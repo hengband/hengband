@@ -3305,7 +3305,7 @@ c_put_str(TERM_YELLOW, "¸½ºß", row, stat_col+35);
 #ifdef JP
 			c_put_str(TERM_WHITE, "!", row + i+1, stat_col + 6);
 #else
-			c_put_str(TERM_WHITE, "!", row + i+1, stat_col + 5);
+			c_put_str(TERM_WHITE, "!", row + i+1, stat_col + 4);
 #endif
 		}
 		c_put_str(TERM_BLUE, buf, row + i+1, stat_col + 13 - strlen(buf));
@@ -4111,7 +4111,7 @@ void display_player(int mode)
 #ifdef JP
 				c_put_str(TERM_WHITE, "!", 3+i, 59);
 #else
-				c_put_str(TERM_WHITE, "!", 3+i, 59-1);
+				c_put_str(TERM_WHITE, "!", 3+i, 59-2);
 #endif
 			}
 		}
