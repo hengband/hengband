@@ -1671,6 +1671,90 @@ static void do_cmd_wiz_zap_all(void)
 }
 
 
+#define NUM_O_SET 8
+#define NUM_O_BIT 32
+
+/*
+ * Hack -- Dump option bits usage
+ */
+static void do_cmd_dump_options(void)
+{
+	int  i, j;
+	FILE *fff;
+	char buf[1024];
+	int  **exist;
+
+	/* Build the filename */
+	path_build(buf, sizeof buf, ANGBAND_DIR_USER, "opt_info.txt");
+
+	/* File type is "TEXT" */
+	FILE_TYPE(FILE_TYPE_TEXT);
+
+	/* Open the file */
+	fff = my_fopen(buf, "w");
+
+	/* Oops */
+	if (!fff)
+	{
+#ifdef JP
+		msg_format("ファイル %s を開けませんでした。", buf);
+#else
+		msg_format("Failed to open file %s.", buf);
+#endif
+		msg_print(NULL);
+		return;
+	}
+
+	/* Allocate the "exist" array (2-dimension) */
+	C_MAKE(exist, NUM_O_SET, int *);
+	C_MAKE(*exist, NUM_O_BIT * NUM_O_SET, int);
+	for (i = 1; i < NUM_O_SET; i++) exist[i] = *exist + i * NUM_O_BIT;
+
+	/* Check for exist option bits */
+	for (i = 0; option_info[i].o_desc; i++)
+	{
+		option_type *ot_ptr = &option_info[i];
+		if (ot_ptr->o_var) exist[ot_ptr->o_set][ot_ptr->o_bit] = i + 1;
+	}
+
+	fputs("[Option bits usage]\n\n", fff);
+
+	fputs("Set - Bit (Page) Option Name\n", fff);
+	fputs("------------------------------------------------\n", fff);
+	/* Dump option bits usage */
+	for (i = 0; i < NUM_O_SET; i++)
+	{
+		for (j = 0; j < NUM_O_BIT; j++)
+		{
+			if (exist[i][j])
+			{
+				option_type *ot_ptr = &option_info[exist[i][j] - 1];
+				fprintf(fff, "  %d -  %02d (%4d) %s\n",
+				        i, j, ot_ptr->o_page, ot_ptr->o_text);
+			}
+			else
+			{
+				fprintf(fff, "  %d -  %02d\n", i, j);
+			}
+		}
+		fputc('\n', fff);
+	}
+
+	/* Free the "exist" array (2-dimension) */
+	C_KILL(*exist, NUM_O_BIT * NUM_O_SET, int);
+	C_KILL(exist, NUM_O_SET, int *);
+
+	/* Close it */
+	my_fclose(fff);
+
+#ifdef JP
+	msg_format("オプションbit使用状況をファイル %s に書き出しました。", buf);
+#else
+	msg_format("Option bits usage dump saved to file %s.", buf);
+#endif
+}
+
+
 #ifdef ALLOW_SPOILERS
 
 /*
@@ -1705,236 +1789,230 @@ void do_cmd_debug(void)
 	/* Analyze the command */
 	switch (cmd)
 	{
-		/* Nothing */
-		case ESCAPE:
-		case ' ':
-		case '\n':
-		case '\r':
+	/* Nothing */
+	case ESCAPE:
+	case ' ':
+	case '\n':
+	case '\r':
 		break;
-
 
 #ifdef ALLOW_SPOILERS
 
-		/* Hack -- Generate Spoilers */
-		case '"':
+	/* Hack -- Generate Spoilers */
+	case '"':
 		do_cmd_spoilers();
 		break;
 
 #endif /* ALLOW_SPOILERS */
 
-
-		/* Hack -- Help */
-		case '?':
+	/* Hack -- Help */
+	case '?':
 		do_cmd_help();
 		break;
 
-
-		/* Cure all maladies */
-		case 'a':
+	/* Cure all maladies */
+	case 'a':
 		do_cmd_wiz_cure_all();
 		break;
 
-		/* Know alignment */
-		case 'A':
+	/* Know alignment */
+	case 'A':
 		msg_format("Your alignment is %d.", p_ptr->align);
 		break;
 
-		/* Teleport to target */
-		case 'b':
+	/* Teleport to target */
+	case 'b':
 		do_cmd_wiz_bamf();
 		break;
 
-		case 'B':
+	case 'B':
 		battle_monsters();
 		break;
 
-		/* Create any object */
-		case 'c':
+	/* Create any object */
+	case 'c':
 		wiz_create_item();
 		break;
 
-		/* Create a named artifact */
-		case 'C':
+	/* Create a named artifact */
+	case 'C':
 		wiz_create_named_art(command_arg);
 		break;
 
-		/* Detect everything */
-		case 'd':
+	/* Detect everything */
+	case 'd':
 		detect_all(DETECT_RAD_ALL*3);
 		break;
 
-		/* Dimension_door */
-		case 'D':
+	/* Dimension_door */
+	case 'D':
 		wiz_dimension_door();
 		break;
 
-		/* Edit character */
-		case 'e':
+	/* Edit character */
+	case 'e':
 		do_cmd_wiz_change();
 		break;
 
-		/* View item info */
-		case 'f':
+	/* View item info */
+	case 'f':
 		identify_fully(FALSE);
 		break;
 
-		/* Good Objects */
-		case 'g':
+	/* Good Objects */
+	case 'g':
 		if (command_arg <= 0) command_arg = 1;
 		acquirement(py, px, command_arg, FALSE, TRUE);
 		break;
 
-		/* Hitpoint rerating */
-		case 'h':
-		do_cmd_rerate(TRUE); break;
+	/* Hitpoint rerating */
+	case 'h':
+		do_cmd_rerate(TRUE);
+		break;
 
 #ifdef MONSTER_HORDES
-		case 'H':
-		do_cmd_summon_horde(); break;
+	case 'H':
+		do_cmd_summon_horde();
+		break;
 #endif /* MONSTER_HORDES */
 
-		/* Identify */
-		case 'i':
+	/* Identify */
+	case 'i':
 		(void)ident_spell(FALSE);
 		break;
 
-		/* Go up or down in the dungeon */
-		case 'j':
+	/* Go up or down in the dungeon */
+	case 'j':
 		do_cmd_wiz_jump();
 		break;
 
-		/* Self-Knowledge */
-		case 'k':
-			self_knowledge();
-			break;
+	/* Self-Knowledge */
+	case 'k':
+		self_knowledge();
+		break;
 
-		/* Learn about objects */
-		case 'l':
-			do_cmd_wiz_learn();
-			break;
+	/* Learn about objects */
+	case 'l':
+		do_cmd_wiz_learn();
+		break;
 
-		/* Magic Mapping */
-		case 'm':
-			map_area(DETECT_RAD_ALL);
-			break;
+	/* Magic Mapping */
+	case 'm':
+		map_area(DETECT_RAD_ALL);
+		break;
 
-		/* Mutation */
-		case 'M':
-			(void)gain_random_mutation(command_arg);
-			break;
+	/* Mutation */
+	case 'M':
+		(void)gain_random_mutation(command_arg);
+		break;
 
-		/* Specific reward */
-		case 'r':
-			(void)gain_level_reward(command_arg);
-			break;
+	/* Specific reward */
+	case 'r':
+		(void)gain_level_reward(command_arg);
+		break;
 
-		/* Summon _friendly_ named monster */
-		case 'N':
-			do_cmd_wiz_named_friendly(command_arg);
-			break;
+	/* Summon _friendly_ named monster */
+	case 'N':
+		do_cmd_wiz_named_friendly(command_arg);
+		break;
 
-		/* Summon Named Monster */
-		case 'n':
-			do_cmd_wiz_named(command_arg);
-			break;
+	/* Summon Named Monster */
+	case 'n':
+		do_cmd_wiz_named(command_arg);
+		break;
 
-		/* Object playing routines */
-		case 'o':
-			do_cmd_wiz_play();
-			break;
+	/* Dump option bits usage */
+	case 'O':
+		do_cmd_dump_options();
+		break;
 
-		/* Phase Door */
-		case 'p':
-			teleport_player(10);
-			break;
+	/* Object playing routines */
+	case 'o':
+		do_cmd_wiz_play();
+		break;
+
+	/* Phase Door */
+	case 'p':
+		teleport_player(10);
+		break;
 
 #if 0
-		/* Complete a Quest -KMW- */
-		case 'q':
+	/* Complete a Quest -KMW- */
+	case 'q':
+		for (i = 0; i < max_quests; i++)
 		{
-			for (i = 0; i < max_quests; i++)
+			if (p_ptr->quest[i].status == QUEST_STATUS_TAKEN)
 			{
-				if (p_ptr->quest[i].status == QUEST_STATUS_TAKEN)
-				{
-					p_ptr->quest[i].status++;
-					msg_print("Completed Quest");
-					msg_print(NULL);
-					break;
-				}
-			}
-			if (i == max_quests)
-			{
-				msg_print("No current quest");
+				p_ptr->quest[i].status++;
+				msg_print("Completed Quest");
 				msg_print(NULL);
+				break;
 			}
-			break;
 		}
+		if (i == max_quests)
+		{
+			msg_print("No current quest");
+			msg_print(NULL);
+		}
+		break;
 #endif
 
-		/* Make every dungeon square "known" to test streamers -KMW- */
-		case 'u':
+	/* Make every dungeon square "known" to test streamers -KMW- */
+	case 'u':
+		for (y = 0; y < cur_hgt; y++)
 		{
-			for(y = 0; y < cur_hgt; y++)
+			for (x = 0; x < cur_wid; x++)
 			{
-				for(x = 0; x < cur_wid; x++)
-				{
-					cave[y][x].info |= (CAVE_GLOW | CAVE_MARK);
-				}
+				cave[y][x].info |= (CAVE_GLOW | CAVE_MARK);
 			}
-			wiz_lite(FALSE);
-			break;
 		}
+		wiz_lite(FALSE);
+		break;
 
-		/* Summon Random Monster(s) */
-		case 's':
-			if (command_arg <= 0) command_arg = 1;
-			do_cmd_wiz_summon(command_arg);
-			break;
+	/* Summon Random Monster(s) */
+	case 's':
+		if (command_arg <= 0) command_arg = 1;
+		do_cmd_wiz_summon(command_arg);
+		break;
 
-		/* Teleport */
-		case 't':
-			teleport_player(100);
-			break;
+	/* Teleport */
+	case 't':
+		teleport_player(100);
+		break;
 
-		/* Very Good Objects */
-		case 'v':
-			if (command_arg <= 0) command_arg = 1;
-			acquirement(py, px, command_arg, TRUE, TRUE);
-			break;
+	/* Very Good Objects */
+	case 'v':
+		if (command_arg <= 0) command_arg = 1;
+		acquirement(py, px, command_arg, TRUE, TRUE);
+		break;
 
-		/* Wizard Light the Level */
-		case 'w':
+	/* Wizard Light the Level */
+	case 'w':
 		wiz_lite((bool)(p_ptr->pclass == CLASS_NINJA));
 		break;
 
-		/* Increase Experience */
-		case 'x':
-		if (command_arg)
-		{
-			gain_exp(command_arg);
-		}
-		else
-		{
-			gain_exp(p_ptr->exp + 1);
-		}
+	/* Increase Experience */
+	case 'x':
+		gain_exp(command_arg ? command_arg : (p_ptr->exp + 1));
 		break;
 
-		/* Zap Monsters (Genocide) */
-		case 'z':
+	/* Zap Monsters (Genocide) */
+	case 'z':
 		do_cmd_wiz_zap();
 		break;
 
-		case 'Z':
+	/* Zap Monsters (Omnicide) */
+	case 'Z':
 		do_cmd_wiz_zap_all();
 		break;
 
-		/* Hack -- whatever I desire */
-		case '_':
+	/* Hack -- whatever I desire */
+	case '_':
 		do_cmd_wiz_hack_ben();
 		break;
 
-		/* Not a Wizard Command */
-		default:
+	/* Not a Wizard Command */
+	default:
 		msg_print("That is not a valid debug command.");
 		break;
 	}
