@@ -147,10 +147,15 @@ if (get_check("本当にこの階を去りますか？"))
 #ifdef JP
 			if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
 				msg_print("なんだこの階段は！");
-			else
+			else if (0 == dun_level)
+				msg_print("地上に戻った。");
+                        else
 				msg_print("階段を上って新たなる迷宮へと足を踏み入れた。");
 #else
-			msg_print("You enter a maze of up staircases.");
+                        if (0 == dun_level)
+				msg_print("You go back to the surface.");
+                        else
+                                msg_print("You enter a maze of up staircases.");
 #endif
 
 

@@ -5356,8 +5356,31 @@ void (*screendump_aux)(void) = NULL;
 void do_cmd_save_screen(void)
 {
 	bool old_use_graphics = use_graphics;
+	bool html_dump = FALSE;
 
 	int wid, hgt;
+
+#ifdef JP
+	prt("記念撮影しますか？ [(y)es/(h)tml/(n)o] ", 0, 0);
+#else
+	prt("Save screen dump? [(y)es/(h)tml/(n)o] ", 0, 0);
+#endif
+	while(TRUE)
+	{
+		char c = inkey();
+		if (c == 'Y' || c == 'y')
+			break;
+		else if (c == 'H' || c == 'h')
+		{
+			html_dump = TRUE;
+			break;
+		}
+		else
+		{
+			prt("", 0, 0);
+			return;
+		}
+	}
 
 	Term_get_size(&wid, &hgt);
 
@@ -5373,11 +5396,7 @@ void do_cmd_save_screen(void)
 		handle_stuff();
 	}
 
-#ifdef JP
-	if (get_check_strict("HTMLで出力しますか？", CHECK_NO_HISTORY))
-#else
-	if (get_check_strict("Save screen dump as HTML? ", CHECK_NO_HISTORY))
-#endif
+	if (html_dump)
 	{
 		do_cmd_save_screen_html();
 		do_cmd_redraw();
