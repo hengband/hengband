@@ -1,4 +1,102 @@
+2002-10-25  Takeshi Mogami  <mogami@cvs>
+
+	* src/files.c 1.60.2.5:
+	王家の墓がクリアできない事があるバグ修正。'C'コマンドで遂行中のクエストを
+	表示するときに init_flags を INIT_SHOW_TEXT(情報表示のみ)にするべきところで、
+	INIT_ASSIGN(クエストの初期化)にしてしまっていた。
+
+2002-10-23  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd1.c 1.44.4.3: 払い抜けでパターンを飛び越えられるバグ修正。
+
+	* src/effects.c 1.25.2.2:
+	辞世の句の画面でスクリーンショットを残すようにした。
+	ついでに辞世の句の画面でカーソルが出ているのを隠すようにした。
+
+	* src/tables.c 1.45.2.2, src/dungeon.c 1.61.2.7:
+	つい入れてしまった{上質以上}の仕様変更を戻す。
+
+2002-10-23  henkma  <henkma@cvs>
+
+	* lib/edit/r_info_j.txt 1.51:
+	Fat Man のレアリティを255にして, 生成されなくした.
+	※ 後で Fat Man という名前のモンスターは r_info から消える.
+
+2002-10-23  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/f_info_j.txt 1.10:
+	ピラニア・トラップの部屋とハルマゲドン・トラップの部屋実装。
+
+2002-10-23  henkma  <henkma@cvs>
+
+	* lib/edit/r_info_j.txt 1.50:
+	『Little Boy』 → 人々を爆死させてきた左手『シアーハートアタック』
+	(英語名 Sheer Heart Attack, the Bomb Hand)
+
+2002-10-23  Takeshi Mogami  <mogami@cvs>
+
+	* src/generate.c 1.34, src/monster2.c 1.43, src/rooms.c 1.20, src/cave.c 1.61, src/cmd1.c 1.57, src/defines.h 1.77:
+	ピラニア・トラップの部屋とハルマゲドン・トラップの部屋実装。
+
+	* src/rooms.c 1.19: 罠ピットが壁の中に孤立している事があるバグ修正。
+	部屋の中のグリッドはCAVE_FLOORで埋めておかないとうまくトンネルが繋がらない。
+
+2002-10-22  Takeshi Mogami  <mogami@cvs>
+
+	* autopick_eng.txt 1.23: type修正。
+
+	* src/dungeon.c 1.61.2.6, src/tables.c 1.45.2.1:
+	弱い簡易鑑定で{上質}と出る代わりに{上質以上}と出るようにした。
+
+	* lib/edit/q0clone0_j.txt 1.2.20.1:
+	little boy引退。代りにBorshinを入れた。
+
+2002-10-22  henkma  <henkma@cvs>
+
+	* autopick_eng.txt 1.15.2.3: skeleton → worthless skeleton
+
+	* autopick_eng.txt 1.22: skeleton → worthless skeleton
+	これで像は拾わないはず
+
+2002-10-22  Takeshi Mogami  <mogami@cvs>
+
+	* acconfig.h 1.4, configure.in 1.21:
+	AC_DEFINE()の中でコメントを定義すれば、acconfig.h はいらないので削除。
+	これは、そもそもコメントを書く為のファイルだったらしい。
+
+	* src/generate.c 1.33, src/grid.c 1.6, src/xtra2.c 1.49:
+	偽壁のバグがまだ残っていたので修正。どうやらランダムvaultがトンネルに複雑に
+	侵食されていたようだ。部屋を繋ぐトンネルの途中のランダムなドアは1つの場所に
+	一回しか置かないから特に処置しなくていいだろうと思っていたが、実際は複数回
+	重なっていたようだ。
+
+2002-10-21  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.71:
+	領域外アクセスのバグ(inventory[INVEN_TOTAL]に対して自動破壊のチェックをしていた)を修正。
+
+2002-10-19  henkma  <henkma@cvs>
+
+	* autopick_eng.txt 1.15.2.2: skeleton of → skeleton
+
+	* autopick_eng.txt 1.21: Archerの項目：skeleton of → skeleton
+	ofを付けるとユニークの骨にしかヒットしない. 像などにヒットするのは我慢する
+	ことにして, このようにすべきだと思われる.
+
+2002-10-16  henkma  <henkma@cvs>
+
+	* lib/file/a_med.txt 1.5.18.1: inteligence → intelligence
+
+	* lib/file/a_med.txt 1.6:
+	randart nameのtypo修正 inteligence → intelligence
+
 2002-10-13  Takeshi Mogami  <mogami@cvs>
+
+	* src/generate.c 1.32:
+	偽の壁(壁に見えるが普通に通れる地形)が出現するバグ修正。ダンジョン生成時の
+	バグだった。一度隠し扉が配置された位置に開いた/壊れたドアが重ねて配置されていた。
+
+	* Changelogs 1.58: 更新
 
 	* src/cmd5.c 1.41.2.1, src/mane.c 1.10.4.2, src/object1.c 1.40.2.5:
 	英語版。You 動詞s の修正。EGOの説明文訂正。
@@ -7,13 +105,11 @@
 
 2002-10-13  henkma  <henkma@cvs>
 
-	* src/cmd5.c 1.45, src/mane.c 1.12:
-	You 動詞s → You 動詞
+	* src/cmd5.c 1.45, src/mane.c 1.12: You 動詞s → You 動詞
 
 2002-10-12  henkma  <henkma@cvs>
 
-	* src/object1.c 1.50:
-	日本語を英語に翻訳したときの訳し間違い修正.
+	* src/object1.c 1.50: 日本語を英語に翻訳したときの訳し間違い修正.
 
 2002-10-10  Takeshi Mogami  <mogami@cvs>
 
@@ -28,8 +124,7 @@
 
 2002-10-08  iks  <iks@cvs>
 
-	* src/hissatsu.c 1.17:
-	剣術家の学習でターンを消費してなかったのを修正。
+	* src/hissatsu.c 1.17: 剣術家の学習でターンを消費してなかったのを修正。
 
 2002-10-05  Takeshi Mogami  <mogami@cvs>
 
@@ -64,8 +159,7 @@
 
 2002-09-27  Takeshi Mogami  <mogami@cvs>
 
-	* lib/edit/r_info_j.txt 1.45.2.4:
-	幽体ワイアームに毒、冷気耐性。
+	* lib/edit/r_info_j.txt 1.45.2.4: 幽体ワイアームに毒、冷気耐性。
 
 2002-09-26  Takeshi Mogami  <mogami@cvs>
 
@@ -210,11 +304,9 @@
 	何も影響しないようにした。1.3.0までは未感知のトラップは問答無用で消滅して
 	いたが、感知済みトラップは壁に潰されない限り消えないので、後者に合せて修正した。
 
-	* lib/help/jlicense.txt 1.1.2.2:
-	rr9氏に聞いた内容を参考に翻訳修正。
+	* lib/help/jlicense.txt 1.1.2.2: rr9氏に聞いた内容を参考に翻訳修正。
 
-	* src/object2.c 1.43.2.4:
-	大防御の守りの指輪のACを +7 増やした。
+	* src/object2.c 1.43.2.4: 大防御の守りの指輪のACを +7 増やした。
 
 	* src/wizard2.c 1.24.2.1:
 	^Ajでダンジョン再生成を繰り返すとどんどん p_ptr->energy_need が減っていって
@@ -276,8 +368,7 @@
 	オプションの自動セーブ間隔の設定をする為に'F'を押すとヘルプが表示
 	されていたバグ修正。break;が一つ抜けていた。
 
-	* lib/help/Makefile.am 1.5.4.1:
-	jlicense.txtを追加。
+	* lib/help/Makefile.am 1.5.4.1: jlicense.txtを追加。
 
 	* lib/help/jlicense.txt 1.1: New file.
 
@@ -432,19 +523,16 @@
 	死の大鎌のKILL_DRAGONを消してSLAY_DRAGONだけにした。
 	死の大鎌のダメージが返ってくるときのスレイの計算も修正(ついでに少々バグ修正)。
 
-	* lib/edit/a_info_j.txt 1.26:
-	ベルシエルの冠にEASY_SPELL付加。
+	* lib/edit/a_info_j.txt 1.26: ベルシエルの冠にEASY_SPELL付加。
 
 2002-08-27  habu  <habu@cvs>
 
 	* lib/edit/e_info_j.txt 1.26, src/defines.h 1.74, src/init1.c 1.44, src/object1.c 1.47, src/object2.c 1.55, src/wizard2.c 1.26, src/xtra1.c 1.49:
 	魔法の難易度を下げるEASY_SPELLをフラグ化した。同時に大賢者のアミュレットにEASY_SPELLフラグを追加した。
 
-	* lib/edit/e_info_j.txt 1.25:
-	大賢者のアミュレットに警告能力を追加。
+	* lib/edit/e_info_j.txt 1.25: 大賢者のアミュレットに警告能力を追加。
 
-	* lib/edit/k_info_j.txt 1.31:
-	賢者のアミュレットに赤外線視力を追加。
+	* lib/edit/k_info_j.txt 1.31: 賢者のアミュレットに赤外線視力を追加。
 
 	* src/object2.c 1.54:
 	賢者のアミュレットに下級ESPが1〜3個付くようにした。(add_esp_weak()を使用)
@@ -484,8 +572,7 @@
 	ESPの耐性自動刻みに対応してhelp更新。
 	{!!}と{.}と{$}の説明が無かったので追加。
 
-	* src/files.c 1.78:
-	type: constraction -> construction
+	* src/files.c 1.78: type: constraction -> construction
 
 2002-08-22  Takeshi Mogami  <mogami@cvs>
 
@@ -861,8 +948,7 @@
 	keymap設定を削除するとコマンド実行中の方向指定にも使えなくなるという物。
 	AngbandやToMEでは修正済み。
 
-	* lib/edit/d_info_j.txt 1.4.2.1, src/monster2.c 1.37.2.1:
-	typo修正。
+	* lib/edit/d_info_j.txt 1.4.2.1, src/monster2.c 1.37.2.1: typo修正。
 
 2002-07-16  Takeshi Mogami  <mogami@cvs>
 
@@ -928,13 +1014,11 @@
 
 	* Changelogs 1.52: 更新
 
-	* lib/edit/r_info_j.txt 1.45, src/mspells1.c 1.26:
-	大鷲を強くした。
+	* lib/edit/r_info_j.txt 1.45, src/mspells1.c 1.26: 大鷲を強くした。
 
 2002-07-13  hoge  <hoge@cvs>
 
-	* lib/edit/a_info_j.txt 1.23, src/xtra1.c 1.43:
-	ヒーローバグ修正
+	* lib/edit/a_info_j.txt 1.23, src/xtra1.c 1.43: ヒーローバグ修正
 
 2002-07-10  Takeshi Mogami  <mogami@cvs>
 
@@ -949,8 +1033,7 @@
 
 2002-07-08  Takeshi Mogami  <mogami@cvs>
 
-	* lib/edit/r_info_j.txt 1.44:
-	ドルジの経験値半減。
+	* lib/edit/r_info_j.txt 1.44: ドルジの経験値半減。
 
 	* lib/edit/r_info_j.txt 1.43:
 	大鷲の経験値適当に修正。エオグゴーレムの説明和訳訂正。
@@ -985,11 +1068,9 @@
 
 2002-07-07  habu  <habu@cvs>
 
-	* Makefile.am 1.2:
-	EXTRA_DISTにhengband.specを追加。
+	* Makefile.am 1.2: EXTRA_DISTにhengband.specを追加。
 
-	* hengband.spec 1.1:
-	TOWさん作のRPMパッケージ用specファイルを追加。
+	* hengband.spec 1.1: TOWさん作のRPMパッケージ用specファイルを追加。
 
 2002-07-06  Takeshi Mogami  <mogami@cvs>
 
@@ -1002,8 +1083,7 @@
 
 2002-07-06  henkma  <henkma@cvs>
 
-	* src/store.c 1.16:
-	破邪の本も魔法書屋で売れるようにした.
+	* src/store.c 1.16: 破邪の本も魔法書屋で売れるようにした.
 
 	* src/spells1.c 1.28:
 	トラップ生成のとき, 鏡の上にも生成されてしまっていたのを修正.
@@ -1053,8 +1133,7 @@
 
 2002-06-30  henkma  <henkma@cvs>
 
-	* src/spellstips.h 1.24:
-	tipsに大量のtypoがあったので修正.
+	* src/spellstips.h 1.24: tipsに大量のtypoがあったので修正.
 
 2002-06-29  Takeshi Mogami  <mogami@cvs>
 
@@ -1088,8 +1167,7 @@
 
 2002-06-28  habu  <habu@cvs>
 
-	* src/chuukei.c 1.6:
-	init_chuukeiの宣言を()と省略せずに(void)とした。
+	* src/chuukei.c 1.6: init_chuukeiの宣言を()と省略せずに(void)とした。
 
 2002-06-28  Takeshi Mogami  <mogami@cvs>
 
@@ -1117,8 +1195,7 @@
 
 2002-06-26  Takeshi Mogami  <mogami@cvs>
 
-	* src/cmd5.c 1.41:
-	英語版未訳。'U'nnamedの説明文。
+	* src/cmd5.c 1.41: 英語版未訳。'U'nnamedの説明文。
 
 	* src/cmd5.c 1.40:
 	MPが足りないときに「十分なマジックポイントがない」のメッセージの後、
@@ -1145,8 +1222,7 @@
 
 2002-06-24  Takeshi Mogami  <mogami@cvs>
 
-	* src/autopick.c 1.51:
-	設定行の説明文に % や %all 等の説明追加。
+	* src/autopick.c 1.51: 設定行の説明文に % や %all 等の説明追加。
 	^L のコマンド説明が初期化されていなかったのを修正。
 
 2002-06-23  Takeshi Mogami  <mogami@cvs>
@@ -1161,8 +1237,7 @@
 	* lib/file/rumors.txt 1.2:
 	typo: is a plenty of longswords -> are plenty of longswords
 
-	* src/object1.c 1.39:
-	typo: it will attempts -> it will attempt
+	* src/object1.c 1.39: typo: it will attempts -> it will attempt
 
 	* lib/edit/q00000ms_j.txt 1.3:
 	M$クエストで、ドアであるべき場所が道の地形だったのを修正。
@@ -1230,8 +1305,7 @@
 
 2002-06-20  Takeshi Mogami  <mogami@cvs>
 
-	* src/load.c 1.31:
-	バージョンアップ後のロードで鏡地形の変更を適用。
+	* src/load.c 1.31: バージョンアップ後のロードで鏡地形の変更を適用。
 
 2002-06-20  henkma  <henkma@cvs>
 
@@ -1293,8 +1367,7 @@
 
 2002-06-17  Takeshi Mogami  <mogami@cvs>
 
-	* configure.in 1.18:
-	commit忘れてた。ほとんど実害はないが。
+	* configure.in 1.18: commit忘れてた。ほとんど実害はないが。
 
 	* src/spells2.c 1.38:
 	lite_area()と同時に、暗闇生成の範囲も広くなっていたので、
@@ -1309,8 +1382,7 @@
 
 2002-06-16  Takeshi Mogami  <mogami@cvs>
 
-	* lib/file/news.txt 1.12, lib/file/news_j.txt 1.11:
-	news.txt 更新。
+	* lib/file/news.txt 1.12, lib/file/news_j.txt 1.11: news.txt 更新。
 
 	* Changelogs 1.49: 更新
 
@@ -1351,8 +1423,7 @@
 
 2002-06-15  hoge  <hoge@cvs>
 
-	* lib/help/jversion.txt 1.11:
-	jversionライトエリア追加
+	* lib/help/jversion.txt 1.11: jversionライトエリア追加
 
 2002-06-15  Takeshi Mogami  <mogami@cvs>
 
@@ -1387,8 +1458,7 @@
 
 2002-06-14  Takeshi Mogami  <mogami@cvs>
 
-	* src/bldg.c 1.16:
-	武器匠でのスレイの倍率表示訂正。
+	* src/bldg.c 1.16: 武器匠でのスレイの倍率表示訂正。
 
 	* src/wizard1.c 1.22.2.3, src/wizard2.c 1.23.2.2, src/melee2.c 1.25.2.3, src/monster2.c 1.34.2.2, src/object1.c 1.35.2.3, src/object2.c 1.41.2.3, src/spells2.c 1.37.2.3, lib/edit/a_info_j.txt 1.22.2.2, lib/edit/e_info_j.txt 1.21.2.2, src/artifact.c 1.24.2.2, src/bldg.c 1.15.2.3, src/cmd1.c 1.44.2.3, src/cmd3.c 1.23.2.3, src/defines.h 1.59.2.3:
 	各種KILL実装。SLAYが3倍なら5倍、2.5倍なら4倍、2倍なら3.5倍に設定した。
@@ -1398,8 +1468,7 @@
 	KILL_GIANT と 各種ESP_ 実装。他の各種 KILL_ はフラグだけ作ってある。
 	KILL_GIANTはフランテング、ESP_は各*〜スレイヤー*に付加。
 
-	* lib/edit/k_info_j.txt 1.28:
-	k_infoにも修正追加。
+	* lib/edit/k_info_j.txt 1.28: k_infoにも修正追加。
 
 	* lib/edit/e_info_j.txt 1.22, src/mindtips.h 1.8, src/spellstips.h 1.22:
 	RGRAでのJohn Q. Smithさんによる 英訳の修正、 k_info以外。
@@ -1451,13 +1520,11 @@
 	正しいラベル a) b)... e) f)... にした。ついでに、床上にアイテムがあるとき、
 	「'4'or'6' 床上」が間違って表示されていたバグ修正。
 
-	* src/tables.c 1.41:
-	聖なる御言葉の英語名が間違っていたのを修正。
+	* src/tables.c 1.41: 聖なる御言葉の英語名が間違っていたのを修正。
 
 2002-06-10  Takeshi Mogami  <mogami@cvs>
 
-	* src/autopick.c 1.46:
-	ファイルの先頭/終端に移動コマンド'g'/'G'追加。
+	* src/autopick.c 1.46: ファイルの先頭/終端に移動コマンド'g'/'G'追加。
 	マクロ定義挿入'm'コマンド、キー配置定義挿入'c'コマンド追加。
 
 	* lib/file/news.txt 1.10:
@@ -1465,8 +1532,7 @@
 
 2002-06-09  Takeshi Mogami  <mogami@cvs>
 
-	* src/autopick.c 1.45:
-	さっきの修正でまたエンバグしていたので 再修正。
+	* src/autopick.c 1.45: さっきの修正でまたエンバグしていたので 再修正。
 
 	* src/monster2.c 1.32:
 	カメレオンの処理の変更で、たぬきの処理に副作用が出てしまっていたので修正。
@@ -1644,8 +1710,7 @@
 	* lib/help/jmagic.txt 1.7, lib/help/jraceclas.txt 1.2, lib/help/magic.txt 1.9, lib/help/raceclas.txt 1.3, src/birth.c 1.40:
 	生命破邪に対応してヘルプの修正。
 
-	* src/birth.c 1.39, src/effects.c 1.23:
-	残っていた翻訳を完了。
+	* src/birth.c 1.39, src/effects.c 1.23: 残っていた翻訳を完了。
 
 	* configure.in 1.14, src/birth.c 1.38, src/cmd5.c 1.31, src/spells3.c 1.35, src/tables.c 1.40:
 	生命破邪の説明修正、スターダストのダイスをd2に、破邪の英語版呪文名ちょっと修正。
@@ -1677,11 +1742,9 @@
 	* autopick_eng.txt 1.11, lib/help/jpref.txt 1.7, lib/help/pref.txt 1.10, src/autopick.c 1.31:
 	自動拾いの、コード整理、ヘルプ修正。
 
-	* src/init1.c 1.38:
-	_strchr()の型の修正の仕方が違ったのを再修正。
+	* src/init1.c 1.38: _strchr()の型の修正の仕方が違ったのを再修正。
 
-	* src/autopick.c 1.30:
-	鑑定時の自動破壊で装備品を壊していたバグ修正。
+	* src/autopick.c 1.30: 鑑定時の自動破壊で装備品を壊していたバグ修正。
 
 2002-05-30  Takeshi Mogami  <mogami@cvs>
 
@@ -1790,8 +1853,7 @@
 	* lib/edit/e_info_j.txt 1.20:
 	Nick Keulmannさんの提案により、of Fire Bolt 等のエゴ名を and Fire Bolt等に変更。
 
-	* src/object2.c 1.38:
-	「輝きの」エゴ指輪が出ないバグ修正。
+	* src/object2.c 1.38: 「輝きの」エゴ指輪が出ないバグ修正。
 
 	* src/bldg.c 1.13: maney -> money
 
@@ -1824,14 +1886,12 @@
 
 2002-05-22  habu  <habu@cvs>
 
-	* lib/edit/k_info_j.txt 1.25:
-	重ランサー → ヘヴィ・ランス に変更。
+	* lib/edit/k_info_j.txt 1.25: 重ランサー → ヘヴィ・ランス に変更。
 	ヘビィ・{フレイル,クロスボウ} を ヘヴィ に表記統一。
 
 2002-05-22  Takeshi Mogami  <mogami@cvs>
 
-	* src/makefile.bcc 1.4:
-	kasinaさんの報告でダンジョンで拾ったアイテム
+	* src/makefile.bcc 1.4: kasinaさんの報告でダンジョンで拾ったアイテム
 	{並の武器、殺戮の武器、指輪等様々} がなぜかpval=-1になって
 	売れないアイテムとして生成される事があった。
 	とりあえず最適化禁止オプション -Od を付けたところ症状は消えたので、
@@ -1883,8 +1943,7 @@
 
 	* Changelogs 1.43: 更新
 
-	* lib/edit/f_info_j.txt 1.7:
-	FEAT_UNDETECTED の定義追加。
+	* lib/edit/f_info_j.txt 1.7: FEAT_UNDETECTED の定義追加。
 
 	* src/cave.c 1.45, src/defines.h 1.47, src/xtra2.c 1.35:
 	view_granite_lite offでview_unsafe_grids on のとき壁を全部xにしてしまっ
@@ -1922,15 +1981,13 @@
 	* src/cmd2.c 1.25, src/dungeon.c 1.43:
 	アリーナで、くさび だけを投げられるようにした。
 
-	* src/xtra2.c 1.32:
-	lookコマンドで名前の次に(レベル???, 無傷)等と表示。
+	* src/xtra2.c 1.32: lookコマンドで名前の次に(レベル???, 無傷)等と表示。
 
 	* src/spells3.c 1.27, src/wizard2.c 1.17, src/xtra2.c 1.31, src/cmd1.c 1.37, src/cmd2.c 1.24, src/cmd5.c 1.20, src/cmd6.c 1.21, src/defines.h 1.45, src/dungeon.c 1.42, src/externs.h 1.54, src/generate.c 1.22, src/grid.c 1.4, src/init1.c 1.34, src/mane.c 1.8, src/melee2.c 1.23, src/mind.c 1.9, src/monster2.c 1.26, src/mspells1.c 1.23, src/mspells2.c 1.17, src/mspells3.c 1.12, src/mutation.c 1.5, src/rooms.c 1.15, src/spells1.c 1.19, src/spells2.c 1.27, src/artifact.c 1.22:
 	summon_specific() や、place_monster()等の仕様変更。
 	u32b mode という変数一つで全部のフラグを表現するようにした。
 
-	* lib/edit/a_info_j.txt 1.22:
-	The Angler は個人名としては誤訳。
+	* lib/edit/a_info_j.txt 1.22: The Angler は個人名としては誤訳。
 
 	* src/cmd5.c 1.19, src/defines.h 1.44, src/spells1.c 1.18, src/spells2.c 1.26:
 	PROJECT_FASTの実装。スターダストはちゃんとスターダストっぽくなった。
@@ -1948,11 +2005,9 @@
 
 2002-05-15  _nothere  <_nothere@cvs>
 
-	* src/monster2.c 1.24:
-	モンスター生成時のsub_align付けの場所変更.
+	* src/monster2.c 1.24: モンスター生成時のsub_align付けの場所変更.
 
-	* src/spells2.c 1.25:
-	英語版での属性表記の修正忘れの修正.
+	* src/spells2.c 1.25: 英語版での属性表記の修正忘れの修正.
 
 2002-05-15  Takeshi Mogami  <mogami@cvs>
 
@@ -2010,8 +2065,7 @@
 	* lib/edit/misc_j.txt 1.8, lib/edit/r_info_j.txt 1.36, lib/file/mondeath_j.txt 1.2, lib/file/monspeak_j.txt 1.5:
 	魔人ウォーケン追加。
 
-	* lib/pref/font-win.prf 1.3:
-	winの豆腐もTERM_L_UMBERに。
+	* lib/pref/font-win.prf 1.3: winの豆腐もTERM_L_UMBERに。
 
 	* lib/edit/f_info_j.txt 1.6, src/cave.c 1.42:
 	永久岩の色をTERM_L_UMBER(15番;U)にした。光源範囲の色TERM_YELLOWは普通の壁の
@@ -2022,8 +2076,7 @@
 	名前付きの方だけを読むようにした。
 	自動拾いエディタとの関係もコンシステントになる。
 
-	* src/mspells3.c 1.11:
-	青魔道師の魔法の失敗率表示の||と&&の間違い修正。
+	* src/mspells3.c 1.11: 青魔道師の魔法の失敗率表示の||と&&の間違い修正。
 
 2002-05-06  Takeshi Mogami  <mogami@cvs>
 
@@ -2043,8 +2096,7 @@
 	「{呪われている, +腕r冷乱}」等のように表示するようにした。
 	ただし、「??%引き」の表示は例外として上書きする。
 
-	* src/autopick.c 1.17:
-	符号間違ってクラッシュしてたので修正。
+	* src/autopick.c 1.17: 符号間違ってクラッシュしてたので修正。
 
 	* src/dungeon.c 1.38:
 	簡易鑑定の後でも自動破壊と自動刻みを適用。これで auto-squelch と同等。
@@ -2096,8 +2148,7 @@
 	  本当は出力時に「＃」に置き変えるのが一番いいが、なんかコードの都合上
 	  大がかりなハックになってしまうのでやめておく。
 
-	* src/autopick.c 1.15:
-	前回の変更でエンバグしてたので修正。
+	* src/autopick.c 1.15: 前回の変更でエンバグしてたので修正。
 
 2002-05-02  Takeshi Mogami  <mogami@cvs>
 
@@ -2153,16 +2204,14 @@
 
 	* src/monster2.c 1.20.2.6: 細かい代入位置の修正.
 
-	* src/monster2.c 1.20.2.5:
-	単純な代入で良かった場所があったので修正.
+	* src/monster2.c 1.20.2.5: 単純な代入で良かった場所があったので修正.
 
 2002-04-28  Takeshi Mogami  <mogami@cvs>
 
 	* src/object1.c 1.28:
 	英語版で '4 or 6 for Inven' の表示を忘れていたので修正。
 
-	* lib/pref/pref-opt.prf 1.7:
-	pref-opt.prf中のhilite_playerの修正忘れ。
+	* lib/pref/pref-opt.prf 1.7: pref-opt.prf中のhilite_playerの修正忘れ。
 
 	* Changelogs 1.39, lib/help/joption.txt 1.8, lib/help/option.txt 1.9, lib/pref/pref-opt.prf 1.6, src/cmd1.c 1.32, src/externs.h 1.44, src/files.c 1.51, src/tables.c 1.31, src/variable.c 1.21:
 	- find_cutとfind_examineの説明文(ゲーム中とヘルプ文章の両方)をわかりやすく。
@@ -2215,8 +2264,7 @@
 	* lib/edit/r_info_j.txt 1.35:
 	英語版の説明文で行末にスペースが抜けていたのを追加。
 
-	* src/autopick.c 1.12:
-	メーセージ中の無駄なスペース削除。
+	* src/autopick.c 1.12: メーセージ中の無駄なスペース削除。
 
 2002-04-27  _nothere  <_nothere@cvs>
 
@@ -2237,11 +2285,9 @@
 
 2002-04-27  henkma  <henkma@cvs>
 
-	* src/racial.c 1.15:
-	良くみたら百裂拳の方もバグってたので修正.
+	* src/racial.c 1.15: 良くみたら百裂拳の方もバグってたので修正.
 
-	* src/racial.c 1.14:
-	修行僧の構えの表示にバグがあったので直した.
+	* src/racial.c 1.14: 修行僧の構えの表示にバグがあったので直した.
 
 2002-04-27  Takeshi Mogami  <mogami@cvs>
 
@@ -2290,16 +2336,14 @@
 
 2002-04-23  Takeshi Mogami  <mogami@cvs>
 
-	* src/autopick.c 1.10:
-	'q'の他に'_'でも終了するようにした。
+	* src/autopick.c 1.10: 'q'の他に'_'でも終了するようにした。
 
 2002-04-22  Takeshi Mogami  <mogami@cvs>
 
 	* src/autopick.c 1.9:
 	エディタを一度終了してもカーソル位置を保存するようにした。
 
-	* src/birth.c 1.27:
-	生い立ちエディタの配列溢れ修正。
+	* src/birth.c 1.27: 生い立ちエディタの配列溢れ修正。
 
 	* src/defines.h 1.36, src/load.c 1.24:
 	忘れてたTURNS_PER_TICKの変更を今やった。20L→10L。
@@ -2311,22 +2355,19 @@
 
 2002-04-21  Takeshi Mogami  <mogami@cvs>
 
-	* src/birth.c 1.26:
-	英語版でメッセージがはみ出していたので修正。
+	* src/birth.c 1.26: 英語版でメッセージがはみ出していたので修正。
 
 	* src/birth.c 1.25, src/defines.h 1.35, src/externs.h 1.41, src/files.c 1.50, src/japanese.c 1.5, src/load.c 1.23, src/save.c 1.11, src/types.h 1.15, src/variable.c 1.18:
 	ToMEのクイック・スタートと生い立ちエディタ移植。
 
-	* src/z-term.c 1.13:
-	デバックメッセージの外し忘れ修正。
+	* src/z-term.c 1.13: デバックメッセージの外し忘れ修正。
 
 2002-04-20  _nothere  <_nothere@cvs>
 
 	* src/main-win.c 1.13:
 	右上のxやファイル(F)メニューの終了(X)が実行された場合の動作をctrl+xを押した場合と同じ動作に変更.
 
-	* lib/edit/k_info_j.txt 1.21:
-	武器呪縛の巻物の説明を修正.
+	* lib/edit/k_info_j.txt 1.21: 武器呪縛の巻物の説明を修正.
 
 	* src/object1.c 1.27:
 	*鑑定*で読める発動効果の説明にダメージと充填ターン数が書かれていない物が残っていたので追加した.
@@ -2346,8 +2387,7 @@
 	* src/generate.c 1.16:
 	闘技場もモンスター闘技場と同様に1画面サイズに修正。
 
-	* src/z-term.c 1.12:
-	&& || の優先順が曖昧だったので修正。括弧忘れてた。
+	* src/z-term.c 1.12: && || の優先順が曖昧だったので修正。括弧忘れてた。
 
 2002-04-19  _nothere  <_nothere@cvs>
 
@@ -2383,8 +2423,7 @@
 
 2002-04-17  Takeshi Mogami  <mogami@cvs>
 
-	* lib/pref/graf-new.prf 1.7:
-	ビハインダーに空白の16x16タイルを割当て。
+	* lib/pref/graf-new.prf 1.7: ビハインダーに空白の16x16タイルを割当て。
 
 	* Changelogs 1.36: 更新
 
@@ -2418,16 +2457,13 @@
 
 2002-04-16  Takeshi Mogami  <mogami@cvs>
 
-	* src/autopick.c 1.8, src/types.h 1.14:
-	コメント追加。typo修正。
+	* src/autopick.c 1.8, src/types.h 1.14: コメント追加。typo修正。
 
 2002-04-16  henkma  <henkma@cvs>
 
-	* lib/edit/k_info_j.txt 1.19:
-	typo修正. 三人称単数現在の's'.
+	* lib/edit/k_info_j.txt 1.19: typo修正. 三人称単数現在の's'.
 
-	* lib/edit/k_info_j.txt 1.18:
-	typo修正corrensond→correspond
+	* lib/edit/k_info_j.txt 1.18: typo修正corrensond→correspond
 
 2002-04-16  Takeshi Mogami  <mogami@cvs>
 
@@ -2457,16 +2493,13 @@
 
 2002-04-14  Takeshi Mogami  <mogami@cvs>
 
-	* src/files.c 1.49:
-	reverse モードで 2 8 の上下が逆なのを修正。
+	* src/files.c 1.49: reverse モードで 2 8 の上下が逆なのを修正。
 
-	* src/autopick.c 1.7:
-	&& と || の優先順位が曖昧なところに括弧追加。
+	* src/autopick.c 1.7: && と || の優先順位が曖昧なところに括弧追加。
 
 	* Changelogs 1.35: 更新
 
-	* src/files.c 1.48:
-	8 2 で1行上下に移動できるように。
+	* src/files.c 1.48: 8 2 で1行上下に移動できるように。
 	ページの最後で勝手に最初のページに巻戻らないように。
 
 	* lib/help/attack.hlp 1.6, lib/help/attack.txt 1.8, lib/help/birth.hlp 1.4, lib/help/birth.txt 1.7, lib/help/charattr.hlp 1.5, lib/help/charattr.txt 1.7, lib/help/command.hlp 1.5, lib/help/commdesc.hlp 1.5, lib/help/defend.hlp 1.4, lib/help/dungeon.hlp 1.5, lib/help/dungeon.txt 1.7, lib/help/general.hlp 1.5, lib/help/general.txt 1.7, lib/help/help.hlp 1.7, lib/help/j_item2.txt 1.2, lib/help/jattack.hlp 1.4, lib/help/jattack.txt 1.6, lib/help/jbirth.hlp 1.3, lib/help/jbirth.txt 1.6, lib/help/jcharattr.hlp 1.3, lib/help/jcharattr.txt 1.8, lib/help/jcommand.hlp 1.4, lib/help/jcommand.txt 1.5, lib/help/jcommdesc.hlp 1.4, lib/help/jcommdesc.txt 1.5, lib/help/jdefend.hlp 1.3, lib/help/jdefend.txt 1.4, lib/help/jdungeon.hlp 1.2, lib/help/jdungeon.txt 1.5, lib/help/jgeneral.hlp 1.4, lib/help/jgeneral.txt 1.5, lib/help/jhelp.hlp 1.5, lib/help/jmagic.hlp 1.3, lib/help/jmonster.hlp 1.2, lib/help/jmonster.txt 1.5, lib/help/jobjects.hlp 1.3, lib/help/jobjects.txt 1.5, lib/help/joption.hlp 1.4, lib/help/jpref.hlp 1.2, lib/help/jpref.txt 1.4, lib/help/jspecial.hlp 1.2, lib/help/jtang.txt 1.5, lib/help/jtown.hlp 1.2, lib/help/jtown.txt 1.5, lib/help/magic.hlp 1.5, lib/help/monster.hlp 1.2, lib/help/monster.txt 1.4, lib/help/objects.hlp 1.3, lib/help/objects.txt 1.5, lib/help/option.hlp 1.5, lib/help/pref.hlp 1.5, lib/help/pref.txt 1.7, lib/help/town.hlp 1.2, lib/help/town.txt 1.5:
@@ -2475,8 +2508,7 @@
 
 2002-04-14  habu  <habu@cvs>
 
-	* src/files.c 1.47:
-	sprintfの型を%ldから%dに修正。
+	* src/files.c 1.47: sprintfの型を%ldから%dに修正。
 
 2002-04-13  Takeshi Mogami  <mogami@cvs>
 
@@ -2510,11 +2542,9 @@
 
 2002-04-12  Takeshi Mogami  <mogami@cvs>
 
-	* readme.txt 1.6:
-	bigscreenに対応してなかった一文削除。
+	* readme.txt 1.6: bigscreenに対応してなかった一文削除。
 
-	* src/autopick.c 1.6:
-	まだ残っていた再描画バグ(^L)修正。
+	* src/autopick.c 1.6: まだ残っていた再描画バグ(^L)修正。
 	英語版コンパイルエラー修正。英語メッセージ細かいとこ修正。
 	^I ^Lでキーワード「武器」が挿入されなかったのを修正。
 
@@ -2530,8 +2560,7 @@
 	constポインタ(ポインタ)の変数をC_FREEに渡すとVC++がワーニングを出す事が
 	わかったので再修正。
 
-	* src/autopick.c 1.4, src/externs.h 1.39:
-	ワーニングを無くす修正。
+	* src/autopick.c 1.4, src/externs.h 1.39: ワーニングを無くす修正。
 	その他、autopick editorの行の説明文追加等。
 
 	* src/xtra2.c 1.27:
@@ -2589,23 +2618,18 @@
 	* src/z-config.h 1.6:
 	makefile.stdを使ったとき、英語版で_JPが定義されていたのを修正。
 
-	* src/cmd4.c 1.32.4.4:
-	ワーニング出ないように修正。
+	* src/cmd4.c 1.32.4.4: ワーニング出ないように修正。
 
-	* src/autopick.c 1.1.2.12:
-	未使用変数のワーニング出ないように修正。
+	* src/autopick.c 1.1.2.12: 未使用変数のワーニング出ないように修正。
 	コード整理。コマンド説明の再描画を必要なときだけに制限。
 
 2002-04-08  Takeshi Mogami  <mogami@cvs>
 
-	* src/autopick.c 1.1.2.11:
-	大事な ^I コマンドが壊れてた。修正。
+	* src/autopick.c 1.1.2.11: 大事な ^I コマンドが壊れてた。修正。
 
-	* src/autopick.c 1.1.2.10:
-	コマンド説明のミス修正。
+	* src/autopick.c 1.1.2.10: コマンド説明のミス修正。
 
-	* src/autopick.c 1.1.2.9:
-	英語版がコンパイルできなかったのを修正。
+	* src/autopick.c 1.1.2.9: 英語版がコンパイルできなかったのを修正。
 	256行目以降で、変更を感知できず画面再描画がされなかったのを修正。
 	'b' '-' でのバックスクロールが半画面程度だったバグ修正。
 	コマンドさらに統合。
@@ -2617,8 +2641,7 @@
 	* src/autopick.c 1.1.2.7:
 	スクロールが遅いので、1行スクロールでなくセンタリングするようにした。
 
-	* src/autopick.c 1.1.2.6:
-	大事な行をコメントアウトしたままだった。
+	* src/autopick.c 1.1.2.6: 大事な行をコメントアウトしたままだった。
 
 	* src/autopick.c 1.1.2.5: 高速化修正。
 
@@ -2630,8 +2653,7 @@
 	gcu と cap で ^S が使えないのを修正するパッチ flowctrl.dif を適用。
 	clockworkから持ってきた Hallvard B. Furuseth さんのパッチ。
 
-	* src/autopick.c 1.1.2.4:
-	カット(^K)してペースト(^Y)できるようにした。
+	* src/autopick.c 1.1.2.4: カット(^K)してペースト(^Y)できるようにした。
 	配列溢れバグ修正。
 
 2002-04-07  Takeshi Mogami  <mogami@cvs>
@@ -2641,8 +2663,7 @@
 
 	* Changelogs 1.33: 更新
 
-	* lib/pref/pickpref.prf 1.1, lib/pref/picktype.prf 1.1:
-	New file.
+	* lib/pref/pickpref.prf 1.1, lib/pref/picktype.prf 1.1: New file.
 
 	* lib/pref/pickpref.prf 1.1.2.1, lib/pref/picktype.prf 1.1.2.1:
 	commit忘れていた。デフォルトの設定ファイル。全く設定を書いていないときに
@@ -2651,13 +2672,11 @@
 	* src/variable.c 1.16.4.2, src/autopick.c 1.1.2.2, src/cmd1.c 1.27.4.3, src/cmd4.c 1.32.4.3, src/externs.h 1.36.4.3, src/files.c 1.43.4.2, src/types.h 1.10.4.2:
 	取り敢えず完成という事にする。初期の構想は全部実装した。もう使用可能。
 
-	* src/main-mac.c 1.12:
-	Bigtile用の変更。kuwaさんより。
+	* src/main-mac.c 1.12: Bigtile用の変更。kuwaさんより。
 
 2002-04-07  henkma  <henkma@cvs>
 
-	* lib/edit/t0000001_j.txt 1.8:
-	単なるコメントの修正.
+	* lib/edit/t0000001_j.txt 1.8: 単なるコメントの修正.
 
 2002-04-07  Takeshi Mogami  <mogami@cvs>
 
@@ -2692,11 +2711,9 @@
 
 2002-04-06  Takeshi Mogami  <mogami@cvs>
 
-	* lib/edit/a_info_j.txt 1.20:
-	宮本武蔵の★の説明追加。
+	* lib/edit/a_info_j.txt 1.20: 宮本武蔵の★の説明追加。
 
-	* readme.txt 1.5, readme_eng.txt 1.6:
-	タイルとBigtileの説明追加。
+	* readme.txt 1.5, readme_eng.txt 1.6: タイルとBigtileの説明追加。
 
 2002-04-06  hoge  <hoge@cvs>
 
@@ -2730,8 +2747,7 @@
 
 2002-04-05  habu  <habu@cvs>
 
-	* lib/edit/a_info_j.txt 1.18:
-	エクスカリバーに警告能力を追加。
+	* lib/edit/a_info_j.txt 1.18: エクスカリバーに警告能力を追加。
 
 2002-04-05  _nothere  <_nothere@cvs>
 
@@ -2761,16 +2777,14 @@
 
 2002-04-03  Takeshi Mogami  <mogami@cvs>
 
-	* src/xtra2.c 1.25.6.2:
-	たぬき のr_sightsが全く増えなかったのを修正。
+	* src/xtra2.c 1.25.6.2: たぬき のr_sightsが全く増えなかったのを修正。
 
 	* src/melee2.c 1.18.6.2:
 	しゃべるモンスターのときはしゃべる。重厚な足音もする。
 
 2002-04-03  _nothere  <_nothere@cvs>
 
-	* lib/edit/k_info_j.txt 1.15.2.3:
-	キノコと薬の説明の英訳完了.
+	* lib/edit/k_info_j.txt 1.15.2.3: キノコと薬の説明の英訳完了.
 
 2002-04-03  Takeshi Mogami  <mogami@cvs>
 
@@ -2802,8 +2816,7 @@
 
 2002-04-02  _nothere  <_nothere@cvs>
 
-	* src/angband.rc 1.3:
-	Windowsでのメニューの半角カナを全角カナに変更.
+	* src/angband.rc 1.3: Windowsでのメニューの半角カナを全角カナに変更.
 
 	* src/cave.c 1.29:
 	ascii_to_zenkakuテーブルでコロンとセミコロンが逆だったので修正.
@@ -2886,8 +2899,7 @@
 	* lib/edit/r_info_j.txt 1.29:
 	Wyrd sister → 運命の魔女。Lesser black reaver → 灰色の掠奪者。
 
-	* src/cave.c 1.28:
-	new_ascii_graphicsのコード整理。
+	* src/cave.c 1.28: new_ascii_graphicsのコード整理。
 
 2002-03-29  henkma  <henkma@cvs>
 
@@ -2896,8 +2908,7 @@
 
 2002-03-28  Takeshi Mogami  <mogami@cvs>
 
-	* src/tables.c 1.26:
-	スペルチェックのとき直したのにcommit忘れてた。
+	* src/tables.c 1.26: スペルチェックのとき直したのにcommit忘れてた。
 
 2002-03-28  henkma  <henkma@cvs>
 
@@ -2916,8 +2927,7 @@
 
 2002-03-27  henkma  <henkma@cvs>
 
-	* src/tables.c 1.23, src/spellstips.h 1.15:
-	typo修正.
+	* src/tables.c 1.23, src/spellstips.h 1.15: typo修正.
 
 	* src/spellstips.h 1.14: typo修正. shild→shield.
 
@@ -2929,8 +2939,7 @@
 	* lib/help/jcommand.hlp 1.3, lib/help/jcommdesc.hlp 1.3, lib/help/jpref.txt 1.2:
 	修正
 
-	* lib/help/jbirth.hlp 1.2, lib/help/jbirth.txt 1.4:
-	修正。
+	* lib/help/jbirth.hlp 1.2, lib/help/jbirth.txt 1.4: 修正。
 
 	* lib/help/birth.txt 1.4: 英訳進行
 
@@ -2943,8 +2952,7 @@
 
 2002-03-26  henkma  <henkma@cvs>
 
-	* src/spellstips.h 1.13:
-	typo修正. Vamparic→Vampiric.
+	* src/spellstips.h 1.13: typo修正. Vamparic→Vampiric.
 
 	* src/mindtips.h 1.5, src/spellstips.h 1.12:
 	typo修正, hiroism→heroism.
@@ -2956,8 +2964,7 @@
 
 	* lib/help/option.txt 1.5: 一部セーブし忘れた。
 
-	* lib/help/option.hlp 1.4, lib/help/option.txt 1.4:
-	英訳さらに進行。
+	* lib/help/option.hlp 1.4, lib/help/option.txt 1.4: 英訳さらに進行。
 
 	* lib/help/joption.hlp 1.3, lib/help/joption.txt 1.5, lib/pref/pref-opt.prf 1.3, src/externs.h 1.36, src/tables.c 1.21, src/variable.c 1.16:
 	未使用のstack_allow_wandsを削除。
@@ -2969,8 +2976,7 @@
 
 2002-03-24  Takeshi Mogami  <mogami@cvs>
 
-	* lib/help/joption.txt 1.4:
-	英訳中に気付いたミス。修正。
+	* lib/help/joption.txt 1.4: 英訳中に気付いたミス。修正。
 
 	* lib/help/charattr.hlp 1.2, lib/help/charattr.txt 1.2, lib/help/general.hlp 1.4, lib/help/general.txt 1.4, lib/help/magic.hlp 1.4, lib/help/magic.txt 1.4, lib/help/version.txt 1.4:
 	英語版ヘルプのできたとこのみ。
@@ -3003,8 +3009,7 @@
 
 2002-03-23  Takeshi Mogami  <mogami@cvs>
 
-	* src/racial.c 1.8:
-	剣の舞いの訳がわかったので修正。
+	* src/racial.c 1.8: 剣の舞いの訳がわかったので修正。
 
 2002-03-23  henkma  <henkma@cvs>
 
@@ -3025,8 +3030,7 @@
 	「弱い呪い」は, 他の表現と統一して, 単に「呪い」で良いと思うのだがどうか？
 	# 今のところ弱い呪い(英語はweak curse)としている.
 
-	* src/object1.c 1.23, src/spells2.c 1.14:
-	呪い関連"nanka"を翻訳.
+	* src/object1.c 1.23, src/spells2.c 1.14: 呪い関連"nanka"を翻訳.
 
 2002-03-23  Takeshi Mogami  <mogami@cvs>
 
@@ -3035,8 +3039,7 @@
 
 2002-03-22  Takeshi Mogami  <mogami@cvs>
 
-	* src/files.c 1.41:
-	ダンプの死亡場所の表示に、死因も追加。
+	* src/files.c 1.41: ダンプの死亡場所の表示に、死因も追加。
 
 	* src/effects.c 1.16:
 	麻痺や彫像状態で死んだとき、死因に"麻痺状態で"、"彫像状態で"を追加するように
@@ -3066,8 +3069,7 @@
 
 2002-03-20  habu  <habu@cvs>
 
-	* src/hissatsu.c 1.5:
-	剣術家の眩惑がMPを消費していないバグを修正
+	* src/hissatsu.c 1.5: 剣術家の眩惑がMPを消費していないバグを修正
 
 2002-03-20  Takeshi Mogami  <mogami@cvs>
 
@@ -3094,8 +3096,7 @@
 
 2002-03-17  Takeshi Mogami  <mogami@cvs>
 
-	* lib/help/jmagic.txt 1.3:
-	剣術家の型の説明を忘れていたので追加。
+	* lib/help/jmagic.txt 1.3: 剣術家の型の説明を忘れていたので追加。
 
 	* lib/help/jmagic.hlp 1.2, lib/help/jmagic.txt 1.2:
 	魔法の説明を変愚蛮怒に対応。
@@ -3185,11 +3186,9 @@
 	* src/dungeon.c 1.21, src/externs.h 1.32, src/files.c 1.39, src/generate.c 1.9, src/init1.c 1.25, src/load.c 1.17, src/main-mac.c 1.11, src/main-win.c 1.7, src/main-x11.c 1.12, src/monster1.c 1.11, src/object1.c 1.20, src/save.c 1.7, src/scores.c 1.5, src/store.c 1.6, src/variable.c 1.13, src/wild.c 1.7, src/xtra1.c 1.26, src/xtra2.c 1.22, src/z-term.c 1.3, src/z-term.h 1.2, src/ang_eng.rc 1.3, src/angband.rc 1.2, src/cave.c 1.23, src/cmd3.c 1.10, src/cmd4.c 1.28, src/defines.h 1.27:
 	branch-mogami-bigtile をマージ。
 
-	* src/main-mac.c 1.10.2.3:
-	switch文のbreak;忘れを修正。
+	* src/main-mac.c 1.10.2.3: switch文のbreak;忘れを修正。
 
-	* src/main-mac.c 1.10.2.2:
-	KuwaさんにMacでテストしてもらって修正。
+	* src/main-mac.c 1.10.2.2: KuwaさんにMacでテストしてもらって修正。
 	サブウィンドウにタイルが表示できないのバグらしき振舞いも修正。
 
 	* Changelogs 1.27:
@@ -3197,8 +3196,7 @@
 	ファイル名にリビジョン番号を付けたので、1.30.2.4 みたいに4つ以上の数字
 	の組だったら枝のファイルである事がわかる。
 
-	* src/scores.c 1.4.2.1:
-	スコアリストを大きいウィンドウに対応。
+	* src/scores.c 1.4.2.1: スコアリストを大きいウィンドウに対応。
 
 	* src/cave.c 1.22.2.10:
 	USE_TRANSPARENCYを使ってないときのコンパイルエラー修正。
@@ -3221,14 +3219,12 @@
 	* src/z-term.c 1.2.14.6:
 	全角キャラクタの上をカーソルが移動したときの更新の不備を修正。
 
-	* src/main-mac.c 1.10.2.1:
-	Bigtile、Macに対応、したつもり。
+	* src/main-mac.c 1.10.2.1: Bigtile、Macに対応、したつもり。
 
 	* src/files.c 1.38.2.1:
 	ヘルプや'I'等で使う show_file() を大きいウィンドウに対応。
 
-	* src/main-win.c 1.6.6.2:
-	Winも全角ASCII文字に対応した修正。
+	* src/main-win.c 1.6.6.2: Winも全角ASCII文字に対応した修正。
 
 	* src/main-x11.c 1.11.2.4, src/z-term.c 1.2.14.5, src/cave.c 1.22.2.8:
 	対応するタイルがないオブジェクトはASCII文字を全角に変換して表示。
@@ -3258,8 +3254,7 @@
 
 2002-03-10  Takeshi Mogami  <mogami@cvs>
 
-	* src/xtra2.c 1.21.2.5:
-	lookコマンドの領域外アクセスを修正。
+	* src/xtra2.c 1.21.2.5: lookコマンドの領域外アクセスを修正。
 
 	* src/dungeon.c 1.20.2.2:
 	作業のついでに、、メッセージサブウィンドウがゲーム開始時に描画されていない
@@ -3331,8 +3326,7 @@
 	キャラクター生成時の能力値のダイスを実験的に 5 + 1d3 + 1d4 + 1d5 から、
 	7 + 1d10 に変更。その代りdelayをデフォルトで 10 (1/100 秒)入れた。
 
-	* src/scores.c 1.4:
-	scores.rawの文字コードを自動で変換するようにした。
+	* src/scores.c 1.4: scores.rawの文字コードを自動で変換するようにした。
 
 	* src/cmd4.c 1.27, src/effects.c 1.13, src/util.c 1.21:
 	get_checkの [y/n]のメッセージを履歴に残すようにしてみた。
@@ -3343,8 +3337,7 @@
 	* lib/edit/t0000002_j.txt 1.3, lib/edit/t0000003_j.txt 1.3, lib/edit/t0000004_j.txt 1.3, lib/help/jbldg.txt 1.2, src/bldg.c 1.9:
 	町の歴史→町の概要 として、jbldg.txtをちゃんと書いた。
 
-	* lib/help/jversion.txt 1.6:
-	書き間違え 2001 -> 2002
+	* lib/help/jversion.txt 1.6: 書き間違え 2001 -> 2002
 
 	* src/files.c 1.38:
 	Winで半角8文字より長い名前を勝手に8byteに切るのを廃止。
@@ -3356,8 +3349,7 @@
 
 2002-03-08  habu  <habu@cvs>
 
-	* lib/edit/e_info_j.txt 1.13:
-	of Poisoning -> of Venom
+	* lib/edit/e_info_j.txt 1.13: of Poisoning -> of Venom
 
 	* lib/edit/e_info_j.txt 1.12, src/object2.c 1.28:
 	XTRA_POWERフラグで呼ばれるのがone_sustain()になっていたのでone_ability()に修正。(祝福)武器もe_info_jでXTRA_POWERを定義。
@@ -3450,8 +3442,7 @@
 
 2002-03-04  Takeshi Mogami  <mogami@cvs>
 
-	* lib/help/jversion.txt 1.3:
-	バージョン履歴に1.0.9の情報追加。
+	* lib/help/jversion.txt 1.3: バージョン履歴に1.0.9の情報追加。
 
 	* lib/edit/r_info_j.txt 1.20:
 	カルダームにCAN_SPEAKが付いてなかったので付けた。
@@ -3461,8 +3452,7 @@
 
 	* Changelogs 1.24: 更新
 
-	* src/main-x11.c 1.11:
-	タイル表示のサイズを正方形にするために、
+	* src/main-x11.c 1.11: タイル表示のサイズを正方形にするために、
 	setenv ANGBAND_X11_FONT_0 '-sony-fixed-medium-r-normal--16-*-*-*-*-160-iso8859-1,-jis-fixed-medium-r-normal--16-*-*-*-*-320-jisx0208.1983-0'
 	setenv ANGBAND_X11_FONT '-sony-fixed-medium-r-normal--16-*-*-*-*-*-iso8859-1,-jis-fixed-medium-r-normal--16-*-*-*-*-*-jisx0208.1983-0'
 	のように、通常のフォントよりも幅だけ2倍にしたとき、今までは表示がおかしくなって
@@ -3509,22 +3499,19 @@
 	* src/xtra1.c 1.23:
 	アライメントの計算で先にjをデクリメントしないとSEGVるので修正。
 
-	* src/spells3.c 1.15:
-	劣化攻撃でまれ(1/13)にpvalが下がるようにした。
+	* src/spells3.c 1.15: 劣化攻撃でまれ(1/13)にpvalが下がるようにした。
 
 	* src/xtra1.c 1.22:
 	称号名がフィールド画面にはみ出さないように修正。但し、称号名はここでしか表示されていないのではみ出すやつはどうやっても全体を見れない事になる。
 
 2002-03-02  Takeshi Mogami  <mogami@cvs>
 
-	* lib/edit/r_info_j.txt 1.19:
-	growing →大きくなってくる
+	* lib/edit/r_info_j.txt 1.19: growing →大きくなってくる
 
 	* lib/edit/a_info_j.txt 1.12:
 	力の指輪の英文説明を修正。モルゴスから隠された→サウロンから隠された。
 
-	* lib/edit/a_info_j.txt 1.11:
-	フンディンの鎖付き鉄球の説明修正。
+	* lib/edit/a_info_j.txt 1.11: フンディンの鎖付き鉄球の説明修正。
 
 2002-03-02  habu  <habu@cvs>
 
@@ -3535,8 +3522,7 @@
 
 	* Changelogs 1.23: 更新
 
-	* src/object1.c 1.18:
-	'\n'の追加し忘れていたのを追加。
+	* src/object1.c 1.18: '\n'の追加し忘れていたのを追加。
 
 	* src/report.c 1.14:
 	MPWで、-noMapCR オプションは弊害が非常に大きく使用不可なので、ローカルで使う
@@ -3558,8 +3544,7 @@
 	ダメージ修正は絶対値を取るようにした。命中修正は変わらないので当てるのは
 	難しい。
 
-	* src/files.c 1.37:
-	pval < -10 のとき'C'での表示がバグるのを修正。
+	* src/files.c 1.37: pval < -10 のとき'C'での表示がバグるのを修正。
 
 	* src/files.c 1.36:
 	キャラクターの作成中に生い立ち表示で現在地を表示しようとするバグを修正。
@@ -3630,8 +3615,7 @@
 	バージョンが変わったときに古い初期設定ファイルを無視するようにした。
 	本当は初期設定ファイルの型式が変ったときだけ無視したいが、いい案がない。
 
-	* Changelogs 1.21.2.2, lib/file/monfrien.txt 1.1.1.1.12.2:
-	英文修正。
+	* Changelogs 1.21.2.2, lib/file/monfrien.txt 1.1.1.1.12.2: 英文修正。
 
 	* lib/edit/r_info_j.txt 1.18.2.3:
 	英語のユニークモンスター名にはTheを自分で付けなくてはいけなかったので修正。
@@ -3693,13 +3677,11 @@
 
 2002-02-23  Takeshi Mogami  <mogami@cvs>
 
-	* lib/help/jtang.txt 1.2:
-	初心者ガイドを変愚蛮怒対応にした。
+	* lib/help/jtang.txt 1.2: 初心者ガイドを変愚蛮怒対応にした。
 
 	* readme_eng.txt 1.4: make install の説明追加
 
-	* lib/edit/r_info_j.txt 1.18:
-	残っていた英文の説明を翻訳。
+	* lib/edit/r_info_j.txt 1.18: 残っていた英文の説明を翻訳。
 
 	* lib/help/jattack.hlp 1.2, lib/help/jcharattr.txt 1.4, lib/help/jobjects.hlp 1.2:
 	タグの修正。
@@ -3711,11 +3693,9 @@
 	持ち物の整理のコードを実行してしまっていたのを修正。勝手な銘のコピー等
 	が起きて一見不可解に見える振るまいをしていた。ついでにコードの整理。
 
-	* src/main-x11.c 1.9:
-	main-gcu.c のサウンドコードを移植。
+	* src/main-x11.c 1.9: main-gcu.c のサウンドコードを移植。
 
-	* src/main-gcu.c 1.2:
-	SOUND関連でバグっぽいコードを修正。
+	* src/main-gcu.c 1.2: SOUND関連でバグっぽいコードを修正。
 
 2002-02-22  habu  <habu@cvs>
 
@@ -3750,8 +3730,7 @@
 	* lib/edit/k_info_j.txt 1.9:
 	鉄冠を45階から40階級に下げた。(金の冠と一緒というのはおかしいだろう)
 
-	* lib/edit/e_info_j.txt 1.10:
-	テレパシーの冠のレア度を下げた。
+	* lib/edit/e_info_j.txt 1.10: テレパシーの冠のレア度を下げた。
 
 2002-02-21  Takeshi Mogami  <mogami@cvs>
 
@@ -3774,8 +3753,7 @@
 
 2002-02-21  henkma  <henkma@cvs>
 
-	* lib/edit/m_info_j.txt 1.4:
-	勘違いでした. m_info_j.txtの変更取り消し.
+	* lib/edit/m_info_j.txt 1.4: 勘違いでした. m_info_j.txtの変更取り消し.
 
 	* lib/edit/m_info_j.txt 1.3:
 	プリーストの魔法の難易度を修正. なぜか第二領域系の魔法が昔より5%減ってて, (一部しか調べてないが)メイジよりうまくなってた.
@@ -3795,8 +3773,7 @@
 
 2002-02-19  Takeshi Mogami  <mogami@cvs>
 
-	* src/birth.c 1.18:
-	職業選択時の忍者の説明も修正(見ること見ること)
+	* src/birth.c 1.18: 職業選択時の忍者の説明も修正(見ること見ること)
 
 2002-02-19  habu  <habu@cvs>
 
@@ -3826,13 +3803,11 @@
 	* lib/edit/a_info_j.txt 1.9, lib/edit/e_info_j.txt 1.7, src/artifact.c 1.11, src/bldg.c 1.7, src/cmd1.c 1.18, src/cmd2.c 1.14, src/cmd3.c 1.8, src/defines.h 1.17, src/files.c 1.35, src/init1.c 1.20, src/object1.c 1.12, src/object2.c 1.14, src/spells2.c 1.11, src/wizard1.c 1.8:
 	FORCE_WEPON -> FORCE_WEAPON
 
-	* lib/edit/a_info_j.txt 1.8:
-	PYECにWARNINGフラグ追加。
+	* lib/edit/a_info_j.txt 1.8: PYECにWARNINGフラグ追加。
 
 2002-02-18  Takeshi Mogami  <mogami@cvs>
 
-	* src/wizard2.c 1.10:
-	^A o の生成率の表示をlogグラフにしてみた。
+	* src/wizard2.c 1.10: ^A o の生成率の表示をlogグラフにしてみた。
 	log_{sqrt(2)}^{生成率} としたので、'*'が2つでちょうど生成率2倍を意味する。
 
 	* src/wizard2.c 1.9:
@@ -3841,8 +3816,7 @@
 
 2002-02-17  Takeshi Mogami  <mogami@cvs>
 
-	* src/wizard2.c 1.8:
-	オーバーフローしていたので修正。
+	* src/wizard2.c 1.8: オーバーフローしていたので修正。
 
 2002-02-17  habu  <habu@cvs>
 
@@ -3860,8 +3834,7 @@
 
 2002-02-16  Takeshi Mogami  <mogami@cvs>
 
-	* src/melee2.c 1.13:
-	敵の時止めがバグっていたので修正。
+	* src/melee2.c 1.13: 敵の時止めがバグっていたので修正。
 
 	* Changelogs 1.20: 更新
 
@@ -3876,8 +3849,7 @@
 
 2002-02-15  Takeshi Mogami  <mogami@cvs>
 
-	* src/monster1.c 1.8:
-	fire a missle -> fire an arrow
+	* src/monster1.c 1.8: fire a missle -> fire an arrow
 
 2002-02-15  hoge  <hoge@cvs>
 
@@ -3907,8 +3879,7 @@
 
 2002-02-14  Takeshi Mogami  <mogami@cvs>
 
-	* lib/edit/r_info_j.txt 1.13, src/tables.c 1.14:
-	typo deamon -> daemon
+	* lib/edit/r_info_j.txt 1.13, src/tables.c 1.14: typo deamon -> daemon
 
 	* src/effects.c 1.7:
 	再び修正。ESCを押すと叫びが "" になって、そのまま入力せずに死ぬと
@@ -3941,8 +3912,7 @@
 	新規にキャラクターを作ったとき、サブウィンドウ1にメッセージ履歴、
 	サブウィンドウ2に持ち物表示を割り当てるようにした。
 
-	* readme.txt 1.3:
-	make install に対応して readme.txt の更新。
+	* readme.txt 1.3: make install に対応して readme.txt の更新。
 
 	* Changelogs 1.18: 更新
 
@@ -4023,8 +3993,7 @@
 
 2002-02-09  habu  <habu@cvs>
 
-	* lib/help/jattack.txt 1.3:
-	矢の平均ダメージ(#/#)に関する説明を追加。
+	* lib/help/jattack.txt 1.3: 矢の平均ダメージ(#/#)に関する説明を追加。
 
 2002-02-09  henkma  <henkma@cvs>
 
@@ -4049,14 +4018,11 @@
 	* src/wizard1.c 1.5.2.1:
 	misc_flags3_desc(スポイラー生成に使われる？)にTR3_WARNINGの項を追加。
 
-	* src/object2.c 1.9.2.2:
-	flag_cost()でTR3_WARNINGの価値を2000に設定。
+	* src/object2.c 1.9.2.2: flag_cost()でTR3_WARNINGの価値を2000に設定。
 
-	* src/cmd3.c 1.6.2.2:
-	英語版のほうにも警告の自動刻み追加。
+	* src/cmd3.c 1.6.2.2: 英語版のほうにも警告の自動刻み追加。
 
-	* src/cmd3.c 1.6.2.1:
-	自動刻みに警告フラグを追加。
+	* src/cmd3.c 1.6.2.1: 自動刻みに警告フラグを追加。
 
 	* src/z-config.h 1.2.2.1, lib/edit/a_info_j.txt 1.4.4.1, lib/edit/k_info_j.txt 1.5.2.1, src/cmd1.c 1.12.2.1, src/defines.h 1.12.2.1, src/externs.h 1.23.2.1, src/init1.c 1.14.2.1, src/object1.c 1.7.2.1, src/object2.c 1.9.2.1, src/xtra1.c 1.15.2.1:
 	先程の変更を改めて枝(branch-habu-warning)にcommit。
@@ -4079,8 +4045,7 @@
 
 2002-02-08  henkma  <henkma@cvs>
 
-	* lib/file/a_high_j.txt 1.8:
-	typo修正。殺生与奪→生殺与奪
+	* lib/file/a_high_j.txt 1.8: typo修正。殺生与奪→生殺与奪
 
 2002-02-08  iks  <iks@cvs>
 
@@ -4196,8 +4161,7 @@
 
 	* src/spellstips.h 1.11: samurai tips typo修正.
 
-	* src/spellstips.h 1.10:
-	さらに剣術家tips(英語)のtypo修正.
+	* src/spellstips.h 1.10: さらに剣術家tips(英語)のtypo修正.
 
 2002-02-04  Takeshi Mogami  <mogami@cvs>
 
@@ -4259,8 +4223,7 @@
 	* src/spellstips.h 1.7:
 	まだfor a while残ってたので直した. (無駄にログ増やしちゃってます, すんません.)
 
-	* src/spellstips.h 1.6:
-	歌の効果なのにfor a whileは変なので削除.
+	* src/spellstips.h 1.6: 歌の効果なのにfor a whileは変なので削除.
 
 	* src/spellstips.h 1.5: tipsのtypo修正.
 
@@ -4293,8 +4256,7 @@
 	* src/tables.c 1.13:
 	easy_* use_command over_exert オプションの位置をキー入力オプションに変更。
 
-	* src/mspells1.c 1.5:
-	Ring-Ranger → the Ring-Ranger。
+	* src/mspells1.c 1.5: Ring-Ranger → the Ring-Ranger。
 	セリフのピリオドの位置が変なのも修正。
 	's'を付けようか迷ったのだけれど、Ranger は「特別奇襲隊」とか「森林警備隊」
 	とかの「隊」単数だから 's' はいらない。個々の「隊員」は ranger で、頭が小文字。
@@ -4335,8 +4297,7 @@
 	* src/main-mac.c 1.5, src/util.c 1.14:
 	MPW用に、util.c の方の 13 も '\r' に書き直し。
 
-	* src/main-mac.c 1.4:
-	MPWではデフォルトで '\r' が line feed(つまり10)、
+	* src/main-mac.c 1.4: MPWではデフォルトで '\r' が line feed(つまり10)、
 	'\n' が caridge return (つまり13)を発生させるというとんでもない仕様である
 	ことが判明したので、13というキーコードを使わないように修正。
 	(-noMapCRというオプションで'\r'と'\n'を入れ換えられるが、
@@ -4436,8 +4397,7 @@
 
 2002-01-28  habu  <habu@cvs>
 
-	* lib/edit/r_info_j.txt 1.10:
-	サムライの攻撃をHITからSLASHに変更。
+	* lib/edit/r_info_j.txt 1.10: サムライの攻撃をHITからSLASHに変更。
 	また、サムライの英語版の説明部分に日本語が残っていたので削除。
 
 2002-01-28  Takeshi Mogami  <mogami@cvs>
@@ -4459,16 +4419,13 @@
 
 2002-01-27  Takeshi Mogami  <mogami@cvs>
 
-	* src/cmd4.c 1.20:
-	fd_copy() がどうも怪しいので、使うのをやめてみた。
+	* src/cmd4.c 1.20: fd_copy() がどうも怪しいので、使うのをやめてみた。
 
-	* src/melee1.c 1.4:
-	英語版でマダムデビのセリフが抜けていたのを追加。
+	* src/melee1.c 1.4: 英語版でマダムデビのセリフが抜けていたのを追加。
 
 2002-01-27  iks  <iks@cvs>
 
-	* lib/file/a_cursed_j.txt 1.6, lib/file/a_med_j.txt 1.5:
-	また更新。
+	* lib/file/a_cursed_j.txt 1.6, lib/file/a_med_j.txt 1.5: また更新。
 
 	* lib/file/a_cursed_j.txt 1.5, lib/file/a_high_j.txt 1.4, lib/file/a_low_j.txt 1.4, lib/file/a_med_j.txt 1.4, lib/file/w_cursed_j.txt 1.5, lib/file/w_high_j.txt 1.4, lib/file/w_low_j.txt 1.7, lib/file/w_med_j.txt 1.4:
 	改行コード違ってました。すんません。
@@ -4497,8 +4454,7 @@
 
 2002-01-26  habu  <habu@cvs>
 
-	* src/cmd1.c 1.12, src/cmd2.c 1.9:
-	typo fix.
+	* src/cmd1.c 1.12, src/cmd2.c 1.9: typo fix.
 
 	* src/report.c 1.11:
 	作ったダンプを再度buf_sprintfに食わせて"%%"などが変に解釈されてしまっていたバグを修正。
@@ -4508,8 +4464,7 @@
 	* lib/file/a_cursed_j.txt 1.3, lib/file/w_cursed_j.txt 1.3, lib/file/w_low_j.txt 1.5:
 	変なの削除。
 
-	* src/files.c 1.25:
-	'C'で、乗馬中の速度の表記にちゃんと対応。
+	* src/files.c 1.25: 'C'で、乗馬中の速度の表記にちゃんと対応。
 
 2002-01-26  hoge  <hoge@cvs>
 
@@ -4538,8 +4493,7 @@
 
 2002-01-26  iks  <iks@cvs>
 
-	* lib/file/w_low_j.txt 1.4:
-	登録数の数え間違いの修正。
+	* lib/file/w_low_j.txt 1.4: 登録数の数え間違いの修正。
 
 	* lib/file/a_cursed_j.txt 1.2, lib/file/a_high_j.txt 1.2, lib/file/a_low_j.txt 1.2, lib/file/a_med_j.txt 1.2, lib/file/w_cursed_j.txt 1.2, lib/file/w_high_j.txt 1.2, lib/file/w_low_j.txt 1.3, lib/file/w_med_j.txt 1.2:
 	ランダムアーティファクト名を追加/修正
@@ -4560,8 +4514,7 @@
 
 2002-01-26  Takeshi Mogami  <mogami@cvs>
 
-	* src/files.c 1.23:
-	引退のときに、生い立ちの下のメッセージを変更。
+	* src/files.c 1.23: 引退のときに、生い立ちの下のメッセージを変更。
 
 2002-01-26  habu  <habu@cvs>
 
@@ -4570,8 +4523,7 @@
 
 2002-01-25  habu  <habu@cvs>
 
-	* src/cmd4.c 1.18:
-	スクリーンダンプのバッファの長さを計る方法を変更。
+	* src/cmd4.c 1.18: スクリーンダンプのバッファの長さを計る方法を変更。
 
 	* src/cmd4.c 1.17, src/defines.h 1.10, src/load.c 1.9, src/save.c 1.4, src/xtra2.c 1.8:
 	引退時のスクリーンダンプ用にサーペントを倒した瞬間の画面を使うようにした。
@@ -4601,8 +4553,7 @@
 	autopickで使い道があるので、$REALM1 $REALM2 で no magic でなく none を
 	返えすように修正。
 
-	* src/files.c 1.22:
-	- 死亡ダンプのメッセージ履歴を、15行->30行へ
+	* src/files.c 1.22: - 死亡ダンプのメッセージ履歴を、15行->30行へ
 	- ダンプの生い立ち表示のところ、こないだの変更のせいでバランスが悪かったので、
 	  一行空行追加。
 
@@ -4643,8 +4594,7 @@
 	ヘルプファイル用にZ240のshow_file()からコピペしてきたときに、reverse フラグの処理を
 	間違って消していたので、復活させた。
 
-	* src/files.c 1.19:
-	もう使わなくなった prt_num()等を削除。
+	* src/files.c 1.19: もう使わなくなった prt_num()等を削除。
 
 	* src/files.c 1.18:
 	set user id を使っているときに、safe_setuid_drop()がちゃんと働いてユーザー設定
@@ -4691,8 +4641,7 @@
 
 2002-01-23  habu  <habu@cvs>
 
-	* lib/help/jmonster.txt 1.2:
-	モンスターの記号の表のずれを修正。
+	* lib/help/jmonster.txt 1.2: モンスターの記号の表のずれを修正。
 
 2002-01-23  Takeshi Mogami  <mogami@cvs>
 
@@ -4701,8 +4650,7 @@
 
 2002-01-23  habu  <habu@cvs>
 
-	* lib/help/jdungeon.txt 1.3:
-	階の雰囲気に関する記述の間違いを修正。
+	* lib/help/jdungeon.txt 1.3: 階の雰囲気に関する記述の間違いを修正。
 
 	* lib/help/jbirth.txt 1.3:
 	魔法領域の表のずれを修正。(TABがあるとずれるようだ。)
@@ -4760,8 +4708,7 @@
 	休憩終了時に全く無意味に disturb() を実行しているので削除。
 	休憩を含むマクロが使いやすくなる。
 
-	* lib/help/jhelp.hlp 1.3:
-	*** empty log message ***
+	* lib/help/jhelp.hlp 1.3: *** empty log message ***
 
 2002-01-21  Takeshi Mogami  <mogami@cvs>
 
@@ -4797,17 +4744,14 @@
 
 2002-01-21  habu  <habu@cvs>
 
-	* src/files.c 1.13:
-	sprintfのフォーマットが合っていなかったので修正。
+	* src/files.c 1.13: sprintfのフォーマットが合っていなかったので修正。
 
 2002-01-21  Takeshi Mogami  <mogami@cvs>
 
-	* src/files.c 1.12, src/xtra2.c 1.6:
-	- 英語版の'C'画面調整。
+	* src/files.c 1.12, src/xtra2.c 1.6: - 英語版の'C'画面調整。
 	- 日付表示を実装。
 
-	* Changelogs 1.3, src/files.c 1.11:
-	'C'の画面の空行の位置を変えてみた。
+	* Changelogs 1.3, src/files.c 1.11: 'C'の画面の空行の位置を変えてみた。
 	Changelogs更新
 
 2002-01-20  habu  <habu@cvs>
@@ -4817,8 +4761,7 @@
 
 2002-01-20  Takeshi Mogami  <mogami@cvs>
 
-	* src/files.c 1.10:
-	英語版の現在地の文を忘れていたので追加。
+	* src/files.c 1.10: 英語版の現在地の文を忘れていたので追加。
 
 	* src/cmd4.c 1.10, src/externs.h 1.9, src/files.c 1.9, src/spells2.c 1.4, src/xtra1.c 1.6, src/xtra2.c 1.5:
 	キャラクター情報画面を変更。
@@ -4859,8 +4802,7 @@
 	近く行なうキャラクター情報'C'の画面の変更に備えて、表示する各行の
 	位置やラベルを配列で管理するように書き換え。
 
-	* src/flavor.c 1.5:
-	@nothereさんのパッチ。金無垢と金有垢を黄色にする。
+	* src/flavor.c 1.5: @nothereさんのパッチ。金無垢と金有垢を黄色にする。
 
 	* src/store.c 1.2:
 	@nothereさんのパッチ。店や家でアイテム'z'を買えてしまうバグの修正。
@@ -4871,11 +4813,9 @@
 	* src/rooms.c 1.5:
 	r_info で Monk -> monk に修正したのでそれに合わせて教会のコードを修正。
 
-	* src/mspells3.c 1.3, src/tables.c 1.7:
-	青魔術師の魔法の英語名を修正。
+	* src/mspells3.c 1.3, src/tables.c 1.7: 青魔術師の魔法の英語名を修正。
 
-	* src/birth.c 1.10:
-	性格の選択で説明文の幅が広すぎるので修正。
+	* src/birth.c 1.10: 性格の選択で説明文の幅が広すぎるので修正。
 
 2002-01-18  Takeshi Mogami  <mogami@cvs>
 
@@ -4943,8 +4883,7 @@
 	* src/init1.c 1.4:
 	k_infoだけname_sizeの領域が足りない時にreallocするようになっていたのを、他と同じくエラーを返すようにした。なぜk_infoだけ特別扱いされていたのか全く不明。
 
-	* src/report.c 1.5:
-	Vasprintfで確保する領域を1024バイトにした。
+	* src/report.c 1.5: Vasprintfで確保する領域を1024バイトにした。
 
 2002-01-17  Takeshi Mogami  <mogami@cvs>
 
@@ -5010,8 +4949,7 @@
 	* lib/edit/k_info_j.txt 1.4, src/spellstips.h 1.4, src/tables.c 1.5:
 	仙術の次元の扉等の変更と、黒装束の追加に英語版も対応。
 
-	* src/cmd3.c 1.3:
-	'/'コマンドの名前で検索 ^M でのメッセージ修正。
+	* src/cmd3.c 1.3: '/'コマンドの名前で検索 ^M でのメッセージ修正。
 
 2002-01-16  Takeshi Mogami  <mogami@cvs>
 
@@ -5049,18 +4987,14 @@
 	英語版で、アーティファクトにフェイク刻みできないようにした。
 	また、エゴにフェイク刻みをした時は単に最後に追加するようにした。
 
-	* configure.in 1.2:
-	--disable-japaneseの説明を修正。
+	* configure.in 1.2: --disable-japaneseの説明を修正。
 	古い(?)FreeBSDでLocaleを使えるようにxpg4ライブラリのチェックを追加。
 
-	* src/autoconf.h.in 1.2:
-	このファイルもauto*関係のファイルなので削除。
+	* src/autoconf.h.in 1.2: このファイルもauto*関係のファイルなので削除。
 
-	* src/stamp-h.in 1.2:
-	これもautomake等が自動的に生成するので削除
+	* src/stamp-h.in 1.2: これもautomake等が自動的に生成するので削除
 
-	* Makefile.in 1.3:
-	先の作業で消し忘れていたファイルを削除。
+	* Makefile.in 1.3: 先の作業で消し忘れていたファイルを削除。
 
 	* Makefile.in 1.2, aclocal.m4 1.2, bootstrap 1.1, configure 1.2, install-sh 1.2, lib/Makefile.in 1.2, lib/apex/Makefile.in 1.2, lib/bone/Makefile.in 1.2, lib/data/Makefile.in 1.2, lib/edit/Makefile.in 1.2, lib/file/Makefile.in 1.2, lib/help/Makefile.in 1.2, lib/info/Makefile.in 1.2, lib/pref/Makefile.in 1.2, lib/save/Makefile.in 1.2, lib/script/Makefile.in 1.2, lib/user/Makefile.in 1.2, lib/xtra/Makefile.in 1.2, lib/xtra/font/Makefile.in 1.2, lib/xtra/graf/Makefile.in 1.2, lib/xtra/music/Makefile.in 1.2, lib/xtra/sound/Makefile.in 1.2, missing 1.2, mkinstalldirs 1.3, src/Makefile.in 1.2:
 	automake,autoconf等によって作られるファイルを削除。これらはcvsのリポジトリに入れるべきフィアルではない。
@@ -5079,8 +5013,7 @@
 
 2002-01-16  henkma  <henkma@cvs>
 
-	* src/cmd4.c 1.4:
-	情報コマンドのknown uniquesをremaining uniquesに
+	* src/cmd4.c 1.4: 情報コマンドのknown uniquesをremaining uniquesに
 
 	* lib/edit/r_info_j.txt 1.4:
 	Ashram(日本語名:黒衣の騎士『アシュラム』)を Ashram, the Ebony Knight に
@@ -5100,8 +5033,7 @@
 
 	* lib/edit/r_info_j.txt 1.3: Wong -> Richard Wong
 
-	* src/variable.c 1.4:
-	$GRAFのデフォルトの値を "ascii" に変更。
+	* src/variable.c 1.4: $GRAFのデフォルトの値を "ascii" に変更。
 	今迄は意味なく"old"になっていて、8x8タイルを使用中なのかasciiグラフィックなのか
 	prfファイルの中で判別できなかった。
 
@@ -5121,13 +5053,11 @@
 
 2002-01-15  iks  <iks@cvs>
 
-	* src/cave.c 1.4:
-	'M'コマンドの日本語メッセージの修正
+	* src/cave.c 1.4: 'M'コマンドの日本語メッセージの修正
 
 2002-01-13  iks  <iks@cvs>
 
-	* src/birth.c 1.4:
-	カーソルキーでキャラクタを作成できるように更新。
+	* src/birth.c 1.4: カーソルキーでキャラクタを作成できるように更新。
 
 2002-01-13  Takeshi Mogami  <mogami@cvs>
 
@@ -5137,14 +5067,12 @@
 
 2002-01-13  habu  <habu@cvs>
 
-	* src/report.c 1.2.2.4:
-	前の変更で使わなくなった変数の宣言を削除。
+	* src/report.c 1.2.2.4: 前の変更で使わなくなった変数の宣言を削除。
 
 	* src/report.c 1.2.2.3:
 	日付と文字コードはもはやスコアサーバに送る必要はないので該当コードを削除。
 
-	* src/report.c 1.2.2.2:
-	無駄に二重に領域を確保していたのを修正。
+	* src/report.c 1.2.2.2: 無駄に二重に領域を確保していたのを修正。
 	さらにインデントを修正。
 
 	* src/report.c 1.2.2.1:
@@ -5157,8 +5085,7 @@
 	が変身すると、プレイヤーに対するkillerの設定に失敗していたので、
 	変身前のモンスターの名前を保持するように修正。
 
-	* lib/edit/r_info_j.txt 1.1.1.1.2.3:
-	Balrog -> Greater Balrog
+	* lib/edit/r_info_j.txt 1.1.1.1.2.3: Balrog -> Greater Balrog
 
 	* src/cmd3.c 1.1.1.1.2.2:
 	思い出の名前検索をキャンセル時にreturn に引数忘れ。
@@ -5189,8 +5116,7 @@
 	たぶん、現在hogeさんが手元で適用していると思われるソースパッチをまとめたもの。
 	最新版とのdiffを取ってhogeさんに送るためだけに準備。
 
-	* autopick.txt 1.1.1.1.2.2:
-	add '(' in example. (first commit)
+	* autopick.txt 1.1.1.1.2.2: add '(' in example. (first commit)
 
 	* src/xtra1.c 1.2.2.1, src/xtra2.c 1.2.2.1, src/z-form.c 1.1.1.1.2.1, src/tables.c 1.2.2.1, src/types.h 1.1.1.1.2.1, src/util.c 1.2.2.1, src/variable.c 1.2.2.1, src/wild.c 1.2.2.1, src/wizard2.c 1.1.1.1.2.1, src/spells1.c 1.2.2.1, src/spells2.c 1.2.2.1, src/spells3.c 1.1.1.1.2.1, src/mind.c 1.1.1.1.2.1, src/mindtips.h 1.1.1.1.2.1, src/monster1.c 1.2.2.1, src/monster2.c 1.2.2.1, src/mspells1.c 1.1.1.1.2.1, src/mspells2.c 1.1.1.1.2.1, src/mspells3.c 1.1.1.1.2.1, src/mutation.c 1.2.2.1, src/object1.c 1.2.2.1, src/object2.c 1.2.2.1, src/racial.c 1.1.1.1.2.1, src/rooms.c 1.2.2.1, src/save.c 1.1.1.1.2.1, src/dungeon.c 1.2.2.1, src/effects.c 1.2.2.1, src/externs.h 1.2.2.1, src/files.c 1.2.2.1, src/flavor.c 1.2.2.1, src/generate.c 1.1.1.1.2.1, src/grid.c 1.1.1.1.2.1, src/h-config.h 1.1.1.1.2.1, src/hissatsu.c 1.1.1.1.2.1, src/inet.c 1.2.2.1, src/load.c 1.2.2.1, src/main-dos.c 1.1.1.1.2.1, src/main-win.c 1.2.2.1, src/makefile.dos 1.1.1.1.2.1, src/makefile.ibm 1.1.1.1.2.1, src/makefile.std 1.1.1.1.2.1, src/melee1.c 1.1.1.1.2.1, src/melee2.c 1.1.1.1.2.1, src/bldg.c 1.2.2.1, src/cave.c 1.2.2.1, src/chuukei.c 1.2.2.1, src/cmd1.c 1.2.2.1, src/cmd2.c 1.2.2.1, src/cmd3.c 1.1.1.1.2.1, src/cmd4.c 1.2.2.1, src/cmd5.c 1.2.2.1, src/cmd6.c 1.2.2.1, src/defines.h 1.2.2.1, lib/pref/colors.prf 1.1.1.1.2.1, lib/pref/font-ami.prf 1.1.1.1.2.1, lib/pref/font-dos.prf 1.1.1.1.2.1, lib/pref/font-ibm.prf 1.1.1.1.2.1, lib/pref/font-mac.prf 1.1.1.1.2.1, lib/pref/font-mon.prf 1.1.1.1.2.1, lib/pref/font-win.prf 1.1.1.1.2.1, lib/pref/font-x11.prf 1.1.1.1.2.1, lib/pref/font-xxx.prf 1.1.1.1.2.1, lib/pref/font.prf 1.1.1.1.2.1, lib/pref/graf-ami.prf 1.1.1.1.2.1, lib/pref/graf-dos.prf 1.1.1.1.2.1, lib/pref/graf-gcu.prf 1.1.1.1.2.1, lib/pref/graf-ibm.prf 1.1.1.1.2.1, lib/pref/graf-mac.prf 1.1.1.1.2.1, lib/pref/graf-new.prf 1.1.1.1.2.1, lib/pref/graf-win.prf 1.1.1.1.2.1, lib/pref/graf-x11.prf 1.1.1.1.2.1, lib/pref/graf-xaw.prf 1.1.1.1.2.1, lib/pref/graf-xxx.prf 1.1.1.1.2.1, lib/pref/graf.prf 1.1.1.1.2.1, lib/pref/pref-acn.prf 1.1.1.1.2.1, lib/pref/pref-ami.prf 1.1.1.1.2.1, lib/pref/pref-gcu.prf 1.1.1.1.2.1, lib/pref/pref-mac.prf 1.2.2.1, lib/pref/pref-opt.prf 1.1.1.1.2.1, lib/pref/pref-win.prf 1.2.2.1, lib/pref/pref-x11.prf 1.2.2.1, lib/pref/user-win.prf 1.1.1.1.2.1, lib/pref/user.prf 1.1.1.1.2.1, lib/pref/xtra-gcu.prf 1.1.1.1.2.1, lib/pref/xtra-new.prf 1.1.1.1.2.1, lib/pref/xtra-xxx.prf 1.1.1.1.2.1, lib/xtra/sound/sound.cfg 1.1.1.1.2.1, src/ang_eng.rc 1.1.1.1.2.1, src/artifact.c 1.2.2.1, src/birth.c 1.2.2.1, lib/edit/t0000001_j.txt 1.1.1.1.2.1, lib/edit/t0000002_j.txt 1.1.1.1.2.1, lib/edit/t0000003_j.txt 1.1.1.1.2.1, lib/edit/t0000004_j.txt 1.1.1.1.2.1, lib/edit/t0000006_j.txt 1.1.1.1.2.1, lib/edit/t_basic_j.txt 1.1.1.1.2.1, lib/edit/t_info_j.txt 1.1.1.1.2.1, lib/edit/t_lite_j.txt 1.1.1.1.2.1, lib/edit/t_pref_j.txt 1.1.1.1.2.1, lib/edit/v_info_j.txt 1.1.1.1.2.1, lib/edit/w_info_j.txt 1.1.1.1.2.1, lib/file/a_low.txt 1.1.1.1.2.1, lib/file/a_med.txt 1.1.1.1.2.1, lib/file/mondeath.txt 1.1.1.1.2.1, lib/file/monfear.txt 1.1.1.1.2.1, lib/file/monspeak.txt 1.1.1.1.2.1, lib/file/news.txt 1.2.2.1, lib/edit/misc_j.txt 1.1.1.1.2.1, lib/edit/q0000001_j.txt 1.1.1.1.2.1, lib/edit/q0000002_j.txt 1.1.1.1.2.1, lib/edit/q0000003_j.txt 1.1.1.1.2.1, lib/edit/q0000004_j.txt 1.1.1.1.2.1, lib/edit/q0000005_j.txt 1.1.1.1.2.1, lib/edit/q0000006_j.txt 1.1.1.1.2.1, lib/edit/q0000007_j.txt 1.1.1.1.2.1, lib/edit/q0000019_j.txt 1.1.1.1.2.1, lib/edit/q0000020_j.txt 1.1.1.1.2.1, lib/edit/q0000021_j.txt 1.1.1.1.2.1, lib/edit/q0000022_j.txt 1.1.1.1.2.1, lib/edit/q0000023_j.txt 1.1.1.1.2.1, lib/edit/q0000027_j.txt 1.1.1.1.2.1, lib/edit/q0000028_j.txt 1.1.1.1.2.1, lib/edit/q00000ms_j.txt 1.1.1.1.2.1, lib/edit/q000chao_j.txt 1.1.1.1.2.1, lib/edit/q000dekn_j.txt 1.1.1.1.2.1, lib/edit/q000eric_j.txt 1.1.1.1.2.1, lib/edit/q000lyeh_j.txt 1.1.1.1.2.1, lib/edit/q000natu_j.txt 1.1.1.1.2.1, lib/edit/q000sorc_j.txt 1.1.1.1.2.1, lib/edit/q00water_j.txt 1.1.1.1.2.1, lib/edit/q0fields_j.txt 1.1.1.1.2.1, lib/edit/q0thief1_j.txt 1.1.1.1.2.1, lib/edit/q0thief2_j.txt 1.1.1.1.2.1, lib/edit/q0willow_j.txt 1.1.1.1.2.1, lib/edit/q_info_j.txt 1.1.1.1.2.1, lib/edit/q_oberon_j.txt 1.1.1.1.2.1, lib/edit/q_pref_j.txt 1.1.1.1.2.1, lib/edit/q_random_j.txt 1.1.1.1.2.1, lib/edit/q_serpen_j.txt 1.1.1.1.2.1, lib/edit/q_warg_j.txt 1.1.1.1.2.1, lib/edit/qdarkelf_j.txt 1.1.1.1.2.1, lib/edit/qhaunted_j.txt 1.1.1.1.2.1, lib/edit/r_info_j.txt 1.1.1.1.2.1, autopick.txt 1.1.1.1.2.1, autopick_eng.txt 1.1.1.1.2.1, lib/edit/a_info_j.txt 1.1.1.1.2.1, lib/edit/e_info_j.txt 1.2.2.1, lib/edit/f_info_j.txt 1.1.1.1.2.1, lib/edit/k_info_j.txt 1.1.1.1.2.1, mkinstalldirs 1.1.1.1.2.1, readme_eng.txt 1.1.1.1.2.1:
 	hengband 1.0.8 fix2 revision 4 by mogami
