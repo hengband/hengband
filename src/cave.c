@@ -685,36 +685,16 @@ byte lighting_colours[16][2] =
 	{ \
 		/* Unsafe cave grid -- idea borrowed from Unangband */ \
 		if (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) \
-		{ \
 			feat = FEAT_UNDETECTED; \
-\
-			/* Access unsafe darkness */ \
-			f_ptr = &f_info[feat]; \
-\
-			/* Char and attr of unsafe grid */ \
-			c = f_ptr->x_char[F_LIT_STANDARD]; \
-			a = f_ptr->x_attr[F_LIT_STANDARD]; \
-		} \
 		else \
-		{ \
-			/* For feat_priority control */ \
 			feat = FEAT_NONE; \
 \
-			/* Access darkness */ \
-			f_ptr = &f_info[feat]; \
+		/* Access darkness */ \
+		f_ptr = &f_info[feat]; \
 \
-			if (use_graphics) \
-			{ \
-				/* Char and attr of darkness */ \
-				c = f_ptr->x_char[F_LIT_STANDARD]; \
-				a = f_ptr->x_attr[F_LIT_STANDARD]; \
-			} \
-			else \
-			{ \
-				/* Use "black" */ \
-				a = TERM_DARK; \
-			} \
-		} \
+		/* Char and attr of darkness */ \
+		c = f_ptr->x_char[F_LIT_STANDARD]; \
+		a = f_ptr->x_attr[F_LIT_STANDARD]; \
 	} \
 	else if (view_granite_lite && view_yellow_lite) \
 	{ \
