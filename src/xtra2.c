@@ -1041,7 +1041,6 @@ msg_print("地面に落とされた。");
 		{
 			int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 			(void)project(m_idx, 3, y, x, damroll(20, 10), GF_FIRE, flg, -1);
-			break;
 		}
 		break;
 
