@@ -245,8 +245,10 @@ void delete_monster_idx(int i)
 		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
 
-		/* Hack -- efficiency */
-		o_ptr->held_m_idx = 0;
+		/*
+		 * o_ptr->held_m_idx is needed in delete_object_idx()
+		 * to prevent calling lite_spot()
+		 */
 
 		/* Delete the object */
 		delete_object_idx(this_o_idx);
@@ -4962,14 +4964,14 @@ void monster_drop_carried_objects(monster_type *m_ptr)
 		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
 
-		/* Paranoia */
-		o_ptr->held_m_idx = 0;
-
 		/* Get local object */
 		q_ptr = &forge;
 
 		/* Copy the object */
 		object_copy(q_ptr, o_ptr);
+
+		/* Forget monster */
+		q_ptr->held_m_idx = 0;
 
 		/* Delete the object */
 		delete_object_idx(this_o_idx);
