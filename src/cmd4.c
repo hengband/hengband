@@ -1100,7 +1100,7 @@ void do_cmd_change_name(void)
 		/* Display the player */
 		display_player(mode);
 
-		if (mode == 6)
+		if (mode == 4)
 		{
 			mode = 0;
 			display_player(mode);
