@@ -3558,8 +3558,8 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				cur_wid = panels_x * SCREEN_WID;
 
 				/* Assume illegal panel */
-				panel_row = 255;
-				panel_col = 255;
+				panel_row_min = 255;
+				panel_col_min = 255;
 
 				/* Place player in a quest level */
 				if (p_ptr->inside_quest)

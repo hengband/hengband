@@ -2140,30 +2140,10 @@ void get_screen_size(int *wid_p, int *hgt_p)
 	if (use_bigtile) *wid_p /= 2;
 }
 
-/*
- * Calculates current boundaries
- * Called below and from "do_cmd_locate()".
- */
-void panel_bounds(void)
-{
-	int wid, hgt;
-
-	/* Get size */
-	get_screen_size(&wid, &hgt);
-
-	panel_row_min = panel_row * hgt / 2;
-	panel_row_max = panel_row_min + hgt - 1;
-	panel_row_prt = panel_row_min - 1;
-	panel_col_min = panel_col * wid / 2;
-	panel_col_max = panel_col_min + wid - 1;
-	panel_col_prt = panel_col_min - 13;
-}
-
 
 /*
  * Calculates current boundaries
  * Called below and from "do_cmd_locate()".
- * Modified for "centering player on screen"
  */
 void panel_bounds_center(void)
 {
@@ -2172,10 +2152,8 @@ void panel_bounds_center(void)
 	/* Get size */
 	get_screen_size(&wid, &hgt);
 
-	panel_row = panel_row_min / (hgt / 2);
 	panel_row_max = panel_row_min + hgt - 1;
 	panel_row_prt = panel_row_min - 1;
-	panel_col = panel_col_min / (wid / 2);
 	panel_col_max = panel_col_min + wid - 1;
 	panel_col_prt = panel_col_min - 13;
 }

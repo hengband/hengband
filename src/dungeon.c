@@ -5551,20 +5551,11 @@ static void dungeon(bool load_game)
 		create_down_stair = create_up_stair = 0;
 	}
 
+	/* Validate the panel */
+	panel_bounds_center();
 
 	/* Verify the panel */
 	verify_panel();
-
-	/* Validate the panel */
-	if (center_player)
-	{
-		panel_bounds_center();
-	}
-	else
-	{
-	panel_bounds();
-	}
-
 
 	/* Flush messages */
 	msg_print(NULL);

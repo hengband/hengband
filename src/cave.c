@@ -2301,16 +2301,21 @@ void prt_path(int y, int x)
 		if (panel_contains(ny, nx))
 		{
 			byte a = default_color;
-			char c;
+			char c, c2;
 
 #ifdef USE_TRANSPARENCY
 			byte ta;
 			char tc;
+#endif
 
 			if (cave[ny][nx].m_idx && m_list[cave[ny][nx].m_idx].ml)
 			{
 				/* Determine what is there */
+#ifdef USE_TRANSPARENCY
 				map_info(ny, nx, &a, &c, &ta, &tc);
+#else
+				map_info(ny, nx, &a, &c);
+#endif
 			
 				if (c == '.' && (a == TERM_WHITE || a == TERM_L_WHITE))
 					a = default_color;
@@ -2326,33 +2331,25 @@ void prt_path(int y, int x)
 				else if (p_ptr->wraith_form) a = TERM_L_DARK;
 			}
 
-
-			/* Hack -- Queue it */
-			Term_queue_char(panel_col_of(nx), ny-panel_row_prt, a, '*', ta, tc);
-#else /* USE_TRANSPARENCY */
-
-			if (cave[ny][nx].m_idx && m_list[cave[ny][nx].m_idx].ml)
+			c = '*';
+			if (use_bigtile)
 			{
-				/* Determine what is there */
-				map_info(ny, nx, &a, &c);
-				
-				if (c == '.' && (a == TERM_WHITE || a == TERM_L_WHITE))
-					a = default_color;
-				else if (a == default_color)
-					a = TERM_WHITE;
-			}
-
-			if (fake_monochrome)
-			{
-				if (world_monster) a = TERM_DARK;
-				else if (p_ptr->invuln || world_player) a = TERM_WHITE;
-				else if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] == MUSIC_INVULN)) a = TERM_WHITE;
-				else if (p_ptr->wraith_form) a = TERM_L_DARK;
+#ifdef JP
+				c2 = ascii_to_zenkaku[2*(c-' ') + 1];
+				c = ascii_to_zenkaku[2*(c-' ')];
+#else
+				c2 = '*';
+#endif
 			}
 
 			/* Hack -- Queue it */
-			Term_queue_char(panel_col_of(nx), ny-panel_row_prt, a, '*');
-#endif /* USE_TRANSPARENCY */
+#ifdef USE_TRANSPARENCY
+			Term_queue_char(panel_col_of(nx), ny-panel_row_prt, a, c, ta, tc);
+			if (use_bigtile) Term_queue_char(panel_col_of(nx), ny-panel_row_prt, a, c2, ta, tc);
+#else
+			Term_queue_char(panel_col_of(nx), ny-panel_row_prt, a, c);
+			if (use_bigtile) Term_queue_char(panel_col_of(nx), ny-panel_row_prt, a, c2);
+#endif
 		}
 
 		/* Known Wall */
