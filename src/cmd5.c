@@ -5386,7 +5386,7 @@ void do_cmd_pet_dismiss(void)
 
 				/* Update the monsters */
 				p_ptr->update |= (PU_BONUS | PU_MONSTERS);
-				p_ptr->redraw |= (PR_EXTRA);
+				p_ptr->redraw |= (PR_EXTRA | PR_UHEALTH);
 			}
 
 			/* HACK : Add the line to message buffer */
