@@ -288,7 +288,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 			else
 			{
 				/* Extract mana consumption rate */
-				shouhimana = s_ptr->smana*(3800 - experience_of_spell(spell, use_realm)) + 2399;
+				shouhimana = s_ptr->smana*(3800 - experience_of_spell(spell, use_realm-1)) + 2399;
 				if(p_ptr->dec_mana)
 					shouhimana *= 3;
 				else shouhimana *= 4;
