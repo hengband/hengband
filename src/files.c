@@ -4189,9 +4189,9 @@ errr make_character_dump(FILE *fff)
 	}
 
 #ifdef JP
-	fprintf(fff, "\n  [クエスト情報]        \n");
+	fprintf(fff, "\n  [クエスト情報]\n");
 #else
-	fprintf(fff, "\n  [Quest information]        \n");
+	fprintf(fff, "\n  [Quest information]\n");
 #endif
 
 #ifdef JP
@@ -4373,7 +4373,7 @@ errr make_character_dump(FILE *fff)
 	}
 
 #ifdef JP
-	fprintf(fff, "\n  [その他の情報]        \n");
+	fprintf(fff, "\n  [その他の情報]\n");
 #else
 	fprintf(fff, "\n  [Miscellaneous information]\n");
 #endif
