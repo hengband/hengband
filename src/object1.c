@@ -5449,7 +5449,7 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 #ifdef JP
 if (inven) strcat(out_val, format(" %s 持ち物,", use_menu ? "'4'or'6'" : "'/'"));
 #else
-			if (inven) strcat(out_val, " / for Inven,");
+if (inven) strcat(out_val, format(" %s for Inven,", use_menu ? "4 or 6" : "'/'"));
 #endif
 
 		}
