@@ -3055,7 +3055,7 @@ if (!get_com("モンスターの文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前):
 #ifdef JP
 		sprintf(buf, "名前:%sにマッチ",temp);
 #else
-		sprintf(buf, "List of '%s'",temp);
+		sprintf(buf, "Monsters with a name \"%s\"",temp);
 #endif
 	}
 	else if (ident_info[i])
