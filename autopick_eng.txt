@@ -297,31 +297,32 @@ skeleton of
 ~lights:darkness
 Iron Spike#@v0
 ?:[EQU $RACE Vampire]
-~scroll of darkness
-~staff of darkness
+(~scroll of darkness
+(~staff of darkness
 ?:1
 
 # Destroy unless very early stage.
 ?:[GEQ $LEVEL 10]
-!amulet of Adornment
-!potion of Apple Juice
-!Empty Bottle
-!potion of water
+(!amulet of Adornment
+(!potion of Apple Juice
+(!Empty Bottle
+(!potion of water
 ?:1
 
-# These have some use at very early stage.
+# These worthless potions have some use at very early stage.
+# Command letter '(' means, 'Don't display its location in full map command.'
 ?:[LEQ $LEVEL 20]
-~potion of booze
-~potion of Slowness
-~potion of Sleep
+(~potion of booze
+(~potion of Slowness
+(~potion of Sleep
 ?:1
 
-# complex example
+# complex example; destroy needless food items.
 ?:[AND [GEQ $LEVEL 20] [IOR [EQU $REALM1 Life] [EQU $REALM2 Life] [EQU $REALM1 Nature] [EQU $REALM2 Nature] [EQU $REALM1 Craft] [EQU $REALM2 Craft]]]
-!Satisfy Hunger
-!food
-!Slime Mold
-!of Elvish Waybread
+(!Satisfy Hunger
+(!food
+(!Slime Mold
+(!of Elvish Waybread
 ?:1
 
 
@@ -368,16 +369,16 @@ collecting spellbooks
 # other spellbooks
 
 ?:[GEQ $LEVEL 30]
-!unreadable first spellbooks
-!unreadable second spellbooks
-!unreadable third spellbooks:arcane
-!unreadable fourth spellbooks:arcane
+(!unreadable first spellbooks
+(!unreadable second spellbooks
+(!unreadable third spellbooks:arcane
+(!unreadable fourth spellbooks:arcane
 ?:1
 
 # pick up for experience
 ?:[IOR [EQU $CLASS Warrior] [EQU $CLASS Berserker] [AND [EQU $CLASS Paladin] [EQU $REALM1 Life]]]
-~unreadable third spellbooks:arcane
-~unreadable fourth spellbooks:arcane
+(~unreadable third spellbooks:arcane
+(~unreadable fourth spellbooks:arcane
 unreadable fourth spellbooks
 unreadable third spellbooks
 ?:1
@@ -388,8 +389,9 @@ unreadable third spellbooks:life
 
 # pick up for money
 ?:[LEQ $LEVEL 29]
-~unreadable third spellbooks:arcane
-~unreadable fourth spellbooks:arcane
+(~unreadable third spellbooks:arcane
+(~unreadable fourth spellbooks:arcane
 unreadable fourth spellbooks
 unreadable third spellbooks
 ?:1
+
