@@ -3983,14 +3983,13 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 
 	if (!p_ptr->leaving)
 	{
+		int i;
+
 		/* Hack -- Process the counters of monsters if needed */
-		if (mproc_max[MTIMED_CSLEEP] > 1) process_monsters_csleep();
-		if (mproc_max[MTIMED_FAST] > 1) process_monsters_fast();
-		if (mproc_max[MTIMED_SLOW] > 1) process_monsters_slow();
-		if (mproc_max[MTIMED_STUNNED] > 1) process_monsters_stunned();
-		if (mproc_max[MTIMED_CONFUSED] > 1) process_monsters_confused();
-		if (mproc_max[MTIMED_MONFEAR] > 1) process_monsters_monfear();
-		if (mproc_max[MTIMED_INVULNER] > 1) process_monsters_invulner();
+		for (i = 0; i < MAX_MTIMED; i++)
+		{
+			if (mproc_max[i] > 0) process_monsters_mtimed(i);
+		}
 	}
 
 

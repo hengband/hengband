@@ -3777,27 +3777,30 @@ void process_monsters(void)
 }
 
 
-static void mproc_add(int m_idx, int mproc_type)
+int get_mproc_idx(int m_idx, int mproc_type)
 {
-	if (mproc_max[mproc_type] < max_m_idx)
+	s16b *cur_mproc_list = mproc_list[mproc_type];
+	int i;
+
+	for (i = mproc_max[mproc_type] - 1; i >= 0; i--)
 	{
-		m_list[m_idx].mproc_idx[mproc_type] = mproc_max[mproc_type];
-		mproc_list[mproc_type][mproc_max[mproc_type]++] = m_idx;
+		if (cur_mproc_list[i] == m_idx) return i;
 	}
+
+	return -1;
 }
 
 
-void mproc_remove(int m_idx, int mproc_type)
+static void mproc_add(int m_idx, int mproc_type)
 {
-	s16b *mproc_idx = &(m_list[m_idx].mproc_idx[mproc_type]);
+	if (mproc_max[mproc_type] < max_m_idx) mproc_list[mproc_type][mproc_max[mproc_type]++] = m_idx;
+}
 
-	if (mproc_max[mproc_type] > 1)
-	{
-		mproc_list[mproc_type][*mproc_idx] = mproc_list[mproc_type][--mproc_max[mproc_type]];
-		m_list[mproc_list[mproc_type][*mproc_idx]].mproc_idx[mproc_type] = *mproc_idx;
-	}
 
-	*mproc_idx = 0;
+static void mproc_remove(int m_idx, int mproc_type)
+{
+	int mproc_idx = get_mproc_idx(m_idx, mproc_type);
+	if (mproc_idx >= 0) mproc_list[mproc_type][mproc_idx] = mproc_list[mproc_type][--mproc_max[mproc_type]];
 }
 
 
@@ -3810,7 +3813,7 @@ void mproc_init(void)
 	int          i, cmi;
 
 	/* Reset "mproc_max[]" */
-	for (cmi = 0; cmi < MAX_MTIMED; cmi++) mproc_max[cmi] = 1;
+	for (cmi = 0; cmi < MAX_MTIMED; cmi++) mproc_max[cmi] = 0;
 
 	/* Process the monsters (backwards) */
 	for (i = m_max - 1; i >= 1; i--)
@@ -3824,7 +3827,6 @@ void mproc_init(void)
 		for (cmi = 0; cmi < MAX_MTIMED; cmi++)
 		{
 			if (m_ptr->mtimed[cmi]) mproc_add(i, cmi);
-			else m_ptr->mproc_idx[cmi] = 0;
 		}
 	}
 }
@@ -4134,37 +4136,20 @@ bool set_monster_invulner(int m_idx, int v, bool energy_need)
 }
 
 
-/*
- * Process the counters of monsters (once per 10 game turns)
- *
- * These functions are to process monsters' counters same as player's.
- */
+static u32b csleep_noise;
 
-
-/* Handle "sleep" */
-void process_monsters_csleep(void)
+static void process_monsters_mtimed_aux(int m_idx, int mtimed_idx)
 {
-	int          m_idx, i;
-	monster_type *m_ptr;
-	monster_race *r_ptr;
-	bool         test;
-	s16b         *cur_mproc_list = mproc_list[MTIMED_CSLEEP];
+	monster_type *m_ptr = &m_list[m_idx];
 
-	u32b noise; /* Hack -- local "player stealth" value */
-
-	/* Hack -- calculate the "player noise" */
-	noise = (1L << (30 - p_ptr->skill_stl));
-
-	/* Process the monsters (backwards) */
-	for (i = mproc_max[MTIMED_CSLEEP] - 1; i >= 1; i--)
+	switch (mtimed_idx)
 	{
-		/* Access the monster */
-		m_idx = cur_mproc_list[i];
-		m_ptr = &m_list[m_idx];
-		r_ptr = &r_info[m_ptr->r_idx];
+	case MTIMED_CSLEEP:
+	{
+		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Assume does not wake up */
-		test = FALSE;
+		bool test = FALSE;
 
 		/* Hack -- Require proximity */
 		if (m_ptr->cdis < AAF_LIMIT)
@@ -4192,7 +4177,7 @@ void process_monsters_csleep(void)
 			if (ironman_nightmare) notice /= 2;
 
 			/* Hack -- See if monster "notices" player */
-			if ((notice * notice * notice) <= noise)
+			if ((notice * notice * notice) <= csleep_noise)
 			{
 				/* Hack -- amount of "waking" */
 				/* Wake up faster near the player */
@@ -4242,24 +4227,10 @@ void process_monsters_csleep(void)
 				}
 			}
 		}
+		break;
 	}
-}
 
-
-/* Handle fast */
-void process_monsters_fast(void)
-{
-	int          m_idx, i;
-	monster_type *m_ptr;
-	s16b         *cur_mproc_list = mproc_list[MTIMED_FAST];
-
-	/* Process the monsters (backwards) */
-	for (i = mproc_max[MTIMED_FAST] - 1; i >= 1; i--)
-	{
-		/* Access the monster */
-		m_idx = cur_mproc_list[i];
-		m_ptr = &m_list[m_idx];
-
+	case MTIMED_FAST:
 		/* Reduce by one, note if expires */
 		if (set_monster_fast(m_idx, MON_FAST(m_ptr) - 1))
 		{
@@ -4278,24 +4249,9 @@ void process_monsters_fast(void)
 #endif
 			}
 		}
-	}
-}
+		break;
 
-
-/* Handle slow */
-void process_monsters_slow(void)
-{
-	int          m_idx, i;
-	monster_type *m_ptr;
-	s16b         *cur_mproc_list = mproc_list[MTIMED_SLOW];
-
-	/* Process the monsters (backwards) */
-	for (i = mproc_max[MTIMED_SLOW] - 1; i >= 1; i--)
-	{
-		/* Access the monster */
-		m_idx = cur_mproc_list[i];
-		m_ptr = &m_list[m_idx];
-
+	case MTIMED_SLOW:
 		/* Reduce by one, note if expires */
 		if (set_monster_slow(m_idx, MON_SLOW(m_ptr) - 1))
 		{
@@ -4314,28 +4270,13 @@ void process_monsters_slow(void)
 #endif
 			}
 		}
-	}
-}
+		break;
 
-
-/* Handle "stun" */
-void process_monsters_stunned(void)
-{
-	int          m_idx, i, rlev;
-	monster_type *m_ptr;
-	s16b         *cur_mproc_list = mproc_list[MTIMED_STUNNED];
-
-	/* Process the monsters (backwards) */
-	for (i = mproc_max[MTIMED_STUNNED] - 1; i >= 1; i--)
+	case MTIMED_STUNNED:
 	{
-		/* Access the monster */
-		m_idx = cur_mproc_list[i];
-		m_ptr = &m_list[m_idx];
-		rlev = r_info[m_ptr->r_idx].level;
+		int rlev = r_info[m_ptr->r_idx].level;
 
-		/* Hack -- Recover from stun */
-
-		/* Fully recover */
+		/* Recover from stun */
 		if (set_monster_stunned(m_idx, (randint0(10000) <= rlev * rlev) ? 0 : (MON_STUNNED(m_ptr) - 1)))
 		{
 			/* Message if visible */
@@ -4354,27 +4295,11 @@ void process_monsters_stunned(void)
 #endif
 			}
 		}
+		break;
 	}
-}
 
-
-/* Handle confusion */
-void process_monsters_confused(void)
-{
-	int          m_idx, i;
-	monster_type *m_ptr;
-	s16b         *cur_mproc_list = mproc_list[MTIMED_CONFUSED];
-
-	/* Process the monsters (backwards) */
-	for (i = mproc_max[MTIMED_CONFUSED] - 1; i >= 1; i--)
-	{
-		/* Access the monster */
-		m_idx = cur_mproc_list[i];
-		m_ptr = &m_list[m_idx];
-
+	case MTIMED_CONFUSED:
 		/* Reduce the confusion */
-
-		/* Recovered */
 		if (set_monster_confused(m_idx, MON_CONFUSED(m_ptr) - randint1(r_info[m_ptr->r_idx].level / 20 + 1)))
 		{
 			/* Message if visible */
@@ -4393,27 +4318,10 @@ void process_monsters_confused(void)
 #endif
 			}
 		}
-	}
-}
+		break;
 
-
-/* Handle "fear" */
-void process_monsters_monfear(void)
-{
-	int          m_idx, i;
-	monster_type *m_ptr;
-	s16b         *cur_mproc_list = mproc_list[MTIMED_MONFEAR];
-
-	/* Process the monsters (backwards) */
-	for (i = mproc_max[MTIMED_MONFEAR] - 1; i >= 1; i--)
-	{
-		/* Access the monster */
-		m_idx = cur_mproc_list[i];
-		m_ptr = &m_list[m_idx];
-
+	case MTIMED_MONFEAR:
 		/* Reduce the fear */
-
-		/* Recover from fear, take note if seen */
 		if (set_monster_monfear(m_idx, MON_MONFEAR(m_ptr) - randint1(r_info[m_ptr->r_idx].level / 20 + 1)))
 		{
 			/* Visual note */
@@ -4438,24 +4346,9 @@ void process_monsters_monfear(void)
 #endif
 			}
 		}
-	}
-}
+		break;
 
-
-/* Handle Invulnerability */
-void process_monsters_invulner(void)
-{
-	int          m_idx, i;
-	monster_type *m_ptr;
-	s16b         *cur_mproc_list = mproc_list[MTIMED_INVULNER];
-
-	/* Process the monsters (backwards) */
-	for (i = mproc_max[MTIMED_INVULNER] - 1; i >= 1; i--)
-	{
-		/* Access the monster */
-		m_idx = cur_mproc_list[i];
-		m_ptr = &m_list[m_idx];
-
+	case MTIMED_INVULNER:
 		/* Reduce by one, note if expires */
 		if (set_monster_invulner(m_idx, MON_INVULNER(m_ptr) - 1, TRUE))
 		{
@@ -4474,6 +4367,29 @@ void process_monsters_invulner(void)
 #endif
 			}
 		}
+		break;
+	}
+}
+
+
+/*
+ * Process the counters of monsters (once per 10 game turns)
+ *
+ * These functions are to process monsters' counters same as player's.
+ */
+void process_monsters_mtimed(int mtimed_idx)
+{
+	int  i;
+	s16b *cur_mproc_list = mproc_list[mtimed_idx];
+
+	/* Hack -- calculate the "player noise" */
+	if (mtimed_idx == MTIMED_CSLEEP) csleep_noise = (1L << (30 - p_ptr->skill_stl));
+
+	/* Process the monsters (backwards) */
+	for (i = mproc_max[mtimed_idx] - 1; i >= 0; i--)
+	{
+		/* Access the monster */
+		process_monsters_mtimed_aux(cur_mproc_list[i], mtimed_idx);
 	}
 }
 

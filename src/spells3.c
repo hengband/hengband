@@ -5358,22 +5358,10 @@ bool polymorph_monster(int y, int x)
 			/* Placing the new monster failed */
 			if (place_monster_aux(0, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN)))
 			{
-				int cmi;
-
-				for (cmi = 0; cmi < MAX_MTIMED; cmi++)
-				{
-					back_m.mtimed[cmi] = 0;
-					back_m.mproc_idx[cmi] = 0;
-				}
 				m_list[hack_m_idx_ii] = back_m;
 
-				if (MON_CSLEEP(&back_m)) (void)set_monster_csleep(hack_m_idx_ii, MON_CSLEEP(&back_m));
-				if (MON_FAST(&back_m)) (void)set_monster_fast(hack_m_idx_ii, MON_FAST(&back_m));
-				if (MON_SLOW(&back_m)) (void)set_monster_slow(hack_m_idx_ii, MON_SLOW(&back_m));
-				if (MON_STUNNED(&back_m)) (void)set_monster_stunned(hack_m_idx_ii, MON_STUNNED(&back_m));
-				if (MON_CONFUSED(&back_m)) (void)set_monster_confused(hack_m_idx_ii, MON_CONFUSED(&back_m));
-				if (MON_MONFEAR(&back_m)) (void)set_monster_monfear(hack_m_idx_ii, MON_MONFEAR(&back_m));
-				if (MON_INVULNER(&back_m)) (void)set_monster_invulner(hack_m_idx_ii, MON_INVULNER(&back_m), FALSE);
+				/* Re-initialize monster process */
+				mproc_init();
 			}
 		}
 

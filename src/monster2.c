@@ -197,7 +197,7 @@ monster_race *real_r_ptr(monster_type *m_ptr)
  */
 void delete_monster_idx(int i)
 {
-	int x, y, cmi;
+	int x, y;
 
 	monster_type *m_ptr = &m_list[i];
 
@@ -217,8 +217,13 @@ void delete_monster_idx(int i)
 	/* Hack -- count the number of "reproducers" */
 	if (r_ptr->flags2 & (RF2_MULTIPLY)) num_repro--;
 
-	for (cmi = 0; cmi < MAX_MTIMED; cmi++)
-		if (m_ptr->mproc_idx[cmi]) mproc_remove(i, cmi);
+	if (MON_CSLEEP(m_ptr)) (void)set_monster_csleep(i, 0);
+	if (MON_FAST(m_ptr)) (void)set_monster_fast(i, 0);
+	if (MON_SLOW(m_ptr)) (void)set_monster_slow(i, 0);
+	if (MON_STUNNED(m_ptr)) (void)set_monster_stunned(i, 0);
+	if (MON_CONFUSED(m_ptr)) (void)set_monster_confused(i, 0);
+	if (MON_MONFEAR(m_ptr)) (void)set_monster_monfear(i, 0);
+	if (MON_INVULNER(m_ptr)) (void)set_monster_invulner(i, 0, FALSE);
 
 
 	/* Hack -- remove target monster */
@@ -366,12 +371,10 @@ static void compact_monsters_aux(int i1, int i2)
 	/* Wipe the hole */
 	(void)WIPE(&m_list[i1], monster_type);
 
-	/* New monster */
-	m_ptr = &m_list[i2];
-
 	for (i = 0; i < MAX_MTIMED; i++)
 	{
-		if (m_ptr->mproc_idx[i]) mproc_list[i][m_ptr->mproc_idx[i]] = i2;
+		int mproc_idx = get_mproc_idx(i2, i);
+		if (mproc_idx >= 0) mproc_list[i][mproc_idx] = i2;
 	}
 }
 
@@ -526,7 +529,7 @@ void wipe_m_list(void)
 	m_cnt = 0;
 
 	/* Reset "mproc_max[]" */
-	for (i = 0; i < MAX_MTIMED; i++) mproc_max[i] = 1;
+	for (i = 0; i < MAX_MTIMED; i++) mproc_max[i] = 0;
 
 	/* Hack -- reset "reproducer" count */
 	num_repro = 0;
@@ -3130,11 +3133,7 @@ msg_print("守りのルーンが壊れた！");
 
 
 	/* No "timed status" yet */
-	for (cmi = 0; cmi < MAX_MTIMED; cmi++)
-	{
-		m_ptr->mtimed[cmi] = 0;
-		m_ptr->mproc_idx[cmi] = 0;
-	}
+	for (cmi = 0; cmi < MAX_MTIMED; cmi++) m_ptr->mtimed[cmi] = 0;
 
 	/* Unknown distance */
 	m_ptr->cdis = 0;

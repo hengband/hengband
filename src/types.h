@@ -585,7 +585,6 @@ struct monster_type
 	s16b max_maxhp;		/* Max Max Hit points */
 
 	s16b mtimed[MAX_MTIMED];	/* Timed status counter */
-	s16b mproc_idx[MAX_MTIMED];
 
 	byte mspeed;	        /* Monster "speed" */
 	s16b energy_need;	/* Monster "energy" */
