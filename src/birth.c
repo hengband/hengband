@@ -2346,7 +2346,7 @@ static bool get_player_realms(void)
 	p_ptr->realm2 = 255;
 	while (1)
 	{
-		char temp[80*8];
+		char temp[80*10];
 		cptr t;
 		count = 0;
 		p_ptr->realm1 = choose_realm(realm_choices1[p_ptr->pclass], &count);
@@ -2362,7 +2362,7 @@ static bool get_player_realms(void)
 
 		roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm1)-1], 74, temp, sizeof(temp));
 		t = temp;
-		for (i = 0; i< 6; i++)
+		for (i = 0; i < 10; i++)
 		{
 			if(t[0] == 0)
 				break; 
