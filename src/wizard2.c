@@ -1478,18 +1478,8 @@ static void do_cmd_wiz_jump(void)
 
 	if (!dun_level) dungeon_type = 0;
 	p_ptr->inside_arena = FALSE;
-	leaving_quest = p_ptr->inside_quest;
 
-	/* Leaving an 'only once' quest marks it as failed */
-	if (leaving_quest &&
-		(quest[leaving_quest].flags & QUEST_FLAG_ONCE) &&
-		(quest[leaving_quest].status == QUEST_STATUS_TAKEN))
-	{
-		quest[leaving_quest].status = QUEST_STATUS_FAILED;
-		quest[leaving_quest].complev = (byte)p_ptr->lev;
-		if (record_fix_quest)
-			do_cmd_write_nikki(NIKKI_FIX_QUEST_F, leaving_quest, NULL);
-	}
+	leave_quest_check();
 
 	if (record_stair) do_cmd_write_nikki(NIKKI_WIZ_TELE,0,NULL);
 

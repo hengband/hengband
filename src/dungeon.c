@@ -1111,6 +1111,30 @@ msg_print("明かりが微かになってきている。");
 }
 
 
+void leave_quest_check(void)
+{
+	/* Save quset number for dungeon pref file ($LEAVING_QUEST) */
+	leaving_quest = p_ptr->inside_quest;
+
+	/* Leaving an 'only once' quest marks it as failed */
+	if (leaving_quest &&
+	    ((quest[leaving_quest].flags & QUEST_FLAG_ONCE)  || (quest[leaving_quest].type == QUEST_TYPE_RANDOM)) &&
+	    (quest[leaving_quest].status == QUEST_STATUS_TAKEN))
+	{
+		quest[leaving_quest].status = QUEST_STATUS_FAILED;
+		quest[leaving_quest].complev = (byte)p_ptr->lev;
+		if (quest[leaving_quest].type == QUEST_TYPE_RANDOM)
+		{
+			r_info[quest[leaving_quest].r_idx].flags1 &= ~(RF1_QUESTOR);
+			if (record_rand_quest)
+				do_cmd_write_nikki(NIKKI_RAND_QUEST_F, leaving_quest, NULL);
+		}
+		else if (record_fix_quest)
+			do_cmd_write_nikki(NIKKI_FIX_QUEST_F, leaving_quest, NULL);
+	}
+}
+
+
 /*
  * Forcibly pseudo-identify an object in the inventory
  * (or on the floor)
@@ -3498,24 +3522,7 @@ msg_print("上に引っ張りあげられる感じがする！");
 				dun_level = 0;
 				dungeon_type = 0;
 
-				leaving_quest = p_ptr->inside_quest;
-
-				/* Leaving an 'only once' quest marks it as failed */
-				if (leaving_quest &&
-					((quest[leaving_quest].flags & QUEST_FLAG_ONCE)  || (quest[leaving_quest].type == QUEST_TYPE_RANDOM)) &&
-					(quest[leaving_quest].status == QUEST_STATUS_TAKEN))
-				{
-					quest[leaving_quest].status = QUEST_STATUS_FAILED;
-					quest[leaving_quest].complev = (byte)p_ptr->lev;
-					if (quest[leaving_quest].type == QUEST_TYPE_RANDOM)
-					{
-						r_info[quest[leaving_quest].r_idx].flags1 &= ~(RF1_QUESTOR);
-						if (record_rand_quest)
-							do_cmd_write_nikki(NIKKI_RAND_QUEST_F, leaving_quest, NULL);
-					}
-					else if (record_fix_quest)
-						do_cmd_write_nikki(NIKKI_FIX_QUEST_F, leaving_quest, NULL);
-				}
+				leave_quest_check();
 
 				p_ptr->inside_quest = 0;
 				p_ptr->leaving = TRUE;

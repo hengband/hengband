@@ -690,6 +690,7 @@ extern void do_cmd_use(void);
 extern void do_cmd_magic_eater(void);
 
 /* dungeon.c */
+extern void leave_quest_check(void);
 extern void play_game(bool new_game);
 extern bool psychometry(void);
 extern void leave_level(int level);

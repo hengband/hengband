@@ -4395,23 +4395,7 @@ msg_print("ここにはクエストの入口はない。");
 		p_ptr->oldpy = 0;
 		p_ptr->oldpx = 0;
 
-		leaving_quest = p_ptr->inside_quest;
-
-		/* Leaving an 'only once' quest marks it as failed */
-		if (leaving_quest &&
-			((quest[leaving_quest].flags & QUEST_FLAG_ONCE) || (quest[leaving_quest].type == QUEST_TYPE_RANDOM)) &&
-			(quest[leaving_quest].status == QUEST_STATUS_TAKEN))
-		{
-			quest[leaving_quest].status = QUEST_STATUS_FAILED;
-			quest[leaving_quest].complev = (byte)p_ptr->lev;
-			if (quest[leaving_quest].type == QUEST_TYPE_RANDOM)
-			{
-				r_info[quest[leaving_quest].r_idx].flags1 &= ~(RF1_QUESTOR);
-				do_cmd_write_nikki(NIKKI_RAND_QUEST_F, leaving_quest, NULL);
-			}
-			else if (record_fix_quest)
-				do_cmd_write_nikki(NIKKI_FIX_QUEST_F, leaving_quest, NULL);
-		}
+		leave_quest_check();
 
 		p_ptr->inside_quest = cave[py][px].special;
 		if(quest[leaving_quest].type != QUEST_TYPE_RANDOM) dun_level = 1;

@@ -592,23 +592,7 @@ msg_print("あなたは天井を突き破って宙へ浮いていく。");
 
 		if (!dun_level) dungeon_type = 0;
 
-		leaving_quest = p_ptr->inside_quest;
-
-		if (leaving_quest &&
-			((quest[leaving_quest].flags & QUEST_FLAG_ONCE)  || (quest[leaving_quest].type == QUEST_TYPE_RANDOM)) &&
-			(quest[leaving_quest].status == QUEST_STATUS_TAKEN))
-		{
-			quest[leaving_quest].status = QUEST_STATUS_FAILED;
-			quest[leaving_quest].complev = (byte)p_ptr->lev;
-			if (quest[leaving_quest].type == QUEST_TYPE_RANDOM)
-			{
-				r_info[quest[leaving_quest].r_idx].flags1 &= ~(RF1_QUESTOR);
-				if (record_rand_quest)
-					do_cmd_write_nikki(NIKKI_RAND_QUEST_F, leaving_quest, NULL);
-			}
-			else if (record_fix_quest)
-				do_cmd_write_nikki(NIKKI_FIX_QUEST_F, leaving_quest, NULL);
-		}
+		leave_quest_check();
 
 		/* Leaving */
 		p_ptr->inside_quest = 0;
