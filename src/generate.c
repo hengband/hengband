@@ -833,6 +833,7 @@ if (cheat_room) msg_print("小さな地下室を却下します。");
 	}
 	}
 
+#if 0
 	/* Reset flags from boundary walls -- Top and bottom */
 	for (x = 0; x < cur_wid; x++)
 	{
@@ -846,6 +847,7 @@ if (cheat_room) msg_print("小さな地下室を却下します。");
 		cave[y][0].info &= ~(CAVE_MASK);
 		cave[y][cur_wid - 1].info &= ~(CAVE_MASK);
 	}
+#endif
 
 
 	if (d_info[dungeon_type].flags1 & DF1_MAZE)
