@@ -211,8 +211,6 @@ they pass through.
 Doors can be broken down by bashing them. Once a door is bashed open,
 it is forever useless and cannot be closed.
 
-For historical reasons, secret doors are never locked.
-
 
 ***** <Feelings>
 === Level Feelings ===
