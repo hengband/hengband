@@ -1925,6 +1925,50 @@ note(format("の中", tmp16s));
 		rd_s16b(&p_ptr->floor_id);
 	}
 
+	if (h_older_than(1, 5, 0, 2))
+	{
+		C_WIPE(&party_mon[i], MAX_PARTY_MON, monster_type);
+	}
+	else
+	{
+		s16b max_num;
+		monster_type dummy_mon;
+
+		rd_s16b(&tmp16s);
+		if (tmp16s > MAX_PARTY_MON)
+		{
+#ifdef JP
+			note("一時保存ペットが多すぎるので一部削除します。");
+#else
+			note("Temporary pets are too many, so some are removed.");
+#endif
+			max_num = MAX_PARTY_MON;
+		}
+		else max_num = tmp16s;
+
+		/* Load temporary preserved pets */
+		for (i = 0; i < max_num; i++)
+		{
+			rd_monster(&party_mon[i]);
+
+			/* Count */
+			real_r_ptr(&party_mon[i])->cur_num++;
+		}
+
+		/* Remove excess pets */
+		for (i = max_num; i < tmp16s; i++)
+		{
+			rd_monster(&dummy_mon);
+
+			if (record_named_pet && dummy_mon.nickname)
+			{
+				char m_name[80];
+				monster_desc(m_name, &dummy_mon, 0x08);
+				do_cmd_write_nikki(NIKKI_NAMED_PET, 5, m_name);
+			}
+		}
+	}
+
 	if (z_older_than(10,1,2))
 	{
 		playtime = 0;

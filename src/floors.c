@@ -340,16 +340,13 @@ static void build_dead_end(void)
  */
 static void preserve_pet(void)
 {
-	int num, i;
-
-	for (num = 0; num < MAX_PARTY_MON; num++)
-	{
-		party_mon[num].r_idx = 0;
-	}
+	int num = 1, i;
 
 	if (p_ptr->riding)
 	{
-		COPY(&party_mon[0], &m_list[p_ptr->riding], monster_type);
+		/* Paranoia - prevent loss of rided monster */
+		for (num = 0; (num < MAX_PARTY_MON) && party_mon[num].r_idx; num++) /* Count forward */ ;
+		if (num < MAX_PARTY_MON) COPY(&party_mon[num++], &m_list[p_ptr->riding], monster_type);
 
 		/* Delete from this floor */
 		delete_monster_idx(p_ptr->riding);
@@ -361,7 +358,7 @@ static void preserve_pet(void)
 	 */
 	if (!p_ptr->wild_mode)
 	{
-		for (i = m_max - 1, num = 1; (i >= 1 && num < MAX_PARTY_MON); i--)
+		for (i = m_max - 1; (i >= 1 && num < MAX_PARTY_MON); i--)
 		{
 			monster_type *m_ptr = &m_list[i];
 
@@ -369,7 +366,7 @@ static void preserve_pet(void)
 			if (!is_pet(m_ptr)) continue;
 			if (i == p_ptr->riding) continue;
 
-			if (reinit_wilderness)
+			if (reinit_wilderness || p_ptr->inside_arena || p_ptr->inside_battle)
 			{
 				/* Don't lose sight of pets when getting a Quest */
 			}
@@ -394,8 +391,8 @@ static void preserve_pet(void)
 				if (m_ptr->confused || m_ptr->stunned || m_ptr->csleep) continue;
 			}
 
-			COPY(&party_mon[num], &m_list[i], monster_type);
-			num++;
+			for (; (num < MAX_PARTY_MON) && party_mon[num].r_idx; num++) /* Count forward */ ;
+			if (num < MAX_PARTY_MON) COPY(&party_mon[num++], &m_list[i], monster_type);
 
 			/* Delete from this floor */
 			delete_monster_idx(i);
@@ -426,10 +423,8 @@ static void preserve_pet(void)
  */
 static void place_pet(void)
 {
-	int i, max_num;
-
-	if (p_ptr->wild_mode) max_num = 1;
-	else max_num = MAX_PARTY_MON;
+	int i;
+	int max_num = p_ptr->wild_mode ? 1 : MAX_PARTY_MON;
 
 	for (i = 0; i < max_num; i++)
 	{
@@ -451,6 +446,9 @@ static void place_pet(void)
 		{
 			int j, d;
 
+			/* Don't place in arena except rided one */
+			if (p_ptr->inside_arena || p_ptr->inside_battle) continue;
+
 			for (d = 1; d < 6; d++)
 			{
 				for (j = 1000; j > 0; j--)
@@ -460,10 +458,7 @@ static void place_pet(void)
 				}
 				if (j) break;
 			}
-			if (d == 6 || p_ptr->inside_arena || p_ptr->inside_battle)
-				m_idx = 0;
-			else
-				m_idx = m_pop();
+			m_idx = (d == 6) ? 0 : m_pop();
 		}
 
 		if (m_idx)
@@ -535,10 +530,10 @@ static void place_pet(void)
 			/* Pre-calculated in precalc_cur_num_of_pet(), but need to decrease */
 			if (r_ptr->cur_num) r_ptr->cur_num--;
 		}
-	}
 
-	/* For accuracy of precalc_cur_num_of_pet() */
-	C_WIPE(party_mon, MAX_PARTY_MON, monster_type);
+		/* For accuracy of precalc_cur_num_of_pet() */
+		WIPE(&party_mon[i], monster_type);
+	}
 }
 
 
