@@ -777,7 +777,7 @@ static char *spell_tips[VALID_REALM][32] =
 		"detects traps, doors and stairs in the neighborhood. and detects all monsters at level 15, treasures and items at level 20. maps nearby area at level 25. lights and know the whole level at level 40. These effects occures by turns while this song continues.",
 		"damages all monsters in sight with PSI damages.",
 		"identifies all items which are in the adjacent squares.",
-		"gives improved stalth for a while.",
+		"gives improved stealth for a while.",
 		"attempts to confuse all monsters in sight.",
 		"damages all monsters in sight with booming sound.",
 		"resurrects nearby corpse and skeltons. and makes these your pets.",
