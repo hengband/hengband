@@ -263,7 +263,7 @@ void teleport_player(int dis)
 	int d, i, min, ox, oy;
 	int tries = 0;
 
-	int xx = -1, yy = -1;
+	int xx, yy;
 
 	/* Initialize */
 	int y = py;
@@ -367,35 +367,29 @@ msg_print("不思議な力がテレポートを防いだ！");
 	lite_spot(oy, ox);
 
 	/* Monsters with teleport ability may follow the player */
-	while (xx < 2)
+	for (xx = -1; xx < 2; xx++)
 	{
-		yy = -1;
-
-		while (yy < 2)
+		for (yy = -1; yy < 2; yy++)
 		{
-			if (xx == 0 && yy == 0)
+			int tmp_m_idx = cave[oy+yy][ox+xx].m_idx;
+
+			/* A monster except your mount may follow */
+			if (tmp_m_idx && p_ptr->riding != tmp_m_idx)
 			{
-				/* Do nothing */
-			}
-			else
-			{
-				if (cave[oy+yy][ox+xx].m_idx)
+				monster_type *m_ptr = &m_list[tmp_m_idx];
+				monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+				/*
+				 * The latter limitation is to avoid
+				 * totally unkillable suckers...
+				 */
+				if ((r_ptr->flags6 & RF6_TPORT) &&
+				    !(r_ptr->flags3 & RF3_RES_TELE))
 				{
-					if ((r_info[m_list[cave[oy+yy][ox+xx].m_idx].r_idx].flags6 & RF6_TPORT) &&
-					    !(r_info[m_list[cave[oy+yy][ox+xx].m_idx].r_idx].flags3 & RF3_RES_TELE))
-						/*
-						 * The latter limitation is to avoid
-						 * totally unkillable suckers...
-						 */
-					{
-						if (!(m_list[cave[oy+yy][ox+xx].m_idx].csleep))
-							teleport_to_player(cave[oy+yy][ox+xx].m_idx, r_info[m_list[cave[oy+yy][ox+xx].m_idx].r_idx].level);
-					}
+					if (!m_ptr->csleep) teleport_to_player(tmp_m_idx, r_ptr->level);
 				}
 			}
-			yy++;
 		}
-		xx++;
 	}
 
 	forget_flow();
