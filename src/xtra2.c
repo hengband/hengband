@@ -813,6 +813,9 @@ msg_print("地面に落とされた。");
 	/* Drop objects being carried */
 	monster_drop_carried_objects(m_ptr);
 
+	if (r_ptr->flags1 & RF1_DROP_GOOD) mo_mode |= AM_GOOD;
+	if (r_ptr->flags1 & RF1_DROP_GREAT) mo_mode |= AM_GREAT;
+
 	switch (m_ptr->r_idx)
 	{
 	case MON_PINK_HORROR:
@@ -855,7 +858,7 @@ msg_print("地面に落とされた。");
 			/* Prepare to make a Blade of Chaos */
 			object_prep(q_ptr, lookup_kind(TV_SWORD, SV_BLADE_OF_CHAOS));
 
-			apply_magic(q_ptr, object_level, AM_NO_FIXED_ART);
+			apply_magic(q_ptr, object_level, AM_NO_FIXED_ART | mo_mode);
 
 			/* Drop it in the dungeon */
 			(void)drop_near(q_ptr, -1, y, x);
@@ -881,7 +884,7 @@ msg_print("地面に落とされた。");
 			get_obj_num_prep();
 
 			/* Make a book */
-			make_object(q_ptr, 0L);
+			make_object(q_ptr, mo_mode);
 
 			/* Drop it in the dungeon */
 			(void)drop_near(q_ptr, -1, y, x);
@@ -1064,7 +1067,7 @@ msg_print("地面に落とされた。");
 				get_obj_num_prep();
 
 				/* Make a cloak */
-				make_object(q_ptr, 0L);
+				make_object(q_ptr, mo_mode);
 
 				/* Drop it in the dungeon */
 				(void)drop_near(q_ptr, -1, y, x);
@@ -1087,7 +1090,7 @@ msg_print("地面に落とされた。");
 				get_obj_num_prep();
 
 				/* Make a poleweapon */
-				make_object(q_ptr, 0L);
+				make_object(q_ptr, mo_mode);
 
 				/* Drop it in the dungeon */
 				(void)drop_near(q_ptr, -1, y, x);
@@ -1110,7 +1113,7 @@ msg_print("地面に落とされた。");
 				get_obj_num_prep();
 
 				/* Make a hard armor */
-				make_object(q_ptr, 0L);
+				make_object(q_ptr, mo_mode);
 
 				/* Drop it in the dungeon */
 				(void)drop_near(q_ptr, -1, y, x);
@@ -1133,7 +1136,7 @@ msg_print("地面に落とされた。");
 				get_obj_num_prep();
 
 				/* Make a sword */
-				make_object(q_ptr, 0L);
+				make_object(q_ptr, mo_mode);
 
 				/* Drop it in the dungeon */
 				(void)drop_near(q_ptr, -1, y, x);
@@ -1143,7 +1146,7 @@ msg_print("地面に落とされた。");
 		break;
 	}
 
-	/* Mega-Hack -- drop fixed artifacts */
+	/* Mega-Hack -- drop fixed items */
 	if (drop_chosen_item)
 	{
 		int a_idx = 0;
@@ -1331,21 +1334,20 @@ msg_print("地面に落とされた。");
 
 		if ((r_ptr->flags7 & RF7_GUARDIAN) && (d_info[dungeon_type].final_guardian == m_ptr->r_idx))
 		{
-			int k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT); /* Acquirement */;
-
-			if (d_info[dungeon_type].final_object)
-				k_idx = d_info[dungeon_type].final_object;
+			int k_idx = d_info[dungeon_type].final_object ? d_info[dungeon_type].final_object
+				: lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
 
 			if (d_info[dungeon_type].final_artifact)
 			{
 				int a_idx = d_info[dungeon_type].final_artifact;
-				if (a_info[a_idx].cur_num == 0)
+				if (!a_info[a_idx].cur_num)
 				{
 					/* Create the artifact */
 					create_named_art(a_idx, y, x);
-
 					a_info[a_idx].cur_num = 1;
-					k_idx = 0;
+
+					/* Prevent rewarding both artifact and "default" object */
+					if (!d_info[dungeon_type].final_object) k_idx = 0;
 				}
 			}
 
@@ -1390,9 +1392,6 @@ msg_print("地面に落とされた。");
 
 	/* Average dungeon and monster levels */
 	object_level = (dun_level + r_ptr->level) / 2;
-
-	if (r_ptr->flags1 & RF1_DROP_GOOD) mo_mode |= AM_GOOD;
-	if (r_ptr->flags1 & RF1_DROP_GREAT) mo_mode |= AM_GREAT;
 
 	/* Drop some objects */
 	for (j = 0; j < number; j++)
