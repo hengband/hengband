@@ -5864,7 +5864,7 @@ void do_cmd_pet(void)
 	int			ask;
 	char			choice;
 	char			out_val[160];
-	int			pets = 0, pet_ctr;
+	int			pet_ctr;
 	monster_type	*m_ptr;
 
 	int mode = 0;
@@ -5875,16 +5875,6 @@ void do_cmd_pet(void)
 	char target_buf[160];
 
 	num = 0;
-
-	/* Calculate pets */
-	/* Process the monsters (backwards) */
-	for (pet_ctr = m_max - 1; pet_ctr >= 1; pet_ctr--)
-	{
-		/* Access the monster */
-		m_ptr = &m_list[pet_ctr];
-
-		if (is_pet(m_ptr)) pets++;
-	}
 
 #ifdef JP
 	power_desc[num] = "¥Ú¥Ã¥È¤òÊü¤¹";
@@ -6281,7 +6271,14 @@ strnfmt(out_val, 78, "(¥³¥Þ¥ó¥É %c-%c¡¢'*'=°ìÍ÷¡¢ESC=½ªÎ») ¥³¥Þ¥ó¥É¤òÁª¤ó¤Ç¤¯¤À¤
 	{
 		case PET_DISMISS: /* Dismiss pets */
 		{
-			if (!pets)
+			/* Check pets (backwards) */
+			for (pet_ctr = m_max - 1; pet_ctr >= 1; pet_ctr--)
+			{
+				/* Player has pet */
+				if (is_pet(&m_list[pet_ctr])) break;
+			}
+
+			if (!pet_ctr)
 			{
 #ifdef JP
 				msg_print("¥Ú¥Ã¥È¤¬¤¤¤Ê¤¤¡ª");
