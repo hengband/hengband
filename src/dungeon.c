@@ -7124,6 +7124,9 @@ prt("お待ち下さい...", 0, 0);
 				p_ptr->chp_frac = 0;
 				p_ptr->exit_bldg = TRUE;
 				reset_tim_flags();
+
+				/* Clear all saved floors */
+				prepare_change_floor_mode(CFM_CLEAR_ALL);
 			}
 			else
 			{
