@@ -4763,35 +4763,31 @@ msg_print("ウィザードモード突入。");
 		/* Go up staircase */
 		case '<':
 		{
-			if(!p_ptr->wild_mode && !dun_level && !p_ptr->inside_arena && !p_ptr->inside_quest)
+			if (!p_ptr->wild_mode && !dun_level && !p_ptr->inside_arena && !p_ptr->inside_quest)
 			{
-				if (!vanilla_town)
+				if (vanilla_town) break;
+
+				if (ambush_flag)
 				{
-					if(ambush_flag)
-					{
 #ifdef JP
-						msg_print("襲撃から逃げるにはマップの端まで移動しなければならない。");
+					msg_print("襲撃から逃げるにはマップの端まで移動しなければならない。");
 #else
-						msg_print("To flee the ambush you have to reach the edge of the map.");
+					msg_print("To flee the ambush you have to reach the edge of the map.");
 #endif
-					}
-					else if (p_ptr->food < PY_FOOD_WEAK)
-					{
-#ifdef JP
-						msg_print("その前に食事をとらないと。");
-#else
-						msg_print("You must eat something here.");
-#endif
-					}
-					else
-					{
-						if (change_wild_mode())
-						{
-							p_ptr->oldpx = px;
-							p_ptr->oldpy = py;
-						}
-					}
+					break;
 				}
+
+				if (p_ptr->food < PY_FOOD_WEAK)
+				{
+#ifdef JP
+					msg_print("その前に食事をとらないと。");
+#else
+					msg_print("You must eat something here.");
+#endif
+					break;
+				}
+
+				change_wild_mode();
 			}
 			else
 				do_cmd_go_up();
@@ -4801,13 +4797,11 @@ msg_print("ウィザードモード突入。");
 		/* Go down staircase */
 		case '>':
 		{
-			if(!p_ptr->wild_mode) do_cmd_go_down();
-			else
-			{
-				p_ptr->wilderness_x = px;
-				p_ptr->wilderness_y = py;
+			if (p_ptr->wild_mode)
 				change_wild_mode();
-			}
+			else
+				do_cmd_go_down();
+
 			break;
 		}
 

@@ -4067,9 +4067,6 @@ msg_print("やっとお腹がきつくなくなった。");
 
 		if (p_ptr->wild_mode && (new_aux < 2))
 		{
-			p_ptr->wilderness_x = px;
-			p_ptr->wilderness_y = py;
-			p_ptr->energy_need = 0;
 			change_wild_mode();
 		}
 
@@ -5366,9 +5363,6 @@ msg_print("*** 警告:低ヒット・ポイント！ ***");
 	}
 	if (p_ptr->wild_mode && !p_ptr->leaving && (p_ptr->chp < MAX(warning, p_ptr->mhp/5)))
 	{
-		p_ptr->wilderness_x = px;
-		p_ptr->wilderness_y = py;
-		p_ptr->energy_need = 0;
 		change_wild_mode();
 	}
 	return damage;

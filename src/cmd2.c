@@ -2744,12 +2744,12 @@ void do_cmd_walk(int pickup)
 #endif
 
 			/* Go into large wilderness view */
-			p_ptr->wilderness_x = px;
-			p_ptr->wilderness_y = py;
 			p_ptr->oldpy = randint1(MAX_HGT-2);
 			p_ptr->oldpx = randint1(MAX_WID-2);
-			energy_use = 100;
 			change_wild_mode();
+
+			/* Give first move to monsters */
+			energy_use = 100;
 
 			/* HACk -- set the encouter flag for the wilderness generation */
 			generate_encounter = TRUE;

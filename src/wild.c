@@ -1186,6 +1186,10 @@ bool change_wild_mode(void)
 	int i;
 	bool have_pet = FALSE;
 
+	/* It is in the middle of changing map */
+	if (p_ptr->leaving) return FALSE;
+
+
 	if (lite_town || vanilla_town)
 	{
 #ifdef JP
@@ -1195,48 +1199,75 @@ bool change_wild_mode(void)
 #endif
 		return FALSE;
 	}
-	if (!p_ptr->wild_mode)
-	{
-		for (i = 1; i < m_max; i++)
-		{
-			monster_type *m_ptr = &m_list[i];
 
-			if (!m_ptr->r_idx) continue;
-			if (is_pet(m_ptr) && i != p_ptr->riding) have_pet = TRUE;
-			if (m_ptr->csleep) continue;
-			if (m_ptr->cdis > MAX_SIGHT) continue;
-			if (!is_hostile(m_ptr)) continue;
+	if (p_ptr->wild_mode)
+	{
+		/* Save the location in the global map */
+		p_ptr->wilderness_x = px;
+		p_ptr->wilderness_y = py;
+
+		/* Give first move to the player */
+		p_ptr->energy_need = 0;
+
+		/* Go back to the ordinary map */
+		p_ptr->wild_mode = FALSE;
+
+		/* Leaving */
+		p_ptr->leaving = TRUE;
+
+		/* Succeed */
+		return TRUE;
+	}
+
+	for (i = 1; i < m_max; i++)
+	{
+		monster_type *m_ptr = &m_list[i];
+
+		if (!m_ptr->r_idx) continue;
+		if (is_pet(m_ptr) && i != p_ptr->riding) have_pet = TRUE;
+		if (m_ptr->csleep) continue;
+		if (m_ptr->cdis > MAX_SIGHT) continue;
+		if (!is_hostile(m_ptr)) continue;
 #ifdef JP
-			msg_print("敵がすぐ近くにいるときは広域マップに入れない！");
+		msg_print("敵がすぐ近くにいるときは広域マップに入れない！");
 #else
-			msg_print("You cannot enter global map, since there is some monsters nearby!");
+		msg_print("You cannot enter global map, since there is some monsters nearby!");
 #endif
+		energy_use = 0;
+		return FALSE;
+	}
+
+	if (have_pet)
+	{
+#ifdef JP
+		cptr msg = "ペットを置いて広域マップに入りますか？";
+#else
+		cptr msg = "Do you leave your pets behind? ";
+#endif
+
+		if (!get_check_strict(msg, CHECK_OKAY_CANCEL))
+		{
 			energy_use = 0;
 			return FALSE;
 		}
-
-		if (have_pet)
-		{
-#ifdef JP
-			if(!get_check_strict("ペットを置いて広域マップに入りますか？", CHECK_OKAY_CANCEL))
-#else
-			if(!get_check_strict("Do you leave your pets behind? ", CHECK_OKAY_CANCEL))
-#endif
-			{
-				energy_use = 0;
-				return FALSE;
-			}
-		}
-
-		energy_use = 1000;
 	}
 
+	/* HACK */
+	energy_use = 1000;
+
+	/* Remember the position */
+	p_ptr->oldpx = px;
+	p_ptr->oldpy = py;
+
+	/* Cancel any special action */
 	set_action(ACTION_NONE);
 
-	p_ptr->wild_mode = !p_ptr->wild_mode;
+	/* Go into the global map */
+	p_ptr->wild_mode = TRUE;
 
 	/* Leaving */
 	p_ptr->leaving = TRUE;
 
+	/* Succeed */
 	return TRUE;
 }
