@@ -3121,7 +3121,7 @@ F:FRIENDS |
 F:OPEN_DOOR | BASH_DOOR | 
 F:EVIL | DEMON | IM_FIRE | NO_FEAR | NO_CONF
 D:$An ugly screaming little demon servant of Tzeentch.
-D:ツィーンチのしもべの、叫ぶ醜い小型の悪魔だ。
+D:ティーンチのしもべの、叫ぶ醜い小型の悪魔だ。
 
 #J0#
 N:190:毛むくじゃらモルド
@@ -4016,7 +4016,7 @@ F:EVIL | DEMON | IM_FIRE | NO_FEAR | NO_CONF
 S:1_IN_8
 S:CONF | SCARE
 D:$An ugly screaming little demon servant of Tzeentch.
-D:ツィーンチのしもべの、叫ぶ醜い小型の悪魔だ。
+D:ティーンチのしもべの、叫ぶ醜い小型の悪魔だ。
 
 #JZ#
 N:243:クローカー
