@@ -4182,8 +4182,6 @@ static int see_wall(int dir, int y, int x)
 
 		if (have_flag(f_ptr->flags, FF_AVOID_RUN) && !ignore_avoid_run)
 			return TRUE;
-
-		if (!have_flag(f_ptr->flags, FF_MOVE)) return TRUE;
 	}
 
 	return FALSE;
