@@ -1210,10 +1210,11 @@ bool change_wild_mode(void)
 				return FALSE;
 			}
 		}
-			
+
 		energy_use = 1000;
 	}
 
+	stop_singing();
 	set_action(ACTION_NONE);
 
 	p_ptr->wild_mode = !p_ptr->wild_mode;
