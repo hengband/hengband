@@ -1305,7 +1305,7 @@ bool make_attack_spell(int m_idx)
 	if (projectable(m_ptr->fy, m_ptr->fx, y, x))
 	{
 		/* Breath disintegration to the glyph if possible */
-		if ((!cave_floor_bold(y, x)) && (f4 & RF4_BR_DISI) && one_in_(2)) do_disi = TRUE;
+		if ((!cave_floor_bold(y,x)) && (r_ptr->flags4 & RF4_BR_DISI) && one_in_(2)) do_disi = TRUE;
 	}
 
 	/* Check path to next grid */
@@ -1313,7 +1313,7 @@ bool make_attack_spell(int m_idx)
 	{
 		bool success = FALSE;
 
-		if ((f4 & RF4_BR_DISI) &&
+		if ((r_ptr->flags4 & RF4_BR_DISI) &&
 		    (m_ptr->cdis < MAX_RANGE/2) &&
 		    in_disintegration_range(m_ptr->fy, m_ptr->fx, y, x) &&
 		    (one_in_(10) || (projectable(y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
@@ -1481,15 +1481,6 @@ bool make_attack_spell(int m_idx)
 		if (!f4 && !f5 && !f6) return (FALSE);
 	}
 
-	/*
-	 * If monster cannot use inate attack and is forced to breathe
-	 * disintegration, monster fails breathing
-	 */
-	if (do_disi)
-	{
-		if (!(f4 & RF4_BR_DISI)) return FALSE;
-	}
-
 	/* Extract the "inate" spells */
 	for (k = 0; k < 32; k++)
 	{
@@ -1526,13 +1517,11 @@ bool make_attack_spell(int m_idx)
 #endif
 
 	if (do_disi)
-	{
 		thrown_spell = 96+31;
-	}
 	else
 	{
 		int attempt = 10;
-		while (attempt--)
+		while(attempt--)
 		{
 			thrown_spell = choose_attack_spell(m_idx, spell, num);
 			if (thrown_spell) break;
