@@ -3353,6 +3353,52 @@ static void player_wipe(void)
 	}
 }
 
+
+/*
+ * Determine the random quest uniques
+ */
+void determine_random_questor(quest_type *q_ptr)
+{
+	int          r_idx;
+	monster_race *r_ptr;
+
+	/* Prepare allocation table */
+	get_mon_num_prep(monster_quest, NULL);
+
+	while (1)
+	{
+		/*
+		 * Random monster 5 - 10 levels out of depth
+		 * (depending on level)
+		 */
+		r_idx = get_mon_num(q_ptr->level + 5 + randint1(q_ptr->level / 10));
+		r_ptr = &r_info[r_idx];
+
+		if (!(r_ptr->flags1 & RF1_UNIQUE)) continue;
+
+		if (r_ptr->flags1 & RF1_QUESTOR) continue;
+
+		if (r_ptr->rarity > 100) continue;
+
+		if (r_ptr->flags7 & RF7_FRIENDLY) continue;
+
+		if (r_ptr->flags7 & RF7_AQUATIC) continue;
+
+		if (r_ptr->flags8 & RF8_WILD_ONLY) continue;
+
+		if (no_questor_or_bounty_uniques(r_idx)) continue;
+
+		/*
+		 * Accept monsters that are 2 - 6 levels
+		 * out of depth depending on the quest level
+		 */
+		if (r_ptr->level > (q_ptr->level + (q_ptr->level / 20))) break;
+	}
+
+	q_ptr->r_idx = r_idx;
+}
+
+
 /*
  *  Initialize random quests and final quests
  */
@@ -3369,9 +3415,6 @@ static void init_dungeon_quests(int number_of_quests)
 
 	p_ptr->inside_quest = 0;
 
-	/* Prepare allocation table */
-	get_mon_num_prep(monster_quest, NULL);
-
 	/* Remove QUESTOR flag */
 	for (i = 1; i < max_r_idx; i++)
 	{
@@ -3384,42 +3427,12 @@ static void init_dungeon_quests(int number_of_quests)
 	{
 		quest_type      *q_ptr = &quest[i];
 		monster_race    *quest_r_ptr;
-		int             r_idx;
 
 		q_ptr->status = QUEST_STATUS_TAKEN;
-
-		while (1)
-		{
-			/*
-			 * Random monster 5 - 10 levels out of depth
-			 * (depending on level)
-			 */
-			r_idx = get_mon_num(q_ptr->level + 5 + randint1(q_ptr->level / 10));
-			r_ptr = &r_info[r_idx];
-
-			if(!(r_ptr->flags1 & RF1_UNIQUE)) continue;
-
-			if(r_ptr->flags1 & RF1_QUESTOR) continue;
-
-			if(r_ptr->flags6 & RF6_SPECIAL) continue;
-
-			if(r_ptr->flags7 & RF7_FRIENDLY) continue;
-
-			if(r_ptr->flags7 & RF7_AQUATIC) continue;
-
-			if(r_ptr->flags8 & RF8_WILD_ONLY) continue;
-
-			/*
-			 * Accept monsters that are 2 - 6 levels
-			 * out of depth depending on the quest level
-			 */
-			if (r_ptr->level > (q_ptr->level + (q_ptr->level / 20))) break;
-		}
-
-		q_ptr->r_idx = r_idx;
-		quest_r_ptr = &r_info[q_ptr->r_idx];
+		determine_random_questor(q_ptr);
 
 		/* Mark uniques */
+		quest_r_ptr = &r_info[q_ptr->r_idx];
 		quest_r_ptr->flags1 |= RF1_QUESTOR;
 
 		q_ptr->max_num = 1;

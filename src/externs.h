@@ -543,6 +543,7 @@ extern void do_cmd_edit_autopick(void);
 extern void add_history_from_pref_line(cptr t);
 extern void player_birth(void);
 extern void get_max_stats(void);
+extern void determine_random_questor(quest_type *q_ptr);
 extern void player_outfit(void);
 extern void dump_yourself(FILE *fff);
 
@@ -713,6 +714,8 @@ extern void do_cmd_magic_eater(bool only_browse);
 /* dungeon.c */
 extern void leave_quest_check(void);
 extern void extract_option_vars(void);
+extern void determine_bounty_uniques(void);
+extern void determine_today_mon(bool conv_old);
 extern void play_game(bool new_game);
 extern bool psychometry(void);
 extern void leave_level(int level);
@@ -835,6 +838,7 @@ extern bool monster_can_cross_terrain(byte feat, monster_race *r_ptr);
 extern bool monster_can_enter(int y, int x, monster_race *r_ptr);
 extern bool are_enemies(monster_type *m_ptr1, monster_type *m_ptr2);
 extern bool monster_living(monster_race *r_ptr);
+extern bool no_questor_or_bounty_uniques(int r_idx);
 
 
 /* monster2.c */

@@ -2471,39 +2471,10 @@ dam_desc = "硬い岩";
 
 	if (!hour && !min)
 	{
-		monster_race *r_ptr;
-
 		if (min != prev_min)
 		{
-			int max_dl = 3;
-			bool old_inside_battle = p_ptr->inside_battle;
-
 			do_cmd_write_nikki(NIKKI_HIGAWARI, 0, NULL);
-
-			p_ptr->inside_battle = TRUE;
-			get_mon_num_prep(NULL,NULL);
-
-			for (i = 0; i < max_d_idx; i++)
-			{
-				if (max_dlv[i] < d_info[i].mindepth) continue;
-				if (max_dl < max_dlv[i]) max_dl = max_dlv[i];
-			}
-			while (1)
-			{
-				today_mon = get_mon_num(max_dl);
-				r_ptr = &r_info[today_mon];
-
-				if (r_ptr->flags1 & RF1_UNIQUE) continue;
-				if (r_ptr->flags7 & (RF7_UNIQUE_7 | RF7_UNIQUE2)) continue;
-				if (r_ptr->flags2 & (RF2_MULTIPLY)) continue;
-				if (!(r_ptr->flags9 & RF9_DROP_CORPSE) || !(r_ptr->flags9 & RF9_DROP_SKELETON)) continue;
-				if (r_ptr->level < MIN(max_dl/2, 40)) continue;
-				if (r_ptr->rarity > 10) continue;
-				if (r_ptr->level == 0) continue;
-				break;
-			}
-			p_ptr->today_mon = 0;
-			p_ptr->inside_battle = old_inside_battle;
+			determine_today_mon(FALSE);
 		}
 	}
 
@@ -6564,6 +6535,95 @@ void extract_option_vars(void)
 
 
 /*
+ * Determine bounty uniques
+ */
+void determine_bounty_uniques(void)
+{
+	int          i, j, tmp;
+	monster_race *r_ptr;
+
+	get_mon_num_prep(NULL, NULL);
+	for (i = 0; i < MAX_KUBI; i++)
+	{
+		while (1)
+		{
+			kubi_r_idx[i] = get_mon_num(MAX_DEPTH - 1);
+			r_ptr = &r_info[kubi_r_idx[i]];
+
+			if (!(r_ptr->flags1 & RF1_UNIQUE)) continue;
+
+			if (!(r_ptr->flags9 & RF9_DROP_CORPSE)) continue;
+
+			if (r_ptr->rarity > 100) continue;
+
+			if (no_questor_or_bounty_uniques(kubi_r_idx[i])) continue;
+
+			for (j = 0; j < i; j++)
+				if (kubi_r_idx[i] == kubi_r_idx[j]) break;
+
+			if (j == i) break;
+		}
+	}
+
+	/* Sort them */
+	for (i = 0; i < MAX_KUBI - 1; i++)
+	{
+		for (j = i; j < MAX_KUBI; j++)
+		{
+			if (r_info[kubi_r_idx[i]].level > r_info[kubi_r_idx[j]].level)
+			{
+				tmp = kubi_r_idx[i];
+				kubi_r_idx[i] = kubi_r_idx[j];
+				kubi_r_idx[j] = tmp;
+			}
+		}
+	}
+}
+
+
+/*
+ * Determine today's bounty monster
+ * Note: conv_old is used if loaded 0.0.3 or older save file
+ */
+void determine_today_mon(bool conv_old)
+{
+	int max_dl = 3, i;
+	bool old_inside_battle = p_ptr->inside_battle;
+	monster_race *r_ptr;
+
+	if (!conv_old)
+	{
+		for (i = 0; i < max_d_idx; i++)
+		{
+			if (max_dlv[i] < d_info[i].mindepth) continue;
+			if (max_dl < max_dlv[i]) max_dl = max_dlv[i];
+		}
+	}
+	else max_dl = MAX(max_dlv[DUNGEON_ANGBAND], 3);
+
+	p_ptr->inside_battle = TRUE;
+	get_mon_num_prep(NULL, NULL);
+
+	while (1)
+	{
+		today_mon = get_mon_num(max_dl);
+		r_ptr = &r_info[today_mon];
+
+		if (r_ptr->flags1 & RF1_UNIQUE) continue;
+		if (r_ptr->flags7 & (RF7_UNIQUE_7 | RF7_UNIQUE2)) continue;
+		if (r_ptr->flags2 & RF2_MULTIPLY) continue;
+		if ((r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) != (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) continue;
+		if (r_ptr->level < MIN(max_dl / 2, 40)) continue;
+		if (r_ptr->rarity > 10) continue;
+		break;
+	}
+
+	p_ptr->today_mon = 0;
+	p_ptr->inside_battle = old_inside_battle;
+}
+
+
+/*
  * Actually play a game
  *
  * If the "new_game" parameter is true, then, after loading the
@@ -6751,8 +6811,6 @@ quit("セーブファイルが壊れています");
 	/* Roll new character */
 	if (new_game)
 	{
-		monster_race *r_ptr;
-
 		/* The dungeon is not ready */
 		character_dungeon = FALSE;
 
@@ -6783,57 +6841,9 @@ quit("セーブファイルが壊れています");
 #endif
 
 		load = FALSE;
-		get_mon_num_prep(NULL, NULL);
-		for (i = 0; i < MAX_KUBI; i++)
-		{
-			while (1)
-			{
-				int j;
 
-				kubi_r_idx[i] = get_mon_num(MAX_DEPTH - 1);
-				r_ptr = &r_info[kubi_r_idx[i]];
-
-				if(!(r_ptr->flags1 & RF1_UNIQUE)) continue;
-
-				if(!(r_ptr->flags9 & RF9_DROP_CORPSE)) continue;
-				if (r_ptr->rarity > 100) continue;
-
-				if(r_ptr->flags6 & RF6_SPECIAL) continue;
-
-				for (j = 0; j < i; j++)
-					if (kubi_r_idx[i] == kubi_r_idx[j])break;
-
-				if (j == i) break;
-			}
-		}
-		for (i = 0; i < MAX_KUBI -1; i++)
-		{
-			int j,tmp;
-			for (j = i; j < MAX_KUBI; j++)
-			{
-				if (r_info[kubi_r_idx[i]].level > r_info[kubi_r_idx[j]].level)
-				{
-					tmp = kubi_r_idx[i];
-					kubi_r_idx[i] = kubi_r_idx[j];
-					kubi_r_idx[j] = tmp;
-				}
-			}
-		}
-
-		p_ptr->inside_battle = TRUE;
-		while (1)
-		{
-			today_mon = get_mon_num(3);
-			r_ptr = &r_info[today_mon];
-
-			if (r_ptr->flags1 & RF1_UNIQUE) continue;
-			if (r_ptr->flags2 & (RF2_MULTIPLY)) continue;
-			if (!(r_ptr->flags9 & RF9_DROP_CORPSE) || !(r_ptr->flags9 & RF9_DROP_SKELETON)) continue;
-			if (r_ptr->rarity > 10) continue;
-			if (r_ptr->level == 0) continue;
-			break;
-		}
-		p_ptr->inside_battle = FALSE;
+		determine_bounty_uniques();
+		determine_today_mon(FALSE);
 	}
 	else
 	{

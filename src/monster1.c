@@ -3691,3 +3691,24 @@ bool monster_living(monster_race *r_ptr)
 	else
 		return TRUE;
 }
+
+
+/*
+ * Is this monster declined to be questor or bounty?
+ */
+bool no_questor_or_bounty_uniques(int r_idx)
+{
+	switch (r_idx)
+	{
+	/*
+	 * Decline them to be questor or bounty because they use
+	 * special motion "split and combine"
+	 */
+	case MON_BANORLUPART:
+	case MON_BANOR:
+	case MON_LUPART:
+		return TRUE;
+	default:
+		return FALSE;
+	}
+}

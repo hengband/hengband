@@ -1500,46 +1500,12 @@ static void rd_extra(void)
 
 	if (z_older_than(10, 0, 3))
 	{
-		get_mon_num_prep(NULL, NULL);
+		determine_bounty_uniques();
+
 		for (i = 0; i < MAX_KUBI; i++)
 		{
-			monster_race *r_ptr;
-			while (1)
-			{
-				int j;
-
-				kubi_r_idx[i] = get_mon_num(MAX_DEPTH - 1);
-				r_ptr = &r_info[kubi_r_idx[i]];
-
-				if(!(r_ptr->flags1 & RF1_UNIQUE)) continue;
-
-				if(!(r_ptr->flags9 & RF9_DROP_CORPSE)) continue;
-
-				if(r_ptr->flags6 & RF6_SPECIAL) continue;
-
-				for (j = 0; j < i; j++)
-					if (kubi_r_idx[i] == kubi_r_idx[j])break;
-
-				if (j == i) break;
-			}
-		}
-		for (i = 0; i < MAX_KUBI -1; i++)
-		{
-			int j,tmp;
-			for (j = i; j < MAX_KUBI; j++)
-			{
-				if (r_info[kubi_r_idx[i]].level > r_info[kubi_r_idx[j]].level)
-				{
-					tmp = kubi_r_idx[i];
-					kubi_r_idx[i] = kubi_r_idx[j];
-					kubi_r_idx[j] = tmp;
-				}
-			}
-		}
-		for (i = 0; i < MAX_KUBI; i++)
-		{
-			if(!r_info[kubi_r_idx[i]].max_num)
-				kubi_r_idx[i] += 10000;
+			/* Is this bounty unique already dead? */
+			if (!r_info[kubi_r_idx[i]].max_num) kubi_r_idx[i] += 10000;
 		}
 	}
 	else
@@ -1882,23 +1848,7 @@ note(format("の中", tmp16s));
 
 	if (z_older_than(10,0,3))
 	{
-		monster_race *r_ptr;
-
-		while (1)
-		{
-			today_mon = get_mon_num(MAX(max_dlv[DUNGEON_ANGBAND], 3));
-			r_ptr = &r_info[today_mon];
-		
-			if (r_ptr->flags1 & RF1_UNIQUE) continue;
-			if (r_ptr->flags2 & (RF2_MULTIPLY)) continue;
-			if (!(r_ptr->flags9 & RF9_DROP_CORPSE) || !(r_ptr->flags9 & RF9_DROP_SKELETON)) continue;
-			if (r_ptr->level < MIN(max_dlv[DUNGEON_ANGBAND], 40)) continue;
-			if (r_ptr->rarity > 10) continue;
-			if (r_ptr->level == 0) continue;
-			break;
-		}
-
-		p_ptr->today_mon = 0;
+		determine_today_mon(TRUE);
 	}
 	else
 	{
@@ -3250,36 +3200,7 @@ note(format("クエストが多すぎる(%u)！", max_quests_load));
 
 					if ((quest[i].type == QUEST_TYPE_RANDOM) && (!quest[i].r_idx))
 					{
-						int r_idx;
-						while (1)
-						{
-							 monster_race *r_ptr;
-
-							/*
-							 * Random monster 5 - 10 levels out of depth
-							 * (depending on level)
-							 */
-							r_idx = get_mon_num(quest[i].level + 5 + randint1(quest[i].level / 10));
-							r_ptr = &r_info[r_idx];
-
-							if(!(r_ptr->flags1 & RF1_UNIQUE)) continue;
-
-							if(r_ptr->flags6 & RF6_SPECIAL) continue;
-
-							if(r_ptr->flags7 & RF7_FRIENDLY) continue;
-
-							if(r_ptr->flags7 & RF7_AQUATIC) continue;
-
-							if(r_ptr->flags8 & RF8_WILD_ONLY) continue;
-
-							/*
-							 * Accept monsters that are 2 - 6 levels
-							 * out of depth depending on the quest level
-							 */
-							if (r_ptr->level > (quest[i].level + (quest[i].level / 20))) break;
-						}
-
-						quest[i].r_idx = r_idx;
+						determine_random_questor(&quest[i]);
 					}
 
 					/* Load quest item index */
