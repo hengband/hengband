@@ -1452,7 +1452,10 @@ s32b object_value(object_type *o_ptr)
 bool can_player_destroy_object(object_type *o_ptr)
 {
 	/* Artifacts cannot be destroyed */
-	if (artifact_p(o_ptr) || o_ptr->art_name)
+	if (!artifact_p(o_ptr) && !o_ptr->art_name) return TRUE;
+
+	/* If object is unidentified, makes fake inscription */
+	if (!object_known_p(o_ptr))
 	{
 		byte feel = FEEL_SPECIAL;
 
@@ -1475,7 +1478,8 @@ bool can_player_destroy_object(object_type *o_ptr)
 		return FALSE;
 	}
 
-	return TRUE;
+	/* Identified artifact -- Nothing to do */
+	return FALSE;
 }
 
 
