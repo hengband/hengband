@@ -478,12 +478,12 @@ Auto Inscription of Resistances and Powers
 ------------------------------------------
 
 When you inscribe {%all} on an *identified* object, the '%all' will
-automatically transform and become a string which describe its
-resistances and powers. For example, when you inscribe {%all} on a
-robe of Resistance which has resistance to four elements and extra
-resistance to Nether, the inscription will transform to {AcElFiClNt}. 
-The 'Ac' means resistance to acid while El, Fi, Cl and Nt mean
-resistances to electricity, fire, cold and nether.
+automatically transforms and changes into a string which describe its
+resistances and powers.  For example, when you inscribe {%all} on a
+robe of Resistance which has resistance to four elements and an extra
+resistance to Nether, the inscription will change into {AcElFiClNt}.
+The 'Ac' is abbreviation of resistance to ACid, while El, Fi, Cl and
+Nt are resistances to ELectricity, FIre, CoLd and NeTher.
 
 On the other hand, when you inscribe {%} on an *identified* object,
 the {%} will transform to a string which describes only its extra
@@ -491,7 +491,7 @@ resistances. In the example above, the inscription will become {Nt},
 meaning the extra resistance of Nether.
 
 
-List of auto-inscription codes:
+List of abbreviations:
 
 *Ac : immune to acid                Ma : decreases mana consumption
 *El : immune to electricity         Th : suitable for throwing
@@ -525,7 +525,7 @@ Sl : affects stealth                |Q : weapon of quake
 Sr : affects searching ability      |S : vorpal hit
 If : affects infravision            |M : weapon of the force
 Dg : affects tunneling ability      /* : slay evil
-(St : sustain strength              /H : slay human
+(St : sustain strength              /p : slay human
 (In : sustain intelligence          /D : kill dragon
 (Wi : sustain wisdom                /d : slay dragon
 (Dx : sustain dexterity             /o : slay orc
