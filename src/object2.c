@@ -4348,7 +4348,7 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 	}
 
 	/* Hack -- analyze ego-items */
-	else if (object_is_ego(o_ptr))
+	if (object_is_ego(o_ptr))
 	{
 		ego_item_type *e_ptr = &e_info[o_ptr->name2];
 
