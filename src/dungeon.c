@@ -4059,7 +4059,7 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 			}
 		}
 
-		/* TY_CURSE activates at mignight! */
+		/* TY_CURSE activates at midnight! */
 		if (!hour && !min)
 		{
 			int count = 0;
