@@ -1820,7 +1820,7 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 #ifdef JP
 		hooked_roff(format("%^sは光っている。", wd_he[msex]));
 #else
-		hooked_roff(format("%^s illuminate the dungeon.  ", wd_he[msex]));
+		hooked_roff(format("%^s is shining.  ", wd_he[msex]));
 #endif
 
 	}
