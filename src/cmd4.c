@@ -5119,7 +5119,7 @@ static cptr monster_group_text[] =
  * Symbols of monsters in each group. Note the "Uniques" group
  * is handled differently.
  */
-static cptr monster_group_char[] = 
+static cptr monster_group_char[] =
 {
 	(char *) -1L,
 	(char *) -2L,
@@ -5174,8 +5174,8 @@ static cptr monster_group_char[] =
 	"X",
 	"Y",
 	"Z",
-	"$!?=&`.|/\\~[]()>",
-	"#",
+	"!$&()+./=>?[\\]`{|~",
+	"#%",
 	",",
 	"*",
 	"@",
