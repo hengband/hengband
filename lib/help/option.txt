@@ -255,6 +255,31 @@ Always show list at first when select items    [always_show_list]
     item from inventory or equipment list will automatically show list
     when activated.
 
+***** [b] objects.txt#AbbrevList
+***** <abbrev_extra>
+Describe obj's extra resistances by abbreviation  [abbrev_extra]
+    When an *identified* equipment is displayed, an abbreviation
+    string for the object's extra resitances and extra abilities are
+    added as fake inscriptions of the object.
+
+    A word "EXTRA" means that the ability must not be obvious from the
+    objects name.  For example, a pair of boots of Levitation
+    sometimes has EXTRA shard resistance.  But fire resistance of an
+    armor of Resist Fire is not an EXTRA resistance.
+
+    The list of abbreviations for each resistances and abilities are
+    described in (objects.txt#AbbrevList [b])
+
+***** <abbrev_all>
+Describe obj's all resistances by abbreviation  [abbrev_all]
+    When an *identified* equipment is displayed, an abbreviation
+    string for all the object's resitances and abilities are added as
+    fake inscriptions of the object.
+
+    The list of abbreviations for each resistances and abilities are
+    described in (objects.txt#AbbrevList [b])
+
+
 ***** <GamePlay>
 === Option set 3 -- Game playing ===
 

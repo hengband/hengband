@@ -491,6 +491,7 @@ resistances. In the example above, the inscription will become {Nt},
 meaning the extra resistance of Nether.
 
 
+***** <AbbrevList>
 List of abbreviations:
 
 At : extra blows                    Ac : resistance to acid
