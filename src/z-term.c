@@ -1703,6 +1703,9 @@ errr Term_fresh(void)
 			if (tx + 1 < Term->wid && !(old_aa[tx] & 0x80)
 			    && iskanji(old_cc[tx]))
 				csize = 2;
+#ifdef WINDOWS
+			if (old_cc[tx] == 127 && use_bigtile) csize = 2;
+#endif
 #endif
 			/* Hack -- use "Term_pict()" always */
 			if (Term->always_pict)
