@@ -435,7 +435,7 @@ s = "読める本がない。";
 	}
 	select_the_force = FALSE;
 
-	if (item == 1111) { /* the_force */
+	if (item == INVEN_FORCE) { /* the_force */
 	    do_cmd_mind_browse();
 	    return;
 	} else
@@ -4780,7 +4780,7 @@ s = "呪文書がない！";
 	}
 	select_the_force = FALSE;
 
-	if (item == 1111) { /* the_force */
+	if (item == INVEN_FORCE) { /* the_force */
 	    do_cmd_mind();
 	    return;
 	} else

@@ -736,6 +736,11 @@
  */
 #define INVEN_TOTAL     36
 
+/*
+ * Fake inventory slot for selecting force (hard-coded).
+ */
+#define INVEN_FORCE     1111
+
 
 /*
  * Indexes of the various "stats" (hard-coded by savefiles, etc).

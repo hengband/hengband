@@ -5366,7 +5366,7 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 	/* Get the item index */
 	if (repeat_pull(cp))
 	{
-		if (*cp == 1111) { /* the_force */
+		if (*cp == INVEN_FORCE) { /* the_force */
 		    item_tester_tval = 0;
 		    item_tester_hook = NULL;
 		    return (TRUE);
@@ -5497,7 +5497,7 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 		done = TRUE;
 
 		if (select_the_force) {
-		    *cp = 1111;
+		    *cp = INVEN_FORCE;
 		    item = TRUE;
 		}
 	}
@@ -5822,7 +5822,7 @@ if (allow_floor) strcat(out_val, " '-'床上,");
 			case 'w':
 			{
 				if (select_the_force) {
-					*cp = 1111;
+					*cp = INVEN_FORCE;
 					item = TRUE;
 					done = TRUE;
 					break;
@@ -6024,7 +6024,7 @@ if (other_query_flag && !verify("本当に", k)) continue;
 			case 'w':
 			{
 				if (select_the_force) {
-					*cp = 1111;
+					*cp = INVEN_FORCE;
 					item = TRUE;
 					done = TRUE;
 					break;
@@ -6388,7 +6388,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 	/* Get the item index */
 	if (repeat_pull(cp))
 	{
-		if (*cp == 1111) { /* the_force */
+		if (*cp == INVEN_FORCE) { /* the_force */
 		    item_tester_tval = 0;
 		    item_tester_hook = NULL;
 		    return (TRUE);
@@ -6518,7 +6518,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 		done = TRUE;
 
 		if (select_the_force) {
-		    *cp = 1111;
+		    *cp = INVEN_FORCE;
 		    item = TRUE;
 		}
 	}
@@ -7098,7 +7098,7 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 			case 'w':
 			{
 				if (select_the_force) {
-					*cp = 1111;
+					*cp = INVEN_FORCE;
 					item = TRUE;
 					done = TRUE;
 					break;
@@ -7394,7 +7394,7 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 			case 'w':
 			{
 				if (select_the_force) {
-					*cp = 1111;
+					*cp = INVEN_FORCE;
 					item = TRUE;
 					done = TRUE;
 					break;
