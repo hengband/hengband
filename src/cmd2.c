@@ -3851,40 +3851,6 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 			{
 				bool fear = FALSE;
 
-				/* Assume a default death */
-#ifdef JP
-				cptr note_dies = "は死んだ。";
-#else
-				cptr note_dies = " dies.";
-#endif
-
-				/* Some monsters get "destroyed" */
-				if (!monster_living(r_ptr))
-				{
-					int i;
-					bool explode = FALSE;
-
-					for (i = 0; i < 4; i++)
-					{
-						if (r_ptr->blow[i].method == RBM_EXPLODE) explode = TRUE;
-					}
-
-					/* Special note at death */
-					if (explode)
-#ifdef JP
-note_dies = "は爆発して粉々になった。";
-#else
-						note_dies = " explodes into tiny shreds.";
-#endif
-					else
-#ifdef JP
-						note_dies = "を倒した。";
-#else
-						note_dies = " is destroyed.";
-#endif
-
-				}
-
 				/* Handle unseen monster */
 				if (!visible)
 				{
@@ -3944,7 +3910,7 @@ note_dies = "は爆発して粉々になった。";
 				}
 
 				/* Hit the monster, check for death */
-				if (mon_take_hit(c_ptr->m_idx, tdam, &fear, note_dies))
+				if (mon_take_hit(c_ptr->m_idx, tdam, &fear, extract_note_dies(real_r_ptr(m_ptr))))
 				{
 					/* Dead monster */
 				}
@@ -4429,42 +4395,6 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 			{
 				bool fear = FALSE;
 
-				/* Assume a default death */
-#ifdef JP
-				cptr note_dies = "は死んだ。";
-#else
-				cptr note_dies = " dies.";
-#endif
-
-
-				/* Some monsters get "destroyed" */
-				if (!monster_living(r_ptr))
-				{
-					int i;
-					bool explode = FALSE;
-
-					for (i = 0; i < 4; i++)
-					{
-						if (r_ptr->blow[i].method == RBM_EXPLODE) explode = TRUE;
-					}
-
-					/* Special note at death */
-					if (explode)
-#ifdef JP
-note_dies = "は爆発して粉々になった。";
-#else
-						note_dies = " explodes into tiny shreds.";
-#endif
-					else
-#ifdef JP
-						note_dies = "を倒した。";
-#else
-						note_dies = " is destroyed.";
-#endif
-
-				}
-
-
 				/* Handle unseen monster */
 				if (!visible)
 				{
@@ -4549,7 +4479,7 @@ note_dies = "は爆発して粉々になった。";
 				}
 
 				/* Hit the monster, check for death */
-				if (mon_take_hit(c_ptr->m_idx, tdam, &fear, note_dies))
+				if (mon_take_hit(c_ptr->m_idx, tdam, &fear, extract_note_dies(real_r_ptr(m_ptr))))
 				{
 					/* Dead monster */
 				}

@@ -3618,7 +3618,7 @@ msg_format("%^sがテレポートした。", m_name);
 							set_tim_eyeeye(p_ptr->tim_eyeeye-5, TRUE);
 						}
 
-						if (p_ptr->riding) mon_take_hit_mon(p_ptr->riding, dam, &fear, NULL, m_idx);
+						if (p_ptr->riding) mon_take_hit_mon(p_ptr->riding, dam, &fear, extract_note_dies(real_r_ptr(&m_list[p_ptr->riding])), m_idx);
 					}
 					break;
 				}

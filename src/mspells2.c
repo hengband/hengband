@@ -3333,7 +3333,7 @@ bool monst_spell_monst(int m_idx)
 						}
 					}
 
-					mon_take_hit_mon(t_idx, dam, &fear, NULL, m_idx);
+					mon_take_hit_mon(t_idx, dam, &fear, extract_note_dies(real_r_ptr(t_ptr)), m_idx);
 				}
 				break;
 			}

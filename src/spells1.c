@@ -1791,11 +1791,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ , int flg)
 	cptr note = NULL;
 
 	/* Assume a default death */
-#ifdef JP
-	cptr note_dies = "は死んだ。";
-#else
-	cptr note_dies = " dies.";
-#endif
+	cptr note_dies = extract_note_dies(real_r_ptr(m_ptr));
 
 	int ty = m_ptr->fy;
 	int tx = m_ptr->fx;
@@ -1826,32 +1822,6 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ , int flg)
 	monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 #endif
 
-
-	/* Some monsters get "destroyed" */
-	if (!monster_living(r_ptr))
-	{
-		int i;
-		bool explode = FALSE;
-
-		for (i = 0; i < 4; i++)
-		{
-			if (r_ptr->blow[i].method == RBM_EXPLODE) explode = TRUE;
-		}
-
-		/* Special note at death */
-		if (explode)
-#ifdef JP
-note_dies = "は爆発して粉々になった。";
-#else
-			note_dies = " explodes into tiny shreds.";
-#endif
-		else
-#ifdef JP
-note_dies = "を倒した。";
-#else
-			note_dies = " is destroyed.";
-#endif
-	}
 
 	if (p_ptr->riding && (c_ptr->m_idx == p_ptr->riding)) disturb(1, 0);
 

@@ -614,6 +614,45 @@ msg_print("魔法の階段が現れた...");
 	}
 }
 
+
+/*
+ * Return monster death string
+ */
+cptr extract_note_dies(monster_race *r_ptr)
+{
+	/* Some monsters get "destroyed" */
+	if (!monster_living(r_ptr))
+	{
+		int i;
+
+		for (i = 0; i < 4; i++)
+		{
+			if (r_ptr->blow[i].method == RBM_EXPLODE)
+			{
+#ifdef JP
+				return "は爆発して粉々になった。";
+#else
+				return " explodes into tiny shreds.";
+#endif
+			}
+		}
+
+#ifdef JP
+		return "を倒した。";
+#else
+		return " is destroyed.";
+#endif
+	}
+
+	/* Assume a default death */
+#ifdef JP
+	return "は死んだ。";
+#else
+	return " dies.";
+#endif
+}
+
+
 /*
  * Handle the "death" of a monster.
  *
