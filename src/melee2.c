@@ -3189,7 +3189,12 @@ msg_format("%^s%s", m_name, monmessage);
 			}
 		}
 
-		if (did_kill_wall)
+		if (is_riding_mon)
+		{
+			if (!p_ptr->riding_ryoute && !MON_MONFEAR(&m_list[p_ptr->riding])) do_move = FALSE;
+		}
+
+		if (did_kill_wall && do_move)
 		{
 			if (one_in_(GRINDNOISE))
 			{
@@ -3234,16 +3239,11 @@ msg_format("%^s%s", m_name, monmessage);
 		/* Some monsters never move */
 		if (do_move && (r_ptr->flags1 & RF1_NEVER_MOVE))
 		{
-			/* Hack -- memorize lack of attacks */
+			/* Hack -- memorize lack of moves */
 			if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags1 |= (RF1_NEVER_MOVE);
 
 			/* Do not move */
 			do_move = FALSE;
-		}
-
-		if (is_riding_mon)
-		{
-			if (!p_ptr->riding_ryoute && !MON_MONFEAR(&m_list[p_ptr->riding])) do_move = FALSE;
 		}
 
 		/* Creature has been allowed move */
