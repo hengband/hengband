@@ -594,5 +594,5 @@
 Original   : (??), Leon Marrick and Chris Weisiger
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : さまざまな人
+Updated    : Hengband 1.0.11
 

@@ -12,7 +12,7 @@ Temple Trade: those items permitted to the pious in life.
 Black Market: the prices are usurious, but some depths items!
 Home: to store some of your precious treasures.
 
-ZAngband additional (if you not prefer Ironman/Vanilla):
+Zangband additional (if you do not prefer Ironman/Vanilla):
 The Fighter's Halls, Order of Paladins, Ranger's Taverns, 
 Gilds of Thieves, and the diverse Towers of magic realms 
 are no longer restricted to the professionals involved. 

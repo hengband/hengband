@@ -753,7 +753,7 @@ r恐 : Fe : 恐怖への耐性		 (魔 : (M: 反魔法バリア
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : いろいろな人
+Updated    : Hengband 1.0.11
 
 
 ***** Begin Hyperlinks

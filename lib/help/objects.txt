@@ -36,14 +36,10 @@ standing on top of them.
 === Equipment and Inventory ===
 
 You can carry up to 23 different objects in your backpack while wearing
-and wielding up to 12 others. Note that the additional powers and
-abilities some objects can grant the player are only effective when
-they are wielded. A Shield of Resist Acid, for example, will not
-protect you from the effects of acid while it is in your backpack.
-items you wear and wield are referred to as your 'equipment' while items
-contained in your backpack are referred to as your 'inventory'. You may
-view a list of your current inventory and equipment at any time by
-using the 'i' and 'e' commands respectively.
+and wielding up to 12 others. Items you wear and wield are referred to
+as your 'equipment' while items contained in your backpack are referred
+to as your 'inventory'. You may view a list of your current inventory
+and equipment at any time by using the 'i' and 'e' commands respectively.
 
 Although you are limited to 23 different items in your inventory, each
 item may actually be a 'pile' of up to 99 similar items. This allows
@@ -71,7 +67,10 @@ your light source, spellbooks (if applicable), healing items, escaping
 items, and the 101 other things necessary for your survival while at
 the same time maintaining space to carry back treasure from the
 dungeon for sale in the town and ensuring that you do not exceed your
-weight limit.
+weight limit. Note that the additional powers and abilities some
+objects can grant the player are only effective when they are wielded.
+A Shield of Resist Acid, for example, will not protect you from the
+effects of acid while it is in your backpack.
 
 
 ***** <Generation>
@@ -481,60 +480,60 @@ Auto Inscription of Resistances and Powers
 When you inscribe {%all} on an *identified* object, the '%all' will
 automatically transform and become a string which describe its
 resistances and powers. For example, when you inscribe {%all} on a
-robe of Resistance which have resistance to four elements and extra
-resistance to Nether, inscription will transform to {AcElFiClNt}. The
-'Ac' means resistance to acid while The El, Fi, Cl and Nt mean
+robe of Resistance which has resistance to four elements and extra
+resistance to Nether, the inscription will transform to {AcElFiClNt}. 
+The 'Ac' means resistance to acid while El, Fi, Cl and Nt mean
 resistances to electricity, fire, cold and nether.
 
 On the other hand, when you inscribe {%} on an *identified* object,
-the {%} will transform to string which describe only its extra
-resistances. In the example above, the inscription will become {Nt}
-which describe extra resistance of Nether.
+the {%} will transform to a string which describes only its extra
+resistances. In the example above, the inscription will become {Nt},
+meaning the extra resistance of Nether.
 
 
-List of auto-inscription code:
+List of auto-inscription codes:
 
-*Ac : immune to acid                  Ma : decreases mana consumption
-*El : immune to electricity		      Th : suitable for throwing
-*Fi : immune to fire		      Rf : reflection
-*Co : immune to cold		      Fa : free action
-Ac : resistance to acid		      Si : see invisible
-El : resistance to electricity	      Hl : hold life
-Fi : resistance to fire		      Esp : telepathy
-Co : resistance to cold		      Sd : slow digestion
-Po : resistance to poison	      Rg : regeneration
-Li : resistance to light	      Lv : levitation
-Dk : resistance to darkness	      Lu : extra light
-Sh : resistance to shards	      Wr : provides warning
-Bl : resistance to blindness	      Xm : xtra might when shooting
-Cf : resistance to confusion	      Xs : xtra number of shots
-So : resistance to sound	      Ag : aggravate monsters
-Nt : resistance to nether	      Bs : blessed weapon
-Nx : resistance to nexus	      (F : fiery sheath
-Ca : resistance to chaos	      (E : electric sheath
-Di : resistance to disenchantment     (C : cold sheath
-Fe : resistance to fear		      (M : anti-magic shell
-At : extra blows		      (T : prevent teleportation
-Sp : affects speed		      |A : brand acid
-St : affects strength		      |E : brand electricity
-In : affects intelligence	      |F : brand fire
-Wi : affects wisdom		      |Co : brand cold
-Dx : affects dexterity		      |P : brand pois
-Cn : affects constitution	      |Ca : chaotic effects
-Ch : affects charisma		      |V : vampiric weapon
-Sl : affects stealth		      |Q : weapon of quake
-Sr : affects searching ability	      |S : vorpal hit
-If : affects infravision	      |M : weapon of the force
-Dg : affects tunneling ability	      /* : slay evil
-(St : sustain strength		      /H : slay human
-(In : sustain intelligence	      /D : kill dragon
-(Wi : sustain wisdom		      /d : slay dragon
-(Dx : sustain dexterity		      /o : slay orc
-(Cn : sustain constitution	      /T : slay troll
-(Ch : sustain charisma  	      /P : slay giant
-				      /U : slay demon
-				      /L : slay undead
-	 			      /Z : slay animal
+*Ac : immune to acid                Ma : decreases mana consumption
+*El : immune to electricity         Th : suitable for throwing
+*Fi : immune to fire                Rf : reflection
+*Co : immune to cold                Fa : free action
+Ac : resistance to acid             Si : see invisible
+El : resistance to electricity      Hl : hold life
+Fi : resistance to fire             Esp : telepathy
+Co : resistance to cold             Sd : slow digestion
+Po : resistance to poison           Rg : regeneration
+Li : resistance to light            Lv : levitation
+Dk : resistance to darkness         Lu : extra light
+Sh : resistance to shards           Wr : provides warning
+Bl : resistance to blindness        Xm : xtra might when shooting
+Cf : resistance to confusion        Xs : xtra number of shots
+So : resistance to sound            Ag : aggravate monsters
+Nt : resistance to nether           Bs : blessed weapon
+Nx : resistance to nexus            (F : fiery sheath
+Ca : resistance to chaos            (E : electric sheath
+Di : resistance to disenchantment   (C : cold sheath
+Fe : resistance to fear             (M : anti-magic shell
+At : extra blows                    (T : prevent teleportation
+Sp : affects speed                  |A : brand acid
+St : affects strength               |E : brand electricity
+In : affects intelligence           |F : brand fire
+Wi : affects wisdom                 |Co : brand cold
+Dx : affects dexterity              |P : brand pois
+Cn : affects constitution           |Ca : chaotic effects
+Ch : affects charisma               |V : vampiric weapon
+Sl : affects stealth                |Q : weapon of quake
+Sr : affects searching ability      |S : vorpal hit
+If : affects infravision            |M : weapon of the force
+Dg : affects tunneling ability      /* : slay evil
+(St : sustain strength              /H : slay human
+(In : sustain intelligence          /D : kill dragon
+(Wi : sustain wisdom                /d : slay dragon
+(Dx : sustain dexterity             /o : slay orc
+(Cn : sustain constitution          /T : slay troll
+(Ch : sustain charisma              /P : slay giant
+                                    /U : slay demon
+                                    /L : slay undead
+                                    /Z : slay animal
 
 
 
@@ -644,7 +643,7 @@ fired at a target.
 The {#anystring} Inscription
 --------------------
 
-The {#anystring} inscription is used to make an items to looks like an
+The {#anystring} inscription is used to make an item look like an
 artifact. For example, a Long Sword (2d5) (+10,+10) which is inscribed
 as {#of Hoge} is displayed as 'a Long Sword of Hoge (2d5) (+10,+10)'.
 
@@ -794,7 +793,7 @@ Light Sources ('~')
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : some people
+Updated    : Hengband 1.0.11
 
 ***** Begin Hyperlinks
 ***** [1] option.txt#UserInterface

@@ -471,18 +471,7 @@ Crushing Blow   48      10d13     18
 
 Pillardancing
 -------------
-
-A Classical tactics of Angband like that; When you are at least twice
-as fast as the monster you are fighting. Find a single block of wall,
-freestanding, and lure your enemy to it. When both you and your enemy
-are standing next to the pillar, hit him, and then move so that you
-are opposite the pillar from him. He will use his turn to move so that
-he's standing next to you.  Hit him again, and then move again. Repeat
-until he's dead.
-
-But in Hengband, this method is not helpful at all. Monsters in
-Hengband essentially move at an irregular speed; they might suddenly
-move some steps at one turn after some turn of pause.
+Not recommended in Hengband:  monsters move at irregular speeds.
 
 
 Shoot'n Scoot
@@ -516,10 +505,10 @@ monsters.
 
 
 --
-Original   : (??) and Leon Marrick
+Original   : (??) Chris Weisiger and Leon Marrick
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : someone
+Updated    : Hengband 1.0.11
 
 ***** Begin Hyperlinks
 ***** [1] commdesc.txt#ThrowFire

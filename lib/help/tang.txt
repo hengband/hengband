@@ -208,7 +208,7 @@ not a perfect escape method.
 
 === On Resistances ====
 
-There are many different kinds of attacks in ZAngband, generally
+There are many different kinds of attacks in Hengband, generally
 falling under physical, magical, and breath attacks. They can all cause
 specialized kinds of damage, which can kill a character if he/she does
 not have resistance to that attack. The majority of attack types have a
@@ -506,7 +506,7 @@ different preferences that make Hengband more enjoyable. There are a few
 that I would recommend. Turn both stacking options ON. This maximizes
 your treasure collection. Turn the Low Hitpoint Warning ON, and place
 the warning percent at about 50%. You'll see the effects of this
-whenever you start to die:). The Delay Factor determines how long it
+whenever you start to die :). The Delay Factor determines how long it
 takes for special effects to "move;" that is: balls exploding, bolts
 moving, missile weapons flying, et cetera. This is machine dependant;
 I usually set mine at about 3 or 4. The Window Flags screen allows you
@@ -552,59 +552,29 @@ everyone knows what a scumbag you are.
 === On Hengband Time ===
 
 If there is one feature of Hengband that tends to confuse people
-(especially veterans of other *band), it's how the speed system in
+(especially veterans of other *band), it is how the speed system in
 Hengband works. 
 
-In most other variant of Angband, the speed of each monster is a fixed
-value and +10 to speed means you move twice as fast as normal-speed
-monsters, +20 is three times as fast. But in Hengband, the speed is
-randomized and irregular; monsters might suddenly move some steps at
-one turn after some turn of pause.
+As in other variants, the energy you and monsters get each turn depends 
+on speed.  Unlike in other variants, this value is only an average; be 
+watchful for opportunities to get a double move on monsters, and be 
+aware that they can do the same to you!  This rule change has a lot of 
+consequences; playing the game will teach them to you...
 
-And same problems as Zangband start to arise when one's speed gets
-much higher than about +28. After this, each point of extra speed
-contributes slightly less than a full point of speed (i.e. the points
-are worth less). There is little point in trying for speed higher than
-+35 or so.
+Apart from this, things are pretty familar.  The amount of energy you 
+can gain each game turn is 10 for an average-speed player or monster, 
+can be almost 50 for very fast ones, and most actions you take cost 100 
+energy to perform.  The biggest exception are weapons of Extra Shots; 
+firing one of these takes less energy, making monsters appear to move 
+in slow motion.  
 
-It might help to understand this if an explanation of Hengband time
-were given. In Hengband, every game turn, the player and monsters gain
-a some amount of "energy"; the amount is random but an average is
-certain fixed value.  Once you have 100 energy points, you get to take
-an action. Most actions cost 100 energy units (the major exception
-being shooting an arrow or bolt with a bow of Extra Shots. This
-divides the energy cost by two or, if it's a bow of Extra Shots +2, by
-three, thus allowing you to shoot several times before a monster gets
-an action).
-
-However, each extra speed point that you have gains you an extra
-energy point each game turn. Thus, if you have +10 to speed, you gain
-twice the normal energy points per game turn, twice as fast as
-normal. Normal monsters only get the normal energy points per game
-turn (same as the player), so you move twice as fast as they do.
-
-If you have +20 to speed, you gain 3 times the normal energy points
-per game turn. But when you have +30 to speed, you gain only 3.8 times
-the normal energy points per game turn, and the maximum average energy
-point is 4.9 times the normal energy points even when you have +99 to
-speed.
+Be aware that speeds increases above about +28 to +35 are much less useful.
 
 
 === Advanced techniques for killing monsters ===
 
 Pillardancing.
-
-     A Classical tactics of Angband like that; When you are at least
-     twice as fast as the monster you are fighting. Find a single
-     block of wall, freestanding, and lure your enemy to it. When both
-     you and your enemy are standing next to the pillar, hit him, and
-     then move so that you are opposite the pillar from him. He will
-     use his turn to move so that he's standing next to you.  Hit him
-     again, and then move again. Repeat until he's dead.
-
-     But in Hengband, this method is not helpful at all. Monsters in
-     Hengband essentially move at an irregular speed; they might
-     suddenly move some steps at one turn after some turn of pause.
+     Not recommended in Hengband:  monsters move at irregular speeds.
 
 Shoot'n Scoot.
      Requires a large room, Phase Door, and some type of missile
@@ -620,8 +590,8 @@ Wail'n Bail.
      dangerous, because you could teleport right next to some nasty
      that will kill you. Also, it is not generally useful for killing
      unique monsters, as they regenerate damage very quickly, and by
-     the time you find them again, they will have healed what you did
-     to them.
+     the time you find them again, they may have healed the damage you 
+     did to them.
  
 The Anti-Summoning Corridor.
      Required a little time to set up. This can be done just about
@@ -635,4 +605,4 @@ The Anti-Summoning Corridor.
 --
 Original   : Chris Weisiger (TANG version 1.6.2)
 Updated    : Zangband DevTeam
-Updated    : some one
+Updated    : Hengband 1.0.11

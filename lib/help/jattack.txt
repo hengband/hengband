@@ -485,7 +485,7 @@ The Anti-Summoning Corridor (穴熊戦法)
 Original   : (??) and Leon Marrick
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : 様々な人
+Updated    : Hengband 1.0.11
 
 
 ***** Begin Hyperlinks

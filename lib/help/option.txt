@@ -171,7 +171,7 @@ Center map while walking (*slow*)    [center_player]
 Centering even while running    [center_running]
      Normally, the map does not center on the player if the player
      moves with the "run" command, only when the running finishes.  If
-     this option is set, the map always center on the player.
+     this option is set, the map always centers on the player.
 
 Use special colors for torch-lit grids    [view_yellow_lite]
     This option causes special colors to be used for "torch-lit" grids
@@ -232,7 +232,7 @@ Always show list at first when select items    [always_show_list]
 === Option set 3 -- Game playing ===
 
 Manually haggle in stores    [manual_haggle]
-    Usually, auto-haggle is used in stores and it resulting in a ten
+    Usually, auto-haggle is used in stores, resulting in a ten
     percent sales tax on items which you would have otherwise been
     forced to haggle for.  If this option is set, auto-haggle is
     disabled.
@@ -330,9 +330,9 @@ Leave last words when your character dies    [last_words]
     instead.
 
 Send score dump to the world score server    [send_score]
-    If this option is set, Hengband will allow you to send score
-    record of your character to world score board on the Internet when
-    your character dies.
+    If this option is set, Hengband will allow you to send the score
+    record of your character to the world score board on the Internet
+    when your character dies.
 
 ***** <Disturbance>
 === Option set 4 -- Disturbance ===
@@ -471,34 +471,34 @@ Hilite the player with the cursor    [hilite_player]
 === Option set 6 -- Easy Auto-Destroyer ===
 
 Use easy auto-destroyer    [destroy_items]
-    If this option is set, Hengband will automatically Destroy all
-    objects which you touch unless the objects is protected by various
+    If this option is set, Hengband will automatically destroy all
+    objects which you touch unless the object is protected by various
     'leave_...'  options below.
 
 Auto-destroyer leaves known worthy items    [leave_worth]
-    This option protects known worthy items, which means the object
-    can be sold at stores, from auto-destruction by destroy_items
-    option.
+    This option protects known objects that can be sold in stores from 
+    auto-destruction by the destroy_items option.
 
 Auto-destroyer leaves weapons and armour    [leave_equip]
     This option protects all weapons and armour from auto-destruction
-    by destroy_items option.
+    by the destroy_items option.
 
 Auto-destroyer leaves closed chests    [leave_chest]
-    This option protects all chests which is not yet opened from
-    auto-destruction by destroy_items option.
+    This option protects all chests which are not yet opened from
+    auto-destruction by the destroy_items option.
 
 Auto-destroyer leaves wanted corpses    [leave_wanted]
     This option protects corpses of monsters wanted at the Hunter's
-    office from auto-destruction by destroy_items option.
+    office from auto-destruction by the destroy_items option.
 
 Auto-destroyer leaves corpses and skeletons    [leave_corpse]
     This option protects all corpses and skeletons from
-    auto-destruction by destroy_items option.
+    auto-destruction by the destroy_items option.
 
-Auto-destroyer leaves junks    [leave_junk]
-    This option protects all 'junks', such as Shards of Pottery or
-    Broken Stick, from auto-destruction by destroy_items option.
+Auto-destroyer leaves junk    [leave_junk]
+    This option protects all 'junk', such as Shards of Pottery or
+    Broken Stick, from auto-destruction by the destroy_items option.  
+    This is especially helpful for Archers.
 
 
 ***** <PlayRecord>
@@ -541,16 +541,16 @@ Record sold items    [record_sell]
     will be written in the Play-record.
 
 Record hitpoint warning    [record_danger]
-    If this option is set, record of hitpoint warning will be written
-    in the Play-record when you caught major damage to hit point.
+    If this option is set, a record of hitpoint warnings will be written
+    in the Play-record when you take major hitpoint damage.
 
 Record arena victories    [record_arena]
-    If this option is set, every victories and defeated game will be
+    If this option is set, every victory and defeated game will be
     written in the Play-record.
 
 Record first identified items    [record_ident]
-    If this option is set, names of every objects which identified
-    first time will be written in the Play-record.
+    If this option is set, names of objects identified for the first
+    time will be written in the Play-record.
 
 Record informations of named pets    [record_named_pet]
     If this option is set, every action with your pets which are given
@@ -772,7 +772,7 @@ Always generate very unusual rooms (*)    [ironman_rooms]
 Nightmare mode(it isn't even remotely fair!)(*)    [ironman_nightmare]
     If this option is enabled, all monsters become unusually
     powerful, and fast. And there will be various unbelievable
-    happening in various situations. Further more, at 12:00 of every
+    happening in various situations. Furthermore, at 12:00 every
     night, you will have a real nightmare.
 
 Left-Hander    [left_hander]
@@ -810,7 +810,7 @@ Autoroll for weight, height and social status    [autochara]
     social status for auto-roller.
 
 Increase capacity of your home (*)    [powerup_home]
-    If this option is enabled, capacity of your home will be expanded
+    If this option is enabled, the capacity of your home will be expanded
     to 20 pages. If not, capacity is only 2 pages.
 
 
@@ -820,4 +820,4 @@ Original   : Ben Harrison
 Updated    : Zangband 2.1.* by Topi Ylinen
 Updated    : Zangband 2.2.0 through 2.2.6c by Robert Ruehlmann
 Updated    : Zangband DevTeam
-Updated    : Many people
+Updated    : Hengband 1.0.11

@@ -1,35 +1,43 @@
 === Hengband Magic System ===
 
-The magic system of Hengband is a modified version of Zangband magic
-system.  And many many new features have been added.  There are two
-kind of magic in Hengband. First one is spellbook magic which is much
-similar to normal magic system of Zangband. Second one is class
-specific magic which is similar to Mindcraft of Zangband.
+
+The magic system of Hengband is a modified version of Zangband's, with many
+new features added.  There are two kind of magic in Hengband:  Spellbook
+magic, similar to the normal magic system of Zangband, and class-specific
+magic, similar to Zangband's mindcrafting.
 
 There are nine different realms of spellbook magic; Life, Sorcery,
-Nature, Chaos, Death, Trump, Arcane, Craft and Daemon.  Players of
+Nature, Chaos, Death, Trump, Arcane, Craft, and Daemon.  Players of
 each class can study and cast spells from spellbooks using one stat;
-intelligence, wisdom or charisma. For spellcasting, you must always
+intelligence, wisdom, or charisma. For spellcasting, you must always
 carry spellbooks which include spells which you want to cast.  You can
-choose either one or two realms depend on class. In Hengband, you can
-change second realm in the middle of game. (Simply study('G') from a
-spellbook of new magic realm.)
+choose either one or two realms, depending on class. In Hengband, you can
+change your second realm in the middle of the game (Simply study ('G') from 
+a spellbook of the new magic realm).
 
-There are eleven classes which use class specific magic(or technique);
-Mindcraft(Mindcrafter), Imitation(Imitator),
-Device-Eating-Magic(Magic-Eater), Music(Bard), Kendo(Samurai), The
-Force(ForceTrainer), Blue-Magic(Blue Mage), Rage(Berserker),
-Smithery(Weaponsmith), Mirror-magic(Mirror Master), Ninjutsu(Ninja)
+There are eleven classes which use class specific magic (or techniques);
+Mindcraft (Mindcrafter), 
+Imitation (Imitator), 
+Device-Eating-Magic (Magic-Eater), 
+Music (Bard), 
+Kendo (Samurai), 
+The Force (ForceTrainer), 
+Blue-Magic (Blue Mage), 
+Rage (Berserker),
+Smithery (Weaponsmith), 
+Mirror-magic (Mirror Master), and 
+Ninjutsu (Ninja)
+
 
 In addition to the above, each class has one or two special techniques
-called Class Power. The Class Power can be use by the racial/class
-power command ("U"/"O"). Class powers are different from magic, but
-explained in this text together with magic.
+called Class Powers, which may be used by typing ("U", or "O" in the 
+roguelike keyset).  Class powers are different from magic, but are explained 
+in this text together with magic.
 
 You might not be able to understand the function of every magic spell
-by reading its name or casting it a few times. In Hengband, there is
-in-game description of each spell. Use the browse command ("b"/"P")
-and choose a spell from the list to get a description of each spell.
+by reading its name or casting it a few times. In Hengband, spells have 
+descriptions.  Use the browse command ("b"/"P") and choose a spell from 
+the list to see its description.
 
 
 ***** <ClassSpellAbil>
@@ -38,293 +46,282 @@ and choose a spell from the list to get a description of each spell.
 Warrior
      Warriors cast no spells. They hate magic. In fact, they even gain
      experience for destroying high level spellbooks.  They have a
-     class power 'Sword Dancing' which attacks in melee to six random
-     directions at once.
+     class power - 'Sword Dancing' - which allows them to conduct a melee
+     attack in six random directions.
 
 Mage
      Mages have the least restrictions in choosing and learning
      spells.  They can freely choose any two realms when a character
-     is created: in the current version, all seven realms are
-     available to them, although their natural inclination makes Life
-     magic fairly hard for them. Otherwise, a mage tends to learn and
-     cast all the spells in his / her realms better than any other
+     is created:  in the current version, all seven realms are
+     available, although their natural inclination makes Life
+     magic fairly hard to learn. Otherwise, a mage tends to learn and
+     cast all the spells in his or her realms better than any other
      character.  The ability to choose second realm of magic has a
      special meaning in Hengband; only second realm can be changed in
-     the middle of the game. You can change second realm by
-     studying("G") from a spellbook of new realm.  They have a class
-     power 'Eat Magic' which absorb mana from wands, staves or rods.
-     Intelligence determines their spell casting ability.
+     the middle of the game. You can change second realm by studying
+     ("G") from a spellbook of new realm.  They have a class power
+     - 'Eat Magic' - which absorbs mana from wands, staves or rods.
+     Intelligence determines their spellcasting ability.
 
 
 Priest
-     Priest can select from Life, Death or Daemon as first realm, and
-     choose second realm almost freely. But two kind of pair selection
-     Life-Death or Life-Daemon are not allowed.  Priests can learn all
-     spells in the selected realms, even if not as efficiently as
+     Priest can select from Life, Death, or Daemon as a first realm, and
+     choose second realm almost freely. But two kinds of pair selection
+      - Life/Death and Life/Daemon - are not allowed.  Priests can learn
+     all spells in the selected realms, even if not as efficiently as
      mages. However, when learning spells, priests cannot voluntarily
      decide which spells to study: they are rewarded with new prayers
      by their patron deities, with no money-back satisfaction
-     guarantee. Every priests which select Life realm have a class
-     power 'Bless Weapon' which bless any edged weapon to be suitable
-     for priests to wield.  Every priests which select Death or Daemon
-     realms have a class power 'Evocation' which damages, scares and
-     banish all monsters in sight.  Wisdom determines their success at
-     praying to his deity.
+     guarantee. Priests which select the Life realm have a class power
+     - 'Bless Weapon' - which blesses any edged weapon to be suitable
+     for priests to wield.  Every priest which select Death or Daemon
+     realms have a class power - 'Evocation' - which damages, scares and
+     banish all monsters in sight.
+     Wisdom determines a priest's success at praying to his or her deity.
 
 Rogue
-     Rogues can select one realm from Sorcery, Death, Trump, Arcane or
+     Rogues can select one realm from Sorcery, Death, Trump, Arcane, or
      Craft.  All Rogues have certain limitations on which spells they
-     can learn, and they are not too fast to learn new spells. After
-     all, for Rogue who are very good at both melee and shooting, the
-     magic is only auxiliary support.  They have a class power 'Hit
-     and Away' which allows them to attack in melee and teleport away
-     from there at once.  Intelligence determines a Rogue's spell
-     casting ability.
+     can learn, and they do not learn new spells very quickly. Rogues
+     are very good at both melee and shooting and, for them, magic is
+     secondary.  They have a class power - 'Hitand Away' - which allows
+     them to attack in melee and teleport away from there at once.
+     Intelligence determines a Rogue's spellcasting ability.
 
 Ranger
      All rangers are trained in Nature magic, and all Nature spells
      are available to them. They even learn these spells almost as
      fast as mages. They can also select a secondary realm (from
-     Sorcery, Chaos, Death, Trump, Arcane and Daemon), but they are
-     slow learners in them, and may find themselves unable to learn
-     some of the highest level spells.  They have a class power 'Probe
-     Monster' which allow you to know monsters' HP, speed and needed
-     experience to evolution.  Intelligence determines a their spell
-     casting ability.
+     Sorcery, Chaos, Death, Trump, Arcane, and Daemon), but they are
+     slow learners here, and may find themselves unable to learn
+     some of the highest level spells.  They have a class power -
+     'Probe Monster' - which allows them to know a monster's HP,
+     speed, and experience required to evolve.
+     Intelligence determines a Ranger's spellcasting ability.
 
 Paladin
      Paladins can select a realm from Life and Death.  Like priests,
-     they cannot select which prayers to learn but are rewarded with
+     they cannot select which prayers to learn, but are rewarded with
      new prayers by their deities. They can learn all spells, but not
-     as fast as priests. Since they detest paganism so strongly that
-     they will even gain experience for destroying pagan high-level
-     spellbooks: 'pagan' means Life spellbooks for a Death Paladin and
-     all other spellbooks than Life for a Life Paladin.  Each of them
-     have a class power 'Holy Lance' or 'Hell Lance'.  Wisdom
-     determines a Paladin's success at praying to his deity.
+     as fast as priests. They detest paganism so strongly that they
+     will even gain experience for destroying high-level pagan spell-
+     books: 'pagan' means Life spellbooks for a Death Paladin and
+     all spellbooks other than Life for a Life Paladin.  Depending on 
+     their realm, they have a class power - 'Holy Lance' or 'Hell Lance'.  
+     Wisdom determines a Paladin's success at praying to his or her deity.
 
 Warrior-Mage
      Warrior-mages begin the game with Arcane magic, and they can
      freely select another realm of magic. Although they do not gain
      new spells as fast as regular mages, they will eventually learn
-     every spell in both realms, thus making a very competitive choice
-     for players who appreciate Arcane magic.  They have two class
-     powers 'Convert HP to SP' and 'Convert SP to HP' which allow them
-     to heal HP using mana or gain mana using HP.  Intelligence
-     determines a Warrior-Mage's spell casting ability.
+     every spell in both realms, thus making them a very competitive
+     choice for players who appreciate Arcane magic.  They have two class
+     powers - 'Convert HP to SP' and 'Convert SP to HP' -  which allow
+     them to heal HP using mana or gain mana using HP.  Intelligence
+     determines a Warrior-Mage's spellcasting ability.
 
 Chaos-Warrior
      Chaos Warriors can select a realm from Chaos and Daemon.  They
      are not interested in any other form of magic. They can learn
-     every spell.  They have a class power 'Confusing Light' which
-     stuns, confuses and scares all monsters in sight.  Intelligence
-     determines their spell casting ability.
+     every spell.  They have a class power - 'Confusing Light' - which
+     stuns, confuses, and scares all monsters in sight.  
+     Intelligence determines a Chaos-Warrior's spellcasting ability.
 
 Monk
      The different sects of monks are devoted to different areas of
-     magic. They select a realm from Life, Nature, Craft and Death.
+     magic. They select a realm from Life, Nature, Craft, and Death.
      They will eventually learn all prayers in the discipline of their
-     choice.  They have two class powers 'Assume a Posture' and
-     'Double Attack'. They can choose different forms of posture in
-     different situations. And use powerful successive combination of
-     attacks for finish blow.  Wisdom determines a Monk's spell
-     casting ability.
+     choice.  They have two class powers - 'Assume a Posture' and
+     'Double Attack'. They can choose different forms of postures in
+     different situations, and use powerful combinations of attacks 
+     for the finishing blow.
+     Wisdom determines a Monk's spellcasting ability.
 
 Mindcrafter
      Although the powers of a Mindcrafter may seem like magic, this is
      not -- strictly speaking -- the case. They are mental powers,
      independent of the ordinary sources of magic. Consequently,
-     Mindcrafters are not interested in spellbooks. They gain more
-     number of Mindcraft and each Mindcraft becomes more powerful as
-     they gain more levels. They can use their Mindcraft even when
-     blinded.  They have a class power 'Clear Mind' which allows them
-     to rapidly regenerate their mana.  Wisdom determines ability to
-     use Mindcraft.
+     Mindcrafters are not interested in spellbooks. They gain new mind-
+     crafting powers and their existing ones become stronger as they
+     gain levels. They can use their power even when blinded.  They
+     have a class power - 'Clear Mind' - which allows them to rapidly
+     regenerate their mana.  
+     Wisdom determines a Mindcrafter's ability to use his or her powers.
 
 High-Mage
      High-mages are mages who specialize in one particular field of
      magic and learn it very well -- much better than the ordinary
      mage. For the price of giving up a second realm of magic, they
      gain substantial benefits in the mana costs, minimum levels, and
-     failure rates in the spells of the realm of their specialty.
-     They have a class power 'Eat Magic' which absorb mana from wands,
-     staves or rods.  Intelligence determines their spell casting
-     ability.
+     failure rates of the spells in their speciality realm. They
+     have a class power - 'Eat Magic' - which absorbs mana from wands,
+     staves, or rods.
+     Intelligence determines a High-Mage's spellcasting ability.
 
 Tourist
-     Since Tourists are always seeing more of the world to add to
-     their stock of information, surprisingly they can cast Arcane
-     magic. But their spell casting ability is very low; they cannot
-     use any attack spells and cannot use the highest level
-     spells. There is one exception; they are very good at identify
-     spell.  They have two class powers 'Take a Photograph' and
-     'Identify True' which is used to gather more and more knowledge
-     of the world!  Intelligence determines a tourist's spell casting
-     ability.
+     Tourists are always seeing more of the world to add to their stock 
+     of information; no other class can compete with their identification 
+     skills.  They have two class powers - 'Take a Photograph' and 
+     'Identify True'.  Their magic is based on Arcane, and - aside from 
+     identify - is very weak indeed.
+     Intelligence determines a Tourist's spellcasting ability.
 
 Imitator
-    Imitators use unique technique 'Imitation' which imitates monster
-    spells/techniques include whose damage/duration value. When
-    monsters in line of sight use spells, they are added to a
-    temporary spell list which the imitator can choose among. Spells
-    should be imitated quickly, because timing and situation are
-    everything. An imitator can only repeat a spell once each time he
-    observes it. They have only small number of long-term memory,
-    ranging from one to three which depends on their level.  When they
-    memorized spells more than this number, they will forget the
-    oldest spell in the list each turn.  They have a class power
-    'Double Revenge' which allows them to imitate spells at double
-    damage or duration.  Dexterity determines general imitation
-    ability, but a stat related to the specific action is often also
-    taken into account.
+     Imitators use a unique technique - 'Imitation' - which imitates
+     monster spells/techniques include whose damage/duration value.
+     When monsters in view use spells, they are added to a temporary
+     spell list which the imitator can choose among. Spells should
+     be imitated quickly, because timing and situation are everything.
+     An imitator can only repeat a spell once each time he observes
+     it. They only have a small long-term memory for spells, which
+     ranges from one to three, depending on their level.  When they
+     memorize more spells than this, they will forget the oldest
+     spell in the list.  They have a class power - 'Double Revenge' -
+     which allows them to imitate spells at double damage or duration.
+     Dexterity determines an Imitator's general imitation ability, but 
+     a stat related to the specific action is often also taken into 
+     account.
 
 BeastMaster
-    Beastmasters use Trump magic to make good use of their monster
-    domination ability and riding ability.  They are very good at
-    summoning living creatures, and they learn summoning spells
-    quicker than Mages. But they cannot summon non-living creatures,
-    and cannot learn such spells.  They have two class powers
-    'Dominate a Living Thing' and 'Dominate Living Things'.  Charisma
-    determines a Beastmaster's spell casting ability.
+     Beastmasters use Trump magic to make good use of their monster
+     domination and riding abilities.  They are very good at summoning
+     living creatures, and they learn summoning spells quicker than
+     Mages. However, they cannot summon non-living creatures.  They 
+     have two class powers - 'Dominate a Living Thing' and 'Dominate 
+     Living Things'.  
+     Charisma determines a Beastmaster's spellcasting ability.
 
 Sorcerer
-    Sorcerers are the all-around best magicians, being able to cast
-    any spell from most magic realms without having to learn it. On
-    the downside, they are the worst fighters in the dungeon, being
-    unable to use any weapon but a Wizardstaff.  They have a class
-    power 'Eat Magic' which absorb mana from wands, staves or rods.
-    Intelligence determines their spell casting ability.
+     Sorcerers are the all-around best magicians, being able to cast
+     any spell from most magic realms without having to learn it. On
+     the downside, they are the worst fighters in the dungeon, being
+     unable to use any weapon but a Wizardstaff.  They have a class
+     power - 'Eat Magic' - which absorbs mana from wands, staves or rods.
+     Intelligence determines a Sorcerer's spellcasting ability.
 
 Archer
-    Archers don't use magic like Warrior. They have a class power
-    'Create Ammo' which creates stones or shots from pile of rubble,
-    arrows and crossbow bolts from bones.
+     Archers are to archery what a warrior is to melee.  They learn no 
+     spells.  Archers have a class power - 'Create Ammo' - which creates 
+     stones or shots from pile of rubble, and arrows and crossbow bolts 
+     from bones.
 
 Magic-Eater
-    Magic-Eaters can absorb the energy of wands, staffs, and rods, and
-    can then use these magics as if they were carrying all of these
-    absorbed devices. Mana and changes of absorbed devices are
-    regenerated naturally by a Magic-Eaters power, and speed of
-    regeneration is influenced by their intelligence.  They have a
-    class power 'Absorb Magic' which is used to absorb magic devices.
-    A Magic-Eater's prime statistic is intelligence.
+     Magic-Eaters can absorb the energy of wands, staffs, and rods, and
+     can then use these magics as if they were carrying all of these
+     absorbed devices. Mana and changes of absorbed devices are
+     regenerated naturally by a Magic-Eater's power, and speed of
+     regeneration is influenced by their intelligence.  They have a
+     class power - 'Absorb Magic' - which is used to absorb magic devices.
+     A Magic-Eater's prime statistic is intelligence.
 
 Bard
-    Bards use Music magic. System of Music magic is almost same as
-    system of spellbook magic, but only Bard can use Music. Bards use
-    songbooks to study and to sing magical songs. There are four
-    songbooks, and first and second songbooks is sold at town.  There
-    is a special feature of song; many songs continue to be sung until
-    either the Bard chooses to stop, or he runs out of the energy
-    required to sing that type of song.  They have a class power 'Stop
-    Singing'.  Charisma determines their singing ability.
+     Bards use music rather than magic.  Songs are found in four songbooks, 
+     of which two are sold in town.  There is a special feature of music; 
+     many songs continue to be sung until either the Bard chooses to stop, 
+     or he runs out of the energy required to sing that type of song.  
+     Bards have a class power - 'Stop Singing'.  
+     Charisma determines a Bard's singing ability.
 
 Red-Mage
-    Red Mages are similar to Warrior-Mage; they are decent fighter and
-    spellcaster.  Red-Mages can use almost all spells from lower rank
-    spellbooks of all realms, first and second spellbooks of all
-    realms and third and fourth Arcane spellbooks, without having to
-    learn it, but they cannot cast spells from higher rank spellbooks;
-    third and fourth spellbooks for all realms other than Arcane.
-    Since they use all realms at once, they are extremely slow
-    learners in them, and have major disadvantage in the mana costs,
-    They have a class power 'Double Magic' which allows them to cast
-    two spells at once.  Intelligence determines their spell casting
-    ability.
+     Red Mages are similar to Warrior-Mage; they are decent fighters and
+     spellcasters.  Red-Mages can use almost all spells from lower rank
+     spellbooks of all realms:  first and second spellbooks of all
+     realms and third and fourth Arcane spellbooks, without having to
+     learn it, but they cannot cast spells from higher rank spellbooks;
+     third and fourth spellbooks for all realms other than Arcane.
+     Since they use all realms at once, they are extremely slow learners 
+     in them, and spells cost more mana to cast.  They have a class power
+     - 'Double Magic' - which allows them to cast two spells at once.  
+     Intelligence determines a Red-Mage's spellcasting ability.
 
 Samurai
-    Samurai can use the art of the blade called Kendo or Bugei. Books
-    of Kendo is similar to spellbooks, but Samurai don't need to carry
-    it around; the books is needed only when they study new combat
-    techniques. Samurai need a weapon wielded to use techniques of
-    Kendo, and most techniques will add powerful special properties to
-    their blows; such as flaming, poisoning, vampiric, etc... There is
-    special treatment about their spellpoints; usual maximum of SP
-    doesn't depend on their level, but depend solely on wisdom, and
-    they can use the class power 'Concentration' to temporarily
-    increase SP beyond its usual maximum value.  They have one more
-    class power 'Assume a Posture'; They can choose different forms of
-    posture in different situations.  Wisdom determines a Samurai's
-    ability to use the special combat techniques available to him.
+     Samurai use the art of the blade called Kendo (or Bugei).  Books
+     of Kendo are similar to spellbooks, but Samurai don't need to carry
+     them around; the books are needed only when they study new combat
+     techniques. Samurai need a weapon wielded to use the techniques of
+     Kendo, and most techniques will add powerful special properties to
+     their blows; such as flaming, poisoning, vampiric, etc...  Their 
+     maximum spellpoints don't depend on their level but solely on 
+     wisdom, and they can use the class power 'Concentration' to tempo-
+     rarily increase SP beyond its usual maximum value.  They have one 
+     more class power - 'Assume a Posture'.  They can choose different 
+     forms of posture in different situations.  
+     Wisdom determines a Samurai's ability to use the special combat 
+     techniques available to him.
 
 ForceTrainer
-    ForceTrainer use both spellbook magic and their special spiritual
-    force called the Force. They can select a realm from Life, Nature,
-    Craft and Death like Monks. To use ordinary spellbook magic, you
-    can use the cast a spell command("m") normally.  And to use The
-    Force, you can select it just as if it is spellbook 'w'; which
-    means you need to press 'm' and then 'w' to select the Force.  The
-    most important spell of the Force is the 'Improve Force'; each
-    time a ForceTrainer activate it, their Force power become more
-    powerful, and their attack power in bare-handed melee fighting is
-    increased temporary. And then the improved Force can be released
-    at one stroke when a ForceTrainer activates some other Force
-    spell, typically an attack spell. They prefer fighting with neither
-    weapon nor armor, and wielding weapons or wearing heavy armor
-    disturbs use of the Force.  They have a class power 'Clear Mind'
-    which allows them to rapidly regenerate their mana.  Wisdom is a
-    ForceTrainer's primary stat.
+     ForceTrainer use both spellbook magic and the special spiritual
+     power called the Force. They can select a realm from Life, Nature,
+     Craft, and Death, just like Monks. To use The Force, you select
+     it just as if it were spellbook 'w'; which means you need to
+     press 'm' and then 'w' to select the Force.  The most important
+     spell of the Force is 'Improve Force'; each time a ForceTrainer
+     activates it, their Force power becomes more powerful, and
+     their attack power in bare-handed melee fighting is increased
+     temporarily. The strengthened Force can be released at one stroke
+     when a ForceTrainer activates some other Force spell, typically
+     an attack spell. They prefer fighting with neither weapon nor
+     armor, and wielding weapons or wearing heavy armor disturbs use
+     of the Force.  They have a class power - 'Clear Mind' - which
+     allows them to rapidly regenerate their mana.
+     Wisdom is a ForceTrainer's primary stat.
 
 Blue-Mage
-    A Blue-Mage can learn and cast spells/techniques of monsters as
-    their own spell, this magic system is called Blue magic. Unlike
-    Imitators, Blue-Mages remember their spells permanently, but they
-    must learn spells from monsters by activating their class power
-    'Learning', and they can learn only attack spells and summoning
-    spells; they cannot learn healing, speed or etc., because these
-    spells don't hit Blue-Mages.  Intelligence determines their spell
-    casting ability.
+     A Blue-Mage can learn and cast monster spells/techniques as
+     their own spell; this technique is called Blue magic. Unlike
+     Imitators, Blue-Mages remember their spells permanently, but they
+     must learn spells from monsters by activating their class power
+     'Learning', and they can learn only attack and summoning spells.
+     Intelligence determines a Blue-Mage's spellcasting ability.
 
 Cavalry
-    Cavalries don't use magic like Warrior.  Since they are very good
-    at riding, they have a class power 'Rodeo' which allows them to
-    forcibly saddle and tame wild monsters.
+     Like Warriors and Archers, the cavalry don't use magic.  Since 
+     they are very good at riding, they have a class power - 'Rodeo' - 
+     which allows them to forcibly saddle and tame wild monsters.
 
 Berserker
-    Berserkers can use their system of unique techniques called
-    'Rage'. They gain more number of techniques as they gain levels.
-    They cannot use magic like Warrior, on the contrary, they cannot
-    use any magic devices and activation of artifacts, and cannot read
-    scrolls. For the relief of this big disadvantage, Berserkers are
-    allowed to have two important class power 'Satisfy Hunger' and
-    'Recall'. Why they can satisfy hunger in dungeon and recall from
-    dungeon?  Don't ask me.
+     Berserkers use a unique system of techniques called 'Rage'. They 
+     gain more techniques as they gain levels. They use no magic: 
+     indeed, they cannot use any magic devices or activate any artifacts,
+     and cannot read scrolls. To offset these great disadvantages, 
+     Berserkers are allowed to have two important class powers - 
+     'Satisfy Hunger' and 'Recall'.
 
 Weaponsmith
-    A Weaponsmith can improve weapons and armors for him or
-    herself. They can extract the essences of special effects from
-    weapons or armors which have various special abilities, and can
-    add these essences to another weapon or armor. Normally, each
-    equipment can be improved only once, but they can remove
-    previously added essence from improved equipment to improve it
-    with another essence. To-hit, to-damage bonus and AC can be
-    improved freely to the maximum value which depend on the level.
-    They have a class power 'Judgment' which allow them to identify,
-    or *identify* at high level, weapons and armor.
+     A Weaponsmith can improve weapons and armors. They extract the essen-
+     ces of special effects from weapons or armors which have various 
+     special abilities, and can add these essences to another weapon or 
+     armor. Normally, each equipment can be improved only once, but they 
+     can remove a previously added essence from improved equipment to 
+     improve it with another essence. To-hit, to-damage bonus, and AC can
+     be improved freely up to a maximum value depending on level.
+     Weaponsmiths have a class power - 'Judgment' - which allows them to 
+     identify (later *identify*) weapons and armor.
 
 Mirror-Master
-    Mirror-Masters can create magical mirrors, and employ them in the
-    casting of Mirror-Magic spells. They gain more number of spell and
-    each spell becomes more powerful as they gain more levels. They
-    can use their spells even when blinded.  For Mirror-Masters,
-    arrangement of mirrors is very important; Some attack spells
-    reflect from mirror, and some other spells are effective only to
-    monsters stand on a mirror.  A Mirror-Master standing on a mirror
-    has greater ability and, for example, can perform quick teleports.
-    The maximum number of Magical Mirrors which can be controlled
-    simultaneously depends on the level, and breaking unnecessary
-    mirror is important work for them.  They have two class powers
-    'Break Mirrors' which breaks all mirrors in current dungeon level
-    and 'Mirror Concentration' which allows them to rapidly regenerate
-    their mana on a mirror.  Intelligence determines a Mirror-Master's
-    spell casting ability.
+     Mirror-Masters can create magical mirrors, and employ them in the
+     casting of Mirror-Magic spells. They gain more spells and each
+     spell becomes more powerful as they gain levels. They can use
+     their spells even when blinded.  For Mirror-Masters, the arrange-
+     ment of mirrors is very important:  Some attack spells reflect from
+     mirrors, and some other spells are effective only against monsters
+     standing on a mirror.  A Mirror-Master standing on a mirror has
+     greater ability and, for example, can perform quick teleports.
+     The maximum number of magical Mirrors which can be controlled
+     simultaneously depends on the level, and breaking unnecessary
+     mirrors is important work for them.  They have two class powers
+     - 'Break Mirrors', which breaks all mirrors in current dungeon level
+     and 'Mirror Concentration', which allows them to rapidly regenerate
+     their mana on a mirror.
+     Intelligence determines a Mirror-Master's spellcasting ability.
 
 Ninja
-    A Ninja can use Ninjutsu for application to lurking and surprise
-    attack.  They gain more number of Ninjutsu as they gain levels.
-    They have a class power 'Quick Walk' which makes their walking
-    speed very fast.  Dexterity determines a Ninja's ability to use
-    Ninjutsu.
+     A Ninja can use Ninjutsu for lurking and surprise attacks.
+     They gain more Ninjutsu techniques as they gain levels.  They
+     have a class power - 'Quick Walk' - which makes their walking
+     speed very fast.
+     Dexterity determines a Ninja's ability to use Ninjutsu.
+
 
 
 ***** <MagicRealms>
@@ -334,8 +331,8 @@ Life
      Life magic is 'good' magic; it relies mostly on healing and
      protective spells. It does have a few attack spells as well, but
      these are mostly used for harming and banishing foul minions of
-     evil, especially undead monsters.  Fail rate of Life spells goes
-     up when casters alignment tend to be evil.
+     evil, especially undead monsters.  The fail rate of Life spells 
+     goes up if the caster's alignment tends towards evil.
 
 Sorcery
      Sorcery is a `meta` realm, including enchantment and general
@@ -352,39 +349,39 @@ Sorcery
      enemies.
 
 Nature
-     Nature magic makes you master of elements; it provides
+     Nature magic makes you a master of the elements; it provides
      protection, detection, curing and attack spells, and most
-     importantly, spells changing surrounding geographical feature.
-     Nature also has a spell of Herbal Healing, which is the only
+     importantly, spells that change surrounding geographical features.
+     Nature also has offers Herbal Healing, which is the only
      powerful healing spell outside the realm of Life magic.  Fail
-     rate of Nature spells goes up when casters alignment tend to be
-     good or evil.
+     rate of Nature spells goes up when the caster's alignment becomes 
+     very good or evil.
 
 Chaos
-     Chaos is the very element of unmaking, and the Chaos spells are
+     Chaos is the very element of unmaking, and Chaos spells are
      the most terrible weapons of destruction imaginable. From Magic
      Missile and Acid Bolt to the medium level Fire Ball and Doom
      Bolt, and finally to the awesome spells of Invoke Logrus, Mana
      Storm and Call the Void, Chaos offers an unsurpassable arsenal of
-     attack spells. And Chaos is the only realm which provides
+     attack spells. Chaos is the only realm which provides the
      *Destruction* spell. The caster can also call on the primal
      forces of Chaos to induce mutations in his/her opponents and even
      him/herself, but otherwise, Chaos has no protective spells.
-     Beware, though, Chaos spells are known to backfire easily and
-     product undesired effects.
+     Beware!  Chaos spells are known to backfire easily and produce
+     undesired effects.
 
 Death
      There is no fouler nor more evil category of spells than the
      necromantic spells of Death Magic. These spells are relatively
      hard to learn, but at higher levels the spells give the caster
      power over living and the (un)dead. Poison, vampirism, death
-     spells and even hellfire can be directed by the caster, but the
-     most powerful spells need his / her own blood as the focus, often
+     spells, and even hellfire can be directed by the caster, but the
+     most powerful spells need his/her own blood as the focus, often
      hurting the caster in the process of casting. Should a Death
      wizard find the legendary tome Necronomicon, he can expect to
      gain very great powers indeed, but at a cost: few that have
-     studied the accursed tome have retained their sanity.  Fail rate
-     of Nature spells goes up when casters alignment tend to be good.
+     studied that accursed tome have retained their sanity.  The Fail 
+     rate of Death spells goes up for casters aligned to good.
 
 Trump
      Trump magic seems an independent source of power, although its
@@ -396,11 +393,11 @@ Trump
      Shuffle spell allows the caster to shuffle the deck and pick one
      card at random. The effect depends on the card picked, and is not
      always pleasant. In the Amber universe, the Trump gateways are
-     also a major method of transportation: Trump magic has, indeed, an
+     also a major method of transportation: Trump magic has an
      admirable selection of teleportation spells. Since the Trump
      gateways can also be used to summon other creatures, Trump magic
      has an equally impressive selection of summoning spells. However,
-     not all monsters appreciate being drawn to another place by Trump
+     not all monsters appreciate being drawn to another place by a Trump
      user. The only summoned creatures whose loyalty is guaranteed are
      the Phantasmal Servants, who lack a will of their own (but can
      develop one, if you treat them badly).
@@ -415,34 +412,34 @@ Arcane
      Arcane spellbooks can be bought in town. It should also be noted
      that the 'specialized' realms (i.e. other than Arcane) usually
      offer the same spell at a lower level and cost. Arcane magic is
-     therefore perhaps not recommendable as one's only realm of magic,
+     therefore not usually recommended as one's only realm of magic,
      but it should be a very nice addition to fill up the gaps in the
-     selection of tools spells in another realm.
+     selection of utility spells in another realm.
 
 Craft
      Craft magic is an original realm in Hengband. It provides spells
-     which reinforce casters physical ability, for example, offensive
-     power, defensive power, speed, regeneration power, infravision,
-     etc..  Especially, the 'Regeneration' and the 'Walk through Wall'
-     are very powerful for considering its spell level.  Craft magic
-     doesn't provide detection spell, but provides temporary telepathy
-     spell.
+     which reinforce the casters physical abilities, including offensive
+     power, defensive power, speed, regeneration, infravision, etc..
+     The 'Regeneration' and 'Walk through Wall' spells are especially
+     powerful for their spell levels.  Craft magic doesn't provide
+     detection spells, but does offer a temporary telepathy spell.
 
 Daemon
      Daemon magic is an original realm in Hengband. It offers powerful
-     attack spells which has property of fire or Nether. There are a
-     few detection spells which provide map of nearby area or temporal
-     telepathy.  Daemon magic also provides temporal transformation
-     spells, which allow caster to become a Demon or a Demon Lord.
-     Fail rate of Nature spells goes up when casters alignment tend to
-     be good.
-    
+     attack spells with the properties of Fire or Nether. There are a
+     few detection spells which provide a map of the nearby area or 
+     temporary telepathy.  Daemon magic also provides temporary trans-
+     formation spells which allow caster to become a Demon or a Demon 
+     Lord.  The fail rate of Daemon spells goes up for casters aligned 
+     towards good.
+
+
 
 ***** <CastingSpells>
 === On Casting Spells ... ===
 
 Players who select spellcasting characters may notice a few unusual
-phenomena during the course of the game. Here's a few helps and
+phenomena during the course of the game. Here are a few hints and
 hints on what may be happening.
 
 --- Armor and Spell Casting ---
@@ -458,7 +455,7 @@ generally be ignored by high level ones.
 --- Mage-Types and Gloves ---
 
 Spellcasters who cast spells from spellbooks using INT as the stat
-determining their spellcasting ability and Blue-Mage will be penalized
+determining their spellcasting ability, or Blue-Mages, will be penalized
 heavily for wielding armor on their hands.  The exception to this is
 that wielding gloves, gauntlets or cesti which boost DEX or which
 grant Free Action will result in no penalty. The rationale behind this
@@ -488,11 +485,16 @@ wears off after a certain period of time. With very few exceptions,
 multiple castings of such spells are not cumulative in terms of the
 duration of the spell. In other words, casting a spell which has a
 duration of 20 turns three times will not result in a duration of 60
-turns. Typically, the subsequent castings will add only a small amount
-to the total duration. Some monsters such as wraith or ghost is often
-floating in a wall. When ball spell is directed to such monsters, the
-ball will blow up at the front of the wall, and the monster will take
-only half damage compared to direct hit.
+turns. Typically, subsequent castings will add only a small amount
+to the total duration. 
+
+
+Some monsters such as wraith or ghost is often
+floating in a wall. 
+
+--- Attacking Monsters in Walls ---
+
+
 
 
 ***** <SpellTypes>
@@ -517,7 +519,9 @@ to target a specific monster as opposed to the first one in the
 direction you are aiming. Secondly, they have a radius (which varies
 from spell to spell). A radius value of one or more will result in the
 spell affecting monsters (and possibly objects, etc) around the target
-in addition to the target itself.
+in addition to the target itself. When ball spells are directed at 
+monsters in walls, the ball will blow up at the front of the wall, and 
+the monster will take only half damage.
 
 --- Line-of-Sight ---
 
@@ -561,4 +565,4 @@ inscriptions).
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Some other people
+Updated    : Hengband 1.0.11

@@ -241,7 +241,7 @@ a magical item although there is some variance from this.
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : some people
+Updated    : Hengband 1.0.11
 
 ***** Begin Hyperlinks
 ***** [1] birth.txt#AutoRoller

@@ -18,5 +18,5 @@ Return : 一行進む (最後からは先頭に戻る)
 --
 Original   : (??)
 Updated    : Zangband DevTeam
-Updated    : いろいろな人
+Updated    : Hengband 1.0.11
 

@@ -26,7 +26,7 @@ screen. The exact species or type of creature can be discovered by
   k   Kobold                          K   Killer Beetle
   l   Aquatic monster                 L   Lich
   m   Mold                            M   Multi-Headed Hydra
-  n   Naga                            N   (unused)
+  n   Naga                            N   Shadower
   o   Orc                             O   Ogre
   p   Human                           P   Giant Human(oid)
   q   Quadruped                       Q   Quylthulg
@@ -40,11 +40,11 @@ screen. The exact species or type of creature can be discovered by
   y   Yeek                            Y   Yeti
   z   Zombie/Mummy                    Z   Zephyr Hound
   $   Creeping Coins                  ,   Mushroom Patch
-  %   Ent, Huorn                      #   Fumes
+  #   Ent, Huorn, Fumes
 
 Note that some monsters disguise themselves by assuming the shape (ie.
 symbol) of common objects found in the dungeon. These include the
-|, ), ?, !, &, $ and * symbols.
+|, ), ?, !, &, =, #, $ and * symbols.
 
 
 ***** <MonsterColors>
@@ -59,7 +59,7 @@ the monster has either melee, magical or breath attacks that are cold
 based.
 
 Unfortunately this rule is applied somewhat inconsistently and there
-are several notable exceptions so don't be surprised. If that 'Green'
+are several notable exceptions so don't be surprised if that 'Green'
 monster spits acid at you. Note that this rule cannot be applied to the
 actual color a creature is displayed as but only to a color in its
 name.
@@ -181,18 +181,17 @@ an attack of amnesia.
 ***** <Pets>
 === Pets and Riding ===
 
-In Hengband, pets are very useful and is safety. In other variant such
-as Zangband, your pets are often so eager to destroy your opponents
-that they may forget all about you, and you get trampled under their
-feet as they charge at your foe. But in Hengband pets will never
-attack you by mistake; you can walk around in safety even in near your
-pet Hell Wyrm is spreading his breathes. And pets will never be
-irritate with you; their will is perfectly dominated by you, and all
-pets are permanently your pets.
+In Hengband, pets are very useful. In other variants (such as Zangband), 
+your pets are often so eager to destroy your opponents that they may 
+forget all about you, and you get trampled under their feet as they 
+charge at your foe. In Hengband, however, pets will never attack you 
+by mistake; you can walk around in safety even as your pet Great Hell 
+Wyrm breaths. Pets will also never be irritated with you; their will is 
+perfectly dominated by you, and all pets are permanently your pets.
 
 One might think that they can make the game much easier. It is of
-course highly satisfying to send your pet Hell Wyrm into a Troll pit
-and wait outside listening for the howls of agony and terror, the
+course highly satisfying to send your pet Great Hell Wyrm into a Troll 
+pit and wait outside listening for the howls of agony and terror, the
 sounds of guts splattering, bones crunching and so on. But one should
 not expect to gain any experience and item drops for such a combat:
 you will only gain experience and items for creatures to whom you
@@ -203,8 +202,8 @@ Hengband is unique and severe, and you might complain about it because
 this feature is not very realistic, but this is a well-thought-out
 result of weighing game balance with reality.
 
-Finally, it takes a lot of mental energy to maintain the control over
-the charmed monsters. The first monster or the first few are 'free',
+Finally, it takes a lot of mental energy to maintain your control over
+charmed monsters. The first monster or the first few are 'free',
 but after that maintaining the control will start taxing your mana
 regain rate. The higher the sum of the levels of your pets the less
 mana you will be able to regain. Keep this in mind if you have a pet
@@ -227,9 +226,9 @@ capture the monster. And then you can 'A'ctivate it again to release
 the monster as your pet.
 
 Hostile monsters will attempt to resist from capturing. You must make
-the monster critically injured status before capture. On that point,
-BeastMasters are very good at using Capture Ball, and the limitation
-is somewhat loose for them.
+the monster critically injured status before capture. BeastMasters are 
+very good at using Capture Balls, and these limitation are relaxed for 
+them.
 
 
 --- Commanding Your Pets ---
@@ -243,9 +242,9 @@ List of pet commands:
 
 dismiss pets
     Dismiss specified pets. Dismissed pets will immediately disappear
-    from current level. Hengband asks you whether you want to dismiss
+    from the current level. Hengband asks you whether you want to dismiss
     each pet in order from high level named pets to low level unnamed
-    pets. You can press the U to dismiss all unnamed pets.
+    pets. You can press 'U' to dismiss all unnamed pets.
 
 specify a target of pet
     Choose a target monster, then all your pets will begin to chase
@@ -305,26 +304,26 @@ use one hand to control a riding pet
 
 --- Riding ---
 
-In Hengband, player can ride on pet horses or dragons, etc.  To
-control your horse, you must keep one hand free for holding the
+In Hengband, the player can ride on pet horses or dragons, etc.  To
+control your mount, you must keep one hand free for holding the
 reins. But your pet will attack your target together with you, and
 enemy's attack will be dispersed. As a result of these, player's
 damage in combat will get reduced in total.
 
-The most important feature of riding is about speed. When you are
-riding on a pet, your speed doesn't depend on your original speed but
-depends only on the speed of riding pet and your proficiency level of
-riding. Quaffing the potion of speed doesn't have effect on the speed
-when you are riding, but you can throw the potion at a wall and haste
-your riding pet. You can use a wand or a spell of haste monster too.
+The most important feature of riding is speed. When you are riding on 
+a pet, your speed doesn't depend on your original speed but depends 
+only on the speed of your mount and your skill at riding. Quaffing a 
+potion of speed has no effect on your mount's speed, but throwing it 
+at a wall will hasten your pet if it is nearby. You can use a wand or 
+a spell of haste monster too.
 
-Note that your proficiency level for riding is very low at first, see
-'(e) Miscellaneous Proficiency' in the information command (~). When
-the proficiency level is low, you cannot make good use of riding, and
-your speed is also very low. You need to practice riding to gain full
-speed of riding monster. Proficiency level will raise a little when
-you attack in melee or shoot with missile weapon when riding.  Ride on
-low level monster at first, and then switch to higher level monster
+Note that your proficiency level for riding is very low at first (see
+'e' Miscellaneous Proficiency' using the information command '~'). When
+your proficiency level is low, you cannot make good use of riding, and
+your speed is also very low. You need to practice riding to gain the full
+speed of the creature you ride. Proficiency level will increase a little 
+when you attack in melee or shoot with missile weapon when riding.  Ride 
+on low level creatures at first, and then switch to higher level mounts
 little by little.
 
 
@@ -336,8 +335,8 @@ get you. Such monsters are described in game messages as being
 'friendly'. A friendly monster will not attempt to hurt you but neither
 will it necessarily attack your enemies.
 
-Like pets, if you annoy a friendly monster it will turn against you.
-Also like pets, any monsters a friendly monster summons will also be
+Unlike pets, if you annoy a friendly monster it will turn against you.
+Like pets, any monsters a friendly monster summons will also be
 friendly. Unlike pets, friendly monsters require no mana upkeep and can
 not be commanded using the pet commands.
 
@@ -345,7 +344,7 @@ not be commanded using the pet commands.
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : someone
+Updated    : Hengband 1.0.11
 
 ***** Begin Hyperlinks
 ***** [1] commdesc.txt#Looking

@@ -590,4 +590,4 @@ exhaustive list is not provided in this document.
 Original   : (??), Leon Marrick and Chris Weisiger
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : some people
+Updated    : Hengband 1.0.11

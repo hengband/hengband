@@ -911,7 +911,7 @@ Infra-vision
      works equally well with or with out a light source. The majority
      of Hengband's creatures are cold-blooded, and will not be detected
      unless lit up by a light source. Most non human races have innate
-     infra-vision ability. Human can gain infra-vision only if it is
+     infra-vision ability. Humans can gain infra-vision only if it is
      magically enhanced.
 
 
@@ -919,7 +919,7 @@ Infra-vision
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : someone
+Updated    : Hengband 1.0.11
 
 ***** Begin Hyperlinks
 ***** [1] birth.txt

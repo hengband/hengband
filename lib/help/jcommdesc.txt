@@ -299,6 +299,12 @@
      ません。
 
 
+種族、職業や変異の特殊能力を使う: Use bonus power (U), (O) 
+     魔法に良く似た種族や職業に特有の能力を使用します。マジックポイン
+     トが十分にあればそれを使い、無ければヒットポイントを使って能力を
+     発動します。
+
+
 ***** <ObjectManip>
 --- アイテムを操作するコマンド ---
 
@@ -667,7 +673,7 @@ Updated    : (2.7.6) by Russ Allbery (rra@cs.stanford.edu)
 Updated    : (2.7.9) by Ben Harrison (benh@phial.com)
 Updated    : Zangband 2.2.0 through 2.2.6c by Robert Ruehlmann
 Updated    : Zangband DevTeam
-Updated    : さまざまな人達
+Updated    : Hengband 1.0.11
 
 
 ***** Begin Hyperlinks

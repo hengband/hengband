@@ -32,11 +32,11 @@ to something you are more comfortable with.
  
 --- Features that do not block line of sight ---
  
-  .   A floor space                   # (Green)        A Tree
-  .   A trap (hidden)                 # (Light Blue)   Shallow Water
-  ^   A trap (known)                  # (Dark Blue)    Deep Water
-  ;   A glyph of warding              # (Orange)       Shallow Lava
-  '   An open door                    # (Red)          Deep Lava
+  .   A floor space                   *                A Mirror
+  .   A trap (hidden)                 ~ (Light Blue)   Shallow Water
+  ^   A trap (known)                  ~ (Dark Blue)    Deep Water
+  ;   A glyph of warding              ~ (Orange)       Shallow Lava
+  '   An open door                    ~ (Red)          Deep Lava
   '   A broken door
   <   A staircase up
   >   A staircase down
@@ -44,10 +44,10 @@ to something you are more comfortable with.
 
 --- Features that block line of sight ---
 
-  #   A secret door                   #   A wall
-  +   A closed door                   %   A mineral vein
-  +   A locked door                   *   Treasure in wall / Pattern
-  +   A jammed door                   :   A pile of rubble
+  #   A wall	                      # (Green)        A Tree
+  %   A mineral vein                  +                A door
+  #   A secret door                   :                A pile of rubble
+  *   Treasure in wall / Pattern
 
 
 ***** <WithinDungeon>
@@ -296,7 +296,7 @@ staircase or recall. In such case, the quest will be treated as
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : someone
+Updated    : Hengband 1.0.11
 
 ***** Begin Hyperlinks
 ***** [1] command.txt

@@ -790,4 +790,4 @@ Angband Version 2.7   :  1/1/95  Ben Harrison
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Last update: December 12, 1999
+Updated    : Hengband 1.0.11

@@ -302,6 +302,11 @@ Cast a spell (m)
      Since you must read the prayer from a book, you cannot be blind
      or confused while praying, and there must be some light present.
 
+Use bonus power (if any) (U) or (O)
+     Some races and classes have special natural abilities. All of
+     these possible abilities are listed in an index under the U (or
+     O) command.
+
 
 ***** <ObjectManip>
 ---  Object Manipulation Commands ---
@@ -540,20 +545,20 @@ Take notes (:)
 --- Game Status Commands ---
 
 Character Description (C)
-    Brings up a full description of your character, including your
-    skill levels, your current and potential stats, and various other
-    information. From this screen, you can change your name or use
-    the file character description command to save your character
-    status to a file. That command saves additional information,
-    including your background, your inventory, and the contents of
-    your house.
+     Brings up a full description of your character, including your
+     skill levels, your current and potential stats, and various other
+     information. From this screen, you can change your name or use
+     the file character description command to save your character
+     status to a file. That command saves additional information,
+     including your background, your inventory, and the contents of
+     your house.
 
 Check various information (~)
-    The command opens a menu from which you can select information
-    about seen Artifacts, Unique monsters, identified objects, and
-    etc.
+     The command opens a menu from which you can select information
+     about seen Artifacts, Unique monsters, identified objects, and
+     etc.
 
-    Display known artifacts
+     Display known artifacts
         This selection lists all of the artifacts that you've
         encountered.  Any artifact that appears in this list, which
         you cannot seem to find, has been lost forever. The "preserve"
@@ -562,18 +567,24 @@ Check various information (~)
         feeling. This command can only be used on the town level, not
         inside the dungeon.
 
-    Display known uniques
+     Display known uniques
          Brings up a list of known unique monsters, plus their current
          status. Once killed, unique monsters never show up again.
 
-    Display known objects
+     Display known objects
          This list all 'flavored' objects (such as rings, scrolls,
          wands, potions, etc.) which you have identified.
 
 
 Check play record (|)
-    This command opens a menu from which you can check/delete play
-    record of your current character.
+     This command opens a menu from which you can check/delete play
+     record of your current character.  This command shows you all the
+     recent messages. You can scroll through them, or exit with
+     ESCAPE. This command takes no time.
+
+
+Display game time (^T) or (')
+     This command shows you current date and time in the game.
 
 
 ***** <SaveExit>
@@ -647,7 +658,7 @@ Game Version (V)
 ***** <Extra>
 --- Extra Commands ---
 
-Repeat previous command (n) ([)
+Repeat last command  (n) or ([)
      This command repeat previously executed command with all its
      arguments. Very useful to repeat casting, for example, magic
      missile to same opponent.
@@ -689,5 +700,5 @@ Updated    : (2.7.6) by Russ Allbery (rra@cs.stanford.edu)
 Updated    : (2.7.9) by Ben Harrison (benh@phial.com)
 Updated    : Zangband 2.2.0 through 2.2.6c by Robert Ruehlmann
 Updated    : Zangband DevTeam
-Updated    : many people
+Updated    : Hengband 1.0.11
 

@@ -330,7 +330,7 @@
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : 様々な人
+Updated    : Hengband 1.0.11
 
 
 

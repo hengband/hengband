@@ -487,4 +487,4 @@
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : いろんな人
+Updated    : Hengband 1.0.11

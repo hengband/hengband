@@ -361,7 +361,7 @@ quest.
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : some people
+Updated    : Hengband 1.0.11
 
 
 ***** Begin Hyperlinks

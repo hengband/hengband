@@ -144,7 +144,7 @@ is about Hengband.
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Many others
+Updated    : Hengband 1.0.11
 
 
 ***** Begin Hyperlinks
