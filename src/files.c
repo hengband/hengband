@@ -4647,7 +4647,7 @@ static void dump_aux_monsters(FILE *fff)
 #endif
 
 		/* Print top 10 */
-		for (k = MIN(10, uniq_total) - 1; k >= 0; k--)
+		for (k = uniq_total - 1; k >= 0 && k >= uniq_total - 10; k--)
 		{
 			monster_race *r_ptr = &r_info[who[k]];
 
