@@ -36,7 +36,7 @@ N: 3:BIAS_FIRE
 周富徳の
 
 N: 4:BIAS_COLD
-6
+7
 冷酷な
 クールな
 『氷結』
@@ -46,7 +46,7 @@ N: 4:BIAS_COLD
 北の国の
 
 N: 5:BIAS_ACID
-6
+7
 今にも溶けそうな
 『白蟻』
 『酸性雨』
@@ -56,7 +56,7 @@ N: 5:BIAS_ACID
 赤錆の
 
 N:12:BIAS_CHAOS
-7
+8
 歪んだ
 『マンデルブロー』
 『シュレティンガー』
@@ -67,7 +67,7 @@ N:12:BIAS_CHAOS
 混浴の覇者の
 
 N:14:BIAS_NECROMANTIC
-7
+8
 腐れた
 人々を窒息させてきた切断された
 『ブラッド』
@@ -120,7 +120,7 @@ N:17:BIAS_MAGE
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
 N:10:BIAS_CON
-7
+8
 『豪力王』
 『超兄貴』
 『鋼鉄丸』
@@ -131,7 +131,7 @@ N:10:BIAS_CON
 究極無敵銀河最強の
 
 N:19:BIAS_RANGER
-6
+7
 広角視界
 レーダー付き
 『カ・ルカン』
