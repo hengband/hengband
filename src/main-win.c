@@ -2357,7 +2357,7 @@ static errr Term_text_win(int x, int y, int n, byte a, const char *s)
 		for (i = 0; i < n; i++)
 		{
 #ifdef JP
-			if (use_bigtile && *(s+i)=="¢ò"[0] && *(s+i+1)=="¢ò"[1])
+			if (use_bigtile && *(s+i)=="¢£"[0] && *(s+i+1)=="¢£"[1])
 			{
 				rc.right += td->font_wid;
 

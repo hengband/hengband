@@ -570,7 +570,7 @@ void Term_queue_char(int x, int y, byte a, char c)
 	if (x < Term->x1[y]) Term->x1[y] = x;
 	if (x > Term->x2[y]) Term->x2[y] = x;
 
-	if (scrn->a[y][x] == 255)
+	if ((scrn->a[y][x] & 0xf0) == 0xf0)
 		if ((x - 1) < Term->x1[y]) Term->x1[y]--;
 }
 
@@ -1156,7 +1156,7 @@ static void Term_fresh_row_both(int y, int x1, int x2)
 #endif /* USE_TRANSPARENCY */
 
 		/* 2nd byte of bigtile */
-		if (na == 255) continue;
+		if ((na & 0xf0) == 0xf0) continue;
 
 		/* Handle high-bit attr/chars */
 		if ((na & 0x80) && (nc & 0x80))

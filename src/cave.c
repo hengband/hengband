@@ -1747,7 +1747,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 #ifdef JP
 /*
  * Table of Ascii-to-Zenkaku
- * ¡Ö¢ò¡×¤ÏÆóÇÜÉýÆ¦Éå¤ÎÆâÉô¥³¡¼¥É¤Ë»ÈÍÑ¡£
+ * ¡Ö¢£¡×¤ÏÆóÇÜÉýÆ¦Éå¤ÎÆâÉô¥³¡¼¥É¤Ë»ÈÍÑ¡£
  */
 static char ascii_to_zenkaku[2*128+1] =  "\
 ¡¡¡ª¡É¡ô¡ð¡ó¡õ¡Ç¡Ê¡Ë¡ö¡Ü¡¤¡Ý¡¥¡¿\
@@ -1755,7 +1755,7 @@ static char ascii_to_zenkaku[2*128+1] =  "\
 ¡÷£Á£Â£Ã£Ä£Å£Æ£Ç£È£É£Ê£Ë£Ì£Í£Î£Ï\
 £Ð£Ñ£Ò£Ó£Ô£Õ£Ö£×£Ø£Ù£Ú¡Î¡À¡Ï¡°¡²\
 ¡Æ£á£â£ã£ä£å£æ£ç£è£é£ê£ë£ì£í£î£ï\
-£ð£ñ£ò£ó£ô£õ£ö£÷£ø£ù£ú¡Ð¡Ã¡Ñ¡Á¢ò";
+£ð£ñ£ò£ó£ô£õ£ö£÷£ø£ù£ú¡Ð¡Ã¡Ñ¡Á¢£";
 #endif
 
 /*
@@ -1773,7 +1773,7 @@ static void bigtile_attr(char *cp, byte *ap, char *cp2, byte *ap2)
 #ifdef JP
 	if (isprint(*cp) || *cp == 127)
 	{
-		*ap2 = 255;
+		*ap2 = (*ap) | 0xf0;
 		*cp2 = ascii_to_zenkaku[2*(*cp-' ') + 1];
 		*cp = ascii_to_zenkaku[2*(*cp-' ')];
 		return;
