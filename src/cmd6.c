@@ -6999,11 +6999,7 @@ static int select_magic_eater(bool only_browse)
 				{
 					chance -= 3 * (p_ptr->lev - level);
 				}
-				chance += p_ptr->to_m_chance;
-				if (p_ptr->heavy_spell) chance += 20;
-				if(p_ptr->dec_mana && p_ptr->easy_spell) chance-=4;
-				else if (p_ptr->easy_spell) chance-=3;
-				else if (p_ptr->dec_mana) chance-=2;
+				chance = mod_spell_chance_1(chance);
 				chance = MAX(chance, adj_mag_fail[p_ptr->stat_ind[mp_ptr->spell_stat]]);
 				/* Stunning makes spells harder */
 				if (p_ptr->stun > 50) chance += 25;
@@ -7011,8 +7007,7 @@ static int select_magic_eater(bool only_browse)
 
 				if (chance > 95) chance = 95;
 
-				if(p_ptr->dec_mana) chance--;
-				if (p_ptr->heavy_spell) chance += 5;
+				chance = mod_spell_chance_2(chance);
 
 				col = TERM_WHITE;
 
@@ -7303,11 +7298,7 @@ msg_print("混乱していて唱えられない！");
 	{
 		chance -= 3 * (p_ptr->lev - level);
 	}
-	chance += p_ptr->to_m_chance;
-	if (p_ptr->heavy_spell) chance += 20;
-	if(p_ptr->dec_mana && p_ptr->easy_spell) chance-=4;
-	else if (p_ptr->easy_spell) chance-=3;
-	else if (p_ptr->dec_mana) chance-=2;
+	chance = mod_spell_chance_1(chance);
 	chance = MAX(chance, adj_mag_fail[p_ptr->stat_ind[mp_ptr->spell_stat]]);
 	/* Stunning makes spells harder */
 	if (p_ptr->stun > 50) chance += 25;
@@ -7315,8 +7306,7 @@ msg_print("混乱していて唱えられない！");
 
 	if (chance > 95) chance = 95;
 
-	if(p_ptr->dec_mana) chance--;
-	if (p_ptr->heavy_spell) chance += 5;
+	chance = mod_spell_chance_2(chance);
 
 	if (randint0(100) < chance)
 	{

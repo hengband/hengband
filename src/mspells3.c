@@ -544,15 +544,10 @@ put_str("MP 失率 効果", y, x + 33);
 					if (plev > spell.level) chance -= 3 * (plev - spell.level);
 					else chance += (spell.level - plev);
 
-					chance += p_ptr->to_m_chance;
-
 					/* Reduce failure rate by INT/WIS adjustment */
 					chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[A_INT]] - 1);
 
-					if (p_ptr->heavy_spell) chance += 20;
-					if(p_ptr->dec_mana && p_ptr->easy_spell) chance-=4;
-					else if (p_ptr->easy_spell) chance-=3;
-					else if (p_ptr->dec_mana) chance-=2;
+					chance = mod_spell_chance_1(chance);
 
 					need_mana = mod_need_mana(monster_powers[spellnum[i]].smana, 0, REALM_NONE);
 
@@ -575,9 +570,7 @@ put_str("MP 失率 効果", y, x + 33);
 					/* Always a 5 percent chance of working */
 					if (chance > 95) chance = 95;
 
-					if(p_ptr->dec_mana) chance--;
-					if (p_ptr->heavy_spell) chance += 5;
-					chance = MAX(chance,0);
+					chance = mod_spell_chance_2(chance);
 
 					/* Get info */
 					learned_info(comment, spellnum[i]);
@@ -1991,15 +1984,10 @@ if (!get_check("それでも挑戦しますか? ")) return FALSE;
 	if (plev > spell.level) chance -= 3 * (plev - spell.level);
 	else chance += (spell.level - plev);
 
-	chance += p_ptr->to_m_chance;
-
 	/* Reduce failure rate by INT/WIS adjustment */
 	chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[A_INT]] - 1);
 
-	if (p_ptr->heavy_spell) chance += 20;
-	if(p_ptr->dec_mana && p_ptr->easy_spell) chance-=4;
-	else if (p_ptr->easy_spell) chance-=3;
-	else if (p_ptr->dec_mana) chance-=2;
+	chance = mod_spell_chance_1(chance);
 
 	/* Not enough mana to cast */
 	if (need_mana > p_ptr->csp)
@@ -2020,9 +2008,7 @@ if (!get_check("それでも挑戦しますか? ")) return FALSE;
 	/* Always a 5 percent chance of working */
 	if (chance > 95) chance = 95;
 
-	if(p_ptr->dec_mana) chance--;
-	if (p_ptr->heavy_spell) chance += 5;
-	chance = MAX(chance,0);
+	chance = mod_spell_chance_2(chance);
 
 	/* Failed spell */
 	if (randint0(100) < chance)

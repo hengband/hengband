@@ -4140,6 +4140,39 @@ int mod_need_mana(int need_mana, int spell, int realm)
 
 
 /*
+ * Modify spell fail rate
+ * Using p_ptr->to_m_chance, p_ptr->dec_mana, p_ptr->easy_spell and p_ptr->heavy_spell
+ */
+int mod_spell_chance_1(int chance)
+{
+	chance += p_ptr->to_m_chance;
+
+	if (p_ptr->heavy_spell) chance += 20;
+
+	if (p_ptr->dec_mana && p_ptr->easy_spell) chance -= 4;
+	else if (p_ptr->easy_spell) chance -= 3;
+	else if (p_ptr->dec_mana) chance -= 2;
+
+	return chance;
+}
+
+
+/*
+ * Modify spell fail rate (as "suffix" process)
+ * Using p_ptr->dec_mana, p_ptr->easy_spell and p_ptr->heavy_spell
+ * Note: variable "chance" cannot be negative.
+ */
+int mod_spell_chance_2(int chance)
+{
+	if (p_ptr->dec_mana) chance--;
+
+	if (p_ptr->heavy_spell) chance += 5;
+
+	return MAX(chance, 0);
+}
+
+
+/*
  * Returns spell chance of failure for spell -RAK-
  */
 s16b spell_chance(int spell, int use_realm)
@@ -4186,7 +4219,6 @@ s16b spell_chance(int spell, int use_realm)
 		chance += 5 * (need_mana - p_ptr->csp);
 	}
 
-	chance += p_ptr->to_m_chance;
 	if ((use_realm != p_ptr->realm1) && ((p_ptr->pclass == CLASS_MAGE) || (p_ptr->pclass == CLASS_PRIEST))) chance += 5;
 
 	/* Extract the minimum failure rate */
@@ -4205,10 +4237,7 @@ s16b spell_chance(int spell, int use_realm)
 	if (((p_ptr->pclass == CLASS_PRIEST) || (p_ptr->pclass == CLASS_SORCERER)) && p_ptr->icky_wield[0]) chance += 25;
 	if (((p_ptr->pclass == CLASS_PRIEST) || (p_ptr->pclass == CLASS_SORCERER)) && p_ptr->icky_wield[1]) chance += 25;
 
-	if (p_ptr->heavy_spell) chance += 20;
-	if(p_ptr->dec_mana && p_ptr->easy_spell) chance-=4;
-	else if (p_ptr->easy_spell) chance-=3;
-	else if (p_ptr->dec_mana) chance-=2;
+	chance = mod_spell_chance_1(chance);
 
 	if ((use_realm == REALM_NATURE) && ((p_ptr->align > 50) || (p_ptr->align < -50))) chance += penalty;
 	if (((use_realm == REALM_LIFE) || (use_realm == REALM_CRUSADE)) && (p_ptr->align < -20)) chance += penalty;
@@ -4231,13 +4260,9 @@ s16b spell_chance(int spell, int use_realm)
 		if (exp >= SPELL_EXP_EXPERT) chance--;
 		if (exp >= SPELL_EXP_MASTER) chance--;
 	}
-	if(p_ptr->dec_mana) chance--;
-	if (p_ptr->heavy_spell) chance += 5;
-
-	chance = MAX(chance,0);
 
 	/* Return the chance */
-	return (chance);
+	return mod_spell_chance_2(chance);
 }
 
 
