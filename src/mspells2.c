@@ -268,6 +268,7 @@ bool monst_spell_monst(int m_idx)
 
 			/* Get it */
 			success = TRUE;
+			break;
 		}
 
 		/* No enemy found */
