@@ -483,57 +483,48 @@ msg_print("クエストを達成した！");
 	equip_cnt++;
 
 	/* Where is the item now */
-	if (slot == INVEN_RARM)
+	switch (slot)
 	{
+#ifdef JP
+	case INVEN_RARM:
 		if ((o_ptr->tval != TV_SHIELD) && (o_ptr->tval != TV_CAPTURE) && (o_ptr->tval != TV_CARD) && (empty_hands(FALSE) & EMPTY_HAND_LARM) && ((o_ptr->weight > 99) || (o_ptr->tval == TV_POLEARM)) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
-#ifdef JP
 			act = "を両手で構えた";
-#else
-			act = "You are wielding";
-#endif
 		else
-#ifdef JP
 			act = (left_hander ? "を左手に装備した" : "を右手に装備した");
-#else
-			act = "You are wielding";
-#endif
+		break;
 
-	}
-	else if (slot == INVEN_LARM)
-	{
-#ifdef JP
+	case INVEN_LARM:
 		act = (left_hander ? "を右手に装備した" : "を左手に装備した");
 #else
+	case INVEN_RARM:
+	case INVEN_LARM:
 		act = "You are wielding";
 #endif
+		break;
 
-	}
-	else if (slot == INVEN_BOW)
-	{
+	case INVEN_BOW:
 #ifdef JP
 		act = "を射撃用に装備した";
 #else
 		act = "You are shooting with";
 #endif
+		break;
 
-	}
-	else if (slot == INVEN_LITE)
-	{
+	case INVEN_LITE:
 #ifdef JP
 		act = "を光源にした";
 #else
 		act = "Your light source is";
 #endif
+		break;
 
-	}
-	else
-	{
+	default:
 #ifdef JP
 		act = "を装備した";
 #else
 		act = "You are wearing";
 #endif
-
+		break;
 	}
 
 	/* Describe the result */
@@ -668,31 +659,34 @@ void kamaenaoshi(int item)
 			msg_format("You are wielding %s with %s hand.", o_name, (left_hander ? "left":"right") );
 #endif
 	}
-	else if ((item == INVEN_LARM) && buki_motteruka(INVEN_RARM))
+	else if (item == INVEN_LARM)
 	{
-		o_ptr = &inventory[INVEN_RARM];
-		object_desc(o_name, o_ptr, TRUE, 3);
-		if (((o_ptr->weight > 99) || (o_ptr->tval == TV_POLEARM)) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
+		if (buki_motteruka(INVEN_RARM))
+		{
+			o_ptr = &inventory[INVEN_RARM];
+			object_desc(o_name, o_ptr, TRUE, 3);
+			if (((o_ptr->weight > 99) || (o_ptr->tval == TV_POLEARM)) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
 #ifdef JP
-			msg_format("%sを両手で構えた。", o_name );
+				msg_format("%sを両手で構えた。", o_name );
 #else
-			msg_format("You are wielding %s with two-handed.", o_name );
+				msg_format("You are wielding %s with two-handed.", o_name );
 #endif
-	}
-	else if ((item == INVEN_LARM) && !(empty_hands(FALSE) & EMPTY_HAND_RARM))
-	{
-		o_ptr = &inventory[INVEN_LARM];
-		o2_ptr = &inventory[INVEN_RARM];
-		object_copy(o_ptr, o2_ptr);
-		p_ptr->total_weight += o2_ptr->weight;
-		inven_item_increase(INVEN_RARM,-1);
-		inven_item_optimize(INVEN_RARM);
-		object_desc(o_name, o_ptr, TRUE, 3);
+		}
+		else if (!(empty_hands(FALSE) & EMPTY_HAND_RARM))
+		{
+			o_ptr = &inventory[INVEN_LARM];
+			o2_ptr = &inventory[INVEN_RARM];
+			object_copy(o_ptr, o2_ptr);
+			p_ptr->total_weight += o2_ptr->weight;
+			inven_item_increase(INVEN_RARM,-1);
+			inven_item_optimize(INVEN_RARM);
+			object_desc(o_name, o_ptr, TRUE, 3);
 #ifdef JP
-		msg_format("%sを持ち替えた。", o_name );
+			msg_format("%sを持ち替えた。", o_name);
 #else
-		msg_format("You switched hand of %s.", o_name );
+			msg_format("You switched hand of %s.", o_name);
 #endif
+		}
 	}
 }
 
