@@ -1759,7 +1759,7 @@ void do_cmd_edit_autopick()
 			upper = cy - (hgt-4)/2;
 		if (upper < 0)
 			upper = 0;
-		if (cx < left + 10 && left > 0 || left + wid - WID_DESC - 5 <= cx)
+		if ((cx < left + 10 && left > 0) || left + wid - WID_DESC - 5 <= cx)
 			left = cx - (wid - WID_DESC)*2/3;
 		if (left < 0)
 			left = 0;
