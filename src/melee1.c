@@ -1983,17 +1983,53 @@ msg_format("%sは体力を回復したようだ。", m_name);
 				{
 					if (r_ptr->flags3 & RF3_EVIL)
 					{
+						if (!(r_ptr->flagsr & RFR_RES_ALL))
+						{
+							int dam = damroll(2, 6);
+
+							/* Modify the damage */
+							dam = mon_damage_mod(m_ptr, dam, FALSE);
+
+#ifdef JP
+							msg_format("%^sは聖なるオーラで傷ついた！", m_name);
+							if (mon_take_hit(m_idx, dam, &fear,
+							    "は倒れた。"))
+#else
+							msg_format("%^s is injured by holy power!", m_name);
+
+							if (mon_take_hit(m_idx, dam, &fear,
+							    " is destroyed."))
+#endif
+							{
+								blinked = FALSE;
+								alive = FALSE;
+							}
+							if (m_ptr->ml)
+								r_ptr->r_flags3 |= RF3_EVIL;
+						}
+						else
+						{
+							if (m_ptr->ml)
+								r_ptr->r_flagsr |= RFR_RES_ALL;
+						}
+					}
+				}
+
+				if (p_ptr->tim_sh_touki && alive && !p_ptr->is_dead)
+				{
+					if (!(r_ptr->flagsr & RFR_RES_ALL))
+					{
 						int dam = damroll(2, 6);
 
 						/* Modify the damage */
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
 
 #ifdef JP
-						msg_format("%^sは聖なるオーラで傷ついた！", m_name);
+						msg_format("%^sが鋭い闘気のオーラで傷ついた！", m_name);
 						if (mon_take_hit(m_idx, dam, &fear,
 						    "は倒れた。"))
 #else
-						msg_format("%^s is injured by holy power!", m_name);
+						msg_format("%^s is injured by the Force", m_name);
 
 						if (mon_take_hit(m_idx, dam, &fear,
 						    " is destroyed."))
@@ -2003,32 +2039,11 @@ msg_format("%sは体力を回復したようだ。", m_name);
 							blinked = FALSE;
 							alive = FALSE;
 						}
-						if (m_ptr->ml)
-							r_ptr->r_flags3 |= RF3_EVIL;
 					}
-				}
-
-				if (p_ptr->tim_sh_touki && alive && !p_ptr->is_dead)
-				{
-					int dam = damroll(2, 6);
-
-					/* Modify the damage */
-					dam = mon_damage_mod(m_ptr, dam, FALSE);
-
-#ifdef JP
-					msg_format("%^sが鋭い闘気のオーラで傷ついた！", m_name);
-					if (mon_take_hit(m_idx, dam, &fear,
-					    "は倒れた。"))
-#else
-					msg_format("%^s is injured by the Force", m_name);
-
-					if (mon_take_hit(m_idx, dam, &fear,
-					    " is destroyed."))
-#endif
-
+					else
 					{
-						blinked = FALSE;
-						alive = FALSE;
+						if (m_ptr->ml)
+							r_ptr->r_flagsr |= RFR_RES_ALL;
 					}
 				}
 			}
