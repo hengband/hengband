@@ -1228,7 +1228,7 @@ extern void build_gamma_table(int gamma);
 
 extern size_t my_strcpy(char *buf, const char *src, size_t bufsize);
 extern size_t my_strcat(char *buf, const char *src, size_t bufsize);
-extern int inkey_special(bool use_numkey_as_special);
+extern int inkey_special(void);
 
 
 /* xtra1.c */

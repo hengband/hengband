@@ -3194,7 +3194,7 @@ bool askfor_aux(char *buf, int len)
 		Term_gotoxy(x + pos, y);
 
 		/* Get a special key code */
-		skey = inkey_special(FALSE);
+		skey = inkey_special();
 
 		/* Analyze the key */
 		switch (skey)
@@ -5223,7 +5223,7 @@ size_t my_strcat(char *buf, const char *src, size_t bufsize)
  * This function is a Mega-Hack and depend on pref-xxx.prf's.
  * Currently works on Linux(UNIX), Windows, and Macintosh only.
  */
-int inkey_special(bool use_numkey_as_special)
+int inkey_special(void)
 {
 	static const struct {
 		cptr keyname;
@@ -5246,29 +5246,6 @@ int inkey_special(bool use_numkey_as_special)
 		{"Page_Down]", SKEY_PGDOWN},
 		{"Home]", SKEY_TOP},
 		{"End]", SKEY_BOTTOM},
-		{"KP_Down]", SKEY_DOWN},
-		{"KP_Left]", SKEY_LEFT},
-		{"KP_Right]", SKEY_RIGHT},
-		{"KP_Up]", SKEY_UP},
-		{"KP_Page_Up]", SKEY_PGUP},
-		{"KP_Page_Down]", SKEY_PGDOWN},
-		{"KP_Home]", SKEY_TOP},
-		{"KP_End]", SKEY_BOTTOM},
-		{NULL, 0},
-	};
-
-	static const struct {
-		cptr keyname;
-		int keycode;
-	} numkey_list[] = {
-		{"KP_2]", SKEY_DOWN},
-		{"KP_4]", SKEY_LEFT},
-		{"KP_6]", SKEY_RIGHT},
-		{"KP_8]", SKEY_UP},
-		{"KP_9]", SKEY_PGUP},
-		{"KP_3]", SKEY_PGDOWN},
-		{"KP_7]", SKEY_TOP},
-		{"KP_1]", SKEY_BOTTOM},
 		{NULL, 0},
 	};
 	char buf[1024];
@@ -5343,19 +5320,6 @@ int inkey_special(bool use_numkey_as_special)
 		{
 			skey = special_key_list[i].keycode;
 			break;
-		}
-	}
-
-	if (!skey && use_numkey_as_special)
-	{
-		/* Get a numkey code */
-		for (i = 0; numkey_list[i].keyname; i++)
-		{
-			if (streq(str, numkey_list[i].keyname))
-			{
-				skey = numkey_list[i].keycode;
-				break;
-			}
 		}
 	}
 

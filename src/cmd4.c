@@ -1382,7 +1382,7 @@ void do_cmd_messages(int num_now)
 
 
 		/* Get a command */
-		skey = inkey_special(TRUE);
+		skey = inkey_special();
 
 		/* Exit on Escape */
 		if (skey == ESCAPE) break;
