@@ -5119,7 +5119,7 @@ note_dies = "はドロドロに溶けた！";
 #ifdef JP
 			if (!who) msg_format("%sを指差して呪いをかけた。", m_name);
 #else
-			if (!who) msg_format("You point at %s and curses.", m_name);
+			if (!who) msg_format("You point at %s and curse.", m_name);
 #endif
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
@@ -5155,7 +5155,7 @@ note_dies = "はドロドロに溶けた！";
 #ifdef JP
 			if (!who) msg_format("%sを指差して恐ろしげに呪いをかけた。", m_name);
 #else
-			if (!who) msg_format("You point at %s and curses horribly.", m_name);
+			if (!who) msg_format("You point at %s and curse horribly.", m_name);
 #endif
 
 			if (r_ptr->flagsr & RFR_RES_ALL)

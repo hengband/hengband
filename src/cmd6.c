@@ -5442,7 +5442,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 #ifdef JP
 				msg_print("ムチを伸ばした。");
 #else
-				msg_print("You stretched your wip.");
+				msg_print("You stretched your whip.");
 #endif
 
 				fetch(dir, 500, TRUE);
