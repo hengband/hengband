@@ -5356,7 +5356,7 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
  * for a single turn, unless that monster can pass_walls or kill_walls.
  * This has allowed massive simplification of the "monster" code.
  */
-bool earthquake(int cy, int cx, int r)
+bool earthquake_aux(int cy, int cx, int r, int m_idx)
 {
 	int             i, t, y, x, yy, xx, dy, dx;
 	int             damage = 0;
@@ -5456,31 +5456,28 @@ bool earthquake(int cy, int cx, int r)
 			case 1:
 			{
 #ifdef JP
-msg_print("ダンジョンの壁が崩れた！");
+				msg_print("ダンジョンの壁が崩れた！");
 #else
 				msg_print("The cave ceiling collapses!");
 #endif
-
 				break;
 			}
 			case 2:
 			{
 #ifdef JP
-msg_print("ダンジョンの床が不自然にねじ曲がった！");
+				msg_print("ダンジョンの床が不自然にねじ曲がった！");
 #else
 				msg_print("The cave floor twists in an unnatural way!");
 #endif
-
 				break;
 			}
 			default:
 			{
 #ifdef JP
-msg_print("ダンジョンが揺れた！崩れた岩が頭に降ってきた！");
+				msg_print("ダンジョンが揺れた！崩れた岩が頭に降ってきた！");
 #else
 				msg_print("The cave quakes!  You are pummeled with debris!");
 #endif
-
 				break;
 			}
 		}
@@ -5490,11 +5487,10 @@ msg_print("ダンジョンが揺れた！崩れた岩が頭に降ってきた！");
 		{
 			/* Message and damage */
 #ifdef JP
-msg_print("あなたはひどい怪我を負った！");
+			msg_print("あなたはひどい怪我を負った！");
 #else
 			msg_print("You are severely crushed!");
 #endif
-
 			damage = 200;
 		}
 
@@ -5507,22 +5503,20 @@ msg_print("あなたはひどい怪我を負った！");
 				case 1:
 				{
 #ifdef JP
-msg_print("降り注ぐ岩をうまく避けた！");
+					msg_print("降り注ぐ岩をうまく避けた！");
 #else
 					msg_print("You nimbly dodge the blast!");
 #endif
-
 					damage = 0;
 					break;
 				}
 				case 2:
 				{
 #ifdef JP
-msg_print("岩石があなたに直撃した!");
+					msg_print("岩石があなたに直撃した!");
 #else
 					msg_print("You are bashed by rubble!");
 #endif
-
 					damage = damroll(10, 4);
 					(void)set_stun(p_ptr->stun + randint1(50));
 					break;
@@ -5530,11 +5524,10 @@ msg_print("岩石があなたに直撃した!");
 				case 3:
 				{
 #ifdef JP
-msg_print("あなたは床と壁との間に挟まれてしまった！");
+					msg_print("あなたは床と壁との間に挟まれてしまった！");
 #else
 					msg_print("You are crushed between the floor and ceiling!");
 #endif
-
 					damage = damroll(10, 4);
 					(void)set_stun(p_ptr->stun + randint1(50));
 					break;
@@ -5549,12 +5542,35 @@ msg_print("あなたは床と壁との間に挟まれてしまった！");
 		map[16+py-cy][16+px-cx] = FALSE;
 
 		/* Take some damage */
-#ifdef JP
-if (damage) take_hit(DAMAGE_ATTACK, damage, "地震", -1);
-#else
-		if (damage) take_hit(DAMAGE_ATTACK, damage, "an earthquake", -1);
-#endif
+		if (damage)
+		{
+			char *killer;
 
+			if (m_idx)
+			{
+				char m_name[80];
+				monster_type *m_ptr = &m_list[m_idx];
+
+				/* Get the monster's real name */
+				monster_desc(m_name, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+
+#ifdef JP
+				killer = format("%sの起こした地震", m_name);
+#else
+				killer = format("an earthquake caused by %s", m_name);
+#endif
+			}
+			else
+			{
+#ifdef JP
+				killer = "地震";
+#else
+				killer = "an earthquake";
+#endif
+			}
+
+			take_hit(DAMAGE_ATTACK, damage, killer, -1);
+		}
 	}
 
 	/* Examine the quaked region */
@@ -5640,11 +5656,10 @@ if (damage) take_hit(DAMAGE_ATTACK, damage, "地震", -1);
 
 					/* Scream in pain */
 #ifdef JP
-msg_format("%^sは苦痛で泣きわめいた！", m_name);
+					msg_format("%^sは苦痛で泣きわめいた！", m_name);
 #else
 					msg_format("%^s wails out in pain!", m_name);
 #endif
-
 
 					/* Take damage from the quake */
 					damage = (sn ? damroll(4, 8) : (m_ptr->hp + 1));
@@ -5837,6 +5852,11 @@ msg_format("%^sは苦痛で泣きわめいた！", m_name);
 
 	/* Success */
 	return (TRUE);
+}
+
+bool earthquake(int cy, int cx, int r)
+{
+	return earthquake_aux(cy, cx, r, 0);
 }
 
 

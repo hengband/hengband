@@ -1066,6 +1066,7 @@ extern bool dispel_demons(int dam);
 extern bool crusade(void);
 extern bool turn_undead(void);
 extern bool destroy_area(int y1, int x1, int r, bool in_generate);
+extern bool earthquake_aux(int cy, int cx, int r, int m_idx);
 extern bool earthquake(int cy, int cx, int r);
 extern void lite_room(int y1, int x1);
 extern void unlite_room(int y1, int x1);
