@@ -738,15 +738,6 @@ static bool set_tunnel(int *x, int *y, bool affectwall)
 	feat = c_ptr->feat;
 	f_ptr = &f_info[feat];
 
-	if (have_flag(f_ptr->flags, FF_WALL) && have_flag(f_ptr->flags, FF_PERMANENT))
-	{
-		/*
-		 * Ignore permanent walls - sometimes cannot tunnel around them anyway
-		 * so don't try - it just complicates things unnecessarily.
-		 */
-		return TRUE;
-	}
-
 	if (is_inner_grid(c_ptr))
 	{
 		return TRUE;
