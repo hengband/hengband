@@ -1,12 +1,13 @@
 N: 1:BIAS_ELEC
-7
+8
+'Stungun'
 'Grid Bug'
 'Spark'
 'Electric Eel'
 'Electronics'
 'Shockbringer'
 of Shockness
-'Surprising Thunder Mountain'
+'Thunder Mountain'
 
 N: 2:BIAS_POIS
 6
@@ -79,13 +80,14 @@ N: 9:BIAS_DEX
 'Sands of Time'
 
 N:16:BIAS_ROGUE
-6
+7
 'Raid'
 'Elusiveness'
 'The Seven Tools'
 of Trickery
 of Jack
 of Tachyon
+of Cowardice
 
 N:17:BIAS_MAGE
 N: 7:BIAS_INT
@@ -100,20 +102,22 @@ N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
 N:10:BIAS_CON
 6
+'Basher'
 'The Body Power'
-'Muscle Bland'
-'BodyBuilder-bane'
+'Muscle'
 'Abslicer'
 'Peace Maker'
 of Slay Munchkin
 
 N:19:BIAS_RANGER
-5
+6
+of Centaurs
+'Animalbane'
+'Sniper'
+'Naturebane'
 'Catapult'
-'Laser Scorp'
-with Radar
 of *Slay Bear*
-of sight seeing
+
 
 N:11:BIAS_CHR
 5

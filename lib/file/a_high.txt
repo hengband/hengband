@@ -79,7 +79,8 @@ of the Holy Grail
 
 N: 9:BIAS_DEX
 N:16:BIAS_ROGUE
-7
+8
+of Gimli
 (*Stealth*)
 'Beelzebub's wing'
 of the Sprite
@@ -90,12 +91,13 @@ of Super Speed
 
 N:17:BIAS_MAGE
 N: 7:BIAS_INT
-5
+7
+of Celebrimbor
+of Eol
 of Merlin's Pattern
 'Mana Prism'
-'Tower of Power'
+'The Tower of Power'
 of the Great Magi
-of *intelligence*
 
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR

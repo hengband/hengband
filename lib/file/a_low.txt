@@ -75,14 +75,13 @@ of Angel
 
 N:16:BIAS_ROGUE
 N: 9:BIAS_DEX
-8
+7
+of Avoidance
 'Speed'
 of Escapee
 'Accelerator'
-of Hide-and-Seek
 of the Joker
 of Illusion
-of LSD
 of the Pickpocket
 
 N:17:BIAS_MAGE

@@ -1,5 +1,6 @@
 N: 1:BIAS_ELEC
 9
+of Poseidon
 'vajra'
 'Aeglin'
 (*Defender*)
@@ -7,7 +8,6 @@ N: 1:BIAS_ELEC
 'Thunder Zap'
 'Angered Thunder God'
 'Thunder Bringer'
-'Lightning Blade'
 of Djinni
 
 N: 2:BIAS_POIS
@@ -31,7 +31,8 @@ of Allah
 of Prominence
 
 N: 4:BIAS_COLD
-6
+7
+of Ice
 (*Defender*)
 'Flost Bland'
 'Ice Edge'
@@ -40,7 +41,8 @@ N: 4:BIAS_COLD
 'Freezing Point'
 
 N: 5:BIAS_ACID
-6
+7
+of Fendilo
 'Disintegrator'
 (*Defender*)
 'Dissolver'
@@ -64,7 +66,8 @@ of Logrus
 of the Champion of Chaos
 
 N:14:BIAS_NECROMANTIC
-6
+7
+'Soulsucker'
 'Hand of Vecna'
 'Deathstorm'
 of Vlad
@@ -75,7 +78,8 @@ of Death
 N:15:BIAS_LAW
 N:13:BIAS_PRIESTLY
 N: 8:BIAS_WIS
-9
+10
+of the Guardian
 (*Holy Avenger*)
 'Word of God'
 'Hand of God'
@@ -87,7 +91,8 @@ N: 8:BIAS_WIS
 'Yggr-drasill'
 
 N:16:BIAS_ROGUE
-8
+9
+of Hermes
 'Secret Weapon'
 (Muder)
 'Quick Kill'
@@ -99,7 +104,8 @@ of Light Speed
 
 N:17:BIAS_MAGE
 N: 7:BIAS_INT
-6
+7
+of Olorin
 'Eternal Verities'
 'Mana Spectrum'
 'Invisible Hand'
@@ -111,7 +117,8 @@ N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
 N:10:BIAS_CON
 N: 9:BIAS_DEX
-10
+11
+'Masamune'
 'Undying Samurai'
 of Ultimate Might
 'Vanquisher'
@@ -124,13 +131,16 @@ of Gerard
 of Benedict
 
 N:19:BIAS_RANGER
-6
-of the Eagle Lord
-of Hyper Nature
-'Hit Maker'
-'Shooting Star'
-'Sniper'
-'Animalbane'
+9
+of Umbar
+of Amras
+of Amrod
+'Lion Fang'
+'Shark Cutter'
+'Eagle Sword'
+'Bison Axe'
+'Tiger Baton'
+'Whirlwind'
 
 N:*:Default
 26

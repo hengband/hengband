@@ -76,6 +76,7 @@ of Rite
 N:16:BIAS_ROGUE
 N: 9:BIAS_DEX
 10
+of Nevrast
 'Silentwalker'
 'Mercury'
 'Darknesslurker'
@@ -85,13 +86,12 @@ of Quietness
 of the Ninja
 of Phasing
 of the Fairy
-of Avoidance
 
 N:17:BIAS_MAGE
 N: 7:BIAS_INT
 7
+of *intelligence*
 'Nuts of Wisdom'
-of Brilliance
 of the Wizard
 of Knowledge
 of the Spellcaster
@@ -111,6 +111,7 @@ of Diamond
 N:19:BIAS_RANGER
 N:10:BIAS_CON
 8
+of Hyper Nature
 'Hound'
 'Red Belet'
 'Bear's Hand'
@@ -118,7 +119,6 @@ N:10:BIAS_CON
 'Life of Leaf'
 of the Hunter
 of Marinera
-of Wood Protection
 
 N:*:Default
 13
