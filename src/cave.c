@@ -5145,3 +5145,32 @@ void disturb(int stop_search, int unused_flag)
 	/* Flush the input if requested */
 	if (flush_disturb) flush();
 }
+
+
+/*
+ * Glow deep lava in the floor
+ */
+void glow_deep_lava(void)
+{
+	int y, x, i, yy, xx;
+	cave_type *c_ptr;
+
+	for (y = 1; y < cur_hgt - 1; y++)
+	{
+		for (x = 1; x < cur_wid - 1; x++)
+		{
+			c_ptr = &cave[y][x];
+
+			if (c_ptr->feat == FEAT_DEEP_LAVA)
+			{
+				for (i = 0; i < 9; i++)
+				{
+					yy = y + ddy_ddd[i];
+					xx = x + ddx_ddd[i];
+					cave[yy][xx].info |= CAVE_GLOW;
+					if (player_has_los_bold(yy, xx)) note_spot(yy, xx);
+				}
+			}
+		}
+	}
+}

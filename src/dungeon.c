@@ -1786,6 +1786,9 @@ msg_print("日が沈んだ。");
 							note_spot(y, x);
 						}
 					}
+
+					/* Glow deep lava */
+					glow_deep_lava();
 				}
 			}
 

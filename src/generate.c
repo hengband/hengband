@@ -1710,20 +1710,8 @@ if (why) msg_format("生成やり直し(%s)", why);
 		wipe_m_list();
 	}
 
-	for (y = 1; y < cur_hgt - 1; y++)
-	{
-		for (x = 1; x < cur_wid - 1; x++)
-		{
-			if ((cave[y][x].feat == FEAT_DEEP_LAVA))
-			{
-				int i;
-				for (i = 0; i < 9; i++)
-				{
-					cave[y+ddy_ddd[i]][x+ddx_ddd[i]].info |= CAVE_GLOW;
-				}
-			}
-		}
-	}
+	/* Glow deep lava */
+	glow_deep_lava();
 
 	/* Reset flag */
 	p_ptr->enter_dungeon = FALSE;
