@@ -1193,9 +1193,15 @@ s32b object_value_real(object_type *o_ptr)
 		value += flag_cost(o_ptr, o_ptr->pval);
 	}
 
-	else if (o_ptr->art_flags[0] || o_ptr->art_flags[1] || o_ptr->art_flags[2] || o_ptr->art_flags[3])
-	{
-		value += flag_cost(o_ptr, o_ptr->pval);
+	else
+        {
+                int i;
+                bool flag = FALSE;
+
+                for (i = 0; i < TR_FLAG_SIZE; i++) 
+                        if (o_ptr->art_flags[i]) flag = TRUE;
+
+		if (flag) value += flag_cost(o_ptr, o_ptr->pval);
 	}
 
 
