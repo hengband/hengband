@@ -6,8 +6,8 @@
     (1) はじめに行くべき所         (jgeneral.txt#First)
     (2) 勝利                       (jgeneral.txt#Winning)
     (3) 死について                 (jgeneral.txt#UponDeath)
-    (5) WEB上の 変愚蛮怒 サイト    (jgeneral.txt#Web)
-    (7) バージョン履歴             (jversion.txt)
+    (4) WEB上の 変愚蛮怒 サイト    (jgeneral.txt#Web)
+    (5) バージョン履歴             (jversion.txt)
 
     (?) ヘルプシステムの使用法     (jhelpinfo.txt)
 
@@ -16,5 +16,5 @@
 ***** [1] jgeneral.txt#Overview
 ***** [2] jgeneral.txt#Winning
 ***** [3] jgeneral.txt#UponDeath
-***** [5] jgeneral.txt#Web
-***** [7] jversion.txt
+***** [4] jgeneral.txt#Web
+***** [5] jversion.txt
