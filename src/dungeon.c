@@ -1230,11 +1230,22 @@ static void process_monsters_counters(void)
 					/* Hack -- amount of "waking" */
 					int d = 1;
 
-					/* Wake up faster near the player */
-					if (m_ptr->cdis < 50) d = (100 / m_ptr->cdis);
-
 					/* Hack -- handle aggravation */
-					if (p_ptr->cursed & TRC_AGGRAVATE) d = m_ptr->csleep;
+					if (p_ptr->cursed & TRC_AGGRAVATE)
+					{
+						d = m_ptr->csleep;
+					}
+					else
+					{
+						/* Wake up faster near the player */
+						if (m_ptr->cdis < 50) d = (100 / m_ptr->cdis);
+
+						/* Hack -- amount of "waking" is affected by speed of player */
+						d *= ((p_ptr->pspeed > 199) ? 49 :
+						      ((p_ptr->pspeed < 0) ? 1 : extract_energy[p_ptr->pspeed]));
+						d /= 10;
+						if (d < 0) d = 1;
+					}
 
 					/* Still asleep */
 					if (m_ptr->csleep > d)
