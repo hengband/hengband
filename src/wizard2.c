@@ -1678,12 +1678,13 @@ static void do_cmd_wiz_zap_all(void)
  */
 static void do_cmd_wiz_create_feature(void)
 {
-	static int prev_feat = FEAT_NONE;
-	static int prev_mimic = FEAT_NONE;
-	cave_type  *c_ptr;
-	char       tmp_val[160];
-	int        tmp_feat, tmp_mimic;
-	int        y, x;
+	static int   prev_feat = FEAT_NONE;
+	static int   prev_mimic = FEAT_NONE;
+	cave_type    *c_ptr;
+	feature_type *f_ptr;
+	char         tmp_val[160];
+	int          tmp_feat, tmp_mimic;
+	int          y, x;
 
 	if (!tgt_pt(&x, &y)) return;
 
@@ -1721,15 +1722,20 @@ static void do_cmd_wiz_create_feature(void)
 
 	cave_set_feat(y, x, tmp_feat);
 	c_ptr->mimic = tmp_mimic;
-	if (tmp_mimic)
-	{
-		feature_type *f_ptr = &f_info[tmp_mimic];
 
-		if (have_flag(f_ptr->flags, FF_GLYPH) ||
-		    have_flag(f_ptr->flags, FF_MINOR_GLYPH) ||
-		    have_flag(f_ptr->flags, FF_MIRROR))
-			c_ptr->info |= (CAVE_OBJECT);
-	}
+	f_ptr = &f_info[get_feat_mimic(c_ptr)];
+
+	if (have_flag(f_ptr->flags, FF_GLYPH) ||
+	    have_flag(f_ptr->flags, FF_MINOR_GLYPH))
+		c_ptr->info |= (CAVE_OBJECT);
+	else if (have_flag(f_ptr->flags, FF_MIRROR))
+		c_ptr->info |= (CAVE_GLOW | CAVE_OBJECT);
+
+	/* Notice */
+	note_spot(y, x);
+
+	/* Redraw */
+	lite_spot(y, x);
 
 	/* Update some things */
 	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
