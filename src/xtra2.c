@@ -1051,8 +1051,9 @@ msg_print("地面に落とされた。");
 		/* Drop it in the dungeon */
 		(void)drop_near(q_ptr, -1, y, x);
 	}
+
 	/* Mega-Hack -- drop "winner" treasures */
-	else
+	else if (!cloned)
 	{
 		if (m_ptr->r_idx == MON_SERPENT)
 		{
@@ -1299,7 +1300,8 @@ msg_print("地面に落とされた。");
 			}
 		}
 	}
-	if ((r_ptr->flags7 & RF7_GUARDIAN) && !p_ptr->inside_battle && (d_info[dungeon_type].final_guardian == m_ptr->r_idx))
+
+	if ((r_ptr->flags7 & RF7_GUARDIAN) && !p_ptr->inside_battle && (d_info[dungeon_type].final_guardian == m_ptr->r_idx) && !cloned)
 	{
 		int k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT); /* Acquirement */;
 
