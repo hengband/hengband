@@ -55,63 +55,6 @@
 
 
 /*
- * Template file header information (see "init.c").  16 bytes.
- *
- * Note that the sizes of many of the "arrays" are between 32768 and
- * 65535, and so we must use "unsigned" values to hold the "sizes" of
- * these arrays below.  Normally, I try to avoid using unsigned values,
- * since they can cause all sorts of bizarre problems, but I have no
- * choice here, at least, until the "race" array is split into "normal"
- * and "unique" monsters, which may or may not actually help.
- *
- * Note that, on some machines, for example, the Macintosh, the standard
- * "read()" and "write()" functions cannot handle more than 32767 bytes
- * at one time, so we need replacement functions, see "util.c" for details.
- *
- * Note that, on some machines, for example, the Macintosh, the standard
- * "malloc()" function cannot handle more than 32767 bytes at one time,
- * but we may assume that the "ralloc()" function can handle up to 65535
- * butes at one time.  We should not, however, assume that the "ralloc()"
- * function can handle more than 65536 bytes at a time, since this might
- * result in segmentation problems on certain older machines, and in fact,
- * we should not assume that it can handle exactly 65536 bytes at a time,
- * since the internal functions may use an unsigned short to specify size.
- *
- * In general, these problems occur only on machines (such as most personal
- * computers) which use 2 byte "int" values, and which use "int" for the
- * arguments to the relevent functions.
- */
-
-typedef struct header header;
-
-struct header
-{
-	byte	v_major;		/* Version -- major */
-	byte	v_minor;		/* Version -- minor */
-	byte	v_patch;		/* Version -- patch */
-	byte	v_extra;		/* Version -- extra */
-
-
-	u16b	info_num;		/* Number of "info" records */
-
-	u16b	info_len;		/* Size of each "info" record */
-
-
-	u32b	head_size;		/* Size of the "header" in bytes */
-
-	u32b	info_size;		/* Size of the "info" array in bytes */
-
-	u32b	name_size;		/* Size of the "name" array in bytes */
-
-#ifdef JP
-        u32b    E_name_size;    /* Size of the "English-name" array in bytes */
-#endif
-	u32b	text_size;		/* Size of the "text" array in bytes */
-};
-
-
-
-/*
  * Information about terrain "features"
  */
 

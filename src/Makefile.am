@@ -21,7 +21,7 @@ hengband_SOURCES = \
 	main-cap.c main-gcu.c main-x11.c main-xaw.c main.c chuukei.c \
 	angband.h defines.h event.h externs.h generate.h grid.h \
 	h-basic.h h-config.h h-define.h h-system.h h-type.h \
-	mindtips.h readdib.h rooms.h spellstips.h streams.h \
+	mindtips.h readdib.h rooms.h spellstips.h streams.h init.h \
 	types.h z-config.h z-form.h z-rand.h z-term.h z-util.h z-virt.h
 
 EXTRA_hengband_SOURCES = \

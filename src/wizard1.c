@@ -2013,7 +2013,7 @@ static void spoil_mon_info(cptr fname)
 
 		/* Name */
 #ifdef JP
-		sprintf(buf, "%s/%s  (", (r_name + r_ptr->name),(E_r_name+r_ptr->E_name));  /* ---)--- */
+		sprintf(buf, "%s/%s  (", (r_name + r_ptr->name),(r_name+r_ptr->E_name));  /* ---)--- */
 #else
 		sprintf(buf, "%s  (", (r_name + r_ptr->name));  /* ---)--- */
 #endif

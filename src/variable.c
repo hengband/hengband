@@ -755,7 +755,6 @@ s16b player_hp[PY_MAX_LEVEL];
 /*
  * The vault generation arrays
  */
-header *v_head;
 vault_type *v_info;
 char *v_name;
 char *v_text;
@@ -763,7 +762,6 @@ char *v_text;
 /*
  * The skill table
  */
-header *s_head;
 skill_table *s_info;
 char *s_name;
 char *s_text;
@@ -771,7 +769,6 @@ char *s_text;
 /*
  * The magic info
  */
-header *m_head;
 player_magic *m_info;
 char *m_name;
 char *m_text;
@@ -779,64 +776,43 @@ char *m_text;
 /*
  * The terrain feature arrays
  */
-header *f_head;
 feature_type *f_info;
 char *f_name;
-#ifdef JP
-char *E_f_name;         /* 英語地形名 */
-#endif
 char *f_text;
 
 /*
  * The object kind arrays
  */
-header *k_head;
 object_kind *k_info;
 char *k_name;
-#ifdef JP
-char *E_k_name;         /* 英語アイテム名 */
-#endif
 char *k_text;
 
 /*
  * The artifact arrays
  */
-header *a_head;
 artifact_type *a_info;
 char *a_name;
-#ifdef JP
-char *E_a_name;         /* 英語アーティファクト名 */
-#endif
 char *a_text;
 
 /*
  * The ego-item arrays
  */
-header *e_head;
 ego_item_type *e_info;
 char *e_name;
-#ifdef JP
-char *E_e_name;         /* 英語「名のある」アイテム名 */
-#endif
 char *e_text;
 
 
 /*
  * The monster race arrays
  */
-header *r_head;
 monster_race *r_info;
 char *r_name;
-#ifdef JP
-char *E_r_name;         /* 英語モンスター名 */
-#endif
 char *r_text;
 
 
 /*
  * The dungeon arrays
  */
-header *d_head;
 dungeon_info_type *d_info;
 char *d_name;
 char *d_text;

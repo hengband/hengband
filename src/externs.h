@@ -399,54 +399,30 @@ extern u32b spell_forgotten1;
 extern u32b spell_forgotten2;
 extern byte spell_order[64];
 extern s16b player_hp[PY_MAX_LEVEL];
-extern header *v_head;
 extern vault_type *v_info;
 extern char *v_name;
 extern char *v_text;
-extern header *s_head;
 extern skill_table *s_info;
 extern char *s_name;
 extern char *s_text;
-extern header *m_head;
 extern player_magic *m_info;
 extern char *m_name;
 extern char *m_text;
-extern header *f_head;
 extern feature_type *f_info;
 extern char *f_name;
-#ifdef JP
-extern char *E_f_name;                  /* 英語地形名 */
-#endif
 extern char *f_text;
-extern header *k_head;
 extern object_kind *k_info;
 extern char *k_name;
-#ifdef JP
-extern char *E_k_name;                  /* 英語アイテム名 */
-#endif
 extern char *k_text;
-extern header *a_head;
 extern artifact_type *a_info;
 extern char *a_name;
-#ifdef JP
-extern char *E_a_name;                  /* 英語伝説のアイテム名 */
-#endif
 extern char *a_text;
-extern header *e_head;
 extern ego_item_type *e_info;
 extern char *e_name;
-#ifdef JP
-extern char *E_e_name;                  /* 英語名のあるアイテム名 */
-#endif
 extern char *e_text;
-extern header *r_head;
 extern monster_race *r_info;
 extern char *r_name;
-#ifdef JP
-extern char *E_r_name;                  /* 英語モンスター名 */
-#endif
 extern char *r_text;
-extern header *d_head;
 extern dungeon_info_type *d_info;
 extern char *d_name;
 extern char *d_text;
@@ -761,15 +737,6 @@ extern void place_closed_door(int y, int x);
 extern void generate_cave(void);
 
 /* init1.c */
-extern errr init_v_info_txt(FILE *fp, char *buf, bool start);
-extern errr init_s_info_txt(FILE *fp, char *buf);
-extern errr init_m_info_txt(FILE *fp, char *buf);
-extern errr init_f_info_txt(FILE *fp, char *buf);
-extern errr init_k_info_txt(FILE *fp, char *buf);
-extern errr init_a_info_txt(FILE *fp, char *buf);
-extern errr init_e_info_txt(FILE *fp, char *buf);
-extern errr init_r_info_txt(FILE *fp, char *buf);
-extern errr init_d_info_txt(FILE *fp, char *buf);
 extern errr process_dungeon_file(cptr name, int ymin, int xmin, int ymax, int xmax);
 
 /* init2.c */
@@ -779,13 +746,8 @@ extern void init_file_paths(char *path);
 extern void init_angband(void);
 extern errr init_buildings(void);
 #ifdef ALLOW_TEMPLATES
-extern s16b error_idx;
-extern s16b error_line;
 extern u32b fake_name_size;
 extern u32b fake_text_size;
-#ifdef JP
-extern u32b E_fake_name_size;         /* 英語名用 */
-#endif
 #endif /* ALLOW_TEMPLATES */
 
 /* load.c */

@@ -2788,7 +2788,7 @@ void do_cmd_query_symbol(void)
 		  }
   
 #ifdef JP
-		  strcpy(temp2, E_r_name+r_ptr->E_name);
+		  strcpy(temp2, r_name+r_ptr->E_name);
 #else
 		  strcpy(temp2, r_name+r_ptr->name);
 #endif
@@ -3117,7 +3117,7 @@ sprintf(buf, "%c - %s", sym, "無効な文字");
 		  }
   
 #ifdef JP
-		  strcpy(temp2, E_r_name+r_ptr->E_name);
+		  strcpy(temp2, r_name+r_ptr->E_name);
 #else
 		  strcpy(temp2, r_name+r_ptr->name);
 #endif
