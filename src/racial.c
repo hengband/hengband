@@ -316,6 +316,17 @@ s = "魔力を取り込めるアイテムがない。";
 		o_ptr = &o_list[0 - item];
 	}
 
+	if (o_ptr->tval == TV_STAFF && o_ptr->sval == SV_STAFF_NOTHING)
+	{
+#ifdef JP
+		msg_print("この杖には発動の為の能力は何も備わっていないようだ。");
+#else
+		msg_print("This staff doesn't have any magical ability.");
+#endif
+		return FALSE;
+	}
+
+
 	if (!object_known_p(o_ptr))
 	{
 #ifdef JP
