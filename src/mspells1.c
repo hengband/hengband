@@ -1390,9 +1390,9 @@ bool make_attack_spell(int m_idx)
 	/* Forbid inate attacks sometimes */
 	if (no_inate)
 	{
-		f4 &= ~(RF4_BREATH_MASK);
-		f5 &= ~(RF5_BREATH_MASK);
-		f6 &= ~(RF6_BREATH_MASK);
+		f4 &= ~(RF4_NOMAGIC_MASK);
+		f5 &= ~(RF5_NOMAGIC_MASK);
+		f6 &= ~(RF6_NOMAGIC_MASK);
 	}
 
 	if (!p_ptr->csp)
