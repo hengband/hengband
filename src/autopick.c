@@ -824,12 +824,12 @@ static void autopick_free_entry(autopick_type *entry)
 }
 
 
-/*
- * Initialize auto-picker preference
- */
 #define MAX_AUTOPICK_DEFAULT 200
 
-void init_autopicker(void)
+/*
+ * Initialize the autopick
+ */
+static void init_autopick(void)
 {
 	static const char easy_autopick_inscription[] = "(:=g";
 	autopick_type entry;
@@ -851,6 +851,93 @@ void init_autopicker(void)
 	/* There is always one entry "=g" */
 	autopick_new_entry(&entry, easy_autopick_inscription, TRUE);
 	autopick_list[max_autopick++] = entry;
+}
+
+
+#define PT_DEFAULT 0
+#define PT_WITH_PNAME 1
+
+/*
+ *  Get file name for autopick preference
+ */
+static cptr pickpref_filename(int filename_mode)
+{
+#ifdef JP
+	static const char namebase[] = "picktype";
+#else
+	static const char namebase[] = "pickpref";
+#endif
+
+	switch (filename_mode)
+	{
+	case PT_DEFAULT:
+		return format("%s.prf", namebase);
+
+	case PT_WITH_PNAME:
+		return format("%s-%s.prf", namebase, player_name);
+
+	default:
+		return NULL;
+	}
+}
+
+
+/*
+ * Load an autopick preference file
+ */
+void autopick_load_pref(bool disp_mes)
+{
+	char buf[80];
+	errr err;
+
+	/* Free old entries */
+	init_autopick();
+
+	/* Try a filename with player name */
+	my_strcpy(buf, pickpref_filename(PT_WITH_PNAME), sizeof(buf));
+
+	/* Load the file */
+	err = process_autopick_file(buf);
+
+	if (err == 0 && disp_mes)
+	{
+		/* Success */
+#ifdef JP
+		msg_format("%sを読み込みました。", buf);
+#else
+		msg_format("Loaded '%s'.", buf);
+#endif
+	}
+
+	/* No file found */
+	if (0 > err)
+	{
+		/* Use default name */
+		my_strcpy(buf, pickpref_filename(PT_DEFAULT), sizeof(buf));
+
+		/* Load the file */
+		err = process_autopick_file(buf);
+
+		if (err == 0 && disp_mes)
+		{
+			/* Success */
+#ifdef JP
+			msg_format("%sを読み込みました。", buf);
+#else
+			msg_format("Loaded '%s'.", buf);
+#endif
+		}
+	}
+
+	if (err && disp_mes)
+	{
+		/* Failed */
+#ifdef JP
+		msg_print("自動拾い設定ファイルの読み込みに失敗しました。");
+#else
+		msg_print("Failed to reload autopick preference.");
+#endif
+	}
 }
 
 
@@ -888,7 +975,7 @@ static void add_autopick_list(autopick_type *entry)
 /*
  *  Process line for auto picker/destroyer.
  */
-errr process_pickpref_file_line(char *buf)
+errr process_autopick_file_command(char *buf)
 {
 	autopick_type an_entry, *entry = &an_entry;
 	int i;
@@ -1588,7 +1675,7 @@ static void auto_destroy_item(object_type *o_ptr, int autopick_idx)
 /*
  *  Auto-destroy marked item
  */
-static void delayed_auto_destroy_aux(int item)
+static void autopick_delayed_alter_aux(int item)
 {
 	object_type *o_ptr;
 
@@ -1631,7 +1718,7 @@ static void delayed_auto_destroy_aux(int item)
 /*
  *  Auto-destroy marked items in inventry and on floor
  */
-void delayed_auto_destroy(void)
+void autopick_delayed_alter(void)
 {
 	int item;
 
@@ -1640,14 +1727,14 @@ void delayed_auto_destroy(void)
 	 * skipping after inven_item_optimize()
 	 */
 	for (item = INVEN_TOTAL - 1; item >= 0 ; item--)
-		delayed_auto_destroy_aux(item);
+		autopick_delayed_alter_aux(item);
 
 	/* Scan the pile of objects */
 	item = cave[py][px].o_idx;
 	while (item)
 	{
 		int next = o_list[item].next_o_idx;
-		delayed_auto_destroy_aux(-item);
+		autopick_delayed_alter_aux(-item);
 		item = next;
 	}
 }
@@ -1659,7 +1746,7 @@ void delayed_auto_destroy(void)
  * Auto-destroyer works only on inventory or on floor stack only when
  * requested.
  */
-void auto_do_item(int item, bool destroy)
+void autopick_alter_item(int item, bool destroy)
 {
 	object_type *o_ptr;
 	int idx;
@@ -1685,7 +1772,7 @@ void auto_do_item(int item, bool destroy)
 /*
  * Automatically pickup/destroy items in this grid.
  */
-void auto_pickup_items(cave_type *c_ptr)
+void autopick_pickup_items(cave_type *c_ptr)
 {
 	s16b this_o_idx, next_o_idx = 0;
 	
@@ -1770,34 +1857,6 @@ void auto_pickup_items(cave_type *c_ptr)
 			auto_destroy_item(o_ptr, idx);
 		}
 	} /* for () */
-}
-
-
-#define PT_DEFAULT 0
-#define PT_WITH_PNAME 1
-
-/*
- *  Get file name for autopick preference
- */
-static cptr pickpref_filename(int filename_mode)
-{
-#ifdef JP
-	static const char namebase[] = "picktype";
-#else
-	static const char namebase[] = "pickpref";
-#endif
-
-	switch (filename_mode)
-	{
-	case PT_DEFAULT:
-		return format("%s.prf", namebase);
-
-	case PT_WITH_PNAME:
-		return format("%s-%s.prf", namebase, player_name);
-
-	default:
-		return NULL;
-	}
 }
 
 
@@ -1934,7 +1993,7 @@ static bool clear_auto_register(void)
 /*
  *  Automatically register an auto-destroy preference line
  */
-bool add_auto_register(object_type *o_ptr)
+bool autopick_autoregister(object_type *o_ptr)
 {
 	char buf[1024];
 	char pref_file[1024];
@@ -5948,7 +6007,7 @@ void do_cmd_edit_autopick(void)
 	update_playtime();
 
 	/* Free old entries */
-	init_autopicker();
+	init_autopick();
 
 	/* Command Description of the 'Last Destroyed Item' */
 	if (autopick_last_destroyed_object.k_idx)
@@ -6075,7 +6134,7 @@ void do_cmd_edit_autopick(void)
 	kill_yank_chain(tb);
 
 	/* Reload autopick pref */
-	process_pickpref_file(buf);
+	process_autopick_file(buf);
 
 	/* HACK -- reset start_time so that playtime is not increase while edit */
 	start_time = time(NULL);

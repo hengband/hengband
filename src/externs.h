@@ -585,14 +585,14 @@ extern s16b now_message;
 extern bool use_menu;
 
 /* autopick.c */
-extern void init_autopicker(void);
-extern errr process_pickpref_file_line(char *buf);
+extern void autopick_load_pref(bool disp_mes);
+extern errr process_autopick_file_command(char *buf);
 extern cptr autopick_line_from_entry(autopick_type *entry);
 extern int is_autopick(object_type *o_ptr);
-extern void auto_do_item(int item, bool destroy);
-extern void delayed_auto_destroy(void);
-extern void auto_pickup_items(cave_type *c_ptr);
-extern bool add_auto_register(object_type *o_ptr);
+extern void autopick_alter_item(int item, bool destroy);
+extern void autopick_delayed_alter(void);
+extern void autopick_pickup_items(cave_type *c_ptr);
+extern bool autopick_autoregister(object_type *o_ptr);
 extern void do_cmd_edit_autopick(void);
 
 /* birth.c */
@@ -718,7 +718,7 @@ extern void do_cmd_messages(int num_now);
 extern void do_cmd_options_aux(int page, cptr info);
 extern void do_cmd_options(void);
 extern void do_cmd_pref(void);
-extern void do_cmd_pickpref(void);
+extern void do_cmd_reload_autopick(void);
 extern void do_cmd_macros(void);
 extern void do_cmd_visuals(void);
 extern void do_cmd_colors(void);
@@ -786,7 +786,7 @@ extern errr file_character(cptr name);
 extern errr process_pref_file_command(char *buf);
 extern cptr process_pref_file_expr(cptr *sp, char *fp);
 extern errr process_pref_file(cptr name);
-extern errr process_pickpref_file(cptr name);
+extern errr process_autopick_file(cptr name);
 extern errr process_histpref_file(cptr name);
 extern void print_equippy(void);
 extern errr check_time_init(void);

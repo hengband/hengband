@@ -434,7 +434,7 @@ msg_print("クエストを達成した！");
 		identify_item(o_ptr);
 
 		/* Auto-inscription */
-		auto_do_item(item, FALSE);
+		autopick_alter_item(item, FALSE);
 	}
 
 	/* Take a turn */
@@ -972,10 +972,10 @@ void do_cmd_destroy(void)
 			if (i == 'a' || i == 'A')
 			{
 				/* Add an auto-destroy preference line */
-				if (add_auto_register(o_ptr))
+				if (autopick_autoregister(o_ptr))
 				{
 					/* Auto-destroy it */
-					auto_do_item(item, TRUE);
+					autopick_alter_item(item, TRUE);
 				}
 
 				/* The object is already destroyed. */

@@ -201,7 +201,7 @@ o_name, index_to_label(slot),game_inscriptions[feel]);
 	o_ptr->feeling = feel;
 
 	/* Auto-inscription/destroy */
-	auto_do_item(slot, destroy_feeling);
+	autopick_alter_item(slot, destroy_feeling);
 
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
@@ -1627,7 +1627,7 @@ msg_format("%sは%sという感じがする...",
 	}
 
 	/* Auto-inscription/destroy */
-	auto_do_item(item, (bool)(okay && destroy_feeling));
+	autopick_alter_item(item, (bool)(okay && destroy_feeling));
 
 	/* Something happened */
 	return (TRUE);
@@ -5222,7 +5222,7 @@ msg_print("アリーナが魔法を吸収した！");
 
 		case '$':
 		{
-			do_cmd_pickpref();
+			do_cmd_reload_autopick();
 			break;
 		}
 
@@ -6474,27 +6474,6 @@ static void load_all_pref_files(void)
 	/* Process that file */
 	process_pref_file(buf);
 
-	/* Free old entries */
-	init_autopicker();
-
-#ifdef JP
-	sprintf(buf, "picktype-%s.prf", player_base);
-#else
-	sprintf(buf, "pickpref-%s.prf", player_base);
-#endif
-
-	err = process_pickpref_file(buf);
-
-	/* Process 'pick????.prf' if 'pick????-<name>.prf' doesn't exist */
-	if (0 > err)
-	{
-#ifdef JP
-		process_pickpref_file("picktype.prf");
-#else
-		process_pickpref_file("pickpref.prf");
-#endif
-	}
-
 	/* Access the "realm 1" pref file */
 	if (p_ptr->realm1 != REALM_NONE)
 	{
@@ -6512,6 +6491,10 @@ static void load_all_pref_files(void)
 		/* Process that file */
 		process_pref_file(buf);
 	}
+
+
+	/* Load an autopick preference file */
+	autopick_load_pref(FALSE);
 }
 
 

@@ -2728,64 +2728,19 @@ void do_cmd_pref(void)
 	(void)process_pref_file_command(buf);
 }
 
-void do_cmd_pickpref(void)
+void do_cmd_reload_autopick(void)
 {
 	char buf[80];
 	errr err;
 
 #ifdef JP
-	if(!get_check("自動拾い設定ファイルをロードしますか? ")) return;
+	if (!get_check("自動拾い設定ファイルをロードしますか? ")) return;
 #else
-	if(!get_check("Reload auto-pick preference file? ")) return;
+	if (!get_check("Reload auto-pick preference file? ")) return;
 #endif
 
-	/* Free old entries */
-	init_autopicker();
-
-	/* キャラ毎の設定ファイルの読み込み */
-#ifdef JP
-	sprintf(buf, "picktype-%s.prf", player_name);
-#else
-	sprintf(buf, "pickpref-%s.prf", player_name);
-#endif
-	err = process_pickpref_file(buf);
-
-	if(err == 0)
-	{
-#ifdef JP
-		msg_format("%sを読み込みました。", buf);
-#else
-		msg_format("loaded '%s'.", buf);
-#endif
-	}
-
-	/* 共通の設定ファイル読み込み */
-
-	/* Process 'pick????.prf' if 'pick????-<name>.prf' doesn't exist */
-	if (0 > err)
-	{
-#ifdef JP
-		err = process_pickpref_file("picktype.prf");
-#else
-		err = process_pickpref_file("pickpref.prf");
-#endif
-
-		if(err == 0)
-		{
-#ifdef JP
-			msg_print("picktype.prfを読み込みました。");
-#else
-			msg_print("loaded 'pickpref.prf'.");
-#endif
-		}
-	}
-
-
-#ifdef JP
-	if(err) msg_print("自動拾い設定ファイルの読み込みに失敗しました。");
-#else
-	if(err) msg_print("Failed to reload autopick preference.");
-#endif
+	/* Load the file with messages */
+	autopick_load_pref(TRUE);
 }
 
 #ifdef ALLOW_MACROS

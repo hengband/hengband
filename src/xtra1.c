@@ -5532,7 +5532,7 @@ void notice_stuff(void)
 	if (p_ptr->notice & (PN_AUTODESTROY))
 	{
 		p_ptr->notice &= ~(PN_AUTODESTROY);
-		delayed_auto_destroy();
+		autopick_delayed_alter();
 	}
 
 	/* Combine the pack */

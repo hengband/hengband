@@ -3444,7 +3444,7 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 #endif
 
 				/* Auto-inscription */
-				auto_do_item(item_new, FALSE);
+				autopick_alter_item(item_new, FALSE);
 
 				/* Now, reduce the original stack's pval. */
 				if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
@@ -3881,7 +3881,7 @@ msg_format("%sを $%ldで売却しました。", o_name, (long)price);
 
 			/* If items remain, auto-inscribe before optimizing */
 			if (o_ptr->number > 0)
-				auto_do_item(item, FALSE);
+				autopick_alter_item(item, FALSE);
 
 			inven_item_optimize(item);
 

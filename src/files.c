@@ -1037,7 +1037,7 @@ cptr process_pref_file_expr(cptr *sp, char *fp)
 
 
 #define PREF_TYPE_NORMAL   0
-#define PREF_TYPE_PICKPREF 1
+#define PREF_TYPE_AUTOPICK 1
 #define PREF_TYPE_HISTPREF 2
 
 /*
@@ -1125,8 +1125,8 @@ static errr process_pref_file_aux(cptr name, int preftype)
   			/* Process that file if allowed */
 			switch (preftype)
 			{
-			case PREF_TYPE_PICKPREF:
-				(void)process_pickpref_file(buf + 2);
+			case PREF_TYPE_AUTOPICK:
+				(void)process_autopick_file(buf + 2);
 				break;
 			case PREF_TYPE_HISTPREF:
 				(void)process_histpref_file(buf + 2);
@@ -1150,9 +1150,9 @@ static errr process_pref_file_aux(cptr name, int preftype)
 		/* This is not original pref line... */
 		if (err)
 		{
-			if (preftype != PREF_TYPE_PICKPREF)
+			if (preftype != PREF_TYPE_AUTOPICK)
   				break;
-			err = process_pickpref_file_line(buf);
+			err = process_autopick_file_command(buf);
 		}
 	}
 
@@ -7235,7 +7235,7 @@ errr get_rnd_line_jonly(cptr file_name, int entry, char *output, int count)
 /*
  * Process file for auto picker/destroyer.
  */
-errr process_pickpref_file(cptr name)
+errr process_autopick_file(cptr name)
 {
 	char buf[1024];
 
@@ -7244,7 +7244,7 @@ errr process_pickpref_file(cptr name)
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 
-	err = process_pref_file_aux(buf, PREF_TYPE_PICKPREF);
+	err = process_pref_file_aux(buf, PREF_TYPE_AUTOPICK);
 
 	/* Result */
 	return (err);

@@ -3003,7 +3003,7 @@
  * How object is marked (flags in object_type.mark)
  * OM_FOUND --- original boolean flag
  * OM_NOMSG --- temporary flag to suppress messages which were
- *              already printed in auto_pickup_items().
+ *              already printed in autopick_pickup_items().
  */
 #define OM_FOUND        0x01    /* original boolean flag */
 #define OM_NOMSG        0x02    /* temporary flag to suppress messages */

@@ -2012,7 +2012,7 @@ void identify_pack(void)
 		identify_item(o_ptr);
 
 		/* Auto-inscription */
-		auto_do_item(i, FALSE);
+		autopick_alter_item(i, FALSE);
 	}
 }
 
@@ -2901,7 +2901,7 @@ s = "鑑定するべきアイテムがない。";
 	}
 
 	/* Auto-inscription/destroy */
-	auto_do_item(item, (bool)(destroy_identify && !old_known));
+	autopick_alter_item(item, (bool)(destroy_identify && !old_known));
 
 	/* Something happened */
 	return (TRUE);
@@ -3082,7 +3082,7 @@ s = "鑑定するべきアイテムがない。";
 	(void)screen_object(o_ptr, TRUE);
 
 	/* Auto-inscription/destroy */
-	auto_do_item(item, (bool)(destroy_identify && !old_known));
+	autopick_alter_item(item, (bool)(destroy_identify && !old_known));
 
 	/* Success */
 	return (TRUE);

@@ -809,7 +809,7 @@ void py_pickup_aux(int o_idx)
 		bool old_known = identify_item(o_ptr);
 
 		/* Auto-inscription/destroy */
-		auto_do_item(slot, (bool)(destroy_identify && !old_known));
+		autopick_alter_item(slot, (bool)(destroy_identify && !old_known));
 
 		/* If it is destroyed, don't pick it up */
 		if (o_ptr->marked & OM_AUTODESTROY) return;
@@ -901,7 +901,7 @@ void carry(int pickup)
 	handle_stuff();
 
 	/* Automatically pickup/destroy/inscribe items */
-	auto_pickup_items(c_ptr);
+	autopick_pickup_items(c_ptr);
 
 
 #ifdef ALLOW_EASY_FLOOR
@@ -975,7 +975,7 @@ void carry(int pickup)
 		/* Pick up objects */
 		else
 		{
-			/* Hack - some objects were handled in auto_pickup_items(). */
+			/* Hack - some objects were handled in autopick_pickup_items(). */
 			if (o_ptr->marked & OM_NOMSG)
 			{
 				/* Clear the flag. */
