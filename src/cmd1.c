@@ -4140,6 +4140,9 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
 		}
 
+		/* Remove "unsafe" flag */
+		if ((!p_ptr->blind && !no_lite()) || !is_trap(c_ptr->feat)) c_ptr->info &= ~(CAVE_UNSAFE);
+
 		/* Redraw new spot */
 		lite_spot(py, px);
 
