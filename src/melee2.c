@@ -1120,8 +1120,9 @@ static bool get_moves(int m_idx, int *mm)
 		    are_enemies(m_ptr, &m_list[t_m_idx]) &&
 		    los(m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
 		{
-			y = m_ptr->target_y;
-			x = m_ptr->target_x;
+			/* Re-extract the "pseudo-direction" */
+			y = m_ptr->fy - m_ptr->target_y;
+			x = m_ptr->fx - m_ptr->target_x;
 			done = TRUE;
 		}
 	}
@@ -1260,15 +1261,8 @@ static bool get_moves(int m_idx, int *mm)
 	if (x > 0) move_val += 4;
 
 	/* Prevent the diamond maneuvre */
-	if (ay > (ax << 1))
-	{
-		move_val++;
-		move_val++;
-	}
-	else if (ax > (ay << 1))
-	{
-		move_val++;
-	}
+	if (ay > (ax << 1)) move_val += 2;
+	else if (ax > (ay << 1)) move_val++;
 
 	/* Extract some directions */
 	switch (move_val)
