@@ -4079,66 +4079,68 @@ void calc_bonuses(void)
 		/* Hack -- do not apply "bow" bonuses */
 		if (i == INVEN_BOW) continue;
 
+		bonus_to_h = o_ptr->to_h;
+		bonus_to_d = o_ptr->to_d;
+
 		if (p_ptr->pclass == CLASS_NINJA)
 		{
 			if (o_ptr->to_h > 0) bonus_to_h = (o_ptr->to_h+1)/2;
-			else bonus_to_h = o_ptr->to_h;
 			if (o_ptr->to_d > 0) bonus_to_d = (o_ptr->to_d+1)/2;
-			else bonus_to_d = o_ptr->to_d;
-		}
-		else
-		{
-			bonus_to_h = o_ptr->to_h;
-			bonus_to_d = o_ptr->to_d;
 		}
 
+		/* To Bow and Natural attack */
+
+		/* Apply the bonuses to hit/damage */
+		p_ptr->to_h_b += bonus_to_h;
+		p_ptr->to_h_m += bonus_to_h;
+		p_ptr->to_d_m += bonus_to_d;
+
+		/* Apply the mental bonuses tp hit/damage, if known */
+		if (object_known_p(o_ptr)) p_ptr->dis_to_h_b += bonus_to_h;
+
+		/* To Melee */
 		if ((i == INVEN_LEFT || i == INVEN_RIGHT) && !p_ptr->ryoute)
 		{
+			/* Apply the bonuses to hit/damage */
 			p_ptr->to_h[i-INVEN_RIGHT] += bonus_to_h;
-			p_ptr->to_h_b += bonus_to_h;
-			p_ptr->to_h_m += bonus_to_h;
 			p_ptr->to_d[i-INVEN_RIGHT] += bonus_to_d;
-			p_ptr->to_d_m += bonus_to_d;
 
-			if (object_known_p(o_ptr)) p_ptr->dis_to_h[i-INVEN_RIGHT] += bonus_to_h;
-			if (object_known_p(o_ptr)) p_ptr->dis_to_h_b += bonus_to_h;
-			if (object_known_p(o_ptr)) p_ptr->dis_to_d[i-INVEN_RIGHT] += bonus_to_d;
+			/* Apply the mental bonuses tp hit/damage, if known */
+			if (object_known_p(o_ptr))
+			{
+				p_ptr->dis_to_h[i-INVEN_RIGHT] += bonus_to_h;
+				p_ptr->dis_to_d[i-INVEN_RIGHT] += bonus_to_d;
+			}
 		}
 		else if (p_ptr->migite && p_ptr->hidarite)
 		{
 			/* Apply the bonuses to hit/damage */
 			p_ptr->to_h[0] += (bonus_to_h > 0) ? (bonus_to_h+1)/2 : bonus_to_h;
 			p_ptr->to_h[1] += (bonus_to_h > 0) ? bonus_to_h/2 : bonus_to_h;
-			p_ptr->to_h_b  += bonus_to_h;
-			p_ptr->to_h_m  += bonus_to_h;
 			p_ptr->to_d[0] += (bonus_to_d > 0) ? (bonus_to_d+1)/2 : bonus_to_d;
 			p_ptr->to_d[1] += (bonus_to_d > 0) ? bonus_to_d/2 : bonus_to_d;
-			p_ptr->to_d_m  += bonus_to_d;
 
 			/* Apply the mental bonuses tp hit/damage, if known */
-			if (object_known_p(o_ptr)) p_ptr->dis_to_h[0] += (bonus_to_h > 0) ? (bonus_to_h+1)/2 : bonus_to_h;
-			if (object_known_p(o_ptr)) p_ptr->dis_to_h[1] += (bonus_to_h > 0) ? bonus_to_h/2 : bonus_to_h;
-			if (object_known_p(o_ptr)) p_ptr->dis_to_h_b  += bonus_to_h;
-			if (object_known_p(o_ptr)) p_ptr->dis_to_d[0] += (bonus_to_d > 0) ? (bonus_to_d+1)/2 : bonus_to_d;
-			if (object_known_p(o_ptr)) p_ptr->dis_to_d[1] += (bonus_to_d > 0) ? bonus_to_d/2 : bonus_to_d;
+			if (object_known_p(o_ptr))
+			{
+				p_ptr->dis_to_h[0] += (bonus_to_h > 0) ? (bonus_to_h+1)/2 : bonus_to_h;
+				p_ptr->dis_to_h[1] += (bonus_to_h > 0) ? bonus_to_h/2 : bonus_to_h;
+				p_ptr->dis_to_d[0] += (bonus_to_d > 0) ? (bonus_to_d+1)/2 : bonus_to_d;
+				p_ptr->dis_to_d[1] += (bonus_to_d > 0) ? bonus_to_d/2 : bonus_to_d;
+			}
 		}
 		else
 		{
 			/* Apply the bonuses to hit/damage */
-			if(i != INVEN_LEFT || p_ptr->ryoute) p_ptr->to_h[0] += bonus_to_h;
-			if(i != INVEN_RIGHT) p_ptr->to_h[1] += bonus_to_h;
-			p_ptr->to_h_b  += bonus_to_h;
-			p_ptr->to_h_m  += bonus_to_h;
-			if(i != INVEN_LEFT || p_ptr->ryoute) p_ptr->to_d[0] += bonus_to_d;
-			if(i != INVEN_RIGHT) p_ptr->to_d[1] += bonus_to_d;
-			p_ptr->to_d_m  += bonus_to_d;
+			p_ptr->to_h[0] += bonus_to_h;
+			p_ptr->to_d[0] += bonus_to_d;
 
 			/* Apply the mental bonuses tp hit/damage, if known */
-			if ((i != INVEN_LEFT || p_ptr->ryoute) && object_known_p(o_ptr)) p_ptr->dis_to_h[0] += bonus_to_h;
-			if ((i != INVEN_RIGHT) && object_known_p(o_ptr)) p_ptr->dis_to_h[1] += bonus_to_h;
-			if (object_known_p(o_ptr)) p_ptr->dis_to_h_b  += bonus_to_h;
-			if ((i != INVEN_LEFT || p_ptr->ryoute) && object_known_p(o_ptr)) p_ptr->dis_to_d[0] += bonus_to_d;
-			if ((i != INVEN_RIGHT) && object_known_p(o_ptr)) p_ptr->dis_to_d[1] += bonus_to_d;
+			if (object_known_p(o_ptr))
+			{
+				p_ptr->dis_to_h[0] += bonus_to_h;
+				p_ptr->dis_to_d[0] += bonus_to_d;
+			}
 		}
 	}
 
