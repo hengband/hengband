@@ -2903,11 +2903,10 @@ R:868:0xC4:0x9B
 R:869:0xC4:0x9C
 
 # Ebony monk
-#R:870:
+R:870:0xC6/0x8b
 
 # Metal Babble
-# (Vermicious Knid of pern)
-R:871:0xB1/0x90
+R:871:0xC6/0x88
 
 # The Yamata-no-Orochi
 #R:872:
@@ -3304,7 +3303,7 @@ R:996:0x99/0x84
 #R:1002:
 
 # The Ghost 'Q'
-#R:1003:
+R:1003:0xC6/0x87
 
 # Pip, the Braver from Another World
 #R:1004:
@@ -3436,7 +3435,7 @@ R:1039:0x9C/0x83
 R:1046:0x9C/0x8C
 
 # Topaz monk
-#R:1047:
+R:1047:0xC6/0x8c
 
 # Stone dragon
 #R:1048:
@@ -3487,13 +3486,13 @@ R:1062:0xA1:0x81
 #R:1063:
 
 # Great Wyrm of Space-Time
-#R:1064:
+R:1064:0xC6/0x8a
 
 # Octopus of Kshitigarbha
 #R:1065:
 
 # Great Bile Wyrm
-#R:1066:
+R:1066:0xC6/0x89
 
 
 # Feature attr/char definitions
