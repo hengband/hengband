@@ -5016,21 +5016,14 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 
 
 	/* Find a grid */
-	for (i = 0; !flag; i++)
+	for (i = 0; !flag && (i < 1000); i++)
 	{
 		/* Bounce around */
-		if (i < 1000)
-		{
-			ty = rand_spread(by, 1);
-			tx = rand_spread(bx, 1);
-		}
+		ty = rand_spread(by, 1);
+		tx = rand_spread(bx, 1);
 
-		/* Random locations */
-		else
-		{
-			ty = randint0(cur_hgt);
-			tx = randint0(cur_wid);
-		}
+		/* Verify location */
+		if (!in_bounds(ty, tx)) continue;
 
 		/* Bounce to that location */
 		by = ty;
@@ -5039,12 +5032,77 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 		/* Require floor space */
 		if (!cave_drop_bold(by, bx)) continue;
 
-		/* Avoid stacking on other objects */
-		if (cave[by][bx].o_idx) continue;
-
-
 		/* Okay */
 		flag = TRUE;
+	}
+
+
+	if (!flag)
+	{
+		int candidates = 0, pick;
+
+		for (ty = 1; ty < cur_hgt - 1; ty++)
+		{
+			for (tx = 1; tx < cur_wid - 1; tx++)
+			{
+				/* A valid space found */
+				if (cave_drop_bold(ty, tx)) candidates++;
+			}
+		}
+
+		/* No valid place! */
+		if (!candidates)
+		{
+			/* Message */
+#ifdef JP
+			msg_format("%sは消えた。", o_name);
+#else
+			msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
+#endif
+
+			/* Debug */
+#ifdef JP
+			if (p_ptr->wizard) msg_print("(床スペースがない)");
+#else
+			if (p_ptr->wizard) msg_print("(no floor space)");
+#endif
+
+			/* Mega-Hack -- preserve artifacts */
+			if (preserve_mode)
+			{
+				/* Hack -- Preserve unknown artifacts */
+				if (object_is_fixed_artifact(j_ptr) && !object_is_known(j_ptr))
+				{
+					/* Mega-Hack -- Preserve the artifact */
+					a_info[j_ptr->name1].cur_num = 0;
+				}
+			}
+
+			/* Failure */
+			return 0;
+		}
+
+		/* Choose a random one */
+		pick = randint1(candidates);
+
+		for (ty = 1; ty < cur_hgt - 1; ty++)
+		{
+			for (tx = 1; tx < cur_wid - 1; tx++)
+			{
+				if (cave_drop_bold(ty, tx))
+				{
+					pick--;
+
+					/* Is this a picked one? */
+					if (!pick) break;
+				}
+			}
+
+			if (!pick) break;
+		}
+
+		by = ty;
+		bx = tx;
 	}
 
 
