@@ -5097,7 +5097,7 @@ msg_print("何か変わった気がする！");
 			if (!m_ptr->r_idx) continue;
 
 			/* Hack -- Detect monster */
-			m_ptr->mflag |= (MFLAG_MARK | MFLAG_SHOW);
+			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 
 			/* Update the monster */
 			update_mon(i, FALSE);
@@ -5672,13 +5672,13 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 					}
 
 					/* Handle memorized monsters */
-					if (m_ptr->mflag & MFLAG_MARK)
+					if (m_ptr->mflag2 & MFLAG2_MARK)
 					{
 						/* Maintain detection */
-						if (m_ptr->mflag & MFLAG_SHOW)
+						if (m_ptr->mflag2 & MFLAG2_SHOW)
 						{
 							/* Forget flag */
-							m_ptr->mflag &= ~(MFLAG_SHOW);
+							m_ptr->mflag2 &= ~(MFLAG2_SHOW);
 
 							/* Still need repairs */
 							repair_monsters = TRUE;
@@ -5688,7 +5688,7 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 						else
 						{
 							/* Forget flag */
-							m_ptr->mflag &= ~(MFLAG_MARK);
+							m_ptr->mflag2 &= ~(MFLAG2_MARK);
 
 							/* Assume invisible */
 							m_ptr->ml = FALSE;

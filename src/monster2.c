@@ -2363,7 +2363,7 @@ void update_mon(int m_idx, bool full)
 
 
 	/* Detected */
-	if (m_ptr->mflag & (MFLAG_MARK)) flag = TRUE;
+	if (m_ptr->mflag2 & (MFLAG2_MARK)) flag = TRUE;
 
 
 	/* Nearby */

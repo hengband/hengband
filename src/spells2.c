@@ -4028,7 +4028,7 @@ bool detect_monsters_normal(int range)
 			repair_monsters = TRUE;
 
 			/* Hack -- Detect monster */
-			m_ptr->mflag |= (MFLAG_MARK | MFLAG_SHOW);
+			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 
 			/* Update the monster */
 			update_mon(i, FALSE);
@@ -4097,7 +4097,7 @@ bool detect_monsters_invis(int range)
 			repair_monsters = TRUE;
 
 			/* Hack -- Detect monster */
-			m_ptr->mflag |= (MFLAG_MARK | MFLAG_SHOW);
+			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 
 			/* Update the monster */
 			update_mon(i, FALSE);
@@ -4170,7 +4170,7 @@ bool detect_monsters_evil(int range)
 			repair_monsters = TRUE;
 
 			/* Hack -- Detect monster */
-			m_ptr->mflag |= (MFLAG_MARK | MFLAG_SHOW);
+			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 
 			/* Update the monster */
 			update_mon(i, FALSE);
@@ -4239,7 +4239,7 @@ bool detect_monsters_nonliving(int range)
 			repair_monsters = TRUE;
 
 			/* Hack -- Detect monster */
-			m_ptr->mflag |= (MFLAG_MARK | MFLAG_SHOW);
+			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 
 			/* Update the monster */
 			update_mon(i, FALSE);
@@ -4306,7 +4306,7 @@ bool detect_monsters_mind(int range)
 			repair_monsters = TRUE;
 
 			/* Hack -- Detect monster */
-			m_ptr->mflag |= (MFLAG_MARK | MFLAG_SHOW);
+			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 
 			/* Update the monster */
 			update_mon(i, FALSE);
@@ -4373,7 +4373,7 @@ bool detect_monsters_string(int range, cptr Match)
 			repair_monsters = TRUE;
 
 			/* Hack -- Detect monster */
-			m_ptr->mflag |= (MFLAG_MARK | MFLAG_SHOW);
+			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 
 			/* Update the monster */
 			update_mon(i, FALSE);
@@ -4450,7 +4450,7 @@ cptr desc_monsters = "変なモンスター";
 			repair_monsters = TRUE;
 
 			/* Hack -- Detect monster */
-			m_ptr->mflag |= (MFLAG_MARK | MFLAG_SHOW);
+			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 
 			/* Update the monster */
 			update_mon(i, FALSE);

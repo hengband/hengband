@@ -1328,7 +1328,7 @@ static void battle_gen(void)
 		if (!m_ptr->r_idx) continue;
 
 		/* Hack -- Detect monster */
-		m_ptr->mflag |= (MFLAG_MARK | MFLAG_SHOW);
+		m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 
 		/* Update the monster */
 		update_mon(i, FALSE);
