@@ -3583,76 +3583,38 @@ static errr parse_line_building(char *buf)
 }
 
 
-static void drop_here(object_type *j_ptr, int by, int bx)
+/*
+ * Place the object j_ptr to a grid
+ */
+static void drop_here(object_type *j_ptr, int y, int x)
 {
-	int i, k, d, s;
-
-	s16b o_idx = 0;
-
-	s16b this_o_idx, next_o_idx = 0;
-
-	bool done = FALSE;
-
-	cave_type *c_ptr = &cave[by][bx];
-
-	/* Scan objects in that grid for combination */
-	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
-	{
-		object_type *o_ptr;
-
-		/* Acquire object */
-		o_ptr = &o_list[this_o_idx];
-
-		/* Acquire next object */
-		next_o_idx = o_ptr->next_o_idx;
-
-		/* Check for combination */
-		if (object_similar(o_ptr, j_ptr))
-		{
-			/* Combine the items */
-			object_absorb(o_ptr, j_ptr);
-
-			/* Success */
-			done = TRUE;
-
-			/* Done */
-			break;
-		}
-	}
+	cave_type *c_ptr = &cave[y][x];
+	object_type *o_ptr;
 
 	/* Get new object */
-	if (!done) o_idx = o_pop();
+	s16b o_idx = o_pop();
+
+	/* Access new object */
+	o_ptr = &o_list[o_idx];
+
+	/* Structure copy */
+	object_copy(o_ptr, j_ptr);
 
 
-	/* Stack */
-	if (!done)
-	{
-		/* Structure copy */
-		object_copy(&o_list[o_idx], j_ptr);
+	/* Locate */
+	o_ptr->iy = y;
+	o_ptr->ix = x;
 
-		/* Access new object */
-		j_ptr = &o_list[o_idx];
+	/* No monster */
+	o_ptr->held_m_idx = 0;
 
-		/* Locate */
-		j_ptr->iy = by;
-		j_ptr->ix = bx;
+	/* Build a stack */
+	o_ptr->next_o_idx = c_ptr->o_idx;
 
-		/* No monster */
-		j_ptr->held_m_idx = 0;
-
-		/* Build a stack */
-		j_ptr->next_o_idx = c_ptr->o_idx;
-
-		/* Place the object */
-		c_ptr->o_idx = o_idx;
-
-		/* Success */
-		done = TRUE;
-	}
-
-	/* Result */
-	return;
+	/* Place the object */
+	c_ptr->o_idx = o_idx;
 }
+
 
 /*
  * Parse a sub-file of the "extra info"
