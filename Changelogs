@@ -1,3 +1,129 @@
+2002-01-26  habu  <habu@akiru>
+
+	* src/report.c:
+	スクリーンダンプの末尾に'\0'を付けてきちんと終端させるようにした。
+
+2002-01-26  Takeshi Mogami  <mogami@akiru>
+
+	* src/files.c:
+	引退のときに、生い立ちの下のメッセージを変更。
+
+2002-01-26  habu  <habu@akiru>
+
+	* src/cmd4.c, src/externs.h, src/report.c:
+	make_screen_dumpをreport.cに移動し、buf_sprintfを使ってダンプを作るようにした。
+
+2002-01-25  habu  <habu@akiru>
+
+	* src/cmd4.c:
+	スクリーンダンプのバッファの長さを計る方法を変更。
+
+	* src/cmd4.c, src/defines.h, src/load.c, src/save.c, src/xtra2.c:
+	引退時のスクリーンダンプ用にサーペントを倒した瞬間の画面を使うようにした。
+	また、待機と将来の引退の為にセーブファイルに保存するようにした。
+	セーブファイルの仕様が変わったのでバージョンが一つ上がっているので注意。
+
+2002-01-25  Takeshi Mogami  <mogami@akiru>
+
+	* src/defines.h, src/rooms.c:
+	教会のモンスターの選択を英語名に頼らずに、モンスター番号で判定するように修正。
+
+2002-01-25  habu  <habu@akiru>
+
+	* src/cmd4.c, src/report.c:
+	ファイルをcloseせずにremoveしていた場所をcloseするように修正。
+
+	* src/cmd4.c:
+	スクリーンダンプ作成中にバッファオーバーが起こらないように修正。
+
+	* src/externs.h, src/report.c, src/variable.c, src/cmd4.c, src/effects.c:
+	キャラクタ死亡時にHTML形式のスクリーンショットを送信する機能を追加。
+	まだ引退時と待機時に対応していない。待機した時にどうするかは考えどころ。
+
+2002-01-25  Takeshi Mogami  <mogami@akiru>
+
+	* autopick.txt, autopick_eng.txt, src/tables.c:
+	autopickで使い道があるので、$REALM1 $REALM2 で no magic でなく none を
+	返えすように修正。
+
+	* src/files.c:
+	- 死亡ダンプのメッセージ履歴を、15行->30行へ
+	- ダンプの生い立ち表示のところ、こないだの変更のせいでバランスが悪かったので、
+	  一行空行追加。
+
+2002-01-25  hoge  <hoge@akiru>
+
+	* lib/edit/k_info_j.txt, lib/edit/t0000001_j.txt, lib/edit/t_lite_j.txt, src/artifact.c, src/cmd1.c, src/cmd6.c, src/load.c, src/melee2.c, src/rooms.c:
+	☆の発動難易度は発動の種類に依存、超隠密はレベルと隠密能力で決定、聖堂騎士は教会で登場、害虫駆除のロッドのレベル変更
+
+2002-01-25  Takeshi Mogami  <mogami@akiru>
+
+	* lib/pref/graf-xxx.prf:
+	いくつか定義追加。バイルと時空wyrm、黒衣の修行僧、黄衣の修行僧はタイル追加。
+
+	* lib/pref/pref-mac.prf, lib/pref/pref-win.prf, lib/pref/pref-x11.prf:
+	マクロトリガーについて、同じキーなら同じ名前になるように統一。
+
+	* src/cmd4.c, src/files.c:
+	- '@'コマンドでファイルを読み込むときに pref ディレクトリから読み
+	  込んでからユーザーディレクトリから読み込むが、エラーはユーザー
+	  ディレクトリのものだけを返すので、実際はprefのファイルを読んで
+	  いてもエラーメッセージが出ていた。それを修正して、両方失敗したの
+	  か pref からだけ読めたのかわかるようにした。
+	- ついてに、設定ファイルによるオプション変更に失敗したときのエラー
+	  メッセージ修正。
+
+2002-01-24  Takeshi Mogami  <mogami@akiru>
+
+	* lib/pref/graf-xxx.prf:
+	イケタ、インターネット'e'、ピカチャウ、ぷよ。
+
+	* src/spells3.c:
+	アーティファクト生成で、失敗するような選択は最初から出来ないように修正。
+
+	* lib/edit/r_info_j.txt:
+	巨大火アリの英語名を変えてなかったので、Giant red ant ->Giant fire ant に変更。
+
+	* src/files.c:
+	ヘルプファイル用にZ240のshow_file()からコピペしてきたときに、reverse フラグの処理を
+	間違って消していたので、復活させた。
+
+	* src/files.c:
+	もう使わなくなった prt_num()等を削除。
+
+	* src/files.c:
+	set user id を使っているときに、safe_setuid_drop()がちゃんと働いてユーザー設定
+	ファイルを読み込めるように、さらに修正。
+
+	* src/util.c:
+	get_check()の中の、漢字を含むメッセージに対して先頭の 70"byte"をコピーという危険な処理
+	        (void)strnfmt(buf, 78, "%.70s[y/n] ", prompt);
+	をmb_strlcpy()を使って書き直し。
+	safe_setuid_drop();の処理がちゃんと動くか実験中に偶然不具合が起ってバグが判明した。
+
+	* src/japanese.c:
+	ずっと前に直したはずのバグ。mb_strlcpy()で、コピー元が漢字かどうかで条件分岐する
+	はずのところをまだ書き込んでないコピー先で iskanji() を見てるというアホなバグ修正。
+
+2002-01-24  henkma  <henkma@akiru>
+
+	* src/cmd1.c:
+	浮遊が付いてなくても荷物が軽ければ水の上を走れるように修正。
+	走るコマンドで、歩くことの繰り返し以上の情報すなわち未鑑定の
+	ものに浮遊が付いてるかどうかの情報が得られてしまうことがなく
+	なった。
+
+2002-01-23  habu  <habu@akiru>
+
+	* src/xtra1.c: Minor code cleanup.
+
+2002-01-23  Takeshi Mogami  <mogami@akiru>
+
+	* lib/pref/xtra-xxx.prf, Changelogs, lib/help/jtown.txt, lib/pref/graf-xxx.prf:
+	- jtown 全角０→0
+	- xtra-xxx.prf 古い行を削除。
+	- 一部修正。
+
 2002-01-23  habu  <habu@akiru>
 
 	* src/cmd6.c, src/defines.h, src/dungeon.c, src/externs.h, src/generate.c, src/init1.c, src/init2.c, src/load.c, src/main-win.c, src/main.c, src/melee2.c, src/monster2.c, src/object2.c, src/racial.c, src/save.c, src/spells1.c, src/spells2.c, src/store.c, src/types.h, src/util.c, src/wild.c, src/wizard2.c, src/xtra1.c, src/xtra2.c, src/angband.h, src/artifact.c, src/birth.c, src/bldg.c, src/cmd1.c, src/cmd2.c, src/cmd3.c, src/cmd4.c, src/cmd5.c:
