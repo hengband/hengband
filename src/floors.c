@@ -729,6 +729,26 @@ static void get_out_monster(void)
 
 
 /*
+ * Is this feature has special meaning (except floor_id) with c_ptr->special?
+ */
+static bool feat_uses_special(byte feat)
+{
+	switch (feat)
+	{
+	case FEAT_QUEST_ENTER:
+	case FEAT_QUEST_EXIT:
+	case FEAT_QUEST_DOWN:
+	case FEAT_QUEST_UP:
+	case FEAT_TOWN:
+	case FEAT_ENTRANCE:
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+
+/*
  * Maintain quest monsters, mark next floor_id at stairs, save current
  * floor, and prepare to enter next floor.
  */
@@ -889,7 +909,7 @@ void leave_floor(void)
 			prepare_change_floor_mode(CFM_RAND_PLACE | CFM_NO_RETURN);
 
 			/* Mega Hack -- It's not the stairs you enter.  Disable it.  */
-			cave[py][px].special = 0;
+			if (!feat_uses_special(cave[py][px].feat)) cave[py][px].special = 0;
 		}
 		else
 		{
@@ -911,7 +931,7 @@ void leave_floor(void)
 		c_ptr = &cave[py][px];
 
 		/* Get back to old saved floor? */
-		if (c_ptr->special && get_sf_ptr(c_ptr->special))
+		if (c_ptr->special && !feat_uses_special(c_ptr->feat) && get_sf_ptr(c_ptr->special))
 		{
 			/* Saved floor is exist.  Use it. */
 			new_floor_id = c_ptr->special;
@@ -920,7 +940,7 @@ void leave_floor(void)
 		/* Extract level movement number */
 		if (change_floor_mode & CFM_DOWN) move_num = 1;
 		else if (change_floor_mode & CFM_UP) move_num = -1;
-		
+
 		/* Mark shaft up/down */
 		if (c_ptr->feat == FEAT_LESS_LESS ||
 		    c_ptr->feat == FEAT_MORE_MORE)
@@ -932,15 +952,16 @@ void leave_floor(void)
 		/* Get out from or Enter the dungeon */
 		if (change_floor_mode & CFM_DOWN)
 		{
+			/* Hack -- Prevent "wild to wild stair" */
 			if (!dun_level)
-				move_num = d_info[c_ptr->special].mindepth;
+				move_num = d_info[(c_ptr->feat == FEAT_ENTRANCE) ? c_ptr->special : DUNGEON_ANGBAND].mindepth;
 		}
 		else if (change_floor_mode & CFM_UP)
 		{
 			if (dun_level + move_num < d_info[dungeon_type].mindepth)
 				move_num = -dun_level;
 		}
-		
+
 		dun_level += move_num;
 	}
 
@@ -992,7 +1013,7 @@ void leave_floor(void)
 		new_floor_id = get_new_floor_id();
 
 		/* Connect from here */
-		if (c_ptr)
+		if (c_ptr && !feat_uses_special(c_ptr->feat))
 		{
 			c_ptr->special = new_floor_id;
 		}
@@ -1102,13 +1123,16 @@ void change_floor(void)
 				{
 					cave_type *c_ptr = &cave[py][px];
 
-					if (change_floor_mode & (CFM_DOWN | CFM_UP))
+					if (!feat_uses_special(c_ptr->feat))
 					{
-						/* Reset to floor */
-						c_ptr->feat = floor_type[randint0(100)];
+						if (change_floor_mode & (CFM_DOWN | CFM_UP))
+						{
+							/* Reset to floor */
+							c_ptr->feat = floor_type[randint0(100)];
+						}
+
+						c_ptr->special = 0;
 					}
-					
-					c_ptr->special = 0;
 				}
 			}
 		}
@@ -1296,11 +1320,14 @@ void change_floor(void)
 						c_ptr->feat = FEAT_LESS;
 				}
 
-				/* Paranoia -- Clear mimic */
-				c_ptr->mimic = 0;
+				if (!feat_uses_special(c_ptr->feat))
+				{
+					/* Paranoia -- Clear mimic */
+					c_ptr->mimic = 0;
 
-				/* Connect to previous floor */
-				c_ptr->special = p_ptr->floor_id;
+					/* Connect to previous floor */
+					c_ptr->special = p_ptr->floor_id;
+				}
 			}
 		}
 
@@ -1450,6 +1477,7 @@ void stair_creation(void)
 				cave_type *c_ptr = &cave[y][x];
 
 				if (!c_ptr->special) continue;
+				if (feat_uses_special(c_ptr->feat)) continue;
 				if (c_ptr->special != dest_floor_id) continue;
 
 				/* Remove old stairs */
@@ -1495,5 +1523,3 @@ void stair_creation(void)
 	/* Connect this stairs to the destination */
 	cave[py][px].special = dest_floor_id;
 }
-
-
