@@ -313,7 +313,8 @@ Keywords:
   lights            : Light sources match.
   junks             : Junk items like Shard of Pottery or etc. match.
   spellbooks        : All books match.
-  hafted weapons    : Hafted weapons match. For priests.
+  favorite weapons  : Weapons suitable for your class (for Priest, Monk,
+                      BeastMaster, ForceTrainer, Cavalry, and Ninja)
 
   You may also use keywords which match specified kinds of equipment:
   weapons, armors, missiles, magical devices, lights, junks, spellbooks, 

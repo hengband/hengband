@@ -63,6 +63,7 @@ static object_type autopick_last_destroyed_object;
 #define FLG_HELMS	    45
 #define FLG_GLOVES	    46
 #define FLG_BOOTS           47
+#define FLG_FAVORITE        48
 
 #ifdef JP
 
@@ -119,6 +120,7 @@ static object_type autopick_last_destroyed_object;
 #define KEY_HELMS "³õ"
 #define KEY_GLOVES "äÆ¼ê"
 #define KEY_BOOTS "·¤"
+#define KEY_FAVORITE "ÆÀ°ÕÉð´ï"
 
 #else 
 
@@ -165,6 +167,7 @@ static object_type autopick_last_destroyed_object;
 #define KEY_HELMS "helms"
 #define KEY_GLOVES "gloves"
 #define KEY_BOOTS "boots"
+#define KEY_FAVORITE "favorite weapons"
 
 #endif /* JP */
 
@@ -263,6 +266,7 @@ cptr autopick_line_from_entry(autopick_type *entry)
 	else if (IS_FLG(FLG_HELMS)) ADD_KEY2(KEY_HELMS);
 	else if (IS_FLG(FLG_GLOVES)) ADD_KEY2(KEY_GLOVES);
 	else if (IS_FLG(FLG_BOOTS)) ADD_KEY2(KEY_BOOTS);
+	else if (IS_FLG(FLG_FAVORITE)) ADD_KEY2(KEY_FAVORITE);
 
 	/* You don't need sepalator after adjective */
 	/* 'artifact' is not true adjective */
@@ -510,6 +514,7 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
 	else if (MATCH_KEY2(KEY_HELMS)) ADD_FLG_NOUN(FLG_HELMS);
 	else if (MATCH_KEY2(KEY_GLOVES)) ADD_FLG_NOUN(FLG_GLOVES);
 	else if (MATCH_KEY2(KEY_BOOTS)) ADD_FLG_NOUN(FLG_BOOTS);
+	else if (MATCH_KEY2(KEY_FAVORITE)) ADD_FLG_NOUN(FLG_FAVORITE);
 
 	/* Last 'keyword' must be at the correct location */
 	if (*ptr == ':')
@@ -548,6 +553,69 @@ void autopick_free_entry(autopick_type *entry)
 	string_free(entry->insc);
 }
 
+
+/*
+ * Favorite weapons
+ */
+static bool is_favorite(object_type *o_ptr, bool others_ok)
+{
+	/* Only weapons match */
+	switch(o_ptr->tval)
+	{
+	case TV_BOW: case TV_HAFTED: case TV_POLEARM:
+	case TV_SWORD: case TV_DIGGING:
+		break;
+	default: return FALSE;
+	}
+
+	/* Favorite weapons are varied depend on the class */
+	switch (p_ptr->pclass)
+	{
+	case CLASS_PRIEST:
+	{
+		u32b flgs[TR_FLAG_SIZE];
+		object_flags_known(o_ptr, flgs);
+
+		if (!have_flag(flgs, TR_BLESSED) && 
+		    !(o_ptr->tval == TV_HAFTED))
+			return FALSE;
+		break;
+	}
+
+	case CLASS_MONK:
+	case CLASS_FORCETRAINER:
+		/* Icky to wield? */
+		if (!(s_info[p_ptr->pclass].w_max[o_ptr->tval-TV_BOW][o_ptr->sval]))
+			return FALSE;
+		break;
+
+	case CLASS_BEASTMASTER:
+	case CLASS_CAVALRY:
+	{
+		u32b flgs[TR_FLAG_SIZE];
+		object_flags_known(o_ptr, flgs);
+
+		/* Is it known to be suitable to using while riding? */
+		if (!(have_flag(flgs, TR_RIDING)))
+			return FALSE;
+
+		break;
+	}
+
+	case CLASS_NINJA:
+		/* Icky to wield? */
+		if (s_info[p_ptr->pclass].w_max[o_ptr->tval-TV_BOW][o_ptr->sval] <= WEAPON_EXP_BEGINNER)
+			return FALSE;
+		break;
+
+	default:
+		/* Non-special class */
+		if (others_ok) return TRUE;
+		else return FALSE;
+	}
+
+	return TRUE;
+}
 
 /*
  * A function for Auto-picker/destroyer
@@ -829,6 +897,11 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 	else if (IS_FLG(FLG_BOOTS))
 	{
 		if (!(o_ptr->tval == TV_BOOTS))
+			return FALSE;
+	}
+	else if (IS_FLG(FLG_FAVORITE))
+	{
+		if (!is_favorite(o_ptr, TRUE))
 			return FALSE;
 	}
 
@@ -1440,6 +1513,8 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		body_str = "äÆ¼ê";
 	else if (IS_FLG(FLG_BOOTS))
 		body_str = "¥Ö¡¼¥Ä";
+	else if (IS_FLG(FLG_FAVORITE))
+		body_str = "ÆÀ°ÕÉð´ï";
 
 	*buff = '\0';
 	if (!before_n) 
@@ -1699,6 +1774,8 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		body_str = "gloves";
 	else if (IS_FLG(FLG_BOOTS))
 		body_str = "boots";
+	else if (IS_FLG(FLG_FAVORITE))
+		body_str = "favorite weapons";
 
 	/* Prepare a string for item name */
 	if (*str)
@@ -2094,10 +2171,10 @@ void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 		ADD_FLG(FLG_JUNKS);
 	else if (o_ptr->tval >= TV_LIFE_BOOK)
 		ADD_FLG(FLG_SPELLBOOKS);
-	else if (o_ptr->tval == TV_HAFTED)
-		ADD_FLG(FLG_HAFTED);
+	else if (is_favorite(o_ptr, FALSE))
+		ADD_FLG(FLG_FAVORITE);
 	else if (o_ptr->tval == TV_POLEARM || o_ptr->tval == TV_SWORD
-		 || o_ptr->tval == TV_DIGGING)
+		 || o_ptr->tval == TV_DIGGING || o_ptr->tval == TV_HAFTED)
 		ADD_FLG(FLG_WEAPONS);
 	else if (o_ptr->tval == TV_SHIELD)
 		ADD_FLG(FLG_SHIELDS);
