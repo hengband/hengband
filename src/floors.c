@@ -969,9 +969,6 @@ void change_floor(void)
 					/* Remove slow status */
 					m_ptr->slow = 0;
 
-					/* Remove sleep */
-					m_ptr->csleep = 0;
-
 					/* Remove stun */
 					m_ptr->stunned = 0;
 
