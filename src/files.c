@@ -2153,7 +2153,8 @@ static void display_player_various(void)
 	desc = likert(xsav, 7);
 	display_player_one_line(ENTRY_SKILL_SAVING, desc, likert_color);
 
-	desc = likert(xstl, 1);
+	/* Hack -- 0 is "minimum stealth value", so print "Very Bad" */
+	desc = likert((xstl > 0) ? xstl : -1, 1);
 	display_player_one_line(ENTRY_SKILL_STEALTH, desc, likert_color);
 
 	desc = likert(xfos, 6);
