@@ -1,4 +1,50 @@
+2002-03-05  Takeshi Mogami  <mogami@akiru>
+
+	* src/cmd1.c, src/effects.c, src/melee1.c, src/melee2.c, src/monster2.c, src/mspells1.c, src/spells1.c:
+	幻覚状態の時に死因が ランダムな名前+(?) になってしまっていたのを、
+	ちゃんと正しい名前になるようにした。(?)の追加も廃止。
+
+	* lib/edit/k_info_j.txt:
+	RGRAでNeoさんという人が自分の事と勘違いして騒いでたので、
+	Neo Tsuyoshi → Neo-Tsuyoshi
+
+2002-03-05  habu  <habu@akiru>
+
+	* src/object2.c:
+	さらにエッセンス消去後にもインベントリを並べ変えるように修正。
+
+	* src/object2.c:
+	エッセンス付加後にインベントリを並び変えるように修正。
+
+	* src/cave.c:
+	disturb()の時、モンスターの追跡用情報が更新されるように修正。
+
+2002-03-05  hoge  <hoge@akiru>
+
+	* lib/file/monfear_j.txt, lib/file/monspeak_j.txt:
+	ベビーサタンのメッセージ
+
+	* lib/file/monfear_j.txt, lib/file/monspeak_j.txt, src/cmd1.c, src/dungeon.c, src/mind.c, src/object2.c, src/tables.c, src/xtra1.c:
+	気を練ると攻撃力アップ
+	幽霊のペナアップ
+
+2002-03-05  habu  <habu@akiru>
+
+	* src/wizard1.c:
+	artifact.spo生成で、PYEC、ナイン、バルド矢も含まれるように修正。
+
 2002-03-04  Takeshi Mogami  <mogami@akiru>
+
+	* lib/help/jversion.txt:
+	バージョン履歴に1.0.9の情報追加。
+
+	* lib/edit/r_info_j.txt:
+	カルダームにCAN_SPEAKが付いてなかったので付けた。
+
+	* configure.in:
+	--disable-fontset についての判断のコードが間違っていたので修正。
+
+	* Changelogs: 更新
 
 	* src/main-x11.c:
 	タイル表示のサイズを正方形にするために、
