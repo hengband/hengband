@@ -2119,7 +2119,7 @@ static errr rd_dungeon(void)
 	rd_u16b(&limit);
 
 	/* Verify maximum */
-	if (limit >= max_o_idx)
+	if (limit > max_o_idx)
 	{
 #ifdef JP
 note(format("アイテムの配列が大きすぎる(%d)！", limit));
