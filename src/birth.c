@@ -5581,7 +5581,7 @@ static bool player_birth_aux(void)
 	p_ptr->prace = 0;
 	while(1)
 	{
-		char temp[80*9];
+		char temp[80*10];
 		cptr t;
 
 		if (!get_player_race()) return FALSE;
@@ -5591,7 +5591,7 @@ static bool player_birth_aux(void)
 		roff_to_buf(race_jouhou[p_ptr->prace], 74, temp);
 		t = temp;
 
-		for (i = 0; i< 9; i++)
+		for (i = 0; i< 10; i++)
 		{
 			if(t[0] == 0)
 				break; 
