@@ -580,7 +580,7 @@ put_str("MP ¼ºÎ¨ ¸ú²Ì", y, x + 33);
 					chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[A_INT]] - 1);
 
 					if (p_ptr->heavy_spell) chance += 20;
-					if(p_ptr->dec_mana || p_ptr->easy_spell) chance-=4;
+					if(p_ptr->dec_mana && p_ptr->easy_spell) chance-=4;
 					else if (p_ptr->easy_spell) chance-=3;
 					else if (p_ptr->dec_mana) chance-=2;
 
