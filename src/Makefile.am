@@ -29,5 +29,3 @@ EXTRA_hengband_SOURCES = \
 	main-dos.c main-ibm.c \
 	makefile.bcc makefile.std makefile.dos makefile.ibm \
 	readdib.c script.c wall.bmp
-
-CFLAGS = @CFLAGS@ -Wall -fno-strength-reduce
