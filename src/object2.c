@@ -7601,7 +7601,7 @@ static void add_essence(int mode)
 #endif
 
 	/* Combine the pack */
-	p_ptr->notice |= (PN_COMBINE);
+	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
 	/* Window stuff */
 	p_ptr->window |= (PW_INVEN);
