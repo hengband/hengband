@@ -3556,7 +3556,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 			/* Note the collision */
 			hit_body = TRUE;
 
-			if (m_ptr->csleep)
+			if (MON_CSLEEP(m_ptr))
 			{
 				if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(V_COMPASSION, -1);
 				if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(V_HONOUR, -1);
@@ -4320,7 +4320,7 @@ msg_print("これはあまり良くない気がする。");
 				/* ToDo (Robert): fix the invulnerability */
 				if (cave[y][x].m_idx &&
 				    is_friendly(&m_list[cave[y][x].m_idx]) &&
-				    !(m_ptr->invulner))
+				    !MON_INVULNER(m_ptr))
 				{
 					char m_name[80];
 					monster_desc(m_name, &m_list[cave[y][x].m_idx], 0);

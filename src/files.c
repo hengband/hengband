@@ -1825,8 +1825,8 @@ static void display_player_middle(void)
 		}
 		else
 		{
-			if (m_list[p_ptr->riding].fast) tmp_speed += 10;
-			if (m_list[p_ptr->riding].slow) tmp_speed -= 10;
+			if (MON_FAST(&m_list[p_ptr->riding])) tmp_speed += 10;
+			if (MON_SLOW(&m_list[p_ptr->riding])) tmp_speed -= 10;
 		}
 
 		if (tmp_speed)
@@ -6247,6 +6247,9 @@ prt("ゲームをセーブしています... 失敗！", 0, 0);
 
 	/* Update stuff */
 	update_stuff();
+
+	/* Initialize monster process */
+	mproc_init();
 
 	/* HACK -- reset the hackish flag */
 	hack_mind = TRUE;

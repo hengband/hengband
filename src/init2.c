@@ -1606,7 +1606,7 @@ static errr init_other(void)
 	C_MAKE(m_list, max_m_idx, monster_type);
 
 	/* Allocate and Wipe the monster process list */
-	for (i = 0; i < MAX_MPROC; i++)
+	for (i = 0; i < MAX_MTIMED; i++)
 	{
 		C_MAKE(mproc_list[i], max_m_idx, s16b);
 		mproc_max[i] = 1;

@@ -310,7 +310,7 @@ bool monst_spell_monst(int m_idx)
 	if (!pet) u_mode |= PM_ALLOW_UNIQUE;
 
 	/* Cannot cast spells when confused */
-	if (m_ptr->confused) return (FALSE);
+	if (MON_CONFUSED(m_ptr)) return (FALSE);
 
 	/* Extract the racial spell flags */
 	f4 = r_ptr->flags4;
@@ -701,7 +701,7 @@ bool monst_spell_monst(int m_idx)
 	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(1, 0);
 
 	/* Check for spell failure (inate attacks never fail) */
-	if (!spell_is_inate(thrown_spell) && (in_no_magic_dungeon || (m_ptr->stunned && one_in_(2))))
+	if (!spell_is_inate(thrown_spell) && (in_no_magic_dungeon || (MON_STUNNED(m_ptr) && one_in_(2))))
 	{
 		disturb(1, 0);
 		/* Message */
@@ -2670,15 +2670,7 @@ bool monst_spell_monst(int m_idx)
 		}
 		else
 		{
-			int tmp = t_ptr->monfear + randint0(4) + 4;
-
-			if (!t_ptr->monfear)
-			{
-				fear = TRUE;
-				mproc_add(t_idx, MPROC_MONFEAR);
-			}
-
-			t_ptr->monfear = (tmp < 200) ? tmp : 200;
+			if (set_monster_monfear(t_idx, MON_MONFEAR(t_ptr) + randint0(4) + 4)) fear = TRUE;
 		}
 
 		wake_up = TRUE;
@@ -2726,16 +2718,13 @@ bool monst_spell_monst(int m_idx)
 		}
 		else
 		{
-			int tmp = t_ptr->confused + 12 + randint0(4);
-
 #ifdef JP
 			if (see_t) msg_format("%^sは目が見えなくなった！ ", t_name);
 #else
 			if (see_t) msg_format("%^s is blinded!", t_name);
 #endif
 
-			t_ptr->confused = (tmp < 200) ? tmp : 200;
-			if (!t_ptr->mproc_idx[MPROC_CONFUSED]) mproc_add(t_idx, MPROC_CONFUSED);
+			(void)set_monster_confused(t_idx, MON_CONFUSED(t_ptr) + 12 + randint0(4));
 		}
 
 		wake_up = TRUE;
@@ -2781,16 +2770,13 @@ bool monst_spell_monst(int m_idx)
 		}
 		else
 		{
-			int tmp = t_ptr->confused + 12 + randint0(4);
-
 #ifdef JP
 			if (see_t) msg_format("%^sは混乱したようだ。", t_name);
 #else
 			if (see_t) msg_format("%^s seems confused.", t_name);
 #endif
 
-			t_ptr->confused = (tmp < 200) ? tmp : 200;
-			if (!t_ptr->mproc_idx[MPROC_CONFUSED]) mproc_add(t_idx, MPROC_CONFUSED);
+			(void)set_monster_confused(t_idx, MON_CONFUSED(t_ptr) + 12 + randint0(4));
 		}
 
 		wake_up = TRUE;
@@ -2837,18 +2823,14 @@ bool monst_spell_monst(int m_idx)
 		}
 		else
 		{
-			if (!t_ptr->slow)
+			if (set_monster_slow(t_idx, MON_SLOW(t_ptr) + 50))
 			{
 #ifdef JP
 				if (see_t) msg_format("%sの動きが遅くなった。", t_name);
 #else
 				if (see_t) msg_format("%^s starts moving slower.", t_name);
 #endif
-				mproc_add(t_idx, MPROC_SLOW);
 			}
-
-			t_ptr->slow = MIN(200, t_ptr->slow + 50);
-			if (p_ptr->riding == t_idx) p_ptr->update |= PU_BONUS;
 		}
 
 		wake_up = TRUE;
@@ -2895,16 +2877,13 @@ bool monst_spell_monst(int m_idx)
 		}
 		else
 		{
-			int tmp = t_ptr->stunned + randint1(4) + 4;
-
 #ifdef JP
 			if (see_t) msg_format("%^sは麻痺した！", t_name);
 #else
 			if (see_t) msg_format("%^s is paralyzed!", t_name);
 #endif
 
-			t_ptr->stunned = (tmp < 200) ? tmp : 200;
-			if (!t_ptr->mproc_idx[MPROC_STUNNED]) mproc_add(t_idx, MPROC_STUNNED);
+			(void)set_monster_stunned(t_idx, MON_STUNNED(t_ptr) + randint1(4) + 4);
 		}
 
 		wake_up = TRUE;
@@ -2932,17 +2911,14 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		/* Allow quick speed increases to base+10 */
-		if (!m_ptr->fast)
+		if (set_monster_fast(m_idx, MON_FAST(m_ptr) + 100))
 		{
 #ifdef JP
 			if (see_m) msg_format("%^sの動きが速くなった。", m_name);
 #else
 			if (see_m) msg_format("%^s starts moving faster.", m_name);
 #endif
-			mproc_add(m_idx, MPROC_FAST);
 		}
-		m_ptr->fast = MIN(200, m_ptr->fast + 100);
-		if (p_ptr->riding == m_idx) p_ptr->update |= PU_BONUS;
 		break;
 
 	/* RF6_HAND_DOOM */
@@ -3025,7 +3001,6 @@ bool monst_spell_monst(int m_idx)
 #else
 				msg_format("%^s looks healthier.", m_name);
 #endif
-
 			}
 			else
 			{
@@ -3038,11 +3013,10 @@ bool monst_spell_monst(int m_idx)
 		if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 
 		/* Cancel fear */
-		if (m_ptr->monfear)
+		if (MON_MONFEAR(m_ptr))
 		{
 			/* Cancel fear */
-			m_ptr->monfear = 0;
-			mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_MONFEAR], MPROC_MONFEAR);
+			(void)set_monster_monfear(m_idx, 0);
 
 			/* Message */
 #ifdef JP
@@ -3050,7 +3024,6 @@ bool monst_spell_monst(int m_idx)
 #else
 			if (see_m) msg_format("%^s recovers %s courage.", m_name, m_poss);
 #endif
-
 		}
 
 		break;
@@ -3067,7 +3040,6 @@ bool monst_spell_monst(int m_idx)
 #else
 				msg_format("%^s casts a Globe of Invulnerability.", m_name);
 #endif
-
 			}
 			else
 			{
@@ -3075,14 +3047,7 @@ bool monst_spell_monst(int m_idx)
 			}
 		}
 
-		if (!m_ptr->invulner)
-		{
-			m_ptr->invulner = randint1(4) + 4;
-			mproc_add(m_idx, MPROC_INVULNER);
-		}
-
-		if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-		if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
+		if (!MON_INVULNER(m_ptr)) (void)set_monster_invulner(m_idx, randint1(4) + 4, FALSE);
 		break;
 
 	/* RF6_BLINK */
@@ -4218,18 +4183,7 @@ bool monst_spell_monst(int m_idx)
 		break;
 	}
 
-	if (wake_up && t_ptr->csleep)
-	{
-		t_ptr->csleep = 0;
-		mproc_remove(t_idx, t_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
-		if (tr_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
-		if (t_ptr->ml)
-		{
-			/* Redraw the health bar */
-			if (p_ptr->health_who == t_idx) p_ptr->redraw |= (PR_HEALTH);
-			if (p_ptr->riding == t_idx) p_ptr->redraw |= (PR_UHEALTH);
-		}
-	}
+	if (wake_up) (void)set_monster_csleep(t_idx, 0);
 
 	if (fear && see_t)
 	{
@@ -4238,7 +4192,6 @@ bool monst_spell_monst(int m_idx)
 #else
 		msg_format("%^s flees in terror!", t_name);
 #endif
-
 	}
 
 	if (m_ptr->ml && maneable && !world_monster && !p_ptr->blind && (p_ptr->pclass == CLASS_IMITATOR))

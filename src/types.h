@@ -584,17 +584,11 @@ struct monster_type
 	s16b maxhp;		/* Max Hit points */
 	s16b max_maxhp;		/* Max Max Hit points */
 
-	s16b csleep;		/* Inactive counter */
+	s16b mtimed[MAX_MTIMED];	/* Timed status counter */
+	s16b mproc_idx[MAX_MTIMED];
 
 	byte mspeed;	        /* Monster "speed" */
 	s16b energy_need;	/* Monster "energy" */
-
-	byte fast;		/* Monster is stunned */
-	byte slow;		/* Monster is stunned */
-	byte stunned;		/* Monster is stunned */
-	byte confused;		/* Monster is confused */
-	byte monfear;		/* Monster is afraid */
-	byte invulner;          /* Monster is temporarily invulnerable */
 
 	byte cdis;		/* Current dis from player */
 
@@ -615,8 +609,6 @@ struct monster_type
 	u32b smart;			/* Field for "smart_learn" */
 
 	s16b parent_m_idx;
-
-	s16b mproc_idx[MAX_MPROC];
 };
 
 

@@ -705,7 +705,7 @@ static void rd_monster_old(monster_type *m_ptr)
 	{
 		rd_s16b(&m_ptr->max_maxhp);
 	}
-	rd_s16b(&m_ptr->csleep);
+	rd_s16b(&m_ptr->mtimed[MTIMED_CSLEEP]);
 	rd_byte(&m_ptr->mspeed);
 	if (z_older_than(10, 4, 2))
 	{
@@ -719,17 +719,22 @@ static void rd_monster_old(monster_type *m_ptr)
 
 	if (z_older_than(10,0,7))
 	{
-		m_ptr->fast = 0;
-		m_ptr->slow = 0;
+		m_ptr->mtimed[MTIMED_FAST] = 0;
+		m_ptr->mtimed[MTIMED_SLOW] = 0;
 	}
 	else
 	{
-		rd_byte(&m_ptr->fast);
-		rd_byte(&m_ptr->slow);
+		rd_byte(&tmp8u);
+		m_ptr->mtimed[MTIMED_FAST] = (s16b)tmp8u;
+		rd_byte(&tmp8u);
+		m_ptr->mtimed[MTIMED_SLOW] = (s16b)tmp8u;
 	}
-	rd_byte(&m_ptr->stunned);
-	rd_byte(&m_ptr->confused);
-	rd_byte(&m_ptr->monfear);
+	rd_byte(&tmp8u);
+	m_ptr->mtimed[MTIMED_STUNNED] = (s16b)tmp8u;
+	rd_byte(&tmp8u);
+	m_ptr->mtimed[MTIMED_CONFUSED] = (s16b)tmp8u;
+	rd_byte(&tmp8u);
+	m_ptr->mtimed[MTIMED_MONFEAR] = (s16b)tmp8u;
 
 	if (z_older_than(10,0,10))
 	{
@@ -747,7 +752,8 @@ static void rd_monster_old(monster_type *m_ptr)
 		rd_s16b(&m_ptr->target_x);
 	}
 
-	rd_byte(&m_ptr->invulner);
+	rd_byte(&tmp8u);
+	m_ptr->mtimed[MTIMED_INVULNER] = (s16b)tmp8u;
 
 	if (!(z_major == 2 && z_minor == 0 && z_patch == 6))
 		rd_u32b(&m_ptr->smart);
@@ -799,6 +805,7 @@ static void rd_monster(monster_type *m_ptr)
 {
 	u32b flags;
 	char buf[128];
+	byte tmp8u;
 
 	if (h_older_than(1, 5, 0, 0))
 	{
@@ -828,31 +835,55 @@ static void rd_monster(monster_type *m_ptr)
 	if (flags & SAVE_MON_SUB_ALIGN) rd_byte(&m_ptr->sub_align);
 	else m_ptr->sub_align = 0;
 
-	if (flags & SAVE_MON_CSLEEP) rd_s16b(&m_ptr->csleep);
-	else m_ptr->csleep = 0;
+	if (flags & SAVE_MON_CSLEEP) rd_s16b(&m_ptr->mtimed[MTIMED_CSLEEP]);
+	else m_ptr->mtimed[MTIMED_CSLEEP] = 0;
 
 	rd_byte(&m_ptr->mspeed);
 
 	rd_s16b(&m_ptr->energy_need);
 
-	if (flags & SAVE_MON_FAST) rd_byte(&m_ptr->fast);
-	else m_ptr->fast = 0;
-	if (flags & SAVE_MON_SLOW) rd_byte(&m_ptr->slow);
-	else m_ptr->slow = 0;
-	if (flags & SAVE_MON_STUNNED) rd_byte(&m_ptr->stunned);
-	else m_ptr->stunned = 0;
-	if (flags & SAVE_MON_CONFUSED) rd_byte(&m_ptr->confused);
-	else m_ptr->confused = 0;
-	if (flags & SAVE_MON_MONFEAR) rd_byte(&m_ptr->monfear);
-	else m_ptr->monfear = 0;
+	if (flags & SAVE_MON_FAST)
+	{
+		rd_byte(&tmp8u);
+		m_ptr->mtimed[MTIMED_FAST] = (s16b)tmp8u;
+	}
+	else m_ptr->mtimed[MTIMED_FAST] = 0;
+	if (flags & SAVE_MON_SLOW)
+	{
+		rd_byte(&tmp8u);
+		m_ptr->mtimed[MTIMED_SLOW] = (s16b)tmp8u;
+	}
+	else m_ptr->mtimed[MTIMED_SLOW] = 0;
+	if (flags & SAVE_MON_STUNNED)
+	{
+		rd_byte(&tmp8u);
+		m_ptr->mtimed[MTIMED_STUNNED] = (s16b)tmp8u;
+	}
+	else m_ptr->mtimed[MTIMED_STUNNED] = 0;
+	if (flags & SAVE_MON_CONFUSED)
+	{
+		rd_byte(&tmp8u);
+		m_ptr->mtimed[MTIMED_CONFUSED] = (s16b)tmp8u;
+	}
+	else m_ptr->mtimed[MTIMED_CONFUSED] = 0;
+	if (flags & SAVE_MON_MONFEAR)
+	{
+		rd_byte(&tmp8u);
+		m_ptr->mtimed[MTIMED_MONFEAR] = (s16b)tmp8u;
+	}
+	else m_ptr->mtimed[MTIMED_MONFEAR] = 0;
 
 	if (flags & SAVE_MON_TARGET_Y) rd_s16b(&m_ptr->target_y);
 	else m_ptr->target_y = 0;
 	if (flags & SAVE_MON_TARGET_X) rd_s16b(&m_ptr->target_x);
 	else m_ptr->target_x = 0;
 
-	if (flags & SAVE_MON_INVULNER) rd_byte(&m_ptr->invulner);
-	else m_ptr->invulner = 0;
+	if (flags & SAVE_MON_INVULNER)
+	{
+		rd_byte(&tmp8u);
+		m_ptr->mtimed[MTIMED_INVULNER] = (s16b)tmp8u;
+	}
+	else m_ptr->mtimed[MTIMED_INVULNER] = 0;
 
 	if (flags & SAVE_MON_SMART) rd_u32b(&m_ptr->smart);
 	else m_ptr->smart = 0;
@@ -2608,7 +2639,7 @@ note(format("モンスターの配列が大きすぎる(%d)！", limit));
 	/* Read the monsters */
 	for (i = 1; i < limit; i++)
 	{
-		int m_idx, cmi;
+		int m_idx;
 		monster_type *m_ptr;
 
 		/* Get a new record */
@@ -2632,14 +2663,6 @@ note(format("モンスター配置エラー (%d <> %d)", i, m_idx));
 
 		/* Read the monster */
 		rd_monster(m_ptr);
-		for (cmi = 0; cmi < MAX_MPROC; cmi++) m_ptr->mproc_idx[cmi] = 0;
-		if (m_ptr->csleep) mproc_add(m_idx, MPROC_CSLEEP);
-		if (m_ptr->fast) mproc_add(m_idx, MPROC_FAST);
-		if (m_ptr->slow) mproc_add(m_idx, MPROC_SLOW);
-		if (m_ptr->stunned) mproc_add(m_idx, MPROC_STUNNED);
-		if (m_ptr->confused) mproc_add(m_idx, MPROC_CONFUSED);
-		if (m_ptr->monfear) mproc_add(m_idx, MPROC_MONFEAR);
-		if (m_ptr->invulner) mproc_add(m_idx, MPROC_INVULNER);
 
 
 		/* Access grid */
@@ -2896,7 +2919,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	for (i = 1; i < limit; i++)
 	{
 		cave_type *c_ptr;
-		int m_idx, cmi;
+		int m_idx;
 		monster_type *m_ptr;
 
 		/* Get a new record */
@@ -2911,14 +2934,6 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 		/* Read the monster */
 		rd_monster(m_ptr);
-		for (cmi = 0; cmi < MAX_MPROC; cmi++) m_ptr->mproc_idx[cmi] = 0;
-		if (m_ptr->csleep) mproc_add(m_idx, MPROC_CSLEEP);
-		if (m_ptr->fast) mproc_add(m_idx, MPROC_FAST);
-		if (m_ptr->slow) mproc_add(m_idx, MPROC_SLOW);
-		if (m_ptr->stunned) mproc_add(m_idx, MPROC_STUNNED);
-		if (m_ptr->confused) mproc_add(m_idx, MPROC_CONFUSED);
-		if (m_ptr->monfear) mproc_add(m_idx, MPROC_MONFEAR);
-		if (m_ptr->invulner) mproc_add(m_idx, MPROC_INVULNER);
 
 
 		/* Access grid */

@@ -219,23 +219,9 @@ void reset_tim_flags(void)
 
 	if (p_ptr->riding)
 	{
-		monster_type *m_ptr = &m_list[p_ptr->riding];
-
-		if (m_ptr->fast)
-		{
-			m_ptr->fast = 0;
-			mproc_remove(p_ptr->riding, m_ptr->mproc_idx[MPROC_FAST], MPROC_FAST);
-		}
-		if (m_ptr->slow)
-		{
-			m_ptr->slow = 0;
-			mproc_remove(p_ptr->riding, m_ptr->mproc_idx[MPROC_SLOW], MPROC_SLOW);
-		}
-		if (m_ptr->invulner)
-		{
-			m_ptr->invulner = 0;
-			mproc_remove(p_ptr->riding, m_ptr->mproc_idx[MPROC_INVULNER], MPROC_INVULNER);
-		}
+		(void)set_monster_fast(p_ptr->riding, 0);
+		(void)set_monster_slow(p_ptr->riding, 0);
+		(void)set_monster_invulner(p_ptr->riding, 0, FALSE);
 	}
 
 	if (p_ptr->pclass == CLASS_BARD)

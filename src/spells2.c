@@ -4605,18 +4605,9 @@ void aggravate_monsters(int who)
 		if (m_ptr->cdis < MAX_SIGHT * 2)
 		{
 			/* Wake up */
-			if (m_ptr->csleep)
+			if (MON_CSLEEP(m_ptr))
 			{
-				/* Wake up */
-				m_ptr->csleep = 0;
-				mproc_remove(i, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
-				if (r_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
-				if (m_ptr->ml)
-				{
-					/* Redraw (later) if needed */
-					if (p_ptr->health_who == i) p_ptr->redraw |= (PR_HEALTH);
-					if (p_ptr->riding == i) p_ptr->redraw |= (PR_UHEALTH);
-				}
+				(void)set_monster_csleep(i, 0);
 				sleep = TRUE;
 			}
 			if (!is_pet(m_ptr)) m_ptr->mflag2 |= MFLAG2_NOPET;
@@ -4627,8 +4618,7 @@ void aggravate_monsters(int who)
 		{
 			if (!is_pet(m_ptr))
 			{
-				m_ptr->fast = MIN(200, m_ptr->fast + 100);
-				if (!m_ptr->mproc_idx[MPROC_FAST]) mproc_add(i, MPROC_FAST);
+				(void)set_monster_fast(i, MON_FAST(m_ptr) + 100);
 				speed = TRUE;
 			}
 		}
@@ -4686,17 +4676,9 @@ bool genocide_aux(int m_idx, int power, bool player_cast, int dam_side, cptr spe
 			msg_format("%^s is unaffected.", m_name);
 #endif
 		}
-		if (m_ptr->csleep)
+		if (MON_CSLEEP(m_ptr))
 		{
-			m_ptr->csleep = 0;
-			mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
-			if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
-			if (m_ptr->ml)
-			{
-				/* Redraw (later) if needed */
-				if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-				if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
-			}
+			(void)set_monster_csleep(m_idx, 0);
 			if (see_m)
 			{
 #ifdef JP
@@ -4953,8 +4935,8 @@ bool probing(void)
 			monster_desc(m_name, m_ptr, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
 
 			speed = m_ptr->mspeed - 110;
-			if(m_ptr->fast) speed += 10;
-			if(m_ptr->slow) speed -= 10;
+			if (MON_FAST(m_ptr)) speed += 10;
+			if (MON_SLOW(m_ptr)) speed -= 10;
 
 			/* Get the monster's alignment */
 #ifdef JP
@@ -4991,17 +4973,17 @@ sprintf(buf, "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:", m_name, align, m_
 			}
 
 #ifdef JP
-			if (m_ptr->csleep) strcat(buf,"¿çÌ² ");
-			if (m_ptr->stunned) strcat(buf,"Û¯Û° ");
-			if (m_ptr->monfear) strcat(buf,"¶²ÉÝ ");
-			if (m_ptr->confused) strcat(buf,"º®Íð ");
-			if (m_ptr->invulner) strcat(buf,"ÌµÅ¨ ");
+			if (MON_CSLEEP(m_ptr)) strcat(buf,"¿çÌ² ");
+			if (MON_STUNNED(m_ptr)) strcat(buf,"Û¯Û° ");
+			if (MON_MONFEAR(m_ptr)) strcat(buf,"¶²ÉÝ ");
+			if (MON_CONFUSED(m_ptr)) strcat(buf,"º®Íð ");
+			if (MON_INVULNER(m_ptr)) strcat(buf,"ÌµÅ¨ ");
 #else
-			if (m_ptr->csleep) strcat(buf,"sleeping ");
-			if (m_ptr->stunned) strcat(buf,"stunned ");
-			if (m_ptr->monfear) strcat(buf,"scared ");
-			if (m_ptr->confused) strcat(buf,"confused ");
-			if (m_ptr->invulner) strcat(buf,"invulnerable ");
+			if (MON_CSLEEP(m_ptr)) strcat(buf,"sleeping ");
+			if (MON_STUNNED(m_ptr)) strcat(buf,"stunned ");
+			if (MON_MONFEAR(m_ptr)) strcat(buf,"scared ");
+			if (MON_CONFUSED(m_ptr)) strcat(buf,"confused ");
+			if (MON_INVULNER(m_ptr)) strcat(buf,"invulnerable ");
 #endif
 			buf[strlen(buf)-1] = '\0';
 			prt(buf,0,0);
@@ -5666,11 +5648,7 @@ msg_format("%^s¤Ï¶ìÄË¤Çµã¤­¤ï¤á¤¤¤¿¡ª", m_name);
 					damage = (sn ? damroll(4, 8) : (m_ptr->hp + 1));
 
 					/* Monster is certainly awake */
-					if (m_ptr->csleep)
-					{
-						m_ptr->csleep = 0;
-						mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
-					}
+					(void)set_monster_csleep(c_ptr->m_idx, 0);
 
 					/* Apply damage directly */
 					m_ptr->hp -= damage;
@@ -5680,7 +5658,7 @@ msg_format("%^s¤Ï¶ìÄË¤Çµã¤­¤ï¤á¤¤¤¿¡ª", m_name);
 					{
 						/* Message */
 #ifdef JP
-msg_format("%^s¤Ï´äÀÐ¤ËËä¤â¤ì¤Æ¤·¤Þ¤Ã¤¿¡ª", m_name);
+						msg_format("%^s¤Ï´äÀÐ¤ËËä¤â¤ì¤Æ¤·¤Þ¤Ã¤¿¡ª", m_name);
 #else
 						msg_format("%^s is embedded in the rock!", m_name);
 #endif
@@ -5969,12 +5947,10 @@ static void cave_temp_room_lite(void)
 			if (r_ptr->flags2 & (RF2_SMART)) chance = 100;
 
 			/* Sometimes monsters wake up */
-			if (m_ptr->csleep && (randint0(100) < chance))
+			if (MON_CSLEEP(m_ptr) && (randint0(100) < chance))
 			{
 				/* Wake up! */
-				m_ptr->csleep = 0;
-				mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
-				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+				(void)set_monster_csleep(c_ptr->m_idx, 0);
 
 				/* Notice the "waking up" */
 				if (is_seen(m_ptr))
@@ -5986,17 +5962,10 @@ static void cave_temp_room_lite(void)
 
 					/* Dump a message */
 #ifdef JP
-msg_format("%^s¤¬ÌÜ¤ò³Ð¤Þ¤·¤¿¡£", m_name);
+					msg_format("%^s¤¬ÌÜ¤ò³Ð¤Þ¤·¤¿¡£", m_name);
 #else
 					msg_format("%^s wakes up.", m_name);
 #endif
-				}
-
-				if (m_ptr->ml)
-				{
-					/* Redraw the health bar */
-					if (p_ptr->health_who == c_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
-					if (p_ptr->riding == c_ptr->m_idx) p_ptr->redraw |= (PR_UHEALTH);
 				}
 			}
 		}
@@ -6610,8 +6579,7 @@ msg_print("¼ºÇÔ¤·¤¿¡£");
 	m_ptr = &m_list[c_ptr->m_idx];
 	r_ptr = &r_info[m_ptr->r_idx];
 
-	/* Redraw the health bar */
-	if (p_ptr->health_who == c_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
+	(void)set_monster_csleep(c_ptr->m_idx, 0);
 
 	if (r_ptr->flagsr & RFR_RES_TELE)
 	{
@@ -6622,13 +6590,6 @@ msg_print("¼ºÇÔ¤·¤¿¡£");
 #endif
 
 		if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-
-		if (m_ptr->csleep)
-		{
-			m_ptr->csleep = 0;
-			mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
-			if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
-		}
 
 		/* Failure */
 		return FALSE;

@@ -190,20 +190,6 @@ monster_race *real_r_ptr(monster_type *m_ptr)
 }
 
 
-void mproc_add(int m_idx, int mproc_type)
-{
-	m_list[m_idx].mproc_idx[mproc_type] = mproc_max[mproc_type];
-	mproc_list[mproc_type][mproc_max[mproc_type]++] = m_idx;
-}
-
-
-void mproc_remove(int m_idx, int mproc_idx, int mproc_type)
-{
-	m_list[m_idx].mproc_idx[mproc_type] = 0;
-	mproc_list[mproc_type][mproc_idx] = mproc_list[mproc_type][--mproc_max[mproc_type]];
-}
-
-
 /*
  * Delete a monster by index.
  *
@@ -231,8 +217,8 @@ void delete_monster_idx(int i)
 	/* Hack -- count the number of "reproducers" */
 	if (r_ptr->flags2 & (RF2_MULTIPLY)) num_repro--;
 
-	for (cmi = 0; cmi < MAX_MPROC; cmi++)
-		if (m_ptr->mproc_idx[cmi]) mproc_remove(i, m_ptr->mproc_idx[cmi], cmi);
+	for (cmi = 0; cmi < MAX_MTIMED; cmi++)
+		if (m_ptr->mproc_idx[cmi]) mproc_remove(i, cmi);
 
 
 	/* Hack -- remove target monster */
@@ -383,7 +369,7 @@ static void compact_monsters_aux(int i1, int i2)
 	/* New monster */
 	m_ptr = &m_list[i2];
 
-	for (i = 0; i < MAX_MPROC; i++)
+	for (i = 0; i < MAX_MTIMED; i++)
 	{
 		if (m_ptr->mproc_idx[i]) mproc_list[i][m_ptr->mproc_idx[i]] = i2;
 	}
@@ -540,7 +526,7 @@ void wipe_m_list(void)
 	m_cnt = 0;
 
 	/* Reset "mproc_max[]" */
-	for (i = 0; i < MAX_MPROC; i++) mproc_max[i] = 1;
+	for (i = 0; i < MAX_MTIMED; i++) mproc_max[i] = 1;
 
 	/* Hack -- reset "reproducer" count */
 	num_repro = 0;
@@ -3143,12 +3129,12 @@ msg_print("守りのルーンが壊れた！");
 	m_ptr->fx = x;
 
 
-	/* No "damage" yet */
-	m_ptr->stunned = 0;
-	m_ptr->confused = 0;
-	m_ptr->monfear = 0;
-
-	for (cmi = 0; cmi < MAX_MPROC; cmi++) m_ptr->mproc_idx[cmi] = 0;
+	/* No "timed status" yet */
+	for (cmi = 0; cmi < MAX_MTIMED; cmi++)
+	{
+		m_ptr->mtimed[cmi] = 0;
+		m_ptr->mproc_idx[cmi] = 0;
+	}
 
 	/* Unknown distance */
 	m_ptr->cdis = 0;
@@ -3209,14 +3195,13 @@ msg_print("守りのルーンが壊れた！");
 	}
 
 	/* Assume no sleeping */
-	m_ptr->csleep = 0;
+	m_ptr->mtimed[MTIMED_CSLEEP] = 0;
 
 	/* Enforce sleeping if needed */
 	if ((mode & PM_ALLOW_SLEEP) && r_ptr->sleep && !ironman_nightmare)
 	{
 		int val = r_ptr->sleep;
-		m_ptr->csleep = ((val * 2) + randint1(val * 10));
-		mproc_add(c_ptr->m_idx, MPROC_CSLEEP);
+		(void)set_monster_csleep(c_ptr->m_idx, (val * 2) + randint1(val * 10));
 	}
 
 	/* Assign maximal hitpoints */
@@ -3248,11 +3233,7 @@ msg_print("守りのルーンが壊れた！");
 	/* Extract the monster base speed */
 	m_ptr->mspeed = get_mspeed(r_ptr);
 
-	if (mode & PM_HASTE)
-	{
-		m_ptr->fast = 100;
-		mproc_add(c_ptr->m_idx, MPROC_FAST);
-	}
+	if (mode & PM_HASTE) (void)set_monster_fast(c_ptr->m_idx, 100);
 
 	/* Give a random starting energy */
 	if (!ironman_nightmare)
@@ -3285,7 +3266,7 @@ msg_print("守りのルーンが壊れた！");
 
 	if (r_ptr->flags7 & RF7_SELF_LD_MASK)
 		p_ptr->update |= (PU_MON_LITE);
-	else if ((r_ptr->flags7 & RF7_HAS_LD_MASK) && !m_ptr->csleep)
+	else if ((r_ptr->flags7 & RF7_HAS_LD_MASK) && !MON_CSLEEP(m_ptr))
 		p_ptr->update |= (PU_MON_LITE);
 
 	/* Update the monster */

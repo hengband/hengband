@@ -209,17 +209,12 @@ void mon_take_hit_mon(int m_idx, int dam, bool *fear, cptr note, int who)
 		if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 	}
 
-	if (m_ptr->csleep)
-	{
-		/* Wake it up */
-		m_ptr->csleep = 0;
-		mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
-		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
-	}
+	/* Wake it up */
+	(void)set_monster_csleep(m_idx, 0);
 
 	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(1, 0);
 
-	if (m_ptr->invulner && randint0(PENETRATE_INVULNERABILITY))
+	if (MON_INVULNER(m_ptr) && randint0(PENETRATE_INVULNERABILITY))
 	{
 		if (seen)
 		{
@@ -339,36 +334,21 @@ msg_format("%^sは殺された。", m_name);
 #ifdef ALLOW_FEAR
 
 	/* Mega-Hack -- Pain cancels fear */
-	if (m_ptr->monfear && (dam > 0))
+	if (MON_MONFEAR(m_ptr) && (dam > 0))
 	{
-		int tmp = randint1(dam / 4);
-
-		/* Cure a little fear */
-		if (tmp < m_ptr->monfear)
+		/* Cure fear */
+		if (set_monster_monfear(m_idx, MON_MONFEAR(m_ptr) - randint1(dam / 4)))
 		{
-			/* Reduce fear */
-			m_ptr->monfear -= tmp;
-		}
-
-		/* Cure all the fear */
-		else
-		{
-			/* Cure fear */
-			m_ptr->monfear = 0;
-			mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_MONFEAR], MPROC_MONFEAR);
-
 			/* No more fear */
 			(*fear) = FALSE;
 		}
 	}
 
 	/* Sometimes a monster gets scared by damage */
-	if (!m_ptr->monfear && !(r_ptr->flags3 & RF3_NO_FEAR))
+	if (!MON_MONFEAR(m_ptr) && !(r_ptr->flags3 & RF3_NO_FEAR))
 	{
-		int		percentage;
-
 		/* Percentage of fully healthy */
-		percentage = (100L * m_ptr->hp) / m_ptr->maxhp;
+		int percentage = (100L * m_ptr->hp) / m_ptr->maxhp;
 
 		/*
 		* Run (sometimes) if at 10% or less of max hit points,
@@ -381,11 +361,9 @@ msg_format("%^sは殺された。", m_name);
 			(*fear) = TRUE;
 
 			/* XXX XXX XXX Hack -- Add some timed fear */
-			m_ptr->monfear += (randint1(10) +
+			(void)set_monster_monfear(m_idx, (randint1(10) +
 				(((dam >= m_ptr->hp) && (percentage > 7)) ?
-				20 : ((11 - percentage) * 5)));
-
-			mproc_add(m_idx, MPROC_MONFEAR);
+				20 : ((11 - percentage) * 5))));
 		}
 	}
 
@@ -462,7 +440,7 @@ static int mon_will_run(int m_idx)
 	if (m_ptr->cdis > MAX_SIGHT + 5) return (FALSE);
 
 	/* All "afraid" monsters will run away */
-	if (m_ptr->monfear) return (TRUE);
+	if (MON_MONFEAR(m_ptr)) return (TRUE);
 
 #ifdef ALLOW_TERROR
 
@@ -1525,15 +1503,10 @@ static bool monst_attack_monst(int m_idx, int t_idx)
 		power = mbe_info[effect].power;
 
 		/* Monster hits */
-		if (!effect || check_hit2(power, rlev, ac, m_ptr->stunned))
+		if (!effect || check_hit2(power, rlev, ac, MON_STUNNED(m_ptr)))
 		{
-			if (t_ptr->csleep)
-			{
-				/* Wake it up */
-				t_ptr->csleep = 0;
-				mproc_remove(t_idx, t_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
-				if (tr_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
-			}
+			/* Wake it up */
+			(void)set_monster_csleep(t_idx, 0);
 
 			if (t_ptr->ml)
 			{
@@ -2148,31 +2121,18 @@ msg_format("%sは体力を回復したようだ。", m_name);
 			case RBM_ENGULF:
 			case RBM_CHARGE:
 				{
-					if (t_ptr->csleep)
-					{
-						/* Wake it up */
-						t_ptr->csleep = 0;
-						mproc_remove(t_idx, t_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
-						if (tr_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
-
-						if (t_ptr->ml)
-						{
-							/* Redraw the health bar */
-							if (p_ptr->health_who == t_idx) p_ptr->redraw |= (PR_HEALTH);
-							if (p_ptr->riding == t_idx) p_ptr->redraw |= (PR_UHEALTH);
-						}
-					}
+					/* Wake it up */
+					(void)set_monster_csleep(t_idx, 0);
 
 					/* Visible monsters */
 					if (see_m)
 					{
 						/* Message */
 #ifdef JP
-msg_format("%sは%^sの攻撃をかわした。", t_name,m_name);
+						msg_format("%sは%^sの攻撃をかわした。", t_name,m_name);
 #else
 						msg_format("%^s misses %s.", m_name, t_name);
 #endif
-
 					}
 
 					break;
@@ -2201,11 +2161,7 @@ msg_format("%sは%^sの攻撃をかわした。", t_name,m_name);
 		sound(SOUND_EXPLODE);
 
 		/* Cancel Invulnerability */
-		if (m_ptr->invulner)
-		{
-			m_ptr->invulner = 0;
-			mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_INVULNER], MPROC_INVULNER);
-		}
+		(void)set_monster_invulner(m_idx, 0, FALSE);
 
 #ifdef JP
 		mon_take_hit_mon(m_idx, m_ptr->hp + 1, &fear, "は爆発して粉々になった。", m_idx);
@@ -2315,7 +2271,7 @@ static void process_monster(int m_idx)
 		}
 	}
 
-	if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && one_in_(13) && !m_ptr->csleep)
+	if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && one_in_(13) && !MON_CSLEEP(m_ptr))
 	{
 		choose_new_monster(m_idx, FALSE, 0);
 		r_ptr = &r_info[m_ptr->r_idx];
@@ -2495,7 +2451,7 @@ static void process_monster(int m_idx)
 	}
 
 	/* Handle "sleep" */
-	if (m_ptr->csleep)
+	if (MON_CSLEEP(m_ptr))
 	{
 		/* Handle non-aggravation - Still sleeping */
 		if (!(p_ptr->cursed & TRC_AGGRAVATE)) return;
@@ -2503,9 +2459,7 @@ static void process_monster(int m_idx)
 		/* Handle aggravation */
 
 		/* Reset sleep counter */
-		m_ptr->csleep = 0;
-		mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
-		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+		(void)set_monster_csleep(m_idx, 0);
 
 		/* Notice the "waking up" */
 		if (see_m)
@@ -2525,10 +2479,6 @@ static void process_monster(int m_idx)
 
 		if (m_ptr->ml)
 		{
-			/* Redraw the health bar */
-			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-			if (is_riding_mon) p_ptr->redraw |= (PR_UHEALTH);
-
 			/* Hack -- Count the wakings */
 			if ((r_ptr->r_wake < MAX_UCHAR) && is_original_ap(m_ptr))
 			{
@@ -2538,7 +2488,7 @@ static void process_monster(int m_idx)
 	}
 
 	/* Handle "stun" */
-	if (m_ptr->stunned)
+	if (MON_STUNNED(m_ptr))
 	{
 		/* Sometimes skip move */
 		if (one_in_(2)) return;
@@ -2658,11 +2608,10 @@ static void process_monster(int m_idx)
 		{
 			if (disturb_minor) disturb(FALSE, FALSE);
 #ifdef JP
-msg_print("重厚な足音が聞こえた。");
+			msg_print("重厚な足音が聞こえた。");
 #else
 			msg_print("You hear heavy steps.");
 #endif
-
 		}
 
 		/* Some monsters can speak */
@@ -2680,42 +2629,36 @@ msg_print("重厚な足音が聞こえた。");
 				monster_desc(m_name, m_ptr, 0);
 			else
 #ifdef JP
-strcpy(m_name, "それ");
+				strcpy(m_name, "それ");
 #else
 				strcpy(m_name, "It");
 #endif
 
-
 			/* Select the file for monster quotes */
-			if (m_ptr->monfear)
+			if (MON_MONFEAR(m_ptr))
 #ifdef JP
-filename = "monfear_j.txt";
+				filename = "monfear_j.txt";
 #else
 				filename = "monfear.txt";
 #endif
-
 			else if (is_pet(m_ptr))
 #ifdef JP
-filename = "monpet_j.txt";
+				filename = "monpet_j.txt";
 #else
 				filename = "monpet.txt";
 #endif
-
 			else if (is_friendly(m_ptr))
 #ifdef JP
-filename = "monfrien_j.txt";
+				filename = "monfrien_j.txt";
 #else
 				filename = "monfrien.txt";
 #endif
-
 			else
 #ifdef JP
 				filename = "monspeak_j.txt";
 #else
 				filename = "monspeak.txt";
 #endif
-
-
 			/* Get the monster line */
 			if (get_rnd_line(filename, m_ptr->ap_r_idx, monmessage) == 0)
 			{
@@ -2775,7 +2718,7 @@ msg_format("%^s%s", m_name, monmessage);
 
 
 	/* Confused -- 100% random */
-	if (m_ptr->confused || !aware)
+	if (MON_CONFUSED(m_ptr) || !aware)
 	{
 		/* Try four "random" directions */
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
@@ -3155,7 +3098,7 @@ msg_format("%^s%s", m_name, monmessage);
 			/* In anti-melee dungeon, stupid or confused monster takes useless turn */
 			if (do_move && (d_info[dungeon_type].flags1 & DF1_NO_MELEE))
 			{
-				if (!m_ptr->confused)
+				if (!MON_CONFUSED(m_ptr))
 				{
 					if (!(r_ptr->flags2 & RF2_STUPID)) do_move = FALSE;
 					else
@@ -3194,7 +3137,7 @@ msg_format("%^s%s", m_name, monmessage);
 			if (((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW) &&
 				 (r_ptr->mexp * r_ptr->level > z_ptr->mexp * z_ptr->level) &&
 				 can_cross && (c_ptr->m_idx != p_ptr->riding)) ||
-				are_enemies(m_ptr, y_ptr) || m_ptr->confused)
+				are_enemies(m_ptr, y_ptr) || MON_CONFUSED(m_ptr))
 			{
 				if (!(r_ptr->flags1 & RF1_NEVER_BLOW))
 				{
@@ -3211,7 +3154,7 @@ msg_format("%^s%s", m_name, monmessage);
 						/* In anti-melee dungeon, stupid or confused monster takes useless turn */
 						else if (d_info[dungeon_type].flags1 & DF1_NO_MELEE)
 						{
-							if (m_ptr->confused) return;
+							if (MON_CONFUSED(m_ptr)) return;
 							else if (r_ptr->flags2 & RF2_STUPID)
 							{
 								if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_STUPID);
@@ -3234,19 +3177,8 @@ msg_format("%^s%s", m_name, monmessage);
 				/* Monster pushed past another monster */
 				did_move_body = TRUE;
 
-				if (y_ptr->csleep)
-				{
-					/* Wake up the moved monster */
-					y_ptr->csleep = 0;
-					mproc_remove(c_ptr->m_idx, y_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
-					if (z_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) p_ptr->update |= (PU_MON_LITE);
-
-					if (y_ptr->ml)
-					{
-						/* Redraw the health bar */
-						if (p_ptr->health_who == c_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
-					}
-				}
+				/* Wake up the moved monster */
+				(void)set_monster_csleep(c_ptr->m_idx, 0);
 
 				/* XXX XXX XXX Message */
 			}
@@ -3276,7 +3208,7 @@ msg_format("%^s%s", m_name, monmessage);
 
 		if (is_riding_mon)
 		{
-			if (!p_ptr->riding_ryoute && !(m_list[p_ptr->riding].monfear)) do_move = FALSE;
+			if (!p_ptr->riding_ryoute && !MON_MONFEAR(&m_list[p_ptr->riding])) do_move = FALSE;
 		}
 
 		/* Creature has been allowed move */
@@ -3520,7 +3452,7 @@ msg_format("%^s%s", m_name, monmessage);
 		m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
 
 	/* If we haven't done anything, try casting a spell again */
-	if (!do_turn && !do_move && !m_ptr->monfear && !is_riding_mon && aware)
+	if (!do_turn && !do_move && !MON_MONFEAR(m_ptr) && !is_riding_mon && aware)
 	{
 		/* Try to cast spell again */
 		if (r_ptr->freq_spell && randint1(100) <= r_ptr->freq_spell)
@@ -3575,11 +3507,10 @@ msg_format("%^s%s", m_name, monmessage);
 
 
 	/* Hack -- get "bold" if out of options */
-	if (!do_turn && !do_move && m_ptr->monfear && aware)
+	if (!do_turn && !do_move && MON_MONFEAR(m_ptr) && aware)
 	{
 		/* No longer afraid */
-		m_ptr->monfear = 0;
-		mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_MONFEAR], MPROC_MONFEAR);
+		(void)set_monster_monfear(m_idx, 0);
 
 		/* Message if seen */
 		if (see_m)
@@ -3597,14 +3528,7 @@ msg_format("%^s%s", m_name, monmessage);
 #endif
 		}
 
-		if (m_ptr->ml)
-		{
-			/* Redraw (later) if needed */
-			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-			if (is_riding_mon) p_ptr->redraw |= (PR_UHEALTH);
-
-			chg_virtue(V_COMPASSION, -1);
-		}
+		if (m_ptr->ml) chg_virtue(V_COMPASSION, -1);
 
 		/* XXX XXX XXX Actually do something now (?) */
 	}
@@ -3789,8 +3713,8 @@ void process_monsters(void)
 			/* Monsters move quickly in Nightmare mode */
 			if (ironman_nightmare) speed += 5;
 
-			if (m_ptr->fast) speed += 10;
-			if (m_ptr->slow) speed -= 10;
+			if (MON_FAST(m_ptr)) speed += 10;
+			if (MON_SLOW(m_ptr)) speed -= 10;
 		}
 
 		/* Give this monster some energy */
@@ -3852,6 +3776,735 @@ void process_monsters(void)
 	}
 }
 
+
+static void mproc_add(int m_idx, int mproc_type)
+{
+	if (mproc_max[mproc_type] < max_m_idx)
+	{
+		m_list[m_idx].mproc_idx[mproc_type] = mproc_max[mproc_type];
+		mproc_list[mproc_type][mproc_max[mproc_type]++] = m_idx;
+	}
+}
+
+
+void mproc_remove(int m_idx, int mproc_type)
+{
+	if (mproc_max[mproc_type] > 1)
+	{
+		mproc_list[mproc_type][m_list[m_idx].mproc_idx[mproc_type]] = mproc_list[mproc_type][--mproc_max[mproc_type]];
+		m_list[m_idx].mproc_idx[mproc_type] = 0;
+	}
+}
+
+
+/*
+ * Initialize monster process
+ */
+void mproc_init(void)
+{
+	monster_type *m_ptr;
+	int          i, cmi;
+
+	/* Reset "mproc_max[]" */
+	for (cmi = 0; cmi < MAX_MTIMED; cmi++) mproc_max[cmi] = 1;
+
+	/* Process the monsters (backwards) */
+	for (i = m_max - 1; i >= 1; i--)
+	{
+		/* Access the monster */
+		m_ptr = &m_list[i];
+
+		/* Ignore "dead" monsters */
+		if (!m_ptr->r_idx) continue;
+
+		for (cmi = 0; cmi < MAX_MTIMED; cmi++)
+		{
+			if (m_ptr->mtimed[cmi]) mproc_add(i, cmi);
+			else m_ptr->mproc_idx[cmi] = 0;
+		}
+	}
+}
+
+
+/*
+ * Set "m_ptr->mtimed[MTIMED_CSLEEP]", notice observable changes
+ */
+bool set_monster_csleep(int m_idx, int v)
+{
+	monster_type *m_ptr = &m_list[m_idx];
+	bool notice = FALSE;
+
+	/* Hack -- Force good values */
+	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+
+	/* Open */
+	if (v)
+	{
+		if (!MON_CSLEEP(m_ptr))
+		{
+			mproc_add(m_idx, MTIMED_CSLEEP);
+			notice = TRUE;
+		}
+	}
+
+	/* Shut */
+	else
+	{
+		if (MON_CSLEEP(m_ptr))
+		{
+			mproc_remove(m_idx, MTIMED_CSLEEP);
+			notice = TRUE;
+		}
+	}
+
+	/* Use the value */
+	m_ptr->mtimed[MTIMED_CSLEEP] = v;
+
+	if (!notice) return FALSE;
+
+	if (m_ptr->ml)
+	{
+		/* Update health bar as needed */
+		if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
+		if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
+	}
+
+	if (r_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+
+	return TRUE;
+}
+
+
+/*
+ * Set "m_ptr->mtimed[MTIMED_FAST]", notice observable changes
+ */
+bool set_monster_fast(int m_idx, int v)
+{
+	monster_type *m_ptr = &m_list[m_idx];
+	bool notice = FALSE;
+
+	/* Hack -- Force good values */
+	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
+
+	/* Open */
+	if (v)
+	{
+		if (!MON_FAST(m_ptr))
+		{
+			mproc_add(m_idx, MTIMED_FAST);
+			notice = TRUE;
+		}
+	}
+
+	/* Shut */
+	else
+	{
+		if (MON_FAST(m_ptr))
+		{
+			mproc_remove(m_idx, MTIMED_FAST);
+			notice = TRUE;
+		}
+	}
+
+	/* Use the value */
+	m_ptr->mtimed[MTIMED_FAST] = v;
+
+	if (!notice) return FALSE;
+
+	if (p_ptr->riding == m_idx) p_ptr->update |= (PU_BONUS);
+
+	return TRUE;
+}
+
+
+/*
+ * Set "m_ptr->mtimed[MTIMED_SLOW]", notice observable changes
+ */
+bool set_monster_slow(int m_idx, int v)
+{
+	monster_type *m_ptr = &m_list[m_idx];
+	bool notice = FALSE;
+
+	/* Hack -- Force good values */
+	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
+
+	/* Open */
+	if (v)
+	{
+		if (!MON_SLOW(m_ptr))
+		{
+			mproc_add(m_idx, MTIMED_SLOW);
+			notice = TRUE;
+		}
+	}
+
+	/* Shut */
+	else
+	{
+		if (MON_SLOW(m_ptr))
+		{
+			mproc_remove(m_idx, MTIMED_SLOW);
+			notice = TRUE;
+		}
+	}
+
+	/* Use the value */
+	m_ptr->mtimed[MTIMED_SLOW] = v;
+
+	if (!notice) return FALSE;
+
+	if (p_ptr->riding == m_idx) p_ptr->update |= (PU_BONUS);
+
+	return TRUE;
+}
+
+
+/*
+ * Set "m_ptr->mtimed[MTIMED_STUNNED]", notice observable changes
+ */
+bool set_monster_stunned(int m_idx, int v)
+{
+	monster_type *m_ptr = &m_list[m_idx];
+	bool notice = FALSE;
+
+	/* Hack -- Force good values */
+	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
+
+	/* Open */
+	if (v)
+	{
+		if (!MON_STUNNED(m_ptr))
+		{
+			mproc_add(m_idx, MTIMED_STUNNED);
+			notice = TRUE;
+		}
+	}
+
+	/* Shut */
+	else
+	{
+		if (MON_STUNNED(m_ptr))
+		{
+			mproc_remove(m_idx, MTIMED_STUNNED);
+			notice = TRUE;
+		}
+	}
+
+	/* Use the value */
+	m_ptr->mtimed[MTIMED_STUNNED] = v;
+
+	return notice;
+}
+
+
+/*
+ * Set "m_ptr->mtimed[MTIMED_CONFUSED]", notice observable changes
+ */
+bool set_monster_confused(int m_idx, int v)
+{
+	monster_type *m_ptr = &m_list[m_idx];
+	bool notice = FALSE;
+
+	/* Hack -- Force good values */
+	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
+
+	/* Open */
+	if (v)
+	{
+		if (!MON_CONFUSED(m_ptr))
+		{
+			mproc_add(m_idx, MTIMED_CONFUSED);
+			notice = TRUE;
+		}
+	}
+
+	/* Shut */
+	else
+	{
+		if (MON_CONFUSED(m_ptr))
+		{
+			mproc_remove(m_idx, MTIMED_CONFUSED);
+			notice = TRUE;
+		}
+	}
+
+	/* Use the value */
+	m_ptr->mtimed[MTIMED_CONFUSED] = v;
+
+	return notice;
+}
+
+
+/*
+ * Set "m_ptr->mtimed[MTIMED_MONFEAR]", notice observable changes
+ */
+bool set_monster_monfear(int m_idx, int v)
+{
+	monster_type *m_ptr = &m_list[m_idx];
+	bool notice = FALSE;
+
+	/* Hack -- Force good values */
+	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
+
+	/* Open */
+	if (v)
+	{
+		if (!MON_MONFEAR(m_ptr))
+		{
+			mproc_add(m_idx, MTIMED_MONFEAR);
+			notice = TRUE;
+		}
+	}
+
+	/* Shut */
+	else
+	{
+		if (MON_MONFEAR(m_ptr))
+		{
+			mproc_remove(m_idx, MTIMED_MONFEAR);
+			notice = TRUE;
+		}
+	}
+
+	/* Use the value */
+	m_ptr->mtimed[MTIMED_MONFEAR] = v;
+
+	if (!notice) return FALSE;
+
+	if (m_ptr->ml)
+	{
+		/* Update health bar as needed */
+		if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
+		if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
+	}
+
+	return TRUE;
+}
+
+
+/*
+ * Set "m_ptr->mtimed[MTIMED_INVULNER]", notice observable changes
+ */
+bool set_monster_invulner(int m_idx, int v, bool energy_need)
+{
+	monster_type *m_ptr = &m_list[m_idx];
+	bool notice = FALSE;
+
+	/* Hack -- Force good values */
+	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
+
+	/* Open */
+	if (v)
+	{
+		if (!MON_INVULNER(m_ptr))
+		{
+			mproc_add(m_idx, MTIMED_INVULNER);
+			notice = TRUE;
+		}
+	}
+
+	/* Shut */
+	else
+	{
+		if (MON_INVULNER(m_ptr))
+		{
+			mproc_remove(m_idx, MTIMED_INVULNER);
+			if (energy_need && !p_ptr->wild_mode) m_ptr->energy_need += ENERGY_NEED();
+			notice = TRUE;
+		}
+	}
+
+	/* Use the value */
+	m_ptr->mtimed[MTIMED_INVULNER] = v;
+
+	if (!notice) return FALSE;
+
+	if (m_ptr->ml)
+	{
+		/* Update health bar as needed */
+		if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
+		if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
+	}
+
+	return TRUE;
+}
+
+
+/*
+ * Process the counters of monsters (once per 10 game turns)
+ *
+ * These functions are to process monsters' counters same as player's.
+ */
+
+
+/* Handle "sleep" */
+void process_monsters_csleep(void)
+{
+	int          m_idx, i;
+	monster_type *m_ptr;
+	monster_race *r_ptr;
+	bool         test;
+	s16b         *cur_mproc_list = mproc_list[MTIMED_CSLEEP];
+
+	u32b noise; /* Hack -- local "player stealth" value */
+
+	/* Hack -- calculate the "player noise" */
+	noise = (1L << (30 - p_ptr->skill_stl));
+
+	/* Process the monsters (backwards) */
+	for (i = mproc_max[MTIMED_CSLEEP] - 1; i >= 1; i--)
+	{
+		/* Access the monster */
+		m_idx = cur_mproc_list[i];
+		m_ptr = &m_list[m_idx];
+		r_ptr = &r_info[m_ptr->r_idx];
+
+		/* Assume does not wake up */
+		test = FALSE;
+
+		/* Hack -- Require proximity */
+		if (m_ptr->cdis < AAF_LIMIT)
+		{
+			/* Handle "sensing radius" */
+			if (m_ptr->cdis <= (is_pet(m_ptr) ? ((r_ptr->aaf > MAX_SIGHT) ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf))
+			{
+				/* We may wake up */
+				test = TRUE;
+			}
+
+			/* Handle "sight" and "aggravation" */
+			else if ((m_ptr->cdis <= MAX_SIGHT) && (player_has_los_bold(m_ptr->fy, m_ptr->fx)))
+			{
+				/* We may wake up */
+				test = TRUE;
+			}
+		}
+
+		if (test)
+		{
+			u32b notice = randint0(1024);
+
+			/* Nightmare monsters are more alert */
+			if (ironman_nightmare) notice /= 2;
+
+			/* Hack -- See if monster "notices" player */
+			if ((notice * notice * notice) <= noise)
+			{
+				/* Hack -- amount of "waking" */
+				/* Wake up faster near the player */
+				int d = (m_ptr->cdis < AAF_LIMIT / 2) ? (AAF_LIMIT / m_ptr->cdis) : 1;
+
+				/* Hack -- amount of "waking" is affected by speed of player */
+				d = (d * SPEED_TO_ENERGY(p_ptr->pspeed)) / 10;
+				if (d < 0) d = 1;
+
+				/* Monster wakes up "a little bit" */
+
+				/* Still asleep */
+				if (!set_monster_csleep(m_idx, MON_CSLEEP(m_ptr) - d))
+				{
+					/* Notice the "not waking up" */
+					if (is_original_ap_and_seen(m_ptr))
+					{
+						/* Hack -- Count the ignores */
+						if (r_ptr->r_ignore < MAX_UCHAR) r_ptr->r_ignore++;
+					}
+				}
+
+				/* Just woke up */
+				else
+				{
+					/* Notice the "waking up" */
+					if (is_seen(m_ptr))
+					{
+						char m_name[80];
+
+						/* Acquire the monster name */
+						monster_desc(m_name, m_ptr, 0);
+
+						/* Dump a message */
+#ifdef JP
+						msg_format("%^sが目を覚ました。", m_name);
+#else
+						msg_format("%^s wakes up.", m_name);
+#endif
+					}
+
+					if (is_original_ap_and_seen(m_ptr))
+					{
+						/* Hack -- Count the wakings */
+						if (r_ptr->r_wake < MAX_UCHAR) r_ptr->r_wake++;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+/* Handle fast */
+void process_monsters_fast(void)
+{
+	int          m_idx, i;
+	monster_type *m_ptr;
+	s16b         *cur_mproc_list = mproc_list[MTIMED_FAST];
+
+	/* Process the monsters (backwards) */
+	for (i = mproc_max[MTIMED_FAST] - 1; i >= 1; i--)
+	{
+		/* Access the monster */
+		m_idx = cur_mproc_list[i];
+		m_ptr = &m_list[m_idx];
+
+		/* Reduce by one, note if expires */
+		if (set_monster_fast(m_idx, MON_FAST(m_ptr) - 1))
+		{
+			if (is_seen(m_ptr))
+			{
+				char m_name[80];
+
+				/* Acquire the monster name */
+				monster_desc(m_name, m_ptr, 0);
+
+				/* Dump a message */
+#ifdef JP
+				msg_format("%^sはもう加速されていない。", m_name);
+#else
+				msg_format("%^s is no longer fast.", m_name);
+#endif
+			}
+		}
+	}
+}
+
+
+/* Handle slow */
+void process_monsters_slow(void)
+{
+	int          m_idx, i;
+	monster_type *m_ptr;
+	s16b         *cur_mproc_list = mproc_list[MTIMED_SLOW];
+
+	/* Process the monsters (backwards) */
+	for (i = mproc_max[MTIMED_SLOW] - 1; i >= 1; i--)
+	{
+		/* Access the monster */
+		m_idx = cur_mproc_list[i];
+		m_ptr = &m_list[m_idx];
+
+		/* Reduce by one, note if expires */
+		if (set_monster_slow(m_idx, MON_SLOW(m_ptr) - 1))
+		{
+			if (is_seen(m_ptr))
+			{
+				char m_name[80];
+
+				/* Acquire the monster name */
+				monster_desc(m_name, m_ptr, 0);
+
+				/* Dump a message */
+#ifdef JP
+				msg_format("%^sはもう減速されていない。", m_name);
+#else
+				msg_format("%^s is no longer slow.", m_name);
+#endif
+			}
+		}
+	}
+}
+
+
+/* Handle "stun" */
+void process_monsters_stunned(void)
+{
+	int          m_idx, i, rlev;
+	monster_type *m_ptr;
+	s16b         *cur_mproc_list = mproc_list[MTIMED_STUNNED];
+
+	/* Process the monsters (backwards) */
+	for (i = mproc_max[MTIMED_STUNNED] - 1; i >= 1; i--)
+	{
+		/* Access the monster */
+		m_idx = cur_mproc_list[i];
+		m_ptr = &m_list[m_idx];
+		rlev = r_info[m_ptr->r_idx].level;
+
+		/* Hack -- Recover from stun */
+
+		/* Fully recover */
+		if (set_monster_stunned(m_idx, (randint0(10000) <= rlev * rlev) ? 0 : (MON_STUNNED(m_ptr) - 1)))
+		{
+			/* Message if visible */
+			if (is_seen(m_ptr))
+			{
+				char m_name[80];
+
+				/* Acquire the monster name */
+				monster_desc(m_name, m_ptr, 0);
+
+				/* Dump a message */
+#ifdef JP
+				msg_format("%^sは朦朧状態から立ち直った。", m_name);
+#else
+				msg_format("%^s is no longer stunned.", m_name);
+#endif
+			}
+		}
+	}
+}
+
+
+/* Handle confusion */
+void process_monsters_confused(void)
+{
+	int          m_idx, i;
+	monster_type *m_ptr;
+	s16b         *cur_mproc_list = mproc_list[MTIMED_CONFUSED];
+
+	/* Process the monsters (backwards) */
+	for (i = mproc_max[MTIMED_CONFUSED] - 1; i >= 1; i--)
+	{
+		/* Access the monster */
+		m_idx = cur_mproc_list[i];
+		m_ptr = &m_list[m_idx];
+
+		/* Reduce the confusion */
+
+		/* Recovered */
+		if (set_monster_confused(m_idx, MON_CONFUSED(m_ptr) - randint1(r_info[m_ptr->r_idx].level / 20 + 1)))
+		{
+			/* Message if visible */
+			if (is_seen(m_ptr))
+			{
+				char m_name[80];
+
+				/* Acquire the monster name */
+				monster_desc(m_name, m_ptr, 0);
+
+				/* Dump a message */
+#ifdef JP
+				msg_format("%^sは混乱から立ち直った。", m_name);
+#else
+				msg_format("%^s is no longer confused.", m_name);
+#endif
+			}
+		}
+	}
+}
+
+
+/* Handle "fear" */
+void process_monsters_monfear(void)
+{
+	int          m_idx, i;
+	monster_type *m_ptr;
+	s16b         *cur_mproc_list = mproc_list[MTIMED_MONFEAR];
+
+	/* Process the monsters (backwards) */
+	for (i = mproc_max[MTIMED_MONFEAR] - 1; i >= 1; i--)
+	{
+		/* Access the monster */
+		m_idx = cur_mproc_list[i];
+		m_ptr = &m_list[m_idx];
+
+		/* Reduce the fear */
+
+		/* Recover from fear, take note if seen */
+		if (set_monster_monfear(m_idx, MON_MONFEAR(m_ptr) - randint1(r_info[m_ptr->r_idx].level / 20 + 1)))
+		{
+			/* Visual note */
+			if (is_seen(m_ptr))
+			{
+				char m_name[80];
+#ifndef JP
+				char m_poss[80];
+
+				/* Acquire the monster possessive */
+				monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+#endif
+
+				/* Acquire the monster name */
+				monster_desc(m_name, m_ptr, 0);
+
+				/* Dump a message */
+#ifdef JP
+				msg_format("%^sは勇気を取り戻した。", m_name);
+#else
+				msg_format("%^s recovers %s courage.", m_name, m_poss);
+#endif
+			}
+		}
+	}
+}
+
+
+/* Handle Invulnerability */
+void process_monsters_invulner(void)
+{
+	int          m_idx, i;
+	monster_type *m_ptr;
+	s16b         *cur_mproc_list = mproc_list[MTIMED_INVULNER];
+
+	/* Process the monsters (backwards) */
+	for (i = mproc_max[MTIMED_INVULNER] - 1; i >= 1; i--)
+	{
+		/* Access the monster */
+		m_idx = cur_mproc_list[i];
+		m_ptr = &m_list[m_idx];
+
+		/* Reduce by one, note if expires */
+		if (set_monster_invulner(m_idx, MON_INVULNER(m_ptr) - 1, TRUE))
+		{
+			if (is_seen(m_ptr))
+			{
+				char m_name[80];
+
+				/* Acquire the monster name */
+				monster_desc(m_name, m_ptr, 0);
+
+				/* Dump a message */
+#ifdef JP
+				msg_format("%^sはもう無敵でない。", m_name);
+#else
+				msg_format("%^s is no longer invulnerable.", m_name);
+#endif
+			}
+		}
+	}
+}
+
+
+void dispel_monster_status(int m_idx)
+{
+	monster_type *m_ptr = &m_list[m_idx];
+	char         m_name[80];
+
+	monster_desc(m_name, m_ptr, 0);
+	if (set_monster_invulner(m_idx, 0, TRUE))
+	{
+#ifdef JP
+		if (m_ptr->ml) msg_format("%sはもう無敵ではない。", m_name);
+#else
+		if (m_ptr->ml) msg_format("%^s is no longer invulnerable.", m_name);
+#endif
+	}
+	if (set_monster_fast(m_idx, 0))
+	{
+#ifdef JP
+		if (m_ptr->ml) msg_format("%sはもう加速されていない。", m_name);
+#else
+		if (m_ptr->ml) msg_format("%^s is no longer fast.", m_name);
+#endif
+	}
+	if (set_monster_slow(m_idx, 0))
+	{
+#ifdef JP
+		if (m_ptr->ml) msg_format("%sはもう減速されていない。", m_name);
+#else
+		if (m_ptr->ml) msg_format("%^s is no longer slow.", m_name);
+#endif
+	}
+}
 
 
 bool process_the_world(int num, int who, bool vs_player)

@@ -924,7 +924,7 @@ static bool dispel_check(int m_idx)
 
 	if (p_ptr->riding && (m_list[p_ptr->riding].mspeed < 135))
 	{
-		if (m_list[p_ptr->riding].fast) return (TRUE);
+		if (MON_FAST(&m_list[p_ptr->riding])) return (TRUE);
 	}
 
 	/* No need to cast dispel spell */
@@ -1049,7 +1049,7 @@ static int choose_attack_spell(int m_idx, byte spells[], byte num)
 	}
 
 	/* Hurt badly or afraid, attempt to flee */
-	if (((m_ptr->hp < m_ptr->maxhp / 3) || m_ptr->monfear) && one_in_(2))
+	if (((m_ptr->hp < m_ptr->maxhp / 3) || MON_MONFEAR(m_ptr)) && one_in_(2))
 	{
 		/* Choose escape spell if possible */
 		if (escape_num) return (escape[randint0(escape_num)]);
@@ -1137,7 +1137,7 @@ static int choose_attack_spell(int m_idx, byte spells[], byte num)
 	}
 
 	/* Cast globe of invulnerability if not already in effect */
-	if (invul_num && !(m_ptr->invulner) && (randint0(100) < 50))
+	if (invul_num && !m_ptr->mtimed[MTIMED_INVULNER] && (randint0(100) < 50))
 	{
 		/* Choose Globe of Invulnerability */
 		return (invul[randint0(invul_num)]);
@@ -1151,7 +1151,7 @@ static int choose_attack_spell(int m_idx, byte spells[], byte num)
 	}
 
 	/* Haste self if we aren't already somewhat hasted (rarely) */
-	if (haste_num && (randint0(100) < 20) && !(m_ptr->fast))
+	if (haste_num && (randint0(100) < 20) && !MON_FAST(m_ptr))
 	{
 		/* Choose haste spell */
 		return (haste[randint0(haste_num)]);
@@ -1296,7 +1296,7 @@ bool make_attack_spell(int m_idx)
 	bool can_remember;
 
 	/* Cannot cast spells when confused */
-	if (m_ptr->confused)
+	if (MON_CONFUSED(m_ptr))
 	{
 		reset_target(m_ptr);
 		return (FALSE);
@@ -1620,7 +1620,7 @@ bool make_attack_spell(int m_idx)
 
 	/* Check for spell failure (inate attacks never fail) */
 	if (!spell_is_inate(thrown_spell)
-	    && (in_no_magic_dungeon || (m_ptr->stunned && one_in_(2)) || (randint0(100) < failrate)))
+	    && (in_no_magic_dungeon || (MON_STUNNED(m_ptr) && one_in_(2)) || (randint0(100) < failrate)))
 	{
 		disturb(1, 0);
 		/* Message */
@@ -1750,30 +1750,7 @@ msg_format("%^sがかん高い金切り声をあげた。", m_name);
 
 				p_ptr->energy_need += ENERGY_NEED();
 			}
-			if (p_ptr->riding)
-			{
-				monster_type *riding_ptr = &m_list[p_ptr->riding];
-
-				if (riding_ptr->invulner)
-				{
-					riding_ptr->invulner = 0;
-					mproc_remove(p_ptr->riding, riding_ptr->mproc_idx[MPROC_INVULNER], MPROC_INVULNER);
-					riding_ptr->energy_need += ENERGY_NEED();
-				}
-				if (riding_ptr->fast)
-				{
-					riding_ptr->fast = 0;
-					mproc_remove(p_ptr->riding, riding_ptr->mproc_idx[MPROC_FAST], MPROC_FAST);
-				}
-				if (riding_ptr->slow)
-				{
-					riding_ptr->slow = 0;
-					mproc_remove(p_ptr->riding, riding_ptr->mproc_idx[MPROC_SLOW], MPROC_SLOW);
-				}
-				p_ptr->update |= PU_BONUS;
-				if (p_ptr->health_who == p_ptr->riding) p_ptr->redraw |= PR_HEALTH;
-				p_ptr->redraw |= (PR_UHEALTH);
-			}
+			if (p_ptr->riding) dispel_monster_status(p_ptr->riding);
 
 #ifdef JP
 			if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
@@ -3259,17 +3236,14 @@ msg_format("%^sが自分の体に念を送った。", m_name);
 			}
 
 			/* Allow quick speed increases to base+10 */
-			if (!m_ptr->fast)
+			if (set_monster_fast(m_idx, MON_FAST(m_ptr) + 100))
 			{
 #ifdef JP
-msg_format("%^sの動きが速くなった。", m_name);
+				msg_format("%^sの動きが速くなった。", m_name);
 #else
 				msg_format("%^s starts moving faster.", m_name);
 #endif
-				mproc_add(m_idx, MPROC_FAST);
 			}
-			m_ptr->fast = MIN(200, m_ptr->fast + 100);
-			if (p_ptr->riding == m_idx) p_ptr->update |= PU_BONUS;
 			break;
 		}
 
@@ -3372,19 +3346,17 @@ msg_format("%^sは体力を回復したようだ。", m_name);
 			if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 
 			/* Cancel fear */
-			if (m_ptr->monfear)
+			if (MON_MONFEAR(m_ptr))
 			{
 				/* Cancel fear */
-				m_ptr->monfear = 0;
-				mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_MONFEAR], MPROC_MONFEAR);
+				(void)set_monster_monfear(m_idx, 0);
 
 				/* Message */
 #ifdef JP
-msg_format("%^sは勇気を取り戻した。", m_name);
+				msg_format("%^sは勇気を取り戻した。", m_name);
 #else
 				msg_format("%^s recovers %s courage.", m_name, m_poss);
 #endif
-
 			}
 			break;
 		}
@@ -3414,14 +3386,7 @@ msg_format("%sは無傷の球の呪文を唱えた。", m_name);
 
 			}
 
-			if (!m_ptr->invulner)
-			{
-				m_ptr->invulner = randint1(4) + 4;
-				mproc_add(m_idx, MPROC_INVULNER);
-			}
-
-			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-			if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
+			if (!MON_INVULNER(m_ptr)) (void)set_monster_invulner(m_idx, randint1(4) + 4, FALSE);
 			break;
 		}
 

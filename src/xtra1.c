@@ -1276,8 +1276,9 @@ static void prt_speed(void)
 	{
 		if (p_ptr->riding)
 		{
-			if (m_list[p_ptr->riding].fast && !m_list[p_ptr->riding].slow) attr = TERM_L_BLUE;
-			else if (m_list[p_ptr->riding].slow && !m_list[p_ptr->riding].fast) attr = TERM_VIOLET;
+			monster_type *m_ptr = &m_list[p_ptr->riding];
+			if (MON_FAST(m_ptr) && !MON_SLOW(m_ptr)) attr = TERM_L_BLUE;
+			else if (MON_SLOW(m_ptr) && !MON_FAST(m_ptr)) attr = TERM_VIOLET;
 			else attr = TERM_GREEN;
 		}
 		else if ((is_fast && !p_ptr->slow) || p_ptr->lightspeed) attr = TERM_YELLOW;
@@ -1296,8 +1297,9 @@ static void prt_speed(void)
 	{
 		if (p_ptr->riding)
 		{
-			if (m_list[p_ptr->riding].fast && !m_list[p_ptr->riding].slow) attr = TERM_L_BLUE;
-			else if (m_list[p_ptr->riding].slow && !m_list[p_ptr->riding].fast) attr = TERM_VIOLET;
+			monster_type *m_ptr = &m_list[p_ptr->riding];
+			if (MON_FAST(m_ptr) && !MON_SLOW(m_ptr)) attr = TERM_L_BLUE;
+			else if (MON_SLOW(m_ptr) && !MON_FAST(m_ptr)) attr = TERM_VIOLET;
 			else attr = TERM_RED;
 		}
 		else if (is_fast && !p_ptr->slow) attr = TERM_YELLOW;
@@ -1568,13 +1570,13 @@ static void health_redraw(bool riding)
 		byte attr = TERM_RED;
 
 		/* Invulnerable */
-		if (m_ptr->invulner) attr = TERM_WHITE;
+		if (MON_INVULNER(m_ptr)) attr = TERM_WHITE;
 
 		/* Asleep */
-		else if (m_ptr->csleep) attr = TERM_BLUE;
+		else if (MON_CSLEEP(m_ptr)) attr = TERM_BLUE;
 
 		/* Afraid */
-		else if (m_ptr->monfear) attr = TERM_VIOLET;
+		else if (MON_MONFEAR(m_ptr)) attr = TERM_VIOLET;
 
 		/* Healthy */
 		else if (pct >= 100) attr = TERM_L_GREEN;
@@ -4593,8 +4595,8 @@ void calc_bonuses(void)
 			new_speed = speed;
 		}
 		new_speed += (p_ptr->skill_exp[GINOU_RIDING] + p_ptr->lev *160L)/3200;
-		if (riding_m_ptr->fast) new_speed += 10;
-		if (riding_m_ptr->slow) new_speed -= 10;
+		if (MON_FAST(riding_m_ptr)) new_speed += 10;
+		if (MON_SLOW(riding_m_ptr)) new_speed -= 10;
 		riding_levitation = (riding_r_ptr->flags7 & RF7_CAN_FLY) ? TRUE : FALSE;
 		if (riding_r_ptr->flags7 & (RF7_CAN_SWIM | RF7_AQUATIC)) p_ptr->can_swim = TRUE;
 

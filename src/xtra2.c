@@ -1570,17 +1570,17 @@ int mon_damage_mod(monster_type *m_ptr, int dam, bool is_psy_spear)
 	if ((r_ptr->flagsr & RFR_RES_ALL) && dam > 0)
 	{
 		dam /= 100;
-		if((dam == 0) && one_in_(3)) dam = 1;
+		if ((dam == 0) && one_in_(3)) dam = 1;
 	}
 
-	if (m_ptr->invulner)
+	if (MON_INVULNER(m_ptr))
 	{
 		if (is_psy_spear)
 		{
 			if (!p_ptr->blind && is_seen(m_ptr))
 			{
 #ifdef JP
-msg_print("バリアを切り裂いた！");
+				msg_print("バリアを切り裂いた！");
 #else
 				msg_print("The barrier is penetrated!");
 #endif
@@ -1714,13 +1714,8 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 	if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
 	if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 
-	if (m_ptr->csleep)
-	{
-		/* Wake it up */
-		m_ptr->csleep = 0;
-		mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
-		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
-	}
+	/* Wake it up */
+	(void)set_monster_csleep(m_idx, 0);
 
 	/* Hack - Cancel any special player stealth magics. -LM- */
 	if (p_ptr->special_defense & NINJA_S_STEALTH)
@@ -2093,36 +2088,21 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 #ifdef ALLOW_FEAR
 
 	/* Mega-Hack -- Pain cancels fear */
-	if (m_ptr->monfear && (dam > 0))
+	if (MON_MONFEAR(m_ptr) && (dam > 0))
 	{
-		int tmp = randint1(dam);
-
-		/* Cure a little fear */
-		if (tmp < m_ptr->monfear)
+		/* Cure fear */
+		if (set_monster_monfear(m_idx, MON_MONFEAR(m_ptr) - randint1(dam)))
 		{
-			/* Reduce fear */
-			m_ptr->monfear -= tmp;
-		}
-
-		/* Cure all the fear */
-		else
-		{
-			/* Cure fear */
-			m_ptr->monfear = 0;
-			mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_MONFEAR], MPROC_MONFEAR);
-
 			/* No more fear */
 			(*fear) = FALSE;
 		}
 	}
 
 	/* Sometimes a monster gets scared by damage */
-	if (!m_ptr->monfear && !(r_ptr->flags3 & (RF3_NO_FEAR)))
+	if (!MON_MONFEAR(m_ptr) && !(r_ptr->flags3 & (RF3_NO_FEAR)))
 	{
-		int percentage;
-
 		/* Percentage of fully healthy */
-		percentage = (100L * m_ptr->hp) / m_ptr->maxhp;
+		int percentage = (100L * m_ptr->hp) / m_ptr->maxhp;
 
 		/*
 		 * Run (sometimes) if at 10% or less of max hit points,
@@ -2135,11 +2115,9 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 			(*fear) = TRUE;
 
 			/* XXX XXX XXX Hack -- Add some timed fear */
-			m_ptr->monfear = (randint1(10) +
+			(void)set_monster_monfear(m_idx, (randint1(10) +
 					  (((dam >= m_ptr->hp) && (percentage > 7)) ?
-					   20 : ((11 - percentage) * 5)));
-
-			mproc_add(m_idx, MPROC_MONFEAR);
+					   20 : ((11 - percentage) * 5))));
 		}
 	}
 
@@ -4360,7 +4338,7 @@ if (!get_com("方向 (ESCで中断)? ", &ch, TRUE)) break;
 		monster_type *m_ptr = &m_list[p_ptr->riding];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-		if (m_ptr->confused)
+		if (MON_CONFUSED(m_ptr))
 		{
 			/* Standard confusion */
 			if (randint0(100) < 75)
@@ -4399,7 +4377,7 @@ msg_print("あなたは混乱している。");
 			monster_type *m_ptr = &m_list[p_ptr->riding];
 
 			monster_desc(m_name, m_ptr, 0);
-			if (m_ptr->confused)
+			if (MON_CONFUSED(m_ptr))
 			{
 #ifdef JP
 msg_format("%sは混乱している。", m_name);

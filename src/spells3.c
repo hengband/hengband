@@ -436,7 +436,7 @@ void teleport_player(int dis, bool passive)
 				if ((r_ptr->flags6 & RF6_TPORT) &&
 				    !(r_ptr->flagsr & RFR_RES_TELE))
 				{
-					if (!m_ptr->csleep) teleport_monster_to(tmp_m_idx, y, x, r_ptr->level, FALSE);
+					if (!MON_CSLEEP(m_ptr)) teleport_monster_to(tmp_m_idx, y, x, r_ptr->level, FALSE);
 				}
 			}
 		}
@@ -1504,11 +1504,10 @@ static bool vanish_dungeon(void)
 			m_ptr = &m_list[c_ptr->m_idx];
 
 			/* Awake monster */
-			if (c_ptr->m_idx && m_ptr->csleep)
+			if (c_ptr->m_idx && MON_CSLEEP(m_ptr))
 			{
 				/* Reset sleep counter */
-				m_ptr->csleep = 0;
-				mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
+				(void)set_monster_csleep(c_ptr->m_idx, 0);
 
 				/* Notice the "waking up" */
 				if (is_seen(m_ptr))
@@ -1522,13 +1521,6 @@ static bool vanish_dungeon(void)
 #else
 					msg_format("%^s wakes up.", m_name);
 #endif
-				}
-
-				if (m_ptr->ml)
-				{
-					/* Redraw the health bar */
-					if (p_ptr->health_who == c_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
-					if (p_ptr->riding == c_ptr->m_idx) p_ptr->redraw |= (PR_UHEALTH);
 				}
 			}
 
@@ -5368,16 +5360,20 @@ bool polymorph_monster(int y, int x)
 			{
 				int cmi;
 
+				for (cmi = 0; cmi < MAX_MTIMED; cmi++)
+				{
+					back_m.mtimed[cmi] = 0;
+					back_m.mproc_idx[cmi] = 0;
+				}
 				m_list[hack_m_idx_ii] = back_m;
 
-				for (cmi = 0; cmi < MAX_MPROC; cmi++) m_list[hack_m_idx_ii].mproc_idx[cmi] = 0;
-				if (back_m.csleep) mproc_add(hack_m_idx_ii, MPROC_CSLEEP);
-				if (back_m.fast) mproc_add(hack_m_idx_ii, MPROC_FAST);
-				if (back_m.slow) mproc_add(hack_m_idx_ii, MPROC_SLOW);
-				if (back_m.stunned) mproc_add(hack_m_idx_ii, MPROC_STUNNED);
-				if (back_m.confused) mproc_add(hack_m_idx_ii, MPROC_CONFUSED);
-				if (back_m.monfear) mproc_add(hack_m_idx_ii, MPROC_MONFEAR);
-				if (back_m.invulner) mproc_add(hack_m_idx_ii, MPROC_INVULNER);
+				if (MON_CSLEEP(&back_m)) (void)set_monster_csleep(hack_m_idx_ii, MON_CSLEEP(&back_m));
+				if (MON_FAST(&back_m)) (void)set_monster_fast(hack_m_idx_ii, MON_FAST(&back_m));
+				if (MON_SLOW(&back_m)) (void)set_monster_slow(hack_m_idx_ii, MON_SLOW(&back_m));
+				if (MON_STUNNED(&back_m)) (void)set_monster_stunned(hack_m_idx_ii, MON_STUNNED(&back_m));
+				if (MON_CONFUSED(&back_m)) (void)set_monster_confused(hack_m_idx_ii, MON_CONFUSED(&back_m));
+				if (MON_MONFEAR(&back_m)) (void)set_monster_monfear(hack_m_idx_ii, MON_MONFEAR(&back_m));
+				if (MON_INVULNER(&back_m)) (void)set_monster_invulner(hack_m_idx_ii, MON_INVULNER(&back_m), FALSE);
 			}
 		}
 

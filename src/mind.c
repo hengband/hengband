@@ -1166,53 +1166,14 @@ static bool cast_force_spell(int spell)
 		break;
 	case 9:
 	{
-		monster_type *m_ptr;
 		int m_idx;
-		char m_name[80];
 
 		if (!target_set(TARGET_KILL)) return FALSE;
 		m_idx = cave[target_row][target_col].m_idx;
 		if (!m_idx) break;
 		if (!player_has_los_bold(target_row, target_col)) break;
 		if (!projectable(py, px, target_row, target_col)) break;
-		m_ptr = &m_list[m_idx];
-		monster_desc(m_name, m_ptr, 0);
-		if (m_ptr->invulner)
-		{
-			m_ptr->invulner = 0;
-			mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_INVULNER], MPROC_INVULNER);
-			if (m_ptr->ml)
-			{
-#ifdef JP
-				msg_format("%sはもう無敵ではない。", m_name);
-#else
-				msg_format("%^s is no longer invulnerable.", m_name);
-#endif
-				p_ptr->redraw |= (PR_HEALTH);
-				if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
-			}
-			m_ptr->energy_need += ENERGY_NEED();
-		}
-		if (m_ptr->fast)
-		{
-			m_ptr->fast = 0;
-			mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_FAST], MPROC_FAST);
-#ifdef JP
-			if (m_ptr->ml) msg_format("%sはもう加速されていない。", m_name);
-#else
-			if (m_ptr->ml) msg_format("%^s is no longer fast.", m_name);
-#endif
-		}
-		if (m_ptr->slow)
-		{
-			m_ptr->slow = 0;
-			mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_SLOW], MPROC_SLOW);
-#ifdef JP
-			if (m_ptr->ml) msg_format("%sはもう減速されていない。", m_name);
-#else
-			if (m_ptr->ml) msg_format("%^s is no longer slow.", m_name);
-#endif
-		}
+		dispel_monster_status(m_idx);
 		break;
 	}
 	case 10:
@@ -1740,12 +1701,8 @@ msg_print("その方向にはモンスターはいません。");
 		m_ptr->fy = ty;
 		m_ptr->fx = tx;
 
-		if (m_ptr->csleep)
-		{
-			/* Wake the monster up */
-			m_ptr->csleep = 0;
-			mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
-		}
+		/* Wake the monster up */
+		(void)set_monster_csleep(m_idx, 0);
 
 		/* Update the monster (new location) */
 		update_mon(m_idx, TRUE);

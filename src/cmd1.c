@@ -2010,7 +2010,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 			if (p_ptr->monlite && (mode != HISSATSU_NYUSIN)) tmp /= 3;
 			if (p_ptr->cursed & TRC_AGGRAVATE) tmp /= 2;
 			if (r_ptr->level > (p_ptr->lev * p_ptr->lev / 20 + 10)) tmp /= 3;
-			if (m_ptr->csleep && m_ptr->ml)
+			if (MON_CSLEEP(m_ptr) && m_ptr->ml)
 			{
 				/* Can't backstab creatures that we can't see, right? */
 				backstab = TRUE;
@@ -2019,7 +2019,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 			{
 				fuiuchi = TRUE;
 			}
-			else if (m_ptr->monfear && m_ptr->ml)
+			else if (MON_MONFEAR(m_ptr) && m_ptr->ml)
 			{
 				stab_fleeing = TRUE;
 			}
@@ -2071,13 +2071,8 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 		}
 	}
 
-	if (m_ptr->csleep)
-	{
-		/* Disturb the monster */
-		m_ptr->csleep = 0;
-		mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
-		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
-	}
+	/* Disturb the monster */
+	(void)set_monster_csleep(c_ptr->m_idx, 0);
 
 	/* Extract monster name (or "it") */
 	monster_desc(m_name, m_ptr, 0);
@@ -2344,7 +2339,15 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				{
 					if (p_ptr->lev > randint1(r_ptr->level + resist_stun + 10))
 					{
-						if (m_ptr->stunned)
+						if (set_monster_stunned(c_ptr->m_idx, stun_effect + MON_STUNNED(m_ptr)))
+						{
+#ifdef JP
+							msg_format("%^sはフラフラになった。", m_name);
+#else
+							msg_format("%^s is stunned.", m_name);
+#endif
+						}
+						else
 						{
 #ifdef JP
 							msg_format("%^sはさらにフラフラになった。", m_name);
@@ -2352,17 +2355,6 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 							msg_format("%^s is more stunned.", m_name);
 #endif
 						}
-						else
-						{
-#ifdef JP
-							msg_format("%^sはフラフラになった。", m_name);
-#else
-							msg_format("%^s is stunned.", m_name);
-#endif
-							mproc_add(c_ptr->m_idx, MPROC_STUNNED);
-						}
-
-						m_ptr->stunned = MIN(stun_effect + m_ptr->stunned, 200);
 					}
 				}
 			}
@@ -2524,7 +2516,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				if (!(r_ptr->flags3 & (RF3_NO_STUN)))
 				{
 					/* Get stunned */
-					if (m_ptr->stunned)
+					if (MON_STUNNED(m_ptr))
 					{
 #ifdef JP
 						msg_format("%sはひどくもうろうとした。", m_name);
@@ -2541,11 +2533,10 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 #else
 						msg_format("%s is dazed.", m_name);
 #endif
-						mproc_add(c_ptr->m_idx, MPROC_STUNNED);
 					}
 
 					/* Apply stun */
-					m_ptr->stunned = (tmp < 200) ? tmp : 200;
+					(void)set_monster_stunned(c_ptr->m_idx, MON_STUNNED(m_ptr) + tmp);
 				}
 				else
 				{
@@ -2779,16 +2770,13 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				}
 				else
 				{
-					int tmp = m_ptr->confused + 10 + randint0(p_ptr->lev) / 5;
-
 #ifdef JP
 					msg_format("%^sは混乱したようだ。", m_name);
 #else
 					msg_format("%^s appears confused.", m_name);
 #endif
 
-					m_ptr->confused = (tmp < 200) ? tmp : 200;
-					if (!m_ptr->mproc_idx[MPROC_CONFUSED]) mproc_add(c_ptr->m_idx, MPROC_CONFUSED);
+					(void)set_monster_confused(c_ptr->m_idx, MON_CONFUSED(m_ptr) + 10 + randint0(p_ptr->lev) / 5);
 				}
 			}
 
@@ -3183,19 +3171,14 @@ bool py_attack(int y, int x, int mode)
 			msg_format ("There is something scary in your way!");
 #endif
 
-		if (m_ptr->csleep)
-		{
-			/* Disturb the monster */
-			m_ptr->csleep = 0;
-			mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
-			if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
-		}
+		/* Disturb the monster */
+		(void)set_monster_csleep(c_ptr->m_idx, 0);
 
 		/* Done */
 		return FALSE;
 	}
 
-	if (m_ptr->csleep) /* It is not honorable etc to attack helpless victims */
+	if (MON_CSLEEP(m_ptr)) /* It is not honorable etc to attack helpless victims */
 	{
 		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(V_COMPASSION, -1);
 		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(V_HONOUR, -1);
@@ -3896,13 +3879,8 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 		    ((p_ptr->muta2 & MUT2_BERS_RAGE) && p_ptr->shero)) &&
 		    pattern_seq(py, px, y, x) && (p_can_enter || p_can_kill_walls))
 		{
-			if (m_ptr->csleep)
-			{
-				/* Disturb the monster */
-				m_ptr->csleep = 0;
-				mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
-				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
-			}
+			/* Disturb the monster */
+			(void)set_monster_csleep(c_ptr->m_idx, 0);
 
 			/* Extract monster name (or "it") */
 			monster_desc(m_name, m_ptr, 0);
@@ -3960,7 +3938,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 			oktomove = FALSE;
 			disturb(0, 0);
 		}
-		else if (riding_m_ptr->monfear)
+		else if (MON_MONFEAR(riding_m_ptr))
 		{
 			char m_name[80];
 
@@ -4025,7 +4003,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 			disturb(0, 0);
 		}
 
-		if (oktomove && riding_m_ptr->stunned && one_in_(2))
+		if (oktomove && MON_STUNNED(riding_m_ptr) && one_in_(2))
 		{
 			char m_name[80];
 			monster_desc(m_name, riding_m_ptr, 0);

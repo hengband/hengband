@@ -2147,12 +2147,11 @@ bool do_riding(bool force)
 			return FALSE;
 		}
 
-		if (m_ptr->csleep)
+		if (MON_CSLEEP(m_ptr))
 		{
 			char m_name[80];
 			monster_desc(m_name, m_ptr, 0);
-			m_ptr->csleep = 0;
-			mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
+			(void)set_monster_csleep(c_ptr->m_idx, 0);
 #ifdef JP
 			msg_format("%sを起こした。", m_name);
 #else

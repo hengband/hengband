@@ -186,18 +186,19 @@ static void wr_item(object_type *o_ptr)
 static void wr_monster(monster_type *m_ptr)
 {
 	u32b flags = 0x00000000;
+	byte tmp8u;
 
 	if (m_ptr->ap_r_idx != m_ptr->r_idx) flags |= SAVE_MON_AP_R_IDX;
 	if (m_ptr->sub_align) flags |= SAVE_MON_SUB_ALIGN;
-	if (m_ptr->csleep) flags |= SAVE_MON_CSLEEP;
-	if (m_ptr->fast) flags |= SAVE_MON_FAST;
-	if (m_ptr->slow) flags |= SAVE_MON_SLOW;
-	if (m_ptr->stunned) flags |= SAVE_MON_STUNNED;
-	if (m_ptr->confused) flags |= SAVE_MON_CONFUSED;
-	if (m_ptr->monfear) flags |= SAVE_MON_MONFEAR;
+	if (MON_CSLEEP(m_ptr)) flags |= SAVE_MON_CSLEEP;
+	if (MON_FAST(m_ptr)) flags |= SAVE_MON_FAST;
+	if (MON_SLOW(m_ptr)) flags |= SAVE_MON_SLOW;
+	if (MON_STUNNED(m_ptr)) flags |= SAVE_MON_STUNNED;
+	if (MON_CONFUSED(m_ptr)) flags |= SAVE_MON_CONFUSED;
+	if (MON_MONFEAR(m_ptr)) flags |= SAVE_MON_MONFEAR;
 	if (m_ptr->target_y) flags |= SAVE_MON_TARGET_Y;
 	if (m_ptr->target_x) flags |= SAVE_MON_TARGET_X;
-	if (m_ptr->invulner) flags |= SAVE_MON_INVULNER;
+	if (MON_INVULNER(m_ptr)) flags |= SAVE_MON_INVULNER;
 	if (m_ptr->smart) flags |= SAVE_MON_SMART;
 	if (m_ptr->exp) flags |= SAVE_MON_EXP;
 	if (m_ptr->mflag2) flags |= SAVE_MON_MFLAG2;
@@ -219,19 +220,43 @@ static void wr_monster(monster_type *m_ptr)
 	if (flags & SAVE_MON_AP_R_IDX) wr_s16b(m_ptr->ap_r_idx);
 
 	if (flags & SAVE_MON_SUB_ALIGN) wr_byte(m_ptr->sub_align);
-	if (flags & SAVE_MON_CSLEEP) wr_s16b(m_ptr->csleep);
+	if (flags & SAVE_MON_CSLEEP) wr_s16b(m_ptr->mtimed[MTIMED_CSLEEP]);
 
 	wr_byte(m_ptr->mspeed);
 	wr_s16b(m_ptr->energy_need);
 
-	if (flags & SAVE_MON_FAST) wr_byte(m_ptr->fast);
-	if (flags & SAVE_MON_SLOW) wr_byte(m_ptr->slow);
-	if (flags & SAVE_MON_STUNNED) wr_byte(m_ptr->stunned);
-	if (flags & SAVE_MON_CONFUSED) wr_byte(m_ptr->confused);
-	if (flags & SAVE_MON_MONFEAR) wr_byte(m_ptr->monfear);
+	if (flags & SAVE_MON_FAST)
+	{
+		tmp8u = (byte)m_ptr->mtimed[MTIMED_FAST];
+		wr_byte(tmp8u);
+	}
+	if (flags & SAVE_MON_SLOW)
+	{
+		tmp8u = (byte)m_ptr->mtimed[MTIMED_SLOW];
+		wr_byte(tmp8u);
+	}
+	if (flags & SAVE_MON_STUNNED)
+	{
+		tmp8u = (byte)m_ptr->mtimed[MTIMED_STUNNED];
+		wr_byte(tmp8u);
+	}
+	if (flags & SAVE_MON_CONFUSED)
+	{
+		tmp8u = (byte)m_ptr->mtimed[MTIMED_CONFUSED];
+		wr_byte(tmp8u);
+	}
+	if (flags & SAVE_MON_MONFEAR)
+	{
+		tmp8u = (byte)m_ptr->mtimed[MTIMED_MONFEAR];
+		wr_byte(tmp8u);
+	}
 	if (flags & SAVE_MON_TARGET_Y) wr_s16b(m_ptr->target_y);
 	if (flags & SAVE_MON_TARGET_X) wr_s16b(m_ptr->target_x);
-	if (flags & SAVE_MON_INVULNER) wr_byte(m_ptr->invulner);
+	if (flags & SAVE_MON_INVULNER)
+	{
+		tmp8u = (byte)m_ptr->mtimed[MTIMED_INVULNER];
+		wr_byte(tmp8u);
+	}
 	if (flags & SAVE_MON_SMART) wr_u32b(m_ptr->smart);
 	if (flags & SAVE_MON_EXP) wr_u32b(m_ptr->exp);
 	if (flags & SAVE_MON_MFLAG2) wr_byte(m_ptr->mflag2);
@@ -1091,7 +1116,7 @@ static bool wr_dungeon(void)
 
 	/*** Meta info ***/
 
-        /* Number of floor_id used from birth */
+	/* Number of floor_id used from birth */
 	wr_s16b(max_floor_id);
 
 	/* Current dungeon type */

@@ -5486,12 +5486,20 @@ extern int PlayerUID;
 #define MPE_DONT_SWAP_MON 0x00000080
 
 
-#define MPROC_CSLEEP   0
-#define MPROC_FAST     1
-#define MPROC_SLOW     2
-#define MPROC_STUNNED  3
-#define MPROC_CONFUSED 4
-#define MPROC_MONFEAR  5
-#define MPROC_INVULNER 6
+#define MTIMED_CSLEEP   0 /* Monster is sleeping */
+#define MTIMED_FAST     1 /* Monster is temporarily fast */
+#define MTIMED_SLOW     2 /* Monster is temporarily slow */
+#define MTIMED_STUNNED  3 /* Monster is stunned */
+#define MTIMED_CONFUSED 4 /* Monster is confused */
+#define MTIMED_MONFEAR  5 /* Monster is afraid */
+#define MTIMED_INVULNER 6 /* Monster is temporarily invulnerable */
 
-#define MAX_MPROC      7
+#define MAX_MTIMED      7
+
+#define MON_CSLEEP(M_PTR)   ((M_PTR)->mtimed[MTIMED_CSLEEP])
+#define MON_FAST(M_PTR)     ((M_PTR)->mtimed[MTIMED_FAST])
+#define MON_SLOW(M_PTR)     ((M_PTR)->mtimed[MTIMED_SLOW])
+#define MON_STUNNED(M_PTR)  ((M_PTR)->mtimed[MTIMED_STUNNED])
+#define MON_CONFUSED(M_PTR) ((M_PTR)->mtimed[MTIMED_CONFUSED])
+#define MON_MONFEAR(M_PTR)  ((M_PTR)->mtimed[MTIMED_MONFEAR])
+#define MON_INVULNER(M_PTR) ((M_PTR)->mtimed[MTIMED_INVULNER])
