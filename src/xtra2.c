@@ -3558,7 +3558,7 @@ if (o_ptr->number != 1) s1 = "それらは";
 #ifdef JP
 				name = "鏡";
 #else
-				name = "mirror";
+				name = "a mirror";
 #endif
 			}
 			else
@@ -3611,7 +3611,7 @@ s2 = "の入口";
 #endif
 
 			}
-			else if ((feat == FEAT_TOWN) || (feat == FEAT_FLOOR) || (feat == FEAT_DIRT) || (feat == FEAT_FLOWER))
+			else if ((feat == FEAT_TOWN) || (feat == FEAT_FLOOR) || (feat == FEAT_DIRT) || (feat == FEAT_FLOWER) || (c_ptr->info & CAVE_IN_MIRROR))
 			{
 #ifndef JP
 				s3 ="";
