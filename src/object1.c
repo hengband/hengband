@@ -6626,6 +6626,16 @@ strcat(out_val, " '/'¡ı»˜… ,");
 #endif
 
 			}
+
+			/* Append */
+			if (command_see && !use_menu)
+			{
+#ifdef JP
+				strcat(out_val, " RET º°,");
+#else
+				strcat(out_val, " Enter for scroll down,");
+#endif
+			}
 		}
 
 		/* Finish the prompt */
@@ -6869,6 +6879,48 @@ strcat(out_val, " '/'¡ı»˜… ,");
 				break;
 			}
 
+			case '\n':
+			case '\r':
+			case '+':
+			{
+				int i, o_idx;
+				cave_type *c_ptr = &cave[py][px];
+ 
+				if (command_wrk != (USE_FLOOR)) break;
+
+				/* Get the object being moved. */
+				o_idx =	c_ptr->o_idx;
+ 
+				/* Only rotate a pile of two or more objects. */
+				if (!(o_idx && o_list[o_idx].next_o_idx)) break;
+
+				/* Remove the first object from the list. */
+				excise_object_idx(o_idx);
+ 	
+				/* Find end of the list. */
+				i = c_ptr->o_idx;
+				while (o_list[i].next_o_idx)
+					i = o_list[i].next_o_idx;
+ 	
+				/* Add after the last object. */
+				o_list[i].next_o_idx = o_idx;
+ 	
+				/* Re-scan floor list */ 
+				scan_floor(floor_list, &floor_num, py, px, 0x01);
+
+				/* Hack -- Fix screen */
+				if (command_see)
+				{
+					/* Load screen */
+					screen_load();
+
+					/* Save screen */
+					screen_save();
+				}
+
+				break;
+			}
+
 			case '/':
 			{
 				if (command_wrk == (USE_INVEN))
@@ -7013,10 +7065,9 @@ strcat(out_val, " '/'¡ı»˜… ,");
 				break;
 			}
 
-			case '\n':
 #if 0
+			case '\n':
 			case '\r':
-#endif
 			{
 				/* Choose "default" inventory item */
 				if (command_wrk == (USE_INVEN))
@@ -7073,6 +7124,7 @@ strcat(out_val, " '/'¡ı»˜… ,");
 				done = TRUE;
 				break;
 			}
+#endif
 
 		        case 'w':
 			{
