@@ -3248,6 +3248,13 @@ void do_cmd_macros(void)
 			/* Clear */
 			clear_from(20);
 
+			/* Help message */
+#ifdef JP
+			c_prt(TERM_L_RED, "カーソルキーの左右でカーソル位置を移動。BackspaceかDeleteで一文字削除。", 22, 0);
+#else
+			c_prt(TERM_L_RED, "Press Left/Right arrow keys to move cursor. Backspace or Delete to delete a char.", 22, 0);
+#endif
+
 			/* Prompt */
 #ifdef JP
 			prt("マクロ行動: ", 20, 0);
@@ -3434,6 +3441,13 @@ void do_cmd_macros(void)
 
 			/* Clear */
 			clear_from(20);
+
+			/* Help message */
+#ifdef JP
+			c_prt(TERM_L_RED, "カーソルキーの左右でカーソル位置を移動。BackspaceかDeleteで一文字削除。", 22, 0);
+#else
+			c_prt(TERM_L_RED, "Press Left/Right arrow keys to move cursor. Backspace or Delete to delete a char.", 22, 0);
+#endif
 
 			/* Prompt */
 #ifdef JP
