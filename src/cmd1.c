@@ -3497,6 +3497,15 @@ bool player_can_enter(byte feature)
 		case FEAT_PERM_INNER:
 		case FEAT_PERM_OUTER:
 		case FEAT_PERM_SOLID:
+                case FEAT_PATTERN_START:
+                case FEAT_PATTERN_1:
+                case FEAT_PATTERN_2:
+                case FEAT_PATTERN_3:
+                case FEAT_PATTERN_4:
+                case FEAT_PATTERN_END:
+                case FEAT_PATTERN_OLD:
+                case FEAT_PATTERN_XTRA1:
+                case FEAT_PATTERN_XTRA2:
 		{
 			return (FALSE);
 		}
