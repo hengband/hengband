@@ -2027,7 +2027,7 @@ D:$The awesome weapon of the Vala Ulmo, Lord of Waters. Mightest of all the
 D:$powers of good save Manwe himself, Ulmo laughs in scorn at the dread powers 
 D:$of the undead, and is utterly in command of the element of water.
 D:水の王であるヴァラ、ウルモの恐ろしい武器。マンウェ自身を除けば
-D:善き勢力の内で最強であるウルモは、アンデドッドの恐るべき力さえ
+D:善き勢力の内で最強であるウルモは、アンデッドの恐るべき力さえ
 D:嘲笑い、酸のエレメントの究極的支配力を持つ。
 
 
