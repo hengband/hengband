@@ -328,7 +328,7 @@ bool monst_spell_monst(int m_idx)
 	{
 		f4 &= ~(RF4_SUMMON_MASK);
 		f5 &= ~(RF5_SUMMON_MASK);
-		f6 &= ~(RF6_SUMMON_MASK);
+		f6 &= ~(RF6_SUMMON_MASK | RF6_TELE_LEVEL);
 	}
 
 	if (p_ptr->inside_battle && !one_in_(3))
@@ -452,40 +452,49 @@ bool monst_spell_monst(int m_idx)
 
 	/* Remove some spells if necessary */
 
-	/* Check for a clean bolt shot */
-	if (((f4 & RF4_BOLT_MASK) ||
-	     (f5 & RF5_BOLT_MASK) ||
-	     (f6 & RF6_BOLT_MASK)) &&
-	    !(r_ptr->flags2 & RF2_STUPID) &&
-	    !clean_shot(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, pet))
+	if (!(r_ptr->flags2 & RF2_STUPID))
 	{
-		f4 &= ~(RF4_BOLT_MASK);
-		f5 &= ~(RF5_BOLT_MASK);
-		f6 &= ~(RF6_BOLT_MASK);
+		/* Check for a clean bolt shot */
+		if (((f4 & RF4_BOLT_MASK) ||
+		     (f5 & RF5_BOLT_MASK) ||
+		     (f6 & RF6_BOLT_MASK)) &&
+		    !clean_shot(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, pet))
+		{
+			f4 &= ~(RF4_BOLT_MASK);
+			f5 &= ~(RF5_BOLT_MASK);
+			f6 &= ~(RF6_BOLT_MASK);
+		}
+
+		/* Check for a possible summon */
+		if (((f4 & RF4_SUMMON_MASK) ||
+		     (f5 & RF5_SUMMON_MASK) ||
+		     (f6 & RF6_SUMMON_MASK)) &&
+		    !(summon_possible(t_ptr->fy, t_ptr->fx)))
+		{
+			/* Remove summoning spells */
+			f4 &= ~(RF4_SUMMON_MASK);
+			f5 &= ~(RF5_SUMMON_MASK);
+			f6 &= ~(RF6_SUMMON_MASK);
+		}
 	}
 
-	/* Check for a possible summon */
-	if (((f4 & RF4_SUMMON_MASK) ||
-	     (f5 & RF5_SUMMON_MASK) ||
-	     (f6 & RF6_SUMMON_MASK)) &&
-	    !(r_ptr->flags2 & RF2_STUPID) &&
-	    !(summon_possible(t_ptr->fy, t_ptr->fx)))
+	if (r_ptr->flags2 & RF2_SMART)
 	{
-		/* Remove summoning spells */
-		f4 &= ~(RF4_SUMMON_MASK);
-		f5 &= ~(RF5_SUMMON_MASK);
-		f6 &= ~(RF6_SUMMON_MASK);
-	}
+		/* Hack -- allow "desperate" spells */
+		if ((m_ptr->hp < m_ptr->maxhp / 10) &&
+		    (randint0(100) < 50))
+		{
+			/* Require intelligent spells */
+			f4 &= (RF4_INT_MASK);
+			f5 &= (RF5_INT_MASK);
+			f6 &= (RF6_INT_MASK);
+		}
 
-	/* Hack -- allow "desperate" spells */
-	if ((r_ptr->flags2 & RF2_SMART) &&
-	    (m_ptr->hp < m_ptr->maxhp / 10) &&
-	    (randint0(100) < 50))
-	{
-		/* Require intelligent spells */
-		f4 &= (RF4_INT_MASK);
-		f5 &= (RF5_INT_MASK);
-		f6 &= (RF6_INT_MASK);
+		/* Hack -- decline "teleport level" in some case */
+		if ((f6 & RF6_TELE_LEVEL) && TELE_LEVEL_IS_INEFF((t_idx == p_ptr->riding) ? 0 : t_idx))
+		{
+			f6 &= ~(RF6_TELE_LEVEL);
+		}
 	}
 
 	/* No spells left */

@@ -542,9 +542,8 @@ void teleport_level(int m_idx)
 		see_m = m_ptr->ml;
 	}
 
-	/* No effect in arena or quest */
-	if (p_ptr->inside_arena || p_ptr->inside_battle || (p_ptr->inside_quest && !random_quest_number(dun_level)) ||
-	    ((quest_number(dun_level) || (dun_level >= d_info[dungeon_type].maxdepth)) && (dun_level > 1) && ironman_downward && (m_idx <= 0)))
+	/* No effect in some case */
+	if (TELE_LEVEL_IS_INEFF(m_idx))
 	{
 #ifdef JP
 		if (see_m) msg_print("効果がなかった。");

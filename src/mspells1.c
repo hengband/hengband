@@ -1416,19 +1416,27 @@ bool make_attack_spell(int m_idx)
 		f6 &= (RF6_NOMAGIC_MASK);
 	}
 
-	/* Hack -- allow "desperate" spells */
-	if ((r_ptr->flags2 & (RF2_SMART)) &&
-		(m_ptr->hp < m_ptr->maxhp / 10) &&
-		(randint0(100) < 50))
+	if (r_ptr->flags2 & RF2_SMART)
 	{
-		/* Require intelligent spells */
-		f4 &= (RF4_INT_MASK);
-		f5 &= (RF5_INT_MASK);
-		f6 &= (RF6_INT_MASK);
+		/* Hack -- allow "desperate" spells */
+		if ((m_ptr->hp < m_ptr->maxhp / 10) &&
+			(randint0(100) < 50))
+		{
+			/* Require intelligent spells */
+			f4 &= (RF4_INT_MASK);
+			f5 &= (RF5_INT_MASK);
+			f6 &= (RF6_INT_MASK);
+		}
 
-		/* No spells left */
-		if (!f4 && !f5 && !f6) return (FALSE);
+		/* Hack -- decline "teleport level" in some case */
+		if ((f6 & RF6_TELE_LEVEL) && TELE_LEVEL_IS_INEFF(0))
+		{
+			f6 &= ~(RF6_TELE_LEVEL);
+		}
 	}
+
+	/* No spells left */
+	if (!f4 && !f5 && !f6) return (FALSE);
 
 	/* Remove the "ineffective" spells */
 	remove_bad_spells(m_idx, &f4, &f5, &f6);
@@ -1437,40 +1445,41 @@ bool make_attack_spell(int m_idx)
 	{
 		f4 &= ~(RF4_SUMMON_MASK);
 		f5 &= ~(RF5_SUMMON_MASK);
-		f6 &= ~(RF6_SUMMON_MASK);
+		f6 &= ~(RF6_SUMMON_MASK | RF6_TELE_LEVEL);
 	}
 
 	/* No spells left */
 	if (!f4 && !f5 && !f6) return (FALSE);
 
-	/* Check for a clean bolt shot */
-	if (((f4 & RF4_BOLT_MASK) ||
-	     (f5 & RF5_BOLT_MASK) ||
-	     (f6 & RF6_BOLT_MASK)) &&
-	    !(r_ptr->flags2 & RF2_STUPID) &&
-	    !clean_shot(m_ptr->fy, m_ptr->fx, py, px, FALSE))
+	if (!(r_ptr->flags2 & RF2_STUPID))
 	{
-		/* Remove spells that will only hurt friends */
-		f4 &= ~(RF4_BOLT_MASK);
-		f5 &= ~(RF5_BOLT_MASK);
-		f6 &= ~(RF6_BOLT_MASK);
-	}
+		/* Check for a clean bolt shot */
+		if (((f4 & RF4_BOLT_MASK) ||
+		     (f5 & RF5_BOLT_MASK) ||
+		     (f6 & RF6_BOLT_MASK)) &&
+		    !clean_shot(m_ptr->fy, m_ptr->fx, py, px, FALSE))
+		{
+			/* Remove spells that will only hurt friends */
+			f4 &= ~(RF4_BOLT_MASK);
+			f5 &= ~(RF5_BOLT_MASK);
+			f6 &= ~(RF6_BOLT_MASK);
+		}
 
-	/* Check for a possible summon */
-	if (((f4 & RF4_SUMMON_MASK) ||
-	     (f5 & RF5_SUMMON_MASK) ||
-	     (f6 & RF6_SUMMON_MASK)) &&
-	    !(r_ptr->flags2 & RF2_STUPID) &&
-	    !(summon_possible(y, x)))
-	{
-		/* Remove summoning spells */
-		f4 &= ~(RF4_SUMMON_MASK);
-		f5 &= ~(RF5_SUMMON_MASK);
-		f6 &= ~(RF6_SUMMON_MASK);
-	}
+		/* Check for a possible summon */
+		if (((f4 & RF4_SUMMON_MASK) ||
+		     (f5 & RF5_SUMMON_MASK) ||
+		     (f6 & RF6_SUMMON_MASK)) &&
+		    !(summon_possible(y, x)))
+		{
+			/* Remove summoning spells */
+			f4 &= ~(RF4_SUMMON_MASK);
+			f5 &= ~(RF5_SUMMON_MASK);
+			f6 &= ~(RF6_SUMMON_MASK);
+		}
 
-	/* No spells left */
-	if (!f4 && !f5 && !f6) return (FALSE);
+		/* No spells left */
+		if (!f4 && !f5 && !f6) return (FALSE);
+	}
 
 	/* Extract the "inate" spells */
 	for (k = 0; k < 32; k++)
