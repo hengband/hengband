@@ -7816,10 +7816,10 @@ kamae kamae_shurui[MAX_KAMAE] =
 	{"юдн╣", 35, ""},
 	{"╪К©Щ", 40, ""},
 #else
-	{"Baihu", 25, "(Black Turtle) "},
-	{"Zuan-wu", 30, "(White Tiger) "},
-	{"Qinglong", 35, "(Blue Chinese Dragon) "},
-	{"Zhuque", 40, "(Red Chinese Phoenix) "},
+	{"Genbu", 25, "(Black Tortoise) "},
+	{"Byakko", 30, "(White Tiger) "},
+	{"Seiryuu", 35, "(Blue Dragon) "},
+	{"Suzaku", 40, "(Red Phoenix) "},
 #endif
 };
 
