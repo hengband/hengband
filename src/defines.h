@@ -4019,6 +4019,20 @@
      ((cave[Y][X].feat <= FEAT_PATTERN_XTRA2) && (cave[Y][X].feat >= FEAT_PATTERN_START))
 
 /*
+ * Does the grid stop disintegration?
+ */
+#define cave_stop_disintegration(Y,X) \
+	(((cave[Y][X].feat >= FEAT_PERM_EXTRA) && \
+	  (cave[Y][X].feat <= FEAT_PERM_SOLID)) || \
+	  (cave[Y][X].feat == FEAT_MOUNTAIN) || \
+	 ((cave[Y][X].feat >= FEAT_SHOP_HEAD) && \
+	  (cave[Y][X].feat <= FEAT_SHOP_TAIL)) || \
+	 ((cave[Y][X].feat >= FEAT_BLDG_HEAD) && \
+	  (cave[Y][X].feat <= FEAT_BLDG_TAIL)) || \
+	  (cave[Y][X].feat == FEAT_MUSEUM))
+
+
+/*
  * Determine if a "legal" grid is within "los" of the player
  *
  * Note the use of comparison to zero to force a "boolean" result

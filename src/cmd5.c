@@ -4187,7 +4187,7 @@ msg_print("神の御力が邪悪を打ち払った！");
 					x = tx - 8 + randint0(17);
 					y = ty - 8 + randint0(17);
 
-					if (!in_bounds(y,x) || !in_disintegration_range(ty, tx, y, x)) continue;
+					if (!in_bounds(y,x) || cave_stop_disintegration(y,x) || !in_disintegration_range(ty, tx, y, x)) continue;
 
 					dx = (tx > x) ? (tx - x) : (x - tx);
 					dy = (ty > y) ? (ty - y) : (y - ty);
