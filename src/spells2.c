@@ -7539,7 +7539,7 @@ void kawarimi(bool success)
 bool rush_attack(bool *mdeath)
 {
 	int dir;
-	int tx, ty, nx, ny;
+	int tx, ty;
 	int tm_idx = 0;
 	u16b path_g[32];
 	int path_n, i;
@@ -7576,70 +7576,78 @@ bool rush_attack(bool *mdeath)
 	/* Project along the path */
 	for (i = 0; i < path_n; i++)
 	{
-		ny = GRID_Y(path_g[i]);
-		nx = GRID_X(path_g[i]);
+		monster_type *m_ptr;
 
-		if (!cave_empty_bold(ny, nx) || !player_can_enter(cave[ny][nx].feat, 0))
-		{
-			if (cave[ny][nx].m_idx)
-			{
-				monster_type *m_ptr = &m_list[cave[ny][nx].m_idx];
+		int ny = GRID_Y(path_g[i]);
+		int nx = GRID_X(path_g[i]);
 
-				if (tm_idx != cave[ny][nx].m_idx)
-				{
-#ifdef JP
-					msg_format("%s%sが立ちふさがっている！", tm_idx ? "別の" : "",
-						m_ptr->ml ? "モンスター" : "何か");
-#else
-					msg_format("There is %s in the way!", m_ptr->ml ? (tm_idx ? "another monster" : "a monster") :
-						"someone");
-#endif
-				}
-				else
-				{
-					if (!player_bold(ty, tx))
-					{
-						/* Hold the monster name */
-						char m_name[80];
-
-						/* Get the monster name (BEFORE polymorphing) */
-						monster_desc(m_name, m_ptr, 0);
-#ifdef JP
-						msg_format("素早く%sの懐に入り込んだ！", m_name);
-#else
-						msg_format("You quickly jump in and attack %s!", m_name);
-#endif
-					}
-				}
-
-				tmp_mdeath = py_attack(ny, nx, HISSATSU_NYUSIN);
-			}
-			else
-			{
-				if (tm_idx)
-				{
-#ifdef JP
-					msg_print("失敗！");
-#else
-					msg_print("Failed!");
-#endif
-				}
-				else
-				{
-#ifdef JP
-					msg_print("ここには入身では入れない。");
-#else
-					msg_print("You can't move to that place.");
-#endif
-				}
-			}
-			break;
-		}
-		else
+		if (cave_empty_bold(ny, nx) && player_can_enter(cave[ny][nx].feat, 0))
 		{
 			ty = ny;
 			tx = nx;
+
+			/* Go to next grid */
+			continue;
 		}
+
+		if (!cave[ny][nx].m_idx)
+		{
+			if (tm_idx)
+			{
+#ifdef JP
+				msg_print("失敗！");
+#else
+				msg_print("Failed!");
+#endif
+			}
+			else
+			{
+#ifdef JP
+				msg_print("ここには入身では入れない。");
+#else
+				msg_print("You can't move to that place.");
+#endif
+			}
+
+			/* Exit loop */
+			break;
+		}
+
+		/* Move player before updating the monster */
+		if (!player_bold(ty, tx)) teleport_player_to(ty, tx, FALSE);
+
+		/* Update the monster */
+		update_mon(cave[ny][nx].m_idx, TRUE);
+
+		/* Found a monster */
+		m_ptr = &m_list[cave[ny][nx].m_idx];
+
+		if (tm_idx != cave[ny][nx].m_idx)
+		{
+#ifdef JP
+			msg_format("%s%sが立ちふさがっている！", tm_idx ? "別の" : "",
+				   m_ptr->ml ? "モンスター" : "何か");
+#else
+			msg_format("There is %s in the way!", m_ptr->ml ? (tm_idx ? "another monster" : "a monster") : "someone");
+#endif
+		}
+		else if (!player_bold(ty, tx))
+		{
+			/* Hold the monster name */
+			char m_name[80];
+
+			/* Get the monster name (BEFORE polymorphing) */
+			monster_desc(m_name, m_ptr, 0);
+#ifdef JP
+			msg_format("素早く%sの懐に入り込んだ！", m_name);
+#else
+			msg_format("You quickly jump in and attack %s!", m_name);
+#endif
+		}
+
+		tmp_mdeath = py_attack(ny, nx, HISSATSU_NYUSIN);
+
+		break;
 	}
 
 	if (!player_bold(ty, tx)) teleport_player_to(ty, tx, FALSE);
