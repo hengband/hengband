@@ -233,6 +233,7 @@ extern bool fresh_before;
 extern bool fresh_after;
 extern bool fresh_message;
 extern bool alert_hitpoint;
+extern bool disturb_trap_detect;
 extern bool view_yellow_lite;
 extern bool view_bright_lite;
 extern bool view_granite_lite;

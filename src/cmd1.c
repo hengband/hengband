@@ -4275,7 +4275,26 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 			/* Hit the trap */
 			hit_trap(break_trap);
 		}
+
+		/* Warn when leaving trap detected region */
+		if (disturb_trap_detect && p_ptr->dtrap_x && p_ptr->dtrap_y && p_ptr->dtrap_rad)
+		{
+			if (distance(py, px, p_ptr->dtrap_y, p_ptr->dtrap_x) >= p_ptr->dtrap_rad) 
+			{
+				p_ptr->dtrap_x=0;
+				p_ptr->dtrap_y=0;
+				p_ptr->dtrap_rad=0;
+#ifdef JP
+				msg_print("* 注意:この先はトラップの感知範囲外です！ *");
+#else
+				msg_print("*Leaving trap detect region!*");
+#endif
+
+				disturb(0, 0);
+			}
+		}
 	}
+
 	if (p_ptr->riding)
 	{
 		m_list[p_ptr->riding].fy = py;
@@ -4648,6 +4667,24 @@ static bool run_test(void)
 	/* Range of newly adjacent grids */
 	max = (prev_dir & 0x01) + 1;
 
+	/* break run when leaving trap detected region */
+	if (disturb_trap_detect && p_ptr->dtrap_x && p_ptr->dtrap_y && p_ptr->dtrap_rad)
+	{
+		if (distance(py, px, p_ptr->dtrap_y, p_ptr->dtrap_x) >= p_ptr->dtrap_rad) 
+		{
+			p_ptr->dtrap_x=0;
+			p_ptr->dtrap_y=0;
+			p_ptr->dtrap_rad=0;
+#ifdef JP
+			msg_print("* 注意:この先はトラップの感知範囲外です！ *");
+#else
+			msg_print("*Leaving trap detect region!*");
+#endif
+
+			/* Break Run */
+			return(TRUE);
+		}
+	}
 
 	/* Look at every newly adjacent square. */
 	for (i = -max; i <= max; i++)

@@ -3352,6 +3352,11 @@ bool detect_traps(int range)
 
 	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] > MUSIC_DETECT)) detect = FALSE;
 
+	/* Set region for disturbance */
+	p_ptr->dtrap_x=px;
+	p_ptr->dtrap_y=py;
+	p_ptr->dtrap_rad=range;
+
 	/* Describe */
 	if (detect)
 	{

@@ -6890,6 +6890,15 @@ option_type option_info[] =
 #endif
 
 
+#ifdef JP
+	{ &disturb_trap_detect,         FALSE, 4, 0, 27,
+        "disturb_trap_detect",          "トラップ感知範囲外に出たときに行動を中止する" },
+#else
+	{ &disturb_trap_detect,         FALSE, 4, 0, 27,
+	"disturb_trap_detect",          "Disturb when leaving last trap detect area"},
+#endif
+
+
 	/*** Efficiency ***/
 
 #ifdef JP
