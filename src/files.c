@@ -7630,6 +7630,12 @@ Term_putstr(45, hgt - 1, -1, TERM_RED, "¶ÛµÞ¥»¡¼¥Ö...");
 #endif
 
 
+#ifdef JP
+	do_cmd_write_nikki(NIKKI_GAMESTART, 0, "----¥²¡¼¥à°Û¾ï½ªÎ»----");
+#else
+	do_cmd_write_nikki(NIKKI_GAMESTART, 0, "---- Panic Save and Abort Game ----");
+#endif
+
 	/* Flush output */
 	Term_fresh();
 

@@ -4306,6 +4306,12 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 				/* Mega-Hack -- Delay death */
 				if (p_ptr->chp < 0) p_ptr->is_dead = FALSE;
 
+#ifdef JP
+				do_cmd_write_nikki(NIKKI_GAMESTART, 0, "----¥²¡¼¥àÃæÃÇ----");
+#else
+				do_cmd_write_nikki(NIKKI_GAMESTART, 0, "---- Save and Exit Game ----");
+#endif
+
 				/* Hardcode panic save */
 				p_ptr->panic_save = 1;
 
