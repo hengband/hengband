@@ -4107,31 +4107,22 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		py = y;
 		px = x;
 
-		if (p_ptr->riding && (riding_r_ptr->flags2 & RF2_KILL_WALL))
-		{
-			if (cave[py][px].feat >= FEAT_RUBBLE && cave[py][px].feat < FEAT_PERM_SOLID)
-			{
-				/* Forget the wall */
-				cave[py][px].info &= ~(CAVE_MARK);
-
-				/* Notice */
-				cave_set_feat(py, px, floor_type[randint0(100)]);
-			}
-		}
-
 		if (music_singing(MUSIC_WALL))
 		{
 			project(0, 0, py, px,
 				(60 + p_ptr->lev), GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM, -1);
 		}
-		else if (p_ptr->kill_wall)
+		else if (p_ptr->kill_wall || (p_ptr->riding && (riding_r_ptr->flags2 & RF2_KILL_WALL)))
 		{
-			if (cave_valid_bold(py, px) &&
+			if (!cave_floor_bold(py, px) && cave_valid_bold(py, px) &&
 				(cave[py][px].feat < FEAT_PATTERN_START ||
 				 cave[py][px].feat > FEAT_PATTERN_XTRA2) &&
 				(cave[py][px].feat < FEAT_DEEP_WATER ||
 				 cave[py][px].feat > FEAT_GRASS))
 			{
+				/* Forget the wall */
+				cave[py][px].info &= ~(CAVE_MARK);
+
 				if (cave[py][px].feat == FEAT_TREES)
 					cave_set_feat(py, px, FEAT_GRASS);
 				else
