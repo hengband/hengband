@@ -2630,6 +2630,18 @@ msg_print("ダンジョンが揺れた。");
 
 			break;
 		}
+
+		case SV_STAFF_NOTHING:
+		{
+#ifdef JP
+			msg_print("何も起らなかった。");
+			msg_print("もったいない事をしたような気がする。食べ物は大切にしなくては。");
+#else
+			msg_print("Nothing happen.");
+			msg_print("What a waste.  It's your food!");
+#endif
+			break;
+		}
 	}
 	return ident;
 }

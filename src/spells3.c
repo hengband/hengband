@@ -2916,7 +2916,10 @@ s = "鑑定するべきアイテムがない。";
 bool item_tester_hook_recharge(object_type *o_ptr)
 {
 	/* Recharge staffs */
-	if (o_ptr->tval == TV_STAFF) return (TRUE);
+	if (o_ptr->tval == TV_STAFF)
+	{
+		if (o_ptr->sval != SV_STAFF_NOTHING) return (TRUE);
+	}
 
 	/* Recharge wands */
 	if (o_ptr->tval == TV_WAND) return (TRUE);
