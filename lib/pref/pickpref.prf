@@ -1,20 +1,6 @@
 #
 # Sample Preference of the Object Auto-picker/Destroyer
 #
-# Important commands 
-#  a i ^Q      :  Insert mode
-#  ESC ^Q      :  Command mode
-#  q _         :  Quit (command mode only)
-#  hjkl2468    :  Move (command mode only)
-#  ^B ^N ^P ^F :  Move (always)
-#  ^I  : Choose from inventry/equipment
-#  ^S  : pick up / destroy / leave on floor
-#  ^U  : identified / unidentified / ...
-#  ^L  : Insert name of the last auto-destroyed item.
-#  '/' : Search string, or search an item specified by ^I or ^L.
-#  'n' : Search next
-#  'N' : Search previous
-#
 
 wanted corpse
 wanted Skeleton
