@@ -703,7 +703,7 @@ static int read_sock(void)
 
 #ifndef WINDOWS
 /* Win版の床の中点と壁の豆腐をピリオドとシャープにする。 */
-void win2unix(int col, char *buf)
+static void win2unix(int col, char *buf)
 {
 	char kabe;
 	if ( col == 9 ) kabe = '%';
