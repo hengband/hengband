@@ -494,49 +494,6 @@ static bool object_flavor(int k_idx)
 }
 
 
-void get_table_name(char *out_string)
-{
-#ifdef JP
-	char Syllable[80];
-	strcpy(out_string, "『");
-	get_rnd_line("aname_j.txt", 1, Syllable);
-	strcat(out_string, Syllable);
-	get_rnd_line("aname_j.txt", 2, Syllable);
-	strcat(out_string, Syllable);
-	strcat(out_string, "』");
-#else
-	int testcounter = randint1(3) + 1;
-
-	strcpy(out_string, "'");
-
-	if (randint1(3) == 2)
-	{
-		while (testcounter--)
-			strcat(out_string, syllables[randint0(MAX_SYLLABLES)]);
-	}
-	else
-	{
-		char Syllable[80];
-		testcounter = randint1(2) + 1;
-		while (testcounter--)
-		{
-			(void)get_rnd_line("elvish.txt", 0, Syllable);
-			strcat(out_string, Syllable);
-		}
-	}
-
-	out_string[1] = toupper(out_string[1]);
-
-	strcat(out_string, "'");
-#endif
-
-
-	out_string[18] = '\0';
-
-	return;
-}
-
-
 /*
  * Prepare the "variable" part of the "k_info" array.
  *
@@ -2383,7 +2340,9 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 				t = object_desc_str(t, &temp[3]);
 				t = object_desc_str(t, "の");
 			}
-			else if ((strncmp(temp, "『", 2) != 0) && (temp[0] != '\''))
+			else if ((strncmp(temp, "『", 2) != 0) &&
+				 (strncmp(temp, "《", 2) != 0) &&
+				 (temp[0] != '\''))
 				t = object_desc_str(t, temp);
 		}
 		/* 伝説のアイテム */
@@ -2470,7 +2429,9 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			int itemp;
 			strcpy(temp, quark_str(o_ptr->art_name));
 			/* MEGA HACK by ita */
-			if (strncmp(temp, "『", 2) == 0) t = object_desc_str(t, temp);
+			if (strncmp(temp, "『", 2) == 0 ||
+			    strncmp(temp, "《", 2) == 0)
+				t = object_desc_str(t, temp);
 			else if (temp[0] == '\'')
 			{
 				itemp = strlen(temp);

@@ -1535,6 +1535,63 @@ static void give_activation_power(object_type *o_ptr)
 }
 
 
+/*
+ * Create a name from random parts.
+ */
+static void get_table_name_aux(char *out_string)
+{
+#ifdef JP
+	char Syllable[80];
+	get_rnd_line("aname_j.txt", 1, Syllable);
+	strcat(out_string, Syllable);
+	get_rnd_line("aname_j.txt", 2, Syllable);
+	strcat(out_string, Syllable);
+#else
+	int testcounter = randint1(3) + 1;
+
+	strcpy(out_string, "'");
+
+	if (randint1(3) == 2)
+	{
+		while (testcounter--)
+			strcat(out_string, syllables[randint0(MAX_SYLLABLES)]);
+	}
+	else
+	{
+		char Syllable[80];
+		testcounter = randint1(2) + 1;
+		while (testcounter--)
+		{
+			(void)get_rnd_line("elvish.txt", 0, Syllable);
+			strcat(out_string, Syllable);
+		}
+	}
+
+	out_string[0] = toupper(out_string[1]);
+
+	strcat(out_string, "'");
+
+	out_string[16] = '\0';
+#endif
+}
+
+
+/*
+ * Create a name from random parts without quotes.
+ */
+static void get_table_name(char *out_string)
+{
+	char buff[80];
+	get_table_name_aux(buff);
+
+#ifdef JP
+	sprintf(out_string, "『%s』", buff);
+#else
+	sprintf(out_string, "'%s'", buff);
+#endif
+}
+
+
 static void get_random_name(char *return_name, bool armour, int power)
 {
 	if (randint1(100) <= TABLE_NAME)
@@ -1902,6 +1959,11 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 	if (a_scroll)
 	{
 		char dummy_name[80] = "";
+#ifdef JP
+		cptr ask_msg = "このアーティファクトを何と名付けますか？";
+#else
+		cptr ask_msg = "What do you want to call the artifact? ";
+#endif
 
 		/* Identify it fully */
 		object_aware(o_ptr);
@@ -1912,28 +1974,27 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 
 		(void)screen_object(o_ptr, TRUE);
 
-#ifdef JP
-		if (get_string("このアーティファクトを何と名付けますか？", dummy_name, sizeof dummy_name) && dummy_name[0])
-#else
-		if (get_string("What do you want to call the artifact? ", dummy_name, sizeof dummy_name) && dummy_name[0])
-#endif
+		if (!get_string(ask_msg, dummy_name, sizeof dummy_name)
+		    || !dummy_name[0])
 		{
-#ifdef JP
-			strcpy(new_name, "《");
-#else
-			strcpy(new_name, "'");
+			/* Cancelled */
+#if 0
+			if (one_in_(2))
+			{
+				get_table_sindarin(dummy_name);
+			}
+			else
 #endif
-			strcat(new_name, dummy_name);
+			{
+				get_table_name_aux(dummy_name);
+			}
+		}
+
 #ifdef JP
-			strcat(new_name, "》という名の");
+		sprintf(new_name, "《%s》", dummy_name);
 #else
-			strcat(new_name, "'");
+		sprintf(new_name, "'%s'", dummy_name);
 #endif
-		}
-		else
-		{
-			get_random_name(new_name, object_is_armour(o_ptr), power_level);
-		}
 
 		chg_virtue(V_INDIVIDUALISM, 2);
 		chg_virtue(V_ENCHANT, 5);
