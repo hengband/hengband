@@ -139,12 +139,14 @@ G:^:s
 N:18:落とし穴
 E:pit
 G:^:s
+M:17
 
 # 0x13 --> visible trap -- poison pit
 
 N:19:落とし穴
 E:pit
 G:^:s
+M:17
 
 # 0x14 --> visible trap -- rune -- summon
 
@@ -169,6 +171,7 @@ G:^:u
 N:23:焦げた場所
 E:discolored spot
 G:^:u
+M:22
 
 # 0x18 --> visible trap -- dart -- slow
 
@@ -181,18 +184,21 @@ G:^:r
 N:25:ダーツ・トラップ
 E:dart trap
 G:^:r
+M:24
 
 # 0x1A --> visible trap -- dart -- lose dex
 
 N:26:ダーツ・トラップ
 E:dart trap
 G:^:r
+M:24
 
 # 0x1B --> visible trap -- dart -- lose con
 
 N:27:ダーツ・トラップ
 E:dart trap
 G:^:r
+M:24
 
 # 0x1C --> visible trap -- gas -- blind
 
@@ -205,18 +211,21 @@ G:^:g
 N:29:ガス・トラップ
 E:gas trap
 G:^:g
+M:28
 
 # 0x1E --> visible trap -- gas -- poison
 
 N:30:ガス・トラップ
 E:gas trap
 G:^:g
+M:28
 
 # 0x1F --> visible trap -- gas -- sleep
 
 N:31:ガス・トラップ
 E:gas trap
 G:^:g
+M:28
 
 # 0x2x --> locked door (power 0)
 

@@ -878,14 +878,6 @@ static void do_cmd_erase_nikki(void)
 	safe_setuid_grab();
 }
 
-#if 0
-void do_debug(void)
-{
-	msg_format("%d %d %d:%d",py,px, p_ptr->energy, p_ptr->skill_dis);
-	msg_print(NULL);
-	battle_monsters();
-}
-#endif
 
 void do_cmd_nikki(void)
 {
@@ -953,11 +945,6 @@ void do_cmd_nikki(void)
 		case '4':
 			do_cmd_erase_nikki();
 			break;
-#if 0
-		case ':':
-			do_debug();
-			break;
-#endif
 		default: /* Unknown option */
 			bell();
 		}
@@ -3589,7 +3576,7 @@ void do_cmd_visuals(void)
 			line_num += 3;
 
 			/* Dump monsters */
-			for (i = 0; i < max_r_idx; i++)
+			for (i = 1; i < max_r_idx; i++)
 			{
 				monster_race *r_ptr = &r_info[i];
 
@@ -3601,7 +3588,7 @@ void do_cmd_visuals(void)
 				line_num++;
 
 				/* Dump the monster attr/char info */
-				fprintf(fff, "R:%d:0x%02X:0x%02X\n\n", i,
+				fprintf(fff, "R:%d:0x%02X/0x%02X\n\n", i,
 					(byte)(r_ptr->x_attr), (byte)(r_ptr->x_char));
 				line_num += 2;
 			}
@@ -3662,19 +3649,26 @@ void do_cmd_visuals(void)
 			line_num += 3;
 
 			/* Dump objects */
-			for (i = 0; i < max_k_idx; i++)
+			for (i = 1; i < max_k_idx; i++)
 			{
+				char o_name[80];
 				object_kind *k_ptr = &k_info[i];
 
 				/* Skip non-entries */
 				if (!k_ptr->name) continue;
 
+				/* Skip entries with flavor */
+				if (k_ptr->flavor) continue;
+
+				/* Tidy name */
+				strip_name(o_name, i);
+
 				/* Dump a comment */
-				fprintf(fff, "# %s\n", (k_name + k_ptr->name));
+				fprintf(fff, "# %s\n", o_name);
 				line_num++;
 
 				/* Dump the object attr/char info */
-				fprintf(fff, "K:%d:0x%02X:0x%02X\n\n", i,
+				fprintf(fff, "K:%d:0x%02X/0x%02X\n\n", i,
 					(byte)(k_ptr->x_attr), (byte)(k_ptr->x_char));
 				line_num += 2;
 			}
@@ -3735,19 +3729,22 @@ void do_cmd_visuals(void)
 			line_num += 3;
 
 			/* Dump features */
-			for (i = 0; i < max_f_idx; i++)
+			for (i = 1; i < max_f_idx; i++)
 			{
 				feature_type *f_ptr = &f_info[i];
 
 				/* Skip non-entries */
 				if (!f_ptr->name) continue;
 
+				/* Skip mimiccing features */
+				if (f_ptr->mimic != i) continue;
+
 				/* Dump a comment */
 				fprintf(fff, "# %s\n", (f_name + f_ptr->name));
 				line_num++;
 
 				/* Dump the feature attr/char info */
-				fprintf(fff, "F:%d:0x%02X:0x%02X\n\n", i,
+				fprintf(fff, "F:%d:0x%02X/0x%02X\n\n", i,
 					(byte)(f_ptr->x_attr), (byte)(f_ptr->x_char));
 				line_num += 2;
 			}
@@ -4746,7 +4743,6 @@ void do_cmd_feeling(void)
 
 
 
-#define BROWSER_ROWS 16
 /*
  * Description of each monster group.
  */
@@ -4866,6 +4862,7 @@ static cptr monster_group_text[] =
 	NULL
 };
 
+
 /*
  * Symbols of monsters in each group. Note the "Uniques" group
  * is handled differently.
@@ -4975,16 +4972,13 @@ static int collect_monsters(int grp_cur, s16b mon_idx[], byte mode)
 		/* Access the race */
 		monster_race *r_ptr = &r_info[i];
 
-		/* Is this a unique? */
-		bool unique = (bool)(r_ptr->flags1 & (RF1_UNIQUE)) ;
-
 		/* Skip empty race */
 		if (!r_ptr->name) continue ;
 
 		/* Require known monsters */
 		if (!(mode & 0x02) && !cheat_know && !r_ptr->r_sights ) continue;
 
-		if (grp_unique && !(unique)) continue;
+		if (grp_unique && !(r_ptr->flags1 & RF1_UNIQUE)) continue;
 
 		/* Check for race in the group */
 		if (grp_unique || strchr(group_char, r_ptr->d_char))
@@ -5035,6 +5029,7 @@ static cptr object_group_text[] =
 	"くさび",
 	"箱",
 	"人形",
+	"像",
 	"ゴミ",
 	"空のビン",
 	"骨",
@@ -5055,6 +5050,7 @@ static cptr object_group_text[] =
 	"ヘルメット",	/* "Helms" */
 	"冠",	/* "Crowns" */
 	"ブーツ",	/* "Boots" */
+	"魔法書",
 #else
 	"Mushrooms",
 	"Potions",
@@ -5073,6 +5069,7 @@ static cptr object_group_text[] =
 	"Spikes",
 	"Boxs",
 	"Figurines",
+	"Statues",
 	"Junks",
 	"Bottles",
 	"Skeletons",
@@ -5093,9 +5090,11 @@ static cptr object_group_text[] =
 	"Helms",
 	"Crowns",
 	"Boots",
+	"Spellbooks",
 #endif
 	NULL
 };
+
 
 /*
  * TVALs of items in each group
@@ -5119,6 +5118,7 @@ static byte object_group_tval[] =
 	TV_SPIKE,
 	TV_CHEST,
 	TV_FIGURINE,
+	TV_STATUE,
 	TV_JUNK,
 	TV_BOTTLE,
 	TV_SKELETON,
@@ -5139,9 +5139,9 @@ static byte object_group_tval[] =
 	TV_HELM,
 	TV_CROWN,
 	TV_BOOTS,
+	TV_LIFE_BOOK, /* Hack -- all spellbooks */
 	0
 };
-
 
 
 /*
@@ -5165,7 +5165,7 @@ static int collect_objects(int grp_cur, int object_idx[])
 		if (!k_ptr->name) continue;
 
 		/* Skip non-flavoured objects */
-		if (!k_ptr->flavor) continue;
+		if (!k_ptr->flavor && !p_ptr->wizard) continue;
 
 		/* Skip items with no distribution (special artifacts) */
 		for (j = 0, k = 0; j < 4; j++) k += k_ptr->chance[j];
@@ -5175,7 +5175,16 @@ static int collect_objects(int grp_cur, int object_idx[])
 		if (!k_ptr->aware && !p_ptr->wizard) continue;
 
 		/* Check for race in the group */
-		if (k_ptr->tval == group_tval)
+		if (TV_LIFE_BOOK == group_tval)
+		{
+			/* Hack -- All spell books */
+			if (TV_LIFE_BOOK <= k_ptr->tval && k_ptr->tval <= TV_HISSATSU_BOOK)
+			{
+				/* Add the race */
+				object_idx[object_cnt++] = i;
+			}
+		}
+		else if (k_ptr->tval == group_tval)
 		{
 			/* Add the race */
 			object_idx[object_cnt++] = i;
@@ -5190,7 +5199,49 @@ static int collect_objects(int grp_cur, int object_idx[])
 }
 
 
+/*
+ * Description of each feature group.
+ */
+static cptr feature_group_text[] = 
+{
+	"terrains",
+	NULL
+};
 
+
+/*
+ * Build a list of feature indexes in the given group. Return the number
+ * of features in the group.
+ */
+static int collect_features(int grp_cur, int *feat_idx)
+{
+	int i, feat_cnt = 0;
+
+	/* Check every feature */
+	for (i = 1; i < max_f_idx; i++)
+	{
+		/* Access the index */
+		feature_type *f_ptr = &f_info[i];
+
+		/* Skip empty index */
+		if (!f_ptr->name) continue;
+
+		/* Skip mimiccing features */
+		if (f_ptr->mimic != i) continue;
+
+		/* Add the index */
+		feat_idx[feat_cnt++] = i;
+	}
+
+	/* Terminate the list */
+	feat_idx[feat_cnt] = 0;
+
+	/* Return the number of races */
+	return feat_cnt;
+}
+
+
+#if 0
 /*
  * Build a list of monster indexes in the given group. Return the number
  * of monsters in the group.
@@ -5228,7 +5279,7 @@ static int collect_artifacts(int grp_cur, int object_idx[])
 	/* Return the number of races */
 	return object_cnt;
 }
-
+#endif /* 0 */
 
 
 /*
@@ -6328,7 +6379,7 @@ static void do_cmd_knowledge_artifacts(void)
 
 		/* Paranoia */
 #ifdef JP
-strcpy(base_name, "未知の伝説のアイテム");
+		strcpy(base_name, "未知の伝説のアイテム");
 #else
 		strcpy(base_name, "Unknown Artifact");
 #endif
@@ -6477,100 +6528,6 @@ static void do_cmd_knowledge_uniques(void)
 	/* Remove the file */
 	fd_kill(file_name);
 }
-
-
-#if 0
-/*
- * Display dead uniques
- */
-static void do_cmd_knowledge_uniques_dead(void)
-{
-	int i, k, n = 0;
-	u16b why = 2;
-	s16b *who;
-
-	FILE *fff;
-
-	char file_name[1024];
-
-	/* Open a new file */
-	fff = my_fopen_temp(file_name, 1024);
-
-	if (!fff) {
-#ifdef JP
-	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
-#else
-	    msg_format("Failed to create temporary file %s.", file_name);
-#endif
-	    msg_print(NULL);
-	    return;
-	}
-
-	/* Allocate the "who" array */
-	C_MAKE(who, max_r_idx, s16b);
-
-	/* Scan the monsters */
-	for (i = 1; i < max_r_idx; i++)
-	{
-		monster_race *r_ptr = &r_info[i];
-
-		/* Use that monster */
-		if (r_ptr->name) who[n++] = i;
-	}
-
-	/* Select the sort method */
-	ang_sort_comp = ang_sort_comp_hook;
-	ang_sort_swap = ang_sort_swap_hook;
-
-	/* Sort the array by dungeon depth of monsters */
-	ang_sort(who, &why, n);
-
-	/* Scan the monster races */
-	for (k = 0; k < n; k++)
-	{
-		monster_race *r_ptr = &r_info[who[k]];
-
-		/* Only print Uniques */
-		if (r_ptr->flags1 & (RF1_UNIQUE))
-		{
-			bool dead = (r_ptr->max_num == 0);
-
-			if (!dead) continue;
-
-			/* Only display "known" uniques */
-			if (dead || cheat_know || r_ptr->r_sights)
-			{
-				/* Print a message */
-#ifdef JP
-				fprintf(fff, "     %sは既に死んでいる。\n",
-					(r_name + r_ptr->name));
-#else
-				fprintf(fff, "     %s is dead\n",
-					(r_name + r_ptr->name));
-#endif
-
-			}
-		}
-	}
-
-	/* Free the "who" array */
-	C_KILL(who, max_r_idx, s16b);
-
-	/* Close the file */
-	my_fclose(fff);
-
-	/* Display the file contents */
-#ifdef JP
-	show_file(TRUE, file_name, "倒したユニーク・モンスター", 0, 0);
-#else
-	show_file(TRUE, file_name, "Dead Uniques", 0, 0);
-#endif
-
-
-	/* Remove the file */
-	fd_kill(file_name);
-}
-#endif /* 0 */
 
 
 /*
@@ -7013,7 +6970,7 @@ static void do_cmd_knowledge_pets(void)
 
 	/* Display the file contents */
 #ifdef JP
-show_file(TRUE, file_name, "現在のペット", 0, 0);
+	show_file(TRUE, file_name, "現在のペット", 0, 0);
 #else
 	show_file(TRUE, file_name, "Current Pets", 0, 0);
 #endif
@@ -7151,11 +7108,11 @@ static void do_cmd_knowledge_kill_count(void)
 			if (This > 0)
 			{
 #ifdef JP
-/* p,tは人と数える by ita*/
-if(strchr("pt",r_ptr->d_char))
-fprintf(fff, "     %3d 人の %s\n", This, r_name + r_ptr->name);
-else
-fprintf(fff, "     %3d 匹の %s\n", This, r_name + r_ptr->name);
+				/* p,tは人と数える by ita*/
+				if(strchr("pt",r_ptr->d_char))
+					fprintf(fff, "     %3d 人の %s\n", This, r_name + r_ptr->name);
+				else
+					fprintf(fff, "     %3d 匹の %s\n", This, r_name + r_ptr->name);
 #else
 				if (This < 2)
 				{
@@ -7200,7 +7157,7 @@ fprintf(fff, "     %3d 匹の %s\n", This, r_name + r_ptr->name);
 
 	/* Display the file contents */
 #ifdef JP
-show_file(TRUE, file_name, "倒した敵の数", 0, 0);
+	show_file(TRUE, file_name, "倒した敵の数", 0, 0);
 #else
 	show_file(TRUE, file_name, "Kill Count", 0, 0);
 #endif
@@ -7209,7 +7166,6 @@ show_file(TRUE, file_name, "倒した敵の数", 0, 0);
 	/* Remove the file */
 	fd_kill(file_name);
 }
-
 
 
 /*
@@ -7236,7 +7192,6 @@ static void display_group_list(int col, int row, int wid, int per_page,
 		c_put_str(attr, group_text[grp], row + i, col);
 	}
 }
-
 
 
 /* 
@@ -7271,13 +7226,21 @@ static void browser_cursor(char ch, int *column, int *grp_cur, int grp_cnt,
 	/* Diagonals - hack */
 	if ((ddx[d] > 0) && ddy[d])
 	{
+		int browser_rows;
+		int wid, hgt;
+
+		/* Get size */
+		Term_get_size(&wid, &hgt);
+
+		browser_rows = hgt - 8;
+
 		/* Browse group list */
 		if (!col)
 		{
 			int old_grp = grp;
 
 			/* Move up or down */
-			grp += ddy[d] * (BROWSER_ROWS - 1);
+			grp += ddy[d] * (browser_rows - 1);
 
 			/* Verify */
 			if (grp >= grp_cnt)	grp = grp_cnt - 1;
@@ -7289,7 +7252,7 @@ static void browser_cursor(char ch, int *column, int *grp_cur, int grp_cnt,
 		else
 		{
 			/* Move up or down */
-			list += ddy[d] * BROWSER_ROWS;
+			list += ddy[d] * browser_rows;
 
 			/* Verify */
 			if (list >= list_cnt) list = list_cnt - 1;
@@ -7343,6 +7306,174 @@ static void browser_cursor(char ch, int *column, int *grp_cur, int grp_cnt,
 }
 
 
+/*
+ * Display visuals.
+ */
+static void display_visual_list(int col, int row, int height, int width, byte attr_top, byte char_left)
+{
+	int i, j;
+
+	/* Clear the display lines */
+	for (i = 0; i < height; i++)
+	{
+		Term_erase(col, row + i, width);
+	}
+
+	/* Bigtile mode uses double width */
+	if (use_bigtile) width /= 2;
+
+	/* Display lines until done */
+	for (i = 0; i < height; i++)
+	{
+		/* Display columns until done */
+		for (j = 0; j < width; j++)
+		{
+			byte a = attr_top + i;
+			byte c = char_left + j;
+			int x = col + j;
+			int y = row + i;
+
+			/* Bigtile mode uses double width */
+			if (use_bigtile) x += j;
+#ifdef JP
+			/* Don't display broken kanji */
+			if (!(a & 0x80) && (c & 0x80)) continue;
+#endif
+
+			/* Display the mark */
+			Term_putch(x, y, a, c);
+
+			/* Write dammy byte */
+			if (use_bigtile)
+			{
+				if ((a & 0x80) && (c & 0x80))
+					Term_putch(x + 1, y, 255, -1);
+				else
+					Term_putch(x + 1, y, 0, ' ');
+			}
+		}
+	}
+}
+
+
+/*
+ *  Clipboard variables for copy&paste in visual mode
+ */
+static byte attr_idx = 0;
+static byte char_idx = 0;
+
+/*
+ *  Do visual mode command -- Change symbols
+ */
+static bool visual_mode_command(char ch, bool *visual_list_ptr, 
+				int height, int width, 
+				byte *attr_top_ptr, byte *char_left_ptr, 
+				byte *cur_attr_ptr, byte *cur_char_ptr)
+{
+	static byte attr_old = 0, char_old = 0;
+
+	switch (ch)
+	{
+	case ESCAPE:
+		if (*visual_list_ptr)
+		{
+			/* Cancel change */
+			*cur_attr_ptr = attr_old;
+			*cur_char_ptr = char_old;
+			*visual_list_ptr = FALSE;
+
+			return TRUE;
+		}
+
+		break;
+
+	case '\n':
+	case '\r':
+		if (*visual_list_ptr)
+		{
+			/* Accept change */
+			*visual_list_ptr = FALSE;
+
+			return TRUE;
+		}
+		break;
+
+	case 'V':
+	case 'v':
+		if (!*visual_list_ptr)
+		{
+			*visual_list_ptr = TRUE;
+
+			*attr_top_ptr = MAX(0, *cur_attr_ptr - 5);
+			*char_left_ptr = MAX(0, *cur_char_ptr - 10);
+
+			attr_old = *cur_attr_ptr;
+			char_old = *cur_char_ptr;
+
+			return TRUE;
+		}
+		break;
+
+	case 'C':
+	case 'c':
+		/* Set the visual */
+		attr_idx = *cur_attr_ptr;
+		char_idx = *cur_char_ptr;
+
+		return TRUE;
+
+	case 'P':
+	case 'p':
+		if (attr_idx)
+		{
+			/* Set the char */
+			*cur_attr_ptr = attr_idx;
+			*attr_top_ptr = MAX(0, *cur_attr_ptr - 5);
+		}
+
+		if (char_idx)
+		{
+			/* Set the char */
+			*cur_char_ptr = char_idx;
+			*char_left_ptr = MAX(0, *cur_char_ptr - 10);
+		}
+
+		return TRUE;
+
+	default:
+		if (*visual_list_ptr)
+		{
+			int eff_width;
+			int d = get_keymap_dir(ch);
+
+			if (use_bigtile) eff_width = width / 2;
+			else eff_width = width;
+					
+			/* Restrict direction */
+			if ((*cur_attr_ptr == 0) && (ddy[d] < 0)) d = 0;
+			if ((*cur_char_ptr == 0) && (ddx[d] < 0)) d = 0;
+			if ((*cur_attr_ptr == 255) && (ddy[d] > 0)) d = 0;
+			if ((*cur_char_ptr == 255) && (ddx[d] > 0)) d = 0;
+
+			/* Set the visual */
+			*cur_attr_ptr += ddy[d];
+			*cur_char_ptr += ddx[d];
+
+			/* Move the frame */
+			if ((ddx[d] < 0) && *char_left_ptr > MAX(0, (int)*cur_char_ptr - 10)) (*char_left_ptr)--;
+			if ((ddx[d] > 0) && *char_left_ptr + eff_width < MIN(255, (int)*cur_char_ptr + 10)) (*char_left_ptr)++;
+			if ((ddy[d] < 0) && *attr_top_ptr > MAX(0, (int)*cur_attr_ptr - 4)) (*attr_top_ptr)--;
+			if ((ddy[d] > 0) && *attr_top_ptr + height < MIN(255, *cur_attr_ptr + 4)) (*attr_top_ptr)++;
+			return TRUE;
+		}
+				
+		break;
+	}
+
+	/* Visual mode command is not used */
+	return FALSE;
+}
+
 
 /*
  * Display the monsters in a group.
@@ -7353,7 +7484,7 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 	int i;
 
 	/* Display lines until done */
-	for (i = 0; i < per_page && mon_idx[i]; i++)
+	for (i = 0; i < per_page && mon_idx[mon_top + i]; i++)
 	{
 		byte attr;
 
@@ -7363,8 +7494,6 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 		/* Access the race */
 		monster_race *r_ptr = &r_info[r_idx];
 
-		/* Is this a unique? */
-		bool unique = (bool)(r_ptr->flags1 & (RF1_UNIQUE)) ;
 
 		/* Choose a color */
 		attr = ((i + mon_top == mon_cur) ? TERM_L_BLUE : TERM_WHITE);
@@ -7372,16 +7501,30 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 		/* Display the name */
 		c_prt(attr, (r_name + r_ptr->name), row + i, col);
 
-		if (p_ptr->wizard) 
+		/* Hack -- visual_list mode */
+		if (per_page == 1)
 		{
-			c_prt(attr, format ("%d", r_idx), row + i, 60);
+			c_prt(attr, format("%02x/%02x", r_ptr->x_attr, r_ptr->x_char), row + i, 60);
+		}
+		else if (p_ptr->wizard) 
+		{
+			c_prt(attr, format("%d", r_idx), row + i, 60);
 		}
 
 		/* Display symbol */
 		Term_putch(70, row + i, r_ptr->x_attr, r_ptr->x_char);
 
+		if (use_bigtile)
+		{
+			if (r_ptr->x_attr & 0x80)
+				Term_putch(70 + 1, row + i, 255, -1);
+			else
+				Term_putch(70 + 1, row + i, 0, ' ');
+		}
+
+
 		/* Display kills */
-		if (!unique)	put_str(format("%5d", r_ptr->r_pkills), row + i, 73);
+		if (!(r_ptr->flags1 & RF1_UNIQUE)) put_str(format("%5d", r_ptr->r_pkills), row + i, 73);
 #ifdef JP
 		else c_put_str((r_ptr->max_num == 0 ? TERM_L_DARK : TERM_WHITE), (r_ptr->max_num == 0 ? "死亡" : "生存"), row + i, 73);
 #else
@@ -7397,13 +7540,14 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 	}
 }
 
+
 /*
  * Display known monsters.
  */
 static void do_cmd_knowledge_monsters(void)
 {
 	int i, len, max;
-	int grp_cur, grp_top;
+	int grp_cur, grp_top, old_grp_cur;
 	int mon_cur, mon_top;
 	int grp_cnt, grp_idx[100];
 	int mon_cnt;
@@ -7412,6 +7556,17 @@ static void do_cmd_knowledge_monsters(void)
 	int column = 0;
 	bool flag;
 	bool redraw;
+
+	bool visual_list = FALSE;
+	byte attr_top = 0, char_left = 0;
+
+	int browser_rows;
+	int wid, hgt;
+
+	/* Get size */
+	Term_get_size(&wid, &hgt);
+
+	browser_rows = hgt - 8;
 
 	/* Allocate the "mon_idx" array */
 	C_MAKE(mon_idx, max_r_idx, s16b);
@@ -7439,8 +7594,10 @@ static void do_cmd_knowledge_monsters(void)
 	/* Terminate the list */
 	grp_idx[grp_cnt] = -1;
 
+	old_grp_cur = -1;
 	grp_cur = grp_top = 0;
 	mon_cur = mon_top = 0;
+	mon_cnt = 0;
 
 	flag = FALSE;
 	redraw = TRUE;
@@ -7448,6 +7605,7 @@ static void do_cmd_knowledge_monsters(void)
 	while (!flag)
 	{
 		char ch;
+		monster_race *r_ptr;
 
 		if (redraw)
 		{
@@ -7472,7 +7630,7 @@ static void do_cmd_knowledge_monsters(void)
 				Term_putch(i, 5, TERM_WHITE, '=');
 			}
 
-			for (i = 0; i < BROWSER_ROWS; i++)
+			for (i = 0; i < browser_rows; i++)
 			{
 				Term_putch(max + 1, 6 + i, TERM_WHITE, '|');
 			}
@@ -7482,29 +7640,50 @@ static void do_cmd_knowledge_monsters(void)
 
 		/* Scroll group list */
 		if (grp_cur < grp_top) grp_top = grp_cur;
-		if (grp_cur >= grp_top + BROWSER_ROWS) grp_top = grp_cur - BROWSER_ROWS + 1;
+		if (grp_cur >= grp_top + browser_rows) grp_top = grp_cur - browser_rows + 1;
 
 		/* Display a list of monster groups */
-		display_group_list(0, 6, max, BROWSER_ROWS, grp_idx, monster_group_text, grp_cur, grp_top);
+		display_group_list(0, 6, max, browser_rows, grp_idx, monster_group_text, grp_cur, grp_top);
 
-		/* Get a list of monsters in the current group */
-		mon_cnt = collect_monsters(grp_idx[grp_cur], mon_idx, 0x00);
+		if (old_grp_cur != grp_cur)
+		{
+			old_grp_cur = grp_cur;
+
+			/* Get a list of monsters in the current group */
+			mon_cnt = collect_monsters(grp_idx[grp_cur], mon_idx, 0x00);
+		}
 
 		/* Scroll monster list */
 		while (mon_cur < mon_top)
-			mon_top = MAX(0, mon_top - BROWSER_ROWS/2);
-		while (mon_cur >= mon_top + BROWSER_ROWS)
-			mon_top = MIN(mon_cnt - BROWSER_ROWS, mon_top + BROWSER_ROWS/2);
+			mon_top = MAX(0, mon_top - browser_rows/2);
+		while (mon_cur >= mon_top + browser_rows)
+			mon_top = MIN(mon_cnt - browser_rows, mon_top + browser_rows/2);
 
-		/* Display a list of monsters in the current group */
-		display_monster_list(max + 3, 6, BROWSER_ROWS, mon_idx, mon_cur, mon_top);
+		if (!visual_list)
+		{
+			/* Display a list of monsters in the current group */
+			display_monster_list(max + 3, 6, browser_rows, mon_idx, mon_cur, mon_top);
+		}
+		else
+		{
+			mon_top = mon_cur;
+
+			/* Display a monster name */
+			display_monster_list(max + 3, 6, 1, mon_idx, mon_cur, mon_top);
+
+			/* Display visual list below first monster */
+			display_visual_list(max + 3, 7, browser_rows-1, wid - (max + 3), attr_top, char_left);
+		}
 
 		/* Prompt */
 #ifdef JP
-		prt("<方向>, 'r'で思い出を見る, ESC", 23, 0);
+		prt(format("<方向>, 'r'で思い出を見る%s%s, ESC", visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更", (attr_idx||char_idx) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"), hgt - 1, 0);
 #else
-		prt("<dir>, 'r' to recall, ESC", 23, 0);
+		prt(format("<dir>, 'r' to recall%s%s, ESC", visual_list ? ", ENTER to accept" : ", 'v' for visuals", (attr_idx||char_idx) ? ", 'c', 'p' to paste" : ", 'c' to copy"), hgt - 1, 0);
 #endif
+
+		/* Get the current monster */
+		r_ptr = &r_info[mon_idx[mon_cur]];
 
 		/* Mega Hack -- track this monster race */
 		if (mon_cnt) monster_race_track(mon_idx[mon_cur]);
@@ -7512,7 +7691,18 @@ static void do_cmd_knowledge_monsters(void)
 		/* Hack -- handle stuff */
 		handle_stuff();
 
-		if (!column)
+		if (visual_list)
+		{
+			int x, y;
+
+			y = 7 + (r_ptr->x_attr - attr_top);
+			if (use_bigtile) x = max + 3 + 2 * (r_ptr->x_char - char_left);
+			else  x = max + 3 + (r_ptr->x_char - char_left);
+
+			/* Place the cursor */
+			Term_gotoxy(x, y);
+		}
+		else if (!column)
 		{
 			Term_gotoxy(0, 6 + (grp_cur - grp_top));
 		}
@@ -7522,6 +7712,9 @@ static void do_cmd_knowledge_monsters(void)
 		}
 	
 		ch = inkey();
+
+		/* Do visual mode command if needed */
+		if (visual_mode_command(ch, &visual_list, browser_rows-1, wid - (max + 3), &attr_top, &char_left, &r_ptr->x_attr, &r_ptr->x_char)) continue;
 
 		switch (ch)
 		{
@@ -7539,7 +7732,7 @@ static void do_cmd_knowledge_monsters(void)
 				{
 					screen_roff(mon_idx[mon_cur], 0);
 
-					(void) inkey();
+					(void)inkey();
 	
 					redraw = TRUE;
 				}
@@ -7550,16 +7743,15 @@ static void do_cmd_knowledge_monsters(void)
 			{
 				/* Move the cursor */
 				browser_cursor(ch, &column, &grp_cur, grp_cnt, &mon_cur, mon_cnt);
-				
+
 				break;
 			}
 		}
 	}
 
-	/* XXX XXX Free the "mon_idx" array */
+	/* Free the "mon_idx" array */
 	C_KILL(mon_idx, max_r_idx, s16b);
 }
-
 
 
 /*
@@ -7571,8 +7763,11 @@ static void display_object_list(int col, int row, int per_page, int object_idx[]
 	int i;
 
 	/* Display lines until done */
-	for (i = 0; i < per_page && object_idx[i]; i++)
+	for (i = 0; i < per_page && object_idx[object_top + i]; i++)
 	{
+		char o_name[80];
+		byte a, c;
+
 		/* Get the object index */
 		int k_idx = object_idx[object_top + i];
 
@@ -7580,22 +7775,46 @@ static void display_object_list(int col, int row, int per_page, int object_idx[]
 		object_kind *k_ptr = &k_info[k_idx];
 
 		/* Choose a color */
-		byte attr = ((k_ptr->aware) ? TERM_WHITE : TERM_SLATE);
-		byte cursor = ((k_ptr->aware) ? TERM_L_BLUE : TERM_BLUE);
+		byte attr = (k_ptr->aware ? TERM_WHITE : TERM_SLATE);
+		byte cursor = (k_ptr->aware ? TERM_L_BLUE : TERM_BLUE);
+
 		attr = ((i + object_top == object_cur) ? cursor : attr);
 		
+		/* Tidy name */
+		strip_name(o_name, k_idx);
+
 		/* Display the name */
-		c_prt(attr, k_name + k_ptr->name, row + i, col);
+		c_prt(attr, o_name, row + i, col);
 
-		if (p_ptr->wizard) c_prt(attr, format ("%d", k_idx), row + i, 70);
-
-		if (k_ptr->aware)
+		/* Hack -- visual_list mode */
+		if (per_page == 1)
 		{
-			byte a = misc_to_attr[k_ptr->flavor];
-			byte c = misc_to_char[k_ptr->flavor];
-	
-			/* Display symbol */
-			Term_putch(76, row + i, a, c);
+			c_prt(attr, format("%02x/%02x", k_ptr->x_attr, k_ptr->x_char), row + i, 60);
+		}
+		else if (p_ptr->wizard)
+		{
+			c_prt(attr, format ("%d", k_idx), row + i, 70);
+		}
+
+		a = k_ptr->flavor ? misc_to_attr[k_ptr->flavor] : k_ptr->x_attr;
+		c = k_ptr->flavor ? misc_to_char[k_ptr->flavor] : k_ptr->x_char;
+
+		/* Symbol is unknown */	
+		if (!k_ptr->aware && !p_ptr->wizard)
+		{
+			c = ' ';
+			a = 0;
+		}
+
+		/* Display symbol */
+		Term_putch(76, row + i, a, c);
+
+		if (use_bigtile)
+		{
+			if (k_ptr->x_attr & 0x80)
+				Term_putch(76 + 1, row + i, 255, -1);
+			else
+				Term_putch(76 + 1, row + i, 0, ' ');
 		}
 	}
 
@@ -7653,7 +7872,7 @@ static void desc_obj_fake(int k_idx)
 static void do_cmd_knowledge_objects(void)
 {
 	int i, len, max;
-	int grp_cur, grp_top;
+	int grp_cur, grp_top, old_grp_cur;
 	int object_old, object_cur, object_top;
 	int grp_cnt, grp_idx[100];
 	int object_cnt;
@@ -7662,6 +7881,17 @@ static void do_cmd_knowledge_objects(void)
 	int column = 0;
 	bool flag;
 	bool redraw;
+
+	bool visual_list = FALSE;
+	byte attr_top = 0, char_left = 0;
+
+	int browser_rows;
+	int wid, hgt;
+
+	/* Get size */
+	Term_get_size(&wid, &hgt);
+
+	browser_rows = hgt - 8;
 
 	/* Allocate the "object_idx" array */
 	C_MAKE(object_idx, max_k_idx, int);
@@ -7689,9 +7919,11 @@ static void do_cmd_knowledge_objects(void)
 	/* Terminate the list */
 	grp_idx[grp_cnt] = -1;
 
+	old_grp_cur = -1;
 	grp_cur = grp_top = 0;
 	object_cur = object_top = 0;
 	object_old = -1;
+	object_cnt = 0;
 
 	flag = FALSE;
 	redraw = TRUE;
@@ -7699,6 +7931,7 @@ static void do_cmd_knowledge_objects(void)
 	while (!flag)
 	{
 		char ch;
+		object_kind *k_ptr;
 
 		if (redraw)
 		{
@@ -7723,7 +7956,7 @@ static void do_cmd_knowledge_objects(void)
 				Term_putch(i, 5, TERM_WHITE, '=');
 			}
 
-			for (i = 0; i < BROWSER_ROWS; i++)
+			for (i = 0; i < browser_rows; i++)
 			{
 				Term_putch(max + 1, 6 + i, TERM_WHITE, '|');
 			}
@@ -7733,29 +7966,50 @@ static void do_cmd_knowledge_objects(void)
 
 		/* Scroll group list */
 		if (grp_cur < grp_top) grp_top = grp_cur;
-		if (grp_cur >= grp_top + BROWSER_ROWS) grp_top = grp_cur - BROWSER_ROWS + 1;
+		if (grp_cur >= grp_top + browser_rows) grp_top = grp_cur - browser_rows + 1;
 
 		/* Display a list of object groups */
-		display_group_list(0, 6, max, BROWSER_ROWS, grp_idx, object_group_text, grp_cur, grp_top);
+		display_group_list(0, 6, max, browser_rows, grp_idx, object_group_text, grp_cur, grp_top);
 
-		/* Get a list of objects in the current group */
-		object_cnt = collect_objects(grp_idx[grp_cur], object_idx);
+		if (old_grp_cur != grp_cur)
+		{
+			old_grp_cur = grp_cur;
 
-		/* Scroll monster list */
+			/* Get a list of objects in the current group */
+			object_cnt = collect_objects(grp_idx[grp_cur], object_idx);
+		}
+
+		/* Scroll object list */
 		while (object_cur < object_top)
-			object_top = MAX(0, object_top - BROWSER_ROWS/2);
-		while (object_cur >= object_top + BROWSER_ROWS)
-			object_top = MIN(object_cnt - BROWSER_ROWS, object_top + BROWSER_ROWS/2);
+			object_top = MAX(0, object_top - browser_rows/2);
+		while (object_cur >= object_top + browser_rows)
+			object_top = MIN(object_cnt - browser_rows, object_top + browser_rows/2);
 
-		/* Display a list of objects in the current group */
-		display_object_list(max + 3, 6, BROWSER_ROWS, object_idx, object_cur, object_top);
+		if (!visual_list)
+		{
+			/* Display a list of objects in the current group */
+			display_object_list(max + 3, 6, browser_rows, object_idx, object_cur, object_top);
+		}
+		else
+		{
+			object_top = object_cur;
+
+			/* Display a list of objects in the current group */
+			display_object_list(max + 3, 6, 1, object_idx, object_cur, object_top);
+
+			/* Display visual list below first object */
+			display_visual_list(max + 3, 7, browser_rows-1, wid - (max + 3), attr_top, char_left);
+		}
 
 		/* Prompt */
 #ifdef JP
-		prt("<方向>, 'r'で思い出を見る, ESC", 23, 0);
+		prt(format("<方向>, 'r'で思い出を見る%s%s, ESC", visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更", (attr_idx||char_idx) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"), hgt - 1, 0);
 #else
-		prt("<dir>, 'r' to recall, ESC", 23, 0);
+		prt(format("<dir>, 'r' to recall%s%s, ESC", visual_list ? ", ENTER to accept" : ", 'v' for visuals", (attr_idx||char_idx) ? ", 'c', 'p' to paste" : ", 'c' to copy"), hgt - 1, 0);
 #endif
+
+		/* Get the current object */
+		k_ptr = &k_info[object_idx[object_cur]];
 
 		/* Mega Hack -- track this object */
 		if (object_cnt) object_kind_track(object_idx[object_cur]);
@@ -7770,7 +8024,18 @@ static void do_cmd_knowledge_objects(void)
 			object_old = object_idx[object_cur];
 		}
 
-		if (!column)
+		if (visual_list)
+		{
+			int x, y;
+
+			y = 7 + (k_ptr->x_attr - attr_top);
+			if (use_bigtile) x = max + 3 + 2 * (k_ptr->x_char - char_left);
+			else  x = max + 3 + (k_ptr->x_char - char_left);
+
+			/* Place the cursor */
+			Term_gotoxy(x, y);
+		}
+		else if (!column)
 		{
 			Term_gotoxy(0, 6 + (grp_cur - grp_top));
 		}
@@ -7780,6 +8045,10 @@ static void do_cmd_knowledge_objects(void)
 		}
 	
 		ch = inkey();
+
+		/* Do visual mode command if needed */
+		/* Symbol of objects with flavor cannot be changed */
+		if (!k_ptr->flavor && visual_mode_command(ch, &visual_list, browser_rows-1, wid - (max + 3), &attr_top, &char_left, &k_ptr->x_attr, &k_ptr->x_char)) continue;
 
 		switch (ch)
 		{
@@ -7809,16 +8078,251 @@ static void do_cmd_knowledge_objects(void)
 		}
 	}
 
-	/* XXX XXX Free the "object_idx" array */
+	/* Free the "object_idx" array */
 	C_KILL(object_idx, max_k_idx, int);
 }
 
 
 
 /*
-* List virtues & status
-*
-*/
+ * Display the features in a group.
+ */
+static void display_feature_list(int col, int row, int per_page, int *feat_idx,
+	int feat_cur, int feat_top)
+{
+	int i;
+
+	/* Display lines until done */
+	for (i = 0; i < per_page && feat_idx[feat_top + i]; i++)
+	{
+		byte attr;
+
+		/* Get the index */
+		int f_idx = feat_idx[feat_top + i];
+
+		/* Access the index */
+		feature_type *f_ptr = &f_info[f_idx];
+
+		/* Choose a color */
+		attr = ((i + feat_top == feat_cur) ? TERM_L_BLUE : TERM_WHITE);
+
+		/* Display the name */
+		c_prt(attr, f_name + f_ptr->name, row + i, col);
+
+		/* Hack -- visual_list mode */
+		if (per_page == 1)
+		{
+			c_prt(attr, format("%02x/%02x", f_ptr->x_attr, f_ptr->x_char), row + i, 60);
+		}
+
+		/* Display symbol */
+		Term_putch(68, row + i, f_ptr->x_attr, f_ptr->x_char);
+
+		if (use_bigtile)
+		{
+			if (f_ptr->x_attr & 0x80)
+				Term_putch(68 + 1, row + i, 255, -1);
+			else
+				Term_putch(68 + 1, row + i, 0, ' ');
+		}
+	}
+
+	/* Clear remaining lines */
+	for (; i < per_page; i++)
+	{
+		Term_erase(col, row + i, 255);
+	}
+}
+
+
+/*
+ * Interact with feature visuals.
+ */
+static void do_cmd_knowledge_features(void)
+{
+	int i, len, max;
+	int grp_cur, grp_top, old_grp_cur;
+	int feat_cur, feat_top;
+	int grp_cnt, grp_idx[100];
+	int feat_cnt;
+	int *feat_idx;
+	
+	int column = 0;
+	bool flag;
+	bool redraw;
+
+	bool visual_list = FALSE;
+	byte attr_top = 0, char_left = 0;
+
+	int browser_rows;
+	int wid, hgt;
+
+	/* Get size */
+	Term_get_size(&wid, &hgt);
+
+	browser_rows = hgt - 8;
+
+	/* Allocate the "feat_idx" array */
+	C_MAKE(feat_idx, max_f_idx, int);
+
+	max = 0;
+	grp_cnt = 0;
+
+	/* Check every group */
+	for (i = 0; feature_group_text[i] != NULL; i++)
+	{
+		/* Measure the label */
+		len = strlen(feature_group_text[i]);
+
+		/* Save the maximum length */
+		if (len > max) max = len;
+
+		/* See if any features are known */
+		if (collect_features(i, feat_idx))
+		{
+			/* Build a list of groups with known features */
+			grp_idx[grp_cnt++] = i;
+		}
+	}
+
+	/* Terminate the list */
+	grp_idx[grp_cnt] = -1;
+
+	old_grp_cur = -1;
+	grp_cur = grp_top = 0;
+	feat_cur = feat_top = 0;
+	feat_cnt = 0;
+
+	flag = FALSE;
+	redraw = TRUE;
+
+	while ((!flag) && (grp_cnt))
+	{
+		char ch;
+		feature_type *f_ptr;
+
+		if (redraw)
+		{
+			clear_from(0);
+		
+			prt("Visuals - features", 2, 0);
+			prt("Group", 4, 0);
+			prt("Name", 4, max + 3);
+			prt("Sym", 4, 67);
+
+			for (i = 0; i < 78; i++)
+			{
+				Term_putch(i, 5, TERM_WHITE, '=');
+			}
+
+			for (i = 0; i < browser_rows; i++)
+			{
+				Term_putch(max + 1, 6 + i, TERM_WHITE, '|');
+			}
+
+			redraw = FALSE;
+		}
+
+		/* Scroll group list */
+		if (grp_cur < grp_top) grp_top = grp_cur;
+		if (grp_cur >= grp_top + browser_rows) grp_top = grp_cur - browser_rows + 1;
+
+		/* Display a list of feature groups */
+		display_group_list(0, 6, max, browser_rows, grp_idx, feature_group_text, grp_cur, grp_top);
+
+		if (old_grp_cur != grp_cur)
+		{
+			old_grp_cur = grp_cur;
+
+			/* Get a list of features in the current group */
+			feat_cnt = collect_features(grp_idx[grp_cur], feat_idx);
+		}
+
+		/* Scroll feature list */
+		while (feat_cur < feat_top)
+			feat_top = MAX(0, feat_top - browser_rows/2);
+		while (feat_cur >= feat_top + browser_rows)
+			feat_top = MIN(feat_cnt - browser_rows, feat_top + browser_rows/2);
+
+		if (!visual_list)
+		{
+			/* Display a list of features in the current group */
+			display_feature_list(max + 3, 6, browser_rows, feat_idx, feat_cur, feat_top);
+		}
+		else
+		{
+			feat_top = feat_cur;
+
+			/* Display a list of features in the current group */
+			display_feature_list(max + 3, 6, 1, feat_idx, feat_cur, feat_top);
+
+			/* Display visual list below first object */
+			display_visual_list(max + 3, 7, browser_rows-1, wid - (max + 3), attr_top, char_left);
+		}
+
+		/* Prompt */
+#ifdef JP
+		prt(format("<方向>%s%s, ESC", visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更", (attr_idx||char_idx) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"), hgt - 1, 0);
+#else
+		prt(format("<dir>%s%s, ESC", visual_list ? ", ENTER to accept" : ", 'v' for visuals", (attr_idx||char_idx) ? ", 'c', 'p' to paste" : ", 'c' to copy"), hgt - 1, 0);
+#endif
+
+		/* Get the current feature */
+		f_ptr = &f_info[feat_idx[feat_cur]];
+
+		if (visual_list)
+		{
+			int x, y;
+
+			y = 7 + (f_ptr->x_attr - attr_top);
+			if (use_bigtile) x = max + 3 + 2 * (f_ptr->x_char - char_left);
+			else  x = max + 3 + (f_ptr->x_char - char_left);
+
+			/* Place the cursor */
+			Term_gotoxy(x, y);
+		}
+		else if (!column)
+		{
+			Term_gotoxy(0, 6 + (grp_cur - grp_top));
+		}
+		else
+		{
+			Term_gotoxy(max + 3, 6 + (feat_cur - feat_top));
+		}
+	
+		ch = inkey();
+
+		/* Do visual mode command if needed */
+		if (visual_mode_command(ch, &visual_list, browser_rows-1, wid - (max + 3), &attr_top, &char_left, &f_ptr->x_attr, &f_ptr->x_char)) continue;
+
+		switch (ch)
+		{
+			case ESCAPE:
+			{
+				flag = TRUE;
+				break;
+			}
+
+			default:
+			{
+				/* Move the cursor */
+				browser_cursor(ch, &column, &grp_cur, grp_cnt, &feat_cur, feat_cnt);
+				break;
+			}
+		}
+	}
+
+	/* Prompt */
+	if (!grp_cnt) msg_print("No features known.");
+
+	/* Free the "feat_idx" array */
+	C_KILL(feat_idx, max_f_idx, int);
+}
+
+
+/*
+ * List wanted monsters
+ */
 static void do_cmd_knowledge_kubi(void)
 {
 	int i;
@@ -7869,7 +8373,7 @@ static void do_cmd_knowledge_kubi(void)
 	
 	/* Display the file contents */
 #ifdef JP
-show_file(TRUE, file_name, "賞金首の一覧", 0, 0);
+	show_file(TRUE, file_name, "賞金首の一覧", 0, 0);
 #else
 	show_file(TRUE, file_name, "Wanted monsters", 0, 0);
 #endif
@@ -7880,9 +8384,8 @@ show_file(TRUE, file_name, "賞金首の一覧", 0, 0);
 }
 
 /*
-* List virtues & status
-*
-*/
+ * List virtues & status
+ */
 static void do_cmd_knowledge_virtues(void)
 {
 	FILE *fff;
@@ -7917,7 +8420,7 @@ static void do_cmd_knowledge_virtues(void)
 	
 	/* Display the file contents */
 #ifdef JP
-show_file(TRUE, file_name, "八つの徳", 0, 0);
+	show_file(TRUE, file_name, "八つの徳", 0, 0);
 #else
 	show_file(TRUE, file_name, "Virtues", 0, 0);
 #endif
@@ -7977,7 +8480,7 @@ static void do_cmd_knowledge_dungeon(void)
 	
 	/* Display the file contents */
 #ifdef JP
-show_file(TRUE, file_name, "今までに入ったダンジョン", 0, 0);
+	show_file(TRUE, file_name, "今までに入ったダンジョン", 0, 0);
 #else
 	show_file(TRUE, file_name, "Dungeon", 0, 0);
 #endif
@@ -8017,13 +8520,13 @@ static void do_cmd_knowledge_stat(void)
 			((PY_MAX_LEVEL - 1+3) * (p_ptr->hitdie + 1))));
 
 #ifdef JP
-if (p_ptr->knowledge & KNOW_HPRATE) fprintf(fff, "現在の体力ランク : %d/100\n\n", percent);
-else fprintf(fff, "現在の体力ランク : ???\n\n");
-fprintf(fff, "能力の最大値\n\n");
+		if (p_ptr->knowledge & KNOW_HPRATE) fprintf(fff, "現在の体力ランク : %d/100\n\n", percent);
+		else fprintf(fff, "現在の体力ランク : ???\n\n");
+		fprintf(fff, "能力の最大値\n\n");
 #else
 		if (p_ptr->knowledge & KNOW_HPRATE) fprintf(fff, "Your current Life Rating is %d/100.\n\n", percent);
 		else fprintf(fff, "Your current Life Rating is ???.\n\n");
-fprintf(fff, "Limits of maximum stats\n\n");
+		fprintf(fff, "Limits of maximum stats\n\n");
 #endif
 		for (v_nr = 0; v_nr < 6; v_nr++)
 		{
@@ -8039,7 +8542,7 @@ fprintf(fff, "Limits of maximum stats\n\n");
 	
 	/* Display the file contents */
 #ifdef JP
-show_file(TRUE, file_name, "自分に関する情報", 0, 0);
+	show_file(TRUE, file_name, "自分に関する情報", 0, 0);
 #else
 	show_file(TRUE, file_name, "HP-rate & Max stat", 0, 0);
 #endif
@@ -8048,6 +8551,7 @@ show_file(TRUE, file_name, "自分に関する情報", 0, 0);
 	/* Remove the file */
 	fd_kill(file_name);
 }
+
 
 /*
  * Print quest status of all active quests
@@ -8174,11 +8678,11 @@ static void do_cmd_knowledge_quests(void)
 				/* Print the quest info */
 #ifdef JP
 				sprintf(tmp_str, "%s (危険度:%d階相当)%s\n",
+					quest[i].name, quest[i].level, note);
 #else
 				sprintf(tmp_str, "%s (Danger level: %d)%s\n",
-#endif
-
 					quest[i].name, quest[i].level, note);
+#endif
 
 				fprintf(fff, tmp_str);
 
@@ -8189,7 +8693,6 @@ static void do_cmd_knowledge_quests(void)
 #else
 					sprintf(tmp_str, "  Quest Completed - Unrewarded\n");
 #endif
-
 
 					fprintf(fff, tmp_str);
 				}
@@ -8219,9 +8722,9 @@ static void do_cmd_knowledge_quests(void)
 					if (quest[i].max_num > 1)
 					{
 #ifdef JP
-sprintf(rand_tmp_str,"%s (%d 階) - %d 体の%sを倒す。(あと %d 体)\n",
-	quest[i].name, quest[i].level,
-	quest[i].max_num, name, quest[i].max_num-quest[i].cur_num);
+						sprintf(rand_tmp_str,"%s (%d 階) - %d 体の%sを倒す。(あと %d 体)\n",
+							quest[i].name, quest[i].level,
+							quest[i].max_num, name, quest[i].max_num-quest[i].cur_num);
 #else
 						plural_aux(name);
 
@@ -8229,17 +8732,16 @@ sprintf(rand_tmp_str,"%s (%d 階) - %d 体の%sを倒す。(あと %d 体)\n",
 							quest[i].name, quest[i].level,
 							quest[i].max_num, name, quest[i].cur_num);
 #endif
-
 					}
 					else
 					{
 #ifdef JP
-sprintf(rand_tmp_str,"%s (%d 階) - %sを倒す。\n",
+						sprintf(rand_tmp_str,"%s (%d 階) - %sを倒す。\n",
+							quest[i].name, quest[i].level, name);
 #else
 						sprintf(rand_tmp_str,"%s (Dungeon level: %d)\n  Kill %s.\n",
-#endif
-
 							quest[i].name, quest[i].level, name);
+#endif
 					}
 				}
 			}
@@ -8320,11 +8822,11 @@ sprintf(rand_tmp_str,"%s (%d 階) - %sを倒す。\n",
 				/* Print the quest info */
 #ifdef JP
 				sprintf(tmp_str, "%s (危険度:%d階相当) - レベル%d\n",
+					quest[i].name, quest[i].level, quest[i].complev);
 #else
 				sprintf(tmp_str, "%s (Danger level: %d) - level %d\n",
-#endif
-
 					quest[i].name, quest[i].level, quest[i].complev);
+#endif
 			}
 
 			fprintf(fff, tmp_str);
@@ -8373,22 +8875,22 @@ sprintf(rand_tmp_str,"%s (%d 階) - %sを倒す。\n",
 				/* Print the quest info */
 #ifdef JP
 				sprintf(tmp_str, "%s (%d階) - レベル%d\n",
+					r_name+r_info[quest[i].r_idx].name, quest[i].level, quest[i].complev);
 #else
 				sprintf(tmp_str, "%s (Dungeon level: %d) - level %d\n",
-#endif
-
 					r_name+r_info[quest[i].r_idx].name, quest[i].level, quest[i].complev);
+#endif
 			}
 			else
 			{
 				/* Print the quest info */
 #ifdef JP
 				sprintf(tmp_str, "%s (危険度:%d階相当) - レベル%d\n",
+					quest[i].name, quest[i].level, quest[i].complev);
 #else
 				sprintf(tmp_str, "%s (Danger level: %d) - level %d\n",
-#endif
-
 					quest[i].name, quest[i].level, quest[i].complev);
+#endif
 			}
 			fprintf(fff, tmp_str);
 		}
@@ -8418,11 +8920,11 @@ sprintf(rand_tmp_str,"%s (%d 階) - %sを倒す。\n",
 			/* Print the quest info */
 #ifdef JP
 			sprintf(tmp_str, "%s (%d階, %s)\n",
+				quest[i].name, quest[i].level, r_name+r_info[quest[i].r_idx].name);
 #else
 			sprintf(tmp_str, "%s (%d, %s)\n",
-#endif
-
 				quest[i].name, quest[i].level, r_name+r_info[quest[i].r_idx].name);
+#endif
 			fprintf(fff, tmp_str);
 		}
 	}
@@ -8451,9 +8953,8 @@ sprintf(rand_tmp_str,"%s (%d 階) - %sを倒す。\n",
 
 
 /*
-* List my home
-*
-*/
+ * List my home
+ */
 static void do_cmd_knowledge_home(void)
 {
 	FILE *fff;
@@ -8532,7 +9033,7 @@ static void do_cmd_knowledge_home(void)
 	
 	/* Display the file contents */
 #ifdef JP
-show_file(TRUE, file_name, "我が家のアイテム", 0, 0);
+	show_file(TRUE, file_name, "我が家のアイテム", 0, 0);
 #else
 	show_file(TRUE, file_name, "Home Inventory", 0, 0);
 #endif
@@ -8766,6 +9267,9 @@ void do_cmd_knowledge(void)
 		case '9': /* Resist list */
 			do_cmd_knowledge_inven();
 			break;
+		case '0': /* Feature list */
+			do_cmd_knowledge_features();
+			break;
 		/* Next page */
 		case 'a': /* Max stat */
 			do_cmd_knowledge_stat();
@@ -8846,7 +9350,7 @@ void do_cmd_time(void)
 	num = 0;
 
 #ifdef JP
-strcpy(desc, "変な時刻だ。");
+	strcpy(desc, "変な時刻だ。");
 #else
 	strcpy(desc, "It is a strange time.");
 #endif
@@ -8854,33 +9358,35 @@ strcpy(desc, "変な時刻だ。");
 
 	/* Message */
 #ifdef JP
-msg_format("%d 日目,時刻は%d:%02d %sです。",
+	msg_format("%d 日目,時刻は%d:%02d %sです。",
+		   day, (hour % 12 == 0) ? 12 : (hour % 12),
+		   min, (hour < 12) ? "AM" : "PM");
 #else
 	msg_format("This is day %d. The time is %d:%02d %s.",
+		   day, (hour % 12 == 0) ? 12 : (hour % 12),
+		   min, (hour < 12) ? "AM" : "PM");
 #endif
 
-				  day, (hour % 12 == 0) ? 12 : (hour % 12),
-				  min, (hour < 12) ? "AM" : "PM");
 
 	/* Find the path */
 	if (!randint0(10) || p_ptr->image)
-		{
+	{
 #ifdef JP
 		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "timefun_j.txt");
 #else
 		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "timefun.txt");
 #endif
 
-		}
-		else
-		{
+	}
+	else
+	{
 #ifdef JP
 		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "timenorm_j.txt");
 #else
 		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "timenorm.txt");
 #endif
 
-		}
+	}
 
 	/* Open this file */
 	fff = my_fopen(buf, "rt");

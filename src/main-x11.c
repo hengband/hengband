@@ -2426,11 +2426,25 @@ static errr Term_xtra_x11(int n, int v)
  */
 static errr Term_curs_x11(int x, int y)
 {
-	/* Draw the cursor */
-	Infoclr_set(xor);
+	if (use_graphics)
+	{
+		XDrawRectangle(Metadpy->dpy, Infowin->win, xor->gc,
+			       x * Infofnt->wid + Infowin->ox,
+			       y * Infofnt->hgt + Infowin->oy,
+			       Infofnt->wid - 1, Infofnt->hgt - 1);
+		XDrawRectangle(Metadpy->dpy, Infowin->win, xor->gc,
+			       x * Infofnt->wid + Infowin->ox + 1,
+			       y * Infofnt->hgt + Infowin->oy + 1,
+			       Infofnt->wid - 3, Infofnt->hgt - 3);
+	}
+	else
+	{
+		/* Draw the cursor */
+		Infoclr_set(xor);
 
-	/* Hilite the cursor character */
-	Infofnt_text_non(x, y, " ", 1);
+		/* Hilite the cursor character */
+		Infofnt_text_non(x, y, " ", 1);
+	}
 
 	/* Success */
 	return (0);
@@ -2442,12 +2456,25 @@ static errr Term_curs_x11(int x, int y)
  */
 static errr Term_bigcurs_x11(int x, int y)
 {
-	/* Draw the cursor */
-	Infoclr_set(xor);
+	if (use_graphics)
+	{
+		XDrawRectangle(Metadpy->dpy, Infowin->win, xor->gc,
+			       x * Infofnt->wid + Infowin->ox,
+			       y * Infofnt->hgt + Infowin->oy,
+			       Infofnt->twid - 1, Infofnt->hgt - 1);
+		XDrawRectangle(Metadpy->dpy, Infowin->win, xor->gc,
+			       x * Infofnt->wid + Infowin->ox + 1,
+			       y * Infofnt->hgt + Infowin->oy + 1,
+			       Infofnt->twid - 3, Infofnt->hgt - 3);
+	}
+	else
+	{
+		/* Draw the cursor */
+		Infoclr_set(xor);
 
-	/* Hilite the cursor character */
-	Infofnt_text_non(x, y, "  ", 2);
-
+		/* Hilite the cursor character */
+		Infofnt_text_non(x, y, "  ", 2);
+	}
 	/* Success */
 	return (0);
 }
@@ -2529,6 +2556,19 @@ static errr Term_pict_x11(int x, int y, int n, const byte *ap, const char *cp)
 		x1 = (c&0x7F) * td->fnt->twid;
 		y1 = (a&0x7F) * td->fnt->hgt;
 
+		/* Illegal tile index */
+		if (td->tiles->width < x1 + td->fnt->wid ||
+		    td->tiles->height < y1 + td->fnt->hgt)
+		{
+			/* Draw black square */
+			XFillRectangle(Metadpy->dpy, td->win->win, clr[0]->gc,
+				       x, y, 
+				       td->fnt->twid, td->fnt->hgt);
+
+			/* Skip drawing tile */
+			continue;
+		}
+
 #ifdef USE_TRANSPARENCY
 
 		ta = *tap++;
@@ -2540,7 +2580,9 @@ static errr Term_pict_x11(int x, int y, int n, const byte *ap, const char *cp)
 		
 		/* Optimise the common case */
 		if (((x1 == x2) && (y1 == y2)) ||
-		    !(((byte)ta & 0x80) && ((byte)tc & 0x80)))
+		    !(((byte)ta & 0x80) && ((byte)tc & 0x80)) ||
+		    td->tiles->width < x2 + td->fnt->wid ||
+		    td->tiles->height < y2 + td->fnt->hgt)
 		{
 			/* Draw object / terrain */
 			XPutImage(Metadpy->dpy, td->win->win,
