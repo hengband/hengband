@@ -4786,6 +4786,12 @@ fprintf(fff, "  [ キャラクタの持ち物 ]\n\n");
 		fprintf(fff, "\n\n");
 	}
 
+#ifdef JP
+        fprintf(fff, "  [チェックサム: \"%s\"]\n\n", get_check_sum());
+#else
+        fprintf(fff, "  [Check Sum: \"%s\"]\n\n", get_check_sum());
+#endif
+
 	return 0;
 }
 

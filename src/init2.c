@@ -344,7 +344,6 @@ static errr init_info_raw(int fd, header *head)
 	    (test.v_major != head->v_major) ||
 	    (test.v_minor != head->v_minor) ||
 	    (test.v_patch != head->v_patch) ||
-	    (test.v_extra != head->v_extra) ||
 	    (test.info_num != head->info_num) ||
 	    (test.info_len != head->info_len) ||
 	    (test.head_size != head->head_size) ||
@@ -2298,3 +2297,21 @@ note("[ユーザー設定ファイルを初期化しています...]");
 #endif
 
 }
+
+/*
+ *  Get check sum in string form
+ */
+cptr get_check_sum(void)
+{
+        return format("%02x%02x%02x%02x%02x%02x%02x%02x%02x", 
+                      f_head.v_extra, 
+                      k_head.v_extra, 
+                      a_head.v_extra, 
+                      e_head.v_extra, 
+                      r_head.v_extra, 
+                      d_head.v_extra, 
+                      m_head.v_extra, 
+                      s_head.v_extra, 
+                      v_head.v_extra);
+}
+

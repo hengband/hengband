@@ -827,6 +827,17 @@ errr init_info_txt(FILE *fp, char *buf, header *head,
 			continue;
 		}
 
+                /* Mega Hack -- Calculate Check Sum */
+                if (buf[0] != 'N' && buf[0] != 'D')
+                {
+                        int i;
+                        for (i = 0; buf[i]; i++)
+                        {
+                                head->v_extra += (byte)buf[i];
+                                head->v_extra ^= (1 << (i % 8));
+                        }
+                }
+
 		/* Parse the line */
 		if ((err = (*parse_info_txt_line)(buf, head)) != 0)
 			return (err);
