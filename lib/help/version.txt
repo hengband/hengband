@@ -24,6 +24,7 @@ Jul. 10th, 2003  hengband 1.5.2 (Development branch) released.
 - Character dump now displays full details of lost fight on Arena.
 - Tidyed up Quest list display.
 - Added 'Dark elven pit'
+- Copy&Paste using mouse on X11 port. (from sCthangband)
 
 - Various bug fixes:
   Strange behaviors after using save command (^S).
