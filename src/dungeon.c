@@ -115,41 +115,41 @@ static void sense_inventory_aux(int slot, bool heavy)
 	{
 		switch (feel)
 		{
-                case FEEL_TERRIBLE:
-                {
-                        feel = FEEL_SPECIAL;
-                        break;
-                }
-                case FEEL_WORTHLESS:
-                {
-                        feel = FEEL_EXCELLENT;
-                        break;
-                }
-                case FEEL_CURSED:
-                {
-                        feel = randint0(3) ? FEEL_GOOD : FEEL_AVERAGE;
-                        break;
-                }
-                case FEEL_AVERAGE:
-                {
-                        feel = randint0(2) ? FEEL_CURSED : FEEL_GOOD;
-                        break;
-                }
-                case FEEL_GOOD:
-                {
-                        feel = randint0(3) ? FEEL_CURSED : FEEL_AVERAGE;
-                        break;
-                }
-                case FEEL_EXCELLENT:
-                {
-                        feel = FEEL_WORTHLESS;
-                        break;
-                }
-                case FEEL_SPECIAL:
-                {
-                        feel = FEEL_TERRIBLE;
-                        break;
-                }
+			case FEEL_TERRIBLE:
+			{
+				feel = FEEL_SPECIAL;
+				break;
+			}
+			case FEEL_WORTHLESS:
+			{
+				feel = FEEL_EXCELLENT;
+				break;
+			}
+			case FEEL_CURSED:
+			{
+				feel = randint0(3) ? FEEL_GOOD : FEEL_AVERAGE;
+				break;
+			}
+			case FEEL_AVERAGE:
+			{
+				feel = randint0(2) ? FEEL_CURSED : FEEL_GOOD;
+				break;
+			}
+			case FEEL_GOOD:
+			{
+				feel = randint0(3) ? FEEL_CURSED : FEEL_AVERAGE;
+				break;
+			}
+			case FEEL_EXCELLENT:
+			{
+				feel = FEEL_WORTHLESS;
+				break;
+			}
+			case FEEL_SPECIAL:
+			{
+				feel = FEEL_TERRIBLE;
+				break;
+			}
 		}
 	}
 
@@ -163,13 +163,13 @@ static void sense_inventory_aux(int slot, bool heavy)
 	if (slot >= INVEN_RARM)
 	{
 #ifdef JP
-                msg_format("%s%s(%c)は%sという感じがする...",
-                           describe_use(slot),o_name, index_to_label(slot),game_inscriptions[feel]);
+msg_format("%s%s(%c)は%sという感じがする...",
+describe_use(slot),o_name, index_to_label(slot),game_inscriptions[feel]);
 #else
 		msg_format("You feel the %s (%c) you are %s %s %s...",
 		           o_name, index_to_label(slot), describe_use(slot),
 		           ((o_ptr->number == 1) ? "is" : "are"),
-                           game_inscriptions[feel]);
+				   game_inscriptions[feel]);
 #endif
 
 	}
@@ -178,13 +178,13 @@ static void sense_inventory_aux(int slot, bool heavy)
 	else
 	{
 #ifdef JP
-                msg_format("ザックの中の%s(%c)は%sという感じがする...",
-                           o_name, index_to_label(slot),game_inscriptions[feel]);
+msg_format("ザックの中の%s(%c)は%sという感じがする...",
+o_name, index_to_label(slot),game_inscriptions[feel]);
 #else
 		msg_format("You feel the %s (%c) in your pack %s %s...",
 		           o_name, index_to_label(slot),
 		           ((o_ptr->number == 1) ? "is" : "are"),
-                           game_inscriptions[feel]);
+				   game_inscriptions[feel]);
 #endif
 
 	}
@@ -236,172 +236,172 @@ static void sense_inventory1(void)
 	/* Analyze the class */
 	switch (p_ptr->pclass)
 	{
-        case CLASS_WARRIOR:
-        case CLASS_ARCHER:
-        case CLASS_SAMURAI:
-        case CLASS_CAVALRY:
-        {
-                /* Good sensing */
-                if (0 != randint0(9000L / (plev * plev + 40))) return;
+		case CLASS_WARRIOR:
+		case CLASS_ARCHER:
+		case CLASS_SAMURAI:
+		case CLASS_CAVALRY:
+		{
+			/* Good sensing */
+			if (0 != randint0(9000L / (plev * plev + 40))) return;
 
-                /* Heavy sensing */
-                heavy = TRUE;
+			/* Heavy sensing */
+			heavy = TRUE;
 
-                /* Done */
-                break;
-        }
+			/* Done */
+			break;
+		}
 
-        case CLASS_SMITH:
-        {
-                /* Good sensing */
-                if (0 != randint0(6000L / (plev * plev + 50))) return;
+		case CLASS_SMITH:
+		{
+			/* Good sensing */
+			if (0 != randint0(6000L / (plev * plev + 50))) return;
 
-                /* Heavy sensing */
-                heavy = TRUE;
+			/* Heavy sensing */
+			heavy = TRUE;
 
-                /* Done */
-                break;
-        }
+			/* Done */
+			break;
+		}
 
-        case CLASS_MAGE:
-        case CLASS_HIGH_MAGE:
-        case CLASS_SORCERER:
-        case CLASS_MAGIC_EATER:
-        {
-                /* Very bad (light) sensing */
-                if (0 != randint0(240000L / (plev + 5))) return;
+		case CLASS_MAGE:
+		case CLASS_HIGH_MAGE:
+		case CLASS_SORCERER:
+		case CLASS_MAGIC_EATER:
+		{
+			/* Very bad (light) sensing */
+			if (0 != randint0(240000L / (plev + 5))) return;
 
-                /* Done */
-                break;
-        }
+			/* Done */
+			break;
+		}
 
-        case CLASS_PRIEST:
-        case CLASS_BARD:
-        {
-                /* Good (light) sensing */
-                if (0 != randint0(10000L / (plev * plev + 40))) return;
+		case CLASS_PRIEST:
+		case CLASS_BARD:
+		{
+			/* Good (light) sensing */
+			if (0 != randint0(10000L / (plev * plev + 40))) return;
 
-                /* Done */
-                break;
-        }
+			/* Done */
+			break;
+		}
 
-        case CLASS_ROGUE:
-        case CLASS_NINJA:
-        {
-                /* Okay sensing */
-                if (0 != randint0(20000L / (plev * plev + 40))) return;
+		case CLASS_ROGUE:
+		case CLASS_NINJA:
+		{
+			/* Okay sensing */
+			if (0 != randint0(20000L / (plev * plev + 40))) return;
 
-                /* Heavy sensing */
-                heavy = TRUE;
+			/* Heavy sensing */
+			heavy = TRUE;
 
-                /* Done */
-                break;
-        }
+			/* Done */
+			break;
+		}
 
-        case CLASS_RANGER:
-        {
-                /* Bad sensing */
-                if (0 != randint0(95000L / (plev * plev + 40))) return;
+		case CLASS_RANGER:
+		{
+			/* Bad sensing */
+			if (0 != randint0(95000L / (plev * plev + 40))) return;
 
-                /* Changed! */
-                heavy = TRUE;
+			/* Changed! */
+			heavy = TRUE;
 
-                /* Done */
-                break;
-        }
+			/* Done */
+			break;
+		}
 
-        case CLASS_PALADIN:
-        {
-                /* Bad sensing */
-                if (0 != randint0(77777L / (plev * plev + 40))) return;
+		case CLASS_PALADIN:
+		{
+			/* Bad sensing */
+			if (0 != randint0(77777L / (plev * plev + 40))) return;
 
-                /* Heavy sensing */
-                heavy = TRUE;
+			/* Heavy sensing */
+			heavy = TRUE;
 
-                /* Done */
-                break;
-        }
+			/* Done */
+			break;
+		}
 
-        case CLASS_WARRIOR_MAGE:
-        case CLASS_RED_MAGE:
-        {
-                /* Bad sensing */
-                if (0 != randint0(75000L / (plev * plev + 40))) return;
+		case CLASS_WARRIOR_MAGE:
+		case CLASS_RED_MAGE:
+		{
+			/* Bad sensing */
+			if (0 != randint0(75000L / (plev * plev + 40))) return;
 
-                /* Done */
-                break;
-        }
+			/* Done */
+			break;
+		}
 
-        case CLASS_MINDCRAFTER:
-        case CLASS_MIRROR_MASTER:
-        {
-                /* Bad sensing */
-                if (0 != randint0(55000L / (plev * plev + 40))) return;
+		case CLASS_MINDCRAFTER:
+		case CLASS_MIRROR_MASTER:
+		{
+			/* Bad sensing */
+			if (0 != randint0(55000L / (plev * plev + 40))) return;
 
-                /* Done */
-                break;
-        }
+			/* Done */
+			break;
+		}
 
-        case CLASS_CHAOS_WARRIOR:
-        {
-                /* Bad sensing */
-                if (0 != randint0(80000L / (plev * plev + 40))) return;
+		case CLASS_CHAOS_WARRIOR:
+		{
+			/* Bad sensing */
+			if (0 != randint0(80000L / (plev * plev + 40))) return;
 
-                /* Changed! */
-                heavy = TRUE;
+			/* Changed! */
+			heavy = TRUE;
 
-                /* Done */
-                break;
-        }
+			/* Done */
+			break;
+		}
 
-        case CLASS_MONK:
-        case CLASS_FORCETRAINER:
-        {
-                /* Okay sensing */
-                if (0 != randint0(20000L / (plev * plev + 40))) return;
+		case CLASS_MONK:
+		case CLASS_FORCETRAINER:
+		{
+			/* Okay sensing */
+			if (0 != randint0(20000L / (plev * plev + 40))) return;
 
-                /* Done */
-                break;
-        }
+			/* Done */
+			break;
+		}
 
-        case CLASS_TOURIST:
-        {
-                /* Good sensing */
-                if (0 != randint0(20000L / ((plev+50)*(plev+50)))) return;
+		case CLASS_TOURIST:
+		{
+			/* Good sensing */
+			if (0 != randint0(20000L / ((plev+50)*(plev+50)))) return;
 
-                /* Heavy sensing */
-                heavy = TRUE;
+			/* Heavy sensing */
+			heavy = TRUE;
 
-                /* Done */
-                break;
-        }
+			/* Done */
+			break;
+		}
 
-        case CLASS_IMITATOR:
-        case CLASS_BLUE_MAGE:
-        {
-                /* Bad sensing */
-                if (0 != randint0(55000L / (plev * plev + 40))) return;
+		case CLASS_IMITATOR:
+		case CLASS_BLUE_MAGE:
+		{
+			/* Bad sensing */
+			if (0 != randint0(55000L / (plev * plev + 40))) return;
 
-                /* Done */
-                break;
-        }
+			/* Done */
+			break;
+		}
 
-        case CLASS_BEASTMASTER:
-        {
-                /* Bad sensing */
-                if (0 != randint0(65000L / (plev * plev + 40))) return;
+		case CLASS_BEASTMASTER:
+		{
+			/* Bad sensing */
+			if (0 != randint0(65000L / (plev * plev + 40))) return;
 
-                /* Done */
-                break;
-        }
-        case CLASS_BERSERKER:
-        {
-                /* Heavy sensing */
-                heavy = TRUE;
+			/* Done */
+			break;
+		}
+		case CLASS_BERSERKER:
+		{
+			/* Heavy sensing */
+			heavy = TRUE;
 
-                /* Done */
-                break;
-        }
+			/* Done */
+			break;
+		}
 	}
 
 	if (compare_virtue(V_KNOWLEDGE, 100, VIRTUE_LARGE)) heavy = TRUE;
@@ -421,28 +421,28 @@ static void sense_inventory1(void)
 		/* Valid "tval" codes */
 		switch (o_ptr->tval)
 		{
-                case TV_SHOT:
-                case TV_ARROW:
-                case TV_BOLT:
-                case TV_BOW:
-                case TV_DIGGING:
-                case TV_HAFTED:
-                case TV_POLEARM:
-                case TV_SWORD:
-                case TV_BOOTS:
-                case TV_GLOVES:
-                case TV_HELM:
-                case TV_CROWN:
-                case TV_SHIELD:
-                case TV_CLOAK:
-                case TV_SOFT_ARMOR:
-                case TV_HARD_ARMOR:
-                case TV_DRAG_ARMOR:
-                case TV_CARD:
-                {
-                        okay = TRUE;
-                        break;
-                }
+			case TV_SHOT:
+			case TV_ARROW:
+			case TV_BOLT:
+			case TV_BOW:
+			case TV_DIGGING:
+			case TV_HAFTED:
+			case TV_POLEARM:
+			case TV_SWORD:
+			case TV_BOOTS:
+			case TV_GLOVES:
+			case TV_HELM:
+			case TV_CROWN:
+			case TV_SHIELD:
+			case TV_CLOAK:
+			case TV_SOFT_ARMOR:
+			case TV_HARD_ARMOR:
+			case TV_DRAG_ARMOR:
+			case TV_CARD:
+			{
+				okay = TRUE;
+				break;
+			}
 		}
 
 		/* Skip non-sense machines */
@@ -477,76 +477,76 @@ static void sense_inventory2(void)
 	/* Analyze the class */
 	switch (p_ptr->pclass)
 	{
-        case CLASS_WARRIOR:
-        case CLASS_ARCHER:
-        case CLASS_SAMURAI:
-        case CLASS_CAVALRY:
-        case CLASS_BERSERKER:
-        {
-                return;
-        }
+		case CLASS_WARRIOR:
+		case CLASS_ARCHER:
+		case CLASS_SAMURAI:
+		case CLASS_CAVALRY:
+		case CLASS_BERSERKER:
+		{
+			return;
+		}
 
-        case CLASS_SMITH:
-        case CLASS_PALADIN:
-        case CLASS_CHAOS_WARRIOR:
-        case CLASS_IMITATOR:
-        case CLASS_BEASTMASTER:
-        case CLASS_NINJA:
-        {
-                /* Very bad (light) sensing */
-                if (0 != randint0(240000L / (plev + 5))) return;
+		case CLASS_SMITH:
+		case CLASS_PALADIN:
+		case CLASS_CHAOS_WARRIOR:
+		case CLASS_IMITATOR:
+		case CLASS_BEASTMASTER:
+		case CLASS_NINJA:
+		{
+			/* Very bad (light) sensing */
+			if (0 != randint0(240000L / (plev + 5))) return;
 
-                /* Done */
-                break;
-        }
+			/* Done */
+			break;
+		}
 
-        case CLASS_RANGER:
-        case CLASS_WARRIOR_MAGE:
-        case CLASS_RED_MAGE:
-        case CLASS_MONK:
-        {
-                /* Bad sensing */
-                if (0 != randint0(95000L / (plev * plev + 40))) return;
+		case CLASS_RANGER:
+		case CLASS_WARRIOR_MAGE:
+		case CLASS_RED_MAGE:
+		case CLASS_MONK:
+		{
+			/* Bad sensing */
+			if (0 != randint0(95000L / (plev * plev + 40))) return;
 
-                /* Done */
-                break;
-        }
+			/* Done */
+			break;
+		}
 
-        case CLASS_PRIEST:
-        case CLASS_BARD:
-        case CLASS_ROGUE:
-        case CLASS_FORCETRAINER:
-        case CLASS_MINDCRAFTER:
-        {
-                /* Good sensing */
-                if (0 != randint0(20000L / (plev * plev + 40))) return;
+		case CLASS_PRIEST:
+		case CLASS_BARD:
+		case CLASS_ROGUE:
+		case CLASS_FORCETRAINER:
+		case CLASS_MINDCRAFTER:
+		{
+			/* Good sensing */
+			if (0 != randint0(20000L / (plev * plev + 40))) return;
 
-                /* Done */
-                break;
-        }
+			/* Done */
+			break;
+		}
 
-        case CLASS_MAGE:
-        case CLASS_HIGH_MAGE:
-        case CLASS_SORCERER:
-        case CLASS_MAGIC_EATER:
-        case CLASS_MIRROR_MASTER:
-        case CLASS_BLUE_MAGE:
-        {
-                /* Good sensing */
-                if (0 != randint0(9000L / (plev * plev + 40))) return;
+		case CLASS_MAGE:
+		case CLASS_HIGH_MAGE:
+		case CLASS_SORCERER:
+		case CLASS_MAGIC_EATER:
+		case CLASS_MIRROR_MASTER:
+		case CLASS_BLUE_MAGE:
+		{
+			/* Good sensing */
+			if (0 != randint0(9000L / (plev * plev + 40))) return;
 
-                /* Done */
-                break;
-        }
+			/* Done */
+			break;
+		}
 
-        case CLASS_TOURIST:
-        {
-                /* Good sensing */
-                if (0 != randint0(20000L / ((plev+50)*(plev+50)))) return;
+		case CLASS_TOURIST:
+		{
+			/* Good sensing */
+			if (0 != randint0(20000L / ((plev+50)*(plev+50)))) return;
 
-                /* Done */
-                break;
-        }
+			/* Done */
+			break;
+		}
 	}
 
 	/*** Sense everything ***/
@@ -564,14 +564,14 @@ static void sense_inventory2(void)
 		/* Valid "tval" codes */
 		switch (o_ptr->tval)
 		{
-                case TV_RING:
-                case TV_AMULET:
-                case TV_LITE:
-                case TV_FIGURINE:
-                {
-                        okay = TRUE;
-                        break;
-                }
+			case TV_RING:
+			case TV_AMULET:
+			case TV_LITE:
+			case TV_FIGURINE:
+			{
+				okay = TRUE;
+				break;
+			}
 		}
 
 		/* Skip non-sense machines */
@@ -596,64 +596,64 @@ static void pattern_teleport(void)
 
 	/* Ask for level */
 #ifdef JP
-        if (get_check("他の階にテレポートしますか？"))
+if (get_check("他の階にテレポートしますか？"))
 #else
-                if (get_check("Teleport level? "))
+	if (get_check("Teleport level? "))
 #endif
 
+	{
+		char	ppp[80];
+		char	tmp_val[160];
+
+		/* Only downward in ironman mode */
+		if (ironman_downward)
+			min_level = dun_level;
+
+		/* Maximum level */
+		if (dungeon_type == DUNGEON_ANGBAND)
+		{
+			if (dun_level > 100)
+				max_level = MAX_DEPTH - 1;
+			else if (dun_level == 100)
+				max_level = 100;
+		}
+		else
                 {
-                        char	ppp[80];
-                        char	tmp_val[160];
+                        max_level = d_info[dungeon_type].maxdepth;
+                        min_level = d_info[dungeon_type].mindepth;
+                }
 
-                        /* Only downward in ironman mode */
-                        if (ironman_downward)
-                                min_level = dun_level;
-
-                        /* Maximum level */
-                        if (dungeon_type == DUNGEON_ANGBAND)
-                        {
-                                if (dun_level > 100)
-                                        max_level = MAX_DEPTH - 1;
-                                else if (dun_level == 100)
-                                        max_level = 100;
-                        }
-                        else
-                        {
-                                max_level = d_info[dungeon_type].maxdepth;
-                                min_level = d_info[dungeon_type].mindepth;
-                        }
-
-                        /* Prompt */
+		/* Prompt */
 #ifdef JP
-                        sprintf(ppp, "テレポート先:(%d-%d)", min_level, max_level);
+sprintf(ppp, "テレポート先:(%d-%d)", min_level, max_level);
 #else
-                        sprintf(ppp, "Teleport to level (%d-%d): ", min_level, max_level);
+		sprintf(ppp, "Teleport to level (%d-%d): ", min_level, max_level);
 #endif
 
 
-                        /* Default */
-                        sprintf(tmp_val, "%d", dun_level);
+		/* Default */
+		sprintf(tmp_val, "%d", dun_level);
 
-                        /* Ask for a level */
-                        if (!get_string(ppp, tmp_val, 10)) return;
+		/* Ask for a level */
+		if (!get_string(ppp, tmp_val, 10)) return;
 
-                        /* Extract request */
-                        command_arg = atoi(tmp_val);
-                }
+		/* Extract request */
+		command_arg = atoi(tmp_val);
+	}
 #ifdef JP
-                else if (get_check("通常テレポート？"))
+else if (get_check("通常テレポート？"))
 #else
-                        else if (get_check("Normal teleport? "))
+	else if (get_check("Normal teleport? "))
 #endif
 
-                        {
-                                teleport_player(200);
-                                return;
-                        }
-                else
-                {
-                        return;
-                }
+	{
+		teleport_player(200);
+		return;
+	}
+	else
+	{
+		return;
+	}
 
 	/* Paranoia */
 	if (command_arg < min_level) command_arg = min_level;
@@ -663,7 +663,7 @@ static void pattern_teleport(void)
 
 	/* Accept request */
 #ifdef JP
-        msg_format("%d 階にテレポートしました。", command_arg);
+msg_format("%d 階にテレポートしました。", command_arg);
 #else
 	msg_format("You teleport to dungeon level %d.", command_arg);
 #endif
@@ -698,8 +698,8 @@ static void wreck_the_pattern(void)
 	}
 
 #ifdef JP
-        msg_print("パターンを血で汚してしまった！");
-        msg_print("何か恐ろしい事が起こった！");
+msg_print("パターンを血で汚してしまった！");
+msg_print("何か恐ろしい事が起こった！");
 #else
 	msg_print("You bleed on the Pattern!");
 	msg_print("Something terrible happens!");
@@ -708,9 +708,9 @@ static void wreck_the_pattern(void)
 
 	if (!p_ptr->invuln)
 #ifdef JP
-                take_hit(DAMAGE_NOESCAPE, damroll(10, 8), "パターン損壊", -1);
+take_hit(DAMAGE_NOESCAPE, damroll(10, 8), "パターン損壊", -1);
 #else
-        take_hit(DAMAGE_NOESCAPE, damroll(10, 8), "corrupting the Pattern", -1);
+		take_hit(DAMAGE_NOESCAPE, damroll(10, 8), "corrupting the Pattern", -1);
 #endif
 
 
@@ -762,7 +762,7 @@ static bool pattern_effect(void)
 		(void)hp_player(1000);
 		cave_set_feat(py, px, FEAT_PATTERN_OLD);
 #ifdef JP
-                msg_print("「パターン」のこの部分は他の部分より強力でないようだ。");
+msg_print("「パターン」のこの部分は他の部分より強力でないようだ。");
 #else
 		msg_print("This section of the Pattern looks less powerful.");
 #endif
@@ -789,7 +789,7 @@ static bool pattern_effect(void)
 	{
 		if (!p_ptr->invuln)
 #ifdef JP
-                        take_hit(DAMAGE_NOESCAPE, 200, "壊れた「パターン」を歩いたダメージ", -1);
+take_hit(DAMAGE_NOESCAPE, 200, "壊れた「パターン」を歩いたダメージ", -1);
 #else
 		take_hit(DAMAGE_NOESCAPE, 200, "walking the corrupted Pattern", -1);
 #endif
@@ -801,9 +801,9 @@ static bool pattern_effect(void)
 			return TRUE;
 		else if (!p_ptr->invuln)
 #ifdef JP
-                        take_hit(DAMAGE_NOESCAPE, damroll(1,3), "「パターン」を歩いたダメージ", -1);
+take_hit(DAMAGE_NOESCAPE, damroll(1,3), "「パターン」を歩いたダメージ", -1);
 #else
-                take_hit(DAMAGE_NOESCAPE, damroll(1, 3), "walking the Pattern", -1);
+			take_hit(DAMAGE_NOESCAPE, damroll(1, 3), "walking the Pattern", -1);
 #endif
 
 	}
@@ -1095,7 +1095,7 @@ static void notice_lite_change(object_type *o_ptr)
 	{
 		disturb(0, 0);
 #ifdef JP
-                msg_print("明かりが消えてしまった！");
+msg_print("明かりが消えてしまった！");
 #else
 		msg_print("Your light has gone out!");
 #endif
@@ -1110,7 +1110,7 @@ static void notice_lite_change(object_type *o_ptr)
 		{
 			if (disturb_minor) disturb(0, 0);
 #ifdef JP
-                        msg_print("明かりが微かになってきている。");
+msg_print("明かりが微かになってきている。");
 #else
 			msg_print("Your light is growing faint.");
 #endif
@@ -1123,7 +1123,7 @@ static void notice_lite_change(object_type *o_ptr)
 	{
 		if (disturb_minor) disturb(0, 0);
 #ifdef JP
-                msg_print("明かりが微かになってきている。");
+msg_print("明かりが微かになってきている。");
 #else
 		msg_print("Your light is growing faint.");
 #endif
@@ -1181,8 +1181,8 @@ bool psychometry(void)
 	item_tester_no_ryoute = TRUE;
 	/* Get an item */
 #ifdef JP
-        q = "どのアイテムを調べますか？";
-        s = "調べるアイテムがありません。";
+q = "どのアイテムを調べますか？";
+s = "調べるアイテムがありません。";
 #else
 	q = "Meditate on which item? ";
 	s = "You have nothing appropriate.";
@@ -1206,7 +1206,7 @@ bool psychometry(void)
 	if (object_known_p(o_ptr))
 	{
 #ifdef JP
-                msg_print("何も新しいことは判らなかった。");
+msg_print("何も新しいことは判らなかった。");
 #else
 		msg_print("You cannot find out anything more about that.");
 #endif
@@ -1224,7 +1224,7 @@ bool psychometry(void)
 	if (!feel)
 	{
 #ifdef JP
-                msg_format("%sからは特に変わった事は感じとれなかった。", o_name);
+msg_format("%sからは特に変わった事は感じとれなかった。", o_name);
 #else
 		msg_format("You do not perceive anything unusual about the %s.", o_name);
 #endif
@@ -1233,12 +1233,12 @@ bool psychometry(void)
 	}
 
 #ifdef JP
-        msg_format("%sは%sという感じがする...",
-                   o_name,  game_inscriptions[feel]);
+msg_format("%sは%sという感じがする...",
+    o_name,  game_inscriptions[feel]);
 #else
 	msg_format("You feel that the %s %s %s...",
-                   o_name, ((o_ptr->number == 1) ? "is" : "are"),
-                   game_inscriptions[feel]);
+			   o_name, ((o_ptr->number == 1) ? "is" : "are"),
+			   game_inscriptions[feel]);
 #endif
 
 
@@ -1298,94 +1298,94 @@ static void gere_music(s32b music)
 {
         switch(music)
         {
-        case MUSIC_SLOW:
-                slow_monsters();
-                break;
-        case MUSIC_STUN:
-                stun_monsters(damroll(p_ptr->lev/10,2));
-                break;
-        case MUSIC_L_LIFE:
-                hp_player(damroll(2,6));
-                break;
-        case MUSIC_FEAR:
-                project_hack(GF_TURN_ALL, p_ptr->lev);
-                break;
-        case MUSIC_PSI:
-                project_hack(GF_PSI, randint1(p_ptr->lev * 3 / 2));
-                break;
-        case MUSIC_ID:
-                project(0, 1, py, px, 0, GF_IDENTIFY, PROJECT_ITEM, -1);
-                break;
-        case MUSIC_CONF:
-                confuse_monsters(p_ptr->lev * 2);
-                break;
-        case MUSIC_SOUND:
-                project_hack(GF_SOUND, damroll(10 + p_ptr->lev/5,7));
-                break;
-        case MUSIC_CHARM:
-                charm_monsters(damroll(10 + p_ptr->lev/15,6));
-                break;
-        case MUSIC_WALL:
-                project(0, 0, py, px,
-                        0, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM | PROJECT_HIDE, -1);
-                break;
-        case MUSIC_DISPEL:
-                dispel_monsters(randint1(p_ptr->lev * 3));
-                dispel_evil(randint1(p_ptr->lev * 3));
-                break;
-        case MUSIC_SARUMAN:
-                slow_monsters();
-                sleep_monsters();
-                break;
-        case MUSIC_QUAKE:
-                earthquake(py, px, 10);
-                break;
-        case MUSIC_STASIS:
-                stasis_monsters(p_ptr->lev * 4);
-                break;
-        case MUSIC_SHERO:
-                dispel_monsters(randint1(p_ptr->lev * 3));
-                break;
-        case MUSIC_H_LIFE:
-                hp_player(damroll(15,10));
-                set_stun(0);
-                set_cut(0);
-                break;
-        case MUSIC_DETECT+19:
-                wiz_lite(FALSE, FALSE);
-        case MUSIC_DETECT+11:
-        case MUSIC_DETECT+12:
-        case MUSIC_DETECT+13:
-        case MUSIC_DETECT+14:
-        case MUSIC_DETECT+15:
-        case MUSIC_DETECT+16:
-        case MUSIC_DETECT+17:
-        case MUSIC_DETECT+18:
-                map_area(DETECT_RAD_MAP);
-                if ((p_ptr->lev > 39) && (music < MUSIC_DETECT+19)) p_ptr->magic_num1[0] = music+1;
-        case MUSIC_DETECT+6:
-        case MUSIC_DETECT+7:
-        case MUSIC_DETECT+8:
-        case MUSIC_DETECT+9:
-        case MUSIC_DETECT+10:
-                detect_treasure(DETECT_RAD_DEFAULT);
-                detect_objects_gold(DETECT_RAD_DEFAULT);
-                detect_objects_normal(DETECT_RAD_DEFAULT);
-                if ((p_ptr->lev > 24) && (music < MUSIC_DETECT+11)) p_ptr->magic_num1[0] = music+1;
-        case MUSIC_DETECT+3:
-        case MUSIC_DETECT+4:
-        case MUSIC_DETECT+5:
-                detect_monsters_invis(DETECT_RAD_DEFAULT);
-                detect_monsters_normal(DETECT_RAD_DEFAULT);
-                if ((p_ptr->lev > 19) && (music < MUSIC_DETECT+6)) p_ptr->magic_num1[0] = music+1;
-        case MUSIC_DETECT:
-        case MUSIC_DETECT+1:
-        case MUSIC_DETECT+2:
-                detect_traps(DETECT_RAD_DEFAULT, TRUE);
-                detect_doors(DETECT_RAD_DEFAULT);
-                detect_stairs(DETECT_RAD_DEFAULT);
-                if ((p_ptr->lev > 14)  && (music  < MUSIC_DETECT+3)) p_ptr->magic_num1[0] = music+1;
-                break;
+                case MUSIC_SLOW:
+                        slow_monsters();
+                        break;
+                case MUSIC_STUN:
+                        stun_monsters(damroll(p_ptr->lev/10,2));
+                        break;
+                case MUSIC_L_LIFE:
+                        hp_player(damroll(2,6));
+                        break;
+                case MUSIC_FEAR:
+                        project_hack(GF_TURN_ALL, p_ptr->lev);
+                        break;
+                case MUSIC_PSI:
+                        project_hack(GF_PSI, randint1(p_ptr->lev * 3 / 2));
+                        break;
+                case MUSIC_ID:
+                        project(0, 1, py, px, 0, GF_IDENTIFY, PROJECT_ITEM, -1);
+                        break;
+                case MUSIC_CONF:
+                        confuse_monsters(p_ptr->lev * 2);
+                        break;
+                case MUSIC_SOUND:
+                        project_hack(GF_SOUND, damroll(10 + p_ptr->lev/5,7));
+                        break;
+                case MUSIC_CHARM:
+                        charm_monsters(damroll(10 + p_ptr->lev/15,6));
+                        break;
+                case MUSIC_WALL:
+			project(0, 0, py, px,
+				0, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM | PROJECT_HIDE, -1);
+                        break;
+                case MUSIC_DISPEL:
+                        dispel_monsters(randint1(p_ptr->lev * 3));
+                        dispel_evil(randint1(p_ptr->lev * 3));
+                        break;
+                case MUSIC_SARUMAN:
+                        slow_monsters();
+                        sleep_monsters();
+                        break;
+                case MUSIC_QUAKE:
+                        earthquake(py, px, 10);
+                        break;
+                case MUSIC_STASIS:
+                        stasis_monsters(p_ptr->lev * 4);
+                        break;
+                case MUSIC_SHERO:
+                        dispel_monsters(randint1(p_ptr->lev * 3));
+                        break;
+                case MUSIC_H_LIFE:
+                        hp_player(damroll(15,10));
+			set_stun(0);
+			set_cut(0);
+                        break;
+                case MUSIC_DETECT+19:
+			wiz_lite(FALSE, FALSE);
+                case MUSIC_DETECT+11:
+                case MUSIC_DETECT+12:
+                case MUSIC_DETECT+13:
+                case MUSIC_DETECT+14:
+                case MUSIC_DETECT+15:
+                case MUSIC_DETECT+16:
+                case MUSIC_DETECT+17:
+                case MUSIC_DETECT+18:
+			map_area(DETECT_RAD_MAP);
+			if ((p_ptr->lev > 39) && (music < MUSIC_DETECT+19)) p_ptr->magic_num1[0] = music+1;
+                case MUSIC_DETECT+6:
+                case MUSIC_DETECT+7:
+                case MUSIC_DETECT+8:
+                case MUSIC_DETECT+9:
+                case MUSIC_DETECT+10:
+			detect_treasure(DETECT_RAD_DEFAULT);
+			detect_objects_gold(DETECT_RAD_DEFAULT);
+			detect_objects_normal(DETECT_RAD_DEFAULT);
+			if ((p_ptr->lev > 24) && (music < MUSIC_DETECT+11)) p_ptr->magic_num1[0] = music+1;
+                case MUSIC_DETECT+3:
+                case MUSIC_DETECT+4:
+                case MUSIC_DETECT+5:
+			detect_monsters_invis(DETECT_RAD_DEFAULT);
+			detect_monsters_normal(DETECT_RAD_DEFAULT);
+			if ((p_ptr->lev > 19) && (music < MUSIC_DETECT+6)) p_ptr->magic_num1[0] = music+1;
+                case MUSIC_DETECT:
+                case MUSIC_DETECT+1:
+                case MUSIC_DETECT+2:
+			detect_traps(DETECT_RAD_DEFAULT, TRUE);
+			detect_doors(DETECT_RAD_DEFAULT);
+			detect_stairs(DETECT_RAD_DEFAULT);
+			if ((p_ptr->lev > 14)  && (music  < MUSIC_DETECT+3)) p_ptr->magic_num1[0] = music+1;
+			break;
         }
 }
 
@@ -1417,10 +1417,10 @@ static void recharged_notice(object_type *o_ptr)
 			/* Notify the player */
 			if (o_ptr->number > 1)
 #ifdef JP
-                                msg_format("%sは再充填された。", o_name);
-                        else msg_format("%sは再充填された。", o_name);
+msg_format("%sは再充填された。", o_name);
+else msg_format("%sは再充填された。", o_name);
 #else
-                        msg_format("Your %s are recharged.", o_name);
+				msg_format("Your %s are recharged.", o_name);
 			else msg_format("Your %s is recharged.", o_name);
 #endif
 
@@ -1460,9 +1460,9 @@ static void check_music(void)
         }
         else
         {
-                p_ptr->csp -= (u16b) (shouhimana / 0x10000);
-                shouhimana = (shouhimana & 0xffff);
-                if (p_ptr->csp_frac < shouhimana)
+			p_ptr->csp -= (u16b) (shouhimana / 0x10000);
+			shouhimana = (shouhimana & 0xffff);
+			if (p_ptr->csp_frac < shouhimana)
 		{
 			p_ptr->csp--;
 			p_ptr->csp_frac += (u16b)(0x10000L - shouhimana);
@@ -1494,11 +1494,11 @@ static void check_music(void)
 	if (p_ptr->spell_exp[p_ptr->magic_num2[0]] < 900)
 		p_ptr->spell_exp[p_ptr->magic_num2[0]]+=5;
 	else if(p_ptr->spell_exp[p_ptr->magic_num2[0]] < 1200)
-        {if (one_in_(2) && (dun_level > 4) && ((dun_level + 10) > p_ptr->lev)) p_ptr->spell_exp[p_ptr->magic_num2[0]]+=1;}
+		{if (one_in_(2) && (dun_level > 4) && ((dun_level + 10) > p_ptr->lev)) p_ptr->spell_exp[p_ptr->magic_num2[0]]+=1;}
 	else if(p_ptr->spell_exp[p_ptr->magic_num2[0]] < 1400)
-        {if (one_in_(5) && ((dun_level + 5) > p_ptr->lev) && ((dun_level + 5) > s_ptr->slevel)) p_ptr->spell_exp[p_ptr->magic_num2[0]]+=1;}
+		{if (one_in_(5) && ((dun_level + 5) > p_ptr->lev) && ((dun_level + 5) > s_ptr->slevel)) p_ptr->spell_exp[p_ptr->magic_num2[0]]+=1;}
 	else if(p_ptr->spell_exp[p_ptr->magic_num2[0]] < 1600)
-        {if (one_in_(5) && ((dun_level + 5) > p_ptr->lev) && (dun_level > s_ptr->slevel)) p_ptr->spell_exp[p_ptr->magic_num2[0]]+=1;}
+		{if (one_in_(5) && ((dun_level + 5) > p_ptr->lev) && (dun_level > s_ptr->slevel)) p_ptr->spell_exp[p_ptr->magic_num2[0]]+=1;}
 
         gere_music(p_ptr->magic_num1[0]);
 }
@@ -1578,7 +1578,7 @@ static void process_world(void)
 		if (number_mon == 0)
 		{
 #ifdef JP
-                        msg_print("相打ちに終わりました。");
+msg_print("相打ちに終わりました。");
 #else
 			msg_print("They have kill each other at the same time.");
 #endif
@@ -1595,7 +1595,7 @@ static void process_world(void)
 
 			monster_desc(m_name, wm_ptr, 0);
 #ifdef JP
-                        msg_format("%sが勝利した！", m_name);
+msg_format("%sが勝利した！", m_name);
 #else
 			msg_format("%s is winner!", m_name);
 #endif
@@ -1604,21 +1604,21 @@ static void process_world(void)
 			if (win_m_idx == (sel_monster+1))
 			{
 #ifdef JP
-                                msg_print("おめでとうございます。");
+msg_print("おめでとうございます。");
 #else
 				msg_print("Congratulations.");
 #endif
 #ifdef JP
-                                msg_format("%d＄を受け取った。", battle_odds);
+msg_format("%d＄を受け取った。", battle_odds);
 #else
 				msg_format("You received %d gold.", battle_odds);
 #endif
-                                p_ptr->au += battle_odds;
+			p_ptr->au += battle_odds;
 			}
 			else
 			{
 #ifdef JP
-                                msg_print("残念でした。");
+msg_print("残念でした。");
 #else
 				msg_print("You lost gold.");
 #endif
@@ -1630,7 +1630,7 @@ static void process_world(void)
 		else if(turn - old_turn == 150*TURNS_PER_TICK)
 		{
 #ifdef JP
-                        msg_print("申し分けありませんが、この勝負は引き分けとさせていただきます。");
+msg_print("申し分けありませんが、この勝負は引き分けとさせていただきます。");
 #else
 			msg_format("This battle have ended in a draw.");
 #endif
@@ -1662,8 +1662,8 @@ static void process_world(void)
 
 				/* Message */
 #ifdef JP
-                                msg_print("アングバンドへの門が閉じかかっています...");
-                                msg_print("ゲームを終了するかセーブするかして下さい。");
+msg_print("アングバンドへの門が閉じかかっています...");
+msg_print("ゲームを終了するかセーブするかして下さい。");
 #else
 				msg_print("The gates to ANGBAND are closing...");
 				msg_print("Please finish up and/or save your game.");
@@ -1676,7 +1676,7 @@ static void process_world(void)
 			{
 				/* Message */
 #ifdef JP
-                                msg_print("今、アングバンドへの門が閉ざされました。");
+msg_print("今、アングバンドへの門が閉ざされました。");
 #else
 				msg_print("The gates to ANGBAND are now closed.");
 #endif
@@ -1725,7 +1725,7 @@ static void process_world(void)
 			{
 				/* Message */
 #ifdef JP
-                                msg_print("夜が明けた。");
+msg_print("夜が明けた。");
 #else
 				msg_print("The sun has risen.");
 #endif
@@ -1756,7 +1756,7 @@ static void process_world(void)
 			{
 				/* Message */
 #ifdef JP
-                                msg_print("日が沈んだ。");
+msg_print("日が沈んだ。");
 #else
 				msg_print("The sun has fallen.");
 #endif
@@ -1773,7 +1773,7 @@ static void process_world(void)
 						/* Darken "boring" features */
 						if ((c_ptr->feat <= FEAT_INVIS) ||
 						    ((c_ptr->feat >= FEAT_DEEP_WATER) &&
-                                                     (c_ptr->feat <= FEAT_MOUNTAIN) &&
+							(c_ptr->feat <= FEAT_MOUNTAIN) &&
 						     (c_ptr->feat != FEAT_MUSEUM)) ||
 						    (x == 0) || (x == cur_wid-1) ||
 						    (y == 0) || (y == cur_hgt-1))
@@ -1812,7 +1812,7 @@ static void process_world(void)
 
 		/* Message */
 #ifdef JP
-                if (cheat_xtra) msg_print("報酬をリセット");
+if (cheat_xtra) msg_print("報酬をリセット");
 #else
 		if (cheat_xtra) msg_print("Rewards reset.");
 #endif
@@ -1842,7 +1842,7 @@ static void process_world(void)
 	{
 		/* Take damage */
 #ifdef JP
-                take_hit(DAMAGE_NOESCAPE, 1, "毒", -1);
+take_hit(DAMAGE_NOESCAPE, 1, "毒", -1);
 #else
 		take_hit(DAMAGE_NOESCAPE, 1, "poison", -1);
 #endif
@@ -1859,8 +1859,8 @@ static void process_world(void)
 			{
 				/* Take damage */
 #ifdef JP
-                                msg_print("日光があなたのアンデッドの肉体を焼き焦がした！");
-                                take_hit(DAMAGE_NOESCAPE, 1, "日光", -1);
+msg_print("日光があなたのアンデッドの肉体を焼き焦がした！");
+take_hit(DAMAGE_NOESCAPE, 1, "日光", -1);
 #else
 				msg_print("The sun's rays scorch your undead flesh!");
 				take_hit(DAMAGE_NOESCAPE, 1, "sunlight", -1);
@@ -1881,7 +1881,7 @@ static void process_world(void)
 			object_desc(o_name, o_ptr, FALSE, 0);
 
 #ifdef JP
-                        msg_format("%sがあなたのアンデッドの肉体を焼き焦がした！", o_name);
+msg_format("%sがあなたのアンデッドの肉体を焼き焦がした！", o_name);
 #else
 			msg_format("The %s scorches your undead flesh!", o_name);
 #endif
@@ -1893,7 +1893,7 @@ static void process_world(void)
 			object_desc(o_name, o_ptr, TRUE, 0);
 
 #ifdef JP
-                        sprintf(ouch, "%sを装備したダメージ", o_name);
+sprintf(ouch, "%sを装備したダメージ", o_name);
 #else
 			sprintf(ouch, "wielding %s", o_name);
 #endif
@@ -1903,7 +1903,7 @@ static void process_world(void)
 	}
 
 	if ((cave[py][px].feat == FEAT_SHAL_LAVA) &&
-            !p_ptr->invuln && !p_ptr->immune_fire && !p_ptr->ffall)
+		!p_ptr->invuln && !p_ptr->immune_fire && !p_ptr->ffall)
 	{
 		int damage = 3000 + randint0(2000);
 
@@ -1917,8 +1917,8 @@ static void process_world(void)
 		{
 			/* Take damage */
 #ifdef JP
-                        msg_print("溶岩で火傷した！");
-                        take_hit(DAMAGE_NOESCAPE, damage, "浅い溶岩流", -1);
+msg_print("溶岩で火傷した！");
+take_hit(DAMAGE_NOESCAPE, damage, "浅い溶岩流", -1);
 #else
 			msg_print("The lava burns you!");
 			take_hit(DAMAGE_NOESCAPE, damage, "shallow lava", -1);
@@ -1929,7 +1929,7 @@ static void process_world(void)
 	}
 
 	else if ((cave[py][px].feat == FEAT_DEEP_LAVA) &&
-                 !p_ptr->invuln && !p_ptr->immune_fire)
+		!p_ptr->invuln && !p_ptr->immune_fire)
 	{
 		int damage = 6000 + randint0(4000);
 
@@ -1944,8 +1944,8 @@ static void process_world(void)
 			damage = damage / 5;
 
 #ifdef JP
-                        message = "熱で火傷した！";
-                        hit_from = "深い溶岩流の上に浮遊したダメージ";
+message = "熱で火傷した！";
+hit_from = "深い溶岩流の上に浮遊したダメージ";
 #else
 			message = "The heat burns you!";
 			hit_from = "flying over deep lava";
@@ -1955,8 +1955,8 @@ static void process_world(void)
 		else
 		{
 #ifdef JP
-                        message = "溶岩で火傷した！";
-                        hit_from = "深い溶岩流";
+message = "溶岩で火傷した！";
+hit_from = "深い溶岩流";
 #else
 			message = "The lava burns you!";
 			hit_from = "deep lava";
@@ -1981,8 +1981,8 @@ static void process_world(void)
 		{
 			/* Take damage */
 #ifdef JP
-                        msg_print("溺れている！");
-                        take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->lev), "溺れ", -1);
+msg_print("溺れている！");
+take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->lev), "溺れ", -1);
 #else
 			msg_print("You are drowning!");
 			take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->lev), "drowning", -1);
@@ -2002,8 +2002,8 @@ static void process_world(void)
 			if (p_ptr->resist_fire) damage = damage / 3;
 			if (p_ptr->oppose_fire) damage = damage / 3;
 #ifdef JP
-                        msg_print("熱い！");
-                        take_hit(DAMAGE_NOESCAPE, damage, "炎のオーラ", -1);
+msg_print("熱い！");
+take_hit(DAMAGE_NOESCAPE, damage, "炎のオーラ", -1);
 #else
 			msg_print("It's hot!");
 			take_hit(DAMAGE_NOESCAPE, damage, "Fire aura", -1);
@@ -2015,8 +2015,8 @@ static void process_world(void)
 			if (p_ptr->resist_elec) damage = damage / 3;
 			if (p_ptr->oppose_elec) damage = damage / 3;
 #ifdef JP
-                        msg_print("痛い！");
-                        take_hit(DAMAGE_NOESCAPE, damage, "電気のオーラ", -1);
+msg_print("痛い！");
+take_hit(DAMAGE_NOESCAPE, damage, "電気のオーラ", -1);
 #else
 			msg_print("It hurts!");
 			take_hit(DAMAGE_NOESCAPE, damage, "Elec aura", -1);
@@ -2028,8 +2028,8 @@ static void process_world(void)
 			if (p_ptr->resist_cold) damage = damage / 3;
 			if (p_ptr->oppose_cold) damage = damage / 3;
 #ifdef JP
-                        msg_print("冷たい！");
-                        take_hit(DAMAGE_NOESCAPE, damage, "冷気のオーラ", -1);
+msg_print("冷たい！");
+take_hit(DAMAGE_NOESCAPE, damage, "冷気のオーラ", -1);
 #else
 			msg_print("It's cold!");
 			take_hit(DAMAGE_NOESCAPE, damage, "Cold aura", -1);
@@ -2052,7 +2052,7 @@ static void process_world(void)
 			/* Do nothing */
 		}
 		else if (!p_ptr->invuln && !p_ptr->wraith_form && !p_ptr->kabenuke &&
-                         ((p_ptr->chp > (p_ptr->lev / 5)) || !p_ptr->pass_wall))
+		    ((p_ptr->chp > (p_ptr->lev / 5)) || !p_ptr->pass_wall))
 		{
 			cptr dam_desc;
 
@@ -2061,8 +2061,8 @@ static void process_world(void)
 			if (p_ptr->pass_wall)
 			{
 #ifdef JP
-                                msg_print("体の分子が分解した気がする！");
-                                dam_desc = "密度";
+msg_print("体の分子が分解した気がする！");
+dam_desc = "密度";
 #else
 				msg_print("Your molecules feel disrupted!");
 				dam_desc = "density";
@@ -2072,8 +2072,8 @@ static void process_world(void)
 			else
 			{
 #ifdef JP
-                                msg_print("崩れた岩に押し潰された！");
-                                dam_desc = "硬い岩";
+msg_print("崩れた岩に押し潰された！");
+dam_desc = "硬い岩";
 #else
 				msg_print("You are being crushed!");
 				dam_desc = "solid rock";
@@ -2137,46 +2137,46 @@ static void process_world(void)
 
 				switch (min / 15)
 				{
-                                case 0:
-                                {
+					case 0:
+					{
 #ifdef JP
-                                        msg_print("遠くで不気味な鐘の音が鳴った。");
+msg_print("遠くで不気味な鐘の音が鳴った。");
 #else
-                                        msg_print("You hear a distant bell toll ominously.");
+						msg_print("You hear a distant bell toll ominously.");
 #endif
 
-                                        break;
-                                }
-                                case 1:
-                                {
+						break;
+					}
+					case 1:
+					{
 #ifdef JP
-                                        msg_print("遠くで鐘が二回鳴った。");
+msg_print("遠くで鐘が二回鳴った。");
 #else
-                                        msg_print("A distant bell sounds twice.");
+						msg_print("A distant bell sounds twice.");
 #endif
 
-                                        break;
-                                }
-                                case 2:
-                                {
+						break;
+					}
+					case 2:
+	{
 #ifdef JP
-                                        msg_print("遠くで鐘が三回鳴った。");
+msg_print("遠くで鐘が三回鳴った。");
 #else
-                                        msg_print("A distant bell sounds three times.");
+						msg_print("A distant bell sounds three times.");
 #endif
 
-                                        break;
-                                }
-                                case 3:
-                                {
+						break;
+					}
+					case 3:
+					{
 #ifdef JP
-                                        msg_print("遠くで鐘が四回鳴った。");
+msg_print("遠くで鐘が四回鳴った。");
 #else
-                                        msg_print("A distant bell tolls four times.");
+						msg_print("A distant bell tolls four times.");
 #endif
 
-                                        break;
-                                }
+						break;
+					}
 				}
 			}
 
@@ -2187,13 +2187,13 @@ static void process_world(void)
 
 				disturb(1, 0);
 #ifdef JP
-                                msg_print("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。");
+msg_print("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。");
 #else
 				msg_print("A distant bell tolls many times, fading into an deathly silence.");
 #endif
 
-                                activate_ty_curse(FALSE, &count);
-                        }
+		activate_ty_curse(FALSE, &count);
+	}
 		}
 	}
 
@@ -2240,7 +2240,7 @@ static void process_world(void)
 
 		/* Take damage */
 #ifdef JP
-                take_hit(DAMAGE_NOESCAPE, i, "致命傷", -1);
+take_hit(DAMAGE_NOESCAPE, i, "致命傷", -1);
 #else
 		take_hit(DAMAGE_NOESCAPE, i, "a fatal wound", -1);
 #endif
@@ -2260,8 +2260,8 @@ static void process_world(void)
 			{
 				/* Basic digestion rate based on speed */
 				i = /* extract_energy[p_ptr->pspeed] * 2;*/
-                                        ((p_ptr->pspeed > 199) ? 49 : ((p_ptr->pspeed < 0) ?
-                                                                       1 : extract_energy[p_ptr->pspeed]));
+	                        ((p_ptr->pspeed > 199) ? 49 : ((p_ptr->pspeed < 0) ?
+        	                1 : extract_energy[p_ptr->pspeed]));
 
 				/* Regeneration takes more food */
 				if (p_ptr->regenerate) i += 20;
@@ -2297,7 +2297,7 @@ static void process_world(void)
 
 		/* Take damage */
 #ifdef JP
-                if (!p_ptr->invuln) take_hit(DAMAGE_LOSELIFE, i, "空腹", -1);
+if (!p_ptr->invuln) take_hit(DAMAGE_LOSELIFE, i, "空腹", -1);
 #else
 		if (!p_ptr->invuln) take_hit(DAMAGE_LOSELIFE, i, "starvation", -1);
 #endif
@@ -2332,7 +2332,7 @@ static void process_world(void)
 			{
 				/* Message */
 #ifdef JP
-                                msg_print("あまりにも空腹で気絶してしまった。");
+msg_print("あまりにも空腹で気絶してしまった。");
 #else
 				msg_print("You faint from the lack of food.");
 #endif
@@ -2390,7 +2390,7 @@ static void process_world(void)
 			if (p_ptr->wizard)
 			{
 #ifdef JP
-                                msg_format("ＭＰ回復: %d/%d", upkeep_regen, regen_amount);
+msg_format("ＭＰ回復: %d/%d", upkeep_regen, regen_amount);
 #else
 				msg_format("Regen: %d/%d", upkeep_regen, regen_amount);
 #endif
@@ -2414,7 +2414,7 @@ static void process_world(void)
 		while (upkeep_factor > 100)
 		{
 #ifdef JP
-                        msg_print("こんなに多くのペットを制御できない！");
+msg_print("こんなに多くのペットを制御できない！");
 #else
 			msg_print("Such much pets cannot be controled at once!");
 #endif
@@ -6039,7 +6039,6 @@ msg_print("試合開始！");
 	/* Not save-and-quit and not dead? */
 	if (p_ptr->playing && !p_ptr->is_dead)
 	{
-                /* Clear at fist */
 		for(num = 0; num < 21; num++)
 		{
 			party_mon[num].r_idx = 0;
@@ -6105,7 +6104,6 @@ msg_print("試合開始！");
 				if (!m_ptr->nickname) continue;
 				if (p_ptr->riding == i) continue;
 				
-                                /* Lost sight of a pet */
 				monster_desc(m_name, m_ptr, 0x88);
 				do_cmd_write_nikki(NIKKI_NAMED_PET, 4, m_name);
 			}
