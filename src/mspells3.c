@@ -8,7 +8,7 @@
  * are included in all such copies.  Other copyrights may also apply.
  */
 
-/* Purpose: Mane code */
+/* Purpose: Imitation code */
 
 #include "angband.h"
 

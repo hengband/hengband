@@ -5942,7 +5942,7 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 					}
 				}
 				new_mane = FALSE;
-				p_ptr->redraw |= (PR_MANE);
+				p_ptr->redraw |= (PR_IMITATION);
 			}
 			if (p_ptr->action == ACTION_LEARN)
 			{

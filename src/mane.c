@@ -8,7 +8,7 @@
  * are included in all such copies.  Other copyrights may also apply.
  */
 
-/* Purpose: Mane code */
+/* Purpose: Imitation code */
 
 #include "angband.h"
 
@@ -1370,7 +1370,7 @@ msg_print("ものまねに失敗した！");
 	energy_use = 100;
 
 	/* Window stuff */
-	p_ptr->redraw |= (PR_MANE);
+	p_ptr->redraw |= (PR_IMITATION);
 	p_ptr->window |= (PW_PLAYER);
 	p_ptr->window |= (PW_SPELL);
 

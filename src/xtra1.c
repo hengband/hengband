@@ -1350,7 +1350,7 @@ static void prt_study(void)
 }
 
 
-static void prt_mane(void)
+static void prt_imitation(void)
 {
 	int wid, hgt, row_study, col_study;
 
@@ -1368,7 +1368,7 @@ static void prt_mane(void)
 #ifdef JP
 			c_put_str(attr, "¤Þ¤Í", row_study, col_study);
 #else
-			c_put_str(attr, "Mane", row_study, col_study);
+			c_put_str(attr, "Imit", row_study, col_study);
 #endif
 		}
 		else
@@ -1672,7 +1672,7 @@ static void prt_frame_extra(void)
 	/* Study spells */
 	prt_study();
 
-	prt_mane();
+	prt_imitation();
 
 	prt_status();
 }
@@ -5885,7 +5885,7 @@ void redraw_stuff(void)
 		p_ptr->redraw &= ~(PR_EXTRA);
 		p_ptr->redraw &= ~(PR_CUT | PR_STUN);
 		p_ptr->redraw &= ~(PR_HUNGER);
-		p_ptr->redraw &= ~(PR_STATE | PR_SPEED | PR_STUDY | PR_MANE | PR_STATUS);
+		p_ptr->redraw &= ~(PR_STATE | PR_SPEED | PR_STUDY | PR_IMITATION | PR_STATUS);
 		prt_frame_extra();
 	}
 
@@ -5921,10 +5921,10 @@ void redraw_stuff(void)
 
 	if (p_ptr->pclass == CLASS_IMITATOR)
 	{
-		if (p_ptr->redraw & (PR_MANE))
+		if (p_ptr->redraw & (PR_IMITATION))
 		{
-			p_ptr->redraw &= ~(PR_MANE);
-			prt_mane();
+			p_ptr->redraw &= ~(PR_IMITATION);
+			prt_imitation();
 		}
 	}
 	else if (p_ptr->redraw & (PR_STUDY))

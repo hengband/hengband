@@ -2759,7 +2759,7 @@
 #define PR_STATE        0x00100000L     /* Display Extra (State) */
 #define PR_SPEED        0x00200000L     /* Display Extra (Speed) */
 #define PR_STUDY        0x00400000L     /* Display Extra (Study) */
-#define PR_MANE         0x00800000L     /* Display Extra (Mane) */
+#define PR_IMITATION    0x00800000L     /* Display Extra (Imitation) */
 #define PR_EXTRA        0x01000000L     /* Display Extra Info */
 #define PR_BASIC        0x02000000L     /* Display Basic Info */
 #define PR_MAP          0x04000000L     /* Display Map */

@@ -4468,7 +4468,7 @@ msg_print("多くの力強いものが間近に現れた音が聞こえる。");
 			p_ptr->mane_num++;
 			new_mane = TRUE;
 
-			p_ptr->redraw |= (PR_MANE);
+			p_ptr->redraw |= (PR_IMITATION);
 		}
 	}
 

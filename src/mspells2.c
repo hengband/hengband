@@ -4231,7 +4231,7 @@ bool monst_spell_monst(int m_idx)
 			p_ptr->mane_num++;
 			new_mane = TRUE;
 
-			p_ptr->redraw |= (PR_MANE);
+			p_ptr->redraw |= (PR_IMITATION);
 		}
 	}
 
