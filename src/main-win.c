@@ -546,7 +546,7 @@ static cptr AngList = "AngList";
 static cptr ANGBAND_DIR_XTRA_GRAF;
 static cptr ANGBAND_DIR_XTRA_SOUND;
 static cptr ANGBAND_DIR_XTRA_HELP;
-#ifndef JP
+#if 0 /* #ifndef JP */
 static cptr ANGBAND_DIR_XTRA_FONT;
 #endif
 #ifdef USE_MUSIC
@@ -825,7 +825,7 @@ static cptr extract_file_name(cptr s)
  *
  * Return a pointer to a static buffer holding the capitalized base name.
  */
-#ifndef JP
+#if 0 /* #ifndef JP */
 static char *analyze_font(char *path, int *wp, int *hp)
 {
 	int wid, hgt;
@@ -2990,7 +2990,11 @@ static void init_windows(void)
 
 #if 1 /* #ifdef JP */
 		strncpy(td->lf.lfFaceName, td->font_want, LF_FACESIZE);
+#ifdef JP
 		td->lf.lfCharSet = SHIFTJIS_CHARSET;
+#else
+		td->lf.lfCharSet = ANSI_CHARSET;
+#endif
 		td->lf.lfPitchAndFamily = FIXED_PITCH | FF_DONTCARE;
 		/* Activate the chosen font */
 		term_force_font(td, NULL);
@@ -5012,7 +5016,7 @@ static void init_stuff(void)
 	validate_file(path);
 
 
-#ifndef JP
+#if 0 /* #ifndef JP */
 	/* Build the "font" path */
 	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "font");
 
