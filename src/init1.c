@@ -447,7 +447,7 @@ static cptr r_info_flags8[] =
 	"XXX8X28",
 	"XXX8X29",
 	"WILD_SWAMP",	/* ToDo: Implement Swamp */
-	"WILD_TOO",
+	"WILD_ALL",
 };
 
 
@@ -733,24 +733,6 @@ errr init_info_txt(FILE *fp, char *buf, header *head,
 	/* Complete the "name" and "text" sizes */
 	if (head->name_size) head->name_size++;
 	if (head->text_size) head->text_size++;
-
-	/* 
-	 * Mega Hack -- init_r_info_txt()だけ最後に特殊な処理をしていた。
-	 *              どうにかならないものか。
-	 */
-	if (head == &r_head)
-	{
-		int i;
-		for (i = 1; i < max_r_idx; i++)
-		{
-			/* Invert flag WILD_ONLY <-> RF8_DUNGEON */
-			r_info[i].flags8 ^= 1L;
-
-			/* WILD_TOO without any other wilderness flags enables all flags */
-			if ((r_info[i].flags8 & RF8_WILD_TOO) && !(r_info[i].flags8 & 0x7FFFFFFE))
-				r_info[i].flags8 = 0x0463;
-		}
-	}
 
 	/* Success */
 	return (0);

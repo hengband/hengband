@@ -3306,7 +3306,7 @@
 /*
  * Monster race flags
  */
-#define RF8_DUNGEON             0x00000001
+#define RF8_WILD_ONLY           0x00000001
 #define RF8_WILD_TOWN           0x00000002
 #define RF8_XXX8X02             0x00000004
 #define RF8_WILD_SHORE          0x00000008
@@ -3317,7 +3317,7 @@
 #define RF8_XXX8X08             0x00000100
 #define RF8_WILD_MOUNTAIN       0x00000200
 #define RF8_WILD_GRASS          0x00000400
-#define RF8_WILD_TOO            0x80000000
+#define RF8_WILD_ALL            0x80000000
 
 /*
  * Monster drop info

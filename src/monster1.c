@@ -3204,7 +3204,7 @@ bool monster_quest(int r_idx)
 	monster_race *r_ptr = &r_info[r_idx];
 
 	/* Random quests are in the dungeon */
-	if (!(r_ptr->flags8 & RF8_DUNGEON)) return FALSE;
+	if (r_ptr->flags8 & RF8_WILD_ONLY) return FALSE;
 
 	/* No random quests for aquatic monsters */
 	if (r_ptr->flags7 & RF7_AQUATIC) return FALSE;
@@ -3223,7 +3223,7 @@ bool monster_dungeon(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	if (r_ptr->flags8 & RF8_DUNGEON)
+	if (!(r_ptr->flags8 & RF8_WILD_ONLY))
 		return TRUE;
 	else
 		return FALSE;
@@ -3256,7 +3256,7 @@ bool monster_waste(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	if (r_ptr->flags8 & RF8_WILD_WASTE)
+	if (r_ptr->flags8 & (RF8_WILD_WASTE | RF8_WILD_ALL))
 		return TRUE;
 	else
 		return FALSE;
@@ -3267,7 +3267,7 @@ bool monster_town(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	if (r_ptr->flags8 & RF8_WILD_TOWN)
+	if (r_ptr->flags8 & (RF8_WILD_TOWN | RF8_WILD_ALL))
 		return TRUE;
 	else
 		return FALSE;
@@ -3278,7 +3278,7 @@ bool monster_wood(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	if (r_ptr->flags8 & RF8_WILD_WOOD)
+	if (r_ptr->flags8 & (RF8_WILD_WOOD | RF8_WILD_ALL))
 		return TRUE;
 	else
 		return FALSE;
@@ -3311,7 +3311,7 @@ bool monster_grass(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	if (r_ptr->flags8 & RF8_WILD_GRASS)
+	if (r_ptr->flags8 & (RF8_WILD_GRASS | RF8_WILD_ALL))
 		return TRUE;
 	else
 		return FALSE;
@@ -3525,7 +3525,8 @@ bool are_enemies(monster_type *m_ptr, monster_type *n_ptr)
 		return TRUE;
 	}
 
-	if ((r_ptr->flags8 & RF8_WILD_TOWN) && (s_ptr->flags8 & RF8_WILD_TOWN))
+	if ((r_ptr->flags8 & (RF8_WILD_TOWN | RF8_WILD_ALL))
+	    && (s_ptr->flags8 & (RF8_WILD_TOWN | RF8_WILD_ALL)))
 	{
 		if (!is_pet(m_ptr) && !is_pet(n_ptr)) return FALSE;
 	}

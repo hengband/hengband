@@ -1641,7 +1641,7 @@ static void get_exp_from_mon(int dam, monster_type *m_ptr)
 
 		  div *= r_ptr->hdice * (r_ptr->hside + 1);
 		}
-		if (!dun_level && ((r_ptr->flags8 & RF8_DUNGEON) || !(r_ptr->flags1 & RF1_UNIQUE))) div *= 5;
+		if (!dun_level && (!(r_ptr->flags8 & RF8_WILD_ONLY) || !(r_ptr->flags1 & RF1_UNIQUE))) div *= 5;
 		div_h = div/0x10000L;
 		div_l = div%0x10000L;
 		div_h *= (m_ptr->max_maxhp*2);

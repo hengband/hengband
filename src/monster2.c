@@ -152,18 +152,6 @@ cptr funny_comments[MAX_SAN_COMMENT] =
 };
 
 
-int get_wilderness_flag(void)
-{
-	int x = p_ptr->wilderness_x;
-	int y = p_ptr->wilderness_y;
-
-	if (dun_level)
-		return (RF8_DUNGEON);
-	else
-		return (1L << wilderness[y][x].terrain);
-}
-
-
 /*
  * Delete a monster by index.
  *

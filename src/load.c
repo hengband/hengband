@@ -2543,7 +2543,7 @@ note(format("クエストが多すぎる(%u)！", max_quests_load));
 
 							if(r_ptr->flags7 & RF7_AQUATIC) continue;
 
-							if(!(r_ptr->flags8 & RF8_DUNGEON)) continue;
+							if(r_ptr->flags8 & RF8_WILD_ONLY) continue;
 
 							/*
 							 * Accept monsters that are 2 - 6 levels
