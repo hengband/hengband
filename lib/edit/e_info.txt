@@ -1241,7 +1241,7 @@ F:TY_CURSE | CURSED | HEAVY_CURSE
 N:185:耐時間逆転の
 E:and Resist Time
 X:27:25
-W:30:0:0:0
+W:30:0:0:7500
 C:0:0:0:0
 
 N:186:不安定の
