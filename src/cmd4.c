@@ -8102,7 +8102,7 @@ static void desc_obj_fake(int k_idx)
 	/* Hack -- Handle stuff */
 	handle_stuff();
 
-	if (!screen_object(o_ptr, FALSE))
+	if (!screen_object(o_ptr, SCROBJ_FAKE_OBJECT | SCROBJ_FORCE_DETAIL))
 	{
 #ifdef JP
 		msg_print("特に変わったところはないようだ。");

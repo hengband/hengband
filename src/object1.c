@@ -2347,7 +2347,7 @@ return "空気の息";
 /*
  * Describe a "fully identified" item
  */
-bool screen_object(object_type *o_ptr, bool real)
+bool screen_object(object_type *o_ptr, u32b mode)
 {
 	int                     i = 0, j, k;
 
@@ -2367,7 +2367,7 @@ bool screen_object(object_type *o_ptr, bool real)
 		char temp[70 * 20];
 
 		roff_to_buf(o_ptr->name1 ? (a_text + a_info[o_ptr->name1].text) :
-			    (k_text + k_info[lookup_kind(o_ptr->tval, o_ptr->sval)].text),
+			    (k_text + k_info[o_ptr->k_idx].text),
 			    77 - 15, temp, sizeof(temp));
 		for (j = 0; temp[j]; j += 1 + strlen(&temp[j]))
 		{ info[i] = &temp[j]; i++;}
@@ -3757,7 +3757,7 @@ info[i++] = "それはあなたの魔力を吸い取る。";
 	}
 
 	/* Describe about this kind of object instead of THIS fake object */
-	if (!real)
+	if (mode & SCROBJ_FAKE_OBJECT)
 	{
 		switch (o_ptr->tval)
 		{
@@ -3855,6 +3855,8 @@ info[i++] = "それはあなたの魔力を吸い取る。";
 		}
 	}
 
+	if (mode & SCROBJ_FORCE_DETAIL) trivial_info = 0;
+
 	/* No relevant informations */
 	if (i <= trivial_info) return (FALSE);
 
@@ -3865,7 +3867,7 @@ info[i++] = "それはあなたの魔力を吸い取る。";
 	Term_get_size(&wid, &hgt);
 
 	/* Display Item name */
-	if (real)
+	if (!(mode & SCROBJ_FAKE_OBJECT))
 		object_desc(o_name, o_ptr, 0);
 	else
 		object_desc(o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));

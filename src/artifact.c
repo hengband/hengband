@@ -1915,7 +1915,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		/* Mark the item as fully known */
 		o_ptr->ident |= (IDENT_MENTAL);
 
-		(void)screen_object(o_ptr, TRUE);
+		(void)screen_object(o_ptr, 0L);
 
 		if (!get_string(ask_msg, dummy_name, sizeof dummy_name)
 		    || !dummy_name[0])

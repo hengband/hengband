@@ -5505,3 +5505,9 @@ extern int PlayerUID;
 #define MON_CONFUSED(M_PTR) ((M_PTR)->mtimed[MTIMED_CONFUSED])
 #define MON_MONFEAR(M_PTR)  ((M_PTR)->mtimed[MTIMED_MONFEAR])
 #define MON_INVULNER(M_PTR) ((M_PTR)->mtimed[MTIMED_INVULNER])
+
+/*
+ * Bit flags for screen_object()
+ */
+#define SCROBJ_FAKE_OBJECT  0x00000001
+#define SCROBJ_FORCE_DETAIL 0x00000002
