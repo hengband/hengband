@@ -722,7 +722,13 @@ int is_autopick(object_type *o_ptr)
 			/* Check if there is a same item */
 			for (j = 0; j < INVEN_PACK; j++)
 			{
-				if (object_similar(&inventory[j], o_ptr))
+				/*
+				 * 'Collecting' means the item must be absorbed 
+				 * into an inventory slot.
+				 * But an item can not be absorbed into itself!
+				 */
+				if ((&inventory[j] != o_ptr) &&
+				    object_similar(&inventory[j], o_ptr))
 					return i;
 			}
 		}
@@ -797,10 +803,35 @@ static bool is_autopick2( object_type *o_ptr) {
 /*
  *  Auto inscription
  */
-void auto_inscribe_item(object_type *o_ptr, int idx)
+void auto_inscribe_item(s16b item, int idx)
 {
+	char o_name[MAX_NLEN];
+	object_type *o_ptr;
+
+	/* Get the item (in the pack) */
+	if (item >= 0) o_ptr = &inventory[item];
+
+	/* Get the item (on the floor) */
+	else o_ptr = &o_list[0 - item];
+
 	if (idx >= 0 && autopick_list[idx].insc && !o_ptr->inscription)
+	{
 		o_ptr->inscription = inscribe_flags(o_ptr, autopick_list[idx].insc);
+
+		if (item >= INVEN_RARM)
+		{
+			/* Redraw inscription */
+			p_ptr->window |= (PW_EQUIP);
+
+			/* {.} and {$} effect p_ptr->warning and TRC_TELEPORT_SELF */
+			p_ptr->update |= (PU_BONUS);
+		}
+		else if (item >= 0)
+		{
+			/* Redraw inscription */
+			p_ptr->window |= (PW_INVEN);
+		}
+	}
 }
 
 
@@ -892,7 +923,7 @@ void auto_pickup_items(cave_type *c_ptr)
 
 		idx = is_autopick(o_ptr);
 
-		auto_inscribe_item(o_ptr, idx);
+		auto_inscribe_item(this_o_idx, idx);
 
 		if (is_autopick2(o_ptr) ||
 		    (idx >= 0 && (autopick_list[idx].action & DO_AUTOPICK)))
@@ -2021,7 +2052,7 @@ void do_cmd_edit_autopick()
 		}
 
 		/* Redraw mode line */
-		if (dirty_line & DIRTY_MODE)
+		if (dirty_flags & DIRTY_MODE)
 		{
 			int sepa_length = wid - WID_DESC;
 

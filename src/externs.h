@@ -544,7 +544,7 @@ extern cptr autopick_line_from_entry(autopick_type *entry);
 extern bool autopick_new_entry(autopick_type *entry, cptr str);
 extern void autopick_free_entry(autopick_type *entry);
 extern int is_autopick(object_type *o_ptr);
-extern void auto_inscribe_item(object_type *o_ptr, int idx);
+extern void auto_inscribe_item(s16b item, int idx);
 extern bool auto_destroy_item(s16b item, int autopick_idx);
 extern void auto_pickup_items(cave_type *c_ptr);
 extern void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr);
