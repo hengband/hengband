@@ -6598,10 +6598,10 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &numpad_as_cursorkey,         TRUE, OPT_PAGE_INPUT, 2, 31,
-	"numpad_as_cursorkey",          "エディタ内でテンキーをカーソルキーとして使う。" },
+	"numpad_as_cursorkey",          "エディタ内でテンキーをカーソルキーとして使う" },
 #else
 	{ &numpad_as_cursorkey,         TRUE, OPT_PAGE_INPUT, 2, 31,
-	"numpad_as_cursorkey",          "Use numpad keys as cursor key in editor mode" },
+	"numpad_as_cursorkey",          "Use numpad keys as cursor keys in editor mode" },
 #endif
 
 	/*** Output Options ***/
