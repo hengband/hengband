@@ -7636,7 +7636,7 @@ msg_format("しかし効力を跳ね返した！");
 #ifdef JP
 msg_print("あなたは命が薄まっていくように感じた！");
 #else
-				msg_print("Your feel your life fade away!");
+				msg_print("You feel your life fade away!");
 #endif
 
 				get_damage = take_hit(DAMAGE_ATTACK, dam, m_name, MS_HAND_DOOM);

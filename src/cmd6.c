@@ -1172,7 +1172,7 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 #ifdef JP
 				msg_print("頭がハッキリとした。");
 #else
-				msg_print("Your feel your head clear.");
+				msg_print("You feel your head clear.");
 #endif
 				p_ptr->window |= (PW_PLAYER);
 				ident = TRUE;
@@ -1184,7 +1184,7 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 #ifdef JP
 				msg_print("頭がハッキリとした。");
 #else
-				msg_print("Your feel your head clear.");
+				msg_print("You feel your head clear.");
 #endif
 
 				p_ptr->redraw |= (PR_MANA);
@@ -2533,7 +2533,7 @@ static int staff_effect(int sval, bool *use_charge, bool magic, bool known)
 #ifdef JP
 				msg_print("頭がハッキリとした。");
 #else
-				msg_print("Your feel your head clear.");
+				msg_print("You feel your head clear.");
 #endif
 
 				p_ptr->redraw |= (PR_MANA);
@@ -5783,7 +5783,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 #ifdef JP
 					msg_print("頭がハッキリとした。");
 #else
-					msg_print("Your feel your head clear.");
+					msg_print("You feel your head clear.");
 #endif
 					p_ptr->window |= (PW_PLAYER);
 				}
@@ -5794,7 +5794,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 #ifdef JP
 					msg_print("頭がハッキリとした。");
 #else
-					msg_print("Your feel your head clear.");
+					msg_print("You feel your head clear.");
 #endif
 
 					p_ptr->redraw |= (PR_MANA);
