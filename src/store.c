@@ -4386,7 +4386,16 @@ static void store_process_command(void)
 		/* Browse a book */
 		case 'b':
 		{
-			do_cmd_browse();
+			if ( (p_ptr->pclass == CLASS_MINDCRAFTER) ||
+			     (p_ptr->pclass == CLASS_BERSERKER) ||
+			     (p_ptr->pclass == CLASS_NINJA) ||
+			     (p_ptr->pclass == CLASS_MIRROR_MASTER) 
+			     ) do_cmd_mind_browse();
+			else if (p_ptr->pclass == CLASS_SMITH)
+				do_cmd_kaji(TRUE);
+			else if (p_ptr->pclass == CLASS_MAGIC_EATER)
+				do_cmd_magic_eater(TRUE);
+			else do_cmd_browse();
 			break;
 		}
 
