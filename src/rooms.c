@@ -373,8 +373,19 @@ static bool find_space(int *y, int *x, int height, int width)
 		return FALSE;
 	}
 
-	/* Choose a random one */
-	pick = randint1(candidates);
+	/* Normal dungeon */
+	if (!(d_info[dungeon_type].flags1 & DF1_NO_CAVE))
+	{
+		/* Choose a random one */
+		pick = randint1(candidates);
+	}
+
+	/* NO_CAVE dungeon (Castle) */
+	else
+	{
+		/* Always choose the center one */
+		pick = candidates/2 + 1;
+	}
 
 	/* Pick up the choosen location */
 	for (block_y = dun->row_rooms - blocks_high; block_y >= 0; block_y--)
