@@ -2537,7 +2537,10 @@ msg_format("%^sは突然敵にまわった！", m_name);
 
 					for (k = 0; k < 6; k++)
 					{
-						count += summon_specific(m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_BIZARRE1, (PM_ALLOW_GROUP | p_mode));
+						if (summon_specific(m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_BIZARRE1, (PM_ALLOW_GROUP | p_mode)))
+						{
+							if (m_list[hack_m_idx_ii].ml) count++;
+						}
 					}
 
 					if (count && m_ptr->ml) r_ptr->r_flags6 |= (RF6_SPECIAL);
