@@ -3376,13 +3376,22 @@ msg_print("突然ほとんど孤独になった気がする。");
 			banish_monsters(100);
 			if (!dun_level && p_ptr->town_num)
 			{
+				int n;
+
+				/* Pick a random shop (except home) */
+				do
+				{
+					n = randint0(MAX_STORES);
+				}
+				while ((n == STORE_HOME) || (n == STORE_MUSEUM));
+
 #ifdef JP
-msg_print("店の主人が丘に向かって走っている！");
+				msg_print("店の主人が丘に向かって走っている！");
 #else
 				msg_print("You see one of the shopkeepers running for the hills!");
 #endif
 
-				store_shuffle(randint0(MAX_STORES));
+				store_shuffle(n);
 			}
 			msg_print(NULL);
 		}
