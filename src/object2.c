@@ -1691,6 +1691,7 @@ static int object_similar_part(object_type *o_ptr, object_type *j_ptr)
 		{
 			/* Require identical knowledge of both items */
 			if (object_known_p(o_ptr) != object_known_p(j_ptr)) return 0;
+			if (o_ptr->feeling != j_ptr->feeling) return 0;
 
 			/* Require identical "bonuses" */
 			if (o_ptr->to_h != j_ptr->to_h) return 0;
