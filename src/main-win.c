@@ -2221,7 +2221,7 @@ static errr Term_curs_win(int x, int y)
 
 #ifdef JP
 	if (x + 1 < Term->wid && 
-	    ((use_bigtile && Term->old->a[y][x+1] == 255)
+	    ((use_bigtile && ((Term->old->a[y][x+1] == 255) || (Term->old->c[y][x] == 127)))
 	    || (iskanji(Term->old->c[y][x]) && !(Term->old->a[y][x] & 0x80))))
 #else
 	if (use_bigtile && x + 1 < Term->wid && Term->old->a[y][x+1] == 255)
