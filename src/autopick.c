@@ -1732,7 +1732,7 @@ void do_cmd_edit_autopick()
 	ctrl_command_desc[LAST_DESTROYED] = last_destroyed_command;
 
 	/* Conditional Expression for Class and Race */
-	sprintf(classrace, "?:[AND [EQU $CLASS %s] [EQU $RACE %s]]", 
+	sprintf(classrace, "?:[AND [EQU $RACE %s] [EQU $CLASS %s]]", 
 #ifdef JP
 		rp_ptr->E_title, cp_ptr->E_title
 #else
