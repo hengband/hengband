@@ -813,12 +813,12 @@ static int racial_aux(power_desc_type *pd_ptr)
 		return 1;
 	}
 
+	if (flush_failure) flush();
 #ifdef JP
 	msg_print("充分に集中できなかった。");
 #else
 	msg_print("You've failed to concentrate hard enough.");
 #endif
-	if (flush_failure) flush();
 
 	return -1;
 }
@@ -923,16 +923,9 @@ static bool cmd_racial_power_aux(s32b command)
 		}
 		case CLASS_PALADIN:
 		{
-			if (is_good_realm(p_ptr->realm1))
-			{
-				if (!get_aim_dir(&dir)) return FALSE;
-				fire_beam(GF_HOLY_FIRE, dir, plev * 3);
-			}
-			else
-			{
-				if (!get_aim_dir(&dir)) return FALSE;
-				fire_beam(GF_HELL_FIRE, dir, plev * 3);
-			}
+			if (!get_aim_dir(&dir)) return FALSE;
+			fire_beam(is_good_realm(p_ptr->realm1) ? GF_HOLY_FIRE : GF_HELL_FIRE,
+			          dir, plev * 3);
 			break;
 		}
 		case CLASS_WARRIOR_MAGE:
@@ -1106,13 +1099,12 @@ static bool cmd_racial_power_aux(s32b command)
 			{
 				if (!get_aim_dir(&dir)) return FALSE;
 				(void)fire_ball_hide(GF_CONTROL_LIVING, dir, p_ptr->lev, 0);
-				break;
 			}
 			else if (command == -4)
 			{
 				project_hack(GF_CONTROL_LIVING, p_ptr->lev);
-				break;
 			}
+			break;
 		}
 		case CLASS_ARCHER:
 		{
@@ -1126,9 +1118,12 @@ static bool cmd_racial_power_aux(s32b command)
 		}
 		case CLASS_BARD:
 		{
+			/* Singing is already stopped */
+			if (!p_ptr->magic_num1[0] && !p_ptr->magic_num1[1]) return FALSE;
+
 			stop_singing();
 			energy_use = 10;
-			return FALSE;
+			break;
 		}
 		case CLASS_RED_MAGE:
 		{
