@@ -14153,7 +14153,7 @@ S:BLIND | CONF | SCARE | CAUSE_4 | CAUSE_3 |
 S:BA_WATE | DARKNESS | BR_DARK | TELE_TO 
 D:$An enormously fearsome and powerful inhabitant of the depths. It 
 D:$resembles a gargantuan octopus and its evil is almost tangible.
-D:とてつもなく強く恐しい深海の生き物だ。巨大な蛸に似ていて、
+D:とてつもなく強く恐ろしい深海の生き物だ。巨大な蛸に似ていて、
 D:見ただけでその邪悪さが伝わってくる。
 
 #J0#
@@ -15114,7 +15114,7 @@ S:BLIND | CONF | SCARE | CAUSE_4 | CAUSE_3 | TELE_TO | TELE_AWAY |
 S:BA_WATE | DARKNESS | BR_DARK | BR_ACID | BR_POIS
 D:$An enormously fearsome and powerful inhabitant of the depths. It 
 D:$resembles a gargantuan octopus and its evil is almost tangible.
-D:とてつもなく強く恐しい深海の生き物だ。巨大な蛸に似ていて、
+D:とてつもなく強く恐ろしい深海の生き物だ。巨大な蛸に似ていて、
 D:見ただけでその邪悪さが伝わってくる。
 
 #JZ#
@@ -18409,7 +18409,7 @@ F:DROP_CORPSE | DROP_SKELETON | CAN_SWIM
 S:1_IN_5 |
 S:ROCKET
 D:$You watch in horror as he aims his massive weapon at you.
-D:彼はその恐しい重火器の狙いをあなたに向けている。
+D:彼はその恐ろしい重火器の狙いをあなたに向けている。
 
 N:897:破片ボルテックス
 E:Shard vortex

@@ -739,7 +739,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 		else
 		{
 #ifdef JP
-			msg_print("渦巻か合体し、破裂した！");
+			msg_print("渦巻が合体し、破裂した！");
 #else
 			msg_print("Vortices coalesce and wreak destruction!");
 #endif
@@ -759,7 +759,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 
 		/* Message. */
 #ifdef JP
-		msg_print("恐しい声が響いた:  「暗闇が汝をつつまん！」");
+		msg_print("恐ろしい声が響いた:  「暗闇が汝をつつまん！」");
 #else
 		msg_print("Hideous voices bid:  'Let the darkness have thee!'");
 #endif
