@@ -5437,11 +5437,6 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
 				/* Become blind */
 				(void)set_blind(p_ptr->blind + 10 + randint1(10));
 			}
-
-			if ((p_ptr->pclass == CLASS_NINJA) && (p_ptr->cur_lite <= 0))
-			{
-				if (!(cave[py][px].info & CAVE_GLOW)) set_superstealth(TRUE);
-			}
 		}
 
 		forget_flow();
@@ -5684,11 +5679,6 @@ if (damage) take_hit(DAMAGE_ATTACK, damage, "цо©л", -1);
 		if (damage) take_hit(DAMAGE_ATTACK, damage, "an earthquake", -1);
 #endif
 
-	}
-
-	if ((p_ptr->pclass == CLASS_NINJA) && (p_ptr->cur_lite <= 0))
-	{
-		if (!(cave[py][px].info & CAVE_GLOW)) set_superstealth(TRUE);
 	}
 
 	/* Examine the quaked region */
@@ -6382,11 +6372,6 @@ void unlite_room(int y1, int x1)
 
 	/* Now, darken them all at once */
 	cave_temp_room_unlite();
-
-	if ((p_ptr->pclass == CLASS_NINJA) && (p_ptr->cur_lite <= 0))
-	{
-		if (!(cave[py][px].info & CAVE_GLOW)) set_superstealth(TRUE);
-	}
 }
 
 

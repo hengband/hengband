@@ -1114,11 +1114,6 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 				/* Mega-Hack -- Update the monster in the affected grid */
 				/* This allows "spear of light" (etc) to work "correctly" */
 				if (c_ptr->m_idx) update_mon(c_ptr->m_idx, FALSE);
-
-				if ((p_ptr->pclass == CLASS_NINJA) && (p_ptr->cur_lite <= 0))
-				{
-					if (player_bold(y, x)) set_superstealth(TRUE);
-				}
 			}
 
 			/* All done */
