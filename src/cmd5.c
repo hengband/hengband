@@ -1122,7 +1122,7 @@ static bool cast_life_spell(int spell)
 		}
 		break;
 	case 17: /* Perception */
-		return ident_spell(FALSE);
+		return ident_spell(FALSE, FALSE);
 	case 18: /* Dispel Undead */
 		(void)dispel_undead(randint1(plev * 5));
 		break;
@@ -1170,7 +1170,7 @@ static bool cast_life_spell(int spell)
 		(void)set_cut(0);
 		break;
 	case 30: /* Holy Vision */
-		return identify_fully(FALSE);
+		return identify_fully(FALSE, FALSE);
 	case 31: /* Ultimate resistance */
 	{
 		int v = randint1(plev/2)+plev/2;
@@ -1238,7 +1238,7 @@ static bool cast_sorcery_spell(int spell)
 		map_area(DETECT_RAD_MAP);
 		break;
 	case 9: /* Identify */
-		return ident_spell(FALSE);
+		return ident_spell(FALSE, FALSE);
 	case 10: /* Slow Monster */
 		if (!get_aim_dir(&dir)) return FALSE;
 
@@ -1259,7 +1259,7 @@ static bool cast_sorcery_spell(int spell)
 		(void)detect_all(DETECT_RAD_DEFAULT);
 		break;
 	case 15: /* Identify True */
-		return identify_fully(FALSE);
+		return identify_fully(FALSE, FALSE);
 	case 16: /* Detect Objects and Treasure*/
 		(void)detect_objects_normal(DETECT_RAD_DEFAULT);
 		(void)detect_treasure(DETECT_RAD_DEFAULT);
@@ -1473,7 +1473,7 @@ msg_print("太陽光線が現れた。");
 		(void)charm_animals(plev * 2);
 		break;
 	case 21: /* Stone Tell */
-		return identify_fully(FALSE);
+		return identify_fully(FALSE, FALSE);
 	case 22: /* Wall of Stone */
 		(void)wall_stone();
 		break;
@@ -2271,9 +2271,9 @@ msg_print("死者が甦った。眠りを妨げるあなたを罰するために！");
 		}
 	case 26: /* Esoteria */
 		if (randint1(50) > plev)
-			return ident_spell(FALSE);
+			return ident_spell(FALSE, FALSE);
 		else
-			return identify_fully(FALSE);
+			return identify_fully(FALSE, FALSE);
 		break;
 	case 27: /* Mimic vampire */
 		(void)set_mimic(10+plev/2 + randint1(10+plev/2), MIMIC_VAMPIRE, FALSE);
@@ -3077,7 +3077,7 @@ msg_print("召還されたサイバーデーモンは怒っている！");
 		case 25: /* Trump Lore */
 			if (success)
 			{
-				return identify_fully(FALSE);
+				return identify_fully(FALSE, FALSE);
 			}
 			break;
 		case 26: /* Heal Monster */
@@ -3380,7 +3380,7 @@ static bool cast_arcane_spell(int spell)
 		teleport_player(plev * 5);
 		break;
 	case 20: /* Identify */
-		return ident_spell(FALSE);
+		return ident_spell(FALSE, FALSE);
 	case 21: /* Stone to Mud */
 		if (!get_aim_dir(&dir)) return FALSE;
 
@@ -3586,7 +3586,7 @@ msg_print("ゴーレムを作った。");
 		}
 		break;
 	case 26: /* Total Knowledge */
-		return identify_fully(FALSE);
+		return identify_fully(FALSE, FALSE);
 		break;
 	case 27: /* Enchant Weapon */
 		return enchant_spell(randint0(4) + 1, randint0(4) + 1, 0);

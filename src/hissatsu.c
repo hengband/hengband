@@ -645,11 +645,11 @@ static bool cast_hissatsu_spell(int spell)
 	{
 		if (p_ptr->lev > 44)
 		{
-			if (!identify_fully(TRUE)) return FALSE;
+			if (!identify_fully(TRUE, FALSE)) return FALSE;
 		}
 		else
 		{
-			if (!ident_spell(TRUE)) return FALSE;
+			if (!ident_spell(TRUE, FALSE)) return FALSE;
 		}
 		break;
 	}

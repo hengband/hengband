@@ -1651,14 +1651,14 @@ static void do_cmd_read_scroll_aux(int item)
 		case SV_SCROLL_IDENTIFY:
 		{
 			ident = TRUE;
-			if (!ident_spell(FALSE)) used_up = FALSE;
+			if (!ident_spell(FALSE, TRUE)) used_up = FALSE;
 			break;
 		}
 
 		case SV_SCROLL_STAR_IDENTIFY:
 		{
 			ident = TRUE;
-			if (!identify_fully(FALSE)) used_up = FALSE;
+			if (!identify_fully(FALSE, TRUE)) used_up = FALSE;
 			break;
 		}
 
@@ -2140,7 +2140,8 @@ msg_print("巻物は煙を立てて消え去った！");
 		floor_item_optimize(0 - item);
 	}
 
-	/* Can save again */
+	/* Delayed optimization */
+	optimize_inventry_auto_destroy();
 }
 
 
@@ -2269,7 +2270,7 @@ static int staff_effect(int sval, bool *use_charge, bool magic)
 
 		case SV_STAFF_IDENTIFY:
 		{
-			if (!ident_spell(FALSE)) *use_charge = FALSE;
+			if (!ident_spell(FALSE, TRUE)) *use_charge = FALSE;
 			ident = TRUE;
 			break;
 		}
@@ -2739,6 +2740,9 @@ static void do_cmd_use_staff_aux(int item)
 	{
 		floor_item_charges(0 - item);
 	}
+
+	/* Delayed optimization */
+	optimize_inventry_auto_destroy();
 }
 
 
@@ -3290,7 +3294,7 @@ static int rod_effect(int sval, int dir, bool *use_charge, bool magic)
 		case SV_ROD_IDENTIFY:
 		{
 			ident = TRUE;
-			if (!ident_spell(FALSE)) *use_charge = FALSE;
+			if (!ident_spell(FALSE, FALSE)) *use_charge = FALSE;
 			break;
 		}
 
@@ -4965,7 +4969,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 				msg_print("Your quarterstaff glows yellow...");
 #endif
 
-				if (!ident_spell(FALSE)) return;
+				if (!ident_spell(FALSE, FALSE)) return;
 				o_ptr->timeout = 10;
 				break;
 			}
@@ -4980,7 +4984,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 
 				detect_all(DETECT_RAD_DEFAULT);
 				probing();
-				identify_fully(FALSE);
+				identify_fully(FALSE, TRUE);
 				o_ptr->timeout = 1000;
 				break;
 			}
@@ -5096,7 +5100,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 #else
 				msg_print("The stone reveals hidden mysteries...");
 #endif
-				if (!ident_spell(FALSE)) return;
+				if (!ident_spell(FALSE, FALSE)) return;
 
 				if (mp_ptr->spell_book)
 				{
@@ -6118,7 +6122,7 @@ msg_print("あなたはエレメントのブレスを吐いた。");
 			switch (o_ptr->name2)
 			{
 			case EGO_AMU_IDENT:
-				if (!ident_spell(FALSE)) return;
+				if (!ident_spell(FALSE, FALSE)) return;
 				o_ptr->timeout = 10;
 				break;
 			case EGO_AMU_CHARM:
@@ -7128,6 +7132,9 @@ msg_print("呪文をうまく唱えられなかった！");
 		{
 			staff_effect(sval, &use_charge, TRUE);
 			if (!use_charge) return;
+
+			/* Delayed optimization */
+			optimize_inventry_auto_destroy();
 		}
 		if (randint1(100) < chance)
 			chg_virtue(V_CHANCE,1);

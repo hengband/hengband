@@ -2609,7 +2609,7 @@ static bool item_tester_hook_identify_weapon_armour(object_type *o_ptr)
  * This routine does *not* automatically combine objects.
  * Returns TRUE if something was identified, else FALSE.
  */
-bool ident_spell(bool only_equip)
+bool ident_spell(bool only_equip, bool wait_optimize)
 {
 	int             item;
 	object_type     *o_ptr;
@@ -2695,7 +2695,7 @@ s = "鑑定するべきアイテムがない。";
 	/* Auto-inscription/destroy */
 	idx = is_autopick(o_ptr);
 	auto_inscribe_item(item, idx);
-	if (!old_known) auto_destroy_item(item, idx);
+	if (!old_known) auto_destroy_item(item, idx, wait_optimize);
 
 	/* Something happened */
 	return (TRUE);
@@ -2785,7 +2785,7 @@ static bool item_tester_hook_identify_fully_weapon_armour(object_type *o_ptr)
  * Fully "identify" an object in the inventory  -BEN-
  * This routine returns TRUE if an item was identified.
  */
-bool identify_fully(bool only_equip)
+bool identify_fully(bool only_equip, bool wait_optimize)
 {
 	int             item;
 	object_type     *o_ptr;
@@ -2877,7 +2877,7 @@ s = "鑑定するべきアイテムがない。";
 	/* Auto-inscription/destroy */
 	idx = is_autopick(o_ptr);
 	auto_inscribe_item(item, idx);
-	if (!old_known) auto_destroy_item(item, idx);
+	if (!old_known) auto_destroy_item(item, idx, wait_optimize);
 
 	/* Success */
 	return (TRUE);

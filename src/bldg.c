@@ -4081,7 +4081,7 @@ msg_print("お金が足りません！");
 				/* Do nothing */
 		break;
 	case BACT_RESEARCH_ITEM:
-		paid = identify_fully(FALSE);
+		paid = identify_fully(FALSE, FALSE);
 		break;
 	case BACT_TOWN_HISTORY:
 		town_history();
@@ -4149,7 +4149,7 @@ msg_print("お金が足りません！");
 		paid = TRUE;
 		break;
 	case BACT_IDENT_ONE: /* needs work */
-		paid = ident_spell(FALSE);
+		paid = ident_spell(FALSE, FALSE);
 		break;
 	case BACT_LEARN:
 		do_cmd_study();

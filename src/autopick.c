@@ -898,9 +898,8 @@ void auto_inscribe_item(int item, int idx)
 
 /*
  * Automatically destroy an item if it is to be destroyed
- *
  */
-bool auto_destroy_item(int item, int autopick_idx)
+bool auto_destroy_item(int item, int autopick_idx, bool wait_optimize)
 {
 	bool destroy = FALSE;
 	char o_name[MAX_NLEN];
@@ -963,7 +962,13 @@ bool auto_destroy_item(int item, int autopick_idx)
 	if (item >= 0)
 	{
 		inven_item_increase(item, -(o_ptr->number));
-		inven_item_optimize(item);
+
+		/*
+		 * Optimize only equipment now.
+		 * Optimize inventry later.
+		 */
+		if (wait_optimize && item > INVEN_PACK)
+			inven_item_optimize(item);
 	}
 
 	/* Eliminate the item (from the floor) */
@@ -980,6 +985,18 @@ bool auto_destroy_item(int item, int autopick_idx)
 #endif
 			
 	return TRUE;
+}
+
+
+/*
+ * Optimize all inventry items after consumption of staves or scrolls.
+ */
+void optimize_inventry_auto_destroy(void)
+{
+	int i;
+
+	for (i = 0; i <= INVEN_PACK; i++)
+		inven_item_optimize(i);
 }
 
 
@@ -1038,7 +1055,7 @@ void auto_pickup_items(cave_type *c_ptr)
 		 */
 		else
 		{
-			if (auto_destroy_item((-this_o_idx), idx))
+			if (auto_destroy_item((-this_o_idx), idx, FALSE))
 				continue;
 		}
 	}
