@@ -232,10 +232,6 @@ static void rd_string(char *str, int max)
 {
 	int i;
 
-#ifdef JP
-        int    kanji, iseuc,l;
-	unsigned char c1,c2;
-#endif
 	/* Read the string */
 	for (i = 0; TRUE; i++)
 	{
@@ -254,64 +250,7 @@ static void rd_string(char *str, int max)
 	/* Terminate */
 	str[max-1] = '\0';
 #ifdef JP
-        kanji = 0;
-        iseuc = 1;
-	l=strlen(str);
-        for (i = 0; i < l; i++) {
-                c1 = str[i];
-                if (c1 & 0x80)  kanji = 1;
-                if ( c1>=0x80 && (c1 < 0xa1 || c1 > 0xfe)) iseuc = 0;
-                }
-#ifdef EUC
-		if (kanji && !iseuc) {
-			unsigned char   tmp[256];
-			for (i = 0; i < l; i++) {
-				c1 = str[i];
-				if (c1 & 0x80) {
-					i++;
-					c2 = str[i];
-					if (c2 >= 0x9f) {
-						c1 = c1 * 2 - (c1 >= 0xe0 ? 0xe0 : 0x60);
-						c2 += 2;
-					} else {
-						c1 = c1 * 2 - (c1 >= 0xe0 ? 0xe1 : 0x61);
-						c2 += 0x60 + (c2 < 0x7f);
-					}
-					tmp[i - 1] = c1;
-					tmp[i] = c2;
-				} else
-					tmp[i] = c1;
-			}
-			tmp[l] = 0;
-			strcpy(str, (char *)tmp);
-		}
-#endif
-
-#ifdef SJIS
-		if (kanji && iseuc) {
-			unsigned char   tmp[256];
-			for (i = 0; i < l; i++) {
-				c1 = str[i];
-				if (c1 & 0x80) {
-					i++;
-					c2 = str[i];
-					if (c1 % 2) {
-						c1 = (c1 >> 1) + (c1 < 0xdf ? 0x31 : 0x71);
-						c2 -= 0x60 + (c2 < 0xe0);
-					} else {
-						c1 = (c1 >> 1) + (c1 < 0xdf ? 0x30 : 0x70);
-						c2 -= 2;
-					}
-					tmp[i - 1] = c1;
-					tmp[i] = c2;
-				} else
-					tmp[i] = c1;
-			}
-			tmp[l] = 0;
-			strcpy(str, tmp);
-		}
-#endif
-
+	codeconv(str);
 #endif
 }
 

@@ -1460,6 +1460,7 @@ extern void jverb3( const char *in , char *out);
 extern void jverb( const char *in , char *out , int flag);
 extern char* strstr_j(cptr str1, cptr str2);
 extern size_t mb_strlcpy(char *dst, const char *src, size_t size);
+extern void codeconv(char *str);
 #endif
 
 #ifdef WORLD_SCORE
