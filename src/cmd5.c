@@ -5582,7 +5582,7 @@ bool do_riding(bool force)
 	if (p_ptr->riding)
 	{
 		/* Skip non-empty grids */
-		if (!cave_empty_bold2(y, x) || c_ptr->m_idx)
+		if (!cave_empty_bold2(y, x))
 		{
 #ifdef JP
 msg_print("そちらには降りられません。");

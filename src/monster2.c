@@ -2917,7 +2917,8 @@ byte get_mspeed(monster_race *r_ptr)
  */
 static bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 {
-	cave_type		*c_ptr;
+	/* Access the location */
+	cave_type		*c_ptr = &cave[y][x];
 
 	monster_type	*m_ptr;
 
@@ -2932,10 +2933,10 @@ static bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 	if (!in_bounds(y, x)) return (FALSE);
 
 	/* Require empty space (if not ghostly) */
-	if (!(!dun_level && (cave[y][x].feat == FEAT_MOUNTAIN) && ((r_ptr->flags8 & RF8_WILD_MOUNTAIN) || (r_ptr->flags7 & RF7_CAN_FLY))) &&
+	if (!(!dun_level && (c_ptr->feat == FEAT_MOUNTAIN) && ((r_ptr->flags8 & RF8_WILD_MOUNTAIN) || (r_ptr->flags7 & RF7_CAN_FLY))) &&
 	    !(cave_empty_bold2(y, x) || (mode & PM_IGNORE_TERRAIN)) &&
 	    !((r_ptr->flags2 & RF2_PASS_WALL) &&
-	      !(cave_perma_bold(y, x) || cave[y][x].m_idx ||
+	      !(cave_perma_bold(y, x) || c_ptr->m_idx ||
 	    player_bold(y, x)))) return (FALSE);
 
 	/* Paranoia */
@@ -2945,12 +2946,12 @@ static bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 	if (!r_ptr->name) return (FALSE);
 
 	/* Nor on the Pattern */
-	if ((cave[y][x].feat >= FEAT_PATTERN_START)
-	 && (cave[y][x].feat <= FEAT_PATTERN_XTRA2))
+	if ((c_ptr->feat >= FEAT_PATTERN_START)
+	 && (c_ptr->feat <= FEAT_PATTERN_XTRA2))
 		return (FALSE);
 
 	if (!(mode & PM_IGNORE_TERRAIN) &&
-	    !monster_can_cross_terrain(cave[y][x].feat, r_ptr))
+	    !monster_can_cross_terrain(c_ptr->feat, r_ptr))
 	{
 		return FALSE;
 	}
@@ -3008,9 +3009,6 @@ static bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 			}
 		}
 	}
-
-	/* Access the location */
-	c_ptr = &cave[y][x];
 
 	if (is_glyph_grid(c_ptr))
 	{
@@ -3422,8 +3420,6 @@ static bool mon_scatter(int *yp, int *xp, int y, int x, int max_dist)
 
 			/* Walls and Monsters block flow */
 			if (!cave_empty_bold2(ny, nx)) continue;
-			if (cave[ny][nx].m_idx) continue;
-			if (player_bold(ny, nx)) continue;
 
 			/* ... nor on the Pattern */
 			if ((cave[ny][nx].feat >= FEAT_PATTERN_START) &&
