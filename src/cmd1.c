@@ -3495,10 +3495,19 @@ bool move_player_effect(int ny, int nx, u32b mpe_mode)
 		/* Redraw new spot */
 		lite_spot(ny, nx);
 
-		if (mpe_mode & MPE_FORGET_FLOW) forget_flow();
-
 		/* Check for new panel (redraw map) */
 		verify_panel();
+
+		if (mpe_mode & MPE_FORGET_FLOW)
+		{
+			forget_flow();
+
+			/* Mega-Hack -- Forget the view */
+			p_ptr->update |= (PU_UN_VIEW);
+
+			/* Redraw map */
+			p_ptr->redraw |= (PR_MAP);
+		}
 
 		/* Update stuff */
 		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_DISTANCE);

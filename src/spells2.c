@@ -6626,7 +6626,7 @@ msg_print("失敗した。");
 	sound(SOUND_TELEPORT);
 
 	/* Swap the player and monster */
-	(void)move_player_effect(ty, tx, MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+	(void)move_player_effect(ty, tx, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 
 	/* Success */
 	return TRUE;
