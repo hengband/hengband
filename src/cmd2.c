@@ -3468,7 +3468,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			}
 
 			/* Brand (Acid) */
-			if ((have_flag(flgs, TR_BRAND_ACID)) || (p_ptr->special_attack & (ATTACK_ACID)))
+			if (have_flag(flgs, TR_BRAND_ACID))
 			{
 				/* Notice immunity */
 				if (r_ptr->flags3 & RF3_EFF_IM_ACID_MASK)
@@ -3487,7 +3487,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			}
 
 			/* Brand (Elec) */
-			if ((have_flag(flgs, TR_BRAND_ELEC)) || (p_ptr->special_attack & (ATTACK_ELEC)))
+			if (have_flag(flgs, TR_BRAND_ELEC))
 			{
 				/* Notice immunity */
 				if (r_ptr->flags3 & RF3_EFF_IM_ELEC_MASK)
@@ -3506,7 +3506,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			}
 
 			/* Brand (Fire) */
-			if ((have_flag(flgs, TR_BRAND_FIRE)) || (p_ptr->special_attack & (ATTACK_FIRE)))
+			if (have_flag(flgs, TR_BRAND_FIRE))
 			{
 				/* Notice immunity */
 				if (r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK)
@@ -3525,7 +3525,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			}
 
 			/* Brand (Cold) */
-			if ((have_flag(flgs, TR_BRAND_COLD)) || (p_ptr->special_attack & (ATTACK_COLD)))
+			if (have_flag(flgs, TR_BRAND_COLD))
 			{
 				/* Notice immunity */
 				if (r_ptr->flags3 & RF3_EFF_IM_COLD_MASK)
@@ -3543,7 +3543,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			}
 
 			/* Brand (Poison) */
-			if ((have_flag(flgs, TR_BRAND_POIS)) || (p_ptr->special_attack & (ATTACK_POIS)))
+			if (have_flag(flgs, TR_BRAND_POIS))
 			{
 				/* Notice immunity */
 				if (r_ptr->flags3 & RF3_EFF_IM_POIS_MASK)
@@ -4487,7 +4487,7 @@ note_dies = "は爆発して粉々になった。";
 				/* Hack -- Base damage from thrown object */
 				tdam = damroll(q_ptr->dd, q_ptr->ds);
 				/* Apply special damage XXX XXX XXX */
-				tdam = tot_dam_aux(q_ptr, tdam, m_ptr, 0);
+				tdam = tot_dam_aux(q_ptr, tdam, m_ptr, 0, TRUE);
 				tdam = critical_shot(q_ptr->weight, q_ptr->to_h, tdam);
 				if (q_ptr->to_d > 0)
 					tdam += q_ptr->to_d;
