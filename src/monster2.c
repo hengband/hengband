@@ -445,6 +445,29 @@ void compact_monsters(int size)
 
 
 /*
+ * Pre-calculate the racial counters of preserved pets
+ * To prevent multiple generation of unique monster who is the minion of player
+ */
+void precalc_cur_num_of_pet(void)
+{
+	monster_type *m_ptr;
+	int i;
+	int max_num = p_ptr->wild_mode ? 1 : MAX_PARTY_MON;
+
+	for (i = 0; i < max_num; i++)
+	{
+		m_ptr = &party_mon[i];
+
+		/* Skip empty monsters */
+		if (!m_ptr->r_idx) continue;
+
+		/* Hack -- Increase the racial counter */
+		real_r_ptr(m_ptr)->cur_num++;
+	}
+}
+
+
+/*
  * Delete/Remove all the monsters when the player leaves the level
  *
  * This is an efficient method of simulating multiple calls to the
@@ -479,9 +502,6 @@ void wipe_m_list(void)
 		/* Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
 
-		/* Hack -- Reduce the racial counter */
-		real_r_ptr(m_ptr)->cur_num = 0;
-
 		/* Monster is gone */
 		cave[m_ptr->fy][m_ptr->fx].m_idx = 0;
 
@@ -489,6 +509,18 @@ void wipe_m_list(void)
 		(void)WIPE(m_ptr, monster_type);
 
 	}
+
+	/*
+	 * Wiping racial counters of all monsters and incrementing of racial
+	 * counters of monsters in party_mon[] is required to prevent multiple
+	 * generation of unique monster who is the minion of player.
+	 */
+
+	/* Hack -- Wipe the racial counter of all monster races */
+	for (i = 1; i < max_r_idx; i++) r_info[i].cur_num = 0;
+
+	/* Hack -- Increase the racial counters of pets */
+	precalc_cur_num_of_pet();
 
 	/* Reset "m_max" */
 	m_max = 1;

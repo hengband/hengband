@@ -573,6 +573,10 @@
 #define PF_RYOUTE       0x0040
 
 
+/* Maximum number of preservable pets */
+#define MAX_PARTY_MON 21
+
+
 /*
  * There is a 1/20 (5%) chance of inflating the requested object_level
  * during the creation of an object (see "get_obj_num()" in "object.c").

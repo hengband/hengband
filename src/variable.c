@@ -1136,7 +1136,7 @@ int riding_t_m_idx;
 s16b kubi_r_idx[MAX_KUBI];
 s16b today_mon;
 
-monster_type party_mon[21];
+monster_type party_mon[MAX_PARTY_MON];
 
 bool write_level;
 

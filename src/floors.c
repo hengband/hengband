@@ -342,7 +342,7 @@ static void preserve_pet(void)
 {
 	int num, i;
 
-	for(num = 0; num < 21; num++)
+	for (num = 0; num < MAX_PARTY_MON; num++)
 	{
 		party_mon[num].r_idx = 0;
 	}
@@ -355,44 +355,51 @@ static void preserve_pet(void)
 		delete_monster_idx(p_ptr->riding);
 	}
 
-	for(i = m_max - 1, num = 1; (i >= 1 && num < 21); i--)
+	/*
+	 * If player is in wild mode, no pets are preserved
+	 * except a monster whom player riding
+	 */
+	if (!p_ptr->wild_mode)
 	{
-		monster_type *m_ptr = &m_list[i];
-			
-		if (!m_ptr->r_idx) continue;
-		if (!is_pet(m_ptr)) continue;
-		if (i == p_ptr->riding) continue;
-
-		if (reinit_wilderness)
+		for (i = m_max - 1, num = 1; (i >= 1 && num < MAX_PARTY_MON); i--)
 		{
-			/* Don't lose sight of pets when getting a Quest */
-		}
-		else
-		{
-			int dis = distance(py, px, m_ptr->fy, m_ptr->fx);
+			monster_type *m_ptr = &m_list[i];
 
-			/*
-			 * Pets with nickname will follow even from 3 blocks away
-			 * when you or the pet can see the other.
-			 */
-			if (m_ptr->nickname && 
-			    (player_has_los_bold(m_ptr->fy, m_ptr->fx) ||
-			     los(m_ptr->fy, m_ptr->fx, py, px)))
+			if (!m_ptr->r_idx) continue;
+			if (!is_pet(m_ptr)) continue;
+			if (i == p_ptr->riding) continue;
+
+			if (reinit_wilderness)
 			{
-				if (dis > 3) continue;
+				/* Don't lose sight of pets when getting a Quest */
 			}
 			else
 			{
-				if (dis > 1) continue;
+				int dis = distance(py, px, m_ptr->fy, m_ptr->fx);
+
+				/*
+				 * Pets with nickname will follow even from 3 blocks away
+				 * when you or the pet can see the other.
+				 */
+				if (m_ptr->nickname && 
+				    (player_has_los_bold(m_ptr->fy, m_ptr->fx) ||
+				     los(m_ptr->fy, m_ptr->fx, py, px)))
+				{
+					if (dis > 3) continue;
+				}
+				else
+				{
+					if (dis > 1) continue;
+				}
+				if (m_ptr->confused || m_ptr->stunned || m_ptr->csleep) continue;
 			}
-			if (m_ptr->confused || m_ptr->stunned || m_ptr->csleep) continue;
+
+			COPY(&party_mon[num], &m_list[i], monster_type);
+			num++;
+
+			/* Delete from this floor */
+			delete_monster_idx(i);
 		}
-
-		COPY(&party_mon[num], &m_list[i], monster_type);
-		num++;
-
-		/* Delete from this floor */
-		delete_monster_idx(i);
 	}
 
 	if (record_named_pet)
@@ -401,12 +408,12 @@ static void preserve_pet(void)
 		{
 			monster_type *m_ptr = &m_list[i];
 			char m_name[80];
-				
+
 			if (!m_ptr->r_idx) continue;
 			if (!is_pet(m_ptr)) continue;
 			if (!m_ptr->nickname) continue;
 			if (p_ptr->riding == i) continue;
-				
+
 			monster_desc(m_name, m_ptr, 0x88);
 			do_cmd_write_nikki(NIKKI_NAMED_PET, 4, m_name);
 		}
@@ -421,17 +428,14 @@ static void place_pet(void)
 {
 	int i, max_num;
 
-	if (p_ptr->wild_mode)
-		max_num = 1;
-	else
-		max_num = 21;
+	if (p_ptr->wild_mode) max_num = 1;
+	else max_num = MAX_PARTY_MON;
 
 	for (i = 0; i < max_num; i++)
 	{
 		int cy, cx, m_idx;
 
 		if (!(party_mon[i].r_idx)) continue;
-
 
 		if (i == 0)
 		{
@@ -447,9 +451,9 @@ static void place_pet(void)
 		{
 			int j, d;
 
-			for(d = 1; d < 6; d++)
+			for (d = 1; d < 6; d++)
 			{
-				for(j = 1000; j > 0; j--)
+				for (j = 1000; j > 0; j--)
 				{
 					scatter(&cy, &cx, py, px, d, 0);
 					if ((cave_floor_bold(cy, cx) || (cave[cy][cx].feat == FEAT_TREES)) && !cave[cy][cx].m_idx && !((cy == py) && (cx == px))) break;
@@ -497,7 +501,8 @@ static void place_pet(void)
 			update_mon(m_idx, TRUE);
 			lite_spot(cy, cx);
 
-			r_ptr->cur_num++;
+			/* Pre-calculated in precalc_cur_num_of_pet() */
+			/* r_ptr->cur_num++; */
 
 			/* Hack -- Count the number of "reproducers" */
 			if (r_ptr->flags2 & RF2_MULTIPLY) num_repro++;
@@ -511,21 +516,29 @@ static void place_pet(void)
 		}
 		else
 		{
+			monster_type *m_ptr = &party_mon[i];
+			monster_race *r_ptr = real_r_ptr(m_ptr);
 			char m_name[80];
 
-			monster_desc(m_name, &party_mon[i], 0);
+			monster_desc(m_name, m_ptr, 0);
 #ifdef JP
 			msg_format("%sとはぐれてしまった。", m_name);
 #else
 			msg_format("You have lost sight of %s.", m_name);
 #endif
-			if (record_named_pet && party_mon[i].nickname)
+			if (record_named_pet && m_ptr->nickname)
 			{
-				monster_desc(m_name, &party_mon[i], 0x08);
+				monster_desc(m_name, m_ptr, 0x08);
 				do_cmd_write_nikki(NIKKI_NAMED_PET, 5, m_name);
 			}
+
+			/* Pre-calculated in precalc_cur_num_of_pet(), but need to decrease */
+			if (r_ptr->cur_num) r_ptr->cur_num--;
 		}
 	}
+
+	/* For accuracy of precalc_cur_num_of_pet() */
+	C_WIPE(party_mon, MAX_PARTY_MON, monster_type);
 }
 
 
@@ -1007,7 +1020,7 @@ void change_floor(void)
 				if (change_floor_mode & CFM_NO_RETURN)
 				{
 					cave_type *c_ptr = &cave[py][px];
-				
+
 					/* Reset to floor */
 					place_floor_grid(c_ptr);
 					c_ptr->special = 0;

@@ -6414,6 +6414,12 @@ void player_birth(void)
 
 	playtime = 0;
 
+	/*
+	 * Paranoia - wipe the pets
+	 * For accuracy of precalc_cur_num_of_pet() called from wipe_m_list()
+	 */
+	C_WIPE(party_mon, MAX_PARTY_MON, monster_type);
+
 	/* 
 	 * Wipe monsters in old dungeon
 	 * This wipe destroys value of m_list[].cur_num .

@@ -1517,6 +1517,7 @@ void clear_cave(void)
 	C_WIPE(m_list, m_max, monster_type);
 	m_max = 1;
 	m_cnt = 0;
+	precalc_cur_num_of_pet();
 
 
 	/* Start with a blank cave */
@@ -1600,14 +1601,14 @@ void generate_cave(void)
 		/* Build the arena -KMW- */
 		if (p_ptr->inside_arena)
 		{
-				/* Small arena */
+			/* Small arena */
 			arena_gen();
 		}
 
 		/* Build the battle -KMW- */
 		else if (p_ptr->inside_battle)
 		{
-				/* Small arena */
+			/* Small arena */
 			battle_gen();
 		}
 
@@ -1619,7 +1620,7 @@ void generate_cave(void)
 		/* Build the town */
 		else if (!dun_level)
 		{
-				/* Make the wilderness */
+			/* Make the wilderness */
 			if (p_ptr->wild_mode) wilderness_gen_small();
 			else wilderness_gen();
 		}
