@@ -1520,7 +1520,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 			{
 				hallu_race = &r_info[randint1(max_r_idx - 1)];
 			}
-			while (hallu_race->flags1 & RF1_UNIQUE);
+			while (!hallu_race->name || (hallu_race->flags1 & RF1_UNIQUE));
 
 			strcpy(silly_name, (r_name + hallu_race->name));
 		}

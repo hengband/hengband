@@ -4610,14 +4610,33 @@ void monster_gain_exp(int m_idx, int s_idx)
 		{
 			if (!ignore_unview || player_can_see_bold(m_ptr->fy, m_ptr->fx))
 			{
+				if (p_ptr->image)
+				{
+					monster_race *hallu_race;
+
+					do
+					{
+						hallu_race = &r_info[randint1(max_r_idx - 1)];
+					}
+					while (!hallu_race->name || (hallu_race->flags1 & RF1_UNIQUE));
+
 #ifdef JP
-				msg_format("%sは%sに進化した。", m_name, r_name + r_ptr->name);
+					msg_format("%sは%sに進化した。", m_name, r_name + hallu_race->name);
 #else
-				msg_format("%^s evolved into %s.", m_name, r_name + r_ptr->name);
+					msg_format("%^s evolved into %s.", m_name, r_name + hallu_race->name);
 #endif
+				}
+				else
+				{
+#ifdef JP
+					msg_format("%sは%sに進化した。", m_name, r_name + r_ptr->name);
+#else
+					msg_format("%^s evolved into %s.", m_name, r_name + r_ptr->name);
+#endif
+				}
 			}
 
-			r_info[old_r_idx].r_xtra1 |= MR1_SINKA;
+			if (!p_ptr->image) r_info[old_r_idx].r_xtra1 |= MR1_SINKA;
 
 			/* Now you feel very close to this pet. */
 			m_ptr->parent_m_idx = 0;
