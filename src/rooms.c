@@ -5980,6 +5980,8 @@ bool generate_rooms(void)
 	/* Assume normal cave */
 	room_info_type *room_info_ptr = room_info_normal;
 
+	bool greater_vault_only = FALSE;
+
 	/*
 	 * Initialize probability list.
 	 */
@@ -6008,6 +6010,8 @@ bool generate_rooms(void)
 			if (i == ROOM_T_GREATER_VAULT) prob_list[i] = 1;
 			else prob_list[i] = 0;
 		}
+
+		greater_vault_only = TRUE;
 	}
 
 	/* Forbidden vaults */
@@ -6090,6 +6094,13 @@ bool generate_rooms(void)
 			i -= 3;
 			break;
 		}
+	}
+
+	if (greater_vault_only)
+	{
+		/* Increase the room built count. */
+		if (room_build(ROOM_T_NORMAL)) rooms_built++;
+		else return FALSE;
 	}
 
 	/*

@@ -188,7 +188,7 @@ static bool alloc_stairs(int feat, int num, int walls)
 	for (i = 0; i < num; i++)
 	{
 		/* Try several times */
-		for (flag = FALSE; !flag; )
+		for (flag = FALSE; !flag && (walls >= 0); walls--)
 		{
 			/* Try several times, then decrease "walls" */
 			for (j = 0; j <= 3000; j++)
@@ -218,8 +218,9 @@ static bool alloc_stairs(int feat, int num, int walls)
 			}
 
 			/* Require fewer walls */
-			if (walls) walls--;
 		}
+
+		if (!flag) return FALSE;
 	}
 	return TRUE;
 }
