@@ -1,0 +1,1210 @@
+=== Races, Classes and Personalities ===
+
+This file describes about the races, classes and personalities
+available in Hengband; racial, class, personality tables are provided
+at the bottom.
+
+
+***** <TheRaces>
+=== The Races ===
+
+There are thirty seven different races that you can choose from in
+Hengband.  Each race has various strengths and weaknesses and its own
+adjustments to a character's stats and abilities.  Many races also
+have intrinsic abilities and powers.  Their racial powers can be used
+by the racial/class power command ("U"/"O").
+
+
+--- Human ---
+
+    The human is the base character.  All other races are compared to
+    them.  Humans can choose any class and are average at
+    everything.  Humans tend to go up levels faster than most other
+    races because of their shorter life spans.  No racial adjustments
+    or intrinsics occur to characters choosing human.
+
+
+--- Half-Elf ---
+
+    Half-elves tend to be smarter and faster than humans, but not as
+    strong.  Half-elves are slightly better at searching, disarming,
+    saving throws, stealth, bows, and magic, but they are not as good
+    at hand weapons.  Half-elves may choose any class and do not
+    receive any intrinsic abilities.
+
+
+--- Elf ---
+
+    Elves are better magicians then humans, but not as good at
+    fighting.  They tend to be smarter and faster than either humans
+    or half-elves and also have better wisdom.  Elves are better at
+    searching, disarming, perception, stealth, bows, and magic, but
+    they are not as good at hand weapons.  They resist light effects
+    intrinsically.
+
+
+--- Hobbits ---
+
+    Hobbits, or Halflings, are very good at bows, throwing, and have
+    good saving throws.  They also are very good at searching,
+    disarming, perception, and stealth; so they make excellent rogues,
+    but prefer to be called burglars.  They are much weaker than
+    humans, and no good at melee fighting.  Halflings have fair
+    infravision, so they can detect warm creatures at a distance.
+    They have their dexterity sustained.
+
+
+--- Gnome ---
+
+    Gnomes are smaller than dwarves but larger than Halflings.  They,
+    like the hobbits, live in the earth in burrow-like homes.  Gnomes
+    make excellent mages, and have very good saving throws.  They are
+    good at searching, disarming, perception, and stealth.  They have
+    lower strength than humans so they are not very good at fighting
+    with hand weapons.  Gnomes have fair infra-vision, so they can
+    detect warm-blooded creatures at a distance.  Gnomes are
+    intrinsically protected against paralysis.
+
+
+--- Dwarf ---
+
+    Dwarves are the headstrong miners and fighters of legend.  Dwarves
+    tend to be stronger and tougher but slower and less intelligent
+    than humans.  Because they are so headstrong and are somewhat
+    wise, they resist spells which are cast on them.  They are very
+    good at searching, perception, fighting, and bows.  Dwarves have a
+    miserable stealth.  They can never be blinded.
+
+
+--- Half-Orc ---
+
+    Half-orcs make excellent warriors, but are terrible at magic.
+    They are as bad as dwarves at stealth, and horrible at searching,
+    disarming, and perception.  Half-orcs are quite ugly, and tend to
+    pay more for goods in town.  Because of their preference to living
+    underground to on the surface, half-orcs resist darkness attacks.
+
+
+--- Half-Troll ---
+
+    Half-Trolls are incredibly strong, and have more hit points than
+    most other races.  They are also very stupid and slow.  They are
+    bad at searching, disarming, perception, and stealth.  They are so
+    ugly that a Half-Orc grimaces in their presence.  They also happen
+    to be fun to run...  Half-trolls always have their strength
+    sustained.  At higher levels, Half-Trolls regenerate wounds
+    automatically, and if he or her is warrior slowly.
+
+
+--- Amberites ---
+
+    The Amberites are a reputedly immortal race, who are endowed with
+    numerous advantages in addition to their longevity.  They are very
+    tough and their constitution cannot be reduced, and their ability
+    to heal wounds far surpasses that of any other race.  Having seen
+    virtually everything, very little is new to them, and they gain
+    levels much slower than the other races.
+
+
+--- High-Elf ---
+
+    High-elves are a race of immortal beings dating from the beginning
+    of time.  They are masters of all skills, and are strong and
+    intelligent, although their wisdom is sometimes suspect.
+    High-elves begin their lives able to see the unseen, and resist
+    light effects just like regular elves.  However, there are few
+    things that they have not seen already, and experience is very
+    hard for them to gain.
+
+
+--- Barbarian ---
+
+    Barbarians are hardy men of the north.  They are fierce in combat,
+    and their wrath is feared throughout the world.  Combat is their
+    life: they feel no fear, and they learn to enter battle frenzy at
+    will even sooner than half-trolls.  Barbarians are, however,
+    suspicious of magic, which makes magic devices fairly hard for
+    them to use.
+
+
+--- Half-Ogre ---
+
+    Half-Ogres are like Half-Orcs, only more so.  They are big, bad,
+    and stupid.  For warriors, they have all the necessary attributes,
+    and they can even become wizards: after all, they are related to
+    Ogre Magi, from whom they have learned the skill of setting
+    trapped runes once their level is high enough.  Like Half-Orcs,
+    they resist darkness, and like Half-Trolls, they have their
+    strength sustained.
+
+
+--- Half-Giant ---
+
+    Half-Giants limited intelligence makes it difficult for them to
+    become full spellcasters, but with their huge strength they make
+    excellent warriors.  Their thick skin makes them resistant to
+    shards, and like Half-Ogres and Half-Trolls, they have their
+    strength sustained.
+
+
+--- Half-Titan ---
+
+    Half-mortal descendants of the mighty titans, these immensely
+    powerful creatures put almost any other race to shame.  They may
+    lack the fascinating special powers of certain other races, but
+    their enhanced attributes more than make up for that.  They learn
+    to estimate the strengths of their foes, and their love for law
+    and order makes them resistant to the effects of Chaos.
+
+
+--- Cyclops ---
+
+    With but one eye, a Cyclops can see more than many with two eyes.
+    They are headstrong, and loud noises bother them very little.
+    They are not quite qualified for the magic using professions, but
+    as a certain Mr.  Ulysses can testify, their accuracy with thrown
+    rocks can be deadly...
+
+
+--- Yeek ---
+
+    Yeeks are among the most pathetic creatures.  Fortunately, their
+    horrible screams can scare away less confident foes, and their
+    skin becomes more and more resistant to acid, as they gain
+    experience.  But having said that, even a mediocre monster can
+    wipe the proverbial floor with an unwary Yeek.
+
+
+--- Klackon ---
+
+    Klackons are bizarre semi-intelligent ant-like insectoid
+    creatures.  They make great fighters, but their mental abilities
+    are severely limited.  Obedient and well-ordered, they can never
+    be confused.  They are also very nimble, and become faster as they
+    advance levels.  They are also very acidic, inherently resisting
+    acid, and capable of spitting acid at higher levels.
+
+
+--- Kobold ---
+
+    Kobolds are a weak goblin race.  They love poisoned weapons, and
+    can learn to throw poisoned darts (of which they carry an
+    unlimited supply).  They are also inherently resistant to poison,
+    although they are not one of the more powerful races.
+
+
+--- Nibelung ---
+
+    The hated and persecuted race of nocturnal dwarves, these
+    cave-dwellers are not much bothered by darkness.  Their natural
+    inclination to magical items has made them immune to effects which
+    could drain away magical energy.
+
+
+--- Dark Elf ---
+
+    Another dark, cave-dwelling race, likewise unhampered by darkness
+    attacks, the Dark Elves have a long tradition and knowledge of
+    magic.  They have an inherent magic missile attack available to
+    them at a low level.  With their keen sight, they also learn to
+    see invisible things as their relatives High-Elves do, but at a
+    higher level.
+
+
+--- Draconian ---
+
+    A humanoid race with dragon-like attributes.  As they advance
+    levels, they gain new elemental resistances (up to Poison
+    Resistance), and they also have a breath weapon, which becomes
+    more powerful with experience.  The exact type of the breath
+    weapon depends on the Draconian's class and level.  With their
+    wings, they can easily escape any pit trap unharmed.
+
+
+--- Mind Flayer ---
+
+    A secretive and mysterious ancient race.  Their civilization may
+    well be older than any other on our planet, and their intelligence
+    and wisdom are naturally sustained, and are so great that they
+    enable Mind Flayers to become more powerful spellcasters than any
+    other race, even if their physical attributes are a good deal less
+    admirable.  As they advance levels, they gain the powers of See
+    Invisible and Telepathy.
+
+
+--- Imp ---
+
+    A demon-creature from the nether-world, naturally resistant to
+    fire attacks, and capable of learning fire bolt and fire ball
+    attacks.  They are little loved by other races, but can perform
+    fairly well in most professions.  As they advance levels, they
+    gain the powers of See Invisible.
+
+
+--- Golem ---
+
+    A Golem is an artificial creature, built from a lifeless raw
+    material like clay, and awakened to life.  They are nearly
+    mindless, making them useless for professions which rely on magic,
+    but as warriors they are very tough.  They are resistant to
+    poison, they can see invisible things, and move freely.  At higher
+    levels, they also become resistant to attacks which threaten to
+    drain away their life force.  Golems gain very little nutrition
+    from ordinary food.  Golems also gain a natural armor class bonus
+    from their tough body.
+
+
+--- Skeleton ---
+
+    There are two types of skeletons: the ordinary, warrior-like
+    skeletons, and the spell-using skeletons, which are also called
+    liches.  As undead beings, skeletons need to worry very little
+    about poison or attacks that can drain life.  They do not really
+    use eyes for perceiving things, and are thus not fooled by
+    invisibility.  Their bones are resistant to sharp shrapnel, and
+    they will quickly become resistant to cold.  Although the magical
+    effects of these will affect the skeleton even without entering
+    the skeleton's (non-existent) belly, the potion or food itself
+    will fall through the skeleton's jaws, giving no nutritional
+    benefit.
+
+
+--- Zombie ---
+
+    Much like Skeletons, Zombies too are undead horrors: they are
+    resistant to life-draining attacks, and can learn to restore their
+    life-force.  Like skeletons, they become resistant to cold-based
+    attacks (actually earlier than skeletons), resist poison and can
+    see invisible.  While still vulnerable to cuts (unlike skeletons),
+    Zombies are resistant to Nether.  Like Golems, they gain very
+    little nutrition from the food of mortals.
+
+
+--- Vampire ---
+
+    One of the mightier undead creatures, the Vampire is an
+    awe-inspiring sight.  Yet this dread creature has a serious
+    weakness: the bright rays of sun are its bane, and it will need to
+    flee the surface to the deep recesses of earth until the sun
+    finally sets.  Darkness, on the other hand, only makes the Vampire
+    stronger.  As undead, the Vampire has a firm hold on its life
+    force, and resists nether attacks.  The Vampire also resists cold
+    and poison based attacks.  It is, however, susceptible to its
+    perpetual hunger for fresh blood, which can only be satiated by
+    sucking the blood from a nearby monster.
+
+
+--- Spectre ---
+
+    Another powerful undead creature: the Spectre is a ghastly
+    apparition, surrounded by an unearthly green glow.  They exist
+    only partially on our plane of existence: half-corporeal, they can
+    pass through walls, although the density of the wall will hurt
+    them in the process of doing this.  As undead, they have a firm
+    hold on their life force, see invisible, and resist poison and
+    cold.  They also resist nether.  At higher levels they develop
+    telepathic abilities.  Spectres make superb spellcasters, but
+    their physical form is very weak.
+
+
+--- Sprite ---
+
+    One of the several fairy races, Sprites are very small.  They have
+    tiny wings and can fly over traps that may open up beneath them.
+    They enjoy sunlight intensely, and need worry little about light
+    based attacks.  Although physically among the weakest races,
+    Sprites are very talented in magic, and can become highly skilled
+    wizards.  Sprites have the special power of spraying Sleeping
+    Dust, and at higher levels they learn to fly faster.
+
+
+--- Beastman ---
+
+    "This race is a blasphemous abomination produced by Chaos.  It is
+    not an independent race but rather a humanoid creature, most often
+    a human, twisted by the Chaos, or a nightmarish crossbreed of a
+    human and a beast.  All Beastmen are accustomed to Chaos so much
+    that they are untroubled by confusion and sound, although raw
+    logrus can still have effects on them.  Beastmen revel in chaos,
+    as it twists them more and more.  Beastmen are subject to
+    mutations: when they have been created, they receive a random
+    mutation.  After that, every time they advance a level they have a
+    small chance of gaining yet another mutation.
+
+
+--- Ent ---
+
+    The Ents are a powerful race dating from the beginning of the
+    world, oldest of all animals or plants who inhabit Arda.  Spirits
+    of the land, they were summoned to guard the forests of
+    Middle-earth.  Being much like trees they are very clumsy but
+    strong, and very susceptible to fire.
+
+
+--- Archon ---
+
+    Archons are a higher class of angels.  They are good at all
+    skills, and are strong, wise, and are a favorite with any people.
+    They are able to see the unseen, and their wings allow them to
+    safely fly over traps and other dangerous places.  However,
+    belonging to a higher plane as they do, the experiences of this
+    world do not leave a strong impression on them and they gain
+    levels slowly.
+
+
+--- Balrog ---
+
+    Balrogs are a higher class of demons.  They are strong,
+    intelligent and tough.  They do not believe in gods, and are not
+    suitable for priest at all.  Balrog are resistant to fire and
+    nether, and have a firm hold on their life force.  They also
+    eventually learn to see invisible things.  They are good at almost
+    all skills except stealth.
+
+
+--- Dunedain ---
+
+    Dunedain are a race of hardy men from the West.  This elder race
+    surpasses human abilities in every field, especially constitution.
+    However, being men of the world, very little is new to them, and
+    levels are very hard for them to gain.  Their constitution cannot
+    be reduced.
+
+
+--- Shadow Fairy ---
+
+    Shadow Fairies are one of the several fairy races.  They have
+    wings, and can fly over traps that may open up beneath them.
+    Shadow Fairies must beware of sunlight, as they are vulnerable to
+    bright light.  They are physically weak, but have advantages in
+    using magic and are amazingly stealthy.  Shadow Fairies have a
+    wonderful advantage in that they never aggravate monsters (If
+    their equipment normally aggravates monsters, they only suffer a
+    penalty to stealth, but if they aggravate by their personality
+    itself, the advantage will be lost).
+
+
+--- Kutar ---
+
+    A Kutar is an expressionless animal-like living creature.  The
+    word 'kuta' means 'absentmindedly' or 'vacantly'.  Their
+    absentmindedness hurts their searching and perception skills, but
+    renders them incapable of being confused.  Their unearthly
+    calmness and serenity make them among the most stealthy of any
+    race.  Kutars, although expressionless, are beautiful and so have
+    a high charisma.  Members of this race can learn to expand their
+    body horizontally.  This increases armour class, but renders them
+    vulnerable to magical attacks.
+
+
+--- Android ---
+
+    An android is a artificial creation with a body of machinery.
+    They are poor at spell casting, but they make excellent warriors.
+    They don't acquire experience like other races, but rather gain in
+    power as they attach new equipment to their frame.  Rings,
+    amulets, and lights do not influence growth.  Androids are
+    resistant to poison, can move freely, and are immune to
+    life-draining attacks.  Moreover, because of their hard metallic
+    bodies, they get a bonus to AC.  Androids have electronic circuits
+    throughout their body and must beware of electric shocks.
+
+
+***** <TheClasses>
+=== The Classes ===
+ 
+There are twenty seven different classes that you can choose from in
+Hengband.  Each class has various strengths and weaknesses and its own
+adjustments to a character's stats and abilities.  Many classes also
+have intrinsic abilities and powers.  These are often linked to the
+character's experience level and only become available later in the
+game.  Their class powers can be used by the racial/class power
+command("U"/"O").
+
+
+--- Warrior ---
+
+    A Warrior is a hack-and-slash character, who solves most of his
+    problems by cutting them to pieces, but will occasionally fall
+    back on the help of a magical device.  Unfortunately, many
+    high-level devices may be forever beyond their use.
+
+    Warriors cast no spells.  They hate magic.  In fact, they even
+    gain experience for destroying high level spellbooks.  They have a
+    class power - 'Sword Dancing' - which allows them to conduct a
+    melee attack in six random directions.
+
+
+--- Mage ---
+
+    A Mage is a spell caster that must live by his wits as he cannot
+    hope to simply hack his way through the dungeon like a warrior.
+    In addition to his spellbooks, a Mage should carry a range of
+    magical devices to help him in his endeavors which he can master
+    far more easily than anyone else.  A Mage's prime statistic is
+    Intelligence as this determines his spell casting ability.
+
+    Mages have the least restrictions in choosing and learning spells.
+    They can freely choose any two realms when a character is created.
+    Their natural inclination makes Life magic fairly hard to learn.
+    Otherwise, a mage tends to learn and cast all the spells in his or
+    her realms better than any other character.  The ability to choose
+    second realm of magic has a special meaning in Hengband; only
+    second realm can be changed in the middle of the game.  You can
+    change second realm by studying ("G") from a spellbook of new
+    realm.  They have a class power - 'Eat Magic' - which absorbs mana
+    from wands, staves or rods.
+
+
+--- Priest ---
+
+    A Priest is a character devoted to serving a higher power.  They
+    explore the dungeon in the service of their God.  Since Priests
+    receive new prayers as gifts from their patron deity, they cannot
+    choose which ones they will learn.  Priests are familiar with
+    magical devices which they believe act as foci for divine
+    intervention in the natural order of things.  A priest wielding an
+    edged weapon will be so uncomfortable with it that his fighting
+    ability.  A Priest's primary stat is Wisdom since this determine
+    his success at praying to his deity.
+
+    Priest can select from Life, Death, or Daemon as a first realm,
+    and choose second realm almost freely.  But two kinds of pair
+    selection - Life/Death and Life/Daemon - are not allowed.  Priests
+    can learn all spells in the selected realms, even if not as
+    efficiently as mages.  However, when learning spells, priests
+    cannot voluntarily decide which spells to study: they are rewarded
+    with new prayers by their patron deities, with no money-back
+    satisfaction guarantee.  Priests which select the Life realm have
+    a class power - 'Bless Weapon' - which blesses any edged weapon to
+    be suitable for priests to wield.  Every priest which select Death
+    or Daemon realms have a class power - 'Evocation' - which damages,
+    scares and banish all monsters in sight.
+
+
+--- Rogue ---
+
+    A Rogue is a character that prefers to live by his cunning, but is
+    capable of fighting his way out of a tight spot.  Rogues are good
+    at locating hidden traps and doors and are the masters of
+    disarming traps and picking locks.  A rogue has a high stealth
+    allowing him to sneak around many creatures without having to
+    fight, or to get in a telling first blow.  A rogue may also
+    backstab a fleeing monster.  Intelligence determines a Rogue's
+    spell casting ability.
+
+    Rogues can select one realm from Sorcery, Death, Trump, Arcane, or
+    Craft.  All Rogues have certain limitations on which spells they
+    can learn, and they do not learn new spells very quickly.  They
+    have a class power - 'Hit and Away' - which allows them to attack
+    in melee and teleport away from there at once.
+
+
+--- Ranger ---
+
+    A Ranger is a combination of a warrior and a mage who has
+    developed a special affinity for the natural world around him.  He
+    is a good fighter and also good about a missile weapon such as a
+    bow.  A ranger has a good stealth, good perception, good
+    searching, a good saving throw and is good with magical devices.
+    Intelligence determines a Ranger's spell casting ability.
+
+    All rangers are trained in Nature magic, and all Nature spells are
+    available to them.  They even learn these spells almost as fast as
+    mages.  They can also select a secondary realm (from Sorcery,
+    Chaos, Death, Trump, Arcane, and Daemon), but they are slow
+    learners here, and may find themselves unable to learn some of the
+    highest level spells.  They have a class power - 'Probe Monster' -
+    which allows them to know a monster's HP, speed, and experience
+    required to evolve.
+
+
+--- Paladin ---
+
+    A Paladin is a combination of a warrior and a priest.  Paladins
+    are very good fighters, but not very good at missile weapons.  A
+    paladin lacks much in the way of abilities.  He is poor at
+    stealth, perception, searching, and magical devices but has a
+    decent saving throw due to his divine alliance.  Wisdom determines
+    a Paladin's success at praying to his deity.
+
+    Paladins can select a realm from Life and Death.  Like priests,
+    they cannot select which prayers to learn, but are rewarded with
+    new prayers by their deities.  They can learn all spells, but not
+    as fast as priests.  They detest paganism so strongly that they
+    will even gain experience for destroying high-level pagan spell-
+    books: 'pagan' means Life spellbooks for a Death Paladin and all
+    spellbooks other than Life for a Life Paladin.  Depending on their
+    realm, they have a class power - 'Holy Lance' or 'Hell Lance'.
+
+
+--- Warrior-Mage ---
+
+    A Warrior-Mage is precisely what the name suggests: a cross
+    between the warrior and mage classes.  While their brothers, the
+    rangers, specialize in Nature magic and survival skills, true
+    Warrior-Mages attempt to reach the best of both worlds.  As
+    warriors they are much superior to the usual Mage class.
+    Intelligence determines a Warrior-Mage's spell casting ability.
+
+    Warrior-mages begin the game with Arcane magic, and they can
+    freely select another realm of magic.  Although they do not gain
+    new spells as fast as regular mages, they will eventually learn
+    every spell in both realms, thus making them a very competitive
+    choice for players who appreciate Arcane magic.  They have two
+    class powers - 'Convert HP to SP' and 'Convert SP to HP' - which
+    allow them to heal HP using mana or gain mana using HP.
+
+
+--- Chaos-Warrior ---
+
+    Chaos Warriors are the feared servants of the terrible Demon Lords
+    of Chaos.  Every Chaos Warrior has a Patron Demon and, when
+    gaining a level, may receive a reward from his Patron.  He might
+    be healed or polymorphed, his stats could be increased, or he
+    might be rewarded with an awesome weapon.  On the other hand, the
+    Patrons might surround him with monsters, drain his stats or wreck
+    his equipment or they might simply ignore him.  The Demon Lords of
+    Chaos are chaotic and unpredictable indeed.  The exact type of
+    reward depends on both the Patron Demon (different Demons give
+    different rewards) and chance.
+
+    Chaos Warriors can select a realm from Chaos and Daemon.  They are
+    not interested in any other form of magic.  They can learn every
+    spell.  They have a class power - 'Confusing Light' - which stuns,
+    confuses, and scares all monsters in sight.
+
+
+--- Monk ---
+
+    The Monk character class is very different from all other classes.
+    Their training in martial arts makes them much more powerful with
+    no armor or weapons.  To gain the resistances necessary for
+    survival a monk may need to wear some kind of armor, but if the
+    armor he wears is too heavy, it will severely disturb his martial
+    arts maneuvers.  As the monk advances levels, new, powerful forms
+    of attack become available.  Their defensive capabilities increase
+    likewise, but if armour is being worn, this effect decreases.
+    Wisdom determines a Monk's spell casting ability.
+
+    The different sects of monks are devoted to different areas of
+    magic.  They select a realm from Life, Nature, Craft, and Death.
+    They will eventually learn all prayers in the discipline of their
+    choice.  They have two class powers - 'Assume a Posture' and
+    'Double Attack'.  They can choose different forms of postures in
+    different situations, and use powerful combinations of attacks for
+    the finishing blow.
+
+
+--- Mindcrafter ---
+
+    The Mindcrafter is a unique class that uses the powers of the mind
+    instead of magic.  These powers are unique to Mindcrafters, and
+    vary from simple extrasensory powers to mental domination of
+    others.  Since these powers are developed by the practice of
+    certain disciplines, a Mindcrafter requires no spellbooks to use
+    them.  The available powers are simply determined by the
+    character's level.  Wisdom determines a Mindcrafter's ability to
+    use mind powers,
+
+    Mindcrafters gain new mindcrafting powers and their existing ones
+    become stronger as they gain levels.  They can use their power
+    even when blinded.  They have a class power - 'Clear Mind' - which
+    allows them to rapidly regenerate their mana.
+
+
+--- High-Mage ---
+
+    High-mages are mages who specialize in one particular field of
+    magic and learn it very well - much better than the ordinary mage.
+    A high mage's prime statistic is intelligence as this determines
+    his spell casting ability.
+
+    For the price of giving up a second realm of magic, High-mages
+    gain substantial benefits in the mana costs, minimum levels, and
+    failure rates of the spells in their speciality realm.  They have
+    a class power - 'Eat Magic' - which absorbs mana from wands,
+    staves, or rods.
+
+
+--- Tourist ---
+
+    Tourists have visited this world for the purpose of sightseeing.
+    Their fighting skills is bad, and they cannot cast powerful
+    spells.  They are the most difficult class to win the game with.
+    Intelligence determines a tourist's spell casting ability.
+
+    Tourists are always seeing more of the world to add to their stock
+    of information; no other class can compete with their
+    identification skills.  They have two class powers - 'Take a
+    Photograph' and 'Identify True'.  Their magic is based on Arcane,
+    and - aside from identify - is very weak indeed.
+
+
+--- Imitator ---
+
+    Imitators have enough fighting skills to survive, but rely on
+    their unique technique - 'Imitation' - which imitates monster
+    spells/techniques include whose damage/duration value.  Dexterity
+    determines general imitation ability, but a stat related to the
+    specific action is often also taken into account.
+
+    To use imitation, Imitators must see monster's spell at first.
+    When monsters in view use spells, they are added to a temporary
+    spell list which the imitator can choose among.  Spells should be
+    imitated quickly, because timing and situation are everything.  An
+    imitator can only repeat a spell once each time he observes it.
+    They only have a small long-term memory for spells, which ranges
+    from one to three, depending on their level.  When they memorize
+    more spells than this, they will forget the oldest spell in the
+    list.  They have a class power - 'Double Revenge' - which allows
+    them to imitate spells at double damage or duration.
+
+
+--- BeastMaster ---
+
+    Beastmasters are in tune with the minds of the creatures of the
+    world of Hengband.  They are very good at riding, and have enough
+    fighting ability.  They use monsters which summoned or dominated
+    by him as his hands and feet.  Beastmasters can cast trump magic,
+    and very good at summoning spell, but they can not summon
+    non-living creatures.  Charisma determines a Beastmaster's spell
+    casting ability.
+
+    Beastmasters use Trump magic to make good use of their monster
+    domination and riding abilities.  They are very good at summoning
+    living creatures, and they learn summoning spells quicker than
+    Mages.  However, they cannot summon non-living creatures.  They
+    have two class powers - 'Dominate a Living Thing' and 'Dominate
+    Living Things'.
+
+
+--- Sorcerer ---
+
+    Sorcerers are the all-around best magicians, being able to cast
+    any spell from most magic realms without having to learn it.  On
+    the downside, they are the worst fighters in the dungeon, being
+    unable to use any weapon but a Wizardstaff.
+
+    Sorcerers can cast any spell from any spellbooks of all nine magic
+    realms with 'Master' proficiency level without having to learn it.
+    They have a class power - 'Eat Magic' - which absorbs mana from
+    wands, staves or rods.
+
+
+--- Archer ---
+
+    Archers are to bows what warriors are to melee.  They are the best
+    class around with any bow, crossbow, or sling.  They need a lot of
+    ammunition, but will learn how to make it from junk found in the
+    dungeon.  An archer is better than a warrior at stealth,
+    perception, searching and magical devices.
+
+    Archers have a class power - 'Create Ammo' - which creates stones
+    or shots from pile of rubble, and arrows and crossbow bolts from
+    bones.
+
+
+--- Magic-Eater ---
+
+    Magic-Eaters can absorb magic devices, and use these magics as
+    their spells.  They are middling-poor at fighting.  A
+    Magic-Eater's prime statistic is intelligence.
+
+    Magic-Eaters can absorb the energy of wands, staffs, and rods, and
+    can then use these magics as if they were carrying all of these
+    absorbed devices.  Mana and changes of absorbed devices are
+    regenerated naturally by a Magic-Eater's power, and speed of
+    regeneration is influenced by their intelligence.  They have a
+    class power - 'Absorb Magic' - which is used to absorb magic
+    devices.
+
+
+--- Bard ---
+
+    Bards are something like traditional musicians.  Their magical
+    attacks are sound-based, and last as long as the Bard has mana.
+    Although a bard cannot sing two or more songs at the same time, he
+    or she does have the advantage that many songs affect all areas in
+    sight.  A bard's prime statistic is charisma.
+
+    The songs are found in four songbooks, of which two are sold in
+    town.  There is a special feature of music; many songs continue to
+    be sung until either the Bard chooses to stop, or he runs out of
+    the energy required to sing that type of song.  Bards have a class
+    power - 'Stop Singing'.
+
+
+--- Red-Mage ---
+
+    Red Mages are similar to Warrior-Mage; they are decent fighters
+    and spellcasters.  Red-Mages can use almost all spells from lower
+    rank spellbooks of all realms, but they cannot cast spells from
+    higher rank spellbooks, and they are extremely slow learners in
+    them.  They are not bad at using magical devices and magic
+    resistance, but are bad at other skills.  A red-mage's prime
+    statistic is intelligence.
+
+    Red-Mages can use almost all spells from lower rank spellbooks of
+    all realms: first and second spellbooks of all realms and third
+    and fourth Arcane spellbooks, without having to learn it, but they
+    cannot cast spells from higher rank spellbooks; third and fourth
+    spellbooks for all realms other than Arcane.  Since they use all
+    realms at once, they have large penalties in the mana costs,
+    minimum levels, and failure rates of spells.  They have a class
+    power - 'Double Magic' - which allows them to cast two spells at
+    once.
+
+
+--- Samurai ---
+
+    Samurai, masters of the art of the blade, are the next strongest
+    fighters after Warriors, and can use various special combat
+    techniques.  Samurai are not good at most other skills, and many
+    magical devices may be too difficult for them to use.  Wisdom
+    determines a Samurai's ability to use the special combat
+    techniques available to him.
+
+    Samurai use the art of the blade called Kendo (or Bugei).  Books
+    of Kendo are similar to spellbooks, but Samurai don't need to
+    carry them around; the books are needed only when they study new
+    combat techniques.  Samurai need a weapon wielded to use the
+    techniques of Kendo, and most techniques will add powerful special
+    properties to their blows; such as flaming, poisoning, vampiric,
+    etc...  Their maximum spellpoints don't depend on their level but
+    solely on wisdom, and they can use the class power 'Concentration'
+    to temporarily increase SP beyond its usual maximum value.  They
+    have one more class power - 'Assume a Posture'.  They can choose
+    different forms of posture in different situations.
+
+
+--- ForceTrainer ---
+
+    A ForceTrainer is a master of the spiritual Force.  They prefer
+    fighting with neither weapon nor armor.  They are not as good
+    fighters as are Monks, but they can use both magic and the
+    spiritual Force.  Wielding weapons or wearing heavy armor disturbs
+    use of the Force.  Wisdom is a ForceTrainer's primary stat.
+
+    ForceTrainer use both spellbook magic and the special spiritual
+    power called the Force.  They can select a realm from Life,
+    Nature, Craft, and Death, just like Monks.  To use The Force, you
+    select it just as if it were spellbook 'w'; which means you need
+    to press 'm' and then 'w' to select the Force.  The most important
+    spell of the Force is 'Improve Force'; each time a ForceTrainer
+    activates it, their Force power becomes more powerful, and their
+    attack power in bare-handed melee fighting is increased
+    temporarily.  The strengthened Force can be released at one stroke
+    when a ForceTrainer activates some other Force spell, typically an
+    attack spell.  They have a class power - 'Clear Mind' - which
+    allows them to rapidly regenerate their mana.
+
+
+--- Blue-Mage ---
+
+    A Blue-Mage is a spell caster that must live by his wits, as he
+    cannot hope to simply hack his way through the dungeon like a
+    warrior.  A major difference between the Mage and the Blue-Mage is
+    the method of learning spells: Blue-Mages may learn spells from
+    monsters.  A Blue-Mage's prime statistic is Intelligence as this
+    determines his spell casting ability.
+
+    A Blue-Mage can learn and cast monster spells/techniques as their
+    own spell; this technique is called Blue magic.  Unlike Imitators,
+    Blue-Mages remember their spells permanently, but they must learn
+    spells from monsters by activating their class power 'Learning',
+    and they can learn only attack and summoning spells.
+
+
+--- Cavalry ---
+
+    Cavalry ride on horses into battle.  Although they cannot cast
+    spells, they are proud of their overwhelming offensive strength on
+    horseback.  They are good at shooting.  At high levels, they learn
+    to forcibly saddle and tame wild monsters.  Since they take pride
+    in the body and the soul, they don't use magical devices well.
+
+    Like Warriors and Archers, the cavalry don't use magic.  Since
+    they are very good at riding, they have a class power - 'Rodeo' -
+    which allows them to forcibly saddle and tame wild monsters.
+
+
+--- Berserker ---
+
+    A Berserker is a fearful fighter indeed, immune to fear and
+    paralysis.  At high levels, Berserkers can reflect bolt spells
+    with their tough flesh.  Furthermore, they can fight without
+    weapons, can remove cursed equipment by force, and can even use
+    their special combat techniques when surrounded by an anti-magic
+    barrier.  Berserkers, however, cannot use any magical devices or
+    read any scrolls, and are hopeless at all non-combat skills.
+    Since Berserker Amberite or Spectres are quite easy to *win* with,
+    their scores are lowered.
+
+    Berserkers use a unique system of techniques called 'Rage'.  They
+    gain more techniques as they gain levels.  They use no magic:
+    indeed, they cannot use any magic devices or activate any
+    artifacts, and cannot read scrolls.  To offset these great
+    disadvantages, Berserkers are allowed to have two important class
+    powers - 'Satisfy Hunger' and 'Recall'.
+
+
+--- Weaponsmith ---
+
+    A Weaponsmith can improve weapons and armors for him or herself.
+    They are good at fighting, and they have potential ability to
+    become even better than Warriors using improved equipments.  They
+    cannot cast spells, and are poor at skills such as stealth or
+    magic defense.
+
+    A Weaponsmith extract the essences of special effects from weapons
+    or armors which have various special abilities, and can add these
+    essences to another weapon or armor.  Normally, each equipment can
+    be improved only once, but they can remove a previously added
+    essence from improved equipment to improve it with another
+    essence.  To-hit, to-damage bonus, and AC can be improved freely
+    up to a maximum value depending on level.  Weaponsmiths have a
+    class power - 'Judgment' - which allows them to identify (later
+    *identify*) weapons and armor.
+
+
+--- Mirror-Master ---
+
+    Mirror-Masters are spell casters; like other mages, they must live
+    by their wits.  They can create magical mirrors, and employ them
+    in the casting of Mirror-Magic spells.  Intelligence determines a
+    Mirror-Master's spell casting ability.
+
+    Mirror-Masters gain more spells and each spell becomes more
+    powerful as they gain levels.  They can use their spells even when
+    blinded.  For Mirror-Masters, the arrangement of mirrors is very
+    important: Some attack spells reflect from mirrors, and some other
+    spells are effective only against monsters standing on a mirror.
+    A Mirror-Master standing on a mirror has greater ability and, for
+    example, can perform quick teleports.  The maximum number of
+    magical Mirrors which can be controlled simultaneously depends on
+    the level, and breaking unnecessary mirrors is important work for
+    them.  They have two class powers - 'Break Mirrors', which breaks
+    all mirrors in current dungeon level and 'Mirror Concentration',
+    which allows them to rapidly regenerate their mana on a mirror.
+
+
+--- Ninja ---
+
+    A Ninja is a fearful assassin lurking in darkness.  He or she can
+    navigate effectively with no light source, catch enemies unawares,
+    and kill with a single blow.  Ninjas can use Ninjutsu, and are
+    good at locating hidden traps and doors, disarming traps and
+    picking locks.  Since heavy armors, heavy weapons, or shields will
+    restrict their motion greatly, they prefer light clothes, and
+    become faster and more stealthy as they gain levels.  A Ninja
+    knows no fear and, at high level, becomes almost immune to poison
+    and able to see invisible things.  Dexterity determines a Ninja's
+    ability to use Ninjutsu.
+
+    A Ninja can use Ninjutsu for lurking and surprise attacks.  They
+    gain more Ninjutsu techniques as they gain levels.  They have a
+    class power - 'Quick Walk' - which makes their walking speed
+    extremely fast.
+
+
+
+***** <ThePersonalities>
+=== The Personality ===
+
+
+There are twelve different personality that you can choose from in
+Hengband.  Each personality has various strengths and weaknesses and
+its own adjustments to a character's stats and abilities.
+
+
+--- Ordinary ---
+
+    "Ordinary" is a personality with no special skills or talents,
+    with unmodified stats and skills.
+
+
+--- Mighty ---
+
+    "Mighty" raises your physical stats and skills, but reduces stats
+    and skills which influence magic.  It makes your stats suitable
+    for a warrior.
+
+
+--- Shrewd ---
+
+    "Shrewd" reduces your physical stats, and raises your intelligence
+    and magical skills.  It makes your stats suitable for a mage.
+
+
+--- Pious ---
+
+    "Pious" deepens your faith in your God.  It makes your physical
+    ability average, and your stats suitable for priest.
+
+
+--- Nimble ---
+
+    "Nimble" renders you highly skilled comparatively well, but
+    reduces your physical ability.
+
+
+--- Fearless ---
+
+    "Fearless" raises both your melee and magical ability.  Stats such
+    as magic defense and constitution are reduced.
+
+
+--- Combat ---
+
+    "Combat" gives you comparatively high melee and shooting
+    abilities, and average constitution.  Other skills such as
+    stealth, magic defense, and magical devices are weakened.  All
+    "Combat" people have great respect for the legendary "Combat
+    Echizen".\ (See "Death Crimson" / Ecole Software Corp.)", "A
+    "Lazy" person has no good stats and can do no action well.
+
+
+--- Sexy ---
+
+    "Sexy" rises all of your abilities, but your haughty attitude will
+    aggravate all monsters.  Only females can choose this personality.
+ 
+
+--- Lucky ---
+
+    A "Lucky" man has poor stats, equivalent to a "Lazy" person.
+    Mysteriously, however, he can do all things well.  Only males can
+    choose this personality.
+ 
+
+--- Patient ---
+
+    A "Patient" person does things carefully.  Patient people have
+    high constitution, and high resilience, but poor abilities in most
+    other skills.
+
+
+--- Munchkin ---
+
+    "munchkin" is a personality for beginners.  It raises all your
+    stats and skills.  With this personality, you can win the game
+    easily, but gain little honor in doing so.
+
+
+
+***** <StatBonusTable>
+=== Stat Bonus Tables ===
+
+Each of the races, classes, and personalities has certain
+modifications to their starting statistics an experience penalty. The
+experience penalty is designed to 'balance' the races with better
+starting statistics and abilities by requiring them to earn more
+experience before advancing a level.
+
+
+--- Table 1 - Race Statistic Bonus Table ---
+
+               STR  INT  WIS  DEX  CON  CHR  Hit Dice Exp Penalty
+Human          +0   +0   +0   +0   +0   +0      10        +0%
+Half-Elf       -1   +1   +1   +1   -1   +1      9         +10%
+Elf            -1   +2   +0   +1   -2   +2      8         +20%
+Hobbit         -2   +1   +1   +3   +2   +1      7         +10%
+Gnome          -1   +2   +0   +2   +1   -1      8         +20%
+Dwarf          +2   -2   +2   -2   +2   -1      11        +25%
+Half-Orc       +2   -1   +0   +0   +1   -2      10        +10%
+Half-Troll     +4   -4   -1   -3   +3   -3      12        +25%
+Amberite       +1   +2   +2   +2   +3   +2      10        +125%
+High-Elf       +1   +3   -1   +3   +1   +3      10        +100%
+Barbarian      +3   -2   -1   +1   +2   +0      11        +20%
+Half-Ogre      +3   -2   +0   -1   +3   -2      12        +45%
+Half-Giant     +4   -2   -2   -2   +3   -2      13        +60%
+Half-Titan     +5   +1   +2   -2   +3   +1      14        +155%
+Cyclops        +4   -3   -2   -3   +4   -3      13        +50%
+Yeek           -2   +1   +1   +1   -2   -4      7         +0%
+Klackon        +2   -1   -1   +1   +2   -1      12        +90%
+Kobold         +1   -1   +0   +1   +0   -2      9         +25%
+Nibelung       +1   -1   +2   +0   +2   -2      11        +70%
+Dark-Elf       -1   +3   +2   +2   -2   +1      9         +50%
+Draconian      +2   +1   +1   +1   +2   -1      11        +120%
+Mindflayer     -3   +4   +4   +0   -2   -3      9         +40%
+Imp            +0   -1   -1   +1   +2   -1      10        +15%
+Golem          +4   -5   -5   -2   +4   -2      12        +100%
+Skeleton       +0   +1   -2   +0   +1   -2      10        +45%
+Zombie         +2   -6   -6   +1   +4   -3      13        +50%
+Vampire        +3   +3   -1   -1   +1   +2      11        +100%
+Spectre        -5   +4   -1   +2   +0   -3      7         +110%
+Sprite         -4   +3   +3   +3   -2   +2      7         +45%
+Beastman       +2   -2   -1   -1   +2   -2      11        +40%
+Ent            +2   +0   +2   -3   +2   +0      12        +40%
+Archon         +2   +0   +4   +1   +2   +3      11        +135%
+Balrog         +4   +2   -10  +2   +3   -5      12        +150%
+Dunadan        +1   +2   +2   +2   +3   +2      10        +80%
+Shadow-Fairy   -2   +2   +2   +1   -1   +0      7         +20%
+Kutar          +0   -1   -1   +1   +2   +3      11        +40%
+Android        +4   -5   -5   +0   +4   -2      13        +100%
+
+
+--- Table 2 - Class Statistic Bonus Table ---
+
+               STR  INT  WIS  DEX  CON  CHR  Hit Dice  Exp Penalty
+Warrior        +4   -2   -2   +2   +2   -1      +9         +0%
+Mage           -4   +3   +0   +1   -2   +1      +0         +30%
+Priest         -1   -3   +3   -1   +0   +2      +2         +20%
+Rogue          +2   +1   -2   +3   +1   -1      +6         +25%
+Ranger         +2   +2   +0   +1   +1   +1      +4         +40%
+Paladin        +3   -3   +1   +0   +2   +2      +6         +35%
+Warrior-Mage   +2   +2   +0   +1   +0   +1      +4         +40%
+Chaos-Warrior  +2   +1   -1   +0   +2   -2      +6         +25%
+Monk           +2   -1   +1   +3   +2   +1      +6         +30%
+Mindcrafter    -1   +0   +3   -1   -1   +2      +2         +25%
+High-Mage      -4   +4   +0   +0   -2   +1      +0         +30%
+Tourist        -1   -1   -1   -1   -1   -1      +0         -30%
+Imitator       +0   +1   -1   +2   +0   +1      +5         +10%
+BeastMaster    +1   -1   -1   +1   +0   +2      +3         +20%
+Sorcerer       -5   +6   -2   +2   +0   -2      +4         +60%
+Archer         +2   -1   -1   +2   +1   +0      +6         +10%
+Magic-Eater    -1   +2   +1   +2   -2   +1      +3         +30%
+Bard           -2   +1   +2   -1   -2   +4      +2         +40%
+Red-Mage       +2   +2   -1   +1   +0   -1      +4         +40%
+Samurai        +3   -2   +1   +2   +1   +0      +6         +30%
+ForceTrainer   +0   -1   +3   +2   +1   +1      +2         +35%
+Blue-Mage      -4   +4   -1   +1   -2   -1      +2         +30%
+Cavalry        +2   -2   -2   +2   +2   +0      +5         +20%
+Berserker      +8   -20  -20  +4   +4   -5      +11        +60%
+Weaponsmith    +3   -1   -1   +1   +0   -1      +6         +30%
+Mirror-Master  -2   +3   +1   -1   -2   +1      +2         +30%
+Ninja          +0   -1   -1   +3   +2   -1      +2         +20%
+
+
+--- Table 3 - Personality Statistic Bonus Table ---
+
+               STR  INT  WIS  DEX  CON  CHR  Hit Dice
+Ordinary       +0   +0   +0   +0   +0   +0      +0 
+Mighty         +2   -2   -1   +0   +1   +0      +1 
+Shrewd         -2   +2   +0   +1   -1   -1      -1 
+Pious          +0   -1   +2   -1   +0   +1      +0 
+Nimble         -1   +1   -1   +2   -1   -1      +0 
+Fearless       +2   +1   +1   -1   -1   +0      -1 
+Combat         +1   -1   -2   +2   +0   +1      +0 
+Lazy           -2   -2   -2   -2   -2   -2      -1 
+Sexy           +1   +1   +1   +1   +1   +3      +0 
+Lucky          -2   -2   -2   -2   -2   +2      +0 
+Patient        -1   -1   +1   -2   +2   +0      +1 
+Munchkin       +10  +10  +10  +10  +10  +10     +15
+
+
+***** <SkillBonusTable>
+=== Ability Tables ===
+
+Each of the races, classes, and personalities has certain
+modifications to their starting abilities. Players may also receive an
+additional level-based bonus to certain skills which is based on their
+class. For example mages improve their magical device skill more
+rapidly than warriors. As noted above, some skills will not improve
+unless magically enhanced.
+
+--- Table 4 - Race Skill Bonus Table ---
+
+               Dsrm  Dvce  Save  Stlh  Srch  Prcp  Melee Bows  Infra
+Human          +0    +0    +0    +0    +0    +10   +0    +0    None
+Half-Elf       +2    +3    +2    +1    +6    +11   -1    +5    20 feet
+Elf            +5    +6    +4    +2    +8    +12   -5    +15   30 feet
+Hobbit         +15   +12   +10   +5    +12   +15   -10   +20   40 feet
+Gnome          +10   +8    +7    +3    +6    +13   -8    +12   40 feet
+Dwarf          +2    +7    +6    -1    +7    +10   +15   +0    50 feet
+Half-Orc       -3    -3    -2    -1    +0    +7    +12   -5    30 feet
+Half-Troll     -5    -8    -5    -2    -1    +5    +20   -10   30 feet
+Amberite       +4    +5    +3    +2    +3    +13   +15   +10   None
+High-Elf       +4    +13   +12   +4    +3    +14   +10   +25   40 feet
+Barbarian      -2    -10   +2    -1    +1    +7    +12   +10   None
+Half-Ogre      -3    -5    -3    -2    -1    +5    +20   +0    30 feet
+Half-Giant     -6    -8    -3    -2    -1    +5    +25   +5    30 feet
+Half-Titan     -5    +5    +1    -2    +1    +8    +25   +0    None
+Cyclops        -4    -5    -3    -2    -2    +5    +20   +12   10 feet
+Yeek           +2    +4    +6    +3    +5    +15   -5    -5    20 feet
+Klackon        +10   +5    +3    +0    -1    +10   +5    +5    20 feet
+Kobold         -2    -3    -1    -1    +1    +8    +10   -8    30 feet
+Nibelung       +3    +5    +6    +1    +5    +10   +9    +0    50 feet
+Dark-Elf       +5    +10   +12   +3    +8    +12   -5    +10   50 feet
+Draconian      -2    +5    +2    +0    +1    +10   +5    +5    20 feet
+Mindflayer     +10   +15   +9    +2    +5    +12   -10   -5    40 feet
+Imp            -3    +2    -1    +1    -1    +10   +5    -5    30 feet
+Golem          -5    -5    +6    -1    -1    +8    +20   +0    40 feet
+Skeleton       -5    +0    +3    -1    -1    +8    +10   +0    20 feet
+Zombie         -5    -5    +5    -1    -1    +5    +15   +0    20 feet
+Vampire        +4    +8    +6    +4    +1    +8    +5    +0    50 feet
+Spectre        +10   +15   +12   +5    +5    +14   -15   -5    50 feet
+Sprite         +10   +8    +6    +4    +10   +10   -12   +0    40 feet
+Beastman       -5    -2    -1    -1    -1    +5    +12   +5    None
+Ent            -5    +2    +5    -1    +0    +9    +15   -5    None
+Archon         +0    +12   +8    +2    +2    +11   +10   +10   30 feet
+Balrog         -3    +12   +15   -2    +1    +8    +20   +0    50 feet
+Dunadan        +4    +5    +3    +2    +3    +13   +15   +10   None
+Shadow-Fairy   +7    +8    +0    +6    +12   +15   -10   -5    40 feet
+Kutar          -2    +5    +5    +5    -2    +6    +0    -5    None
+Android        +0    -5    +0    -2    +3    +14   +20   +10   None
+
+
+--- Table 5 - Class Skill Bonus Table ---
+
+               Dsrm   Dvce   Save   Stlh  Srch  Prcp  Melee  Bows
+Warrior        25+12  18+7   31+10   1    14     2    70+30  55+30
+Mage           30+7   40+15  38+11   3    16    20    34+6   20+7 
+Priest         25+7   35+11  40+12   2    16     8    48+13  35+11
+Rogue          45+15  37+12  36+10   5    32    24    60+21  66+18
+Ranger         30+8   37+11  36+10   3    24    16    56+18  72+28
+Paladin        20+7   24+10  34+11   1    12     2    68+21  40+18
+Warrior-Mage   30+7   35+10  36+10   2    18    16    50+15  25+11
+Chaos-Warrior  20+7   25+11  34+10   1    14    12    65+20  40+17
+Monk           45+15  34+11  36+10   5    32    24    64+18  60+18
+Mindcrafter    30+10  33+11  38+10   3    22    16    50+14  40+18
+High-Mage      30+7   40+15  38+11   3    16    20    34+6   20+7 
+Tourist        15+5   18+7   28+9    1    12     2    40+11  20+11
+Imitator       25+7   30+10  36+10   2    18    16    60+18  50+20
+BeastMaster    20+7   25+10  32+10   2    18    16    52+14  63+25
+Sorcerer       30+7   48+18  75+13   2    12    22     0+0    0+0 
+Archer         38+12  24+10  35+10   4    24    16    56+18  82+36
+Magic-Eater    25+7   42+16  36+10   2    20    16    48+13  35+11
+Bard           20+8   33+13  34+11  -5    16    20    34+10  20+8 
+Red-Mage       20+7   34+11  34+11   1    16    10    56+18  25+11
+Samurai        25+12  18+7   32+10   2    16     6    70+23  40+18
+ForceTrainer   30+10  34+11  38+11   4    32    24    50+14  40+15
+Blue-Mage      30+7   40+16  36+11   3    20    16    40+6   25+7 
+Cavalry        20+10  18+7   32+10   1    16    10    60+22  66+26
+Berserker      -inf   -inf   -inf   -inf  -inf  -inf  120+50 -inf
+Weaponsmith    30+10  28+10  28+10   1    20    10    60+21  45+15
+Mirror-Master  30+10  33+11  40+12   3    14    16    34+6   30+10
+Ninja          45+15  24+10  36+10   8    48    32    70+25  66+18
+
+For character classes, there are two figures: the first figure is the
+base level of the ability, while the second figure is the bonus that
+the character gains to this skill every ten levels. So, to find out
+the total skill value of any character's skills, add the "race" value
+to the "class" value, and then the bonus once for every ten levels
+that the character has.
+
+
+--- Table 6 - Personality Skill Bonus Table ---
+
+               Dsrm  Dvce  Save  Stlh  Srch  Prcp  Melee Bows
+Ordinary       +0    +0    +0    +0    +0    +0    +0    +0 
+Mighty         -5    -5    -3    -1    -2    -2    +10   +0 
+Shrewd         +3    +8    +2    +0    -2    +5    -8    -5 
+Pious          -5    +2    +4    -1    +3    -2    -3    -6 
+Nimble         +7    +2    -1    +1    +5    +5    +0    +10
+Fearless       -5    +5    -2    +0    +2    -2    +10   +10
+Combat         -2    -3    -3    +0    -1    +2    +5    +5 
+Lazy           -5    -5    -3    -1    -4    -2    -8    -8 
+Sexy           +10   +5    +3    +0    +4    +2    +10   +10
+Lucky          +10   +7    +3    +2    +10   +8    +15   +15
+Patient        -5    -3    +3    +1    +0    -3    -6    -6 
+Munchkin       +20   +40   +30   +10   +40   +40   +80   +80
+
+For character personalities, each figure has two meanings; base level
+of the ability and the bonus that the character gains to this skill at
+the 50th level.
+
+
+--
+Updated    : Hengband 1.1.0

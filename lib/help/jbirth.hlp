@@ -3,26 +3,22 @@
 参照したいオンライン・ヘルプの番号を押して下さい:
 
     (a) キャラクターの作成                (jbirth.txt)
-    (b) 初期オプション                    (jbirth.txt#StartUp)
-    (c) キャラクタの個性                  (jbirth.txt#CharAttributes)
-    (d) 種族と職業の組合せ                (jbirth.txt#RaceClassComb)
-    (e) 魔法領域の選択                    (jbirth.txt#ChoosingMagic)
-    (f) 職業による魔法領域の制限          (jbirth.txt#Restrictions)
-    (g) ランダムクエスト                  (jbirth.txt#RandomQuests)
-    (h) オートローラー                    (jbirth.txt#AutoRoller)
-    (i) キャラクターの命名                (jbirth.txt#CharName)
-    (j) 初期装備                          (jbirth.txt#StartInventory)
+    (b) キャラクタの個性(基本的な特性値)  (jbirth.txt#CharAttributes)
+    (c) 初期オプション                    (jbirth.txt#StartupOptions)
+    (d) ランダムクエスト数決定            (jbirth.txt#RandomQuests)
+    (e) オートローラー                    (jbirth.txt#AutoRoller)
+    (f) ６つの主要能力値                  (jbirth.txt#PrimaryStats)
+    (g) 主要技能                          (jbirth.txt#PrimarySkills)
+    (h) 熟練度(武器、魔法、技能の経験値)  (jbirth.txt#Proficiency)
 
-    (?) ヘルプシステムの使用法            (jhelpinfo.txt)
+    (?) Help System Commands              (jhelpinfo.txt)
 
 
 ***** [a] jbirth.txt
-***** [b] jbirth.txt#StartUp
-***** [c] jbirth.txt#CharAttributes
-***** [d] jbirth.txt#RaceClassComb
-***** [e] jbirth.txt#ChoosingMagic
-***** [f] jbirth.txt#Restrictions
-***** [g] jbirth.txt#RandomQuests
-***** [h] jbirth.txt#AutoRoller
-***** [i] jbirth.txt#CharName
-***** [j] jbirth.txt#StartInventory
+***** [b] jbirth.txt#CharAttributes
+***** [c] jbirth.txt#StartupOptions
+***** [d] jbirth.txt#RandomQuests
+***** [e] jbirth.txt#AutoRoller
+***** [f] jbirth.txt#PrimaryStats
+***** [g] jbirth.txt#PrimarySkills
+***** [h] jbirth.txt#Proficiency

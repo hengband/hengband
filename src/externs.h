@@ -753,6 +753,7 @@ extern void place_closed_door(int y, int x);
 extern void generate_cave(void);
 
 /* init1.c */
+extern int color_char_to_attr(char c);
 extern errr process_dungeon_file(cptr name, int ymin, int xmin, int ymax, int xmax);
 
 /* init2.c */

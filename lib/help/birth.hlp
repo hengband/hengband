@@ -3,28 +3,22 @@ Creating a Character.
 Please choose one of the following online help files:
 
     (a) Creating a Character              (birth.txt)
-    (b) Start-Up Options                  (birth.txt#StartUp)
-    (c) Character Attributes              (birth.txt#CharAttributes)
-    (d) Race Class Combinations           (birth.txt#RaceClassComb)
-    (e) Choosing Your Magic Realm         (birth.txt#ChoosingMagic)
-    (f) Class/Realm Restrictions          (birth.txt#Restrictions)
-    (g) Random Quests                     (birth.txt#RandomQuests)
-    (h) The Auto-Roller                   (birth.txt#AutoRoller)
-    (i) Life Ratings                      (birth.txt#LifeRating)
-    (j) Naming Your Character             (birth.txt#CharName)
-    (k) Starting Inventory                (birth.txt#StartInventory)
+    (b) Character Attributes              (birth.txt#CharAttributes)
+    (c) Start-Up Options                  (birth.txt#StartupOptions)
+    (d) Random Quests                     (birth.txt#RandomQuests)
+    (e) The Auto-Roller                   (birth.txt#AutoRoller)
+    (f) Primary Statistics                (birth.txt#PrimaryStats)
+    (g) Primary Skills                    (birth.txt#PrimarySkills)
+    (h) Proficiency Levels                (birth.txt#Proficiency)
 
     (?) Help System Commands              (helpinfo.txt)
 
 
 ***** [a] birth.txt
-***** [b] birth.txt#StartUp
-***** [c] birth.txt#CharAttributes
-***** [d] birth.txt#RaceClassComb
-***** [e] birth.txt#ChoosingMagic
-***** [f] birth.txt#Restrictions
-***** [g] birth.txt#RandomQuests
-***** [h] birth.txt#AutoRoller
-***** [i] birth.txt#LifeRating
-***** [j] birth.txt#CharName
-***** [k] birth.txt#StartInventory
+***** [b] birth.txt#CharAttributes
+***** [c] birth.txt#StartupOptions
+***** [d] birth.txt#RandomQuests
+***** [e] birth.txt#AutoRoller
+***** [f] birth.txt#PrimaryStats
+***** [g] birth.txt#PrimarySkills
+***** [h] birth.txt#Proficiency

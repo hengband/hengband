@@ -1,7 +1,7 @@
 === Creating a Character ===
 
 Hengband is a role playing game, in which you, the player, control a
-character in the world of Hengband. Perhaps the most important thing
+character in the world of Hengband.  Perhaps the most important thing
 you control is the birth of your character, in which you choose or
 allow to be chosen various attributes that will affect the future life
 of your character.
@@ -11,31 +11,15 @@ choices as to constraints on the type of character you wish to play,
 followed by a series of random calculations to generate ("roll up") a
 random character matching the appropriate constraints.
 
-Once your character has been generated, you will be given the choice to
-generate a new character obeying the same constraints, and once you
+Once your character has been generated, you will be given the choice
+to generate a new character obeying the same constraints, and once you
 have generated more than one character, you can switch back and forth
 between the two most recent characters, until you are presented with a
 character that you feel comfortable with.
 
 You may start the entire process over at any time by pressing 'S' at
-any prompt (with the exception of the autoroller (see below [b]) prompt
-and the prompt for the number of random quests (see below [c])).
-
-
-***** <StartUp>
-=== Start-up Options ===
-
-During character generation you may press '=' at any time to access
-the start-up options. A more detailed description of the various
-start-up options can be found in the section on the Options Page (see
-option.txt#StartUp [d]). Some options have "(*)" mark that means these
-options effect to the difficulty of the game and effect to estimation
-of your score.
-
-Perhaps one of the most important features of the start-up options is
-the ability to decide what type of town level you want. The various
-town options are discussed on the Town page (see dungeon.txt#TownLevel
-[e]).
+any prompt (with the exception of the prompt for the number of random
+quests (see below [c])).
 
 
 ***** <CharAttributes>
@@ -43,216 +27,377 @@ town options are discussed on the Town page (see dungeon.txt#TownLevel
 
 Once you begin character generation you will be asked to choose your
 character's four primary attributes - its sex, race, class and
-personality. If you have selected a spellcasting class, you will also
-be prompted for your choice of magic realm(s).
-
-Your character's sex has a minimal effect on game play - females start
-with slightly more gold, males are generally heavier and so can bash
-more effectively. Race, class, personality and magic realms have a far
-more significant effect and are discussed at some length in the Race
-(see charattr.txt#TheRaces [f]), Class (see charattr.txt#TheClasses
-[g]) and Magic Realms (see magic.txt#MagicRealms [h]) sections.
-
---- Secondary Attributes ---
+personality.  If you have selected a spellcasting class, you will also
+be prompted for your choice of magic realm(s).  Your character's sex
+has a minimal effect on game play, but some personalities are
+restricted to male only or female only.  More details of attributes
+are found in the Races, Classes and Personalities section (see
+raceclas.hlp [a]) and the Magic System section (see magic.hlp [b]).
 
 Each character has a few secondary attributes, height, weight, social
-class, and background history, which are randomly determined, but which
-are affected by the sex and race of the character. In general, these
-attributes are only used to provide "flavor" to the character, to
-assist in the roll playing, but they do have a few minor effects on the
-game. For example, background history affects social class, which
-affects the amount of money the character will start with. And weight
-affects carrying capacity and bashing ability.
+class, and background history, which are randomly determined, but
+which are affected by the sex and race of the character.  In general,
+these attributes are only used to provide "flavor" to the character,
+to assist in the roll playing, but they do have a few minor effects on
+the game.  For example, background history affects social class, which
+affects the amount of money the character will start with.  And weight
+affects riding ability.
 
-***** <RaceClassComb> 
-=== Race/Class Combinations ===
-
-Once a race has been chosen, you will need to pick a class. Some 
-race/class combinations are not recommended and so certain classes are
-shown inside brackets. This may be because the combination is not
-conceptually sound or because the chosen race has stat penalties in
-areas where that class needs bonuses.
-
-However, any race/class combination can be chosen and experienced
-players may often choose unusual combinations for the challenge that
-they represent. It is recommended that inexperienced players choose
-warriors as spellcasting requires a player more familiar with dungeon
-survival techniques.
-
-The following table shows which classes are recommended for the various
-races.
+In addition to these attributes, there are several statistics which
+are used to determine your character's relative skills and abilities
+as follows:
 
 
-***** <ChoosingMagic>
-=== Choosing Your Magic Realm(s) ===
+--- Primary Statistics ---
 
-If you have selected a spellcasting class, you will next be prompted
-for your choice of magic realm(s). The magic system, as implemented in
-Hengband, consists of nine realms: Life, Arcane, Sorcery, Nature,
-Trump, Chaos, Death, Craft and Daemon. In general, Life is primarily
-defensive but also offers spells to attack evil creatures, Arcane
-offers utility spells and some limited offensive capability, Sorcery
-offers utility and defensive spells, Nature offers both defensive and
-offensive spells, Trump specializes in teleportation and summoning
-spells and Chaos and Death are offensive. A more complete description
-of the magic realms and spellcasting in general can be found in the
-section on the Magic Realms (see magic.txt#MagicRealms [h]).
+Each character has six primary statistics or 'stats'.  These are
+strength, intelligence, wisdom, dexterity, constitution and charisma,
+which modify the abilities of the character in a variety of ways.  For
+example, strength affects your carrying capacity, the amount of damage
+you to a monster when you hit it and the number of blows per round you
+get with a weapon.  A more complete discussion of the primary
+statistics is contained later in this document (see below [c]).
 
-Where possible, it is generally a good idea to pick one defensive realm
-and one offensive realm.
+--- Experience ---
 
-You cannot be as proficient in secondary realm as in first realm. But
-you can change secondary realm to other realm of magic even in the
-middle of the game. For that, you must choose a spellbook of new realm
-in the study command. But beware! After changing realm, you will
-forget all spells of old realm, moreover the number of learning will
-not be restored and be lost permanently.
+Experience affects almost everything else about your character.
+Experience can be gained as your character kills monsters, casts
+spells or prays for the first time, learns about an object kind by
+using it, disarms traps and unlocks doors.  Certain classes may also
+gain experience by destroying specific dungeon spell books and there
+are potions in the dungeon that will boost your experience if you
+quaff them.
+
+When your character's experience crosses certain fixed boundaries, you
+will attain a new experience level (up to a maximum of 50).  When this
+happens, your hitpoints, mana (if any), certain skills such as melee
+fighting and bows and throws will all increase.  Some races and
+classes will also gain new powers and abilities when crossing certain
+experience thresholds.
+
+Deep down inside, the real objective of the game is to increase your
+experience, and certain other characteristics, and also to collect
+useful items, to give you a decent chance against the great Serpent of
+Chaos.  Certain monsters can "drain" your experience, and thus your
+level, which will cause you to lose all of the effects of the higher
+level.  Luckily, you can restore drained experience through magical
+means, or by simply regaining the experience all over again.
+
+--- Gold (AU) ---
+
+Each character has some gold, which can be used to buy items and
+services from the shops and other buildings on the town level.  Gold
+can be obtained by selling items to the shops, taking it from the
+corpses of dead monsters, mining it and by finding it lying on the
+dungeon floor.
+
+Each character starts out with some gold, the amount of which is based
+on the character's social class, charisma, and other stats (less
+powerful characters start with more gold).  Each character also starts
+out with a few useful items, which may be kept, or sold to a
+shop-keeper for more gold.
+
+--- Hit Points ---
+
+Each character has hit points, representing how much damage the
+character can sustain before he dies.  Your hit points are derived
+from your race, class, level, and constitution, and can be boosted by
+magical means.  Hit points may be regained by resting, or by a variety
+of magical means.
+
+--- Spell Points (Mana) ---
+
+Each character has spell points, or mana, which represents how many
+spells a character can cast.  Your spell points (sometimes called
+mana) are derived from your class, level and a primary stat of your
+class.  Spell points may be regained by resting, or by a few magical
+means.
+
+--- Character Skills ---
+
+Each character also has several primary skills: disarming, magic
+devices, saving throws, stealth, searching, perception, melee and bows
+and throws, which are derived from the character's race, class,
+experience level, stats and their current equipment.  These skills
+have fairly obvious effects, but will be described more completely
+below.  The starting abilities of a character are based upon race and
+class.  Abilities may be adjusted by high or low stats, and may
+increase with the level of the character (see below for details [d]).
 
 
-***** <Restrictions>
---- Class/Realm Restrictions ---
+***** <StartupOptions>
+=== Start-up Options ===
 
-In Hengband, spellcasting classes can select either one or two realms
-from those available. Some classes which can learn two realms may learn
-their first realm 'better' than their second.
+During character generation you may press '=' at any time to access
+the start-up options.  A more detailed description of the various
+start-up options can be found in the section on the Options Page (see
+option.txt#StartUp [e]).  Some options have "(*)" mark that means
+these options effect to the difficulty of the game and effect to
+estimation of your score.
 
-Note that certain realms may be prohibited for some classes. In the
-table below, '1' indicates that the realm may only be the first
-choice, '2' indicates that the realm may only be the second choice and
-'1/2' indicates that it can be either. Classes that only have '1'
-options do not get a second realm. Classes with only one '1' option
-must choose this option as their first realm.
-
-Sorcerers and Red Mages are exceptions. They can use all magic realms
-and they don't need to study spells. Red Mages can cast spells from
-lower rank spellbooks of all realms.
-
-
-Class          Life Sorcery Nature Chaos Death Trump Arcane Craft Daemon
-----------------------------------------------------------------------
-Mage           1/2  1/2     1/2    1/2   1/2   1/2   1/2    1/2   1/2
-Priest         1    2       2      2     1     2     2      2     1  
-Rogue               1                    1     1     1      1
-Ranger              2       1      2     2     2     2            2
-Paladin        1                         1
-Warrior-Mage   2    2       2      2     2     2     1      2     2
-Chaos Warrior                      1                              1
-Monk           1            1            1                  1  
-High Mage      1    1       1      1     1     1     1      1     1
-Sorcerer       All realms
-Red Mage       All realms (Lower rank spellbooks only)
-ForceTrainer   1            1            1                  1  
+Perhaps one of the most important features of the start-up options is
+the ability to decide what type of town level you want.  The various
+town options are discussed on the Town page (see dungeon.txt#TownLevel
+[f]).
 
 
 ***** <RandomQuests>
-=== RandomQuests ===
+=== Random Quests ===
 
-Once you have chosen your race, class and (if applicable) your magic
-realm(s), you will be asked how many random quests you wish to be
-assigned. You may choose any number between 0 and 10. A more detailed
-discussion of random quests can be found in the Dungeon section (see
-dungeon.txt#RandomQuests [i]).
+Once you have chosen your race, class, personality and (if applicable)
+your magic realm(s), you will be asked how many random quests you wish
+to be assigned.  You may choose any number between 0 and 10.  A more
+detailed discussion of random quests can be found in the Dungeon
+section (see dungeon.txt#RandomQuests [g]).
 
 
 ***** <AutoRoller>
 === The Auto-Roller ===
 
 The auto-roller is a quick means of generating start-up characters
-based on a set of user-selected criteria. If you choose to use the
+based on a set of user-selected criteria.  If you choose to use the
 auto-roller, you will be presented with a column giving the maximum
-possible statistics (see charattr.txt#PrimaryStats [j]) for your
-choice of race, class and maximize mode (see option.txt#StartUp
-[d]). Then you can specify your desired statistics using keypad or
-cursor keys.
+possible statistics (see below [c]) for your choice of race, class and
+personality (see raceclas.hlp [a]).  Then you can specify your desired
+statistics using keypad or cursor keys.
 
 Once you have specified your desired statistics, the computer will
 then randomly roll successive start-up characters and compare them to
-your specified criteria. Each stat is rolled as a number from 8 to 17,
-with a normal distribution, and is then immediately modified based
-upon the race and class which you have chosen. The exact quantum of
-this modification can be found in the Character Attributes section
-(see charattr.txt#StatBonusTable [k]).
+your specified criteria.  Each stat is rolled as a number from 8 to
+17, with a normal distribution, and is then immediately modified based
+upon the race, class and personality which you have chosen.  The exact
+quantum of this modification can be found in the stat bonus table (see
+raceclas.txt#StatBonusTable [h]).
 
 Once a character that matches or exceeds your expectations has been
-rolled, Hengband stops to ask you whether you accept or not. If you
+rolled, Hengband stops to ask you whether you accept or not.  If you
 accept the rolled character (by pressing Enter), you will be asked for
-its name (see below [m]). If not, you may press 'r' to resume rolling
-and searching for the next match or, if this is not your first match,
-'p' to return to the previous character which met your criteria.
+its name.  If not, you may press 'r' to resume rolling and searching
+for the next match or, if this is not your first match, 'p' to return
+to the previous character which met your criteria.
 
 Note: The statistics are not independent of each other and trying to
-maximize each one using the auto-roller will not work. A good idea is
-to specify statistics close to maximum that are critical for your class
-(for example, high wisdom for priests, intelligence for mages and
-strength and dexterity for warriors). You should set minimum acceptable
-levels for the remaining statistics rather than looking for high rolls.
+maximize each one using the auto-roller will not work.  A good idea is
+to specify statistics close to maximum that are critical for your
+class (for example, high wisdom for priests, intelligence for mages
+and strength and dexterity for warriors).  You should set minimum
+acceptable levels for the remaining statistics rather than looking for
+high rolls.
 
 If you select not to use the auto-roller, the computer will roll one
 random character at a time and then display it for you to either
-accept or reject. The 'r', 'p' and Enter keys will work as outlined
+accept or reject.  The 'r', 'p' and Enter keys will work as outlined
 above.
 
 
-***** <LifeRating>
-=== Life Ratings ===
+***** <PrimaryStats>
+=== Primary Statistics ===
 
-In Hengband, Life Rating is not displayed at character making, but
-displayed later by magical means such as Self Knowledge.  Life Rating
-is an indication of how many hitpoints your character will have at
-character level 50 before taking into consideration any bonus from
-having a high constitution. The life rating will be displayed in the
-form of x/100 where 'x' is typically a number varying between 80 and
-120.
+Each character has six primary "stats", strength, intelligence,
+wisdom, dexterity, constitution, and charisma, which modify the
+abilities of the character in a variety of ways.  Every stat has a
+numerical value, ranging from a minimum of 3, up to a normal maximum
+of 18, and even higher, into the "percentile" range, represented as
+"18/01" through "18/130".  True maximum of each base stat is randomly
+ranging from 18/70 to 18/130, and average of all your stat maximums
+are always 18/100.  These maximums are chosen randomly when your
+character is created or your character quaff a Potion of New Life.
+Actually, every stat can be raised even above these maximum of base
+stat by modification from race, class, personality and magical
+equipment, up to a pure maximum of 18/220, which is represented as
+"18/***".
 
-Your life rating is only a guarantee of your character's hitpoints at
-level 50. This might be achieved by small increases in the early stages
-and much larger increases in the later game or the other way around.
-Generally, however, the increases tend to be fairly even.
+Traditionally, a percentile stat such as "18/50" has been thought of as
+representing a value part way between 18 and 19, and this is one way to
+think of them.  However, often, the best way to view the "bonus" values
+after the "18/" is as "tenth" points, since it often takes the same
+magic to raise a stat from, say, 4 to 5, or 16 to 17, as it does from,
+say, 18/40 to 18/50.  The important thing to remember is that almost all
+internal calculations "ignore" the final digit of any "bonus", so that,
+for example, "18/40" and "18/49" are always have the same effects.
+
+--- The Primary Statistics ---
+
+Strength
+     Strength is critical to fighting effectively in melee combat and
+     with missile weapons.  A high strength will improve your chances
+     of getting multiple blows with your melee weapon and, in
+     addition, will dramatically increase the amount of damage done
+     with each hit.  Strength also has a marginal effect on your
+     chance to hit your opponent.  Characters with low strength may
+     receive penalties.  Strength is also useful in tunneling, bashing
+     and in carrying heavy items without being slowed down.
+ 
+Intelligence
+     Intelligence affects the spellcasting abilities of mage-like
+     spellcasters (high mages, mages, warrior-mages, rangers, chaos
+     warriors and rogues).  Intelligence will affect the number of
+     spells these classes may learn each level, the number of spell
+     points they receive and their spell fail rates.  These classes
+     cannot learn spells if their intelligence is 7 or lower.  Also,
+     intelligent characters are better at using magic devices, picking
+     locks and disarming traps.
+ 
+Wisdom
+     Wisdom affects the ability of priest-like spellcasters (priests,
+     paladins and monks) to use prayers.  WIS will affect the number
+     of spells these classes may learn each level, the number of spell
+     points they receive and their spell fail rates.  In addition, WIS
+     is also used to determine a Mindcrafter's ability to use his or
+     her mental powers.  These classes cannot learn spells if their
+     wisdom is 7 or lower.  Wise character's will have better chances
+     of resisting magical spells cast upon them by monsters.
+ 
+Dexterity
+     Dexterity is a combination of agility and quickness.  A high
+     dexterity may allow a character to get multiple blows with
+     lighter weapons, thus greatly increasing his kill power, and will
+     increase his chances of hitting with any weapon and dodging blows
+     from enemies.  Dexterity is also useful in picking locks,
+     disarming traps, and protecting yourself from some of the thieves
+     that inhabit the dungeons.
+ 
+Constitution
+     Constitution is a character's ability to resist damage to his
+     body, and to recover from damage received.  Therefore a character
+     with a high constitution will receive more hit points and also
+     recover them faster while resting.
+
+Charisma
+     Charisma represents a character's personality and physical
+     appearance.  A character with a high charisma will receive better
+     prices from store owners, whereas a character with a very low
+     charisma may be robbed blind.  A high charisma will also mean
+     more starting money for the character.  Charisma is also used
+     when calculating the success of a Mindcrafter at dominating a
+     monster.
+ 
+
+***** <PrimarySkills>
+=== Primary Skills ===
+
+Characters possess some different abilities which can help them to
+survive.  The starting abilities of a character are based upon race
+and class.  Abilities may be adjusted by high or low stats, and may
+increase with the level of the character with the rate of increase
+dependent upon the level of the character.
+ 
+Melee
+     Melee is the ability to hit and do damage with weapons or fists.
+     Normally a character gets a single blow from any weapon, but if
+     his dexterity and strength are high enough, he may receive more
+     blows per round with lighter weapons.  Strength and dexterity
+     both modify the ability to hit an opponent.  This skill increases
+     with the level of the character.
+ 
+Bows and Throws
+     Using ranged missile weapons (and throwing objects) is included in
+     this skill.  Different stats apply to different weapons, but this
+     ability may modify the distance an object is thrown/fired, the
+     amount of damage done, and the ability to hit a creature.  This
+     skill increases with the level of the character.
+ 
+Saving Throws
+     A Saving Throw is the ability of a character to resist the
+     effects of a spell cast on him by another person/creature.  This
+     does not include spells cast on the player by his own stupidity,
+     such as quaffing a nasty potion.  This ability increases with the
+     level of the character, but then most high level creatures are
+     better at casting spells, so it tends to even out.  A high wisdom
+     also increases this ability.
+ 
+Stealth
+     The ability to move silently about is very useful.  Characters
+     with good stealth can usually surprise their opponents, gaining
+     the first blow.  Also, creatures may fail to notice a stealthy
+     character entirely, allowing a player to avoid certain fights.
+     This skill is based entirely upon race and class, and will never
+     improve unless magically enhanced.
+ 
+Disarming
+     Disarming is the ability to remove traps (safely), and includes
+     picking locks on traps and doors.  A successful disarming will
+     gain the character some experience.  A trap must be found before
+     it can be disarmed.  Dexterity and intelligence both modify the
+     ability to disarm, and this ability increases with the level of
+     the character.
+ 
+Magical Devices
+     Using a magical device such as a wand or staff requires
+     experience and knowledge.  Spell users such as magi and priests
+     are therefore much better at using a magical device than say a
+     warrior.  This skill is modified by intelligence, and increases
+     with the level of the character.
+ 
+Perception (Searching Frequency)
+     Perception is the ability to notice something without actively
+     seeking it out.  This skill is based entirely upon race and
+     class, and will never improve unless magically enhanced.
+ 
+Searching (Searching Ability)
+     To search is to actively look for secret doors, floor traps, and
+     traps on chests.  Rogues are the best at searching, but magi,
+     rangers, and priests are also good at it.  This skill is based
+     entirely upon race and class, and will never improve unless
+     magically enhanced.
+
+Infra-vision
+     Infra-vision is the ability to see heat sources.  Since most of
+     the dungeon is cool or cold, infra-vision will not allow the
+     player to see walls and objects.  Infra-vision will allow a
+     character to see any warm-blooded creatures up to a certain
+     distance.  This ability works equally well with or with out a
+     light source.  The majority of Hengband's creatures are
+     cold-blooded, and will not be detected unless lit up by a light
+     source.  Most non human races have innate infra-vision ability.
+     Humans can gain infra-vision only if it is magically enhanced.
 
 
-***** <CharName>
-=== Naming Your Character ===
+***** <Proficiency>
+=== Proficiency Levels ===
 
-Once you have accepted a character you will be asked to provide a name
-for the character. In general, the actual choice of a name is not
-important, but do keep in mind that it may have some effect on the game
-itself. For example, on some machines, the character name determines
-the filename that will be used to save the character to disk. On
-others, the character name specifies special "pref" files. And the
-character name is used on the high score list.
+In Hengband, characters possess different proficiency levels or
+experiences for each weapon type, spells, and a few other skills.  The
+starting proficiency levels and the maximum proficiency levels of a
+character are based upon class.  Each proficiency level may increase
+when you practice with it, and can be checked by the 'Check various
+information' command (~).
 
+For weapon proficiency, you need to hit monsters many times with a
+weapon of that type to practice.  And your to-hit bonus of the weapon
+will increases with the proficiency level of it. The rate of increase
+is dependent upon the level of the character and the level of the
+opponents.
 
-***** <StartInventory>
-=== Starting Inventory ===
+For spell proficiency, you need to cast the spell many times in a deep
+level of the dungeon to practice.  And the fail-rate and mana
+consumption rate of the spell decreases when the proficiency level
+increases.  The level of the dungeon you need is dependent upon the
+level of the character and the level of the spell.
 
-Once you have named your character, you will be prompted to press 'Esc'
-and, having done so, you will be brought to the town screen from where
-you will begin your adventuring. You should note that each character
-starts in the town with a small number of items in their inventory.
-Which items you are given will depend upon your chosen race and class
-and the number of such items depends on chance. For example, all
-classes receive either food rations or scrolls of satisfy hunger but
-the number of rations or scrolls received is random. Typically, you
-will receive a weapon, a piece of armor, some food, some torches and
-a magical item although there is some variance from this.
+The effect of the proficiency level of the Dual Wielding and the
+Martial Arts is almost same as the weapon proficiency; These will
+effect upon your to-hit bonus of dual wielding combat or bare handed
+combat.
+
+For the proficiency level of the Riding, you need to attack in melee
+or shoot with missile weapon when riding.  And your speed increases up
+to the mount's speed when the proficiency level increases.  (see
+monster.txt#Pets [i])
 
 
 --
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.0.11
+Updated    : Hengband 1.1.0
 
-***** Begin Hyperlinks
-***** [b] birth.txt#AutoRoller
-***** [c] birth.txt#RandomQuests
-***** [d] option.txt#StartUp
-***** [e] dungeon.txt#TownLevel
-***** [f] charattr.txt#TheRaces
-***** [g] charattr.txt#TheClasses
-***** [h] magic.txt#MagicRealms
-***** [i] dungeon.txt#RandomQuests
-***** [j] charattr.txt#PrimaryStats
-***** [k] charattr.txt#StatBonusTable
-***** [l] birth.txt#LifeRating
-***** [m] birth.txt#CharName
+***** [a] raceclas.hlp
+***** [b] magic.hlp
+***** [c] birth.txt#PrimaryStats
+***** [d] birth.txt#PrimarySkills
+***** [e] option.txt#StartUp
+***** [f] town.txt#TownLevel
+***** [g] dungeon.txt#RandomQuests
+***** [h] raceclas.txt#StatBonusTable
+***** [i] monster.txt#Pets

@@ -2,28 +2,28 @@ Welcome to the Hengband Online Help System.
 
 Please choose one of the following online help files:
 
-    (a) General Information            (general.hlp)
-    (b) Creating a Character           (birth.hlp)
-    (c) Character Attributes           (charattr.hlp)
-    (d) The Town and Wilderness        (town.hlp)
-    (e) The Dungeon                    (dungeon.hlp)
-    (f) Hengband Objects               (objects.hlp)
-    (g) Monsters and Pets              (monster.hlp)
-    (h) Attacking and Weapons          (attack.hlp)
-    (i) Defending and Armor            (defend.hlp)
-    (j) Hengband Magic System          (magic.hlp)
-    (k) Hengband Commands              (command.hlp)
-    (l) Hengband Options               (option.hlp)
-    (m) User Preference Files          (pref.hlp)
-    (n) The Hengband Newbie Guide      (tang.txt)
-    (o) Version history                (version.txt)
+    (a) General Information               (general.hlp)
+    (b) Creating a Character              (birth.hlp)
+    (c) Races, Classes and Personalities  (raceclas.hlp)
+    (d) The Town and Wilderness           (town.hlp)
+    (e) The Dungeon                       (dungeon.hlp)
+    (f) Hengband Objects                  (objects.hlp)
+    (g) Monsters and Pets                 (monster.hlp)
+    (h) Attacking and Weapons             (attack.hlp)
+    (i) Defending and Armor               (defend.hlp)
+    (j) Hengband Magic System             (magic.hlp)
+    (k) Hengband Commands                 (command.hlp)
+    (l) Hengband Options                  (option.hlp)
+    (m) User Preference Files             (pref.hlp)
+    (n) The Hengband Newbie Guide         (tang.txt)
+    (o) Version history                   (version.txt)
 
-    (?) Help System Commands           (helpinfo.txt)
+    (?) Help System Commands              (helpinfo.txt)
 
 
 ***** [a] general.hlp
 ***** [b] birth.hlp
-***** [c] charattr.hlp
+***** [c] raceclas.hlp
 ***** [d] town.hlp
 ***** [e] dungeon.hlp
 ***** [f] objects.hlp

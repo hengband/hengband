@@ -1671,7 +1671,7 @@ static cptr race_jouhou[MAX_RACES] =
 
  "This race is a blasphemous abomination produced by Chaos. It is not an independent race but rather a humanoid creature, most often a human, twisted by the Chaos, or a nightmarish crossbreed of a human and a beast. All Beastmen are accustomed to Chaos so much that they are untroubled by confusion and sound, although raw logrus can still have effects on them. Beastmen revel in chaos, as it twists them more and more. Beastmen are subject to mutations: when they have been created, they receive a random mutation. After that, every time they advance a level they have a small chance of gaining yet another mutation.",
 
-"The Ents are a powerful race dating from the beginning of the world, oldest of all animals or plants who inhabit Arda. Spirits of the land, they were summoned to guard the forests of Middle-earth. Being much like trees they are very slow but strong, and very susceptible to fire. As the Shepherds of the Trees, they have the innate ability to cause trees to rise about them for protection.",
+"The Ents are a powerful race dating from the beginning of the world, oldest of all animals or plants who inhabit Arda. Spirits of the land, they were summoned to guard the forests of Middle-earth. Being much like trees they are very clumsy but strong, and very susceptible to fire.",
 
 "Archons are a higher class of angels. They are good at all skills, and are strong, wise, and are a favorite with any people. They are able to see the unseen, and their wings allow them to safely fly over traps and other dangerous places. However, belonging to a higher plane as they do, the experiences of this world do not leave a strong impression on them and they gain levels slowly.",
 

@@ -747,7 +747,7 @@ static bool add_name(u32b *offset, header *head, cptr buf)
  * Convert a "color letter" into an "actual" color
  * The colors are: dwsorgbuDWvyRGBU, as shown below
  */
-static int color_char_to_attr(char c)
+int color_char_to_attr(char c)
 {
 	switch (c)
 	{

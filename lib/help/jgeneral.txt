@@ -5,7 +5,7 @@
 [c]を参照)に目を通しておいた方がいいでしょう。
 
 変愚蛮怒 というゲームは一人用のダンジョン・シミュレーターです。プレイ
-ヤーは様々な種族や職業、魔法領域(jcharattr.txt [d]を参照)を選択して自
+ヤーは様々な種族や職業、魔法領域(jbirth.txt [d]を参照)を選択して自
 分のキャラクターを作成し、そのキャラクターを操作してダンジョンの中を数
 日、いや数週間、いや数カ月の間冒険をすることになるでしょう。ダンジョン
 の奥深くでは経験値や他の特性を得、有用なアイテムを集めることが目的とな
@@ -135,13 +135,13 @@ http://www.kmc.gr.jp/~habu/gridbug.html
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.0.11
+Updated    : Hengband 1.1.0
 
 
 ***** Begin Hyperlinks
 ***** [b] jcommand.txt
 ***** [c] jcommdesc.txt
-***** [d] jcharattr.txt
+***** [d] jbirth.txt
 ***** [e] jattack.txt#MonsterMemory
 ***** [f] jtown.txt
 

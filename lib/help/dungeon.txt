@@ -32,22 +32,35 @@ to something you are more comfortable with.
  
 --- Features that do not block line of sight ---
  
-  .   A floor space                   *                A Mirror
-  .   A trap (hidden)                 ~ (Light Blue)   Shallow Water
-  ^   A trap (known)                  ~ (Dark Blue)    Deep Water
-  ;   A glyph of warding              ~ (Orange)       Shallow Lava
-  '   An open door                    ~ (Red)          Deep Lava
-  '   A broken door
-  <   A staircase up
-  >   A staircase down
-
+  [[[[[w.]   Floor                       [[[[[v*]   A Mirror                     
+  [[[[[w.]   A trap (hidden)             [[[[[y;]   A glyph of warding             
+  [[[[[w^]   A trap (known)              [[[[[R;]   A explosive rune             
+  [[[[[u.]   Dirt                        [[[[[B*]   Section of the Pattern  
+  [[[[[g.]   Patch of grass              [[[[[b*]   Section of the Pattern  
+  [[[[[G:]   Flower                      [[[[[U1]   General Store             
+  [[[[[g:]   Brake                       [[[[[s2]   Armoury                     
+  [[[[[B.]   Swamp                       [[[[[w3]   Weapon Smiths             
+  [[[[[B~]   Shallow Water               [[[[[g4]   Temple                     
+  [[[[[b~]   Deep Water                  [[[[[b5]   Alchemy Shop             
+  [[[[[U~]   Shallow Lava                [[[[[r6]   Magic Shop                     
+  [[[[[r~]   Deep Lava                   [[[[[D7]   Black Market             
+  [[[[[D#]   Dark pit                    [[[[[y8]   Home                     
+  [[[[[U']   An open door                [[[[[o9]   Bookstore                     
+  [[[[[u']   A broken door               [[[[[v0]   Museum                     
+  [[[[[w<]   A staircase up              [[[[[B+]   Other building             
+  [[[[[w>]   A staircase down            [[[[[v+]   Other building          
+  [[[[[U<]   A shaft up                       
+  [[[[[U>]   A shaft down                   
+  [[[[[v>]   An entrance to dungeon
+  [[[[[y>]   quest entrance
 
 --- Features that block line of sight ---
 
-  #   A wall	                      # (Green)        A Tree
-  %   A mineral vein                  +                A door
-  #   A secret door                   :                A pile of rubble
-  *   Treasure in wall / Pattern
+  [[[[[w#]   A granite wall              [[[[[G#]   A Tree          
+  [[[[[s%]   A magma vein                [[[[[o^]   Mountain chain  
+  [[[[[w%]   A quartz vein               [[[[[U+]   A door          
+  [[[[[w#]   A secret door               [[[[[w:]   A pile of rubble
+  [[[[[o*]   Treasure in wall
 
 
 ***** <WithinDungeon>

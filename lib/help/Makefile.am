@@ -2,13 +2,13 @@
 
 angband_files = \
 	attack.hlp attack.txt birth.hlp birth.txt \
-	bldg.txt charattr.hlp charattr.txt command.hlp \
+	bldg.txt raceclas.hlp raceclas.txt command.hlp \
 	command.txt commdesc.hlp commdesc.txt defend.hlp \
 	defend.txt dungeon.hlp dungeon.txt gambling.txt \
 	general.hlp general.txt help.hlp helpinfo.txt \
 	j_general.txt j_item1.txt j_item2.txt j_trans.txt \
 	jattack.hlp jattack.txt jbirth.hlp jbirth.txt \
-	jbldg.txt jcharattr.hlp jcharattr.txt jcommand.hlp \
+	jbldg.txt jraceclas.hlp jraceclas.txt jcommand.hlp \
 	jcommand.txt jcommdesc.hlp jcommdesc.txt jdefend.hlp \
 	jdefend.txt jdungeon.hlp jdungeon.txt jgambling.txt \
 	jgeneral.hlp jgeneral.txt jhelp.hlp jhelpinfo.txt \

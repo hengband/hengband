@@ -4997,6 +4997,9 @@ bool show_file(bool show_version, cptr name, cptr what, int line, int mode)
 	/* Backup value for "line" */
 	int back = 0;
 
+	/* Color of the next line */
+	byte color = TERM_WHITE;
+
 	/* Loop counter */
 	int cnt;
 
@@ -5176,35 +5179,41 @@ msg_format("'%s'をオープンできません。", name);
 	/* Pre-Parse the file */
 	while (TRUE)
 	{
+		char *str;
+
 		/* Read a line or stop */
 		if (my_fgets(fff, buf, 1024)) break;
 
+		/* Get a color */
+		if (prefix(buf, "#####")) str = &buf[6];
+		else str = buf;
+
 		/* XXX Parse "menu" items */
-		if (prefix(buf, "***** "))
+		if (prefix(str, "***** "))
 		{
 			/* Notice "menu" requests */
-			if ((buf[6] == '[') && isalpha(buf[7]))
+			if ((str[6] == '[') && isalpha(str[7]))
 			{
 				/* This is a menu file */
 				menu = TRUE;
 
 				/* Extract the menu item */
-				k = buf[7] - 'A';
+				k = str[7] - 'A';
 
-				if ((buf[8] == ']') && (buf[9] == ' '))
+				if ((str[8] == ']') && (str[9] == ' '))
 				{
 					/* Extract the menu item */
-					strncpy(hook[k], buf + 10, 31);
+					strncpy(hook[k], str + 10, 31);
 
 					/* Make sure it's null-terminated */
 					hook[k][31] = '\0';
 				}
 			}
 			/* Notice "tag" requests */
-			else if (buf[6] == '<')
+			else if (str[6] == '<')
 			{
-				buf[strlen(buf) - 1] = '\0';
-				add_tag(&tags, buf + 7, next);
+				str[strlen(str) - 1] = '\0';
+				add_tag(&tags, str + 7, next);
 			}
 
 			/* Skip this */
@@ -5263,9 +5272,12 @@ msg_format("'%s'をオープンできません。", name);
 			next++;
 		}
 
-		/* Dump the next rows lines of the file */
+		/* Dump the next 20, or rows, lines of the file */
 		for (i = 0; i < rows; )
 		{
+			int print_x, x;
+			cptr str;
+
 			/* Hack -- track the "first" line */
 			if (!i) line = next;
 
@@ -5275,11 +5287,23 @@ msg_format("'%s'をオープンできません。", name);
 			/* Hack -- skip "special" lines */
 			if (prefix(buf, "***** ")) continue;
 
+			/* Get a color */
+			if (prefix(buf, "#####"))
+			{
+				color = color_char_to_attr(buf[5]);
+				str = &buf[6];
+			}
+			else
+			{
+				color = TERM_WHITE;
+				str = buf;
+			}
+
 			/* Count the "real" lines */
 			next++;
 
-			/* Make a lower case version of buf for searching */
-			strcpy(lc_buf, buf);
+			/* Make a lower case version of str for searching */
+			strcpy(lc_buf, str);
 
 			for (lc_buf_ptr = lc_buf; *lc_buf_ptr != 0; lc_buf_ptr++)
 			{
@@ -5298,23 +5322,48 @@ msg_format("'%s'をオープンできません。", name);
 			find = NULL;
 
 			/* Dump the line */
-			Term_putstr(0, i+2, -1, TERM_WHITE, buf);
+			x = 0;
+			print_x = 0;
+			while (str[x])
+			{
+				/* Color ? */
+				if (prefix(str + x, "[[[[["))
+				{
+					int c = color_char_to_attr(str[x + 5]);
+					x += 6;
+
+					/* Ok print the link name */
+					while (str[x] != ']')
+					{
+						Term_putch(print_x, i + 2, c, str[x]);
+						x++;
+						print_x++;
+					}
+				}
+				else
+				{
+					Term_putch(print_x, i + 2, color, str[x]);
+					print_x++;
+				}
+
+				x++;
+			}
 
 			/* Hilite "shower" */
 			if (shower[0])
 			{
-				cptr str = lc_buf;
+				cptr s2 = lc_buf;
 
 				/* Display matches */
-				while ((str = strstr(str, shower)) != NULL)
+				while ((s2 = strstr(s2, shower)) != NULL)
 				{
 					int len = strlen(shower);
 
 					/* Display the match */
-					Term_putstr(str-lc_buf, i+2, len, TERM_YELLOW, &buf[str-lc_buf]);
+					Term_putstr(s2-lc_buf, i+2, len, TERM_YELLOW, &str[s2-lc_buf]);
 
 					/* Advance */
-					str += len;
+					s2 += len;
 				}
 			}
 

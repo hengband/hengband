@@ -1,0 +1,18 @@
+種族、職業、性格
+
+参照したいオンライン・ヘルプの番号を押して下さい:
+
+    (a) 種族                              (jraceclas.txt#TheRaces)
+    (b) 職業                              (jraceclas.txt#TheClasses)
+    (c) 性格                              (jraceclas.txt#ThePersonalities)
+    (d) 能力値修正表                      (jraceclas.txt#StatBonusTable)
+    (e) 技能修正値表                      (jraceclas.txt#SkillBonusTable)
+
+    (?) ヘルプシステムの使用法            (jhelpinfo.txt)
+
+
+***** [a] jraceclas.txt#TheRaces
+***** [b] jraceclas.txt#TheClasses
+***** [c] jraceclas.txt#ThePersonalities
+***** [d] jraceclas.txt#StatBonusTable
+***** [e] jraceclas.txt#SkillBonusTable

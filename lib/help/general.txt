@@ -8,7 +8,7 @@ beginning any serious adventuring...
 
 The game of Hengband is a single player dungeon simulation. A player
 may choose from a number of races, classes and magic realms when
-creating a character (see charattr.txt [d]), and then "run" that
+creating a character (see birth.hlp [d]), and then "run" that
 character over a period of days, weeks, even months. Deep down inside,
 the real objective of the game is to increase your experience, and
 certain other characteristics, and also to collect useful items, to
@@ -144,11 +144,11 @@ is about Hengband.
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.0.11
+Updated    : Hengband 1.1.0
 
 
 ***** Begin Hyperlinks
-***** [b] command.txt
+***** [b] birth.hlp
 ***** [c] commdesc.txt
 ***** [d] charattr.txt
 ***** [e] attack.txt#MonsterMemory

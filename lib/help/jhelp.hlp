@@ -2,8 +2,8 @@
   参照したいヘルプの番号を押して下さい:
 
  (a)全体的な情報        (jgeneral.hlp) (u)追加情報    (jspecail.hlp)
- (b)キャラクター作成    (jbirth  .hlp) (o)英語版ヘルプ(help    .hlp)
- (c)種族、職業、性格    (jcharattr.hlp)
+ (b)キャラクターの作成  (jbirth  .hlp) (o)英語版ヘルプ(help    .hlp)
+ (c)種族、職業、性格    (jraceclas.hlp)
  (d)街と荒野            (jtown   .hlp)
  (e)ダンジョンの探険    (jdungeon.hlp)
  (f)アイテム            (jobjects.hlp)
@@ -19,7 +19,7 @@
  (?)ヘルプシステムの使用法      (jhelpinfo.txt)
 ***** [a] jgeneral.hlp
 ***** [b] jbirth.hlp
-***** [c] jcharattr.hlp
+***** [c] jraceclas.hlp
 ***** [d] jtown.hlp
 ***** [e] jdungeon.hlp
 ***** [f] jobjects.hlp
