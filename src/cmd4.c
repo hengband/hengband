@@ -6610,8 +6610,8 @@ static void do_cmd_knowledge_uniques(void)
 	{
 		monster_race *r_ptr = &r_info[who[k]];
 
-		/* Only print Uniques */
-		if (r_ptr->flags1 & (RF1_UNIQUE))
+		/* Only print Uniques (rarity <= 100) */
+		if ((r_ptr->flags1 & RF1_UNIQUE) && r_ptr->rarity && (r_ptr->rarity <= 100))
 		{
 			bool dead = (r_ptr->max_num == 0);
 
@@ -6628,7 +6628,6 @@ static void do_cmd_knowledge_uniques(void)
 				fprintf(fff, "     %s is alive\n",
 					(r_name + r_ptr->name));
 #endif
-
 			}
 		}
 	}
