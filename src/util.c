@@ -2266,8 +2266,8 @@ cptr quark_str(s16b i)
 {
 	cptr q;
 
-	/* Verify */
-	if ((i < 1) || (i >= quark__num)) i = 1;
+	/* Return NULL for an invalid index */
+	if ((i < 1) || (i >= quark__num)) return NULL;
 
 	/* Access the quark */
 	q = quark__str[i];
