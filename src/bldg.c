@@ -2800,120 +2800,115 @@ msg_print("バーテンはいくらかの食べ物とビールをくれた。");
 			break;
 
 		case BACT_REST: /* Rest for the night */
-			if (!is_daytime()) /* Nighttime only */
+			if ((p_ptr->poisoned) || (p_ptr->cut))
 			{
-				if ((p_ptr->poisoned) || (p_ptr->cut))
+#ifdef JP
+				msg_print("あなたに必要なのは部屋ではなく、治療者です。");
+#else
+				msg_print("You need a healer, not a room.");
+#endif
+
+				msg_print(NULL);
+#ifdef JP
+				msg_print("すみません、でもうちで誰かに死なれちゃ困りますんで。");
+#else
+				msg_print("Sorry, but don't want anyone dying in here.");
+#endif
+			}
+			else
+			{
+				int oldturn = turn;
+				int prev_day, prev_hour, prev_min;
+
+				extract_day_hour_min(&prev_day, &prev_hour, &prev_min);
+#ifdef JP
+				do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "宿屋に泊まった。");
+#else
+				if ((prev_hour >= 6) && (prev_hour <= 17)) do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "stay over daytime at the inn.");
+				else do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "stay over night at the inn.");
+#endif
+				turn = (turn / (TURNS_PER_TICK*TOWN_DAWN/2) + 1) * (TURNS_PER_TICK*TOWN_DAWN/2);
+				if ((prev_hour >= 18) && (prev_hour <= 23)) do_cmd_write_nikki(NIKKI_HIGAWARI, 0, NULL);
+				p_ptr->chp = p_ptr->mhp;
+
+				dungeon_turn += MIN(turn - oldturn, TURNS_PER_TICK*250);
+
+				if (ironman_nightmare)
 				{
 #ifdef JP
-msg_print("あなたに必要なのは部屋ではなく、治療者です。");
+					msg_print("眠りに就くと恐ろしい光景が心をよぎった。");
 #else
-					msg_print("You need a healer, not a room.");
+					msg_print("Horrible visions flit through your mind as you sleep.");
 #endif
 
-					msg_print(NULL);
+					/* Pick a nightmare */
+					get_mon_num_prep(get_nightmare, NULL);
+
+					/* Have some nightmares */
+					while(1)
+					{
+						have_nightmare(get_mon_num(MAX_DEPTH));
+
+						if (!one_in_(3)) break;
+					}
+
+					/* Remove the monster restriction */
+					get_mon_num_prep(NULL, NULL);
+
 #ifdef JP
-msg_print("すみません、でもうちで誰かに死なれちゃ困りますんで。");
+					msg_print("あなたは絶叫して目を覚ました。");
+					do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "悪夢にうなされてよく眠れなかった。");
 #else
-					msg_print("Sorry, but don't want anyone dying in here.");
+					msg_print("You awake screaming.");
+					do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "be troubled by a nightmare.");
 #endif
-
 				}
 				else
 				{
-					int oldturn = turn;
-#ifdef JP
-					do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "宿屋に泊まった。");
-#else
-					do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "stay over night at the inn");
-#endif
-					turn = (turn / (TURNS_PER_TICK*TOWN_DAWN/2) + 1) * (TURNS_PER_TICK*TOWN_DAWN/2);
-					if (((oldturn + TURNS_PER_TICK * TOWN_DAWN / 4) % (TURNS_PER_TICK * TOWN_DAWN)) > TURNS_PER_TICK * TOWN_DAWN/4) do_cmd_write_nikki(NIKKI_HIGAWARI, 0, NULL);
+					set_blind(0);
+					set_confused(0);
+					p_ptr->stun = 0;
 					p_ptr->chp = p_ptr->mhp;
+					p_ptr->csp = p_ptr->msp;
+					if (p_ptr->pclass == CLASS_MAGIC_EATER)
+					{
+						int i;
+						for (i = 0; i < 72; i++)
+						{
+							p_ptr->magic_num1[i] = p_ptr->magic_num2[i]*EATER_CHARGE;
+						}
+						for (; i < 108; i++)
+						{
+							p_ptr->magic_num1[i] = 0;
+						}
+					}
 
-					dungeon_turn += MIN(turn - oldturn, TURNS_PER_TICK*250);
-
-					if (ironman_nightmare)
+					if ((prev_hour >= 6) && (prev_hour <= 17))
 					{
 #ifdef JP
-msg_print("眠りに就くと恐ろしい光景が心をよぎった。");
+						msg_print("あなたはリフレッシュして目覚め、夕方を迎えた。");
+						do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "夕方を迎えた。");
 #else
-						msg_print("Horrible visions flit through your mind as you sleep.");
-#endif
-
-
-						/* Pick a nightmare */
-						get_mon_num_prep(get_nightmare, NULL);
-
-						/* Have some nightmares */
-						while(1)
-						{
-							have_nightmare(get_mon_num(MAX_DEPTH));
-
-							if (!one_in_(3)) break;
-						}
-
-						/* Remove the monster restriction */
-						get_mon_num_prep(NULL, NULL);
-
-#ifdef JP
-msg_print("あなたは絶叫して目を覚ました。");
-#else
-						msg_print("You awake screaming.");
-#endif
-
-#ifdef JP
-						do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "悪夢にうなされてよく眠れなかった。");
-#else
-						do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "be troubled by a nightmare.");
+						msg_print("You awake refreshed for the evening.");
+						do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "awake refreshed.");
 #endif
 					}
 					else
 					{
-						set_blind(0);
-						set_confused(0);
-						p_ptr->stun = 0;
-						p_ptr->chp = p_ptr->mhp;
-						p_ptr->csp = p_ptr->msp;
-						if (p_ptr->pclass == CLASS_MAGIC_EATER)
-						{
-							int i;
-							for (i = 0; i < 72; i++)
-							{
-								p_ptr->magic_num1[i] = p_ptr->magic_num2[i]*EATER_CHARGE;
-							}
-							for (; i < 108; i++)
-							{
-								p_ptr->magic_num1[i] = 0;
-							}
-						}
-
 #ifdef JP
-msg_print("あなたはリフレッシュして目覚め、新たな日を迎えた。");
+						msg_print("あなたはリフレッシュして目覚め、新たな日を迎えた。");
+						do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "すがすがしい朝を迎えた。");
 #else
 						msg_print("You awake refreshed for the new day.");
-#endif
-
-#ifdef JP
-						do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "すがすがしい朝をむかえた。");
-#else
 						do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "awake refreshed.");
 #endif
 					}
-
-					p_ptr->leftbldg = TRUE;
 				}
-			}
-			else
-			{
-#ifdef JP
-msg_print("部屋は夜だけ使用可能です。");
-#else
-				msg_print("The rooms are available only at night.");
-#endif
 
-				return (FALSE);
+				p_ptr->leftbldg = TRUE;
 			}
 			break;
+
 		case BACT_RUMORS: /* Listen for rumors */
 			{
 				char Rumor[1024];
