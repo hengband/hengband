@@ -3050,7 +3050,7 @@ info[i++] = "あなたの手は赤く輝いている。";
 	{
 		info2[i]  = report_magics_aux(p_ptr->word_recall);
 #ifdef JP
-info[i++] = "の後帰還の詔を発動する。";
+info[i++] = "この後帰還の詔を発動する。";
 #else
 		info[i++] = "You waiting to be recalled";
 #endif
