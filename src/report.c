@@ -291,6 +291,9 @@ cptr make_screen_dump(void)
 
 	if (old_use_graphics)
 	{
+		/* Clear -more- prompt first */
+		msg_print(NULL);
+
 		use_graphics = FALSE;
 		reset_visuals();
 
