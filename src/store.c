@@ -2240,6 +2240,8 @@ static void display_entry(int pos)
 #endif
 
 		Term_queue_bigchar(cur_col, i + 6, a, c, 0, 0);
+		if (use_bigtile) cur_col++;
+
 		cur_col += 2;
 	}
 
