@@ -1,4 +1,175 @@
+2002-11-23  Takeshi Mogami  <mogami@cvs>
+
+	* src/load.c 1.46:
+	load.c 1.45 の修正と同様の物をモンスターの方にもするのを忘れていたので修正。
+
+	* src/object1.c 1.55: 賢者のアミュのESPの数の説明文訂正。
+
+	* src/externs.h 1.87, src/object1.c 1.54, src/spells3.c 1.56, src/store.c 1.20, src/artifact.c 1.29, src/cmd3.c 1.32, src/cmd4.c 1.64:
+	新しい既知のアイテムリストで、賢者のアミュレット等でacとpvalが無駄に表
+	示([+3] (+0)等)されていたので表示しないように修正。またランダムに能力
+	追加を持つアイテムはランダムである事を説明行に追加。
+
+	* lib/help/joption.txt 1.19, lib/help/option.txt 1.20, src/xtra2.c 1.53:
+	lookコマンドの'x'の振舞いを微調整。射撃等のtarget指定時にはスペースキー
+	は次のターゲットへカーソルを移動するが、'x'は足元のアイテムを表示する。
+	また、オプションのヘルプ更新。
+
+	* src/wild.c 1.18:
+	広域マップで画面をスクロールすると右端の境界の外までスクロールできてしまうバグ修正。
+
+2002-11-21  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd4.c 1.63, src/externs.h 1.86, src/xtra2.c 1.52:
+	easy_floor使用中の look/target コマンドを使いやすくした。
+
+	* lib/edit/k_info.txt 1.3, src/flavor.c 1.27:
+	アイテム名の頭に付いていたゴミ"& "を削除したが、flavor.cの一部が"& "の存在
+	を仮定して単純に2文字削除するような処理をしていた為、死体の名前の表示がおか
+	しくなってしまっていたバグ修正。他にもflavor.cに残っていた"& "削除。
+
+	* src/load.c 1.45:
+	デバッグコマンドで大量のアイテムを一度に作成してアイテム数がmax(=1024個)の
+	ときにすぐにセーブすると、ロード不可能になるバグ修正。
+
+2002-11-21  iks  <iks@cvs>
+
+	* src/cmd6.c 1.40:
+	ただの杖を使ったときに、杖を食糧とする種族以外では「もったいない」メッセージが出ないように変更。
+
+	* src/cmd4.c 1.62:
+	変数の型違いによる警告を除去。既知のアイテムリストで1つも既知でないときに思い出を見ると空のアイテムの思い出を表示してたのを修正。
+
+2002-11-21  Takeshi Mogami  <mogami@cvs>
+
+	* src/mspells3.c 1.16:
+	青魔道師のレベルテレポートを地上で使うとモンスターが存在しない天井を破って宙に浮いていくバグ修正。
+
+	* src/mind.c 1.17:
+	Jaroslav Sladeさん報告の鏡使いの消費エネルギーのバグ修正。
+	テレポートの代りに光のしずく等が消費エネルギー50になっていた。
+
+2002-11-20  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.75, src/object1.c 1.53, src/spells1.c 1.44, src/spells2.c 1.60, src/spells3.c 1.55:
+	John Mikula からの報告(heng-mlに転送済み)に従って英文をいろいろ修正。
+
+	* src/xtra2.c 1.51:
+	lookコマンドやターゲット選択時に、次元の扉の位置選択と同様の高速移動モー
+	ドを移植した。シフトキー+方向指定で大きく移動する。また次元の扉の方も
+	今までは斜め移動がちゃんと45度方向になっていなかったので、45度(もちろ
+	んグリッドが正方形と仮定したときの値)になるように修正。
+
+2002-11-19  Takeshi Mogami  <mogami@cvs>
+
+	* src/generate.c 1.39, src/wild.c 1.17, src/dungeon.c 1.78:
+	だいぶ前からあった alloc_monster()の呼び方の間違え修正。
+	モンスターの召喚コードを多数のbool型引数からu32bのbit flagで置き換え
+	た時に、alloc_monster()の呼び出しのコードだけ bit flag用に書き変え忘れ
+	ていた。(ただし、TRUE == 0x01 == PM_ALLOW_SLEEP だったので偶然実害無し。)
+
+2002-11-18  Takeshi Mogami  <mogami@cvs>
+
+	* src/generate.c 1.38, src/grid.c 1.9, src/rooms.c 1.24:
+	通れる壁が出来るmimicのバグ。依然として残っていたのを修正。
+	こんどは何万回もダンジョン生成テストを繰り返してデバッグコードで
+	バグを探索して数ヶ所実際にバグの原因になっている所を確認して修正した。
+
+	* src/util.c 1.35:
+	大量のマクロを連続実行してz-termのリングバッファが溢れると、
+	それ以降マクロだけが一切実行されなくなるバグ修正。
+
+2002-11-17  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/k_info.txt 1.2:
+	日本語版のアイテム名データにある "& "は無駄なので削除。
+	英語版の場合は "a " "an "を追加可能である事を示す印だが、
+	Z以降のアイテムは一部間違っていたので修正。
+	(複数のpieceでできた armour には "a" "an" は付かない。)
+
+	* src/cmd4.c 1.61:
+	Ey のモンスターのリスト表示/アイテムのリスト表示を移植。patch by So-Miya
+
+2002-11-16  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd6.c 1.39: 英語版でmsg_format()の引数が少かったバグ修正。
+
+	* src/birth.c 1.57:
+	バルログはスタート時にランダムな人間タイプの死体を持つ。
+
+	* lib/help/jraceclas.txt 1.7, lib/help/raceclas.txt 1.8:
+	狂戦士の説明から空腹充足のクラスパワーの記述削除。
+
+	* src/cmd6.c 1.38:
+	骸骨が杖/魔法棒の魔力を吸収するコードが働いていなかったバグ修正。
+
+	* src/cmd1.c 1.60:
+	走るコマンドの処理で、mimicを考慮していない場所が残っていたために荒野の外周に
+	沿って走ったときの振舞いがおかしくなっていたバグ修正。
+
+	* src/tables.c 1.53:
+	heng-mlに届いた John Mikula さんのアドバイスに従って修行僧の構えの英語名
+	をローマ字にした。
+
+2002-11-15  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/qdarkelf.txt 1.1, lib/edit/qdarkelf_j.txt 1.3, lib/edit/qhaunted.txt 1.1, lib/edit/qhaunted_j.txt 1.3, lib/edit/r_info.txt 1.1, lib/edit/r_info_j.txt 1.52, lib/edit/s_info.txt 1.1, lib/edit/s_info_j.txt 1.4, lib/edit/t0000001.txt 1.1, lib/edit/t0000001_j.txt 1.10, lib/edit/t0000002.txt 1.1, lib/edit/t0000002_j.txt 1.7, lib/edit/t0000003.txt 1.1, lib/edit/t0000003_j.txt 1.6, lib/edit/t0000004.txt 1.1, lib/edit/t0000004_j.txt 1.6, lib/edit/t0000005.txt 1.1, lib/edit/t0000005_j.txt 1.3, lib/edit/t0000006.txt 1.1, lib/edit/t0000006_j.txt 1.3, lib/edit/t_basic.txt 1.1, lib/edit/t_basic_j.txt 1.3, lib/edit/t_info.txt 1.1, lib/edit/t_info_j.txt 1.3, lib/edit/t_lite.txt 1.1, lib/edit/t_lite_j.txt 1.11, lib/edit/t_pref.txt 1.1, lib/edit/t_pref_j.txt 1.3, lib/edit/v_info.txt 1.1, lib/edit/v_info_j.txt 1.6, lib/edit/w_info.txt 1.1, lib/edit/w_info_j.txt 1.3, lib/edit/Makefile.am 1.5, lib/edit/a_info.txt 1.1, lib/edit/a_info_j.txt 1.28, lib/edit/d_info.txt 1.1, lib/edit/d_info_j.txt 1.6, lib/edit/e_info.txt 1.1, lib/edit/e_info_j.txt 1.27, lib/edit/f_info.txt 1.1, lib/edit/f_info_j.txt 1.11, lib/edit/k_info.txt 1.1, lib/edit/k_info_j.txt 1.35, lib/edit/m_info.txt 1.1, lib/edit/m_info_j.txt 1.11, lib/edit/misc.txt 1.1, lib/edit/misc_j.txt 1.11, lib/edit/q0000001.txt 1.1, lib/edit/q0000001_j.txt 1.3, lib/edit/q0000002.txt 1.1, lib/edit/q0000002_j.txt 1.3, lib/edit/q0000003.txt 1.1, lib/edit/q0000003_j.txt 1.3, lib/edit/q0000004.txt 1.1, lib/edit/q0000004_j.txt 1.3, lib/edit/q0000005.txt 1.1, lib/edit/q0000005_j.txt 1.3, lib/edit/q0000006.txt 1.1, lib/edit/q0000006_j.txt 1.3, lib/edit/q0000007.txt 1.1, lib/edit/q0000007_j.txt 1.3, lib/edit/q0000019.txt 1.1, lib/edit/q0000019_j.txt 1.3, lib/edit/q0000020.txt 1.1, lib/edit/q0000020_j.txt 1.3, lib/edit/q0000021.txt 1.1, lib/edit/q0000021_j.txt 1.3, lib/edit/q0000022.txt 1.1, lib/edit/q0000022_j.txt 1.3, lib/edit/q0000023.txt 1.1, lib/edit/q0000023_j.txt 1.3, lib/edit/q0000027.txt 1.1, lib/edit/q0000027_j.txt 1.6, lib/edit/q0000028.txt 1.1, lib/edit/q0000028_j.txt 1.3, lib/edit/q00000ms.txt 1.1, lib/edit/q00000ms_j.txt 1.4, lib/edit/q000chao.txt 1.1, lib/edit/q000chao_j.txt 1.3, lib/edit/q000dekn.txt 1.1, lib/edit/q000dekn_j.txt 1.3, lib/edit/q000eric.txt 1.1, lib/edit/q000eric_j.txt 1.3, lib/edit/q000lyeh.txt 1.1, lib/edit/q000lyeh_j.txt 1.3, lib/edit/q000natu.txt 1.1, lib/edit/q000natu_j.txt 1.3, lib/edit/q000sorc.txt 1.1, lib/edit/q000sorc_j.txt 1.3, lib/edit/q00water.txt 1.1, lib/edit/q00water_j.txt 1.3, lib/edit/q0clone0.txt 1.1, lib/edit/q0clone0_j.txt 1.4, lib/edit/q0fields.txt 1.1, lib/edit/q0fields_j.txt 1.3, lib/edit/q0thief1.txt 1.1, lib/edit/q0thief1_j.txt 1.4, lib/edit/q0thief2.txt 1.1, lib/edit/q0thief2_j.txt 1.4, lib/edit/q0willow.txt 1.1, lib/edit/q0willow_j.txt 1.3, lib/edit/q_info.txt 1.1, lib/edit/q_info_j.txt 1.4, lib/edit/q_oberon.txt 1.1, lib/edit/q_oberon_j.txt 1.3, lib/edit/q_pref.txt 1.1, lib/edit/q_pref_j.txt 1.3, lib/edit/q_random.txt 1.1, lib/edit/q_random_j.txt 1.3, lib/edit/q_serpen.txt 1.1, lib/edit/q_serpen_j.txt 1.4, lib/edit/q_warg.txt 1.1, lib/edit/q_warg_j.txt 1.3, src/files.c 1.88, src/generate.c 1.37, src/init2.c 1.19, src/load.c 1.44, src/wild.c 1.16, src/birth.c 1.56, src/bldg.c 1.26, src/cmd4.c 1.60, src/dungeon.c 1.77:
+	lib/edit/以下のファイル名から、"_j"を削除。
+
+	* src/spells3.c 1.54, src/wizard2.c 1.31:
+	魔力喰いで失敗してロッドが壊れたとき、残りのロッドのtimeoutが異常になるバグ修正。
+	またデバッグコマンド使用中に見付けたo_ptr->pvalをロッドの古い仕様に添って
+	書き変えていた古いコード削除。
+
+2002-11-12  Takeshi Mogami  <mogami@cvs>
+
+	* src/init1.c 1.48:
+	rgraにて、古いDOSアプリを使ったために、t_info_j.txtの中の
+	"%:t0000001_j.txt"が8文字制限にひっかかってファイルが読めず、
+	変愚蛮怒がクラッシュしていたが、エラーメッセージがないので原因の判明が遅れた。
+	そこでファイルが読めないときはエラーメッセージを出すように修正。
+	(なぜか読めなくてもエラーを出さないようにHACKしてあったが、
+	とっておく理由はないのでそのHACK部分を削除。)
+
+	* src/cmd4.c 1.59, src/mspells3.c 1.15:
+	値が未定義の変数というWarningに対応して修正。
+
+2002-11-10  Takeshi Mogami  <mogami@cvs>
+
+	* src/birth.c 1.55:
+	アンドロイドの油びんにapply_magic()を実行しなかった為、
+	pvalからxtra4へ燃料の量の値を移すコードが実行されず、
+	ランタンの燃料補充に使えない油びんになっていたバグ修正。
+
+	* lib/file/news.txt 1.16, lib/file/news_j.txt 1.15:
+	rr氏のmailアドレス更新。
+
+	* src/birth.c 1.54:
+	英語版で種族選択時の説明文が長すぎて切れる事があったので修正。
+
+	* src/cmd6.c 1.37, src/spells3.c 1.53:
+	・魔道具術師が食糧の「杖」を吸収できないようにした。
+	・「杖」を使用(u/Z)したときにメッセージを出す。
+
+	* lib/file/rumors_j.txt 1.2:
+	多少の誤訳に…、目をつぶって欲しくない、ので改訂。
+
+	* src/cmd5.c 1.48: 離した→放した
+
+2002-11-09  Takeshi Mogami  <mogami@cvs>
+
+	* src/init2.c 1.18:
+	錬金術の店で空腹充足の巻物を削った欄に、テレポート、ショート・テレポート、
+	武器ダメージ増加、武器命中率上昇を追加。
+
+	* lib/edit/k_info_j.txt 1.34, lib/edit/misc_j.txt 1.10, lib/help/faq.txt 1.1, lib/help/general.hlp 1.7, lib/help/help.hlp 1.9, lib/help/joption.txt 1.18, lib/help/jraceclas.txt 1.6, lib/help/magic.hlp 1.6, lib/help/option.txt 1.19, lib/help/raceclas.txt 1.7, lib/pref/pref-opt.prf 1.13, src/tables.c 1.52, src/variable.c 1.34, src/autopick.c 1.74, src/birth.c 1.53, src/cmd5.c 1.47, src/cmd6.c 1.36, src/defines.h 1.81, src/externs.h 1.85, src/init2.c 1.17, src/racial.c 1.26, src/spells2.c 1.59:
+	空腹充足の巻物と狂戦士の空腹充足レイシャル廃止。
+	アンドロイドは油びんを飲める。バルログは'E'で't','p','h'の死体を犠にできる。
+	アンデッドは杖か魔法棒のチャージを食える。エントは薬の水分で十分栄養が取れる。
+
 2002-11-08  Takeshi Mogami  <mogami@cvs>
+
+	* Changelogs 1.60: 更新
 
 	* src/defines.h 1.80: 1.3.2に変え忘れていたところ変えた。
 	古い未使用のマクロいくつか削除。
