@@ -2647,7 +2647,7 @@ info[i++] = "それは乗馬中は非常に使いやすい。";
 	if (have_flag(flgs, TR_STR))
 	{
 #ifdef JP
-info[i++] = "それは腕力に影響を及ぼす";
+info[i++] = "それは腕力に影響を及ぼす。";
 #else
 		info[i++] = "It affects your strength.";
 #endif
@@ -2656,7 +2656,7 @@ info[i++] = "それは腕力に影響を及ぼす";
 	if (have_flag(flgs, TR_INT))
 	{
 #ifdef JP
-info[i++] = "それは知能に影響を及ぼす";
+info[i++] = "それは知能に影響を及ぼす。";
 #else
 		info[i++] = "It affects your intelligence.";
 #endif
@@ -2665,7 +2665,7 @@ info[i++] = "それは知能に影響を及ぼす";
 	if (have_flag(flgs, TR_WIS))
 	{
 #ifdef JP
-info[i++] = "それは賢さに影響を及ぼす";
+info[i++] = "それは賢さに影響を及ぼす。";
 #else
 		info[i++] = "It affects your wisdom.";
 #endif
@@ -2674,7 +2674,7 @@ info[i++] = "それは賢さに影響を及ぼす";
 	if (have_flag(flgs, TR_DEX))
 	{
 #ifdef JP
-info[i++] = "それは器用さに影響を及ぼす";
+info[i++] = "それは器用さに影響を及ぼす。";
 #else
 		info[i++] = "It affects your dexterity.";
 #endif
@@ -2683,7 +2683,7 @@ info[i++] = "それは器用さに影響を及ぼす";
 	if (have_flag(flgs, TR_CON))
 	{
 #ifdef JP
-info[i++] = "それは耐久力に影響を及ぼす";
+info[i++] = "それは耐久力に影響を及ぼす。";
 #else
 		info[i++] = "It affects your constitution.";
 #endif
@@ -2692,7 +2692,7 @@ info[i++] = "それは耐久力に影響を及ぼす";
 	if (have_flag(flgs, TR_CHR))
 	{
 #ifdef JP
-info[i++] = "それは魅力に影響を及ぼす";
+info[i++] = "それは魅力に影響を及ぼす。";
 #else
 		info[i++] = "It affects your charisma.";
 #endif
@@ -2702,7 +2702,7 @@ info[i++] = "それは魅力に影響を及ぼす";
 	if (have_flag(flgs, TR_MAGIC_MASTERY))
 	{
 #ifdef JP
-info[i++] = "それは魔法道具使用能力に影響を及ぼす";
+info[i++] = "それは魔法道具使用能力に影響を及ぼす。";
 #else
 		info[i++] = "It affects your ability to use magic devices.";
 #endif
@@ -2711,7 +2711,7 @@ info[i++] = "それは魔法道具使用能力に影響を及ぼす";
 	if (have_flag(flgs, TR_STEALTH))
 	{
 #ifdef JP
-info[i++] = "それは隠密行動能力に影響を及ぼす";
+info[i++] = "それは隠密行動能力に影響を及ぼす。";
 #else
 		info[i++] = "It affects your stealth.";
 #endif
@@ -2720,7 +2720,7 @@ info[i++] = "それは隠密行動能力に影響を及ぼす";
 	if (have_flag(flgs, TR_SEARCH))
 	{
 #ifdef JP
-info[i++] = "それは探索能力に影響を及ぼす";
+info[i++] = "それは探索能力に影響を及ぼす。";
 #else
 		info[i++] = "It affects your searching.";
 #endif
@@ -2729,7 +2729,7 @@ info[i++] = "それは探索能力に影響を及ぼす";
 	if (have_flag(flgs, TR_INFRA))
 	{
 #ifdef JP
-info[i++] = "それは赤外線視力に影響を及ぼす";
+info[i++] = "それは赤外線視力に影響を及ぼす。";
 #else
 		info[i++] = "It affects your infravision.";
 #endif
@@ -2738,7 +2738,7 @@ info[i++] = "それは赤外線視力に影響を及ぼす";
 	if (have_flag(flgs, TR_TUNNEL))
 	{
 #ifdef JP
-info[i++] = "それは採掘能力に影響を及ぼす";
+info[i++] = "それは採掘能力に影響を及ぼす。";
 #else
 		info[i++] = "It affects your ability to tunnel.";
 #endif
@@ -2747,7 +2747,7 @@ info[i++] = "それは採掘能力に影響を及ぼす";
 	if (have_flag(flgs, TR_SPEED))
 	{
 #ifdef JP
-info[i++] = "それはスピードに影響を及ぼす";
+info[i++] = "それはスピードに影響を及ぼす。";
 #else
 		info[i++] = "It affects your speed.";
 #endif
@@ -2756,7 +2756,7 @@ info[i++] = "それはスピードに影響を及ぼす";
 	if (have_flag(flgs, TR_BLOWS))
 	{
 #ifdef JP
-info[i++] = "それは打撃回数に影響を及ぼす";
+info[i++] = "それは打撃回数に影響を及ぼす。";
 #else
 		info[i++] = "It affects your attack speed.";
 #endif
@@ -2766,7 +2766,7 @@ info[i++] = "それは打撃回数に影響を及ぼす";
 	if (have_flag(flgs, TR_BRAND_ACID))
 	{
 #ifdef JP
-info[i++] = "それは酸によって大きなダメージを与える";
+info[i++] = "それは酸によって大きなダメージを与える。";
 #else
 		info[i++] = "It does extra damage from acid.";
 #endif
@@ -2775,7 +2775,7 @@ info[i++] = "それは酸によって大きなダメージを与える";
 	if (have_flag(flgs, TR_BRAND_ELEC))
 	{
 #ifdef JP
-info[i++] = "それは電撃によって大きなダメージを与える";
+info[i++] = "それは電撃によって大きなダメージを与える。";
 #else
 		info[i++] = "It does extra damage from electricity.";
 #endif
@@ -2784,7 +2784,7 @@ info[i++] = "それは電撃によって大きなダメージを与える";
 	if (have_flag(flgs, TR_BRAND_FIRE))
 	{
 #ifdef JP
-info[i++] = "それは火炎によって大きなダメージを与える";
+info[i++] = "それは火炎によって大きなダメージを与える。";
 #else
 		info[i++] = "It does extra damage from fire.";
 #endif
@@ -2793,7 +2793,7 @@ info[i++] = "それは火炎によって大きなダメージを与える";
 	if (have_flag(flgs, TR_BRAND_COLD))
 	{
 #ifdef JP
-info[i++] = "それは冷気によって大きなダメージを与える";
+info[i++] = "それは冷気によって大きなダメージを与える。";
 #else
 		info[i++] = "It does extra damage from frost.";
 #endif
