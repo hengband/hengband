@@ -276,19 +276,19 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
 	act = DO_AUTOPICK | DO_DISPLAY;
 	while (1)
 	{
-		if (*str == '!')
+		if ((act & DO_AUTOPICK) && *str == '!')
 		{
 			act &= ~DO_AUTOPICK;
 			act |= DO_AUTODESTROY;
 			str++;
 		}
-		else if (*str == '~')
+		else if ((act & DO_AUTOPICK) && *str == '~')
 		{
 			act &= ~DO_AUTOPICK;
 			act |= DONT_AUTOPICK;
 			str++;
 		}
-		else if (*str == '(')
+		else if ((act & DO_DISPLAY) && *str == '(')
 		{
 			act &= ~DO_DISPLAY;
 			str++;
