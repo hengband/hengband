@@ -5769,8 +5769,6 @@ void main(void)
 
 
 #ifdef USE_SFL_CODE
-
-#if ( TARGET_API_MAC_CARBON ) || ( !MAC_MPW )
 	/* Obtain a "Universal Procedure Pointer" */
 	AEH_Start_UPP = NewAEEventHandlerUPP(AEH_Start);
 	/* Install the hook (ignore error codes) */
@@ -5794,37 +5792,7 @@ void main(void)
 	/* Install the hook (ignore error codes) */
 	AEInstallEventHandler(kCoreEventClass, kAEOpenDocuments, AEH_Open_UPP,
 	                      0L, FALSE);
-#else
-	/* Obtain a "Universal Procedure Pointer" */
-	AEH_Start_UPP = NewAEEventHandlerProc(AEH_Start);
-
-	/* Install the hook (ignore error codes) */
-	AEInstallEventHandler(kCoreEventClass, kAEOpenApplication, AEH_Start_UPP,
-	                      0L, FALSE);
-
-	/* Obtain a "Universal Procedure Pointer" */
-	AEH_Quit_UPP = NewAEEventHandlerProc(AEH_Quit);
-
-	/* Install the hook (ignore error codes) */
-	AEInstallEventHandler(kCoreEventClass, kAEQuitApplication, AEH_Quit_UPP,
-	                      0L, FALSE);
-
-	/* Obtain a "Universal Procedure Pointer" */
-	AEH_Print_UPP = NewAEEventHandlerProc(AEH_Print);
-
-	/* Install the hook (ignore error codes) */
-	AEInstallEventHandler(kCoreEventClass, kAEPrintDocuments, AEH_Print_UPP,
-	                      0L, FALSE);
-
-	/* Obtain a "Universal Procedure Pointer" */
-	AEH_Open_UPP = NewAEEventHandlerProc(AEH_Open);
-
-	/* Install the hook (ignore error codes) */
-	AEInstallEventHandler(kCoreEventClass, kAEOpenDocuments, AEH_Open_UPP,
-	                      0L, FALSE);
 #endif
-#endif
-
 
 	/* Find the current application */
 	SetupAppDir();
