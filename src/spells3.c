@@ -1566,15 +1566,13 @@ static bool vanish_dungeon(void)
 			/* Lose room and vault */
 			c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-			/* Awake monster */
-			if (c_ptr->m_idx)
-			{
-				m_ptr = &m_list[c_ptr->m_idx];
+			m_ptr = &m_list[c_ptr->m_idx];
 
+			/* Awake monster */
+			if (c_ptr->m_idx && m_ptr->csleep)
+			{
 				/* Reset sleep counter */
 				m_ptr->csleep = 0;
-
-				if (r_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 
 				/* Notice the "waking up" */
 				if (m_ptr->ml)
