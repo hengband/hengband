@@ -4903,20 +4903,21 @@ void store_shuffle(int which)
 		/* Get the item */
 		o_ptr = &st_ptr->stock[i];
 
-		/* Hack -- Sell all old items for "half price" */
-		if (!(o_ptr->art_name))
+		if (!(artifact_p(o_ptr) || o_ptr->art_name))
+		{
+			/* Hack -- Sell all non-artifact old items for "half price" */
 			o_ptr->discount = 50;
 
-		/* Hack -- Items are no longer "fixed price" */
-		o_ptr->ident &= ~(IDENT_FIXED);
+			/* Hack -- Items are no longer "fixed price" */
+			o_ptr->ident &= ~(IDENT_FIXED);
 
-		/* Mega-Hack -- Note that the item is "on sale" */
+			/* Mega-Hack -- Note that the item is "on sale" */
 #ifdef JP
-		o_ptr->inscription = quark_add("Çä½ÐÃæ");
+			o_ptr->inscription = quark_add("Çä½ÐÃæ");
 #else
-		o_ptr->inscription = quark_add("on sale");
+			o_ptr->inscription = quark_add("on sale");
 #endif
-
+		}
 	}
 }
 

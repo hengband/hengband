@@ -2164,6 +2164,39 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 		}
 	}
 
+	/* While in the dungeon (vanilla_town or lite_town mode only) */
+	else if ((vanilla_town || (lite_town && !p_ptr->inside_quest && !p_ptr->inside_battle && !p_ptr->inside_arena)) && dun_level)
+	{
+		/*** Shuffle the Storekeepers ***/
+
+		/* Chance is only once a day (while in dungeon) */
+		if (!(turn % (TURNS_PER_TICK * STORE_TICKS)))
+		{
+			/* Sometimes, shuffle the shop-keepers */
+			if (one_in_(STORE_SHUFFLE))
+			{
+				int n;
+
+				/* Pick a random shop (except home) */
+				do
+				{
+					n = randint0(MAX_STORES);
+				}
+				while ((n == STORE_HOME) || (n == STORE_MUSEUM));
+
+				/* Message */
+#ifdef JP
+				if (cheat_xtra) msg_format("%sの店主をシャッフルします。", f_name + f_info[FEAT_SHOP_HEAD + n].name);
+#else
+				if (cheat_xtra) msg_format("Shuffle a Shopkeeper of %s.", f_name + f_info[FEAT_SHOP_HEAD + n].name);
+#endif
+
+				/* Shuffle it */
+				store_shuffle(n);
+			}
+		}
+	}
+
 	/* Set back the rewards once a day */
 	/* Only used for reward in thief's guild for now */
 	if (!(turn % (TURNS_PER_TICK * TOWN_DAWN)))
