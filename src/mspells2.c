@@ -3719,7 +3719,7 @@ bool monst_spell_monst(int m_idx)
 			int num = 2 + randint1(3);
 			for (k = 0; k < num; k++)
 			{
-				count += summon_named_creature(m_idx, y, x, 921, p_mode);
+				count += summon_named_creature(m_idx, y, x, MON_IE, p_mode);
 			}
 		}
 		else if (m_ptr->r_idx == MON_CALDARM)
@@ -3727,7 +3727,7 @@ bool monst_spell_monst(int m_idx)
 			int num = randint1(3);
 			for (k = 0; k < num; k++)
 			{
-				count += summon_named_creature(m_idx, y, x, 930, p_mode);
+				count += summon_named_creature(m_idx, y, x, MON_LOCKE_CLONE, p_mode);
 			}
 		}
 		else if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)

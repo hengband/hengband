@@ -4942,8 +4942,10 @@ extern int PlayerUID;
 #define MON_SHARD_VOR     897
 #define MON_MASTER_MYS    916
 #define MON_G_MASTER_MYS  917
+#define MON_IE            921
 #define MON_TSUCHINOKO    926
 #define MON_GCWADL        929
+#define MON_LOCKE_CLONE   930
 #define MON_CALDARM       931
 #define MON_BANORLUPART   932
 #define MON_BANOR         933

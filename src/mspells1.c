@@ -3916,7 +3916,7 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 				int num = 2 + randint1(3);
 				for (k = 0; k < num; k++)
 				{
-					count += summon_named_creature(m_idx, y, x, 921, mode);
+					count += summon_named_creature(m_idx, y, x, MON_IE, mode);
 				}
 			}
 			else if (m_ptr->r_idx == MON_CALDARM)
@@ -3924,7 +3924,7 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 				int num = randint1(3);
 				for (k = 0; k < num; k++)
 				{
-					count += summon_named_creature(m_idx, y, x, 930, mode);
+					count += summon_named_creature(m_idx, y, x, MON_LOCKE_CLONE, mode);
 				}
 			}
 			else if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
