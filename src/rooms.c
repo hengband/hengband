@@ -2093,19 +2093,51 @@ static bool build_type5(void)
 	int cur_nest_type = pick_vault_type(nest_types, d_info[dungeon_type].nest);
 	vault_aux_type *n_ptr;
 
-	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(&yval, &xval, 11, 25)) return FALSE;
-
 	/* No type available */
-	if (cur_nest_type < 0)
-	{
-		return FALSE;
-	}
+	if (cur_nest_type < 0) return FALSE;
 
 	n_ptr = &nest_types[cur_nest_type];
 
 	/* Process a preparation function if necessary */
 	if (n_ptr->prep_func) (*(n_ptr->prep_func))();
+
+	/* Prepare allocation table */
+	get_mon_num_prep(n_ptr->hook_func, NULL);
+
+	align.sub_align = SUB_ALIGN_NEUTRAL;
+
+	/* Pick some monster types */
+	for (i = 0; i < NUM_NEST_MON_TYPE; i++)
+	{
+		int r_idx = 0, attempts = 100;
+		monster_race *r_ptr = NULL;
+
+		while (attempts--)
+		{
+			/* Get a (hard) monster type */
+			r_idx = get_mon_num(dun_level + 10);
+			r_ptr = &r_info[r_idx];
+
+			/* Decline incorrect alignment */
+			if (monster_has_hostile_align(&align, 0, 0, r_ptr)) continue;
+
+			/* Accept this monster */
+			break;
+		}
+
+		/* Notice failure */
+		if (!r_idx || !attempts) return FALSE;
+
+		/* Note the alignment */
+		if (r_ptr->flags3 & RF3_EVIL) align.sub_align |= SUB_ALIGN_EVIL;
+		if (r_ptr->flags3 & RF3_GOOD) align.sub_align |= SUB_ALIGN_GOOD;
+
+		nest_mon_info[i].r_idx = r_idx;
+		nest_mon_info[i].used = FALSE;
+	}
+
+	/* Find and reserve some space in the dungeon.  Get center of room. */
+	if (!find_space(&yval, &xval, 11, 25)) return FALSE;
 
 	/* Large room */
 	y1 = yval - 4;
@@ -2171,7 +2203,6 @@ static bool build_type5(void)
 		}
 	}
 
-
 	/* Place a secret door */
 	switch (randint1(4))
 	{
@@ -2179,42 +2210,6 @@ static bool build_type5(void)
 		case 2: place_secret_door(y2 + 1, xval); break;
 		case 3: place_secret_door(yval, x1 - 1); break;
 		case 4: place_secret_door(yval, x2 + 1); break;
-	}
-
-
-	/* Prepare allocation table */
-	get_mon_num_prep(n_ptr->hook_func, NULL);
-
-	align.sub_align = SUB_ALIGN_NEUTRAL;
-
-	/* Pick some monster types */
-	for (i = 0; i < NUM_NEST_MON_TYPE; i++)
-	{
-		int r_idx = 0, attempts = 100;
-		monster_race *r_ptr = NULL;
-
-		while (attempts--)
-		{
-			/* Get a (hard) monster type */
-			r_idx = get_mon_num(dun_level + 10);
-			r_ptr = &r_info[r_idx];
-
-			/* Decline incorrect alignment */
-			if (monster_has_hostile_align(&align, 0, 0, r_ptr)) continue;
-
-			/* Accept this monster */
-			break;
-		}
-
-		/* Notice failure */
-		if (!r_idx || !attempts) return FALSE;
-
-		/* Note the alignment */
-		if (r_ptr->flags3 & RF3_EVIL) align.sub_align |= SUB_ALIGN_EVIL;
-		if (r_ptr->flags3 & RF3_GOOD) align.sub_align |= SUB_ALIGN_GOOD;
-
-		nest_mon_info[i].r_idx = r_idx;
-		nest_mon_info[i].used = FALSE;
 	}
 
 	/* Describe */
@@ -2327,19 +2322,50 @@ static bool build_type6(void)
 	int cur_pit_type = pick_vault_type(pit_types, d_info[dungeon_type].pit);
 	vault_aux_type *n_ptr;
 
-	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(&yval, &xval, 11, 25)) return FALSE;
-
 	/* No type available */
-	if (cur_pit_type < 0)
-	{
-		return FALSE;
-	}
+	if (cur_pit_type < 0) return FALSE;
 
 	n_ptr = &pit_types[cur_pit_type];
 
 	/* Process a preparation function if necessary */
 	if (n_ptr->prep_func) (*(n_ptr->prep_func))();
+
+	/* Prepare allocation table */
+	get_mon_num_prep(n_ptr->hook_func, NULL);
+
+	align.sub_align = SUB_ALIGN_NEUTRAL;
+
+	/* Pick some monster types */
+	for (i = 0; i < 16; i++)
+	{
+		int r_idx = 0, attempts = 100;
+		monster_race *r_ptr = NULL;
+
+		while (attempts--)
+		{
+			/* Get a (hard) monster type */
+			r_idx = get_mon_num(dun_level + 10);
+			r_ptr = &r_info[r_idx];
+
+			/* Decline incorrect alignment */
+			if (monster_has_hostile_align(&align, 0, 0, r_ptr)) continue;
+
+			/* Accept this monster */
+			break;
+		}
+
+		/* Notice failure */
+		if (!r_idx || !attempts) return FALSE;
+
+		/* Note the alignment */
+		if (r_ptr->flags3 & RF3_EVIL) align.sub_align |= SUB_ALIGN_EVIL;
+		if (r_ptr->flags3 & RF3_GOOD) align.sub_align |= SUB_ALIGN_GOOD;
+
+		what[i] = r_idx;
+	}
+
+	/* Find and reserve some space in the dungeon.  Get center of room. */
+	if (!find_space(&yval, &xval, 11, 25)) return FALSE;
 
 	/* Large room */
 	y1 = yval - 4;
@@ -2410,41 +2436,6 @@ static bool build_type6(void)
 		case 2: place_secret_door(y2 + 1, xval); break;
 		case 3: place_secret_door(yval, x1 - 1); break;
 		case 4: place_secret_door(yval, x2 + 1); break;
-	}
-
-
-	/* Prepare allocation table */
-	get_mon_num_prep(n_ptr->hook_func, NULL);
-
-	align.sub_align = SUB_ALIGN_NEUTRAL;
-
-	/* Pick some monster types */
-	for (i = 0; i < 16; i++)
-	{
-		int r_idx = 0, attempts = 100;
-		monster_race *r_ptr = NULL;
-
-		while (attempts--)
-		{
-			/* Get a (hard) monster type */
-			r_idx = get_mon_num(dun_level + 10);
-			r_ptr = &r_info[r_idx];
-
-			/* Decline incorrect alignment */
-			if (monster_has_hostile_align(&align, 0, 0, r_ptr)) continue;
-
-			/* Accept this monster */
-			break;
-		}
-
-		/* Notice failure */
-		if (!r_idx || !attempts) return FALSE;
-
-		/* Note the alignment */
-		if (r_ptr->flags3 & RF3_EVIL) align.sub_align |= SUB_ALIGN_EVIL;
-		if (r_ptr->flags3 & RF3_GOOD) align.sub_align |= SUB_ALIGN_GOOD;
-
-		what[i] = r_idx;
 	}
 
 	/* Sort the entries */
@@ -5618,10 +5609,7 @@ static bool build_type13(void)
 	vault_aux_type *n_ptr;
 
 	/* Only in Angband */
-	if (dungeon_type != 1) return FALSE;
-
-	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(&yval, &xval, 13, 25)) return FALSE;
+	if (dungeon_type != DUNGEON_ANGBAND) return FALSE;
 
 	/* No type available */
 	if (cur_pit_type < 0) return FALSE;
@@ -5630,6 +5618,43 @@ static bool build_type13(void)
 
 	/* Process a preparation function if necessary */
 	if (n_ptr->prep_func) (*(n_ptr->prep_func))();
+
+	/* Prepare allocation table */
+	get_mon_num_prep(n_ptr->hook_func, vault_aux_trapped_pit);
+
+	align.sub_align = SUB_ALIGN_NEUTRAL;
+
+	/* Pick some monster types */
+	for (i = 0; i < 16; i++)
+	{
+		int r_idx = 0, attempts = 100;
+		monster_race *r_ptr = NULL;
+
+		while (attempts--)
+		{
+			/* Get a (hard) monster type */
+			r_idx = get_mon_num(dun_level + 0);
+			r_ptr = &r_info[r_idx];
+
+			/* Decline incorrect alignment */
+			if (monster_has_hostile_align(&align, 0, 0, r_ptr)) continue;
+
+			/* Accept this monster */
+			break;
+		}
+
+		/* Notice failure */
+		if (!r_idx || !attempts) return FALSE;
+
+		/* Note the alignment */
+		if (r_ptr->flags3 & RF3_EVIL) align.sub_align |= SUB_ALIGN_EVIL;
+		if (r_ptr->flags3 & RF3_GOOD) align.sub_align |= SUB_ALIGN_GOOD;
+
+		what[i] = r_idx;
+	}
+
+	/* Find and reserve some space in the dungeon.  Get center of room. */
+	if (!find_space(&yval, &xval, 13, 25)) return FALSE;
 
 	/* Large room */
 	y1 = yval - 5;
@@ -5731,40 +5756,6 @@ static bool build_type13(void)
 	cave[yval][xval].mimic = cave[yval][xval].feat;
 	cave[yval][xval].feat = FEAT_TRAP_OPEN;
 
-	/* Prepare allocation table */
-	get_mon_num_prep(n_ptr->hook_func, vault_aux_trapped_pit);
-
-	align.sub_align = SUB_ALIGN_NEUTRAL;
-
-	/* Pick some monster types */
-	for (i = 0; i < 16; i++)
-	{
-		int r_idx = 0, attempts = 100;
-		monster_race *r_ptr = NULL;
-
-		while (attempts--)
-		{
-			/* Get a (hard) monster type */
-			r_idx = get_mon_num(dun_level + 0);
-			r_ptr = &r_info[r_idx];
-
-			/* Decline incorrect alignment */
-			if (monster_has_hostile_align(&align, 0, 0, r_ptr)) continue;
-
-			/* Accept this monster */
-			break;
-		}
-
-		/* Notice failure */
-		if (!r_idx || !attempts) return FALSE;
-
-		/* Note the alignment */
-		if (r_ptr->flags3 & RF3_EVIL) align.sub_align |= SUB_ALIGN_EVIL;
-		if (r_ptr->flags3 & RF3_GOOD) align.sub_align |= SUB_ALIGN_GOOD;
-
-		what[i] = r_idx;
-	}
-
 	/* Sort the entries */
 	for (i = 0; i < 16 - 1; i++)
 	{
@@ -5819,7 +5810,6 @@ static bool build_type13(void)
 	{
 		good_item_flag = TRUE;
 	}
-
 
 	for (i = 0; placing[i][2] >= 0; i++)
 	{
