@@ -1550,9 +1550,9 @@ return "魔法の地図と光 : 50+d50 ターン毎";
 		case ART_JUDGE:
 		{
 #ifdef JP
-return "体力と引き替えに千里眼と帰還";
+return "体力と引き替えに千里眼と帰還 : 20+d20 ターン毎";
 #else
-			return "clairvoyance and recall, draining you";
+			return "clairvoyance and recall, draining you every 20+d20 turns";
 #endif
 
 		}
@@ -1644,9 +1644,9 @@ return "信じ難いこと : 450+d450 ターン毎";
 		case ART_DOR: case ART_TERROR: case ART_STONEMASK:
 		{
 #ifdef JP
-return "全方向への恐怖の光線";
+			return "全方向への恐怖の光線 : 3*(レベル+10) ターン毎";
 #else
-			return "rays of fear in every direction";
+			return "rays of fear in every direction every 3*(level+10) turns";
 #endif
 
 		}
@@ -2051,9 +2051,9 @@ return "魔力の嵐 (250) : 300 ターン毎";
 			case EGO_RING_DRAGON_F:
 				if (o_ptr->sval == SV_RING_FLAMES)
 #ifdef JP
-return "火炎のブレスと火への耐性";
+return "火炎のブレス (200) と火への耐性 : 200 ターン毎";
 #else
-					return "breath of fire and resist fire";
+					return "breath of fire (200) and resist fire every 200 turns";
 #endif
 				else
 #ifdef JP
@@ -2064,9 +2064,9 @@ return "火炎のブレス (200) : 250 ターン毎";
 			case EGO_RING_DRAGON_C:
 				if (o_ptr->sval == SV_RING_ICE)
 #ifdef JP
-return "冷気のブレスと冷気への耐性";
+return "冷気のブレス (200) と冷気への耐性 : 200 ターン毎";
 #else
-					return "breath of cold and resist cold";
+					return "breath of cold (200) and resist cold every 200 turns";
 #endif
 				else
 #ifdef JP
@@ -2100,9 +2100,9 @@ return "テレポート・アウェイ : 150 ターン毎";
 #endif
 			case EGO_RING_TRUE:
 #ifdef JP
-return "士気高揚、祝福、究極の耐性";
+return "士気高揚、祝福、究極の耐性 : 777 ターン毎";
 #else
-			return "hero, bless, and ultimate resistance";
+			return "hero, bless, and ultimate resistance every 777 turns";
 #endif
 			}
 		}
@@ -2110,30 +2110,30 @@ return "士気高揚、祝福、究極の耐性";
 		{
 			case SV_RING_FLAMES:
 #ifdef JP
-return "ファイア・ボールと火への耐性";
+return "ファイア・ボール (100) と火への耐性 : 50+d50 ターン毎";
 #else
-				return "ball of fire and resist fire";
+				return "ball of fire (100) and resist fire every 50+d50 turns";
 #endif
 
 			case SV_RING_ICE:
 #ifdef JP
-return "コールド・ボールと冷気への耐性";
+return "コールド・ボール (100) と冷気への耐性 : 50+d50 ターン毎";
 #else
-				return "ball of cold and resist cold";
+				return "ball of cold (100) and resist cold every 50+d50 turns";
 #endif
 
 			case SV_RING_ACID:
 #ifdef JP
-return "アシッド・ボールと酸への耐性";
+return "アシッド・ボール (100) と酸への耐性 : 50+d50 ターン毎";
 #else
-				return "ball of acid and resist acid";
+				return "ball of acid (100) and resist acid every 50+d50 turns";
 #endif
 
 			case SV_RING_ELEC:
 #ifdef JP
-return "サンダー・ボールと電撃への耐性";
+return "サンダー・ボール (100) と電撃への耐性 : 50+d50 ターン毎";
 #else
-				return "ball of elec and resist elec";
+				return "ball of elec (100) and resist elec every 50+d50 turns";
 #endif
 
 			default:
