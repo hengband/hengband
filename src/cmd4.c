@@ -2333,7 +2333,7 @@ void do_cmd_options(void)
 		{
 			/* Birth */
 #ifdef JP
-			prt("(B)      初期            オプション (参照のみ)", 16, 5);
+			prt("(B)       初期            オプション (参照のみ)", 16, 5);
 #else
 			prt("(B) Birth Options (Browse Only)", 16, 5);
 #endif
@@ -2342,7 +2342,7 @@ void do_cmd_options(void)
 		{
 			/* Birth */
 #ifdef JP
-			prt("(B)      初期            オプション", 16, 5);
+			prt("(B)       初期            オプション", 16, 5);
 #else
 			prt("(B) Birth Options", 16, 5);
 #endif
@@ -2353,7 +2353,7 @@ void do_cmd_options(void)
 		{
 			/* Cheating */
 #ifdef JP
-			prt("(C)      詐欺            オプション", 17, 5);
+			prt("(C)       詐欺            オプション", 17, 5);
 #else
 			prt("(C) Cheating Options", 17, 5);
 #endif
