@@ -7010,22 +7010,6 @@ static void do_cmd_knowledge_pets(void)
 		}
 	}
 
-	/* Process the waiting pets (backwards) */
-	for (i = MAX_PARTY_MON - 1; i >= 0; i--)
-	{
-		/* Access the monster */
-		m_ptr = &party_mon[i];
-
-		/* Ignore "dead" monsters */
-		if (!m_ptr->r_idx) continue;
-
-		t_friends++;
-
-		/* List waiting pets */
-		monster_desc(pet_name, m_ptr, MD_ASSUME_OUTSIDE | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-		fprintf(fff, "%s (%s)\n", pet_name, look_mon_desc(m_ptr, 0x00));
-	}
-
 	show_upkeep = calculate_upkeep();
 
 	fprintf(fff, "----------------------------------------------\n");

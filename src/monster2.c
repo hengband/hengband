@@ -1452,7 +1452,6 @@ s16b get_mon_num(int level)
  *  MD_ASSUME_VISIBLE --> Assume the monster is visible
  *  MD_TRUE_NAME      --> Chameleon's true name
  *  MD_IGNORE_HALLU   --> Ignore hallucination, and penetrate shape change
- *  MD_ASSUME_OUTSIDE --> Assume this monster pet waiting outside the floor
  *
  * Useful Modes:
  *  0x00 --> Full nominative name ("the kobold") or "it"
@@ -1765,15 +1764,6 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 		if ((mode & MD_IGNORE_HALLU) && m_ptr->ap_r_idx != m_ptr->r_idx)
 		{
 			strcat(desc, format("(%s)", r_name + r_info[m_ptr->r_idx].name));
-		}
-
-		if (mode & MD_ASSUME_OUTSIDE)
-		{
-#ifdef JP
-			strcat(desc,"(ÂÔµ¡Ãæ)");
-#else
-			strcat(desc,"(waiting)");
-#endif
 		}
 
 		/* Handle the Possessive as a special afterthought */

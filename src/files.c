@@ -4104,25 +4104,6 @@ errr make_character_dump(FILE *fff)
 			fprintf(fff, "%s\n", pet_name);
 		}
 
-		for (i = MAX_PARTY_MON - 1; i >= 0; i--)
-		{
-			monster_type *m_ptr = &party_mon[i];
-
-			if (!m_ptr->r_idx) continue;
-			if (!m_ptr->nickname) continue;
-			if (!pet)
-			{
-#ifdef JP
-				fprintf(fff, "\n  [主なペット]\n\n");
-#else
-				fprintf(fff, "\n  [leading pets]\n\n");
-#endif
-				pet = TRUE;
-			}
-			monster_desc(pet_name, m_ptr, MD_ASSUME_OUTSIDE | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-			fprintf(fff, "%s\n", pet_name);
-		}
-
 		if (pet) fprintf(fff, "\n");
 	}
 
