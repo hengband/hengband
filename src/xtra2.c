@@ -3295,8 +3295,11 @@ s2 = "をまた";
 		if (easy_floor)
 		{
 			int floor_list[23], floor_num;
+			int min_width = 0;
 
-			if (scan_floor(floor_list, &floor_num, y, x, 0x02))
+			floor_num = scan_floor(floor_list, y, x, 0x02);
+
+			if (floor_num)
 			{
 				/* Not boring */
 				boring = FALSE;
@@ -3345,32 +3348,57 @@ s1, o_name, s2, s3, info);
 					query = inkey();
 
 					/* Display list of items (query == "el", not "won") */
-					if ((floor_num > 1) && (query == 'x'))
+					if (floor_num == 1 || query != 'x')
 					{
+						/* Stop */
+						break;
+					}
+					else while (1)
+					{
+						int i, o_idx;
+						cave_type *c_ptr;
+
 						/* Save screen */
 						screen_save();
 
 						/* Display */
-						(void)show_floor(0, y, x);
+						(void)show_floor(0, y, x, &min_width);
 
 						/* Prompt */
 #ifdef JP
-prt("何かキーを押すとゲームに戻ります", 0, 0);
+						prt("Enterで次へ、他のキーを押すとゲームに戻ります", 0, 0);
 #else
-						prt("Hit any key to continue", 0, 0);
+						prt("Hit Enter to scroll, Hit any other key to continue", 0, 0);
 #endif
 
-
 						/* Wait */
-						(void) inkey();
+						query = inkey();
 
 						/* Load screen */
 						screen_load();
-					}
-					else
-					{
-						/* Stop */
-						break;
+
+						/* Exit unless 'Enter' */
+						if (query != '\n' && query != '\r') break;
+
+						/* Get the object being moved. */
+						c_ptr = &cave[y][x];
+						o_idx =	c_ptr->o_idx;
+ 
+						/* Only rotate a pile of two or more objects. */
+						if (o_idx && o_list[o_idx].next_o_idx)
+						{
+
+							/* Remove the first object from the list. */
+							excise_object_idx(o_idx);
+ 	
+							/* Find end of the list. */
+							i = c_ptr->o_idx;
+							while (o_list[i].next_o_idx)
+								i = o_list[i].next_o_idx;
+ 	
+							/* Add after the last object. */
+							o_list[i].next_o_idx = o_idx;
+						}
 					}
 				}
 

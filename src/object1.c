@@ -5019,7 +5019,7 @@ bool can_get_item(void)
 		if (item_tester_okay(&inventory[j]))
 			return TRUE;
 
-	(void)scan_floor(floor_list, &floor_num, py, px, 0x01);
+	floor_num = scan_floor(floor_list, py, px, 0x01);
 	if (floor_num)
 		return TRUE;
 
@@ -5930,16 +5930,14 @@ if (ver && !verify("本当に", k))
  *		mode & 0x02 -- Marked items only
  *		mode & 0x04 -- Stop after first
  */
-bool scan_floor(int *items, int *item_num, int y, int x, int mode)
+int scan_floor(int *items, int y, int x, int mode)
 {
 	int this_o_idx, next_o_idx;
 
 	int num = 0;
 
-	(*item_num) = 0;
-
 	/* Sanity */
-	if (!in_bounds(y, x)) return (FALSE);
+	if (!in_bounds(y, x)) return 0;
 
 	/* Scan all objects in the grid */
 	for (this_o_idx = cave[y][x].o_idx; this_o_idx; this_o_idx = next_o_idx)
@@ -5959,26 +5957,24 @@ bool scan_floor(int *items, int *item_num, int y, int x, int mode)
 		if ((mode & 0x02) && !o_ptr->marked) continue;
 
 		/* Accept this item */
-		items[num++] = this_o_idx;
+		/* XXX Hack -- Enforce limit */
+		if (num <= 23)
+			items[num] = this_o_idx;
+
+		num++;
 
 		/* Only one */
 		if (mode & 0x04) break;
-
-		/* XXX Hack -- Enforce limit */
-		if (num == 23) break;
 	}
 
-	/* Number of items */
-	(*item_num) = num;
-
 	/* Result */
-	return (num != 0);
+	return num;
 }
 
 /*
  * Display a list of the items on the floor at the given location.
  */
-int show_floor(int target_item, int y, int x)
+int show_floor(int target_item, int y, int x, int *min_width)
 {
 	int i, j, k, l;
 	int col, len, lim;
@@ -6001,7 +5997,7 @@ int show_floor(int target_item, int y, int x)
 	Term_get_size(&wid, &hgt);
 
 	/* Default length */
-	len = 20;
+	len = MAX((*min_width), 20);
 
 	/* Maximum space allowed for descriptions */
 	lim = wid - 4;
@@ -6010,10 +6006,10 @@ int show_floor(int target_item, int y, int x)
 	if (show_weights) lim -= 9;
 
 	/* Scan for objects in the grid, using item_tester_okay() */
-	(void) scan_floor(floor_list, &floor_num, y, x, 0x01);
+	floor_num = scan_floor(floor_list, y, x, 0x01);
 
 	/* Display the inventory */
-	for (k = 0, i = 0; i < floor_num; i++)
+	for (k = 0, i = 0; i < floor_num && i < 23; i++)
 	{
 		o_ptr = &o_list[floor_list[i]];
 
@@ -6044,6 +6040,9 @@ int show_floor(int target_item, int y, int x)
 		/* Advance to next "line" */
 		k++;
 	}
+
+	/* Save width */
+	*min_width = len;
 
 	/* Find the column to start in */
 	col = (len > wid - 4) ? 0 : (wid - len - 1);
@@ -6131,6 +6130,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 	char out_val[160];
 
 	int floor_num, floor_list[23], floor_top = 0;
+	int min_width = 0;
 
 	extern bool select_spellbook;
 	extern bool select_the_force;
@@ -6249,7 +6249,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 	if (floor)
 	{
 		/* Scan all objects in the grid */
-		(void) scan_floor(floor_list, &floor_num, py, px, 0x01);
+		floor_num = scan_floor(floor_list, py, px, 0x01);
 	}
 
 	/* Accept inventory */
@@ -6395,7 +6395,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 			n2 = I2A(k - floor_top);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_floor(menu_line, py, px);
+			if (command_see) get_item_label = show_floor(menu_line, py, px, &min_width);
 		}
 
 		/* Viewing inventory */
@@ -6643,7 +6643,7 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 			if (command_see && !use_menu)
 			{
 #ifdef JP
-				strcat(out_val, " RET 次,");
+				strcat(out_val, " Enter 次,");
 #else
 				strcat(out_val, " Enter for scroll down,");
 #endif
@@ -6667,7 +6667,7 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 		int max_line = 1;
 		if (command_wrk == USE_INVEN) max_line = max_inven;
 		else if (command_wrk == USE_EQUIP) max_line = max_equip;
-		else if (command_wrk == USE_FLOOR) max_line = floor_num;
+		else if (command_wrk == USE_FLOOR) max_line = MIN(23, floor_num);
 		switch (which)
 		{
 			case ESCAPE:
@@ -6749,7 +6749,7 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 				/* Switch inven/equip */
 				if (command_wrk == USE_INVEN) max_line = max_inven;
 				else if (command_wrk == USE_EQUIP) max_line = max_equip;
-				else if (command_wrk == USE_FLOOR) max_line = floor_num;
+				else if (command_wrk == USE_FLOOR) max_line = MIN(23, floor_num);
 				if (menu_line > max_line) menu_line = max_line;
 
 				/* Need to redraw */
@@ -6810,7 +6810,7 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 				/* Switch inven/equip */
 				if (command_wrk == USE_INVEN) max_line = max_inven;
 				else if (command_wrk == USE_EQUIP) max_line = max_equip;
-				else if (command_wrk == USE_FLOOR) max_line = floor_num;
+				else if (command_wrk == USE_FLOOR) max_line = MIN(23, floor_num);
 				if (menu_line > max_line) menu_line = max_line;
 
 				/* Need to redraw */
@@ -6927,7 +6927,7 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 				o_list[i].next_o_idx = o_idx;
  	
 				/* Re-scan floor list */ 
-				scan_floor(floor_list, &floor_num, py, px, 0x01);
+				floor_num = scan_floor(floor_list, py, px, 0x01);
 
 				/* Hack -- Fix screen */
 				if (command_see)
@@ -7210,7 +7210,7 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 				else if (command_wrk == USE_FLOOR)
 				{
 					k = islower(which) ? A2I(which) : -1;
-					if (k < 0 || k >= floor_num)
+					if (k < 0 || k >= floor_num || k >= 23)
 					{
 						bell();
 						break;
@@ -7415,12 +7415,11 @@ void py_pickup_floor(int pickup)
 		}
 
 		/* Remember this object index */
-		floor_list[floor_num] = this_o_idx;
+		if (floor_num <= 23)
+			floor_list[floor_num] = this_o_idx;
 
 		/* Count non-gold objects */
 		floor_num++;
-
-		if (floor_num == 23) break;
 
 		/* Remember this index */
 		floor_o_idx = this_o_idx;

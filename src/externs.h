@@ -1432,8 +1432,8 @@ extern bool do_cmd_disarm_aux(int y, int x, int dir);
 #ifdef ALLOW_EASY_FLOOR /* TNB */
 
 /* object1.c */
-extern bool scan_floor(int *items, int *item_num, int y, int x, int mode);
-extern int  show_floor(int target_item, int y, int x);
+extern int scan_floor(int *items, int y, int x, int mode);
+extern int show_floor(int target_item, int y, int x, int *min_width);
 extern bool get_item_floor(int *cp, cptr pmt, cptr str, int mode);
 extern void py_pickup_floor(int pickup);
 
