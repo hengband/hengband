@@ -461,12 +461,12 @@ static void place_pet(void)
 			else
 				m_idx = m_pop();
 		}
-		
+
 		if (m_idx)
 		{
 			monster_type *m_ptr = &m_list[m_idx];
 			monster_race *r_ptr;
-			
+
 			cave[cy][cx].m_idx = m_idx;
 
 			m_ptr->r_idx = party_mon[i].r_idx;
@@ -488,27 +488,31 @@ static void place_pet(void)
 			{
 				/* Monster is still being nice */
 				m_ptr->mflag |= (MFLAG_NICE);
-				
+
 				/* Must repair monsters */
 				repair_monsters = TRUE;
 			}
-			
+
 			/* Update the monster */
 			update_mon(m_idx, TRUE);
 			lite_spot(cy, cx);
-			
+
 			r_ptr->cur_num++;
-			
+
 			/* Hack -- Count the number of "reproducers" */
 			if (r_ptr->flags2 & RF2_MULTIPLY) num_repro++;
-			
+
 			/* Hack -- Notice new multi-hued monsters */
-			if (r_ptr->flags1 & RF1_ATTR_MULTI) shimmer_monsters = TRUE;
+			{
+				monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
+				if ((ap_r_ptr->flags1 & RF1_ATTR_MULTI) || (ap_r_ptr->flags2 & RF2_SHAPECHANGER))
+					shimmer_monsters = TRUE;
+			}
 		}
 		else
 		{
 			char m_name[80];
-			
+
 			monster_desc(m_name, &party_mon[i], 0);
 #ifdef JP
 			msg_format("%sとはぐれてしまった。", m_name);

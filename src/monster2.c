@@ -3305,7 +3305,11 @@ msg_print("守りのルーンが壊れた！");
 
 
 	/* Hack -- Notice new multi-hued monsters */
-	if (r_ptr->flags1 & RF1_ATTR_MULTI) shimmer_monsters = TRUE;
+	{
+		monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
+		if ((ap_r_ptr->flags1 & RF1_ATTR_MULTI) || (ap_r_ptr->flags2 & RF2_SHAPECHANGER))
+			shimmer_monsters = TRUE;
+	}
 
 	if (p_ptr->warning && character_dungeon)
 	{

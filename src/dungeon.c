@@ -6005,11 +6005,15 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 					/* Skip dead monsters */
 					if (!m_ptr->r_idx) continue;
 
+					/* Skip unseen monsters */
+					if (!m_ptr->ml) continue;
+
 					/* Access the monster race */
-					r_ptr = &r_info[m_ptr->r_idx];
+					r_ptr = &r_info[m_ptr->ap_r_idx];
 
 					/* Skip non-multi-hued monsters */
-					if (!(r_ptr->flags1 & RF1_ATTR_MULTI)) continue;
+					if (!(r_ptr->flags1 & RF1_ATTR_MULTI) && !(r_ptr->flags2 & RF2_SHAPECHANGER))
+						continue;
 
 					/* Reset the flag */
 					shimmer_monsters = TRUE;
