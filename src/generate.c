@@ -137,13 +137,36 @@ static int next_to_walls(int y, int x)
 }
 
 
+static bool cannot_place_stairs(void)
+{
+	int       y, x;
+	cave_type *c_ptr;
+
+	for (y = 1; y < (cur_hgt - 1); y++)
+	{
+		for (x = 1; x < (cur_wid - 1); x++)
+		{
+			/* Access the grid */
+			c_ptr = &cave[y][x];
+
+			/* Require "naked" floor grid */
+			if (is_floor_grid(c_ptr) && !pattern_tile(y, x) && !c_ptr->o_idx && !c_ptr->m_idx) return FALSE;
+		}
+	}
+
+	/* No naked grid */
+	return TRUE;
+}
+
+
 /*
  * Places some staircases near walls
  */
 static bool alloc_stairs(int feat, int num, int walls)
 {
-	int          y, x, i, j, flag;
+	int          y, x, i, j;
 	int          shaft_num = 0;
+	bool         flag, checked;
 	cave_type    *c_ptr;
 
 	feature_type *f_ptr = &f_info[feat];
@@ -188,7 +211,7 @@ static bool alloc_stairs(int feat, int num, int walls)
 	for (i = 0; i < num; i++)
 	{
 		/* Try several times */
-		for (flag = FALSE; !flag && (walls >= 0); walls--)
+		for (flag = checked = FALSE; !flag; )
 		{
 			/* Try several times, then decrease "walls" */
 			for (j = 0; j <= 3000; j++)
@@ -201,7 +224,7 @@ static bool alloc_stairs(int feat, int num, int walls)
 				c_ptr = &cave[y][x];
 
 				/* Require "naked" floor grid */
-				if (!is_floor_grid(c_ptr) || pattern_tile(y,x) || c_ptr->o_idx || c_ptr->m_idx) continue;
+				if (!is_floor_grid(c_ptr) || pattern_tile(y, x) || c_ptr->o_idx || c_ptr->m_idx) continue;
 
 				/* Require a certain number of adjacent walls */
 				if (next_to_walls(y, x) < walls) continue;
@@ -218,6 +241,12 @@ static bool alloc_stairs(int feat, int num, int walls)
 			}
 
 			/* Require fewer walls */
+			if (walls) walls--;
+			else if (!checked)
+			{
+				if (cannot_place_stairs()) return FALSE;
+				checked = TRUE;
+			}
 		}
 
 		if (!flag) return FALSE;
