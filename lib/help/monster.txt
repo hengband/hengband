@@ -81,7 +81,7 @@ This feature is called the monster memory. Your monster memory recalls
 the particular attacks of each creature (whether or not technically a
 monster) which you have suffered, as well as recalling if you have
 observed them to multiply or move erratically, or drop treasure, etc.
-Similary if you attack a creature with a magical attack and it resists,
+Similarly if you attack a creature with a magical attack and it resists,
 that fact is noted. 
 
 If you have killed enough of a particular creature, or suffered enough
@@ -94,7 +94,7 @@ Your monster memory may be accessed by pressing '/' and then entering
 the symbol you wish to research. Each monster with that symbol of which
 you have some knowledge will displayed in turn beginning with the
 deepest. Alternatively, you may enter targetting mode by pressing '*'
-and, with the curser over the creature in question, press 'r' to
+and, with the cursor over the creature in question, press 'r' to
 recall details.
 
 The best feature about your monster memory is that it can be passed on
@@ -133,14 +133,14 @@ Unique monsters tend to be more resistant to magic than the other
 dungeon inhabitants. Thus, slowing, confusing, sleeping and scaring
 will be less effective and may not work at all. In addition, Genocide
 and Mass-Genocide spells will never work on Uniques and *Destruction*
-will teleoprt them from a level but will not kill them.
+will teleport them from a level but will not kill them.
 
 --- Keeping Track of Uniques ---
 
 Since Unique monsters are often very difficult to defeat, most
 players will attempt to kill them all before attempting to battle
 the Serpent of Chaos (itself a Unique monster). This avoids the
-need to battle two very difficult oponents at the same time.
+need to battle two very difficult opponents at the same time.
 
 Each time your character happens upon a new Unique, this is
 recorded in your monster memory. Under the knowledge command ('~')
@@ -155,7 +155,7 @@ as it approaches. Typically, a monster will shout obscenities and
 challenges to combat but they may also refer to events relating to
 themselves. Hengband has no mechanism to allow you to respond to the
 monsters (other than with violence). You may prevent Unique monsters
-from speaking by changing the approopriate option under the options
+from speaking by changing the appropriate option under the options
 menus.
 
 --- Rewards for Killing Uniques ---
@@ -171,7 +171,7 @@ upon how deep in the dungeon the relevant Unique is normally found.
 === Eldritch Horrors ===
 
 Some of the monsters in the dungeons of Hengband are so fearsome to
-look upon that doing so can have serious repurcussions. When you meet
+look upon that doing so can have serious repercussions. When you meet
 one of these sanity blasting monsters, one of several nasty things
 may happen to you. These include having your intelligence and/or your
 wisdom temporarily reduced, becoming scared or confused, or suffering
@@ -215,7 +215,7 @@ which can summon or otherwise produce more pets...
 
 You may obtain pets in several different ways. Some magic realms offer
 the ability to summon pets magically or to charm the creatures you
-meet. Mindcrafters may 'dominate' their oponents. Chaos patrons may
+meet. Mindcrafters may 'dominate' their opponents. Chaos patrons may
 grant pets as a gift to their devotees. Magical figurines can be thrown
 to create a pet and wands of charm monster may be used as their name
 suggests.
@@ -227,7 +227,7 @@ capture the monster. And then you can 'A'ctivate it again to release
 the monster as your pet.
 
 Hostile monsters will attempt to resist from capturing. You must make
-the monster critically injured status before caputure. On that point,
+the monster critically injured status before capture. On that point,
 BeastMasters are very good at using Capture Ball, and the limitation
 is somewhat loose for them.
 
@@ -242,13 +242,13 @@ which can be found be pressing 'p'.
 List of pet commands:
 
 dismiss pets
-    Dismiss specified pets. Dismissed pets will immediatly disappear
+    Dismiss specified pets. Dismissed pets will immediately disappear
     from current level. Hengband asks you whether you want to dismiss
     each pet in order from high level named pets to low level unnamed
     pets. You can press the U to dismiss all unnamed pets.
 
-specify a targert of pet
-    Choose a target monster, then all your pets wiil begin to chase
+specify a target of pet
+    Choose a target monster, then all your pets will begin to chase
     the target.
 
 stay close
@@ -306,7 +306,7 @@ use one hand to control a riding pet
 --- Riding ---
 
 In Hengband, player can ride on pet horses or dragons, etc.  To
-controll your horse, you must keep one hand free for holding the
+control your horse, you must keep one hand free for holding the
 reins. But your pet will attack your target together with you, and
 enemy's attack will be dispersed. As a result of these, player's
 damage in combat will get reduced in total.

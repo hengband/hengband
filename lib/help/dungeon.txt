@@ -120,7 +120,7 @@ level and 'reset' the recall depth to that level (instead of the
 deepest level).
 
 A more complete description of Hengband objects is found elsewhere in
-the documetnation (see object.txt [2]).
+the documentation (see object.txt [2]).
 
 
 ***** <Mining>

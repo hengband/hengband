@@ -461,6 +461,195 @@ are fake, and cannot be removed, though they can be covered up by a
 real inscription if you so desire. Try "_" as a nice short one.
 
 
+--- Making use of Inscriptions ---
+
+Some players use the inscription feature to record useful and/or
+interesting facts about an object such as where and how it was
+acquired or what its abilities and powers are. Hengband have a feature
+to automatically inscribe abilities of items for you.
+
+In addition to this, inscriptions can be used in far more powerful
+ways. Many commands in Hengband require you to specify an object from
+your inventory such as which potion you wish to 'q'uaff or which staff
+you wish to 'u'se.  Inscriptions offer a powerful way of managing this
+and provide a useful labor saving tool.
+
+
+Auto Inscription of Resistances and Powers
+------------------------------------------
+
+When you inscribe {%all} on an *identified* object, the '%all' will
+automatically transform and become a string which describe its
+resistances and powers. For example, when you inscribe {%all} on a
+robe of Resistance which have resistance to four elements and extra
+resistance to Nether, inscription will transform to {AcElFiClNt}. The
+'Ac' means resistance to acid while The El, Fi, Cl and Nt mean
+resistances to electricity, fire, cold and nether.
+
+On the other hand, when you inscribe {%} on an *identified* object,
+the {%} will transform to string which describe only its extra
+resistances. In the example above, the inscription will become {Nt}
+which describe extra resistance of Nether.
+
+
+List of auto-inscription code:
+
+*Ac : immune to acid                  Ma : decreases mana consumption
+*El : immune to electricity		      Th : suitable for throwing
+*Fi : immune to fire		      Rf : reflection
+*Co : immune to cold		      Fa : free action
+Ac : resistance to acid		      Si : see invisible
+El : resistance to electricity	      Hl : hold life
+Fi : resistance to fire		      Esp : telepathy
+Co : resistance to cold		      Sd : slow digestion
+Po : resistance to poison	      Rg : regeneration
+Li : resistance to light	      Lv : levitation
+Dk : resistance to darkness	      Lu : extra light
+Sh : resistance to shards	      Wr : provides warning
+Bl : resistance to blindness	      Xm : xtra might when shooting
+Cf : resistance to confusion	      Xs : xtra number of shots
+So : resistance to sound	      Ag : aggravate monsters
+Nt : resistance to nether	      Bs : blessed weapon
+Nx : resistance to nexus	      (F : fiery sheath
+Ca : resistance to chaos	      (E : electric sheath
+Di : resistance to disenchantment     (C : cold sheath
+Fe : resistance to fear		      (M : anti-magic shell
+At : extra blows		      (T : prevent teleportation
+Sp : affects speed		      |A : brand acid
+St : affects strength		      |E : brand electricity
+In : affects intelligence	      |F : brand fire
+Wi : affects wisdom		      |Co : brand cold
+Dx : affects dexterity		      |P : brand pois
+Cn : affects constitution	      |Ca : chaotic effects
+Ch : affects charisma		      |V : vampiric weapon
+Sl : affects stealth		      |Q : weapon of quake
+Sr : affects searching ability	      |S : vorpal hit
+If : affects infravision	      |M : weapon of the force
+Dg : affects tunneling ability	      /* : slay evil
+(St : sustain strength		      /H : slay human
+(In : sustain intelligence	      /D : kill dragon
+(Wi : sustain wisdom		      /d : slay dragon
+(Dx : sustain dexterity		      /o : slay orc
+(Cn : sustain constitution	      /T : slay troll
+(Ch : sustain charisma  	      /P : slay giant
+				      /U : slay demon
+				      /L : slay undead
+	 			      /Z : slay animal
+
+
+
+The {@x#} Inscription
+---------------------
+The {@x#} inscription (where 'x' is the key to activate a specific
+command and '#' is a number from 0 to 9) is, perhaps the most commonly
+used inscription. When you select command 'x', followed by a number
+'#', the game searches for an object with the inscription {@x#} and
+performs that command upon it. Thus if the player inscribes a Potion of
+Healing as {@q1}, then pressing 'q1' will quaff it automatically. This
+feature is useful because as items are added or removed from your
+inventory, the actual slot that they are in changes. However, the
+inscription will work regardless of the position.
+
+There is an exception; when the command is 'm' (cast spell), you can
+use any alphabet letter as '#' instead of a number, such like {@ma} or
+{@mb}. This feature is added because pressing an alphabet key is
+easier and faster than pressing a number key in rogue-like keymap.
+
+Note that you can inscribe multiple different objects with the same
+inscription {@x#}. If you do so, the command 'x#' will act on the first
+appropriately inscribed object in your inventory list and not on each
+of them.
+
+Also note that you can place multiple such inscriptions on a single
+object. So that a spell book might be inscribed {@m1@b1@G1} since the
+cast spell, browse book, and gain spell commands each require a spell
+book reference as an argument. You can also inscribe the same command
+more than one so that food item might be inscribed {@E@1E2}
+
+Example 1:
+    You have a primary weapon and a shovel. You normally use the
+    weapon but want to use the shovel for mining treasure. Inscribe
+    your primary weapon with {@w0} and your shovel with {@w1}. Then,
+    when you want to wield your shovel, you can press 'w1' and to
+    re-wield your sword you can press 'w0' regardless of where in the
+    inventory they are located at the time.
+
+    Note: you can also inscribe both weapons with {@w0} and just press
+    'w0' whenever you want to exchange weapon and shovel.
+
+Example 2:
+    To cast the first spell from your first spell book, you would
+    normally type 'maa' and to cast the first spell from the second
+    book, you would type 'mba'. However, if your first book is stolen
+    or destroyed, pressing 'mba' would no longer cast the spell you
+    wanted. This often leads to people people to cast spells
+    incorrectly. Instead inscribe your first spell book with {@ma},
+    your second with {@mb}, etc. Cast spells by typing 'maa', 'mba',
+    etc. Even if your other spell books are lost, you will never need
+    to worry about casting the wrong spell.
+
+Example 3:
+    You are carrying some Rations of Food and some Elvish Waybread.
+    You wish to use up the Rations first before eating the Waybread,
+    but also want to be able to use the healing/curing properties of
+    the Waybread in an emergency. You would inscribe the Rations with
+    {@E1} and the Waybread with {@E1@E2}. Since the Rations appear
+    before the Waybread on the inventory listing, typing 'E1' will
+    ensure you eat all the Rations first before touching the Waybread
+    but that you only ever have to press E1 to eat. But, pressing 'E2'
+    will bypass the Rations and jump to the Waybread. Some players also
+    do similar things with cure and healing potions.
+
+The {@#} Inscription
+---------------------
+The {@#} inscription (where '#' is a number from 0 to 9) is similar
+to the {@x#} inscription except that it works for any command. Thus, if
+you engrave both your digging instrument and your primary weapon with
+{@0}, pressing 'w0' will wield whichever one is not being currently
+wielded. However, if you had also inscribed a potion with {@0}, you
+would instead get an error message because the potion appears first in
+the inventory and you can not wield potions.
+
+The {!x} Inscription
+--------------------
+The {!x} inscription (where 'x' is the key to activate a specific
+command) will induce "verification" whenever that object is "selected".
+Thus, inscribing {!v!k!d} on an object will greatly reduce the odds of
+you "losing" it by accident. This is because any attempt to throw it
+('f'), destroy it ('k') or drop it ('d') will prompt Hengband to verify
+whether or not you really wish to take that action.  
+
+Note that inscribing {!*} on an object will prompt Hengband to verify
+any action thus you allowing you to be very paranoid about the object.
+Also note that "selling" and "dropping" both use the "d" command so
+that inscribing an item with {!d} will also prevent you from selling it
+by accident.
+
+The {^x} Inscription
+--------------------
+The {^x} inscription (where 'x' is the key to activate a specific
+command) will induce verification before taking that action. One
+common example of its usage is to inscribe boots with {^<^>} which will
+verify the user's command to leave the level via the staircases before
+actually doing so.
+
+The {=g} Inscription
+--------------------
+The {=g} inscription on an object prompts Hengband to automatically
+pick it up. This instruction overrides any auto-pickup options chosen
+chosen by the player (if necessary). The primary purpose is to allow
+easy retrieval of missiles such as arrows and bolts once they have been
+fired at a target.
+
+The {#anystring} Inscription
+--------------------
+
+The {#anystring} inscription is used to make an items to looks like an
+artifact. For example, a Long Sword (2d5) (+10,+10) which is inscribed
+as {#of Hoge} is displayed as 'a Long Sword of Hoge (2d5) (+10,+10)'.
+
+
+
 ***** <ObjectTypes>
 === The Object Types ===
 

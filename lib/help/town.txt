@@ -73,7 +73,7 @@ Fortunately, the various shops and the other special buildings are open
 on a 24-hour basis.
 
 The world of Hengband includes five towns separated by a wilderness
-and many dungons. Fixed quests (see below [3]) could be begun by
+and many dungeons. Fixed quests (see below [3]) could be begun by
 entering certain buildings in the towns.
 
 While most people welcome these large world, they are not for everyone
@@ -104,7 +104,7 @@ civilization the more cautious he or she should be.
 Since this world is very large, it is convenient to go into global map
 mode by pressing the '<' key, and then return to local map mode by '>'
 key when you are at the destination. In the global map, however, you
-might suddenly get assult from monsters. In such situation, you cannot
+might suddenly get assault from monsters. In such situation, you cannot
 run away using the '<' key, you might go to the border of the screen
 to run away.
 

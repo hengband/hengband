@@ -534,12 +534,6 @@ Critical Wounds, Potions, Staves and Rods of Healing, Potions of
 *Healing* and Potions of Life, from weakest to strongest. Both the Life
 and Nature realms contains spells to heal the player.
 
-Cure Light/Serious/Critical Wounds
-     these generally restore a small amount of hitpoints and may also
-     remove temporary bad effects like confusion, blindness, poison and
-     cuts. The amount of hitpoints healed and the number of other bad
-     effects cured increases from Light to Serious to Critical.
-
 Cure Light Wounds
      restores 2d8 hitpoints and removes cuts, blindness and berserk.
 
@@ -548,7 +542,7 @@ Cure Serious Wounds
      berserk.
 
 Cure Critical Wounds
-     restores 4d8 hitpoints and removes cuts, blindness, confusion,
+     restores 6d8 hitpoints and removes cuts, blindness, confusion,
      stun, poison and berserk.
 
 Curing

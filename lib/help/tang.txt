@@ -1,9 +1,9 @@
-=== The Zangband Newbie Guide ===
+=== The Hengband Newbie Guide ===
 
 
 Note: This guide has been adapted from The Angband Newbie Guide by
 Chris Weisiger and has undergone certain revisions to conform more
-closely to Zangband.
+closely to Hengband.
 
  
 === Basic Training ===
@@ -15,22 +15,31 @@ spellcaster types; they're much more difficult to play. If you want
 basic information about races and classes, go to the on-line help
 (type "?") and read "Character Attributes". You should probably read
 most of the help files here; the commands list is especially important
-to someone new to Zangband.
+to someone new to Hengband.
 
 After naming your character, you'll start in the town. The various
 numbers represent stores, where you can buy new equipment and sell
 stuff you've found in the dungeon. The little ">" is a staircase, the
-entrance to the dungeon. If you want to know what a specific symbol
-stands for, type "/", and then the symbol. For instance, if you're
-wondering what all the t's are, type "/t", and the game will tell you
-that these are townspeople. You can also "l"ook at an item, feature, or
+entrance to the dungeon.  Stand on the entrance to the dungeon, and
+type ">", and you enters into the dungeon, and then type "<", and you
+return to the surface.
+
+Next, type "<" again on the surface. If there are no hostile monsters
+near you, you will enters the Global Map mode which displays all the
+world of Hengband. Type ">" to return from global map mode to normal
+map mode.
+
+If you want to know what a specific symbol stands for, type "/", and
+then the symbol. For instance, if you're wondering what all the t's
+are, type "/t", and the game will tell you that these are
+townspeople. You can also "l"ook at an item, feature, or
 monster. While looking, pressing space or enter will cycle through the
 different "interesting" things in view. There is also a full map
 function: type "M". It will bring up a map of the entire area (just a
 single screen in the case of the town, but useful later on in the
 dungeon). Finally, if you type "L", you can scroll the (full-zoom) map
-around the dungeon. In general, you can use "M" to find areas that look
-interesting and "L" to look at them in detail.
+around the dungeon. In general, you can use "M" to find areas that
+look interesting and "L" to look at them in detail.
 
 Take a look around the town, but avoid the Mean-Looking Mercenaries and
 Battle-Scarred Veterans; they can kill you fairly easily. A note on
@@ -58,7 +67,7 @@ rid of old items and buying new ones. If you ever find that there's
 something you need which the stores don't currently have, you can wait
 a while for the stores to refresh.
 
-Zangband's not actually all that difficult to learn to play. You should
+Hengband's not actually all that difficult to learn to play. You should
 get the hang of it fairly quickly.
  
 From here on we'll be giving detailed dungeon survival information.
@@ -121,19 +130,29 @@ The second most important items are those of healing. Healing, in this
 case, covers Cure Light/Serious/Critical Wounds, Healing, *Healing*,
 and Life Potions, from weakest to strongest.
 
-Cure Light/Serious/Critical Wounds
-     these generally restore a small amount of hitpoints and may also
-     remove temporary bad effects like confusion, blindness, poison and
-     cuts. The amount of hitpoints healed and the number of other bad
-     effects cured increases from Light to Serious to Critical.
+Cure Light Wounds
+     restores 2d8 hitpoints and removes cuts, blindness and berserk.
+
+Cure Serious Wounds
+     restores 4d8 hitpoints and removes cuts, blindness, confusion and
+     berserk.
+
+Cure Critical Wounds
+     restores 6d8 hitpoints and removes cuts, blindness, confusion,
+     stun, poison and berserk.
+
+Curing
+     restores 50 hitpoints and removes cuts, blindness, confusion,
+     stun, poison and hallucination.
 
 Healing
-     restores 200 hitpoints and removes all temporary bad effects with
-     the exception of fear and cures all wounds.
+     restores 300 hitpoints and removes cuts, blindness, confusion,
+     stun, poison and berserk.
 
 *Healing*
-     restores 1000 hitpoints and removes all temporary bad effects and
-     cures all wounds
+     restores 1200 hitpoints and removes cuts, blindness, confusion,
+     stun, poison and berserk.
+
 
 Potions of Life
      restores 5000 hitpoints (about 5 times more than you'll ever
@@ -233,15 +252,16 @@ to go past the depth without the attribute, be very careful and don't
 complain if you get the dreaded "It breathes -more- You are dead"
 message.
 
-1000': Free Action, See Invisible
-1250': Basic four Resistances
-1900': Maxxed Stats, Confusion Resistance, Blindness Resistance
-2000': Poison Resistance
-2500': Hold Life
-2700': Chaos Resistance, Nether Resistance
-3000': Permanent and Temporary Speed of +20 or greater
-4000': Permanent + Temporary Speed of +30 or greater
-4950': As much as you can get. Sustains, Speed, every resistance, 
+20 (1000'): Free Action, See Invisible, Fire resistance
+25 (1250'): Basic four Resistances
+30 (1500'): Confusion Res, Blindness Res(Magician only), (Nexus Res)
+35 (1750'): Poison Resistance, Blindness Resistance (for all)
+40 (2000'): Nether Res, Chaos Res, (Darkness Res; sometimes)
+50 (2500'): Hold Life, Telepathy
+60 (3000'): Permanent Speed of +10 or greater
+70 (3500'): Permanent Speed of +15 or greater, Shard Res, Darkness Res
+90 (4500'): Permanent Speed of +25 or greater
+99 (4950'): As much as you can get. Sustains, Speed, every resistance, 
  
 Notes: If you have high infravision, you can probably hold off on See
 Invisible for a few levels. Not very many, however; Ghosts start
@@ -259,10 +279,11 @@ Before this, you need Staves of Teleportation which can be activated
 when blinded or confused, although with a decent failure rate. Scrolls
 are fail-safe.
 
-Poison Resistance is necessary because two monsters, Ancient Multi-Hued
-Dragons, and Drolems, start showing up at about depth. Both of these
-monsters breath poison for huge amounts of damage (700 and 800 points,
-respectively).
+Poison Resistance is necessary because two monsters, Ancient
+Multi-Hued Dragons, and Drolems, start showing up at about depth. Both
+of these monsters breath poison for huge amounts of damage (700 and
+800 points, respectively). Moreover Poison Resistance is necessary
+to prevent fearful side effect of Toxic waste.
 
 Hold Life is very nice, but not important. If you can't get it, carry
 lots of Potions of Restore Life Levels.
@@ -347,34 +368,34 @@ level" which gives you no information whatsoever.
 Your equipment will always carry around little numbers that tell you
 how effective it is. Armors take this form:
  
-A Foobar (+x, +y) [a, +b] (+c)
+A Robe (+x,+y) [a,+b] (+c)
  
 Weapons take this form:
  
-A Foobaz XdY (+x, +y) [a, +b] (+c)
+A Long Sword (XdY) (+x,+y) [+b] (+c)
  
 When unidentified, armors will show just this:
  
-[a]
+A Robe [a]
  
 Weapons will show this:
  
-XdY
+A Long Sword (XdY)
  
-(+x, +y). This is the item's magical bonuses to your skill and your
-deadliness respectively. These are added to whatever other bonuses you
-have when you attack. Some armors have similar bonuses to your skill
-and deadliness, but they are mostly artifacts, the exceptions being
-Gloves/Gauntlets/Cesti of Slaying and Power. Many body armors have a
-small negative number before the base armor bonus (see below); this is
-a penalty to your skill (the armor is so heavy that you have trouble
-moving around in it). However, this penalty is small enough for all but
-the youngest of characters to ignore. 
+(+x,+y). This is the item's magical bonuses to your to-hit and
+to-damage bonus respectively. These are added to whatever other
+bonuses you have when you attack. Some armors have similar bonuses to
+your to-hit and to-damage, but they are mostly artifacts, the
+exceptions being Gloves/Gauntlets/Cesti of Slaying and Power. Many
+body armors have a small negative number before the base armor bonus
+(see below); this is a penalty to your skill (the armor is so heavy
+that you have trouble moving around in it). However, this penalty is
+small enough for all but the youngest of characters to ignore.
 
 Rings of Combat or Skill have a single (+y) or (+x). When worn, they
-affect your deadliness and skill in melee battle respectively.
+affect your to-damage and to-hit bonus in melee battle respectively.
 
-[a, +b]. This is the item's base armor class and magical bonus to
+[a,+b]. This is the item's base armor class and magical bonus to
 armor. The higher, the better. While theoretically, a weapon could
 provide a base armor bonus, none of them do, and only a few weapons
 have a magical bonus to armor.
@@ -391,7 +412,7 @@ does not affect every stat in this list! Most items that have a +c only
 affect one or two of these stats. Some items affect more (A Weapon of
 Westernesse affects Strength, Dexterity, and Constitution)].
  
-As a side note for the above: Zangband follows the parenthesis for any
+As a side note for the above: Hengband follows the parenthesis for any
 item. If you see a number in brackets, like this: [b], it is a bonus to
 AC. If it is in parenthesis, like this: (+x), it is either a bonus to a
 stat or to hit/damage (and which should normally be obvious by the name
@@ -400,9 +421,9 @@ like this:
  
 A Mace (Holy Avenger) (2d4) (+7, +5) [+4] (+1)
  
-Thus, it rolls 2 four-sided dice when attacking, has +7 bonus to your
-skill and +5 bonus to your deadliness, increases your AC by 4, and
-increases a stat (In this case Wisdom) by 1.
+Thus, it rolls 2 four-sided dice when attacking, has +7 bonus to hit
+and +5 bonus to damage, increases your AC by 4, and increases a stat
+(In this case Wisdom) by 1.
  
 XdY. This is the weapon's base damage. When you successfully hit a
 monster, X number of Y-sided dice are rolled. This number represents
@@ -416,7 +437,7 @@ information will only be displayed if you have the proper shooting
 weapon.  (Your melee weapon's average damage is displayed on the info-
 screen.)  The format of this is:
 
-An arrow (3d5) (+0, +0) (26/26)
+An arrow (1d5) (+0, +0) (26/26)
 
 The first number is the average damage per shot, and the second is
 average damage per round.  The two numbers can differ because the
@@ -434,7 +455,7 @@ you find a weapon of Slay Orc), in the later part of the game, where
 magical bonuses to damage all but take over combat, slays play a very
 minor role. The rundown on slays:
 
-     Slay (or *Slay*) Evil: x1.7 damage dice against evil monsters
+     Slay (or *Slay*) Evil: x2 damage dice against evil monsters
      Slay (or *Slay*) Animal, Undead, Demon, Giant, Dragon: x2 damage
        dice against the relevant monster type
 
@@ -449,7 +470,7 @@ it!
 === On the Monster Memory ===
 
 In many other games, you are required to take notes on monster's
-weaknesses, strengths, spells, et cetera. Zangband takes care of this
+weaknesses, strengths, spells, et cetera. Hengband takes care of this
 for you, with the handy Monster Memory. Every time you find out
 something new about a monster, like that it can breathe fire, this is
 added to your knowledge of the monster. To look over this knowledge,
@@ -475,14 +496,13 @@ White Dragon," not the color of it's image on the screen (you can't
 rely on a white "p" to be a cold based monster! It will probably be a
 paladin or some such). In general, White monsters are cold-based, Red
 are fire-based, Blue are electrical, Black is acidic, and Yellow/Green
-are poisonous. A Multi-Hued monster is all of these. Crimson monsters
-can cause weakness.
+are poisonous. A Multi-Hued monster is all of these.
  
  
 === On the Preferences ===
 
 The preferences screen is reached by typing "=". It contains many
-different preferences that make Zangband more enjoyable. There are a few
+different preferences that make Hengband more enjoyable. There are a few
 that I would recommend. Turn both stacking options ON. This maximizes
 your treasure collection. Turn the Low Hitpoint Warning ON, and place
 the warning percent at about 50%. You'll see the effects of this
@@ -508,12 +528,12 @@ at lower depths.
  
 === On Death ===
 
-Death in Zangband is permanent. Saving in Zangband is meant only to let
+Death in Hengband is permanent. Saving in Hengband is meant only to let
 you pick up where you left off; if you die, your savefile is marked.
 The next time you try to use the savefile, you will get the new
 character dialogue. Ancestors of dead characters will retain their
 monster memory and preferences. Many people here have characters like
-"Yuppy XIV"; people die very often in Zangband.
+"Yuppy XIV"; people die very often in Hengband.
 
 Some people make backup savefiles; if their character dies, they simply
 load the older character, and pick up where they left off. They lose
@@ -529,58 +549,63 @@ truly win the game. It also sets your Social Status to zero, so
 everyone knows what a scumbag you are.
 
  
-=== On ZAngband Time ===
+=== On Hengband Time ===
 
-If there is one feature of Zangband that tends to confuse people
-(especially veterans of other roguelikes), it's how the speed system in
-Zangband works. Most other roguelikes have a simple incremental system,
-where +1 to speed means you move twice as fast as normal-speed
-monsters, +2 is three times as fast (or twice as fast as fast
-monsters), and so on. Zangband has a decimalized version. +10 is the
-old +1 to speed, and +20 is the old +2. This allows for characters to
-be "half again as fast" as a monster, with the in-game effect that the
-character occasionally gets a free turn.
+If there is one feature of Hengband that tends to confuse people
+(especially veterans of other *band), it's how the speed system in
+Hengband works. 
 
-However, problems start to arise when one's speed gets much higher than
-about +28. After this, each point of extra speed contributes slightly
-less than a full point of speed (i.e. the points are worth less). There
-is little point in trying for speed higher than +35 or so.
+In most other variant of Angband, the speed of each monster is a fixed
+value and +10 to speed means you move twice as fast as normal-speed
+monsters, +20 is three times as fast. But in Hengband, the speed is
+randomized and irregular; monsters might suddenly move some steps at
+one turn after some turn of pause.
 
-It might help to understand this if an explanation of Zangband time were
-given. In Zangband, every game turn, the player and monsters gain a
-certain amount of "energy". At normal speed, you gain 10 points of
-energy every game turn. Once you have 100 energy points, you get to
-take an action. Most actions cost 100 energy units (the major exception
-being shooting an arrow or bolt with a bow of Extra Shots. This divides
-the energy cost by two or, if it's a bow of Extra Shots +2, by three,
-thus allowing you to shoot several times before a monster gets an
-action).
+And same problems as Zangband start to arise when one's speed gets
+much higher than about +28. After this, each point of extra speed
+contributes slightly less than a full point of speed (i.e. the points
+are worth less). There is little point in trying for speed higher than
++35 or so.
 
-However, each extra speed point that you have gains you an extra energy
-point each game turn. Thus, if you have +10 to speed, you gain 20
-energy points per game turn, twice as fast as normal. Normal monsters
-only get 10 energy points per game turn (same as the player), so you
-move twice as fast as they do.
+It might help to understand this if an explanation of Hengband time
+were given. In Hengband, every game turn, the player and monsters gain
+a some amount of "energy"; the amount is random but an average is
+certain fixed value.  Once you have 100 energy points, you get to take
+an action. Most actions cost 100 energy units (the major exception
+being shooting an arrow or bolt with a bow of Extra Shots. This
+divides the energy cost by two or, if it's a bow of Extra Shots +2, by
+three, thus allowing you to shoot several times before a monster gets
+an action).
 
-The slowing of gains from speed that occurs at about +28 or so to speed
-is then translated to each point of speed not giving a complete point
-of energy each game turn. It's the same effect, subjectively.
+However, each extra speed point that you have gains you an extra
+energy point each game turn. Thus, if you have +10 to speed, you gain
+twice the normal energy points per game turn, twice as fast as
+normal. Normal monsters only get the normal energy points per game
+turn (same as the player), so you move twice as fast as they do.
+
+If you have +20 to speed, you gain 3 times the normal energy points
+per game turn. But when you have +30 to speed, you gain only 3.8 times
+the normal energy points per game turn, and the maximum average energy
+point is 4.9 times the normal energy points even when you have +99 to
+speed.
 
 
 === Advanced techniques for killing monsters ===
 
 Pillardancing.
-     Requires that you be at least twice as fast as the monster you are
-     fighting. Find a single block of wall, freestanding, and lure your
-     enemy to it. When both you and your enemy are standing next to the
-     pillar, hit him, and then move so that you are opposite the pillar
-     from him. He will use his turn to move so that he's standing next
-     to you. Hit him again, and then move again. Repeat until he's
-     dead. Note that some monsters move erratically, and cannot be
-     relied upon to move in the method expected. Also, some monsters
-     (mostly Ghosts) can move through walls, and a small number of
-     monsters can chew through walls.
- 
+
+     A Classical tactics of Angband like that; When you are at least
+     twice as fast as the monster you are fighting. Find a single
+     block of wall, freestanding, and lure your enemy to it. When both
+     you and your enemy are standing next to the pillar, hit him, and
+     then move so that you are opposite the pillar from him. He will
+     use his turn to move so that he's standing next to you.  Hit him
+     again, and then move again. Repeat until he's dead.
+
+     But in Hengband, this method is not helpful at all. Monsters in
+     Hengband essentially move at an irregular speed; they might
+     suddenly move some steps at one turn after some turn of pause.
+
 Shoot'n Scoot.
      Requires a large room, Phase Door, and some type of missile
      weapon. Stand at one end of the room, your enemy at the other.
@@ -588,15 +613,7 @@ Shoot'n Scoot.
      Phase Door. Fire again, until he gets close, and repeat. By the
      time you run out of ammunition, he should be dead or weak enough
      for you to finish him HTH (Hand to Hand).
- 
-Hack'n Back.
-     Requires that you be at least twice as fast as your opponent.
-     Stand next to your enemy, hit him, and back up. He should use his
-     turn to move towards you instead of using a missile weapon or a
-     spell. Hit him again, back up again, repeat. This is a little more
-     dangerous than Pillardancing, because the monster gets a chance to
-     breathe or cast a spell, but it's easier to set up.
- 
+
 Wail'n Bail.
      Requires Teleport items. Fight the monster until you're almost
      dead, teleport out, find him, and resume fighting. This is
@@ -618,4 +635,4 @@ The Anti-Summoning Corridor.
 --
 Original   : Chris Weisiger (TANG version 1.6.2)
 Updated    : Zangband DevTeam
-Last Update: January 13, 2000
+Updated    : some one
