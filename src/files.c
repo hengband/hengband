@@ -4175,7 +4175,7 @@ void display_player(int mode)
 					put_str(format("...You died in %s.", map_name()), 5 + 12, 10);
 #endif
 			}
-			else
+			else if (character_dungeon)
 			{
 				if (dun_level)
 				{
