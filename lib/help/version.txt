@@ -361,7 +361,7 @@ Robert would also like to thank:
 
         Scott Bigham, for the S-Lang patch.
 
-        Jeff Duprey for the new mutations.	
+        Jeff Duprey for the new mutations.      
 
         John Duffin and Leigh Silas Hanrihan for the new items.
 
