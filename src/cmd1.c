@@ -3255,18 +3255,26 @@ bool py_attack(int y, int x, int mode)
 		}
 	}
 
+	/* Gain riding experience */
 	if (p_ptr->riding)
 	{
 		int ridinglevel = r_info[m_list[p_ptr->riding].r_idx].level;
-		if ((p_ptr->skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING]) && ((p_ptr->skill_exp[GINOU_RIDING] - 1000) / 200 < r_info[m_ptr->r_idx].level) && (p_ptr->skill_exp[GINOU_RIDING]/100 - 2000 < ridinglevel))
-			p_ptr->skill_exp[GINOU_RIDING]++;
-		if ((p_ptr->skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING]) && (p_ptr->skill_exp[GINOU_RIDING]/100 < ridinglevel))
+
+		if (p_ptr->skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING])
 		{
-			if (ridinglevel*100 > (p_ptr->skill_exp[GINOU_RIDING] + 1500))
-				p_ptr->skill_exp[GINOU_RIDING] += (1+(ridinglevel - p_ptr->skill_exp[GINOU_RIDING]/100 - 15));
-			else p_ptr->skill_exp[GINOU_RIDING]++;
+			if (((p_ptr->skill_exp[GINOU_RIDING] - 1000) / 200) < r_info[m_ptr->r_idx].level)
+				p_ptr->skill_exp[GINOU_RIDING]++;
+
+			/* Extra experience */
+			if ((p_ptr->skill_exp[GINOU_RIDING] / 100) < ridinglevel)
+			{
+				if (((p_ptr->skill_exp[GINOU_RIDING] + 1500) / 100) < ridinglevel)
+					p_ptr->skill_exp[GINOU_RIDING] += (1 + (ridinglevel - (p_ptr->skill_exp[GINOU_RIDING] / 100 + 15)));
+				else p_ptr->skill_exp[GINOU_RIDING]++;
+			}
+
+			p_ptr->update |= (PU_BONUS);
 		}
-		p_ptr->update |= (PU_BONUS);
 	}
 
 	riding_t_m_idx = c_ptr->m_idx;
