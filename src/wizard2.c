@@ -14,40 +14,51 @@
 
 
 /*
- * Hack -- Rerate Hitpoints
+ * Roll the hitdie -- aux of do_cmd_rerate()
  */
-void do_cmd_rerate(bool display)
+void do_cmd_rerate_aux(void)
 {
-	int min_value, max_value, i, percent, j;
+	/* Minimum hitpoints at highest level */
+	int min_value = p_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (p_ptr->hitdie + 1)) * 3 / 8;
 
-	min_value = ((PY_MAX_LEVEL+2) * (p_ptr->hitdie + 1)) * 3 / 8;
-	min_value += p_ptr->hitdie;
+	/* Maximum hitpoints at highest level */
+	int max_value = p_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (p_ptr->hitdie + 1)) * 5 / 8;
 
-	max_value = ((PY_MAX_LEVEL+2) * (p_ptr->hitdie + 1)) * 5 / 8;
-	max_value += p_ptr->hitdie;
+	int i;
 
 	/* Rerate */
 	while (1)
 	{
+		/* Pre-calculate level 1 hitdice */
 		p_ptr->player_hp[0] = p_ptr->hitdie;
 
 		for (i = 1; i < 4; i++)
 		{
-			j = randint1(p_ptr->hitdie);
-			p_ptr->player_hp[0] += j;
+			p_ptr->player_hp[0] += randint1(p_ptr->hitdie);
 		}
 
-		/* Collect values */
+		/* Roll the hitpoint values */
 		for (i = 1; i < PY_MAX_LEVEL; i++)
 		{
-			p_ptr->player_hp[i] = randint1(p_ptr->hitdie);
-			p_ptr->player_hp[i] += p_ptr->player_hp[i - 1];
+			p_ptr->player_hp[i] = p_ptr->player_hp[i - 1] + randint1(p_ptr->hitdie);
 		}
 
-		/* Legal values */
+		/* Require "valid" hitpoints at highest level */
 		if ((p_ptr->player_hp[PY_MAX_LEVEL - 1] >= min_value) &&
 		    (p_ptr->player_hp[PY_MAX_LEVEL - 1] <= max_value)) break;
 	}
+}
+
+
+/*
+ * Hack -- Rerate Hitpoints
+ */
+void do_cmd_rerate(bool display)
+{
+	int percent;
+
+	/* Rerate */
+	do_cmd_rerate_aux();
 
 	percent = (int)(((long)p_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) /
 		(2 * p_ptr->hitdie +

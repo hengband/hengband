@@ -2726,7 +2726,7 @@ void get_max_stats(void)
  */
 static void get_extra(bool roll_hitdie)
 {
-	int		i, j, min_value, max_value;
+	int i, j;
 
 	/* Experience factor */
 	if (p_ptr->prace == RACE_ANDROID) p_ptr->expfact = rp_ptr->r_exp;
@@ -2766,45 +2766,7 @@ static void get_extra(bool roll_hitdie)
 		p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 
 	/* Roll for hit point unless quick-start */
-	if (roll_hitdie)
-	{
-		/* Minimum hitpoints at highest level */
-		min_value = ((PY_MAX_LEVEL+2) * (p_ptr->hitdie + 1)) * 3 / 8;
-		min_value += p_ptr->hitdie;
-
-		/* Maximum hitpoints at highest level */
-		max_value = ((PY_MAX_LEVEL+2) * (p_ptr->hitdie + 1)) * 5 / 8;
-		max_value += p_ptr->hitdie;
-
-		/* Roll out the hitpoints */
-		while (TRUE)
-		{
-			/* Pre-calculate level 1 hitdice */
-			p_ptr->player_hp[0] = p_ptr->hitdie;
-
-			for (i = 1; i < 4; i++)
-			{
-				j = randint1(p_ptr->hitdie);
-				p_ptr->player_hp[0] += j;
-			}
-
-			/* Roll the hitpoint values */
-			for (i = 1; i < PY_MAX_LEVEL; i++)
-			{
-				j = randint1(p_ptr->hitdie);
-				p_ptr->player_hp[i] = p_ptr->player_hp[i - 1] + j;
-			}
-
-			/* XXX Could also require acceptable "mid-level" hitpoints */
-
-			/* Require "valid" hitpoints at highest level */
-			if (p_ptr->player_hp[PY_MAX_LEVEL - 1] < min_value) continue;
-			if (p_ptr->player_hp[PY_MAX_LEVEL - 1] > max_value) continue;
-
-			/* Acceptable */
-			break;
-		}
-	}
+	if (roll_hitdie) do_cmd_rerate_aux();
 
 	/* Initial hitpoints */
 	p_ptr->mhp = p_ptr->player_hp[0];
