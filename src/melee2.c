@@ -3917,7 +3917,7 @@ bool set_monster_fast(int m_idx, int v)
 
 	if (!notice) return FALSE;
 
-	if (p_ptr->riding == m_idx) p_ptr->update |= (PU_BONUS);
+	if ((p_ptr->riding == m_idx) && !p_ptr->leaving) p_ptr->update |= (PU_BONUS);
 
 	return TRUE;
 }
@@ -3959,7 +3959,7 @@ bool set_monster_slow(int m_idx, int v)
 
 	if (!notice) return FALSE;
 
-	if (p_ptr->riding == m_idx) p_ptr->update |= (PU_BONUS);
+	if ((p_ptr->riding == m_idx) && !p_ptr->leaving) p_ptr->update |= (PU_BONUS);
 
 	return TRUE;
 }
