@@ -168,23 +168,27 @@ static bool breath_direct(int y1, int x1, int y2, int x2, int rad, int typ, bool
 }
 
 /*
- * Get the actual center point of ball spells (originally from TOband)
+ * Get the actual center point of ball spells (rad > 1) (originally from TOband)
  */
-static void get_project_point(int sy, int sx, int *ty, int *tx, int flg)
+void get_project_point(int sy, int sx, int *ty, int *tx, int flg)
 {
 	u16b path_g[128];
-	int  path_n;
+	int  path_n, i;
 
 	path_n = project_path(path_g, MAX_RANGE, sy, sx, *ty, *tx, flg);
 
-	if (path_n)
+	*ty = sy;
+	*tx = sx;
+
+	/* Project along the path */
+	for (i = 0; i < path_n; i++)
 	{
-		/* Use final point of projection */
-		*ty = GRID_Y(path_g[path_n - 1]);
-		*tx = GRID_X(path_g[path_n - 1]);
-	}
-	else
-	{
+		sy = GRID_Y(path_g[i]);
+		sx = GRID_X(path_g[i]);
+
+		/* Hack -- Balls explode before reaching walls */
+		if (!have_flag(f_flags_bold(sy, sx), FF_PROJECT)) break;
+
 		*ty = sy;
 		*tx = sx;
 	}
@@ -437,6 +441,11 @@ bool monst_spell_monst(int m_idx)
 						f5 &= ~(RF5_BIG_BALL_MASK);
 						f6 &= ~(RF6_BIG_BALL_MASK);
 					}
+				}
+				else if (f5 & RF5_BA_LITE)
+				{
+					if ((distance(real_y, real_x, py, px) <= 4) && los(real_y, real_x, py, px))
+						f5 &= ~(RF5_BA_LITE);
 				}
 			}
 

@@ -1416,6 +1416,7 @@ extern bool raise_possible(monster_type *m_ptr);
 extern bool spell_is_inate(u16b spell);
 
 /* mspells2.c */
+extern void get_project_point(int sy, int sx, int *ty, int *tx, int flg);
 extern bool monst_spell_monst(int m_idx);
 
 /* artifact.c */

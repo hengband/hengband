@@ -1192,6 +1192,11 @@ bool spell_is_inate(u16b spell)
 }
 
 
+#define DO_SPELL_NONE    0
+#define DO_SPELL_BR_LITE 1
+#define DO_SPELL_BR_DISI 2
+#define DO_SPELL_BA_LITE 3
+
 /*
  * Creatures can cast spells, shoot missiles, and breathe.
  *
@@ -1258,8 +1263,7 @@ bool make_attack_spell(int m_idx)
 	char            m_poss[80];
 #endif
 	bool            no_inate = FALSE;
-	bool            do_br_lite = FALSE;
-	bool            do_br_disi = FALSE;
+	bool            do_spell = DO_SPELL_NONE;
 	int             dam = 0;
 	u32b mode = 0L;
 	int s_num_6 = (easy_band ? 2 : 6);
@@ -1320,11 +1324,11 @@ bool make_attack_spell(int m_idx)
 	{
 		if (!have_flag(f_flags_bold(y, x), FF_PROJECT))
 		{
-			/* Breath lite to the transparent wall if possible */
-			if ((f4 & RF4_BR_LITE) && cave_los_bold(y, x) && one_in_(2)) do_br_lite = TRUE;
-
 			/* Breath disintegration to the wall if possible */
-			if ((f4 & RF4_BR_DISI) && have_flag(f_flags_bold(y, x), FF_HURT_DISI) && one_in_(2)) do_br_disi = TRUE;
+			if ((f4 & RF4_BR_DISI) && have_flag(f_flags_bold(y, x), FF_HURT_DISI) && one_in_(2)) do_spell = DO_SPELL_BR_DISI;
+
+			/* Breath lite to the transparent wall if possible */
+			else if ((f4 & RF4_BR_LITE) && cave_los_bold(y, x) && one_in_(2)) do_spell = DO_SPELL_BR_LITE;
 		}
 	}
 
@@ -1333,23 +1337,33 @@ bool make_attack_spell(int m_idx)
 	{
 		bool success = FALSE;
 
-		if ((f4 & RF4_BR_DISI) &&
-		    (m_ptr->cdis < MAX_RANGE/2) &&
+		if ((f4 & RF4_BR_DISI) && (m_ptr->cdis < MAX_RANGE/2) &&
 		    in_disintegration_range(m_ptr->fy, m_ptr->fx, y, x) &&
 		    (one_in_(10) || (projectable(y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
 		{
-			do_br_disi = TRUE;
+			do_spell = DO_SPELL_BR_DISI;
 			success = TRUE;
 		}
-		else if ((f4 & RF4_BR_LITE) &&
-		    (m_ptr->cdis < MAX_RANGE/2) &&
+		else if ((f4 & RF4_BR_LITE) && (m_ptr->cdis < MAX_RANGE/2) &&
 		    los(m_ptr->fy, m_ptr->fx, y, x) &&
 		    (one_in_(10) || (projectable(y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
 		{
-			do_br_lite = TRUE;
+			do_spell = DO_SPELL_BR_LITE;
 			success = TRUE;
 		}
-		else
+		else if ((f5 & RF5_BA_LITE) && (m_ptr->cdis <= MAX_RANGE))
+		{
+			int by = y, bx = x;
+			get_project_point(m_ptr->fy, m_ptr->fx, &by, &bx, 0L);
+			if ((distance(by, bx, y, x) <= 3) && los(by, bx, y, x) &&
+			    (one_in_(10) || (projectable(y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
+			{
+				do_spell = DO_SPELL_BA_LITE;
+				success = TRUE;
+			}
+		}
+
+		if (!success)
 		{
 			int i;
 			int tonari;
@@ -1556,27 +1570,33 @@ bool make_attack_spell(int m_idx)
 	monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 #endif
 
-	if (do_br_lite && do_br_disi)
+	switch (do_spell)
 	{
-		if (one_in_(2)) thrown_spell = 96+14; /* RF4_BR_LITE */
-		else thrown_spell = 96+31; /* RF4_BR_DISI */
-	}
-	else if (do_br_lite)
-	{
-		thrown_spell = 96+14; /* RF4_BR_LITE */
-	}
-	else if (do_br_disi)
-	{
-		thrown_spell = 96+31; /* RF4_BR_DISI */
-	}
-	else
-	{
-		int attempt = 10;
-		while(attempt--)
+	case DO_SPELL_NONE:
 		{
-			thrown_spell = choose_attack_spell(m_idx, spell, num);
-			if (thrown_spell) break;
+			int attempt = 10;
+			while (attempt--)
+			{
+				thrown_spell = choose_attack_spell(m_idx, spell, num);
+				if (thrown_spell) break;
+			}
 		}
+		break;
+
+	case DO_SPELL_BR_LITE:
+		thrown_spell = 96+14; /* RF4_BR_LITE */
+		break;
+
+	case DO_SPELL_BR_DISI:
+		thrown_spell = 96+31; /* RF4_BR_DISI */
+		break;
+
+	case DO_SPELL_BA_LITE:
+		thrown_spell = 128+20; /* RF5_BA_LITE */
+		break;
+
+	default:
+		return FALSE; /* Paranoia */
 	}
 
 	/* Abort if no spell was chosen */
