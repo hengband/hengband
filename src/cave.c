@@ -1747,6 +1747,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 #ifdef JP
 /*
  * Table of Ascii-to-Zenkaku
+ * ¡Ö¢ò¡×¤ÏÆóÇÜÉýÆ¦Éå¤ÎÆâÉô¥³¡¼¥É¤Ë»ÈÍÑ¡£
  */
 static char ascii_to_zenkaku[2*128+1] =  "\
 ¡¡¡ª¡É¡ô¡ð¡ó¡õ¡Ç¡Ê¡Ë¡ö¡Ü¡¤¡Ý¡¥¡¿\
@@ -1754,7 +1755,7 @@ static char ascii_to_zenkaku[2*128+1] =  "\
 ¡÷£Á£Â£Ã£Ä£Å£Æ£Ç£È£É£Ê£Ë£Ì£Í£Î£Ï\
 £Ð£Ñ£Ò£Ó£Ô£Õ£Ö£×£Ø£Ù£Ú¡Î¡À¡Ï¡°¡²\
 ¡Æ£á£â£ã£ä£å£æ£ç£è£é£ê£ë£ì£í£î£ï\
-£ð£ñ£ò£ó£ô£õ£ö£÷£ø£ù£ú¡Ð¡Ã¡Ñ¡Á¡¡";
+£ð£ñ£ò£ó£ô£õ£ö£÷£ø£ù£ú¡Ð¡Ã¡Ñ¡Á¢ò";
 #endif
 
 /*
@@ -1770,16 +1771,7 @@ static void bigtile_attr(char *cp, byte *ap, char *cp2, byte *ap2)
 	}
 
 #ifdef JP
-#ifdef WINDOWS
-	if (*cp == 127)
-	{
-		*ap2 = *ap;
-		*cp2 = *cp;
-		return;
-	}
-#endif
-
-	if (isprint(*cp))
+	if (isprint(*cp) || *cp == 127)
 	{
 		*ap2 = *ap;
 		*cp2 = ascii_to_zenkaku[2*(*cp-' ') + 1];
@@ -2090,7 +2082,7 @@ void lite_spot(int y, int x)
 		}
 
 #ifdef JP
-		if (use_bigtile && !(a & 0x80) && isprint(c))
+		if (use_bigtile && !(a & 0x80) && (isprint(c) || c == 127))
 		{
 			Term_queue_chars(panel_col_of(x), y-panel_row_prt, 2, a, &ascii_to_zenkaku[2*(c-' ')]);
 			return;

@@ -2221,7 +2221,7 @@ static errr Term_curs_win(int x, int y)
 
 #ifdef JP
 	if (x + 1 < Term->wid && 
-	    ((use_bigtile && ((Term->old->a[y][x+1] == 255) || (Term->old->c[y][x] == 127)))
+	    ((use_bigtile && Term->old->a[y][x+1] == 255)
 	    || (iskanji(Term->old->c[y][x]) && !(Term->old->a[y][x] & 0x80))))
 #else
 	if (use_bigtile && x + 1 < Term->wid && Term->old->a[y][x+1] == 255)
@@ -2357,12 +2357,32 @@ static errr Term_text_win(int x, int y, int n, byte a, const char *s)
 		for (i = 0; i < n; i++)
 		{
 #ifdef JP
-			if ( iskanji(*(s+i)) )  /*  ２バイト文字  */
+			if (use_bigtile && *(s+i)=="Å"[0] && *(s+i+1)=="Å"[1])
+			{
+				rc.right += td->font_wid;
+
+				oldBrush = SelectObject(hdc, myBrush);
+				oldPen = SelectObject(hdc, GetStockObject(NULL_PEN) );
+
+				/* Dump the wall */
+				Rectangle(hdc, rc.left, rc.top, rc.right+1, rc.bottom+1);
+
+				SelectObject(hdc, oldBrush);
+				SelectObject(hdc, oldPen);
+				rc.right -= td->font_wid;
+
+				/* Advance */
+				i++;
+				rc.left += 2 * td->tile_wid;
+				rc.right += 2 * td->tile_wid;
+			}
+			else if ( iskanji(*(s+i)) )  /*  ２バイト文字  */
 			{
 				rc.right += td->font_wid;
 				/* Dump the text */
 				ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc,
 		    		       s+i, 2, NULL);
+				rc.right -= td->font_wid;
 
 				/* Advance */
 				i++;
