@@ -6865,6 +6865,9 @@ quit("セーブファイルが壊れています");
 
 		determine_bounty_uniques();
 		determine_today_mon(FALSE);
+
+		/* Initialize object array */
+		wipe_o_list();
 	}
 	else
 	{
@@ -6915,11 +6918,6 @@ quit("セーブファイルが壊れています");
 
 	/* Flavor the objects */
 	flavor_init();
-	if (new_game)
-	{
-		wipe_o_list();
-		player_outfit();
-	}
 
 	/* Flash a message */
 #ifdef JP
@@ -7032,6 +7030,12 @@ prt("お待ち下さい...", 0, 0);
 
 	/* Load the "pref" files */
 	load_all_pref_files();
+
+	/* Give startup outfit (after loading pref files) */
+	if (new_game)
+	{
+		player_outfit();
+	}
 
 	/* React to changes */
 	Term_xtra(TERM_XTRA_REACT, 0);

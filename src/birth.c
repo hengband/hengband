@@ -3740,6 +3740,22 @@ static bool monster_hook_human(int r_idx)
 
 
 /*
+ * Add an outfit object
+ */
+static void add_outfit(object_type *o_ptr)
+{
+	s16b slot;
+
+	object_aware(o_ptr);
+	object_known(o_ptr);
+	slot = inven_carry(o_ptr);
+
+	/* Auto-inscription */
+	autopick_alter_item(slot, FALSE);
+}
+
+
+/*
  * Init players with some belongings
  *
  * Having an item makes the player "aware" of its purpose.
@@ -3774,7 +3790,7 @@ void player_outfit(void)
 			object_prep(q_ptr, lookup_kind(TV_CORPSE, SV_CORPSE));
 			q_ptr->pval = get_mon_num(2);
 			q_ptr->number = 1;
-			(void)inven_carry(q_ptr);
+			add_outfit(q_ptr);
 		}
 		break;
 
@@ -3783,9 +3799,7 @@ void player_outfit(void)
 		/* Some Skeletons */
 		object_prep(q_ptr, lookup_kind(TV_SKELETON, SV_ANY));
 		q_ptr->number = (byte)rand_range(7, 12);
-		object_aware(q_ptr);
-		object_known(q_ptr);
-		(void)inven_carry(q_ptr);
+		add_outfit(q_ptr);
 		break;
 #endif
 	case RACE_SKELETON:
@@ -3795,19 +3809,15 @@ void player_outfit(void)
 		/* Staff (of Nothing) */
 		object_prep(q_ptr, lookup_kind(TV_STAFF, SV_STAFF_NOTHING));
 		q_ptr->number = 1;
-		object_aware(q_ptr);
-		object_known(q_ptr);
 
-		(void)inven_carry(q_ptr);
+		add_outfit(q_ptr);
 		break;
 
 	case RACE_ENT:
 		/* Potions of Water */
 		object_prep(q_ptr, lookup_kind(TV_POTION, SV_POTION_WATER));
 		q_ptr->number = (byte)rand_range(15, 23);
-		object_aware(q_ptr);
-		object_known(q_ptr);
-		(void)inven_carry(q_ptr);
+		add_outfit(q_ptr);
 
 		break;
 
@@ -3819,9 +3829,7 @@ void player_outfit(void)
 		apply_magic(q_ptr, 1, AM_NO_FIXED_ART);
 
 		q_ptr->number = (byte)rand_range(7, 12);
-		object_aware(q_ptr);
-		object_known(q_ptr);
-		(void)inven_carry(q_ptr);
+		add_outfit(q_ptr);
 
 		break;
 
@@ -3829,10 +3837,8 @@ void player_outfit(void)
 		/* Food rations */
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
 		q_ptr->number = (byte)rand_range(3, 7);
-		object_aware(q_ptr);
-		object_known(q_ptr);
 
-		(void)inven_carry(q_ptr);
+		add_outfit(q_ptr);
 	}
 
 	/* Get local object */
@@ -3845,10 +3851,7 @@ void player_outfit(void)
 
 		q_ptr->number = (byte)rand_range(2, 5);
 
-		object_aware(q_ptr);
-		object_known(q_ptr);
-
-		(void)inven_carry(q_ptr);
+		add_outfit(q_ptr);
 	}
 	else if (p_ptr->pclass != CLASS_NINJA)
 	{
@@ -3856,10 +3859,8 @@ void player_outfit(void)
 		object_prep(q_ptr, lookup_kind(TV_LITE, SV_LITE_TORCH));
 		q_ptr->number = (byte)rand_range(3, 7);
 		q_ptr->xtra4 = rand_range(3, 7) * 500;
-		object_aware(q_ptr);
-		object_known(q_ptr);
 
-		(void)inven_carry(q_ptr);
+		add_outfit(q_ptr);
 	}
 
 	/* Get local object */
@@ -3871,20 +3872,14 @@ void player_outfit(void)
 		object_prep(q_ptr, lookup_kind(TV_ARROW, SV_AMMO_NORMAL));
 		q_ptr->number = (byte)rand_range(15, 20);
 
-		object_aware(q_ptr);
-		object_known(q_ptr);
-
-		(void)inven_carry(q_ptr);
+		add_outfit(q_ptr);
 	}
 	if (p_ptr->pclass == CLASS_RANGER)
 	{
 		/* Hack -- Give the player some arrows */
 		object_prep(q_ptr, lookup_kind(TV_BOW, SV_SHORT_BOW));
 
-		object_aware(q_ptr);
-		object_known(q_ptr);
-
-		(void)inven_carry(q_ptr);
+		add_outfit(q_ptr);
 	}
 	else if (p_ptr->pclass == CLASS_ARCHER)
 	{
@@ -3892,10 +3887,7 @@ void player_outfit(void)
 		object_prep(q_ptr, lookup_kind(TV_ARROW, SV_AMMO_NORMAL));
 		q_ptr->number = (byte)rand_range(15, 20);
 
-		object_aware(q_ptr);
-		object_known(q_ptr);
-
-		(void)inven_carry(q_ptr);
+		add_outfit(q_ptr);
 	}
 	else if (p_ptr->pclass == CLASS_HIGH_MAGE)
 	{
@@ -3904,10 +3896,7 @@ void player_outfit(void)
 		q_ptr->number = 1;
 		q_ptr->pval = (byte)rand_range(25, 30);
 
-		object_aware(q_ptr);
-		object_known(q_ptr);
-
-		(void)inven_carry(q_ptr);
+		add_outfit(q_ptr);
 	}
 	else if (p_ptr->pclass == CLASS_SORCERER)
 	{
@@ -3917,10 +3906,7 @@ void player_outfit(void)
 			object_prep(q_ptr, lookup_kind(i, 0));
 			q_ptr->number = 1;
 
-			object_aware(q_ptr);
-			object_known(q_ptr);
-
-			(void)inven_carry(q_ptr);
+			add_outfit(q_ptr);
 		}
 	}
 	else if (p_ptr->pclass == CLASS_TOURIST)
@@ -3931,51 +3917,33 @@ void player_outfit(void)
 			object_prep(q_ptr, lookup_kind(TV_SHOT, SV_AMMO_LIGHT));
 			q_ptr->number = (byte)rand_range(15, 20);
 
-			object_aware(q_ptr);
-			object_known(q_ptr);
-
-			(void)inven_carry(q_ptr);
+			add_outfit(q_ptr);
 		}
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_BISCUIT));
 		q_ptr->number = (byte)rand_range(2, 4);
 
-		object_aware(q_ptr);
-		object_known(q_ptr);
-
-		(void)inven_carry(q_ptr);
+		add_outfit(q_ptr);
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_WAYBREAD));
 		q_ptr->number = (byte)rand_range(2, 4);
 
-		object_aware(q_ptr);
-		object_known(q_ptr);
-
-		(void)inven_carry(q_ptr);
+		add_outfit(q_ptr);
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_JERKY));
 		q_ptr->number = (byte)rand_range(1, 3);
 
-		object_aware(q_ptr);
-		object_known(q_ptr);
-
-		(void)inven_carry(q_ptr);
+		add_outfit(q_ptr);
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_PINT_OF_ALE));
 		q_ptr->number = (byte)rand_range(2, 4);
 
-		object_aware(q_ptr);
-		object_known(q_ptr);
-
-		(void)inven_carry(q_ptr);
+		add_outfit(q_ptr);
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_PINT_OF_WINE));
 		q_ptr->number = (byte)rand_range(2, 4);
 
-		object_aware(q_ptr);
-		object_known(q_ptr);
-
-		(void)inven_carry(q_ptr);
+		add_outfit(q_ptr);
 	}
 	else if (p_ptr->pclass == CLASS_NINJA)
 	{
@@ -3983,10 +3951,7 @@ void player_outfit(void)
 		object_prep(q_ptr, lookup_kind(TV_SPIKE, 0));
 		q_ptr->number = (byte)rand_range(15, 20);
 
-		object_aware(q_ptr);
-		object_known(q_ptr);
-
-		(void)inven_carry(q_ptr);
+		add_outfit(q_ptr);
 	}
 
 	if(p_ptr->pseikaku == SEIKAKU_SEXY)
@@ -4032,10 +3997,7 @@ void player_outfit(void)
 			q_ptr->name2 = EGO_BRAND_POIS;
 		}
 
-		object_aware(q_ptr);
-		object_known(q_ptr);
-
-		(void)inven_carry(q_ptr);
+		add_outfit(q_ptr);
 	}
 
 	/* Hack -- make aware of the water */
