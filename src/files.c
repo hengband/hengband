@@ -2308,6 +2308,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 			add_flag(flgs, TR_HOLD_LIFE);
 			add_flag(flgs, TR_RES_DARK);
 			add_flag(flgs, TR_RES_NETHER);
+			if (p_ptr->pclass != CLASS_NINJA) add_flag(flgs, TR_LITE);
 			add_flag(flgs, TR_RES_POIS);
 			add_flag(flgs, TR_RES_COLD);
 			add_flag(flgs, TR_SEE_INVIS);
@@ -2455,6 +2456,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 		add_flag(flgs, TR_HOLD_LIFE);
 		add_flag(flgs, TR_RES_DARK);
 		add_flag(flgs, TR_RES_NETHER);
+		if (p_ptr->pclass != CLASS_NINJA) add_flag(flgs, TR_LITE);
 		add_flag(flgs, TR_RES_POIS);
 		add_flag(flgs, TR_RES_COLD);
 		break;
@@ -2571,7 +2573,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 		add_flag(flgs, TR_RES_BLIND);
 		add_flag(flgs, TR_RES_CONF);
 		add_flag(flgs, TR_HOLD_LIFE);
-		add_flag(flgs, TR_LITE);
+		if (p_ptr->pclass != CLASS_NINJA) add_flag(flgs, TR_LITE);
 		if (p_ptr->lev > 9)
 			add_flag(flgs, TR_SPEED);
 	}

@@ -2318,7 +2318,7 @@ void update_mon(int m_idx, bool full)
 	bool easy = FALSE;
 
 	/* Non-Ninja player in the darkness */
-	bool in_darkness = (d_info[dungeon_type].flags1 & DF1_DARKNESS) && (p_ptr->see_nocto < MAX_SIGHT);
+	bool in_darkness = (d_info[dungeon_type].flags1 & DF1_DARKNESS) && !p_ptr->see_nocto;
 
 	/* Do disturb? */
 	if (disturb_high)

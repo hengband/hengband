@@ -1296,6 +1296,7 @@ struct player_type
 	bool heavy_spell;
 	bool warning;
 	bool mighty_throw;
+	bool see_nocto;		/* Noctovision */
 
 	s16b to_dd[2]; /* Extra dice/sides */
 	s16b to_ds[2];
@@ -1324,7 +1325,6 @@ struct player_type
 	s16b ac;			/* Base ac */
 
 	s16b see_infra;		/* Infravision range */
-	s16b see_nocto;		/* Noctovision range */
 
 	s16b skill_dis;		/* Skill: Disarming */
 	s16b skill_dev;		/* Skill: Magic Devices */
