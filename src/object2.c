@@ -3396,7 +3396,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 							break;
 						case SV_RING_PROTECTION:
 							o_ptr->name2 = EGO_RING_SUPER_AC;
-							o_ptr->to_a += m_bonus(5, level);
+							o_ptr->to_a += 7 + m_bonus(5, level);
 							break;
 						case SV_RING_RES_FEAR:
 							o_ptr->name2 = EGO_RING_HERO;
