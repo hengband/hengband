@@ -109,11 +109,6 @@
 
 #include <string.h>
 
-#if !defined(linux) && !defined(__MWERKS__) && !defined(ACORN) && !defined(WIN32)
-extern long atol();
-#endif
-
-
 #include <stdarg.h>
 
 #endif /* INCLUDED_H_SYSTEM_H */
