@@ -140,7 +140,7 @@ example, use "\" + "." + "6", to specify "run east".
  [  (unused)                            ^M  (special - return)
  ]  (unused)                            ^N  (unused)
  -  Walk (flip pickup)                  ^O  (unused)
- _  (unused)                            ^P  Show previous messages
+ _  Edit auto-picker/destroyer pref     ^P  Show previous messages
  +  Alter grid                          ^Q  Display quest info
  =  Set options                         ^R  Redraw the screen
  ;  Walk (with pickup)                  ^S  Save and don't quit
@@ -206,7 +206,7 @@ example, use "\" + "." + "6", to specify "run east".
  [  Repeat last command                 ^M  (tunnel - south)
  ]  (unused)                            ^N  (tunnel - south east)
  -  Walk (flip pickup)                  ^O  (unused)
- _  (unused)                            ^P  Show previous messages
+ _  Edit auto-picker/destroyer pref     ^P  Show previous messages
  +  Alter grid                          ^Q  Display quest info
  =  Set options                         ^R  Redraw the screen
  ;  Walk (with pickup)                  ^S  Save and don't quit
