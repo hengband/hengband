@@ -3222,7 +3222,7 @@ static void mon_lite_hack(int y, int x)
 				if (!cave_floor_bold(y, x - 1)) return;
 			}
 		}
-		else if (((x < px) && (x > mon_fx)) || ((x > py) && (y < mon_fx)))
+		else if (((x < px) && (x > mon_fx)) || ((x > px) && (x < mon_fx)))
 		{
 			midpoint = (py + mon_fy) >> 1;
 			if (y < midpoint)
@@ -3293,7 +3293,7 @@ static void mon_dark_hack(int y, int x)
 				if (!cave_floor_bold(y, x - 1)) return;
 			}
 		}
-		else if (((x < px) && (x > mon_fx)) || ((x > py) && (y < mon_fx)))
+		else if (((x < px) && (x > mon_fx)) || ((x > px) && (x < mon_fx)))
 		{
 			midpoint = (py + mon_fy) >> 1;
 			if (y < midpoint)
