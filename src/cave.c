@@ -14,6 +14,7 @@
 static byte display_autopick;
 static int match_autopick;
 static object_type *autopick_obj;
+static int feat_priority;
 
 /*
  * Distance between two points via Newton-Raphson technique
@@ -876,6 +877,8 @@ void map_info(int y, int x, byte *ap, char *cp)
 	/* Feature code */
 	feat = c_ptr->feat;
 
+	feat_priority = 10;
+
 	/* Floors (etc) */
 	if ((feat <= FEAT_INVIS) || (feat == FEAT_DIRT) || (feat == FEAT_GRASS))
 	{
@@ -1314,6 +1317,8 @@ void map_info(int y, int x, byte *ap, char *cp)
 			/* Normal attr */
 			(*ap) = object_attr(o_ptr);
 
+			feat_priority = 15;
+
 			/* Hack -- hallucination */
 			if (p_ptr->image) image_object(ap, cp);
 
@@ -1340,6 +1345,8 @@ void map_info(int y, int x, byte *ap, char *cp)
 
 			/* Desired char */
 			c = r_ptr->x_char;
+
+			feat_priority = 20;
 
 			/* Mimics' colors vary */
 			if (strchr("\"!=", c) && !(r_ptr->flags1 & RF1_UNIQUE))
@@ -1473,6 +1480,8 @@ void map_info(int y, int x, byte *ap, char *cp)
 	if ((y == py) && (x == px))
 	{
 		monster_race *r_ptr = &r_info[0];
+
+		feat_priority = 21;
 
 		/* Get the "player" attr */
 		a = r_ptr->x_attr;
@@ -2142,112 +2151,6 @@ void prt_path(int y, int x)
 }
 
 
-
-
-/*
- * Display highest priority object in the RATIO by RATIO area
- */
-#define RATIO 3
-
-
-/*
- * Hack -- priority array (see below)
- *
- * Note that all "walls" always look like "secret doors" (see "map_info()").
- */
-static byte priority_table[][2] =
-{
-	/* Dark */
-	{ FEAT_NONE, 2 },
-
-	/* Floors */
-	{ FEAT_FLOOR, 5 },
-
-	/* Walls */
-	{ FEAT_SECRET, 10 },
-
-	/* Quartz */
-	{ FEAT_QUARTZ, 11 },
-
-	/* Magma */
-	{ FEAT_MAGMA, 12 },
-
-	/* Rubble */
-	{ FEAT_RUBBLE, 13 },
-
-	/* Open doors */
-	{ FEAT_OPEN, 15 },
-	{ FEAT_BROKEN, 15 },
-
-	/* Closed doors */
-	{ FEAT_DOOR_HEAD + 0x00, 17 },
-
-	/* Hidden gold */
-	{ FEAT_QUARTZ_K, 19 },
-	{ FEAT_MAGMA_K, 19 },
-
-	/* water, lava, & trees */
-	{ FEAT_DEEP_WATER, 20 },
-	{ FEAT_SHAL_WATER, 20 },
-	{ FEAT_DEEP_LAVA, 20 },
-	{ FEAT_SHAL_LAVA, 20 },
-	{ FEAT_DIRT, 6 },
-	{ FEAT_GRASS, 6 },
-	{ FEAT_FLOWER, 6 },
-	{ FEAT_DEEP_GRASS, 6 },
-	{ FEAT_DARK_PIT, 20 },
-	{ FEAT_TREES, 6 },
-	{ FEAT_MOUNTAIN, 20 },
-
-	/* Stairs */
-	{ FEAT_LESS, 25 },
-	{ FEAT_MORE, 25 },
-	{ FEAT_LESS_LESS, 25 },
-	{ FEAT_MORE_MORE, 25 },
-	{ FEAT_ENTRANCE, 25 },
-
-	{ FEAT_QUEST_ENTER, 25 },
-	{ FEAT_QUEST_EXIT, 25 },
-	{ FEAT_QUEST_DOWN, 25 },
-	{ FEAT_QUEST_UP, 25 },
-
-	/* End */
-	{ 0, 0 }
-};
-
-
-/*
- * Hack -- a priority function (see below)
- */
-static byte priority(byte a, char c)
-{
-	int i, p0, p1;
-
-	feature_type *f_ptr;
-
-	/* Scan the table */
-	for (i = 0; TRUE; i++)
-	{
-		/* Priority level */
-		p1 = priority_table[i][1];
-
-		/* End of table */
-		if (!p1) break;
-
-		/* Feature index */
-		p0 = priority_table[i][0];
-
-		/* Access the feature */
-		f_ptr = &f_info[p0];
-
-		/* Check character and attribute, accept matches */
-		if ((f_ptr->x_char == c) && (f_ptr->x_attr == a)) return (p1);
-	}
-
-	/* Default */
-	return (20);
-}
-
 static cptr simplify_list[][2] =
 {
 #ifdef JP
@@ -2417,8 +2320,8 @@ void display_map(int *cy, int *cx)
 			map_info(j, i, &ta, &tc);
 #endif /* USE_TRANSPARENCY */
 
-			/* Extract the priority of that attr/char */
-			tp = priority(ta, tc);
+			/* Extract the priority */
+			tp = feat_priority;
 
 			if(match_autopick!=-1
 			   && (match_autopick_yx[y][x] == -1
