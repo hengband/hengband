@@ -1010,10 +1010,8 @@ void do_cmd_destroy(void)
 	energy_use = 100;
 
 	/* Artifacts cannot be destroyed */
-	if (artifact_p(o_ptr) || o_ptr->art_name)
+	if (!can_player_destroy_object(o_ptr))
 	{
-		byte feel = FEEL_SPECIAL;
-
 		energy_use = 0;
 
 		/* Message */
@@ -1022,24 +1020,6 @@ void do_cmd_destroy(void)
 #else
 		msg_format("You cannot destroy %s.", o_name);
 #endif
-
-
-		/* Hack -- Handle icky artifacts */
-		if (cursed_p(o_ptr) || broken_p(o_ptr)) feel = FEEL_TERRIBLE;
-
-		/* Hack -- inscribe the artifact */
-		o_ptr->feeling = feel;
-
-		/* We have "felt" it (again) */
-		o_ptr->ident |= (IDENT_SENSE);
-
-		/* Combine the pack */
-		p_ptr->notice |= (PN_COMBINE);
-
-		p_ptr->redraw |= (PR_EQUIPPY);
-
-		/* Window stuff */
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
 		/* Done */
 		return;

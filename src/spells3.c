@@ -1905,32 +1905,14 @@ sprintf(out_val, "本当に%sを金に変えますか？", o_name);
 	}
 
 	/* Artifacts cannot be destroyed */
-	if (artifact_p(o_ptr) || o_ptr->art_name)
+	if (!can_player_destroy_object(o_ptr))
 	{
-		byte feel = FEEL_SPECIAL;
-
 		/* Message */
 #ifdef JP
-msg_format("%sを金に変えることに失敗した。", o_name);
+		msg_format("%sを金に変えることに失敗した。", o_name);
 #else
 		msg_format("You fail to turn %s to gold!", o_name);
 #endif
-
-
-		/* Hack -- Handle icky artifacts */
-		if (cursed_p(o_ptr) || broken_p(o_ptr)) feel = FEEL_TERRIBLE;
-
-		/* Hack -- inscribe the artifact */
-		o_ptr->feeling = feel;
-
-		/* We have "felt" it (again) */
-		o_ptr->ident |= (IDENT_SENSE);
-
-		/* Combine the pack */
-		p_ptr->notice |= (PN_COMBINE);
-
-		/* Window stuff */
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
 		/* Done */
 		return FALSE;
