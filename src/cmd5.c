@@ -4149,8 +4149,14 @@ msg_print("神聖な力が邪悪を打ち払った！");
 				nx = x;
 				mmove2(&ny, &nx, py, px, ty, tx);
 
+				/* Stop at maximum range */
+				if (MAX_SIGHT*2 < distance(py, px, ny, nx)) break;
+
 				/* Stopped by walls/doors */
 				if (!cave_floor_bold(ny, nx)) break;
+
+				/* Stopped by monsters */
+				if ((dir != 5) && cave[ny][nx].m_idx != 0) break;
 
 				/* Save the new location */
 				x = nx;
@@ -4161,7 +4167,7 @@ msg_print("神聖な力が邪悪を打ち払った！");
 
 			for (i = 0; i < b; i++)
 			{
-				int count = randint1(2), d = 0;
+				int count = 20, d = 0;
 
 				while (count--)
 				{
@@ -4170,17 +4176,22 @@ msg_print("神聖な力が邪悪を打ち払った！");
 					x = tx - 5 + randint0(11);
 					y = ty - 5 + randint0(11);
 
-					if (!in_bounds(y,x) || cave_stop_disintegration(y,x) || !in_disintegration_range(ty, tx, y, x)) continue;
-
 					dx = (tx > x) ? (tx - x) : (x - tx);
 					dy = (ty > y) ? (ty - y) : (y - ty);
 
 					/* Approximate distance */
 					d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
+					/* Within the radius */
 					if (d < 5) break;
 				}
 
 				if (count < 0) continue;
+
+				/* Cannot penetrate perm walls */
+				if (!in_bounds(y,x) ||
+				    cave_stop_disintegration(y,x) ||
+				    !in_disintegration_range(ty, tx, y, x))
+					continue;
 
 				project(0, 2, y, x, plev * 4, GF_DISINTEGRATE, PROJECT_JUMP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
 			}
