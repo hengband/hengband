@@ -5957,7 +5957,7 @@ bool room_build(int typ)
  * 
  * Generate rooms in dungeon.  Build bigger rooms at first.
  */
-void generate_rooms(void)
+bool generate_rooms(void)
 {
 	int i;
 	bool remain;
@@ -5976,7 +5976,6 @@ void generate_rooms(void)
 
 	/* Assume normal cave */
 	room_info_type *room_info_ptr = room_info_normal;
-
 
 	/*
 	 * Initialize probability list.
@@ -6146,6 +6145,8 @@ void generate_rooms(void)
 		if (!remain) break;
 	}
 
+	if (rooms_built < 1) return FALSE;
+
 	if (cheat_room)
 	{
 #ifdef JP
@@ -6154,4 +6155,6 @@ void generate_rooms(void)
 		msg_format("Number of Rooms: %d", rooms_built);
 #endif
 	}
+
+	return TRUE;
 }

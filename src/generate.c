@@ -742,7 +742,7 @@ static bool cave_gen(void)
 		/*
 		 * Build each type of room in turn until we cannot build any more.
 		 */
-		generate_rooms();
+		if (!generate_rooms()) return FALSE;
 
 
 		/* Make a hole in the dungeon roof sometimes at level 1 */
@@ -1285,11 +1285,10 @@ static bool level_gen(cptr *why)
 	{
 		if (cheat_room)
 #ifdef JP
-msg_print("小さなフロア");
+			msg_print("小さなフロア");
 #else
-		  msg_print("A 'small' dungeon level.");
+			msg_print("A 'small' dungeon level.");
 #endif
-
 
 		if (d_info[dungeon_type].flags1 & DF1_SMALLEST)
 		{
