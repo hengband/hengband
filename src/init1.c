@@ -1213,20 +1213,6 @@ errr parse_f_info(char *buf, header *head)
 	}
 #endif
 
-#if 0
-
-	/* Process 'D' for "Description" */
-	else if (buf[0] == 'D')
-	{
-		/* Acquire the text */
-		s = buf+2;
-
-		/* Store the text */
-		if (!add_text(&f_ptr->text, head, s)) return (7);
-	}
-
-#endif
-
 
 	/* Process 'M' for "Mimic" (one line only) */
 	else if (buf[0] == 'M')

@@ -3152,6 +3152,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 	{
 		monster_type *m_ptr = &m_list[c_ptr->m_idx];
 		monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
+		char m_name[80];
 		bool recall = FALSE;
 
 		/* Not boring */
