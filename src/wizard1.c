@@ -207,9 +207,9 @@ static grouper group_item[] =
 #endif
 
 #ifdef JP
-{ TV_PARCHEMENT,    "Õ”»ÈªÊ" },
+{ TV_PARCHMENT,    "Õ”»ÈªÊ" },
 #else
-{ TV_PARCHEMENT,    "Parchement" },
+{ TV_PARCHMENT,    "Parchment" },
 #endif
 
 #ifdef JP

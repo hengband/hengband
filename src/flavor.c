@@ -2036,13 +2036,13 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			break;
 		}
 
-		case TV_PARCHEMENT:
+		case TV_PARCHMENT:
 		{
 			modstr = basenm;
 #ifdef JP
 			basenm = "Õ”»ÈªÊ - #";
 #else
-			basenm = "& Parchement~ - #";
+			basenm = "& Parchment~ - #";
 #endif
 			break;
 		}

@@ -2162,7 +2162,7 @@ msg_print("巻物は煙を立てて消え去った！");
 #endif
 		used_up = FALSE;
 	}
-	else if (o_ptr->tval==TV_PARCHEMENT)
+	else if (o_ptr->tval==TV_PARCHMENT)
 	{
 		cptr q;
 		char o_name[MAX_NLEN];
@@ -2244,7 +2244,7 @@ msg_print("巻物は煙を立てて消え去った！");
  */
 static bool item_tester_hook_readable(object_type *o_ptr)
 {
-	if ((o_ptr->tval==TV_SCROLL) || (o_ptr->tval==TV_PARCHEMENT) || (o_ptr->name1 == ART_GHB) || (o_ptr->name1 == ART_POWER)) return (TRUE);
+	if ((o_ptr->tval==TV_SCROLL) || (o_ptr->tval==TV_PARCHMENT) || (o_ptr->name1 == ART_GHB) || (o_ptr->name1 == ART_POWER)) return (TRUE);
 
 	/* Assume not */
 	return (FALSE);
