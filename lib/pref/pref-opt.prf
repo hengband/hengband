@@ -49,6 +49,8 @@ Y:view_special_lite
 X:new_ascii_graphics
 X:display_path
 Y:always_show_list
+X:abbrev_extra
+X:abbrev_all
 
 ##### Game-Play #####
 

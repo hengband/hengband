@@ -6769,7 +6769,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &abbrev_extra,                FALSE, 2, 2, 10,
-	"abbrev_extra",                 "アイテムに追加耐性/能力の略称を刻む。" },
+	"abbrev_extra",                 "アイテムに追加耐性/能力の略称を刻む" },
 #else
 	{ &abbrev_extra,                FALSE, 2, 2, 10,
 	"abbrev_extra",                 "Describe obj's extra resistances by abbreviation" },
@@ -6777,7 +6777,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &abbrev_all,                  FALSE, 2, 2, 11,
-	"abbrev_all",                   "アイテムに全ての耐性/能力の略称を刻む。" },
+	"abbrev_all",                   "アイテムに全ての耐性/能力の略称を刻む" },
 #else
 	{ &abbrev_all,                  FALSE, 2, 2, 11,
 	"abbrev_all",                   "Describe obj's all resistances by abbreviation" },
