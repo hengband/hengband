@@ -1123,7 +1123,7 @@ extern void remove_all_mirrors(bool explode);
 /* spells3.c */
 extern bool teleport_away(int m_idx, int dis, bool dec_valour);
 extern void teleport_monster_to(int m_idx, int ty, int tx, int power);
-extern bool cave_teleportable_bold(int y, int x, u16b mode);
+extern bool cave_teleportable_bold(int y, int x);
 extern void teleport_player(int dis);
 extern void teleport_player_to(int ny, int nx, bool no_tele);
 extern void teleport_level(int m_idx);

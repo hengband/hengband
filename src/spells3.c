@@ -251,7 +251,7 @@ void teleport_monster_to(int m_idx, int ty, int tx, int power)
 }
 
 
-bool cave_teleportable_bold(int y, int x, u16b mode)
+bool cave_teleportable_bold(int y, int x)
 {
 	cave_type    *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
@@ -259,25 +259,25 @@ bool cave_teleportable_bold(int y, int x, u16b mode)
 	/* Require "teleportable" space */
 	if (!have_flag(f_ptr->flags, FF_TELEPORTABLE)) return FALSE;
 
-	if (!(mode & TELEPORT_ALLOW_OBJECT) && (c_ptr->info & CAVE_OBJECT)) return FALSE;
+	/* No teleporting into vaults and such */
+	if (c_ptr->info & CAVE_ICKY) return FALSE;
 
 	if (c_ptr->m_idx) return FALSE;
-	if (player_bold(y, x)) return FALSE;
 
 	if (!player_can_enter(c_ptr->feat, 0)) return FALSE;
 
-	if ((mode & TELEPORT_REQUIRE_PROJECT) && !have_flag(f_ptr->flags, FF_PROJECT)) return FALSE;
-
-	if (!(mode & TELEPORT_ALLOW_DEEP))
+	if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP))
 	{
-		if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP))
-		{
-			if (!p_ptr->ffall && !p_ptr->can_swim) return FALSE;
-		}
-		if (have_flag(f_ptr->flags, FF_LAVA) && !p_ptr->immune_fire && !IS_INVULN())
-		{
-			if (have_flag(f_ptr->flags, FF_DEEP) || !p_ptr->ffall) return FALSE;
-		}
+		if (!p_ptr->ffall && !p_ptr->can_swim) return FALSE;
+	}
+
+	if (have_flag(f_ptr->flags, FF_LAVA) && !p_ptr->immune_fire && !IS_INVULN())
+	{
+		/* Always forbid deep lave */
+		if (have_flag(f_ptr->flags, FF_DEEP)) return FALSE;
+
+		/* Forbid shallow lave when the player don't have levitation */
+		if (!p_ptr->ffall) return FALSE;
 	}
 
 	return TRUE;
@@ -351,10 +351,7 @@ msg_print("不思議な力がテレポートを防いだ！");
 			/* Ignore illegal locations */
 			if (!in_bounds(y, x)) continue;
 
-			/* No teleporting into vaults and such */
-			if (cave[y][x].info & CAVE_ICKY) continue;
-
-			if (!cave_teleportable_bold(y, x, 0)) continue;
+			if (!cave_teleportable_bold(y, x)) continue;
 
 			/* This grid looks good */
 			look = FALSE;
@@ -482,9 +479,11 @@ void teleport_player_to(int ny, int nx, bool no_tele)
 			if (in_bounds(y, x)) break;
 		}
 
-		/* Accept "naked" floor grids */
-		if (!no_tele && player_bold(y, x)) break;
-		if (cave_teleportable_bold(y, x, TELEPORT_ALLOW_DEEP | (no_tele ? 0 : TELEPORT_ALLOW_OBJECT))) break;
+		/* Accept any grid when wizard mode */
+		if (p_ptr->wizard) break;
+
+		/* Accept teleportable floor grids */
+		if (cave_teleportable_bold(y, x)) break;
 
 		/* Occasionally advance the distance */
 		if (++ctr > (4 * dis * dis + 4 * dis + 1))
@@ -5875,8 +5874,7 @@ static bool dimension_door_aux(int x, int y)
 
 	p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
 
-	if (!cave_teleportable_bold(y, x, TELEPORT_ALLOW_DEEP | TELEPORT_ALLOW_OBJECT | TELEPORT_REQUIRE_PROJECT) ||
-	    (cave[y][x].info & CAVE_ICKY) ||
+	if (!cave_teleportable_bold(y, x) ||
 	    (distance(y, x, py, px) > plev / 2 + 10) ||
 	    (!randint0(plev / 10 + 10)))
 	{

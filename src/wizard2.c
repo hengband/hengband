@@ -108,17 +108,7 @@ static bool wiz_dimension_door(void)
 
 	if (!tgt_pt(&x, &y)) return FALSE;
 
-	if (!cave_teleportable_bold(y, x, TELEPORT_ALLOW_DEEP | TELEPORT_ALLOW_OBJECT))
-	{
-#ifdef JP
-msg_print("精霊界から物質界に戻る時うまくいかなかった！");
-#else
-		msg_print("You fail to exit the astral plane correctly!");
-#endif
-
-		teleport_player(10);
-	}
-	else teleport_player_to(y, x, FALSE);
+	teleport_player_to(y, x, FALSE);
 
 	return (TRUE);
 }

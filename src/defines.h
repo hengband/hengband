@@ -1291,14 +1291,6 @@
 #define FAF_NO_DROP 0x02
 
 
-/*
- * Player teleportation flags
- */
-#define TELEPORT_ALLOW_DEEP      0x0001
-#define TELEPORT_ALLOW_OBJECT    0x0002
-#define TELEPORT_REQUIRE_PROJECT 0x0004
-
-
 /* Type of pattern tiles */
 #define NOT_PATTERN_TILE      -1
 #define PATTERN_TILE_START    0

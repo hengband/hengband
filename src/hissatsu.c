@@ -1045,8 +1045,7 @@ static bool cast_hissatsu_spell(int spell)
 	case 27:
 	{
 		if (!tgt_pt(&x, &y)) return FALSE;
-		if (!cave_teleportable_bold(y, x, TELEPORT_ALLOW_DEEP | TELEPORT_ALLOW_OBJECT | TELEPORT_REQUIRE_PROJECT) ||
-		    (cave[y][x].info & CAVE_ICKY) ||
+		if (!cave_teleportable_bold(y, x) ||
 		    (distance(y, x, py, px) > MAX_SIGHT / 2) ||
 		    !projectable(py, px, y, x))
 		{
