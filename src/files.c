@@ -910,7 +910,7 @@ cptr process_pref_file_expr(cptr *sp, char *fp)
 		if (f != b2) v = "?x?x?";
 
 		/* Extract final and Terminate */
-		if ((f = *s) != '\0') *s++;
+		if ((f = *s) != '\0') s++;
 	}
 
 	/* Other */
@@ -927,7 +927,7 @@ cptr process_pref_file_expr(cptr *sp, char *fp)
 		b[i] = '\0';
 
 		/* Extract final and Terminate */
-		if ((f = *s) != '\0') *s++;
+		if ((f = *s) != '\0') s++;
 
 		/* Variable */
 		if (*b == '$')
