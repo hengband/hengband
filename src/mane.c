@@ -330,6 +330,7 @@ msg_format("%sはもう無敵ではない。", m_name);
 #else
 			msg_format("%^s is no longer invulnerable.", m_name);
 #endif
+			m_ptr->energy_need += ENERGY_NEED();
 		}
 		if (m_ptr->fast)
 		{
