@@ -1329,7 +1329,7 @@ C:0:0:0:0
 F:ACTIVATE
 
 N:220:Ì¥ÏÇ¤Î
-E:and Fascination
+E:and Monster Turning
 X:29:15
 W:40:0:0:2000
 C:0:0:0:0
