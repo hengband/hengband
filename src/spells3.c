@@ -2838,24 +2838,32 @@ bool ident_spell(bool only_equip)
 	else
 		item_tester_hook = item_tester_hook_identify;
 
-	if (!can_get_item())
+	if (can_get_item())
+	{
+#ifdef JP
+		q = "どのアイテムを鑑定しますか? ";
+#else
+		q = "Identify which item? ";
+#endif
+	}
+	else
 	{
 		if (only_equip)
-		{
 			item_tester_hook = object_is_weapon_armour_ammo;
-		}
 		else
-		{
 			item_tester_hook = NULL;
-		}
+
+#ifdef JP
+		q = "すべて鑑定済みです。 ";
+#else
+		q = "All items are identified. ";
+#endif
 	}
 
 	/* Get an item */
 #ifdef JP
-q = "どのアイテムを鑑定しますか? ";
-s = "鑑定するべきアイテムがない。";
+	s = "鑑定するべきアイテムがない。";
 #else
-	q = "Identify which item? ";
 	s = "You have nothing to identify.";
 #endif
 
@@ -3012,21 +3020,33 @@ bool identify_fully(bool only_equip)
 	else
 		item_tester_hook = item_tester_hook_identify_fully;
 
-	if (!can_get_item())
+	if (can_get_item())
+	{
+#ifdef JP
+		q = "どのアイテムを*鑑定*しますか? ";
+#else
+		q = "*Identify* which item? ";
+#endif
+	}
+	else
 	{
 		if (only_equip)
 			item_tester_hook = object_is_weapon_armour_ammo;
 		else
 			item_tester_hook = NULL;
+
+#ifdef JP
+		q = "すべて*鑑定*済みです。 ";
+#else
+		q = "All items are *identified*. ";
+#endif
 	}
 
 	/* Get an item */
 #ifdef JP
-q = "どのアイテムを鑑定しますか? ";
-s = "鑑定するべきアイテムがない。";
+	s = "*鑑定*するべきアイテムがない。";
 #else
-	q = "Identify which item? ";
-	s = "You have nothing to identify.";
+	s = "You have nothing to *identify*.";
 #endif
 
 	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
