@@ -1177,10 +1177,6 @@ static void wiz_quantity_item(object_type *o_ptr)
 
 		/* Accept modifications */
 		o_ptr->number = tmp_int;
-
-		/* Hack -- rod pvals must change if the number in the stack does. -LM- */
-		if (o_ptr->tval == TV_ROD)
-			o_ptr->pval = o_ptr->pval * o_ptr->number / tmp_qnt;
 	}
 }
 

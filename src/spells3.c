@@ -5906,8 +5906,8 @@ msg_format("乱暴な魔法のために%sが一本壊れた！", o_name);
 #endif
 
 					/* Reduce rod stack maximum timeout, drain wands. */
-					if (o_ptr->tval == TV_ROD) o_ptr->timeout -= k_ptr->pval;
-					if (o_ptr->tval == TV_WAND) o_ptr->pval = o_ptr->pval * (o_ptr->number - 1) / o_ptr->number;
+					if (o_ptr->tval == TV_ROD) o_ptr->timeout = MIN(o_ptr->timeout, k_ptr->pval * (o_ptr->number - 1));
+					else if (o_ptr->tval == TV_WAND) o_ptr->pval = o_ptr->pval * (o_ptr->number - 1) / o_ptr->number;
 
 				}
 				else
