@@ -4593,8 +4593,8 @@ static void dump_aux_monsters(FILE *fff)
 	/* Monsters slain */
 
 	int k;
-	unsigned long uniq_total = 0;
-	unsigned long norm_total = 0;
+	long uniq_total = 0;
+	long norm_total = 0;
 	s16b *who;
 
 	/* Sort by monster level */
@@ -4655,9 +4655,9 @@ static void dump_aux_monsters(FILE *fff)
 	else if (uniq_total == 0)
 	{
 #ifdef JP
-		fprintf(fff,"%lu体の敵を倒しています。\n", norm_total);
+		fprintf(fff,"%ld体の敵を倒しています。\n", norm_total);
 #else
-		fprintf(fff,"You have defeated %lu %s.\n", norm_total, norm_total == 1 ? "enemy" : "enemies");
+		fprintf(fff,"You have defeated %ld %s.\n", norm_total, norm_total == 1 ? "enemy" : "enemies");
 #endif
 	}
 
@@ -4665,9 +4665,9 @@ static void dump_aux_monsters(FILE *fff)
 	else /* if (uniq_total > 0) */
 	{
 #ifdef JP
-		fprintf(fff, "%lu体のユニーク・モンスターを含む、合計%lu体の敵を倒しています。\n", uniq_total, norm_total); 
+		fprintf(fff, "%ld体のユニーク・モンスターを含む、合計%ld体の敵を倒しています。\n", uniq_total, norm_total); 
 #else
-		fprintf(fff, "You have defeated %lu %s including %lu unique monster%s in total.\n", norm_total, norm_total == 1 ? "enemy" : "enemies", uniq_total, (uniq_total == 1 ? "" : "s"));
+		fprintf(fff, "You have defeated %ld %s including %ld unique monster%s in total.\n", norm_total, norm_total == 1 ? "enemy" : "enemies", uniq_total, (uniq_total == 1 ? "" : "s"));
 #endif
 
 
@@ -4679,13 +4679,13 @@ static void dump_aux_monsters(FILE *fff)
 		ang_sort(who, &why, uniq_total);
 
 #ifdef JP
-		fprintf(fff, "\n《上位%lu体のユニーク・モンスター》\n", MIN(uniq_total, 10));
+		fprintf(fff, "\n《上位%ld体のユニーク・モンスター》\n", MIN(uniq_total, 10));
 #else
-		fprintf(fff, "\n< Unique monsters top %lu >\n", MIN(uniq_total, 10));
+		fprintf(fff, "\n< Unique monsters top %ld >\n", MIN(uniq_total, 10));
 #endif
 
 		/* Print top 10 */
-		for (k = uniq_total - 1; k >= 0 && k >= (long)uniq_total - 10; k--)
+		for (k = uniq_total - 1; k >= 0 && k >= uniq_total - 10; k--)
 		{
 			monster_race *r_ptr = &r_info[who[k]];
 
