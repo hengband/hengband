@@ -2970,6 +2970,18 @@ errr init_x11(int argc, char *argv[])
 			smoothRescaling = FALSE;
 			continue;
 		}
+
+		if (prefix(argv[i], "-a"))
+		{
+			arg_graphics = GRAPHICS_ADAM_BOLT;
+			continue;
+		}
+
+		if (prefix(argv[i], "-o"))
+		{
+			arg_graphics = GRAPHICS_ORIGINAL;
+			continue;
+		}
 #endif /* USE_GRAPHICS */
 
 		if (prefix(argv[i], "-n"))
@@ -2977,6 +2989,12 @@ errr init_x11(int argc, char *argv[])
 			num_term = atoi(&argv[i][2]);
 			if (num_term > MAX_TERM_DATA) num_term = MAX_TERM_DATA;
 			else if (num_term < 1) num_term = 1;
+			continue;
+		}
+
+		if (prefix(argv[i], "--"))
+		{
+			/* Ignore */
 			continue;
 		}
 
@@ -3083,8 +3101,26 @@ errr init_x11(int argc, char *argv[])
 #ifdef USE_GRAPHICS
 
 	/* Try graphics */
-	if (arg_graphics)
+	switch (arg_graphics)
 	{
+	case GRAPHICS_ORIGINAL:
+		/* Try the "8x8.bmp" file */
+		path_build(filename, 1024, ANGBAND_DIR_XTRA, "graf/8x8.bmp");
+
+		/* Use the "8x8.bmp" file if it exists */
+		if (0 == fd_close(fd_open(filename, O_RDONLY)))
+		{
+			/* Use graphics */
+			use_graphics = TRUE;
+
+			pict_wid = pict_hgt = 8;
+
+			ANGBAND_GRAF = "old";
+			break;
+		}
+		/* Fall through */
+
+	case GRAPHICS_ADAM_BOLT:
 		/* Try the "16x16.bmp" file */
 		path_build(filename, 1024, ANGBAND_DIR_XTRA, "graf/16x16.bmp");
 
@@ -3097,22 +3133,8 @@ errr init_x11(int argc, char *argv[])
 			pict_wid = pict_hgt = 16;
 
 			ANGBAND_GRAF = "new";
-		}
-		else
-		{
-			/* Try the "8x8.bmp" file */
-			path_build(filename, 1024, ANGBAND_DIR_XTRA, "graf/8x8.bmp");
 
-			/* Use the "8x8.bmp" file if it exists */
-			if (0 == fd_close(fd_open(filename, O_RDONLY)))
-			{
-				/* Use graphics */
-				use_graphics = TRUE;
-
-				pict_wid = pict_hgt = 8;
-
-				ANGBAND_GRAF = "old";
-			}
+			break;
 		}
 	}
 
