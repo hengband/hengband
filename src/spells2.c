@@ -7417,6 +7417,7 @@ bool rush_attack(bool *mdeath)
 	u16b path_g[32];
 	int path_n, i;
 	bool tmp_mdeath = FALSE;
+	bool moved = FALSE;
 
 	if (mdeath) *mdeath = FALSE;
 
@@ -7518,12 +7519,14 @@ bool rush_attack(bool *mdeath)
 #endif
 		}
 
+		if (!player_bold(ty, tx)) teleport_player_to(ty, tx, FALSE, FALSE);
+		moved = TRUE;
 		tmp_mdeath = py_attack(ny, nx, HISSATSU_NYUSIN);
 
 		break;
 	}
 
-	if (!player_bold(ty, tx)) teleport_player_to(ty, tx, FALSE, FALSE);
+	if (!moved && !player_bold(ty, tx)) teleport_player_to(ty, tx, FALSE, FALSE);
 
 	if (mdeath) *mdeath = tmp_mdeath;
 	return TRUE;
