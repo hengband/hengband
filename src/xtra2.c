@@ -3568,9 +3568,8 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 
 		/* Pick a prefix */
 		if (*s2 &&
-		    (!have_flag(f_ptr->flags, FF_MOVE) ||
-		    (!have_flag(f_ptr->flags, FF_LOS) &&
-		     !have_flag(f_ptr->flags, FF_TREE)) ||
+		    ((!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) ||
+		     (!have_flag(f_ptr->flags, FF_LOS) && !have_flag(f_ptr->flags, FF_TREE)) ||
 		     have_flag(f_ptr->flags, FF_TOWN)))
 		{
 #ifdef JP

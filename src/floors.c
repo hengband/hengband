@@ -524,7 +524,7 @@ static void place_pet(void)
 				for (j = 1000; j > 0; j--)
 				{
 					scatter(&cy, &cx, py, px, d, 0);
-					if (have_flag(f_flags_bold(cy, cx), FF_MOVE) && !cave[cy][cx].m_idx && !player_bold(cy, cx)) break;
+					if (monster_can_enter(cy, cx, &r_info[party_mon[i].r_idx], 0)) break;
 				}
 				if (j) break;
 			}

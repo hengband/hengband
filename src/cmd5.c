@@ -1813,7 +1813,7 @@ msg_print("「卑しき者よ、我は汝の下僕にあらず！ お前の魂を頂くぞ！」");
 					x = px - 8 + randint0(17);
 					y = py - 8 + randint0(17);
 
-					if (!in_bounds(y, x) || !have_flag(f_flags_bold(y, x), FF_MOVE) || !projectable(py, px, y, x)) continue;
+					if (!in_bounds(y, x) || !projectable(py, px, y, x)) continue;
 
 					dx = (px > x) ? (px - x) : (x - px);
 					dy = (py > y) ? (py - y) : (y - py);
@@ -3106,7 +3106,7 @@ msg_print("召喚されたドラゴンは怒っている！");
 						x = px - 8 + randint0(17);
 						y = py - 8 + randint0(17);
 
-						if (!in_bounds(y, x) || !have_flag(f_flags_bold(y, x), FF_MOVE) || !projectable(py, px, y, x)) continue;
+						if (!in_bounds(y, x) || !projectable(py, px, y, x)) continue;
 
 						dx = (px > x) ? (px - x) : (x - px);
 						dy = (py > y) ? (py - y) : (y - py);
@@ -5470,6 +5470,7 @@ bool rakuba(int dam, bool force)
 	char m_name[80];
 	monster_type *m_ptr = &m_list[p_ptr->riding];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	bool fall_dam = FALSE;
 
 	if (!p_ptr->riding) return FALSE;
 	if (p_ptr->wild_mode) return FALSE;
@@ -5523,7 +5524,7 @@ bool rakuba(int dam, bool force)
 			if (c_ptr->m_idx) continue;
 
 			/* Skip non-empty grids */
-			if (!have_flag(f_flags_grid(c_ptr), FF_MOVE))
+			if (!have_flag(f_flags_grid(c_ptr), FF_MOVE) && !have_flag(f_flags_grid(c_ptr), FF_CAN_FLY))
 			{
 				if (!player_can_ride_aux(c_ptr, FALSE)) continue;
 			}
@@ -5594,19 +5595,24 @@ msg_format("%sから振り落とされそうになって、壁にぶつかった。",m_name);
 	{
 		monster_desc(m_name, m_ptr, 0);
 #ifdef JP
-msg_format("%sから落ちたが、空中でうまく体勢を立て直して着地した。",m_name);
+		msg_format("%sから落ちたが、空中でうまく体勢を立て直して着地した。",m_name);
 #else
 		msg_format("You are thrown from %s, but make a good landing.",m_name);
 #endif
-		return FALSE;
 	}
+	else
+	{
 #ifdef JP
-	take_hit(DAMAGE_NOESCAPE, r_ptr->level+3, "落馬", -1);
+		take_hit(DAMAGE_NOESCAPE, r_ptr->level+3, "落馬", -1);
 #else
-	take_hit(DAMAGE_NOESCAPE, r_ptr->level+3, "Falling from riding", -1);
+		take_hit(DAMAGE_NOESCAPE, r_ptr->level+3, "Falling from riding", -1);
 #endif
+		fall_dam = TRUE;
+	}
 
-	return TRUE;
+	if (sy && p_ptr->is_dead) move_player_effect(FALSE, FALSE);
+
+	return fall_dam;
 }
 
 bool do_riding(bool force)
@@ -5708,15 +5714,14 @@ bool do_riding(bool force)
 			feature_type *f_ptr = &f_info[get_feat_mimic(c_ptr)];
 #ifdef JP
 			msg_format("そのモンスターは%sの%sにいる。", f_name + f_ptr->name,
-			           (!have_flag(f_ptr->flags, FF_MOVE) ||
-			           (!have_flag(f_ptr->flags, FF_LOS) &&
-			            !have_flag(f_ptr->flags, FF_TREE))) ? "中" : "上");
+			           ((!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) ||
+			            (!have_flag(f_ptr->flags, FF_LOS) && !have_flag(f_ptr->flags, FF_TREE))) ?
+			           "中" : "上");
 #else
 			msg_format("This monster is %s the %s.",
-			           (!have_flag(f_ptr->flags, FF_MOVE) ||
-			           (!have_flag(f_ptr->flags, FF_LOS) &&
-			            !have_flag(f_ptr->flags, FF_TREE))) ? "in" : "on",
-			           f_name + f_ptr->name);
+			           ((!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) ||
+			            (!have_flag(f_ptr->flags, FF_LOS) && !have_flag(f_ptr->flags, FF_TREE))) ?
+			           "in" : "on", f_name + f_ptr->name);
 #endif
 
 			return FALSE;
@@ -5756,7 +5761,7 @@ bool do_riding(bool force)
 	oy = py;
 	ox = px;
 
-	/* Move the player to the safe location */
+	/* Move the player */
 	py = y;
 	px = x;
 
@@ -5792,6 +5797,9 @@ bool do_riding(bool force)
 	p_ptr->redraw |= (PR_UHEALTH);
 
 	handle_stuff();
+
+	move_player_effect(FALSE, FALSE);
+
 	return TRUE;
 }
 

@@ -2916,7 +2916,7 @@ msg_format("%^s%s", m_name, monmessage);
 
 			/* Monster moves through walls (and doors) */
 			if ((r_ptr->flags2 & RF2_PASS_WALL) && (!is_riding_mon || p_ptr->pass_wall) &&
-			    !have_flag(f_ptr->flags, FF_MOVE))
+			    have_flag(f_ptr->flags, FF_CAN_PASS))
 			{
 				/* Monster went through a wall */
 				did_pass_wall = TRUE;
