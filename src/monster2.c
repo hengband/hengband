@@ -2858,7 +2858,16 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 	{
 		m_ptr->max_maxhp = damroll(r_ptr->hdice, r_ptr->hside);
 	}
+
+	/* Monsters have double hitpoints in Nightmare mode */
+	if (ironman_nightmare)
+	{
+		u32b hp = m_ptr->max_maxhp * 2L;
+		m_ptr->max_maxhp = (s16b)MIN(30000, hp);
+	}
+
 	m_ptr->maxhp = (long)(m_ptr->maxhp * m_ptr->max_maxhp) / oldmaxhp;
+	if (m_ptr->maxhp < 1) m_ptr->maxhp = 1;
 	m_ptr->hp = (long)(m_ptr->hp * m_ptr->max_maxhp) / oldmaxhp;
 }
 

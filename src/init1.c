@@ -2718,8 +2718,8 @@ errr parse_r_info(char *buf, header *head)
 
 		/* Save the values */
 		r_ptr->speed = spd;
-		r_ptr->hdice = hp1;
-		r_ptr->hside = hp2;
+		r_ptr->hdice = MAX(hp1, 1);
+		r_ptr->hside = MAX(hp2, 1);
 		r_ptr->aaf = aaf;
 		r_ptr->ac = ac;
 		r_ptr->sleep = slp;

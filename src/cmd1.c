@@ -2726,6 +2726,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				}
 				m_ptr->maxhp -= (k+7)/8;
 				if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
+				if (m_ptr->maxhp < 1) m_ptr->maxhp = 1;
 				weak = TRUE;
 			}
 			can_drain = FALSE;

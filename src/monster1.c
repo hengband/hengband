@@ -1674,15 +1674,15 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 			    wd_he[msex], r_ptr->ac));
 
 		/* Maximized hitpoints */
-		if (flags1 & RF1_FORCE_MAXHP)
+		if ((flags1 & RF1_FORCE_MAXHP) || (r_ptr->hside == 1))
 		{
+			u32b hp = r_ptr->hdice * (ironman_nightmare ? 2 : 1) * r_ptr->hside;
 #ifdef JP
 			hooked_roff(format(" %d の体力がある。",
 #else
 			hooked_roff(format(" and a life rating of %d.  ",
 #endif
-
-				    r_ptr->hdice * r_ptr->hside));
+				    (s16b)MIN(30000, hp)));
 		}
 
 		/* Variable hitpoints */
@@ -1693,8 +1693,7 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 #else
 			hooked_roff(format(" and a life rating of %dd%d.  ",
 #endif
-
-				    r_ptr->hdice, r_ptr->hside));
+				    r_ptr->hdice * (ironman_nightmare ? 2 : 1), r_ptr->hside));
 		}
 	}
 
