@@ -828,7 +828,7 @@ static char *spell_tips[VALID_REALM][32] =
 		"attacks all adjacent monsters with power corresponding to your cut status. then increases your cut status. No effect to unliving monsters.",
 		"shakes dungeon structure, and results in random swaping of floors and walls.",
 		"fires a beam of shock wave.",
-		"damages all monsters in sight with sound. aggrevate nearby monsters.",
+		"damages all monsters in sight with sound. aggravate nearby monsters.",
 		"attacks with powerful 3 strikes.",
 
 		"attacks with vamparic strikes which absorbs HP from a monster and gives them to you. No effect to unliving monsters.",
