@@ -4179,7 +4179,13 @@ static int see_wall(int dir, int y, int x)
 
 		f_ptr = &f_info[feat];
 
+		/* Don't run on a tree unless explicitly requested */
 		if (have_flag(f_ptr->flags, FF_AVOID_RUN) && !ignore_avoid_run)
+			return TRUE;
+
+		/* Don't run in a wall */
+		if (!have_flag(f_ptr->flags, FF_MOVE) &&
+		    !have_flag(f_ptr->flags, FF_CAN_FLY))
 			return TRUE;
 	}
 
