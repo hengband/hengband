@@ -3008,6 +3008,8 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 				}
 				k += (p_ptr->to_d[hand] + o_ptr->to_d);
 
+                                if (k < 0) k = 0;
+
 #ifdef JP
 				take_hit(DAMAGE_FORCE, k, "死の大鎌", -1);
 #else
