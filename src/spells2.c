@@ -5279,15 +5279,15 @@ sprintf(buf, "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:", m_name, align, m_
 			/* Learn everything about this monster */
 			if (lore_do_probe(m_ptr->r_idx))
 			{
-#ifdef JP
-				/* Note that we learnt some new flags  -Mogami- */
-				msg_format("%sについてさらに詳しくなった気がする。", m_name);
-#else
 				char buf[80];
 
 				/* Get base name of monster */
 				strcpy(buf, (r_name + r_ptr->name));
 
+#ifdef JP
+				/* Note that we learnt some new flags  -Mogami- */
+				msg_format("%sについてさらに詳しくなった気がする。", buf);
+#else
 				/* Pluralize it */
 				plural_aux(buf);
 
