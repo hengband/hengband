@@ -3776,6 +3776,9 @@ static void do_menu_file_open(bool all)
 	/* Let the player to choose savefile */
 	if (!select_savefile(all)) return;
 
+	/* Hack */
+	HiliteMenu(0);
+
 	/* Game is in progress */
 	game_in_progress = TRUE;
 
