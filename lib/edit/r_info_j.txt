@@ -6167,7 +6167,7 @@ D:$It is a giant scorpion with a sharp stinger.
 D:それは鋭い刺を持った巨大なサソリだ。
 
 N:370:緑衣の修行僧
-E:Jade Monk
+E:Jade monk
 G:p:G
 I:120:54d12:30:46:10
 W:30:2:0:800:0:0
@@ -8485,7 +8485,7 @@ D:$A huge, ugly, half-human in search of plunder.
 D:餌食を探し回っている、巨大で醜い人間とトロルの混血だ。
 
 N:492:白衣の修行僧
-E:Ivory Monk
+E:Ivory monk
 G:p:w
 I:120:42d13:25:51:7
 W:33:1:0:900:2000:915
@@ -17822,7 +17822,7 @@ D:ことができる。水陸ともに敏捷に動き---腹の両側に小さな足がうじゃうじゃ---」
 D:（ロジャー・ゼラズニイ、小尾芙佐訳「わが名はコンラッド」早川書房、p.93）
 
 N:870:黒衣の修行僧
-E:Ebony Monk
+E:Ebony monk
 G:p:D
 I:120:63d11:20:57:5
 W:36:3:0:1100:0:0
@@ -17929,7 +17929,7 @@ D:$The tortured soul of a once powerful wyrm.
 D:かつて強大な力を誇っていたワイアームの怨霊だ。
 
 N:875:ストームトロル
-E:Storm Troll
+E:Storm troll
 G:T:b
 I:120:60d50:20:110:100
 W:51:2:0:3500:0:0
@@ -19670,7 +19670,7 @@ D:逆にその甘言に誑かされ、至福の地アマンへ兵を向け、
 D:それが結局はヌメノールを滅亡に導くことになる。
 
 N:979:大江山の鬼の王『酒呑童子』
-E:Shuten-douji, the king ogre of Ooe-mountain
+E:Shuten-douji, the King Ogre of Ooe-Mountain
 G:O:o
 I:125:30d100:20:120:20
 W:47:3:0:15000:0:0
@@ -19843,7 +19843,7 @@ B:KICK:HURT:4d10
 F:DROP_2D2 | ANIMAL | NO_SLEEP | CAN_FLY | RIDING
 
 N:991:オーディンの乗馬『スレイプニル』
-E:Sleipnir, the Odin's steed
+E:Sleipnir, the Odin's Steed
 G:q:o
 I:130:40d100:20:140:50
 W:51:3:0:17000:0:0
@@ -20034,7 +20034,7 @@ D:$Mitsukuni of the Yellow Gate, Grand Duke of Mito
 D:ご老公を助けて旅から旅へ。とんだ爺に仕えたもんだ。
 
 N:1003:ゴースト『Ｑ』
-E:The ghost 'Q'
+E:The Ghost 'Q'
 G:G:w
 I:140:10d20:10:30:10
 W:15:3:0:150:0:0
@@ -20201,7 +20201,7 @@ D:金なら1匹、銀なら5匹でもれなくおもちゃのカンヅメが当たります。
 
 
 N:1012:自縛霊
-E:Jibaku Ghost
+E:Jibaku ghost
 G:G:W
 I:110:20d5:12:10:10
 W:8:2:0:20:0:0
@@ -20275,7 +20275,7 @@ D:輝く死と破壊の機械だ。
 # 蜘蛛召喚する敵が召喚しちゃうと変だけど。訳は「蜘蛛型爆弾」の方がよいかも。
 #
 N:1016:スパイダー・ボム
-E:Spider Bomb
+E:Spider bomb
 G:S:W
 I:120:5d10:30:50:0
 W:20:4:0:10:0:0
@@ -20292,7 +20292,7 @@ D:蜘蛛のような形の小さな爆弾で、あなたに向って歩き、爆発する。
 # HUNTER X HUNTER より。
 #
 N:1017:爆弾をとりつけられた蚊
-E:Bomb Mosquito
+E:Bomb mosquito
 G:I:D
 I:120:1d1:30:50:0
 W:1:3:0:3:0:0
@@ -20305,7 +20305,7 @@ F:WEIRD_MIND | ANIMAL
 # ケンシロウのコピーだけど、少しだけ違う。Raoh?
 #
 N:1018:世紀末覇者『ラオウ』
-E:Raou the conqueror
+E:Raou the Conqueror
 G:p:W
 I:123:60d100:50:170:10
 W:62:2:0:30000:0:0
@@ -20325,7 +20325,7 @@ S:CAUSE_3 | TELE_TO
 # ジュリアンのやつのコピー。名前？
 #
 N:1019:ラオウの愛馬『黒王号』
-E:Kokuo, Raou's steed
+E:Kokuo, Raou's Steed
 G:q:D
 I:130:30d100:20:100:50
 W:40:3:0:2000:0:0
@@ -20455,7 +20455,7 @@ D:三途の川の死者の国への渡し守だ。
 D:あなたを乗せて渡し賃をもらおうと考えている。
 
 N:1026:老ソーサラー
-E:Old Sorcerer
+E:Old sorcerer
 G:p:v
 I:130:52d25:20:60:10
 W:69:3:0:5000:0:0
@@ -20480,7 +20480,7 @@ D:魔法を唱えられるように浄められている。魔法の詠唱はうつろにダンジョンに
 D:こだまし、聞く者をよろめかす。
 
 N:1027:二子峠の魔王『赤カブト』
-E:Red Helm, the King of bear
+E:Red Helm, the King of Bear
 G:q:r
 I:120:100d10:20:100:10
 W:25:2:0:1200:0:0
@@ -20509,7 +20509,7 @@ D:$These bears are followers of Red Helm.
 D:『赤カブト』の配下の熊だ。
 
 N:1029:ベビーサタン
-E:Baby satan
+E:Baby Satan
 G:u:v
 I:115:20d10:30:50:10
 W:20:2:0:250:0:0
@@ -20540,7 +20540,7 @@ D:$He is a king of southerings. He was arrested by Zhuge Liang 7 times.
 D:南蛮の王。諸葛亮に七度擒にされる。
 
 N:1031:金色の怪人『ワッハマン』
-E:Wahha-Man the golden
+E:Wahha-Man the Golden
 G:g:y
 I:130:100d100:100:200:0
 W:85:2:0:35000:0:0
@@ -20631,7 +20631,7 @@ F:STUPID | COLD_BLOOD | CHAR_MULTI | NO_CONF | NO_SLEEP |
 F:EVIL | IM_COLD | IM_FIRE | FORCE_MAXHP | IM_ELEC | IM_POIS
 
 N:1036:トラップマスター
-E:Trap Master
+E:Trap master
 G:p:b
 I:125:30d10:20:70:0
 W:28:5:0:240:0:0
@@ -20642,7 +20642,7 @@ S:1_IN_2 |
 S:TRAPS | BLINK
 
 N:1037:聖堂騎士
-E:Knight Templar
+E:Knight templar
 G:p:w
 I:120:60d25:20:130:10
 W:52:2:0:5000:0:0
@@ -20820,7 +20820,7 @@ D:背が低くて浅黒い肌をした東夷で、黒い服に身を包んでいる。
 
 
 N:1047:黄衣の修行僧
-E:Topaz Monk
+E:Topaz monk
 G:p:y
 I:120:59d11:30:46:10
 W:35:2:0:800:0:0
@@ -20838,7 +20838,7 @@ D:黄色の法衣を身に纏った、拳法に熟練した修行僧だ。
 
 
 N:1048:石ドラゴン
-E:Stone Dragon
+E:Stone dragon
 G:D:D
 I:110:100d25:20:170:70
 W:45:3:0:4000:40000:1049
@@ -20855,7 +20855,7 @@ D:$A huge dragon all made of stone. It looks very solid...
 D:全身が石でできた巨大なドラゴンだ。非常に硬そうに見える...
 
 N:1049:鋼鉄ドラゴン
-E:Steel Dragon
+E:Steel dragon
 G:D:D
 I:120:100d50:20:200:70
 W:55:3:0:10000:0:0
@@ -21056,7 +21056,7 @@ D:$He weighs 127 kg. He is the president of some remote country.
 D:彼は全ての街に一億ゴールド寄付した。
 
 N:1060:『森トロル』
-E:Mori troll
+E:Mori Troll
 G:T:G
 I:109:35d20:50:15:4
 W:0:255:0:0:0:0
@@ -21108,7 +21108,7 @@ D:ていうかグルーを笑って生きのびた者はいない。
 
 
 N:1063:巨大白シラミの王『lousy』
-E:Lousy, the King of louses
+E:Lousy, the King of Louses
 G:I:W
 I:130:11d11:8:10:10
 W:9:3:0:100:0:0
