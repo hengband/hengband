@@ -4474,7 +4474,7 @@ static bool CheckEvents(bool wait)
 				Term_keypress('0' + (ck - 64) % 10);
 
 				/* Hack -- Terminate the sequence */
-				Term_keypress(13);
+				Term_keypress('\r');
 			}
 
 			break;
