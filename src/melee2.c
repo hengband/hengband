@@ -2481,6 +2481,82 @@ msg_print("地面に落とされた。");
 			
 	}
 
+	/* Handle Invulnerability */
+	if (m_ptr->invulner)
+	{
+		/* Reduce by one, note if expires */
+		m_ptr->invulner--;
+
+		if (!(m_ptr->invulner) && m_ptr->ml)
+		{
+			char m_name[80];
+
+			/* Acquire the monster name */
+			monster_desc(m_name, m_ptr, 0);
+
+			/* Dump a message */
+#ifdef JP
+msg_format("%^sはもう無敵でない。", m_name);
+#else
+			msg_format("%^s is no longer invulnerable.", m_name);
+#endif
+
+			m_ptr->energy_need += ENERGY_NEED();
+			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
+			if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
+		}
+	}
+
+	/* Handle fast */
+	if (m_ptr->fast)
+	{
+		/* Reduce by one, note if expires */
+		m_ptr->fast--;
+
+		if (!(m_ptr->fast) && m_ptr->ml)
+		{
+			char m_name[80];
+
+			/* Acquire the monster name */
+			monster_desc(m_name, m_ptr, 0);
+
+			/* Dump a message */
+#ifdef JP
+msg_format("%^sはもう加速されていない。", m_name);
+#else
+			msg_format("%^s is no longer fast.", m_name);
+#endif
+
+			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
+			if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
+		}
+	}
+
+	/* Handle slow */
+	if (m_ptr->slow)
+	{
+		/* Reduce by one, note if expires */
+		m_ptr->slow--;
+
+		if (!(m_ptr->slow) && m_ptr->ml)
+		{
+			char m_name[80];
+
+			/* Acquire the monster name */
+			monster_desc(m_name, m_ptr, 0);
+
+			/* Dump a message */
+#ifdef JP
+msg_format("%^sはもう減速されていない。", m_name);
+#else
+			msg_format("%^s is no longer slow.", m_name);
+#endif
+
+			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
+			if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
+		}
+	}
+
 	/* Handle "sleep" */
 	if (m_ptr->csleep)
 	{
@@ -2651,82 +2727,6 @@ msg_format("%^sは混乱から立ち直った。", m_name);
 				if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
 				if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 			}
-		}
-	}
-
-	/* Handle Invulnerability */
-	if (m_ptr->invulner)
-	{
-		/* Reduce by one, note if expires */
-		m_ptr->invulner--;
-
-		if (!(m_ptr->invulner) && m_ptr->ml)
-		{
-			char m_name[80];
-
-			/* Acquire the monster name */
-			monster_desc(m_name, m_ptr, 0);
-
-			/* Dump a message */
-#ifdef JP
-msg_format("%^sはもう無敵でない。", m_name);
-#else
-			msg_format("%^s is no longer invulnerable.", m_name);
-#endif
-
-			m_ptr->energy_need += ENERGY_NEED();
-			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-			if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
-		}
-	}
-
-	/* Handle fast */
-	if (m_ptr->fast)
-	{
-		/* Reduce by one, note if expires */
-		m_ptr->fast--;
-
-		if (!(m_ptr->fast) && m_ptr->ml)
-		{
-			char m_name[80];
-
-			/* Acquire the monster name */
-			monster_desc(m_name, m_ptr, 0);
-
-			/* Dump a message */
-#ifdef JP
-msg_format("%^sはもう加速されていない。", m_name);
-#else
-			msg_format("%^s is no longer fast.", m_name);
-#endif
-
-			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-			if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
-		}
-	}
-
-	/* Handle slow */
-	if (m_ptr->slow)
-	{
-		/* Reduce by one, note if expires */
-		m_ptr->slow--;
-
-		if (!(m_ptr->slow) && m_ptr->ml)
-		{
-			char m_name[80];
-
-			/* Acquire the monster name */
-			monster_desc(m_name, m_ptr, 0);
-
-			/* Dump a message */
-#ifdef JP
-msg_format("%^sはもう減速されていない。", m_name);
-#else
-			msg_format("%^s is no longer slow.", m_name);
-#endif
-
-			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-			if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 		}
 	}
 
