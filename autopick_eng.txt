@@ -254,6 +254,8 @@ unidentified lights:^Phial#!!
 collecting rod
 collecting potion
 collecting scroll
+collecting missiles
+(collecting items
 
 #
 # good items

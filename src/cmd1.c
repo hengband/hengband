@@ -1278,7 +1278,7 @@ int is_autopick(object_type *o_ptr)
 			/* Check if there is a same item */
 			for (j = 0; j < INVEN_PACK; j++)
 			{
-				if (inventory[j].k_idx == o_ptr->k_idx)
+				if (object_similar(&inventory[j], o_ptr))
 					return i;
 			}
 		}
