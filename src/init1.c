@@ -3546,6 +3546,77 @@ static errr parse_line_building(char *buf)
 }
 
 
+static void drop_here(object_type *j_ptr, int by, int bx)
+{
+	int i, k, d, s;
+
+	s16b o_idx = 0;
+
+	s16b this_o_idx, next_o_idx = 0;
+
+	bool done = FALSE;
+
+	cave_type *c_ptr = &cave[by][bx];
+
+	/* Scan objects in that grid for combination */
+	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	{
+		object_type *o_ptr;
+
+		/* Acquire object */
+		o_ptr = &o_list[this_o_idx];
+
+		/* Acquire next object */
+		next_o_idx = o_ptr->next_o_idx;
+
+		/* Check for combination */
+		if (object_similar(o_ptr, j_ptr))
+		{
+			/* Combine the items */
+			object_absorb(o_ptr, j_ptr);
+
+			/* Success */
+			done = TRUE;
+
+			/* Done */
+			break;
+		}
+	}
+
+	/* Get new object */
+	if (!done) o_idx = o_pop();
+
+
+	/* Stack */
+	if (!done)
+	{
+		/* Structure copy */
+		object_copy(&o_list[o_idx], j_ptr);
+
+		/* Access new object */
+		j_ptr = &o_list[o_idx];
+
+		/* Locate */
+		j_ptr->iy = by;
+		j_ptr->ix = bx;
+
+		/* No monster */
+		j_ptr->held_m_idx = 0;
+
+		/* Build a stack */
+		j_ptr->next_o_idx = c_ptr->o_idx;
+
+		/* Place the object */
+		c_ptr->o_idx = o_idx;
+
+		/* Success */
+		done = TRUE;
+	}
+
+	/* Result */
+	return;
+}
+
 /*
  * Parse a sub-file of the "extra info"
  */
@@ -3731,7 +3802,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				/* Apply magic (no messages, no artifacts) */
 				apply_magic(o_ptr, base_level, AM_NO_FIXED_ART | AM_GOOD);
 
-				(void)drop_near(o_ptr, -1, *y, *x);
+				drop_here(o_ptr, *y, *x);
 			}
 
 			/* Artifact */
@@ -3746,7 +3817,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 					object_prep(q_ptr, k_idx);
 
 					/* Drop it in the dungeon */
-					(void)drop_near(q_ptr, -1, *y, *x);
+					drop_here(q_ptr, *y, *x);
 				}
 				else
 				{
