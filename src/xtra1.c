@@ -2925,22 +2925,6 @@ void calc_bonuses(void)
 {
 	int             i, j, hold, neutral[2];
 	int             new_speed;
-	bool old_telepathy;
-	bool old_esp_animal;
-	bool old_esp_undead;
-	bool old_esp_demon;
-	bool old_esp_orc;
-	bool old_esp_troll;
-	bool old_esp_giant;
-	bool old_esp_dragon;
-	bool old_esp_human;
-	bool old_esp_evil;
-	bool old_esp_good;
-	bool old_esp_nonliving;
-	bool old_esp_unique;
-	int             old_see_inv;
-	int             old_dis_ac;
-	int             old_dis_to_a;
 	int             extra_blows[2];
 	int             extra_shots;
 	object_type     *o_ptr;
@@ -2956,27 +2940,26 @@ void calc_bonuses(void)
 	s16b this_o_idx, next_o_idx = 0;
 	player_race *tmp_rp_ptr;
 
-
 	/* Save the old vision stuff */
-	old_telepathy = p_ptr->telepathy;
-	old_esp_animal = p_ptr->esp_animal;
-	old_esp_undead = p_ptr->esp_undead;
-	old_esp_demon = p_ptr->esp_demon;
-	old_esp_orc = p_ptr->esp_orc;
-	old_esp_troll = p_ptr->esp_troll;
-	old_esp_giant = p_ptr->esp_giant;
-	old_esp_dragon = p_ptr->esp_dragon;
-	old_esp_human = p_ptr->esp_human;
-	old_esp_evil = p_ptr->esp_evil;
-	old_esp_good = p_ptr->esp_good;
-	old_esp_nonliving = p_ptr->esp_nonliving;
-	old_esp_unique = p_ptr->esp_unique;
-
-	old_see_inv = p_ptr->see_inv;
+	bool old_telepathy = p_ptr->telepathy;
+	bool old_esp_animal = p_ptr->esp_animal;
+	bool old_esp_undead = p_ptr->esp_undead;
+	bool old_esp_demon = p_ptr->esp_demon;
+	bool old_esp_orc = p_ptr->esp_orc;
+	bool old_esp_troll = p_ptr->esp_troll;
+	bool old_esp_giant = p_ptr->esp_giant;
+	bool old_esp_dragon = p_ptr->esp_dragon;
+	bool old_esp_human = p_ptr->esp_human;
+	bool old_esp_evil = p_ptr->esp_evil;
+	bool old_esp_good = p_ptr->esp_good;
+	bool old_esp_nonliving = p_ptr->esp_nonliving;
+	bool old_esp_unique = p_ptr->esp_unique;
+	bool old_see_inv = p_ptr->see_inv;
+	bool old_mighty_throw = p_ptr->mighty_throw;
 
 	/* Save the old armor class */
-	old_dis_ac = p_ptr->dis_ac;
-	old_dis_to_a = p_ptr->dis_to_a;
+	bool old_dis_ac = p_ptr->dis_ac;
+	bool old_dis_to_a = p_ptr->dis_to_a;
 
 
 	/* Clear extra blows/shots */
@@ -4082,13 +4065,19 @@ void calc_bonuses(void)
 			p_ptr->to_h[0] += bonus_to_h;
 			p_ptr->to_d[0] += bonus_to_d;
 
-			/* Apply the mental bonuses tp hit/damage, if known */
+			/* Apply the mental bonuses to hit/damage, if known */
 			if (object_known_p(o_ptr))
 			{
 				p_ptr->dis_to_h[0] += bonus_to_h;
 				p_ptr->dis_to_d[0] += bonus_to_d;
 			}
 		}
+	}
+
+	if (old_mighty_throw != p_ptr->mighty_throw)
+	{
+		/* Redraw average damege display of Shuriken */
+		p_ptr->window |= PW_INVEN;
 	}
 
 	if (p_ptr->cursed & TRC_TELEPORT) p_ptr->cursed &= ~(TRC_TELEPORT_SELF);
