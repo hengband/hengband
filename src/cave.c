@@ -1800,7 +1800,7 @@ static char ascii_to_zenkaku[2*128+1] =  "\
  */
 void bigtile_attr(char *cp, byte *ap, char *cp2, byte *ap2)
 {
-	if (*ap & 0x80)
+	if ((*ap & 0x80) && (*cp & 0x80))
 	{
 		*ap2 = 255;
 		*cp2 = -1;

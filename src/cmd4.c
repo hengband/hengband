@@ -7340,10 +7340,13 @@ static void display_visual_list(int col, int row, int height, int width, byte at
 			a = attr_top + i;
 			c = char_left + j;
 
-#ifdef JP
-			/* Don't display broken kanji */
-			if (!(a & 0x80) && (c & 0x80)) continue;
-#endif
+			/* Ignore illegal characters */
+			if ((int)attr_top + i > 0x7f || (int)char_left + j > 0xff ||
+			    c < ' ' || (!use_graphics && c > 0x7f))
+				continue;
+
+			/* Force correct code for both ASCII character and tile */
+			if (c & 0x80) a |= 0x80;
 
 			if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
 
@@ -7354,6 +7357,25 @@ static void display_visual_list(int col, int row, int height, int width, byte at
 			if (use_bigtile) Term_putch(x + 1, y, a2, c2);
 		}
 	}
+}
+
+
+/*
+ * Place the cursor at the collect position for visual mode
+ */
+static void place_visual_list_cursor(int col, int row, byte a, byte c, byte attr_top, byte char_left)
+{
+	int i = (a & 0x7f) - attr_top;
+	int j = c - char_left;
+
+	int x = col + j;
+	int y = row + i;
+
+	/* Bigtile mode uses double width */
+	if (use_bigtile) x += j;
+
+	/* Place the cursor */
+	Term_gotoxy(x, y);
 }
 
 
@@ -7405,7 +7427,7 @@ static bool visual_mode_command(char ch, bool *visual_list_ptr,
 		{
 			*visual_list_ptr = TRUE;
 
-			*attr_top_ptr = MAX(0, *cur_attr_ptr - 5);
+			*attr_top_ptr = MAX(0, (*cur_attr_ptr & 0x7f) - 5);
 			*char_left_ptr = MAX(0, *cur_char_ptr - 10);
 
 			attr_old = *cur_attr_ptr;
@@ -7429,7 +7451,7 @@ static bool visual_mode_command(char ch, bool *visual_list_ptr,
 		{
 			/* Set the char */
 			*cur_attr_ptr = attr_idx;
-			*attr_top_ptr = MAX(0, *cur_attr_ptr - 5);
+			*attr_top_ptr = MAX(0, (*cur_attr_ptr & 0x7f) - 5);
 		}
 
 		if (char_idx)
@@ -7446,25 +7468,34 @@ static bool visual_mode_command(char ch, bool *visual_list_ptr,
 		{
 			int eff_width;
 			int d = get_keymap_dir(ch);
+			byte a = (*cur_attr_ptr & 0x7f);
+			byte c = *cur_char_ptr;
 
 			if (use_bigtile) eff_width = width / 2;
 			else eff_width = width;
 					
 			/* Restrict direction */
-			if ((*cur_attr_ptr == 0) && (ddy[d] < 0)) d = 0;
-			if ((*cur_char_ptr == 0) && (ddx[d] < 0)) d = 0;
-			if ((*cur_attr_ptr == 255) && (ddy[d] > 0)) d = 0;
-			if ((*cur_char_ptr == 255) && (ddx[d] > 0)) d = 0;
+			if ((a == 0) && (ddy[d] < 0)) d = 0;
+			if ((c == 0) && (ddx[d] < 0)) d = 0;
+			if ((a == 0x7f) && (ddy[d] > 0)) d = 0;
+			if ((c == 0xff) && (ddx[d] > 0)) d = 0;
+
+			a += ddy[d];
+			c += ddx[d];
+
+			/* Force correct code for both ASCII character and tile */
+			if (c & 0x80) a |= 0x80;
 
 			/* Set the visual */
-			*cur_attr_ptr += ddy[d];
-			*cur_char_ptr += ddx[d];
+			*cur_attr_ptr = a;
+			*cur_char_ptr = c;
+
 
 			/* Move the frame */
-			if ((ddx[d] < 0) && *char_left_ptr > MAX(0, (int)*cur_char_ptr - 10)) (*char_left_ptr)--;
-			if ((ddx[d] > 0) && *char_left_ptr + eff_width < MIN(255, (int)*cur_char_ptr + 10)) (*char_left_ptr)++;
-			if ((ddy[d] < 0) && *attr_top_ptr > MAX(0, (int)*cur_attr_ptr - 4)) (*attr_top_ptr)--;
-			if ((ddy[d] > 0) && *attr_top_ptr + height < MIN(255, *cur_attr_ptr + 4)) (*attr_top_ptr)++;
+			if ((ddx[d] < 0) && *char_left_ptr > MAX(0, (int)c - 10)) (*char_left_ptr)--;
+			if ((ddx[d] > 0) && *char_left_ptr + eff_width < MIN(0xff, (int)c + 10)) (*char_left_ptr)++;
+			if ((ddy[d] < 0) && *attr_top_ptr > MAX(0, (int)(a & 0x7f) - 4)) (*attr_top_ptr)--;
+			if ((ddy[d] > 0) && *attr_top_ptr + height < MIN(0x7f, (a & 0x7f) + 4)) (*attr_top_ptr)++;
 			return TRUE;
 		}
 				
@@ -7694,14 +7725,7 @@ static void do_cmd_knowledge_monsters(void)
 
 		if (visual_list)
 		{
-			int x, y;
-
-			y = 7 + (r_ptr->x_attr - attr_top);
-			if (use_bigtile) x = max + 3 + 2 * (r_ptr->x_char - char_left);
-			else  x = max + 3 + (r_ptr->x_char - char_left);
-
-			/* Place the cursor */
-			Term_gotoxy(x, y);
+			place_visual_list_cursor(max + 3, 7, r_ptr->x_attr, r_ptr->x_char, attr_top, char_left);
 		}
 		else if (!column)
 		{
@@ -8026,14 +8050,7 @@ static void do_cmd_knowledge_objects(void)
 
 		if (visual_list)
 		{
-			int x, y;
-
-			y = 7 + (k_ptr->x_attr - attr_top);
-			if (use_bigtile) x = max + 3 + 2 * (k_ptr->x_char - char_left);
-			else  x = max + 3 + (k_ptr->x_char - char_left);
-
-			/* Place the cursor */
-			Term_gotoxy(x, y);
+			place_visual_list_cursor(max + 3, 7, k_ptr->x_attr, k_ptr->x_char, attr_top, char_left);
 		}
 		else if (!column)
 		{
@@ -8095,6 +8112,8 @@ static void display_feature_list(int col, int row, int per_page, int *feat_idx,
 	/* Display lines until done */
 	for (i = 0; i < per_page && feat_idx[feat_top + i]; i++)
 	{
+		byte a, a2;
+		char c, c2;
 		byte attr;
 
 		/* Get the index */
@@ -8115,16 +8134,16 @@ static void display_feature_list(int col, int row, int per_page, int *feat_idx,
 			c_prt(attr, format("%02x/%02x", f_ptr->x_attr, f_ptr->x_char), row + i, 60);
 		}
 
-		/* Display symbol */
-		Term_putch(68, row + i, f_ptr->x_attr, f_ptr->x_char);
+		a = f_ptr->x_attr;
+		c = f_ptr->x_char;
 
-		if (use_bigtile)
-		{
-			if (f_ptr->x_attr & 0x80)
-				Term_putch(68 + 1, row + i, 255, -1);
-			else
-				Term_putch(68 + 1, row + i, 0, ' ');
-		}
+		if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
+
+		/* Display symbol */
+		Term_putch(68, row + i, a, c);
+
+		/* Second byte */
+		if (use_bigtile) Term_putch(68 + 1, row + i, a2, c2);
 	}
 
 	/* Clear remaining lines */
@@ -8272,14 +8291,7 @@ static void do_cmd_knowledge_features(void)
 
 		if (visual_list)
 		{
-			int x, y;
-
-			y = 7 + (f_ptr->x_attr - attr_top);
-			if (use_bigtile) x = max + 3 + 2 * (f_ptr->x_char - char_left);
-			else  x = max + 3 + (f_ptr->x_char - char_left);
-
-			/* Place the cursor */
-			Term_gotoxy(x, y);
+			place_visual_list_cursor(max + 3, 7, f_ptr->x_attr, f_ptr->x_char, attr_top, char_left);
 		}
 		else if (!column)
 		{
