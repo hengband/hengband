@@ -50,28 +50,19 @@ typedef struct {
 #ifndef HAVE_VASPRINTF
 #define vasprintf	Vasprintf
 
+static int Vasprintf(char **buf, const char *fmt, va_list ap)
+{
+	int ret;
+
+	*buf = malloc(1024);
+
 #if defined(HAVE_VSNPRINTF)
-static int Vasprintf(char **buf, const char *fmt, va_list ap)
-{
-	int ret;
-
-	*buf = malloc(BUFSIZE);
-
-	ret = vsnprintf(*buf, BUFSIZE, fmt, ap);
-
-	return ret;
-}
+	ret = vsnprintf(*buf, 1024, fmt, ap);
 #else
-static int Vasprintf(char **buf, const char *fmt, va_list ap)
-{
-	int ret;
-	*buf = malloc(BUFSIZE * 4);
-
 	ret = vsprintf(*buf, fmt, ap);
-
+#endif
 	return ret;
 }
-#endif
 
 #endif /* ifndef HAVE_VASPRINTF */ 
 
