@@ -3061,17 +3061,11 @@ bool py_attack(int y, int x, int mode)
 	    !(p_ptr->muta2 & (MUT2_HORNS | MUT2_BEAK | MUT2_SCOR_TAIL | MUT2_TRUNK | MUT2_TENTACLES)))
 	{
 #ifdef JP
-		msg_print("両手がふさがって攻撃できない。");
+		msg_format("%s攻撃できない。", (empty_hands(FALSE) == EMPTY_HAND_NONE) ? "両手がふさがって" : "");
 #else
 		msg_print("You cannot do attacking.");
 #endif
 		return FALSE;
-	}
-
-	if (m_ptr->csleep) /* It is not honorable etc to attack helpless victims */
-	{
-		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(V_COMPASSION, -1);
-		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(V_HONOUR, -1);
 	}
 
 	/* Extract monster name (or "it") */
@@ -3176,6 +3170,12 @@ bool py_attack(int y, int x, int mode)
 
 		/* Done */
 		return FALSE;
+	}
+
+	if (m_ptr->csleep) /* It is not honorable etc to attack helpless victims */
+	{
+		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(V_COMPASSION, -1);
+		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(V_HONOUR, -1);
 	}
 
 	if (p_ptr->migite && p_ptr->hidarite)
