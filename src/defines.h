@@ -1117,7 +1117,7 @@
 #define FEAT_MIRROR             0xc3
 
 /* unknown grid (not detected)  */
-#define FEAT_UNDETECTD          0xc4
+#define FEAT_UNDETECTED         0xc4
 
 /* special traps */
 #define FEAT_TRAP_ARMAGEDDON    0xc5

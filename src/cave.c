@@ -762,7 +762,7 @@ static byte lighting_colours[16][2] =
 		/* Unsafe cave grid -- idea borrowed from Unangband */ \
 		if (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) \
 		{ \
-			feat = FEAT_UNDETECTD; \
+			feat = FEAT_UNDETECTED; \
 \
 			/* Access unsafe darkness */ \
 			f_ptr = &f_info[feat]; \
@@ -1072,7 +1072,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 		{
 			/* Unsafe cave grid -- idea borrowed from Unangband */
 			if (view_unsafe_grids && (c_ptr->info & (CAVE_UNSAFE)))
-				feat = FEAT_UNDETECTD;
+				feat = FEAT_UNDETECTED;
 			else
 				feat = FEAT_NONE;
 
@@ -1281,7 +1281,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 			{
 				/* Unsafe cave grid -- idea borrowed from Unangband */
 				if (view_unsafe_grids && (c_ptr->info & (CAVE_UNSAFE)))
-					feat = FEAT_UNDETECTD;
+					feat = FEAT_UNDETECTED;
 				else
 					feat = FEAT_NONE;
 			}
@@ -1308,7 +1308,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 		switch (feat)
 		{
 		case FEAT_NONE:
-		case FEAT_UNDETECTD:
+		case FEAT_UNDETECTED:
 		case FEAT_DARK_PIT:
 			feat_priority = 1;
 			break;
