@@ -3303,6 +3303,9 @@ static void player_wipe(void)
 		p_ptr->magic_num1[i] = 0;
 		p_ptr->magic_num2[i] = 0;
 	}
+
+	/* Reset monster arena */
+	battle_monsters();
 }
 
 
