@@ -572,7 +572,7 @@ msg_print("クエストを達成した！");
 	if (create_stairs)
 	{
 		/* Stagger around */
-		while (cave_perma_bold(y, x) || cave[y][x].o_idx)
+		while (cave_perma_bold(y, x) || cave[y][x].o_idx || (cave[y][x].info & CAVE_IN_MIRROR) )
 		{
 			/* Pick a location */
 			scatter(&ny, &nx, y, x, 1, 0);
