@@ -5484,6 +5484,9 @@ bool polymorph_monster(int y, int x)
 		/* Create a new monster (no groups) */
 		if (place_monster_aux(0, y, x, new_r_idx, mode))
 		{
+			m_list[hack_m_idx_ii].nickname = back_m.nickname;
+			m_list[hack_m_idx_ii].parent_m_idx = back_m.parent_m_idx;
+
 			/* Success */
 			polymorphed = TRUE;
 		}
