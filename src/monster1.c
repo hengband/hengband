@@ -3337,8 +3337,6 @@ static bool mon_hook_floor(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	if (!mon_hook_dungeon(r_idx)) return FALSE;
-
 	if (!(r_ptr->flags7 & RF7_AQUATIC) ||
 	    (r_ptr->flags7 & RF7_CAN_FLY))
 		return TRUE;
