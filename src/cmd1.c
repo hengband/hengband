@@ -1,14 +1,14 @@
 /* File: cmd1.c */
 
-/* Purpose: Movement commands (part 1) */
-
 /*
- * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
  *
- * This software may be copied and distributed for educational, research, and
- * not for profit purposes provided that this copyright and statement are
- * included in all such copies.
+ * This software may be copied and distributed for educational, research,
+ * and not for profit purposes provided that this copyright and statement
+ * are included in all such copies.  Other copyrights may also apply.
  */
+
+/* Purpose: Movement commands (part 1) */
 
 #include "angband.h"
 #define MAX_VAMPIRIC_DRAIN 50

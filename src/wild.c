@@ -1,15 +1,15 @@
 /* File: wild.c */
 
-/* Purpose: Wilderness generation */
-
 /*
- * Copyright (c) 1989, 1999 James E. Wilson, Robert A. Koeneke,
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke,
  * Robert Ruehlmann
  *
- * This software may be copied and distributed for educational, research, and
- * not for profit purposes provided that this copyright and statement are
- * included in all such copies.
+ * This software may be copied and distributed for educational, research,
+ * and not for profit purposes provided that this copyright and statement
+ * are included in all such copies.  Other copyrights may also apply.
  */
+
+/* Purpose: Wilderness generation */
 
 #include "angband.h"
 

@@ -1,4 +1,201 @@
+2003-04-03  iks  <iks@cvs>
+
+	* src/birth.c 1.63, src/externs.h 1.96, src/files.c 1.96:
+	生い立ちエディタ用のテンプレートをファイルで定義できるようにした。(@nothereさん提供)
+
+	* src/object2.c 1.68:
+	鍛治師のエッセンス追加で弓にスレイを付加できないようにした。
+
+	* src/cmd4.c 1.79: 既知のモンスター一覧での記号の抜けを補完。
+
+	* src/bldg.c 1.31:
+	カオスの塔の突然変異治療サービスで必ず1個変異が治るようにした。
+
+	* src/object2.c 1.67, src/store.c 1.23, src/wizard2.c 1.34:
+	多数のロッドを所持したときにpvalがオーバフローする不具合を修正。
+
+2003-03-21  iks  <iks@cvs>
+
+	* src/mane.c 1.15:
+	まねのレベルテレポートを地上で使った時に天井を突き破らないよう修正。
+
+	* src/mane.c 1.14, src/mspells3.c 1.18:
+	因果耐性があるモンスターはレベルテレポートされないよう変更。
+
+2003-02-25  Takeshi Mogami  <mogami@cvs>
+
+	* src/birth.c 1.62, src/defines.h 1.87, src/util.c 1.38:
+	Robert Ruehlmann 氏に "They are annoying and make the already pretty
+	long character creation process even longer.  (中略) Stop pestering
+	me." と言われたので、キャラ生成時に「よろしいですか？」の質問で n と
+	Esc 以外は全部 y と見做して先に進むようにした。
+	ついでにバージョン番号上げ。
+
+2003-02-22  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd4.c 1.78:
+	auto_dump_printf()で、fprintf(.., "%s", str); とするべきところを
+	fprintf(.., str);と書いてしまっていたので修正。
+
+2003-02-15  Takeshi Mogami  <mogami@cvs>
+
+	* src/mspells2.c 1.31:
+	モンスターのターゲットの修正をしたときにbreak;を入れ忘れていてターゲットを正しく選べなくなっていたバグ修正。
+
+2003-02-13  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd4.c 1.77: コメントの間違い修正。
+
+	* src/files.c 1.95:
+	Macro Triggerのコード、最近書き変えたときにうっかりshift key付きの方のkey codeの扱いを間違えていたので修正。簡単愚より。
+
+2003-02-12  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.77, src/cmd4.c 1.76, src/files.c 1.94, src/floors.c 1.9, src/init2.c 1.23, src/load.c 1.52, src/main.c 1.5, src/save.c 1.32, src/scores.c 1.12, src/wizard1.c 1.29:
+	cmd4.cの auto_dump のコードを整理、コメント付加。Sangbandへの移植作業
+	においてもうちょっと綺麗にした方が良いだろうという事になった為。
+	関連してsafe_setuid_*()の使い方を変更。Vanillaと同様にした。微妙にsecurityが向上する。
+
+2003-02-10  Takeshi Mogami  <mogami@cvs>
+
+	* src/dungeon.c 1.88:
+	{!!}と刻んだアイテムが再充填されたときの行動中止で、探索中のモードが解除されないように修正。disturb(1, 0) → disturb(0, 0)
+
+2003-02-09  Takeshi Mogami  <mogami@cvs>
+
+	* src/defines.h 1.86, src/object2.c 1.66:
+	充填時間が長いロッドを多数重ねるとo_ptr->timeoutがoverflawするバグに対策。
+	重ねられるロッドの数を99より少く制限するようにした。
+
+2003-02-06  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd6.c 1.48, src/dungeon.c 1.87, src/externs.h 1.95, src/files.c 1.93, src/floors.c 1.8, src/main-gcu.c 1.10, src/main-x11.c 1.22, src/melee2.c 1.42, src/mind.c 1.19, src/monster2.c 1.50, src/mspells2.c 1.30, src/mspells3.c 1.17, src/object2.c 1.65, src/save.c 1.31, src/scores.c 1.11, src/spells2.c 1.63, src/spells3.c 1.61, src/util.c 1.37, src/wild.c 1.21, src/wizard1.c 1.28, src/wizard2.c 1.33, src/xtra2.c 1.58, src/birth.c 1.61, src/bldg.c 1.30, src/cave.c 1.71, src/cmd3.c 1.35, src/cmd4.c 1.75, src/cmd5.c 1.54:
+	gccで -Wunused を付けても警告が出ないように無視している関数の引数等を(void)で明記。
+
+2003-02-04  Takeshi Mogami  <mogami@cvs>
+
+	* src/bldg.c 1.29, src/cmd3.c 1.34, src/externs.h 1.94, src/files.c 1.92, src/floors.c 1.7, src/monster1.c 1.29, src/monster2.c 1.49, src/spells2.c 1.62, src/tables.c 1.55, src/variable.c 1.37:
+	- lore_do_probe()で思い出情報を全て得るようにして、モンスター仙人でも
+	この関数を使用するようにした。probing()の場合は新しい思い出情報を得られ
+	たときにメッセージを出す。
+	- files.cのマクロトリガーのコードでmalloc()を使っていたので
+	string_make()に書き変え、同時にコード整理。
+	inet.cとreport.cはそもそも環境依存なのでmalloc()のまま変更しなかった。
+
+	* lib/file/monspeak_j.txt 1.7: s/子悪魔/小悪魔/
+
+2003-02-01  Takeshi Mogami  <mogami@cvs>
+
+	* src/cave.c 1.66.2.2, src/cmd5.c 1.49.2.3, src/dungeon.c 1.78.2.3, src/melee2.c 1.37.2.1, src/monster2.c 1.45.2.1, src/racial.c 1.26.2.3:
+	- サブウィンドウのアップデートの不備の再修正と抹殺後のモンスターの光源のアップデートの不備をマージ。
+	- 幽体化して壁に完全に埋まって荒馬馴らしを使って失敗して落馬したときに、
+	落馬に失敗してペットでない敵モンスターに乗馬した状態になるバグ、さらに
+	レベルテレポートするとペットになってしまうバグ修正。(ほぼマージ)
+
+	* src/cmd5.c 1.53, src/floors.c 1.6, src/racial.c 1.30:
+	サーペントに乗馬できる複合バグ(1)+(2)+(3)修正。
+	(1) レベルテレポートで繋った階を結ぶ階段を捜して、その階段の上にモンス
+	ターを誘いこみ、レベルテレポで先回りして階段の反対側から元のフロアに戻
+	ると、その階段の上にいるモンスターに重なる事ができるバグ。
+	(2) 騎兵の荒馬馴らしで乗馬した直後に落馬する場合、まわりが敵で埋まって
+	いてしかも元自分が居た場所もバグ(1)によって埋まっていたとき、落馬が失
+	敗して荒馬馴らしの対象の敵にp_ptr->ridingが設定されたままになるバグ。
+	(3) 階を移動してペットが付いてくる時、p_ptr->ridingが設定されていれば
+	ペットフラグが無くても付いてくる上、ペットフラグが無いときに強制的に付
+	けていたバグ。
+
+	* lib/help/jobjects.txt 1.10, lib/help/objects.txt 1.9, readme.txt 1.11, readme_eng.txt 1.10:
+	ドキュメント更新。
+
+	* src/cmd5.c 1.52, src/externs.h 1.93, src/object1.c 1.58:
+	{@ma}等のようにアルファベットをタグに使う方法を全てのコマンドで使える
+	ようにした。その代りに{@a}のようなコマンド名を指定しない形式は使用不可
+	にしたので、{@aa}等と書いてもおかしな振舞いはおこらない。
+	仕様がすっきりして、{@ma@ba@Ga}等も使えるので良いと思う。
+
+2003-01-26  henkma  <henkma@cvs>
+
+	* src/spells3.c 1.56.2.3:
+	匠の加速魔法の期間の表示が間違っていたので修正
+
+2003-01-24  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd1.c 1.64, src/defines.h 1.85, src/melee2.c 1.41, src/monster2.c 1.48:
+	ハルマゲドントラップで堕天使はデーモン側としてちゃんと戦うように変更。
+	ターゲットがあるときに、呪文だけでなく殴りもちゃんとターゲットを狙うように変更。
+
+	* src/xtra1.c 1.58:
+	MP表示の色がHP警告の割合によって変化するようになっていたので、20%以下になったら赤くなるように固定した。
+
+	* src/rooms.c 1.27:
+	ピラニア/ハルマゲドン・トラップの位置を少しランダムにして部屋の中央からずれるようにした。
+
+	* src/mspells2.c 1.29, src/save.c 1.30, src/types.h 1.25, src/cmd1.c 1.63, src/cmd3.c 1.33, src/init1.c 1.51, src/load.c 1.51, src/melee2.c 1.40, src/monster1.c 1.28, src/mspells1.c 1.35:
+	- ハルマゲドントラップを安全にした。出現するモンスターは変化無しだが、
+	悪魔と天使が全て互いにターゲットを設定されているのでプレイヤーには目も
+	くれない。反撃召喚のコードを整理して視界内にいる対象にもターゲットが設
+	定できるようにして応用した。
+	- また、モンスターの魔法の対象選択のコードを整理したのでペットにターゲッ
+	トを与えたときに、より正確にターゲットのみを攻撃するようになった。
+	- freq_inate(freq_spellのブレス版)は実効的には未使用状態なので削除した。
+
+	* src/spells3.c 1.56.2.2:
+	変幻の魔公に乗馬してテレポートすると、まれに変幻の魔公がプレイヤーから
+	数歩離れた位置に現われるバグ修正。テレポートの到着地点がたまたま現在地から
+	2歩以内の範囲であったとき、現在地付近のモンスターがテレポートに付いてくる
+	コードにひっかかって乗馬が勝手にテレポートしてしまっていた。
+
+	* src/cave.c 1.70, src/melee2.c 1.39, src/monster2.c 1.47:
+	サブウィンドウのアップデートの不備、さっきの変更ではまだ残っていたので再修正。
+	また、抹殺後にモンスターの光源がアップデートされていなかったバグ修正。
+
+	* src/xtra1.c 1.57, src/defines.h 1.84, src/dungeon.c 1.86, src/melee2.c 1.38:
+	サブウィンドウの「自分の周囲を表示」「ダンジョン全体図」でアップデートに不備
+	があり最新の状態を表示していなかったので修正。
+	また、handle_staff()やnotice_staff()の呼び方が統一されていなかったのでその辺を整理。
+
+2003-01-23  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/raceclas.txt 1.8.2.1, src/object1.c 1.55.2.2, src/cmd1.c 1.60.2.1, src/main-win.c 1.21.2.1:
+	開発版からバグ修正等マージ(Blue-Mage説明、乱れ雪月花+カオス効果、アンバー冠の説明、Winの起動時のフォント)。
+
+	* src/spells1.c 1.45:
+	&&と書くべき所で、& になっていたのを修正。ただし、詳しく調べたが実害は無かった。
+
+	* lib/help/raceclas.txt 1.9:
+	Blue-Mageの説明で、ものまね師との違いがわかり難かったので書き直し。
+	さらにLeon Marrickさんに校正(書き直し？)してもらった。
+
+2003-01-23  iks  <iks@cvs>
+
+	* src/cmd1.c 1.62:
+	乱れ雪月花使用時に、カオス効果で敵がアウェイすると打撃回数が1回余って変なものを殴っていたのを修正。
+
+2003-01-21  henkma  <henkma@cvs>
+
+	* src/object1.c 1.57:
+	アンバー冠の発動の説明の日本語訳が間違っていたので修正.
+
+2003-01-16  henkma  <henkma@cvs>
+
+	* src/birth.c 1.60, src/files.c 1.91:
+	シャドウ・シフトが弱くなったにもかかわらず、アンバー狂戦士のスコアが低いまま
+	だったので、スコア計算を普通に戻した。同時に職業の説明の狂戦士の所の文も変更
+	した。
+
+2003-01-03  iks  <iks@cvs>
+
+	* src/main-win.c 1.22:
+	WinNT/2000/XPで起動時にフォントがおかしい不具合を修正。
+
+2002-12-28  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd6.c 1.40.2.7:
+	塩水の薬の腹減りがアンデッドに無効のはずが、逆にアンデッドのみ有効になってしまっていたバグ修正。
+
 2002-12-23  Takeshi Mogami  <mogami@cvs>
+
+	* Changelogs 1.64: 更新。
 
 	* lib/help/jversion.txt 1.14.2.1, lib/help/version.txt 1.14.2.1:
 	version.txtを1.4.1と1.5.1用に更新。
@@ -5371,7 +5568,7 @@
 2002-01-18  Takeshi Mogami  <mogami@cvs>
 
 	* Changelogs 1.1: ChangeLogsを
-	rcs2log | sed s###g > Changelogs
+	rcs2log | sed s#/www/cvsroot/Hengband/##g > Changelogs
 	のように入れる事にしましょう。
 
 	* src/object2.c 1.7:
