@@ -1732,10 +1732,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 		if (m_ptr->mflag2 & MFLAG_CHAMELEON)
 		{
 			/* You might have unmasked Chameleon first time */
-			if (r_ptr->flags1 & RF1_UNIQUE)
-				r_ptr = &r_info[MON_CHAMELEON_K];
-			else
-				r_ptr = &r_info[MON_CHAMELEON];
+			r_ptr = real_r_ptr(m_ptr);
 			if (r_ptr->r_sights < MAX_SHORT) r_ptr->r_sights++;
 		}
 

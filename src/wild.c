@@ -15,6 +15,47 @@
 
 
 /*
+ * Fill the arrays of floors and walls in the good proportions
+ */
+void set_floor_and_wall(byte type)
+{
+	static byte cur_type = 255;
+	int i;
+
+	/* Already filled */
+	if (cur_type == type) return;
+
+	cur_type = type;
+
+	for (i = 0; i < 100; i++)
+	{
+		int lim1, lim2, lim3;
+
+		lim1 = d_info[type].floor_percent1;
+		lim2 = lim1 + d_info[type].floor_percent2;
+		lim3 = lim2 + d_info[type].floor_percent3;
+
+		if (i < lim1)
+			floor_type[i] = d_info[type].floor1;
+		else if (i < lim2)
+			floor_type[i] = d_info[type].floor2;
+		else if (i < lim3)
+			floor_type[i] = d_info[type].floor3;
+
+		lim1 = d_info[type].fill_percent1;
+		lim2 = lim1 + d_info[type].fill_percent2;
+		lim3 = lim2 + d_info[type].fill_percent3;
+		if (i < lim1)
+			fill_type[i] = d_info[type].fill_type1;
+		else if (i < lim2)
+			fill_type[i] = d_info[type].fill_type2;
+		else if (i < lim3)
+			fill_type[i] = d_info[type].fill_type3;
+	}
+}
+
+
+/*
  * Helper for plasma generation.
  */
 static void perturb_point_mid(int x1, int x2, int x3, int x4,
@@ -848,11 +889,8 @@ void wilderness_gen(void)
 	if(generate_encounter) ambush_flag = TRUE;
 	generate_encounter = FALSE;
 
-	for (i = 0; i < 100; i++)
-	{
-		floor_type[i] = FEAT_FLOOR;
-		fill_type[i] = FEAT_WALL_EXTRA;
-	}
+	/* Fill the arrays of floors and walls in the good proportions */
+	set_floor_and_wall(0);
 
 	/* Set rewarded quests to finished */
 	for (i = 0; i < max_quests; i++)

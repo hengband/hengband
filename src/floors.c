@@ -446,7 +446,7 @@ static void place_pet(void)
 			cave[cy][cx].m_idx = m_idx;
 
 			m_ptr->r_idx = party_mon[i].r_idx;
-			r_ptr = &r_info[m_ptr->r_idx];
+			r_ptr = real_r_ptr(m_ptr);
 
 			/* Copy all member of the structure */
 			*m_ptr = party_mon[i];
@@ -499,8 +499,56 @@ static void place_pet(void)
 
 
 /*
- * Maintain unique monsters and artifatcs, mark next floor_id at
- * stairs, save current floor, and prepare to enter next floor.
+ * Hack -- Update location of unique monsters and artifacts
+ *
+ * The r_ptr->floor_id and a_ptr->floor_id are not updated correctly
+ * while new floor creation since dungeons may be re-created by
+ * auto-scum option.
+ */
+static void update_unique_artifact(s16b cur_floor_id)
+{
+	int i;
+
+	/* Maintain unique monsters */
+	for (i = 1; i < m_max; i++)
+	{
+		monster_race *r_ptr;
+		monster_type *m_ptr = &m_list[i];
+
+		/* Skip dead monsters */
+		if (!m_ptr->r_idx) continue;
+
+		/* Extract real monster race */
+		r_ptr = real_r_ptr(m_ptr);
+
+		/* Memorize location of the unique monster */
+		if ((r_ptr->flags1 & RF1_UNIQUE) ||
+		    (r_ptr->flags7 & RF7_UNIQUE_7))
+		{
+			r_ptr->floor_id = cur_floor_id;
+		}
+	}
+
+	/* Maintain artifatcs */
+	for (i = 1; i < o_max; i++)
+	{
+		object_type *o_ptr = &o_list[i];
+
+		/* Skip dead objects */
+		if (!o_ptr->k_idx) continue;
+
+		/* Memorize location of the artifact */
+		if (artifact_p(o_ptr))
+		{
+			a_info[o_ptr->name1].floor_id = cur_floor_id;
+		}
+	}
+}
+
+
+/*
+ * Maintain quest monsters, mark next floor_id at stairs, save current
+ * floor, and prepare to enter next floor.
  */
 void leave_floor(void)
 {
@@ -537,7 +585,7 @@ void leave_floor(void)
 		}
 	}
 
-	/* Maintain unique monsters and quest monsters */
+	/* Maintain quest monsters */
 	for (i = 1; i < m_max; i++)
 	{
 		monster_race *r_ptr;
@@ -546,43 +594,18 @@ void leave_floor(void)
 		/* Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
 
+		/* Only maintain quest monsters */
+		if (quest_r_idx != m_ptr->r_idx) continue;
+
 		/* Extract real monster race */
-		r_ptr = &r_info[m_ptr->r_idx];
-		if (m_ptr->mflag2 & MFLAG_CHAMELEON)
-		{
-			if (r_ptr->flags1 & RF1_UNIQUE)
-				r_ptr = &r_info[MON_CHAMELEON_K];
-			else
-				r_ptr = &r_info[MON_CHAMELEON];
-		}
+		r_ptr = real_r_ptr(m_ptr);
 
-		/* Memorize location of unique */
+		/* Ignore unique monsters */
 		if ((r_ptr->flags1 & RF1_UNIQUE) ||
-		    (r_ptr->flags7 & RF7_UNIQUE_7))
-		{
-			r_ptr->floor_id = p_ptr->floor_id;
-		}
+		    (r_ptr->flags7 & RF7_UNIQUE_7)) continue;
 
-		else if (quest_r_idx == m_ptr->r_idx)
-		{
-			/* Delete non-unique quest monsters */
-			delete_monster_idx(i);
-		}
-	}
-
-	/* Maintain artifatcs */
-	for (i = 1; i < o_max; i++)
-	{
-		object_type *o_ptr = &o_list[i];
-
-		/* Skip dead objects */
-		if (!o_ptr->k_idx) continue;
-
-		/* Memorize location of the artifact */
-		if (artifact_p(o_ptr))
-		{
-			a_info[o_ptr->name1].floor_id = p_ptr->floor_id;
-		}
+		/* Delete non-unique quest monsters */
+		delete_monster_idx(i);
 	}
 
 	/* Check if there is a same item */
@@ -848,7 +871,7 @@ void change_floor(void)
 		/* Create cave */
 		generate_cave();
 
-		/* Paranoia */
+		/* Paranoia -- Now on the surface */
 		new_floor_id = 0;
 	}
 
@@ -886,7 +909,8 @@ void change_floor(void)
 		}
 
 		/*
-		 * Next floor is right-above/right-under the current floor.
+		 * Set lower/upper_floor_id of new floor when the new
+		 * floor is right-above/right-under the current floor.
 		 *
 		 * Stair creation/Teleport level/Trap door will take
 		 * you the same floor when you used it later again.
@@ -897,11 +921,13 @@ void change_floor(void)
 
 			if (change_floor_mode & CFM_UP)
 			{
+				/* New floor is right-above */
 				if (cur_sf_ptr->upper_floor_id == new_floor_id)
 					sf_ptr->lower_floor_id = p_ptr->floor_id;
 			}
 			else if (change_floor_mode & CFM_DOWN)
 			{
+				/* New floor is right-under */
 				if (cur_sf_ptr->lower_floor_id == new_floor_id)
 					sf_ptr->upper_floor_id = p_ptr->floor_id;
 			}
@@ -952,14 +978,7 @@ void change_floor(void)
 				}
 
 				/* Extract real monster race */
-				r_ptr = &r_info[m_ptr->r_idx];
-				if (m_ptr->mflag2 & MFLAG_CHAMELEON)
-				{
-					if (r_ptr->flags1 & RF1_UNIQUE)
-						r_ptr = &r_info[MON_CHAMELEON_K];
-					else
-						r_ptr = &r_info[MON_CHAMELEON];
-				}
+				r_ptr = real_r_ptr(m_ptr);
 
 				/* Ignore non-unique */
 				if (!(r_ptr->flags1 & RF1_UNIQUE) &&
@@ -1134,12 +1153,16 @@ void change_floor(void)
 	/* Place preserved pet monsters */
 	place_pet();
 
+	/* Hack -- maintain unique and artifacts */
+	update_unique_artifact(new_floor_id);
+
 	/* Now the player is in new floor */
 	p_ptr->floor_id = new_floor_id;
 
 	/* The dungeon is ready */
 	character_dungeon = TRUE;
 
+	/* Hack -- Munchkin characters always get whole map */
 	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN)
 		wiz_lite(TRUE, (bool)(p_ptr->pclass == CLASS_NINJA));
 

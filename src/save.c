@@ -1114,9 +1114,6 @@ static void wr_dungeon(void)
 		/* Unused element */
 		if (!sf_ptr->floor_id) continue;
 
-		/* Wipe all cave */
-		clear_cave();
-
 		/* Load temporal saved floor file */
 		if (load_floor(sf_ptr, (SLF_SECOND | SLF_NO_KILL)))
 		{
@@ -1132,9 +1129,6 @@ static void wr_dungeon(void)
 			wr_byte(1);
 		}
 	}
-
-	/* Wipe all cave */
-	clear_cave();
 
 	/* Restore current floor */
 	if (!load_floor(cur_sf_ptr, (SLF_SECOND)))

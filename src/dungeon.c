@@ -6522,31 +6522,7 @@ quit("セーブファイルが壊れています");
 		s_info[p_ptr->pclass].w_max[TV_HAFTED-TV_BOW][SV_WHIP] = 8000;
 
 	/* Fill the arrays of floors and walls in the good proportions */
-	for (i = 0; i < 100; i++)
-	{
-		int lim1, lim2, lim3;
-
-		lim1 = d_info[dungeon_type].floor_percent1;
-		lim2 = lim1 + d_info[dungeon_type].floor_percent2;
-		lim3 = lim2 + d_info[dungeon_type].floor_percent3;
-
-		if (i < lim1)
-			floor_type[i] = d_info[dungeon_type].floor1;
-		else if (i < lim2)
-			floor_type[i] = d_info[dungeon_type].floor2;
-		else if (i < lim3)
-			floor_type[i] = d_info[dungeon_type].floor3;
-
-		lim1 = d_info[dungeon_type].fill_percent1;
-		lim2 = lim1 + d_info[dungeon_type].fill_percent2;
-		lim3 = lim2 + d_info[dungeon_type].fill_percent3;
-		if (i < lim1)
-			fill_type[i] = d_info[dungeon_type].fill_type1;
-		else if (i < lim2)
-			fill_type[i] = d_info[dungeon_type].fill_type2;
-		else if (i < lim3)
-			fill_type[i] = d_info[dungeon_type].fill_type3;
-	}
+	set_floor_and_wall(dungeon_type);
 
 	/* Flavor the objects */
 	flavor_init();

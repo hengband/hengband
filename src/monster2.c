@@ -160,6 +160,7 @@ void set_target(monster_type *m_ptr, int y, int x)
 	m_ptr->target_x = x;
 }
 
+
 /*
  * Reset the target of counter attack
  */
@@ -167,6 +168,29 @@ void reset_target(monster_type *m_ptr)
 {
 	set_target(m_ptr, 0, 0);
 }
+
+
+/*
+ *  Extract monster race pointer of a monster's true form
+ */
+monster_race *real_r_ptr(monster_type *m_ptr)
+{
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+	/* Extract real race */
+	if (m_ptr->mflag2 & MFLAG_CHAMELEON)
+	{
+		if (r_ptr->flags1 & RF1_UNIQUE)
+			return &r_info[MON_CHAMELEON_K];
+		else
+			return &r_info[MON_CHAMELEON];
+	}
+	else
+	{
+		return r_ptr;
+	}
+}
+
 
 /*
  * Delete a monster by index.
@@ -190,17 +214,7 @@ void delete_monster_idx(int i)
 
 
 	/* Hack -- Reduce the racial counter */
-	if (m_ptr->mflag2 & MFLAG_CHAMELEON)
-	{
-		if (r_ptr->flags1 & RF1_UNIQUE)
-			r_info[MON_CHAMELEON_K].cur_num--;
-		else
-			r_info[MON_CHAMELEON].cur_num--;
-	}
-	else
-	{
-		r_ptr->cur_num--;
-	}
+	real_r_ptr(m_ptr)->cur_num--;
 
 	/* Hack -- count the number of "reproducers" */
 	if (r_ptr->flags2 & (RF2_MULTIPLY)) num_repro--;
@@ -467,15 +481,7 @@ void wipe_m_list(void)
 		/* Mega-Hack -- preserve Unique's XXX XXX XXX */
 
 		/* Hack -- Reduce the racial counter */
-		if (m_ptr->mflag2 & MFLAG_CHAMELEON)
-		{
-			if (r_ptr->flags1 & RF1_UNIQUE)
-				r_info[MON_CHAMELEON_K].cur_num = 0;
-			else
-				r_info[MON_CHAMELEON].cur_num = 0;
-		}
-		else
-			r_ptr->cur_num = 0;
+		real_r_ptr(m_ptr)->cur_num = 0;
 
 		/* Monster is gone */
 		cave[m_ptr->fy][m_ptr->fx].m_idx = 0;
@@ -1494,11 +1500,8 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 
 	r_ptr = &r_info[m_ptr->ap_r_idx];
 
-	if ((mode & 0x100) && (m_ptr->mflag2 & MFLAG_CHAMELEON))
-	{
-		if (r_ptr->flags1 & RF1_UNIQUE) name = (r_name + r_info[MON_CHAMELEON_K].name);
-		else name = (r_name + r_info[MON_CHAMELEON].name);
-	}
+	/* Mode of 0x100 will reveal Chameleon's true name */
+	if (mode & 0x100) name = (r_name + real_r_ptr(m_ptr)->name);
 	else name = (r_name + r_ptr->name);
 
 	/* Are we hallucinating? (Idea from Nethack...) */
@@ -1916,12 +1919,13 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 		{
 			/* Something silly happens... */
 #ifdef JP
-msg_format("%s%sの顔を見てしまった！",
+			msg_format("%s%sの顔を見てしまった！",
+				funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
 #else
 			msg_format("You behold the %s visage of %s!",
+				funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
 #endif
 
-				funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
 
 			if (one_in_(3))
 			{
@@ -1934,12 +1938,12 @@ msg_format("%s%sの顔を見てしまった！",
 
 		/* Something frightening happens... */
 #ifdef JP
-msg_format("%s%sの顔を見てしまった！",
+		msg_format("%s%sの顔を見てしまった！",
+			horror_desc[randint0(MAX_SAN_HORROR)], m_name);
 #else
 		msg_format("You behold the %s visage of %s!",
-#endif
-
 			horror_desc[randint0(MAX_SAN_HORROR)], m_name);
+#endif
 
 		r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
 
@@ -3200,12 +3204,16 @@ msg_print("守りのルーンが壊れた！");
 	update_mon(c_ptr->m_idx, TRUE);
 
 
-	/* Hack -- Count the monsters on the level */
-	if (m_ptr->mflag2 & MFLAG_CHAMELEON)
-		r_info[r_idx].cur_num++;
-	else
-		r_ptr->cur_num++;
+	/* Count the monsters on the level */
+	real_r_ptr(m_ptr)->cur_num++;
 
+	/*
+	 * Memorize location of the unique monster in saved floors.
+	 * A unique monster move from old saved floor.
+	 */
+	if (character_dungeon &&
+	    ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_UNIQUE_7)))
+		real_r_ptr(m_ptr)->floor_id = p_ptr->floor_id;
 
 	/* Hack -- Count the number of "reproducers" */
 	if (r_ptr->flags2 & RF2_MULTIPLY) num_repro++;

@@ -2433,11 +2433,7 @@ note(format("モンスターの配列が大きすぎる(%d)！", limit));
 	for (i = 1; i < limit; i++)
 	{
 		int m_idx;
-
 		monster_type *m_ptr;
-
-		monster_race *r_ptr;
-
 
 		/* Get a new record */
 		m_idx = m_pop();
@@ -2468,12 +2464,8 @@ note(format("モンスター配置エラー (%d <> %d)", i, m_idx));
 		/* Mark the location */
 		c_ptr->m_idx = m_idx;
 
-
-		/* Access race */
-		r_ptr = &r_info[m_ptr->r_idx];
-
-		/* Count XXX XXX XXX */
-		r_ptr->cur_num++;
+		/* Count */
+		real_r_ptr(m_ptr)->cur_num++;
 	}
 
 	/*** Success ***/
@@ -2510,6 +2502,10 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 	cave_template_type *template;
 	u16b num_temp;
+
+
+	/*** Wipe all cave ***/
+	clear_cave();
 
 
 	/*** Basic info ***/
@@ -2642,7 +2638,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	rd_u16b(&limit);
 
 	/* Verify maximum */
-	if (limit >= max_o_idx) return 151;
+	if (limit > max_o_idx) return 151;
 
 
 	/* Read the dungeon items */
@@ -2701,7 +2697,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	rd_u16b(&limit);
 
 	/* Hack -- verify */
-	if (limit >= max_m_idx) return 161;
+	if (limit > max_m_idx) return 161;
 
 	/* Read the monsters */
 	for (i = 1; i < limit; i++)
@@ -2709,8 +2705,6 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		cave_type *c_ptr;
 		int m_idx;
 		monster_type *m_ptr;
-		monster_race *r_ptr;
-
 
 		/* Get a new record */
 		m_idx = m_pop();
@@ -2732,12 +2726,8 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		/* Mark the location */
 		c_ptr->m_idx = m_idx;
 
-
-		/* Access race */
-		r_ptr = &r_info[m_ptr->r_idx];
-
-		/* Count XXX XXX XXX */
-		r_ptr->cur_num++;
+		/* Count */
+		real_r_ptr(m_ptr)->cur_num++;
 	}
 
 	/* Success */
@@ -2832,9 +2822,6 @@ static errr rd_dungeon(void)
 			rd_byte(&tmp8u);
 			if (tmp8u) continue;
 
-			/* Wipe all cave */
-			clear_cave();
-
 			/* Read from the save file */
 			err = rd_saved_floor(sf_ptr);
 			
@@ -2851,9 +2838,6 @@ static errr rd_dungeon(void)
 		/* Finally load current floor data from temporal file */
 		if (!err)
 		{
-			/* Wipe all cave */
-			clear_cave();
-
 			if (!load_floor(get_sf_ptr(p_ptr->floor_id), SLF_SECOND)) err = 183;
 		}
 	}
@@ -3034,9 +3018,8 @@ if (arg_fiddle) note("メッセージをロードしました");
 
 	for (i = 0; i < max_r_idx; i++)
 	{
-		monster_race *r_ptr;
 		/* Access that monster */
-		r_ptr = &r_info[i];
+		monster_race *r_ptr = &r_info[i];
 
 		/* Hack -- Reset the death counter */
 		r_ptr->max_num = 100;
@@ -3062,13 +3045,8 @@ note(format("モンスターの種族が多すぎる(%u)！", tmp16u));
 	/* Read the available records */
 	for (i = 0; i < tmp16u; i++)
 	{
-		monster_race *r_ptr;
-
 		/* Read the lore */
 		rd_lore(i);
-
-		/* Access that monster */
-		r_ptr = &r_info[i];
 	}
 
 #ifdef JP

@@ -817,7 +817,7 @@ extern cptr funny_desc[MAX_SAN_FUNNY];
 extern cptr funny_comments[MAX_SAN_COMMENT];
 extern void set_target(monster_type *m_ptr, int y, int x);
 extern void reset_target(monster_type *m_ptr);
-extern void sanity_blast(monster_type *m_ptr, bool necro);
+extern monster_race *real_r_ptr(monster_type *m_ptr);
 extern void delete_monster_idx(int i);
 extern void delete_monster(int y, int x);
 extern void compact_monsters(int size);
@@ -828,6 +828,7 @@ extern s16b get_mon_num(int level);
 extern void monster_desc(char *desc, monster_type *m_ptr, int mode);
 extern void lore_do_probe(int m_idx);
 extern void lore_treasure(int m_idx, int num_item, int num_gold);
+extern void sanity_blast(monster_type *m_ptr, bool necro);
 extern void update_mon(int m_idx, bool full);
 extern void update_monsters(bool full);
 extern bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode);
@@ -1477,6 +1478,7 @@ extern void k_info_reset(void);
 extern bool buki_motteruka(int i);
 
 /* wild.c */
+extern void set_floor_and_wall(byte type);
 extern void wilderness_gen(void);
 extern void wilderness_gen_small(void);
 extern errr init_wilderness(void);

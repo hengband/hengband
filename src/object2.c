@@ -4211,6 +4211,10 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 		/* Hack -- Mark the artifact as "created" */
 		a_ptr->cur_num = 1;
 
+		/* Hack -- Memorize location of artifact in saved floors */
+		if (character_dungeon)
+			a_ptr->floor_id = p_ptr->floor_id;
+
 		/* Extract the other fields */
 		o_ptr->pval = a_ptr->pval;
 		o_ptr->ac = a_ptr->ac;

@@ -388,41 +388,6 @@ static void try_door(int y, int x)
 }
 
 
-/*
- * Fill the arrays of floors and walls in the good proportions
- */
-static void set_basic_floor_and_wall(byte type)
-{
-	int i;
-
-	for (i = 0; i < 100; i++)
-	{
-		int lim1, lim2, lim3;
-
-		lim1 = d_info[type].floor_percent1;
-		lim2 = lim1 + d_info[type].floor_percent2;
-		lim3 = lim2 + d_info[type].floor_percent3;
-
-		if (i < lim1)
-			floor_type[i] = d_info[type].floor1;
-		else if (i < lim2)
-			floor_type[i] = d_info[type].floor2;
-		else if (i < lim3)
-			floor_type[i] = d_info[type].floor3;
-
-		lim1 = d_info[type].fill_percent1;
-		lim2 = lim1 + d_info[type].fill_percent2;
-		lim3 = lim2 + d_info[type].fill_percent3;
-		if (i < lim1)
-			fill_type[i] = d_info[type].fill_type1;
-		else if (i < lim2)
-			fill_type[i] = d_info[type].fill_type2;
-		else if (i < lim3)
-			fill_type[i] = d_info[type].fill_type3;
-	}
-}
-
-
 /* Place quest monsters */
 void place_quest_monsters(void)
 {
@@ -524,7 +489,7 @@ static bool cave_gen(void)
 	dun_data dun_body;
 
 	/* Fill the arrays of floors and walls in the good proportions */
-	set_basic_floor_and_wall(dungeon_type);
+	set_floor_and_wall(dungeon_type);
 
 
 	/* Prepare allocation table */
@@ -1606,7 +1571,7 @@ void clear_cave(void)
 	rating = 0;
 
 	/* Fill the arrays of floors and walls in the good proportions */
-	set_basic_floor_and_wall(0);
+	set_floor_and_wall(0);
 }
 
 
