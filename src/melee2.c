@@ -722,7 +722,7 @@ static bool get_moves_aux(int m_idx, int *yp, int *xp, bool no_flow)
 static bool get_fear_moves_aux(int m_idx, int *yp, int *xp)
 {
 	int y, x, y1, x1, fy, fx, gy = 0, gx = 0;
-	int dist = 0, score = -1;
+	int score = -1;
 	int i;
 
 	monster_type *m_ptr = &m_list[m_idx];
@@ -750,7 +750,8 @@ static bool get_fear_moves_aux(int m_idx, int *yp, int *xp)
 		/* Ignore locations off of edge */
 		if (!in_bounds2(y, x)) continue;
 
-		if (cave[y][x].dist < dist) continue;
+		/* Don't move toward player */
+		/* if (cave[y][x].dist < 3) continue; */ /* Hmm.. Need it? */
 
 		/* Calculate distance of this grid from our destination */
 		dis = distance(y, x, y1, x1);
@@ -765,7 +766,6 @@ static bool get_fear_moves_aux(int m_idx, int *yp, int *xp)
 		if (s < score) continue;
 
 		/* Save the score and time */
-		dist = cave[y][x].dist;
 		score = s;
 
 		/* Save the location */
@@ -944,7 +944,7 @@ static bool find_safety(int m_idx, int *yp, int *xp)
 
 	sint *y_offsets;
 	sint *x_offsets;
-	
+
 	cave_type *c_ptr;
 
 	/* Start with adjacent locations, spread further */
@@ -953,7 +953,7 @@ static bool find_safety(int m_idx, int *yp, int *xp)
 		/* Get the lists of points with a distance d from (fx, fy) */
 		y_offsets = dist_offsets_y[d];
 		x_offsets = dist_offsets_x[d];
-		
+
 		/* Check the locations */
 		for (i = 0, dx = x_offsets[0], dy = y_offsets[0];
 		     dx != 0 || dy != 0;
@@ -961,7 +961,7 @@ static bool find_safety(int m_idx, int *yp, int *xp)
 		{
 			y = fy + dy;
 			x = fx + dx;
-			
+
 			/* Skip illegal locations */
 			if (!in_bounds(y, x)) continue;
 
@@ -974,16 +974,16 @@ static bool find_safety(int m_idx, int *yp, int *xp)
 			if (!stupid_monsters && !(m_ptr->mflag2 & MFLAG_NOFLOW))
 			{
 				/* Ignore grids very far from the player */
-				if (c_ptr->when < cave[py][px].when) continue;
+				if (c_ptr->dist == 0) continue;
 
 				/* Ignore too-distant grids */
 				if (c_ptr->dist > cave[fy][fx].dist + 2 * d) continue;
 			}
 			
 			/* Check for absence of shot (more or less) */
-			if (clean_shot(fy, fx, y, x, FALSE))
+			if (!player_has_los_grid(c_ptr))
 			{
-							
+
 				/* Calculate distance from player */
 				dis = distance(y, x, py, px);
 
@@ -992,20 +992,13 @@ static bool find_safety(int m_idx, int *yp, int *xp)
 				{
 					gy = y;
 					gx = x;
-					if (!player_has_los_grid(c_ptr))
-					{
-						gdis = dis * 5;
-					}
-					else
-					{
-						gdis = dis;
-					}
+					gdis = dis;
 				}
 			}
 		}
 
 		/* Check for success */
-		if (gdis > d + m_ptr->cdis)
+		if (gdis > 0)
 		{
 			/* Good location */
 			(*yp) = fy - gy;
@@ -1017,13 +1010,7 @@ static bool find_safety(int m_idx, int *yp, int *xp)
 	}
 
 	/* No safe place */
-	
-	/* Save farthest location from player in LOS of monster */
-	(*yp) = fy - gy;
-	(*xp) = fx - gx;
-	
-	/* Hack - return TRUE anyway. */
-	return (TRUE);
+	return (FALSE);
 }
 
 
@@ -1232,21 +1219,25 @@ static bool get_moves(int m_idx, int *mm)
 	{
 		if (!done && will_run)
 		{
+			int tmp_x = (-x);
+			int tmp_y = (-y);
+
 			/* Try to find safe place */
-			if (!find_safety(m_idx, &y, &x))
-			{
-				/* This is not a very "smart" method XXX XXX */
-				y = (-y);
-				x = (-x);
-			}
-			else
+			if (find_safety(m_idx, &y, &x))
 			{
 				/* Attempt to avoid the player */
 				if (!stupid_monsters && !no_flow)
 				{
 					/* Adjust movement */
-					(void)get_fear_moves_aux(m_idx, &y, &x);
+					if (get_fear_moves_aux(m_idx, &y, &x)) done = TRUE;
 				}
+			}
+
+			if (!done)
+			{
+				/* This is not a very "smart" method XXX XXX */
+				y = tmp_y;
+				x = tmp_x;
 			}
 		}
 	}
