@@ -425,10 +425,6 @@ errr Term_xtra(int n, int v)
 	/* Verify the hook */
 	if (!Term->xtra_hook) return (-1);
 
-#ifdef CHUUKEI
-	if( n == TERM_XTRA_CLEAR || n == TERM_XTRA_FRESH || n == TERM_XTRA_SHAPE )
-	  send_xtra_to_chuukei_server(n);
-#endif
 	/* Call the hook */
 	return ((*Term->xtra_hook)(n, v));
 }
@@ -443,11 +439,20 @@ errr Term_xtra(int n, int v)
  */
 static errr Term_curs_hack(int x, int y)
 {
-	/* Compiler silliness */
-	if (x || y) return (-2);
+	/* Unused */
+	(void)x;
+	(void)y;
 
 	/* Oops */
 	return (-1);
+}
+
+/*
+ * Hack -- fake hook for "Term_bigcurs()" (see above)
+ */
+static errr Term_bigcurs_hack(int x, int y)
+{
+	return (*Term->curs_hook)(x, y);
 }
 
 /*
@@ -455,8 +460,10 @@ static errr Term_curs_hack(int x, int y)
  */
 static errr Term_wipe_hack(int x, int y, int n)
 {
-	/* Compiler silliness */
-	if (x || y || n) return (-2);
+	/* Unused */
+	(void)x;
+	(void)y;
+	(void)n;
 
 	/* Oops */
 	return (-1);
@@ -465,15 +472,14 @@ static errr Term_wipe_hack(int x, int y, int n)
 /*
  * Hack -- fake hook for "Term_text()" (see above)
  */
-#ifdef JP
 static errr Term_text_hack(int x, int y, int n, byte a, cptr cp)
-#else
-static errr Term_text_hack(int x, int y, int n, byte a, const char *cp)
-#endif
-
 {
-	/* Compiler silliness */
-	if (x || y || n || a || cp) return (-2);
+	/* Unused */
+	(void)x;
+	(void)y;
+	(void)n;
+	(void)a;
+	(void)cp;
 
 	/* Oops */
 	return (-1);
@@ -482,10 +488,16 @@ static errr Term_text_hack(int x, int y, int n, byte a, const char *cp)
 /*
  * Hack -- fake hook for "Term_pict()" (see above)
  */
-static errr Term_pict_hack(int x, int y, int n, const byte *ap, const char *cp, const byte *tap, const char *tcp)
+static errr Term_pict_hack(int x, int y, int n, const byte *ap, cptr cp, const byte *tap, cptr tcp)
 {
-	/* Compiler silliness */
-	if (x || y || n || ap || cp || tap || tcp) return (-2);
+	/* Unused */
+	(void)x;
+	(void)y;
+	(void)n;
+	(void)ap;
+	(void)cp;
+	(void)tap;
+	(void)tcp;
 
 	/* Oops */
 	return (-1);
@@ -1057,18 +1069,12 @@ static void Term_fresh_row_both(int y, int x1, int x2)
 				/* Draw pending chars (normal) */
 				if (fa || always_text)
 				{
-#ifdef CHUUKEI
-			send_text_to_chuukei_server(fx, y, fn, fa, &scr_cc[fx]);
-#endif
 					(void)((*Term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
 				}
 
 				/* Draw pending chars (black) */
 				else
 				{
-#ifdef CHUUKEI
-			send_wipe_to_chuukei_server(fx, y, fn);
-#endif
 					(void)((*Term->wipe_hook)(fx, y, fn));
 				}
 
@@ -1108,18 +1114,12 @@ static void Term_fresh_row_both(int y, int x1, int x2)
 				/* Draw pending chars (normal) */
 				if (fa || always_text)
 				{
-#ifdef CHUUKEI
-			send_text_to_chuukei_server(fx, y, fn, fa, &scr_cc[fx]);
-#endif
 					(void)((*Term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
 				}
 
 				/* Draw pending chars (black) */
 				else
 				{
-#ifdef CHUUKEI
-			send_wipe_to_chuukei_server(fx, y, fn);
-#endif
 					(void)((*Term->wipe_hook)(fx, y, fn));
 				}
 
@@ -1148,18 +1148,12 @@ static void Term_fresh_row_both(int y, int x1, int x2)
 				/* Draw the pending chars */
 				if (fa || always_text)
 				{
-#ifdef CHUUKEI
-			send_text_to_chuukei_server(fx, y, fn, fa, &scr_cc[fx]);
-#endif
 					(void)((*Term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
 				}
 
 				/* Hack -- Erase "leading" spaces */
 				else
 				{
-#ifdef CHUUKEI
-			send_wipe_to_chuukei_server(fx, y, fn);
-#endif
 					(void)((*Term->wipe_hook)(fx, y, fn));
 				}
 
@@ -1186,18 +1180,12 @@ static void Term_fresh_row_both(int y, int x1, int x2)
 		/* Draw pending chars (normal) */
 		if (fa || always_text)
 		{
-#ifdef CHUUKEI
-			send_text_to_chuukei_server(fx, y, fn, fa, &scr_cc[fx]);
-#endif
 			(void)((*Term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
 		}
 
 		/* Draw pending chars (black) */
 		else
 		{
-#ifdef CHUUKEI
-			send_wipe_to_chuukei_server(fx, y, fn);
-#endif
 			(void)((*Term->wipe_hook)(fx, y, fn));
 		}
 	}
@@ -1295,18 +1283,12 @@ static void Term_fresh_row_text(int y, int x1, int x2)
 				/* Draw pending chars (normal) */
 				if (fa || always_text)
 				{
-#ifdef CHUUKEI
-			send_text_to_chuukei_server(fx, y, fn, fa, &scr_cc[fx]);
-#endif
 					(void)((*Term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
 				}
 
 				/* Draw pending chars (black) */
 				else
 				{
-#ifdef CHUUKEI
-			send_wipe_to_chuukei_server(fx, y, fn);
-#endif
 					(void)((*Term->wipe_hook)(fx, y, fn));
 				}
 
@@ -1345,18 +1327,12 @@ static void Term_fresh_row_text(int y, int x1, int x2)
 				/* Draw the pending chars */
 				if (fa || always_text)
 				{
-#ifdef CHUUKEI
-			send_text_to_chuukei_server(fx, y, fn, fa, &scr_cc[fx]);
-#endif
 					(void)((*Term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
 				}
 
 				/* Hack -- Erase "leading" spaces */
 				else
 				{
-#ifdef CHUUKEI
-			send_wipe_to_chuukei_server(fx, y, fn);
-#endif
 					(void)((*Term->wipe_hook)(fx, y, fn));
 				}
 
@@ -1383,18 +1359,12 @@ static void Term_fresh_row_text(int y, int x1, int x2)
 		/* Draw pending chars (normal) */
 		if (fa || always_text)
 		{
-#ifdef CHUUKEI
-			send_text_to_chuukei_server(fx, y, fn, fa, &scr_cc[fx]);
-#endif
 			(void)((*Term->text_hook)(fx, y, fn, fa, &scr_cc[fx]));
 		}
 
 		/* Draw pending chars (black) */
 		else
 		{
-#ifdef CHUUKEI
-			send_wipe_to_chuukei_server(fx, y, fn);
-#endif
 			(void)((*Term->wipe_hook)(fx, y, fn));
 		}
 	}
@@ -1547,14 +1517,6 @@ errr Term_fresh(void)
 	}
 
 
-	/* Paranoia -- use "fake" hooks to prevent core dumps */
-	if (!Term->curs_hook) Term->curs_hook = Term_curs_hack;
-	if (!Term->bigcurs_hook) Term->bigcurs_hook = Term->curs_hook;
-	if (!Term->wipe_hook) Term->wipe_hook = Term_wipe_hack;
-	if (!Term->text_hook) Term->text_hook = Term_text_hack;
-	if (!Term->pict_hook) Term->pict_hook = Term_pict_hack;
-
-
 	/* Handle "total erase" */
 	if (Term->total_erase)
 	{
@@ -1644,19 +1606,12 @@ errr Term_fresh(void)
 			/* Hack -- restore the actual character */
 			else if (old_aa[tx] || Term->always_text)
 			{
-
-#ifdef CHUUKEI
-				send_text_to_chuukei_server(tx, ty, csize, (old_aa[tx] & 0xf), &old_cc[tx]);
-#endif
 				(void)((*Term->text_hook)(tx, ty, csize, (unsigned char) (old_aa[tx] & 0xf), &old_cc[tx]));
 			}
 
 			/* Hack -- erase the grid */
 			else
 			{
-#ifdef CHUUKEI
-			send_wipe_to_chuukei_server(tx, ty, 1);
-#endif
 				(void)((*Term->wipe_hook)(tx, ty, 1));
 			}
 		}
@@ -1744,10 +1699,6 @@ errr Term_fresh(void)
 		/* Draw the cursor */
 		if (!scr->cu && scr->cv)
 		{
-#ifdef CHUUKEI
-			send_curs_to_chuukei_server(scr->cx, scr->cy);
-#endif
-
 #ifdef JP
 			if ((scr->cx + 1 < w) &&
 			    ((old->a[scr->cy][scr->cx + 1] & AF_BIGTILE2) == AF_BIGTILE2 ||
@@ -1774,9 +1725,6 @@ errr Term_fresh(void)
 		/* The cursor is useless, hide it */
 		if (scr->cu)
 		{
-#ifdef CHUUKEI
-		  send_curs_to_chuukei_server(w - 1, scr->cy);
-#endif
 			/* Paranoia -- Put the cursor NEAR where it belongs */
 			(void)((*Term->curs_hook)(w - 1, scr->cy));
 
@@ -1787,9 +1735,6 @@ errr Term_fresh(void)
 		/* The cursor is invisible, hide it */
 		else if (!scr->cv)
 		{
-#ifdef CHUUKEI
-		  send_curs_to_chuukei_server(scr->cx, scr->cy);
-#endif
 			/* Paranoia -- Put the cursor where it belongs */
 			(void)((*Term->curs_hook)(scr->cx, scr->cy));
 
@@ -1800,9 +1745,6 @@ errr Term_fresh(void)
 		/* The cursor is visible, display it correctly */
 		else
 		{
-#ifdef CHUUKEI
-		  send_curs_to_chuukei_server(scr->cx, scr->cy);
-#endif
 			/* Put the cursor where it belongs */
 			(void)((*Term->curs_hook)(scr->cx, scr->cy));
 
@@ -3033,6 +2975,14 @@ errr term_init(term *t, int w, int h, int k)
 	/* Default "blank" */
 	t->attr_blank = 0;
 	t->char_blank = ' ';
+
+
+	/* Prepare "fake" hooks to prevent core dumps */
+	t->curs_hook = Term_curs_hack;
+	t->bigcurs_hook = Term_bigcurs_hack;
+	t->wipe_hook = Term_wipe_hack;
+	t->text_hook = Term_text_hack;
+	t->pict_hook = Term_pict_hack;
 
 
 	/* Success */

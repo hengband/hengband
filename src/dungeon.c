@@ -6680,10 +6680,16 @@ void play_game(bool new_game)
 	bool load_game = TRUE;
 
 #ifdef CHUUKEI
-	if(chuukei_client){
-	  reset_visuals();
-	  browse_chuukei();
-	  return;
+	if (chuukei_client)
+	{
+		reset_visuals();
+		browse_chuukei();
+		return;
+	}
+
+	else if (chuukei_server)
+	{
+		prepare_chuukei_hooks();
 	}
 #endif
 

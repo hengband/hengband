@@ -1622,11 +1622,8 @@ extern bool chuukei_server;
 extern bool chuukei_client;
 
 extern int connect_chuukei_server(char *server_string);
-extern void send_text_to_chuukei_server(int x, int y, int len, int col, char *str);
-extern void send_wipe_to_chuukei_server(int x, int y, int len);
-extern void send_xtra_to_chuukei_server(int n);
 extern void browse_chuukei(void);
-extern void send_curs_to_chuukei_server(int x, int y);
 extern void flush_ringbuf(void);
+extern void prepare_chuukei_hooks(void);
 #endif
 

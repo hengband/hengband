@@ -77,6 +77,32 @@ int recv(int s, char *buffer, size_t buflen, int flags)
 }
 #endif
 
+/*
+ * Original hooks
+ */
+static errr (*old_xtra_hook)(int n, int v);
+static errr (*old_curs_hook)(int x, int y);
+static errr (*old_bigcurs_hook)(int x, int y);
+static errr (*old_wipe_hook)(int x, int y, int n);
+static errr (*old_text_hook)(int x, int y, int n, byte a, cptr s);
+
+
+static void disable_chuukei_server(void)
+{
+	term *t = angband_term[0];
+
+        if (!chuukei_server) return;
+
+	chuukei_server = FALSE;
+
+	t->xtra_hook = old_xtra_hook;
+	t->curs_hook = old_curs_hook;
+	t->bigcurs_hook = old_bigcurs_hook;
+	t->wipe_hook = old_wipe_hook;
+	t->text_hook = old_text_hook;
+}
+
+
 /* ANSI Cによればstatic変数は0で初期化されるが一応初期化する */
 static errr init_chuukei(void)
 {
@@ -114,8 +140,8 @@ static errr insert_ringbuf(char *buf)
 	/* バッファをオーバー */
 	if (ring.inlen + len >= RINGBUF_SIZE)
 	{
-		chuukei_server = FALSE;
-		chuukei_client = FALSE;
+		if (chuukei_server) disable_chuukei_server();
+		else chuukei_client = FALSE;
 
 		prt("バッファが溢れました。サーバとの接続を切断します。", 0, 0);
 		inkey();
@@ -183,7 +209,7 @@ void flush_ringbuf(void)
 		if (result <= 0)
 		{
 			/* サーバとの接続断？ */
-			chuukei_server = FALSE;
+			disable_chuukei_server();
 
 			prt("サーバとの接続が切断されました。", 0, 0);
 			inkey();
@@ -223,7 +249,7 @@ void flush_ringbuf(void)
 		if (result <= 0)
 		{
 			/* サーバとの接続断？ */
-			chuukei_server = FALSE;
+			disable_chuukei_server();
 
 			prt("サーバとの接続が切断されました。", 0, 0);
 			inkey();
@@ -481,12 +507,10 @@ static bool string_is_repeat(char *str, int len)
 	return (TRUE);
 }
 
-void send_text_to_chuukei_server(int x, int y, int len, int col, char *str)
+static errr send_text_to_chuukei_server(int x, int y, int len, byte col, cptr str)
 {
 	char buf[1024];
 	char buf2[1024];
-
-	if (!chuukei_server || Term != angband_term[0]) return;
 
 	strncpy(buf2, str, len);
 	buf2[len] = '\0';
@@ -508,44 +532,91 @@ void send_text_to_chuukei_server(int x, int y, int len, int col, char *str)
 	}
 
 	insert_ringbuf(buf);
+
+	return (*old_text_hook)(x, y, len, col, str);
 }
 
-void send_wipe_to_chuukei_server(int x, int y, int len)
+static errr send_wipe_to_chuukei_server(int x, int y, int len)
 {
 	char buf[1024];
-
-	if (!chuukei_server || Term != angband_term[0]) return;
 
 	sprintf(buf, "w%c%c%c", x+1, y+1, len);
 
 	insert_ringbuf(buf);
+
+	return (*old_wipe_hook)(x, y, len);
 }
 
-void send_xtra_to_chuukei_server(int n)
+static errr send_xtra_to_chuukei_server(int n, int v)
 {
 	char buf[1024];
 
-	if (!chuukei_server || Term != angband_term[0]) return;
-	sprintf(buf, "x%c", n+1);
+	(void)v;
 
-	insert_ringbuf(buf);
-
-	if (n == TERM_XTRA_FRESH)
+	if (n == TERM_XTRA_CLEAR || n == TERM_XTRA_FRESH || n == TERM_XTRA_SHAPE)
 	{
-		sprintf(buf, "d%ld", get_current_time() - epoch_time);
+		sprintf(buf, "x%c", n+1);
+		
 		insert_ringbuf(buf);
+		
+		if (n == TERM_XTRA_FRESH)
+		{
+			sprintf(buf, "d%ld", get_current_time() - epoch_time);
+			insert_ringbuf(buf);
+		}
 	}
+
+	/* Verify the hook */
+	if (!old_xtra_hook) return -1;
+
+	return (*old_xtra_hook)(n, v);
 }
 
-void send_curs_to_chuukei_server(int x, int y)
+static errr send_curs_to_chuukei_server(int x, int y)
 {
 	char buf[1024];
 
-	if (!chuukei_server || Term != angband_term[0]) return;
 	sprintf(buf, "c%c%c", x+1, y+1);
 
 	insert_ringbuf(buf);
+
+	return (*old_curs_hook)(x, y);
 }
+
+static errr send_bigcurs_to_chuukei_server(int x, int y)
+{
+	char buf[1024];
+
+	sprintf(buf, "C%c%c", x+1, y+1);
+
+	insert_ringbuf(buf);
+
+	return (*old_bigcurs_hook)(x, y);
+}
+
+
+/*
+ * Prepare z-term hooks to call send_*_to_chuukei_server()'s
+ */
+void prepare_chuukei_hooks(void)
+{
+	term *t0 = angband_term[0];
+
+	/* Save original z-term hooks */
+	old_xtra_hook = t0->xtra_hook;
+	old_curs_hook = t0->curs_hook;
+	old_bigcurs_hook = t0->bigcurs_hook;
+	old_wipe_hook = t0->wipe_hook;
+	old_text_hook = t0->text_hook;
+
+	/* Prepare z-term hooks */
+	t0->xtra_hook = send_xtra_to_chuukei_server;
+	t0->curs_hook = send_curs_to_chuukei_server;
+	t0->bigcurs_hook = send_bigcurs_to_chuukei_server;
+	t0->wipe_hook = send_wipe_to_chuukei_server;
+	t0->text_hook = send_text_to_chuukei_server;
+}
+
 
 static int read_sock(void)
 {
@@ -721,6 +792,9 @@ static bool flush_ringbuf_client(void)
 
 		case 'c':
 			(void)((*angband_term[0]->curs_hook)(x, y));
+			break;
+		case 'C':
+			(void)((*angband_term[0]->bigcurs_hook)(x, y));
 			break;
 		}
 	}
