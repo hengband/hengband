@@ -4609,6 +4609,7 @@ void aggravate_monsters(int who)
 			{
 				/* Wake up */
 				m_ptr->csleep = 0;
+				if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
 				if (r_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 				if (m_ptr->ml)
 				{
@@ -4626,6 +4627,7 @@ void aggravate_monsters(int who)
 		{
 			if (!is_pet(m_ptr))
 			{
+				if (!m_ptr->mproc_idx) mproc_add(i);
 				m_ptr->fast = MIN(200, m_ptr->fast + 100);
 				speed = TRUE;
 			}
@@ -4687,6 +4689,7 @@ bool genocide_aux(int m_idx, int power, bool player_cast, int dam_side, cptr spe
 		if (m_ptr->csleep)
 		{
 			m_ptr->csleep = 0;
+			if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
 			if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 			if (m_ptr->ml)
 			{
@@ -5663,7 +5666,11 @@ msg_format("%^sは苦痛で泣きわめいた！", m_name);
 					damage = (sn ? damroll(4, 8) : (m_ptr->hp + 1));
 
 					/* Monster is certainly awake */
-					m_ptr->csleep = 0;
+					if (m_ptr->csleep)
+					{
+						m_ptr->csleep = 0;
+						if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+					}
 
 					/* Apply damage directly */
 					m_ptr->hp -= damage;
@@ -5966,7 +5973,7 @@ static void cave_temp_room_lite(void)
 			{
 				/* Wake up! */
 				m_ptr->csleep = 0;
-
+				if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
 				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 
 				/* Notice the "waking up" */
@@ -6616,8 +6623,12 @@ msg_print("失敗した。");
 
 		if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 
-		m_ptr->csleep = 0;
-		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+		if (m_ptr->csleep)
+		{
+			m_ptr->csleep = 0;
+			if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+			if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+		}
 
 		/* Failure */
 		return FALSE;

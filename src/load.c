@@ -2632,6 +2632,8 @@ note(format("モンスター配置エラー (%d <> %d)", i, m_idx));
 
 		/* Read the monster */
 		rd_monster(m_ptr);
+		if (need_mproc(m_ptr)) mproc_add(m_idx);
+		else m_ptr->mproc_idx = 0;
 
 
 		/* Access grid */
@@ -2903,6 +2905,8 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 		/* Read the monster */
 		rd_monster(m_ptr);
+		if (need_mproc(m_ptr)) mproc_add(m_idx);
+		else m_ptr->mproc_idx = 0;
 
 
 		/* Access grid */

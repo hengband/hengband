@@ -333,6 +333,12 @@ static void build_dead_end(void)
 }
 
 
+/* Maximum number of preservable pets */
+#define MAX_PARTY_MON 21
+
+static monster_type party_mon[MAX_PARTY_MON];
+
+
 /*
  * Preserve_pets
  */
@@ -572,6 +578,9 @@ static void place_pet(void)
 			/* Hack -- Count the number of "reproducers" */
 			if (r_ptr->flags2 & RF2_MULTIPLY) num_repro++;
 
+			if (need_mproc(m_ptr)) mproc_add(m_idx);
+			else m_ptr->mproc_idx = 0;
+
 			/* Hack -- Notice new multi-hued monsters */
 			{
 				monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
@@ -602,8 +611,8 @@ static void place_pet(void)
 		}
 	}
 
-	/* For accuracy of precalc_cur_num_of_pet() */               
-	C_WIPE(party_mon, MAX_PARTY_MON, monster_type);                            
+	/* For accuracy of precalc_cur_num_of_pet() */
+	C_WIPE(party_mon, MAX_PARTY_MON, monster_type);
 }
 
 
@@ -1217,6 +1226,8 @@ void change_floor(void)
 
 					/* Remove confusion */
 					m_ptr->confused = 0;
+
+					if (!m_ptr->csleep) mproc_remove(m_ptr->mproc_idx);
 				}
 
 				/* Extract real monster race */

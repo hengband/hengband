@@ -1508,6 +1508,7 @@ static bool vanish_dungeon(void)
 			{
 				/* Reset sleep counter */
 				m_ptr->csleep = 0;
+				if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
 
 				/* Notice the "waking up" */
 				if (is_seen(m_ptr))
@@ -5364,7 +5365,11 @@ bool polymorph_monster(int y, int x)
 		{
 			/* Placing the new monster failed */
 			if (place_monster_aux(0, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN)))
+			{
 				m_list[hack_m_idx_ii] = back_m;
+				if (need_mproc(&back_m)) mproc_add(hack_m_idx_ii);
+				else m_list[hack_m_idx_ii].mproc_idx = 0;
+			}
 		}
 
 		if (targeted) target_who = hack_m_idx_ii;

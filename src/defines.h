@@ -616,10 +616,6 @@
 #define PF_RYOUTE       0x0040
 
 
-/* Maximum number of preservable pets */
-#define MAX_PARTY_MON 21
-
-
 /*
  * There is a 1/20 (5%) chance of inflating the requested object_level
  * during the creation of an object (see "get_obj_num()" in "object.c").
@@ -5488,3 +5484,8 @@ extern int PlayerUID;
 #define MPE_DO_PICKUP     0x00000020
 #define MPE_BREAK_TRAP    0x00000040
 #define MPE_DONT_SWAP_MON 0x00000080
+
+
+#define need_mproc(M) \
+	((M)->invulner || (M)->fast || (M)->slow || (M)->csleep || \
+	 (M)->stunned || (M)->confused || (M)->monfear)

@@ -209,10 +209,13 @@ void mon_take_hit_mon(int m_idx, int dam, bool *fear, cptr note, int who)
 		if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 	}
 
-	/* Wake it up */
-	m_ptr->csleep = 0;
-
-	if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+	if (m_ptr->csleep)
+	{
+		/* Wake it up */
+		m_ptr->csleep = 0;
+		if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+	}
 
 	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(1, 0);
 
@@ -352,6 +355,7 @@ msg_format("%^sは殺された。", m_name);
 		{
 			/* Cure fear */
 			m_ptr->monfear = 0;
+			if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
 
 			/* No more fear */
 			(*fear) = FALSE;
@@ -375,6 +379,8 @@ msg_format("%^sは殺された。", m_name);
 		{
 			/* Hack -- note fear */
 			(*fear) = TRUE;
+
+			if (!m_ptr->mproc_idx) mproc_add(m_idx);
 
 			/* XXX XXX XXX Hack -- Add some timed fear */
 			m_ptr->monfear += (randint1(10) +
@@ -1521,10 +1527,14 @@ static bool monst_attack_monst(int m_idx, int t_idx)
 		/* Monster hits */
 		if (!effect || check_hit2(power, rlev, ac, m_ptr->stunned))
 		{
-			/* Wake it up */
-			t_ptr->csleep = 0;
+			if (t_ptr->csleep)
+			{
+				/* Wake it up */
+				t_ptr->csleep = 0;
+				if (!need_mproc(t_ptr)) mproc_remove(t_ptr->mproc_idx);
+				if (tr_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+			}
 
-			if (tr_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 			if (t_ptr->ml)
 			{
 				/* Redraw the health bar */
@@ -2138,15 +2148,19 @@ msg_format("%sは体力を回復したようだ。", m_name);
 			case RBM_ENGULF:
 			case RBM_CHARGE:
 				{
-					/* Wake it up */
-					t_ptr->csleep = 0;
-
-					if (tr_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
-					if (t_ptr->ml)
+					if (t_ptr->csleep)
 					{
-						/* Redraw the health bar */
-						if (p_ptr->health_who == t_idx) p_ptr->redraw |= (PR_HEALTH);
-						if (p_ptr->riding == t_idx) p_ptr->redraw |= (PR_UHEALTH);
+						/* Wake it up */
+						t_ptr->csleep = 0;
+						if (!need_mproc(t_ptr)) mproc_remove(t_ptr->mproc_idx);
+						if (tr_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+
+						if (t_ptr->ml)
+						{
+							/* Redraw the health bar */
+							if (p_ptr->health_who == t_idx) p_ptr->redraw |= (PR_HEALTH);
+							if (p_ptr->riding == t_idx) p_ptr->redraw |= (PR_UHEALTH);
+						}
 					}
 
 					/* Visible monsters */
@@ -2187,7 +2201,11 @@ msg_format("%sは%^sの攻撃をかわした。", t_name,m_name);
 		sound(SOUND_EXPLODE);
 
 		/* Cancel Invulnerability */
-		if (m_ptr->invulner) m_ptr->invulner = 0;
+		if (m_ptr->invulner)
+		{
+			m_ptr->invulner = 0;
+			if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+		}
 
 #ifdef JP
 		mon_take_hit_mon(m_idx, m_ptr->hp + 1, &fear, "は爆発して粉々になった。", m_idx);
@@ -2486,7 +2504,7 @@ static void process_monster(int m_idx)
 
 		/* Reset sleep counter */
 		m_ptr->csleep = 0;
-
+		if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
 		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 
 		/* Notice the "waking up" */
@@ -3216,16 +3234,18 @@ msg_format("%^s%s", m_name, monmessage);
 				/* Monster pushed past another monster */
 				did_move_body = TRUE;
 
-				/* Wake up the moved monster */
-				y_ptr->csleep = 0;
-
-				if (r_info[y_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
-					p_ptr->update |= (PU_MON_LITE);
-
-				if (y_ptr->ml)
+				if (y_ptr->csleep)
 				{
-					/* Redraw the health bar */
-					if (p_ptr->health_who == c_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
+					/* Wake up the moved monster */
+					y_ptr->csleep = 0;
+					if (!need_mproc(y_ptr)) mproc_remove(y_ptr->mproc_idx);
+					if (z_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) p_ptr->update |= (PU_MON_LITE);
+
+					if (y_ptr->ml)
+					{
+						/* Redraw the health bar */
+						if (p_ptr->health_who == c_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
+					}
 				}
 
 				/* XXX XXX XXX Message */
@@ -3559,6 +3579,7 @@ msg_format("%^s%s", m_name, monmessage);
 	{
 		/* No longer afraid */
 		m_ptr->monfear = 0;
+		if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
 
 		/* Message if seen */
 		if (see_m)

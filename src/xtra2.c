@@ -1714,10 +1714,13 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 	if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
 	if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 
-	/* Wake it up */
-	m_ptr->csleep = 0;
-
-	if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+	if (m_ptr->csleep)
+	{
+		/* Wake it up */
+		m_ptr->csleep = 0;
+		if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+	}
 
 	/* Hack - Cancel any special player stealth magics. -LM- */
 	if (p_ptr->special_defense & NINJA_S_STEALTH)
@@ -2106,6 +2109,7 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 		{
 			/* Cure fear */
 			m_ptr->monfear = 0;
+			if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
 
 			/* No more fear */
 			(*fear) = FALSE;
@@ -2129,6 +2133,8 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 		{
 			/* Hack -- note fear */
 			(*fear) = TRUE;
+
+			if (!m_ptr->mproc_idx) mproc_add(m_idx);
 
 			/* XXX XXX XXX Hack -- Add some timed fear */
 			m_ptr->monfear = (randint1(10) +

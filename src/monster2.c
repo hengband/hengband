@@ -190,6 +190,20 @@ monster_race *real_r_ptr(monster_type *m_ptr)
 }
 
 
+void mproc_add(int m_idx)
+{
+	m_list[m_idx].mproc_idx = mproc_max;
+	mproc_list[mproc_max++] = m_idx;
+}
+
+
+void mproc_remove(int mproc_idx)
+{
+	m_list[mproc_list[mproc_idx]].mproc_idx = 0;
+	mproc_list[mproc_idx] = mproc_list[--mproc_max];
+}
+
+
 /*
  * Delete a monster by index.
  *
@@ -216,6 +230,8 @@ void delete_monster_idx(int i)
 
 	/* Hack -- count the number of "reproducers" */
 	if (r_ptr->flags2 & (RF2_MULTIPLY)) num_repro--;
+
+	if (m_ptr->mproc_idx) mproc_remove(m_ptr->mproc_idx);
 
 
 	/* Hack -- remove target monster */
@@ -363,6 +379,7 @@ static void compact_monsters_aux(int i1, int i2)
 	/* Wipe the hole */
 	(void)WIPE(&m_list[i1], monster_type);
 
+	if (m_list[i2].mproc_idx) mproc_list[m_list[i2].mproc_idx] = i2;
 }
 
 
@@ -502,7 +519,7 @@ void wipe_m_list(void)
 
 	/*
 	 * Wiping racial counters of all monsters and incrementing of racial
-	 * counters of monsters in party_mon[] is required to prevent multiple
+	 * counters of monsters in party_mon[] are required to prevent multiple
 	 * generation of unique monster who is the minion of player.
 	 */
 
@@ -514,6 +531,9 @@ void wipe_m_list(void)
 
 	/* Reset "m_cnt" */
 	m_cnt = 0;
+
+	/* Reset "mproc_max" */
+	mproc_max = 1;
 
 	/* Hack -- reset "reproducer" count */
 	num_repro = 0;
@@ -3270,6 +3290,8 @@ msg_print("守りのルーンが壊れた！");
 	/* Hack -- Count the number of "reproducers" */
 	if (r_ptr->flags2 & RF2_MULTIPLY) num_repro++;
 
+	if (need_mproc(m_ptr)) mproc_add(c_ptr->m_idx);
+	else m_ptr->mproc_idx = 0;
 
 	/* Hack -- Notice new multi-hued monsters */
 	{

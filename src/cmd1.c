@@ -2071,9 +2071,13 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 		}
 	}
 
-	/* Disturb the monster */
-	m_ptr->csleep = 0;
-	if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+	if (m_ptr->csleep)
+	{
+		/* Disturb the monster */
+		m_ptr->csleep = 0;
+		if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+	}
 
 	/* Extract monster name (or "it") */
 	monster_desc(m_name, m_ptr, 0);
@@ -2340,13 +2344,23 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				{
 					if (p_ptr->lev > randint1(r_ptr->level + resist_stun + 10))
 					{
+						if (m_ptr->stunned)
+						{
 #ifdef JP
-						if (m_ptr->stunned) msg_format("%^sはさらにフラフラになった。", m_name);
-						else msg_format("%^sはフラフラになった。", m_name);
+							msg_format("%^sはさらにフラフラになった。", m_name);
 #else
-						if (m_ptr->stunned) msg_format("%^s is more stunned.", m_name);
-						else msg_format("%^s is stunned.", m_name);
+							msg_format("%^s is more stunned.", m_name);
 #endif
+						}
+						else
+						{
+#ifdef JP
+							msg_format("%^sはフラフラになった。", m_name);
+#else
+							msg_format("%^s is stunned.", m_name);
+#endif
+							if (!m_ptr->mproc_idx) mproc_add(c_ptr->m_idx);
+						}
 
 						m_ptr->stunned += stun_effect;
 					}
@@ -2527,6 +2541,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 #else
 						msg_format("%s is dazed.", m_name);
 #endif
+						if (!m_ptr->mproc_idx) mproc_add(c_ptr->m_idx);
 					}
 
 					/* Apply stun */
@@ -2770,6 +2785,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 					msg_format("%^s appears confused.", m_name);
 #endif
 
+					if (!m_ptr->mproc_idx) mproc_add(c_ptr->m_idx);
 					m_ptr->confused += 10 + randint0(p_ptr->lev) / 5;
 				}
 			}
@@ -2831,16 +2847,6 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 						msg_format("%^s changes!", m_name);
 #endif
 
-
-						/* Hack -- Get new monster */
-						m_ptr = &m_list[c_ptr->m_idx];
-
-						/* Oops, we need a different name... */
-						monster_desc(m_name, m_ptr, 0);
-
-						/* Hack -- Get new race */
-						r_ptr = &r_info[m_ptr->r_idx];
-
 						*fear = FALSE;
 						weak = FALSE;
 					}
@@ -2851,8 +2857,16 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 #else
 						msg_format("%^s is unaffected.", m_name);
 #endif
-
 					}
+
+					/* Hack -- Get new monster */
+					m_ptr = &m_list[c_ptr->m_idx];
+
+					/* Oops, we need a different name... */
+					monster_desc(m_name, m_ptr, 0);
+
+					/* Hack -- Get new race */
+					r_ptr = &r_info[m_ptr->r_idx];
 				}
 			}
 			else if (o_ptr->name1 == ART_G_HAMMER)
@@ -3155,7 +3169,7 @@ bool py_attack(int y, int x, int mode)
 		/* Message */
 		if (m_ptr->ml)
 #ifdef JP
-		msg_format("恐くて%sを攻撃できない！", m_name);
+			msg_format("恐くて%sを攻撃できない！", m_name);
 #else
 			msg_format("You are too afraid to attack %s!", m_name);
 #endif
@@ -3167,9 +3181,13 @@ bool py_attack(int y, int x, int mode)
 			msg_format ("There is something scary in your way!");
 #endif
 
-		/* Disturb the monster */
-		m_ptr->csleep = 0;
-		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+		if (m_ptr->csleep)
+		{
+			/* Disturb the monster */
+			m_ptr->csleep = 0;
+			if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+			if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+		}
 
 		/* Done */
 		return FALSE;
@@ -3876,8 +3894,13 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 		    ((p_ptr->muta2 & MUT2_BERS_RAGE) && p_ptr->shero)) &&
 		    pattern_seq(py, px, y, x) && (p_can_enter || p_can_kill_walls))
 		{
-			m_ptr->csleep = 0;
-			if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+			if (m_ptr->csleep)
+			{
+				/* Disturb the monster */
+				m_ptr->csleep = 0;
+				if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+			}
 
 			/* Extract monster name (or "it") */
 			monster_desc(m_name, m_ptr, 0);

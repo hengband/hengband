@@ -2670,7 +2670,11 @@ bool monst_spell_monst(int m_idx)
 		}
 		else
 		{
-			if (!t_ptr->monfear) fear = TRUE;
+			if (!t_ptr->monfear)
+			{
+				if (!t_ptr->mproc_idx) mproc_add(t_idx);
+				fear = TRUE;
+			}
 
 			t_ptr->monfear += randint0(4) + 4;
 		}
@@ -2727,6 +2731,7 @@ bool monst_spell_monst(int m_idx)
 #endif
 
 
+			if (!t_ptr->mproc_idx) mproc_add(t_idx);
 			t_ptr->confused += 12 + (byte)randint0(4);
 		}
 
@@ -2780,6 +2785,7 @@ bool monst_spell_monst(int m_idx)
 #endif
 
 
+			if (!t_ptr->mproc_idx) mproc_add(t_idx);
 			t_ptr->confused += 12 + (byte)randint0(4);
 		}
 
@@ -2834,6 +2840,7 @@ bool monst_spell_monst(int m_idx)
 #else
 				if (see_t) msg_format("%^s starts moving slower.", t_name);
 #endif
+				if (!t_ptr->mproc_idx) mproc_add(t_idx);
 			}
 
 			t_ptr->slow = MIN(200, t_ptr->slow + 50);
@@ -2891,6 +2898,7 @@ bool monst_spell_monst(int m_idx)
 #endif
 
 
+			if (!t_ptr->mproc_idx) mproc_add(t_idx);
 			t_ptr->stunned += randint1(4) + 4;
 		}
 
@@ -2926,7 +2934,7 @@ bool monst_spell_monst(int m_idx)
 #else
 			if (see_m) msg_format("%^s starts moving faster.", m_name);
 #endif
-
+			if (!m_ptr->mproc_idx) mproc_add(m_idx);
 		}
 		m_ptr->fast = MIN(200, m_ptr->fast + 100);
 		if (p_ptr->riding == m_idx) p_ptr->update |= PU_BONUS;
@@ -3029,6 +3037,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			/* Cancel fear */
 			m_ptr->monfear = 0;
+			if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
 
 			/* Message */
 #ifdef JP
@@ -3061,7 +3070,11 @@ bool monst_spell_monst(int m_idx)
 			}
 		}
 
-		if (!m_ptr->invulner) m_ptr->invulner = randint1(4) + 4;
+		if (!m_ptr->invulner)
+		{
+			if (!m_ptr->mproc_idx) mproc_add(m_idx);
+			m_ptr->invulner = randint1(4) + 4;
+		}
 
 		if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
 		if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
@@ -4200,9 +4213,10 @@ bool monst_spell_monst(int m_idx)
 		break;
 	}
 
-	if (wake_up)
+	if (wake_up && t_ptr->csleep)
 	{
 		t_ptr->csleep = 0;
+		if (!need_mproc(t_ptr)) mproc_remove(t_ptr->mproc_idx);
 		if (tr_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 		if (t_ptr->ml)
 		{

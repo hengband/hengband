@@ -1167,6 +1167,7 @@ static bool cast_force_spell(int spell)
 	case 9:
 	{
 		monster_type *m_ptr;
+		bool need_mproc_remove = FALSE;
 		char m_name[80];
 
 		if (!target_set(TARGET_KILL)) return FALSE;
@@ -1178,6 +1179,7 @@ static bool cast_force_spell(int spell)
 		if (m_ptr->invulner)
 		{
 			m_ptr->invulner = 0;
+			need_mproc_remove = TRUE;
 			if (m_ptr->ml)
 			{
 #ifdef JP
@@ -1193,6 +1195,7 @@ static bool cast_force_spell(int spell)
 		if (m_ptr->fast)
 		{
 			m_ptr->fast = 0;
+			need_mproc_remove = TRUE;
 #ifdef JP
 			if (m_ptr->ml) msg_format("%sはもう加速されていない。", m_name);
 #else
@@ -1202,6 +1205,7 @@ static bool cast_force_spell(int spell)
 		if (m_ptr->slow)
 		{
 			m_ptr->slow = 0;
+			need_mproc_remove = TRUE;
 #ifdef JP
 			if (m_ptr->ml) msg_format("%sはもう減速されていない。", m_name);
 #else
@@ -1209,6 +1213,7 @@ static bool cast_force_spell(int spell)
 #endif
 		}
 
+		if (need_mproc_remove && !need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
 		break;
 	}
 	case 10:
@@ -1736,8 +1741,12 @@ msg_print("その方向にはモンスターはいません。");
 		m_ptr->fy = ty;
 		m_ptr->fx = tx;
 
-		/* Wake the monster up */
-		m_ptr->csleep = 0;
+		if (m_ptr->csleep)
+		{
+			/* Wake the monster up */
+			m_ptr->csleep = 0;
+			if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+		}
 
 		/* Update the monster (new location) */
 		update_mon(m_idx, TRUE);

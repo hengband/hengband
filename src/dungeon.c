@@ -1104,10 +1104,10 @@ static void regen_captured_monsters(void)
  */
 static void process_monsters_counters(void)
 {
-	int          m_idx;
+	int          m_idx, i;
 	monster_type *m_ptr;
 	monster_race *r_ptr;
-	bool         see_m;
+	bool         see_m, need_mproc_remove;
 
 	u32b noise; /* Hack -- local "player stealth" value */
 
@@ -1118,14 +1118,14 @@ static void process_monsters_counters(void)
 	noise = (1L << (30 - p_ptr->skill_stl));
 
 	/* Process the monsters (backwards) */
-	for (m_idx = m_max - 1; m_idx >= 1; m_idx--)
+	for (i = mproc_max - 1; i >= 1; i--)
 	{
+		m_idx = mproc_list[i];
+		need_mproc_remove = TRUE;
+
 		/* Access the monster */
 		m_ptr = &m_list[m_idx];
 		r_ptr = &r_info[m_ptr->r_idx];
-
-		/* Ignore "dead" monsters */
-		if (!m_ptr->r_idx) continue;
 
 		see_m = is_seen(m_ptr);
 
@@ -1158,6 +1158,7 @@ static void process_monsters_counters(void)
 				}
 				if (!p_ptr->wild_mode) m_ptr->energy_need += ENERGY_NEED();
 			}
+			else need_mproc_remove = FALSE;
 		}
 
 		/* Handle fast */
@@ -1184,6 +1185,7 @@ static void process_monsters_counters(void)
 				}
 				if (p_ptr->riding == m_idx) p_ptr->update |= (PU_BONUS);
 			}
+			else need_mproc_remove = FALSE;
 		}
 
 		/* Handle slow */
@@ -1210,6 +1212,7 @@ static void process_monsters_counters(void)
 				}
 				if (p_ptr->riding == m_idx) p_ptr->update |= (PU_BONUS);
 			}
+			else need_mproc_remove = FALSE;
 		}
 
 		/* Handle "sleep" */
@@ -1259,6 +1262,7 @@ static void process_monsters_counters(void)
 					{
 						/* Monster wakes up "a little bit" */
 						m_ptr->csleep -= d;
+						need_mproc_remove = FALSE;
 
 						/* Notice the "not waking up" */
 						if (is_original_ap_and_seen(m_ptr))
@@ -1326,6 +1330,7 @@ static void process_monsters_counters(void)
 			{
 				/* Recover somewhat */
 				m_ptr->stunned -= d;
+				need_mproc_remove = FALSE;
 			}
 
 			/* Fully recover */
@@ -1363,6 +1368,7 @@ static void process_monsters_counters(void)
 			{
 				/* Reduce the confusion */
 				m_ptr->confused -= d;
+				need_mproc_remove = FALSE;
 			}
 
 			/* Recovered */
@@ -1400,6 +1406,7 @@ static void process_monsters_counters(void)
 			{
 				/* Reduce the fear */
 				m_ptr->monfear -= d;
+				need_mproc_remove = FALSE;
 			}
 
 			/* Recover from fear, take note if seen */
@@ -1436,6 +1443,8 @@ static void process_monsters_counters(void)
 				}
 			}
 		}
+
+		if (need_mproc_remove) mproc_remove(i);
 	}
 }
 
@@ -4325,7 +4334,7 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 	if (!(turn % (TURNS_PER_TICK*3))) regen_captured_monsters();
 
 	/* Hack -- Process the counters of all monsters */
-	process_monsters_counters();
+	if (mproc_max > 1) process_monsters_counters();
 
 
 	/* Date changes */
@@ -5824,6 +5833,7 @@ msg_print("中断しました。");
 	{
 		monster_type *m_ptr = &m_list[p_ptr->riding];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
+		bool need_mproc_remove = FALSE;
 
 		if (m_ptr->csleep)
 		{
@@ -5831,6 +5841,7 @@ msg_print("中断しました。");
 
 			/* Recover fully */
 			m_ptr->csleep = 0;
+			need_mproc_remove = TRUE;
 
 			if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 
@@ -5869,6 +5880,7 @@ msg_print("中断しました。");
 
 				/* Recover fully */
 				m_ptr->stunned = 0;
+				need_mproc_remove = TRUE;
 
 				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
@@ -5907,6 +5919,7 @@ msg_print("中断しました。");
 
 				/* Recover fully */
 				m_ptr->confused = 0;
+				need_mproc_remove = TRUE;
 
 				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
@@ -5945,6 +5958,7 @@ msg_print("中断しました。");
 
 				/* Recover fully */
 				m_ptr->monfear = 0;
+				need_mproc_remove = TRUE;
 
 				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
@@ -5958,6 +5972,8 @@ msg_print("中断しました。");
 				p_ptr->redraw |= (PR_UHEALTH);
 			}
 		}
+
+		if (need_mproc_remove && !need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
 
 		/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
 		handle_stuff();

@@ -311,6 +311,7 @@ msg_print("かん高い金切り声をあげた。");
 	case MS_DISPEL:
 	{
 		monster_type *m_ptr;
+		bool need_mproc_remove = FALSE;
 		char m_name[80];
 
 		if (!target_set(TARGET_KILL)) return FALSE;
@@ -322,6 +323,7 @@ msg_print("かん高い金切り声をあげた。");
 		if (m_ptr->invulner)
 		{
 			m_ptr->invulner = 0;
+			need_mproc_remove = TRUE;
 			if (m_ptr->ml)
 			{
 #ifdef JP
@@ -337,6 +339,7 @@ msg_print("かん高い金切り声をあげた。");
 		if (m_ptr->fast)
 		{
 			m_ptr->fast = 0;
+			need_mproc_remove = TRUE;
 #ifdef JP
 			if (m_ptr->ml) msg_format("%sはもう加速されていない。", m_name);
 #else
@@ -346,6 +349,7 @@ msg_print("かん高い金切り声をあげた。");
 		if (m_ptr->slow)
 		{
 			m_ptr->slow = 0;
+			need_mproc_remove = TRUE;
 #ifdef JP
 			if (m_ptr->ml) msg_format("%sはもう減速されていない。", m_name);
 #else
@@ -353,6 +357,7 @@ msg_print("かん高い金切り声をあげた。");
 #endif
 		}
 
+		if (need_mproc_remove && !need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
 		break;
 	}
 	case MS_ROCKET:

@@ -686,6 +686,12 @@ object_type *o_list;
  */
 monster_type *m_list;
 
+/*
+ * The array to process dungeon monsters [max_m_idx]
+ */
+s16b *mproc_list;
+s16b mproc_max = 1; /* Number of monsters to be processed */
+
 
 /*
  * Maximum number of towns
@@ -1163,8 +1169,6 @@ int riding_t_m_idx;
 
 s16b kubi_r_idx[MAX_KUBI];
 s16b today_mon;
-
-monster_type party_mon[MAX_PARTY_MON];
 
 bool write_level;
 
