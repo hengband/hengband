@@ -1715,6 +1715,13 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 	if (a_scroll)
 	{
 		char dummy_name[80];
+		/* Identify it fully */
+		object_aware(o_ptr);
+		object_known(o_ptr);
+
+		/* Mark the item as fully known */
+		o_ptr->ident |= (IDENT_MENTAL);
+
 		strcpy(dummy_name, "");
 		(void)identify_fully_aux(o_ptr);
 
@@ -1743,12 +1750,6 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 #endif
 
 		}
-		/* Identify it fully */
-		object_aware(o_ptr);
-		object_known(o_ptr);
-
-		/* Mark the item as fully known */
-		o_ptr->ident |= (IDENT_MENTAL);
 
 		chg_virtue(V_INDIVIDUALISM, 2);
 		chg_virtue(V_ENCHANT, 5);
