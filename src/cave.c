@@ -3377,7 +3377,7 @@ void forget_view(void)
 		/* Forget that the grid is viewable */
 		c_ptr->info &= ~(CAVE_VIEW);
 
-		if (!panel_contains(y, x)) continue;
+		/* if (!panel_contains(y, x)) continue; */
 
 		/* Update the screen */
 		/* lite_spot(y, x); Perhaps don't need? */

@@ -5083,6 +5083,9 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
 		return (FALSE);
 	}
 
+	/* Lose monster light */
+	if (!in_generate) clear_mon_lite();
+
 	/* Big area of affect */
 	for (y = (y1 - r); y <= (y1 + r); y++)
 	{
@@ -5722,6 +5725,8 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 		}
 	}
 
+	/* Lose monster light */
+	clear_mon_lite();
 
 	/* Examine the quaked region */
 	for (dy = -r; dy <= r; dy++)
