@@ -121,15 +121,15 @@ static cptr mind_tips[5][MAX_MIND_POWERS] =
 static cptr mind_tips[5][MAX_MIND_POWERS] =
 {
 {
-	"detects visible monsters in your vicinity and more and more. detects traps and doors at level 5, invisible monsters at level 15, items at level 30. And magic mapping at level 20. lights and know the whole level at level 45. gives telepathy at level 25",
+	"detects visible monsters in your vicinity and more and more. detects traps and doors at level 5, invisible monsters at level 15, items at level 30. And magic mapping at level 20. lights and know the whole level at level 45. gives telepathy at level 25.",
 	"fires a beam or ball which inflicts PSI damage.",
 	"teleport short distance.",
 	"teleport long distance.",
 	"stuns, confuses or scares a monster. or attempts to charm all monsters in sight at level 30.",
-	"fires a ball which hurts monsters with telekinesis",
+	"fires a ball which hurts monsters with telekinesis.",
 	"gives stone skin and some resistance to elements for a while. The level increased, the more number of resistances given.",
 	"gives feeling of an item. or identify an item at level 25.",
-	"generate a ball centered on you which inflict monster with PSI damage. or inflict all monsters with PSI damage at level 25",
+	"generate a ball centered on you which inflict monster with PSI damage. or inflict all monsters with PSI damage at level 25.",
 	"removes fear and stun. gives heroism and speed. heals HP a little unless you already have heroism and temporal speed boost.",
 	"pulls a distant item close to you.",
 	"fires a ball which damages monsters and absorbs monsters' mind power. absorbing is takes more turns which from 0 to 1.5.",
@@ -192,13 +192,13 @@ static cptr mind_tips[5][MAX_MIND_POWERS] =
 {
 	"detects visible monsters in your vicinity and more and more. detects invisible monsters at level 15. gives telepathy at level 25. Magic mapping at level 35. All of effects need 4 more levels unless on a mirror.",
 	"makes a mirror under you.",
-	"fires bolt of flash light. or fires beam of light on a mirror at level 10",
+	"fires bolt of flash light. or fires beam of light on a mirror at level 10.",
 	"teleport short distance.",
 	"lights up nearby area and the inside of a room permanently.",
 	"teleport long distance.",
 	"gives aura of shards of mirror for a while. It cause counter attack to monsters which attacks you.",
 	"teleports all monsters on the line away unless resisted.",
-	"fires a ball of shards",
+	"fires a ball of shards.",
 	"generate balls which send monsters to sleep on all mirrors in the whole level.",
 	"fires a beam of mana. If the beam hit a mirror, it breaks that mirror and reflects toward another mirror.",
 	"eliminates a monster on a mirror from current dungeon level.",
@@ -209,7 +209,7 @@ static cptr mind_tips[5][MAX_MIND_POWERS] =
 	"teleport to given location.",
 	"recalls player from dungeon to town, or from town to the deepest level of dungeon.",
 	"completely protects you from any attacks at one in two chance.",
-	"generates a magical triangle which damages all monsters in the area. The vertices of the triangle is you and two mirrors in sight. ",
+	"generates a magical triangle which damages all monsters in the area. The vertices of the triangle is you and two mirrors in sight.",
 	"generates barrier which completly protect you from almost all damages. takes a few your turns when the barrier breaks or duration time is exceeded.",
 },
 

@@ -476,7 +476,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"gives resistance to fire and cold. These resistances can be added to which from equipment for more powerful resistances.",
 		"maps nearby area.",
 		"attempts to scare undead monsters in sight.",
-		"Much powerful healing magic. and heals cut and stun completely.",
+		"much powerful healing magic, and heals cut and stun completely.",
 		"sets a glyph on the floor beneath you. Monsters cannot attack you if you are on a glyph, but can try to break glyph.", 
 
 		"removes normal and heavy curse from equipped items.",
@@ -493,7 +493,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"eliminates all nearby undead monsters, exhausting you.  Powerful or unique monsters may be able to resist.",
 		"maps and lights whole dungeon level. knows all objects location. and gives telepathy for a while.",
 		"restores all stats and experience.",
-		"The greatest healing magic. heals all HP, cut and stun.",
+		"the greatest healing magic. heals all HP, cut and stun.",
 		"*identifies* an item.",
 		"gives ultimate resistance, bonus to AC and speed."
 	},
@@ -506,7 +506,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"attempts to confuse a monster.",
 		"teleport long distance.",
 		"attempts to sleep a monster.",
-		"Recharges staffs, wands or rods.",
+		"recharges staffs, wands or rods.",
 
 		"maps nearby area.",
 		"identifies an item.",
@@ -595,7 +595,7 @@ static cptr spell_tips[VALID_REALM][32] =
 
 		"attempts to polymorph a monster.",
 		"fires lightning beams in all directions.",
-		"Recharges staffs, wands or rods.",
+		"recharges staffs, wands or rods.",
 		"fires a huge ball of disintegration.",
 		"recreates current dungeon level.",
 		"fires a magic rocket.",
@@ -870,9 +870,9 @@ static cptr spell_tips[VALID_REALM][32] =
 
 		"shakes dungeon structure, and results in random swapping of floors and walls.",
 		"attempts to freeze all monsters in sight.",
-		"sets a glyph on the floor beneath you. Monsters cannot attack you if you are on a glyph, but can try to break glyph", 
+		"sets a glyph on the floor beneath you. Monsters cannot attack you if you are on a glyph, but can try to break glyph.", 
 		"hastes you. gives heroism. damages all monsters in sight.",
-		"Powerful healing song. also heals cut and stun completely.",
+		"powerful healing song. also heals cut and stun completely.",
 		"restores all stats and experience.",
 		"fires an extremely powerful tiny ball of sound.",
 		"generates barrier which completely protect you from almost all damages. takes a few your turns when the barrier breaks.",
@@ -892,7 +892,6 @@ static cptr spell_tips[VALID_REALM][32] =
 		"attacks an evil unliving monster with great damage. No effect to other  monsters.",
 		"attacks an adjacent monster, and blow it away.",
 		"identifies a weapon or armor. or *identifies* these at level 45.",
-
 		"breaks rock. or greatly damage a monster made by rocks.",
 		"attacks a monster with increased number of attacks and more damage unless it has resistance to cold.",
 		"attempts to kill a monster instantly. If failed cause only 1HP of damage.",
