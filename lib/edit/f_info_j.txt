@@ -408,27 +408,27 @@ M:56
 
 N:60:±Êµ×´ä¤ÎÊÉ
 E:permanent wall
-G:#:w
+G:#:U
 
 # 0x3D --> permanent wall -- inner (perm)
 
 N:61:±Êµ×´ä¤ÎÊÉ
 E:permanent wall
-G:#:w
+G:#:U
 M:60
 
 # 0x3E --> permanent wall -- outer (perm)
 
 N:62:±Êµ×´ä¤ÎÊÉ
 E:permanent wall
-G:#:w
+G:#:U
 M:60
 
 # 0x3F --> permanent wall -- solid (perm)
 
 N:63:±Êµ×´ä¤ÎÊÉ
 E:permanent wall
-G:#:w
+G:#:U
 M:60
 
 N:64:ÇúÈ¯¥ë¡¼¥ó

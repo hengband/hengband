@@ -699,7 +699,7 @@ static byte lighting_colours[16][2] =
 	{TERM_WHITE, TERM_L_DARK},
 
 	/* TERM_ORANGE */
-	{TERM_YELLOW, TERM_UMBER},
+	{TERM_L_UMBER, TERM_UMBER},
 
 	/* TERM_RED */
 	{TERM_RED, TERM_RED},
@@ -735,7 +735,7 @@ static byte lighting_colours[16][2] =
 	{TERM_L_BLUE, TERM_L_BLUE},
 
 	/* TERM_L_UMBER */
-	{TERM_YELLOW, TERM_UMBER}
+	{TERM_L_UMBER, TERM_UMBER}
 };
 
 /*
