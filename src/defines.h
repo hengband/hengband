@@ -4454,13 +4454,6 @@
 	 have_flag((F)->flags, FF_PERMANENT))
 
 /*
- * Determine if a "boundary" grid is "floor mimic"
- */
-#define boundary_floor_grid(C) \
-	((C)->mimic && feat_supports_los((C)->mimic) && \
-	 permanent_wall(&f_info[(C)->feat]))
-
-/*
  * Get feature mimic from f_info[] (applying "mimic" field)
  */
 #define get_feat_mimic(C) \

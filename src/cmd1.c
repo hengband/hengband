@@ -3611,6 +3611,15 @@ void move_player_effect(int do_pickup, bool break_trap)
 
 
 /*
+ * Determine if a "boundary" grid is "floor mimic"
+ */
+#define boundary_floor(C, F, MF) \
+	((C)->mimic && permanent_wall(F) && \
+	 (have_flag((MF)->flags, FF_MOVE) || have_flag((MF)->flags, FF_CAN_FLY)) && \
+	 have_flag((MF)->flags, FF_PROJECT) && \
+	 !have_flag((MF)->flags, FF_OPEN))
+
+/*
  * Move player in the given direction, with the given "pickup" flag.
  *
  * This routine should (probably) always induce energy expenditure.
@@ -3972,7 +3981,8 @@ void move_player(int dir, int do_pickup, bool break_trap)
 	{
 		/* Feature code (applying "mimic" field) */
 		s16b feat = get_feat_mimic(c_ptr);
-		cptr name = f_name + f_info[feat].name;
+		feature_type *mimic_f_ptr = &f_info[feat];
+		cptr name = f_name + mimic_f_ptr->name;
 
 		oktomove = FALSE;
 
@@ -3980,11 +3990,10 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		disturb(0, 0);
 
 		/* Notice things in the dark */
-		if ((!(c_ptr->info & (CAVE_MARK))) &&
-		    (p_ptr->blind || !(c_ptr->info & (CAVE_LITE))))
+		if (!(c_ptr->info & CAVE_MARK) && !player_can_see_bold(y, x))
 		{
 			/* Boundary floor mimic */
-			if (boundary_floor_grid(c_ptr))
+			if (boundary_floor(c_ptr, f_ptr, mimic_f_ptr))
 			{
 #ifdef JP
 				msg_print("それ以上先には進めないようだ。");
@@ -4012,7 +4021,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		else
 		{
 			/* Boundary floor mimic */
-			if (boundary_floor_grid(c_ptr))
+			if (boundary_floor(c_ptr, f_ptr, mimic_f_ptr))
 			{
 #ifdef JP
 				msg_print("それ以上先には進めない。");
@@ -4050,7 +4059,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		}
 
 		/* Sound */
-		if (!boundary_floor_grid(c_ptr)) sound(SOUND_HITWALL);
+		if (!boundary_floor(c_ptr, f_ptr, mimic_f_ptr)) sound(SOUND_HITWALL);
 	}
 
 	/* Normal movement */
