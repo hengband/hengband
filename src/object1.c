@@ -144,7 +144,7 @@ void object_flags(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 	for (i = 0; i < TR_FLAG_SIZE; i++)
 		flgs[i] |= o_ptr->art_flags[i];
 
-	if ((o_ptr->tval > TV_CAPTURE) && o_ptr->xtra3)
+	if (item_tester_hook_smith(o_ptr))
 	{
 		int add = o_ptr->xtra3 - 1;
 
@@ -277,7 +277,7 @@ void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 			flgs[i] |= o_ptr->art_flags[i];
 	}
 
-	if ((o_ptr->tval > TV_CAPTURE) && o_ptr->xtra3)
+	if (item_tester_hook_smith(o_ptr))
 	{
 		int add = o_ptr->xtra3 - 1;
 
@@ -1877,7 +1877,7 @@ return "釣りをする : いつでも";
 
 	}
 
-	if ((o_ptr->tval > TV_CAPTURE) && o_ptr->xtra3)
+	if (item_tester_hook_smith(o_ptr))
 	{
 		switch (o_ptr->xtra3 - 1)
 		{

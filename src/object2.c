@@ -8209,7 +8209,7 @@ static void add_essence(int mode)
 }
 
 
-static bool item_tester_hook_kaji(object_type *o_ptr)
+bool item_tester_hook_smith(object_type *o_ptr)
 {
 	switch (o_ptr->tval)
 	{
@@ -8247,7 +8247,7 @@ static void erase_essence(void)
 	char o_name[MAX_NLEN];
 	u32b flgs[TR_FLAG_SIZE];
 
-	item_tester_hook = item_tester_hook_kaji;
+	item_tester_hook = item_tester_hook_smith;
 
 	/* Get an item */
 #ifdef JP

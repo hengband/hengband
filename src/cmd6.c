@@ -5738,7 +5738,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 		return;
 	}
 
-	if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3))
+	if (item_tester_hook_smith(o_ptr))
 	{
 		switch (o_ptr->xtra3-1)
 		{

@@ -430,7 +430,7 @@ static void rd_item_old(object_type *o_ptr)
 		rd_byte(&o_ptr->xtra3);
 		if (h_older_than(1, 3, 0, 1))
 		{
-			if (o_ptr->tval > TV_CAPTURE && o_ptr->xtra3 >= 1+96)
+			if (item_tester_hook_smith(o_ptr) && o_ptr->xtra3 >= 1+96)
 				o_ptr->xtra3 += -96 + MIN_SPECIAL_ESSENCE;
 		}
 

@@ -2389,7 +2389,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 	/* while (*s == '~') s++; */
 
 #ifdef JP
-	if ((o_ptr->tval > TV_CAPTURE) && o_ptr->xtra3)
+	if (item_tester_hook_smith(o_ptr))
 	{
 		t = object_desc_str(t,format("鍛冶師%sの",player_name));
 	}
@@ -2534,7 +2534,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		}
 	}
 #else
-	if ((o_ptr->tval > TV_CAPTURE) && o_ptr->xtra3)
+	if (item_tester_hook_smith(o_ptr))
 	{
 		t = object_desc_str(t,format(" of %s the Smith",player_name));
 	}
@@ -2749,7 +2749,7 @@ t = object_desc_str(t, "(マルチ・トラップ)");
 	if (have_flag(flgs, TR_SHOW_MODS)) show_weapon = TRUE;
 
 	/* Display the item like a weapon */
-	if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
+	if (item_tester_hook_smith(o_ptr) && (o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
 		show_weapon = TRUE;
 
 	/* Display the item like a weapon */

@@ -946,6 +946,7 @@ extern void reorder_pack(void);
 extern void display_koff(int k_idx);
 extern object_type *choose_warning_item(void);
 extern bool process_warning(int xx, int yy);
+extern bool item_tester_hook_smith(object_type *o_ptr);
 extern void do_cmd_kaji(bool only_browse);
 
 /* racial.c */
