@@ -298,11 +298,23 @@ cptr autopick_line_from_entry(autopick_type *entry)
                 buf[i] = '\0';
 	}
 
+	return string_make(buf);
+}
+
+
+/*
+ * Reconstruct preference line from entry and kill entry
+ */
+static cptr autopick_line_from_entry_kill(autopick_type *entry)
+{
+        cptr ptr = autopick_line_from_entry(entry);
+
         /* Free memory for original entry */
         autopick_free_entry(entry);
 
-	return string_make(buf);
+        return ptr;
 }
+
 
 /*
  * A function to create new entry
@@ -1846,7 +1858,7 @@ static void toggle_string(cptr *lines_list, int flg, int y)
 	else
 		ADD_FLG(flg);
 
-	lines_list[y] = autopick_line_from_entry(entry);
+	lines_list[y] = autopick_line_from_entry_kill(entry);
 }
 
 /*
@@ -2504,7 +2516,7 @@ void do_cmd_edit_autopick(void)
         if (autopick_last_destroyed_object.k_idx)
         {
                 autopick_entry_from_object(entry, &autopick_last_destroyed_object);
-                last_destroyed = autopick_line_from_entry(entry);
+                last_destroyed = autopick_line_from_entry_kill(entry);
         }
 
 	/* Command Description of the Last Destroyed Item */
@@ -2891,7 +2903,7 @@ void do_cmd_edit_autopick(void)
 					entry->action |= DO_AUTOPICK;
 				}
 
-				lines_list[cy] = autopick_line_from_entry(entry);
+				lines_list[cy] = autopick_line_from_entry_kill(entry);
 
 				/* Now dirty */
 				dirty_line = cy;
@@ -2932,7 +2944,7 @@ void do_cmd_edit_autopick(void)
 					entry->action |= DO_AUTOPICK;
 				}
 
-				lines_list[cy] = autopick_line_from_entry(entry);
+				lines_list[cy] = autopick_line_from_entry_kill(entry);
 
 				/* Now dirty */
 				dirty_line = cy;
@@ -2967,7 +2979,7 @@ void do_cmd_edit_autopick(void)
                                 else
                                         entry->action &= ~DO_DISPLAY;
 
-                                lines_list[cy] = autopick_line_from_entry(entry);
+                                lines_list[cy] = autopick_line_from_entry_kill(entry);
 
                                 /* Now dirty */
                                 dirty_line = cy;
@@ -3160,7 +3172,7 @@ void do_cmd_edit_autopick(void)
 				if (cx > 0) cx--;
 			}
 
-			lines_list[cy] = autopick_line_from_entry(entry);
+			lines_list[cy] = autopick_line_from_entry_kill(entry);
 
 			/* Now dirty */
 			dirty_line = cy;
@@ -3173,7 +3185,7 @@ void do_cmd_edit_autopick(void)
 				dirty_flags |= DIRTY_SCREEN;
 				break;
 			}
-			tmp = autopick_line_from_entry(entry);
+			tmp = autopick_line_from_entry_kill(entry);
 
 			if (tmp)
 			{
@@ -3218,7 +3230,7 @@ void do_cmd_edit_autopick(void)
 
 			if (!entry->insc) entry->insc = string_make("");
 
-			lines_list[cy] = autopick_line_from_entry(entry);
+			lines_list[cy] = autopick_line_from_entry_kill(entry);
 
 			/* Move to collumn for auto inscription */
 			for (cx = 0; lines_list[cy][cx]; cx++)
@@ -3278,7 +3290,7 @@ void do_cmd_edit_autopick(void)
 				entry->action |= DO_AUTOPICK;
 			}
 
-			lines_list[cy] = autopick_line_from_entry(entry);
+			lines_list[cy] = autopick_line_from_entry_kill(entry);
 
 			/* Now dirty */
 			dirty_line = cy;
@@ -3329,7 +3341,7 @@ void do_cmd_edit_autopick(void)
 				REM_FLG(FLG_STAR_IDENTIFIED);
 			}
 
-			lines_list[cy] = autopick_line_from_entry(entry);
+			lines_list[cy] = autopick_line_from_entry_kill(entry);
 
 			/* Now dirty */
 			dirty_line = cy;
@@ -3377,7 +3389,7 @@ void do_cmd_edit_autopick(void)
 				REM_FLG(FLG_ARTIFACT);
 			}
 
-			lines_list[cy] = autopick_line_from_entry(entry);
+			lines_list[cy] = autopick_line_from_entry_kill(entry);
 
 			/* Now dirty */
 			dirty_line = cy;
