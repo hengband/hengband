@@ -1,6 +1,16 @@
 #
 # Sample preference of the Object Auto-picker/Destroyer
 #
+# Important commands 
+#  a i ^Q      :  Insert mode
+#  ESC ^Q      :  Command mode
+#  q _         :  Quit (command mode only)
+#  hjkl2468    :  Move (command mode only)
+#  ^B ^N ^P ^F :  Move (always)
+#  ^I  : Choose from inventry/equipment
+#  ^S  : pick up / destroy / leave on floor
+#  ^U  : identified / unidentified / ...
+#
 
 wanted corpse
 wanted Skeleton
@@ -24,9 +34,10 @@ potion of dexterity
 potion of constitution
 potion of intelligence
 potion of Charisma
-
 potion of life#!k
 healing#!k
+
+!potion of water
 
 ?:[EQU $CLASS Archer]
 worthless skeleton
