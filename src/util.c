@@ -620,6 +620,8 @@ errr fd_copy(cptr file, cptr what)
 {
 	char buf[1024];
 	char aux[1024];
+	int read_num;
+	int src_fd, dst_fd;
 
 	/* Hack -- Try to parse the path */
 	if (path_parse(buf, 1024, file)) return (-1);
@@ -627,11 +629,26 @@ errr fd_copy(cptr file, cptr what)
 	/* Hack -- Try to parse the path */
 	if (path_parse(aux, 1024, what)) return (-1);
 
-	/* Copy XXX XXX XXX */
-	/* (void)rename(buf, aux); */
+	/* Open source file */
+	src_fd = fd_open(buf, O_RDONLY);
+	if (src_fd < 0) return (-1);
+
+	/* Open destination file */
+	dst_fd = fd_open(aux, O_WRONLY|O_TRUNC|O_CREAT);
+	if (dst_fd < 0) return (-1);
+
+	/* Copy */
+	while ((read_num = read(src_fd, buf, 1024)) > 0)
+	{
+		write(dst_fd, buf, read_num);
+	}
+
+	/* Close files */
+	fd_close(src_fd);
+	fd_close(dst_fd);
 
 	/* XXX XXX XXX */
-	return (1);
+	return (0);
 }
 
 
