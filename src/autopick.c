@@ -1688,6 +1688,9 @@ static cptr ctrl_command_desc[] =
  */
 void do_cmd_edit_autopick()
 {
+	static int cx = 0, cy = 0;
+	static int upper = 0, left = 0;
+
 	cptr last_destroyed;
 	char last_destroyed_command[WID_DESC+3];
 	char yank_buf[MAX_YANK];
@@ -1699,9 +1702,7 @@ void do_cmd_edit_autopick()
 	int i, j, k, len;
 	cptr tmp;
 
-	int upper = 0, left = 0;
 	int old_upper = -1, old_left = -1;
-	int cx = 0, cy = 0;
 	int old_cy = -1;
 	int key = -1, old_key;
 
@@ -1743,6 +1744,18 @@ void do_cmd_edit_autopick()
 	yank_buf[0] = '\0';
 
 	lines_list = read_pickpref_text_lines();
+
+	/* Reset cursor position if needed */
+	for (i = 0; i < cy; i++)
+	{
+		if (!lines_list[i])
+		{
+			cy = cx = 0;
+			break;
+		}
+	}
+	if (strlen(lines_list[cy]) < cx)
+		cy = cx = 0;
 
 	/* Save the screen */
 	screen_save();
