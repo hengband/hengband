@@ -4179,10 +4179,9 @@ static bool get_player_race(void)
 	p_ptr->prace = k;
 
 	rp_ptr = &race_info[p_ptr->prace];
-	str = rp_ptr->title;
 
 	/* Display */
-	c_put_str(TERM_L_BLUE, str, 4, 15);
+	c_put_str(TERM_L_BLUE, rp_ptr->title, 4, 15);
 
 	/* Success */
 	return TRUE;
@@ -4395,15 +4394,10 @@ static bool get_player_class(void)
 	p_ptr->pclass = k;
 	cp_ptr = &class_info[p_ptr->pclass];
 	mp_ptr = &m_info[p_ptr->pclass];
-	str = cp_ptr->title;
 
 
 	/* Display */
-#ifdef JP
-	c_put_str(TERM_L_BLUE, str, 5, 15);
-#else
 	c_put_str(TERM_L_BLUE, cp_ptr->title, 5, 15);
-#endif
 
 	return TRUE;
 }
@@ -5626,14 +5620,12 @@ static bool player_birth_aux(void)
 	{
 		/* Analyze */
 		sp_ptr = &sex_info[n];
-		str = sp_ptr->title;
-
 
 		/* Display */
 #ifdef JP
-		sprintf(buf, "%c%c%s", I2A(n), p2, str);
+		sprintf(buf, "%c%c%s", I2A(n), p2, sp_ptr->title);
 #else
-		sprintf(buf, "%c%c %s", I2A(n), p2, str);
+		sprintf(buf, "%c%c %s", I2A(n), p2, sp_ptr->title);
 #endif
 		put_str(buf, 12 + (n/5), 2 + 15 * (n%5));
 	}
@@ -5731,11 +5723,9 @@ static bool player_birth_aux(void)
 	/* Set sex */
 	p_ptr->psex = k;
 	sp_ptr = &sex_info[p_ptr->psex];
-	str = sp_ptr->title;
-
 
 	/* Display */
-	c_put_str(TERM_L_BLUE, str, 3, 15);
+	c_put_str(TERM_L_BLUE, sp_ptr->title, 3, 15);
 
 	/* Clean up */
 	clear_from(10);
