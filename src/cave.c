@@ -556,7 +556,7 @@ bool cave_valid_grid(cave_type *c_ptr)
 /*
  * Hack -- Legal monster codes
  */
-static cptr image_monster_hack = \
+static char image_monster_hack[] = \
 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 /*
@@ -564,21 +564,23 @@ static cptr image_monster_hack = \
  */
 static void image_monster(byte *ap, char *cp)
 {
-	int n = strlen(image_monster_hack);
-
 	/* Random symbol from set above */
 	if (use_graphics)
 	{
-		(*cp) = r_info[randint1(max_r_idx-1)].x_char;
-		(*ap) = r_info[randint1(max_r_idx-1)].x_attr;
+		monster_race *r_ptr = &r_info[randint1(max_r_idx - 1)];
+
+		*cp = r_ptr->x_char;
+		*ap = r_ptr->x_attr;
 	}
 	else
 	/* Text mode */
 	{
-		(*cp) = (image_monster_hack[randint0(n)]);
+		int n = sizeof(image_monster_hack) - 1;
+
+		*cp = image_monster_hack[randint0(n)];
 
 		/* Random color */
-		(*ap) = randint1(15);
+		*ap = randint1(15);
 	}
 }
 
@@ -587,27 +589,28 @@ static void image_monster(byte *ap, char *cp)
 /*
  * Hack -- Legal object codes
  */
-static cptr image_object_hack = \
-"?/|\\\"!$()_-=[]{},~";
+static char image_object_hack[] = "?/|\\\"!$()_-=[]{},~";
 
 /*
  * Mega-Hack -- Hallucinatory object
  */
 static void image_object(byte *ap, char *cp)
 {
-	int n = strlen(image_object_hack);
-
 	if (use_graphics)
 	{
-		(*cp) = k_info[randint1(max_k_idx-1)].x_char;
-		(*ap) = k_info[randint1(max_k_idx-1)].x_attr;
+		object_kind *k_ptr = &k_info[randint1(max_k_idx-1)];
+
+		*cp = k_ptr->x_char;
+		*ap = k_ptr->x_attr;
 	}
 	else
 	{
-		(*cp) = (image_object_hack[randint0(n)]);
+		int n = sizeof(image_object_hack) - 1;
+
+		*cp = image_object_hack[randint0(n)];
 
 		/* Random color */
-		(*ap) = randint1(15);
+		*ap = randint1(15);
 	}
 }
 
@@ -634,8 +637,7 @@ static void image_random(byte *ap, char *cp)
 /*
  * Not using graphical tiles for this feature?
  */
-#define is_ascii_graphics(C , A) \
-    (!(((C) & 0x80) && ((A) & 0x80)))
+#define is_ascii_graphics(A) (!((A) & 0x80))
 
 /*
  * The 16x16 tile of the terrain supports lighting
@@ -1040,7 +1042,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 				/* Handle "blind" */
 				if (p_ptr->blind)
 				{
-					if (is_ascii_graphics(c,a))
+					if (is_ascii_graphics(a))
 					{
 						/* Use darkened colour */
 						a = lighting_colours[a][1];
@@ -1056,9 +1058,9 @@ void map_info(int y, int x, byte *ap, char *cp)
 				else if (c_ptr->info & (CAVE_LITE | CAVE_MNLT))
 				{
 					/* Torch lite */
-					if (view_yellow_lite && !p_ptr->wild_mode && ((use_graphics && feat_supports_lighting(feat)) || is_ascii_graphics(c,a)))
+					if (view_yellow_lite && !p_ptr->wild_mode && ((use_graphics && feat_supports_lighting(feat)) || is_ascii_graphics(a)))
 					{
-						if (is_ascii_graphics(c,a))
+						if (is_ascii_graphics(a))
 						{
 							/* Use lightened colour */
 							a = lighting_colours[a][0];
@@ -1073,12 +1075,12 @@ void map_info(int y, int x, byte *ap, char *cp)
 				}
 
 				/* Handle "view_bright_lite" */
-				else if (view_bright_lite && !p_ptr->wild_mode && ((use_graphics && feat_supports_lighting(feat)) || is_ascii_graphics(c,a)))
+				else if (view_bright_lite && !p_ptr->wild_mode && ((use_graphics && feat_supports_lighting(feat)) || is_ascii_graphics(a)))
 				{
 					/* Not viewable */
 					if (!(c_ptr->info & CAVE_VIEW))
 					{
-						if (is_ascii_graphics(c,a))
+						if (is_ascii_graphics(a))
 						{
 							/* Use darkened colour */
 							a = lighting_colours[a][1];
@@ -1093,7 +1095,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 					/* Not glowing */
 					else if (!(c_ptr->info & CAVE_GLOW))
 					{
-						if (is_ascii_graphics(c,a))
+						if (is_ascii_graphics(a))
 						{
 							/* Use darkened colour */
 							a = lighting_colours[a][1];
@@ -1339,7 +1341,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 	(*cp) = c;
 
 	/* Hack -- rare random hallucination, except on outer dungeon walls */
-	if (p_ptr->image && (feat < FEAT_PERM_SOLID) && !randint0(256))
+	if (p_ptr->image && (feat < FEAT_PERM_SOLID) && one_in_(256))
 	{
 		/* Hallucinate */
 		image_random(ap, cp);
@@ -1408,11 +1410,18 @@ void map_info(int y, int x, byte *ap, char *cp)
 
 			feat_priority = 30;
 
-			/* Hack -- hallucination */
+			/* Hallucination */
 			if (p_ptr->image)
 			{
-				/* Prevent clear char and attr monster */
-				if (~r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR))
+				/*
+				 * Monsters with both CHAR_CLEAR and ATTR_CLEAR
+				 * flags are always unseen.
+				 */
+				if (!(~r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)))
+				{
+					/* Do nothing */
+				}
+				else
 				{
 					/* Hallucinatory monster */
 					image_monster(ap, cp);
@@ -1424,66 +1433,85 @@ void map_info(int y, int x, byte *ap, char *cp)
 				a = r_ptr->x_attr;
 				c = r_ptr->x_char;
 
-				/* Normal (non-clear attr) monster or bizarre grid under monster */
-				if (!(r_ptr->flags1 & RF1_ATTR_CLEAR) || (*ap & 0x80))
+				/* Normal monsters */
+				if (!(r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR | RF1_ATTR_MULTI)))
 				{
-					/* Desired monster attr */
+					/* Desired monster attr/char */
 					*ap = a;
+					*cp = c;
 
-					/* Not special monster attr codes */
-					if (!(a & 0x80))
+					/* Mimics' colors vary */
+					if (((c == '\"') || (c == '!') || (c == '='))
+					    && !(r_ptr->flags1 & RF1_UNIQUE))
 					{
-						/* Multi-hued monster */
-						if (r_ptr->flags1 & RF1_ATTR_MULTI)
-						{
-							/* Multi-hued attr */
-							if (r_ptr->flags2 & RF2_ATTR_ANY) *ap = randint1(15);
-							else switch (randint1(7))
-							{
-							case 1: *ap = TERM_RED;     break;
-							case 2: *ap = TERM_L_RED;   break;
-							case 3: *ap = TERM_WHITE;   break;
-							case 4: *ap = TERM_L_GREEN; break;
-							case 5: *ap = TERM_BLUE;    break;
-							case 6: *ap = TERM_L_DARK;  break;
-							case 7: *ap = TERM_GREEN;   break;
-							}
-						}
-
-						/* Mimics' colors vary */
-						else if (((c == '\"') || (c == '!') || (c == '='))
-						    && !(r_ptr->flags1 & RF1_UNIQUE))
-						{
-							/* Use semi-random attr */
-							*ap = c_ptr->m_idx % 15 + 1;
-						}
+						/* Use semi-random attr */
+						*ap = c_ptr->m_idx % 15 + 1;
 					}
 				}
 
-				/* Normal (non-clear char) monster or bizarre grid under monster */
-				if (!(r_ptr->flags1 & RF1_CHAR_CLEAR) || (*cp & 0x80))
+				/*
+				 * Monsters with both CHAR_CLEAR and ATTR_CLEAR
+				 * flags are always unseen.
+				 */
+				if (!(~r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)))
 				{
-					/* Desired monster char */
-					*cp = c;
+					/* Do nothing */
+				}
 
-					/* Not special monster char codes */
-					if (!(c & 0x80))
+				else
+				{
+					/***  Monster's attr  ***/
+					if ((r_ptr->flags1 & RF1_ATTR_CLEAR) && !use_graphics)
 					{
-						/* Is it a shapechanger? */
-						if (r_ptr->flags2 & RF2_SHAPECHANGER)
+						/* Clear-attr */
+						/* Do nothing */
+					}
+					else if ((r_ptr->flags1 & RF1_ATTR_MULTI) && !use_graphics)
+					{
+						/* Multi-hued attr */
+						if (r_ptr->flags2 & RF2_ATTR_ANY) *ap = randint1(15);
+						else switch (randint1(7))
 						{
-							if (use_graphics)
-							{
-								*cp = r_info[randint1(max_r_idx - 1)].x_char;
-								*ap = r_info[randint1(max_r_idx - 1)].x_attr;
-							}
-							else
-							{
-								*cp = (one_in_(25) ?
-									image_object_hack[randint0(strlen(image_object_hack))] :
-									image_monster_hack[randint0(strlen(image_monster_hack))]);
-							}
+						case 1: *ap = TERM_RED;     break;
+						case 2: *ap = TERM_L_RED;   break;
+						case 3: *ap = TERM_WHITE;   break;
+						case 4: *ap = TERM_L_GREEN; break;
+						case 5: *ap = TERM_BLUE;    break;
+						case 6: *ap = TERM_L_DARK;  break;
+						case 7: *ap = TERM_GREEN;   break;
 						}
+					}
+					else
+					{
+						/* Normal case */
+						*ap = a;
+					}
+
+					/***  Monster's char  ***/
+					if ((r_ptr->flags1 & RF1_CHAR_CLEAR) && !use_graphics)
+					{
+						/* Clear-char */
+						/* Do nothing */
+					}
+					else if (r_ptr->flags2 & RF2_SHAPECHANGER)
+					{
+						if (use_graphics)
+						{
+							monster_race *tmp_r_ptr = &r_info[randint1(max_r_idx - 1)];
+							*cp = tmp_r_ptr->x_char;
+							*ap = tmp_r_ptr->x_attr;
+						}
+						else
+						{
+							*cp = (one_in_(25) ?
+							       image_object_hack[randint0(sizeof(image_object_hack) - 1)] :
+							       image_monster_hack[randint0(sizeof(image_monster_hack) - 1)]);
+						}
+					}
+					else
+					{
+						/* Normal case */
+						*cp = c;
 					}
 				}
 			}
@@ -1855,7 +1883,7 @@ void lite_spot(int y, int x)
 		}
 
 #ifdef JP
-		if (use_bigtile && !(a & 0x80) && (isprint(c) || c == 127))
+		if (use_bigtile && is_ascii_graphics(a) && (isprint(c) || c == 127))
 		{
 			/* Term_queue_chars は全角ASCII地形を正しくupdateする。 */
 			Term_queue_chars(panel_col_of(x), y-panel_row_prt, 2, a, &ascii_to_zenkaku[2*(c-' ')]);
@@ -2028,7 +2056,7 @@ void prt_path(int y, int x)
 #else
 				map_info(ny, nx, &a, &c);
 #endif
-				if (a & 0x80)
+				if (!is_ascii_graphics(a))
 					a = default_color;
 				else if (c == '.' && (a == TERM_WHITE || a == TERM_L_WHITE))
 					a = default_color;
