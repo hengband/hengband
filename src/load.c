@@ -302,6 +302,12 @@ static void rd_item(object_type *o_ptr)
 	if (h_older_than(1, 3, 0, 0)) o_ptr->art_flags[3] = 0L;
         else rd_u32b(&o_ptr->art_flags[3]);
 
+        if (h_older_than(1, 3, 0, 0))
+        {
+                if (o_ptr->name2 == EGO_TELEPATHY)
+                        add_flag(o_ptr->art_flags, TR_TELEPATHY);
+        }
+
 	if (z_older_than(11, 0, 11))
 	{
 		o_ptr->curse_flags = 0L;
