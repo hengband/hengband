@@ -3267,8 +3267,11 @@ static void player_wipe(void)
 		/* Hack -- Non-unique Nazguls are semi-unique */
 		else if (r_ptr->flags7 & RF7_NAZGUL) r_ptr->max_num = MAX_NAZGUL_NUM;
 
-		/* Clear player kills */
+		/* Clear visible kills in this life */
 		r_ptr->r_pkills = 0;
+
+		/* Clear all kills in this life */
+		r_ptr->r_akills = 0;
 	}
 
 
