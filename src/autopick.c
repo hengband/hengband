@@ -4603,6 +4603,8 @@ static void draw_text_editor(text_body_type *tb)
 			char f;
 			cptr v;
 			cptr s = tb->lines_list[y];
+			char *ss, *s_keep;
+			int s_len;
 
 			/* Update this line's state */
 			tb->states[y] = state;
@@ -4614,8 +4616,15 @@ static void draw_text_editor(text_body_type *tb)
 			if (streq(s, "$AUTOREGISTER"))
 				state |= LSTAT_AUTOREGISTER;
 
+			s_len = strlen(s);
+			ss = (char *)string_make(s);
+			s_keep = ss;
+
 			/* Parse the expr */
-			v = process_pref_file_expr(&s, &f);
+			v = process_pref_file_expr(&ss, &f);
+
+			/* Cannot use string_free() because the string was "destroyed" */
+			C_FREE(s_keep, s_len + 1, char);
 
 			/* Set flag */
 			if (streq(v, "0")) state |= LSTAT_BYPASS;
