@@ -261,6 +261,9 @@ void delete_monster_idx(int i)
 
 	/* Visual update */
 	lite_spot(y, x);
+
+	/* Update some things */
+	p_ptr->update |= (PU_MON_LITE);
 }
 
 

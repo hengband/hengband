@@ -2143,6 +2143,9 @@ void lite_spot(int y, int x)
 		if (use_bigtile)
 			Term_queue_char(panel_col_of(x)+1, y-panel_row_prt, 255, -1);
 #endif /* USE_TRANSPARENCY */
+
+		/* Update sub-windows */
+		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	}
 }
 
