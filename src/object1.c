@@ -2525,11 +2525,18 @@ info[i++] = "それは魔法抵抗力を下げる。";
 			info[i++] = "It provides no light.";
 #endif
 
-			if (o_ptr->sval == SV_LITE_FEANOR ||
-			    o_ptr->sval == SV_LITE_LANTERN)
+			if (o_ptr->sval == SV_LITE_FEANOR)
 			{
 #ifdef JP
-				info[i++] = "それは明りの半径を狭める(半径に-2)。";
+				info[i++] = "それは明かりの半径を狭める(半径に-3)。";
+#else
+				info[i++] = "It decreases radius of light source by 3.";
+#endif
+			}
+			else if (o_ptr->sval == SV_LITE_LANTERN)
+			{
+#ifdef JP
+				info[i++] = "それは明かりの半径を狭める(半径に-2)。";
 #else
 				info[i++] = "It decreases radius of light source by 2.";
 #endif
@@ -2537,7 +2544,7 @@ info[i++] = "それは魔法抵抗力を下げる。";
 			else
 			{
 #ifdef JP
-				info[i++] = "それは明りの半径を狭める(半径に-1)。";
+				info[i++] = "それは明かりの半径を狭める(半径に-1)。";
 #else
 				info[i++] = "It decreases radius of light source by 1.";
 #endif
