@@ -928,7 +928,7 @@ void auto_pickup_items(cave_type *c_ptr)
 		 */
 		else
 		{
-			if (auto_destroy_item(this_o_idx, (!always_pickup ? idx : -2)))
+			if (auto_destroy_item((-this_o_idx), (!always_pickup ? idx : -2)))
 				continue;
 		}
 	}
