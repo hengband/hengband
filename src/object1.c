@@ -2478,7 +2478,7 @@ info[i++] = "それは二刀流での命中率を向上させる。";
 #ifdef JP
 info[i++] = "それは魔法の難易度を下げる。";
 #else
-		info[i++] = "It affects your ability to use magic devices.";
+		info[i++] = "It affects your ability to cast spells.";
 #endif
 	}
 
@@ -2487,7 +2487,7 @@ info[i++] = "それは魔法の難易度を下げる。";
 #ifdef JP
 info[i++] = "それは魔法の難易度を上げる。";
 #else
-		info[i++] = "It prevents you from using magic items.";
+		info[i++] = "It prevents you from casting spells.";
 #endif
 	}
 
