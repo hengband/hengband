@@ -2010,6 +2010,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 	int             chaos_effect = 0;
 	bool            stab_fleeing = FALSE;
 	bool            fuiuchi = FALSE;
+	bool            monk_attack = FALSE;
 	bool            do_quake = FALSE;
 	bool            weak = FALSE;
 	bool            drain_msg = TRUE;
@@ -2022,30 +2023,40 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 	bool            is_lowlevel = (r_ptr->level < (p_ptr->lev - 15));
 	bool            zantetsu_mukou, e_j_mukou;
 
-
-
-	if (((p_ptr->pclass == CLASS_ROGUE) || (p_ptr->pclass == CLASS_NINJA)) && buki_motteruka(INVEN_RARM + hand) && !p_ptr->icky_wield[hand])
+	switch (p_ptr->pclass)
 	{
-		int tmp = p_ptr->lev*6+(p_ptr->skill_stl+10)*4;
-		if (p_ptr->monlite && (mode != HISSATSU_NYUSIN)) tmp /= 3;
-		if (p_ptr->cursed & TRC_AGGRAVATE) tmp /= 2;
-		if (r_ptr->level > (p_ptr->lev*p_ptr->lev/20+10)) tmp /= 3;
-		if (m_ptr->csleep && m_ptr->ml)
+	case CLASS_ROGUE:
+	case CLASS_NINJA:
+		if (buki_motteruka(INVEN_RARM + hand) && !p_ptr->icky_wield[hand])
 		{
-			/* Can't backstab creatures that we can't see, right? */
-			backstab = TRUE;
+			int tmp = p_ptr->lev * 6 + (p_ptr->skill_stl + 10) * 4;
+			if (p_ptr->monlite && (mode != HISSATSU_NYUSIN)) tmp /= 3;
+			if (p_ptr->cursed & TRC_AGGRAVATE) tmp /= 2;
+			if (r_ptr->level > (p_ptr->lev * p_ptr->lev / 20 + 10)) tmp /= 3;
+			if (m_ptr->csleep && m_ptr->ml)
+			{
+				/* Can't backstab creatures that we can't see, right? */
+				backstab = TRUE;
+			}
+			else if ((p_ptr->special_defense & NINJA_S_STEALTH) && (randint0(tmp) > (r_ptr->level+20)) && m_ptr->ml && !(r_ptr->flagsr & RFR_RES_ALL))
+			{
+				fuiuchi = TRUE;
+			}
+			else if (m_ptr->monfear && m_ptr->ml)
+			{
+				stab_fleeing = TRUE;
+			}
 		}
-		else if ((p_ptr->special_defense & NINJA_S_STEALTH) && (randint0(tmp) > (r_ptr->level+20)) && m_ptr->ml && !(r_ptr->flagsr & RFR_RES_ALL))
-		{
-			fuiuchi = TRUE;
-		}
-		else if (m_ptr->monfear && m_ptr->ml)
-		{
-			stab_fleeing = TRUE;
-		}
+		break;
+
+	case CLASS_MONK:
+	case CLASS_FORCETRAINER:
+	case CLASS_BERSERKER:
+		if (empty_hands(TRUE) & EMPTY_HAND_RARM) monk_attack = TRUE;
+		break;
 	}
 
-	if(!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
+	if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
 	{
 		if ((r_ptr->level + 10) > p_ptr->lev)
 		{
@@ -2147,40 +2158,17 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 			sound(SOUND_HIT);
 
 			/* Message */
-			if (backstab)
 #ifdef JP
-				msg_format("あなたは冷酷にも眠っている無力な%sを突き刺した！",
+			if (backstab) msg_format("あなたは冷酷にも眠っている無力な%sを突き刺した！", m_name);
+			else if (fuiuchi) msg_format("不意を突いて%sに強烈な一撃を喰らわせた！", m_name);
+			else if (stab_fleeing) msg_format("逃げる%sを背中から突き刺した！", m_name);
+			else if (!monk_attack) msg_format("%sを攻撃した。", m_name);
 #else
-				msg_format("You cruelly stab the helpless, sleeping %s!",
+			if (backstab) msg_format("You cruelly stab the helpless, sleeping %s!", m_name);
+			else if (fuiuchi) msg_format("You make surprise attack, and hit %s with a powerful blow!", m_name);
+			else if (stab_fleeing) msg_format("You backstab the fleeing %s!",  m_name);
+			else if (!monk_attack) msg_format("You hit %s.", m_name);
 #endif
-
-				    m_name);
-			else if (fuiuchi)
-#ifdef JP
-				msg_format("不意を突いて%sに強烈な一撃を喰らわせた！",
-#else
-				msg_format("You make surprise attack, and hit %s with a powerful blow!",
-#endif
-
-				    m_name);
-			else if (stab_fleeing)
-#ifdef JP
-				msg_format("逃げる%sを背中から突き刺した！",
-#else
-				msg_format("You backstab the fleeing %s!",
-#endif
-
-				    m_name);
-			else
-			{
-				if (!(((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_BERSERKER)) && (empty_hands(TRUE) & EMPTY_HAND_RARM)))
-#ifdef JP
-			msg_format("%sを攻撃した。", m_name);
-#else
-					msg_format("You hit %s.", m_name);
-#endif
-
-			}
 
 			/* Hack -- bare hands do one damage */
 			k = 1;
@@ -2234,7 +2222,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				vorpal_cut = TRUE;
 			else vorpal_cut = FALSE;
 
-			if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_BERSERKER)) && (empty_hands(TRUE) & EMPTY_HAND_RARM))
+			if (monk_attack)
 			{
 				int special_effect = 0, stun_effect = 0, times = 0, max_times;
 				int min_level = 1;
@@ -2282,7 +2270,6 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 #else
 							msg_print("Attack re-selected.");
 #endif
-
 						}
 					}
 					else
@@ -2293,7 +2280,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 
 				if (p_ptr->pclass == CLASS_FORCETRAINER) min_level = MAX(1, ma_ptr->min_level - 3);
 				else min_level = ma_ptr->min_level;
-				k = damroll(ma_ptr->dd, ma_ptr->ds);
+				k = damroll(ma_ptr->dd + p_ptr->to_dd[hand], ma_ptr->ds + p_ptr->to_ds[hand]);
 				if (p_ptr->special_attack & ATTACK_SUIKEN) k *= 2;
 
 				if (ma_ptr->effect == MA_KNEE)
@@ -2379,20 +2366,13 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				{
 					if (p_ptr->lev > randint1(r_ptr->level + resist_stun + 10))
 					{
-						if (m_ptr->stunned)
 #ifdef JP
-							msg_format("%^sはさらにフラフラになった。", m_name);
+						if (m_ptr->stunned) msg_format("%^sはさらにフラフラになった。", m_name);
+						else msg_format("%^sはフラフラになった。", m_name);
 #else
-							msg_format("%^s is more stunned.", m_name);
+						if (m_ptr->stunned) msg_format("%^s is more stunned.", m_name);
+						else msg_format("%^s is stunned.", m_name);
 #endif
-
-						else
-#ifdef JP
-							msg_format("%^sはフラフラになった。", m_name);
-#else
-							msg_format("%^s is stunned.", m_name);
-#endif
-
 
 						m_ptr->stunned += stun_effect;
 					}
@@ -2437,11 +2417,10 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 					{
 						char chainsword_noise[1024];
 #ifdef JP
-       if (!get_rnd_line("chainswd_j.txt", 0, chainsword_noise))
+						if (!get_rnd_line("chainswd_j.txt", 0, chainsword_noise))
 #else
 						if (!get_rnd_line("chainswd.txt", 0, chainsword_noise))
 #endif
-
 						{
 							msg_print(chainsword_noise);
 						}
@@ -2454,7 +2433,6 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 #else
 						msg_print("Your Vorpal Blade goes snicker-snack!");
 #endif
-
 					}
 					else
 					{
@@ -2463,7 +2441,6 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 #else
 						msg_format("Your weapon cuts deep into %s!", m_name);
 #endif
-
 					}
 
 					/* Try to increase the damage */
@@ -2482,54 +2459,28 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 #else
 						msg_format("You cut %s in half!", m_name);
 #endif
-
 					}
 					else
 					{
-						switch(mult)
+						switch (mult)
 						{
 #ifdef JP
-case 2:	msg_format("%sを斬った！", m_name);		break;
+						case 2: msg_format("%sを斬った！", m_name); break;
+						case 3: msg_format("%sをぶった斬った！", m_name); break;
+						case 4: msg_format("%sをメッタ斬りにした！", m_name); break;
+						case 5: msg_format("%sをメッタメタに斬った！", m_name); break;
+						case 6: msg_format("%sを刺身にした！", m_name); break;
+						case 7: msg_format("%sを斬って斬って斬りまくった！", m_name); break;
+						default: msg_format("%sを細切れにした！", m_name); break;
 #else
-							case 2:	msg_format("You gouge %s!", m_name);		break;
+						case 2: msg_format("You gouge %s!", m_name); break;
+						case 3: msg_format("You maim %s!", m_name); break;
+						case 4: msg_format("You carve %s!", m_name); break;
+						case 5: msg_format("You cleave %s!", m_name); break;
+						case 6: msg_format("You smite %s!", m_name); break;
+						case 7: msg_format("You eviscerate %s!", m_name); break;
+						default: msg_format("You shred %s!", m_name); break;
 #endif
-
-#ifdef JP
-case 3:	msg_format("%sをぶった斬った！", m_name);			break;
-#else
-							case 3:	msg_format("You maim %s!", m_name);			break;
-#endif
-
-#ifdef JP
-case 4:	msg_format("%sをメッタ斬りにした！", m_name);		break;
-#else
-							case 4:	msg_format("You carve %s!", m_name);		break;
-#endif
-
-#ifdef JP
-case 5:	msg_format("%sをメッタメタに斬った！", m_name);		break;
-#else
-							case 5:	msg_format("You cleave %s!", m_name);		break;
-#endif
-
-#ifdef JP
-case 6:	msg_format("%sを刺身にした！", m_name);		break;
-#else
-							case 6:	msg_format("You smite %s!", m_name);		break;
-#endif
-
-#ifdef JP
-case 7:	msg_format("%sを斬って斬って斬りまくった！", m_name);	break;
-#else
-							case 7:	msg_format("You eviscerate %s!", m_name);	break;
-#endif
-
-#ifdef JP
-default:	msg_format("%sを細切れにした！", m_name);		break;
-#else
-							default:	msg_format("You shred %s!", m_name);		break;
-#endif
-
 						}
 					}
 					drain_result = drain_result * 3 / 2;
@@ -2588,7 +2539,7 @@ default:	msg_format("%sを細切れにした！", m_name);		break;
 					if (m_ptr->stunned)
 					{
 #ifdef JP
-msg_format("%sはひどくもうろうとした。", m_name);
+						msg_format("%sはひどくもうろうとした。", m_name);
 #else
 						msg_format("%s is more dazed.", m_name);
 #endif
@@ -2598,7 +2549,7 @@ msg_format("%sはひどくもうろうとした。", m_name);
 					else
 					{
 #ifdef JP
-msg_format("%s はもうろうとした。", m_name);
+						msg_format("%s はもうろうとした。", m_name);
 #else
 						msg_format("%s is dazed.", m_name);
 #endif
@@ -2610,9 +2561,9 @@ msg_format("%s はもうろうとした。", m_name);
 				else
 				{
 #ifdef JP
-msg_format("%s には効果がなかった。", m_name);
+					msg_format("%s には効果がなかった。", m_name);
 #else
-						msg_format("%s is not effected.", m_name);
+					msg_format("%s is not effected.", m_name);
 #endif
 				}
 			}
@@ -2623,9 +2574,9 @@ msg_format("%s には効果がなかった。", m_name);
 			{
 				if ((randint1(randint1(r_ptr->level/7)+5) == 1) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2))
 				{
-					k = m_ptr->hp + 1;
+					if (k < m_ptr->hp + 1) k = m_ptr->hp + 1;
 #ifdef JP
-msg_format("%sの急所を突き刺した！", m_name);
+					msg_format("%sの急所を突き刺した！", m_name);
 #else
 					msg_format("You hit %s on a fatal spot!", m_name);
 #endif
@@ -2640,7 +2591,7 @@ msg_format("%sの急所を突き刺した！", m_name);
 					k *= 5;
 					drain_result *= 2;
 #ifdef JP
-msg_format("刃が%sに深々と突き刺さった！", m_name);
+					msg_format("刃が%sに深々と突き刺さった！", m_name);
 #else
 					msg_format("You critically injured %s!", m_name);
 #endif
@@ -2652,18 +2603,18 @@ msg_format("刃が%sに深々と突き刺さった！", m_name);
 						k = MAX(k*5, m_ptr->hp/2);
 						drain_result *= 2;
 #ifdef JP
-msg_format("%sに致命傷を負わせた！", m_name);
+						msg_format("%sに致命傷を負わせた！", m_name);
 #else
-					msg_format("You fatally injured %s!", m_name);
+						msg_format("You fatally injured %s!", m_name);
 #endif
 					}
 					else
 					{
-						k = m_ptr->hp + 1;
+						if (k < m_ptr->hp + 1) k = m_ptr->hp + 1;
 #ifdef JP
-msg_format("刃が%sの急所を貫いた！", m_name);
+						msg_format("刃が%sの急所を貫いた！", m_name);
 #else
-					msg_format("You hit %s on a fatal spot!", m_name);
+						msg_format("You hit %s on a fatal spot!", m_name);
 #endif
 					}
 				}
@@ -2677,7 +2628,6 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 #else
 				msg_format("You do %d (out of %d) damage.", k, m_ptr->hp);
 #endif
-
 			}
 
 			if (k <= 0) can_drain = FALSE;
@@ -2705,7 +2655,7 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 #ifdef JP
 					msg_print("またつまらぬものを斬ってしまった．．．");
 #else
-					msg_print("Sign..Another trifling thing I've cut....");
+					msg_print("Sigh... Another trifling thing I've cut....");
 #endif
 				break;
 			}
@@ -2988,7 +2938,7 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 				/* Extract the flags */
 				object_flags(o_ptr, flgs);
 
-				k = damroll(o_ptr->dd, o_ptr->ds);
+				k = damroll(o_ptr->dd + p_ptr->to_dd[hand], o_ptr->ds + p_ptr->to_ds[hand]);
 				{
 					int mult;
 					switch (p_ptr->mimic_form)
