@@ -1655,6 +1655,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ , int flg)
 	cave_type *c_ptr = &cave[y][x];
 
 	monster_type *m_ptr = &m_list[c_ptr->m_idx];
+	monster_type *caster_ptr = (who > 0) ? &m_list[who] : NULL;
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -1672,7 +1673,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ , int flg)
 	bool known = ((m_ptr->cdis <= MAX_SIGHT) || p_ptr->inside_battle);
 
 	/* Can the player see the source of this effect? */
-	bool see_s = ((who <= 0) || m_list[who].ml);
+	bool see_s = ((who <= 0) || is_seen(caster_ptr));
 
 	/* Were the effects "irrelevant"? */
 	bool skipped = FALSE;
@@ -1721,7 +1722,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ , int flg)
 	int ty = m_ptr->fy;
 	int tx = m_ptr->fx;
 
-	int caster_lev = (who > 0) ? r_info[m_list[who].r_idx].level : p_ptr->lev * 2;
+	int caster_lev = (who > 0) ? r_info[caster_ptr->r_idx].level : (p_ptr->lev * 2);
 
 	/* Nobody here */
 	if (!c_ptr->m_idx) return (FALSE);
@@ -2717,9 +2718,9 @@ note_dies = "は蒸発した！";
 			if (!(los(m_ptr->fy, m_ptr->fx, py, px)))
 			{
 #ifdef JP
-				if (seen) msg_format("%sはあなたが見えないので影響されない！", m_name);
+				if (is_seen(m_ptr)) msg_format("%sはあなたが見えないので影響されない！", m_name);
 #else
-				if (seen) msg_format("%^s can't see you, and isn't affected!", m_name);
+				if (is_seen(m_ptr)) msg_format("%^s can't see you, and isn't affected!", m_name);
 #endif
 				skipped = TRUE;
 				break;
@@ -4954,8 +4955,6 @@ note_dies = "はドロドロに溶けた！";
 			{
 				if (who > 0)
 				{
-					monster_type *caster_ptr = &m_list[who];
-
 					/* Heal the monster */
 					if (caster_ptr->hp < caster_ptr->maxhp)
 					{
@@ -4968,7 +4967,7 @@ note_dies = "はドロドロに溶けた！";
 						if (p_ptr->riding == who) p_ptr->redraw |= (PR_UHEALTH);
 
 						/* Special message */
-						if (caster_ptr->ml)
+						if (is_seen(caster_ptr))
 						{
 							/* Get the monster name */
 							monster_desc(killer, caster_ptr, 0);
@@ -5299,7 +5298,7 @@ note_dies = "はドロドロに溶けた！";
 			}
 
 			/* Attempt a saving throw */
-			if ((randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35)) && ((who <= 0) || (m_list[who].r_idx != MON_KENSHIROU)))
+			if ((randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35)) && ((who <= 0) || (caster_ptr->r_idx != MON_KENSHIROU)))
 			{
 #ifdef JP
 				note = "には効果がなかった。";
@@ -6115,7 +6114,7 @@ msg_print("少し悲しい気分がした。");
 		else
 		{
 			/* Give detailed messages if visible or destroyed */
-			if (note && seen) msg_format("%^s%s", m_name, note);
+			if (note && is_seen(m_ptr)) msg_format("%^s%s", m_name, note);
 
 			/* Hack -- Pain message */
 			else if (see_s)
@@ -6135,9 +6134,9 @@ msg_print("少し悲しい気分がした。");
 	else if (heal_leper)
 	{
 #ifdef JP
-msg_print("不潔な病人は病気が治った！");
+		if (is_seen(m_ptr)) msg_print("不潔な病人は病気が治った！");
 #else
-		msg_print("The Mangy looking leper is healed!");
+		if (is_seen(m_ptr)) msg_print("The Mangy looking leper is healed!");
 #endif
 
 		delete_monster_idx(c_ptr->m_idx);
@@ -6161,9 +6160,9 @@ msg_print("不潔な病人は病気が治った！");
 			if (do_sleep) anger_monster(m_ptr);
 
 			/* Give detailed messages if visible or destroyed */
-			if (note && seen)
+			if (note && is_seen(m_ptr))
 #ifdef JP
-msg_format("%s%s", m_name, note);
+				msg_format("%s%s", m_name, note);
 #else
 				msg_format("%^s%s", m_name, note);
 #endif
@@ -6180,18 +6179,17 @@ msg_format("%s%s", m_name, note);
 				anger_monster(m_ptr);
 
 			/* Take note */
-			if ((fear || do_fear) && (m_ptr->ml))
+			if ((fear || do_fear) && is_seen(m_ptr))
 			{
 				/* Sound */
 				sound(SOUND_FLEE);
 
 				/* Message */
 #ifdef JP
-msg_format("%^sは恐怖して逃げ出した！", m_name);
+				msg_format("%^sは恐怖して逃げ出した！", m_name);
 #else
 				msg_format("%^s flees in terror!", m_name);
 #endif
-
 			}
 
 			/* Hack -- handle sleep */
@@ -6341,9 +6339,9 @@ msg_print("生命力が体から吸い取られた気がする！");
 				set_target(m_ptr, monster_target_y, monster_target_x);
 			}
 		}
-		else if (is_pet(&m_list[who]) && !player_bold(m_ptr->target_y, m_ptr->target_x))
+		else if ((who > 0) && is_pet(caster_ptr) && !player_bold(m_ptr->target_y, m_ptr->target_x))
 		{
-			set_target(m_ptr, m_list[who].fy, m_list[who].fx);
+			set_target(m_ptr, caster_ptr->fy, caster_ptr->fx);
 		}
 	}
 
@@ -6707,7 +6705,7 @@ if (fuzzy) msg_print("何か鋭いもので攻撃された！");
 		case GF_PLASMA:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何かとても熱いものでで攻撃された！");
+			if (fuzzy) msg_print("何かとても熱いもので攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by something *HOT*!");
 #endif
@@ -6917,7 +6915,7 @@ if (fuzzy) msg_print("何か混乱するもので攻撃された！");
 		case GF_DISENCHANT:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何かさえないものでで攻撃された！");
+			if (fuzzy) msg_print("何かさえないもので攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by something static!");
 #endif
@@ -7198,8 +7196,8 @@ msg_print("あなたは以前ほど力強くなくなってしまった...。");
 		case GF_GRAVITY:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何か重いものでで攻撃された！");
-msg_print("周辺の重力がゆがんだ。");
+			if (fuzzy) msg_print("何か重いもので攻撃された！");
+			msg_print("周辺の重力がゆがんだ。");
 #else
 			if (fuzzy) msg_print("You are hit by something heavy!");
 			msg_print("Gravity warps around you.");
@@ -9047,7 +9045,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 						t_x = x_saver;
 					}
 
-					if (m_ptr->ml)
+					if (is_seen(m_ptr))
 					{
 #ifdef JP
 						if ((m_ptr->r_idx == MON_KENSHIROU) || (m_ptr->r_idx == MON_RAOU))
@@ -9057,9 +9055,8 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 #else
 						msg_print("The attack bounces!");
 #endif
-
-						if (is_original_ap(m_ptr)) ref_ptr->r_flags2 |= RF2_REFLECTING;
 					}
+					if (m_ptr->ml && is_original_ap(m_ptr)) ref_ptr->r_flags2 |= RF2_REFLECTING;
 
 					/* Reflected bolts randomly target either one */
 					if (one_in_(2)) flg |= PROJECT_PLAYER;

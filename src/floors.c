@@ -447,10 +447,10 @@ static void preserve_pet(void)
 		{
 			/* Its parent have gone, it also goes away. */
 
-			if (m_ptr->ml)
+			if (is_seen(m_ptr))
 			{
 				char m_name[80];
-			
+
 				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
 

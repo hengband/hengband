@@ -64,6 +64,7 @@ X:compress_savefile
 X:abbrev_extra
 X:abbrev_all
 X:exp_need
+X:ignore_unview
 
 ##### Game-Play #####
 

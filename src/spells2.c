@@ -4698,8 +4698,10 @@ while(!get_com("どの種類(文字)のモンスターを抹殺しますか: ", &typ, FALSE));
 
 		if (angry && player_cast)
 		{
+			bool see_m = is_seen(m_ptr);
+
 			monster_desc(m_name, m_ptr, 0);
-			if (m_ptr->ml && !p_ptr->blind)
+			if (see_m && !p_ptr->blind)
 			{
 #ifdef JP
 msg_format("%^sには効果がなかった。", m_name);
@@ -4711,7 +4713,7 @@ msg_format("%^sには効果がなかった。", m_name);
 			{
 				m_ptr->csleep = 0;
 				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
-				if (m_ptr->ml && !p_ptr->blind)
+				if (see_m && !p_ptr->blind)
 				{
 #ifdef JP
 msg_format("%^sが目を覚ました。", m_name);
@@ -4722,7 +4724,7 @@ msg_format("%^sが目を覚ました。", m_name);
 			}
 			if (is_friendly(m_ptr) && !is_pet(m_ptr))
 			{
-				if (m_ptr->ml && !p_ptr->blind)
+				if (see_m && !p_ptr->blind)
 				{
 #ifdef JP
 					msg_format("%sは怒った！", m_name);
@@ -4828,8 +4830,10 @@ bool mass_genocide(int power, int player_cast)
 
 		if (angry && player_cast)
 		{
+			bool see_m = is_seen(m_ptr);
+
 			monster_desc(m_name, m_ptr, 0);
-			if (m_ptr->ml && !p_ptr->blind)
+			if (see_m && !p_ptr->blind)
 			{
 #ifdef JP
 msg_format("%^sには効果がなかった。", m_name);
@@ -4841,7 +4845,7 @@ msg_format("%^sには効果がなかった。", m_name);
 			{
 				m_ptr->csleep = 0;
 				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
-				if (m_ptr->ml && !p_ptr->blind)
+				if (see_m && !p_ptr->blind)
 				{
 #ifdef JP
 msg_format("%^sが目を覚ました。", m_name);
@@ -4852,7 +4856,7 @@ msg_format("%^sが目を覚ました。", m_name);
 			}
 			if (is_friendly(m_ptr) && !is_pet(m_ptr))
 			{
-				if (m_ptr->ml && !p_ptr->blind)
+				if (see_m && !p_ptr->blind)
 				{
 #ifdef JP
 					msg_format("%sは怒った！", m_name);
@@ -4961,8 +4965,10 @@ bool mass_genocide_undead(int power, int player_cast)
 
 		if (angry && player_cast)
 		{
+			bool see_m = is_seen(m_ptr);
+
 			monster_desc(m_name, m_ptr, 0);
-			if (m_ptr->ml && !p_ptr->blind)
+			if (see_m && !p_ptr->blind)
 			{
 #ifdef JP
 msg_format("%^sには効果がなかった。", m_name);
@@ -4974,7 +4980,7 @@ msg_format("%^sには効果がなかった。", m_name);
 			{
 				m_ptr->csleep = 0;
 				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
-				if (m_ptr->ml && !p_ptr->blind)
+				if (see_m && !p_ptr->blind)
 				{
 #ifdef JP
 msg_format("%^sが目を覚ました。", m_name);
@@ -4985,7 +4991,7 @@ msg_format("%^sが目を覚ました。", m_name);
 			}
 			if (is_friendly(m_ptr) && !is_pet(m_ptr))
 			{
-				if (m_ptr->ml && !p_ptr->blind)
+				if (see_m && !p_ptr->blind)
 				{
 #ifdef JP
 					msg_format("%sは怒った！", m_name);
@@ -6034,7 +6040,7 @@ static void cave_temp_room_lite(void)
 				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 
 				/* Notice the "waking up" */
-				if (m_ptr->ml)
+				if (is_seen(m_ptr))
 				{
 					char m_name[80];
 
@@ -6047,11 +6053,11 @@ msg_format("%^sが目を覚ました。", m_name);
 #else
 					msg_format("%^s wakes up.", m_name);
 #endif
-					/* Redraw the health bar */
-					if (p_ptr->health_who == c_ptr->m_idx)
-						p_ptr->redraw |= (PR_HEALTH);
-
 				}
+
+				/* Redraw the health bar */
+				if (m_ptr->ml && (p_ptr->health_who == c_ptr->m_idx))
+					p_ptr->redraw |= (PR_HEALTH);
 			}
 		}
 

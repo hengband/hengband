@@ -1577,7 +1577,7 @@ int mon_damage_mod(monster_type *m_ptr, int dam, bool is_psy_spear)
 	{
 		if (is_psy_spear)
 		{
-			if(!p_ptr->blind && m_ptr->ml)
+			if (!p_ptr->blind && is_seen(m_ptr))
 			{
 #ifdef JP
 msg_print("バリアを切り裂いた！");

@@ -1107,6 +1107,7 @@ static void process_monsters_counters(void)
 	int          m_idx;
 	monster_type *m_ptr;
 	monster_race *r_ptr;
+	bool         see_m;
 
 	u32b noise; /* Hack -- local "player stealth" value */
 
@@ -1126,6 +1127,8 @@ static void process_monsters_counters(void)
 		/* Ignore "dead" monsters */
 		if (!m_ptr->r_idx) continue;
 
+		see_m = is_seen(m_ptr);
+
 		/* Handle Invulnerability */
 		if (m_ptr->invulner)
 		{
@@ -1134,7 +1137,7 @@ static void process_monsters_counters(void)
 
 			if (!m_ptr->invulner)
 			{
-				if (m_ptr->ml)
+				if (see_m)
 				{
 					char m_name[80];
 
@@ -1147,7 +1150,9 @@ static void process_monsters_counters(void)
 #else
 					msg_format("%^s is no longer invulnerable.", m_name);
 #endif
-
+				}
+				if (m_ptr->ml)
+				{
 					if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
 					if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 				}
@@ -1161,26 +1166,23 @@ static void process_monsters_counters(void)
 			/* Reduce by one, note if expires */
 			m_ptr->fast--;
 
-			if (!m_ptr->fast && m_ptr->ml)
+			if (!m_ptr->fast)
 			{
-				char m_name[80];
-
-				/* Acquire the monster name */
-				monster_desc(m_name, m_ptr, 0);
-
-				/* Dump a message */
-#ifdef JP
-				msg_format("%^sはもう加速されていない。", m_name);
-#else
-				msg_format("%^s is no longer fast.", m_name);
-#endif
-
-				if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-				if (p_ptr->riding == m_idx)
+				if (see_m)
 				{
-					p_ptr->redraw |= (PR_UHEALTH);
-					p_ptr->update |= (PU_BONUS);
+					char m_name[80];
+
+					/* Acquire the monster name */
+					monster_desc(m_name, m_ptr, 0);
+
+					/* Dump a message */
+#ifdef JP
+					msg_format("%^sはもう加速されていない。", m_name);
+#else
+					msg_format("%^s is no longer fast.", m_name);
+#endif
 				}
+				if (p_ptr->riding == m_idx) p_ptr->update |= (PU_BONUS);
 			}
 		}
 
@@ -1190,26 +1192,23 @@ static void process_monsters_counters(void)
 			/* Reduce by one, note if expires */
 			m_ptr->slow--;
 
-			if (!m_ptr->slow && m_ptr->ml)
+			if (!m_ptr->slow)
 			{
-				char m_name[80];
-
-				/* Acquire the monster name */
-				monster_desc(m_name, m_ptr, 0);
-
-				/* Dump a message */
-#ifdef JP
-				msg_format("%^sはもう減速されていない。", m_name);
-#else
-				msg_format("%^s is no longer slow.", m_name);
-#endif
-
-				if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-				if (p_ptr->riding == m_idx)
+				if (see_m)
 				{
-					p_ptr->redraw |= (PR_UHEALTH);
-					p_ptr->update |= (PU_BONUS);
+					char m_name[80];
+
+					/* Acquire the monster name */
+					monster_desc(m_name, m_ptr, 0);
+
+					/* Dump a message */
+#ifdef JP
+					msg_format("%^sはもう減速されていない。", m_name);
+#else
+					msg_format("%^s is no longer slow.", m_name);
+#endif
 				}
+				if (p_ptr->riding == m_idx) p_ptr->update |= (PU_BONUS);
 			}
 		}
 
@@ -1281,7 +1280,7 @@ static void process_monsters_counters(void)
 						if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 
 						/* Notice the "waking up" */
-						if (m_ptr->ml)
+						if (see_m)
 						{
 							char m_name[80];
 
@@ -1294,7 +1293,10 @@ static void process_monsters_counters(void)
 #else
 							msg_format("%^s wakes up.", m_name);
 #endif
+						}
 
+						if (m_ptr->ml)
+						{
 							/* Redraw the health bar */
 							if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
 							if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
@@ -1336,7 +1338,7 @@ static void process_monsters_counters(void)
 				m_ptr->stunned = 0;
 
 				/* Message if visible */
-				if (m_ptr->ml)
+				if (see_m)
 				{
 					char m_name[80];
 
@@ -1349,9 +1351,6 @@ static void process_monsters_counters(void)
 #else
 					msg_format("%^s is no longer stunned.", m_name);
 #endif
-
-					if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-					if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 				}
 			}
 		}
@@ -1376,7 +1375,7 @@ static void process_monsters_counters(void)
 				m_ptr->confused = 0;
 
 				/* Message if visible */
-				if (m_ptr->ml)
+				if (see_m)
 				{
 					char m_name[80];
 
@@ -1389,9 +1388,6 @@ static void process_monsters_counters(void)
 #else
 					msg_format("%^s is no longer confused.", m_name);
 #endif
-
-					if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-					if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 				}
 			}
 		}
@@ -1416,7 +1412,7 @@ static void process_monsters_counters(void)
 				m_ptr->monfear = 0;
 
 				/* Visual note */
-				if (m_ptr->ml)
+				if (see_m)
 				{
 					char m_name[80];
 #ifndef JP
@@ -1435,7 +1431,9 @@ static void process_monsters_counters(void)
 #else
 					msg_format("%^s recovers %s courage.", m_name, m_poss);
 #endif
-
+				}
+				if (m_ptr->ml)
+				{
 					if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
 					if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 				}

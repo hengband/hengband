@@ -505,7 +505,7 @@ void teleport_level(int m_idx)
 		/* Get the monster name (or "it") */
 		monster_desc(m_name, m_ptr, 0);
 
-		see_m = m_ptr->ml;
+		see_m = is_seen(m_ptr);
 	}
 
 	/* No effect in some case */
@@ -1491,7 +1491,7 @@ static bool vanish_dungeon(void)
 				m_ptr->csleep = 0;
 
 				/* Notice the "waking up" */
-				if (m_ptr->ml)
+				if (is_seen(m_ptr))
 				{
 					/* Acquire the monster name */
 					monster_desc(m_name, m_ptr, 0);

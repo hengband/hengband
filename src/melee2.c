@@ -194,7 +194,7 @@ void mon_take_hit_mon(int m_idx, int dam, bool *fear, cptr note, int who)
 
 	char m_name[160];
 
-	bool seen = m_ptr->ml;
+	bool seen = is_seen(m_ptr);
 
 	/* Can the player be aware of this attack? */
 	bool known = (m_ptr->cdis <= MAX_SIGHT);
@@ -203,8 +203,11 @@ void mon_take_hit_mon(int m_idx, int dam, bool *fear, cptr note, int who)
 	monster_desc(m_name, m_ptr, 0);
 
 	/* Redraw (later) if needed */
-	if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-	if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
+	if (m_ptr->ml)
+	{
+		if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
+		if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
+	}
 
 	/* Wake it up */
 	m_ptr->csleep = 0;
@@ -1447,8 +1450,8 @@ static bool monst_attack_monst(int m_idx, int t_idx)
 	int             y_saver = t_ptr->fy;
 	int             x_saver = t_ptr->fx;
 
-	bool see_m = m_ptr->ml;
-	bool see_t = t_ptr->ml;
+	bool see_m = is_seen(m_ptr);
+	bool see_t = is_seen(t_ptr);
 	bool see_either = see_m || see_t;
 
 	/* Can the player be aware of this attack? */
@@ -2044,9 +2047,8 @@ msg_format("%sは体力を回復したようだ。", m_name);
 #else
 								msg_format("%^s is suddenly very hot!", m_name);
 #endif
-
-								if (see_t && is_original_ap(t_ptr)) tr_ptr->r_flags2 |= RF2_AURA_FIRE;
 							}
+							if (m_ptr->ml && t_ptr->ml && is_original_ap(t_ptr)) tr_ptr->r_flags2 |= RF2_AURA_FIRE;
 							project(t_idx, 0, m_ptr->fy, m_ptr->fx,
 								damroll (1 + ((tr_ptr->level) / 26),
 								1 + ((tr_ptr->level) / 17)),
@@ -2054,7 +2056,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 						}
 						else
 						{
-							if (see_m && is_original_ap(m_ptr)) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
+							if (m_ptr->ml && is_original_ap(m_ptr)) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
 						}
 					}
 
@@ -2070,9 +2072,8 @@ msg_format("%sは体力を回復したようだ。", m_name);
 #else
 								msg_format("%^s is suddenly very cold!", m_name);
 #endif
-
-								if (see_t && is_original_ap(t_ptr)) tr_ptr->r_flags3 |= RF3_AURA_COLD;
 							}
+							if (m_ptr->ml && t_ptr->ml && is_original_ap(t_ptr)) tr_ptr->r_flags3 |= RF3_AURA_COLD;
 							project(t_idx, 0, m_ptr->fy, m_ptr->fx,
 								damroll (1 + ((tr_ptr->level) / 26),
 								1 + ((tr_ptr->level) / 17)),
@@ -2080,7 +2081,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 						}
 						else
 						{
-							if (see_m && is_original_ap(m_ptr)) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
+							if (m_ptr->ml && is_original_ap(m_ptr)) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
 						}
 					}
 
@@ -2096,9 +2097,8 @@ msg_format("%sは体力を回復したようだ。", m_name);
 #else
 								msg_format("%^s gets zapped!", m_name);
 #endif
-
-								if (see_t && is_original_ap(t_ptr)) tr_ptr->r_flags2 |= RF2_AURA_ELEC;
 							}
+							if (m_ptr->ml && t_ptr->ml && is_original_ap(t_ptr)) tr_ptr->r_flags2 |= RF2_AURA_ELEC;
 							project(t_idx, 0, m_ptr->fy, m_ptr->fx,
 								damroll (1 + ((tr_ptr->level) / 26),
 								1 + ((tr_ptr->level) / 17)),
@@ -2106,7 +2106,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 						}
 						else
 						{
-							if (see_m && is_original_ap(m_ptr)) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
+							if (m_ptr->ml && is_original_ap(m_ptr)) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
 						}
 					}
 				}
@@ -2156,7 +2156,7 @@ msg_format("%sは%^sの攻撃をかわした。", t_name,m_name);
 
 
 		/* Analyze "visible" monsters only */
-		if (see_m && !do_silly_attack)
+		if (m_ptr->ml && !do_silly_attack)
 		{
 			/* Count "obvious" attacks (and ones that cause damage) */
 			if (obvious || damage || (r_ptr->r_blows[ap_cnt] > 10))
@@ -2269,6 +2269,8 @@ static void process_monster(int m_idx)
 
 	bool            is_riding_mon = (m_idx == p_ptr->riding);
 
+	bool            see_m = is_seen(m_ptr);
+
 	if (is_riding_mon && !(r_ptr->flags7 & RF7_RIDING))
 	{
 		if (rakuba(0, TRUE))
@@ -2305,10 +2307,10 @@ static void process_monster(int m_idx)
 	{
 		/* Its parent have gone, it also goes away. */
 
-		if (m_ptr->ml)
+		if (see_m)
 		{
 			char m_name[80];
-			
+
 			/* Acquire the monster name */
 			monster_desc(m_name, m_ptr, 0);
 
@@ -2339,7 +2341,7 @@ static void process_monster(int m_idx)
 			if (is_pet(m_ptr) && !(m_ptr->ml))
 				sad = TRUE;
 
-			if (m_ptr->ml)
+			if (see_m)
 			{
 				char m_name[80];
 
@@ -2348,11 +2350,10 @@ static void process_monster(int m_idx)
 
 				/* Oops */
 #ifdef JP
-msg_format("%sは消え去った！", m_name);
+				msg_format("%sは消え去った！", m_name);
 #else
 				msg_format("%^s disappears!", m_name);
 #endif
-
 			}
 
 			/* Generate treasure, etc */
@@ -2364,11 +2365,10 @@ msg_format("%sは消え去った！", m_name);
 			if (sad)
 			{
 #ifdef JP
-msg_print("少しの間悲しい気分になった。");
+				msg_print("少しの間悲しい気分になった。");
 #else
 				msg_print("You feel sad for a moment.");
 #endif
-
 			}
 
 			return;
@@ -2420,7 +2420,7 @@ msg_print("少しの間悲しい気分になった。");
 					}
 				}
 
-				if (m_ptr->ml)
+				if (see_m)
 				{
 					if ((r_ptr->flags2 & RF2_CAN_SPEAK) && (m_ptr->r_idx != MON_GRIP) && (m_ptr->r_idx != MON_WOLF) && (m_ptr->r_idx != MON_FANG) &&
 					    player_has_los_bold(m_ptr->fy, m_ptr->fx) && projectable(m_ptr->fy, m_ptr->fx, py, px))
@@ -2478,7 +2478,7 @@ msg_print("少しの間悲しい気分になった。");
 		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 
 		/* Notice the "waking up" */
-		if (m_ptr->ml)
+		if (see_m)
 		{
 			char m_name[80];
 
@@ -3537,7 +3537,7 @@ msg_format("%^s%s", m_name, monmessage);
 		m_ptr->monfear = 0;
 
 		/* Message if seen */
-		if (m_ptr->ml)
+		if (see_m)
 		{
 			char m_name[80];
 
@@ -3958,11 +3958,15 @@ void monster_gain_exp(int m_idx, int s_idx)
 
 		if (is_pet(m_ptr) || m_ptr->ml)
 		{
+			if (!ignore_unview || player_can_see_bold(m_ptr->fy, m_ptr->fx))
+			{
 #ifdef JP
-			msg_format("%sは%sに進化した。", m_name, r_name + r_ptr->name);
+				msg_format("%sは%sに進化した。", m_name, r_name + r_ptr->name);
 #else
-			msg_format("%^s evolved into %s.", m_name, r_name + r_ptr->name);
+				msg_format("%^s evolved into %s.", m_name, r_name + r_ptr->name);
 #endif
+			}
+
 			r_info[old_r_idx].r_xtra1 |= MR1_SINKA;
 
 			/* Now you feel very close to this pet. */

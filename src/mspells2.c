@@ -288,9 +288,9 @@ bool monst_spell_monst(int m_idx)
 
 	bool blind = (p_ptr->blind ? TRUE : FALSE);
 
-	bool see_m = m_ptr->ml;
+	bool see_m = is_seen(m_ptr);
 	bool maneable = player_has_los_bold(m_ptr->fy, m_ptr->fx);
-	bool learnable = (see_m && maneable && !world_monster);
+	bool learnable = (m_ptr->ml && maneable && !world_monster);
 	bool see_t;
 	bool see_either;
 	bool known;
@@ -672,7 +672,7 @@ bool monst_spell_monst(int m_idx)
 	/* Choose a spell to cast */
 	thrown_spell = spell[randint0(num)];
 
-	see_t = t_ptr->ml;
+	see_t = is_seen(t_ptr);
 	see_either = (see_m || see_t);
 
 	/* Can the player be aware of this attack? */
@@ -2699,7 +2699,7 @@ bool monst_spell_monst(int m_idx)
 		else
 		{
 #ifdef JP
-			if (see_t)   msg_format("%^sは目が見えなくなった！ ", t_name);
+			if (see_t) msg_format("%^sは目が見えなくなった！ ", t_name);
 #else
 			if (see_t) msg_format("%^s is blinded!", t_name);
 #endif
@@ -2815,6 +2815,7 @@ bool monst_spell_monst(int m_idx)
 			}
 
 			t_ptr->slow = MIN(200, t_ptr->slow + 50);
+			if (p_ptr->riding == t_idx) p_ptr->update |= PU_BONUS;
 		}
 
 		wake_up = TRUE;
@@ -3073,7 +3074,7 @@ bool monst_spell_monst(int m_idx)
 
 		teleport_away(m_idx, MAX_SIGHT * 2 + 5, FALSE, FALSE);
 
-		if (los(py, px, m_ptr->fy, m_ptr->fx) && !world_monster && see_m)
+		if (los(py, px, m_ptr->fy, m_ptr->fx) && !world_monster && m_ptr->ml)
 		{
 			for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 			{
@@ -3284,30 +3285,28 @@ bool monst_spell_monst(int m_idx)
 		{
 			if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
 			{
+				if (t_ptr->ml && is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 				if (see_t)
 				{
-					if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 #ifdef JP
 					msg_format("%^sには効果がなかった。", t_name);
 #else
 					msg_format("%^s is unaffected!", t_name);
 #endif
-
 				}
 
 				resists_tele = TRUE;
 			}
 			else if (tr_ptr->level > randint1(100))
 			{
+				if (t_ptr->ml && is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 				if (see_t)
 				{
-					if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 #ifdef JP
 					msg_format("%^sは耐性を持っている！", t_name);
 #else
 					msg_format("%^s resists!", t_name);
 #endif
-
 				}
 
 				resists_tele = TRUE;
@@ -3346,30 +3345,28 @@ bool monst_spell_monst(int m_idx)
 		{
 			if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
 			{
+				if (t_ptr->ml && is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 				if (see_t)
 				{
-					if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 #ifdef JP
 					msg_format("%^sには効果がなかった。", t_name);
 #else
 					msg_format("%^s is unaffected!", t_name);
 #endif
-
 				}
 
 				resists_tele = TRUE;
 			}
 			else if (tr_ptr->level > randint1(100))
 			{
+				if (t_ptr->ml && is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 				if (see_t)
 				{
-					if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 #ifdef JP
 					msg_format("%^sは耐性を持っている！", t_name);
 #else
 					msg_format("%^s resists!", t_name);
 #endif
-
 				}
 
 				resists_tele = TRUE;
@@ -4184,7 +4181,7 @@ bool monst_spell_monst(int m_idx)
 
 	}
 
-	if (see_m && maneable && !world_monster && !p_ptr->blind && (p_ptr->pclass == CLASS_IMITATOR))
+	if (m_ptr->ml && maneable && !world_monster && !p_ptr->blind && (p_ptr->pclass == CLASS_IMITATOR))
 	{
 		if (thrown_spell != 167) /* Not RF6_SPECIAL */
 		{
@@ -4207,7 +4204,7 @@ bool monst_spell_monst(int m_idx)
 	}
 
 	/* Remember what the monster did, if we saw it */
-	if (see_m && is_original_ap(m_ptr))
+	if (m_ptr->ml && is_original_ap(m_ptr))
 	{
 		/* Inate spell */
 		if (thrown_spell < 32*4)

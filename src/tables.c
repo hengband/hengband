@@ -6726,7 +6726,6 @@ option_type option_info[] =
 	"display_path",                 "Display actual path before shooting" },
 #endif
 
-
 	/*** Text Display Options ***/
 
 #ifdef JP
@@ -6833,6 +6832,13 @@ option_type option_info[] =
 	"exp_need",                     "Show the experience needed for next level" },
 #endif
 
+#ifdef JP
+	{ &ignore_unview,               FALSE, OPT_PAGE_TEXT, 2, 13,
+	"ignore_unview",                "視界外のモンスターの行動を表示しない" },
+#else
+	{ &ignore_unview,               FALSE, OPT_PAGE_TEXT, 2, 13,
+	"ignore_unview",                "Ignore whenever any monster does" },
+#endif
 
 	/*** Game-Play ***/
 

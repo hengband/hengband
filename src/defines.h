@@ -4076,6 +4076,12 @@
 #define is_original_ap(A) \
 	 (bool)(((A)->ap_r_idx == (A)->r_idx) ? TRUE : FALSE)
 
+/*
+ * Is the monster seen by the player?
+ */
+#define is_seen(A) \
+	((bool) ((A)->ml && (!ignore_unview || player_can_see_bold((A)->fy, (A)->fx))))
+
 
 /*** Option Definitions ***/
 
