@@ -722,14 +722,14 @@ static bool cave_gen(void)
 				if (force_rooms || (randint0(DUN_UNUSUAL) < dun_level))
 				{
 #ifdef FORCE_V_IDX
-					if (room_build(y, x, 8)) continue;
+					if (room_build(y, x, ROOM_BUILD_TYPE_GREATER_VAULT)) continue;
 #else
 					/* Type 8 -- Greater vault (4%) */
 					if (k < 4)
 					{
 						if (max_vault_ok > 1)
 						{
-							if (room_build(y, x, 8)) continue;
+							if (room_build(y, x, ROOM_BUILD_TYPE_GREATER_VAULT)) continue;
 						}
 						else
 						{
@@ -746,7 +746,7 @@ static bool cave_gen(void)
 					{
 						if (max_vault_ok > 0)
 						{
-							if (room_build(y, x, 7)) continue;
+							if (room_build(y, x, ROOM_BUILD_TYPE_LESSER_VAULT)) continue;
 						}
 						else
 						{
@@ -760,42 +760,42 @@ static bool cave_gen(void)
 
 
 					/* Type 10 -- Random vault (4%) */
-					if ((k < 14) && room_build(y, x, 10)) continue;
+					if ((k < 14) && room_build(y, x, ROOM_BUILD_TYPE_RANDOM_VAULT)) continue;
 
 					/* Type 5 -- Monster nest (8%) */
-					if ((k < 22) && room_build(y, x, 5)) continue;
+					if ((k < 22) && room_build(y, x, ROOM_BUILD_TYPE_NEST)) continue;
 
 					/* Type 6 -- Monster pit (10%) */
-					if ((k < 32) && room_build(y, x, 6)) continue;
+					if ((k < 32) && room_build(y, x, ROOM_BUILD_TYPE_PIT)) continue;
 
 					/* Type 13 -- Trapped monster pit (5%) */
-					if ((k < 37) && room_build(y, x, 13)) continue;
+					if ((k < 37) && room_build(y, x, ROOM_BUILD_TYPE_TRAP_PIT)) continue;
 
 					/* Type 14 -- Trapped room (5%) */
-					if ((k < 42) && room_build(y, x, 14)) continue;
+					if ((k < 42) && room_build(y, x, ROOM_BUILD_TYPE_TRAP)) continue;
 #endif
 				}
 
 				/* Type 2 -- Overlapping (25%) */
-				if ((k < 25) && room_build(y, x, 2)) continue;
+				if ((k < 25) && room_build(y, x, ROOM_BUILD_TYPE_OVERLAP)) continue;
 
 				/* Type 3 -- Cross room (25%) */
-				if ((k < 50) && room_build(y, x, 3)) continue;
+				if ((k < 50) && room_build(y, x, ROOM_BUILD_TYPE_CROSS)) continue;
 
 				if (d_info[dungeon_type].flags1 & DF1_NO_CAVE)
 				{
-					if (room_build(y, x, 4)) continue;
+					if (room_build(y, x, ROOM_BUILD_TYPE_INNER_FEAT)) continue;
 				}
 				else
 				{
 					/* Type 4 -- Large room (25%) */
-					if ((k < 75) && room_build(y, x, 4)) continue;
+					if ((k < 75) && room_build(y, x, ROOM_BUILD_TYPE_INNER_FEAT)) continue;
 
 					/* Type 11 -- Circular (10%) */
-					if ((k < 85) && room_build(y, x, 11)) continue;
+					if ((k < 85) && room_build(y, x, ROOM_BUILD_TYPE_OVAL)) continue;
 
 					/* Type 12 -- Crypt (15%) */
-					if ((k < 100) && room_build(y, x, 12)) continue;
+					if ((k < 100) && room_build(y, x, ROOM_BUILD_TYPE_CRYPT)) continue;
 				}
 			}
 
@@ -806,12 +806,12 @@ static bool cave_gen(void)
 			if (((k < dun_level) || (d_info[dungeon_type].flags1 & DF1_CAVE)) && (!cavern) && (!empty_level) && (laketype == 0) && !(d_info[dungeon_type].flags1 & DF1_NO_CAVE))
 			{
 				/* Type 9 -- Fractal cave */
-				if (room_build(y, x, 9)) continue;
+				if (room_build(y, x, ROOM_BUILD_TYPE_FRACAVE)) continue;
 			}
 			else
 			{
 				/* Attempt a "trivial" room */
-				if (room_build(y, x, 1)) continue;
+				if (room_build(y, x, ROOM_BUILD_TYPE_NORMAL)) continue;
 			}
 
 			continue;

@@ -1196,7 +1196,7 @@ static void process_monsters_counters(void)
 			bool test = FALSE;
 
 			/* Hack -- Require proximity */
-			if (m_ptr->cdis < 100)
+			if (m_ptr->cdis < AAF_LIMIT)
 			{
 				/* Handle "sensing radius" */
 				if (m_ptr->cdis <= (is_pet(m_ptr) ? ((r_ptr->aaf > MAX_SIGHT) ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf))
@@ -1238,7 +1238,7 @@ static void process_monsters_counters(void)
 					else
 					{
 						/* Wake up faster near the player */
-						if (m_ptr->cdis < 50) d = (100 / m_ptr->cdis);
+						if (m_ptr->cdis < AAF_LIMIT / 2) d = (AAF_LIMIT / m_ptr->cdis);
 
 						/* Hack -- amount of "waking" is affected by speed of player */
 						d = (d * SPEED_TO_ENERGY(p_ptr->pspeed)) / 10;

@@ -5544,33 +5544,34 @@ static void build_type14(int by0, int bx0)
 bool room_build(int by0, int bx0, int typ)
 {
 	/* Restrict level */
-	if ((dun_level < roomdep[typ]) && !ironman_rooms) return (FALSE);
+	if ((dun_level < roomdep[typ]) && !ironman_rooms) return FALSE;
 
 	/* Restrict "crowded" rooms */
-	if ((dun->crowded >= 2) && ((typ == 5) || (typ == 6) || (typ == 13))) return (FALSE);
+	if ((dun->crowded >= 2) && ((typ == ROOM_BUILD_TYPE_NEST) ||
+		(typ == ROOM_BUILD_TYPE_PIT) || (typ == ROOM_BUILD_TYPE_TRAP_PIT))) return FALSE;
 
 	/* Build a room */
 	switch (typ)
 	{
-		/* Build an appropriate room */
-		case 14: build_type14(by0, bx0); break;
-		case 13: build_type13(by0, bx0); break;
-		case 12: build_type12(by0, bx0); break;
-		case 11: build_type11(by0, bx0); break;
-		case 10: build_type10(by0, bx0); break;
-		case 9: build_type9(by0, bx0); break;
-		case 8: build_type8(by0, bx0); break;
-		case 7: build_type7(by0, bx0); break;
-		case 6: build_type6(by0, bx0, FALSE); break;
-		case 5: build_type5(by0, bx0, FALSE); break;
-		case 4: build_type4(by0, bx0); break;
-		case 3: build_type3(by0, bx0); break;
-		case 2: build_type2(by0, bx0); break;
-		case 1: build_type1(by0, bx0); break;
+	/* Build an appropriate room */
+	case ROOM_BUILD_TYPE_NORMAL:        build_type1(by0, bx0); break;
+	case ROOM_BUILD_TYPE_OVERLAP:       build_type2(by0, bx0); break;
+	case ROOM_BUILD_TYPE_CROSS:         build_type3(by0, bx0); break;
+	case ROOM_BUILD_TYPE_INNER_FEAT:    build_type4(by0, bx0); break;
+	case ROOM_BUILD_TYPE_NEST:          build_type5(by0, bx0, FALSE); break;
+	case ROOM_BUILD_TYPE_PIT:           build_type6(by0, bx0, FALSE); break;
+	case ROOM_BUILD_TYPE_LESSER_VAULT:  build_type7(by0, bx0); break;
+	case ROOM_BUILD_TYPE_GREATER_VAULT: build_type8(by0, bx0); break;
+	case ROOM_BUILD_TYPE_FRACAVE:       build_type9(by0, bx0); break;
+	case ROOM_BUILD_TYPE_RANDOM_VAULT:  build_type10(by0, bx0); break;
+	case ROOM_BUILD_TYPE_OVAL:          build_type11(by0, bx0); break;
+	case ROOM_BUILD_TYPE_CRYPT:         build_type12(by0, bx0); break;
+	case ROOM_BUILD_TYPE_TRAP_PIT:      build_type13(by0, bx0); break;
+	case ROOM_BUILD_TYPE_TRAP:          build_type14(by0, bx0); break;
 
-		/* Paranoia */
-		default: return (FALSE);
+	/* Paranoia */
+	default: return FALSE;
 	}
 
-	return (TRUE);
+	return TRUE;
 }

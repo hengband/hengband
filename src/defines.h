@@ -604,6 +604,7 @@
  */
 #define MAX_SIGHT       20      /* Maximum view distance */
 #define MAX_RANGE       (p_ptr->inside_battle ? 36 : 18)      /* Maximum range (spells, etc) */
+#define AAF_LIMIT       100     /* Limit of sensing radius */
 
 
 
@@ -2385,6 +2386,23 @@
 #define CAVE_OBJECT  0x1000    /* mirror */
 #define CAVE_UNSAFE     0x2000    /* Might have trap */
 #define CAVE_IN_DETECT  0x4000    /* trap detected area (inner circle only) */
+
+
+/* Room types for room_build() */
+#define ROOM_BUILD_TYPE_NORMAL         1
+#define ROOM_BUILD_TYPE_OVERLAP        2
+#define ROOM_BUILD_TYPE_CROSS          3
+#define ROOM_BUILD_TYPE_INNER_FEAT     4
+#define ROOM_BUILD_TYPE_NEST           5
+#define ROOM_BUILD_TYPE_PIT            6
+#define ROOM_BUILD_TYPE_LESSER_VAULT   7
+#define ROOM_BUILD_TYPE_GREATER_VAULT  8
+#define ROOM_BUILD_TYPE_FRACAVE        9
+#define ROOM_BUILD_TYPE_RANDOM_VAULT  10
+#define ROOM_BUILD_TYPE_OVAL          11
+#define ROOM_BUILD_TYPE_CRYPT         12
+#define ROOM_BUILD_TYPE_TRAP_PIT      13
+#define ROOM_BUILD_TYPE_TRAP          14
 
 
 /*
