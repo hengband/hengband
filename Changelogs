@@ -1,4 +1,224 @@
+2002-09-07  Takeshi Mogami  <mogami@cvs>
+
+	* src/spells2.c 1.55:
+	地震が起きたときに未感知のトラップが勝手に感知済みになっていたので修正して
+	何も影響しないようにした。1.3.0までは未感知のトラップは問答無用で消滅して
+	いたが、感知済みトラップは壁に潰されない限り消えないので、後者に合せて修正した。
+
+	* lib/help/jlicense.txt 1.1.2.2:
+	rr9氏に聞いた内容を参考に翻訳修正。
+
+	* src/object2.c 1.43.2.4:
+	大防御の守りの指輪のACを +7 増やした。
+
+	* src/wizard2.c 1.24.2.1:
+	^Ajでダンジョン再生成を繰り返すとどんどん p_ptr->energy_need が減っていって
+	時止め状態になってしまうバグ修正。
+
+2002-09-06  habu  <habu@cvs>
+
+	* src/melee2.c 1.26.2.2:
+	cave_info.whenの仕様が変わってモンスターが逃げるコード正しく機能していなかったので修正。
+
+2002-09-06  Takeshi Mogami  <mogami@cvs>
+
+	* src/monster2.c 1.41, src/mspells1.c 1.32, src/object2.c 1.59, src/racial.c 1.23, src/rooms.c 1.17, src/spells1.c 1.39, src/spells2.c 1.54, src/spells3.c 1.50, src/streams.c 1.4, src/xtra2.c 1.47, configure.in 1.20, lib/edit/f_info_j.txt 1.9, lib/file/news.txt 1.14, lib/file/news_j.txt 1.13, src/cave.c 1.59, src/cmd1.c 1.53, src/cmd2.c 1.33, src/defines.h 1.75, src/dungeon.c 1.70, src/externs.h 1.77, src/generate.c 1.30, src/grid.c 1.5, src/load.c 1.39, src/melee1.c 1.21, src/melee2.c 1.31, src/mind.c 1.14:
+	c_ptr->mimicを活用する一連の改造：
+	* トラップは各罠の地形をmimicで床に見せる→特定の場所に固有なトラップを配置可能。
+	* 隠しドアは普通のドアをmimicで壁に見せる→山脈や溶岩等にも隠しドアが存在可能。
+	* 鏡、守りのルーン、爆発のルーンは、CAVE_OBJECTフラグ+それぞれへのmimicで表現。
+
+	* lib/edit/a_info_j.txt 1.27, src/cmd1.c 1.52:
+	理力の計算式を 倍率＝元の倍率×(1.5)+2 に変更。ゴルン・ノヴァにKILL_DEMON付加。
+
+2002-09-06  habu  <habu@cvs>
+
+	* src/melee2.c 1.26.2.1:
+	モンスターが戦いを決意した時にヘルスバーが恐怖状態のまま更新されていなかったのを修正。
+
+	* src/cave.c 1.53.2.2:
+	モンスターのプレイヤー追跡コードで、もはや使われていないflow_nが残っていたため、forget_flow()が動いていなかったのを修正。
+
+2002-09-06  xdd  <xdd@cvs>
+
+	* src/main-mac-carbon.c 1.6:
+	MPWでコンパイル出来なかった問題の修正。
+
+	* src/main-mac-carbon.c 1.2.2.2:
+	MPWでコンパイル出来なかった問題の修正。
+
+2002-09-05  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd4.c 1.46.2.1:
+	1.3.0から塔のクエストの情報がダンプ等(1.2.0ではクエスト情報コマンドのみ)で
+	間違った表示がされていたバグ修正をマージ。
+
+	* src/cmd4.c 1.55, src/files.c 1.80:
+	塔のクエストの情報がダンプ等で間違った表示がされていたバグ修正。
+	q_info_j.txt を読む前に quest[].info を使っていたため正しい値になっていなかった。
+
+	* src/mindtips.h 1.9:
+	鏡の封印の説明の英語版がtypoがあり単語そのものも違った：vanich → eliminates
+
+2002-09-05  habu  <habu@cvs>
+
+	* src/cmd6.c 1.23.2.2:
+	鑑定のロッドで鑑定したアイテムが自動破壊がされた時に持ちもの欄がずれて関係ないアイテムが充電中になるのを修正。
+
+2002-09-04  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd4.c 1.54:
+	オプションの自動セーブ間隔の設定をする為に'F'を押すとヘルプが表示
+	されていたバグ修正。break;が一つ抜けていた。
+
+	* lib/help/Makefile.am 1.5.4.1:
+	jlicense.txtを追加。
+
+	* lib/help/jlicense.txt 1.1: New file.
+
+	* lib/help/j_general.txt 1.1.20.1, lib/help/j_trans.txt 1.1.20.1, lib/help/jgeneral.hlp 1.4.6.1, lib/help/jlicense.txt 1.1.2.1, lib/help/jspecial.hlp 1.2.6.1:
+	新しい使用許諾文書をとりあえず追加。Angband license を中心に据えて変更
+	を加えて再配布する場合の変愚蛮怒独自の条件を追加。dual license につい
+	ての注意も付加。また、現在の Angband OpenSource Initiative の状況につ
+	いてthangorodorimの文章の翻訳を添付。
+
+2002-09-04  habu  <habu@cvs>
+
+	* src/mane.c 1.10.4.1:
+	ものまねの実際の失敗率計算に器用等が考慮されてなかったので修正。
+
+2002-09-03  habu  <habu@cvs>
+
+	* src/object2.c 1.58:
+	鋭敏のエゴのESP追加の仕様変更の時、鋭敏の冠のほうだけ変更して鋭敏の兜を変更し忘れていたので、兜のほうも冠と同じように変更した。
+
+2002-09-03  xdd  <xdd@cvs>
+
+	* src/main-mac-carbon.c 1.2.2.1:
+	CPUが高負荷になる問題の修正。タイル幅高の選択でクラッシュしていた問題の修正。ウェイトを大きくしてもアニメーションしていなかった問題の修正。透過処理の修正。
+
+2002-09-03  habu  <habu@cvs>
+
+	* src/spells1.c 1.29.2.3:
+	project_p()内でwhoが-1(箱の爆発から発生したダメージ)の時にそのままモンスター配列を読んで配列外アクセスを起こしていたので修正し、罠で死んだ場合を考慮してkiller文字列にに"罠"を入れるようにした。開発版のほうでkiller文字列の"罠"の英語版を作るのを忘れていたのも一緒に修正。
+
+	* src/spells1.c 1.38:
+	killer文字列の"罠"の英語版を作るのを忘れていたので追加。
+
+	* src/spells1.c 1.37:
+	project_p()内でwhoが-1(箱の爆発から発生したダメージ)の時にそのままモンスター配列を読んで配列外アクセスを起こしていたので修正し、罠で死んだ場合を考慮してkiller文字列にに"罠"を入れるようにした。
+
+2002-09-02  xdd  <xdd@cvs>
+
+	* src/main-mac-carbon.c 1.5:
+	CPUが高負荷になる問題の修正。
+	タイル幅高の選択でクラッシュしていた問題の修正。
+	ゲーム中、ウェイトを大きくしてもアニメーションしていなかった問題の修正
+	透過処理の修正
+
+2002-09-02  habu  <habu@cvs>
+
+	* src/init2.c 1.12.4.1:
+	モンスターソート用に確保した配列を開放していず、メモリリークしていたのを修正。
+
+	* src/spells1.c 1.29.2.2:
+	who_nameを初期化していないためにkillerにstrcpyした時にバッファオーバーする事があったのでwho_nameをヌル文字列で初期化するように修正。
+
+	* src/flavor.c 1.17.4.1:
+	モンスターボールや像などのアイテムはpvalからモンスター番号を取得しているが、すべてのアイテムでモンスター配列を見ていたため食糧などの巨大なpvalを持つアイテムで配列外アクセスが起こっていたのを修正。
+
+2002-09-02  Takeshi Mogami  <mogami@cvs>
+
+	* src/readdib.c 1.1.1.1.28.1:
+	win版でAdam Boltタイルをインストールしてない状態で読み込もうとすると
+	ファイル名が文字化けしたエラーダイアログが出ていたバグ修正。
+
+2002-09-02  habu  <habu@cvs>
+
+	* src/flavor.c 1.21:
+	モンスターボールや像などのアイテムはpvalからモンスター番号を取得しているが、すべてのアイテムでモンスター配列を見ていたため食糧などの巨大なpvalを持つアイテムで配列外アクセスが起こっていたのを修正。
+
+2002-09-02  Takeshi Mogami  <mogami@cvs>
+
+	* src/cave.c 1.57, src/object2.c 1.57, src/spells1.c 1.35, src/spells2.c 1.53:
+	罠ピットの開門トラップが感知前に解除可能だったバグ修正。
+
+2002-09-02  iks  <iks@cvs>
+
+	* src/ang_eng.rc 1.4, src/angband.rc 1.5, src/main-win.c 1.19:
+	サブウィンドウを前面に固定する機能を追加。
+
+2002-09-01  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/r_info_j.txt 1.45.2.2:
+	ウォーケンに『』付加。アイテム落すように修正。
+
+	* lib/edit/k_info_j.txt 1.29.2.1:
+	隠密エッセンスの増殖バグ対策で、エルフのクロークと黒装束のpvalを標準で1にした。
+	通常は1d4で上書きされるから影響ないが、凡庸やエッセンス抽出すると(+1)になる。
+
+2002-09-01  xdd  <xdd@cvs>
+
+	* src/main-mac-carbon.c 1.4:
+	main-mac.cをCarbonに対応。2倍幅タイル表示可能
+
+2002-09-01  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd3.c 1.28:
+	モンスター調査で^Mを押して名前を入力せずにキャンセルすると画面が真っ暗になるバグ修正。
+
+2002-08-31  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd2.c 1.32, src/object2.c 1.56:
+	射撃のときに*スレイ*が適用されていなったので修正。英語版でエッセンスを付加する
+	ときのスレイのリストの順番をきれいに直した。
+
+2002-08-31  iks  <iks@cvs>
+
+	* src/mane.c 1.11:
+	ものまねの実際の失敗率計算に器用等が考慮されてなかったので修正。
+
+2002-08-31  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.66:
+	自動拾いの修正値のキーワードがautopick.txt等では「修正値nn以上の」と
+	書いてあるのに「修正値がnn以上の」でないと受け付けなかったので前者に統一。
+	元々pvalを持たないアイテムの場合は命中修正やダメージ修正で判定するように
+	してあったが、エゴアイテムの中には切れ味の武器のようにmax_pvalが0なのに
+	実際はpvalを与えられているものがあり、キーワードが正常に動作しなかった
+	のでmax_pvalを見ないように修正。
+
+2002-08-30  Takeshi Mogami  <mogami@cvs>
+
+	* src/object1.c 1.40.2.3, src/variable.c 1.28.2.1:
+	メインウィンドウの幅を大きくしたとき、アイテムリスト及び装備リストを表示に
+	おいて配列外アクセスが起きてwindowsでは a) の位置のアイテム名が途中で切れる
+	という症状が出ていたバグを修正。
+
+2002-08-30  habu  <habu@cvs>
+
+	* src/xtra1.c 1.50:
+	小手のpvalが0だと装備しても魔法が唱えにくくならなくなっていたバグを修正。have_flag()を使って書き直した時に間違って括弧を減らしてしまったのが原因らしい。
+
+2002-08-29  Takeshi Mogami  <mogami@cvs>
+
+	* src/variable.c 1.29, src/object1.c 1.48:
+	メインウィンドウの幅を大きくしたとき、アイテムリスト及び装備リストを表示に
+	おいて配列外アクセスが起きてwindowsでは a) の位置のアイテム名が途中で切れる
+	という症状が出ていたバグを修正。
+
 2002-08-27  Takeshi Mogami  <mogami@cvs>
+
+	* src/util.c 1.33:
+	errr errr_tmp; というグローバル変数を以前にコード整理したときに消して
+	しまったが、MPWでは一箇所でこれを使っていたのでエラーが出た。
+	ローカル変数に書き変えて修正。
+
+	* src/cmd3.c 1.27:
+	耐性銘刻みのデータ構造体の英語版の定義に一部日本語版の形式になってしまっ
+	てたのを修正。
+
+	* Changelogs 1.55: 更新。
 
 	* lib/help/jversion.txt 1.11.2.1, lib/help/version.txt 1.11.2.1:
 	version.txt、 1.2.0と1.3.0両用。
