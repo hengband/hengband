@@ -6562,6 +6562,7 @@ static void do_cmd_knowledge_artifacts(void)
 
 /*
  * Display known uniques
+ * With "XTRA HACK UNIQHIST" (Originally from XAngband)
  */
 static void do_cmd_knowledge_uniques(void)
 {
@@ -6573,10 +6574,19 @@ static void do_cmd_knowledge_uniques(void)
 
 	char file_name[1024];
 
+	int n_alive[10];
+	int n_alive_surface = 0;
+	int n_alive_over100 = 0;
+	int n_alive_total = 0;
+	int max_lev = -1;
+
+	for (i = 0; i < 10; i++) n_alive[i] = 0;
+
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
 
-	if (!fff) {
+	if (!fff)
+	{
 #ifdef JP
 	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
 #else
@@ -6593,9 +6603,36 @@ static void do_cmd_knowledge_uniques(void)
 	for (i = 1; i < max_r_idx; i++)
 	{
 		monster_race *r_ptr = &r_info[i];
+		int          lev;
 
-		/* Use that monster */
-		if (r_ptr->name) who[n++] = i;
+		if (!r_ptr->name) continue;
+
+		/* Require unique monsters */
+		if (!(r_ptr->flags1 & RF1_UNIQUE)) continue;
+
+		/* Only display "known" uniques */
+		if (!cheat_know && !r_ptr->r_sights) continue;
+
+		/* Only print rarity <= 100 uniques */
+		if (!r_ptr->rarity || ((r_ptr->rarity > 100) && !(r_ptr->flags1 & RF1_QUESTOR))) continue;
+
+		/* Only "alive" uniques */
+		if (r_ptr->max_num == 0) continue;
+
+		if (r_ptr->level)
+		{
+			lev = (r_ptr->level - 1) / 10;
+			if (lev < 10)
+			{
+				n_alive[lev]++;
+				if (max_lev < lev) max_lev = lev;
+			}
+			else n_alive_over100++;
+		}
+		else n_alive_surface++;
+
+		/* Collect "appropriate" monsters */
+		who[n++] = i;
 	}
 
 	/* Select the sort method */
@@ -6605,31 +6642,57 @@ static void do_cmd_knowledge_uniques(void)
 	/* Sort the array by dungeon depth of monsters */
 	ang_sort(who, &why, n);
 
+	if (n_alive_surface)
+	{
+#ifdef JP
+		fprintf(fff, "     地上  生存: %3d体\n", n_alive_surface);
+#else
+		fprintf(fff, "      Surface  alive: %3d\n", n_alive_surface);
+#endif
+		n_alive_total += n_alive_surface;
+	}
+	for (i = 0; i <= max_lev; i++)
+	{
+#ifdef JP
+		fprintf(fff, "%3d-%3d階  生存: %3d体\n", 1 + i * 10, 10 + i * 10, n_alive[i]);
+#else
+		fprintf(fff, "Level %3d-%3d  alive: %3d\n", 1 + i * 10, 10 + i * 10, n_alive[i]);
+#endif
+		n_alive_total += n_alive[i];
+	}
+	if (n_alive_over100)
+	{
+#ifdef JP
+		fprintf(fff, "101-   階  生存: %3d体\n", n_alive_over100);
+#else
+		fprintf(fff, "Level 101-     alive: %3d\n", n_alive_over100);
+#endif
+		n_alive_total += n_alive_over100;
+	}
+
+	if (n_alive_total)
+	{
+		fprintf(fff, "---------  -----------\n", n_alive_total);
+#ifdef JP
+		fprintf(fff, "     合計  生存: %3d体\n", n_alive_total);
+#else
+		fprintf(fff, "        Total  alive: %3d\n", n_alive_total);
+#endif
+		fputc('\n', fff);
+	}
+	else fputs("現在は既知の生存ユニークはいません。\n", fff);
+
 	/* Scan the monster races */
 	for (k = 0; k < n; k++)
 	{
 		monster_race *r_ptr = &r_info[who[k]];
 
-		/* Only print Uniques (rarity <= 100) */
-		if ((r_ptr->flags1 & RF1_UNIQUE) && r_ptr->rarity && (r_ptr->rarity <= 100))
-		{
-			bool dead = (r_ptr->max_num == 0);
-
-			if (dead) continue;
-
-			/* Only display "known" uniques */
-			if (dead || cheat_know || r_ptr->r_sights)
-			{
-				/* Print a message */
+		/* Print a message */
 #ifdef JP
-				fprintf(fff, "     %sはまだ生きている。\n",
-					(r_name + r_ptr->name));
+		fprintf(fff, "     %s (レベル%d)\n", r_name + r_ptr->name, r_ptr->level);
 #else
-				fprintf(fff, "     %s is alive\n",
-					(r_name + r_ptr->name));
+		fprintf(fff, "     %s (level %d)\n", r_name + r_ptr->name, r_ptr->level);
 #endif
-			}
-		}
 	}
 
 	/* Free the "who" array */
