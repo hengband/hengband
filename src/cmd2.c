@@ -311,7 +311,7 @@ if (get_check("本当にこの階を去りますか？"))
 			/* Go down */
 			if (c_ptr->feat == FEAT_MORE_MORE) down_num += 2;
 			else down_num += 1;
-			if (!quest_number(dun_level+down_num) && (dun_level < d_info[dungeon_type].maxdepth - 1 - down_num) && one_in_(13) && !fall_trap && dun_level)
+			if (!quest_number(dun_level+down_num) && (dun_level < d_info[dungeon_type].maxdepth - 1 - down_num) && one_in_(13) && !fall_trap && dun_level && !ironman_downward)
 			{
 				down_num++;
 #ifdef JP
