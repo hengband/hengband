@@ -1,4 +1,141 @@
+2002-08-27  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/jversion.txt 1.11.2.1, lib/help/version.txt 1.11.2.1:
+	version.txt、 1.2.0と1.3.0両用。
+
+	* lib/edit/k_info_j.txt 1.32, src/cmd1.c 1.51:
+	死の大鎌のKILL_DRAGONを消してSLAY_DRAGONだけにした。
+	死の大鎌のダメージが返ってくるときのスレイの計算も修正(ついでに少々バグ修正)。
+
+	* lib/edit/a_info_j.txt 1.26:
+	ベルシエルの冠にEASY_SPELL付加。
+
+2002-08-27  habu  <habu@cvs>
+
+	* lib/edit/e_info_j.txt 1.26, src/defines.h 1.74, src/init1.c 1.44, src/object1.c 1.47, src/object2.c 1.55, src/wizard2.c 1.26, src/xtra1.c 1.49:
+	魔法の難易度を下げるEASY_SPELLをフラグ化した。同時に大賢者のアミュレットにEASY_SPELLフラグを追加した。
+
+	* lib/edit/e_info_j.txt 1.25:
+	大賢者のアミュレットに警告能力を追加。
+
+	* lib/edit/k_info_j.txt 1.31:
+	賢者のアミュレットに赤外線視力を追加。
+
+	* src/object2.c 1.54:
+	賢者のアミュレットに下級ESPが1〜3個付くようにした。(add_esp_weak()を使用)
+
+2002-08-26  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/jdefend.hlp 1.4, lib/help/jdungeon.hlp 1.3, lib/help/jgeneral.hlp 1.5, lib/help/jhelp.hlp 1.7, lib/help/jhelpinfo.txt 1.5, lib/help/jmagic.hlp 1.4, lib/help/jmagic.txt 1.8, lib/help/jmonster.hlp 1.3, lib/help/jobjects.hlp 1.4, lib/help/joption.txt 1.14, lib/help/jpref.hlp 1.3, lib/help/jraceclas.hlp 1.2, lib/help/jraceclas.txt 1.5, lib/help/jspecial.hlp 1.3, lib/help/jtown.hlp 1.3, lib/help/magic.txt 1.10, lib/help/option.txt 1.15, lib/help/raceclas.txt 1.6, src/birth.c 1.49, src/cmd4.c 1.53, src/files.c 1.79, autopick.txt 1.18, autopick_eng.txt 1.20, lib/help/birth.hlp 1.6, lib/help/birth.txt 1.10, lib/help/general.hlp 1.6, lib/help/jattack.hlp 1.5, lib/help/jbirth.hlp 1.6, lib/help/jbirth.txt 1.9:
+	キャラクター生成中やオプション設定中に'?'を押すとヘルプファイルの中の
+	現在の画面に対応した項目を表示するようにした。(Eyangbandのまね)
+
+2002-08-24  Takeshi Mogami  <mogami@cvs>
+
+	* src/spells2.c 1.41.2.2:
+	ライトエリアで、部屋の一部でない壁や木が照らされなかったバグ修正。
+
+	* src/spells2.c 1.51:
+	未鑑定のトラップ感知アイテムを使った後で、無意味なタイミングで警告メッセージ
+	が出てしまっていたので修正。
+
+2002-08-23  Takeshi Mogami  <mogami@cvs>
+
+	* src/object2.c 1.43.2.3:
+	"Ring of Warning pulsates" should be "Your Ring ...".
+
+	* src/object1.c 1.46: ESPの説明文を改善。
+
+	* src/cmd1.c 1.44.4.2:
+	返って来た死の大鎌のダメージ計算でダメージ修正後にマイナスになったとき、
+	0に直すのを忘れていてヒットポイントが増えてしまっていたのを修正。
+
+	* src/object2.c 1.52:
+	今後フラグを増やしたときの為に、裸の数値はなるべく使わない方が良いので
+	一箇所残っていた art_flags[3]等の数値による添字を TR_FLAG_SIZEを使って
+	forループで書き換えた。
+
+	* lib/help/jobjects.txt 1.8, lib/help/objects.txt 1.7:
+	ESPの耐性自動刻みに対応してhelp更新。
+	{!!}と{.}と{$}の説明が無かったので追加。
+
+	* src/files.c 1.78:
+	type: constraction -> construction
+
+2002-08-22  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.56.2.3:
+	MPWのバグらしき現象で、pre-process中に収集中の「収」の字の2バイト目が
+	勝手に消えてしまうので、消えないように強引に漢字コードを書き込んだ。
+
+	* lib/help/raceclas.txt 1.5: typo修正。
+
+2002-08-21  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/jpref.txt 1.14, lib/help/pref.txt 1.17, src/autopick.c 1.64, autopick.txt 1.17, autopick_eng.txt 1.19:
+	再再修正。':'もeditファイルの設定行や自動拾いの区切り記号と重なるのでやばかった。
+	';'に変更。
+
+	* src/artifact.c 1.26, src/externs.h 1.76, src/object2.c 1.51:
+	警告の指輪に1/3の確率で下級ESP付加。
+
+2002-08-20  Takeshi Mogami  <mogami@cvs>
+
+	* autopick.txt 1.16, autopick_eng.txt 1.18, lib/help/jpref.txt 1.13, lib/help/pref.txt 1.16, src/autopick.c 1.63:
+	確認の後拾う設定文字を'*'にしたのは失敗だった。「*鑑定*済みの」というキーワードを
+	忘れていた。そこで文字を':'に変更。
+
+	* src/dungeon.c 1.61.2.4:
+	経験値を吸い取る能力(TRC_DRAIN_EXP)がアンドロイドの強化度も吸い取って不気味
+	だったので、アンドロイドでは無効になるように修正。
+
+	* src/generate.c 1.25.2.1:
+	vaultの中等で階段がトラップと同じ場所に配置されて、トラップを発見したときに
+	階段が消える事があったバグを修正。
+
+	* src/dungeon.c 1.69:
+	薬等に対するサイコメトリーは無価値の薬を{壊れている}と判定する効果はあったので、
+	効果を無くすのはやめて再修正。
+	薬等については直後の自動破壊だけを無効にするようにした。
+
+	* src/dungeon.c 1.68:
+	超能力者のサイコメトリーでアイテムのfeelingがわかった瞬間に自動破壊適用。
+	今までは未判明の薬等もサイコメトリーの効果を受けて無意味に{並}と判定
+	されていたが、自動破壊される危険があるので、サイコメトリーの影響は
+	武器や装飾品だけに制限した。
+
+	* src/spells2.c 1.50:
+	view_torch_gridsが yes のときは暗闇生成で暗くなった床のCAVE_MARKを消さない。
+
+	* autopick.txt 1.15, autopick_eng.txt 1.17, lib/help/jpref.txt 1.12, lib/help/pref.txt 1.15:
+	'*'に導入に伴ってヘルプの更新。
+
+	* src/autopick.c 1.62, src/cave.c 1.56, src/cmd1.c 1.49, src/cmd2.c 1.31, src/cmd4.c 1.52, src/defines.h 1.73, src/melee1.c 1.20, src/melee2.c 1.29, src/object1.c 1.45, src/object2.c 1.50, src/spells2.c 1.49:
+	heng-mlに来た Kieron Dunbar さんのパッチをで持ち物欄のスペースがなくて
+	自動拾いに設定されたアイテムを拾えないときに、「拾えない」事を表わすメッ
+	セージが2度出てしまう現象を解決。
+	また、自動拾い設定のフラグ'~'、'!'、に加えて新しく'*'を導入：
+	carry_query_flag で出るのと同様な確認メッセージを自動拾いの直前に出す。
+	ただし、'n'でキャンセルしても何度も出るのがちょっとわずらわしいと思っ
+	たので一度'n'を押すとそれをフラグで覚えておいて2度と聞かないようにした。
+
+2002-08-16  iks  <iks@cvs>
+
+	* src/dungeon.c 1.67:
+	経験値を吸い取る能力(TRC_DRAIN_EXP)がアンドロイドの強化度も吸い取って不気味だったので、アンドロイドでは無効になるように修正。
+
+2002-08-16  Takeshi Mogami  <mogami@cvs>
+
+	* src/files.c 1.77:
+	死亡後のダンプファイル書き出しで、「現存するファイル %s に上書きしますか? 」
+	の質問メッセージがメッセージログに残ってしまっていたので修正。
+
+	* src/spells2.c 1.48:
+	回復モンスター等が跳ね返るのは仕様。という事でPROJECT_REFLECTABLE付加。
+
 2002-08-15  Takeshi Mogami  <mogami@cvs>
+
+	* Changelogs 1.54: 更新
 
 	* src/spells2.c 1.47, src/cmd1.c 1.48, src/cmd6.c 1.31, src/defines.h 1.72, src/hissatsu.c 1.14, src/melee1.c 1.19, src/melee2.c 1.28, src/mind.c 1.13, src/monster2.c 1.40, src/mspells1.c 1.31, src/mspells2.c 1.24, src/racial.c 1.22, src/spells1.c 1.34:
 	project_p()にフラグを渡すようにしたため、反射しない魔法には全てPROJECT_NO_REFを
