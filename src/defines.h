@@ -730,6 +730,11 @@
 #define INVEN_FEET      35
 
 /*
+ * used for get_random_ego()
+ */
+#define INVEN_AMMO     23
+
+/*
  * Total number of inventory slots (hard-coded).
  */
 #define INVEN_TOTAL     36
@@ -1433,10 +1438,10 @@
 #define EGO_KILL_ANIMAL         88
 #define EGO_KILL_EVIL           89
 #define EGO_KILL_UNDEAD         90
-#define EGO_KILL_DEMON          83
-#define EGO_KILL_ORC            84
-#define EGO_KILL_TROLL          85
-#define EGO_KILL_GIANT          86
+#define EGO_KILL_DEMON          91
+#define EGO_KILL_ORC            92
+#define EGO_KILL_TROLL          93
+#define EGO_KILL_GIANT          94
 #define EGO_KILL_DRAGON         95
 #define EGO_VAMPIRIC            96
 #define EGO_PRISM               97
