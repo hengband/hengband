@@ -837,6 +837,7 @@ static void prt_status(void)
 static void prt_title(void)
 {
 	cptr p = "";
+	char str[14];
 
 	/* Wizard */
 	if (wizard)
@@ -878,9 +879,13 @@ static void prt_title(void)
 	/* Normal */
 	else
 	{
-		p = player_title[p_ptr->pclass][(p_ptr->lev - 1) / 5];
-
-
+#ifdef JP
+		mb_strlcpy(str, player_title[p_ptr->pclass][(p_ptr->lev - 1) / 5], 14);
+#else
+		strncpy(str, player_title[p_ptr->pclass][(p_ptr->lev - 1) / 5], 13);
+		str[13] = '\0';
+#endif
+		p = str;
 	}
 
 	prt_field(p, ROW_TITLE, COL_TITLE);
