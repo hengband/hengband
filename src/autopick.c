@@ -1358,7 +1358,7 @@ static void free_text_lines(cptr *lines_list)
 		string_free(lines_list[lines]);
 
 	/* free list of pointers */
-	C_FREE(lines_list, MAX_LINES, cptr *);
+	C_FREE((char **)lines_list, MAX_LINES, char *);
 }
 
 
