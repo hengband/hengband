@@ -51,7 +51,6 @@ cptr spell_categoly_name(int tval)
  * The "known" should be TRUE for cast/pray, FALSE for study
  */
 
-bool select_spellbook=FALSE;
 bool select_the_force=FALSE;
 
 static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm)
@@ -433,15 +432,12 @@ s = "読める本がない。";
 	s = "You have no books that you can read.";
 #endif
 
-	select_spellbook=TRUE;
 	if (p_ptr->pclass == CLASS_FORCETRAINER)
 		select_the_force = TRUE;
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))){
-	    select_spellbook = FALSE;
 	    select_the_force = FALSE;
 	    return;
 	}
-	select_spellbook = FALSE;
 	select_the_force = FALSE;
 
 	if (item == 1111) { /* the_force */
@@ -698,9 +694,7 @@ s = "読める本がない。";
 	s = "You have no books that you can read.";
 #endif
 
-	select_spellbook=TRUE;
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
-	select_spellbook=FALSE;
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
@@ -4783,15 +4777,12 @@ s = "呪文書がない！";
 	s = "You have no spell books!";
 #endif
 
-	select_spellbook=TRUE;
 	if (p_ptr->pclass == CLASS_FORCETRAINER)
 		select_the_force = TRUE;
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))){
-	    select_spellbook = FALSE;
 	    select_the_force = FALSE;
 	    return;
 	}
-	select_spellbook = FALSE;
 	select_the_force = FALSE;
 
 	if (item == 1111) { /* the_force */

@@ -4597,6 +4597,107 @@ void display_equip(void)
 
 
 
+/*
+ * Find the "first" inventory object with the given "tag".
+ *
+ * A "tag" is a numeral "n" appearing as "@n" anywhere in the
+ * inscription of an object.  Alphabetical characters don't work as a
+ * tag in this form.
+ *
+ * Also, the tag "@xn" will work as well, where "n" is a any tag-char,
+ * and "x" is the "current" command_cmd code.
+ */
+static int get_tag(int *cp, char tag)
+{
+	int i;
+	cptr s;
+
+
+	/**** Find a tag in the form of {@x#} (allow alphabet tag) ***/
+
+	/* Check every object */
+	for (i = 0; i < INVEN_TOTAL; ++i)
+	{
+		object_type *o_ptr = &inventory[i];
+
+		/* Skip non-objects */
+		if (!o_ptr->k_idx) continue;
+
+		/* Skip empty inscriptions */
+		if (!o_ptr->inscription) continue;
+
+		/* Skip non-choice */
+		if (!item_tester_okay(o_ptr)) continue;
+
+		/* Find a '@' */
+		s = strchr(quark_str(o_ptr->inscription), '@');
+
+		/* Process all tags */
+		while (s)
+		{
+			/* Check the special tags */
+			if ((s[1] == command_cmd) && (s[2] == tag))
+			{
+				/* Save the actual inventory ID */
+				*cp = i;
+
+				/* Success */
+				return (TRUE);
+			}
+
+			/* Find another '@' */
+			s = strchr(s + 1, '@');
+		}
+	}
+
+
+	/**** Find a tag in the form of {@#} (allows only numerals)  ***/
+
+	/* Don't allow {@#} with '#' being alphabet */
+	if (tag < '0' || '9' < tag)
+	{
+		/* No such tag */
+		return FALSE;
+	}
+
+	/* Check every object */
+	for (i = 0; i < INVEN_TOTAL; ++i)
+	{
+		object_type *o_ptr = &inventory[i];
+
+		/* Skip non-objects */
+		if (!o_ptr->k_idx) continue;
+
+		/* Skip empty inscriptions */
+		if (!o_ptr->inscription) continue;
+
+		/* Skip non-choice */
+		if (!item_tester_okay(o_ptr)) continue;
+
+		/* Find a '@' */
+		s = strchr(quark_str(o_ptr->inscription), '@');
+
+		/* Process all tags */
+		while (s)
+		{
+			/* Check the normal tags */
+			if (s[1] == tag)
+			{
+				/* Save the actual inventory ID */
+				*cp = i;
+
+				/* Success */
+				return (TRUE);
+			}
+
+			/* Find another '@' */
+			s = strchr(s + 1, '@');
+		}
+	}
+
+	/* No such tag */
+	return (FALSE);
+}
 
 
 
@@ -4607,6 +4708,7 @@ void display_equip(void)
  */
 int show_inven(int target_item)
 {
+	cptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	int             i, j, k, l, z = 0;
 	int             col, cur_col, len;
 	object_type     *o_ptr;
@@ -4620,7 +4722,6 @@ int show_inven(int target_item)
 	char inven_spellbook_label[52+1];
 
 	/* See cmd5.c */
-	extern bool select_spellbook;
 
 	/* Starting column */
 	col = command_gap;
@@ -4644,23 +4745,26 @@ int show_inven(int target_item)
 		z = i + 1;
 	}
 
-	if (select_spellbook)
+	/*** Move around label characters with correspond tags ***/
+
+	/* Prepare normal labels */
+	strcpy(inven_spellbook_label, alphabet_chars);
+
+	/* Move each label */
+	for (i = 0; i < 52; i++)
 	{
 		int index;
+		char c = alphabet_chars[i];
 
-		strcpy(inven_spellbook_label, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
-		for (i = 0; i < 52; i++)
+		/* Find a tag with this label */
+		if (get_tag(&index, c))
 		{
-			char c;
-			if (i < 26) c = (char)('a' + i);
-			else c = (char)('A' + i - 26);
+			/* Delete the over writen label */
+			if (inven_spellbook_label[i] == c)
+				inven_spellbook_label[i] = ' ';
 
-			if (get_tag(&index, c))
-			{
-				if (inven_spellbook_label[i] == c)
-					inven_spellbook_label[i] = ' ';
-				inven_spellbook_label[index] = c;
-			}
+			/* Move the label to the place of correspond tag */
+			inven_spellbook_label[index] = c;
 		}
 	}
 
@@ -4735,7 +4839,7 @@ int show_inven(int target_item)
 			}
 			else strcpy(tmp_val, "  ");
 		}
-		else if (i <= INVEN_PACK && select_spellbook)
+		else if (i <= INVEN_PACK)
 		{
 			sprintf(tmp_val, "%c)", inven_spellbook_label[i]);
 		}
@@ -5153,94 +5257,6 @@ static bool get_item_okay(int i)
 
 
 /*
- * Find the "first" inventory object with the given "tag".
- *
- * A "tag" is a char "n" appearing as "@n" anywhere in the
- * inscription of an object.
- *
- * Also, the tag "@xn" will work as well, where "n" is a tag-char,
- * and "x" is the "current" command_cmd code.
- */
-int get_tag(int *cp, char tag)
-{
-	int i;
-	cptr s;
-
-	/* Check every object */
-	for (i = 0; i < INVEN_TOTAL; ++i)
-	{
-		object_type *o_ptr = &inventory[i];
-
-		/* Skip non-objects */
-		if (!o_ptr->k_idx) continue;
-
-		/* Skip empty inscriptions */
-		if (!o_ptr->inscription) continue;
-
-		/* Skip non-choice */
-		if (!item_tester_okay(o_ptr)) continue;
-
-		/* Find a '@' */
-		s = strchr(quark_str(o_ptr->inscription), '@');
-
-		/* Process all tags */
-		while (s)
-		{
-			/* Check the special tags */
-			if ((s[1] == command_cmd) && (s[2] == tag))
-			{
-				/* Save the actual inventory ID */
-				*cp = i;
-
-				/* Success */
-				return (TRUE);
-			}
-
-			/* Find another '@' */
-			s = strchr(s + 1, '@');
-		}
-	}
-
-	/* Check every object */
-	for (i = 0; i < INVEN_TOTAL; ++i)
-	{
-		object_type *o_ptr = &inventory[i];
-
-		/* Skip non-objects */
-		if (!o_ptr->k_idx) continue;
-
-		/* Skip empty inscriptions */
-		if (!o_ptr->inscription) continue;
-
-		/* Skip non-choice */
-		if (!item_tester_okay(o_ptr)) continue;
-
-		/* Find a '@' */
-		s = strchr(quark_str(o_ptr->inscription), '@');
-
-		/* Process all tags */
-		while (s)
-		{
-			/* Check the normal tags */
-			if (s[1] == tag && !((s[2] >= '0' && s[2] <= '9') || (s[2] >= 'a' && s[2] <= 'z') || (s[2] >= 'A' && s[2] <= 'Z')))
-		{
-				/* Save the actual inventory ID */
-				*cp = i;
-
-				/* Success */
-				return (TRUE);
-			}
-
-			/* Find another '@' */
-			s = strchr(s + 1, '@');
-		}
-	}
-
-	/* No such tag */
-	return (FALSE);
-}
-
-/*
  * Determine whether get_item() can get some item or not
  * assuming mode = (USE_EQUIP | USE_INVEN | USE_FLOOR).
  */
@@ -5333,7 +5349,6 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 	char out_val[160];
 
 	/* See cmd5.c */
-	extern bool select_spellbook;
 	extern bool select_the_force;
 
 	int menu_line = (use_menu ? 1 : 0);
@@ -6014,39 +6029,41 @@ if (other_query_flag && !verify("本当に", k)) continue;
 					done = TRUE;
 					break;
 				}
+
+				/* Fall through */
 			}
 
 			default:
 			{
 				int ver;
-				if(select_spellbook){
-				    bool not_found = FALSE;
-				    /* Look up the tag */
-				    if (!get_tag(&k, which))
-				    {
-					not_found = TRUE;
-				    }
+				bool not_found = FALSE;
 
-				    /* Hack -- Validate the item */
-				    if ((k < INVEN_RARM) ? !inven : !equip)
-				    {
+				/* Look up the alphabetical tag */
+				if (!get_tag(&k, which))
+				{
 					not_found = TRUE;
-				    }
+				}
 
-				    /* Validate the item */
-				    if (!get_item_okay(k))
-				    {
+				/* Hack -- Validate the item */
+				if ((k < INVEN_RARM) ? !inven : !equip)
+				{
 					not_found = TRUE;
-				    }
+				}
 
-				    if( !not_found ){
+				/* Validate the item */
+				if (!get_item_okay(k))
+				{
+					not_found = TRUE;
+				}
+
+				if (!not_found)
+				{
 					/* Accept that choice */
 					(*cp) = k;
 					item = TRUE;
 					done = TRUE;
 					break;
-				    }
-				}				
+				}
 
 				/* Extract "query" setting */
 				ver = isupper(which);
@@ -6360,7 +6377,6 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 	int floor_num, floor_list[23], floor_top = 0;
 	int min_width = 0;
 
-	extern bool select_spellbook;
 	extern bool select_the_force;
 
 	int menu_line = (use_menu ? 1 : 0);
@@ -7388,35 +7404,34 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 			default:
 			{
 				int ver;
+				bool not_found = FALSE;
 
-				if(select_spellbook){
-				    bool not_found = FALSE;
-				    /* Look up the tag */
-				    if (!get_tag(&k, which))
-				    {
+				/* Look up the alphabetical tag */
+				if (!get_tag(&k, which))
+				{
 					not_found = TRUE;
-				    }
+				}
 
-				    /* Hack -- Validate the item */
-				    if ((k < INVEN_RARM) ? !inven : !equip)
-				    {
+				/* Hack -- Validate the item */
+				if ((k < INVEN_RARM) ? !inven : !equip)
+				{
 					not_found = TRUE;
-				    }
+				}
 
-				    /* Validate the item */
-				    if (!get_item_okay(k))
-				    {
+				/* Validate the item */
+				if (!get_item_okay(k))
+				{
 					not_found = TRUE;
-				    }
+				}
 
-				    if( !not_found ){
+				if (!not_found)
+				{
 					/* Accept that choice */
 					(*cp) = k;
 					item = TRUE;
 					done = TRUE;
 					break;
-				    }
-				}				
+				}
 
 				/* Extract "query" setting */
 				ver = isupper(which);
