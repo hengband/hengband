@@ -140,7 +140,7 @@ dual license について
 ページの Angband OpenSource Initiative についてのページを参照してくだ
 さい。
 
-http://thangorodrim.angband.org/development/opensource.html
+http://www.thangorodrim.net/development/opensource.html
 
 翻訳(一部意訳)：
 

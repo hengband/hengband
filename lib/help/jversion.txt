@@ -1174,12 +1174,12 @@ Zangband 2.2.0 はこれまでで最も変化したバージョンといえます。歴史的
 これは Robert Ruehlmann 氏がZangbandの新しい管理者になってから最初に出
 たバージョンです。彼自身の言葉によれば...
 
-「ZAngband 2.1.0c は Topi氏による最後のバージョンです。彼は仕事に就いて
-ZAngband を開発する時間がなくなってしまいました。彼は新しい管理者を募
-り、私がその仕事を引き継ぐことになりました。自己紹介しましょう、私の名
-前は Robert Ruehlmann、DOS 用のグラフィカル Angband の作者であり、『
-Thangorodrim - The Angband Page』(http://thangorodrim.angband.org)のウ
-ェブマスターです。」
+「ZAngband 2.1.0c は Topi氏による最後のバージョンです。彼は仕事に就い
+てZAngband を開発する時間がなくなってしまいました。彼は新しい管理者を
+募り、私がその仕事を引き継ぐことになりました。自己紹介しましょう、私の
+名前は Robert Ruehlmann、DOS 用のグラフィカル Angband の作者であり、
+『Thangorodrim - The Angband Page』(http://www.thangorodrim.net)のウェ
+ブマスターです。」
 
 
 === バージョン 1.0 - 2.1.0c ===

@@ -130,6 +130,7 @@ information from this BBS (Bulletin Board System).
 Hengband sources and executables are uploaded to
 clockwork.dementia.org FTP site which include most variant of Angband.
 Links to the files are available at Thangorodrim.
+(http://www.thangorodrim.net)
 
 --- The Newsgroup (rec.games.roguelike.angband) ---
 

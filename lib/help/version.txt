@@ -377,7 +377,7 @@ doesn't have enough time anymore to continue work on ZAngband.
 He asked for a new maintainer and I was the one to take over the task.
 May I introduce myself, my name is Robert Ruehlmann, I'm the creator
 of the graphical Angband versions for DOS and webmaster of
-"Thangorodrim - The Angband Page" ("http://thangorodrim.angband.org").
+"Thangorodrim - The Angband Page" ("http://www.thangorodrim.net").
 
 Special thanks
 --------------
