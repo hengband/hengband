@@ -162,8 +162,8 @@ static void roff_aux(int r_idx, int mode)
 	byte drop_gold, drop_item;
 
 	int		vn = 0;
-	byte		color[64];
-	cptr		vp[64];
+	byte		color[96];
+	cptr		vp[96];
 
 	bool know_everything = FALSE;
 
@@ -997,16 +997,18 @@ hooked_roff(format("%^sは矢の呪文を跳ね返す。", wd_he[msex]));
 		for (n = 0; n < vn; n++)
 		{
 #ifdef JP
-			if(n!=vn-1){
-			  jverb(vp[n],jverb_buf,JVERB_OR);
-			  hook_c_roff(color[n], jverb_buf);
-			  hook_c_roff(color[n], "り、");
+			if (n != vn - 1)
+			{
+				jverb(vp[n], jverb_buf, JVERB_OR);
+				hook_c_roff(color[n], jverb_buf);
+				hook_c_roff(color[n], "り");
+				hooked_roff("、");
 			}
-			else  hook_c_roff(color[n], vp[n]);
+			else hook_c_roff(color[n], vp[n]);
 #else
 			/* Intro */
 			if (n == 0) hooked_roff(" may ");
-			else if (n < vn-1) hooked_roff(", ");
+			else if (n < vn - 1) hooked_roff(", ");
 			else hooked_roff(" or ");
 
 			/* Dump */
