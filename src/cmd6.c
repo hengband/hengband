@@ -3725,17 +3725,6 @@ static bool item_tester_hook_activate(object_type *o_ptr)
 	/* Check activation flag */
 	if (have_flag(flgs, TR_ACTIVATE)) return (TRUE);
 
-	if ((o_ptr->tval > TV_CAPTURE) && o_ptr->xtra3)
-	{
-		switch(o_ptr->xtra3)
-		case ESSENCE_TMP_RES_ACID:
-		case ESSENCE_TMP_RES_ELEC:
-		case ESSENCE_TMP_RES_FIRE:
-		case ESSENCE_TMP_RES_COLD:
-		case ESSENCE_EARTHQUAKE:
-			return (TRUE);
-	}
-
 	/* Assume not */
 	return (FALSE);
 }
@@ -5621,35 +5610,35 @@ msg_print("あなたの槍は電気でスパークしている...");
 		return;
 	}
 
-	else if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == ESSENCE_TMP_RES_ACID))
+	else if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_ACID))
 	{
 		(void)set_oppose_acid(randint1(20) + 20, FALSE);
 		o_ptr->timeout = randint0(50) + 50;
 		return;
 	}
 
-	else if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == ESSENCE_TMP_RES_ELEC))
+	else if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_ELEC))
 	{
 		(void)set_oppose_elec(randint1(20) + 20, FALSE);
 		o_ptr->timeout = randint0(50) + 50;
 		return;
 	}
 
-	else if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == ESSENCE_TMP_RES_FIRE))
+	else if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_FIRE))
 	{
 		(void)set_oppose_fire(randint1(20) + 20, FALSE);
 		o_ptr->timeout = randint0(50) + 50;
 		return;
 	}
 
-	else if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == ESSENCE_TMP_RES_COLD))
+	else if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_COLD))
 	{
 		(void)set_oppose_cold(randint1(20) + 20, FALSE);
 		o_ptr->timeout = randint0(50) + 50;
 		return;
 	}
 
-	else if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == ESSENCE_EARTHQUAKE))
+	else if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == 1+ESSENCE_EARTHQUAKE))
 	{
 		earthquake(py, px, 5);
 		o_ptr->timeout = 100 + randint1(100);

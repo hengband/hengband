@@ -414,6 +414,12 @@ static void rd_item(object_type *o_ptr)
 	else
 	{
 		rd_byte(&o_ptr->xtra3);
+                if (h_older_than(1, 3, 0, 1))
+                {
+                        if (o_ptr->tval > TV_CAPTURE && o_ptr->xtra3 >= 1+96)
+                                o_ptr->xtra3 += -96 + MIN_OTHER_ESSENCE;
+                }
+
 		rd_s16b(&o_ptr->xtra4);
 		rd_s16b(&o_ptr->xtra5);
 	}
@@ -1210,6 +1216,16 @@ static void rd_extra(void)
 	{
 		for (i = 0; i < 108; i++) rd_s32b(&p_ptr->magic_num1[i]);
 		for (i = 0; i < 108; i++) rd_byte(&p_ptr->magic_num2[i]);
+                if (h_older_than(1, 3, 0, 1))
+                {
+                        if (p_ptr->pclass == CLASS_SMITH)
+                        {
+                                p_ptr->magic_num1[TR_ES_ATTACK] = p_ptr->magic_num1[96];
+                                p_ptr->magic_num1[96] = 0;
+                                p_ptr->magic_num1[TR_ES_AC] = p_ptr->magic_num1[97];
+                                p_ptr->magic_num1[97] = 0;
+                        }
+                }
 	}
 	if ((p_ptr->pclass == CLASS_BARD) && p_ptr->magic_num1[0]) p_ptr->action = ACTION_SING;
 

@@ -41,7 +41,7 @@
 #define H_VER_MAJOR 1
 #define H_VER_MINOR 3
 #define H_VER_PATCH 0
-#define H_VER_EXTRA 0
+#define H_VER_EXTRA 1
 
 /* Added for ZAngband */
 #define FAKE_VERSION   0
@@ -3039,8 +3039,8 @@
 #define TR_TELEPORT            90     /* Item teleports player */
 #define TR_AGGRAVATE           91     /* Item aggravates monsters */
 #define TR_BLESSED             92     /* Item is Blessed */
-#define TR_XXX3                93
-#define TR_XXX4                94
+#define TR_ES_ATTACK           93     /* Fake flag for Smith */
+#define TR_ES_AC               94     /* Fake flag for Smith */
 #define TR_XXX5                95
 
 #define TR_KILL_ANIMAL         96
@@ -4807,88 +4807,118 @@ extern int PlayerUID;
 #define HISSATSU_IAI    100
 
 
-#define ESSENCE_STR           1
-#define ESSENCE_INT           2
-#define ESSENCE_WIS           3
-#define ESSENCE_DEX           4
-#define ESSENCE_CON           5
-#define ESSENCE_CHR           6
-#define ESSENCE_MAGIC_MASTERY 7
-#define ESSENCE_STEALTH       9
-#define ESSENCE_SEARCH        10
-#define ESSENCE_INFRA         11
-#define ESSENCE_TUNNEL        12
-#define ESSENCE_SPEED         13
-#define ESSENCE_BLOWS         14
-#define ESSENCE_CHAOTIC       15
-#define ESSENCE_VAMPIRIC      16
-#define ESSENCE_S_ANIMAL      17
-#define ESSENCE_S_EVIL        18
-#define ESSENCE_S_UNDEAD      19
-#define ESSENCE_S_DEMON       20
-#define ESSENCE_S_ORC         21
-#define ESSENCE_S_TROLL       22
-#define ESSENCE_S_GIANT       23
-#define ESSENCE_S_DRAGON      24
-#define ESSENCE__K__DRAGON    25
-#define ESSENCE_EARTHQUAKE    27
-#define ESSENCE_B_POIS        28
-#define ESSENCE_B_ACID        29
-#define ESSENCE_B_ELEC        30
-#define ESSENCE_B_FIRE        31
-#define ESSENCE_B_COLD        32
-#define ESSENCE_S_STR         33
-#define ESSENCE_IM_ACID       41
-#define ESSENCE_REFLECT       46
-#define ESSENCE_FREE_ACT      47
-#define ESSENCE_HOLD_LIFE     48
-#define ESSENCE_RES_ACID      49
-#define ESSENCE_RES_ELEC      50
-#define ESSENCE_RES_FIRE      51
-#define ESSENCE_RES_COLD      52
-#define ESSENCE_RES_POIS      53
-#define ESSENCE_RES_FEAR      54
-#define ESSENCE_RES_LITE      55
-#define ESSENCE_RES_DARK      56
-#define ESSENCE_RES_BLIND     57
-#define ESSENCE_RES_CONF      58
-#define ESSENCE_RES_SOUND     59
-#define ESSENCE_RES_SHARDS    60
-#define ESSENCE_RES_NETHER    61
-#define ESSENCE_RES_NEXUS     62
-#define ESSENCE_RES_CHAOS     63
-#define ESSENCE_RES_DISEN     64
-#define ESSENCE__SH__FIRE     65
-#define ESSENCE__SH__ELEC     66
-#define ESSENCE_S_HUMAN       67
-#define ESSENCE__SH__COLD     68
-#define ESSENCE_NO_MAGIC      70
-#define ESSENCE_WARNING       73
-#define ESSENCE_FEATHER       77
-#define ESSENCE_LITE          78
-#define ESSENCE_SEE_INVIS     79
-#define ESSENCE_TELEPATHY     80
-#define ESSENCE_SLOW_DIGEST   81
-#define ESSENCE_REGEN         82
-#define ESSENCE_TELEPROT      91
-#define ESSENCE_ATTACK        97
-#define ESSENCE_AC            98
-#define ESSENCE_TMP_RES_ACID  99
-#define ESSENCE_TMP_RES_ELEC  100
-#define ESSENCE_TMP_RES_FIRE  101
-#define ESSENCE_TMP_RES_COLD  102
-#define ESSENCE_SH_FIRE       103
-#define ESSENCE_SH_ELEC       104
-#define ESSENCE_SH_COLD       105
-#define ESSENCE_RESISTANCE    106
-#define ESSENCE_SUSTAIN       107
-#define ESSENCE_SLAY_GLOVE    108
+#define ESSENCE_STR           0
+#define ESSENCE_INT           1
+#define ESSENCE_WIS           2
+#define ESSENCE_DEX           3
+#define ESSENCE_CON           4
+#define ESSENCE_CHR           5
+#define ESSENCE_MAGIC_MASTERY 6
 
-#define MAX_ESSENCE 108
+#define ESSENCE_STEALTH       8
+#define ESSENCE_SEARCH        9
+#define ESSENCE_INFRA         10
+#define ESSENCE_TUNNEL        11
+#define ESSENCE_SPEED         12
+#define ESSENCE_BLOWS         13
+#define ESSENCE_CHAOTIC       14
+#define ESSENCE_VAMPIRIC      15
+#define ESSENCE_S_ANIMAL      16
+#define ESSENCE_S_EVIL        17
+#define ESSENCE_S_UNDEAD      18
+#define ESSENCE_S_DEMON       19
+#define ESSENCE_S_ORC         20
+#define ESSENCE_S_TROLL       21
+#define ESSENCE_S_GIANT       22
+#define ESSENCE_S_DRAGON      23
+#define ESSENCE__K__DRAGON    24
 
-#define ESSENCE_MASK1 0xFCFD5F7F
-#define ESSENCE_MASK2 0xFFFFE000
-#define ESSENCE_MASK3 0x0003F020
+#define ESSENCE_EARTHQUAKE    26
+#define ESSENCE_B_POIS        27
+#define ESSENCE_B_ACID        28
+#define ESSENCE_B_ELEC        29
+#define ESSENCE_B_FIRE        30
+#define ESSENCE_B_COLD        31
+#define ESSENCE_SUST_STR      32
+
+#define ESSENCE_IM_ACID       40
+
+#define ESSENCE_REFLECT       45
+#define ESSENCE_FREE_ACT      46
+#define ESSENCE_HOLD_LIFE     47
+#define ESSENCE_RES_ACID      48
+#define ESSENCE_RES_ELEC      49
+#define ESSENCE_RES_FIRE      50
+#define ESSENCE_RES_COLD      51
+#define ESSENCE_RES_POIS      52
+#define ESSENCE_RES_FEAR      53
+#define ESSENCE_RES_LITE      54
+#define ESSENCE_RES_DARK      55
+#define ESSENCE_RES_BLIND     56
+#define ESSENCE_RES_CONF      57
+#define ESSENCE_RES_SOUND     58
+#define ESSENCE_RES_SHARDS    59
+#define ESSENCE_RES_NETHER    60
+#define ESSENCE_RES_NEXUS     61
+#define ESSENCE_RES_CHAOS     62
+#define ESSENCE_RES_DISEN     63
+#define ESSENCE__SH__FIRE     64
+#define ESSENCE__SH__ELEC     65
+#define ESSENCE_S_HUMAN       66
+#define ESSENCE__SH__COLD     67
+
+#define ESSENCE_NO_MAGIC      69
+
+#define ESSENCE_WARNING       72
+
+#define ESSENCE_FEATHER       76
+#define ESSENCE_LITE          77
+#define ESSENCE_SEE_INVIS     78
+#define ESSENCE_TELEPATHY     79
+#define ESSENCE_SLOW_DIGEST   80
+#define ESSENCE_REGEN         81
+
+#define ESSENCE_TELEPROT      90
+
+#define ESSENCE_KILL_ANIMAL   96
+#define ESSENCE_KILL_EVIL     97
+#define ESSENCE_KILL_UNDEAD   98
+#define ESSENCE_KILL_DEMON    99
+#define ESSENCE_KILL_ORC      100
+#define ESSENCE_KILL_TROLL    101
+#define ESSENCE_KILL_GIANT    102
+#define ESSENCE_KILL_HUMAN    103
+#define ESSENCE_ESP_ANIMAL    104
+#define ESSENCE_ESP_UNDEAD    105
+#define ESSENCE_ESP_DEMON     106
+#define ESSENCE_ESP_ORC       107
+#define ESSENCE_ESP_TROLL     108
+#define ESSENCE_ESP_GIANT     109
+#define ESSENCE_ESP_DRAGON    110
+#define ESSENCE_ESP_HUMAN     111
+#define ESSENCE_ESP_EVIL      112
+#define ESSENCE_ESP_GOOD      113
+#define ESSENCE_ESP_NONLIVING 114
+#define ESSENCE_ESP_UNIQUE    115
+
+#define MAX_TR_FLAG_ESSENCE 117
+#define MIN_OTHER_ESSENCE 200
+
+#define ESSENCE_ATTACK        (MIN_OTHER_ESSENCE + 0)
+#define ESSENCE_AC            (MIN_OTHER_ESSENCE + 1)
+#define ESSENCE_TMP_RES_ACID  (MIN_OTHER_ESSENCE + 2)
+#define ESSENCE_TMP_RES_ELEC  (MIN_OTHER_ESSENCE + 3)
+#define ESSENCE_TMP_RES_FIRE  (MIN_OTHER_ESSENCE + 4)
+#define ESSENCE_TMP_RES_COLD  (MIN_OTHER_ESSENCE + 5)
+#define ESSENCE_SH_FIRE       (MIN_OTHER_ESSENCE + 6)
+#define ESSENCE_SH_ELEC       (MIN_OTHER_ESSENCE + 7)
+#define ESSENCE_SH_COLD       (MIN_OTHER_ESSENCE + 8)
+#define ESSENCE_RESISTANCE    (MIN_OTHER_ESSENCE + 9)
+#define ESSENCE_SUSTAIN       (MIN_OTHER_ESSENCE + 10)
+#define ESSENCE_SLAY_GLOVE    (MIN_OTHER_ESSENCE + 11)
+
+#define MAX_ESSENCE (MAX_TR_FLAG_ESSENCE + 12)
+
 
 #define DUNGEON_MODE_NONE       0
 #define DUNGEON_MODE_AND        1

@@ -6488,225 +6488,249 @@ struct essence_type
 
 #ifdef JP
 static essence_type essence_info[MAX_ESSENCE] = {
-{"ÏÓÎÏ","ÏÓÎÏ", 1, 4, 20},
-{"ÃÎÇ½","ÃÎÇ½", 2, 4, 20},
-{"¸­¤µ","¸­¤µ", 3, 4, 20},
-{"´ïÍÑ¤µ","´ïÍÑ¤µ", 4, 4, 20},
-{"ÂÑµ×ÎÏ","ÂÑµ×ÎÏ", 5, 4, 20},
-{"Ì¥ÎÏ","Ì¥ÎÏ", 6, 4, 20},
-{"ËâÎÏ»ÙÇÛ","ËâÎÏ»ÙÇÛ", 7, 4, 20},
-{"","", 0, 0, 0},
-{"±£Ì©","±£Ì©", 9, 4, 40},
-{"Ãµº÷","Ãµº÷", 10, 4, 15},
-{"ÀÖ³°Àþ»ëÎÏ","ÀÖ³°Àþ»ëÎÏ", 11, 4, 15},
-{"ºÎ·¡","ºÎ·¡", 12, 4, 15},
-{"¥¹¥Ô¡¼¥É","¥¹¥Ô¡¼¥É", 13, 4, 12},
-{"ÄÉ²Ã¹¶·â","ÄÉ²Ã¹¶·â", 14, 1, 20},
-{"¥«¥ª¥¹¹¶·â","¥«¥ª¥¹¹¶·â", 15, 1, 15},
-{"µÛ·ì¹¶·â","µÛ·ì¹¶·â", 16, 1, 60},
-{"Æ°ÊªÇÜÂÇ","Æ°ÊªÇÜÂÇ", 17, 1, 20},
-{"¼Ù°­ÇÜÂÇ","¼Ù°­ÇÜÂÇ", 18, 1, 100},
-{"ÉÔ»àÇÜÂÇ","ÉÔ»àÇÜÂÇ", 19, 1, 20},
-{"°­ËâÇÜÂÇ","°­ËâÇÜÂÇ", 20, 1, 20},
-{"¥ª¡¼¥¯ÇÜÂÇ","¥ª¡¼¥¯ÇÜÂÇ", 21, 1, 15},
-{"¥È¥í¥ëÇÜÂÇ","¥È¥í¥ëÇÜÂÇ", 22, 1, 15},
-{"µð¿ÍÇÜÂÇ","µð¿ÍÇÜÂÇ", 23, 1, 20},
-{"ÎµÇÜÂÇ","ÎµÇÜÂÇ", 24, 1, 20},
-{"","ÎµÇÜÇÜÂÇ", 24, 1, 60},
-{"","", 0, 0, 0},
-{"ÃÏ¿Ì","ÃÏ¿ÌÈ¯Æ°", 27, 5, 15},
-{"ÆÇ»¦","ÆÇ»¦", 28, 1, 20},
-{"ÍÏ²ò","ÍÏ²ò", 29, 1, 20},
-{"ÅÅ·â","ÅÅ·â", 30, 1, 20},
-{"¾Æ´þ","¾Æ´þ", 31, 1, 20},
-{"Åà·ë","Åà·ë", 32, 1, 20},
-{"Ç½ÎÏ°Ý»ý","ÏÓÎÏ°Ý»ý", 33, 3, 15},
-{"","ÃÎÇ½°Ý»ý", 33, 3, 15},
-{"","¸­¤µ°Ý»ý", 33, 3, 15},
-{"","´ïÍÑ¤µ°Ý»ý", 33, 3, 15},
-{"","ÂÑµ×ÎÏ°Ý»ý", 33, 3, 15},
-{"","Ì¥ÎÏ°Ý»ý", 33, 3, 15},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"ÌÈ±Ö","»ÀÌÈ±Ö", 41, 2, 20},
-{"","ÅÅ·âÌÈ±Ö", 41, 2, 20},
-{"","²Ð±êÌÈ±Ö", 41, 2, 20},
-{"","Îäµ¤ÌÈ±Ö", 41, 2, 20},
-{"","", 0, 0, 0},
-{"È¿¼Í","È¿¼Í", 46, 2, 20},
-{"ËãáãÃÎ¤é¤º","ËãáãÃÎ¤é¤º", 47, 3, 20},
-{"À¸Ì¿ÎÏ°Ý»ý","À¸Ì¿ÎÏ°Ý»ý", 48, 3, 20},
-{"ÂÑ»À","ÂÑ»À", 49, 2, 15},
-{"ÂÑÅÅ·â","ÂÑÅÅ·â", 50, 2, 15},
-{"ÂÑ²Ð±ê","ÂÑ²Ð±ê", 51, 2, 15},
-{"ÂÑÎäµ¤","ÂÑÎäµ¤", 52, 2, 15},
-{"ÂÑÆÇ","ÂÑÆÇ", 53, 2, 25},
-{"ÂÑ¶²ÉÝ","ÂÑ¶²ÉÝ", 54, 2, 20},
-{"ÂÑÁ®¸÷","ÂÑÁ®¸÷", 55, 2, 20},
-{"ÂÑ°Å¹õ","ÂÑ°Å¹õ", 56, 2, 20},
-{"ÂÑÌÕÌÜ","ÂÑÌÕÌÜ", 57, 2, 20},
-{"ÂÑº®Íð","ÂÑº®Íð", 58, 2, 20},
-{"ÂÑ¹ì²»","ÂÑ¹ì²»", 59, 2, 20},
-{"ÂÑÇËÊÒ","ÂÑÇËÊÒ", 60, 2, 20},
-{"ÂÑÃÏ¹ö","ÂÑÃÏ¹ö", 61, 2, 20},
-{"ÂÑ°ø²Ìº®Íð","ÂÑ°ø²Ìº®Íð", 62, 2, 20},
-{"ÂÑ¥«¥ª¥¹","ÂÑ¥«¥ª¥¹", 63, 2, 20},
-{"ÂÑÎô²½","ÂÑÎô²½", 64, 2, 20},
+{"ÏÓÎÏ","ÏÓÎÏ", TR_STR, 4, 20},
+{"ÃÎÇ½","ÃÎÇ½", TR_INT, 4, 20},
+{"¸­¤µ","¸­¤µ", TR_WIS, 4, 20},
+{"´ïÍÑ¤µ","´ïÍÑ¤µ", TR_DEX, 4, 20},
+{"ÂÑµ×ÎÏ","ÂÑµ×ÎÏ", TR_CON, 4, 20},
+{"Ì¥ÎÏ","Ì¥ÎÏ", TR_CHR, 4, 20},
+{"ËâÎÏ»ÙÇÛ","ËâÎÏ»ÙÇÛ", TR_MAGIC_MASTERY, 4, 20},
+{"","", -1, 0, 0},
+{"±£Ì©","±£Ì©", TR_STEALTH, 4, 40},
+{"Ãµº÷","Ãµº÷", TR_SEARCH, 4, 15},
+{"ÀÖ³°Àþ»ëÎÏ","ÀÖ³°Àþ»ëÎÏ", TR_INFRA, 4, 15},
+{"ºÎ·¡","ºÎ·¡", TR_TUNNEL, 4, 15},
+{"¥¹¥Ô¡¼¥É","¥¹¥Ô¡¼¥É", TR_SPEED, 4, 12},
+{"ÄÉ²Ã¹¶·â","ÄÉ²Ã¹¶·â", TR_BLOWS, 1, 20},
+{"¥«¥ª¥¹¹¶·â","¥«¥ª¥¹¹¶·â", TR_CHAOTIC, 1, 15},
+{"µÛ·ì¹¶·â","µÛ·ì¹¶·â", TR_VAMPIRIC, 1, 60},
+{"Æ°ÊªÇÜÂÇ","Æ°ÊªÇÜÂÇ", TR_SLAY_ANIMAL, 5, 20},
+{"¼Ù°­ÇÜÂÇ","¼Ù°­ÇÜÂÇ", TR_SLAY_EVIL, 5, 100},
+{"ÉÔ»àÇÜÂÇ","ÉÔ»àÇÜÂÇ", TR_SLAY_UNDEAD, 5, 20},
+{"°­ËâÇÜÂÇ","°­ËâÇÜÂÇ", TR_SLAY_DEMON, 5, 20},
+{"¥ª¡¼¥¯ÇÜÂÇ","¥ª¡¼¥¯ÇÜÂÇ", TR_SLAY_ORC, 5, 15},
+{"¥È¥í¥ëÇÜÂÇ","¥È¥í¥ëÇÜÂÇ", TR_SLAY_TROLL, 5, 15},
+{"µð¿ÍÇÜÂÇ","µð¿ÍÇÜÂÇ", TR_SLAY_GIANT, 5, 20},
+{"ÎµÇÜÂÇ","ÎµÇÜÂÇ", TR_SLAY_DRAGON, 5, 20},
+{"","ÎµÇÜÇÜÂÇ", TR_SLAY_DRAGON, 5, 60},
+{"","", -1, 0, 0},
+{"ÃÏ¿Ì","ÃÏ¿ÌÈ¯Æ°", TR_IMPACT, 7, 15},
+{"ÆÇ»¦","ÆÇ»¦", TR_BRAND_POIS, 1, 20},
+{"ÍÏ²ò","ÍÏ²ò", TR_BRAND_ACID, 1, 20},
+{"ÅÅ·â","ÅÅ·â", TR_BRAND_ELEC, 1, 20},
+{"¾Æ´þ","¾Æ´þ", TR_BRAND_FIRE, 1, 20},
+{"Åà·ë","Åà·ë", TR_BRAND_COLD, 1, 20},
+{"Ç½ÎÏ°Ý»ý","ÏÓÎÏ°Ý»ý", TR_SUST_STR, 3, 15},
+{"","ÃÎÇ½°Ý»ý", TR_SUST_STR, 3, 15},
+{"","¸­¤µ°Ý»ý", TR_SUST_STR, 3, 15},
+{"","´ïÍÑ¤µ°Ý»ý", TR_SUST_STR, 3, 15},
+{"","ÂÑµ×ÎÏ°Ý»ý", TR_SUST_STR, 3, 15},
+{"","Ì¥ÎÏ°Ý»ý", TR_SUST_STR, 3, 15},
 {"","", -1, 0, 0},
 {"","", -1, 0, 0},
-{"¿Í´ÖÇÜÂÇ","¿Í´ÖÇÜÂÇ", 67, 1, 20},
+{"ÌÈ±Ö","»ÀÌÈ±Ö", TR_IM_ACID, 2, 20},
+{"","ÅÅ·âÌÈ±Ö", TR_IM_ACID, 2, 20},
+{"","²Ð±êÌÈ±Ö", TR_IM_ACID, 2, 20},
+{"","Îäµ¤ÌÈ±Ö", TR_IM_ACID, 2, 20},
 {"","", -1, 0, 0},
-{"","", 0, 0, 0},
-{"È¿ËâË¡","È¿ËâË¡", 70, 3, 15},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"·Ù¹ð","·Ù¹ð", 73, 3, 20},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"ÉâÍ·","ÉâÍ·", 77, 3, 20},
-{"±Êµ×¸÷¸»","±Êµ×¸÷¸»", 78, 3, 15},
-{"²Ä»ëÆ©ÌÀ","²Ä»ëÆ©ÌÀ", 79, 3, 20},
-{"¥Æ¥ì¥Ñ¥·¡¼","¥Æ¥ì¥Ñ¥·¡¼", 80, 3, 15},
-{"ÃÙ¾Ã²½","ÃÙ¾Ã²½", 81, 3, 15},
-{"µÞÂ®²óÉü","µÞÂ®²óÉü", 82, 3, 20},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"¥Æ¥ì¥Ý¡¼¥È","¥Æ¥ì¥Ý¡¼¥È", 91, 3, 25},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"¹¶·â","¹¶·â", 97, 6, 30},
-{"ËÉ¸æ","ËÉ¸æ", 98, 6, 15},
-{"","»ÀÂÑÀ­È¯Æ°", 49, 5, 50},
-{"","ÅÅ·âÂÑÀ­È¯Æ°", 50, 5, 50},
-{"","²Ð±êÂÑÀ­È¯Æ°", 51, 5, 50},
-{"","Îäµ¤ÂÑÀ­È¯Æ°", 52, 5, 50},
-{"","²Ð±ê¥ª¡¼¥é", 0, 5, 30},
-{"","ÅÅ·â¥ª¡¼¥é", 0, 5, 30},
-{"","Îäµ¤¥ª¡¼¥é", 0, 5, 30},
-{"","Á´ÂÑÀ­", 0, 2, 150},
-{"","ÁõÈ÷ÊÝ»ý", 0, 6, 10},
-{"","»¦Ù¤¤Î¾®¼ê", 97, 1, 200},
+{"È¿¼Í","È¿¼Í", TR_REFLECT, 2, 20},
+{"ËãáãÃÎ¤é¤º","ËãáãÃÎ¤é¤º", TR_FREE_ACT, 3, 20},
+{"À¸Ì¿ÎÏ°Ý»ý","À¸Ì¿ÎÏ°Ý»ý", TR_HOLD_LIFE, 3, 20},
+{"ÂÑ»À","ÂÑ»À", TR_RES_ACID, 2, 15},
+{"ÂÑÅÅ·â","ÂÑÅÅ·â", TR_RES_ELEC, 2, 15},
+{"ÂÑ²Ð±ê","ÂÑ²Ð±ê", TR_RES_FIRE, 2, 15},
+{"ÂÑÎäµ¤","ÂÑÎäµ¤", TR_RES_COLD, 2, 15},
+{"ÂÑÆÇ","ÂÑÆÇ", TR_RES_POIS, 2, 25},
+{"ÂÑ¶²ÉÝ","ÂÑ¶²ÉÝ", TR_RES_FEAR, 2, 20},
+{"ÂÑÁ®¸÷","ÂÑÁ®¸÷", TR_RES_LITE, 2, 20},
+{"ÂÑ°Å¹õ","ÂÑ°Å¹õ", TR_RES_DARK, 2, 20},
+{"ÂÑÌÕÌÜ","ÂÑÌÕÌÜ", TR_RES_BLIND, 2, 20},
+{"ÂÑº®Íð","ÂÑº®Íð", TR_RES_CONF, 2, 20},
+{"ÂÑ¹ì²»","ÂÑ¹ì²»", TR_RES_SOUND, 2, 20},
+{"ÂÑÇËÊÒ","ÂÑÇËÊÒ", TR_RES_SHARDS, 2, 20},
+{"ÂÑÃÏ¹ö","ÂÑÃÏ¹ö", TR_RES_NETHER, 2, 20},
+{"ÂÑ°ø²Ìº®Íð","ÂÑ°ø²Ìº®Íð", TR_RES_NEXUS, 2, 20},
+{"ÂÑ¥«¥ª¥¹","ÂÑ¥«¥ª¥¹", TR_RES_CHAOS, 2, 20},
+{"ÂÑÎô²½","ÂÑÎô²½", TR_RES_DISEN, 2, 20},
+{"","", -2, 0, 0}, /* ²Ð±ê¥ª¡¼¥é¥Õ¥é¥° */
+{"","", -2, 0, 0}, /* ÅÅ·â¥ª¡¼¥é¥Õ¥é¥° */
+{"¿Í´ÖÇÜÂÇ","¿Í´ÖÇÜÂÇ", TR_SLAY_HUMAN, 5, 20},
+{"","", -2, 0, 0}, /* Îäµ¤¥ª¡¼¥é¥Õ¥é¥° */
+{"","", -1, 0, 0},
+{"È¿ËâË¡","È¿ËâË¡", TR_NO_MAGIC, 3, 15},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"·Ù¹ð","·Ù¹ð", TR_WARNING, 3, 20},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"ÉâÍ·","ÉâÍ·", TR_FEATHER, 3, 20},
+{"±Êµ×¸÷¸»","±Êµ×¸÷¸»", TR_LITE, 3, 15},
+{"²Ä»ëÆ©ÌÀ","²Ä»ëÆ©ÌÀ", TR_SEE_INVIS, 3, 20},
+{"¥Æ¥ì¥Ñ¥·¡¼","¥Æ¥ì¥Ñ¥·¡¼", TR_TELEPATHY, 6, 15},
+{"ÃÙ¾Ã²½","ÃÙ¾Ã²½", TR_SLOW_DIGEST, 3, 15},
+{"µÞÂ®²óÉü","µÞÂ®²óÉü", TR_REGEN, 3, 20},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"¥Æ¥ì¥Ý¡¼¥È","¥Æ¥ì¥Ý¡¼¥È", TR_TELEPORT, 3, 25},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"¹¶·â","", -1, 0, 0},
+{"ËÉ¸æ","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"","Æ°ÊªÇÜÇÜÂÇ", TR_SLAY_ANIMAL, 5, 60},
+{"","¼Ù°­ÇÜÇÜÂÇ", TR_SLAY_EVIL, 0, 60},
+{"","ÉÔ»àÇÜÇÜÂÇ", TR_SLAY_UNDEAD, 5, 60},
+{"","°­ËâÇÜÇÜÂÇ", TR_SLAY_DEMON, 5, 60},
+{"","¥ª¡¼¥¯ÇÜÇÜÂÇ", TR_SLAY_ORC, 5, 60},
+{"","¥È¥í¥ëÇÜÇÜÂÇ", TR_SLAY_TROLL, 5, 60},
+{"","µð¿ÍÇÜÇÜÂÇ", TR_SLAY_GIANT, 5, 60},       
+{"","¿Í´ÖÇÜÇÜÂÇ", TR_SLAY_HUMAN, 5, 60},
+{"","Æ°ÊªESP", TR_SLAY_ANIMAL, 6, 40},
+{"","ÉÔ»àESP", TR_SLAY_UNDEAD, 6, 40}, 
+{"","°­ËâESP", TR_SLAY_DEMON, 6, 40},       
+{"","¥ª¡¼¥¯ESP", TR_SLAY_ORC, 6, 40},     
+{"","¥È¥í¥ëESP", TR_SLAY_TROLL, 6, 40},   
+{"","µð¿ÍESP", TR_SLAY_GIANT, 6, 40},       
+{"","ÎµESP", TR_SLAY_DRAGON, 6, 40},
+{"","¿Í´ÖESP", TR_SLAY_HUMAN, 6, 40},
+{"","¼Ù°­ESP", -1, 0, 15},
+{"","Á±ÎÉESP", -1, 0, 15},
+{"","ÌµÀ¸ÊªESP", -1, 0, 15},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+
+/* MAX_TR_FLAG_ESSENCE 117 */
+
+{"","¹¶·â", TR_ES_ATTACK, 10, 30},
+{"","ËÉ¸æ", TR_ES_AC, 10, 15},
+{"","»ÀÂÑÀ­È¯Æ°", TR_RES_ACID, 7, 50},
+{"","ÅÅ·âÂÑÀ­È¯Æ°", TR_RES_ELEC, 7, 50},
+{"","²Ð±êÂÑÀ­È¯Æ°", TR_RES_FIRE, 7, 50},
+{"","Îäµ¤ÂÑÀ­È¯Æ°", TR_RES_COLD, 7, 50},
+{"","²Ð±ê¥ª¡¼¥é", -1, 7, 30},
+{"","ÅÅ·â¥ª¡¼¥é", -1, 7, 30},
+{"","Îäµ¤¥ª¡¼¥é", -1, 7, 30},
+{"","Á´ÂÑÀ­", -1, 2, 150},
+{"","ÁõÈ÷ÊÝ»ý", -1, 10, 10},
+{"","»¦Ù¤¤Î¾®¼ê", TR_ES_ATTACK, 1, 200},
 };
 #else
 static essence_type essence_info[MAX_ESSENCE] = {
-{"strength","strength", 1, 4, 20},
-{"intelligen.","intelligence", 2, 4, 20},
-{"wisdom","wisdom", 3, 4, 20},
-{"dexterity","dexterity", 4, 4, 20},
-{"constitut.","constitution", 5, 4, 20},
-{"charisma","charisma", 6, 4, 20},
-{"magic mast.","magic mastery", 7, 4, 20},
-{"","", 0, 0, 0},
-{"stealth","stealth", 9, 4, 40},
-{"serching","serching", 10, 4, 15},
-{"inflavision","inflavision", 11, 4, 15},
-{"digging","digging", 12, 4, 15},
-{"speed","speed", 13, 4, 12},
-{"extra atk","extra attack", 14, 1, 20},
-{"chaos brand","chaos brand", 15, 1, 15},
-{"vampiric","vampiric brand", 16, 1, 60},
-{"slay animal","slay animal", 17, 1, 20},
-{"slay evil","slay evil", 18, 1, 100},
-{"slay undead","slay undead", 19, 1, 20},
-{"slay demon","slay demon", 20, 1, 20},
-{"slay orc","slay orc", 21, 1, 15},
-{"slay troll","slay troll", 22, 1, 15},
-{"slay giant","slay giant", 23, 1, 20},
-{"slay dragon","slay dragon", 24, 1, 20},
-{"","kill dragon", 24, 1, 60},
-{"","", 0, 0, 0},
-{"quake","quake activation", 27, 5, 15},
-{"pois. brand","poison brand", 28, 1, 20},
-{"acid brand","acid brand", 29, 1, 20},
-{"elec. brand","electric brand", 30, 1, 20},
-{"fire brand","fire brand", 31, 1, 20},
-{"cold brand","cold brand", 32, 1, 20},
-{"sustain","sustain strength", 33, 3, 15},
-{"","sustain intelligence", 33, 3, 15},
-{"","sustain wisdom", 33, 3, 15},
-{"","sustain dexterity", 33, 3, 15},
-{"","sustain constitution", 33, 3, 15},
-{"","sustain charisma", 33, 3, 15},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"immunity","acid immunity", 41, 2, 20},
-{"","electric immunity", 41, 2, 20},
-{"","fire immunity", 41, 2, 20},
-{"","cold immunity", 41, 2, 20},
-{"","", 0, 0, 0},
-{"reflection","reflection", 46, 2, 20},
-{"free action","free action", 47, 3, 20},
-{"hold life","hold life", 48, 3, 20},
-{"res. acid","resistance to acid", 49, 2, 15},
-{"res. elec.","resistance to electric", 50, 2, 15},
-{"res. fire","resistance to fire", 51, 2, 15},
-{"res. cold","resistance to cold", 52, 2, 15},
-{"res. poison","resistance to poison", 53, 2, 25},
-{"res. fear","resistance to fear", 54, 2, 20},
-{"res. light","resistance to light", 55, 2, 20},
-{"res. dark","resistance to dark", 56, 2, 20},
-{"res. blind","resistance to blind", 57, 2, 20},
-{"res.confuse","resistance to confusion", 58, 2, 20},
-{"res. sound","resistance to sound", 59, 2, 20},
-{"res. shard","resistance to shard", 60, 2, 20},
-{"res. nether","resistance to nether", 61, 2, 20},
-{"res. nexus","resistance to nexus", 62, 2, 20},
-{"res. chaos","resistance to chaos", 63, 2, 20},
-{"res. disen.","resistance to disenchantment", 64, 2, 20},
+{"strength","strength", 0, 4, 20},
+{"intelligen.","intelligence", 1, 4, 20},
+{"wisdom","wisdom", 2, 4, 20},
+{"dexterity","dexterity", 3, 4, 20},
+{"constitut.","constitution", 4, 4, 20},
+{"charisma","charisma", 5, 4, 20},
+{"magic mast.","magic mastery", 6, 4, 20},
+{"","", -1, 0, 0},
+{"stealth","stealth", 8, 4, 40},
+{"serching","serching", 9, 4, 15},
+{"inflavision","inflavision", 10, 4, 15},
+{"digging","digging", 11, 4, 15},
+{"speed","speed", 12, 4, 12},
+{"extra atk","extra attack", 13, 1, 20},
+{"chaos brand","chaos brand", 14, 1, 15},
+{"vampiric","vampiric brand", 15, 1, 60},
+{"slay animal","slay animal", 16, 1, 20},
+{"slay evil","slay evil", 17, 1, 100},
+{"slay undead","slay undead", 18, 1, 20},
+{"slay demon","slay demon", 19, 1, 20},
+{"slay orc","slay orc", 20, 1, 15},
+{"slay troll","slay troll", 21, 1, 15},
+{"slay giant","slay giant", 22, 1, 20},
+{"slay dragon","slay dragon", 23, 1, 20},
+{"","kill dragon", 23, 1, 60},
+{"","", -1, 0, 0},
+{"quake","quake activation", 26, 5, 15},
+{"pois. brand","poison brand", 27, 1, 20},
+{"acid brand","acid brand", 28, 1, 20},
+{"elec. brand","electric brand", 29, 1, 20},
+{"fire brand","fire brand", 30, 1, 20},
+{"cold brand","cold brand", 31, 1, 20},
+{"sustain","sustain strength", 32, 3, 15},
+{"","sustain intelligence", 32, 3, 15},
+{"","sustain wisdom", 32, 3, 15},
+{"","sustain dexterity", 32, 3, 15},
+{"","sustain constitution", 32, 3, 15},
+{"","sustain charisma", 32, 3, 15},
 {"","", -1, 0, 0},
 {"","", -1, 0, 0},
-{"slay human","slay human", 67, 1, 20},
+{"immunity","acid immunity", 40, 2, 20},
+{"","electric immunity", 40, 2, 20},
+{"","fire immunity", 40, 2, 20},
+{"","cold immunity", 40, 2, 20},
 {"","", -1, 0, 0},
-{"","", 0, 0, 0},
-{"anti magic","anti magic", 70, 3, 15},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"warning","warning", 73, 3, 20},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"levitation","levitation", 77, 3, 20},
-{"perm. light","permanent light", 78, 3, 15},
-{"see invis.","see invisible", 79, 3, 20},
-{"telepathy","telepathy", 80, 3, 15},
-{"slow dige.","slow digestion", 81, 3, 15},
-{"regen.","regeneration", 82, 3, 20},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"teleport","teleport", 91, 3, 25},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"","", 0, 0, 0},
-{"weapon enc.","weapon enchant", 97, 6, 30},
-{"armor enc.","armor enchant", 98, 6, 15},
-{"","resist acid activation", 49, 5, 50},
-{"","resist electricity activation", 50, 5, 50},
-{"","resist fire activation", 51, 5, 50},
-{"","resist cold activation", 52, 5, 50},
-{"","fiery sheath", 0, 5, 30},
-{"","electric sheath", 0, 5, 30},
-{"","sheath of coldness", 0, 5, 30},
-{"","resistance", 0, 2, 150},
-{"","elements proof", 0, 6, 10},
-{"","gauntlets of slay", 97, 1, 200},
+{"reflection","reflection", 45, 2, 20},
+{"free action","free action", 46, 3, 20},
+{"hold life","hold life", 47, 3, 20},
+{"res. acid","resistance to acid", 48, 2, 15},
+{"res. elec.","resistance to electric", 49, 2, 15},
+{"res. fire","resistance to fire", 50, 2, 15},
+{"res. cold","resistance to cold", 51, 2, 15},
+{"res. poison","resistance to poison", 52, 2, 25},
+{"res. fear","resistance to fear", 53, 2, 20},
+{"res. light","resistance to light", 54, 2, 20},
+{"res. dark","resistance to dark", 55, 2, 20},
+{"res. blind","resistance to blind", 56, 2, 20},
+{"res.confuse","resistance to confusion", 57, 2, 20},
+{"res. sound","resistance to sound", 58, 2, 20},
+{"res. shard","resistance to shard", 59, 2, 20},
+{"res. nether","resistance to nether", 60, 2, 20},
+{"res. nexus","resistance to nexus", 61, 2, 20},
+{"res. chaos","resistance to chaos", 62, 2, 20},
+{"res. disen.","resistance to disenchantment", 63, 2, 20},
+{"","", -2, 0, 0},
+{"","", -2, 0, 0},
+{"slay human","slay human", 66, 1, 20},
+{"","", -2, 0, 0},
+{"","", -1, 0, 0},
+{"anti magic","anti magic", 69, 3, 15},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"warning","warning", 72, 3, 20},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"levitation","levitation", 76, 3, 20},
+{"perm. light","permanent light", 77, 3, 15},
+{"see invis.","see invisible", 78, 3, 20},
+{"telepathy","telepathy", 79, 3, 15},
+{"slow dige.","slow digestion", 80, 3, 15},
+{"regen.","regeneration", 81, 3, 20},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"teleport","teleport", 90, 3, 25},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"weapon enc.","weapon enchant", 96, 6, 30},
+{"armor enc.","armor enchant", 97, 6, 15},
+{"","resist acid activation", 48, 5, 50},
+{"","resist electricity activation", 49, 5, 50},
+{"","resist fire activation", 50, 5, 50},
+{"","resist cold activation", 51, 5, 50},
+{"","fiery sheath", -1, 5, 30},
+{"","electric sheath", -1, 5, 30},
+{"","sheath of coldness", -1, 5, 30},
+{"","resistance", -1, 2, 150},
+{"","elements proof", -1, 6, 10},
+{"","gauntlets of slay", 96, 1, 200},
 };
 #endif
 
@@ -6749,8 +6773,10 @@ static void display_essence(void)
 #endif
 	for (i = 0; i < MAX_ESSENCE; i++)
 	{
-		if (!essence_info[i].drain_name[0]) continue;
-		prt(format("%-11s %5d", essence_info[i].drain_name, p_ptr->magic_num1[i]), 2+num%20, 8+num/20*22);
+                essence_type *es_ptr = &essence_info[i];
+
+		if (!es_ptr->drain_name[0]) continue;
+		prt(format("%-11s %5d", es_ptr->drain_name, p_ptr->magic_num1[i]), 2+num%21, 8+num/21*22);
 		num++;
 	}
 #ifdef JP
@@ -6765,7 +6791,7 @@ static void display_essence(void)
 
 static void drain_essence(void)
 {
-	int drain_value[MAX_ESSENCE];
+	int drain_value[MAX_TR_FLAG_ESSENCE];
 	int i, item;
 	int dec = 4;
 	bool observe = FALSE;
@@ -6776,7 +6802,7 @@ static void drain_essence(void)
 	byte iy, ix, marked, number;
 	s16b next_o_idx, weight;
 
-	for (i = 0; i < MAX_ESSENCE; i++)
+	for (i = 0; i < MAX_TR_FLAG_ESSENCE; i++)
 		drain_value[i] = 0;
 
 	item_tester_hook = item_tester_hook_weapon_armour;
@@ -6819,6 +6845,14 @@ static void drain_essence(void)
 
 	object_flags(o_ptr, old_flgs);
 	if (have_flag(old_flgs, TR_KILL_DRAGON)) add_flag(old_flgs, TR_SLAY_DRAGON);
+	if (have_flag(old_flgs, TR_KILL_ANIMAL)) add_flag(old_flgs, TR_SLAY_ANIMAL);
+	if (have_flag(old_flgs, TR_KILL_EVIL)) add_flag(old_flgs, TR_SLAY_EVIL);
+	if (have_flag(old_flgs, TR_KILL_UNDEAD)) add_flag(old_flgs, TR_SLAY_UNDEAD);
+	if (have_flag(old_flgs, TR_KILL_DEMON)) add_flag(old_flgs, TR_SLAY_DEMON);
+	if (have_flag(old_flgs, TR_KILL_ORC)) add_flag(old_flgs, TR_SLAY_ORC);
+	if (have_flag(old_flgs, TR_KILL_TROLL)) add_flag(old_flgs, TR_SLAY_TROLL);
+	if (have_flag(old_flgs, TR_KILL_GIANT)) add_flag(old_flgs, TR_SLAY_GIANT);
+	if (have_flag(old_flgs, TR_KILL_HUMAN)) add_flag(old_flgs, TR_SLAY_HUMAN);
 
 	old_to_a = o_ptr->to_a;
 	old_ac = o_ptr->ac;
@@ -6855,81 +6889,82 @@ static void drain_essence(void)
 
 	object_flags(o_ptr, new_flgs);
 
-	for (i = 0; i < 96; i++)
+	for (i = 0; i < MAX_TR_FLAG_ESSENCE; i++)
 	{
+                essence_type *es_ptr = &essence_info[i];
 		int pval = 0;
 
 		if (is_pval_flag(i) && old_pval) pval = (have_flag(new_flgs, i)) ? old_pval-o_ptr->pval : old_pval;
 
-		if ((!(have_flag(new_flgs, i)) || pval) && (have_flag(old_flgs, i)) && essence_info[i].link)
+		if ((!(have_flag(new_flgs, i)) || pval) && (have_flag(old_flgs, i)) && es_ptr->link != -1)
 		{
 			if (pval)
 			{
-				drain_value[essence_info[i].link-1] += 10 * pval;
+				drain_value[es_ptr->link] += 10 * pval;
 			}
-			else if (essence_info[i].link != -1)
+			else if (es_ptr->link != -2)
 			{
-				drain_value[essence_info[i].link-1] += 10;
+				drain_value[es_ptr->link] += 10;
 			}
-			else if (i == ESSENCE__SH__FIRE-1)
+			else if (i == ESSENCE__SH__FIRE)
 			{
-				drain_value[ESSENCE_B_FIRE-1] += 10;
-				drain_value[ESSENCE_RES_FIRE-1] += 10;
+				drain_value[ESSENCE_B_FIRE] += 10;
+				drain_value[ESSENCE_RES_FIRE] += 10;
 			}
-			else if (i == ESSENCE__SH__ELEC-1)
+			else if (i == ESSENCE__SH__ELEC)
 			{
-				drain_value[ESSENCE_B_ELEC-1] += 10;
-				drain_value[ESSENCE_RES_ELEC-1] += 10;
+				drain_value[ESSENCE_B_ELEC] += 10;
+				drain_value[ESSENCE_RES_ELEC] += 10;
 			}
-			else if (i == ESSENCE__SH__COLD-1)
+			else if (i == ESSENCE__SH__COLD)
 			{
-				drain_value[ESSENCE_B_COLD-1] += 10;
-				drain_value[ESSENCE_RES_COLD-1] += 10;
+				drain_value[ESSENCE_B_COLD] += 10;
+				drain_value[ESSENCE_RES_COLD] += 10;
 			}
 		}
 	}
 
 	if ((have_flag(old_flgs, TR_FORCE_WEAPON)) && !(have_flag(new_flgs, TR_FORCE_WEAPON)))
 	{
-		drain_value[ESSENCE_INT-1] += 5;
-		drain_value[ESSENCE_WIS-1] += 5;
+		drain_value[ESSENCE_INT] += 5;
+		drain_value[ESSENCE_WIS] += 5;
 	}
 	if ((have_flag(old_flgs, TR_VORPAL)) && !(have_flag(new_flgs, TR_VORPAL)))
 	{
-		drain_value[ESSENCE_B_POIS-1] += 5;
-		drain_value[ESSENCE_B_ACID-1] += 5;
-		drain_value[ESSENCE_B_ELEC-1] += 5;
-		drain_value[ESSENCE_B_FIRE-1] += 5;
-		drain_value[ESSENCE_B_COLD-1] += 5;
+		drain_value[ESSENCE_B_POIS] += 5;
+		drain_value[ESSENCE_B_ACID] += 5;
+		drain_value[ESSENCE_B_ELEC] += 5;
+		drain_value[ESSENCE_B_FIRE] += 5;
+		drain_value[ESSENCE_B_COLD] += 5;
 	}
 	if ((have_flag(old_flgs, TR_DEC_MANA)) && !(have_flag(new_flgs, TR_DEC_MANA)))
 	{
-		drain_value[ESSENCE_INT-1] += 10;
+		drain_value[ESSENCE_INT] += 10;
 	}
 	if ((have_flag(old_flgs, TR_XTRA_MIGHT)) && !(have_flag(new_flgs, TR_XTRA_MIGHT)))
 	{
-		drain_value[ESSENCE_STR-1] += 10;
+		drain_value[ESSENCE_STR] += 10;
 	}
 	if ((have_flag(old_flgs, TR_XTRA_SHOTS)) && !(have_flag(new_flgs, TR_XTRA_SHOTS)))
 	{
-		drain_value[ESSENCE_DEX-1] += 10;
+		drain_value[ESSENCE_DEX] += 10;
 	}
 	if (old_name2 == EGO_2WEAPON)
 	{
-		drain_value[ESSENCE_DEX-1] += 20;
+		drain_value[ESSENCE_DEX] += 20;
 	}
 	if ((o_ptr->tval >= TV_SHOT) && (o_ptr->tval <= TV_SWORD) && (o_ptr->tval != TV_BOW))
 	{
-		if (old_ds > o_ptr->ds) drain_value[ESSENCE_ATTACK-1] += (old_ds-o_ptr->ds)*10;
+		if (old_ds > o_ptr->ds) drain_value[ESSENCE_ATTACK] += (old_ds-o_ptr->ds)*10;
 
-		if (old_dd > o_ptr->dd) drain_value[ESSENCE_ATTACK-1] += (old_dd-o_ptr->dd)*10;
+		if (old_dd > o_ptr->dd) drain_value[ESSENCE_ATTACK] += (old_dd-o_ptr->dd)*10;
 	}
-	if (old_to_h > o_ptr->to_h) drain_value[ESSENCE_ATTACK-1] += (old_to_h-o_ptr->to_h)*10;
-	if (old_to_d > o_ptr->to_d) drain_value[ESSENCE_ATTACK-1] += (old_to_d-o_ptr->to_d)*10;
-	if (old_ac > o_ptr->ac) drain_value[ESSENCE_AC-1] += (old_ac-o_ptr->ac)*10;
-	if (old_to_a > o_ptr->to_a) drain_value[ESSENCE_AC-1] += (old_to_a-o_ptr->to_a)*10;
+	if (old_to_h > o_ptr->to_h) drain_value[ESSENCE_ATTACK] += (old_to_h-o_ptr->to_h)*10;
+	if (old_to_d > o_ptr->to_d) drain_value[ESSENCE_ATTACK] += (old_to_d-o_ptr->to_d)*10;
+	if (old_ac > o_ptr->ac) drain_value[ESSENCE_AC] += (old_ac-o_ptr->ac)*10;
+	if (old_to_a > o_ptr->to_a) drain_value[ESSENCE_AC] += (old_to_a-o_ptr->to_a)*10;
 
-	for (i = 0; i < MAX_ESSENCE; i++)
+	for (i = 0; i < MAX_TR_FLAG_ESSENCE; i++)
 	{
 		drain_value[i] *= number;
 		drain_value[i] = drain_value[i] * dec / 4;
@@ -6955,13 +6990,15 @@ static void drain_essence(void)
 #else
 		msg_print("Extracted essences:");
 #endif
-		for (i = 0; i < MAX_ESSENCE; i++)
+		for (i = 0; i < MAX_TR_FLAG_ESSENCE; i++)
 		{
+                        essence_type *es_ptr = &essence_info[i];
+
 			if (!drain_value[i]) continue;
 			p_ptr->magic_num1[i] += drain_value[i];
 			p_ptr->magic_num1[i] = MIN(20000, p_ptr->magic_num1[i]);
 			msg_print(NULL);
-			msg_format("%s...%d", essence_info[i].drain_name, drain_value[i]);
+			msg_format("%s...%d", es_ptr->drain_name, drain_value[i]);
 		}
 	}
 
@@ -6980,8 +7017,31 @@ static int choose_essence(void)
 	char choice;
 	int menu_line = (use_menu ? 1 : 0);
 
+#ifdef JP
+        cptr menu_name[] = {
+                "Éð´ïÂ°À­", 
+                "ÂÑÀ­",
+                "Ç½ÎÏ",
+                "¿ôÃÍ",
+                "¥¹¥ì¥¤",
+                "ESP",
+                "¤½¤ÎÂ¾"
+        };
+#else
+        cptr menu_name[] = {
+                "Brand weapon",
+                "Resistance",
+                "Ability",
+                "Magic number", 
+                "Slay",
+                "ESP",
+                "Others"
+        };
+#endif
+        const int mode_max = 7;
+
 #ifdef ALLOW_REPEAT
-	if (repeat_pull(&mode) && 1 <= mode && mode <= 5)
+	if (repeat_pull(&mode) && 1 <= mode && mode <= mode_max)
 		return mode;
 	mode = 0;
 #endif /* ALLOW_REPEAT */
@@ -6992,21 +7052,16 @@ static int choose_essence(void)
 
 		while(!mode)
 		{
+                        int i;
+                        for (i = 0; i < mode_max; i++)
 #ifdef JP
-			prt(format(" %s Éð´ïÂ°À­", (menu_line == 1) ? "¡Õ" : "  "), 2, 14);
-			prt(format(" %s ÂÑÀ­", (menu_line == 2) ? "¡Õ" : "  "), 3, 14);
-			prt(format(" %s Ç½ÎÏ", (menu_line == 3) ? "¡Õ" : "  "), 4, 14);
-			prt(format(" %s ¿ôÃÍ", (menu_line == 4) ? "¡Õ" : "  "), 5, 14);
-			prt(format(" %s ¤½¤ÎÂ¾", (menu_line == 5) ? "¡Õ" : "  "), 6, 14);
+                                prt(format(" %s %s", (menu_line == 1+i) ? "¡Õ" : "  ", menu_name[i]), 2 + i, 14);
 			prt("¤É¤Î¼ïÎà¤Î¥¨¥Ã¥»¥ó¥¹ÉÕ²Ã¤ò¹Ô¤¤¤Þ¤¹¤«¡©", 0, 0);
 #else
-			prt(format(" %s Brand weapon", (menu_line == 1) ? "> " : "  "), 2, 14);
-			prt(format(" %s Resistance", (menu_line == 2) ? "> " : "  "), 3, 14);
-			prt(format(" %s Ability", (menu_line == 3) ? "> " : "  "), 4, 14);
-			prt(format(" %s Magic number", (menu_line == 4) ? "> " : "  "), 5, 14);
-			prt(format(" %s Others", (menu_line == 5) ? "> " : "  "), 6, 14);
+                                prt(format(" %s %s", (menu_line == 1+i) ? "> " : "  ", menu_name[i]), 2 + i, 14);
 			prt("Choose from menu.", 0, 0);
 #endif
+
 			choice = inkey();
 			switch(choice)
 			{
@@ -7023,7 +7078,7 @@ static int choose_essence(void)
 			case '8':
 			case 'k':
 			case 'K':
-				menu_line+= 4;
+				menu_line += mode_max - 1;
 				break;
 			case '\r':
 			case '\n':
@@ -7032,7 +7087,7 @@ static int choose_essence(void)
 				mode = menu_line;
 				break;
 			}
-			if (menu_line > 5) menu_line -= 5;
+			if (menu_line > mode_max) menu_line -= mode_max;
 		}
 		screen_load();
 	}
@@ -7041,19 +7096,14 @@ static int choose_essence(void)
 		screen_save();
 		while (!mode)
 		{
+                        int i;
+
+                        for (i = 0; i < mode_max; i++)
+                                prt(format("  %c) %s", 'a' + i, menu_name[i]), 2 + i, 14);
+
 #ifdef JP
-			prt("  a) ¹¶·âÂ°À­", 2, 14);
-			prt("  b) ÂÑÀ­", 3, 14);
-			prt("  c) Ç½ÎÏ", 4, 14);
-			prt("  d) ¿ôÃÍ", 5, 14);
-			prt("  e) ¤½¤ÎÂ¾", 6, 14);
 			if (!get_com("²¿¤òÉÕ²Ã¤·¤Þ¤¹¤«:", &choice, TRUE))
 #else
-			prt("  a) Brand weapon", 2, 14);
-			prt("  b) Resistance", 3, 14);
-			prt("  c) Ability", 4, 14);
-			prt("  d) Magic number", 5, 14);
-			prt("  e) Others", 6, 14);
 			if (!get_com("Command :", &choice, TRUE))
 #endif
 			{
@@ -7061,29 +7111,10 @@ static int choose_essence(void)
 				return 0;
 			}
 
-			switch (choice)
-			{
-			case 'A':
-			case 'a':
-				mode = 1;
-				break;
-			case 'B':
-			case 'b':
-				mode = 2;
-				break;
-			case 'C':
-			case 'c':
-				mode = 3;
-				break;
-			case 'D':
-			case 'd':
-				mode = 4;
-				break;
-			case 'E':
-			case 'e':
-				mode = 5;
-				break;
-			}
+                        if (isupper(choice)) choice = tolower(choice);
+
+                        if ('a' <= choice && choice <= 'a' + (char)mode_max - 1)
+                                mode = (int)choice - 'a' + 1;
 		}
 		screen_load();
 	}
@@ -7104,15 +7135,18 @@ static void add_essence(int mode)
 	object_type *o_ptr;
 	int ask = TRUE;
 	char out_val[160];
-	int num[22];
+	int num[22], essence_id;
 	char o_name[MAX_NLEN];
 	int use_essence;
+        essence_type *es_ptr;
 
 	int menu_line = (use_menu ? 1 : 0);
 
 	for (i = 0; i < MAX_ESSENCE; i++)
 	{
-		if (essence_info[i].type != mode) continue;
+                es_ptr = &essence_info[i];
+
+		if (es_ptr->type != mode) continue;
 		num[max_num++] = i;
 	}
 
@@ -7253,14 +7287,14 @@ static void add_essence(int mode)
 					col = TERM_WHITE;
 					able[ctr] = TRUE;
 
-					if (essence_info[num[ctr]].link)
+					if (essence_info[num[ctr]].link != -1)
 					{
-						strcat(dummy, format("(%s)", essence_info[essence_info[num[ctr]].link-1].drain_name));
-						if (p_ptr->magic_num1[essence_info[num[ctr]].link-1] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+						strcat(dummy, format("(%s)", essence_info[essence_info[num[ctr]].link].drain_name));
+						if (p_ptr->magic_num1[essence_info[num[ctr]].link] < essence_info[num[ctr]].value) able[ctr] = FALSE;
 					}
 					else
 					{
-						switch(num[ctr]+1)
+						switch(num[ctr])
 						{
 						case ESSENCE_SH_FIRE:
 #ifdef JP
@@ -7268,8 +7302,8 @@ static void add_essence(int mode)
 #else
 							strcat(dummy, "(brand fire + res.fire)              ");
 #endif
-							if (p_ptr->magic_num1[ESSENCE_B_FIRE-1] < essence_info[num[ctr]].value) able[ctr] = FALSE;
-							if (p_ptr->magic_num1[ESSENCE_RES_FIRE-1] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_B_FIRE] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_FIRE] < essence_info[num[ctr]].value) able[ctr] = FALSE;
 							break;
 						case ESSENCE_SH_ELEC:
 #ifdef JP
@@ -7277,8 +7311,8 @@ static void add_essence(int mode)
 #else
 							strcat(dummy, "(brand elec. + res. elec.)              ");
 #endif
-							if (p_ptr->magic_num1[ESSENCE_B_ELEC-1] < essence_info[num[ctr]].value) able[ctr] = FALSE;
-							if (p_ptr->magic_num1[ESSENCE_RES_ELEC-1] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_B_ELEC] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_ELEC] < essence_info[num[ctr]].value) able[ctr] = FALSE;
 							break;
 						case ESSENCE_SH_COLD:
 #ifdef JP
@@ -7286,8 +7320,8 @@ static void add_essence(int mode)
 #else
 							strcat(dummy, "(brand cold + res. cold)              ");
 #endif
-							if (p_ptr->magic_num1[ESSENCE_B_COLD-1] < essence_info[num[ctr]].value) able[ctr] = FALSE;
-							if (p_ptr->magic_num1[ESSENCE_RES_COLD-1] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_B_COLD] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_COLD] < essence_info[num[ctr]].value) able[ctr] = FALSE;
 							break;
 						case ESSENCE_RESISTANCE:
 #ifdef JP
@@ -7295,10 +7329,10 @@ static void add_essence(int mode)
 #else
 							strcat(dummy, "(r.fire+r.cold+r.elec+r.acid)");
 #endif
-							if (p_ptr->magic_num1[ESSENCE_RES_FIRE-1] < essence_info[num[ctr]].value) able[ctr] = FALSE;
-							if (p_ptr->magic_num1[ESSENCE_RES_COLD-1] < essence_info[num[ctr]].value) able[ctr] = FALSE;
-							if (p_ptr->magic_num1[ESSENCE_RES_ELEC-1] < essence_info[num[ctr]].value) able[ctr] = FALSE;
-							if (p_ptr->magic_num1[ESSENCE_RES_ACID-1] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_FIRE] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_COLD] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_ELEC] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_ACID] < essence_info[num[ctr]].value) able[ctr] = FALSE;
 							break;
 						case ESSENCE_SUSTAIN:
 #ifdef JP
@@ -7306,10 +7340,10 @@ static void add_essence(int mode)
 #else
 							strcat(dummy, "(r.fire+r.cold+r.elec+r.acid)");
 #endif
-							if (p_ptr->magic_num1[ESSENCE_RES_FIRE-1] < essence_info[num[ctr]].value) able[ctr] = FALSE;
-							if (p_ptr->magic_num1[ESSENCE_RES_COLD-1] < essence_info[num[ctr]].value) able[ctr] = FALSE;
-							if (p_ptr->magic_num1[ESSENCE_RES_ELEC-1] < essence_info[num[ctr]].value) able[ctr] = FALSE;
-							if (p_ptr->magic_num1[ESSENCE_RES_ACID-1] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_FIRE] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_COLD] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_ELEC] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_ACID] < essence_info[num[ctr]].value) able[ctr] = FALSE;
 							break;
 						}
 					}
@@ -7318,9 +7352,9 @@ static void add_essence(int mode)
 
 					strcpy(dummy2, format("%-50s",dummy));
 
-					if (essence_info[num[ctr]].link)
+					if (essence_info[num[ctr]].link != -1)
 					{
-						strcat(dummy2, format(" %d/%d",essence_info[num[ctr]].value, p_ptr->magic_num1[essence_info[num[ctr]].link-1]));
+						strcat(dummy2, format(" %d/%d",essence_info[num[ctr]].value, p_ptr->magic_num1[essence_info[num[ctr]].link]));
 					}
 					else
 					{
@@ -7394,13 +7428,20 @@ static void add_essence(int mode)
 	}
 #endif /* ALLOW_REPEAT */
 
-	if (num[i] == ESSENCE_SLAY_GLOVE-1)
+        es_ptr = &essence_info[num[i]];
+
+        if (num[i] < MAX_TR_FLAG_ESSENCE)
+                essence_id = num[i];
+        else
+                essence_id = num[i] - MAX_TR_FLAG_ESSENCE + MIN_OTHER_ESSENCE;
+
+	if (essence_id == ESSENCE_SLAY_GLOVE)
 		item_tester_tval = TV_GLOVES;
 	else if (mode == 1)
 		item_tester_hook = item_tester_hook_melee_ammo;
-	else if (num[i] == ESSENCE_ATTACK-1)
+	else if (essence_id == ESSENCE_ATTACK)
 		item_tester_hook = item_tester_hook_weapon;
-	else if (num[i] == ESSENCE_AC-1)
+	else if (essence_id == ESSENCE_AC)
 		item_tester_hook = item_tester_hook_armour;
 	else
 		item_tester_hook = item_tester_hook_weapon_armour;
@@ -7429,7 +7470,7 @@ static void add_essence(int mode)
 		o_ptr = &o_list[0 - item];
 	}
 
-	if ((mode != 6) && (o_ptr->name1 || o_ptr->art_name || o_ptr->xtra3))
+	if ((mode != 10) && (o_ptr->name1 || o_ptr->art_name || o_ptr->xtra3))
 	{
 #ifdef JP
 		msg_print("¤½¤Î¥¢¥¤¥Æ¥à¤Ï¤³¤ì°Ê¾å²þÎÉ¤Ç¤­¤Ê¤¤¡£");
@@ -7441,7 +7482,7 @@ static void add_essence(int mode)
 	
 	object_desc(o_name, o_ptr, FALSE, 0);
 
-	use_essence = essence_info[num[i]].value;
+	use_essence = es_ptr->value;
 	if ((o_ptr->tval >= TV_SHOT) && (o_ptr->tval <= TV_BOLT)) use_essence = (use_essence+9)/10;
 	if (o_ptr->number > 1)
 	{
@@ -7454,9 +7495,9 @@ static void add_essence(int mode)
 
 	}
 
-	if (essence_info[num[i]].link)
+	if (es_ptr->link != -1)
 	{
-		if (p_ptr->magic_num1[essence_info[num[i]].link-1] < use_essence)
+		if (p_ptr->magic_num1[es_ptr->link] < use_essence)
 		{
 #ifdef JP
 			msg_print("¥¨¥Ã¥»¥ó¥¹¤¬Â­¤ê¤Ê¤¤¡£");
@@ -7465,9 +7506,9 @@ static void add_essence(int mode)
 #endif
 			return;
 		}
-		if ((num[i] < 32) && is_pval_flag(num[i]))
+		if (is_pval_flag(essence_id))
 		{
-			if (num[i] == ESSENCE_BLOWS-1)
+			if (essence_id == ESSENCE_BLOWS)
 			{
 				if (o_ptr->pval > 1)
 				{
@@ -7493,7 +7534,7 @@ static void add_essence(int mode)
 				char tmp[80];
 				char tmp_val[160];
 				int pval;
-				int limit = MIN(5, p_ptr->magic_num1[essence_info[num[i]].link-1]/essence_info[num[i]].value);
+				int limit = MIN(5, p_ptr->magic_num1[es_ptr->link]/es_ptr->value);
 
 
 #ifdef JP
@@ -7515,7 +7556,7 @@ static void add_essence(int mode)
 				msg_format("It will take %d essences.",use_essence);
 #endif
 			}
-			if (p_ptr->magic_num1[essence_info[num[i]].link-1] < use_essence)
+			if (p_ptr->magic_num1[es_ptr->link] < use_essence)
 			{
 #ifdef JP
 				msg_print("¥¨¥Ã¥»¥ó¥¹¤¬Â­¤ê¤Ê¤¤¡£");
@@ -7525,7 +7566,7 @@ static void add_essence(int mode)
 				return;
 			}
 		}
-		else if (num[i] == ESSENCE_SLAY_GLOVE-1)
+		else if (essence_id == ESSENCE_SLAY_GLOVE)
 		{
 			char tmp_val[160];
 			int val;
@@ -7546,7 +7587,7 @@ static void add_essence(int mode)
 #else
 			msg_format("It will take %d essences.",use_essence);
 #endif
-			if (p_ptr->magic_num1[essence_info[num[i]].link-1] < use_essence)
+			if (p_ptr->magic_num1[es_ptr->link] < use_essence)
 			{
 #ifdef JP
 				msg_print("¥¨¥Ã¥»¥ó¥¹¤¬Â­¤ê¤Ê¤¤¡£");
@@ -7561,8 +7602,8 @@ static void add_essence(int mode)
 			o_ptr->to_h += get_to_h;
 			o_ptr->to_d += get_to_d;
 		}
-		p_ptr->magic_num1[essence_info[num[i]].link-1] -= use_essence;
-		if (num[i] == ESSENCE_ATTACK-1)
+		p_ptr->magic_num1[es_ptr->link] -= use_essence;
+		if (essence_id == ESSENCE_ATTACK)
 		{
 			if ((o_ptr->to_h >= p_ptr->lev/5+5) && (o_ptr->to_d >= p_ptr->lev/5+5))
 			{
@@ -7580,7 +7621,7 @@ static void add_essence(int mode)
 				if (o_ptr->to_d < p_ptr->lev/5+5) o_ptr->to_d++;
 			}
 		}
-		else if (num[i] == ESSENCE_AC-1)
+		else if (essence_id == ESSENCE_AC)
 		{
 			if (o_ptr->to_a >= p_ptr->lev/5+5)
 			{
@@ -7599,53 +7640,53 @@ static void add_essence(int mode)
 		}
 		else
 		{
-			o_ptr->xtra3 = num[i]+1;
+                        o_ptr->xtra3 = essence_id + 1;
 		}
 	}
 	else
 	{
 		bool success = TRUE;
 
-		switch(num[i]+1)
+		switch(essence_id)
 		{
 		case ESSENCE_SH_FIRE:
-			if ((p_ptr->magic_num1[ESSENCE_B_FIRE-1] < use_essence) || (p_ptr->magic_num1[ESSENCE_RES_FIRE-1] < use_essence))
+			if ((p_ptr->magic_num1[ESSENCE_B_FIRE] < use_essence) || (p_ptr->magic_num1[ESSENCE_RES_FIRE] < use_essence))
 			{
 				success = FALSE;
 				break;
 			}
-			p_ptr->magic_num1[ESSENCE_B_FIRE-1] -= use_essence;
-			p_ptr->magic_num1[ESSENCE_RES_FIRE-1] -= use_essence;
+			p_ptr->magic_num1[ESSENCE_B_FIRE] -= use_essence;
+			p_ptr->magic_num1[ESSENCE_RES_FIRE] -= use_essence;
 			break;
 		case ESSENCE_SH_ELEC:
-			if ((p_ptr->magic_num1[ESSENCE_B_ELEC-1] < use_essence) || (p_ptr->magic_num1[ESSENCE_RES_ELEC-1] < use_essence))
+			if ((p_ptr->magic_num1[ESSENCE_B_ELEC] < use_essence) || (p_ptr->magic_num1[ESSENCE_RES_ELEC] < use_essence))
 			{
 				success = FALSE;
 				break;
 			}
-			p_ptr->magic_num1[ESSENCE_B_ELEC-1] -= use_essence;
-			p_ptr->magic_num1[ESSENCE_RES_ELEC-1] -= use_essence;
+			p_ptr->magic_num1[ESSENCE_B_ELEC] -= use_essence;
+			p_ptr->magic_num1[ESSENCE_RES_ELEC] -= use_essence;
 			break;
 		case ESSENCE_SH_COLD:
-			if ((p_ptr->magic_num1[ESSENCE_B_COLD-1] < use_essence) || (p_ptr->magic_num1[ESSENCE_RES_COLD-1] < use_essence))
+			if ((p_ptr->magic_num1[ESSENCE_B_COLD] < use_essence) || (p_ptr->magic_num1[ESSENCE_RES_COLD] < use_essence))
 			{
 				success = FALSE;
 				break;
 			}
-			p_ptr->magic_num1[ESSENCE_B_COLD-1] -= use_essence;
-			p_ptr->magic_num1[ESSENCE_RES_COLD-1] -= use_essence;
+			p_ptr->magic_num1[ESSENCE_B_COLD] -= use_essence;
+			p_ptr->magic_num1[ESSENCE_RES_COLD] -= use_essence;
 			break;
 		case ESSENCE_RESISTANCE:
 		case ESSENCE_SUSTAIN:
-			if ((p_ptr->magic_num1[ESSENCE_RES_ACID-1] < use_essence) || (p_ptr->magic_num1[ESSENCE_RES_ELEC-1] < use_essence) || (p_ptr->magic_num1[ESSENCE_RES_FIRE-1] < use_essence) || (p_ptr->magic_num1[ESSENCE_RES_COLD-1] < use_essence))
+			if ((p_ptr->magic_num1[ESSENCE_RES_ACID] < use_essence) || (p_ptr->magic_num1[ESSENCE_RES_ELEC] < use_essence) || (p_ptr->magic_num1[ESSENCE_RES_FIRE] < use_essence) || (p_ptr->magic_num1[ESSENCE_RES_COLD] < use_essence))
 			{
 				success = FALSE;
 				break;
 			}
-			p_ptr->magic_num1[ESSENCE_RES_ACID-1] -= use_essence;
-			p_ptr->magic_num1[ESSENCE_RES_ELEC-1] -= use_essence;
-			p_ptr->magic_num1[ESSENCE_RES_FIRE-1] -= use_essence;
-			p_ptr->magic_num1[ESSENCE_RES_COLD-1] -= use_essence;
+			p_ptr->magic_num1[ESSENCE_RES_ACID] -= use_essence;
+			p_ptr->magic_num1[ESSENCE_RES_ELEC] -= use_essence;
+			p_ptr->magic_num1[ESSENCE_RES_FIRE] -= use_essence;
+			p_ptr->magic_num1[ESSENCE_RES_COLD] -= use_essence;
 			break;
 		}
 		if (!success)
@@ -7657,22 +7698,25 @@ static void add_essence(int mode)
 #endif
 			return;
 		}
-		if (num[i] == ESSENCE_SUSTAIN-1)
+		if (essence_id == ESSENCE_SUSTAIN)
 		{
 			add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
 			add_flag(o_ptr->art_flags, TR_IGNORE_ELEC);
 			add_flag(o_ptr->art_flags, TR_IGNORE_FIRE);
 			add_flag(o_ptr->art_flags, TR_IGNORE_COLD);
 		}
-		else o_ptr->xtra3 = num[i]+1;
+		else
+                {
+                        o_ptr->xtra3 = essence_id + 1;
+                }
 	}
 
 	energy_use = 100;
 
 #ifdef JP
-	msg_format("%s¤Ë%s¤ÎÇ½ÎÏ¤òÉÕ²Ã¤·¤Þ¤·¤¿¡£", o_name, essence_info[num[i]].add_name);
+	msg_format("%s¤Ë%s¤ÎÇ½ÎÏ¤òÉÕ²Ã¤·¤Þ¤·¤¿¡£", o_name, es_ptr->add_name);
 #else
-	msg_format("You have added ability of %s to %s.", essence_info[num[i]].add_name, o_name);
+	msg_format("You have added ability of %s to %s.", es_ptr->add_name, o_name);
 #endif
 
 	/* Combine the pack */
@@ -7755,7 +7799,7 @@ static void erase_essence(void)
 
 	energy_use = 100;
 
-	if (o_ptr->xtra3 == ESSENCE_SLAY_GLOVE)
+	if (o_ptr->xtra3 == 1+ESSENCE_SLAY_GLOVE)
 	{
 		o_ptr->to_h -= (o_ptr->xtra4>>8);
 		o_ptr->to_d -= (o_ptr->xtra4 & 0x000f);
@@ -7962,6 +8006,6 @@ void do_cmd_kaji(bool only_browse)
 				break;
 			add_essence(mode);
 			break;
-		case 5: add_essence(6);break;
+		case 5: add_essence(10);break;
 	}
 }
