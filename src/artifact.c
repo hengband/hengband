@@ -3027,8 +3027,9 @@ void get_bloody_moon_flags(object_type *o_ptr)
 	dummy = randint1(2) + randint1(2);
 	for (i = 0; i < dummy; i++)
 	{
-		int flag = randint0(27);
-		if (flag >= 19) add_flag(o_ptr->art_flags, TR_KILL_ANIMAL + flag - 19);
+		int flag = randint0(26);
+		if (flag >= 20) add_flag(o_ptr->art_flags, TR_KILL_UNDEAD + flag - 20);
+		else if (flag == 19) add_flag(o_ptr->art_flags, TR_KILL_ANIMAL);
 		else if (flag == 18) add_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
 		else add_flag(o_ptr->art_flags, TR_CHAOTIC + flag);
 	}
