@@ -596,7 +596,7 @@ extern void health_track(int m_idx);
 extern void monster_race_track(int r_idx);
 extern void object_kind_track(int k_idx);
 extern void disturb(int stop_search, int flush_output);
-extern void glow_deep_lava(void);
+extern void glow_deep_lava_and_bldg(void);
 
 /* cmd1.c */
 extern bool test_hit_fire(int chance, int ac, int vis);

@@ -2099,11 +2099,10 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 			{
 				/* Message */
 #ifdef JP
-msg_print("夜が明けた。");
+				msg_print("夜が明けた。");
 #else
 				msg_print("The sun has risen.");
 #endif
-
 
 				/* Hack -- Scan the town */
 				for (y = 0; y < cur_hgt; y++)
@@ -2128,13 +2127,14 @@ msg_print("夜が明けた。");
 			/* Night falls */
 			else
 			{
+				byte feat;
+
 				/* Message */
 #ifdef JP
-msg_print("日が沈んだ。");
+				msg_print("日が沈んだ。");
 #else
 				msg_print("The sun has fallen.");
 #endif
-
 
 				/* Hack -- Scan the town */
 				for (y = 0; y < cur_hgt; y++)
@@ -2144,24 +2144,27 @@ msg_print("日が沈んだ。");
 						/* Get the cave grid */
 						c_ptr = &cave[y][x];
 
-						/* Darken "boring" features */
-						if ((c_ptr->feat <= FEAT_INVIS) ||
-						    ((c_ptr->feat >= FEAT_DEEP_WATER) &&
-							(c_ptr->feat <= FEAT_MOUNTAIN) &&
-						     (c_ptr->feat != FEAT_MUSEUM)) ||
-						    (x == 0) || (x == cur_wid-1) ||
-						    (y == 0) || (y == cur_hgt-1))
-						{
-							/* Forget the grid */
-							if (!is_mirror_grid(c_ptr)) c_ptr->info &= ~(CAVE_GLOW | CAVE_MARK);
+						/* Feature code (applying "mimic" field) */
+						feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
 
-							/* Hack -- Notice spot */
-							note_spot(y, x);
+						if (!is_mirror_grid(c_ptr) && (feat != FEAT_QUEST_ENTER) && (feat != FEAT_ENTRANCE))
+						{
+							/* Assume dark */
+							c_ptr->info &= ~(CAVE_GLOW);
+
+							if ((feat <= FEAT_INVIS) || (feat == FEAT_DIRT) || (feat == FEAT_GRASS))
+							{
+								/* Forget the normal floor grid */
+								c_ptr->info &= ~(CAVE_MARK);
+
+								/* Hack -- Notice spot */
+								note_spot(y, x);
+							}
 						}
 					}
 
-					/* Glow deep lava */
-					glow_deep_lava();
+					/* Glow deep lava and building entrances */
+					glow_deep_lava_and_bldg();
 				}
 			}
 

@@ -4907,9 +4907,9 @@ void disturb(int stop_search, int unused_flag)
 
 
 /*
- * Glow deep lava in the floor
+ * Glow deep lava and building entrances in the floor
  */
-void glow_deep_lava(void)
+void glow_deep_lava_and_bldg(void)
 {
 	int y, x, i, yy, xx;
 	cave_type *c_ptr;
@@ -4927,7 +4927,12 @@ void glow_deep_lava(void)
 			/* Feature code (applying "mimic" field) */
 			feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
 
-			if (feat == FEAT_DEEP_LAVA)
+			if ((feat == FEAT_DEEP_LAVA) ||
+			   ((feat >= FEAT_SHOP_HEAD) &&
+			    (feat <= FEAT_SHOP_TAIL)) ||
+			    (feat == FEAT_MUSEUM) ||
+			   ((feat >= FEAT_BLDG_HEAD) &&
+			    (feat <= FEAT_BLDG_TAIL)))
 			{
 				for (i = 0; i < 9; i++)
 				{

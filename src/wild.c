@@ -814,18 +814,25 @@ void wilderness_gen(void)
 			}
 			else
 			{
-				/* Darken "boring" features */
-				if ((c_ptr->feat <= FEAT_INVIS) ||
-				    ((c_ptr->feat >= FEAT_DEEP_WATER) &&
-					(c_ptr->feat <= FEAT_MOUNTAIN) &&
-				     (c_ptr->feat != FEAT_MUSEUM)) ||
-				    (x == 0) || (x == cur_wid-1) ||
-				    (y == 0) || (y == cur_hgt-1))
+				/* Feature code (applying "mimic" field) */
+				byte feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+
+				if (!is_mirror_grid(c_ptr) && (feat != FEAT_QUEST_ENTER) && (feat != FEAT_ENTRANCE))
 				{
-					/* Forget the grid */
-					c_ptr->info &= ~(CAVE_GLOW | CAVE_MARK);
+					/* Assume dark */
+					c_ptr->info &= ~(CAVE_GLOW);
+
+					/* Darken "boring" features */
+					if ((feat <= FEAT_INVIS) ||
+					   ((feat >= FEAT_DEEP_WATER) &&
+					    (feat <= FEAT_MOUNTAIN) &&
+					    (feat != FEAT_MUSEUM)))
+					{
+						/* Forget the grid */
+						c_ptr->info &= ~(CAVE_MARK);
+					}
 				}
-				else if (c_ptr->feat == FEAT_ENTRANCE)
+				else if (feat == FEAT_ENTRANCE)
 				{
 					/* Assume lit */
 					c_ptr->info |= (CAVE_GLOW);

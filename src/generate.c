@@ -1712,8 +1712,8 @@ if (why) msg_format("生成やり直し(%s)", why);
 		wipe_m_list();
 	}
 
-	/* Glow deep lava */
-	glow_deep_lava();
+	/* Glow deep lava and building entrances */
+	glow_deep_lava_and_bldg();
 
 	/* Reset flag */
 	p_ptr->enter_dungeon = FALSE;
