@@ -12,9 +12,8 @@
 
 #include "angband.h"
 
-#define MAX_LINELEN 1024
 
-static object_type autopick_last_destroyed_object;
+#define MAX_LINELEN 1024
 
 /*
  * Macros for Keywords
@@ -64,6 +63,9 @@ static object_type autopick_last_destroyed_object;
 #define FLG_GLOVES	    46
 #define FLG_BOOTS           47
 #define FLG_FAVORITE        48
+
+#define FLG_NOUN_BEGIN      FLG_ITEMS
+#define FLG_NOUN_END        FLG_FAVORITE
 
 #ifdef JP
 
@@ -191,6 +193,306 @@ static object_type autopick_last_destroyed_object;
 #ifdef JP
 	static char kanji_colon[] = "：";
 #endif
+
+
+/*
+ * A function to create new entry
+ */
+bool autopick_new_entry(autopick_type *entry, cptr str)
+{
+	cptr insc;
+	int i;
+	byte act = 0;
+	char buf[MAX_LINELEN];
+	cptr prev_ptr, ptr, old_ptr;
+	int prev_flg;
+
+	if (str[1] == ':') switch (str[0])
+	{
+	case '?': case '%':
+	case 'A': case 'P': case 'C':
+		return FALSE;
+	}
+
+	entry->flag[0] = entry->flag[1] = 0L;
+	entry->dice = 0;
+
+	act = DO_AUTOPICK | DO_DISPLAY;
+	while (1)
+	{
+		if ((act & DO_AUTOPICK) && *str == '!')
+		{
+			act &= ~DO_AUTOPICK;
+			act |= DO_AUTODESTROY;
+			str++;
+		}
+		else if ((act & DO_AUTOPICK) && *str == '~')
+		{
+			act &= ~DO_AUTOPICK;
+			act |= DONT_AUTOPICK;
+			str++;
+		}
+		else if ((act & DO_AUTOPICK) && *str == ';')
+		{
+			act &= ~DO_AUTOPICK;
+			act |= DO_QUERY_AUTOPICK;
+			str++;
+		}
+		else if ((act & DO_DISPLAY) && *str == '(')
+		{
+			act &= ~DO_DISPLAY;
+			str++;
+		}
+		else
+			break;
+	}
+
+	/* don't mind upper or lower case */
+	insc = NULL;
+	for (i = 0; *str; i++)
+	{
+		char c = *str++;
+#ifdef JP
+		if (iskanji(c))
+		{
+			buf[i++] = c;
+			buf[i] = *str++;
+			continue;
+		}
+#endif
+		/* Auto-inscription? */
+		if (c == '#')
+		{
+			buf[i] = '\0';
+			insc = str;
+			break;
+		}
+
+		if (isupper(c)) c = tolower(c);
+
+		buf[i] = c;
+	}
+	buf[i] = '\0';
+
+#if 0	
+	/* Skip empty line */
+	if (*buf == 0) return FALSE;
+#endif
+
+	ptr = prev_ptr = buf;
+	old_ptr = NULL;
+
+	while (old_ptr != ptr)
+	{
+		/* Save current location */
+		old_ptr = ptr;
+
+		if (MATCH_KEY(KEY_ALL)) ADD_FLG(FLG_ALL);
+		if (MATCH_KEY(KEY_COLLECTING)) ADD_FLG(FLG_COLLECTING);
+		if (MATCH_KEY(KEY_UNIDENTIFIED)) ADD_FLG(FLG_UNIDENTIFIED);
+		if (MATCH_KEY(KEY_IDENTIFIED)) ADD_FLG(FLG_IDENTIFIED);
+		if (MATCH_KEY(KEY_STAR_IDENTIFIED)) ADD_FLG(FLG_STAR_IDENTIFIED);
+		if (MATCH_KEY(KEY_BOOSTED)) ADD_FLG(FLG_BOOSTED);
+
+		/*** Weapons whose dd*ds is more than nn ***/
+		if (MATCH_KEY2(KEY_MORE_THAN))
+		{
+			int k = 0;
+			entry->dice = 0;
+
+			/* Drop leading spaces */
+			while (' ' == *ptr) ptr++;
+
+			/* Read number */
+			while ('0' <= *ptr && *ptr <= '9')
+			{
+				entry->dice = 10 * entry->dice + (*ptr - '0');
+				ptr++;
+				k++;
+			}
+
+			if (k > 0 && k <= 2)
+			{
+				(void)MATCH_KEY(KEY_DICE);
+				ADD_FLG(FLG_MORE_THAN);
+			}
+			else
+				ptr = prev_ptr;
+		}
+
+		/*** Items whose magical bonus is more than n ***/
+		if (MATCH_KEY2(KEY_MORE_BONUS))
+		{
+			int k = 0;
+			entry->bonus = 0;
+
+			/* Drop leading spaces */
+			while (' ' == *ptr) ptr++;
+
+			/* Read number */
+			while ('0' <= *ptr && *ptr <= '9')
+			{
+				entry->bonus = 10 * entry->bonus + (*ptr - '0');
+				ptr++;
+				k++;
+			}
+
+			if (k > 0 && k <= 2)
+			{
+				(void)MATCH_KEY(KEY_MORE_BONUS2);
+				ADD_FLG(FLG_MORE_BONUS);
+			}
+			else
+				ptr = prev_ptr;
+		}
+
+		if (MATCH_KEY(KEY_WORTHLESS)) ADD_FLG(FLG_WORTHLESS);
+		if (MATCH_KEY(KEY_EGO)) ADD_FLG(FLG_EGO);
+		if (MATCH_KEY(KEY_NAMELESS)) ADD_FLG(FLG_NAMELESS);
+		if (MATCH_KEY(KEY_UNAWARE)) ADD_FLG(FLG_UNAWARE);
+		if (MATCH_KEY(KEY_WANTED)) ADD_FLG(FLG_WANTED);
+		if (MATCH_KEY(KEY_UNIQUE)) ADD_FLG(FLG_UNIQUE);
+		if (MATCH_KEY(KEY_HUMAN)) ADD_FLG(FLG_HUMAN);
+		if (MATCH_KEY(KEY_UNREADABLE)) ADD_FLG(FLG_UNREADABLE);
+		if (MATCH_KEY(KEY_REALM1)) ADD_FLG(FLG_REALM1);
+		if (MATCH_KEY(KEY_REALM2)) ADD_FLG(FLG_REALM2);
+		if (MATCH_KEY(KEY_FIRST)) ADD_FLG(FLG_FIRST);
+		if (MATCH_KEY(KEY_SECOND)) ADD_FLG(FLG_SECOND);
+		if (MATCH_KEY(KEY_THIRD)) ADD_FLG(FLG_THIRD);
+		if (MATCH_KEY(KEY_FOURTH)) ADD_FLG(FLG_FOURTH);
+	}
+
+	/* Not yet found any noun */
+	prev_flg = -1;
+
+	if (MATCH_KEY2(KEY_ARTIFACT)) ADD_FLG_NOUN(FLG_ARTIFACT);
+
+	if (MATCH_KEY2(KEY_ITEMS)) ADD_FLG_NOUN(FLG_ITEMS);
+	else if (MATCH_KEY2(KEY_WEAPONS)) ADD_FLG_NOUN(FLG_WEAPONS);
+	else if (MATCH_KEY2(KEY_ARMORS)) ADD_FLG_NOUN(FLG_ARMORS);
+	else if (MATCH_KEY2(KEY_MISSILES)) ADD_FLG_NOUN(FLG_MISSILES);
+	else if (MATCH_KEY2(KEY_DEVICES)) ADD_FLG_NOUN(FLG_DEVICES);
+	else if (MATCH_KEY2(KEY_LIGHTS)) ADD_FLG_NOUN(FLG_LIGHTS);
+	else if (MATCH_KEY2(KEY_JUNKS)) ADD_FLG_NOUN(FLG_JUNKS);
+	else if (MATCH_KEY2(KEY_SPELLBOOKS)) ADD_FLG_NOUN(FLG_SPELLBOOKS);
+	else if (MATCH_KEY2(KEY_HAFTED)) ADD_FLG_NOUN(FLG_HAFTED);
+	else if (MATCH_KEY2(KEY_SHIELDS)) ADD_FLG_NOUN(FLG_SHIELDS);
+	else if (MATCH_KEY2(KEY_BOWS)) ADD_FLG_NOUN(FLG_BOWS);
+	else if (MATCH_KEY2(KEY_RINGS)) ADD_FLG_NOUN(FLG_RINGS);
+	else if (MATCH_KEY2(KEY_AMULETS)) ADD_FLG_NOUN(FLG_AMULETS);
+	else if (MATCH_KEY2(KEY_SUITS)) ADD_FLG_NOUN(FLG_SUITS);
+	else if (MATCH_KEY2(KEY_CLOAKS)) ADD_FLG_NOUN(FLG_CLOAKS);
+	else if (MATCH_KEY2(KEY_HELMS)) ADD_FLG_NOUN(FLG_HELMS);
+	else if (MATCH_KEY2(KEY_GLOVES)) ADD_FLG_NOUN(FLG_GLOVES);
+	else if (MATCH_KEY2(KEY_BOOTS)) ADD_FLG_NOUN(FLG_BOOTS);
+	else if (MATCH_KEY2(KEY_FAVORITE)) ADD_FLG_NOUN(FLG_FAVORITE);
+
+	/* Last 'keyword' must be at the correct location */
+	if (*ptr == ':')
+		ptr++;
+#ifdef JP
+	else if (ptr[0] == kanji_colon[0] && ptr[1] == kanji_colon[1])
+		ptr += 2;
+#endif
+	else if (*ptr == '\0')
+	{
+		/* There was no noun */
+		if (prev_flg == -1)
+
+		/* Add extra word "items" */
+		ADD_FLG_NOUN(FLG_ITEMS);
+	}
+	else
+	{
+		/* Noun type? */
+		if (prev_flg != -1)
+		{
+			/* A noun type keyword didn't end correctly */
+			entry->flag[prev_flg/32] &= ~(1L<< (prev_flg%32));
+			ptr = prev_ptr;
+		}
+	}
+
+	/* Save this auto-picker entry line */
+	entry->name = string_make(ptr);
+	entry->action = act;
+	entry->insc = string_make(insc);
+
+	return TRUE;
+}
+
+
+/*
+ * A function to delete entry
+ */
+void autopick_free_entry(autopick_type *entry)
+{
+	string_free(entry->name);
+	string_free(entry->insc);
+}
+
+
+/*
+ * Initialize auto-picker preference
+ */
+void init_autopicker(void)
+{
+	static const char easy_autopick_inscription[] = "(:=g";
+	autopick_type entry;
+	int i;
+
+	/* Clear old entries */
+	for( i = 0; i < max_autopick; i++)
+		autopick_free_entry(&autopick_list[i]);
+
+	max_autopick = 0;
+
+	/* There is always one entry "=g" */
+	autopick_new_entry(&entry, easy_autopick_inscription);
+	autopick_list[max_autopick++] = entry;
+}
+
+
+
+/*
+ *  Process line for auto picker/destroyer.
+ */
+errr process_pickpref_file_line(char *buf)
+{
+	autopick_type entry;
+	int i;
+
+	if (max_autopick == MAX_AUTOPICK)
+		return 1;
+	
+	/* Nuke illegal char */
+	for(i = 0; buf[i]; i++)
+	{
+#ifdef JP
+		if (iskanji(buf[i]))
+		{
+			i++;
+			continue;
+		}
+#endif
+		if (isspace(buf[i]) && buf[i] != ' ')
+			break;
+	}
+	buf[i] = 0;
+	
+	if (!autopick_new_entry(&entry, buf)) return 0;
+
+	/* Already has the same entry? */ 
+	for(i = 0; i < max_autopick; i++)
+		if(!strcmp(entry.name, autopick_list[i].name)
+		   && entry.flag[0] == autopick_list[i].flag[0]
+		   && entry.flag[1] == autopick_list[i].flag[1]
+		   && entry.dice == autopick_list[i].dice
+		   && entry.bonus == autopick_list[i].bonus) return 0;
+
+	autopick_list[max_autopick++] = entry;
+	return 0;
+}
 
 
 /*
@@ -323,234 +625,6 @@ static cptr autopick_line_from_entry_kill(autopick_type *entry)
 	autopick_free_entry(entry);
 
 	return ptr;
-}
-
-
-/*
- * A function to create new entry
- */
-bool autopick_new_entry(autopick_type *entry, cptr str)
-{
-	cptr insc;
-	int i;
-	byte act = 0;
-	char buf[MAX_LINELEN];
-	cptr prev_ptr, ptr, old_ptr;
-	int prev_flg;
-
-	if (str[1] == ':') switch (str[0])
-	{
-	case '?': case '%':
-	case 'A': case 'P': case 'C':
-		return FALSE;
-	}
-
-	entry->flag[0] = entry->flag[1] = 0L;
-	entry->dice = 0;
-
-	act = DO_AUTOPICK | DO_DISPLAY;
-	while (1)
-	{
-		if ((act & DO_AUTOPICK) && *str == '!')
-		{
-			act &= ~DO_AUTOPICK;
-			act |= DO_AUTODESTROY;
-			str++;
-		}
-		else if ((act & DO_AUTOPICK) && *str == '~')
-		{
-			act &= ~DO_AUTOPICK;
-			act |= DONT_AUTOPICK;
-			str++;
-		}
-		else if ((act & DO_AUTOPICK) && *str == ';')
-		{
-			act &= ~DO_AUTOPICK;
-			act |= DO_QUERY_AUTOPICK;
-			str++;
-		}
-		else if ((act & DO_DISPLAY) && *str == '(')
-		{
-			act &= ~DO_DISPLAY;
-			str++;
-		}
-		else
-			break;
-	}
-
-	/* don't mind upper or lower case */
-	insc = NULL;
-	for (i = 0; *str; i++)
-	{
-		char c = *str++;
-#ifdef JP
-		if (iskanji(c))
-		{
-			buf[i++] = c;
-			buf[i] = *str++;
-			continue;
-		}
-#endif
-		/* Auto-inscription? */
-		if (c == '#')
-		{
-			buf[i] = '\0';
-			insc = str;
-			break;
-		}
-
-		if (isupper(c)) c = tolower(c);
-
-		buf[i] = c;
-	}
-	buf[i] = '\0';
-	
-	/* Skip empty line */
-	if (*buf == 0) return FALSE;
-
-	ptr = prev_ptr = buf;
-	old_ptr = NULL;
-
-	while (old_ptr != ptr)
-	{
-		/* Save current location */
-		old_ptr = ptr;
-
-		if (MATCH_KEY(KEY_ALL)) ADD_FLG(FLG_ALL);
-		if (MATCH_KEY(KEY_COLLECTING)) ADD_FLG(FLG_COLLECTING);
-		if (MATCH_KEY(KEY_UNIDENTIFIED)) ADD_FLG(FLG_UNIDENTIFIED);
-		if (MATCH_KEY(KEY_IDENTIFIED)) ADD_FLG(FLG_IDENTIFIED);
-		if (MATCH_KEY(KEY_STAR_IDENTIFIED)) ADD_FLG(FLG_STAR_IDENTIFIED);
-		if (MATCH_KEY(KEY_BOOSTED)) ADD_FLG(FLG_BOOSTED);
-
-		/*** Weapons whose dd*ds is more than nn ***/
-		if (MATCH_KEY2(KEY_MORE_THAN))
-		{
-			int k = 0;
-			entry->dice = 0;
-
-			/* Drop leading spaces */
-			while (' ' == *ptr) ptr++;
-
-			/* Read number */
-			while ('0' <= *ptr && *ptr <= '9')
-			{
-				entry->dice = 10 * entry->dice + (*ptr - '0');
-				ptr++;
-				k++;
-			}
-
-			if (k > 0 && k <= 2)
-			{
-				(void)MATCH_KEY(KEY_DICE);
-				ADD_FLG(FLG_MORE_THAN);
-			}
-			else
-				ptr = prev_ptr;
-		}
-
-		/*** Items whose magical bonus is more than n ***/
-		if (MATCH_KEY2(KEY_MORE_BONUS))
-		{
-			int k = 0;
-			entry->bonus = 0;
-
-			/* Drop leading spaces */
-			while (' ' == *ptr) ptr++;
-
-			/* Read number */
-			while ('0' <= *ptr && *ptr <= '9')
-			{
-				entry->bonus = 10 * entry->bonus + (*ptr - '0');
-				ptr++;
-				k++;
-			}
-
-			if (k > 0 && k <= 2)
-			{
-				(void)MATCH_KEY(KEY_MORE_BONUS2);
-				ADD_FLG(FLG_MORE_BONUS);
-			}
-			else
-				ptr = prev_ptr;
-		}
-
-		if (MATCH_KEY(KEY_WORTHLESS)) ADD_FLG(FLG_WORTHLESS);
-		if (MATCH_KEY(KEY_EGO)) ADD_FLG(FLG_EGO);
-		if (MATCH_KEY(KEY_NAMELESS)) ADD_FLG(FLG_NAMELESS);
-		if (MATCH_KEY(KEY_UNAWARE)) ADD_FLG(FLG_UNAWARE);
-		if (MATCH_KEY(KEY_WANTED)) ADD_FLG(FLG_WANTED);
-		if (MATCH_KEY(KEY_UNIQUE)) ADD_FLG(FLG_UNIQUE);
-		if (MATCH_KEY(KEY_HUMAN)) ADD_FLG(FLG_HUMAN);
-		if (MATCH_KEY(KEY_UNREADABLE)) ADD_FLG(FLG_UNREADABLE);
-		if (MATCH_KEY(KEY_REALM1)) ADD_FLG(FLG_REALM1);
-		if (MATCH_KEY(KEY_REALM2)) ADD_FLG(FLG_REALM2);
-		if (MATCH_KEY(KEY_FIRST)) ADD_FLG(FLG_FIRST);
-		if (MATCH_KEY(KEY_SECOND)) ADD_FLG(FLG_SECOND);
-		if (MATCH_KEY(KEY_THIRD)) ADD_FLG(FLG_THIRD);
-		if (MATCH_KEY(KEY_FOURTH)) ADD_FLG(FLG_FOURTH);
-	}
-
-	/* Not yet found any noun */
-	prev_flg = -1;
-
-	if (MATCH_KEY2(KEY_ARTIFACT)) ADD_FLG_NOUN(FLG_ARTIFACT);
-
-	if (MATCH_KEY2(KEY_ITEMS)) ADD_FLG_NOUN(FLG_ITEMS);
-	else if (MATCH_KEY2(KEY_WEAPONS)) ADD_FLG_NOUN(FLG_WEAPONS);
-	else if (MATCH_KEY2(KEY_ARMORS)) ADD_FLG_NOUN(FLG_ARMORS);
-	else if (MATCH_KEY2(KEY_MISSILES)) ADD_FLG_NOUN(FLG_MISSILES);
-	else if (MATCH_KEY2(KEY_DEVICES)) ADD_FLG_NOUN(FLG_DEVICES);
-	else if (MATCH_KEY2(KEY_LIGHTS)) ADD_FLG_NOUN(FLG_LIGHTS);
-	else if (MATCH_KEY2(KEY_JUNKS)) ADD_FLG_NOUN(FLG_JUNKS);
-	else if (MATCH_KEY2(KEY_SPELLBOOKS)) ADD_FLG_NOUN(FLG_SPELLBOOKS);
-	else if (MATCH_KEY2(KEY_HAFTED)) ADD_FLG_NOUN(FLG_HAFTED);
-	else if (MATCH_KEY2(KEY_SHIELDS)) ADD_FLG_NOUN(FLG_SHIELDS);
-	else if (MATCH_KEY2(KEY_BOWS)) ADD_FLG_NOUN(FLG_BOWS);
-	else if (MATCH_KEY2(KEY_RINGS)) ADD_FLG_NOUN(FLG_RINGS);
-	else if (MATCH_KEY2(KEY_AMULETS)) ADD_FLG_NOUN(FLG_AMULETS);
-	else if (MATCH_KEY2(KEY_SUITS)) ADD_FLG_NOUN(FLG_SUITS);
-	else if (MATCH_KEY2(KEY_CLOAKS)) ADD_FLG_NOUN(FLG_CLOAKS);
-	else if (MATCH_KEY2(KEY_HELMS)) ADD_FLG_NOUN(FLG_HELMS);
-	else if (MATCH_KEY2(KEY_GLOVES)) ADD_FLG_NOUN(FLG_GLOVES);
-	else if (MATCH_KEY2(KEY_BOOTS)) ADD_FLG_NOUN(FLG_BOOTS);
-	else if (MATCH_KEY2(KEY_FAVORITE)) ADD_FLG_NOUN(FLG_FAVORITE);
-
-	/* Last 'keyword' must be at the correct location */
-	if (*ptr == ':')
-		ptr++;
-#ifdef JP
-	else if (ptr[0] == kanji_colon[0] && ptr[1] == kanji_colon[1])
-		ptr += 2;
-#endif
-	else if (*ptr == '\0')
-		; /* nothing to do */
-	else
-	{
-		/* Noun type? */
-		if (prev_flg != -1)
-		{
-			/* A noun type keyword didn't end correctly */
-			entry->flag[prev_flg/32] &= ~(1L<< (prev_flg%32));
-			ptr = prev_ptr;
-		}
-	}
-
-	/* Save this auto-picker entry line */
-	entry->name = string_make(ptr);
-	entry->action = act;
-	entry->insc = string_make(insc);
-
-	return TRUE;
-}
-
-/*
- * A function to delete entry
- */
-void autopick_free_entry(autopick_type *entry)
-{
-	string_free(entry->name);
-	string_free(entry->insc);
 }
 
 
@@ -979,6 +1053,42 @@ int is_autopick(object_type *o_ptr)
 
 
 /*
+ *  Auto inscription
+ */
+void auto_inscribe_item(int item, int idx)
+{
+	object_type *o_ptr;
+
+	/* Get the item (in the pack) */
+	if (item >= 0) o_ptr = &inventory[item];
+
+	/* Get the item (on the floor) */
+	else o_ptr = &o_list[0 - item];
+
+	/* Auto-inscription or Re-inscribe for resistances {%} */
+	if ((idx < 0 || !autopick_list[idx].insc) && !o_ptr->inscription)
+		return;
+
+	if (!o_ptr->inscription)
+		o_ptr->inscription = quark_add(autopick_list[idx].insc);
+
+	if (item > INVEN_PACK)
+	{
+		/* Redraw inscription */
+		p_ptr->window |= (PW_EQUIP);
+
+		/* {.} and {$} effect p_ptr->warning and TRC_TELEPORT_SELF */
+		p_ptr->update |= (PU_BONUS);
+	}
+	else if (item >= 0)
+	{
+		/* Redraw inscription */
+		p_ptr->window |= (PW_INVEN);
+	}
+}
+
+
+/*
  * Automatically destroy items in this grid.
  */
 static bool is_opt_confirm_destroy(object_type *o_ptr)
@@ -1045,44 +1155,10 @@ static bool is_opt_confirm_destroy(object_type *o_ptr)
 
 
 /*
- *  Auto inscription
- */
-void auto_inscribe_item(int item, int idx)
-{
-	object_type *o_ptr;
-
-	/* Get the item (in the pack) */
-	if (item >= 0) o_ptr = &inventory[item];
-
-	/* Get the item (on the floor) */
-	else o_ptr = &o_list[0 - item];
-
-	/* Auto-inscription or Re-inscribe for resistances {%} */
-	if ((idx < 0 || !autopick_list[idx].insc) && !o_ptr->inscription)
-		return;
-
-	if (!o_ptr->inscription)
-		o_ptr->inscription = quark_add(autopick_list[idx].insc);
-
-	if (item > INVEN_PACK)
-	{
-		/* Redraw inscription */
-		p_ptr->window |= (PW_EQUIP);
-
-		/* {.} and {$} effect p_ptr->warning and TRC_TELEPORT_SELF */
-		p_ptr->update |= (PU_BONUS);
-	}
-	else if (item >= 0)
-	{
-		/* Redraw inscription */
-		p_ptr->window |= (PW_INVEN);
-	}
-}
-
-
-/*
  * Automatically destroy an item if it is to be destroyed
  */
+static object_type autopick_last_destroyed_object;
+
 bool auto_destroy_item(int item, int autopick_idx)
 {
 	bool destroy = FALSE;
@@ -1310,6 +1386,44 @@ void auto_pickup_items(cave_type *c_ptr)
 		}
 	}
 }
+
+
+/********  Auto-picker/destroyer editor  **********/
+
+#define MAX_YANK MAX_LINELEN
+
+/* 
+ * Struct for yank buffer
+ */
+typedef struct chain_str {
+	struct chain_str *next;
+	char s[1];
+} chain_str_type;
+
+
+/*
+ * Data struct for text editor
+ */
+typedef struct {
+	int wid, hgt;
+	int cx, cy;
+	int upper, left;
+	int old_wid, old_hgt;
+	int old_cy;
+	int old_upper, old_left;
+	int mx, my;
+	bool mark;
+	object_type *search_o_ptr;
+	cptr search_str;
+	cptr last_destroyed;
+	chain_str_type *yank;
+	bool yank_eol;
+	cptr *lines_list;
+	byte dirty_flags;
+	int dirty_line;
+	int filename_mode;
+	int old_com_id;
+} text_body_type;
 
 
 /*
@@ -1983,6 +2097,7 @@ static cptr *read_pickpref_text_lines(int *filename_mode_p)
 	return lines_list;
 }
 
+
 /*
  * Write whole lines of memory to a file.
  */
@@ -2029,21 +2144,72 @@ static void free_text_lines(cptr *lines_list)
 /*
  * Delete or insert string
  */
-static void toggle_string(cptr *lines_list, int flg, int y)
+static void toggle_keyword(text_body_type *tb, int flg)
 {
 	autopick_type an_entry, *entry = &an_entry;
 
-	if (!autopick_new_entry(entry, lines_list[y]))
+	if (!autopick_new_entry(entry, tb->lines_list[tb->cy]))
 		return;
 
-	string_free(lines_list[y]);
+	string_free(tb->lines_list[tb->cy]);
+
+	/* Remove all noun flag */
+	if (FLG_NOUN_BEGIN <= flg && flg <= FLG_NOUN_END)
+	{
+		int i;
+		for (i = FLG_NOUN_BEGIN; i <= FLG_NOUN_END; i++)
+			REM_FLG(i);
+	}
+
 	if (IS_FLG(flg)) 
 		REM_FLG(flg);
 	else
 		ADD_FLG(flg);
 
-	lines_list[y] = autopick_line_from_entry_kill(entry);
+	tb->lines_list[tb->cy] = autopick_line_from_entry_kill(entry);
+
+	/* Now dirty */
+	tb->dirty_line = tb->cy;
 }
+
+
+/*
+ * Delete or insert string
+ */
+static void add_keyword(text_body_type *tb, int flg)
+{
+	autopick_type an_entry, *entry = &an_entry;
+
+	if (!autopick_new_entry(entry, tb->lines_list[tb->cy]))
+		return;
+
+	/* There is the flag already */
+	if (IS_FLG(flg))
+	{
+		/* Free memory for the entry */
+		autopick_free_entry(entry);
+
+		return;
+	}
+
+	string_free(tb->lines_list[tb->cy]);
+
+	/* Remove all noun flag */
+	if (FLG_NOUN_BEGIN <= flg && flg <= FLG_NOUN_END)
+	{
+		int i;
+		for (i = FLG_NOUN_BEGIN; i <= FLG_NOUN_END; i++)
+			REM_FLG(i);
+	}
+
+	ADD_FLG(flg);
+
+	tb->lines_list[tb->cy] = autopick_line_from_entry_kill(entry);
+
+	/* Now dirty */
+	tb->dirty_line = tb->cy;
+}
+
 
 /*
  * Insert return code and split the line
@@ -2242,12 +2408,58 @@ static bool entry_from_choosed_object(autopick_type *entry)
 
 
 /*
+ * Choose an item for search
+ */
+static byte get_object_for_search(object_type **o_handle, cptr *search_strp)
+{
+	char buf[MAX_NLEN+20];
+	object_type *o_ptr;
+	cptr q, s;
+
+	/* Get an item */
+#ifdef JP
+	q = "どのアイテムを検索しますか? ";
+	s = "アイテムを持っていない。";
+#else
+	q = "Enter which item? ";
+	s = "You have nothing to enter.";
+#endif
+	o_ptr = choose_object(q, s);
+	if (!o_ptr) return 0;
+
+	*o_handle = o_ptr;
+
+	string_free(*search_strp);
+	object_desc(buf, *o_handle, FALSE, 3);
+	*search_strp = string_make(format("<%s>", buf));
+	return 1;
+}
+
+
+/*
+ * Prepare for search by destroyed object
+ */
+static byte get_destroyed_object_for_search(object_type **o_handle, cptr *search_strp)
+{
+	char buf[MAX_NLEN+20];
+
+	if (!autopick_last_destroyed_object.k_idx) return 0;
+
+	*o_handle = &autopick_last_destroyed_object;
+
+	string_free(*search_strp);
+	object_desc(buf, *o_handle, FALSE, 3);
+	*search_strp = string_make(format("<%s>", buf));
+	return 1;
+}
+
+
+/*
  * Choose an item or string for search
  */
-static bool get_string_for_search(object_type **o_handle, cptr *search_strp)
+static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 {
 	int pos = 0;
-	cptr q, s;
 	char buf[MAX_NLEN+20];
 
 #ifdef JP
@@ -2271,60 +2483,48 @@ static bool get_string_for_search(object_type **o_handle, cptr *search_strp)
 	/* Process input */
 	while (1)
 	{
-		object_type *o_ptr;
+		bool back = FALSE;
 		int i;
 
 		/* Place cursor */
 		Term_gotoxy(col + pos, 0);
 
-		/* Do not process macros except special keys */
-		inkey_special = TRUE;
-
 		/* Get a key */
 		i = inkey();
+
+		/* HACK -- ignore macro defined on ASCII keys */
+		if (strlen(inkey_macro_trigger_string) == 1)
+			i = inkey_macro_trigger_string[0];
+
 
 		/* Analyze the key */
 		switch (i)
 		{
 		case ESCAPE:
-			pos = 0;
-			return FALSE;
+			return 0;
+
+		case KTRL('r'):
+			back = TRUE;
+			/* Fall through */
 
 		case '\n':
 		case '\r':
-			if (!pos && *o_handle) return TRUE;
+		case KTRL('s'):
+			if (!pos && *o_handle) return (back ? -1 : 1);
 			string_free(*search_strp);
 			*search_strp = string_make(buf);
 			*o_handle = NULL;
-			return TRUE;
+			return (back ? -1 : 1);
 
 		case KTRL('i'):
 			/* Get an item */
-#ifdef JP
-			q = "どのアイテムを検索しますか? ";
-			s = "アイテムを持っていない。";
-#else
-			q = "Enter which item? ";
-			s = "You have nothing to enter.";
-#endif
-			o_ptr = choose_object(q, s);
-			if (!o_ptr) return FALSE;
-
-			*o_handle = o_ptr;
-
-			string_free(*search_strp);
-			object_desc(buf, *o_handle, FALSE, 3);
-			*search_strp = string_make(format("<%s>", buf));
-			return TRUE;
+			return get_object_for_search(o_handle, search_strp);
 
 		case KTRL('l'):
-			if (!autopick_last_destroyed_object.k_idx) break;
-			*o_handle = &autopick_last_destroyed_object;
-
-			string_free(*search_strp);
-			object_desc(buf, *o_handle, FALSE, 3);
-			*search_strp = string_make(format("<%s>", buf));
-			return TRUE;
+			/* Prepare string for destroyed object if there is one. */
+			if (get_destroyed_object_for_search(o_handle, search_strp))
+				return 1;
+			break;
 
 		case 0x7F:
 		case '\010':
@@ -2466,66 +2666,984 @@ static bool search_for_string(cptr *lines_list, cptr search_str, int *cxp, int *
 }
 
 
+
+
 /*
- * Initialize auto-picker preference
+ * Editor commands
  */
-void init_autopicker(void)
+#define EC_QUIT                1 
+#define EC_REVERT	       2 
+#define EC_HELP                3 
+#define EC_RETURN	       4        
+#define EC_LEFT		       5 
+#define EC_DOWN		       6 
+#define EC_UP		       7 
+#define EC_RIGHT	       8 
+#define EC_BOL		       9 
+#define EC_EOL		       10
+#define EC_PGUP		       11
+#define EC_PGDOWN	       12
+#define EC_TOP		       13
+#define EC_BOTTOM	       14
+#define EC_CUT		       15
+#define EC_COPY		       16
+#define EC_PASTE	       17
+#define EC_BLOCK	       18
+#define EC_KILL_LINE	       19
+#define EC_DELETE_CHAR	       20
+#define EC_BACKSPACE	       21
+#define EC_SEARCH_STR	       22
+#define EC_SEARCH_FORW         23
+#define EC_SEARCH_BACK         24
+#define EC_SEARCH_OBJ	       25
+#define EC_SEARCH_DESTROYED    26
+#define EC_INSERT_OBJECT       27
+#define EC_INSERT_DESTROYED    28
+#define EC_INSERT_BLOCK	       29
+#define EC_INSERT_MACRO	       30
+#define EC_INSERT_KEYMAP       31
+#define EC_CL_AUTOPICK	       32
+#define EC_CL_DESTROY	       33
+#define EC_CL_LEAVE	       34
+#define EC_CL_QUERY	       35
+#define EC_CL_NO_DISP	       36
+#define EC_IK_UNAWARE	       37
+#define EC_IK_UNIDENTIFIED     38
+#define EC_IK_IDENTIFIED       39
+#define EC_IK_STAR_IDENTIFIED  40
+#define EC_KK_WEAPONS	       41
+#define EC_KK_FAVORITE	       42
+#define EC_KK_ARMORS	       43
+#define EC_KK_MISSILES	       44
+#define EC_KK_DEVICES	       45
+#define EC_KK_LIGHTS	       46
+#define EC_KK_JUNKS	       47
+#define EC_KK_SPELLBOOKS       48
+#define EC_KK_SHIELDS	       49
+#define EC_KK_BOWS	       50
+#define EC_KK_RINGS	       51
+#define EC_KK_AMULETS	       52
+#define EC_KK_SUITS	       53
+#define EC_KK_CLOAKS	       54
+#define EC_KK_HELMS	       55
+#define EC_KK_GLOVES	       56
+#define EC_KK_BOOTS	       57
+#define EC_OK_COLLECTING       58
+#define EC_OK_BOOSTED	       59
+#define EC_OK_MORE_THAN	       60
+#define EC_OK_MORE_BONUS       61
+#define EC_OK_WORTHLESS	       62
+#define EC_OK_ARTIFACT	       63
+#define EC_OK_EGO	       64
+#define EC_OK_NAMELESS	       65
+#define EC_OK_WANTED	       66
+#define EC_OK_UNIQUE	       67
+#define EC_OK_HUMAN	       68
+#define EC_OK_UNREADABLE       69
+#define EC_OK_REALM1	       70
+#define EC_OK_REALM2	       71
+#define EC_OK_FIRST	       72
+#define EC_OK_SECOND	       73
+#define EC_OK_THIRD	       74
+#define EC_OK_FOURTH	       75
+
+
+typedef struct {
+	int level;
+	int key;
+	int com_id;
+} command_menu_type;
+
+
+command_menu_type menu_data[] =
 {
-	static const char easy_autopick_inscription[] = "(:=g";
-	autopick_type entry;
+	{0, KTRL('q'), EC_QUIT}, 
+	{0, KTRL('z'), EC_REVERT},
+	{0, -1, EC_HELP},
+
+	{0, -1, -1},
+	{1, KTRL('b'), EC_LEFT},
+	{1, KTRL('n'), EC_DOWN},
+	{1, KTRL('p'), EC_UP},
+	{1, KTRL('f'), EC_RIGHT},
+	{1, KTRL('a'), EC_BOL},
+	{1, KTRL('e'), EC_EOL},
+	{1, KTRL('o'), EC_PGUP},
+	{1, KTRL('l'), EC_PGDOWN},
+	{1, KTRL('y'), EC_TOP},
+	{1, KTRL('u'), EC_BOTTOM},
+
+	{0, -1, -1},
+	{1, KTRL('x'), EC_CUT},
+	{1, KTRL('c'), EC_COPY},
+	{1, KTRL('v'), EC_PASTE},
+	{1, KTRL('g'), EC_BLOCK},
+	{1, KTRL('k'), EC_KILL_LINE},
+	{1, KTRL('d'), EC_DELETE_CHAR},
+	{1, KTRL('h'), EC_BACKSPACE},
+	{1, KTRL('j'), EC_RETURN},
+	{1, KTRL('m'), EC_RETURN},
+
+	{0, -1, -1},
+	{1, KTRL('s'), EC_SEARCH_STR},
+	{1, -1, EC_SEARCH_FORW},
+	{1, KTRL('r'), EC_SEARCH_BACK},
+	{1, -1, EC_SEARCH_OBJ},
+	{1, -1, EC_SEARCH_DESTROYED},
+
+	{0, -1, -1},
+	{1, KTRL('i'), EC_INSERT_OBJECT},
+	{1, -1, EC_INSERT_DESTROYED},
+	{1, -1, EC_INSERT_BLOCK},
+	{1, -1, EC_INSERT_MACRO},
+	{1, -1, EC_INSERT_KEYMAP},
+
+ 	{0, -1, -1},
+	{1, -1, EC_CL_AUTOPICK},
+	{1, -1, EC_CL_DESTROY},
+	{1, -1, EC_CL_LEAVE},
+	{1, -1, EC_CL_QUERY},
+	{1, -1, EC_CL_NO_DISP},
+
+ 	{0, -1, -1},
+	{1, -1, EC_IK_UNAWARE},
+	{1, -1, EC_IK_UNIDENTIFIED},
+	{1, -1, EC_IK_IDENTIFIED},
+	{1, -1, EC_IK_STAR_IDENTIFIED},
+
+ 	{0, -1, -1},
+	{1, -1, EC_KK_WEAPONS},
+	{1, -1, EC_KK_FAVORITE},
+	{1, -1, EC_KK_ARMORS},
+	{1, -1, EC_KK_MISSILES},
+	{1, -1, EC_KK_DEVICES},
+	{1, -1, EC_KK_LIGHTS},
+	{1, -1, EC_KK_JUNKS},
+	{1, -1, EC_KK_SPELLBOOKS},
+	{1, -1, EC_KK_SHIELDS},
+	{1, -1, EC_KK_BOWS},
+	{1, -1, EC_KK_RINGS},
+	{1, -1, EC_KK_AMULETS},
+	{1, -1, EC_KK_SUITS},
+	{1, -1, EC_KK_CLOAKS},
+	{1, -1, EC_KK_HELMS},
+	{1, -1, EC_KK_GLOVES},
+	{1, -1, EC_KK_BOOTS},
+
+ 	{0, -1, -1},
+	{1, -1, EC_OK_COLLECTING},
+	{1, -1, EC_OK_BOOSTED},
+	{1, -1, EC_OK_MORE_THAN},
+	{1, -1, EC_OK_MORE_BONUS},
+	{1, -1, EC_OK_WORTHLESS},
+	{1, -1, EC_OK_ARTIFACT},
+	{1, -1, EC_OK_EGO},
+	{1, -1, EC_OK_NAMELESS},
+	{1, -1, EC_OK_WANTED},
+	{1, -1, EC_OK_UNIQUE},
+	{1, -1, EC_OK_HUMAN},
+	{1, -1, EC_OK_UNREADABLE},
+	{1, -1, EC_OK_REALM1},
+	{1, -1, EC_OK_REALM2},
+	{1, -1, EC_OK_FIRST},
+	{1, -1, EC_OK_SECOND},
+	{1, -1, EC_OK_THIRD},
+	{1, -1, EC_OK_FOURTH},
+
+	{-1, -1, 0}
+};
+
+
+cptr menu_name[] =
+#ifdef JP
+{
+	"セーブして終了", 
+	"全ての変更を破棄", 
+	"ヘルプ", 
+
+	"カーソル移動", 
+	"左", 
+	"下", 
+	"上", 
+	"右", 
+	"行の先頭", 
+	"行の終端", 
+	"上のページ", 
+	"下のページ", 
+	"1行目へ移動", 
+	"最下行へ移動", 
+
+	"編集", 
+	"選択範囲をカット", 
+	"選択範囲をコピー", 
+	"ペースト", 
+	"選択範囲の指定", 
+	"行の残りを削除", 
+	"1文字削除", 
+	"バックスペース", 
+	"改行", 
+	"改行", 
+
+	"検索", 
+	"文字列で検索", 
+	"前方へ再検索", 
+	"後方へ再検索", 
+	"アイテムを選択して検索", 
+	"自動破壊されたアイテムで検索", 
+
+	"色々挿入...", 
+	"選択したアイテムの名前を挿入", 
+	"自動破壊されたアイテムの名前を挿入", 
+	"条件分岐ブロックの例を挿入", 
+	"マクロ定義を挿入", 
+	"キーマップ定義を挿入", 
+
+ 	"自動コマンド指定文字", 
+	"「 」 (自動拾い)", 
+	"「!」 (自動破壊)", 
+	"「~」 (放置)", 
+	"「;」 (確認して拾う)", 
+	"「(」 (マップコマンドで表示しない)", 
+
+ 	"識別状態キーワード", 
+	"未判明", 
+	"未鑑定", 
+	"鑑定済み", 
+	"*鑑定*済み", 
+
+ 	"キーワード (名詞)", 
+	"武器", 
+	"得意武器", 
+	"防具", 
+	"矢", 
+	"魔法アイテム", 
+	"光源", 
+	"がらくた", 
+	"魔法書", 
+	"盾", 
+	"弓", 
+	"指輪", 
+	"アミュレット", 
+	"鎧", 
+	"クローク", 
+	"兜", 
+	"籠手", 
+	"靴", 
+
+ 	"キーワード (形容詞)", 
+	"収集中の", 
+	"ダイス目の違う (武器)", 
+	"ダイス目 # 以上の (武器)", 
+	"修正値 # 以上の", 
+	"無価値の", 
+	"アーティファクト", 
+	"エゴ (装備)", 
+	"無銘の (装備)", 
+	"賞金首の", 
+	"ユニーク・モンスターの", 
+	"人間の", 
+	"読めない (魔法書)", 
+	"第一領域の (魔法書)", 
+	"第二領域の (魔法書)", 
+	"1冊目の (魔法書)", 
+	"2冊目の (魔法書)", 
+	"3冊目の (魔法書)", 
+	"4冊目の (魔法書)", 
+};
+#else
+{
+	"Save & Quit", 
+	"Revert all changes", 
+	"Help", 
+
+	"Move cursor", 
+	"Left", 
+	"Down", 
+	"Up", 
+	"Right", 
+	"Beggining of line", 
+	"End of line", 
+	"Page up", 
+	"Page down", 
+	"Top", 
+	"Bottom", 
+
+	"Edit", 
+	"Cut", 
+	"Copy", 
+	"Paste", 
+	"Select block", 
+	"Kill rest of line", 
+	"Delete character", 
+	"Backspace", 
+	"Return", 
+	"Return", 
+
+	"Search", 
+	"Search by string", 
+	"Search forward", 
+	"Search backward", 
+	"Search by inventory object", 
+	"Search by destroyed object", 
+
+	"Insert...", 
+	"Insert name of choosen object", 
+	"Insert name of destroyed object", 
+	"Insert conditional block", 
+	"Insert a macro definition", 
+	"Insert a keymap definition", 
+
+ 	"Command letter", 
+	"' ' (Auto pick)", 
+	"'!' (Auto destroy)", 
+	"'~' (Leave it on the floor)", 
+	"';' (Query to pick up)", 
+	"'(' (No display on the large map)", 
+
+ 	"Identify states", 
+	"unaware", 
+	"unidentified", 
+	"identified", 
+	"*identified*", 
+
+ 	"Keywords (noun)", 
+	"weapons", 
+	"favorite", 
+	"armors", 
+	"missiles", 
+	"devices", 
+	"lights", 
+	"junks", 
+	"spellbooks", 
+	"shields", 
+	"bows", 
+	"rings", 
+	"amulets", 
+	"suits", 
+	"cloaks", 
+	"helms", 
+	"gloves", 
+	"boots", 
+
+ 	"Keywords (adjective)", 
+	"collecting", 
+	"dice boosted (weapons)", 
+	"more than # dice (weapons)", 
+	"more bonus than #", 
+	"worthless", 
+	"artifact", 
+	"ego (equipments)", 
+	"nameless (equipments)", 
+	"wanted", 
+	"unique", 
+	"human", 
+	"unreadable (spellbooks)", 
+	"realm1 (spellbooks)", 
+	"realm2 (spellbooks)", 
+	"first (spellbooks)", 
+	"second (spellbooks)", 
+	"third (spellbooks)", 
+	"fourth (spellbooks)", 
+};
+
+#endif
+
+/*
+ * Find a command by 'key'.
+ */
+static int get_com_id(char key)
+{
 	int i;
 
-	/* Clear old entries */
-	for( i = 0; i < max_autopick; i++)
-		autopick_free_entry(&autopick_list[i]);
+	for (i = 0; menu_name[i]; i++)
+	{
+		if (menu_data[i].key == key)
+		{
+			return menu_data[i].com_id;
+		}
+	}
 
-	max_autopick = 0;
-
-	/* There is always one entry "=g" */
-	autopick_new_entry(&entry, easy_autopick_inscription);
-	autopick_list[max_autopick++] = entry;
+	return 0;
 }
 
 
+/*
+ * Display the menu, and get a command 
+ */
+static int do_command_menu(int level, int start)
+{
+	int i;
+	int max_len = 0;
+	int max_menu_wid;
+	int col0 = 5 + level*4;
+	int row0 = 1 + level*2;
+	byte menu_key = 0;
+	int menu_id_list[26];
+	bool redraw = TRUE;
+	char linestr[MAX_LINELEN];
+
+	/* Get max length */
+	menu_key = 0;
+	for (i = start; menu_data[i].level >= level; i++)
+	{
+		int len;
+
+		/* Ignore lower level sub menus */
+		if (menu_data[i].level > level) continue;
+
+		len = strlen(menu_name[i]);
+		if (len > max_len) max_len = len;
+
+		menu_id_list[menu_key] = i;
+		menu_key++;
+	}
+
+	while (menu_key < 26)
+	{
+		menu_id_list[menu_key] = -1;
+		menu_key++;
+	}
+
+	/* Extra space for displaying menu key and command key */
+	max_menu_wid = max_len + 3 + 3;
+
+	/* Prepare box line */
+	linestr[0] = '\0';
+	strcat(linestr, "+");
+	for (i = 0; i < max_menu_wid + 2; i++)
+	{
+		strcat(linestr, "-");
+	}
+	strcat(linestr, "+");
+
+	while (1)
+	{
+		int com_id;
+		char key;
+		int menu_id;
+
+		if (redraw)
+		{
+			int row1 = row0 + 1;
+
+			/* Draw top line */
+			Term_putstr(col0, row0, -1, TERM_WHITE, linestr);
+
+			/* Draw menu items */
+			menu_key = 0;
+			for (i = start; menu_data[i].level >= level; i++)
+			{
+				char com_key_str[3];
+				cptr str;
+
+				/* Ignore lower level sub menus */
+				if (menu_data[i].level > level) continue;
+
+				if (menu_data[i].com_id == -1)
+				{
+#ifdef JP
+					strcpy(com_key_str, "▼");
+#else
+					strcpy(com_key_str, ">");
+#endif
+				}
+				else if (menu_data[i].key != -1)
+				{
+					com_key_str[0] = '^';
+					com_key_str[1] = menu_data[i].key + '@';
+					com_key_str[2] = '\0';
+				}
+				else
+				{
+					com_key_str[0] = '\0';
+				}
+
+				str = format("| %c) %-*s %2s | ", menu_key + 'a', max_len, menu_name[i], com_key_str);
+
+				Term_putstr(col0, row1++, -1, TERM_WHITE, str);
+
+				menu_key++;
+			}
+
+			/* Draw bottom line */
+			Term_putstr(col0, row1, -1, TERM_WHITE, linestr);
+
+			/* The menu was shown */
+			redraw = FALSE;
+		}
+		prt(format("(a-%c) コマンド:", menu_key + 'a' - 1), 0, 0);
+		key = inkey();
+
+		if (key == ESCAPE) return 0;
+
+		if ('a' <= key && key <= 'z')
+		{
+			menu_id = menu_id_list[key - 'a'];
+
+			if (menu_id >= 0)
+			{
+				com_id = menu_data[menu_id].com_id;
+
+				if (com_id == -1)
+				{
+					com_id = do_command_menu(level + 1, menu_id + 1);
+					if (com_id) return com_id;
+					else redraw = TRUE;
+				}
+				else if (com_id)
+				{
+					return com_id;
+				}
+			}
+		}
+
+		else
+		{
+			com_id = get_com_id(key);
+			if (com_id) return com_id;
+			else continue;
+		}
+	}
+}
+
+
+static chain_str_type *new_chain_str(cptr str)
+{
+	chain_str_type *chain;
+
+	size_t len = strlen(str);
+
+	chain = (chain_str_type *)ralloc(sizeof(chain_str_type) + len * sizeof(char));
+
+	strcpy(chain->s, str);
+	chain->next = NULL;
+
+	return chain;
+}
+
+
+static void kill_yank_chain(text_body_type *tb)
+{
+	chain_str_type *chain = tb->yank;
+	tb->yank = NULL;
+
+	while (chain)
+	{
+		chain_str_type *next = chain->next;
+		size_t len = strlen(chain->s);
+
+		rnfree(chain, sizeof(chain_str_type) + len * sizeof(char));
+
+		chain = next;
+	}
+}
+
+
+static void add_str_to_yank(text_body_type *tb, cptr str)
+{
+	chain_str_type *chain;
+
+	tb->yank_eol = FALSE;
+
+	if (NULL == tb->yank)
+	{
+		tb->yank = new_chain_str(str);
+		return;
+	}
+
+	chain = tb->yank;
+
+	while (1)
+	{
+		if (!chain->next)
+		{
+			chain->next = new_chain_str(str);
+			return;
+		}
+
+		/* Go to next */
+		chain = chain->next;
+	}
+}
+
 
 /*
- *  Process line for auto picker/destroyer.
+ * Dirty flag for text editor
  */
-errr process_pickpref_file_line(char *buf)
-{
-	autopick_type entry;
-	int i;
+#define DIRTY_ALL 0x01
+#define DIRTY_MODE 0x04
+#define DIRTY_SCREEN 0x08
+#define DIRTY_NOT_FOUND 0x10
+#define DIRTY_NO_SEARCH 0x20
 
-	if (max_autopick == MAX_AUTOPICK)
-		return 1;
-	
-	/* Nuke illegal char */
-	for(i = 0; buf[i]; i++)
-	{
+
+#define DESCRIPT_HGT 3
+
+/*
+ * Draw text
+ */
+static void draw_text_editor(text_body_type *tb)
+{
+	int i;
+	int by1 = -1, bx1 = -1, by2 = -1, bx2 = -1;
+
+	/* Get size */
+	Term_get_size(&tb->wid, &tb->hgt);
+
+	/*
+	 * Top line (-1), description line (-3), separator (-1)
+	 *  == -5
+	 */
+	tb->hgt -= 2 + DESCRIPT_HGT;
+
 #ifdef JP
-		if (iskanji(buf[i]))
+	/* Don't let cursor at second byte of kanji */
+	for (i = 0; tb->lines_list[tb->cy][i]; i++)
+		if (iskanji(tb->lines_list[tb->cy][i]))
 		{
 			i++;
-			continue;
+			if (i == tb->cx)
+			{
+				tb->cx--;
+				break;
+			}
 		}
 #endif
-		if (isspace(buf[i]) && buf[i] != ' ')
-			break;
+
+	/* Scroll if necessary */
+	if (tb->cy < tb->upper || tb->upper + tb->hgt <= tb->cy)
+		tb->upper = tb->cy - (tb->hgt)/2;
+	if (tb->upper < 0)
+		tb->upper = 0;
+	if ((tb->cx < tb->left + 10 && tb->left > 0) || tb->left + tb->wid - 5 <= tb->cx)
+		tb->left = tb->cx - (tb->wid)*2/3;
+	if (tb->left < 0)
+		tb->left = 0;
+
+	/* Redraw whole window after resize */
+	if (tb->old_wid != tb->wid || tb->old_hgt != tb->hgt)
+		tb->dirty_flags |= DIRTY_SCREEN;
+
+	/* Redraw all text after scroll */
+	else if (tb->old_upper != tb->upper || tb->old_left != tb->left)
+		tb->dirty_flags |= DIRTY_ALL;
+
+
+	if (tb->dirty_flags & DIRTY_SCREEN)
+	{
+		tb->dirty_flags |= (DIRTY_ALL | DIRTY_MODE);
+
+		/* Clear screen */
+		Term_clear();
 	}
-	buf[i] = 0;
-	
-	if (!autopick_new_entry(&entry, buf)) return 0;
 
-	/* Already has the same entry? */ 
-	for(i = 0; i < max_autopick; i++)
-		if(!strcmp(entry.name, autopick_list[i].name)
-		   && entry.flag[0] == autopick_list[i].flag[0]
-		   && entry.flag[1] == autopick_list[i].flag[1]
-		   && entry.dice == autopick_list[i].dice
-		   && entry.bonus == autopick_list[i].bonus) return 0;
+	/* Redraw mode line */
+	if (tb->dirty_flags & DIRTY_MODE)
+	{
+		char buf[MAX_LINELEN];
 
-	autopick_list[max_autopick++] = entry;
-	return 0;
+		int sepa_length = tb->wid;
+
+		/* Separator */
+		for (i = 0; i < sepa_length; i++)
+			buf[i] = '-';
+		buf[i] = '\0';
+
+		Term_putstr(0, tb->hgt + 1, sepa_length, TERM_WHITE, buf);
+	}
+
+	if (tb->mark)
+	{
+		tb->dirty_flags |= DIRTY_ALL;
+
+		if (tb->my < tb->cy ||
+		    (tb->my == tb->cy && tb->mx < tb->cx))
+		{
+			by1 = tb->my;
+			bx1 = tb->mx;
+			by2 = tb->cy;
+			bx2 = tb->cx;
+		}
+		else
+		{
+			by2 = tb->my;
+			bx2 = tb->mx;
+			by1 = tb->cy;
+			bx1 = tb->cx;
+		}
+	}
+
+	/* Dump up to tb->hgt lines of messages */
+	for (i = 0; i < tb->hgt; i++)
+	{
+		int j;
+		int leftcol = 0;
+		cptr msg;
+		int y = tb->upper+i;
+
+		/* clean or dirty? */
+		if (!(tb->dirty_flags & DIRTY_ALL) && (tb->dirty_line != y))
+			continue;
+
+		msg = tb->lines_list[y];
+		if (!msg) break;
+
+		/* Apply horizontal scroll */
+		for (j = 0; *msg; msg++, j++)
+		{
+			if (j == tb->left) break;
+#ifdef JP
+			if (j > tb->left)
+			{
+				leftcol = 1;
+				break;
+			}
+			if (iskanji(*msg))
+			{
+				msg++;
+				j++;
+			}
+#endif
+		}
+
+		/* Erase line */
+		Term_erase(0, i + 1, tb->wid);
+
+		if (!tb->mark)
+		{
+			/* Dump the messages, bottom to top */
+			Term_putstr(leftcol, i + 1, tb->wid - 1, TERM_WHITE, msg);
+		}
+
+		else
+		{
+			int x0 = leftcol + tb->left;
+
+			int sx0 = 0;
+			int sx1 = 0;
+
+			if (by1 <= y && y < by2) sx1 = strlen(msg);
+			if (y == by1) sx0 = bx1;
+			if (y == by2) sx1 = bx2;
+
+			Term_gotoxy(leftcol, i + 1);
+			if (x0 < sx0) Term_addstr(sx0 - x0, TERM_WHITE, msg);
+			if (x0 < sx1) Term_addstr(sx1 - sx0, TERM_YELLOW, msg + (sx0 - x0));
+			Term_addstr(-1, TERM_WHITE, msg + (sx1 - x0));
+		}
+	}
+
+	for (; i < tb->hgt; i++)
+	{
+		/* Erase line */
+		Term_erase(0, i + 1, tb->wid);
+	}
+
+	/* Display information when updated */
+	if (tb->old_cy != tb->cy || (tb->dirty_flags & (DIRTY_ALL | DIRTY_NOT_FOUND | DIRTY_NO_SEARCH)) || tb->dirty_line == tb->cy)
+	{
+		autopick_type an_entry, *entry = &an_entry;
+
+		/* Clear information line */
+		for (i = 0; i < DESCRIPT_HGT; i++)
+		{
+			/* Erase line */
+			Term_erase(0, tb->hgt + 2 + i, tb->wid);
+		}
+
+		/* Display information */
+		if (tb->dirty_flags & DIRTY_NOT_FOUND)
+		{
+#ifdef JP
+			prt(format("パターンが見つかりません: %s", tb->search_str), tb->hgt + 1 + 1, 0);
+#else
+			prt(format("Pattern not found: %s", tb->search_str), tb->hgt + 1 + 1, 0);
+#endif
+		}
+		else if (tb->dirty_flags & DIRTY_NO_SEARCH)
+		{
+#ifdef JP
+			prt("検索中のパターンがありません('/'で検索)。", tb->hgt + 1 + 1, 0);
+#else
+			prt("No pattern to search. (Press '/' to search.)", tb->hgt +1 + 1, 0);
+#endif
+		}
+		else if (tb->lines_list[tb->cy][0] == '#')
+		{
+#ifdef JP
+			prt("この行はコメントです。", tb->hgt +1 + 1, 0);
+#else
+			prt("This line is a comment.", tb->hgt +1 + 1, 0);
+#endif
+		}
+		else if (tb->lines_list[tb->cy][1] == ':')
+		{
+			switch(tb->lines_list[tb->cy][0])
+			{
+			case '?':
+#ifdef JP
+				prt("この行は条件分岐式です。", tb->hgt +1 + 1, 0);
+#else
+				prt("This line is a Conditional Expression.", tb->hgt +1 + 1, 0);
+#endif
+				break;
+			case 'A':
+#ifdef JP
+				prt("この行はマクロの実行内容を定義します。", tb->hgt +1 + 1, 0);
+#else
+				prt("This line defines a Macro action.", tb->hgt +1 + 1, 0);
+#endif
+				break;
+			case 'P':
+#ifdef JP
+				prt("この行はマクロのトリガー・キーを定義します。", tb->hgt +1 + 1, 0);
+#else
+				prt("This line defines a Macro trigger key.", tb->hgt +1 + 1, 0);
+#endif
+				break;
+			case 'C':
+#ifdef JP
+				prt("この行はキー配置を定義します。", tb->hgt +1 + 1, 0);
+#else
+				prt("This line defines a Keymap.", tb->hgt +1 + 1, 0);
+#endif
+				break;
+			}
+		}
+
+		/* Get description of an autopicker preference line */
+		else if (autopick_new_entry(entry, tb->lines_list[tb->cy]))
+		{
+			char buf[MAX_LINELEN];
+			char temp[MAX_LINELEN];
+			cptr t;
+
+			describe_autopick(buf, entry);
+
+			roff_to_buf(buf, 81, temp, sizeof(temp));
+			t = temp;
+			for (i = 0; i < 3; i++)
+			{
+				if(t[0] == 0)
+					break; 
+				else
+				{
+					prt(t, tb->hgt +1 + 1 + i, 0);
+					t += strlen(t) + 1;
+				}
+			}
+			autopick_free_entry(entry);
+		}
+	}
+}
+
+
+/*
+ * Kill segment of a line
+ */
+static void kill_line_segment(text_body_type *tb, int y, int x0, int x1)
+{
+	char buf[MAX_LINELEN];
+	cptr s = tb->lines_list[y];
+	char *d = buf;
+	int x;
+
+	/* No segment? */
+	if (x0 == x1) return;
+
+	/* Kill whole line? */
+	if (x0 == 0 && s[x1] == '\0')
+	{
+		int i;
+
+		string_free(tb->lines_list[y]);
+
+		/* Shift lines up */
+		for (i = y; tb->lines_list[i+1]; i++)
+			tb->lines_list[i] = tb->lines_list[i+1];
+		tb->lines_list[i] = NULL;
+
+		return;
+	}
+
+	/* Before the segment */
+	for (x = 0; x < x0; x++)
+		*(d++) = s[x];
+
+	/* After the segment */
+	for (x = x1; s[x]; x++)
+		*(d++) = s[x];
+
+	*d = '\0';
+
+	/* Replace */
+	string_free(tb->lines_list[y]);
+	tb->lines_list[y] = string_make(buf);
+}
+
+
+/*
+ * Kill text in the block selection
+ */
+static bool kill_text_in_selection(text_body_type *tb, bool force)
+{
+	int by1, bx1, by2, bx2;
+	int y;
+
+	if (!force && tb->mark == -1)
+	{
+		/* Don't kill auto selection block (by paste) */
+		tb->mark = 0;
+
+		/* Now dirty */
+		tb->dirty_flags |= DIRTY_ALL;
+
+		return FALSE;
+	}
+
+	/* Correct cursor location */
+	if ((uint)tb->cx > strlen(tb->lines_list[tb->cy]))
+		tb->cx = (int)strlen(tb->lines_list[tb->cy]);
+
+	if (tb->my < tb->cy ||
+	    (tb->my == tb->cy && tb->mx < tb->cx))
+	{
+		by1 = tb->my;
+		bx1 = tb->mx;
+		by2 = tb->cy;
+		bx2 = tb->cx;
+	}
+	else
+	{
+		by2 = tb->my;
+		bx2 = tb->mx;
+		by1 = tb->cy;
+		bx1 = tb->cx;
+	}
+
+	/* Kill lines in reverse order */
+	for (y = by2; y >= by1; y--)
+	{
+		int x0 = 0;
+		int x1 = strlen(tb->lines_list[y]);
+
+		if (y == by1) x0 = bx1;
+		if (y == by2) x1 = bx2;
+
+		kill_line_segment(tb, y, x0, x1);
+	}
+
+	/* Correct cursor position */
+	tb->cy = by1;
+	tb->cx = bx1;
+
+	/* Disable selection */
+	tb->mark = 0;
+
+	/* Now dirty */
+	tb->dirty_flags |= DIRTY_ALL;
+
+	return TRUE;
 }
 
 
@@ -2580,10 +3698,24 @@ static bool insert_macro_line(cptr *lines_list, int cy)
 	string_free(lines_list[cy]);
 	lines_list[cy] = string_make(format("P:%s", tmp));
 
+	/* Acquire action */
+	i = macro_find_exact(buf);
+
+	if (i == -1)
+	{
+		/* Nothing defined */
+		tmp[0] = '\0';
+	}
+	else
+	{
+		/* Analyze the current action */
+		ascii_to_text(tmp, macro__act[i]);
+	}
+
 	/* Insert blank action preference line */
 	insert_return_code(lines_list, 0, cy);
 	string_free(lines_list[cy]);
-	lines_list[cy] = string_make("A:");
+	lines_list[cy] = string_make(format("A:%s", tmp));
 
 	return TRUE;
 }
@@ -2597,6 +3729,7 @@ static bool insert_keymap_line(cptr *lines_list, int cy)
 	char tmp[1024];
 	char buf[2];
 	int mode;
+	cptr act;
 
 	/* Roguelike */
 	if (rogue_like_commands)
@@ -2631,112 +3764,991 @@ static bool insert_keymap_line(cptr *lines_list, int cy)
 	string_free(lines_list[cy]);
 	lines_list[cy] = string_make(format("C:%d:%s", mode, tmp));
 
+	/* Look up the keymap */
+	act = keymap_act[mode][(byte)(buf[0])];
+
 	/* Insert blank action preference line */
 	insert_return_code(lines_list, 0, cy);
 	string_free(lines_list[cy]);
-	lines_list[cy] = string_make("A:");
+	lines_list[cy] = string_make(format("A:%s", act));
 
 	return TRUE;
 }
 
 
 /*
- * Description of control commands
+ * Execute a single editor command
  */
-
-#define WID_DESC 31
-
-static cptr ctrl_command_desc[] =
+static bool do_editor_command(text_body_type *tb, int com_id)
 {
+	switch(com_id)
+	{
+	case EC_QUIT:
+		return TRUE;
+
+	case EC_REVERT:
+		/* Revert to original */
 #ifdef JP
-#define LAST_DESTROYED 6
-	"^P ^N ^B ^F 上下左右に移動",
-	"^A ^E 行の先頭、終端",
-	"^Q 入力/コマンドモード切り替え",
-	"^R 変更を全て取り消して元に戻す",
-	"------------------------------------",
-	"^I 持ち物/装備から選択",
-	"^L",
-	"^K カーソルから終端まで削除",
-	"^Y 削除(^K)した行を挿入",
-	"^C 種族、職業の条件式を挿入",
-	"------------------------------------",
-	"^S 変更 (!破壊/~放置/拾う)",
-	"^G \"(\" 全体マップで表示しない",
-	"^O \"#\" 自動刻み",
-	"------------------------------------",
-	"^U 未鑑定/未判明/鑑定/*鑑定*",
-	"^W \"無価値の\"",
-	"^X 無銘/エゴ/アーティファクト",
-	"^Z \"収集中の\"",
-	NULL
+		if (!get_check("全ての変更を破棄して元の状態に戻します。よろしいですか？ "))
 #else
-#define LAST_DESTROYED 6
-	"^P ^N ^B ^F Move Cursor",
-	"^A ^E Beginning and End of Line",
-	"^Q Toggle Insert/Command mode",
-	"^R Revert to Original File",
-	"------------------------------------",
-	"^I Object in Inventry/Equipment",
-	"^L",
-	"^K Kill Rest of Line",
-	"^Y Insert killed(^K) text",
-	"^C Insert conditional expression",
-	"------------------------------------",
-	"^S Toggle(!Destroy/~Leave/Pick)",
-	"^G \"(\" No display in the 'M'ap",
-	"^O \"#\" Auto-Inscribe",
-	"------------------------------------",
-	"^U Toggle 'identified' state",
-	"^W \"worthless\"",
-	"^X Toggle nameless/ego/artifact",
-	"^Z \"collecting\"",
-	NULL
+			if (!get_check("Discard all changes and revert to original file. Are you sure? "))
 #endif
-};
+				break;
+
+		free_text_lines(tb->lines_list);
+		tb->lines_list = read_pickpref_text_lines(&tb->filename_mode);
+		tb->dirty_flags |= DIRTY_ALL | DIRTY_MODE;
+		tb->cx = tb->cy = 0;
+		break;
+
+	case EC_HELP:
+		/* Peruse the main help file */
+#ifdef JP
+		(void)show_file(TRUE, "jhelp.hlp", NULL, 0, 0);
+#else
+		(void)show_file(TRUE, "help.hlp", NULL, 0, 0);
+#endif
+		/* Redraw all */
+		tb->dirty_flags |= DIRTY_SCREEN;
+
+		break;
+
+	case EC_RETURN:
+		/* Split a line or insert end of line */
+
+		/*
+		 * If there is a selection, kill it, and replace it
+		 * with return code.
+		 */
+		if (tb->mark) kill_text_in_selection(tb, FALSE);
+
+		insert_return_code(tb->lines_list, tb->cx, tb->cy);
+		tb->cy++;
+		tb->cx = 0;
+
+		/* Now dirty */
+		tb->dirty_flags |= DIRTY_ALL;
+		break;
+
+	case EC_LEFT:
+		/* Back */
+		if (0 < tb->cx)
+		{
+			int len;
+
+			tb->cx--;
+			len = strlen(tb->lines_list[tb->cy]);
+			if (len < tb->cx) tb->cx = len;
+		}
+		else if (tb->cy > 0)
+		{
+			tb->cy--;
+			tb->cx = strlen(tb->lines_list[tb->cy]);
+		}
+		break;
+
+	case EC_DOWN:
+		/* Next line */
+		if (tb->lines_list[tb->cy + 1]) tb->cy++;
+		break;
+
+	case EC_UP:
+		/* Previous line */
+		if (tb->cy > 0) tb->cy--;
+		break;
+
+	case EC_RIGHT:
+	{
+		/* Forward */
+
+		int len;
+#ifdef JP
+		if (iskanji(tb->lines_list[tb->cy][tb->cx])) tb->cx++;
+#endif
+		tb->cx++;
+		len = strlen(tb->lines_list[tb->cy]);
+		if (len < tb->cx)
+		{
+			if (tb->lines_list[tb->cy + 1])
+			{
+				tb->cy++;
+				tb->cx = 0;
+			}
+			else
+				tb->cx = len;
+		}
+		break;
+	}
+
+	case EC_BOL:
+		/* Beginning of line */
+		tb->cx = 0;
+		break;
+
+	case EC_EOL:
+		/* End of line */
+		tb->cx = strlen(tb->lines_list[tb->cy]);
+		break;
+
+	case EC_PGUP:
+		while (0 < tb->cy && tb->upper <= tb->cy)
+			tb->cy--;
+		while (0 < tb->upper && tb->cy + 1 < tb->upper + tb->hgt)
+			tb->upper--;
+		break;
+
+	case EC_PGDOWN:
+		/* Page down */
+		while (tb->cy < tb->upper + tb->hgt && tb->lines_list[tb->cy + 1])
+			tb->cy++;
+		tb->upper = tb->cy;
+		break;
+
+	case EC_TOP:
+		tb->cy = 0;
+		break;
+
+	case EC_BOTTOM:
+		while (tb->lines_list[tb->cy + 1])
+			tb->cy++;
+		break;
+
+	case EC_CUT:
+	{	
+		/* Need block selection */
+		if (!tb->mark) break;
+
+		/* Copy the text first */
+		do_editor_command(tb, EC_COPY);
+
+		/* Kill all */
+		kill_text_in_selection(tb, TRUE);
+
+		break;
+	}
+
+	case EC_COPY:
+	{	
+		int by1, bx1, by2, bx2;
+		int y;
+
+		/* Need block selection */
+		if (!tb->mark) break;
+
+		/* Correct cursor location */
+		if ((uint)tb->cx > strlen(tb->lines_list[tb->cy]))
+			tb->cx = (int)strlen(tb->lines_list[tb->cy]);
+
+		if (tb->my < tb->cy ||
+		    (tb->my == tb->cy && tb->mx < tb->cx))
+		{
+			by1 = tb->my;
+			bx1 = tb->mx;
+			by2 = tb->cy;
+			bx2 = tb->cx;
+		}
+		else
+		{
+			by2 = tb->my;
+			bx2 = tb->mx;
+			by1 = tb->cy;
+			bx1 = tb->cx;
+		}
+
+		/* Kill old yank buffer */
+		kill_yank_chain(tb);
+
+		/* Copy string to yank buffer */
+		for (y = by1; y <= by2; y++)
+		{
+			int i;
+			char buf[MAX_LINELEN];
+
+			int x0 = 0;
+			int x1 = strlen(tb->lines_list[y]);
+
+			if (y == by1) x0 = bx1;
+			if (y == by2) x1 = bx2;
+
+			for (i = 0; i < x1 - x0; i++)
+			{
+				buf[i] = tb->lines_list[y][x0 + i];
+			}
+			buf[i] = '\0';
+
+			add_str_to_yank(tb, buf);
+		}
+
+		/* Disable selection */
+		tb->mark = 0;
+
+		/* Now dirty */
+		tb->dirty_flags |= DIRTY_ALL;
+		break;
+	}
+
+	case EC_PASTE:
+	{
+		/* Paste killed text */
+
+		chain_str_type *chain = tb->yank;
+
+		/* Correct cursor location */
+		if ((uint)tb->cx > strlen(tb->lines_list[tb->cy]))
+			tb->cx = (int)strlen(tb->lines_list[tb->cy]);
+
+		/*
+		 * If there is a selection, kill text, and
+		 * replace it with the yank text.
+		 */
+		if (tb->mark) kill_text_in_selection(tb, FALSE);
+
+		/* Auto select pasted text */
+		tb->mark = -1;
+		tb->mx = tb->cx;
+		tb->my = tb->cy;
+
+		/* Paste text */
+		while (chain)
+		{
+			cptr yank_str = chain->s;
+
+			char buf[MAX_LINELEN];
+			int i;
+			char rest[MAX_LINELEN], *rest_ptr = rest;
+
+			/* Save preceding string */
+			for(i = 0; i < tb->cx; i++)
+				buf[i] = tb->lines_list[tb->cy][i];
+
+			strcpy(rest, &(tb->lines_list[tb->cy][i]));
+
+			/* Paste yank buffer */
+			while (*yank_str && i < MAX_LINELEN-1)
+			{
+				buf[i++] = *yank_str++;
+			}
+
+			/* Terminate */
+			buf[i] = '\0';
+
+			chain = chain->next;
+
+			if (chain || tb->yank_eol)
+			{
+				/* There is an end of line between chain nodes */
+
+				insert_return_code(tb->lines_list, tb->cx, tb->cy);
+
+				/* Replace this line with new one */
+				string_free(tb->lines_list[tb->cy]);
+				tb->lines_list[tb->cy] = string_make(buf);
+
+				/* Move to next line */
+				tb->cx = 0;
+				tb->cy++;
+
+				continue;
+			}
+
+			/* Final line doesn't have end of line */
+
+			tb->cx = strlen(buf);
+
+			/* Rest of original line */
+			while (*rest_ptr && i < MAX_LINELEN-1)
+			{
+				buf[i++] = *rest_ptr++;
+			}
+
+			/* Terminate */
+			buf[i] = '\0';
+
+			/* Replace this line with new one */
+			string_free(tb->lines_list[tb->cy]);
+			tb->lines_list[tb->cy] = string_make(buf);
+
+			/* Finish */
+			break;
+		}
+
+		/* Now dirty */
+		tb->dirty_flags |= DIRTY_ALL;
+		break;
+	}
+
+	case EC_BLOCK:
+		if (tb->mark)
+		{
+			/* Disable the selection */
+			tb->mark = 0;
+
+			/* Redraw text */
+			tb->dirty_flags |= DIRTY_ALL;
+		}
+		else
+		{
+			tb->mark = 1;
+
+			/* Repeating this command swaps cursor position */
+			if (com_id == tb->old_com_id)
+			{
+				int tmp;
+
+				tmp = tb->cy;
+				tb->cy = tb->my;
+				tb->my = tmp;
+				tmp = tb->cx;
+				tb->cx = tb->mx;
+				tb->mx = tmp;
+
+				/* Redraw text */
+				tb->dirty_flags |= DIRTY_ALL;
+			}
+			else
+			{
+				/* Mark the point 1 */
+				tb->my = tb->cy;
+				tb->mx = tb->cx;
+			}
+		}
+		break;
+
+	case EC_KILL_LINE:
+	{
+		/* Kill rest of line */
+
+		int i;
+		char buf[MAX_LINELEN];
+		cptr line;
+
+		/* If there is a selection, kill it */
+		if (tb->mark)
+		{
+			if (kill_text_in_selection(tb, FALSE)) break;
+		}
+
+		/* Correct cursor location */
+		if ((uint)tb->cx > strlen(tb->lines_list[tb->cy]))
+			tb->cx = (int)strlen(tb->lines_list[tb->cy]);
+
+		/* Save preceding string */
+		for (i = 0; tb->lines_list[tb->cy][i] && i < tb->cx; i++)
+		{
+#ifdef JP
+			if (iskanji(tb->lines_list[tb->cy][i]))
+			{
+				buf[i] = tb->lines_list[tb->cy][i];
+				i++;
+			}
+#endif
+			buf[i] = tb->lines_list[tb->cy][i];
+		}
+		buf[i] = '\0';
+		line = string_make(buf);
+
+		/* Append only if this command is repeated. */
+		if (tb->old_com_id != com_id)
+		{
+			kill_yank_chain(tb);
+			tb->yank = NULL;
+		}
+
+		/* Really deleted some text */
+		if (strlen(tb->lines_list[tb->cy] + i))
+		{
+			/* Add deleted string to yank buffer */
+			add_str_to_yank(tb, tb->lines_list[tb->cy] + i);
+
+			/* Replace current line with 'preceding string' */
+			string_free(tb->lines_list[tb->cy]);
+			tb->lines_list[tb->cy] = line;
+
+			/* Now dirty */
+			tb->dirty_line = tb->cy;
+
+			/* Leave end of line character */
+			break;
+		}
+
+		/* Delete the end of line character only */
+		if (tb->yank_eol) add_str_to_yank(tb, "");
+		else tb->yank_eol = TRUE;
+
+		do_editor_command(tb, EC_DELETE_CHAR);
+		break;
+	}
+
+	case EC_DELETE_CHAR:
+		/* DELETE == go forward + BACK SPACE */
+
+		/* If there is a selection, kill it */
+		if (tb->mark)
+		{
+			if (kill_text_in_selection(tb, FALSE)) break;
+		}
+
+#ifdef JP
+		if (iskanji(tb->lines_list[tb->cy][tb->cx])) tb->cx++;
+#endif
+		tb->cx++;
+
+		do_editor_command(tb, EC_BACKSPACE);
+		break;
+
+	case EC_BACKSPACE:
+	{
+		/* BACK SPACE */
+
+		int len, i, j, k;
+		char buf[MAX_LINELEN];
+
+		/* If there is a selection, kill it */
+		if (tb->mark)
+		{
+			if (kill_text_in_selection(tb, FALSE)) break;
+		}
+
+		len = strlen(tb->lines_list[tb->cy]);
+		if (len < tb->cx)
+		{
+			if (tb->lines_list[tb->cy + 1])
+			{
+				tb->cy++;
+				tb->cx = 0;
+			}
+			else
+			{
+				tb->cx = len;
+				break;
+			}
+		}
+
+		if (tb->cx == 0)
+		{
+			/* delete a return code and union two lines */
+			if (tb->cy == 0) break;
+			tb->cx = strlen(tb->lines_list[tb->cy-1]);
+			strcpy(buf, tb->lines_list[tb->cy-1]);
+			strcat(buf, tb->lines_list[tb->cy]);
+			string_free(tb->lines_list[tb->cy-1]);
+			string_free(tb->lines_list[tb->cy]);
+			tb->lines_list[tb->cy-1] = string_make(buf);
+			for (i = tb->cy; tb->lines_list[i+1]; i++)
+				tb->lines_list[i] = tb->lines_list[i+1];
+			tb->lines_list[i] = NULL;
+			tb->cy--;
+
+			/* Now dirty */
+			tb->dirty_flags |= DIRTY_ALL;
+			break;
+		}
+
+		for (i = j = k = 0; tb->lines_list[tb->cy][i] && i < tb->cx; i++)
+		{
+			k = j;
+#ifdef JP
+			if (iskanji(tb->lines_list[tb->cy][i]))
+				buf[j++] = tb->lines_list[tb->cy][i++];
+#endif
+			buf[j++] = tb->lines_list[tb->cy][i];
+		}
+		while (j > k)
+		{
+			tb->cx--;
+			j--;
+		}
+		for (; tb->lines_list[tb->cy][i]; i++)
+			buf[j++] = tb->lines_list[tb->cy][i];
+		buf[j] = '\0';
+		string_free(tb->lines_list[tb->cy]);
+		tb->lines_list[tb->cy] = string_make(buf);
+
+		/* Now dirty */
+		tb->dirty_line = tb->cy;
+		break;
+	}
+
+	case EC_SEARCH_STR:
+	{
+		byte search_dir;
+
+		/* Become dirty because of item/equip menu */
+		tb->dirty_flags |= DIRTY_SCREEN;
+
+		search_dir = get_string_for_search(&tb->search_o_ptr, &tb->search_str);
+
+		if (!search_dir) break;
+
+		if (search_dir == 1) do_editor_command(tb, EC_SEARCH_FORW);
+		else do_editor_command(tb, EC_SEARCH_BACK);
+		break;
+	}
+
+	case EC_SEARCH_FORW:
+		if (tb->search_o_ptr)
+		{
+			if (!search_for_object(tb->lines_list, tb->search_o_ptr, &tb->cx, &tb->cy, TRUE)) tb->dirty_flags |= DIRTY_NOT_FOUND;
+		}
+		else if (tb->search_str)
+		{
+			if (!search_for_string(tb->lines_list, tb->search_str, &tb->cx, &tb->cy, TRUE)) tb->dirty_flags |= DIRTY_NOT_FOUND;
+		}
+		else
+		{
+			tb->dirty_flags |= DIRTY_NO_SEARCH;
+		}
+		break;
+
+	case EC_SEARCH_BACK:
+		if (tb->search_o_ptr)
+		{
+			if (!search_for_object(tb->lines_list, tb->search_o_ptr, &tb->cx, &tb->cy, FALSE)) tb->dirty_flags |= DIRTY_NOT_FOUND;
+		}
+		else if (tb->search_str)
+		{
+			if (!search_for_string(tb->lines_list, tb->search_str, &tb->cx, &tb->cy, FALSE)) tb->dirty_flags |= DIRTY_NOT_FOUND;
+		}
+		else
+		{
+			tb->dirty_flags |= DIRTY_NO_SEARCH;
+		}
+		break;
+
+	case EC_SEARCH_OBJ:
+		/* Become dirty because of item/equip menu */
+		tb->dirty_flags |= DIRTY_SCREEN;
+
+		if (!get_object_for_search(&tb->search_o_ptr, &tb->search_str)) break;
+
+		do_editor_command(tb, EC_SEARCH_FORW);
+		break;
+
+	case EC_SEARCH_DESTROYED:
+		if (!get_destroyed_object_for_search(&tb->search_o_ptr, &tb->search_str)) break;
+
+		do_editor_command(tb, EC_SEARCH_FORW);
+		break;
+
+	case EC_INSERT_OBJECT:
+	{
+		/* Insert choosen item name */
+
+		autopick_type an_entry, *entry = &an_entry;
+
+		if (!entry_from_choosed_object(entry))
+		{
+			/* Now dirty because of item/equip menu */
+			tb->dirty_flags |= DIRTY_SCREEN;
+			break;
+		}
+
+		insert_return_code(tb->lines_list, 0, tb->cy);
+		string_free(tb->lines_list[tb->cy]);
+		tb->lines_list[tb->cy] = autopick_line_from_entry_kill(entry);
+		tb->cx = 0;
+
+		/* Now dirty because of item/equip menu */
+		tb->dirty_flags |= DIRTY_SCREEN;
+
+		break;
+	}
+
+	case EC_INSERT_DESTROYED:
+		/* Insert a name of last destroyed item */
+		if (tb->last_destroyed)
+		{
+			insert_return_code(tb->lines_list, 0, tb->cy);
+			string_free(tb->lines_list[tb->cy]);
+			tb->lines_list[tb->cy] = string_make(tb->last_destroyed);
+			tb->cx = 0;
+
+			/* Now dirty */
+			tb->dirty_flags |= DIRTY_ALL;
+		}
+		break;
+
+	case EC_INSERT_BLOCK:
+	{
+		/* Insert a conditinal expression line */
+		char classrace[80];
+
+		/* Conditional Expression for Class and Race */
+		sprintf(classrace, "?:[AND [EQU $RACE %s] [EQU $CLASS %s]]", 
+#ifdef JP
+			rp_ptr->E_title, cp_ptr->E_title
+#else
+			rp_ptr->title, cp_ptr->title
+#endif
+			);
+
+		insert_return_code(tb->lines_list, 0, tb->cy);
+		string_free(tb->lines_list[tb->cy]);
+		tb->lines_list[tb->cy] = string_make(classrace);
+		tb->cy++;
+		insert_return_code(tb->lines_list, 0, tb->cy);
+		string_free(tb->lines_list[tb->cy]);
+		tb->lines_list[tb->cy] = string_make("?:1");
+		tb->cx = 0;
+
+		/* Now dirty */
+		tb->dirty_flags |= DIRTY_ALL;
+		break;
+	}
+
+	case EC_INSERT_MACRO:
+		/* Draw_everythig (delete menu) */
+		draw_text_editor(tb);
+
+		/* Erase line */
+		Term_erase(0, tb->cy - tb->upper + 1, tb->wid);
+
+		/* Prompt */
+#ifdef JP
+		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, "P:<トリガーキー>: ");
+#else
+		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, "P:<Trigger key>: ");
+#endif
+		if (insert_macro_line(tb->lines_list, tb->cy))
+		{
+			/* Prepare to input action */
+			tb->cx = 2;
+
+			/* Now dirty */
+			tb->dirty_flags |= DIRTY_ALL;
+			tb->dirty_flags |= DIRTY_MODE;
+		}
+
+		break;
+
+	case EC_INSERT_KEYMAP:
+		/* Draw_everythig (delete menu) */
+		draw_text_editor(tb);
+
+		/* Erase line */
+		Term_erase(0, tb->cy - tb->upper + 1, tb->wid);
+
+		/* Prompt */
+#ifdef JP
+		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, format("C:%d:<コマンドキー>: ", (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
+#else
+		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, format("C:%d:<Keypress>: ", (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
+#endif
+
+		if (insert_keymap_line(tb->lines_list, tb->cy))
+		{
+			/* Prepare to input action */
+			tb->cx = 2;
+
+			/* Now dirty */
+			tb->dirty_flags |= DIRTY_ALL;
+			tb->dirty_flags |= DIRTY_MODE;
+		}				
+		break;
+
+	case EC_CL_AUTOPICK:
+	{
+		autopick_type an_entry, *entry = &an_entry;
+
+		if (!autopick_new_entry(entry, tb->lines_list[tb->cy]))
+		{
+			break;
+		}
+		string_free(tb->lines_list[tb->cy]);
+
+		if (entry->action & (DO_AUTODESTROY | DONT_AUTOPICK | DO_QUERY_AUTOPICK))
+			if (tb->cx > 0) tb->cx--;
+
+		entry->action &= ~DO_AUTODESTROY;
+		entry->action &= ~DONT_AUTOPICK;
+		entry->action &= ~DO_QUERY_AUTOPICK;
+		entry->action |= DO_AUTOPICK;
+
+		tb->lines_list[tb->cy] = autopick_line_from_entry_kill(entry);
+
+		/* Now dirty */
+		tb->dirty_line = tb->cy;
+		break;
+	}
+
+	case EC_CL_DESTROY:
+	{
+		autopick_type an_entry, *entry = &an_entry;
+
+		if (!autopick_new_entry(entry, tb->lines_list[tb->cy]))
+		{
+			break;
+		}
+		string_free(tb->lines_list[tb->cy]);
+
+		entry->action &= ~DONT_AUTOPICK;
+		entry->action &= ~DO_QUERY_AUTOPICK;
+		if (!(entry->action & DO_AUTODESTROY))
+		{
+			entry->action &= ~DO_AUTOPICK;
+			entry->action |= DO_AUTODESTROY;
+			tb->cx++;
+		}
+		else 
+		{
+			entry->action &= ~DO_AUTODESTROY;
+			entry->action |= DO_AUTOPICK;
+			if (tb->cx > 0) tb->cx--;
+		}
+
+		tb->lines_list[tb->cy] = autopick_line_from_entry_kill(entry);
+
+		/* Now dirty */
+		tb->dirty_line = tb->cy;
+
+		break;
+	}
+
+	case EC_CL_LEAVE:
+	{
+		autopick_type an_entry, *entry = &an_entry;
+
+		if (!autopick_new_entry(entry, tb->lines_list[tb->cy]))
+		{
+			break;
+		}
+		string_free(tb->lines_list[tb->cy]);
+
+		entry->action &= ~DO_AUTODESTROY;
+		entry->action &= ~DO_QUERY_AUTOPICK;
+		if (!(entry->action & DONT_AUTOPICK))
+		{
+			entry->action &= ~DO_AUTOPICK;
+			entry->action |= DONT_AUTOPICK;
+			tb->cx++;
+		}
+		else 
+		{
+			entry->action &= ~DONT_AUTOPICK;
+			entry->action |= DO_AUTOPICK;
+			if (tb->cx > 0) tb->cx--;
+		}
+
+		tb->lines_list[tb->cy] = autopick_line_from_entry_kill(entry);
+
+		/* Now dirty */
+		tb->dirty_line = tb->cy;
+		break;
+	}
+
+	case EC_CL_QUERY:
+	{
+		autopick_type an_entry, *entry = &an_entry;
+
+		if (!autopick_new_entry(entry, tb->lines_list[tb->cy]))
+		{
+			break;
+		}
+		string_free(tb->lines_list[tb->cy]);
+
+		entry->action &= ~DO_AUTODESTROY;
+		entry->action &= ~DONT_AUTOPICK;
+		if (!(entry->action & DO_QUERY_AUTOPICK))
+		{
+			entry->action &= ~DO_AUTOPICK;
+			entry->action |= DO_QUERY_AUTOPICK;
+			tb->cx++;
+		}
+		else 
+		{
+			entry->action &= ~DO_QUERY_AUTOPICK;
+			entry->action |= DO_AUTOPICK;
+			if (tb->cx > 0) tb->cx--;
+		}
+
+		tb->lines_list[tb->cy] = autopick_line_from_entry_kill(entry);
+
+		/* Now dirty */
+		tb->dirty_line = tb->cy;
+		break;
+	}
+
+	case EC_CL_NO_DISP:
+	{
+		/* Toggle display on the 'M'ap */
+
+		autopick_type an_entry, *entry = &an_entry;
+
+		if (!autopick_new_entry(entry, tb->lines_list[tb->cy]))
+			break;
+		string_free(tb->lines_list[tb->cy]);
+
+		if (entry->action & DO_DISPLAY)
+		{
+			entry->action &= ~DO_DISPLAY;
+			tb->cx++;
+		}
+		else
+		{
+			entry->action |= DO_DISPLAY;
+			if (tb->cx > 0) tb->cx--;
+		}
+
+		tb->lines_list[tb->cy] = autopick_line_from_entry_kill(entry);
+
+		/* Now dirty */
+		tb->dirty_line = tb->cy;
+		break;
+	}
+
+	case EC_IK_UNAWARE: toggle_keyword(tb, FLG_UNAWARE); break;
+	case EC_IK_UNIDENTIFIED: toggle_keyword(tb, FLG_UNIDENTIFIED); break;
+	case EC_IK_IDENTIFIED: toggle_keyword(tb, FLG_IDENTIFIED); break;
+	case EC_IK_STAR_IDENTIFIED: toggle_keyword(tb, FLG_STAR_IDENTIFIED); break;
+	case EC_KK_WEAPONS: toggle_keyword(tb, FLG_WEAPONS); break;
+	case EC_KK_FAVORITE: toggle_keyword(tb, FLG_FAVORITE); break;
+	case EC_KK_ARMORS: toggle_keyword(tb, FLG_ARMORS); break;
+	case EC_KK_MISSILES: toggle_keyword(tb, FLG_MISSILES); break;
+	case EC_KK_DEVICES: toggle_keyword(tb, FLG_DEVICES); break;
+	case EC_KK_LIGHTS: toggle_keyword(tb, FLG_LIGHTS); break;
+	case EC_KK_JUNKS: toggle_keyword(tb, FLG_JUNKS); break;
+	case EC_KK_SPELLBOOKS: toggle_keyword(tb, FLG_SPELLBOOKS); break;
+	case EC_KK_SHIELDS: toggle_keyword(tb, FLG_SHIELDS); break;
+	case EC_KK_BOWS: toggle_keyword(tb, FLG_BOWS); break;
+	case EC_KK_RINGS: toggle_keyword(tb, FLG_RINGS); break;
+	case EC_KK_AMULETS: toggle_keyword(tb, FLG_AMULETS); break;
+	case EC_KK_SUITS: toggle_keyword(tb, FLG_SUITS); break;
+	case EC_KK_CLOAKS: toggle_keyword(tb, FLG_CLOAKS); break;
+	case EC_KK_HELMS: toggle_keyword(tb, FLG_HELMS); break;
+	case EC_KK_GLOVES: toggle_keyword(tb, FLG_GLOVES); break;
+	case EC_KK_BOOTS: toggle_keyword(tb, FLG_BOOTS); break;
+	case EC_OK_COLLECTING: toggle_keyword(tb, FLG_COLLECTING); break;
+	case EC_OK_BOOSTED: toggle_keyword(tb, FLG_BOOSTED); break;
+	case EC_OK_MORE_THAN: toggle_keyword(tb, FLG_MORE_THAN); break;
+	case EC_OK_MORE_BONUS: toggle_keyword(tb, FLG_MORE_BONUS); break;
+	case EC_OK_WORTHLESS: toggle_keyword(tb, FLG_WORTHLESS); break;
+	case EC_OK_ARTIFACT: toggle_keyword(tb, FLG_ARTIFACT); break;
+	case EC_OK_EGO: toggle_keyword(tb, FLG_EGO); break;
+	case EC_OK_NAMELESS: toggle_keyword(tb, FLG_NAMELESS); break;
+	case EC_OK_WANTED: toggle_keyword(tb, FLG_WANTED); break;
+	case EC_OK_UNIQUE: toggle_keyword(tb, FLG_UNIQUE); break;
+	case EC_OK_HUMAN: toggle_keyword(tb, FLG_HUMAN); break;
+	case EC_OK_UNREADABLE:
+		toggle_keyword(tb, FLG_UNREADABLE);
+		add_keyword(tb, FLG_SPELLBOOKS);
+		break;
+	case EC_OK_REALM1:
+		toggle_keyword(tb, FLG_REALM1);
+		add_keyword(tb, FLG_SPELLBOOKS);
+		break;
+	case EC_OK_REALM2:
+		toggle_keyword(tb, FLG_REALM2);
+		add_keyword(tb, FLG_SPELLBOOKS);
+		break;
+	case EC_OK_FIRST:
+		toggle_keyword(tb, FLG_FIRST);
+		add_keyword(tb, FLG_SPELLBOOKS);
+		break;
+	case EC_OK_SECOND:
+		toggle_keyword(tb, FLG_SECOND);
+		add_keyword(tb, FLG_SPELLBOOKS);
+		break;
+	case EC_OK_THIRD:
+		toggle_keyword(tb, FLG_THIRD);
+		add_keyword(tb, FLG_SPELLBOOKS);
+		break;
+	case EC_OK_FOURTH:
+		toggle_keyword(tb, FLG_FOURTH);
+		add_keyword(tb, FLG_SPELLBOOKS);
+		break;
+	}
+
+	/* Save old command */
+	tb->old_com_id = com_id;
+
+	return FALSE;
+}
 
 
-#define MAX_YANK MAX_LINELEN
-#define DIRTY_ALL 0x01
-#define DIRTY_COMMAND 0x02
-#define DIRTY_MODE 0x04
-#define DIRTY_SCREEN 0x08
-#define DIRTY_NOT_FOUND 0x10
-#define DIRTY_NO_SEARCH 0x20
+/*
+ * Insert single letter at cursor position.
+ */
+static void insert_single_letter(text_body_type *tb, int key)
+{
+	int i, j, len;
+	char buf[MAX_LINELEN];
+
+	/* Save preceding string */
+	for (i = j = 0; tb->lines_list[tb->cy][i] && i < tb->cx; i++)
+		buf[j++] = tb->lines_list[tb->cy][i];
+
+	/* Add a character */
+#ifdef JP
+	if (iskanji(key))
+	{
+		int next;
+
+		inkey_base = TRUE;
+		next = inkey();
+		if (j+2 < MAX_LINELEN)
+		{
+			buf[j++] = key;
+			buf[j++] = next;
+			tb->cx += 2;
+		}
+		else
+			bell();
+	}
+	else
+#endif
+	{
+		if (j+1 < MAX_LINELEN)
+			buf[j++] = key;
+		tb->cx++;
+	}
+
+	/* Add following */
+	for (; tb->lines_list[tb->cy][i] && j + 1 < MAX_LINELEN; i++)
+		buf[j++] = tb->lines_list[tb->cy][i];
+	buf[j] = '\0';
+
+	/* Replace current line with new line */
+	string_free(tb->lines_list[tb->cy]);
+	tb->lines_list[tb->cy] = string_make(buf);
+
+	/* Move to correct collumn */
+	len = strlen(tb->lines_list[tb->cy]);
+	if (len < tb->cx) tb->cx = len;
+
+	/* Now dirty */
+	tb->dirty_line = tb->cy;
+}
 
 /*
  * In-game editor of Object Auto-picker/Destoryer
  */
 void do_cmd_edit_autopick(void)
 {
-	static int cx = 0, cy = 0;
-	static int upper = 0, left = 0;
+	text_body_type text_body, *tb = &text_body;
 
-	object_type *search_o_ptr = NULL;
-	cptr search_str = NULL;
-	cptr last_destroyed = NULL;
-	char last_destroyed_command[WID_DESC+3];
-	char yank_buf[MAX_YANK];
-	char classrace[80];
 	autopick_type an_entry, *entry = &an_entry;
 	char buf[MAX_LINELEN];
-	cptr *lines_list;
-	int filename_mode = PT_WITH_PNAME;
 
-	int i, j, k, len;
-
-	int old_upper = -1, old_left = -1;
-	int old_cy = -1;
-	int key = -1, old_key;
-	bool repeated_clearing = FALSE;
-	bool edit_mode = FALSE;
-
-	byte dirty_flags = DIRTY_ALL | DIRTY_COMMAND | DIRTY_MODE;
-	int dirty_line = -1;
-
-	int wid, hgt, old_wid = -1, old_hgt = -1;
+	int i;
+	int key = -1;
 
 	static s32b old_autosave_turn = 0L;
+	bool quit = FALSE;
+
+	tb->cx = tb->cy = tb->upper = tb->left = 0;
+	tb->mark = 0;
+	tb->mx = tb->my = 0;
+	tb->old_cy = tb->old_upper = tb->old_left = -1;
+	tb->old_wid = tb->old_hgt = -1;
+	tb->old_com_id = 0;
+
+	tb->yank = NULL;
+	tb->search_o_ptr = NULL;
+	tb->search_str = NULL;
+	tb->last_destroyed = NULL;
+	tb->dirty_flags = DIRTY_ALL | DIRTY_MODE;
+	tb->dirty_line = -1;
+	tb->filename_mode = PT_WITH_PNAME;
 
 	/* Autosave */
 	if (turn > old_autosave_turn + 100L)
@@ -2755,41 +4767,18 @@ void do_cmd_edit_autopick(void)
 	if (autopick_last_destroyed_object.k_idx)
 	{
 		autopick_entry_from_object(entry, &autopick_last_destroyed_object);
-		last_destroyed = autopick_line_from_entry_kill(entry);
-
-		my_strcpy(last_destroyed_command, format("^L \"%s\"", last_destroyed), sizeof(last_destroyed_command));
+		tb->last_destroyed = autopick_line_from_entry_kill(entry);
 	}
-	else
-	{
-#ifdef JP
-		strcpy(last_destroyed_command, "^L 最後に自動破壊したアイテム名");
-#else
-		strcpy(last_destroyed_command, "^L Last destroyed object");
-#endif
-	}
-	ctrl_command_desc[LAST_DESTROYED] = last_destroyed_command;
-
-	/* Conditional Expression for Class and Race */
-	sprintf(classrace, "?:[AND [EQU $RACE %s] [EQU $CLASS %s]]", 
-#ifdef JP
-		rp_ptr->E_title, cp_ptr->E_title
-#else
-		rp_ptr->title, cp_ptr->title
-#endif
-		);
-
-	/* Clear yank buffer */
-	yank_buf[0] = '\0';
 
 	/* Read or initialize whole text */
-	lines_list = read_pickpref_text_lines(&filename_mode);
+	tb->lines_list = read_pickpref_text_lines(&tb->filename_mode);
 
 	/* Reset cursor position if needed */
-	for (i = 0; i < cy; i++)
+	for (i = 0; i < tb->cy; i++)
 	{
-		if (!lines_list[i])
+		if (!tb->lines_list[i])
 		{
-			cy = cx = 0;
+			tb->cy = tb->cx = 0;
 			break;
 		}
 	}
@@ -2798,1079 +4787,158 @@ void do_cmd_edit_autopick(void)
 	screen_save();
 
 	/* Process requests until done */
-	while (1)
+	while (!quit)
 	{
-		/* Get size */
-		Term_get_size(&wid, &hgt);
+		int com_id = 0;
 
-#ifdef JP
-		/* Don't let cursor at second byte of kanji */
-		for (i = 0; lines_list[cy][i]; i++)
-			if (iskanji(lines_list[cy][i]))
-			{
-				i++;
-				if (i == cx)
-				{
-					cx--;
-					break;
-				}
-			}
-#endif
-
-		/* Scroll if necessary */
-		if (cy < upper || upper + hgt - 4 <= cy)
-			upper = cy - (hgt-4)/2;
-		if (upper < 0)
-			upper = 0;
-		if ((cx < left + 10 && left > 0) || left + wid - WID_DESC - 5 <= cx)
-			left = cx - (wid - WID_DESC)*2/3;
-		if (left < 0)
-			left = 0;
-
-		/* Redraw whole window after resize */
-		if (old_wid != wid || old_hgt != hgt)
-			dirty_flags |= DIRTY_SCREEN;
-
-		/* Redraw all text after scroll */
-		else if (old_upper != upper || old_left != left)
-			dirty_flags |= DIRTY_ALL;
-
-
-		if (dirty_flags & DIRTY_SCREEN)
-		{
-			dirty_flags |= (DIRTY_ALL | DIRTY_COMMAND | DIRTY_MODE);
-
-			/* Clear screen */
-			Term_clear();
-		}
-
-		if (dirty_flags & DIRTY_COMMAND)
-		{
-			/* Display control command */
-			for (i = 0; ctrl_command_desc[i]; i++)
-				Term_putstr(wid - WID_DESC, i + 1, WID_DESC, TERM_WHITE, ctrl_command_desc[i]);
-		}
-
-		/* Redraw mode line */
-		if (dirty_flags & DIRTY_MODE)
-		{
-			int sepa_length = wid - WID_DESC;
-
-			/* Separator */
-			for (i = 0; i < sepa_length; i++)
-				buf[i] = '-';
-			buf[i] = '\0';
-
-			/* Mode line */
-			if (edit_mode)
-				strncpy(buf + sepa_length - 21, " (INSERT MODE)  ", 16);
-			else
-				strncpy(buf + sepa_length - 21, " (COMMAND MODE) ", 16);
-
-			Term_putstr(0, hgt - 3, sepa_length, (byte) (edit_mode ? TERM_YELLOW : TERM_WHITE), buf);
-		}
-		
-		/* Dump up to 20, or hgt-4, lines of messages */
-		for (i = 0; i < hgt - 4; i++)
-		{
-			int leftcol = 0;
-			cptr msg;
-
-			/* clean or dirty? */
-			if (!(dirty_flags & DIRTY_ALL) && (dirty_line != upper+i))
-				continue;
-
-			msg = lines_list[upper+i];
-			if (!msg) break;
-
-			/* Apply horizontal scroll */
-			for (j = 0; *msg; msg++, j++)
-			{
-				if (j == left) break;
-#ifdef JP
-				if (j > left)
-				{
-					leftcol = 1;
-					break;
-				}
-				if (iskanji(*msg))
-				{
-					msg++;
-					j++;
-				}
-#endif
-			}
-
-			/* Erase line */
-			Term_erase(0, i + 1, wid - WID_DESC);
-
-			/* Dump the messages, bottom to top */
-			Term_putstr(leftcol, i + 1, wid - WID_DESC - 1, TERM_WHITE, msg);
-		}
-
-		for (; i < hgt - 4; i++)
-		{
-			/* Erase line */
-			Term_erase(0, i + 1, wid - WID_DESC);
-		}
+		/* Draw_everythig */
+		draw_text_editor(tb);
 
 		/* Display header line */
 #ifdef JP
-		if (edit_mode)
-			prt("^Q ESC でコマンドモードへ移行、通常の文字はそのまま入力", 0, 0);
-		else
-			prt("q _ で終了、hjkl2468 で移動、^Q a i で入力モード、/ n N で検索", 0, 0);
+		prt("(^Q:終了, ESC:メニュー, その他:入力)", 0, 0);
 #else	
-		if (edit_mode)
-			prt("Press ^Q ESC to command mode, any letters to insert", 0, 0);
-		else
-			prt(format("Press q _ to quit, %s to move, ^Q a i to insert mode, /nN to find", rogue_like_commands ? "hjkl" : "2468"), 0, 0);
+		prt("(^Q:quit, ESC:menu, Other:input text)", 0, 0);
 #endif
-		/* Display current position */
-		prt (format("(%d,%d)", cx, cy), 0, 70);
-
-		/* Display information when updated */
-		if (old_cy != cy || (dirty_flags & (DIRTY_ALL | DIRTY_NOT_FOUND | DIRTY_NO_SEARCH)) || dirty_line == cy)
+		if (!tb->mark)
 		{
-			/* Clear information line */
-			Term_erase(0, hgt - 3 + 1, wid);
-			Term_erase(0, hgt - 3 + 2, wid);
-
-			/* Display information */
-			if (dirty_flags & DIRTY_NOT_FOUND)
-			{
-#ifdef JP
-				prt(format("パターンが見つかりません: %s", search_str), hgt - 3 + 1, 0);
-#else
-				prt(format("Pattern not found: %s", search_str), hgt - 3 + 1, 0);
-#endif
-			}
-			else if (dirty_flags & DIRTY_NO_SEARCH)
-			{
-#ifdef JP
-				prt("検索中のパターンがありません('/'で検索)。", hgt - 3 + 1, 0);
-#else
-				prt("No pattern to search. (Press '/' to search.)", hgt - 3 + 1, 0);
-#endif
-			}
-			else if (lines_list[cy][0] == '#')
-			{
-#ifdef JP
-				prt("この行はコメントです。", hgt - 3 + 1, 0);
-#else
-				prt("This line is a comment.", hgt - 3 + 1, 0);
-#endif
-			}
-			else if (lines_list[cy][1] == ':')
-			{
-				switch(lines_list[cy][0])
-				{
-				case '?':
-#ifdef JP
-					prt("この行は条件分岐式です。", hgt - 3 + 1, 0);
-#else
-					prt("This line is a Conditional Expression.", hgt - 3 + 1, 0);
-#endif
-					break;
-				case 'A':
-#ifdef JP
-					prt("この行はマクロの実行内容を定義します。", hgt - 3 + 1, 0);
-#else
-					prt("This line defines a Macro action.", hgt - 3 + 1, 0);
-#endif
-					break;
-				case 'P':
-#ifdef JP
-					prt("この行はマクロのトリガー・キーを定義します。", hgt - 3 + 1, 0);
-#else
-					prt("This line defines a Macro trigger key.", hgt - 3 + 1, 0);
-#endif
-					break;
-				case 'C':
-#ifdef JP
-					prt("この行はキー配置を定義します。", hgt - 3 + 1, 0);
-#else
-					prt("This line defines a Keymap.", hgt - 3 + 1, 0);
-#endif
-					break;
-				}
-			}
-
-			/* Get description of an autopicker preference line */
-			else if (autopick_new_entry(entry, lines_list[cy]))
-			{
-				char temp[1024];
-				cptr t;
-
-				describe_autopick(buf, entry);
-
-				roff_to_buf(buf, 81, temp, sizeof(temp));
-				t = temp;
-				for (i = 0; i< 2; i++)
-				{
-					if(t[0] == 0)
-						break; 
-					else
-					{
-						prt(t, hgt - 3 + 1 + i, 0);
-						t += strlen(t) + 1;
-					}
-				}
-				autopick_free_entry(entry);
-			}
+			/* Display current position */
+			prt (format("(%d, %d)", tb->cx, tb->cy), 0, 60);
+		}
+		else
+		{
+			/* Display current position and mark position */
+			prt (format("(%d-%d, %d-%d)", tb->mx, tb->cx, tb->my, tb->cy), 0, 60);
 		}
 
 		/* Place cursor */
-		Term_gotoxy(cx - left, cy - upper + 1);
+		Term_gotoxy(tb->cx - tb->left, tb->cy - tb->upper + 1);
 
 		/* Now clean */
-		dirty_flags = 0;
-		dirty_line = -1;
+		tb->dirty_flags = 0;
+		tb->dirty_line = -1;
 
 		/* Save old key and location */
-		old_cy = cy;
-		old_key = key;
-		old_upper = upper;
-		old_left = left;
-		old_wid = wid;
-		old_hgt = hgt;
-
-		/* Do not process macros except special keys */
-		inkey_special = TRUE;
+		tb->old_cy = tb->cy;
+		tb->old_upper = tb->upper;
+		tb->old_left = tb->left;
+		tb->old_wid = tb->wid;
+		tb->old_hgt = tb->hgt;
 
 		/* Get a command */
 		key = inkey();
 
-		if (edit_mode)
-		{
-			if (key == ESCAPE)
-			{
-				edit_mode = FALSE;
+		/* Delete key */
+		if (key == 0x7F) key = KTRL('d');
 
-				/* Mode line is now dirty */
-				dirty_flags |= DIRTY_MODE;
+		/* HACK -- ignore macro defined on ASCII keys */
+		if (strlen(inkey_macro_trigger_string) == 1)
+		{
+			/* Get original key */
+			key = inkey_macro_trigger_string[0];
+		}
+
+
+		if (key == ESCAPE)
+		{
+			com_id = do_command_menu(0, 0);
+
+			/* Redraw all */
+			tb->dirty_flags |= DIRTY_SCREEN;
+		}
+
+		/* Cursor key macroes to direction command */
+		else if (strlen(inkey_macro_trigger_string) > 1)
+		{
+			switch (key)
+			{
+			case '2':
+				com_id = EC_DOWN;
+				break;
+			case '4':
+				com_id = EC_LEFT;
+				break;
+			case '6':
+				com_id = EC_RIGHT;
+				break;
+			case '8':
+				com_id = EC_UP;
+				break;
 			}
 
-			/* Insert a character */
-			else if (!iscntrl(key&0xff))
+			/* Mega Hack!!! Start selection with shift + cursor keys */
+			if (!com_id)
 			{
-				/* Save preceding string */
-				for (i = j = 0; lines_list[cy][i] && i < cx; i++)
-					buf[j++] = lines_list[cy][i];
+				char buf[1024];
 
-				/* Add a character */
-#ifdef JP
-				if (iskanji(key))
+				/* Get ascii form */
+				ascii_to_text(buf, inkey_macro_trigger_string);
+
+				if (strstr(buf, "shift-Down"))
+					com_id = EC_DOWN;
+				else if (strstr(buf, "shift-Left"))
+					com_id = EC_LEFT;
+				else if (strstr(buf, "shift-Right"))
+					com_id = EC_RIGHT;
+				else if (strstr(buf, "shift-Up"))
+					com_id = EC_UP;
+
+				if (com_id)
 				{
-					int next;
+					/* Kill further macro expansion */
+					flush();
 
-					inkey_base = TRUE;
-					next = inkey();
-					if (j+2 < MAX_LINELEN)
+					/* Start selection */
+					if (!tb->mark)
 					{
-						buf[j++] = key;
-						buf[j++] = next;
-						cx += 2;
+						tb->mark = 1;
+						tb->my = tb->cy;
+						tb->mx = tb->cx;
+						
+						/* Need to redraw text */
+						if (com_id == EC_UP || com_id == EC_DOWN)
+						{
+							/* Now dirty */
+							tb->dirty_flags |= DIRTY_ALL;
+						}
 					}
-					else
-						bell();
 				}
-				else
-#endif
-				{
-					if (j+1 < MAX_LINELEN)
-						buf[j++] = key;
-					cx++;
-				}
-
-				/* Add following */
-				for (; lines_list[cy][i] && j + 1 < MAX_LINELEN; i++)
-					buf[j++] = lines_list[cy][i];
-				buf[j] = '\0';
-
-				/* Replace current line with new line */
-				string_free(lines_list[cy]);
-				lines_list[cy] = string_make(buf);
-
-				/* Move to correct collumn */
-				len = strlen(lines_list[cy]);
-				if (len < cx) cx = len;
-
-				/* Now dirty */
-				dirty_line = cy;
 			}
 		}
+
+		if (com_id)
+		{
+			/* Already done */
+		}
+
+		/* Insert a character */
+		else if (!iscntrl(key & 0xff))
+		{
+			/*
+			 * If there is a selection, kill text, and
+			 * replace it with a single letter.
+			 */
+			if (tb->mark) kill_text_in_selection(tb, FALSE);
+
+			insert_single_letter(tb, key);
+
+			/* Next loop */
+			continue;
+		}
+
+		/* Other commands */
 		else
 		{
-			/* Exit on 'q' */
-			if (key == 'q' || key == '_') break;
-
-			switch(key)
-			{
-			case 'a': case 'i':
-				edit_mode = TRUE;
-
-				/* Mode line is now dirty */
-				dirty_flags |= DIRTY_MODE;
-				break;
-			case '~':
-				if (!autopick_new_entry(entry, lines_list[cy]))
-				{
-					if (old_key != key) repeated_clearing = FALSE;
-
-					/* Next line */
-					if (lines_list[cy + 1]) cy++;
-					cx = 0;
-					break;
-				}
-				string_free(lines_list[cy]);
-
-				if (old_key != key)
-				{
-					if (entry->action & DONT_AUTOPICK)
-						repeated_clearing = TRUE;
-					else
-						repeated_clearing = FALSE;
-				}
-
-				entry->action &= ~DO_AUTODESTROY;
-				entry->action &= ~DO_QUERY_AUTOPICK;
-				if (!repeated_clearing)
-				{
-					entry->action &= ~DO_AUTOPICK;
-					entry->action |= DONT_AUTOPICK;
-				}
-				else 
-				{
-					entry->action &= ~DONT_AUTOPICK;
-					entry->action |= DO_AUTOPICK;
-				}
-
-				lines_list[cy] = autopick_line_from_entry_kill(entry);
-
-				/* Now dirty */
-				dirty_line = cy;
-
-				/* Next line */
-				if (lines_list[cy + 1]) cy++;
-				cx = 0;
-				break;
-			case '!':
-				if (!autopick_new_entry(entry, lines_list[cy]))
-				{
-					if (old_key != key) repeated_clearing = FALSE;
-
-					/* Next line */
-					if (lines_list[cy + 1]) cy++;
-					cx = 0;
-					break;
-				}
-				string_free(lines_list[cy]);
-
-				if (old_key != key)
-				{
-					if (entry->action & DO_AUTODESTROY)
-						repeated_clearing = TRUE;
-					else
-						repeated_clearing = FALSE;
-				}
-
-				entry->action &= ~DONT_AUTOPICK;
-				entry->action &= ~DO_QUERY_AUTOPICK;
-				if (!repeated_clearing)
-				{
-					entry->action &= ~DO_AUTOPICK;
-					entry->action |= DO_AUTODESTROY;
-				}
-				else 
-				{
-					entry->action &= ~DO_AUTODESTROY;
-					entry->action |= DO_AUTOPICK;
-				}
-
-				lines_list[cy] = autopick_line_from_entry_kill(entry);
-
-				/* Now dirty */
-				dirty_line = cy;
-
-				/* Next line */
-				if (lines_list[cy + 1]) cy++;
-				cx = 0;
-				break;
-			case ';':
-				if (!autopick_new_entry(entry, lines_list[cy]))
-				{
-					if (old_key != key) repeated_clearing = FALSE;
-
-					/* Next line */
-					if (lines_list[cy + 1]) cy++;
-					cx = 0;
-					break;
-				}
-				string_free(lines_list[cy]);
-
-				if (old_key != key)
-				{
-					if (entry->action & DO_QUERY_AUTOPICK)
-						repeated_clearing = TRUE;
-					else
-						repeated_clearing = FALSE;
-				}
-
-				entry->action &= ~DO_AUTODESTROY;
-				entry->action &= ~DONT_AUTOPICK;
-				if (!repeated_clearing)
-				{
-					entry->action &= ~DO_AUTOPICK;
-					entry->action |= DO_QUERY_AUTOPICK;
-				}
-				else 
-				{
-					entry->action &= ~DO_QUERY_AUTOPICK;
-					entry->action |= DO_AUTOPICK;
-				}
-
-				lines_list[cy] = autopick_line_from_entry_kill(entry);
-
-				/* Now dirty */
-				dirty_line = cy;
-
-				/* Next line */
-				if (lines_list[cy + 1]) cy++;
-				cx = 0;
-				break;
-			case '(':
-				/* Toggle display on the 'M'ap */
-				if (!autopick_new_entry(entry, lines_list[cy]))
-				{
-					if (old_key != key) repeated_clearing = FALSE;
-
-					/* Next line */
-					if (lines_list[cy + 1]) cy++;
-					cx = 0;
-					break;
-				}
-				string_free(lines_list[cy]);
-
-				if (old_key != key)
-				{
-					if (entry->action & DO_DISPLAY)
-						repeated_clearing = TRUE;
-					else
-						repeated_clearing = FALSE;
-				}
-
-				if (!repeated_clearing)
-					entry->action |= DO_DISPLAY;
-				else
-					entry->action &= ~DO_DISPLAY;
-
-				lines_list[cy] = autopick_line_from_entry_kill(entry);
-
-				/* Now dirty */
-				dirty_line = cy;
-
-				/* Next line */
-				if (lines_list[cy + 1]) cy++;
-				cx = 0;
-				break;
-			case '#':
-			case '{':
-				key = KTRL('o');
-				break;
-			case 'h': case '4':
-				key = KTRL('b');
-				break;
-			case 'l': case '6':
-				key = KTRL('f');
-				break;
-			case 'j': case '2':
-				key = KTRL('n');
-				break;
-			case 'k': case '8':
-				key = KTRL('p');
-				break;
-			case ' ':
-				while (cy < upper + hgt-4 && lines_list[cy + 1])
-					cy++;
-				upper = cy;
-				break;
-			case '-': case 'b':
-				while (0 < cy && upper <= cy)
-					cy--;
-				while (0 < upper && cy + 1 < upper + hgt - 4)
-					upper--;
-				break;
-
-			case 'g':
-				cy = 0;
-				break;
-
-			case 'G':
-				while (lines_list[cy + 1])
-					cy++;
-				break;
-
-			case 'm':
-				/* Erase line */
-				Term_erase(0, cy - upper + 1, wid - WID_DESC);
-
-				/* Prompt */
-#ifdef JP
-				Term_putstr(0, cy - upper + 1, wid - WID_DESC - 1, TERM_YELLOW, "P:<トリガーキー>: ");
-#else
-				Term_putstr(0, cy - upper + 1, wid - WID_DESC - 1, TERM_YELLOW, "P:<Trigger key>: ");
-#endif
-				if (insert_macro_line(lines_list, cy))
-				{
-					/* Prepare to input action */
-					cx = 2;
-					edit_mode = TRUE;
-
-					/* Now dirty */
-					dirty_flags |= DIRTY_ALL;
-					dirty_flags |= DIRTY_MODE;
-				}
-
-				break;
-
-			case 'c':
-				/* Erase line */
-				Term_erase(0, cy - upper + 1, wid - WID_DESC);
-
-				/* Prompt */
-#ifdef JP
-				Term_putstr(0, cy - upper + 1, wid - WID_DESC - 1, TERM_YELLOW, format("C:%d:<コマンドキー>: ", (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
-#else
-				Term_putstr(0, cy - upper + 1, wid - WID_DESC - 1, TERM_YELLOW, format("C:%d:<Keypress>: ", (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
-#endif
-
-				if (insert_keymap_line(lines_list, cy))
-				{
-					/* Prepare to input action */
-					cx = 2;
-					edit_mode = TRUE;
-
-					/* Now dirty */
-					dirty_flags |= DIRTY_ALL;
-					dirty_flags |= DIRTY_MODE;
-				}				
-				break;
-			case '/':
-				/* Become dirty because of item/equip menu */
-				dirty_flags |= DIRTY_SCREEN;
-
-				if (!get_string_for_search(&search_o_ptr, &search_str))
-					break;
-
-				/* fall through */
-			case 'n':
-				if (search_o_ptr)
-				{
-					if (!search_for_object(lines_list, search_o_ptr, &cx, &cy, TRUE)) dirty_flags |= DIRTY_NOT_FOUND;
-				}
-				else if (search_str)
-				{
-					if (!search_for_string(lines_list, search_str, &cx, &cy, TRUE)) dirty_flags |= DIRTY_NOT_FOUND;
-				}
-				else
-				{
-					dirty_flags |= DIRTY_NO_SEARCH;
-				}
-				break;
-			case 'N':
-				if (search_o_ptr)
-				{
-					if (!search_for_object(lines_list, search_o_ptr, &cx, &cy, FALSE)) dirty_flags |= DIRTY_NOT_FOUND;
-				}
-				else if (search_str)
-				{
-					if (!search_for_string(lines_list, search_str, &cx, &cy, FALSE)) dirty_flags |= DIRTY_NOT_FOUND;
-				}
-				else
-				{
-					dirty_flags |= DIRTY_NO_SEARCH;
-				}
-				break;
-			}
+			com_id = get_com_id(key);
 		}
 
-		switch(key)
-		{
-		case KTRL('a'):
-			/* Beginning of line */
-			cx = 0;
-			break;
-		case KTRL('b'):
-			/* Back */
-			if (0 < cx)
-			{
-				cx--;
-				len = strlen(lines_list[cy]);
-				if (len < cx) cx = len;
-			}
-			else if (cy > 0)
-			{
-				cy--;
-				cx = strlen(lines_list[cy]);
-			}
-			break;
-		case KTRL('c'):
-			/* Insert a conditinal expression line */
-			insert_return_code(lines_list, 0, cy);
-			string_free(lines_list[cy]);
-			lines_list[cy] = string_make(classrace);
-			cy++;
-			insert_return_code(lines_list, 0, cy);
-			string_free(lines_list[cy]);
-			lines_list[cy] = string_make("?:1");
-			cx = 0;
-
-			/* Now dirty */
-			dirty_flags |= DIRTY_ALL;
-			break;
-		case KTRL('e'):
-			/* End of line */
-			cx = strlen(lines_list[cy]);
-			break;
-		case KTRL('f'):
-			/* Forward */
-#ifdef JP
-			if (iskanji(lines_list[cy][cx])) cx++;
-#endif
-			cx++;
-			len = strlen(lines_list[cy]);
-			if (len < cx)
-			{
-				if (lines_list[cy + 1])
-				{
-					cy++;
-					cx = 0;
-				}
-				else
-					cx = len;
-			}
-			break;
-		case KTRL('g'):
-			/* Toggle display on the 'M'ap */
-			if (!autopick_new_entry(entry, lines_list[cy]))
-				break;
-			string_free(lines_list[cy]);
-
-			if (entry->action & DO_DISPLAY)
-			{
-				entry->action &= ~DO_DISPLAY;
-				cx++;
-			}
-			else
-			{
-				entry->action |= DO_DISPLAY;
-				if (cx > 0) cx--;
-			}
-
-			lines_list[cy] = autopick_line_from_entry_kill(entry);
-
-			/* Now dirty */
-			dirty_line = cy;
-			break;
-		case KTRL('i'):
-			/* Insert choosen item name */
-			if (!entry_from_choosed_object(entry))
-			{
-				/* Now dirty because of item/equip menu */
-				dirty_flags |= DIRTY_SCREEN;
-				break;
-			}
-
-			insert_return_code(lines_list, 0, cy);
-			string_free(lines_list[cy]);
-			lines_list[cy] = autopick_line_from_entry_kill(entry);
-			cx = 0;
-
-			/* Now dirty because of item/equip menu */
-			dirty_flags |= DIRTY_SCREEN;
-
-			break;
-		case KTRL('l'):
-			/* Insert a name of last destroyed item */
-			if (last_destroyed)
-			{
-				insert_return_code(lines_list, 0, cy);
-				string_free(lines_list[cy]);
-				lines_list[cy] = string_make(last_destroyed);
-				cx = 0;
-
-				/* Now dirty */
-				dirty_flags |= DIRTY_ALL;
-			}
-			break;
-		case '\n': case '\r':
-			/* Split a line or insert end of line */
-			insert_return_code(lines_list, cx, cy);
-			cy++;
-			cx = 0;
-
-			/* Now dirty */
-			dirty_flags |= DIRTY_ALL;
-			break;
-		case KTRL('n'):
-			/* Next line */
-			if (lines_list[cy + 1]) cy++;
-			break;
-		case KTRL('o'):
-			/* Prepare to write auto-inscription text */
-			if (!autopick_new_entry(entry, lines_list[cy]))
-				break;
-			string_free(lines_list[cy]);
-
-			if (!entry->insc) entry->insc = string_make("");
-
-			lines_list[cy] = autopick_line_from_entry_kill(entry);
-
-			/* Move to collumn for auto inscription */
-			for (cx = 0; lines_list[cy][cx]; cx++)
-				if (lines_list[cy][cx] == '#') break;
-			cx++;
-			edit_mode = TRUE;
-
-			/* Now dirty */
-			dirty_line = cy;
-			dirty_flags |= DIRTY_MODE;
-			break;
-		case KTRL('p'):
-			/* Previous line */
-			if (cy > 0) cy--;
-			break;
-		case KTRL('q'):
-			/* Change mode */
-			edit_mode = !edit_mode;
-			
-			/* Mode line is now dirty */
-			dirty_flags |= DIRTY_MODE;
-			break;
-		case KTRL('r'):
-			/* Revert to original */
-#ifdef JP
-			if (!get_check("全ての変更を破棄して元の状態に戻します。よろしいですか？ "))
-#else
-			if (!get_check("Discard all changes and revert to original file. Are you sure? "))
-#endif
-				break;
-
-			free_text_lines(lines_list);
-			lines_list = read_pickpref_text_lines(&filename_mode);
-			dirty_flags |= DIRTY_ALL | DIRTY_MODE;
-			cx = cy = 0;
-			edit_mode = FALSE;
-			break;
-		case KTRL('s'):
-			/* Rotate action; pickup/destroy/leave */
-			if (!autopick_new_entry(entry, lines_list[cy]))
-				break;
-			string_free(lines_list[cy]);
-
-			if (entry->action & DO_AUTOPICK)
-			{
-				entry->action &= ~DO_AUTOPICK;
-				entry->action |= DO_AUTODESTROY;
-			}
-			else if (entry->action & DO_AUTODESTROY)
-			{
-				entry->action &= ~DO_AUTODESTROY;
-				entry->action |= DONT_AUTOPICK;
-			}
-			else if (entry->action & DONT_AUTOPICK)
-			{
-				entry->action &= ~DONT_AUTOPICK;
-				entry->action |= DO_AUTOPICK;
-			}
-
-			lines_list[cy] = autopick_line_from_entry_kill(entry);
-
-			/* Now dirty */
-			dirty_line = cy;
-
-			break;
-		case KTRL('t'):
-			/* Nothing */
-			break;
-		case KTRL('u'):
-			/* Rotate identify-state; identified/unidentified/... */
-			if (!autopick_new_entry(entry, lines_list[cy]))
-				break;
-			string_free(lines_list[cy]);
-
-			if (IS_FLG(FLG_UNIDENTIFIED)) 
-			{
-				REM_FLG(FLG_UNIDENTIFIED);
-				ADD_FLG(FLG_UNAWARE);
-				REM_FLG(FLG_IDENTIFIED);
-				REM_FLG(FLG_STAR_IDENTIFIED);
-			}
-			else if (IS_FLG(FLG_UNAWARE)) 
-			{
-				REM_FLG(FLG_UNIDENTIFIED);
-				REM_FLG(FLG_UNAWARE);
-				ADD_FLG(FLG_IDENTIFIED);
-				REM_FLG(FLG_STAR_IDENTIFIED);
-			}
-			else if (IS_FLG(FLG_STAR_IDENTIFIED)) 
-			{
-				REM_FLG(FLG_UNIDENTIFIED);
-				REM_FLG(FLG_UNAWARE);
-				REM_FLG(FLG_IDENTIFIED);
-				REM_FLG(FLG_STAR_IDENTIFIED);
-			}
-			else if (IS_FLG(FLG_IDENTIFIED)) 
-			{
-				REM_FLG(FLG_UNIDENTIFIED);
-				REM_FLG(FLG_UNAWARE);
-				REM_FLG(FLG_IDENTIFIED);
-				ADD_FLG(FLG_STAR_IDENTIFIED);
-			}
-			else
-			{
-				ADD_FLG(FLG_UNIDENTIFIED);
-				REM_FLG(FLG_UNAWARE);
-				REM_FLG(FLG_IDENTIFIED);
-				REM_FLG(FLG_STAR_IDENTIFIED);
-			}
-
-			lines_list[cy] = autopick_line_from_entry_kill(entry);
-
-			/* Now dirty */
-			dirty_line = cy;
-			break;
-		case KTRL('v'):
-			/* Scroll up */
-			while (cy < upper + hgt-4 && lines_list[cy + 1])
-				cy++;
-			upper = cy;
-			break;
-		case KTRL('w'):
-			/* Toggle 'worthless' */
-			toggle_string(lines_list, FLG_WORTHLESS, cy);
-			/* Now dirty */
-			dirty_line = cy;
-			break;
-		case KTRL('x'):
-			/* Rotate within nameless, ego, artifact */
-			if (!autopick_new_entry(entry, lines_list[cy]))
-				break;
-			string_free(lines_list[cy]);
-
-			if (IS_FLG(FLG_NAMELESS)) 
-			{
-				REM_FLG(FLG_NAMELESS);
-				ADD_FLG(FLG_EGO);
-				REM_FLG(FLG_ARTIFACT);
-			}
-			else if (IS_FLG(FLG_EGO)) 
-			{
-				REM_FLG(FLG_NAMELESS);
-				REM_FLG(FLG_EGO);
-				ADD_FLG(FLG_ARTIFACT);
-			}
-			else if (IS_FLG(FLG_ARTIFACT)) 
-			{
-				REM_FLG(FLG_NAMELESS);
-				REM_FLG(FLG_EGO);
-				REM_FLG(FLG_ARTIFACT);
-			}
-			else
-			{
-				ADD_FLG(FLG_NAMELESS);
-				REM_FLG(FLG_EGO);
-				REM_FLG(FLG_ARTIFACT);
-			}
-
-			lines_list[cy] = autopick_line_from_entry_kill(entry);
-
-			/* Now dirty */
-			dirty_line = cy;
-			break;
-
-		case KTRL('y'):
-			/* Paste killed text */
-			if (strlen(yank_buf))
-			{
-				bool ret = FALSE;
-
-				for (j = 0; yank_buf[j]; j += strlen(yank_buf + j) + 1)
-				{
-					if (ret && '\n' == yank_buf[j])
-					{
-						ret = FALSE;
-						continue;
-					}
-
-					/* Split current line */
-					insert_return_code(lines_list, cx, cy);
-
-					/* Save preceding string */
-					for(i = 0; lines_list[cy][i]; i++)
-						buf[i] = lines_list[cy][i];
-
-					/* Paste yank buffer */
-					if ('\n' != yank_buf[j])
-					{
-						int k = j;
-						while (yank_buf[k] && i < MAX_LINELEN-1)
-							buf[i++] = yank_buf[k++];
-						ret = TRUE;
-					}
-
-					buf[i] = '\0';
-
-					string_free(lines_list[cy]);
-					lines_list[cy] = string_make(buf);
-
-					/* Move to the beggining of next line */
-					cx = 0;
-					cy++;
-				}
-
-				/* Now dirty */
-				dirty_flags |= DIRTY_ALL;
-			}
-			break;
-		case KTRL('z'):
-			/* Toggle 'collecting' */
-			toggle_string(lines_list, FLG_COLLECTING, cy);
-			/* Now dirty */
-			dirty_line = cy;
-			break;
-
-		case KTRL('k'):
-			/* Kill rest of line */
-			if ((uint)cx > strlen(lines_list[cy]))
-				cx = (int)strlen(lines_list[cy]);
-
-			/* Save preceding string */
-			for (i = 0; lines_list[cy][i] && i < cx; i++)
-			{
-#ifdef JP
-				if (iskanji(lines_list[cy][i]))
-				{
-					buf[i] = lines_list[cy][i];
-					i++;
-				}
-#endif
-				buf[i] = lines_list[cy][i];
-			}
-			buf[i] = '\0';
-
-			j = 0;
-			if (old_key == key)
-				while (yank_buf[j])
-					j += strlen(yank_buf + j) + 1;
-
-			/* Copy following to yank buffer */
-			if (lines_list[cy][i])
-			{
-				while (lines_list[cy][i] && j < MAX_YANK - 2)
-					yank_buf[j++] = lines_list[cy][i++];
-				i = TRUE;
-			}
-			else
-			{
-				if (j < MAX_YANK - 2)
-					yank_buf[j++] = '\n';
-				i = FALSE;
-			}
-			yank_buf[j++] = '\0';
-			yank_buf[j] = '\0';
-
-			/* Replace current line with 'preceding string' */
-			string_free(lines_list[cy]);
-			lines_list[cy] = string_make(buf);
-
-			if (i)
-			{
-				/* Now dirty */
-				dirty_line = cy;
-				break;
-			}
-
-			/* fall through */
-		case KTRL('d'):
-		case 0x7F:
-			/* DELETE == go forward + BACK SPACE */
-#ifdef JP
-			if (iskanji(lines_list[cy][cx])) cx++;
-#endif
-			cx++;
-
-			/* fall through */
-
-		case '\010':
-			/* BACK SPACE */
-			len = strlen(lines_list[cy]);
-			if (len < cx)
-			{
-				if (lines_list[cy + 1])
-				{
-					cy++;
-					cx = 0;
-				}
-				else
-				{
-					cx = len;
-					break;
-				}
-			}
-
-			if (cx == 0)
-			{
-				/* delete a return code and union two lines */
-				if (cy == 0) break;
-				cx = strlen(lines_list[cy-1]);
-				strcpy(buf, lines_list[cy-1]);
-				strcat(buf, lines_list[cy]);
-				string_free(lines_list[cy-1]);
-				string_free(lines_list[cy]);
-				lines_list[cy-1] = string_make(buf);
-				for (i = cy; lines_list[i+1]; i++)
-					lines_list[i] = lines_list[i+1];
-				lines_list[i] = NULL;
-				cy--;
-
-				/* Now dirty */
-				dirty_flags |= DIRTY_ALL;
-				break;
-			}
-
-			for (i = j = k = 0; lines_list[cy][i] && i < cx; i++)
-			{
-				k = j;
-#ifdef JP
-				if (iskanji(lines_list[cy][i]))
-					buf[j++] = lines_list[cy][i++];
-#endif
-				buf[j++] = lines_list[cy][i];
-			}
-			while (j > k)
-			{
-				cx--;
-				j--;
-			}
-			for (; lines_list[cy][i]; i++)
-				buf[j++] = lines_list[cy][i];
-			buf[j] = '\0';
-			string_free(lines_list[cy]);
-			lines_list[cy] = string_make(buf);
-
-			/* Now dirty */
-			dirty_line = cy;
-			break;
-		}
-
+		if (com_id) quit = do_editor_command(tb, com_id);
 	} /* while (1) */
 
 	/* Restore the screen */
 	screen_load();
 
-	switch (filename_mode)
+	switch (tb->filename_mode)
 	{
 	case PT_DEFAULT:
 #ifdef JP
@@ -3889,10 +4957,13 @@ void do_cmd_edit_autopick(void)
 		break;
 	}
 
-	write_text_lines(buf, lines_list);
-	free_text_lines(lines_list);
+	write_text_lines(buf, tb->lines_list);
+	free_text_lines(tb->lines_list);
 
-	string_free(last_destroyed);
+	string_free(tb->last_destroyed);
+
+	/* Destroy string chain */
+	kill_yank_chain(tb);
 
 	/* Reload autopick pref */
 	process_pickpref_file(buf);

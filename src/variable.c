@@ -133,7 +133,7 @@ bool inkey_base;		/* See the "inkey()" function */
 bool inkey_xtra;		/* See the "inkey()" function */
 bool inkey_scan;		/* See the "inkey()" function */
 bool inkey_flag;		/* See the "inkey()" function */
-bool inkey_special;		/* See the "inkey()" function */
+char inkey_macro_trigger_string[1024];
 
 s16b coin_type;			/* Hack -- force coin type */
 

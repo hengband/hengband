@@ -178,7 +178,7 @@ extern bool inkey_base;
 extern bool inkey_xtra;
 extern bool inkey_scan;
 extern bool inkey_flag;
-extern bool inkey_special;
+extern char inkey_macro_trigger_string[1024];
 extern s16b coin_type;
 extern bool opening_chest;
 extern bool shimmer_monsters;
@@ -522,17 +522,17 @@ extern s16b now_message;
 extern bool use_menu;
 
 /* autopick.c */
-extern cptr autopick_line_from_entry(autopick_type *entry);
 extern bool autopick_new_entry(autopick_type *entry, cptr str);
 extern void autopick_free_entry(autopick_type *entry);
+extern void init_autopicker(void);
+extern errr process_pickpref_file_line(char *buf);
+extern cptr autopick_line_from_entry(autopick_type *entry);
 extern int is_autopick(object_type *o_ptr);
 extern void auto_inscribe_item(int item, int idx);
 extern bool auto_destroy_item(int item, int autopick_idx);
 extern void delayed_auto_destroy(void);
 extern void auto_pickup_items(cave_type *c_ptr);
 extern void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr);
-extern void init_autopicker(void);
-extern errr process_pickpref_file_line(char *buf);
 extern void do_cmd_edit_autopick(void);
 
 /* birth.c */
