@@ -16,9 +16,10 @@
 #include "z-virt.h"
 
 /* Special flags in the attr data */
-#define AF_BIGTILE 0xf0
+#define AF_BIGTILE2 0xf0
 
 #ifdef JP
+#define AF_TILE1   0x80
 #define AF_KANJI1  0x10
 #define AF_KANJI2  0x20
 #define AF_KANJIC  0x0f
@@ -529,7 +530,7 @@ void Term_queue_char(int x, int y, byte a, char c, byte ta, char tc)
 	if (x < Term->x1[y]) Term->x1[y] = x;
 	if (x > Term->x2[y]) Term->x2[y] = x;
 
-	if ((scrn->a[y][x] & AF_BIGTILE) == AF_BIGTILE)
+	if ((scrn->a[y][x] & AF_BIGTILE2) == AF_BIGTILE2)
 		if ((x - 1) < Term->x1[y]) Term->x1[y]--;
 }
 
@@ -572,16 +573,16 @@ void Term_queue_bigchar(int x, int y, byte a, char c, byte ta, char tc)
 		return;
 	}
 
-	/* A tile become a Bigtile */
-	if ((a & 0x80) && (c & 0x80))
+	/* A tile becomes a Bigtile */
+	if ((a & AF_TILE1) && (c & 0x80))
 	{
 		/* Mark it as a Bigtile */
-		a2 = AF_BIGTILE;
+		a2 = AF_BIGTILE2;
 
 		c2 = -1;
 
 		/* Ignore non-tile background */
-		if (!((ta & 0x80) && (tc & 0x80)))
+		if (!((ta & AF_TILE1) && (tc & 0x80)))
 		{
 			ta = 0;
 			tc = 0;
@@ -722,7 +723,7 @@ void Term_queue_chars(int x, int y, int n, byte a, cptr s)
 	 * 重なった文字の左部分を消去。
 	 * 表示開始位置が左端でないと仮定。
 	 */
-	if ((scr_aa[x] & AF_KANJI2) && (scr_aa[x] & AF_BIGTILE) != AF_BIGTILE)
+	if ((scr_aa[x] & AF_KANJI2) && (scr_aa[x] & AF_BIGTILE2) != AF_BIGTILE2)
 	{
 		scr_cc[x - 1] = ' ';
 		scr_aa[x - 1] &= AF_KANJIC;
@@ -736,7 +737,7 @@ void Term_queue_chars(int x, int y, int n, byte a, cptr s)
 		/* 特殊文字としてMSBが立っている可能性がある */
 		/* その場合attrのMSBも立っているのでこれで識別する */
 /* check */
-		if (!(a & 0x80) && iskanji(*s))
+		if (!(a & AF_TILE1) && iskanji(*s))
 		{
 			char nc1 = *s++;
 			char nc2 = *s;
@@ -797,7 +798,7 @@ void Term_queue_chars(int x, int y, int n, byte a, cptr s)
 
 		int w, h;
 		Term_get_size(&w, &h);
-		if (x != w && (scr_aa[x] & AF_BIGTILE) != AF_BIGTILE && (scr_aa[x] & AF_KANJI2))
+		if (x != w && !(scr_aa[x] & AF_TILE1) && (scr_aa[x] & AF_KANJI2))
 		{
 			scr_cc[x] = ' ';
 			scr_aa[x] &= AF_KANJIC;
@@ -892,7 +893,7 @@ static void Term_fresh_row_pict(int y, int x1, int x2)
 		/* 特殊文字としてMSBが立っている可能性がある */
 		/* その場合attrのMSBも立っているのでこれで識別する */
 /* check */
-		kanji = (iskanji(nc) && !(na & 0x80));
+		kanji = (iskanji(nc) && !(na & AF_TILE1));
 #endif
 
 		ota = old_taa[x];
@@ -1030,7 +1031,7 @@ static void Term_fresh_row_both(int y, int x1, int x2)
 		/* その場合attrのMSBも立っているのでこれで識別する */
 /* check */
 /*		kanji = (iskanji(nc));  */
-		kanji = (iskanji(nc) && !(na & 0x80));
+		kanji = (iskanji(nc) && !(na & AF_TILE1));
 #endif
 
 		ota = old_taa[x];
@@ -1096,10 +1097,10 @@ static void Term_fresh_row_both(int y, int x1, int x2)
 		old_tcc[x] = ntc;
 
 		/* 2nd byte of bigtile */
-		if ((na & AF_BIGTILE) == AF_BIGTILE) continue;
+		if ((na & AF_BIGTILE2) == AF_BIGTILE2) continue;
 
 		/* Handle high-bit attr/chars */
-		if ((na & 0x80) && (nc & 0x80))
+		if ((na & AF_TILE1) && (nc & 0x80))
 		{
 			/* Flush */
 			if (fn)
@@ -1241,7 +1242,7 @@ static void Term_fresh_row_text(int y, int x1, int x2)
 	int kanji = 0;
 
 	for (x = 0; x < x1; x++)
-		if (!(old_aa[x] & 0x80) && iskanji(old_cc[x]))
+		if (!(old_aa[x] & AF_TILE1) && iskanji(old_cc[x]))
 		{
 			if (x == x1 - 1)
 			{
@@ -1276,7 +1277,7 @@ static void Term_fresh_row_text(int y, int x1, int x2)
 		/* 特殊文字としてMSBが立っている可能性がある */
 		/* その場合attrのMSBも立っているのでこれで識別する */
 /* check */
-		kanji = (iskanji(nc) && !(na & 0x80));
+		kanji = (iskanji(nc) && !(na & AF_TILE1));
 #endif
 		/* Handle unchanged grids */
 #ifdef JP
@@ -1624,7 +1625,7 @@ errr Term_fresh(void)
 			char otc = old_tcc[tx];
 
 #ifdef JP
-			if (tx + 1 < Term->wid && !(old_aa[tx] & 0x80)
+			if (tx + 1 < Term->wid && !(old_aa[tx] & AF_TILE1)
 			    && iskanji(old_cc[tx]))
 				csize = 2;
 #endif
@@ -1635,7 +1636,7 @@ errr Term_fresh(void)
 			}
 
 			/* Hack -- use "Term_pict()" sometimes */
-			else if (Term->higher_pict && (old_aa[tx] & 0x80) && (old_cc[tx] & 0x80))
+			else if (Term->higher_pict && (old_aa[tx] & AF_TILE1) && (old_cc[tx] & 0x80))
 			{
 				(void)((*Term->pict_hook)(tx, ty, 1, &old_aa[tx], &old_cc[tx], &ota, &otc));
 			}
@@ -1749,11 +1750,11 @@ errr Term_fresh(void)
 
 #ifdef JP
 			if ((scr->cx + 1 < w) &&
-			    ((old->a[scr->cy][scr->cx + 1] & AF_BIGTILE) == AF_BIGTILE ||
-			     (!(old->a[scr->cy][scr->cx] & 0x80) &&
+			    ((old->a[scr->cy][scr->cx + 1] & AF_BIGTILE2) == AF_BIGTILE2 ||
+			     (!(old->a[scr->cy][scr->cx] & AF_TILE1) &&
 			      iskanji(old->c[scr->cy][scr->cx]))))
 #else
-			if ((scr->cx + 1 < w) && (old->a[scr->cy][scr->cx + 1] & AF_BIGTILE) == AF_BIGTILE)
+			if ((scr->cx + 1 < w) && (old->a[scr->cy][scr->cx + 1] & AF_BIGTILE2) == AF_BIGTILE2)
 #endif
 			{
 				/* Double width cursor for the Bigtile mode */
@@ -1942,6 +1943,41 @@ errr Term_addch(byte a, char c)
 
 
 /*
+ * Bigtile version of Term_addch().
+ *
+ * If use_bigtile is FALSE, simply call Term_addch() .
+ *
+ * Otherwise, queue a pair of attr/char for display at the current
+ * cursor location, and advance the cursor to the right by two.
+ */
+errr Term_add_bigch(byte a, char c)
+{
+	if (!use_bigtile) return Term_addch(a, c);
+
+	/* Handle "unusable" cursor */
+	if (Term->scr->cu) return (-1);
+
+	/* Paranoia -- no illegal chars */
+	if (!c) return (-2);
+
+	/* Queue the given character for display */
+	Term_queue_bigchar(Term->scr->cx, Term->scr->cy, a, c, 0, 0);
+
+	/* Advance the cursor */
+	Term->scr->cx += 2;
+
+	/* Success */
+	if (Term->scr->cx < Term->wid) return (0);
+
+	/* Note "Useless" cursor */
+	Term->scr->cu = 1;
+
+	/* Note "Useless" cursor */
+	return (1);
+}
+
+
+/*
  * At the current location, using an attr, add a string
  *
  * We also take a length "n", using negative values to imply
@@ -2102,10 +2138,10 @@ errr Term_erase(int x, int y, int n)
 	 * 全角文字の右半分から文字を表示する場合、
 	 * 重なった文字の左部分を消去。
 	 */
-	if (n > 0 && (((scr_aa[x] & AF_KANJI2) && (scr_aa[x] & AF_BIGTILE) != AF_BIGTILE)
-		      || (scr_aa[x] & AF_BIGTILE) == AF_BIGTILE))
+	if (n > 0 && (((scr_aa[x] & AF_KANJI2) && !(scr_aa[x] & AF_TILE1))
+		      || (scr_aa[x] & AF_BIGTILE2) == AF_BIGTILE2))
 #else
-	if (n > 0 && (scr_aa[x] & AF_BIGTILE) == AF_BIGTILE)
+	if (n > 0 && (scr_aa[x] & AF_BIGTILE2) == AF_BIGTILE2)
 #endif
 	{
 		x--;
