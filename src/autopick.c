@@ -1400,6 +1400,9 @@ void auto_pickup_items(cave_type *c_ptr)
 #define LSTAT_BYPASS      0x01
 #define LSTAT_EXPRESSION  0x02
 
+#define QUIT_WITHOUT_SAVE 1
+#define QUIT_AND_SAVE     2
+
 /* 
  * Struct for yank buffer
  */
@@ -1436,6 +1439,8 @@ typedef struct {
 	int dirty_line;
 	int filename_mode;
 	int old_com_id;
+
+	bool changed;
 } text_body_type;
 
 
@@ -2470,6 +2475,9 @@ static bool insert_return_code(text_body_type *tb)
 	/* Expressions need re-evaluation */
 	tb->dirty_flags |= DIRTY_EXPRESSION;
 
+	/* Text is changed */
+	tb->changed = TRUE;
+
 	return TRUE;
 }
 
@@ -2920,86 +2928,88 @@ static bool search_for_string(text_body_type *tb, cptr search_str, bool forward)
  * Editor command id's
  */
 #define EC_QUIT                1 
-#define EC_REVERT	       2 
-#define EC_HELP                3 
-#define EC_RETURN	       4        
-#define EC_LEFT		       5 
-#define EC_DOWN		       6 
-#define EC_UP		       7 
-#define EC_RIGHT	       8 
-#define EC_BOL		       9 
-#define EC_EOL		       10
-#define EC_PGUP		       11
-#define EC_PGDOWN	       12
-#define EC_TOP		       13
-#define EC_BOTTOM	       14
-#define EC_CUT		       15
-#define EC_COPY		       16
-#define EC_PASTE	       17
-#define EC_BLOCK	       18
-#define EC_KILL_LINE	       19
-#define EC_DELETE_CHAR	       20
-#define EC_BACKSPACE	       21
-#define EC_SEARCH_STR	       22
-#define EC_SEARCH_FORW         23
-#define EC_SEARCH_BACK         24
-#define EC_SEARCH_OBJ	       25
-#define EC_SEARCH_DESTROYED    26
-#define EC_INSERT_OBJECT       27
-#define EC_INSERT_DESTROYED    28
-#define EC_INSERT_BLOCK	       29
-#define EC_INSERT_MACRO	       30
-#define EC_INSERT_KEYMAP       31
-#define EC_CL_AUTOPICK	       32
-#define EC_CL_DESTROY	       33
-#define EC_CL_LEAVE	       34
-#define EC_CL_QUERY	       35
-#define EC_CL_NO_DISP	       36
-#define EC_OK_COLLECTING       37
-#define EC_IK_UNAWARE	       38
-#define EC_IK_UNIDENTIFIED     39
-#define EC_IK_IDENTIFIED       40
-#define EC_IK_STAR_IDENTIFIED  41
-#define EC_OK_BOOSTED	       42
-#define EC_OK_MORE_THAN	       43
-#define EC_OK_MORE_BONUS       44
-#define EC_OK_WORTHLESS	       45
-#define EC_OK_ARTIFACT	       46
-#define EC_OK_EGO	       47
-#define EC_OK_NAMELESS	       48
-#define EC_OK_WANTED	       49
-#define EC_OK_UNIQUE	       50
-#define EC_OK_HUMAN	       51
-#define EC_OK_UNREADABLE       52
-#define EC_OK_REALM1	       53
-#define EC_OK_REALM2	       54
-#define EC_OK_FIRST	       55
-#define EC_OK_SECOND	       56
-#define EC_OK_THIRD	       57
-#define EC_OK_FOURTH	       58
-#define EC_KK_WEAPONS	       59
-#define EC_KK_FAVORITE	       60
-#define EC_KK_ARMORS	       61
-#define EC_KK_MISSILES	       62
-#define EC_KK_DEVICES	       63
-#define EC_KK_LIGHTS	       64
-#define EC_KK_JUNKS	       65
-#define EC_KK_SPELLBOOKS       66
-#define EC_KK_SHIELDS	       67
-#define EC_KK_BOWS	       68
-#define EC_KK_RINGS	       69
-#define EC_KK_AMULETS	       70
-#define EC_KK_SUITS	       71
-#define EC_KK_CLOAKS	       72
-#define EC_KK_HELMS	       73
-#define EC_KK_GLOVES	       74
-#define EC_KK_BOOTS	       75
+#define EC_SAVEQUIT            2     
+#define EC_REVERT	       3 
+#define EC_HELP                4 
+#define EC_RETURN	       5        
+#define EC_LEFT		       6 
+#define EC_DOWN		       7 
+#define EC_UP		       8 
+#define EC_RIGHT	       9 
+#define EC_BOL		       10
+#define EC_EOL		       11
+#define EC_PGUP		       12
+#define EC_PGDOWN	       13
+#define EC_TOP		       14
+#define EC_BOTTOM	       15
+#define EC_CUT		       16
+#define EC_COPY		       17
+#define EC_PASTE	       18
+#define EC_BLOCK	       19
+#define EC_KILL_LINE	       20
+#define EC_DELETE_CHAR	       21
+#define EC_BACKSPACE	       22
+#define EC_SEARCH_STR	       23
+#define EC_SEARCH_FORW         24
+#define EC_SEARCH_BACK         25
+#define EC_SEARCH_OBJ	       26
+#define EC_SEARCH_DESTROYED    27
+#define EC_INSERT_OBJECT       28
+#define EC_INSERT_DESTROYED    29
+#define EC_INSERT_BLOCK	       30
+#define EC_INSERT_MACRO	       31
+#define EC_INSERT_KEYMAP       32
+#define EC_CL_AUTOPICK	       33
+#define EC_CL_DESTROY	       34
+#define EC_CL_LEAVE	       35
+#define EC_CL_QUERY	       36
+#define EC_CL_NO_DISP	       37
+#define EC_OK_COLLECTING       38
+#define EC_IK_UNAWARE	       39
+#define EC_IK_UNIDENTIFIED     40
+#define EC_IK_IDENTIFIED       41
+#define EC_IK_STAR_IDENTIFIED  42
+#define EC_OK_BOOSTED	       43
+#define EC_OK_MORE_THAN	       44
+#define EC_OK_MORE_BONUS       45
+#define EC_OK_WORTHLESS	       46
+#define EC_OK_ARTIFACT	       47
+#define EC_OK_EGO	       48
+#define EC_OK_NAMELESS	       49
+#define EC_OK_WANTED	       50
+#define EC_OK_UNIQUE	       51
+#define EC_OK_HUMAN	       52
+#define EC_OK_UNREADABLE       53
+#define EC_OK_REALM1	       54
+#define EC_OK_REALM2	       55
+#define EC_OK_FIRST	       56
+#define EC_OK_SECOND	       57
+#define EC_OK_THIRD	       58
+#define EC_OK_FOURTH	       59
+#define EC_KK_WEAPONS	       60
+#define EC_KK_FAVORITE	       61
+#define EC_KK_ARMORS	       62
+#define EC_KK_MISSILES	       63
+#define EC_KK_DEVICES	       64
+#define EC_KK_LIGHTS	       65
+#define EC_KK_JUNKS	       66
+#define EC_KK_SPELLBOOKS       67
+#define EC_KK_SHIELDS	       68
+#define EC_KK_BOWS	       69
+#define EC_KK_RINGS	       70
+#define EC_KK_AMULETS	       71
+#define EC_KK_SUITS	       72
+#define EC_KK_CLOAKS	       73
+#define EC_KK_HELMS	       74
+#define EC_KK_GLOVES	       75
+#define EC_KK_BOOTS	       76
 
 
 /* Manu names */
 #ifdef JP
 
-#define MN_QUIT "セーブして終了" 
+#define MN_QUIT "セーブ無しで終了" 
+#define MN_SAVEQUIT "セーブして終了" 
 #define MN_REVERT "全ての変更を破棄" 
 #define MN_HELP "ヘルプ" 
 
@@ -3071,7 +3081,8 @@ static bool search_for_string(text_body_type *tb, cptr search_str, bool forward)
 
 #else
 
-#define MN_QUIT "Save & Quit" 
+#define MN_QUIT "Quit without save" 
+#define MN_SAVEQUIT "Save & Quit" 
 #define MN_REVERT "Revert all changes" 
 #define MN_HELP "Help" 
 
@@ -3154,21 +3165,10 @@ typedef struct {
 
 command_menu_type menu_data[] =
 {
-	{MN_QUIT, 0, KTRL('q'), EC_QUIT}, 
-	{MN_REVERT, 0, KTRL('z'), EC_REVERT},
 	{MN_HELP, 0, -1, EC_HELP},
-
-	{MN_MOVE, 0, -1, -1},
-	{MN_LEFT, 1, KTRL('b'), EC_LEFT},
-	{MN_DOWN, 1, KTRL('n'), EC_DOWN},
-	{MN_UP, 1, KTRL('p'), EC_UP},
-	{MN_RIGHT, 1, KTRL('f'), EC_RIGHT},
-	{MN_BOL, 1, KTRL('a'), EC_BOL},
-	{MN_EOL, 1, KTRL('e'), EC_EOL},
-	{MN_PGUP, 1, KTRL('o'), EC_PGUP},
-	{MN_PGDOWN, 1, KTRL('l'), EC_PGDOWN},
-	{MN_TOP, 1, KTRL('y'), EC_TOP},
-	{MN_BOTTOM, 1, KTRL('u'), EC_BOTTOM},
+	{MN_QUIT, 0, KTRL('q'), EC_QUIT}, 
+	{MN_SAVEQUIT, 0, KTRL('w'), EC_SAVEQUIT}, 
+	{MN_REVERT, 0, KTRL('z'), EC_REVERT},
 
 	{MN_EDIT, 0, -1, -1},
 	{MN_CUT, 1, KTRL('x'), EC_CUT},
@@ -3188,19 +3188,24 @@ command_menu_type menu_data[] =
 	{MN_SEARCH_OBJ, 1, -1, EC_SEARCH_OBJ},
 	{MN_SEARCH_DESTROYED, 1, -1, EC_SEARCH_DESTROYED},
 
+	{MN_MOVE, 0, -1, -1},
+	{MN_LEFT, 1, KTRL('b'), EC_LEFT},
+	{MN_DOWN, 1, KTRL('n'), EC_DOWN},
+	{MN_UP, 1, KTRL('p'), EC_UP},
+	{MN_RIGHT, 1, KTRL('f'), EC_RIGHT},
+	{MN_BOL, 1, KTRL('a'), EC_BOL},
+	{MN_EOL, 1, KTRL('e'), EC_EOL},
+	{MN_PGUP, 1, KTRL('o'), EC_PGUP},
+	{MN_PGDOWN, 1, KTRL('l'), EC_PGDOWN},
+	{MN_TOP, 1, KTRL('y'), EC_TOP},
+	{MN_BOTTOM, 1, KTRL('u'), EC_BOTTOM},
+
 	{MN_INSERT, 0, -1, -1},
 	{MN_INSERT_OBJECT, 1, KTRL('i'), EC_INSERT_OBJECT},
 	{MN_INSERT_DESTROYED, 1, -1, EC_INSERT_DESTROYED},
 	{MN_INSERT_BLOCK, 1, -1, EC_INSERT_BLOCK},
 	{MN_INSERT_MACRO, 1, -1, EC_INSERT_MACRO},
 	{MN_INSERT_KEYMAP, 1, -1, EC_INSERT_KEYMAP},
-
- 	{MN_COMMAND_LETTER, 0, -1, -1},
-	{MN_CL_AUTOPICK, 1, -1, EC_CL_AUTOPICK},
-	{MN_CL_DESTROY, 1, -1, EC_CL_DESTROY},
-	{MN_CL_LEAVE, 1, -1, EC_CL_LEAVE},
-	{MN_CL_QUERY, 1, -1, EC_CL_QUERY},
-	{MN_CL_NO_DISP, 1, -1, EC_CL_NO_DISP},
 
  	{MN_ADJECTIVE_GEN, 0, -1, -1},
 	{KEY_UNAWARE, 1, -1, EC_IK_UNAWARE},
@@ -3246,6 +3251,13 @@ command_menu_type menu_data[] =
 	{KEY_HELMS, 1, -1, EC_KK_HELMS},
 	{KEY_GLOVES, 1, -1, EC_KK_GLOVES},
 	{KEY_BOOTS, 1, -1, EC_KK_BOOTS},
+
+ 	{MN_COMMAND_LETTER, 0, -1, -1},
+	{MN_CL_AUTOPICK, 1, -1, EC_CL_AUTOPICK},
+	{MN_CL_DESTROY, 1, -1, EC_CL_DESTROY},
+	{MN_CL_LEAVE, 1, -1, EC_CL_LEAVE},
+	{MN_CL_QUERY, 1, -1, EC_CL_QUERY},
+	{MN_CL_NO_DISP, 1, -1, EC_CL_NO_DISP},
 
 	{NULL, -1, -1, 0}
 };
@@ -3766,7 +3778,7 @@ static void draw_text_editor(text_body_type *tb)
 #ifdef JP
 					str = "現在の式の値は「偽(=0)」です。";
 #else
-					str = "  The expression is 'False'(=0) currently.";
+					str = "The expression is 'False'(=0) currently.";
 #endif
 				}
 				else
@@ -3774,7 +3786,7 @@ static void draw_text_editor(text_body_type *tb)
 #ifdef JP
 					str = "現在の式の値は「真(=1)」です。";
 #else
-					str = "  The expression is 'True'(=1) currently.";
+					str = "The expression is 'True'(=1) currently.";
 #endif
 				}
 				break;
@@ -3787,7 +3799,7 @@ static void draw_text_editor(text_body_type *tb)
 #ifdef JP
 					str = "この行は現在は無効な状態です。";
 #else
-					str = "  This line is bypassed currently.";
+					str = "This line is bypassed currently.";
 #endif
 				}
 				break;
@@ -3880,6 +3892,9 @@ static void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool wh
 
 	/* Expressions may need re-evaluation */
 	check_expression_line(tb, y);
+
+	/* Text is changed */
+	tb->changed = TRUE;
 }
 
 
@@ -4024,7 +4039,18 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	switch(com_id)
 	{
 	case EC_QUIT:
-		return TRUE;
+		if (tb->changed)
+		{
+#ifdef JP
+			if (!get_check("全ての変更を破棄してから終了します。よろしいですか？ ")) break;
+#else
+			if (!get_check("Discard all changes and quit. Are you sure? ")) break;
+#endif
+		}
+		return QUIT_WITHOUT_SAVE;
+
+	case EC_SAVEQUIT:
+		return QUIT_AND_SAVE;
 
 	case EC_REVERT:
 		/* Revert to original */
@@ -4039,6 +4065,9 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		tb->dirty_flags |= DIRTY_ALL | DIRTY_MODE | DIRTY_EXPRESSION;
 		tb->cx = tb->cy = 0;
 		tb->mark = 0;
+
+		/* Text is not changed */
+		tb->changed = FALSE;
 		break;
 
 	case EC_HELP:
@@ -4372,6 +4401,9 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		/* Expressions need re-evaluation */
 		tb->dirty_flags |= DIRTY_EXPRESSION;
 
+		/* Text is changed */
+		tb->changed = TRUE;
+
 		break;
 	}
 
@@ -4541,6 +4573,9 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 			/* Expressions need re-evaluation */
 			tb->dirty_flags |= DIRTY_EXPRESSION;
 
+			/* Text is changed */
+			tb->changed = TRUE;
+
 			break;
 		}
 
@@ -4569,6 +4604,9 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 		/* Expressions may need re-evaluation */
 		check_expression_line(tb, tb->cy);
+
+		/* Text is changed */
+		tb->changed = TRUE;
 
 		break;
 	}
@@ -4669,6 +4707,9 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 			/* Now dirty */
 			tb->dirty_flags |= DIRTY_ALL;
+
+			/* Text is changed */
+			tb->changed = TRUE;
 		}
 		break;
 
@@ -4697,6 +4738,10 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 		/* Now dirty */
 		tb->dirty_flags |= DIRTY_ALL;
+
+		/* Text is changed */
+		tb->changed = TRUE;
+
 		break;
 	}
 
@@ -4720,7 +4765,9 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 			/* Now dirty */
 			tb->dirty_flags |= DIRTY_ALL;
-			tb->dirty_flags |= DIRTY_MODE;
+
+			/* Text is changed */
+			tb->changed = TRUE;
 		}
 
 		break;
@@ -4746,7 +4793,9 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 			/* Now dirty */
 			tb->dirty_flags |= DIRTY_ALL;
-			tb->dirty_flags |= DIRTY_MODE;
+
+			/* Text is changed */
+			tb->changed = TRUE;
 		}				
 		break;
 
@@ -4880,6 +4929,9 @@ static void insert_single_letter(text_body_type *tb, int key)
 
 	/* Expressions may need re-evaluation */
 	check_expression_line(tb, tb->cy);
+
+	/* Text is changed */
+	tb->changed = TRUE;
 }
 
 /*
@@ -4896,8 +4948,9 @@ void do_cmd_edit_autopick(void)
 	int key = -1;
 
 	static s32b old_autosave_turn = 0L;
-	bool quit = FALSE;
+	byte quit = 0;
 
+	tb->changed = FALSE;
 	tb->cx = tb->cy = tb->upper = tb->left = 0;
 	tb->mark = 0;
 	tb->mx = tb->my = 0;
@@ -4960,9 +5013,9 @@ void do_cmd_edit_autopick(void)
 
 		/* Display header line */
 #ifdef JP
-		prt("(^Q:終了, ESC:メニュー, その他:入力)", 0, 0);
+		prt("(^Q:終了 ^W:セーブして終了, ESC:メニュー, その他:入力)", 0, 0);
 #else	
-		prt("(^Q:quit, ESC:menu, Other:input text)", 0, 0);
+		prt("(^Q:quit, ^W:save&quit, ESC:menu, Other:input text)", 0, 0);
 #endif
 		if (!tb->mark)
 		{
@@ -5155,7 +5208,8 @@ void do_cmd_edit_autopick(void)
 		break;
 	}
 
-	write_text_lines(buf, tb->lines_list);
+	if (tb->changed && quit == QUIT_AND_SAVE)
+		write_text_lines(buf, tb->lines_list);
 	free_text_lines(tb->lines_list);
 
 	string_free(tb->last_destroyed);
