@@ -950,7 +950,7 @@ msg_print("地面に落とされた。");
 				{
 					scatter(&wy, &wx, py, px, 20, 0);
 				}
-				while (!(in_bounds(wy, wx) && cave_floor_bold(wy, wx)) && --attempts);
+				while (!(in_bounds(wy, wx) && cave_empty_bold2(wy, wx)) && --attempts);
 
 				if (attempts > 0)
 				{
