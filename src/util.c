@@ -5262,7 +5262,7 @@ int inkey_special(void)
 	trig_len = strlen(inkey_macro_trigger_string);
 
 	/* No special key */
-	if (!trig_len) return (int)key;
+	if (!trig_len) return (0xff & (int)key);
 
 	/*
 	 * Mega Hack -- ignore macro defined on ASCII keys
@@ -5270,20 +5270,21 @@ int inkey_special(void)
 	 * When this function is used, all ASCII keys are used as
 	 * themselfs instead of macro triggers for command macro's.
 	 */
-#ifdef JP
-	if (trig_len == 1 && !iskanji(inkey_macro_trigger_string[0]))
-#else
 	if (trig_len == 1)
-#endif
 	{
 		/* Get original key */
 		key = inkey_macro_trigger_string[0];
-		
-		/* Kill further macro expansion */
-		flush();
+
+#ifdef JP
+		if (!iskanji(key))
+#endif
+		{
+			/* Kill further macro expansion */
+			flush();
+		}
 
 		/* Return the originaly pressed key */
-		return (int)key;
+		return (0xff & (int)key);
 	}
 
 	/* Convert the trigger */
@@ -5329,7 +5330,7 @@ int inkey_special(void)
 		inkey_macro_trigger_string[0] = '\0';
 
 		/* Return normal keycode */
-		return (int)key;
+		return (0xff & (int)key);
 	}
 
 	/* A special key found */
