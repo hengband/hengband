@@ -6455,7 +6455,7 @@ bool process_frakir(int xx, int yy)
 #ifdef JP
 			msg_format("%sが鋭く震えた！", o_name);
 #else
-			msg_format("%s pulsates sharply!", o_name);
+			msg_format("Your %s pulsates sharply!", o_name);
 #endif
 			disturb(0,0);
 #ifdef JP
@@ -6476,7 +6476,7 @@ bool process_frakir(int xx, int yy)
 #ifdef JP
 		msg_format("%sが震えた！", o_name);
 #else
-		msg_format("%s pulsates!", o_name);
+		msg_format("Your %s pulsates!", o_name);
 #endif
 		disturb(0,0);
 #ifdef JP
