@@ -1259,107 +1259,104 @@ void map_info(int y, int x, byte *ap, char *cp)
                 }
         }
 
-	switch (feat)
+	if (feat_priority == -1)
 	{
-	case FEAT_NONE:
-	case FEAT_FLOOR:
-	case FEAT_INVIS:
-	case FEAT_TRAP_TRAPDOOR:
-	case FEAT_TRAP_PIT:
-	case FEAT_TRAP_SPIKED_PIT:
-	case FEAT_TRAP_POISON_PIT:
-	case FEAT_TRAP_TY_CURSE:
-	case FEAT_TRAP_TELEPORT:
-	case FEAT_TRAP_FIRE:
-	case FEAT_TRAP_ACID:
-	case FEAT_TRAP_SLOW:
-	case FEAT_TRAP_LOSE_STR:
-	case FEAT_TRAP_LOSE_DEX:
-	case FEAT_TRAP_LOSE_CON:
-	case FEAT_TRAP_BLIND:
-	case FEAT_TRAP_CONFUSE:
-	case FEAT_TRAP_POISON:
-	case FEAT_TRAP_SLEEP:
-	case FEAT_TRAP_TRAPS:
-	case FEAT_DIRT:
-	case FEAT_GRASS:
-	case FEAT_FLOWER:
-	case FEAT_DEEP_GRASS:
-	case FEAT_SWAMP:
-	case FEAT_TREES:
-		feat_priority = 0;
-		break;
-
-	case FEAT_OPEN:
-	case FEAT_BROKEN:
-		feat_priority = 5;
-		break;
-
-	case FEAT_SECRET:
-	case FEAT_RUBBLE:
-	case FEAT_MAGMA:
-	case FEAT_QUARTZ:
-	case FEAT_MAGMA_H:
-	case FEAT_QUARTZ_H:
-	case FEAT_WALL_EXTRA:
-	case FEAT_WALL_INNER:
-	case FEAT_WALL_OUTER:
-	case FEAT_WALL_SOLID:
-	case FEAT_DEEP_WATER:
-	case FEAT_SHAL_WATER:
-	case FEAT_DEEP_LAVA:
-	case FEAT_SHAL_LAVA:
-	case FEAT_DARK_PIT:
-		feat_priority = 6;
-		break;
-
-	case FEAT_MAGMA_K:
-	case FEAT_QUARTZ_K:
-		feat_priority = 7;
-		break;
-
-	case FEAT_MOUNTAIN:
-	case FEAT_PERM_EXTRA:
-	case FEAT_PERM_INNER:
-	case FEAT_PERM_OUTER:
-	case FEAT_PERM_SOLID:
-		feat_priority = 8;
-		break;
-
-	case FEAT_GLYPH:
-	case FEAT_MINOR_GLYPH:
-	case FEAT_MIRROR:
-	case FEAT_PATTERN_START:
-	case FEAT_PATTERN_1:
-	case FEAT_PATTERN_2:
-	case FEAT_PATTERN_3:
-	case FEAT_PATTERN_4:
-	case FEAT_PATTERN_END:
-	case FEAT_PATTERN_OLD:
-	case FEAT_PATTERN_XTRA1:
-	case FEAT_PATTERN_XTRA2:
-		feat_priority = 16;
-		break;
-
-		/* objects have feat_priority = 20 */ 
-		/* monsters have feat_priority = 30 */ 
-
-	case FEAT_LESS:
-	case FEAT_MORE:
-	case FEAT_QUEST_ENTER:
-	case FEAT_QUEST_EXIT:
-	case FEAT_QUEST_DOWN:
-	case FEAT_QUEST_UP:
-	case FEAT_LESS_LESS:
-	case FEAT_MORE_MORE:
-	case FEAT_TOWN:
-	case FEAT_ENTRANCE:
-		feat_priority = 35;
-		break;
-
-	default:
-		feat_priority = 10;
-		break;
+		switch (feat)
+		{
+		case FEAT_NONE:
+		case FEAT_FLOOR:
+		case FEAT_INVIS:
+		case FEAT_TRAP_TRAPDOOR:
+		case FEAT_TRAP_PIT:
+		case FEAT_TRAP_SPIKED_PIT:
+		case FEAT_TRAP_POISON_PIT:
+		case FEAT_TRAP_TY_CURSE:
+		case FEAT_TRAP_TELEPORT:
+		case FEAT_TRAP_FIRE:
+		case FEAT_TRAP_ACID:
+		case FEAT_TRAP_SLOW:
+		case FEAT_TRAP_LOSE_STR:
+		case FEAT_TRAP_LOSE_DEX:
+		case FEAT_TRAP_LOSE_CON:
+		case FEAT_TRAP_BLIND:
+		case FEAT_TRAP_CONFUSE:
+		case FEAT_TRAP_POISON:
+		case FEAT_TRAP_SLEEP:
+		case FEAT_TRAP_TRAPS:
+		case FEAT_DIRT:
+		case FEAT_GRASS:
+		case FEAT_FLOWER:
+		case FEAT_DEEP_GRASS:
+		case FEAT_SWAMP:
+		case FEAT_TREES:
+		case FEAT_SECRET:
+		case FEAT_RUBBLE:
+		case FEAT_MAGMA:
+		case FEAT_QUARTZ:
+		case FEAT_MAGMA_H:
+		case FEAT_QUARTZ_H:
+		case FEAT_WALL_EXTRA:
+		case FEAT_WALL_INNER:
+		case FEAT_WALL_OUTER:
+		case FEAT_WALL_SOLID:
+		case FEAT_DEEP_WATER:
+		case FEAT_SHAL_WATER:
+		case FEAT_DEEP_LAVA:
+		case FEAT_SHAL_LAVA:
+		case FEAT_DARK_PIT:
+			feat_priority = 1;
+			break;
+			
+		case FEAT_MAGMA_K:
+		case FEAT_QUARTZ_K:
+			feat_priority = 2;
+			break;
+			
+		case FEAT_MOUNTAIN:
+		case FEAT_PERM_EXTRA:
+		case FEAT_PERM_INNER:
+		case FEAT_PERM_OUTER:
+		case FEAT_PERM_SOLID:
+			feat_priority = 5;
+			break;
+			
+			/* default is feat_priority = 20; (doors and stores) */ 
+			
+		case FEAT_GLYPH:
+		case FEAT_MINOR_GLYPH:
+		case FEAT_MIRROR:
+		case FEAT_PATTERN_START:
+		case FEAT_PATTERN_1:
+		case FEAT_PATTERN_2:
+		case FEAT_PATTERN_3:
+		case FEAT_PATTERN_4:
+		case FEAT_PATTERN_END:
+		case FEAT_PATTERN_OLD:
+		case FEAT_PATTERN_XTRA1:
+		case FEAT_PATTERN_XTRA2:
+			feat_priority = 16;
+			break;
+			
+			/* objects have feat_priority = 20 */ 
+			/* monsters have feat_priority = 30 */ 
+			
+		case FEAT_LESS:
+		case FEAT_MORE:
+		case FEAT_QUEST_ENTER:
+		case FEAT_QUEST_EXIT:
+		case FEAT_QUEST_DOWN:
+		case FEAT_QUEST_UP:
+		case FEAT_LESS_LESS:
+		case FEAT_MORE_MORE:
+		case FEAT_TOWN:
+		case FEAT_ENTRANCE:
+			feat_priority = 35;
+			break;
+			
+		default:
+			feat_priority = 10;
+			break;
+		}
 	}
 
 	/* Hack -- rare random hallucination, except on outer dungeon walls */
@@ -2404,6 +2401,7 @@ void display_map(int *cy, int *cx)
 
 			match_autopick=-1;
 			autopick_obj=NULL;
+			feat_priority = -1;
 
 			/* Extract the current attr/char at that map location */
 #ifdef USE_TRANSPARENCY
@@ -2425,7 +2423,7 @@ void display_map(int *cy, int *cx)
 			}
 
 			/* Save "best" */
-			if (mp[y][x] <= tp)
+			if (mp[y][x] < tp || (mp[y][x] == tp && ((y + i) * yrat + x + j) % (xrat*yrat) == 0))
 			{
 				/* Save the char */
 				mc[y][x] = tc;
