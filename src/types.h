@@ -1140,6 +1140,9 @@ struct player_type
 	bool dtrap;               /* Whether you are on trap-safe grids */
 	s16b floor_id;            /* Current floor location */ 
 
+	bool autopick_autoregister; /* auto register is in-use or not */
+
+
 	/*** Temporary fields ***/
 
 	bool playing;			/* True if player is playing */

@@ -718,7 +718,7 @@ static void wr_extra(void)
 	wr_s16b(p_ptr->ele_immune);
 	wr_u32b(p_ptr->special_defense);
 	wr_byte(p_ptr->knowledge);
-	wr_byte(0);     /* oops */
+	wr_byte(p_ptr->autopick_autoregister);
 	wr_byte(0);     /* oops */
 	wr_byte(p_ptr->action);
 	wr_byte(0);

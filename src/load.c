@@ -1922,7 +1922,10 @@ note(format("¤ÎÃæ", tmp16s));
 		rd_u32b(&p_ptr->special_defense);
 	}
 	rd_byte(&p_ptr->knowledge);
-	rd_byte(&tmp8u); /* oops */
+
+	rd_byte(&tmp8u);
+	p_ptr->autopick_autoregister = tmp8u ? TRUE : FALSE;
+
 	rd_byte(&tmp8u); /* oops */
 	rd_byte(&p_ptr->action);
 	if (!z_older_than(10, 4, 3))

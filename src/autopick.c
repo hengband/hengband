@@ -424,6 +424,238 @@ static bool autopick_new_entry(autopick_type *entry, cptr str, bool allow_defaul
 
 
 /*
+ * Favorite weapons
+ */
+static bool is_favorite(object_type *o_ptr, bool others_ok)
+{
+	/* Only weapons match */
+	switch(o_ptr->tval)
+	{
+	case TV_BOW: case TV_HAFTED: case TV_POLEARM:
+	case TV_SWORD: case TV_DIGGING:
+		break;
+	default: return FALSE;
+	}
+
+	/* Favorite weapons are varied depend on the class */
+	switch (p_ptr->pclass)
+	{
+	case CLASS_PRIEST:
+	{
+		u32b flgs[TR_FLAG_SIZE];
+		object_flags_known(o_ptr, flgs);
+
+		if (!have_flag(flgs, TR_BLESSED) && 
+		    !(o_ptr->tval == TV_HAFTED))
+			return FALSE;
+		break;
+	}
+
+	case CLASS_MONK:
+	case CLASS_FORCETRAINER:
+		/* Icky to wield? */
+		if (!(s_info[p_ptr->pclass].w_max[o_ptr->tval-TV_BOW][o_ptr->sval]))
+			return FALSE;
+		break;
+
+	case CLASS_BEASTMASTER:
+	case CLASS_CAVALRY:
+	{
+		u32b flgs[TR_FLAG_SIZE];
+		object_flags_known(o_ptr, flgs);
+
+		/* Is it known to be suitable to using while riding? */
+		if (!(have_flag(flgs, TR_RIDING)))
+			return FALSE;
+
+		break;
+	}
+
+	case CLASS_NINJA:
+		/* Icky to wield? */
+		if (s_info[p_ptr->pclass].w_max[o_ptr->tval-TV_BOW][o_ptr->sval] <= WEAPON_EXP_BEGINNER)
+			return FALSE;
+		break;
+
+	default:
+		/* Non-special class */
+		if (others_ok) return TRUE;
+		else return FALSE;
+	}
+
+	return TRUE;
+}
+
+
+/*
+ * Get auto-picker entry from o_ptr.
+ */
+static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
+{
+	/* Assume that object name is to be added */
+	bool name = TRUE;
+
+	entry->name = NULL;
+	entry->insc = string_make(quark_str(o_ptr->inscription));
+	entry->action = DO_AUTOPICK | DO_DISPLAY;
+	entry->flag[0] = entry->flag[1] = 0L;
+	entry->dice = 0;
+
+	if (!object_aware_p(o_ptr))
+	{
+		ADD_FLG(FLG_UNAWARE);
+	}
+	else if (!object_known_p(o_ptr))
+	{
+		ADD_FLG(FLG_UNIDENTIFIED);
+	}
+	else
+	{
+		if (o_ptr->name2)
+		{
+			ego_item_type *e_ptr = &e_info[o_ptr->name2];
+			entry->name = string_make(e_name + e_ptr->name);
+			name = FALSE;
+			ADD_FLG(FLG_EGO);
+		}
+		else if (o_ptr->name1 || o_ptr->art_name)
+			ADD_FLG(FLG_ARTIFACT);
+		else
+		{
+			/* Wearable nameless object */
+			switch (o_ptr->tval)
+			{
+			case TV_WHISTLE:
+			case TV_SHOT: case TV_ARROW: case TV_BOLT: case TV_BOW:
+			case TV_DIGGING: case TV_HAFTED: case TV_POLEARM: case TV_SWORD: 
+			case TV_BOOTS: case TV_GLOVES: case TV_HELM: case TV_CROWN:
+			case TV_SHIELD: case TV_CLOAK:
+			case TV_SOFT_ARMOR: case TV_HARD_ARMOR: case TV_DRAG_ARMOR:
+			case TV_LITE: case TV_AMULET: case TV_RING: case TV_CARD:
+
+				ADD_FLG(FLG_NAMELESS);
+				break;
+			}
+		}
+
+	}
+
+
+	switch(o_ptr->tval)
+	{
+		object_kind *k_ptr; 
+	case TV_HAFTED: case TV_POLEARM: case TV_SWORD: case TV_DIGGING:
+		k_ptr = &k_info[o_ptr->k_idx];
+		if ((o_ptr->dd != k_ptr->dd) || (o_ptr->ds != k_ptr->ds))
+			ADD_FLG(FLG_BOOSTED);
+	}
+
+	if (o_ptr->tval == TV_CORPSE && object_is_shoukinkubi(o_ptr))
+	{
+		REM_FLG(FLG_WORTHLESS);
+		ADD_FLG(FLG_WANTED);
+	}
+
+	if ((o_ptr->tval == TV_CORPSE || o_ptr->tval == TV_STATUE)
+	    && (r_info[o_ptr->pval].flags1 & RF1_UNIQUE))
+	{
+		ADD_FLG(FLG_UNIQUE);
+	}
+
+	if (o_ptr->tval == TV_CORPSE && strchr("pht", r_info[o_ptr->pval].d_char))
+	{
+		ADD_FLG(FLG_HUMAN);
+	}
+
+	if (o_ptr->tval >= TV_LIFE_BOOK &&
+	    !check_book_realm(o_ptr->tval, o_ptr->sval))
+	{
+		ADD_FLG(FLG_UNREADABLE);
+		if (o_ptr->tval != TV_ARCANE_BOOK) name = FALSE;
+	}
+
+	if (REALM1_BOOK == o_ptr->tval &&
+	    p_ptr->pclass != CLASS_SORCERER &&
+	    p_ptr->pclass != CLASS_RED_MAGE)
+	{
+		ADD_FLG(FLG_REALM1);
+		name = FALSE;
+	}
+
+	if (REALM2_BOOK == o_ptr->tval &&
+	    p_ptr->pclass != CLASS_SORCERER &&
+	    p_ptr->pclass != CLASS_RED_MAGE)
+	{
+		ADD_FLG(FLG_REALM2);
+		name = FALSE;
+	}
+
+	if (o_ptr->tval >= TV_LIFE_BOOK && 0 == o_ptr->sval)
+		ADD_FLG(FLG_FIRST);
+	if (o_ptr->tval >= TV_LIFE_BOOK && 1 == o_ptr->sval)
+		ADD_FLG(FLG_SECOND);
+	if (o_ptr->tval >= TV_LIFE_BOOK && 2 == o_ptr->sval)
+		ADD_FLG(FLG_THIRD);
+	if (o_ptr->tval >= TV_LIFE_BOOK && 3 == o_ptr->sval)
+		ADD_FLG(FLG_FOURTH);
+
+	if (o_ptr->tval == TV_SHOT || o_ptr->tval == TV_BOLT
+		 || o_ptr->tval == TV_ARROW)
+		ADD_FLG(FLG_MISSILES);
+	else if (o_ptr->tval == TV_SCROLL || o_ptr->tval == TV_STAFF
+		 || o_ptr->tval == TV_WAND || o_ptr->tval == TV_ROD)
+		ADD_FLG(FLG_DEVICES);
+	else if (o_ptr->tval == TV_LITE)
+		ADD_FLG(FLG_LIGHTS);
+	else if (o_ptr->tval == TV_SKELETON || o_ptr->tval == TV_BOTTLE
+		 || o_ptr->tval == TV_JUNK || o_ptr->tval == TV_STATUE)
+		ADD_FLG(FLG_JUNKS);
+	else if (o_ptr->tval >= TV_LIFE_BOOK)
+		ADD_FLG(FLG_SPELLBOOKS);
+	else if (is_favorite(o_ptr, FALSE))
+		ADD_FLG(FLG_FAVORITE);
+	else if (o_ptr->tval == TV_POLEARM || o_ptr->tval == TV_SWORD
+		 || o_ptr->tval == TV_DIGGING || o_ptr->tval == TV_HAFTED)
+		ADD_FLG(FLG_WEAPONS);
+	else if (o_ptr->tval == TV_SHIELD)
+		ADD_FLG(FLG_SHIELDS);
+	else if (o_ptr->tval == TV_BOW)
+		ADD_FLG(FLG_BOWS);
+	else if (o_ptr->tval == TV_RING)
+		ADD_FLG(FLG_RINGS);
+	else if (o_ptr->tval == TV_AMULET)
+		ADD_FLG(FLG_AMULETS);
+	else if (o_ptr->tval == TV_DRAG_ARMOR || o_ptr->tval == TV_HARD_ARMOR ||
+		 o_ptr->tval == TV_SOFT_ARMOR)
+		ADD_FLG(FLG_SUITS);
+	else if (o_ptr->tval == TV_CLOAK)
+		ADD_FLG(FLG_CLOAKS);
+	else if (o_ptr->tval == TV_HELM)
+		ADD_FLG(FLG_HELMS);
+	else if (o_ptr->tval == TV_GLOVES)
+		ADD_FLG(FLG_GLOVES);
+	else if (o_ptr->tval == TV_BOOTS)
+		ADD_FLG(FLG_BOOTS);
+
+
+	if (name)
+	{
+		char o_name[MAX_NLEN];
+		object_desc(o_name, o_ptr, FALSE, 0);
+
+		entry->name = string_make(o_name);
+	}
+
+	else if (!entry->name)
+	{
+		entry->name = string_make("");
+	}
+
+	return;
+}
+
+
+/*
  * A function to delete entry
  */
 static void autopick_free_entry(autopick_type *entry)
@@ -436,11 +668,20 @@ static void autopick_free_entry(autopick_type *entry)
 /*
  * Initialize auto-picker preference
  */
+#define MAX_AUTOPICK_DEFAULT 200
+
 void init_autopicker(void)
 {
 	static const char easy_autopick_inscription[] = "(:=g";
 	autopick_type entry;
 	int i;
+
+	if (!autopick_list)
+	{
+		max_max_autopick = MAX_AUTOPICK_DEFAULT;
+		C_MAKE(autopick_list, max_max_autopick, autopick_type);
+		max_autopick = 0;
+	}
 
 	/* Clear old entries */
 	for( i = 0; i < max_autopick; i++)
@@ -454,18 +695,45 @@ void init_autopicker(void)
 }
 
 
+/*
+ * Add one line to autopick_list[]
+ */
+static void add_autopick_list(autopick_type *entry)
+{
+	/* There is no enough space to add one line */
+	if (max_autopick >= max_max_autopick)
+	{
+		int old_max_max_autopick = max_max_autopick;
+		autopick_type *old_autopick_list = autopick_list;
+
+		/* Increase size of list */
+		max_max_autopick += MAX_AUTOPICK_DEFAULT;
+
+		/* Allocate */
+		C_MAKE(autopick_list, max_max_autopick, autopick_type);
+
+		/* Copy from old list to new list */
+		C_COPY(autopick_list, old_autopick_list, old_max_max_autopick, autopick_type);
+
+		/* Kill old list */
+		C_FREE(old_autopick_list, old_max_max_autopick, autopick_type);
+	}
+
+	/* Add one line */
+	autopick_list[max_autopick] = *entry;
+
+	max_autopick++;
+}
+
 
 /*
  *  Process line for auto picker/destroyer.
  */
 errr process_pickpref_file_line(char *buf)
 {
-	autopick_type entry;
+	autopick_type an_entry, *entry = &an_entry;
 	int i;
 
-	if (max_autopick == MAX_AUTOPICK)
-		return 1;
-	
 	/* Nuke illegal char */
 	for(i = 0; buf[i]; i++)
 	{
@@ -481,17 +749,17 @@ errr process_pickpref_file_line(char *buf)
 	}
 	buf[i] = 0;
 	
-	if (!autopick_new_entry(&entry, buf, FALSE)) return 0;
+	if (!autopick_new_entry(entry, buf, FALSE)) return 0;
 
 	/* Already has the same entry? */ 
 	for(i = 0; i < max_autopick; i++)
-		if(!strcmp(entry.name, autopick_list[i].name)
-		   && entry.flag[0] == autopick_list[i].flag[0]
-		   && entry.flag[1] == autopick_list[i].flag[1]
-		   && entry.dice == autopick_list[i].dice
-		   && entry.bonus == autopick_list[i].bonus) return 0;
+		if(!strcmp(entry->name, autopick_list[i].name)
+		   && entry->flag[0] == autopick_list[i].flag[0]
+		   && entry->flag[1] == autopick_list[i].flag[1]
+		   && entry->dice == autopick_list[i].dice
+		   && entry->bonus == autopick_list[i].bonus) return 0;
 
-	autopick_list[max_autopick++] = entry;
+	add_autopick_list(entry);
 	return 0;
 }
 
@@ -628,69 +896,6 @@ static cptr autopick_line_from_entry_kill(autopick_type *entry)
 	return ptr;
 }
 
-
-/*
- * Favorite weapons
- */
-static bool is_favorite(object_type *o_ptr, bool others_ok)
-{
-	/* Only weapons match */
-	switch(o_ptr->tval)
-	{
-	case TV_BOW: case TV_HAFTED: case TV_POLEARM:
-	case TV_SWORD: case TV_DIGGING:
-		break;
-	default: return FALSE;
-	}
-
-	/* Favorite weapons are varied depend on the class */
-	switch (p_ptr->pclass)
-	{
-	case CLASS_PRIEST:
-	{
-		u32b flgs[TR_FLAG_SIZE];
-		object_flags_known(o_ptr, flgs);
-
-		if (!have_flag(flgs, TR_BLESSED) && 
-		    !(o_ptr->tval == TV_HAFTED))
-			return FALSE;
-		break;
-	}
-
-	case CLASS_MONK:
-	case CLASS_FORCETRAINER:
-		/* Icky to wield? */
-		if (!(s_info[p_ptr->pclass].w_max[o_ptr->tval-TV_BOW][o_ptr->sval]))
-			return FALSE;
-		break;
-
-	case CLASS_BEASTMASTER:
-	case CLASS_CAVALRY:
-	{
-		u32b flgs[TR_FLAG_SIZE];
-		object_flags_known(o_ptr, flgs);
-
-		/* Is it known to be suitable to using while riding? */
-		if (!(have_flag(flgs, TR_RIDING)))
-			return FALSE;
-
-		break;
-	}
-
-	case CLASS_NINJA:
-		/* Icky to wield? */
-		if (s_info[p_ptr->pclass].w_max[o_ptr->tval-TV_BOW][o_ptr->sval] <= WEAPON_EXP_BEGINNER)
-			return FALSE;
-		break;
-
-	default:
-		/* Non-special class */
-		if (others_ok) return TRUE;
-		else return FALSE;
-	}
-
-	return TRUE;
-}
 
 /*
  * A function for Auto-picker/destroyer
@@ -1389,6 +1594,296 @@ void auto_pickup_items(cave_type *c_ptr)
 }
 
 
+#define PT_DEFAULT 0
+#define PT_WITH_PNAME 1
+
+/*
+ *  Get file name for autopick preference
+ */
+static cptr pickpref_filename(int filename_mode)
+{
+#ifdef JP
+	static const char namebase[] = "picktype";
+#else
+	static const char namebase[] = "pickpref";
+#endif
+
+	switch (filename_mode)
+	{
+	case PT_DEFAULT:
+		return format("%s.prf", namebase);
+
+	case PT_WITH_PNAME:
+		return format("%s-%s.prf", namebase, player_name);
+
+	default:
+		return NULL;
+	}
+}
+
+
+static const char autoregister_header[] = "?:$AUTOREGISTER";
+
+/*
+ *  Clear auto registered lines in the picktype.prf .
+ */
+static bool clear_auto_register(void)
+{
+	char tmp_file[1024];
+	char pref_file[1024];
+	char buf[1024];
+	FILE *pref_fff;
+	FILE *tmp_fff;
+	int num = 0;
+	bool autoregister = FALSE;
+	bool okay = TRUE;
+
+	path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(PT_WITH_PNAME));
+	pref_fff = my_fopen(pref_file, "r");
+
+	if (!pref_fff)
+	{
+		path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(PT_DEFAULT));
+		pref_fff = my_fopen(pref_file, "r");
+	}
+
+	if (!pref_fff)
+	{
+		/* No file yet */
+		return TRUE;
+	}
+
+	/* Open a new (temporary) file */
+	tmp_fff = my_fopen_temp(tmp_file, sizeof(tmp_file));
+
+	if (!tmp_fff)
+	{
+		/* Close the preference file */
+		fclose(pref_fff);
+
+#ifdef JP
+		msg_format("一時ファイル %s を作成できませんでした。", tmp_file);
+#else
+		msg_format("Failed to create temporary file %s.", tmp_file);
+#endif
+		msg_print(NULL);
+		return FALSE;
+	}
+
+	
+	/* Loop for every line */
+	while (TRUE)
+	{
+		/* Read a line */
+		if (my_fgets(pref_fff, buf, sizeof(buf))) break;
+
+		if (autoregister)
+		{
+			/* Delete auto-registered line */
+
+			/* Count auto-destroy preference lines */
+			if (buf[0] != '#' && buf[0] != '?') num++;
+		}
+
+		/* We are looking for auto-registered line */
+		else
+		{
+			if (streq(buf, autoregister_header))
+			{
+				/* Delete all further lines */
+				autoregister = TRUE;
+			}
+			else
+			{
+				/* Copy orginally lines */
+				fprintf(tmp_fff, "%s\n", buf);
+			}
+		}
+	}
+
+	/* Close files */
+	my_fclose(pref_fff);
+	my_fclose(tmp_fff);
+
+	if (num)
+	{
+#ifdef JP
+		msg_format("以前のキャラクター用の自動設定(%d行)が残っています。", num);
+		strcpy(buf, "古い設定行は削除します。よろしいですか？");
+#else
+		msg_format("Auto registered lines (%d lines) for previous character are remaining.", num);
+		strcpy(buf, "These lines will be deleted.  Are you sure? ");
+#endif
+
+		/* You can cancel it */
+		if (!get_check(buf))
+		{
+			okay = FALSE;
+			autoregister = FALSE;
+
+#ifdef JP
+			msg_print("エディタのカット&ペースト等を使って必要な行を避難してください。");
+#else
+			msg_print("Use cut & paste of auto picker editor (_) to keep old prefs.");
+#endif
+		}
+	}
+
+
+	/* If there are some changes, overwrite the original file with new one */
+	if (autoregister)
+	{
+		/* Copy contents of temporary file */
+
+		tmp_fff = my_fopen(tmp_file, "r");
+		pref_fff = my_fopen(pref_file, "w");
+
+		while (!my_fgets(tmp_fff, buf, sizeof(buf)))
+			fprintf(pref_fff, "%s\n", buf);
+
+		my_fclose(pref_fff);
+		my_fclose(tmp_fff);
+	}
+
+	/* Kill the temporary file */
+	fd_kill(tmp_file);
+
+	return okay;
+}
+
+
+/*
+ *  Automatically register an auto-destroy preference line
+ */
+bool add_auto_register(object_type *o_ptr)
+{
+	char buf[1024];
+	char pref_file[1024];
+	FILE *pref_fff;
+	autopick_type an_entry, *entry = &an_entry;
+
+	int match_autopick = is_autopick(o_ptr);
+
+	/* Already registered */
+	if (match_autopick != -1)
+	{
+		cptr what;
+		byte act = autopick_list[match_autopick].action;
+
+#ifdef JP
+		if (act & DO_AUTOPICK) what = "自動で拾う";
+		else if (act & DO_AUTODESTROY) what = "自動破壊する";
+		else if (act & DONT_AUTOPICK) what = "放置する";
+		else /* if (act & DO_QUERY_AUTOPICK) */ what = "確認して拾う";
+
+		msg_format("そのアイテムは既に%sように設定されています。", what);
+#else
+		if (act & DO_AUTOPICK) what = "auto-pickup";
+		else if (act & DO_AUTODESTROY) what = "auto-destroy";
+		else if (act & DONT_AUTOPICK) what = "leave on floor";
+		else /* if (act & DO_QUERY_AUTOPICK) */ what = "query auto-pickup";
+
+		msg_format("The object is already registered to %s.", what);
+#endif
+		
+		return FALSE;
+	}
+
+
+	if (!p_ptr->autopick_autoregister)
+	{
+		/* Clear old auto registered lines */
+		if (!clear_auto_register()) return FALSE;
+	}
+
+	/* Try a filename with player name */
+	path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(PT_WITH_PNAME));
+	pref_fff = my_fopen(pref_file, "r");
+
+	if (!pref_fff)
+	{
+		/* Use default name */
+		path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(PT_DEFAULT));
+		pref_fff = my_fopen(pref_file, "r");
+	}
+
+	/* Check the header */
+	while (TRUE)
+	{
+		/* Read a line */
+		if (my_fgets(pref_fff, buf, sizeof(buf)))
+		{
+			/* No header found */
+			p_ptr->autopick_autoregister = FALSE;
+
+			break;
+		}
+
+		if (streq(buf, autoregister_header))
+		{
+			/* Found the header */
+			p_ptr->autopick_autoregister = TRUE;
+
+			break;
+		}
+	}
+
+	/* Close read only FILE* */
+	fclose(pref_fff);
+
+	/* Open for append */
+	pref_fff = my_fopen(pref_file, "a");
+
+	/* Failure */
+	if (!pref_fff) {
+#ifdef JP
+		msg_format("%s を開くことができませんでした。", pref_file);
+#else
+		msg_format("Failed to open %s.", pref_file);
+#endif
+		msg_print(NULL);
+
+		/* Failed */
+		return FALSE;
+	}
+
+	if (!p_ptr->autopick_autoregister)
+	{
+		/* Add the header */
+		fprintf(pref_fff, "%s\n", autoregister_header);
+
+#ifdef JP
+		fprintf(pref_fff, "%s\n", "# *警告!!* 以降の行は自動登録されたものです。");
+		fprintf(pref_fff, "%s\n", "# 後で自動的に削除されますので、必要な行は上の方へ移動しておいてください。");
+#else
+		fprintf(pref_fff, "%s\n", "# *Waring!* The lines below will be deleated later.");
+		fprintf(pref_fff, "%s\n", "# Keep it by cut & paste if you need these lines for future characters.");
+#endif
+
+		/* Now auto register is in-use */
+		p_ptr->autopick_autoregister = TRUE;
+	}
+
+	/* Get a preference entry */
+	autopick_entry_from_object(entry, o_ptr);
+
+	/* Set to auto-destroy (with no-display) */
+	entry->action = DO_AUTODESTROY;
+
+	/* Load the new line as preference */
+	add_autopick_list(entry);
+
+	/* Add a line to the file */
+	/* Don't kill "entry" */
+	fprintf(pref_fff, "%s\n", autopick_line_from_entry(entry));
+
+	/* Close the file */
+	fclose(pref_fff);
+
+	return TRUE;
+}
+
+
 /********  Auto-picker/destroyer editor  **********/
 
 #define MAX_YANK MAX_LINELEN
@@ -1397,8 +1892,9 @@ void auto_pickup_items(cave_type *c_ptr)
 #define MARK_MARK     0x01
 #define MARK_BY_SHIFT 0x02
 
-#define LSTAT_BYPASS      0x01
-#define LSTAT_EXPRESSION  0x02
+#define LSTAT_BYPASS        0x01
+#define LSTAT_EXPRESSION    0x02
+#define LSTAT_AUTOREGISTER  0x04
 
 #define QUIT_WITHOUT_SAVE 1
 #define QUIT_AND_SAVE     2
@@ -2079,39 +2575,26 @@ static cptr *read_text_lines(cptr filename, bool user)
 }
 
 
-#define PT_DEFAULT 0
-#define PT_WITH_PNAME 1
-
 static cptr *read_pickpref_text_lines(int *filename_mode_p)
 {
 	char buf[1024];
 	cptr *lines_list;
 
-#ifdef JP
-	sprintf(buf, "picktype-%s.prf", player_name);
-#else
-	sprintf(buf, "pickpref-%s.prf", player_name);
-#endif
+	*filename_mode_p = PT_WITH_PNAME;
+	strcpy(buf, pickpref_filename(*filename_mode_p));
 	lines_list = read_text_lines(buf, TRUE);
 
 	if (!lines_list)
 	{
-#ifdef JP
-		lines_list = read_text_lines("picktype.prf", TRUE);
-#else
-		lines_list = read_text_lines("pickpref.prf", TRUE);
-#endif
 		*filename_mode_p = PT_DEFAULT;
+		strcpy(buf, pickpref_filename(*filename_mode_p));
+		lines_list = read_text_lines(buf, TRUE);
 	}
 
 	if (!lines_list)
 	{
-#ifdef JP
-		lines_list = read_text_lines("picktype.prf", FALSE);
-#else
-		lines_list = read_text_lines("pickpref.prf", FALSE);
-#endif
-		*filename_mode_p = PT_WITH_PNAME;
+		strcpy(buf, pickpref_filename(*filename_mode_p));
+		lines_list = read_text_lines(buf, FALSE);
 	}
 
 	if (!lines_list)
@@ -2119,7 +2602,6 @@ static cptr *read_pickpref_text_lines(int *filename_mode_p)
 		/* Allocate list of pointers */
 		C_MAKE(lines_list, MAX_LINES, cptr);
 		lines_list[0] = string_make("");
-		*filename_mode_p = PT_WITH_PNAME;
 	}
 	return lines_list;
 }
@@ -2488,126 +2970,6 @@ static bool insert_return_code(text_body_type *tb)
 	tb->changed = TRUE;
 
 	return TRUE;
-}
-
-
-/*
- * Get auto-picker entry from o_ptr.
- */
-void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
-{
-	char o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, FALSE, 0);
-
-	entry->name = string_make(o_name);
-	entry->insc = string_make(quark_str(o_ptr->inscription));
-	entry->action = DO_AUTOPICK | DO_DISPLAY;
-	entry->flag[0] = entry->flag[1] = 0L;
-	entry->dice = 0;
-
-	if (!object_aware_p(o_ptr))
-		ADD_FLG(FLG_UNAWARE);
-	if (object_value(o_ptr) <= 0)
-		ADD_FLG(FLG_WORTHLESS);
-
-	if (object_known_p(o_ptr))
-	{
-		if (o_ptr->name2)
-			ADD_FLG(FLG_EGO);
-		else if (o_ptr->name1 || o_ptr->art_name)
-			ADD_FLG(FLG_ARTIFACT);
-	}
-
-	switch(o_ptr->tval)
-	{
-		object_kind *k_ptr; 
-	case TV_HAFTED: case TV_POLEARM: case TV_SWORD: case TV_DIGGING:
-		k_ptr = &k_info[o_ptr->k_idx];
-		if ((o_ptr->dd != k_ptr->dd) || (o_ptr->ds != k_ptr->ds))
-			ADD_FLG(FLG_BOOSTED);
-	}
-
-	if (o_ptr->tval == TV_CORPSE && object_is_shoukinkubi(o_ptr))
-	{
-		REM_FLG(FLG_WORTHLESS);
-		ADD_FLG(FLG_WANTED);
-	}
-
-	if ((o_ptr->tval == TV_CORPSE || o_ptr->tval == TV_STATUE)
-	    && (r_info[o_ptr->pval].flags1 & RF1_UNIQUE))
-	{
-		REM_FLG(FLG_WORTHLESS);
-		ADD_FLG(FLG_UNIQUE);
-	}
-
-	if (o_ptr->tval == TV_CORPSE && strchr("pht", r_info[o_ptr->pval].d_char))
-	{
-		REM_FLG(FLG_WORTHLESS);
-		ADD_FLG(FLG_HUMAN);
-	}
-
-	if (o_ptr->tval >= TV_LIFE_BOOK &&
-	    !check_book_realm(o_ptr->tval, o_ptr->sval))
-		ADD_FLG(FLG_UNREADABLE);
-
-	if (REALM1_BOOK == o_ptr->tval &&
-	    p_ptr->pclass != CLASS_SORCERER &&
-	    p_ptr->pclass != CLASS_RED_MAGE)
-		ADD_FLG(FLG_REALM1);
-
-	if (REALM2_BOOK == o_ptr->tval &&
-	    p_ptr->pclass != CLASS_SORCERER &&
-	    p_ptr->pclass != CLASS_RED_MAGE)
-		ADD_FLG(FLG_REALM2);
-
-	if (o_ptr->tval >= TV_LIFE_BOOK && 0 == o_ptr->sval)
-		ADD_FLG(FLG_FIRST);
-	if (o_ptr->tval >= TV_LIFE_BOOK && 1 == o_ptr->sval)
-		ADD_FLG(FLG_SECOND);
-	if (o_ptr->tval >= TV_LIFE_BOOK && 2 == o_ptr->sval)
-		ADD_FLG(FLG_THIRD);
-	if (o_ptr->tval >= TV_LIFE_BOOK && 3 == o_ptr->sval)
-		ADD_FLG(FLG_FOURTH);
-
-	if (o_ptr->tval == TV_SHOT || o_ptr->tval == TV_BOLT
-		 || o_ptr->tval == TV_ARROW)
-		ADD_FLG(FLG_MISSILES);
-	else if (o_ptr->tval == TV_SCROLL || o_ptr->tval == TV_STAFF
-		 || o_ptr->tval == TV_WAND || o_ptr->tval == TV_ROD)
-		ADD_FLG(FLG_DEVICES);
-	else if (o_ptr->tval == TV_LITE)
-		ADD_FLG(FLG_LIGHTS);
-	else if (o_ptr->tval == TV_SKELETON || o_ptr->tval == TV_BOTTLE
-		 || o_ptr->tval == TV_JUNK || o_ptr->tval == TV_STATUE)
-		ADD_FLG(FLG_JUNKS);
-	else if (o_ptr->tval >= TV_LIFE_BOOK)
-		ADD_FLG(FLG_SPELLBOOKS);
-	else if (is_favorite(o_ptr, FALSE))
-		ADD_FLG(FLG_FAVORITE);
-	else if (o_ptr->tval == TV_POLEARM || o_ptr->tval == TV_SWORD
-		 || o_ptr->tval == TV_DIGGING || o_ptr->tval == TV_HAFTED)
-		ADD_FLG(FLG_WEAPONS);
-	else if (o_ptr->tval == TV_SHIELD)
-		ADD_FLG(FLG_SHIELDS);
-	else if (o_ptr->tval == TV_BOW)
-		ADD_FLG(FLG_BOWS);
-	else if (o_ptr->tval == TV_RING)
-		ADD_FLG(FLG_RINGS);
-	else if (o_ptr->tval == TV_AMULET)
-		ADD_FLG(FLG_AMULETS);
-	else if (o_ptr->tval == TV_DRAG_ARMOR || o_ptr->tval == TV_HARD_ARMOR ||
-		 o_ptr->tval == TV_SOFT_ARMOR)
-		ADD_FLG(FLG_SUITS);
-	else if (o_ptr->tval == TV_CLOAK)
-		ADD_FLG(FLG_CLOAKS);
-	else if (o_ptr->tval == TV_HELM)
-		ADD_FLG(FLG_HELMS);
-	else if (o_ptr->tval == TV_GLOVES)
-		ADD_FLG(FLG_GLOVES);
-	else if (o_ptr->tval == TV_BOOTS)
-		ADD_FLG(FLG_BOOTS);
-
-	return;
 }
 
 
@@ -3194,7 +3556,7 @@ command_menu_type menu_data[] =
 	{MN_SEARCH_STR, 1, KTRL('s'), EC_SEARCH_STR},
 	{MN_SEARCH_FORW, 1, -1, EC_SEARCH_FORW},
 	{MN_SEARCH_BACK, 1, KTRL('r'), EC_SEARCH_BACK},
-	{MN_SEARCH_OBJ, 1, -1, EC_SEARCH_OBJ},
+	{MN_SEARCH_OBJ, 1, KTRL('t'), EC_SEARCH_OBJ},
 	{MN_SEARCH_DESTROYED, 1, -1, EC_SEARCH_DESTROYED},
 
 	{MN_MOVE, 0, -1, -1},
@@ -3589,11 +3951,16 @@ static void draw_text_editor(text_body_type *tb)
 			if (*s++ != '?') continue;
 			if (*s++ != ':') continue;
 
+			/* Lines below this line are auto-registered */
+			if (streq(s, "$AUTOREGISTER"))
+				state |= LSTAT_AUTOREGISTER;
+
 			/* Parse the expr */
 			v = process_pref_file_expr(&s, &f);
 
 			/* Set flag */
-			state = (streq(v, "0") ? LSTAT_BYPASS : 0);
+			if (streq(v, "0")) state |= LSTAT_BYPASS;
+			else state &= ~LSTAT_BYPASS;
 
 			/* Re-update this line's state */
 			tb->states[y] = state | LSTAT_EXPRESSION;
@@ -3666,9 +4033,17 @@ static void draw_text_editor(text_body_type *tb)
 		/* Erase line */
 		Term_erase(0, i + 1, tb->wid);
 
-		/* Bypassed line will be displayed by darker color */
-		if (tb->states[y] & LSTAT_BYPASS) color = TERM_SLATE;
-		else color = TERM_WHITE;
+		if (tb->states[y] & LSTAT_AUTOREGISTER)
+		{
+			/* Warning color -- These lines will be deleted later */
+			color = TERM_L_RED;
+		}
+		else
+		{
+			/* Bypassed line will be displayed by darker color */
+			if (tb->states[y] & LSTAT_BYPASS) color = TERM_SLATE;
+			else color = TERM_WHITE;
+		}
 
 		if (!tb->mark)
 		{
@@ -3800,10 +4175,17 @@ static void draw_text_editor(text_body_type *tb)
 				}
 				break;
 
-			case 'A':
-			case 'P':
-			case 'C':
-				if (tb->states[tb->cy] & LSTAT_BYPASS)
+			default:
+				if (tb->states[tb->cy] & LSTAT_AUTOREGISTER)
+				{
+#ifdef JP
+					str = "この行は後で削除されます。";
+#else
+					str = "This line will be delete later.";
+#endif
+				}
+
+				else if (tb->states[tb->cy] & LSTAT_BYPASS)
 				{
 #ifdef JP
 					str = "この行は現在は無効な状態です。";
@@ -3826,6 +4208,15 @@ static void draw_text_editor(text_body_type *tb)
 			cptr t;
 
 			describe_autopick(buf, entry);
+
+			if (tb->states[tb->cy] & LSTAT_AUTOREGISTER)
+			{
+#ifdef JP
+				strcat(buf, "この行は後で削除されます。");
+#else
+				strcat(buf, "  This line will be delete later.");
+#endif
+			}
 
 			if (tb->states[tb->cy] & LSTAT_BYPASS)
 			{
@@ -4978,7 +5369,7 @@ void do_cmd_edit_autopick(void)
 	tb->last_destroyed = NULL;
 	tb->dirty_flags = DIRTY_ALL | DIRTY_MODE | DIRTY_EXPRESSION;
 	tb->dirty_line = -1;
-	tb->filename_mode = PT_WITH_PNAME;
+	tb->filename_mode = PT_DEFAULT;
 
 	/* Autosave */
 	if (turn > old_autosave_turn + 100L)
@@ -5203,26 +5594,10 @@ void do_cmd_edit_autopick(void)
 	/* Restore the screen */
 	screen_load();
 
-	switch (tb->filename_mode)
-	{
-	case PT_DEFAULT:
-#ifdef JP
-		strcpy(buf, "picktype.prf");
-#else
-		strcpy(buf, "pickpref.prf");
-#endif
-		break;
+	/* Get the filename of preference */
+	strcpy(buf, pickpref_filename(tb->filename_mode));
 
-	case PT_WITH_PNAME:
-#ifdef JP
-		sprintf(buf, "picktype-%s.prf", player_name);
-#else
-		sprintf(buf, "pickpref-%s.prf", player_name);
-#endif
-		break;
-	}
-
-	if (tb->changed && quit == QUIT_AND_SAVE)
+	if (quit == QUIT_AND_SAVE)
 		write_text_lines(buf, tb->lines_list);
 
 	free_text_lines(tb->lines_list);

@@ -40,7 +40,8 @@ int level_up = 0;
  *  List for auto-picker/destroyer entries
  */
 int max_autopick = 0;
-autopick_type autopick_list[MAX_AUTOPICK];
+int max_max_autopick = 0;
+autopick_type *autopick_list = NULL;
 
 /*
  * Savefile version

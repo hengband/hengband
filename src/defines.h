@@ -5011,7 +5011,6 @@ extern int PlayerUID;
 /* Maximum "Nazguls" number */
 #define MAX_NAZGUL_NUM 5
 
-#define MAX_AUTOPICK 1009
 #define DO_AUTOPICK       0x01
 #define DO_AUTODESTROY    0x02
 #define DO_DISPLAY        0x04

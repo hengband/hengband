@@ -984,19 +984,70 @@ void do_cmd_destroy(void)
 	o_ptr->number = old_number;
 
 	/* Verify unless quantity given */
-	if (!force)
+	if (!force && (confirm_destroy || (object_value(o_ptr) > 0)))
 	{
-		if (confirm_destroy || (object_value(o_ptr) > 0))
-		{
-			/* Make a verification */
-#ifdef JP
-		sprintf(out_val, "本当に%sを壊しますか? ", o_name);
-#else
-			sprintf(out_val, "Really destroy %s? ", o_name);
-#endif
+		bool okay = TRUE;
 
-			if (!get_check(out_val)) return;
+		/* Make a verification */
+		sprintf(out_val, 
+#ifdef JP
+			"本当に%sを壊しますか? [y/n/Auto]",
+#else
+			"Really destroy %s? [y/n/Auto]",
+#endif
+			o_name);
+
+		msg_print(NULL);
+
+		/* Prompt */
+		prt(out_val, 0, 0);
+
+		/* HACK : Add the line to message buffer */
+		message_add(out_val);
+		p_ptr->window |= (PW_MESSAGE);
+		window_stuff();
+
+		/* Get an acceptable answer */
+		while (TRUE)
+		{
+			char i = inkey();
+
+			if (i == 'y' || i == 'Y')
+			{
+				okay = TRUE;
+				break;
+			}
+			if (i == ESCAPE || i == 'n' || i == 'N')
+			{
+				/* Cancel */
+				okay = FALSE;
+				break;
+			}
+			if (i == 'a' || i == 'A')
+			{
+				int idx;
+
+				/* Add an auto-destroy preference line */
+				if (add_auto_register(o_ptr))
+				{
+					/* Auto-destroy it */
+					idx = is_autopick(o_ptr);
+					auto_destroy_item(item, idx);
+				}
+
+				/* The object is already destroyed. */
+				return;
+			}
+
+			/* Loop */
+			continue;
 		}
+
+		/* Erase the prompt */
+		prt("", 0, 0);
+
+		/* Cancelled */
+		if (!okay) return;
 	}
 
 	/* Take a turn */

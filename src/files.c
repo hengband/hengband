@@ -1010,6 +1010,15 @@ cptr process_pref_file_expr(cptr *sp, char *fp)
 				sprintf(tmp, "%02d", p_ptr->lev);
 				v = tmp;
 			}
+
+			/* Autopick auto-register is in-use or not? */
+			else if (streq(b+1, "AUTOREGISTER"))
+			{
+				if (p_ptr->autopick_autoregister)
+					v = "1";
+				else
+					v = "0";
+			}
 		}
 
 		/* Constant */

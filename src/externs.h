@@ -35,7 +35,8 @@ extern int level_up;
  *  List for auto-picker/destroyer entries
  */
 extern int max_autopick;
-extern autopick_type autopick_list[MAX_AUTOPICK];
+extern int max_max_autopick;
+extern autopick_type *autopick_list;
 
 /* tables.c */
 extern s16b ddd[9];
@@ -530,7 +531,7 @@ extern void auto_inscribe_item(int item, int idx);
 extern bool auto_destroy_item(int item, int autopick_idx);
 extern void delayed_auto_destroy(void);
 extern void auto_pickup_items(cave_type *c_ptr);
-extern void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr);
+extern bool add_auto_register(object_type *o_ptr);
 extern void do_cmd_edit_autopick(void);
 
 /* birth.c */
