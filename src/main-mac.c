@@ -1010,13 +1010,10 @@ static void term_data_redraw(term_data *td)
  * Constants
  */
 
-#define kPictID					1002			/* Graf 'pict' resource */
+#define kPictID					1001			/* Graf 'pict' resource */
 
-#define kGrafWidth				16				/* Graf Size (X) */
-#define kGrafHeight				16				/* Graf Size (Y) */
-
-#define kPictCols				32				/* Number of Cols in Pict */
-#define kPictRows				60				/* Number of Rows in Pict */
+#define kGrafWidth				8				/* Graf Size (X) */
+#define kGrafHeight				8				/* Graf Size (Y) */
 
 
 /*
@@ -1949,8 +1946,8 @@ static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp)
 			Rect r1;
 
 			/* Row and Col */
-			row = ((byte)a & 0x7F);// % kPictRows;
-			col = ((byte)c & 0x7F);// % kPictCols;
+			row = ((byte)a & 0x7F);
+			col = ((byte)c & 0x7F);
 			
 			/* Source rectangle */
 			r1.left = col * kGrafWidth;
@@ -5188,7 +5185,11 @@ BackColor(blackColor);
 
 	/* Note the "system" */
 	ANGBAND_SYS = "mac";
+#if 0
 	ANGBAND_GRAF = "new";
+#else
+	ANGBAND_GRAF = "old";
+#endif
 
 	/* Initialize */
 	init_stuff();
