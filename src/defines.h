@@ -3715,14 +3715,6 @@
 	(RF6_BREATH_MASK | RF6_SPECIAL)
 
 
-/*
- * Hack -- unused spells
- */
-
-#define RF4_XXX_MASK \
-	(RF4_XXX1 | RF4_XXX2 | RF4_XXX3 | RF4_XXX4)
-
-
 #define MR1_SINKA 0x01
 
 

@@ -2145,9 +2145,12 @@ void learn_spell(int monspell)
 }
 
 
-void set_rf_masks(s32b *f4,  s32b *f5, s32b *f6, int mode)
+/*
+ * Extract monster spells mask for the given mode
+ */
+void set_rf_masks(s32b *f4, s32b *f5, s32b *f6, int mode)
 {
-	switch(mode)
+	switch (mode)
 	{
 		case MONSPELL_TYPE_BOLT:
 			*f4 = ((RF4_BOLT_MASK | RF4_BEAM_MASK) & ~(RF4_ROCKET));
@@ -2174,9 +2177,9 @@ void set_rf_masks(s32b *f4,  s32b *f5, s32b *f6, int mode)
 			break;
 
 		case MONSPELL_TYPE_OTHER:
-			*f4 = ~(RF4_BOLT_MASK | RF4_BEAM_MASK | RF4_BALL_MASK | RF4_SUMMON_MASK | RF4_INDIRECT_MASK | RF4_RIDING_MASK | RF4_XXX_MASK);
-			*f5 = ~(RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_SUMMON_MASK | RF5_INDIRECT_MASK | RF5_RIDING_MASK);
-			*f6 = (~(RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK | RF6_SUMMON_MASK | RF6_INDIRECT_MASK | RF6_RIDING_MASK)) | (RF6_TRAPS | RF6_DARKNESS);
+			*f4 = RF4_ATTACK_MASK & ~(RF4_BOLT_MASK | RF4_BEAM_MASK | RF4_BALL_MASK | RF4_INDIRECT_MASK);
+			*f5 = RF5_ATTACK_MASK & ~(RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_INDIRECT_MASK);
+			*f6 = RF6_ATTACK_MASK & ~(RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK | RF6_INDIRECT_MASK);
 			break;
 	}
 
