@@ -302,7 +302,7 @@ W:0:0:10:3
 A:0/1:5/1:10/1:20/1
 D:$This nutritious but fairly bland food is 
 D:$familiar to anyone contemplating long journeys.
-#D:未訳
+D:栄養はあるが味気ないこの食料は長旅を考える冒険者に良く合う。
 
 N:22:ビスケット
 E:& Hard Biscuit~
@@ -1011,7 +1011,7 @@ A:3/1
 P:0:1d3:0:0:0
 F:SHOW_MODS
 #D:$A grapestone-shaped slug of lead, the right heft for hurling from a sling.
-#D:未訳
+#D:スリングで投げるのに適した重さの、葡萄の粒のような鉛の塊だ。
 
 
 ##### Shovels and Picks #####
@@ -1307,7 +1307,8 @@ P:14:1d4:-2:0:0
 D:$A sleeved hauberk of interlocking steel rings, well padded with leather.  
 D:$Chain mail takes skill to make, but offers good protection and relatively 
 D:$low weight.
-#D:未訳
+D:鋼鉄の輪が噛み合った袖付きの鎖かたびらで、革が当てられている。
+D:鎖かたびらを作るには熟練を要するが、高い防御力を持ち比較的に軽量に仕上がる。
 
 N:110:錆びた鎖かたびら
 E:Rusty Chain Mail~
@@ -1318,7 +1319,8 @@ A:25/1
 P:14:1d4:-5:0:-8
 D:$Each link of this suit is brittle with rust, and the corroded rings 
 D:$are stiff and weakened.
-#D:未訳
+D:この鎧の各部の継ぎ目は錆で脆くなっており、朽ちた鎖の輪は固まってしまい弱まっ
+D:ている。
 
 N:111:重鎖かたびら
 E:Augmented Chain Mail~
@@ -1330,7 +1332,8 @@ P:16:1d4:-2:0:0
 D:$A hauberk, leggings, and sleeves of interlocking steel rings, 
 D:$strategically reinforced at vital locations with a second layer 
 D:$of chain, all over a layer of heavy padding.
-#D:未訳
+D:噛み合った鋼鉄の輪でできた鎖かたびらと脛当てと袖であり、2枚目の鎖の層で致命的
+D:な部分を戦略的に補強しており、至る所に重い詰め物の層がある。
 
 N:112:強化鎖かたびら
 E:Bar Chain Mail~
@@ -1356,7 +1359,7 @@ W:45:0:260:1200
 A:45/1
 P:22:1d6:-3:0:0
 D:$A steel corselet and vambraces over a skirt and leggings of chain.
-#D:未訳
+D:鋼鉄製の胴鎧であり、スカートの上部には腕鎧があり、鎖の脛当てを持つ。
 
 N:115:金属製ラメラー・アーマー
 E:Metal Lamellar Armour~
@@ -1375,7 +1378,8 @@ A:45/1
 P:25:2d4:-3:0:0
 D:$A full suit of carefully fitted plates, with hinged joints backed 
 D:$by chain, and light padding underneath.
-#D:未訳
+D:念入りに体に合わせた鉄板製の全身鎧であり、ちょうつがいで繋がった部分の裏は
+D:鎖で守られ、鎧の裏には軽い詰め物がある。
 
 N:117:強化プレート・アーマー
 E:Ribbed Plate Armour~
@@ -1395,7 +1399,8 @@ P:40:2d4:-4:0:0
 F:IGNORE_ACID
 D:$Adamantite, hard as diamonds, forms this exquisite suit; nothing else 
 D:$in Middle Earth gives as much protection.
-#D:未訳
+D:ダイアモンドのように硬いアダマンタイトでできた精巧で美しい鎧であり、
+D:これほどの防御をもたらす鎧は中つ国には存在しない。
 
 N:119:ミスリル製プレート・メイル
 E:Mithril Plate Mail~
@@ -1407,7 +1412,8 @@ P:35:2d4:-3:0:0
 F:IGNORE_ACID
 D:$A shimmering suit of true-silver, forged long ago by dwarven smiths of 
 D:$legend.  It gleams with purest white as you gaze upon it.
-#D:未訳
+D:遥かなる昔に伝説のドワーフの鍛冶師に鍛えられた、輝くまことの銀の鎧だ。
+D:凝視すると純白にきらめく。
 
 N:120:ミスリル製鎖かたびら
 E:Mithril Chain Mail~
@@ -1419,7 +1425,8 @@ P:28:1d4:-1:0:0
 F:IGNORE_ACID
 D:$Rare and wondrous is chain mail made of true-silver, for it offers more 
 D:$protection for the weight than any other armour.
-#D:未訳
+D:本当に希少で驚くべきまことの銀製の鎖かたびらであり、他の鎧に比べてもその
+D:軽さにしてより高い防御を与える。
 
 N:121:二重鎖かたびら
 E:Double Chain Mail~
@@ -1442,7 +1449,7 @@ P:10:1d1:0:0:10
 F:IGNORE_ACID | REFLECT
 #D:$A shield of purest white, made of mithril, engraved with runes to keep 
 #D:$all hurt and harm from you.
-#D:未訳
+#D:傷と危険から守られるようにルーン文字が刻まれたミスリル製の純白の盾だ。
 
 
 ### The Cloaks ###
@@ -1455,7 +1462,7 @@ W:1:0:10:3
 A:1/1:20/1
 P:1:0d0:0:0:0
 D:$A traveller's sturdy outer garment.
-#D:未訳
+D:冒険者用の丈夫な外套だ。
 
 N:124:影のクローク
 E:& Shadow Cloak~
@@ -1466,7 +1473,7 @@ A:75/5
 P:6:0d0:0:0:4
 F:RES_DARK | RES_LITE
 D:$A midnight-hued cloak that wreathes the wearer in folds of shadow.
-#D:未訳
+D:着用者を影の層で包み込む闇夜の色のクロークだ。
 
 
 ### The Gloves ###
@@ -1479,7 +1486,7 @@ W:1:0:5:3
 A:1/1
 P:1:0d0:0:0:0
 D:$Leather hand protection, with an open palm for gripping weapons.
-#D:未訳
+D:革製の手甲で、手のひらは武器を握るために開いている。
 
 N:126:ガントレット
 E:& Set~ of Gauntlets
@@ -1489,7 +1496,7 @@ W:10:0:25:35
 A:10/1
 P:2:1d1:0:0:0
 D:$A set of gloves that completely covers the hand and wrist in steel plating.
-#D:未訳
+D:手と手首を鋼鉄板で完全に覆うグローブだ。
 
 N:127:セスタス
 E:& Set~ of Cesti
@@ -1499,7 +1506,7 @@ W:50:0:40:100
 A:50/1
 P:5:1d1:0:0:0
 D:$A massive set of hand sheathings, bound with steel and thrice-cured leather.
-#D:未訳
+D:力強い手の覆いで、鋼鉄としっかり煮固めた革で縛ってある。
 
 
 ### The shields ###
@@ -1512,6 +1519,7 @@ W:3:0:50:15
 A:3/1
 P:3:1d1:0:0:0
 D:$A circular shield of cured animal hide stretched over layered wooden strips.
+D:煮固めた動物の革を重ねた小さな木の板いっぱいに伸ばして作った丸い盾だ。
 
 N:129:革製ラージ・シールド
 E:& Large Leather Shield~
@@ -1522,7 +1530,7 @@ A:15/1
 P:6:1d2:0:0:0
 D:$A large oval shield made of layered wooden strips with a thick leather 
 D:$covering.
-#D:未訳
+D:重ねた木の板を厚い革で覆った大きな楕円形の盾だ。
 
 N:130:金属製スモール・シールド
 E:& Small Metal Shield~
@@ -1532,7 +1540,7 @@ W:10:0:65:40
 A:10/1
 P:5:1d2:0:0:0
 D:$A round shield of wood reinforced with metal rims and central disk.
-#D:未訳
+D:金属の縁材と中心の円盤で強化した円形の木の盾だ。
 
 N:131:金属製ラージ・シールド
 E:& Large Metal Shield~
@@ -1543,7 +1551,8 @@ A:30/1
 P:8:1d3:0:0:0
 D:$An oval shield of wood covered by leather and rimmed with metal.  A large 
 D:$iron shield boss offers excellent hand protection.
-#D:未訳
+D:革で覆った木の板を金属で縁取った楕円形の盾だ。盾の大きな鉄の突起は素晴らしい
+D:腕の防御をもたらす。
 
 
 ##### Rings #####
@@ -4202,7 +4211,7 @@ P:30:2d4:-2:0:10
 F:RES_ACID |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of utterly black scales, against which no metal or wood can rest.
-#D:未訳
+D:木や金属が耐えられないかのような漆黒の鱗鎧だ。
 
 N:401:ブルードラゴン・スケイルメイル
 E:Blue Dragon Scale Mail~
@@ -4215,7 +4224,7 @@ F:RES_ELEC |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of scales as blue as sapphires, emitting eerie sparks and flashes as 
 D:$you move about in it.
-#D:未訳
+D:着た者が動くと不気味な稲妻と光を放つ、サファイアのように青い鱗鎧だ。
 
 N:402:ホワイトドラゴン・スケイルメイル
 E:White Dragon Scale Mail~
@@ -4228,7 +4237,7 @@ F:RES_COLD |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of scales, coldly gleaming in frosty white.  A shiver runs down 
 D:$through your spine even as you look at it.
-#D:未訳
+D:冷淡な白に冷たくきらめく鱗鎧だ。それを見る時、背筋が寒くなる。
 
 N:403:レッドドラゴン・スケイルメイル
 E:Red Dragon Scale Mail~
@@ -4241,7 +4250,7 @@ F:RES_FIRE |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of scales, with all the reds of every fire ever lit.  The scar 
 D:$tissue from an old burn aches as you put this armour on.
-#D:未訳
+D:常に燃える炎に赤く彩られた鱗鎧だ。これを着ると古い火傷跡が痛む。
 
 N:404:グリーンドラゴン・スケイルメイル
 E:Green Dragon Scale Mail~
@@ -4254,7 +4263,7 @@ F:RES_POIS |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of scales, glistening in sickly green, out from which falls the 
 D:$skeleton of a rat who touched it and died in agony.
-#D:未訳
+D:病的な緑に光る鱗鎧で、それに触れたネズミは苦痛に死んで白骨化する。
 
 N:405:万色ドラゴン・スケイルメイル
 E:Multi-Hued Dragon Scale Mail~
@@ -4267,7 +4276,8 @@ F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_POIS
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of scales that throbs with angry energies; it takes all your energy 
 D:$to master the Elements fighting an endless war trapped inside.
-#D:未訳
+D:怒りのエネルギーに脈打つ鱗鎧で、鎧の中に捕らわれ永遠に戦い続けるエレメント達
+D:を支配するために着る者の力全てを用いる。
 
 #JZ#
 N:406:ドラゴンモドキ・スケイルメイル
@@ -4291,7 +4301,8 @@ F:RES_SOUND | RES_SHARDS |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of scales in stern blue and silver.  You feel the slightest tremor 
 D:$as you touch it, like massed trumpets heard and cyclones felt from afar.
-#D:未訳
+D:厳粛な青と銀の鱗鎧だ。それに触れると、トランペットの集団の演奏が聞こえるか
+D:遠方からの竜巻を感じるかのようにごく微かな振動を感じる。
 
 N:408:ブロンズドラゴン・スケイルメイル
 E:Bronze Dragon Scale Mail~
@@ -4305,7 +4316,8 @@ F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of scales, gleaming in rich engraved bronze.  The more you look at 
 D:$the the maze of whorls and lines that close inspection reveal on its 
 D:$surface, the less sense you are able to make of them.
-#D:未訳
+D:贅沢に彫刻された青銅がきらめく鱗鎧だ。近づいて見ると鎧の表面に現れる渦と線の
+D:迷宮を見れば見るほど、どうやってそれらができているのかわからなくなる。
 
 N:409:ゴールドドラゴン・スケイルメイル
 E:Gold Dragon Scale Mail~
@@ -4319,7 +4331,8 @@ F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of scales in mirror-like gold.  You hear nothing unusual as you 
 D:$wear this armour, yet your ears ache as though in the midst of a 
 D:$cacophony.
-#D:未訳
+D:鏡のような金の鱗鎧だ。不協和音の中にいるかのように耳が痛くなり、この鎧を着る
+D:と異常なまでに何も聞こえなくなる。
 
 N:410:カオスドラゴン・スケイルメイル
 E:Chaos Dragon Scale Mail~
@@ -4332,7 +4345,8 @@ F:RES_CHAOS | RES_DISEN |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of scales.  Every shape, in every color imaginable, riot and 
 D:$contend upon its surface as you stare in fascination.
-#D:未訳
+D:鱗鎧だ。魅惑されて見つめると、その表面で想像できる限りの色をとる様々な形
+D:すべてが乱舞し争う。
 
 N:411:バランスドラゴン・スケイルメイル
 E:Balance Dragon Scale Mail~
@@ -4346,7 +4360,8 @@ F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of scales.  Featureless grey to casual inspection, yet a closer 
 D:$look reveals patterns within patterns of iridescence that throb with 
 D:$leashed energies bound as though by chains of adamant.
-#D:未訳
+D:鱗鎧だ。何気なく見ると平凡な灰色だが、近づいてよく見るとアダマンタイトの鎖の
+D:ようなものに縛られたエネルギーが脈打つ虹色の紋様の中にも紋様が現れる。
 
 N:412:パワードラゴン・スケイルメイル
 E:Power Dragon Scale Mail~
@@ -4362,7 +4377,8 @@ F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit with scales of every color, surrounded in a nimbus of perfectly 
 D:$untramelled yet inextricably intermingled and utterly mastered powers 
 D:$elemental and ethereal.
-#D:未訳
+D:すべての色を持つ鱗鎧で、完全な自由でありながら密接に混ざり合い完全に支配され
+D:た元素と天上界の力の後光に包まれている。
 
 ## PDSM has been restored to (almost) its former glory in Zangband
 
@@ -4377,7 +4393,7 @@ P:8:1d3:0:0:10
 F:IGNORE_ACID | IGNORE_FIRE | IGNORE_ELEC | IGNORE_COLD
 D:$A dragon-winged great helm, glowing in all the colors of the rainbow.  
 D:$It grants resistance to the elements.
-#D:未訳
+D:ドラゴンの翼飾りのある大きな兜で、虹色に輝く。元素への耐性を保証する。
 
 #JZ#
 N:414:ドラゴン・シールド
@@ -5857,7 +5873,8 @@ P:0:0d0:0:0:10
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD 
 D:$This unearthly, completely transparent body mantle folds and drapes in 
 D:$iridescent patterns around you.  It weighs absolutely nothing.
-#D:未訳
+D:この世の物ではない、この完全に透明な外套は着る者を虹模様で包み飾る。
+D:それは完全に重さがない。
 
 N:612:鏡
 E:& Mirror~
