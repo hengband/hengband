@@ -526,7 +526,7 @@ msg_print("あなたの飢えは新鮮な血によってのみ満たされる！");
 #ifdef JP
 		msg_format("%sは燃え上り灰になった。精力を吸収した気がする。", o_name);
 #else
-		msg_format("%^s is burnt to ashes.  You absorb its vitality!");
+		msg_format("%^s is burnt to ashes.  You absorb its vitality!", o_name);
 #endif
 		(void)set_food(PY_FOOD_MAX - 1);
 	}
