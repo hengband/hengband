@@ -2442,7 +2442,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 					if (o_ptr->name1 == ART_VORPAL_BLADE)
 					{
 #ifdef JP
-						msg_print("目にも止まらぬボーパル・ブレード、手錬の早業！");
+						msg_print("目にも止まらぬヴォーパルブレード、手錬の早業！");
 #else
 						msg_print("Your Vorpal Blade goes snicker-snack!");
 #endif
