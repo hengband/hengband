@@ -130,7 +130,7 @@ static char *mind_tips[5][MAX_MIND_POWERS] =
 	"gives stone skin and some resistance to elements for a while. The level increased, the more number of resistances given.",
 	"gives feeling of an item. or identify an item at level 25.",
 	"generate a ball centered on you which inflict monster with PSI damage. or inflict all monsters with PSI damage at level 25",
-	"removes fear and stun. gives hiroism and speed. heals HP a little unless you already have hiroism and temporal speed boost.",
+	"removes fear and stun. gives heroism and speed. heals HP a little unless you already have heroism and temporal speed boost.",
 	"pulls a distant item close to you.",
 	"fires a ball which damages monsters and absorbs monsters' mind power. absorbing is takes more turns which from 0 to 1.5.",
 	"fires a beam of pure energy which penetrate the invulnerability barrier.",

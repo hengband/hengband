@@ -795,7 +795,7 @@ static char *spell_tips[VALID_REALM][32] =
 		"shakes dungeon structure, and results in random swaping of floors and walls.",
 		"attempts to freeze all monsters in sight.",
 		"sets a glyph on the floor beneath you. Monsters cannot attack you if you are on a glyph, but can try to break glyph", 
-		"hastes you. gives hiroism. damages all monsters in sight.",
+		"hastes you. gives heroism. damages all monsters in sight.",
 		"Powerful healing song. also heals cut and stun completly.",
 		"restores all stats and experience",
 		"fires an extremely powerful tiny ball of sound.",
