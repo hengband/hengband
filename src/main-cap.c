@@ -627,6 +627,9 @@ static void keymap_game_prepare(void)
 	/* Hack -- Turn off "echo" and "canonical" mode */
 	game_termios.c_lflag &= ~(ECHO | ICANON);
 
+	/* Turn off flow control */
+	game_termios.c_iflag &= ~IXON;
+
 #endif
 
 #ifdef USE_TERMIO
@@ -668,6 +671,9 @@ static void keymap_game_prepare(void)
 	/* Hack -- Turn off "echo" and "canonical" mode */
 	game_termio.c_lflag &= ~(ECHO | ICANON);
 
+	/* Turn off flow control */
+	game_termio.c_iflag &= ~IXON;
+
 #endif
 
 #ifdef USE_TCHARS
@@ -704,6 +710,8 @@ static void keymap_game_prepare(void)
 	/* Hack -- Turn off "echo" and "canonical" mode */
 	/* game_termios.c_lflag &= ~(ECHO | ICANON); */
 	game_ttyb.flag &= ~(ECHO | ICANON);
+
+	/* XXX XXX XXX  Should maybe turn off flow control too.  How? */
 
 #endif
 
