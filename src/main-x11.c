@@ -2277,7 +2277,6 @@ static void init_sound()
 static errr Term_xtra_x11_sound(int v)
 {
 	char buf[1024];
-	char *argv[4];
 	
 	/* Sound disabled */
 	if (!use_sound) return (1);

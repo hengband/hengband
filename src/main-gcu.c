@@ -862,7 +862,6 @@ static errr Term_xtra_gcu_event(int v)
 static errr Term_xtra_gcu_sound(int v)
 {
    char buf[1024];
-   char *argv[4];
 
    /* Sound disabled */
    if (!use_sound) return (1);
@@ -877,8 +876,9 @@ static errr Term_xtra_gcu_sound(int v)
    system(buf);
    
    return (0);
-#if 0
 
+#if 0
+   char *argv[4];
    pid_t pid;
 
    /* Sound disabled */
