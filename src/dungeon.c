@@ -7246,19 +7246,6 @@ msg_print("ウィザードモードに念を送り、死を欺いた。");
 					p_ptr->csp = p_ptr->msp;
 					p_ptr->csp_frac = 0;
 
-					/* Hack -- Healing */
-					(void)set_blind(0);
-					(void)set_confused(0);
-					(void)set_poisoned(0);
-					(void)set_afraid(0);
-					(void)set_paralyzed(0);
-					(void)set_image(0);
-					(void)set_stun(0);
-					(void)set_cut(0);
-
-					/* Hack -- Prevent starvation */
-					(void)set_food(PY_FOOD_MAX - 1);
-
 					/* Hack -- cancel recall */
 					if (p_ptr->word_recall)
 					{
@@ -7286,14 +7273,26 @@ msg_print("張りつめた大気が流れ去った...");
 
 					/* Note cause of death XXX XXX XXX */
 #ifdef JP
-(void)strcpy(p_ptr->died_from, "死の欺き");
+					(void)strcpy(p_ptr->died_from, "死の欺き");
 #else
 					(void)strcpy(p_ptr->died_from, "Cheating death");
 #endif
 
-
 					/* Do not die */
 					p_ptr->is_dead = FALSE;
+
+					/* Hack -- Healing */
+					(void)set_blind(0);
+					(void)set_confused(0);
+					(void)set_poisoned(0);
+					(void)set_afraid(0);
+					(void)set_paralyzed(0);
+					(void)set_image(0);
+					(void)set_stun(0);
+					(void)set_cut(0);
+
+					/* Hack -- Prevent starvation */
+					(void)set_food(PY_FOOD_MAX - 1);
 
 					dun_level = 0;
 					p_ptr->inside_arena = FALSE;
