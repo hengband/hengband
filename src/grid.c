@@ -541,7 +541,6 @@ void build_tunnel(int row1, int col1, int row2, int col2)
 	bool door_flag = FALSE;
 
 	cave_type *c_ptr;
-	feature_type *f_ptr;
 
 	/* Save the starting location */
 	start_row = row1;
@@ -594,9 +593,8 @@ void build_tunnel(int row1, int col1, int row2, int col2)
 
 		/* Access the location */
 		c_ptr = &cave[tmp_row][tmp_col];
-		f_ptr = &f_info[c_ptr->feat];
 
-		if (permanent_wall(f_ptr))
+		if (permanent_wall(&f_info[c_ptr->feat]))
 		{
 			/* Avoid the edge of vaults */
 			if (is_inner_grid(c_ptr)) continue;
@@ -608,13 +606,9 @@ void build_tunnel(int row1, int col1, int row2, int col2)
 		/* Pierce "outer" walls of rooms */
 		if (is_outer_grid(c_ptr))
 		{
-			feature_type *ff_ptr;
-
 			/* Acquire the "next" location */
 			y = tmp_row + row_dir;
 			x = tmp_col + col_dir;
-
-			ff_ptr = &f_info[cave[y][x].feat];
 
 			/* Hack -- Avoid outer/solid walls */
 			if (is_outer_bold(y, x)) continue;
@@ -728,15 +722,11 @@ void build_tunnel(int row1, int col1, int row2, int col2)
  */
 static bool set_tunnel(int *x, int *y, bool affectwall)
 {
-	int feat, i, j, dx, dy;
+	int i, j, dx, dy;
 
 	cave_type *c_ptr = &cave[*y][*x];
-	feature_type *f_ptr;
 
 	if (!in_bounds(*y, *x)) return TRUE;
-
-	feat = c_ptr->feat;
-	f_ptr = &f_info[feat];
 
 	if (is_inner_grid(c_ptr))
 	{

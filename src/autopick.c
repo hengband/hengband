@@ -4510,12 +4510,6 @@ static void draw_text_editor(text_body_type *tb)
 
 	if (tb->mark)
 	{
-		int tmp_cx = tb->cx;
-		int len = strlen(tb->lines_list[tb->cy]);
-
-		/* Correct cursor location */
-		if (tb->cx > len) tmp_cx = len;
-
 		tb->dirty_flags |= DIRTY_ALL;
 
 		by1 = MIN(tb->my, tb->cy);

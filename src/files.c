@@ -4685,7 +4685,7 @@ static void dump_aux_monsters(FILE *fff)
 #endif
 
 		/* Print top 10 */
-		for (k = uniq_total - 1; k >= 0 && k >= uniq_total - 10; k--)
+		for (k = uniq_total - 1; k >= 0 && k >= (long)uniq_total - 10; k--)
 		{
 			monster_race *r_ptr = &r_info[who[k]];
 
@@ -7603,10 +7603,9 @@ Term_putstr(0, 0, -1, TERM_WHITE, "½ÏÎ¸¤Î¾å¤Î¼«»¦¡ª");
  */
 static void handle_signal_abort(int sig)
 {
-	int wid, hgt, rows;
+	int wid, hgt;
 
 	Term_get_size(&wid, &hgt);
-	rows = hgt - 4;
 
 	/* Disable handler */
 	(void)signal(sig, SIG_IGN);
