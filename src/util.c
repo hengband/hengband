@@ -356,14 +356,14 @@ FILE *my_fopen(cptr file, cptr mode)
 {
 	char buf[1024];
 
-#if defined(MACINTOSH) && defined(MAC_MPW)
+#if defined(MAC_MPW) || defined(MACH_O_CARBON)
 	FILE *tempfff;
 #endif
 
 	/* Hack -- Try to parse the path */
 	if (path_parse(buf, 1024, file)) return (NULL);
 
-#if defined(MACINTOSH) && defined(MAC_MPW)
+#if defined(MAC_MPW) || defined(MACH_O_CARBON)
 	if (my_strchr(mode, 'w'))
 	{
 		/* setting file type/creator */
@@ -702,7 +702,7 @@ int fd_make(cptr file, int mode)
 
 #else /* BEN_HACK */
 
-# if defined(MACINTOSH) && defined(MAC_MPW)
+#if defined(MAC_MPW) || defined(MACH_O_CARBON)
 	{
 		int fdes;
 		/* Create the file, fail if exists, write-only, binary */

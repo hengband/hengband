@@ -12,7 +12,7 @@
 
 #include "angband.h"
 
-#ifdef MACINTOSH
+#if defined(MACINTOSH) || defined(MACH_O_CARBON)
 #ifdef verify
 #undef verify
 #endif

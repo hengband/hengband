@@ -1571,10 +1571,18 @@ extern int usleep(huge usecs);
 /* extern void main(void); */
 #endif
 
-#if defined(MAC_MPW)
+#if defined(MAC_MPW) || defined(MACH_O_CARBON)
 /* Globals needed */
 extern  u32b _ftype;
 extern  u32b _fcreator;
+#endif
+
+#if defined(MAC_MPW) && defined(CARBON)
+extern void convert_pathname(char *path);
+#endif
+
+#if defined(MACH_O_CARBON)
+extern void fsetfileinfo(cptr path, u32b fcreator, u32b ftype);
 #endif
 
 #ifdef WINDOWS
