@@ -3192,8 +3192,9 @@ I:55:19:5
 W:100:0:50:100000
 A:100/255
 P:0:1d2:0:0:0
-D:$It restores mana to full and cures berserk when you use it.
-D:それは使うと魔力が最大まで回復し、狂戦士化を癒す。
+D:$It restores mana to full, restores your intelligence and cures berserk when 
+D:$you use it.
+D:それは使うと魔力が最大まで回復し、知能を回復し、狂戦士化を癒す。
 
 N:326:鑑定
 E:Perception
