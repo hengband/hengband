@@ -6138,6 +6138,9 @@ msg_format("乱暴な魔法のために%sが壊れた！", o_name);
 		p_ptr->csp = p_ptr->msp;
 	}
 
+	/* Redraw mana and hp */
+	p_ptr->redraw |= (PR_MANA);
+
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 	p_ptr->window |= (PW_INVEN);
 

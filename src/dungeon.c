@@ -3681,6 +3681,9 @@ msg_print("無敵な気がする！");
 
 				hp_player(healing);
 				p_ptr->csp -= healing;
+
+				/* Redraw mana */
+				p_ptr->redraw |= (PR_MANA);
 			}
 		}
 		if ((p_ptr->muta2 & MUT2_HP_TO_SP) && !p_ptr->anti_magic &&
@@ -3698,6 +3701,9 @@ msg_print("無敵な気がする！");
 				}
 
 				p_ptr->csp += healing;
+
+				/* Redraw mana */
+				p_ptr->redraw |= (PR_MANA);
 #ifdef JP
 take_hit(DAMAGE_LOSELIFE, healing, "頭に昇った血", -1);
 #else

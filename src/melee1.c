@@ -2157,6 +2157,9 @@ msg_format("%^sから落ちてしまった！", m_name);
 #endif
 		py_attack(m_ptr->fy, m_ptr->fx, HISSATSU_COUNTER);
 		fear = FALSE;
+
+		/* Redraw mana */
+		p_ptr->redraw |= (PR_MANA);
 	}
 
 	/* Blink away */
