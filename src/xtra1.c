@@ -4546,6 +4546,8 @@ void calc_bonuses(void)
 		{
 			new_speed = speed;
 		}
+		new_speed 
+		+= (p_ptr->skill_exp[GINOU_RIDING] + p_ptr->lev *160L)/3200;
 		if (m_list[p_ptr->riding].fast) new_speed += 10;
 		if (m_list[p_ptr->riding].slow) new_speed -= 10;
 		if (r_info[m_list[p_ptr->riding].r_idx].flags7 & RF7_CAN_FLY) p_ptr->ffall = TRUE;
