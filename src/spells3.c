@@ -148,7 +148,6 @@ void teleport_monster_to(int m_idx, int ty, int tx, int power)
 	int attempts = 500;
 	int dis = 2;
 	bool look = TRUE;
-	cave_type    *c_ptr;
 	monster_type *m_ptr = &m_list[m_idx];
 
 
@@ -178,6 +177,8 @@ void teleport_monster_to(int m_idx, int ty, int tx, int power)
 		/* Try several locations */
 		for (i = 0; i < 500; i++)
 		{
+			cave_type    *c_ptr;
+
 			/* Pick a (possibly illegal) location */
 			while (1)
 			{
@@ -226,7 +227,7 @@ void teleport_monster_to(int m_idx, int ty, int tx, int power)
 	sound(SOUND_TPOTHER);
 
 	/* Update the new location */
-	c_ptr->m_idx = m_idx;
+	cave[ny][nx].m_idx = m_idx;
 
 	/* Update the old location */
 	cave[oy][ox].m_idx = 0;
@@ -520,7 +521,6 @@ msg_print("不思議な力がテレポートを防いだ！");
 void teleport_level(int m_idx)
 {
 	bool         go_up;
-	monster_type *m_ptr;
 	char         m_name[160];
 	bool         see_m = TRUE;
 
@@ -534,7 +534,7 @@ void teleport_level(int m_idx)
 	}
 	else /* To monster */
 	{
-		m_ptr = &m_list[m_idx];
+		monster_type *m_ptr = &m_list[m_idx];
 
 		/* Get the monster name (or "it") */
 		monster_desc(m_name, m_ptr, 0);
@@ -683,6 +683,8 @@ void teleport_level(int m_idx)
 	/* Monster level teleportation is simple deleting now */
 	if (m_idx > 0)
 	{
+		monster_type *m_ptr = &m_list[m_idx];
+
 		/* Check for quest completion */
 		check_quest_completion(m_ptr);
 
