@@ -4510,7 +4510,7 @@ void do_cmd_store(void)
 	}
 
 	/* Calculate the number of store maintainances since the last visit */
-	maintain_num = (turn - town[p_ptr->town_num].store[which].last_visit) / (TURNS_PER_TICK * STORE_TURNS);
+	maintain_num = (turn - town[p_ptr->town_num].store[which].last_visit) / (TURNS_PER_TICK * STORE_TICKS);
 
 	/* Maintain the store max. 10 times */
 	if (maintain_num > 10) maintain_num = 10;
@@ -5035,7 +5035,7 @@ void store_init(int town_num, int store_num)
 	 * MEGA-HACK - Last visit to store is
 	 * BEFORE player birth to enable store restocking
 	 */
-	st_ptr->last_visit = -200L * STORE_TURNS;
+	st_ptr->last_visit = -10L * TURNS_PER_TICK * STORE_TICKS;
 
 	/* Clear any old items */
 	for (k = 0; k < st_ptr->stock_size; k++)

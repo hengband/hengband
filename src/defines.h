@@ -478,7 +478,7 @@
 #define STORE_MIN_KEEP  6               /* Min slots to "always" keep full */
 #define STORE_MAX_KEEP  18              /* Max slots to "always" keep full */
 #define STORE_SHUFFLE   21              /* 1/Chance (per day) of an owner changing */
-#define STORE_TURNS     1000    /* Number of turns between turnovers */
+#define STORE_TICKS     1000            /* Number of ticks between turnovers */
 
 
 /*

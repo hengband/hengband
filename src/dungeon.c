@@ -2052,7 +2052,8 @@ msg_print("日が沈んだ。");
 	}
 
 	/* Set back the rewards once a day */
-	if (!(turn % (TURNS_PER_TICK*10 * STORE_TURNS)))
+	/* Only used for reward in thief's guild for now */
+	if (!(turn % (TURNS_PER_TICK * TOWN_DAWN)))
 	{
 		int n;
 
