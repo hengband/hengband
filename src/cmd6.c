@@ -2546,7 +2546,7 @@ msg_print("ダンジョンが揺れた。");
 			msg_print("Mighty magics rend your enemies!");
 #endif
 			project(0, 5, py, px,
-				(randint1(200) + 300) * 2, GF_MANA, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID | PROJECT_NO_REF, -1);
+				(randint1(200) + 300) * 2, GF_MANA, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
 			if ((p_ptr->pclass != CLASS_MAGE) && (p_ptr->pclass != CLASS_HIGH_MAGE) && (p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_MAGIC_EATER) && (p_ptr->pclass != CLASS_BLUE_MAGE))
 			{
 #ifdef JP
@@ -5024,7 +5024,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 			{
 				int num = 1;
 				int i;
-				int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_NO_REF;
+				int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 				int tx, ty;
 #ifdef JP
 				msg_print("せっかくだから『クリムゾン』をぶっぱなすぜ！");

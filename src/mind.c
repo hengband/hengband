@@ -1349,7 +1349,7 @@ msg_format("There are too many mirrors to control!");
 	  for(x=0;x<cur_wid;x++){
 	    for(y=0;y<cur_hgt;y++){
 	      if(cave[y][x].info & CAVE_IN_MIRROR){
-		project(0,2,y,x,plev,GF_OLD_SLEEP,(PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP|PROJECT_NO_REF|PROJECT_NO_HANGEKI),-1);
+		project(0,2,y,x,plev,GF_OLD_SLEEP,(PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP|PROJECT_NO_HANGEKI),-1);
 	      }
 	    }
 	  }
@@ -1690,7 +1690,7 @@ msg_print("その方向にはモンスターはいません。");
 	case 10:
 		project_length = 5;
 		if (!get_aim_dir(&dir)) return FALSE;
-		project_hook(GF_ATTACK, dir, HISSATSU_NYUSIN, PROJECT_STOP | PROJECT_KILL | PROJECT_NO_REF);
+		project_hook(GF_ATTACK, dir, HISSATSU_NYUSIN, PROJECT_STOP | PROJECT_KILL);
 
 		break;
 	case 11:

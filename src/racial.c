@@ -1381,7 +1381,7 @@ msg_print("武器を持たないといけません。");
 				for( y=0 ; y < cur_hgt ;y++){
 				  if( (cave[y][x].info & CAVE_IN_MIRROR)){
 				    remove_mirror(y,x);
-				    project(0,2,y,x, p_ptr->lev /2 +5 ,GF_SHARDS,(PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP|PROJECT_NO_REF|PROJECT_NO_HANGEKI),-1);
+				    project(0,2,y,x, p_ptr->lev /2 +5 ,GF_SHARDS,(PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP|PROJECT_NO_HANGEKI),-1);
 				  }
 				}
 			      }

@@ -2382,21 +2382,21 @@
  *   KILL: Affect each monster in the "blast area" in some way
  *   HIDE: Hack -- disable "visual" feedback from projection
  */
-#define PROJECT_JUMP       0x01
-#define PROJECT_BEAM       0x02
-#define PROJECT_THRU       0x04
-#define PROJECT_STOP       0x08
-#define PROJECT_GRID       0x10
-#define PROJECT_ITEM       0x20
-#define PROJECT_KILL       0x40
-#define PROJECT_HIDE       0x80
-#define PROJECT_DISI       0x100
-#define PROJECT_PLAYER     0x200
-#define PROJECT_MONSTER    0x400
-#define PROJECT_NO_REF     0x800
-#define PROJECT_NO_HANGEKI 0x1000
-#define PROJECT_PATH       0x2000
-#define PROJECT_FAST       0x4000
+#define PROJECT_JUMP        0x01
+#define PROJECT_BEAM        0x02
+#define PROJECT_THRU        0x04
+#define PROJECT_STOP        0x08
+#define PROJECT_GRID        0x10
+#define PROJECT_ITEM        0x20
+#define PROJECT_KILL        0x40
+#define PROJECT_HIDE        0x80
+#define PROJECT_DISI        0x100
+#define PROJECT_PLAYER      0x200
+#define PROJECT_MONSTER     0x400
+#define PROJECT_REFLECTABLE 0x800
+#define PROJECT_NO_HANGEKI  0x1000
+#define PROJECT_PATH        0x2000
+#define PROJECT_FAST        0x4000
 
 /*
  * Bit flags for the "enchant()" function

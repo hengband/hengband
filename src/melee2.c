@@ -2056,7 +2056,7 @@ act = "%sにむかって歌った。";
 				if (!explode)
 				{
 					project(m_idx, 0, t_ptr->fy, t_ptr->fx,
-						(pt == GF_OLD_SLEEP ? r_ptr->level : damage), pt, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER | PROJECT_NO_REF, -1);
+						(pt == GF_OLD_SLEEP ? r_ptr->level : damage), pt, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER, -1);
 				}
 
 				if (heal_effect)
@@ -2110,7 +2110,7 @@ msg_format("%^sは突然熱くなった！", m_name);
 						project(t_idx, 0, m_ptr->fy, m_ptr->fx,
 							damroll (1 + ((tr_ptr->level) / 26),
 							1 + ((tr_ptr->level) / 17)),
-							GF_FIRE, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER | PROJECT_NO_REF, -1);
+							GF_FIRE, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER, -1);
 					}
 
 					/* Aura cold */
@@ -2133,7 +2133,7 @@ msg_format("%^sは突然寒くなった！", m_name);
 						project(t_idx, 0, m_ptr->fy, m_ptr->fx,
 							damroll (1 + ((tr_ptr->level) / 26),
 							1 + ((tr_ptr->level) / 17)),
-							GF_COLD, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER | PROJECT_NO_REF, -1);
+							GF_COLD, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER, -1);
 					}
 
 					/* Aura elec */
@@ -2156,7 +2156,7 @@ msg_format("%^sは電撃を食らった！", m_name);
 						project(t_idx, 0, m_ptr->fy, m_ptr->fx,
 							damroll (1 + ((tr_ptr->level) / 26),
 							1 + ((tr_ptr->level) / 17)),
-							GF_ELEC, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER | PROJECT_NO_REF, -1);
+							GF_ELEC, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER, -1);
 					}
 
 				}
@@ -3327,7 +3327,7 @@ msg_print("ルーンが爆発した！");
 						msg_print("The rune explodes!");
 #endif
 
-						project(0, 2, ny, nx, 2 * (p_ptr->lev + damroll(7, 7)), GF_MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_REF | PROJECT_NO_HANGEKI), -1);
+						project(0, 2, ny, nx, 2 * (p_ptr->lev + damroll(7, 7)), GF_MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 					}
 				}
 				else

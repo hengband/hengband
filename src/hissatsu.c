@@ -353,7 +353,7 @@ static bool cast_hissatsu_spell(int spell)
 	case 0:
 		project_length = 2;
 		if (!get_aim_dir(&dir)) return FALSE;
-		project_hook(GF_ATTACK, dir, HISSATSU_2, PROJECT_STOP | PROJECT_KILL | PROJECT_NO_REF);
+		project_hook(GF_ATTACK, dir, HISSATSU_2, PROJECT_STOP | PROJECT_KILL);
 
 		break;
 	case 1:
@@ -782,7 +782,7 @@ static bool cast_hissatsu_spell(int spell)
 	case 18:
 		project_length = 5;
 		if (!get_aim_dir(&dir)) return FALSE;
-		project_hook(GF_ATTACK, dir, HISSATSU_NYUSIN, PROJECT_STOP | PROJECT_KILL | PROJECT_NO_REF);
+		project_hook(GF_ATTACK, dir, HISSATSU_NYUSIN, PROJECT_STOP | PROJECT_KILL);
 
 		break;
 	case 19: /* Whirlwind Attack */
@@ -1028,7 +1028,7 @@ static bool cast_hissatsu_spell(int spell)
 			else
 				p_ptr->csp -= 8;
 			new = FALSE;
-			if (!project_hook(GF_ATTACK, dir, HISSATSU_NYUSIN, PROJECT_STOP | PROJECT_KILL | PROJECT_NO_REF)) break;
+			if (!project_hook(GF_ATTACK, dir, HISSATSU_NYUSIN, PROJECT_STOP | PROJECT_KILL)) break;
 			count++;
 			command_dir = 0;
 			p_ptr->redraw |= PR_MANA;
@@ -1065,7 +1065,7 @@ msg_print("不思議な力がテレポートを防いだ！");
 
 			break;
 		}
-		project(0, 0, y, x, HISSATSU_ISSEN, GF_ATTACK, PROJECT_BEAM | PROJECT_KILL | PROJECT_NO_REF, -1);
+		project(0, 0, y, x, HISSATSU_ISSEN, GF_ATTACK, PROJECT_BEAM | PROJECT_KILL, -1);
 		teleport_player_to(y, x, TRUE);
 		break;
 	}

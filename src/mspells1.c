@@ -489,7 +489,7 @@ bool clean_shot(int y1, int x1, int y2, int x2, bool friend)
  */
 static void bolt(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_PLAYER;
+	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_PLAYER | PROJECT_REFLECTABLE;
 
 	/* Target the player with a bolt attack */
 	(void)project(m_idx, 0, py, px, dam_hp, typ, flg, (learnable ? monspell : -1));
@@ -497,7 +497,7 @@ static void bolt(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
 
 static void beam(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
 {
-	int flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU | PROJECT_PLAYER | PROJECT_NO_REF;
+	int flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU | PROJECT_PLAYER;
 
 	/* Target the player with a bolt attack */
 	(void)project(m_idx, 0, py, px, dam_hp, typ, flg, (learnable ? monspell : -1));
@@ -511,7 +511,7 @@ static void beam(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
  */
 static void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, bool learnable)
 {
-	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER | PROJECT_NO_REF;
+	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER;
 
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -3629,7 +3629,7 @@ msg_format("%^sがテレポートした。", m_name);
 
 							msg_format("The attack of %s has wounded %s!", m_name, m_name_self);
 #endif
-							project(0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL | PROJECT_NO_REF, -1);
+							project(0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
 							set_tim_eyeeye(p_ptr->tim_eyeeye-5, TRUE);
 						}
                                         }

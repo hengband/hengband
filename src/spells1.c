@@ -1216,7 +1216,7 @@ msg_print("ドアが溶けて泥になった！");
 				msg_print("The mirror was chashed!");
 #endif				
 				remove_mirror(y,x);
-			    project(0,2,y,x, p_ptr->lev /2 +5 ,GF_SHARDS,(PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP|PROJECT_NO_REF|PROJECT_NO_HANGEKI),-1);
+			    project(0,2,y,x, p_ptr->lev /2 +5 ,GF_SHARDS,(PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP|PROJECT_NO_HANGEKI),-1);
 			}
 			break;
 		}
@@ -6433,7 +6433,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 	if (!who) return (FALSE);
 	if (who == p_ptr->riding) return (FALSE);
 
-	if ((p_ptr->reflect || p_ptr->tim_reflect || ((p_ptr->special_defense & KATA_FUUJIN) && !p_ptr->blind)) && !(flg & PROJECT_NO_REF) && !one_in_(10))
+	if ((p_ptr->reflect || p_ptr->tim_reflect || ((p_ptr->special_defense & KATA_FUUJIN) && !p_ptr->blind)) && (flg & PROJECT_REFLECTABLE) && !one_in_(10))
 	{
 		byte t_y, t_x;
 		int max_attempts = 10;
@@ -6464,7 +6464,7 @@ else msg_print("攻撃が跳ね返った！");
 			t_x = m_list[who].fx;
 		}
 
-		project(0, 0, t_y, t_x, dam, typ, (PROJECT_STOP|PROJECT_KILL), monspell);
+		project(0, 0, t_y, t_x, dam, typ, (PROJECT_STOP|PROJECT_KILL|PROJECT_REFLECTABLE), monspell);
 
 		disturb(1, 0);
 		return TRUE;
@@ -7694,7 +7694,7 @@ msg_print("あなたは命が薄まっていくように感じた！");
 
 		msg_format("The attack of %s has wounded %s!", m_name, m_name_self);
 #endif
-		project(0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL | PROJECT_NO_REF, -1);
+		project(0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
 		set_tim_eyeeye(p_ptr->tim_eyeeye-5, TRUE);
 	}
 
@@ -9032,7 +9032,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			{
 				monster_race *ref_ptr = &r_info[m_list[cave[y][x].m_idx].r_idx];
 
-				if ((ref_ptr->flags2 & RF2_REFLECTING) && (!one_in_(10) && !(flg & PROJECT_NO_REF) && (!who || dist_hack > 1)))
+				if ((ref_ptr->flags2 & RF2_REFLECTING) && (!one_in_(10) && (flg & PROJECT_REFLECTABLE) && (!who || dist_hack > 1)))
 				{
 					byte t_y, t_x;
 					int max_attempts = 10;
@@ -9313,7 +9313,7 @@ bool binding_field( int dam )
 			{
 				if( player_has_los_bold(y,x) ){
 					(void)project_m(0,0,y,x,dam,GF_MANA,
-					  (PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP|PROJECT_NO_REF));
+					  (PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP));
 				}
 			}
 		}
@@ -9341,7 +9341,7 @@ void seal_of_mirror( int dam )
 			if( (cave[y][x].info & CAVE_IN_MIRROR))
 			{
 				if(project_m(0,0,y,x,dam,GF_GENOCIDE,
-							 (PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP|PROJECT_NO_REF)))
+							 (PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP)))
 				{
 					if( !cave[y][x].m_idx )
 					{

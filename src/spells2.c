@@ -4522,7 +4522,7 @@ bool detect_all(int range)
 bool project_hack(int typ, int dam)
 {
 	int     i, x, y;
-	int     flg = PROJECT_JUMP | PROJECT_KILL | PROJECT_HIDE | PROJECT_NO_REF;
+	int     flg = PROJECT_JUMP | PROJECT_KILL | PROJECT_HIDE;
 	bool    obvious = FALSE;
 
 
@@ -6453,7 +6453,7 @@ bool fire_ball(int typ, int dir, int dam, int rad)
 {
 	int tx, ty;
 
-	int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_NO_REF;
+	int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
 	if (typ == GF_CONTROL_LIVING) flg|= PROJECT_HIDE;
 	/* Use the given direction */
@@ -6483,7 +6483,7 @@ bool fire_rocket(int typ, int dir, int dam, int rad)
 {
 	int tx, ty;
 
-	int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_NO_REF;
+	int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
 	/* Use the given direction */
 	tx = px + 99 * ddx[dir];
@@ -6511,7 +6511,7 @@ bool fire_ball_hide(int typ, int dir, int dam, int rad)
 {
 	int tx, ty;
 
-	int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_NO_REF | PROJECT_HIDE;
+	int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE;
 
 	/* Use the given direction */
 	tx = px + 99 * ddx[dir];
@@ -6540,7 +6540,7 @@ bool fire_ball_hide(int typ, int dir, int dam, int rad)
  */
 bool fire_meteor(int who, int typ, int y, int x, int dam, int rad)
 {
-	int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_NO_REF;
+	int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
 	/* Analyze the "target" and the caster. */
 	return (project(who, rad, y, x, dam, typ, flg, -1));
@@ -6553,7 +6553,7 @@ bool fire_blast(int typ, int dir, int dd, int ds, int num, int dev)
 	int ty, tx, y, x;
 	int i;
 
-	int flg = PROJECT_FAST | PROJECT_THRU | PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
+	int flg = PROJECT_FAST | PROJECT_THRU | PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE | PROJECT_GRID;
 
 	/* Assume okay */
 	bool result = TRUE;
@@ -6777,7 +6777,7 @@ bool project_hook(int typ, int dir, int dam, int flg)
  */
 bool fire_bolt(int typ, int dir, int dam)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
+	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE | PROJECT_GRID;
 	return (project_hook(typ, dir, dam, flg));
 }
 
