@@ -6552,7 +6552,7 @@ msg_print("試合開始！");
  * Modified by Arcum Dagsson to support
  * separate macro files for different realms.
  */
-void load_all_pref_files(void)
+static void load_all_pref_files(void)
 {
 	char buf[1024];
 

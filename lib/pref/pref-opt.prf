@@ -77,7 +77,6 @@ X:bound_walls_perm
 Y:last_words
 Y:send_score
 X:allow_debug_opts
-X:autoload_pref_files
 
 ##### Disturbance #####
 

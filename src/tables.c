@@ -6918,14 +6918,6 @@ option_type option_info[] =
 	"allow_debug_opts",             "Allow use of debug/cheat options" },
 #endif
 
-#ifdef JP
-	{ &autoload_pref_files,         FALSE, OPT_PAGE_GAMEPLAY, 2, 2,
-	"autoload_pref_files",          "設定ファイルを自動で読み込む" },
-#else
-	{ &autoload_pref_files,         FALSE, OPT_PAGE_GAMEPLAY, 2, 2,
-	"autoload_pref_files",          "Load user pref files automatically" },
-#endif
-
 	/*** Disturbance ***/
 
 #ifdef JP

@@ -5854,7 +5854,7 @@ void process_player_name(bool sf)
 	int i, k = 0;
 	char old_player_base[32] = "";
 
-	if (autoload_pref_files && character_generated) strcpy(old_player_base, player_base);
+	if (character_generated) strcpy(old_player_base, player_base);
 
 	/* Cannot be too long */
 #if defined(MACINTOSH) || defined(MSDOS) || defined(USE_EMX) || defined(AMIGA) || defined(ACORN) || defined(VM)
@@ -6017,10 +6017,10 @@ quit_fmt("'%s' という名前は不正なコントロールコードを含んでいます。", player_nam
 		path_build(savefile, sizeof(savefile), ANGBAND_DIR_SAVE, temp);
 	}
 
-	/* Load the "pref" files */
-	if (autoload_pref_files && character_generated)
+	/* Load an autopick preference file */
+	if (character_generated)
 	{
-		if (!streq(old_player_base, player_base)) load_all_pref_files();
+		if (!streq(old_player_base, player_base)) autopick_load_pref(FALSE);
 	}
 }
 

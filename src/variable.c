@@ -260,7 +260,6 @@ bool send_score;	/* Send score dump to the world score server */
 #endif
 
 bool allow_debug_opts;	/* Allow use of debug/cheat options */
-bool autoload_pref_files;
 
 
 /*** Disturbance Options ***/

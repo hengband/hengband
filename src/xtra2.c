@@ -222,8 +222,8 @@ msg_print("あなたは変わった気がする...");
 		handle_stuff();
 	}
 
-	/* Load the "pref" files */
-	if (autoload_pref_files && (old_lev != p_ptr->lev)) load_all_pref_files();
+	/* Load an autopick preference file */
+	if (old_lev != p_ptr->lev) autopick_load_pref(FALSE);
 }
 
 

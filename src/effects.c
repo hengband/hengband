@@ -4780,8 +4780,8 @@ void change_race(int new_race, cptr effect_msg)
 
 	handle_stuff();
 
-	/* Load the "pref" files */
-	if (autoload_pref_files && (old_race != p_ptr->prace)) load_all_pref_files();
+	/* Load an autopick preference file */
+	if (old_race != p_ptr->prace) autopick_load_pref(FALSE);
 
 	/* Player's graphic tile may change */
 	lite_spot(py, px);
