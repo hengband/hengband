@@ -419,7 +419,7 @@ collecting spellbooks
 ?:1
 
 # pick up for experience
-?:[IOR [EQU $CLASS Warrior Berserker] [AND [EQU $CLASS Paladin] [EQU $REALM1 Life]]]
+?:[IOR [EQU $CLASS Warrior Berserker] [AND [EQU $CLASS Paladin] [EQU $REALM1 Crusade]]]
 (~unreadable third spellbooks:arcane
 (~unreadable fourth spellbooks:arcane
 unreadable fourth spellbooks
@@ -427,7 +427,9 @@ unreadable third spellbooks
 ?:1
 ?:[AND [EQU $CLASS Paladin] [EQU $REALM1 Death]]
 unreadable fourth spellbooks:life
+unreadable fourth spellbooks:crusade
 unreadable third spellbooks:life
+unreadable third spellbooks:crusade
 ?:1
 
 # pick up for money
