@@ -61,6 +61,9 @@ bool test_hit_norm(int chance, int ac, int vis)
 	/* Hack -- Instant miss or hit */
 	if (k < 10) return (k < 5);
 
+	if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
+		if (one_in_(20)) return (FALSE);
+
 	/* Wimpy attack never hits */
 	if (chance <= 0) return (FALSE);
 
@@ -1588,7 +1591,7 @@ static int check_hit(int power)
 	if (k < 10) return (k < 5);
 
 	if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
-		if (one_in_(20)) return (FALSE);
+		if (one_in_(20)) return (TRUE);
 
 	/* Paranoia -- No power */
 	if (power <= 0) return (FALSE);
