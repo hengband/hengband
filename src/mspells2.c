@@ -179,23 +179,42 @@ static bool breath_direct(int y1, int x1, int y2, int x2, int rad, int typ, bool
 		x = nx;
 	}
 
-	breath_shape(grid_g, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y, x, typ);
-
-	for (i = 0; i < grids; i++)
+	if ((y1 == y) && (x1 == x))
 	{
-		/* Extract the location */
-		y = gy[i];
-		x = gx[i];
-
-		if (y == y2 && x == x2)
-			hit2 = TRUE;
-		if (player_bold(y, x))
-			hityou = TRUE;
+		if (flg & PROJECT_DISI)
+		{
+			if (in_disintegration_range(y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
+			if (in_disintegration_range(y1, x1, py, px) && (distance(y1, x1, py, px) <= rad)) hityou = TRUE;
+		}
+		else if (flg & PROJECT_LOS)
+		{
+			if (los(y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
+			if (los(y1, x1, py, px) && (distance(y1, x1, py, px) <= rad)) hityou = TRUE;
+		}
+		else
+		{
+			if (projectable(y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
+			if (projectable(y1, x1, py, px) && (distance(y1, x1, py, px) <= rad)) hityou = TRUE;
+		}
 	}
-	if (!hit2)
-		return FALSE;
-	if (friend && hityou)
-		return FALSE;
+	else
+	{
+		breath_shape(grid_g, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y, x, typ);
+
+		for (i = 0; i < grids; i++)
+		{
+			/* Extract the location */
+			y = gy[i];
+			x = gx[i];
+
+			if ((y == y2) && (x == x2)) hit2 = TRUE;
+			if (player_bold(y, x)) hityou = TRUE;
+		}
+	}
+
+	if (!hit2) return FALSE;
+	if (friend && hityou) return FALSE;
+
 	return TRUE;
 }
 
