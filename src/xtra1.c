@@ -1810,7 +1810,11 @@ static void prt_frame_basic(void)
 	if (p_ptr->mimic_form)
 		prt_field(mimic_info[p_ptr->mimic_form].title, ROW_RACE, COL_RACE);
 	else
-		prt_field(rp_ptr->title, ROW_RACE, COL_RACE);
+	{
+		char str[14];
+		mb_strlcpy(str, rp_ptr->title, 14);
+		prt_field(str, ROW_RACE, COL_RACE);
+	}
 /*	prt_field(cp_ptr->title, ROW_CLASS, COL_CLASS); */
 /*	prt_field(ap_ptr->title, ROW_SEIKAKU, COL_SEIKAKU); */
 
