@@ -953,7 +953,8 @@ static s32b price_item(object_type *o_ptr, int greed, bool flip)
 	}
 
 	/* Compute the final price (with rounding) */
-	price = (price * adjust + 50L) / 100L;
+	/* Hack -- prevent overflow */
+	price = (s32b)(((u32b)price * (u32b)adjust + 50UL) / 100UL);
 
 	/* Note -- Never become "free" */
 	if (price <= 0L) return (1L);
