@@ -1420,12 +1420,18 @@ s = "読める書がない。";
 		p_ptr->spell_order[j] = i;
 		gain = TRUE;
 	}
+
+	/* No gain ... */
 	if (!gain)
 #ifdef JP
 		msg_print("何も覚えられなかった。");
 #else
 		msg_print("You were not able to learn any special attacks.");
 #endif
+
+	/* Take a turn */
+	else
+		energy_use = 100;
 
 	p_ptr->update |= (PU_SPELLS);
 }
