@@ -146,13 +146,19 @@ char* strstr_j(const char* s, const char* t)
  * strを環境に合った文字コードに変換する。
  * strの長さに制限はない。
  */
-void codeconv(char *str)
+void codeconv(char *str, bool unknown)
 {
+	/* EUCを仮定。 */
+	static bool iseuc = 1;
+
 	int i;
-	int kanji = 0, iseuc = 1;
+	int kanji = 0;
 	int len;
 	unsigned char c1, c2;
 	unsigned char *tmp;
+
+	/* 文字コードが変わる可能性がある時は、今までの情報を忘れる。 */
+	if (unknown) iseuc = 1;
 
 	/* 漢字が存在し、その漢字コードがEUCかどうか調べる。*/
 	for (i = 0; str[i]; i++)
