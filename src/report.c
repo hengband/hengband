@@ -121,6 +121,15 @@ static int buf_sprintf(BUF *buf, const char *fmt, ...)
 
 	if(!tmpbuf) return -1;
 
+#ifdef MAC_MPW
+	{
+		/* '\n' is 0x0D and '\r' is 0x0A in MPW. Swap back these. */
+		char *ptr;
+		for (ptr = tmpbuf; *ptr; ptr++)
+			if ('\n' == *ptr) *ptr = '\r';
+	}
+#endif
+
 	ret = buf_append(buf, tmpbuf, strlen(tmpbuf));
 
 	free(tmpbuf);
@@ -187,14 +196,14 @@ static void http_post(int sd, char *url, BUF *buf)
 	BUF *output;
 
 	output = buf_new();
-	buf_sprintf(output, "POST %s HTTP/1.0\r\n", url);
-	buf_sprintf(output, "User-Agent: Hengband %d.%d.%d\r\n",
+	buf_sprintf(output, "POST %s HTTP/1.0\n", url);
+	buf_sprintf(output, "User-Agent: Hengband %d.%d.%d\n",
 		    FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 
-	buf_sprintf(output, "Content-Length: %d\r\n", buf->size);
-	buf_sprintf(output, "Content-Encoding: binary\r\n");
-	buf_sprintf(output, "Content-Type: application/octet-stream\r\n");
-	buf_sprintf(output, "\r\n");
+	buf_sprintf(output, "Content-Length: %d\n", buf->size);
+	buf_sprintf(output, "Content-Encoding: binary\n");
+	buf_sprintf(output, "Content-Type: application/octet-stream\n");
+	buf_sprintf(output, "\n");
 	buf_append(output, buf->data, buf->size);
 
 	soc_write(sd, output->data, output->size);
@@ -234,7 +243,7 @@ static errr make_dump(BUF* dumpbuf)
 
 	while (fgets(buf, 1024, fff))
 	{
-		(void)buf_append(dumpbuf, buf, strlen(buf));
+		(void)buf_sprintf(dumpbuf, "%s", buf);
 	}
 
 	/* Close the file */
