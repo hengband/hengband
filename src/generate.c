@@ -1561,7 +1561,7 @@ static void place_pet(void)
 /*
  * Wipe all unnecessary flags after cave generation
  */
-void wipe_generate_cave_flags(void)
+static void wipe_generate_cave_flags(void)
 {
 	int x, y;
 
