@@ -1329,13 +1329,6 @@ s16b get_mon_num(int level)
 				if (r_info[MON_LUPART].cur_num > 0) continue;
 			}
 		}
-		else if (!p_ptr->inside_battle && chameleon_change
-			 && (r_ptr->flags1 & (RF1_UNIQUE)))
-		{
-			/* Hack -- Chameleon Lord must be "unique" */
-			if (r_info[MON_CHAMELEON_K].cur_num >= r_ptr->max_num)
-				continue;
-		}
 
 		/* Accept */
 		table[i].prob3 = table[i].prob2;
@@ -2498,7 +2491,8 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 	int old_r_idx = m_ptr->r_idx;
 	bool old_unique = FALSE;
 
-	if (r_info[m_ptr->r_idx].flags1 & RF1_UNIQUE) old_unique = TRUE;
+	if (r_info[m_ptr->r_idx].flags1 & RF1_UNIQUE)
+		old_unique = TRUE;
 	if (old_unique && (r_idx == MON_CHAMELEON)) r_idx = MON_CHAMELEON_K;
 	r_ptr = &r_info[r_idx];
 
