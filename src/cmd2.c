@@ -1247,7 +1247,7 @@ void do_cmd_open(void)
 		o_idx = chest_check(y, x);
 
 		/* Nothing useful */
-		if (!is_closed_door(feat) && !o_idx)
+		if (!have_flag(f_info[feat].flags, FF_OPEN) && !o_idx)
 		{
 			/* Message */
 #ifdef JP
