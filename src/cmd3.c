@@ -1334,7 +1334,6 @@ static flag_insc_table flag_insc_misc[] =
 	{ "Ëã", "Fa", TR_FREE_ACT, -1 },
 	{ "»ë", "Si", TR_SEE_INVIS, -1 },
 	{ "·Ð", "Hl", TR_HOLD_LIFE, -1 },
-	{ "´¶", "Esp", TR_TELEPATHY, -1 },
 	{ "ÃÙ", "Sd", TR_SLOW_DIGEST, -1 },
 	{ "³è", "Rg", TR_REGEN, -1 },
 	{ "Éâ", "Lv", TR_FEATHER, -1 },
@@ -1395,13 +1394,36 @@ static flag_insc_table flag_insc_slay[] =
 {
 	{ "¼Ù", "*", TR_SLAY_EVIL, TR_KILL_EVIL },
 	{ "¿Í", "p", TR_SLAY_HUMAN, TR_KILL_HUMAN },
-	{ "Îµ", "d", TR_SLAY_DRAGON, TR_KILL_DRAGON },
+	{ "Îµ", "D", TR_SLAY_DRAGON, TR_KILL_DRAGON },
 	{ "¥ª", "o", TR_SLAY_ORC, TR_KILL_ORC },
 	{ "¥È", "T", TR_SLAY_TROLL, TR_KILL_TROLL },
 	{ "µð", "P", TR_SLAY_GIANT, TR_KILL_GIANT },
 	{ "¥Ç", "U", TR_SLAY_DEMON, TR_KILL_DEMON },
 	{ "»à", "L", TR_SLAY_UNDEAD, TR_KILL_UNDEAD },
 	{ "Æ°", "Z", TR_SLAY_ANIMAL, TR_KILL_ANIMAL },
+	{ NULL, NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_esp1[] =
+{
+	{ "´¶", "Tele", TR_TELEPATHY, -1 },
+	{ "¼Ù", "Evil", TR_ESP_EVIL, -1 },
+	{ "Á±", "Good", TR_ESP_GOOD, -1 },
+	{ "Ìµ", "Nolv", TR_ESP_NONLIVING, -1 },
+	{ "¸Ä", "Uniq", TR_ESP_UNIQUE, -1 },
+	{ NULL, NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_esp2[] =
+{
+	{ "¿Í", "p", TR_ESP_HUMAN, -1 },
+	{ "Îµ", "D", TR_ESP_DRAGON, -1 },
+	{ "¥ª", "o", TR_ESP_ORC, -1 },
+	{ "¥È", "T", TR_ESP_TROLL, -1 },
+	{ "µð", "P", TR_ESP_GIANT, -1 },
+	{ "¥Ç", "U", TR_ESP_DEMON, -1 },
+	{ "»à", "L", TR_ESP_UNDEAD, -1 },
+	{ "Æ°", "Z", TR_ESP_ANIMAL, -1 },
 	{ NULL, NULL, 0, -1 }
 };
 
@@ -1472,7 +1494,6 @@ static flag_insc_table flag_insc_misc[] =
   	{ "Fa", TR_FREE_ACT, -1 },
   	{ "Si", TR_SEE_INVIS, -1 },
   	{ "Hl", TR_HOLD_LIFE, -1 },
-  	{ "Esp", TR_TELEPATHY, -1 },
   	{ "Sd", TR_SLOW_DIGEST, -1 },
   	{ "Rg", TR_REGEN, -1 },
   	{ "Lv", TR_FEATHER, -1 },
@@ -1536,7 +1557,7 @@ static flag_insc_table flag_insc_slay[] =
 {
 	{ "*", TR_SLAY_EVIL, TR_KILL_EVIL },
 	{ "p", TR_SLAY_HUMAN, TR_KILL_HUMAN },
-	{ "d", TR_SLAY_DRAGON, TR_KILL_DRAGON },
+	{ "D", TR_SLAY_DRAGON, TR_KILL_DRAGON },
 	{ "o", TR_SLAY_ORC, TR_KILL_ORC },
 	{ "T", TR_SLAY_TROLL, TR_KILL_TROLL },
 	{ "P", TR_SLAY_GIANT, TR_KILL_GIANT },
@@ -1544,6 +1565,29 @@ static flag_insc_table flag_insc_slay[] =
 	{ "L", TR_SLAY_UNDEAD, TR_KILL_UNDEAD },
 	{ "Z", TR_SLAY_ANIMAL, TR_KILL_ANIMAL },
 	{ NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_esp1[] =
+{
+	{ "Tele", TR_TELEPATHY, -1 },
+	{ "Evil", TR_ESP_EVIL, -1 },
+	{ "Good", TR_ESP_GOOD, -1 },
+	{ "Nolv", TR_ESP_NONLIVING, -1 },
+	{ "Uniq", TR_ESP_UNIQUE, -1 },
+	{ NULL, NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_esp2[] =
+{
+	{ "p", TR_ESP_HUMAN, -1 },
+	{ "D", TR_ESP_DRAGON, -1 },
+	{ "o", TR_ESP_ORC, -1 },
+	{ "T", TR_ESP_TROLL, -1 },
+	{ "P", TR_ESP_GIANT, -1 },
+	{ "U", TR_ESP_DEMON, -1 },
+	{ "L", TR_ESP_UNDEAD, -1 },
+	{ "Z", TR_ESP_ANIMAL, -1 },
+	{ NULL, NULL, 0, -1 }
 };
 
 static flag_insc_table flag_insc_sust[] =
@@ -1736,6 +1780,25 @@ s16b inscribe_flags(object_type *o_ptr, cptr out_val)
 			if (have_flag_of(flag_insc_slay, flgs))
 				ADD_INSC("/");
 			ptr = inscribe_flags_aux(flag_insc_slay, flgs, kanji, ptr);
+
+			/* Esp */
+                        if (kanji)
+                        {
+                                if (have_flag_of(flag_insc_esp1, flgs) ||
+                                    have_flag_of(flag_insc_esp2, flgs))
+                                        ADD_INSC("~");
+                                ptr = inscribe_flags_aux(flag_insc_esp1, flgs, kanji, ptr);
+                                ptr = inscribe_flags_aux(flag_insc_esp2, flgs, kanji, ptr);
+                        }
+                        else
+                        {
+                                if (have_flag_of(flag_insc_esp1, flgs))
+                                        ADD_INSC("~");
+                                ptr = inscribe_flags_aux(flag_insc_esp1, flgs, kanji, ptr);
+                                if (have_flag_of(flag_insc_esp2, flgs))
+                                        ADD_INSC("~");
+                                ptr = inscribe_flags_aux(flag_insc_esp2, flgs, kanji, ptr);
+                        }
 
 			/* Random Teleport */
 			if (have_flag(flgs, TR_TELEPORT))
