@@ -487,7 +487,7 @@ extern bool preserve_mode;
 extern bool autoroller;
 extern bool autochara;
 extern bool can_save;
-extern bool world_monster;
+extern s16b world_monster;
 extern bool world_player;
 extern int cap_mon;
 extern int cap_mspeed;

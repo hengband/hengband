@@ -3901,14 +3901,15 @@ bool process_the_world(int num, int who, bool vs_player)
 		msg_print(NULL);
 	}
 
-	world_monster = TRUE;
+	/* This monster cast spells */
+	world_monster = hack_m_idx;
 
 	if (vs_player) do_cmd_redraw();
 
 	while(num--)
 	{
 		if(!m_ptr->r_idx) break;
-		process_monster(hack_m_idx);
+		process_monster(world_monster);
 
 		reset_target(m_ptr);
 
@@ -3937,7 +3938,7 @@ bool process_the_world(int num, int who, bool vs_player)
 	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
-	world_monster = FALSE;
+	world_monster = 0;
 	if (vs_player || los(py, px, m_ptr->fy, m_ptr->fx))
 	{
 #ifdef JP

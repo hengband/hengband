@@ -691,8 +691,8 @@ void monster_death(int m_idx, bool drop_item)
 	bool drop_chosen_item = drop_item && !cloned && !p_ptr->inside_arena
 		&& !p_ptr->inside_battle && !is_pet(m_ptr);
 
-
-	if (world_monster) world_monster = FALSE;
+	/* The caster is dead? */
+	if (world_monster && world_monster == m_idx) world_monster = 0;
 
 	/* Notice changes in view */
 	if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))

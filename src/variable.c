@@ -1118,7 +1118,7 @@ bool autochara;
 
 bool can_save = FALSE;        /* Game can be saved */
 
-bool world_monster;
+s16b world_monster;
 bool world_player;
 
 int cap_mon;
