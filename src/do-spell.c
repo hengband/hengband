@@ -9567,7 +9567,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (desc) return "壁を掘り進む。自分の足元のアイテムは蒸発する。";
 #else
 		if (name) return "Sound of disintegration";
-		if (desc) return "Turns all rocks in the adjacent squares to mud.";
+		if (desc) return "Makes you be able to burrow into walls. Objects under your feet evaporate.";
 #endif
 
 		/* Stop singing before start another */
