@@ -1496,7 +1496,7 @@ return "全感知 : 55+d55 ターン毎";
 		case ART_AMBER:
 		{
 #ifdef JP
-return "体力回復(500) : 500 ターン毎";
+return "体力回復(700) : 250 ターン毎";
 #else
 			return "heal (700) every 250 turns";
 #endif
