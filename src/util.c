@@ -1861,6 +1861,33 @@ static char inkey_aux(void)
 
 
 /*
+ * Cancel macro action on the queue
+ */
+static void forget_macro_action(void)
+{
+	if (!parse_macro) return;
+
+	/* Drop following macro action string */
+	while (TRUE)
+	{
+		char ch;
+
+		/* End loop if no key ready */
+		if (Term_inkey(&ch, FALSE, TRUE)) break;
+
+		/* End loop if no key ready */
+		if (ch == 0) break;
+
+		/* End of "macro action" */
+		if (ch == 30) break;
+	}
+
+	/* No longer inside "macro action" */
+	parse_macro = FALSE;
+}
+
+
+/*
  * Mega-Hack -- special "inkey_next" pointer.  XXX XXX XXX
  *
  * This special pointer allows a sequence of keys to be "inserted" into
@@ -5308,31 +5335,21 @@ int inkey_special(void)
 	/* Examine trigger string */
 	trig_len = strlen(inkey_macro_trigger_string);
 
-	/* No special key */
+	/* Already known that no special key */
 	if (!trig_len) return (int)((unsigned char)key);
 
-	if (trig_len == 1)
+	/*
+	 * Hack -- Ignore macro defined on ASCII characters.
+	 */
+	if (trig_len == 1 && parse_macro)
 	{
 		char c = inkey_macro_trigger_string[0];
 
-		/*
-		 * Hack -- Ignore macro defined on ASCII control
-		 * characters.
-		 *
-		 * In fact any ASCII characters should be used as
-		 * themselfs instead of macro triggers for command
-		 * macro.  But we cannot find out whether 'c' is given
-		 * as part of a macro action or no macro is defined on
-		 * the c key when inkey() returns 'c'.
-		 */
-		if (iscntrl((int)((unsigned char)c)))
-		{
-			/* Kill further macro expansion */
-			flush();
+		/* Cancel macro action on the queue */
+		forget_macro_action();
 
-			/* Return the originaly pressed key */
-			return (int)((unsigned char)c);
-		}
+		/* Return the originaly pressed key */
+		return (int)((unsigned char)c);
 	}
 
 	/* Convert the trigger */
@@ -5374,8 +5391,8 @@ int inkey_special(void)
 		/* A special key found */
 		if (skey)
 		{
-			/* Kill further macro expansion */
-			flush();
+			/* Cancel macro action on the queue */
+			forget_macro_action();
 
 			/* Return special key code and modifier flags */
 			return (skey | modifier);
