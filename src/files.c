@@ -3843,7 +3843,7 @@ void display_player(int mode)
                                 else if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST))
                                 {
                                         /* Get the quest text */
-                                        /* Bewere that INIT_ASSIGN resets the cur_num.
+                                        /* Bewere that INIT_ASSIGN resets the cur_num. */
                                         init_flags = INIT_ASSIGN;
 
                                         process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
