@@ -4150,11 +4150,24 @@ void display_player(int mode)
 			else if (death)
 			{
 				if (dun_level)
+				{
+					if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST))
+					{
 #ifdef JP
-					put_str(format("…あなたは %s の %d 階で死んだ。", map_name(), dun_level), 5 + 12, 10);
+						put_str(format("…あなたは クエスト「%s」で死んだ。", quest[p_ptr->inside_quest].name), 5 + 12, 10);
 #else
-					put_str(format("...You were dead at level %d of %s.", dun_level, map_name()), 5 + 12, 10);
+						put_str(format("...You were dead at quest '%s'.", quest[p_ptr->inside_quest].name), 5 + 12, 10);
 #endif
+					}
+					else
+					{					
+#ifdef JP
+						put_str(format("…あなたは %s の %d 階で死んだ。", map_name(), dun_level), 5 + 12, 10);
+#else
+						put_str(format("...You were dead at level %d of %s.", dun_level, map_name()), 5 + 12, 10);
+#endif
+					}
+				}
 				else
 #ifdef JP
 					put_str(format("…あなたは %s で死んだ。", map_name()), 5 + 12, 10);
@@ -4165,11 +4178,24 @@ void display_player(int mode)
 			else
 			{
 				if (dun_level)
+				{
+					if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST))
+					{
 #ifdef JP
-					put_str(format("…あなたは現在、 %s の %d 階で探索している。", map_name(), dun_level), 5 + 12, 10);
+						put_str(format("…あなたは現在、 クエスト「%s」を遂行中だ。", quest[p_ptr->inside_quest].name), 5 + 12, 10);
 #else
-					put_str(format("...Now, you are exploring at level %d of %s.", dun_level, map_name()), 5 + 12, 10);
+						put_str(format("...Now, you are in the quest '%s'.", quest[p_ptr->inside_quest].name), 5 + 12, 10);
 #endif
+					}							
+					else
+					{
+#ifdef JP
+						put_str(format("…あなたは現在、 %s の %d 階で探索している。", map_name(), dun_level), 5 + 12, 10);
+#else
+						put_str(format("...Now, you are exploring at level %d of %s.", dun_level, map_name()), 5 + 12, 10);
+#endif
+					}
+				}
 				else
 #ifdef JP
 					put_str(format("…あなたは現在、 %s にいる。", map_name()), 5 + 12, 10);
