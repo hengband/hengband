@@ -2663,26 +2663,48 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 	m_ptr->hp = (long)(m_ptr->hp * m_ptr->max_maxhp) / oldmaxhp;
 }
 
+
+/*
+ *  Hook for Tanuki
+ */
+static bool monster_hook_tanuki(int r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	if (r_ptr->flags1 & (RF1_UNIQUE)) return FALSE;
+	if (r_ptr->flags2 & RF2_MULTIPLY) return FALSE;
+	if (r_ptr->flags7 & (RF7_FRIENDLY | RF7_CHAMELEON)) return FALSE;
+	if (r_ptr->flags7 & RF7_AQUATIC) return FALSE;
+	
+	if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
+		return FALSE;
+
+	return (*(get_monster_hook()))(r_idx);
+}
+
+
 /*
  *  Set initial racial appearance of a monster
  */
 static int initial_r_appearance(int r_idx)
 {
+ 	int attempts = 1000;
+
 	int ap_r_idx;
 	int min = MIN(base_level-5, 50);
 
 	if (!(r_info[r_idx].flags7 & RF7_TANUKI))
 		return r_idx;
 
-	get_mon_num_prep(monster_hook_chameleon, NULL);
+	get_mon_num_prep(monster_hook_tanuki, NULL);
 
-	while (1)
+	while (--attempts)
 	{
 		ap_r_idx = get_mon_num(base_level + 10);
-		if (r_info[ap_r_idx].flags7 & RF7_AQUATIC) continue;
-		if (r_info[ap_r_idx].level >= min) break;
+		if (r_info[ap_r_idx].level >= min) return ap_r_idx;
 	}
-	return ap_r_idx;
+
+	return r_idx;
 }
 
 
