@@ -1188,7 +1188,7 @@ static bool cmd_racial_power_aux(s32b command)
 			}
 			else if (command == -4)
 			{
-				if (!buki_motteruka(INVEN_RARM))
+				if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
 				{
 #ifdef JP
 					msg_print("武器を持たないといけません。");

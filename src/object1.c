@@ -4084,131 +4084,86 @@ cptr mention_use(int i)
 	switch (i)
 	{
 #ifdef JP
-case INVEN_RARM: p = p_ptr->ryoute ? " 両手" : (left_hander ? " 左手" : " 右手"); break;
+		case INVEN_RARM:  p = p_ptr->heavy_wield[0] ? "運搬中" : ((p_ptr->ryoute && p_ptr->migite) ? " 両手" : (left_hander ? " 左手" : " 右手")); break;
 #else
-		case INVEN_RARM: p = "Wielding"; break;
+		case INVEN_RARM:  p = p_ptr->heavy_wield[0] ? "Just lifting" : (p_ptr->migite ? "Wielding" : "On arm"); break;
 #endif
 
 #ifdef JP
-case INVEN_LARM:   p = (left_hander ? " 右手" : " 左手"); break;
+		case INVEN_LARM:  p = p_ptr->heavy_wield[1] ? "運搬中" : ((p_ptr->ryoute && p_ptr->hidarite) ? " 両手" : (left_hander ? " 右手" : " 左手")); break;
 #else
-		case INVEN_LARM:   p = "On arm"; break;
+		case INVEN_LARM:  p = p_ptr->heavy_wield[1] ? "Just lifting" : (p_ptr->hidarite ? "Wielding" : "On arm"); break;
 #endif
 
 #ifdef JP
-case INVEN_BOW:   p = "射撃用"; break;
+		case INVEN_BOW:   p = (adj_str_hold[p_ptr->stat_ind[A_STR]] < inventory[i].weight / 10) ? "運搬中" : "射撃用"; break;
 #else
-		case INVEN_BOW:   p = "Shooting"; break;
+		case INVEN_BOW:   p = (adj_str_hold[p_ptr->stat_ind[A_STR]] < inventory[i].weight / 10) ? "Just holding" : "Shooting"; break;
 #endif
 
 #ifdef JP
-case INVEN_LEFT:  p = (left_hander ? "右手指" : "左手指"); break;
+		case INVEN_RIGHT: p = (left_hander ? "左手指" : "右手指"); break;
 #else
-		case INVEN_LEFT:  p = "On left hand"; break;
+		case INVEN_RIGHT: p = (left_hander ? "On left hand" : "On right hand"); break;
 #endif
 
 #ifdef JP
-case INVEN_RIGHT: p = (left_hander ? "左手指" : "右手指"); break;
+		case INVEN_LEFT:  p = (left_hander ? "右手指" : "左手指"); break;
 #else
-		case INVEN_RIGHT: p = "On right hand"; break;
+		case INVEN_LEFT:  p = (left_hander ? "On right hand" : "On left hand"); break;
 #endif
 
 #ifdef JP
-case INVEN_NECK:  p = "  首"; break;
+		case INVEN_NECK:  p = "  首"; break;
 #else
 		case INVEN_NECK:  p = "Around neck"; break;
 #endif
 
 #ifdef JP
-case INVEN_LITE:  p = " 光源"; break;
+		case INVEN_LITE:  p = " 光源"; break;
 #else
 		case INVEN_LITE:  p = "Light source"; break;
 #endif
 
 #ifdef JP
-case INVEN_BODY:  p = "  体"; break;
+		case INVEN_BODY:  p = "  体"; break;
 #else
 		case INVEN_BODY:  p = "On body"; break;
 #endif
 
 #ifdef JP
-case INVEN_OUTER: p = "体の上"; break;
+		case INVEN_OUTER: p = "体の上"; break;
 #else
 		case INVEN_OUTER: p = "About body"; break;
 #endif
 
 #ifdef JP
-case INVEN_HEAD:  p = "  頭"; break;
+		case INVEN_HEAD:  p = "  頭"; break;
 #else
 		case INVEN_HEAD:  p = "On head"; break;
 #endif
 
 #ifdef JP
-case INVEN_HANDS: p = "  手"; break;
+		case INVEN_HANDS: p = "  手"; break;
 #else
 		case INVEN_HANDS: p = "On hands"; break;
 #endif
 
 #ifdef JP
-case INVEN_FEET:  p = "  足"; break;
+		case INVEN_FEET:  p = "  足"; break;
 #else
 		case INVEN_FEET:  p = "On feet"; break;
 #endif
 
 #ifdef JP
-default:          p = "ザック"; break;
+		default:          p = "ザック"; break;
 #else
 		default:          p = "In pack"; break;
 #endif
-
-	}
-
-	/* Hack -- Heavy weapon */
-	if (i == INVEN_RARM)
-	{
-		if (p_ptr->heavy_wield[0])
-		{
-#ifdef JP
-p = "運搬中";
-#else
-			p = "Just lifting";
-#endif
-
-		}
-	}
-
-	/* Hack -- Heavy weapon */
-	if (i == INVEN_LARM)
-	{
-		if (p_ptr->heavy_wield[1])
-		{
-#ifdef JP
-p = "運搬中";
-#else
-			p = "Just lifting";
-#endif
-
-		}
-	}
-
-	/* Hack -- Heavy bow */
-	if (i == INVEN_BOW)
-	{
-		object_type *o_ptr;
-		o_ptr = &inventory[i];
-		if (adj_str_hold[p_ptr->stat_ind[A_STR]] < o_ptr->weight / 10)
-		{
-#ifdef JP
-p = "運搬中";
-#else
-			p = "Just holding";
-#endif
-
-		}
 	}
 
 	/* Return the result */
-	return (p);
+	return p;
 }
 
 
@@ -4223,118 +4178,82 @@ cptr describe_use(int i)
 	switch (i)
 	{
 #ifdef JP
-case INVEN_RARM: p = p_ptr->ryoute ? "両手に装備している" : (left_hander ? "左手に装備している" : "右手に装備している"); break;
+		case INVEN_RARM:  p = p_ptr->heavy_wield[0] ? "運搬中の" : ((p_ptr->ryoute && p_ptr->migite) ? "両手に装備している" : (left_hander ? "左手に装備している" : "右手に装備している")); break;
 #else
-		case INVEN_RARM: p = "attacking monsters with"; break;
+		case INVEN_RARM:  p = p_ptr->heavy_wield[0] ? "just lifting" : (p_ptr->migite ? "attacking monsters with" : "wearing on your arm"); break;
 #endif
 
 #ifdef JP
-case INVEN_LARM:   p = (left_hander ? "右手に装備している" : "左手に装備している"); break;
+		case INVEN_LARM:  p = p_ptr->heavy_wield[1] ? "運搬中の" : ((p_ptr->ryoute && p_ptr->hidarite) ? "両手に装備している" : (left_hander ? "右手に装備している" : "左手に装備している")); break;
 #else
-		case INVEN_LARM:   p = "wearing on your arm"; break;
+		case INVEN_LARM:  p = p_ptr->heavy_wield[1] ? "just lifting" : (p_ptr->hidarite ? "attacking monsters with" : "wearing on your arm"); break;
 #endif
 
 #ifdef JP
-case INVEN_BOW:   p = "射撃用に装備している"; break;
+		case INVEN_BOW:   p = (adj_str_hold[p_ptr->stat_ind[A_STR]] < inventory[i].weight / 10) ? "持つだけで精一杯の" : "射撃用に装備している"; break;
 #else
-		case INVEN_BOW:   p = "shooting missiles with"; break;
+		case INVEN_BOW:   p = (adj_str_hold[p_ptr->stat_ind[A_STR]] < inventory[i].weight / 10) ? "just holding" : "shooting missiles with"; break;
 #endif
 
 #ifdef JP
-case INVEN_LEFT:  p = (left_hander ? "右手の指にはめている" : "左手の指にはめている"); break;
+		case INVEN_RIGHT: p = (left_hander ? "左手の指にはめている" : "右手の指にはめている"); break;
 #else
-		case INVEN_LEFT:  p = "wearing on your left hand"; break;
+		case INVEN_RIGHT: p = (left_hander ? "wearing on your left hand" : "wearing on your right hand"); break;
 #endif
 
 #ifdef JP
-case INVEN_RIGHT: p = (left_hander ? "左手の指にはめている" : "右手の指にはめている"); break;
+		case INVEN_LEFT:  p = (left_hander ? "右手の指にはめている" : "左手の指にはめている"); break;
 #else
-		case INVEN_RIGHT: p = "wearing on your right hand"; break;
+		case INVEN_LEFT:  p = (left_hander ? "wearing on your right hand" : "wearing on your left hand"); break;
 #endif
 
 #ifdef JP
-case INVEN_NECK:  p = "首にかけている"; break;
+		case INVEN_NECK:  p = "首にかけている"; break;
 #else
 		case INVEN_NECK:  p = "wearing around your neck"; break;
 #endif
 
 #ifdef JP
-case INVEN_LITE:  p = "光源にしている"; break;
+		case INVEN_LITE:  p = "光源にしている"; break;
 #else
 		case INVEN_LITE:  p = "using to light the way"; break;
 #endif
 
 #ifdef JP
-case INVEN_BODY:  p = "体に着ている"; break;
+		case INVEN_BODY:  p = "体に着ている"; break;
 #else
 		case INVEN_BODY:  p = "wearing on your body"; break;
 #endif
 
 #ifdef JP
-case INVEN_OUTER: p = "身にまとっている"; break;
+		case INVEN_OUTER: p = "身にまとっている"; break;
 #else
 		case INVEN_OUTER: p = "wearing on your back"; break;
 #endif
 
 #ifdef JP
-case INVEN_HEAD:  p = "頭にかぶっている"; break;
+		case INVEN_HEAD:  p = "頭にかぶっている"; break;
 #else
 		case INVEN_HEAD:  p = "wearing on your head"; break;
 #endif
 
 #ifdef JP
-case INVEN_HANDS: p = "手につけている"; break;
+		case INVEN_HANDS: p = "手につけている"; break;
 #else
 		case INVEN_HANDS: p = "wearing on your hands"; break;
 #endif
 
 #ifdef JP
-case INVEN_FEET:  p = "足にはいている"; break;
+		case INVEN_FEET:  p = "足にはいている"; break;
 #else
 		case INVEN_FEET:  p = "wearing on your feet"; break;
 #endif
 
 #ifdef JP
-default:          p = "ザックに入っている"; break;
+		default:          p = "ザックに入っている"; break;
 #else
 		default:          p = "carrying in your pack"; break;
 #endif
-
-	}
-
-	/* Hack -- Heavy weapon */
-	if (i == INVEN_RARM)
-	{
-		object_type *o_ptr;
-		int hold = adj_str_hold[p_ptr->stat_ind[A_STR]];
-
-		if (p_ptr->ryoute) hold *= 2;
-		o_ptr = &inventory[i];
-		if (hold < o_ptr->weight / 10)
-		{
-#ifdef JP
-p = "運搬中の";
-#else
-			p = "just lifting";
-#endif
-
-		}
-	}
-
-	/* Hack -- Heavy bow */
-	if (i == INVEN_BOW)
-	{
-		object_type *o_ptr;
-		o_ptr = &inventory[i];
-		if (adj_str_hold[p_ptr->stat_ind[A_STR]] < o_ptr->weight / 10)
-		{
-#ifdef JP
-p = "持つだけで精一杯の";
-#else
-			p = "just holding";
-#endif
-
-		}
 	}
 
 	/* Return the result */
@@ -4530,14 +4449,14 @@ void display_equip(void)
 		Term_putstr(0, i - INVEN_RARM, 3, TERM_WHITE, tmp_val);
 
 		/* Obtain an item description */
-		if ((i == INVEN_LARM) && p_ptr->ryoute)
+		if ((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute)
 		{
 #ifdef JP
 			strcpy(o_name, "(武器を両手持ち)");
 #else
 			strcpy(o_name, "(wielding with two-hands)");
 #endif
-			attr = 1;
+			attr = TERM_WHITE;
 		}
 		else
 		{
@@ -5068,19 +4987,21 @@ int show_equip(int target_item)
 		o_ptr = &inventory[i];
 
 		/* Is this item acceptable? */
-		if (!item_tester_okay(o_ptr) && (!((i == INVEN_LARM) && p_ptr->ryoute) || item_tester_no_ryoute)) continue;
+		if (!item_tester_okay(o_ptr) &&
+		    (!((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute) ||
+		     item_tester_no_ryoute)) continue;
 
 		/* Description */
 		object_desc(o_name, o_ptr, 0);
 
-		if ((i == INVEN_LARM) && p_ptr->ryoute)
+		if ((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute)
 		{
 #ifdef JP
 			(void)strcpy(out_desc[k],"(武器を両手持ち)");
 #else
 			(void)strcpy(out_desc[k],"(wielding with two-hands)");
 #endif
-			out_color[k] = 1;
+			out_color[k] = TERM_WHITE;
 		}
 		else
 		{
@@ -5609,6 +5530,14 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 	while ((e1 <= e2) && (!get_item_okay(e1))) e1++;
 	while ((e1 <= e2) && (!get_item_okay(e2))) e2--;
 
+	if (equip && p_ptr->ryoute && !item_tester_no_ryoute)
+	{
+		if (p_ptr->migite)
+		{
+			if (e2 < INVEN_LARM) e2 = INVEN_LARM;
+		}
+		else if (p_ptr->hidarite) e1 = INVEN_RARM;
+	}
 
 
 	/* Restrict floor usage */
@@ -6635,6 +6564,15 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 	/* Restrict equipment indexes */
 	while ((e1 <= e2) && (!get_item_okay(e1))) e1++;
 	while ((e1 <= e2) && (!get_item_okay(e2))) e2--;
+
+	if (equip && p_ptr->ryoute && !item_tester_no_ryoute)
+	{
+		if (p_ptr->migite)
+		{
+			if (e2 < INVEN_LARM) e2 = INVEN_LARM;
+		}
+		else if (p_ptr->hidarite) e1 = INVEN_RARM;
+	}
 
 
 	/* Count "okay" floor items */

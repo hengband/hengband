@@ -317,3 +317,13 @@ bool object_is_nameless(object_type *o_ptr)
 	return FALSE;
 }
 
+
+/*
+ * Check if an object is melee weapon and allows wielding with two-hands
+ */
+bool object_allow_two_hands_wielding(object_type *o_ptr)
+{
+	if (object_is_melee_weapon(o_ptr) && ((o_ptr->weight > 99) || (o_ptr->tval == TV_POLEARM))) return TRUE;
+
+	return FALSE;
+}

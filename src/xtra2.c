@@ -5153,7 +5153,7 @@ msg_print("「甦るがよい、我が下僕よ！」");
 #endif
 			break;
 		case REW_CURSE_WP:
-			if (!buki_motteruka(INVEN_RARM)) break;
+			if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM)) break;
 #ifdef JP
 msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
@@ -5168,8 +5168,14 @@ msg_print("「汝、武器に頼ることなかれ。」");
 			msg_print("'Thou reliest too much on thy weapon.'");
 #endif
 
-			object_desc(o_name, &inventory[INVEN_RARM], OD_NAME_ONLY);
-			(void)curse_weapon(FALSE, INVEN_RARM);
+			dummy = INVEN_RARM;
+			if (buki_motteruka(INVEN_LARM))
+			{
+				dummy = INVEN_LARM;
+				if (buki_motteruka(INVEN_RARM) && one_in_(2)) dummy = INVEN_RARM;
+			}
+			object_desc(o_name, &inventory[dummy], OD_NAME_ONLY);
+			(void)curse_weapon(FALSE, dummy);
 #ifdef JP
 			reward = format("%sが破壊された。", o_name);
 #else
@@ -5236,9 +5242,15 @@ msg_print("「我を怒りしめた罪を償うべし。」");
 				case 3:
 					if (one_in_(2))
 					{
-						if (!buki_motteruka(INVEN_RARM)) break;
-						object_desc(o_name, &inventory[INVEN_RARM], OD_NAME_ONLY);
-						(void)curse_weapon(FALSE, INVEN_RARM);
+						if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM)) break;
+						dummy = INVEN_RARM;
+						if (buki_motteruka(INVEN_LARM))
+						{
+							dummy = INVEN_LARM;
+							if (buki_motteruka(INVEN_RARM) && one_in_(2)) dummy = INVEN_RARM;
+						}
+						object_desc(o_name, &inventory[dummy], OD_NAME_ONLY);
+						(void)curse_weapon(FALSE, dummy);
 #ifdef JP
 						reward = format("%sが破壊された。", o_name);
 #else
@@ -5291,7 +5303,19 @@ msg_print("「死ぬがよい、下僕よ！」");
 			}
 			activate_hi_summon(py, px, FALSE);
 			(void)activate_ty_curse(FALSE, &count);
-			if (one_in_(2)) (void)curse_weapon(FALSE, INVEN_RARM);
+			if (one_in_(2))
+			{
+				dummy = 0;
+
+				if (buki_motteruka(INVEN_RARM))
+				{
+					dummy = INVEN_RARM;
+					if (buki_motteruka(INVEN_LARM) && one_in_(2)) dummy = INVEN_LARM;
+				}
+				else if (buki_motteruka(INVEN_LARM)) dummy = INVEN_LARM;
+
+				if (dummy) (void)curse_weapon(FALSE, dummy);
+			}
 			if (one_in_(2)) (void)curse_armor();
 			break;
 		case REW_DESTRUCT:

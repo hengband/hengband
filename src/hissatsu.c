@@ -1184,7 +1184,7 @@ msg_print("混乱していて集中できない！");
 
 		return;
 	}
-	if (!buki_motteruka(INVEN_RARM))
+	if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
 	{
 		if (flush_failure) flush();
 #ifdef JP

@@ -1300,7 +1300,7 @@ extern void update_stuff(void);
 extern void redraw_stuff(void);
 extern void window_stuff(void);
 extern void handle_stuff(void);
-extern s16b empty_hands(bool is_monk);
+extern s16b empty_hands(bool riding_control);
 extern bool heavy_armor(void);
 
 
@@ -1575,6 +1575,7 @@ extern bool object_allow_enchant_melee_weapon(object_type *o_ptr);
 extern bool object_is_smith(object_type *o_ptr);
 extern bool object_is_artifact(object_type *o_ptr);
 extern bool object_is_nameless(object_type *o_ptr);
+extern bool object_allow_two_hands_wielding(object_type *o_ptr);
 
 /* wild.c */
 extern void set_floor_and_wall(byte type);

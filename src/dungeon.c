@@ -3242,6 +3242,7 @@ static void process_world_aux_mutation(void)
 	}
 	if ((p_ptr->muta2 & MUT2_DISARM) && one_in_(10000))
 	{
+		int slot = 0;
 		object_type *o_ptr;
 
 		disturb(0, 0);
@@ -3253,27 +3254,32 @@ static void process_world_aux_mutation(void)
 		take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->wt / 6), "tripping", -1);
 #endif
 
-
 		msg_print(NULL);
 		if (buki_motteruka(INVEN_RARM))
 		{
-			int slot = INVEN_RARM;
+			slot = INVEN_RARM;
 			o_ptr = &inventory[INVEN_RARM];
+
 			if (buki_motteruka(INVEN_LARM) && one_in_(2))
 			{
 				o_ptr = &inventory[INVEN_LARM];
 				slot = INVEN_LARM;
 			}
-			if (!object_is_cursed(o_ptr))
-			{
-#ifdef JP
-				msg_print("武器を落してしまった！");
-#else
-				msg_print("You drop your weapon!");
-#endif
+		}
+		else if (buki_motteruka(INVEN_LARM))
+		{
+			o_ptr = &inventory[INVEN_LARM];
+			slot = INVEN_LARM;
+		}
 
-				inven_drop(slot, 1);
-			}
+		if (slot && !object_is_cursed(o_ptr))
+		{
+#ifdef JP
+			msg_print("武器を落してしまった！");
+#else
+			msg_print("You drop your weapon!");
+#endif
+			inven_drop(slot, 1);
 		}
 	}
 }

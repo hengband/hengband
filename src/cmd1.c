@@ -1975,7 +1975,8 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 	monster_type    *m_ptr = &m_list[c_ptr->m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 
-	object_type     *o_ptr;
+	/* Access the weapon */
+	object_type     *o_ptr = &inventory[INVEN_RARM + hand];
 
 	char            m_name[80];
 
@@ -2032,7 +2033,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 		break;
 	}
 
-	if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
+	if (!o_ptr->k_idx) /* Empty hand */
 	{
 		if ((r_ptr->level + 10) > p_ptr->lev)
 		{
@@ -2050,7 +2051,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 			}
 		}
 	}
-	else
+	else if (object_is_melee_weapon(o_ptr))
 	{
 		if ((r_ptr->level + 10) > p_ptr->lev)
 		{
@@ -2076,9 +2077,6 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 
 	/* Extract monster name (or "it") */
 	monster_desc(m_name, m_ptr, 0);
-
-	/* Access the weapon */
-	o_ptr = &inventory[INVEN_RARM+hand];
 
 	/* Calculate the "attack quality" */
 	bonus = p_ptr->to_h[hand] + o_ptr->to_h;
@@ -3058,6 +3056,17 @@ bool py_attack(int y, int x, int mode)
 	disturb(0, 0);
 
 	energy_use = 100;
+
+	if (!p_ptr->migite && !p_ptr->hidarite &&
+	    !(p_ptr->muta2 & (MUT2_HORNS | MUT2_BEAK | MUT2_SCOR_TAIL | MUT2_TRUNK | MUT2_TENTACLES)))
+	{
+#ifdef JP
+		msg_print("両手がふさがって攻撃できない。");
+#else
+		msg_print("You cannot do attacking.");
+#endif
+		return FALSE;
+	}
 
 	if (m_ptr->csleep) /* It is not honorable etc to attack helpless victims */
 	{

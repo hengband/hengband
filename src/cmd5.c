@@ -6114,28 +6114,84 @@ power_desc[num] = "Î¥¤ì¤Æ¤¤¤í";
 
 	powers[num++] = PET_NAME;
 
-	if (p_ptr->riding && buki_motteruka(INVEN_RARM) && (empty_hands(FALSE) & EMPTY_HAND_LARM) && ((inventory[INVEN_RARM].weight > 99) || (inventory[INVEN_RARM].tval == TV_POLEARM)))
+	if (p_ptr->riding)
 	{
-		if (p_ptr->pet_extra_flags & PF_RYOUTE)
+		if ((p_ptr->migite && (empty_hands(FALSE) == EMPTY_HAND_LARM) &&
+		     object_allow_two_hands_wielding(&inventory[INVEN_RARM])) ||
+		    (p_ptr->hidarite && (empty_hands(FALSE) == EMPTY_HAND_RARM) &&
+			 object_allow_two_hands_wielding(&inventory[INVEN_LARM])))
 		{
+			if (p_ptr->pet_extra_flags & PF_RYOUTE)
+			{
 #ifdef JP
-			power_desc[num] = "Éð´ï¤òÊÒ¼ê¤Ç»ý¤Ä";
+				power_desc[num] = "Éð´ï¤òÊÒ¼ê¤Ç»ý¤Ä";
 #else
-			power_desc[num] = "use one hand to control a riding pet";
+				power_desc[num] = "use one hand to control a riding pet";
 #endif
+			}
+			else
+			{
+#ifdef JP
+				power_desc[num] = "Éð´ï¤òÎ¾¼ê¤Ç»ý¤Ä";
+#else
+				power_desc[num] = "use both hands for a weapon";
+#endif
+			}
 
+			powers[num++] = PET_RYOUTE;
 		}
 		else
 		{
+			switch (p_ptr->pclass)
+			{
+			case CLASS_MONK:
+			case CLASS_FORCETRAINER:
+			case CLASS_BERSERKER:
+				if (empty_hands(FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM))
+				{
+					if (p_ptr->pet_extra_flags & PF_RYOUTE)
+					{
 #ifdef JP
-			power_desc[num] = "Éð´ï¤òÎ¾¼ê¤Ç»ý¤Ä";
+						power_desc[num] = "ÊÒ¼ê¤Ç³ÊÆ®¤¹¤ë";
 #else
-			power_desc[num] = "use both hands for a weapon.";
+						power_desc[num] = "use one hand to control a riding pet";
 #endif
+					}
+					else
+					{
+#ifdef JP
+						power_desc[num] = "Î¾¼ê¤Ç³ÊÆ®¤¹¤ë";
+#else
+						power_desc[num] = "use both hands for melee";
+#endif
+					}
 
+					powers[num++] = PET_RYOUTE;
+				}
+				else if ((empty_hands(FALSE) != EMPTY_HAND_NONE) && !buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
+				{
+					if (p_ptr->pet_extra_flags & PF_RYOUTE)
+					{
+#ifdef JP
+						power_desc[num] = "³ÊÆ®¤ò¹Ô¤ï¤Ê¤¤";
+#else
+						power_desc[num] = "use one hand to control a riding pet";
+#endif
+					}
+					else
+					{
+#ifdef JP
+						power_desc[num] = "³ÊÆ®¤ò¹Ô¤¦";
+#else
+						power_desc[num] = "use one hand for melee";
+#endif
+					}
+
+					powers[num++] = PET_RYOUTE;
+				}
+				break;
+			}
 		}
-
-		powers[num++] = PET_RYOUTE;
 	}
 
 	/* Nothing chosen yet */

@@ -3884,7 +3884,7 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 	}
 	else if (boomerang)
 	{
-		if (buki_motteruka(INVEN_LARM))
+		if (buki_motteruka(INVEN_RARM) && buki_motteruka(INVEN_LARM))
 		{
 			item_tester_hook = item_tester_hook_boomerang;
 #ifdef JP
@@ -3901,10 +3901,8 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 				return FALSE;
 			}
 		}
-		else
-		{
-			item = INVEN_RARM;
-		}
+		else if (buki_motteruka(INVEN_LARM)) item = INVEN_LARM;
+		else item = INVEN_RARM;
 	}
 	else
 	{

@@ -2913,7 +2913,7 @@ static int weight_limit(void)
 
 bool buki_motteruka(int i)
 {
-	return ((inventory[i].k_idx && inventory[i].tval >= TV_DIGGING && inventory[i].tval <= TV_SWORD) ? TRUE : FALSE);
+	return ((inventory[i].k_idx && object_is_melee_weapon(&inventory[i])) ? TRUE : FALSE);
 }
 
 
@@ -2941,6 +2941,8 @@ void calc_bonuses(void)
 {
 	int             i, j, hold, neutral[2];
 	int             new_speed;
+	int             default_hand = 0;
+	int             empty_hands_status = empty_hands(TRUE);
 	int             extra_blows[2];
 	int             extra_shots;
 	object_type     *o_ptr;
@@ -3134,14 +3136,55 @@ void calc_bonuses(void)
 	/* Base skill -- digging */
 	p_ptr->skill_dig = 0;
 
-	if (buki_motteruka(INVEN_RARM) && (empty_hands(FALSE) & EMPTY_HAND_LARM) && ((inventory[INVEN_RARM].weight > 99) || (inventory[INVEN_RARM].tval == TV_POLEARM)) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE))) p_ptr->ryoute = TRUE;
-	if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_BERSERKER)) && (empty_hands(TRUE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE))) p_ptr->ryoute = TRUE;
-	if (buki_motteruka(INVEN_RARM) || !buki_motteruka(INVEN_LARM)) p_ptr->migite = TRUE;
-	if (buki_motteruka(INVEN_LARM)) p_ptr->hidarite = TRUE;
+	if (buki_motteruka(INVEN_RARM)) p_ptr->migite = TRUE;
+	if (buki_motteruka(INVEN_LARM))
+	{
+		p_ptr->hidarite = TRUE;
+		if (!p_ptr->migite) default_hand = 1;
+	}
+
+	if (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE))
+	{
+		if (p_ptr->migite && (empty_hands(FALSE) == EMPTY_HAND_LARM) &&
+			object_allow_two_hands_wielding(&inventory[INVEN_RARM]))
+		{
+			p_ptr->ryoute = TRUE;
+		}
+		else if (p_ptr->hidarite && (empty_hands(FALSE) == EMPTY_HAND_RARM) &&
+			object_allow_two_hands_wielding(&inventory[INVEN_LARM]))
+		{
+			p_ptr->ryoute = TRUE;
+		}
+		else
+		{
+			switch (p_ptr->pclass)
+			{
+			case CLASS_MONK:
+			case CLASS_FORCETRAINER:
+			case CLASS_BERSERKER:
+				if (empty_hands(FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM))
+				{
+					p_ptr->migite = TRUE;
+					p_ptr->ryoute = TRUE;
+				}
+				break;
+			}
+		}
+	}
+
+	if (!p_ptr->migite && !p_ptr->hidarite)
+	{
+		if (empty_hands_status & EMPTY_HAND_RARM) p_ptr->migite = TRUE;
+		else if (empty_hands_status == EMPTY_HAND_LARM)
+		{
+			p_ptr->hidarite = TRUE;
+			default_hand = 1;
+		}
+	}
 
 	if (p_ptr->special_defense & KAMAE_MASK)
 	{
-		if (!(empty_hands(TRUE) & EMPTY_HAND_RARM))
+		if (!(empty_hands_status & EMPTY_HAND_RARM))
 		{
 			set_action(ACTION_NONE);
 		}
@@ -3219,7 +3262,8 @@ void calc_bonuses(void)
 				new_speed -= (p_ptr->lev) / 10;
 				p_ptr->skill_stl -= (p_ptr->lev)/10;
 			}
-			else if (!inventory[INVEN_LARM].tval || p_ptr->hidarite)
+			else if ((!inventory[INVEN_RARM].k_idx || p_ptr->migite) &&
+			         (!inventory[INVEN_LARM].k_idx || p_ptr->hidarite))
 			{
 				new_speed += 3;
 				if (!(prace_is_(RACE_KLACKON) ||
@@ -3232,7 +3276,8 @@ void calc_bonuses(void)
 				if  (p_ptr->lev > 24)
 					p_ptr->free_act = TRUE;
 			}
-			if (!inventory[INVEN_LARM].tval || p_ptr->hidarite)
+			if ((!inventory[INVEN_RARM].k_idx || p_ptr->migite) &&
+			    (!inventory[INVEN_LARM].k_idx || p_ptr->hidarite))
 			{
 				p_ptr->to_a += p_ptr->lev/2+5;
 				p_ptr->dis_to_a += p_ptr->lev/2+5;
@@ -4074,14 +4119,14 @@ void calc_bonuses(void)
 		else
 		{
 			/* Apply the bonuses to hit/damage */
-			p_ptr->to_h[0] += bonus_to_h;
-			p_ptr->to_d[0] += bonus_to_d;
+			p_ptr->to_h[default_hand] += bonus_to_h;
+			p_ptr->to_d[default_hand] += bonus_to_d;
 
 			/* Apply the mental bonuses to hit/damage, if known */
 			if (object_is_known(o_ptr))
 			{
-				p_ptr->dis_to_h[0] += bonus_to_h;
-				p_ptr->dis_to_d[0] += bonus_to_d;
+				p_ptr->dis_to_h[default_hand] += bonus_to_h;
+				p_ptr->dis_to_d[default_hand] += bonus_to_d;
 			}
 		}
 	}
@@ -4478,10 +4523,11 @@ void calc_bonuses(void)
 
 	if (p_ptr->special_defense & KAMAE_SUZAKU) new_speed += 10;
 
-	if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
+	if ((p_ptr->migite && (empty_hands_status & EMPTY_HAND_RARM)) ||
+	    (p_ptr->hidarite && (empty_hands_status & EMPTY_HAND_LARM)))
 	{
-		p_ptr->to_h[0] += (p_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
-		p_ptr->dis_to_h[0] += (p_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
+		p_ptr->to_h[default_hand] += (p_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
+		p_ptr->dis_to_h[default_hand] += (p_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
 	}
 
 	if (buki_motteruka(INVEN_RARM) && buki_motteruka(INVEN_LARM))
@@ -4899,7 +4945,7 @@ void calc_bonuses(void)
 			p_ptr->to_d[i] += p_ptr->lev/6;
 			p_ptr->dis_to_h[i] += p_ptr->lev/5;
 			p_ptr->dis_to_d[i] += p_ptr->lev/6;
-			if (!p_ptr->hidarite || p_ptr->ryoute)
+			if (((i == 0) && !p_ptr->hidarite) || p_ptr->ryoute)
 			{
 				p_ptr->to_h[i] += p_ptr->lev/5;
 				p_ptr->to_d[i] += p_ptr->lev/6;
@@ -4968,7 +5014,20 @@ void calc_bonuses(void)
 		int penalty = 0;
 
 		p_ptr->riding_ryoute = FALSE;
+
 		if (p_ptr->ryoute || (empty_hands(FALSE) == EMPTY_HAND_NONE)) p_ptr->riding_ryoute = TRUE;
+		else if (p_ptr->pet_extra_flags & PF_RYOUTE)
+		{
+			switch (p_ptr->pclass)
+			{
+			case CLASS_MONK:
+			case CLASS_FORCETRAINER:
+			case CLASS_BERSERKER:
+				if ((empty_hands(FALSE) != EMPTY_HAND_NONE) && !buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
+					p_ptr->riding_ryoute = TRUE;
+				break;
+			}
+		}
 
 		if ((p_ptr->pclass == CLASS_BEASTMASTER) || (p_ptr->pclass == CLASS_CAVALRY))
 		{
@@ -4986,7 +5045,8 @@ void calc_bonuses(void)
 	}
 
 	/* Different calculation for monks with empty hands */
-	if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_BERSERKER)) && (empty_hands(TRUE) & EMPTY_HAND_RARM))
+	if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_BERSERKER)) &&
+		(empty_hands_status & EMPTY_HAND_RARM) && !p_ptr->hidarite)
 	{
 		int blow_base = p_ptr->lev + adj_dex_blow[p_ptr->stat_ind[A_DEX]];
 		p_ptr->num_blow[0] = 0;
@@ -5153,13 +5213,13 @@ void calc_bonuses(void)
 		bonus_to_d = ((int)(adj_str_td[p_ptr->stat_ind[A_STR]]) - 128)/2;
 		bonus_to_h = ((int)(adj_str_th[p_ptr->stat_ind[A_STR]]) - 128) + ((int)(adj_dex_th[p_ptr->stat_ind[A_DEX]]) - 128);
 
-		p_ptr->to_h[0] += MAX(bonus_to_h,1);
-		p_ptr->dis_to_h[0] += MAX(bonus_to_h,1);
-		p_ptr->to_d[0] += MAX(bonus_to_d,1);
-		p_ptr->dis_to_d[0] += MAX(bonus_to_d,1);
+		p_ptr->to_h[default_hand] += MAX(bonus_to_h,1);
+		p_ptr->dis_to_h[default_hand] += MAX(bonus_to_h,1);
+		p_ptr->to_d[default_hand] += MAX(bonus_to_d,1);
+		p_ptr->dis_to_d[default_hand] += MAX(bonus_to_d,1);
 	}
 
-	if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_BERSERKER)) && (empty_hands(TRUE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM))) p_ptr->ryoute = FALSE;
+	if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_BERSERKER)) && (empty_hands(FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM))) p_ptr->ryoute = FALSE;
 
 	/* Affect Skill -- stealth (bonus one) */
 	p_ptr->skill_stl += 1;
@@ -5439,7 +5499,7 @@ void calc_bonuses(void)
 		if (p_ptr->riding_ryoute)
 		{
 #ifdef JP
-			msg_print("両手がふさがっていて馬を操れない。");
+			msg_format("%s馬を操れない。", (empty_hands(FALSE) == EMPTY_HAND_NONE) ? "両手がふさがっていて" : "");
 #else
 			msg_print("You are using both hand for fighting, and you can't control a riding pet.");
 #endif
@@ -5447,7 +5507,7 @@ void calc_bonuses(void)
 		else
 		{
 #ifdef JP
-			msg_print("手が空いて馬を操れるようになった。");
+			msg_format("%s馬を操れるようになった。", (empty_hands(FALSE) == EMPTY_HAND_NONE) ? "手が空いて" : "");
 #else
 			msg_print("You began to control riding pet with one hand.");
 #endif
@@ -5983,13 +6043,19 @@ void handle_stuff(void)
 }
 
 
-s16b empty_hands(bool is_monk)
+s16b empty_hands(bool riding_control)
 {
 	s16b status = EMPTY_HAND_NONE;
-	if (is_monk && (p_ptr->pclass != CLASS_MONK) && (p_ptr->pclass != CLASS_FORCETRAINER) && (p_ptr->pclass != CLASS_BERSERKER)) return EMPTY_HAND_NONE;
 
-	if (!(inventory[INVEN_RARM].k_idx)) status |= EMPTY_HAND_RARM;
-	if (!(inventory[INVEN_LARM].k_idx)) status |= EMPTY_HAND_LARM;
+	if (!inventory[INVEN_RARM].k_idx) status |= EMPTY_HAND_RARM;
+	if (!inventory[INVEN_LARM].k_idx) status |= EMPTY_HAND_LARM;
+
+	if (riding_control && (status != EMPTY_HAND_NONE) && p_ptr->riding && !(p_ptr->pet_extra_flags & PF_RYOUTE))
+	{
+		if (status & EMPTY_HAND_LARM) status &= ~(EMPTY_HAND_LARM);
+		else if (status & EMPTY_HAND_RARM) status &= ~(EMPTY_HAND_RARM);
+	}
+
 	return status;
 }
 

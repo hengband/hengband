@@ -4001,8 +4001,12 @@ msg_format("%sを $%ldで売却しました。", o_name, (long)price);
 			display_inventory();
 		}
 	}
-	if (item >= INVEN_RARM) calc_android_exp();
-	if ((choice == 0) && ((item == INVEN_RARM) || (item == INVEN_LARM))) kamaenaoshi(item);
+
+	if ((choice == 0) && (item >= INVEN_RARM))
+	{
+		calc_android_exp();
+		kamaenaoshi(item);
+	}
 }
 
 

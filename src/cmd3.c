@@ -219,6 +219,8 @@ void do_cmd_wield(void)
 
 	cptr q, s;
 
+	int need_switch_wielding = 0;
+
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
 		set_action(ACTION_NONE);
@@ -260,6 +262,7 @@ void do_cmd_wield(void)
 	case TV_CAPTURE:
 	case TV_SHIELD:
 	case TV_CARD:
+		/* Dual wielding */
 		if (buki_motteruka(INVEN_RARM) && buki_motteruka(INVEN_LARM))
 		{
 			/* Restrict the choices */
@@ -276,27 +279,28 @@ void do_cmd_wield(void)
 #endif
 
 			if (!get_item(&slot, q, s, (USE_EQUIP))) return;
-			if ((slot == INVEN_RARM) && !object_is_cursed(&inventory[INVEN_RARM]))
-			{
-				object_type *or_ptr = &inventory[INVEN_RARM];
-				object_type *ol_ptr = &inventory[INVEN_LARM];
-				object_type object_tmp;
-				object_type *otmp_ptr = &object_tmp;
-				char ol_name[MAX_NLEN];
+			if (slot == INVEN_RARM) need_switch_wielding = INVEN_LARM;
+		}
 
-				object_desc(ol_name, ol_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+		else if (buki_motteruka(INVEN_LARM)) slot = INVEN_RARM;
 
-				object_copy(otmp_ptr, ol_ptr);
-				object_copy(ol_ptr, or_ptr);
-				object_copy(or_ptr, otmp_ptr);
+		/* Both arms are already used by non-weapon */
+		else if (inventory[INVEN_RARM].k_idx && !object_is_melee_weapon(&inventory[INVEN_RARM]) &&
+		         inventory[INVEN_LARM].k_idx && !object_is_melee_weapon(&inventory[INVEN_LARM]))
+		{
+			/* Restrict the choices */
+			item_tester_hook = item_tester_hook_mochikae;
+
+			/* Choose a hand */
 #ifdef JP
-				msg_format("%sを%sに構えなおした。", ol_name, left_hander ? "左手" : "右手");
+			q = "どちらの手に装備しますか?";
+			s = "おっと。";
 #else
-				msg_format("You wield %s at %s hand.", ol_name, left_hander ? "left" : "right");
+			q = "Equip which hand? ";
+			s = "Oops.";
 #endif
 
-				slot = INVEN_LARM;
-			}
+			if (!get_item(&slot, q, s, (USE_EQUIP))) return;
 		}
 		break;
 
@@ -312,6 +316,15 @@ void do_cmd_wield(void)
 			if (!get_check("二刀流で戦いますか？")) slot = INVEN_RARM;
 #else
 			if (!get_check("Dual wielding? ")) slot = INVEN_RARM;
+#endif
+		}
+
+		else if (!inventory[INVEN_RARM].k_idx && buki_motteruka(INVEN_LARM))
+		{
+#ifdef JP
+			if (!get_check("二刀流で戦いますか？")) slot = INVEN_LARM;
+#else
+			if (!get_check("Dual wielding? ")) slot = INVEN_LARM;
 #endif
 		}
 
@@ -331,6 +344,8 @@ void do_cmd_wield(void)
 #endif
 
 			if (!get_item(&slot, q, s, (USE_EQUIP))) return;
+			if ((slot == INVEN_LARM) && !buki_motteruka(INVEN_RARM))
+				need_switch_wielding = INVEN_RARM;
 		}
 		break;
 
@@ -407,6 +422,28 @@ sprintf(dummy, "%sを装備すると吸血鬼になります。よろしいですか？", o_name);
 #endif
 
 		if (!get_check(dummy)) return;
+	}
+
+	if (need_switch_wielding && !object_is_cursed(&inventory[need_switch_wielding]))
+	{
+		object_type *slot_o_ptr = &inventory[slot];
+		object_type *switch_o_ptr = &inventory[need_switch_wielding];
+		object_type object_tmp;
+		object_type *otmp_ptr = &object_tmp;
+		char switch_name[MAX_NLEN];
+
+		object_desc(switch_name, switch_o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+
+		object_copy(otmp_ptr, switch_o_ptr);
+		object_copy(switch_o_ptr, slot_o_ptr);
+		object_copy(slot_o_ptr, otmp_ptr);
+#ifdef JP
+		msg_format("%sを%sに構えなおした。", switch_name, (slot == INVEN_RARM) ? (left_hander ? "左手" : "右手") : (left_hander ? "右手" : "左手"));
+#else
+		msg_format("You wield %s at %s hand.", switch_name, (slot == INVEN_RARM) ? (left_hander ? "left" : "right") : (left_hander ? "right" : "left"));
+#endif
+
+		slot = need_switch_wielding;
 	}
 
 	/* Check if completed a quest */
@@ -486,7 +523,7 @@ msg_print("クエストを達成した！");
 	switch (slot)
 	{
 	case INVEN_RARM:
-		if ((o_ptr->tval != TV_SHIELD) && (o_ptr->tval != TV_CAPTURE) && (o_ptr->tval != TV_CARD) && (empty_hands(FALSE) & EMPTY_HAND_LARM) && ((o_ptr->weight > 99) || (o_ptr->tval == TV_POLEARM)) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
+		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(FALSE) == EMPTY_HAND_LARM) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
 #ifdef JP
 			act = "%s(%c)を両手で構えた。";
 #else
@@ -501,10 +538,17 @@ msg_print("クエストを達成した！");
 		break;
 
 	case INVEN_LARM:
+		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(FALSE) == EMPTY_HAND_RARM) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
 #ifdef JP
-		act = (left_hander ? "%s(%c)を右手に装備した。" : "%s(%c)を左手に装備した。");
+			act = "%s(%c)を両手で構えた。";
 #else
-		act = (left_hander ? "You are wielding %s (%c) on right hand." : "You are wielding %s (%c) on left hand.");
+			act = "You are wielding %s (%c) with both hands.";
+#endif
+		else
+#ifdef JP
+			act = (left_hander ? "%s(%c)を右手に装備した。" : "%s(%c)を左手に装備した。");
+#else
+			act = (left_hander ? "You are wielding %s (%c) on right hand." : "You are wielding %s (%c) on left hand.");
 #endif
 		break;
 
@@ -584,53 +628,68 @@ msg_print("クエストを達成した！");
 
 void kamaenaoshi(int item)
 {
-	object_type *o_ptr, *o2_ptr;
+	object_type *o_ptr, *new_o_ptr;
 	char o_name[MAX_NLEN];
 
-	if ((item == INVEN_RARM) && buki_motteruka(INVEN_LARM))
+	if (item == INVEN_RARM)
 	{
-		o_ptr = &inventory[INVEN_RARM];
-		o2_ptr = &inventory[INVEN_LARM];
-		object_copy(o_ptr, o2_ptr);
-		p_ptr->total_weight += o2_ptr->weight;
-		inven_item_increase(INVEN_LARM,-1);
-		inven_item_optimize(INVEN_LARM);
-		object_desc(o_name, o_ptr, 0);
-		if (((o_ptr->weight > 99) || (o_ptr->tval == TV_POLEARM)) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
+		if (buki_motteruka(INVEN_LARM))
+		{
+			o_ptr = &inventory[INVEN_LARM];
+			object_desc(o_name, o_ptr, 0);
+
+			if (!object_is_cursed(o_ptr))
+			{
+				new_o_ptr = &inventory[INVEN_RARM];
+				object_copy(new_o_ptr, o_ptr);
+				p_ptr->total_weight += o_ptr->weight;
+				inven_item_increase(INVEN_LARM, -((int)o_ptr->number));
+				inven_item_optimize(INVEN_LARM);
+				if (object_allow_two_hands_wielding(o_ptr) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
 #ifdef JP
-			msg_format("%sを両手で構えた。", o_name );
+					msg_format("%sを両手で構えた。", o_name);
 #else
-			msg_format("You are wielding %s with both hands.", o_name );
+					msg_format("You are wielding %s with both hands.", o_name);
 #endif
-		 else
+				 else
 #ifdef JP
-			msg_format("%sを%sで構えた。", o_name, (left_hander ? "左手" : "右手"));
+					msg_format("%sを%sで構えた。", o_name, (left_hander ? "左手" : "右手"));
 #else
-			msg_format("You are wielding %s on %s hand.", o_name, (left_hander ? "left":"right") );
+					msg_format("You are wielding %s on %s hand.", o_name, (left_hander ? "left":"right"));
 #endif
+			}
+			else
+			{
+				if (object_allow_two_hands_wielding(o_ptr) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
+#ifdef JP
+					msg_format("%sを両手で構えた。", o_name);
+#else
+					msg_format("You are wielding %s with both hands.", o_name);
+#endif
+			}
+		}
 	}
 	else if (item == INVEN_LARM)
 	{
+		o_ptr = &inventory[INVEN_RARM];
+		if (o_ptr->k_idx) object_desc(o_name, o_ptr, 0);
+
 		if (buki_motteruka(INVEN_RARM))
 		{
-			o_ptr = &inventory[INVEN_RARM];
-			object_desc(o_name, o_ptr, 0);
-			if (((o_ptr->weight > 99) || (o_ptr->tval == TV_POLEARM)) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
+			if (object_allow_two_hands_wielding(o_ptr) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
 #ifdef JP
-				msg_format("%sを両手で構えた。", o_name );
+				msg_format("%sを両手で構えた。", o_name);
 #else
-				msg_format("You are wielding %s with both hands.", o_name );
+				msg_format("You are wielding %s with both hands.", o_name);
 #endif
 		}
-		else if (!(empty_hands(FALSE) & EMPTY_HAND_RARM))
+		else if (!(empty_hands(FALSE) & EMPTY_HAND_RARM) && !object_is_cursed(o_ptr))
 		{
-			o_ptr = &inventory[INVEN_LARM];
-			o2_ptr = &inventory[INVEN_RARM];
-			object_copy(o_ptr, o2_ptr);
-			p_ptr->total_weight += o2_ptr->weight;
-			inven_item_increase(INVEN_RARM,-1);
+			new_o_ptr = &inventory[INVEN_LARM];
+			object_copy(new_o_ptr, o_ptr);
+			p_ptr->total_weight += o_ptr->weight;
+			inven_item_increase(INVEN_RARM, -((int)o_ptr->number));
 			inven_item_optimize(INVEN_RARM);
-			object_desc(o_name, o_ptr, 0);
 #ifdef JP
 			msg_format("%sを持ち替えた。", o_name);
 #else
@@ -826,9 +885,11 @@ void do_cmd_drop(void)
 	/* Drop (some of) the item */
 	inven_drop(item, amt);
 
-	if ((item == INVEN_RARM) || (item == INVEN_LARM)) kamaenaoshi(item);
-
-	if (item >= INVEN_RARM) calc_android_exp();
+	if (item >= INVEN_RARM)
+	{
+		kamaenaoshi(item);
+		calc_android_exp();
+	}
 
 	p_ptr->redraw |= (PR_EQUIPPY);
 }

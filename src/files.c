@@ -1682,61 +1682,55 @@ static void display_player_one_line(int entry, cptr val, byte attr)
 }
 
 
+static void display_player_melee_bonus(int hand, int hand_entry)
+{
+	char buf[160];
+	int show_tohit = p_ptr->dis_to_h[hand];
+	int show_todam = p_ptr->dis_to_d[hand];
+	object_type *o_ptr = &inventory[INVEN_RARM + hand];
+
+	/* Hack -- add in weapon info if known */
+	if (object_is_known(o_ptr)) show_tohit += o_ptr->to_h;
+	if (object_is_known(o_ptr)) show_todam += o_ptr->to_d;
+
+	/* Melee attacks */
+	sprintf(buf, "(%+d,%+d)", show_tohit, show_todam);
+
+	/* Dump the bonuses to hit/dam */
+	if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
+		display_player_one_line(ENTRY_BARE_HAND, buf, TERM_L_BLUE);
+	else if (p_ptr->ryoute)
+		display_player_one_line(ENTRY_TWO_HANDS, buf, TERM_L_BLUE);
+	else
+		display_player_one_line(hand_entry, buf, TERM_L_BLUE);
+}
+
+
 /*
  * Prints the following information on the screen.
  */
 static void display_player_middle(void)
 {
 	char buf[160];
-	int show_tohit, show_todam;
-	object_type *o_ptr;
+
+	/* Base skill */
+	int show_tohit = p_ptr->dis_to_h_b;
+	int show_todam = 0;
+
+	/* Range weapon */
+	object_type *o_ptr = &inventory[INVEN_BOW];
+
 	int tmul = 0;
 	int e;
 
-	if(p_ptr->migite)
+	if (p_ptr->migite)
 	{
-		show_tohit = p_ptr->dis_to_h[0];
-		show_todam = p_ptr->dis_to_d[0];
-
-		o_ptr = &inventory[INVEN_RARM];
-
-		/* Hack -- add in weapon info if known */
-		if (object_is_known(o_ptr)) show_tohit += o_ptr->to_h;
-		if (object_is_known(o_ptr)) show_todam += o_ptr->to_d;
-
-		/* Melee attacks */
-		sprintf(buf, "(%+d,%+d)", show_tohit, show_todam);
-
-		/* Dump the bonuses to hit/dam */
-		if(!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
-			display_player_one_line(ENTRY_BARE_HAND, buf, TERM_L_BLUE);
-		else if(p_ptr->ryoute)
-			display_player_one_line(ENTRY_TWO_HANDS, buf, TERM_L_BLUE);
-		else if (left_hander)
-			display_player_one_line(ENTRY_LEFT_HAND1, buf, TERM_L_BLUE);
-		else
-			display_player_one_line(ENTRY_RIGHT_HAND1, buf, TERM_L_BLUE);
+		display_player_melee_bonus(0, left_hander ? ENTRY_LEFT_HAND1 : ENTRY_RIGHT_HAND1);
 	}
 
-	if(p_ptr->hidarite)
+	if (p_ptr->hidarite)
 	{
-		show_tohit = p_ptr->dis_to_h[1];
-		show_todam = p_ptr->dis_to_d[1];
-
-		o_ptr = &inventory[INVEN_LARM];
-
-		/* Hack -- add in weapon info if known */
-		if (object_is_known(o_ptr)) show_tohit += o_ptr->to_h;
-		if (object_is_known(o_ptr)) show_todam += o_ptr->to_d;
-
-		/* Melee attacks */
-		sprintf(buf, "(%+d,%+d)", show_tohit, show_todam);
-
-		/* Dump the bonuses to hit/dam */
-		if (left_hander)
-			display_player_one_line(ENTRY_RIGHT_HAND2, buf, TERM_L_BLUE);
-		else
-			display_player_one_line(ENTRY_LEFT_HAND2, buf, TERM_L_BLUE);
+		display_player_melee_bonus(1, left_hander ? ENTRY_RIGHT_HAND2: ENTRY_LEFT_HAND2);
 	}
 	else if ((p_ptr->pclass == CLASS_MONK) && (empty_hands(TRUE) & EMPTY_HAND_RARM))
 	{
@@ -1761,13 +1755,6 @@ static void display_player_middle(void)
 				display_player_one_line(ENTRY_POSTURE, "none", TERM_YELLOW);
 #endif
 	}
-
-	/* Range weapon */
-	o_ptr = &inventory[INVEN_BOW];
-
-	/* Base skill */
-	show_tohit = p_ptr->dis_to_h_b;
-	show_todam = 0;
 
 	/* Apply weapon bonuses */
 	if (object_is_known(o_ptr)) show_tohit += o_ptr->to_h;
@@ -2270,7 +2257,8 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 			add_flag(flgs, TR_SPEED);
 		else
 		{
-			if (!inventory[INVEN_LARM].tval || p_ptr->hidarite)
+			if ((!inventory[INVEN_RARM].k_idx || p_ptr->migite) &&
+			    (!inventory[INVEN_LARM].k_idx || p_ptr->hidarite))
 				add_flag(flgs, TR_SPEED);
 			if (p_ptr->lev>24)
 				add_flag(flgs, TR_FREE_ACT);
@@ -4823,7 +4811,7 @@ static void dump_aux_equipment_inventory(FILE *fff)
 		for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 		{
 			object_desc(o_name, &inventory[i], 0);
-			if ((i == INVEN_LARM) && p_ptr->ryoute)
+			if ((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute)
 #ifdef JP
 				strcpy(o_name, "(武器を両手持ち)");
 #else
