@@ -333,9 +333,8 @@ static void close_auto_dump(void)
 
 
 /*
- *   Take note to the dialy.
+ *   Take note to the diary.
  */
-
 errr do_cmd_write_nikki(int type, int num, cptr note)
 {
 	int day, hour, min;
@@ -459,7 +458,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 #ifdef JP
 			fprintf(fff, " %2d:%02d %20s %sを発見した。\n", hour, min, note_level, note);
 #else
-			fprintf(fff, " %2d:%02d %20s discover %s.\n", hour, min, note_level, note);
+			fprintf(fff, " %2d:%02d %20s discovered %s.\n", hour, min, note_level, note);
 #endif
 			break;
 		}
@@ -567,13 +566,13 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 #ifdef JP
 				fprintf(fff, " %2d:%02d %20s 帰還を使って%sの%d階へ下りた。\n", hour, min, note_level, d_name+d_info[dungeon_type].name, max_dlv[dungeon_type]);
 #else
-				fprintf(fff, " %2d:%02d %20s recall to dungeon level %d of %s.\n", hour, min, note_level, max_dlv[dungeon_type], d_name+d_info[dungeon_type].name);
+				fprintf(fff, " %2d:%02d %20s recalled to dungeon level %d of %s.\n", hour, min, note_level, max_dlv[dungeon_type], d_name+d_info[dungeon_type].name);
 #endif
 			else
 #ifdef JP
 				fprintf(fff, " %2d:%02d %20s 帰還を使って地上へと戻った。\n", hour, min, note_level);
 #else
-				fprintf(fff, " %2d:%02d %20s recall from dungeon to surface.\n", hour, min, note_level);
+				fprintf(fff, " %2d:%02d %20s recalled from dungeon to surface.\n", hour, min, note_level);
 #endif
 			break;
 		}
@@ -583,7 +582,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 #ifdef JP
 			fprintf(fff, " %2d:%02d %20s クエスト「%s」へと突入した。\n", hour, min, note_level, quest[num].name);
 #else
-			fprintf(fff, " %2d:%02d %20s enter quest '%s'.\n", hour, min, note_level, quest[num].name);
+			fprintf(fff, " %2d:%02d %20s entered the quest '%s'.\n", hour, min, note_level, quest[num].name);
 #endif
 			break;
 		}
@@ -592,7 +591,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 #ifdef JP
 			fprintf(fff, " %2d:%02d %20s レベル・テレポートで脱出した。\n", hour, min, note_level);
 #else
-			fprintf(fff, " %2d:%02d %20s Get out using teleport level.\n", hour, min, note_level);
+			fprintf(fff, " %2d:%02d %20s Got out using teleport level.\n", hour, min, note_level);
 #endif
 			break;
 		}
@@ -601,7 +600,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 #ifdef JP
 			fprintf(fff, " %2d:%02d %20s %sを購入した。\n", hour, min, note_level, note);
 #else
-			fprintf(fff, " %2d:%02d %20s buy %s.\n", hour, min, note_level, note);
+			fprintf(fff, " %2d:%02d %20s bought %s.\n", hour, min, note_level, note);
 #endif
 			break;
 		}
@@ -610,7 +609,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 #ifdef JP
 			fprintf(fff, " %2d:%02d %20s %sを売却した。\n", hour, min, note_level, note);
 #else
-			fprintf(fff, " %2d:%02d %20s sell %s.\n", hour, min, note_level, note);
+			fprintf(fff, " %2d:%02d %20s sold %s.\n", hour, min, note_level, note);
 #endif
 			break;
 		}
@@ -630,14 +629,14 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 #ifdef JP
 			fprintf(fff, " %2d:%02d %20s 闘技場の%d回戦(%s)に勝利した。\n", hour, min, note_level, num, note);
 #else
-			fprintf(fff, " %2d:%02d %20s win the %d%s fight (%s).\n", hour, min, note_level, num, (num%10==1?"st":num%10==2?"nd":num%10==3?"rd":"th"), note);
+			fprintf(fff, " %2d:%02d %20s won the %d%s fight (%s).\n", hour, min, note_level, num, (num%10==1?"st":num%10==2?"nd":num%10==3?"rd":"th"), note);
 #endif
 			if (num == MAX_ARENA_MONS)
 			{
 #ifdef JP
 				fprintf(fff, "                 闘技場のすべての敵に勝利し、チャンピオンとなった。\n");
 #else
-				fprintf(fff, "                 win all fight to become a Chanpion.\n");
+				fprintf(fff, "                 won all fight to become a Chanpion.\n");
 #endif
 				do_level = FALSE;
 			}
@@ -648,7 +647,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 #ifdef JP
 			fprintf(fff, " %2d:%02d %20s %sを識別した。\n", hour, min, note_level, note);
 #else
-			fprintf(fff, " %2d:%02d %20s identify %s.\n", hour, min, note_level, note);
+			fprintf(fff, " %2d:%02d %20s identified %s.\n", hour, min, note_level, note);
 #endif
 			break;
 		}
@@ -694,7 +693,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 #ifdef JP
 			fprintf(fff, " %2d:%02d %20s %sへとパターンの力で移動した。\n", hour, min, note_level, to);
 #else
-			fprintf(fff, " %2d:%02d %20s use Pattern to teleport to %s.\n", hour, min, note_level, to);
+			fprintf(fff, " %2d:%02d %20s used Pattern to teleport to %s.\n", hour, min, note_level, to);
 #endif
 			break;
 		}
@@ -703,7 +702,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 #ifdef JP
 			fprintf(fff, " %2d:%02d %20s レベルが%dに上がった。\n", hour, min, note_level, num);
 #else
-			fprintf(fff, " %2d:%02d %20s reach player level %d.\n", hour, min, note_level, num);
+			fprintf(fff, " %2d:%02d %20s reached player level %d.\n", hour, min, note_level, num);
 #endif
 			break;
 		}
@@ -728,56 +727,56 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 #ifdef JP
 					fprintf(fff, "%sを旅の友にすることに決めた。\n", note);
 #else
-					fprintf(fff, "decide to travel together with %s.\n", note);
+					fprintf(fff, "decided to travel together with %s.\n", note);
 #endif
 					break;
 				case 1:
 #ifdef JP
 					fprintf(fff, "%sの名前を消した。\n", note);
 #else
-					fprintf(fff, "unname %s.\n", note);
+					fprintf(fff, "unnamed %s.\n", note);
 #endif
 					break;
 				case 2:
 #ifdef JP
 					fprintf(fff, "%sを解放した。\n", note);
 #else
-					fprintf(fff, "dismiss %s.\n", note);
+					fprintf(fff, "dismissed %s.\n", note);
 #endif
 					break;
 				case 3:
 #ifdef JP
 					fprintf(fff, "%sが死んでしまった。\n", note);
 #else
-					fprintf(fff, "%s die.\n", note);
+					fprintf(fff, "%s died.\n", note);
 #endif
 					break;
 				case 4:
 #ifdef JP
 					fprintf(fff, "%sをおいて別のマップへ移動した。\n", note);
 #else
-					fprintf(fff, "move to other map leaving %s behind.\n", note);
+					fprintf(fff, "moved to another map leaving %s behind.\n", note);
 #endif
 					break;
 				case 5:
 #ifdef JP
 					fprintf(fff, "%sとはぐれてしまった。\n", note);
 #else
-					fprintf(fff, "lose sight of %s.\n", note);
+					fprintf(fff, "lost sight of %s.\n", note);
 #endif
 					break;
 				case 6:
 #ifdef JP
 					fprintf(fff, "%sが*破壊*によって消え去った。\n", note);
 #else
-					fprintf(fff, "%s is made disappeared by *destruction*.\n", note);
+					fprintf(fff, "%s was made disappeared by *destruction*.\n", note);
 #endif
 					break;
 				case 7:
 #ifdef JP
 					fprintf(fff, "%sが岩石に押し潰された。\n", note);
 #else
-					fprintf(fff, "%s is crushed by falling rocks.\n", note);
+					fprintf(fff, "%s was crushed by falling rocks.\n", note);
 #endif
 					break;
 				default:
