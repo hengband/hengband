@@ -4202,7 +4202,9 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 		case TV_BOOTS:
 		{
 			/* Elven Cloak and Black Clothes ... */
-			if (o_ptr->pval) o_ptr->pval = randint1(o_ptr->pval);
+			if (((o_ptr->tval == TV_CLOAK) && (o_ptr->sval == SV_ELVEN_CLOAK)) ||
+			    ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_KUROSHOUZOKU)))
+				o_ptr->pval = randint1(4);
 
 #if 1
 			if (power ||
