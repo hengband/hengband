@@ -3457,8 +3457,7 @@ F:WIS | MAGIC_MASTERY | HIDE_TYPE |
 F:RES_CONF | RES_CHAOS | 
 F:SEE_INVIS | FREE_ACT | REGEN | HOLD_LIFE | ACTIVATE |
 F:INSTA_ART
-D:聖騎士の説明だよ。
-D:そのうちなんかかくよ。
+D:これを身につけたプレイヤーは呪いをはね返すことができる。
 
 N:218:地獄の
 E:of the Hell
@@ -3469,8 +3468,7 @@ F:INT | WIS | CHR | STEALTH | SPEED | HIDE_TYPE |
 F:RES_DARK | RES_NETHER |
 F:SEE_INVIS | AGGRAVATE | ESP_UNDEAD | ACTIVATE |
 F:INSTA_ART
-D:地獄の説明だよ。
-D:そのうちなんかかくよ。
+D:地獄の囚人を拘束する首輪だ。多くの囚人の怨念が込められている。
 
 N:219:帯魔力
 E:The Charmed
@@ -3481,8 +3479,6 @@ F:INT | CHR | INFRA | SEARCH | HIDE_TYPE |
 F:SEE_INVIS | FREE_ACT | SLOW_DIGEST | REGEN | LITE | WARNING |
 F:SH_FIRE | SH_ELEC | SH_COLD | ACTIVATE |
 F:INSTA_ART
-D:帯魔力の説明だよ。
-D:そのうちなんかかくよ。
 
 N:220:ものまねの始祖ゴゴの
 E:of Gogo
@@ -3492,6 +3488,4 @@ P:0:0d0:0:0:0
 F:INT | WIS | DEX | 
 F:SEE_INVIS | LITE |
 F:INSTA_ART
-D:ゴゴの説明だよ。
-D:そのうちなんかかくよ。
 
