@@ -3666,7 +3666,7 @@ static bool cmd_visuals_aux(int i, int *num, int max)
 static void print_visuals_menu(cptr choice_msg)
 {
 #ifdef JP
-	prt("画面表示の設定", 1, 0);
+	prt("[ 画面表示の設定 ]", 1, 0);
 #else
 	prt("Interact with Visuals", 1, 0);
 #endif
