@@ -5009,7 +5009,7 @@ bool probing(void)
 			if ((r_ptr->flags3 & RF3_EVIL) && (r_ptr->flags3 & RF3_GOOD)) align = "good&evil";
 			else if (r_ptr->flags3 & RF3_EVIL) align = "evil";
 			else if (r_ptr->flags3 & RF3_GOOD) align = "good";
-			else if ((m_ptr->sub_align & SUB_ALIGN_EVIL) && (m_ptr->sub_align & SUB_ALIGN_GOOD)) align = "neutral(good and evil)";
+			else if ((m_ptr->sub_align & SUB_ALIGN_EVIL) && (m_ptr->sub_align & SUB_ALIGN_GOOD)) align = "neutral(good&evil)";
 			else if (m_ptr->sub_align & SUB_ALIGN_EVIL) align = "neutral(evil)";
 			else if (m_ptr->sub_align & SUB_ALIGN_GOOD) align = "neutral(good)";
 			else align = "neutral";
