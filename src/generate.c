@@ -144,9 +144,8 @@ static bool alloc_stairs(int feat, int num, int walls)
                 {
 			monster_race *r_ptr = &r_info[quest[q_idx].r_idx];
 
-			/* The unique monster is still alive? */
-			if ((r_ptr->flags1 & RF1_UNIQUE) &&
-                            (0 < r_ptr->max_num))
+			/* The quest monster(s) is still alive? */
+			if (!(r_ptr->flags1 & RF1_UNIQUE) || 0 < r_ptr->max_num)
                                 return TRUE;
                 }
 

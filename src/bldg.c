@@ -4632,7 +4632,7 @@ void quest_discovery(int q_idx)
 
                 /* Hack -- "unique" monsters must be "unique" */
                 if ((r_ptr->flags1 & RF1_UNIQUE) &&
-                    (r_ptr->cur_num >= r_ptr->max_num))
+                    (0 == r_ptr->max_num))
                 {
 #ifdef JP
                         msg_print("この階は以前は誰かによって守られていたようだ…。");
