@@ -53,7 +53,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"アイテムを識別する。",
 		"モンスター1体を減速さる。抵抗されると無効。",
 		"視界内の全てのモンスターを眠らせる。抵抗されると無効。",
-		"モンスター1体をテレポートさせる。抵抗されると無効。",
+		"モンスターをテレポートさせるビームを放つ。抵抗されると無効。",
 		"一定時間、加速する。",
 		"近くの全てのモンスター、罠、扉、階段、財宝、そしてアイテムを感知する。",
 		"アイテムの持つ能力を完全に知る。",
@@ -130,7 +130,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"自分を中心とした轟音の球を発生させる。",
 		"純粋な魔力のビームを放つ。",
 		"炎の球を放つ。",
-		"モンスター1体をテレポートさせる。抵抗されると無効。",
+		"モンスターをテレポートさせるビームを放つ。抵抗されると無効。",
 		"周辺のアイテム、モンスター、地形を破壊する。",
 		"巨大なカオスの球を放つ。",
 
@@ -198,7 +198,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"最深階を変更する。",
 		"遠距離のテレポートをする。",
 		"一定時間、テレパシー能力を得る。",
-		"モンスター1体をテレポートさせる。抵抗されると無効。",
+		"モンスターをテレポートさせるビームを放つ。抵抗されると無効。",
 		"1体の動物を召喚する。",
 
 		"アイテムを自分の足元へ移動させる。",
@@ -256,11 +256,11 @@ static cptr spell_tips[VALID_REALM][32] =
 		"壁を溶かして床にする。",
 		"光線を放つ。光りを嫌うモンスターに効果がある。",
 		"満腹にする。",
-		"一定時間、透明なものが見えるようになる。",
 
+		"一定時間、透明なものが見えるようになる。",
 		"1体のエレメンタルを召喚する。",
 		"瞬時に上か下の階にテレポートする。",
-		"モンスター1体をテレポートさせる。抵抗されると無効。",
+		"モンスターをテレポートさせるビームを放つ。抵抗されると無効。",
 		"炎、電撃、冷気、酸のどれかの球を放つ。",
 		"近くの全てのモンスター、罠、扉、階段、財宝、そしてアイテムを感知する。",
 		"地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。",
@@ -512,7 +512,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"identifies an item.",
 		"attempts to slow a monster.",
 		"attempts to sleep all monsters in sight.",
-		"attempts to teleport a monster away.",
+		"teleports all monsters on the line away unless resisted.",
 		"hastes you for a while.",
 		"detects all monsters, traps, doors, stairs, treasures and items in your vicinity.",
 		"*identifies* an item.",
@@ -525,6 +525,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"teleport to up or down stairs in a moment.",
 		"recalls player from dungeon to town, or from town to the deepest level of dungeon.",
 		"teleport to given location.",
+
 		"proves all monsters' alignment, HP, speed and their true character.",
 		"sets a glyph under you. The glyph will explode when a monster moves on it.",
 		"pulls a distant item close to you.",
@@ -557,7 +558,6 @@ static cptr spell_tips[VALID_REALM][32] =
 		"creates a stair which goes down or up.",
 		"gives bonus to AC for a while.",
 		"gives resistance to fire, cold, electricity, acid and poison for a while. These resistances can be added to which from equipment for more powerful resistances.",
-
 		"creates trees in all adjacent squares.",
 		"attempts to charm all animals in sight.",
 		"*identifies* an item.",
@@ -589,7 +589,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"generates a ball of sound centered on you.",
 		"fires a beam of pure mana.",
 		"fires a ball of fire.",
-		"attempts to teleport a monster away.",
+		"teleports all monsters on the line away unless resisted.",
 		"destroy everything in nearby area.",
 		"fires a huge ball of chaos.",
 
@@ -657,7 +657,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"resets the 'deepest' level for recall spell.",
 		"teleport long distance.",
 		"gives telepathy for a while.",
-		"attempts to teleport a monster away.",
+		"teleports all monsters on the line away unless resisted.",
 		"attempts to charm an animal.",
 
 		"pulls a distant item close to you.",
@@ -715,11 +715,11 @@ static cptr spell_tips[VALID_REALM][32] =
 		"turns one rock square to mud.",
 		"fires a beam of light which damages to light-sensitive monsters.",
 		"satisfies hunger.",
-		"gives see invisible for a while.",
 
+		"gives see invisible for a while.",
 		"summons an elemental.",
 		"teleport to up or down stairs in a moment.",
-		"attempts to teleport a monster away.",
+		"teleports all monsters on the line away unless resisted.",
 		"fires a ball of some elements.",
 		"detects all monsters, traps, doors, stairs, treasures and items in your vicinity.",
 		"recalls player from dungeon to town, or from town to the deepest level of dungeon.",
@@ -849,7 +849,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"lights up nearby area and the inside of a room permanently.",
 		"attempts to scare all monsters in sight.",
 		"removes fear, and gives bonus to hit and 10 more HP for a while.",
-		
+
 		"detects traps, doors and stairs in your vicinity. and detects all monsters at level 15, treasures and items at level 20. maps nearby area at level 25. lights and know the whole level at level 40. These effects occurs by turns while this song continues.",
 		"damages all monsters in sight with PSI damages.",
 		"identifies all items which are in the adjacent squares.",
