@@ -3571,7 +3571,8 @@ void move_player(int dir, int do_pickup, bool break_trap)
 	/* Player can not walk through "walls"... */
 	/* unless in Shadow Form */
 	p_can_kill_walls = p_ptr->kill_wall && have_flag(f_ptr->flags, FF_TUNNEL) &&
-		!cave_floor_grid(c_ptr) && cave_valid_bold(y, x);
+		(!p_can_enter || !have_flag(f_ptr->flags, FF_LOS)) &&
+		!have_flag(f_ptr->flags, FF_PERMANENT);
 
 	/* Hack -- attack monsters */
 	if (c_ptr->m_idx && (m_ptr->ml || p_can_enter || p_can_kill_walls))
