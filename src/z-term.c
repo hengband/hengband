@@ -17,9 +17,9 @@
 
 /* Special flags in the attr data */
 #define AF_BIGTILE2 0xf0
+#define AF_TILE1   0x80
 
 #ifdef JP
-#define AF_TILE1   0x80
 #define AF_KANJI1  0x10
 #define AF_KANJI2  0x20
 #define AF_KANJIC  0x0f
