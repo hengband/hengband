@@ -412,4 +412,4 @@
 --------
 Mr.hoge
 http://echizen.s5.xrea.com/heng/
-echizen¡÷s5.xrea.com
+echizen¡÷users.sourceforge.jp
