@@ -77,6 +77,8 @@ bool is_trap(int feat)
 		case FEAT_TRAP_TRAPS:
 		case FEAT_TRAP_ALARM:
                 case FEAT_TRAP_OPEN:
+                case FEAT_TRAP_ARMAGEDDON:
+                case FEAT_TRAP_PIRANHA:
 		{
 			/* A trap */
 			return (TRUE);

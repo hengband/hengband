@@ -1065,6 +1065,10 @@
 /* unknown grid (not detected)  */
 #define FEAT_UNDETECTD          0xc4
 
+/* special traps */
+#define FEAT_TRAP_ARMAGEDDON    0xc5
+#define FEAT_TRAP_PIRANHA       0xc6
+
 /*
  * Wilderness terrains
  */
@@ -2681,6 +2685,7 @@
 #define SUMMON_GUARDIANS            62
 #define SUMMON_KNIGHTS              63
 #define SUMMON_EAGLES               64
+#define SUMMON_PIRANHAS             65
 
 
 /*
@@ -4550,6 +4555,7 @@ extern int PlayerUID;
 #define MON_WOLF          54
 #define MON_FANG          55
 #define MON_LOUSE         69
+#define MON_PIRANHA       70
 #define MON_COPPER_COINS  85
 #define MON_NOV_PALADIN   97
 #define MON_GREEN_G       100

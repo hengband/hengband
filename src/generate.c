@@ -692,6 +692,9 @@ if (cheat_room) msg_print("小さな地下室を却下します。");
 
 				/* Type 13 -- Trapped monster pit (5%) */
 				if ((k < 37) && room_build(y, x, 13)) continue;
+
+				/* Type 14 -- Trapped room (5%) */
+				if ((k < 42) && room_build(y, x, 14)) continue;
 #endif
 
 			}

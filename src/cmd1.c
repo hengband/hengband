@@ -1622,6 +1622,65 @@ msg_print("まばゆい閃光が走った！");
 
                         break;
                 }
+
+                case FEAT_TRAP_ARMAGEDDON:
+                {
+                        static int levs[10] = {0, 0, 20, 10, 5, 3, 2, 1, 1, 1};
+
+                        int lev;
+#ifdef JP
+                        msg_print("突然天界の戦争に巻き込まれた！");
+#else
+                        msg_print("Suddenly, you are surrounded by immotal beings!");
+#endif
+
+			/* Destroy this trap */
+			cave_set_feat(y, x, floor_type[randint0(100)]);
+
+                        /* Summon Demons and Angels */
+                        for (lev = dun_level; lev >= 20; lev -= 1 + lev/16)
+                        {
+                                num = levs[MIN(lev/10, 9)];
+                                for (i = 0; i < num; i++)
+                                {
+                                        int x1 = rand_spread(x, 7);
+                                        int y1 = rand_spread(y, 5);
+
+                                        /* Skip illegal grids */
+                                        if (!in_bounds(y1, x1)) continue;
+
+                                        /* Require line of sight */
+                                        if (!player_has_los_bold(y1, x1)) continue;
+
+                                        (void)summon_specific(0, y1, x1, lev, SUMMON_DEMON, (PM_NO_PET));
+                                        (void)summon_specific(0, y1, x1, lev, SUMMON_ANGEL, (PM_NO_PET));
+                                }
+                        }
+                        break;
+                }
+
+                case FEAT_TRAP_PIRANHA:
+                {
+#ifdef JP
+                        msg_print("突然壁から水が溢れ出した！ピラニアがいる！");
+#else
+                        msg_print("Suddenly, the room is filled with water with piranhas!");
+#endif
+
+			/* Destroy this trap */
+			cave_set_feat(y, x, floor_type[randint0(100)]);
+
+			/* Water fills room */
+                        fire_ball_hide(GF_WATER_FLOW, 0, 1, 10);
+
+                        /* Summon Piranhas */
+			num = 1 + dun_level/20;
+			for (i = 0; i < num; i++)
+			{
+				(void)summon_specific(0, y, x, dun_level, SUMMON_PIRANHAS, (PM_ALLOW_GROUP | PM_NO_PET));
+			}
+                        break;
+                }
 	}
 	if (break_trap && is_trap(c_ptr->feat))
 	{

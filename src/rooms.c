@@ -293,6 +293,7 @@ static bool room_alloc(int x, int y, bool crowded, int by0, int bx0, int *xx, in
  *  11 -- circular rooms
  *  12 -- crypts
  *  13 -- trapped monster pits
+ *  14 -- trapped room
  */
 
 
@@ -5325,7 +5326,6 @@ static void build_type13(int by0, int bx0)
 	/* Place the wall open trap */
 	cave[yval][xval].mimic = cave[yval][xval].feat;
 	cave[yval][xval].feat = FEAT_TRAP_OPEN;
-        add_cave_info(yval, xval, CAVE_ROOM);
 
 	/* Prepare allocation table */
 	get_mon_num_prep(n_ptr->hook_func, vault_aux_trapped_pit);
@@ -5427,6 +5427,93 @@ static void build_type13(int by0, int bx0)
 
 
 /*
+ * Type 14 -- trapped rooms
+ *
+ * A special trap is placed at center of the room
+ */
+static void build_type14(int by0, int bx0)
+{
+	int y, x, y2, x2, yval, xval;
+	int y1, x1, xsize, ysize;
+
+	bool light;
+
+	cave_type *c_ptr;
+        byte trap;
+
+	/* Pick a room size */
+	y1 = randint1(4);
+	x1 = randint1(11);
+	y2 = randint1(3);
+	x2 = randint1(11);
+
+	xsize = x1 + x2 + 1;
+	ysize = y1 + y2 + 1;
+
+	/* Try to allocate space for room.  If fails, exit */
+	if (!room_alloc(xsize + 2, ysize + 2, FALSE, by0, bx0, &xval, &yval)) return;
+
+	/* Choose lite or dark */
+	light = ((dun_level <= randint1(25)) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS));
+
+
+	/* Get corner values */
+	y1 = yval - ysize / 2;
+	x1 = xval - xsize / 2;
+	y2 = yval + (ysize - 1) / 2;
+	x2 = xval + (xsize - 1) / 2;
+
+
+	/* Place a full floor under the room */
+	for (y = y1 - 1; y <= y2 + 1; y++)
+	{
+		for (x = x1 - 1; x <= x2 + 1; x++)
+		{
+			c_ptr = &cave[y][x];
+			place_floor_grid(c_ptr);
+			c_ptr->info |= (CAVE_ROOM);
+			if (light) c_ptr->info |= (CAVE_GLOW);
+		}
+	}
+
+	/* Walls around the room */
+	for (y = y1 - 1; y <= y2 + 1; y++)
+	{
+		c_ptr = &cave[y][x1 - 1];
+		place_outer_grid(c_ptr);
+		c_ptr = &cave[y][x2 + 1];
+		place_outer_grid(c_ptr);
+	}
+	for (x = x1 - 1; x <= x2 + 1; x++)
+	{
+		c_ptr = &cave[y1 - 1][x];
+		place_outer_grid(c_ptr);
+		c_ptr = &cave[y2 + 1][x];
+		place_outer_grid(c_ptr);
+	}
+
+        if (dun_level < 30 + randint1(30))
+                trap = FEAT_TRAP_PIRANHA;
+        else
+                trap = FEAT_TRAP_ARMAGEDDON;
+
+	/* Place a special trap */
+	cave[yval][xval].mimic = cave[yval][xval].feat;
+	cave[yval][xval].feat = trap;
+
+	/* Message */
+	if (cheat_room)
+	{
+#ifdef JP
+                msg_format("%s¤ÎÉô²°", f_name + f_info[trap].name);
+#else
+                msg_format("Room of %s", f_name + f_info[trap].name);
+#endif
+	}
+}
+
+
+/*
  * Attempt to build a room of the given type at the given block
  *
  * Note that we restrict the number of "crowded" rooms to reduce
@@ -5444,6 +5531,7 @@ bool room_build(int by0, int bx0, int typ)
 	switch (typ)
 	{
 		/* Build an appropriate room */
+		case 14: build_type14(by0, bx0); break;
 		case 13: build_type13(by0, bx0); break;
 		case 12: build_type12(by0, bx0); break;
 		case 11: build_type11(by0, bx0); break;

@@ -861,6 +861,11 @@ static bool summon_specific_aux(int r_idx)
                                 (r_ptr->flags8 & RF8_WILD_ONLY));
 			break;
 		}
+		case SUMMON_PIRANHAS:
+		{
+			okay = (r_idx == MON_PIRANHA);
+			break;
+		}
 	}
 
 	/* Result */
