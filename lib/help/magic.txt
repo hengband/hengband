@@ -52,8 +52,8 @@ Warrior-Mage  | 2   | 2 | 2 | 2 | 2   | 2 | 1 | 2 | 2   | 2   |
 Chaos Warrior |     |   |   | 1 |     |   |   |   | 1   |     |
 Monk          | 1   |   | 1 |   | 1   |   |   | 1 |     |     | 
 High Mage     | 1   | 1 | 1 | 1 | 1   | 1 | 1 | 1 | 1   | 1   |
-              |     |   |   |   |     |   | 1 |   |     |     |  
-              |     |   |   |   |     | 1 |   |   |     |     |  
+Tourist       |     |   |   |   |     |   | 1 |   |     |     |  
+BeastMaster   |     |   |   |   |     | 1 |   |   |     |     |  
 ForceTrainer  | 1   |   | 1 |   | 1   |   |   | 1 |     | 1   |  
 Sorcerer      |  All realms
 Red Mage      |  All realms (Lower rank spellbooks only)
