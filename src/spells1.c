@@ -6394,6 +6394,7 @@ msg_print("生命力が体から吸い取られた気がする！");
 static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int typ, int a_rad, int monspell)
 {
 	int k = 0;
+	int rlev;
 
 	/* Hack -- assume obvious */
 	bool obvious = TRUE;
@@ -6483,6 +6484,8 @@ else msg_print("攻撃が跳ね返った！");
 
 	/* Get the source monster */
 	m_ptr = &m_list[who];
+	/* Extract the monster level */
+	rlev = (((&r_info[m_ptr->r_idx])->level >= 1) ? (&r_info[m_ptr->r_idx])->level : 1);
 
 	/* Get the monster name */
 	monster_desc(m_name, m_ptr, 0);
@@ -7467,6 +7470,207 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 			break;
 		}
 
+		/* Mind blast */
+		case GF_MIND_BLAST:
+		{
+			if (randint0(100 + rlev/2) < (MAX(5, p_ptr->skill_sav)))
+			{
+#ifdef JP
+msg_print("しかし効力を跳ね返した！");
+#else
+				msg_print("You resist the effects!");
+#endif
+				learn_spell(MS_MIND_BLAST);
+			}
+			else
+			{
+#ifdef JP
+msg_print("霊的エネルギーで精神が攻撃された。");
+#else
+				msg_print("Your mind is blasted by psyonic energy.");
+#endif
+
+				if (!p_ptr->resist_conf)
+				{
+					(void)set_confused(p_ptr->confused + randint0(4) + 4);
+				}
+
+				if (!p_ptr->resist_chaos && one_in_(3))
+				{
+					(void)set_image(p_ptr->image + randint0(250) + 150);
+				}
+
+				p_ptr->csp -= 50;
+				if (p_ptr->csp < 0)
+				{
+					p_ptr->csp = 0;
+					p_ptr->csp_frac = 0;
+				}
+				p_ptr->redraw |= PR_MANA;
+
+				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, MS_MIND_BLAST);
+			}
+			break;
+		}
+		/* Brain smash */
+		case GF_BRAIN_SMASH:
+		{
+			if (randint0(100 + rlev/2) < (MAX(5, p_ptr->skill_sav)))
+			{
+#ifdef JP
+msg_print("しかし効力を跳ね返した！");
+#else
+				msg_print("You resist the effects!");
+#endif
+				learn_spell(MS_BRAIN_SMASH);
+			}
+			else
+			{
+#ifdef JP
+msg_print("霊的エネルギーで精神が攻撃された。");
+#else
+				msg_print("Your mind is blasted by psionic energy.");
+#endif
+
+				p_ptr->csp -= 100;
+				if (p_ptr->csp < 0)
+				{
+					p_ptr->csp = 0;
+					p_ptr->csp_frac = 0;
+				}
+				p_ptr->redraw |= PR_MANA;
+
+				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, MS_BRAIN_SMASH);
+				if (!p_ptr->resist_blind)
+				{
+					(void)set_blind(p_ptr->blind + 8 + randint0(8));
+				}
+				if (!p_ptr->resist_conf)
+				{
+					(void)set_confused(p_ptr->confused + randint0(4) + 4);
+				}
+				if (!p_ptr->free_act)
+				{
+					(void)set_paralyzed(p_ptr->paralyzed + randint0(4) + 4);
+				}
+				(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
+
+				while (randint0(100 + rlev/2) > (MAX(5, p_ptr->skill_sav)))
+					(void)do_dec_stat(A_INT);
+				while (randint0(100 + rlev/2) > (MAX(5, p_ptr->skill_sav)))
+					(void)do_dec_stat(A_WIS);
+
+				if (!p_ptr->resist_chaos)
+				{
+					(void)set_image(p_ptr->image + randint0(250) + 150);
+				}
+			}
+			break;
+		}
+		/* cause 1 */
+		case GF_CAUSE_1:
+		{
+			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
+			{
+#ifdef JP
+msg_print("しかし効力を跳ね返した！");
+#else
+				msg_print("You resist the effects!");
+#endif
+				learn_spell(MS_CAUSE_1);
+			}
+			else
+			{
+				curse_equipment(15, 0);
+				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, MS_CAUSE_1);
+			}
+			break;
+		}
+		/* cause 2 */
+		case GF_CAUSE_2:
+		{
+			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
+			{
+#ifdef JP
+msg_print("しかし効力を跳ね返した！");
+#else
+				msg_print("You resist the effects!");
+#endif
+				learn_spell(MS_CAUSE_2);
+			}
+			else
+			{
+				curse_equipment(25, MIN(rlev/2-15, 5));
+				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, MS_CAUSE_2);
+			}
+			break;
+		}
+		/* cause 3 */
+		case GF_CAUSE_3:
+		{
+			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
+			{
+#ifdef JP
+msg_print("しかし効力を跳ね返した！");
+#else
+				msg_print("You resist the effects!");
+#endif
+				learn_spell(MS_CAUSE_3);
+			}
+			else
+			{
+				curse_equipment(33, MIN(rlev/2-15, 15));
+				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, MS_CAUSE_3);
+			}
+			break;
+		}
+		/* cause 4 */
+		case GF_CAUSE_4:
+		{
+			if ((randint0(100 + rlev/2) < p_ptr->skill_sav) && !(m_ptr->r_idx == MON_KENSHIROU))
+			{
+#ifdef JP
+msg_print("しかし秘孔を跳ね返した！");
+#else
+				msg_print("You resist the effects!");
+#endif
+				learn_spell(MS_CAUSE_4);
+			}
+			else
+			{
+				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, MS_CAUSE_4);
+				(void)set_cut(p_ptr->cut + damroll(10, 10));
+			}
+			break;
+		}
+		/* Hand of Doom */
+		case GF_HAND_DOOM:
+		{
+			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
+			{
+#ifdef JP
+msg_format("しかし効力を跳ね返した！");
+#else
+				msg_format("You resist the effects!");
+#endif
+				learn_spell(MS_HAND_DOOM);
+
+			}
+			else
+			{
+#ifdef JP
+msg_print("あなたは命が薄まっていくように感じた！");
+#else
+				msg_print("Your feel your life fade away!");
+#endif
+
+				get_damage = take_hit(DAMAGE_ATTACK, dam, m_name, MS_HAND_DOOM);
+				curse_equipment(40, 20);
+
+				if (p_ptr->chp < 1) p_ptr->chp = 1;
+			}
+			break;
+		}
 
 		/* Default */
 		default:

@@ -2616,43 +2616,7 @@ msg_format("%^sがあなたの瞳をじっとにらんでいる。", m_name);
 			}
 
 			dam = damroll(7, 7);
-			if (randint0(100 + rlev/2) < (MAX(5, p_ptr->skill_sav)))
-			{
-#ifdef JP
-msg_print("しかし効力を跳ね返した！");
-#else
-				msg_print("You resist the effects!");
-#endif
-				learn_spell(MS_MIND_BLAST);
-			}
-			else
-			{
-#ifdef JP
-msg_print("霊的エネルギーで精神が攻撃された。");
-#else
-				msg_print("Your mind is blasted by psyonic energy.");
-#endif
-
-				if (!p_ptr->resist_conf)
-				{
-					(void)set_confused(p_ptr->confused + randint0(4) + 4);
-				}
-
-				if (!p_ptr->resist_chaos && one_in_(3))
-				{
-					(void)set_image(p_ptr->image + randint0(250) + 150);
-				}
-
-				p_ptr->csp -= 50;
-				if (p_ptr->csp < 0)
-				{
-					p_ptr->csp = 0;
-					p_ptr->csp_frac = 0;
-				}
-				p_ptr->redraw |= PR_MANA;
-
-				take_hit(DAMAGE_ATTACK, dam, ddesc, MS_MIND_BLAST);
-			}
+			breath(y, x, m_idx, GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST, learnable);
 			break;
 		}
 
@@ -2682,56 +2646,7 @@ msg_format("%^sがあなたの瞳をじっと見ている。", m_name);
 			}
 
 			dam = damroll(12, 12);
-			if (randint0(100 + rlev/2) < (MAX(5, p_ptr->skill_sav)))
-			{
-#ifdef JP
-msg_print("しかし効力を跳ね返した！");
-#else
-				msg_print("You resist the effects!");
-#endif
-				learn_spell(MS_BRAIN_SMASH);
-			}
-			else
-			{
-#ifdef JP
-msg_print("霊的エネルギーで精神が攻撃された。");
-#else
-				msg_print("Your mind is blasted by psionic energy.");
-#endif
-
-				p_ptr->csp -= 100;
-				if (p_ptr->csp < 0)
-				{
-					p_ptr->csp = 0;
-					p_ptr->csp_frac = 0;
-				}
-				p_ptr->redraw |= PR_MANA;
-
-				take_hit(DAMAGE_ATTACK, dam, ddesc, MS_BRAIN_SMASH);
-				if (!p_ptr->resist_blind)
-				{
-					(void)set_blind(p_ptr->blind + 8 + randint0(8));
-				}
-				if (!p_ptr->resist_conf)
-				{
-					(void)set_confused(p_ptr->confused + randint0(4) + 4);
-				}
-				if (!p_ptr->free_act)
-				{
-					(void)set_paralyzed(p_ptr->paralyzed + randint0(4) + 4);
-				}
-				(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
-
-				while (randint0(100 + rlev/2) > (MAX(5, p_ptr->skill_sav)))
-					(void)do_dec_stat(A_INT);
-				while (randint0(100 + rlev/2) > (MAX(5, p_ptr->skill_sav)))
-					(void)do_dec_stat(A_WIS);
-
-				if (!p_ptr->resist_chaos)
-				{
-					(void)set_image(p_ptr->image + randint0(250) + 150);
-				}
-			}
+			breath(y, x, m_idx, GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH, learnable);
 			break;
 		}
 
@@ -2754,20 +2669,7 @@ else msg_format("%^sがあなたを指さして呪った。", m_name);
 #endif
 
 			dam = damroll(3, 8);
-			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
-			{
-#ifdef JP
-msg_print("しかし効力を跳ね返した！");
-#else
-				msg_print("You resist the effects!");
-#endif
-				learn_spell(MS_CAUSE_1);
-			}
-			else
-			{
-				curse_equipment(15, 0);
-				take_hit(DAMAGE_ATTACK, dam, ddesc, MS_CAUSE_1);
-			}
+			breath(y, x, m_idx, GF_CAUSE_1, dam, 0, FALSE, MS_CAUSE_1, learnable);
 			break;
 		}
 
@@ -2790,20 +2692,7 @@ else msg_format("%^sがあなたを指さして恐ろしげに呪った。", m_name);
 #endif
 
 			dam = damroll(8, 8);
-			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
-			{
-#ifdef JP
-msg_print("しかし効力を跳ね返した！");
-#else
-				msg_print("You resist the effects!");
-#endif
-				learn_spell(MS_CAUSE_2);
-			}
-			else
-			{
-				curse_equipment(25, MIN(rlev/2-15, 5));
-				take_hit(DAMAGE_ATTACK, dam, ddesc, MS_CAUSE_2);
-			}
+			breath(y, x, m_idx, GF_CAUSE_2, dam, 0, FALSE, MS_CAUSE_2, learnable);
 			break;
 		}
 
@@ -2826,20 +2715,7 @@ else msg_format("%^sがあなたを指さして恐ろしげに呪文を唱えた！", m_name);
 #endif
 
 			dam = damroll(10, 15);
-			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
-			{
-#ifdef JP
-msg_print("しかし効力を跳ね返した！");
-#else
-				msg_print("You resist the effects!");
-#endif
-				learn_spell(MS_CAUSE_3);
-			}
-			else
-			{
-				curse_equipment(33, MIN(rlev/2-15, 15));
-				take_hit(DAMAGE_ATTACK, dam, ddesc, MS_CAUSE_3);
-			}
+			breath(y, x, m_idx, GF_CAUSE_3, dam, 0, FALSE, MS_CAUSE_3, learnable);
 			break;
 		}
 
@@ -2862,20 +2738,7 @@ else msg_format("%^sがあなたの秘孔を突いて「お前は既に死んでいる」と叫んだ。", m
 #endif
 
 			dam = damroll(15, 15);
-			if ((randint0(100 + rlev/2) < p_ptr->skill_sav) && !(m_ptr->r_idx == MON_KENSHIROU))
-			{
-#ifdef JP
-msg_print("しかし秘孔を跳ね返した！");
-#else
-				msg_print("You resist the effects!");
-#endif
-				learn_spell(MS_CAUSE_4);
-			}
-			else
-			{
-				take_hit(DAMAGE_ATTACK, dam, ddesc, MS_CAUSE_4);
-				(void)set_cut(p_ptr->cut + damroll(10, 10));
-			}
+			breath(y, x, m_idx, GF_CAUSE_4, dam, 0, FALSE, MS_CAUSE_4, learnable);
 			break;
 		}
 
@@ -3403,31 +3266,8 @@ msg_format("%^sが破滅の手を放った！", m_name);
 #else
 			msg_format("%^s invokes the Hand of Doom!", m_name);
 #endif
-
-			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
-			{
-#ifdef JP
-msg_format("しかし効力を跳ね返した！");
-#else
-				msg_format("You resist the effects!");
-#endif
-				learn_spell(MS_HAND_DOOM);
-
-			}
-			else
-			{
-				int dummy = (((s32b) ((40 + randint1(20)) * (p_ptr->chp))) / 100);
-#ifdef JP
-msg_print("あなたは命が薄まっていくように感じた！");
-#else
-				msg_print("Your feel your life fade away!");
-#endif
-
-				take_hit(DAMAGE_ATTACK, dummy, m_name, MS_HAND_DOOM);
-				curse_equipment(40, 20);
-
-				if (p_ptr->chp < 1) p_ptr->chp = 1;
-			}
+			dam = (((s32b) ((40 + randint1(20)) * (p_ptr->chp))) / 100);
+			breath(y, x, m_idx, GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM, learnable);
 			break;
 		}
 
@@ -3742,6 +3582,7 @@ msg_format("%^sがテレポートした。", m_name);
                                         else
                                         {
                                                 int dam = damroll(4, 8);
+						int get_damage = 0;
 #ifdef JP
                                                 msg_format("%^sがあなたを掴んで空中から投げ落した。", m_name);
 #else
@@ -3769,7 +3610,25 @@ msg_format("%^sがテレポートした。", m_name);
                                                         dam += damroll(6, 8);
                                                 }
 
-                                                take_hit(DAMAGE_NOESCAPE, dam, m_name, -1);
+						/* Mega hack -- this special action deals damage to the player. Therefore the code of "eyeeye" is necessary.
+						   -- henkma
+						 */
+                                                get_damage = take_hit(DAMAGE_NOESCAPE, dam, m_name, -1);
+						if (p_ptr->tim_eyeeye && get_damage > 0 && !p_ptr->is_dead)
+						{
+#ifdef JP
+							msg_format("攻撃が%s自身を傷つけた！", m_name);
+#else
+							char m_name_self[80];
+		
+							/* hisself */
+							monster_desc(m_name_self, m_ptr, 0x23);
+
+							msg_format("The attack of %s has wounded %s!", m_name, m_name_self);
+#endif
+							project(0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL | PROJECT_NO_REF, -1);
+							set_tim_eyeeye(p_ptr->tim_eyeeye-5, TRUE);
+						}
                                         }
                                         break;
                                 }
