@@ -1293,9 +1293,7 @@ s32b object_value_real(object_type *o_ptr)
 		case TV_AMULET:
 		{
 			/* Hack -- negative bonuses are bad */
-			if (o_ptr->to_a < 0) return (0L);
-			if (o_ptr->to_h < 0) return (0L);
-			if (o_ptr->to_d < 0) return (0L);
+			if (o_ptr->to_h + o_ptr->to_d + o_ptr->to_a < 0) return (0L);
 
 			/* Give credit for bonuses */
 			value += ((o_ptr->to_h + o_ptr->to_d + o_ptr->to_a) * 200L);
@@ -3392,6 +3390,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 							{
 								o_ptr->name2 = EGO_RING_BERSERKER;
 								o_ptr->to_h -= 2+randint1(4);
+								o_ptr->to_d += 2+randint1(4);
 							}
 							break;
 						case SV_RING_PROTECTION:
