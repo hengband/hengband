@@ -8926,7 +8926,7 @@ void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
 				sprintf(tmp_str, "  %-40s (危険度:%3d階相当) - レベル%2d\n",
 					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev);
 #else
-				sprintf(tmp_str, "  %-40s (Danger level: %3d)  - level %2d\n",
+				sprintf(tmp_str, "  %-40s (Danger  level: %3d) - level %2d\n",
 					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev);
 #endif
 			}
@@ -9001,7 +9001,7 @@ void do_cmd_knowledge_quests_failed(FILE *fff, int quest_num[])
 				sprintf(tmp_str, "  %-40s (危険度:%3d階相当) - レベル%2d\n",
 					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev);
 #else
-				sprintf(tmp_str, "  %-40s (Danger level: %3d)  - level %2d\n",
+				sprintf(tmp_str, "  %-40s (Danger  level: %3d) - level %2d\n",
 					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev);
 #endif
 			}
