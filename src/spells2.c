@@ -6000,14 +6000,69 @@ static void cave_temp_room_unlite(void)
 
 
 /*
+ * Determine how much contiguous open space this grid is next to
+ */
+static int next_to_open(int cy, int cx)
+{
+	int i;
+
+	int y, x;
+
+	int len = 0;
+	int blen = 0;
+
+	for (i = 0; i < 16; i++)
+	{
+		y = cy + ddy_cdd[i % 8];
+		x = cx + ddx_cdd[i % 8];
+
+		/* Found a wall, break the length */
+		if (!cave_floor_bold(y, x))
+		{
+			/* Track best length */
+			if (len > blen)
+			{
+				blen = len;
+			}
+
+			len = 0;
+		}
+		else
+		{
+			len++;
+		}
+	}
+
+	return (MAX(len, blen));
+}
+
+
+static int next_to_walls_adj(int cy, int cx)
+{
+	int i;
+
+	int y, x;
+
+	int c = 0;
+
+	for (i = 0; i < 8; i++)
+	{
+		y = cy + ddy_ddd[i];
+		x = cx + ddx_ddd[i];
+
+		if (!cave_floor_bold(y, x)) c++;
+	}
+
+	return c;
+}
+
+
+/*
  * Aux function -- see below
  */
 static void cave_temp_room_aux(int y, int x)
 {
 	cave_type *c_ptr;
-
-	/* Verify */
-/*	if (!in_bounds(y, x)) return; */
 
 	/* Get the grid */
 	c_ptr = &cave[y][x];
@@ -6016,7 +6071,28 @@ static void cave_temp_room_aux(int y, int x)
 	if (c_ptr->info & (CAVE_TEMP)) return;
 
 	/* Do not "leave" the current room */
-	if (!(c_ptr->info & (CAVE_ROOM))) return;
+	if (!(c_ptr->info & (CAVE_ROOM)))
+	{
+		/* Verify */
+		if (!in_bounds(y, x)) return;
+
+		/* If a wall, exit */
+		if (!cave_floor_bold(y, x)) return;
+
+		/* Do not exceed the maximum spell range */
+		if (distance(py, px, y, x) > MAX_RANGE) return;
+
+		/* Verify this grid */
+		/*
+		 * The reason why it is ==6 instead of >5 is that 8 is impossible
+		 * due to the check for cave_bold above.
+		 * 7 lights dead-end corridors (you need to do this for the
+		 * checkboard interesting rooms, so that the boundary is lit
+		 * properly.
+		 * This leaves only a check for 6 bounding walls!
+		 */
+		if ((next_to_walls_adj(y, x) == 6) && (next_to_open(y, x) <= 1)) return;
+	}
 
 	/* Paranoia -- verify space */
 	if (temp_n == TEMP_MAX) return;
