@@ -1726,7 +1726,7 @@ void do_cmd_options_aux(int page, cptr info)
 	Term_clear();
 
 #ifdef JP
-	if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "以下のオプションは、自動破壊を使用するときのみ有効", 4, 6);
+	if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "以下のオプションは、簡易自動破壊を使用するときのみ有効", 4, 6);
 #else
 	if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "Following options will protect items from easy auto-destroyer.", 4, 3);
 #endif
@@ -2060,7 +2060,7 @@ void do_cmd_options(void)
 		prt("(3)   ゲームプレイ        オプション", 6, 5);
 		prt("(4)   行動中止関係        オプション", 7, 5);
 		prt("(5)      効率化           オプション", 8, 5);
-		prt("(6) アイテム自動拾い/破壊 オプション", 9, 5);
+		prt("(6) 簡易アイテム自動破壊  オプション", 9, 5);
 		prt("(R)    プレイ記録         オプション", 10, 5);
 		/* Special choices */
 		prt("(D)  基本ウェイト量", 12, 5);
@@ -2180,9 +2180,9 @@ void do_cmd_options(void)
                         {
                                 /* Spawn */
 #ifdef JP
-                                do_cmd_options_aux(7, "アイテム自動拾い/破壊オプション");
+                                do_cmd_options_aux(7, "簡易アイテム自動破壊オプション");
 #else
-                                do_cmd_options_aux(7, "Object Auto-Pick/Destroy Options");
+                                do_cmd_options_aux(7, "Easy Auto-Destroyer Options");
 #endif
                                 break;
                         }

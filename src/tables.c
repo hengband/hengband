@@ -6288,14 +6288,6 @@ cptr window_flag_desc[32] =
 /*
  * Available Options
  *
- * Option Screen Sets:
- *
- *      Set 1: User Interface
- *      Set 2: Disturbance
- *      Set 3: Inventory
- *      Set 4: Game Play
- *
- * Note that bits 28-31 of set 0 are currently unused.
  */
 option_type option_info[] =
 {
@@ -7186,7 +7178,7 @@ option_type option_info[] =
 
 #ifdef JP
         { &destroy_items,               FALSE, 7, 7, 0,
-        "destroy_items",                "アイテムの自動破壊を使用する" },
+        "destroy_items",                "アイテムの簡易自動破壊を使用する" },
 #else
         { &destroy_items,               FALSE, 7, 7, 0,
         "destroy_items",                "Use easy auto-destroyer" },

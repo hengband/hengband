@@ -4836,7 +4836,7 @@ msg_print("キャラクタ情報のファイルへの書き出しに成功しました。");
 /*
  * Recursive file perusal.
  *
- * Return FALSE on "ESCAPE", otherwise TRUE.
+ * Return FALSE on 'Q', otherwise TRUE.
  *
  * Process various special text in the input file, including
  * the "menu" structures used by the "help file" system.
@@ -5344,7 +5344,7 @@ strcpy(tmp, "jhelp.hlp");
 
 			if (askfor_aux(tmp, 80))
 			{
-				if (!show_file(TRUE, tmp, NULL, 0, mode)) k = ESCAPE;
+				if (!show_file(TRUE, tmp, NULL, 0, mode)) k = 'q';
 			}
 		}
 
@@ -5382,13 +5382,13 @@ strcpy(tmp, "jhelp.hlp");
 				case TRUE:
 				{
 					strcpy(tmp, "j_com_r.txt");
-					if(!show_file(TRUE, tmp, NULL, 0, mode)) k = ESCAPE;
+					if(!show_file(TRUE, tmp, NULL, 0, mode)) k = 'q';
 					break;
 				}
 				case FALSE:
 				{
 					strcpy(tmp, "j_com_o.txt");
-					if(!show_file(TRUE, tmp, NULL, 0, mode)) k = ESCAPE;
+					if(!show_file(TRUE, tmp, NULL, 0, mode)) k = 'q';
 					break;
 				}
 			}
@@ -5407,7 +5407,7 @@ strcpy(tmp, "jhelp.hlp");
 			{
 				/* Recurse on that file */
 				if (!show_file(TRUE, hook[key], NULL, 0, mode))
-					k = ESCAPE;
+					k = 'q';
 			}
 		}
 
@@ -5477,13 +5477,14 @@ msg_print("ファイルが見つかりません。");
 
 		/* Exit on escape */
 		if (k == ESCAPE) break;
+		if (k == 'q') break;
 	}
 
 	/* Close the file */
 	my_fclose(fff);
 
 	/* Escape */
-	if (k == ESCAPE) return (FALSE);
+	if (k == 'q') return (FALSE);
 
 	/* Normal return */
 	return (TRUE);
