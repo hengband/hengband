@@ -2229,7 +2229,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 	if ((o_ptr->tval == TV_BOLT) || (o_ptr->tval == TV_ARROW) || (o_ptr->tval == TV_SHOT))
 	{
 		tohit2 = (tohit2+1)/2;
-		tohit2 = (todam2+1)/2;
+		todam2 = (todam2+1)/2;
 	}
 
 	artifact_bias = 0;
