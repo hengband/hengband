@@ -675,6 +675,12 @@ msg_format("%d 階にテレポートしました。", command_arg);
 	p_ptr->inside_quest = 0;
 	energy_use = 0;
 
+	/*
+	 * Clear all saved floors
+	 * and create a first saved floor
+	 */
+	prepare_change_floor_mode(CFM_FIRST_FLOOR);
+
 	/* Leaving */
 	p_ptr->leaving = TRUE;
 }
@@ -4226,6 +4232,12 @@ msg_print("下に引きずり降ろされる感じがする！");
 					p_ptr->oldpy = py;
 				}
 				p_ptr->wild_mode = FALSE;
+
+				/*
+				 * Clear all saved floors
+				 * and create a first saved floor
+				 */
+				prepare_change_floor_mode(CFM_FIRST_FLOOR);
 
 				/* Leaving */
 				p_ptr->leaving = TRUE;
