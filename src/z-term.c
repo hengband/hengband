@@ -15,11 +15,13 @@
 
 #include "z-virt.h"
 
+/* Special flags in the attr data */
+#define AF_BIGTILE 0xf0
 
 #ifdef JP
-#define KANJI1  0x10
-#define KANJI2  0x20
-#define KANJIC  0x0f
+#define AF_KANJI1  0x10
+#define AF_KANJI2  0x20
+#define AF_KANJIC  0x0f
 /*
  * Á´³ÑÊ¸»úÂÐ±þ¡£
  * Â°À­¤ËÁ´³ÑÊ¸»ú¤Î£±¥Ð¥¤¥ÈÌÜ¡¢£²¥Ð¥¤¥ÈÌÜ¤âµ­²±¡£
@@ -527,8 +529,91 @@ void Term_queue_char(int x, int y, byte a, char c, byte ta, char tc)
 	if (x < Term->x1[y]) Term->x1[y] = x;
 	if (x > Term->x2[y]) Term->x2[y] = x;
 
-	if ((scrn->a[y][x] & 0xf0) == 0xf0)
+	if ((scrn->a[y][x] & AF_BIGTILE) == AF_BIGTILE)
 		if ((x - 1) < Term->x1[y]) Term->x1[y]--;
+}
+
+
+/*
+ * Bigtile version of Term_queue_char().
+ *
+ * If use_bigtile is FALSE, simply call Term_queue_char().
+ *
+ * Otherwise, mentally draw a pair of attr/char at a given location.
+ *
+ * Assumes given location and values are valid.
+ */
+void Term_queue_bigchar(int x, int y, byte a, char c, byte ta, char tc)
+{
+
+#ifdef JP
+	/*
+	 * A table which relates each ascii character to a multibyte
+	 * character.
+	 *
+	 * ¡Ö¢£¡×¤ÏÆóÇÜÉýÆ¦Éå¤ÎÆâÉô¥³¡¼¥É¤Ë»ÈÍÑ¡£
+	 */
+	static char ascii_to_zenkaku[] =
+		"¡¡¡ª¡É¡ô¡ð¡ó¡õ¡Ç¡Ê¡Ë¡ö¡Ü¡¤¡Ý¡¥¡¿"
+		"£°£±£²£³£´£µ£¶£·£¸£¹¡§¡¨¡ã¡á¡ä¡©"
+		"¡÷£Á£Â£Ã£Ä£Å£Æ£Ç£È£É£Ê£Ë£Ì£Í£Î£Ï"
+		"£Ð£Ñ£Ò£Ó£Ô£Õ£Ö£×£Ø£Ù£Ú¡Î¡À¡Ï¡°¡²"
+		"¡Æ£á£â£ã£ä£å£æ£ç£è£é£ê£ë£ì£í£î£ï"
+		"£ð£ñ£ò£ó£ô£õ£ö£÷£ø£ù£ú¡Ð¡Ã¡Ñ¡Á¢£";
+#endif
+
+	byte a2;
+	char c2;
+
+	/* If non bigtile mode, call orginal function */
+	if (!use_bigtile)
+	{
+		Term_queue_char(x, y, a, c, ta, tc);
+		return;
+	}
+
+	/* A tile become a Bigtile */
+	if ((a & 0x80) && (c & 0x80))
+	{
+		/* Mark it as a Bigtile */
+		a2 = AF_BIGTILE;
+
+		c2 = -1;
+
+		/* Ignore non-tile background */
+		if (!((ta & 0x80) && (tc & 0x80)))
+		{
+			ta = 0;
+			tc = 0;
+		}
+	}
+
+#ifdef JP
+	/*
+	 * Use a multibyte character instead of a dirty pair of ASCII
+	 * characters.
+	 */
+	else if (' ' <= c && c <= 127)
+	{
+		c = ascii_to_zenkaku[2 * (c - ' ')];
+		c2 = ascii_to_zenkaku[2 * (c - ' ') + 1];
+
+		/* Mark it as a Kanji */
+		a2 = a | AF_KANJI2;
+		a |= AF_KANJI1;
+	}
+#endif
+
+	else
+	{
+		/* Dirty pair of ASCII characters */
+		a2 = TERM_WHITE;
+		c2 = ' ';
+	}
+
+	/* Display pair of attr/char */
+	Term_queue_char(x, y, a, c, ta, tc);
+	Term_queue_char(x + 1, y, a2, c2, 0, 0);
 }
 
 
@@ -637,10 +722,10 @@ void Term_queue_chars(int x, int y, int n, byte a, cptr s)
 	 * ½Å¤Ê¤Ã¤¿Ê¸»ú¤Îº¸ÉôÊ¬¤ò¾Ãµî¡£
 	 * É½¼¨³«»Ï°ÌÃÖ¤¬º¸Ã¼¤Ç¤Ê¤¤¤È²¾Äê¡£
 	 */
-	if ((scr_aa[x] & KANJI2) && !(scr_aa[x] & 0x80))
+	if ((scr_aa[x] & AF_KANJI2) && (scr_aa[x] & AF_BIGTILE) != AF_BIGTILE)
 	{
 		scr_cc[x - 1] = ' ';
-		scr_aa[x - 1] &= KANJIC;
+		scr_aa[x - 1] &= AF_KANJIC;
 		x1 = x2 = x - 1;
 	}
 #endif
@@ -656,8 +741,8 @@ void Term_queue_chars(int x, int y, int n, byte a, cptr s)
 			char nc1 = *s++;
 			char nc2 = *s;
 
-			byte na1 = (a | KANJI1);
-			byte na2 = (a | KANJI2);
+			byte na1 = (a | AF_KANJI1);
+			byte na2 = (a | AF_KANJI2);
 
 			if((--n == 0) || !nc2) break;
 
@@ -712,10 +797,10 @@ void Term_queue_chars(int x, int y, int n, byte a, cptr s)
 
 		int w, h;
 		Term_get_size(&w, &h);
-		if (x != w && !(scr_aa[x] & 0x80) && (scr_aa[x] & KANJI2))
+		if (x != w && (scr_aa[x] & AF_BIGTILE) != AF_BIGTILE && (scr_aa[x] & AF_KANJI2))
 		{
 			scr_cc[x] = ' ';
-			scr_aa[x] &= KANJIC;
+			scr_aa[x] &= AF_KANJIC;
 			if (x1 < 0) x1 = x;
 			x2 = x;
 		}
@@ -1011,7 +1096,7 @@ static void Term_fresh_row_both(int y, int x1, int x2)
 		old_tcc[x] = ntc;
 
 		/* 2nd byte of bigtile */
-		if ((na & 0xf0) == 0xf0) continue;
+		if ((na & AF_BIGTILE) == AF_BIGTILE) continue;
 
 		/* Handle high-bit attr/chars */
 		if ((na & 0x80) && (nc & 0x80))
@@ -1050,7 +1135,7 @@ static void Term_fresh_row_both(int y, int x1, int x2)
 
 		/* Notice new color */
 #ifdef JP
-		if (fa != (na & KANJIC))
+		if (fa != (na & AF_KANJIC))
 #else
 		if (fa != na)
 #endif
@@ -1083,7 +1168,7 @@ static void Term_fresh_row_both(int y, int x1, int x2)
 
 			/* Save the new color */
 #ifdef JP
-			fa = (na & KANJIC);
+			fa = (na & AF_KANJIC);
 #else
 			fa = na;
 #endif
@@ -1247,7 +1332,7 @@ static void Term_fresh_row_text(int y, int x1, int x2)
 
 		/* Notice new color */
 #ifdef JP
-		if (fa != (na & KANJIC))
+		if (fa != (na & AF_KANJIC))
 #else
 		if (fa != na)
 #endif
@@ -1280,7 +1365,7 @@ static void Term_fresh_row_text(int y, int x1, int x2)
 
 			/* Save the new color */
 #ifdef JP
-			fa = (na & KANJIC);
+			fa = (na & AF_KANJIC);
 #else
 			fa = na;
 #endif
@@ -1664,11 +1749,11 @@ errr Term_fresh(void)
 
 #ifdef JP
 			if ((scr->cx + 1 < w) &&
-			    ((old->a[scr->cy][scr->cx + 1] == 255) ||
+			    ((old->a[scr->cy][scr->cx + 1] & AF_BIGTILE) == AF_BIGTILE ||
 			     (!(old->a[scr->cy][scr->cx] & 0x80) &&
 			      iskanji(old->c[scr->cy][scr->cx]))))
 #else
-			if ((scr->cx + 1 < w) && (old->a[scr->cy][scr->cx + 1] == 255))
+			if ((scr->cx + 1 < w) && (old->a[scr->cy][scr->cx + 1] & AF_BIGTILE) == AF_BIGTILE)
 #endif
 			{
 				/* Double width cursor for the Bigtile mode */
@@ -2017,10 +2102,10 @@ errr Term_erase(int x, int y, int n)
 	 * Á´³ÑÊ¸»ú¤Î±¦È¾Ê¬¤«¤éÊ¸»ú¤òÉ½¼¨¤¹¤ë¾ì¹ç¡¢
 	 * ½Å¤Ê¤Ã¤¿Ê¸»ú¤Îº¸ÉôÊ¬¤ò¾Ãµî¡£
 	 */
-	if (n > 0 && (((scr_aa[x] & KANJI2) && !(scr_aa[x] & 0x80))
-		      || ((byte)scr_cc[x] == 255 && scr_aa[x] == 255)))
+	if (n > 0 && (((scr_aa[x] & AF_KANJI2) && (scr_aa[x] & AF_BIGTILE) != AF_BIGTILE)
+		      || (scr_aa[x] & AF_BIGTILE) == AF_BIGTILE))
 #else
-	if (n > 0 && (byte)scr_cc[x] == 255 && scr_aa[x] == 255)
+	if (n > 0 && (scr_aa[x] & AF_BIGTILE) == AF_BIGTILE)
 #endif
 	{
 		x--;
@@ -2044,7 +2129,7 @@ errr Term_erase(int x, int y, int n)
 		 * 2001/04/29 -- Habu
 		 * ¹Ô¤Î±¦Ã¼¤Î¾ì¹ç¤Ï¤³¤Î½èÍý¤ò¤·¤Ê¤¤¤è¤¦¤Ë½¤Àµ¡£
 		 */
-		if ((oa & KANJI1) && (i + 1) == n && x != w - 1)
+		if ((oa & AF_KANJI1) && (i + 1) == n && x != w - 1)
 			n++;
 #endif
 		/* Save the "literal" information */
@@ -2182,12 +2267,12 @@ errr Term_redraw_section(int x1, int y1, int x2, int y2)
    
 		if (x1j > 0)
 		{
-			if (Term->scr->a[i][x1j] & KANJI2) x1j--;
+			if (Term->scr->a[i][x1j] & AF_KANJI2) x1j--;
 		}
    
 		if (x2j < Term->wid - 1)
 		{
-			if (Term->scr->a[i][x2j] & KANJI1) x2j++;
+			if (Term->scr->a[i][x2j] & AF_KANJI1) x2j++;
 		}
    
 		Term->x1[i] = x1j;

@@ -1603,47 +1603,6 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 }
 
 
-#ifdef JP
-/*
- * Table of Ascii-to-Zenkaku
- * ¡Ö¢£¡×¤ÏÆóÇÜÉýÆ¦Éå¤ÎÆâÉô¥³¡¼¥É¤Ë»ÈÍÑ¡£
- */
-static char ascii_to_zenkaku[2*128+1] =  "\
-¡¡¡ª¡É¡ô¡ð¡ó¡õ¡Ç¡Ê¡Ë¡ö¡Ü¡¤¡Ý¡¥¡¿\
-£°£±£²£³£´£µ£¶£·£¸£¹¡§¡¨¡ã¡á¡ä¡©\
-¡÷£Á£Â£Ã£Ä£Å£Æ£Ç£È£É£Ê£Ë£Ì£Í£Î£Ï\
-£Ð£Ñ£Ò£Ó£Ô£Õ£Ö£×£Ø£Ù£Ú¡Î¡À¡Ï¡°¡²\
-¡Æ£á£â£ã£ä£å£æ£ç£è£é£ê£ë£ì£í£î£ï\
-£ð£ñ£ò£ó£ô£õ£ö£÷£ø£ù£ú¡Ð¡Ã¡Ñ¡Á¢£";
-#endif
-
-/*
- * Prepare Bigtile or 2-bytes character attr/char pairs
- */
-void bigtile_attr(char *cp, byte *ap, char *cp2, byte *ap2)
-{
-	if ((*ap & 0x80) && (*cp & 0x80))
-	{
-		*ap2 = 255;
-		*cp2 = -1;
-		return;
-	}
-
-#ifdef JP
-	if (isprint(*cp) || *cp == 127)
-	{
-		*ap2 = (*ap) | 0xf0;
-		*cp2 = ascii_to_zenkaku[2*(*cp-' ') + 1];
-		*cp = ascii_to_zenkaku[2*(*cp-' ')];
-		return;
-	}
-#endif
-
-	*ap2 = TERM_WHITE;
-	*cp2 = ' ';
-}
-
-
 /*
  * Calculate panel colum of a location in the map
  */
@@ -1674,9 +1633,6 @@ void move_cursor_relative(int row, int col)
  */
 void print_rel(char c, byte a, int y, int x)
 {
-	char c2;
-	byte a2;
-
 	/* Only do "legal" locations */
 	if (panel_contains(y, x))
 	{
@@ -1688,12 +1644,8 @@ void print_rel(char c, byte a, int y, int x)
 			else if (p_ptr->wraith_form) a = TERM_L_DARK;
 		}
 
-		if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
-
 		/* Draw the char using the attr */
-		Term_draw(panel_col_of(x), y-panel_row_prt, a, c);
-		if (use_bigtile)
-			Term_draw(panel_col_of(x)+1, y-panel_row_prt, a2, c2);
+		Term_queue_bigchar(panel_col_of(x), y-panel_row_prt, a, c, 0, 0);
 	}
 }
 
@@ -1922,22 +1874,8 @@ void lite_spot(int y, int x)
 			else if (p_ptr->wraith_form) a = TERM_L_DARK;
 		}
 
-#ifdef JP
-		if (use_bigtile && is_ascii_graphics(a) && (isprint(c) || c == 127))
-		{
-			/* Term_queue_chars ¤ÏÁ´³ÑASCIIÃÏ·Á¤òÀµ¤·¤¯update¤¹¤ë¡£ */
-			Term_queue_chars(panel_col_of(x), y-panel_row_prt, 2, a, &ascii_to_zenkaku[2*(c-' ')]);
-
-			/* Update sub-windows */
-			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-			return;
-		}
-#endif
-
 		/* Hack -- Queue it */
-		Term_queue_char(panel_col_of(x), y-panel_row_prt, a, c, ta, tc);
-		if (use_bigtile)
-			Term_queue_char(panel_col_of(x)+1, y-panel_row_prt, 255, -1, 0, 0);
+		Term_queue_bigchar(panel_col_of(x), y-panel_row_prt, a, c, ta, tc);
 
 		/* Update sub-windows */
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -2001,8 +1939,8 @@ void prt_map(void)
 		/* Scan the columns of row "y" */
 		for (x = xmin; x <= xmax; x++)
 		{
-			byte a, a2;
-			char c, c2;
+			byte a;
+			char c;
 
 			byte ta;
 			char tc;
@@ -2018,11 +1956,8 @@ void prt_map(void)
 				else if (p_ptr->wraith_form) a = TERM_L_DARK;
 			}
 
-			if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
-
 			/* Efficiency -- Redraw that grid of the map */
-			Term_queue_char(panel_col_of(x), y-panel_row_prt, a, c, ta, tc);
-			if (use_bigtile) Term_queue_char(panel_col_of(x)+1, y-panel_row_prt, a2, c2, 0, 0);
+			Term_queue_bigchar(panel_col_of(x), y-panel_row_prt, a, c, ta, tc);
 		}
 	}
 
@@ -2066,8 +2001,8 @@ void prt_path(int y, int x)
 
 		if (panel_contains(ny, nx))
 		{
-			byte a2, a = default_color;
-			char c, c2;
+			byte a = default_color;
+			char c;
 
 			byte ta;
 			char tc;
@@ -2093,11 +2028,9 @@ void prt_path(int y, int x)
 			}
 
 			c = '*';
-			if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
 
 			/* Hack -- Queue it */
-			Term_queue_char(panel_col_of(nx), ny-panel_row_prt, a, c, ta, tc);
-			if (use_bigtile) Term_queue_char(panel_col_of(nx)+1, ny-panel_row_prt, a2, c2, 0, 0);
+			Term_queue_bigchar(panel_col_of(nx), ny-panel_row_prt, a, c, ta, tc);
 		}
 
 		/* Known Wall */
@@ -2214,8 +2147,8 @@ void display_map(int *cy, int *cx)
 {
 	int i, j, x, y;
 
-	byte ta, a2;
-	char tc, c2;
+	byte ta;
+	char tc;
 
 	byte tp;
 
@@ -2396,8 +2329,7 @@ void display_map(int *cy, int *cx)
 	/* Display each map line in order */
 	for (y = 0; y < hgt + 2; ++y)
 	{
-		/* Start a new line */
-		Term_gotoxy(COL_MAP, y);
+		int cx = COL_MAP;
 
 		/* Display the line */
 		for (x = 0; x < wid + 2; ++x)
@@ -2413,11 +2345,11 @@ void display_map(int *cy, int *cx)
 				else if (p_ptr->wraith_form) ta = TERM_L_DARK;
 			}
 
-			if (use_bigtile) bigtile_attr(&tc, &ta, &c2, &a2);
-
 			/* Add the character */
-			Term_addch(ta, tc);
-			if (use_bigtile) Term_addch(a2, c2);
+			Term_queue_bigchar(cx, y, ta, tc, 0, 0);
+
+			if (use_bigtile) cx += 2;
+			else cx++;
 		}
 	}
 

@@ -555,7 +555,6 @@ extern bool cave_valid_bold(int y, int x);
 extern bool cave_valid_grid(cave_type *c_ptr);
 extern bool no_lite(void);
 extern void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp);
-extern void bigtile_attr(char *cp, byte *ap, char *cp2, byte *ap2);
 extern void move_cursor_relative(int row, int col);
 extern void print_rel(char c, byte a, int y, int x);
 extern void note_spot(int y, int x);
