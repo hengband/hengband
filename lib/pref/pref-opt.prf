@@ -52,7 +52,6 @@ X:auto_scum
 X:stack_force_notes
 X:stack_force_costs
 Y:stack_allow_items
-Y:stack_allow_wands
 Y:expand_look
 Y:expand_list
 Y:view_perma_grids
