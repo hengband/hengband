@@ -1,6 +1,6 @@
 === History of Hengband from 1.0.7 to 1.1.0 ===
 
-  Jun. ?th, 2002  hengband 1.1.0 Release Candidate 1 released.
+  Jun. 2nd, 2002  hengband 1.1.0 Release Candidate 1 released.
 
 - Splited Life realm into two and new spells added; New 'Life' realm
   and New 'Crusade' realm.
