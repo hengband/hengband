@@ -146,53 +146,55 @@ void object_flags(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 
 	if ((o_ptr->tval > TV_CAPTURE) && o_ptr->xtra3)
 	{
-		if (o_ptr->xtra3 < TR_FLAG_MAX+1)
+                int add = o_ptr->xtra3 - 1;
+
+		if (add < TR_FLAG_MAX)
 		{
-			add_flag(flgs, o_ptr->xtra3 - 1);
+			add_flag(flgs, add);
 		}
-		else if (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_ACID)
+		else if (add == ESSENCE_TMP_RES_ACID)
 		{
 			add_flag(flgs, TR_RES_ACID);
 			add_flag(flgs, TR_ACTIVATE);
 		}
-		else if (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_ELEC)
+		else if (add == ESSENCE_TMP_RES_ELEC)
 		{
 			add_flag(flgs, TR_RES_ELEC);
 			add_flag(flgs, TR_ACTIVATE);
 		}
-		else if (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_FIRE)
+		else if (add == ESSENCE_TMP_RES_FIRE)
 		{
 			add_flag(flgs, TR_RES_FIRE);
 			add_flag(flgs, TR_ACTIVATE);
 		}
-		else if (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_COLD)
+		else if (add == ESSENCE_TMP_RES_COLD)
 		{
 			add_flag(flgs, TR_RES_COLD);
 			add_flag(flgs, TR_ACTIVATE);
 		}
-		else if (o_ptr->xtra3 == 1+ESSENCE_SH_FIRE)
+		else if (add == ESSENCE_SH_FIRE)
 		{
 			add_flag(flgs, TR_RES_FIRE);
 			add_flag(flgs, TR_SH_FIRE);
 		}
-		else if (o_ptr->xtra3 == 1+ESSENCE_SH_ELEC)
+		else if (add == ESSENCE_SH_ELEC)
 		{
 			add_flag(flgs, TR_RES_ELEC);
 			add_flag(flgs, TR_SH_ELEC);
 		}
-		else if (o_ptr->xtra3 == 1+ESSENCE_SH_COLD)
+		else if (add == ESSENCE_SH_COLD)
 		{
 			add_flag(flgs, TR_RES_COLD);
 			add_flag(flgs, TR_SH_COLD);
 		}
-		else if (o_ptr->xtra3 == 1+ESSENCE_RESISTANCE)
+		else if (add == ESSENCE_RESISTANCE)
 		{
 			add_flag(flgs, TR_RES_ACID);
 			add_flag(flgs, TR_RES_ELEC);
 			add_flag(flgs, TR_RES_FIRE);
 			add_flag(flgs, TR_RES_COLD);
 		}
-		else if (o_ptr->xtra3 == 1+ESSENCE_EARTHQUAKE)
+		else if (add == TR_IMPACT)
 		{
 			add_flag(flgs, TR_ACTIVATE);
 		}
@@ -277,42 +279,44 @@ void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 
 	if ((o_ptr->tval > TV_CAPTURE) && o_ptr->xtra3)
 	{
-		if (o_ptr->xtra3 < 1+MAX_TR_FLAG_ESSENCE)
+                int add = o_ptr->xtra3 - 1;
+
+		if (add < TR_FLAG_MAX)
 		{
-			add_flag(flgs, o_ptr->xtra3 - 1);
+			add_flag(flgs, add);
 		}
-		else if (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_ACID)
+		else if (add == ESSENCE_TMP_RES_ACID)
 		{
 			add_flag(flgs, TR_RES_ACID);
 		}
-		else if (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_ELEC)
+		else if (add == ESSENCE_TMP_RES_ELEC)
 		{
 			add_flag(flgs, TR_RES_ELEC);
 		}
-		else if (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_FIRE)
+		else if (add == ESSENCE_TMP_RES_FIRE)
 		{
 			add_flag(flgs, TR_RES_FIRE);
 		}
-		else if (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_COLD)
+		else if (add == ESSENCE_TMP_RES_COLD)
 		{
 			add_flag(flgs, TR_RES_COLD);
 		}
-		else if (o_ptr->xtra3 == 1+ESSENCE_SH_FIRE)
+		else if (add == ESSENCE_SH_FIRE)
 		{
 			add_flag(flgs, TR_RES_FIRE);
 			add_flag(flgs, TR_SH_FIRE);
 		}
-		else if (o_ptr->xtra3 == 1+ESSENCE_SH_ELEC)
+		else if (add == ESSENCE_SH_ELEC)
 		{
 			add_flag(flgs, TR_RES_ELEC);
 			add_flag(flgs, TR_SH_ELEC);
 		}
-		else if (o_ptr->xtra3 == 1+ESSENCE_SH_COLD)
+		else if (add == ESSENCE_SH_COLD)
 		{
 			add_flag(flgs, TR_RES_COLD);
 			add_flag(flgs, TR_SH_COLD);
 		}
-		else if (o_ptr->xtra3 == 1+ESSENCE_RESISTANCE)
+		else if (add == ESSENCE_RESISTANCE)
 		{
 			add_flag(flgs, TR_RES_ACID);
 			add_flag(flgs, TR_RES_ELEC);
@@ -1873,49 +1877,50 @@ return "釣りをする : いつでも";
 
 	}
 
-	if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_ACID))
-	{
+	if ((o_ptr->tval > TV_CAPTURE) && o_ptr->xtra3)
+        {
+                switch (o_ptr->xtra3 - 1)
+                {
+                case ESSENCE_TMP_RES_ACID:
 #ifdef JP
-return "酸への耐性 : 50+d50ターン毎";
+                        return "酸への耐性 : 50+d50ターン毎";
 #else
-				return "resist acid every 50+d50 turns";
+                        return "resist acid every 50+d50 turns";
 #endif
-	}
+                        break;
 
-	if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_ELEC))
-	{
+                case ESSENCE_TMP_RES_ELEC:
 #ifdef JP
-return "電撃への耐性 : 50+d50ターン毎";
+                        return "電撃への耐性 : 50+d50ターン毎";
 #else
-				return "resist elec every 50+d50 turns";
+                        return "resist elec every 50+d50 turns";
 #endif
-	}
+                        break;
 
-	if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_FIRE))
-	{
+                case ESSENCE_TMP_RES_FIRE:
 #ifdef JP
-return "火への耐性 : 50+d50ターン毎";
+                        return "火への耐性 : 50+d50ターン毎";
 #else
-				return "resist fire every 50+d50 turns";
+                        return "resist fire every 50+d50 turns";
 #endif
-	}
+                        break;
 
-	if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_COLD))
-	{
+                case ESSENCE_TMP_RES_COLD:
 #ifdef JP
-return "冷気への耐性 : 50+d50ターン毎";
+                        return "冷気への耐性 : 50+d50ターン毎";
 #else
-				return "resist cold every 50+d50 turns";
+                        return "resist cold every 50+d50 turns";
 #endif
-	}
+                        break;
 
-	if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == 1+ESSENCE_EARTHQUAKE))
-	{
+                case TR_IMPACT:
 #ifdef JP
-return "地震 : 100+d100 ターン毎";
+                        return "地震 : 100+d100 ターン毎";
 #else
-		return "earthquake every 100+d100 turns";
+                        return "earthquake every 100+d100 turns";
 #endif
+                        break;
+                }
 	}
 
 	if (o_ptr->name2 == EGO_TRUMP)

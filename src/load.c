@@ -417,7 +417,7 @@ static void rd_item(object_type *o_ptr)
                 if (h_older_than(1, 3, 0, 1))
                 {
                         if (o_ptr->tval > TV_CAPTURE && o_ptr->xtra3 >= 1+96)
-                                o_ptr->xtra3 += -96 + MIN_OTHER_ESSENCE;
+                                o_ptr->xtra3 += -96 + MIN_SPECIAL_ESSENCE;
                 }
 
 		rd_s16b(&o_ptr->xtra4);

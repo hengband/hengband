@@ -5610,45 +5610,41 @@ msg_print("あなたの槍は電気でスパークしている...");
 		return;
 	}
 
-	else if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_ACID))
-	{
-		(void)set_oppose_acid(randint1(20) + 20, FALSE);
-		o_ptr->timeout = randint0(50) + 50;
-		return;
-	}
+	else if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3))
+        {
+                switch (o_ptr->xtra3-1)
+                {
+                case ESSENCE_TMP_RES_ACID:
+                        (void)set_oppose_acid(randint1(20) + 20, FALSE);
+                        o_ptr->timeout = randint0(50) + 50;
+                        return;
 
-	else if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_ELEC))
-	{
-		(void)set_oppose_elec(randint1(20) + 20, FALSE);
-		o_ptr->timeout = randint0(50) + 50;
-		return;
-	}
+                case ESSENCE_TMP_RES_ELEC:
+                        (void)set_oppose_elec(randint1(20) + 20, FALSE);
+                        o_ptr->timeout = randint0(50) + 50;
+                        return;
 
-	else if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_FIRE))
-	{
-		(void)set_oppose_fire(randint1(20) + 20, FALSE);
-		o_ptr->timeout = randint0(50) + 50;
-		return;
-	}
+                case ESSENCE_TMP_RES_FIRE:
+                        (void)set_oppose_fire(randint1(20) + 20, FALSE);
+                        o_ptr->timeout = randint0(50) + 50;
+                        return;
 
-	else if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == 1+ESSENCE_TMP_RES_COLD))
-	{
-		(void)set_oppose_cold(randint1(20) + 20, FALSE);
-		o_ptr->timeout = randint0(50) + 50;
-		return;
-	}
+                case ESSENCE_TMP_RES_COLD:
+                        (void)set_oppose_cold(randint1(20) + 20, FALSE);
+                        o_ptr->timeout = randint0(50) + 50;
+                        return;
 
-	else if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == 1+ESSENCE_EARTHQUAKE))
-	{
-		earthquake(py, px, 5);
-		o_ptr->timeout = 100 + randint1(100);
+                case TR_IMPACT:
+                        earthquake(py, px, 5);
+                        o_ptr->timeout = 100 + randint1(100);
+                        
+                        /* Window stuff */
+                        p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
-		/* Window stuff */
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
-
-		/* Done */
-		return;
-	}
+                        /* Done */
+                        return;
+                }
+        }
 
 
 	else if (o_ptr->name2 == EGO_TRUMP)
