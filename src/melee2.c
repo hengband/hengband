@@ -3883,10 +3883,18 @@ void monster_gain_exp(int m_idx, int s_idx)
 		int old_r_idx = m_ptr->r_idx;
 		byte old_sub_align = m_ptr->sub_align;
 
+		/* Hack -- Reduce the racial counter of previous monster */
+		real_r_ptr(m_ptr)->cur_num--;
+
 		monster_desc(m_name, m_ptr, 0);
 		m_ptr->r_idx = r_ptr->next_r_idx;
+
+		/* Count the monsters on the level */
+		real_r_ptr(m_ptr)->cur_num++;
+
 		m_ptr->ap_r_idx = m_ptr->r_idx;
 		r_ptr = &r_info[m_ptr->r_idx];
+
 		if (r_ptr->flags1 & RF1_FORCE_MAXHP)
 		{
 			m_ptr->max_maxhp = maxroll(r_ptr->hdice, r_ptr->hside);
