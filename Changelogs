@@ -1,4 +1,58 @@
+2002-01-28  habu  <habu@akiru>
+
+	* lib/edit/r_info_j.txt:
+	メフィストフェレスから単独のESCORTSフラグを削除。
+
+2002-01-28  Takeshi Mogami  <mogami@akiru>
+
+	* src/files.c:
+	引退時に生い立ちの下の「〜で引退した」のメッセージがおかしかったので修正。
+
+2002-01-28  habu  <habu@akiru>
+
+	* lib/edit/r_info_j.txt:
+	サムライの攻撃をHITからSLASHに変更。
+	また、サムライの英語版の説明部分に日本語が残っていたので削除。
+
+2002-01-28  Takeshi Mogami  <mogami@akiru>
+
+	* src/cave.c:
+	マップ表示での表示の優先度を変更。アイテムを常に地形より優先して表示。
+	モンスターはアイテムよりも優先。
+
+	* src/variable.c, src/cave.c, src/externs.h, src/main-dos.c, src/main-win.c, src/main-x11.c:
+	use_transparency を use_lighting に改名。
+	さっきの修正で use_transparency がタイルの重ね表示のオプションだと思って、
+	8x8タイルでも設定するようにして、cave.cで明暗効果の使用可否をANGBAND_GRAFで
+	判定するよう修正したが、実は use_transparency はタイルの明暗効果のオプション
+	としてしか使っていなかったので、あらためて修正した。
+
+	* acconfig.h, configure.in, src/cave.c, src/main-x11.c:
+	8x8タイルで、transparencyに対応。地形とアイテムやキャラクターが重なって表示される。
+	もしかして、黒っぽいアイテムやモンスターについてタイルを一部修正必要かも。
+
 2002-01-27  Takeshi Mogami  <mogami@akiru>
+
+	* src/cmd4.c:
+	fd_copy() がどうも怪しいので、使うのをやめてみた。
+
+	* src/melee1.c:
+	英語版でマダムデビのセリフが抜けていたのを追加。
+
+2002-01-27  iks  <iks@akiru>
+
+	* lib/file/a_cursed_j.txt, lib/file/a_med_j.txt:
+	また更新。
+
+	* lib/file/a_cursed_j.txt, lib/file/a_high_j.txt, lib/file/a_low_j.txt, lib/file/a_med_j.txt, lib/file/w_cursed_j.txt, lib/file/w_high_j.txt, lib/file/w_low_j.txt, lib/file/w_med_j.txt:
+	改行コード違ってました。すんません。
+
+	* lib/file/a_cursed_j.txt, lib/file/a_high_j.txt, lib/file/a_low_j.txt, lib/file/a_med_j.txt, lib/file/w_cursed_j.txt, lib/file/w_high_j.txt, lib/file/w_low_j.txt, lib/file/w_med_j.txt:
+	☆名をかなり修正、追加も多少あります。
+
+2002-01-27  Takeshi Mogami  <mogami@akiru>
+
+	* Changelogs: 更新
 
 	* src/report.c:
 	make_screen_dump()で自動変数の配列の初期化を関数内でやっていたが、
