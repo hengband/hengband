@@ -4230,19 +4230,12 @@ errr make_character_dump(FILE *fff)
 	char		buf[1024];
 
 
-#ifndef FAKE_VERSION
-	/* Begin dump */
-	fprintf(fff, "  [Angband %d.%d.%d Character Dump]\n\n",
-	        VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
-#else
 #ifdef JP
 	fprintf(fff, "  [変愚蛮怒 %d.%d.%d キャラクタ情報]\n\n",
 	        FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 #else
 	fprintf(fff, "  [Hengband %d.%d.%d Character Dump]\n\n",
 	        FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
-#endif
-
 #endif
 
 	update_playtime();

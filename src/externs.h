@@ -106,16 +106,12 @@ extern monster_power monster_powers[MAX_MONSPELLS];
 
 /* variable.c */
 extern cptr copyright[5];
-extern byte version_major;
-extern byte version_minor;
-extern byte version_patch;
-extern byte version_extra;
-extern byte sf_major;
-extern byte sf_minor;
-extern byte sf_patch;
+extern byte h_ver_major;
+extern byte h_ver_minor;
+extern byte h_ver_patch;
+extern byte h_ver_extra;
 extern byte sf_extra;
-extern u32b sf_version;
-extern u32b sf_xtra;
+extern u32b sf_system;
 extern byte z_major;
 extern byte z_minor;
 extern byte z_patch;

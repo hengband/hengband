@@ -67,29 +67,32 @@ static u32b	x_check = 0L;
 
 
 
-#if 0
 /*
  * This function determines if the version of the savefile
- * currently being read is older than version "x.y.z".
+ * currently being read is older than version "major.minor.patch.extra".
  */
-static bool older_than(byte x, byte y, byte z)
+static bool h_older_than(byte major, byte minor, byte patch, byte extra)
 {
 	/* Much older, or much more recent */
-	if (sf_major < x) return (TRUE);
-	if (sf_major > x) return (FALSE);
+	if (h_ver_major < major) return (TRUE);
+	if (h_ver_major > major) return (FALSE);
 
 	/* Distinctly older, or distinctly more recent */
-	if (sf_minor < y) return (TRUE);
-	if (sf_minor > y) return (FALSE);
+	if (h_ver_minor < minor) return (TRUE);
+	if (h_ver_minor > minor) return (FALSE);
 
 	/* Barely older, or barely more recent */
-	if (sf_patch < z) return (TRUE);
-	if (sf_patch > z) return (FALSE);
+	if (h_ver_patch < patch) return (TRUE);
+	if (h_ver_patch > patch) return (FALSE);
+
+	/* Barely older, or barely more recent */
+	if (h_ver_extra < extra) return (TRUE);
+	if (h_ver_extra > extra) return (FALSE);
 
 	/* Identical versions */
 	return (FALSE);
 }
-#endif
+
 
 /*
  * The above function, adapted for Zangband
@@ -419,35 +422,10 @@ static void rd_item(object_type *o_ptr)
 		o_ptr->pval = 0;
 	}
 
-	/* Feeling - from 2.3.1, "savefile version 1" */
-	if (sf_version >= 1)
-	{
-		rd_byte(&o_ptr->feeling);
-	}
+        rd_byte(&o_ptr->feeling);
 
 	/* Inscription */
 	rd_string(buf, 128);
-
-	/* If this savefile is old, maybe we need to translate the feeling */
-	if (sf_version < 1)
-	{
-		byte i;
-
-		for (i = 0; i <= FEEL_MAX; i++)
-		{
-			if (game_inscriptions[i] == NULL)
-			{
-				continue;
-			}
-
-			if (streq(buf, game_inscriptions[i]))
-			{
-				o_ptr->feeling = i;
-				buf[0] = 0;
-				break;
-			}
-		}
-	}
 
 	/* Save the inscription */
 	if (buf[0]) o_ptr->inscription = quark_add(buf);
@@ -588,11 +566,7 @@ static void rd_monster(monster_type *m_ptr)
 		rd_s16b(&m_ptr->target_x);
 	}
 
-	/* Monster invulnerability introduced from 2.3.2+ */
-	if (sf_version < 2)
-		m_ptr->invulner = 0;
-	else
-		rd_byte(&m_ptr->invulner);
+        rd_byte(&m_ptr->invulner);
 
 	if (!(z_major == 2 && z_minor == 0 && z_patch == 6))
 		rd_u32b(&m_ptr->smart);
@@ -2217,13 +2191,13 @@ static errr rd_savefile_new_aux(void)
 
 
 	/* Mention the savefile version */
+        note(format(
 #ifdef JP
-note(format("バージョン %d.%d.%d のセーブ・ファイルをロード中...",
+                     "バージョン %d.%d.%d のセーブ・ファイルをロード中...",
 #else
-	note(format("Loading a %d.%d.%d savefile...",
+                     "Loading a %d.%d.%d savefile...",
 #endif
-
-		(z_major > 9) ? z_major - 10 : z_major, z_minor, z_patch));
+                     (z_major > 9) ? z_major - 10 : z_major, z_minor, z_patch));
 
 
 	/* Strip the version bytes */
@@ -2237,13 +2211,15 @@ note(format("バージョン %d.%d.%d のセーブ・ファイルをロード中...",
 	v_check = 0L;
 	x_check = 0L;
 
-#if SAVEFILE_VERSION
 	/* Read the version number of the savefile */
-	rd_u32b(&sf_version);
-#endif /* SAVEFILE_VERSION */
+        /* Old savefile will be version 0.0.0.3 */
+        rd_byte(&h_ver_extra);
+        rd_byte(&h_ver_patch);
+        rd_byte(&h_ver_minor);
+        rd_byte(&h_ver_major);
 
 	/* Operating system info */
-	rd_u32b(&sf_xtra);
+	rd_u32b(&sf_system);
 
 	/* Time of savefile creation */
 	rd_u32b(&sf_when);

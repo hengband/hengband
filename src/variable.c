@@ -43,21 +43,14 @@ int max_autopick = 0;
 autopick_type autopick_list[MAX_AUTOPICK];
 
 /*
- * Executable version
- */
-byte version_major = VERSION_MAJOR;
-byte version_minor = VERSION_MINOR;
-byte version_patch = VERSION_PATCH;
-byte version_extra = VERSION_EXTRA;
-
-/*
  * Savefile version
  */
-byte sf_major;			/* Savefile's "version_major" */
-byte sf_minor;			/* Savefile's "version_minor" */
-byte sf_patch;			/* Savefile's "version_patch" */
-byte sf_extra;			/* Savefile's "version_extra" */
-u32b sf_version;		/* Savefile's "version" */
+byte h_ver_major;       /* Savefile version for Hengband 1.1.1 and later */
+byte h_ver_minor;
+byte h_ver_patch;
+byte h_ver_extra;
+
+byte sf_extra;		/* Savefile's encoding key */
 
 byte z_major;           /* Savefile version for Hengband */
 byte z_minor;
@@ -66,7 +59,7 @@ byte z_patch;
 /*
  * Savefile information
  */
-u32b sf_xtra;			/* Operating system info */
+u32b sf_system;			/* Operating system info */
 u32b sf_when;			/* Time when savefile created */
 u16b sf_lives;			/* Number of past "lives" with this file */
 u16b sf_saves;			/* Number of "saves" during this life */

@@ -155,6 +155,9 @@
 #include <Memory.h>
 #include <QDOffscreen.h>
 #include <Sound.h>
+#if TARGET_API_MAC_CARBON
+#include <Navigation.h>
+#endif
 
 #ifdef JP
 
@@ -211,6 +214,16 @@
 #include <Folders.h>
 
 #endif
+
+/*
+ * Globals for MPW compilation
+ */
+#ifdef MAC_MPW
+       /* Globals needed */
+       u32b _ftype;
+       u32b _fcreator;
+#endif
+
 
 
 #if 0
@@ -816,8 +829,8 @@ static OSErr ChooseFile( StringPtr filename, FSSpec selfld )
 			// there is only one selection here we get only the first AEDescList:
 			if (( err = AEGetNthPtr( &(reply.selection), 1, typeFSS, &keyWord, &typeCode, &finalFSSpec, sizeof( FSSpec ), &actualSize )) == noErr )
 			{
-				refnum_to_name( filename, finalFSSpec.parID, finalFSSpec.vRefNum, &finalFSSpec.name );
-				// 'finalFSSpec' is the chosen fileŽÉ
+				refnum_to_name( filename, finalFSSpec.parID, finalFSSpec.vRefNum, finalFSSpec.name );
+				// 'finalFSSpec' is the chosen file¥Î
 			}
 			
 			err = NavDisposeReply( &reply );
@@ -843,7 +856,7 @@ static void activate(WindowPtr w)
 	if (active != w)
 	{
 		/* Activate */
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 		if (w) SetPortWindowPort(w);
 #else
 		if (w) SetPort(w);
@@ -1018,7 +1031,8 @@ static void term_data_check_size(term_data *td)
 {
 	BitMap		screen;
 	
-#ifdef TARGET_CARBON						
+#if TARGET_API_MAC_CARBON
+						
 	GetQDGlobalsScreenBits( &screen );
 #else
 	screen = qd.screenBits;
@@ -1103,7 +1117,6 @@ static void term_data_check_size(term_data *td)
 	}
 }
 
-//static OSErr XDDSWUpDateGWorldFromPict( term_data *td );
 /*
  * Hack -- resize a term_data
  *
@@ -1113,10 +1126,6 @@ static void term_data_resize(term_data *td)
 {
 	/* Actually resize the window */
 	SizeWindow(td->w, td->size_wid, td->size_hgt, 0);
-	
-/*#ifdef JP
-		XDDSWUpDateGWorldFromPict( td );
-#endif*/
 }
 
 
@@ -1143,7 +1152,7 @@ static void term_data_redraw(term_data *td)
 	Term_activate(old);
 
 	/* No need to redraw */
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 	{
 		RgnHandle		theRgn = NewRgn();
 		GetWindowRegion( td->w, kWindowContentRgn, theRgn );
@@ -1385,57 +1394,6 @@ static OSErr XDDSWCreateGWorldFromPict(
 }
 
 
-static OSErr XDDSWUpDateGWorldFromPict( term_data *td )
-{
-	GWorldPtr saveGWorld;
-	GDHandle saveGDevice;
-	Rect pictRect;
-	short depth;
-	GDHandle theGDH;
-	
-	GWorldFlags	errflag;
-	
-	/*  */
-	
-	if( td->bufferPort == NULL )
-		return;
-	/* Get depth */
-	depth = td->pixelDepth;
-
-	/* Get GDH */
-	theGDH = td->theGDH;
-	
-	/* Obtain size rectangle */
-	pictRect.top = 0;
-	pictRect.left = 0;
-	pictRect.right = td->size_wid;
-	pictRect.bottom = td->tile_hgt;
-	
-	XDDSWUnlockFrame(td);
-	
-	errflag = UpdateGWorld( &td->bufferPort, depth, &pictRect, 0, 0, 0);
-	XDDSWLockFrame(td);
-	if( errflag & gwFlagErr ){
-		//SysBeep(0);
-		return;
-	}
-	
-	/* Save GWorld */
-//	GetGWorld(&saveGWorld, &saveGDevice);
-
-	/* Activate */
-//	SetGWorld(td->bufferPort, nil);
-
-	/* Dump the pict into the GWorld */
-//	(void)LockPixels(GetGWorldPixMap(td->bufferPort));
-//	EraseRect(&td->bufferPort->portRect);
-	
-//	UnlockPixels(GetGWorldPixMap(td->bufferPort));
-
-	/* Restore GWorld */
-//	SetGWorld(saveGWorld, saveGDevice);
-	
-}
 #endif
 
 /*
@@ -1451,7 +1409,7 @@ static errr globe_init(void)
 	PicHandle newPictH;
 
 	/* Use window XXX XXX XXX */
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 	SetPortWindowPort(data[0].w);
 #else
 	SetPort(data[0].w);
@@ -1611,7 +1569,7 @@ static void Term_init_mac(term *t)
 		PixMapHandle basePixMap;
 
 		/* Obtain the rect */
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 		GetWindowBounds( (WindowRef)td->w, kWindowContentRgn, &globalRect );
 #else
 		globalRect = td->w->portRect;
@@ -1644,7 +1602,7 @@ static void Term_init_mac(term *t)
 	{
 		Rect		portRect;
 		
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 		GetWindowBounds( (WindowRef)td->w, kWindowContentRgn, &portRect );
 		global_to_local( &portRect );
 #else
@@ -1658,7 +1616,7 @@ static void Term_init_mac(term *t)
 		EraseRect(&portRect);
 
 		/* Invalidate the window */
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 		InvalWindowRect((WindowRef)(td->w), (const Rect *)(&portRect));
 #else
 		InvalRect( &portRect );
@@ -1909,7 +1867,7 @@ static errr Term_xtra_mac(int n, int v)
 		{
 			Rect		portRect;
 			
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 			GetWindowBounds( (WindowRef)td->w, kWindowContentRgn, &portRect );
 			global_to_local( &portRect );
 #else
@@ -2117,7 +2075,7 @@ static errr Term_text_mac(int x, int y, int n, byte a, const char *cp)
 			ForeColor(blackColor);
 {
 			
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 			
 			PixMapHandle	srcBitMap;
 			PixMapHandle	destBitMap;
@@ -2371,10 +2329,10 @@ static void save_prefs(void)
 
 	/*** The current version ***/
 
-	putshort(VERSION_MAJOR);
-	putshort(VERSION_MINOR);
-	putshort(VERSION_PATCH);
-	putshort(VERSION_EXTRA);
+	putshort(FAKE_VERSION);
+	putshort(FAKE_VER_MAJOR);
+	putshort(FAKE_VER_MINOR);
+	putshort(FAKE_VER_PATCH);
 
 	putshort(arg_sound);
 	putshort(arg_graphics);
@@ -2433,10 +2391,10 @@ static void load_prefs(void)
 	old_extra = getshort();
 
 	/* Hack -- Verify or ignore */
-	if ((old_major != VERSION_MAJOR) ||
-	    (old_minor != VERSION_MINOR) ||
-	    (old_patch != VERSION_PATCH) ||
-	    (old_extra != VERSION_EXTRA))
+	if ((old_version != FAKE_VERSION) ||
+	    (old_major != FAKE_VER_MAJOR) ||
+	    (old_minor != FAKE_VER_MINOR) ||
+	    (old_patch != FAKE_VER_PATCH))
 	{
 		/* Message */
 		#ifdef JP
@@ -2503,7 +2461,7 @@ static void term_data_hack(term_data *td)
 	short fid;
 
 #ifdef JP
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 	/* Default to Monaco font */
 	fid = FMGetFontFamilyFromName( "\pOsaka¡ÝÅùÉý" );
 #else
@@ -2892,7 +2850,7 @@ void SoundConfigDLog(void)
 	for( i = 1 ; i < 7 ; i++ )
 		SetCheck( dialog, i+2 , soundmode[i] );
 	
-	ShowWindow(dialog);
+//	ShowWindow(dialog);
 	for( item_hit = 100 ; cancel < item_hit ; ){
 		ModalDialog(0, &item_hit);
 		
@@ -3175,7 +3133,7 @@ static void init_menubar(void)
 
 
 	/* Get the "File" menu */
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 	m = GetMenu(129);
 	err = Gestalt( gestaltSystemVersion, &response );
 	if ( (err == noErr) && (response >= 0x00000A00) )
@@ -3222,7 +3180,7 @@ static void init_menubar(void)
 	tmpw = NewWindow(0, &r, "\p", false, documentProc, 0, 0, 0);
 
 	/* Activate the "fake" window */
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 	SetPortWindowPort(tmpw);
 #else
 	SetPort(tmpw);
@@ -3251,7 +3209,7 @@ static void init_menubar(void)
 		GetMenuItemText(m, i, tmpName);	//GetItem(m, i, tmpName);
 
 		/* Acquire the font index */
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 		fontNum = FMGetFontFamilyFromName( tmpName );
 #else
 		GetFNum(tmpName, &fontNum);
@@ -3547,7 +3505,7 @@ static void setup_menus(void)
 			/* Analyze font */
 			/* GetMenuItemText(m,i,s); */
 			GetMenuItemText(m, i, s);	//GetItem(m, i, s);
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 			value = FMGetFontFamilyFromName( s );
 #else
 			GetFNum(s, &value);
@@ -3795,7 +3753,7 @@ static void menu(long mc)
 				break;
 			}
 
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 #else
 			/* Desk accessory */
 			GetMenuItemText(GetMenuHandle(128),selection,s);
@@ -3978,7 +3936,7 @@ static void menu(long mc)
 			/* Get a new font name */
 			/* GetMenuItemText(GetMHandle(131), selection, s); */
 			GetMenuItemText(GetMenuHandle(131), selection, s);		//GetItem(GetMHandle(131), selection, s);
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 			fid = FMGetFontFamilyFromName( s );
 #else
 			GetFNum(s, &fid);
@@ -4238,7 +4196,7 @@ static OSErr CheckRequiredAEParams(const AppleEvent *theAppleEvent)
  * Apple Event Handler -- Open Application
  */
 static pascal OSErr AEH_Start(const AppleEvent *theAppleEvent,
-                              const AppleEvent *reply, long handlerRefCon)
+                              AppleEvent *reply, long handlerRefCon)
 {
 #pragma unused(reply, handlerRefCon)
 
@@ -4250,10 +4208,10 @@ static pascal OSErr AEH_Start(const AppleEvent *theAppleEvent,
  * Apple Event Handler -- Quit Application
  */
 static pascal OSErr AEH_Quit(const AppleEvent *theAppleEvent,
-                             const AppleEvent *reply, long handlerRefCon)
+                             AppleEvent *reply, long handlerRefCon)
 {
 #pragma unused(reply, handlerRefCon)
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 	/* Save the game (if necessary) */
 	if (game_in_progress && character_generated)
 	{
@@ -4279,7 +4237,7 @@ static pascal OSErr AEH_Quit(const AppleEvent *theAppleEvent,
  * Apple Event Handler -- Print Documents
  */
 static pascal OSErr AEH_Print(const AppleEvent *theAppleEvent,
-                              const AppleEvent *reply, long handlerRefCon)
+                              AppleEvent *reply, long handlerRefCon)
 {
 #pragma unused(theAppleEvent, reply, handlerRefCon)
 
@@ -4301,7 +4259,7 @@ static pascal OSErr AEH_Print(const AppleEvent *theAppleEvent,
  * snippet from Think Reference 2.0.  (The prior sentence could read
  * "shamelessly swiped & hacked")
  */
-static pascal OSErr AEH_Open(AppleEvent *theAppleEvent,
+static pascal OSErr AEH_Open(const AppleEvent *theAppleEvent,
                              AppleEvent* reply, long handlerRefCon)
 {
 #pragma unused(reply, handlerRefCon)
@@ -4455,7 +4413,7 @@ static bool CheckEvents(bool wait)
 	/* Timestamp last check */
 	lastTicks = curTicks;
 
-#ifndef TARGET_CARBON
+#ifndef TARGET_API_MAC_CARBON
 	/* Let the "system" run */
 	SystemTask();
 #endif
@@ -4585,7 +4543,9 @@ static bool CheckEvents(bool wait)
 				Term_keypress('0' + (ck - 64) % 10);
 
 				/* Hack -- Terminate the sequence */
-				Term_keypress(13);
+				/* MPW can generate 10 or 13 for keycode of '\r' */
+				/* -noMapCR option swaps '\r' and '\n' */
+				Term_keypress('\r');
 			}
 
 			break;
@@ -4618,7 +4578,7 @@ static bool CheckEvents(bool wait)
 					HiliteMenu(0);
 					break;
 				}
-#ifndef TARGET_CARBON
+#ifndef TARGET_API_MAC_CARBON
 				case inSysWindow:
 				{
 					SystemClick(&event, w);
@@ -4634,7 +4594,8 @@ static bool CheckEvents(bool wait)
 					BitMap screen;
 					Rect portRect;
 					
-#ifdef TARGET_CARBON						
+#if TARGET_API_MAC_CARBON
+						
 					GetQDGlobalsScreenBits( &screen );
 #else
 					screen = qd.screenBits;
@@ -4655,7 +4616,7 @@ static bool CheckEvents(bool wait)
 					activate(td->w);
 
 					/* Analyze */
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 					GetWindowBounds( (WindowRef)td->w, kWindowContentRgn, &portRect );
 #else
 					portRect = td->w->portRect;
@@ -4663,7 +4624,7 @@ static bool CheckEvents(bool wait)
 #endif
 					p.h = portRect.left;
 					p.v = portRect.top;
-#ifndef TARGET_CARBON
+#ifndef TARGET_API_MAC_CARBON
 					LocalToGlobal(&p);
 #endif
 					td->r.left = p.h;
@@ -4701,7 +4662,7 @@ static bool CheckEvents(bool wait)
 
 				case inGrow:
 				{
-					int x, y;
+					s16b x, y;
 
 					term *old = Term;
 
@@ -4763,7 +4724,7 @@ static bool CheckEvents(bool wait)
 		{
 			/* check for error when mounting the disk */
 			
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 #else
 			if (HiWord(event.message) != noErr)
 			{
@@ -4789,7 +4750,7 @@ static bool CheckEvents(bool wait)
 				if (event.message & resumeFlag)
 				{
 					
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 					{
 						Cursor	arrow;
 						
@@ -4822,7 +4783,7 @@ static bool CheckEvents(bool wait)
 		/* From "Steve Linberg" and "Maarten Hazewinkel" */
 		case kHighLevelEvent:
 		{
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 			AEProcessAppleEvent(&event);
 #else
 			/* Process apple events */
@@ -5028,21 +4989,18 @@ static void hook_core(cptr str)
  */
 static void init_stuff(void)
 {
-	int i;
-
-	short vrefnum;
-	long drefnum;
-	long junk;
-
-	SFTypeList types;
-	SFReply reply;
-
 	Rect r;
+	BitMap tBitMap;
+	Rect screenRect;
 	Point topleft;
 
 	char path[1024];
-	
-	BitMap screen;
+
+	OSErr err = noErr;
+	NavDialogOptions dialogOptions;
+	FSSpec theFolderSpec;
+	NavReplyRecord theReply;
+
 
 	/* Fake rectangle */
 	r.left = 0;
@@ -5051,12 +5009,8 @@ static void init_stuff(void)
 	r.bottom = 188;
 
 	/* Center it */
-#ifdef TARGET_CARBON						
-	GetQDGlobalsScreenBits( &screen );
-#else
-	screen = qd.screenBits;
-#endif
-	center_rect(&r, &screen.bounds);
+	screenRect = GetQDGlobalsScreenBits(&tBitMap)->bounds;
+	center_rect(&r, &screenRect);
 
 	/* Extract corner */
 	topleft.v = r.top;
@@ -5065,6 +5019,7 @@ static void init_stuff(void)
 
 	/* Default to the "lib" folder with the application */
 	refnum_to_name(path, app_dir, app_vol, (char*)("\plib:"));
+
 
 	/* Check until done */
 	while (1)
@@ -5096,39 +5051,72 @@ static void init_stuff(void)
 			plog("The Angband 'lib' folder is probably missing or misplaced.");
 		#endif
 
-		/* Warning */
-		plog("Please 'open' any file in any sub-folder of the 'lib' folder.");
+		/* Ask the user to choose the lib folder */
+		err = NavGetDefaultDialogOptions(&dialogOptions);
 
-		/* Get any file */
+		/* Paranoia */
+		if (err != noErr) quit(NULL);
+
+		/* Set default location option */
+		dialogOptions.dialogOptionFlags |= kNavSelectDefaultLocation;
+
+		/* Clear preview option */
+		dialogOptions.dialogOptionFlags &= ~(kNavAllowPreviews);
+
+		/* Forbit selection of multiple files */
+		dialogOptions.dialogOptionFlags &= ~(kNavAllowMultipleFiles);
+
+		/* Display location */
+		dialogOptions.location = topleft;
+
+		/* Load the message for the missing folder from the resource fork */
+		GetIndString(dialogOptions.message, 128, 1);
+
+		/* Wait for the user to choose a folder */
+		err = NavChooseFolder(
+			nil,
+			&theReply,
+			&dialogOptions,
+			nil,
+			nil,
+			nil);
+
+		/* Assume the player doesn't want to go on */
+		if ((err != noErr) || !theReply.validRecord) quit(NULL);
+
+		/* Retrieve FSSpec from the reply */
 		{
-			OSErr		err;
-			char path[1024];
-			FSSpec	fsp;
-			
-			refnum_to_name(path, app_dir, app_vol, (char*)("\plib:file:"));
-	
-			FSpLocationFromFullPath( strlen(path), path, &fsp );
-			
-			err = ChooseFile( path, fsp );
-			
-			if( err != noErr )
-			{
-				quit(NULL);
-			}
+			AEKeyword theKeyword;
+			DescType actualType;
+			Size actualSize;
+
+			/* Get a pointer to selected folder */
+			err = AEGetNthPtr(
+				&(theReply.selection),
+				1,
+				typeFSS,
+				&theKeyword,
+				&actualType,
+				&theFolderSpec,
+				sizeof(FSSpec),
+				&actualSize);
+
+			/* Paranoia */
+			if (err != noErr) quit(NULL);
 		}
-		
-		/* Hack -- Remove the "filename" */
-		i = strlen(path) - 1;
-		while ((i > 0) && (path[i] != ':')) i--;
-		if (path[i] == ':') path[i+1] = '\0';
 
-		/* Hack -- allow "lib" folders */
-		if (suffix(path, "lib:")) continue;
+		/* Free navitagor reply */
+		err = NavDisposeReply(&theReply);
 
-		/* Hack -- Remove the "sub-folder" */
-		i = i - 1;
-		while ((i > 1) && (path[i] != ':')) i--;
-		if (path[i] == ':') path[i+1] = '\0';
+		/* Paranoia */
+		if (err != noErr) quit(NULL);
+
+		/* Extract textual file name for given file */
+		refnum_to_name(
+			path,
+			theFolderSpec.parID,
+			theFolderSpec.vRefNum,
+			(char *)theFolderSpec.name);
 	}
 }
 
@@ -5141,7 +5129,7 @@ void main(void)
 	EventRecord tempEvent;
 	int numberOfMasters = 10;
 
-#ifndef TARGET_CARBON
+#ifndef TARGET_API_MAC_CARBON
 	/* Increase stack space by 64K */
 	SetApplLimit(GetApplLimit() - 65536L);
 
@@ -5152,7 +5140,7 @@ void main(void)
 	/* Get more Masters */
 	while (numberOfMasters--) MoreMasters();
 
-#ifndef TARGET_CARBON
+#ifndef TARGET_API_MAC_CARBON
 	/* Set up the Macintosh */
 	InitGraf(&qd.thePort);
 	InitFonts();
@@ -5190,7 +5178,7 @@ void main(void)
 
 # else
 
-#ifndef TARGET_CARBON
+#ifndef TARGET_API_MAC_CARBON
 	/* Block */
 	if (TRUE)
 	{
@@ -5339,7 +5327,7 @@ BackColor(blackColor);
 	while (CheckEvents(TRUE)) /* loop */;
 
 	/* Reset the cursor */
-#ifdef TARGET_CARBON
+#if TARGET_API_MAC_CARBON
 	{
 		Cursor	arrow;
 		GetQDGlobalsArrow( &arrow );

@@ -4366,10 +4366,6 @@ void do_cmd_version(void)
 {
 
 	/* Silly message */
-#ifndef FAKE_VERSION
-	msg_format("You are playing Angband %d.%d.%d.",
-	           VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
-#else
 #ifdef JP
 	msg_format(" —∂Ú»⁄≈‹(Hengband) %d.%d.%d",
 	            FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
@@ -4377,9 +4373,6 @@ void do_cmd_version(void)
 	msg_format("You are playing Hengband %d.%d.%d.",
 	            FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 #endif
-
-#endif
-
 }
 
 

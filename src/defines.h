@@ -37,21 +37,17 @@
  */
 #define VERSION_NAME "Hengband"
 
-
-/*
- * Current version number of Angband: 2.8.1
- */
-#define VERSION_MAJOR   2
-#define VERSION_MINOR   8
-#define VERSION_PATCH   1
-
-#define SAVEFILE_VERSION 3
+/* Savefile version for Hengband 1.1.1 and later */
+#define H_VER_MAJOR 1
+#define H_VER_MINOR 1
+#define H_VER_PATCH 1
+#define H_VER_EXTRA 0
 
 /* Added for ZAngband */
 #define FAKE_VERSION   0
 #define FAKE_VER_MAJOR 11
 #define FAKE_VER_MINOR 1
-#define FAKE_VER_PATCH 0
+#define FAKE_VER_PATCH 1
 
 #define ANGBAND_2_8_1
 #define ZANGBAND
@@ -62,16 +58,6 @@
 #define VERSION_EXTRA   0
 
 
-#ifdef JP
- /*
-  * 日本語版のバージョン
-  */
-#define JVERSION_MAJOR 0
-#define JVERSION_MINOR 9
-#define JVERSION_PATCH 4
-#define JVERSION_EXTRA 0
-
-#endif
 /*
  * Number of grids in each block (vertically)
  * Probably hard-coded to 11, see "generate.c"
