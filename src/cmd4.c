@@ -7268,30 +7268,37 @@ static void do_cmd_knowledge_autopick(void)
 
 	for (k = 0; k < max_autopick; k++)
 	{
-		if (!(autopick_action[k] & DO_AUTOPICK))
+		char *tmp;
+		byte act = autopick_action[k];
+		if (act & DONT_AUTOPICK)
 		{
 #ifdef JP
-			fprintf(fff, "     [ÊüÃÖ]");
+			tmp = "ÊüÃÖ";
 #else
-			fprintf(fff, "    [Leave]");
+			tmp = "Leave";
 #endif
 		}
-		else if ((autopick_action[k] & DO_AUTODESTROY))
+		else if (act & DO_AUTODESTROY)
 		{
 #ifdef JP
-			fprintf(fff, "     [ÇË²õ]");
+			tmp = "ÇË²õ";
 #else
-			fprintf(fff, "  [Destroy]");
+			tmp = "Destroy";
 #endif
 		}
 		else
 		{
 #ifdef JP
-			fprintf(fff, "     [½¦¤¦]");
+			tmp = "½¦¤¦";
 #else
-			fprintf(fff, "   [Pickup]");
+			tmp = "Pickup";
 #endif
 		}
+
+		if (act & DO_DISPLAY)
+			fprintf(fff, "%11s", format("[%s]", tmp));
+		else
+			fprintf(fff, "%11s", format("(%s)", tmp));
 
 		fprintf(fff, " %s", autopick_name[k]);
 		if(autopick_insc[k] != NULL)
