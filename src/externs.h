@@ -1359,6 +1359,7 @@ extern bool do_res_stat(int stat);
 extern bool do_inc_stat(int stat);
 extern bool restore_level(void);
 extern bool lose_all_info(void);
+extern void gain_exp_64(s32b amount, u32b amount_frac);
 extern void gain_exp(s32b amount);
 extern void calc_android_exp(void);
 extern void lose_exp(s32b amount);

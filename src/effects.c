@@ -4979,6 +4979,7 @@ msg_format("%sの構成が変化した！", p_ptr->prace == RACE_ANDROID ? "機械" : "内臓
  * the game when he dies, since the "You die." message is shown before
  * setting the player to "dead".
  */
+
 int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 {
 	int old_chp = p_ptr->chp;
@@ -5372,14 +5373,14 @@ msg_print("*** 警告:低ヒット・ポイント！ ***");
 /*
  * Gain experience
  */
-void gain_exp(s32b amount)
+void gain_exp_64(s32b amount, u32b amount_frac)
 {
 	if (p_ptr->is_dead) return;
 
 	if (p_ptr->prace == RACE_ANDROID) return;
 
 	/* Gain some experience */
-	p_ptr->exp += amount;
+	s64b_add(&(p_ptr->exp), &(p_ptr->exp_frac), amount, amount_frac);
 
 	/* Slowly recover from experience drainage */
 	if (p_ptr->exp < p_ptr->max_exp)
@@ -5390,6 +5391,15 @@ void gain_exp(s32b amount)
 
 	/* Check Experience */
 	check_experience();
+}
+
+
+/*
+ * Gain experience
+ */
+void gain_exp(s32b amount)
+{
+	gain_exp_64(amount, 0L);
 }
 
 

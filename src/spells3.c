@@ -4531,7 +4531,7 @@ static void spell_info(char *p, int spell, int use_realm)
 		case 26: sprintf(p, " %s%d", s_dam, 150 + plev*3/2); break;
 		case 27: sprintf(p, " %s150 / 250", s_dam); break;
 		case 29: sprintf(p, " %s%d", s_dam, 300 + (plev * 4)); break;
-		case 30: sprintf(p, " %s%d", s_dam, p_ptr->chp); break;
+		case 30: sprintf(p, " %s%ld", s_dam, p_ptr->chp); break;
 		case 31: sprintf(p, " %s3 * 175", s_dam); break;
 		}
 		break;

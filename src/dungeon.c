@@ -819,33 +819,25 @@ static bool pattern_effect(void)
  */
 static void regenhp(int percent)
 {
-	s32b    new_chp, new_chp_frac;
-	int     old_chp;
+	s32b new_chp;
+	u32b new_chp_frac;
+	s32b old_chp;
 
 	if (p_ptr->special_defense & KATA_KOUKIJIN) return;
 	if (p_ptr->action == ACTION_HAYAGAKE) return;
+
 	/* Save the old hitpoints */
 	old_chp = p_ptr->chp;
 
 	/* Extract the new hitpoints */
-	new_chp = ((long)p_ptr->mhp) * percent + PY_REGEN_HPBASE;
-	p_ptr->chp += (s16b)(new_chp >> 16);   /* div 65536 */
+	new_chp = 0;
+	new_chp_frac = (p_ptr->mhp * percent + PY_REGEN_HPBASE) << 16;
 
-	/* check for overflow */
-	if ((p_ptr->chp < 0) && (old_chp > 0)) p_ptr->chp = MAX_SHORT;
-	new_chp_frac = (new_chp & 0xFFFF) + p_ptr->chp_frac;	/* mod 65536 */
-	if (new_chp_frac >= 0x10000L)
-	{
-		p_ptr->chp_frac = (u16b)(new_chp_frac - 0x10000L);
-		p_ptr->chp++;
-	}
-	else
-	{
-		p_ptr->chp_frac = (u16b)new_chp_frac;
-	}
+	s64b_add(&(p_ptr->chp), &(p_ptr->chp_frac), new_chp, new_chp_frac);
+
 
 	/* Fully healed */
-	if (p_ptr->chp >= p_ptr->mhp)
+	if (0 < s64b_cmp(p_ptr->chp, p_ptr->chp_frac, p_ptr->mhp, 0))
 	{
 		p_ptr->chp = p_ptr->mhp;
 		p_ptr->chp_frac = 0;
@@ -866,55 +858,65 @@ static void regenhp(int percent)
 
 
 /*
- * Regenerate mana points				-RAK-
+ * Regenerate mana points
+ * Get ((new_mana) / 2^32) mana point once called.
  */
 static void regenmana(int percent)
 {
-	s32b        new_mana, new_mana_frac;
-	int                   old_csp;
-	bool    old_csp_msp = (p_ptr->csp > p_ptr->msp);
+	s32b old_csp = p_ptr->csp;
 
-	if (p_ptr->special_defense & KATA_KOUKIJIN) return;
-	if ((p_ptr->pclass == CLASS_SAMURAI) && (p_ptr->regenerate)) percent /= 2;
-	old_csp = p_ptr->csp;
-	new_mana = ((long)p_ptr->msp) * percent + PY_REGEN_MNBASE;
-	if (old_csp_msp && (new_mana > 0))
+	/*
+	 * Excess mana will decay 32 times faster than normal
+	 * regeneration rate.
+	 */
+	if (p_ptr->csp > p_ptr->msp)
 	{
-		new_mana *= 32;
-		p_ptr->csp--;
-		p_ptr->csp -= (s16b)(new_mana >> 16);	/* div 65536 */
-		new_mana_frac = p_ptr->csp_frac + 0x10000L - (new_mana & 0xFFFF);
-	}
-	else
-	{
-		if (old_csp_msp) new_mana += ((((long)p_ptr->msp) * percent + PY_REGEN_MNBASE) * 32);
-		p_ptr->csp += (s16b)(new_mana >> 16);	/* div 65536 */
+		u32b decay_frac = (p_ptr->msp * 32 * PY_REGEN_NORMAL + PY_REGEN_MNBASE) << 16;
 
-		new_mana_frac = (new_mana & 0xFFFF) + p_ptr->csp_frac;	/* mod 65536 */
-	}
-	if (new_mana_frac >= 0x10000L)
-	{
-		p_ptr->csp_frac = (u16b)(new_mana_frac - 0x10000L);
-		p_ptr->csp++;
-	}
-	else
-	{
-		p_ptr->csp_frac = (u16b)(new_mana_frac);
+		/* Decay */
+		s64b_sub(&(p_ptr->csp), &(p_ptr->csp_frac), 0, decay_frac);
+
+		/* Stop decaying */
+		if (p_ptr->csp < p_ptr->msp)
+		{
+			p_ptr->csp = p_ptr->msp;
+			p_ptr->csp_frac = 0;
+		}
 	}
 
-	/* check for overflow */
-	if (p_ptr->csp < 0)
+	/* Regerating mana (unless the player has excess mana) */
+	else if (percent > 0)
 	{
-		p_ptr->csp = 0;
-		p_ptr->csp_frac = 0;
+		u32b new_mana_frac = (p_ptr->msp * percent / 100 + PY_REGEN_MNBASE) << 16;
+
+		/* Regenerate */
+		s64b_add(&(p_ptr->csp), &(p_ptr->csp_frac), 0, new_mana_frac);
+
+		/* Must set frac to zero even if equal */
+		if (p_ptr->csp >= p_ptr->msp)
+		{
+			p_ptr->csp = p_ptr->msp;
+			p_ptr->csp_frac = 0;
+		}
 	}
 
-	/* Must set frac to zero even if equal */
-	if ((old_csp_msp && p_ptr->csp < p_ptr->msp) || (!old_csp_msp && p_ptr->csp >= p_ptr->msp))
+
+	/* Reduce mana (even when the player has excess mana) */
+	if (percent < 0)
 	{
-		p_ptr->csp = p_ptr->msp;
-		p_ptr->csp_frac = 0;
+		u32b reduce_mana_frac = (p_ptr->msp * PY_REGEN_NORMAL + PY_REGEN_MNBASE) << 16;
+
+		/* Reduce mana */
+		s64b_sub(&(p_ptr->csp), &(p_ptr->csp_frac), 0, reduce_mana_frac);
+
+		/* check for overflow */
+		if (p_ptr->csp < 0)
+		{
+			p_ptr->csp = 0;
+			p_ptr->csp_frac = 0;
+		}
 	}
+
 
 	/* Redraw mana */
 	if (old_csp != p_ptr->csp)
@@ -1792,35 +1794,35 @@ static void check_music(void)
 {
 	magic_type *s_ptr;
 	int spell;
-	u32b need_mana;
+	s32b need_mana;
+	u32b need_mana_frac;
 
 	/* Music singed by player */
 	if (p_ptr->pclass != CLASS_BARD) return;
 	if (!p_ptr->magic_num1[0] && !p_ptr->magic_num1[1]) return;
 
+	if (p_ptr->anti_magic)
+	{
+		stop_singing();
+		return;
+	}
+
 	spell = p_ptr->magic_num2[0];
 	s_ptr = &technic_info[REALM_MUSIC - MIN_TECHNIC][spell];
 
 	need_mana = mod_need_mana(s_ptr->smana, spell, REALM_MUSIC);
-	need_mana *= 0x8000;
-	if (((u32b)p_ptr->csp < (need_mana / 0x10000)) || (p_ptr->anti_magic))
+	need_mana_frac = 0;
+
+	s64b_RSHIFT(need_mana, need_mana_frac);
+
+	if (s64b_cmp(p_ptr->csp, p_ptr->csp_frac, need_mana, need_mana_frac) < 0)
 	{
 		stop_singing();
 		return;
 	}
 	else
 	{
-		p_ptr->csp -= (u16b) (need_mana / 0x10000);
-		need_mana = (need_mana & 0xffff);
-		if ((u32b)p_ptr->csp_frac < need_mana)
-		{
-			p_ptr->csp--;
-			p_ptr->csp_frac += (u16b)(0x10000L - need_mana);
-		}
-		else
-		{
-			p_ptr->csp_frac -= (u16b)need_mana;
-		}
+		s64b_sub(&(p_ptr->csp), &(p_ptr->csp_frac), need_mana, need_mana_frac);
 
 		p_ptr->redraw |= PR_MANA;
 		if (p_ptr->magic_num1[1])
@@ -1859,6 +1861,7 @@ static void check_music(void)
 	gere_music(p_ptr->magic_num1[0]);
 }
 
+
 /* Choose one of items that have cursed flag */
 static object_type *choose_cursed_obj_name(u32b flag)
 {
@@ -1894,6 +1897,7 @@ static void process_world_aux_hp_and_sp(void)
 	feature_type *f_ptr = &f_info[cave[py][px].feat];
 	bool cave_no_regen = FALSE;
 	int upkeep_factor = 0;
+	int upkeep_regen;
 
 	/* Default regeneration */
 	int regen_amount = PY_REGEN_NORMAL;
@@ -2223,32 +2227,20 @@ take_hit(DAMAGE_NOESCAPE, damage, "冷気のオーラ", -1);
 
 	upkeep_factor = calculate_upkeep();
 
+	/* No regeneration while special action */
+	if ((p_ptr->action == ACTION_LEARN) ||
+	    (p_ptr->action == ACTION_HAYAGAKE) ||
+	    (p_ptr->special_defense & KATA_KOUKIJIN))
+	{
+		upkeep_factor += 100;
+	}
+
 	/* Regenerate the mana */
-	if (upkeep_factor)
-	{
-		s32b upkeep_regen = ((100 - upkeep_factor) * regen_amount);
-		if ((p_ptr->action == ACTION_LEARN) || (p_ptr->action == ACTION_HAYAGAKE)) upkeep_regen -= regen_amount;
-		regenmana(upkeep_regen/100);
+	upkeep_regen = (100 - upkeep_factor) * regen_amount;
+	regenmana(upkeep_regen);
 
-#if 0
-		/* Debug message */
-		if (p_ptr->wizard)
-		{
-#ifdef JP
-			msg_format("ＭＰ回復: %d/%d", upkeep_regen, regen_amount);
-#else
-			msg_format("Regen: %d/%d", upkeep_regen, regen_amount);
-#endif
 
-		}
-#endif /* 0 */
-
-	}
-	else if (p_ptr->action != ACTION_LEARN)
-	{
-		regenmana(regen_amount);
-	}
-
+	/* Recharge magic eater's power */
 	if (p_ptr->pclass == CLASS_MAGIC_EATER)
 	{
 		regenmagic(regen_amount);
@@ -2259,9 +2251,9 @@ take_hit(DAMAGE_NOESCAPE, damage, "冷気のオーラ", -1);
 		while (upkeep_factor > 100)
 		{
 #ifdef JP
-msg_print("こんなに多くのペットを制御できない！");
+			msg_print("こんなに多くのペットを制御できない！");
 #else
-			msg_print("Such much pets cannot be controled at once!");
+			msg_print("Too many pets to control at once!");
 #endif
 			msg_print(NULL);
 			do_cmd_pet_dismiss();
@@ -2289,16 +2281,7 @@ msg_print("こんなに多くのペットを制御できない！");
 	/* Regenerate Hit Points if needed */
 	if ((p_ptr->chp < p_ptr->mhp) && !cave_no_regen)
 	{
-		feature_type *f_ptr = &f_info[cave[py][px].feat];
-
-		if (have_flag(f_ptr->flags, FF_PATTERN) && (f_ptr->power <= PATTERN_TILE_4))
-		{
-			regenhp(regen_amount / 5); /* Hmmm. this should never happen? */
-		}
-		else
-		{
-			regenhp(regen_amount);
-		}
+		regenhp(regen_amount);
 	}
 }
 
@@ -5857,24 +5840,23 @@ msg_format("%^sを恐怖から立ち直らせた。", m_name);
 	}
 	if (p_ptr->action == ACTION_LEARN)
 	{
-		int hoge = ((p_ptr->msp * 0x10000L) / 256L)+7680L;
-		if ((p_ptr->csp * 0x10000L + p_ptr->csp_frac) < hoge)
+		s32b cost = 0L;
+		u32b cost_frac = (p_ptr->msp + 30L);
+
+		s64b_mul(&cost, &cost_frac, 0, (256 << 16));
+
+ 
+		if (s64b_cmp(p_ptr->csp, p_ptr->csp_frac, cost, cost_frac) < 0)
 		{
+			/* Mana run out */
 			p_ptr->csp = 0;
 			p_ptr->csp_frac = 0;
 			set_action(ACTION_NONE);
 		}
 		else
 		{
-			p_ptr->csp -= (s16b)(hoge >> 16);
-			hoge &= 0xFFFFL;
-			if (p_ptr->csp_frac < hoge)
-			{
-				p_ptr->csp_frac += 0x10000L - hoge;
-				p_ptr->csp--;
-			}
-			else
-				p_ptr->csp_frac -= hoge;
+			/* Reduce mana */
+			s64b_sub(&(p_ptr->csp), &(p_ptr->csp_frac), cost, cost_frac);
 		}
 		p_ptr->redraw |= PR_MANA;
 	}

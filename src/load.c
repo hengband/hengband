@@ -1496,6 +1496,7 @@ static void rd_extra(void)
 
 	byte tmp8u;
 	s16b tmp16s;
+	u16b tmp16u;
 
 	rd_string(player_name, sizeof(player_name));
 
@@ -1556,7 +1557,16 @@ static void rd_extra(void)
 	if (h_older_than(1, 5, 4, 1)) p_ptr->max_max_exp = p_ptr->max_exp;
 	else rd_s32b(&p_ptr->max_max_exp);
 	rd_s32b(&p_ptr->exp);
-	rd_u16b(&p_ptr->exp_frac);
+
+	if (h_older_than(1, 7, 0, 3))
+	{
+		rd_u16b(&tmp16u);
+		p_ptr->exp_frac = (u32b)tmp16u;
+	}
+	else
+	{
+		rd_u32b(&p_ptr->exp_frac);
+	}
 
 	rd_s16b(&p_ptr->lev);
 
@@ -1715,13 +1725,41 @@ static void rd_extra(void)
 		rd_s16b(&tmp16s2);
 	}
 
-	rd_s16b(&p_ptr->mhp);
-	rd_s16b(&p_ptr->chp);
-	rd_u16b(&p_ptr->chp_frac);
+	if (h_older_than(1, 7, 0, 3))
+	{
+		rd_s16b(&tmp16s);
+		p_ptr->mhp = tmp16s;
 
-	rd_s16b(&p_ptr->msp);
-	rd_s16b(&p_ptr->csp);
-	rd_u16b(&p_ptr->csp_frac);
+		rd_s16b(&tmp16s);
+		p_ptr->chp = tmp16s;
+
+		rd_u16b(&tmp16u);
+		p_ptr->chp_frac = (u32b)tmp16u;
+	}
+	else
+	{
+		rd_s32b(&p_ptr->mhp);
+		rd_s32b(&p_ptr->chp);
+		rd_u32b(&p_ptr->chp_frac);
+	}
+
+	if (h_older_than(1, 7, 0, 3))
+	{
+		rd_s16b(&tmp16s);
+		p_ptr->msp = tmp16s;
+
+		rd_s16b(&tmp16s);
+		p_ptr->csp = tmp16s;
+
+		rd_u16b(&tmp16u);
+		p_ptr->csp_frac = (u32b)tmp16u;
+	}
+	else
+	{
+		rd_s32b(&p_ptr->msp);
+		rd_s32b(&p_ptr->csp);
+		rd_u32b(&p_ptr->csp_frac);
+	}
 
 	rd_s16b(&p_ptr->max_plv);
 	if (z_older_than(10, 3, 8))

@@ -140,5 +140,129 @@ void core(cptr str)
 }
 
 
+/*** 64-bit integer operations ***/
 
+/* Add B to A */
+void s64b_add(s32b *A1, u32b *A2, s32b B1, u32b B2)
+{
+	(*A2) += B2;
+
+	/* Overflawed? */
+	if ((*A2) < B2)
+		(*A1) += B1 + 1;
+	else
+		(*A1) += B1;
+}
+
+
+/* Subtract B from A */
+void s64b_sub(s32b *A1, u32b *A2, s32b B1, u32b B2)
+{
+	/* Underflaw? */
+	if ((*A2) < B2)
+		(*A1) -= B1 + 1;
+	else
+		(*A1) -= B1;
+
+	(*A2) -= B2;
+}
+
+
+/*
+ * Multiply A by B
+ *
+ * (A1*2^32 + A2h*2^16 + A2l) * (B1*2^32 + B2h*2^16 + B2l)
+ *  = (A1*B2 & 0xffffffff)*2^32
+ *   +(A2*B1 & 0xffffffff)*2^32
+ *   +(A2h*B2h & 0xffffffff)*2^32
+ *   +(A2h*B2l & 0xffff0000)*2^16
+ *   +(A2l*B2h & 0xffff0000)*2^16
+ *   +(A2*B2 & 0xffffffff)
+ */
+void s64b_mul(s32b *A1, u32b *A2, s32b B1, u32b B2)
+{
+	s32b tmp1;
+	u32b A2val = (*A2);
+
+	u32b B2high = (B2 >> 16);
+	u32b A2high = (A2val >> 16);
+
+	(*A2) *= B2;
+	tmp1 = (*A1) * B2;
+	tmp1 += A2val * B1;
+	tmp1 += A2high * B2high;
+	tmp1 += (A2high * (u16b)B2) >> 16;
+	tmp1 += ((u16b)A2val * B2high) >> 16;
+
+	(*A1) = tmp1;
+}
+
+
+/* Compare A to B */
+int s64b_cmp(s32b A1, u32b A2, s32b B1, u32b B2)
+{
+	if (A1 > B1) return 1;
+	if (A1 < B1) return -1;
+	if (A2 > B2) return 1;
+	if (A2 < B2) return -1;
+	return 0;
+}
+
+/*
+ * Divide A by B
+ *
+ * Assumes that both A and B are positive
+ */
+void s64b_div(s32b *A1, u32b *A2, s32b B1, u32b B2)
+{
+	s32b result1 = 0;
+	u32b result2 = 0;
+	s32b A1val = (*A1);
+	u32b A2val = (*A2);
+	int bit = 0;
+
+	/* No result for B==0 */
+	if (B1 == 0 && B2 == 0) return;
+
+	/*
+	 * Find the highest bit of quotient
+	 */
+	while (s64b_cmp(A1val, A2val, B1, B2) == 1)
+	{
+		s64b_LSHIFT(B1, B2);
+		bit++;
+	}
+
+	/* Extract bits of quotient one by one */
+	while (bit >= 0)
+	{
+		if (s64b_cmp(A1val, A2val, B1, B2) >= 0)
+		{
+			if (bit >= 32)
+				result1 |= (0x00000001L << (bit - 32));
+			else
+				result2 |= (0x00000001L << bit);
+
+			s64b_sub(&A1val, &A2val, B1, B2);
+		}
+	
+		s64b_RSHIFT(B1, B2);
+		bit--;
+	}
+
+	(*A1) = result1;
+	(*A2) = result2;
+}
+
+
+/* Reminder of division (A % B) */
+void s64b_mod(s32b *A1, u32b *A2, s32b B1, u32b B2)
+{
+	s32b tmp1 = (*A1);
+	u32b tmp2 = (*A2);
+
+	s64b_div(&tmp1, &tmp2, B1, B2);
+	s64b_mul(&tmp1, &tmp2, B1, B2);
+	s64b_sub(A1, A2, tmp1, tmp2);
+}
 

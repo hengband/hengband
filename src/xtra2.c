@@ -1591,115 +1591,71 @@ msg_print("バリアを切り裂いた！");
 	return (dam);
 }
 
+
+/*
+ * Calculate experience point to be get
+ *
+ * Even the 64 bit operation is not big enough to avoid overflaw
+ * unless we carefully choose orders of multiplication and division.
+ *
+ * Get the coefficient first, and multiply (potentially huge) base
+ * experience point of a monster later.
+ */
 static void get_exp_from_mon(int dam, monster_type *m_ptr)
 {
-	s32b         div, new_exp, new_exp_frac;
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	int          monnum_penarty = 0;
+
+	s32b new_exp;
+	u32b new_exp_frac;
+	s32b div_h;
+	u32b div_l;
 
 	if (!m_ptr->r_idx) return;
 	if (is_pet(m_ptr) || p_ptr->inside_battle) return;
+
+	/*
+	 * - Ratio of monster's level to player's level effects
+	 * - Varying speed effects
+	 * - Get a fraction in proportion of damage point
+	 */
+	new_exp = r_ptr->level * SPEED_TO_ENERGY(m_ptr->mspeed) * dam;
+	new_exp_frac = 0;
+	div_h = 0L;
+	div_l = (p_ptr->max_plv+2) * SPEED_TO_ENERGY(r_ptr->speed);
+
+	/* Use (average maxhp * 2) as a denominator */
+	if (!(r_ptr->flags1 & RF1_FORCE_MAXHP))
+		s64b_mul(&div_h, &div_l, 0, r_ptr->hdice * (r_ptr->hside + 1));
 	else
+		s64b_mul(&div_h, &div_l, 0, r_ptr->hdice * r_ptr->hside * 2);
+
+	/* Special penalty in the wilderness */
+	if (!dun_level && (!(r_ptr->flags8 & RF8_WILD_ONLY) || !(r_ptr->flags1 & RF1_UNIQUE)))
+		s64b_mul(&div_h, &div_l, 0, 5);
+
+	/* Do division first to prevent overflaw */
+	s64b_div(&new_exp, &new_exp_frac, div_h, div_l);
+
+	/* Special penalty for mutiply-monster */
+	if ((r_ptr->flags2 & RF2_MULTIPLY) || (m_ptr->r_idx == MON_DAWN))
 	{
-		u32b m_exp;
-		u32b m_exp_h, m_exp_l;
-		u32b div_h, div_l;
-		if ((r_ptr->flags2 & RF2_MULTIPLY) || (m_ptr->r_idx == MON_DAWN))
+		int monnum_penarty = r_ptr->r_pkills / 400;
+		if (monnum_penarty > 8) monnum_penarty = 8;
+
+		while (monnum_penarty--)
 		{
-			monnum_penarty = r_ptr->r_pkills / 400;
-			if (monnum_penarty > 8) monnum_penarty = 8;
+			/* Divide by 4 */
+			s64b_RSHIFT(new_exp, new_exp_frac);
+			s64b_RSHIFT(new_exp, new_exp_frac);
 		}
-		if (r_ptr->flags1 & RF1_UNIQUE)
-		{
-			m_exp = (long)r_ptr->mexp * r_ptr->level;
-			div = (p_ptr->max_plv+2);
-		}
-		else
-		{
-			m_exp = (long)r_ptr->mexp * r_ptr->level * SPEED_TO_ENERGY(m_ptr->mspeed);
-			div = (p_ptr->max_plv+2) * SPEED_TO_ENERGY(r_ptr->speed);
-		}
-		m_exp_h = m_exp/0x10000L;
-		m_exp_l = m_exp%0x10000L;
-		m_exp_h *= dam;
-		m_exp_l *= dam;
-		m_exp_h += m_exp_l / 0x10000L;
-		m_exp_l %= 0x10000L;
-
-		/* real monster maxhp have effect on EXP */
-		if(!(r_ptr->flags1 & RF1_FORCE_MAXHP))
-		{
-		  u32b maxhp = m_ptr->max_maxhp*2;
-		  m_exp_h *= maxhp;
-		  m_exp_l *= maxhp;
-		  m_exp_h += m_exp_l / 0x10000L;
-		  m_exp_l %= 0x10000L;
-
-		  div *= r_ptr->hdice * (r_ptr->hside + 1);
-		}
-		if (!dun_level && (!(r_ptr->flags8 & RF8_WILD_ONLY) || !(r_ptr->flags1 & RF1_UNIQUE))) div *= 5;
-		div_h = div/0x10000L;
-		div_l = div%0x10000L;
-		div_h *= (m_ptr->max_maxhp*2);
-		div_l *= (m_ptr->max_maxhp*2);
-		div_h += div_l / 0x10000L;
-		div_l %= 0x10000L;
-
-		while (monnum_penarty)
-		{
-			div_h *= 4;
-			div_l *= 4;
-			div_h += div_l / 0x10000L;
-			div_l %= 0x10000L;
-			monnum_penarty--;
-		}
-
-		m_exp_l = (0x7fffffff & (m_exp_h << 16)) | m_exp_l;
-		m_exp_h = m_exp_h >> 15;
-		div_l = (0x7fffffff & (div_h << 16)) | div_l;
-		div_h = div_h >> 15;
-
-#define M_INT_GREATER63(h1,l1,h2,l2)  ( (h1>h2)||( (h1==h2)&&(l1>=l2)))
-#define M_INT_SUB63(h1,l1, h2,l2) {h1-=h2;if(l1<l2){l1+=0x80000000;h1--;}l1-=l2;}
-#define M_INT_LSHIFT63(h1,l1) {h1=(h1<<1)|(l1>>30);l1=(l1<<1)&0x7fffffff;}
-#define M_INT_RSHIFT63(h1,l1) {l1=(l1>>1)|(h1<<30);h1>>=1;}
-#define M_INT_DIV63(h1,l1,h2,l2,result) \
-		do{ \
-		  int bit=1; \
-		  result = 0; \
-		  while( M_INT_GREATER63(h1,l1, h2, l2) ){M_INT_LSHIFT63(h2, l2); bit<<=1;} \
-		  for(bit>>=1; bit>=1; bit>>=1){ \
-		    M_INT_RSHIFT63(h2, l2); \
-		    if(M_INT_GREATER63(h1, l1, h2, l2)) \
-		      {result|=bit;M_INT_SUB63(h1, l1, h2, l2);} \
-		  } \
-		} while(0)
-
-		/* Give some experience for the kill */
-		M_INT_DIV63(m_exp_h, m_exp_l, div_h, div_l, new_exp);
-
-		/* Handle fractional experience */
-		/* multiply 0x10000L to remainder */
-		m_exp_h = (m_exp_h<<16) | (m_exp_l>>15);
-		m_exp_l <<= 16;
-		M_INT_DIV63(m_exp_h, m_exp_l, div_h, div_l, new_exp_frac);
-		new_exp_frac += p_ptr->exp_frac;
-		/* Keep track of experience */
-		if (new_exp_frac >= 0x10000L)
-		{
-			new_exp++;
-			p_ptr->exp_frac = (u16b)(new_exp_frac - 0x10000L);
-		}
-		else
-		{
-			p_ptr->exp_frac = (u16b)new_exp_frac;
-		}
-
-		/* Gain experience */
-		gain_exp(new_exp);
 	}
-}
 
+	/* Finally multiply base experience point of the monster */
+	s64b_mul(&new_exp, &new_exp_frac, 0, r_ptr->mexp);
+
+	/* Gain experience */
+	gain_exp_64(new_exp, new_exp_frac);
+}
 
 
 /*
@@ -2993,59 +2949,53 @@ static void target_set_prepare(int mode)
  */
 static void evaluate_monster_exp(char *buf, monster_type *m_ptr)
 {
-#define M_INT_GREATER(h1,l1,h2,l2)  ( (h1>h2)||( (h1==h2)&&(l1>=l2)))
-#define M_INT_SUB(h1,l1, h2,l2) {h1-=h2;if(l1<l2){l1+=0x10000;h1--;}l1-=l2;}
-#define M_INT_ADD(h1,l1, h2,l2) {h1+=h2;l1+=l2;if(l1>=0x10000L){l1&=0xFFFF;h1++;}}
-#define M_INT_LSHIFT(h1,l1) {h1=(h1<<1)|(l1>>15);l1=(l1<<1)&0xffff;}
-#define M_INT_RSHIFT(h1,l1) {l1=(l1>>1)|((h1&1)<<15);h1>>=1;}
-#define M_INT_MULT(h1,l1,mul,h2,l2) {l2=(l1*mul)&0xffff;h2=((l1*mul)>>16)+h1*mul;}
-
 	monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
+	u32b num;
+	s32b exp_mon, exp_adv;
+	u32b exp_mon_frac, exp_adv_frac;
 
-	u32b tmp_h,tmp_l;
-	int bit,result;
-	u32b exp_mon= (ap_r_ptr->mexp)*(ap_r_ptr->level);
-	u32b exp_mon_h= exp_mon / (p_ptr->max_plv+2);
-	u32b exp_mon_l= ((exp_mon % (p_ptr->max_plv+2))*0x10000/(p_ptr->max_plv+2))&0xFFFF;
-	
-	u32b exp_adv_h = player_exp[p_ptr->lev -1] * p_ptr->expfact /100;
-	u32b exp_adv_l = ((player_exp[p_ptr->lev -1]%100) * p_ptr->expfact *0x10000/100)&0xFFFF;
-	
-	M_INT_SUB(exp_adv_h, exp_adv_l, p_ptr->exp, p_ptr->exp_frac);
-	if ((p_ptr->lev>=PY_MAX_LEVEL) || (p_ptr->prace == RACE_ANDROID))
-		sprintf(buf,"**");
-	else if (!ap_r_ptr->r_tkills || (m_ptr->mflag2 & MFLAG2_KAGE))
-		sprintf(buf,"??");
-	else if (M_INT_GREATER(exp_mon_h, exp_mon_l, exp_adv_h, exp_adv_l))
-		sprintf(buf,"001");
-	else 
+	if ((p_ptr->lev >= PY_MAX_LEVEL) || (p_ptr->prace == RACE_ANDROID))
 	{
-		M_INT_MULT(exp_mon_h, exp_mon_l, 1000,tmp_h, tmp_l);
-		if( M_INT_GREATER(exp_adv_h, exp_adv_l, tmp_h, tmp_l) )
-			sprintf(buf,"999");
-		else
+		sprintf(buf,"**");
+		return;
+	}
+	else if (!ap_r_ptr->r_tkills || (m_ptr->mflag2 & MFLAG2_KAGE))
+	{
+		if (!p_ptr->wizard)
 		{
-			bit=1; result=0;
-			M_INT_ADD(exp_adv_h, exp_adv_l, exp_mon_h, exp_mon_l);
-			M_INT_SUB(exp_adv_h, exp_adv_l, 0, 1);
-			while(M_INT_GREATER(exp_adv_h, exp_adv_l, exp_mon_h,exp_mon_l))
-			{
-				M_INT_LSHIFT(exp_mon_h,exp_mon_l);
-				bit <<= 1;
-			}
-			M_INT_RSHIFT(exp_mon_h,exp_mon_l);bit>>=1;
-			for(;bit>=1;bit>>=1)
-			{
-				if(M_INT_GREATER(exp_adv_h,exp_adv_l,exp_mon_h,exp_mon_l))
-				{
-					result |= bit;
-					M_INT_SUB(exp_adv_h,exp_adv_l,exp_mon_h,exp_mon_l);
-				}
-				M_INT_RSHIFT(exp_mon_h,exp_mon_l); 
-			}
-			sprintf(buf,"%03d",result);
+			sprintf(buf,"??");
+			return;
 		}
 	}
+
+
+	/* The monster's experience point (assuming average monster speed) */
+	exp_mon = ap_r_ptr->mexp * ap_r_ptr->level;
+	exp_mon_frac = 0;
+	s64b_div(&exp_mon, &exp_mon_frac, 0, (p_ptr->max_plv + 2));
+
+
+	/* Total experience value for next level */
+	exp_adv = player_exp[p_ptr->lev -1] * p_ptr->expfact;
+	exp_adv_frac = 0;
+	s64b_div(&exp_adv, &exp_adv_frac, 0, 100);
+
+	/* Experience value need to get */
+	s64b_sub(&exp_adv, &exp_adv_frac, p_ptr->exp, p_ptr->exp_frac);
+
+
+	/* You need to kill at least one monster to get any experience */
+	s64b_add(&exp_adv, &exp_adv_frac, exp_mon, exp_mon_frac);
+	s64b_sub(&exp_adv, &exp_adv_frac, 0, 1);
+
+	/* Extract number of monsters needed */
+	s64b_div(&exp_adv, &exp_adv_frac, exp_mon, exp_mon_frac);
+
+	/* If 999 or more monsters needed, only display "999". */
+	num = MIN(999, exp_adv_frac);
+
+	/* Display the number */
+	sprintf(buf,"%03ld", num);
 }
 
 

@@ -999,7 +999,7 @@ struct player_type
 	s32b max_max_exp;	/* Max max experience (only to calculate score) */
 	s32b max_exp;		/* Max experience */
 	s32b exp;			/* Cur experience */
-	u16b exp_frac;		/* Cur exp frac (times 2^16) */
+	u32b exp_frac;		/* Cur exp frac (times 2^16) */
 
 	s16b lev;			/* Level */
 
@@ -1013,13 +1013,13 @@ struct player_type
 	s32b wilderness_y;
 	bool wild_mode;
 
-	s16b mhp;			/* Max hit pts */
-	s16b chp;			/* Cur hit pts */
-	u16b chp_frac;		/* Cur hit frac (times 2^16) */
+	s32b mhp;			/* Max hit pts */
+	s32b chp;			/* Cur hit pts */
+	u32b chp_frac;		/* Cur hit frac (times 2^16) */
 
-	s16b msp;			/* Max mana pts */
-	s16b csp;			/* Cur mana pts */
-	u16b csp_frac;		/* Cur mana frac (times 2^16) */
+	s32b msp;			/* Max mana pts */
+	s32b csp;			/* Cur mana pts */
+	u32b csp_frac;		/* Cur mana frac (times 2^16) */
 
 	s16b max_plv;		/* Max Player Level */
 

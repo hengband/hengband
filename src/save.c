@@ -575,7 +575,7 @@ static void wr_extra(void)
 	wr_u32b(p_ptr->max_exp);
 	wr_u32b(p_ptr->max_max_exp);
 	wr_u32b(p_ptr->exp);
-	wr_u16b(p_ptr->exp_frac);
+	wr_u32b(p_ptr->exp_frac);
 	wr_s16b(p_ptr->lev);
 
 	for (i = 0; i < 64; i++) wr_s16b(p_ptr->spell_exp[i]);
@@ -623,13 +623,13 @@ static void wr_extra(void)
 	/* Was number of p_ptr->rewards[] */
 	wr_s16b(0);
 
-	wr_s16b(p_ptr->mhp);
-	wr_s16b(p_ptr->chp);
-	wr_u16b(p_ptr->chp_frac);
+	wr_s32b(p_ptr->mhp);
+	wr_s32b(p_ptr->chp);
+	wr_u32b(p_ptr->chp_frac);
 
-	wr_s16b(p_ptr->msp);
-	wr_s16b(p_ptr->csp);
-	wr_u16b(p_ptr->csp_frac);
+	wr_s32b(p_ptr->msp);
+	wr_s32b(p_ptr->csp);
+	wr_u32b(p_ptr->csp_frac);
 
 	/* Max Player and Dungeon Levels */
 	wr_s16b(p_ptr->max_plv);
