@@ -1097,18 +1097,9 @@ static bool get_moves(int m_idx, int *mm)
 	int          x2 = px;
 	bool         done = FALSE;
 	bool         will_run = mon_will_run(m_idx);
-	cave_type	*c_ptr;
+	cave_type    *c_ptr;
 	bool         no_flow = ((m_ptr->mflag2 & MFLAG2_NOFLOW) && (cave[m_ptr->fy][m_ptr->fx].cost > 2));
-	bool         can_pass_wall;
-
-	/* Flow towards the player */
-	(void)get_moves_aux(m_idx, &y2, &x2, no_flow);
-
-	can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || (p_ptr->pass_wall)));
-
-	/* Extract the "pseudo-direction" */
-	y = m_ptr->fy - y2;
-	x = m_ptr->fx - x2;
+	bool         can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || (p_ptr->pass_wall)));
 
 	/* Counter attack to an enemy monster */
 	if (!will_run && m_ptr->target_y)
@@ -1120,7 +1111,7 @@ static bool get_moves(int m_idx, int *mm)
 		    are_enemies(m_ptr, &m_list[t_m_idx]) &&
 		    los(m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
 		{
-			/* Re-extract the "pseudo-direction" */
+			/* Extract the "pseudo-direction" */
 			y = m_ptr->fy - m_ptr->target_y;
 			x = m_ptr->fx - m_ptr->target_x;
 			done = TRUE;
@@ -1144,14 +1135,12 @@ static bool get_moves(int m_idx, int *mm)
 			/* Count room grids next to player */
 			for (i = 0; i < 8; i++)
 			{
-				int x = px + ddx_ddd[i];
-				int y = py + ddy_ddd[i];
-				
-				cave_type *c_ptr;
+				int xx = px + ddx_ddd[i];
+				int yy = py + ddy_ddd[i];
 
-				if (!in_bounds2(y, x)) continue;
-				
-				c_ptr = &cave[y][x];
+				if (!in_bounds2(yy, xx)) continue;
+
+				c_ptr = &cave[yy][xx];
 
 				/* Check grid */
 				if (((cave_floor_grid(c_ptr)) || ((c_ptr->feat & 0x60) == 0x60)) &&
@@ -1212,6 +1201,18 @@ static bool get_moves(int m_idx, int *mm)
 			/* Done */
 			done = TRUE;
 		}
+	}
+
+	if (!done)
+	{
+		/* Flow towards the player */
+		(void)get_moves_aux(m_idx, &y2, &x2, no_flow);
+
+		/* Extract the "pseudo-direction" */
+		y = m_ptr->fy - y2;
+		x = m_ptr->fx - x2;
+
+		/* Not done */
 	}
 
 	/* Apply fear if possible and necessary */
