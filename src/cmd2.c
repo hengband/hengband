@@ -4369,7 +4369,10 @@ note_dies = "は爆発して粉々になった。";
 				/* Apply special damage XXX XXX XXX */
 				tdam = tot_dam_aux(q_ptr, tdam, m_ptr, 0);
 				tdam = critical_shot(q_ptr->weight, q_ptr->to_h, tdam);
-				tdam += q_ptr->to_d;
+				if (q_ptr->to_d > 0)
+					tdam += q_ptr->to_d;
+				else
+					tdam += -q_ptr->to_d;
 
 				if (boomerang)
 				{
