@@ -651,6 +651,66 @@ static cptr d_info_flags1[] =
 
 
 /*
+ * Add a text to the text-storage and store offset to it.
+ *
+ * Returns FALSE when there isn't enough space available to store
+ * the text.
+ */
+static bool add_text(u32b *offset, header *head, cptr buf)
+{
+	/* Hack -- Verify space */
+	if (head->text_size + strlen(buf) + 8 > fake_text_size)
+		return (FALSE);
+
+	/* New text? */
+	if (*offset == 0)
+	{
+		/* Advance and save the text index */
+		*offset = ++head->text_size;	
+	}
+
+	/* Append chars to the text */
+	strcpy(head->text_ptr + head->text_size, buf);
+
+	/* Advance the index */
+	head->text_size += strlen(buf);
+
+	/* Success */
+	return (TRUE);
+}
+
+
+/*
+ * Add a name to the name-storage and return an offset to it.
+ *
+ * Returns FALSE when there isn't enough space available to store
+ * the name.
+ */
+static bool add_name(u32b *offset, header *head, cptr buf)
+{
+	/* Hack -- Verify space */
+	if (head->name_size + strlen(buf) + 8 > fake_name_size)
+		return (FALSE);
+
+	/* New name? */
+	if (*offset == 0)
+	{
+		/* Advance and save the name index */
+		*offset = ++head->name_size;
+	}
+
+	/* Append chars to the names */
+	strcpy(head->name_ptr + head->name_size, buf);
+
+	/* Advance the index */
+	head->name_size += strlen(buf);
+
+	/* Success */
+	return (TRUE);
+}
+
+
+/*
  * Convert a "color letter" into an "actual" color
  * The colors are: dwsorgbuDWvyRGBU, as shown below
  */
@@ -780,17 +840,8 @@ errr parse_v_info(char *buf, header *head)
 		/* Point at the "info" */
 		v_ptr = &v_info[i];
 
-		/* Hack -- Verify space */
-		if (head->name_size + strlen(s) + 8 > fake_name_size) return (7);
-
-		/* Advance and Save the name index */
-		if (!v_ptr->name) v_ptr->name = ++head->name_size;
-
-		/* Append chars to the name */
-		strcpy(head->name_ptr + head->name_size, s);
-
-		/* Advance the index */
-		head->name_size += strlen(s);
+		/* Store the name */
+		if (!add_name(&v_ptr->name, head, s)) return (7);
 	}
 
 	/* There better be a current v_ptr */
@@ -802,18 +853,8 @@ errr parse_v_info(char *buf, header *head)
 		/* Acquire the text */
 		s = buf+2;
 
-		/* Hack -- Verify space */
-		if (head->text_size + strlen(s) + 8 > fake_text_size) return (7);
-
-		/* Advance and Save the text index */
-		if (!v_ptr->text) v_ptr->text = ++head->text_size;
-
-		/* Append chars to the name */
-		strcpy(head->text_ptr + head->text_size, s);
-
-		/* Advance the index */
-		head->text_size += strlen(s);
-
+		/* Store the text */
+		if (!add_text(&v_ptr->text, head, s)) return (7);
 	}
 
 	/* Process 'X' for "Extra info" (one line only) */
@@ -1090,17 +1131,8 @@ errr parse_f_info(char *buf, header *head)
 		f_ptr = &f_info[i];
 
 #ifdef JP
-		/* Hack -- Verify space */
-		if (head->name_size + strlen(s) + 8 > fake_name_size) return (7);
-
-		/* Advance and Save the name index */
-		if (!f_ptr->name) f_ptr->name = ++head->name_size;
-
-		/* Append chars to the name */
-		strcpy(head->name_ptr + head->name_size, s);
-
-		/* Advance the index */
-		head->name_size += strlen(s);
+		/* Store the name */
+		if (!add_name(&f_ptr->name, head, s)) return (7);
 #endif
 		/* Default "mimic" */
 		f_ptr->mimic = i;
@@ -1122,17 +1154,8 @@ errr parse_f_info(char *buf, header *head)
 		/* Acquire the Text */
 		s = buf+2;
 
-		/* Hack -- Verify space */
-		if (head->name_size + strlen(s) + 8 > fake_name_size) return (7);
-
-		/* Advance and Save the name index */
-		if (!f_ptr->name) f_ptr->name = ++head->name_size;
-
-		/* Append chars to the name */
-		strcpy(head->name_ptr + head->name_size, s);
-
-		/* Advance the index */
-		head->name_size += strlen(s);
+		/* Store the name */
+		if (!add_name(&f_ptr->name, head, s)) return (7);
 	}
 #endif
 
@@ -1144,18 +1167,8 @@ errr parse_f_info(char *buf, header *head)
 		/* Acquire the text */
 		s = buf+2;
 
-			/* Hack -- Verify space */
-		if (f_head->text_size + strlen(s) + 8 > fake_text_size) return (7);
-
-		/* Advance and Save the text index */
-		if (!f_ptr->text) f_ptr->text = ++f_head->text_size;
-
-		/* Append chars to the name */
-		strcpy(f_text + f_head->text_size, s);
-
-		/* Advance the index */
-		f_head->text_size += strlen(s);
-
+		/* Store the text */
+		if (!add_text(&f_ptr->text, head, s)) return (7);
 	}
 
 #endif
@@ -1301,17 +1314,8 @@ errr parse_k_info(char *buf, header *head)
 		k_ptr = &k_info[i];
 
 #ifdef JP
-		/* Hack -- Verify space */
-		if (head->name_size + strlen(s) + 8 > fake_name_size) return (7);
-
-		/* Advance and Save the name index */
-		if (!k_ptr->name) k_ptr->name = ++head->name_size;
-
-		/* Append chars to the name */
-		strcpy(head->name_ptr + head->name_size, s);
-
-		/* Advance the index */
-		head->name_size += strlen(s);
+		/* Store the name */
+		if (!add_name(&k_ptr->name, head, s)) return (7);
 #endif
 	}
 
@@ -1332,17 +1336,8 @@ errr parse_k_info(char *buf, header *head)
 		/* Acquire the Text */
 		s = buf+2;
 
-			/* Hack -- Verify space */
-		if (head->name_size + strlen(s) + 8 > fake_name_size) return (7);
-
-		/* Advance and Save the name index */
-		if (!k_ptr->name) k_ptr->name = ++head->name_size;
-
-		/* Append chars to the name */
-		strcpy(head->name_ptr + head->name_size, s);
-
-		/* Advance the index */
-		head->name_size += strlen(s);
+		/* Store the name */
+		if (!add_name(&k_ptr->name, head, s)) return (7);
 	}
 #endif
 #if 0
@@ -1353,17 +1348,8 @@ errr parse_k_info(char *buf, header *head)
 		/* Acquire the text */
 		s = buf+2;
 
-			/* Hack -- Verify space */
-		if (k_head->text_size + strlen(s) + 8 > fake_text_size) return (7);
-
-		/* Advance and Save the text index */
-		if (!k_ptr->text) k_ptr->text = ++k_head->text_size;
-
-		/* Append chars to the name */
-		strcpy(k_text + k_head->text_size, s);
-
-		/* Advance the index */
-		k_head->text_size += strlen(s);
+		/* Store the text */
+		if (!add_text(&k_ptr->text, head, s)) return (7);
 	}
 
 #endif
@@ -1607,17 +1593,8 @@ errr parse_a_info(char *buf, header *head)
 		a_ptr->flags3 |= (TR3_IGNORE_FIRE);
 		a_ptr->flags3 |= (TR3_IGNORE_COLD);
 #ifdef JP
-		/* Hack -- Verify space */
-		if (head->name_size + strlen(s) + 8 > fake_name_size) return (7);
-
-		/* Advance and Save the name index */
-		if (!a_ptr->name) a_ptr->name = ++head->name_size;
-
-		/* Append chars to the name */
-		strcpy(head->name_ptr + head->name_size, s);
-
-		/* Advance the index */
-		head->name_size += strlen(s);
+		/* Store the name */
+		if (!add_name(&a_ptr->name, head, s)) return (7);
 #endif
 	}
 
@@ -1638,17 +1615,8 @@ errr parse_a_info(char *buf, header *head)
 		/* Acquire the Text */
 		s = buf+2;
 
-			/* Hack -- Verify space */
-		if (head->name_size + strlen(s) + 8 > fake_name_size) return (7);
-
-		/* Advance and Save the name index */
-		if (!a_ptr->name) a_ptr->name = ++head->name_size;
-
-		/* Append chars to the name */
-		strcpy(head->name_ptr + head->name_size, s);
-
-		/* Advance the index */
-		head->name_size += strlen(s);
+		/* Store the name */
+		if (!add_name(&a_ptr->name, head, s)) return (7);
 	}
 #endif
 
@@ -1667,17 +1635,8 @@ errr parse_a_info(char *buf, header *head)
 		s = buf+3;
 #endif
 
-		/* Hack -- Verify space */
-		if (head->text_size + strlen(s) + 8 > fake_text_size) return (7);
-
-		/* Advance and Save the text index */
-		if (!a_ptr->text) a_ptr->text = ++head->text_size;
-
-		/* Append chars to the name */
-		strcpy(head->text_ptr + head->text_size, s);
-
-		/* Advance the index */
-		head->text_size += strlen(s);
+		/* Store the text */
+		if (!add_text(&a_ptr->text, head, s)) return (7);
 	}
 
 
@@ -1866,17 +1825,8 @@ errr parse_e_info(char *buf, header *head)
 		/* Point at the "info" */
 		e_ptr = &e_info[i];
 #ifdef JP
-		/* Hack -- Verify space */
-		if (head->name_size + strlen(s) + 8 > fake_name_size) return (7);
-
-		/* Advance and Save the name index */
-		if (!e_ptr->name) e_ptr->name = ++head->name_size;
-
-		/* Append chars to the name */
-		strcpy(head->name_ptr + head->name_size, s);
-
-		/* Advance the index */
-		head->name_size += strlen(s);
+		/* Store the name */
+		if (!add_name(&e_ptr->name, head, s)) return (7);
 #endif
 	}
 
@@ -1897,17 +1847,8 @@ errr parse_e_info(char *buf, header *head)
 		/* Acquire the Text */
 		s = buf+2;
 
-			/* Hack -- Verify space */
-		if (head->name_size + strlen(s) + 8 > fake_name_size) return (7);
-
-		/* Advance and Save the name index */
-		if (!e_ptr->name) e_ptr->name = ++head->name_size;
-
-		/* Append chars to the name */
-		strcpy(head->name_ptr + head->name_size, s);
-
-		/* Advance the index */
-		head->name_size += strlen(s);
+		/* Store the name */
+		if (!add_name(&e_ptr->name, head, s)) return (7);
 	}
 #endif
 #if 0
@@ -1918,17 +1859,8 @@ errr parse_e_info(char *buf, header *head)
 		/* Acquire the text */
 		s = buf+2;
 
-			/* Hack -- Verify space */
-		if (e_head->text_size + strlen(s) + 8 > fake_text_size) return (7);
-
-		/* Advance and Save the text index */
-		if (!e_ptr->text) e_ptr->text = ++e_head->text_size;
-
-		/* Append chars to the name */
-		strcpy(e_text + e_head->text_size, s);
-
-		/* Advance the index */
-		e_head->text_size += strlen(s);
+		/* Store the text */
+		if (!add_text(&e_ptr->text, head, s)) return (7);
 	}
 
 #endif
@@ -2186,17 +2118,8 @@ errr parse_r_info(char *buf, header *head)
 		/* Point at the "info" */
 		r_ptr = &r_info[i];
 #ifdef JP
-		/* Hack -- Verify space */
-		if (head->name_size + strlen(s) + 8 > fake_name_size) return (7);
-
-		/* Advance and Save the name index */
-		if (!r_ptr->name) r_ptr->name = ++head->name_size;
-
-		/* Append chars to the name */
-		strcpy(head->name_ptr + head->name_size, s);
-
-		/* Advance the index */
-		head->name_size += strlen(s);
+		/* Store the name */
+		if (!add_name(&r_ptr->name, head, s)) return (7);
 #endif
 	}
 
@@ -2212,17 +2135,8 @@ errr parse_r_info(char *buf, header *head)
 		/* Acquire the Text */
 		s = buf+2;
 
-			/* Hack -- Verify space */
-		if (head->name_size + strlen(s) + 8 > fake_name_size) return (7);
-
-		/* Advance and Save the name index */
-		if (!r_ptr->E_name) r_ptr->E_name = ++head->name_size;
-
-		/* Append chars to the name */
-		strcpy(head->name_ptr + head->name_size, s);
-
-		/* Advance the index */
-		head->name_size += strlen(s);
+		/* Store the name */
+		if (!add_name(&r_ptr->E_name, head, s)) return (7);
 	}
 #else
 	else if (buf[0] == 'E')
@@ -2230,17 +2144,8 @@ errr parse_r_info(char *buf, header *head)
 		/* Acquire the Text */
 		s = buf+2;
 
-			/* Hack -- Verify space */
-		if (head->name_size + strlen(s) + 8 > fake_name_size) return (7);
-
-		/* Advance and Save the name index */
-		if (!r_ptr->name) r_ptr->name = ++head->name_size;
-
-		/* Append chars to the name */
-		strcpy(head->name_ptr + head->name_size, s);
-
-		/* Advance the index */
-		head->name_size += strlen(s);
+		/* Store the name */
+		if (!add_name(&r_ptr->name, head, s)) return (7);
 	}
 #endif
 	/* Process 'D' for "Description" */
@@ -2258,17 +2163,8 @@ errr parse_r_info(char *buf, header *head)
 		s = buf+3;
 #endif
 
-		/* Hack -- Verify space */
-		if (head->text_size + strlen(s) + 8 > fake_text_size) return (7);
-
-		/* Advance and Save the text index */
-		if (!r_ptr->text) r_ptr->text = ++head->text_size;
-
-		/* Append chars to the name */
-		strcpy(head->text_ptr + head->text_size, s);
-
-		/* Advance the index */
-		head->text_size += strlen(s);
+		/* Store the text */
+		if (!add_text(&r_ptr->text, head, s)) return (7);
 	}
 
 	/* Process 'G' for "Graphics" (one line only) */
@@ -2660,17 +2556,8 @@ errr parse_d_info(char *buf, header *head)
 		/* Point at the "info" */
 		d_ptr = &d_info[i];
 #ifdef JP
-		/* Hack -- Verify space */
-		if (head->name_size + strlen(s) + 8 > fake_name_size) return (7);
-
-		/* Advance and Save the name index */
-		if (!d_ptr->name) d_ptr->name = ++head->name_size;
-
-		/* Append chars to the name */
-		strcpy(head->name_ptr + head->name_size, s);
-
-		/* Advance the index */
-		head->name_size += strlen(s);
+		/* Store the name */
+		if (!add_name(&d_ptr->name, head, s)) return (7);
 #endif
 	}
 
@@ -2682,17 +2569,8 @@ errr parse_d_info(char *buf, header *head)
 		/* Acquire the Text */
 		s = buf+2;
 
-		/* Hack -- Verify space */
-		if (head->name_size + strlen(s) + 8 > fake_name_size) return (7);
-
-		/* Advance and Save the name index */
-		if (!d_ptr->name) d_ptr->name = ++head->name_size;
-
-		/* Append chars to the name */
-		strcpy(head->name_ptr + head->name_size, s);
-
-		/* Advance the index */
-		head->name_size += strlen(s);
+		/* Store the name */
+		if (!add_name(&d_ptr->name, head, s)) return (7);
 	}
 #endif
 
@@ -2711,17 +2589,8 @@ errr parse_d_info(char *buf, header *head)
 		s = buf+3;
 #endif
 
-		/* Hack -- Verify space */
-		if (head->text_size + strlen(s) + 8 > fake_text_size) return (7);
-
-		/* Advance and Save the text index */
-		if (!d_ptr->text) d_ptr->text = ++head->text_size;
-
-		/* Append chars to the name */
-		strcpy(d_text + head->text_size, s);
-
-		/* Advance the index */
-		head->text_size += strlen(s);
+		/* Store the text */
+		if (!add_text(&d_ptr->text, head, s)) return (7);
 	}
 
 	/* Process 'W' for "More Info" (one line only) */
