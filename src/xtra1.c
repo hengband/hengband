@@ -2110,6 +2110,7 @@ static void fix_overhead(void)
 	for (j = 0; j < 8; j++)
 	{
 		term *old = Term;
+		int wid, hgt;
 
 		/* No window */
 		if (!angband_term[j]) continue;
@@ -2120,11 +2121,16 @@ static void fix_overhead(void)
 		/* Activate */
 		Term_activate(angband_term[j]);
 
-		/* Redraw map */
-		display_map(&cy, &cx);
+		/* Full map in too small window is useless  */
+		Term_get_size(&wid, &hgt);
+		if (wid > COL_MAP + 2 && hgt > ROW_MAP + 2)
+		{
+			/* Redraw map */
+			display_map(&cy, &cx);
 
-		/* Fresh */
-		Term_fresh();
+			/* Fresh */
+			Term_fresh();
+		}
 
 		/* Restore */
 		Term_activate(old);
