@@ -3458,9 +3458,6 @@ static bool eval_ac(int iAC)
 		int quality = 60 + lvl * 3; /* attack quality with power 60 */
 		int dodge;   /* 回避率(%) */
 		int average; /* ダメージ期待値 */
-		float rateA,rateR=0.0;
-		float damage;
-		char tmp_str[100];
 
 		put_str(format("%3d", lvl), row + 0, col);
 
