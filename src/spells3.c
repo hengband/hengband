@@ -2895,7 +2895,7 @@ s = "鑑定するべきアイテムがない。";
 	}
 
 	/* Describe it fully */
-	(void)identify_fully_aux(o_ptr);
+	(void)screen_object(o_ptr, TRUE);
 
 	/* Auto-inscription/destroy */
 	idx = is_autopick(o_ptr);

@@ -843,7 +843,7 @@ extern void object_flags(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE]);
 extern void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE]);
 extern void object_desc_store(char *buf, object_type *o_ptr, int pref, int mode);
 extern cptr item_activation(object_type *o_ptr);
-extern bool identify_fully_aux(object_type *o_ptr);
+extern bool screen_object(object_type *o_ptr, bool real);
 extern char index_to_label(int i);
 extern s16b label_to_inven(int c);
 extern s16b label_to_equip(int c);

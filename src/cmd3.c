@@ -1185,9 +1185,9 @@ void do_cmd_observe(void)
 
 	/* Describe it fully */
 #ifdef JP
-	if (!identify_fully_aux(o_ptr)) msg_print("特に変わったところはないようだ。");
+	if (!screen_object(o_ptr, TRUE)) msg_print("特に変わったところはないようだ。");
 #else
-	if (!identify_fully_aux(o_ptr)) msg_print("You see nothing special.");
+	if (!screen_object(o_ptr, TRUE)) msg_print("You see nothing special.");
 #endif
 
 }

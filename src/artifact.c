@@ -1909,7 +1909,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		o_ptr->ident |= (IDENT_MENTAL);
 
 		strcpy(dummy_name, "");
-		(void)identify_fully_aux(o_ptr);
+		(void)screen_object(o_ptr, TRUE);
 
 #ifdef JP
 		if (!(get_string("このアーティファクトを何と名付けますか？", dummy_name, 80)))

@@ -4064,7 +4064,7 @@ msg_format("%sを調べている...", o_name);
 
 
 	/* Describe it fully */
-	if (!identify_fully_aux(o_ptr))
+	if (!screen_object(o_ptr, TRUE))
 #ifdef JP
 msg_print("特に変わったところはないようだ。");
 #else

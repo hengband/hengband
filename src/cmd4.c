@@ -5200,7 +5200,7 @@ static int collect_objects(int grp_cur, int object_idx[])
 		if (!(k))  continue; 
 
 		/* Require objects ever seen*/
-		if (!k_ptr->aware) continue;
+		if (!k_ptr->aware && !p_ptr->wizard) continue;
 
 		/* Check for race in the group */
 		if (k_ptr->tval == group_tval)
@@ -7650,8 +7650,14 @@ static void desc_obj_fake(int k_idx)
 	/* Hack -- Handle stuff */
 	handle_stuff();
 
-	/* screen_object(o_ptr, FALSE); */
-	if (!identify_fully_aux(o_ptr)) msg_print("特に変わったところはないようだ。");
+	if (!screen_object(o_ptr, FALSE))
+	{
+#ifdef JP
+		msg_print("特に変わったところはないようだ。");
+#else
+		msg_print("You see nothing special.");
+#endif
+	}
 }
 
 
@@ -7766,7 +7772,7 @@ static void do_cmd_knowledge_objects(void)
 		prt("<dir>, 'r' to recall, ESC", 23, 0);
 #endif
 
-		/* Mega Hack -- track this monster race */
+		/* Mega Hack -- track this object */
 		if (object_cnt) object_kind_track(object_idx[object_cur]);
 
 		/* The "current" object changed */

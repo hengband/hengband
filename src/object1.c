@@ -2374,7 +2374,7 @@ return "空気の息";
 /*
  * Describe a "fully identified" item
  */
-bool identify_fully_aux(object_type *o_ptr)
+bool screen_object(object_type *o_ptr, bool real)
 {
 	int                     i = 0, j, k;
 
@@ -3767,56 +3767,103 @@ info[i++] = "それはあなたの魔力を吸い取る。";
 
 	}
 
-	/* XTRA HACK ARTDESC */
+	/* Describe about this kind of object instead of THIS fake object */
+	if (!real)
+	{
+		switch (o_ptr->tval)
+		{
+		case TV_RING:
+			switch (o_ptr->sval)
+			{
+			case SV_RING_LORDLY:
+#ifdef JP
+				info[i++] = "それは幾つかのランダムな耐性を授ける。";
+#else
+				info[i++] = "It provides some random resistances.";
+#endif
+				break;
+			case SV_RING_WARNING:
+#ifdef JP
+				info[i++] = "それはひとつの低級なESPを授ける事がある。";
+#else
+				info[i++] = "It may provide a low rank ESP.";
+#endif
+				break;
+			}
+			break;
+
+		case TV_AMULET:
+			switch (o_ptr->sval)
+			{
+			case SV_AMULET_RESISTANCE:
+#ifdef JP
+				info[i++] = "それは毒への耐性を授ける事がある。";
+#else
+				info[i++] = "It may provides resistance to poison.";
+#endif
+#ifdef JP
+				info[i++] = "それはランダムな耐性を授ける事がある。";
+#else
+				info[i++] = "It may provide a random resistances.";
+#endif
+				break;
+			case SV_AMULET_THE_MAGI:
+#ifdef JP
+				info[i++] = "それは３つの低級なESPを授ける。";
+#else
+				info[i++] = "It provides three low rank ESPs.";
+#endif
+				break;
+			}
+			break;
+		}
+	}
+
 	if (have_flag(flgs, TR_IGNORE_ACID) &&
 	    have_flag(flgs, TR_IGNORE_ELEC) &&
 	    have_flag(flgs, TR_IGNORE_FIRE) &&
 	    have_flag(flgs, TR_IGNORE_COLD))
 	{
 #ifdef JP
-	  info[i++] = "それは酸・電撃・火炎・冷気では傷つかない。";
+		info[i++] = "それは酸・電撃・火炎・冷気では傷つかない。";
 #else
-	  info[i++] = "It cannot be harmed by the elements.";
+		info[i++] = "It cannot be harmed by the elements.";
 #endif
-	} else {
-	if (have_flag(flgs, TR_IGNORE_ACID))
-	{
-#ifdef JP
-info[i++] = "それは酸では傷つかない。";
-#else
-		info[i++] = "It cannot be harmed by acid.";
-#endif
-
 	}
-	if (have_flag(flgs, TR_IGNORE_ELEC))
+	else
 	{
+		if (have_flag(flgs, TR_IGNORE_ACID))
+		{
 #ifdef JP
-info[i++] = "それは電撃では傷つかない。";
+			info[i++] = "それは酸では傷つかない。";
 #else
-		info[i++] = "It cannot be harmed by electricity.";
+			info[i++] = "It cannot be harmed by acid.";
 #endif
-
-	}
-	if (have_flag(flgs, TR_IGNORE_FIRE))
-	{
+		}
+		if (have_flag(flgs, TR_IGNORE_ELEC))
+		{
 #ifdef JP
-info[i++] = "それは火炎では傷つかない。";
+			info[i++] = "それは電撃では傷つかない。";
 #else
-		info[i++] = "It cannot be harmed by fire.";
+			info[i++] = "It cannot be harmed by electricity.";
 #endif
-
-	}
-	if (have_flag(flgs, TR_IGNORE_COLD))
-	{
+		}
+		if (have_flag(flgs, TR_IGNORE_FIRE))
+		{
 #ifdef JP
-info[i++] = "それは冷気では傷つかない。";
+			info[i++] = "それは火炎では傷つかない。";
 #else
-		info[i++] = "It cannot be harmed by cold.";
+			info[i++] = "It cannot be harmed by fire.";
 #endif
-
-	}
-
-	/* XTRA HACK ARTDESC */
+		}
+		if (have_flag(flgs, TR_IGNORE_COLD))
+		{
+#ifdef JP
+			info[i++] = "それは冷気では傷つかない。";
+#else
+			info[i++] = "It cannot be harmed by cold.";
+#endif
+		}
 	}
 
 	/* No special effects */
@@ -3829,8 +3876,12 @@ info[i++] = "それは冷気では傷つかない。";
 	Term_get_size(&wid, &hgt);
 
 	/* Display Item name */
-	object_desc(o_name, o_ptr, TRUE, 3);
-	prt(format("%s", o_name), 0, 0);
+	if (real)
+		object_desc(o_name, o_ptr, TRUE, 3);
+	else
+		object_desc_store(o_name, o_ptr, TRUE, 0);
+
+	prt(o_name, 0, 0);
 
 	/* Erase the screen */
 	for (k = 1; k < hgt; k++) prt("", k, 13);
