@@ -3462,7 +3462,6 @@ static void init_dungeon_quests(void)
 {
 	int number_of_quests = MAX_RANDOM_QUEST - MIN_RANDOM_QUEST + 1;
 	int i;
-	monster_race    *r_ptr;
 
 	/* Init the random quests */
 	init_flags = INIT_ASSIGN;
@@ -3471,13 +3470,6 @@ static void init_dungeon_quests(void)
 	process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 	p_ptr->inside_quest = 0;
-
-	/* Remove QUESTOR flag */
-	for (i = 1; i < max_r_idx; i++)
-	{
-		r_ptr = &r_info[i];
-		if (r_ptr->flags1 & RF1_QUESTOR) r_ptr->flags1 &= ~RF1_QUESTOR;
-	}
 
 	/* Generate quests */
 	for (i = MIN_RANDOM_QUEST + number_of_quests - 1; i >= MIN_RANDOM_QUEST; i--)
