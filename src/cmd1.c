@@ -3548,6 +3548,26 @@ bool player_can_enter(byte feature)
 
 
 /*
+ * Get feature string which blocks your way
+ */
+static cptr blocking_feat_name(byte feat)
+{
+	switch (feat)
+	{
+#ifdef JP
+	case FEAT_TREES: return "木";
+	case FEAT_MOUNTAIN: return "山";
+	default: return "壁";
+#else
+	case FEAT_TREES: return "tree";
+	case FEAT_MOUNTAIN: return "mountain";
+	default: return "wall";
+#endif
+	}
+}
+
+
+/*
  * Move player in the given direction, with the given "pickup" flag.
  *
  * This routine should (probably) always induce energy expenditure.
@@ -3667,7 +3687,8 @@ void move_player(int dir, int do_pickup, bool break_trap)
 			return;
 		}
 
-		oktomove = FALSE;
+		/* "Blocked" message appears later */
+		/* oktomove = FALSE; */
 	}
 
 	/* Get the monster */
@@ -3681,8 +3702,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 	/* unless in Shadow Form */
 	if (p_ptr->wraith_form || p_ptr->pass_wall || p_ptr->kabenuke)
 		p_can_pass_walls = TRUE;
-	if ((cave[y][x].feat >= FEAT_PERM_EXTRA) &&
-	    (cave[y][x].feat <= FEAT_PERM_SOLID))
+	if ((c_ptr->feat >= FEAT_PERM_EXTRA) && (c_ptr->feat <= FEAT_PERM_SOLID))
 	{
 		p_can_pass_walls = FALSE;
 	}
@@ -3992,9 +4012,9 @@ void move_player(int dir, int do_pickup, bool break_trap)
 			else
 			{
 #ifdef JP
-				msg_format("%sが行く手をはばんでいるようだ。", (feat == FEAT_TREES) ? "木" : "壁");
+				msg_format("%sが行く手をはばんでいるようだ。", blocking_feat_name(feat));
 #else
-				msg_format("You feel a %s blocking your way.", (feat == FEAT_TREES) ? "tree" : "wall");
+				msg_format("You feel a %s blocking your way.", blocking_feat_name(feat));
 #endif
 
 				c_ptr->info |= (CAVE_MARK);
@@ -4059,9 +4079,9 @@ void move_player(int dir, int do_pickup, bool break_trap)
 			else
 			{
 #ifdef JP
-				msg_format("%sが行く手をはばんでいる。", (feat == FEAT_TREES) ? "木" : "壁");
+				msg_format("%sが行く手をはばんでいる。", blocking_feat_name(feat));
 #else
-				msg_format("There is a %s blocking your way.", (feat == FEAT_TREES) ? "tree" : "wall");
+				msg_format("There is a %s blocking your way.", blocking_feat_name(feat));
 #endif
 
 				if (!(p_ptr->confused || p_ptr->stun || p_ptr->image))
@@ -4276,7 +4296,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		}
 
 		/* Handle quest areas -KMW- */
-		else if (cave[y][x].feat == FEAT_QUEST_ENTER)
+		else if (c_ptr->feat == FEAT_QUEST_ENTER)
 		{
 			/* Disturb */
 			disturb(0, 0);
@@ -4286,7 +4306,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 			command_new = SPECIAL_KEY_QUEST;
 		}
 
-		else if (cave[y][x].feat == FEAT_QUEST_EXIT)
+		else if (c_ptr->feat == FEAT_QUEST_EXIT)
 		{
 			if (quest[p_ptr->inside_quest].type == QUEST_TYPE_FIND_EXIT)
 			{
@@ -4304,7 +4324,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 
 			leave_quest_check();
 
-			p_ptr->inside_quest = cave[y][x].special;
+			p_ptr->inside_quest = c_ptr->special;
 			dun_level = 0;
 			p_ptr->oldpx = 0;
 			p_ptr->oldpy = 0;
