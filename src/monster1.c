@@ -141,7 +141,8 @@ static void roff_aux(int r_idx, int mode)
 #endif
 	int             msex = 0;
 
-	int speed = (ironman_nightmare) ? r_ptr->speed + 5 : r_ptr->speed;
+	bool nightmare = ironman_nightmare && !(mode & 0x02);
+	int speed = nightmare ? r_ptr->speed + 5 : r_ptr->speed;
 
 	bool            breath = FALSE;
 	bool            magic = FALSE;
@@ -1676,7 +1677,7 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 		/* Maximized hitpoints */
 		if ((flags1 & RF1_FORCE_MAXHP) || (r_ptr->hside == 1))
 		{
-			u32b hp = r_ptr->hdice * (ironman_nightmare ? 2 : 1) * r_ptr->hside;
+			u32b hp = r_ptr->hdice * (nightmare ? 2 : 1) * r_ptr->hside;
 #ifdef JP
 			hooked_roff(format(" %d の体力がある。",
 #else
@@ -1693,7 +1694,7 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 #else
 			hooked_roff(format(" and a life rating of %dd%d.  ",
 #endif
-				    r_ptr->hdice * (ironman_nightmare ? 2 : 1), r_ptr->hside));
+				    r_ptr->hdice * (nightmare ? 2 : 1), r_ptr->hside));
 		}
 	}
 
