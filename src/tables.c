@@ -8205,7 +8205,7 @@ byte feature_action_flags[FF_FLAG_MAX] =
 	0, /* ICE */
 	0, /* ACID */
 	0, /* OIL */
-	0, /* MUST_FLY */
+	0, /* XXX04 */
 	0, /* CAN_CLIMB */
 	0, /* CAN_FLY */
 	0, /* CAN_SWIM */

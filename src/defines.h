@@ -1207,7 +1207,7 @@
 /* #define FF_ICE           48 */
 /* #define FF_ACID          49 */
 /* #define FF_OIL           50 */
-#define FF_MUST_FLY      51
+/* #define FF_XXX04      51 */
 /* #define FF_CAN_CLIMB     52 */
 #define FF_CAN_FLY       53
 #define FF_CAN_SWIM      54
@@ -4362,7 +4362,6 @@
  */
 #define cave_empty_bold2(Y,X) \
 	(have_flag(f_flags_bold((Y), (X)), FF_PLACE) && \
-	 !have_flag(f_flags_bold((Y), (X)), FF_MUST_FLY) && \
 	 (character_dungeon || !have_flag(f_flags_bold((Y), (X)), FF_TREE)) && \
 	 !(cave[Y][X].m_idx) && \
 	 !player_bold(Y,X))
@@ -4380,8 +4379,7 @@
  * Line 7 -- forbid the player
  */
 #define cave_naked_bold(Y,X) \
-	(have_flag(f_flags_bold((Y), (X)), FF_PLACE) && \
-	 have_flag(f_flags_bold((Y), (X)), FF_DROP) && \
+	(have_flag(f_flags_bold((Y), (X)), FF_DROP) && \
 	 !have_flag(f_flags_bold((Y), (X)), FF_PERMANENT) && \
 	 !(cave[Y][X].info & CAVE_OBJECT) && \
 	 !(cave[Y][X].o_idx) && \
@@ -4410,16 +4408,6 @@
  */
 #define cave_empty_grid(C) \
 	(have_flag(f_flags_grid(C), FF_PLACE) && \
-	 !((C)->m_idx) && \
-	 !player_grid(C))
-
-
-/*
- * Grid based version of "cave_empty_bold()"
- */
-#define cave_empty_grid2(C) \
-	((have_flag(f_flags_grid(C), FF_PLACE) || \
-	  have_flag(f_flags_grid(C), FF_TREE)) && \
 	 !((C)->m_idx) && \
 	 !player_grid(C))
 

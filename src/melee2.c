@@ -1017,6 +1017,7 @@ static bool find_safety(int m_idx, int *yp, int *xp)
 static bool find_hiding(int m_idx, int *yp, int *xp)
 {
 	monster_type *m_ptr = &m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	int fy = m_ptr->fy;
 	int fx = m_ptr->fx;
@@ -1049,7 +1050,7 @@ static bool find_hiding(int m_idx, int *yp, int *xp)
 			c_ptr = &cave[y][x];
 
 			/* Skip occupied locations */
-			if (!cave_empty_grid(c_ptr)) continue;
+			if (!monster_can_enter(y, x, r_ptr, 0)) continue;
 
 			/* Check for hidden, available grid */
 			if (!player_has_los_grid(c_ptr) && clean_shot(fy, fx, y, x, FALSE))
@@ -1186,8 +1187,7 @@ static bool get_moves(int m_idx, int *mm)
 				if (!in_bounds2(y2, x2)) continue;
 
 				/* Ignore filled grids */
-				c_ptr = &cave[y2][x2];
-				if (!cave_empty_grid(c_ptr)) continue;
+				if (!monster_can_enter(y2, x2, r_ptr, 0)) continue;
 
 				/* Try to fill this hole */
 				break;

@@ -3436,8 +3436,6 @@ bool player_can_enter(s16b feature, u16b mode)
 
 	if (!have_flag(f_ptr->flags, FF_MOVE)) return FALSE;
 
-	if (have_flag(f_ptr->flags, FF_MUST_FLY) && !p_ptr->ffall) return FALSE;
-
 	return TRUE;
 }
 
@@ -3729,7 +3727,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 	{
 	}
 
-	else if (have_flag(f_ptr->flags, FF_MUST_FLY) && !p_ptr->ffall)
+	else if (!have_flag(f_ptr->flags, FF_MOVE) && have_flag(f_ptr->flags, FF_CAN_FLY) && !p_ptr->ffall)
 	{
 #ifdef JP
 		msg_format("空を飛ばないと%sの上には行けない。", f_name + f_ptr->name);

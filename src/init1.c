@@ -184,7 +184,7 @@ static cptr f_info_flags[] =
 	"ICE",
 	"ACID",
 	"OIL",
-	"MUST_FLY",
+	"XXX04",
 	"CAN_CLIMB",
 	"CAN_FLY",
 	"CAN_SWIM",

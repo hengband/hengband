@@ -3447,8 +3447,6 @@ bool monster_can_cross_terrain(s16b feat, monster_race *r_ptr, u16b mode)
 	/* Some monsters can walk on mountains */
 	if (have_flag(f_ptr->flags, FF_MOUNTAIN) && (r_ptr->flags8 & RF8_WILD_MOUNTAIN)) return TRUE;
 
-	if (have_flag(f_ptr->flags, FF_MUST_FLY) && !(r_ptr->flags7 & RF7_CAN_FLY)) return FALSE;
-
 	/* Water */
 	if (have_flag(f_ptr->flags, FF_WATER))
 	{
