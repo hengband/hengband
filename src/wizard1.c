@@ -1905,7 +1905,7 @@ static void spoil_out(cptr str)
 /*
  *  Hook function used in spoil_mon_info()
  */
-void roff_func(byte attr, cptr str)
+static void roff_func(byte attr, cptr str)
 {
 	spoil_out(str);
 }

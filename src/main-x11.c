@@ -2257,7 +2257,7 @@ static bool check_file(cptr s)
 /*
  * Initialize sound
  */
-static void init_sound()
+static void init_sound(void)
 {
 	int i;
 	char wav[128];

@@ -1271,9 +1271,9 @@ void do_cmd_uninscribe(void)
 typedef struct flag_insc_table
 {
 #ifdef JP
-	char *japanese;
+	cptr japanese;
 #endif
-	char *english;
+	cptr english;
 	u32b flag;
 	int num;
 	u32b except_flag;
@@ -1294,7 +1294,7 @@ static flag_insc_table flag_insc_plus[] =
 	{ "√µ", "Sr", TR1_SEARCH, 1, 0 },
 	{ "¿÷", "If", TR1_INFRA, 1, 0 },
 	{ "∑°", "Dg", TR1_TUNNEL, 1, 0 },
-	{ NULL, 0, 0, 0 }
+	{ NULL, NULL, 0, 0, 0 }
 };
 
 static flag_insc_table flag_insc_immune[] =
@@ -1303,7 +1303,7 @@ static flag_insc_table flag_insc_immune[] =
 	{ "≈≈", "El", TR2_IM_ELEC, 2, 0 },
 	{ "≤–", "Fi", TR2_IM_FIRE, 2, 0 },
 	{ "Œ‰", "Co", TR2_IM_COLD, 2, 0 },
-	{ NULL, 0, 0, 0 }
+	{ NULL, NULL, 0, 0, 0 }
 };
 
 static flag_insc_table flag_insc_resistance[] =
@@ -1324,7 +1324,7 @@ static flag_insc_table flag_insc_resistance[] =
 	{ "∆Ÿ", "Ca", TR2_RES_CHAOS, 2, 0 },
 	{ "ŒÙ", "Di", TR2_RES_DISEN, 2, 0 },
 	{ "∂≤", "Fe", TR2_RES_FEAR, 2, 0 },
-	{ NULL, 0, 0, 0 }
+	{ NULL, NULL, 0, 0, 0 }
 };
 
 static flag_insc_table flag_insc_misc[] =
@@ -1350,7 +1350,7 @@ static flag_insc_table flag_insc_misc[] =
 	{ "ºˆ", "Cu", TR3_HEAVY_CURSE, 3, TR3_PERMA_CURSE },
 	{ "¥˜", "Ty", TR3_TY_CURSE, 3, 0 },
 #endif
-	{ NULL, 0, 0, 0 }
+	{ NULL, NULL, 0, 0, 0 }
 };
 
 static flag_insc_table flag_insc_aura[] =
@@ -1360,7 +1360,7 @@ static flag_insc_table flag_insc_aura[] =
 	{ "Œ‰", "C", TR3_SH_COLD, 3, 0 },
 	{ "À‚", "M", TR3_NO_MAGIC, 3, 0 },
 	{ "Ω÷", "T", TR3_NO_TELE, 3, 0 },
-	{ NULL, 0, 0, 0 }
+	{ NULL, NULL, 0, 0, 0 }
 };
 
 static flag_insc_table flag_insc_brand[] =

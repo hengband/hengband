@@ -1490,7 +1490,7 @@ static cptr *read_text_lines(cptr filename, bool user)
 	return lines_list;
 }
 
-static cptr *read_pickpref_text_lines()
+static cptr *read_pickpref_text_lines(void)
 {
 	char buf[1024];
 	cptr *lines_list;
@@ -1627,7 +1627,7 @@ static void delete_string(cptr *lines_list, int n, int x, int y)
 /*
  * Delete or insert string
  */
-void toggle_string(cptr *lines_list, int flg, int y)
+static void toggle_string(cptr *lines_list, int flg, int y)
 {
 	autopick_type an_entry, *entry = &an_entry;
 
@@ -1914,7 +1914,7 @@ static cptr ctrl_command_desc[] =
 /*
  * In-game editor of Object Auto-picker/Destoryer
  */
-void do_cmd_edit_autopick()
+void do_cmd_edit_autopick(void)
 {
 	static int cx = 0, cy = 0;
 	static int upper = 0, left = 0;

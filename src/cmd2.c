@@ -3239,7 +3239,7 @@ static int breakage_chance(object_type *o_ptr)
 }
 
 
-s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
+static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 {
 	int mult = 10;
 

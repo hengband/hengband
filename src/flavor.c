@@ -873,7 +873,7 @@ static char *object_desc_num(char *t, uint n)
  *（cmd1.c で流用するために object_desc_japanese から移動した。）
  */
 
-extern char *object_desc_kosuu(char *t, object_type *o_ptr)
+char *object_desc_kosuu(char *t, object_type *o_ptr)
 {
     t = object_desc_num(t, o_ptr->number);
 

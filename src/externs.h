@@ -102,6 +102,7 @@ extern kamae kamae_shurui[MAX_KAMAE];
 extern kamae kata_shurui[MAX_KATA];
 extern cptr shougou_moji[5];
 extern byte conv_terrain2feat[MAX_WILDERNESS];
+extern cptr silly_attacks[MAX_SILLY_ATTACK];
 extern monster_power monster_powers[MAX_MONSPELLS];
 
 /* variable.c */
@@ -550,7 +551,7 @@ extern bool auto_destroy_item(int item, int autopick_idx);
 extern void auto_pickup_items(cave_type *c_ptr);
 extern void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr);
 extern void init_autopicker(void);
-extern void do_cmd_edit_autopick();
+extern void do_cmd_edit_autopick(void);
 
 /* birth.c */
 extern void player_birth(void);
@@ -674,6 +675,7 @@ extern void do_cmd_note(void);
 extern void do_cmd_version(void);
 extern void do_cmd_feeling(void);
 extern void do_cmd_load_screen(void);
+extern void do_cmd_save_screen_html_aux(char *filename, int message);
 extern void do_cmd_save_screen(void);
 extern void do_cmd_knowledge(void);
 extern void plural_aux(char * Name);
@@ -720,6 +722,7 @@ extern void safe_setuid_drop(void);
 extern void safe_setuid_grab(void);
 extern s16b tokenize(char *buf, s16b num, char **tokens, int mode);
 extern void display_player(int mode);
+extern errr make_character_dump(FILE *fff);
 extern errr file_character(cptr name, bool full);
 extern errr process_pref_file_command(char *buf);
 extern errr process_pref_file(cptr name);
@@ -753,6 +756,7 @@ extern u32b counts_read(int where);
 /* flavor.c */
 extern void get_table_name(char *out_string);
 extern void flavor_init(void);
+extern char *object_desc_kosuu(char *t, object_type *o_ptr);
 extern void object_desc(char *buf, object_type *o_ptr, int pref, int mode);
 
 /* generate.c */
@@ -934,6 +938,7 @@ extern void remove_loc(void);
 
 /* spells1.c */
 extern bool in_disintegration_range(int y1, int x1, int y2, int x2);
+extern void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte *gm, int *pgm_rad, int rad, int y1, int x1, int y2, int x2, bool disint_ball, bool real_breath);
 extern int take_hit(int damage_type, int damage, cptr kb_str, int monspell);
 extern u16b bolt_pict(int y, int x, int ny, int nx, int typ);
 extern sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg);
@@ -1488,7 +1493,7 @@ extern void strip_name(char *buf, int k_idx);
 extern bool compare_virtue(int type, int num, int tekitou);
 extern int virtue_number(int type);
 extern cptr virtue[MAX_VIRTUE];
-extern void get_virtues();
+extern void get_virtues(void);
 extern void chg_virtue(int virtue, int amount);
 extern void set_virtue(int virtue, int amount);
 extern void dump_virtues(FILE * OutFile);
@@ -1515,7 +1520,7 @@ extern cptr make_screen_dump(void);
 extern int soc_write(int sd, char *buf, size_t sz);
 extern int connect_scoreserver(void);
 extern int disconnect_server(int sd);
-extern char *soc_err(void);
+extern cptr soc_err(void);
 
 #ifdef CHUUKEI
 /* chuukei.c */

@@ -428,7 +428,7 @@ static int terrain_table[MAX_WILDERNESS][18] =
 };
 
 
-void generate_wilderness_area(int terrain, u32b seed, bool border, bool corner)
+static void generate_wilderness_area(int terrain, u32b seed, bool border, bool corner)
 {
 	int x1, y1;
 	int table_size = sizeof(terrain_table[0]) / sizeof(int);

@@ -1,5 +1,5 @@
 #ifdef JP
-static char *spell_tips[VALID_REALM][32] =
+static cptr spell_tips[VALID_REALM][32] =
 {
 	{
 		"怪我と体力を少し回復させる。",
@@ -458,7 +458,7 @@ static char *spell_tips[VALID_REALM][32] =
 	},
 };
 #else
-static char *spell_tips[VALID_REALM][32] =
+static cptr spell_tips[VALID_REALM][32] =
 {
 	{
 		"heals cut and HP a little.",

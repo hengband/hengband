@@ -107,30 +107,7 @@
 #include <unistd.h>
 #endif /* __DJGPP__ */
 
-
-#ifdef SET_UID
-
-#ifdef USG
-# include <string.h>
-#else
-# include <strings.h>
-# ifndef strstr
-extern char *strstr();
-# endif
-# ifndef strchr
-extern char *strchr();
-# endif
-# ifndef strrchr
-extern char *strrchr();
-# endif
-#endif
-
-#else /* SET_UID */
-
-# include <string.h>
-
-#endif /* SET_UID */
-
+#include <string.h>
 
 #if !defined(linux) && !defined(__MWERKS__) && !defined(ACORN) && !defined(WIN32)
 extern long atol();

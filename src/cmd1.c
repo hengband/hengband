@@ -688,7 +688,6 @@ void py_pickup_aux(int o_idx)
 	char old_name[MAX_NLEN];
 	char kazu_str[80];
 	int hirottakazu;
-	extern char *object_desc_kosuu(char *t, object_type *o_ptr);
 #else
 	char o_name[MAX_NLEN];
 #endif
@@ -1520,7 +1519,7 @@ msg_print("まばゆい閃光が走った！");
 }
 
 
-void touch_zap_player(monster_type *m_ptr)
+static void touch_zap_player(monster_type *m_ptr)
 {
 	int aura_damage = 0;
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -1617,7 +1616,7 @@ static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
 
 	int             dss, ddd;
 
-	char            *atk_desc;
+	cptr            atk_desc;
 
 	switch (attack)
 	{

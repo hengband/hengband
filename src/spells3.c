@@ -1139,7 +1139,7 @@ msg_print("照明用アイテムは満タンになった。");
 }
 
 
-bool item_tester_hook_weapon_nobow(object_type *o_ptr)
+static bool item_tester_hook_weapon_nobow(object_type *o_ptr)
 {
 	switch (o_ptr->tval)
 	{
@@ -2051,7 +2051,7 @@ bool item_tester_hook_weapon(object_type *o_ptr)
 	return (FALSE);
 }
 
-bool item_tester_hook_weapon2(object_type *o_ptr)
+static bool item_tester_hook_weapon2(object_type *o_ptr)
 {
 	switch (o_ptr->tval)
 	{
@@ -2097,7 +2097,7 @@ bool item_tester_hook_armour(object_type *o_ptr)
 }
 
 
-bool item_tester_hook_corpse(object_type *o_ptr)
+static bool item_tester_hook_corpse(object_type *o_ptr)
 {
 	switch (o_ptr->tval)
 	{
@@ -2147,7 +2147,7 @@ bool item_tester_hook_weapon_armour(object_type *o_ptr)
 /*
  * Check if an object is nameless weapon or armour
  */
-bool item_tester_hook_nameless_weapon_armour(object_type *o_ptr)
+static bool item_tester_hook_nameless_weapon_armour(object_type *o_ptr)
 {
 	if (o_ptr->name1 || o_ptr->art_name || o_ptr->name2 || o_ptr->xtra3)
 		return FALSE;
@@ -2592,12 +2592,12 @@ bool identify_item(object_type *o_ptr)
 }
 
 
-bool item_tester_hook_identify(object_type *o_ptr)
+static bool item_tester_hook_identify(object_type *o_ptr)
 {
 	return (bool)!object_known_p(o_ptr);
 }
 
-bool item_tester_hook_identify_weapon_armour(object_type *o_ptr)
+static bool item_tester_hook_identify_weapon_armour(object_type *o_ptr)
 {
 	if (object_known_p(o_ptr))
 		return FALSE;
@@ -2769,12 +2769,12 @@ msg_print("まばゆい閃光が走った！");
 
 
 
-bool item_tester_hook_identify_fully(object_type *o_ptr)
+static bool item_tester_hook_identify_fully(object_type *o_ptr)
 {
 	return (bool)(!object_known_p(o_ptr) || !(o_ptr->ident & IDENT_MENTAL));
 }
 
-bool item_tester_hook_identify_fully_weapon_armour(object_type *o_ptr)
+static bool item_tester_hook_identify_fully_weapon_armour(object_type *o_ptr)
 {
 	if (!item_tester_hook_identify_fully(o_ptr))
 		return FALSE;

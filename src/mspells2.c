@@ -59,7 +59,7 @@ static void monst_beam_monst(int m_idx, int y, int x, int typ, int dam_hp, int m
 /*
  * Determine if a beam spell will hit the target.
  */
-bool direct_beam(int y1, int x1, int y2, int x2, monster_type *m_ptr)
+static bool direct_beam(int y1, int x1, int y2, int x2, monster_type *m_ptr)
 {
 	bool hit2 = FALSE;
 	int i, y, x;
@@ -105,8 +105,6 @@ static bool breath_direct(int y1, int x1, int y2, int x2, int rad, bool disint_b
 
 	int grid_n = 0;
 	u16b grid_g[512];
-
-	void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte *gm, int *pgm_rad, int rad, int y1, int x1, int y2, int x2, bool disint_ball, bool real_breath);
 
 	int grids = 0;
 	byte gx[1024], gy[1024];

@@ -2634,13 +2634,6 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp)
 }
 
 
-#ifdef USE_TRANSPARENCY
-extern void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp);
-#else /* USE_TRANSPARENCY */
-extern void map_info(int y, int x, byte *ap, char *cp);
-#endif /* USE_TRANSPARENCY */
-
-
 static void windows_map(void)
 {
 	term_data *td = &data[0];
@@ -3812,7 +3805,6 @@ static void process_menus(WORD wCmd)
 
 			if (GetSaveFileName(&ofn))
 			{
-				extern void do_cmd_save_screen_html_aux(char *filename, int message);
 				do_cmd_save_screen_html_aux(buf, 0);
 			}
 			break;

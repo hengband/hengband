@@ -14,7 +14,7 @@
 
 #define pseudo_plev() (((p_ptr->lev + 40) * (p_ptr->lev + 40) - 1550) / 130)
 
-void learned_info(char *p, int power)
+static void learned_info(char *p, int power)
 {
 	int plev = pseudo_plev();
 	int hp = p_ptr->chp;

@@ -26,7 +26,7 @@
 
 #include <stdlib.h>
 
-static char	*errstr;
+static cptr errstr;
 static char	*proxy;
 static int	proxy_port;
 
@@ -100,7 +100,7 @@ int soc_read(int sd, char *buf, size_t sz)
 #endif /* if 0 */
 
 /* プロキシサーバのアドレスををファイルから読んで設定する */
-static void set_proxy()
+static void set_proxy(void)
 {
 	char buf[1024];
 	size_t len;
@@ -120,7 +120,7 @@ static void set_proxy()
 	if (!fp)
 	{
 		/* ファイルが存在しない場合はdefine.h内のデフォルトを設定 */
-		proxy = HTTP_PROXY;
+		proxy = (char *)HTTP_PROXY;
 		proxy_port = HTTP_PROXY_PORT;
 		return;
 	}
@@ -228,7 +228,7 @@ static void (*sig_int_saved)(int);
 static void (*sig_alm_saved)(int);
 #endif
 
-static void restore_signal()
+static void restore_signal(void)
 {
 #if !defined(WINDOWS) && !defined(MACINTOSH)
 	struct itimerval	val0;
@@ -508,8 +508,7 @@ int disconnect_server(int sd)
 #endif
 }
 
-char *
-soc_err()
+cptr soc_err()
 {
 	return errstr;
 }

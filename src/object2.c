@@ -1530,7 +1530,7 @@ void reduce_charges(object_type *o_ptr, int amt)
 /*
  *  Determine if an item can partly absorb a second item.
  */
-bool object_similar_part(object_type *o_ptr, object_type *j_ptr)
+static bool object_similar_part(object_type *o_ptr, object_type *j_ptr)
 {
 	/* Require identical object types */
 	if (o_ptr->k_idx != j_ptr->k_idx) return (0);
@@ -6640,7 +6640,7 @@ static essence_type essence_info[MAX_ESSENCE] = {
 };
 #endif
 
-bool item_tester_hook_melee_ammo(object_type *o_ptr)
+static bool item_tester_hook_melee_ammo(object_type *o_ptr)
 {
 	switch (o_ptr->tval)
 	{
@@ -6916,7 +6916,7 @@ static void drain_essence(void)
 
 
 
-static int choose_essence()
+static int choose_essence(void)
 {
 	int mode = 0;
 	char choice;
@@ -7620,7 +7620,7 @@ static void add_essence(int mode)
 }
 
 
-bool item_tester_hook_kaji(object_type *o_ptr)
+static bool item_tester_hook_kaji(object_type *o_ptr)
 {
 	switch (o_ptr->tval)
 	{
@@ -7650,7 +7650,7 @@ bool item_tester_hook_kaji(object_type *o_ptr)
 }
 
 
-void erase_essence(void)
+static void erase_essence(void)
 {
 	int item;
 	cptr q, s;

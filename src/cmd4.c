@@ -5162,19 +5162,19 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	char buf[2048];
 
 	int yomikomu = 0;
-	char *tags[4] = {
+	cptr tags[4] = {
 		"HEADER_START:",
 		"HEADER_END:",
 		"FOOTER_START:",
 		"FOOTER_END:",
 	};
 
-	char *html_head[] = {
+	cptr html_head[] = {
 		"<html>\n<body text=\"#ffffff\" bgcolor=\"#000000\">\n",
 		"<pre>",
 		0,
 	};
-	char *html_foot[] = {
+	cptr html_foot[] = {
 		"</pre>\n",
 		"</body>\n</html>\n",
 		0,
@@ -5241,7 +5241,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 		for (x = 0; x < wid - 1; x++)
 		{
 			int rv, gv, bv;
-			char *cc = NULL;
+			cptr cc = NULL;
 			/* Get the attr/char */
 			(void)(Term_what(x, y, &a, &c));
 
@@ -5318,7 +5318,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 /*
  * Hack -- save a screen dump to a file
  */
-void do_cmd_save_screen_html(void)
+static void do_cmd_save_screen_html(void)
 {
 	char buf[1024], tmp[256] = "screen.html";
 
@@ -5598,7 +5598,7 @@ static void ang_sort_art_swap(vptr u, vptr v, int a, int b)
 /*
  * Check the status of "artifacts"
  */
-void do_cmd_knowledge_artifacts(void)
+static void do_cmd_knowledge_artifacts(void)
 {
 	int i, k, z, x, y, n = 0;
 	u16b why = 3;
@@ -6673,7 +6673,7 @@ static void do_cmd_knowledge_objects(void)
 * List virtues & status
 *
 */
-void do_cmd_knowledge_kubi(void)
+static void do_cmd_knowledge_kubi(void)
 {
 	int i;
 	FILE *fff;
@@ -6737,7 +6737,7 @@ show_file(TRUE, file_name, "¾Þ¶â¼ó¤Î°ìÍ÷", 0, 0);
 * List virtues & status
 *
 */
-void do_cmd_knowledge_virtues(void)
+static void do_cmd_knowledge_virtues(void)
 {
 	FILE *fff;
 	
@@ -6785,7 +6785,7 @@ show_file(TRUE, file_name, "È¬¤Ä¤ÎÆÁ", 0, 0);
 * Dungeon
 *
 */
-void do_cmd_knowledge_dungeon(void)
+static void do_cmd_knowledge_dungeon(void)
 {
 	FILE *fff;
 	
@@ -7291,7 +7291,7 @@ sprintf(rand_tmp_str,"%s (%d ³¬) - %s¤òÅÝ¤¹¡£\n",
 * List my home
 *
 */
-void do_cmd_knowledge_home(void)
+static void do_cmd_knowledge_home(void)
 {
 	FILE *fff;
 	

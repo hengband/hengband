@@ -1107,7 +1107,7 @@ static void rd_ghost(void)
 /*
  * Save quick start data
  */
-void load_quick_start()
+static void load_quick_start(void)
 {
 	byte tmp8u;
 	int i;

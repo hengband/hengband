@@ -193,7 +193,7 @@ static BUF * buf_subbuf(BUF *buf, int pos1, size_t sz)
 }
 #endif
 
-static void http_post(int sd, char *url, BUF *buf)
+static void http_post(int sd, cptr url, BUF *buf)
 {
 	BUF *output;
 
@@ -215,8 +215,6 @@ static void http_post(int sd, char *url, BUF *buf)
 /* キャラクタダンプを作って BUFに保存 */
 static errr make_dump(BUF* dumpbuf)
 {
-	errr make_character_dump(FILE *fff);
-
 	char		buf[1024];
 	FILE *fff;
 	char file_name[1024];
@@ -270,12 +268,12 @@ cptr make_screen_dump(void)
 	byte a = 0, old_a = 0;
 	char c = ' ';
 
-	static char *html_head[] = {
+	static cptr html_head[] = {
 		"<html>\n<body text=\"#ffffff\" bgcolor=\"#000000\">\n",
 		"<pre>",
 		0,
 	};
-	static char *html_foot[] = {
+	static cptr html_foot[] = {
 		"</pre>\n",
 		"</body>\n</html>\n",
 		0,
@@ -317,7 +315,7 @@ cptr make_screen_dump(void)
 		for (x = 0; x < wid - 1; x++)
 		{
 			int rv, gv, bv;
-			char *cc = NULL;
+			cptr cc = NULL;
 			/* Get the attr/char */
 			(void)(Term_what(x, y, &a, &c));
 

@@ -2909,7 +2909,7 @@ static void player_vuln_flags(u32b *f1, u32b *f2, u32b *f3)
 /*
  * Helper function, see below
  */
-static void display_player_flag_aux(int row, int col, char *header,
+static void display_player_flag_aux(int row, int col, cptr header,
 				    int n, u32b flag1, u32b flag2,
 				    u32b im_f[], u32b vul_f)
 {

@@ -7303,7 +7303,7 @@ if (ver && !verify("À‹≈ˆ§À", k))
 }
 
 
-bool py_pickup_floor_aux(void)
+static bool py_pickup_floor_aux(void)
 {
 	s16b this_o_idx;
 

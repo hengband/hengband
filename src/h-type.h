@@ -148,21 +148,6 @@ typedef cptr *cptr_ptr;
 
 
 
-/*** Pointers to Functions with simple return types and any args ***/
-
-typedef void	(*func_void)();
-typedef errr	(*func_errr)();
-typedef char	(*func_char)();
-typedef byte	(*func_byte)();
-typedef bool	(*func_bool)();
-typedef sint	(*func_sint)();
-typedef uint	(*func_uint)();
-typedef real	(*func_real)();
-typedef vptr	(*func_vptr)();
-typedef cptr	(*func_cptr)();
-
-
-
 /*** Pointers to Functions of special types (for various purposes) ***/
 
 /* A generic function takes a user data and a special data */

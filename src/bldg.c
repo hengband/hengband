@@ -571,7 +571,7 @@ static void reset_deck(int deck[])
 	}
 }
 
-static bool have_joker()
+static bool have_joker(void)
 {
 	int i;
 
@@ -589,7 +589,7 @@ static bool find_card_num(int num)
 	return FALSE;
 }
 
-static bool yaku_check_flush()
+static bool yaku_check_flush(void)
 {
 	int i, suit;
 	bool joker_is_used = FALSE;
@@ -607,7 +607,7 @@ static bool yaku_check_flush()
 	return TRUE;
 }
 
-static int yaku_check_straight()
+static int yaku_check_straight(void)
 {
 	int i, lowest = 99;
 	bool joker_is_used = FALSE;
@@ -663,7 +663,7 @@ static int yaku_check_straight()
 /*
  * 0:nopair 1:1 pair 2:2 pair 3:3 cards 4:full house 6:4cards
  */
-static int yaku_check_pair()
+static int yaku_check_pair(void)
 {
 	int i, i2, matching = 0;
 
@@ -714,7 +714,7 @@ static int yaku_check_pair()
 #define ODDS_3C 1
 #define ODDS_2P 1
 
-static int yaku_check()
+static int yaku_check(void)
 {
 	prt("                            ", 4, 3);
 
@@ -853,7 +853,7 @@ static void display_kaeruka(int hoge, int kaeruka[])
 }
 
 
-static void display_cards()
+static void display_cards(void)
 {
 	int i, j;
 	char suitcolor[4] = {TERM_YELLOW, TERM_L_RED, TERM_L_BLUE, TERM_L_GREEN};
@@ -1100,7 +1100,7 @@ static void display_cards()
 	}
 }
 
-static int do_poker()
+static int do_poker(void)
 {
 	int i, k = 2;
 	char cmd;
@@ -3034,7 +3034,7 @@ static void town_history(void)
  * the current +dam of the player.
  */
 static void compare_weapon_aux2(object_type *o_ptr, int numblows,
-                                int r, int c, int mult, char attr[80],
+                                int r, int c, int mult, cptr attr,
                                 u32b f1, u32b f2, u32b f3, byte color)
 {
 	char tmp_str[80];

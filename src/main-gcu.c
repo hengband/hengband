@@ -651,7 +651,7 @@ static bool check_file(cptr s)
 /*
  * Initialize sound
  */
-static bool init_sound()
+static bool init_sound(void)
 {
    /* Initialize once */
    if (!can_use_sound)

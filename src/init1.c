@@ -7,7 +7,7 @@
 
 #ifdef JP
 #undef strchr
-char* _strchr(char* ptr, char ch)
+static char *_strchr(char *ptr, char ch)
 {
 	for ( ; *ptr != '\0'; ++ptr)
 	{
@@ -1073,7 +1073,7 @@ errr parse_m_info(char *buf, header *head)
 
 
 		/* Scan for the values */
-		if (4 != sscanf(s, "%x:%d:%d:%d",
+		if (4 != sscanf(s, "%d:%d:%d:%d",
 				&xtra, &type, &first, &weight))	return (1);
 
 		m_ptr->spell_xtra = xtra;
@@ -3840,7 +3840,7 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
 	else
 	{
 		/* Accept all printables except spaces and brackets */
-		while (isprint(*s) && !strchr(" []", *s)) ++s;
+		while (isprint(*s) && !strchr((char *)" []", *s)) ++s;
 
 		/* Extract final and Terminate */
 		if ((f = *s) != '\0') *s++ = '\0';

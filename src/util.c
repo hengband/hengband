@@ -91,10 +91,12 @@ int usleep(huge usecs)
 
 
 /*
-* Hack -- External functions
-*/
-extern struct passwd *getpwuid();
-extern struct passwd *getpwnam();
+ * Hack -- External functions
+ */
+#ifdef SET_UID
+extern struct passwd *getpwuid(uid_t uid);
+extern struct passwd *getpwnam(const char *name);
+#endif
 
 
 /*
@@ -791,9 +793,6 @@ errr fd_seek(int fd, huge n)
 	p = lseek(fd, n, SEEK_SET);
 
 	/* Failure */
-	if (p < 0) return (1);
-
-	/* Failure */
 	if (p != n) return (1);
 
 	/* Success */
@@ -1260,7 +1259,7 @@ void text_to_ascii(char *buf, cptr str)
 }
 
 
-bool trigger_ascii_to_text(char **bufptr, cptr *strptr)
+static bool trigger_ascii_to_text(char **bufptr, cptr *strptr)
 {
 	char *s = *bufptr;
 	cptr str = *strptr;
@@ -1608,21 +1607,6 @@ errr macro_add(cptr pat, cptr act)
 }
 
 
-
-/*
- * Initialize the "macro" package
- */
-errr macro_init(void)
-{
-	/* Macro patterns */
-	C_MAKE(macro__pat, MACRO_MAX, cptr);
-
-	/* Macro actions */
-	C_MAKE(macro__act, MACRO_MAX, cptr);
-
-	/* Success */
-	return (0);
-}
 
 /*
  * Local variable -- we are inside a "macro action"

@@ -1,4 +1,4 @@
-static char *kaji_tips[5] =
+static cptr kaji_tips[5] =
 {
 #ifdef JP
 	"現在持っているエッセンスの一覧を表示する",

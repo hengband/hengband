@@ -890,7 +890,7 @@ static void wr_ghost(void)
 /*
  * Save quick start data
  */
-void save_quick_start()
+static void save_quick_start(void)
 {
 	int i;
 

@@ -12,7 +12,6 @@
 
 #include "angband.h"
 
-extern cptr silly_attacks[MAX_SILLY_ATTACK];
 
 /*
  * Critical blow.  All hits that do 95% of total possible damage,

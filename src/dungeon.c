@@ -1385,7 +1385,7 @@ else msg_format("%sは再充填された。", o_name);
 }
 
 
-static void check_music()
+static void check_music(void)
 {
         magic_type *s_ptr;
 	u32b shouhimana;
@@ -1454,7 +1454,7 @@ static void check_music()
 }
 
 /* Choose one of items that have cursed flag */
-object_type *choose_cursed_obj_name(u32b flag)
+static object_type *choose_cursed_obj_name(u32b flag)
 {
 	int i;
 	int choices[INVEN_TOTAL-INVEN_RARM];
@@ -4916,7 +4916,7 @@ prt(" '?' でヘルプが表示されます。", 0, 0);
 
 
 
-bool monster_tsuri(int r_idx)
+static bool monster_tsuri(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 

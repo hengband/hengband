@@ -181,7 +181,7 @@ int virtue_number(int type)
 
 /* Aux function */
 
-void get_random_virtue(int which)
+static void get_random_virtue(int which)
 {
   int type = 0;
 
@@ -227,7 +227,7 @@ void get_random_virtue(int which)
 
 /* Select virtues & reset values for a new character */
 
-void get_virtues()
+void get_virtues(void)
 {
    int i = 0, j = 0;
 

@@ -21,8 +21,6 @@
 #define GRINDNOISE 20
 #define CYBERNOISE 20
 
-extern cptr silly_attacks[MAX_SILLY_ATTACK];
-
 /*
  * Calculate the direction to the next enemy
  */

@@ -4976,7 +4976,7 @@ bool probing(void)
 	int cu, cv;
 	bool    probe = FALSE;
 	char buf[256];
-	char *align;
+	cptr align;
 
 	cu = Term->scr->cu;
 	cv = Term->scr->cv;

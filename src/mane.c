@@ -15,7 +15,7 @@
 
 static int damage;
 
-void mane_info(char *p, int power, int dam)
+static void mane_info(char *p, int power, int dam)
 {
 	int plev = p_ptr->lev;
 #ifdef JP

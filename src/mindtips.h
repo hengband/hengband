@@ -1,5 +1,5 @@
 #ifdef JP
-static char *mind_tips[5][MAX_MIND_POWERS] =
+static cptr mind_tips[5][MAX_MIND_POWERS] =
 {
 {
 	"近くの全ての見えるモンスターを感知する。レベル5で罠/扉、15で透明なモンスター、30で財宝とアイテムを感知できるようになる。レベル20で周辺の地形を感知し、45でその階全体を永久に照らし、ダンジョン内のすべてのアイテムを感知する。レベル25で一定時間テレパシーを得る。",
@@ -118,7 +118,7 @@ static char *mind_tips[5][MAX_MIND_POWERS] =
 },
 };
 #else
-static char *mind_tips[5][MAX_MIND_POWERS] =
+static cptr mind_tips[5][MAX_MIND_POWERS] =
 {
 {
 	"detects visible monsters in the neighborhood and more and more. detects traps and doors at level 5, invisible monsters at level 15, items at level 30. And magic mapping at level 20. lights and know the whole level at level 45. gives telepathy at level 25",

@@ -937,7 +937,7 @@ msg_format("その本には学ぶべき%sがない。", p);
 }
 
 
-void wild_magic(int spell)
+static void wild_magic(int spell)
 {
 	int counter = 0;
 	int type = SUMMON_BIZARRE1 + randint0(6);
@@ -5765,7 +5765,7 @@ msg_format("%sを起こした。", m_name);
 	return TRUE;
 }
 
-void do_name_pet(void)
+static void do_name_pet(void)
 {
 	monster_type *m_ptr;
 	char out_val[20];

@@ -981,7 +981,7 @@ static void wiz_statistics(object_type *o_ptr)
 	u32b test_roll = 1000000;
 
 	char ch;
-	char *quality;
+	cptr quality;
 
 	bool good, great;
 

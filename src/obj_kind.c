@@ -244,50 +244,6 @@ cptr get_object_name(object_type *o_ptr)
 }
 
 
-/* Default object attribute */
-byte get_object_d_attr(object_type *o_ptr)
-{
-#if 0
-	return get_object_d_attr_callback(o_ptr);
-#else
-	return k_info[o_ptr->k_idx].d_attr;
-#endif
-}
-
-
-/* Default object character */
-byte get_object_x_attr(object_type *o_ptr)
-{
-#if 0
-	return get_object_x_attr_callback(o_ptr);
-#else
-	return k_info[o_ptr->k_idx].x_attr;
-#endif
-}
-
-
-/* Desired object attribute */
-char get_object_d_char(object_type *o_ptr)
-{
-#if 0
-	return get_object_d_char_callback(o_ptr);
-#else
-	return k_info[o_ptr->k_idx].d_char;
-#endif
-}
-
-
-/* Desired object character */
-char get_object_x_char(object_type *o_ptr)
-{
-#if 0
-	return get_object_x_char_callback(o_ptr);
-#else
-	return k_info[o_ptr->k_idx].x_char;
-#endif
-}
-
-
 /* The player is "aware" of the item's effects */
 bool get_object_aware(object_type *o_ptr)
 {
