@@ -597,7 +597,7 @@ static char *spell_tips[VALID_REALM][32] =
 		"causes random effects.",
 		"fires a bolt or beam of darkness.",
 		"gives another bonus to hit and HP, immunity to fear for a while. hastes you. but decreases AC.",
-		"makes current weapon Vamparic.",
+		"makes current weapon Vampiric.",
 		"fires 3 bolts. Each of the bolts absorbs some HP from a monster and gives them to you.",
 		"damages all living monsters in sight.",
 		"fires a huge ball of darkness.",
