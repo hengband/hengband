@@ -104,6 +104,7 @@ void check_experience(void)
 msg_format("レベル %d にようこそ。", p_ptr->lev);
 #else
 		msg_format("Welcome to level %d.", p_ptr->lev);
+
 #endif
 
 		/* Update some stuff */
@@ -113,7 +114,7 @@ msg_format("レベル %d にようこそ。", p_ptr->lev);
 		p_ptr->redraw |= (PR_LEV | PR_TITLE);
 
 		/* Window stuff */
-		p_ptr->window |= (PW_PLAYER | PW_SPELL);
+		p_ptr->window |= (PW_PLAYER | PW_SPELL | PW_INVEN);
 
 		/* HPとMPの上昇量を表示 */
 		level_up = 1;
