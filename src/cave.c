@@ -4793,6 +4793,12 @@ void wiz_lite(bool ninja)
 					/* Feature code (applying "mimic" field) */
 					feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
+					/* Perma-lite the grid */
+					if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS) && !ninja)
+					{
+						c_ptr->info |= (CAVE_GLOW);
+					}
+
 					/* Memorize normal features */
 					if ((feat > FEAT_INVIS) && (feat != FEAT_DIRT) && (feat != FEAT_GRASS))
 					{
@@ -4800,11 +4806,9 @@ void wiz_lite(bool ninja)
 						c_ptr->info |= (CAVE_MARK);
 					}
 
-					/* Perma-lite the grid */
-					if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS) && !ninja)
+					/* Perma-lit grids (newly and previously) */
+					else if (c_ptr->info & CAVE_GLOW)
 					{
-						c_ptr->info |= (CAVE_GLOW);
-
 						/* Normally, memorize floors (see above) */
 						if (view_perma_grids && !view_torch_grids)
 						{
