@@ -2107,8 +2107,8 @@ void lite_spot(int y, int x)
 	/* Redraw if on screen */
 	if (panel_contains(y, x) && in_bounds2(y, x))
 	{
-		byte a, a2;
-		char c, c2;
+		byte a;
+		char c;
 
 #ifdef USE_TRANSPARENCY
 		byte ta;
@@ -2130,18 +2130,24 @@ void lite_spot(int y, int x)
 			else if (p_ptr->wraith_form) a = TERM_L_DARK;
 		}
 
-		if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
+#ifdef JP
+		if (use_bigtile && !(a & 0x80) && isprint(c))
+		{
+			Term_queue_chars(panel_col_of(x), y-panel_row_prt, 2, a, &ascii_to_zenkaku[2*(c-' ')]);
+			return;
+		}
+#endif
 
 #ifdef USE_TRANSPARENCY
 		/* Hack -- Queue it */
 		Term_queue_char(panel_col_of(x), y-panel_row_prt, a, c, ta, tc);
 		if (use_bigtile)
-			Term_queue_char(panel_col_of(x)+1, y-panel_row_prt, a2, c2, 0, 0);
+			Term_queue_char(panel_col_of(x)+1, y-panel_row_prt, 255, 255, 0, 0);
 #else /* USE_TRANSPARENCY */
 		/* Hack -- Queue it */
 		Term_queue_char(panel_col_of(x), y-panel_row_prt, a, c);
 		if (use_bigtile)
-			Term_queue_char(panel_col_of(x)+1, y-panel_row_prt, a2, c2);
+			Term_queue_char(panel_col_of(x)+1, y-panel_row_prt, 255, 255);
 #endif /* USE_TRANSPARENCY */
 	}
 }
