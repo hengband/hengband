@@ -20574,7 +20574,7 @@ S:HEAL | TRAPS
 # 強すぎる？
 #
 N:1022:サイヤ人『ナッパ』
-E:Nappa the Saiayan
+E:Nappa the Saiyan
 G:p:U
 I:125:25d100:30:125:15
 W:50:3:0:13500:0:0
@@ -20590,8 +20590,8 @@ S:1_IN_8 |
 S:TELE_TO | BO_MANA
 D:$He looks like brawny human being apparently. 
 D:$However, unlike man, it has the tail of a monkey. 
-D:$This tail proves he is a Saiayan. 
-D:$A Saiayan's fighting power is far superior to human's and will bring many destruction.
+D:$This tail proves he is a Saiyan. 
+D:$A Saiyan's fighting power is far superior to human's and will bring many destruction.
 D:逞しい人間のようだが、猿の尻尾が付いている。これこそがサイヤ人の証だ。
 D:その戦闘力は人間を凌駕し、多くの破壊を呼び起こすだろう。
 
