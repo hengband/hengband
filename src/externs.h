@@ -525,6 +525,7 @@ extern void optimize_inventry_auto_destroy(void);
 extern void auto_pickup_items(cave_type *c_ptr);
 extern void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr);
 extern void init_autopicker(void);
+extern errr process_pickpref_file_line(char *buf);
 extern void do_cmd_edit_autopick(void);
 
 /* birth.c */
