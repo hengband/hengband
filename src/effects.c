@@ -5075,18 +5075,11 @@ get_rnd_line("death_j.txt", 0, death_message);
 #endif
 				}
 #ifdef JP
-			        if (!get_string(streq(died_from, "Seppuku") ? "辞世の句: " : "断末魔の叫び: ", death_message, 1024))
+			        while (!get_string(streq(died_from, "Seppuku") ? "辞世の句: " : "断末魔の叫び: ", death_message, 1024)) ;
 #else
-				if (!get_string("Last word: ", death_message, 1024))
+				while (!get_string("Last word: ", death_message, 1024)) ;
 #endif
 
-				{
-#ifdef JP
-					strcpy(death_message, format("あなたは%sました。", android ? "壊れ" : "死に"));
-#else
-					strcpy(death_message, android ? "You are broken." : "You die.");
-#endif
-				}
 				if (streq(died_from, "Seppuku"))
 				{
 #ifdef JP
