@@ -4377,6 +4377,7 @@ extern int PlayerUID;
 #define NIKKI_GAMESTART   19
 #define NIKKI_WIZ_TELE    20
 #define NIKKI_NAMED_PET   21
+#define NIKKI_PAT_TELE    22
 
 #define MAX_MANE 16
 #define MAX_MONSPELLS 96

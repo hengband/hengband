@@ -583,6 +583,29 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 #endif
 			break;
 		}
+		case NIKKI_PAT_TELE:
+		{
+			cptr to;
+			if (!dun_level)
+#ifdef JP
+				to = "地上";
+#else
+				to = "the surface";
+#endif
+			else
+#ifdef JP
+				to = format("%d階(%s)", dun_level, d_name+d_info[dungeon_type].name);
+#else
+				to = format("level %d of %s", dun_level, d_name+d_info[dungeon_type].name);
+#endif
+				
+#ifdef JP
+			fprintf(fff, " %2d:%02d %20s %sへとパターンの力で移動した。\n", hour, min, note_level, to);
+#else
+			fprintf(fff, " %2d:%02d %20s use Pattern to teleport to %s.\n", hour, min, note_level, to);
+#endif
+			break;
+		}
 		case NIKKI_LEVELUP:
 		{
 #ifdef JP

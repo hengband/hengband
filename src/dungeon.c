@@ -672,6 +672,14 @@ msg_format("%d 階にテレポートしました。", command_arg);
 	/* Change level */
 	dun_level = command_arg;
 
+	leave_quest_check();
+
+	if (record_stair) do_cmd_write_nikki(NIKKI_PAT_TELE,0,NULL);
+
+	p_ptr->inside_quest = 0;
+	p_ptr->leftbldg = FALSE;
+	energy_use = 0;
+
 	/* Leaving */
 	p_ptr->leaving = TRUE;
 }
