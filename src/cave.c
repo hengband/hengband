@@ -4852,7 +4852,8 @@ void wiz_dark(void)
 			cave_type *c_ptr = &cave[y][x];
 
 			/* Process the grid */
-			c_ptr->info &= ~(CAVE_MARK);
+			c_ptr->info &= ~(CAVE_MARK | CAVE_IN_DETECT);
+			c_ptr->info |= (CAVE_UNSAFE);
 		}
 	}
 
