@@ -2767,8 +2767,6 @@ msg_print("激烈な感情の発作におそわれるようになった！");
  */
 static bool inn_comm(int cmd)
 {
-	int dawnval;
-
 	switch (cmd)
 	{
 		case BACT_FOOD: /* Buy food & drink */
@@ -2792,9 +2790,8 @@ msg_print("バーテンはいくらかの食べ物とビールをくれた。");
 			break;
 
 		case BACT_REST: /* Rest for the night */
-			dawnval = ((turn % (TURNS_PER_TICK * TOWN_DAWN)));
-			if (dawnval > (TURNS_PER_TICK * TOWN_DAWN)/4)
-			{  /* nighttime */
+			if (!is_daytime()) /* Nighttime only */
+			{
 				if ((p_ptr->poisoned) || (p_ptr->cut))
 				{
 #ifdef JP
