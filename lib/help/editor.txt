@@ -295,7 +295,7 @@ Special Notes:
 
   - usage of operators
     [EQU arg1 arg2 ...]
-      If all args are same, returns "1", or else returns "0".
+      If all args are the same as arg1, returns "1", or else returns "0".
     [IOR arg1 arg2 ...]
     [AND arg1 arg2 ...]
       IOR evaluates and returns all args' logical OR. IAND is logical AND.

@@ -212,7 +212,7 @@
 #    
 #      - usage of operators
 #        [EQU arg1 arg2 ...]
-#          If all args are same, returns "1", or else returns "0".
+#          If all args are the same as arg1, returns "1", or else returns "0".
 #        [IOR arg1 arg2 ...]
 #        [AND arg1 arg2 ...]
 #          IOR evaluates and returns all args' logical OR. AND is logical AND.
@@ -357,8 +357,7 @@ Iron Spike#@v0
 ?:1
 
 # complex example; destroy needless food items.
-?:[AND [GEQ $LEVEL 20] [IOR [EQU $REALM1 Life] [EQU $REALM2 Life] [EQU $REALM1 Nature] [EQU $REALM2 Nature] [EQU $REALM1 Craft] [EQU $REALM2 Craft]]]
-(!Satisfy Hunger
+?:[AND [GEQ $LEVEL 20] [IOR [EQU $REALM1 Life Nature Craft] [EQU $REALM2 Life Nature Craft]]]
 (!food
 (!Slime Mold
 (!of Elvish Waybread
@@ -420,7 +419,7 @@ collecting spellbooks
 ?:1
 
 # pick up for experience
-?:[IOR [EQU $CLASS Warrior] [EQU $CLASS Berserker] [AND [EQU $CLASS Paladin] [EQU $REALM1 Life]]]
+?:[IOR [EQU $CLASS Warrior Berserker] [AND [EQU $CLASS Paladin] [EQU $REALM1 Life]]]
 (~unreadable third spellbooks:arcane
 (~unreadable fourth spellbooks:arcane
 unreadable fourth spellbooks

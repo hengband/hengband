@@ -357,8 +357,7 @@
 ?:1
 
 #複雑な例（誰も使わないでしょう。このままコピーする場合以外は…）
-?:[AND [GEQ $LEVEL 20] [IOR [EQU $REALM1 Life] [EQU $REALM2 Life] [EQU $REALM1 Nature] [EQU $REALM2 Nature] [EQU $REALM1 Craft] [EQU $REALM2 Craft]]]
-(!空腹充足
+?:[AND [GEQ $LEVEL 20] [IOR [EQU $REALM1 Life Nature Craft] [EQU $REALM2 Life Nature Craft]]]
 (!食料
 (!スライムモルド
 (!エルフの行糧
@@ -433,7 +432,7 @@
 
 # 戦士と狂戦士は上級魔法書を手動で破壊すると経験値になるので、拾う。
 # 生命パラディンも生命以外の魔法書を手動で破壊すると経験値になる。
-?:[IOR [EQU $CLASS Warrior] [EQU $CLASS Berserker] [AND [EQU $CLASS Paladin] [EQU $REALM1 Life]]]
+?:[IOR [EQU $CLASS Warrior Berserker] [AND [EQU $CLASS Paladin] [EQU $REALM1 Life]]]
 (~読めない4冊目の秘術の魔法書
 読めない4冊目の魔法書
 (~読めない3冊目の秘術の魔法書
