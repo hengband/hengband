@@ -416,8 +416,6 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 				}
 
 				if (mult < 30) mult = 30;
-				if (o_ptr->name1 == ART_HRUNTING)
-					mult *= 3;
 			}
 
 			/* Execute Giant */
@@ -430,6 +428,7 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 				}
 
 				if (mult < 50) mult = 50;
+				if ((mult < 90) && (o_ptr->name1 == ART_HRUNTING)) mult = 90;
 			}
 
 			/* Slay Dragon  */
