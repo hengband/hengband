@@ -3363,24 +3363,21 @@ if (!get_rnd_line("chainswd_j.txt", 0, noise))
 			check_experience();
 		}
 		/* Add light curse (Later) */
-		if ((p_ptr->cursed & TRC_ADD_L_CURSE) && one_in_(4000))
+		if ((p_ptr->cursed & TRC_ADD_L_CURSE) && one_in_(2000))
 		{
 			u32b new_curse;
-			bool changed = FALSE;
 			object_type *o_ptr;
-			char o_name[MAX_NLEN];
 
 			o_ptr = choose_cursed_obj_name(TRC_ADD_L_CURSE);
-			object_desc(o_name, o_ptr, FALSE, 0);
 
 			new_curse = get_curse(0, o_ptr);
 			if (!(o_ptr->curse_flags & new_curse))
 			{
-				changed = TRUE;
+				char o_name[MAX_NLEN];
+
+				object_desc(o_name, o_ptr, FALSE, 0);
+
 				o_ptr->curse_flags |= new_curse;
-			}
-			if (changed)
-			{
 #ifdef JP
 msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
 #else
@@ -3388,28 +3385,26 @@ msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
 #endif
 
 				o_ptr->feeling = FEEL_NONE;
+
+				p_ptr->update |= (PU_BONUS);
 			}
-			p_ptr->update |= (PU_BONUS);
 		}
 		/* Add heavy curse (Later) */
-		if ((p_ptr->cursed & TRC_ADD_H_CURSE) && one_in_(4000))
+		if ((p_ptr->cursed & TRC_ADD_H_CURSE) && one_in_(2000))
 		{
 			u32b new_curse;
-			bool changed = FALSE;
 			object_type *o_ptr;
-			char o_name[MAX_NLEN];
 
 			o_ptr = choose_cursed_obj_name(TRC_ADD_H_CURSE);
-			object_desc(o_name, o_ptr, FALSE, 0);
 
 			new_curse = get_curse(1, o_ptr);
 			if (!(o_ptr->curse_flags & new_curse))
 			{
-				changed = TRUE;
+				char o_name[MAX_NLEN];
+
+				object_desc(o_name, o_ptr, FALSE, 0);
+
 				o_ptr->curse_flags |= new_curse;
-			}
-			if (changed)
-			{
 #ifdef JP
 msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
 #else
@@ -3417,8 +3412,9 @@ msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
 #endif
 
 				o_ptr->feeling = FEEL_NONE;
+
+				p_ptr->update |= (PU_BONUS);
 			}
-			p_ptr->update |= (PU_BONUS);
 		}
 		/* Call animal */
 		if ((p_ptr->cursed & TRC_CALL_ANIMAL) && one_in_(1500))

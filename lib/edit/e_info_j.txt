@@ -253,7 +253,7 @@ N:30:鋭敏の
 E:of Seeing
 X:33:8
 W:0:18:0:1000
-C:0:0:0:8
+C:0:0:0:6
 F:SEARCH | RES_BLIND | SEE_INVIS
 
 N:31:赤外線視力の

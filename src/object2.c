@@ -2336,6 +2336,8 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 				case EGO_DF:
 					if (one_in_(3))
 						o_ptr->art_flags2 |= TR2_RES_POIS;
+					if (one_in_(3))
+						o_ptr->art_flags3 |= TR3_WARNING;
 					break;
 				case EGO_KILL_DRAGON:
 					if (one_in_(3))

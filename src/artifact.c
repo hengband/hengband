@@ -775,7 +775,7 @@ static void random_misc(object_type * o_ptr)
 		break;
 	}
 
-	switch (randint1(31))
+	switch (randint1(33))
 	{
 		case 1:
 			o_ptr->art_flags2 |= TR2_SUST_STR;
@@ -881,6 +881,10 @@ static void random_misc(object_type * o_ptr)
 			break;
 		case 31:
 			o_ptr->art_flags3 |= TR3_NO_TELE;
+			break;
+		case 32:
+		case 33:
+			o_ptr->art_flags3 |= TR3_WARNING;
 			break;
 	}
 }

@@ -4651,6 +4651,15 @@ void calc_bonuses(void)
 		{
 			penalty1 = MIN(0, penalty1);
 			penalty2 = MIN(0, penalty2);
+			p_ptr->to_a += 10;
+			p_ptr->dis_to_a += 10;
+		}
+		else
+		{
+			if ((inventory[INVEN_RARM].name1 == ART_MUSASI_KATANA) && (penalty1 > 0))
+				penalty1 /= 2;
+			if ((inventory[INVEN_LARM].name1 == ART_MUSASI_WAKIZASI) && (penalty2 > 0))
+				penalty2 /= 2;
 		}
 		if (inventory[INVEN_RARM].tval == TV_POLEARM) penalty1 += 10;
 		if (inventory[INVEN_LARM].tval == TV_POLEARM) penalty2 += 10;
@@ -5265,7 +5274,7 @@ void calc_bonuses(void)
 	if (p_ptr->ryoute && !omoi)
 	{
 		int bonus_to_h=0, bonus_to_d=0;
-		bonus_to_d = ((int)(adj_str_td[p_ptr->stat_ind[A_STR]]) - 128);
+		bonus_to_d = ((int)(adj_str_td[p_ptr->stat_ind[A_STR]]) - 128)/2;
 		bonus_to_h = ((int)(adj_str_th[p_ptr->stat_ind[A_STR]]) - 128) + ((int)(adj_dex_th[p_ptr->stat_ind[A_DEX]]) - 128);
 
 		p_ptr->to_h[0] += MAX(bonus_to_h,1);
