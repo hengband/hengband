@@ -4481,7 +4481,7 @@ static void run_init(int dir)
 	row = py + ddy[dir];
 	col = px + ddx[dir];
 
-	ignore_avoid_run = have_flag(f_flags_bold(row, col), FF_AVOID_RUN);
+	ignore_avoid_run = cave_have_flag_bold(row, col, FF_AVOID_RUN);
 
 	/* Extract cycle index */
 	i = chome[dir];

@@ -1480,7 +1480,7 @@ msg_print("太陽光線が現れた。");
 				m_ptr = &m_list[c_ptr->m_idx];
 
 				/* Hack -- attack monsters */
-				if (c_ptr->m_idx && (m_ptr->ml || have_flag(f_flags_bold(y, x), FF_PROJECT)))
+				if (c_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(y, x, FF_PROJECT)))
 					py_attack(y, x, 0);
 			}
 		}
@@ -4107,7 +4107,7 @@ msg_print("神聖な力が邪悪を打ち払った！");
 				if (MAX_RANGE <= distance(py, px, ny, nx)) break;
 
 				/* Stopped by walls/doors */
-				if (!have_flag(f_flags_bold(ny, nx), FF_PROJECT)) break;
+				if (!cave_have_flag_bold(ny, nx, FF_PROJECT)) break;
 
 				/* Stopped by monsters */
 				if ((dir != 5) && cave[ny][nx].m_idx != 0) break;
@@ -5527,12 +5527,12 @@ bool rakuba(int dam, bool force)
 			if (c_ptr->m_idx) continue;
 
 			/* Skip non-empty grids */
-			if (!have_flag(f_flags_grid(c_ptr), FF_MOVE) && !have_flag(f_flags_grid(c_ptr), FF_CAN_FLY))
+			if (!cave_have_flag_grid(c_ptr, FF_MOVE) && !cave_have_flag_grid(c_ptr, FF_CAN_FLY))
 			{
 				if (!player_can_ride_aux(c_ptr, FALSE)) continue;
 			}
 
-			if (have_flag(f_flags_grid(c_ptr), FF_PATTERN)) continue;
+			if (cave_have_flag_grid(c_ptr, FF_PATTERN)) continue;
 
 			/* Count "safe" grids */
 			sn++;

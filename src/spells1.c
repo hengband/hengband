@@ -375,7 +375,7 @@ sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 			else if (!(flg & (PROJECT_PATH)))
 			{
 				/* Always stop at non-initial wall grids */
-				if ((n > 0) && !have_flag(f_flags_bold(y, x), FF_PROJECT)) break;
+				if ((n > 0) && !cave_have_flag_bold(y, x, FF_PROJECT)) break;
 			}
 
 			/* Sometimes stop at non-initial monsters/players */
@@ -464,7 +464,7 @@ sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 			else if (!(flg & (PROJECT_PATH)))
 			{
 				/* Always stop at non-initial wall grids */
-				if ((n > 0) && !have_flag(f_flags_bold(y, x), FF_PROJECT)) break;
+				if ((n > 0) && !cave_have_flag_bold(y, x, FF_PROJECT)) break;
 			}
 
 			/* Sometimes stop at non-initial monsters/players */
@@ -535,7 +535,7 @@ sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 			else if (!(flg & (PROJECT_PATH)))
 			{
 				/* Always stop at non-initial wall grids */
-				if ((n > 0) && !have_flag(f_flags_bold(y, x), FF_PROJECT)) break;
+				if ((n > 0) && !cave_have_flag_bold(y, x, FF_PROJECT)) break;
 			}
 
 			/* Sometimes stop at non-initial monsters/players */
@@ -989,7 +989,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 				if (cave_perma_bold(y, x)) break;
 
 				/* Ignore grid without enough space */
-				if (!have_flag(f_flags_bold(y, x), FF_FLOOR)) break;
+				if (!cave_have_flag_bold(y, x, FF_FLOOR)) break;
 
 				/* Place a shallow lava */
 				cave_set_feat(y, x, FEAT_SHAL_LAVA);
@@ -1015,7 +1015,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 				if (cave_perma_bold(y, x)) break;
 
 				/* Ignore grid without enough space */
-				if (!have_flag(f_flags_bold(y, x), FF_FLOOR)) break;
+				if (!cave_have_flag_bold(y, x, FF_FLOOR)) break;
 
 				/* Place a shallow lava */
 				cave_set_feat(y, x, FEAT_SHAL_WATER);
@@ -8617,7 +8617,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 				}
 			}
 			if(project_o(0,0,y,x,dam,GF_SUPER_RAY) )notice=TRUE;
-			if (!have_flag(f_flags_bold(y, x), FF_PROJECT))
+			if (!cave_have_flag_bold(y, x, FF_PROJECT))
 			{
 				if( second_step )continue;
 				break;
@@ -8691,7 +8691,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 		else
 		{
 			/* Hack -- Balls explode before reaching walls */
-			if (!have_flag(f_flags_bold(ny, nx), FF_PROJECT) && (rad > 0)) break;
+			if (!cave_have_flag_bold(ny, nx, FF_PROJECT) && (rad > 0)) break;
 		}
 
 		/* Advance */

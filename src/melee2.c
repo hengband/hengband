@@ -3716,7 +3716,7 @@ void process_monsters(void)
 		/* Hack -- Monsters can "smell" the player from far away */
 		/* Note that most monsters have "aaf" of "20" or so */
 		else if (!(m_ptr->mflag2 & MFLAG2_NOFLOW) &&
-			have_flag(f_flags_bold(py, px), FF_MOVE) &&
+			cave_have_flag_bold(py, px, FF_MOVE) &&
 			(cave[py][px].when == cave[fy][fx].when) &&
 			(cave[fy][fx].dist < MONSTER_FLOW_DEPTH) &&
 			(cave[fy][fx].dist < r_ptr->aaf))

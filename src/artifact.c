@@ -2252,7 +2252,7 @@ bool activate_random_artifact(object_type * o_ptr)
 					m_ptr = &m_list[c_ptr->m_idx];
 
 					/* Hack -- attack monsters */
-					if (c_ptr->m_idx && (m_ptr->ml || have_flag(f_flags_bold(y, x), FF_PROJECT)))
+					if (c_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(y, x, FF_PROJECT)))
 						py_attack(y, x, 0);
 				}
 			}

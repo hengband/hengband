@@ -1393,7 +1393,7 @@ bool make_attack_spell(int m_idx)
 				c_ptr = &cave[next_y][next_x];
 
 				/* Skip door, rubble, wall, tree, mountain, etc. */
-				if (!have_flag(f_flags_grid(c_ptr), FF_PROJECT)) continue;
+				if (!cave_have_flag_grid(c_ptr, FF_PROJECT)) continue;
 
 				if (projectable(m_ptr->fy, m_ptr->fx, next_y, next_x))
 				{

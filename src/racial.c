@@ -124,7 +124,7 @@ static bool do_cmd_archer(void)
 #endif
 			return FALSE;
 		}
-		else if (!have_flag(f_flags_grid(c_ptr), FF_CAN_DIG) || !have_flag(f_flags_grid(c_ptr), FF_HURT_ROCK))
+		else if (!cave_have_flag_grid(c_ptr, FF_CAN_DIG) || !cave_have_flag_grid(c_ptr, FF_HURT_ROCK))
 		{
 #ifdef JP
 			msg_print("硬すぎて崩せなかった。");

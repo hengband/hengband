@@ -171,7 +171,7 @@ static bool breath_direct(int y1, int x1, int y2, int x2, int rad, int typ, bool
 		else
 		{
 			/* Hack -- Balls explode before reaching walls */
-			if (!have_flag(f_flags_bold(ny, nx), FF_PROJECT)) break;
+			if (!cave_have_flag_bold(ny, nx, FF_PROJECT)) break;
 		}
 
 		/* Save the "blast epicenter" */
@@ -240,7 +240,7 @@ void get_project_point(int sy, int sx, int *ty, int *tx, int flg)
 		sx = GRID_X(path_g[i]);
 
 		/* Hack -- Balls explode before reaching walls */
-		if (!have_flag(f_flags_bold(sy, sx), FF_PROJECT)) break;
+		if (!cave_have_flag_bold(sy, sx, FF_PROJECT)) break;
 
 		*ty = sy;
 		*tx = sx;

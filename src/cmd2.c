@@ -1482,7 +1482,7 @@ static bool do_cmd_tunnel_test(int y, int x)
 	}
 
 	/* Must be a wall/door/etc */
-	if (!have_flag(f_flags_grid(c_ptr), FF_TUNNEL))
+	if (!cave_have_flag_grid(c_ptr, FF_TUNNEL))
 	{
 		/* Message */
 #ifdef JP
@@ -2728,7 +2728,7 @@ void do_cmd_walk(bool pickup)
 	}
 
 	/* Hack again -- Is there a special encounter ??? */
-	if (p_ptr->wild_mode && !have_flag(f_flags_bold(py, px), FF_TOWN))
+	if (p_ptr->wild_mode && !cave_have_flag_bold(py, px, FF_TOWN))
 	{
 		int tmp = 120 + p_ptr->lev*10 - wilderness[py][px].level + 5;
 		if (tmp < 1) 
@@ -3514,7 +3514,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 		mmove2(&ny, &nx, py, px, ty, tx);
 
 		/* Stopped by walls/doors */
-		if (!have_flag(f_flags_bold(ny, nx), FF_PROJECT) && !cave[ny][nx].m_idx) break;
+		if (!cave_have_flag_bold(ny, nx, FF_PROJECT) && !cave[ny][nx].m_idx) break;
 
 		/* Advance the distance */
 		cur_dis++;
@@ -4087,7 +4087,7 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 		mmove2(&ny[cur_dis], &nx[cur_dis], py, px, ty, tx);
 
 		/* Stopped by walls/doors */
-		if (!have_flag(f_flags_bold(ny[cur_dis], nx[cur_dis]), FF_PROJECT))
+		if (!cave_have_flag_bold(ny[cur_dis], nx[cur_dis], FF_PROJECT))
 		{
 			hit_wall = TRUE;
 			break;

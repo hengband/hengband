@@ -4251,12 +4251,12 @@
 	((C) == &cave[py][px])
 
 
-#define f_flags_bold(Y,X) \
-	(f_info[cave[(Y)][(X)].feat].flags)
+#define cave_have_flag_bold(Y,X,INDEX) \
+	(have_flag(f_info[cave[(Y)][(X)].feat].flags, (INDEX)))
 
 
-#define f_flags_grid(C) \
-	(f_info[(C)->feat].flags)
+#define cave_have_flag_grid(C,INDEX) \
+	(have_flag(f_info[(C)->feat].flags, (INDEX)))
 
 
 /*
@@ -4285,7 +4285,7 @@
  * Line 3 -- forbid normal objects
  */
 #define cave_clean_bold(Y,X) \
-	(have_flag(f_flags_bold((Y), (X)), FF_FLOOR) && \
+	(cave_have_flag_bold((Y), (X), FF_FLOOR) && \
 	 !(cave[Y][X].info & CAVE_OBJECT) && \
 	  (cave[Y][X].o_idx == 0))
 
@@ -4297,7 +4297,7 @@
  * Line 2 -- forbid object terrains
  */
 #define cave_drop_bold(Y,X) \
-	(have_flag(f_flags_bold((Y), (X)), FF_DROP) && \
+	(cave_have_flag_bold((Y), (X), FF_DROP) && \
 	 !(cave[Y][X].info & CAVE_OBJECT))
 
 
@@ -4310,7 +4310,7 @@
  * Line 3 -- forbid the player
  */
 #define cave_empty_bold(Y,X) \
-	(have_flag(f_flags_bold((Y), (X)), FF_PLACE) && \
+	(cave_have_flag_bold((Y), (X), FF_PLACE) && \
 	 !(cave[Y][X].m_idx) && \
 	 !player_bold(Y,X))
 
@@ -4324,7 +4324,7 @@
  */
 #define cave_empty_bold2(Y,X) \
 	(cave_empty_bold(Y,X) && \
-	 (character_dungeon || !have_flag(f_flags_bold((Y), (X)), FF_TREE)))
+	 (character_dungeon || !cave_have_flag_bold((Y), (X), FF_TREE)))
 
 
 /*
@@ -4346,14 +4346,14 @@
  * Line 1 -- permanent flag
  */
 #define cave_perma_bold(Y,X) \
-	(have_flag(f_flags_bold((Y), (X)), FF_PERMANENT))
+	(cave_have_flag_bold((Y), (X), FF_PERMANENT))
 
 
 /*
  * Grid based version of "cave_empty_bold()"
  */
 #define cave_empty_grid(C) \
-	(have_flag(f_flags_grid(C), FF_PLACE) && \
+	(cave_have_flag_grid((C), FF_PLACE) && \
 	 !((C)->m_idx) && \
 	 !player_grid(C))
 
@@ -4362,19 +4362,19 @@
  * Grid based version of "cave_perma_bold()"
  */
 #define cave_perma_grid(C) \
-	(have_flag(f_flags_grid(C), FF_PERMANENT))
+	(cave_have_flag_grid((C), FF_PERMANENT))
 
 
 #define pattern_tile(Y,X) \
-	(have_flag(f_flags_bold((Y), (X)), FF_PATTERN))
+	(cave_have_flag_bold((Y), (X), FF_PATTERN))
 
 /*
  * Does the grid stop disintegration?
  */
 #define cave_stop_disintegration(Y,X) \
-	(!have_flag(f_flags_bold((Y), (X)), FF_PROJECT) && \
-	 (!have_flag(f_flags_bold((Y), (X)), FF_HURT_DISI) || \
-	  have_flag(f_flags_bold((Y), (X)), FF_PERMANENT)))
+	(!cave_have_flag_bold((Y), (X), FF_PROJECT) && \
+	 (!cave_have_flag_bold((Y), (X), FF_HURT_DISI) || \
+	  cave_have_flag_bold((Y), (X), FF_PERMANENT)))
 
 
 /*

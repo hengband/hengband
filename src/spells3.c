@@ -1611,7 +1611,7 @@ void call_the_(void)
 	{
 		c_ptr = &cave[py + ddy_ddd[i]][px + ddx_ddd[i]];
 
-		if (!have_flag(f_flags_grid(c_ptr), FF_PROJECT))
+		if (!cave_have_flag_grid(c_ptr, FF_PROJECT))
 		{
 			if (!c_ptr->mimic || !have_flag(f_info[c_ptr->mimic].flags, FF_PROJECT) ||
 			    !permanent_wall(&f_info[c_ptr->feat]))
@@ -1800,7 +1800,7 @@ msg_print("アイテムがコントロールを外れて落ちた。");
 			c_ptr = &cave[ty][tx];
 
 			if ((distance(py, px, ty, tx) > MAX_RANGE) ||
-				!have_flag(f_flags_bold(ty, tx), FF_PROJECT)) return;
+				!cave_have_flag_bold(ty, tx, FF_PROJECT)) return;
 		}
 		while (!c_ptr->o_idx);
 	}

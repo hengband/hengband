@@ -4501,7 +4501,7 @@ void do_cmd_store(void)
 	c_ptr = &cave[py][px];
 
 	/* Verify a store */
-	if (!have_flag(f_flags_grid(c_ptr), FF_STORE))
+	if (!cave_have_flag_grid(c_ptr, FF_STORE))
 	{
 #ifdef JP
 		msg_print("ここには店がありません。");

@@ -2431,7 +2431,7 @@ static int staff_effect(int sval, bool *use_charge, bool magic, bool known)
 				{
 					scatter(&y, &x, py, px, 4, 0);
 
-					if (!have_flag(f_flags_bold(y, x), FF_PROJECT)) continue;
+					if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
 
 					if (!player_bold(y, x)) break;
 				}
@@ -4401,7 +4401,7 @@ msg_print("あなたはフラキアに敵を締め殺すよう命じた。");
 					{
 						scatter(&y, &x, py, px, 4, 0);
 
-						if (!have_flag(f_flags_bold(y, x), FF_PROJECT)) continue;
+						if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
 
 						if (!player_bold(y, x)) break;
 					}
@@ -5407,7 +5407,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 				y = py+ddy[dir];
 				x = px+ddx[dir];
 				tsuri_dir = dir;
-				if (!have_flag(f_flags_bold(y, x), FF_WATER))
+				if (!cave_have_flag_bold(y, x, FF_WATER))
 				{
 #ifdef JP
 					msg_print("そこは水辺ではない。");

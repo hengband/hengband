@@ -5301,7 +5301,7 @@ void disclose_grid(int y, int x)
 {
 	cave_type *c_ptr = &cave[y][x];
 
-	if (have_flag(f_flags_grid(c_ptr), FF_SECRET))
+	if (cave_have_flag_grid(c_ptr, FF_SECRET))
 	{
 		/* No longer hidden */
 		cave_alter_feat(y, x, FF_SECRET);

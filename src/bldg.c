@@ -4848,7 +4848,7 @@ void do_cmd_quest(void)
 {
 	energy_use = 100;
 
-	if (!have_flag(f_flags_bold(py, px), FF_QUEST_ENTER))
+	if (!cave_have_flag_bold(py, px, FF_QUEST_ENTER))
 	{
 #ifdef JP
 msg_print("ここにはクエストの入口はない。");
@@ -4897,7 +4897,7 @@ void do_cmd_bldg(void)
 
 	energy_use = 100;
 
-	if (!have_flag(f_flags_bold(py, px), FF_BLDG))
+	if (!cave_have_flag_bold(py, px, FF_BLDG))
 	{
 #ifdef JP
 		msg_print("ここには建物はない。");

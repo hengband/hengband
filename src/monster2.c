@@ -3851,7 +3851,7 @@ bool alloc_monster(int dis, u32b mode)
 		}
 		else
 		{
-			if (!cave_empty_bold2(y, x) && !have_flag(f_flags_bold(y, x), FF_MOUNTAIN)) continue;
+			if (!cave_empty_bold2(y, x) && !cave_have_flag_bold(y, x, FF_MOUNTAIN)) continue;
 		}
 
 		/* Accept far away grids */

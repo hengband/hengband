@@ -874,7 +874,7 @@ void wilderness_gen(void)
 				/* Get the cave grid */
 				c_ptr = &cave[y][x];
 
-				if (have_flag(f_flags_grid(c_ptr), FF_ENTRANCE))
+				if (cave_have_flag_grid(c_ptr, FF_ENTRANCE))
 				{
 					if (c_ptr->m_idx) delete_monster_idx(c_ptr->m_idx);
 					p_ptr->oldpy = y;

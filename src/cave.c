@@ -73,7 +73,7 @@ bool is_trap(int feat)
  */
 bool is_known_trap(cave_type *c_ptr)
 {
-	if (!c_ptr->mimic && !have_flag(f_flags_grid(c_ptr), FF_SECRET) &&
+	if (!c_ptr->mimic && !cave_have_flag_grid(c_ptr, FF_SECRET) &&
 	    is_trap(c_ptr->feat)) return TRUE;
 	else
 		return FALSE;
@@ -97,7 +97,7 @@ bool is_closed_door(int feat)
  */
 bool is_hidden_door(cave_type *c_ptr)
 {
-	if ((c_ptr->mimic || have_flag(f_flags_grid(c_ptr), FF_SECRET)) &&
+	if ((c_ptr->mimic || cave_have_flag_grid(c_ptr, FF_SECRET)) &&
 	    is_closed_door(c_ptr->feat))
 		return TRUE;
 	else
@@ -1757,7 +1757,7 @@ void prt_path(int y, int x)
 		}
 
 		/* Known Wall */
-		if ((c_ptr->info & CAVE_MARK) && !have_flag(f_flags_grid(c_ptr), FF_PROJECT)) break;
+		if ((c_ptr->info & CAVE_MARK) && !cave_have_flag_grid(c_ptr, FF_PROJECT)) break;
 
 		/* Change color */
 		if (nx == x && ny == y) default_color = TERM_L_DARK;
@@ -4151,7 +4151,7 @@ void update_flow(void)
 			if (c_ptr->dist != 0 && c_ptr->dist <= n && c_ptr->cost <= m) continue;
 
 			/* Ignore "walls" and "rubble" */
-			if (!have_flag(f_flags_grid(c_ptr), FF_MOVE) && !is_closed_door(c_ptr->feat)) continue;
+			if (!cave_have_flag_grid(c_ptr, FF_MOVE) && !is_closed_door(c_ptr->feat)) continue;
 
 			/* Save the flow cost */
 			if (c_ptr->cost == 0 || c_ptr->cost > m) c_ptr->cost = m;
@@ -4242,7 +4242,7 @@ void update_smell(void)
 			c_ptr = &cave[y][x];
 
 			/* Walls, water, and lava cannot hold scent. */
-			if (!have_flag(f_flags_grid(c_ptr), FF_MOVE) && !is_closed_door(c_ptr->feat)) continue;
+			if (!cave_have_flag_grid(c_ptr, FF_MOVE) && !is_closed_door(c_ptr->feat)) continue;
 
 			/* Grid must not be blocked by walls from the character */
 			if (!player_has_los_bold(y, x)) continue;

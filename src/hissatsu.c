@@ -632,7 +632,7 @@ static bool cast_hissatsu_spell(int spell)
 		if (cave[y][x].m_idx)
 			py_attack(y, x, HISSATSU_HAGAN);
 
-		if (!have_flag(f_flags_bold(y, x), FF_HURT_ROCK)) break;
+		if (!cave_have_flag_bold(y, x, FF_HURT_ROCK)) break;
 
 		/* Destroy the feature */
 		cave_alter_feat(y, x, FF_HURT_ROCK);
@@ -761,7 +761,7 @@ static bool cast_hissatsu_spell(int spell)
 			m_ptr = &m_list[c_ptr->m_idx];
 
 			/* Hack -- attack monsters */
-			if (c_ptr->m_idx && (m_ptr->ml || have_flag(f_flags_bold(y, x), FF_PROJECT)))
+			if (c_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(y, x, FF_PROJECT)))
 			{
 				if (!monster_living(&r_info[m_ptr->r_idx]))
 				{
@@ -1086,7 +1086,7 @@ msg_print("その方向にはモンスターはいません。");
 			damage *= p_ptr->num_blow[i];
 			total_damage += (damage / 100);
 		}
-		project(0, (have_flag(f_flags_bold(y, x), FF_PROJECT) ? 5 : 0), y, x, total_damage * 3 / 2, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM, -1);
+		project(0, (cave_have_flag_bold(y, x, FF_PROJECT) ? 5 : 0), y, x, total_damage * 3 / 2, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM, -1);
 		break;
 	}
 	case 30:

@@ -128,10 +128,10 @@ static int next_to_walls(int y, int x)
 {
 	int	k = 0;
 
-	if (have_flag(f_flags_bold(y + 1, x), FF_WALL)) k++;
-	if (have_flag(f_flags_bold(y - 1, x), FF_WALL)) k++;
-	if (have_flag(f_flags_bold(y, x + 1), FF_WALL)) k++;
-	if (have_flag(f_flags_bold(y, x - 1), FF_WALL)) k++;
+	if (cave_have_flag_bold(y + 1, x, FF_WALL)) k++;
+	if (cave_have_flag_bold(y - 1, x, FF_WALL)) k++;
+	if (cave_have_flag_bold(y, x + 1, FF_WALL)) k++;
+	if (cave_have_flag_bold(y, x - 1, FF_WALL)) k++;
 
 	return (k);
 }
@@ -346,7 +346,7 @@ static int next_to_corr(int y1, int x1)
 		c_ptr = &cave[y][x];
 
 		/* Skip non floors */
-		if (have_flag(f_flags_grid(c_ptr), FF_WALL)) continue;
+		if (cave_have_flag_grid(c_ptr, FF_WALL)) continue;
 
 		/* Skip non "empty floor" grids */
 		if (!is_floor_grid(c_ptr))
@@ -376,15 +376,15 @@ static bool possible_doorway(int y, int x)
 	if (next_to_corr(y, x) >= 2)
 	{
 		/* Check Vertical */
-		if (have_flag(f_flags_bold(y - 1, x), FF_WALL) &&
-		    have_flag(f_flags_bold(y + 1, x), FF_WALL))
+		if (cave_have_flag_bold(y - 1, x, FF_WALL) &&
+		    cave_have_flag_bold(y + 1, x, FF_WALL))
 		{
 			return (TRUE);
 		}
 
 		/* Check Horizontal */
-		if (have_flag(f_flags_bold(y, x - 1), FF_WALL) &&
-		    have_flag(f_flags_bold(y, x + 1), FF_WALL))
+		if (cave_have_flag_bold(y, x - 1, FF_WALL) &&
+		    cave_have_flag_bold(y, x + 1, FF_WALL))
 		{
 			return (TRUE);
 		}
@@ -404,7 +404,7 @@ static void try_door(int y, int x)
 	if (!in_bounds(y, x)) return;
 
 	/* Ignore walls */
-	if (have_flag(f_flags_bold(y, x), FF_WALL)) return;
+	if (cave_have_flag_bold(y, x, FF_WALL)) return;
 
 	/* Ignore room grids */
 	if (cave[y][x].info & (CAVE_ROOM)) return;

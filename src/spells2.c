@@ -3535,7 +3535,7 @@ static bool detect_feat_flag(int range, int flag, bool known)
 			}
 
 			/* Detect flags */
-			if (have_flag(f_flags_grid(c_ptr), flag))
+			if (cave_have_flag_grid(c_ptr, flag))
 			{
 				/* Detect secrets */
 				disclose_grid(y, x);
@@ -5860,7 +5860,7 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 				c_ptr->info &= ~CAVE_OBJECT;
 
 				/* Wall (or floor) type */
-				t = have_flag(f_flags_bold(yy, xx), FF_PROJECT) ? randint0(100) : 200;
+				t = cave_have_flag_bold(yy, xx, FF_PROJECT) ? randint0(100) : 200;
 
 				/* Granite */
 				if (t < 20)
@@ -6279,7 +6279,7 @@ static void cave_temp_lite_room_aux(int y, int x)
  */
 static bool cave_pass_dark_bold(int y, int x)
 {
-	return have_flag(f_flags_bold(y, x), FF_PROJECT);
+	return cave_have_flag_bold(y, x, FF_PROJECT);
 }
 
 /*
@@ -7292,7 +7292,7 @@ void wall_breaker(void)
 		{
 			scatter(&y, &x, py, px, 4, 0);
 
-			if (!have_flag(f_flags_bold(y, x), FF_PROJECT)) continue;
+			if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
 
 			if (!player_bold(y, x)) break;
 		}

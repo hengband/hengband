@@ -3906,7 +3906,7 @@ static bool generate_lake(int y0, int x0, int xsize, int ysize, int c1, int c2, 
 			cave[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
 
 			/* Light lava */
-			if (have_flag(f_flags_bold(y0 + y - yhsize, x0 + x - xhsize), FF_LAVA))
+			if (cave_have_flag_bold(y0 + y - yhsize, x0 + x - xhsize, FF_LAVA))
 			{
 				if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS)) cave[y0 + y - yhsize][x0 + x - xhsize].info |= CAVE_GLOW;
 			}
@@ -4052,7 +4052,7 @@ static void fill_treasure(int x1, int x2, int y1, int y2, int difficulty)
 
 			 /* if floor, shallow water and lava */
 			if (is_floor_bold(y, x) ||
-			    (have_flag(f_flags_bold(y, x), FF_PLACE) && have_flag(f_flags_bold(y, x), FF_DROP)))
+			    (cave_have_flag_bold(y, x, FF_PLACE) && cave_have_flag_bold(y, x, FF_DROP)))
 			{
 				/* The smaller 'value' is, the better the stuff */
 				if (value < 0)
