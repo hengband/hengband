@@ -4111,6 +4111,88 @@ msg_print("特に変わったところはないようだ。");
 
 
 /*
+ * Remove an item from museum (Originally from TOband)
+ */
+static void museum_remove_object(void)
+{
+	int         i;
+	int         item;
+	object_type *o_ptr;
+	char        o_name[MAX_NLEN];
+	char        out_val[160];
+
+	/* Empty? */
+	if (st_ptr->stock_num <= 0)
+	{
+#ifdef JP
+		msg_print("博物館には何も置いてありません。");
+#else
+		msg_print("Museum is empty.");
+#endif
+
+		return;
+	}
+
+	/* Find the number of objects on this and following pages */
+	i = st_ptr->stock_num - store_top;
+
+	/* And then restrict it to the current page */
+	if (i > 12) i = 12;
+
+	/* Prompt */
+#ifdef JP
+	sprintf(out_val, "どのアイテムの展示をやめさせますか？");
+#else
+	sprintf(out_val, "Which item do you want to order to remove? ");
+#endif
+
+	/* Get the item number to be removed */
+	if (!get_stock(&item, out_val, 0, i - 1)) return;
+
+	/* Get the actual index */
+	item = item + store_top;
+
+	/* Get the actual item */
+	o_ptr = &st_ptr->stock[item];
+
+	/* Description */
+	object_desc(o_name, o_ptr, 0);
+
+#ifdef JP
+	msg_print("展示をやめさせたアイテムは二度と見ることはできません！");
+	if (!get_check(format("本当に%sの展示をやめさせますか？", o_name))) return;
+#else
+	msg_print("You cannot see items which is removed from the Museum!");
+	if (!get_check(format("Really order to remove %s from the Museum? ", o_name))) return;
+#endif
+
+	/* Message */
+#ifdef JP
+	msg_format("%sの展示をやめさせた。", o_name);
+#else
+	msg_format("You ordered to remove %s.", o_name);
+#endif
+
+	/* Remove the items from the home */
+	store_item_increase(item, -o_ptr->number);
+	store_item_optimize(item);
+
+	/* The item is gone */
+
+	/* Nothing left */
+	if (st_ptr->stock_num == 0) store_top = 0;
+
+	/* Nothing left on that screen */
+	else if (store_top >= st_ptr->stock_num) store_top -= 12;
+
+	/* Redraw everything */
+	display_inventory();
+
+	return;
+}
+
+
+/*
  * Hack -- set this to leave the store
  */
 static bool leave_store = FALSE;
@@ -4470,11 +4552,18 @@ static void store_process_command(void)
 		/* Hack -- Unknown command */
 		default:
 		{
+			if ((cur_store_num == STORE_MUSEUM) && (command_cmd == 'r'))
+			{
+				museum_remove_object();
+			}
+			else
+			{
 #ifdef JP
-			msg_print("そのコマンドは店の中では使えません。");
+				msg_print("そのコマンドは店の中では使えません。");
 #else
-			msg_print("That command does not work in stores.");
+				msg_print("That command does not work in stores.");
 #endif
+			}
 
 			break;
 		}
@@ -4630,28 +4719,28 @@ void do_cmd_store(void)
 		if (cur_store_num == STORE_HOME)
 		{
 #ifdef JP
-		   prt("g) アイテムを取る", 21, 27);
-		   prt("d) アイテムを置く", 22, 27);
-		   prt("x) 家のアイテムを調べる", 23,27);
+			prt("g) アイテムを取る", 21, 27);
+			prt("d) アイテムを置く", 22, 27);
+			prt("x) 家のアイテムを調べる", 23,27);
 #else
-		   prt("g) Get an item.", 21, 27);
-		   prt("d) Drop an item.", 22, 27);
-		   prt("x) eXamine an item in the home.", 23,27);
+			prt("g) Get an item.", 21, 27);
+			prt("d) Drop an item.", 22, 27);
+			prt("x) eXamine an item in the home.", 23,27);
 #endif
-
 		}
 
 		/* Museum commands */
 		else if (cur_store_num == STORE_MUSEUM)
 		{
 #ifdef JP
-		   prt("d) アイテムを置く", 21, 27);
-		   prt("x) 博物館のアイテムを調べる", 23,27);
+			prt("d) アイテムを置く", 21, 27);
+			prt("r) アイテムの展示をやめる", 22, 27);
+			prt("x) 博物館のアイテムを調べる", 23, 27);
 #else
-		   prt("d) Drop an item.", 21, 27);
-		   prt("x) eXamine an item in the museum.", 23,27);
+			prt("d) Drop an item.", 21, 27);
+			prt("r) order to Remove an item.", 22, 27);
+			prt("x) eXamine an item in the museum.", 23, 27);
 #endif
-
 		}
 
 		/* Shop commands XXX XXX XXX */
@@ -4662,11 +4751,10 @@ void do_cmd_store(void)
 			prt("s) アイテムを売る", 22, 30);
 			prt("x) 商品を調べる", 23,30);
 #else
-		   prt("p) Purchase an item.", 21, 30);
-		   prt("s) Sell an item.", 22, 30);
-		   prt("x) eXamine an item in the shop", 23,30);
+			prt("p) Purchase an item.", 21, 30);
+			prt("s) Sell an item.", 22, 30);
+			prt("x) eXamine an item in the shop", 23,30);
 #endif
-
 		}
 
 #ifdef JP
@@ -4674,7 +4762,7 @@ void do_cmd_store(void)
 
 		prt("i/e) 持ち物/装備の一覧", 21, 56);
 
-		if( rogue_like_commands == TRUE )
+		if (rogue_like_commands)
 		{
 			prt("w/T) 装備する/はずす", 22, 56);
 		}
@@ -4685,7 +4773,7 @@ void do_cmd_store(void)
 #else
 		prt("i/e) Inventry/Equipment list", 21, 56);
 
-		if( rogue_like_commands == TRUE )
+		if (rogue_like_commands)
 		{
 			prt("w/T) Wear/Take off equipment", 22, 56);
 		}
