@@ -1,4 +1,96 @@
+2002-10-13  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd5.c 1.41.2.1, src/mane.c 1.10.4.2, src/object1.c 1.40.2.5:
+	英語版。You 動詞s の修正。EGOの説明文訂正。
+
+	* src/object1.c 1.51: prevents -> interferes with
+
+2002-10-13  henkma  <henkma@cvs>
+
+	* src/cmd5.c 1.45, src/mane.c 1.12:
+	You 動詞s → You 動詞
+
+2002-10-12  henkma  <henkma@cvs>
+
+	* src/object1.c 1.50:
+	日本語を英語に翻訳したときの訳し間違い修正.
+
+2002-10-10  Takeshi Mogami  <mogami@cvs>
+
+	* src/main-x11.c 1.19:
+	RGRAで話題が出たフォントが見付からないときの問題を修正。
+	ちゃんとエラーメッセージを出すようにした。コードはZangbandより。
+
+	* src/autopick.c 1.70, src/cmd3.c 1.30, src/externs.h 1.80, src/flavor.c 1.22, src/xtra1.c 1.54:
+	耐性自動刻みが動的に実行されるようにした。鍛冶師の装備やエゴ能力の付与
+	等の後で自動的に自動刻みが更新される。(実際にはobject_desc()の中で処理)
+	ランダムテレポートの抑制は{%}も{.}と同様の働きをするようにして解決。
+
+2002-10-08  iks  <iks@cvs>
+
+	* src/hissatsu.c 1.17:
+	剣術家の学習でターンを消費してなかったのを修正。
+
+2002-10-05  Takeshi Mogami  <mogami@cvs>
+
+	* src/object1.c 1.40.2.4, src/xtra1.c 1.43.2.5:
+	暗闇の光源を装備しているときに、
+	火炎オーラ等でプレイヤーの体に光源があるとき、光源半径の計算が間違って
+	いて暗闇の光源を装備しても半径0にできなかったバグ修正。
+	*鑑定*時の暗闇光源の説明に半径のマイナス数値を具体的に表記。
+
+	* src/object1.c 1.49, src/xtra1.c 1.53:
+	火炎オーラ等でプレイヤーの体に光源があるとき、光源半径の計算が間違って
+	いて暗闇の光源を装備しても半径0にできなかったバグ修正。
+	*鑑定*時の暗闇光源の説明に半径のマイナス数値を具体的に表記。
+
+2002-10-03  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.69:
+	持ち物の中で隣りあった複数のスロットのアイテムが同時に簡易鑑定されたと
+	きに全部同時に自動破壊するのに失敗していたので修正。一つが破壊された後
+	で持ち物内のスロットが1つずつずれるのを考慮し忘れていた。
+
+2002-10-02  Takeshi Mogami  <mogami@cvs>
+
+	* src/dungeon.c 1.61.2.5, src/externs.h 1.69.2.3, src/variable.c 1.28.2.2, src/bldg.c 1.17.2.1:
+	クエストを引き受ける等した時に決してペットとはぐれないようにした。
+
+	* src/dungeon.c 1.73:
+	Emacsの操作を間違えて大量の行のインデントを変更してしまっていたので戻した。
+
+	* src/bldg.c 1.22, src/dungeon.c 1.72, src/externs.h 1.79, src/variable.c 1.30:
+	クエストを引き受ける等した時に決してペットとはぐれないようにした。
+
+2002-09-27  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/r_info_j.txt 1.45.2.4:
+	幽体ワイアームに毒、冷気耐性。
+
+2002-09-26  Takeshi Mogami  <mogami@cvs>
+
+	* src/main-mac.c 1.21, src/main-win.c 1.20, src/main-x11.c 1.18, src/z-term.c 1.17, src/z-term.h 1.3:
+	Bit tileモード用のカーソル表示コードを整理。main-xxx.cの中で地形情報の配列の
+	内容を直接参照してしまっていた所を、書き変えて参照せずに済むようにした。
+	既にVanilla用のパッチで適用していたもの。
+
+	* src/store.c 1.16.2.1, src/wizard1.c 1.23.2.1, src/wizard2.c 1.24.2.2, src/xtra1.c 1.43.2.4, src/defines.h 1.65.2.5, src/files.c 1.60.2.4, src/load.c 1.33.2.2, src/mspells2.c 1.21.2.2, src/rooms.c 1.15.4.1, src/spells1.c 1.29.2.4, lib/edit/t0000002_j.txt 1.4.4.1, lib/edit/t_lite_j.txt 1.7.4.2, lib/file/news.txt 1.12.2.3, lib/file/news_j.txt 1.11.2.3, lib/help/general.txt 1.8.4.1, lib/help/jbldg.txt 1.2.16.1, lib/help/jlicense.txt 1.1.2.3, lib/help/jversion.txt 1.11.2.3, lib/help/version.txt 1.11.2.3, src/birth.c 1.48.2.1, src/cmd3.c 1.23.4.2, src/cmd4.c 1.46.2.2, src/cmd6.c 1.23.2.4, configure.in 1.18.2.3, lib/edit/r_info_j.txt 1.45.2.3:
+	1.3.x に加えたバグ修正から関係あるものを1.2.2に適用。
+
+	* lib/edit/r_info_j.txt 1.48, lib/edit/t0000002_j.txt 1.5, lib/edit/t_lite_j.txt 1.9:
+	ハーフエル→ハーフエルフ。
+	骸骨ドラゴンに耐冷と耐毒付加。
+
 2002-09-24  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/general.txt 1.9, lib/help/jlicense.txt 1.3, lib/help/jversion.txt 1.13, lib/help/version.txt 1.13:
+	Thangorodrim のアドレス変更に対応。
+
+	* src/mspells2.c 1.26:
+	TOband teamよりの報告で、monst_breath_monst() で半径0のボールを撃てない仕様
+	だったのを修正、しかし現在は使っていないので無関係。
+
+	* Changelogs 1.57: 更新
 
 	* lib/help/jbldg.txt 1.3, src/birth.c 1.50, src/cmd1.c 1.56, src/cmd3.c 1.29, src/cmd4.c 1.56, src/files.c 1.81, src/load.c 1.41, src/monster2.c 1.42, src/mspells2.c 1.25, src/rooms.c 1.18, src/spells1.c 1.41, src/store.c 1.18, src/wizard1.c 1.26, src/wizard2.c 1.29, src/xtra1.c 1.52:
 	「TOband dev-team からバグ報告」のバグいろいろ修正。全部ではない。
