@@ -2689,15 +2689,18 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 	}
 
 	/* Note the discount, if any */
-        if (o_ptr->discount)
+	if (o_ptr->discount)
 	{
 		/* Hidden by real inscription unless in a store */
 		if (!tmp_val2[0] || (o_ptr->ident & IDENT_STORE))
 		{
+			char discount_num_buf[4];
+
 			/* Append to other fake inscriptions if any */
 			if (fake_insc_buf[0]) strcat(fake_insc_buf, ", ");
 
-			(void)object_desc_num(fake_insc_buf, o_ptr->discount);
+			(void)object_desc_num(discount_num_buf, o_ptr->discount);
+			strcat(fake_insc_buf, discount_num_buf);
 #ifdef JP
 			strcat(fake_insc_buf, "%°ú¤­");
 #else
