@@ -1902,6 +1902,7 @@ static void do_cmd_options_autosave(cptr info)
 }
 
 
+#define PAGE_STARTUP     6
 #define PAGE_AUTODESTROY 7
 
 /*
@@ -1913,6 +1914,8 @@ void do_cmd_options_aux(int page, cptr info)
 	int     i, k = 0, n = 0, l;
 	int     opt[24];
 	char    buf[80];
+	bool    browse_only = (page == PAGE_STARTUP) && character_generated &&
+	                      (!p_ptr->wizard || !allow_debug_opts);
 
 
 	/* Lookup the options */
@@ -2018,7 +2021,7 @@ void do_cmd_options_aux(int page, cptr info)
 			case 'Y':
 			case '6':
 			{
-				(*option_info[opt[k]].o_var) = TRUE;
+				if (!browse_only) (*option_info[opt[k]].o_var) = TRUE;
 				k = (k + 1) % n;
 				break;
 			}
@@ -2027,7 +2030,7 @@ void do_cmd_options_aux(int page, cptr info)
 			case 'N':
 			case '4':
 			{
-				(*option_info[opt[k]].o_var) = FALSE;
+				if (!browse_only) (*option_info[opt[k]].o_var) = FALSE;
 				k = (k + 1) % n;
 				break;
 			}
@@ -2035,7 +2038,7 @@ void do_cmd_options_aux(int page, cptr info)
 			case 't':
 			case 'T':
 			{
-				(*option_info[opt[k]].o_var) = !(*option_info[opt[k]].o_var);
+				if (!browse_only) (*option_info[opt[k]].o_var) = !(*option_info[opt[k]].o_var);
 				break;
 			}
 
@@ -2049,7 +2052,7 @@ void do_cmd_options_aux(int page, cptr info)
 				/* Peruse the help file */
 				(void)show_file(TRUE, buf, NULL, 0, 0);
 
-				Term_clear(); 
+				Term_clear();
 				break;
 			}
 
@@ -2322,22 +2325,42 @@ void do_cmd_options(void)
 		prt("(W) Window Flags", 15, 5);
 #endif
 
+		if (!p_ptr->wizard || !allow_debug_opts)
+		{
+			/* Startup */
+#ifdef JP
+			prt("(S)       初期            オプション (参照のみ)", 16, 5);
+#else
+			prt("(S) Startup Options (Browse Only)", 16, 5);
+#endif
+		}
+		else
+		{
+			/* Startup */
+#ifdef JP
+			prt("(S)       初期            オプション", 16, 5);
+#else
+			prt("(S) Startup Options", 16, 5);
+#endif
+		}
+
+
 		if (p_ptr->noscore || allow_debug_opts)
 		{
 			/* Cheating */
 #ifdef JP
-			prt("(C)       詐欺            オプション", 16, 5);
+			prt("(C)       詐欺            オプション", 17, 5);
 #else
-			prt("(C) Cheating Options", 16, 5);
+			prt("(C) Cheating Options", 17, 5);
 #endif
 		}
 
 
 		/* Prompt */
 #ifdef JP
-		prt("コマンド:", 18, 0);
+		prt("コマンド:", 19, 0);
 #else
-		prt("Command: ", 18, 0);
+		prt("Command: ", 19, 0);
 #endif
 
 
@@ -2437,6 +2460,20 @@ void do_cmd_options(void)
 #else
 				do_cmd_options_aux(10, "Play-record Option");
 #endif
+				break;
+			}
+
+			/* Startup Options */
+			case 'S':
+			case 's':
+			{
+				/* Spawn */
+#ifdef JP
+				do_cmd_options_aux(6, (!p_ptr->wizard || !allow_debug_opts) ? "初期オプション(参照のみ)" : "初期オプション((*)はスコアに影響)");
+#else
+				do_cmd_options_aux(6, (!p_ptr->wizard || !allow_debug_opts) ? "Startup Opts(browse only)" : "Startup Opts((*)s effect score)");
+#endif
+
 				break;
 			}
 
