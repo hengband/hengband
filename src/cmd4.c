@@ -7811,7 +7811,7 @@ static void display_object_list(int col, int row, int per_page, int object_idx[]
 
 		if (use_bigtile)
 		{
-			if (k_ptr->x_attr & 0x80)
+			if (a & 0x80)
 				Term_putch(76 + 1, row + i, 255, -1);
 			else
 				Term_putch(76 + 1, row + i, 0, ' ');
