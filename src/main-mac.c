@@ -3337,7 +3337,7 @@ static void cf_save_prefs()
 	/* Gfx settings */
 	save_pref_short("arg.arg_sound", arg_sound);
 	save_pref_short("arg.graf_mode", graf_mode);
-	save_pref_short("arg.arg_bigtile", use_bigtile);
+	save_pref_short("arg.arg_bigtile", arg_bigtile);
 
 #ifndef MACH_O_CARBON
 	/* SoundMode */
@@ -3421,7 +3421,7 @@ static void cf_load_prefs()
 		/* double-width tiles */
 		if (query_load_pref_short("arg.arg_bigtile", &pref_tmp))
 		{
-			use_bigtile = pref_tmp;
+			arg_bigtile = use_bigtile = pref_tmp;
 		}
 
 	}
