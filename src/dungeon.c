@@ -1378,7 +1378,8 @@ static void gere_music(s32b music)
 		case MUSIC_DETECT+8:
 		case MUSIC_DETECT+9:
 		case MUSIC_DETECT+10:
-			detect_treasure(DETECT_RAD_DEFAULT);
+			/* There are too many hidden treasure.  So... */
+			/* detect_treasure(DETECT_RAD_DEFAULT); */
 			detect_objects_gold(DETECT_RAD_DEFAULT);
 			detect_objects_normal(DETECT_RAD_DEFAULT);
 			if ((p_ptr->lev > 24) && (music < MUSIC_DETECT+11)) p_ptr->magic_num1[0] = music+1;
