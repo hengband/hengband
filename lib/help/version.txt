@@ -1,5 +1,46 @@
 === History of Hengband from 1.0.7 to 1.3.1 ===
 
+
+  Dec. 9th, 2002  hengband 1.5.0 (Development branch) released.
+
+Implemented 'Saved Floors':
+- You can climb back the same stairs to get back to the same floor.
+- But different stairs will always take you to different floors.
+- All saved floors will be cleared when your reached to the surface.
+- Changed effects of Level teleport, trap door and stair creation.
+  (Each effect takes you to the floor right above or right under.)
+- Remove two options; dungeon_stairs and confirm_stairs
+- Add a new option 'confirm_quest' which warns about one-way stairs.
+- Increased number of walls with treasure.
+- Implemented walls with hidden treasure.
+- Removed detect treasure effect from the Detection spell.
+
+
+  Dec. 9th, 2002  hengband 1.4.0 (Stable branch) released.
+
+- Removed scrolls of satisfy hunger and that class power of Berserkers.
+  Androids can quaff flasks of oil.
+  Barlogs can sacrifice corpses with symbol 't','p', or 'h' using the Eat command.
+  Golems, Zombies, Skeletons, and Spectors can Eat charges of wands and staves.
+  Ents can get nutritions from water in any potions.
+- Added lists of known monsters/objects from Eyangband.
+- Shift + direction keys will move cursor quickly in the look command.
+- Tuned interface to list stack of items in the look command with easy_floor.
+- Added new service of buildings in town which evaluate effects of your AC.
+- Added disturb_high: disturb whenever high-level monster moves
+- Added allow_debug_opts: allow use of debug/cheat options
+- Changed 'munchkin_death' into a cheat option 'cheat_save'.
+- Removed terrain_streams and stupid_monsters.
+- Fixed typos and grammar errors on English. (Thanks to John Mikula)
+- Fix various bugs:
+  Too many items break savefile.  Crash at boundary of wilderness.
+  Stop time at forest of global map.  Hidden door at Deep Water.
+  A floor mimiccing wall.  Warding True.  Disintegration on runes.
+  Absence of new traps.  Confused Blue-mage.  Quickness of Mirror-magic.
+  Resurrection of Amberites.  Multiple Chameleon King.
+  Buffer-overflow breaks macro.
+
+
   Oct. 31st, 2002  hengband 1.3.1 (Development branch) released.
 
 - Added a new menu 'Keep on top' for subwindows of Windows version
