@@ -5345,6 +5345,55 @@ static bool monster_tsuri(int r_idx)
 }
 
 
+/* Hack -- Pack Overflow */
+static void pack_overflow(void)
+{
+	if (inventory[INVEN_PACK].k_idx)
+	{
+		int item = INVEN_PACK;
+		char o_name[MAX_NLEN];
+		object_type *o_ptr;
+
+		/* Access the slot to be dropped */
+		o_ptr = &inventory[item];
+
+		/* Disturbing */
+		disturb(0, 0);
+
+		/* Warning */
+#ifdef JP
+		msg_print("ザックからアイテムがあふれた！");
+#else
+		msg_print("Your pack overflows!");
+#endif
+
+		/* Describe */
+		object_desc(o_name, o_ptr, 0);
+
+		/* Message */
+#ifdef JP
+		msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
+#else
+		msg_format("You drop %s (%c).", o_name, index_to_label(item));
+#endif
+
+		/* Drop it (carefully) near the player */
+		(void)drop_near(o_ptr, 0, py, px);
+
+		/* Modify, Describe, Optimize */
+		inven_item_increase(item, -255);
+		inven_item_describe(item);
+		inven_item_optimize(item);
+
+		/* Handle "p_ptr->notice" */
+		notice_stuff();
+
+		/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
+		handle_stuff();
+	}
+}
+
+
 /*
  * Process the player
  *
@@ -5668,53 +5717,7 @@ msg_print("中断しました。");
 
 
 		/* Hack -- Pack Overflow */
-		if (inventory[INVEN_PACK].k_idx)
-		{
-			int item = INVEN_PACK;
-
-			char o_name[MAX_NLEN];
-
-			object_type *o_ptr;
-
-			/* Access the slot to be dropped */
-			o_ptr = &inventory[item];
-
-			/* Disturbing */
-			disturb(0, 0);
-
-			/* Warning */
-#ifdef JP
-msg_print("ザックからアイテムがあふれた！");
-#else
-			msg_print("Your pack overflows!");
-#endif
-
-
-			/* Describe */
-			object_desc(o_name, o_ptr, 0);
-
-			/* Message */
-#ifdef JP
-msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
-#else
-			msg_format("You drop %s (%c).", o_name, index_to_label(item));
-#endif
-
-
-			/* Drop it (carefully) near the player */
-			(void)drop_near(o_ptr, 0, py, px);
-
-			/* Modify, Describe, Optimize */
-			inven_item_increase(item, -255);
-			inven_item_describe(item);
-			inven_item_optimize(item);
-
-			/* Handle "p_ptr->notice" */
-			notice_stuff();
-
-			/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
-			handle_stuff();
-		}
+		pack_overflow();
 
 
 		/* Hack -- cancel "lurking browse mode" */
@@ -5812,6 +5815,10 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 			/* Process the command */
 			process_command();
 		}
+
+
+		/* Hack -- Pack Overflow */
+		pack_overflow();
 
 
 		/*** Clean up ***/
