@@ -3996,7 +3996,7 @@ void display_player(int mode)
 			display_player_one_line(ENTRY_REALM, tmp, TERM_L_BLUE);
 		}
 
-		if (p_ptr->pclass == CLASS_CHAOS_WARRIOR)
+		if ((p_ptr->pclass == CLASS_CHAOS_WARRIOR) || (p_ptr->muta2 & MUT2_CHAOS_GIFT))
 			display_player_one_line(ENTRY_PATRON, chaos_patrons[p_ptr->chaos_patron], TERM_L_BLUE);
 
 		/* Age, Height, Weight, Social */
