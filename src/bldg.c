@@ -3840,6 +3840,8 @@ msg_format("%s ¤Ç¤¹¡£", tmp_str);
 			msg_format("You have: %s.", tmp_str);
 #endif
 
+			/* Auto-inscription */
+			auto_inscribe_item(item, is_autopick(o_ptr));
 
 			/* Update the gold display */
 			building_prt_gold();
@@ -4130,12 +4132,18 @@ static void building_recharge_all(void)
 	{
 		o_ptr = &inventory[i];
 		k_ptr = &k_info[o_ptr->k_idx];
-				
+
 		/* skip non magic device */
 		if (o_ptr->tval < TV_STAFF || o_ptr->tval > TV_ROD) continue;
 
 		/* Identify it */
-		if (!object_known_p(o_ptr)) identify_item(o_ptr);
+		if (!object_known_p(o_ptr))
+		{
+			identify_item(o_ptr);
+
+			/* Auto-inscription */
+			auto_inscribe_item(i, is_autopick(o_ptr));
+		}
 
 		/* Recharge */
 		switch (o_ptr->tval)

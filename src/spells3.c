@@ -2010,6 +2010,9 @@ void identify_pack(void)
 
 		/* Identify it */
 		identify_item(o_ptr);
+
+		/* Auto-inscription */
+		auto_inscribe_item(i, is_autopick(o_ptr));
 	}
 }
 

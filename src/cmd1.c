@@ -806,7 +806,13 @@ void py_pickup_aux(int o_idx)
 	/* Delete the object */
 	delete_object_idx(o_idx);
 
-	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN) identify_item(o_ptr);
+	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN)
+	{
+		identify_item(o_ptr);
+
+		/* Auto-inscription */
+		auto_inscribe_item(slot, is_autopick(o_ptr));
+	}
 
 	/* Describe the object */
 	object_desc(o_name, o_ptr, TRUE, 3);

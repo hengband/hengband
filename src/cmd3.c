@@ -443,7 +443,13 @@ msg_print("クエストを達成した！");
 		}
 	}
 
-	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN) identify_item(o_ptr);
+	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN)
+	{
+		identify_item(o_ptr);
+
+		/* Auto-inscription */
+		auto_inscribe_item(item, is_autopick(o_ptr));
+	}
 
 	/* Take a turn */
 	energy_use = 100;
