@@ -2186,7 +2186,7 @@ static bool kankin(void)
 #ifdef JP
 			sprintf(buf, "%s を換金しますか？",o_name);
 #else
-			sprintf(buf, "Convert %s into maney? ",o_name);
+			sprintf(buf, "Convert %s into money? ",o_name);
 #endif
 			if (get_check(buf))
 			{
@@ -2214,7 +2214,7 @@ static bool kankin(void)
 #ifdef JP
 			sprintf(buf, "%s を換金しますか？",o_name);
 #else
-			sprintf(buf, "Convert %s into maney? ",o_name);
+			sprintf(buf, "Convert %s into money? ",o_name);
 #endif
 			if (get_check(buf))
 			{
@@ -2242,7 +2242,7 @@ static bool kankin(void)
 #ifdef JP
 			sprintf(buf, "%s を換金しますか？",o_name);
 #else
-			sprintf(buf, "Convert %s into maney? ",o_name);
+			sprintf(buf, "Convert %s into money? ",o_name);
 #endif
 			if (get_check(buf))
 			{
@@ -2271,7 +2271,7 @@ static bool kankin(void)
 #ifdef JP
 			sprintf(buf, "%s を換金しますか？",o_name);
 #else
-			sprintf(buf, "Convert %s into maney? ",o_name);
+			sprintf(buf, "Convert %s into money? ",o_name);
 #endif
 			if (get_check(buf))
 			{
@@ -2299,7 +2299,7 @@ static bool kankin(void)
 #ifdef JP
 			sprintf(buf, "%s を換金しますか？",o_name);
 #else
-			sprintf(buf, "Convert %s into maney? ",o_name);
+			sprintf(buf, "Convert %s into money? ",o_name);
 #endif
 			if (get_check(buf))
 			{
@@ -2330,7 +2330,7 @@ static bool kankin(void)
 #ifdef JP
 				sprintf(buf, "%s を換金しますか？",o_name);
 #else
-				sprintf(buf, "Convert %s into maney? ",o_name);
+				sprintf(buf, "Convert %s into money? ",o_name);
 #endif
 				if (get_check(buf))
 				{
