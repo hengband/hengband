@@ -4989,7 +4989,11 @@ bool take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 #endif
 
 			/* Note cause of death */
-			(void)strcpy(died_from, hit_from);
+#ifdef JP
+			sprintf(died_from, "%s%s", !p_ptr->paralyzed ? "" : p_ptr->free_act ? "Ä¦Áü¾õÂÖ¤Ç":"Ëãáã¾õÂÖ¤Ç", hit_from);
+#else
+			sprintf(died_from, "%s%s", hit_from, !p_ptr->paralyzed ? "" : " while helpless");
+#endif
 
 			/* No longer a winner */
 			total_winner = FALSE;
