@@ -1433,14 +1433,27 @@ static void do_cmd_wiz_cure_all(void)
 	(void)restore_level();
 
 	/* Heal the player */
-	p_ptr->chp = p_ptr->mhp;
-	p_ptr->chp_frac = 0;
+	if (p_ptr->chp < p_ptr->mhp)
+	{
+		p_ptr->chp = p_ptr->mhp;
+		p_ptr->chp_frac = 0;
+
+		/* Redraw */
+		p_ptr->redraw |= (PR_HP);
+
+		/* Window stuff */
+		p_ptr->window |= (PW_PLAYER);
+	}
 
 	/* Restore mana */
 	if (p_ptr->csp < p_ptr->msp)
 	{
 		p_ptr->csp = p_ptr->msp;
 		p_ptr->csp_frac = 0;
+
+		p_ptr->redraw |= (PR_MANA);
+		p_ptr->window |= (PW_PLAYER);
+		p_ptr->window |= (PW_SPELL);
 	}
 
 	/* Cure stuff */
@@ -1456,9 +1469,6 @@ static void do_cmd_wiz_cure_all(void)
 
 	/* No longer hungry */
 	(void)set_food(PY_FOOD_MAX - 1);
-
-	/* Redraw everything */
-	do_cmd_redraw();
 }
 
 
