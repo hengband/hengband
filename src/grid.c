@@ -412,26 +412,6 @@ void vault_monsters(int y1, int x1, int num)
 
 
 /*
- * Count the number of walls adjacent to the given grid.
- *
- * Note -- Assumes "in_bounds(y, x)"
- *
- * We count only granite walls and permanent walls.
- */
-int next_to_walls(int y, int x)
-{
-	int	k = 0;
-
-	if (cave_floor_grid(&cave[y + 1][x])) k++;
-	if (cave_floor_grid(&cave[y - 1][x])) k++;
-	if (cave_floor_grid(&cave[y][x + 1])) k++;
-	if (cave_floor_grid(&cave[y][x - 1])) k++;
-
-	return (k);
-}
-
-
-/*
  * Always picks a correct direction
  */
 void correct_dir(int *rdir, int *cdir, int y1, int x1, int y2, int x2)

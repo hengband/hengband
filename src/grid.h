@@ -226,7 +226,6 @@ extern void vault_objects(int y, int x, int num);
 extern void vault_trap_aux(int y, int x, int yd, int xd);
 extern void vault_traps(int y, int x, int yd, int xd, int num);
 
-extern int next_to_walls(int y, int x);
 extern void correct_dir(int *rdir, int *cdir, int y1, int x1, int y2, int x2);
 
 extern void rand_dir(int *rdir, int *cdir);

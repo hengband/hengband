@@ -118,12 +118,32 @@ dun_data *dun;
 
 
 /*
+ * Count the number of walls adjacent to the given grid.
+ *
+ * Note -- Assumes "in_bounds(y, x)"
+ *
+ * We count only granite walls and permanent walls.
+ */
+static int next_to_walls(int y, int x)
+{
+	int	k = 0;
+
+	if (have_flag(f_flags_bold(y + 1, x), FF_WALL)) k++;
+	if (have_flag(f_flags_bold(y - 1, x), FF_WALL)) k++;
+	if (have_flag(f_flags_bold(y, x + 1), FF_WALL)) k++;
+	if (have_flag(f_flags_bold(y, x - 1), FF_WALL)) k++;
+
+	return (k);
+}
+
+
+/*
  * Places some staircases near walls
  */
 static bool alloc_stairs(int feat, int num, int walls)
 {
 	int          y, x, i, j, flag;
-	int          more_num = 0;
+	int          shaft_num = 0;
 	cave_type    *c_ptr;
 
 	feature_type *f_ptr = &f_info[feat];
@@ -134,7 +154,7 @@ static bool alloc_stairs(int feat, int num, int walls)
 		if (ironman_downward || !dun_level) return TRUE;
 
 		if (dun_level > d_info[dungeon_type].mindepth)
-			more_num = (randint1(num+1))/2;
+			shaft_num = (randint1(num+1))/2;
 	}
 	else if (have_flag(f_ptr->flags, FF_MORE))
 	{
@@ -154,20 +174,24 @@ static bool alloc_stairs(int feat, int num, int walls)
 		if (dun_level >= d_info[dungeon_type].maxdepth) return TRUE;
 
 		if ((dun_level < d_info[dungeon_type].maxdepth-1) && !quest_number(dun_level+1))
-			more_num = (randint1(num)+1)/2;
+			shaft_num = (randint1(num)+1)/2;
 	}
 
 	/* Paranoia */
 	else return FALSE;
 
+
+	/* There very few walls in an arena level */
+	if (dun->empty_level) walls = 1;
+
 	/* Place "num" stairs */
 	for (i = 0; i < num; i++)
 	{
-		/* Place some stairs */
+		/* Try several times */
 		for (flag = FALSE; !flag; )
 		{
 			/* Try several times, then decrease "walls" */
-			for (j = 0; !flag && j <= 3000; j++)
+			for (j = 0; j <= 3000; j++)
 			{
 				/* Pick a random grid */
 				y = randint1(cur_hgt-2);
@@ -186,13 +210,13 @@ static bool alloc_stairs(int feat, int num, int walls)
 				c_ptr->mimic = 0;
 
 				/* Clear previous contents, add stairs */
-				c_ptr->feat = (i < more_num) ? feat_state(feat, FF_SHAFT) : feat;
+				c_ptr->feat = (i < shaft_num) ? feat_state(feat, FF_SHAFT) : feat;
 
 				/* All done */
 				flag = TRUE;
+				break;
 			}
 
-			if (!flag) return FALSE;
 			/* Require fewer walls */
 			if (walls) walls--;
 		}
