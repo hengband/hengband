@@ -2156,7 +2156,7 @@ msg_format("%sは%^sの攻撃をかわした。", t_name,m_name);
 
 
 		/* Analyze "visible" monsters only */
-		if (m_ptr->ml && !do_silly_attack)
+		if (is_original_ap_and_seen(m_ptr) && !do_silly_attack)
 		{
 			/* Count "obvious" attacks (and ones that cause damage) */
 			if (obvious || damage || (r_ptr->r_blows[ap_cnt] > 10))
@@ -2491,13 +2491,16 @@ static void process_monster(int m_idx)
 #else
 			msg_format("%^s wakes up.", m_name);
 #endif
+		}
 
+		if (m_ptr->ml)
+		{
 			/* Redraw the health bar */
 			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
 			if (is_riding_mon) p_ptr->redraw |= (PR_UHEALTH);
 
 			/* Hack -- Count the wakings */
-			if (r_ptr->r_wake < MAX_UCHAR)
+			if ((r_ptr->r_wake < MAX_UCHAR) && is_original_ap(m_ptr))
 			{
 				r_ptr->r_wake++;
 			}

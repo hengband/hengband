@@ -1291,6 +1291,8 @@ bool make_attack_spell(int m_idx)
 	bool in_no_magic_dungeon = (d_info[dungeon_type].flags1 & DF1_NO_MAGIC) && dun_level
 		&& (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest));
 
+	bool can_remember;
+
 	/* Cannot cast spells when confused */
 	if (m_ptr->confused)
 	{
@@ -1627,6 +1629,8 @@ bool make_attack_spell(int m_idx)
 
 	/* Projectable? */
 	direct = player_bold(y, x);
+
+	can_remember = is_original_ap_and_seen(m_ptr);
 
 	/* Cast the spell. */
 	switch (thrown_spell)
@@ -4555,7 +4559,7 @@ msg_print("多くの力強いものが間近に現れた音が聞こえる。");
 	}
 
 	/* Remember what the monster did to us */
-	if (is_original_ap_and_seen(m_ptr))
+	if (can_remember)
 	{
 		/* Inate spell */
 		if (thrown_spell < 32 * 4)

@@ -300,6 +300,8 @@ bool monst_spell_monst(int m_idx)
 	bool in_no_magic_dungeon = (d_info[dungeon_type].flags1 & DF1_NO_MAGIC) && dun_level
 		&& (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest));
 
+	bool can_remember;
+
 	bool resists_tele = FALSE;
 
 	/* Prepare flags for summoning */
@@ -693,6 +695,8 @@ bool monst_spell_monst(int m_idx)
 
 		return (TRUE);
 	}
+
+	can_remember = is_original_ap_and_seen(m_ptr);
 
 	switch (thrown_spell)
 	{
@@ -4204,7 +4208,7 @@ bool monst_spell_monst(int m_idx)
 	}
 
 	/* Remember what the monster did, if we saw it */
-	if (is_original_ap_and_seen(m_ptr))
+	if (can_remember)
 	{
 		/* Inate spell */
 		if (thrown_spell < 32*4)

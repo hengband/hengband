@@ -1261,13 +1261,10 @@ static void process_monsters_counters(void)
 						m_ptr->csleep -= d;
 
 						/* Notice the "not waking up" */
-						if (m_ptr->ml)
+						if (is_original_ap_and_seen(m_ptr))
 						{
 							/* Hack -- Count the ignores */
-							if (r_ptr->r_ignore < MAX_UCHAR)
-							{
-								r_ptr->r_ignore++;
-							}
+							if (r_ptr->r_ignore < MAX_UCHAR) r_ptr->r_ignore++;
 						}
 					}
 
@@ -1302,7 +1299,7 @@ static void process_monsters_counters(void)
 							if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 
 							/* Hack -- Count the wakings */
-							if (r_ptr->r_wake < MAX_UCHAR)
+							if ((r_ptr->r_wake < MAX_UCHAR) && is_original_ap(m_ptr))
 							{
 								r_ptr->r_wake++;
 							}
