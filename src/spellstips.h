@@ -784,7 +784,7 @@ static char *spell_tips[VALID_REALM][32] =
 		"attempts to charm all monsters in sight.",
 
 		"turns all rocks in the adjacent squares to mud.",
-		"gives resistance to fire, cold, electricity, acid and poison for a while. These resistances can be added to which from equipment for more powerful resistances.",
+		"gives resistance to fire, cold, electricity, acid and poison. These resistances can be added to which from equipment for more powerful resistances.",
 		"hastes you.",
 		"teleports all monsters in sight away unless resisted.",
 		"damages all monsters in sight. hurts evil monsters greatly.",
