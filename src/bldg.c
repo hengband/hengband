@@ -3624,11 +3624,10 @@ static bool enchant_item(int cost, int to_hit, int to_dam, int to_ac)
 	int         maxenchant = (p_ptr->lev / 5);
 	char        tmp_str[MAX_NLEN];
 
-
 	clear_bldg(4, 18);
 #ifdef JP
-prt(format("現在のあなたの技量だと、+%d まで改良できます。", maxenchant), 5, 0);
-prt(format(" 改良の料金は一個につき＄%d です。", cost), 7, 0);
+	prt(format("現在のあなたの技量だと、+%d まで改良できます。", maxenchant), 5, 0);
+	prt(format(" 改良の料金は一個につき＄%d です。", cost), 7, 0);
 #else
 	prt(format("  Based on your skill, we can improve up to +%d.", maxenchant), 5, 0);
 	prt(format("  The price for the service is %d gold per item.", cost), 7, 0);
@@ -3638,8 +3637,8 @@ prt(format(" 改良の料金は一個につき＄%d です。", cost), 7, 0);
 
 	/* Get an item */
 #ifdef JP
-q = "どのアイテムを改良しますか？";
-s = "改良できるものがありません。";
+	q = "どのアイテムを改良しますか？";
+	s = "改良できるものがありません。";
 #else
 	q = "Improve which item? ";
 	s = "You have nothing to improve.";
@@ -3655,7 +3654,7 @@ s = "改良できるものがありません。";
 	{
 		object_desc(tmp_str, o_ptr, OD_NAME_ONLY);
 #ifdef JP
-msg_format("%sを改良するだけのゴールドがありません！", tmp_str);
+		msg_format("%sを改良するだけのゴールドがありません！", tmp_str);
 #else
 		msg_format("You do not have the gold to improve %s!", tmp_str);
 #endif
@@ -3710,11 +3709,10 @@ msg_format("%sを改良するだけのゴールドがありません！", tmp_str);
 
 		/* Message */
 #ifdef JP
-msg_print("改良に失敗した。");
+		msg_print("改良に失敗した。");
 #else
 		msg_print("The improvement failed.");
 #endif
-
 
 		return (FALSE);
 	}
@@ -3722,9 +3720,9 @@ msg_print("改良に失敗した。");
 	{
 		object_desc(tmp_str, o_ptr, OD_NAME_AND_ENCHANT);
 #ifdef JP
-msg_format("＄%d で%sを改良しました。", cost * o_ptr->number, tmp_str );
+		msg_format("＄%dで%sに改良しました。", cost * o_ptr->number, tmp_str);
 #else
-		msg_format("Improved %s for %d gold.", tmp_str, cost * o_ptr->number);
+		msg_format("Improved into %s for %d gold.", tmp_str, cost * o_ptr->number);
 #endif
 
 		/* Charge the money */
