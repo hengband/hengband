@@ -1496,7 +1496,7 @@ static bool is_opt_confirm_destroy(object_type *o_ptr)
 		if (object_value(o_ptr) > 0) return FALSE;
 	
 	if (leave_equip)
-		if (!object_is_weapon_armour_ammo(o_ptr)) return FALSE;
+		if (object_is_weapon_armour_ammo(o_ptr)) return FALSE;
 	
 	if (leave_chest)
 		if ((o_ptr->tval == TV_CHEST) && o_ptr->pval) return FALSE;
