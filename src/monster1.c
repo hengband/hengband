@@ -741,7 +741,7 @@ if (flags3 & RF3_ORC)      hook_c_roff(TERM_UMBER, "オーク");
 #ifdef JP
 if (flags2 & RF2_HUMAN) hook_c_roff(TERM_L_WHITE, "人間");
 #else
-		if (flags2 & RF2_HUMAN) hook_c_roff(TERM_L_WHITE, " Human");
+		if (flags2 & RF2_HUMAN) hook_c_roff(TERM_L_WHITE, " human");
 #endif
 
 #ifdef JP
