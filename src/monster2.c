@@ -2485,6 +2485,11 @@ void update_monsters(bool full)
 }
 
 
+/*
+ * Hack -- the index of the summoning monster
+ */
+static int summon_specific_who_for_chameleons = 0;
+
 static bool monster_hook_chameleon_lord(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -2556,11 +2561,26 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 			r_ptr = &r_info[r_idx];
 
 			if (!monster_can_cross_terrain(cave[m_ptr->fy][m_ptr->fx].feat, r_ptr)) continue;
-			if (!born && !old_unique)
+			if (!born)
 			{
-				if ((r_info[old_r_idx].flags3 & RF3_GOOD) && !(r_ptr->flags3 & RF3_GOOD)) continue;
-				if ((r_info[old_r_idx].flags3 & RF3_EVIL) && !(r_ptr->flags3 & RF3_EVIL)) continue;
-				if (!(r_info[old_r_idx].flags3 & (RF3_GOOD | RF3_EVIL)) && (r_ptr->flags3 & (RF3_GOOD | RF3_EVIL))) continue;
+				if (!old_unique)
+				{
+					if ((r_info[old_r_idx].flags3 & RF3_GOOD) && !(r_ptr->flags3 & RF3_GOOD)) continue;
+					if ((r_info[old_r_idx].flags3 & RF3_EVIL) && !(r_ptr->flags3 & RF3_EVIL)) continue;
+					if (!(r_info[old_r_idx].flags3 & (RF3_GOOD | RF3_EVIL)) && (r_ptr->flags3 & (RF3_GOOD | RF3_EVIL))) continue;
+				}
+				else
+				{
+					if ((m_ptr->sub_align & SUB_ALIGN_EVIL) && (r_ptr->flags3 & RF3_GOOD)) continue;
+					if ((m_ptr->sub_align & SUB_ALIGN_GOOD) && (r_ptr->flags3 & RF3_EVIL)) continue;
+				}
+			}
+			else if (summon_specific_who_for_chameleons > 0)
+			{
+				monster_type *sm_ptr = &m_list[summon_specific_who_for_chameleons];
+
+				if ((sm_ptr->sub_align & SUB_ALIGN_EVIL) && (r_ptr->flags3 & RF3_GOOD)) continue;
+				if ((sm_ptr->sub_align & SUB_ALIGN_GOOD) && (r_ptr->flags3 & RF3_EVIL)) continue;
 			}
 			break;
 		}
@@ -2572,7 +2592,17 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 	m_ptr->ap_r_idx = r_idx;
 	update_mon(m_idx, FALSE);
 	lite_spot(m_ptr->fy, m_ptr->fx);
-	if (born) return;
+	if (born)
+	{
+		/* Sub-alignment of a chameleon */
+		if (r_ptr->flags3 & (RF3_EVIL | RF3_GOOD))
+		{
+			m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
+			if (r_ptr->flags3 & RF3_EVIL) m_ptr->sub_align |= SUB_ALIGN_EVIL;
+			if (r_ptr->flags3 & RF3_GOOD) m_ptr->sub_align |= SUB_ALIGN_GOOD;
+		}
+		return;
+	}
 
 	if (m_idx == p_ptr->riding)
 	{
@@ -2857,6 +2887,16 @@ msg_print("守りのルーンが壊れた！");
 	m_ptr->r_idx = r_idx;
 	m_ptr->ap_r_idx = initial_r_appearance(r_idx);
 
+	/* Sub-alignment of a monster */
+	if ((who > 0) && !(r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)))
+		m_ptr->sub_align = m_list[who].sub_align;
+	else
+	{
+		m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
+		if (r_ptr->flags3 & RF3_EVIL) m_ptr->sub_align |= SUB_ALIGN_EVIL;
+		if (r_ptr->flags3 & RF3_GOOD) m_ptr->sub_align |= SUB_ALIGN_GOOD;
+	}
+
 	/* Place the monster at the location */
 	m_ptr->fy = y;
 	m_ptr->fx = x;
@@ -2882,25 +2922,24 @@ msg_print("守りのルーンが壊れた！");
 
 	if (r_ptr->flags7 & RF7_CHAMELEON)
 	{
+		if (who > 0) summon_specific_who_for_chameleons = who;
+		else summon_specific_who_for_chameleons = 0;
+
 		choose_new_monster(c_ptr->m_idx, TRUE, 0);
 		r_ptr = &r_info[m_ptr->r_idx];
 		m_ptr->mflag2 |= MFLAG_CHAMELEON;
 		rating++;
+
+		/* Hack - Set sub_align to neutral when the Chameleon Lord is generated as "GUARDIAN" */
+		if ((r_ptr->flags1 & RF1_UNIQUE) && (who <= 0))
+			m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
+
+		summon_specific_who_for_chameleons = 0;
 	}
 	else if (is_kage)
 	{
 		m_ptr->ap_r_idx = MON_KAGE;
 		m_ptr->mflag2 |= MFLAG_KAGE;
-	}
-
-	/* Sub-alignment of a monster */
-	if ((who > 0) && !(r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)))
-		m_ptr->sub_align = m_list[who].sub_align;
-	else
-	{
-		m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
-		if (r_ptr->flags3 & RF3_EVIL) m_ptr->sub_align |= SUB_ALIGN_EVIL;
-		if (r_ptr->flags3 & RF3_GOOD) m_ptr->sub_align |= SUB_ALIGN_GOOD;
 	}
 
 	if (no_pet) m_ptr->mflag2 |= MFLAG_NOPET;
