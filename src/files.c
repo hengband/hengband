@@ -5932,6 +5932,11 @@ prt("ゲームをセーブしています... 失敗！", 0, 0);
 	(void)strcpy(p_ptr->died_from, "(alive and well)");
 #endif
 
+	/* Update some things */
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE | PU_DISTANCE);
+
+	/* Update stuff */
+	update_stuff();
 }
 
 
