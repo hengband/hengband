@@ -3386,7 +3386,7 @@ msg_print("爆発のルーンは解除された。");
 
 #define MON_SCAT_MAXD 10
 
-static bool mon_scatter(int *yp, int *xp, int y, int x, int max_dist)
+static bool mon_scatter(int r_idx, int *yp, int *xp, int y, int x, int max_dist)
 {
 	int place_x[MON_SCAT_MAXD];
 	int place_y[MON_SCAT_MAXD];
@@ -3401,6 +3401,7 @@ static bool mon_scatter(int *yp, int *xp, int y, int x, int max_dist)
 		num[i] = 0;
 
 	for (nx = x - max_dist; nx <= x + max_dist; nx++)
+	{
 		for (ny = y - max_dist; ny <= y + max_dist; ny++)
 		{
 			/* Ignore annoying locations */
@@ -3409,11 +3410,22 @@ static bool mon_scatter(int *yp, int *xp, int y, int x, int max_dist)
 			/* Require "line of sight" */
 			if (!los(y, x, ny, nx)) continue;
 
-			/* Walls and Monsters block flow */
-			if (!cave_empty_bold2(ny, nx)) continue;
+			if (r_idx > 0)
+			{
+				monster_race *r_ptr = &r_info[r_idx];
 
-			/* ... nor on the Pattern */
-			if (pattern_tile(ny, nx)) continue;
+				/* Require empty space (if not ghostly) */
+				if (!monster_can_enter(ny, nx, r_ptr, 0))
+					continue;
+			}
+			else
+			{
+				/* Walls and Monsters block flow */
+				if (!cave_empty_bold2(ny, nx)) continue;
+				
+				/* ... nor on the Pattern */
+				if (pattern_tile(ny, nx)) continue;
+			}
 
 			i = distance(y, x, ny, nx);
 
@@ -3429,6 +3441,7 @@ static bool mon_scatter(int *yp, int *xp, int y, int x, int max_dist)
 				place_y[i] = ny;
 			}
 		}
+	}
 
 	i = 0;
 	while (i < MON_SCAT_MAXD && 0 == num[i])
@@ -3960,7 +3973,7 @@ bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
 
 	if (p_ptr->inside_arena) return (FALSE);
 
-	if (!mon_scatter(&y, &x, y1, x1, 2)) return FALSE;
+	if (!mon_scatter(0, &y, &x, y1, x1, 2)) return FALSE;
 
 	/* Save the summoner */
 	summon_specific_who = who;
@@ -4010,7 +4023,7 @@ bool summon_named_creature (int who, int oy, int ox, int r_idx, u32b mode)
 
 	if (p_ptr->inside_arena) return FALSE;
 
-	if (!mon_scatter(&y, &x, oy, ox, 2)) return FALSE;
+	if (!mon_scatter(r_idx, &y, &x, oy, ox, 2)) return FALSE;
 
 	/* Place it (allow groups) */
 	return place_monster_aux(who, y, x, r_idx, (mode | PM_NO_KAGE));
@@ -4028,7 +4041,7 @@ bool multiply_monster(int m_idx, bool clone, u32b mode)
 
 	int y, x;
 
-	if (!mon_scatter(&y, &x, m_ptr->fy, m_ptr->fx, 1))
+	if (!mon_scatter(m_ptr->r_idx, &y, &x, m_ptr->fy, m_ptr->fx, 1))
 		return FALSE;
 
 	if (m_ptr->mflag2 & MFLAG2_NOPET) mode |= PM_NO_PET;
