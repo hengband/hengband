@@ -4826,7 +4826,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"Soldier",
 		"Mercenary",
 		"Veteran",
-		"Swordsman",
+		"Bowman",
 		"Champion",
 		"Hero",
 		"Baron",
