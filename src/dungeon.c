@@ -7067,6 +7067,29 @@ prt("お待ち下さい...", 0, 0);
 		change_floor();
 	}
 
+	else
+	{
+		/* HACK -- Restore from panic-save */
+		if (p_ptr->panic_save)
+		{
+			/* No player?  -- Try to regenerate floor */
+			if (!py || !px)
+			{
+#ifdef JP
+				msg_print("プレイヤーの位置がおかしい。フロアを再生成します。");
+#else
+				msg_print("What a strange player location.  Regenerate the dungeon floor.");
+#endif
+				change_floor();
+			}
+
+			/* Still no player?  -- Try to locate random place */
+			if (!py || !px) py = px = 10;
+
+			/* No longer in panic */
+			p_ptr->panic_save = 0;
+		}
+	}
 
 	/* Character is now "complete" */
 	character_generated = TRUE;
