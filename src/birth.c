@@ -3699,6 +3699,21 @@ static byte player_init[MAX_CLASS][3][2] =
 
 
 /*
+ * Hook function for human corpses
+ */
+static bool monster_hook_human(int r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	if (r_ptr->flags1 & (RF1_UNIQUE)) return FALSE;
+
+	if (strchr("pht", r_ptr->d_char)) return TRUE;
+
+	return FALSE;
+}
+
+
+/*
  * Init players with some belongings
  *
  * Having an item makes the player "aware" of its purpose.
@@ -3718,10 +3733,23 @@ void player_outfit(void)
 	switch (p_ptr->prace)
 	{
 	case RACE_VAMPIRE:
-	case RACE_DEMON:
 		/* Nothing! */
 		/* Vampires can drain blood of creatures */
+		break;
+
+	case RACE_DEMON:
 		/* Demon can drain vitality from humanoid corpse */
+
+		/* Prepare allocation table */
+		get_mon_num_prep(monster_hook_human, NULL);
+
+		for (i = rand_range(3,4); i > 0; i--)
+		{
+			object_prep(q_ptr, lookup_kind(TV_CORPSE, SV_CORPSE));
+			q_ptr->pval = get_mon_num(2);
+			q_ptr->number = 1;
+			(void)inven_carry(q_ptr);
+		}
 		break;
 
 #if 0
