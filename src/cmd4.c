@@ -4942,6 +4942,7 @@ static cptr monster_group_text[] =
 {
 #ifdef JP
 	"ユニーク",	/* "Uniques" */
+	"乗馬可能なモンスター",	/* "Riding" */
 	"アリ",
 	"コウモリ",
 	"ムカデ",
@@ -4999,6 +5000,7 @@ static cptr monster_group_text[] =
 	"球体",
 #else
 	"Uniques",
+	"Ridable monsters",
 	"Ant",
 	"Bat",
 	"Centipede",
@@ -5066,6 +5068,7 @@ static cptr monster_group_text[] =
 static cptr monster_group_char[] = 
 {
 	(char *) -1L,
+	(char *) -2L,
 	"a",
 	"b",
 	"c",
@@ -5167,6 +5170,9 @@ static int collect_monsters(int grp_cur, s16b mon_idx[], byte mode)
 	/* XXX Hack -- Check if this is the "Uniques" group */
 	bool grp_unique = (monster_group_char[grp_cur] == (char *) -1L);
 
+	/* XXX Hack -- Check if this is the "Riding" group */
+	bool grp_riding = (monster_group_char[grp_cur] == (char *) -2L);
+
 	/* Check every race */
 	for (i = 0; i < max_r_idx; i++)
 	{
@@ -5179,17 +5185,27 @@ static int collect_monsters(int grp_cur, s16b mon_idx[], byte mode)
 		/* Require known monsters */
 		if (!(mode & 0x02) && !cheat_know && !r_ptr->r_sights ) continue;
 
-		if (grp_unique && !(r_ptr->flags1 & RF1_UNIQUE)) continue;
-
-		/* Check for race in the group */
-		if (grp_unique || strchr(group_char, r_ptr->d_char))
+		if (grp_unique)
 		{
-			/* Add the race */
-			mon_idx[mon_cnt++] = i;
-
-			/* XXX Hack -- Just checking for non-empty group */
-			if (mode & 0x01) break;
+			if (!(r_ptr->flags1 & RF1_UNIQUE)) continue;
 		}
+
+		else if (grp_riding)
+		{
+			if (!(r_ptr->flags7 & RF7_RIDING)) continue;
+		}
+
+		else
+		{
+			/* Check for race in the group */
+			if (!strchr(group_char, r_ptr->d_char)) continue;
+		}
+
+		/* Add the race */
+		mon_idx[mon_cnt++] = i;
+
+		/* XXX Hack -- Just checking for non-empty group */
+		if (mode & 0x01) break;
 	}
 
 	/* Terminate the list */
