@@ -357,6 +357,24 @@ static bool kind_is_armor(int k_idx)
 
 
 /*
+ * Hack -- determine if a template is hafted weapon
+ */
+static bool kind_is_hafted(int k_idx)
+{
+	object_kind *k_ptr = &k_info[k_idx];
+
+	/* Analyze the item type */
+	if (k_ptr->tval == TV_HAFTED)
+	{
+		return (TRUE);
+	}
+
+	/* Assume not good */
+	return (FALSE);
+}
+
+
+/*
  * Check for "Quest" completion when a quest monster is killed or charmed.
  */
 void check_quest_completion(monster_type *m_ptr)
@@ -1138,6 +1156,26 @@ msg_print("地面に落とされた。");
 				get_obj_num_hook = kind_is_armor;
 
 				/* Make a hard armor */
+				make_object(q_ptr, mo_mode);
+
+				/* Drop it in the dungeon */
+				(void)drop_near(q_ptr, -1, y, x);
+			}
+			break;
+
+		case '\\':
+			if (dun_level > 4)
+			{
+				/* Get local object */
+				q_ptr = &forge;
+
+				/* Wipe the object */
+				object_wipe(q_ptr);
+
+				/* Activate restriction */
+				get_obj_num_hook = kind_is_hafted;
+
+				/* Make a poleweapon */
 				make_object(q_ptr, mo_mode);
 
 				/* Drop it in the dungeon */

@@ -11354,19 +11354,16 @@ F:CAN_SWIM | NO_CONF | NO_SLEEP |
 D:$Weird, jelly like creatures. No two look the same.
 D:気味の悪いゼリー状生物。同じようにみえるものは二つと無い。
 
-#JZ#
-N:627:『Fat Man』
-E:Fat Man
-G:{:D
-I:120:14d14:10:80:12
-W:40:255:0:200:0:0
-B:EXPLODE:SHATTER:200d2
-F:FORCE_SLEEP | FORCE_MAXHP | UNIQUE | REFLECTING |
-F:EMPTY_MIND | COLD_BLOOD | BASH_DOOR |
-F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS |
-F:NO_FEAR | NO_CONF | NO_SLEEP | NONLIVING | RES_TELE
-D:$A shining machine of death and destruction.
-D:輝く死と破壊の機械だ。
+N:627:地獄の鉄槌
+E:Hammer of hell
+G:\:v
+I:100:50d10:30:40:0
+W:24:5:0:1000:0:0
+B:CRUSH:SUPERHURT:30d1
+F:COLD_BLOOD | EVIL | NO_SLEEP | NO_CONF | NO_FEAR | NO_STUN | NONLIVING |
+F:IM_ACID | IM_COLD | IM_POIS | RES_NETH | RES_DARK
+#D:$Untranslated
+D:犠牲者の装備と魂を固めて、地獄の鉄床で鍛えてできた禍々しい鉄槌だ。
 
 #JZ#
 N:628:呪われし『マレキス』
