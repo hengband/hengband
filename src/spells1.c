@@ -1069,14 +1069,14 @@ msg_print("ドアが溶けて泥になった！");
 			if (!cave_naked_bold(y, x)) break;
 
                         /* Create a glyph */
-                        cave[py][px].info |= CAVE_OBJECT;
-                        cave[py][px].mimic = FEAT_GLYPH;
+                        cave[y][x].info |= CAVE_OBJECT;
+                        cave[y][x].mimic = FEAT_GLYPH;
 
                         /* Notice */
-                        note_spot(py, px);
+                        note_spot(y, x);
 	
                         /* Redraw */
-                        lite_spot(py, px);
+                        lite_spot(y, x);
 
 			break;
 		}
@@ -7987,6 +7987,43 @@ bool in_disintegration_range(int y1, int x1, int y2, int x2)
 	return (TRUE);
 }
 
+
+/*
+ *  Do disintegration effect on the terrain
+ *  before we decide the region of the effect.
+ */
+static bool do_disintegration(int by, int bx, int y, int x)
+{
+        byte feat;
+
+        /* Disintegration balls explosions are stopped by perma-walls */
+        if (!in_disintegration_range(by, bx, y, x)) return FALSE;
+						
+        /* Permanent walls and artifacts don't get effect */
+        /* But not protect monsters and other objects */
+        if (!cave_valid_bold(y, x)) return TRUE;
+
+        /* Destroy mirror/glyph */
+        remove_mirror(y,x);
+
+        feat = cave[y][x].feat;
+
+        if ((feat < FEAT_PATTERN_START || feat > FEAT_PATTERN_XTRA2) &&
+            (feat < FEAT_DEEP_WATER || feat > FEAT_GRASS))
+        {
+                if (feat == FEAT_TREES || feat == FEAT_FLOWER || feat == FEAT_DEEP_GRASS)
+                        cave_set_feat(y, x, FEAT_GRASS);
+                else
+                        cave_set_feat(y, x, floor_type[randint0(100)]);
+        }
+
+        /* Update some things -- similar to GF_KILL_WALL */
+        p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
+
+        return TRUE;
+}
+
+
 /*
  * breath shape
  */ 
@@ -8025,24 +8062,17 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 					
 					if (disint_ball)
 					{
-						/* Disintegration balls explosions are stopped by perma-walls */
-						if (!in_disintegration_range(by, bx, y, x)) continue;
-						
-						/* Disintegration destroys mirrors. */
-						remove_mirror(y,x);
-						if (real_breath && cave_valid_bold(y, x) &&
-						    (cave[y][x].feat < FEAT_PATTERN_START ||
-						     cave[y][x].feat > FEAT_PATTERN_XTRA2) &&
-						    (cave[y][x].feat < FEAT_DEEP_WATER ||
-						     cave[y][x].feat > FEAT_GRASS))
-						{
-							if (cave[y][x].feat == FEAT_TREES)
-								cave_set_feat(y, x, FEAT_GRASS);
-							else
-                                                                cave_set_feat(y, x, floor_type[randint0(100)]);
-						}
-						/* Update some things -- similar to GF_KILL_WALL */
-						p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
+                                                /* Disintegration are stopped only by perma-walls */
+                                                if (real_breath)
+                                                {
+                                                        /* Destroy terrains */
+                                                        if (!do_disintegration(by, bx, y, x)) continue;
+                                                }
+                                                else
+                                                {
+                                                        /* No actual disintegration */
+                                                        if (!in_disintegration_range(by, bx, y, x)) continue;
+                                                }
 					}
 					else
 					{
@@ -8810,23 +8840,8 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 
 						if (typ == GF_DISINTEGRATE)
 						{
-							/* Disintegration balls explosions are stopped by perma-walls */
-							if (!in_disintegration_range(y2, x2, y, x)) continue;
-
-							if (cave_valid_bold(y, x) &&
-								(cave[y][x].feat < FEAT_PATTERN_START ||
-								 cave[y][x].feat > FEAT_PATTERN_XTRA2) &&
-								(cave[y][x].feat < FEAT_DEEP_WATER ||
-								 cave[y][x].feat > FEAT_GRASS))
-							{
-								if (cave[y][x].feat == FEAT_TREES)
-									cave_set_feat(y, x, FEAT_GRASS);
-								else
-                                                                        cave_set_feat(y, x, floor_type[randint0(100)]);
-							}
-
-							/* Update some things -- similar to GF_KILL_WALL */
-							p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
+                                                        /* Disintegration are stopped only by perma-walls */
+                                                        if (!do_disintegration(y2, x2, y, x)) continue;
 						}
 						else
 						{
