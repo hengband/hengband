@@ -1933,18 +1933,10 @@ note(format("の中", tmp16s));
 	{
 		s16b max_num;
 		monster_type dummy_mon;
+		bool removed = FALSE;
 
 		rd_s16b(&tmp16s);
-		if (tmp16s > MAX_PARTY_MON)
-		{
-#ifdef JP
-			note("一時保存ペットが多すぎるので一部削除します。");
-#else
-			note("Temporary pets are too many, so some are removed.");
-#endif
-			max_num = MAX_PARTY_MON;
-		}
-		else max_num = tmp16s;
+		max_num = MIN(MAX_PARTY_MON, tmp16s);
 
 		/* Load temporary preserved pets */
 		for (i = 0; i < max_num; i++)
@@ -1960,13 +1952,22 @@ note(format("の中", tmp16s));
 		{
 			rd_monster(&dummy_mon);
 
-			if (record_named_pet && dummy_mon.nickname)
+			if (dummy_mon.r_idx)
 			{
-				char m_name[80];
-				monster_desc(m_name, &dummy_mon, 0x08);
-				do_cmd_write_nikki(NIKKI_NAMED_PET, 5, m_name);
+				if (record_named_pet && dummy_mon.nickname)
+				{
+					char m_name[80];
+					monster_desc(m_name, &dummy_mon, 0x08);
+					do_cmd_write_nikki(NIKKI_NAMED_PET, 5, m_name);
+				}
+				removed = TRUE;
 			}
 		}
+#ifdef JP
+		if (removed) note("一時保存ペットが多すぎるので一部削除します。");
+#else
+		if (removed) note("Temporary pets are too many, so some are removed.");
+#endif
 	}
 
 	if (z_older_than(10,1,2))
