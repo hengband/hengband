@@ -1486,7 +1486,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 					}
 
 					/***  Monster's char  ***/
-					if ((r_ptr->flags1 & RF1_CHAR_CLEAR) && !use_graphics)
+					if ((r_ptr->flags1 & RF1_CHAR_CLEAR) && (*cp != ' ') && !use_graphics)
 					{
 						/* Clear-char */
 						/* Do nothing */
