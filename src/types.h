@@ -1542,10 +1542,10 @@ struct dungeon_info_type {
  *  A structure type for entry of auto-picker/destroyer
  */
 typedef struct {
-	cptr name;
-	cptr insc;
-	byte action;
-	u32b flag[2];
-	byte dice;
+	cptr name;          /* Items which have 'name' as part of its name match */
+	cptr insc;          /* Items will be auto-inscribed as 'insc' */
+	byte action;        /* Auto-pickup or Destroy or Leave items */
+	u32b flag[2];       /* Misc. keyword to be matched */
+	byte dice;          /* Weapons which have more than 'dice' dice match */
 } autopick_type;
 

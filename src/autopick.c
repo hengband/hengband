@@ -1133,18 +1133,21 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	else if (IS_FLG(FLG_BOOTS))
 		body_str = "boots";
 
+	/* Prepare a string for item name */
 	if (*str)
 	{
 		if (*str == '^')
 		{
 			str++;
 			top = TRUE;
-			whose_str[whose_n++] = "name is begining with \"";
+			whose_str[whose_n++] = "name is beginning with \"";
 		}
 		else
 			which_str[which_n++] = "have \"";
 	}
 
+
+	/* Describe action flag */
 	if (act & DONT_AUTOPICK)
 		strcpy(buff, "Leave on floor ");
 	else if (act & DO_AUTODESTROY)
@@ -1152,9 +1155,11 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	else
 		strcpy(buff, "Pickup ");
 
+	/* Auto-insctiption */
 	if (insc)
 		strncat(buff, format("and inscribe \"%s\" on ", insc), 80);
 
+	/* Adjective */
 	if (!before_n) 
 		strcat(buff, "all ");
 	else for (i = 0; i < before_n && before_str[i]; i++)
@@ -1163,13 +1168,17 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		strcat(buff, " ");
 	}
 
+	/* Item class */
 	strcat(buff, body_str);
 
+	/* of ... */
 	for (i = 0; i < after_n && after_str[i]; i++)
 	{
 		strcat(buff, " ");
 		strcat(buff, after_str[i]);
 	}
+
+	/* which ... */
 	for (i = 0; i < whose_n && whose_str[i]; i++)
 	{
 		if (i == 0)
@@ -1180,15 +1189,18 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		strcat(buff, whose_str[i]);
 	}
 
+	/* Item name ; whose name is beginning with "str" */
 	if (*str && top)
 	{
 		strcat(buff, str);
 		strcat(buff, "\"");
 	}
 
+	/* whose ..., and which .... */
 	if (whose_n && which_n)
 		strcat(buff, ", and ");
 
+	/* which ... */
 	for (i = 0; i < which_n && which_str[i]; i++)
 	{
 		if (i == 0)
@@ -1199,6 +1211,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		strcat(buff, which_str[i]);
 	}
 
+	/* Item name ; which have "str" as part of its name */
 	if (*str && !top)
 	{
 		strncat(buff, str, 80);
@@ -1206,6 +1219,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	}
 	strcat(buff, ".");
 
+	/* Describe whether it will be displayed on the full map or not */
 	if (act & DO_DISPLAY)
 	{
 		if (act & DONT_AUTOPICK)
