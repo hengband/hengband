@@ -824,12 +824,12 @@ bool auto_destroy_item(s16b item, int autopick_idx)
 	{
 		disturb(0,0);
 
+		/* Describe the object (with {terrible/special}) */
+		object_desc(o_name, o_ptr, TRUE, 3);
+
 		/* Artifact? */
 		if (!can_player_destroy_object(o_ptr))
 		{
-			/* Describe the object (with {terrible/special}) */
-			object_desc(o_name, o_ptr, TRUE, 3);
-
 			/* Message */
 #ifdef JP
 			msg_format("%sは破壊不能だ。", o_name);
