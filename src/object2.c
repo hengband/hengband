@@ -6329,13 +6329,13 @@ void display_koff(int k_idx)
 object_type *choose_warning_item(void)
 {
 	int i;
-	int choices[INVEN_TOTAL-INVEN_RARM];
+	int choices[INVEN_TOTAL - INVEN_RARM];
 	int number = 0;
 
-	/* Paranoia -- Player has no warning-item */
-	if (!p_ptr->warning) return (NULL);
+	/* Paranoia -- Player has no warning ability */
+	if (!p_ptr->warning) return NULL;
 
-	/* Search Inventry */
+	/* Search Inventory */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
 		u32b flgs[TR_FLAG_SIZE];
@@ -6350,7 +6350,7 @@ object_type *choose_warning_item(void)
 	}
 
 	/* Choice one of them */
-	return (&inventory[choices[randint0(number)]]);
+	return number ? &inventory[choices[randint0(number)]] : NULL;
 }
 
 /* Calculate spell damages */
@@ -6614,7 +6614,6 @@ bool process_warning(int xx, int yy)
 			monster_type *m_ptr;
 			monster_race *r_ptr;
 			u32b f4, f5, f6;
-			int rlev;
 
 			if (!in_bounds(my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE)) continue;
 
@@ -6623,65 +6622,76 @@ bool process_warning(int xx, int yy)
 			if (!c_ptr->m_idx) continue;
 
 			m_ptr = &m_list[c_ptr->m_idx];
+
+			if (m_ptr->csleep) continue;
+			if (!is_hostile(m_ptr)) continue;
+
 			r_ptr = &r_info[m_ptr->r_idx];
 
 			f4 = r_ptr->flags4;
 			f5 = r_ptr->flags5;
 			f6 = r_ptr->flags6;
 
-			rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-
-			if (m_ptr->csleep) continue;
-			if (is_pet(m_ptr)) continue;
-
 			/* Monster spells (only powerful ones)*/
 			if (projectable(my, mx, yy, xx))
 			{
+				int breath_dam_div3 = m_ptr->hp / 3;
+				int breath_dam_div6 = m_ptr->hp / 6;
+
+				if (!(d_info[dungeon_type].flags1 & DF1_NO_MAGIC))
+				{
+					int rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+					int storm_dam = rlev * 4 + 150;
+
+					if (f5 & RF5_BA_MANA) spell_damcalc(m_ptr, GF_MANA, storm_dam, 0, &dam_max0);
+					if (f5 & RF5_BA_DARK) spell_damcalc(m_ptr, GF_DARK, storm_dam, 0, &dam_max0);
+					if (f5 & RF5_BA_LITE) spell_damcalc(m_ptr, GF_LITE, storm_dam, 0, &dam_max0);
+					if (f6 & RF6_HAND_DOOM) spell_damcalc(m_ptr, GF_HAND_DOOM, p_ptr->chp * 6 / 10, 0, &dam_max0);
+					if (f6 & RF6_PSY_SPEAR) spell_damcalc(m_ptr, GF_PSY_SPEAR, (r_ptr->flags2 & RF2_POWERFUL) ? (rlev * 2 + 150) : (rlev * 3 / 2 + 100), 0, &dam_max0);
+				}
 				if (f4 & RF4_ROCKET) spell_damcalc(m_ptr, GF_ROCKET, m_ptr->hp / 4, 800, &dam_max0);
-				if (f4 & RF4_BR_ACID) spell_damcalc(m_ptr, GF_ACID, m_ptr->hp / 3, 1600, &dam_max0);
-				if (f4 & RF4_BR_ELEC) spell_damcalc(m_ptr, GF_ELEC, m_ptr->hp / 3, 1600, &dam_max0);
-				if (f4 & RF4_BR_FIRE) spell_damcalc(m_ptr, GF_FIRE, m_ptr->hp / 3, 1600, &dam_max0);
-				if (f4 & RF4_BR_COLD) spell_damcalc(m_ptr, GF_COLD, m_ptr->hp / 3, 1600, &dam_max0);
-				if (f4 & RF4_BR_POIS) spell_damcalc(m_ptr, GF_POIS, m_ptr->hp / 3, 800, &dam_max0);
-				if (f4 & RF4_BR_NETH) spell_damcalc(m_ptr, GF_NETHER, m_ptr->hp / 6, 550, &dam_max0);
-				if (f4 & RF4_BR_LITE) spell_damcalc(m_ptr, GF_LITE, m_ptr->hp / 6, 400, &dam_max0);
-				if (f4 & RF4_BR_DARK) spell_damcalc(m_ptr, GF_DARK, m_ptr->hp / 6, 400, &dam_max0);
-				if (f4 & RF4_BR_CONF) spell_damcalc(m_ptr, GF_CONFUSION, m_ptr->hp / 6, 450, &dam_max0);
-				if (f4 & RF4_BR_SOUN) spell_damcalc(m_ptr, GF_SOUND, m_ptr->hp / 6, 450, &dam_max0);
-				if (f4 & RF4_BR_CHAO) spell_damcalc(m_ptr, GF_CHAOS, m_ptr->hp / 6, 600, &dam_max0);
-				if (f4 & RF4_BR_DISE) spell_damcalc(m_ptr, GF_DISENCHANT, m_ptr->hp / 6, 500, &dam_max0);
-				if (f4 & RF4_BR_NEXU) spell_damcalc(m_ptr, GF_NEXUS, m_ptr->hp / 3, 250, &dam_max0);
-				if (f4 & RF4_BR_TIME) spell_damcalc(m_ptr, GF_TIME, m_ptr->hp / 3, 150, &dam_max0);
-				if (f4 & RF4_BR_INER) spell_damcalc(m_ptr, GF_INERTIA, m_ptr->hp / 6, 200, &dam_max0);
-				if (f4 & RF4_BR_GRAV) spell_damcalc(m_ptr, GF_GRAVITY, m_ptr->hp / 3, 200, &dam_max0);
-				if (f4 & RF4_BR_SHAR) spell_damcalc(m_ptr, GF_SHARDS, m_ptr->hp / 6, 500, &dam_max0);
-				if (f4 & RF4_BR_PLAS) spell_damcalc(m_ptr, GF_PLASMA, m_ptr->hp / 6, 150, &dam_max0);
-				if (f4 & RF4_BR_WALL) spell_damcalc(m_ptr, GF_FORCE, m_ptr->hp / 6, 200, &dam_max0);
-				if (f4 & RF4_BR_MANA) spell_damcalc(m_ptr, GF_MANA, m_ptr->hp / 3, 250, &dam_max0);
-				if (f4 & RF4_BR_NUKE) spell_damcalc(m_ptr, GF_NUKE, m_ptr->hp / 3, 800, &dam_max0);
-				if (f4 & RF4_BR_DISI) spell_damcalc(m_ptr, GF_DISINTEGRATE, m_ptr->hp / 6, 150, &dam_max0);
-				if (f5 & RF5_BA_MANA) spell_damcalc(m_ptr, GF_MANA, rlev * 4 + 150, 0, &dam_max0);
-				if (f5 & RF5_BA_DARK) spell_damcalc(m_ptr, GF_DARK, rlev * 4 + 150, 0, &dam_max0);
-				if (f5 & RF5_BA_LITE) spell_damcalc(m_ptr, GF_LITE, rlev * 4 + 150, 0, &dam_max0);
-				if (f6 & RF6_HAND_DOOM) spell_damcalc(m_ptr, GF_HAND_DOOM, p_ptr->chp * 6 / 10, 0, &dam_max0);
-				if (f6 & RF6_PSY_SPEAR) spell_damcalc(m_ptr, GF_PSY_SPEAR, (r_ptr->flags2 & RF2_POWERFUL) ? (rlev * 2 + 150) : (rlev * 3 / 2 + 100), 0, &dam_max0);
+				if (f4 & RF4_BR_ACID) spell_damcalc(m_ptr, GF_ACID, breath_dam_div3, 1600, &dam_max0);
+				if (f4 & RF4_BR_ELEC) spell_damcalc(m_ptr, GF_ELEC, breath_dam_div3, 1600, &dam_max0);
+				if (f4 & RF4_BR_FIRE) spell_damcalc(m_ptr, GF_FIRE, breath_dam_div3, 1600, &dam_max0);
+				if (f4 & RF4_BR_COLD) spell_damcalc(m_ptr, GF_COLD, breath_dam_div3, 1600, &dam_max0);
+				if (f4 & RF4_BR_POIS) spell_damcalc(m_ptr, GF_POIS, breath_dam_div3, 800, &dam_max0);
+				if (f4 & RF4_BR_NETH) spell_damcalc(m_ptr, GF_NETHER, breath_dam_div6, 550, &dam_max0);
+				if (f4 & RF4_BR_LITE) spell_damcalc(m_ptr, GF_LITE, breath_dam_div6, 400, &dam_max0);
+				if (f4 & RF4_BR_DARK) spell_damcalc(m_ptr, GF_DARK, breath_dam_div6, 400, &dam_max0);
+				if (f4 & RF4_BR_CONF) spell_damcalc(m_ptr, GF_CONFUSION, breath_dam_div6, 450, &dam_max0);
+				if (f4 & RF4_BR_SOUN) spell_damcalc(m_ptr, GF_SOUND, breath_dam_div6, 450, &dam_max0);
+				if (f4 & RF4_BR_CHAO) spell_damcalc(m_ptr, GF_CHAOS, breath_dam_div6, 600, &dam_max0);
+				if (f4 & RF4_BR_DISE) spell_damcalc(m_ptr, GF_DISENCHANT, breath_dam_div6, 500, &dam_max0);
+				if (f4 & RF4_BR_NEXU) spell_damcalc(m_ptr, GF_NEXUS, breath_dam_div3, 250, &dam_max0);
+				if (f4 & RF4_BR_TIME) spell_damcalc(m_ptr, GF_TIME, breath_dam_div3, 150, &dam_max0);
+				if (f4 & RF4_BR_INER) spell_damcalc(m_ptr, GF_INERTIA, breath_dam_div6, 200, &dam_max0);
+				if (f4 & RF4_BR_GRAV) spell_damcalc(m_ptr, GF_GRAVITY, breath_dam_div3, 200, &dam_max0);
+				if (f4 & RF4_BR_SHAR) spell_damcalc(m_ptr, GF_SHARDS, breath_dam_div6, 500, &dam_max0);
+				if (f4 & RF4_BR_PLAS) spell_damcalc(m_ptr, GF_PLASMA, breath_dam_div6, 150, &dam_max0);
+				if (f4 & RF4_BR_WALL) spell_damcalc(m_ptr, GF_FORCE, breath_dam_div6, 200, &dam_max0);
+				if (f4 & RF4_BR_MANA) spell_damcalc(m_ptr, GF_MANA, breath_dam_div3, 250, &dam_max0);
+				if (f4 & RF4_BR_NUKE) spell_damcalc(m_ptr, GF_NUKE, breath_dam_div3, 800, &dam_max0);
+				if (f4 & RF4_BR_DISI) spell_damcalc(m_ptr, GF_DISINTEGRATE, breath_dam_div6, 150, &dam_max0);
 			}
 
 			/* Monster melee attacks */
-			if (mx <= xx + 1 && mx >= xx - 1 && my <= yy + 1 && my >= yy - 1)
+			if (!(r_ptr->flags1 & RF1_NEVER_BLOW) && !(d_info[dungeon_type].flags1 & DF1_NO_MELEE))
 			{
-				int m;
-				int dam_melee = 0;
-				for (m = 0; m < 4; m++)
+				if (mx <= xx + 1 && mx >= xx - 1 && my <= yy + 1 && my >= yy - 1)
 				{
-					/* Skip non-attacks */
-					if (!r_ptr->blow[m].method || (r_ptr->blow[m].method == RBM_SHOOT)) continue;
+					int m;
+					int dam_melee = 0;
+					for (m = 0; m < 4; m++)
+					{
+						/* Skip non-attacks */
+						if (!r_ptr->blow[m].method || (r_ptr->blow[m].method == RBM_SHOOT)) continue;
 
-					/* Extract the attack info */
-					dam_melee += blow_damcalc(m_ptr, &r_ptr->blow[m]);
-					if (r_ptr->blow[m].method == RBM_EXPLODE) break;
+						/* Extract the attack info */
+						dam_melee += blow_damcalc(m_ptr, &r_ptr->blow[m]);
+						if (r_ptr->blow[m].method == RBM_EXPLODE) break;
+					}
+					if (dam_melee > dam_max0) dam_max0 = dam_melee;
 				}
-				if (dam_melee > dam_max0) dam_max0 = dam_melee;
 			}
 
 			/* Contribution from this monster */
@@ -6698,10 +6708,12 @@ bool process_warning(int xx, int yy)
 		{
 			object_type *o_ptr = choose_warning_item();
 
-			object_desc(o_name, o_ptr, FALSE, 0);
+			if (o_ptr) object_desc(o_name, o_ptr, FALSE, 0);
 #ifdef JP
+			else strcpy(o_name, "体"); /* Warning ability without item */
 			msg_format("%sが鋭く震えた！", o_name);
 #else
+			else strcpy(o_name, "body"); /* Warning ability without item */
 			msg_format("Your %s pulsates sharply!", o_name);
 #endif
 			disturb(0, 0);
@@ -6720,10 +6732,12 @@ bool process_warning(int xx, int yy)
 	{
 		object_type *o_ptr = choose_warning_item();
 
-		object_desc(o_name, o_ptr, FALSE, 0);
+		if (o_ptr) object_desc(o_name, o_ptr, FALSE, 0);
 #ifdef JP
+		else strcpy(o_name, "体"); /* Warning ability without item */
 		msg_format("%sが震えた！", o_name);
 #else
+		else strcpy(o_name, "body"); /* Warning ability without item */
 		msg_format("Your %s pulsates!", o_name);
 #endif
 		disturb(0, 0);
