@@ -185,7 +185,15 @@ p'を押すことで前のキャラクタに戻ることができます。
 ません。
 
 エディタモードでは2468(またはカーソルキー)でカーソルを移動、リターンキー
-で編集終了です。
+で編集終了です。ESCキーでは変更を破棄して編集終了です。Ctrl-Fキーでは、
+lib/user/ にある histedit-<名前>.prf または histedit.prf というファイル
+から生い立ちを読み込みます。histedit-<名前>.prf は histedit.prf に優先
+されます。
+
+生い立ち設定ファイル中では条件分岐(jpref.txt#Condition [i])を他の設定
+ファイル同様に使用できます。生い立ちの本文は "H:<文字列>" という形式で
+記述します。生い立ちの文字列領域はあまり大きくはなく、生い立ちが長すぎ
+る場合は全て入りきらないことになります。
 
 
 ***** <QuickStart>
@@ -357,14 +365,14 @@ p'を押すことで前のキャラクタに戻ることができます。
 乗馬の熟練度は、乗馬中に近接攻撃や飛び道具によってモンスターを攻撃する
 事で練習できます。熟練度が上ると乗馬中のキャラクターの加速が上り、最大
 で乗馬になっているモンスターの加速値に等しくなるまで上昇します。
-(jmonster.txt#Pets [i]を参照)
+(jmonster.txt#Pets [j]を参照)
 
 
 --
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.3.0
+Updated    : Hengband 1.5.2
 
 
 ***** [a] jraceclas.hlp
@@ -375,4 +383,5 @@ Updated    : Hengband 1.3.0
 ***** [f] jtown.txt#TownLevel
 ***** [g] jdungeon.txt#RandomQuests
 ***** [h] jraceclas.txt#StatBonusTable
-***** [i] jmonster.txt#Pets
+***** [i] jpref.txt#Condition
+***** [j] jmonster.txt#Pets
