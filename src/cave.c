@@ -2816,6 +2816,30 @@ void forget_lite(void)
 
 
 /*
+ * For delayed visual update
+ */
+#define cave_note_and_redraw_later(C,Y,X) \
+{\
+	(C)->info |= CAVE_NOTE; \
+	cave_redraw_later((C), (Y), (X)); \
+}
+
+
+/*
+ * For delayed visual update
+ */
+#define cave_redraw_later(C,Y,X) \
+{\
+	if (!((C)->info & CAVE_REDRAW)) \
+	{ \
+		(C)->info |= CAVE_REDRAW; \
+		redraw_y[redraw_n] = (Y); \
+		redraw_x[redraw_n++] = (X); \
+	} \
+}
+
+
+/*
  * XXX XXX XXX
  *
  * This macro allows us to efficiently add a grid to the "lite" array,
@@ -2861,6 +2885,7 @@ void update_lite(void)
 {
 	int i, x, y, min_x, max_x, min_y, max_y;
 	int p = p_ptr->cur_lite;
+	cave_type *c_ptr;
 
 	/*** Special case ***/
 
@@ -2871,8 +2896,8 @@ void update_lite(void)
 		/* Forget the old lite */
 		/* forget_lite(); Perhaps don't need? */
 
-		/* Draw the player */
-		lite_spot(py, px);
+		/* Add it to later visual update */
+		cave_redraw_later(&cave[py][px], py, px);
 	}
 #endif
 
@@ -3041,14 +3066,13 @@ void update_lite(void)
 		y = lite_y[i];
 		x = lite_x[i];
 
+		c_ptr = &cave[y][x];
+
 		/* Update fresh grids */
-		if (cave[y][x].info & (CAVE_TEMP)) continue;
+		if (c_ptr->info & (CAVE_TEMP)) continue;
 
-		/* Note */
-		note_spot(y, x);
-
-		/* Redraw */
-		lite_spot(y, x);
+		/* Add it to later visual update */
+		cave_note_and_redraw_later(c_ptr, y, x);
 	}
 
 	/* Clear them all */
@@ -3057,18 +3081,23 @@ void update_lite(void)
 		y = temp_y[i];
 		x = temp_x[i];
 
+		c_ptr = &cave[y][x];
+
 		/* No longer in the array */
-		cave[y][x].info &= ~(CAVE_TEMP);
+		c_ptr->info &= ~(CAVE_TEMP);
 
 		/* Update stale grids */
-		if (cave[y][x].info & (CAVE_LITE)) continue;
+		if (c_ptr->info & (CAVE_LITE)) continue;
 
-		/* Redraw */
-		lite_spot(y, x);
+		/* Add it to later visual update */
+		cave_redraw_later(c_ptr, y, x);
 	}
 
 	/* None left */
 	temp_n = 0;
+
+	/* Mega-Hack -- Visual update later */
+	p_ptr->update |= (PU_DELAY_VIS);
 }
 
 
@@ -3313,9 +3342,8 @@ void update_mon_lite(void)
 		/* It it no longer lit? */
 		if (!(c_ptr->info & CAVE_MNLT) && player_has_los_grid(c_ptr))
 		{
-			/* It is now unlit */
-			note_spot(fy, fx);
-			lite_spot(fy, fx);
+			/* Add it to later visual update */
+			cave_note_and_redraw_later(c_ptr, fy, fx);
 		}
 
 		/* Add to end of temp array */
@@ -3349,12 +3377,8 @@ void update_mon_lite(void)
 			if ((c_ptr->info & (CAVE_VIEW | CAVE_TEMP)) == CAVE_VIEW)
 			{
 				/* It is now lit */
-
-				/* Note */
-				note_spot(fy, fx);
-
-				/* Redraw */
-				lite_spot(fy, fx);
+				/* Add it to later visual update */
+				cave_note_and_redraw_later(c_ptr, fy, fx);
 			}
 
 			/* Save in the monster lit array */
@@ -3366,6 +3390,9 @@ void update_mon_lite(void)
 
 	/* Finished with temp_n */
 	temp_n = 0;
+
+	/* Mega-Hack -- Visual update later */
+	p_ptr->update |= (PU_DELAY_VIS);
 
 	p_ptr->monlite = (cave[py][px].info & CAVE_MNLT) ? TRUE : FALSE;
 
@@ -4097,11 +4124,8 @@ void update_view(void)
 		/* Update only newly viewed grids */
 		if (c_ptr->info & (CAVE_TEMP)) continue;
 
-		/* Note */
-		note_spot(y, x);
-
-		/* Redraw */
-		lite_spot(y, x);
+		/* Add it to later visual update */
+		cave_note_and_redraw_later(c_ptr, y, x);
 	}
 
 	/* Wipe the old grids, update as needed */
@@ -4119,14 +4143,55 @@ void update_view(void)
 		/* Update only non-viewable grids */
 		if (c_ptr->info & (CAVE_VIEW)) continue;
 
-		/* Redraw */
-		lite_spot(y, x);
+		/* Add it to later visual update */
+		cave_redraw_later(c_ptr, y, x);
 	}
 
 	/* None left */
 	temp_n = 0;
+
+	/* Mega-Hack -- Visual update later */
+	p_ptr->update |= (PU_DELAY_VIS);
 }
 
+
+/*
+ * Mega-Hack -- Delayed visual update
+ * Only used if update_view(), update_lite() or update_mon_lite() was called
+ */
+void delayed_visual_update(void)
+{
+	int       i, y, x;
+	cave_type *c_ptr;
+
+	/* Update needed grids */
+	for (i = 0; i < redraw_n; i++)
+	{
+		y = redraw_y[i];
+		x = redraw_x[i];
+
+		/* Access the grid */
+		c_ptr = &cave[y][x];
+
+		/* Update only needed grids (prevent multiple updating) */
+		if (!(c_ptr->info & CAVE_REDRAW)) continue;
+
+		/* If required, note */
+		if (c_ptr->info & CAVE_NOTE) note_spot(y, x);
+
+		/* Redraw */
+		lite_spot(y, x);
+
+		/* Hack -- Visual update of monster on this grid */
+		if (c_ptr->m_idx) update_mon(c_ptr->m_idx, FALSE);
+
+		/* No longer in the array */
+		c_ptr->info &= ~(CAVE_NOTE | CAVE_REDRAW);
+	}
+
+	/* None left */
+	redraw_n = 0;
+}
 
 
 /*

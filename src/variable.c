@@ -402,6 +402,13 @@ s16b temp_n;
 byte temp_y[TEMP_MAX];
 byte temp_x[TEMP_MAX];
 
+/*
+ * Array of grids for delayed visual updating (see "cave.c")
+ */
+s16b redraw_n;
+byte redraw_y[TEMP_MAX];
+byte redraw_x[TEMP_MAX];
+
 
 /*
  * Number of active macros.

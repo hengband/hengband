@@ -5703,6 +5703,16 @@ void update_stuff(void)
 		update_mon_lite();
 	}
 
+	/*
+	 * Mega-Hack -- Delayed visual update
+	 * Only used if update_view(), update_lite() or update_mon_lite() was called
+	 */
+	if (p_ptr->update & (PU_DELAY_VIS))
+	{
+		p_ptr->update &= ~(PU_DELAY_VIS);
+		delayed_visual_update();
+	}
+
 	if (p_ptr->update & (PU_MONSTERS))
 	{
 		p_ptr->update &= ~(PU_MONSTERS);

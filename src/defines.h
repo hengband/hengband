@@ -2389,9 +2389,9 @@
 
 /* Used only after cave generation */
 #define CAVE_XXXX1      0x0200
-#define CAVE_XXXX2      0x0400
-#define CAVE_XXXX3      0x0800
-#define CAVE_OBJECT  0x1000    /* mirror */
+#define CAVE_NOTE       0x0400    /* Flag for delayed visual update (needs note_spot()) */
+#define CAVE_REDRAW     0x0800    /* Flag for delayed visual update (needs lite_spot()) */
+#define CAVE_OBJECT     0x1000    /* mirror */
 #define CAVE_UNSAFE     0x2000    /* Might have trap */
 #define CAVE_IN_DETECT  0x4000    /* trap detected area (inner circle only) */
 
@@ -2553,7 +2553,7 @@
 #define PU_VIEW         0x00100000L     /* Update view */
 #define PU_LITE         0x00200000L     /* Update lite */
 #define PU_MON_LITE     0x00400000L     /* Monster illumination */
-/* xxx */
+#define PU_DELAY_VIS    0x00800000L     /* Mega-Hack -- Delayed visual update */
 #define PU_MONSTERS     0x01000000L     /* Update monsters */
 #define PU_DISTANCE     0x02000000L     /* Update distances */
 /* xxx */
