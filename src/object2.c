@@ -1797,8 +1797,12 @@ bool object_similar(object_type *o_ptr, object_type *j_ptr)
  */
 void object_absorb(object_type *o_ptr, object_type *j_ptr)
 {
-	/* Add together the item counts */
-	o_ptr->number = o_ptr->number + j_ptr->number;
+	int max_num = object_similar_part(o_ptr, j_ptr);
+	int total = o_ptr->number + j_ptr->number;
+	int diff = (total > max_num) ? total - max_num : 0;
+
+	/* Combine quantity, lose excess items */
+	o_ptr->number = (total > max_num) ? max_num : total;
 
 	/* Hack -- blend "known" status */
 	if (object_known_p(j_ptr)) object_known(o_ptr);
@@ -1827,14 +1831,14 @@ void object_absorb(object_type *o_ptr, object_type *j_ptr)
 	/* Hack -- if rods are stacking, add the pvals (maximum timeouts) and current timeouts together. -LM- */
 	if (o_ptr->tval == TV_ROD)
 	{
-		o_ptr->pval += j_ptr->pval;
-		o_ptr->timeout += j_ptr->timeout;
+		o_ptr->pval += j_ptr->pval * (j_ptr->number - diff) / j_ptr->number;
+		o_ptr->timeout += j_ptr->timeout * (j_ptr->number - diff) / j_ptr->number;
 	}
 
 	/* Hack -- if wands are stacking, combine the charges. -LM- */
 	if (o_ptr->tval == TV_WAND)
 	{
-		o_ptr->pval += j_ptr->pval;
+		o_ptr->pval += j_ptr->pval * (j_ptr->number - diff) / j_ptr->number;
 	}
 }
 
@@ -6067,16 +6071,30 @@ void combine_pack(void)
 				}
 				else
 				{
+					int old_num = o_ptr->number;
 					int remain = j_ptr->number + o_ptr->number - max_num;
-					
+#if 0
 					o_ptr->number -= remain;
-					
+#endif
 					/* Add together the item counts */
 					object_absorb(j_ptr, o_ptr);
 
 					o_ptr->number = remain;
-					
+
+					/* Hack -- if rods are stacking, add the pvals (maximum timeouts) and current timeouts together. -LM- */
+					if (o_ptr->tval == TV_ROD)
+					{
+						o_ptr->pval =  o_ptr->pval * remain / old_num;
+						o_ptr->timeout = o_ptr->timeout * remain / old_num;
+					}
+
+					/* Hack -- if wands are stacking, combine the charges. -LM- */
+					if (o_ptr->tval == TV_WAND)
+					{
+						o_ptr->pval = o_ptr->pval * remain / old_num;
+					}
 				}
+
 				/* Window stuff */
 				p_ptr->window |= (PW_INVEN);
 				
@@ -6092,7 +6110,6 @@ void combine_pack(void)
 #else
 	if (flag) msg_print("You combine some items in your pack.");
 #endif
-
 }
 
 

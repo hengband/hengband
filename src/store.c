@@ -1197,21 +1197,24 @@ static bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
  */
 static void store_object_absorb(object_type *o_ptr, object_type *j_ptr)
 {
+	int max_num = (o_ptr->tval == TV_ROD) ?
+		MIN(99, MAX_SHORT / k_info[o_ptr->k_idx].pval) : 99;
 	int total = o_ptr->number + j_ptr->number;
+	int diff = (total > max_num) ? total - max_num : 0;
 
 	/* Combine quantity, lose excess items */
-	o_ptr->number = (total > 99) ? 99 : total;
+	o_ptr->number = (total > max_num) ? max_num : total;
 
 	/* Hack -- if rods are stacking, add the pvals (maximum timeouts) together. -LM- */
 	if (o_ptr->tval == TV_ROD)
 	{
-		o_ptr->pval += j_ptr->pval;
+		o_ptr->pval += j_ptr->pval * (j_ptr->number - diff) / j_ptr->number;
 	}
 
 	/* Hack -- if wands are stacking, combine the charges. -LM- */
 	if (o_ptr->tval == TV_WAND)
 	{
-		o_ptr->pval += j_ptr->pval;
+		o_ptr->pval += j_ptr->pval * (j_ptr->number - diff) / j_ptr->number;
 	}
 }
 
