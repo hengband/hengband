@@ -1417,7 +1417,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 				 * Monsters with both CHAR_CLEAR and ATTR_CLEAR
 				 * flags are always unseen.
 				 */
-				if (!(~r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)))
+				if ((r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)) == (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR))
 				{
 					/* Do nothing */
 				}
@@ -1446,7 +1446,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 				 * Monsters with both CHAR_CLEAR and ATTR_CLEAR
 				 * flags are always unseen.
 				 */
-				else if (!(~r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)))
+				else if ((r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)) == (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR))
 				{
 					/* Do nothing */
 				}

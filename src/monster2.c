@@ -1688,7 +1688,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 
 
 	/* Handle visible monsters, "reflexive" request */
-	else if (!(~mode & (MD_POSSESSIVE | MD_OBJECTIVE)))
+	else if ((mode & (MD_POSSESSIVE | MD_OBJECTIVE)) == (MD_POSSESSIVE | MD_OBJECTIVE))
 	{
 		/* The monster is visible, so use its gender */
 #ifdef JP
