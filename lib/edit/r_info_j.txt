@@ -18801,13 +18801,16 @@ D:女がいるのが、雪明かりで見えた。女は茂作のうえに身をかがめて、
 D:息を吹きかけていた。−その息は、きらきらする白い煙のようであった。
 D:(怪談・奇談 ラフカディオ・ハーン、田代三千稔訳 角川文庫)
 
+# Description in English by Nick Keulmann
 N:924:クリボー
-E:Cribo
+E:Goomba
 G:,:U
 I:110:4d4:20:20:20
 W:2:1:0:5:100:951
 B:BITE:HURT:1d8
 F:WEIRD_MIND | DROP_CORPSE
+D:$A renegade mushroom from the Mushroom Kingdom that has been 
+D:$corruptedby chaos.  It is quite angry and it marches towards you.
 D:キノコ王国を裏切り混沌に魂を売った憎むべき悪のキノコだ。
 
 N:925:日光猿
@@ -18832,6 +18835,7 @@ B:CRUSH:SUPERHURT:5d8
 F:ANIMAL | DROP_SKELETON | DROP_CORPSE
 D:それを捕えた者には $1,000,000 の賞金が出るといわれている。
 
+# Description in English by Nick Keulmann
 N:927:ひげおやじ『マリオ』
 E:Mario
 G:p:r
@@ -18847,10 +18851,13 @@ F:OPEN_DOOR | GOOD | CAN_SWIM | CAN_FLY |
 F:NO_CONF | NO_SLEEP | FRIENDLY | TAKE_ITEM |
 S:1_IN_4 |
 S:BA_FIRE | HASTE | HOLD | CONF | BLIND
+D:$A happy plumber jumping up and down, his red mustache matches 
+D:$his red hat.
 D:赤い帽子と口髭がよく似合う、ダンディな配管工だ。
 
+# Description in English by Nick Keulmann
 N:928:『クッパ大王』
-E:Kuppa
+E:King Koopa
 G:D:g
 I:110:100d15:20:120:40
 W:34:4:0:3000:0:0
@@ -18864,6 +18871,8 @@ F:DROP_1D2 | DROP_2D2 | ONLY_ITEM | DROP_GOOD |
 F:BASH_DOOR | EVIL | CAN_SWIM | CAN_FLY | KILL_ITEM |
 S:1_IN_3 |
 S:BR_FIRE | SCARE
+D:$He is a huge fire spitting turtle of disreputable character.  
+D:$He is plotting to conquer the Mushroom Kingdom.
 D:亀のような外見をしているが、火を吐き、凶暴な性格をしている。
 D:彼は常にキノコ王国を征服しようとたくらんでいる。
 
@@ -19074,6 +19083,7 @@ D:脳だけからサイバーにされたレムスとて例外ではなかった。
 D:「あ…れはレ…ムスじゃないわ。怪…物よ」
 D:（聖悠紀、超人ロック「サイバー・ジェノサイド」）
 
+# Description in English by Nick Keulmann
 N:938:白騎士
 E:White knight
 G:p:w
@@ -19088,6 +19098,8 @@ F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:GOOD
 S:1_IN_8 | 
 S:CONF | HOLD | CAUSE_3 | HEAL
+D:$A knight wrapped in plate armor of pure white.  
+D:$He stares at you menacingly.
 D:彼は純白のプレートアーマーに身を包み、威嚇的に冒険者を見つめる。
 
 N:939:ディアの『ホアルムラス』
@@ -19289,8 +19301,9 @@ S:BO_MANA | BA_FIRE | BA_COLD | BA_ELEC | BA_ACID | BO_ICEE | BO_PLAS |
 S:BO_WATE | BA_WATE | PSY_SPEAR | CAUSE_3 | CAUSE_4 |
 S:CONF | BLIND | S_MONSTERS | TPORT
 
+# Description in English by Nick Keulmann
 N:950:ハンマーブロス
-E:Hammer bors
+E:Hammer brother
 G:h:g
 I:120:10d25:20:30:10
 W:22:2:0:300:0:0
@@ -19301,11 +19314,13 @@ B:HIT:HURT:2d4
 F:FORCE_SLEEP | DROP_CORPSE | RAND_50 | ANIMAL |
 S:1_IN_2 | 
 S:SHOOT
+D:$A large turtle creature walking on two legs, 
+D:$proudly throwing hammers from an unlimited supply.
 D:この二本足で歩行する亀のような生き物は、
 D:投擲を非常に得意としている。
 
 N:951:メット
-E:Met
+E:Buzzy beetle
 G:R:D
 I:100:15d15:20:90:10
 W:15:4:0:60:600:950
@@ -19359,6 +19374,7 @@ F:ORC | HURT_LITE | EVIL |
 S:1_IN_2 |
 S:SHOOT
 
+# Description in English by Nick Keulmann
 N:955:やせこけた馬
 E:Scrawny horse
 G:q:o
@@ -19368,8 +19384,10 @@ B:BITE:HURT:1d2
 B:KICK:HURT:1d3
 F:WILD_ONLY | WILD_TOWN | RAND_25 |
 F:ANIMAL | DROP_SKELETON | DROP_CORPSE | RIDING
+D:$This pitiful horse has not been well fed, it walks unsteadily.
 D:満足に飼葉も与えられていないがりがりでふらふらの哀れな馬だ。
 
+# Description in English by Nick Keulmann
 N:956:馬
 E:Horse
 G:q:o
@@ -19379,9 +19397,12 @@ B:BITE:HURT:1d8
 B:KICK:HURT:2d4
 F:WILD_WASTE | BASH_DOOR |
 F:ANIMAL | DROP_SKELETON | DROP_CORPSE | RIDING
+D:$As for the horse with the animal of four feet which can run fast, 
+D:$it was utilized for a long time as the vehicle of the human.
 D:馬は速く駆けることのできる四本足の獣で、
 D:古くから人間の乗り物として利用されてきた。
 
+# Description in English by Nick Keulmann
 N:957:あばれ馬
 E:Unruly horse
 G:q:G
@@ -19392,9 +19413,12 @@ B:KICK:HURT:2d4
 B:KICK:HURT:2d4
 F:WILD_WASTE | BASH_DOOR | RAND_25 |
 F:ANIMAL | DROP_SKELETON | DROP_CORPSE | RIDING
+D:$This creature is gentle and submissive until you try to ride it.  
+D:$Watch out for it's reckless kicking.
 D:馬は普段は従順で大人しい生き物であるが、
 D:一旦暴走しだすと手がつけられなくなる。
 
+# Description in English by Nick Keulmann
 N:958:赤ぷよ
 E:Red puyo
 G:j:r
@@ -19404,6 +19428,7 @@ B:EXPLODE:FIRE:10d2
 F:IM_ACID | IM_COLD | IM_ELEC | IM_POIS |
 F:NEVER_MOVE | MULTIPLY |
 F:EMPTY_MIND | NO_FEAR | NO_CONF | NO_SLEEP
+D:$A mysterious red jelly thing.  It looks ready to explode.
 D:赤くてぷよぷよした謎の生物だ。
 
 N:959:青ぷよ
@@ -19415,6 +19440,7 @@ B:EXPLODE:COLD:10d2
 F:IM_ACID | IM_FIRE | IM_ELEC | IM_POIS |
 F:NEVER_MOVE | MULTIPLY |
 F:EMPTY_MIND | NO_FEAR | NO_CONF | NO_SLEEP
+D:$A mysterious blue jelly thing.  It looks ready to explode.
 D:青くてぷよぷよした謎の生物だ。
 
 N:960:黄ぷよ
@@ -19426,6 +19452,7 @@ B:EXPLODE:ELEC:10d2
 F:IM_ACID | IM_FIRE | IM_COLD | IM_POIS |
 F:NEVER_MOVE | MULTIPLY |
 F:EMPTY_MIND | NO_FEAR | NO_CONF | NO_SLEEP
+D:$A mysterious yellow jelly thing.  It looks ready to explode.
 D:黄色くてぷよぷよした謎の生物だ。
 
 N:961:緑ぷよ
@@ -19437,6 +19464,7 @@ B:EXPLODE:ACID:10d2
 F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS |
 F:NEVER_MOVE | MULTIPLY |
 F:EMPTY_MIND | NO_FEAR | NO_CONF | NO_SLEEP
+D:$A mysterious green jelly thing.  It looks ready to explode.
 D:緑色でぷよぷよした謎の生物だ。
 
 N:962:スライムモルド
@@ -20310,6 +20338,7 @@ B:TOUCH:LOSE_WIS
 F:NEVER_MOVE | 
 F:INVISIBLE | COLD_BLOOD | PASS_WALL | CAN_FLY |
 F:EVIL | UNDEAD | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP
+D:$A lost soul of an adventurer still lingering in this world.
 D:この世に未練がある冒険者の魂のなれの果てだ。
 
 #
@@ -20604,7 +20633,7 @@ D:$These bears are followers of Red Helm.
 D:『赤カブト』の配下の熊だ。
 
 N:1029:ベビーサタン
-E:Baby Satan
+E:Demonite
 G:u:v
 I:115:20d10:30:50:10
 W:20:2:0:250:0:0
@@ -20614,6 +20643,7 @@ F:OPEN_DOOR | DEMON | CAN_SPEAK | NONLIVING |
 F:EVIL | RAND_25 | IM_COLD | IM_FIRE | IM_POIS | CAN_SWIM |
 S:1_IN_6 |
 S:BR_COLD
+D:A demon small in stature whose face you can't help but love.
 D:憎めない顔をした小柄な悪魔だ。
 
 #
