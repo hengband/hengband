@@ -4393,9 +4393,9 @@ static void draw_text_editor(text_body_type *tb)
 		else if (tb->dirty_flags & DIRTY_NO_SEARCH)
 		{
 #ifdef JP
-			str1 = "検索中のパターンがありません('/'で検索)。";
+			str1 = "検索するパターンがありません(^S で検索)。";
 #else
-			str1 = "No pattern to search. (Press '/' to search.)";
+			str1 = "No pattern to search. (Press ^S to search.)";
 #endif
 		}
 		else if (tb->lines_list[tb->cy][0] == '#')
@@ -5357,7 +5357,13 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		break;
 
 	case EC_SEARCH_DESTROYED:
-		if (!get_destroyed_object_for_search(&tb->search_o_ptr, &tb->search_str)) break;
+		if (!get_destroyed_object_for_search(&tb->search_o_ptr, &tb->search_str))
+		{
+			/* There is no object to search */
+			tb->dirty_flags |= DIRTY_NO_SEARCH;
+
+			break;
+		}
 
 		do_editor_command(tb, EC_SEARCH_FORW);
 		break;
