@@ -919,6 +919,10 @@ static void save_quick_start(void)
 	for (i = 0; i < 4; i++) wr_string(previous_char.history[i]);
 
 	wr_byte(previous_char.quests);
+
+	/* No quick start after using debug mode */
+	if (noscore) previous_char.quick_ok = FALSE;
+
 	wr_byte((byte)previous_char.quick_ok);
 }
 
