@@ -4867,7 +4867,9 @@ static cptr monster_group_text[] =
 	"イエティ",
 	"ハウンド",
 	"ミミック",
+	"壁/植物/気体",
 	"おばけキノコ",
+	"球体",
 #else
 	"Uniques",
 	"Ant",
@@ -4922,7 +4924,9 @@ static cptr monster_group_text[] =
 	"Yeti",
 	"Zephyr Hound",
 	"Mimic",
+	"Wall/Plant/Gus",
 	"Mushroom patch",
+	"Ball",
 #endif
 	NULL
 };
@@ -4986,8 +4990,10 @@ static cptr monster_group_char[] =
 	"X",
 	"Y",
 	"Z",
-	"$!?=.|~[]",
+	"$!?=&`.|/\\~[]()>",
+	"#",
 	",",
+	"*",
 	NULL
 };
 
