@@ -871,23 +871,27 @@ void auto_inscribe_item(int item, int idx)
 	/* Get the item (on the floor) */
 	else o_ptr = &o_list[0 - item];
 
-	if (idx >= 0 && autopick_list[idx].insc && !o_ptr->inscription)
-	{
+	/* Auto-inscription or Re-inscribe for resistances {%} */
+	if ((idx < 0 || !autopick_list[idx].insc) && !o_ptr->inscription)
+		return;
+
+	if (o_ptr->inscription)
+		o_ptr->inscription = inscribe_flags(o_ptr, quark_str(o_ptr->inscription));
+	else
 		o_ptr->inscription = inscribe_flags(o_ptr, autopick_list[idx].insc);
 
-		if (item > INVEN_PACK)
-		{
-			/* Redraw inscription */
-			p_ptr->window |= (PW_EQUIP);
+	if (item > INVEN_PACK)
+	{
+		/* Redraw inscription */
+		p_ptr->window |= (PW_EQUIP);
 
-			/* {.} and {$} effect p_ptr->warning and TRC_TELEPORT_SELF */
-			p_ptr->update |= (PU_BONUS);
-		}
-		else if (item >= 0)
-		{
-			/* Redraw inscription */
-			p_ptr->window |= (PW_INVEN);
-		}
+		/* {.} and {$} effect p_ptr->warning and TRC_TELEPORT_SELF */
+		p_ptr->update |= (PU_BONUS);
+	}
+	else if (item >= 0)
+	{
+		/* Redraw inscription */
+		p_ptr->window |= (PW_INVEN);
 	}
 }
 
