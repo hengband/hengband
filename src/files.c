@@ -4091,7 +4091,22 @@ void display_player(int mode)
 			}
 
 
-			if (death)
+			if (death && total_winner)
+			{
+				if (dun_level)
+#ifdef JP
+					put_str(format("…あなたは %s の %d 階で引退した。", map_name(), dun_level), 5 + 12, 10);
+#else
+					put_str(format("...You retired from the adventure at level %d of %s.", dun_level, map_name()), 5 + 12, 10);
+#endif
+				else
+#ifdef JP
+					put_str(format("…あなたは %s で引退した。", map_name()), 5 + 12, 10);
+#else
+					put_str(format("...You retired from the adventure at %s.", map_name()), 5 + 12, 10);
+#endif
+			}
+			else if (death)
 			{
 				if (dun_level)
 #ifdef JP
