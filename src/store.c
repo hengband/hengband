@@ -1528,7 +1528,7 @@ bool combine_and_reorder_home(int store_num)
 	int         i, j, k;
 	s32b        o_value;
 	object_type forge, *o_ptr, *j_ptr;
-	bool        flag = FALSE, combined_or_reordered;
+	bool        flag = FALSE, combined;
 	store_type  *old_st_ptr = st_ptr;
 	bool        old_stack_force_notes = stack_force_notes;
 	bool        old_stack_force_costs = stack_force_costs;
@@ -1542,7 +1542,7 @@ bool combine_and_reorder_home(int store_num)
 
 	do
 	{
-		combined_or_reordered = FALSE;
+		combined = FALSE;
 
 		/* Combine the items in the home (backwards) */
 		for (i = st_ptr->stock_num - 1; i > 0; i--)
@@ -1616,7 +1616,7 @@ bool combine_and_reorder_home(int store_num)
 					}
 
 					/* Take note */
-					combined_or_reordered = TRUE;
+					combined = TRUE;
 
 					/* Done */
 					break;
@@ -1624,50 +1624,50 @@ bool combine_and_reorder_home(int store_num)
 			}
 		}
 
-		/* Re-order the items in the home (forwards) */
-		for (i = 0; i < st_ptr->stock_num; i++)
+		flag |= combined;
+	}
+	while (combined);
+
+	/* Re-order the items in the home (forwards) */
+	for (i = 0; i < st_ptr->stock_num; i++)
+	{
+		/* Get the item */
+		o_ptr = &st_ptr->stock[i];
+
+		/* Skip empty slots */
+		if (!o_ptr->k_idx) continue;
+
+		/* Get the "value" of the item */
+		o_value = object_value(o_ptr);
+
+		/* Scan every occupied slot */
+		for (j = 0; j < st_ptr->stock_num; j++)
 		{
-			/* Get the item */
-			o_ptr = &st_ptr->stock[i];
-
-			/* Skip empty slots */
-			if (!o_ptr->k_idx) continue;
-
-			/* Get the "value" of the item */
-			o_value = object_value(o_ptr);
-
-			/* Scan every occupied slot */
-			for (j = 0; j < st_ptr->stock_num; j++)
-			{
-				if (object_sort_comp(o_ptr, o_value, &st_ptr->stock[j])) break;
-			}
-
-			/* Never move down */
-			if (j >= i) continue;
-
-			/* Take note */
-			combined_or_reordered = TRUE;
-
-			/* Get local object */
-			j_ptr = &forge;
-
-			/* Save a copy of the moving item */
-			object_copy(j_ptr, &st_ptr->stock[i]);
-
-			/* Slide the objects */
-			for (k = i; k > j; k--)
-			{
-				/* Slide the item */
-				object_copy(&st_ptr->stock[k], &st_ptr->stock[k - 1]);
-			}
-
-			/* Insert the moving item */
-			object_copy(&st_ptr->stock[j], j_ptr);
+			if (object_sort_comp(o_ptr, o_value, &st_ptr->stock[j])) break;
 		}
 
-		flag |= combined_or_reordered;
+		/* Never move down */
+		if (j >= i) continue;
+
+		/* Take note */
+		flag = TRUE;
+
+		/* Get local object */
+		j_ptr = &forge;
+
+		/* Save a copy of the moving item */
+		object_copy(j_ptr, &st_ptr->stock[i]);
+
+		/* Slide the objects */
+		for (k = i; k > j; k--)
+		{
+			/* Slide the item */
+			object_copy(&st_ptr->stock[k], &st_ptr->stock[k - 1]);
+		}
+
+		/* Insert the moving item */
+		object_copy(&st_ptr->stock[j], j_ptr);
 	}
-	while (combined_or_reordered);
 
 	st_ptr = old_st_ptr;
 	if (store_num != STORE_HOME)
