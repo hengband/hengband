@@ -5363,7 +5363,7 @@ void place_trap(int y, int x)
 	if (!cave_naked_bold(y, x)) return;
 
 	/* Place an invisible trap */
-	c_ptr->mimic = f_info[c_ptr->feat].mimic;
+	c_ptr->mimic = c_ptr->feat;
 	c_ptr->feat = choose_random_trap();
 }
 

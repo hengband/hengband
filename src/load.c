@@ -2389,7 +2389,7 @@ static errr rd_dungeon_old(void)
 			/* Old CAVE_IN_MIRROR flag */
 			if (c_ptr->info & CAVE_OBJECT)
 			{
-				c_ptr->mimic = f_info[FEAT_MIRROR].mimic;
+				c_ptr->mimic = FEAT_MIRROR;
 			}
 
 			/* Runes will be mimics and flags */
@@ -2397,7 +2397,7 @@ static errr rd_dungeon_old(void)
 				 c_ptr->feat == FEAT_GLYPH)
 			{
 				c_ptr->info |= CAVE_OBJECT;
-				c_ptr->mimic = f_info[c_ptr->feat].mimic;
+				c_ptr->mimic = c_ptr->feat;
 				c_ptr->feat = FEAT_FLOOR;
 			}
 
@@ -2405,14 +2405,14 @@ static errr rd_dungeon_old(void)
 			else if (c_ptr->info & CAVE_TRAP)
 			{
 				c_ptr->info &= ~CAVE_TRAP;
-				c_ptr->mimic = f_info[c_ptr->feat].mimic;
+				c_ptr->mimic = c_ptr->feat;
 				c_ptr->feat = choose_random_trap();
 			}
 
 			/* Another hidden trap */
 			else if (c_ptr->feat == FEAT_INVIS)
 			{
-				c_ptr->mimic = f_info[FEAT_FLOOR].mimic;
+				c_ptr->mimic = FEAT_FLOOR;
 				c_ptr->feat = FEAT_TRAP_OPEN;
 			}
 
@@ -2420,7 +2420,7 @@ static errr rd_dungeon_old(void)
 			else if (c_ptr->feat == FEAT_SECRET)
 			{
 				place_closed_door(y, x);
-				c_ptr->mimic = f_info[FEAT_WALL_EXTRA].mimic;
+				c_ptr->mimic = FEAT_WALL_EXTRA;
 			}
 		}
 	}

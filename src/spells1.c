@@ -1070,11 +1070,11 @@ msg_print("ドアが溶けて泥になった！");
 
 			/* Create a glyph */
 			cave[y][x].info |= CAVE_OBJECT;
-			cave[y][x].mimic = f_info[FEAT_GLYPH].mimic;
+			cave[y][x].mimic = FEAT_GLYPH;
 
 			/* Notice */
 			note_spot(y, x);
-
+	
 			/* Redraw */
 			lite_spot(y, x);
 
