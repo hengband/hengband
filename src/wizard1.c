@@ -2033,7 +2033,7 @@ static void spoil_mon_info(cptr fname)
 		spoil_out(buf);
 
 		/* Number */
-		sprintf(buf, "Num:%d  ", n);
+		sprintf(buf, "Num:%d  ", who[l]);
 		spoil_out(buf);
 
 		/* Level */
