@@ -8895,7 +8895,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 	if (flg & PROJECT_KILL)
 	{
 		see_s_msg = (who > 0) ? is_seen(&m_list[who]) :
-			(!who ? TRUE : player_can_see_bold(y1, x1));
+			(!who ? TRUE : (player_can_see_bold(y1, x1) && projectable(py, px, y1, x1)));
 	}
 
 
