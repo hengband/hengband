@@ -1465,6 +1465,17 @@ void call_the_(void)
 			if (i - 5) fire_ball(GF_NUKE, i, 175, 4);
 		}
 	}
+
+	/* Prevent destruction of quest levels and town */
+	else if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !dun_level)
+	{
+#ifdef JP
+		msg_print("地面が揺れた。");
+#else
+		msg_print("The ground trembles.");
+#endif
+	}
+
 	else
 	{
 #ifdef JP
@@ -1499,7 +1510,6 @@ void call_the_(void)
 #else
 		take_hit(DAMAGE_NOESCAPE, 100 + randint1(150), "a suicidal Call the Void", -1);
 #endif
-
 	}
 }
 
