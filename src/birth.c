@@ -1981,15 +1981,15 @@ static cptr realm_jouhou[VALID_REALM] =
 
 "Arcane magic is a general purpose realm of magic.  It attempts to encompass all 'useful' spells from all realms.  This is the downside of Arcane magic: while Arcane does have all the necessary 'tool' spells for a dungeon delver, it has no ultra-powerful high level spells.  As a consequence, all Arcane spellbooks can be bought in town.  It should also be noted that the 'specialized' realms usually offer the same spell at a lower level and cost. ",
 
-"Craft magic can strengthen the caster or equipments.  These spells greatly improve the caster's fighting ability, but spells that hurts opponents directly is not exist.",
+"Craft magic can strengthen the caster or the equipments.  These spells can greatly improve the caster's fighting ability.  Using them against opponents directly is not possible.",
 
 "Demon is a very evil realm, same as Death.  It provides various attack spells and devilish detection spells.  at higher levels, Demon magic provides ability to dominate demons, and to polymorph yourself into a demon.",
 
-"Crusade is a realm of 'Justice'; It does have many attack spells which are mostly used for harming and banishing foul minions of evil, and these spells are not so effective for good monsters.",
+"Crusade is a magic of 'Justice'.  It includes damage spells, which are greatly effective against foul and evil monsters, but have poor effects against good monsters.",
 
 "Music magic shows various effects as sing song.  There is two type of song; the one which shows effects instantly and the other one shows effect continuously until SP runs out.  But the latter type has a limit; only one song can be sing at the same time.",
 
-"The books of Kendo describe various combat techniques.  It need to read the books when one studys the techniques, but it doesn't need to take around the books to use the techniques after one memorizes it.  It need a weapon wielded to use the techniques."
+"The books of Kendo describe about various combat techniques.  When learning new techniques, you are required to carry the books, but once you memorizes them, you don't have to carry them.  When using a technique, wielding a weapon is required."
 #endif
 };
 
