@@ -1,3 +1,252 @@
+2003-05-09  Takeshi Mogami  <mogami@cvs>
+
+	* src/spells2.c 1.67, src/defines.h 1.95, src/dungeon.c 1.98, src/generate.c 1.47, src/monster2.c 1.55:
+	MFLAG_SHOWとMFLAG_MARKを m_ptr->mflag2へ移動して、セーブファイルに保存
+	されるようにした。これによってセーブコマンド使用直後にモンスター感知済みの
+	敵が感知されていないかのように振舞うバグを修正。
+
+	* src/spells3.c 1.71, src/xtra2.c 1.66, src/mutation.c 1.10, src/spells1.c 1.52, src/spells2.c 1.66, src/defines.h 1.94, src/load.c 1.55, src/melee2.c 1.48, src/monster1.c 1.33, src/monster2.c 1.54:
+	m_ptr->flag2のフラグ名を MFLAG_* からMFLAG2_* に変更した。
+	次のように自動で処理したので、参考までに。
+	% for x in src/*.[ch]; do sed 's/MFLAG_\(KAGE\|NOPET\|NOGENO\|CHAMELEON\|NOFLOW\)/MFLAG2_\1/g' $x>$x.new; diff -u $x $x.new>$x.diff; done;
+	% cat src/*.diff|patch -p0
+
+2003-05-09  nothere  <nothere@cvs>
+
+	* src/cave.c 1.75, src/floors.c 1.11:
+	forget_view()とforget_lite()の中でのlite_spot()は不要のようなので削除.
+	これにより, leave_floor()での先のHackを取り消した.
+
+	* src/floors.c 1.10:
+	トラップ・ドアに落ちた際にプレイヤーが近くの階段にテレポートしたように見えるバグを修正.
+
+	* src/spells3.c 1.70:
+	ironman_downward時にテレポート・レベルでダンジョンの最下層を越えるバグを修正.
+
+	* src/cave.c 1.74, src/effects.c 1.37:
+	music_singing()を使った方が分かりやすそうな部分を変更.
+
+	* src/spells3.c 1.69: アイテムを無力化しても銘を維持するように修正.
+
+	* src/files.c 1.102:
+	get_rnd_line()の対象になるファイルで, 先頭が数字で後に数字以外が続く行であっても
+	行数設定とみなされて, その結果行数が設定され直したり意図した行が出ない場合が
+	あったバグを修正.
+
+	* src/avatar.c 1.8, src/birth.c 1.67, src/bldg.c 1.34, src/cmd4.c 1.84, src/cmd5.c 1.63, src/cmd6.c 1.50, src/dungeon.c 1.97, src/files.c 1.101, src/flavor.c 1.33, src/grid.c 1.12, src/hissatsu.c 1.21, src/main-win.c 1.23, src/makefile.bcc 1.7, src/melee1.c 1.28, src/melee2.c 1.47, src/mind.c 1.21, src/monster1.c 1.32, src/monster2.c 1.53, src/mspells1.c 1.38, src/mspells2.c 1.33, src/mspells3.c 1.22, src/object1.c 1.61, src/object2.c 1.75, src/racial.c 1.35, src/readdib.c 1.4, src/scores.c 1.15, src/spells1.c 1.51, src/spells3.c 1.68, src/util.c 1.40, src/wizard1.c 1.32, src/xtra1.c 1.63, src/xtra2.c 1.65:
+	BCC++ 5.5.1で警告封じオプション -w- を外した場合のコンパイル警告の除去.
+	* 使用されていない変数はコメントアウトではなく削除した.
+	* 英語版や他のプラットフォームとの互換をとるためにどうしても必要な部分の警告は
+	  除去できなかった.
+	* 他のコンパイラでは別の警告が残っている, もしくは新たに警告されるかもしれない.
+	* 警告を黙らせる必要も薄れたので, makefile.bccからは -w- を除去.
+
+2003-05-08  nothere  <nothere@cvs>
+
+	* src/monster2.c 1.52, src/mspells1.c 1.37, src/spells2.c 1.65, src/spells3.c 1.67, src/xtra1.c 1.62:
+	prace_is_()を使うべきと考えられる部分の修正.
+
+	* src/cmd1.c 1.70, src/externs.h 1.104, src/melee1.c 1.27, src/melee2.c 1.46, src/object2.c 1.74, src/tables.c 1.59, src/types.h 1.28, src/xtra2.c 1.64:
+	警告機能の実装を大幅に変更.
+	* マクロから関数に書き換え.
+	* 嵐系攻撃や破滅の手や打撃で最悪の場合を考えているのに, 上位属性の耐性あり
+	  ダメージ計算時は期待値で計算されていたため, 警告に関わる計算は最悪の場合の
+	  計算に統一した.
+	* 警告対象に光の剣を追加.
+	* ダメージ計算を実際のものとほぼ同等にした.
+	* 種族が持つ弱点や免疫, 幽体化状態などを反映させた.
+	* 破滅の手を完全に防御できる魔法防御を持つ場合は免疫扱いとした.
+	* 元素打撃には耐性や免疫を, 無属性打撃にはACを考慮する.
+	* 打撃の警告判定で, 射撃用ダイスや自爆後の攻撃が算入されていたバグを修正.
+	* フラキアに限定されたわけではないので, "frakir" と書かれた場所を修正.
+	この過程で, モンスターの打撃効果のデータの一部をテーブル化して整理した.
+
+	* src/files.c 1.100:
+	process_pref_file_command()の多段if文分岐をswitch文に変更.
+
+	* src/cave.c 1.73, src/dungeon.c 1.96, src/externs.h 1.103, src/generate.c 1.46:
+	地上で日が沈んだ瞬間に溶岩が暗くならないように変更.
+
+2003-05-07  nothere  <nothere@cvs>
+
+	* src/wizard1.c 1.31:
+	アーティファクトスポイラー生成時に, 追加耐性と追加能力の有無を記すように変更.
+	TObandより移植.
+
+	* src/files.c 1.99: bool型よりint型とすべき場所があったので変更.
+
+	* lib/help/birth.txt 1.11, lib/help/jbirth.txt 1.10:
+	外部生い立ちファイルの書式説明を追加.
+
+	* src/store.c 1.25:
+	全ての街の自宅と博物館で 'C' を使うと辺境の地にいることになるバグを修正.
+
+	* lib/edit/k_info.txt 1.7:
+	ベースアイテム説明の未訳分を和訳. 英文がコメントアウトされていた物はコメントのまま.
+	訳文はおそらく改善の余地あり.
+
+2003-05-06  nothere  <nothere@cvs>
+
+	* src/cmd4.c 1.83:
+	toggle_frequency()の中身を多段if文からswitch文に変更.
+
+	* src/spells1.c 1.50:
+	MAX()の呼び出しに乱数が使われていて, "サイキック・ドレイン" 使用時にバックファイアを
+	喰らった時に負のMPになり得るバグを修正.
+
+2003-05-05  nothere  <nothere@cvs>
+
+	* lib/edit/r_info.txt 1.3:
+	英語版でベビーサタンの説明テキストが表示されず, 日本語版で英文と和文が同時に表示
+	されていたバグを修正.
+
+	* src/bldg.c 1.33, src/defines.h 1.93, src/effects.c 1.36, src/externs.h 1.102, src/generate.c 1.45, src/tables.c 1.58, src/types.h 1.27, src/xtra2.c 1.63:
+	アリーナデータの直値指定を記号定数に置き換え, データ構造を変更. 賞品はk_idx直接
+	指定ではなく, tvalとsvalの組に変更. また, モンスター記号定数の綴りを一部修正.
+
+	* src/scores.c 1.14:
+	端末サイズに関わらず, *勝利*して引退する時のクラウンを中心に表示させるように変更.
+
+	* src/defines.h 1.92, src/dungeon.c 1.95, src/object2.c 1.73, src/spells3.c 1.66, src/xtra2.c 1.62:
+	Vanillaのままになっていて変愚と合わなくなっていたアイテムのsvalの記号定数を変愚蛮怒
+	仕様に合わせた.
+
+	* src/init1.c 1.54, src/racial.c 1.34, src/xtra2.c 1.61:
+	k_info内のIDを直接指定していた部分をlookup_kind()を使うように修正.
+	また, svalの直接指定があった部分を記号定数を使うように修正.
+
+	* src/cmd4.c 1.82:
+	playrecordで, "階(ダンジョン名)" という文字列をformat()の内部バッファに取っていたため,
+	NIKKI_STAIRなどの時にformat()が呼ばれると, playrecordに書かれるべき "階(ダンジョン
+	名)"という文字列を上書きしてしまい, 出力が少しおかしかったバグを修正.
+
+	* src/dungeon.c 1.94:
+	ウィザードモード使用時にplayrecordに記録されていなかったので, 記録するように修正.
+
+	* src/birth.c 1.66:
+	キャラクタ作成の最後に 'S' を入力した直後にランダムクエスター決定を行うように修正.
+
+	* src/cmd3.c 1.37:
+	思い出詳細参照中に 'r' を押すと思い出プロンプトが消えるバグを修正.
+
+	* src/bldg.c 1.32:
+	モンスター調査した, あるいはしようとした後に街を出るなりしてマップを作り直した瞬間に,
+	思い出ウィンドウに別のモンスターが表示される場合があるバグを修正. モンスター調査で
+	代金を支払った場合にそのモンスターを思い出ウィンドウに表示するように変更.
+
+	* src/effects.c 1.35, src/externs.h 1.101, src/melee1.c 1.26, src/spells1.c 1.49:
+	経験値吸収部分でまとめられるものは関数にまとめるようにして整理.
+	この過程で, 地獄属性とカオス属性による経験値吸収時の和文はわずかに変わった.
+
+2003-05-04  nothere  <nothere@cvs>
+
+	* src/melee1.c 1.25:
+	モンスターの打撃で防具が劣化したのが次の打撃に反映されていなかったのを修正.
+
+	* src/melee2.c 1.45:
+	モンスター同士の殴り合いで, 粉砕属性に対しAC軽減がなされていなかったのを修正.
+
+	* lib/edit/q0000005.txt 1.2:
+	クエスト "塔" 達成時の英文が和文に対応していなかったので修正.
+
+	* src/birth.c 1.65, src/cmd1.c 1.69, src/cmd2.c 1.40, src/cmd4.c 1.81, src/cmd5.c 1.62, src/defines.h 1.91, src/dungeon.c 1.93, src/externs.h 1.100, src/files.c 1.98, src/init1.c 1.53, src/load.c 1.54, src/racial.c 1.33, src/spells3.c 1.65, src/tables.c 1.57, src/wizard2.c 1.36, src/xtra1.c 1.61, src/xtra2.c 1.60:
+	熟練度に関する数値が直接指定されていた部分を記号定数化.
+
+	* src/cmd5.c 1.61:
+	破邪魔法 "神の怒り" の分解ボール落下の中心部を41マス離れたところまで指定できて
+	いたので, 18マスまでに制限.
+
+	* src/spells3.c 1.64:
+	スペルマスターと赤魔道師が魔法熟練度による難易度減少を受けられなかったバグを修正.
+
+	* src/monster1.c 1.31:
+	英語版でモンスターの思い出の一部が正しく配色されていなかったバグを修正.
+
+2003-05-03  nothere  <nothere@cvs>
+
+	* src/dungeon.c 1.92: 武器簡易鑑定のswitch文を少し整理.
+
+	* src/melee1.c 1.24:
+	EXP_VAMP攻撃を無生物種族, あるいは無生物ミミックのプレイヤーが受けた場合に,
+	攻撃したモンスターがHPを回復していたバグを修正.
+
+	* src/dungeon.c 1.91, src/xtra1.c 1.60:
+	種族変更するとターン数が狂い日付がずれるので, 経過ゲームターン数計算には
+	スタート時の種族を見るように修正.
+
+	* src/flavor.c 1.32:
+	射撃武器の倍率表示がsvalのmod演算だったので, bow_tmul()を使うように修正.
+
+	* src/cmd1.c 1.68:
+	view_unsafe_grids時に, 自分で歩いた床からは 'x' を消すように変更.
+	ただし, 光源なしもしくは盲目でトラップに掛かった場合は 'x' は消さない.
+
+	* src/cmd5.c 1.60:
+	カオス魔法 "悪魔召喚" での召喚失敗時の英文が "Greater Demon" になっていたので
+	"demons" に修正.
+
+	* src/melee2.c 1.44:
+	モンスターが進化した際にsub_alignが正しく初期化されなかったバグを修正.
+
+	* src/externs.h 1.99, src/mutation.c 1.9, src/racial.c 1.32:
+	レイシャルパワーに関する修正.
+	* キャンセル可能なレイシャルパワーをキャンセルしてもコストとターンを消費しないように,
+	  TObandの手法により修正. これにより, 表示部と実行部で分散していたレイシャル
+	  パワーの難易度などのデータを1個所で管理するようになった.
+	* ペットを連れた剣術家が型を変更できるように修正.
+
+	* src/cmd1.c 1.67: "ボーパル・ブレード" -> "ヴォーパルブレード".
+
+	* lib/help/jmagic.txt 1.9, src/cmd5.c 1.59, src/mspells3.c 1.21, lib/edit/r_info.txt 1.2:
+	"召還" -> "召喚".
+
+	* lib/file/monspeak_j.txt 1.8:
+	一部モンスターの台詞に "「」" がなかったので修正.
+
+	* src/cmd5.c 1.58, src/defines.h 1.90, src/object1.c 1.60:
+	練気術師で練気術を選択する際のダミーのアイテムスロット1111を記号定数INVEN_FORCEに変更.
+
+	* src/defines.h 1.89:
+	is_magic()マクロが領域番号0以下に対してもTRUEを返していたバグを修正.
+
+	* src/object2.c 1.72:
+	スペルマスター/赤魔道師では "アイテムの詳細" ウィンドウ表示で使った魔法書の呪文
+	一覧が表示されないバグを修正.
+
+	* src/cmd5.c 1.57, src/dungeon.c 1.90, src/externs.h 1.98, src/mspells3.c 1.20, src/spells3.c 1.63:
+	消費魔力減少フラグと (領域魔法であれば) 魔法熟練度から導かれる消費魔力計算を
+	1関数にまとめた.
+
+	* src/cmd5.c 1.56:
+	生命, 暗黒, 自然, 悪魔魔法に失敗すると, 魔法に対応した徳以外に [識] が下がっていたバグを修正.
+
+2003-04-17  iks  <iks@cvs>
+
+	* src/flavor.c 1.31, src/object2.c 1.71:
+	鍛治師が殺戮修正をつけた小手が劣化されると発生するバグを修正。
+	- 殺戮修正が0になると表示がおかしい
+	- 劣化されてからエッセンス消去するとマイナスの殺戮修正が残る
+
+	* src/cmd1.c 1.66: 乗馬スキル計算の条件式がおかしいのを修正。
+
+	* src/object2.c 1.70:
+	テレパシーの冠に無生物ESPが付いた場合、下位ESPが3+1d(1d6)個つくように変更。
+
+	* src/spells1.c 1.48: ブレスの形状生成ルーチンをXAngbandから移植。
+
+2003-04-15  Takeshi Mogami  <mogami@cvs>
+
+	* src/spells1.c 1.47:
+	breath_shape()のアルゴリズムのバグ修正。gridのインデックスと発射点から
+	の距離の数値を混同していた為、斜め方向のブレスの形状が異常だった。
+
+	* src/xtra2.c 1.59, src/z-config.h 1.7, src/z-form.c 1.4, src/z-form.h 1.2, src/z-rand.c 1.4, src/z-rand.h 1.4, src/z-util.c 1.4, src/z-util.h 1.3, src/util.c 1.39, src/variable.c 1.38, src/wild.c 1.22, src/wizard1.c 1.30, src/wizard2.c 1.35, src/xtra1.c 1.59, src/types.h 1.26, src/store.c 1.24, src/streams.c 1.8, src/streams.h 1.2, src/tables.c 1.56, src/spells1.c 1.46, src/spells2.c 1.64, src/spells3.c 1.62, src/rooms.c 1.28, src/rooms.h 1.2, src/save.c 1.33, src/scores.c 1.13, src/object2.c 1.69, src/racial.c 1.31, src/mspells3.c 1.19, src/mutation.c 1.8, src/obj_kind.c 1.3, src/object1.c 1.59, src/mspells1.c 1.36, src/mspells2.c 1.32, src/melee1.c 1.23, src/melee2.c 1.43, src/mind.c 1.20, src/monster1.c 1.30, src/monster2.c 1.51, src/init2.c 1.24, src/load.c 1.53, src/mane.c 1.16, src/flavor.c 1.30, src/generate.c 1.44, src/grid.c 1.11, src/hissatsu.c 1.20, src/init1.c 1.52, src/externs.h 1.97, src/files.c 1.97, src/dungeon.c 1.89, src/effects.c 1.34, src/cmd6.c 1.49, src/defines.h 1.88, src/cmd3.c 1.36, src/cmd4.c 1.80, src/cmd5.c 1.55, src/cmd1.c 1.65, src/cmd2.c 1.39, src/cave.c 1.72, src/birth.c 1.64, Changelogs 1.65:
+	Leon氏の勧めに従って、Vanillaのコードと同様に各ソースファイルの頭の
+	copyright表示に Ben Harrisonの名前を追加。
+	全ての現行*bandは Ben のコードベースを使っているのに ZAngが出来た時点
+	で Ben 自身がvanillaのソースのcopyrightに名前を入れてなかったという理
+	由だけで変愚でも名前が抜けているから、とそういう理由。
+
 2003-04-03  iks  <iks@cvs>
 
 	* src/birth.c 1.63, src/externs.h 1.96, src/files.c 1.96:
