@@ -4851,6 +4851,8 @@ s = "呪文書がない！";
 	/* Verify "dangerous" spells */
 	if (shouhimana > p_ptr->csp)
 	{
+		if (flush_failure) flush();
+
 		/* Warning */
 #ifdef JP
 msg_format("その%sを%sのに十分なマジックポイントがない。",prayer,
