@@ -18,5 +18,5 @@
            Hengband: Mr.Hoge (echizen @ s5.xrea.com) & Many others
                        http://echizen.s5.xrea.com/heng/
 
-                 Send bug report to "echizen @ s5.xrea.com"
-                     or "mogami @ het.ph.tsukuba.ac.jp".
+                  Send bug report to "heng-ml@kmc.gr.jp"
+ 
