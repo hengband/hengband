@@ -3285,7 +3285,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
 			{
-				if (t_ptr->ml && is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+				if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 				if (see_t)
 				{
 #ifdef JP
@@ -3299,7 +3299,7 @@ bool monst_spell_monst(int m_idx)
 			}
 			else if (tr_ptr->level > randint1(100))
 			{
-				if (t_ptr->ml && is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+				if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 				if (see_t)
 				{
 #ifdef JP
@@ -3345,7 +3345,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
 			{
-				if (t_ptr->ml && is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+				if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 				if (see_t)
 				{
 #ifdef JP
@@ -3359,7 +3359,7 @@ bool monst_spell_monst(int m_idx)
 			}
 			else if (tr_ptr->level > randint1(100))
 			{
-				if (t_ptr->ml && is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+				if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 				if (see_t)
 				{
 #ifdef JP
@@ -4204,7 +4204,7 @@ bool monst_spell_monst(int m_idx)
 	}
 
 	/* Remember what the monster did, if we saw it */
-	if (m_ptr->ml && is_original_ap(m_ptr))
+	if (is_original_ap_and_seen(m_ptr))
 	{
 		/* Inate spell */
 		if (thrown_spell < 32*4)

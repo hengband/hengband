@@ -4555,7 +4555,7 @@ msg_print("多くの力強いものが間近に現れた音が聞こえる。");
 	}
 
 	/* Remember what the monster did to us */
-	if (seen && is_original_ap(m_ptr))
+	if (is_original_ap_and_seen(m_ptr))
 	{
 		/* Inate spell */
 		if (thrown_spell < 32 * 4)

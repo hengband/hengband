@@ -6673,12 +6673,12 @@ msg_print("失敗した。");
 	if (r_ptr->flagsr & RFR_RES_TELE)
 	{
 #ifdef JP
-msg_print("テレポートを邪魔された！");
+		msg_print("テレポートを邪魔された！");
 #else
 		msg_print("Your teleportation is blocked!");
 #endif
 
-		if (m_ptr->ml && is_original_ap(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+		if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 
 		m_ptr->csleep = 0;
 		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
