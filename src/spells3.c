@@ -4309,7 +4309,7 @@ static void spell_info(char *p, int spell, int use_realm)
 		case 15: sprintf(p, " %s%d+d%d", s_dur, plev/2, plev/2); break;
 		case 16: sprintf(p, " %s25+d30", s_dur); break;
 		case 17: sprintf(p, " %s30+d20", s_dur); break;
-		case 19: sprintf(p, " %s%d+d%d", s_dur, plev+20, plev); break;
+		case 19: sprintf(p, " %s%d+d%d", s_dur, plev, plev+20); break;
 		case 20: sprintf(p, " %s50+d50", s_dur); break;
 		case 23: sprintf(p, " %s20+d20", s_dur); break;
 		case 31: sprintf(p, " %s13+d13", s_dur); break;
