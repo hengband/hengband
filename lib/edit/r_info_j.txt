@@ -19569,7 +19569,7 @@ D:$Beld seeks to conquer Lodoss and will destroy anyone who stands in his way.
 D:ベルドはロードス征服をたくらみ、立ちはだかる全てを破壊しようとした。
 
 N:974:黒衣の騎士『アシュラム』
-E:Ashram
+E:Ashram, the Ebony Knight
 G:p:D
 I:120:77d20:10:120:50
 W:40:4:0:5000:0:0
