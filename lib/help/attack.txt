@@ -317,7 +317,7 @@ Weapon of Slay Dragon
 Weapon of *Slay* Animal
     This weapon is especially effective against natural creatures and
     will inflict damage with four times the normal dice against such
-    creatures, and allows wielder to sense the presence of natutal
+    creatures, and allows wielder to sense the presence of natural
     creatures.  It will also increase your intelligence and allow you
     to regenerate hit-points and mana faster.
 

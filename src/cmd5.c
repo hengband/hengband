@@ -2317,7 +2317,7 @@ void do_cmd_pet(void)
 	sprintf(target_buf,"ペットのターゲットを指定 (現在：%s)",
 		(pet_t_m_idx ? r_name + r_info[m_list[pet_t_m_idx].r_idx].name : "指定なし"));
 #else
-	sprintf(target_buf,"specify a targert of pet (now:%s)",
+	sprintf(target_buf,"specify a target of pet (now:%s)",
 		(pet_t_m_idx ? r_name + r_info[m_list[pet_t_m_idx].r_idx].name : "nothing"));
 #endif
 	power_desc[num] = target_buf;

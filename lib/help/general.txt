@@ -16,7 +16,7 @@ give you a decent chance against the great Serpent of Chaos, who lurks
 somewhere in the depths of the dungeon.
 
 ***** <First>
---- First Place to Go
+--- First Place to Go ---
 
 The player will begin his adventure on the town level where he may
 acquire supplies, weapons, armor, and magical devices by bartering
@@ -31,7 +31,9 @@ safe.  Once you complete this dungeon, you will be strong enough to
 leave Outpost in search of greater adventures.  Carry lots of food and
 fuel, for the journey can be a long one.
 
---- The Global Map  ( Press the '<' key, And you see all of the world! )
+--- The Global Map ---
+
+[[[[G|Press the '<' key, and you see all of the world!
 
 Since this world is very large, it is convenient to go into global map
 mode by pressing the '<' key, and then return to local map mode by '>'

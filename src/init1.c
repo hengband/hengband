@@ -870,6 +870,26 @@ static bool add_text(u32b *offset, header *head, cptr buf)
 		*offset = ++head->text_size;	
 	}
 
+	/* Additional text */
+	else
+	{
+		/*
+		 * If neither the end of the last line nor
+		 * the beginning of current line is not a space,
+		 * fill up a space as a correct separator of two words.
+		 */
+		if (head->text_size > 0 &&
+		    *(head->text_ptr + head->text_size - 1) != ' ' &&
+		    buf[0] != ' ')
+		{
+			/* Append a space */
+			*(head->text_ptr + head->text_size) = ' ';
+
+			/* Advance the index */
+			head->text_size++;
+		}
+	}
+
 	/* Append chars to the text */
 	strcpy(head->text_ptr + head->text_size, buf);
 

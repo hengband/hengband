@@ -390,7 +390,7 @@ static struct {
 #else
 = {
 	{TERM_YELLOW, "Ts", "Tsuyoshi"},
-	{TERM_VIOLET, "Hu", "Hullc"},
+	{TERM_VIOLET, "Ha", "Halluc"},
 	{TERM_L_DARK, "Bl", "Blind"},
 	{TERM_RED, "Pa", "Paralyzed"},
 	{TERM_VIOLET, "Cf", "Confused"},
