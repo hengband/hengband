@@ -5877,12 +5877,9 @@ bool polymorph_monster(int y, int x)
 /*
  * Dimension Door
  */
-bool dimension_door(bool use_mirror)
+static bool dimension_door_aux(int x, int y)
 {
 	int	plev = p_ptr->lev;
-	int	x = 0, y = 0;
-
-	if (!tgt_pt(&x, &y)) return FALSE;
 
 	p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
 
@@ -5891,29 +5888,63 @@ bool dimension_door(bool use_mirror)
 	    (distance(y, x, py, px) > plev / 2 + 10) ||
 	    (!randint0(plev / 10 + 10)))
 	{
-		if (!use_mirror)
-		{
-#ifdef JP
-			msg_print("精霊界から物質界に戻る時うまくいかなかった！");
-#else
-			msg_print("You fail to exit the astral plane correctly!");
-#endif
-		}
-		else
-		{
-#ifdef JP
-			msg_print("鏡の世界をうまく通れなかった！");
-#else
-			msg_print("You fail to pass the mirror plane correctly!");
-#endif
-		}
 		p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
 		teleport_player((plev+2)*2);
+
+		/* Failed */
+		return FALSE;
 	}
 	else
+	{
 		teleport_player_to(y, x, TRUE);
 
-	return (TRUE);
+		/* Success */
+		return TRUE;
+	}
+}
+
+
+/*
+ * Dimension Door
+ */
+bool dimension_door(void)
+{
+	int x = 0, y = 0;
+
+	/* Rerutn FALSE if cancelled */
+	if (!tgt_pt(&x, &y)) return FALSE;
+
+	if (dimension_door_aux(x, y)) return TRUE;
+
+#ifdef JP
+	msg_print("精霊界から物質界に戻る時うまくいかなかった！");
+#else
+	msg_print("You fail to exit the astral plane correctly!");
+#endif
+
+	return TRUE;
+}
+
+
+/*
+ * Mirror Master's Dimension Door
+ */
+bool mirror_tunnel(void)
+{
+	int x = 0, y = 0;
+
+	/* Rerutn FALSE if cancelled */
+	if (!tgt_pt(&x, &y)) return FALSE;
+
+	if (dimension_door_aux(x, y)) return TRUE;
+
+#ifdef JP
+	msg_print("鏡の世界をうまく通れなかった！");
+#else
+	msg_print("You fail to pass the mirror plane correctly!");
+#endif
+
+	return TRUE;
 }
 
 

@@ -1256,7 +1256,7 @@ msg_print("次元の扉が開いた。目的地を選んで下さい。");
 		msg_print("You open a dimensional gate. Choose a destination.");
 #endif
 
-		return dimension_door(FALSE);
+		return dimension_door();
 	case 24: /* Probing */
 		(void)probing();
 		break;
@@ -2802,7 +2802,7 @@ msg_print("次元の扉が開いた。目的地を選んで下さい。");
 				msg_print("You open a dimensional gate. Choose a destination.");
 #endif
 
-				return dimension_door(FALSE);
+				return dimension_door();
 			}
 			break;
 		case 14: /* Word of Recall */

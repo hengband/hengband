@@ -6334,7 +6334,7 @@ msg_print("あなたはエレメントのブレスを吐いた。");
 				o_ptr->timeout = randint0(50) + 50;
 				break;
 			case EGO_AMU_D_DOOR:
-				(void)dimension_door(FALSE);
+				(void)dimension_door();
 				o_ptr->timeout = 200;
 				break;
 			case EGO_AMU_RES_FIRE_:
