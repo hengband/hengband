@@ -411,5 +411,5 @@
 
 --------
 Mr.hoge
-http://echizen.s5.xrea.com/heng/
+http://hengband.sourceforge.jp/
 echizen¡÷users.sourceforge.jp

@@ -15,8 +15,8 @@
        ZAngband Jap ver.:    Mitsuhiro Itakura < m-itakura@geocities.co.jp >
 
 
-           Hengband: Mr.Hoge (echizen @ s5.xrea.com) & Many others
-                       http://echizen.s5.xrea.com/heng/
+           Hengband: Mr.Hoge (echizen @ users.sourceforge.jp) & Many others
+                       http://hengband.sourceforge.jp/
 
             Send bug report to "hengband-dev@lists.sourceforge.jp"
  

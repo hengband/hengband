@@ -104,15 +104,15 @@ memory containing all the experience of past incarnations.
 
 
 --- The official Hengband website ---
-(http://echizen.s5.xrea.com/heng/eng-hengband/score.html)
+(http://hengband.sourceforge.jp/en/)
 
-http://echizen.s5.xrea.com/heng/ is the official Hengband website.  It
-includes information on where to download the Hengband source code and
-current executables for most popular operating systems as well as
+http://hengband.sourceforge.jp/en/ is the official Hengband website.
+It includes information on where to download the Hengband source code
+and current executables for most popular operating systems as well as
 information on current development issues.
 
 --- Hengband World Score Board ---
-(http://echizen.s5.xrea.com/heng/eng-hengband/score.html)
+(http://hengband.sourceforge.jp/en/score.html)
 
 The official Hengband website includes this score board. You can see
 hundreds of character records at here. And there is translated version
@@ -145,7 +145,7 @@ is about Hengband.
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.1.0
+Updated    : Hengband 1.5.4
 
 
 ***** Begin Hyperlinks

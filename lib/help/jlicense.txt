@@ -10,7 +10,7 @@
     変愚蛮怒の、日本語版アングバンドおよび日本語版 Zangbandよりの変
   更部分については以下の者が代表して著作権を有します。
 
-    Mr.hoge                 Email: echizen@s5.xrea.com
+    Mr.hoge                 Email: echizen＠users.sourceforge.jp
 
 
     日本語版 Zangbandの、Zangband 固有の日本語化部分については以下の者

@@ -109,7 +109,7 @@ A. You cannot directly control your mount unless you use one hand to
 Q. Where is the score server?  And how do I register my character
    dumps?
 
-A. Here;'http://echizen.s5.xrea.com/heng/eng-hengband/score.html'.
+A. Here;'http://hengband.sourceforge.jp/en/score.html'.
    When you die, Hengband will ask you as 'Do you send score to the
    world score sever?'.  And if you answer 'y', Hengband will
    automatically register your character dump and screen shot.
@@ -132,17 +132,17 @@ A. Hengband is mainly based on ZAngband 2.2.8 Japanese version.
    Hengband also includes codes from many other variants including
    ToME, OAngband, etc...  Mr.Hoge wrote the first original part of
    Hengband.  And currently, it is maintained by Hengband Development
-   Team including Mr.Hoge, Habu, Henkma, iks, Kuwa, Mogami, and
+   Team including Mr.Hoge, Habu, Henkma, iks, Kuwa, Mogami, nsk, and
    @nothere.
 
 
 Q. Where is Hengband?
 
-A. Here: http://echizen.s5.xrea.com/heng/eng-hengband/index.html
+A. Here: http://hengband.sourceforge.jp/en/
 
 
 
  Hengband FAQ written by Mogami
 
 --
-Updated    : Hengband 1.5.0
+Updated    : Hengband 1.5.4
