@@ -583,7 +583,7 @@ errr process_pref_file_command(char *buf)
 				int os = option_info[i].o_set;
 				int ob = option_info[i].o_bit;
 
-				if (p_ptr->playing && 6 == option_info[i].o_page && !p_ptr->wizard)
+				if ((p_ptr->playing || character_xtra) && 6 == option_info[i].o_page && !p_ptr->wizard)
 				{
 #ifdef JP
 					msg_format("初期オプションは変更できません! '%s'", buf);
@@ -6964,13 +6964,18 @@ errr process_pickpref_file(cptr name)
 errr process_histpref_file(cptr name)
 {
 	char buf[1024];
-
 	errr err = 0;
+	bool old_character_xtra = character_xtra;
 
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 
+	/* Hack -- prevent modification birth options in this file */
+	character_xtra = TRUE;
+
 	err = process_pref_file_aux(buf, PREF_TYPE_HISTPREF);
+
+	character_xtra = old_character_xtra;
 
 	/* Result */
 	return (err);
