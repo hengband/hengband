@@ -3518,7 +3518,8 @@ static void search_for_string(text_body_type *tb, cptr search_str, bool forward)
 		if (!pos) continue;
 
 		/* Found a line but it's inactive */
-		if (tb->states[i] & LSTAT_BYPASS)
+		if ((tb->states[i] & LSTAT_BYPASS) &&
+		    !(tb->states[i] & LSTAT_EXPRESSION))
 		{
 			/* If it is first found, remember it */
 			if (bypassed_cy == -1)
