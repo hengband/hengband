@@ -4170,6 +4170,7 @@ void monster_gain_exp(int m_idx, int s_idx)
 		int old_maxhp = m_ptr->max_maxhp;
 		int old_r_idx = m_ptr->r_idx;
 		int i;
+		byte old_sub_align = m_ptr->sub_align;
 
 		monster_desc(m_name, m_ptr, 0);
 		m_ptr->r_idx = r_ptr->next_r_idx;
@@ -4210,6 +4211,16 @@ void monster_gain_exp(int m_idx, int s_idx)
 		}
 
 		if (m_ptr->mspeed > 199) m_ptr->mspeed = 199;
+
+		/* Sub-alignment of a monster */
+		if (!is_pet(m_ptr) && !(r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)))
+			m_ptr->sub_align = old_sub_align;
+		else
+		{
+			m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
+			if (r_ptr->flags3 & RF3_EVIL) m_ptr->sub_align |= SUB_ALIGN_EVIL;
+			if (r_ptr->flags3 & RF3_GOOD) m_ptr->sub_align |= SUB_ALIGN_GOOD;
+		}
 
 		m_ptr->exp = 0;
 
