@@ -7990,7 +7990,16 @@ static void add_essence(int mode)
 		}
 		if (is_pval_flag(es_ptr->add))
 		{
-			if (es_ptr->add == TR_BLOWS)
+			if (o_ptr->pval < 0)
+			{
+#ifdef JP
+				msg_print("このアイテムの能力修正を強化することはできない。");
+#else
+				msg_print("You cannot increase magic number of this item.");
+#endif
+				return;
+			}
+			else if (es_ptr->add == TR_BLOWS)
 			{
 				if (o_ptr->pval > 1)
 				{
@@ -8001,8 +8010,6 @@ static void add_essence(int mode)
 #endif
 				}
 
-				/* Hack -- Negative pval takes more essence */
-				use_essence *= 1 - ((o_ptr->pval >= 0) ? 0 : o_ptr->pval);
 				o_ptr->pval = 1;
 #ifdef JP
 				msg_format("エッセンスを%d個使用します。", use_essence);
@@ -8026,7 +8033,6 @@ static void add_essence(int mode)
 				int pval;
 				int limit = MIN(5, p_ptr->magic_num1[es_ptr->essence]/es_ptr->value);
 
-				if (o_ptr->pval < 0) limit -= o_ptr->pval;
 #ifdef JP
 				sprintf(tmp, "いくつ付加しますか？ (1-%d): ", limit);
 #else
@@ -8074,16 +8080,16 @@ static void add_essence(int mode)
 			else if (val < 1) val = 1;
 			use_essence *= val;
 #ifdef JP
-			msg_format("エッセンスを%d個使用します。",use_essence);
+			msg_format("エッセンスを%d個使用します。", use_essence);
 #else
-			msg_format("It will take %d essences.",use_essence);
+			msg_format("It will take %d essences.", use_essence);
 #endif
 			if (p_ptr->magic_num1[es_ptr->essence] < use_essence)
 			{
 #ifdef JP
 				msg_print("エッセンスが足りない。");
 #else
-				msg_print("You don't have enough essences");
+				msg_print("You don't have enough essences.");
 #endif
 				return;
 			}
@@ -8185,7 +8191,7 @@ static void add_essence(int mode)
 #ifdef JP
 			msg_print("エッセンスが足りない。");
 #else
-			msg_print("You don't have enough essences");
+			msg_print("You don't have enough essences.");
 #endif
 			return;
 		}
