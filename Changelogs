@@ -1,4 +1,74 @@
+2002-04-04  Takeshi Mogami  <mogami@cvs>
+
+	* src/mspells2.c 1.13:
+	mspells2.c モンスター対モンスターで実装されてない魔法を使ったとき、
+	return FALSE; で呪文をキャンセルしなければいけないところで、break;して
+	呪文を唱えた後の処理に移り、ものまねを覚えてしまっていたので修正。
+	特にThe World は who が未定な状態でものまねを覚えるので使用時にバグる。
+	ついでに、死者復活の呪文はモンスター対モンスターでも使えるように実装。
+
+2002-04-03  Takeshi Mogami  <mogami@cvs>
+
+	* src/xtra2.c 1.25.6.2:
+	たぬき のr_sightsが全く増えなかったのを修正。
+
+	* src/melee2.c 1.18.6.2:
+	しゃべるモンスターのときはしゃべる。重厚な足音もする。
+
+2002-04-03  _nothere  <_nothere@cvs>
+
+	* lib/edit/k_info_j.txt 1.15.2.3:
+	キノコと薬の説明の英訳完了.
+
+2002-04-03  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/r_info_j.txt 1.30.2.2, src/monster2.c 1.17.6.4:
+	たぬき は、AQUATICにはならない。ユニークにならない。レベル下限付き。
+
+	* src/monster2.c 1.17.6.3:
+	たぬき を見ただけでは sights を増やさないように修正。
+	名前の付いたペットの たぬき についてちゃんと名前を表示するように修正。
+
+	* src/monster2.c 1.17.6.2:
+	モルゴスたぬきとかが簡単に作れてまずい気がするので、
+	ペットの たぬき は名前の最後に ？ を追加。
+
+	* src/generate.c 1.11.6.1, src/melee2.c 1.18.6.1:
+	見掛けのモンスター種族、ap_r_idx の設定を忘れていたところ修正。
+
+	* lib/edit/misc_j.txt 1.5.10.1, lib/edit/r_info_j.txt 1.30.2.1, src/cmd2.c 1.19.6.1, src/cmd3.c 1.15.4.1, src/defines.h 1.31.6.1, src/externs.h 1.36.6.1, src/init1.c 1.29.6.1, src/load.c 1.20.6.1, src/monster2.c 1.17.6.1, src/save.c 1.8.6.1, src/spells1.c 1.12.6.1, src/spells2.c 1.17.4.1, src/types.h 1.10.6.1, src/xtra2.c 1.25.6.1, src/cave.c 1.29.2.1, src/cmd1.c 1.27.6.1:
+	「たぬき」の実装。セーブデータが変るので、バージョンを1.0.12に上げてある。
+
+	* src/store.c 1.7:
+	博物館に寄贈するとき、全く同じ物が既に寄贈してあるときはメッセージを
+	少し変えるようにしてみた。写真をコレクションするときに
+	気付かずに複数まとまっているのがなんか気に食わなかったので。
+
+	* src/files.c 1.44:
+	(")コマンドで初期オプションを変更できると、実験するのに便利なので、
+	ウィザードモードのときだけは変更できるようにした。
+
+2002-04-02  _nothere  <_nothere@cvs>
+
+	* src/angband.rc 1.3:
+	Windowsでのメニューの半角カナを全角カナに変更.
+
+	* src/cave.c 1.29:
+	ascii_to_zenkakuテーブルでコロンとセミコロンが逆だったので修正.
+
+2002-04-02  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/r_info_j.txt 1.30:
+	プーケル人の説明の誤訳のため、人間と勘違いされていたので、説明文修正。
+	人間フラグ削除。
+
 2002-04-01  Takeshi Mogami  <mogami@cvs>
+
+	* src/main.c 1.3:
+	コマンドラインから -h で出るヘルプメッセージにX11等の固有の情報も表示。
+	OAngからコピーしてきて、修正したもの。
+
+	* Changelogs 1.30: 更新
 
 	* lib/help/charattr.hlp 1.3, lib/help/charattr.txt 1.5, lib/help/jcharattr.hlp 1.2, lib/help/jcharattr.txt 1.7:
 	職業、種族、性格の能力、技能修正表を作成。
