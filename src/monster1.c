@@ -964,7 +964,7 @@ roff(format("%^sは矢の呪文を跳ね返す。", wd_he[msex]));
 #ifdef JP
 	if (flags4 & RF4_SHOOT) {vp[vn] = "射撃をする";color[vn++] = TERM_UMBER;}
 #else
-	if (flags4 & RF4_SHOOT) {vp[vn] = "fire a missile";color[vn++] = TERM_UMBER;}
+	if (flags4 & RF4_SHOOT) {vp[vn] = "fire an arrow";color[vn++] = TERM_UMBER;}
 #endif
 
 #ifdef JP
