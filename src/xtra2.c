@@ -5781,3 +5781,30 @@ int bow_tmul(int sval)
 
 	return (tmul);
 }
+
+/*
+ * Return alignment title
+ */
+cptr your_alignment(void)
+{
+#ifdef JP
+	if (p_ptr->align > 150) return "大善";
+	else if (p_ptr->align > 50) return "中善";
+	else if (p_ptr->align > 10) return "小善";
+	else if (p_ptr->align > -11) return "中立";
+	else if (p_ptr->align > -51) return "小悪";
+	else if (p_ptr->align > -151) return "中悪";
+	else return "大悪";
+#else
+	if (p_ptr->align > 150) return "lawful";
+	else if (p_ptr->align > 50) return "good";
+	else if (p_ptr->align > 10) return "neutral good";
+	else if (p_ptr->align > -11) return "neutral";
+	else if (p_ptr->align > -51) return "neutral evil";
+	else if (p_ptr->align > -151) return "evil";
+	else return "chaotic";
+#endif
+}
+
+
+

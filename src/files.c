@@ -1563,7 +1563,7 @@ static void prt_num2(cptr header, cptr tailer, int num, int row, int col, byte c
 #define ENTRY_POSTURE 6
 #define ENTRY_SHOOT_HIT_DAM 7
 #define ENTRY_SHOOT_POWER 8
-#define ENTRY_TO_AC 9
+#define ENTRY_SPEED 9
 #define ENTRY_BASE_AC 10
 #define ENTRY_LEVEL 11
 #define ENTRY_CUR_EXP 12
@@ -1597,6 +1597,7 @@ static void prt_num2(cptr header, cptr tailer, int num, int row, int col, byte c
 #define ENTRY_HEIGHT 39
 #define ENTRY_WEIGHT 40
 #define ENTRY_SOCIAL 41
+#define ENTRY_ALIGN 42
 
 
 static struct
@@ -1608,93 +1609,95 @@ static struct
 } disp_player_line[]
 #ifdef JP
 = {
-	{ 1,  9, 25, "¬«∑‚Ω§¿µ(≥ ∆Æ)"},
-	{ 1,  9, 25, "¬«∑‚Ω§¿µ(ŒæºÍ)"},
-	{ 1,  9, 25, "¬«∑‚Ω§¿µ(±¶ºÍ)"},
-	{ 1,  9, 25, "¬«∑‚Ω§¿µ(∫∏ºÍ)"},
-	{ 1, 10, 25, "¬«∑‚Ω§¿µ(∫∏ºÍ)"},
+	{ 1, 10, 25, "¬«∑‚Ω§¿µ(≥ ∆Æ)"},
+	{ 1, 10, 25, "¬«∑‚Ω§¿µ(ŒæºÍ)"},
 	{ 1, 10, 25, "¬«∑‚Ω§¿µ(±¶ºÍ)"},
-	{ 1, 10, 25, ""},
-	{ 1, 11, 25, "ºÕ∑‚π∂∑‚Ω§¿µ"},
-	{ 1, 12, 25, "ºÕ∑‚…¥Ô«‹Œ®"},
-	{ 1, 13, 25, "AC Ω§¿µ"},
-	{ 1, 14, 25, "¥À‹ AC"},
-	{28,  9, 20, "•Ï•Ÿ•Î"},
-	{28, 10, 20, "∑–∏≥√Õ"},
-	{28, 11, 20, "∫«¬Á∑–∏≥"},
-	{28, 12, 20, "º°•Ï•Ÿ•Î"},
-	{28, 13, 20, "ΩÍª˝∂‚"},
-	{28, 14, 20, "•ø°º•ÛøÙ"},
-	{52, 10, 22, "£»£–"},
-	{52, 12, 22, "£Õ£–"},
-	{52, 14, 22, "•◊•Ï•§ª˛¥÷"},
-	{ 1, 17, -1, "¬«∑‚π∂∑‚«ΩŒœ : "},
-	{ 1, 18, -1, "ºÕ∑‚π∂∑‚«ΩŒœ : "},
-	{ 1, 19, -1, "À‚À°À…∏Ê«ΩŒœ : "},
-	{ 1, 20, -1, "±£Ã©π‘∆∞«ΩŒœ : "},
-	{28, 17, -1, "√Œ≥–«ΩŒœ     : "},
-	{28, 18, -1, "√µ∫˜«ΩŒœ     : "},
-	{28, 19, -1, "≤ÚΩ¸«ΩŒœ     : "},
-	{28, 20, -1, "À‚À°∆ª∂Òª»Õ— : "},
-	{55, 17, -1, "¬«∑‚≤ÛøÙ    : "},
-	{55, 18, -1, "ºÕ∑‚≤ÛøÙ    : "},
-	{55, 19, -1, " ø∂—•¿•·°º•∏: "},
-	{55, 20, -1, "¿÷≥∞¿˛ªÎŒœ  : "},
+	{ 1, 10, 25, "¬«∑‚Ω§¿µ(∫∏ºÍ)"},
+	{ 1, 11, 25, "¬«∑‚Ω§¿µ(∫∏ºÍ)"},
+	{ 1, 11, 25, "¬«∑‚Ω§¿µ(±¶ºÍ)"},
+	{ 1, 11, 25, ""},
+	{ 1, 15, 25, "ºÕ∑‚π∂∑‚Ω§¿µ"},
+	{ 1, 16, 25, "ºÕ∑‚…¥Ô«‹Œ®"},
+	{01, 20, 25, "≤√¬Æ"},
+	{ 1, 19, 25, "£¡£√"},
+	{29, 13, 21, "•Ï•Ÿ•Î"},
+	{29, 14, 21, "∑–∏≥√Õ"},
+	{29, 15, 21, "∫«¬Á∑–∏≥"},
+	{29, 16, 21, "º°•Ï•Ÿ•Î"},
+	{29, 17, 21, "ΩÍª˝∂‚"},
+	{29, 19, 21, "•ø°º•ÛøÙ"},
+	{29, 10, 21, "£»£–"},
+	{29, 11, 21, "£Õ£–"},
+	{29, 20, 21, "•◊•Ï•§ª˛¥÷"},
+	{54, 10, -1, "¬«∑‚π∂∑‚  :"},
+	{54, 11, -1, "ºÕ∑‚π∂∑‚  :"},
+	{54, 12, -1, "À‚À°À…∏Ê  :"},
+	{54, 13, -1, "±£Ã©π‘∆∞  :"},
+	{54, 14, -1, "√Œ≥–      :"},
+	{54, 15, -1, "√µ∫˜      :"},
+	{54, 16, -1, "≤ÚΩ¸      :"},
+	{54, 17, -1, "À‚À°∆ª∂Ò  :"},
+	{01, 12, 25, "¬«∑‚≤ÛøÙ"},
+	{01, 17, 25, "ºÕ∑‚≤ÛøÙ"},
+	{01, 13, 25, " ø∂—•¿•·°º•∏"},
+	{54, 19, -1, "¿÷≥∞¿˛ªÎŒœ:"},
 	{26,  1, -1, "Ãæ¡∞  : "},
 	{ 1,  3, -1, "¿≠ Ã     : "},
 	{ 1,  4, -1, "ºÔ¬≤     : "},
 	{ 1,  5, -1, "ø¶∂»     : "},
 	{ 1,  6, -1, "À‚À°     : "},
 	{ 1,  7, -1, "ºÈ∏ÓÀ‚ø¿ : "},
-	{30,  3, 22, "«ØŒ"},
-	{30,  4, 22, "ø»ƒπ"},
-	{30,  5, 22, "¬ŒΩ≈"},
-	{30,  6, 22, "º“≤Ò≈™√œ∞Ã"},
+	{29,  3, 21, "«ØŒ"},
+	{29,  4, 21, "ø»ƒπ"},
+	{29,  5, 21, "¬ŒΩ≈"},
+	{29,  6, 21, "º“≤Ò≈™√œ∞Ã"},
+	{29,  8, 21, "¬∞¿≠"},
 };
 #else
 = {
-	{ 1,  9, 25, "Melee(bare h.)"},
-	{ 1,  9, 25, "Melee(2hands)"},
-	{ 1,  9, 25, "Melee(Right)"},
-	{ 1,  9, 25, "Melee(Left)"},
-	{ 1, 10, 25, "Melee(Left)"},
-	{ 1, 10, 25, "Melee(Right)"},
-	{ 1, 10, 25, "Posture"},
-	{ 1, 11, 25, "Shoot"},
-	{ 1, 12, 25, "Shoot Power"},
-	{ 1, 13, 25, "+ To AC"},
-	{ 1, 14, 25, "Base AC"},
-	{28,  9, 20, "Level"},
-	{28, 10, 20, "Experience"},
-	{28, 11, 20, "Max Exp"},
-	{28, 12, 20, "Exp to Adv"},
-	{28, 13, 20, "Gold"},
-	{28, 14, 20, "Total turn"},
-	{52, 10, 22, "Hit point"},
-	{52, 12, 22, "SP (Mana)"},
-	{52, 14, 22, "Play time"},
-	{ 1, 17, -1, "Fighting    : "},
-	{ 1, 18, -1, "Bows/Throw  : "},
-	{ 1, 19, -1, "Saving Throw: "},
-	{ 1, 20, -1, "Stealth     : "},
-	{28, 17, -1, "Perception  : "},
-	{28, 18, -1, "Searching   : "},
-	{28, 19, -1, "Disarming   : "},
-	{28, 20, -1, "Magic Device: "},
-	{55, 17, -1, "Blows/Round : "},
-	{55, 18, -1, "Shots/Round : "},
-	{55, 19, -1, "Wpn.dmg/Rnd : "},
-	{55, 20, -1, "Infra-Vision: "},
+	{ 1, 10, 25, "Bare hand"},
+	{ 1, 10, 25, "Two hands"},
+	{ 1, 10, 25, "Right hand"},
+	{ 1, 10, 25, "Left hand"},
+	{ 1, 11, 25, "Left hand"},
+	{ 1, 11, 25, "Right hand"},
+	{ 1, 11, 25, "Posture"},
+	{ 1, 15, 25, "Shoot"},
+	{ 1, 16, 25, "Shoot Power"},
+	{01, 20, 25, "Speed"},
+	{ 1, 19, 25, "AC"},
+	{29, 13, 21, "Level"},
+	{29, 14, 21, "Experience"},
+	{29, 15, 21, "Max Exp"},
+	{29, 16, 21, "Exp to Adv"},
+	{29, 17, 21, "Gold"},
+	{29, 19, 21, "Total turn"},
+	{29, 10, 21, "Hit point"},
+	{29, 11, 21, "SP (Mana)"},
+	{29, 20, 21, "Play time"},
+	{54, 10, -1, "Fighting    :"},
+	{54, 11, -1, "Bows/Throw  :"},
+	{54, 12, -1, "Saving Throw:"},
+	{54, 13, -1, "Stealth     :"},
+	{54, 14, -1, "Perception  :"},
+	{54, 15, -1, "Searching   :"},
+	{54, 16, -1, "Disarming   :"},
+	{54, 17, -1, "Magic Device:"},
+	{01, 12, 25, "Blows/Round"},
+	{01, 17, 25, "Shots/Round"},
+	{01, 13, 25, "Wpn.dmg/Rnd"},
+	{54, 19, -1, "Infra-Vision: "},
 	{26,  1, -1, "Name  : "},
 	{ 1,  3, -1, "Sex      : "},
 	{ 1,  4, -1, "Race     : "},
 	{ 1,  5, -1, "Class    : "},
 	{ 1,  6, -1, "Magic    : "},
 	{ 1,  7, -1, "Patron   : "},
-	{30,  3, 22, "Age"},
-	{30,  4, 22, "Height"},
-	{30,  5, 22, "Weight"},
-	{30,  6, 22, "Social Class"},
+	{29,  3, 21, "Age"},
+	{29,  4, 21, "Height"},
+	{29,  5, 21, "Weight"},
+	{29,  6, 21, "Social Class"},
+	{29,  8, 21, "Alignment"},
 };
 #endif
 
@@ -1840,12 +1843,48 @@ static void display_player_middle(void)
 	/* shoot power */
 	display_player_one_line(ENTRY_SHOOT_POWER, format("x%d.%02d", tmul/100, tmul%100), TERM_L_BLUE);
 
-	/* Dump the armor class bonus */
-	display_player_one_line(ENTRY_TO_AC, format("%d", p_ptr->dis_to_a), TERM_L_BLUE);
+	/* Dump the armor class */
+	display_player_one_line(ENTRY_BASE_AC, format("[%d,%+d]", p_ptr->dis_ac, p_ptr->dis_to_a), TERM_L_BLUE);
 
-	/* Dump the total armor class */
-	display_player_one_line(ENTRY_BASE_AC, format("%d", p_ptr->dis_ac), TERM_L_BLUE);
-				
+	/* Dump speed */
+	{
+		bool is_fast = (p_ptr->fast || music_singing(MUSIC_SPEED) || music_singing(MUSIC_SHERO));
+		int tmp_speed = 0;
+		byte attr;
+		int i;
+
+		i = p_ptr->pspeed-110;
+
+		/* Hack -- Visually "undo" the Search Mode Slowdown */
+		if (p_ptr->action == ACTION_SEARCH) i += 10;
+
+		if (i > 0)
+			attr = TERM_L_GREEN;
+		else if (i == 0)
+			attr = TERM_L_BLUE;
+		else
+			attr = TERM_L_UMBER;
+
+		if (is_fast) tmp_speed += 10;
+		if (p_ptr->slow) tmp_speed -= 10;
+		if (p_ptr->lightspeed) tmp_speed = 99;
+
+		if (tmp_speed)
+		{
+			sprintf(buf, "(%+d%+d)", i-tmp_speed, tmp_speed);
+			if (tmp_speed > 0)
+				attr = TERM_YELLOW;
+			else
+				attr = TERM_VIOLET;
+		}
+		else
+		{
+			sprintf(buf, "(%+d)", i);
+		}
+	
+		display_player_one_line(ENTRY_SPEED, buf, attr);
+	}
+
 	/* Dump character level */
 	display_player_one_line(ENTRY_LEVEL, format("%d", p_ptr->lev), TERM_L_GREEN);
 
@@ -1877,19 +1916,19 @@ static void display_player_middle(void)
 
 	/* Dump hit point */
 	if (p_ptr->chp >= p_ptr->mhp) 
-		display_player_one_line(ENTRY_HP, format("%d / %d", p_ptr->chp , p_ptr->mhp), TERM_L_GREEN);
+		display_player_one_line(ENTRY_HP, format("%4d/%4d", p_ptr->chp , p_ptr->mhp), TERM_L_GREEN);
 	else if (p_ptr->chp > (p_ptr->mhp * hitpoint_warn) / 10) 
-		display_player_one_line(ENTRY_HP, format("%d / %d", p_ptr->chp , p_ptr->mhp), TERM_YELLOW);
+		display_player_one_line(ENTRY_HP, format("%4d/%4d", p_ptr->chp , p_ptr->mhp), TERM_YELLOW);
 	else
-		display_player_one_line(ENTRY_HP, format("%d / %d", p_ptr->chp , p_ptr->mhp), TERM_RED);
+		display_player_one_line(ENTRY_HP, format("%4d/%4d", p_ptr->chp , p_ptr->mhp), TERM_RED);
 
 	/* Dump mana power */
 	if (p_ptr->csp >= p_ptr->msp) 
-		display_player_one_line(ENTRY_SP, format("%d / %d", p_ptr->csp , p_ptr->msp), TERM_L_GREEN);
+		display_player_one_line(ENTRY_SP, format("%4d/%4d", p_ptr->csp , p_ptr->msp), TERM_L_GREEN);
 	else if (p_ptr->csp > (p_ptr->msp * hitpoint_warn) / 10) 
-		display_player_one_line(ENTRY_SP, format("%d / %d", p_ptr->csp , p_ptr->msp), TERM_YELLOW);
+		display_player_one_line(ENTRY_SP, format("%4d/%4d", p_ptr->csp , p_ptr->msp), TERM_YELLOW);
 	else
-		display_player_one_line(ENTRY_SP, format("%d / %d", p_ptr->csp , p_ptr->msp), TERM_RED);
+		display_player_one_line(ENTRY_SP, format("%4d/%4d", p_ptr->csp , p_ptr->msp), TERM_RED);
 
 	/* Dump play time */
 	display_player_one_line(ENTRY_PLAY_TIME, format("%.2lu:%.2lu:%.2lu", playtime/(60*60), (playtime/60)%60, playtime%60), TERM_L_GREEN);
@@ -2179,11 +2218,11 @@ static void display_player_various(void)
 	display_player_one_line(ENTRY_SKILL_DEVICE, desc, likert_color);
 
 	if (!muta_att)
-		display_player_one_line(ENTRY_BLOWS, format("%d+%d", blows1, blows2), TERM_WHITE);
+		display_player_one_line(ENTRY_BLOWS, format("%d+%d", blows1, blows2), TERM_L_BLUE);
 	else
-		display_player_one_line(ENTRY_BLOWS, format("%d+%d+%d", blows1, blows2, muta_att), TERM_WHITE);
+		display_player_one_line(ENTRY_BLOWS, format("%d+%d+%d", blows1, blows2, muta_att), TERM_L_BLUE);
 
-	display_player_one_line(ENTRY_SHOTS, format("%d.%02d", shots, shot_frac), TERM_WHITE);
+	display_player_one_line(ENTRY_SHOTS, format("%d.%02d", shots, shot_frac), TERM_L_BLUE);
 
 
 	if ((damage[0]+damage[1]) == 0)
@@ -2191,7 +2230,7 @@ static void display_player_various(void)
 	else
 		desc = format("%d+%d", blows1 * damage[0] / 100, blows2 * damage[1] / 100);
 
-	display_player_one_line(ENTRY_AVG_DMG, desc, TERM_WHITE);
+	display_player_one_line(ENTRY_AVG_DMG, desc, TERM_L_BLUE);
 
 	display_player_one_line(ENTRY_INFRA, format("%d feet", p_ptr->see_infra * 10), TERM_WHITE);
 }
@@ -3988,6 +4027,7 @@ void display_player(int mode)
 		display_player_one_line(ENTRY_WEIGHT, format("%d" ,(int)p_ptr->wt), TERM_L_BLUE);
 		display_player_one_line(ENTRY_SOCIAL, format("%d" ,(int)p_ptr->sc), TERM_L_BLUE);
 #endif
+		display_player_one_line(ENTRY_ALIGN, format("%s" ,your_alignment()), TERM_L_BLUE);
 
 
 		/* Display the stats */
@@ -3999,7 +4039,7 @@ void display_player(int mode)
 				int value;
 
 				/* Use lowercase stat name */
-				put_str(stat_names_reduced[i], 2 + i, 59);
+				put_str(stat_names_reduced[i], 3 + i, 54);
 
 				/* Get the current stat */
 				value = p_ptr->stat_use[i];
@@ -4008,7 +4048,7 @@ void display_player(int mode)
 				cnv_stat(value, buf);
 
 				/* Display the current stat (modified) */
-				c_put_str(TERM_YELLOW, buf, 2 + i, 66);
+				c_put_str(TERM_YELLOW, buf, 3 + i, 61);
 
 				/* Acquire the max stat */
 				value = p_ptr->stat_top[i];
@@ -4017,20 +4057,20 @@ void display_player(int mode)
 				cnv_stat(value, buf);
 
 				/* Display the maximum stat (modified) */
-				c_put_str(TERM_L_GREEN, buf, 2 + i, 73);
+				c_put_str(TERM_L_GREEN, buf, 3 + i, 68);
 			}
 
 			/* Normal treatment of "normal" stats */
 			else
 			{
 				/* Assume uppercase stat name */
-				put_str(stat_names[i], 2 + i, 59);
+				put_str(stat_names[i], 3 + i, 54);
 
 				/* Obtain the current stat (modified) */
 				cnv_stat(p_ptr->stat_use[i], buf);
 
 				/* Display the current stat (modified) */
-				c_put_str(TERM_L_GREEN, buf, 2 + i, 66);
+				c_put_str(TERM_L_GREEN, buf, 3 + i, 61);
 			}
 
 			if (p_ptr->stat_max[i] == p_ptr->stat_max_max[i])
@@ -4039,35 +4079,40 @@ void display_player(int mode)
 			}
 		}
 
-		/* Extra info */
-		display_player_middle();
-
 		/* Display "history" info */
 		if (mode == 1)
 		{
 #ifdef JP
-			put_str("(•≠•„•È•Ø•ø°º§Œ¿∏§§Œ©§¡)", 16, 25);
+			put_str("(•≠•„•È•Ø•ø°º§Œ¿∏§§Œ©§¡)", 11, 25);
 #else
-			put_str("(Character Background)", 16, 25);
+			put_str("(Character Background)", 11, 25);
 #endif
-
 
 			for (i = 0; i < 4; i++)
 			{
-				put_str(history[i], i + 17, 10);
+				put_str(history[i], i + 12, 10);
+			}
+
+			if (death)
+			{
+				if (dun_level)
+					put_str(format("°ƒ§¢§ §ø§œ %s §Œ %d ≥¨§«ª‡§Û§¿°£", map_name(), dun_level), 5 + 12, 10);
+				else
+					put_str(format("°ƒ§¢§ §ø§œ %s §«ª‡§Û§¿°£", map_name(), dun_level), 5 + 12, 10);
+			}
+			else
+			{
+				if (dun_level)
+					put_str(format("°ƒ§¢§ §ø§œ∏Ω∫ﬂ°¢ %s §Œ %d ≥¨§«√µ∫˜§∑§∆§§§Î°£", map_name(), dun_level), 5 + 12, 10);
+				else
+					put_str(format("°ƒ§¢§ §ø§œ∏Ω∫ﬂ°¢ %s §À§§§Î°£", map_name(), dun_level), 5 + 12, 10);
 			}
 		}
 
 		/* Display "various" info */
 		else
 		{
-#ifdef JP
-			put_str("     (§Ω§Œ¬æ§Œ«ΩŒœ)     ", 16, 25);
-#else
-			put_str("(Miscellaneous Abilities)", 16, 25);
-#endif
-
-
+			display_player_middle();
 			display_player_various();
 		}
 	}
@@ -4110,7 +4155,6 @@ errr make_character_dump(FILE *fff)
 	store_type  *st_ptr;
 	char		o_name[MAX_NLEN];
 	char		buf[1024];
-	cptr            disp_align;
 
 
 #ifndef FAKE_VERSION
@@ -4165,7 +4209,7 @@ errr make_character_dump(FILE *fff)
 	display_player(1);
 
 	/* Dump part of the screen */
-	for (y = 16; y < 21; y++)
+	for (y = 11; y < 18; y++)
 	{
 		/* Dump each row */
 		for (x = 0; x < 79; x++)
@@ -4595,23 +4639,9 @@ fprintf(fff, "\n\n  [•◊•Ï•§•‰°º§Œ∆¡]\n\n");
 #endif
 
 #ifdef JP
-	if (p_ptr->align > 150) disp_align = "¬Á¡±";
-	else if (p_ptr->align > 50) disp_align = "√Ê¡±";
-	else if (p_ptr->align > 10) disp_align = "æÆ¡±";
-	else if (p_ptr->align > -11) disp_align = "√ÊŒ©";
-	else if (p_ptr->align > -51) disp_align = "æÆ∞≠";
-	else if (p_ptr->align > -151) disp_align = "√Ê∞≠";
-	else disp_align = "¬Á∞≠";
-	fprintf(fff, "¬∞¿≠ : %s\n", disp_align);
+	fprintf(fff, "¬∞¿≠ : %s\n", your_alignment());
 #else
-	if (p_ptr->align > 150) disp_align = "lawful";
-	else if (p_ptr->align > 50) disp_align = "good";
-	else if (p_ptr->align > 10) disp_align = "neutral good";
-	else if (p_ptr->align > -11) disp_align = "neutral";
-	else if (p_ptr->align > -51) disp_align = "neutral evil";
-	else if (p_ptr->align > -151) disp_align = "evil";
-	else disp_align = "chaotic";
-	fprintf(fff, "Your alighnment : %s\n", disp_align);
+	fprintf(fff, "Your alighnment : %s\n", your_alignment());
 #endif
 	fprintf(fff, "\n");
 	dump_virtues(fff);

@@ -6563,7 +6563,6 @@ void do_cmd_knowledge_virtues(void)
 	FILE *fff;
 	
 	char file_name[1024];
-	cptr disp_align;
 	
 	
 	/* Open a new file */
@@ -6581,25 +6580,9 @@ void do_cmd_knowledge_virtues(void)
 	if (fff)
 	{
 #ifdef JP
-		if (p_ptr->align > 150) disp_align = "大善";
-		else if (p_ptr->align > 50) disp_align = "中善";
-		else if (p_ptr->align > 10) disp_align = "小善";
-		else if (p_ptr->align > -11) disp_align = "中立";
-		else if (p_ptr->align > -51) disp_align = "小悪";
-		else if (p_ptr->align > -151) disp_align = "中悪";
-		else disp_align = "大悪";
-		fprintf(fff, "現在の属性 : %s\n", disp_align);
-		fprintf(fff, "\n");
+		fprintf(fff, "現在の属性 : %s\n\n", your_alignment());
 #else
-		if (p_ptr->align > 150) disp_align = "lawful";
-		else if (p_ptr->align > 50) disp_align = "good";
-		else if (p_ptr->align > 10) disp_align = "neutral good";
-		else if (p_ptr->align > -11) disp_align = "neutral";
-		else if (p_ptr->align > -51) disp_align = "neutral evil";
-		else if (p_ptr->align > -151) disp_align = "evil";
-		else disp_align = "chaotic";
-		fprintf(fff, "Your alighnment : %s\n", disp_align);
-		fprintf(fff, "\n");
+		fprintf(fff, "Your alighnment : %s\n\n", your_alignment());
 #endif
 		dump_virtues(fff);
 	}

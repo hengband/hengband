@@ -43,8 +43,6 @@ void self_knowledge(void)
 
 	cptr info[220];
 
-	cptr disp_align;
-
 	int plev = p_ptr->lev;
 
 	int percent;
@@ -108,23 +106,9 @@ sprintf(Dummy, "現在の体力ランク : %d/100", percent);
 	info[i++] = "";
 
 #ifdef JP
-	if (p_ptr->align > 150) disp_align = "大善";
-	else if (p_ptr->align > 50) disp_align = "中善";
-	else if (p_ptr->align > 10) disp_align = "小善";
-	else if (p_ptr->align > -11) disp_align = "中立";
-	else if (p_ptr->align > -51) disp_align = "小悪";
-	else if (p_ptr->align > -151) disp_align = "中悪";
-	else disp_align = "大悪";
-	sprintf(Dummy, "現在の属性 : %s(%ld)", disp_align, p_ptr->align);
+	sprintf(Dummy, "現在の属性 : %s(%ld)", your_alignment(), p_ptr->align);
 #else
-	if (p_ptr->align > 150) disp_align = "lawful";
-	else if (p_ptr->align > 50) disp_align = "good";
-	else if (p_ptr->align > 10) disp_align = "neutral good";
-	else if (p_ptr->align > -11) disp_align = "neutral";
-	else if (p_ptr->align > -51) disp_align = "neutral evil";
-	else if (p_ptr->align > -151) disp_align = "evil";
-	else disp_align = "chaotic";
-	sprintf(Dummy, "Your alighnment : %s(%ld)", disp_align, p_ptr->align);
+	sprintf(Dummy, "Your alighnment : %s(%ld)", your_alignment(), p_ptr->align);
 #endif
 	strcpy(buf[1], Dummy);
 	info[i++] = buf[1];

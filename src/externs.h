@@ -1173,6 +1173,7 @@ extern void build_gamma_table(int gamma);
 
 /* xtra1.c */
 extern void prt_time(void);
+extern cptr map_name(void);
 extern void cnv_stat(int val, char *out_val);
 extern s16b modify_stat_value(int value, int amount);
 extern void notice_stuff(void);
@@ -1278,6 +1279,7 @@ extern int mon_damage_mod(monster_type *m_ptr, int dam, bool is_psy_spear);
 extern s16b gain_energy(void);
 extern s16b bow_energy(int sval);
 extern int bow_tmul(int sval);
+extern cptr your_alignment(void);
 
 /* mspells1.c */
 extern bool clean_shot(int y1, int x1, int y2, int x2, bool friend);

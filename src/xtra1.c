@@ -124,19 +124,20 @@ void prt_time(void)
 	c_put_str(TERM_WHITE, "             ", ROW_DAY, COL_DAY);
 
 	/* Dump the info itself */
+	c_put_str(TERM_WHITE, format(
 #ifdef JP
-	c_put_str(TERM_WHITE, format("%2d日目",
+		"%2d日目",
 #else
-	c_put_str(TERM_WHITE, format("Day %-2d",
+		"Day %-2d",
 #endif
-		  ((p_ptr->prace == RACE_VAMPIRE) ||
-		   (p_ptr->prace == RACE_SKELETON) ||
-		   (p_ptr->prace == RACE_ZOMBIE) ||
-		   (p_ptr->prace == RACE_SPECTRE))
-		   ? (turn - (15L * TOWN_DAWN)) / len + 1
-		   : (turn + (5L * TOWN_DAWN))/ len + 1),
+		((p_ptr->prace == RACE_VAMPIRE) ||
+		 (p_ptr->prace == RACE_SKELETON) ||
+		 (p_ptr->prace == RACE_ZOMBIE) ||
+		 (p_ptr->prace == RACE_SPECTRE))
+		? (turn - (15L * TOWN_DAWN)) / len + 1
+		: (turn + (5L * TOWN_DAWN))/ len + 1),
 		  ROW_DAY, COL_DAY);
-
+	
 	c_put_str(TERM_WHITE, format("%2d:%02d",
 				      (24 * tick / len) % 24,
 				      (1440 * tick / len) % 60),
@@ -144,46 +145,52 @@ void prt_time(void)
 }
 
 
-
+cptr map_name(void)
+{
+	if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST)
+	    && (quest[p_ptr->inside_quest].flags & QUEST_FLAG_PRESET))
+#ifdef JP
+		return "クエスト";
+#else
+          	return "Quest";
+#endif
+	else if (p_ptr->wild_mode)
+#ifdef JP
+		return "地上";
+#else
+		return "Surface";
+#endif
+	else if (p_ptr->inside_arena)
+#ifdef JP
+		return "アリーナ";
+#else
+		return "Monster Arena";
+#endif
+	else if (p_ptr->inside_battle)
+#ifdef JP
+		return "闘技場";
+#else
+		return "Arena";
+#endif
+	else if (!dun_level && p_ptr->town_num)
+		return town[p_ptr->town_num].name;
+	else
+		return d_name+d_info[dungeon_type].name;
+}
 
 /*
  * Print dungeon
  */
 static void prt_dungeon(void)
 {
-	cptr dungeon_name = d_name+d_info[dungeon_type].name;
+	cptr dungeon_name;
 	int col;
 
 	/* Dump 13 spaces to clear */
 	c_put_str(TERM_WHITE, "             ", ROW_DUNGEON, COL_DUNGEON);
 
-	if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST) && (quest[p_ptr->inside_quest].flags & QUEST_FLAG_PRESET))
+	dungeon_name = map_name();
 
-#ifdef JP
-	dungeon_name = "クエスト";
-#else
-	dungeon_name = "Quest";
-#endif
-	else if (p_ptr->wild_mode)
-#ifdef JP
-		dungeon_name = "地上";
-#else
-		dungeon_name = "Surface";
-#endif
-	else if (p_ptr->inside_arena)
-#ifdef JP
-		dungeon_name = "アリーナ";
-#else
-		dungeon_name = "Monster Arena";
-#endif
-	else if (p_ptr->inside_battle)
-#ifdef JP
-		dungeon_name = "闘技場";
-#else
-		dungeon_name = "Arena";
-#endif
-	else if (!dun_level && p_ptr->town_num)
-		dungeon_name = town[p_ptr->town_num].name;
 	col = COL_DUNGEON + 6 - strlen(dungeon_name)/2;
 	if (col < 0) col = 0;
 
