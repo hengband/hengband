@@ -5376,8 +5376,11 @@ static bool get_item_allow(int item)
 	/* Process preventions */
 	while (s)
 	{
+		/* Ignore the "!!" inscription */
+		if (s[1] == '!') s++;
+
 		/* Check the "restriction" */
-		if ((s[1] == command_cmd) || (s[1] == '*'))
+		else if ((s[1] == command_cmd) || (s[1] == '*'))
 		{
 			/* Verify the choice */
 #ifdef JP
