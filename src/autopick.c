@@ -1060,7 +1060,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	bool top = FALSE;
 
 #ifdef JP
-	cptr before_str[20], body_str;
+	cptr before_str[100], body_str;
 	int before_n = 0;
 
 	body_str = "アイテム";
@@ -2341,12 +2341,12 @@ void do_cmd_edit_autopick(void)
 			/* Get description of an autopicker preference line */
 			else if (autopick_new_entry(entry, lines_list[cy]))
 			{
-				char temp[80*4];
+				char temp[1024];
 				cptr t;
 
 				describe_autopick(buf, entry);
 
-				roff_to_buf(buf, 79, temp);
+				roff_to_buf(buf, 81, temp);
 				t = temp;
 				for (i = 0; i< 2; i++)
 				{
