@@ -3958,8 +3958,6 @@ void calc_bonuses(void)
 		/* Extract the item flags */
 		object_flags(o_ptr, &f1, &f2, &f3);
 
-		if (((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_WARNING)) || (o_ptr->name1 == ART_BARAHIR)) p_ptr->warning = TRUE;
-
 		/* Affect stats */
 		if (f1 & (TR1_STR)) p_ptr->stat_add[A_STR] += o_ptr->pval;
 		if (f1 & (TR1_INT)) p_ptr->stat_add[A_INT] += o_ptr->pval;
@@ -4016,6 +4014,7 @@ void calc_bonuses(void)
 		if (f3 & (TR3_FEATHER))     p_ptr->ffall = TRUE;
 		if (f2 & (TR2_FREE_ACT))    p_ptr->free_act = TRUE;
 		if (f2 & (TR2_HOLD_LIFE))   p_ptr->hold_life = TRUE;
+		if (f3 & (TR3_WARNING))     p_ptr->warning = TRUE;
 
 		/* Immunity flags */
 		if (f2 & (TR2_IM_FIRE)) p_ptr->immune_fire = TRUE;

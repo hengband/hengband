@@ -4480,15 +4480,14 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 	{
 		int oy, ox;
 
-#ifdef USE_FRAKIR
-                if (p_ptr->warning)
-		  {
-		    if(!process_frakir(x,y))
-		      {
-			energy_use = 25;return;
-		      }
-		  }
-#endif
+		if (p_ptr->warning)
+		{
+			if(!process_frakir(x,y))
+			{
+				energy_use = 25;
+				return;
+			}
+		}
 
 		if (do_past)
 		{

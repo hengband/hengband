@@ -890,10 +890,7 @@ extern cptr item_activation(object_type *o_ptr);
 extern void combine_pack(void);
 extern void reorder_pack(void);
 extern void display_koff(int k_idx);
-
-#ifdef USE_FRAKIR
 extern bool process_frakir(int xx, int yy);
-#endif
 extern void do_cmd_kaji(bool only_browse);
 
 /* racial.c */
