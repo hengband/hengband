@@ -15,48 +15,48 @@
 /*
  * Macros for Keywords
  */
-#define FLG_ALL 0
-#define FLG_COLLECTING 1
-#define FLG_UNIDENTIFIED 2
-#define FLG_IDENTIFIED 3
+#define FLG_ALL             0
+#define FLG_COLLECTING	    1
+#define FLG_UNIDENTIFIED    2
+#define FLG_IDENTIFIED	    3
 #define FLG_STAR_IDENTIFIED 4
-#define FLG_NAMELESS 5
-#define FLG_UNAWARE 6
-#define FLG_WORTHLESS 7
-#define FLG_BOOSTED 8
-#define FLG_MORE_THAN 9
-#define FLG_DICE 10
-#define FLG_WANTED 11
-#define FLG_UNIQUE 12
-#define FLG_HUMAN 13
-#define FLG_UNREADABLE 14
-#define FLG_REALM1 15
-#define FLG_REALM2 16
-#define FLG_FIRST 17
-#define FLG_SECOND 18
-#define FLG_THIRD 19
-#define FLG_FOURTH 20
-#define FLG_ITEMS 21
-#define FLG_XXX1 22 /* unused */
-#define FLG_WEAPONS 23
-#define FLG_ARMORS 24
-#define FLG_MISSILES 25
-#define FLG_DEVICES 26
-#define FLG_LIGHTS 27
-#define FLG_JUNKS 28
-#define FLG_SPELLBOOKS 29
-#define FLG_HAFTED 30
-#define FLG_SHIELDS 31
-#define FLG_BOWS 32
-#define FLG_RINGS 33
-#define FLG_AMULETS 34
-#define FLG_SUITS 35
-#define FLG_CLOAKS 36
-#define FLG_HELMS 37
-#define FLG_GLOVES 38
-#define FLG_BOOTS 39
-#define FLG_EGO 40
-#define FLG_ARTIFACT 41
+#define FLG_ARTIFACT	    5
+#define FLG_EGO		    6
+#define FLG_NAMELESS	    7
+#define FLG_UNAWARE	    8
+#define FLG_WORTHLESS	    9
+#define FLG_BOOSTED	    10
+#define FLG_MORE_THAN	    11
+#define FLG_DICE	    12
+#define FLG_WANTED	    13
+#define FLG_UNIQUE	    14
+#define FLG_HUMAN	    15
+#define FLG_UNREADABLE	    16
+#define FLG_REALM1	    17
+#define FLG_REALM2	    18
+#define FLG_FIRST	    19
+#define FLG_SECOND	    20
+#define FLG_THIRD	    21
+#define FLG_FOURTH	    22
+
+#define FLG_ITEMS	    30
+#define FLG_WEAPONS	    31
+#define FLG_ARMORS	    32
+#define FLG_MISSILES	    33
+#define FLG_DEVICES	    34
+#define FLG_LIGHTS	    35
+#define FLG_JUNKS	    36
+#define FLG_SPELLBOOKS	    37
+#define FLG_HAFTED	    38
+#define FLG_SHIELDS	    39
+#define FLG_BOWS	    40
+#define FLG_RINGS	    41
+#define FLG_AMULETS	    42
+#define FLG_SUITS	    43
+#define FLG_CLOAKS	    44
+#define FLG_HELMS	    45
+#define FLG_GLOVES	    46
+#define FLG_BOOTS           47
 
 #ifdef JP
 
@@ -65,6 +65,8 @@
 #define KEY_UNIDENTIFIED "未鑑定の"
 #define KEY_IDENTIFIED "鑑定済みの"
 #define KEY_STAR_IDENTIFIED "*鑑定*済みの"
+#define KEY_ARTIFACT "アーティファクト"
+#define KEY_EGO "エゴ"
 #define KEY_NAMELESS "無銘の"
 #define KEY_UNAWARE "未判明の"
 #define KEY_WORTHLESS "無価値の"
@@ -82,7 +84,6 @@
 #define KEY_THIRD "3冊目の"
 #define KEY_FOURTH "4冊目の"
 #define KEY_ITEMS "アイテム"
-#define KEY_XXX1 ""
 #define KEY_WEAPONS "武器"
 #define KEY_ARMORS "防具"
 #define KEY_MISSILES "矢"
@@ -100,8 +101,6 @@
 #define KEY_HELMS "兜"
 #define KEY_GLOVES "籠手"
 #define KEY_BOOTS "靴"
-#define KEY_EGO "エゴ"
-#define KEY_ARTIFACT "アーティファクト"
 
 #else 
 
@@ -110,6 +109,8 @@
 #define KEY_UNIDENTIFIED "unidentified"
 #define KEY_IDENTIFIED "identified"
 #define KEY_STAR_IDENTIFIED "*identified*"
+#define KEY_ARTIFACT "artifact"
+#define KEY_EGO "ego"
 #define KEY_NAMELESS "nameless"
 #define KEY_UNAWARE "unaware"
 #define KEY_WORTHLESS "worthless"
@@ -127,7 +128,6 @@
 #define KEY_THIRD "third"
 #define KEY_FOURTH "fourth"
 #define KEY_ITEMS "items"
-#define KEY_XXX1
 #define KEY_WEAPONS "weapons"
 #define KEY_ARMORS "armors"
 #define KEY_MISSILES "missiles"
@@ -145,8 +145,6 @@
 #define KEY_HELMS "helms"
 #define KEY_GLOVES "gloves"
 #define KEY_BOOTS "boots"
-#define KEY_EGO "ego"
-#define KEY_ARTIFACT "artifact"
 
 #endif /* JP */
 
@@ -1062,7 +1060,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	/*** Unreadable spellbooks ***/
 	if (IS_FLG(FLG_UNREADABLE))
 	{
-		before_str[before_n++] = "領域が異なる為にあなたには読めない";
+		before_str[before_n++] = "あなたが読めない領域の";
 		body_str = "魔法書";
 	}
 

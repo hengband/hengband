@@ -66,6 +66,8 @@
 #      unidentified      : Unidentified items match.
 #      identified        : Identified items match.
 #      *identified*      : *Identified* items match.
+#      artifacts         : Artifacts items match.
+#      ego               : Ego items match.
 #      nameless          : Non ego/non artifact items match.
 #      unaware           : Items with unknown effects match.
 #      worthless         : Items which you cannot sell match.
@@ -84,11 +86,10 @@
 #
 #      items             : All items match. Use it with an adjective for 
 #                          readability (i.e. "unaware items").
-#      artifacts         : All artifacts match.
 #      weapons           : All weapons including missile weapons match.
 #      armors            : All armors match.
 #      missiles          : Arrows, bolts, and shots match.
-#      magical devices   : Wands, staffs and rods match.
+#      magical devices   : Wands, staffs, rods and scrolls match.
 #      lights            : Light sources match.
 #      junks             : Junk items like Shard of Pottery or etc. match.
 #      spellbooks        : All books match.
