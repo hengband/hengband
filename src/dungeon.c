@@ -6832,14 +6832,14 @@ quit("セーブファイルが壊れています");
 		Rand_quick = TRUE;
 
 		/* Initialize the saved floors data */
-		init_saved_floors();
+		init_saved_floors(FALSE);
 	}
 
 	/* Old game is loaded.  But new game is requested. */
 	else if (new_game)
 	{
-		/* Delete expanded temporal files */
-		clear_saved_floor_files();
+		/* Initialize the saved floors data */
+		init_saved_floors(TRUE);
 	}
 
 	/* Process old character */

@@ -2868,7 +2868,7 @@ static errr rd_dungeon(void)
 	int i;
 
 	/* Initialize saved_floors array and temporal files */
-	init_saved_floors();
+	init_saved_floors(FALSE);
 
 	/* Older method */
 	if (h_older_than(1, 5, 0, 0))

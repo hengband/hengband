@@ -5195,6 +5195,7 @@ extern int PlayerUID;
 #define CFM_RAND_CONNECT 0x0040  /* Connect with random stairs */
 #define CFM_CLEAR_ALL    0x0080  /* Reach to the surface/Recall/Alter reality */
 #define CFM_NO_RETURN    0x0100  /* Flee from random quest etc... */
+#define CFM_FIRST_FLOOR  0x0200  /* Create exit from the dungeon */
 
 
 /*

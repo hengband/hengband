@@ -5132,9 +5132,6 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 
 		chg_virtue(V_SACRIFICE, 10);
 
-		/* Clear all saved floors */
-		prepare_change_floor_mode(CFM_CLEAR_ALL);
-
 		/* Leaving */
 		p_ptr->leaving = TRUE;
 

@@ -23,13 +23,12 @@ static u32b latest_visit_mark;  /* Max number of visit_mark */
  * Initialize saved_floors array.  Make sure that old temporal files
  * are not remaining as gurbages.
  */
-void init_saved_floors(void)
+void init_saved_floors(bool force)
 {
 	char floor_savefile[1024];
 	int i;
 	int fd = -1;
 	int mode = 0644;
-	bool force = FALSE;
 
 #ifdef SET_UID
 # ifdef SECURE
@@ -119,8 +118,7 @@ void init_saved_floors(void)
 
 /*
  * Kill temporal files
- * Should be called just before the game quit
- * and before new game discarding saved game.
+ * Should be called just before the game quit.
  */
 void clear_saved_floor_files(void)
 {
@@ -749,6 +747,97 @@ static bool feat_uses_special(byte feat)
 
 
 /*
+ * Virtually teleport onto the stairs that is connecting between two
+ * floors.
+ *
+ * Teleport level spell and trap doors will always lead the player to
+ * the one of the floors connected by the one of the stairs in the
+ * current floor.
+ */
+static void locate_connected_stairs(saved_floor_type *sf_ptr)
+{
+	int x, y, sx = 0, sy = 0;
+	int x_table[20];
+	int y_table[20];
+	int num = 0;
+	int i;
+
+	/* Search usable stairs */
+	for (y = 0; y < cur_hgt; y++)
+	{
+		for (x = 0; x < cur_wid; x++)
+		{
+			cave_type *c_ptr = &cave[y][x];
+			bool ok = FALSE;
+
+			if (change_floor_mode & CFM_UP)
+			{
+				if (c_ptr->feat == FEAT_LESS ||
+				    c_ptr->feat == FEAT_LESS_LESS)
+				{
+					ok = TRUE;
+
+					/* Found fixed stairs? */
+					if (c_ptr->special &&
+					    c_ptr->special == sf_ptr->upper_floor_id)
+					{
+						sx = x;
+						sy = y;
+					}
+				}
+			}
+			else if (change_floor_mode & CFM_DOWN)
+			{
+				if (c_ptr->feat == FEAT_MORE ||
+				    c_ptr->feat == FEAT_MORE_MORE)
+				{
+					ok = TRUE;
+
+					/* Found fixed stairs */
+					if (c_ptr->special &&
+					    c_ptr->special == sf_ptr->lower_floor_id)
+					{
+						sx = x;
+						sy = y;
+					}
+				}
+			}
+
+			if (ok && num < 20)
+			{
+				x_table[num] = x;
+				y_table[num] = y;
+				num++;
+			}
+		}
+	}
+
+	if (sx)
+	{
+		/* Already fixed */
+		py = sy;
+		px = sx;
+	}
+	else if (!num)
+	{
+		/* No stairs found! -- No return */
+		prepare_change_floor_mode(CFM_RAND_PLACE | CFM_NO_RETURN);
+
+		/* Mega Hack -- It's not the stairs you enter.  Disable it.  */
+		if (!feat_uses_special(cave[py][px].feat)) cave[py][px].special = 0;
+	}
+	else
+	{
+		/* Choose random one */
+		i = randint0(num);
+
+		/* Point stair location */
+		py = y_table[i];
+		px = x_table[i];
+	}
+}
+
+/*
  * Maintain quest monsters, mark next floor_id at stairs, save current
  * floor, and prepare to enter next floor.
  */
@@ -768,22 +857,15 @@ void leave_floor(void)
 	/* New floor is not yet prepared */
 	new_floor_id = 0;
 
-
-	if (!p_ptr->floor_id)
+	/* Temporary get a floor_id (for Arena) */
+	if (!p_ptr->floor_id &&
+	    !(change_floor_mode & (CFM_NO_RETURN | CFM_CLEAR_ALL)))
 	{
-		if (change_floor_mode & (CFM_NO_RETURN | CFM_CLEAR_ALL))
-		{
-			/* No need to save current floor */
-			return;
-		}
-		else
-		{
-			/* Get temporal floor_id */
-			p_ptr->floor_id = get_new_floor_id();
-
-			/* Record the dungeon level */
-			get_sf_ptr(p_ptr->floor_id)->dun_level = dun_level;
-		}
+	    /* Get temporal floor_id */
+	    p_ptr->floor_id = get_new_floor_id();
+	    
+	    /* Record the dungeon level */
+	    get_sf_ptr(p_ptr->floor_id)->dun_level = dun_level;
 	}
 
 
@@ -845,88 +927,12 @@ void leave_floor(void)
 	/* Choose random stairs */
 	if ((change_floor_mode & CFM_RAND_CONNECT) && p_ptr->floor_id)
 	{
-		int x, y, sx = 0, sy = 0;
-		int x_table[20];
-		int y_table[20];
-		int num = 0;
-		int i;
-
-		/* Search usable stairs */
-		for (y = 0; y < cur_hgt; y++)
-		{
-			for (x = 0; x < cur_wid; x++)
-			{
-				cave_type *c_ptr = &cave[y][x];
-				bool ok = FALSE;
-
-				if (change_floor_mode & CFM_UP)
-				{
-					/* Found fixed stairs */
-					if (c_ptr->special &&
-					    c_ptr->special == sf_ptr->upper_floor_id)
-					{
-						sx = x;
-						sy = y;
-					}
-
-					if (c_ptr->feat == FEAT_LESS ||
-					    c_ptr->feat == FEAT_LESS_LESS)
-						ok = TRUE;
-				}
-				else if (change_floor_mode & CFM_DOWN)
-				{
-					/* Found fixed stairs */
-					if (c_ptr->special &&
-					    c_ptr->special == sf_ptr->lower_floor_id)
-					{
-						sx = x;
-						sy = y;
-					}
-
-					if (c_ptr->feat == FEAT_MORE ||
-					    c_ptr->feat == FEAT_MORE_MORE)
-						ok = TRUE;
-				}
-
-				if (ok && num < 20)
-				{
-					x_table[num] = x;
-					y_table[num] = y;
-					num++;
-				}
-			}
-		}
-
-		if (sx)
-		{
-			/* Already fixed */
-			py = sy;
-			px = sx;
-		}
-		else if (!num)
-		{
-			/* No stairs found! -- No return */
-			prepare_change_floor_mode(CFM_RAND_PLACE | CFM_NO_RETURN);
-
-			/* Mega Hack -- It's not the stairs you enter.  Disable it.  */
-			if (!feat_uses_special(cave[py][px].feat)) cave[py][px].special = 0;
-		}
-		else
-		{
-			/* Choose random one */
-			i = randint0(num);
-
-			/* Point stair location */
-			py = y_table[i];
-			px = x_table[i];
-		}
+		locate_connected_stairs(sf_ptr);
 	}
 
 	/* Extract new dungeon level */
 	if (!(change_floor_mode & CFM_CLEAR_ALL))
 	{
-		int move_num = 0;
-
 		/* Extract stair position */
 		c_ptr = &cave[py][px];
 
@@ -937,24 +943,32 @@ void leave_floor(void)
 			new_floor_id = c_ptr->special;
 		}
 
-		/* Extract level movement number */
-		if (change_floor_mode & CFM_DOWN) move_num = 1;
-		else if (change_floor_mode & CFM_UP) move_num = -1;
-
 		/* Mark shaft up/down */
 		if (c_ptr->feat == FEAT_LESS_LESS ||
 		    c_ptr->feat == FEAT_MORE_MORE)
 		{
 			prepare_change_floor_mode(CFM_SHAFT);
-			move_num += SGN(move_num);
 		}
+	}
+
+	/* Climb up/down some sort of stairs */
+	if (change_floor_mode & (CFM_DOWN | CFM_UP))
+	{
+		int move_num = 0;
+
+		/* Extract level movement number */
+		if (change_floor_mode & CFM_DOWN) move_num = 1;
+		else if (change_floor_mode & CFM_UP) move_num = -1;
+
+		/* Shafts are deeper than normal stairs */
+		if (change_floor_mode & CFM_SHAFT)
+			move_num += SGN(move_num);
 
 		/* Get out from or Enter the dungeon */
 		if (change_floor_mode & CFM_DOWN)
 		{
-			/* Hack -- Prevent "wild to wild stair" */
 			if (!dun_level)
-				move_num = d_info[(c_ptr->feat == FEAT_ENTRANCE) ? c_ptr->special : DUNGEON_ANGBAND].mindepth;
+				move_num = d_info[dungeon_type].mindepth;
 		}
 		else if (change_floor_mode & CFM_UP)
 		{
@@ -981,6 +995,7 @@ void leave_floor(void)
 		prepare_change_floor_mode(CFM_CLEAR_ALL);
 	}
 
+	/* Kill some old saved floors */
 	if (change_floor_mode & CFM_CLEAR_ALL)
 	{
 		int i;
@@ -1088,7 +1103,8 @@ void change_floor(void)
 	ambush_flag = FALSE;
 
 	/* No saved floors (On the surface etc.) */
-	if (change_floor_mode & CFM_CLEAR_ALL)
+	if ((change_floor_mode & CFM_CLEAR_ALL) &&
+	    !(change_floor_mode & CFM_FIRST_FLOOR))
 	{
 		/* Create cave */
 		generate_cave();
@@ -1295,7 +1311,7 @@ void change_floor(void)
 			sf_ptr->dun_level = dun_level;
 
 			/* Create connected stairs */
-			if (!(change_floor_mode & (CFM_NO_RETURN | CFM_CLEAR_ALL)))
+			if (!(change_floor_mode & CFM_NO_RETURN))
 			{
 				/* Extract stair position */
 				cave_type *c_ptr = &cave[py][px];
@@ -1320,14 +1336,11 @@ void change_floor(void)
 						c_ptr->feat = FEAT_LESS;
 				}
 
-				if (!feat_uses_special(c_ptr->feat))
-				{
-					/* Paranoia -- Clear mimic */
-					c_ptr->mimic = 0;
+				/* Paranoia -- Clear mimic */
+				c_ptr->mimic = 0;
 
-					/* Connect to previous floor */
-					c_ptr->special = p_ptr->floor_id;
-				}
+				/* Connect to previous floor */
+				c_ptr->special = p_ptr->floor_id;
 			}
 		}
 

@@ -290,6 +290,9 @@ void do_cmd_go_down(void)
 			p_ptr->oldpx = px;
 			p_ptr->oldpy = py;
 			dungeon_type = (byte)target_dungeon;
+
+			/* Clear all saved floors */
+			prepare_change_floor_mode(CFM_CLEAR_ALL | CFM_FIRST_FLOOR);
 		}
 
 		/* Hack -- take a turn */

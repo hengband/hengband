@@ -762,7 +762,7 @@ extern char *object_desc_kosuu(char *t, object_type *o_ptr);
 extern void object_desc(char *buf, object_type *o_ptr, int pref, int mode);
 
 /* floors.c */
-extern void init_saved_floors(void);
+extern void init_saved_floors(bool force);
 extern void clear_saved_floor_files(void);
 extern saved_floor_type *get_sf_ptr(s16b floor_id);
 extern s16b get_new_floor_id(void);
