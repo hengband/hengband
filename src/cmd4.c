@@ -7011,7 +7011,7 @@ static void do_cmd_knowledge_pets(void)
 			char pet_name[80];
 			t_friends++;
 			monster_desc(pet_name, m_ptr, 0x88);
-			fprintf(fff, "%s (%s)", pet_name, look_mon_desc(i));
+			fprintf(fff, "%s (%s)", pet_name, look_mon_desc(i, 0x00));
 			if (p_ptr->riding == i)
 #ifdef JP
 				fprintf(fff, " ¾èÇÏÃæ");
