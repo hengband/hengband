@@ -5409,6 +5409,7 @@ static bool player_birth_aux(void)
 			sp_ptr = &sex_info[p_ptr->psex];
 			rp_ptr = &race_info[p_ptr->prace];
 			cp_ptr = &class_info[p_ptr->pclass];
+                        mp_ptr = &m_info[p_ptr->pclass];
 			ap_ptr = &seikaku_info[p_ptr->pseikaku];
 
 			/* Calc hitdie, but don't roll */
