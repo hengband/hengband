@@ -3816,7 +3816,7 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
 			{
 				p = t;
 				t = process_dungeon_file_expr(&s, &f);
-				if (*t && (strcmp(p, t) > 0)) v = "0";
+				if (*t && atoi(p) > atoi(t)) v = "0";
 			}
 		}
 
@@ -3832,7 +3832,9 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
 			{
 				p = t;
 				t = process_dungeon_file_expr(&s, &f);
-				if (*t && (strcmp(p, t) < 0)) v = "0";
+
+				/* Compare two numbers instead of string */
+				if (*t && atoi(p) < atoi(t)) v = "0";
 			}
 		}
 

@@ -878,7 +878,7 @@ cptr process_pref_file_expr(cptr *sp, char *fp)
 			{
 				p = t;
 				t = process_pref_file_expr(&s, &f);
-				if (*t && (strcmp(p, t) > 0)) v = "0";
+				if (*t && atoi(p) > atoi(t)) v = "0";
 			}
 		}
 
@@ -894,7 +894,9 @@ cptr process_pref_file_expr(cptr *sp, char *fp)
 			{
 				p = t;
 				t = process_pref_file_expr(&s, &f);
-				if (*t && (strcmp(p, t) < 0)) v = "0";
+
+				/* Compare two numbers instead of string */
+				if (*t && atoi(p) < atoi(t)) v = "0";
 			}
 		}
 
