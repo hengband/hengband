@@ -2144,17 +2144,6 @@ void do_cmd_query_symbol(void)
 		/* Hack -- Handle stuff */
 		handle_stuff();
 
-		/* Hack -- Begin the prompt */
-		roff_top(r_idx);
-
-		/* Hack -- Complete the prompt */
-#ifdef JP
-		Term_addstr(-1, TERM_WHITE, " ['r'思い出, ESC]");
-#else
-		Term_addstr(-1, TERM_WHITE, " [(r)ecall, ESC]");
-#endif
-
-
 		/* Interact */
 		while (1)
 		{
@@ -2166,15 +2155,17 @@ void do_cmd_query_symbol(void)
 
 				/* Recall on screen */
 				screen_roff(who[i], 0);
-
-				/* Hack -- Complete the prompt (again) */
-#ifdef JP
-				Term_addstr(-1, TERM_WHITE, " ['r'思い出, ESC]");
-#else
-				Term_addstr(-1, TERM_WHITE, " [(r)ecall, ESC]");
-#endif
-
 			}
+
+			/* Hack -- Begin the prompt */
+			roff_top(r_idx);
+
+			/* Hack -- Complete the prompt */
+#ifdef JP
+			Term_addstr(-1, TERM_WHITE, " ['r'思い出, ESC]");
+#else
+			Term_addstr(-1, TERM_WHITE, " [(r)ecall, ESC]");
+#endif
 
 			/* Command */
 			query = inkey();
