@@ -3687,6 +3687,52 @@ note = "は眠り込んでしまった！";
 
 
 		/* Sleep (Use "dam" as "power") */
+		case GF_STASIS_EVIL:
+		{
+			if (seen) obvious = TRUE;
+
+			if (r_ptr->flags3 & (RF3_RES_ALL))
+			{
+#ifdef JP
+				note = "には効果がなかった！";
+#else
+				note = " is immune.";
+#endif
+				dam = 0;
+				if (seen) r_ptr->r_flags3 |= (RF3_RES_ALL);
+				break;
+			}
+			/* Attempt a saving throw */
+			if ((r_ptr->flags1 & RF1_UNIQUE) ||
+			    !(r_ptr->flags3 & RF3_EVIL) ||
+			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			{
+#ifdef JP
+note = "には効果がなかった！";
+#else
+				note = " is unaffected!";
+#endif
+
+				obvious = FALSE;
+			}
+			else
+			{
+				/* Go to sleep (much) later */
+#ifdef JP
+note = "は動けなくなった！";
+#else
+				note = " is suspended!";
+#endif
+
+				do_sleep = 500;
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+		/* Sleep (Use "dam" as "power") */
 		case GF_STASIS:
 		{
 			if (seen) obvious = TRUE;
@@ -5726,6 +5772,36 @@ note = "を支配した。";
 
 			/* No "real" damage */
 			dam = 0;
+			break;
+		}
+
+		case GF_WOUNDS:
+		{
+			if (seen) obvious = TRUE;
+
+			if (r_ptr->flags3 & (RF3_RES_ALL))
+			{
+#ifdef JP
+				note = "には完全な耐性がある！";
+#else
+				note = " is immune.";
+#endif
+				skipped = TRUE;
+				if (seen) r_ptr->r_flags3 |= (RF3_RES_ALL);
+				break;
+			}
+
+			/* Attempt a saving throw */
+			if (randint0(100 + dam) < (r_ptr->level + 50))
+			{
+
+#ifdef JP
+note = "には効果がなかった。";
+#else
+				note = "is unaffected!";
+#endif
+				dam = 0;
+			}
 			break;
 		}
 

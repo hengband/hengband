@@ -329,6 +329,8 @@ static named_num gf_desc[] =
 	{"GF_STAR_HEAL",		GF_STAR_HEAL			},
 	{"GF_WATER_FLOW",		GF_WATER_FLOW			},
 	{"GF_CRUSADE",		GF_CRUSADE			},
+	{"GF_STASIS_EVIL",			GF_STASIS_EVIL		},
+	{"GF_WOUNDS",			GF_WOUNDS		},
 	{NULL, 						0						}
 };
 

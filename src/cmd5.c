@@ -1045,30 +1045,31 @@ static bool cast_life_spell(int spell)
 
 	switch (spell)
 	{
-	case 0: /* Detect Evil */
-		(void)detect_monsters_evil(DETECT_RAD_DEFAULT);
-		break;
-	case 1: /* Cure Light Wounds */
+	case 0: /* Cure Light Wounds */
 		(void)hp_player(damroll(2, 10));
 		(void)set_cut(p_ptr->cut - 10);
 		break;
-	case 2: /* Bless */
+	case 1: /* Bless */
 		(void)set_blessed(randint1(12) + 12, FALSE);
 		break;
-	case 3: /* Remove Fear */
-		(void)set_afraid(0);
+	case 2: /* Make Light Wounds */
+		if (!get_aim_dir(&dir)) return FALSE;
+		fire_ball_hide(GF_WOUNDS, dir, damroll(3 + ((plev - 1) / 5), 4), 0);
 		break;
-	case 4: /* Call Light */
+	case 3: /* Call Light */
 		(void)lite_area(damroll(2, (plev / 2)), (plev / 10) + 1);
 		break;
-	case 5: /* Detect Traps + Secret Doors */
+	case 4: /* Detect Traps + Secret Doors */
 		(void)detect_traps(DETECT_RAD_DEFAULT);
 		(void)detect_doors(DETECT_RAD_DEFAULT);
 		(void)detect_stairs(DETECT_RAD_DEFAULT);
 		break;
-	case 6: /* Cure Medium Wounds */
+	case 5: /* Cure Medium Wounds */
 		(void)hp_player(damroll(4, 10));
 		(void)set_cut((p_ptr->cut / 2) - 20);
+		break;
+	case 6: /* Cure Poison */
+		(void)set_poisoned(0);
 		break;
 	case 7: /* Satisfy Hunger */
 		(void)set_food(PY_FOOD_MAX - 1);
@@ -1083,30 +1084,24 @@ static bool cast_life_spell(int spell)
 #endif
 		}
 		break;
-	case 9: /* Cure Poison */
-		(void)set_poisoned(0);
+	case 9: /* Make Medium Wounds */
+		if (!get_aim_dir(&dir)) return FALSE;
+		fire_ball_hide(GF_WOUNDS, dir, damroll(8 + ((plev - 5) / 4), 8), 0);
 		break;
 	case 10: /* Cure Critical Wounds */
 		(void)hp_player(damroll(8, 10));
 		(void)set_stun(0);
 		(void)set_cut(0);
 		break;
-	case 11: /* Sense Unseen */
-		(void)set_tim_invis(randint1(24) + 24, FALSE);
+	case 11:
+		(void)set_oppose_cold(randint1(20) + 20, FALSE);
+		(void)set_oppose_fire(randint1(20) + 20, FALSE);
 		break;
-	case 12: /* Holy Orb */
-		if (!get_aim_dir(&dir)) return FALSE;
-
-		fire_ball(GF_HOLY_FIRE, dir,
-		          (damroll(3, 6) + plev +
-		          (plev / ((p_ptr->pclass == CLASS_PRIEST ||
-		             p_ptr->pclass == CLASS_HIGH_MAGE ||
-			     p_ptr->pclass == CLASS_SORCERER) ? 2 : 4))),
-		          ((plev < 30) ? 2 : 3));
-
+	case 12:
+		map_area(DETECT_RAD_MAP);
 		break;
-	case 13: /* Protection from Evil */
-		(void)set_protevil(randint1(25) + 3 * p_ptr->lev, FALSE);
+	case 13:
+		(void)turn_undead();
 		break;
 	case 14: /* Healing */
 		(void)hp_player(300);
@@ -1116,12 +1111,7 @@ static bool cast_life_spell(int spell)
 	case 15: /* Glyph of Warding */
 		warding_glyph();
 		break;
-	case 16: /* Exorcism */
-		(void)dispel_undead(randint1(plev));
-		(void)dispel_demons(randint1(plev));
-		(void)turn_evil(plev);
-		break;
-	case 17: /* Dispel Curse */
+	case 16: /* Dispel Curse */
 		if (remove_all_curse())
 		{
 #ifdef JP
@@ -1131,51 +1121,41 @@ static bool cast_life_spell(int spell)
 #endif
 		}
 		break;
-	case 18: /* Dispel Undead + Demons */
-		(void)dispel_undead(randint1(plev * 3));
-		(void)dispel_demons(randint1(plev * 3));
+	case 17: /* Perception */
+		return ident_spell(FALSE);
+	case 18: /* Dispel Undead */
+		(void)dispel_undead(randint1(plev * 5));
 		break;
 	case 19: /* 'Day of the Dove' */
 		charm_monsters(plev * 2);
 		break;
-	case 20: /* Dispel Evil */
-		(void)dispel_evil(randint1(plev * 4));
+	case 20: /* Make Critical Wounds */
+		if (!get_aim_dir(&dir)) return FALSE;
+		fire_ball_hide(GF_WOUNDS, dir, damroll(5+((plev - 5) / 3), 15), 0);
 		break;
-	case 21: /* Banishment */
-		if (banish_evil(100))
-		{
-#ifdef JP
-msg_print("神の御力が邪悪を打ち払った！");
-#else
-			msg_print("The power of your god banishes evil!");
-#endif
-
-		}
+	case 21: /* Word of Recall */
+		if (!word_of_recall()) return FALSE;
 		break;
-	case 22: /* Holy Word */
-		(void)dispel_evil(randint1(plev * 4));
-		(void)hp_player(1000);
-		(void)set_afraid(0);
-		(void)set_poisoned(0);
-		(void)set_stun(0);
-		(void)set_cut(0);
+	case 22: /* Alter Reality */
+		alter_reality();
 		break;
 	case 23: /* Warding True */
 		warding_glyph();
 		glyph_creation();
 		break;
-	case 24: /* Heroism */
-		(void)set_hero(randint1(25) + 25, FALSE);
-		(void)hp_player(10);
-		(void)set_afraid(0);
+	case 24:
+		num_repro += MAX_REPRO;
 		break;
-	case 25: /* Prayer */
-		(void)set_blessed(randint1(48) + 48, FALSE);
+	case 25: /* Detection True */
+		(void)detect_all(DETECT_RAD_DEFAULT);
 		break;
-	case 26: /* Turn Undead */
+	case 26: /* Genocide Undead */
 		(void)mass_genocide_undead(plev+50,TRUE);
 		break;
-	case 27: /* Restoration */
+	case 27: /* Clairvoyance */
+		wiz_lite(FALSE, FALSE);
+		break;
+	case 28: /* Restoration */
 		(void)do_res_stat(A_STR);
 		(void)do_res_stat(A_INT);
 		(void)do_res_stat(A_WIS);
@@ -1184,27 +1164,13 @@ msg_print("神の御力が邪悪を打ち払った！");
 		(void)do_res_stat(A_CHR);
 		(void)restore_level();
 		break;
-	case 28: /* Healing True */
+	case 29: /* Healing True */
 		(void)hp_player(2000);
 		(void)set_stun(0);
 		(void)set_cut(0);
 		break;
-	case 29: /* Holy Vision */
+	case 30: /* Holy Vision */
 		return identify_fully(FALSE);
-	case 30: /* Divine Intervention */
-		project(0, 1, py, px, 500, GF_HOLY_FIRE, PROJECT_KILL, -1);
-		dispel_monsters(plev * 4);
-		slow_monsters();
-		stun_monsters(plev * 4);
-		confuse_monsters(plev * 4);
-		turn_monsters(plev * 4);
-		stasis_monsters(plev * 4);
-		summon_specific(-1, py, px, plev, SUMMON_ANGEL, (PM_ALLOW_GROUP | PM_FORCE_PET));
-		(void)set_hero(randint1(25) + 25, FALSE);
-		(void)hp_player(300);
-		(void)set_fast(randint1(20 + plev) + plev, FALSE);
-		(void)set_afraid(0);
-		break;
 	case 31: /* Ultimate resistance */
 	{
 		int v = randint1(plev/2)+plev/2;
@@ -3993,42 +3959,39 @@ static bool cast_haja_spell(int spell)
 	case 1:
 		(void)detect_monsters_evil(DETECT_RAD_DEFAULT);
 		break;
-	case 2: /* Bless */
-		(void)set_blessed(randint1(12) + 12, FALSE);
-		break;
-	case 3: /* Remove Fear */
+	case 2: /* Remove Fear */
 		(void)set_afraid(0);
 		break;
-	case 4:
+	case 3:
 		if (!get_aim_dir(&dir)) return FALSE;
 
 		(void)fear_monster(dir, plev);
 		break;
-	case 5:
+	case 4:
 		(void)sleep_monsters_touch();
 		break;
-	case 6:
+	case 5:
 		teleport_player(plev*3);
 		break;
-	case 7:
+	case 6:
 		if (!get_aim_dir(&dir)) return FALSE;
 		fire_blast(GF_LITE, dir, 3+((plev-1)/8), 3, 10, 3);
 		break;
-	case 8:
+	case 7:
 		(void)set_cut(0);
 		(void)set_poisoned(0);
 		(void)set_stun(0);
 		break;
-	case 9:
+	case 8:
 		if (!get_aim_dir(&dir)) return FALSE;
 		(void)fire_ball(GF_AWAY_EVIL, dir, MAX_SIGHT*5, 0);
 		break;
-	case 10: /* Exorcism */
+	case 9: /* Exorcism */
 		(void)dispel_undead(randint1(plev));
 		(void)dispel_demons(randint1(plev));
 		(void)turn_evil(plev);
 		break;
-	case 11: /* Holy Orb */
+	case 10: /* Holy Orb */
 		if (!get_aim_dir(&dir)) return FALSE;
 
 		fire_ball(GF_HOLY_FIRE, dir,
@@ -4038,6 +4001,16 @@ static bool cast_haja_spell(int spell)
 			     p_ptr->pclass == CLASS_SORCERER) ? 2 : 4))),
 		          ((plev < 30) ? 2 : 3));
 
+		break;
+	case 11: /* Remove Curse */
+		if (remove_curse())
+		{
+#ifdef JP
+			msg_print("誰かに見守られているような気がする。");
+#else
+			msg_print("You feel as if someone is watching over you.");
+#endif
+		}
 		break;
 	case 12: /* Sense Unseen */
 		(void)set_tim_invis(randint1(24) + 24, FALSE);
@@ -4062,15 +4035,9 @@ static bool cast_haja_spell(int spell)
 
 		(void)destroy_door(dir);
 		break;
-	case 17: /* Remove Curse */
-		if (remove_curse())
-		{
-#ifdef JP
-			msg_print("誰かに見守られているような気がする。");
-#else
-			msg_print("You feel as if someone is watching over you.");
-#endif
-		}
+	case 17:
+		if (!get_aim_dir(&dir)) return FALSE;
+		(void)stasis_evil(dir);
 		break;
 	case 18:
 		set_tim_sh_holy(randint1(20)+20, FALSE);
@@ -4137,9 +4104,9 @@ msg_print("「我は汝の下僕にあらず！ 悪行者よ、悔い改めよ！」");
 		if (banish_evil(100))
 		{
 #ifdef JP
-msg_print("神の御力が邪悪を打ち払った！");
+msg_print("神聖な力が邪悪を打ち払った！");
 #else
-			msg_print("The power of your god banishes evil!");
+			msg_print("The power of your god banishes evil!"); /* nanka */
 #endif
 
 		}
@@ -4153,39 +4120,55 @@ msg_print("神の御力が邪悪を打ち払った！");
 	case 29:
 		{
 			int x, y, tx, ty;
+			int nx, ny;
 			int dir, i;
 			int b = 10 + randint1(10);
+
 			if (!get_aim_dir(&dir)) return FALSE;
-			tx = px;
-			ty = py;
+
+			/* Use the given direction */
+			tx = px + 99 * ddx[dir];
+			ty = py + 99 * ddy[dir];
 
 			/* Hack -- Use an actual "target" */
-			if (dir != 5) {
-				while(1)
-				{
-					if (cave_stop_disintegration(ty + ddy[dir], tx + ddx[dir])) break;
-					tx += ddx[dir];
-					ty += ddy[dir];
-					if (!cave_floor_bold(ty,tx) || !player_has_los_bold(ty, tx) || cave[ty][tx].m_idx) break;
-				}
-			}
-			else if (target_okay() && !cave_stop_disintegration(target_row, target_col) && in_disintegration_range(py, px, target_row, target_col))
+			if ((dir == 5) && target_okay())
 			{
 				tx = target_col;
 				ty = target_row;
 			}
 
+			x = px;
+			y = py;
+
+			while(1)
+			{
+				/* Hack -- Stop at the target */
+				if ((y == ty) && (x == tx)) break;
+
+				ny = y;
+				nx = x;
+				mmove2(&ny, &nx, py, px, ty, tx);
+
+				/* Stopped by walls/doors */
+				if (!cave_floor_bold(ny, nx)) break;
+
+				/* Save the new location */
+				x = nx;
+				y = ny;
+			}
+			tx = x;
+			ty = y;
 
 			for (i = 0; i < b; i++)
 			{
-				int count = 20, d = 0;
+				int count = randint1(2), d = 0;
 
 				while (count--)
 				{
 					int dx, dy;
 
-					x = tx - 8 + randint0(17);
-					y = ty - 8 + randint0(17);
+					x = tx - 5 + randint0(11);
+					y = ty - 5 + randint0(11);
 
 					if (!in_bounds(y,x) || cave_stop_disintegration(y,x) || !in_disintegration_range(ty, tx, y, x)) continue;
 
@@ -4904,10 +4887,10 @@ msg_format("%sをうまく唱えられなかった！", prayer);
 
 		sound(SOUND_FAIL);
 
-		if (realm == REALM_LIFE) /* nanka */
+		if (realm == REALM_LIFE)
 		{
 			if (randint1(100) < chance)
-				chg_virtue(V_FAITH, -1);
+				chg_virtue(V_VITALITY, -1);
 		}
 		else if (realm == REALM_DEATH)
 		{
@@ -4924,10 +4907,10 @@ msg_format("%sをうまく唱えられなかった！", prayer);
 			if (randint1(100) < chance)
 				chg_virtue(V_JUSTICE, 1);
 		}
-		if (realm == REALM_HAJA) /* nanka */
+		if (realm == REALM_HAJA)
 		{
 			if (randint1(100) < chance)
-				chg_virtue(V_FAITH, -1);
+				chg_virtue(V_JUSTICE, -1);
 		}
 		else if (randint1(100) < chance)
 		{
@@ -5059,12 +5042,12 @@ msg_print("An infernal sound echoed.");
 			/* Gain experience */
 			gain_exp(e * s_ptr->slevel);
 
-			if (realm == REALM_LIFE) /* nanka */
+			if (realm == REALM_LIFE)
 			{
-				chg_virtue(V_FAITH, 1);
+				chg_virtue(V_TEMPERANCE, 1);
 				chg_virtue(V_COMPASSION, 1);
 				chg_virtue(V_VITALITY, 1);
-				chg_virtue(V_HONOUR, 1);
+				chg_virtue(V_DILIGENCE, 1);
 			}
 			else if (realm == REALM_DEATH)
 			{
@@ -5080,11 +5063,11 @@ msg_print("An infernal sound echoed.");
 				chg_virtue(V_HONOUR, -1);
 				chg_virtue(V_TEMPERANCE, -1);
 			}
-			else if (realm == REALM_HAJA) /* nanka */
+			else if (realm == REALM_HAJA)
 			{
 				chg_virtue(V_FAITH, 1);
-				chg_virtue(V_COMPASSION, 1);
-				chg_virtue(V_VITALITY, 1);
+				chg_virtue(V_JUSTICE, 1);
+				chg_virtue(V_SACRIFICE, 1);
 				chg_virtue(V_HONOUR, 1);
 			}
 			else if (realm == REALM_NATURE)
@@ -5095,12 +5078,12 @@ msg_print("An infernal sound echoed.");
 			else
 				chg_virtue(V_KNOWLEDGE, 1);
 		}
-		if (realm == REALM_LIFE) /* nanka */
+		if (realm == REALM_LIFE)
 		{
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_FAITH, 1);
+			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_TEMPERANCE, 1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_COMPASSION, 1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_VITALITY, 1);
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_HONOUR, 1);
+			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_DILIGENCE, 1);
 		}
 		else if (realm == REALM_DEATH)
 		{
@@ -5116,11 +5099,11 @@ msg_print("An infernal sound echoed.");
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_HONOUR, -1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_TEMPERANCE, -1);
 		}
-		else if (realm == REALM_HAJA) /* nanka */
+		else if (realm == REALM_HAJA)
 		{
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_FAITH, 1);
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_COMPASSION, 1);
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_VITALITY, 1);
+			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_JUSTICE, 1);
+			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_SACRIFICE, 1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_HONOUR, 1);
 		}
 		else if (realm == REALM_NATURE)
@@ -5171,16 +5154,16 @@ msg_print("精神を集中しすぎて気を失ってしまった！");
 		/* Hack -- Bypass free action */
 		(void)set_paralyzed(p_ptr->paralyzed + randint1(5 * oops + 1));
 
-		if (realm == REALM_LIFE) /* nanka */
-			chg_virtue(V_FAITH, -10);
+		if (realm == REALM_LIFE)
+			chg_virtue(V_VITALITY, -10);
 		else if (realm == REALM_DEATH)
 			chg_virtue(V_UNLIFE, -10);
 		else if (realm == REALM_DAEMON)
 			chg_virtue(V_JUSTICE, 10);
 		else if (realm == REALM_NATURE)
 			chg_virtue(V_NATURE, -10);
-		else if (realm == REALM_HAJA) /* nanka */
-			chg_virtue(V_FAITH, -10);
+		else if (realm == REALM_HAJA)
+			chg_virtue(V_JUSTICE, -10);
 		else
 			chg_virtue(V_KNOWLEDGE, -10);
 

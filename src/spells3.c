@@ -4108,31 +4108,19 @@ static void spell_info(char *p, int spell, int realm)
 	case 0: /* Life */
 		switch (spell)
 		{
-		case  1: sprintf(p, " %s2d10", s_heal); break;
-		case  2: sprintf(p, " %s12+d12", s_dur); break;
-		case  4: sprintf(p, " %s%d", s_dam, 10 + (plev / 2)); break;
-		case  6: sprintf(p, " %s4d10", s_heal); break;
+		case  0: sprintf(p, " %s2d10", s_heal); break;
+		case  1: sprintf(p, " %s12+d12", s_dur); break;
+		case  2: sprintf(p, " %s%dd4", s_dam, 3 + ((plev - 1) / 5)); break;
+		case  3: sprintf(p, " %s%d", s_dam, 10 + (plev / 2)); break;
+		case  5: sprintf(p, " %s4d10", s_heal); break;
+		case  9: sprintf(p, " %s%dd8", s_dam, 8 + ((plev - 1) / 5)); break;
 		case 10: sprintf(p, " %s8d10", s_heal); break;
-		case 11: sprintf(p, " %s24+d24", s_dur); break;
-		case 12: sprintf(p, " %s3d6+%d", s_dam, orb); break;
-		case 13: sprintf(p, " %sd25+%d", s_dur, 3 * plev); break;
+		case 11: sprintf(p, " %s20+d20", s_dur); break;
 		case 14: sprintf(p, " %s300", s_heal); break;
-		case 16: sprintf(p, " %sd%d", s_dam, plev); break;
-		case 18: sprintf(p, " %sd%d", s_dam, 3 * plev); break;
-		case 20: sprintf(p, " %sd%d", s_dam, 4 * plev); break;
-#ifdef JP
-		case 22: sprintf(p, " Â»:d%d/²ó:1000", 4 * plev); break;
-#else
-		case 22: sprintf(p, " d %d/h 1000", 4 * plev); break;
-#endif
-		case 24: sprintf(p, " %s25+d25", s_dur); break;
-		case 25: sprintf(p, " %s48+d48", s_dur); break;
-		case 28: sprintf(p, " %s2000", s_heal); break;
-#ifdef JP
-		case 30: sprintf(p, " ²ó300/Â»%d+250", plev * 4); break;
-#else
-		case 30: sprintf(p, " h300/d%d+250", plev * 4); break;
-#endif
+		case 18: sprintf(p, " %sd%d", s_dam, 5 * plev); break;
+		case 20: sprintf(p, " %s%dd15", s_dam, 5 + ((plev - 1) / 3)); break;
+		case 21: sprintf(p, " %s15+d21", s_delay); break;
+		case 29: sprintf(p, " %s2000", s_heal); break;
 		case 31: sprintf(p, " %s%d+d%d", s_dur,(plev/2), (plev/2)); break;
 		}
 		break;
@@ -4348,14 +4336,14 @@ static void spell_info(char *p, int spell, int realm)
 		switch (spell)
 		{
 		case  0: sprintf(p, " %s%dd4", s_dam, 3 + ((plev - 1) / 5)); break;
-		case  6: sprintf(p, " %s%d", s_range, plev*3); break;
+		case  5: sprintf(p, " %s%d", s_range, plev*3); break;
 #ifdef JP
-		case  7: sprintf(p, " %s³Æ%dd3", s_dam, 3+((plev-1)/8)); break;
+		case  6: sprintf(p, " %s³Æ%dd3", s_dam, 3+((plev-1)/8)); break;
 #else
-		case  7: sprintf(p, " %s%dd3 each", s_dam, 3+((plev-1)/8)); break;
+		case  6: sprintf(p, " %s%dd3 each", s_dam, 3+((plev-1)/8)); break;
 #endif
-		case 10: sprintf(p, " %sd%d", s_dam, plev); break;
-		case 11: sprintf(p, " %s3d6+%d", s_dam, orb); break;
+		case  9: sprintf(p, " %sd%d", s_dam, plev); break;
+		case 10: sprintf(p, " %s3d6+%d", s_dam, orb); break;
 		case 12: sprintf(p, " %s24+d24", s_dur); break;
 		case 13: sprintf(p, " %sd25+%d", s_dur, 3 * plev); break;
 		case 14: sprintf(p, " %s%d", s_dam, plev*5); break;
@@ -4375,9 +4363,9 @@ static void spell_info(char *p, int spell, int realm)
 		case 29: sprintf(p, " %s%d each", s_dam, plev*4); break;
 #endif
 #ifdef JP
-		case 30: sprintf(p, " ²ó100/Â»%d+250", plev * 4); break;
+		case 30: sprintf(p, " ²ó100/Â»%d+%d", plev * 4, plev*11/2); break;
 #else
-		case 30: sprintf(p, " h100/d%d+250", plev * 4); break;
+		case 30: sprintf(p, " h100/d%d+%d", plev * 4, plev*11/2); break;
 #endif
 		}
 		break;

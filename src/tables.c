@@ -4101,7 +4101,7 @@ cptr realm_names[]
 	"Arcane",
 	"Craft",
 	"Daemon",
-	"nanka",
+	"Crusade",
 	"unknown",
 	"unknown",
 	"unknown",
@@ -4121,41 +4121,41 @@ cptr spell_names[VALID_REALM][32] =
 	/*** Life Spells ***/
 	{
 		/* Common Life Spellbooks */
-"邪悪存在感知",
 "軽傷の治癒",
 "祝福",
-"恐怖除去",
+"軽傷",
 "光の召喚",
 "罠 & 隠し扉感知",
 "重傷の治癒",
+"解毒",
 "空腹充足",
 
 "解呪",
-"解毒",
+"重傷",
 "致命傷の治癒",
-"透明視認",
-"聖なる光球",
-"対邪悪結界",
+"耐熱耐寒",
+"周辺感知",
+"パニック・アンデッド",
 "体力回復",
 "結界の紋章",
 
 		/* Rare Life Spellbooks */
-"悪魔払い",
 "*解呪*",
-"アンデッド & 悪魔退散",
+"鑑識",
+"アンデッド退散",
 "凪の刻",
-"邪悪退散",
-"邪悪追放",
-"聖なる御言葉",
+"致命傷",
+"帰還の詔",
+"真実の祭壇",
 "真・結界",
 
-"士気高揚",
-"祈り",
+"不毛化",
+"全感知",
 "アンデッド消滅",
+"千里眼",
 "全復活",
 "*体力回復*",
 "聖なるビジョン",
-"神威",
 "究極の耐性"
 	},
 
@@ -4501,31 +4501,31 @@ cptr spell_names[VALID_REALM][32] =
 
 	},
 
-	/*** nanka Spells ***/
+	/*** Crusade Spells ***/
 
 	{
-		/* Common nanka Spellbooks */
+		/* Common Crusade Spellbooks */
 "電撃",
 "邪悪存在感知",
-"祝福",
 "恐怖除去",
 "モンスター恐慌",
 "聖域",
 "入口",
 "スターダスト",
-
 "身体浄化",
+
 "邪悪飛ばし",
 "悪魔払い",
 "聖なる光球",
+"解呪",
 "透明視認",
 "対邪悪結界",
 "裁きの雷",
 "聖なる御言葉",
 
-		/* Rare nanka Spellbooks */
+		/* Rare Crusade Spellbooks */
 "開かれた道",
-"解呪",
+"封魔",
 "聖なるオーラ",
 "アンデッド&悪魔退散",
 "邪悪退散",
@@ -4636,7 +4636,7 @@ cptr spell_names[VALID_REALM][32] =
 
 cptr spell_names[VALID_REALM][32] =
 {
-	/*** Life Spells ***/
+	/*** Life Spells ***/ /* nanka */
 	{
 		/* Common Life Spellbooks */
 		"Detect Evil",
@@ -5017,17 +5017,17 @@ cptr spell_names[VALID_REALM][32] =
 		/* Common Crusade Spellbooks */
 		"Zap",
 		"Detect Evil",
-		"Bless",
 		"Remove Fear",
 		"Scare Monster",
 		"Sanctuary",
 		"Portal",
 		"Star Dust",
-
 		"Purify",
+
 		"Scatter Evil",
 		"Exorcism",
 		"Holy Orb",
+		"Remove Curse",
 		"Sense Unseen",
 		"Protection from Evil",
 		"Judgment Thunder",
@@ -5035,7 +5035,7 @@ cptr spell_names[VALID_REALM][32] =
 
 		/* Rare Crusade Spellbooks */
 		"Unbarring Ways",
-		"Remove Curse",
+		"nanka",
 		"Holy Aura",
 		"Dispel Undead & Demons",
 		"Dispel Evil",

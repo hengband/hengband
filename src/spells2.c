@@ -6628,6 +6628,12 @@ bool stasis_monster(int dir)
 }
 
 
+bool stasis_evil(int dir)
+{
+	return (fire_ball_hide(GF_STASIS_EVIL, dir, p_ptr->lev*2, 0));
+}
+
+
 bool confuse_monster(int dir, int plev)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL;

@@ -2782,8 +2782,10 @@
 #define GF_STAR_HEAL 112
 #define GF_WATER_FLOW   113
 #define GF_CRUSADE     114
+#define GF_STASIS_EVIL 115
+#define GF_WOUNDS      116
 
-#define MAX_GF				114
+#define MAX_GF				116
 
 /*
  * Some things which induce learning

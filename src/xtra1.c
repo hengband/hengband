@@ -376,7 +376,7 @@ static struct {
 	{TERM_L_BLUE, "²ó", "²óÉü"},
 	{TERM_L_RED, "ÀÖ", "ÀÖ³°"},
 	{TERM_UMBER, "±£", "±£Ì©"},
-	{TERM_YELLOW, "Ä¶±£", "Ä¶±£Ì©"},
+	{TERM_YELLOW, "±£", "Ä¶±£Ì©"},
 	{TERM_WHITE, "µ¢", "µ¢´Ô"},
 	{0, NULL, NULL}
 };
@@ -5394,6 +5394,9 @@ msg_print("¥Ð¥é¥ó¥¹¤¬¤È¤ì¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£");
 		else if (p_ptr->vir_types[i] == V_JUSTICE) p_ptr->align += (p_ptr->virtues[i]*2);
 		else if (p_ptr->vir_types[i] != V_CHANCE) p_ptr->align += p_ptr->virtues[i];
         }
+	if ((inventory[INVEN_RARM].name1 == ART_IRON_BALL) || (inventory[INVEN_LARM].name1 == ART_IRON_BALL)) p_ptr->align -= 1000;
+	if (prace_is_(RACE_ANGEL)) p_ptr->align += 200;
+	if ((prace_is_(RACE_DEMON)) || (p_ptr->mimic_form == MIMIC_DEMON_LORD) || (p_ptr->mimic_form == MIMIC_DEMON)) p_ptr->align -= 200;
 	while (j)
 	{
 		j--;
@@ -5408,9 +5411,6 @@ msg_print("¥Ð¥é¥ó¥¹¤¬¤È¤ì¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£");
 			if (p_ptr->align > 0) p_ptr->align = 0;
 		}
 	}
-	if ((inventory[INVEN_RARM].name1 == ART_IRON_BALL) || (inventory[INVEN_LARM].name1 == ART_IRON_BALL)) p_ptr->align -= 1000;
-	if (prace_is_(RACE_ANGEL)) p_ptr->align += 200;
-	if ((prace_is_(RACE_DEMON)) || (p_ptr->mimic_form == MIMIC_DEMON_LORD) || (p_ptr->mimic_form == MIMIC_DEMON)) p_ptr->align -= 200;
 
 	have_dd_s = FALSE;
 	have_dd_t = FALSE;
