@@ -6303,6 +6303,24 @@ option_type option_info[] =
 
 
 #ifdef JP
+	{ &always_pickup,               FALSE, 1, 0, 5,
+        "always_pickup",                "常にアイテムを拾う" },
+#else
+	{ &always_pickup,               FALSE,  1, 0, 5,
+	"always_pickup",                "Pick things up by default" },
+#endif
+
+
+#ifdef JP
+	{ &carry_query_flag,            FALSE, 1, 0, 3,
+	"carry_query_flag",  "アイテムを拾う前に確認する" },
+#else
+	{ &carry_query_flag,            FALSE, 1, 0, 3,
+	"carry_query_flag",             "Prompt before picking things up" },
+#endif
+
+
+#ifdef JP
 	{ &quick_messages,              TRUE,  1, 0, 1,
      "quick_messages",  "クイック・メッセージを使用する" },
 #else
@@ -6339,29 +6357,11 @@ option_type option_info[] =
 
 
 #ifdef JP
-	{ &carry_query_flag,            FALSE, 1, 0, 3,
-	"carry_query_flag",  "アイテムを拾う前に確認する" },
-#else
-	{ &carry_query_flag,            FALSE, 1, 0, 3,
-	"carry_query_flag",             "Prompt before picking things up" },
-#endif
-
-
-#ifdef JP
 	{ &use_old_target,              FALSE, 1, 0, 4,
      "use_old_target",  "常に以前のターゲットを指定する" },
 #else
 	{ &use_old_target,              FALSE, 1, 0, 4,
 	"use_old_target",               "Use old target by default" },
-#endif
-
-
-#ifdef JP
-	{ &always_pickup,               FALSE, 1, 0, 5,
-        "always_pickup",                "常にアイテムを拾う" },
-#else
-	{ &always_pickup,               FALSE,  1, 0, 5,
-	"always_pickup",                "Pick things up by default" },
 #endif
 
 

@@ -1,17 +1,17 @@
 # autopick.txt for Hengband
 #
 # The last part of this file is an example of 'pickpref.prf'. 
-# You can copy this file to lib/user/ or ~/.angband/Hengband/ 
+# You can copy this file to lib\user\ or ~/.angband/Hengband/ 
 # to use as preference of auto-picker.
 # (UNIX user must copy to ~/.angband/Hengband/. Others must 
-# copy to lib/user/.)
+# copy to lib\user\ .)
 #
 #    =====   How to use auto-picker/destroyer   ========
 #    
 #      Create a file named "pickpref.prf" or "pickpref-<<name>>.prf" 
 #      (or move and rename this file) in the same directory as your 
 #      user preference files.  This will be ~/.angband/Hengband/ 
-#      for UNIX, or hengband/lib/user/ for other operating systems.
+#      for UNIX, or hengband\lib\user\ for other operating systems.
 #      
 #      The game will read the file "pickpref-<<current character 
 #      name>>.prf" first and then read the file "pickpref.prf".  The 
@@ -191,26 +191,28 @@
 #      - Special variables
 #        $RACE
 #         Returns name of player race. One of below:
-#          Human, Half-Elf, Elf, Hobbit, Gnome, Dwarf, Half-Orc, Half-Troll,
-#          Amberite, High-Elf, Barbarian, Half-Ogre, Half-Giant, Half-Titan,
-#          Cyclops, Yeek, Klackon, Kobold, Nibelung, Dark-Elf, Draconian,
-#          Mindflayer, Imp, Golem, Skeleton, Zombie, Vampire, Spectre, Sprite,
-#          Beastman, Ent, Archon, Balrog, Dunadan, Shadow-Fairy, Kutar, Android,
+#          Human, Half-Elf, Elf, Hobbit, Gnome, Dwarf, Half-Orc,
+#          Half-Troll, Amberite, High-Elf, Barbarian, Half-Ogre,
+#          Half-Giant, Half-Titan, Cyclops, Yeek, Klackon, Kobold,
+#          Nibelung, Dark-Elf, Draconian, Mindflayer, Imp, Golem,
+#          Skeleton, Zombie, Vampire, Spectre, Sprite, Beastman, Ent,
+#          Archon, Balrog, Dunadan, Shadow-Fairy, Kutar, Android,
 #
 #        $CLASS
 #         Returns name of player class. One of below:
-#          Warrior, Mage, Priest, Rogue, Ranger, Paladin, Warrior-Mage,
-#          Chaos-Warrior, Monk, Mindcrafter, High-Mage, Tourist, Imitator,
-#          BeastMaster, Sorcerer, Archer, Magic-Eater, Bard, Red-Mage, Samurai,
-#          ForceTrainer, Blue-Mage, Cavalry, Berserker, Weaponsmith, 
-#          Mirror-Master, Ninja
+#          Warrior, Mage, Priest, Rogue, Ranger, Paladin,
+#          Warrior-Mage, Chaos-Warrior, Monk, Mindcrafter, High-Mage,
+#          Tourist, Imitator, BeastMaster, Sorcerer, Archer,
+#          Magic-Eater, Bard, Red-Mage, Samurai, ForceTrainer,
+#          Blue-Mage, Cavalry, Berserker, Weaponsmith, Mirror-Master,
+#          Ninja
 #
 #        $PLAYER
 #         Returns player name.
 #        $REALM1
 #         Returns player's first magic realm
-#          Life, Sorcery, Nature, Chaos, Death, Trump
-#          Arcane, Craft, Daemon, Music, Kendo
+#          Life, Sorcery, Nature, Chaos, Death, Trump Arcane, Craft,
+#          Daemon, Music, Kendo
 #        $REALM2
 #         Returns player's second magic realm
 #        $LEVEL
@@ -220,9 +222,9 @@
 #------------------------------------------------------------------
 #
 #    Below is an example 'pickpref.prf' file.
-#    You can copy this file to lib/user/ or ~/.angband/Hengband/.
+#    You can copy this file to lib\user\ or ~/.angband/Hengband/.
 #    (UNIX user must copy to ~/.angband/Hengband/. Others must copy 
-#    to  lib/user/.)
+#    to  lib\user\ .)
 #
 #------------------------------------------------------------------
 
