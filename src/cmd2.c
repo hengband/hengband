@@ -4129,11 +4129,25 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 		msg_print("Hmmm, it seems to be cursed.");
 #endif
 
-
 		/* Nope */
 		return FALSE;
 	}
 
+	if (p_ptr->inside_arena)
+	{
+		if (o_ptr->tval != 5)
+		{
+#ifdef JP
+			msg_print("アリーナではアイテムを使えない！");
+#else
+			msg_print("You're in the arena now. This is hand-to-hand!");
+#endif
+			msg_print(NULL);
+
+			/* Nope */
+			return FALSE;
+		}
+	}
 
 	/* Get local object */
 	q_ptr = &forge;

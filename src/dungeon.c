@@ -4523,18 +4523,7 @@ msg_print("アリーナが魔法を吸収した！");
 		{
 			if (!p_ptr->wild_mode)
 			{
-			if (!p_ptr->inside_arena)
 				do_cmd_throw();
-			else
-			{
-#ifdef JP
-msg_print("アリーナではアイテムを使えない！");
-#else
-				msg_print("You're in the arena now. This is hand-to-hand!");
-#endif
-
-				msg_print(NULL);
-			}
 			}
 			break;
 		}
