@@ -6444,19 +6444,16 @@ static void print_tomb(void)
 	/* Print the text-tombstone */
 	if (!done)
 	{
-		cptr	p;
-
-		char	tmp[160];
-
-		char	buf[1024];
-#ifndef JP
-		char    dummy[80];
+		cptr   p;
+		char   tmp[160];
+		char   buf[1024];
+		char   dummy[80];
+		char   *t;
+		FILE   *fp;
+		time_t ct = time((time_t)0);
+#ifdef JP
+		int    extra_line = 0;
 #endif
-
-		FILE        *fp;
-
-		time_t	ct = time((time_t)0);
-
 
 		/* Clear screen */
 		Term_clear();
@@ -6467,7 +6464,6 @@ static void print_tomb(void)
 #else
 		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "dead.txt");
 #endif
-
 
 		/* Open the News file */
 		fp = my_fopen(buf, "r");
@@ -6488,17 +6484,15 @@ static void print_tomb(void)
 			my_fclose(fp);
 		}
 
-
 		/* King or Queen */
 		if (p_ptr->total_winner || (p_ptr->lev > PY_MAX_LEVEL))
 		{
 #ifdef JP
-		/* 英日切り替え */
-		  p= "偉大なる者";
+			/* 英日切り替え */
+			p= "偉大なる者";
 #else
 			p = "Magnificent";
 #endif
-
 		}
 
 		/* Normal */
@@ -6518,47 +6512,40 @@ static void print_tomb(void)
 		center_string(buf, p);
 		put_str(buf, 8, 11);
 
-
 		center_string(buf, cp_ptr->title);
-
 		put_str(buf, 10, 11);
 
 #ifdef JP
-(void)sprintf(tmp, "レベル: %d", (int)p_ptr->lev);
+		(void)sprintf(tmp, "レベル: %d", (int)p_ptr->lev);
 #else
 		(void)sprintf(tmp, "Level: %d", (int)p_ptr->lev);
 #endif
-
 		center_string(buf, tmp);
 		put_str(buf, 11, 11);
 
 #ifdef JP
-(void)sprintf(tmp, "経験値: %ld", (long)p_ptr->exp);
+		(void)sprintf(tmp, "経験値: %ld", (long)p_ptr->exp);
 #else
 		(void)sprintf(tmp, "Exp: %ld", (long)p_ptr->exp);
 #endif
-
 		center_string(buf, tmp);
 		put_str(buf, 12, 11);
 
 #ifdef JP
-(void)sprintf(tmp, "所持金: %ld", (long)p_ptr->au);
+		(void)sprintf(tmp, "所持金: %ld", (long)p_ptr->au);
 #else
 		(void)sprintf(tmp, "AU: %ld", (long)p_ptr->au);
 #endif
-
 		center_string(buf, tmp);
 		put_str(buf, 13, 11);
 
 #ifdef JP
-	/* 墓に刻む言葉をオリジナルより細かく表示 */
-	if (streq(p_ptr->died_from, "途中終了"))
-	{
-		strcpy(tmp, "<自殺>");
-	}
-	else
-	{
-		if (streq(p_ptr->died_from, "ripe"))
+		/* 墓に刻む言葉をオリジナルより細かく表示 */
+		if (streq(p_ptr->died_from, "途中終了"))
+		{
+			strcpy(tmp, "<自殺>");
+		}
+		else if (streq(p_ptr->died_from, "ripe"))
 		{
 			strcpy(tmp, "引退後に天寿を全う");
 		}
@@ -6568,71 +6555,83 @@ static void print_tomb(void)
 		}
 		else
 		{
-			strcpy(tmp, p_ptr->died_from);
-		}
-	}
-	center_string(buf, tmp);
-	put_str(buf, 14, 11);
-
-	if(!streq(p_ptr->died_from, "ripe") && !streq(p_ptr->died_from, "Seppuku"))
-	{
-		if( dun_level == 0 )
-		{
-			cptr town = (p_ptr->town_num ? "街" : "荒野");
-			if(streq(p_ptr->died_from, "途中終了"))
+			roff_to_buf(p_ptr->died_from, 32, tmp, sizeof tmp);
+			t = tmp + strlen(tmp) + 1;
+			if (*t)
 			{
-				sprintf(tmp, "%sで死んだ", town);
-			}
-			else
-			{
-				sprintf(tmp, "に%sで殺された", town);
-			}
-		}
-		else
-		{
-			if(streq(p_ptr->died_from, "途中終了"))
-			{
-				sprintf(tmp, "地下 %d 階で死んだ", dun_level);
-			}
-			else
-			{
-				sprintf(tmp, "に地下 %d 階で殺された", dun_level);
+				strcpy(dummy, t); /* 2nd line */
+				if (*(t + strlen(t) + 1)) /* Does 3rd line exist? */
+				{
+					for (t = dummy + strlen(dummy) - 2; iskanji(*(t - 1)); t--) /* Loop */;
+					strcpy(t, "…");
+				}
+				center_string(buf, dummy);
+				put_str(buf, 15, 11);
+				extra_line = 1;
 			}
 		}
 		center_string(buf, tmp);
-		put_str(buf, 15, 11);
-	}
+		put_str(buf, 14, 11);
+
+		if (!streq(p_ptr->died_from, "ripe") && !streq(p_ptr->died_from, "Seppuku"))
+		{
+			if (dun_level == 0)
+			{
+				cptr town = p_ptr->town_num ? "街" : "荒野";
+				if (streq(p_ptr->died_from, "途中終了"))
+				{
+					sprintf(tmp, "%sで死んだ", town);
+				}
+				else
+				{
+					sprintf(tmp, "に%sで殺された", town);
+				}
+			}
+			else
+			{
+				if (streq(p_ptr->died_from, "途中終了"))
+				{
+					sprintf(tmp, "地下 %d 階で死んだ", dun_level);
+				}
+				else
+				{
+					sprintf(tmp, "に地下 %d 階で殺された", dun_level);
+				}
+			}
+			center_string(buf, tmp);
+			put_str(buf, 15 + extra_line, 11);
+		}
 #else
 		(void)sprintf(tmp, "Killed on Level %d", dun_level);
 		center_string(buf, tmp);
 		put_str(buf, 14, 11);
 
-
-		if (strlen(p_ptr->died_from) > 24)
-		{
-			strncpy(dummy, p_ptr->died_from, 24);
-			dummy[24] = '\0';
-			(void)sprintf(tmp, "by %s.", dummy);
-		}
-		else
-			(void)sprintf(tmp, "by %s.", p_ptr->died_from);
-
+		roff_to_buf(format("by %s.", p_ptr->died_from), 32, tmp, sizeof tmp);
 		center_string(buf, tmp);
 		put_str(buf, 15, 11);
+		t = tmp + strlen(tmp) + 1;
+		if (*t)
+		{
+			strcpy(dummy, t); /* 2nd line */
+			if (*(t + strlen(t) + 1)) /* Does 3rd line exist? */
+			{
+				int dummy_len = strlen(dummy);
+				strcpy(dummy + MIN(dummy_len, 28), "...");
+			}
+			center_string(buf, dummy);
+			put_str(buf, 16, 11);
+		}
 #endif
-
-
 
 		(void)sprintf(tmp, "%-.24s", ctime(&ct));
 		center_string(buf, tmp);
 		put_str(buf, 17, 11);
 
 #ifdef JP
-msg_format("さようなら、%s!", player_name);
+		msg_format("さようなら、%s!", player_name);
 #else
 		msg_format("Goodbye, %s!", player_name);
 #endif
-
 	}
 }
 
