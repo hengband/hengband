@@ -2142,6 +2142,19 @@ msg_print("まばゆい閃光が走った！");
 
 			break;
 		}
+
+		case FEAT_TRAP_ALARM:
+		{
+#ifdef JP
+			msg_print("けたたましい音が鳴り響いた！");
+#else
+			msg_print("An alarm sounds!");
+#endif
+
+			aggravate_monsters(0);
+
+			break;
+		}
 	}
 	if (break_trap && is_trap(c_ptr->feat))
 	{

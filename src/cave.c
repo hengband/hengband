@@ -75,6 +75,7 @@ bool is_trap(int feat)
 		case FEAT_TRAP_POISON:
 		case FEAT_TRAP_SLEEP:
 		case FEAT_TRAP_TRAPS:
+		case FEAT_TRAP_ALARM:
 		{
 			/* A trap */
 			return (TRUE);
@@ -1288,6 +1289,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 		case FEAT_TRAP_POISON:
 		case FEAT_TRAP_SLEEP:
 		case FEAT_TRAP_TRAPS:
+		case FEAT_TRAP_ALARM:
 		case FEAT_DIRT:
 		case FEAT_GRASS:
 		case FEAT_FLOWER:

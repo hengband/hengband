@@ -5067,7 +5067,7 @@ void acquirement(int y1, int x1, int num, bool great, bool known)
 }
 
 
-#define MAX_TRAPS		17
+#define MAX_TRAPS		18
 
 static int trap_num[MAX_TRAPS] =
 {
@@ -5088,6 +5088,7 @@ static int trap_num[MAX_TRAPS] =
 	FEAT_TRAP_POISON,
 	FEAT_TRAP_SLEEP,
 	FEAT_TRAP_TRAPS,
+	FEAT_TRAP_ALARM,
 };
 
 

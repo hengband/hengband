@@ -559,6 +559,10 @@ N:90:コンパクトルーン
 E:compact rune
 G:^:D
 
+N:91:警報装置
+E:alarm
+G:^:R
+
 N:93:花
 E:flower
 G:::G
