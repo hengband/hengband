@@ -5243,11 +5243,13 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 			}
 			else
 			{
+				char dummy[1024];
 #ifdef JP
-				sprintf(p_ptr->died_from, "%s%s%s", !p_ptr->paralyzed ? "" : p_ptr->free_act ? "Ä¦Áü¾õÂÖ¤Ç" : "Ëãáã¾õÂÖ¤Ç", p_ptr->image ? "¸¸³Ð¤ËÏÄ¤ó¤À" : "", hit_from);
+				sprintf(dummy, "%s%s%s", !p_ptr->paralyzed ? "" : p_ptr->free_act ? "Ä¦Áü¾õÂÖ¤Ç" : "Ëãáã¾õÂÖ¤Ç", p_ptr->image ? "¸¸³Ð¤ËÏÄ¤ó¤À" : "", hit_from);
 #else
-				sprintf(p_ptr->died_from, "%s%s", hit_from, !p_ptr->paralyzed ? "" : " while helpless");
+				sprintf(dummy, "%s%s", hit_from, !p_ptr->paralyzed ? "" : " while helpless");
 #endif
+				my_strcpy(p_ptr->died_from, dummy, sizeof p_ptr->died_from);
 			}
 
 			/* No longer a winner */
