@@ -1,4 +1,89 @@
+2002-04-14  Takeshi Mogami  <mogami@cvs>
+
+	* src/files.c 1.48:
+	8 2 で1行上下に移動できるように。
+	ページの最後で勝手に最初のページに巻戻らないように。
+
+	* lib/help/attack.hlp 1.6, lib/help/attack.txt 1.8, lib/help/birth.hlp 1.4, lib/help/birth.txt 1.7, lib/help/charattr.hlp 1.5, lib/help/charattr.txt 1.7, lib/help/command.hlp 1.5, lib/help/commdesc.hlp 1.5, lib/help/defend.hlp 1.4, lib/help/dungeon.hlp 1.5, lib/help/dungeon.txt 1.7, lib/help/general.hlp 1.5, lib/help/general.txt 1.7, lib/help/help.hlp 1.7, lib/help/j_item2.txt 1.2, lib/help/jattack.hlp 1.4, lib/help/jattack.txt 1.6, lib/help/jbirth.hlp 1.3, lib/help/jbirth.txt 1.6, lib/help/jcharattr.hlp 1.3, lib/help/jcharattr.txt 1.8, lib/help/jcommand.hlp 1.4, lib/help/jcommand.txt 1.5, lib/help/jcommdesc.hlp 1.4, lib/help/jcommdesc.txt 1.5, lib/help/jdefend.hlp 1.3, lib/help/jdefend.txt 1.4, lib/help/jdungeon.hlp 1.2, lib/help/jdungeon.txt 1.5, lib/help/jgeneral.hlp 1.4, lib/help/jgeneral.txt 1.5, lib/help/jhelp.hlp 1.5, lib/help/jmagic.hlp 1.3, lib/help/jmonster.hlp 1.2, lib/help/jmonster.txt 1.5, lib/help/jobjects.hlp 1.3, lib/help/jobjects.txt 1.5, lib/help/joption.hlp 1.4, lib/help/jpref.hlp 1.2, lib/help/jpref.txt 1.4, lib/help/jspecial.hlp 1.2, lib/help/jtang.txt 1.5, lib/help/jtown.hlp 1.2, lib/help/jtown.txt 1.5, lib/help/magic.hlp 1.5, lib/help/monster.hlp 1.2, lib/help/monster.txt 1.4, lib/help/objects.hlp 1.3, lib/help/objects.txt 1.5, lib/help/option.hlp 1.5, lib/help/pref.hlp 1.5, lib/help/pref.txt 1.7, lib/help/town.hlp 1.2, lib/help/town.txt 1.5:
+	リンクの文字に数字を使わないようにして、アルファベットのみにした。
+	数字は後で上下に1行移動等に使える。
+
+2002-04-14  habu  <habu@cvs>
+
+	* src/files.c 1.47:
+	sprintfの型を%ldから%dに修正。
+
+2002-04-13  Takeshi Mogami  <mogami@cvs>
+
+	* src/birth.c 1.24, src/bldg.c 1.12, src/cave.c 1.36, src/cmd4.c 1.34, src/defines.h 1.33, src/dungeon.c 1.31, src/externs.h 1.40, src/files.c 1.46, src/generate.c 1.14, src/store.c 1.8, src/wild.c 1.11, src/xtra1.c 1.32:
+	スピードシステム修正に備えて、turnと時刻の取りあつかいのコードを整理。
+	#define TURNS_PER_TICK 20L を定義した。
+	日付を求める関数等を用意してそれを呼ぶようにした。
+
+2002-04-13  _nothere  <_nothere@cvs>
+
+	* src/cave.c 1.35, src/z-term.c 1.9:
+	全角文字モードで, 周囲と色が全く同じ物の左バイトが更新されず, 右バイトの文字だけが更新されて半角で現れたりして化ける問題を修正.
+
+2002-04-13  Takeshi Mogami  <mogami@cvs>
+
+	* src/cave.c 1.34, src/main-win.c 1.11, src/z-term.c 1.8:
+	二倍幅豆腐、内部コードに「Å」を使う方法で実装。
+	main-win.cでrectangleを進め方にバグがあり、rc.rightを3バイト進めていたので、
+	修正して、豆腐が右横に伸びなくした。
+
+2002-04-12  _nothere  <_nothere@cvs>
+
+	* src/cave.c 1.33, src/z-term.c 1.7:
+	全角カーソルの右半分が正しく消去されないのを修正. ついでに, 先程のcave.cの変更部分に#ifdef WINDOWSを付けた.
+
+	* src/cave.c 1.32:
+	Windowsで豆腐のbigtileが崩れる問題に対して, bigtile_attr()内で第2byteに豆腐をコピーする方法で応急処置. しかし, 起動時や終了時, 移動時に化けたりゴミが残ったり, 光源が永久岩に食い込む問題は未解決.
+
+	* src/main-win.c 1.10:
+	豆腐とbigtileが両方有効になっているとき, 豆腐の壁にカーソルを合わせると半角のカーソルになっていたのを全角のカーソルに直した.
+
+2002-04-12  Takeshi Mogami  <mogami@cvs>
+
+	* readme.txt 1.6:
+	bigscreenに対応してなかった一文削除。
+
+	* src/autopick.c 1.6:
+	まだ残っていた再描画バグ(^L)修正。
+	英語版コンパイルエラー修正。英語メッセージ細かいとこ修正。
+	^I ^Lでキーワード「武器」が挿入されなかったのを修正。
+
+2002-04-10  iks  <iks@cvs>
+
+	* src/main-win.c 1.9:
+	ウィンドウを過小にリサイズできてしまってbigscreenの挙動がアヤシイのを解決。
+	フォント変更時にウィンドウサイズが80x24に戻される上に、bigscreenが追随していなくて表示が食み出していたのを解決。
+
+2002-04-10  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.5:
+	constポインタ(ポインタ)の変数をC_FREEに渡すとVC++がワーニングを出す事が
+	わかったので再修正。
+
+	* src/autopick.c 1.4, src/externs.h 1.39:
+	ワーニングを無くす修正。
+	その他、autopick editorの行の説明文追加等。
+
+	* src/xtra2.c 1.27:
+	ウィンドウのリサイズ後に変な位置にカーソルが移動していたのを修正。
+
+	* src/xtra1.c 1.31:
+	サブウィンドウに全体マップを表示するとき、ウィンドウが小さすぎると落ちるので、
+	そのときは表示をしないように修正。
+
+	* src/birth.c 1.23, src/generate.c 1.13:
+	モンスター闘技場の表示位置が変になるバグ修正。
+	もうひとつ、キャラスタート時に4体のモンスターを初期化してないバグも修正。
+	(時間が経つと初期化されるので実害はないが)
+
 2002-04-09  Takeshi Mogami  <mogami@cvs>
+
+	* Changelogs 1.34: 更新
 
 	* src/autopick.c 1.3:
 	早速修正。^I をキャンセルした後で画面を再描画してなかった。
