@@ -1533,8 +1533,8 @@ note(format("¤ÎÃæ", tmp16s));
 			rd_s16b(&p_ptr->tim_mimic);
 			rd_s16b(&p_ptr->tim_sh_fire);
 		}
-		/* rd_s16b(&p_ptr->tim_sh_holy); nanka */
-		/* rd_s16b(&p_ptr->tim_eyeeye); nanka */
+		rd_s16b(&p_ptr->tim_sh_holy);
+		rd_s16b(&p_ptr->tim_eyeeye);
 
 		/* by henkma */
 		if ( z_older_than(11,0,3) ){

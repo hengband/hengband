@@ -1091,8 +1091,8 @@ static void wr_extra(void)
 	wr_byte(p_ptr->mimic_form);
 	wr_s16b(p_ptr->tim_mimic);
 	wr_s16b(p_ptr->tim_sh_fire);
-	/*	wr_s16b(p_ptr->tim_sh_holy); nanka */
-	/*	wr_s16b(p_ptr->tim_eyeeye); nanka */
+	wr_s16b(p_ptr->tim_sh_holy);
+	wr_s16b(p_ptr->tim_eyeeye);
 
 	/* by henkma */
 	wr_s16b(p_ptr->tim_reflect);
