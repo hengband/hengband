@@ -63,6 +63,7 @@
 #
 #      all               : All items match.
 #      collecting        : Matches if you already have that same item.
+#      unaware           : Items with unknown effects match.
 #      unidentified      : Unidentified items match.
 #      identified        : Identified items match.
 #      *identified*      : *Identified* items match.
@@ -73,7 +74,6 @@
 #      artifacts         : Artifacts items match.
 #      ego               : Ego items match.
 #      nameless          : Non ego/non artifact items match.
-#      unaware           : Items with unknown effects match.
 #      wanted            : Wanted monster's corpses or skeletons match.
 #      unique monster's  : Unique monster's corpses, skeletons or statues match.
 #      human             : Human corpses or skeletons match.
@@ -166,9 +166,10 @@
 #      Strict syntax of each line is below.
 #      
 #      [! ~ (]
-#      [[all] [collecting] [unidentified] [identified] [*identified*] 
+#      [[all] [collecting]
+#       [unaware] [unidentified] [identified] [*identified*] 
 #       [dice boosted] [more than N dice] [more bonus than N] 
-#       [worthless] [artifact] [ego] [nameless] [unaware] 
+#       [worthless] [artifact] [ego] [nameless] 
 #       [wanted] [unique monster's] [human] [unreadable] 
 #       [first realm's] [second realm's] [first] [second] [third] [fourth] 
 #       [items | weapons | armors | missiles | magical devices | 
