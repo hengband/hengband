@@ -4622,10 +4622,15 @@ bool make_object(object_type *j_ptr, u32b mode)
 	{
 		int k_idx;
 
+		/*
+		 * Hack -- If restriction is already specified, allocation table is
+		 * should be prepared by get_obj_num_prep().
+		 * We rely previous preparation before reaching here.
+		 */
 		/* Good objects */
-		if (mode & AM_GOOD)
+		if ((mode & AM_GOOD) && !get_obj_num_hook)
 		{
-			/* Activate restriction */
+			/* Activate restriction (if already specified, use it) */
 			get_obj_num_hook = kind_is_good;
 
 			/* Prepare allocation table */
