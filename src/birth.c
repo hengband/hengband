@@ -3357,6 +3357,29 @@ static void player_wipe(void)
 
 
 /*
+ *  Hook function for quest monsters
+ */
+static bool mon_hook_quest(int r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Random quests are in the dungeon */
+	if (r_ptr->flags8 & RF8_WILD_ONLY) return FALSE;
+
+	/* No random quests for aquatic monsters */
+	if (r_ptr->flags7 & RF7_AQUATIC) return FALSE;
+
+	/* No random quests for multiplying monsters */
+	if (r_ptr->flags2 & RF2_MULTIPLY) return FALSE;
+
+	/* No quests to kill friendly monsters */
+	if (r_ptr->flags7 & RF7_FRIENDLY) return FALSE;
+
+	return TRUE;
+}
+
+
+/*
  * Determine the random quest uniques
  */
 void determine_random_questor(quest_type *q_ptr)
@@ -3365,7 +3388,7 @@ void determine_random_questor(quest_type *q_ptr)
 	monster_race *r_ptr;
 
 	/* Prepare allocation table */
-	get_mon_num_prep(monster_quest, NULL);
+	get_mon_num_prep(mon_hook_quest, NULL);
 
 	while (1)
 	{

@@ -811,19 +811,8 @@ extern void screen_roff(int r_idx, int mode);
 extern void display_roff(int r_idx);
 extern void output_monster_spoiler(int r_idx, void (*roff_func)(byte attr, cptr str));
 extern void create_name(int type, char *name);
-/* monster1.c (was in monster3.c ??) */
-extern bool monster_quest(int r_idx);
-extern bool monster_dungeon(int r_idx);
-extern bool monster_ocean(int r_idx);
-extern bool monster_shore(int r_idx);
-extern bool monster_town(int r_idx);
-extern bool monster_wood(int r_idx);
-extern bool monster_volcano(int r_idx);
-extern bool monster_mountain(int r_idx);
-extern bool monster_grass(int r_idx);
-extern bool monster_deep_water(int r_idx);
-extern bool monster_shallow_water(int r_idx);
-extern bool monster_lava(int r_idx);
+extern bool mon_hook_dungeon(int r_idx);
+
 extern monster_hook_type get_monster_hook(void);
 extern monster_hook_type get_monster_hook2(int y, int x);
 extern void set_friendly(monster_type *m_ptr);

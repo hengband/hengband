@@ -1672,7 +1672,7 @@ static bool vault_aux_battle(int r_idx)
 	monster_race *r_ptr = &r_info[r_idx];
 
 	/* Decline town monsters */
-/*	if (!monster_dungeon(r_idx)) return FALSE; */
+/*	if (!mon_hook_dungeon(r_idx)) return FALSE; */
 
 	/* Decline unique monsters */
 /*	if (r_ptr->flags1 & (RF1_UNIQUE)) return (FALSE); */

@@ -1274,7 +1274,7 @@ static bool build_type4(void)
  * Line 3 -- forbid aquatic monsters
  */
 #define vault_monster_okay(I) \
-	(monster_dungeon(I) && \
+	(mon_hook_dungeon(I) && \
 	 !(r_info[I].flags1 & RF1_UNIQUE) && \
 	 !(r_info[I].flags7 & RF7_UNIQUE2) && \
 	 !(r_info[I].flagsr & RFR_RES_ALL) && \

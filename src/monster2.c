@@ -3590,7 +3590,7 @@ static bool place_monster_okay(int r_idx)
 	monster_race *z_ptr = &r_info[r_idx];
 
 	/* Hack - Escorts have to have the same dungeon flag */
-	if (monster_dungeon(place_monster_idx) != monster_dungeon(r_idx)) return (FALSE);
+	if (mon_hook_dungeon(place_monster_idx) != mon_hook_dungeon(r_idx)) return (FALSE);
 
 	/* Require similar "race" */
 	if (z_ptr->d_char != r_ptr->d_char) return (FALSE);
@@ -3927,7 +3927,7 @@ static bool summon_specific_okay(int r_idx)
 	monster_race *r_ptr = &r_info[r_idx];
 
 	/* Hack - Only summon dungeon monsters */
-	if (!monster_dungeon(r_idx)) return (FALSE);
+	if (!mon_hook_dungeon(r_idx)) return (FALSE);
 
 	/* Hack -- identify the summoning monster */
 	if (summon_specific_who > 0)
