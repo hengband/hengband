@@ -957,13 +957,13 @@ cptr process_pref_file_expr(char **sp, char *fp)
 	{
 		/* Accept all printables except spaces and brackets */
 #ifdef JP
-		while ((iskanji(*s) || isprint(*s)) && !strchr(" []", *s))
+		while ((iskanji(*s) || isprint(*s)) && !my_strchr(" []", *s))
 		{
 			if (iskanji(*s)) s++;
 			s++;
 		}
 #else
-		while (isprint(*s) && !strchr(" []", *s)) ++s;
+		while (isprint(*s) && !my_strchr(" []", *s)) ++s;
 #endif
 
 		/* Extract final and Terminate */
