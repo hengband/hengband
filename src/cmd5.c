@@ -2315,10 +2315,10 @@ void do_cmd_pet(void)
 
 	int mode = 0;
 
-	byte y = 1, x = 0;
-	int ctr = 0;
 	char buf[160];
 	char target_buf[160];
+
+	int menu_line = use_menu ? 1 : 0;
 
 	num = 0;
 
@@ -2342,7 +2342,7 @@ void do_cmd_pet(void)
 	powers[num++] = PET_TARGET;
 
 #ifdef JP
-power_desc[num] = "¶á¤¯¤Ë¤¤¤í";
+	power_desc[num] = "¶á¤¯¤Ë¤¤¤í";
 #else
 	power_desc[num] = "stay close";
 #endif
@@ -2360,7 +2360,7 @@ power_desc[num] = "¶á¤¯¤Ë¤¤¤í";
 	powers[num++] = PET_FOLLOW_ME;
 
 #ifdef JP
-power_desc[num] = "Å¨¤ò¸«¤Ä¤±¤ÆÅÝ¤»";
+	power_desc[num] = "Å¨¤ò¸«¤Ä¤±¤ÆÅÝ¤»";
 #else
 	power_desc[num] = "seek and destroy";
 #endif
@@ -2369,7 +2369,7 @@ power_desc[num] = "Å¨¤ò¸«¤Ä¤±¤ÆÅÝ¤»";
 	powers[num++] = PET_SEEK_AND_DESTROY;
 
 #ifdef JP
-power_desc[num] = "¾¯¤·Î¥¤ì¤Æ¤¤¤í";
+	power_desc[num] = "¾¯¤·Î¥¤ì¤Æ¤¤¤í";
 #else
 	power_desc[num] = "give me space";
 #endif
@@ -2378,7 +2378,7 @@ power_desc[num] = "¾¯¤·Î¥¤ì¤Æ¤¤¤í";
 	powers[num++] = PET_ALLOW_SPACE;
 
 #ifdef JP
-power_desc[num] = "Î¥¤ì¤Æ¤¤¤í";
+	power_desc[num] = "Î¥¤ì¤Æ¤¤¤í";
 #else
 	power_desc[num] = "stay away";
 #endif
@@ -2393,7 +2393,6 @@ power_desc[num] = "Î¥¤ì¤Æ¤¤¤í";
 #else
 		power_desc[num] = "pets open doors (now On)";
 #endif
-
 	}
 	else
 	{
@@ -2402,7 +2401,6 @@ power_desc[num] = "Î¥¤ì¤Æ¤¤¤í";
 #else
 		power_desc[num] = "pets open doors (now Off)";
 #endif
-
 	}
 	powers[num++] = PET_OPEN_DOORS;
 
@@ -2413,7 +2411,6 @@ power_desc[num] = "Î¥¤ì¤Æ¤¤¤í";
 #else
 		power_desc[num] = "pets pick up items (now On)";
 #endif
-
 	}
 	else
 	{
@@ -2422,7 +2419,6 @@ power_desc[num] = "Î¥¤ì¤Æ¤¤¤í";
 #else
 		power_desc[num] = "pets pick up items (now Off)";
 #endif
-
 	}
 	powers[num++] = PET_TAKE_ITEMS;
 
@@ -2433,7 +2429,6 @@ power_desc[num] = "Î¥¤ì¤Æ¤¤¤í";
 #else
 		power_desc[num] = "allow teleport (now On)";
 #endif
-
 	}
 	else
 	{
@@ -2442,7 +2437,6 @@ power_desc[num] = "Î¥¤ì¤Æ¤¤¤í";
 #else
 		power_desc[num] = "allow teleport (now Off)";
 #endif
-
 	}
 	powers[num++] = PET_TELEPORT;
 
@@ -2453,7 +2447,6 @@ power_desc[num] = "Î¥¤ì¤Æ¤¤¤í";
 #else
 		power_desc[num] = "allow cast attack spell (now On)";
 #endif
-
 	}
 	else
 	{
@@ -2462,7 +2455,6 @@ power_desc[num] = "Î¥¤ì¤Æ¤¤¤í";
 #else
 		power_desc[num] = "allow cast attack spell (now Off)";
 #endif
-
 	}
 	powers[num++] = PET_ATTACK_SPELL;
 
@@ -2473,7 +2465,6 @@ power_desc[num] = "Î¥¤ì¤Æ¤¤¤í";
 #else
 		power_desc[num] = "allow cast summon spell (now On)";
 #endif
-
 	}
 	else
 	{
@@ -2482,7 +2473,6 @@ power_desc[num] = "Î¥¤ì¤Æ¤¤¤í";
 #else
 		power_desc[num] = "allow cast summon spell (now Off)";
 #endif
-
 	}
 	powers[num++] = PET_SUMMON_SPELL;
 
@@ -2493,7 +2483,6 @@ power_desc[num] = "Î¥¤ì¤Æ¤¤¤í";
 #else
 		power_desc[num] = "allow involve player in area spell (now On)";
 #endif
-
 	}
 	else
 	{
@@ -2502,7 +2491,6 @@ power_desc[num] = "Î¥¤ì¤Æ¤¤¤í";
 #else
 		power_desc[num] = "allow involve player in area spell (now Off)";
 #endif
-
 	}
 	powers[num++] = PET_BALL_SPELL;
 
@@ -2513,7 +2501,6 @@ power_desc[num] = "Î¥¤ì¤Æ¤¤¤í";
 #else
 		power_desc[num] = "get off a pet";
 #endif
-
 	}
 	else
 	{
@@ -2522,7 +2509,6 @@ power_desc[num] = "Î¥¤ì¤Æ¤¤¤í";
 #else
 		power_desc[num] = "ride a pet";
 #endif
-
 	}
 	powers[num++] = PET_RIDING;
 
@@ -2614,91 +2600,126 @@ power_desc[num] = "Î¥¤ì¤Æ¤¤¤í";
 		}
 	}
 
+#ifdef ALLOW_REPEAT
+	if (!(repeat_pull(&i) && (i >= 0) && (i < num)))
+	{
+#endif /* ALLOW_REPEAT */
+
 	/* Nothing chosen yet */
 	flag = FALSE;
 
-	/* Build a prompt (accept all spells) */
-	if (num <= 26)
-	{
-		/* Build a prompt (accept all spells) */
-#ifdef JP
-strnfmt(out_val, 78, "(¥³¥Þ¥ó¥É %c-%c¡¢'*'=°ìÍ÷¡¢ESC=½ªÎ») ¥³¥Þ¥ó¥É¤òÁª¤ó¤Ç¤¯¤À¤µ¤¤:",
-#else
-		strnfmt(out_val, 78, "(Command %c-%c, *=List, ESC=exit) Select a command: ",
-#endif
+	/* No redraw yet */
+	redraw = FALSE;
 
-			I2A(0), I2A(num - 1));
+	if (use_menu)
+	{
+		/* Save the screen */
+		screen_save();
+
+		/* Build a prompt */
+#ifdef JP
+		strnfmt(out_val, 78, "(¥³¥Þ¥ó¥É¡¢ESC=½ªÎ») ¥³¥Þ¥ó¥É¤òÁª¤ó¤Ç¤¯¤À¤µ¤¤:");
+#else
+		strnfmt(out_val, 78, "(Command, ESC=exit) Choose command from menu.");
+#endif
 	}
 	else
 	{
+		/* Build a prompt */
+		strnfmt(out_val, 78,
 #ifdef JP
-strnfmt(out_val, 78, "(¥³¥Þ¥ó¥É %c-%c¡¢'*'=°ìÍ÷¡¢ESC=½ªÎ») ¥³¥Þ¥ó¥É¤òÁª¤ó¤Ç¤¯¤À¤µ¤¤:",
+		        "(¥³¥Þ¥ó¥É %c-%c¡¢'*'=°ìÍ÷¡¢ESC=½ªÎ») ¥³¥Þ¥ó¥É¤òÁª¤ó¤Ç¤¯¤À¤µ¤¤:",
 #else
-		strnfmt(out_val, 78, "(Command %c-%c, *=List, ESC=exit) Select a command: ",
+		        "(Command %c-%c, *=List, ESC=exit) Select a command: ",
 #endif
-
-			I2A(0), '0' + num - 27);
+		        I2A(0), I2A(num - 1));
 	}
 
-	/* Show list */
-	redraw = TRUE;
-
-	/* Save the screen */
-	Term_save();
-
-	prt("", y++, x);
-
-	while (ctr < num)
-	{
-		prt(format("%s%c) %s", (ctr == mode) ? "*" : " ", I2A(ctr), power_desc[ctr]), y + ctr, x);
-		ctr++;
-	}
-
-	if (ctr < 17)
-	{
-		prt("", y + ctr, x);
-	}
-	else
-	{
-		prt("", y + 17, x);
-	}
+	choice = (always_show_list || use_menu) ? ESCAPE : 1;
 
 	/* Get a command from the user */
-	while (!flag && get_com(out_val, &choice, TRUE))
+	while (!flag)
 	{
+		if (choice == ESCAPE) choice = ' ';
+		else if (!get_com(out_val, &choice, TRUE)) break;
+
+		if (use_menu && (choice != ' '))
+		{
+			switch (choice)
+			{
+			case '0':
+				screen_load();
+				return;
+
+			case '8':
+			case 'k':
+			case 'K':
+				menu_line += (num - 1);
+				break;
+
+			case '2':
+			case 'j':
+			case 'J':
+				menu_line++;
+				break;
+
+			case '4':
+			case 'h':
+			case 'H':
+				menu_line = 1;
+				break;
+
+			case '6':
+			case 'l':
+			case 'L':
+				menu_line = num;
+				break;
+
+			case 'x':
+			case 'X':
+			case '\r':
+			case '\n':
+				i = menu_line - 1;
+				ask = FALSE;
+				break;
+			}
+			if (menu_line > num) menu_line -= num;
+		}
+
 		/* Request redraw */
-		if ((choice == ' ') || (choice == '*') || (choice == '?'))
+		if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && ask))
 		{
 			/* Show the list */
-			if (!redraw)
+			if (!redraw || use_menu)
 			{
-				y = 1;
-				x = 0;
-				ctr = 0;
+				byte y = 1, x = 0;
+				int ctr = 0;
 
 				/* Show list */
 				redraw = TRUE;
 
 				/* Save the screen */
-				Term_save();
+				if (!use_menu) screen_save();
 
 				prt("", y++, x);
 
-				while (ctr < num)
+				/* Print list */
+				for (ctr = 0; ctr < num; ctr++)
 				{
-					sprintf(buf, "%s%c) %s", (ctr == mode) ? "*" : " ", I2A(ctr), power_desc[ctr]);
+					/* Letter/number for power selection */
+#ifdef JP
+					if (use_menu) sprintf(buf, "%c%s ", (ctr == mode) ? '*' : ' ', (ctr == (menu_line - 1)) ? "¡Õ" : "  ");
+#else
+					if (use_menu) sprintf(buf, "%c%s ", (ctr == mode) ? '*' : ' ', (ctr == (menu_line - 1)) ? "> " : "  ");
+#endif
+					else sprintf(buf, "%c%c) ", (ctr == mode) ? '*' : ' ', I2A(ctr));
+
+					strcat(buf, power_desc[ctr]);
+
 					prt(buf, y + ctr, x);
-					ctr++;
 				}
 
-				if (ctr < 17)
-				{
-					prt("", y + ctr, x);
-				}
-				else
-				{
-					prt("", y + 17, x);
-				}
+				prt("", y + MIN(ctr, 17), x);
 			}
 
 			/* Hide the list */
@@ -2708,14 +2729,14 @@ strnfmt(out_val, 78, "(¥³¥Þ¥ó¥É %c-%c¡¢'*'=°ìÍ÷¡¢ESC=½ªÎ») ¥³¥Þ¥ó¥É¤òÁª¤ó¤Ç¤¯¤À¤
 				redraw = FALSE;
 
 				/* Restore the screen */
-				Term_load();
+				screen_load();
 			}
 
 			/* Redo asking */
 			continue;
 		}
 
-		if (isalpha(choice))
+		if (!use_menu)
 		{
 			/* Note verify */
 			ask = (isupper(choice));
@@ -2725,12 +2746,6 @@ strnfmt(out_val, 78, "(¥³¥Þ¥ó¥É %c-%c¡¢'*'=°ìÍ÷¡¢ESC=½ªÎ») ¥³¥Þ¥ó¥É¤òÁª¤ó¤Ç¤¯¤À¤
 
 			/* Extract request */
 			i = (islower(choice) ? A2I(choice) : -1);
-		}
-		else
-		{
-			ask = FALSE; /* Can't uppercase digits */
-
-			i = choice - '0' + 26;
 		}
 
 		/* Totally Illegal */
@@ -2750,7 +2765,6 @@ strnfmt(out_val, 78, "(¥³¥Þ¥ó¥É %c-%c¡¢'*'=°ìÍ÷¡¢ESC=½ªÎ») ¥³¥Þ¥ó¥É¤òÁª¤ó¤Ç¤¯¤À¤
 			strnfmt(buf, 78, "Use %s? ", power_desc[i]);
 #endif
 
-
 			/* Belay that order */
 			if (!get_check(buf)) continue;
 		}
@@ -2760,7 +2774,7 @@ strnfmt(out_val, 78, "(¥³¥Þ¥ó¥É %c-%c¡¢'*'=°ìÍ÷¡¢ESC=½ªÎ») ¥³¥Þ¥ó¥É¤òÁª¤ó¤Ç¤¯¤À¤
 	}
 
 	/* Restore the screen */
-	if (redraw) Term_load();
+	if (redraw) screen_load();
 
 	/* Abort if needed */
 	if (!flag)
@@ -2768,6 +2782,11 @@ strnfmt(out_val, 78, "(¥³¥Þ¥ó¥É %c-%c¡¢'*'=°ìÍ÷¡¢ESC=½ªÎ») ¥³¥Þ¥ó¥É¤òÁª¤ó¤Ç¤¯¤À¤
 		energy_use = 0;
 		return;
 	}
+
+#ifdef ALLOW_REPEAT
+	repeat_push(i);
+	}
+#endif /* ALLOW_REPEAT */
 
 	switch (powers[i])
 	{
