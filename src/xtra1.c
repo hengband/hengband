@@ -320,7 +320,7 @@ static void prt_stat(int stat)
 
 
 static struct {
-	int attr;
+	byte attr;
 	cptr sstr;
 	cptr lstr;
 } bar[]

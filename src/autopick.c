@@ -776,7 +776,7 @@ static bool is_opt_confirm_destroy(object_type *o_ptr)
 /*
  *  Auto inscription
  */
-void auto_inscribe_item(s16b item, int idx)
+void auto_inscribe_item(int item, int idx)
 {
 	object_type *o_ptr;
 
@@ -810,7 +810,7 @@ void auto_inscribe_item(s16b item, int idx)
 /*
  * Automatically destroy an item if it is to be destroyed
  */
-bool auto_destroy_item(s16b item, int autopick_idx)
+bool auto_destroy_item(int item, int autopick_idx)
 {
 	char o_name[MAX_NLEN];
 	object_type *o_ptr;
@@ -2062,7 +2062,7 @@ void do_cmd_edit_autopick()
 			else
 				strncpy(buf + sepa_length - 21, " (COMMAND MODE) ", 16);
 
-			Term_putstr(0, hgt - 3, sepa_length, edit_mode ? TERM_YELLOW : TERM_WHITE, buf);
+			Term_putstr(0, hgt - 3, sepa_length, (byte) (edit_mode ? TERM_YELLOW : TERM_WHITE), buf);
 		}
 		
 		/* Dump up to 20, or hgt-4, lines of messages */
@@ -2628,7 +2628,7 @@ void do_cmd_edit_autopick()
 
 		case KTRL('k'):
 			/* Kill rest of line */
-			if (lines_list[cy][0] != '\0' && cx < strlen(lines_list[cy]))
+			if (lines_list[cy][0] != '\0' && (unsigned int) cx < strlen(lines_list[cy]))
 			{
 				for (i = j = 0; lines_list[cy][i] && i < cx; i++)
 				{

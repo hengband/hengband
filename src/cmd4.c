@@ -2406,7 +2406,6 @@ void do_cmd_pickpref(void)
 {
 	char buf[80];
 	errr err;
-	int i;
 
 #ifdef JP
 	if(!get_check("自動拾い設定ファイルをロードしますか? ")) return;
@@ -3289,7 +3288,7 @@ void do_cmd_macros(void)
 }
 
 
-static void cmd_visuals_aux(char i, int *num, int max)
+static void cmd_visuals_aux(int i, int *num, int max)
 {
 	if (iscntrl(i))
 	{

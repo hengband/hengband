@@ -1734,7 +1734,7 @@ errr Term_fresh(void)
 #ifdef CHUUKEI
 				send_text_to_chuukei_server(tx, ty, csize, (old_aa[tx] & 0xf), &old_cc[tx]);
 #endif
-				(void)((*Term->text_hook)(tx, ty, csize, (old_aa[tx] & 0xf), &old_cc[tx]));
+				(void)((*Term->text_hook)(tx, ty, csize, (unsigned char) (old_aa[tx] & 0xf), &old_cc[tx]));
 			}
 
 			/* Hack -- erase the grid */

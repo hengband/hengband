@@ -1403,16 +1403,16 @@ static void check_music()
 	shouhimana /= 9600;
 	if(shouhimana < 1) shouhimana = 1;
         shouhimana *= 0x8000;
-        if ((p_ptr->csp < shouhimana / 0x10000) || (p_ptr->anti_magic))
+        if (((u16b)(p_ptr->csp) < (shouhimana / 0x10000)) || (p_ptr->anti_magic))
         {
                 stop_singing();
 		return;
         }
         else
         {
-                p_ptr->csp -= shouhimana / 0x10000;
-		shouhimana = (shouhimana & 0xffff);
-		if (p_ptr->csp_frac < shouhimana)
+			p_ptr->csp -= (u16b) (shouhimana / 0x10000);
+			shouhimana = (shouhimana & 0xffff);
+			if (p_ptr->csp_frac < shouhimana)
 		{
 			p_ptr->csp--;
 			p_ptr->csp_frac += (u16b)(0x10000L - shouhimana);

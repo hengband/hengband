@@ -747,7 +747,7 @@ static bool add_name(u32b *offset, header *head, cptr buf)
  * Convert a "color letter" into an "actual" color
  * The colors are: dwsorgbuDWvyRGBU, as shown below
  */
-int color_char_to_attr(char c)
+byte color_char_to_attr(char c)
 {
 	switch (c)
 	{
@@ -1225,7 +1225,7 @@ errr parse_f_info(char *buf, header *head)
 	/* Process 'G' for "Graphics" (one line only) */
 	else if (buf[0] == 'G')
 	{
-		int tmp;
+		byte tmp;
 
 		/* Paranoia */
 		if (!buf[2]) return (1);
@@ -1407,7 +1407,7 @@ errr parse_k_info(char *buf, header *head)
 	else if (buf[0] == 'G')
 	{
 		char sym;
-		int tmp;
+		byte tmp;
 
 		/* Paranoia */
 		if (!buf[2]) return (1);
@@ -2239,7 +2239,7 @@ errr parse_r_info(char *buf, header *head)
 	else if (buf[0] == 'G')
 	{
 		char sym;
-		int tmp;
+		byte tmp;
 
 		/* Paranoia */
 		if (!buf[2]) return (1);

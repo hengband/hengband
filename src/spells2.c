@@ -6289,7 +6289,7 @@ bool fire_meteor(int who, int typ, int y, int x, int dam, int rad)
 bool fire_blast(int typ, int dir, int dd, int ds, int num, int dev)
 {
 	int ly, lx, ld;
-	int ty, tx, y, x, dist;
+	int ty, tx, y, x;
 	int i;
 
 	int flg = PROJECT_FAST | PROJECT_THRU | PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;

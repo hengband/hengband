@@ -4322,10 +4322,10 @@ errr make_character_dump(FILE *fff)
 		fprintf(fff, "%s\n", buf);
 	}
 
-	for (i = 0; i < p_ptr->count / 80; i++)
+	for (i = 0; (unsigned int) i < (p_ptr->count / 80); i++)
 		fprintf(fff, " ");
 	fprintf(fff, "\n");
-	for (i = 0; i < p_ptr->count % 80; i++)
+	for (i = 0; (unsigned int) i < (p_ptr->count % 80); i++)
 		fprintf(fff, " ");
 
 	{
@@ -5331,7 +5331,7 @@ msg_format("'%s'をオープンできません。", name);
 				/* Color ? */
 				if (prefix(str + x, "[[[[["))
 				{
-					int c = color_char_to_attr(str[x + 5]);
+					byte c = color_char_to_attr(str[x + 5]);
 					x += 6;
 
 					/* Ok print the link name */
