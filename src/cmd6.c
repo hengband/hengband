@@ -3295,7 +3295,7 @@ static int rod_effect(int sval, int dir, bool *use_charge, bool magic)
 	{
 		case SV_ROD_DETECT_TRAP:
 		{
-			if (detect_traps(DETECT_RAD_DEFAULT, dir ? TRUE : FALSE)) ident = TRUE;
+			if (detect_traps(DETECT_RAD_DEFAULT, dir ? FALSE : TRUE)) ident = TRUE;
 			break;
 		}
 
