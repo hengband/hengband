@@ -1765,6 +1765,9 @@ static errr init_alloc(void)
 		}
 	}
 
+	/* Free the "r_info" array */
+	C_KILL(elements, max_r_idx, tag_type);
+
 #else /* SORT_R_INFO */
 
 	int j;
