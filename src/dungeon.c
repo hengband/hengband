@@ -1492,14 +1492,14 @@ static void check_music(void)
 			p_ptr->redraw |= (PR_STATUS);
 		}
 	}
-	if (p_ptr->spell_exp[spell] < 900)
-		p_ptr->spell_exp[spell]+=5;
-	else if(p_ptr->spell_exp[spell] < 1200)
-		{if (one_in_(2) && (dun_level > 4) && ((dun_level + 10) > p_ptr->lev)) p_ptr->spell_exp[spell]+=1;}
-	else if(p_ptr->spell_exp[spell] < 1400)
-		{if (one_in_(5) && ((dun_level + 5) > p_ptr->lev) && ((dun_level + 5) > s_ptr->slevel)) p_ptr->spell_exp[spell]+=1;}
-	else if(p_ptr->spell_exp[spell] < 1600)
-		{if (one_in_(5) && ((dun_level + 5) > p_ptr->lev) && (dun_level > s_ptr->slevel)) p_ptr->spell_exp[spell]+=1;}
+	if (p_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER)
+		p_ptr->spell_exp[spell] += 5;
+	else if(p_ptr->spell_exp[spell] < SPELL_EXP_SKILLED)
+	{ if (one_in_(2) && (dun_level > 4) && ((dun_level + 10) > p_ptr->lev)) p_ptr->spell_exp[spell] += 1; }
+	else if(p_ptr->spell_exp[spell] < SPELL_EXP_EXPERT)
+	{ if (one_in_(5) && ((dun_level + 5) > p_ptr->lev) && ((dun_level + 5) > s_ptr->slevel)) p_ptr->spell_exp[spell] += 1; }
+	else if(p_ptr->spell_exp[spell] < SPELL_EXP_MASTER)
+	{ if (one_in_(5) && ((dun_level + 5) > p_ptr->lev) && (dun_level > s_ptr->slevel)) p_ptr->spell_exp[spell] += 1; }
 
 	gere_music(p_ptr->magic_num1[0]);
 }
@@ -6466,8 +6466,8 @@ quit("セーブファイルが壊れています");
 	panel_col_min = cur_wid;
 
 	/* Sexy gal gets bonus to maximum weapon skill of whip */
-	if(p_ptr->pseikaku == SEIKAKU_SEXY)
-		s_info[p_ptr->pclass].w_max[TV_HAFTED-TV_BOW][SV_WHIP] = 8000;
+	if (p_ptr->pseikaku == SEIKAKU_SEXY)
+		s_info[p_ptr->pclass].w_max[TV_HAFTED-TV_BOW][SV_WHIP] = WEAPON_EXP_MASTER;
 
 	/* Fill the arrays of floors and walls in the good proportions */
 	set_floor_and_wall(dungeon_type);

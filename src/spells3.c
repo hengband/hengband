@@ -3897,8 +3897,8 @@ strcpy(name, "(х╫фиитг╫)");
  */
 s16b experience_of_spell(int spell, int use_realm)
 {
-	if (p_ptr->pclass == CLASS_SORCERER) return 1600;
-	else if (p_ptr->pclass == CLASS_RED_MAGE) return 1200;
+	if (p_ptr->pclass == CLASS_SORCERER) return SPELL_EXP_MASTER;
+	else if (p_ptr->pclass == CLASS_RED_MAGE) return SPELL_EXP_SKILLED;
 	else if (use_realm == p_ptr->realm1) return p_ptr->spell_exp[spell];
 	else if (use_realm == p_ptr->realm2) return p_ptr->spell_exp[spell + 32];
 	else return 0;
@@ -3968,7 +3968,7 @@ s16b spell_chance(int spell, int use_realm)
 	chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
 
 	if (p_ptr->riding)
-		chance += (MAX(r_info[m_list[p_ptr->riding].r_idx].level-p_ptr->skill_exp[GINOU_RIDING]/100-10,0));
+		chance += (MAX(r_info[m_list[p_ptr->riding].r_idx].level - p_ptr->skill_exp[GINOU_RIDING] / 100 - 10, 0));
 
 	/* Extract mana consumption rate */
 	need_mana = mod_need_mana(s_ptr->smana, spell, use_realm);
@@ -4021,8 +4021,8 @@ s16b spell_chance(int spell, int use_realm)
 	    || (p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_RED_MAGE))
 	{
 		s16b exp = experience_of_spell(spell, use_realm);
-		if(exp > 1399) chance--;
-		if(exp > 1599) chance--;
+		if (exp >= SPELL_EXP_EXPERT) chance--;
+		if (exp >= SPELL_EXP_MASTER) chance--;
 	}
 	if(p_ptr->dec_mana) chance--;
 	if (p_ptr->heavy_spell) chance += 5;
@@ -4420,7 +4420,7 @@ static void spell_info(char *p, int spell, int use_realm)
  */
 void print_spells(int target_spell, byte *spells, int num, int y, int x, int use_realm)
 {
-	int             i, spell, shougou, increment = 64;
+	int             i, spell, exp_level, increment = 64;
 	magic_type      *s_ptr;
 	cptr            comment;
 	char            info[80];
@@ -4492,20 +4492,16 @@ put_str(buf, y, x + 29);
 			/* Extract mana consumption rate */
 			need_mana = mod_need_mana(s_ptr->smana, spell, use_realm);
 
-			if ((increment == 64) || (s_ptr->slevel >= 99)) shougou = 0;
-			else if (exp < 900) shougou = 0;
-			else if (exp < 1200) shougou = 1;
-			else if (exp < 1400) shougou = 2;
-			else if (exp < 1600) shougou = 3;
-			else shougou = 4;
+			if ((increment == 64) || (s_ptr->slevel >= 99)) exp_level = EXP_LEVEL_UNSKILLED;
+			else exp_level = spell_exp_level(exp);
 
 			max = FALSE;
-			if (!increment && (shougou == 4)) max = TRUE;
-			else if ((increment == 32) && (shougou >= 3)) max = TRUE;
+			if (!increment && (exp_level == EXP_LEVEL_MASTER)) max = TRUE;
+			else if ((increment == 32) && (exp_level >= EXP_LEVEL_EXPERT)) max = TRUE;
 			else if (s_ptr->slevel >= 99) max = TRUE;
-			else if ((p_ptr->pclass == CLASS_RED_MAGE) && (shougou >= 2)) max = TRUE;
+			else if ((p_ptr->pclass == CLASS_RED_MAGE) && (exp_level >= EXP_LEVEL_SKILLED)) max = TRUE;
 
-			strncpy(ryakuji,shougou_moji[shougou],4);
+			strncpy(ryakuji, exp_level_str[exp_level], 4);
 			ryakuji[3] = ']';
 			ryakuji[4] = '\0';
 		}

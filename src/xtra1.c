@@ -4524,15 +4524,15 @@ void calc_bonuses(void)
 
 	if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
 	{
-		p_ptr->to_h[0] += (p_ptr->skill_exp[GINOU_SUDE]-4000)/200;
-		p_ptr->dis_to_h[0] += (p_ptr->skill_exp[GINOU_SUDE]-4000)/200;
+		p_ptr->to_h[0] += (p_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
+		p_ptr->dis_to_h[0] += (p_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
 	}
 
 	if (buki_motteruka(INVEN_RARM) && buki_motteruka(INVEN_LARM))
 	{
 		int penalty1, penalty2;
-		penalty1 = ((100-p_ptr->skill_exp[GINOU_NITOURYU]/160) - (130-inventory[INVEN_RARM].weight)/8);
-		penalty2 = ((100-p_ptr->skill_exp[GINOU_NITOURYU]/160) - (130-inventory[INVEN_LARM].weight)/8);
+		penalty1 = ((100 - p_ptr->skill_exp[GINOU_NITOURYU] / 160) - (130 - inventory[INVEN_RARM].weight) / 8);
+		penalty2 = ((100 - p_ptr->skill_exp[GINOU_NITOURYU] / 160) - (130 - inventory[INVEN_LARM].weight) / 8);
 		if ((inventory[INVEN_RARM].name1 == ART_QUICKTHORN) && (inventory[INVEN_LARM].name1 == ART_TINYTHORN))
 		{
 			penalty1 = penalty1 / 2 - 5;
@@ -4584,7 +4584,7 @@ void calc_bonuses(void)
 		int speed = m_list[p_ptr->riding].mspeed;
 		if (m_list[p_ptr->riding].mspeed > 110)
 		{
-			p_ptr->pspeed = 110 + (s16b)((speed-110)*(p_ptr->skill_exp[GINOU_RIDING]*3 + p_ptr->lev*160L - 10000L)/(22000L));
+			p_ptr->pspeed = 110 + (s16b)((speed - 110) * (p_ptr->skill_exp[GINOU_RIDING] * 3 + p_ptr->lev * 160L - 10000L) / (22000L));
 			if (p_ptr->pspeed < 110) p_ptr->pspeed = 110;
 		}
 		else
@@ -4596,7 +4596,7 @@ void calc_bonuses(void)
 		if (r_info[m_list[p_ptr->riding].r_idx].flags7 & RF7_CAN_FLY) p_ptr->ffall = TRUE;
 		if (r_info[m_list[p_ptr->riding].r_idx].flags7 & (RF7_CAN_SWIM | RF7_AQUATIC)) p_ptr->can_swim = TRUE;
 
-		if (p_ptr->skill_exp[GINOU_RIDING] < 2000) j += (p_ptr->wt*3*(2000 - p_ptr->skill_exp[GINOU_RIDING]))/2000;
+		if (p_ptr->skill_exp[GINOU_RIDING] < RIDING_EXP_SKILLED) j += (p_ptr->wt * 3 * (RIDING_EXP_SKILLED - p_ptr->skill_exp[GINOU_RIDING])) / RIDING_EXP_SKILLED;
 
 		i = 3000 + r_info[m_list[p_ptr->riding].r_idx].level * 50;
 	}
@@ -5113,13 +5113,13 @@ void calc_bonuses(void)
 
 	for (i = 0 ; i < 2 ; i++)
 	{
-		if(buki_motteruka(INVEN_RARM+i))
+		if (buki_motteruka(INVEN_RARM+i))
 		{
 			int tval = inventory[INVEN_RARM+i].tval - TV_BOW;
 			int sval = inventory[INVEN_RARM+i].sval;
 
-			p_ptr->to_h[i] += (p_ptr->weapon_exp[tval][sval]-4000)/200;
-			p_ptr->dis_to_h[i] += (p_ptr->weapon_exp[tval][sval]-4000)/200;
+			p_ptr->to_h[i] += (p_ptr->weapon_exp[tval][sval] - WEAPON_EXP_BEGINNER) / 200;
+			p_ptr->dis_to_h[i] += (p_ptr->weapon_exp[tval][sval] - WEAPON_EXP_BEGINNER) / 200;
 			if ((p_ptr->pclass == CLASS_MONK) && !(s_info[CLASS_MONK].w_max[tval][sval]))
 			{
 				p_ptr->to_h[i] -= 40;
@@ -5134,7 +5134,7 @@ void calc_bonuses(void)
 			}
 			else if (p_ptr->pclass == CLASS_NINJA)
 			{
-				if ((s_info[CLASS_NINJA].w_max[tval][sval] <= 4000) || (inventory[INVEN_LARM-i].tval == TV_SHIELD))
+				if ((s_info[CLASS_NINJA].w_max[tval][sval] <= WEAPON_EXP_BEGINNER) || (inventory[INVEN_LARM-i].tval == TV_SHIELD))
 				{
 					p_ptr->to_h[i] -= 40;
 					p_ptr->dis_to_h[i] -= 40;

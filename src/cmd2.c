@@ -3663,9 +3663,9 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	/* Actually "fire" the object */
 	bonus = (p_ptr->to_h_b + o_ptr->to_h + j_ptr->to_h);
 	if ((j_ptr->sval == SV_LIGHT_XBOW) || (j_ptr->sval == SV_HEAVY_XBOW))
-		chance = (p_ptr->skill_thb + ((p_ptr->weapon_exp[0][j_ptr->sval])/400 + bonus) * BTH_PLUS_ADJ);
+		chance = (p_ptr->skill_thb + (p_ptr->weapon_exp[0][j_ptr->sval] / 400 + bonus) * BTH_PLUS_ADJ);
 	else
-		chance = (p_ptr->skill_thb + ((p_ptr->weapon_exp[0][j_ptr->sval]-4000)/200 + bonus) * BTH_PLUS_ADJ);
+		chance = (p_ptr->skill_thb + ((p_ptr->weapon_exp[0][j_ptr->sval] - (WEAPON_EXP_MASTER / 2)) / 200 + bonus) * BTH_PLUS_ADJ);
 
 	energy_use = bow_energy(j_ptr->sval);
 	tmul = bow_tmul(j_ptr->sval);
@@ -3821,9 +3821,9 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 				if (now_exp < s_info[p_ptr->pclass].w_max[0][j_ptr->sval])
 				{
 					int amount = 0;
-					if (now_exp < 4000) amount = 80;
-					else if (now_exp <  6000) amount = 25;
-					else if ((now_exp < 7000) && (p_ptr->lev > 19)) amount = 10;
+					if (now_exp < SPELL_EXP_BEGINNER) amount = 80;
+					else if (now_exp < SPELL_EXP_SKILLED) amount = 25;
+					else if ((now_exp < SPELL_EXP_EXPERT) && (p_ptr->lev > 19)) amount = 10;
 					else if (p_ptr->lev > 34) amount = 2;
 					p_ptr->weapon_exp[0][j_ptr->sval] += amount;
 					p_ptr->update |= (PU_BONUS);
@@ -3832,9 +3832,11 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 
 			if (p_ptr->riding)
 			{
-				if (p_ptr->skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING] && ((p_ptr->skill_exp[GINOU_RIDING] - 1000) / 200 < r_info[m_list[p_ptr->riding].r_idx].level) && one_in_(2))
+				if ((p_ptr->skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING])
+					&& ((p_ptr->skill_exp[GINOU_RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200 < r_info[m_list[p_ptr->riding].r_idx].level)
+					&& one_in_(2))
 				{
-					p_ptr->skill_exp[GINOU_RIDING]+=1;
+					p_ptr->skill_exp[GINOU_RIDING] += 1;
 					p_ptr->update |= (PU_BONUS);
 				}
 			}

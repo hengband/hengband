@@ -107,7 +107,7 @@ extern int monk_ave_damage[PY_MAX_LEVEL+1][3];
 extern cptr game_inscriptions[];
 extern kamae kamae_shurui[MAX_KAMAE];
 extern kamae kata_shurui[MAX_KATA];
-extern cptr shougou_moji[5];
+extern cptr exp_level_str[5];
 extern byte conv_terrain2feat[MAX_WILDERNESS];
 extern cptr silly_attacks[MAX_SILLY_ATTACK];
 extern monster_power monster_powers[MAX_MONSPELLS];
@@ -1329,6 +1329,9 @@ extern s16b gain_energy(void);
 extern s16b bow_energy(int sval);
 extern int bow_tmul(int sval);
 extern cptr your_alignment(void);
+extern int weapon_exp_level(int weapon_exp);
+extern int riding_exp_level(int riding_exp);
+extern int spell_exp_level(int spell_exp);
 
 /* mspells1.c */
 extern bool clean_shot(int y1, int x1, int y2, int x2, bool friend);

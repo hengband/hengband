@@ -380,7 +380,7 @@ static void do_cmd_wiz_change_aux(void)
 
 
 	/* Default */
-	sprintf(tmp_val, "8000");
+	sprintf(tmp_val, "%d", WEAPON_EXP_MASTER);
 
 	/* Query */
 #ifdef JP
@@ -393,10 +393,10 @@ static void do_cmd_wiz_change_aux(void)
 	tmp_s16b = atoi(tmp_val);
 
 	/* Verify */
-	if (tmp_s16b < 0) tmp_s16b = 0L;
-	if (tmp_s16b > 8000) tmp_s16b = 8000L;
+	if (tmp_s16b < WEAPON_EXP_UNSKILLED) tmp_s16b = WEAPON_EXP_UNSKILLED;
+	if (tmp_s16b > WEAPON_EXP_MASTER) tmp_s16b = WEAPON_EXP_MASTER;
 
-	for (j = 0; j <= TV_SWORD - TV_BOW;j++)
+	for (j = 0; j <= TV_SWORD - TV_BOW; j++)
 	{
 		for (i = 0;i < 64;i++)
 		{
@@ -412,9 +412,9 @@ static void do_cmd_wiz_change_aux(void)
 	}
 
 	for (j = 0; j < 32; j++)
-		p_ptr->spell_exp[j] = (tmp_s16b > 1600 ? 1600 : tmp_s16b);
+		p_ptr->spell_exp[j] = (tmp_s16b > SPELL_EXP_MASTER ? SPELL_EXP_MASTER : tmp_s16b);
 	for (; j < 64; j++)
-		p_ptr->spell_exp[j] = (tmp_s16b > 1400 ? 1400 : tmp_s16b);
+		p_ptr->spell_exp[j] = (tmp_s16b > SPELL_EXP_EXPERT ? SPELL_EXP_EXPERT : tmp_s16b);
 
 	/* Default */
 	sprintf(tmp_val, "%ld", (long)(p_ptr->au));

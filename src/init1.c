@@ -981,13 +981,18 @@ errr parse_s_info(char *buf, header *head)
 	else if (buf[0] == 'W')
 	{
 		int tval, sval, start, max;
-		const s16b exp_conv_table[] = { 0, 4000, 6000, 7000, 8000 };
+		const s16b exp_conv_table[] =
+		{
+			WEAPON_EXP_UNSKILLED, WEAPON_EXP_BEGINNER, WEAPON_EXP_SKILLED,
+			WEAPON_EXP_EXPERT, WEAPON_EXP_MASTER
+		};
 
 		/* Scan for the values */
 		if (4 != sscanf(buf+2, "%d:%d:%d:%d",
 				&tval, &sval, &start, &max)) return (1);
 
-		if (start < 0 || start > 4 || max < 0 || max > 4) return (8);
+		if (start < EXP_LEVEL_UNSKILLED || start > EXP_LEVEL_MASTER
+			|| max < EXP_LEVEL_UNSKILLED || max > EXP_LEVEL_MASTER) return (8);
 
 		/* Save the values */
 		s_ptr->w_start[tval][sval] = exp_conv_table[start];
@@ -1003,7 +1008,8 @@ errr parse_s_info(char *buf, header *head)
 		if (3 != sscanf(buf+2, "%d:%d:%d",
 				&num, &start, &max)) return (1);
 
-		if (start < 0 || start > 8000 || max < 0 || max > 8000) return (8);
+		if (start < WEAPON_EXP_UNSKILLED || start > WEAPON_EXP_MASTER
+			|| max < WEAPON_EXP_UNSKILLED || max > WEAPON_EXP_MASTER) return (8);
 
 		/* Save the values */
 		s_ptr->s_start[num] = start;

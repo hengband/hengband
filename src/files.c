@@ -1758,13 +1758,13 @@ static void display_player_middle(void)
 	if (object_known_p(o_ptr)) show_todam += o_ptr->to_d;
 
 	if ((o_ptr->sval == SV_LIGHT_XBOW) || (o_ptr->sval == SV_HEAVY_XBOW))
-		show_tohit += (p_ptr->weapon_exp[0][o_ptr->sval])/400;
+		show_tohit += p_ptr->weapon_exp[0][o_ptr->sval] / 400;
 	else
-		show_tohit += (p_ptr->weapon_exp[0][o_ptr->sval]-4000)/200;
+		show_tohit += (p_ptr->weapon_exp[0][o_ptr->sval] - (WEAPON_EXP_MASTER / 2)) / 200;
 
 	/* Range attacks */
 	display_player_one_line(ENTRY_SHOOT_HIT_DAM, format("(%+d,%+d)", show_tohit, show_todam), TERM_L_BLUE);
-	
+
 	if (inventory[INVEN_BOW].k_idx)
 	{
 		tmul = bow_tmul(inventory[INVEN_BOW].sval);

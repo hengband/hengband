@@ -1412,7 +1412,7 @@ static void rd_extra(void)
 	for (i = 0; i < 64; i++) rd_s16b(&p_ptr->spell_exp[i]);
 	if ((p_ptr->pclass == CLASS_SORCERER) && z_older_than(10, 4, 2))
 	{
-		for (i = 0; i < 64; i++) p_ptr->spell_exp[i] = 1600;
+		for (i = 0; i < 64; i++) p_ptr->spell_exp[i] = SPELL_EXP_MASTER;
 	}
 	if (z_older_than(10, 3, 6))
 		for (i = 0; i < 5; i++) for (j = 0; j < 60; j++) rd_s16b(&p_ptr->weapon_exp[i][j]);

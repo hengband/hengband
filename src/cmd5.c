@@ -555,24 +555,24 @@ s = "読める本がない。";
 
 static void change_realm2(int next_realm)
 {
-	int i, j=0;
+	int i, j = 0;
 	char tmp[80];
 
 	for (i = 0; i < 64; i++)
 	{
 		p_ptr->spell_order[j] = p_ptr->spell_order[i];
-		if(p_ptr->spell_order[i] < 32) j++;
+		if (p_ptr->spell_order[i] < 32) j++;
 	}
 	for (; j < 64; j++)
 		p_ptr->spell_order[j] = 99;
 
 	for (i = 32; i < 64; i++)
 	{
-		p_ptr->spell_exp[i] = 0;
+		p_ptr->spell_exp[i] = SPELL_EXP_UNSKILLED;
 	}
 	p_ptr->spell_learned2 = 0L;
 	p_ptr->spell_worked2 = 0L;
-	p_ptr->spell_forgotten2 = 0L;	
+	p_ptr->spell_forgotten2 = 0L;
 
 #ifdef JP
 	sprintf(tmp,"魔法の領域を%sから%sに変更した。", realm_names[p_ptr->realm2], realm_names[next_realm]);
@@ -799,9 +799,9 @@ msg_format("その本には学ぶべき%sがない。", p);
 
 	if (learned)
 	{
-		int max_exp = (spell < 32) ? 1600 : 1400;
+		int max_exp = (spell < 32) ? SPELL_EXP_MASTER : SPELL_EXP_EXPERT;
 		int old_exp = p_ptr->spell_exp[spell];
-		int new_rank = 0;
+		int new_rank = EXP_LEVEL_UNSKILLED;
 		cptr name = spell_names[technic2magic(increment ? p_ptr->realm2 : p_ptr->realm1)-1][spell%32];
 
 		if (old_exp >= max_exp)
@@ -821,31 +821,31 @@ msg_format("その本には学ぶべき%sがない。", p);
 		{
 			return;
 		}
-		else if (old_exp >= 1400)
+		else if (old_exp >= SPELL_EXP_EXPERT)
 		{
-			p_ptr->spell_exp[spell] = 1600;
-			new_rank = 4;
+			p_ptr->spell_exp[spell] = SPELL_EXP_MASTER;
+			new_rank = EXP_LEVEL_MASTER;
 		}
-		else if (old_exp >= 1200)
+		else if (old_exp >= SPELL_EXP_SKILLED)
 		{
-			if (spell >= 32) p_ptr->spell_exp[spell] = 1400;
-			else p_ptr->spell_exp[spell] += 200;
-			new_rank = 3;
+			if (spell >= 32) p_ptr->spell_exp[spell] = SPELL_EXP_EXPERT;
+			else p_ptr->spell_exp[spell] += SPELL_EXP_EXPERT - SPELL_EXP_SKILLED;
+			new_rank = EXP_LEVEL_EXPERT;
 		}
-		else if (old_exp >= 900)
+		else if (old_exp >= SPELL_EXP_BEGINNER)
 		{
-			p_ptr->spell_exp[spell] = 1200+(old_exp-900)*2/3;
-			new_rank = 2;
+			p_ptr->spell_exp[spell] = SPELL_EXP_SKILLED + (old_exp - SPELL_EXP_BEGINNER) * 2 / 3;
+			new_rank = EXP_LEVEL_SKILLED;
 		}
 		else
 		{
-			p_ptr->spell_exp[spell] = 900+(old_exp)/3;
-			new_rank = 1;
+			p_ptr->spell_exp[spell] = SPELL_EXP_BEGINNER + old_exp / 3;
+			new_rank = EXP_LEVEL_BEGINNER;
 		}
 #ifdef JP
-		msg_format("%sの熟練度が%sに上がった。", name, shougou_moji[new_rank]);
+		msg_format("%sの熟練度が%sに上がった。", name, exp_level_str[new_rank]);
 #else
-		msg_format("Your proficiency of %s is now %s rank.", name, shougou_moji[new_rank]);
+		msg_format("Your proficiency of %s is now %s rank.", name, exp_level_str[new_rank]);
 #endif
 	}
 	else
@@ -882,14 +882,21 @@ msg_format("その本には学ぶべき%sがない。", p);
 	/* Take a turn */
 	energy_use = 100;
 
-	if (mp_ptr->spell_book == TV_LIFE_BOOK)
+	switch (mp_ptr->spell_book)
+	{
+	case TV_LIFE_BOOK:
 		chg_virtue(V_FAITH, 1);
-	else if (mp_ptr->spell_book == TV_DEATH_BOOK)
+		break;
+	case TV_DEATH_BOOK:
 		chg_virtue(V_UNLIFE, 1);
-	else if (mp_ptr->spell_book == TV_NATURE_BOOK)
+		break;
+	case TV_NATURE_BOOK:
 		chg_virtue(V_NATURE, 1);
-	else
+		break;
+	default:
 		chg_virtue(V_KNOWLEDGE, 1);
+		break;
+	}
 
 	/* Sound */
 	sound(SOUND_STUDY);
@@ -902,17 +909,12 @@ msg_format("その本には学ぶべき%sがない。", p);
 	{
 		/* Message */
 #ifdef JP
-			if( p_ptr->new_spells < 10 ){
-				msg_format("あと %d つの%sを学べる。", p_ptr->new_spells, p);
-			}else{
-				msg_format("あと %d 個の%sを学べる。", p_ptr->new_spells, p);
-			}
+		if (p_ptr->new_spells < 10) msg_format("あと %d つの%sを学べる。", p_ptr->new_spells, p);
+		else msg_format("あと %d 個の%sを学べる。", p_ptr->new_spells, p);
 #else
-		msg_format("You can learn %d more %s%s.",
-			p_ptr->new_spells, p,
-			(p_ptr->new_spells != 1) ? "s" : "");
+		msg_format("You can learn %d more %s%s.", p_ptr->new_spells, p,
+		           (p_ptr->new_spells != 1) ? "s" : "");
 #endif
-
 	}
 #endif
 
@@ -5112,24 +5114,24 @@ msg_print("An infernal sound echoed.");
 			s16b cur_exp = p_ptr->spell_exp[(increment ? 32 : 0)+spell];
 			s16b exp_gain = 0;
 
-			if (cur_exp < 900)
-				exp_gain+=60;
-			else if(cur_exp < 1200)
+			if (cur_exp < SPELL_EXP_BEGINNER)
+				exp_gain += 60;
+			else if (cur_exp < SPELL_EXP_SKILLED)
 			{
 				if ((dun_level > 4) && ((dun_level + 10) > p_ptr->lev))
 					exp_gain = 8;
 			}
-			else if(cur_exp < 1400)
+			else if (cur_exp < SPELL_EXP_EXPERT)
 			{
 				if (((dun_level + 5) > p_ptr->lev) && ((dun_level + 5) > s_ptr->slevel))
 					exp_gain = 2;
 			}
-			else if((cur_exp < 1600) && !increment)
+			else if ((cur_exp < SPELL_EXP_MASTER) && !increment)
 			{
 				if (((dun_level + 5) > p_ptr->lev) && (dun_level > s_ptr->slevel))
 					exp_gain = 1;
 			}
-			p_ptr->spell_exp[(increment ? 32 : 0)+spell] += exp_gain;
+			p_ptr->spell_exp[(increment ? 32 : 0) + spell] += exp_gain;
 		}
 	}
 
@@ -5497,18 +5499,18 @@ bool rakuba(int dam, bool force)
 		{
 			int level = r_ptr->level;
 			if (p_ptr->riding_ryoute) level += 20;
-			if ((dam/2 + r_ptr->level) > (p_ptr->skill_exp[GINOU_RIDING]/30+10))
+			if ((dam / 2 + r_ptr->level) > (p_ptr->skill_exp[GINOU_RIDING] / 30 + 10))
 			{
-				if((p_ptr->skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING]) && s_info[p_ptr->pclass].s_max[GINOU_RIDING] > 1000)
+				if ((p_ptr->skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING]) && s_info[p_ptr->pclass].s_max[GINOU_RIDING] > (RIDING_EXP_BEGINNER * 2))
 				{
-					if (r_ptr->level*100 > (p_ptr->skill_exp[GINOU_RIDING] + 1500))
-						p_ptr->skill_exp[GINOU_RIDING] += (1+(r_ptr->level - p_ptr->skill_exp[GINOU_RIDING]/100 - 15));
+					if (r_ptr->level * 100 > (p_ptr->skill_exp[GINOU_RIDING] + (RIDING_EXP_SKILLED - RIDING_EXP_BEGINNER)))
+						p_ptr->skill_exp[GINOU_RIDING] += (1 + (r_ptr->level - p_ptr->skill_exp[GINOU_RIDING] / 100 - 15));
 					else p_ptr->skill_exp[GINOU_RIDING]++;
 				}
 			}
-			if (randint0(dam/2 + level*2) < (p_ptr->skill_exp[GINOU_RIDING]/30+10))
+			if (randint0(dam / 2 + level * 2) < (p_ptr->skill_exp[GINOU_RIDING] / 30 + 10))
 			{
-				if ((((p_ptr->pclass == CLASS_BEASTMASTER) || (p_ptr->pclass == CLASS_CAVALRY)) && !p_ptr->riding_ryoute) || !one_in_(p_ptr->lev*(p_ptr->riding_ryoute ? 2 : 3)+30))
+				if ((((p_ptr->pclass == CLASS_BEASTMASTER) || (p_ptr->pclass == CLASS_CAVALRY)) && !p_ptr->riding_ryoute) || !one_in_(p_ptr->lev*(p_ptr->riding_ryoute ? 2 : 3) + 30))
 				{
 					return FALSE;
 				}
@@ -5711,7 +5713,7 @@ msg_print("その場所にはモンスターはいません。");
 
 			return FALSE;
 		}
-		if (r_info[m_ptr->r_idx].level > randint1((p_ptr->skill_exp[GINOU_RIDING]/50 + p_ptr->lev/2 +20)))
+		if (r_info[m_ptr->r_idx].level > randint1((p_ptr->skill_exp[GINOU_RIDING] / 50 + p_ptr->lev / 2 + 20)))
 		{
 #ifdef JP
 msg_print("うまく乗れなかった。");

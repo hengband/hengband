@@ -2743,17 +2743,17 @@ static void get_extra(bool roll_hitdie)
 
 	for (i = 0; i < 64; i++)
 	{
-		if (p_ptr->pclass == CLASS_SORCERER) p_ptr->spell_exp[i] = 1600;
-		else if (p_ptr->pclass == CLASS_RED_MAGE) p_ptr->spell_exp[i] = 1200;
-		else p_ptr->spell_exp[i] = 0;
+		if (p_ptr->pclass == CLASS_SORCERER) p_ptr->spell_exp[i] = SPELL_EXP_MASTER;
+		else if (p_ptr->pclass == CLASS_RED_MAGE) p_ptr->spell_exp[i] = SPELL_EXP_SKILLED;
+		else p_ptr->spell_exp[i] = SPELL_EXP_UNSKILLED;
 	}
 
 	for (i = 0; i < 5; i++)
 		for (j = 0; j < 64; j++)
 			p_ptr->weapon_exp[i][j] = s_info[p_ptr->pclass].w_start[i][j];
-	if(p_ptr->pseikaku == SEIKAKU_SEXY)
+	if ((p_ptr->pseikaku == SEIKAKU_SEXY) && (p_ptr->weapon_exp[TV_HAFTED-TV_BOW][SV_WHIP] < WEAPON_EXP_BEGINNER))
 	{
-		p_ptr->weapon_exp[TV_HAFTED-TV_BOW][SV_WHIP] = 4000;
+		p_ptr->weapon_exp[TV_HAFTED-TV_BOW][SV_WHIP] = WEAPON_EXP_BEGINNER;
 	}
 
 	for (i = 0; i < 10; i++)

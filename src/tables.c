@@ -7829,7 +7829,7 @@ kamae kata_shurui[MAX_KATA] =
 #endif
 };
 
-cptr shougou_moji[5]=
+cptr exp_level_str[5]=
 #ifdef JP
 {"[初心者]", "[入門者]", "[熟練者]", "[エキスパート]", "[達人]"};
 #else

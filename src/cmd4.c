@@ -6593,7 +6593,7 @@ static void do_cmd_knowledge_uniques(void)
  */
 static void do_cmd_knowledge_weapon_exp(void)
 {
-	int i,j, num, shougou;
+	int i, j, num, weapon_exp;
 
 	FILE *fff;
 
@@ -6612,7 +6612,7 @@ static void do_cmd_knowledge_weapon_exp(void)
 	    return;
 	}
 
-	for(i = 0; i < 5; i++)
+	for (i = 0; i < 5; i++)
 	{
 		for (num = 0; num < 64; num++)
 		{
@@ -6620,22 +6620,18 @@ static void do_cmd_knowledge_weapon_exp(void)
 			{
 				object_kind *k_ptr = &k_info[j];
 
-				if ((k_ptr->tval == TV_SWORD-i) && (k_ptr->sval == num))
+				if ((k_ptr->tval == TV_SWORD - i) && (k_ptr->sval == num))
 				{
-					if((k_ptr->tval == TV_BOW) && (k_ptr->sval == SV_CRIMSON)) continue;
+					if ((k_ptr->tval == TV_BOW) && (k_ptr->sval == SV_CRIMSON)) continue;
 
-					if(p_ptr->weapon_exp[4-i][num]<4000) shougou=0;
-					else if(p_ptr->weapon_exp[4-i][num]<6000) shougou=1;
-					else if(p_ptr->weapon_exp[4-i][num]<7000) shougou=2;
-					else if(p_ptr->weapon_exp[4-i][num]<8000) shougou=3;
-					else shougou=4;
+					weapon_exp = p_ptr->weapon_exp[4 - i][num];
 					strip_name(tmp, j);
-					fprintf(fff,"%-25s ",tmp);
-					if (p_ptr->weapon_exp[4-i][num] >= s_info[p_ptr->pclass].w_max[4-i][num]) fprintf(fff,"!");
-					else fprintf(fff," ");
-					fprintf(fff,"%s",shougou_moji[shougou]);
-					if (cheat_xtra) fprintf(fff," %d",p_ptr->weapon_exp[4-i][num]);
-					fprintf(fff,"\n");
+					fprintf(fff, "%-25s ", tmp);
+					if (weapon_exp >= s_info[p_ptr->pclass].w_max[4 - i][num]) fprintf(fff, "!");
+					else fprintf(fff, " ");
+					fprintf(fff, "%s", exp_level_str[weapon_exp_level(weapon_exp)]);
+					if (cheat_xtra) fprintf(fff, " %d", weapon_exp);
+					fprintf(fff, "\n");
 					break;
 				}
 			}
@@ -6663,7 +6659,7 @@ static void do_cmd_knowledge_weapon_exp(void)
  */
 static void do_cmd_knowledge_spell_exp(void)
 {
-	int i=0, shougou;
+	int i = 0, spell_exp, exp_level;
 
 	FILE *fff;
 	magic_type *s_ptr;
@@ -6682,12 +6678,12 @@ static void do_cmd_knowledge_spell_exp(void)
 	    return;
 	}
 
-	if(p_ptr->realm1 != REALM_NONE)
+	if (p_ptr->realm1 != REALM_NONE)
 	{
 #ifdef JP
-		fprintf(fff,"%sの魔法書\n",realm_names[p_ptr->realm1]);
+		fprintf(fff, "%sの魔法書\n", realm_names[p_ptr->realm1]);
 #else
-		fprintf(fff,"%s Spellbook\n",realm_names[p_ptr->realm1]);
+		fprintf(fff, "%s Spellbook\n", realm_names[p_ptr->realm1]);
 #endif
 		for (i = 0; i < 32; i++)
 		{
@@ -6699,29 +6695,30 @@ static void do_cmd_knowledge_spell_exp(void)
 			{
 				s_ptr = &mp_ptr->info[p_ptr->realm1 - 1][i];
 			}
-			if(s_ptr->slevel == 99) continue;
-			if(p_ptr->spell_exp[i]<900) shougou=0;
-			else if(p_ptr->spell_exp[i]<1200) shougou=1;
-			else if(p_ptr->spell_exp[i]<1400) shougou=2;
-			else if(p_ptr->spell_exp[i]<1600) shougou=3;
-			else shougou=4;
-			fprintf(fff,"%-25s ",spell_names[technic2magic(p_ptr->realm1)-1][i]);
+			if (s_ptr->slevel >= 99) continue;
+			spell_exp = p_ptr->spell_exp[i];
+			exp_level = spell_exp_level(spell_exp);
+			fprintf(fff, "%-25s ", spell_names[technic2magic(p_ptr->realm1) - 1][i]);
 			if (p_ptr->realm1 == REALM_HISSATSU)
-				fprintf(fff,"[--]");
+				fprintf(fff, "[--]");
 			else
 			{
-				if (shougou == 4) fprintf(fff,"!");
-				else fprintf(fff," ");
-				fprintf(fff,"%s",shougou_moji[shougou]);
+				if (exp_level >= EXP_LEVEL_MASTER) fprintf(fff, "!");
+				else fprintf(fff, " ");
+				fprintf(fff, "%s", exp_level_str[exp_level]);
 			}
-			if (cheat_xtra) fprintf(fff," %d",p_ptr->spell_exp[i]);
-			fprintf(fff,"\n");
+			if (cheat_xtra) fprintf(fff, " %d", spell_exp);
+			fprintf(fff, "\n");
 		}
 	}
 
-	if(p_ptr->realm2 != REALM_NONE)
+	if (p_ptr->realm2 != REALM_NONE)
 	{
-		fprintf(fff,"\n%s Spellbook\n",realm_names[p_ptr->realm2]);
+#ifdef JP
+		fprintf(fff, "%sの魔法書\n", realm_names[p_ptr->realm2]);
+#else
+		fprintf(fff, "\n%s Spellbook\n", realm_names[p_ptr->realm2]);
+#endif
 		for (i = 0; i < 32; i++)
 		{
 			if (!is_magic(p_ptr->realm1))
@@ -6732,18 +6729,16 @@ static void do_cmd_knowledge_spell_exp(void)
 			{
 				s_ptr = &mp_ptr->info[p_ptr->realm2 - 1][i];
 			}
-			if(s_ptr->slevel == 99) continue;
+			if (s_ptr->slevel >= 99) continue;
 
-			if(p_ptr->spell_exp[i+32]<900) shougou=0;
-			else if(p_ptr->spell_exp[i+32]<1200) shougou=1;
-			else if(p_ptr->spell_exp[i+32]<1400) shougou=2;
-			else shougou=3;
-			fprintf(fff,"%-25s ",spell_names[technic2magic(p_ptr->realm2)-1][i]);
-			if (shougou == 3) fprintf(fff,"!");
-			else fprintf(fff," ");
-			fprintf(fff,"%s",shougou_moji[shougou]);
-			if (cheat_xtra) fprintf(fff," %d",p_ptr->spell_exp[i+32]);
-			fprintf(fff,"\n");
+			spell_exp = p_ptr->spell_exp[i + 32];
+			exp_level = spell_exp_level(spell_exp);
+			fprintf(fff, "%-25s ", spell_names[technic2magic(p_ptr->realm2) - 1][i]);
+			if (exp_level >= EXP_LEVEL_EXPERT) fprintf(fff, "!");
+			else fprintf(fff, " ");
+			fprintf(fff, "%s", exp_level_str[exp_level]);
+			if (cheat_xtra) fprintf(fff, " %d", spell_exp);
+			fprintf(fff, "\n");
 		}
 	}
 
@@ -6768,7 +6763,7 @@ static void do_cmd_knowledge_spell_exp(void)
  */
 static void do_cmd_knowledge_skill_exp(void)
 {
-	int i=0, shougou;
+	int i = 0, skill_exp;
 
 	FILE *fff;
 
@@ -6793,28 +6788,13 @@ static void do_cmd_knowledge_skill_exp(void)
 
 	for (i = 0; i < 3; i++)
 	{
-		if(i == GINOU_RIDING)
-		{
-			if(p_ptr->skill_exp[i]<500) shougou=0;
-			else if(p_ptr->skill_exp[i]<2000) shougou=1;
-			else if(p_ptr->skill_exp[i]<5000) shougou=2;
-			else if(p_ptr->skill_exp[i]<8000) shougou=3;
-			else shougou=4;
-		}
-		else
-		{
-			if(p_ptr->skill_exp[i]<4000) shougou=0;
-			else if(p_ptr->skill_exp[i]<6000) shougou=1;
-			else if(p_ptr->skill_exp[i]<7000) shougou=2;
-			else if(p_ptr->skill_exp[i]<8000) shougou=3;
-			else shougou=4;
-		}
-		fprintf(fff,"%-20s ",skill_name[i]);
-		if (p_ptr->skill_exp[i] == s_info[p_ptr->pclass].s_max[i]) fprintf(fff,"!");
-		else fprintf(fff," ");
-		fprintf(fff,"%s",shougou_moji[shougou]);
-		if (cheat_xtra) fprintf(fff," %d",p_ptr->skill_exp[i]);
-		fprintf(fff,"\n");
+		skill_exp = p_ptr->skill_exp[i];
+		fprintf(fff, "%-20s ", skill_name[i]);
+		if (skill_exp >= s_info[p_ptr->pclass].s_max[i]) fprintf(fff, "!");
+		else fprintf(fff, " ");
+		fprintf(fff, "%s", exp_level_str[(i == GINOU_RIDING) ? riding_exp_level(skill_exp) : weapon_exp_level(skill_exp)]);
+		if (cheat_xtra) fprintf(fff, " %d", skill_exp);
+		fprintf(fff, "\n");
 	}
 
 	/* Close the file */
