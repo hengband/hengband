@@ -1572,14 +1572,6 @@ msg_print("体を悪くしてしまった！");
 }
 
 
-/*
- * Pray a prayer -- Unused in Hengband
- */
-void do_cmd_pray(void)
-{
-	msg_print("Praying is not used in Hengband. Use magic spell casting instead.");
-}
-
 static bool ang_sort_comp_pet_dismiss(vptr u, vptr v, int a, int b)
 {
 	u16b *who = (u16b*)(u);

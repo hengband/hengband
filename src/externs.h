@@ -783,7 +783,6 @@ extern cptr spell_category_name(int tval);
 extern void do_cmd_browse(void);
 extern void do_cmd_study(void);
 extern void do_cmd_cast(void);
-extern void do_cmd_pray(void);
 extern bool rakuba(int dam, bool force);
 extern bool do_riding(bool force);
 extern int calculate_upkeep(void);
