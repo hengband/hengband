@@ -7411,9 +7411,9 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 		/* Display kills */
 		if (!unique)	put_str(format("%5d", r_ptr->r_pkills), row + i, 73);
 #ifdef JP
-		else put_str(format("%s", (r_ptr->max_num == 0) ? "死亡" : "生存"), row + i, 73);
+		else c_put_str((r_ptr->max_num == 0 ? TERM_L_DARK : TERM_WHITE), (r_ptr->max_num == 0 ? "死亡" : "生存"), row + i, 73);
 #else
-		else put_str(format("%s", (r_ptr->max_num == 0) ? "dead" : "alive"), row + i, 73);
+		else c_put_str((r_ptr->max_num == 0 ? TERM_L_DARK : TERM_WHITE), (r_ptr->max_num == 0 ? "dead" : "alive"), row + i, 73);
 #endif
 	
 	}
