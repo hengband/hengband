@@ -3928,27 +3928,15 @@ void display_player(int mode)
 }
 
 
-errr make_character_dump(FILE *fff)
+/*
+ *
+ */
+static void dump_aux_display_player(FILE *fff)
 {
-	int		i, x, y;
-	byte		a;
-	char		c;
-	cptr		paren = ")";
-	store_type  *st_ptr;
-	char		o_name[MAX_NLEN];
+	int x, y, i;
+	byte a;
+	char c;
 	char		buf[1024];
-	int		*quest_num;
-	int		dummy;
-
-#ifdef JP
-	fprintf(fff, "  [変愚蛮怒 %d.%d.%d キャラクタ情報]\n\n",
-		FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
-#else
-	fprintf(fff, "  [Hengband %d.%d.%d Character Dump]\n\n",
-		FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
-#endif
-
-	update_playtime();
 
 	/* Display player */
 	display_player(0);
@@ -4074,47 +4062,59 @@ errr make_character_dump(FILE *fff)
 	fprintf(fff, "\n");
 	for (i = 0; (unsigned int) i < (p_ptr->count % 80); i++)
 		fprintf(fff, " ");
+}
 
+
+/*
+ *
+ */
+static void dump_aux_pet(FILE *fff)
+{
+	int i;
+	bool pet = FALSE;
+	char pet_name[80];
+
+	for (i = m_max - 1; i >= 1; i--)
 	{
-		bool pet = FALSE;
-		char pet_name[80];
+		monster_type *m_ptr = &m_list[i];
 
-		for (i = m_max - 1; i >= 1; i--)
+		if (!m_ptr->r_idx) continue;
+		if (!is_pet(m_ptr)) continue;
+		if (!m_ptr->nickname && (p_ptr->riding != i)) continue;
+		if (!pet)
 		{
-			monster_type *m_ptr = &m_list[i];
-
-			if (!m_ptr->r_idx) continue;
-			if (!is_pet(m_ptr)) continue;
-			if (!m_ptr->nickname && (p_ptr->riding != i)) continue;
-			if (!pet)
-			{
 #ifdef JP
-				fprintf(fff, "\n  [主なペット]\n\n");
+			fprintf(fff, "\n  [主なペット]\n\n");
 #else
-				fprintf(fff, "\n  [leading pets]\n\n");
+			fprintf(fff, "\n  [leading pets]\n\n");
 #endif
-				pet = TRUE;
-			}
-			monster_desc(pet_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-			fprintf(fff, "%s\n", pet_name);
+			pet = TRUE;
 		}
-
-		if (pet) fprintf(fff, "\n");
+		monster_desc(pet_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+		fprintf(fff, "%s\n", pet_name);
 	}
 
+	if (pet) fprintf(fff, "\n");
+}
 
-	if (p_ptr->pclass == CLASS_BLUE_MAGE) {
 
-		int             i = 0;
-		int	            j = 0;
-		int				l1 = 0;
-		int				l2 = 0;
-		int             num = 0;
-		int             spellnum[MAX_MONSPELLS];
-		s32b            f4 = 0, f5 = 0, f6 = 0;
-		char			p[60][80];
-		int				col = 0;
-		bool			pcol = FALSE;
+/*
+ *
+ */
+static void dump_aux_class_special(FILE *fff)
+{
+	if (p_ptr->pclass == CLASS_BLUE_MAGE)
+	{
+		int i = 0;
+		int j = 0;
+		int l1 = 0;
+		int l2 = 0;
+		int num = 0;
+		int spellnum[MAX_MONSPELLS];
+		s32b f4 = 0, f5 = 0, f6 = 0;
+		char p[60][80];
+		int col = 0;
+		bool pcol = FALSE;
 
 		for (i=0;i<60;i++) { p[i][0] = '\0'; }
 
@@ -4236,14 +4236,23 @@ errr make_character_dump(FILE *fff)
 			fprintf(fff, p[i]);
 		}
 	}
+}
 
-	fprintf(fff, "\n");
+
+/*
+ *
+ */
+static void dump_aux_quest(FILE *fff)
+{
+	int i;
+	int *quest_num;
+	int dummy;
 
 
 #ifdef JP
-	fprintf(fff, "\n  [クエスト情報]\n");
+	fprintf(fff, "\n\n  [クエスト情報]\n");
 #else
-	fprintf(fff, "\n  [Quest information]\n");
+	fprintf(fff, "\n\n  [Quest information]\n");
 #endif
 
 	/* Allocate Memory */
@@ -4263,11 +4272,20 @@ errr make_character_dump(FILE *fff)
 
 	/* Free Memory */
 	C_KILL(quest_num, max_quests, int);
+}
 
+
+/*
+ *
+ */
+static void dump_aux_last_message(FILE *fff)
+{
 	if (p_ptr->is_dead)
 	{
 		if (!p_ptr->total_winner)
 		{
+			int i;
+
 #ifdef JP
 			fprintf(fff, "\n  [死ぬ直前のメッセージ]\n\n");
 #else
@@ -4291,18 +4309,22 @@ errr make_character_dump(FILE *fff)
 			fprintf(fff,"  %s\n", p_ptr->last_message);
 		}
 	}
+}
+
+
+/*
+ *
+ */
+static void dump_aux_recall(FILE *fff)
+{
+	int y;
 
 #ifdef JP
-	fprintf(fff, "\n  [その他の情報]\n");
+	fprintf(fff, "\n\n  [帰還場所]\n\n");
 #else
-	fprintf(fff, "\n  [Miscellaneous information]\n");
+	fprintf(fff, "\n\n  [Recall Depth]\n\n");
 #endif
 
-#ifdef JP
-	fprintf(fff, "\n 帰還場所:\n");
-#else
-	fprintf(fff, "\n Recall Depth:\n");
-#endif
 	for (y = 1; y < max_d_idx; y++)
 	{
 		bool seiha = FALSE;
@@ -4321,6 +4343,20 @@ errr make_character_dump(FILE *fff)
 		fprintf(fff, "   %c%-16s: level %3d\n", seiha ? '!' : ' ', d_name+d_info[y].name, max_dlv[y]);
 #endif
 	}
+}
+
+
+/*
+ *
+ */
+static void dump_aux_options(FILE *fff)
+{
+#ifdef JP
+	fprintf(fff, "\n  [オプション設定]\n");
+#else
+	fprintf(fff, "\n  [Option settings]\n");
+#endif
+
 
 	if (preserve_mode)
 #ifdef JP
@@ -4463,121 +4499,204 @@ errr make_character_dump(FILE *fff)
 	fprintf(fff, "\n Num. Random Quests: %d", number_of_quests());
 #endif
 
-	fprintf(fff, "\n");
-
-	if (!lite_town && !vanilla_town)
-	{
-		if (p_ptr->arena_number < 0)
-		{
-			if (p_ptr->arena_number <= ARENA_DEFEATED_OLD_VER)
-			{
-#ifdef JP
-				fprintf(fff, "\n 闘技場: 敗北\n");
-#else
-				fprintf(fff, "\n Arena: Defeated\n");
-#endif
-			}
-			else
-			{
-#ifdef JP
-				fprintf(fff, "\n 闘技場: %d回戦で%sの前に敗北\n", -p_ptr->arena_number,
-					r_name + r_info[arena_info[-1 - p_ptr->arena_number].r_idx].name);
-#else
-				fprintf(fff, "\n Arena: Defeated by %s in the %d%s fight\n",
-					r_name + r_info[arena_info[-1 - p_ptr->arena_number].r_idx].name,
-					-p_ptr->arena_number, get_ordinal_number_suffix(-p_ptr->arena_number));
-#endif
-			}
-		}
-		else if (p_ptr->arena_number > MAX_ARENA_MONS + 2)
-		{
-#ifdef JP
-			fprintf(fff, "\n 闘技場: 真のチャンピオン\n");
-#else
-			fprintf(fff, "\n Arena: True Champion\n");
-#endif
-		}
-		else if (p_ptr->arena_number > MAX_ARENA_MONS - 1)
-		{
-#ifdef JP
-			fprintf(fff, "\n 闘技場: チャンピオン\n");
-#else
-			fprintf(fff, "\n Arena: Champion\n");
-#endif
-		}
-		else
-		{
-#ifdef JP
-			fprintf(fff, "\n 闘技場: %2d勝\n", (p_ptr->arena_number > MAX_ARENA_MONS ? MAX_ARENA_MONS : p_ptr->arena_number));
-#else
-			fprintf(fff, "\n Arena: %2d Victor%s\n", (p_ptr->arena_number > MAX_ARENA_MONS ? MAX_ARENA_MONS : p_ptr->arena_number), (p_ptr->arena_number > 1) ? "ies" : "y");
-#endif
-		}
-	}
+	fprintf(fff,"\n");
 
 	if (p_ptr->noscore)
 #ifdef JP
-		fprintf(fff, "\n 何か不正なことをしてしまってます。");
+		fprintf(fff, "\n 何か不正なことをしてしまっています。");
 #else
 		fprintf(fff, "\n You have done something illegal.");
 #endif
 
-
 	fprintf(fff,"\n");
+}
 
-	/* Monsters slain */
+
+/*
+ *
+ */
+static void dump_aux_arena(FILE *fff)
+{
+	if (lite_town || vanilla_town) return;
+
+	if (p_ptr->arena_number < 0)
 	{
-		int k;
-		s32b Total = 0;
-
-		for (k = 1; k < max_r_idx; k++)
+		if (p_ptr->arena_number <= ARENA_DEFEATED_OLD_VER)
 		{
-			monster_race *r_ptr = &r_info[k];
+#ifdef JP
+			fprintf(fff, "\n 闘技場: 敗北\n");
+#else
+			fprintf(fff, "\n Arena: Defeated\n");
+#endif
+		}
+		else
+		{
+#ifdef JP
+			fprintf(fff, "\n 闘技場: %d回戦で%sの前に敗北\n", -p_ptr->arena_number,
+				r_name + r_info[arena_info[-1 - p_ptr->arena_number].r_idx].name);
+#else
+			fprintf(fff, "\n Arena: Defeated by %s in the %d%s fight\n",
+				r_name + r_info[arena_info[-1 - p_ptr->arena_number].r_idx].name,
+				-p_ptr->arena_number, get_ordinal_number_suffix(-p_ptr->arena_number));
+#endif
+		}
+	}
+	else if (p_ptr->arena_number > MAX_ARENA_MONS + 2)
+	{
+#ifdef JP
+		fprintf(fff, "\n 闘技場: 真のチャンピオン\n");
+#else
+		fprintf(fff, "\n Arena: True Champion\n");
+#endif
+	}
+	else if (p_ptr->arena_number > MAX_ARENA_MONS - 1)
+	{
+#ifdef JP
+		fprintf(fff, "\n 闘技場: チャンピオン\n");
+#else
+		fprintf(fff, "\n Arena: Champion\n");
+#endif
+	}
+	else
+	{
+#ifdef JP
+		fprintf(fff, "\n 闘技場: %2d勝\n", (p_ptr->arena_number > MAX_ARENA_MONS ? MAX_ARENA_MONS : p_ptr->arena_number));
+#else
+		fprintf(fff, "\n Arena: %2d Victor%s\n", (p_ptr->arena_number > MAX_ARENA_MONS ? MAX_ARENA_MONS : p_ptr->arena_number), (p_ptr->arena_number > 1) ? "ies" : "y");
+#endif
+	}
 
-			if (r_ptr->flags1 & RF1_UNIQUE)
+	fprintf(fff, "\n");
+}
+
+
+/*
+ *
+ */
+static void dump_aux_monsters(FILE *fff)
+{
+	/* Monsters slain */
+
+	int k;
+	unsigned long uniq_total = 0;
+	unsigned long norm_total = 0;
+	s16b *who;
+
+	/* Sort by monster level */
+	u16b why = 2;
+
+#ifdef JP
+	fprintf(fff, "\n  [倒したモンスター]\n\n");
+#else
+	fprintf(fff, "\n  [Defeated monsters]\n\n");
+#endif
+
+	/* Allocate the "who" array */
+	C_MAKE(who, max_r_idx, s16b);
+
+	/* Count monster kills */
+	for (k = 1; k < max_r_idx; k++)
+	{
+		monster_race *r_ptr = &r_info[k];
+
+		/* Ignore unused index */
+ 		if (!r_ptr->name) continue;
+
+		/* Unique monsters */
+		if (r_ptr->flags1 & RF1_UNIQUE)
+		{
+			bool dead = (r_ptr->max_num == 0);
+			if (dead)
 			{
-				bool dead = (r_ptr->max_num == 0);
-				if (dead)
-				{
-					Total++;
-				}
-			}
-			else
-			{
-				s16b This = r_ptr->r_pkills;
-				if (This > 0)
-				{
-					Total += This;
-				}
+				norm_total++;
+
+				/* Add a unique monster to the list */
+				who[uniq_total++] = k;
 			}
 		}
 
-		if (Total < 1)
-#ifdef JP
-			fprintf(fff,"\n まだ敵を倒していません。\n");
-#else
-			fprintf(fff,"\n You have defeated no enemies yet.\n");
-#endif
-
-		else if (Total == 1)
-#ifdef JP
-			fprintf(fff,"\n 一体の敵を倒しています。\n");
-#else
-			fprintf(fff,"\n You have defeated one enemy.\n");
-#endif
-
+		/* Normal monsters */
 		else
-#ifdef JP
-			fprintf(fff,"\n %lu 体の敵を倒しています。\n", Total);
-#else
-			fprintf(fff,"\n You have defeated %lu enemies.\n", Total);
-#endif
-
+		{
+			if (r_ptr->r_pkills > 0)
+			{
+				norm_total += r_ptr->r_pkills;
+			}
+		}
 	}
 
 
+	/* No monsters is defeated */
+	if (norm_total < 1)
+	{
+#ifdef JP
+		fprintf(fff,"まだ敵を倒していません。\n");
+#else
+		fprintf(fff,"You have defeated no enemies yet.\n");
+#endif
+	}
+
+	/* Defeated more than one normal monsters */
+	else if (uniq_total == 0)
+	{
+#ifdef JP
+		fprintf(fff,"%lu体の敵を倒しています。\n", norm_total);
+#else
+		fprintf(fff,"You have defeated %lu %s.\n", norm_total, norm_total == 1 ? "enemy" : "enemies");
+#endif
+	}
+
+	/* Defeated more than one unique monsters */
+	else /* if (uniq_total > 0) */
+	{
+#ifdef JP
+		fprintf(fff, "%lu体のユニーク・モンスターを含む、合計%lu体の敵を倒しています。\n", uniq_total, norm_total); 
+#else
+		fprintf(fff, "You have defeated %lu %s including %lu unique monster%s in total.\n", norm_total, norm_total == 1 ? "enemy" : "enemies", uniq_total, (uniq_total == 1 ? "" : "s"));
+#endif
+
+
+		/* Select the sort method */
+		ang_sort_comp = ang_sort_comp_hook;
+		ang_sort_swap = ang_sort_swap_hook;
+
+		/* Sort the array by dungeon depth of monsters */
+		ang_sort(who, &why, uniq_total);
+
+#ifdef JP
+		fprintf(fff, "\n《上位%lu体のユニーク・モンスター》\n", MIN(uniq_total, 10));
+#else
+		fprintf(fff, "\n< Unique monsters top %lu >\n", MIN(uniq_total, 10));
+#endif
+
+		/* Print top 10 */
+		for (k = MIN(10, uniq_total); k >= 0; k--)
+		{
+			monster_race *r_ptr = &r_info[who[k]];
+
+#ifdef JP
+			fprintf(fff, "  %-40s (レベル%3d)\n", (r_name + r_ptr->name), r_ptr->level); 
+#else
+			fprintf(fff, "  %-40s (level %3d)\n", (r_name + r_ptr->name), r_ptr->level); 
+#endif
+		}
+
+	}
+
+	/* Free the "who" array */
+	C_KILL(who, max_r_idx, s16b);
+}
+
+
+/*
+ *
+ */
+static void dump_aux_race_history(FILE *fff)
+{
 	if (p_ptr->old_race1 || p_ptr->old_race2)
 	{
+		int i;
+
 #ifdef JP
 		fprintf(fff, "\n\n あなたは%sとして生まれた。", race_info[p_ptr->start_race].title);
 #else
@@ -4601,9 +4720,18 @@ errr make_character_dump(FILE *fff)
 #endif
 		}
 	}
+}
 
+
+/*
+ *
+ */
+static void dump_aux_realm_history(FILE *fff)
+{
 	if (p_ptr->old_realm)
 	{
+		int i;
+
 		for (i = 0; i < MAX_MAGIC; i++)
 		{
 			if (!(p_ptr->old_realm & 1L << i)) continue;
@@ -4614,7 +4742,14 @@ errr make_character_dump(FILE *fff)
 #endif
 		}
 	}
+}
 
+
+/*
+ *
+ */
+static void dump_aux_virtues(FILE *fff)
+{
 #ifdef JP
 	fprintf(fff, "\n\n  [プレイヤーの徳]\n\n");
 #else
@@ -4626,9 +4761,17 @@ errr make_character_dump(FILE *fff)
 #else
 	fprintf(fff, "Your alighnment : %s\n", your_alignment());
 #endif
+
 	fprintf(fff, "\n");
 	dump_virtues(fff);
+}
 
+
+/*
+ *
+ */
+static void dump_aux_mutations(FILE *fff)
+{
 	if (p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3)
 	{
 #ifdef JP
@@ -4640,10 +4783,18 @@ errr make_character_dump(FILE *fff)
 		dump_mutations(fff);
 	}
 
-
 	/* Skip some lines */
 	fprintf(fff, "\n\n");
+}
 
+
+/*
+ *
+ */
+static void dump_aux_equipment_inventory(FILE *fff)
+{
+	int i;
+	char o_name[MAX_NLEN];
 
 	/* Dump the equipment */
 	if (equip_cnt)
@@ -4663,8 +4814,9 @@ errr make_character_dump(FILE *fff)
 #else
 				strcpy(o_name, "(wielding with two-hands)");
 #endif
-			fprintf(fff, "%c%s %s\n",
-				index_to_label(i), paren, o_name);
+
+			fprintf(fff, "%c) %s\n",
+				index_to_label(i), o_name);
 		}
 		fprintf(fff, "\n\n");
 	}
@@ -4683,27 +4835,39 @@ errr make_character_dump(FILE *fff)
 
 		/* Dump the inventory slots */
 		object_desc(o_name, &inventory[i], TRUE, 3);
-		fprintf(fff, "%c%s %s\n", index_to_label(i), paren, o_name);
+		fprintf(fff, "%c) %s\n", index_to_label(i), o_name);
 	}
 
 	/* Add an empty line */
 	fprintf(fff, "\n\n");
+}
 
-	process_dungeon_file("w_info.txt", 0, 0, max_wild_y, max_wild_x);
 
-	/* Print all homes in the different towns */
+/*
+ *
+ */
+static void dump_aux_home_museum(FILE *fff)
+{
+	char o_name[MAX_NLEN];
+	store_type  *st_ptr;
+
+	/* Do we need it?? */
+	/* process_dungeon_file("w_info.txt", 0, 0, max_wild_y, max_wild_x); */
+
+	/* Print the home */
 	st_ptr = &town[1].store[STORE_HOME];
 
 	/* Home -- if anything there */
 	if (st_ptr->stock_num)
 	{
-		/* Header with name of the town */
+		int i;
+		int x = 1;
+
 #ifdef JP
 		fprintf(fff, "  [我が家のアイテム]\n");
 #else
 		fprintf(fff, "  [Home Inventory]\n");
 #endif
-		x = 1;
 
 		/* Dump all available items */
 		for (i = 0; i < st_ptr->stock_num; i++)
@@ -4715,7 +4879,7 @@ errr make_character_dump(FILE *fff)
 				fprintf(fff, "\n ( page %d )\n", x++);
 #endif
 			object_desc(o_name, &st_ptr->stock[i], TRUE, 3);
-			fprintf(fff, "%c%s %s\n", I2A(i%12), paren, o_name);
+			fprintf(fff, "%c) %s\n", I2A(i%12), o_name);
 		}
 
 		/* Add an empty line */
@@ -4723,19 +4887,20 @@ errr make_character_dump(FILE *fff)
 	}
 
 
-	/* Print all homes in the different towns */
+	/* Print the home */
 	st_ptr = &town[1].store[STORE_MUSEUM];
 
 	/* Home -- if anything there */
 	if (st_ptr->stock_num)
 	{
-		/* Header with name of the town */
+		int i;
+		int x = 1;
+
 #ifdef JP
 		fprintf(fff, "  [博物館のアイテム]\n");
 #else
 		fprintf(fff, "  [Museum]\n");
 #endif
-		x = 1;
 
 		/* Dump all available items */
 		for (i = 0; i < st_ptr->stock_num; i++)
@@ -4743,11 +4908,11 @@ errr make_character_dump(FILE *fff)
 #ifdef JP
 		if ((i % 12) == 0) fprintf(fff, "\n ( %d ページ )\n", x++);
 			object_desc(o_name, &st_ptr->stock[i], TRUE, 3);
-			fprintf(fff, "%c%s %s\n", I2A(i%12), paren, o_name);
+			fprintf(fff, "%c) %s\n", I2A(i%12), o_name);
 #else
 		if ((i % 12) == 0) fprintf(fff, "\n ( page %d )\n", x++);
 			object_desc(o_name, &st_ptr->stock[i], TRUE, 3);
-			fprintf(fff, "%c%s %s\n", I2A(i%12), paren, o_name);
+			fprintf(fff, "%c) %s\n", I2A(i%12), o_name);
 #endif
 
 		}
@@ -4755,6 +4920,39 @@ errr make_character_dump(FILE *fff)
 		/* Add an empty line */
 		fprintf(fff, "\n\n");
 	}
+}
+
+
+/*
+ * Output the character dump to a file
+ */
+errr make_character_dump(FILE *fff)
+{
+#ifdef JP
+	fprintf(fff, "  [変愚蛮怒 %d.%d.%d キャラクタ情報]\n\n",
+		FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+#else
+	fprintf(fff, "  [Hengband %d.%d.%d Character Dump]\n\n",
+		FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+#endif
+
+	update_playtime();
+
+	dump_aux_display_player(fff);
+	dump_aux_last_message(fff);
+	dump_aux_options(fff);
+	dump_aux_recall(fff);
+	dump_aux_quest(fff);
+	dump_aux_arena(fff);
+	dump_aux_monsters(fff);
+	dump_aux_virtues(fff);
+	dump_aux_race_history(fff);
+	dump_aux_realm_history(fff);
+	dump_aux_class_special(fff);
+	dump_aux_mutations(fff);
+	dump_aux_pet(fff);
+	dump_aux_equipment_inventory(fff);
+	dump_aux_home_museum(fff);
 
 #ifdef JP
 	fprintf(fff, "  [チェックサム: \"%s\"]\n\n", get_check_sum());
