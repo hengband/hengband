@@ -372,8 +372,8 @@ bool summon_possible(int y1, int x1)
 			/* ...nor on the Pattern */
 			if (pattern_tile(y, x)) continue;
 
-			/* Require empty floor grid in line of sight */
-			if (cave_empty_bold(y, x) && los(y1, x1, y, x) && los(y, x, y1, x1)) return (TRUE);
+			/* Require empty floor grid in line of projection */
+			if (cave_empty_bold(y, x) && projectable(y1, x1, y, x) && projectable(y, x, y1, x1)) return (TRUE);
 		}
 	}
 
@@ -395,6 +395,7 @@ bool raise_possible(monster_type *m_ptr)
 		{
 			if (distance(y, x, yy, xx) > 5) continue;
 			if (!los(y, x, yy, xx)) continue;
+			if (!projectable(y, x, yy, xx)) continue;
 
 			c_ptr = &cave[yy][xx];
 			/* Scan the pile of objects */

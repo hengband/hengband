@@ -1646,8 +1646,8 @@ msg_print("まばゆい閃光が走った！");
 					/* Skip illegal grids */
 					if (!in_bounds(y1, x1)) continue;
 
-					/* Require line of sight */
-					if (!player_has_los_bold(y1, x1)) continue;
+					/* Require line of projection */
+					if (!projectable(py, px, y1, x1)) continue;
 
 					if (summon_specific(0, y1, x1, lev, SUMMON_ARMAGE_EVIL, (PM_NO_PET)))
 						evil_idx = hack_m_idx_ii;

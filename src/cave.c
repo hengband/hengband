@@ -4688,8 +4688,8 @@ bool projectable(int y1, int x1, int y2, int x2)
 	/* Check the projection path */
 	grid_n = project_path(grid_g, (project_length ? project_length : MAX_RANGE), y1, x1, y2, x2, 0);
 
-	/* No grid is ever projectable from itself */
-	if (!grid_n) return (FALSE);
+	/* Identical grid */
+	if (!grid_n) return TRUE;
 
 	/* Final grid */
 	y = GRID_Y(grid_g[grid_n - 1]);

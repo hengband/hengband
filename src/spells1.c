@@ -6419,8 +6419,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 			t_x = m_list[who].fx - 1 + randint1(3);
 			max_attempts--;
 		}
-		while (max_attempts && in_bounds2u(t_y, t_x) &&
-		     !(player_has_los_bold(t_y, t_x)));
+		while (max_attempts && in_bounds2u(t_y, t_x) && !projectable(py, px, t_y, t_x));
 
 		if (max_attempts < 1)
 		{
@@ -8060,7 +8059,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 					else
 					{
 						/* The blast is stopped by walls */
-						if (!los(by, bx, y, x)) continue;
+						if (!projectable(by, bx, y, x)) continue;
 					}
 
 					/* Save this grid */
@@ -8802,7 +8801,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 						else
 						{
 							/* Ball explosions are stopped by walls */
-							if (!los(by, bx, y, x)) continue;
+							if (!projectable(by, bx, y, x)) continue;
 						}
 
 						/* Save this grid */
@@ -9007,8 +9006,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 						t_x = x_saver - 1 + randint1(3);
 						max_attempts--;
 					}
-					while (max_attempts && in_bounds2u(t_y, t_x) &&
-					    !(los(y, x, t_y, t_x)));
+					while (max_attempts && in_bounds2u(t_y, t_x) && !projectable(y, x, t_y, t_x));
 
 					if (max_attempts < 1)
 					{
@@ -9286,7 +9284,8 @@ bool binding_field( int dam )
 			if( is_mirror_grid(&cave[y][x]) &&
 			    distance(py,px,y,x) <= MAX_RANGE &&
 			    distance(py,px,y,x) != 0 &&
-			    player_has_los_bold(y,x)
+			    player_has_los_bold(y,x) &&
+			    projectable(py, px, y, x)
 			    ){
 				mirror_y[mirror_num]=y;
 				mirror_x[mirror_num]=x;
@@ -9336,7 +9335,7 @@ bool binding_field( int dam )
 			    centersign*( (point_x[2]-x)*(point_y[0]-y)
 					 -(point_y[2]-y)*(point_x[0]-x)) >=0 )
 			{
-				if( player_has_los_bold(y,x)){
+				if (player_has_los_bold(y, x) && projectable(py, px, y, x)) {
 					/* Visual effects */
 					if(!(p_ptr->blind)
 					   && panel_contains(y,x)){
@@ -9359,7 +9358,7 @@ bool binding_field( int dam )
 			    centersign*( (point_x[2]-x)*(point_y[0]-y)
 					 -(point_y[2]-y)*(point_x[0]-x)) >=0 )
 			{
-				if( player_has_los_bold(y,x)){
+				if (player_has_los_bold(y, x) && projectable(py, px, y, x)) {
 					(void)project_f(0,0,y,x,dam,GF_MANA); 
 				}
 			}
@@ -9374,7 +9373,7 @@ bool binding_field( int dam )
 			    centersign*( (point_x[2]-x)*(point_y[0]-y)
 					 -(point_y[2]-y)*(point_x[0]-x)) >=0 )
 			{
-				if( player_has_los_bold(y,x)){
+				if (player_has_los_bold(y, x) && projectable(py, px, y, x)) {
 					(void)project_o(0,0,y,x,dam,GF_MANA); 
 				}
 			}
@@ -9389,7 +9388,7 @@ bool binding_field( int dam )
 			    centersign*( (point_x[2]-x)*(point_y[0]-y)
 					 -(point_y[2]-y)*(point_x[0]-x)) >=0 )
 			{
-				if( player_has_los_bold(y,x) ){
+				if (player_has_los_bold(y, x) && projectable(py, px, y, x)) {
 					(void)project_m(0,0,y,x,dam,GF_MANA,
 					  (PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP));
 				}

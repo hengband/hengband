@@ -1838,15 +1838,28 @@ msg_print("アイテムがコントロールを外れて落ちた。");
 		}
 
 		/* We need to see the item */
-		if (require_los && !player_has_los_bold(ty, tx))
+		if (require_los)
 		{
+			if (!player_has_los_bold(ty, tx))
+			{
 #ifdef JP
-msg_print("そこはあなたの視界に入っていません。");
+				msg_print("そこはあなたの視界に入っていません。");
 #else
-			msg_print("You have no direct line of sight to that location.");
+				msg_print("You have no direct line of sight to that location.");
 #endif
 
-			return;
+				return;
+			}
+			else if (!projectable(py, px, ty, tx))
+			{
+#ifdef JP
+				msg_print("そこは壁の向こうです。");
+#else
+				msg_print("You have no direct line of sight to that location.");
+#endif
+
+				return;
+			}
 		}
 	}
 	else

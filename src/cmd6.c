@@ -5525,6 +5525,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 						if (!m_ptr->r_idx) continue;
 						if (!((m_ptr->r_idx == MON_SUKE) || (m_ptr->r_idx == MON_KAKU))) continue;
 						if (!los(m_ptr->fy, m_ptr->fx, py, px)) continue;
+						if (!projectable(m_ptr->fy, m_ptr->fx, py, px)) continue;
 						count++;
 						break;
 					}

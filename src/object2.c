@@ -4981,8 +4981,8 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 			/* Skip illegal grids */
 			if (!in_bounds(ty, tx)) continue;
 
-			/* Require line of sight */
-			if (!los(y, x, ty, tx)) continue;
+			/* Require line of projection */
+			if (!projectable(y, x, ty, tx)) continue;
 
 			/* Obtain grid */
 			c_ptr = &cave[ty][tx];

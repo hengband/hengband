@@ -4443,7 +4443,7 @@ bool project_hack(int typ, int dam)
 		x = m_ptr->fx;
 
 		/* Require line of sight */
-		if (!player_has_los_bold(y, x)) continue;
+		if (!player_has_los_bold(y, x) || !projectable(py, px, y, x)) continue;
 
 		/* Mark the monster */
 		m_ptr->mflag |= (MFLAG_TEMP);

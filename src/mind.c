@@ -1172,38 +1172,42 @@ static bool cast_force_spell(int spell)
 		if (!target_set(TARGET_KILL)) return FALSE;
 		if (!cave[target_row][target_col].m_idx) break;
 		if (!los(py, px, target_row, target_col)) break;
+		if (!projectable(py, px, target_row, target_col)) break;
 		m_ptr = &m_list[cave[target_row][target_col].m_idx];
 		monster_desc(m_name, m_ptr, 0);
 		if (m_ptr->invulner)
 		{
 			m_ptr->invulner = 0;
+			if (m_ptr->ml)
+			{
 #ifdef JP
-msg_format("%sはもう無敵ではない。", m_name);
+				msg_format("%sはもう無敵ではない。", m_name);
 #else
-			msg_format("%^s is no longer invulnerable.", m_name);
+				msg_format("%^s is no longer invulnerable.", m_name);
 #endif
+				p_ptr->redraw |= (PR_HEALTH);
+				if (p_ptr->riding == cave[target_row][target_col].m_idx) p_ptr->redraw |= (PR_UHEALTH);
+			}
 			m_ptr->energy_need += ENERGY_NEED();
 		}
 		if (m_ptr->fast)
 		{
 			m_ptr->fast = 0;
 #ifdef JP
-msg_format("%sはもう加速されていない。", m_name);
+			if (m_ptr->ml) msg_format("%sはもう加速されていない。", m_name);
 #else
-			msg_format("%^s is no longer fast.", m_name);
+			if (m_ptr->ml) msg_format("%^s is no longer fast.", m_name);
 #endif
 		}
 		if (m_ptr->slow)
 		{
 			m_ptr->slow = 0;
 #ifdef JP
-msg_format("%sはもう減速されていない。", m_name);
+			if (m_ptr->ml) msg_format("%sはもう減速されていない。", m_name);
 #else
-			msg_format("%^s is no longer slow.", m_name);
+			if (m_ptr->ml) msg_format("%^s is no longer slow.", m_name);
 #endif
 		}
-		p_ptr->redraw |= (PR_HEALTH);
-		if (p_ptr->riding == cave[target_row][target_col].m_idx) p_ptr->redraw |= (PR_UHEALTH);
 
 		break;
 	}
@@ -1734,6 +1738,7 @@ msg_print("その方向にはモンスターはいません。");
 		m_idx = cave[target_row][target_col].m_idx;
 		if (!m_idx) break;
 		if (!player_has_los_bold(target_row, target_col)) break;
+		if (!projectable(py, px, target_row, target_col)) break;
 		m_ptr = &m_list[m_idx];
 		monster_desc(m_name, m_ptr, 0);
 #ifdef JP

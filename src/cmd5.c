@@ -1813,7 +1813,7 @@ msg_print("「卑しき者よ、我は汝の下僕にあらず！ お前の魂を頂くぞ！」");
 					x = px - 8 + randint0(17);
 					y = py - 8 + randint0(17);
 
-					if (!in_bounds(y, x) || !have_flag(f_flags_bold(y, x), FF_MOVE) || !player_has_los_bold(y, x)) continue;
+					if (!in_bounds(y, x) || !have_flag(f_flags_bold(y, x), FF_MOVE) || !projectable(py, px, y, x)) continue;
 
 					dx = (px > x) ? (px - x) : (x - px);
 					dy = (py > y) ? (py - y) : (y - py);
@@ -3106,7 +3106,7 @@ msg_print("召喚されたドラゴンは怒っている！");
 						x = px - 8 + randint0(17);
 						y = py - 8 + randint0(17);
 
-						if (!in_bounds(y, x) || !have_flag(f_flags_bold(y, x), FF_MOVE) || !player_has_los_bold(y, x)) continue;
+						if (!in_bounds(y, x) || !have_flag(f_flags_bold(y, x), FF_MOVE) || !projectable(py, px, y, x)) continue;
 
 						dx = (px > x) ? (px - x) : (x - px);
 						dy = (py > y) ? (py - y) : (y - py);

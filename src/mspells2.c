@@ -405,7 +405,7 @@ bool monst_spell_monst(int m_idx)
 
 				get_project_point(m_ptr->fy, m_ptr->fx, &real_y, &real_x, 0L);
 
-				if (los(real_y, real_x, py, px))
+				if (projectable(real_y, real_x, py, px))
 				{
 					int dist = distance(real_y, real_x, py, px);
 
@@ -430,7 +430,7 @@ bool monst_spell_monst(int m_idx)
 				int real_x = x;
 
 				get_project_point(m_ptr->fy, m_ptr->fx, &real_y, &real_x, PROJECT_STOP);
-				if (los(real_y, real_x, py, px) && (distance(real_y, real_x, py, px) <= 2))
+				if (projectable(real_y, real_x, py, px) && (distance(real_y, real_x, py, px) <= 2))
 					f4 &= ~(RF4_ROCKET);
 			}
 
