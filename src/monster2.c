@@ -3454,6 +3454,33 @@ bool alloc_monster(int dis, bool slp)
 {
 	int			y = 0, x = 0;
 	int         attempts_left = 10000;
+	int guardian = d_info[dungeon_type].final_guardian;
+
+        /* Put an Guardian */
+        if(guardian && d_info[dungeon_type].maxdepth == dun_level && r_info[guardian].cur_num < r_info[guardian].max_num )
+        {
+                int oy;
+                int ox;
+                int try = 4000;
+
+                /* Find a good position */
+                while(try)
+                {
+                        /* Get a random spot */
+                        oy = randint(cur_hgt - 4) + 2;
+                        ox = randint(cur_wid - 4) + 2;
+
+                        /* Is it a good spot ? */
+                        if (cave_empty_bold2(oy, ox) && monster_can_cross_terrain(cave[oy][ox].feat, &r_info[guardian]))
+			{
+				/* Place the guardian */
+				if (place_monster_aux(oy, ox, guardian, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE)) break;
+			}
+                        /* One less try */
+                        try--;
+                }
+	}
+
 
 	/* Find a legal, distant, unoccupied, space */
 	while (attempts_left--)
