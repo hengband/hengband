@@ -6220,16 +6220,15 @@ static bool player_birth_aux(void)
 	/* Clear prompt */
 	clear_from(23);
 
+	/* Get a name, recolor it, prepare savefile */
+	get_name();
+
 	/*** Edit character background ***/
 	edit_history();
 
 	/*** Finish up ***/
 
 	get_max_stats();
-
-	/* Get a name, recolor it, prepare savefile */
-
-	get_name();
 
 	get_virtues();
 
