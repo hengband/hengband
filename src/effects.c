@@ -5151,6 +5151,8 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 		}
 		else
 		{
+			int q_idx = quest_number(dun_level);
+
 #ifdef WORLD_SCORE
 			/* Make screen dump */
 			screen_dump = make_screen_dump();
@@ -5178,7 +5180,8 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 #else
 				strcpy(buf,"on the surface");
 #endif
-			else if (quest_number(dun_level) && ((quest_number(dun_level) < MIN_RANDOM_QUEST) && !(quest_number(dun_level) == QUEST_OBERON || quest_number(dun_level) == QUEST_SERPENT)))
+			else if (q_idx && (is_fixed_quest_idx(q_idx) &&
+			         !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
 #ifdef JP
 				strcpy(buf,"クエスト");
 #else

@@ -5331,7 +5331,7 @@ bool destroy_area(int y1, int x1, int r)
 
 
 	/* Prevent destruction of quest levels and town */
-	if ((p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST)) || !dun_level)
+	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !dun_level)
 	{
 		return (FALSE);
 	}
@@ -5534,7 +5534,7 @@ bool earthquake(int cy, int cx, int r)
 
 
 	/* Prevent destruction of quest levels and town */
-	if ((p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST)) || !dun_level)
+	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !dun_level)
 	{
 		return (FALSE);
 	}

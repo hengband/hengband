@@ -3808,7 +3808,7 @@ void display_player(int mode)
 					sprintf(statmsg, "...You were killed by %s in %s.", p_ptr->died_from, map_name());
 #endif
 				}
-				else if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST))
+				else if (p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest))
 				{
 					/* Get the quest text */
 					/* Bewere that INIT_ASSIGN resets the cur_num. */
@@ -3823,7 +3823,7 @@ void display_player(int mode)
 #endif
 				}
 				else
-				{					
+				{
 #ifdef JP
 					sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), dun_level, p_ptr->died_from);
 #else
@@ -3841,7 +3841,7 @@ void display_player(int mode)
 					sprintf(statmsg, "...Now, you are in %s.", map_name());
 #endif
 				}
-				else if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST))
+				else if (p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest))
 				{
 					/* Clear the text */
 					/* Must be done before doing INIT_SHOW_TEXT */
@@ -3861,7 +3861,7 @@ void display_player(int mode)
 #else
 					sprintf(statmsg, "...Now, you are in the quest '%s'.", quest[p_ptr->inside_quest].name);
 #endif
-				}							
+				}
 				else
 				{
 #ifdef JP
@@ -4156,10 +4156,10 @@ errr make_character_dump(FILE *fff)
 
 		if (quest[num].status == QUEST_STATUS_FINISHED)
 		{
-			if (num < MIN_RANDOM_QUEST)
+			if (is_fixed_quest_idx(num))
 			{
 				int old_quest;
-			
+
 				/* Set the quest number temporary */
 				old_quest = p_ptr->inside_quest;
 				p_ptr->inside_quest = num;
@@ -4178,7 +4178,7 @@ errr make_character_dump(FILE *fff)
 
 			total++;
 
-			if ((num >= MIN_RANDOM_QUEST) && quest[num].r_idx)
+			if (!is_fixed_quest_idx(num) && quest[num].r_idx)
 			{
 				/* Print the quest info */
 
@@ -4237,7 +4237,7 @@ errr make_character_dump(FILE *fff)
 
 		if ((quest[num].status == QUEST_STATUS_FAILED_DONE) || (quest[num].status == QUEST_STATUS_FAILED))
 		{
-			if (num < MIN_RANDOM_QUEST)
+			if (is_fixed_quest_idx(num))
 			{
 				int old_quest;
 
@@ -4259,7 +4259,7 @@ errr make_character_dump(FILE *fff)
 
 			total++;
 
-			if ((num >= MIN_RANDOM_QUEST) && quest[num].r_idx)
+			if (!is_fixed_quest_idx(num) && quest[num].r_idx)
 			{
 				/* Print the quest info */
 #ifdef JP

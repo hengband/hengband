@@ -1314,7 +1314,7 @@ void stair_creation(void)
 
 	/* No effect out of standard dungeon floor */
 	if (!dun_level || (!up && !down) ||
-	    (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST)) ||
+	    (p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) ||
 	    p_ptr->inside_arena || p_ptr->inside_battle)
 	{
 		/* arena or quest */

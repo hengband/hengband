@@ -1378,7 +1378,7 @@ bool make_attack_spell(int m_idx)
 		f6 &= ~(RF6_DARKNESS);
 	}
 
-	if (dun_level && (!p_ptr->inside_quest || (p_ptr->inside_quest < MIN_RANDOM_QUEST)) && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC))
+	if (dun_level && (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest)) && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC))
 	{
 		f4 &= (RF4_NOMAGIC_MASK);
 		f5 &= (RF5_NOMAGIC_MASK);

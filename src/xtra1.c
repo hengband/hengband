@@ -175,7 +175,7 @@ void prt_time(void)
 
 cptr map_name(void)
 {
-	if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST)
+	if (p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)
 	    && (quest[p_ptr->inside_quest].flags & QUEST_FLAG_PRESET))
 #ifdef JP
 		return "クエスト";

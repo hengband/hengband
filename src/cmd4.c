@@ -344,6 +344,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 	cptr note_level = "";
 	bool do_level = TRUE;
 	char note_level_buf[40];
+	int q_idx;
 
 	static bool disable_nikki = FALSE;
 
@@ -399,6 +400,8 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		return (-1);
 	}
 
+	q_idx = quest_number(dun_level);
+
 	if (write_level)
 	{
 		if (p_ptr->inside_arena)
@@ -413,7 +416,8 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 #else
 			note_level = "Surface:";
 #endif
-		else if (quest_number(dun_level) && ((quest_number(dun_level) < MIN_RANDOM_QUEST) && !(quest_number(dun_level) == QUEST_OBERON || quest_number(dun_level) == QUEST_SERPENT)))
+		else if (q_idx && (is_fixed_quest_idx(q_idx)
+		         && !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
 #ifdef JP
 			note_level = "クエスト:";
 #else
@@ -534,7 +538,8 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		case NIKKI_STAIR:
 		{
 			cptr to;
-			if (quest_number(dun_level) && ((quest_number(dun_level) < MIN_RANDOM_QUEST) && !(quest_number(dun_level) == QUEST_OBERON || quest_number(dun_level) == QUEST_SERPENT)))
+			if (q_idx && (is_fixed_quest_idx(q_idx)
+			     && !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
 			{
 #ifdef JP
 				to = "地上";
@@ -8823,7 +8828,7 @@ static void do_cmd_knowledge_quests(void)
 	{
 		if (quest[i].status == QUEST_STATUS_FINISHED)
 		{
-			if (i < MIN_RANDOM_QUEST)
+			if (is_fixed_quest_idx(i))
 			{
 				int old_quest;
 
@@ -8845,7 +8850,7 @@ static void do_cmd_knowledge_quests(void)
 
 			total++;
 
-			if ((i >= MIN_RANDOM_QUEST) && quest[i].r_idx)
+			if (!is_fixed_quest_idx(i) && quest[i].r_idx)
 			{
 				/* Print the quest info */
 
@@ -8904,7 +8909,7 @@ static void do_cmd_knowledge_quests(void)
 	{
 		if ((quest[i].status == QUEST_STATUS_FAILED_DONE) || (quest[i].status == QUEST_STATUS_FAILED))
 		{
-			if (i < MIN_RANDOM_QUEST)
+			if (is_fixed_quest_idx(i))
 			{
 				int old_quest;
 
@@ -8926,7 +8931,7 @@ static void do_cmd_knowledge_quests(void)
 
 			total++;
 
-			if ((i >= MIN_RANDOM_QUEST) && quest[i].r_idx)
+			if (!is_fixed_quest_idx(i) && quest[i].r_idx)
 			{
 				/* Print the quest info */
 #ifdef JP

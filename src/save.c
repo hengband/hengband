@@ -1289,7 +1289,7 @@ static bool wr_savefile_new(void)
 		wr_byte(quest[i].complev);
 
 		/* Save quest status if quest is running */
-		if (quest[i].status == QUEST_STATUS_TAKEN || quest[i].status == QUEST_STATUS_COMPLETED || ((i >= MIN_RANDOM_QUEST) && (i <= MAX_RANDOM_QUEST)))
+		if (quest[i].status == QUEST_STATUS_TAKEN || quest[i].status == QUEST_STATUS_COMPLETED || !is_fixed_quest_idx(i))
 		{
 			wr_s16b(quest[i].cur_num);
 			wr_s16b(quest[i].max_num);

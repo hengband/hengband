@@ -1492,7 +1492,7 @@ msg_print("明かりが微かになってきている。");
 
 void leave_quest_check(void)
 {
-	/* Save quset number for dungeon pref file ($LEAVING_QUEST) */
+	/* Save quest number for dungeon pref file ($LEAVING_QUEST) */
 	leaving_quest = p_ptr->inside_quest;
 
 	/* Leaving an 'only once' quest marks it as failed */
@@ -1916,13 +1916,17 @@ static void process_world(void)
 	s32b len = TURNS_PER_TICK * TOWN_DAWN;
 	s32b tick = turn % len + len / 4;
 
+	int quest_num = quest_number(dun_level);
+
 	extract_day_hour_min(&day, &hour, &min);
 	prev_min = (1440 * (tick - TURNS_PER_TICK) / len) % 60;
 
 	if ((turn - old_turn == (150 - dun_level) * TURNS_PER_TICK)
-	    && (dun_level) &&
-	    !(quest_number(dun_level) && ((quest_number(dun_level) < MIN_RANDOM_QUEST) && !(quest_number(dun_level) == QUEST_OBERON || quest_number(dun_level) == QUEST_SERPENT || !(quest[quest_number(dun_level)].flags & QUEST_FLAG_PRESET)))) &&
-	    !(p_ptr->inside_battle))
+	    && dun_level &&
+	    !(quest_num && (is_fixed_quest_idx(quest_num) &&
+	    !((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) ||
+	      !(quest[quest_num].flags & QUEST_FLAG_PRESET)))) &&
+	    !p_ptr->inside_battle)
 		do_cmd_feeling();
 
 	if (p_ptr->inside_battle && !p_ptr->leaving)
@@ -6265,7 +6269,9 @@ static void dungeon(bool load_game)
 	/* Refresh */
 	Term_fresh();
 
-	if (quest_number(dun_level) && ((quest_number(dun_level) < MIN_RANDOM_QUEST) && !(quest_number(dun_level) == QUEST_OBERON || quest_number(dun_level) == QUEST_SERPENT || !(quest[quest_number(dun_level)].flags & QUEST_FLAG_PRESET)))) do_cmd_feeling();
+	if (quest_num && (is_fixed_quest_idx(quest_num) &&
+	    !((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) ||
+	    !(quest[quest_num].flags & QUEST_FLAG_PRESET)))) do_cmd_feeling();
 
 	if (p_ptr->inside_battle)
 	{
@@ -6276,7 +6282,6 @@ static void dungeon(bool load_game)
 		}
 		else
 		{
-			
 #ifdef JP
 msg_print("試合開始！");
 #else
@@ -6306,9 +6311,9 @@ msg_print("試合開始！");
 				   d_name+d_info[dungeon_type].name, 
 				   r_name+r_info[d_info[dungeon_type].final_guardian].name);
 #else
-		msg_format("%^s lives in this level as the keeper of %s.",
-				   r_name+r_info[d_info[dungeon_type].final_guardian].name, 
-				   d_name+d_info[dungeon_type].name);
+			msg_format("%^s lives in this level as the keeper of %s.",
+					   r_name+r_info[d_info[dungeon_type].final_guardian].name, 
+					   d_name+d_info[dungeon_type].name);
 #endif
 	}
 
