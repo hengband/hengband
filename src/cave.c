@@ -2868,7 +2868,7 @@ void update_lite(void)
 	if (p <= 0)
 	{
 		/* Forget the old lite */
-		forget_lite();
+		/* forget_lite(); Perhaps don't need? */
 
 		/* Draw the player */
 		lite_spot(py, px);
