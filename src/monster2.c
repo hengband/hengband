@@ -446,6 +446,14 @@ void compact_monsters(int size)
 			/* All monsters get a saving throw */
 			if (randint0(100) < chance) continue;
 
+			if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
+			{
+				char m_name[80];
+
+				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+				do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_COMPACT, m_name);
+			}
+
 			/* Delete the monster */
 			delete_monster_idx(i);
 

@@ -799,7 +799,7 @@ void teleport_level(int m_idx)
 			char m2_name[80];
 
 			monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
-			do_cmd_write_nikki(NIKKI_NAMED_PET, 8, m2_name);
+			do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_TELE_LEVEL, m2_name);
 		}
 
 		delete_monster_idx(m_idx);

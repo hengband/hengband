@@ -4662,7 +4662,18 @@ bool genocide_aux(int m_idx, int power, bool player_cast, int dam_side, cptr spe
 	else if (player_cast && (m_ptr->mflag2 & MFLAG2_NOGENO)) resist = TRUE;
 
 	/* Delete the monster */
-	else delete_monster_idx(m_idx);
+	else
+	{
+		if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
+		{
+			char m_name[80];
+
+			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+			do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
+		}
+
+		delete_monster_idx(m_idx);
+	}
 
 	if (resist && player_cast)
 	{
@@ -5140,7 +5151,7 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
 						char m_name[80];
 
 						monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-						do_cmd_write_nikki(NIKKI_NAMED_PET, 6, m_name);
+						do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_DESTROY, m_name);
 					}
 
 					/* Delete the monster (if any) */
@@ -5687,7 +5698,7 @@ bool earthquake_aux(int cy, int cx, int r, int m_idx)
 								char m2_name[80];
 
 								monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
-								do_cmd_write_nikki(NIKKI_NAMED_PET, 7, m2_name);
+								do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_EARTHQUAKE, m2_name);
 							}
 						}
 
@@ -5909,6 +5920,15 @@ void discharge_minion(void)
 		project(i, 2+(r_ptr->level/20), m_ptr->fy,
 			m_ptr->fx, dam, GF_PLASMA, 
 			PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
+
+		if (record_named_pet && m_ptr->nickname)
+		{
+			char m_name[80];
+
+			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+			do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_BLAST, m_name);
+		}
+
 		delete_monster_idx(i);
 	}
 }

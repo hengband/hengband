@@ -2290,6 +2290,14 @@ static void process_monster(int m_idx)
 #endif
 		}
 
+		if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
+		{
+			char m_name[80];
+
+			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+			do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_LOSE_PARENT, m_name);
+		}
+
 		/* Delete the monster */
 		delete_monster_idx(m_idx);
 

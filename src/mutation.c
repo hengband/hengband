@@ -3754,6 +3754,14 @@ bool mutation_power_aux(u32b power)
 					(r_ptr->level < randint1(p_ptr->lev+50)) &&
 					!(m_ptr->mflag2 & MFLAG2_NOGENO))
 				{
+					if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
+					{
+						char m_name[80];
+
+						monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+						do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
+					}
+
 					/* Delete the monster, rather than killing it. */
 					delete_monster_idx(c_ptr->m_idx);
 #ifdef JP

@@ -1643,6 +1643,14 @@ static void do_cmd_wiz_zap(void)
 		/* Delete nearby monsters */
 		if (m_ptr->cdis <= MAX_SIGHT)
 		{
+			if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
+			{
+				char m_name[80];
+
+				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+				do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
+			}
+
 			delete_monster_idx(i);
 		}
 	}
@@ -1666,6 +1674,14 @@ static void do_cmd_wiz_zap_all(void)
 
 		/* Skip the mount */
 		if (i == p_ptr->riding) continue;
+
+		if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
+		{
+			char m_name[80];
+
+			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+			do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
+		}
 
 		/* Delete this monster */
 		delete_monster_idx(i);
