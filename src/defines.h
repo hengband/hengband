@@ -4332,8 +4332,7 @@
  * Line 4 -- forbid normal objects
  */
 #define cave_clean_bold(Y,X) \
-	(have_flag(f_flags_bold((Y), (X)), FF_DROP) && \
-	 !have_flag(f_flags_bold((Y), (X)), FF_PERMANENT) && \
+	(have_flag(f_flags_bold((Y), (X)), FF_FLOOR) && \
 	 !(cave[Y][X].info & CAVE_OBJECT) && \
 	  (cave[Y][X].o_idx == 0))
 
@@ -4380,12 +4379,7 @@
  * Line 8 -- forbid the player
  */
 #define cave_naked_bold(Y,X) \
-	(have_flag(f_flags_bold((Y), (X)), FF_PROJECT) && \
-	 have_flag(f_flags_bold((Y), (X)), FF_DROP) && \
-	 !have_flag(f_flags_bold((Y), (X)), FF_DOOR) && \
-	 !have_flag(f_flags_bold((Y), (X)), FF_PERMANENT) && \
-	 !(cave[Y][X].info & CAVE_OBJECT) && \
-	 !(cave[Y][X].o_idx) && \
+	(cave_clean_bold(Y,X) && \
 	 !(cave[Y][X].m_idx) && \
 	 !player_bold(Y,X))
 

@@ -979,8 +979,11 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 			/* Shallow Lava */
 			if (dam == 1)
 			{
-				/* Require a "naked" floor grid */
-				if (!cave_naked_bold(y, x)) break;
+				/* Ignore permanent grid */
+				if (cave_perma_bold(y, x)) break;
+
+				/* Ignore grid without enough space */
+				if (!have_flag(f_flags_bold(y, x), FF_FLOOR)) break;
 
 				/* Place a shallow lava */
 				cave_set_feat(y, x, FEAT_SHAL_LAVA);
@@ -988,7 +991,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 			/* Deep Lava */
 			else if (dam)
 			{
-				/* Require a "naked" floor grid */
+				/* Ignore permanent grid */
 				if (cave_perma_bold(y, x)) break;
 
 				/* Place a deep lava */
@@ -1002,8 +1005,11 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 			/* Shallow Water */
 			if (dam == 1)
 			{
-				/* Require a "naked" floor grid */
-				if (!cave_naked_bold(y, x)) break;
+				/* Ignore permanent grid */
+				if (cave_perma_bold(y, x)) break;
+
+				/* Ignore grid without enough space */
+				if (!have_flag(f_flags_bold(y, x), FF_FLOOR)) break;
 
 				/* Place a shallow lava */
 				cave_set_feat(y, x, FEAT_SHAL_WATER);
@@ -1011,7 +1017,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 			/* Deep Water */
 			else if (dam)
 			{
-				/* Require a "naked" floor grid */
+				/* Ignore permanent grid */
 				if (cave_perma_bold(y, x)) break;
 
 				/* Place a deep lava */
