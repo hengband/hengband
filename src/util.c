@@ -3180,7 +3180,7 @@ void clear_from(int row)
  * ESCAPE clears the buffer and the window and returns FALSE.
  * RETURN accepts the current buffer contents and returns TRUE.
  */
-bool askfor_aux(char *buf, int len)
+bool askfor_aux(char *buf, int len, bool numpad_cursor)
 {
 	int y, x;
 	int pos = 0;
@@ -3221,7 +3221,7 @@ bool askfor_aux(char *buf, int len)
 		Term_gotoxy(x + pos, y);
 
 		/* Get a special key code */
-		skey = inkey_special();
+		skey = inkey_special(numpad_cursor);
 
 		/* Analyze the key */
 		switch (skey)
@@ -3423,6 +3423,17 @@ bool askfor_aux(char *buf, int len)
 
 
 /*
+ * Get some string input at the cursor location.
+ *
+ * Allow to use numpad keys as cursor keys.
+ */
+bool askfor(char *buf, int len)
+{
+	return askfor_aux(buf, len, TRUE);
+}
+
+
+/*
  * Get a string from the user
  *
  * The "prompt" should take the form "Prompt: "
@@ -3443,7 +3454,7 @@ bool get_string(cptr prompt, char *buf, int len)
 	prt(prompt, 0, 0);
 
 	/* Ask the user for a string */
-	res = askfor_aux(buf, len);
+	res = askfor(buf, len);
 
 	/* Clear prompt */
 	prt("", 0, 0);
@@ -3616,10 +3627,9 @@ bool get_com(cptr prompt, char *command, bool z_escape)
  */
 s16b get_quantity(cptr prompt, int max)
 {
+	bool res;
 	int amt;
-
 	char tmp[80];
-
 	char buf[80];
 
 
@@ -3661,7 +3671,7 @@ s16b get_quantity(cptr prompt, int max)
 	{
 		/* Build a prompt */
 #ifdef JP
-			sprintf(tmp, "いくつですか (1-%d): ", max);
+		sprintf(tmp, "いくつですか (1-%d): ", max);
 #else
 		sprintf(tmp, "Quantity (1-%d): ", max);
 #endif
@@ -3671,6 +3681,11 @@ s16b get_quantity(cptr prompt, int max)
 		prompt = tmp;
 	}
 
+	/* Paranoia XXX XXX XXX */
+	msg_print(NULL);
+
+	/* Display prompt */
+	prt(prompt, 0, 0);
 
 	/* Default to one */
 	amt = 1;
@@ -3678,8 +3693,17 @@ s16b get_quantity(cptr prompt, int max)
 	/* Build the default */
 	sprintf(buf, "%d", amt);
 
-	/* Ask for a quantity */
-	if (!get_string(prompt, buf, 6)) return (0);
+	/*
+	 * Ask for a quantity
+	 * Don't allow to use numpad as cursor key.
+	 */
+	res = askfor_aux(buf, 6, FALSE);
+
+	/* Clear prompt */
+	prt("", 0, 0);
+
+	/* Cancelled */
+	if (!res) return 0;
 
 	/* Extract a number */
 	amt = atoi(buf);
@@ -5316,7 +5340,7 @@ void str_tolower(char *str)
  * This function is a Mega-Hack and depend on pref-xxx.prf's.
  * Currently works on Linux(UNIX), Windows, and Macintosh only.
  */
-int inkey_special(void)
+int inkey_special(bool numpad_cursor)
 {
 	static const struct {
 		cptr keyname;
@@ -5415,10 +5439,13 @@ int inkey_special(void)
 			if (!modifier_key_list[i].keyname) break;
 		}
 
+		/* numpad_as_cursorkey option force numpad keys to input numbers */
+		if (!numpad_as_cursorkey) numpad_cursor = FALSE;
+
 		/* Get a special key code */
 		for (i = 0; special_key_list[i].keyname; i++)
 		{
-			if ((!special_key_list[i].numpad || numpad_as_cursorkey) &&
+			if ((!special_key_list[i].numpad || numpad_cursor) &&
 			    streq(str, special_key_list[i].keyname))
 			{
 				skey = special_key_list[i].keycode;

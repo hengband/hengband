@@ -1382,7 +1382,7 @@ void do_cmd_messages(int num_now)
 
 
 		/* Get a command */
-		skey = inkey_special();
+		skey = inkey_special(TRUE);
 
 		/* Exit on Escape */
 		if (skey == ESCAPE) break;
@@ -1402,7 +1402,7 @@ void do_cmd_messages(int num_now)
 
 
 			/* Get a "shower" string, or continue */
-			if (!askfor_aux(shower, 80)) continue;
+			if (!askfor(shower, 80)) continue;
 
 			/* Okay */
 			continue;
@@ -1422,7 +1422,7 @@ void do_cmd_messages(int num_now)
 
 
 			/* Get a "finder" string, or continue */
-			if (!askfor_aux(finder, 80)) continue;
+			if (!askfor(finder, 80)) continue;
 
 			/* Show it */
 			strcpy(shower, finder);
@@ -3146,7 +3146,7 @@ void do_cmd_macros(void)
 			sprintf(tmp, "%s.prf", player_name);
 
 			/* Ask for a file */
-			if (!askfor_aux(tmp, 80)) continue;
+			if (!askfor(tmp, 80)) continue;
 
 			/* Process the given filename */
 			err = process_pref_file(tmp);
@@ -3202,7 +3202,7 @@ void do_cmd_macros(void)
 			sprintf(tmp, "%s.prf", player_name);
 
 			/* Ask for a file */
-			if (!askfor_aux(tmp, 80)) continue;
+			if (!askfor(tmp, 80)) continue;
 
 			/* Dump the macros */
 			(void)macro_dump(tmp);
@@ -3314,7 +3314,7 @@ void do_cmd_macros(void)
 			ascii_to_text(tmp, macro__buf);
 
 			/* Get an encoded action */
-			if (askfor_aux(tmp, 80))
+			if (askfor(tmp, 80))
 			{
 				/* Convert to ascii */
 				text_to_ascii(macro__buf, tmp);
@@ -3389,7 +3389,7 @@ void do_cmd_macros(void)
 			sprintf(tmp, "%s.prf", player_name);
 
 			/* Ask for a file */
-			if (!askfor_aux(tmp, 80)) continue;
+			if (!askfor(tmp, 80)) continue;
 
 			/* Dump the macros */
 			(void)keymap_dump(tmp);
@@ -3501,7 +3501,7 @@ void do_cmd_macros(void)
 			ascii_to_text(tmp, macro__buf);
 
 			/* Get an encoded action */
-			if (askfor_aux(tmp, 80))
+			if (askfor(tmp, 80))
 			{
 				/* Convert to ascii */
 				text_to_ascii(macro__buf, tmp);
@@ -3577,7 +3577,7 @@ void do_cmd_macros(void)
 			tmp[80] = '\0';
 
 			/* Get an encoded action */
-			if (!askfor_aux(buf, 80)) continue;
+			if (!askfor(buf, 80)) continue;
 
 			/* Extract an action */
 			text_to_ascii(macro__buf, buf);
@@ -3737,7 +3737,7 @@ void do_cmd_visuals(void)
 			sprintf(tmp, "%s.prf", player_name);
 
 			/* Query */
-			if (!askfor_aux(tmp, 70)) continue;
+			if (!askfor(tmp, 70)) continue;
 
 			/* Process the given filename */
 			(void)process_pref_file(tmp);
@@ -3770,7 +3770,7 @@ void do_cmd_visuals(void)
 			sprintf(tmp, "%s.prf", player_name);
 			
 			/* Get a filename */
-			if (!askfor_aux(tmp, 70)) continue;
+			if (!askfor(tmp, 70)) continue;
 
 			/* Build the filename */
 			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
@@ -3838,7 +3838,7 @@ void do_cmd_visuals(void)
 			sprintf(tmp, "%s.prf", player_name);
 
 			/* Get a filename */
-			if (!askfor_aux(tmp, 70)) continue;
+			if (!askfor(tmp, 70)) continue;
 
 			/* Build the filename */
 			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
@@ -3913,7 +3913,7 @@ void do_cmd_visuals(void)
 			sprintf(tmp, "%s.prf", player_name);
 
 			/* Get a filename */
-			if (!askfor_aux(tmp, 70)) continue;
+			if (!askfor(tmp, 70)) continue;
 
 			/* Build the filename */
 			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
@@ -4380,7 +4380,7 @@ void do_cmd_colors(void)
 			sprintf(tmp, "%s.prf", player_name);
 
 			/* Query */
-			if (!askfor_aux(tmp, 70)) continue;
+			if (!askfor(tmp, 70)) continue;
 
 			/* Process the given filename */
 			(void)process_pref_file(tmp);
@@ -4419,7 +4419,7 @@ void do_cmd_colors(void)
 			sprintf(tmp, "%s.prf", player_name);
 
 			/* Get a filename */
-			if (!askfor_aux(tmp, 70)) continue;
+			if (!askfor(tmp, 70)) continue;
 
 			/* Build the filename */
 			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);

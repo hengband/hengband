@@ -5406,7 +5406,7 @@ static void edit_history(void)
 		Term_gotoxy(x + 10, y + 12);
 
 		/* Get special key code */
-		skey = inkey_special();
+		skey = inkey_special(TRUE);
 
 		/* Get a character code */
 		if (!(skey & SKEY_MASK)) c = (char)skey;
@@ -5947,7 +5947,7 @@ static bool player_birth_aux(void)
 			strcpy(inp, "10");
 
 			/* Get a response (or escape) */
-			if (!askfor_aux(inp, 2)) strcpy(inp, "10");
+			if (!askfor_aux(inp, 2, FALSE)) strcpy(inp, "10");
 
 			/* Quit */
 			if (inp[0] == 'Q') birth_quit();

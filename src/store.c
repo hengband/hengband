@@ -2590,11 +2590,25 @@ static int get_haggle(cptr pmt, s32b *poffer, s32b price, int final)
 	/* Ask until done */
 	while (TRUE)
 	{
+		bool res;
+
+		/* Display prompt */
+		prt(buf, 0, 0);
+
 		/* Default */
 		strcpy(out_val, "");
 
-		/* Ask the user for a response */
-		if (!get_string(buf, out_val, 32)) return (FALSE);
+		/*
+		 * Ask the user for a response.
+		 * Don't allow to use numpad as cursor key.
+		 */
+		res = askfor_aux(out_val, 32, FALSE);
+
+		/* Clear prompt */
+		prt("", 0, 0);
+
+		/* Cancelled */
+		if (!res) return FALSE;
 
 		/* Skip leading spaces */
 		for (p = out_val; *p == ' '; p++) /* loop */;

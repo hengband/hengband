@@ -5543,7 +5543,7 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 		}
 
 		/* Get a special key code */
-		skey = inkey_special();
+		skey = inkey_special(TRUE);
 
 		/* Show the help for the help */
 		if (skey == '?')
@@ -5568,7 +5568,7 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 			prt("Show: ", hgt - 1, 0);
 #endif
 
-			(void)askfor_aux(shower_str, 80);
+			(void)askfor(shower_str, 80);
 
 			/* Make it lowercase */
 			str_tolower(shower_str);
@@ -5588,7 +5588,7 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 #endif
 
 
-			if (askfor_aux(finder_str, 80))
+			if (askfor(finder_str, 80))
 			{
 				/* Find it */
 				find = finder_str;
@@ -5615,7 +5615,7 @@ prt("行: ", hgt - 1, 0);
 
 			strcpy(tmp, "0");
 
-			if (askfor_aux(tmp, 80))
+			if (askfor(tmp, 80))
 			{
 				line = atoi(tmp);
 			}
@@ -5646,7 +5646,7 @@ strcpy(tmp, "jhelp.hlp");
 #endif
 
 
-			if (askfor_aux(tmp, 80))
+			if (askfor(tmp, 80))
 			{
 				if (!show_file(TRUE, tmp, NULL, 0, mode)) skey = 'q';
 			}
@@ -6693,7 +6693,7 @@ put_str("ファイルネーム: ", 23, 0);
 		strcpy(out_val, "");
 
 		/* Ask for filename (or abort) */
-		if (!askfor_aux(out_val, 60)) return;
+		if (!askfor(out_val, 60)) return;
 
 		/* Return means "show on screen" */
 		if (!out_val[0]) break;
