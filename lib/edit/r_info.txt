@@ -14404,7 +14404,7 @@ S:S_UNDEAD
 D:$A glowing skull possessed by sorcerous power.  It need not move, but 
 D:$merely blast you with mighty magic.
 D:それは発光する頭蓋骨で、ソーサラーの力によって動かされている。
-D:あまり動かないが、まれに強力な魔法で攻撃してくる。
+D:動く必要がなく、強力な魔法で攻撃してくるのみである。
 
 #J0#
 N:751:カオス・ボルテックス
