@@ -1337,14 +1337,14 @@ msg_print("地面に落とされた。");
 	}
 	if ((r_ptr->flags7 & RF7_GUARDIAN) && !p_ptr->inside_battle && (d_info[dungeon_type].final_guardian == m_ptr->r_idx))
 	{
-		s16b k_idx = 198; /* Acquirement */;
+		int k_idx = 198; /* Acquirement */;
 
 		if (d_info[dungeon_type].final_object)
 			k_idx = d_info[dungeon_type].final_object;
 
 		if (d_info[dungeon_type].final_artifact)
 		{
-			byte a_idx = d_info[dungeon_type].final_artifact;
+			int a_idx = d_info[dungeon_type].final_artifact;
 			if (a_info[a_idx].cur_num == 0)
 			{
 				/* Create the artifact */

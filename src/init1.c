@@ -3362,7 +3362,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			{
 				if (a_info[artifact_index].cur_num)
 				{
-					s16b k_idx = 198;
+					int k_idx = 198;
 					object_type forge;
 					object_type *q_ptr = &forge;
 
