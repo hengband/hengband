@@ -6391,7 +6391,7 @@ msg_print("生命力が体から吸い取られた気がする！");
  * We return "TRUE" if any "obvious" effects were observed.  XXX XXX Actually,
  * we just assume that the effects were obvious, for historical reasons.
  */
-static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int typ, int a_rad, int monspell)
+static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int typ, int flg, int monspell)
 {
 	int k = 0;
 	int rlev;
@@ -6433,7 +6433,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 	if (!who) return (FALSE);
 	if (who == p_ptr->riding) return (FALSE);
 
-	if ((p_ptr->reflect || p_ptr->tim_reflect || ((p_ptr->special_defense & KATA_FUUJIN) && !p_ptr->blind)) && !a_rad && !one_in_(10) && (typ != GF_PSY_SPEAR))
+	if ((p_ptr->reflect || p_ptr->tim_reflect || ((p_ptr->special_defense & KATA_FUUJIN) && !p_ptr->blind)) && !(flg & PROJECT_NO_REF) && !one_in_(10))
 	{
 		byte t_y, t_x;
 		int max_attempts = 10;
@@ -9130,9 +9130,9 @@ else msg_print("攻撃は跳ね返った！");
 				/* Affect the player */
 				if ((y == y2) && (x == x2) && (y == py) && (x == px) && (flg & PROJECT_MONSTER))
 				{
-					if (project_p(who, who_name, d+1, y, x, dam, typ, rad, monspell)) notice = TRUE;
+					if (project_p(who, who_name, d+1, y, x, dam, typ, flg, monspell)) notice = TRUE;
 				}
-				else if (project_p(who, who_name, d, y, x, dam, typ, rad, monspell)) notice = TRUE;
+				else if (project_p(who, who_name, d, y, x, dam, typ, flg, monspell)) notice = TRUE;
 			}
 			else
 			{
@@ -9141,10 +9141,10 @@ else msg_print("攻撃は跳ね返った！");
 				{
 					if (!((flg & PROJECT_BEAM) || (flg & PROJECT_STOP)))
 					{
-						if (project_p(who, who_name, dist+1, y, x, dam, typ, rad, monspell)) notice = TRUE;
+						if (project_p(who, who_name, dist+1, y, x, dam, typ, flg, monspell)) notice = TRUE;
 					}
 				}
-				else if (project_p(who, who_name, dist, y, x, dam, typ, rad, monspell)) notice = TRUE;
+				else if (project_p(who, who_name, dist, y, x, dam, typ, flg, monspell)) notice = TRUE;
 			}
 		}
 	}
