@@ -482,7 +482,7 @@ errr my_fgets(FILE *fff, char *buf, huge n)
 				buf[i++] = ' ';
 
 				/* Append some more spaces */
-				while (!(i % 8)) buf[i++] = ' ';
+				while (0 != (i % 8)) buf[i++] = ' ';
 			}
 
 #ifdef JP
@@ -492,14 +492,13 @@ errr my_fgets(FILE *fff, char *buf, huge n)
 				buf[i++] = *s++;
 				buf[i++] = *s;
 			}
-# ifndef EUC
-	/* 半角かなに対応 */
-			else if ((((int)*s & 0xff) > 0xa1) && (((int)*s & 0xff ) < 0xdf))
+
+			/* 半角かなに対応 */
+			else if (iskana(*s))
 			{
 				buf[i++] = *s;
 				if (i >= n) break;
 			}
-# endif
 #endif
 			/* Handle printables */
 			else if (isprint(*s))
@@ -5287,8 +5286,7 @@ int inkey_special(bool use_numkey_as_special)
 	trig_len = strlen(inkey_macro_trigger_string);
 
 	/* No special key */
-	if (!trig_len) return (0xff & (int)key);
-
+	if (!trig_len) return (int)((unsigned char)key);
 	/*
 	 * Mega Hack -- ignore macro defined on ASCII keys
 	 *
@@ -5309,7 +5307,7 @@ int inkey_special(bool use_numkey_as_special)
 		}
 
 		/* Return the originaly pressed key */
-		return (0xff & (int)key);
+		return (int)((unsigned char)key);
 	}
 
 	/* Convert the trigger */
@@ -5368,7 +5366,7 @@ int inkey_special(bool use_numkey_as_special)
 		inkey_macro_trigger_string[0] = '\0';
 
 		/* Return normal keycode */
-		return (0xff & (int)key);
+		return (int)((unsigned char)key);
 	}
 
 	/* A special key found */
