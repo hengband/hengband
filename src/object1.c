@@ -3883,8 +3883,8 @@ info[i++] = "それはあなたの魔力を吸い取る。";
 		monster_race *r_ptr = &r_info[o_ptr->pval];
 		int namelen = strlen(r_name + r_ptr->name);
 		prt(format("%s: '", r_name + r_ptr->name), 1, 15);
-		c_prt(r_ptr->d_attr, format("%c", r_ptr->d_char), 1, 18+namelen);
-		prt("'", 1, 19+namelen);
+		Term_queue_bigchar(18 + namelen, 1, r_ptr->x_attr, r_ptr->x_char, 0, 0);
+		prt("'", 1, (use_bigtile ? 20 : 19) + namelen);
 	}
 	else
 #ifdef JP
