@@ -1954,6 +1954,9 @@ static errr rd_dungeon(void)
         {
                 for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
                 {
+			/* Access the cave */
+			c_ptr = &cave[y][x];
+
                         /* Very old */
                         if (c_ptr->feat == FEAT_INVIS)
                         {
