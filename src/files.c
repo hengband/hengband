@@ -2621,7 +2621,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 }
 
 
-static void tim_player_flags(u32b flgs[TR_FLAG_SIZE], bool im_and_res)
+static void tim_player_flags(u32b flgs[TR_FLAG_SIZE])
 {
 	int i;
 
@@ -2639,30 +2639,18 @@ static void tim_player_flags(u32b flgs[TR_FLAG_SIZE], bool im_and_res)
 		add_flag(flgs, TR_TELEPATHY);
 	if (IS_FAST() || p_ptr->slow)
 		add_flag(flgs, TR_SPEED);
-	if (im_and_res)
-	{
-		if (IS_OPPOSE_ACID() && !(p_ptr->special_defense & DEFENSE_ACID) && !(prace_is_(RACE_YEEK) && (p_ptr->lev > 19)))
-			add_flag(flgs, TR_RES_ACID);
-		if (IS_OPPOSE_ELEC() && !(p_ptr->special_defense & DEFENSE_ELEC))
-			add_flag(flgs, TR_RES_ELEC);
-		if (IS_OPPOSE_FIRE() && !(p_ptr->special_defense & DEFENSE_FIRE))
-			add_flag(flgs, TR_RES_FIRE);
-		if (IS_OPPOSE_COLD() && !(p_ptr->special_defense & DEFENSE_COLD))
-			add_flag(flgs, TR_RES_COLD);
-	}
-	else
-	{
-		if (IS_OPPOSE_ACID())
-			add_flag(flgs, TR_RES_ACID);
-		if (IS_OPPOSE_ELEC())
-			add_flag(flgs, TR_RES_ELEC);
-		if (IS_OPPOSE_FIRE())
-			add_flag(flgs, TR_RES_FIRE);
-		if (IS_OPPOSE_COLD())
-			add_flag(flgs, TR_RES_COLD);
-	}
+
+	if (IS_OPPOSE_ACID() && !(p_ptr->special_defense & DEFENSE_ACID) && !(prace_is_(RACE_YEEK) && (p_ptr->lev > 19)))
+		add_flag(flgs, TR_RES_ACID);
+	if (IS_OPPOSE_ELEC() && !(p_ptr->special_defense & DEFENSE_ELEC))
+		add_flag(flgs, TR_RES_ELEC);
+	if (IS_OPPOSE_FIRE() && !(p_ptr->special_defense & DEFENSE_FIRE))
+		add_flag(flgs, TR_RES_FIRE);
+	if (IS_OPPOSE_COLD() && !(p_ptr->special_defense & DEFENSE_COLD))
+		add_flag(flgs, TR_RES_COLD);
 	if (IS_OPPOSE_POIS())
 		add_flag(flgs, TR_RES_POIS);
+
 	if (p_ptr->special_attack & ATTACK_ACID)
 		add_flag(flgs, TR_BRAND_ACID);
 	if (p_ptr->special_attack & ATTACK_ELEC)
@@ -2992,7 +2980,7 @@ static void display_player_flag_info(void)
 
 	/* Extract flags and store */
 	player_flags(f.player_flags);
-	tim_player_flags(f.tim_player_flags, TRUE);
+	tim_player_flags(f.tim_player_flags);
 	player_immunity(f.player_imm);
 	tim_player_immunity(f.tim_player_imm);
 	known_obj_immunity(f.known_obj_imm);
@@ -3121,7 +3109,7 @@ static void display_player_other_flag_info(void)
 
 	/* Extract flags and store */
 	player_flags(f.player_flags);
-	tim_player_flags(f.tim_player_flags, TRUE);
+	tim_player_flags(f.tim_player_flags);
 	player_immunity(f.player_imm);
 	tim_player_immunity(f.tim_player_imm);
 	known_obj_immunity(f.known_obj_imm);
