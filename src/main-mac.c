@@ -183,11 +183,6 @@
 #endif /* MACH_O_CARBON */
 
 /*
- * Use rewritten asynchronous sound player
- */
-#define USE_ASYNC_SOUND
-
-/*
  * Cleaning up a couple of things to make these easier to change --AR
  */
 #ifdef JP
@@ -237,6 +232,17 @@
  */
 # define USE_SFL_CODE
 
+/*
+ * Use rewritten asynchronous sound player
+ */
+#define USE_ASYNC_SOUND
+
+
+#ifdef MACH_O_CARBON
+
+#define USE_QT_SOUND
+
+#endif /* MACH_O_CARBON */
 #endif /* ANGBAND_LITE_MAC */
 
 
@@ -457,596 +463,6 @@ AEEventHandlerUPP AEH_Print_UPP;
 AEEventHandlerUPP AEH_Open_UPP;
 
 #endif
-
-# ifdef USE_ASYNC_SOUND
-
-/*
- * Asynchronous sound player revised
- */
-#if defined(USE_QT_SOUND) && !defined(MACH_O_CARBON)
-# undef USE_QT_SOUND
-#endif /* USE_QT_SOUND && !MACH_O_CARBON */
-
-
-/*
- * Number of channels in the channel pool
- */
-#if TARGET_API_MAC_CARBON
-#define MAX_CHANNELS		8
-#else
-#define MAX_CHANNELS		4
-#endif
-
-/*
- * A pool of sound channels
- */
-static SndChannelPtr channels[MAX_CHANNELS];
-
-/*
- * Status of the channel pool
- */
-static Boolean channel_initialised = FALSE;
-
-/*
- * Data handles containing sound samples
- */
-static SndListHandle samples[SOUND_MAX];
-
-/*
- * Reference counts of sound samples
- */
-static SInt16 sample_refs[SOUND_MAX];
-
-
-/*
- * Sound effects
- *
- * These constants aren't used by the program at the moment.
- */
-#define SOUND_VOLUME_MIN	0	/* Default minimum sound volume */
-#define SOUND_VOLUME_MAX	255	/* Default maximum sound volume */
-#define VOLUME_MIN			0	/* Minimum sound volume in % */
-#define VOLUME_MAX			100	/* Maximum sound volume in % */
-#define VOLUME_INC			5	/* Increment sound volume in % */
-
-/* I'm just too lazy to write a panel for this XXX XXX */
-static SInt16 sound_volume = SOUND_VOLUME_MAX;
-
-#ifdef USE_QT_SOUND
-
-/*
- * Moving graphics resources into data fork -- pelpel
- *
- * (Carbon, Bundle)
- * Given base and type names of a resource, find a file in the
- * current application bundle and return its FSSpec in the third argument.
- * Returns true on success, false otherwise.
- * e.g. get_resource_spec(CFSTR("8x8"), CFSTR("png"), &spec);
- */
-static Boolean get_resource_spec(
-	CFStringRef base_name, CFStringRef type_name, FSSpec *spec)
-{
-	CFURLRef res_url;
-	FSRef ref;
-
-	/* Find resource (=file) in the current bundle */
-	res_url = CFBundleCopyResourceURL(
-		CFBundleGetMainBundle(), base_name, type_name, NULL);
-
-	/* Oops */
-	if (res_url == NULL) return (false);
-
-	/* Convert CFURL to FSRef */
-	(void)CFURLGetFSRef(res_url, &ref);
-
-	/* Convert FSRef to FSSpec */
-	(void)FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, spec, NULL);
-
-	/* Free allocated CF data */
-	CFRelease(res_url);
-
-	/* Success */
-	return (true);
-}
-
-/*
- * QuickTime sound, by Ron Anderson
- *
- * I didn't choose to use Windows-style .ini files (Ron wrote a parser
- * for it, but...), nor did I use lib/xtra directory, hoping someone
- * would code plist-based configuration code in the future -- pelpel
- */
-
-/*
- * (QuickTime)
- * Load sound effects from data-fork resources.  They are wav files
- * with the same names as angband_sound_name[] (variable.c)
- *
- * Globals referenced: angband_sound_name[]
- * Globals updated: samples[] (they can be *huge*)
- */
-static void load_sounds(void)
-{
-	OSErr err;
-	int i;
-
-	/* Start QuickTime */
-	err = EnterMovies();
-
-	/* Error */
-	if (err != noErr) return;
-
-	/*
-	 * This loop may take a while depending on the count and size of samples
-	 * to load.
-	 *
-	 * We should use a progress dialog for this.
-	 */
-	for (i = 1; i < SOUND_MAX; i++)
-	{
-		/* Apple APIs always give me headacke :( */
-		CFStringRef name;
-		FSSpec spec;
-		SInt16 file_id;
-		SInt16 res_id;
-		Str255 movie_name;
-		Movie movie;
-		Track track;
-		Handle h;
-		Boolean res;
-
-		/* Allocate CFString with the name of sound event to be processed */
-		name = CFStringCreateWithCString(NULL, angband_sound_name[i],
-			kTextEncodingUS_ASCII);
-
-		/* Error */
-		if (name == NULL) continue;
-
-		/* Find sound sample resource with the same name */
-		res = get_resource_spec(name, CFSTR("wav"), &spec);
-
-		/* Free the reference to CFString */
-		CFRelease(name);
-
-		/* Error */
-		if (!res) continue;
-
-		/* Open the sound file */
-		err = OpenMovieFile(&spec, &file_id, fsRdPerm);
-
-		/* Error */
-		if (err != noErr) continue;
-
-		/* Create Movie from the file */
-		err = NewMovieFromFile(&movie, file_id, &res_id, movie_name,
-			newMovieActive, NULL);
-
-		/* Error */
-		if (err != noErr) goto close_file;
-
-		/* Get the first track of the movie */
-		track = GetMovieIndTrackType(movie, 1, AudioMediaCharacteristic,
-			movieTrackCharacteristic | movieTrackEnabledOnly );
-
-		/* Error */
-		if (track == NULL) goto close_movie;
-
-		/* Allocate a handle to store sample */
-		h = NewHandle(0);
-
-		/* Error */
-		if (h == NULL) goto close_track;
-
-		/* Dump the sample into the handle */
-		err = PutMovieIntoTypedHandle(movie, track, soundListRsrc, h, 0,
-			GetTrackDuration(track), 0L, NULL);
-
-		/* Success */
-		if (err == noErr)
-		{
-			/* Store the handle in the sample list */
-			samples[i] = (SndListHandle)h;
-		}
-
-		/* Failure */
-		else
-		{
-			/* Free unused handle */
-			DisposeHandle(h);
-		}
-
-		/* Free the track */
-		close_track: DisposeMovieTrack(track);
-
-		/* Free the movie */
-		close_movie: DisposeMovie(movie);
-
-		/* Close the movie file */
-		close_file: CloseMovieFile(file_id);
-	}
-
-	/* Stop QuickTime */
-	ExitMovies();
-}
-
-#else /* USE_QT_SOUND */
-
-/*
- * Return a handle of 'snd ' resource given Angband sound event number,
- * or NULL if it isn't found.
- *
- * Globals referenced: angband_sound_name[] (variable.c)
- */
-static SndListHandle find_sound(int num)
-{
-	Str255 sound;
-
-	/* Get the proper sound name */
-	strnfmt((char*)sound + 1, 255, "%.16s.wav", angband_sound_name[num]);
-	sound[0] = strlen((char*)sound + 1);
-
-	/* Obtain resource XXX XXX XXX */
-	return ((SndListHandle)GetNamedResource('snd ', sound));
-}
-
-#endif /* USE_QT_SOUND */
-
-
-/*
- * Clean up sound support - to be called when the game exits.
- *
- * Globals referenced: channels[], samples[], sample_refs[].
- */
-static void cleanup_sound(void)
-{
-	int i;
-
-	/* No need to clean it up */
-	if (!channel_initialised) return;
-
-	/* Dispose channels */
-	for (i = 0; i < MAX_CHANNELS; i++)
-	{
-		/* Drain sound commands and free the channel */
-		SndDisposeChannel(channels[i], TRUE);
-	}
-
-	/* Free sound data */
-	for (i = 1; i < SOUND_MAX; i++)
-	{
-		/* Still locked */
-		if ((sample_refs[i] > 0) && (samples[i] != NULL))
-		{
-			/* Unlock it */
-			HUnlock((Handle)samples[i]);
-		}
-
-#ifndef USE_QT_SOUND
-
-		/* Release it */
-		if (samples[i]) ReleaseResource((Handle)samples[i]);
-#else
-
-		/* Free handle */
-		if (samples[i]) DisposeHandle((Handle)samples[i]);
-#endif /* !USE_QT_SOUND */
-	}
-}
-
-
-/*
- * Play sound effects asynchronously -- pelpel
- *
- * I don't believe those who first started using the previous implementations
- * imagined this is *much* more complicated as it may seem.  Anyway, 
- * introduced round-robin scheduling of channels and made it much more
- * paranoid about HLock/HUnlock.
- *
- * XXX XXX de-refcounting, HUnlock and ReleaseResource should be done
- * using channel's callback procedures, which set global flags, and
- * a procedure hooked into CheckEvents does housekeeping.  On the other
- * hand, this lazy reclaiming strategy keeps things simple (no interrupt
- * time code) and provides a sort of cache for sound data.
- *
- * Globals referenced: channel_initialised, channels[], samples[],
- *   sample_refs[].
- * Globals updated: ditto.
- */
-static void play_sound(int num, SInt16 vol)
-{
-	OSErr err;
-	int i;
-	int prev_num;
-	SndListHandle h;
-	SndChannelPtr chan;
-	SCStatus status;
-
-	static int next_chan;
-	static SInt16 channel_occupants[MAX_CHANNELS];
-	static SndCommand volume_cmd, quiet_cmd;
-
-
-	/* Initialise sound channels */
-	if (!channel_initialised)
-	{
-		for (i = 0; i < MAX_CHANNELS; i++)
-		{
-			/* Paranoia - Clear occupant table */
-			/* channel_occupants[i] = 0; */
-
-			/* Create sound channel for all sounds to play from */
-			err = SndNewChannel(&channels[i], sampledSynth, initMono, 0L);
-
-			/* Error */
-			if (err != noErr)
-			{
-				/* Free channels */
-				while (--i >= 0)
-				{
-					SndDisposeChannel(channels[i], TRUE);
-				}
-
-				/* Notify error */
-#ifdef JP
-				plog("サウンドチャンネルを初期化出来ません!");
-#else
-				plog("Cannot initialise sound channels!");
-#endif
-
-				/* Cancel request */
-				use_sound = arg_sound = FALSE;
-
-				/* Failure */
-				return;
-			}
-		}
-
-		/* First channel to use */
-		next_chan = 0;
-
-		/* Prepare volume command */
-		volume_cmd.cmd = volumeCmd;
-		volume_cmd.param1 = 0;
-		volume_cmd.param2 = 0;
-
-		/* Prepare quiet command */
-		quiet_cmd.cmd = quietCmd;
-		quiet_cmd.param1 = 0;
-		quiet_cmd.param2 = 0;
-
-		/* Initialisation complete */
-		channel_initialised = TRUE;
-	}
-
-	/* Paranoia */
-	if ((num <= 0) || (num >= SOUND_MAX)) return;
-
-	/* Prepare volume command */
-	volume_cmd.param2 = ((SInt32)vol << 16) | vol;
-
-	/* Channel to use (round robin) */
-	chan = channels[next_chan];
-
-	/* See if the resource is already in use */
-	if (sample_refs[num] > 0)
-	{
-		/* Resource in use */
-		h = samples[num];
-
-		/* Increase the refcount */
-		sample_refs[num]++;
-	}
-
-	/* Sound is not currently in use */
-	else
-	{
-		/* Get handle for the sound */
-#ifdef USE_QT_SOUND
-		h = samples[num];
-#else
-		h = find_sound(num);
-#endif /* USE_QT_SOUND */
-
-		/* Sample not available */
-		if (h == NULL) return;
-
-#ifndef USE_QT_SOUND
-
-		/* Load resource */
-		LoadResource((Handle)h);
-
-		/* Remember it */
-		samples[num] = h;
-
-#endif /* !USE_QT_SOUND */
-
-		/* Lock the handle */
-		HLockHi((Handle)h);
-
-		/* Initialise refcount */
-		sample_refs[num] = 1;
-	}
-
-	/* Poll the channel */
-	err = SndChannelStatus(chan, sizeof(SCStatus), &status);
-
-	/* It isn't available */
-	if ((err != noErr) || status.scChannelBusy)
-	{
-		/* Shut it down */
-		SndDoImmediate(chan, &quiet_cmd);
-	}
-
-	/* Previously played sound on this channel */
-	prev_num = channel_occupants[next_chan];
-
-	/* Process previously played sound */
-	if (prev_num != 0)
-	{
-		/* Decrease refcount */
-		sample_refs[prev_num]--;
-
-		/* We can free it now */
-		if (sample_refs[prev_num] <= 0)
-		{
-			/* Unlock */
-			HUnlock((Handle)samples[prev_num]);
-
-#ifndef USE_QT_SOUND
-
-			/* Release */
-			ReleaseResource((Handle)samples[prev_num]);
-
-			/* Forget handle */
-			samples[prev_num] = NULL;
-
-#endif /* !USE_QT_SOUND */
-
-			/* Paranoia */
-			sample_refs[prev_num] = 0;
-		}
-	}
-
-	/* Remember this sound as the current occupant of the channel */
-	channel_occupants[next_chan] = num;
-
-	/* Set up volume for channel */
-	SndDoImmediate(chan, &volume_cmd);
-
-	/* Play new sound asynchronously */
-	SndPlay(chan, h, TRUE);
-
-	/* Schedule next channel (round robin) */
-	next_chan++;
-	if (next_chan >= MAX_CHANNELS) next_chan = 0;
-}
-
-# else /* USE_ASYNC_SOUND */
-
-/*
- * Play sound synchronously
- *
- * This may not be your choice, but much safer and much less resource hungry.
- */
-static void play_sound(int num, SInt16 vol)
-{
-	Handle handle;
-	Str255 sound;
-
-	/* Get the proper sound name */
-	strnfmt((char*)sound + 1, 255, "%.16s.wav", angband_sound_name[num]);
-	sound[0] = strlen((char*)sound + 1);
-
-	/* Obtain resource XXX XXX XXX */
-	handle = GetNamedResource('snd ', sound);
-
-	/* Oops */
-	if (handle == NULL) return;
-
-	/* Load and Lock */
-	LoadResource(handle);
-	HLockHi(handle);
-
-	/* Play sound (wait for completion) */
-	SndPlay(NULL, (SndListHandle)handle, FALSE);
-
-	/* Unlock and release */
-	HUnlock(handle);
-	ReleaseResource(handle);
-}
-
-# endif /* USE_ASYNC_SOUND */
-
-#ifndef MACH_O_CARBON
-
-/*
-	Extra Sound Mode
-*/
-
-static int ext_sound = 0;
-
-#define		SND_NON		0
-#define		SND_ATTACK	1
-#define		SND_MOVE		2
-#define		SND_TRAP		3
-#define		SND_SHOP		4
-#define		SND_ME		5
-#define		SND_CMD_ERROR	6
-
-static int soundchoice[] = {
-	SND_NON,
-	SND_ATTACK,
-	SND_ATTACK,
-	SND_ATTACK,
-	SND_TRAP,
-	SND_ATTACK,
-	SND_ME,
-	SND_ME,
-	SND_ME,
-	SND_MOVE,
-	SND_ATTACK,
-	SND_ME,
-	SND_ATTACK,
-	SND_NON,
-	SND_MOVE,
-	SND_MOVE,
-	SND_ME,
-	SND_SHOP,
-	SND_SHOP,
-	SND_SHOP,
-	SND_SHOP,
-	SND_MOVE,
-	SND_MOVE,
-	SND_MOVE,
-	SND_MOVE,
-	SND_ATTACK,
-	SND_SHOP,
-	SND_SHOP,
-	SND_ME,
-	SND_NON,
-	SND_ATTACK,
-	SND_NON,
-	SND_NON,
-	SND_NON,
-	SND_NON,
-	SND_ATTACK,
-	SND_ATTACK,
-	SND_NON,
-	SND_NON,
-	SND_ATTACK,
-	SND_NON,
-	SND_NON,
-	SND_NON,
-	SND_TRAP,
-	SND_ATTACK,
-	SND_ATTACK,
-	SND_ATTACK,
-	SND_ATTACK,
-	SND_ATTACK,
-	SND_NON,
-	SND_NON,
-	SND_NON,
-	SND_NON,
-	SND_NON,
-	SND_CMD_ERROR,
-	SND_TRAP,
-	SND_NON,
-	SND_NON,
-	SND_TRAP,
-	SND_ATTACK,
-	SND_TRAP,
-	SND_ATTACK,
-	SND_ATTACK,
-	SND_NON,
-	SND_TRAP,
-};
-
-static int ext_graf = 0;
-
-#endif /* !MACH_O_CARBON */
-
-static short			soundmode[8];
-
 
 /*
  * Convert refnum+vrefnum+fname into a full file name
@@ -1874,16 +1290,45 @@ static void term_data_redraw(term_data *td)
 
 
 /*
- * Constants
+ * Graphics support
  */
 
-static int pictID = 1001;	/* 8x8 tiles; 16x16 tiles are 1002 */
+/*
+ * PICT id of image tiles, set by Term_xtra_mac_react
+ */
+#ifdef MACH_O_CARBON
+static CFStringRef pictID = NULL;
+#else
+static int pictID = 0;
+#endif /* MACH_O_CARBON */
 
-static int grafWidth = 8;	/* Always equal to grafHeight */
-static int grafHeight = 8;	/* Either 8 or 16 */
+/*
+ * Width and height of a tile in pixels
+ */
+static int grafWidth = 0;
+static int grafHeight = 0;
 
-static bool arg_newstyle_graphics;
-static bool use_newstyle_graphics;
+/*
+ * Numbers of rows and columns in tiles, calculated by
+ * the PICT loading code
+ */
+static int pictCols = 0;
+static int pictRows = 0;
+
+/*
+ * Available graphics modes - 32x32 tiles don't work on Classic
+ */
+#define GRAF_MODE_NONE	0
+#define GRAF_MODE_8X8	1
+#define GRAF_MODE_16X16	2
+#define GRAF_MODE_32X32	3
+
+/*
+ * Current and requested graphics modes
+ */
+static int graf_mode = GRAF_MODE_NONE;
+static int graf_mode_req = GRAF_MODE_NONE;
+
 
 /*
  * Forward Declare
@@ -1947,6 +1392,123 @@ static void BenSWUnlockFrame(FrameRec *srcFrameP)
 	
 }
 
+#ifdef MACH_O_CARBON
+
+/*
+ * Moving graphics resources into data fork -- pelpel
+ *
+ * (Carbon, Bundle)
+ * Given base and type names of a resource, find a file in the
+ * current application bundle and return its FSSpec in the third argument.
+ * Returns true on success, false otherwise.
+ * e.g. get_resource_spec(CFSTR("8x8"), CFSTR("png"), &spec);
+ */
+static Boolean get_resource_spec(
+	CFStringRef base_name, CFStringRef type_name, FSSpec *spec)
+{
+	CFURLRef res_url;
+	FSRef ref;
+
+	/* Find resource (=file) in the current bundle */
+	res_url = CFBundleCopyResourceURL(
+		CFBundleGetMainBundle(), base_name, type_name, NULL);
+
+	/* Oops */
+	if (res_url == NULL) return (false);
+
+	/* Convert CFURL to FSRef */
+	(void)CFURLGetFSRef(res_url, &ref);
+
+	/* Convert FSRef to FSSpec */
+	(void)FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, spec, NULL);
+
+	/* Free allocated CF data */
+	CFRelease(res_url);
+
+	/* Success */
+	return (true);
+}
+
+
+/*
+ * (QuickTime)
+ * Create a off-screen GWorld from contents of a file specified by a FSSpec.
+ * Based on BenSWCreateGWorldFromPict.
+ *
+ * Globals referenced: data[0], graf_height, graf_width
+ * Globals updated: pict_rows, pict_cols.
+ */
+static OSErr create_gworld_from_spec(
+	GWorldPtr *tile_gw, FSSpec *tile_spec)
+{
+	OSErr err;
+	GraphicsImportComponent gi;
+	GWorldPtr gw, tmp_gw;
+	GDHandle gdh, tmp_gdh;
+	Rect r;
+	SInt16 depth;
+
+	/* See if QuickTime understands the file format */
+	err = GetGraphicsImporterForFile(tile_spec, &gi);
+
+	/* Oops */
+	if (err != noErr) return (err);
+
+	/* Get depth */
+	depth = data[0].pixelDepth;
+
+	/* Get GDH */
+	gdh = data[0].theGDH;
+
+	/* Retrieve the rect of the image */
+	err = GraphicsImportGetNaturalBounds(gi, &r);
+
+	/* Adjust it, so that the upper left corner becomes (0, 0) */
+	OffsetRect(&r, -r.left, -r.top);
+
+	/* Calculate and set numbers of rows and columns */
+	pictRows = r.bottom / grafHeight;
+	pictCols = r.right / grafWidth;
+
+	/* Create a GWorld */
+	err = NewGWorld(&gw, depth, &r, NULL, gdh, noNewDevice);
+
+	/* Oops */
+	if (err != noErr) return (err);
+
+	/* Save the pointer to the GWorld */
+	*tile_gw = gw;
+
+	/* Save the current GWorld */
+	GetGWorld(&tmp_gw, &tmp_gdh);
+
+	/* Activate the newly created GWorld */
+	(void)GraphicsImportSetGWorld(gi, gw, NULL);
+
+	/* Prevent pixmap from moving while drawing */
+	(void)LockPixels(GetGWorldPixMap(gw));
+
+	/* Clear the pixels */
+	EraseRect(&r);
+
+	/* Draw the image into it */
+	(void)GraphicsImportDraw(gi);
+
+	/* Release the lock*/
+	UnlockPixels(GetGWorldPixMap(gw));
+
+	/* Restore GWorld */
+	SetGWorld(tmp_gw, tmp_gdh);
+
+	/* Close the image importer */
+	CloseComponent(gi);
+
+	/* Success */
+	return (noErr);
+}
+
+#else /* MACH_O_CARBON */
+
 static OSErr BenSWCreateGWorldFromPict(
 	GWorldPtr *pictGWorld,
 	PicHandle pictH)
@@ -2004,7 +1566,7 @@ static OSErr BenSWCreateGWorldFromPict(
 	return (0);
 }
 
-
+#endif /* MACH_O_CARBON */
 
 
 /*
@@ -2017,7 +1579,11 @@ static errr globe_init(void)
 	
 	GWorldPtr tempPictGWorldP;
 
+#ifdef MACH_O_CARBON
+	FSSpec pict_spec;
+#else
 	PicHandle newPictH;
+#endif /* MACH_O_CARBON */
 
 	/* Use window XXX XXX XXX */
 #if TARGET_API_MAC_CARBON
@@ -2026,6 +1592,38 @@ static errr globe_init(void)
 	SetPort(data[0].w);
 #endif
 
+
+#ifdef MACH_O_CARBON
+
+	/* Get the tile resources */
+	if (!get_resource_spec(pictID, CFSTR("png"), &pict_spec)) return (-1);
+
+	/* Create GWorld */
+	err = create_gworld_from_spec(&tempPictGWorldP, &pict_spec);
+
+	/* Error */
+	if (err != noErr) return (err);
+
+	/* Create the frame */
+	frameP = (FrameRec*)NewPtrClear((Size)sizeof(FrameRec));
+
+	/* Analyze result */
+	if (frameP == NULL)
+	{
+		/* Dispose of image GWorld */
+		DisposeGWorld(tempPictGWorldP);
+
+		/* Fake error code */
+		return (-1);
+	}
+
+	/* Save GWorld */
+	frameP->framePort = tempPictGWorldP;
+
+	/* Lock it */
+	BenSWLockFrame(frameP);
+
+#else /* MACH_O_CARBON */
 
 	/* Get the pict resource */
 	newPictH = GetPicture(pictID);
@@ -2063,6 +1661,8 @@ static errr globe_init(void)
 			}
 		}
 	}
+#endif /* MACH_O_CARBON */
+
 
 	/* Result */
 	return (err);
@@ -2097,6 +1697,560 @@ static errr globe_nuke(void)
 	return (0);
 }
 
+
+# ifdef USE_ASYNC_SOUND
+
+/*
+ * Asynchronous sound player revised
+ */
+#if defined(USE_QT_SOUND) && !defined(MACH_O_CARBON)
+# undef USE_QT_SOUND
+#endif /* USE_QT_SOUND && !MACH_O_CARBON */
+
+
+/*
+ * Number of channels in the channel pool
+ */
+#if TARGET_API_MAC_CARBON
+#define MAX_CHANNELS		8
+#else
+#define MAX_CHANNELS		4
+#endif
+
+/*
+ * A pool of sound channels
+ */
+static SndChannelPtr channels[MAX_CHANNELS];
+
+/*
+ * Status of the channel pool
+ */
+static Boolean channel_initialised = FALSE;
+
+/*
+ * Data handles containing sound samples
+ */
+static SndListHandle samples[SOUND_MAX];
+
+/*
+ * Reference counts of sound samples
+ */
+static SInt16 sample_refs[SOUND_MAX];
+
+
+/*
+ * Sound effects
+ *
+ * These constants aren't used by the program at the moment.
+ */
+#define SOUND_VOLUME_MIN	0	/* Default minimum sound volume */
+#define SOUND_VOLUME_MAX	255	/* Default maximum sound volume */
+#define VOLUME_MIN			0	/* Minimum sound volume in % */
+#define VOLUME_MAX			100	/* Maximum sound volume in % */
+#define VOLUME_INC			5	/* Increment sound volume in % */
+
+/* I'm just too lazy to write a panel for this XXX XXX */
+static SInt16 sound_volume = SOUND_VOLUME_MAX;
+
+#ifdef USE_QT_SOUND
+
+/*
+ * QuickTime sound, by Ron Anderson
+ *
+ * I didn't choose to use Windows-style .ini files (Ron wrote a parser
+ * for it, but...), nor did I use lib/xtra directory, hoping someone
+ * would code plist-based configuration code in the future -- pelpel
+ */
+
+/*
+ * (QuickTime)
+ * Load sound effects from data-fork resources.  They are wav files
+ * with the same names as angband_sound_name[] (variable.c)
+ *
+ * Globals referenced: angband_sound_name[]
+ * Globals updated: samples[] (they can be *huge*)
+ */
+static void load_sounds(void)
+{
+	OSErr err;
+	int i;
+
+	/* Start QuickTime */
+	err = EnterMovies();
+
+	/* Error */
+	if (err != noErr) return;
+
+	/*
+	 * This loop may take a while depending on the count and size of samples
+	 * to load.
+	 *
+	 * We should use a progress dialog for this.
+	 */
+	for (i = 1; i < SOUND_MAX; i++)
+	{
+		/* Apple APIs always give me headacke :( */
+		CFStringRef name;
+		FSSpec spec;
+		SInt16 file_id;
+		SInt16 res_id;
+		Str255 movie_name;
+		Movie movie;
+		Track track;
+		Handle h;
+		Boolean res;
+
+		/* Allocate CFString with the name of sound event to be processed */
+		name = CFStringCreateWithCString(NULL, angband_sound_name[i],
+			kTextEncodingUS_ASCII);
+
+		/* Error */
+		if (name == NULL) continue;
+
+		/* Find sound sample resource with the same name */
+		res = get_resource_spec(name, CFSTR("wav"), &spec);
+
+		/* Free the reference to CFString */
+		CFRelease(name);
+
+		/* Error */
+		if (!res) continue;
+
+		/* Open the sound file */
+		err = OpenMovieFile(&spec, &file_id, fsRdPerm);
+
+		/* Error */
+		if (err != noErr) continue;
+
+		/* Create Movie from the file */
+		err = NewMovieFromFile(&movie, file_id, &res_id, movie_name,
+			newMovieActive, NULL);
+
+		/* Error */
+		if (err != noErr) goto close_file;
+
+		/* Get the first track of the movie */
+		track = GetMovieIndTrackType(movie, 1, AudioMediaCharacteristic,
+			movieTrackCharacteristic | movieTrackEnabledOnly );
+
+		/* Error */
+		if (track == NULL) goto close_movie;
+
+		/* Allocate a handle to store sample */
+		h = NewHandle(0);
+
+		/* Error */
+		if (h == NULL) goto close_track;
+
+		/* Dump the sample into the handle */
+		err = PutMovieIntoTypedHandle(movie, track, soundListRsrc, h, 0,
+			GetTrackDuration(track), 0L, NULL);
+
+		/* Success */
+		if (err == noErr)
+		{
+			/* Store the handle in the sample list */
+			samples[i] = (SndListHandle)h;
+		}
+
+		/* Failure */
+		else
+		{
+			/* Free unused handle */
+			DisposeHandle(h);
+		}
+
+		/* Free the track */
+		close_track: DisposeMovieTrack(track);
+
+		/* Free the movie */
+		close_movie: DisposeMovie(movie);
+
+		/* Close the movie file */
+		close_file: CloseMovieFile(file_id);
+	}
+
+	/* Stop QuickTime */
+	ExitMovies();
+}
+
+#else /* USE_QT_SOUND */
+
+/*
+ * Return a handle of 'snd ' resource given Angband sound event number,
+ * or NULL if it isn't found.
+ *
+ * Globals referenced: angband_sound_name[] (variable.c)
+ */
+static SndListHandle find_sound(int num)
+{
+	Str255 sound;
+
+	/* Get the proper sound name */
+	strnfmt((char*)sound + 1, 255, "%.16s.wav", angband_sound_name[num]);
+	sound[0] = strlen((char*)sound + 1);
+
+	/* Obtain resource XXX XXX XXX */
+	return ((SndListHandle)GetNamedResource('snd ', sound));
+}
+
+#endif /* USE_QT_SOUND */
+
+
+/*
+ * Clean up sound support - to be called when the game exits.
+ *
+ * Globals referenced: channels[], samples[], sample_refs[].
+ */
+static void cleanup_sound(void)
+{
+	int i;
+
+	/* No need to clean it up */
+	if (!channel_initialised) return;
+
+	/* Dispose channels */
+	for (i = 0; i < MAX_CHANNELS; i++)
+	{
+		/* Drain sound commands and free the channel */
+		SndDisposeChannel(channels[i], TRUE);
+	}
+
+	/* Free sound data */
+	for (i = 1; i < SOUND_MAX; i++)
+	{
+		/* Still locked */
+		if ((sample_refs[i] > 0) && (samples[i] != NULL))
+		{
+			/* Unlock it */
+			HUnlock((Handle)samples[i]);
+		}
+
+#ifndef USE_QT_SOUND
+
+		/* Release it */
+		if (samples[i]) ReleaseResource((Handle)samples[i]);
+#else
+
+		/* Free handle */
+		if (samples[i]) DisposeHandle((Handle)samples[i]);
+#endif /* !USE_QT_SOUND */
+	}
+}
+
+
+/*
+ * Play sound effects asynchronously -- pelpel
+ *
+ * I don't believe those who first started using the previous implementations
+ * imagined this is *much* more complicated as it may seem.  Anyway, 
+ * introduced round-robin scheduling of channels and made it much more
+ * paranoid about HLock/HUnlock.
+ *
+ * XXX XXX de-refcounting, HUnlock and ReleaseResource should be done
+ * using channel's callback procedures, which set global flags, and
+ * a procedure hooked into CheckEvents does housekeeping.  On the other
+ * hand, this lazy reclaiming strategy keeps things simple (no interrupt
+ * time code) and provides a sort of cache for sound data.
+ *
+ * Globals referenced: channel_initialised, channels[], samples[],
+ *   sample_refs[].
+ * Globals updated: ditto.
+ */
+static void play_sound(int num, SInt16 vol)
+{
+	OSErr err;
+	int i;
+	int prev_num;
+	SndListHandle h;
+	SndChannelPtr chan;
+	SCStatus status;
+
+	static int next_chan;
+	static SInt16 channel_occupants[MAX_CHANNELS];
+	static SndCommand volume_cmd, quiet_cmd;
+
+
+	/* Initialise sound channels */
+	if (!channel_initialised)
+	{
+		for (i = 0; i < MAX_CHANNELS; i++)
+		{
+			/* Paranoia - Clear occupant table */
+			/* channel_occupants[i] = 0; */
+
+			/* Create sound channel for all sounds to play from */
+			err = SndNewChannel(&channels[i], sampledSynth, initMono, 0L);
+
+			/* Error */
+			if (err != noErr)
+			{
+				/* Free channels */
+				while (--i >= 0)
+				{
+					SndDisposeChannel(channels[i], TRUE);
+				}
+
+				/* Notify error */
+#ifdef JP
+				plog("サウンドチャンネルを初期化出来ません!");
+#else
+				plog("Cannot initialise sound channels!");
+#endif
+
+				/* Cancel request */
+				use_sound = arg_sound = FALSE;
+
+				/* Failure */
+				return;
+			}
+		}
+
+		/* First channel to use */
+		next_chan = 0;
+
+		/* Prepare volume command */
+		volume_cmd.cmd = volumeCmd;
+		volume_cmd.param1 = 0;
+		volume_cmd.param2 = 0;
+
+		/* Prepare quiet command */
+		quiet_cmd.cmd = quietCmd;
+		quiet_cmd.param1 = 0;
+		quiet_cmd.param2 = 0;
+
+		/* Initialisation complete */
+		channel_initialised = TRUE;
+	}
+
+	/* Paranoia */
+	if ((num <= 0) || (num >= SOUND_MAX)) return;
+
+	/* Prepare volume command */
+	volume_cmd.param2 = ((SInt32)vol << 16) | vol;
+
+	/* Channel to use (round robin) */
+	chan = channels[next_chan];
+
+	/* See if the resource is already in use */
+	if (sample_refs[num] > 0)
+	{
+		/* Resource in use */
+		h = samples[num];
+
+		/* Increase the refcount */
+		sample_refs[num]++;
+	}
+
+	/* Sound is not currently in use */
+	else
+	{
+		/* Get handle for the sound */
+#ifdef USE_QT_SOUND
+		h = samples[num];
+#else
+		h = find_sound(num);
+#endif /* USE_QT_SOUND */
+
+		/* Sample not available */
+		if (h == NULL) return;
+
+#ifndef USE_QT_SOUND
+
+		/* Load resource */
+		LoadResource((Handle)h);
+
+		/* Remember it */
+		samples[num] = h;
+
+#endif /* !USE_QT_SOUND */
+
+		/* Lock the handle */
+		HLockHi((Handle)h);
+
+		/* Initialise refcount */
+		sample_refs[num] = 1;
+	}
+
+	/* Poll the channel */
+	err = SndChannelStatus(chan, sizeof(SCStatus), &status);
+
+	/* It isn't available */
+	if ((err != noErr) || status.scChannelBusy)
+	{
+		/* Shut it down */
+		SndDoImmediate(chan, &quiet_cmd);
+	}
+
+	/* Previously played sound on this channel */
+	prev_num = channel_occupants[next_chan];
+
+	/* Process previously played sound */
+	if (prev_num != 0)
+	{
+		/* Decrease refcount */
+		sample_refs[prev_num]--;
+
+		/* We can free it now */
+		if (sample_refs[prev_num] <= 0)
+		{
+			/* Unlock */
+			HUnlock((Handle)samples[prev_num]);
+
+#ifndef USE_QT_SOUND
+
+			/* Release */
+			ReleaseResource((Handle)samples[prev_num]);
+
+			/* Forget handle */
+			samples[prev_num] = NULL;
+
+#endif /* !USE_QT_SOUND */
+
+			/* Paranoia */
+			sample_refs[prev_num] = 0;
+		}
+	}
+
+	/* Remember this sound as the current occupant of the channel */
+	channel_occupants[next_chan] = num;
+
+	/* Set up volume for channel */
+	SndDoImmediate(chan, &volume_cmd);
+
+	/* Play new sound asynchronously */
+	SndPlay(chan, h, TRUE);
+
+	/* Schedule next channel (round robin) */
+	next_chan++;
+	if (next_chan >= MAX_CHANNELS) next_chan = 0;
+}
+
+# else /* USE_ASYNC_SOUND */
+
+/*
+ * Play sound synchronously
+ *
+ * This may not be your choice, but much safer and much less resource hungry.
+ */
+static void play_sound(int num, SInt16 vol)
+{
+	Handle handle;
+	Str255 sound;
+
+	/* Get the proper sound name */
+	strnfmt((char*)sound + 1, 255, "%.16s.wav", angband_sound_name[num]);
+	sound[0] = strlen((char*)sound + 1);
+
+	/* Obtain resource XXX XXX XXX */
+	handle = GetNamedResource('snd ', sound);
+
+	/* Oops */
+	if (handle == NULL) return;
+
+	/* Load and Lock */
+	LoadResource(handle);
+	HLockHi(handle);
+
+	/* Play sound (wait for completion) */
+	SndPlay(NULL, (SndListHandle)handle, FALSE);
+
+	/* Unlock and release */
+	HUnlock(handle);
+	ReleaseResource(handle);
+}
+
+# endif /* USE_ASYNC_SOUND */
+
+/*
+	Extra Sound Mode
+*/
+
+
+static short soundmode[8];
+
+#define		SND_NON		0
+#define		SND_ATTACK	1
+#define		SND_MOVE		2
+#define		SND_TRAP		3
+#define		SND_SHOP		4
+#define		SND_ME		5
+#define		SND_CMD_ERROR	6
+
+#ifndef MACH_O_CARBON
+
+static int soundchoice[] = {
+	SND_NON,
+	SND_ATTACK,
+	SND_ATTACK,
+	SND_ATTACK,
+	SND_TRAP,
+	SND_ATTACK,
+	SND_ME,
+	SND_ME,
+	SND_ME,
+	SND_MOVE,
+	SND_ATTACK,
+	SND_ME,
+	SND_ATTACK,
+	SND_NON,
+	SND_MOVE,
+	SND_MOVE,
+	SND_ME,
+	SND_SHOP,
+	SND_SHOP,
+	SND_SHOP,
+	SND_SHOP,
+	SND_MOVE,
+	SND_MOVE,
+	SND_MOVE,
+	SND_MOVE,
+	SND_ATTACK,
+	SND_SHOP,
+	SND_SHOP,
+	SND_ME,
+	SND_NON,
+	SND_ATTACK,
+	SND_NON,
+	SND_NON,
+	SND_NON,
+	SND_NON,
+	SND_ATTACK,
+	SND_ATTACK,
+	SND_NON,
+	SND_NON,
+	SND_ATTACK,
+	SND_NON,
+	SND_NON,
+	SND_NON,
+	SND_TRAP,
+	SND_ATTACK,
+	SND_ATTACK,
+	SND_ATTACK,
+	SND_ATTACK,
+	SND_ATTACK,
+	SND_NON,
+	SND_NON,
+	SND_NON,
+	SND_NON,
+	SND_NON,
+	SND_CMD_ERROR,
+	SND_TRAP,
+	SND_NON,
+	SND_NON,
+	SND_TRAP,
+	SND_ATTACK,
+	SND_TRAP,
+	SND_ATTACK,
+	SND_ATTACK,
+	SND_NON,
+	SND_TRAP,
+};
+
+static int ext_sound = 0;
+static int ext_graf = 0;
+
+#endif /* !MACH_O_CARBON */
 
 #endif /* ANGBAND_LITE_MAC */
 
@@ -2290,48 +2444,77 @@ static errr Term_xtra_mac_react(void)
 	}
 
 	
-	/* Handle transparency */
-	if (use_newstyle_graphics != arg_newstyle_graphics)
+	/* Handle graphics */
+	if (graf_mode_req != graf_mode)
 	{
+		/* dispose old GWorld's if present */
 		globe_nuke();
 
-		if (globe_init() != 0)
+		/* Setup parameters according to request */
+		switch (graf_mode_req)
 		{
-			plog("Cannot initialize graphics!");
-			arg_graphics = FALSE;
-			arg_newstyle_graphics = FALSE;
+			/* ASCII - no graphics whatsoever */
+			case GRAF_MODE_NONE:
+			{
+				use_graphics = arg_graphics = GRAPHICS_NONE;
+				break;
+			}
+
+			/*
+			 * 8x8 tiles (PICT id 1001)
+			 * no transparency effect
+			 * "old" graphics definitions
+			 */
+			case GRAF_MODE_8X8:
+			{
+				use_graphics = arg_graphics = GRAPHICS_ORIGINAL;
+				ANGBAND_GRAF = "old";
+#ifdef MACH_O_CARBON
+				pictID = CFSTR("8x8");
+#else
+				pictID = 1001;
+#endif /* MACH_O_CARBON */
+				grafWidth = grafHeight = 8;
+				break;
+			}
+
+			/*
+			 * 16x16 tiles (images: PICT id 1002)
+			 * with transparency effect
+			 * "new" graphics definitions
+			 */
+			case GRAF_MODE_16X16:
+			{
+				use_graphics = arg_graphics = GRAPHICS_ADAM_BOLT;
+				ANGBAND_GRAF = "new";
+#ifdef MACH_O_CARBON
+				pictID = CFSTR("16x16");
+#else
+				pictID = 1002;
+#endif /* MACH_O_CARBON */
+				grafWidth = grafHeight = 16;
+				break;
+			}
 		}
 
-		/* Apply request */
-		use_newstyle_graphics = arg_newstyle_graphics;
-
-		/* Apply and Verify */
-		term_data_check_size(td);
-
-		/* Resize the window */
-		term_data_resize(td);
- 
-		/* Reset visuals */
-		reset_visuals();
-	}
-	
-	/* Handle graphics */
-	if (use_graphics != arg_graphics)
-	{
-		/* Initialize graphics */
-
-		if (!use_graphics && !frameP && (globe_init() != 0))
+		if ((graf_mode_req != GRAF_MODE_NONE) && !frameP && (globe_init() != 0))
 		{
 #ifdef JP
 			plog("グラフィックの初期化は出来ませんでした.");
 #else
 			plog("Cannot initialize graphics!");
 #endif
-			arg_graphics = FALSE;
+
+			/* reject request */
+			graf_mode_req = GRAF_MODE_NONE;
+
+			/* reset graphics flags */
+			use_graphics = arg_graphics = FALSE;
+
 		}
 
-		/* Apply request */
-		use_graphics = arg_graphics;
+		/* update current graphics mode */
+		graf_mode = graf_mode_req;
 
 		/* Apply and Verify */
 		term_data_check_size(td);
@@ -3153,18 +3336,13 @@ static void cf_save_prefs()
 
 	/* Gfx settings */
 	save_pref_short("arg.arg_sound", arg_sound);
-	save_pref_short("arg.arg_graphics", arg_graphics);
-	save_pref_short("arg.arg_newstyle_graphics", arg_newstyle_graphics);
-	save_pref_short("arg.arg_bigtile", arg_bigtile);
-
-#ifndef MACH_O_CARBON
+	save_pref_short("arg.graf_mode", graf_mode);
+	save_pref_short("arg.arg_bigtile", use_bigtile);
 
 	/* SoundMode */
 	for( i = 0 ; i < 7 ; i++ )
 		save_pref_short(format("sound%d.on", i), soundmode[i]);
 
-#endif /* MACH_O_CARBON */
-	
 	/* Windows */
 	for (i = 0; i < MAX_TERM_DATA; i++)
 	{
@@ -3203,8 +3381,6 @@ static void cf_load_prefs()
 	short pref_major, pref_minor, pref_patch, pref_extra;
 	int i;
 
-	MenuHandle m;
-
 	/* Assume nothing is wrong, yet */
 	ok = TRUE;
 
@@ -3228,25 +3404,6 @@ static void cf_load_prefs()
 		return;
 	}
 
-#if 0
-
-	/* Check version */
-	if ((pref_major != PREF_VER_MAJOR) ||
-		(pref_minor != PREF_VER_MINOR) ||
-		(pref_patch != PREF_VER_PATCH) ||
-		(pref_extra != PREF_VER_EXTRA))
-	{
-		/* Message */
-		mac_warning(
-			format("Ignoring %d.%d.%d.%d preferences.",
-				pref_major, pref_minor, pref_patch, pref_extra));
-
-		/* Ignore */
-		return;
-	}
-
-#endif
-
 	/* Gfx settings */
 	{
 		short pref_tmp;
@@ -3256,29 +3413,8 @@ static void cf_load_prefs()
 			arg_sound = pref_tmp;
 
 		/* graphics */
-		if (query_load_pref_short("arg.arg_graphics", &pref_tmp))
-			arg_graphics = pref_tmp;
-
-		/*newstyle graphics*/
-		if (query_load_pref_short("arg.arg_newstyle_graphics", &pref_tmp))
-		{
-			use_newstyle_graphics = pref_tmp;
-		}
-
-		if (use_newstyle_graphics == true)
-		{
-			ANGBAND_GRAF = "new";
-			arg_newstyle_graphics = true;
-			grafWidth = grafHeight = 16;
-			pictID = 1002;
-		}
-		else
-		{
-			ANGBAND_GRAF = "old";
-			arg_newstyle_graphics = false;
-			grafWidth = grafHeight = 8;
-			pictID = 1001;
-		}
+		if (query_load_pref_short("arg.graf_mode", &pref_tmp))
+			graf_mode_req = pref_tmp;
 
 		/* double-width tiles */
 		if (query_load_pref_short("arg.arg_bigtile", &pref_tmp))
@@ -3288,30 +3424,11 @@ static void cf_load_prefs()
 
 	}
 
-#ifndef MACH_O_CARBON
-
 	/* SoundMode */
 	for( i = 0 ; i < 7 ; i++ )
 	{
 		query_load_pref_short(format("sound%d.on", i), &soundmode[i]);
 	}
-
-#endif /* MACH_O_CARBON */
-
-	/* Special menu */
-	m = GetMenuHandle(134);
-
-	/* Item "arg_sound" */
-	CheckMenuItem(m, 1, arg_sound);
-
-	/* Item "arg_graphics" */
-	CheckMenuItem(m, 2, arg_graphics);
-	
-	/* Item "arg_newstyle_graphics"*/
-	CheckMenuItem(m, 8, arg_newstyle_graphics);
-
-	/* Item "arg_bigtile"*/
-	CheckMenuItem(m, 9, arg_bigtile);
 
 	/* Windows */
 	for (i = 0; i < MAX_TERM_DATA; i++)
@@ -3379,8 +3496,7 @@ static void save_prefs(void)
 	putshort(FAKE_VER_PATCH);
 
 	putshort(arg_sound);
-	putshort(arg_graphics);
-	putshort(arg_newstyle_graphics);
+	putshort(graf_mode);
 	putshort(arg_bigtile);
 	
 	/* SoundMode */
@@ -3451,25 +3567,7 @@ static void load_prefs(void)
 	}
 
 	arg_sound = getshort();
-	arg_graphics = getshort();
-	arg_newstyle_graphics = getshort();
-	use_newstyle_graphics = arg_newstyle_graphics;
-	
-	if (use_newstyle_graphics == true)
-	{
-		ANGBAND_GRAF = "new";
-		arg_newstyle_graphics = true;
-		grafWidth = grafHeight = 16;
-		pictID = 1002;
-	}
-	else
-	{
-		ANGBAND_GRAF = "old";
-		arg_newstyle_graphics = false;
-		grafWidth = grafHeight = 8;
-		pictID = 1001;
-	}
-
+	graf_mode_req = getshort();
 	arg_bigtile = getshort();
 	use_bigtile = arg_bigtile;
 	
@@ -3477,21 +3575,6 @@ static void load_prefs(void)
 	for( i = 0 ; i < 7 ; i++ )
 		soundmode[i] = getshort();
 	
-	/* Special menu */
-	m = GetMenuHandle(134);
-
-	/* Item "arg_sound" */
-	CheckItem(m, 1, arg_sound);
-
-	/* Item "arg_graphics" */
-	CheckItem(m, 2, arg_graphics);
-	
-	/* Item "arg_newstyle_graphics"*/
-	CheckItem(m, 8, arg_newstyle_graphics);
-
-	/* Item "arg_bigtile"*/
-	CheckItem(m, 9, arg_bigtile);
-
 	/* Windows */
 	for (i = 0; i < MAX_TERM_DATA; i++)
 	{
@@ -4476,11 +4559,6 @@ static void handle_open_when_ready(void)
 /*
  * Initialize the menus
  *
- * Verify menus 128, 129, 130
- * Create menus 131, 132, 133, 134
- *
- * The standard menus are:
- *
  *   Apple (128) =   { About, -, ... }
  *   File (129) =    { New,Open,Import,Close,Save,-,Exit,Quit }
  *   Edit (130) =    { Cut, Copy, Paste, Clear }   (?)
@@ -4488,9 +4566,70 @@ static void handle_open_when_ready(void)
  *   Size (132) =    { ... }
  *   Window (133) =  { Angband, Mirror, Recall, Choice,
  *                     Term-4, Term-5, Term-6, Term-7 }
- *   Special (134) = { arg_sound, arg_graphics, -,
- *                     arg_fiddle, arg_wizard }
+ *   Special (134) = { Sound, Graphics, TileWidth, TileHeight, -,
+ *                     Fiddle, Wizard }
  */
+
+/* Apple menu */
+#define MENU_APPLE	128
+#define ITEM_ABOUT	1
+
+/* File menu */
+#define MENU_FILE	129
+# define ITEM_NEW	1
+# define ITEM_OPEN	2
+# define ITEM_IMPORT	3
+# define ITEM_CLOSE	4
+# define ITEM_SAVE	5
+#  define ITEM_QUIT	7
+
+/* Edit menu */
+#define MENU_EDIT	130
+# define ITEM_UNDO	1
+# define ITEM_CUT	3
+# define ITEM_COPY	4
+# define ITEM_PASTE	5
+# define ITEM_CLEAR	6
+
+/* Font menu */
+#define MENU_FONT	131
+# define ITEM_BOLD	1
+# define ITEM_WIDE	2
+
+/* Size menu */
+#define MENU_SIZE	132
+
+/* Windows menu */
+#define MENU_WINDOWS	133
+
+/* Special menu */
+#define MENU_SPECIAL	134
+# define ITEM_SOUND	1
+# define ITEM_GRAPH	2
+# define ITEM_TILEWIDTH 3
+# define ITEM_TILEHEIGHT 4
+# define ITEM_FIDDLE	6
+# define ITEM_WIZARD	7
+
+/* Sounds submenu */
+#define SUBMENU_SOUND	143
+# define ITEM_USE_SOUND	1
+# define ITEM_SOUND_SETTING	2
+
+/* Graphics submenu */
+#define SUBMENU_GRAPH	144
+# define ITEM_NONE	1
+# define ITEM_8X8	2
+# define ITEM_16X16	3
+# define ITEM_BIGTILE 5	
+
+/* TileWidth submenu */
+#define SUBMENU_TILEWIDTH	145
+
+/* TileHeight submenu */
+#define SUBMENU_TILEHEIGHT	146
+
+
 static void init_menubar(void)
 {
 	int i, n;
@@ -4500,62 +4639,55 @@ static void init_menubar(void)
 	WindowPtr tmpw;
 
 	MenuHandle m;
-	OSErr		err;
-	long		response;
+
+	Handle mbar;
+
+#if TARGET_API_MAC_CARBON
+	OSErr err;
+	long response;
+#endif
 
 	/* Get the "apple" menu */
-	m = GetMenu(128);
+	mbar = GetNewMBar(128);
 
-	/* Insert the menu */
-	InsertMenu(m, 0);
+	/* Whoops! */
+#ifdef JP
+	if (mbar == nil) quit("メニューバー ID 128を見つける事ができません!");
+#else
+	if (mbar == nil) quit("Cannot find menubar('MBAR') id 128!");
+#endif
+
+	/* Insert them into the current menu list */
+	SetMenuBar(mbar);
+
+	/* Free handle */
+	DisposeHandle(mbar);
+
+#if !TARGET_API_MAC_CARBON
+	/* Apple menu (id 128) */
+	m = GetMenuHandle(MENU_APPLE);
 
 	/* Add the DA's to the "apple" menu */
-#if TARGET_API_MAC_CARBON
-#else
 	AppendResMenu	(m, 'DRVR');
 #endif
 
 	/* Get the "File" menu */
 #if TARGET_API_MAC_CARBON
-	m = GetMenu(129);
+	m = GetMenu(MENU_FILE);
 	err = Gestalt( gestaltSystemVersion, &response );
 	if ( (err == noErr) && (response >= 0x00000A00) )
 	{
-		DeleteMenuItem( m, 7 );
+		DeleteMenuItem(m, ITEM_QUIT);
 	}
-#else
-	m = GetMenu(129);
 #endif
 
-	/* Insert the menu */
-	InsertMenu(m, 0);
+	/* Edit menu (id 130) - we don't have to do anything */
 
-
-	/* Get the "Edit" menu */
-	m = GetMenu(130);
-
-	/* Insert the menu */
-	InsertMenu(m, 0);
-
-
-	/* Make the "Font" menu */
-	#ifdef JP
-	m = NewMenu(131, "\pフォント");
-	#else
-	m = NewMenu(131, "\pFont");
-	#endif
-	
-	/* Insert the menu */
-	InsertMenu(m, 0);
-
-	/* Add "bold" */
-	AppendMenu(m, "\pBold");
-
-	/* Add "wide" */
-	AppendMenu(m, "\pWide");
-
-	/* Add a separator */
-	AppendMenu(m, "\p-");
+	/*
+	 * Font menu (id 131) - append names of mono-spaced fonts
+	 * followed by all available ones
+	 */
+	m = GetMenuHandle(MENU_FONT);
 
 	/* Fake window */
 	r.left = r.right = r.top = r.bottom = 0;
@@ -4623,15 +4755,8 @@ static void init_menubar(void)
 	AppendResMenu	(m, 'FONT');
 
 
-	/* Make the "Size" menu */
-	#ifdef JP
-	m = NewMenu(132, "\pサイズ");
-	#else
-	m = NewMenu(132, "\pSize");
-	#endif
-	
-	/* Insert the menu */
-	InsertMenu(m, 0);
+	/* Size menu (id 132) */
+	m = GetMenuHandle(MENU_SIZE);
 
 	/* Add some sizes (stagger choices) */
 	for (i = 8; i <= 32; i += ((i / 16) + 1))
@@ -4647,15 +4772,8 @@ static void init_menubar(void)
 	}
 
 
-	/* Make the "Windows" menu */
-	#ifdef JP
-	m = NewMenu(133, "\pウインドウ");
-	#else
-	m = NewMenu(133, "\pWindows");
-	#endif
-	
-	/* Insert the menu */
-	InsertMenu(m, 0);
+	/* Windows menu (id 133) */
+	m = GetMenuHandle(MENU_WINDOWS);
 
 	/* Default choices */
 	for (i = 0; i < MAX_TERM_DATA; i++)
@@ -4674,48 +4792,104 @@ static void init_menubar(void)
 	}
 
 
-	/* Make the "Special" menu */
-	#ifdef JP
-	m = NewMenu(134, "\p特別");
-	#else
-	m = NewMenu(134, "\pSpecial");
-	#endif
-	
-	/* Insert the menu */
-	InsertMenu(m, 0);
+#if TARGET_API_MAC_CARBON && !defined(MAC_MPW)
 
-	/* Append the choices */
-	#ifdef JP
-	AppendMenu(m, "\pサウンド使用");
-	AppendMenu(m, "\pグラフィック使用");
-	AppendMenu(m, "\p-");
-	AppendMenu(m, "\parg_fiddle");
-	AppendMenu(m, "\parg_wizard");
-	AppendMenu(m, "\p-");
-	AppendMenu(m, "\pサウンド設定...");
-	AppendMenu(m, "\p16X16グラフィック");
-	AppendMenu(m, "\p２倍幅タイル表示");
-	#else
-	AppendMenu(m, "\parg_sound");
-	AppendMenu(m, "\parg_graphics");
-	AppendMenu(m, "\p-");
-	AppendMenu(m, "\parg_fiddle");
-	AppendMenu(m, "\parg_wizard");
-	AppendMenu(m, "\p-");
-	AppendMenu(m, "\pSound config");
-	AppendMenu(m, "\pAdam Bolt tile");
-	AppendMenu(m, "\pBigtile Mode");
-	#endif
+	/* CW or gcc -- Use recommended interface for hierarchical menus */
 
-	/* Make the "TileWidth" menu */
-	#ifdef JP
-	m = NewMenu(135, "\pタイル幅");
-	#else
-	m = NewMenu(135, "\pTileWidth");
-	#endif
+	/* Special menu (id 134) */
+	m = GetMenuHandle(MENU_SPECIAL);
 
-	/* Insert the menu */
-	InsertMenu(m, 0);
+	/* Insert Graphics submenu (id 143) */
+	{
+		MenuHandle submenu;
+
+		/* Get the submenu */
+		submenu = GetMenu(SUBMENU_SOUND);
+
+		/* Insert it */
+		SetMenuItemHierarchicalMenu(m, ITEM_SOUND, submenu);
+	}
+
+	/* Insert Graphics submenu (id 144) */
+	{
+		MenuHandle submenu;
+
+		/* Get the submenu */
+		submenu = GetMenu(SUBMENU_GRAPH);
+
+		/* Insert it */
+		SetMenuItemHierarchicalMenu(m, ITEM_GRAPH, submenu);
+	}
+
+	/* Insert TileWidth submenu (id 145) */
+	{
+		MenuHandle submenu;
+
+		/* Get the submenu */
+		submenu = GetMenu(SUBMENU_TILEWIDTH);
+
+		/* Add some sizes */
+		for (i = 4, n = 1; i <= 32; i++, n++)
+		{
+			Str15 buf;
+
+			/* Textual size */
+			strnfmt((char*)buf + 1, 15, "%d", i);
+			buf[0] = strlen((char*)buf + 1);
+
+			/* Append item */
+			AppendMenu(submenu, buf);
+		}
+
+		/* Insert it */
+		SetMenuItemHierarchicalMenu(m, ITEM_TILEWIDTH, submenu);
+	}
+
+	/* Insert TileHeight submenu (id 146) */
+	{
+		MenuHandle submenu;
+
+		/* Get the submenu */
+		submenu = GetMenu(SUBMENU_TILEHEIGHT);
+
+
+		/* Add some sizes */
+		for (i = 4, n = 1; i <= 32; i++, n++)
+		{
+			Str15 buf;
+
+			/* Textual size */
+			strnfmt((char*)buf + 1, 15, "%d", i);
+			buf[0] = strlen((char*)buf + 1);
+
+			/* Append item */
+			AppendMenu(submenu, buf);
+		}
+
+		/* Insert it */
+		SetMenuItemHierarchicalMenu(m, ITEM_TILEHEIGHT, submenu);
+	}
+
+#else
+
+	/* Special menu (id 134) */
+
+	/* Get graphics (sub)menu (id 143) */
+	m = GetMenu(SUBMENU_SOUND);
+
+	/* Insert it as a submenu */		
+	InsertMenu(m, hierMenu);
+
+
+	/* Get graphics (sub)menu (id 144) */
+	m = GetMenu(SUBMENU_GRAPH);
+
+	/* Insert it as a submenu */		
+	InsertMenu(m, hierMenu);
+
+
+	/* Get TileWidth (sub)menu (id 145) */
+	m = GetMenu(SUBMENU_TILEWIDTH);
 
 	/* Add some sizes */
 	for (i = 4; i <= 32; i++)
@@ -4731,15 +4905,11 @@ static void init_menubar(void)
 	}
 
 
-	/* Make the "TileHeight" menu */
-	#ifdef JP
-	m = NewMenu(136, "\pタイル高");
-	#else
-	m = NewMenu(136, "\pTileHeight");
-	#endif
+	/* Insert it as a submenu */
+	InsertMenu(m, hierMenu);
 
-	/* Insert the menu */
-	InsertMenu(m, 255);
+	/* Get TileHeight (sub)menu (id 146) */
+	m = GetMenu(SUBMENU_TILEHEIGHT);
 
 	/* Add some sizes */
 	for (i = 4; i <= 32; i++)
@@ -4755,6 +4925,10 @@ static void init_menubar(void)
 	}
 
 
+	/* Insert the menu */
+	InsertMenu(m, hierMenu);
+
+#endif
 	/* Update the menu bar */
 	DrawMenuBar();
 }
@@ -4788,7 +4962,7 @@ static void setup_menus(void)
 
 
 	/* File menu */
-	m = GetMenuHandle(129);
+	m = GetMenuHandle(MENU_FILE);
 
 	/* Get menu size */
 #if TARGET_API_MAC_CARBON
@@ -4814,13 +4988,13 @@ static void setup_menus(void)
 	if (initialized && !game_in_progress)
 	{
 #if TARGET_API_MAC_CARBON
-		EnableMenuItem(m, 1);
-		EnableMenuItem(m, 2);
-		EnableMenuItem(m, 3);
+		EnableMenuItem(m, ITEM_NEW);
+		EnableMenuItem(m, ITEM_OPEN);
+		EnableMenuItem(m, ITEM_IMPORT);
 #else
-		EnableItem(m, 1);
-		EnableItem(m, 2);
-		EnableItem(m, 3);
+		EnableItem(m, ITEM_NEW);
+		EnableItem(m, ITEM_OPEN);
+		EnableItem(m, ITEM_IMPORT);
 #endif
 	}
 
@@ -4828,9 +5002,9 @@ static void setup_menus(void)
 	if (initialized)
 	{
 #if TARGET_API_MAC_CARBON
-		EnableMenuItem(m, 4);
+		EnableMenuItem(m, ITEM_CLOSE);
 #else
-		EnableItem(m, 4);
+		EnableItem(m, ITEM_CLOSE);
 #endif
 	}
 
@@ -4838,9 +5012,9 @@ static void setup_menus(void)
 	if (initialized && character_generated)
 	{
 #if TARGET_API_MAC_CARBON
-		EnableMenuItem(m, 5);
+		EnableMenuItem(m, ITEM_SAVE);
 #else
-		EnableItem(m, 5);
+		EnableItem(m, ITEM_SAVE);
 #endif
 	}
 
@@ -4848,15 +5022,15 @@ static void setup_menus(void)
 	if (TRUE)
 	{
 #if TARGET_API_MAC_CARBON
-		EnableMenuItem(m, 7);
+		EnableMenuItem(m, ITEM_QUIT);
 #else
-		EnableItem(m, 7);
+		EnableItem(m, ITEM_QUIT);
 #endif
 	}
 
 
 	/* Edit menu */
-	m = GetMenuHandle(130);
+	m = GetMenuHandle(MENU_EDIT);
 
 	/* Get menu size */
 #if TARGET_API_MAC_CARBON
@@ -4882,23 +5056,23 @@ static void setup_menus(void)
 	if (!td)
 	{
 #if TARGET_API_MAC_CARBON
-		EnableMenuItem(m, 1);
-		EnableMenuItem(m, 3);
-		EnableMenuItem(m, 4);
-		EnableMenuItem(m, 5);
-		EnableMenuItem(m, 6);
+		EnableMenuItem(m, ITEM_UNDO);
+		EnableMenuItem(m, ITEM_CUT);
+		EnableMenuItem(m, ITEM_COPY);
+		EnableMenuItem(m, ITEM_PASTE);
+		EnableMenuItem(m, ITEM_CLEAR);
 #else
-		EnableItem(m, 1);
-		EnableItem(m, 3);
-		EnableItem(m, 4);
-		EnableItem(m, 5);
-		EnableItem(m, 6);
+		EnableItem(m, ITEM_UNDO);
+		EnableItem(m, ITEM_CUT);
+		EnableItem(m, ITEM_COPY);
+		EnableItem(m, ITEM_PASTE);
+		EnableItem(m, ITEM_CLEAR);
 #endif
 	}
 
 
 	/* Font menu */
-	m = GetMenuHandle(131);
+	m = GetMenuHandle(MENU_FONT);
 
 	/* Get menu size */
 #if TARGET_API_MAC_CARBON
@@ -4931,16 +5105,16 @@ static void setup_menus(void)
 	{
 #if TARGET_API_MAC_CARBON
 		/* Enable "bold" */
-		EnableMenuItem(m, 1);
+		EnableMenuItem(m, ITEM_BOLD);
 
 		/* Enable "extend" */
-		EnableMenuItem(m, 2);
+		EnableMenuItem(m, ITEM_WIDE);
 
 		/* Check the appropriate "bold-ness" */
-		if (td->font_face & bold) CheckMenuItem(m, 1, TRUE);
+		if (td->font_face & bold) CheckMenuItem(m, ITEM_BOLD, TRUE);
 
 		/* Check the appropriate "wide-ness" */
-		if (td->font_face & extend) CheckMenuItem(m, 2, TRUE);
+		if (td->font_face & extend) CheckMenuItem(m, ITEM_WIDE, TRUE);
 
 		/* Analyze fonts */
 		for (i = 4; i <= n; i++)
@@ -4957,16 +5131,16 @@ static void setup_menus(void)
 		}
 #else
 		/* Enable "bold" */
-		EnableItem(m, 1);
+		EnableItem(m, ITEM_BOLD);
 
 		/* Enable "extend" */
-		EnableItem(m, 2);
+		EnableItem(m, ITEM_WIDE);
 
 		/* Check the appropriate "bold-ness" */
-		if (td->font_face & bold) CheckItem(m, 1, TRUE);
+		if (td->font_face & bold) CheckItem(m, ITEM_BOLD, TRUE);
 
 		/* Check the appropriate "wide-ness" */
-		if (td->font_face & extend) CheckItem(m, 2, TRUE);
+		if (td->font_face & extend) CheckItem(m, ITEM_WIDE, TRUE);
 
 		/* Analyze fonts */
 		for (i = 4; i <= n; i++)
@@ -4986,7 +5160,7 @@ static void setup_menus(void)
 
 
 	/* Size menu */
-	m = GetMenuHandle(132);
+	m = GetMenuHandle(MENU_SIZE);
 
 	/* Get menu size */
 #if TARGET_API_MAC_CARBON
@@ -5014,23 +5188,18 @@ static void setup_menus(void)
 		/* Analyze sizes */
 		for (i = 1; i <= n; i++)
 		{
-#if TARGET_API_MAC_CARBON
 			/* Analyze size */
 			GetMenuItemText(m, i, s);
 			s[s[0]+1] = '\0';
 			value = atoi((char*)(s+1));
 
+#if TARGET_API_MAC_CARBON
 			/* Enable the "real" sizes */
 			if (RealFont(td->font_id, value)) EnableMenuItem(m, i);
 
 			/* Check the current size */
 			if (td->font_size == value) CheckMenuItem(m, i, TRUE);
 #else
-			/* Analyze size */
-			GetMenuItemText(m, i, s);
-			s[s[0]+1] = '\0';
-			value = atoi((char*)(s+1));
-
 			/* Enable the "real" sizes */
 			if (RealFont(td->font_id, value)) EnableItem(m, i);
 
@@ -5042,7 +5211,7 @@ static void setup_menus(void)
 
 
 	/* Windows menu */
-	m = GetMenuHandle(133);
+	m = GetMenuHandle(MENU_WINDOWS);
 
 	/* Get menu size */
 #if TARGET_API_MAC_CARBON
@@ -5064,7 +5233,7 @@ static void setup_menus(void)
 
 
 	/* Special menu */
-	m = GetMenuHandle(134);
+	m = GetMenuHandle(MENU_SPECIAL);
 
 	/* Get menu size */
 #if TARGET_API_MAC_CARBON
@@ -5079,90 +5248,312 @@ static void setup_menus(void)
 		/* Reset */
 #if TARGET_API_MAC_CARBON
 		DisableMenuItem(m, i);
+
+#ifdef MAC_MPW
+		/* XXX Oh no, this removes submenu... */
+		if ((i != ITEM_SOUND) &&
+		    (i != ITEM_GRAPH) &&
+		    (i != ITEM_TILEWIDTH) &&
+		    (i != ITEM_TILEHEIGHT)) CheckMenuItem(m, i, FALSE);
+#else
+
 		CheckMenuItem(m, i, FALSE);
+#endif
+
 #else
 		DisableItem(m, i);
-		CheckItem(m, i, FALSE);
+
+		/* XXX Oh no, this removes submenu... */
+		if ((i != ITEM_SOUND) &&
+		    (i != ITEM_GRAPH) &&
+		    (i != ITEM_TILEWIDTH) &&
+		    (i != ITEM_TILEHEIGHT)) CheckItem(m, i, FALSE);
 #endif
 	}
 
 #if TARGET_API_MAC_CARBON
 	/* Item "arg_sound" */
-	EnableMenuItem(m, 1);
-	CheckMenuItem(m, 1, arg_sound);
+	EnableMenuItem(m, ITEM_SOUND);
+	{
+		MenuRef submenu;
 
-	/* Item "arg_graphics" */
-	EnableMenuItem(m, 2);
-	CheckMenuItem(m, 2, arg_graphics);
+#ifdef MAC_MPW
+
+		/* MPW's Universal Interface is a bit out of date */
+
+		/* Graphics submenu */
+		submenu = GetMenuHandle(SUBMENU_SOUND);
+
+#else
+
+		/* Graphics submenu */
+		(void)GetMenuItemHierarchicalMenu(m, ITEM_SOUND, &submenu);
+
+#endif
+
+		/* Get menu size */
+		n = CountMenuItems(submenu);
+
+		/* Reset menu */
+		for (i = 1; i <= n; i++)
+		{
+			/* Reset */
+			DisableMenuItem(submenu, i);
+			CheckMenuItem(submenu, i, FALSE);
+		}
+
+		/* Item "Sound On/Off" */
+		EnableMenuItem(submenu, ITEM_USE_SOUND);
+		CheckMenuItem(submenu, ITEM_USE_SOUND, arg_sound);
+
+		/* Item "Sounf Config" */
+#ifndef MACH_O_CARBON
+		EnableMenuItem(submenu, ITEM_SOUND_SETTING);
+#endif
+	}
+
+	/* Item "Graphics" */
+	EnableMenuItem(m, ITEM_GRAPH);
+	{
+		MenuRef submenu;
+
+#ifdef MAC_MPW
+
+		/* MPW's Universal Interface is a bit out of date */
+
+		/* Graphics submenu */
+		submenu = GetMenuHandle(SUBMENU_GRAPH);
+
+#else
+
+		/* Graphics submenu */
+		(void)GetMenuItemHierarchicalMenu(m, ITEM_GRAPH, &submenu);
+
+#endif
+
+		/* Get menu size */
+		n = CountMenuItems(submenu);
+
+		/* Reset menu */
+		for (i = 1; i <= n; i++)
+		{
+			/* Reset */
+			DisableMenuItem(submenu, i);
+			CheckMenuItem(submenu, i, FALSE);
+		}
+
+		/* Item "None" */
+		EnableMenuItem(submenu, ITEM_NONE);
+		CheckMenuItem(submenu, ITEM_NONE, (graf_mode == GRAF_MODE_NONE));
+
+		/* Item "8x8" */
+		EnableMenuItem(submenu, ITEM_8X8);
+		CheckMenuItem(submenu, ITEM_8X8, (graf_mode == GRAF_MODE_8X8));
+
+		/* Item "16x16" */
+		EnableMenuItem(submenu, ITEM_16X16);
+		CheckMenuItem(submenu, ITEM_16X16, (graf_mode == GRAF_MODE_16X16));
+
+		/* Item "Big tiles" */
+		EnableMenuItem(submenu, ITEM_BIGTILE);
+		CheckMenuItem(submenu, ITEM_BIGTILE, arg_bigtile);
+	}
+
+	/* Item "TileWidth" */
+	EnableMenuItem(m, ITEM_TILEWIDTH);
+	{
+		MenuRef submenu;
+
+#ifdef MAC_MPW
+
+		/* MPW's Universal Interface is a bit out of date */
+
+		/* TIleWidth submenu */
+		submenu = GetMenuHandle(SUBMENU_TILEWIDTH);
+
+#else
+
+		/* TileWidth submenu */
+		(void)GetMenuItemHierarchicalMenu(m, ITEM_TILEWIDTH, &submenu);
+
+#endif
+
+		/* Get menu size */
+		n = CountMenuItems(submenu);
+
+		/* Reset menu */
+		for (i = 1; i <= n; i++)
+		{
+			/* Reset */
+			DisableMenuItem(submenu, i);
+			CheckMenuItem(submenu, i, FALSE);
+		}
+
+		/* Active window */
+		if (td)
+		{
+			/* Analyze sizes */
+			for (i = 1; i <= n; i++)
+			{
+				/* Analyze size */
+				/* GetMenuItemText(m,i,s); */
+				GetMenuItemText(submenu, i, s);
+				s[s[0]+1] = '\0';
+				value = atoi((char*)(s+1));
+
+				/* Enable */
+				if (value >= td->font_wid) EnableMenuItem(submenu, i);
+
+				/* Check the current size */
+				if (td->tile_wid == value) CheckMenuItem(submenu, i, TRUE);
+			}
+		}
+	}
+
+	/* Item "TileHeight" */
+	EnableMenuItem(m, ITEM_TILEHEIGHT);
+	{
+		MenuRef submenu;
+
+#ifdef MAC_MPW
+
+		/* MPW's Universal Interface is a bit out of date */
+
+		/* TileHeight submenu */
+		submenu = GetMenuHandle(SUBMENU_TILEHEIGHT);
+
+#else
+
+		/* TileWidth submenu */
+		(void)GetMenuItemHierarchicalMenu(m, ITEM_TILEHEIGHT, &submenu);
+
+#endif
+
+		/* Get menu size */
+		n = CountMenuItems(submenu);
+
+		/* Reset menu */
+		for (i = 1; i <= n; i++)
+		{
+			/* Reset */
+			DisableMenuItem(submenu, i);
+			CheckMenuItem(submenu, i, FALSE);
+		}
+
+		/* Active window */
+		if (td)
+		{
+			/* Analyze sizes */
+			for (i = 1; i <= n; i++)
+			{
+				/* Analyze size */
+				/* GetMenuItemText(m,i,s); */
+				GetMenuItemText(submenu, i, s);
+				s[s[0]+1] = '\0';
+				value = atoi((char*)(s+1));
+
+				/* Enable */
+				if (value >= td->font_hgt) EnableMenuItem(submenu, i);
+
+				/* Check the current size */
+				if (td->tile_hgt == value) CheckMenuItem(submenu, i, TRUE);
+			}
+		}
+	}
 
 	/* Item "arg_fiddle" */
-	EnableMenuItem(m, 4);
-	CheckMenuItem(m, 4, arg_fiddle);
+	EnableMenuItem(m, ITEM_FIDDLE);
+	CheckMenuItem(m, ITEM_FIDDLE, arg_fiddle);
 
 	/* Item "arg_wizard" */
-	EnableMenuItem(m, 5);
-	CheckMenuItem(m, 5, arg_wizard);
+	EnableMenuItem(m, ITEM_WIZARD);
+	CheckMenuItem(m, ITEM_WIZARD, arg_wizard);
 
-	/* Item "SoundSetting" */
-	EnableMenuItem(m, 7);
-
-	/* Item NewStyle Graphics */
-	EnableMenuItem(m, 8);
-	CheckMenuItem(m, 8, use_newstyle_graphics);
-
-	/* Item Bigtile Mode */
-	EnableMenuItem(m, 9);
-	CheckMenuItem(m, 9, arg_bigtile);
 #else
 	/* Item "arg_sound" */
-	EnableItem(m, 1);
-	CheckItem(m, 1, arg_sound);
+	EnableItem(m, ITEM_SOUND);
 
 	/* Item "arg_graphics" */
-	EnableItem(m, 2);
-	CheckItem(m, 2, arg_graphics);
+	EnableItem(m, ITEM_GRAPH);
+
+	/* Item "TileWidth" */
+	EnableItem(m, ITEM_TILEWIDTH);
+
+	/* Item "TileHeight" */
+	EnableItem(m, ITEM_TILEHEIGHT);
 
 	/* Item "arg_fiddle" */
-	EnableItem(m, 4);
-	CheckItem(m, 4, arg_fiddle);
+	EnableItem(m, ITEM_FIDDLE);
+	CheckItem(m, ITEM_FIDDLE, arg_fiddle);
 
 	/* Item "arg_wizard" */
-	EnableItem(m, 5);
-	CheckItem(m, 5, arg_wizard);
+	EnableItem(m, ITEM_WIZARD);
+	CheckItem(m, ITEM_WIZARD, arg_wizard);
 
-	/* Item "SoundSetting" */
-	EnableItem(m, 7);
-
-	/* Item NewStyle Graphics */
-	EnableItem(m, 8);
-	CheckItem(m, 8, use_newstyle_graphics);
-
-	/* Item Bigtile Mode */
-	EnableItem(m, 9);
-	CheckItem(m, 9, arg_bigtile);
-#endif
-
-	/* TileWidth menu */
-	m = GetMenuHandle(135);
+	/* Sounds submenu */
+	m = GetMenuHandle(SUBMENU_SOUND);
 
 	/* Get menu size */
-#if TARGET_API_MAC_CARBON
-	n = CountMenuItems(m);
-#else
 	n = CountMItems(m);
-#endif
 
 	/* Reset menu */
 	for (i = 1; i <= n; i++)
 	{
 		/* Reset */
-#if TARGET_API_MAC_CARBON
-		DisableMenuItem(m, i);
-		CheckMenuItem(m, i, FALSE);
-#else
 		DisableItem(m, i);
 		CheckItem(m, i, FALSE);
-#endif
+	}
+	
+	/* Item "Sound On/Off" */
+	EnableItem(m, ITEM_USE_SOUND);
+	CheckItem(m, ITEM_USE_SOUND, arg_sound);
+
+	/* Item "Sound Config" */
+	EnableItem(m, ITEM_SOUND_SETTING);
+
+	/* Graphics submenu */
+	m = GetMenuHandle(SUBMENU_GRAPH);
+
+	/* Get menu size */
+	n = CountMItems(m);
+
+	/* Reset menu */
+	for (i = 1; i <= n; i++)
+	{
+		/* Reset */
+		DisableItem(m, i);
+		CheckItem(m, i, FALSE);
+	}
+	
+	/* Item "None" */
+	EnableItem(m, ITEM_NONE);
+	CheckItem(m, ITEM_NONE, (graf_mode == GRAF_MODE_NONE));
+
+	/* Item "8x8" */
+	EnableItem(m, ITEM_8X8);
+	CheckItem(m, ITEM_8X8, (graf_mode == GRAF_MODE_8X8));
+
+	/* Item "16x16" */
+	EnableItem(m, ITEM_16X16);
+	CheckItem(m, ITEM_16X16, (graf_mode == GRAF_MODE_16X16));
+
+	/* Item "Bigtile" */
+	EnableItem(m, ITEM_BIGTILE);
+	CheckItem(m, ITEM_BIGTILE, arg_bigtile);
+
+
+	/* TIleWidth submenu */
+	m = GetMenuHandle(SUBMENU_TILEWIDTH);
+
+	/* Get menu size */
+	n = CountMItems(m);
+
+	/* Reset menu */
+	for (i = 1; i <= n; i++)
+	{
+		/* Reset */
+		DisableItem(m, i);
+		CheckItem(m, i, FALSE);
 	}
 
 	/* Active window */
@@ -5177,44 +5568,27 @@ static void setup_menus(void)
 			s[s[0]+1] = '\0';
 			value = atoi((char*)(s+1));
 
-#if TARGET_API_MAC_CARBON
 			/* Enable */
-			EnableMenuItem(m, i);
-
-			/* Check the current size */
-			if (td->tile_wid == value) CheckMenuItem(m, i, TRUE);
-#else
-			/* Enable */
-			EnableItem(m, i);
+			if (value >= td->font_wid) EnableItem(m, i);
 
 			/* Check the current size */
 			if (td->tile_wid == value) CheckItem(m, i, TRUE);
-#endif
 		}
 	}
 
 
-	/* TileHeight menu */
-	m = GetMenuHandle(136);
+	/* TileHeight submenu */
+	m = GetMenuHandle(SUBMENU_TILEHEIGHT);
 
 	/* Get menu size */
-#if TARGET_API_MAC_CARBON
-	n = CountMenuItems(m);
-#else
 	n = CountMItems(m);
-#endif
 
 	/* Reset menu */
 	for (i = 1; i <= n; i++)
 	{
 		/* Reset */
-#if TARGET_API_MAC_CARBON
-		DisableMenuItem(m, i);
-		CheckMenuItem(m, i, FALSE);
-#else
 		DisableItem(m, i);
 		CheckItem(m, i, FALSE);
-#endif
 	}
 
 	/* Active window */
@@ -5228,21 +5602,15 @@ static void setup_menus(void)
 			s[s[0]+1] = '\0';
 			value = atoi((char*)(s+1));
 
-#if TARGET_API_MAC_CARBON
 			/* Enable */
-			EnableMenuItem(m, i);
-
-			/* Check the current size */
-			if (td->tile_hgt == value) CheckMenuItem(m, i, TRUE);
-#else
-			/* Enable */
-			EnableItem(m, i);
+			if (value >= td->font_hgt) EnableItem(m, i);
 
 			/* Check the current size */
 			if (td->tile_hgt == value) CheckItem(m, i, TRUE);
-#endif
 		}
 	}
+#endif
+
 }
 
 
@@ -5287,11 +5655,11 @@ static void menu(long mc)
 	switch (menuid)
 	{
 		/* Apple Menu */
-		case 128:
+		case MENU_APPLE:
 		{
 			/* About Angband... */
 #if TARGET_API_MAC_CARBON
-			if (selection == 1)
+			if (selection == ITEM_ABOUT)
 			{
 				DialogPtr dialog;
 				short item_hit;
@@ -5319,7 +5687,7 @@ static void menu(long mc)
 				break;
 			}
 #else
-			if (selection == 1)
+			if (selection == ITEM_ABOUT)
 			{
 				DialogPtr dialog;
 				Rect r;
@@ -5337,41 +5705,40 @@ static void menu(long mc)
 			}
 
 			/* Desk accessory */
-			/* GetMenuItemText(GetMHandle(128),selection,s); */
-			GetMenuItemText(GetMenuHandle(128), selection, s);
+			GetMenuItemText(GetMenuHandle(MENU_APPLE), selection, s);
 			OpenDeskAcc(s);
 			break;
 #endif
 		}
 
 		/* File Menu */
-		case 129:
+		case MENU_FILE:
 		{
 			switch (selection)
 			{
 				/* New */
-				case 1:
+				case ITEM_NEW:
 				{
 					do_menu_file_new();
 					break;
 				}
 
 				/* Open... */
-				case 2:
+				case ITEM_OPEN:
 				{
 					do_menu_file_open(FALSE);
 					break;
 				}
 
 				/* Import... */
-				case 3:
+				case ITEM_IMPORT:
 				{
 					do_menu_file_open(TRUE);
 					break;
 				}
 
 				/* Close */
-				case 4:
+				case ITEM_CLOSE:
 				{
 					/* No window */
 					if (!td) break;
@@ -5389,7 +5756,7 @@ static void menu(long mc)
 				}
 
 				/* Save */
-				case 5:
+				case ITEM_SAVE:
 				{
 					if (!can_save){
 #ifdef JP
@@ -5410,7 +5777,7 @@ static void menu(long mc)
 				}
 
 				/* Quit (with save) */
-				case 7:
+				case ITEM_QUIT:
 				{
 					/* Save the game (if necessary) */
 					if (game_in_progress && character_generated)
@@ -5443,14 +5810,14 @@ static void menu(long mc)
 		}
 
 		/* Edit menu */
-		case 130:
+		case MENU_EDIT:
 		{
 			/* Unused */
 			break;
 		}
 
 		/* Font menu */
-		case 131:
+		case MENU_FONT:
 		{
 			/* Require a window */
 			if (!td) break;
@@ -5462,7 +5829,7 @@ static void menu(long mc)
 			activate(td->w);
 
 			/* Toggle the "bold" setting */
-			if (selection == 1)
+			if (selection == ITEM_BOLD)
 			{
 				/* Toggle the setting */
 				if (td->font_face & bold)
@@ -5489,7 +5856,7 @@ static void menu(long mc)
 			}
 
 			/* Toggle the "wide" setting */
-			if (selection == 2)
+			if (selection == ITEM_WIDE)
 			{
 				/* Toggle the setting */
 				if (td->font_face & extend)
@@ -5516,7 +5883,7 @@ static void menu(long mc)
 			}
 
 			/* Get a new font name */
-			GetMenuItemText(GetMenuHandle(131), selection, s);
+			GetMenuItemText(GetMenuHandle(MENU_FONT), selection, s);
 			GetFNum(s, &fid);
 
 			/* Save the new font id */
@@ -5568,7 +5935,7 @@ static void menu(long mc)
 		}
 
 		/* Size menu */
-		case 132:
+		case MENU_SIZE:
 		{
 			if (!td) break;
 
@@ -5578,7 +5945,7 @@ static void menu(long mc)
 			/* Activate */
 			activate(td->w);
 
-			GetMenuItemText(GetMenuHandle(132), selection, s);
+			GetMenuItemText(GetMenuHandle(MENU_SIZE), selection, s);
 			s[s[0]+1]=0;
 			td->font_size = atoi((char*)(s+1));
 
@@ -5600,7 +5967,7 @@ static void menu(long mc)
 		}
 
 		/* Window menu */
-		case 133:
+		case MENU_WINDOWS:
 		{
 			/* Parse */
 			i = selection - 1;
@@ -5630,11 +5997,32 @@ static void menu(long mc)
 		}
 
 		/* Special menu */
-		case 134:
+		case MENU_SPECIAL:
 		{
 			switch (selection)
 			{
-				case 1:
+				case ITEM_FIDDLE:
+				{
+					arg_fiddle = !arg_fiddle;
+					break;
+				}
+
+				case ITEM_WIZARD:
+				{
+					arg_wizard = !arg_wizard;
+					break;
+				}
+			}
+
+			break;
+		}
+
+		/* Sounds submenu */
+		case SUBMENU_SOUND:
+		{
+			switch (selection)
+			{
+				case ITEM_USE_SOUND:
 				{
 					/* Toggle arg_sound */
 					arg_sound = !arg_sound;
@@ -5645,74 +6033,47 @@ static void menu(long mc)
 					break;
 				}
 
-				case 2:
-				{
-					/* Toggle arg_graphics */
-					arg_graphics = !arg_graphics;
-					if( arg_graphics == true ){
-						ANGBAND_GRAF = "old";
-						arg_newstyle_graphics = false;
-						grafWidth = grafHeight = 8;
-						pictID = 1001;
-					}
-
-					/* Hack -- Force redraw */
-					Term_key_push(KTRL('R'));
-
-					break;
-				}
-
-				case 4:
-				{
-					arg_fiddle = !arg_fiddle;
-					break;
-				}
-
-				case 5:
-				{
-					arg_wizard = !arg_wizard;
-					break;
-				}
-
-				case 7:
+				case ITEM_SOUND_SETTING:
 				{
 					SoundConfigDLog();
+
 					break;
 				}
-				case 8:
-				{
-					if (streq(ANGBAND_GRAF, "old"))
-					{
-						ANGBAND_GRAF = "new";
-						arg_newstyle_graphics = true;
-						grafWidth = grafHeight = 16;
-						pictID = 1002;
-					}
-					else
-					{
-						ANGBAND_GRAF = "old";
-						arg_newstyle_graphics = false;
-						grafWidth = grafHeight = 8;
-						pictID = 1001;
-					}
+			}
 
-					/* Hack -- Force redraw */
-					Term_key_push(KTRL('R'));
+			break;
+		}
+
+		/* Graphics submenu */
+		case SUBMENU_GRAPH:
+		{
+			switch (selection)
+			{
+				case ITEM_NONE:
+				{
+					graf_mode_req = GRAF_MODE_NONE;
+
 					break;
 				}
 
-				case 9: /* bigtile mode */
+				case ITEM_8X8:
 				{
+					graf_mode_req = GRAF_MODE_8X8;
+
+					break;
+				}
+
+				case ITEM_16X16:
+				{
+					graf_mode_req = GRAF_MODE_16X16;
+
+					break;
+				}
+
+				case ITEM_BIGTILE:
+				{
+					term *old = Term;
 					term_data *td = &data[0];
-
-					if (!can_save){
-#ifdef JP
-						plog("今は変更出来ません。");
-#else
-						plog("You may not do that right now.");
-#endif
-						break;
-					}
 
 					/* Toggle "arg_bigtile" */
 					arg_bigtile = !arg_bigtile;
@@ -5723,16 +6084,21 @@ static void menu(long mc)
 					/* Resize the term */
 					Term_resize(td->cols, td->rows);
 
+					/* Activate old */
+					Term_activate(old);
+
 					break;
 				}
-
 			}
+
+			/* Hack -- Force redraw */
+			Term_key_push(KTRL('R'));
 
 			break;
 		}
 
-		/* TileWidth menu */
-		case 135:
+		/* TileWidth submenu */
+		case SUBMENU_TILEWIDTH:
 		{
 			if (!td) break;
 
@@ -5742,7 +6108,8 @@ static void menu(long mc)
 			/* Activate */
 			activate(td->w);
 
-			GetMenuItemText(GetMenuHandle(135), selection, s);
+			/* Analyse value */
+			GetMenuItemText(GetMenuHandle(SUBMENU_TILEWIDTH), selection, s);
 			s[s[0]+1]=0;
 			td->tile_wid = atoi((char*)(s+1));
 
@@ -5759,8 +6126,8 @@ static void menu(long mc)
 			break;
 		}
 
-		/* TileHeight menu */
-		case 136:
+		/* TileHeight submenu */
+		case SUBMENU_TILEHEIGHT:
 		{
 			if (!td) break;
 
@@ -5770,7 +6137,8 @@ static void menu(long mc)
 			/* Activate */
 			activate(td->w);
 
-			GetMenuItemText(GetMenuHandle(136), selection, s);
+			/* Analyse value */
+			GetMenuItemText(GetMenuHandle(SUBMENU_TILEHEIGHT), selection, s);
 			s[s[0]+1]=0;
 			td->tile_hgt = atoi((char*)(s+1));
 
@@ -5837,6 +6205,7 @@ static pascal OSErr AEH_Quit(const AppleEvent *theAppleEvent,
 {
 #pragma unused(reply, handlerRefCon)
 #if TARGET_API_MAC_CARBON
+#pragma unused(theAppleEvent)
 
 	/* Save the game (if necessary) */
 	if (game_in_progress && character_generated)
@@ -7054,6 +7423,13 @@ int main(void)
 
 	/* Mega-Hack -- Allocate a "lifeboat" */
 	lifeboat = NewPtr(16384);
+
+#ifdef USE_QT_SOUND
+
+	/* Load sound effect resources */
+	load_sounds();
+
+#endif /* USE_QT_SOUND */
 
 	/* Note the "system" */
 	ANGBAND_SYS = "mac";
