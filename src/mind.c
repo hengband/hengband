@@ -1684,11 +1684,7 @@ msg_print("その方向にはモンスターはいません。");
 		set_oppose_fire(plev, FALSE);
 		break;
 	case 10:
-		project_length = 5;
-		if (!get_aim_dir(&dir)) return FALSE;
-		project_hook(GF_ATTACK, dir, HISSATSU_NYUSIN, PROJECT_STOP | PROJECT_KILL);
-
-		break;
+		return rush_attack(NULL);
 	case 11:
 	{
 		int i;

@@ -777,11 +777,7 @@ static bool cast_hissatsu_spell(int spell)
 		break;
 	}
 	case 18:
-		project_length = 5;
-		if (!get_aim_dir(&dir)) return FALSE;
-		project_hook(GF_ATTACK, dir, HISSATSU_NYUSIN, PROJECT_STOP | PROJECT_KILL);
-
-		break;
+		return rush_attack(NULL);
 	case 19: /* Whirlwind Attack */
 	{
 		int y = 0, x = 0;
@@ -1026,30 +1022,35 @@ static bool cast_hissatsu_spell(int spell)
 	}
 	case 26:
 	{
+#define NEED_MANA_PER_MONSTER 8
 		bool new = TRUE;
-		int count = 0;
+		bool mdeath;
+		/* int count = 0; currently unused */
 		do
 		{
-			project_length = 5;
-			if (!get_aim_dir(&dir)) break;
+			if (!rush_attack(&mdeath)) break;
 			if (new)
+			{
 				/* Reserve needed mana point */
 				p_ptr->csp -= technic_info[TECHNIC_HISSATSU][26].smana;
+				new = FALSE;
+			}
 			else
-				p_ptr->csp -= 8;
-			new = FALSE;
-			if (!project_hook(GF_ATTACK, dir, HISSATSU_NYUSIN, PROJECT_STOP | PROJECT_KILL)) break;
-			count++;
+				p_ptr->csp -= NEED_MANA_PER_MONSTER;
+			if (!mdeath) break;
+			/* count++; currently unused */
 			command_dir = 0;
 			p_ptr->redraw |= PR_MANA;
 			handle_stuff();
-		} while (p_ptr->csp > 8);
+		}
+		while (p_ptr->csp > NEED_MANA_PER_MONSTER);
 		if (new) return FALSE;
 
 		/* Restore reserved mana */
 		p_ptr->csp += technic_info[TECHNIC_HISSATSU][26].smana;
-
 		break;
+
+#undef NEED_MANA_PER_MONSTER
 	}
 	case 27:
 	{

@@ -5459,62 +5459,11 @@ msg_format("うまく捕まえられなかった。");
 			break;
 		}
 
+		/* Attack (Use "dam" as attack type) */
 		case GF_ATTACK:
 		{
-			if (seen) obvious = TRUE;
-			skipped = TRUE;
-			if (dam == HISSATSU_NYUSIN)
-			{
-				int i, yy, xx;
-				int ny = y, nx = x;
-				bool success = FALSE;
-				for (i = 0; i < 8; i++)
-				{
-					yy = y + ddy[i];
-					xx = x + ddx[i];
-					if (cave_empty_bold(yy, xx) || player_bold(yy, xx))
-					{
-						success = TRUE;
-						if (distance(py, px, ny, nx) > distance(py, px, yy, xx))
-						{
-							ny = yy;
-							nx = xx;
-						}
-					}
-				}
-				if (success)
-				{
-					if (!player_bold(ny, nx))
-					{
-						teleport_player_to(ny, nx, FALSE);
-#ifdef JP
-						msg_print("素早く相手の懐に入り込んだ！");
-#else
-						msg_format("You quickly jump in and attack %s!", m_name);
-#endif
-					}
-				}
-				else
-				{
-#ifdef JP
-					msg_print("失敗！");
-#else
-					msg_print("Failed!");
-#endif
-					dam = 0;
-					break;
-				}
-			}
-			if (c_ptr->m_idx)
-				return (py_attack(y, x, dam));
-			else
-#ifdef JP
-				msg_print("攻撃は空を切った。");
-#else
-				msg_print("You attack the empty air.");
-#endif
-			dam = 0;
-			break;
+			/* Return this monster's death */
+			return py_attack(y, x, dam);
 		}
 
 		/* Sleep (Use "dam" as "power") */
@@ -8784,11 +8733,6 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 				Term_xtra(TERM_XTRA_DELAY, msec);
 			}
 		}
-		if ((typ == GF_ATTACK) && (dam == HISSATSU_NYUSIN) && ((i+1) == path_n))
-		{
-			if (cave_empty_bold(y, x)) teleport_player_to(ny, nx, FALSE);
-		}
-
 	}
 
 	/* Save the "blast epicenter" */
