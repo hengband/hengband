@@ -3893,23 +3893,32 @@ s16b experience_of_spell(int spell, int use_realm)
  */
 int mod_need_mana(int need_mana, int spell, int realm)
 {
+#define MANA_CONST   2400
+#define MANA_DIV        4
+#define DEC_MANA_DIV    3
+
 	/* Realm magic */
 	if ((realm > REALM_NONE) && (realm <= MAX_REALM))
 	{
-		need_mana = need_mana * (3800 - experience_of_spell(spell, realm)) + 2399;
-
-		if (p_ptr->dec_mana) need_mana *= 3;
-		else need_mana *= 4;
-
-		need_mana /= 9600;
+		/*
+		 * need_mana defaults if spell exp equals SPELL_EXP_EXPERT and !p_ptr->dec_mana.
+		 * MANA_CONST is used to calculate need_mana effected from spell proficiency.
+		 */
+		need_mana = need_mana * (MANA_CONST + SPELL_EXP_EXPERT - experience_of_spell(spell, realm)) + (MANA_CONST - 1);
+		need_mana *= p_ptr->dec_mana ? DEC_MANA_DIV : MANA_DIV;
+		need_mana /= MANA_CONST * MANA_DIV;
 		if (need_mana < 1) need_mana = 1;
 	}
 
 	/* Non-realm magic */
 	else
 	{
-		if (p_ptr->dec_mana) need_mana = (need_mana + 1) * 3 / 4;
+		if (p_ptr->dec_mana) need_mana = (need_mana + 1) * DEC_MANA_DIV / MANA_DIV;
 	}
+
+#undef DEC_MANA_DIV
+#undef MANA_DIV
+#undef MANA_CONST
 
 	return need_mana;
 }
