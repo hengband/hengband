@@ -2169,6 +2169,14 @@ act = "%sにむかって歌った。";
 }
 
 
+static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_ptr)
+{
+	return !have_flag(f_ptr->flags, FF_GLASS) ||
+	       (r_info[m_ptr->r_idx].flags2 & RF2_STUPID) ||
+	       (m_ptr->hp >= MAX(m_ptr->maxhp / 3, 200));
+}
+
+
 /*
  * Process a monster
  *
@@ -2856,7 +2864,7 @@ msg_format("%^s%s", m_name, monmessage);
 		else if ((r_ptr->flags2 & RF2_KILL_WALL) &&
 		         (can_cross ? !have_flag(f_ptr->flags, FF_LOS) : !is_riding_mon) &&
 		         have_flag(f_ptr->flags, FF_HURT_DISI) && !have_flag(f_ptr->flags, FF_PERMANENT) &&
-		         (!have_flag(f_ptr->flags, FF_GLASS) || (r_ptr->flags2 & RF2_STUPID) || (m_ptr->hp >= MAX(m_ptr->maxhp / 3, 200))))
+		         check_hp_for_feat_destruction(f_ptr, m_ptr))
 		{
 			/* Eat through walls/doors/rubble */
 			do_move = TRUE;
@@ -2929,7 +2937,7 @@ msg_format("%^s%s", m_name, monmessage);
 				(!is_pet(m_ptr) || (p_ptr->pet_extra_flags & PF_OPEN_DOORS)))
 			{
 				/* Attempt to Bash XXX XXX XXX */
-				if (randint0(m_ptr->hp / 10) > f_ptr->power)
+				if (check_hp_for_feat_destruction(f_ptr, m_ptr) && (randint0(m_ptr->hp / 10) > f_ptr->power))
 				{
 					/* Message */
 					if (have_flag(f_ptr->flags, FF_GLASS))
