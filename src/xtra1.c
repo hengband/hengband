@@ -1480,159 +1480,97 @@ static void prt_stun(void)
  * Auto-track current target monster when bored.  Note that the
  * health-bar stops tracking any monster that "disappears".
  */
-static void health_redraw(void)
+static void health_redraw(bool riding)
 {
 
 #ifdef DRS_SHOW_HEALTH_BAR
 
+	s16b health_who;
+	int row, col;
+	monster_type *m_ptr;
+
+	if (riding)
+	{
+		health_who = p_ptr->riding;
+		row = ROW_RIDING_INFO;
+		col = COL_RIDING_INFO;
+	}
+	else
+	{
+		health_who = p_ptr->health_who;
+		row = ROW_INFO;
+		col = COL_INFO;
+	}
+
+	m_ptr = &m_list[health_who];
+
 	/* Not tracking */
-	if (!p_ptr->health_who)
+	if (!health_who)
 	{
 		/* Erase the health bar */
-		Term_erase(COL_INFO, ROW_INFO, 12);
+		Term_erase(col, row, 12);
 	}
 
 	/* Tracking an unseen monster */
-	else if (!m_list[p_ptr->health_who].ml)
+	else if (!m_ptr->ml)
 	{
 		/* Indicate that the monster health is "unknown" */
-		Term_putstr(COL_INFO, ROW_INFO, 12, TERM_WHITE, "[----------]");
+		Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
 	}
 
 	/* Tracking a hallucinatory monster */
 	else if (p_ptr->image)
 	{
 		/* Indicate that the monster health is "unknown" */
-		Term_putstr(COL_INFO, ROW_INFO, 12, TERM_WHITE, "[----------]");
+		Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
 	}
 
 	/* Tracking a dead monster (???) */
-	else if (!m_list[p_ptr->health_who].hp < 0)
+	else if (m_ptr->hp < 0)
 	{
 		/* Indicate that the monster health is "unknown" */
-		Term_putstr(COL_INFO, ROW_INFO, 12, TERM_WHITE, "[----------]");
+		Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
 	}
 
 	/* Tracking a visible monster */
 	else
 	{
-		int pct, pct2, len;
+		/* Extract the "percent" of health */
+		int pct = 100L * m_ptr->hp / m_ptr->maxhp;
+		int pct2 = 100L * m_ptr->hp / m_ptr->max_maxhp;
 
-		monster_type *m_ptr = &m_list[p_ptr->health_who];
+		/* Convert percent into "health" */
+		int len = (pct2 < 10) ? 1 : (pct2 < 90) ? (pct2 / 10 + 1) : 10;
 
 		/* Default to almost dead */
 		byte attr = TERM_RED;
 
-		/* Extract the "percent" of health */
-		pct = 100L * m_ptr->hp / m_ptr->maxhp;
-		pct2 = 100L * m_ptr->hp / m_ptr->max_maxhp;
-
-		/* Badly wounded */
-		if (pct >= 10) attr = TERM_L_RED;
-
-		/* Wounded */
-		if (pct >= 25) attr = TERM_ORANGE;
-
-		/* Somewhat Wounded */
-		if (pct >= 60) attr = TERM_YELLOW;
-
-		/* Healthy */
-		if (pct >= 100) attr = TERM_L_GREEN;
-
-		/* Afraid */
-		if (m_ptr->monfear) attr = TERM_VIOLET;
-
-		/* Asleep */
-		if (m_ptr->csleep) attr = TERM_BLUE;
-
 		/* Invulnerable */
 		if (m_ptr->invulner) attr = TERM_WHITE;
 
-		/* Convert percent into "health" */
-		len = (pct2 < 10) ? 1 : (pct2 < 90) ? (pct2 / 10 + 1) : 10;
-
-		/* Default to "unknown" */
-		Term_putstr(COL_INFO, ROW_INFO, 12, TERM_WHITE, "[----------]");
-
-		/* Dump the current "health" (use '*' symbols) */
-		Term_putstr(COL_INFO + 1, ROW_INFO, len, attr, "**********");
-	}
-
-#endif
-
-}
-
-
-
-static void riding_health_redraw(void)
-{
-
-#ifdef DRS_SHOW_HEALTH_BAR
-
-	/* Not tracking */
-	if (!p_ptr->riding)
-	{
-		/* Erase the health bar */
-		Term_erase(COL_RIDING_INFO, ROW_RIDING_INFO, 12);
-	}
-
-	/* Tracking a hallucinatory monster */
-	else if (p_ptr->image)
-	{
-		/* Indicate that the monster health is "unknown" */
-		Term_putstr(COL_RIDING_INFO, ROW_RIDING_INFO, 12, TERM_WHITE, "[----------]");
-	}
-
-	/* Tracking a dead monster (???) */
-	else if (!m_list[p_ptr->health_who].hp < 0)
-	{
-		/* Indicate that the monster health is "unknown" */
-		Term_putstr(COL_RIDING_INFO, ROW_RIDING_INFO, 12, TERM_WHITE, "[----------]");
-	}
-
-	/* Tracking a visible monster */
-	else
-	{
-		int pct, pct2, len;
-
-		monster_type *m_ptr = &m_list[p_ptr->riding];
-
-		/* Default to almost dead */
-		byte attr = TERM_RED;
-
-		/* Extract the "percent" of health */
-		pct = 100L * m_ptr->hp / m_ptr->maxhp;
-		pct2 = 100L * m_ptr->hp / m_ptr->max_maxhp;
-
-		/* Badly wounded */
-		if (pct >= 10) attr = TERM_L_RED;
-
-		/* Wounded */
-		if (pct >= 25) attr = TERM_ORANGE;
-
-		/* Somewhat Wounded */
-		if (pct >= 60) attr = TERM_YELLOW;
-
-		/* Healthy */
-		if (pct >= 100) attr = TERM_L_GREEN;
+		/* Asleep */
+		else if (m_ptr->csleep) attr = TERM_BLUE;
 
 		/* Afraid */
-		if (m_ptr->monfear) attr = TERM_VIOLET;
+		else if (m_ptr->monfear) attr = TERM_VIOLET;
 
-		/* Asleep */
-		if (m_ptr->csleep) attr = TERM_BLUE;
+		/* Healthy */
+		else if (pct >= 100) attr = TERM_L_GREEN;
 
-		/* Invulnerable */
-		if (m_ptr->invulner) attr = TERM_WHITE;
+		/* Somewhat Wounded */
+		else if (pct >= 60) attr = TERM_YELLOW;
 
-		/* Convert percent into "health" */
-		len = (pct2 < 10) ? 1 : (pct2 < 90) ? (pct2 / 10 + 1) : 10;
+		/* Wounded */
+		else if (pct >= 25) attr = TERM_ORANGE;
+
+		/* Badly wounded */
+		else if (pct >= 10) attr = TERM_L_RED;
 
 		/* Default to "unknown" */
-		Term_putstr(COL_RIDING_INFO, ROW_RIDING_INFO, 12, TERM_WHITE, "[----------]");
+		Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
 
 		/* Dump the current "health" (use '*' symbols) */
-		Term_putstr(COL_RIDING_INFO + 1, ROW_RIDING_INFO, len, attr, "**********");
+		Term_putstr(col + 1, row, len, attr, "**********");
 	}
 
 #endif
@@ -1687,8 +1625,8 @@ static void prt_frame_basic(void)
 	prt_depth();
 
 	/* Special */
-	health_redraw();
-	riding_health_redraw();
+	health_redraw(FALSE);
+	health_redraw(TRUE);
 }
 
 
@@ -5852,13 +5790,13 @@ void redraw_stuff(void)
 	if (p_ptr->redraw & (PR_HEALTH))
 	{
 		p_ptr->redraw &= ~(PR_HEALTH);
-		health_redraw();
+		health_redraw(FALSE);
 	}
 
 	if (p_ptr->redraw & (PR_UHEALTH))
 	{
 		p_ptr->redraw &= ~(PR_UHEALTH);
-		riding_health_redraw();
+		health_redraw(TRUE);
 	}
 
 
