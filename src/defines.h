@@ -2678,6 +2678,7 @@
 #define SUMMON_LOUSE                61
 #define SUMMON_GUARDIANS            62
 #define SUMMON_KNIGHTS              63
+#define SUMMON_EAGLES               64
 
 
 /*
@@ -4527,11 +4528,14 @@ extern int PlayerUID;
 #define MON_ENERGY_VOR    359
 #define MON_JADE_MONK     370
 #define MON_HAGEN         383
+#define MON_MENELDOR      384
 #define MON_PHANTOM_B     385
+#define MON_GWAIHIR       410
 #define MON_ANGEL         417
 #define MON_ADAMANT_COINS 423
 #define MON_BARNEY        441
 #define MON_ARCHANGEL     456
+#define MON_THORONDOR     468
 #define MON_GHOST         477
 #define MON_NINJA         485
 #define MON_IVORY_MONK    492

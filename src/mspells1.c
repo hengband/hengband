@@ -1075,7 +1075,12 @@ static int choose_attack_spell(int m_idx, byte spells[], byte num)
 			case MON_BANORLUPART:
 				if (randint0(100) < 70) success = TRUE;
 				break;
-			default: break;
+			case MON_BANOR:
+			case MON_LUPART:
+                                break;
+			default:
+                                if (randint0(100) < 50) success = TRUE;
+                                break;
 		}
 		if (success) return (special[randint0(special_num)]);
 	}
@@ -3717,7 +3722,52 @@ msg_format("%^sがテレポートした。", m_name);
 
 					break;
 				}
-				default: return FALSE;
+
+                        default:
+                                if (r_ptr->d_char == 'B')
+                                {
+                                        if (!direct) break;
+                                        disturb(1, 0);
+                                        if (one_in_(3) || x!=px || y!=py)
+                                        {
+#ifdef JP
+                                                msg_format("%^sは突然視界から消えた!", m_name);
+#else
+                                                msg_format("%^s suddenly go out of your sight!", m_name);
+#endif
+                                                teleport_away(m_idx, 10, FALSE);
+                                                p_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
+                                                break;
+                                        }
+                                        else
+                                        {
+#ifdef JP
+                                                msg_format("%^sがあなたを掴んで空中から投げ落した。", m_name);
+#else
+                                                msg_format("%^s holds you, and drops from the sky.", m_name);
+#endif
+                                                teleport_player_to(m_ptr->fy, m_ptr->fx, FALSE);
+
+                                                if (p_ptr->ffall)
+                                                {
+#ifdef JP
+                                                        msg_print("あなたは静かに着地した。");
+#else
+                                                        msg_print("You float gently down to the ground.");
+#endif
+                                                }
+                                                else
+                                                {
+                                                        int dam = damroll(2, 8);
+                                                        sound(SOUND_FALL);
+                                                        take_hit(DAMAGE_NOESCAPE, dam, m_name, -1);
+                                                }
+                                        }
+                                        break;
+                                }
+
+                                /* Something is wrong */
+                                else return FALSE;
 			}
 			break;
 		}
@@ -3992,6 +4042,16 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 					count += summon_named_creature(m_idx, y, x, MON_SHURYUUDAN, mode);
 				}
 			}
+			else if(m_ptr->r_idx == MON_THORONDOR ||
+                                m_ptr->r_idx == MON_GWAIHIR ||
+                                m_ptr->r_idx == MON_MENELDOR)
+                        {
+				int num = 4 + randint1(3);
+				for (k = 0; k < num; k++)
+				{
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_EAGLES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+				}
+                        }
 			else if(m_ptr->r_idx == MON_LOUSY)
 			{
 				int num = 2 + randint1(3);

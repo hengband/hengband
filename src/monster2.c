@@ -855,6 +855,13 @@ static bool summon_specific_aux(int r_idx)
 				(r_idx == MON_KNI_TEMPLAR));
 			break;
 		}
+		case SUMMON_EAGLES:
+		{
+			okay = (r_ptr->d_char == 'B' &&
+                                (r_ptr->flags8 & RF8_WILD_MOUNTAIN) &&
+                                (r_ptr->flags8 & RF8_WILD_ONLY));
+			break;
+		}
 	}
 
 	/* Result */

@@ -5572,18 +5572,23 @@ D:その毒爪には気をつけろ！
 N:335:大鷲
 E:Great eagle
 G:B:u
-I:120:100d5:20:65:20
-W:20:2:0:150:10000:640
+I:125:5d100:20:65:20
+W:35:2:0:150:10000:640
 B:CLAW:HURT:6d3
 B:CLAW:HURT:6d3
 B:BITE:HURT:3d6
 F:CAN_FLY |
 F:WILD_ONLY | WILD_MOUNTAIN | WILD_VOLCANO
 F:ANIMAL | GOOD | DROP_CORPSE | RIDING
+S:1_IN_3
+S:SPECIAL
 D:$An agent of supernatural beings, this creature looks like a 
 D:$huge eagle.
-D:この生き物はなにか超自然的な存在の使いだ。 
-D:そしてそれは大きなワシのように見える。
+#D:この生き物はなにか超自然的な存在の使いだ。 
+#D:そしてそれは大きなワシのように見える。
+D:マンウェに遣わされた偉大な大鷲は人の言葉を話し、
+D:マイアールと同じ魂を持っていると言われる。
+D:この大鷲はその一族の一員である。
 
 #JZ#
 N:336:動く岩
@@ -6435,21 +6440,27 @@ D:グンター王の異父弟にあたり、奸計にってジークフリードを殺害し、
 D:環を奪った犯人。
 
 #JZ#
-N:384:大鷲王『メネルドール』
+N:384:疾翼『メネルドール』
 E:Meneldor the Swift
 G:B:u
-I:120:80d10:20:65:20
-W:24:1:0:360:0:0
+I:130:13d100:20:65:20
+W:38:1:0:360:0:0
 B:CLAW:HURT:7d3
 B:CLAW:HURT:7d3
 B:BITE:HURT:3d7
 F:CAN_FLY | UNIQUE | FORCE_MAXHP | DROP_CORPSE
 F:WILD_ONLY | WILD_MOUNTAIN | WILD_VOLCANO | 
 F:ANIMAL | GOOD | RIDING
+S:1_IN_2
+S:SPECIAL | S_KIN
 D:$An agent of supernatural beings, this creature looks like a 
 D:$huge eagle.
-D:この生き物はなにか超自然的な存在の使いだ。 
-D:そしてそれは大きなワシのように見える。
+#D:この生き物はなにか超自然的な存在の使いだ。 
+#D:そしてそれは大きなワシのように見える。
+D:マンウェに遣わされた偉大な大鷲は人の言葉を話し、
+D:マイアールと同じ魂を持っていると言われる。
+D:メネルドールは一族の中でグワイヒアとその弟ランドローバルに継いで速く、
+D:疾翼と呼ばれる。
 
 #JZ#
 N:385:幽体獣
@@ -6900,18 +6911,24 @@ D:彼は自分の墓を汚したあなたに復讐するため甦った。
 N:410:風早彦『グワイヒア』
 E:Gwaihir the Windlord
 G:B:u
-I:120:85d10:20:65:20
-W:24:1:0:360:0:0
+I:132:15d100:20:65:20
+W:40:1:0:360:0:0
 B:CLAW:HURT:15d2
 B:CLAW:HURT:15d2
 B:BITE:HURT:3d10
 F:CAN_FLY | UNIQUE | FORCE_MAXHP | DROP_CORPSE
 F:WILD_ONLY | WILD_MOUNTAIN | WILD_VOLCANO | 
 F:ANIMAL | GOOD | RIDING
+S:1_IN_2
+S:SPECIAL | S_KIN
 D:$An agent of supernatural beings, this creature looks like a 
 D:$huge eagle.
-D:この生き物はなにか超自然的な存在の使いだ。 
-D:そしてそれは大きなワシのように見える。
+#D:この生き物はなにか超自然的な存在の使いだ。 
+#D:そしてそれは大きなワシのように見える。
+D:マンウェに遣わされた偉大な大鷲は人の言葉を話し、
+D:マイアールと同じ魂を持っていると言われる。
+D:グワイヒアは大鷲の王であり、一族の中で最も強く、速い。
+D:これが風の支配者と呼ばれる所以である。
 
 #J0#
 N:411:巨大赤ダニ
@@ -8036,7 +8053,7 @@ D:史上最大のホオジロザメで、今にもあなたを食べようとしている！
 N:468:大鷲王『ソロンドール』
 E:Thorondor
 G:B:u
-I:120:85d12:20:65:20
+I:132:30d100:20:65:20
 W:55:1:0:555:0:0
 B:CLAW:HURT:16d2
 B:CLAW:HURT:16d2
@@ -8044,8 +8061,14 @@ B:BITE:HURT:4d10
 F:CAN_FLY | UNIQUE | ESCORT | ESCORTS | FORCE_MAXHP | DROP_CORPSE
 F:WILD_ONLY | WILD_MOUNTAIN | WILD_VOLCANO |
 F:ANIMAL | GOOD | RIDING
+S:1_IN_2
+S:SPECIAL | S_KIN
 D:$An agent of supernatural being, Thorondor is the lord of eagles.
-D:ソロンドールは超自然的な存在の使いで、大鷲たちの王だ。
+#D:ソロンドールは超自然的な存在の使いで、大鷲たちの王だ。
+D:マンウェに遣わされた偉大な大鷲は人の言葉を話し、
+D:マイアールと同じ魂を持っていると言われる。
+D:ソロンドールは全ての大鷲のうちで最初に現われた者であり、最強かつ最大の王だ。
+D:その巨大な体を前にすればモルゴスの卑小な召使い達は逃げ惑うことしか出来無い。
 
 #J0#
 N:469:巨大青アリ

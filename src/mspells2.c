@@ -3312,7 +3312,7 @@ msg_format("%^sがテレポートした。", m_name);
 				return FALSE;
 			}
 
-			/* RF6_XXX4X6 */
+                        /* RF6_SPECIAL */
 			case 160+7:
 			{
 				int k;
@@ -3327,10 +3327,38 @@ msg_format("%^sがテレポートした。", m_name);
 						}
 						return FALSE;
 					}
-					default: return FALSE;
-				}
-			}
+                                default:
+                                        if (r_ptr->d_char == 'B')
+                                        {
+                                                if (one_in_(3))
+                                                {
+                                                        if (see_m)
+                                                        {
+#ifdef JP
+                                                                msg_format("%^sは突然急上昇して視界から消えた!", m_name);
+#else
+                                                                msg_format("%^s suddenly go out of your sight!", m_name);
+#endif
+                                                        }
+                                                        teleport_away(m_idx, 10, FALSE);
+                                                        p_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
+                                                        break;
+                                                }
+                                                else
+                                                {
+                                                        /* Not implemented */
+                                                        return FALSE;
+                                                }
+                                                break;
+                                        }
+                                        
+                                        /* Something is wrong */
+                                        else return FALSE;
+                                }
 
+                                /* done */
+                                break;
+                        }
 			/* RF6_TELE_TO */
 			case 160+8:
 			{
@@ -3591,6 +3619,16 @@ msg_format("%sが魔法で%sを召喚した。", m_name,
 						count += summon_named_creature(m_idx, y, x, MON_SHURYUUDAN, p_mode);
 					}
 				}
+                                else if(m_ptr->r_idx == MON_THORONDOR ||
+                                        m_ptr->r_idx == MON_GWAIHIR ||
+                                        m_ptr->r_idx == MON_MENELDOR)
+                                {
+                                        int num = 4 + randint1(3);
+                                        for (k = 0; k < num; k++)
+                                        {
+                                                count += summon_specific(m_idx, y, x, rlev, SUMMON_EAGLES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | p_mode));
+                                        }
+                                }
 				else if(m_ptr->r_idx == MON_LOUSY)
 				{
 					int num = 2 + randint1(3);
