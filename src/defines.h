@@ -1731,8 +1731,8 @@
 #define SV_PHOTO			50
 
 /* The "sval" codes for TV_CORPSE */
-#define SV_SKELETON 				0
-#define SV_CORPSE					1
+#define SV_SKELETON 			0
+#define SV_CORPSE			1
 
 /* The "sval" codes for TV_SHOT/TV_ARROW/TV_BOLT */
 #define SV_AMMO_LIGHT                    0	/* pebbles */
@@ -2071,6 +2071,7 @@
 #define SV_STAFF_DESTRUCTION            29
 #define SV_STAFF_ANIMATE_DEAD           30
 #define SV_STAFF_MSTORM                 31
+#define SV_STAFF_NOTHING                32
 
 
 /* The "sval" codes for TV_WAND */
@@ -2267,6 +2268,9 @@
 #define SV_POTION_NEO_TSUYOSHI          64
 #define SV_POTION_TSUYOSHI              65
 #define SV_POTION_POLYMORPH             66
+
+/* The "sval" codes for TV_FLASK */
+#define SV_FLASK_OIL                   0
 
 /* The "sval" codes for TV_FOOD */
 #define SV_FOOD_POISON                   0

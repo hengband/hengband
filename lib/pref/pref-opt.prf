@@ -133,6 +133,7 @@ Y:leave_chest
 Y:leave_wanted
 X:leave_corpse
 X:leave_junk
+Y:leave_special
 
 ##### Play-record Options #####
 

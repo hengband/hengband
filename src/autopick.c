@@ -933,6 +933,39 @@ static bool is_opt_confirm_destroy(object_type *o_ptr)
 	
 	if (leave_junk)
 		if ((o_ptr->tval == TV_SKELETON) || (o_ptr->tval == TV_BOTTLE) || (o_ptr->tval == TV_JUNK) || (o_ptr->tval == TV_STATUE)) return FALSE;
+
+	if (leave_special)
+	{
+#if 0
+		if (p_ptr->prace == RACE_SKELETON)
+		{
+			if (o_ptr->tval == TV_SKELETON ||
+			    (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_SKELETON))
+				return FALSE;
+		}
+		else 
+#endif
+		if (p_ptr->prace == RACE_DEMON)
+		{
+			if (o_ptr->tval == TV_CORPSE &&
+			    o_ptr->sval == SV_CORPSE &&
+			    strchr("pht", r_info[o_ptr->pval].d_char))
+				return FALSE;
+		}
+
+		if (p_ptr->pclass == CLASS_ARCHER)
+		{
+			if (o_ptr->tval == TV_SKELETON ||
+			    (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_SKELETON))
+				return FALSE;
+		}
+		else if (p_ptr->pclass == CLASS_NINJA)
+		{
+			if (o_ptr->tval == TV_LITE &&
+			    o_ptr->name2 == EGO_LITE_DARKNESS)
+				return FALSE;
+		}
+	}
 	
 	if (o_ptr->tval == TV_GOLD) return FALSE;
 	

@@ -1372,8 +1372,23 @@ static bool cast_nature_spell(int spell)
 		(void)detect_stairs(DETECT_RAD_DEFAULT);
 		break;
 	case 3: /* Produce Food */
-		(void)set_food(PY_FOOD_MAX - 1);
+	{
+		object_type forge, *q_ptr = &forge;
+
+#ifdef JP
+		msg_print("食料を生成した。");
+#else
+		msg_print("A food ration is produced.");
+#endif
+
+		/* Create the food ration */
+		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
+
+		/* Drop the object from heaven */
+		(void)drop_near(q_ptr, -1, py, px);
 		break;
+
+	}
 	case 4: /* Daylight */
 		(void)lite_area(damroll(2, (plev / 2)), (plev / 10) + 1);
 		if ((prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE)) && !p_ptr->resist_lite)

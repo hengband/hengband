@@ -386,7 +386,7 @@ static void do_cmd_eat_food_aux(int item)
 	}
 
 	/* We have tried it */
-	object_tried(o_ptr);
+	if (o_ptr->tval == TV_FOOD) object_tried(o_ptr);
 
 	/* The player is now aware of the object */
 	if (ident && !object_aware_p(o_ptr))
@@ -420,6 +420,20 @@ msg_print("あなたの飢えは新鮮な血によってのみ満たされる！");
 	}
 	else if (p_ptr->prace == RACE_SKELETON)
 	{
+#if 0
+		if (o_ptr->tval == TV_SKELETON ||
+		    (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_SKELETON))
+		{
+#ifdef JP
+			msg_print("あなたは骨で自分の体を補った。");
+#else
+			msg_print("Your body absorbs the bone.");
+#endif
+			set_food(p_ptr->food + 5000);
+		}
+		else 
+#endif
+
 		if (!((o_ptr->sval == SV_FOOD_WAYBREAD) ||
 		      (o_ptr->sval < SV_FOOD_BISCUIT)))
 		{
@@ -448,6 +462,118 @@ msg_print("食べ物がアゴを素通りして落ち、消えた！");
 #endif
 
 		}
+	}
+	else if ((p_ptr->prace == RACE_SKELETON ||
+		  p_ptr->prace == RACE_GOLEM ||
+		  p_ptr->prace == RACE_ZOMBIE ||
+		  p_ptr->prace == RACE_SPECTRE) &&
+		 (o_ptr->tval == TV_STAFF || o_ptr->tval == TV_WAND))
+	{
+		cptr staff;
+
+		if (o_ptr->tval == TV_STAFF &&
+		    (item < 0) && (o_ptr->number > 1))
+		{
+#ifdef JP
+			msg_print("まずは杖を拾わなければ。");
+#else
+			msg_print("You must first pick up the staffs.");
+#endif
+			return;
+		}
+
+#ifdef JP
+		staff = (o_ptr->tval == TV_STAFF) ? "杖" : "魔法棒";
+#else
+		staff = (o_ptr->tval == TV_STAFF) ? "staff" : "wand";
+#endif
+
+		/* "Eat" charges */
+		if (o_ptr->pval == 0)
+		{
+#ifdef JP
+			msg_format("この%sにはもう魔力が残っていない。", staff);
+#else
+			msg_format("The %s has no charges left.", staff);
+#endif
+			return;
+		}
+
+#ifdef JP
+		msg_format("あなたは%sの魔力をエネルギー源として吸収した。", staff);
+#else
+		msg_format("You absorb mana of the %s as your energy.", staff);
+#endif
+
+		/* Use a single charge */
+		o_ptr->pval--;
+
+		/* Eat a charge */
+		set_food(p_ptr->food + 5000);
+
+		/* XXX Hack -- unstack if necessary */
+		if (o_ptr->tval == TV_STAFF &&
+		    (item >= 0) && (o_ptr->number > 1))
+		{
+			object_type forge;
+			object_type *q_ptr;
+
+			/* Get local object */
+			q_ptr = &forge;
+
+			/* Obtain a local object */
+			object_copy(q_ptr, o_ptr);
+
+			/* Modify quantity */
+			q_ptr->number = 1;
+
+			/* Restore the charges */
+			o_ptr->pval++;
+
+			/* Unstack the used item */
+			o_ptr->number--;
+			p_ptr->total_weight -= q_ptr->weight;
+			item = inven_carry(q_ptr);
+
+			/* Message */
+#ifdef JP
+			msg_format("杖をまとめなおした。");
+#else
+			msg_print("You unstack your staff.");
+#endif
+		}
+
+		/* Describe charges in the pack */
+		if (item >= 0)
+		{
+			inven_item_charges(item);
+		}
+
+		/* Describe charges on the floor */
+		else
+		{
+			floor_item_charges(0 - item);
+		}
+
+		/* Don't eat a staff/wand itself */
+		return;
+	}
+	else if ((p_ptr->prace == RACE_DEMON ||
+		 (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)) &&
+		 (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_CORPSE &&
+		  strchr("pht", r_info[o_ptr->pval].d_char)))
+	{
+		/* Drain vitality of humanoids */
+		char o_name[MAX_NLEN];
+
+		object_desc(o_name, o_ptr, FALSE, 0);
+
+#ifdef JP
+		msg_format("%sは燃え上り灰になった。精力を吸収した気がする。", o_name);
+#else
+		msg_format("%^s is burnt to ashes.  You absorb its vitality!");
+#endif
+		(void)set_food(PY_FOOD_MAX - 1);
 	}
 	else if ((p_ptr->prace == RACE_GOLEM) ||
 		 (p_ptr->prace == RACE_ZOMBIE) ||
@@ -493,8 +619,34 @@ msg_print("生者の食物はあなたにとってほとんど栄養にならない。");
  */
 static bool item_tester_hook_eatable(object_type *o_ptr)
 {
-/*	if ((o_ptr->tval==TV_FOOD) || ((o_ptr->tval==TV_CORPSE) && o_ptr->sval)) return (TRUE); */
-	if (o_ptr->tval==TV_FOOD) return (TRUE);
+	if (o_ptr->tval==TV_FOOD) return TRUE;
+
+#if 0
+	if (p_ptr->prace == RACE_SKELETON)
+	{
+		if (o_ptr->tval == TV_SKELETON ||
+		    (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_SKELETON))
+			return TRUE;
+	}
+	else 
+#endif
+
+	if (p_ptr->prace == RACE_SKELETON ||
+	    p_ptr->prace == RACE_GOLEM ||
+	    p_ptr->prace == RACE_ZOMBIE ||
+	    p_ptr->prace == RACE_SPECTRE)
+	{
+		if (o_ptr->tval == TV_STAFF || o_ptr->tval == TV_WAND)
+			return TRUE;
+	}
+	else if ((p_ptr->prace == RACE_DEMON) ||
+		 (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON))
+	{
+		if (o_ptr->tval == TV_CORPSE &&
+		    o_ptr->sval == SV_CORPSE &&
+		    strchr("pht", r_info[o_ptr->pval].d_char))
+			return TRUE;
+	}
 
 	/* Assume not */
 	return (FALSE);
@@ -614,51 +766,44 @@ static void do_cmd_quaff_potion_aux(int item)
 	lev = get_object_level(q_ptr);
 
 	/* Analyze the potion */
-	switch (q_ptr->sval)
+	if (q_ptr->tval == TV_POTION)
 	{
-#ifdef JP
-		/* 飲みごたえをオリジナルより細かく表現 */
-		case SV_POTION_WATER:
+		switch (q_ptr->sval)
 		{
+#ifdef JP
+			/* 飲みごたえをオリジナルより細かく表現 */
+		case SV_POTION_WATER:
 			msg_print("口の中がさっぱりした。");
 			msg_print("のどの渇きが少しおさまった。");
 			ident = TRUE;
 			break;
-		}
+
 		case SV_POTION_APPLE_JUICE:
-		{
 			msg_print("甘くてサッパリとしていて、とてもおいしい。");
 			msg_print("のどの渇きが少しおさまった。");
 			ident = TRUE;
 			break;
-		}
+
 		case SV_POTION_SLIME_MOLD:
-		{
 			msg_print("なんとも不気味な味だ。");
 			msg_print("のどの渇きが少しおさまった。");
 			ident = TRUE;
 			break;
-		}
+
 #else
 		case SV_POTION_WATER:
 		case SV_POTION_APPLE_JUICE:
 		case SV_POTION_SLIME_MOLD:
-		{
 			msg_print("You feel less thirsty.");
 			ident = TRUE;
 			break;
-		}
 #endif
 
-
 		case SV_POTION_SLOWNESS:
-		{
 			if (set_slow(randint1(25) + 15, FALSE)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_SALT_WATER:
-		{
 #ifdef JP
 			msg_print("うぇ！思わず吐いてしまった。");
 #else
@@ -670,10 +815,8 @@ static void do_cmd_quaff_potion_aux(int item)
 			(void)set_paralyzed(p_ptr->paralyzed + 4);
 			ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_POISON:
-		{
 			if (!(p_ptr->resist_pois || p_ptr->oppose_pois))
 			{
 				if (set_poisoned(p_ptr->poisoned + randint0(15) + 10))
@@ -682,10 +825,8 @@ static void do_cmd_quaff_potion_aux(int item)
 				}
 			}
 			break;
-		}
 
 		case SV_POTION_BLINDNESS:
-		{
 			if (!p_ptr->resist_blind)
 			{
 				if (set_blind(p_ptr->blind + randint0(100) + 100))
@@ -694,10 +835,8 @@ static void do_cmd_quaff_potion_aux(int item)
 				}
 			}
 			break;
-		}
 
 		case SV_POTION_CONFUSION: /* Booze */
-		{
 			if (p_ptr->pclass != CLASS_MONK) chg_virtue(V_HARMONY, -1);
 			else if (!p_ptr->resist_conf) p_ptr->special_attack |= ATTACK_SUIKEN;
 			if (!p_ptr->resist_conf)
@@ -735,10 +874,8 @@ msg_print("何も思い出せない。どうやってここへ来たのかも分からない！");
 				}
 			}
 			break;
-		}
 
 		case SV_POTION_SLEEP:
-		{
 			if (!p_ptr->free_act)
 			{
 #ifdef JP
@@ -772,10 +909,8 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 				}
 			}
 			break;
-		}
 
 		case SV_POTION_LOSE_MEMORIES:
-		{
 			if (!p_ptr->hold_life && (p_ptr->exp > 0))
 			{
 #ifdef JP
@@ -789,10 +924,8 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 				ident = TRUE;
 			}
 			break;
-		}
 
 		case SV_POTION_RUINATION:
-		{
 #ifdef JP
 			msg_print("身も心も弱ってきて、精気が抜けていくようだ。");
 			take_hit(DAMAGE_LOSELIFE, damroll(10, 10), "破滅の薬", -1);
@@ -809,46 +942,32 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			(void)dec_stat(A_INT, 25, TRUE);
 			ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_DEC_STR:
-		{
 			if (do_dec_stat(A_STR)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_DEC_INT:
-		{
 			if (do_dec_stat(A_INT)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_DEC_WIS:
-		{
 			if (do_dec_stat(A_WIS)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_DEC_DEX:
-		{
 			if (do_dec_stat(A_DEX)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_DEC_CON:
-		{
 			if (do_dec_stat(A_CON)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_DEC_CHR:
-		{
 			if (do_dec_stat(A_CHR)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_DETONATIONS:
-		{
 #ifdef JP
 			msg_print("体の中で激しい爆発が起きた！");
 			take_hit(DAMAGE_NOESCAPE, damroll(50, 20), "爆発の薬", -1);
@@ -861,10 +980,8 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			(void)set_cut(p_ptr->cut + 5000);
 			ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_DEATH:
-		{
 			chg_virtue(V_VITALITY, -1);
 			chg_virtue(V_UNLIFE, 5);
 #ifdef JP
@@ -877,46 +994,34 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 
 			ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_INFRAVISION:
-		{
 			if (set_tim_infra(p_ptr->tim_infra + 100 + randint1(100), FALSE))
 			{
 				ident = TRUE;
 			}
 			break;
-		}
 
 		case SV_POTION_DETECT_INVIS:
-		{
 			if (set_tim_invis(p_ptr->tim_invis + 12 + randint1(12), FALSE))
 			{
 				ident = TRUE;
 			}
 			break;
-		}
 
 		case SV_POTION_SLOW_POISON:
-		{
 			if (set_poisoned(p_ptr->poisoned / 2)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_CURE_POISON:
-		{
 			if (set_poisoned(0)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_BOLDNESS:
-		{
 			if (set_afraid(0)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_SPEED:
-		{
 			if (!p_ptr->fast)
 			{
 				if (set_fast(randint1(25) + 15, FALSE)) ident = TRUE;
@@ -926,63 +1031,49 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 				(void)set_fast(p_ptr->fast + 5, FALSE);
 			}
 			break;
-		}
 
 		case SV_POTION_RESIST_HEAT:
-		{
 			if (set_oppose_fire(p_ptr->oppose_fire + randint1(10) + 10, FALSE))
 			{
 				ident = TRUE;
 			}
 			break;
-		}
 
 		case SV_POTION_RESIST_COLD:
-		{
 			if (set_oppose_cold(p_ptr->oppose_cold + randint1(10) + 10, FALSE))
 			{
 				ident = TRUE;
 			}
 			break;
-		}
 
 		case SV_POTION_HEROISM:
-		{
 			if (set_afraid(0)) ident = TRUE;
 			if (set_hero(p_ptr->hero + randint1(25) + 25, FALSE)) ident = TRUE;
 			if (hp_player(10)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_BESERK_STRENGTH:
-		{
 			if (set_afraid(0)) ident = TRUE;
 			if (set_shero(p_ptr->shero + randint1(25) + 25, FALSE)) ident = TRUE;
 			if (hp_player(30)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_CURE_LIGHT:
-		{
 			if (hp_player(damroll(2, 8))) ident = TRUE;
 			if (set_blind(0)) ident = TRUE;
 			if (set_cut(p_ptr->cut - 10)) ident = TRUE;
 			if (set_shero(0,TRUE)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_CURE_SERIOUS:
-		{
 			if (hp_player(damroll(4, 8))) ident = TRUE;
 			if (set_blind(0)) ident = TRUE;
 			if (set_confused(0)) ident = TRUE;
 			if (set_cut((p_ptr->cut / 2) - 50)) ident = TRUE;
 			if (set_shero(0,TRUE)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_CURE_CRITICAL:
-		{
 			if (hp_player(damroll(6, 8))) ident = TRUE;
 			if (set_blind(0)) ident = TRUE;
 			if (set_confused(0)) ident = TRUE;
@@ -991,10 +1082,8 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			if (set_cut(0)) ident = TRUE;
 			if (set_shero(0,TRUE)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_HEALING:
-		{
 			if (hp_player(300)) ident = TRUE;
 			if (set_blind(0)) ident = TRUE;
 			if (set_confused(0)) ident = TRUE;
@@ -1003,10 +1092,8 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			if (set_cut(0)) ident = TRUE;
 			if (set_shero(0,TRUE)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_STAR_HEALING:
-		{
 			if (hp_player(1200)) ident = TRUE;
 			if (set_blind(0)) ident = TRUE;
 			if (set_confused(0)) ident = TRUE;
@@ -1015,10 +1102,8 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			if (set_cut(0)) ident = TRUE;
 			if (set_shero(0,TRUE)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_LIFE:
-		{
 			chg_virtue(V_VITALITY, 1);
 			chg_virtue(V_UNLIFE, -5);
 #ifdef JP
@@ -1045,10 +1130,8 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			hp_player(5000);
 			ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_RESTORE_MANA:
-		{
 			if (p_ptr->pclass == CLASS_MAGIC_EATER)
 			{
 				int i;
@@ -1088,88 +1171,60 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			}
 			if (set_shero(0,TRUE)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_RESTORE_EXP:
-		{
 			if (restore_level()) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_RES_STR:
-		{
 			if (do_res_stat(A_STR)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_RES_INT:
-		{
 			if (do_res_stat(A_INT)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_RES_WIS:
-		{
 			if (do_res_stat(A_WIS)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_RES_DEX:
-		{
 			if (do_res_stat(A_DEX)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_RES_CON:
-		{
 			if (do_res_stat(A_CON)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_RES_CHR:
-		{
 			if (do_res_stat(A_CHR)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_INC_STR:
-		{
 			if (do_inc_stat(A_STR)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_INC_INT:
-		{
 			if (do_inc_stat(A_INT)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_INC_WIS:
-		{
 			if (do_inc_stat(A_WIS)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_INC_DEX:
-		{
 			if (do_inc_stat(A_DEX)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_INC_CON:
-		{
 			if (do_inc_stat(A_CON)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_INC_CHR:
-		{
 			if (do_inc_stat(A_CHR)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_AUGMENTATION:
-		{
 			if (do_inc_stat(A_STR)) ident = TRUE;
 			if (do_inc_stat(A_INT)) ident = TRUE;
 			if (do_inc_stat(A_WIS)) ident = TRUE;
@@ -1177,10 +1232,8 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			if (do_inc_stat(A_CON)) ident = TRUE;
 			if (do_inc_stat(A_CHR)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_ENLIGHTENMENT:
-		{
 #ifdef JP
 			msg_print("自分の置かれている状況が脳裏に浮かんできた...");
 #else
@@ -1192,10 +1245,8 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			wiz_lite(FALSE, FALSE);
 			ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_STAR_ENLIGHTENMENT:
-		{
 #ifdef JP
 			msg_print("更なる啓蒙を感じた...");
 #else
@@ -1218,10 +1269,8 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			self_knowledge();
 			ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_SELF_KNOWLEDGE:
-		{
 #ifdef JP
 			msg_print("自分自身のことが少しは分かった気がする...");
 #else
@@ -1232,10 +1281,8 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			self_knowledge();
 			ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_EXPERIENCE:
-		{
 			if (p_ptr->prace == RACE_ANDROID) break;
 			chg_virtue(V_ENLIGHTEN, 1);
 			if (p_ptr->exp < PY_MAX_EXP)
@@ -1252,10 +1299,8 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 				ident = TRUE;
 			}
 			break;
-		}
 
 		case SV_POTION_RESISTANCE:
-		{
 			(void)set_oppose_acid(p_ptr->oppose_acid + randint1(20) + 20, FALSE);
 			(void)set_oppose_elec(p_ptr->oppose_elec + randint1(20) + 20, FALSE);
 			(void)set_oppose_fire(p_ptr->oppose_fire + randint1(20) + 20, FALSE);
@@ -1263,10 +1308,8 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			(void)set_oppose_pois(p_ptr->oppose_pois + randint1(20) + 20, FALSE);
 			ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_CURING:
-		{
 			if (hp_player(50)) ident = TRUE;
 			if (set_blind(0)) ident = TRUE;
 			if (set_poisoned(0)) ident = TRUE;
@@ -1275,17 +1318,13 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			if (set_cut(0)) ident = TRUE;
 			if (set_image(0)) ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_INVULNERABILITY:
-		{
 			(void)set_invuln(p_ptr->invuln + randint1(4) + 4, FALSE);
 			ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_NEW_LIFE:
-		{
 			do_cmd_rerate(FALSE);
 			get_max_stats();
 			p_ptr->update |= PU_BONUS;
@@ -1305,18 +1344,14 @@ msg_print("全ての突然変異が治った。");
 			}
 			ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_NEO_TSUYOSHI:
-		{
 			(void)set_image(0);
 			(void)set_tsuyoshi(p_ptr->tsuyoshi + randint1(100) + 100, FALSE);
 			ident = TRUE;
 			break;
-		}
 
 		case SV_POTION_TSUYOSHI:
-		{
 #ifdef JP
 msg_print("「オクレ兄さん！」");
 #else
@@ -1331,10 +1366,8 @@ msg_print("「オクレ兄さん！」");
 			}
 			ident = TRUE;
 			break;
-		}
 		
 		case SV_POTION_POLYMORPH:
-		{
 			if ((p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3) && one_in_(23))
 			{
 				chg_virtue(V_CHANCE, -5);
@@ -1411,11 +1444,32 @@ msg_print("液体の一部はあなたのアゴを素通りして落ちた！");
 				break;
 			case RACE_GOLEM:
 			case RACE_ZOMBIE:
-			case RACE_ENT:
 			case RACE_DEMON:
 			case RACE_SPECTRE:
-			case RACE_ANDROID:
 				set_food(p_ptr->food + ((o_ptr->pval) / 20));
+				break;
+			case RACE_ANDROID:
+				if (o_ptr->tval == TV_FLASK)
+				{
+#ifdef JP
+					msg_print("オイルを補給した。");
+#else
+					msg_print("You replenish yourself with the oil.");
+#endif
+					set_food(p_ptr->food + 5000);
+				}
+				else
+				{
+					set_food(p_ptr->food + ((o_ptr->pval) / 20));
+				}
+				break;
+			case RACE_ENT:
+#ifdef JP
+				msg_print("水分を取り込んだ。");
+#else
+				msg_print("You are moistened.");
+#endif
+				set_food(MIN(p_ptr->food + o_ptr->pval + 1000, PY_FOOD_MAX - 1));
 				break;
 			default:
 				(void)set_food(p_ptr->food + o_ptr->pval);
@@ -1436,6 +1490,26 @@ msg_print("液体の一部はあなたのアゴを素通りして落ちた！");
 }
 
 
+/*
+ * Hook to determine if an object can be quaffed
+ */
+static bool item_tester_hook_quaff(object_type *o_ptr)
+{
+	if (o_ptr->tval == TV_POTION) return TRUE;
+
+	if (p_ptr->prace == RACE_ANDROID)
+	{
+		if (o_ptr->tval == TV_FLASK && o_ptr->sval == SV_FLASK_OIL)
+			return TRUE;
+	}
+
+	return FALSE;
+}
+
+
+/*
+ * Quaff some potion (from the pack or floor)
+ */
 void do_cmd_quaff_potion(void)
 {
 	int  item;
@@ -1447,7 +1521,7 @@ void do_cmd_quaff_potion(void)
 	}
 
 	/* Restrict choices to potions */
-	item_tester_tval = TV_POTION;
+	item_tester_hook = item_tester_hook_quaff;
 
 	/* Get an item */
 #ifdef JP

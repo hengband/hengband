@@ -294,6 +294,7 @@ extern bool leave_corpse;
 extern bool leave_junk;
 extern bool destroy_items;
 extern bool leave_chest;
+extern bool leave_special;
 extern bool record_fix_art;
 extern bool record_rand_art;
 extern bool record_destroy_uniq;

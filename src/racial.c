@@ -1342,13 +1342,6 @@ msg_print("武器を持たないといけません。");
 		{
 			if (command == -3)
 			{
-				if (racial_aux(5, 5, A_DEX, 10))
-				{
-					(void)set_food(PY_FOOD_MAX - 1);
-				}
-			}
-			else if (command == -4)
-			{
 				if (racial_aux(10, 10, A_DEX, 20))
 				{
 					if (!word_of_recall()) return FALSE;
@@ -2738,16 +2731,6 @@ strcpy(power_desc[num].name, "荒馬ならし");
 	}
 	case CLASS_BERSERKER:
 	{
-#ifdef JP
-strcpy(power_desc[num].name, "空腹充足");
-#else
-		strcpy(power_desc[num].name, "Satisfy Hunger");
-#endif
-
-		power_desc[num].level = 5;
-		power_desc[num].cost = 5;
-		power_desc[num].fail = 100 - racial_chance(5, A_DEX, 10);
-		power_desc[num++].number = -3;
 #ifdef JP
 strcpy(power_desc[num].name, "帰還");
 #else

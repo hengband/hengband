@@ -621,6 +621,13 @@ Auto-destroyer leaves junk    [leave_junk]
     Broken Stick, from auto-destruction by the destroy_items option.  
     This is especially helpful for Archers.
 
+***** <leave_special>
+Auto-destroyer leaves items your race/class needs  [leave_special]
+    This option protects specific items which are normally worthless,
+    but very important for specific classes or races.  These include
+    bones for Archers, ego light source of darkness for Ninja,
+    humanoid corpses for Balrogs, etc...
+
 
 ***** <PlayRecord>
 === Option set R -- Play-record ===
@@ -976,4 +983,4 @@ Original   : Ben Harrison
 Updated    : Zangband 2.1.* by Topi Ylinen
 Updated    : Zangband 2.2.0 through 2.2.6c by Robert Ruehlmann
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.3.0
+Updated    : Hengband 1.3.2

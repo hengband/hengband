@@ -813,14 +813,6 @@ info[i++] = "あなたはモンスターに乗って無理矢理ペットにすることができる。";
 			}
 			break;
 		case CLASS_BERSERKER:
-			if (plev > 4)
-			{
-#ifdef JP
-info[i++] = "あなたは自分で空腹を満たすことができる。";
-#else
-				info[i++] = "You can satisfy hunger.";
-#endif
-			}
 			if (plev > 9)
 			{
 #ifdef JP

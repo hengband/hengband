@@ -274,7 +274,8 @@ by the racial/class power command ("U"/"O").
     poison, they can see invisible things, and move freely.  At higher
     levels, they also become resistant to attacks which threaten to
     drain away their life force.  Golems gain very little nutrition
-    from ordinary food.  Golems also gain a natural armor class bonus
+    from ordinary food, but can absorb mana from staves and wands as
+    their power source.  Golems also gain a natural armor class bonus
     from their tough body.
 
 
@@ -291,7 +292,8 @@ by the racial/class power command ("U"/"O").
     effects of these will affect the skeleton even without entering
     the skeleton's (non-existent) belly, the potion or food itself
     will fall through the skeleton's jaws, giving no nutritional
-    benefit.
+    benefit.  They can absorb mana from staves and wands as their
+    energy source.
 
 
 ***** <Zombie>
@@ -303,7 +305,8 @@ by the racial/class power command ("U"/"O").
     attacks (actually earlier than skeletons), resist poison and can
     see invisible.  While still vulnerable to cuts (unlike skeletons),
     Zombies are resistant to Nether.  Like Golems, they gain very
-    little nutrition from the food of mortals.
+    little nutrition from the food of mortals, but can absorb mana
+    from staves and wands as their energy source.
 
 
 ***** <Vampire>
@@ -332,7 +335,9 @@ by the racial/class power command ("U"/"O").
     hold on their life force, see invisible, and resist poison and
     cold.  They also resist nether.  At higher levels they develop
     telepathic abilities.  Spectres make superb spellcasters, but
-    their physical form is very weak.
+    their physical form is very weak.  They gain very little nutrition
+    from the food of mortals, but can absorb mana from staves and
+    wands as their energy source.
 
 
 ***** <Sprite>
@@ -369,7 +374,9 @@ by the racial/class power command ("U"/"O").
     world, oldest of all animals or plants who inhabit Arda.  Spirits
     of the land, they were summoned to guard the forests of
     Middle-earth.  Being much like trees they are very clumsy but
-    strong, and very susceptible to fire.
+    strong, and very susceptible to fire.  They gain very little
+    nutrition from the food of mortals, but they can absorb water from
+    potions as their nutrition.
 
 
 ***** <Archon>
@@ -392,7 +399,9 @@ by the racial/class power command ("U"/"O").
     suitable for priest at all.  Balrog are resistant to fire and
     nether, and have a firm hold on their life force.  They also
     eventually learn to see invisible things.  They are good at almost
-    all skills except stealth.
+    all skills except stealth.  They gain very little nutrition from
+    the food of mortals, and need human corpses as sacrifices to
+    regain their vitality.
 
 
 ***** <Dunadan>
@@ -444,7 +453,9 @@ by the racial/class power command ("U"/"O").
     resistant to poison, can move freely, and are immune to
     life-draining attacks.  Moreover, because of their hard metallic
     bodies, they get a bonus to AC.  Androids have electronic circuits
-    throughout their body and must beware of electric shocks.
+    throughout their body and must beware of electric shocks.  They
+    gain very little nutrition from the food of mortals, but they can
+    use flasks of oil as their energy source.
 
 
 ***** <TheClasses>
@@ -1293,4 +1304,4 @@ the 50th level.
 
 
 --
-Updated    : Hengband 1.3.0
+Updated    : Hengband 1.3.2

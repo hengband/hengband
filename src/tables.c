@@ -7350,6 +7350,14 @@ option_type option_info[] =
 	"leave_junk",                   "Auto-destroyer leaves junk" },
 #endif
 
+#ifdef JP
+	{ &leave_special,               TRUE, 7, 7, 1,
+	"leave_special",                "種族/職業で特別に必要なアイテムは壊さない" },
+#else
+	{ &leave_special,               TRUE, 7, 7, 1,
+	"leave_special",                "Auto-destroyer leaves items your race/class needs" },
+#endif
+
 
 	/*** Play-record Options ***/
 

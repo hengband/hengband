@@ -640,6 +640,13 @@ MPが足りなくても魔法に挑戦する  [over_exert]
 がらくたは壊さない  [leave_junk]
     陶器のかけらや空ビンなどのがらくたを自動破壊の対象にしないようにします。
 
+***** <leave_special>
+種族/職業で特別に必要なアイテムは壊さない  [leave_special]
+    通常は無価値であるにも関わらず特定の職業や種族の場合のみ役に立つア
+    イテムを自動破壊の対象にしないようにします。アーチャーの場合は骨、
+    バルログの場合は人間タイプの死体、忍者の場合は暗闇の光源等があては
+    まります。
+
 
 ***** <PlayRecord>
 === オプションR -- プレイ記録オプション ===
@@ -929,6 +936,6 @@ Original   : Ben Harrison
 Updated    : Zangband 2.1.* by Topi Ylinen
 Updated    : Zangband 2.2.0 through 2.2.6c by Robert Ruehlmann
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.3.0
+Updated    : Hengband 1.3.2
 
 ***** [a] jpref.txt#Options
