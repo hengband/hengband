@@ -1392,8 +1392,8 @@ msg_print("小さなフロア");
 		cur_wid = level_width * SCREEN_WID;
 
 		/* Assume illegal panel */
-		panel_row_min = 255;
-		panel_col_min = 255;
+		panel_row_min = cur_hgt;
+		panel_col_min = cur_wid;
 
 		if (cheat_room)
 		  msg_format("X:%d, Y:%d.", cur_hgt, cur_wid);
@@ -1405,8 +1405,8 @@ msg_print("小さなフロア");
 		cur_wid = MAX_WID;
 
 		/* Assume illegal panel */
-		panel_row_min = 255;
-		panel_col_min = 255;
+		panel_row_min = cur_hgt;
+		panel_col_min = cur_wid;
 	}
 
 	/* Make a dungeon */
