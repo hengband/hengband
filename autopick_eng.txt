@@ -66,14 +66,14 @@
 #      unidentified      : Unidentified items match.
 #      identified        : Identified items match.
 #      *identified*      : *Identified* items match.
+#      dice boosted      : Weapons with boosted damage dice match.
+#      more than N dice  : Weapons with dice (dd * ds) better than +N match.
+#      more bonus than N : Items which has more magical bonus than (+N) match.
+#      worthless         : Items which you cannot sell match.
 #      artifacts         : Artifacts items match.
 #      ego               : Ego items match.
 #      nameless          : Non ego/non artifact items match.
 #      unaware           : Items with unknown effects match.
-#      worthless         : Items which you cannot sell match.
-#      dice boosted      : Weapons with boosted damage dice match.
-#      more than N dice  : Weapons with dice (dd * ds) better than +N match.
-#      more bonus than N : Items which has more magical bonus than (+N) match.
 #      wanted            : Wanted monster's corpses or skeletons match.
 #      unique monster's  : Unique monster's corpses, skeletons or statues match.
 #      human             : Human corpses or skeletons match.
@@ -167,8 +167,8 @@
 #      
 #      [! ~ (]
 #      [[all] [collecting] [unidentified] [identified] [*identified*] 
-#       [artifact] [ego] [nameless] [unaware] [worthless] 
 #       [dice boosted] [more than N dice] [more bonus than N] 
+#       [worthless] [artifact] [ego] [nameless] [unaware] 
 #       [wanted] [unique monster's] [human] [unreadable] 
 #       [first realm's] [second realm's] [first] [second] [third] [fourth] 
 #       [items | weapons | armors | missiles | magical devices | 

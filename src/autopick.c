@@ -20,16 +20,16 @@
 #define FLG_UNIDENTIFIED    2
 #define FLG_IDENTIFIED	    3
 #define FLG_STAR_IDENTIFIED 4
-#define FLG_ARTIFACT	    5
-#define FLG_EGO		    6
-#define FLG_NAMELESS	    7
-#define FLG_UNAWARE	    8
-#define FLG_WORTHLESS	    9
-#define FLG_BOOSTED	    10
-#define FLG_MORE_THAN	    11
-#define FLG_DICE	    12
-#define FLG_MORE_BONUS	    13
-#define FLG_MORE_BONUS2	    14
+#define FLG_BOOSTED	    5
+#define FLG_MORE_THAN	    6
+#define FLG_DICE	    7
+#define FLG_MORE_BONUS	    8
+#define FLG_MORE_BONUS2	    9
+#define FLG_WORTHLESS	    10
+#define FLG_ARTIFACT	    11
+#define FLG_EGO		    12
+#define FLG_NAMELESS	    13
+#define FLG_UNAWARE	    14
 #define FLG_WANTED	    15
 #define FLG_UNIQUE	    16
 #define FLG_HUMAN	    17
@@ -67,16 +67,16 @@
 #define KEY_UNIDENTIFIED "未鑑定の"
 #define KEY_IDENTIFIED "鑑定済みの"
 #define KEY_STAR_IDENTIFIED "*鑑定*済みの"
-#define KEY_ARTIFACT "アーティファクト"
-#define KEY_EGO "エゴ"
-#define KEY_NAMELESS "無銘の"
-#define KEY_UNAWARE "未判明の"
-#define KEY_WORTHLESS "無価値の"
 #define KEY_BOOSTED "ダイス目の違う"
 #define KEY_MORE_THAN  "ダイス目"
 #define KEY_DICE  "以上の"
 #define KEY_MORE_BONUS  "修正値が"
 #define KEY_MORE_BONUS2  "以上の"
+#define KEY_WORTHLESS "無価値の"
+#define KEY_ARTIFACT "アーティファクト"
+#define KEY_EGO "エゴ"
+#define KEY_NAMELESS "無銘の"
+#define KEY_UNAWARE "未判明の"
 #define KEY_WANTED "賞金首の"
 #define KEY_UNIQUE "ユニーク・モンスターの"
 #define KEY_HUMAN "人間の"
@@ -113,16 +113,16 @@
 #define KEY_UNIDENTIFIED "unidentified"
 #define KEY_IDENTIFIED "identified"
 #define KEY_STAR_IDENTIFIED "*identified*"
-#define KEY_ARTIFACT "artifact"
-#define KEY_EGO "ego"
-#define KEY_NAMELESS "nameless"
-#define KEY_UNAWARE "unaware"
-#define KEY_WORTHLESS "worthless"
 #define KEY_BOOSTED "dice boosted"
 #define KEY_MORE_THAN  "more than"
 #define KEY_DICE  " dice"
 #define KEY_MORE_BONUS  "more bonus than"
 #define KEY_MORE_BONUS2  ""
+#define KEY_WORTHLESS "worthless"
+#define KEY_ARTIFACT "artifact"
+#define KEY_EGO "ego"
+#define KEY_NAMELESS "nameless"
+#define KEY_UNAWARE "unaware"
 #define KEY_WANTED "wanted"
 #define KEY_UNIQUE "unique monster's"
 #define KEY_HUMAN "human"
@@ -195,11 +195,6 @@ cptr autopick_line_from_entry(autopick_type *entry)
 	if (IS_FLG(FLG_UNIDENTIFIED)) ADD_KEY(KEY_UNIDENTIFIED);
 	if (IS_FLG(FLG_IDENTIFIED)) ADD_KEY(KEY_IDENTIFIED);
 	if (IS_FLG(FLG_STAR_IDENTIFIED)) ADD_KEY(KEY_STAR_IDENTIFIED);
-	if (IS_FLG(FLG_ARTIFACT)) ADD_KEY(KEY_ARTIFACT);
-	if (IS_FLG(FLG_EGO)) ADD_KEY(KEY_EGO);
-	if (IS_FLG(FLG_NAMELESS)) ADD_KEY(KEY_NAMELESS);
-	if (IS_FLG(FLG_UNAWARE)) ADD_KEY(KEY_UNAWARE);
-	if (IS_FLG(FLG_WORTHLESS)) ADD_KEY(KEY_WORTHLESS);
 	if (IS_FLG(FLG_BOOSTED)) ADD_KEY(KEY_BOOSTED);
 
 	if (IS_FLG(FLG_MORE_THAN))
@@ -216,6 +211,11 @@ cptr autopick_line_from_entry(autopick_type *entry)
 		ADD_KEY(KEY_MORE_BONUS2);
 	}
 
+	if (IS_FLG(FLG_WORTHLESS)) ADD_KEY(KEY_WORTHLESS);
+	if (IS_FLG(FLG_ARTIFACT)) ADD_KEY(KEY_ARTIFACT);
+	if (IS_FLG(FLG_EGO)) ADD_KEY(KEY_EGO);
+	if (IS_FLG(FLG_NAMELESS)) ADD_KEY(KEY_NAMELESS);
+	if (IS_FLG(FLG_UNAWARE)) ADD_KEY(KEY_UNAWARE);
 	if (IS_FLG(FLG_WANTED)) ADD_KEY(KEY_WANTED);
 	if (IS_FLG(FLG_UNIQUE)) ADD_KEY(KEY_UNIQUE);
 	if (IS_FLG(FLG_HUMAN)) ADD_KEY(KEY_HUMAN);
@@ -353,11 +353,6 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
 	if (MATCH_KEY(KEY_UNIDENTIFIED)) ADD_FLG(FLG_UNIDENTIFIED);
 	if (MATCH_KEY(KEY_IDENTIFIED)) ADD_FLG(FLG_IDENTIFIED);
 	if (MATCH_KEY(KEY_STAR_IDENTIFIED)) ADD_FLG(FLG_STAR_IDENTIFIED);
-	if (MATCH_KEY(KEY_ARTIFACT)) ADD_FLG(FLG_ARTIFACT);
-	if (MATCH_KEY(KEY_EGO)) ADD_FLG(FLG_EGO);
-	if (MATCH_KEY(KEY_NAMELESS)) ADD_FLG(FLG_NAMELESS);
-	if (MATCH_KEY(KEY_UNAWARE)) ADD_FLG(FLG_UNAWARE);
-	if (MATCH_KEY(KEY_WORTHLESS)) ADD_FLG(FLG_WORTHLESS);
 	if (MATCH_KEY(KEY_BOOSTED)) ADD_FLG(FLG_BOOSTED);
 
 	/*** Weapons whose dd*ds is more than nn ***/
@@ -412,6 +407,11 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
 			ptr = prev_ptr;
 	}
 
+	if (MATCH_KEY(KEY_WORTHLESS)) ADD_FLG(FLG_WORTHLESS);
+	if (MATCH_KEY(KEY_ARTIFACT)) ADD_FLG(FLG_ARTIFACT);
+	if (MATCH_KEY(KEY_EGO)) ADD_FLG(FLG_EGO);
+	if (MATCH_KEY(KEY_NAMELESS)) ADD_FLG(FLG_NAMELESS);
+	if (MATCH_KEY(KEY_UNAWARE)) ADD_FLG(FLG_UNAWARE);
 	if (MATCH_KEY(KEY_WANTED)) ADD_FLG(FLG_WANTED);
 	if (MATCH_KEY(KEY_UNIQUE)) ADD_FLG(FLG_UNIQUE);
 	if (MATCH_KEY(KEY_HUMAN)) ADD_FLG(FLG_HUMAN);
@@ -521,50 +521,6 @@ int is_autopick(object_type *o_ptr)
 		    (!object_known_p(o_ptr) || !(o_ptr->ident & IDENT_MENTAL)))
 			continue;
 
-		/*** Artifact object ***/
-		if (IS_FLG(FLG_ARTIFACT))
-		{
-			if (!object_known_p(o_ptr) || (!o_ptr->name1 && !o_ptr->art_name))
-				continue;
-		}
-
-		/*** Ego object ***/
-		if (IS_FLG(FLG_EGO))
-		{
-			if (!object_known_p(o_ptr) || !o_ptr->name2)
-				continue;
-		}
-
-		/*** Nameless ***/
-		if (IS_FLG(FLG_NAMELESS))
-		{
-			switch (o_ptr->tval)
-			{
-			case TV_WHISTLE:
-			case TV_SHOT: case TV_ARROW: case TV_BOLT: case TV_BOW:
-			case TV_DIGGING: case TV_HAFTED: case TV_POLEARM: case TV_SWORD: 
-			case TV_BOOTS: case TV_GLOVES: case TV_HELM: case TV_CROWN:
-			case TV_SHIELD: case TV_CLOAK:
-			case TV_SOFT_ARMOR: case TV_HARD_ARMOR: case TV_DRAG_ARMOR:
-			case TV_LITE: case TV_AMULET: case TV_RING: case TV_CARD:
-				if ((!object_known_p(o_ptr) || o_ptr->inscription
-				     || o_ptr->name1 || o_ptr->name2 || o_ptr->art_name))
-					continue;
-				break;
-			default:
-				/* don't match */
-				continue;
-			}
-		}
-
-		/*** Unaware items ***/
-		if (IS_FLG(FLG_UNAWARE) && object_aware_p(o_ptr))
-			continue;
-
-		/*** Worthless items ***/
-		if (IS_FLG(FLG_WORTHLESS) && object_value(o_ptr) > 0)
-			continue;
-
 		/*** Dice boosted (weapon of slaying) ***/
 		if (IS_FLG(FLG_BOOSTED))
 		{
@@ -612,6 +568,50 @@ int is_autopick(object_type *o_ptr)
 			}
 		}
 				
+		/*** Worthless items ***/
+		if (IS_FLG(FLG_WORTHLESS) && object_value(o_ptr) > 0)
+			continue;
+
+		/*** Artifact object ***/
+		if (IS_FLG(FLG_ARTIFACT))
+		{
+			if (!object_known_p(o_ptr) || (!o_ptr->name1 && !o_ptr->art_name))
+				continue;
+		}
+
+		/*** Ego object ***/
+		if (IS_FLG(FLG_EGO))
+		{
+			if (!object_known_p(o_ptr) || !o_ptr->name2)
+				continue;
+		}
+
+		/*** Nameless ***/
+		if (IS_FLG(FLG_NAMELESS))
+		{
+			switch (o_ptr->tval)
+			{
+			case TV_WHISTLE:
+			case TV_SHOT: case TV_ARROW: case TV_BOLT: case TV_BOW:
+			case TV_DIGGING: case TV_HAFTED: case TV_POLEARM: case TV_SWORD: 
+			case TV_BOOTS: case TV_GLOVES: case TV_HELM: case TV_CROWN:
+			case TV_SHIELD: case TV_CLOAK:
+			case TV_SOFT_ARMOR: case TV_HARD_ARMOR: case TV_DRAG_ARMOR:
+			case TV_LITE: case TV_AMULET: case TV_RING: case TV_CARD:
+				if ((!object_known_p(o_ptr) || o_ptr->inscription
+				     || o_ptr->name1 || o_ptr->name2 || o_ptr->art_name))
+					continue;
+				break;
+			default:
+				/* don't match */
+				continue;
+			}
+		}
+
+		/*** Unaware items ***/
+		if (IS_FLG(FLG_UNAWARE) && object_aware_p(o_ptr))
+			continue;
+
 		/*** Wanted monster's corpse/skeletons ***/
 		if (IS_FLG(FLG_WANTED) &&
 		    (o_ptr->tval != TV_CORPSE || !object_is_shoukinkubi(o_ptr)))
@@ -1059,35 +1059,6 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	if (IS_FLG(FLG_STAR_IDENTIFIED))
 		before_str[before_n++] = "完全に鑑定済みの";
 
-	/*** Artifact ***/
-	if (IS_FLG(FLG_ARTIFACT))
-	{
-		before_str[before_n++] = "アーティファクトの";
-		body_str = "装備";
-	}
-
-	/*** Ego ***/
-	if (IS_FLG(FLG_EGO))
-	{
-		before_str[before_n++] = "エゴアイテムの";
-		body_str = "装備";
-	}
-
-	/*** Nameless ***/
-	if (IS_FLG(FLG_NAMELESS))
-	{
-		before_str[before_n++] = "エゴでもアーティファクトでもない";
-		body_str = "装備";
-	}
-
-	/*** Unaware items ***/
-	if (IS_FLG(FLG_UNAWARE))
-		before_str[before_n++] = "未鑑定でその効果も判明していない";
-
-	/*** Worthless items ***/
-	if (IS_FLG(FLG_WORTHLESS))
-		before_str[before_n++] = "店で無価値と判定される";
-
 	/*** Dice boosted (weapon of slaying) ***/
 	if (IS_FLG(FLG_BOOSTED))
 	{
@@ -1117,6 +1088,35 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		before_str[before_n++] = more_bonus_desc_str;
 		before_str[before_n++] = ")以上の";
 	}
+
+	/*** Worthless items ***/
+	if (IS_FLG(FLG_WORTHLESS))
+		before_str[before_n++] = "店で無価値と判定される";
+
+	/*** Artifact ***/
+	if (IS_FLG(FLG_ARTIFACT))
+	{
+		before_str[before_n++] = "アーティファクトの";
+		body_str = "装備";
+	}
+
+	/*** Ego ***/
+	if (IS_FLG(FLG_EGO))
+	{
+		before_str[before_n++] = "エゴアイテムの";
+		body_str = "装備";
+	}
+
+	/*** Nameless ***/
+	if (IS_FLG(FLG_NAMELESS))
+	{
+		before_str[before_n++] = "エゴでもアーティファクトでもない";
+		body_str = "装備";
+	}
+
+	/*** Unaware items ***/
+	if (IS_FLG(FLG_UNAWARE))
+		before_str[before_n++] = "未鑑定でその効果も判明していない";
 
 	/*** Wanted monster's corpse/skeletons ***/
 	if (IS_FLG(FLG_WANTED))
@@ -1298,6 +1298,13 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	if (IS_FLG(FLG_STAR_IDENTIFIED))
 		before_str[before_n++] = "fully identified";
 
+	/*** Worthless items ***/
+	if (IS_FLG(FLG_WORTHLESS))
+	{
+		before_str[before_n++] = "worthless";
+		which_str[which_n++] = "can not be sold at stores";
+	}
+
 	/*** Artifacto ***/
 	if (IS_FLG(FLG_ARTIFACT))
 	{
@@ -1322,13 +1329,6 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	{
 		before_str[before_n++] = "unidentified";
 		whose_str[whose_n++] = "basic abilities are not known";
-	}
-
-	/*** Worthless items ***/
-	if (IS_FLG(FLG_WORTHLESS))
-	{
-		before_str[before_n++] = "worthless";
-		which_str[which_n++] = "can not be sold at stores";
 	}
 
 	/*** Dice boosted (weapon of slaying) ***/
