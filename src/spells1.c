@@ -1663,6 +1663,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ , int flg)
 
 	/* Is the monster "seen"? */
 	bool seen = m_ptr->ml;
+	bool seen_msg = is_seen(m_ptr);
 
 	bool slept = (bool)(m_ptr->csleep > 0);
 
@@ -1673,7 +1674,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ , int flg)
 	bool known = ((m_ptr->cdis <= MAX_SIGHT) || p_ptr->inside_battle);
 
 	/* Can the player see the source of this effect? */
-	bool see_s = ((who <= 0) || is_seen(caster_ptr));
+	bool see_s_msg = ((who <= 0) || is_seen(caster_ptr));
 
 	/* Were the effects "irrelevant"? */
 	bool skipped = FALSE;
@@ -2718,9 +2719,9 @@ note_dies = "は蒸発した！";
 			if (!(los(m_ptr->fy, m_ptr->fx, py, px)))
 			{
 #ifdef JP
-				if (is_seen(m_ptr)) msg_format("%sはあなたが見えないので影響されない！", m_name);
+				if (seen_msg) msg_format("%sはあなたが見えないので影響されない！", m_name);
 #else
-				if (is_seen(m_ptr)) msg_format("%^s can't see you, and isn't affected!", m_name);
+				if (seen_msg) msg_format("%^s can't see you, and isn't affected!", m_name);
 #endif
 				skipped = TRUE;
 				break;
@@ -3395,9 +3396,9 @@ note = "が分裂した！";
 			if (m_ptr->maxhp < m_ptr->max_maxhp)
 			{
 #ifdef JP
-msg_format("%^sの強さが戻った。", m_name);
+				if (seen_msg) msg_format("%^sの強さが戻った。", m_name);
 #else
-				msg_format("%^s recovers %s vitality.", m_name, m_poss);
+				if (seen_msg) msg_format("%^s recovers %s vitality.", m_name, m_poss);
 #endif
 				m_ptr->maxhp = m_ptr->max_maxhp;
 			}
@@ -3415,27 +3416,27 @@ msg_format("%^sの強さが戻った。", m_name);
 			if (m_ptr->stunned)
 			{
 #ifdef JP
-msg_format("%^sは朦朧状態から立ち直った。", m_name);
+				if (seen_msg) msg_format("%^sは朦朧状態から立ち直った。", m_name);
 #else
-				msg_format("%^s is no longer stunned.", m_name);
+				if (seen_msg) msg_format("%^s is no longer stunned.", m_name);
 #endif
 				m_ptr->stunned = 0;
 			}
 			if (m_ptr->confused)
 			{
 #ifdef JP
-msg_format("%^sは混乱から立ち直った。", m_name);
+				if (seen_msg) msg_format("%^sは混乱から立ち直った。", m_name);
 #else
-				msg_format("%^s is no longer confused.", m_name);
+				if (seen_msg) msg_format("%^s is no longer confused.", m_name);
 #endif
 				m_ptr->confused = 0;
 			}
 			if (m_ptr->monfear)
 			{
 #ifdef JP
-msg_format("%^sは勇気を取り戻した。", m_name);
+				if (seen_msg) msg_format("%^sは勇気を取り戻した。", m_name);
 #else
-				msg_format("%^s recovers %s courage.", m_name, m_poss);
+				if (seen_msg) msg_format("%^s recovers %s courage.", m_name, m_poss);
 #endif
 				m_ptr->monfear = 0;
 			}
@@ -3446,29 +3447,32 @@ msg_format("%^sは勇気を取り戻した。", m_name);
 			/* No overflow */
 			if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
 
-			chg_virtue(V_VITALITY, 1);
-			
-			if (r_ptr->flags1 & RF1_UNIQUE)
-				chg_virtue(V_INDIVIDUALISM, 1);
-	
-			if (is_friendly(m_ptr))
-				chg_virtue(V_HONOUR, 1);
-			else if (!(r_ptr->flags3 & RF3_EVIL))
+			if (!who)
 			{
-				if (r_ptr->flags3 & RF3_GOOD)
-					chg_virtue(V_COMPASSION, 2);
-				else
-					chg_virtue(V_COMPASSION, 1);
+				chg_virtue(V_VITALITY, 1);
+
+				if (r_ptr->flags1 & RF1_UNIQUE)
+					chg_virtue(V_INDIVIDUALISM, 1);
+
+				if (is_friendly(m_ptr))
+					chg_virtue(V_HONOUR, 1);
+				else if (!(r_ptr->flags3 & RF3_EVIL))
+				{
+					if (r_ptr->flags3 & RF3_GOOD)
+						chg_virtue(V_COMPASSION, 2);
+					else
+						chg_virtue(V_COMPASSION, 1);
+				}
+
+				if (r_ptr->flags3 & RF3_ANIMAL)
+					chg_virtue(V_NATURE, 1);
 			}
 
 			if (m_ptr->r_idx == MON_LEPER)
 			{
 				heal_leper = TRUE;
-				chg_virtue(V_COMPASSION, 5);
+				if (!who) chg_virtue(V_COMPASSION, 5);
 			}
-	
-			if (r_ptr->flags3 & RF3_ANIMAL)
-				chg_virtue(V_NATURE, 1);
 
 			/* Redraw (later) if needed */
 			if (p_ptr->health_who == c_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
@@ -3507,10 +3511,13 @@ note = "の動きが速くなった。";
 			if (c_ptr->m_idx == p_ptr->riding)
 				p_ptr->update |= (PU_BONUS);
 
-			if (r_ptr->flags1 & RF1_UNIQUE)
-				chg_virtue(V_INDIVIDUALISM, 1);
-			if (is_friendly(m_ptr))
-				chg_virtue(V_HONOUR, 1);
+			if (!who)
+			{
+				if (r_ptr->flags1 & RF1_UNIQUE)
+					chg_virtue(V_INDIVIDUALISM, 1);
+				if (is_friendly(m_ptr))
+					chg_virtue(V_HONOUR, 1);
+			}
 
 			/* No "real" damage */
 			dam = 0;
@@ -4927,7 +4934,7 @@ note_dies = "はドロドロに溶けた！";
 						if (p_ptr->riding == who) p_ptr->redraw |= (PR_UHEALTH);
 
 						/* Special message */
-						if (is_seen(caster_ptr))
+						if (see_s_msg)
 						{
 							/* Get the monster name */
 							monster_desc(killer, caster_ptr, 0);
@@ -4954,9 +4961,9 @@ note_dies = "はドロドロに溶けた！";
 			else
 			{
 #ifdef JP
-				msg_format("%sには効果がなかった。", m_name);
+				if (see_s_msg) msg_format("%sには効果がなかった。", m_name);
 #else
-				msg_format("%s is unaffected.", m_name);
+				if (see_s_msg) msg_format("%s is unaffected.", m_name);
 #endif
 			}
 			dam = 0;
@@ -5827,180 +5834,178 @@ note = "には効果がなかった。";
 		/* Extract method of death */
 		note = note_dies;
 	}
-
-	/* Mega-Hack -- Handle "polymorph" -- monsters get a saving throw */
-	else if (do_poly && (randint1(90) > r_ptr->level))
+	else
 	{
-		if (polymorph_monster(y, x))
+		/* Sound and Impact resisters never stun */
+		if (do_stun &&
+		    !(r_ptr->flagsr & (RFR_RES_SOUN | RFR_RES_WALL)) &&
+		    !(r_ptr->flags3 & RF3_NO_STUN))
 		{
 			/* Obvious */
 			if (seen) obvious = TRUE;
 
-			/* Monster polymorphs */
+			/* Get stunned */
+			if (m_ptr->stunned)
+			{
 #ifdef JP
-			note = "が変身した！";
+				note = "はひどくもうろうとした。";
 #else
-			note = " changes!";
+				note = " is more dazed.";
 #endif
 
+				tmp = m_ptr->stunned + (do_stun / 2);
+			}
+			else
+			{
+#ifdef JP
+				note = "はもうろうとした。";
+#else
+				note = " is dazed.";
+#endif
 
-			/* Turn off the damage */
-			dam = 0;
+				tmp = do_stun;
+			}
 
-			/* Hack -- Get new monster */
-			m_ptr = &m_list[c_ptr->m_idx];
+			/* Apply stun */
+			m_ptr->stunned = (tmp < 200) ? tmp : 200;
 
-			/* Hack -- Get new race */
-			r_ptr = &r_info[m_ptr->r_idx];
+			/* Get angry */
+			get_angry = TRUE;
 		}
-		else
+
+		/* Confusion and Chaos resisters (and sleepers) never confuse */
+		if (do_conf &&
+			 !(r_ptr->flags3 & RF3_NO_CONF) &&
+			 !(r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK))
 		{
-			/* No polymorph */
+			/* Obvious */
+			if (seen) obvious = TRUE;
+
+			/* Already partially confused */
+			if (m_ptr->confused)
+			{
 #ifdef JP
-note = "には効果がなかった！";
+				note = "はさらに混乱したようだ。";
 #else
-			note = " is unaffected!";
+				note = " looks more confused.";
 #endif
 
+				tmp = m_ptr->confused + (do_conf / 2);
+			}
+
+			/* Was not confused */
+			else
+			{
+#ifdef JP
+				note = "は混乱したようだ。";
+#else
+				note = " looks confused.";
+#endif
+
+				tmp = do_conf;
+			}
+
+			/* Apply confusion */
+			m_ptr->confused = (tmp < 200) ? tmp : 200;
+
+			/* Get angry */
+			get_angry = TRUE;
 		}
-	}
-
-	/* Handle "teleport" */
-	else if (do_dist)
-	{
-		/* Obvious */
-		if (seen) obvious = TRUE;
-
-		/* Message */
-#ifdef JP
-		note = "が消え去った！";
-#else
-		note = " disappears!";
-#endif
-
-		chg_virtue(V_VALOUR, -1);
-
-		/* Teleport */
-		teleport_away(c_ptr->m_idx, do_dist, (bool)(!who), TRUE);
-
-		/* Hack -- get new location */
-		y = m_ptr->fy;
-		x = m_ptr->fx;
-
-		/* Hack -- get new grid */
-		c_ptr = &cave[y][x];
-	}
-
-	/* Sound and Impact resisters never stun */
-	else if (do_stun &&
-	    !(r_ptr->flagsr & (RFR_RES_SOUN | RFR_RES_WALL)) &&
-	    !(r_ptr->flags3 & RF3_NO_STUN))
-	{
-		/* Obvious */
-		if (seen) obvious = TRUE;
-
-		/* Get stunned */
-		if (m_ptr->stunned)
-		{
-#ifdef JP
-			note = "はひどくもうろうとした。";
-#else
-			note = " is more dazed.";
-#endif
-
-			tmp = m_ptr->stunned + (do_stun / 2);
-		}
-		else
-		{
-#ifdef JP
-			note = "はもうろうとした。";
-#else
-			note = " is dazed.";
-#endif
-
-			tmp = do_stun;
-		}
-
-		/* Apply stun */
-		m_ptr->stunned = (tmp < 200) ? tmp : 200;
-
-		/* Get angry */
-		get_angry = TRUE;
-	}
-
-	/* Confusion and Chaos resisters (and sleepers) never confuse */
-	else if (do_conf &&
-		 !(r_ptr->flags3 & RF3_NO_CONF) &&
-		 !(r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK))
-	{
-		/* Obvious */
-		if (seen) obvious = TRUE;
-
-		/* Already partially confused */
-		if (m_ptr->confused)
-		{
-#ifdef JP
-			note = "はさらに混乱したようだ。";
-#else
-			note = " looks more confused.";
-#endif
-
-			tmp = m_ptr->confused + (do_conf / 2);
-		}
-
-		/* Was not confused */
-		else
-		{
-#ifdef JP
-			note = "は混乱したようだ。";
-#else
-			note = " looks confused.";
-#endif
-
-			tmp = do_conf;
-		}
-
-		/* Apply confusion */
-		m_ptr->confused = (tmp < 200) ? tmp : 200;
-
-		/* Get angry */
-		get_angry = TRUE;
-	}
-
-	else if (do_time)
-	{
-		/* Obvious */
-		if (seen) obvious = TRUE;
-
-		if (do_time >= m_ptr->maxhp) do_time = m_ptr->maxhp - 1;
 
 		if (do_time)
 		{
+			/* Obvious */
+			if (seen) obvious = TRUE;
+
+			if (do_time >= m_ptr->maxhp) do_time = m_ptr->maxhp - 1;
+
+			if (do_time)
+			{
 #ifdef JP
-			note = "は弱くなったようだ。";
+				note = "は弱くなったようだ。";
 #else
-			note = " seems weakened.";
+				note = " seems weakened.";
 #endif
-			m_ptr->maxhp -= do_time;
-			if ((m_ptr->hp - dam) > m_ptr->maxhp) dam = m_ptr->hp - m_ptr->maxhp;
+				m_ptr->maxhp -= do_time;
+				if ((m_ptr->hp - dam) > m_ptr->maxhp) dam = m_ptr->hp - m_ptr->maxhp;
+			}
+			get_angry = TRUE;
 		}
-		get_angry = TRUE;
+
+		/* Mega-Hack -- Handle "polymorph" -- monsters get a saving throw */
+		if (do_poly && (randint1(90) > r_ptr->level))
+		{
+			if (polymorph_monster(y, x))
+			{
+				/* Obvious */
+				if (seen) obvious = TRUE;
+
+				/* Monster polymorphs */
+#ifdef JP
+				note = "が変身した！";
+#else
+				note = " changes!";
+#endif
+
+				/* Turn off the damage */
+				dam = 0;
+
+				/* Hack -- Get new monster */
+				m_ptr = &m_list[c_ptr->m_idx];
+
+				/* Hack -- Get new race */
+				r_ptr = &r_info[m_ptr->r_idx];
+			}
+			else
+			{
+				/* No polymorph */
+#ifdef JP
+				note = "には効果がなかった！";
+#else
+				note = " is unaffected!";
+#endif
+			}
+		}
+
+		/* Handle "teleport" */
+		if (do_dist)
+		{
+			/* Obvious */
+			if (seen) obvious = TRUE;
+
+			/* Message */
+#ifdef JP
+			note = "が消え去った！";
+#else
+			note = " disappears!";
+#endif
+
+			if (!who) chg_virtue(V_VALOUR, -1);
+
+			/* Teleport */
+			teleport_away(c_ptr->m_idx, do_dist, (bool)(!who), TRUE);
+
+			/* Hack -- get new location */
+			y = m_ptr->fy;
+			x = m_ptr->fx;
+
+			/* Hack -- get new grid */
+			c_ptr = &cave[y][x];
+		}
+
+		/* Fear */
+		if (do_fear)
+		{
+			/* Increase fear */
+			tmp = m_ptr->monfear + do_fear;
+
+			/* Set fear */
+			m_ptr->monfear = (tmp < 200) ? tmp : 200;
+
+			/* Get angry */
+			get_angry = TRUE;
+		}
 	}
-
-
-	/* Fear */
-	if (do_fear)
-	{
-		/* Increase fear */
-		tmp = m_ptr->monfear + do_fear;
-
-		/* Set fear */
-		m_ptr->monfear = (tmp < 200) ? tmp : 200;
-
-		/* Get angry */
-		get_angry = TRUE;
-	}
-
 
 	if (typ == GF_DRAIN_MANA)
 	{
@@ -6034,7 +6039,7 @@ note = "には効果がなかった！";
 			if (known && note)
 			{
 				monster_desc(m_name, m_ptr, MD_TRUE_NAME);
-				if (see_s)
+				if (see_s_msg)
 				{
 					msg_format("%^s%s", m_name, note);
 				}
@@ -6067,10 +6072,10 @@ msg_print("少し悲しい気分がした。");
 		else
 		{
 			/* Give detailed messages if visible or destroyed */
-			if (note && is_seen(m_ptr)) msg_format("%^s%s", m_name, note);
+			if (note && seen_msg) msg_format("%^s%s", m_name, note);
 
 			/* Hack -- Pain message */
-			else if (see_s)
+			else if (see_s_msg)
 			{
 				message_pain(c_ptr->m_idx, dam);
 			}
@@ -6087,9 +6092,9 @@ msg_print("少し悲しい気分がした。");
 	else if (heal_leper)
 	{
 #ifdef JP
-		if (is_seen(m_ptr)) msg_print("不潔な病人は病気が治った！");
+		if (seen_msg) msg_print("不潔な病人は病気が治った！");
 #else
-		if (is_seen(m_ptr)) msg_print("The Mangy looking leper is healed!");
+		if (seen_msg) msg_print("The Mangy looking leper is healed!");
 #endif
 
 		delete_monster_idx(c_ptr->m_idx);
@@ -6113,7 +6118,7 @@ msg_print("少し悲しい気分がした。");
 			if (do_sleep) anger_monster(m_ptr);
 
 			/* Give detailed messages if visible or destroyed */
-			if (note && is_seen(m_ptr))
+			if (note && seen_msg)
 #ifdef JP
 				msg_format("%s%s", m_name, note);
 #else
@@ -6132,7 +6137,7 @@ msg_print("少し悲しい気分がした。");
 				anger_monster(m_ptr);
 
 			/* Take note */
-			if ((fear || do_fear) && is_seen(m_ptr))
+			if ((fear || do_fear) && seen)
 			{
 				/* Sound */
 				sound(SOUND_FLEE);
