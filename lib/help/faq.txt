@@ -9,17 +9,11 @@ Q. I want to play as an Android, Balrog, Golem, Skeleton, Zombie,
 
 A. Scroll of Satisfy Hunger and Berserker's ability of Satisfy Hunger
    are obsoleted.  And races which previously relyed on Satisfy Hunger
-   have new sources of nutrition now; Android can quaff oil, Balrogs
-   can sacrifice human corpse using the 'E'at command, All Undead
-   races can absorb mana from staves and wands using the 'E'at
-   command, Ents can gain enough nutrition from potions.
-
-
-Berserkers gain a class power 'Satisfy Hunger' at level 5.  Press
-   the 'U'(original keyset) or 'O'(Roguelike keyset) to use class
-   power.  Berserkers also gain one more class power 'Recall' at level
-   10.  If your level is lower than 5, eating huge amount of foods at
-   once will help you.
+   have new sources of nutrition now; Android can quaff oil.  Balrogs
+   can sacrifice human corpse using the 'E'at command.  Golems,
+   Skeletons, Zombies, and Spectres can absorb mana from staves and
+   wands using the 'E'at command.  Ents can gain enough nutrition from
+   potions.
 
 
 Q. I got through the Yeek cave and I headed into the wilderness....and
@@ -38,6 +32,13 @@ Q. I'm playing as a berserker, and cannot read scrolls.  How do I
 A. You can simply 't'ake off cursed equipments.  Since cursed
    equipments are strongly sticking, you need to try 't'ake off
    command many times.
+
+
+Q. I know Berserkers cannot use scrolls, and rods.  How do I recall
+   from dungeon?  Maybe I need to travel completely on foot?!!
+
+A. Berserkers gain a class power 'Recall' at level 10.  Press the
+   'U'(original keyset) or 'O'(Roguelike keyset) to use class power.
 
 
 Q. Why Ninja have Iron Spikes at the start?
@@ -144,4 +145,4 @@ A. Here: http://echizen.s5.xrea.com/heng/eng-hengband/index.html
  Hengband FAQ written by Mogami
 
 --
-Updated    : Hengband 1.3.2
+Updated    : Hengband 1.5.0
