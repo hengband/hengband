@@ -265,7 +265,7 @@ bool cave_player_teleportable_bold(int y, int x, bool passive)
 	/* No teleporting into vaults and such */
 	if (c_ptr->info & CAVE_ICKY) return FALSE;
 
-	if (c_ptr->m_idx) return FALSE;
+	if (c_ptr->m_idx && (c_ptr->m_idx != p_ptr->riding)) return FALSE;
 
 	if (!passive)
 	{
@@ -458,7 +458,7 @@ void teleport_player_to(int ny, int nx, bool no_tele, bool passive)
 		}
 
 		/* Accept any grid when wizard mode */
-		if (p_ptr->wizard && !passive) break;
+		if (p_ptr->wizard && (!cave[y][x].m_idx || (cave[y][x].m_idx == p_ptr->riding))) break;
 
 		/* Accept teleportable floor grids */
 		if (cave_player_teleportable_bold(y, x, passive)) break;
