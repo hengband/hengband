@@ -547,10 +547,6 @@ msg_print("アリーナレベル");
 		}
 	}
 
-	/* Hack -- boundary walls and mimics are set later */
-	for (y = 0; y < cur_hgt; y++) cave[y][0].feat = cave[y][cur_wid - 1].feat = FEAT_NONE;
-	for (x = 0; x < cur_wid; x++) cave[0][x].feat = cave[cur_hgt - 1][x].feat = FEAT_NONE;
-
 #ifdef ALLOW_CAVERNS_AND_LAKES
 	/* Possible "destroyed" level */
 	if ((dun_level > 30) && one_in_(DUN_DEST*2) && (small_levels) && (d_info[dungeon_type].flags1 & DF1_DESTROY))
@@ -837,36 +833,18 @@ if (cheat_room) msg_print("小さな地下室を却下します。");
 	}
 	}
 
-	/* Special boundary walls -- Top and bottom */
+	/* Reset flags from boundary walls -- Top and bottom */
 	for (x = 0; x < cur_wid; x++)
 	{
-		cave_type *c_ptr = &cave[0][x]; /* Top */
-
-		/* Clear previous contents */
-		if (c_ptr->feat == FEAT_NONE) c_ptr->feat = fill_type[randint0(100)];
-		c_ptr->info &= ~(CAVE_MASK);
-
-		c_ptr = &cave[cur_hgt - 1][x]; /* Bottom */
-
-		/* Clear previous contents */
-		if (c_ptr->feat == FEAT_NONE) c_ptr->feat = fill_type[randint0(100)];
-		c_ptr->info &= ~(CAVE_MASK);
+		cave[0][x].info &= ~(CAVE_MASK);
+		cave[cur_hgt - 1][x].info &= ~(CAVE_MASK);
 	}
 
-	/* Special boundary walls -- Left and right */
+	/* Reset flags from boundary walls -- Left and right */
 	for (y = 1; y < (cur_hgt - 1); y++)
 	{
-		cave_type *c_ptr = &cave[y][0]; /* Left */
-
-		/* Clear previous contents */
-		if (c_ptr->feat == FEAT_NONE) c_ptr->feat = fill_type[randint0(100)];
-		c_ptr->info &= ~(CAVE_MASK);
-
-		c_ptr = &cave[y][cur_wid - 1]; /* Right */
-
-		/* Clear previous contents */
-		if (c_ptr->feat == FEAT_NONE) c_ptr->feat = fill_type[randint0(100)];
-		c_ptr->info &= ~(CAVE_MASK);
+		cave[y][0].info &= ~(CAVE_MASK);
+		cave[y][cur_wid - 1].info &= ~(CAVE_MASK);
 	}
 
 
