@@ -3967,6 +3967,8 @@ strcpy(info, "q止 p自 o現 +次 -前");
 		/* Arbitrary grids */
 		else
 		{
+			bool move_fast = FALSE;
+
 			if (!(mode & TARGET_LOOK)) prt_path(y, x);
 
 			/* Access */
@@ -4080,6 +4082,9 @@ strcpy(info, "q止 t決 p自 m近 +次 -前");
 					/* Extract the action (if any) */
 					d = get_keymap_dir(query);
 
+					/* XTRA HACK MOVEFAST */
+					if (isupper(query)) move_fast = TRUE;
+
 					if (!d) bell();
 					break;
 				}
@@ -4091,9 +4096,18 @@ strcpy(info, "q止 t決 p自 m近 +次 -前");
 				int dx = ddx[d];
 				int dy = ddy[d];
 
-				/* Move */
-				x += dx;
-				y += dy;
+				/* XTRA HACK MOVEFAST */
+				if (move_fast)
+				{
+					int mag = MIN(wid / 2, hgt / 2);
+					x += dx * mag;
+					y += dy * mag;
+				}
+				else
+				{
+					x += dx;
+					y += dy;
+				}
 
 				/* Do not move horizontally if unnecessary */
 				if (((x < panel_col_min + wid / 2) && (dx > 0)) ||
@@ -5577,11 +5591,14 @@ msg_print("場所を選んでスペースキーを押して下さい。");
 				/* XTRA HACK MOVEFAST */
 				if (move_fast)
 				{
-				     x += dx * wid / 2;
-				     y += dy * hgt / 2;
-				} else {
-				x += dx;
-				y += dy;
+					int mag = MIN(wid / 2, hgt / 2);
+					x += dx * mag;
+					y += dy * mag;
+				}
+				else
+				{
+					x += dx;
+					y += dy;
 				}
 
 				/* Do not move horizontally if unnecessary */
