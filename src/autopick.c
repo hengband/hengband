@@ -2169,7 +2169,11 @@ static void toggle_keyword(text_body_type *tb, int flg)
 	bool fixed = FALSE;
 
 	/* Select this line */
-	if (!tb->mark) tb->my = tb->cy;
+	if (!tb->mark)
+	{
+		tb->my = tb->cy;
+		tb->mx = 0;
+	}
 
 	if (tb->my < tb->cy)
 	{
@@ -2188,7 +2192,7 @@ static void toggle_keyword(text_body_type *tb, int flg)
 
 	/* String on these lines are not really selected */  
 	if (tb->lines_list[by1][bx1] == '\0' && by1 < tb->cy) by1++;
-	if (bx2 == 0 && tb->cy < by2) by2--;
+	if (bx2 == 0 && by1 < by2) by2--;
 
 
 	/* Set/Reset flag of each line */
@@ -2196,8 +2200,7 @@ static void toggle_keyword(text_body_type *tb, int flg)
 	{
 		autopick_type an_entry, *entry = &an_entry;
 
-		if (!autopick_new_entry(entry, tb->lines_list[y], TRUE))
-			return;
+		if (!autopick_new_entry(entry, tb->lines_list[y], !fixed)) continue;
 
 		string_free(tb->lines_list[y]);
 
@@ -2257,7 +2260,11 @@ static void toggle_command_letter(text_body_type *tb, byte flg)
 	bool fixed = FALSE;
 
 	/* Select this line */
-	if (!tb->mark) tb->my = tb->cy;
+	if (!tb->mark)
+	{
+		tb->my = tb->cy;
+		tb->mx = 0;
+	}
 
 	if (tb->my < tb->cy)
 	{
@@ -2276,15 +2283,14 @@ static void toggle_command_letter(text_body_type *tb, byte flg)
 
 	/* String on these lines are not really selected */  
 	if (tb->lines_list[by1][bx1] == '\0' && by1 < tb->cy) by1++;
-	if (bx2 == 0 && tb->cy < by2) by2--;
-
+	if (bx2 == 0 && by1 < by2) by2--;
 
 	/* Set/Reset flag of each line */
 	for (y = by1; y <= by2; y++)
 	{
 		int wid = 0;
 
-		if (!autopick_new_entry(entry, tb->lines_list[y], TRUE)) continue;
+		if (!autopick_new_entry(entry, tb->lines_list[y], FALSE)) continue;
 
 		string_free(tb->lines_list[y]);
 
@@ -2341,36 +2347,67 @@ static void toggle_command_letter(text_body_type *tb, byte flg)
  */
 static void add_keyword(text_body_type *tb, int flg)
 {
-	autopick_type an_entry, *entry = &an_entry;
+	int by1, by2, bx1, bx2, y;
 
-	if (!autopick_new_entry(entry, tb->lines_list[tb->cy], TRUE))
-		return;
-
-	/* There is the flag already */
-	if (IS_FLG(flg))
+	/* Select this line */
+	if (!tb->mark)
 	{
-		/* Free memory for the entry */
-		autopick_free_entry(entry);
-
-		return;
+		tb->my = tb->cy;
+		tb->mx = 0;
 	}
 
-	string_free(tb->lines_list[tb->cy]);
-
-	/* Remove all noun flag */
-	if (FLG_NOUN_BEGIN <= flg && flg <= FLG_NOUN_END)
+	if (tb->my < tb->cy)
 	{
-		int i;
-		for (i = FLG_NOUN_BEGIN; i <= FLG_NOUN_END; i++)
-			REM_FLG(i);
+		by1 = tb->my;
+		by2 = tb->cy;
+		bx1 = tb->mx;
+		bx2 = tb->cx;
+	}
+	else
+	{
+		by2 = tb->my;
+		by1 = tb->cy;
+		bx2 = tb->mx;
+		bx1 = tb->cx;
 	}
 
-	ADD_FLG(flg);
+	/* String on these lines are not really selected */  
+	if (tb->lines_list[by1][bx1] == '\0' && by1 < tb->cy) by1++;
+	if (bx2 == 0 && by1 < by2) by2--;
 
-	tb->lines_list[tb->cy] = autopick_line_from_entry_kill(entry);
+	/* Set/Reset flag of each line */
+	for (y = by1; y <= by2; y++)
+	{
+		autopick_type an_entry, *entry = &an_entry;
 
-	/* Now dirty */
-	tb->dirty_line = tb->cy;
+		if (!autopick_new_entry(entry, tb->lines_list[y], FALSE)) continue;
+
+		/* There is the flag already */
+		if (IS_FLG(flg))
+		{
+			/* Free memory for the entry */
+			autopick_free_entry(entry);
+			
+			continue;
+		}
+		
+		string_free(tb->lines_list[y]);
+		
+		/* Remove all noun flag */
+		if (FLG_NOUN_BEGIN <= flg && flg <= FLG_NOUN_END)
+		{
+			int i;
+			for (i = FLG_NOUN_BEGIN; i <= FLG_NOUN_END; i++)
+				REM_FLG(i);
+		}
+		
+		ADD_FLG(flg);
+		
+		tb->lines_list[y] = autopick_line_from_entry_kill(entry);
+
+		/* Now dirty */
+		tb->dirty_flags |= DIRTY_ALL;
+	}
 }
 
 
@@ -3362,6 +3399,7 @@ static void kill_yank_chain(text_body_type *tb)
 {
 	chain_str_type *chain = tb->yank;
 	tb->yank = NULL;
+	tb->yank_eol = TRUE;
 
 	while (chain)
 	{
@@ -3673,7 +3711,7 @@ static void draw_text_editor(text_body_type *tb)
 /*
  * Kill segment of a line
  */
-static void kill_line_segment(text_body_type *tb, int y, int x0, int x1)
+static void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool whole)
 {
 	char buf[MAX_LINELEN];
 	cptr s = tb->lines_list[y];
@@ -3684,7 +3722,7 @@ static void kill_line_segment(text_body_type *tb, int y, int x0, int x1)
 	if (x0 == x1) return;
 
 	/* Kill whole line? */
-	if (x0 == 0 && s[x1] == '\0' && tb->lines_list[y+1])
+	if (whole && x0 == 0 && s[x1] == '\0' && tb->lines_list[y+1])
 	{
 		int i;
 
@@ -3711,61 +3749,6 @@ static void kill_line_segment(text_body_type *tb, int y, int x0, int x1)
 	/* Replace */
 	string_free(tb->lines_list[y]);
 	tb->lines_list[y] = string_make(buf);
-}
-
-
-/*
- * Kill text in the block selection
- */
-static bool kill_text_in_selection(text_body_type *tb)
-{
-	int by1, bx1, by2, bx2;
-	int y;
-
-	int len = strlen(tb->lines_list[tb->cy]);
-
-	/* Correct cursor location */
-	if (tb->cx > len) tb->cx = len;
-
-	if (tb->my < tb->cy ||
-	    (tb->my == tb->cy && tb->mx < tb->cx))
-	{
-		by1 = tb->my;
-		bx1 = tb->mx;
-		by2 = tb->cy;
-		bx2 = tb->cx;
-	}
-	else
-	{
-		by2 = tb->my;
-		bx2 = tb->mx;
-		by1 = tb->cy;
-		bx1 = tb->cx;
-	}
-
-	/* Kill lines in reverse order */
-	for (y = by2; y >= by1; y--)
-	{
-		int x0 = 0;
-		int x1 = strlen(tb->lines_list[y]);
-
-		if (y == by1) x0 = bx1;
-		if (y == by2) x1 = bx2;
-
-		kill_line_segment(tb, y, x0, x1);
-	}
-
-	/* Correct cursor position */
-	tb->cy = by1;
-	tb->cx = bx1;
-
-	/* Disable selection */
-	tb->mark = 0;
-
-	/* Now dirty */
-	tb->dirty_flags |= DIRTY_ALL;
-
-	return TRUE;
 }
 
 
@@ -3938,11 +3921,14 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	case EC_RETURN:
 		/* Split a line or insert end of line */
 
-		/*
-		 * If there is a selection, kill it, and replace it
-		 * with return code.
-		 */
-		if (tb->mark) kill_text_in_selection(tb);
+		/* Ignore selection */
+		if (tb->mark)
+		{
+			tb->mark = 0;
+
+			/* Now dirty */
+			tb->dirty_flags |= DIRTY_ALL;
+		}
 
 		insert_return_code(tb->lines_list, tb->cx, tb->cy);
 		tb->cy++;
@@ -4037,11 +4023,49 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 	case EC_CUT:
 	{	
+		int by1, bx1, by2, bx2;
+		int y;
+
 		/* Copy the text first */
 		do_editor_command(tb, EC_COPY);
 
-		/* Kill all */
-		kill_text_in_selection(tb);
+		if (tb->my < tb->cy ||
+		    (tb->my == tb->cy && tb->mx < tb->cx))
+		{
+			by1 = tb->my;
+			bx1 = tb->mx;
+			by2 = tb->cy;
+			bx2 = tb->cx;
+		}
+		else
+		{
+			by2 = tb->my;
+			bx2 = tb->mx;
+			by1 = tb->cy;
+			bx1 = tb->cx;
+		}
+
+		/* Kill lines in reverse order */
+		for (y = by2; y >= by1; y--)
+		{
+			int x0 = 0;
+			int x1 = strlen(tb->lines_list[y]);
+
+			if (y == by1) x0 = bx1;
+			if (y == by2) x1 = bx2;
+
+			kill_line_segment(tb, y, x0, x1, TRUE);
+		}
+
+		/* Correct cursor position */
+		tb->cy = by1;
+		tb->cx = bx1;
+
+		/* Disable selection */
+		tb->mark = 0;
+
+		/* Now dirty */
+		tb->dirty_flags |= DIRTY_ALL;
 
 		break;
 	}
@@ -4134,11 +4158,14 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		/* Correct cursor location */
 		if (tb->cx > len) tb->cx = len;
 
-		/*
-		 * If there is a selection, kill text, and
-		 * replace it with the yank text.
-		 */
-		if (tb->mark) kill_text_in_selection(tb);
+		/* Ignore selection */
+		if (tb->mark)
+		{
+			tb->mark = 0;
+
+			/* Now dirty */
+			tb->dirty_flags |= DIRTY_ALL;
+		}
 
 		/* Paste text */
 		while (chain)
@@ -4255,34 +4282,19 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	{
 		/* Kill rest of line */
 
-		int i;
-		char buf[MAX_LINELEN];
-		cptr line;
-
-		/* If there is a selection, kill it */
-		if (tb->mark)
-		{
-			if (kill_text_in_selection(tb)) break;
-		}
+		int len = strlen(tb->lines_list[tb->cy]);
 
 		/* Correct cursor location */
-		if ((uint)tb->cx > strlen(tb->lines_list[tb->cy]))
-			tb->cx = (int)strlen(tb->lines_list[tb->cy]);
+		if (tb->cx > len) tb->cx = len;
 
-		/* Save preceding string */
-		for (i = 0; tb->lines_list[tb->cy][i] && i < tb->cx; i++)
+		/* Ignore selection */
+		if (tb->mark)
 		{
-#ifdef JP
-			if (iskanji(tb->lines_list[tb->cy][i]))
-			{
-				buf[i] = tb->lines_list[tb->cy][i];
-				i++;
-			}
-#endif
-			buf[i] = tb->lines_list[tb->cy][i];
+			tb->mark = 0;
+
+			/* Now dirty */
+			tb->dirty_flags |= DIRTY_ALL;
 		}
-		buf[i] = '\0';
-		line = string_make(buf);
 
 		/* Append only if this command is repeated. */
 		if (tb->old_com_id != com_id)
@@ -4292,14 +4304,12 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		}
 
 		/* Really deleted some text */
-		if (strlen(tb->lines_list[tb->cy] + i))
+		if (tb->cx < len)
 		{
 			/* Add deleted string to yank buffer */
-			add_str_to_yank(tb, tb->lines_list[tb->cy] + i);
+			add_str_to_yank(tb, &(tb->lines_list[tb->cy][tb->cx]));
 
-			/* Replace current line with 'preceding string' */
-			string_free(tb->lines_list[tb->cy]);
-			tb->lines_list[tb->cy] = line;
+			kill_line_segment(tb, tb->cy, tb->cx, len, FALSE);
 
 			/* Now dirty */
 			tb->dirty_line = tb->cy;
@@ -4308,9 +4318,11 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 			break;
 		}
 
-		/* Delete the end of line character only */
+		/* Cut the end of line character only */
 		if (tb->yank_eol) add_str_to_yank(tb, "");
-		else tb->yank_eol = TRUE;
+
+		/* Cut end of line */
+		tb->yank_eol = TRUE;
 
 		do_editor_command(tb, EC_DELETE_CHAR);
 		break;
@@ -4319,10 +4331,13 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	case EC_DELETE_CHAR:
 		/* DELETE == go forward + BACK SPACE */
 
-		/* If there is a selection, kill it */
+		/* Ignore selection */
 		if (tb->mark)
 		{
-			if (kill_text_in_selection(tb)) break;
+			tb->mark = 0;
+
+			/* Now dirty */
+			tb->dirty_flags |= DIRTY_ALL;
 		}
 
 #ifdef JP
@@ -4340,10 +4355,13 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		int len, i, j, k;
 		char buf[MAX_LINELEN];
 
-		/* If there is a selection, kill it */
+		/* Ignore selection */
 		if (tb->mark)
 		{
-			if (kill_text_in_selection(tb)) break;
+			tb->mark = 0;
+
+			/* Now dirty */
+			tb->dirty_flags |= DIRTY_ALL;
 		}
 
 		len = strlen(tb->lines_list[tb->cy]);
@@ -4939,11 +4957,14 @@ void do_cmd_edit_autopick(void)
 		/* Insert a character */
 		else if (!iscntrl(key & 0xff))
 		{
-			/*
-			 * If there is a selection, kill text, and
-			 * replace it with a single letter.
-			 */
-			if (tb->mark) kill_text_in_selection(tb);
+			/* Ignore selection */
+			if (tb->mark)
+			{
+				tb->mark = 0;
+
+				/* Now dirty */
+				tb->dirty_flags |= DIRTY_ALL;
+			}
 
 			insert_single_letter(tb, key);
 
