@@ -670,6 +670,9 @@ void leave_floor(void)
 	/* Preserve pets and prepare to take these to next floor */
 	preserve_pet();
 
+	/* Remove all mirrors without explosion */
+	remove_all_mirrors(FALSE);
+
 	/* New floor is not yet prepared */
 	new_floor_id = 0;
 

@@ -1282,19 +1282,8 @@ static bool cmd_racial_power_aux(s32b command)
 		{
 			if (command == -3)
 			{
-				int x, y;
-				for (x = 0; x < cur_wid; x++)
-				{
-					for (y = 0; y < cur_hgt; y++)
-					{
-						if (is_mirror_grid(&cave[y][x]))
-						{
-							remove_mirror(y, x);
-							project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS,
-								(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
-						}
-					}
-				}
+				/* Explode all mirrors */
+				remove_all_mirrors(TRUE);
 			}
 			else if (command == -4)
 			{

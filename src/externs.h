@@ -1088,6 +1088,7 @@ extern bool eat_magic(int power);
 extern void discharge_minion(void);
 extern void kawarimi(bool success);
 extern bool rush_attack(bool *mdeath);
+extern void remove_all_mirrors(bool explode);
 
 /* spells3.c */
 extern bool teleport_away(int m_idx, int dis, bool dec_valour);
