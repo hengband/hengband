@@ -3564,6 +3564,19 @@
 
 
 /*
+ * Hack -- 'ball' spells with radius 4 that may hurt friends
+ */
+#define RF4_BIG_BALL_MASK \
+	(RF4_BA_CHAO)
+
+#define RF5_BIG_BALL_MASK \
+	(RF5_BA_LITE | RF5_BA_DARK | RF5_BA_WATE | RF5_BA_MANA)
+
+#define RF6_BIG_BALL_MASK \
+	0L
+
+
+/*
  * Hack -- 'breath' spells that may hurt friends
  */
 #define RF4_BREATH_MASK \
