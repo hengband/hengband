@@ -6109,6 +6109,7 @@ static bool build_type15(void)
 				c_ptr = &cave[y][x];
 				place_inner_perm_grid(c_ptr);
 				c_ptr->feat = feat_permanent_glass_wall;
+				cave[yval + ddy_ddd[dir1]][xval + ddx_ddd[dir1]].info |= (CAVE_ICKY);
 			}
 
 			/* Glass door */
@@ -6122,6 +6123,7 @@ static bool build_type15(void)
 			/* Place a potion */
 			get_obj_num_hook = kind_is_potion;
 			place_object(yval, xval, AM_NO_FIXED_ART);
+			cave[yval][xval].info |= (CAVE_ICKY);
 		}
 		break;
 
@@ -6174,6 +6176,7 @@ static bool build_type15(void)
 
 			/* Place an object */
 			place_object(yval, xval, AM_NO_FIXED_ART);
+			cave[yval][xval].info |= (CAVE_ICKY);
 		}
 		break;
 
@@ -6235,6 +6238,11 @@ static bool build_type15(void)
 				get_obj_num_hook = kind_is_potion;
 				place_object(yval + 1, xval, AM_NO_FIXED_ART);
 			}
+
+			for (y = yval - 2; y <= yval + 2; y++)
+				for (x = xval - 2; x <= xval + 2; x++)
+					cave[y][x].info |= (CAVE_ICKY);
+
 		}
 		break;
 	}
