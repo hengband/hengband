@@ -131,6 +131,13 @@ Allow casting spells when short of mana    [over_exert]
     have enough mana.  If this option is set, the program allow you to
     cast spells at such dangerous situation.
 
+***** <numpad_as_cursorkey>
+Use numpad keys as cursor keys in editor mode    [numpad_as_cursorkey]
+    This option makes numpad keys work as cursor movement keys while
+    text editing mode.  Which include auto-picker editor, inputing an
+    inscription, a macro action, and etc.
+
+
 ***** <Output>
 === Option set 2 -- Screen output ===
 
