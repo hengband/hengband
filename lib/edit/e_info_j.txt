@@ -601,7 +601,7 @@ F:BRAND_COLD | RES_COLD | IGNORE_COLD
 
 #JZ#
 N:76:ÆÇ»¦¤Î
-E:of Poisoning
+E:of Venom
 X:24:20
 W:0:36:0:4500
 F:BRAND_POIS | RES_POIS
