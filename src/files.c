@@ -1592,7 +1592,7 @@ static struct
 	{29,  5, 21, "Weight"},
 	{29,  6, 21, "Social Class"},
 	{29,  7, 21, "Align"},
-	{29, 14, 21, "Constraction"},
+	{29, 14, 21, "Construction"},
 };
 #endif
 
