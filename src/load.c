@@ -1904,12 +1904,22 @@ static errr rd_dungeon(void)
 	/* Load the dungeon data */
 	for (x = y = 0; y < ymax; )
 	{
+                u16b info;
+
 		/* Grab RLE info */
 		rd_byte(&count);
 		if (z_older_than(10,3,6))
+                {
 			rd_byte(&tmp8u);
+                        info = (u16b)tmp8u;
+                }
 		else
-			rd_s16b(&tmp16s);
+                {
+			rd_u16b(&info);
+
+                        /* Decline invalid flags */
+                        info &= ~(CAVE_LITE | CAVE_VIEW | CAVE_MNLT);
+                }
 
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
@@ -1918,9 +1928,7 @@ static errr rd_dungeon(void)
 			c_ptr = &cave[y][x];
 
 			/* Extract "info" */
-			if (z_older_than(10,3,6))
-				c_ptr->info = tmp8u;
-			else c_ptr->info = tmp16s;
+                        c_ptr->info = info;
 
 			/* Advance/Wrap */
 			if (++x >= xmax)

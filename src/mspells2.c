@@ -2267,12 +2267,7 @@ if (see_both) msg_format("%^sは耐性を持っている！", t_name);
 				}
 				else
 				{
-#ifdef JP
-mon_take_hit_mon(FALSE, t_idx, dam, &fear, "は死んだ。", m_idx);
-#else
-					mon_take_hit_mon(FALSE, t_idx, dam, &fear, " is destroyed.", m_idx);
-#endif
-
+					mon_take_hit_mon(FALSE, t_idx, dam, &fear, NULL, m_idx);
 				}
 
 				wake_up = TRUE;
@@ -2318,11 +2313,7 @@ if (see_both) msg_format("%^sは耐性を持っている！", t_name);
 				}
 				else
 				{
-#ifdef JP
-mon_take_hit_mon(FALSE, t_idx, dam, &fear, "は死んだ。", m_idx);
-#else
-					mon_take_hit_mon(FALSE, t_idx, dam, &fear, " is destroyed.", m_idx);
-#endif
+					mon_take_hit_mon(FALSE, t_idx, dam, &fear, NULL, m_idx);
 
 				}
 
@@ -2369,12 +2360,7 @@ if (see_both) msg_format("%^sは耐性を持っている！", t_name);
 				}
 				else
 				{
-#ifdef JP
-mon_take_hit_mon(FALSE, t_idx, dam, &fear, "は死んだ。", m_idx);
-#else
-					mon_take_hit_mon(FALSE, t_idx, dam, &fear, " is destroyed.", m_idx);
-#endif
-
+					mon_take_hit_mon(FALSE, t_idx, dam, &fear, NULL, m_idx);
 				}
 
 				wake_up = TRUE;
@@ -2420,12 +2406,7 @@ if (see_both) msg_format("%^sは耐性を持っている！", t_name);
 				}
 				else
 				{
-#ifdef JP
-mon_take_hit_mon(FALSE, t_idx, dam, &fear, "は死んだ。", m_idx);
-#else
-					mon_take_hit_mon(FALSE, t_idx, dam, &fear, " is destroyed.", m_idx);
-#endif
-
+					mon_take_hit_mon(FALSE, t_idx, dam, &fear, NULL, m_idx);
 				}
 
 				wake_up = TRUE;

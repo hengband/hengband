@@ -6224,6 +6224,9 @@ static bool player_birth_aux(void)
 	previous_char.quests = number_of_quests;
 	previous_char.quick_ok = TRUE;
 
+	/* Process the player name */
+	process_player_name(FALSE);
+
 	/* Accept */
 	return (TRUE);
 }

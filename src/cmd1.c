@@ -4258,32 +4258,20 @@ static int see_wall(int dir, int y, int x)
         /* Feature code (applying "mimic" field) */
         feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
 
-	/* Non-wall grids are not known walls */
-	if (feat <= FEAT_DOOR_TAIL) return (FALSE);
-
-	if ((feat >= FEAT_DEEP_WATER) &&
-	    (feat <= FEAT_GRASS)) return (FALSE);
-
-	if ((feat >= FEAT_SHOP_HEAD) &&
-	    (feat <= FEAT_SHOP_TAIL)) return (FALSE);
-
-	if (feat == FEAT_DEEP_GRASS) return (FALSE);
-	if (feat == FEAT_FLOWER) return (FALSE);
-
-	if (feat == FEAT_MUSEUM) return (FALSE);
-
-	if ((feat >= FEAT_BLDG_HEAD) &&
-	    (feat <= FEAT_BLDG_TAIL)) return (FALSE);
-
-/*	if (feat == FEAT_TREES) return (FALSE); */
-
 	/* Must be known to the player */
-	if (!(c_ptr->info & (CAVE_MARK))) return (FALSE);
+	if (c_ptr->info & (CAVE_MARK))
+        {
+                /* Rubble, Magma, Quartz, Wall, Perm wall */
+                if (feat >= FEAT_RUBBLE && feat <= FEAT_PERM_SOLID) return TRUE;
 
-	if (feat >= FEAT_TOWN) return (FALSE);
+                /* Tree */
+                if (feat == FEAT_TREES) return TRUE;
 
-	/* Default */
-	return (TRUE);
+                /* Mountain */
+                if (feat == FEAT_MOUNTAIN) return TRUE;
+        }
+
+        return FALSE;
 }
 
 

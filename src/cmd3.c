@@ -319,9 +319,9 @@ s = "おっと。";
 			object_copy(ol_ptr, or_ptr);
 			object_copy(or_ptr, otmp_ptr);
 #ifdef JP
-			msg_format("%sを右手に構えなおした。", ol_name);
+			msg_format("%sを%sに構えなおした。", ol_name, left_hander ? "左手" : "右手");
 #else
-			msg_format("You wield %s at right hand.", ol_name);
+			msg_format("You wield %s at %s hand.", ol_name, left_hander ? "left" : "right");
 #endif
 
 			slot = INVEN_LARM;

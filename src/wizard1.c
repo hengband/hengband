@@ -871,7 +871,7 @@ static const flag_desc misc_flags3_desc[] =
 	{ TR_DRAIN_EXP,          "Drains Experience" },
 	{ TR_AGGRAVATE,          "Aggravates" },
 	{ TR_BLESSED,            "Blessed Blade" },
-	{ TR_DEC_MANA,           "Decrease Shouhi Mana" },
+	{ TR_DEC_MANA,           "Decrease Mana Consumption Rate" },
 #endif
 };
 

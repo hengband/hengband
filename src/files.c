@@ -5793,9 +5793,6 @@ void get_name(void)
 		strcpy(player_name, "PLAYER");
 	}
 
-	/* Process the player name */
-	process_player_name(FALSE);
-
 	strcpy(tmp,ap_ptr->title);
 #ifdef JP
 	if(ap_ptr->no == 1)

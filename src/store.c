@@ -3993,21 +3993,21 @@ static void store_examine(void)
 	{
 		if (cur_store_num == STORE_HOME)
 #ifdef JP
-msg_print("我が家には何も置いてありません。");
+                        msg_print("我が家には何も置いてありません。");
 #else
 			msg_print("Your home is empty.");
 #endif
 
-		if (cur_store_num == STORE_MUSEUM)
+                else if (cur_store_num == STORE_MUSEUM)
 #ifdef JP
-msg_print("博物館には何も置いてありません。");
+                        msg_print("博物館には何も置いてありません。");
 #else
 			msg_print("Museum is empty.");
 #endif
 
 		else
 #ifdef JP
-msg_print("現在商品の在庫を切らしています。");
+                        msg_print("現在商品の在庫を切らしています。");
 #else
 			msg_print("I am currently out of stock.");
 #endif

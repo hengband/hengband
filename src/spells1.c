@@ -390,7 +390,9 @@ sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 			/* Sometimes stop at non-initial monsters/players */
 			if (flg & (PROJECT_STOP))
 			{
-				if ((n > 0) && (cave[y][x].m_idx != 0)) break;
+				if ((n > 0) &&
+                                    ((y == py && x == px) || cave[y][x].m_idx != 0))
+                                        break;
 			}
 
 			if (!in_bounds(y, x)) break;
@@ -473,7 +475,9 @@ sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 			/* Sometimes stop at non-initial monsters/players */
 			if (flg & (PROJECT_STOP))
 			{
-				if ((n > 0) && (cave[y][x].m_idx != 0)) break;
+				if ((n > 0) &&
+                                    ((y == py && x == px) || cave[y][x].m_idx != 0))
+                                        break;
 			}
 
 			if (!in_bounds(y, x)) break;
@@ -538,7 +542,9 @@ sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 			/* Sometimes stop at non-initial monsters/players */
 			if (flg & (PROJECT_STOP))
 			{
-				if ((n > 0) && (cave[y][x].m_idx != 0)) break;
+				if ((n > 0) &&
+                                    ((y == py && x == px) || cave[y][x].m_idx != 0))
+                                        break;
 			}
 
 			if (!in_bounds(y, x)) break;

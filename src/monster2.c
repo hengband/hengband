@@ -16,7 +16,6 @@
 #define HORDE_NOEVIL 0x02
 
 bool is_kage = FALSE;
-u16b horde_align = 0;
 
 cptr horror_desc[MAX_SAN_HORROR] =
 {
@@ -889,10 +888,12 @@ static bool restrict_monster_to_dungeon(int r_idx)
 	}
 	if (d_ptr->flags1 & DF1_NO_MAGIC)
 	{
-		if (r_idx == MON_CHAMELEON) return TRUE;
-		if (r_ptr->freq_spell && !(r_ptr->flags4 & RF4_NOMAGIC_MASK) && !(r_ptr->flags5 & RF5_NOMAGIC_MASK) && !(r_ptr->flags6 & RF6_NOMAGIC_MASK))
+		if (r_idx != MON_CHAMELEON &&
+                    r_ptr->freq_spell && 
+                    !(r_ptr->flags4 & RF4_NOMAGIC_MASK) &&
+                    !(r_ptr->flags5 & RF5_NOMAGIC_MASK) &&
+                    !(r_ptr->flags6 & RF6_NOMAGIC_MASK))
 			return FALSE;
-		else return TRUE;
 	}
 	if (d_ptr->flags1 & DF1_NO_MELEE)
 	{
@@ -901,13 +902,11 @@ static bool restrict_monster_to_dungeon(int r_idx)
 		    !(r_ptr->flags5 & (RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_CAUSE_1 | RF5_CAUSE_2 | RF5_CAUSE_3 | RF5_CAUSE_4 | RF5_MIND_BLAST | RF5_BRAIN_SMASH)) &&
 		    !(r_ptr->flags6 & (RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK)))
 			return FALSE;
-		else return TRUE;
 	}
 	if (d_ptr->flags1 & DF1_BEGINNER)
 	{
 		if (r_ptr->level > dun_level)
 			return FALSE;
-		else return TRUE;
 	}
 
 	if (d_ptr->special_div == 64) return TRUE;
@@ -3659,9 +3658,6 @@ bool alloc_horde(int y, int x)
 	}
 	if (attempts < 1) return FALSE;
 
-	if (r_ptr->flags3 & RF3_GOOD) horde_align |= HORDE_NOEVIL;
-	if (r_ptr->flags3 & RF3_EVIL) horde_align |= HORDE_NOGOOD;
-
 	attempts = 1000;
 
 	while (--attempts)
@@ -3670,7 +3666,7 @@ bool alloc_horde(int y, int x)
 		if (place_monster_aux(0, y, x, r_idx, 0L)) break;
 	}
 
-	if (attempts < 1) {horde_align = 0;return FALSE;}
+	if (attempts < 1) return FALSE;
 
 	m_idx = cave[y][x].m_idx;
 
@@ -3687,7 +3683,6 @@ bool alloc_horde(int y, int x)
 		x = cx;
 	}
 
-	horde_align = 0;
 	return TRUE;
 }
 
@@ -3861,9 +3856,6 @@ static bool summon_specific_okay(int r_idx)
 	    (((p_ptr->align > 9) && (r_ptr->flags3 & RF3_EVIL)) ||
 	     ((p_ptr->align < -9) && (r_ptr->flags3 & RF3_GOOD))))
 		return FALSE;
-
-	if ((horde_align & HORDE_NOGOOD) && (r_ptr->flags3 & RF3_GOOD)) return FALSE;
-	if ((horde_align & HORDE_NOEVIL) && (r_ptr->flags3 & RF3_EVIL)) return FALSE;
 
 	if ((r_ptr->flags7 & RF7_CHAMELEON) && (d_info[dungeon_type].flags1 & DF1_CHAMELEON)) return TRUE;
 

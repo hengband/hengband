@@ -187,13 +187,13 @@ cptr map_name(void)
 #ifdef JP
 		return "アリーナ";
 #else
-		return "Monster Arena";
+		return "Arena";
 #endif
 	else if (p_ptr->inside_battle)
 #ifdef JP
 		return "闘技場";
 #else
-		return "Arena";
+		return "Monster Arena";
 #endif
 	else if (!dun_level && p_ptr->town_num)
 		return town[p_ptr->town_num].name;
@@ -5475,7 +5475,7 @@ msg_print("バランスがとれるようになった。");
 	have_kabe = FALSE;
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		if ((inventory[i].tval == TV_SORCERY_BOOK) && (inventory[i].sval == 3)) have_dd_s = TRUE;
+		if ((inventory[i].tval == TV_SORCERY_BOOK) && (inventory[i].sval == 2)) have_dd_s = TRUE;
 		if ((inventory[i].tval == TV_TRUMP_BOOK) && (inventory[i].sval == 1)) have_dd_t = TRUE;
 		if ((inventory[i].tval == TV_NATURE_BOOK) && (inventory[i].sval == 2)) have_sw = TRUE;
 		if ((inventory[i].tval == TV_ENCHANT_BOOK) && (inventory[i].sval == 2)) have_kabe = TRUE;
