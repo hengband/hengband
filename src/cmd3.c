@@ -986,8 +986,6 @@ void do_cmd_destroy(void)
 	/* Verify unless quantity given */
 	if (!force && (confirm_destroy || (object_value(o_ptr) > 0)))
 	{
-		bool okay = TRUE;
-
 		/* Make a verification */
 		sprintf(out_val, 
 #ifdef JP
@@ -999,9 +997,6 @@ void do_cmd_destroy(void)
 
 		msg_print(NULL);
 
-		/* Prompt */
-		prt(out_val, 0, 0);
-
 		/* HACK : Add the line to message buffer */
 		message_add(out_val);
 		p_ptr->window |= (PW_MESSAGE);
@@ -1010,18 +1005,25 @@ void do_cmd_destroy(void)
 		/* Get an acceptable answer */
 		while (TRUE)
 		{
-			char i = inkey();
+			char i;
+
+			/* Prompt */
+			prt(out_val, 0, 0);
+
+			i = inkey();
+
+			/* Erase the prompt */
+			prt("", 0, 0);
+
 
 			if (i == 'y' || i == 'Y')
 			{
-				okay = TRUE;
 				break;
 			}
 			if (i == ESCAPE || i == 'n' || i == 'N')
 			{
 				/* Cancel */
-				okay = FALSE;
-				break;
+				return;
 			}
 			if (i == 'a' || i == 'A')
 			{
@@ -1038,16 +1040,7 @@ void do_cmd_destroy(void)
 				/* The object is already destroyed. */
 				return;
 			}
-
-			/* Loop */
-			continue;
 		}
-
-		/* Erase the prompt */
-		prt("", 0, 0);
-
-		/* Cancelled */
-		if (!okay) return;
 	}
 
 	/* Take a turn */

@@ -5073,7 +5073,7 @@ void calc_bonuses(void)
 	{
 		if (buki_motteruka(INVEN_RARM+i))
 		{
-			int tval = inventory[INVEN_RARM+i].tval - TV_BOW;
+			int tval = inventory[INVEN_RARM+i].tval - TV_WEAPON_BEGIN;
 			int sval = inventory[INVEN_RARM+i].sval;
 
 			p_ptr->to_h[i] += (p_ptr->weapon_exp[tval][sval] - WEAPON_EXP_BEGINNER) / 200;

@@ -1780,6 +1780,15 @@
 #define TV_HISSATSU_BOOK 106
 #define TV_GOLD         127     /* Gold can only be picked up by players */
 
+#define TV_MISSILE_BEGIN TV_SHOT
+#define TV_MISSILE_END   TV_BOLT
+#define TV_EQUIP_BEGIN   TV_BOW
+#define TV_EQUIP_END     TV_CARD
+#define TV_WEAPON_BEGIN	 TV_BOW
+#define TV_WEAPON_END  	 TV_SWORD
+#define TV_ARMOR_BEGIN 	 TV_BOOTS
+#define TV_ARMOR_END   	 TV_DRAG_ARMOR
+
 /* Any subvalue */
 #define SV_ANY 					255
 

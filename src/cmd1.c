@@ -2076,7 +2076,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 	{
 		if ((r_ptr->level + 10) > p_ptr->lev)
 		{
-			int tval = inventory[INVEN_RARM+hand].tval - TV_BOW;
+			int tval = inventory[INVEN_RARM+hand].tval - TV_WEAPON_BEGIN;
 			int sval = inventory[INVEN_RARM+hand].sval;
 			int now_exp = p_ptr->weapon_exp[tval][sval];
 			if (now_exp < s_info[p_ptr->pclass].w_max[tval][sval])

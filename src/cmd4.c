@@ -5741,13 +5741,13 @@ static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr, int *j, by
 	 * HACK:Ring of Lordly protection and Dragon equipment
 	 * have random resistances.
 	 */
-	if (((o_ptr->tval >= TV_BOW) && (o_ptr->tval<= TV_DRAG_ARMOR) && o_ptr->name2)
-	    || ((o_ptr->tval == TV_AMULET) && (o_ptr->sval == SV_AMULET_RESISTANCE))
-	    || ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_LORDLY))
-	    || ((o_ptr->tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD))
-	    || ((o_ptr->tval == TV_HELM) && (o_ptr->sval == SV_DRAGON_HELM))
-	    || ((o_ptr->tval == TV_GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES))
-	    || ((o_ptr->tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE))
+	if (((TV_EQUIP_BEGIN <= tval) && (tval <= TV_EQUIP_END) && o_ptr->name2)
+	    || ((tval == TV_AMULET) && (o_ptr->sval == SV_AMULET_RESISTANCE))
+	    || ((tval == TV_RING) && (o_ptr->sval == SV_RING_LORDLY))
+	    || ((tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD))
+	    || ((tval == TV_HELM) && (o_ptr->sval == SV_DRAGON_HELM))
+	    || ((tval == TV_GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES))
+	    || ((tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE))
 	    || o_ptr->art_name || o_ptr->name1)
 	{
 		int i = 0;
@@ -5853,7 +5853,7 @@ static void do_cmd_knowledge_inven(void)
 	}
 	fprintf(fff, "%s\n", inven_res_label);
 
-	for (tval = TV_BOW; tval <= TV_RING; tval++)
+	for (tval = TV_EQUIP_BEGIN; tval <= TV_EQUIP_END; tval++)
 	{
 		if (j != 0)
 		{

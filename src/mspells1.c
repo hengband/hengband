@@ -558,8 +558,8 @@ u32b get_curse(int power, object_type *o_ptr)
 		{
 			if (new_curse & TRC_HEAVY_MASK) continue;
 		}
-		if (((o_ptr->tval < TV_BOW) || (o_ptr->tval > TV_SWORD)) && (new_curse == TRC_LOW_MELEE)) continue;
-		if (((o_ptr->tval < TV_BOOTS) || (o_ptr->tval > TV_DRAG_ARMOR)) && (new_curse == TRC_LOW_AC)) continue;
+		if (((o_ptr->tval < TV_WEAPON_BEGIN) || (o_ptr->tval > TV_WEAPON_END)) && (new_curse == TRC_LOW_MELEE)) continue;
+		if (((o_ptr->tval < TV_ARMOR_BEGIN) || (o_ptr->tval > TV_ARMOR_END)) && (new_curse == TRC_LOW_AC)) continue;
 		break;
 	}
 	return new_curse;

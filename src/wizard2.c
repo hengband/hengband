@@ -407,7 +407,7 @@ static void do_cmd_wiz_change_aux(void)
 	if (tmp_s16b < WEAPON_EXP_UNSKILLED) tmp_s16b = WEAPON_EXP_UNSKILLED;
 	if (tmp_s16b > WEAPON_EXP_MASTER) tmp_s16b = WEAPON_EXP_MASTER;
 
-	for (j = 0; j <= TV_SWORD - TV_BOW; j++)
+	for (j = 0; j <= TV_WEAPON_END - TV_WEAPON_BEGIN; j++)
 	{
 		for (i = 0;i < 64;i++)
 		{

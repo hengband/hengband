@@ -5443,7 +5443,7 @@ void calc_android_exp(void)
 			s32b total_flags = flag_cost(o_ptr, o_ptr->pval);
 			int fake_level;
 
-			if (o_ptr->tval >= TV_BOOTS)
+			if (o_ptr->tval >= TV_ARMOR_BEGIN)
 			{
 				/* For armors */
 				if (total_flags < 15000) fake_level = 10;

@@ -426,16 +426,11 @@ static bool autopick_new_entry(autopick_type *entry, cptr str, bool allow_defaul
 /*
  * Favorite weapons
  */
-static bool is_favorite(object_type *o_ptr, bool others_ok)
+static bool is_favorite(object_type *o_ptr)
 {
 	/* Only weapons match */
-	switch(o_ptr->tval)
-	{
-	case TV_BOW: case TV_HAFTED: case TV_POLEARM:
-	case TV_SWORD: case TV_DIGGING:
-		break;
-	default: return FALSE;
-	}
+	if (!(TV_WEAPON_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_WEAPON_END))
+		return FALSE;
 
 	/* Favorite weapons are varied depend on the class */
 	switch (p_ptr->pclass)
@@ -454,7 +449,7 @@ static bool is_favorite(object_type *o_ptr, bool others_ok)
 	case CLASS_MONK:
 	case CLASS_FORCETRAINER:
 		/* Icky to wield? */
-		if (!(s_info[p_ptr->pclass].w_max[o_ptr->tval-TV_BOW][o_ptr->sval]))
+		if (!(s_info[p_ptr->pclass].w_max[o_ptr->tval-TV_WEAPON_BEGIN][o_ptr->sval]))
 			return FALSE;
 		break;
 
@@ -473,14 +468,13 @@ static bool is_favorite(object_type *o_ptr, bool others_ok)
 
 	case CLASS_NINJA:
 		/* Icky to wield? */
-		if (s_info[p_ptr->pclass].w_max[o_ptr->tval-TV_BOW][o_ptr->sval] <= WEAPON_EXP_BEGINNER)
+		if (s_info[p_ptr->pclass].w_max[o_ptr->tval-TV_WEAPON_BEGIN][o_ptr->sval] <= WEAPON_EXP_BEGINNER)
 			return FALSE;
 		break;
 
 	default:
-		/* Non-special class */
-		if (others_ok) return TRUE;
-		else return FALSE;
+		/* All weapons are okay for non-special classes */
+		return TRUE;
 	}
 
 	return TRUE;
@@ -501,16 +495,52 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 	entry->flag[0] = entry->flag[1] = 0L;
 	entry->dice = 0;
 
+	/* Unaware */
 	if (!object_aware_p(o_ptr))
 	{
 		ADD_FLG(FLG_UNAWARE);
 	}
+
+	/* Not really identified */
 	else if (!object_known_p(o_ptr))
 	{
-		ADD_FLG(FLG_UNIDENTIFIED);
+		if (!(o_ptr->ident & IDENT_SENSE))
+		{
+			ADD_FLG(FLG_UNIDENTIFIED);
+		}
+		else
+		{
+			/* Pseudo-identified */
+			switch (o_ptr->feeling)
+			{
+			case FEEL_AVERAGE:
+			case FEEL_GOOD:
+				ADD_FLG(FLG_NAMELESS);
+				break;
+
+			case FEEL_BROKEN:
+			case FEEL_CURSED:
+				ADD_FLG(FLG_NAMELESS);
+				ADD_FLG(FLG_WORTHLESS);
+				break;
+
+			case FEEL_TERRIBLE:
+			case FEEL_WORTHLESS:
+				ADD_FLG(FLG_WORTHLESS);
+				break;
+
+			default:
+				/* It's not know as useless so... */
+				ADD_FLG(FLG_UNIDENTIFIED);
+				break;
+			}
+		}
 	}
+
+	/* Identified */
 	else
 	{
+		/* Ego object */
 		if (o_ptr->name2)
 		{
 			ego_item_type *e_ptr = &e_info[o_ptr->name2];
@@ -518,24 +548,17 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 			name = FALSE;
 			ADD_FLG(FLG_EGO);
 		}
+
+		/* Artifact */
 		else if (o_ptr->name1 || o_ptr->art_name)
 			ADD_FLG(FLG_ARTIFACT);
+
+		/* Non-ego, non-artifact */
 		else
 		{
 			/* Wearable nameless object */
-			switch (o_ptr->tval)
-			{
-			case TV_WHISTLE:
-			case TV_SHOT: case TV_ARROW: case TV_BOLT: case TV_BOW:
-			case TV_DIGGING: case TV_HAFTED: case TV_POLEARM: case TV_SWORD: 
-			case TV_BOOTS: case TV_GLOVES: case TV_HELM: case TV_CROWN:
-			case TV_SHIELD: case TV_CLOAK:
-			case TV_SOFT_ARMOR: case TV_HARD_ARMOR: case TV_DRAG_ARMOR:
-			case TV_LITE: case TV_AMULET: case TV_RING: case TV_CARD:
-
+			if ((TV_EQUIP_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_EQUIP_END))
 				ADD_FLG(FLG_NAMELESS);
-				break;
-			}
 		}
 
 	}
@@ -612,8 +635,6 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 		ADD_FLG(FLG_JUNKS);
 	else if (o_ptr->tval >= TV_LIFE_BOOK)
 		ADD_FLG(FLG_SPELLBOOKS);
-	else if (is_favorite(o_ptr, FALSE))
-		ADD_FLG(FLG_FAVORITE);
 	else if (o_ptr->tval == TV_POLEARM || o_ptr->tval == TV_SWORD
 		 || o_ptr->tval == TV_DIGGING || o_ptr->tval == TV_HAFTED)
 		ADD_FLG(FLG_WEAPONS);
@@ -987,22 +1008,36 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 	/*** Nameless ***/
 	if (IS_FLG(FLG_NAMELESS))
 	{
-		switch (o_ptr->tval)
-		{
-		case TV_WHISTLE:
-		case TV_SHOT: case TV_ARROW: case TV_BOLT: case TV_BOW:
-		case TV_DIGGING: case TV_HAFTED: case TV_POLEARM: case TV_SWORD: 
-		case TV_BOOTS: case TV_GLOVES: case TV_HELM: case TV_CROWN:
-		case TV_SHIELD: case TV_CLOAK:
-		case TV_SOFT_ARMOR: case TV_HARD_ARMOR: case TV_DRAG_ARMOR:
-		case TV_LITE: case TV_AMULET: case TV_RING: case TV_CARD:
-			if ((!object_known_p(o_ptr) || o_ptr->inscription
-			     || o_ptr->name1 || o_ptr->name2 || o_ptr->art_name))
-				return FALSE;
-			break;
-		default:
-			/* don't match */
+		if (!(TV_EQUIP_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_EQUIP_END))
 			return FALSE;
+
+		/* Inscription is a some sort of 'name' */
+		if (o_ptr->inscription) return FALSE;
+
+		/* Identified */
+		if (object_known_p(o_ptr))
+		{
+			/* Artifacts and Ego objects are not okay */
+			if (o_ptr->name1 || o_ptr->art_name || o_ptr->name2)
+				return FALSE;
+		}
+
+		/* Pseudo-identified */
+		else if (o_ptr->ident & IDENT_SENSE)
+		{
+			switch (o_ptr->feeling)
+			{
+			case FEEL_AVERAGE:
+			case FEEL_GOOD:
+			case FEEL_BROKEN:
+			case FEEL_CURSED:
+				/* It's nameless */
+				break;
+
+			default:
+				/* It's not nameless */
+				return FALSE;
+			}
 		}
 	}
 
@@ -1070,24 +1105,13 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 	/*** Items ***/
 	if (IS_FLG(FLG_WEAPONS))
 	{
-		switch(o_ptr->tval)
-		{
-		case TV_BOW: case TV_HAFTED: case TV_POLEARM:
-		case TV_SWORD: case TV_DIGGING:
-			break;
-		default: return FALSE;
-		}
+		if (!(TV_WEAPON_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_WEAPON_END))
+			return FALSE;
 	}
 	else if (IS_FLG(FLG_ARMORS))
 	{
-		switch(o_ptr->tval)
-		{
-		case TV_BOOTS: case TV_GLOVES: case TV_CLOAK: case TV_CROWN:
-		case TV_HELM: case TV_SHIELD: case TV_SOFT_ARMOR:
-		case TV_HARD_ARMOR: case TV_DRAG_ARMOR:
-			break;
-		default: return FALSE;
-		}
+		if (!(TV_ARMOR_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_ARMOR_END))
+			return FALSE;
 	}
 	else if (IS_FLG(FLG_MISSILES))
 	{
@@ -1181,7 +1205,7 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 	}
 	else if (IS_FLG(FLG_FAVORITE))
 	{
-		if (!is_favorite(o_ptr, TRUE))
+		if (!is_favorite(o_ptr))
 			return FALSE;
 	}
 
@@ -1306,7 +1330,7 @@ static bool is_opt_confirm_destroy(object_type *o_ptr)
 		if (object_value(o_ptr) > 0) return FALSE;
 	
 	if (leave_equip)
-		if ((o_ptr->tval >= TV_SHOT) && (o_ptr->tval <= TV_DRAG_ARMOR)) return FALSE;
+		if ((o_ptr->tval >= TV_MISSILE_BEGIN) && (o_ptr->tval <= TV_ARMOR_END)) return FALSE;
 	
 	if (leave_chest)
 		if ((o_ptr->tval == TV_CHEST) && o_ptr->pval) return FALSE;
@@ -3556,7 +3580,7 @@ command_menu_type menu_data[] =
 	{MN_SEARCH_STR, 1, KTRL('s'), EC_SEARCH_STR},
 	{MN_SEARCH_FORW, 1, -1, EC_SEARCH_FORW},
 	{MN_SEARCH_BACK, 1, KTRL('r'), EC_SEARCH_BACK},
-	{MN_SEARCH_OBJ, 1, KTRL('t'), EC_SEARCH_OBJ},
+	{MN_SEARCH_OBJ, 1, KTRL('y'), EC_SEARCH_OBJ},
 	{MN_SEARCH_DESTROYED, 1, -1, EC_SEARCH_DESTROYED},
 
 	{MN_MOVE, 0, -1, -1},
@@ -3568,7 +3592,7 @@ command_menu_type menu_data[] =
 	{MN_EOL, 1, KTRL('e'), EC_EOL},
 	{MN_PGUP, 1, KTRL('o'), EC_PGUP},
 	{MN_PGDOWN, 1, KTRL('l'), EC_PGDOWN},
-	{MN_TOP, 1, KTRL('y'), EC_TOP},
+	{MN_TOP, 1, KTRL('t'), EC_TOP},
 	{MN_BOTTOM, 1, KTRL('u'), EC_BOTTOM},
 
 	{MN_INSERT, 0, -1, -1},

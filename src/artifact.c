@@ -207,7 +207,7 @@ static void curse_artifact(object_type * o_ptr)
 
 static void random_plus(object_type * o_ptr)
 {
-	int this_type = (o_ptr->tval < TV_BOOTS ? 23 : 19);
+	int this_type = (o_ptr->tval <= TV_WEAPON_END ? 23 : 19);
 
 	switch (artifact_bias)
 	{
@@ -892,7 +892,7 @@ static void random_misc(object_type * o_ptr)
 		case 24:
 		case 25:
 		case 26:
-			if (o_ptr->tval >= TV_BOOTS && o_ptr->tval <= TV_DRAG_ARMOR)
+			if (TV_ARMOR_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_ARMOR_END)
 				random_misc(o_ptr);
 			else
 			{
@@ -1633,7 +1633,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 	char    new_name[1024];
 	int     has_pval = 0;
 	int     powers = randint1(5) + 1;
-	int     max_type = (o_ptr->tval < TV_BOOTS ? 7 : 5);
+	int     max_type = (o_ptr->tval <= TV_WEAPON_END ? 7 : 5);
 	int     power_level;
 	s32b    total_flags;
 	bool    a_cursed = FALSE;
@@ -1755,7 +1755,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 				has_pval = TRUE;
 				break;
 			case 3: case 4:
-				if (one_in_(2) && (o_ptr->tval < TV_BOOTS) && (o_ptr->tval != TV_BOW))
+				if (one_in_(2) && (o_ptr->tval <= TV_WEAPON_END) && (o_ptr->tval != TV_BOW))
 				{
 					if (a_cursed && !one_in_(13)) break;
 					if (one_in_(13))
@@ -1812,7 +1812,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 	}
 
 	/* give it some plusses... */
-	if (o_ptr->tval >= TV_BOOTS && o_ptr->tval <= TV_DRAG_ARMOR)
+	if (TV_ARMOR_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_ARMOR_END)
 		o_ptr->to_a += randint1(o_ptr->to_a > 19 ? 1 : 20 - o_ptr->to_a);
 	else if (o_ptr->tval <= TV_SWORD)
 	{
@@ -1833,14 +1833,14 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 	if (a_cursed) curse_artifact(o_ptr);
 
 	if (!a_cursed &&
-	    (randint1((o_ptr->tval >= TV_BOOTS)
+	    (randint1((o_ptr->tval >= TV_ARMOR_BEGIN)
 	    ? ACTIVATION_CHANCE * 2 : ACTIVATION_CHANCE) == 1))
 	{
 		o_ptr->xtra2 = 0;
 		give_activation_power(o_ptr);
 	}
 
-	if ((o_ptr->tval >= TV_BOOTS) && (o_ptr->tval <= TV_DRAG_ARMOR))
+	if (TV_ARMOR_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_ARMOR_END)
 	{
 		while ((o_ptr->to_d+o_ptr->to_h) > 20)
 		{
@@ -1882,7 +1882,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		remove_flag(o_ptr->art_flags, TR_BRAND_COLD);
 	}
 
-	if (o_ptr->tval >= TV_BOOTS)
+	if (o_ptr->tval >= TV_ARMOR_BEGIN)
 	{
 		/* For armors */
 		if (a_cursed) power_level = 0;
@@ -1920,7 +1920,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 #endif
 
 		{
-			get_random_name(new_name, (bool)(o_ptr->tval >= TV_BOOTS), power_level);
+			get_random_name(new_name, (bool)(o_ptr->tval >= TV_ARMOR_BEGIN), power_level);
 		}
 		else
 		{
@@ -1945,7 +1945,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 	}
 	else
 	{
-		get_random_name(new_name, (bool)(o_ptr->tval >= TV_BOOTS), power_level);
+		get_random_name(new_name, (bool)(o_ptr->tval >= TV_ARMOR_BEGIN), power_level);
 	}
 
 	if (cheat_xtra)

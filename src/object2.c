@@ -7517,7 +7517,8 @@ static void drain_essence(void)
 	{
 		drain_value[TR_DEX] += 20;
 	}
-	if ((o_ptr->tval >= TV_SHOT) && (o_ptr->tval <= TV_SWORD) && (o_ptr->tval != TV_BOW))
+	if ((TV_MISSILE_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_MISSILE_END) ||
+	    (TV_WEAPON_BEGIN <=  o_ptr->tval && o_ptr->tval <= TV_WEAPON_END))
 	{
 		if (old_ds > o_ptr->ds) drain_value[TR_ES_ATTACK] += (old_ds-o_ptr->ds)*10;
 

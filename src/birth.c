@@ -2751,9 +2751,9 @@ static void get_extra(bool roll_hitdie)
 	for (i = 0; i < 5; i++)
 		for (j = 0; j < 64; j++)
 			p_ptr->weapon_exp[i][j] = s_info[p_ptr->pclass].w_start[i][j];
-	if ((p_ptr->pseikaku == SEIKAKU_SEXY) && (p_ptr->weapon_exp[TV_HAFTED-TV_BOW][SV_WHIP] < WEAPON_EXP_BEGINNER))
+	if ((p_ptr->pseikaku == SEIKAKU_SEXY) && (p_ptr->weapon_exp[TV_HAFTED-TV_WEAPON_BEGIN][SV_WHIP] < WEAPON_EXP_BEGINNER))
 	{
-		p_ptr->weapon_exp[TV_HAFTED-TV_BOW][SV_WHIP] = WEAPON_EXP_BEGINNER;
+		p_ptr->weapon_exp[TV_HAFTED-TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_BEGINNER;
 	}
 
 	for (i = 0; i < 10; i++)

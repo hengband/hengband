@@ -6944,7 +6944,7 @@ quit("セーブファイルが壊れています");
 
 	/* Sexy gal gets bonus to maximum weapon skill of whip */
 	if (p_ptr->pseikaku == SEIKAKU_SEXY)
-		s_info[p_ptr->pclass].w_max[TV_HAFTED-TV_BOW][SV_WHIP] = WEAPON_EXP_MASTER;
+		s_info[p_ptr->pclass].w_max[TV_HAFTED-TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_MASTER;
 
 	/* Fill the arrays of floors and walls in the good proportions */
 	set_floor_and_wall(dungeon_type);
