@@ -3997,7 +3997,7 @@ errr make_character_dump(FILE *fff)
 
 		/* End the row */
 #ifdef JP
-			fprintf(fff, "%s\n", buf);
+		fprintf(fff, "%s\n", buf);
 #else
 		fprintf(fff, "%s\n", buf);
 #endif
@@ -4184,7 +4184,7 @@ errr make_character_dump(FILE *fff)
 
 				if (quest[num].complev == 0)
 				{
-					fprintf(fff, 
+					fprintf(fff,
 #ifdef JP
 						"  %s (%d階) - 不戦勝\n",
 #else
@@ -4195,7 +4195,7 @@ errr make_character_dump(FILE *fff)
 				}
 				else
 				{
-					fprintf(fff, 
+					fprintf(fff,
 #ifdef JP
 						"  %s (%d階) - レベル%d\n",
 #else
@@ -4514,7 +4514,7 @@ errr make_character_dump(FILE *fff)
 
 	if (p_ptr->noscore)
 #ifdef JP
-fprintf(fff, "\n 何か不正なことをしてしまってます。");
+		fprintf(fff, "\n 何か不正なことをしてしまってます。");
 #else
 		fprintf(fff, "\n You have done something illegal.");
 #endif
@@ -4551,21 +4551,21 @@ fprintf(fff, "\n 何か不正なことをしてしまってます。");
 
 		if (Total < 1)
 #ifdef JP
-fprintf(fff,"\n まだ敵を倒していません。\n");
+			fprintf(fff,"\n まだ敵を倒していません。\n");
 #else
 			fprintf(fff,"\n You have defeated no enemies yet.\n");
 #endif
 
 		else if (Total == 1)
 #ifdef JP
-fprintf(fff,"\n 一体の敵を倒しています。\n");
+			fprintf(fff,"\n 一体の敵を倒しています。\n");
 #else
 			fprintf(fff,"\n You have defeated one enemy.\n");
 #endif
 
 		else
 #ifdef JP
-fprintf(fff,"\n %lu 体の敵を倒しています。\n", Total);
+			fprintf(fff,"\n %lu 体の敵を倒しています。\n", Total);
 #else
 			fprintf(fff,"\n You have defeated %lu enemies.\n", Total);
 #endif
@@ -4613,7 +4613,7 @@ fprintf(fff,"\n %lu 体の敵を倒しています。\n", Total);
 	}
 
 #ifdef JP
-fprintf(fff, "\n\n  [プレイヤーの徳]\n\n");
+	fprintf(fff, "\n\n  [プレイヤーの徳]\n\n");
 #else
 	fprintf(fff, "\n\n  [Virtues]\n\n");
 #endif
@@ -4629,7 +4629,7 @@ fprintf(fff, "\n\n  [プレイヤーの徳]\n\n");
 	if (p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3)
 	{
 #ifdef JP
-fprintf(fff, "\n\n  [突然変異]\n\n");
+		fprintf(fff, "\n\n  [突然変異]\n\n");
 #else
 		fprintf(fff, "\n\n  [Mutations]\n\n");
 #endif
@@ -4646,7 +4646,7 @@ fprintf(fff, "\n\n  [突然変異]\n\n");
 	if (equip_cnt)
 	{
 #ifdef JP
-fprintf(fff, "  [ キャラクタの装備 ]\n\n");
+		fprintf(fff, "  [キャラクタの装備]\n\n");
 #else
 		fprintf(fff, "  [Character Equipment]\n\n");
 #endif
@@ -4668,7 +4668,7 @@ fprintf(fff, "  [ キャラクタの装備 ]\n\n");
 
 	/* Dump the inventory */
 #ifdef JP
-fprintf(fff, "  [ キャラクタの持ち物 ]\n\n");
+	fprintf(fff, "  [キャラクタの持ち物]\n\n");
 #else
 	fprintf(fff, "  [Character Inventory]\n\n");
 #endif
@@ -4696,11 +4696,11 @@ fprintf(fff, "  [ キャラクタの持ち物 ]\n\n");
 	{
 		/* Header with name of the town */
 #ifdef JP
-		fprintf(fff, "  [ 我が家のアイテム ]\n");
+		fprintf(fff, "  [我が家のアイテム]\n");
 #else
 		fprintf(fff, "  [Home Inventory]\n");
 #endif
-		x=1;
+		x = 1;
 
 		/* Dump all available items */
 		for (i = 0; i < st_ptr->stock_num; i++)
@@ -4728,11 +4728,11 @@ fprintf(fff, "  [ キャラクタの持ち物 ]\n\n");
 	{
 		/* Header with name of the town */
 #ifdef JP
-		fprintf(fff, "  [ 博物館のアイテム ]\n");
+		fprintf(fff, "  [博物館のアイテム]\n");
 #else
 		fprintf(fff, "  [Museum]\n");
 #endif
-		x=1;
+		x = 1;
 
 		/* Dump all available items */
 		for (i = 0; i < st_ptr->stock_num; i++)
