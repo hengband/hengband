@@ -1277,8 +1277,9 @@
 #define FF_MIRROR        108
 #define FF_UNPERM        109
 #define FF_TELEPORTABLE  110
+#define FF_CONVERT       111
 
-#define FF_FLAG_MAX      111
+#define FF_FLAG_MAX      112
 #define FF_FLAG_SIZE     (1 + ((FF_FLAG_MAX - 1) / 32))
 
 /* Which features are dynamic */
@@ -1310,6 +1311,16 @@
 #define PATTERN_TILE_OLD      6
 #define PATTERN_TILE_TELEPORT 7
 #define PATTERN_TILE_WRECKED  8
+
+
+/* Type of conversions */
+#define CONVERT_TYPE_FLOOR   0
+#define CONVERT_TYPE_WALL    1
+#define CONVERT_TYPE_INNER   2
+#define CONVERT_TYPE_OUTER   3
+#define CONVERT_TYPE_SOLID   4
+#define CONVERT_TYPE_STREAM1 5
+#define CONVERT_TYPE_STREAM2 6
 
 
 /*

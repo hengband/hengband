@@ -246,6 +246,7 @@ static cptr f_info_flags[] =
 	"MIRROR",
 	"UNPERM",
 	"TELEPORTABLE",
+	"CONVERT",
 };
 
 

@@ -4466,25 +4466,31 @@ void cave_set_feat(int y, int x, int feat)
 
 int conv_dungeon_feat(int newfeat)
 {
-	switch (newfeat)
+	feature_type *f_ptr = &f_info[newfeat];
+
+	if (have_flag(f_ptr->flags, FF_CONVERT))
 	{
-	case FEAT_CONVERT_FLOOR:
-		return floor_type[randint0(100)];
-	case FEAT_CONVERT_WALL:
-		return fill_type[randint0(100)];
-	case FEAT_CONVERT_INNER:
-		return feat_wall_inner;
-	case FEAT_CONVERT_OUTER:
-		return feat_wall_outer;
-	case FEAT_CONVERT_SOLID:
-		return feat_wall_solid;
-	case FEAT_CONVERT_STREAM1:
-		return d_info[dungeon_type].stream1;
-	case FEAT_CONVERT_STREAM2:
-		return d_info[dungeon_type].stream2;
-	default:
-		return newfeat;
+		switch (f_ptr->power)
+		{
+		case CONVERT_TYPE_FLOOR:
+			return floor_type[randint0(100)];
+		case CONVERT_TYPE_WALL:
+			return fill_type[randint0(100)];
+		case CONVERT_TYPE_INNER:
+			return feat_wall_inner;
+		case CONVERT_TYPE_OUTER:
+			return feat_wall_outer;
+		case CONVERT_TYPE_SOLID:
+			return feat_wall_solid;
+		case CONVERT_TYPE_STREAM1:
+			return d_info[dungeon_type].stream1;
+		case CONVERT_TYPE_STREAM2:
+			return d_info[dungeon_type].stream2;
+		default:
+			return newfeat;
+		}
 	}
+	else return newfeat;
 }
 
 
