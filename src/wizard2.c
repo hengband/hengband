@@ -194,10 +194,10 @@ static void prt_alloc(byte tval, byte sval, int row, int col)
 {
 	int i, j;
 	int home = 0;
-	u32b maxd = 1, maxr = 1, maxt = 1;
+	u32b maxr = 1, maxt = 1, ratio;
 	u32b rarity[K_MAX_DEPTH];
 	u32b total[K_MAX_DEPTH];
-	u32b display[22];
+	s32b maxd = 1, display[22];
 	byte c = TERM_WHITE;
 	cptr r = "+--common--+";
 	object_kind *k_ptr;
@@ -209,11 +209,12 @@ static void prt_alloc(byte tval, byte sval, int row, int col)
 	/* Wipe the tables */
 	(void)C_WIPE(rarity, K_MAX_DEPTH, u32b);
 	(void)C_WIPE(total, K_MAX_DEPTH, u32b);
-	(void)C_WIPE(display, 22, u32b);
+	(void)C_WIPE(display, 22, s32b);
 
 	/* Scan all entries */
 	for (i = 0; i < K_MAX_DEPTH; i++)
 	{
+		int total_frac = 0;
 		for (j = 0; j < alloc_kind_size; j++)
 		{
 			int prob = 0;
@@ -231,7 +232,8 @@ static void prt_alloc(byte tval, byte sval, int row, int col)
 			k_ptr = &k_info[table[j].index];
 
 			/* Accumulate probabilities */
-			total[i] += prob;
+			total[i] += prob / (GREAT_OBJ * K_MAX_DEPTH);
+			total_frac += prob % (GREAT_OBJ * K_MAX_DEPTH);
 
 			/* Accumulate probabilities */
 			if ((k_ptr->tval == tval) && (k_ptr->sval == sval))
@@ -240,6 +242,7 @@ static void prt_alloc(byte tval, byte sval, int row, int col)
 				rarity[i] += prob;
 			}
 		}
+		total[i] += total_frac / (GREAT_OBJ * K_MAX_DEPTH);
 	}
 
 	/* Find maxima */
@@ -249,43 +252,55 @@ static void prt_alloc(byte tval, byte sval, int row, int col)
 		if (total[i] > maxt) maxt = total[i];
 	}
 
+	if (maxr / (GREAT_OBJ * K_MAX_DEPTH) != 0)
+		ratio = maxt / (maxr / (GREAT_OBJ * K_MAX_DEPTH));
+	else
+		ratio = 99999L;
+
 	/* Simulate a log graph */
-	if (maxt / maxr > 32)
+	if (ratio > 1000)
 	{
 		c = TERM_L_WHITE;
 		r = "+-uncommon-+";
 	}
-	if (maxt / maxr > 1024)
+	if (ratio > 3000)
 	{
 		c = TERM_SLATE;
 		r = "+---rare---+";
 	}
-	if (maxt / maxr > 32768L)
+	if (ratio > 32768L)
 	{
 		c = TERM_L_DARK;
-		r = "+--unique--+";
+		r = "+-VeryRare-+";
 	}
 
 	/* Calculate probabilities for each range */
 	for (i = 0; i < 22; i++)
 	{
 		/* Shift the values into view */
-		for (j = i * K_MAX_DEPTH / 22; j < (i + 1) * K_MAX_DEPTH / 22; j++)
-		{
-			display[i] += rarity[j] * (100 * maxt / total[j]);
-		}
 
-		/* Correct proportions */
-		display[i] /= maxr;
+		int possibility = 0;
+		for (j = i * K_MAX_DEPTH / 22; j < (i + 1) * K_MAX_DEPTH / 22; j++)
+			possibility += rarity[j] * (100 * maxt / total[j]);
+
+		possibility = possibility / maxr;
+
+		/* display[i] = log_{sqrt(2)}(possibility) */
+		display[i] = 0;
+		while (possibility)
+		{
+			display[i]++;
+			possibility = possibility * 1000 / 1414;
+		}
 
 		/* Track maximum */
 		if (display[i] > maxd) maxd = display[i];
 	}
 
 	/* Normalize */
-	for (i = 0; i < 22; i++)
+	if (maxd > 10) for (i = 0; i < 22; i++)
 	{
-		display[i] = display[i] * 10 / maxd;
+		display[i] = display[i] - maxd + 10;
 	}
 
 	/* Graph the rarities */
@@ -294,6 +309,9 @@ static void prt_alloc(byte tval, byte sval, int row, int col)
 		Term_putch(col, row + i + 1, TERM_WHITE,  '|');
 
 		prt(format("%d", (i * K_MAX_DEPTH / 220) % 10), row + i + 1, col);
+
+		if (display[i] <= 0) 
+			continue;
 
 		/* Note the level */
 		if ((i * K_MAX_DEPTH / 22 <= home) && (home < (i + 1) * K_MAX_DEPTH / 22))
