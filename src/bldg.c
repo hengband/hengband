@@ -4797,7 +4797,10 @@ msg_print("お金が足りません！");
 		break;
 	}
 	case BACT_LOSE_MUTATION:
-		if (p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3)
+		if (p_ptr->muta1 || p_ptr->muta2 ||
+		    (p_ptr->muta3 & ~MUT3_GOOD_LUCK) ||
+		    (p_ptr->pseikaku != SEIKAKU_LUCKY &&
+		     (p_ptr->muta3 & MUT3_GOOD_LUCK)))
 		{
 			while(!lose_mutation(0));
 			paid = TRUE;
