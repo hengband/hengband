@@ -226,8 +226,8 @@ B:$0:N:Library:Mirimbar:High-Elf
 B:0:N:図書館:ミリムバー:ハイ=エルフ
 B:$0:A:0:Research item:1300:1300:a:1:0
 B:0:A:0:アイテム調査:1300:1300:a:1:0
-B:$0:A:1:Town history:0:0:h:2:0
-B:0:A:1:街の歴史:0:0:h:2:0
+B:$0:A:1:Town Overview:0:0:h:2:0
+B:0:A:1:街の概要:0:0:h:2:0
 B:$0:A:2:Identify item:100:100:i:44:0
 B:0:A:2:アイテム鑑定:100:100:i:44:0
 

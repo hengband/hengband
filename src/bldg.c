@@ -3015,7 +3015,7 @@ static void town_history(void)
 
 	/* Peruse the building help file */
 #ifdef JP
-(void)show_file(TRUE, "bldg_j.txt", NULL, 0, 0);
+(void)show_file(TRUE, "jbldg.txt", NULL, 0, 0);
 #else
 	(void)show_file(TRUE, "bldg.txt", NULL, 0, 0);
 #endif
