@@ -110,6 +110,8 @@ static cptr desc_insult[] =
 	"dances around you!",
 	"makes obscene gestures!",
 	"moons you!!!"
+	"calls you a parasite!",
+	"calls you a cyborg!"
 #endif
 
 };
