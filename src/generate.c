@@ -802,6 +802,8 @@ static bool cave_gen(void)
 	/* Build some rooms */
 	else
 	{
+		int tunnel_fail_count = 0;
+
 		/*
 		 * Build each type of room in turn until we cannot build any more.
 		 */
@@ -886,13 +888,15 @@ static bool cave_gen(void)
 			if (randint1(dun_level) > d_info[dungeon_type].tunnel_percent)
 			{
 				/* make cave-like tunnel */
-				build_tunnel2(dun->cent[i].x, dun->cent[i].y, x, y, 2, 2);
+				(void)build_tunnel2(dun->cent[i].x, dun->cent[i].y, x, y, 2, 2);
 			}
 			else
 			{
 				/* make normal tunnel */
-				build_tunnel(dun->cent[i].y, dun->cent[i].x, y, x);
+				if (!build_tunnel(dun->cent[i].y, dun->cent[i].x, y, x)) tunnel_fail_count++;
 			}
+
+			if (tunnel_fail_count >= 2) return FALSE;
 
 			/* Turn the tunnel into corridor */
 			for (j = 0; j < dun->tunn_n; j++)

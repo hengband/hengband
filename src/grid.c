@@ -562,7 +562,7 @@ void set_floor(int x, int y)
  *   outer -- outer room walls
  *   solid -- solid room walls
  */
-void build_tunnel(int row1, int col1, int row2, int col2)
+bool build_tunnel(int row1, int col1, int row2, int col2)
 {
 	int y, x;
 	int tmp_row, tmp_col;
@@ -585,7 +585,7 @@ void build_tunnel(int row1, int col1, int row2, int col2)
 	while ((row1 != row2) || (col1 != col2))
 	{
 		/* Mega-Hack -- Paranoia -- prevent infinite loops */
-		if (main_loop_count++ > 2000) break;
+		if (main_loop_count++ > 2000) return FALSE;
 
 		/* Allow bends in the tunnel */
 		if (randint0(100) < dun_tun_chg)
@@ -651,6 +651,7 @@ void build_tunnel(int row1, int col1, int row2, int col2)
 				dun->wall[dun->wall_n].x = col1;
 				dun->wall_n++;
 			}
+			else return FALSE;
 
 			/* Forbid re-entry near this piercing */
 			for (y = row1 - 1; y <= row1 + 1; y++)
@@ -689,6 +690,7 @@ void build_tunnel(int row1, int col1, int row2, int col2)
 				dun->tunn[dun->tunn_n].x = col1;
 				dun->tunn_n++;
 			}
+			else return FALSE;
 
 			/* Allow door in next grid */
 			door_flag = FALSE;
@@ -711,6 +713,7 @@ void build_tunnel(int row1, int col1, int row2, int col2)
 					dun->door[dun->door_n].x = col1;
 					dun->door_n++;
 				}
+				else return FALSE;
 
 				/* No door in next grid */
 				door_flag = TRUE;
@@ -732,6 +735,8 @@ void build_tunnel(int row1, int col1, int row2, int col2)
 			}
 		}
 	}
+
+	return TRUE;
 }
 
 
@@ -767,9 +772,10 @@ static bool set_tunnel(int *x, int *y, bool affectwall)
 			dun->tunn[dun->tunn_n].y = *y;
 			dun->tunn[dun->tunn_n].x = *x;
 			dun->tunn_n++;
-		}
 
-		return TRUE;
+			return TRUE;
+		}
+		else return FALSE;
 	}
 
 	if (is_floor_bold(*y, *x))
@@ -787,6 +793,7 @@ static bool set_tunnel(int *x, int *y, bool affectwall)
 			dun->wall[dun->wall_n].x = *x;
 			dun->wall_n++;
 		}
+		else return FALSE;
 
 		/* Forbid re-entry near this piercing */
 		for (j = *y - 1; j <= *y + 1; j++)
@@ -1114,6 +1121,7 @@ bool build_tunnel2(int x1, int y1, int x2, int y2, int type, int cutoff)
 						dun->door[dun->door_n].x = x3;
 						dun->door_n++;
 					}
+					else return FALSE;
 				}
 				firstsuccede = TRUE;
 			}
