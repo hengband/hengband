@@ -2487,7 +2487,7 @@ info[i++] = "それは魔法の難易度を下げる。";
 #ifdef JP
 info[i++] = "それは魔法の難易度を上げる。";
 #else
-		info[i++] = "It prevents you from casting spells.";
+		info[i++] = "It interferes with casting spells.";
 #endif
 	}
 
@@ -3342,7 +3342,7 @@ info[i++] = "それは明かりの半径を狭める(半径に-1)。";
 #ifdef JP
 info[i++] = "それは永遠の明かりを授ける(半径に+1)。";
 #else
-			info[i++] = "It provides permanent light (radius increases by 1).";
+			info[i++] = "It provides permanent light. (radius +1)";
 #endif
 
 	}
