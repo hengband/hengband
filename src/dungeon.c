@@ -1344,7 +1344,7 @@ static void gere_music(s32b music)
                 case MUSIC_DETECT:
                 case MUSIC_DETECT+1:
                 case MUSIC_DETECT+2:
-			detect_traps(DETECT_RAD_DEFAULT);
+			detect_traps(DETECT_RAD_DEFAULT, TRUE);
 			detect_doors(DETECT_RAD_DEFAULT);
 			detect_stairs(DETECT_RAD_DEFAULT);
 			if ((p_ptr->lev > 14)  && (music  < MUSIC_DETECT+3)) p_ptr->magic_num1[0] = music+1;

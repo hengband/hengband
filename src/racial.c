@@ -1547,7 +1547,7 @@ msg_print("¼þ°Ï¤òÄ´¤Ù¤¿¡£");
 				msg_print("You examine your surroundings.");
 #endif
 
-				(void)detect_traps(DETECT_RAD_DEFAULT);
+				(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
 				(void)detect_doors(DETECT_RAD_DEFAULT);
 				(void)detect_stairs(DETECT_RAD_DEFAULT);
 			}
@@ -1803,7 +1803,7 @@ msg_print("¼þ°Ï¤òÄ´ºº¤·¤¿¡£");
 				msg_print("You examine your surroundings.");
 #endif
 
-				(void)detect_traps(DETECT_RAD_DEFAULT);
+				(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
 				(void)detect_doors(DETECT_RAD_DEFAULT);
 				(void)detect_stairs(DETECT_RAD_DEFAULT);
 			}

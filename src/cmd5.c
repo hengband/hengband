@@ -1059,7 +1059,7 @@ static bool cast_life_spell(int spell)
 		(void)lite_area(damroll(2, (plev / 2)), (plev / 10) + 1);
 		break;
 	case 4: /* Detect Traps + Secret Doors */
-		(void)detect_traps(DETECT_RAD_DEFAULT);
+		(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
 		(void)detect_doors(DETECT_RAD_DEFAULT);
 		(void)detect_stairs(DETECT_RAD_DEFAULT);
 		break;
@@ -1211,7 +1211,7 @@ static bool cast_sorcery_spell(int spell)
 		teleport_player(10);
 		break;
 	case 2: /* Detect Doors and Traps */
-		(void)detect_traps(DETECT_RAD_DEFAULT);
+		(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
 		(void)detect_doors(DETECT_RAD_DEFAULT);
 		(void)detect_stairs(DETECT_RAD_DEFAULT);
 		break;
@@ -1367,7 +1367,7 @@ static bool cast_nature_spell(int spell)
 			damroll(3 + ((plev - 1) / 5), 4));
 		break;
 	case 2: /* Detect Doors & Traps */
-		(void)detect_traps(DETECT_RAD_DEFAULT);
+		(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
 		(void)detect_doors(DETECT_RAD_DEFAULT);
 		(void)detect_stairs(DETECT_RAD_DEFAULT);
 		break;
@@ -1419,7 +1419,7 @@ take_hit(DAMAGE_NOESCAPE, damroll(2, 2), "Æü¤Î¸÷", -1);
 		break;
 	case 10: /* Nature Awareness -- downgraded */
 		map_area(DETECT_RAD_MAP);
-		(void)detect_traps(DETECT_RAD_DEFAULT);
+		(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
 		(void)detect_doors(DETECT_RAD_DEFAULT);
 		(void)detect_stairs(DETECT_RAD_DEFAULT);
 		(void)detect_monsters_normal(DETECT_RAD_DEFAULT);
@@ -3339,7 +3339,7 @@ static bool cast_arcane_spell(int spell)
 		(void)set_cut(p_ptr->cut - 10);
 		break;
 	case 8: /* Detect Doors & Traps */
-		(void)detect_traps(DETECT_RAD_DEFAULT);
+		(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
 		(void)detect_doors(DETECT_RAD_DEFAULT);
 		(void)detect_stairs(DETECT_RAD_DEFAULT);
 		break;

@@ -928,7 +928,7 @@ extern void seal_of_mirror(int dam);
 /* spells2.c */
 extern void message_pain(int m_idx, int dam);
 extern void self_knowledge(void);
-extern bool detect_traps(int range);
+extern bool detect_traps(int range, bool known);
 extern bool detect_doors(int range);
 extern bool detect_stairs(int range);
 extern bool detect_treasure(int range);

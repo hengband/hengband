@@ -3491,7 +3491,7 @@ prt("[何かキーを押すとゲームに戻ります]", k, 13);
 /*
  * Detect all traps on current panel
  */
-bool detect_traps(int range)
+bool detect_traps(int range, bool known)
 {
 	int             x, y;
 	bool            detect = FALSE;
@@ -3512,7 +3512,7 @@ bool detect_traps(int range)
 			c_ptr = &cave[y][x];
 
 			/* Mark as detected */
-			if (dist <= range)
+			if (dist <= range && known)
 			{
 				if (dist <= range - 1)
 					c_ptr->info |= (CAVE_IN_DETECT);
@@ -4497,7 +4497,7 @@ bool detect_all(int range)
 	bool detect = FALSE;
 
 	/* Detect everything */
-	if (detect_traps(range)) detect = TRUE;
+	if (detect_traps(range, TRUE)) detect = TRUE;
 	if (detect_doors(range)) detect = TRUE;
 	if (detect_stairs(range)) detect = TRUE;
 	if (detect_treasure(range)) detect = TRUE;

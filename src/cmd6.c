@@ -1208,7 +1208,7 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			wiz_lite(TRUE, FALSE);
 			(void)do_inc_stat(A_INT);
 			(void)do_inc_stat(A_WIS);
-			(void)detect_traps(DETECT_RAD_DEFAULT);
+			(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
 			(void)detect_doors(DETECT_RAD_DEFAULT);
 			(void)detect_stairs(DETECT_RAD_DEFAULT);
 			(void)detect_treasure(DETECT_RAD_DEFAULT);
@@ -1472,7 +1472,7 @@ void do_cmd_quaff_potion(void)
  * include scrolls with no effects but recharge or identify, which are
  * cancelled before use.  XXX Reading them still takes a turn, though.
  */
-static void do_cmd_read_scroll_aux(int item)
+static void do_cmd_read_scroll_aux(int item, bool known)
 {
 	int         k, used_up, ident, lev;
 	object_type *o_ptr;
@@ -1768,7 +1768,7 @@ static void do_cmd_read_scroll_aux(int item)
 
 		case SV_SCROLL_DETECT_TRAP:
 		{
-			if (detect_traps(DETECT_RAD_DEFAULT)) ident = TRUE;
+			if (detect_traps(DETECT_RAD_DEFAULT, known)) ident = TRUE;
 			break;
 		}
 
@@ -2159,6 +2159,7 @@ static bool item_tester_hook_readable(object_type *o_ptr)
 
 void do_cmd_read_scroll(void)
 {
+	object_type *o_ptr;
 	int  item;
 	cptr q, s;
 
@@ -2214,12 +2215,24 @@ void do_cmd_read_scroll(void)
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
+	/* Get the item (in the pack) */
+	if (item >= 0)
+	{
+		o_ptr = &inventory[item];
+	}
+
+	/* Get the item (on the floor) */
+	else
+	{
+		o_ptr = &o_list[0 - item];
+	}
+
 	/* Read the scroll */
-	do_cmd_read_scroll_aux(item);
+	do_cmd_read_scroll_aux(item, object_aware_p(o_ptr));
 }
 
 
-static int staff_effect(int sval, bool *use_charge, bool magic)
+static int staff_effect(int sval, bool *use_charge, bool magic, bool known)
 {
 	int k;
 	int ident = FALSE;
@@ -2364,7 +2377,7 @@ static int staff_effect(int sval, bool *use_charge, bool magic)
 
 		case SV_STAFF_DETECT_TRAP:
 		{
-			if (detect_traps(DETECT_RAD_DEFAULT)) ident = TRUE;
+			if (detect_traps(DETECT_RAD_DEFAULT, known)) ident = TRUE;
 			break;
 		}
 
@@ -2665,7 +2678,7 @@ static void do_cmd_use_staff_aux(int item)
 	/* Sound */
 	sound(SOUND_ZAP);
 
-	ident = staff_effect(o_ptr->sval, &use_charge, FALSE);
+	ident = staff_effect(o_ptr->sval, &use_charge, FALSE, object_aware_p(o_ptr));
 
 	if (!(object_aware_p(o_ptr)))
 	{
@@ -3282,7 +3295,7 @@ static int rod_effect(int sval, int dir, bool *use_charge, bool magic)
 	{
 		case SV_ROD_DETECT_TRAP:
 		{
-			if (detect_traps(DETECT_RAD_DEFAULT)) ident = TRUE;
+			if (detect_traps(DETECT_RAD_DEFAULT, dir ? TRUE : FALSE)) ident = TRUE;
 			break;
 		}
 
@@ -3519,7 +3532,8 @@ static int rod_effect(int sval, int dir, bool *use_charge, bool magic)
  */
 static void do_cmd_zap_rod_aux(int item)
 {
-	int         ident, chance, dir, lev, fail;
+	int ident, chance, lev, fail;
+        int dir = 0;
 	object_type *o_ptr;
 	bool success;
 
@@ -4109,7 +4123,7 @@ take_hit(DAMAGE_LOSELIFE, damroll(3,8), "審判の宝石", -1);
 				take_hit(DAMAGE_LOSELIFE, damroll(3, 8), "the Jewel of Judgement", -1);
 #endif
 
-				(void)detect_traps(DETECT_RAD_DEFAULT);
+				(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
 				(void)detect_doors(DETECT_RAD_DEFAULT);
 				(void)detect_stairs(DETECT_RAD_DEFAULT);
 
@@ -6558,7 +6572,7 @@ msg_print("混乱していて読めない！");
 				return;
 			}
 
-		  do_cmd_read_scroll_aux(item);
+		  do_cmd_read_scroll_aux(item, TRUE);
 		  break;
 		}
 
@@ -7152,7 +7166,7 @@ msg_print("呪文をうまく唱えられなかった！");
 		}
 		else
 		{
-			staff_effect(sval, &use_charge, TRUE);
+			staff_effect(sval, &use_charge, TRUE, TRUE);
 			if (!use_charge) return;
 
 			/* Delayed optimization */
