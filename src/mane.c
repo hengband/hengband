@@ -1257,7 +1257,7 @@ msg_print("古代ドラゴンを召喚した！");
 		int k;
 		if (!target_set(TARGET_KILL)) return FALSE;
 #ifdef JP
-msg_print("アンバーの王を召喚した！");
+msg_print("アンバーの王族を召喚した！");
 #else
 			msg_print("You summons Lords of Amber!");
 #endif

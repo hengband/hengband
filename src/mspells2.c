@@ -4090,7 +4090,7 @@ msg_format("%^sが魔法で古代ドラゴンを召喚した！", m_name);
 						disturb(1, 0);
 
 #ifdef JP
-msg_format("%^sがアンバーの王を召喚した！", m_name);
+msg_format("%^sがアンバーの王族を召喚した！", m_name);
 #else
 						msg_format("%^s magically summons Lords of Amber!", m_name);
 #endif

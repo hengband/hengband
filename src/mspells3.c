@@ -1896,7 +1896,7 @@ msg_print("Summoned ancient dragons are angry!");
 	{
 		int k;
 #ifdef JP
-msg_print("失件田□及畢毛黎揚仄凶〞");
+msg_print("失件田□及畢簡毛黎揚仄凶〞");
 #else
 			msg_print("You summon a Lord of Amber!");
 #endif
@@ -1905,7 +1905,7 @@ msg_print("失件田□及畢毛黎揚仄凶〞");
 			{
 				if (!pet)
 #ifdef JP
-msg_print("黎椒今木凶失件田□及畢反變勻化中月〞");
+msg_print("黎椒今木凶失件田□及畢簡反變勻化中月〞");
 #else
 msg_print("Summoned Lords of Amber are angry!");
 #endif

@@ -1574,7 +1574,7 @@ if (flags6 & (RF6_S_CYBER))         {vp[vn] = "¥µ¥¤¥Ð¡¼¥Ç¡¼¥â¥ó¾¤´­";color[vn++]
 #endif
 
 #ifdef JP
-if (flags6 & (RF6_S_AMBERITES))     {vp[vn] = "¥¢¥ó¥Ð¡¼¤Î²¦¾¤´­";color[vn++] = TERM_VIOLET;}
+if (flags6 & (RF6_S_AMBERITES))     {vp[vn] = "¥¢¥ó¥Ð¡¼¤Î²¦Â²¾¤´­";color[vn++] = TERM_VIOLET;}
 #else
 	if (flags6 & (RF6_S_AMBERITES))     {vp[vn] = "summon Lords of Amber";color[vn++] = TERM_VIOLET;}
 #endif

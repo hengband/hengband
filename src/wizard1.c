@@ -2461,7 +2461,7 @@ if (flags6 & (RF6_S_DRAGON))        vp[vn++] = "一体のドラゴンを召喚する";
 if (flags6 & (RF6_S_HI_UNDEAD))     vp[vn++] = "強力なアンデッドを召喚する";
 if (flags6 & (RF6_S_HI_DRAGON))     vp[vn++] = "古代ドラゴンを召喚する";
 if (flags6 & (RF6_S_CYBER))         vp[vn++] = "サイバーデーモンを召喚する";
-if (flags6 & (RF6_S_AMBERITES))     vp[vn++] = "アンバーの王を召喚する";
+if (flags6 & (RF6_S_AMBERITES))     vp[vn++] = "アンバーの王族を召喚する";
 if (flags6 & (RF6_S_UNIQUE))        vp[vn++] = "ユニーク・モンスターを召喚する";
 #else
 		if (flags6 & (RF6_HAND_DOOM))         vp[vn++] = "invoke the Hand of Doom";

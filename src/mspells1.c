@@ -4487,7 +4487,7 @@ if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
 #endif
 
 #ifdef JP
-else msg_format("%^sがアンバーの王を召喚した！", m_name);
+else msg_format("%^sがアンバーの王族を召喚した！", m_name);
 #else
 			else msg_format("%^s magically summons Lords of Amber!", m_name);
 #endif
