@@ -1253,7 +1253,7 @@ static bool cast_sorcery_spell(int spell)
 #else
 		if (!get_check("Are you sure? (Teleport Level)")) return FALSE;
 #endif
-		(void)teleport_player_level();
+		(void)teleport_level(0);
 		break;
 	case 22: /* Word of Recall */
 		return word_of_recall();
@@ -2798,7 +2798,7 @@ msg_print("御用でございますか、御主人様？");
 #else
 				if (!get_check("Are you sure? (Teleport Level)")) return FALSE;
 #endif
-				(void)teleport_player_level();
+				(void)teleport_level(0);
 			}
 			break;
 		case 13: /* Dimension Door */
@@ -3389,7 +3389,7 @@ msg_print("光線が放たれた。");
 #else
 		if (!get_check("Are you sure? (Teleport Level)")) return FALSE;
 #endif
-		(void)teleport_player_level();
+		(void)teleport_level(0);
 		break;
 	case 27: /* Teleport Away */
 		if (!get_aim_dir(&dir)) return FALSE;

@@ -512,32 +512,53 @@ msg_print("不思議な力がテレポートを防いだ！");
 
 /*
  * Teleport the player one level up or down (random when legal)
+ * Note: If m_idx <= 0, target is player.
  */
-void teleport_player_level(void)
+void teleport_level(int m_idx)
 {
-	bool go_up;
+	bool         go_up;
+	monster_type *m_ptr;
+	char         m_name[160];
+	bool         see_m = TRUE;
 
-	/* No effect in arena or quest */
-	if (p_ptr->inside_arena || (p_ptr->inside_quest && !random_quest_number(dun_level)) ||
-	    ((quest_number(dun_level) || (dun_level >= d_info[dungeon_type].maxdepth)) && (dun_level > 1) && ironman_downward))
+	if (m_idx <= 0) /* To player */
 	{
 #ifdef JP
-msg_print("効果がなかった。");
+		strcpy(m_name, "あなた");
 #else
-		msg_print("There is no effect.");
+		strcpy(m_name, "you");
+#endif
+	}
+	else /* To monster */
+	{
+		m_ptr = &m_list[m_idx];
+
+		/* Get the monster name (or "it") */
+		monster_desc(m_name, m_ptr, 0);
+
+		see_m = m_ptr->ml;
+	}
+
+	/* No effect in arena or quest */
+	if (p_ptr->inside_arena || p_ptr->inside_battle || (p_ptr->inside_quest && !random_quest_number(dun_level)) ||
+	    ((quest_number(dun_level) || (dun_level >= d_info[dungeon_type].maxdepth)) && (dun_level > 1) && ironman_downward && (m_idx <= 0)))
+	{
+#ifdef JP
+		if (see_m) msg_print("効果がなかった。");
+#else
+		if (see_m) msg_print("There is no effect.");
 #endif
 
 		return;
 	}
 
-	if (p_ptr->anti_tele)
+	if ((m_idx <= 0) && p_ptr->anti_tele) /* To player */
 	{
 #ifdef JP
-msg_print("不思議な力がテレポートを防いだ！");
+		msg_print("不思議な力がテレポートを防いだ！");
 #else
 		msg_print("A mysterious force prevents you from teleporting!");
 #endif
-
 		return;
 	}
 
@@ -545,104 +566,125 @@ msg_print("不思議な力がテレポートを防いだ！");
 	if (randint0(100) < 50) go_up = TRUE;
 	else go_up = FALSE;
 
-	if (p_ptr->wizard)
+	if ((m_idx <= 0) && p_ptr->wizard)
 	{
 		if (get_check("Force to go up? ")) go_up = TRUE;
 		else if (get_check("Force to go down? ")) go_up = FALSE;
 	}
 
 	/* Down only */ 
-	if (ironman_downward || (dun_level <= d_info[dungeon_type].mindepth))
+	if ((ironman_downward && (m_idx <= 0)) || (dun_level <= d_info[dungeon_type].mindepth))
 	{
 #ifdef JP
-msg_print("あなたは床を突き破って沈んでいく。");
+		if (see_m) msg_format("%^sは床を突き破って沈んでいく。", m_name);
 #else
-		msg_print("You sink through the floor.");
+		if (see_m) msg_format("%^s sink%s through the floor.", m_name, (m_idx <= 0) ? "" : "s");
 #endif
-		if (!dun_level)
+		if (m_idx <= 0) /* To player */
 		{
-			dungeon_type = p_ptr->recall_dungeon;
-			p_ptr->oldpy = py;
-			p_ptr->oldpx = px;
+			if (!dun_level)
+			{
+				dungeon_type = p_ptr->recall_dungeon;
+				p_ptr->oldpy = py;
+				p_ptr->oldpx = px;
+			}
+
+			if (record_stair) do_cmd_write_nikki(NIKKI_TELE_LEV, 1, NULL);
+
+			if (autosave_l) do_cmd_save_game(TRUE);
+
+			if (!dun_level)
+			{
+				dun_level = d_info[dungeon_type].mindepth;
+				prepare_change_floor_mode(CFM_RAND_PLACE | CFM_CLEAR_ALL);
+			}
+			else
+			{
+				prepare_change_floor_mode(CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+			}
+
+			/* Leaving */
+			p_ptr->leaving = TRUE;
 		}
-
-		if (record_stair) do_cmd_write_nikki(NIKKI_TELE_LEV, 1, NULL);
-
-		if (autosave_l) do_cmd_save_game(TRUE);
-
-		if (!dun_level)
-		{
-			dun_level = d_info[dungeon_type].mindepth;
-			prepare_change_floor_mode(CFM_RAND_PLACE | CFM_CLEAR_ALL);
-		}
-		else
-		{
-			prepare_change_floor_mode(CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
-		}
-
-		/* Leaving */
-		p_ptr->leaving = TRUE;
 	}
 
 	/* Up only */
 	else if (quest_number(dun_level) || (dun_level >= d_info[dungeon_type].maxdepth))
 	{
 #ifdef JP
-msg_print("あなたは天井を突き破って宙へ浮いていく。");
+		if (see_m) msg_format("%^sは天井を突き破って宙へ浮いていく。", m_name);
 #else
-		msg_print("You rise up through the ceiling.");
+		if (see_m) msg_format("%^s rise%s up through the ceiling.", m_name, (m_idx <= 0) ? "" : "s");
 #endif
 
 
-		if (record_stair) do_cmd_write_nikki(NIKKI_TELE_LEV, -1, NULL);
+		if (m_idx <= 0) /* To player */
+		{
+			if (record_stair) do_cmd_write_nikki(NIKKI_TELE_LEV, -1, NULL);
 
-		if (autosave_l) do_cmd_save_game(TRUE);
+			if (autosave_l) do_cmd_save_game(TRUE);
 
-		prepare_change_floor_mode(CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+			prepare_change_floor_mode(CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 
-		leave_quest_check();
+			leave_quest_check();
 
-		/* Leaving */
-		p_ptr->inside_quest = 0;
-		p_ptr->leaving = TRUE;
+			/* Leaving */
+			p_ptr->inside_quest = 0;
+			p_ptr->leaving = TRUE;
+		}
 	}
 	else if (go_up)
 	{
 #ifdef JP
-msg_print("あなたは天井を突き破って宙へ浮いていく。");
+		if (see_m) msg_format("%^sは天井を突き破って宙へ浮いていく。", m_name);
 #else
-		msg_print("You rise up through the ceiling.");
+		if (see_m) msg_format("%^s rise%s up through the ceiling.", m_name, (m_idx <= 0) ? "" : "s");
 #endif
 
 
-		if (record_stair) do_cmd_write_nikki(NIKKI_TELE_LEV, -1, NULL);
+		if (m_idx <= 0) /* To player */
+		{
+			if (record_stair) do_cmd_write_nikki(NIKKI_TELE_LEV, -1, NULL);
 
-		if (autosave_l) do_cmd_save_game(TRUE);
+			if (autosave_l) do_cmd_save_game(TRUE);
 
-		prepare_change_floor_mode(CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+			prepare_change_floor_mode(CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 
-		/* Leaving */
-		p_ptr->leaving = TRUE;
+			/* Leaving */
+			p_ptr->leaving = TRUE;
+		}
 	}
 	else
 	{
 #ifdef JP
-msg_print("あなたは床を突き破って沈んでいく。");
+		if (see_m) msg_format("%^sは床を突き破って沈んでいく。", m_name);
 #else
-		msg_print("You sink through the floor.");
+		if (see_m) msg_format("%^s sink%s through the floor.", m_name, (m_idx <= 0) ? "" : "s");
 #endif
 
-		/* Never reach this code on the surface */
-		/* if (!dun_level) dungeon_type = p_ptr->recall_dungeon; */
+		if (m_idx <= 0) /* To player */
+		{
+			/* Never reach this code on the surface */
+			/* if (!dun_level) dungeon_type = p_ptr->recall_dungeon; */
 
-		if (record_stair) do_cmd_write_nikki(NIKKI_TELE_LEV, 1, NULL);
+			if (record_stair) do_cmd_write_nikki(NIKKI_TELE_LEV, 1, NULL);
 
-		if (autosave_l) do_cmd_save_game(TRUE);
+			if (autosave_l) do_cmd_save_game(TRUE);
 
-		prepare_change_floor_mode(CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+			prepare_change_floor_mode(CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 
-		/* Leaving */
-		p_ptr->leaving = TRUE;
+			/* Leaving */
+			p_ptr->leaving = TRUE;
+		}
+	}
+
+	/* Monster level teleportation is simple deleting now */
+	if (m_idx > 0)
+	{
+		/* Check for quest completion */
+		check_quest_completion(m_ptr);
+
+		delete_monster_idx(m_idx);
 	}
 
 	/* Sound */
@@ -1047,7 +1089,7 @@ msg_print("しかし効力を跳ね返した！");
 			}
 
 			/* Teleport Level */
-			teleport_player_level();
+			teleport_level(0);
 			break;
 		}
 

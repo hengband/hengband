@@ -1433,7 +1433,7 @@ bool make_attack_spell(int m_idx)
 	/* Remove the "ineffective" spells */
 	remove_bad_spells(m_idx, &f4, &f5, &f6);
 
-	if (p_ptr->inside_arena)
+	if (p_ptr->inside_arena || p_ptr->inside_battle)
 	{
 		f4 &= ~(RF4_SUMMON_MASK);
 		f5 &= ~(RF5_SUMMON_MASK);
@@ -3676,7 +3676,7 @@ msg_print("しかし効力を跳ね返した！");
 			}
 			else
 			{
-				teleport_player_level();
+				teleport_level(0);
 			}
 			learn_spell(MS_TELE_LEVEL);
 			update_smart_learn(m_idx, DRS_NEXUS);

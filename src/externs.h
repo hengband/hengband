@@ -1093,7 +1093,7 @@ extern bool teleport_away(int m_idx, int dis, bool dec_valour);
 extern void teleport_to_player(int m_idx, int power);
 extern void teleport_player(int dis);
 extern void teleport_player_to(int ny, int nx, bool no_tele);
-extern void teleport_player_level(void);
+extern void teleport_level(int m_idx);
 extern bool recall_player(int turns);
 extern bool word_of_recall(void);
 extern bool reset_recall(void);

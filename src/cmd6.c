@@ -1733,7 +1733,7 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 
 		case SV_SCROLL_TELEPORT_LEVEL:
 		{
-			(void)teleport_player_level();
+			(void)teleport_level(0);
 			ident = TRUE;
 			break;
 		}

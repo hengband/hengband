@@ -328,6 +328,7 @@ bool monst_spell_monst(int m_idx)
 		f5 &= ~(RF5_SUMMON_MASK);
 		f6 &= ~(RF6_SUMMON_MASK);
 	}
+
 	if (p_ptr->inside_battle && !one_in_(3))
 	{
 		f6 &= ~(RF6_HEAL);
@@ -3339,8 +3340,43 @@ bool monst_spell_monst(int m_idx)
 
 	/* RF6_TELE_LEVEL */
 	case 160+10:
-		/* Not implemented */
-		return FALSE;
+		if (known)
+		{
+			if (see_either)
+			{
+#ifdef JP
+				msg_format("%^sが%sの足を指さした。", m_name, t_name);
+#else
+				msg_format("%^s gestures at %s's feet.", m_name, t_name);
+#endif
+			}
+			else
+			{
+				mon_fight = TRUE;
+			}
+		}
+
+		if (tr_ptr->flagsr & (RFR_EFF_RES_NEXU_MASK | RFR_RES_TELE))
+		{
+#ifdef JP
+			if (see_t) msg_format("%^sには効果がなかった。", t_name);
+#else
+			if (see_t) msg_format("%^s is unaffected!", t_name);
+#endif
+		}
+		else if ((tr_ptr->flags1 & RF1_QUESTOR) ||
+			    (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10))
+		{
+#ifdef JP
+			if (see_t) msg_format("%^sは効力を跳ね返した！", t_name);
+#else
+			if (see_t) msg_format("%^s resist the effects!", t_name);
+#endif
+		}
+		else teleport_level((t_idx == p_ptr->riding) ? 0 : t_idx);
+
+		wake_up = TRUE;
+		break;
 
 	/* RF6_PSY_SPEAR */
 	case 160+11:
