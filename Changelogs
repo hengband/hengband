@@ -1,4 +1,78 @@
+2002-03-04  Takeshi Mogami  <mogami@akiru>
+
+	* src/main-x11.c:
+	タイル表示のサイズを正方形にするために、
+	setenv ANGBAND_X11_FONT_0 '-sony-fixed-medium-r-normal--16-*-*-*-*-160-iso8859-1,-jis-fixed-medium-r-normal--16-*-*-*-*-320-jisx0208.1983-0'
+	setenv ANGBAND_X11_FONT '-sony-fixed-medium-r-normal--16-*-*-*-*-*-iso8859-1,-jis-fixed-medium-r-normal--16-*-*-*-*-*-jisx0208.1983-0'
+	のように、通常のフォントよりも幅だけ2倍にしたとき、今までは表示がおかしくなって
+	画面にゴミが出ていたので修正した。
+
+	* src/cmd4.c, src/object1.c, src/report.c:
+	タイル表示でもスクリーンショットを送信できるようにした。
+
+2002-03-04  habu  <habu@akiru>
+
+	* lib/edit/k_info_j.txt:
+	飛び道具の出現階変更に合わせてアイテムレベルも変更。
+
+2002-03-03  Takeshi Mogami  <mogami@akiru>
+
+	* src/cmd4.c:
+	rgraに流れていたパッチを参考に、'%'コマンドで数値入力でcharやattrを変更
+	できるようにした。^N ^A ^C で数値入力に入る。
+
+2002-03-03  henkma  <henkma@akiru>
+
+	* src/racial.c:
+	英語のレイシャルパワーの名前の大文字小文字の使いわけがバラバラなので,
+	重要な単語の先頭のみ大文字という風に統一.
+
+2002-03-03  hoge  <hoge@akiru>
+
+	* lib/file/a_cursed_j.txt, lib/file/a_high_j.txt, lib/file/a_low_j.txt, lib/file/a_med_j.txt, lib/file/w_high_j.txt, lib/file/w_low_j.txt, lib/file/w_med_j.txt, src/birth.c, src/init2.c, src/xtra1.c, lib/edit/a_info_j.txt, lib/edit/k_info_j.txt, lib/edit/t0000001_j.txt, lib/edit/t_lite_j.txt:
+	飛び道具の出現階変更とそれに伴なってクエストの報酬変更
+	2つ以上の単語の☆名に・を挿入
+
+2002-03-02  habu  <habu@akiru>
+
+	* lib/file/a_high_j.txt, lib/file/a_med_j.txt:
+	なぜか一行目だけNが抜けていたので修正。
+
+2002-03-02  Takeshi Mogami  <mogami@akiru>
+
+	* src/main-gcu.c, src/main-x11.c:
+	argv未使用のワーニングを消す修正。
+
+2002-03-02  habu  <habu@akiru>
+
+	* src/xtra1.c:
+	アライメントの計算で先にjをデクリメントしないとSEGVるので修正。
+
+	* src/spells3.c:
+	劣化攻撃でまれ(1/13)にpvalが下がるようにした。
+
+	* src/xtra1.c:
+	称号名がフィールド画面にはみ出さないように修正。但し、称号名はここでしか表示されていないのではみ出すやつはどうやっても全体を見れない事になる。
+
+2002-03-02  Takeshi Mogami  <mogami@akiru>
+
+	* lib/edit/r_info_j.txt:
+	growing →大きくなってくる
+
+	* lib/edit/a_info_j.txt:
+	力の指輪の英文説明を修正。モルゴスから隠された→サウロンから隠された。
+
+	* lib/edit/a_info_j.txt:
+	フンディンの鎖付き鉄球の説明修正。
+
+2002-03-02  habu  <habu@akiru>
+
+	* src/xtra1.c:
+	徳によるアライメントの計算のバグを修正。(kobayasiさん御報告)
+
 2002-02-28  Takeshi Mogami  <mogami@akiru>
+
+	* Changelogs: 更新
 
 	* src/object1.c: '\n'の追加し忘れていたのを追加。
 
