@@ -715,7 +715,6 @@ void Term_queue_chars(int x, int y, int n, byte a, cptr s)
          */
         if ((scr_aa[x] & KANJI2) && !(scr_aa[x] & 0x80))
         {
-		plog_fmt("scr_aa[%d]=%d\n",x,scr_aa[x]);
                 scr_cc[x - 1] = ' ';
                 scr_aa[x - 1] &= KANJIC;
                 x1 = x2 = x - 1;
