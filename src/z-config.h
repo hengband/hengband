@@ -17,6 +17,11 @@
 #define USE_SPECIAL
 
 #ifndef HAVE_CONFIG_H
+
+/*
+ * USE_FONTSET and/or USE_XIM can be commented out
+ * when you don't want to use it.
+ */
 #ifdef JP
 #define USE_FONTSET
 #define USE_XIM
@@ -26,9 +31,10 @@
 #define USE_LOCALE
 #endif
 
-#ifndef USE_FONTSET
+#if defined(JP) && !defined(USE_FONTSET)
 #define _JP
 #endif
+
 #endif /* HAVE_CONFIG_H */
 
 
