@@ -1,6 +1,6 @@
 ## Makefile.am -- Process this file with automake to process Makefile.in
 
-EXTRA_DIST = \
+angband_files = \
 	colors.prf \
 	font-ami.prf font-dos.prf font-ibm.prf font-mac.prf \
 	font-mon.prf font-win.prf font-x11.prf font-xxx.prf \
@@ -12,3 +12,14 @@ EXTRA_DIST = \
 	pref-x11.prf pref.prf proxy.prf spell-xx.prf \
 	user-win.prf user.prf xtra-gcu.prf \
 	xtra-new.prf xtra-xxx.prf
+
+EXTRA_DIST = \
+  $(angband_files)
+
+if SET_GID
+angbanddir = @DEFAULT_PATH@pref
+
+angband_DATA = \
+  $(angband_files)
+endif
+

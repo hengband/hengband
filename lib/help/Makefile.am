@@ -1,6 +1,6 @@
 ## Makefile.am -- Process this file with automake to process Makefile.in
 
-EXTRA_DIST = \
+angband_files = \
 	arena.txt attack.hlp attack.txt birth.hlp birth.txt \
 	bldg.txt command.hlp command.txt commdesc.hlp commdesc.txt \
 	dungeon.hlp dungeon.txt gambling.txt general.hlp general.txt \
@@ -16,3 +16,14 @@ EXTRA_DIST = \
 	jtang.txt jtown.hlp jtown.txt jversion.txt \
 	jversion.txt magic.hlp magic.txt option.hlp option.txt \
 	pref.hlp pref.txt readme.txt spoiler.hlp tang.txt version.txt
+
+EXTRA_DIST = \
+  $(angband_files)
+
+if SET_GID
+angbanddir = @DEFAULT_PATH@help
+
+angband_DATA = \
+  $(angband_files)
+endif
+

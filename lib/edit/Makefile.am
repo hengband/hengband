@@ -1,6 +1,6 @@
 ## Makefile.am -- Process this file with automake to process Makefile.in
 
-EXTRA_DIST = \
+angband_files = \
 	a_info_j.txt d_info_j.txt e_info_j.txt f_info_j.txt \
 	k_info_j.txt misc_j.txt \
 	q0000001_j.txt q0000002_j.txt q0000003_j.txt q0000004_j.txt \
@@ -17,3 +17,14 @@ EXTRA_DIST = \
 	t0000006_j.txt t_basic_j.txt t_info_j.txt t_lite_j.txt \
 	t_pref_j.txt v_info_j.txt w_info_j.txt \
 	m_info_j.txt s_info_j.txt
+
+EXTRA_DIST = \
+  $(angband_files)
+
+if SET_GID
+angbanddir = @DEFAULT_PATH@edit
+
+angband_DATA = \
+  $(angband_files)
+endif
+

@@ -29,3 +29,9 @@ EXTRA_hengband_SOURCES = \
 	main-dos.c main-ibm.c main-mac-carbon.c \
 	makefile.bcc makefile.std makefile.dos makefile.ibm \
 	readdib.c script.c wall.bmp
+
+install-exec-hook:
+if SET_GID
+	chgrp "@GAMEGROUP@" "$(DESTDIR)$(bindir)/hengband"
+	chmod g+s "$(DESTDIR)$(bindir)/hengband"
+endif

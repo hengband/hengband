@@ -12,3 +12,4 @@
 #undef CHUUKEI
 #undef WORLD_SCORE
 #undef USE_TRANSPARENCY
+#undef DEFAULT_PATH
