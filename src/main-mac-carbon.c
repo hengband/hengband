@@ -4494,6 +4494,12 @@ static void menu(long mc)
 				{
 					/* Toggle arg_graphics */
 					arg_graphics = !arg_graphics;
+					if( arg_graphics == true ){
+						ANGBAND_GRAF = "old";
+						arg_newstyle_graphics = false;
+						grafWidth = grafHeight = 8;
+						pictID = 1001;
+					}
 
 					/* Hack -- Force redraw */
 					Term_key_push(KTRL('R'));
