@@ -37,7 +37,7 @@
 #define FLG_THIRD 19
 #define FLG_FOURTH 20
 #define FLG_ITEMS 21
-#define FLG_ARTIFACTS 22
+#define FLG_XXX1 22 /* unused */
 #define FLG_WEAPONS 23
 #define FLG_ARMORS 24
 #define FLG_MISSILES 25
@@ -82,7 +82,7 @@
 #define KEY_THIRD "3冊目の"
 #define KEY_FOURTH "4冊目の"
 #define KEY_ITEMS "アイテム"
-#define KEY_ARTIFACTS "アーティファクトアイテム" /* 英語版との互換性の為残す */
+#define KEY_XXX1 ""
 #define KEY_WEAPONS "武器"
 #define KEY_ARMORS "防具"
 #define KEY_MISSILES "矢"
@@ -127,7 +127,7 @@
 #define KEY_THIRD "third"
 #define KEY_FOURTH "fourth"
 #define KEY_ITEMS "items"
-#define KEY_ARTIFACTS "artifacts"
+#define KEY_XXX1
 #define KEY_WEAPONS "weapons"
 #define KEY_ARMORS "armors"
 #define KEY_MISSILES "missiles"
@@ -217,7 +217,6 @@ cptr autopick_line_from_entry(autopick_type *entry)
 	if (IS_FLG(FLG_FOURTH)) ADD_KEY(KEY_FOURTH);
 
 	if (IS_FLG(FLG_ITEMS)) ADD_KEY2(KEY_ITEMS);
-	else if (IS_FLG(FLG_ARTIFACTS)) ADD_KEY2(KEY_ARTIFACTS);
 	else if (IS_FLG(FLG_WEAPONS)) ADD_KEY2(KEY_WEAPONS);
 	else if (IS_FLG(FLG_ARMORS)) ADD_KEY2(KEY_ARMORS);
 	else if (IS_FLG(FLG_MISSILES)) ADD_KEY2(KEY_MISSILES);
@@ -379,7 +378,6 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
 	prev_ptr = ptr;
 
 	if (MATCH_KEY(KEY_ITEMS)) ADD_FLG2(FLG_ITEMS);
-	else if (MATCH_KEY(KEY_ARTIFACTS)) ADD_FLG2(FLG_ARTIFACTS);
 	else if (MATCH_KEY(KEY_WEAPONS)) ADD_FLG2(FLG_WEAPONS);
 	else if (MATCH_KEY(KEY_ARMORS)) ADD_FLG2(FLG_ARMORS);
 	else if (MATCH_KEY(KEY_MISSILES)) ADD_FLG2(FLG_MISSILES);
@@ -603,13 +601,7 @@ int is_autopick(object_type *o_ptr)
 			continue;
 
 		/*** Items ***/
-		if (IS_FLG(FLG_ARTIFACTS))
-		{
-			if (!(object_known_p(o_ptr)
-			      && (artifact_p(o_ptr) || o_ptr->art_name)))
-				continue;
-		}
-		else if (IS_FLG(FLG_WEAPONS))
+		if (IS_FLG(FLG_WEAPONS))
 		{
 			switch(o_ptr->tval)
 			{
@@ -1116,8 +1108,6 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	/*** Items ***/
 	if (IS_FLG(FLG_ITEMS))
 		; /* Nothing to do */
-	else if (IS_FLG(FLG_ARTIFACTS))
-		body_str = "アーティファクト";
 	else if (IS_FLG(FLG_WEAPONS))
 		body_str = "武器";
 	else if (IS_FLG(FLG_ARMORS))
@@ -1798,10 +1788,7 @@ void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 	if (o_ptr->tval >= TV_LIFE_BOOK && 3 == o_ptr->sval)
 		ADD_FLG(FLG_FOURTH);
 
-	if (object_known_p(o_ptr) && (artifact_p(o_ptr) || o_ptr->art_name))
-		ADD_FLG(FLG_ARTIFACTS);
-	
-	else if (o_ptr->tval == TV_SHOT || o_ptr->tval == TV_BOLT
+	if (o_ptr->tval == TV_SHOT || o_ptr->tval == TV_BOLT
 		 || o_ptr->tval == TV_ARROW)
 		ADD_FLG(FLG_MISSILES);
 	else if (o_ptr->tval == TV_SCROLL || o_ptr->tval == TV_STAFF
