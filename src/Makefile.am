@@ -26,6 +26,6 @@ hengband_SOURCES = \
 
 EXTRA_hengband_SOURCES = \
 	angband.ico angband.rc ang_eng.rc maid-x11.c main-mac.c main-win.c \
-	main-dos.c main-ibm.c \
+	main-dos.c main-ibm.c main-mac-carbon.c \
 	makefile.bcc makefile.std makefile.dos makefile.ibm \
 	readdib.c script.c wall.bmp
