@@ -488,10 +488,10 @@
 
 
 /*
- * Extract energy from speed
+ * Extract energy from speed (Assumes that SPEED is unsigned)
  */
 #define SPEED_TO_ENERGY(SPEED) \
-	(((SPEED) > 199) ? 49 : (((int)(SPEED) < 0) ? 1 : extract_energy[(SPEED)]))
+	(((SPEED) > 199) ? 49 : extract_energy[(SPEED)])
 
 
 /*
