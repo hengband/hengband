@@ -206,6 +206,9 @@ static void alloc_object(int set, int typ, int num)
 	int dummy = 0;
 	cave_type *c_ptr;
 
+	/* A small level has few objects. */
+	num = num * cur_hgt * cur_wid / (MAX_HGT*MAX_WID) +1;
+
 	/* Place some objects */
 	for (k = 0; k < num; k++)
 	{
