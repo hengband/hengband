@@ -863,7 +863,7 @@ static bool summon_specific_aux(int r_idx)
 }
 
 
-static bool chameleon_change = FALSE;
+static int chameleon_change_m_idx = 0;
 
 
 /*
@@ -878,7 +878,7 @@ static bool restrict_monster_to_dungeon(int r_idx)
 
 	if (d_ptr->flags1 & DF1_CHAMELEON)
 	{
-		if (chameleon_change) return TRUE;
+		if (chameleon_change_m_idx) return TRUE;
 	}
 	if (d_ptr->flags1 & DF1_NO_MAGIC)
 	{
@@ -1139,7 +1139,7 @@ errr get_mon_num_prep(monster_hook_type monster_hook,
 		    (get_mon_num2_hook && !((*get_mon_num2_hook)(entry->index))))
 			continue;
 
-		if (!p_ptr->inside_battle && !chameleon_change &&
+		if (!p_ptr->inside_battle && !chameleon_change_m_idx &&
 		    summon_specific_type != SUMMON_GUARDIANS)
 		{
 			/* Hack -- don't create questors */
@@ -1318,7 +1318,7 @@ s16b get_mon_num(int level)
 		/* Access the actual race */
 		r_ptr = &r_info[r_idx];
 
-		if (!p_ptr->inside_battle && !chameleon_change)
+		if (!p_ptr->inside_battle && !chameleon_change_m_idx)
 		{
 			/* Hack -- "unique" monsters must be "unique" */
 			if (((r_ptr->flags1 & (RF1_UNIQUE)) ||
@@ -2491,6 +2491,8 @@ void update_monsters(bool full)
 static bool monster_hook_chameleon_lord(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
+	monster_type *m_ptr = &m_list[chameleon_change_m_idx];
+	monster_race *old_r_ptr = &r_info[m_ptr->r_idx];
 
 	if (!(r_ptr->flags1 & (RF1_UNIQUE))) return FALSE;
 	if (r_ptr->flags7 & (RF7_FRIENDLY | RF7_CHAMELEON)) return FALSE;
@@ -2500,12 +2502,32 @@ static bool monster_hook_chameleon_lord(int r_idx)
 	if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
 		return FALSE;
 
+	if (!monster_can_cross_terrain(cave[m_ptr->fy][m_ptr->fx].feat, r_ptr)) return FALSE;
+
+	/* Not born */
+	if (!(old_r_ptr->flags7 & RF7_CHAMELEON))
+	{
+		if ((m_ptr->sub_align & SUB_ALIGN_EVIL) && (r_ptr->flags3 & RF3_GOOD)) return FALSE;
+		if ((m_ptr->sub_align & SUB_ALIGN_GOOD) && (r_ptr->flags3 & RF3_EVIL)) return FALSE;
+	}
+
+	/* Born now */
+	else if (summon_specific_who > 0)
+	{
+		monster_type *sm_ptr = &m_list[summon_specific_who];
+
+		if ((sm_ptr->sub_align & SUB_ALIGN_EVIL) && (r_ptr->flags3 & RF3_GOOD)) return FALSE;
+		if ((sm_ptr->sub_align & SUB_ALIGN_GOOD) && (r_ptr->flags3 & RF3_EVIL)) return FALSE;
+	}
+
 	return TRUE;
 }
 
 static bool monster_hook_chameleon(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
+	monster_type *m_ptr = &m_list[chameleon_change_m_idx];
+	monster_race *old_r_ptr = &r_info[m_ptr->r_idx];
 
 	if (r_ptr->flags1 & (RF1_UNIQUE)) return FALSE;
 	if (r_ptr->flags2 & RF2_MULTIPLY) return FALSE;
@@ -2514,13 +2536,31 @@ static bool monster_hook_chameleon(int r_idx)
 	if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
 		return FALSE;
 
+	if (!monster_can_cross_terrain(cave[m_ptr->fy][m_ptr->fx].feat, r_ptr)) return FALSE;
+
+	/* Not born */
+	if (!(old_r_ptr->flags7 & RF7_CHAMELEON))
+	{
+		if ((old_r_ptr->flags3 & RF3_GOOD) && !(r_ptr->flags3 & RF3_GOOD)) return FALSE;
+		if ((old_r_ptr->flags3 & RF3_EVIL) && !(r_ptr->flags3 & RF3_EVIL)) return FALSE;
+		if (!(old_r_ptr->flags3 & (RF3_GOOD | RF3_EVIL)) && (r_ptr->flags3 & (RF3_GOOD | RF3_EVIL))) return FALSE;
+	}
+
+	/* Born now */
+	else if (summon_specific_who > 0)
+	{
+		monster_type *sm_ptr = &m_list[summon_specific_who];
+
+		if ((sm_ptr->sub_align & SUB_ALIGN_EVIL) && (r_ptr->flags3 & RF3_GOOD)) return FALSE;
+		if ((sm_ptr->sub_align & SUB_ALIGN_GOOD) && (r_ptr->flags3 & RF3_EVIL)) return FALSE;
+	}
+
 	return (*(get_monster_hook()))(r_idx);
 }
 
 
 void choose_new_monster(int m_idx, bool born, int r_idx)
 {
-	int attempt = 5000;
 	int oldmaxhp, i;
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr;
@@ -2537,53 +2577,30 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 
 	if (!r_idx)
 	{
-		chameleon_change = TRUE;
+		int level;
+
+		chameleon_change_m_idx = m_idx;
 		if (old_unique)
 			get_mon_num_prep(monster_hook_chameleon_lord, NULL);
 		else
 			get_mon_num_prep(monster_hook_chameleon, NULL);
 
-		while (--attempt)
-		{
-			int level;
+		if (old_unique)
+			level = r_info[MON_CHAMELEON_K].level;
+		else if (!dun_level)
+			level = wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].level;
+		else
+			level = dun_level;
 
-			if (old_unique)
-				level = r_info[MON_CHAMELEON_K].level;
-			else if (!dun_level)
-				level = wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].level;
-			else
-				level = dun_level;
+		if (d_info[dungeon_type].flags1 & DF1_CHAMELEON) level+= 2+randint1(3);
 
-			if (d_info[dungeon_type].flags1 & DF1_CHAMELEON) level+= 2+randint1(3);
-			r_idx = get_mon_num(level);
-			r_ptr = &r_info[r_idx];
+		r_idx = get_mon_num(level);
+		r_ptr = &r_info[r_idx];
 
-			if (!monster_can_cross_terrain(cave[m_ptr->fy][m_ptr->fx].feat, r_ptr)) continue;
-			if (!born)
-			{
-				if (!old_unique)
-				{
-					if ((r_info[old_r_idx].flags3 & RF3_GOOD) && !(r_ptr->flags3 & RF3_GOOD)) continue;
-					if ((r_info[old_r_idx].flags3 & RF3_EVIL) && !(r_ptr->flags3 & RF3_EVIL)) continue;
-					if (!(r_info[old_r_idx].flags3 & (RF3_GOOD | RF3_EVIL)) && (r_ptr->flags3 & (RF3_GOOD | RF3_EVIL))) continue;
-				}
-				else
-				{
-					if ((m_ptr->sub_align & SUB_ALIGN_EVIL) && (r_ptr->flags3 & RF3_GOOD)) continue;
-					if ((m_ptr->sub_align & SUB_ALIGN_GOOD) && (r_ptr->flags3 & RF3_EVIL)) continue;
-				}
-			}
-			else if (summon_specific_who > 0)
-			{
-				monster_type *sm_ptr = &m_list[summon_specific_who];
+		chameleon_change_m_idx = 0;
 
-				if ((sm_ptr->sub_align & SUB_ALIGN_EVIL) && (r_ptr->flags3 & RF3_GOOD)) continue;
-				if ((sm_ptr->sub_align & SUB_ALIGN_GOOD) && (r_ptr->flags3 & RF3_EVIL)) continue;
-			}
-			break;
-		}
-		chameleon_change = FALSE;
-		if (!attempt) return;
+		/* Paranoia */
+		if (!r_idx) return;
 	}
 
 	m_ptr->r_idx = r_idx;
