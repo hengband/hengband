@@ -25,10 +25,8 @@
 #define FLG_IDENTIFIED	    4 
 #define FLG_STAR_IDENTIFIED 5 
 #define FLG_BOOSTED	    6 
-#define FLG_MORE_THAN	    7 
-#define FLG_DICE	    8 
-#define FLG_MORE_BONUS	    9 
-#define FLG_MORE_BONUS2	    10
+#define FLG_MORE_DICE	    7 
+#define FLG_MORE_BONUS	    10 
 #define FLG_WORTHLESS	    11
 #define FLG_ARTIFACT	    12
 #define FLG_EGO		    13
@@ -315,7 +313,7 @@ static bool autopick_new_entry(autopick_type *entry, cptr str, bool allow_defaul
 			if (k > 0 && k <= 2)
 			{
 				(void)MATCH_KEY(KEY_DICE);
-				ADD_FLG(FLG_MORE_THAN);
+				ADD_FLG(FLG_MORE_DICE);
 			}
 			else
 				ptr = prev_ptr;
@@ -509,6 +507,12 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 	/* Assume that object name is to be added */
 	bool name = TRUE;
 
+#ifdef JP
+	bool bol_mark = FALSE;
+#else
+	bool bol_mark = TRUE;
+#endif
+
 	char name_str[MAX_NLEN];
 
 	/* Initialize name string */
@@ -523,6 +527,7 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 	if (!object_aware_p(o_ptr))
 	{
 		ADD_FLG(FLG_UNAWARE);
+		bol_mark = TRUE;
 	}
 
 	/* Not really identified */
@@ -531,6 +536,7 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 		if (!(o_ptr->ident & IDENT_SENSE))
 		{
 			ADD_FLG(FLG_UNIDENTIFIED);
+			bol_mark = TRUE;
 		}
 		else
 		{
@@ -540,12 +546,14 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 			case FEEL_AVERAGE:
 			case FEEL_GOOD:
 				ADD_FLG(FLG_NAMELESS);
+				bol_mark = TRUE;
 				break;
 
 			case FEEL_BROKEN:
 			case FEEL_CURSED:
 				ADD_FLG(FLG_NAMELESS);
 				ADD_FLG(FLG_WORTHLESS);
+				bol_mark = TRUE;
 				break;
 
 			case FEEL_TERRIBLE:
@@ -557,9 +565,13 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 				ADD_FLG(FLG_EGO);
 				break;
 
+			case FEEL_UNCURSED:
+				/* XXX No appropriate flag */
+				/* ADD_FLG(); */
+				break;
+
 			default:
-				/* It's not known to be useless so... */
-				ADD_FLG(FLG_UNIDENTIFIED);
+				/* Never reach here */
 				break;
 			}
 		}
@@ -600,6 +612,8 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 			/* Wearable nameless object */
 			if ((TV_EQUIP_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_EQUIP_END))
 				ADD_FLG(FLG_NAMELESS);
+
+				bol_mark = TRUE;
 		}
 
 	}
@@ -702,7 +716,15 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 	/* Prepare the object description */
 	if (name)
 	{
-		object_desc(name_str, o_ptr, FALSE, 0);
+		char o_name[MAX_NLEN];
+
+		object_desc(o_name, o_ptr, FALSE, 0);
+
+		/*
+		 * If necessary, add a '^' which indicates the
+		 * beginning of line.
+		 */
+		sprintf(name_str, "%s%s", bol_mark ? "^" : "", o_name);
 	}
 
 	/* Register the name in lowercase */
@@ -847,7 +869,7 @@ cptr autopick_line_from_entry(autopick_type *entry)
 	if (IS_FLG(FLG_UNAWARE)) ADD_KEY(KEY_UNAWARE);
 	if (IS_FLG(FLG_BOOSTED)) ADD_KEY(KEY_BOOSTED);
 
-	if (IS_FLG(FLG_MORE_THAN))
+	if (IS_FLG(FLG_MORE_DICE))
 	{
 		ADD_KEY(KEY_MORE_THAN);
 		strcat(ptr, format("%d", entry->dice));
@@ -999,7 +1021,7 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 	}
 
 	/*** Weapons which dd*ds is more than nn ***/
-	if (IS_FLG(FLG_MORE_THAN))
+	if (IS_FLG(FLG_MORE_DICE))
 	{
 		if (o_ptr->dd * o_ptr->ds < entry->dice)
 			return FALSE;
@@ -2082,7 +2104,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	}
 
 	/*** Weapons whose dd*ds is more than nn ***/
-	if (IS_FLG(FLG_MORE_THAN))
+	if (IS_FLG(FLG_MORE_DICE))
 	{
 		static char more_than_desc_str[] = "___";
 		before_str[before_n++] = "ダメージダイスの最大値が";
@@ -2371,7 +2393,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	}
 
 	/*** Weapons whose dd*ds is more than nn ***/
-	if (IS_FLG(FLG_MORE_THAN))
+	if (IS_FLG(FLG_MORE_DICE))
 	{
 		static char more_than_desc_str[] =
 			"maximum damage from dice is bigger than __";
@@ -3585,7 +3607,7 @@ static void search_for_string(text_body_type *tb, cptr search_str, bool forward)
 #define EC_IK_IDENTIFIED       41
 #define EC_IK_STAR_IDENTIFIED  42
 #define EC_OK_BOOSTED	       43
-#define EC_OK_MORE_THAN	       44
+#define EC_OK_MORE_DICE	       44
 #define EC_OK_MORE_BONUS       45
 #define EC_OK_WORTHLESS	       46
 #define EC_OK_ARTIFACT	       47
@@ -3684,7 +3706,7 @@ static void search_for_string(text_body_type *tb, cptr search_str, bool forward)
 
 #define MN_ADJECTIVE_SPECIAL "形容詞(特殊)の選択" 
 #define MN_BOOSTED "ダイス目の違う (武器)" 
-#define MN_MORE_THAN "ダイス目 # 以上の (武器)" 
+#define MN_MORE_DICE "ダイス目 # 以上の (武器)" 
 #define MN_MORE_BONUS "修正値 # 以上の (指輪等)" 
 #define MN_ARTIFACT "アーティファクト (装備)" 
 #define MN_EGO "エゴ (装備)" 
@@ -3757,7 +3779,7 @@ static void search_for_string(text_body_type *tb, cptr search_str, bool forward)
 
 #define MN_ADJECTIVE_SPECIAL "Adjective (special)" 
 #define MN_BOOSTED "dice boosted (weapons)" 
-#define MN_MORE_THAN "more than # dice (weapons)" 
+#define MN_MORE_DICE "more than # dice (weapons)" 
 #define MN_MORE_BONUS "more bonus than # (rings etc.)" 
 #define MN_ARTIFACT "artifact (equipments)" 
 #define MN_EGO "ego (equipments)" 
@@ -3840,7 +3862,7 @@ command_menu_type menu_data[] =
 
  	{MN_ADJECTIVE_SPECIAL, 0, -1, -1},
 	{MN_BOOSTED, 1, -1, EC_OK_BOOSTED},
-	{MN_MORE_THAN, 1, -1, EC_OK_MORE_THAN},
+	{MN_MORE_DICE, 1, -1, EC_OK_MORE_DICE},
 	{MN_MORE_BONUS, 1, -1, EC_OK_MORE_BONUS},
 	{MN_ARTIFACT, 1, -1, EC_OK_ARTIFACT},
 	{MN_EGO, 1, -1, EC_OK_EGO},
@@ -5508,7 +5530,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	case EC_KK_BOOTS: toggle_keyword(tb, FLG_BOOTS); break;
 	case EC_OK_COLLECTING: toggle_keyword(tb, FLG_COLLECTING); break;
 	case EC_OK_BOOSTED: toggle_keyword(tb, FLG_BOOSTED); break;
-	case EC_OK_MORE_THAN: toggle_keyword(tb, FLG_MORE_THAN); break;
+	case EC_OK_MORE_DICE: toggle_keyword(tb, FLG_MORE_DICE); break;
 	case EC_OK_MORE_BONUS: toggle_keyword(tb, FLG_MORE_BONUS); break;
 	case EC_OK_WORTHLESS: toggle_keyword(tb, FLG_WORTHLESS); break;
 	case EC_OK_ARTIFACT: toggle_keyword(tb, FLG_ARTIFACT); break;
