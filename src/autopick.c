@@ -67,7 +67,17 @@ static object_type autopick_last_destroyed_object;
 #ifdef JP
 
 #define KEY_ALL "すべての"
+
+#ifdef MAC_MPW
+/*
+ * MEGA HACK -- MPWのバグ除け。
+ * pre-process中に「収」の字の2バイト目が勝手に消えてしまう。
+ */
+#define KEY_COLLECTING "\x8e\xfb集中の"
+#else
 #define KEY_COLLECTING "収集中の"
+#endif
+
 #define KEY_UNIDENTIFIED "未鑑定の"
 #define KEY_IDENTIFIED "鑑定済みの"
 #define KEY_STAR_IDENTIFIED "*鑑定*済みの"
