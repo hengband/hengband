@@ -2890,16 +2890,19 @@ static void calc_torch(void)
 
 	}
 
-	/* max radius is 5 without rewriting other code -- */
+	/* max radius is 14 (was 5) without rewriting other code -- */
 	/* see cave.c:update_lite() and defines.h:LITE_MAX */
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS && p_ptr->cur_lite > 1)
 		p_ptr->cur_lite = 1;
+
+	/*
+         * check if the player doesn't have light radius, 
+	 * but does weakly glow as an intrinsic.
+         */
+	if (p_ptr->cur_lite <= 0 && p_ptr->lite) p_ptr->cur_lite++;
+
 	if (p_ptr->cur_lite > 14) p_ptr->cur_lite = 14;
 	if (p_ptr->cur_lite < 0) p_ptr->cur_lite = 0;
-
-	/* check if the player doesn't have a lite source, */
-	/* but does glow as an intrinsic.                  */
-	if (p_ptr->cur_lite == 0 && p_ptr->lite) p_ptr->cur_lite = 1;
 
 	/* end experimental mods */
 
