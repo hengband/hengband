@@ -4423,22 +4423,31 @@ void cave_set_feat(int y, int x, int feat)
 	{
 		c_ptr->info &= ~(CAVE_GLOW);
 		if (!view_torch_grids) c_ptr->info &= ~(CAVE_MARK);
+
+		/* Remove flag for mirror/glyph */
+		c_ptr->info &= ~(CAVE_OBJECT);
 	}
 
 	/* Clear mimic type */
 	c_ptr->mimic = 0;
 
-	/* Remove flag for mirror/glyph */
-	c_ptr->info &= ~(CAVE_OBJECT);
-
 	/* Change the feature */
 	c_ptr->feat = feat;
 
-	/* Check for change to boring grid */
-	if (!have_flag(f_ptr->flags, FF_REMEMBER)) c_ptr->info &= ~(CAVE_MARK);
+	if (character_dungeon)
+	{
+		/* Check for change to boring grid */
+		if (!have_flag(f_ptr->flags, FF_REMEMBER)) c_ptr->info &= ~(CAVE_MARK);
 
-	/* Check for change to out of sight grid */
-	else if (!player_can_see_bold(y, x)) c_ptr->info &= ~(CAVE_MARK);
+		/* Check for change to out of sight grid */
+		else if (!player_can_see_bold(y, x)) c_ptr->info &= ~(CAVE_MARK);
+
+		/* Notice */
+		note_spot(y, x);
+
+		/* Redraw */
+		lite_spot(y, x);
+	}
 
 	/* Hack -- glow the deep lava */
 	if (have_flag(f_ptr->flags, FF_GLOW) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS))
@@ -4451,7 +4460,7 @@ void cave_set_feat(int y, int x, int feat)
 			xx = x + ddx_ddd[i];
 			if (!in_bounds2(yy, xx)) continue;
 			cave[yy][xx].info |= CAVE_GLOW;
-			if (player_has_los_bold(yy, xx))
+			if (character_dungeon && player_has_los_bold(yy, xx))
 			{
 				/* Notice */
 				note_spot(yy, xx);
@@ -4461,12 +4470,6 @@ void cave_set_feat(int y, int x, int feat)
 			}
 		}
 	}
-
-	/* Notice */
-	note_spot(y, x);
-
-	/* Redraw */
-	lite_spot(y, x);
 }
 
 
@@ -4885,9 +4888,14 @@ void glow_deep_lava_and_bldg(void)
 					xx = x + ddx_ddd[i];
 					if (!in_bounds2(yy, xx)) continue;
 					cave[yy][xx].info |= CAVE_GLOW;
-					if (player_has_los_bold(yy, xx)) note_spot(yy, xx);
 				}
 			}
 		}
 	}
+
+	/* Update the view and lite */
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
+
+	/* Redraw map */
+	p_ptr->redraw |= (PR_MAP);
 }
