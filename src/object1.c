@@ -7783,7 +7783,7 @@ static bool py_pickup_floor_aux(void)
  *
  * This is called by py_pickup() when easy_floor is TRUE.
  */
-void py_pickup_floor(int pickup)
+void py_pickup_floor(bool pickup)
 {
 	s16b this_o_idx, next_o_idx = 0;
 

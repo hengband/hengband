@@ -501,40 +501,10 @@ static bool cast_hissatsu_spell(int spell)
 
 		if (player_can_enter(cave[y][x].feat, 0) && !is_trap(cave[y][x].feat) && !cave[y][x].m_idx)
 		{
-			int oy, ox;
-
 			msg_print(NULL);
 
-			/* Save the old location */
-			oy = py;
-			ox = px;
-
 			/* Move the player */
-			py = y;
-			px = x;
-
-			forget_flow();
-
-			/* Redraw the old spot */
-			lite_spot(oy, ox);
-
-			/* Redraw the new spot */
-			lite_spot(py, px);
-
-			/* Check for new panel (redraw map) */
-			verify_panel();
-
-			/* Update stuff */
-			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
-
-			/* Update the monsters */
-			p_ptr->update |= (PU_DISTANCE);
-
-			/* Window stuff */
-			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
-			/* Handle stuff XXX XXX XXX */
-			handle_stuff();
+			(void)move_player_effect(py, px, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 		}
 		break;
 	}
@@ -881,15 +851,16 @@ static bool cast_hissatsu_spell(int spell)
 		if (dir == 5) return FALSE;
 		for (i = 0; i < 3; i++)
 		{
-			int oy, ox;
 			int ny, nx;
 			int m_idx;
+			cave_type *c_ptr;
 			monster_type *m_ptr;
 
 			y = py + ddy[dir];
 			x = px + ddx[dir];
+			c_ptr = &cave[y][x];
 
-			if (cave[y][x].m_idx)
+			if (c_ptr->m_idx)
 				py_attack(y, x, HISSATSU_3DAN);
 			else
 			{
@@ -907,51 +878,27 @@ static bool cast_hissatsu_spell(int spell)
 			}
 
 			/* Monster is dead? */
-			if (!cave[y][x].m_idx) break;
+			if (!c_ptr->m_idx) break;
 
 			ny = y + ddy[dir];
 			nx = x + ddx[dir];
-			m_idx = cave[y][x].m_idx;
+			m_idx = c_ptr->m_idx;
 			m_ptr = &m_list[m_idx];
 
 			/* Monster cannot move back? */
-			if (!monster_can_enter(ny, nx, &r_info[m_ptr->r_idx], 0)) continue;
+			if (!monster_can_enter(ny, nx, &r_info[m_ptr->r_idx], 0))
+			{
+				/* -more- */
+				if (i < 2) msg_print(NULL);
+				continue;
+			}
 
-			cave[y][x].m_idx = 0;
+			c_ptr->m_idx = 0;
 			cave[ny][nx].m_idx = m_idx;
 			m_ptr->fy = ny;
 			m_ptr->fx = nx;
 
 			update_mon(m_idx, TRUE);
-
-			/* Player can move forward? */
-			if (player_can_enter(cave[y][x].feat, 0))
-			{
-				/* Save the old location */
-				oy = py;
-				ox = px;
-
-				/* Move the player */
-				py = y;
-				px = x;
-
-				if (p_ptr->riding)
-				{
-					cave[oy][ox].m_idx = cave[py][px].m_idx;
-					cave[py][px].m_idx = p_ptr->riding;
-					m_list[p_ptr->riding].fy = py;
-					m_list[p_ptr->riding].fx = px;
-					update_mon(p_ptr->riding, TRUE);
-				}
-
-				forget_flow();
-
-				/* Redraw the old spot */
-				lite_spot(oy, ox);
-
-				/* Redraw the new spot */
-				lite_spot(py, px);
-			}
 
 			/* Redraw the old spot */
 			lite_spot(y, x);
@@ -959,20 +906,12 @@ static bool cast_hissatsu_spell(int spell)
 			/* Redraw the new spot */
 			lite_spot(ny, nx);
 
-			/* Check for new panel (redraw map) */
-			verify_panel();
-
-			/* Update stuff */
-			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
-
-			/* Update the monsters */
-			p_ptr->update |= (PU_DISTANCE);
-
-			/* Window stuff */
-			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
-			/* Handle stuff */
-			handle_stuff();
+			/* Player can move forward? */
+			if (player_can_enter(c_ptr->feat, 0))
+			{
+				/* Move the player */
+				if (!move_player_effect(py, px, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP)) break;
+			}
 
 			/* -more- */
 			if (i < 2) msg_print(NULL);

@@ -383,20 +383,7 @@ msg_print("不思議な力がテレポートを防いだ！");
 	ox = px;
 
 	/* Move the player */
-	py = y;
-	px = x;
-
-	if (p_ptr->riding)
-	{
-		cave[oy][ox].m_idx = cave[py][px].m_idx;
-		cave[py][px].m_idx = p_ptr->riding;
-		m_list[p_ptr->riding].fy = py;
-		m_list[p_ptr->riding].fx = px;
-		update_mon(p_ptr->riding, TRUE);
-	}
-
-	/* Redraw the old spot */
-	lite_spot(oy, ox);
+	(void)move_player_effect(py, px, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 
 	/* Monsters with teleport ability may follow the player */
 	for (xx = -1; xx < 2; xx++)
@@ -418,31 +405,11 @@ msg_print("不思議な力がテレポートを防いだ！");
 				if ((r_ptr->flags6 & RF6_TPORT) &&
 				    !(r_ptr->flagsr & RFR_RES_TELE))
 				{
-					if (!m_ptr->csleep) teleport_monster_to(tmp_m_idx, py, px, r_ptr->level);
+					if (!m_ptr->csleep) teleport_monster_to(tmp_m_idx, y, x, r_ptr->level);
 				}
 			}
 		}
 	}
-
-	forget_flow();
-
-	/* Redraw the new spot */
-	lite_spot(py, px);
-
-	/* Check for new panel (redraw map) */
-	verify_panel();
-
-	/* Update stuff */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
-
-	/* Update the monsters */
-	p_ptr->update |= (PU_DISTANCE);
-
-	/* Window stuff */
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
-	/* Handle stuff XXX XXX XXX */
-	handle_stuff();
 }
 
 
@@ -455,7 +422,7 @@ msg_print("不思議な力がテレポートを防いだ！");
  */
 void teleport_player_to(int ny, int nx, bool no_tele)
 {
-	int y, x, oy, ox, dis = 0, ctr = 0;
+	int y, x, dis = 0, ctr = 0;
 
 	if (p_ptr->anti_tele && no_tele)
 	{
@@ -496,45 +463,8 @@ void teleport_player_to(int ny, int nx, bool no_tele)
 	/* Sound */
 	sound(SOUND_TELEPORT);
 
-	/* Save the old location */
-	oy = py;
-	ox = px;
-
 	/* Move the player */
-	py = y;
-	px = x;
-
-	if (p_ptr->riding)
-	{
-		cave[oy][ox].m_idx = cave[py][px].m_idx;
-		cave[py][px].m_idx = p_ptr->riding;
-		m_list[p_ptr->riding].fy = py;
-		m_list[p_ptr->riding].fx = px;
-		update_mon(p_ptr->riding, TRUE);
-	}
-
-	forget_flow();
-
-	/* Redraw the old spot */
-	lite_spot(oy, ox);
-
-	/* Redraw the new spot */
-	lite_spot(py, px);
-
-	/* Check for new panel (redraw map) */
-	verify_panel();
-
-	/* Update stuff */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
-
-	/* Update the monsters */
-	p_ptr->update |= (PU_DISTANCE);
-
-	/* Window stuff */
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
-	/* Handle stuff XXX XXX XXX */
-	handle_stuff();
+	(void)move_player_effect(py, px, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 }
 
 

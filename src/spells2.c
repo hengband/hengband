@@ -5477,7 +5477,7 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
  */
 bool earthquake(int cy, int cx, int r)
 {
-	int             i, t, y, x, yy, xx, dy, dx, oy, ox;
+	int             i, t, y, x, yy, xx, dy, dx;
 	int             damage = 0;
 	int             sn = 0, sy = 0, sx = 0;
 	bool            hurt = FALSE;
@@ -5660,31 +5660,8 @@ msg_print("あなたは床と壁との間に挟まれてしまった！");
 				}
 			}
 
-			/* Save the old location */
-			oy = py;
-			ox = px;
-
 			/* Move the player to the safe location */
-			py = sy;
-			px = sx;
-
-			if (p_ptr->riding)
-			{
-				cave[oy][ox].m_idx = cave[py][px].m_idx;
-				cave[py][px].m_idx = p_ptr->riding;
-				m_list[p_ptr->riding].fy = py;
-				m_list[p_ptr->riding].fx = px;
-				update_mon(p_ptr->riding, TRUE);
-			}
-
-			/* Redraw the old spot */
-			lite_spot(oy, ox);
-
-			/* Redraw the new spot */
-			lite_spot(py, px);
-
-			/* Check for new panel */
-			verify_panel();
+			(void)move_player_effect(py, px, sy, sx, MPE_DONT_PICKUP);
 		}
 
 		/* Important -- no wall on player */
@@ -6660,6 +6637,9 @@ msg_print("失敗した。");
 	m_ptr = &m_list[c_ptr->m_idx];
 	r_ptr = &r_info[m_ptr->r_idx];
 
+	/* Redraw the health bar */
+	if (p_ptr->health_who == c_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
+
 	if (r_ptr->flagsr & RFR_RES_TELE)
 	{
 #ifdef JP
@@ -6679,60 +6659,8 @@ msg_print("テレポートを邪魔された！");
 
 	sound(SOUND_TELEPORT);
 
-	cave[py][px].m_idx = c_ptr->m_idx;
-
-	/* Update the old location */
-	c_ptr->m_idx = p_ptr->riding;
-
-	/* Move the monster */
-	m_ptr->fy = py;
-	m_ptr->fx = px;
-
-	/* Move the player */
-	px = tx;
-	py = ty;
-
-	if (p_ptr->riding)
-	{
-		m_list[p_ptr->riding].fy = ty;
-		m_list[p_ptr->riding].fx = tx;
-
-		/* Update the monster (new location) */
-		update_mon(p_ptr->riding, TRUE);
-	}
-
-	tx = m_ptr->fx;
-	ty = m_ptr->fy;
-
-	m_ptr->csleep = 0;
-
-	/* Update the monster (new location) */
-	update_mon(cave[ty][tx].m_idx, TRUE);
-
-	/* Redraw the old grid */
-	lite_spot(ty, tx);
-
-	/* Redraw the new grid */
-	lite_spot(py, px);
-
-	/* Check for new panel (redraw map) */
-	verify_panel();
-
-	/* Update stuff */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
-
-	/* Update the monsters */
-	p_ptr->update |= (PU_DISTANCE);
-
-	/* Window stuff */
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
-	/* Redraw the health bar */
-	if (p_ptr->health_who == cave[ty][tx].m_idx)
-		p_ptr->redraw |= (PR_HEALTH);
-
-	/* Handle stuff XXX XXX XXX */
-	handle_stuff();
+	/* Swap the player and monster */
+	(void)move_player_effect(py, px, ty, tx, MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 
 	/* Success */
 	return TRUE;

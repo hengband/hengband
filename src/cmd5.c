@@ -5613,14 +5613,16 @@ msg_format("%sから振り落とされそうになって、壁にぶつかった。",m_name);
 		fall_dam = TRUE;
 	}
 
-	if (sy && p_ptr->is_dead) move_player_effect(FALSE, FALSE);
+	/* Move the player */
+	if (sy && !p_ptr->is_dead)
+		(void)move_player_effect(py, px, py, px, MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
 
 	return fall_dam;
 }
 
 bool do_riding(bool force)
 {
-	int oy, ox, x, y, dir = 0;
+	int x, y, dir = 0;
 	cave_type *c_ptr;
 	monster_type *m_ptr;
 
@@ -5760,33 +5762,10 @@ bool do_riding(bool force)
 		if (p_ptr->riding == p_ptr->health_who) health_track(0);
 	}
 
-	/* Save the old location */
-	oy = py;
-	ox = px;
-
-	/* Move the player */
-	py = y;
-	px = x;
-
-	/* Redraw the old spot */
-	lite_spot(oy, ox);
-
-	/* Redraw the new spot */
-	lite_spot(py, px);
-
-	/* Check for new panel */
-	verify_panel();
-
 	energy_use = 100;
 
 	/* Mega-Hack -- Forget the view and lite */
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-
-	/* Update stuff */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
-
-	/* Update the monsters */
-	p_ptr->update |= (PU_DISTANCE);
 
 	/* Update the monsters */
 	p_ptr->update |= (PU_BONUS);
@@ -5794,14 +5773,10 @@ bool do_riding(bool force)
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP | PR_EXTRA);
 
-	/* Window stuff */
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
 	p_ptr->redraw |= (PR_UHEALTH);
 
-	handle_stuff();
-
-	move_player_effect(FALSE, FALSE);
+	/* Move the player */
+	(void)move_player_effect(py, px, y, x, MPE_HANDLE_STUFF | MPE_ENERGY_USE | MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
 
 	return TRUE;
 }

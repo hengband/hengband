@@ -1498,40 +1498,10 @@ static bool cast_berserk_spell(int spell)
 
 		if (player_can_enter(cave[y][x].feat, 0) && !is_trap(cave[y][x].feat) && !cave[y][x].m_idx)
 		{
-			int oy, ox;
-
 			msg_print(NULL);
 
-			/* Save the old location */
-			oy = py;
-			ox = px;
-
 			/* Move the player */
-			py = y;
-			px = x;
-
-			forget_flow();
-
-			/* Redraw the old spot */
-			lite_spot(oy, ox);
-
-			/* Redraw the new spot */
-			lite_spot(py, px);
-
-			/* Check for new panel (redraw map) */
-			verify_panel();
-
-			/* Update stuff */
-			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
-
-			/* Update the monsters */
-			p_ptr->update |= (PU_DISTANCE);
-
-			/* Window stuff */
-			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
-			/* Handle stuff XXX XXX XXX */
-			handle_stuff();
+			(void)move_player_effect(py, px, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 		}
 		break;
 	}

@@ -875,7 +875,7 @@ void py_pickup_aux(int o_idx)
  * Note that we ONLY handle things that can be picked up.
  * See "move_player()" for handling of other things.
  */
-void carry(int pickup)
+void carry(bool pickup)
 {
 	cave_type *c_ptr = &cave[py][px];
 
@@ -981,7 +981,6 @@ void carry(int pickup)
 			}
 			/* Describe the object */
 			else if (!pickup)
-
 			{
 #ifdef JP
 				msg_format("%sがある。", o_name);
@@ -3439,68 +3438,122 @@ bool player_can_enter(s16b feature, u16b mode)
 }
 
 
-void move_player_effect(int do_pickup, bool break_trap)
+/*
+ * Move the player
+ */
+bool move_player_effect(int oy, int ox, int ny, int nx, u32b mpe_mode)
 {
-	cave_type *c_ptr = &cave[py][px];
+	cave_type *c_ptr = &cave[ny][nx];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 
-	/* Check for new panel (redraw map) */
-	verify_panel();
-
-	/* Update stuff */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
-
-	/* Update the monsters */
-	p_ptr->update |= (PU_DISTANCE);
-
-	/* Window stuff */
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
-	/* Remove "unsafe" flag */
-	if ((!p_ptr->blind && !no_lite()) || !is_trap(c_ptr->feat)) c_ptr->info &= ~(CAVE_UNSAFE);
-
-	/* For get everything when requested hehe I'm *NASTY* */
-	if (dun_level && (d_info[dungeon_type].flags1 & DF1_FORGET)) wiz_dark();
-
-	if (p_ptr->pclass == CLASS_NINJA)
+	if (!(mpe_mode & MPE_STAYING))
 	{
-		if (c_ptr->info & (CAVE_GLOW)) set_superstealth(FALSE);
-		else if (p_ptr->cur_lite <= 0) set_superstealth(TRUE);
-	}
+		cave_type *oc_ptr = &cave[oy][ox];
+		int om_idx = oc_ptr->m_idx;
+		int nm_idx = c_ptr->m_idx;
 
-	if ((p_ptr->action == ACTION_HAYAGAKE) && !have_flag(f_ptr->flags, FF_PROJECT))
-	{
+		/* Move the player */
+		py = ny;
+		px = nx;
+
+		/* Hack -- For moving monster or riding player's moving */
+		if (!(mpe_mode & MPE_DONT_SWAP_MON))
+		{
+			/* Swap two monsters */
+			c_ptr->m_idx = om_idx;
+			oc_ptr->m_idx = nm_idx;
+
+			if (om_idx > 0) /* Monster on old spot (or p_ptr->riding) */
+			{
+				monster_type *om_ptr = &m_list[om_idx];
+				om_ptr->fy = ny;
+				om_ptr->fx = nx;
+				update_mon(om_idx, TRUE);
+			}
+
+			if (nm_idx > 0) /* Monster on new spot */
+			{
+				monster_type *nm_ptr = &m_list[nm_idx];
+				nm_ptr->fy = oy;
+				nm_ptr->fx = ox;
+				update_mon(nm_idx, TRUE);
+			}
+		}
+
+		/* Redraw old spot */
+		lite_spot(oy, ox);
+
+		/* Redraw new spot */
+		lite_spot(ny, nx);
+
+		if (mpe_mode & MPE_FORGET_FLOW) forget_flow();
+
+		/* Check for new panel (redraw map) */
+		verify_panel();
+
+		/* Update stuff */
+		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
+
+		/* Update the monsters */
+		p_ptr->update |= (PU_DISTANCE);
+
+		/* Window stuff */
+		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+
+		/* Remove "unsafe" flag */
+		if ((!p_ptr->blind && !no_lite()) || !is_trap(c_ptr->feat)) c_ptr->info &= ~(CAVE_UNSAFE);
+
+		/* For get everything when requested hehe I'm *NASTY* */
+		if (dun_level && (d_info[dungeon_type].flags1 & DF1_FORGET)) wiz_dark();
+
+		/* Handle stuff */
+		if (mpe_mode & MPE_HANDLE_STUFF) handle_stuff();
+
+		if (p_ptr->pclass == CLASS_NINJA)
+		{
+			if (c_ptr->info & (CAVE_GLOW)) set_superstealth(FALSE);
+			else if (p_ptr->cur_lite <= 0) set_superstealth(TRUE);
+		}
+
+		if ((p_ptr->action == ACTION_HAYAGAKE) && !have_flag(f_ptr->flags, FF_PROJECT))
+		{
 #ifdef JP
-		msg_print("ここでは素早く動けない。");
+			msg_print("ここでは素早く動けない。");
 #else
-		msg_print("You cannot run in wall.");
+			msg_print("You cannot run in wall.");
 #endif
-		set_action(ACTION_NONE);
+			set_action(ACTION_NONE);
+		}
 	}
 
-	/* Spontaneous Searching */
-	if ((p_ptr->skill_fos >= 50) || (0 == randint0(50 - p_ptr->skill_fos)))
+	if (mpe_mode & MPE_ENERGY_USE)
 	{
-		search();
-	}
+		if (music_singing(MUSIC_WALL))
+		{
+			(void)project(0, 0, py, px, (60 + p_ptr->lev), GF_DISINTEGRATE,
+				PROJECT_KILL | PROJECT_ITEM, -1);
 
-	/* Continuous Searching */
-	if (p_ptr->action == ACTION_SEARCH)
-	{
-		search();
+			if (!player_bold(ny, nx) || p_ptr->is_dead || p_ptr->leaving) return FALSE;
+		}
+
+		/* Spontaneous Searching */
+		if ((p_ptr->skill_fos >= 50) || (0 == randint0(50 - p_ptr->skill_fos)))
+		{
+			search();
+		}
+
+		/* Continuous Searching */
+		if (p_ptr->action == ACTION_SEARCH)
+		{
+			search();
+		}
 	}
 
 	/* Handle "objects" */
-
-#ifdef ALLOW_EASY_DISARM /* TNB */
-
-	carry(do_pickup != always_pickup);
-
-#else /* ALLOW_EASY_DISARM -- TNB */
-
-	carry(do_pickup);
-
-#endif /* ALLOW_EASY_DISARM -- TNB */
+	if (!(mpe_mode & MPE_DONT_PICKUP))
+	{
+		carry((mpe_mode & MPE_DO_PICKUP) ? TRUE : FALSE);
+	}
 
 	/* Handle "store doors" */
 	if (have_flag(f_ptr->flags, FF_STORE))
@@ -3562,7 +3615,7 @@ void move_player_effect(int do_pickup, bool break_trap)
 	}
 
 	/* Set off a trap */
-	else if (have_flag(f_ptr->flags, FF_HIT_TRAP))
+	else if (have_flag(f_ptr->flags, FF_HIT_TRAP) && !(mpe_mode & MPE_STAYING))
 	{
 		/* Disturb */
 		disturb(0, 0);
@@ -3582,18 +3635,20 @@ void move_player_effect(int do_pickup, bool break_trap)
 		}
 
 		/* Hit the trap */
-		hit_trap(break_trap);
+		hit_trap((mpe_mode & MPE_BREAK_TRAP) ? TRUE : FALSE);
+
+		if (!player_bold(ny, nx) || p_ptr->is_dead || p_ptr->leaving) return FALSE;
 	}
 
 	/* Warn when leaving trap detected region */
-	if ((disturb_trap_detect || alert_trap_detect)
-	    && p_ptr->dtrap && !(cave[py][px].info & CAVE_IN_DETECT))
+	if (!(mpe_mode & MPE_STAYING) && (disturb_trap_detect || alert_trap_detect)
+	    && p_ptr->dtrap && !(c_ptr->info & CAVE_IN_DETECT))
 	{
 		/* No duplicate warning */
 		p_ptr->dtrap = FALSE;
 
 		/* You are just on the edge */
-		if (!(cave[py][px].info & CAVE_UNSAFE))
+		if (!(c_ptr->info & CAVE_UNSAFE))
 		{
 			if (alert_trap_detect)
 			{
@@ -3607,6 +3662,8 @@ void move_player_effect(int do_pickup, bool break_trap)
 			if (disturb_trap_detect) disturb(0, 0);
 		}
 	}
+
+	return player_bold(ny, nx) && !p_ptr->is_dead && !p_ptr->leaving;
 }
 
 
@@ -3628,7 +3685,7 @@ void move_player_effect(int do_pickup, bool break_trap)
  * any monster which might be in the destination grid.  Previously,
  * moving into walls was "free" and did NOT hit invisible monsters.
  */
-void move_player(int dir, int do_pickup, bool break_trap)
+void move_player(int dir, bool do_pickup, bool break_trap)
 {
 	/* Find the result of moving */
 	int y = py + ddy[dir];
@@ -4079,20 +4136,16 @@ void move_player(int dir, int do_pickup, bool break_trap)
 	/* Normal movement */
 	if (oktomove)
 	{
-		int oy, ox;
+		u32b mpe_mode = MPE_ENERGY_USE;
 
 		if (p_ptr->warning)
 		{
-			if(!process_warning(x, y))
+			if (!process_warning(x, y))
 			{
 				energy_use = 25;
 				return;
 			}
 		}
-
-		/* Hack -- For moving monster or riding player's moving */
-		cave[py][px].m_idx = c_ptr->m_idx;
-		c_ptr->m_idx = 0;
 
 		if (do_past)
 		{
@@ -4101,62 +4154,44 @@ void move_player(int dir, int do_pickup, bool break_trap)
 #else
 			msg_format("You push past %s.", m_name);
 #endif
-
-			m_ptr->fy = py;
-			m_ptr->fx = px;
-			update_mon(cave[py][px].m_idx, TRUE);
 		}
 
 		/* Change oldpx and oldpy to place the player well when going back to big mode */
 		if (p_ptr->wild_mode)
 		{
-			if(ddy[dir] > 0)  p_ptr->oldpy = 1;
-			if(ddy[dir] < 0)  p_ptr->oldpy = MAX_HGT - 2;
-			if(ddy[dir] == 0) p_ptr->oldpy = MAX_HGT / 2;
-			if(ddx[dir] > 0)  p_ptr->oldpx = 1;
-			if(ddx[dir] < 0)  p_ptr->oldpx = MAX_WID - 2;
-			if(ddx[dir] == 0) p_ptr->oldpx = MAX_WID / 2;
+			if (ddy[dir] > 0)  p_ptr->oldpy = 1;
+			if (ddy[dir] < 0)  p_ptr->oldpy = MAX_HGT - 2;
+			if (ddy[dir] == 0) p_ptr->oldpy = MAX_HGT / 2;
+			if (ddx[dir] > 0)  p_ptr->oldpx = 1;
+			if (ddx[dir] < 0)  p_ptr->oldpx = MAX_WID - 2;
+			if (ddx[dir] == 0) p_ptr->oldpx = MAX_WID / 2;
 		}
 
-		/* Save old location */
-		oy = py;
-		ox = px;
-
-		/* Move the player */
-		py = y;
-		px = x;
-
-		if (music_singing(MUSIC_WALL))
+		if (p_can_kill_walls)
 		{
-			project(0, 0, py, px,
-				(60 + p_ptr->lev), GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM, -1);
-		}
-		else if (p_can_kill_walls)
-		{
-			cave_alter_feat(py, px, FF_HURT_DISI);
+			cave_alter_feat(y, x, FF_HURT_DISI);
 
 			/* Update some things -- similar to GF_KILL_WALL */
 			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
 		}
 
-		if (p_ptr->riding)
-		{
-			riding_m_ptr->fy = py;
-			riding_m_ptr->fx = px;
-			cave[py][px].m_idx = p_ptr->riding;
-			update_mon(p_ptr->riding, TRUE);
-		}
-
-		/* Redraw new spot */
-		lite_spot(py, px);
-
-		/* Redraw old spot */
-		lite_spot(oy, ox);
-
 		/* Sound */
 		/* sound(SOUND_WALK); */
 
-		move_player_effect(do_pickup, break_trap);
+#ifdef ALLOW_EASY_DISARM /* TNB */
+
+		if (do_pickup != always_pickup) mpe_mode |= MPE_DO_PICKUP;
+
+#else /* ALLOW_EASY_DISARM -- TNB */
+
+		if (do_pickup) mpe_mode |= MPE_DO_PICKUP;
+
+#endif /* ALLOW_EASY_DISARM -- TNB */
+
+		if (break_trap) mpe_mode |= MPE_BREAK_TRAP;
+
+		/* Move the player */
+		(void)move_player_effect(py, px, y, x, mpe_mode);
 	}
 }
 

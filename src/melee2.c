@@ -3198,7 +3198,7 @@ msg_format("%^s%s", m_name, monmessage);
 			}
 
 			/* Push past weaker monsters (unless leaving a wall) */
-			else if ((r_ptr->flags2 & RF2_MOVE_BODY) &&
+			else if ((r_ptr->flags2 & RF2_MOVE_BODY) && !(r_ptr->flags1 & RF1_NEVER_MOVE) &&
 				(r_ptr->mexp > z_ptr->mexp) &&
 				can_cross && (c_ptr->m_idx != p_ptr->riding) &&
 				monster_can_cross_terrain(cave[m_ptr->fy][m_ptr->fx].feat, z_ptr, 0))
@@ -3208,6 +3208,12 @@ msg_format("%^s%s", m_name, monmessage);
 
 				/* Monster pushed past another monster */
 				did_move_body = TRUE;
+
+				/* Wake up the moved monster */
+				y_ptr->csleep = 0;
+
+				if (r_info[y_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+					p_ptr->update |= (PU_MON_LITE);
 
 				/* XXX XXX XXX Message */
 			}
@@ -3248,9 +3254,6 @@ msg_format("%^s%s", m_name, monmessage);
 			/* Take a turn */
 			do_turn = TRUE;
 
-			/* Hack -- Update the old location */
-			cave[oy][ox].m_idx = c_ptr->m_idx;
-
 			if (did_kill_wall)
 			{
 				if (one_in_(GRINDNOISE))
@@ -3275,53 +3278,45 @@ msg_format("%^s%s", m_name, monmessage);
 				}
 			}
 
-			/* Mega-Hack -- move the old monster, if any */
-			if (c_ptr->m_idx)
+			if (!is_riding_mon)
 			{
-				/* Move the old monster */
-				y_ptr->fy = oy;
-				y_ptr->fx = ox;
+				/* Hack -- Update the old location */
+				cave[oy][ox].m_idx = c_ptr->m_idx;
 
-				/* Update the old monster */
-				update_mon(c_ptr->m_idx, TRUE);
+				/* Mega-Hack -- move the old monster, if any */
+				if (c_ptr->m_idx)
+				{
+					/* Move the old monster */
+					y_ptr->fy = oy;
+					y_ptr->fx = ox;
 
-				/* Wake up the moved monster */
-				y_ptr->csleep = 0;
+					/* Update the old monster */
+					update_mon(c_ptr->m_idx, TRUE);
+				}
 
-				if (r_info[y_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
-					p_ptr->update |= (PU_MON_LITE);
+				/* Hack -- Update the new location */
+				c_ptr->m_idx = m_idx;
+
+				/* Move the monster */
+				m_ptr->fy = ny;
+				m_ptr->fx = nx;
+
+				/* Update the monster */
+				update_mon(m_idx, TRUE);
+
+				/* Redraw the old grid */
+				lite_spot(oy, ox);
+
+				/* Redraw the new grid */
+				lite_spot(ny, nx);
 			}
-
-			/* Hack -- Update the new location */
-			c_ptr->m_idx = m_idx;
-
-			/* Move the monster */
-			m_ptr->fy = ny;
-			m_ptr->fx = nx;
-
-			/* Update the monster */
-			update_mon(m_idx, TRUE);
-
-			if (is_riding_mon)
-			{
-				py = ny;
-				px = nx;
-			}
-
-			/* Redraw the old grid */
-			lite_spot(oy, ox);
-
-			/* Redraw the new grid */
-			lite_spot(ny, nx);
-
-			if (is_riding_mon)
+			else
 			{
 				/* Sound */
 				/* sound(SOUND_WALK); */
 
-				move_player_effect(FALSE, FALSE);
-
-				if (!player_bold(ny, nx) || p_ptr->leaving) break;
+				/* Move the player */
+				if (!move_player_effect(py, px, ny, nx, MPE_DONT_PICKUP)) break;
 			}
 
 			/* Possible disturb */

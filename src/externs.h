@@ -654,12 +654,12 @@ extern s16b critical_norm(int weight, int plus, int dam, s16b meichuu, int mode)
 extern s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bool thrown);
 extern void search(void);
 extern void py_pickup_aux(int o_idx);
-extern void carry(int pickup);
+extern void carry(bool pickup);
 extern bool py_attack(int y, int x, int mode);
 extern bool pattern_seq(int c_y, int c_x, int n_y, int n_x);
 extern bool player_can_enter(s16b feature, u16b mode);
-extern void move_player_effect(int do_pickup, bool break_trap);
-extern void move_player(int dir, int do_pickup, bool break_trap);
+extern bool move_player_effect(int oy, int ox, int ny, int nx, u32b mpe_mode);
+extern void move_player(int dir, bool do_pickup, bool break_trap);
 extern void run_step(int dir);
 
 /* cmd2.c */
@@ -673,8 +673,8 @@ extern void do_cmd_disarm(void);
 extern void do_cmd_bash(void);
 extern void do_cmd_alter(void);
 extern void do_cmd_spike(void);
-extern void do_cmd_walk(int pickup);
-extern void do_cmd_stay(int pickup);
+extern void do_cmd_walk(bool pickup);
+extern void do_cmd_stay(bool pickup);
 extern void do_cmd_run(void);
 extern void do_cmd_rest(void);
 extern void do_cmd_fire(void);
@@ -1548,7 +1548,7 @@ extern bool do_cmd_disarm_aux(int y, int x, int dir);
 extern int scan_floor(int *items, int y, int x, int mode);
 extern int show_floor(int target_item, int y, int x, int *min_width);
 extern bool get_item_floor(int *cp, cptr pmt, cptr str, int mode);
-extern void py_pickup_floor(int pickup);
+extern void py_pickup_floor(bool pickup);
 
 /* variable.c */
 extern bool easy_floor;

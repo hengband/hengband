@@ -2685,7 +2685,7 @@ void do_cmd_spike(void)
 /*
  * Support code for the "Walk" and "Jump" commands
  */
-void do_cmd_walk(int pickup)
+void do_cmd_walk(bool pickup)
 {
 	int dir;
 
@@ -2802,10 +2802,11 @@ void do_cmd_run(void)
  * Stay still.  Search.  Enter stores.
  * Pick up treasure if "pickup" is true.
  */
-void do_cmd_stay(int pickup)
+void do_cmd_stay(bool pickup)
 {
 	cave_type *c_ptr = &cave[py][px];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
+	u32b mpe_mode = MPE_STAYING | MPE_ENERGY_USE;
 
 	/* Allow repeated command */
 	if (command_arg)
@@ -2820,78 +2821,11 @@ void do_cmd_stay(int pickup)
 		command_arg = 0;
 	}
 
-
 	/* Take a turn */
 	energy_use = 100;
 
-
-	/* Spontaneous Searching */
-	if ((p_ptr->skill_fos >= 50) || (0 == randint0(50 - p_ptr->skill_fos)))
-	{
-		search();
-	}
-
-	/* Continuous Searching */
-	if (p_ptr->action == ACTION_SEARCH)
-	{
-		search();
-	}
-
-
-	/* Handle "objects" */
-	carry(pickup);
-
-
-	/* Hack -- enter a store if we are on one */
-	if (have_flag(f_ptr->flags, FF_STORE))
-	{
-		/* Disturb */
-		disturb(0, 0);
-
-		energy_use = 0;
-		/* Hack -- enter store */
-		command_new = SPECIAL_KEY_STORE;
-	}
-
-	/* Hack -- enter a building if we are on one -KMW- */
-	else if (have_flag(f_ptr->flags, FF_BLDG))
-	{
-		/* Disturb */
-		disturb(0, 0);
-
-		energy_use = 0;
-		/* Hack -- enter building */
-		command_new = SPECIAL_KEY_BUILDING;
-	}
-
-	/* Exit a quest if reach the quest exit */
-	else if (have_flag(f_ptr->flags, FF_QUEST_EXIT))
-	{
-		int q_index = p_ptr->inside_quest;
-
-		/* Was quest completed? */
-		if (quest[q_index].type == QUEST_TYPE_FIND_EXIT)
-		{
-			quest[q_index].status = QUEST_STATUS_COMPLETED;
-			quest[q_index].complev = (byte)p_ptr->lev;
-#ifdef JP
-			msg_print("クエストを完了した！");
-#else
-			msg_print("You accomplished your quest!");
-#endif
-
-			msg_print(NULL);
-		}
-
-		leave_quest_check();
-
-		p_ptr->inside_quest = cave[py][px].special;
-		dun_level = 0;
-		p_ptr->oldpx = 0;
-		p_ptr->oldpy = 0;
-
-		p_ptr->leaving = TRUE;
-	}
+	if (pickup) mpe_mode |= MPE_DO_PICKUP;
+	(void)move_player_effect(py, px, py, px, mpe_mode);
 }
 
 

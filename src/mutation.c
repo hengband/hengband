@@ -3457,7 +3457,7 @@ bool mutation_power_aux(u32b power)
 
 		case MUT1_EAT_ROCK:
 			{
-				int x, y, ox, oy;
+				int x, y;
 				cave_type *c_ptr;
 				feature_type *f_ptr;
 
@@ -3527,29 +3527,8 @@ bool mutation_power_aux(u32b power)
 				/* Destroy the wall */
 				cave_alter_feat(y, x, FF_HURT_ROCK);
 
-				oy = py;
-				ox = px;
-
-				py = y;
-				px = x;
-
-				if (p_ptr->riding)
-				{
-					m_list[p_ptr->riding].fy = py;
-					m_list[p_ptr->riding].fx = px;
-					cave[py][px].m_idx = p_ptr->riding;
-					cave[oy][ox].m_idx = 0;
-					update_mon(p_ptr->riding, TRUE);
-				}
-
-				lite_spot(py, px);
-				lite_spot(oy, ox);
-
-				verify_panel();
-
-				p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
-				p_ptr->update |= (PU_DISTANCE);
-				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+				/* Move the player */
+				(void)move_player_effect(py, px, y, x, MPE_DONT_PICKUP);
 			}
 			break;
 
