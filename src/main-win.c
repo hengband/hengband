@@ -5167,6 +5167,8 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 		}
 	}
 
+	/* Catch nasty signals */
+	signals_init();
 
 	/* Initialize */
 	init_angband();

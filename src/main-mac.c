@@ -6002,6 +6002,9 @@ void main(void)
 	/* Initialize */
 	init_stuff();
 
+	/* Catch nasty signals */
+	signals_init();
+
 	/* Initialize */
 	init_angband();
 
