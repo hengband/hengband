@@ -2183,7 +2183,8 @@ static byte get_random_ego(byte slot, bool good, int level)
 	{
 		e_ptr = &e_info[i];
 		
-		if (e_ptr->slot == slot && level >= e_ptr->level 
+		if (e_ptr->slot == slot
+		    /* && level >= e_ptr->level */
 		    && ((good && e_ptr->rating) || (!good && !e_ptr->rating)) )
 		{
 			if (e_ptr->rarity)
@@ -2197,7 +2198,8 @@ static byte get_random_ego(byte slot, bool good, int level)
 	{
 		e_ptr = &e_info[i];
 		
-		if (e_ptr->slot == slot  && level >= e_ptr->level
+		if (e_ptr->slot == slot
+		    /* && level >= e_ptr->level */
 		    && ((good && e_ptr->rating) || (!good && !e_ptr->rating)) )
 		{
 			if (e_ptr->rarity)
