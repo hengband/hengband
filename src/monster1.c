@@ -719,36 +719,36 @@ path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, "r_info_j.raw");
 #ifdef JP
 if (flags2 & RF2_ELDRITCH_HORROR) hook_c_roff(TERM_VIOLET, "狂気を誘う");/*nuke me*/
 #else
-		if (flags2 & RF2_ELDRITCH_HORROR) hooked_roff(" sanity-blasting");
+		if (flags2 & RF2_ELDRITCH_HORROR) hook_c_roff(TERM_VIOLET, " sanity-blasting");
 #endif
 
 #ifdef JP
 if (flags3 & RF3_ANIMAL)          hook_c_roff(TERM_L_GREEN, "自然界の");
 #else
-		if (flags3 & RF3_ANIMAL)          hooked_roff(" natural");
+		if (flags3 & RF3_ANIMAL)          hook_c_roff(TERM_L_GREEN, " natural");
 #endif
 
 #ifdef JP
 if (flags3 & RF3_EVIL)            hook_c_roff(TERM_L_DARK, "邪悪なる");
 #else
-		if (flags3 & RF3_EVIL)            hooked_roff(" evil");
+		if (flags3 & RF3_EVIL)            hook_c_roff(TERM_L_DARK, " evil");
 #endif
 
 #ifdef JP
 if (flags3 & RF3_GOOD)            hook_c_roff(TERM_YELLOW, "善良な");
 #else
-		if (flags3 & RF3_GOOD)            hooked_roff(" good");
+		if (flags3 & RF3_GOOD)            hook_c_roff(TERM_YELLOW, " good");
 #endif
 
 #ifdef JP
 if (flags3 & RF3_UNDEAD)          hook_c_roff(TERM_VIOLET, "アンデッドの");
 #else
-		if (flags3 & RF3_UNDEAD)          hooked_roff(" undead");
+		if (flags3 & RF3_UNDEAD)          hook_c_roff(TERM_VIOLET, " undead");
 #endif
 #ifdef JP
 if (flags3 & RF3_AMBERITE)        hook_c_roff(TERM_VIOLET, "アンバーの王族の");
 #else
-		if (flags3 & RF3_AMBERITE)        hooked_roff(" Amberite");
+		if (flags3 & RF3_AMBERITE)        hook_c_roff(TERM_VIOLET, " Amberite");
 #endif
 
 
@@ -758,43 +758,43 @@ if (flags3 & RF3_AMBERITE)        hook_c_roff(TERM_VIOLET, "アンバーの王族の");
 #ifdef JP
      if (flags3 & RF3_DRAGON)   hook_c_roff(TERM_ORANGE, "ドラゴン");
 #else
-		     if (flags3 & RF3_DRAGON)   hooked_roff(" dragon");
+		     if (flags3 & RF3_DRAGON)   hook_c_roff(TERM_ORANGE, " dragon");
 #endif
 
 #ifdef JP
 if (flags3 & RF3_DEMON)    hook_c_roff(TERM_VIOLET, "デーモン");
 #else
-		if (flags3 & RF3_DEMON)    hooked_roff(" demon");
+		if (flags3 & RF3_DEMON)    hook_c_roff(TERM_VIOLET, " demon");
 #endif
 
 #ifdef JP
 if (flags3 & RF3_GIANT)    hook_c_roff(TERM_L_UMBER, "ジャイアント");
 #else
-		if (flags3 & RF3_GIANT)    hooked_roff(" giant");
+		if (flags3 & RF3_GIANT)    hook_c_roff(TERM_L_UMBER, " giant");
 #endif
 
 #ifdef JP
 if (flags3 & RF3_TROLL)    hook_c_roff(TERM_BLUE, "トロル");
 #else
-		if (flags3 & RF3_TROLL)    hooked_roff(" troll");
+		if (flags3 & RF3_TROLL)    hook_c_roff(TERM_BLUE, " troll");
 #endif
 
 #ifdef JP
 if (flags3 & RF3_ORC)      hook_c_roff(TERM_UMBER, "オーク");
 #else
-		if (flags3 & RF3_ORC)      hooked_roff(" orc");
+		if (flags3 & RF3_ORC)      hook_c_roff(TERM_UMBER, " orc");
 #endif
 
 #ifdef JP
 if (flags2 & RF2_HUMAN) hook_c_roff(TERM_L_WHITE, "人間");
 #else
-		if (flags2 & RF2_HUMAN) hooked_roff(" Human");
+		if (flags2 & RF2_HUMAN) hook_c_roff(TERM_L_WHITE, " Human");
 #endif
 
 #ifdef JP
 if (flags2 & RF2_QUANTUM)  hook_c_roff(TERM_VIOLET, "量子生物");
 #else
-		if (flags2 & RF2_QUANTUM)  hooked_roff(" quantum creature");
+		if (flags2 & RF2_QUANTUM)  hook_c_roff(TERM_VIOLET, " quantum creature");
 #endif
 
 	}
@@ -863,7 +863,7 @@ else                            hooked_roff("モンスター");
 #ifdef JP
 hook_c_roff(TERM_VIOLET, format("%^sは炎と氷とスパークに包まれている。", wd_he[msex]));
 #else
-		hooked_roff(format("%^s is surrounded by flames and electricity.  ", wd_he[msex]));
+		hook_c_roff(TERM_VIOLET, format("%^s is surrounded by flames and electricity.  ", wd_he[msex]));
 #endif
 
 	}
@@ -872,7 +872,7 @@ hook_c_roff(TERM_VIOLET, format("%^sは炎と氷とスパークに包まれている。", wd_he[m
 #ifdef JP
 hook_c_roff(TERM_L_RED, format("%^sは炎とスパークに包まれている。", wd_he[msex]));
 #else
-		hooked_roff(format("%^s is surrounded by flames and electricity.  ", wd_he[msex]));
+		hook_c_roff(TERM_L_RED, format("%^s is surrounded by flames and electricity.  ", wd_he[msex]));
 #endif
 
 	}
@@ -881,7 +881,7 @@ hook_c_roff(TERM_L_RED, format("%^sは炎とスパークに包まれている。", wd_he[msex])
 #ifdef JP
 hook_c_roff(TERM_BLUE, format("%^sは炎と氷に包まれている。", wd_he[msex]));
 #else
-		hooked_roff(format("%^s is surrounded by flames and electricity.  ", wd_he[msex]));
+		hook_c_roff(TERM_BLUE, format("%^s is surrounded by flames and electricity.  ", wd_he[msex]));
 #endif
 
 	}
@@ -890,7 +890,7 @@ hook_c_roff(TERM_BLUE, format("%^sは炎と氷に包まれている。", wd_he[msex]));
 #ifdef JP
 hook_c_roff(TERM_L_GREEN, format("%^sは氷とスパークに包まれている。", wd_he[msex]));
 #else
-		hooked_roff(format("%^s is surrounded by ice and electricity.  ", wd_he[msex]));
+		hook_c_roff(TERM_L_GREEN, format("%^s is surrounded by ice and electricity.  ", wd_he[msex]));
 #endif
 
 	}
@@ -899,7 +899,7 @@ hook_c_roff(TERM_L_GREEN, format("%^sは氷とスパークに包まれている。", wd_he[msex
 #ifdef JP
 hook_c_roff(TERM_RED, format("%^sは炎に包まれている。", wd_he[msex]));
 #else
-		hooked_roff(format("%^s is surrounded by flames.  ", wd_he[msex]));
+		hook_c_roff(TERM_RED, format("%^s is surrounded by flames.  ", wd_he[msex]));
 #endif
 
 	}
@@ -908,7 +908,7 @@ hook_c_roff(TERM_RED, format("%^sは炎に包まれている。", wd_he[msex]));
 #ifdef JP
 hook_c_roff(TERM_BLUE, format("%^sは氷に包まれている。", wd_he[msex]));
 #else
-		hooked_roff(format("%^s is surrounded by ice.  ", wd_he[msex]));
+		hook_c_roff(TERM_BLUE, format("%^s is surrounded by ice.  ", wd_he[msex]));
 #endif
 
 	}
@@ -917,7 +917,7 @@ hook_c_roff(TERM_BLUE, format("%^sは氷に包まれている。", wd_he[msex]));
 #ifdef JP
 hook_c_roff(TERM_L_BLUE, format("%^sはスパークに包まれている。", wd_he[msex]));
 #else
-		hooked_roff(format("%^s is surrounded by electricity.  ", wd_he[msex]));
+		hook_c_roff(TERM_L_BLUE, format("%^s is surrounded by electricity.  ", wd_he[msex]));
 #endif
 
 	}
@@ -1011,7 +1011,7 @@ hooked_roff(format("%^sは矢の呪文を跳ね返す。", wd_he[msex]));
 			else hooked_roff(" or ");
 
 			/* Dump */
-			hooked_roff(vp[n]);
+			hook_c_roff(color[n], vp[n]);
 #endif
 
 		}
@@ -1633,7 +1633,7 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 		hooked_roff(" magical, casting spells");
 
 		/* Adverb */
-		if (flags2 & RF2_SMART) hooked_roff(" intelligently");
+		if (flags2 & RF2_SMART) hook_c_roff(TERM_YELLOW, " intelligently");
 #endif
 
 
