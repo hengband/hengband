@@ -2256,12 +2256,6 @@ void redraw_window(void)
 {
 	/* Only if the dungeon exists */
 	if (!character_dungeon) return;
-	
-	/* Hack - Activate term zero for the redraw */
-	Term_activate(&term_screen[0]);
-	
-	/* Hack -- react to changes */
-	Term_xtra(TERM_XTRA_REACT, 0);
 
 	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
@@ -2274,9 +2268,6 @@ void redraw_window(void)
 
 	/* Redraw */
 	Term_redraw();
-
-	/* Refresh */
-	Term_fresh();
 }
 
 
