@@ -19556,7 +19556,7 @@ D:可愛らしい純心無垢なスライムモルドだ。
 D:触れて死ね！
 
 N:963:ビルダー帝国帝王『ボ帝ビル』
-E:Boty-Buildeng, the Emperor
+E:Botei-Building, the Emperor
 G:P:U
 I:120:12d100:25:130:40
 W:36:2:0:2500:0:0
