@@ -1719,17 +1719,21 @@ static option_type autosave_info[2] =
 
 static s16b toggle_frequency(s16b current)
 {
-	if (current == 0) return 50;
-	if (current == 50) return 100;
-	if (current == 100) return 250;
-	if (current == 250) return 500;
-	if (current == 500) return 1000;
-	if (current == 1000) return 2500;
-	if (current == 2500) return 5000;
-	if (current == 5000) return 10000;
-	if (current == 10000) return 25000;
+	switch (current)
+	{
+	case 0: return 50;
+	case 50: return 100;
+	case 100: return 250;
+	case 250: return 500;
+	case 500: return 1000;
+	case 1000: return 2500;
+	case 2500: return 5000;
+	case 5000: return 10000;
+	case 10000: return 25000;
+	default: return 0;
+	}
 
-	return 0;
+	return 0; /* Paranoia */
 }
 
 
