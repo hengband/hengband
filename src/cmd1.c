@@ -2085,8 +2085,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 
 	/* Disturb the monster */
 	m_ptr->csleep = 0;
-	if (r_ptr->flags7 & RF7_HAS_LD_MASK)
-		p_ptr->update |= (PU_MON_LITE);
+	if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 
 	/* Extract monster name (or "it") */
 	monster_desc(m_name, m_ptr, 0);
@@ -3130,6 +3129,7 @@ bool py_attack(int y, int x, int mode)
 
 	cave_type       *c_ptr = &cave[y][x];
 	monster_type    *m_ptr = &m_list[c_ptr->m_idx];
+	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	char            m_name[80];
 
 	/* Disturb the player */
@@ -3139,8 +3139,8 @@ bool py_attack(int y, int x, int mode)
 
 	if (m_ptr->csleep) /* It is not honorable etc to attack helpless victims */
 	{
-		if (!(r_info[m_ptr->r_idx].flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(V_COMPASSION, -1);
-		if (!(r_info[m_ptr->r_idx].flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(V_HONOUR, -1);
+		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(V_COMPASSION, -1);
+		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(V_HONOUR, -1);
 	}
 
 	/* Extract monster name (or "it") */
@@ -3152,7 +3152,7 @@ bool py_attack(int y, int x, int mode)
 	/* Track a new monster */
 	if (m_ptr->ml) health_track(c_ptr->m_idx);
 
-	if ((r_info[m_ptr->r_idx].flags1 & RF1_FEMALE) &&
+	if ((r_ptr->flags1 & RF1_FEMALE) &&
 	    !(p_ptr->stun || p_ptr->confused || p_ptr->image || !m_ptr->ml))
 	{
 		if ((inventory[INVEN_RARM].name1 == ART_ZANTETSU) || (inventory[INVEN_LARM].name1 == ART_ZANTETSU))
@@ -3215,7 +3215,7 @@ bool py_attack(int y, int x, int mode)
 #else
 				msg_format("You stop to avoid hitting %s.", m_name);
 #endif
-			return FALSE;
+				return FALSE;
 			}
 		}
 	}
@@ -3241,7 +3241,7 @@ bool py_attack(int y, int x, int mode)
 
 		/* Disturb the monster */
 		m_ptr->csleep = 0;
-		p_ptr->update |= (PU_MON_LITE);
+		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 
 		/* Done */
 		return FALSE;
@@ -3249,7 +3249,7 @@ bool py_attack(int y, int x, int mode)
 
 	if (p_ptr->migite && p_ptr->hidarite)
 	{
-		if ((p_ptr->skill_exp[GINOU_NITOURYU] < s_info[p_ptr->pclass].s_max[GINOU_NITOURYU]) && ((p_ptr->skill_exp[GINOU_NITOURYU] - 1000) / 200 < r_info[m_ptr->r_idx].level))
+		if ((p_ptr->skill_exp[GINOU_NITOURYU] < s_info[p_ptr->pclass].s_max[GINOU_NITOURYU]) && ((p_ptr->skill_exp[GINOU_NITOURYU] - 1000) / 200 < r_ptr->level))
 		{
 			if (p_ptr->skill_exp[GINOU_NITOURYU] < WEAPON_EXP_BEGINNER)
 				p_ptr->skill_exp[GINOU_NITOURYU] += 80;
@@ -3272,7 +3272,7 @@ bool py_attack(int y, int x, int mode)
 		if (cur < max)
 		{
 			int ridinglevel = r_info[m_list[p_ptr->riding].r_idx].level;
-			int targetlevel = r_info[m_ptr->r_idx].level;
+			int targetlevel = r_ptr->level;
 			int inc = 0;
 
 			if ((cur / 200 - 5) < targetlevel)
@@ -3563,6 +3563,9 @@ void move_player(int dir, int do_pickup, bool break_trap)
 	cave_type *c_ptr;
 	monster_type *m_ptr;
 
+	monster_type *riding_m_ptr = &m_list[p_ptr->riding];
+	monster_race *riding_r_ptr = &r_info[p_ptr->riding ? riding_m_ptr->r_idx : 0]; /* Paranoia */
+
 	char m_name[80];
 
 	bool p_can_pass_walls = FALSE;
@@ -3692,6 +3695,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 	/* Hack -- attack monsters */
 	if (c_ptr->m_idx && (m_ptr->ml || cave_floor_bold(y, x) || p_can_pass_walls))
 	{
+		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Attack -- only if we can see it OR it is not in a wall */
 		if (!is_hostile(m_ptr) &&
@@ -3701,7 +3705,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		    ((cave_floor_bold(y, x)) || (c_ptr->feat == FEAT_TREES) || (p_can_pass_walls)))
 		{
 			m_ptr->csleep = 0;
-			p_ptr->update |= (PU_MON_LITE);
+			if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 
 			/* Extract monster name (or "it") */
 			monster_desc(m_name, m_ptr, 0);
@@ -3718,9 +3722,9 @@ void move_player(int dir, int do_pickup, bool break_trap)
 				py_attack(y, x, 0);
 				oktomove = FALSE;
 			}
-			else if (monster_can_cross_terrain(cave[py][px].feat, &r_info[m_ptr->r_idx]) &&
+			else if (monster_can_cross_terrain(cave[py][px].feat, r_ptr) &&
 				 (cave_floor_bold(py, px) || cave[py][px].feat == FEAT_TREES ||
-				  (r_info[m_ptr->r_idx].flags2 & RF2_PASS_WALL)))
+				  (r_ptr->flags2 & RF2_PASS_WALL)))
 			{
 				do_past = TRUE;
 			}
@@ -3839,7 +3843,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 	}
 
 #endif /* ALLOW_EASY_DISARM -- TNB */
-	else if (p_ptr->riding && (r_info[m_list[p_ptr->riding].r_idx].flags1 & RF1_NEVER_MOVE))
+	else if (p_ptr->riding && (riding_r_ptr->flags1 & RF1_NEVER_MOVE))
 	{
 #ifdef JP
 		msg_print("動けない！");
@@ -3851,16 +3855,16 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		disturb(0, 0);
 	}
 
-	else if (p_ptr->riding && m_list[p_ptr->riding].monfear)
+	else if (p_ptr->riding && riding_m_ptr->monfear)
 	{
 		char m_name[80];
 
 		/* Acquire the monster name */
-		monster_desc(m_name, &m_list[p_ptr->riding], 0);
+		monster_desc(m_name, riding_m_ptr, 0);
 
 		/* Dump a message */
 #ifdef JP
-msg_format("%sが恐怖していて制御できない。", m_name);
+		msg_format("%sが恐怖していて制御できない。", m_name);
 #else
 		msg_format("%^s is too scared to control.", m_name);
 #endif
@@ -3874,7 +3878,7 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 		disturb(0, 0);
 	}
 
-	else if ((p_ptr->riding && (r_info[m_list[p_ptr->riding].r_idx].flags7 & RF7_AQUATIC)) && (c_ptr->feat != FEAT_SHAL_WATER) && (c_ptr->feat != FEAT_DEEP_WATER))
+	else if ((p_ptr->riding && (riding_r_ptr->flags7 & RF7_AQUATIC)) && (c_ptr->feat != FEAT_SHAL_WATER) && (c_ptr->feat != FEAT_DEEP_WATER))
 	{
 #ifdef JP
 		msg_print("陸上に上がれない。");
@@ -3886,7 +3890,7 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 		disturb(0, 0);
 	}
 
-	else if ((p_ptr->riding && !(r_info[m_list[p_ptr->riding].r_idx].flags7 & (RF7_AQUATIC | RF7_CAN_SWIM | RF7_CAN_FLY))) && (c_ptr->feat == FEAT_DEEP_WATER))
+	else if ((p_ptr->riding && !(riding_r_ptr->flags7 & (RF7_AQUATIC | RF7_CAN_SWIM | RF7_CAN_FLY))) && (c_ptr->feat == FEAT_DEEP_WATER))
 	{
 #ifdef JP
 		msg_print("水上に行けない。");
@@ -3898,7 +3902,7 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 		disturb(0, 0);
 	}
 
-	else if ((p_ptr->riding && (r_info[m_list[p_ptr->riding].r_idx].flags2 & (RF2_AURA_FIRE)) && !(r_info[m_list[p_ptr->riding].r_idx].flags7 & (RF7_CAN_FLY))) && (c_ptr->feat == FEAT_SHAL_WATER))
+	else if ((p_ptr->riding && (riding_r_ptr->flags2 & RF2_AURA_FIRE) && !(riding_r_ptr->flags7 & RF7_CAN_FLY)) && (c_ptr->feat == FEAT_SHAL_WATER))
 	{
 #ifdef JP
 		msg_print("水上に行けない。");
@@ -3910,7 +3914,7 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 		disturb(0, 0);
 	}
 
-	else if ((p_ptr->riding && !(r_info[m_list[p_ptr->riding].r_idx].flags7 & (RF7_CAN_FLY)) && !(r_info[m_list[p_ptr->riding].r_idx].flagsr & RFR_EFF_IM_FIRE_MASK)) && ((c_ptr->feat == FEAT_SHAL_LAVA) || (c_ptr->feat == FEAT_DEEP_LAVA)))
+	else if ((p_ptr->riding && !(riding_r_ptr->flags7 & RF7_CAN_FLY) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) && ((c_ptr->feat == FEAT_SHAL_LAVA) || (c_ptr->feat == FEAT_DEEP_LAVA)))
 	{
 #ifdef JP
 		msg_print("溶岩の上に行けない。");
@@ -3922,10 +3926,10 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 		disturb(0, 0);
 	}
 
-	else if (p_ptr->riding && m_list[p_ptr->riding].stunned && one_in_(2))
+	else if (p_ptr->riding && riding_m_ptr->stunned && one_in_(2))
 	{
 		char m_name[80];
-		monster_desc(m_name, &m_list[p_ptr->riding], 0);
+		monster_desc(m_name, riding_m_ptr, 0);
 #ifdef JP
 		msg_format("%sが朦朧としていてうまく動けない！",m_name);
 #else
@@ -4136,7 +4140,7 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 		py = y;
 		px = x;
 
-		if (p_ptr->riding && (r_info[m_list[p_ptr->riding].r_idx].flags2 & RF2_KILL_WALL))
+		if (p_ptr->riding && (riding_r_ptr->flags2 & RF2_KILL_WALL))
 		{
 			if (cave[py][px].feat >= FEAT_RUBBLE && cave[py][px].feat < FEAT_PERM_SOLID)
 			{
@@ -4165,7 +4169,8 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 				else
 					cave_set_feat(py, px, floor_type[randint0(100)]);
 			}
-				/* Update some things -- similar to GF_KILL_WALL */
+
+			/* Update some things -- similar to GF_KILL_WALL */
 			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
 		}
 
@@ -4346,7 +4351,7 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 					msg_print("*Leaving trap detect region!*");
 #endif
 				}
-				
+
 				if (disturb_trap_detect)
 				{
 					disturb(0, 0);
@@ -4357,11 +4362,12 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 
 	if (p_ptr->riding)
 	{
-		m_list[p_ptr->riding].fy = py;
-		m_list[p_ptr->riding].fx = px;
+		riding_m_ptr->fy = py;
+		riding_m_ptr->fx = px;
 		cave[py][px].m_idx = p_ptr->riding;
 		update_mon(cave[py][px].m_idx, TRUE);
-		p_ptr->update |= (PU_MON_LITE);
+		if (riding_r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+			p_ptr->update |= (PU_MON_LITE);
 	}
 }
 

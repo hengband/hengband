@@ -3095,7 +3095,7 @@ bool monst_spell_monst(int m_idx)
 #endif
 					}
 					teleport_away(m_idx, 10, FALSE);
-					p_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
+					p_ptr->update |= (PU_MONSTERS);
 				}
 				else
 				{

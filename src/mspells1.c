@@ -3369,7 +3369,7 @@ msg_format("%^sが瞬時に消えた。", m_name);
 #endif
 
 			teleport_away(m_idx, 10, FALSE);
-			p_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
+			p_ptr->update |= (PU_MONSTERS);
 			break;
 		}
 
@@ -3550,7 +3550,7 @@ msg_format("%^sがテレポートした。", m_name);
 						msg_format("%^s suddenly go out of your sight!", m_name);
 #endif
 						teleport_away(m_idx, 10, FALSE);
-						p_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
+						p_ptr->update |= (PU_MONSTERS);
 					}
 					else
 					{

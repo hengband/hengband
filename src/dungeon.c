@@ -5623,6 +5623,7 @@ msg_print("中断しました。");
 	if (p_ptr->riding && !p_ptr->confused && !p_ptr->blind)
 	{
 		monster_type *m_ptr = &m_list[p_ptr->riding];
+		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		if (m_ptr->csleep)
 		{
@@ -5631,7 +5632,7 @@ msg_print("中断しました。");
 			/* Recover fully */
 			m_ptr->csleep = 0;
 
-			if (r_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+			if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 
 			/* Acquire the monster name */
 			monster_desc(m_name, m_ptr, 0);
@@ -5649,7 +5650,7 @@ msg_format("%^sを起こした。", m_name);
 			int d = 1;
 
 			/* Make a "saving throw" against stun */
-			if (randint0(r_info[m_ptr->r_idx].level) < p_ptr->skill_exp[GINOU_RIDING])
+			if (randint0(r_ptr->level) < p_ptr->skill_exp[GINOU_RIDING])
 			{
 				/* Recover fully */
 				d = m_ptr->stunned;
@@ -5689,7 +5690,7 @@ msg_format("%^sを朦朧状態から立ち直らせた。", m_name);
 			int d = 1;
 
 			/* Make a "saving throw" against stun */
-			if (randint0(r_info[m_ptr->r_idx].level) < p_ptr->skill_exp[GINOU_RIDING])
+			if (randint0(r_ptr->level) < p_ptr->skill_exp[GINOU_RIDING])
 			{
 				/* Recover fully */
 				d = m_ptr->confused;
@@ -5729,7 +5730,7 @@ msg_format("%^sを混乱状態から立ち直らせた。", m_name);
 			int d = 1;
 
 			/* Make a "saving throw" against stun */
-			if (randint0(r_info[m_ptr->r_idx].level) < p_ptr->skill_exp[GINOU_RIDING])
+			if (randint0(r_ptr->level) < p_ptr->skill_exp[GINOU_RIDING])
 			{
 				/* Recover fully */
 				d = m_ptr->monfear;

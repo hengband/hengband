@@ -1111,11 +1111,12 @@ static bool cast_force_spell(int spell)
 			int oy = y, ox = x;
 			int m_idx = cave[y][x].m_idx;
 			monster_type *m_ptr = &m_list[m_idx];
+			monster_race *r_ptr = &r_info[m_ptr->r_idx];
 			char m_name[80];
 
 			monster_desc(m_name, m_ptr, 0);
 
-			if (randint1(r_info[m_ptr->r_idx].level * 3 / 2) > randint0(dam / 2) + dam/2)
+			if (randint1(r_ptr->level * 3 / 2) > randint0(dam / 2) + dam/2)
 			{
 #ifdef JP
 				msg_format("%sは飛ばされなかった。", m_name);
@@ -1151,6 +1152,9 @@ static bool cast_force_spell(int spell)
 					update_mon(m_idx, TRUE);
 					lite_spot(oy, ox);
 					lite_spot(ty, tx);
+
+					if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+						p_ptr->update |= (PU_MON_LITE);
 				}
 			}
 		}
@@ -1776,7 +1780,8 @@ msg_print("その方向にはモンスターはいません。");
 		/* Redraw the new grid */
 		lite_spot(ty, tx);
 
-		p_ptr->update |= (PU_MON_LITE);
+		if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+			p_ptr->update |= (PU_MON_LITE);
 
 		break;
 	}

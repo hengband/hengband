@@ -813,14 +813,14 @@ msg_print("まばゆい閃光が走った！");
 #endif
 
 					obvious = TRUE;
+				}
 
-					/* Visibility change */
-					if ((c_ptr->feat >= FEAT_DOOR_HEAD) &&
-						 (c_ptr->feat <= FEAT_DOOR_TAIL))
-					{
-						/* Update some things */
-						p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
-					}
+				/* Visibility change */
+				if ((c_ptr->feat >= FEAT_DOOR_HEAD) &&
+					 (c_ptr->feat <= FEAT_DOOR_TAIL))
+				{
+					/* Update some things */
+					p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
 				}
 
 				/* Forget the door */

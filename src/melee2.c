@@ -3333,7 +3333,8 @@ msg_print("爆発のルーンは解除された。");
 				/* Wake up the moved monster */
 				y_ptr->csleep = 0;
 
-				if (r_info[y_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+				if (r_info[y_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+					p_ptr->update |= (PU_MON_LITE);
 			}
 
 			/* Hack -- Update the new location */

@@ -634,6 +634,9 @@ static bool cast_hissatsu_spell(int spell)
 				update_mon(m_idx, TRUE);
 				lite_spot(oy, ox);
 				lite_spot(ty, tx);
+
+				if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+					p_ptr->update |= (PU_MON_LITE);
 			}
 		}
 		break;
