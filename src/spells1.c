@@ -610,13 +610,13 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 #ifdef JP
 			message = "∏œ§Ï§ø";break;
 #else
-			message = "nanka.";break;
+			message = "was blasted.";break;
 #endif
 		case GF_TIME:
 #ifdef JP
 			message = "ΩÃ§Û§¿";break;
 #else
-			message = "nanka.";break;
+			message = "shrank.";break;
 #endif
 		case GF_ACID:
 #ifdef JP
@@ -629,7 +629,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 #ifdef JP
 			message = "≈‡§Í°¢∫’§±ª∂§√§ø";break;
 #else
-			message = "nanka.";break;
+			message = "was frozen and smashed.";break;
 #endif
 		case GF_FIRE:
 		case GF_ELEC:
