@@ -5152,6 +5152,13 @@ get_rnd_line("death_j.txt", 0, death_message);
 
 		if (record_danger && (old_chp > warning))
 		{
+			if (p_ptr->image && damage_type == DAMAGE_ATTACK)
+#ifdef JP
+				hit_from = "何か";
+#else
+				hit_from = "something";
+#endif
+
 #ifdef JP
 			sprintf(tmp,"%sによってピンチに陥いった。",hit_from);
 #else
