@@ -1744,7 +1744,16 @@ bool make_attack_normal(int m_idx)
 					{
 						/* 1% chance for perm. damage */
 						bool perm = one_in_(10);
-						if (dec_stat(A_CON, randint1(10), perm)) obvious = TRUE;
+						if (dec_stat(A_CON, randint1(10), perm))
+						{
+#ifdef JP
+							msg_print("病があなたを蝕んでいる気がする。");
+#else
+							msg_print("You feel strange sickness.");
+#endif
+
+							obvious = TRUE;
+						}
 					}
 
 					break;
