@@ -1675,14 +1675,14 @@ static struct
 	{29, 10, 21, "Hit point"},
 	{29, 11, 21, "SP (Mana)"},
 	{29, 20, 21, "Play time"},
-	{54, 10, -1, "Fighting    :"},
-	{54, 11, -1, "Bows/Throw  :"},
-	{54, 12, -1, "Saving Throw:"},
-	{54, 13, -1, "Stealth     :"},
-	{54, 14, -1, "Perception  :"},
-	{54, 15, -1, "Searching   :"},
-	{54, 16, -1, "Disarming   :"},
-	{54, 17, -1, "Magic Device:"},
+	{54, 10, -1, "Fighting    : "},
+	{54, 11, -1, "Bows/Throw  : "},
+	{54, 12, -1, "Saving Throw: "},
+	{54, 13, -1, "Stealth     : "},
+	{54, 14, -1, "Perception  : "},
+	{54, 15, -1, "Searching   : "},
+	{54, 16, -1, "Disarming   : "},
+	{54, 17, -1, "Magic Device: "},
 	{01, 12, 25, "Blows/Round"},
 	{01, 17, 25, "Shots/Round"},
 	{01, 13, 25, "Wpn.dmg/Rnd"},
@@ -4093,19 +4093,36 @@ void display_player(int mode)
 				put_str(history[i], i + 12, 10);
 			}
 
+
 			if (death)
 			{
 				if (dun_level)
+#ifdef JP
 					put_str(format("…あなたは %s の %d 階で死んだ。", map_name(), dun_level), 5 + 12, 10);
+#else
+					put_str(format("...You were dead at level %d of %s.", dun_level, map_name()), 5 + 12, 10);
+#endif
 				else
-					put_str(format("…あなたは %s で死んだ。", map_name(), dun_level), 5 + 12, 10);
+#ifdef JP
+					put_str(format("…あなたは %s で死んだ。", map_name()), 5 + 12, 10);
+#else
+					put_str(format("...You were dead at %s.", map_name()), 5 + 12, 10);
+#endif
 			}
 			else
 			{
 				if (dun_level)
+#ifdef JP
 					put_str(format("…あなたは現在、 %s の %d 階で探索している。", map_name(), dun_level), 5 + 12, 10);
+#else
+					put_str(format("...Now, you are exploring at level %d of %s.", dun_level, map_name()), 5 + 12, 10);
+#endif
 				else
-					put_str(format("…あなたは現在、 %s にいる。", map_name(), dun_level), 5 + 12, 10);
+#ifdef JP
+					put_str(format("…あなたは現在、 %s にいる。", map_name()), 5 + 12, 10);
+#else
+					put_str(format("...Now, you are in %s.", map_name()), 5 + 12, 10);
+#endif
 			}
 		}
 
