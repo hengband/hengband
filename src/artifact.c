@@ -1497,7 +1497,6 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 				warrior_artifact_bias = 25;
 				break;
 			case CLASS_RANGER:
-			case CLASS_MIRROR_MASTER:
 				artifact_bias = BIAS_RANGER;
 				warrior_artifact_bias = 30;
 				break;
@@ -1531,6 +1530,16 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 			case CLASS_BEASTMASTER:
 				artifact_bias = BIAS_CHR;
 				warrior_artifact_bias = 50;
+				break;
+			case CLASS_MIRROR_MASTER:
+				if (randint(4) > 1) 
+				{
+				    artifact_bias = BIAS_MAGE;
+				}
+				else
+				{
+				    artifact_bias = BIAS_ROGUE;
+				}
 				break;
 		}
 	}
