@@ -1608,6 +1608,27 @@ static bool ang_sort_comp_pet_dismiss(vptr u, vptr v, int a, int b)
 	return w1 <= w2;
 }
 
+void check_pets_num_and_align(monster_type *m_ptr, bool inc)
+{
+	s32b old_friend_align = friend_align;
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+	if (inc)
+	{
+		total_friends++;
+		if (r_ptr->flags3 & RF3_GOOD) friend_align += r_ptr->level;
+		if (r_ptr->flags3 & RF3_EVIL) friend_align -= r_ptr->level;
+	}
+	else
+	{
+		total_friends--;
+		if (r_ptr->flags3 & RF3_GOOD) friend_align -= r_ptr->level;
+		if (r_ptr->flags3 & RF3_EVIL) friend_align += r_ptr->level;
+	}
+
+	if (old_friend_align != friend_align) p_ptr->update |= (PU_BONUS);
+}
+
 int calculate_upkeep(void)
 {
 	s32b old_friend_align = friend_align;

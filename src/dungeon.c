@@ -6073,6 +6073,8 @@ static void dungeon(bool load_game)
 		if (record_maxdepth) do_cmd_write_nikki(NIKKI_MAXDEAPTH, dun_level, NULL);
 	}
 
+	(void)calculate_upkeep();
+
 	/* Validate the panel */
 	panel_bounds_center();
 
