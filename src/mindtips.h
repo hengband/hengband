@@ -201,7 +201,7 @@ static cptr mind_tips[5][MAX_MIND_POWERS] =
 	"fires a ball of shards",
 	"generate balls which send monsters to sleep on all mirrors in the whole level.",
 	"fires a beam of mana. If the beam hit a mirror, it breaks that mirror and reflects toward another mirror.",
-	"vanich a monster on a mirror from current dungeon level.",
+	"eliminates a monster on a mirror from current dungeon level.",
 	"gives bonus to AC. gives reflection at level 32. gives magic resistance at level 40.",
 	"fires a powerful beam of mana. If the beam hit a mirror, it breaks that mirror and fires 8 beams of mana to 8 different directions from that point.",
 	"attempts to slow, stun, confuse, scare, freeze all monsters in sight. gets more power on a mirror.",
