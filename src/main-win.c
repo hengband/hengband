@@ -3346,7 +3346,7 @@ static void process_menus(WORD wCmd)
 				if (!can_save)
 				{
 #ifdef JP
-				plog("今は終了できません。");
+					plog("今は終了できません。");
 #else
 					plog("You may not do that right now.");
 #endif
@@ -3360,6 +3360,9 @@ static void process_menus(WORD wCmd)
 				forget_lite();
 				forget_view();
 				clear_mon_lite();
+
+				/* For writing the playrecord, not for saving the game */
+				do_cmd_save_and_exit();
 
 				/* Save the game */
 #ifdef ZANGBAND
@@ -4043,7 +4046,11 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 			{
 				if (!can_save)
 				{
+#ifdef JP
+					plog("今は終了できません。");
+#else
 					plog("You may not do that right now.");
+#endif
 					return 0;
 				}
 
@@ -4053,6 +4060,9 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 				forget_lite();
 				forget_view();
 				clear_mon_lite();
+
+				/* For writing the playrecord, not for saving the game */
+				do_cmd_save_and_exit();
 
 				/* Save the game */
 #ifdef ZANGBAND
