@@ -5345,9 +5345,19 @@ static bool build_type10(void)
 
 	/* Select type of vault */
 #ifdef ALLOW_CAVERNS_AND_LAKES
-	vtype = randint1(15);
+	do
+	{
+		vtype = randint1(15);
+	}
+	while ((d_info[dungeon_type].flags1 & DF1_NO_CAVE) &&
+		((vtype == 1) || (vtype == 3) || (vtype == 8) || (vtype == 9) || (vtype == 11)));
 #else /* ALLOW_CAVERNS_AND_LAKES */
-	vtype = randint1(7);
+	do
+	{
+		vtype = randint1(7);
+	}
+	while ((d_info[dungeon_type].flags1 & DF1_NO_CAVE) &&
+		((vtype == 1) || (vtype == 3)));
 #endif /* ALLOW_CAVERNS_AND_LAKES */
 
 	switch (vtype)
