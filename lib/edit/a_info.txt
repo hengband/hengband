@@ -3450,10 +3450,10 @@ D:いるのは女だ。わたしはエオウィン、エオムンドの娘だ。」
 
 N:217:聖騎士の
 E:of Sacred Knights
-I:40:25:1
+I:40:25:2
 W:50:50:2:77777
 P:0:0d0:0:0:10
-F:WIS | MAGIC_MASTERY | HIDE_TYPE |
+F:STR | WIS | HIDE_TYPE |
 F:RES_CONF | RES_CHAOS | 
 F:SEE_INVIS | FREE_ACT | REGEN | HOLD_LIFE | ACTIVATE |
 F:INSTA_ART
@@ -3473,7 +3473,7 @@ D:地獄の囚人を拘束する首輪だ。多くの囚人の怨念が込められている。
 N:219:帯魔力
 E:The Charmed
 I:40:27:2
-W:50:80:2:100000
+W:50:100:2:100000
 P:0:0d0:0:0:5
 F:INT | CHR | INFRA | SEARCH | HIDE_TYPE |
 F:SEE_INVIS | FREE_ACT | SLOW_DIGEST | REGEN | LITE | WARNING |
@@ -3483,7 +3483,7 @@ F:INSTA_ART
 N:220:ものまねの始祖ゴゴの
 E:of Gogo
 I:40:28:4
-W:50:50:2:55555
+W:50:100:2:55555
 P:0:0d0:0:0:0
 F:INT | WIS | DEX | 
 F:SEE_INVIS | LITE |
