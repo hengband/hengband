@@ -6939,8 +6939,13 @@ prt("お待ち下さい...", 0, 0);
 		/* Handle "p_ptr->notice" */
 		notice_stuff();
 
+		/* Hack -- prevent "icky" message */
+		character_xtra = TRUE;
+
 		/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
 		handle_stuff();
+
+		character_xtra = FALSE;
 
 		/* Cancel the target */
 		target_who = 0;
