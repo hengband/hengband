@@ -2796,6 +2796,8 @@ void do_cmd_macros(void)
 		/* Load a 'macro' file */
 		else if (i == '1')
 		{
+			errr err;
+
 			/* Prompt */
 #ifdef JP
 			prt("コマンド: ユーザー設定ファイルのロード", 16, 0);
@@ -2819,15 +2821,31 @@ void do_cmd_macros(void)
 			if (!askfor_aux(tmp, 80)) continue;
 
 			/* Process the given filename */
-			if (0 != process_pref_file(tmp))
+			err = process_pref_file(tmp);
+			if (-2 == err)
+			{
+#ifdef JP
+				msg_format("標準の設定ファイル'%s'を読み込みました。", tmp);
+#else
+				msg_format("Loaded default '%s'.", tmp);
+#endif
+			}
+			else if (err)
 			{
 				/* Prompt */
 #ifdef JP
-				msg_print("ファイルを読み込めませんでした！");
+				msg_format("'%s'の読み込みに失敗しました！", tmp);
 #else
-				msg_print("Could not load file!");
+				msg_format("Failed to load '%s'!");
 #endif
-
+			}
+			else
+			{
+#ifdef JP
+				msg_format("'%s'を読み込みました。", tmp);
+#else
+				msg_format("Loaded '%s'.", tmp);
+#endif
 			}
 		}
 

@@ -583,10 +583,20 @@ errr process_pref_file_command(char *buf)
 			int ob = option_info[i].o_bit;
 
 			if (option_info[i].o_var &&
-				 option_info[i].o_text &&
-				 streq(option_info[i].o_text, buf + 2) &&
-				(!alive || option_info[i].o_page !=6))
+			    option_info[i].o_text &&
+			    streq(option_info[i].o_text, buf + 2))
 			{
+				if (alive && 6 == option_info[i].o_page)
+				{
+#ifdef JP
+					msg_format("初期オプションは変更できません! '%s'", buf);	
+#else
+					msg_format("Startup options can not changed! '%s'", buf);	
+#endif
+					msg_print(NULL);
+					return 0;
+				}
+
 				/* Clear */
 				option_flag[os] &= ~(1L << ob);
 				(*option_info[i].o_var) = FALSE;
@@ -595,7 +605,11 @@ errr process_pref_file_command(char *buf)
 		}
 
 		/* don't know that option. ignore it.*/
-		msg_format("Ignored wrong option %s.", buf+2);
+#ifdef JP
+		msg_format("オプションの名前が正しくありません： %s", buf);
+#else
+		msg_format("Ignored invalid option: %s", buf);
+#endif
 		msg_print(NULL);
 		return 0;
 	}
@@ -609,10 +623,20 @@ errr process_pref_file_command(char *buf)
 			int ob = option_info[i].o_bit;
 
 			if (option_info[i].o_var &&
-				 option_info[i].o_text &&
-				 streq(option_info[i].o_text, buf + 2) &&
-				(!alive || option_info[i].o_page !=6))
+			    option_info[i].o_text &&
+			    streq(option_info[i].o_text, buf + 2))
 			{
+				if (alive && 6 == option_info[i].o_page)
+				{
+#ifdef JP
+					msg_format("初期オプションは変更できません! '%s'", buf);	
+#else
+					msg_format("Startup options can not changed! '%s'", buf);	
+#endif
+					msg_print(NULL);
+					return 0;
+				}
+
 				/* Set */
 				option_flag[os] |= (1L << ob);
 				(*option_info[i].o_var) = TRUE;
@@ -621,7 +645,11 @@ errr process_pref_file_command(char *buf)
 		}
 
 		/* don't know that option. ignore it.*/
-		msg_format("Ignored wrong option %s.", buf+2);
+#ifdef JP
+		msg_format("オプションの名前が正しくありません： %s", buf);
+#else
+		msg_format("Ignored invalid option: %s", buf);
+#endif
 		msg_print(NULL);
 		return 0;
 	}
@@ -1235,32 +1263,37 @@ errr process_pref_file(cptr name)
 {
 	char buf[1024];
 
-	errr err = 0;
+	errr err1, err2;
 
 	/* Build the filename */
 	path_build(buf, 1024, ANGBAND_DIR_PREF, name);
 
-	/* Process the pref file */
-	err = process_pref_file_aux(buf, FALSE);
+	/* Process the system pref file */
+	err1 = process_pref_file_aux(buf, FALSE);
 
 	/* Stop at parser errors, but not at non-existing file */
-	if (err < 1)
-	{
-		/* Drop priv's */
-		safe_setuid_drop();
+	if (err1 > 0) return err1;
 
-		/* Build the filename */
-		path_build(buf, 1024, ANGBAND_DIR_USER, name);
 
-		/* Process the pref file */
-		err = process_pref_file_aux(buf, FALSE);
+	/* Drop priv's */
+	safe_setuid_drop();
+	
+	/* Build the filename */
+	path_build(buf, 1024, ANGBAND_DIR_USER, name);
+	
+	/* Process the user pref file */
+	err2 = process_pref_file_aux(buf, FALSE);
 
-		/* Grab priv's */
-		safe_setuid_grab();
-	}
+	/* Grab priv's */
+	safe_setuid_grab();
 
-	/* Result */
-	return (err);
+
+	/* User file does not exist, but read system pref file */
+	if (err2 < 0 && !err1)
+		return -2;
+
+	/* Result of user file processing */
+	return err2;
 }
 
 
