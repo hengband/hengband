@@ -2670,6 +2670,7 @@ static void process_world_aux_mutation(void)
 
 		msg_print(NULL);
 		set_food(PY_FOOD_WEAK);
+		if (music_singing_any()) stop_singing();
 	}
 
 	if ((p_ptr->muta2 & MUT2_WALK_SHAD) &&

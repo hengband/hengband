@@ -5206,7 +5206,8 @@ extern int PlayerUID;
 
 #define MUSIC_DETECT            101
 
-#define music_singing(X) ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] == X))
+#define music_singing(X) ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] == (X)))
+#define music_singing_any() ((p_ptr->pclass == CLASS_BARD) && p_ptr->magic_num1[0])
 
 #define HISSATSU_NONE   0
 #define HISSATSU_2      1

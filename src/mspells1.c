@@ -1723,9 +1723,8 @@ msg_format("%^sがかん高い金切り声をあげた。", m_name);
 #else
 				msg_print("Your hands stop glowing.");
 #endif
-
 			}
-			if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0]))
+			if (music_singing_any())
 			{
 				p_ptr->magic_num1[1] = p_ptr->magic_num1[0];
 				p_ptr->magic_num1[0] = 0;

@@ -1636,7 +1636,7 @@ static void rd_extra(void)
 			}
 		}
 	}
-	if ((p_ptr->pclass == CLASS_BARD) && p_ptr->magic_num1[0]) p_ptr->action = ACTION_SING;
+	if (music_singing_any()) p_ptr->action = ACTION_SING;
 
 	if (z_older_than(11, 0, 7))
 	{

@@ -59,6 +59,8 @@ static void do_cmd_eat_food_aux(int item)
 	int ident, lev;
 	object_type *o_ptr;
 
+	if (music_singing_any()) stop_singing();
+
 	/* Get the item (in the pack) */
 	if (item >= 0)
 	{
@@ -726,10 +728,7 @@ static void do_cmd_quaff_potion_aux(int item)
 		return;
 	}
 
-	if((p_ptr->pclass == CLASS_BARD) && p_ptr->magic_num1[0])
-	{
-		stop_singing();
-	}
+	if (music_singing_any()) stop_singing();
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
@@ -1615,10 +1614,7 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 		return;
 	}
 
-	if((p_ptr->pclass == CLASS_BARD) && p_ptr->magic_num1[0])
-	{
-		stop_singing();
-	}
+	if (music_singing_any()) stop_singing();
 
 	/* Not identified yet */
 	ident = FALSE;
@@ -5289,6 +5285,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 
 			case ART_BOROMIR:
 			{
+				if (music_singing_any()) stop_singing();
 #ifdef JP
 				msg_print("あなたは力強い突風を吹き鳴らした。周囲の敵が震え上っている!");
 #else
@@ -5929,6 +5926,8 @@ msg_print("あなたの槍は電気でスパークしている...");
 		/* Get a direction for breathing (or abort) */
 		if (!get_aim_dir(&dir)) return;
 
+		if (music_singing_any()) stop_singing();
+
 		/* Branch on the sub-type */
 		switch (o_ptr->sval)
 		{
@@ -6372,6 +6371,8 @@ msg_print("あなたはエレメントのブレスを吐いた。");
 
 	else if (o_ptr->tval == TV_WHISTLE)
 	{
+		if (music_singing_any()) stop_singing();
+
 #if 0
 		if (object_is_cursed(o_ptr))
 		{

@@ -1354,6 +1354,7 @@ static bool cmd_racial_power_aux(s32b command)
 		{
 			int type = (one_in_(2) ? GF_NETHER : GF_FIRE);
 			if (!get_aim_dir(&dir)) return FALSE;
+			if (music_singing_any()) stop_singing();
 #ifdef JP
 			msg_format("あなたは%sのブレスを吐いた。",((type == GF_NETHER) ? "地獄" : "火炎"));
 #else
@@ -1383,6 +1384,8 @@ static bool cmd_racial_power_aux(s32b command)
 				y = py + ddy[dir];
 				x = px + ddx[dir];
 				c_ptr = &cave[y][x];
+
+				if (music_singing_any()) stop_singing();
 
 				if (!c_ptr->m_idx)
 				{
@@ -1589,6 +1592,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 		case RACE_YEEK:
 			if (!get_aim_dir(&dir)) return FALSE;
+			if (music_singing_any()) stop_singing();
 #ifdef JP
 			msg_print("身の毛もよだつ叫び声を上げた！");
 #else
@@ -1600,6 +1604,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 		case RACE_KLACKON:
 			if (!get_aim_dir(&dir)) return FALSE;
+			if (music_singing_any()) stop_singing();
 #ifdef JP
 			msg_print("酸を吐いた。");
 #else
@@ -1840,6 +1845,8 @@ static bool cmd_racial_power_aux(s32b command)
 					}
 				}
 
+				if (music_singing_any()) stop_singing();
+
 #ifdef JP
 				msg_format("あなたは%sのブレスを吐いた。", Type_desc);
 #else
@@ -1922,6 +1929,8 @@ static bool cmd_racial_power_aux(s32b command)
 				x = px + ddx[dir];
 				c_ptr = &cave[y][x];
 
+				if (music_singing_any()) stop_singing();
+
 				if (!c_ptr->m_idx)
 				{
 #ifdef JP
@@ -1972,6 +1981,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 		case RACE_SPECTRE:
 			if (!get_aim_dir(&dir)) return FALSE;
+			if (music_singing_any()) stop_singing();
 #ifdef JP
 			msg_print("あなたはおどろおどろしい叫び声をあげた！");
 #else
@@ -1996,6 +2006,7 @@ static bool cmd_racial_power_aux(s32b command)
 			{
 				int type = (one_in_(2) ? GF_NETHER : GF_FIRE);
 				if (!get_aim_dir(&dir)) return FALSE;
+				if (music_singing_any()) stop_singing();
 #ifdef JP
 				msg_format("あなたは%sのブレスを吐いた。",((type == GF_NETHER) ? "地獄" : "火炎"));
 #else
