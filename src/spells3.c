@@ -452,7 +452,7 @@ msg_print("不思議な力がテレポートを防いだ！");
 		{
 			if (cave_naked_bold(y, x) || (((cave[y][x].feat == FEAT_DEEP_LAVA) || (cave[y][x].feat == FEAT_DEEP_WATER)) && !cave[y][x].m_idx)) break;
 		}
-		else if (cave_empty_bold(y, x) || ((y == py) && (x == px))) break;
+		else if (cave_empty_bold(y, x) || player_bold(y, x)) break;
 
 		/* Occasionally advance the distance */
 		if (++ctr > (4 * dis * dis + 4 * dis + 1))

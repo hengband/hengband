@@ -5213,7 +5213,7 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 
 	/* Mega-Hack -- no message if "dropped" by player */
 	/* Message when an object falls under the player */
-	if (chance && (by == py) && (bx == px))
+	if (chance && player_bold(by, bx))
 	{
 #ifdef JP
 		msg_print("何かが足下に転がってきた。");

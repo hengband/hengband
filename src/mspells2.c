@@ -89,7 +89,7 @@ static bool direct_beam(int y1, int x1, int y2, int x2, monster_type *m_ptr)
 			return FALSE;
 		}
 
-		if (friend && y == py && x == px)
+		if (friend && player_bold(y, x))
 			return FALSE;
 	}
 	if (!hit2)
@@ -126,7 +126,7 @@ static bool breath_direct(int y1, int x1, int y2, int x2, int rad, bool disint_b
 
 		if (y == y2 && x == x2)
 			hit2 = TRUE;
-		if (y == py && x == px)
+		if (player_bold(y, x))
 			hityou = TRUE;
 	}
 	if (!hit2)

@@ -391,7 +391,7 @@ sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-				    ((y == py && x == px) || cave[y][x].m_idx != 0))
+				    (player_bold(y, x) || cave[y][x].m_idx != 0))
 					break;
 			}
 
@@ -476,7 +476,7 @@ sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-				    ((y == py && x == px) || cave[y][x].m_idx != 0))
+				    (player_bold(y, x) || cave[y][x].m_idx != 0))
 					break;
 			}
 
@@ -543,7 +543,7 @@ sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-				    ((y == py && x == px) || cave[y][x].m_idx != 0))
+				    (player_bold(y, x) || cave[y][x].m_idx != 0))
 					break;
 			}
 
@@ -1011,7 +1011,7 @@ msg_print("ドアが溶けて泥になった！");
 			if (!cave_naked_bold(y, x)) break;
 
 			/* Not on the player */
-			if ((y == py) && (x == px)) break;
+			if (player_bold(y, x)) break;
 
 			/* Create a closed door */
 			cave_set_feat(y, x, FEAT_DOOR_HEAD + 0x00);
@@ -1049,7 +1049,7 @@ msg_print("ドアが溶けて泥になった！");
 			if (!cave_naked_bold(y, x)) break;
 
 			/* Not on the player */
-			if ((y == py) && (x == px)) break;
+			if (player_bold(y, x)) break;
 
 			/* Create a closed door */
 			cave_set_feat(y, x, FEAT_TREES);
@@ -1087,7 +1087,7 @@ msg_print("ドアが溶けて泥になった！");
 			if (!cave_naked_bold(y, x)) break;
 
 			/* Not on the player */
-			if ((y == py) && (x == px)) break;
+			if (player_bold(y, x)) break;
 
 			/* Place a trap */
 			cave_set_feat(y, x, FEAT_WALL_EXTRA);
@@ -5397,24 +5397,26 @@ msg_format("うまく捕まえられなかった。");
 			skipped = TRUE;
 			if (dam == HISSATSU_NYUSIN)
 			{
-				int i;
+				int i, yy, xx;
 				int ny = y, nx = x;
 				bool success = FALSE;
 				for (i = 0; i < 8; i++)
 				{
-					if (cave_empty_bold(y+ddy[i], x+ddx[i]) || ((y+ddy[i] == py) && (x+ddx[i] == px)))
+					yy = y + ddy[i];
+					xx = x + ddx[i];
+					if (cave_empty_bold(yy, xx) || player_bold(yy, xx))
 					{
 						success = TRUE;
-						if (distance(py, px, ny, nx) > distance(py, px, y+ddy[i], x+ddx[i]))
+						if (distance(py, px, ny, nx) > distance(py, px, yy, xx))
 						{
-							ny = y+ddy[i];
-							nx = x+ddx[i];
+							ny = yy;
+							nx = xx;
 						}
 					}
 				}
 				if (success)
 				{
-					if ((ny != py) || (nx != px))
+					if (!player_bold(ny, nx))
 					{
 						teleport_player_to(ny, nx, FALSE);
 #ifdef JP
@@ -6336,7 +6338,7 @@ msg_print("生命力が体から吸い取られた気がする！");
 				set_target(m_ptr, monster_target_y, monster_target_x);
 			}
 		}
-		else if (is_pet(&m_list[who]) && (m_ptr->target_y != py) && (m_ptr->target_x != px))
+		else if (is_pet(&m_list[who]) && !player_bold(m_ptr->target_y, m_ptr->target_x))
 		{
 			set_target(m_ptr, m_list[who].fy, m_list[who].fx);
 		}
@@ -6428,7 +6430,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 
 
 	/* Player is not here */
-	if ((x != px) || (y != py)) return (FALSE);
+	if (!player_bold(y, x)) return (FALSE);
 
 	if ((p_ptr->special_defense & NINJA_KAWARIMI) && dam && (randint0(55) < (p_ptr->lev*3/5+20)) && who && (who != p_ptr->riding))
 	{
@@ -9040,10 +9042,10 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			{
 				effective_dist = dist;
 			}
-			
-			
+
+
 			/* There is the riding player on this monster */
-			if (p_ptr->riding && (y == py) && (x == px))
+			if (p_ptr->riding && player_bold(y, x))
 			{
 				/* Aimed on the player */
 				if (flg & PROJECT_PLAYER)
@@ -9112,12 +9114,12 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 					effective_dist++;
 				}
 			}
-			
+
 			/* Affect the monster in the grid */
 			if (project_m(who, effective_dist, y, x, dam, typ,flg)) notice = TRUE;
 		}
-		
-	
+
+
 		/* Player affected one monster (without "jumping") */
 		if (!who && (project_m_n == 1) && !jump)
 		{
@@ -9159,7 +9161,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			x = gx[i];
 
 			/* Affect the player? */
-			if (y != py || x != px) continue;
+			if (!player_bold(y, x)) continue;
 
 			/* Find the closest point in the blast */
 			if (breath)

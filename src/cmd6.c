@@ -2425,15 +2425,15 @@ static int staff_effect(int sval, bool *use_charge, bool magic, bool known)
 			}
 			for (k = 0; k < num; k++)
 			{
-		attempts = 1000;
+				attempts = 1000;
 
-				while(attempts--)
+				while (attempts--)
 				{
 					scatter(&y, &x, py, px, 4, 0);
 
 					if (!cave_floor_bold(y, x)) continue;
 
-					if ((y != py) || (x != px)) break;
+					if (!player_bold(y, x)) break;
 				}
 
 				project(0, 0, y, x, damroll(6 + p_ptr->lev / 8, 10), GF_LITE_WEAK,
@@ -4395,15 +4395,15 @@ msg_print("あなたはフラキアに敵を締め殺すよう命じた。");
 
 				for (k = 0; k < num; k++)
 				{
-		attempts = 1000;
+					attempts = 1000;
 
-					while(attempts--)
+					while (attempts--)
 					{
 						scatter(&y, &x, py, px, 4, 0);
 
 						if (!cave_floor_bold(y, x)) continue;
 
-						if ((y != py) || (x != px)) break;
+						if (!player_bold(y, x)) break;
 					}
 
 					project(0, 3, y, x, 150, GF_ELEC,

@@ -1824,11 +1824,11 @@ msg_print("その方向にはモンスターはいません。");
 			int typ = one_in_(2) ? GF_FIRE : one_in_(3) ? GF_NETHER : GF_PLASMA;
 			int attempts = 1000;
 
-			while(attempts--)
+			while (attempts--)
 			{
 				scatter(&y, &x, py, px, 4, 0);
 
-				if ((y != py) || (x != px)) break;
+				if (!player_bold(y, x)) break;
 			}
 			project(0, 0, y, x, damroll(6 + plev / 8, 10), typ,
 				(PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL), -1);

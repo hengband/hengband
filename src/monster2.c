@@ -1805,7 +1805,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 			strcat(desc,buf);
 		}
 
-		if ((m_ptr->fy == py) && (m_ptr->fx == px))
+		if (player_bold(m_ptr->fy, m_ptr->fx))
 		{
 #ifdef JP
 			strcat(desc,"(¾èÇÏÃæ)");
@@ -3018,7 +3018,7 @@ bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 	    !(cave_empty_bold2(y, x) || (mode & PM_IGNORE_TERRAIN)) &&
 	    !((r_ptr->flags2 & RF2_PASS_WALL) &&
 	      !(cave_perma_bold(y, x) || cave[y][x].m_idx ||
-		((y == py) && (x == px))))) return (FALSE);
+	    player_bold(y, x)))) return (FALSE);
 
 	/* Paranoia */
 	if (!r_idx) return (FALSE);
@@ -3479,25 +3479,25 @@ static bool mon_scatter(int *yp, int *xp, int y, int x, int max_dist)
 		{
 			/* Ignore annoying locations */
 			if (!in_bounds(ny, nx)) continue;
-			
+
 			/* Require "line of sight" */
 			if (!los(y, x, ny, nx)) continue;
-			
+
 			/* Walls and Monsters block flow */
 			if (!cave_empty_bold2(ny, nx)) continue;
 			if (cave[ny][nx].m_idx) continue;
-			if ((ny == py) && (nx == px)) continue;
-						
+			if (player_bold(ny, nx)) continue;
+
 			/* ... nor on the Pattern */
 			if ((cave[ny][nx].feat >= FEAT_PATTERN_START) &&
 			    (cave[ny][nx].feat <= FEAT_PATTERN_XTRA2))
 				continue;
-			
+
 			i = distance(y, x, ny, nx);
 
 			if (i > max_dist)
 				continue;
-			
+
 			num[i]++;
 
 			/* random swap */
@@ -3506,7 +3506,6 @@ static bool mon_scatter(int *yp, int *xp, int y, int x, int max_dist)
 				place_x[i] = nx;
 				place_y[i] = ny;
 			}
-			
 		}
 
 	i = 0;

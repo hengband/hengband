@@ -467,7 +467,7 @@ bool clean_shot(int y1, int x1, int y2, int x2, bool friend)
 			}
 		}
 		/* Pets may not shoot through the character - TNB */
-		if ((y == py) && (x == px))
+		if (player_bold(y, x))
 		{
 			if (friend) return (FALSE);
 		}
@@ -1540,7 +1540,7 @@ bool make_attack_spell(int m_idx)
 	}
 
 	/* Projectable? */
-	direct = ((x == px) && (y == py));
+	direct = player_bold(y, x);
 
 	/* Cast the spell. */
 	switch (thrown_spell)

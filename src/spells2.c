@@ -5365,7 +5365,7 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
 				c_ptr->info &= ~(CAVE_UNSAFE | CAVE_OBJECT);
 
 				/* Hack -- Notice player affect */
-				if ((x == px) && (y == py))
+				if (player_bold(y, x))
 				{
 					/* Hurt the player later */
 					flag = TRUE;
@@ -5641,7 +5641,7 @@ bool earthquake(int cy, int cx, int r)
 			map[16+yy-cy][16+xx-cx] = TRUE;
 
 			/* Hack -- Take note of player damage */
-			if ((yy == py) && (xx == px)) hurt = TRUE;
+			if (player_bold(yy, xx)) hurt = TRUE;
 		}
 	}
 
@@ -5873,7 +5873,7 @@ if (damage) take_hit(DAMAGE_ATTACK, damage, "地震", -1);
 							if (map[16+y-cy][16+x-cx]) continue;
 
 							if (cave[y][x].m_idx) continue;
-							if ((y == py) && (x == px)) continue;
+							if (player_bold(y, x)) continue;
 
 							/* Count "safe" grids */
 							sn++;
@@ -5980,7 +5980,7 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 			c_ptr = &cave[yy][xx];
 
 			/* Paranoia -- never affect player */
-/*			if ((yy == py) && (xx == px)) continue; */
+/*			if (player_bold(yy, xx)) continue; */
 
 			/* Destroy location (if valid) */
 			if (cave_valid_bold(yy, xx))
@@ -7429,13 +7429,13 @@ void wall_breaker(void)
 
 	if (randint1(80 + p_ptr->lev) < 70)
 	{
-		while(attempts--)
+		while (attempts--)
 		{
 			scatter(&y, &x, py, px, 4, 0);
 
 			if (!cave_floor_bold(y, x)) continue;
 
-			if ((y != py) || (x != px)) break;
+			if (!player_bold(y, x)) break;
 		}
 
 		project(0, 0, y, x, 20 + randint1(30), GF_KILL_WALL,
@@ -7451,11 +7451,11 @@ void wall_breaker(void)
 
 		for (i = 0; i < num; i++)
 		{
-			while(1)
+			while (1)
 			{
 				scatter(&y, &x, py, px, 10, 0);
 
-				if ((y != py) && (x != px)) break;
+				if (!player_bold(y, x)) break;
 			}
 
 			project(0, 0, y, x, 20 + randint1(30), GF_KILL_WALL,

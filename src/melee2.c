@@ -37,7 +37,7 @@ static bool get_enemy_dir(int m_idx, int *mm)
 
 	monster_type *t_ptr;
 
-	if (riding_t_m_idx && (m_ptr->fx == px) && (m_ptr->fy == py))
+	if (riding_t_m_idx && player_bold(m_ptr->fy, m_ptr->fx))
 	{
 		y = m_list[riding_t_m_idx].fy;
 		x = m_list[riding_t_m_idx].fx;
@@ -387,7 +387,7 @@ msg_format("%^sは殺された。", m_name);
 
 	if ((dam > 0) && !is_pet(m_ptr) && !is_friendly(m_ptr) && (who != m_idx))
 	{
-		if (is_pet(&m_list[who]) && (m_ptr->target_y != py) && (m_ptr->target_x != px))
+		if (is_pet(&m_list[who]) && !player_bold(m_ptr->target_y, m_ptr->target_x))
 		{
 			set_target(m_ptr, m_list[who].fy, m_list[who].fx);
 		}
@@ -541,7 +541,7 @@ static bool get_moves_aux2(int m_idx, int *yp, int *xp)
 		if (!in_bounds2(y, x)) continue;
 
 		/* Simply move to player */
-		if ((y == py) && (x == px)) return (FALSE);
+		if (player_bold(y, x)) return (FALSE);
 
 		c_ptr = &cave[y][x];
 
@@ -2831,7 +2831,7 @@ msg_format("%^s%s", m_name, monmessage);
 		}
 
 		/* Hack -- player 'in' wall */
-		else if ((ny == py) && (nx == px))
+		else if (player_bold(ny, nx))
 		{
 			do_move = TRUE;
 		}
@@ -3000,7 +3000,7 @@ msg_print("ドアを叩き開ける音がした！");
 
 		/* Hack -- check for Glyph of Warding */
 		if (do_move && is_glyph_grid(c_ptr) &&
-		    !((r_ptr->flags1 & RF1_NEVER_BLOW) && (py == ny) && (px == nx)))
+		    !((r_ptr->flags1 & RF1_NEVER_BLOW) && player_bold(ny, nx)))
 		{
 			/* Assume no move allowed */
 			do_move = FALSE;
@@ -3034,7 +3034,7 @@ msg_print("守りのルーンが壊れた！");
 			}
 		}
 		else if (do_move && is_explosive_rune_grid(c_ptr) &&
-			 !((r_ptr->flags1 & RF1_NEVER_BLOW) && (py == ny) && (px == nx)))
+			 !((r_ptr->flags1 & RF1_NEVER_BLOW) && player_bold(ny, nx)))
 		{
 			/* Assume no move allowed */
 			do_move = FALSE;
@@ -3081,14 +3081,13 @@ msg_print("爆発のルーンは解除された。");
 				do_move = TRUE;
 			}
 		}
-		if (do_move && (ny == py) && (nx == px) && (d_info[dungeon_type].flags1 & DF1_NO_MELEE))
+		if (do_move && player_bold(ny, nx) && (d_info[dungeon_type].flags1 & DF1_NO_MELEE))
 		{
 			do_move = FALSE;
 		}
 
 		/* Some monsters never attack */
-		if (do_move && (ny == py) && (nx == px) &&
-			(r_ptr->flags1 & RF1_NEVER_BLOW))
+		if (do_move && player_bold(ny, nx) && (r_ptr->flags1 & RF1_NEVER_BLOW))
 		{
 			/* Hack -- memorize lack of attacks */
 			if (m_ptr->ml) r_ptr->r_flags1 |= (RF1_NEVER_BLOW);
@@ -3098,7 +3097,7 @@ msg_print("爆発のルーンは解除された。");
 		}
 
 		/* The player is in the way.  Attack him. */
-		if (do_move && (ny == py) && (nx == px))
+		if (do_move && player_bold(ny, nx))
 		{
 			if (!p_ptr->riding || one_in_(2))
 			{

@@ -1517,7 +1517,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 	}
 
 	/* Handle "player" */
-	if ((y == py) && (x == px))
+	if (player_bold(y, x))
 	{
 		monster_race *r_ptr = &r_info[0];
 
@@ -4232,10 +4232,10 @@ void update_flow(void)
 			x = tx + ddx_ddd[d];
 
 			/* Ignore player's grid */
-			if (x == px && y == py) continue;
+			if (player_bold(y, x)) continue;
 
 			c_ptr = &cave[y][x];
-				       
+
 			if (is_closed_door(c_ptr->feat)) m += 3;
 
 			/* Ignore "pre-stamped" entries */

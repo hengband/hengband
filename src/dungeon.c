@@ -6849,9 +6849,9 @@ quit("セーブファイルが壊れています");
 		if (p_ptr->riding == -1)
 		{
 			p_ptr->riding = 0;
-			for(i = m_max; i > 0; i--)
+			for (i = m_max; i > 0; i--)
 			{
-				if ((m_list[i].fy == py) && (m_list[i].fx == px))
+				if (player_bold(m_list[i].fy, m_list[i].fx))
 				{
 					p_ptr->riding = i;
 					break;

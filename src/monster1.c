@@ -3534,7 +3534,7 @@ bool monster_can_enter(int y, int x, monster_race *r_ptr)
 	byte feat = c_ptr->feat;
 
 	/* Player or other monster */
-	if ((y == py) && (x == px)) return FALSE;
+	if (player_bold(y, x)) return FALSE;
 	if (c_ptr->m_idx) return FALSE;
 
 	/* Permanent wall */

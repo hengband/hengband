@@ -2818,7 +2818,7 @@ static bool target_set_accept(int y, int x)
 	if (!(in_bounds(y, x))) return (FALSE);
 
 	/* Player grid is always interesting */
-	if ((y == py) && (x == px)) return (TRUE);
+	if (player_bold(y, x)) return (TRUE);
 
 
 	/* Handle hallucination */
@@ -3093,7 +3093,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 #endif /* ALLOW_EASY_FLOOR */
 
 	/* Hack -- under the player */
-	if ((y == py) && (x == px))
+	if (player_bold(y, x))
 	{
 		/* Description */
 #ifdef JP
@@ -5573,8 +5573,8 @@ msg_print("場所を選んでスペースキーを押して下さい。");
 		case '5':
 		case '0':
 			/* illegal place */
-			if (x == px && y == py) ch = 0;
-			
+			if (player_bold(y, x)) ch = 0;
+
 			/* okay place */
 			else success = TRUE;
 

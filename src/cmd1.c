@@ -5227,7 +5227,7 @@ void run_step(int dir)
 
 #endif /* ALLOW_EASY_DISARM -- TNB */
 
-	if ((py == p_ptr->run_py) && (px == p_ptr->run_px))
+	if (player_bold(p_ptr->run_py, p_ptr->run_px))
 	{
 		p_ptr->run_py = 0;
 		p_ptr->run_px = 0;

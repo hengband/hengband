@@ -3952,6 +3952,19 @@
    ((X) >= panel_col_min) && ((X) <= panel_col_max))
 
 
+/*
+ * Determine if player is on this grid
+ */
+#define player_bold(Y,X) \
+	(((Y) == py) && ((X) == px))
+
+
+/*
+ * Grid based version of "player_bold()"
+ */
+#define player_grid(C) \
+	((C) == &cave[py][px])
+
 
 /*
  * Determine if a "legal" grid is a "floor" grid
@@ -3999,7 +4012,7 @@
 #define cave_empty_bold(Y,X) \
     (cave_floor_bold(Y,X) && \
      !(cave[Y][X].m_idx) && \
-     !(((Y) == py) && ((X) == px)))
+     !player_bold(Y,X))
 
 
 /*
@@ -4012,7 +4025,7 @@
 #define cave_empty_bold2(Y,X) \
     (((cave_floor_bold(Y,X) && (cave[Y][X].feat != FEAT_DARK_PIT)) || (character_dungeon && (cave[Y][X].feat == FEAT_TREES)))&& \
      !(cave[Y][X].m_idx) && \
-     !(((Y) == py) && ((X) == px)))
+     !player_bold(Y,X))
 
 
 /*
@@ -4079,7 +4092,7 @@
 #define cave_empty_grid(C) \
     (cave_floor_grid(C) && \
      !((C)->m_idx) && \
-     !((C) == &cave[py][px]))
+     !player_grid(C))
 
 /*
  * Grid based version of "cave_empty_bold()"
@@ -4087,7 +4100,7 @@
 #define cave_empty_grid2(C) \
     ((cave_floor_grid(C) || ((C)->feat == FEAT_TREES)) && \
      !((C)->m_idx) && \
-     !((C) == &cave[py][px]))
+     !player_grid(C))
 
 /*
  * Grid based version of "cave_empty_bold()"
@@ -4096,7 +4109,7 @@
     (((C)->feat == FEAT_FLOOR) && \
      !((C)->o_idx) && \
      !((C)->m_idx) && \
-     !((C) == &cave[py][px]))
+     !player_grid(C))
 
 
 /*

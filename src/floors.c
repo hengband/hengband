@@ -454,7 +454,7 @@ static void place_pet(void)
 				for (j = 1000; j > 0; j--)
 				{
 					scatter(&cy, &cx, py, px, d, 0);
-					if ((cave_floor_bold(cy, cx) || (cave[cy][cx].feat == FEAT_TREES)) && !cave[cy][cx].m_idx && !((cy == py) && (cx == px))) break;
+					if ((cave_floor_bold(cy, cx) || (cave[cy][cx].feat == FEAT_TREES)) && !cave[cy][cx].m_idx && !player_bold(cy, cx)) break;
 				}
 				if (j) break;
 			}

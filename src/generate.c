@@ -227,7 +227,7 @@ static void alloc_object(int set, int typ, int num)
 			if (!is_floor_grid(c_ptr) || c_ptr->o_idx || c_ptr->m_idx) continue;
 
 			/* Avoid player location */
-			if (py == y && px == x) continue;
+			if (player_bold(y, x)) continue;
 
 			/* Check for "room" */
 			room = (cave[y][x].info & CAVE_ROOM) ? TRUE : FALSE;
