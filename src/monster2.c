@@ -2752,6 +2752,7 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 	monster_race *r_ptr;
 	char old_m_name[80];
 	bool old_unique = FALSE;
+	int old_r_idx = m_ptr->r_idx;
 
 	if (r_info[m_ptr->r_idx].flags1 & RF1_UNIQUE)
 		old_unique = TRUE;
@@ -2792,6 +2793,11 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 	m_ptr->ap_r_idx = r_idx;
 	update_mon(m_idx, FALSE);
 	lite_spot(m_ptr->fy, m_ptr->fx);
+
+	if ((r_info[old_r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) ||
+	    (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)))
+		p_ptr->update |= (PU_MON_LITE);
+
 	if (born)
 	{
 		/* Sub-alignment of a chameleon */
