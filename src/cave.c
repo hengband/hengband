@@ -1942,7 +1942,7 @@ void note_spot(int y, int x)
 		if ((c_ptr->feat <= FEAT_INVIS) || (c_ptr->feat == FEAT_DIRT) || (c_ptr->feat == FEAT_GRASS))
 		{
 			/* Option -- memorize all torch-lit floors */
-			if (view_torch_grids && (c_ptr->info & (CAVE_LITE)))
+			if (view_torch_grids && (c_ptr->info & (CAVE_LITE | CAVE_MNLT)))
 			{
 				/* Memorize */
 				c_ptr->info |= (CAVE_MARK);
@@ -1964,7 +1964,7 @@ void note_spot(int y, int x)
 		}
 
 		/* Memorize torch-lit walls */
-		else if (c_ptr->info & (CAVE_LITE))
+		else if (c_ptr->info & (CAVE_LITE | CAVE_MNLT))
 		{
 			/* Memorize */
 			c_ptr->info |= (CAVE_MARK);

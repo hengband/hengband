@@ -5790,10 +5790,7 @@ static void dungeon(bool load_game)
 	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE | PU_TORCH);
 
 	/* Update monsters */
-	p_ptr->update |= (PU_MONSTERS);
-
-	/* Update stuff */
-	p_ptr->update |= (PU_FLOW | PU_DISTANCE);
+	p_ptr->update |= (PU_MONSTERS | PU_DISTANCE | PU_FLOW);
 
 	/* Update stuff */
 	update_stuff();

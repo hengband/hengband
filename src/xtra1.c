@@ -5629,17 +5629,20 @@ void update_stuff(void)
 		update_flow();
 	}
 
+	if (p_ptr->update & (PU_DISTANCE))
+	{
+		p_ptr->update &= ~(PU_DISTANCE);
+
+                /* Still need to call update_monsters(FALSE) after update_mon_lite() */ 
+		/* p_ptr->update &= ~(PU_MONSTERS); */
+
+		update_monsters(TRUE);
+	}
+
 	if (p_ptr->update & (PU_MON_LITE))
 	{
 		p_ptr->update &= ~(PU_MON_LITE);
 		update_mon_lite();
-	}
-
-	if (p_ptr->update & (PU_DISTANCE))
-	{
-		p_ptr->update &= ~(PU_DISTANCE);
-		p_ptr->update &= ~(PU_MONSTERS);
-		update_monsters(TRUE);
 	}
 
 	if (p_ptr->update & (PU_MONSTERS))
