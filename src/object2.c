@@ -5698,6 +5698,8 @@ bool inven_carry_okay(object_type *o_ptr)
 
 bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr)
 {
+	int o_type, j_type;
+
 	/* Use empty slots */
 	if (!j_ptr->k_idx) return TRUE;
 
@@ -5731,9 +5733,18 @@ bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr)
 	if (!object_is_known(j_ptr)) return TRUE;
 
 	/* Fixed artifacts, random artifacts and ego items */
-	if (!object_is_fixed_artifact(o_ptr) ^ !object_is_fixed_artifact(j_ptr)) return !object_is_fixed_artifact(j_ptr);
-	if (!o_ptr->art_name ^ !j_ptr->art_name) return !j_ptr->art_name;
-	if (!object_is_ego(o_ptr) ^ !object_is_ego(j_ptr)) return !object_is_ego(j_ptr);
+	if (object_is_fixed_artifact(o_ptr)) o_type = 3;
+	else if (o_ptr->art_name) o_type = 2;
+	else if (object_is_ego(o_ptr)) o_type = 1;
+	else o_type = 0;
+
+	if (object_is_fixed_artifact(j_ptr)) j_type = 3;
+	else if (j_ptr->art_name) j_type = 2;
+	else if (object_is_ego(j_ptr)) j_type = 1;
+	else j_type = 0;
+
+	if (o_type < j_type) return TRUE;
+	if (o_type > j_type) return FALSE;
 
 	switch (o_ptr->tval)
 	{
