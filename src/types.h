@@ -348,7 +348,8 @@ struct monster_race
 	s16b r_sights;			/* Count sightings of this monster */
 	s16b r_deaths;			/* Count deaths from this monster */
 
-	s16b r_pkills;			/* Count monsters killed in this life */
+	s16b r_pkills;			/* Count visible monsters killed in this life */
+	s16b r_akills;			/* Count all monsters killed in this life */
 	s16b r_tkills;			/* Count monsters killed in all lives */
 
 	byte r_wake;			/* Number of times woken up (?) */

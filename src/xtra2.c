@@ -1079,7 +1079,7 @@ msg_print("地面に落とされた。");
 	case MON_A_GOLD:
 	case MON_A_SILVER:
 		if (drop_chosen_item && ((m_ptr->r_idx == MON_A_GOLD) ||
-		     ((m_ptr->r_idx == MON_A_SILVER) && (r_ptr->r_pkills % 5 == 0))))
+		     ((m_ptr->r_idx == MON_A_SILVER) && (r_ptr->r_akills % 5 == 0))))
 		{
 			/* Get local object */
 			q_ptr = &forge;
@@ -1642,7 +1642,7 @@ static void get_exp_from_mon(int dam, monster_type *m_ptr)
 	/* Special penalty for mutiply-monster */
 	if ((r_ptr->flags2 & RF2_MULTIPLY) || (m_ptr->r_idx == MON_DAWN))
 	{
-		int monnum_penarty = r_ptr->r_pkills / 400;
+		int monnum_penarty = r_ptr->r_akills / 400;
 		if (monnum_penarty > 8) monnum_penarty = 8;
 
 		while (monnum_penarty--)
@@ -1758,15 +1758,18 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 				{
 					r_info[MON_BANORLUPART].max_num = 0;
 					r_info[MON_BANORLUPART].r_pkills++;
+					r_info[MON_BANORLUPART].r_akills++;
 					if (r_info[MON_BANORLUPART].r_tkills < MAX_SHORT) r_info[MON_BANORLUPART].r_tkills++;
 				}
 				else if (m_ptr->r_idx == MON_BANORLUPART)
 				{
 					r_info[MON_BANOR].max_num = 0;
 					r_info[MON_BANOR].r_pkills++;
+					r_info[MON_BANOR].r_akills++;
 					if (r_info[MON_BANOR].r_tkills < MAX_SHORT) r_info[MON_BANOR].r_tkills++;
 					r_info[MON_LUPART].max_num = 0;
 					r_info[MON_LUPART].r_pkills++;
+					r_info[MON_LUPART].r_akills++;
 					if (r_info[MON_LUPART].r_tkills < MAX_SHORT) r_info[MON_LUPART].r_tkills++;
 				}
 			}
@@ -1774,6 +1777,9 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 			/* When the player kills a Nazgul, it stays dead */
 			else if (r_ptr->flags7 & RF7_NAZGUL) r_ptr->max_num--;
 		}
+
+		/* Count all monsters killed */
+		if (r_ptr->r_akills < MAX_SHORT) r_ptr->r_akills++;
 
 		/* Recall even invisible uniques or winners */
 		if (m_ptr->ml || (r_ptr->flags1 & RF1_UNIQUE))
@@ -1910,7 +1916,7 @@ msg_format("%^sは恐ろしい血の呪いをあなたにかけた！", m_name);
 				chg_virtue(V_HONOUR, 1);
 			}
 		}
-		if ((r_ptr->flags2 & RF2_MULTIPLY) && (r_ptr->r_pkills > 1000) && one_in_(10))
+		if ((r_ptr->flags2 & RF2_MULTIPLY) && (r_ptr->r_akills > 1000) && one_in_(10))
 		{
 			chg_virtue(V_VALOUR, -1);
 		}

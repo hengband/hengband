@@ -965,6 +965,14 @@ static void rd_lore(int r_idx)
 	rd_s16b(&r_ptr->r_sights);
 	rd_s16b(&r_ptr->r_deaths);
 	rd_s16b(&r_ptr->r_pkills);
+	if (h_older_than(1, 7, 0, 5))
+	{
+		r_ptr->r_akills = r_ptr->r_pkills;
+	}
+	else
+	{
+		rd_s16b(&r_ptr->r_akills);
+	}
 	rd_s16b(&r_ptr->r_tkills);
 
 	/* Count wakes and ignores */

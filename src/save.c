@@ -276,6 +276,7 @@ static void wr_lore(int r_idx)
 	wr_s16b(r_ptr->r_sights);
 	wr_s16b(r_ptr->r_deaths);
 	wr_s16b(r_ptr->r_pkills);
+	wr_s16b(r_ptr->r_akills);
 	wr_s16b(r_ptr->r_tkills);
 
 	/* Count wakes and ignores */

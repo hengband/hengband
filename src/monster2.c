@@ -487,12 +487,14 @@ void wipe_m_list(void)
 		{
 			r_info[MON_BANOR].max_num = 0;
 			r_info[MON_BANOR].r_pkills++;
+			r_info[MON_BANOR].r_akills++;
 			if (r_info[MON_BANOR].r_tkills < MAX_SHORT) r_info[MON_BANOR].r_tkills++;
 		}
 		if (r_info[MON_LUPART].max_num)
 		{
 			r_info[MON_LUPART].max_num = 0;
 			r_info[MON_LUPART].r_pkills++;
+			r_info[MON_LUPART].r_akills++;
 			if (r_info[MON_LUPART].r_tkills < MAX_SHORT) r_info[MON_LUPART].r_tkills++;
 		}
 	}
