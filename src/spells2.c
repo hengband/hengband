@@ -5784,13 +5784,11 @@ msg_print("あなたは床と壁との間に挟まれてしまった！");
 
 			if (p_ptr->riding)
 			{
-				int tmp;
-				tmp = cave[py][px].m_idx;
-				cave[py][px].m_idx = cave[oy][ox].m_idx;
-				cave[oy][ox].m_idx = tmp;
+				cave[oy][ox].m_idx = cave[py][px].m_idx;
+				cave[py][px].m_idx = p_ptr->riding;
 				m_list[p_ptr->riding].fy = py;
 				m_list[p_ptr->riding].fx = px;
-				update_mon(cave[py][px].m_idx, TRUE);
+				update_mon(p_ptr->riding, TRUE);
 			}
 
 			/* Redraw the old spot */
@@ -6800,7 +6798,7 @@ msg_print("テレポートを邪魔された！");
 		m_list[p_ptr->riding].fx = tx;
 
 		/* Update the monster (new location) */
-		update_mon(cave[ty][tx].m_idx, TRUE);
+		update_mon(p_ptr->riding, TRUE);
 	}
 
 	tx = m_ptr->fx;

@@ -946,13 +946,11 @@ static bool cast_hissatsu_spell(int spell)
 
 				if (p_ptr->riding)
 				{
-					int tmp;
-					tmp = cave[py][px].m_idx;
-					cave[py][px].m_idx = cave[oy][ox].m_idx;
-					cave[oy][ox].m_idx = tmp;
+					cave[oy][ox].m_idx = cave[py][px].m_idx;
+					cave[py][px].m_idx = p_ptr->riding;
 					m_list[p_ptr->riding].fy = py;
 					m_list[p_ptr->riding].fx = px;
-					update_mon(cave[py][px].m_idx, TRUE);
+					update_mon(p_ptr->riding, TRUE);
 				}
 
 				forget_flow();

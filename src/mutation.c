@@ -3543,7 +3543,7 @@ bool mutation_power_aux(u32b power)
 					m_list[p_ptr->riding].fx = px;
 					cave[py][px].m_idx = p_ptr->riding;
 					cave[oy][ox].m_idx = 0;
-					update_mon(cave[py][px].m_idx, TRUE);
+					update_mon(p_ptr->riding, TRUE);
 				}
 
 				lite_spot(py, px);

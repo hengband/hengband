@@ -362,13 +362,11 @@ msg_print("不思議な力がテレポートを防いだ！");
 
 	if (p_ptr->riding)
 	{
-		int tmp;
-		tmp = cave[py][px].m_idx;
-		cave[py][px].m_idx = cave[oy][ox].m_idx;
-		cave[oy][ox].m_idx = tmp;
+		cave[oy][ox].m_idx = cave[py][px].m_idx;
+		cave[py][px].m_idx = p_ptr->riding;
 		m_list[p_ptr->riding].fy = py;
 		m_list[p_ptr->riding].fx = px;
-		update_mon(cave[py][px].m_idx, TRUE);
+		update_mon(p_ptr->riding, TRUE);
 	}
 
 	/* Redraw the old spot */
@@ -483,13 +481,11 @@ msg_print("不思議な力がテレポートを防いだ！");
 
 	if (p_ptr->riding)
 	{
-		int tmp;
-		tmp = cave[py][px].m_idx;
-		cave[py][px].m_idx = cave[oy][ox].m_idx;
-		cave[oy][ox].m_idx = tmp;
+		cave[oy][ox].m_idx = cave[py][px].m_idx;
+		cave[py][px].m_idx = p_ptr->riding;
 		m_list[p_ptr->riding].fy = py;
 		m_list[p_ptr->riding].fx = px;
-		update_mon(cave[py][px].m_idx, TRUE);
+		update_mon(p_ptr->riding, TRUE);
 	}
 
 	forget_flow();

@@ -3687,11 +3687,6 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		p_can_pass_walls = FALSE;
 	}
 
-	if (p_ptr->riding)
-	{
-		cave[py][px].m_idx = 0;
-	}
-
 	/* Hack -- attack monsters */
 	if (c_ptr->m_idx && (m_ptr->ml || cave_floor_bold(y, x) || p_can_pass_walls))
 	{
@@ -4106,6 +4101,10 @@ void move_player(int dir, int do_pickup, bool break_trap)
 			}
 		}
 
+		/* Hack -- For moving monster or riding player's moving */
+		cave[py][px].m_idx = c_ptr->m_idx;
+		c_ptr->m_idx = 0;
+
 		if (do_past)
 		{
 #ifdef JP
@@ -4116,8 +4115,6 @@ void move_player(int dir, int do_pickup, bool break_trap)
 
 			m_ptr->fy = py;
 			m_ptr->fx = px;
-			cave[py][px].m_idx = c_ptr->m_idx;
-			c_ptr->m_idx = 0;
 			update_mon(cave[py][px].m_idx, TRUE);
 		}
 
@@ -4151,6 +4148,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 				cave_set_feat(py, px, floor_type[randint0(100)]);
 			}
 		}
+
 		if (music_singing(MUSIC_WALL))
 		{
 			project(0, 0, py, px,
@@ -4176,6 +4174,14 @@ void move_player(int dir, int do_pickup, bool break_trap)
 
 		/* Remove "unsafe" flag */
 		if ((!p_ptr->blind && !no_lite()) || !is_trap(c_ptr->feat)) c_ptr->info &= ~(CAVE_UNSAFE);
+
+		if (p_ptr->riding)
+		{
+			riding_m_ptr->fy = py;
+			riding_m_ptr->fx = px;
+			cave[py][px].m_idx = p_ptr->riding;
+			update_mon(p_ptr->riding, TRUE);
+		}
 
 		/* Redraw new spot */
 		lite_spot(py, px);
@@ -4358,16 +4364,6 @@ void move_player(int dir, int do_pickup, bool break_trap)
 				}
 			}
 		}
-	}
-
-	if (p_ptr->riding)
-	{
-		riding_m_ptr->fy = py;
-		riding_m_ptr->fx = px;
-		cave[py][px].m_idx = p_ptr->riding;
-		update_mon(cave[py][px].m_idx, TRUE);
-		if (riding_r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
-			p_ptr->update |= (PU_MON_LITE);
 	}
 }
 
