@@ -4992,102 +4992,111 @@ void do_cmd_pet_dismiss(void)
 	/* Process the monsters (backwards) */
 	for (i = 0; i < max_pet; i++)
 	{
+		bool delete_this;
+		char friend_name[80];
+		char buf[80];
+		bool kakunin;
+
 		/* Access the monster */
 		pet_ctr = who[i];
 		m_ptr = &m_list[pet_ctr];
 
+		delete_this = FALSE;
+		kakunin = ((pet_ctr == p_ptr->riding) || (m_ptr->nickname));
+		monster_desc(friend_name, m_ptr, 0x80);
+		
+		if (!all_pets)
 		{
-			bool delete_this = FALSE;
-			char friend_name[80];
-			bool kakunin = ((pet_ctr == p_ptr->riding) || (m_ptr->nickname));
-			monster_desc(friend_name, m_ptr, 0x80);
-
-			if (all_pets && !kakunin)
-				delete_this = TRUE;
-			else
+			/* Hack -- health bar for this monster */
+			health_track(pet_ctr);
+			
+			/* Hack -- handle stuff */
+			handle_stuff();
+			
+#ifdef JP
+			sprintf(buf, "%sを放しますか？ [Yes/No/Unnamed (%d匹)]", friend_name, max_pet-i);
+#else
+			sprintf(buf, "Dismiss %s? [Yes/No/Unnamed (%d remain)]", friend_name, max_pet-i);
+#endif
+			prt(buf, 0, 0);
+			
+			if (m_ptr->ml)
+				move_cursor_relative(m_ptr->fy, m_ptr->fx);
+			
+			while (TRUE)
 			{
-				char ch;
-				char check_friend[80];
-				if (all_pets)
+				char ch = inkey();
+
+				if (ch == 'Y' || ch == 'y')
 				{
-#ifdef JP
-sprintf(check_friend, "%sを放しますか？ [Yes/No]", friend_name);
-#else
- sprintf(check_friend, "Dismiss %s? [Yes/No]", friend_name);
-#endif
-				}
-				else
-				{
-#ifdef JP
-sprintf(check_friend, "%sを放しますか？ [Yes/No/All(%d匹)]", friend_name, max_pet-i);
-#else
- sprintf(check_friend, "Dismiss %s? [Yes/No/All(%d remain)]", friend_name, max_pet-i);
-#endif
-				}
-				/* Hack -- health bar for this monster */
-				health_track(pet_ctr);
-
-				/* Hack -- handle stuff */
-				handle_stuff();
-
-				prt(check_friend, 0, 0);
-
-				if (m_ptr->ml)
-					move_cursor_relative(m_ptr->fy, m_ptr->fx);
-				while (TRUE)
-				{
-					ch = inkey();
-					if (ch == ESCAPE) break;
-					if (strchr("YyNnAa", ch)) break;
-					bell();
-				}
-
-				if (ch == 'A' || ch == 'a') all_pets = TRUE;
-
-				if (ch == 'Y' || ch == 'y' || ch == 'A' || ch == 'a')
-				{
+					delete_this = TRUE;
+					
 					if (kakunin)
 					{
 #ifdef JP
-						sprintf(check_friend, "本当によろしいですか？ (%s) ", friend_name);
+						sprintf(buf, "本当によろしいですか？ (%s) ", friend_name);
 #else
-						sprintf(check_friend, "Really? (%s) ", friend_name);
+						sprintf(buf, "Are you sure? (%s) ", friend_name);
 #endif
-						if (!get_check(check_friend)) continue;
+						if (!get_check(buf))
+							delete_this = FALSE;
 					}
-					if (record_named_pet && m_ptr->nickname)
-					{
-						char m_name[80];
-
-						monster_desc(m_name, m_ptr, 0x08);
-						do_cmd_write_nikki(NIKKI_NAMED_PET, 2, m_name);
-					}
-					delete_this = TRUE;
+					break;
 				}
-			}
-
-			if (delete_this)
-			{
-				if (pet_ctr == p_ptr->riding)
+				
+				if (ch == 'U' || ch == 'u')
 				{
-#ifdef JP
-msg_format("%sから降りた。", friend_name);
-#else
-					msg_format("You have got off %s. ", friend_name);
-#endif
-
-					p_ptr->riding = 0;
-
-					/* Update the monsters */
-					p_ptr->update |= (PU_BONUS | PU_MONSTERS);
-					p_ptr->redraw |= (PR_EXTRA);
+					all_pets = TRUE;
+					break;
 				}
-				delete_monster_idx(pet_ctr);
-				Dismissed++;
+				
+				if (ch == ESCAPE || ch == 'N' || ch == 'n')
+					break;
+				
+				bell();
 			}
 		}
-	}
+		
+		if ((all_pets && !kakunin) || (!all_pets && delete_this))
+		{
+			if (record_named_pet && m_ptr->nickname)
+			{
+				char m_name[80];
+				
+				monster_desc(m_name, m_ptr, 0x08);
+				do_cmd_write_nikki(NIKKI_NAMED_PET, 2, m_name);
+			}
+			
+			if (pet_ctr == p_ptr->riding)
+			{
+#ifdef JP
+				msg_format("%sから降りた。", friend_name);
+#else
+				msg_format("You have got off %s. ", friend_name);
+#endif
+				
+				p_ptr->riding = 0;
+				
+				/* Update the monsters */
+				p_ptr->update |= (PU_BONUS | PU_MONSTERS);
+				p_ptr->redraw |= (PR_EXTRA);
+			}
 
+			/* HACK : Add the line to message buffer */
+#ifdef JP
+			sprintf(buf, "%s を離した。", friend_name);
+#else
+			sprintf(buf, "Dismissed %s.", friend_name);
+#endif
+			message_add(buf);
+			p_ptr->window |= (PW_MESSAGE);
+			window_stuff();
+
+			delete_monster_idx(pet_ctr);
+			Dismissed++;
+		}
+	}
+	
 	Term->scr->cu = cu;
 	Term->scr->cv = cv;
 	Term_fresh();
@@ -5095,11 +5104,13 @@ msg_format("%sから降りた。", friend_name);
 	C_KILL(who, max_m_idx, u16b);
 
 #ifdef JP
-msg_format("%d 匹のペットを放しました。", Dismissed);
+	msg_format("%d 匹のペットを放しました。", Dismissed);
 #else
 	msg_format("You have dismissed %d pet%s.", Dismissed,
-		(Dismissed == 1 ? "" : "s"));
+		   (Dismissed == 1 ? "" : "s"));
 #endif
+	if (Dismissed == 0 && all_pets)
+		msg_print("'U'nnamed は、乗馬以外の名前のないペットだけを全て解放します。");
 
 	p_ptr->update |= (PU_MON_LITE);
 }
