@@ -813,71 +813,64 @@ else                            hooked_roff("モンスター");
 	if ((flags2 & RF2_AURA_FIRE) && (flags2 & RF2_AURA_ELEC) && (flags3 & RF3_AURA_COLD))
 	{
 #ifdef JP
-hook_c_roff(TERM_VIOLET, format("%^sは炎と氷とスパークに包まれている。", wd_he[msex]));
+		hook_c_roff(TERM_VIOLET, format("%^sは炎と氷とスパークに包まれている。", wd_he[msex]));
 #else
-		hook_c_roff(TERM_VIOLET, format("%^s is surrounded by flames and electricity.  ", wd_he[msex]));
+		hook_c_roff(TERM_VIOLET, format("%^s is surrounded by flames, ice and electricity.  ", wd_he[msex]));
 #endif
-
 	}
 	else if ((flags2 & RF2_AURA_FIRE) && (flags2 & RF2_AURA_ELEC))
 	{
 #ifdef JP
-hook_c_roff(TERM_L_RED, format("%^sは炎とスパークに包まれている。", wd_he[msex]));
+		hook_c_roff(TERM_L_RED, format("%^sは炎とスパークに包まれている。", wd_he[msex]));
 #else
 		hook_c_roff(TERM_L_RED, format("%^s is surrounded by flames and electricity.  ", wd_he[msex]));
 #endif
-
 	}
 	else if ((flags2 & RF2_AURA_FIRE) && (flags3 & RF3_AURA_COLD))
 	{
 #ifdef JP
-hook_c_roff(TERM_BLUE, format("%^sは炎と氷に包まれている。", wd_he[msex]));
+		hook_c_roff(TERM_BLUE, format("%^sは炎と氷に包まれている。", wd_he[msex]));
 #else
-		hook_c_roff(TERM_BLUE, format("%^s is surrounded by flames and electricity.  ", wd_he[msex]));
+		hook_c_roff(TERM_BLUE, format("%^s is surrounded by flames and ice.  ", wd_he[msex]));
 #endif
-
 	}
 	else if ((flags3 & RF3_AURA_COLD) && (flags2 & RF2_AURA_ELEC))
 	{
 #ifdef JP
-hook_c_roff(TERM_L_GREEN, format("%^sは氷とスパークに包まれている。", wd_he[msex]));
+		hook_c_roff(TERM_L_GREEN, format("%^sは氷とスパークに包まれている。", wd_he[msex]));
 #else
 		hook_c_roff(TERM_L_GREEN, format("%^s is surrounded by ice and electricity.  ", wd_he[msex]));
 #endif
-
 	}
 	else if (flags2 & RF2_AURA_FIRE)
 	{
 #ifdef JP
-hook_c_roff(TERM_RED, format("%^sは炎に包まれている。", wd_he[msex]));
+		hook_c_roff(TERM_RED, format("%^sは炎に包まれている。", wd_he[msex]));
 #else
 		hook_c_roff(TERM_RED, format("%^s is surrounded by flames.  ", wd_he[msex]));
 #endif
-
 	}
 	else if (flags3 & RF3_AURA_COLD)
 	{
 #ifdef JP
-hook_c_roff(TERM_BLUE, format("%^sは氷に包まれている。", wd_he[msex]));
+		hook_c_roff(TERM_BLUE, format("%^sは氷に包まれている。", wd_he[msex]));
 #else
 		hook_c_roff(TERM_BLUE, format("%^s is surrounded by ice.  ", wd_he[msex]));
 #endif
-
 	}
 	else if (flags2 & RF2_AURA_ELEC)
 	{
 #ifdef JP
-hook_c_roff(TERM_L_BLUE, format("%^sはスパークに包まれている。", wd_he[msex]));
+		hook_c_roff(TERM_L_BLUE, format("%^sはスパークに包まれている。", wd_he[msex]));
 #else
 		hook_c_roff(TERM_L_BLUE, format("%^s is surrounded by electricity.  ", wd_he[msex]));
 #endif
-
 	}
 
 	if (flags2 & RF2_REFLECTING)
 	{
 #ifdef JP
-hooked_roff(format("%^sは矢の呪文を跳ね返す。", wd_he[msex]));
+		hooked_roff(format("%^sは矢の呪文を跳ね返す。", wd_he[msex]));
 #else
 		hooked_roff(format("%^s reflects bolt spells.  ", wd_he[msex]));
 #endif
