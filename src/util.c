@@ -5406,6 +5406,12 @@ int inkey_special(bool numpad_cursor)
 	int i;
 	size_t trig_len;
 
+	/*
+	 * Forget macro trigger ----
+	 * It's important if we are already expanding macro action
+	 */
+	inkey_macro_trigger_string[0] = '\0';
+
 	/* Get a keypress */
 	key = inkey();
 
