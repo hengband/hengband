@@ -2448,6 +2448,15 @@
  *   ITEM: Affect each object in the "blast area" in some way
  *   KILL: Affect each monster in the "blast area" in some way
  *   HIDE: Hack -- disable "visual" feedback from projection
+ *   DISI: Disintegrate non-permanent features
+ *   PLAYER: Main target is player (used for riding player)
+ *   AIMED: Target is only player or monster, so don't affect another.
+ *          Depend on PROJECT_PLAYER.
+ *          (used for minimum (rad == 0) balls on riding player)
+ *   REFLECTABLE: Refrectable spell attacks (used for "bolts")
+ *   NO_HANGEKI: Avoid counter attacks of monsters
+ *   PATH: Only used for printing project path
+ *   FAST: Hide "visual" of flying bolts until blast
  */
 #define PROJECT_JUMP        0x01
 #define PROJECT_BEAM        0x02
@@ -2459,7 +2468,7 @@
 #define PROJECT_HIDE        0x80
 #define PROJECT_DISI        0x100
 #define PROJECT_PLAYER      0x200
-#define PROJECT_MONSTER     0x400
+#define PROJECT_AIMED       0x400
 #define PROJECT_REFLECTABLE 0x800
 #define PROJECT_NO_HANGEKI  0x1000
 #define PROJECT_PATH        0x2000

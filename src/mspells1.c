@@ -521,10 +521,21 @@ static void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool b
 	/* Handle breath attacks */
 	if (breath) rad = 0 - rad;
 
-	if (typ == GF_ROCKET) flg |= PROJECT_STOP;
-	if (typ == GF_MIND_BLAST || typ == GF_BRAIN_SMASH ||
-	    typ == GF_CAUSE_1 || typ == GF_CAUSE_2 || typ == GF_CAUSE_3 ||
-	    typ == GF_CAUSE_4 || typ == GF_HAND_DOOM) flg |= PROJECT_HIDE;
+	switch (typ)
+	{
+	case GF_ROCKET:
+		flg |= PROJECT_STOP;
+		break;
+	case GF_MIND_BLAST:
+	case GF_BRAIN_SMASH:
+	case GF_CAUSE_1:
+	case GF_CAUSE_2:
+	case GF_CAUSE_3:
+	case GF_CAUSE_4:
+	case GF_HAND_DOOM:
+		flg |= (PROJECT_HIDE | PROJECT_AIMED);
+		break;
+	}
 
 	/* Target the player with a ball attack */
 	(void)project(m_idx, rad, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));

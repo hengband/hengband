@@ -6109,7 +6109,7 @@ void discharge_minion(void)
 		if (dam > 800) dam = 800;
 		project(i, 2+(r_ptr->level/20), m_ptr->fy,
 			m_ptr->fx, dam, GF_PLASMA, 
-			PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_MONSTER, -1);
+			PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
 		delete_monster_idx(i);
 	}
 }

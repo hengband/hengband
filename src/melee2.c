@@ -2013,7 +2013,7 @@ act = "%sにむかって歌った。";
 				if (!explode)
 				{
 					project(m_idx, 0, t_ptr->fy, t_ptr->fx,
-						(pt == GF_OLD_SLEEP ? r_ptr->level : damage), pt, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER, -1);
+						(pt == GF_OLD_SLEEP ? r_ptr->level : damage), pt, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
 				}
 
 				if (heal_effect)
@@ -2066,7 +2066,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 							project(t_idx, 0, m_ptr->fy, m_ptr->fx,
 								damroll (1 + ((tr_ptr->level) / 26),
 								1 + ((tr_ptr->level) / 17)),
-								GF_FIRE, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER, -1);
+								GF_FIRE, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
 						}
 						else
 						{
@@ -2093,7 +2093,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 							project(t_idx, 0, m_ptr->fy, m_ptr->fx,
 								damroll (1 + ((tr_ptr->level) / 26),
 								1 + ((tr_ptr->level) / 17)),
-								GF_COLD, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER, -1);
+								GF_COLD, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
 						}
 						else
 						{
@@ -2120,7 +2120,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 							project(t_idx, 0, m_ptr->fy, m_ptr->fx,
 								damroll (1 + ((tr_ptr->level) / 26),
 								1 + ((tr_ptr->level) / 17)),
-								GF_ELEC, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER, -1);
+								GF_ELEC, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
 						}
 						else
 						{

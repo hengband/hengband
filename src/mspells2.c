@@ -20,7 +20,7 @@
  */
 static void monst_breath_monst(int m_idx, int y, int x, int typ, int dam_hp, int rad, bool breath, int monspell, bool learnable)
 {
-	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_MONSTER;
+	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -44,14 +44,14 @@ static void monst_breath_monst(int m_idx, int y, int x, int typ, int dam_hp, int
  */
 static void monst_bolt_monst(int m_idx, int y, int x, int typ, int dam_hp, int monspell, bool learnable)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_MONSTER | PROJECT_REFLECTABLE;
+	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 
 	(void)project(m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 
 static void monst_beam_monst(int m_idx, int y, int x, int typ, int dam_hp, int monspell, bool learnable)
 {
-	int flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU | PROJECT_MONSTER;
+	int flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU;
 
 	(void)project(m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
@@ -2141,7 +2141,7 @@ bool monst_spell_monst(int m_idx)
 		if (see_m)
 		{
 #ifdef JP
-			msg_format("%^sは%sをじっと睨んだ", m_name, t_name);
+			msg_format("%^sは%sをじっと睨んだ。", m_name, t_name);
 #else
 			msg_format("%^s gazes intently at %s.", m_name, t_name);
 #endif
@@ -2203,7 +2203,7 @@ bool monst_spell_monst(int m_idx)
 		if (see_m)
 		{
 #ifdef JP
-			msg_format("%^sは%sをじっと睨んだ", m_name, t_name);
+			msg_format("%^sは%sをじっと睨んだ。", m_name, t_name);
 #else
 			msg_format("%^s gazes intently at %s.", m_name, t_name);
 #endif
@@ -3629,7 +3629,7 @@ bool monst_spell_monst(int m_idx)
 			}
 		}
 
-		(void)project(m_idx, 3, y, x, 0, GF_DARK_WEAK, PROJECT_GRID | PROJECT_KILL | PROJECT_MONSTER, MS_DARKNESS);
+		(void)project(m_idx, 3, y, x, 0, GF_DARK_WEAK, PROJECT_GRID | PROJECT_KILL, MS_DARKNESS);
 
 		unlite_room(y, x);
 

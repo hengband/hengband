@@ -5049,19 +5049,22 @@ note_dies = "はドロドロに溶けた！";
 
 			if ((r_ptr->flags4 & ~(RF4_NOMAGIC_MASK)) || (r_ptr->flags5 & ~(RF5_NOMAGIC_MASK)) || (r_ptr->flags6 & ~(RF6_NOMAGIC_MASK)))
 			{
-				/* Message */
+				if (!who)
+				{
+					/* Message */
 #ifdef JP
-msg_format("%sから精神エネルギーを吸いとった。",m_name);
+					msg_format("%sから精神エネルギーを吸いとった。", m_name);
 #else
-				msg_format("You draw psychic energy from %s.", m_name);
+					msg_format("You draw psychic energy from %s.", m_name);
 #endif
 
-				(void)hp_player(dam);
+					(void)hp_player(dam);
+				}
 			}
 			else
 			{
 #ifdef JP
-msg_format("%sには効果がなかった。",m_name);
+				msg_format("%sには効果がなかった。", m_name);
 #else
 				msg_format("%s is unaffected.", m_name);
 #endif
@@ -5076,9 +5079,9 @@ msg_format("%sには効果がなかった。",m_name);
 			if (seen) obvious = TRUE;
 			/* Message */
 #ifdef JP
-msg_format("%sをじっと睨んだ。",m_name);
+			if (!who) msg_format("%sをじっと睨んだ。", m_name);
 #else
-			msg_format("You gaze intently at %s.", m_name);
+			if (!who) msg_format("You gaze intently at %s.", m_name);
 #endif
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
@@ -5104,7 +5107,7 @@ msg_format("%sをじっと睨んだ。",m_name);
 					if (seen && is_original_ap(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
 				}
 #ifdef JP
-note = "には効果がなかった。";
+				note = "には効果がなかった。";
 #else
 				note = "is unaffected!";
 #endif
@@ -5113,8 +5116,8 @@ note = "には効果がなかった。";
 			else
 			{
 #ifdef JP
-msg_format("%sは精神攻撃を食らった。",m_name);
-note_dies = "の精神は崩壊し、肉体は抜け殻となった。";
+				msg_format("%sは精神攻撃を食らった。", m_name);
+				note_dies = "の精神は崩壊し、肉体は抜け殻となった。";
 #else
 				msg_format("%^s is blasted by psionic energy.", m_name);
 				note_dies = " collapses, a mindless husk.";
@@ -5131,9 +5134,9 @@ note_dies = "の精神は崩壊し、肉体は抜け殻となった。";
 			if (seen) obvious = TRUE;
 			/* Message */
 #ifdef JP
-msg_format("%sをじっと睨んだ。",m_name);
+			if (!who) msg_format("%sをじっと睨んだ。", m_name);
 #else
-			msg_format("You gaze intently at %s.", m_name);
+			if (!who) msg_format("You gaze intently at %s.", m_name);
 #endif
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
@@ -5159,7 +5162,7 @@ msg_format("%sをじっと睨んだ。",m_name);
 					if (seen && is_original_ap(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
 				}
 #ifdef JP
-note = "には効果がなかった。";
+				note = "には効果がなかった。";
 #else
 				note = "is unaffected!";
 #endif
@@ -5168,8 +5171,8 @@ note = "には効果がなかった。";
 			else
 			{
 #ifdef JP
-msg_format("%sは精神攻撃を食らった。",m_name);
-note_dies = "の精神は崩壊し、肉体は抜け殻となった。";
+				msg_format("%sは精神攻撃を食らった。", m_name);
+				note_dies = "の精神は崩壊し、肉体は抜け殻となった。";
 #else
 				msg_format("%^s is blasted by psionic energy.", m_name);
 				note_dies = " collapses, a mindless husk.";
@@ -5190,9 +5193,9 @@ note_dies = "の精神は崩壊し、肉体は抜け殻となった。";
 			if (seen) obvious = TRUE;
 			/* Message */
 #ifdef JP
-msg_format("%sを指差して呪いをかけた。",m_name);
+			if (!who) msg_format("%sを指差して呪いをかけた。", m_name);
 #else
-			msg_format("You point at %s and curses.", m_name);
+			if (!who) msg_format("You point at %s and curses.", m_name);
 #endif
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
@@ -5210,9 +5213,8 @@ msg_format("%sを指差して呪いをかけた。",m_name);
 			/* Attempt a saving throw */
 			if (randint0(100 + caster_lev) < (r_ptr->level + 35))
 			{
-
 #ifdef JP
-note = "には効果がなかった。";
+				note = "には効果がなかった。";
 #else
 				note = "is unaffected!";
 #endif
@@ -5227,9 +5229,9 @@ note = "には効果がなかった。";
 			if (seen) obvious = TRUE;
 			/* Message */
 #ifdef JP
-msg_format("%sを指差して恐ろしげに呪いをかけた。",m_name);
+			if (!who) msg_format("%sを指差して恐ろしげに呪いをかけた。", m_name);
 #else
-			msg_format("You point at %s and curses horribly.", m_name);
+			if (!who) msg_format("You point at %s and curses horribly.", m_name);
 #endif
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
@@ -5247,9 +5249,8 @@ msg_format("%sを指差して恐ろしげに呪いをかけた。",m_name);
 			/* Attempt a saving throw */
 			if (randint0(100 + caster_lev) < (r_ptr->level + 35))
 			{
-
 #ifdef JP
-note = "には効果がなかった。";
+				note = "には効果がなかった。";
 #else
 				note = "is unaffected!";
 #endif
@@ -5264,9 +5265,9 @@ note = "には効果がなかった。";
 			if (seen) obvious = TRUE;
 			/* Message */
 #ifdef JP
-msg_format("%sを指差し、恐しげに呪文を唱えた！",m_name);
+			if (!who) msg_format("%sを指差し、恐ろしげに呪文を唱えた！", m_name);
 #else
-			msg_format("You point at %s, incanting terribly!", m_name);
+			if (!who) msg_format("You point at %s, incanting terribly!", m_name);
 #endif
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
@@ -5284,9 +5285,8 @@ msg_format("%sを指差し、恐しげに呪文を唱えた！",m_name);
 			/* Attempt a saving throw */
 			if (randint0(100 + caster_lev) < (r_ptr->level + 35))
 			{
-
 #ifdef JP
-note = "には効果がなかった。";
+				note = "には効果がなかった。";
 #else
 				note = "is unaffected!";
 #endif
@@ -5301,9 +5301,9 @@ note = "には効果がなかった。";
 			if (seen) obvious = TRUE;
 			/* Message */
 #ifdef JP
-msg_format("%sの秘孔を突いて、「お前は既に死んでいる」と叫んだ。",m_name);
+			if (!who) msg_format("%sの秘孔を突いて、「お前は既に死んでいる」と叫んだ。", m_name);
 #else
-			msg_format("You point at %s, screaming th word, 'DIE!'.", m_name);
+			if (!who) msg_format("You point at %s, screaming the word, 'DIE!'.", m_name);
 #endif
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
@@ -5319,11 +5319,10 @@ msg_format("%sの秘孔を突いて、「お前は既に死んでいる」と叫んだ。",m_name);
 			}
 
 			/* Attempt a saving throw */
-			if (randint0(100 + caster_lev) < (r_ptr->level + 35))
+			if ((randint0(100 + caster_lev) < (r_ptr->level + 35)) && ((who <= 0) || (m_list[who].r_idx != MON_KENSHIROU)))
 			{
-
 #ifdef JP
-note = "には効果がなかった。";
+				note = "には効果がなかった。";
 #else
 				note = "is unaffected!";
 #endif
@@ -5688,9 +5687,9 @@ note = "には効果がなかった！";
 		case GF_PHOTO:
 		{
 #ifdef JP
-			msg_format("%sを写真に撮った。",m_name);
+			if (!who) msg_format("%sを写真に撮った。", m_name);
 #else
-			msg_format("You take a photograph of %s.",m_name);
+			if (!who) msg_format("You take a photograph of %s.", m_name);
 #endif
 			/* Hurt by light */
 			if (r_ptr->flags3 & (RF3_HURT_LITE))
@@ -5706,8 +5705,8 @@ note = "には効果がなかった！";
 
 				/* Special effect */
 #ifdef JP
-note = "は光に身をすくめた！";
-note_dies = "は光を受けてしぼんでしまった！";
+				note = "は光に身をすくめた！";
+				note_dies = "は光を受けてしぼんでしまった！";
 #else
 				note = " cringes from the light!";
 				note_dies = " shrivels away in the light!";
@@ -8681,7 +8680,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 		}
 
 		/* Only do visuals if requested */
-		if (!blind && !(flg & (PROJECT_HIDE)) && !(flg & PROJECT_FAST))
+		if (!blind && !(flg & (PROJECT_HIDE | PROJECT_FAST)))
 		{
 			/* Only do visuals if the player can "see" the bolt */
 			if (panel_contains(y, x) && player_has_los_bold(y, x))
@@ -9033,9 +9032,8 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 					}
 
 					/* Reflected bolts randomly target either one */
-					flg &= ~(PROJECT_MONSTER | PROJECT_PLAYER);
-					if (one_in_(2)) flg |= PROJECT_MONSTER;
-					else flg |= PROJECT_PLAYER;
+					if (one_in_(2)) flg |= PROJECT_PLAYER;
+					else flg &= ~(PROJECT_PLAYER);
 
 					/* The bolt is reflected */
 					project(cave[y][x].m_idx, 0, t_y, t_x, dam, typ, flg, monspell);
@@ -9063,7 +9061,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 				/* Aimed on the player */
 				if (flg & PROJECT_PLAYER)
 				{
-					if (flg & (PROJECT_BEAM | PROJECT_REFLECTABLE))
+					if (flg & (PROJECT_BEAM | PROJECT_REFLECTABLE | PROJECT_AIMED))
 					{
 						/*
 						 * A beam or bolt is well aimed
@@ -9084,8 +9082,9 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 
 				/*
 				 * This grid is the original target.
+				 * Or aimed on your horse.
 				 */
-				else if ((y == y2) || (x == x2))
+				else if (((y == y2) && (x == x2)) || (flg & PROJECT_AIMED))
 				{
 					/* Hit the mount with full damage */
 				}
@@ -9109,9 +9108,8 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 					else
 					{
 						/* Hit the player later */
-						flg &= ~(PROJECT_MONSTER);
 						flg |= PROJECT_PLAYER;
-							
+
 						/* Don't affect the mount */
 						continue;
 					}
@@ -9203,8 +9201,10 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 				 *
 				 * But already choosen to hit the
 				 * mount at this point.
+				 *
+				 * Or aimed on your horse.
 				 */
-				else if (flg & (PROJECT_BEAM | PROJECT_REFLECTABLE))
+				else if (flg & (PROJECT_BEAM | PROJECT_REFLECTABLE | PROJECT_AIMED))
 				{
 					/*
 					 * A beam or bolt is well aimed
