@@ -750,6 +750,65 @@ static byte lighting_colours[16][2] =
 	{TERM_L_UMBER, TERM_UMBER}
 };
 
+
+/*
+ * Mega-Hack -- Partial code of map_info() for darkened grids
+ * Note: Each variable is declared in map_info().
+ *       This macro modifies "feat", "f_ptr", "c" and "a".
+ */
+#define darkened_grid_hack() \
+{ \
+	if (feat_floor(feat)) \
+	{ \
+		/* Unsafe cave grid -- idea borrowed from Unangband */ \
+		if (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) \
+		{ \
+			feat = FEAT_UNDETECTD; \
+\
+			/* Access unsafe darkness */ \
+			f_ptr = &f_info[feat]; \
+\
+			/* Char and attr of unsafe grid */ \
+			c = f_ptr->x_char; \
+			a = f_ptr->x_attr; \
+		} \
+		else \
+		{ \
+			/* For feat_priority control */ \
+			feat = FEAT_NONE; \
+\
+			if (use_graphics) \
+			{ \
+				/* Access darkness */ \
+				f_ptr = &f_info[feat]; \
+\
+				/* Char and attr of darkness */ \
+				c = f_ptr->x_char; \
+				a = f_ptr->x_attr; \
+			} \
+			else \
+			{ \
+				/* Use "black" */ \
+				a = TERM_DARK; \
+			} \
+		} \
+	} \
+	else \
+	{ \
+		if (is_ascii_graphics(a)) \
+		{ \
+			/* Use darkened colour */ \
+			a = !new_ascii_graphics ? TERM_L_DARK : lighting_colours[a][1]; \
+		} \
+		else if (use_graphics && feat_supports_lighting(feat)) \
+		{ \
+			/* Use a dark tile */ \
+			c++; \
+		} \
+	} \
+} ;
+
+
 /*
  * Extract the attr/char to display at the given (legal) map location
  *
@@ -913,38 +972,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 			/* Mega-Hack -- Handle "in-sight" and "darkened" grids first */
 			if (darkened_grid)
 			{
-				/* Unsafe cave grid -- idea borrowed from Unangband */
-				if (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE))
-				{
-					feat = FEAT_UNDETECTD;
-
-					/* Access unsafe darkness */
-					f_ptr = &f_info[feat];
-
-					/* Char and attr of unsafe grid */
-					c = f_ptr->x_char;
-					a = f_ptr->x_attr;
-				}
-				else
-				{
-					/* For feat_priority control */
-					feat = FEAT_NONE;
-
-					if (use_graphics)
-					{
-						/* Access darkness */
-						f_ptr = &f_info[feat];
-
-						/* Char and attr of darkness */
-						c = f_ptr->x_char;
-						a = f_ptr->x_attr;
-					}
-					else
-					{
-						/* Use "black" */
-						a = TERM_DARK;
-					}
-				}
+				darkened_grid_hack();
 			}
 
 			/* Special lighting effects */
@@ -1078,38 +1106,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 			/* Mega-Hack -- Handle "in-sight" and "darkened" grids first */
 			if (darkened_grid)
 			{
-				/* Unsafe cave grid -- idea borrowed from Unangband */
-				if (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE))
-				{
-					feat = FEAT_UNDETECTD;
-
-					/* Access unsafe darkness */
-					f_ptr = &f_info[feat];
-
-					/* Char and attr of unsafe grid */
-					c = f_ptr->x_char;
-					a = f_ptr->x_attr;
-				}
-				else
-				{
-					/* For feat_priority control */
-					feat = FEAT_NONE;
-
-					if (use_graphics)
-					{
-						/* Access darkness */
-						f_ptr = &f_info[feat];
-
-						/* Char and attr of darkness */
-						c = f_ptr->x_char;
-						a = f_ptr->x_attr;
-					}
-					else
-					{
-						/* Use "black" */
-						a = TERM_DARK;
-					}
-				}
+				darkened_grid_hack();
 			}
 
 			else if (new_ascii_graphics)
@@ -1302,38 +1299,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 			/* Mega-Hack -- Handle "in-sight" and "darkened" grids */
 			if (darkened_grid)
 			{
-				/* Unsafe cave grid -- idea borrowed from Unangband */
-				if (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE))
-				{
-					feat = FEAT_UNDETECTD;
-
-					/* Access unsafe darkness */
-					f_ptr = &f_info[feat];
-
-					/* Char and attr of unsafe grid */
-					c = f_ptr->x_char;
-					a = f_ptr->x_attr;
-				}
-				else
-				{
-					/* For feat_priority control */
-					feat = FEAT_NONE;
-
-					if (use_graphics)
-					{
-						/* Access darkness */
-						f_ptr = &f_info[feat];
-
-						/* Char and attr of darkness */
-						c = f_ptr->x_char;
-						a = f_ptr->x_attr;
-					}
-					else
-					{
-						/* Use "black" */
-						a = TERM_DARK;
-					}
-				}
+				darkened_grid_hack();
 			}
 		}
 	}
