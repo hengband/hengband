@@ -5184,15 +5184,28 @@ static void edit_history(void)
 			if (iskanji2(p_ptr->history[y], x)) x++;
 #endif
                         x++;
-                        if (x > 58) x = 0;
+                        if (x > 58)
+			{
+				x = 0;
+				if (y < 3) y++;
+			}
                 }
                 else if (c == '4')
                 {
                         x--;
+			if (x < 0)
+			{
+				if (y)
+				{
+					y--;
+					x = 58;
+				}
+				else x = 0;
+			}
+
 #ifdef JP
 			if ((x > 0) && (iskanji2(p_ptr->history[y], x-1))) x--;
 #endif
-                        if (x < 0) x = 58;
                 }
                 else if (c == '\r')
                 {
@@ -5210,15 +5223,24 @@ static void edit_history(void)
 		else if (c == '\010')
 		{
 			x--;
+			if (x < 0)
+			{
+				if (y)
+				{
+					y--;
+					x = 58;
+				}
+				else x = 0;
+			}
+
                         p_ptr->history[y][x] = ' ';
 #ifdef JP
-			if ((x > 0) && (iskanji2(p_ptr->history[y], x-1)))
+			if ((x > 0) && (iskanji2(p_ptr->history[y], x - 1)))
 			{
 				x--;
 				p_ptr->history[y][x] = ' ';
 			}
 #endif
-			if (x < 0) x = 58;
 		}
 #ifdef JP
 		else if (iskanji(c) || isprint(c))
