@@ -68,6 +68,7 @@ X:view_unsafe_grids
 Y:small_levels
 X:always_small_levels
 Y:empty_levels
+X:bound_walls_perm
 Y:last_words
 Y:send_score
 X:allow_debug_opts

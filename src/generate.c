@@ -994,13 +994,13 @@ static bool cave_gen(void)
 		cave_type *c_ptr = &cave[0][x];
 
 		/* Set boundary mimic and add "solid" perma-wall */
-		c_ptr->mimic = f_info[c_ptr->feat].mimic;
+		c_ptr->mimic = bound_walls_perm ? 0 : f_info[c_ptr->feat].mimic;
 		c_ptr->feat = FEAT_PERM_SOLID;
 
 		c_ptr = &cave[cur_hgt - 1][x];
 
 		/* Set boundary mimic and add "solid" perma-wall */
-		c_ptr->mimic = f_info[c_ptr->feat].mimic;
+		c_ptr->mimic = bound_walls_perm ? 0 : f_info[c_ptr->feat].mimic;
 		c_ptr->feat = FEAT_PERM_SOLID;
 	}
 
@@ -1010,13 +1010,13 @@ static bool cave_gen(void)
 		cave_type *c_ptr = &cave[y][0];
 
 		/* Set boundary mimic and add "solid" perma-wall */
-		c_ptr->mimic = f_info[c_ptr->feat].mimic;
+		c_ptr->mimic = bound_walls_perm ? 0 : f_info[c_ptr->feat].mimic;
 		c_ptr->feat = FEAT_PERM_SOLID;
 
 		c_ptr = &cave[y][cur_wid - 1];
 
 		/* Set boundary mimic and add "solid" perma-wall */
-		c_ptr->mimic = f_info[c_ptr->feat].mimic;
+		c_ptr->mimic = bound_walls_perm ? 0 : f_info[c_ptr->feat].mimic;
 		c_ptr->feat = FEAT_PERM_SOLID;
 	}
 

@@ -289,6 +289,7 @@ extern bool over_exert;
 extern bool small_levels;
 extern bool always_small_levels;
 extern bool empty_levels;
+extern bool bound_walls_perm;
 extern bool player_symbols;
 extern bool equippy_chars;
 extern bool use_command;

@@ -6905,6 +6905,15 @@ option_type option_info[] =
 
 
 #ifdef JP
+	{ &bound_walls_perm,            FALSE,  3, 2, 1,
+	"bound_walls_perm",             "ダンジョンの外壁を永久岩にする" },
+#else
+	{ &bound_walls_perm,            FALSE,  3, 2, 1,
+	"bound_walls_perm",             "Boundary walls are created by permanent wall" },
+#endif
+
+
+#ifdef JP
 	{ &last_words,                  TRUE, 3, 0, 28,
 	"last_words",                   "キャラクターが死んだ時遺言をのこす" },
 #else
