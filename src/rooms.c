@@ -5974,6 +5974,9 @@ bool generate_rooms(void)
 	/* Limit number of rooms */
 	int dun_rooms = DUN_ROOMS_MAX * area_size / 100;
 
+	/* Limit minimum number of rooms */
+	int min_rooms = 8 - ((MAX_HGT/ cur_hgt) + (MAX_WID / cur_wid));
+
 	/* Assume normal cave */
 	room_info_type *room_info_ptr = room_info_normal;
 
@@ -6145,7 +6148,7 @@ bool generate_rooms(void)
 		if (!remain) break;
 	}
 
-	if (rooms_built < 1) return FALSE;
+	if (rooms_built < min_rooms) return FALSE;
 
 	if (cheat_room)
 	{
