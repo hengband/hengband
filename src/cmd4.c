@@ -5027,6 +5027,7 @@ static void do_cmd_knowledge_inven(void)
 /*
  * Make screen dump to buffer
  */
+#define SCREEN_BUF_SIZE 65536
 cptr make_screen_dump(void)
 {
 	int y, x, i;
@@ -5037,7 +5038,7 @@ cptr make_screen_dump(void)
 	FILE *fff;
 	char file_name[1024];
 	char buf[4096];
-	char screen_buf[65536];
+	char screen_buf[SCREEN_BUF_SIZE];
 
 	char *html_head[] = {
 		"<html>\n<body text=\"#ffffff\" bgcolor=\"#000000\">\n",
@@ -5124,6 +5125,11 @@ cptr make_screen_dump(void)
 
 	while (fgets(buf, 4096, fff))
 	{
+		if (strlen(screen_buf) + strlen(buf) + 1 > SCREEN_BUF_SIZE)
+		{
+			/* Too big screen dump size */
+			return (NULL);
+		}
 		strcat(screen_buf, buf);
 	}
 
