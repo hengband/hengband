@@ -3304,11 +3304,13 @@ bool get_check(cptr prompt)
  * mode & CHECK_OKAY_CANCEL : force user to answer 'O'kay or 'C'ancel
  * mode & CHECK_NO_ESCAPE   : don't allow ESCAPE key
  * mode & CHECK_NO_HISTORY  : no message_add
+ * mode & CHECK_DEFAULT_Y   : accept any key as y, except n and Esc.
  */
 bool get_check_strict(cptr prompt, int mode)
 {
 	int i;
 	char buf[80];
+	bool flag = FALSE;
 
 	if (auto_more)
 	{
@@ -3329,6 +3331,11 @@ bool get_check_strict(cptr prompt, int mode)
 	{
 		my_strcpy(buf, prompt, sizeof(buf)-15);
 		strcat(buf, "[(O)k/(C)ancel]");
+	}
+	else if (mode & CHECK_DEFAULT_Y)
+	{
+		my_strcpy(buf, prompt, sizeof(buf)-5);
+		strcat(buf, "[Y/n]");
 	}
 	else
 	{
@@ -3351,41 +3358,57 @@ bool get_check_strict(cptr prompt, int mode)
 	while (TRUE)
 	{
 		i = inkey();
+
+		if (!(mode & CHECK_NO_ESCAPE))
+		{
+			if (i == ESCAPE)
+			{
+				flag = FALSE;
+				break;
+			}
+		}
+
 		if (mode & CHECK_OKAY_CANCEL)
 		{
-			if ( i == 'o' || i == 'O' )
+			if (i == 'o' || i == 'O')
 			{
-				i = 'Y';
+				flag = TRUE;
+				break;
+			}
+			else if (i == 'c' || i == 'C')
+			{
+				flag = FALSE;
 				break;
 			}
 		}
-		else if (i == 'y' || i == 'Y')
+		else
 		{
-				break;
-		}
-		if (!(mode & CHECK_NO_ESCAPE) && (i == ESCAPE)) break;
-		if ( mode & CHECK_OKAY_CANCEL )
-		{
-			if ( i == 'c' || i == 'C' )
+			if (i == 'y' || i == 'Y')
 			{
+				flag = TRUE;
+				break;
+			}
+			else if (i == 'n' || i == 'N')
+			{
+				flag = FALSE;
 				break;
 			}
 		}
-		else if (i == 'n' || i == 'N')
+
+		if (mode & CHECK_DEFAULT_Y)
 		{
-				break;
+			flag = TRUE;
+			break;
 		}
+
 		bell();
 	}
 
 	/* Erase the prompt */
 	prt("", 0, 0);
 
-	/* Normal negation */
-	if ((i != 'Y') && (i != 'y')) return (FALSE);
-
-	/* Success */
-	return (TRUE);
+	/* Return the flag */
+	return flag;
 }
 
 

@@ -2381,9 +2381,9 @@ static bool get_player_realms(void)
 		}
 else
 #ifdef JP
-		if (get_check("よろしいですか？")) break;
+		if (get_check_strict("よろしいですか？", CHECK_DEFAULT_Y)) break;
 #else
-		if (get_check("Are you sure? ")) break;
+		if (get_check_strict("Are you sure? ", CHECK_DEFAULT_Y)) break;
 #endif
 	}
 
@@ -2443,9 +2443,9 @@ else
 				break;
 			}
 #ifdef JP
-			else if (get_check("よろしいですか？")) break;
+			else if (get_check_strict("よろしいですか？", CHECK_DEFAULT_Y)) break;
 #else
-			else if (get_check("Are you sure? ")) break;
+			else if (get_check_strict("Are you sure? ", CHECK_DEFAULT_Y)) break;
 #endif
 		}
 		if (p_ptr->realm2)
@@ -5634,9 +5634,9 @@ static bool player_birth_aux(void)
 			}
 		}
 #ifdef JP
-		if (get_check("よろしいですか？")) break;
+		if (get_check_strict("よろしいですか？", CHECK_DEFAULT_Y)) break;
 #else
-		if (get_check("Are you sure? ")) break;
+		if (get_check_strict("Are you sure? ", CHECK_DEFAULT_Y)) break;
 #endif
 		clear_from(10);
 		c_put_str(TERM_WHITE, "              ", 4, 15);
@@ -5670,9 +5670,9 @@ static bool player_birth_aux(void)
 		}
 
 #ifdef JP
-		if (get_check("よろしいですか？")) break;
+		if (get_check_strict("よろしいですか？", CHECK_DEFAULT_Y)) break;
 #else
-		if (get_check("Are you sure? ")) break;
+		if (get_check_strict("Are you sure? ", CHECK_DEFAULT_Y)) break;
 #endif
 		c_put_str(TERM_WHITE, "              ", 5, 15);
 	}
@@ -5704,9 +5704,9 @@ static bool player_birth_aux(void)
 			}
 		}
 #ifdef JP
-		if (get_check("よろしいですか？")) break;
+		if (get_check_strict("よろしいですか？", CHECK_DEFAULT_Y)) break;
 #else
-		if (get_check("Are you sure? ")) break;
+		if (get_check_strict("Are you sure? ", CHECK_DEFAULT_Y)) break;
 #endif
 		c_put_str(TERM_L_BLUE, player_name, 1, 34);
 		prt("", 1, 34+strlen(player_name));
@@ -6236,9 +6236,9 @@ static bool ask_quick_start(void)
 		char c;
 
 #ifdef JP
-		put_str("クイック・スタートを使いますか？[y/n]", 14, 10);
+		put_str("クイック・スタートを使いますか？[y/N]", 14, 10);
 #else
-		put_str("Use quick start? [y/n]", 14, 10);
+		put_str("Use quick start? [y/N]", 14, 10);
 #endif
 		c = inkey();
 

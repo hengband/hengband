@@ -47,7 +47,7 @@
 #define FAKE_VERSION   0
 #define FAKE_VER_MAJOR 11
 #define FAKE_VER_MINOR 5
-#define FAKE_VER_PATCH 1
+#define FAKE_VER_PATCH 2
 
 #define ANGBAND_2_8_1
 #define ZANGBAND
@@ -2420,6 +2420,7 @@
 #define CHECK_OKAY_CANCEL 0x01
 #define CHECK_NO_ESCAPE   0x02
 #define CHECK_NO_HISTORY  0x04
+#define CHECK_DEFAULT_Y   0x08
 
 
 /*
