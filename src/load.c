@@ -1949,14 +1949,21 @@ static errr rd_dungeon(void)
 			/* Access the cave */
 			c_ptr = &cave[y][x];
 
+			/* Extract "feat" */
+			c_ptr->feat = tmp8u;
+
 			if (c_ptr->feat == FEAT_INVIS)
 			{
 				c_ptr->feat = FEAT_FLOOR;
 				c_ptr->info |= CAVE_TRAP;
 			}
 
-			/* Extract "feat" */
-			c_ptr->feat = tmp8u;
+                        /* Older than 1.1.1 */
+			if (c_ptr->feat == FEAT_MIRROR)
+			{
+				c_ptr->feat = FEAT_FLOOR;
+				c_ptr->info |= CAVE_IN_MIRROR;
+			}
 
 			/* Advance/Wrap */
 			if (++x >= xmax)
