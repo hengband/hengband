@@ -3385,6 +3385,12 @@ msg_print("下に引きずり降ろされる感じがする！");
 				msg_print("The world changes!");
 #endif
 
+				/*
+				 * Clear all saved floors
+				 * and create a first saved floor
+				 */
+				prepare_change_floor_mode(CFM_FIRST_FLOOR);
+
 				/* Leaving */
 				p_ptr->leaving = TRUE;
 			}
