@@ -1649,9 +1649,9 @@ static void get_exp_from_mon(int dam, monster_type *m_ptr)
 
 	/* Use (average maxhp * 2) as a denominator */
 	if (!(r_ptr->flags1 & RF1_FORCE_MAXHP))
-		s64b_mul(&div_h, &div_l, 0, r_ptr->hdice * (r_ptr->hside + 1));
+		s64b_mul(&div_h, &div_l, 0, r_ptr->hdice * (ironman_nightmare ? 2 : 1) * (r_ptr->hside + 1));
 	else
-		s64b_mul(&div_h, &div_l, 0, r_ptr->hdice * r_ptr->hside * 2);
+		s64b_mul(&div_h, &div_l, 0, r_ptr->hdice * (ironman_nightmare ? 2 : 1) * r_ptr->hside * 2);
 
 	/* Special penalty in the wilderness */
 	if (!dun_level && (!(r_ptr->flags8 & RF8_WILD_ONLY) || !(r_ptr->flags1 & RF1_UNIQUE)))
