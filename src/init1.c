@@ -3430,7 +3430,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			/* Hidden trap (or door) */
 			else if (letter[idx].trap)
 			{
-				c_ptr->mimic = c_ptr->feat;
+				c_ptr->mimic = f_info[c_ptr->feat].mimic;
 				c_ptr->feat = letter[idx].trap;
 			}
 			else if (object_index)

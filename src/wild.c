@@ -760,41 +760,41 @@ void wilderness_gen(void)
 	for (i = 0; i < MAX_WID; i++)
 	{
 		cave[0][i].feat = FEAT_PERM_SOLID;
-		cave[0][i].mimic = border.north[i];
+		cave[0][i].mimic = f_info[border.north[i]].mimic;
 	}
 
 	/* Special boundary walls -- South */
 	for (i = 0; i < MAX_WID; i++)
 	{
 		cave[MAX_HGT - 1][i].feat = FEAT_PERM_SOLID;
-		cave[MAX_HGT - 1][i].mimic = border.south[i];
+		cave[MAX_HGT - 1][i].mimic = f_info[border.south[i]].mimic;
 	}
 
 	/* Special boundary walls -- West */
 	for (i = 0; i < MAX_HGT; i++)
 	{
 		cave[i][0].feat = FEAT_PERM_SOLID;
-		cave[i][0].mimic = border.west[i];
+		cave[i][0].mimic = f_info[border.west[i]].mimic;
 	}
 
 	/* Special boundary walls -- East */
 	for (i = 0; i < MAX_HGT; i++)
 	{
 		cave[i][MAX_WID - 1].feat = FEAT_PERM_SOLID;
-		cave[i][MAX_WID - 1].mimic = border.east[i];
+		cave[i][MAX_WID - 1].mimic = f_info[border.east[i]].mimic;
 	}
 
 	/* North west corner */
-	cave[0][0].mimic = border.north_west;
+	cave[0][0].mimic = f_info[border.north_west].mimic;
 
 	/* North east corner */
-	cave[0][MAX_WID - 1].mimic = border.north_east;
+	cave[0][MAX_WID - 1].mimic = f_info[border.north_east].mimic;
 
 	/* South west corner */
-	cave[MAX_HGT - 1][0].mimic = border.south_west;
+	cave[MAX_HGT - 1][0].mimic = f_info[border.south_west].mimic;
 
 	/* South east corner */
-	cave[MAX_HGT - 1][MAX_WID - 1].mimic = border.south_east;
+	cave[MAX_HGT - 1][MAX_WID - 1].mimic = f_info[border.south_east].mimic;
 
 	/* Light up or darken the area */
 	for (y = 0; y < cur_hgt; y++)

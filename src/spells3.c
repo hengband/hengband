@@ -1561,7 +1561,7 @@ static bool vanish_dungeon(void)
 		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
 		/* Set boundary mimic if needed */
-		if (c_ptr->mimic && vanishable_feat(c_ptr->mimic)) c_ptr->mimic = floor_type[randint0(100)];
+		if (c_ptr->mimic && vanishable_feat(c_ptr->mimic)) c_ptr->mimic = f_info[floor_type[randint0(100)]].mimic;
 
 		c_ptr = &cave[cur_hgt - 1][x];
 
@@ -1569,7 +1569,7 @@ static bool vanish_dungeon(void)
 		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
 		/* Set boundary mimic if needed */
-		if (c_ptr->mimic && vanishable_feat(c_ptr->mimic)) c_ptr->mimic = floor_type[randint0(100)];
+		if (c_ptr->mimic && vanishable_feat(c_ptr->mimic)) c_ptr->mimic = f_info[floor_type[randint0(100)]].mimic;
 	}
 
 	/* Special boundary walls -- Left and right */
@@ -1581,7 +1581,7 @@ static bool vanish_dungeon(void)
 		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
 		/* Set boundary mimic if needed */
-		if (c_ptr->mimic && vanishable_feat(c_ptr->mimic)) c_ptr->mimic = floor_type[randint0(100)];
+		if (c_ptr->mimic && vanishable_feat(c_ptr->mimic)) c_ptr->mimic = f_info[floor_type[randint0(100)]].mimic;
 
 		c_ptr = &cave[y][cur_wid - 1];
 
@@ -1589,7 +1589,7 @@ static bool vanish_dungeon(void)
 		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
 		/* Set boundary mimic if needed */
-		if (c_ptr->mimic && vanishable_feat(c_ptr->mimic)) c_ptr->mimic = floor_type[randint0(100)];
+		if (c_ptr->mimic && vanishable_feat(c_ptr->mimic)) c_ptr->mimic = f_info[floor_type[randint0(100)]].mimic;
 	}
 
 	/* Mega-Hack -- Forget the view and lite */
@@ -1893,7 +1893,7 @@ msg_print("床上のアイテムが呪文を跳ね返した。");
 
 	/* Create a glyph */
 	cave[py][px].info |= CAVE_OBJECT;
-	cave[py][px].mimic = FEAT_GLYPH;
+	cave[py][px].mimic = f_info[FEAT_GLYPH].mimic;
 
 	/* Notice */
 	note_spot(py, px);
@@ -1920,7 +1920,7 @@ msg_print("床上のアイテムが呪文を跳ね返した。");
 
 	/* Create a mirror */
 	cave[py][px].info |= CAVE_OBJECT;
-	cave[py][px].mimic = FEAT_MIRROR;
+	cave[py][px].mimic = f_info[FEAT_MIRROR].mimic;
 
 	/* Turn on the light */
 	cave[py][px].info |= CAVE_GLOW;
@@ -1954,7 +1954,7 @@ msg_print("床上のアイテムが呪文を跳ね返した。");
 
 	/* Create a glyph */
 	cave[py][px].info |= CAVE_OBJECT;
-	cave[py][px].mimic = FEAT_MINOR_GLYPH;
+	cave[py][px].mimic = f_info[FEAT_MINOR_GLYPH].mimic;
 
 	/* Notice */
 	note_spot(py, px);
