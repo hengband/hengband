@@ -2678,6 +2678,19 @@
 #define MD_TRUE_NAME      0x00000100 /* Chameleon's true name */
 #define MD_IGNORE_HALLU   0x00000200 /* Ignore hallucination, and penetrate shape change */
 
+
+/*
+ * Bit flags for object_desc()
+ */
+#define OD_NAME_ONLY        0x00000001  /* Omit values, pval, inscription */
+#define OD_NAME_AND_ENCHANT 0x00000002  /* Omit pval, inscription */
+#define OD_OMIT_INSCRIPTION 0x00000004  /* Omit inscription */
+#define OD_OMIT_PREFIX      0x00000008  /* Omit numeric prefix */
+#define OD_NO_PLURAL        0x00000010  /* Don't use plural */
+#define OD_STORE            0x00000020  /* Assume to be aware and known */
+#define OD_NO_FLAVOR        0x00000040  /* Allow to hidden flavor */
+
+
 /*
  * Bit flags for the "p_ptr->special_attack" variable. -LM-
  *
@@ -2991,7 +3004,7 @@
 #define IDENT_FIXED     0x02    /* Item has been "haggled" */
 #define IDENT_EMPTY     0x04    /* Item charges are known */
 #define IDENT_KNOWN     0x08    /* Item abilities are known */
-#define IDENT_STOREB    0x10    /* Item is storebought !!!! */
+#define IDENT_STORE     0x10    /* Item is storebought !!!! */
 #define IDENT_MENTAL    0x20    /* Item information is known */
 #if 0
 #define IDENT_CURSED    0x40    /* Item is temporarily cursed */

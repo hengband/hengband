@@ -129,7 +129,7 @@ static bool do_cmd_archer(void)
 
 			(void)inven_carry(q_ptr);
 
-			object_desc(o_name, q_ptr, TRUE, 2);
+			object_desc(o_name, q_ptr, 0);
 #ifdef JP
 			msg_format("岩石を削って%sを作った。",o_name);
 #else
@@ -192,7 +192,7 @@ static bool do_cmd_archer(void)
 
 		q_ptr->discount = 99;
 
-		object_desc(o_name, q_ptr, TRUE, 2);
+		object_desc(o_name, q_ptr, 0);
 #ifdef JP
 		msg_format("%sを作った。", o_name);
 #else
@@ -256,7 +256,7 @@ static bool do_cmd_archer(void)
 
 		q_ptr->discount = 99;
 
-		object_desc(o_name, q_ptr, TRUE, 2);
+		object_desc(o_name, q_ptr, 0);
 #ifdef JP
 		msg_format("%sを作った。", o_name);
 #else
@@ -380,7 +380,7 @@ s = "魔力を取り込めるアイテムがない。";
 		}
 	}
 
-	object_desc(o_name, o_ptr, TRUE, 3);
+	object_desc(o_name, o_ptr, 0);
 	/* Message */
 #ifdef JP
 	msg_format("%sの魔力を取り込んだ。", o_name);

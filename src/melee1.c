@@ -995,7 +995,7 @@ bool make_attack_normal(int m_idx)
 						if (artifact_p(o_ptr) || o_ptr->art_name) continue;
 
 						/* Get a description */
-						object_desc(o_name, o_ptr, FALSE, 3);
+						object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
 
 						/* Message */
 #ifdef JP
@@ -1091,7 +1091,7 @@ bool make_attack_normal(int m_idx)
 						if ((o_ptr->tval != TV_FOOD) && !((o_ptr->tval == TV_CORPSE) && (o_ptr->sval))) continue;
 
 						/* Get a description */
-						object_desc(o_name, o_ptr, FALSE, 0);
+						object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 						/* Message */
 #ifdef JP

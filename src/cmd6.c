@@ -528,7 +528,7 @@ msg_print("あなたの飢えは新鮮な血によってのみ満たされる！");
 		/* Drain vitality of humanoids */
 		char o_name[MAX_NLEN];
 
-		object_desc(o_name, o_ptr, FALSE, 0);
+		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 #ifdef JP
 		msg_format("%sは燃え上り灰になった。精力を吸収した気がする。", o_name);
@@ -2174,7 +2174,7 @@ msg_print("巻物は煙を立てて消え去った！");
 		q=format("book-%d_jp.txt",o_ptr->sval);
 
 		/* Display object description */
-		object_desc(o_name, o_ptr, TRUE, 0);
+		object_desc(o_name, o_ptr, OD_NAME_ONLY);
 
 		/* Build the filename */
 		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, q);

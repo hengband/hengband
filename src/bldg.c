@@ -2229,7 +2229,7 @@ static bool kankin(void)
 		if ((o_ptr->tval == TV_CAPTURE) && (o_ptr->pval == MON_TSUCHINOKO))
 		{
 			char buf[MAX_NLEN+20];
-			object_desc(o_name, o_ptr, TRUE, 3);
+			object_desc(o_name, o_ptr, 0);
 #ifdef JP
 			sprintf(buf, "%s を換金しますか？",o_name);
 #else
@@ -2260,7 +2260,7 @@ static bool kankin(void)
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (o_ptr->pval == MON_TSUCHINOKO))
 		{
 			char buf[MAX_NLEN+20];
-			object_desc(o_name, o_ptr, TRUE, 3);
+			object_desc(o_name, o_ptr, 0);
 #ifdef JP
 			sprintf(buf, "%s を換金しますか？",o_name);
 #else
@@ -2291,7 +2291,7 @@ static bool kankin(void)
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON) && (o_ptr->pval == MON_TSUCHINOKO))
 		{
 			char buf[MAX_NLEN+20];
-			object_desc(o_name, o_ptr, TRUE, 3);
+			object_desc(o_name, o_ptr, 0);
 #ifdef JP
 			sprintf(buf, "%s を換金しますか？",o_name);
 #else
@@ -2320,7 +2320,7 @@ static bool kankin(void)
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name)))
 		{
 			char buf[MAX_NLEN+20];
-			object_desc(o_name, o_ptr, TRUE, 3);
+			object_desc(o_name, o_ptr, 0);
 #ifdef JP
 			sprintf(buf, "%s を換金しますか？",o_name);
 #else
@@ -2350,7 +2350,7 @@ static bool kankin(void)
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON) && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name)))
 		{
 			char buf[MAX_NLEN+20];
-			object_desc(o_name, o_ptr, TRUE, 3);
+			object_desc(o_name, o_ptr, 0);
 #ifdef JP
 			sprintf(buf, "%s を換金しますか？",o_name);
 #else
@@ -2385,7 +2385,7 @@ static bool kankin(void)
 				int num, k;
 				object_type forge;
 
-				object_desc(o_name, o_ptr, TRUE, 3);
+				object_desc(o_name, o_ptr, 0);
 #ifdef JP
 				sprintf(buf, "%sを渡しますか？",o_name);
 #else
@@ -2446,7 +2446,7 @@ static bool kankin(void)
 				(void)inven_carry(&forge);
 
 				/* Describe the object */
-				object_desc(o_name, &forge, TRUE, 3);
+				object_desc(o_name, &forge, 0);
 #ifdef JP
 				msg_format("%s を貰った。",o_name);
 #else
@@ -3258,7 +3258,7 @@ static void list_weapon(object_type *o_ptr, int row, int col)
 	int eff_ds = o_ptr->ds + p_ptr->to_ds[0];
 
 	/* Print the weapon name */
-	object_desc(o_name, o_ptr, TRUE, 0);
+	object_desc(o_name, o_ptr, OD_NAME_ONLY);
 	c_put_str(TERM_YELLOW, o_name, row, col);
 
 	/* Print the player's number of blows */
@@ -3641,7 +3641,7 @@ s = "改良できるものがありません。";
 	/* Check if the player has enough money */
 	if (p_ptr->au < (cost * o_ptr->number))
 	{
-		object_desc(tmp_str, o_ptr, TRUE, 0);
+		object_desc(tmp_str, o_ptr, OD_NAME_ONLY);
 #ifdef JP
 msg_format("%sを改良するだけのゴールドがありません！", tmp_str);
 #else
@@ -3708,7 +3708,7 @@ msg_print("改良に失敗した。");
 	}
 	else
 	{
-		object_desc(tmp_str, o_ptr, TRUE, 1);
+		object_desc(tmp_str, o_ptr, OD_NAME_AND_ENCHANT);
 #ifdef JP
 msg_format("＄%d で%sを改良しました。", cost * o_ptr->number, tmp_str );
 #else
@@ -3816,7 +3816,7 @@ get_check("＄50で鑑定しますか？ "))
 			identify_item(o_ptr);
 
 			/* Description */
-			object_desc(tmp_str, o_ptr, TRUE, 3);
+			object_desc(tmp_str, o_ptr, 0);
 
 #ifdef JP
 msg_format("%s です。", tmp_str);
@@ -3923,7 +3923,7 @@ msg_print("この杖はもう充分に充填されています。");
 	/* Check if the player has enough money */
 	if (p_ptr->au < price)
 	{
-		object_desc(tmp_str, o_ptr, TRUE, 0);
+		object_desc(tmp_str, o_ptr, OD_NAME_ONLY);
 #ifdef JP
 msg_format("%sを再充填するには＄%d 必要です！", tmp_str,price );
 #else
@@ -3982,7 +3982,7 @@ charges = get_quantity(format("一回分＄%d で何回分充填しますか？",
 	}
 
 	/* Give feedback */
-	object_desc(tmp_str, o_ptr, TRUE, 3);
+	object_desc(tmp_str, o_ptr, 0);
 #ifdef JP
 msg_format("%sを＄%d で再充填しました。", tmp_str, price);
 #else

@@ -4812,7 +4812,7 @@ static void dump_aux_equipment_inventory(FILE *fff)
 
 		for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 		{
-			object_desc(o_name, &inventory[i], TRUE, 3);
+			object_desc(o_name, &inventory[i], 0);
 			if ((i == INVEN_LARM) && p_ptr->ryoute)
 #ifdef JP
 				strcpy(o_name, "(武器を両手持ち)");
@@ -4839,7 +4839,7 @@ static void dump_aux_equipment_inventory(FILE *fff)
 		if (!inventory[i].k_idx) break;
 
 		/* Dump the inventory slots */
-		object_desc(o_name, &inventory[i], TRUE, 3);
+		object_desc(o_name, &inventory[i], 0);
 		fprintf(fff, "%c) %s\n", index_to_label(i), o_name);
 	}
 
@@ -4883,7 +4883,7 @@ static void dump_aux_home_museum(FILE *fff)
 #else
 				fprintf(fff, "\n ( page %d )\n", x++);
 #endif
-			object_desc(o_name, &st_ptr->stock[i], TRUE, 3);
+			object_desc(o_name, &st_ptr->stock[i], 0);
 			fprintf(fff, "%c) %s\n", I2A(i%12), o_name);
 		}
 
@@ -4912,11 +4912,11 @@ static void dump_aux_home_museum(FILE *fff)
 		{
 #ifdef JP
 		if ((i % 12) == 0) fprintf(fff, "\n ( %d ページ )\n", x++);
-			object_desc(o_name, &st_ptr->stock[i], TRUE, 3);
+			object_desc(o_name, &st_ptr->stock[i], 0);
 			fprintf(fff, "%c) %s\n", I2A(i%12), o_name);
 #else
 		if ((i % 12) == 0) fprintf(fff, "\n ( page %d )\n", x++);
-			object_desc(o_name, &st_ptr->stock[i], TRUE, 3);
+			object_desc(o_name, &st_ptr->stock[i], 0);
 			fprintf(fff, "%c) %s\n", I2A(i%12), o_name);
 #endif
 
@@ -6785,7 +6785,7 @@ prt("持っていたアイテム: -続く-", 0, 0);
 					prt(tmp_val, j+2, 4);
 
 					/* Display object description */
-					object_desc(o_name, o_ptr, TRUE, 3);
+					object_desc(o_name, o_ptr, 0);
 					c_put_str(tval_to_attr[o_ptr->tval], o_name, j+2, 7);
 				}
 

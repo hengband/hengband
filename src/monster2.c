@@ -3329,7 +3329,7 @@ msg_print("守りのルーンが壊れた！");
 			o_ptr = choose_warning_item();
 			if (o_ptr)
 			{
-				object_desc(o_name, o_ptr, FALSE, 0);
+				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
 				msg_format("%sは%s光った。", o_name, color);
 #else

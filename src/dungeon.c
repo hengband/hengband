@@ -162,7 +162,7 @@ static void sense_inventory_aux(int slot, bool heavy)
 	if (disturb_minor) disturb(0, 0);
 
 	/* Get an object description */
-	object_desc(o_name, o_ptr, FALSE, 0);
+	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	/* Message (equipment) */
 	if (slot >= INVEN_RARM)
@@ -1561,7 +1561,7 @@ msg_print("何も新しいことは判らなかった。");
 	feel = value_check_aux1(o_ptr);
 
 	/* Get an object description */
-	object_desc(o_name, o_ptr, FALSE, 0);
+	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	/* Skip non-feelings */
 	if (!feel)
@@ -1753,7 +1753,7 @@ static void recharged_notice(object_type *o_ptr)
 		if (s[1] == '!')
 		{
 			/* Describe (briefly) */
-			object_desc(o_name, o_ptr, FALSE, 0);
+			object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 			/* Notify the player */
 #ifdef JP
@@ -2258,7 +2258,7 @@ take_hit(DAMAGE_NOESCAPE, 1, "日光", -1);
 			char ouch [MAX_NLEN+40];
 
 			/* Get an object description */
-			object_desc(o_name, o_ptr, FALSE, 0);
+			object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 #ifdef JP
 msg_format("%sがあなたのアンデッドの肉体を焼き焦がした！", o_name);
@@ -2270,7 +2270,7 @@ msg_format("%sがあなたのアンデッドの肉体を焼き焦がした！", o_name);
 			cave_no_regen = TRUE;
 
 			/* Get an object description */
-			object_desc(o_name, o_ptr, TRUE, 0);
+			object_desc(o_name, o_ptr, OD_NAME_ONLY);
 
 #ifdef JP
 sprintf(ouch, "%sを装備したダメージ", o_name);
@@ -3818,7 +3818,7 @@ if (!get_rnd_line("chainswd_j.txt", 0, noise))
 			{
 				char o_name[MAX_NLEN];
 
-				object_desc(o_name, o_ptr, FALSE, 0);
+				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 				o_ptr->curse_flags |= new_curse;
 #ifdef JP
@@ -3845,7 +3845,7 @@ msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
 			{
 				char o_name[MAX_NLEN];
 
-				object_desc(o_name, o_ptr, FALSE, 0);
+				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 				o_ptr->curse_flags |= new_curse;
 #ifdef JP
@@ -3867,7 +3867,7 @@ msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
 			{
 				char o_name[MAX_NLEN];
 
-				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_ANIMAL), FALSE, 0);
+				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_ANIMAL), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
 msg_format("%sが動物を引き寄せた！", o_name);
 #else
@@ -3884,7 +3884,7 @@ msg_format("%sが動物を引き寄せた！", o_name);
 			{
 				char o_name[MAX_NLEN];
 
-				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DEMON), FALSE, 0);
+				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DEMON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
 msg_format("%sが悪魔を引き寄せた！", o_name);
 #else
@@ -3902,7 +3902,7 @@ msg_format("%sが悪魔を引き寄せた！", o_name);
 			{
 				char o_name[MAX_NLEN];
 
-				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DRAGON), FALSE, 0);
+				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DRAGON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
 msg_format("%sがドラゴンを引き寄せた！", o_name);
 #else
@@ -3939,7 +3939,7 @@ msg_print("とても暗い... とても恐い！");
 		{
 			char o_name[MAX_NLEN];
 
-			object_desc(o_name, choose_cursed_obj_name(TRC_DRAIN_HP), FALSE, 0);
+			object_desc(o_name, choose_cursed_obj_name(TRC_DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
 msg_format("%sはあなたの体力を吸収した！", o_name);
 #else
@@ -3952,7 +3952,7 @@ msg_format("%sはあなたの体力を吸収した！", o_name);
 		{
 			char o_name[MAX_NLEN];
 
-			object_desc(o_name, choose_cursed_obj_name(TRC_DRAIN_MANA), FALSE, 0);
+			object_desc(o_name, choose_cursed_obj_name(TRC_DRAIN_MANA), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
 msg_format("%sはあなたの魔力を吸収した！", o_name);
 #else
@@ -5835,7 +5835,7 @@ msg_print("ザックからアイテムがあふれた！");
 
 
 			/* Describe */
-			object_desc(o_name, o_ptr, TRUE, 3);
+			object_desc(o_name, o_ptr, 0);
 
 			/* Message */
 #ifdef JP

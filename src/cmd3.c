@@ -284,7 +284,7 @@ void do_cmd_wield(void)
 				object_type *otmp_ptr = &object_tmp;
 				char ol_name[MAX_NLEN];
 
-				object_desc(ol_name, ol_ptr, FALSE, 0);
+				object_desc(ol_name, ol_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 				object_copy(otmp_ptr, ol_ptr);
 				object_copy(ol_ptr, or_ptr);
@@ -360,7 +360,7 @@ void do_cmd_wield(void)
 	if (cursed_p(&inventory[slot]))
 	{
 		/* Describe it */
-		object_desc(o_name, &inventory[slot], FALSE, 0);
+		object_desc(o_name, &inventory[slot], (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 		/* Message */
 #ifdef JP
@@ -381,7 +381,7 @@ void do_cmd_wield(void)
 		char dummy[MAX_NLEN+80];
 
 		/* Describe it */
-		object_desc(o_name, o_ptr, FALSE, 0);
+		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 #ifdef JP
 sprintf(dummy, "本当に%s{呪われている}を使いますか？", o_name);
@@ -397,7 +397,7 @@ sprintf(dummy, "本当に%s{呪われている}を使いますか？", o_name);
 		char dummy[MAX_NLEN+80];
 
 		/* Describe it */
-		object_desc(o_name, o_ptr, FALSE, 0);
+		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 #ifdef JP
 sprintf(dummy, "%sを装備すると吸血鬼になります。よろしいですか？", o_name);
@@ -534,7 +534,7 @@ msg_print("クエストを達成した！");
 	}
 
 	/* Describe the result */
-	object_desc(o_name, o_ptr, TRUE, 3);
+	object_desc(o_name, o_ptr, 0);
 
 	/* Message */
 	msg_format(act, o_name, index_to_label(slot));
@@ -595,7 +595,7 @@ void kamaenaoshi(int item)
 		p_ptr->total_weight += o2_ptr->weight;
 		inven_item_increase(INVEN_LARM,-1);
 		inven_item_optimize(INVEN_LARM);
-		object_desc(o_name, o_ptr, TRUE, 3);
+		object_desc(o_name, o_ptr, 0);
 		if (((o_ptr->weight > 99) || (o_ptr->tval == TV_POLEARM)) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
 #ifdef JP
 			msg_format("%sを両手で構えた。", o_name );
@@ -614,7 +614,7 @@ void kamaenaoshi(int item)
 		if (buki_motteruka(INVEN_RARM))
 		{
 			o_ptr = &inventory[INVEN_RARM];
-			object_desc(o_name, o_ptr, TRUE, 3);
+			object_desc(o_name, o_ptr, 0);
 			if (((o_ptr->weight > 99) || (o_ptr->tval == TV_POLEARM)) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
 #ifdef JP
 				msg_format("%sを両手で構えた。", o_name );
@@ -630,7 +630,7 @@ void kamaenaoshi(int item)
 			p_ptr->total_weight += o2_ptr->weight;
 			inven_item_increase(INVEN_RARM,-1);
 			inven_item_optimize(INVEN_RARM);
-			object_desc(o_name, o_ptr, TRUE, 3);
+			object_desc(o_name, o_ptr, 0);
 #ifdef JP
 			msg_format("%sを持ち替えた。", o_name);
 #else
@@ -924,7 +924,7 @@ void do_cmd_destroy(void)
 	/* Describe the object */
 	old_number = o_ptr->number;
 	o_ptr->number = amt;
-	object_desc(o_name, o_ptr, TRUE, 3);
+	object_desc(o_name, o_ptr, 0);
 	o_ptr->number = old_number;
 
 	/* Verify unless quantity given */
@@ -1151,7 +1151,7 @@ void do_cmd_observe(void)
 
 
 	/* Description */
-	object_desc(o_name, o_ptr, TRUE, 3);
+	object_desc(o_name, o_ptr, 0);
 
 	/* Describe */
 #ifdef JP
@@ -1282,7 +1282,7 @@ void do_cmd_inscribe(void)
 	}
 
 	/* Describe the activity */
-	object_desc(o_name, o_ptr, TRUE, 2);
+	object_desc(o_name, o_ptr, OD_OMIT_INSCRIPTION);
 
 	/* Message */
 #ifdef JP

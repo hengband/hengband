@@ -1648,18 +1648,24 @@ static void get_inscription(char *buff, object_type *o_ptr)
  *
  * Hack -- Display "The One Ring" as "a Plain Gold Ring" until aware.
  *
- * If "pref" then a "numeric" prefix will be pre-pended.
- *
  * Mode:
- *   0 -- The Cloak of Death
- *   1 -- The Cloak of Death [1,+3]
- *   2 -- The Cloak of Death [1,+3] (+2 to Stealth)
- *   3 -- The Cloak of Death [1,+3] (+2 to Stealth) {nifty}
+ *   OD_NAME_ONLY        : The Cloak of Death
+ *   OD_NAME_AND_ENCHANT : The Cloak of Death [1,+3]
+ *   OD_OMIT_INSCRIPTION : The Cloak of Death [1,+3] (+2 to Stealth)
+ *   0                   : The Cloak of Death [1,+3] (+2 to Stealth) {nifty}
+ *
+ *   OD_OMIT_PREFIX      : Forbidden numeric prefix
+ *   OD_NO_PLURAL        : Forbidden use of plural 
+ *   OD_STORE            : Assume to be aware and known
+ *   OD_NO_FLAVOR        : Allow to hidden flavor
  */
-void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
+void object_desc(char *buf, object_type *o_ptr, u32b mode)
 {
+	/* Extract object kind name */
+	cptr            kindname = get_object_name(o_ptr);
+
 	/* Extract default "base" string */
-	cptr            basenm = get_object_name(o_ptr);
+	cptr            basenm = kindname;
 
 	/* Assume no "modifier" string */
 	cptr            modstr = "";
@@ -1667,19 +1673,16 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 	/* Hack -- Extract the sub-type "indexx" */
 	int             indexx = o_ptr->sval;
 
-	int             power, i;
+	int             power;
 
 	bool            aware = FALSE;
 	bool            known = FALSE;
-
-#ifndef JP
-	bool            append_name = FALSE;
-#endif
+	bool            flavor = TRUE;
 
 	bool            show_weapon = FALSE;
 	bool            show_armour = FALSE;
 
-	cptr            s, u;
+	cptr            s;
 	char            *t;
 
 	char            p1 = '(', p2 = ')';
@@ -1688,7 +1691,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 	char            tmp_val[MAX_NLEN+160];
 	char            tmp_val2[MAX_NLEN+10];
-	char            insc_buf[1024];
+	char            fake_insc_buf[30];
 
 	u32b flgs[TR_FLAG_SIZE];
 
@@ -1700,11 +1703,24 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 	object_flags(o_ptr, flgs);
 
 	/* See if the object is "aware" */
-	if (object_aware_p(o_ptr) || (o_ptr->ident & IDENT_MENTAL)) aware = TRUE;
+	if (object_aware_p(o_ptr)) aware = TRUE;
 
 	/* See if the object is "known" */
 	if (object_known_p(o_ptr)) known = TRUE;
 
+	/* Allow flavors to be hidden when aware */
+	if (aware && ((mode & OD_NO_FLAVOR) || plain_descriptions)) flavor = FALSE;
+
+	/* Object is in the inventory of a store or spoiler */
+	if ((mode & OD_STORE) || (o_ptr->ident & IDENT_STORE))
+	{
+		/* Don't show flavors */
+		flavor = FALSE;
+
+		/* Pretend known and aware */
+		aware = TRUE;
+		known = TRUE;
+	}
 
 	/* Analyze the object */
 	switch (o_ptr->tval)
@@ -1795,22 +1811,15 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 			modstr = r_name + r_ptr->name;
 
-
 #ifdef JP
-			sprintf(tmp_val2, "#%s", basenm);
+			basenm = "#%";
 #else
 			if (r_ptr->flags1 & RF1_UNIQUE)
-			{
-				sprintf(tmp_val2, "& %s %s", basenm, "of #");
-			}
+				basenm = "& % of #";
 			else
-			{
-				sprintf(tmp_val2, "& # %s", basenm);
-			}
+				basenm = "& # %";
 #endif
 
-
-			basenm = tmp_val2;
 			break;
 		}
 
@@ -1864,17 +1873,14 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			/* Color the object */
 			modstr = amulet_adj[indexx];
 
-			if ((plain_descriptions && aware) || (o_ptr->ident & IDENT_STOREB))
 #ifdef JP
-				basenm = aware ? "%のアミュレット" : "アミュレット";
-			else
-				basenm = aware ? "#%のアミュレット" : "#アミュレット";
+                        if (!flavor)    basenm = "%のアミュレット";
+                        else if (aware) basenm = "%の#アミュレット";
+                        else            basenm = "#アミュレット";
 #else
-				basenm = "& Amulet~";
-			else
-				basenm = aware ? "& # Amulet~" : "& # Amulet~";
-
-			if (aware) append_name = TRUE;
+                        if (!flavor)    basenm = "& Amulet~ of %";
+                        else if (aware) basenm = "& # Amulet~ of %";
+                        else            basenm = "& # Amulet~";
 #endif
 
 			break;
@@ -1893,17 +1899,14 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			/* Color the object */
 			modstr = ring_adj[indexx];
 
-			if ((plain_descriptions && aware) || (o_ptr->ident & IDENT_STOREB))
 #ifdef JP
-				basenm = aware ? "%の指輪" : "指輪";
-			else
-				basenm = aware ? "#%の指輪" : "#指輪";
+                        if (!flavor)    basenm = "%の指輪";
+                        else if (aware) basenm = "%の#指輪";
+                        else            basenm = "#指輪";
 #else
-				basenm = "& Ring~";
-			else
-				basenm = aware ? "& # Ring~" : "& # Ring~";
-
-			if (aware) append_name = TRUE;
+                        if (!flavor)    basenm = "& Ring~ of %";
+                        else if (aware) basenm = "& # Ring~ of %";
+                        else            basenm = "& # Ring~";
 #endif
 
 			if (!k_ptr->to_h && !k_ptr->to_d && (o_ptr->to_h || o_ptr->to_d)) show_weapon = TRUE;
@@ -1921,17 +1924,14 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			/* Color the object */
 			modstr = staff_adj[indexx];
 
-			if ((plain_descriptions && aware) || (o_ptr->ident & IDENT_STOREB))
 #ifdef JP
-				basenm = aware ? "%の杖" : "杖";
-			else
-				basenm = aware ? "#%の杖" : "#杖";
+                        if (!flavor)    basenm = "%の杖";
+                        else if (aware) basenm = "%の#杖";
+                        else            basenm = "#杖";
 #else
-				basenm = "& Staff~";
-			else
-				basenm = aware ? "& # Staff~" : "& # Staff~";
-
-			if (aware) append_name = TRUE;
+                        if (!flavor)    basenm = "& Staff~ of %";
+                        else if (aware) basenm = "& # Staff~ of %";
+                        else            basenm = "& # Staff~";
 #endif
 
 			break;
@@ -1942,17 +1942,14 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			/* Color the object */
 			modstr = wand_adj[indexx];
 
-			if ((plain_descriptions && aware) || (o_ptr->ident & IDENT_STOREB))
 #ifdef JP
-				basenm = aware? "%の魔法棒":"魔法棒";
-			else
-				basenm = aware ? "#%の魔法棒" : "#魔法棒";
+                        if (!flavor)    basenm = "%の魔法棒";
+                        else if (aware) basenm = "%の#魔法棒";
+                        else            basenm = "#魔法棒";
 #else
-				basenm = "& Wand~";
-			else
-				basenm = aware ? "& # Wand~" : "& # Wand~";
-
-			if (aware) append_name = TRUE;
+			if (!flavor)    basenm = "& Wand~ of %";
+			else if (aware) basenm = "& # Wand~ of %";
+			else            basenm = "& # Wand~";
 #endif
 
 			break;
@@ -1963,17 +1960,14 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			/* Color the object */
 			modstr = rod_adj[indexx];
 
-			if ((plain_descriptions && aware) || (o_ptr->ident & IDENT_STOREB))
 #ifdef JP
-				basenm = aware? "%のロッド":"ロッド";
-			else
-				basenm = aware ? "#%のロッド" : "#ロッド";
+			if (!flavor)    basenm = "%のロッド";
+			else if (aware) basenm = "%の#ロッド";
+                        else            basenm = "#ロッド";
 #else
-				basenm = "& Rod~";
-			else
-				basenm = aware ? "& # Rod~" : "& # Rod~";
-
-			if (aware) append_name = TRUE;
+                        if (!flavor)    basenm = "& Rod~ of %";
+                        else if (aware) basenm = "& # Rod~ of %";
+                        else            basenm = "& # Rod~";
 #endif
 
 			break;
@@ -1984,17 +1978,14 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			/* Color the object */
 			modstr = scroll_adj[indexx];
 
-			if ((plain_descriptions && aware) || (o_ptr->ident & IDENT_STOREB))
 #ifdef JP
-				basenm = aware ? "%の巻物" : "巻物";
-			else
-				basenm = aware ? "「#」と書かれた%の巻物" : "「#」と書かれた巻物";
+                        if (!flavor)    basenm = "%の巻物";
+                        else if (aware) basenm = "「#」と書かれた%の巻物";
+                        else            basenm = "「#」と書かれた巻物";
 #else
-				basenm = "& Scroll~";
-			else
-				basenm = aware ? "& Scroll~ titled \"#\"" : "& Scroll~ titled \"#\"";
-
-			if (aware) append_name = TRUE;
+                        if (!flavor)    basenm = "& Scroll~ of %";
+                        else if (aware) basenm = "& Scroll~ titled \"#\" of %";
+                        else            basenm = "& Scroll~ titled \"#\"";
 #endif
 
 			break;
@@ -2005,17 +1996,14 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			/* Color the object */
 			modstr = potion_adj[indexx];
 
-			if ((plain_descriptions && aware) || (o_ptr->ident & IDENT_STOREB))
 #ifdef JP
-				basenm = aware ? "%の薬" : "薬";
-			else
-				basenm = aware ? "#%の薬" : "#薬";
+                        if (!flavor)    basenm = "%の薬";
+                        else if (aware) basenm = "%の#薬";
+                        else            basenm = "#薬";
 #else
-				basenm = "& Potion~";
-			else
-				basenm = aware ? "& # Potion~" : "& # Potion~";
-
-			if (aware) append_name = TRUE;
+                        if (!flavor)    basenm = "& Potion~ of %";
+                        else if (aware) basenm = "& # Potion~ of %";
+                        else            basenm = "& # Potion~";
 #endif
 
 			break;
@@ -2029,17 +2017,14 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			/* Color the object */
 			modstr = food_adj[indexx];
 
-			if ((plain_descriptions && aware) || (o_ptr->ident & IDENT_STOREB))
 #ifdef JP
-				basenm = aware ? "%のキノコ" : "キノコ";
-			else
-				basenm = aware ? "#%のキノコ" : "#キノコ";
+                        if (!flavor)    basenm = "%のキノコ";
+                        else if (aware) basenm = "%の#キノコ";
+                        else            basenm = "#キノコ";
 #else
-				basenm = "& Mushroom~";
-			else
-				basenm = aware ? "& # Mushroom~" : "& # Mushroom~";
-
-			if (aware) append_name = TRUE;
+                        if (!flavor)    basenm = "& Mushroom~ of %";
+                        else if (aware) basenm = "& # Mushroom~ of %";
+                        else            basenm = "& # Mushroom~";
 #endif
 
 			break;
@@ -2047,11 +2032,10 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 		case TV_PARCHMENT:
 		{
-			modstr = basenm;
 #ifdef JP
-			basenm = "羊皮紙 - #";
+			basenm = "羊皮紙 - %";
 #else
-			basenm = "& Parchment~ - #";
+			basenm = "& Parchment~ - %";
 #endif
 			break;
 		}
@@ -2059,14 +2043,13 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		/* Magic Books */
 		case TV_LIFE_BOOK:
 		{
-			modstr = basenm;
 #ifdef JP
-			basenm = "生命の魔法書#";
+			basenm = "生命の魔法書%";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
-				basenm = "& Book~ of Life Magic #";
+				basenm = "& Book~ of Life Magic %";
 			else
-				basenm = "& Life Spellbook~ #";
+				basenm = "& Life Spellbook~ %";
 #endif
 
 			break;
@@ -2074,14 +2057,13 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 		case TV_SORCERY_BOOK:
 		{
-			modstr = basenm;
 #ifdef JP
-			basenm = "仙術の魔法書#";
+			basenm = "仙術の魔法書%";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
-				basenm = "& Book~ of Sorcery #";
+				basenm = "& Book~ of Sorcery %";
 			else
-				basenm = "& Sorcery Spellbook~ #";
+				basenm = "& Sorcery Spellbook~ %";
 #endif
 
 			break;
@@ -2089,14 +2071,13 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 		case TV_NATURE_BOOK:
 		{
-			modstr = basenm;
 #ifdef JP
-			basenm = "自然の魔法書#";
+			basenm = "自然の魔法書%";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
-				basenm = "& Book~ of Nature Magic #";
+				basenm = "& Book~ of Nature Magic %";
 			else
-				basenm = "& Nature Spellbook~ #";
+				basenm = "& Nature Spellbook~ %";
 #endif
 
 			break;
@@ -2104,14 +2085,13 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 		case TV_CHAOS_BOOK:
 		{
-			modstr = basenm;
 #ifdef JP
-			basenm = "カオスの魔法書#";
+			basenm = "カオスの魔法書%";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
-				basenm = "& Book~ of Chaos Magic #";
+				basenm = "& Book~ of Chaos Magic %";
 			else
-				basenm = "& Chaos Spellbook~ #";
+				basenm = "& Chaos Spellbook~ %";
 #endif
 
 			break;
@@ -2119,14 +2099,13 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 		case TV_DEATH_BOOK:
 		{
-			modstr = basenm;
 #ifdef JP
-			basenm = "暗黒の魔法書#";
+			basenm = "暗黒の魔法書%";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
-				basenm = "& Book~ of Death Magic #";
+				basenm = "& Book~ of Death Magic %";
 			else
-				basenm = "& Death Spellbook~ #";
+				basenm = "& Death Spellbook~ %";
 #endif
 
 			break;
@@ -2134,14 +2113,13 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 		case TV_TRUMP_BOOK:
 		{
-			modstr = basenm;
 #ifdef JP
-			basenm = "トランプの魔法書#";
+			basenm = "トランプの魔法書%";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
-				basenm = "& Book~ of Trump Magic #";
+				basenm = "& Book~ of Trump Magic %";
 			else
-				basenm = "& Trump Spellbook~ #";
+				basenm = "& Trump Spellbook~ %";
 #endif
 
 			break;
@@ -2149,14 +2127,13 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 		case TV_ARCANE_BOOK:
 		{
-			modstr = basenm;
 #ifdef JP
-			basenm = "秘術の魔法書#";
+			basenm = "秘術の魔法書%";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
-				basenm = "& Book~ of Arcane Magic #";
+				basenm = "& Book~ of Arcane Magic %";
 			else
-				basenm = "& Arcane Spellbook~ #";
+				basenm = "& Arcane Spellbook~ %";
 #endif
 
 			break;
@@ -2164,14 +2141,13 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 		case TV_ENCHANT_BOOK:
 		{
-			modstr = basenm;
 #ifdef JP
-			basenm = "匠の魔法書#";
+			basenm = "匠の魔法書%";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
-				basenm = "& Book~ of Craft Magic #";
+				basenm = "& Book~ of Craft Magic %";
 			else
-				basenm = "& Craft Spellbook~ #";
+				basenm = "& Craft Spellbook~ %";
 #endif
 
 			break;
@@ -2179,14 +2155,13 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 		case TV_DAEMON_BOOK:
 		{
-			modstr = basenm;
 #ifdef JP
-			basenm = "悪魔の魔法書#";
+			basenm = "悪魔の魔法書%";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
-				basenm = "& Book~ of Daemon Magic #";
+				basenm = "& Book~ of Daemon Magic %";
 			else
-				basenm = "& Daemon Spellbook~ #";
+				basenm = "& Daemon Spellbook~ %";
 #endif
 
 			break;
@@ -2194,14 +2169,13 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 		case TV_CRUSADE_BOOK:
 		{
-			modstr = basenm;
 #ifdef JP
-			basenm = "破邪の魔法書#";
+			basenm = "破邪の魔法書%";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
-				basenm = "& Book~ of Crusade Magic #";
+				basenm = "& Book~ of Crusade Magic %";
 			else
-				basenm = "& Crusade Spellbook~ #";
+				basenm = "& Crusade Spellbook~ %";
 #endif
 
 			break;
@@ -2209,11 +2183,10 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 		case TV_MUSIC_BOOK:
 		{
-			modstr = basenm;
 #ifdef JP
-			basenm = "歌集#";
+			basenm = "歌集%";
 #else
-			basenm = "& Song Book~ #";
+			basenm = "& Song Book~ %";
 #endif
 
 			break;
@@ -2221,11 +2194,10 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 		case TV_HISSATSU_BOOK:
 		{
-			modstr = basenm;
 #ifdef JP
-			basenm = "& 武芸の書#";
+			basenm = "& 武芸の書%";
 #else
-			basenm = "Book~ of Kendo #";
+			basenm = "Book~ of Kendo %";
 #endif
 
 			break;
@@ -2255,10 +2227,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 	if (aware && have_flag(flgs, TR_FULL_NAME))
 	{
 		if (known && o_ptr->name1) basenm = a_name + a_info[o_ptr->name1].name;
-		else basenm = get_object_name(o_ptr);
-#ifndef JP
-		append_name = FALSE;
-#endif
+		else basenm = kindname;
 	}
 
 	/* Start dumping the result */
@@ -2271,7 +2240,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		s = basenm;
 
 	/* No prefix */
-	if (!pref)
+	if (mode & OD_OMIT_PREFIX)
 	{
 		/* Nothing */
 	}
@@ -2299,7 +2268,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		s = basenm + 2;
 
 		/* No prefix */
-		if (!pref)
+		if (mode & OD_OMIT_PREFIX)
 		{
 			/* Nothing */
 		}
@@ -2334,22 +2303,28 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			}
 		}
 
-		/* A single one, with a vowel in the modifier */
-		else if ((*s == '#') && (is_a_vowel(modstr[0])))
-		{
-			t = object_desc_str(t, "an ");
-		}
-
-		/* A single one, with a vowel */
-		else if (is_a_vowel(*s))
-		{
-			t = object_desc_str(t, "an ");
-		}
-
-		/* A single one, without a vowel */
+		/* A single one */
 		else
 		{
-			t = object_desc_str(t, "a ");
+			bool vowel;
+
+			switch (*s)
+			{
+			case '#': vowel = is_a_vowel(modstr[0]); break;
+			case '%': vowel = is_a_vowel(*kindname); break;
+			default:  vowel = is_a_vowel(*s); break;
+			}
+
+			if (vowel)
+			{
+				/* A single one, with a vowel */
+				t = object_desc_str(t, "an ");
+			}
+			else
+			{
+				/* A single one, without a vowel */
+				t = object_desc_str(t, "a ");
+			}
 		}
 	}
 
@@ -2360,7 +2335,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		s = basenm;
 
 		/* No pref */
-		if (!pref)
+		if (mode & OD_OMIT_PREFIX)
 		{
 			/* Nothing */
 		}
@@ -2407,8 +2382,8 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		/* ランダム・アーティファクト */
 		if (o_ptr->art_name)
 		{
-			char temp[256];
-			strcpy(temp, quark_str(o_ptr->art_name));
+			cptr temp = quark_str(o_ptr->art_name);
+
 			/* '『' から始まらない伝説のアイテムの名前は最初に付加する */
 			/* 英語版のセーブファイルから来た 'of XXX' は,「XXXの」と表示する */
 			if (strncmp(temp, "of ", 3) == 0)
@@ -2437,17 +2412,34 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		}
 	}
 #endif
+
 	/* Copy the string */
 	for (; *s; s++)
 	{
-		/* Pluralizer */
-#ifdef JP
+		/* Insert the modifier (flavor) */
 		if (*s == '#')
-#else
-		if (*s == '~')
+		{
+			t = object_desc_str(t, modstr);
+
+			/* Paranoia -- Never append multiple modstr's */
+			modstr = "";
+		}
+
+		/* Append kind name */
+		else if (*s == '%')
+		{
+			t = object_desc_str(t, kindname);
+
+			/* Paranoia -- Never append multiple kindname's */
+			kindname = "";
+		}
+
+#ifndef JP
+		/* Pluralizer */
+		else if (*s == '~')
 		{
 			/* Add a plural if needed */
-			if (pref && (o_ptr->number != 1))
+			if (!(mode & OD_NO_PLURAL) && (o_ptr->number != 1))
 			{
 				char k = t[-1];
 
@@ -2460,23 +2452,8 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 				*t++ = 's';
 			}
 		}
-
-		/* Modifier */
-		else if (*s == '#')
 #endif
-		{
-			/* Insert the modifier */
-			for (u = modstr; *u; u++) *t++ = *u;
-		}
 
-#ifdef JP
-		else if (*s == '%')
-		/* saigo の代わり。効能を付加する by ita */
-		{
-			modstr = get_object_name(o_ptr);
-			for (u = modstr; *u; u++) *t++ = *u;
-		}
-#endif
 		/* Normal */
 		else
 		{
@@ -2487,16 +2464,6 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 	/* Terminate */
 	*t = '\0';
-
-
-	/* Append the "kind name" to the "base name" */
-#ifndef JP
-	if (append_name)
-	{
-		t = object_desc_str(t, " of ");
-		t = object_desc_str(t, get_object_name(o_ptr));
-	}
-#endif
 
 
 #ifdef JP
@@ -2606,7 +2573,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 
 	/* No more details wanted */
-	if (mode < 1) goto copyback;
+	if (mode & OD_NAME_ONLY) goto object_desc_done;
 
 	/* Hack -- Chests must be described in detail */
 	if (o_ptr->tval == TV_CHEST)
@@ -2944,7 +2911,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 
 	/* No more details wanted */
-	if (mode < 2) goto copyback;
+	if (mode & OD_NAME_AND_ENCHANT) goto object_desc_done;
 
 
 	if (known) /* Known item only */
@@ -3130,63 +3097,11 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 
 	/* No more details wanted */
-	if (mode < 3) goto copyback;
+	if (mode & OD_OMIT_INSCRIPTION) goto object_desc_done;
 
 
-	/* No inscription yet */
+	/* Prepare real inscriptions in a buffer */
 	tmp_val2[0] = '\0';
-
-	/* Use the game-generated "feeling" otherwise, if available */
-	if (o_ptr->feeling)
-	{
-		strcpy(tmp_val2, game_inscriptions[o_ptr->feeling]);
-	}
-
-	/* Note "cursed" if the item is known to be cursed */
-	else if (cursed_p(o_ptr) && (known || (o_ptr->ident & IDENT_SENSE)))
-	{
-#ifdef JP
-		strcpy(tmp_val2, "呪われている");
-#else
-		strcpy(tmp_val2, "cursed");
-#endif
-	}
-
-	/* Note "unidentified" if the item is unidentified */
-	else if (((o_ptr->tval == TV_RING) || (o_ptr->tval == TV_AMULET)
-		   || (o_ptr->tval == TV_LITE) || (o_ptr->tval == TV_FIGURINE))
-		 && object_aware_p(o_ptr) && !known
-		 && !(o_ptr->ident & IDENT_SENSE))
-	{
-#ifdef JP
-		strcpy(tmp_val2, "未鑑定");
-#else
-		strcpy(tmp_val2, "unidentified");
-#endif
-	}
-
-	/* Mega-Hack -- note empty wands/staffs */
-	else if (!known && (o_ptr->ident & IDENT_EMPTY))
-	{
-#ifdef JP
-		strcpy(tmp_val2, "空");
-#else
-		strcpy(tmp_val2, "empty");
-#endif
-	}
-
-	/* Note "tried" if the object has been tested unsuccessfully */
-	else if (!aware && object_tried_p(o_ptr))
-	{
-#ifdef JP
-		strcpy(tmp_val2, "未判明");
-#else
-		strcpy(tmp_val2, "tried");
-#endif
-	}
-
-	/* Init inscription buffer */
-	insc_buf[0] = '\0';
 
 	/* Auto abbreviation inscribe */
 	if ((abbrev_extra || abbrev_all) && (o_ptr->ident & IDENT_MENTAL))
@@ -3202,7 +3117,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 #endif
 			all = abbrev_all;
 
-			get_ability_abbreviation(insc_buf, o_ptr, kanji, all);
+			get_ability_abbreviation(tmp_val2, o_ptr, kanji, all);
 		}
 	}
 
@@ -3211,70 +3126,118 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 	{
 		char buff[1024];
 
-		if (insc_buf[0]) strcat(insc_buf, ", ");
+		if (tmp_val2[0]) strcat(tmp_val2, ", ");
 
 		/* Get inscription and convert {%} */
 		get_inscription(buff, o_ptr);
 
 		/* strcat with correct treating of kanji */
-		my_strcat(insc_buf, buff, sizeof(insc_buf));
+		my_strcat(tmp_val2, buff, sizeof(tmp_val2));
 	}
 
 
-	/* Note the discount, if any */
-        if (o_ptr->discount &&
-	    (!insc_buf[0] || (o_ptr->ident & IDENT_STOREB)))
-	{
-		if (tmp_val2[0]) strcat(tmp_val2, ", ");
+	/* No fake inscription yet */
+	fake_insc_buf[0] = '\0';
 
-		(void)object_desc_num(tmp_val2, o_ptr->discount);
+	/* Use the game-generated "feeling" otherwise, if available */
+	if (o_ptr->feeling)
+	{
+		strcpy(fake_insc_buf, game_inscriptions[o_ptr->feeling]);
+	}
+
+	/* Note "cursed" if the item is known to be cursed */
+	else if (cursed_p(o_ptr) && (known || (o_ptr->ident & IDENT_SENSE)))
+	{
 #ifdef JP
-		strcat(tmp_val2, "%引き");
+		strcpy(fake_insc_buf, "呪われている");
 #else
-		strcat(tmp_val2, "% off");
+		strcpy(fake_insc_buf, "cursed");
 #endif
 	}
 
-	/* Add insc_buf */
-	if (insc_buf[0])
+	/* Note "unidentified" if the item is unidentified */
+	else if (((o_ptr->tval == TV_RING) || (o_ptr->tval == TV_AMULET)
+		   || (o_ptr->tval == TV_LITE) || (o_ptr->tval == TV_FIGURINE))
+		 && aware && !known
+		 && !(o_ptr->ident & IDENT_SENSE))
 	{
-		if (tmp_val2[0]) strcat(tmp_val2, ", ");
+#ifdef JP
+		strcpy(fake_insc_buf, "未鑑定");
+#else
+		strcpy(fake_insc_buf, "unidentified");
+#endif
+	}
 
-		strcat(tmp_val2, insc_buf);
+	/* Mega-Hack -- note empty wands/staffs */
+	else if (!known && (o_ptr->ident & IDENT_EMPTY))
+	{
+#ifdef JP
+		strcpy(fake_insc_buf, "空");
+#else
+		strcpy(fake_insc_buf, "empty");
+#endif
+	}
+
+	/* Note "tried" if the object has been tested unsuccessfully */
+	else if (!aware && object_tried_p(o_ptr))
+	{
+#ifdef JP
+		strcpy(fake_insc_buf, "未判明");
+#else
+		strcpy(fake_insc_buf, "tried");
+#endif
+	}
+
+	/* Note the discount, if any */
+        if (o_ptr->discount)
+	{
+		/* Hidden by real inscription unless in a store */
+		if (!tmp_val2[0] || (o_ptr->ident & IDENT_STORE))
+		{
+			/* Append to other fake inscriptions if any */
+			if (fake_insc_buf[0]) strcat(fake_insc_buf, ", ");
+
+			(void)object_desc_num(fake_insc_buf, o_ptr->discount);
+#ifdef JP
+			strcat(fake_insc_buf, "%引き");
+#else
+			strcat(fake_insc_buf, "% off");
+#endif
+		}
 	}
 
 
 	/* Append the inscription, if any */
-	if (tmp_val2[0])
+	if (fake_insc_buf[0] || tmp_val2[0])
 	{
 		/* Append the inscription */
 		t = object_desc_chr(t, ' ');
 		t = object_desc_chr(t, c1);
-		t = object_desc_str(t, tmp_val2);
+
+		/* Append fake inscriptions */
+		if (fake_insc_buf[0])
+		{
+			t = object_desc_str(t, fake_insc_buf);
+		}
+
+		/* Append a separater */
+		if (fake_insc_buf[0] && tmp_val2[0])
+		{
+			t = object_desc_chr(t, ',');
+			t = object_desc_chr(t, ' ');
+		}
+
+		/* Append real inscriptions */
+		if (tmp_val2[0])
+		{
+			t = object_desc_str(t, tmp_val2);
+		}
+
 		t = object_desc_chr(t, c2);
 	}
 
-copyback:
-	t = tmp_val;
-	for (i = 0; i < MAX_NLEN - 2; i++)
-	{
-#ifdef JP
-		if (iskanji(*(t + i)))
-		{
-			*(buf + i) = *(t + i);
-			i++;
-		}
-#endif
-		*(buf + i) = *(t + i);
-	}
-	if (i == MAX_NLEN - 2)
-	{
-#ifdef JP
-		if (iskanji(*(t + i)))
-			*(buf + i) = '\0';
-		else
-#endif
-			*(buf + i) = *(t + i);
-	}
-	*(buf + MAX_NLEN - 1) = '\0';
+object_desc_done:
+	my_strcpy(buf, tmp_val, MAX_NLEN);
 }
+
+

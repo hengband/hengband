@@ -818,7 +818,7 @@ extern u32b counts_read(int where);
 extern void get_table_name(char *out_string);
 extern void flavor_init(void);
 extern char *object_desc_kosuu(char *t, object_type *o_ptr);
-extern void object_desc(char *buf, object_type *o_ptr, int pref, int mode);
+extern void object_desc(char *buf, object_type *o_ptr, u32b mode);
 
 /* floors.c */
 extern void init_saved_floors(bool force);
@@ -926,7 +926,6 @@ extern s16b m_bonus(int max, int level);
 extern void reset_visuals(void);
 extern void object_flags(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE]);
 extern void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE]);
-extern void object_desc_store(char *buf, object_type *o_ptr, int pref, int mode);
 extern cptr item_activation(object_type *o_ptr);
 extern bool screen_object(object_type *o_ptr, bool real);
 extern char index_to_label(int i);

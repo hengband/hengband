@@ -5599,7 +5599,7 @@ static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr, int *j, by
 	    || o_ptr->art_name || o_ptr->name1)
 	{
 		int i = 0;
-		object_desc(o_name, o_ptr, TRUE, 0);
+		object_desc(o_name, o_ptr, OD_NAME_ONLY);
 
 		while (o_name[i] && (i < 26))
 		{
@@ -6355,8 +6355,11 @@ static void do_cmd_knowledge_artifacts(void)
 			/* Make it an artifact */
 			q_ptr->name1 = (byte)who[k];
 
+			/* Display as if known */
+			q_ptr->ident |= IDENT_STORE;
+
 			/* Describe the artifact */
-			object_desc_store(base_name, q_ptr, FALSE, 0);
+			object_desc(base_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 		}
 
 		/* Hack -- Build the artifact name */
@@ -9016,7 +9019,7 @@ static void do_cmd_knowledge_home(void)
 			{
 #ifdef JP
 				if ((i % 12) == 0) fprintf(fff, "\n ( %d ¥Ú¡¼¥¸ )\n", x++);
-				object_desc(o_name, &st_ptr->stock[i], TRUE, 3);
+				object_desc(o_name, &st_ptr->stock[i], 0);
 				if (strlen(o_name) <= 80-3)
 				{
 					fprintf(fff, "%c%s %s\n", I2A(i%12), paren, o_name);
@@ -9033,7 +9036,7 @@ static void do_cmd_knowledge_home(void)
 					fprintf(fff, "   %.77s\n", o_name+n);
 				}
 #else
-				object_desc(o_name, &st_ptr->stock[i], TRUE, 3);
+				object_desc(o_name, &st_ptr->stock[i], 0);
 				fprintf(fff, "%c%s %s\n", I2A(i%12), paren, o_name);
 #endif
 

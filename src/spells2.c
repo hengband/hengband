@@ -5446,7 +5446,7 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
 						if (in_generate && cheat_peek)
 						{
 							char o_name[MAX_NLEN];
-							object_desc_store(o_name, o_ptr, FALSE, 0);
+							object_desc(o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
 #ifdef JP
 							msg_format("伝説のアイテム (%s) は生成中に*破壊*された。", o_name);
 #else

@@ -791,7 +791,7 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 	{
 		char o_name[MAX_NLEN];
 
-		object_desc(o_name, o_ptr, FALSE, 0);
+		object_desc(o_name, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL | OD_NAME_ONLY));
 
 		/*
 		 * If necessary, add a '^' which indicates the
@@ -1497,7 +1497,7 @@ int is_autopick(object_type *o_ptr)
 	if (o_ptr->tval == TV_GOLD) return -1;
 
 	/* Prepare object name string first */
-	object_desc(o_name, o_ptr, FALSE, 3);
+	object_desc(o_name, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
 
 	/* Convert the string to lower case */
 	str_tolower(o_name);
@@ -1642,7 +1642,7 @@ static void auto_destroy_item(object_type *o_ptr, int autopick_idx)
 		char o_name[MAX_NLEN];
 
 		/* Describe the object (with {terrible/special}) */
-		object_desc(o_name, o_ptr, TRUE, 3);
+		object_desc(o_name, o_ptr, 0);
 
 		/* Message */
 #ifdef JP
@@ -1684,7 +1684,7 @@ static void autopick_delayed_alter_aux(int item)
 		char o_name[MAX_NLEN];
 
 		/* Describe the object (with {terrible/special}) */
-		object_desc(o_name, o_ptr, TRUE, 3);
+		object_desc(o_name, o_ptr, 0);
 
 		/* Eliminate the item (from the pack) */
 		if (item >= 0)
@@ -1796,7 +1796,7 @@ void autopick_pickup_items(cave_type *c_ptr)
 				char o_name[MAX_NLEN];
 
 				/* Describe the object */
-				object_desc(o_name, o_ptr, TRUE, 3);
+				object_desc(o_name, o_ptr, 0);
 
 				/* Message */
 #ifdef JP
@@ -1821,7 +1821,7 @@ void autopick_pickup_items(cave_type *c_ptr)
 				}
 
 				/* Describe the object */
-				object_desc(o_name, o_ptr, TRUE, 3);
+				object_desc(o_name, o_ptr, 0);
 
 #ifdef JP
 				sprintf(out_val, "%sを拾いますか? ", o_name);
@@ -2030,7 +2030,7 @@ bool autopick_autoregister(object_type *o_ptr)
 		char o_name[MAX_NLEN];
 
 		/* Describe the object (with {terrible/special}) */
-		object_desc(o_name, o_ptr, TRUE, 3);
+		object_desc(o_name, o_ptr, 0);
 
 		/* Message */
 #ifdef JP
@@ -3366,7 +3366,7 @@ static byte get_object_for_search(object_type **o_handle, cptr *search_strp)
 	*o_handle = o_ptr;
 
 	string_free(*search_strp);
-	object_desc(buf, *o_handle, FALSE, 3);
+	object_desc(buf, *o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
 	*search_strp = string_make(format("<%s>", buf));
 	return 1;
 }
@@ -3384,7 +3384,7 @@ static byte get_destroyed_object_for_search(object_type **o_handle, cptr *search
 	*o_handle = &autopick_last_destroyed_object;
 
 	string_free(*search_strp);
-	object_desc(buf, *o_handle, FALSE, 3);
+	object_desc(buf, *o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
 	*search_strp = string_make(format("<%s>", buf));
 	return 1;
 }
@@ -3698,7 +3698,7 @@ static void search_for_object(text_body_type *tb, object_type *o_ptr, bool forwa
 	int i = tb->cy;
 
 	/* Prepare object name string first */
-	object_desc(o_name, o_ptr, FALSE, 3);
+	object_desc(o_name, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
 
 	/* Convert the string to lower case */
 	str_tolower(o_name);

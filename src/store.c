@@ -1945,7 +1945,7 @@ static void store_create(void)
 		object_known(q_ptr);
 
 		/* Mark it storebought */
-		q_ptr->ident |= IDENT_STOREB;
+		q_ptr->ident |= IDENT_STORE;
 
 		/* Mega-Hack -- no chests in stores */
 		if (q_ptr->tval == TV_CHEST) continue;
@@ -2089,7 +2089,7 @@ static void display_entry(int pos)
 		if (show_weights) maxwid -= 10;
 
 		/* Describe the object */
-		object_desc(o_name, o_ptr, TRUE, 3);
+		object_desc(o_name, o_ptr, 0);
 		o_name[maxwid] = '\0';
 		c_put_str(tval_to_attr[o_ptr->tval], o_name, i+6, cur_col);
 
@@ -2119,7 +2119,7 @@ static void display_entry(int pos)
 		if (show_weights) maxwid -= 7;
 
 		/* Describe the object (fully) */
-		object_desc_store(o_name, o_ptr, TRUE, 3);
+		object_desc(o_name, o_ptr, 0);
 		o_name[maxwid] = '\0';
 		c_put_str(tval_to_attr[o_ptr->tval], o_name, i+6, cur_col);
 
@@ -3353,7 +3353,7 @@ msg_format("一つにつき $%ldです。", (long)(best));
 		else
 		{
 			/* Describe the object (fully) */
-			object_desc_store(o_name, j_ptr, TRUE, 3);
+			object_desc(o_name, j_ptr, 0);
 
 			/* Message */
 #ifdef JP
@@ -3407,7 +3407,7 @@ msg_format("%s(%c)を購入する。", o_name, I2A(item));
 				j_ptr->ident &= ~(IDENT_FIXED);
 
 				/* Describe the transaction */
-				object_desc(o_name, j_ptr, TRUE, 3);
+				object_desc(o_name, j_ptr, 0);
 
 				/* Message */
 #ifdef JP
@@ -3420,7 +3420,7 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 				record_turn = turn;
 
 				if (record_buy) do_cmd_write_nikki(NIKKI_BUY, 0, o_name);
-				object_desc(o_name, o_ptr, TRUE, 0);
+				object_desc(o_name, o_ptr, OD_NAME_ONLY);
 				if(record_rand_art && o_ptr->art_name)
 					do_cmd_write_nikki(NIKKI_ART, 0, o_name);
 
@@ -3429,12 +3429,12 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 
 				/* Erase the "feeling" */
 				j_ptr->feeling = FEEL_NONE;
-				j_ptr->ident &= ~(IDENT_STOREB);
+				j_ptr->ident &= ~(IDENT_STORE);
 				/* Give it to the player */
 				item_new = inven_carry(j_ptr);
 
 				/* Describe the final result */
-				object_desc(o_name, &inventory[item_new], TRUE, 3);
+				object_desc(o_name, &inventory[item_new], 0);
 
 				/* Message */
 #ifdef JP
@@ -3558,7 +3558,7 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 		item_new = inven_carry(j_ptr);
 
 		/* Describe just the result */
-		object_desc(o_name, &inventory[item_new], TRUE, 3);
+		object_desc(o_name, &inventory[item_new], 0);
 
 		/* Message */
 #ifdef JP
@@ -3744,7 +3744,7 @@ static void store_sell(void)
 	}
 
 	/* Get a full description */
-	object_desc(o_name, q_ptr, TRUE, 3);
+	object_desc(o_name, q_ptr, 0);
 
 	/* Remove any inscription, feeling for stores */
 	if ((cur_store_num != STORE_HOME) && (cur_store_num != STORE_MUSEUM))
@@ -3837,8 +3837,8 @@ static void store_sell(void)
 			/* Modify quantity */
 			q_ptr->number = amt;
 
-			/* Make it look like known */
-			q_ptr->ident |= IDENT_STOREB;
+			/* Make it look like to be known */
+			q_ptr->ident |= IDENT_STORE;
 
 			/*
 			 * Hack -- If a rod or wand, let the shopkeeper know just
@@ -3853,7 +3853,7 @@ static void store_sell(void)
 			value = object_value(q_ptr) * q_ptr->number;
 
 			/* Get the description all over again */
-			object_desc(o_name, q_ptr, TRUE, 3);
+			object_desc(o_name, q_ptr, 0);
 
 			/* Describe the result (in message buffer) */
 #ifdef JP
@@ -3908,7 +3908,7 @@ msg_format("%sを $%ldで売却しました。", o_name, (long)price);
 	else if (cur_store_num == STORE_MUSEUM)
 	{
 		char o2_name[MAX_NLEN];
-		object_desc(o2_name, q_ptr, TRUE, 0);
+		object_desc(o2_name, q_ptr, OD_NAME_ONLY);
 
 		if (-1 == store_check_num(q_ptr))
 		{
@@ -4081,7 +4081,7 @@ msg_print("このアイテムについて特に知っていることはない。");
 	}
 
 	/* Description */
-	object_desc(o_name, o_ptr, TRUE, 3);
+	object_desc(o_name, o_ptr, 0);
 
 	/* Describe */
 #ifdef JP
@@ -4786,7 +4786,7 @@ void do_cmd_store(void)
 				object_copy(q_ptr, o_ptr);
 
 				/* Describe it */
-				object_desc(o_name, q_ptr, TRUE, 3);
+				object_desc(o_name, q_ptr, 0);
 
 				/* Message */
 #ifdef JP
@@ -5083,7 +5083,7 @@ void move_to_black_market(object_type *o_ptr)
 
 	st_ptr = &town[p_ptr->town_num].store[STORE_BLACK];
 
-	o_ptr->ident |= IDENT_STOREB;
+	o_ptr->ident |= IDENT_STORE;
 
 	(void)store_carry(o_ptr);
 

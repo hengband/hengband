@@ -328,40 +328,6 @@ void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 
 
 /*
- * Hack -- describe an item currently in a store's inventory
- * This allows an item to *look* like the player is "aware" of it
- */
-void object_desc_store(char *buf, object_type *o_ptr, int pref, int mode)
-{
-	/* Save the "aware" flag */
-	bool hack_aware = object_aware_p(o_ptr);
-
-	/* Save the "known" flag */
-	bool hack_known = (o_ptr->ident & (IDENT_KNOWN)) ? TRUE : FALSE;
-
-
-	/* Set the "known" flag */
-	o_ptr->ident |= (IDENT_KNOWN);
-
-	/* Force "aware" for description */
-	k_info[o_ptr->k_idx].aware = TRUE;
-
-
-	/* Describe the object */
-	object_desc(buf, o_ptr, pref, mode);
-
-
-	/* Restore "aware" flag */
-	k_info[o_ptr->k_idx].aware = hack_aware;
-
-	/* Clear the known flag */
-	if (!hack_known) o_ptr->ident &= ~(IDENT_KNOWN);
-}
-
-
-
-
-/*
  * Determine the "Activation" (if any) for an artifact
  * Return a string, or NULL for "no activation"
  */
@@ -3881,9 +3847,9 @@ info[i++] = "それはあなたの魔力を吸い取る。";
 
 	/* Display Item name */
 	if (real)
-		object_desc(o_name, o_ptr, TRUE, 3);
+		object_desc(o_name, o_ptr, 0);
 	else
-		object_desc_store(o_name, o_ptr, TRUE, 0);
+		object_desc(o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
 
 	prt(o_name, 0, 0);
 
@@ -4463,7 +4429,7 @@ void display_inven(void)
 		Term_putstr(0, i, 3, TERM_WHITE, tmp_val);
 
 		/* Obtain an item description */
-		object_desc(o_name, o_ptr, TRUE, 3);
+		object_desc(o_name, o_ptr, 0);
 
 		/* Obtain the length of the description */
 		n = strlen(o_name);
@@ -4556,7 +4522,7 @@ void display_equip(void)
 		}
 		else
 		{
-			object_desc(o_name, o_ptr, TRUE, 3);
+			object_desc(o_name, o_ptr, 0);
 			attr = tval_to_attr[o_ptr->tval % 128];
 		}
 
@@ -4927,7 +4893,7 @@ int show_inven(int target_item)
 		if (!item_tester_okay(o_ptr)) continue;
 
 		/* Describe the object */
-		object_desc(o_name, o_ptr, TRUE, 3);
+		object_desc(o_name, o_ptr, 0);
 
 		/* Save the object index, color, and description */
 		out_index[k] = i;
@@ -5086,7 +5052,7 @@ int show_equip(int target_item)
 		if (!item_tester_okay(o_ptr) && (!((i == INVEN_LARM) && p_ptr->ryoute) || item_tester_no_ryoute)) continue;
 
 		/* Description */
-		object_desc(o_name, o_ptr, TRUE, 3);
+		object_desc(o_name, o_ptr, 0);
 
 		if ((i == INVEN_LARM) && p_ptr->ryoute)
 		{
@@ -5321,7 +5287,7 @@ static bool verify(cptr prompt, int item)
 	}
 
 	/* Describe */
-	object_desc(o_name, o_ptr, TRUE, 3);
+	object_desc(o_name, o_ptr, 0);
 
 	/* Prompt */
 #ifdef JP
@@ -6416,7 +6382,7 @@ int show_floor(int target_item, int y, int x, int *min_width)
 		o_ptr = &o_list[floor_list[i]];
 
 		/* Describe the object */
-		object_desc(o_name, o_ptr, TRUE, 3);
+		object_desc(o_name, o_ptr, 0);
 
 		/* Save the index */
 		out_index[k] = i;
@@ -7818,7 +7784,7 @@ void py_pickup_floor(int pickup)
 		o_ptr = &o_list[this_o_idx];
 
 		/* Describe the object */
-		object_desc(o_name, o_ptr, TRUE, 3);
+		object_desc(o_name, o_ptr, 0);
 
 		/* Access the next object */
 		next_o_idx = o_ptr->next_o_idx;
@@ -7904,7 +7870,7 @@ void py_pickup_floor(int pickup)
 #endif /* ALLOW_EASY_SENSE */
 
 			/* Describe the object */
-			object_desc(o_name, o_ptr, TRUE, 3);
+			object_desc(o_name, o_ptr, 0);
 
 			/* Message */
 #ifdef JP
@@ -7952,7 +7918,7 @@ void py_pickup_floor(int pickup)
 #endif /* ALLOW_EASY_SENSE */
 
 			/* Describe the object */
-			object_desc(o_name, o_ptr, TRUE, 3);
+			object_desc(o_name, o_ptr, 0);
 
 			/* Message */
 #ifdef JP
@@ -8002,7 +7968,7 @@ void py_pickup_floor(int pickup)
 #endif /* ALLOW_EASY_SENSE */
 
 			/* Describe the object */
-			object_desc(o_name, o_ptr, TRUE, 3);
+			object_desc(o_name, o_ptr, 0);
 
 			/* Build a prompt */
 #ifdef JP

@@ -3303,7 +3303,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 			next_o_idx = o_ptr->next_o_idx;
 
 			/* Obtain an object description */
-			object_desc(o_name, o_ptr, TRUE, 3);
+			object_desc(o_name, o_ptr, 0);
 
 			/* Describe the object */
 #ifdef JP
@@ -3357,7 +3357,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 				o_ptr = &o_list[floor_list[0]];
 
 				/* Describe the object */
-				object_desc(o_name, o_ptr, TRUE, 3);
+				object_desc(o_name, o_ptr, 0);
 
 				/* Message */
 #ifdef JP
@@ -3483,7 +3483,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 			boring = FALSE;
 
 			/* Obtain an object description */
-			object_desc(o_name, o_ptr, TRUE, 3);
+			object_desc(o_name, o_ptr, 0);
 
 			/* Describe the object */
 #ifdef JP
@@ -5245,7 +5245,7 @@ msg_print("「汝、武器に頼ることなかれ。」");
 			msg_print("'Thou reliest too much on thy weapon.'");
 #endif
 
-			object_desc(o_name, &inventory[INVEN_RARM], TRUE, 0);
+			object_desc(o_name, &inventory[INVEN_RARM], OD_NAME_ONLY);
 			(void)curse_weapon(FALSE, INVEN_RARM);
 #ifdef JP
 			reward = format("%sが破壊された。", o_name);
@@ -5269,7 +5269,7 @@ msg_print("「汝、防具に頼ることなかれ。」");
 			msg_print("'Thou reliest too much on thine equipment.'");
 #endif
 
-			object_desc(o_name, &inventory[INVEN_BODY], TRUE, 0);
+			object_desc(o_name, &inventory[INVEN_BODY], OD_NAME_ONLY);
 			(void)curse_armor();
 #ifdef JP
 			reward = format("%sが破壊された。", o_name);
@@ -5314,7 +5314,7 @@ msg_print("「我を怒りしめた罪を償うべし。」");
 					if (one_in_(2))
 					{
 						if (!buki_motteruka(INVEN_RARM)) break;
-						object_desc(o_name, &inventory[INVEN_RARM], TRUE, 0);
+						object_desc(o_name, &inventory[INVEN_RARM], OD_NAME_ONLY);
 						(void)curse_weapon(FALSE, INVEN_RARM);
 #ifdef JP
 						reward = format("%sが破壊された。", o_name);
@@ -5325,7 +5325,7 @@ msg_print("「我を怒りしめた罪を償うべし。」");
 					else
 					{
 						if (!inventory[INVEN_BODY].k_idx) break;
-						object_desc(o_name, &inventory[INVEN_BODY], TRUE, 0);
+						object_desc(o_name, &inventory[INVEN_BODY], OD_NAME_ONLY);
 						(void)curse_armor();
 #ifdef JP
 						reward = format("%sが破壊された。", o_name);

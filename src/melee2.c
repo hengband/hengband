@@ -3422,7 +3422,7 @@ msg_print("爆発のルーンは解除された。");
 					object_flags(o_ptr, flgs);
 
 					/* Acquire the object name */
-					object_desc(o_name, o_ptr, TRUE, 3);
+					object_desc(o_name, o_ptr, 0);
 
 					/* Acquire the monster name */
 					monster_desc(m_name, m_ptr, MD_INDEF_HIDDEN);

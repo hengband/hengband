@@ -3666,7 +3666,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	}
 
 	/* Describe the object */
-	object_desc(o_name, o_ptr, FALSE, 3);
+	object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
 
 
 	/* Use the proper number of shots */
@@ -4247,7 +4247,7 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 	q_ptr->number = 1;
 
 	/* Description */
-	object_desc(o_name, q_ptr, FALSE, 3);
+	object_desc(o_name, q_ptr, OD_OMIT_PREFIX);
 
 	if (p_ptr->mighty_throw) mult += 3;
 
@@ -4610,7 +4610,7 @@ msg_print("これはあまり良くない気がする。");
 		j = -1;
 		if (boomerang) back_chance += 4+randint1(5);
 		if (super_boomerang) back_chance += 100;
-		object_desc(o2_name, q_ptr, FALSE, 0);
+		object_desc(o2_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 		if((back_chance > 30) && (!one_in_(100) || super_boomerang))
 		{
