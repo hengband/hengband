@@ -4547,7 +4547,7 @@ msg_format("その%sを%sのに十分なマジックポイントがない。",prayer,
 
 		/* Verify */
 #ifdef JP
-if (!get_check("それでも挑戦しますか? ")) return;
+if (!get_check_strict("それでも挑戦しますか? ", 1)) return;
 #else
 		if (!get_check("Attempt it anyway? ")) return;
 #endif
