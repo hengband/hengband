@@ -839,7 +839,9 @@ bool make_attack_normal(int m_idx)
 						    (o_ptr->pval))
 						{
 							/* Calculate healed hitpoints */
-							int heal = rlev * o_ptr->pval * o_ptr->number;
+							int heal=rlev * o_ptr->pval;
+							if( o_ptr->tval == TV_STAFF)
+							    heal *=  o_ptr->number;
 
 							/* Don't heal more than max hp */
 							heal = MIN(heal, m_ptr->maxhp - m_ptr->hp);
