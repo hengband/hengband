@@ -1281,7 +1281,7 @@ static bool vault_aux_mimic(int r_idx)
 	if (!vault_monster_okay(r_idx)) return (FALSE);
   
 	/* Require mimic */
-	if (!strchr("!|$?=`", r_ptr->d_char)) return (FALSE);
+	if (!strchr("!|$?=", r_ptr->d_char)) return (FALSE);
 
 	/* Okay */
 	return (TRUE);
