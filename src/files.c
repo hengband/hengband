@@ -3832,69 +3832,76 @@ void display_player(int mode)
 			}
 			else if (p_ptr->is_dead)
 			{
-				if (dun_level)
-				{
-					if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST))
-					{
-						/* Get the quest text */
-						init_flags = INIT_ASSIGN;
-
-						process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
-
-#ifdef JP
-						sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[p_ptr->inside_quest].name, p_ptr->died_from);
-#else
-						sprintf(statmsg, "...You were killed by %s in the quest '%s'.", p_ptr->died_from, quest[p_ptr->inside_quest].name);
-#endif
-					}
-					else
-					{					
-#ifdef JP
-						sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), dun_level, p_ptr->died_from);
-#else
-						sprintf(statmsg, "...You were killed by %s on level %d of %s.", p_ptr->died_from, dun_level, map_name());
-#endif
-					}
-				}
-				else
+				if (!dun_level)
+                                {
 #ifdef JP
 					sprintf(statmsg, "…あなたは%sで%sに殺された。", map_name(), p_ptr->died_from);
 #else
 					sprintf(statmsg, "...You were killed by %s in %s.", p_ptr->died_from, map_name());
 #endif
+                                }
+                                else if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST))
+                                {
+                                        /* Get the quest text */
+                                        /* Bewere that INIT_ASSIGN resets the cur_num.
+                                        init_flags = INIT_ASSIGN;
+
+                                        process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+
+#ifdef JP
+                                        sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[p_ptr->inside_quest].name, p_ptr->died_from);
+#else
+                                        sprintf(statmsg, "...You were killed by %s in the quest '%s'.", p_ptr->died_from, quest[p_ptr->inside_quest].name);
+#endif
+                                }
+                                else
+                                {					
+#ifdef JP
+                                        sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), dun_level, p_ptr->died_from);
+#else
+                                        sprintf(statmsg, "...You were killed by %s on level %d of %s.", p_ptr->died_from, dun_level, map_name());
+#endif
+                                }
 			}
 			else if (character_dungeon)
 			{
-				if (dun_level)
+				if (!dun_level)
 				{
-					if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST))
-					{
-						/* Get the quest text */
-						init_flags = INIT_SHOW_TEXT;
-
-						process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
-
-#ifdef JP
-						sprintf(statmsg, "…あなたは現在、 クエスト「%s」を遂行中だ。", quest[p_ptr->inside_quest].name);
-#else
-						sprintf(statmsg, "...Now, you are in the quest '%s'.", quest[p_ptr->inside_quest].name);
-#endif
-					}							
-					else
-					{
-#ifdef JP
-						sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(), dun_level);
-#else
-						sprintf(statmsg, "...Now, you are exploring level %d of %s.", dun_level, map_name());
-#endif
-					}
-				}
-				else
 #ifdef JP
 					sprintf(statmsg, "…あなたは現在、 %s にいる。", map_name());
 #else
 				        sprintf(statmsg, "...Now, you are in %s.", map_name());
 #endif
+                                }
+                                else if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST))
+                                {
+                                        /* Clear the text */
+                                        /* Must be done before doing INIT_SHOW_TEXT */
+                                        for (i = 0; i < 10; i++)
+                                        {
+                                                quest_text[i][0] = '\0';
+                                        }
+                                        quest_text_line = 0;
+
+                                        /* Get the quest text */
+                                        init_flags = INIT_SHOW_TEXT;
+
+                                        process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+
+#ifdef JP
+                                        sprintf(statmsg, "…あなたは現在、 クエスト「%s」を遂行中だ。", quest[p_ptr->inside_quest].name);
+#else
+                                        sprintf(statmsg, "...Now, you are in the quest '%s'.", quest[p_ptr->inside_quest].name);
+#endif
+                                }							
+                                else
+                                {
+#ifdef JP
+                                        sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(), dun_level);
+#else
+                                        sprintf(statmsg, "...Now, you are exploring level %d of %s.", dun_level, map_name());
+#endif
+                                }
 			}
 
 			if (*statmsg)
@@ -4191,7 +4198,7 @@ errr make_character_dump(FILE *fff)
 				p_ptr->inside_quest = num;
 
 				/* Get the quest */
-                                init_flags = INIT_SHOW_TEXT;
+                                init_flags = INIT_ASSIGN;
 
 				process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
 
