@@ -124,7 +124,7 @@ N: 7:BIAS_INT
 9
 'Magi's Seeing'
 'Sign of Brilliance'
-'Tome of Inteligence'
+'Tome of Intelligence'
 of *intelligence*
 of the Wizard
 of Knowledge
