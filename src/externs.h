@@ -127,6 +127,7 @@ extern byte arg_graphics;
 extern bool arg_monochrome;
 extern bool arg_force_original;
 extern bool arg_force_roguelike;
+extern bool arg_bigtile;
 extern bool character_generated;
 extern bool character_dungeon;
 extern bool character_loaded;
@@ -165,6 +166,7 @@ extern s32b old_battle;
 extern bool wizard;
 extern bool use_sound;
 extern bool use_graphics;
+extern bool use_bigtile;
 extern u16b total_winner;
 extern u16b panic_save;
 extern u16b noscore;
@@ -317,7 +319,6 @@ extern byte feeling;
 extern s16b rating;
 extern bool good_item_flag;
 extern bool closing_flag;
-extern s16b max_panel_rows, max_panel_cols;
 extern s16b panel_row, panel_col;
 extern s16b panel_row_min, panel_row_max;
 extern s16b panel_col_min, panel_col_max;
@@ -732,6 +733,11 @@ extern errr get_rnd_line_jonly(cptr file_name, int entry, char *output, int coun
 extern errr counts_write(int where, u32b count);
 extern u32b counts_read(int where);
 
+/* flavor.c */
+extern void get_table_name(char *out_string);
+extern void flavor_init(void);
+extern void object_desc(char *buf, object_type *o_ptr, int pref, int mode);
+
 /* generate.c */
 extern void place_closed_door(int y, int x);
 extern void generate_cave(void);
@@ -760,9 +766,33 @@ extern bool process_the_world(int num, int who, bool vs_player);
 extern void monster_gain_exp(int m_idx, int s_idx);
 
 /* monster1.c */
+extern void roff_top(int r_idx);
 extern void screen_roff(int r_idx, int remember);
 extern void display_roff(int r_idx);
 extern void create_name(int type, char *name);
+/* monster1.c (was in monster3.c ??) */
+extern bool monster_quest(int r_idx);
+extern bool monster_dungeon(int r_idx);
+extern bool monster_ocean(int r_idx);
+extern bool monster_shore(int r_idx);
+extern bool monster_town(int r_idx);
+extern bool monster_wood(int r_idx);
+extern bool monster_volcano(int r_idx);
+extern bool monster_mountain(int r_idx);
+extern bool monster_grass(int r_idx);
+extern bool monster_deep_water(int r_idx);
+extern bool monster_shallow_water(int r_idx);
+extern bool monster_lava(int r_idx);
+extern monster_hook_type get_monster_hook(void);
+extern monster_hook_type get_monster_hook2(int y, int x);
+extern void set_friendly(monster_type *m_ptr);
+extern void set_pet(monster_type *m_ptr);
+extern void set_hostile(monster_type *m_ptr);
+extern void anger_monster(monster_type *m_ptr);
+extern bool monster_can_cross_terrain(byte feat, monster_race *r_ptr);
+extern bool are_enemies(monster_type *m_ptr1, monster_type *m_ptr2);
+extern bool monster_living(monster_race *r_ptr);
+
 
 /* monster2.c */
 extern cptr horror_desc[MAX_SAN_HORROR];
@@ -796,38 +826,14 @@ extern bool place_monster_one(int y, int x, int r_idx, bool slp, bool friendly, 
 extern bool player_place(int y, int x);
 extern void monster_drop_carried_objects(monster_type *m_ptr);
 
-/* monster3.c (currently in monster1.c) */
-extern bool monster_dungeon(int r_idx);
-extern bool monster_quest(int r_idx);
-extern bool monster_ocean(int r_idx);
-extern bool monster_shore(int r_idx);
-extern bool monster_town(int r_idx);
-extern bool monster_wood(int r_idx);
-extern bool monster_volcano(int r_idx);
-extern bool monster_mountain(int r_idx);
-extern bool monster_grass(int r_idx);
-extern bool monster_deep_water(int r_idx);
-extern bool monster_shallow_water(int r_idx);
-extern bool monster_lava(int r_idx);
-extern monster_hook_type get_monster_hook(void);
-extern monster_hook_type get_monster_hook2(int y, int x);
-extern void set_friendly(monster_type *m_ptr);
-extern void set_pet(monster_type *m_ptr);
-extern void set_hostile(monster_type *m_ptr);
-extern void anger_monster(monster_type *m_ptr);
-extern bool monster_can_cross_terrain(byte feat, monster_race *r_ptr);
-extern bool are_enemies(monster_type *m_ptr1, monster_type *m_ptr2);
-extern bool monster_living(monster_race *r_ptr);
-
 /* object1.c */
-/* object2.c */
 extern s16b m_bonus(int max, int level);
-extern void flavor_init(void);
+
 extern void reset_visuals(void);
 extern void object_flags(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3);
 extern void object_flags_known(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3);
-extern void object_desc(char *buf, object_type *o_ptr, int pref, int mode);
 extern void object_desc_store(char *buf, object_type *o_ptr, int pref, int mode);
+extern cptr item_activation(object_type *o_ptr);
 extern bool identify_fully_aux(object_type *o_ptr);
 extern char index_to_label(int i);
 extern s16b label_to_inven(int c);
@@ -835,18 +841,6 @@ extern s16b label_to_equip(int c);
 extern s16b wield_slot(object_type *o_ptr);
 extern cptr mention_use(int i);
 extern cptr describe_use(int i);
-extern void inven_item_charges(int item);
-extern void inven_item_describe(int item);
-extern void inven_item_increase(int item, int num);
-extern void inven_item_optimize(int item);
-extern void floor_item_charges(int item);
-extern void floor_item_describe(int item);
-extern void floor_item_increase(int item, int num);
-extern void floor_item_optimize(int item);
-extern bool inven_carry_okay(object_type *o_ptr);
-extern s16b inven_carry(object_type *o_ptr);
-extern s16b inven_takeoff(int item, int amt);
-extern void inven_drop(int item, int amt);
 extern bool check_book_realm(const byte book_tval, const byte book_sval);
 extern bool item_tester_okay(object_type *o_ptr);
 extern void display_inven(void);
@@ -856,6 +850,8 @@ extern int show_equip(int target_item);
 extern void toggle_inven_equip(void);
 extern bool can_get_item(void);
 extern bool get_item(int *cp, cptr pmt, cptr str, int mode);
+
+/* object2.c */
 extern void excise_object_idx(int o_idx);
 extern void delete_object_idx(int o_idx);
 extern void delete_object(int y, int x);
@@ -886,7 +882,18 @@ extern s16b drop_near(object_type *o_ptr, int chance, int y, int x);
 extern void acquirement(int y1, int x1, int num, bool great, bool known);
 extern void pick_trap(int y, int x);
 extern void place_trap(int y, int x);
-extern cptr item_activation(object_type *o_ptr);
+extern void inven_item_charges(int item);
+extern void inven_item_describe(int item);
+extern void inven_item_increase(int item, int num);
+extern void inven_item_optimize(int item);
+extern void floor_item_charges(int item);
+extern void floor_item_describe(int item);
+extern void floor_item_increase(int item, int num);
+extern void floor_item_optimize(int item);
+extern bool inven_carry_okay(object_type *o_ptr);
+extern s16b inven_carry(object_type *o_ptr);
+extern s16b inven_takeoff(int item, int amt);
+extern void inven_drop(int item, int amt);
 extern void combine_pack(void);
 extern void reorder_pack(void);
 extern void display_koff(int k_idx);
@@ -1008,7 +1015,6 @@ extern bool control_one_demon(int dir, int plev);
 extern bool charm_animal(int dir, int plev);
 extern bool charm_living(int dir, int plev);
 extern bool mindblast_monsters(int dam);
-extern void get_table_name(char *out_string);
 extern s32b flag_cost(object_type *o_ptr, int plusses);
 extern void report_magics(void);
 extern bool teleport_swap(int dir);
@@ -1254,8 +1260,11 @@ extern void check_experience(void);
 extern void check_quest_completion(monster_type *m_ptr);
 extern void monster_death(int m_idx, bool drop_item);
 extern bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note);
+extern void get_screen_size(int *wid_p, int *hgt_p);
 extern void panel_bounds(void);
 extern void panel_bounds_center(void);
+extern void resize_map(void);
+extern void redraw_window(void);
 extern bool change_panel(int dy, int dx);
 extern void verify_panel(void);
 extern cptr look_mon_desc(int m_idx);

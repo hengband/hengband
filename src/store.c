@@ -2021,7 +2021,7 @@ static void updatebargain(s32b price, s32b minprice, int num)
  */
 static void display_entry(int pos)
 {
-	int 		i;
+	int 		i, cur_col;
 	object_type 	*o_ptr;
 	s32b		x;
 
@@ -2041,6 +2041,7 @@ static void display_entry(int pos)
 	(void)sprintf(out_val, "%c) ", I2A(i));
 	prt(out_val, i+6, 0);
 
+	cur_col = 3;
 	if (show_item_graph)
 	{
 		byte a = object_attr(o_ptr);
@@ -2051,7 +2052,14 @@ static void display_entry(int pos)
 			a |= 0x40;
 #endif
 
-		Term_draw(3, i + 6, a, c);
+		Term_draw(cur_col, i + 6, a, c);
+		if (use_bigtile)
+		{
+			cur_col++;
+			if (a & 0x80)
+				Term_draw(cur_col, i + 6, 255, 255);
+		}
+		cur_col += 2;
 	}
 
 	/* Describe an item in the home */
@@ -2065,7 +2073,7 @@ static void display_entry(int pos)
 		/* Describe the object */
 		object_desc(o_name, o_ptr, TRUE, 3);
 		o_name[maxwid] = '\0';
-		c_put_str(tval_to_attr[o_ptr->tval], o_name, i+6, show_item_graph ? 5 : 3);
+		c_put_str(tval_to_attr[o_ptr->tval], o_name, i+6, cur_col);
 
 		/* Show weights */
 		if (show_weights)
@@ -2095,7 +2103,7 @@ static void display_entry(int pos)
 		/* Describe the object (fully) */
 		object_desc_store(o_name, o_ptr, TRUE, 3);
 		o_name[maxwid] = '\0';
-		c_put_str(tval_to_attr[o_ptr->tval], o_name, i+6, show_item_graph ? 5 : 3);
+		c_put_str(tval_to_attr[o_ptr->tval], o_name, i+6, cur_col);
 
 		/* Show weights */
 		if (show_weights)

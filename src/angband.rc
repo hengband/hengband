@@ -110,8 +110,8 @@ ANGBAND MENU
    MENUITEM "&なし", 400
    MENUITEM "&旧ﾀｲﾙ", 401
    MENUITEM "&Adam Boltさんﾀｲﾙ", 402
-   }
-
+   MENUITEM "タイルを２倍幅で表示", 409
+  }
   MENUITEM "効果音(&S)", 410
   MENUITEM "壁紙を使う(&B)", 440
   MENUITEM "壁紙を選択(&O)...", 441

@@ -5960,6 +5960,22 @@ void play_game(bool new_game)
 	/* Hack -- Character is "icky" */
 	character_icky = TRUE;
 
+	/* Make sure main term is active */
+	Term_activate(angband_term[0]);
+
+	/* Initialise the resize hooks */
+	angband_term[0]->resize_hook = resize_map;
+	
+	for (i = 1; i < 8; i++)
+	{
+		/* Does the term exist? */
+		if (angband_term[i])
+		{
+			/* Add the redraw on resize hook */
+			angband_term[i]->resize_hook = redraw_window;
+		}
+	}
+
 	/* Hack -- turn off the cursor */
 	(void)Term_set_cursor(0);
 
@@ -6343,7 +6359,7 @@ if (init_v_info()) quit("建築物初期化不能");
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
 
 	/* Window stuff */
-	p_ptr->window |= (PW_MONSTER);
+	p_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
 
 	/* Window stuff */
 	window_stuff();

@@ -1912,8 +1912,8 @@ static errr rd_dungeon(void)
 	if (z_older_than(10, 3, 13) && !dun_level && !p_ptr->inside_arena) {py = 33;px = 131;}
 	rd_s16b(&cur_hgt);
 	rd_s16b(&cur_wid);
-	rd_s16b(&max_panel_rows);
-	rd_s16b(&max_panel_cols);
+	rd_s16b(&tmp16s); /* max_panel_rows */
+	rd_s16b(&tmp16s); /* max_panel_cols */
 
 #if 0
 	if (!py || !px) {py = 10;px = 10;}/* ダンジョン生成に失敗してセグメンテったときの復旧用 */

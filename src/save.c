@@ -1135,7 +1135,7 @@ static void wr_dungeon(void)
 	int i, y, x;
 
 	byte tmp8u;
-	u16b tmp16s;
+	u16b tmp16u;
 
 	byte count;
 	byte prev_char;
@@ -1155,8 +1155,8 @@ static void wr_dungeon(void)
 	wr_u16b((u16b)px);
 	wr_u16b(cur_hgt);
 	wr_u16b(cur_wid);
-	wr_u16b(max_panel_rows);
-	wr_u16b(max_panel_cols);
+	wr_u16b(0); /* max_panel_rows */
+	wr_u16b(0); /* max_panel_cols */
 
 
 	/*** Simple "Run-Length-Encoding" of cave ***/
@@ -1174,14 +1174,14 @@ static void wr_dungeon(void)
 			c_ptr = &cave[y][x];
 
 			/* Extract a byte */
-			tmp16s = c_ptr->info;
+			tmp16u = c_ptr->info;
 
 			/* If the run is broken, or too full, flush it */
-			if ((tmp16s != prev_s16b) || (count == MAX_UCHAR))
+			if ((tmp16u != prev_s16b) || (count == MAX_UCHAR))
 			{
 				wr_byte((byte)count);
 				wr_u16b((u16b)prev_s16b);
-				prev_s16b = tmp16s;
+				prev_s16b = tmp16u;
 				count = 1;
 			}
 
@@ -1300,14 +1300,14 @@ static void wr_dungeon(void)
 			c_ptr = &cave[y][x];
 
 			/* Extract a byte */
-			tmp16s = c_ptr->special;
+			tmp16u = c_ptr->special;
 
 			/* If the run is broken, or too full, flush it */
-			if ((tmp16s != prev_s16b) || (count == MAX_UCHAR))
+			if ((tmp16u != prev_s16b) || (count == MAX_UCHAR))
 			{
 				wr_byte((byte)count);
 				wr_u16b(prev_s16b);
-				prev_s16b = tmp16s;
+				prev_s16b = tmp16u;
 				count = 1;
 			}
 

@@ -3557,17 +3557,9 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				if (*x % SCREEN_WID) panels_x++;
 				cur_wid = panels_x * SCREEN_WID;
 
-				/* Choose a panel row */
-				max_panel_rows = (cur_hgt / SCREEN_HGT) * 2 - 2;
-				if (max_panel_rows < 0) max_panel_rows = 0;
-
-				/* Choose a panel col */
-				max_panel_cols = (cur_wid / SCREEN_WID) * 2 - 2;
-				if (max_panel_cols < 0) max_panel_cols = 0;
-
 				/* Assume illegal panel */
-				panel_row = max_panel_rows;
-				panel_col = max_panel_cols;
+				panel_row = 255;
+				panel_col = 255;
 
 				/* Place player in a quest level */
 				if (p_ptr->inside_quest)

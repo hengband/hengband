@@ -646,13 +646,9 @@ void wilderness_gen(void)
 	cur_hgt = MAX_HGT;
 	cur_wid = MAX_WID;
 
-	/* Determine number of panels */
-	max_panel_rows = (cur_hgt / SCREEN_HGT) * 2 - 2;
-	max_panel_cols = (cur_wid / SCREEN_WID) * 2 - 2;
-
 	/* Assume illegal panel */
-	panel_row = max_panel_rows;
-	panel_col = max_panel_cols;
+	panel_row = 255;
+	panel_col = 255;
 
 	/* Init the wilderness */
 
@@ -914,13 +910,9 @@ void wilderness_gen_small()
 	if (cur_hgt > MAX_HGT) cur_hgt = MAX_HGT;
 	if (cur_wid > MAX_WID) cur_wid = MAX_WID;
 
-	/* Determine number of panels */
-	max_panel_rows = (cur_hgt / SCREEN_HGT) * 2 - 2;
-	max_panel_cols = (cur_wid / SCREEN_WID) * 2 - 2;
-
 	/* Assume illegal panel */
-	panel_row = max_panel_rows;
-	panel_col = max_panel_cols;
+	panel_row = 255;
+	panel_col = 255;
 
         /* Place the player */
         px = p_ptr->wilderness_x;

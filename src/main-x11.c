@@ -348,6 +348,7 @@ struct infofnt
 	cptr name;
 
 	s16b wid;
+	s16b twid;
 	s16b hgt;
 	s16b asc;
 
@@ -1324,6 +1325,11 @@ static errr Infofnt_prepare(XFontStruct *info)
 	ifnt->wid = cs->width;
 #endif
 
+	if (use_bigtile)
+		ifnt->twid = 2 * ifnt->wid;
+	else
+		ifnt->twid = ifnt->wid;
+
 #ifdef _JP
     /* Assign the struct */
     ikfnt->info = kinfo;
@@ -2165,13 +2171,16 @@ static errr CheckEvent(bool wait)
 			cols = ((Infowin->w - (ox + ox)) / td->fnt->wid);
 			rows = ((Infowin->h - (oy + oy)) / td->fnt->hgt);
 
-			/* Paranoia */
-			if (td == &data[0]) cols = 80;
-			if (td == &data[0]) rows = 24;
-
 			/* Hack -- minimal size */
 			if (cols < 1) cols = 1;
 			if (rows < 1) rows = 1;
+
+			if (td == &data[0])
+			{
+				/* Hack the main window must be at least 80x24 */
+				if (cols < 80) cols = 80;
+				if (rows < 24) rows = 24;
+			}
 
 			/* Desired size of window */
 			wid = cols * td->fnt->wid + (ox + ox);
@@ -2422,6 +2431,13 @@ static errr Term_curs_x11(int x, int y)
 	/* Draw the cursor */
 	Infoclr_set(xor);
 
+#ifdef JP
+	if (use_bigtile && x + 1 < Term->wid && (Term->old->a[y][x+1] == 255 || (iskanji(Term->old->c[y][x]) && !(Term->old->a[y][x] & 0x80))))
+#else
+	if (use_bigtile && x + 1 < Term->wid && Term->old->a[y][x+1] == 255)
+#endif
+		Infofnt_text_non(x, y, "  ", 2);
+	else
 	/* Hilite the cursor character */
 	Infofnt_text_non(x, y, " ", 1);
 
@@ -2478,7 +2494,6 @@ static errr Term_pict_x11(int x, int y, int n, const byte *ap, const char *cp)
 	byte a;
 	char c;
 
-
 #ifdef USE_TRANSPARENCY
 	byte ta;
 	char tc;
@@ -2498,13 +2513,13 @@ static errr Term_pict_x11(int x, int y, int n, const byte *ap, const char *cp)
 	y += Infowin->oy;
 	x += Infowin->ox;
 
-	for (i = 0; i < n; ++i)
+	for (i = 0; i < n; ++i, x += td->fnt->wid)
 	{
 		a = *ap++;
 		c = *cp++;
 
 		/* For extra speed - cache these values */
-		x1 = (c&0x7F) * td->fnt->wid;
+		x1 = (c&0x7F) * td->fnt->twid;
 		y1 = (a&0x7F) * td->fnt->hgt;
 
 #ifdef USE_TRANSPARENCY
@@ -2513,7 +2528,7 @@ static errr Term_pict_x11(int x, int y, int n, const byte *ap, const char *cp)
 		tc = *tcp++;
 
 		/* For extra speed - cache these values */
-		x2 = (tc&0x7F) * td->fnt->wid;
+		x2 = (tc&0x7F) * td->fnt->twid;
 		y2 = (ta&0x7F) * td->fnt->hgt;
 		
 		/* Optimise the common case */
@@ -2525,7 +2540,7 @@ static errr Term_pict_x11(int x, int y, int n, const byte *ap, const char *cp)
 		  	        td->tiles,
 		  	        x1, y1,
 		  	        x, y,
-		  	        td->fnt->wid, td->fnt->hgt);	
+		  	        td->fnt->twid, td->fnt->hgt);	
 		}
 		else
 		{
@@ -2533,7 +2548,7 @@ static errr Term_pict_x11(int x, int y, int n, const byte *ap, const char *cp)
 			/* Mega Hack^2 - assume the top left corner is "black" */
 			blank = XGetPixel(td->tiles, 0, td->fnt->hgt * 6);
 
-			for (k = 0; k < td->fnt->wid; k++)
+			for (k = 0; k < td->fnt->twid; k++)
 			{
 				for (l = 0; l < td->fnt->hgt; l++)
 				{
@@ -2556,7 +2571,7 @@ static errr Term_pict_x11(int x, int y, int n, const byte *ap, const char *cp)
 		    	      clr[0]->gc,
 		     	     td->TmpImage,
 		     	     0, 0, x, y,
-		     	     td->fnt->wid, td->fnt->hgt);
+		     	     td->fnt->twid, td->fnt->hgt);
 		}
 
 #else /* USE_TRANSPARENCY */
@@ -2567,10 +2582,9 @@ static errr Term_pict_x11(int x, int y, int n, const byte *ap, const char *cp)
 		          td->tiles,
 		          x1, y1,
 		          x, y,
-		          td->fnt->wid, td->fnt->hgt);
+		          td->fnt->twid, td->fnt->hgt);
 
 #endif /* USE_TRANSPARENCY */
-		x += td->fnt->wid;
 	}
 
 	/* Success */
@@ -2664,7 +2678,7 @@ static errr term_data_init(term_data *td, int i)
 {
 	term *t = &td->t;
 
-	bool fixed = (i == 0);
+	bool fixed = FALSE;
 
 	cptr name = angband_term_name[i];
 
@@ -2835,21 +2849,24 @@ static errr term_data_init(term_data *td, int i)
 	y = (str != NULL) ? atoi(str) : -1;
 
 
-	if (!fixed)
+	/* Window specific cols */
+	sprintf(buf, "ANGBAND_X11_COLS_%d", i);
+	str = getenv(buf);
+	val = (str != NULL) ? atoi(str) : -1;
+	if (val > 0) cols = val;
+
+	/* Window specific rows */
+	sprintf(buf, "ANGBAND_X11_ROWS_%d", i);
+	str = getenv(buf);
+	val = (str != NULL) ? atoi(str) : -1;
+	if (val > 0) rows = val;
+
+	/* Hack the main window must be at least 80x24 */
+	if (!i)
 	{
-		/* Window specific cols */
-		sprintf(buf, "ANGBAND_X11_COLS_%d", i);
-		str = getenv(buf);
-		val = (str != NULL) ? atoi(str) : -1;
-		if (val > 0) cols = val;
-
-		/* Window specific rows */
-		sprintf(buf, "ANGBAND_X11_ROWS_%d", i);
-		str = getenv(buf);
-		val = (str != NULL) ? atoi(str) : -1;
-		if (val > 0) rows = val;
+		if (cols < 80) cols = 80;
+		if (rows < 24) rows = 24;
 	}
-
 
 	/* Window specific inner border offset (ox) */
 	sprintf(buf, "ANGBAND_X11_IBOX_%d", i);
@@ -2879,7 +2896,7 @@ static errr term_data_init(term_data *td, int i)
 
 
 	/* Hack -- key buffer size */
-	num = (fixed ? 1024 : 16);
+	num = ((i == 0) ? 1024 : 16);
 
 	/* Assume full size windows */
 	wid = cols * td->fnt->wid + (ox + ox);
@@ -2893,17 +2910,7 @@ static errr term_data_init(term_data *td, int i)
 
 	/* Ask for certain events */
 #if defined(USE_XIM)
-#if 0
-	/* XIM が有効なのはメインウィンドウのみなので、首尾を一貫させるため
-	   通常のキー入力も無効にする */
-	if(i == 0){
-		Infowin_set_mask(ExposureMask | StructureNotifyMask | KeyPressMask);
-	}else{
-		Infowin_set_mask(ExposureMask | StructureNotifyMask);
-	}
-#else
 	Infowin_set_mask(ExposureMask | StructureNotifyMask | KeyPressMask | FocusChangeMask);
-#endif
 #else
 	Infowin_set_mask(ExposureMask | StructureNotifyMask | KeyPressMask);
 #endif
@@ -2935,19 +2942,21 @@ static errr term_data_init(term_data *td, int i)
 	/* Oops */
 	if (sh == NULL) quit("XAllocSizeHints failed");
 
-	/* Fixed window size */
-	if (fixed)
+	/* Main window has a differing minimum size */
+	if (i == 0)
 	{
-		/* Fixed size */
+		/* Main window min size is 80x24 */
 		sh->flags = PMinSize | PMaxSize;
-		sh->min_width = sh->max_width = wid;
-		sh->min_height = sh->max_height = hgt;
+		sh->min_width = 80 * td->fnt->wid + (ox + ox);
+		sh->min_height = 24 * td->fnt->hgt + (oy + oy);
+		sh->max_width = 255 * td->fnt->wid + (ox + ox);
+		sh->max_height = 255 * td->fnt->hgt + (oy + oy);
 	}
 
-	/* Variable window size */
+	/* Other windows can be shrunk to 1x1 */
 	else
 	{
-		/* Variable size */
+		/* Other windows */
 		sh->flags = PMinSize | PMaxSize;
 		sh->min_width = td->fnt->wid + (ox + ox);
 		sh->min_height = td->fnt->hgt + (oy + oy);
@@ -3062,6 +3071,12 @@ errr init_x11(int argc, char *argv[])
 		if (prefix(argv[i], "-o"))
 		{
 			arg_graphics = GRAPHICS_ORIGINAL;
+			continue;
+		}
+
+		if (prefix(argv[i], "-b"))
+		{
+			arg_bigtile = use_bigtile = TRUE;
 			continue;
 		}
 #endif /* USE_GRAPHICS */
@@ -3252,7 +3267,7 @@ errr init_x11(int argc, char *argv[])
 			td->tiles =
 			ResizeImage(dpy, tiles_raw,
 			            pict_wid, pict_hgt,
-			            td->fnt->wid, td->fnt->hgt);
+			            td->fnt->twid, td->fnt->hgt);
 		}
 
 #ifdef USE_TRANSPARENCY
@@ -3270,14 +3285,14 @@ errr init_x11(int argc, char *argv[])
 			ii = 1;
 			jj = (depth - 1) >> 2;
 			while (jj >>= 1) ii <<= 1;
-			total = td->fnt->wid * td->fnt->hgt * ii;
+			total = td->fnt->twid * td->fnt->hgt * ii;
 			
 			
 			TmpData = (char *)malloc(total);
 
 			td->TmpImage = XCreateImage(dpy,visual,depth,
 				ZPixmap, 0, TmpData,
-				td->fnt->wid, td->fnt->hgt, 8, 0);
+				td->fnt->twid, td->fnt->hgt, 8, 0);
 
 		}
 #endif /* USE_TRANSPARENCY */

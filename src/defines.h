@@ -922,16 +922,16 @@
 #define ROW_STATE               20
 #define COL_STATE                7      /* <state> */
 
-#define ROW_SPEED               23
+//#define ROW_SPEED               23
 #define COL_SPEED               58      /* "Slow (-NN)" or "Fast (+NN)" */
 
-#define ROW_STUDY               23
+//#define ROW_STUDY               23
 #define COL_STUDY               68      /* "Study" */
 
-#define ROW_DEPTH               23
+//#define ROW_DEPTH               23
 #define COL_DEPTH               72      /* "Lev NNN" / "NNNN ft" */
 
-#define ROW_STATBAR             23
+//#define ROW_STATBAR             23
 #define COL_STATBAR              0
 
 

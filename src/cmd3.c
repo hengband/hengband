@@ -69,9 +69,14 @@ void do_cmd_inven(void)
 	/* Process "Escape" */
 	if (command_new == ESCAPE)
 	{
+		int wid, hgt;
+
+		/* Get size */
+		Term_get_size(&wid, &hgt);
+
 		/* Reset stuff */
 		command_new = 0;
-		command_gap = 50;
+		command_gap = wid - 30;
 	}
 
 	/* Process normal keys */
@@ -139,9 +144,14 @@ void do_cmd_equip(void)
 	/* Process "Escape" */
 	if (command_new == ESCAPE)
 	{
+		int wid, hgt;
+
+		/* Get size */
+		Term_get_size(&wid, &hgt);
+
 		/* Reset stuff */
 		command_new = 0;
-		command_gap = 50;
+		command_gap = wid - 30;
 	}
 
 	/* Process normal keys */
@@ -2206,6 +2216,11 @@ void do_cmd_locate(void)
 
 	char	out_val[160];
 
+	int wid, hgt;
+
+	/* Get size */
+	get_screen_size(&wid, &hgt);
+
 
 	/* Start at current panel */
 	y2 = y1 = panel_row_min;
@@ -2246,8 +2261,8 @@ void do_cmd_locate(void)
 		        "Map sector [%d(%02d),%d(%02d)], which is%s your sector.  Direction?",
 #endif
 
-		        y2 / (SCREEN_HGT / 2), y2 % (SCREEN_HGT / 2),
-		        x2 / (SCREEN_WID / 2), x2 % (SCREEN_WID / 2), tmp_val);
+		        y2 / (hgt / 2), y2 % (hgt / 2),
+		        x2 / (wid / 2), x2 % (wid / 2), tmp_val);
 
 		/* Assume no direction */
 		dir = 0;
@@ -2594,59 +2609,6 @@ void ang_sort_swap_hook(vptr u, vptr v, int a, int b)
 	who[b] = holder;
 }
 
-
-
-/*
- * Hack -- Display the "name" and "attr/chars" of a monster race
- */
-static void roff_top(int r_idx)
-{
-	monster_race	*r_ptr = &r_info[r_idx];
-
-	byte		a1, a2;
-	char		c1, c2;
-
-
-	/* Access the chars */
-	c1 = r_ptr->d_char;
-	c2 = r_ptr->x_char;
-
-	/* Access the attrs */
-	a1 = r_ptr->d_attr;
-	a2 = r_ptr->x_attr;
-
-	/* Clear the top line */
-	Term_erase(0, 0, 255);
-
-	/* Reset the cursor */
-	Term_gotoxy(0, 0);
-
-	/* A title (use "The" for non-uniques) */
-#ifdef JP
-        /* 英日切り替え機能に非対応 */
-        if (0)
-#else
-	if (!(r_ptr->flags1 & (RF1_UNIQUE)))
-#endif
-
-	{
-		Term_addstr(-1, TERM_WHITE, "The ");
-	}
-
-	/* Dump the name */
-	Term_addstr(-1, TERM_WHITE, (r_name + r_ptr->name));
-
-
-	/* Append the "standard" attr/char info */
-	Term_addstr(-1, TERM_WHITE, " ('");
-	Term_addch(a1, c1);
-	Term_addstr(-1, TERM_WHITE, "')");
-
-	/* Append the "optional" attr/char info */
-	Term_addstr(-1, TERM_WHITE, "/('");
-	Term_addch(a2, c2);
-	Term_addstr(-1, TERM_WHITE, "'):");
-}
 
 
 /*

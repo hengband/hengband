@@ -911,21 +911,9 @@ static void term_data_check_size(term_data *td)
 #else /* ANGBAND_LITE_MAC */
 
 	/* Handle graphics */
-	if (use_graphics && (td == &data[0]))
-	{
-		td->t->always_pict = TRUE;
-	}
+	td->t->higher_pict = TRUE;
 
 #endif /* ANGBAND_LITE_MAC */
-
-	/* Fake mono-space */
-	if (!td->font_mono ||
-	    (td->font_wid != td->tile_wid) ||
-	    (td->font_hgt != td->tile_hgt))
-	{
-		/* Handle fake monospace */
-		td->t->always_pict = TRUE;
-	}
 }
 
 static OSErr XDDSWUpDateGWorldFromPict( term_data *td );
@@ -1516,7 +1504,7 @@ static errr Term_xtra_mac_react(void)
 
 	
 	/* Handle transparency */
-	if (((td == &data[0]) || (td == &data[6])) && (use_newstyle_graphics != arg_newstyle_graphics))
+	if (use_newstyle_graphics != arg_newstyle_graphics)
 	{
 		globe_nuke();
 
@@ -1541,7 +1529,7 @@ static errr Term_xtra_mac_react(void)
 	}
 	
 	/* Handle graphics */
-	if ((td == &data[0]) && (use_graphics != arg_graphics))
+	if (use_graphics != arg_graphics)
 	{
 		/* Initialize graphics */
 
@@ -1771,6 +1759,14 @@ static errr Term_curs_mac(int x, int y)
 	r.right = r.left + td->tile_wid;
 	r.top = y * td->tile_hgt + td->size_oh1;
 	r.bottom = r.top + td->tile_hgt;
+
+#ifdef JP
+	if (use_bigtile && x + 1 < Term->wid && (Term->old->a[y][x+1] == 255 || (iskanji(Term->old->c[y][x]) && !(Term->old->a[y][x] & 0x80))))
+#else
+	if (use_bigtile && x + 1 < Term->wid && Term->old->a[y][x+1] == 255)
+#endif
+		r.right += td->tile_wid;
+
 	FrameRect(&r);
 
 	/* Success */
@@ -1853,7 +1849,7 @@ static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp)
 	/* Save GWorld */
 	GetGWorld(&saveGWorld, &saveGDevice);
 	
-	if( n > 0 )
+	if( n > 1 )
 	{
 		/* Destination rectangle */
 		r2.left = x * td->tile_wid + td->size_ow1;
@@ -1908,7 +1904,7 @@ static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp)
 #else /* ANGBAND_LITE_MAC */
 
 		/* Graphics -- if Available and Needed */
-		if (use_graphics && ((td == &data[0]) || (td == &data[6])) &&
+		if (use_graphics &&
 		    ((byte)a & 0x80) && ((byte)c & 0x80))
 		{
 			int col, row;
@@ -1945,7 +1941,11 @@ static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp)
 				/* draw transparent tile */
 				/* BackColor is ignored and the destination is left untouched */
 				BackColor(blackColor);
+
+				if (use_bigtile) r2.right += td->tile_wid;
+
 				CopyBits( srcBitMap, destBitMap, &r1, &r2, transparent, NULL );
+				if (use_bigtile) r2.right -= td->tile_wid;
 			}
 			/* Restore colors */
 			BackColor(blackColor);
@@ -2031,6 +2031,12 @@ static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp)
 		destRect.right = destRect.left + (td->tile_wid * n);
 		destRect.top = y * td->tile_hgt + td->size_oh1;
 		destRect.bottom = destRect.top + td->tile_hgt;
+
+		if (use_bigtile)
+		{
+			srcRect.right += td->tile_wid * n;
+			destRect.right += td->tile_wid * n;
+		}
 
 		UnlockPixels( PortPix );
 
@@ -2214,6 +2220,7 @@ static void save_prefs(void)
 	putshort(arg_sound);
 	putshort(arg_graphics);
 	putshort(arg_newstyle_graphics);
+	putshort(arg_bigtile);
 	
 	/* SoundMode */
 	for( i = 0 ; i < 7 ; i++ )
@@ -2301,6 +2308,9 @@ static void load_prefs(void)
 		grafWidth = grafHeight = 8;
 		pictID = 1001;
 	}
+
+	arg_bigtile = getshort();
+	use_bigtile = arg_bigtile;
 	
 	/* SoundMode */
 	for( i = 0 ; i < 7 ; i++ )
@@ -3246,6 +3256,7 @@ static void init_menubar(void)
 	AppendMenu(m, "\p-");
 	AppendMenu(m, "\pサウンド設定...");
 	AppendMenu(m, "\p16X16グラフィック");
+	AppendMenu(m, "\p２倍幅タイル表示");
 	#else
 	AppendMenu(m, "\parg_sound");
 	AppendMenu(m, "\parg_graphics");
@@ -3255,6 +3266,7 @@ static void init_menubar(void)
 	AppendMenu(m, "\p-");
 	AppendMenu(m, "\pSound config");
 	AppendMenu(m, "\pAdam Bolt tile");
+	AppendMenu(m, "\pBigtile Mode");
 	#endif
 
 	/* Make the "TileWidth" menu */
@@ -3541,6 +3553,10 @@ static void setup_menus(void)
 	/* Item NewStyle Graphics */
 	EnableItem(m, 8);
 	CheckItem(m, 8, use_newstyle_graphics);
+
+	/* Item Bigtile Mode */
+	EnableItem(m, 9);
+	CheckItem(m, 9, arg_bigtile);
 
 	/* Item "Hack" */
 	/* EnableItem(m, 9); */
@@ -4010,6 +4026,7 @@ static void menu(long mc)
 				case 7:
 				{
 					SoundConfigDLog();
+					break;
 				}
 				case 8:
 				{
@@ -4030,6 +4047,32 @@ static void menu(long mc)
 
 					/* Hack -- Force redraw */
 					Term_key_push(KTRL('R'));
+					break;
+				}
+
+                                case 9: /* bigtile mode */
+				{
+					term_data *td = &data[0];
+
+					if (!can_save){
+#ifdef JP
+						plog("今は変更出来ません。");
+#else
+						plog("You may not do that right now.");
+#endif
+						break;
+					}
+
+					/* Toggle "arg_bigtile" */
+					arg_bigtile = !arg_bigtile;
+
+					/* Activate */
+					Term_activate(td->t);
+
+					/* Resize the term */
+					Term_resize(td->cols, td->rows);
+
+					break;
 				}
 
 			}

@@ -434,8 +434,8 @@ static bool cave_gen(void)
 	/* Global data */
 	dun = &dun_body;
 
-	if (!max_panel_rows) max_vault_ok--;
-	if (!max_panel_cols) max_vault_ok--;
+	if (cur_hgt <= SCREEN_HGT / 2 - 2) max_vault_ok--;
+	if (cur_wid <= SCREEN_WID / 2 - 2) max_vault_ok--;
 
 	/* Randomize the dungeon creation values */
 	dun_rooms = rand_range(DUN_ROOMS_MIN, DUN_ROOMS_MAX);
@@ -1391,16 +1391,12 @@ msg_print("小さなフロア");
 		cur_hgt = level_height * SCREEN_HGT;
 		cur_wid = level_width * SCREEN_WID;
 
-		/* Determine number of panels */
-		max_panel_rows = level_height * 2 - 2;
-		max_panel_cols = level_width * 2 - 2;
-
 		/* Assume illegal panel */
-		panel_row = max_panel_rows;
-		panel_col = max_panel_cols;
+		panel_row = 255;
+		panel_col = 255;
 
 		if (cheat_room)
-		  msg_format("X:%d, Y:%d.", max_panel_cols, max_panel_rows);
+		  msg_format("X:%d, Y:%d.", cur_hgt, cur_wid);
 	}
 	else
 	{
@@ -1408,13 +1404,9 @@ msg_print("小さなフロア");
 		cur_hgt = MAX_HGT;
 		cur_wid = MAX_WID;
 
-		/* Determine number of panels */
-		max_panel_rows = (cur_hgt / SCREEN_HGT) * 2 - 2;
-		max_panel_cols = (cur_wid / SCREEN_WID) * 2 - 2;
-
 		/* Assume illegal panel */
-		panel_row = max_panel_rows;
-		panel_col = max_panel_cols;
+		panel_row = 255;
+		panel_col = 255;
 	}
 
 	/* Make a dungeon */

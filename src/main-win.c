@@ -171,6 +171,7 @@
 #define IDM_OPTIONS_NO_GRAPHICS	 400
 #define IDM_OPTIONS_OLD_GRAPHICS 401
 #define IDM_OPTIONS_NEW_GRAPHICS 402
+#define IDM_OPTIONS_BIGTILE		409
 #define IDM_OPTIONS_SOUND		410
 #define IDM_OPTIONS_SAVER		420
 #define IDM_OPTIONS_MAP			430
@@ -1116,6 +1117,10 @@ static void save_prefs(void)
 	sprintf(buf, "%d", arg_graphics);
 	WritePrivateProfileString("Angband", "Graphics", buf, ini_file);
 
+	/* Save the "arg_bigtile" flag */
+	strcpy(buf, arg_bigtile ? "1" : "0");
+	WritePrivateProfileString("Angband", "Bigtile", buf, ini_file);
+
 	/* Save the "arg_sound" flag */
 	strcpy(buf, arg_sound ? "1" : "0");
 	WritePrivateProfileString("Angband", "Sound", buf, ini_file);
@@ -1204,6 +1209,10 @@ static void load_prefs(void)
 
 	/* Extract the "arg_graphics" flag */
 	arg_graphics = GetPrivateProfileInt("Angband", "Graphics", GRAPHICS_NONE, ini_file);
+
+	/* Extract the "arg_bigtile" flag */
+	arg_bigtile = GetPrivateProfileInt("Angband", "Bigtile", FALSE, ini_file);
+	use_bigtile = arg_bigtile;
 
 	/* Extract the "arg_sound" flag */
 	arg_sound = (GetPrivateProfileInt("Angband", "Sound", 0, ini_file) != 0);
@@ -2208,6 +2217,13 @@ static errr Term_curs_win(int x, int y)
 	rc.top = y * tile_hgt + td->size_oh1;
 	rc.bottom = rc.top + tile_hgt;
 
+#ifdef JP
+	if (use_bigtile && x + 1 < Term->wid && (Term->old->a[y][x+1] == 255 || (iskanji(Term->old->c[y][x]) && !(Term->old->a[y][x] & 0x80))))
+#else
+	if (use_bigtile && x + 1 < Term->wid && Term->old->a[y][x+1] == 255)
+#endif
+		rc.right += tile_wid;
+
 	/* Cursor is done as a yellow "box" */
 	hdc = GetDC(td->w);
 	FrameRect(hdc, &rc, hbrYellow);
@@ -2424,7 +2440,7 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp)
 
 	int i;
 	int x1, y1, w1, h1;
-	int x2, y2, w2, h2;
+	int x2, y2, w2, h2, tw2;
 
 # ifdef USE_TRANSPARENCY
 
@@ -2459,6 +2475,10 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp)
 	{
 		w2 = td->tile_wid;
 		h2 = td->tile_hgt;
+		tw2 = w2;
+
+		/* big tile mode */
+		if (use_bigtile) tw2 *= 2;
 	}
 
 	/* Location of window cell */
@@ -2504,16 +2524,16 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp)
 			y3 = (tap[i] & 0x7F) * h1;
 
 			/* Perfect size */
-			if ((w1 == w2) && (h1 == h2))
+			if ((w1 == tw2) && (h1 == h2))
 			{
 				/* Copy the terrain picture from the bitmap to the window */
-				BitBlt(hdc, x2, y2, w2, h2, hdcSrc, x3, y3, SRCCOPY);
+				BitBlt(hdc, x2, y2, tw2, h2, hdcSrc, x3, y3, SRCCOPY);
 
 				/* Mask out the tile */
-				BitBlt(hdc, x2, y2, w2, h2, hdcMask, x1, y1, SRCAND);
+				BitBlt(hdc, x2, y2, tw2, h2, hdcMask, x1, y1, SRCAND);
 
 				/* Draw the tile */
-				BitBlt(hdc, x2, y2, w2, h2, hdcSrc, x1, y1, SRCPAINT);
+				BitBlt(hdc, x2, y2, tw2, h2, hdcSrc, x1, y1, SRCPAINT);
 			}
 
 			/* Need to stretch */
@@ -2523,16 +2543,16 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp)
 				SetStretchBltMode(hdc, COLORONCOLOR);
 
 				/* Copy the terrain picture from the bitmap to the window */
-				StretchBlt(hdc, x2, y2, w2, h2, hdcSrc, x3, y3, w1, h1, SRCCOPY);
+				StretchBlt(hdc, x2, y2, tw2, h2, hdcSrc, x3, y3, w1, h1, SRCCOPY);
 
 				/* Only draw if terrain and overlay are different */
 				if ((x1 != x3) || (y1 != y3))
 				{
 					/* Mask out the tile */
-					StretchBlt(hdc, x2, y2, w2, h2, hdcMask, x1, y1, w1, h1, SRCAND);
+					StretchBlt(hdc, x2, y2, tw2, h2, hdcMask, x1, y1, w1, h1, SRCAND);
 
 					/* Draw the tile */
-					StretchBlt(hdc, x2, y2, w2, h2, hdcSrc, x1, y1, w1, h1, SRCPAINT);
+					StretchBlt(hdc, x2, y2, tw2, h2, hdcSrc, x1, y1, w1, h1, SRCPAINT);
 				}
 			}
 		}
@@ -2542,10 +2562,10 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp)
 
 		{
 			/* Perfect size */
-			if ((w1 == w2) && (h1 == h2))
+			if ((w1 == tw2) && (h1 == h2))
 			{
 				/* Copy the picture from the bitmap to the window */
-				BitBlt(hdc, x2, y2, w2, h2, hdcSrc, x1, y1, SRCCOPY);
+				BitBlt(hdc, x2, y2, tw2, h2, hdcSrc, x1, y1, SRCCOPY);
 			}
 
 			/* Need to stretch */
@@ -2555,7 +2575,7 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp)
 				SetStretchBltMode(hdc, COLORONCOLOR);
 
 				/* Copy the picture from the bitmap to the window */
-				StretchBlt(hdc, x2, y2, w2, h2, hdcSrc, x1, y1, w1, h1, SRCCOPY);
+				StretchBlt(hdc, x2, y2, tw2, h2, hdcSrc, x1, y1, w1, h1, SRCCOPY);
 			}
 		}
 	}
@@ -3074,6 +3094,8 @@ static void setup_menus(void)
 	               MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 	EnableMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS,
 	               MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+	EnableMenuItem(hm, IDM_OPTIONS_BIGTILE,
+	               MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 	EnableMenuItem(hm, IDM_OPTIONS_SOUND,
 	               MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 #ifndef JP
@@ -3095,6 +3117,8 @@ static void setup_menus(void)
 	              (arg_graphics == GRAPHICS_ORIGINAL ? MF_CHECKED : MF_UNCHECKED));
 	CheckMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS,
 	              (arg_graphics == GRAPHICS_ADAM_BOLT ? MF_CHECKED : MF_UNCHECKED));
+	CheckMenuItem(hm, IDM_OPTIONS_BIGTILE,
+	              (arg_bigtile ? MF_CHECKED : MF_UNCHECKED));
 	CheckMenuItem(hm, IDM_OPTIONS_SOUND,
 	              (arg_sound ? MF_CHECKED : MF_UNCHECKED));
 	CheckMenuItem(hm, IDM_OPTIONS_BG,
@@ -3111,6 +3135,8 @@ static void setup_menus(void)
 	EnableMenuItem(hm, IDM_OPTIONS_OLD_GRAPHICS, MF_ENABLED);
 	/* Menu "Options", Item "Graphics" */
 	EnableMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS, MF_ENABLED);
+	/* Menu "Options", Item "Graphics" */
+	EnableMenuItem(hm, IDM_OPTIONS_BIGTILE, MF_ENABLED);
 #endif /* USE_GRAPHICS */
 
 #ifdef USE_SOUND
@@ -3626,6 +3652,32 @@ static void process_menus(WORD wCmd)
 			break;
 		}
 
+		case IDM_OPTIONS_BIGTILE:
+		{
+			term_data *td = &data[0];
+
+			/* Paranoia */
+			if (!inkey_flag)
+			{
+				plog("You may not do that right now.");
+				break;
+			}
+
+			/* Toggle "arg_sound" */
+			arg_bigtile = !arg_bigtile;
+
+			/* Activate */
+			Term_activate(&td->t);
+
+			/* Resize the term */
+			Term_resize(td->cols, td->rows);
+
+			/* Redraw later */
+			InvalidateRect(td->w, NULL, TRUE);
+
+			break;
+		}
+
 		case IDM_OPTIONS_SOUND:
 		{
 			/* Paranoia */
@@ -4049,22 +4101,27 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 
 				case SIZE_RESTORED:
 				{
-					uint old_tile_wid = td->tile_wid;
-					uint old_tile_hgt = td->tile_hgt;
+					uint cols = (LOWORD(lParam) - td->size_ow1) / td->tile_wid;
+					uint rows = (HIWORD(lParam) - td->size_oh1) / td->tile_hgt;
 
-					td->size_hack = TRUE;
-
-					td->tile_wid = LOWORD(lParam) / td->cols;
-					td->tile_hgt = HIWORD(lParam) / td->rows;
-
-					if ((td->tile_wid != old_tile_wid) ||
-						(td->tile_hgt != old_tile_hgt))
+					/* New size */
+					if ((td->cols != cols) || (td->rows != rows))
 					{
-						term_getsize(td);
+						/* Save the new size */
+						td->cols = cols;
+						td->rows = rows;
+
+						/* Activate */
+						Term_activate(&td->t);
+
+						/* Resize the term */
+						Term_resize(td->cols, td->rows);
 
 						/* Redraw later */
 						InvalidateRect(td->w, NULL, TRUE);
 					}
+
+					td->size_hack = TRUE;
 
 					/* Show sub-windows */
 					for (i = 1; i < MAX_TERM_DATA; i++)
@@ -4215,9 +4272,9 @@ LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 
 		case WM_SIZE:
 		{
-			uint old_tile_wid = td->tile_wid;
-			uint old_tile_hgt = td->tile_hgt;
-
+			uint cols;
+			uint rows;
+			
 			/* this message was sent before WM_NCCREATE */
 			if (!td) return 1;
 
@@ -4229,29 +4286,34 @@ LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 
 			td->size_hack = TRUE;
 
-			td->tile_wid = LOWORD(lParam) / td->cols;
-			td->tile_hgt = HIWORD(lParam) / td->rows;
+			cols = (LOWORD(lParam) - td->size_ow1) / td->tile_wid;
+			rows = (HIWORD(lParam) - td->size_oh1) / td->tile_hgt;
 
-			if ((td->tile_wid != old_tile_wid) ||
-				(td->tile_hgt != old_tile_hgt))
+			/* New size */
+			if ((td->cols != cols) || (td->rows != rows))
 			{
-				if (((td->tile_wid < td->font_wid) ||
-					 (td->tile_hgt < td->font_hgt)) ||
-					((td->cols < 80) || (td->rows < 24)))
-				{
-					td->tile_wid = td->font_wid;
-					td->tile_hgt = td->font_hgt;
+				/* Save old term */
+				term *old_term = Term;
 
-					td->cols = (LOWORD(lParam) - td->size_ow1 - td->size_ow2) / td->tile_wid;
-					td->rows = (HIWORD(lParam) - td->size_oh1 - td->size_oh2) / td->tile_hgt;
-				}
+				/* Save the new size */
+				td->cols = cols;
+				td->rows = rows;
 
-				term_getsize(td);
+				/* Activate */
+				Term_activate(&td->t);
 
-				MoveWindow(hWnd, td->pos_x, td->pos_y, td->size_wid, td->size_hgt, TRUE);
+				/* Resize the term */
+				Term_resize(td->cols, td->rows);
+
+				/* Activate */
+				Term_activate(old_term);
 
 				/* Redraw later */
 				InvalidateRect(td->w, NULL, TRUE);
+
+				/* HACK - Redraw all windows */
+				p_ptr->window = 0xFFFFFFFF;
+				window_stuff();
 			}
 
 			td->size_hack = FALSE;

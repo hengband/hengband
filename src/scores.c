@@ -139,6 +139,10 @@ void display_scores_aux(int from, int to, int note, high_score *score)
 	char	out_val[256];
 	char	tmp_val[160];
 
+	int wid, hgt, per_screen;
+
+	Term_get_size(&wid, &hgt);
+	per_screen = (hgt - 4) / 4;
 
 	/* Paranoia -- it may not have opened */
 	if (highscore_fd < 0) return;
@@ -166,8 +170,8 @@ void display_scores_aux(int from, int to, int note, high_score *score)
 	if (i > to) i = to;
 
 
-	/* Show 5 per page, until "done" */
-	for (k = from, place = k+1; k < i; k += 5)
+	/* Show per_screen per page, until "done" */
+	for (k = from, place = k+1; k < i; k += per_screen)
 	{
 		/* Clear screen */
 		Term_clear();
@@ -192,8 +196,8 @@ sprintf(tmp_val, "( %d 位以下 )", k + 1);
 			put_str(tmp_val, 0, 40);
 		}
 
-		/* Dump 5 entries */
-		for (j = k, n = 0; j < i && n < 5; place++, j++, n++)
+		/* Dump per_screen entries */
+		for (j = k, n = 0; j < i && n < per_screen; place++, j++, n++)
 		{
 			int pr, pc, pa, clev, mlev, cdun, mdun;
 
@@ -359,13 +363,13 @@ if (mlev > clev) strcat(out_val, format(" (最高%d)", mlev));
 
 		/* Wait for response */
 #ifdef JP
-prt("[ ESCで中断, その他のキーで続けます ]", 23, 21);
+prt("[ ESCで中断, その他のキーで続けます ]", hgt - 1, 21);
 #else
-		prt("[Press ESC to quit, any other key to continue.]", 23, 17);
+		prt("[Press ESC to quit, any other key to continue.]", hgt - 1, 17);
 #endif
 
 		j = inkey();
-		prt("", 23, 0);
+		prt("", hgt - 1, 0);
 
 		/* Hack -- notice Escape */
 		if (j == ESCAPE) break;

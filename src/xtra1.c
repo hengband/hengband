@@ -243,13 +243,18 @@ static void prt_stat(int stat)
 
 static void prt_status(void)
 {
+	int wid, hgt, row_statbar;
+
+	Term_get_size(&wid, &hgt);
+	row_statbar = hgt - 1;
+
 	/* Tsuyoshi  */
 	if (p_ptr->tsuyoshi)
 	{
 #ifdef JP
-		c_put_str(TERM_YELLOW, "¤Ä", ROW_STATBAR, COL_STATBAR);
+		c_put_str(TERM_YELLOW, "¤Ä", row_statbar, COL_STATBAR);
 #else
-		c_put_str(TERM_YELLOW, "Ts", ROW_STATBAR, COL_STATBAR);
+		c_put_str(TERM_YELLOW, "Ts", row_statbar, COL_STATBAR);
 #endif
 	}
 
@@ -257,575 +262,575 @@ static void prt_status(void)
 	else if (p_ptr->image)
 	{
 #ifdef JP
-		c_put_str(TERM_VIOLET, "¸¸", ROW_STATBAR, COL_STATBAR);
+		c_put_str(TERM_VIOLET, "¸¸", row_statbar, COL_STATBAR);
 #else
-		c_put_str(TERM_VIOLET, "Hu", ROW_STATBAR, COL_STATBAR);
+		c_put_str(TERM_VIOLET, "Hu", row_statbar, COL_STATBAR);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR);
+		put_str("  ", row_statbar, COL_STATBAR);
 	}
 
 	/* Blindness */
 	if (p_ptr->blind)
 	{
 #ifdef JP
-		c_put_str(TERM_L_DARK, "ÌÕ", ROW_STATBAR, COL_STATBAR+2);
+		c_put_str(TERM_L_DARK, "ÌÕ", row_statbar, COL_STATBAR+2);
 #else
-		c_put_str(TERM_L_DARK, "Bl", ROW_STATBAR, COL_STATBAR+2);
+		c_put_str(TERM_L_DARK, "Bl", row_statbar, COL_STATBAR+2);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+2);
+		put_str("  ", row_statbar, COL_STATBAR+2);
 	}
 
 	/* Paralysis */
 	if (p_ptr->paralyzed)
 	{
 #ifdef JP
-		c_put_str(TERM_RED, "áã", ROW_STATBAR, COL_STATBAR+4);
+		c_put_str(TERM_RED, "áã", row_statbar, COL_STATBAR+4);
 #else
-		c_put_str(TERM_RED, "Pa", ROW_STATBAR, COL_STATBAR+4);
+		c_put_str(TERM_RED, "Pa", row_statbar, COL_STATBAR+4);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+4);
+		put_str("  ", row_statbar, COL_STATBAR+4);
 	}
 
 	/* Confusion */
 	if (p_ptr->confused)
 	{
 #ifdef JP
-		c_put_str(TERM_VIOLET, "Íð", ROW_STATBAR, COL_STATBAR+6);
+		c_put_str(TERM_VIOLET, "Íð", row_statbar, COL_STATBAR+6);
 #else
-		c_put_str(TERM_VIOLET, "Cf", ROW_STATBAR, COL_STATBAR+6);
+		c_put_str(TERM_VIOLET, "Cf", row_statbar, COL_STATBAR+6);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+6);
+		put_str("  ", row_statbar, COL_STATBAR+6);
 	}
 
 	/* Afraid */
 	if (p_ptr->poisoned)
 	{
 #ifdef JP
-		c_put_str(TERM_GREEN, "ÆÇ", ROW_STATBAR, COL_STATBAR+8);
+		c_put_str(TERM_GREEN, "ÆÇ", row_statbar, COL_STATBAR+8);
 #else
-		c_put_str(TERM_GREEN, "Po", ROW_STATBAR, COL_STATBAR+8);
+		c_put_str(TERM_GREEN, "Po", row_statbar, COL_STATBAR+8);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+8);
+		put_str("  ", row_statbar, COL_STATBAR+8);
 	}
 
 	/* Times see-invisible */
 	if (p_ptr->tim_invis)
 	{
 #ifdef JP
-		c_put_str(TERM_L_BLUE, "»ë", ROW_STATBAR, COL_STATBAR+10);
+		c_put_str(TERM_L_BLUE, "»ë", row_statbar, COL_STATBAR+10);
 #else
-		c_put_str(TERM_L_BLUE, "Se", ROW_STATBAR, COL_STATBAR+10);
+		c_put_str(TERM_L_BLUE, "Se", row_statbar, COL_STATBAR+10);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+10);
+		put_str("  ", row_statbar, COL_STATBAR+10);
 	}
 
 	/* Timed esp */
 	if (p_ptr->tim_esp || music_singing(MUSIC_MIND))
 	{
 #ifdef JP
-		c_put_str(TERM_ORANGE, "¥Æ", ROW_STATBAR, COL_STATBAR+12);
+		c_put_str(TERM_ORANGE, "¥Æ", row_statbar, COL_STATBAR+12);
 #else
-		c_put_str(TERM_ORANGE, "Te", ROW_STATBAR, COL_STATBAR+12);
+		c_put_str(TERM_ORANGE, "Te", row_statbar, COL_STATBAR+12);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+12);
+		put_str("  ", row_statbar, COL_STATBAR+12);
 	}
 
 	/* Timed regenerate */
 	if (p_ptr->tim_regen)
 	{
 #ifdef JP
-		c_put_str(TERM_L_BLUE, "²ó", ROW_STATBAR, COL_STATBAR+14);
+		c_put_str(TERM_L_BLUE, "²ó", row_statbar, COL_STATBAR+14);
 #else
-		c_put_str(TERM_L_BLUE, "Rg", ROW_STATBAR, COL_STATBAR+14);
+		c_put_str(TERM_L_BLUE, "Rg", row_statbar, COL_STATBAR+14);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+14);
+		put_str("  ", row_statbar, COL_STATBAR+14);
 	}
 
 	/* Timed infra-vision */
 	if (p_ptr->tim_infra)
 	{
 #ifdef JP
-		c_put_str(TERM_L_RED, "ÀÖ", ROW_STATBAR, COL_STATBAR+16);
+		c_put_str(TERM_L_RED, "ÀÖ", row_statbar, COL_STATBAR+16);
 #else
-		c_put_str(TERM_L_RED, "If", ROW_STATBAR, COL_STATBAR+16);
+		c_put_str(TERM_L_RED, "If", row_statbar, COL_STATBAR+16);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+16);
+		put_str("  ", row_statbar, COL_STATBAR+16);
 	}
 
 	/* Protection from evil */
 	if (p_ptr->protevil)
 	{
 #ifdef JP
-		c_put_str(TERM_SLATE, "¼Ù", ROW_STATBAR, COL_STATBAR+18);
+		c_put_str(TERM_SLATE, "¼Ù", row_statbar, COL_STATBAR+18);
 #else
-		c_put_str(TERM_SLATE, "Ev", ROW_STATBAR, COL_STATBAR+18);
+		c_put_str(TERM_SLATE, "Ev", row_statbar, COL_STATBAR+18);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+18);
+		put_str("  ", row_statbar, COL_STATBAR+18);
 	}
 
 	/* Invulnerability */
 	if (p_ptr->invuln || music_singing(MUSIC_INVULN))
 	{
 #ifdef JP
-		c_put_str(TERM_YELLOW, "Ìµ", ROW_STATBAR, COL_STATBAR+20);
+		c_put_str(TERM_YELLOW, "Ìµ", row_statbar, COL_STATBAR+20);
 #else
-		c_put_str(TERM_YELLOW, "Iv", ROW_STATBAR, COL_STATBAR+20);
+		c_put_str(TERM_YELLOW, "Iv", row_statbar, COL_STATBAR+20);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+20);
+		put_str("  ", row_statbar, COL_STATBAR+20);
 	}
 
 	/* Wraith form */
 	if (p_ptr->wraith_form)
 	{
 #ifdef JP
-		c_put_str(TERM_L_DARK, "Í©", ROW_STATBAR, COL_STATBAR+22);
+		c_put_str(TERM_L_DARK, "Í©", row_statbar, COL_STATBAR+22);
 #else
-		c_put_str(TERM_L_DARK, "Gh", ROW_STATBAR, COL_STATBAR+22);
+		c_put_str(TERM_L_DARK, "Gh", row_statbar, COL_STATBAR+22);
 #endif
 	}
 	/* Kabenuke */
 	else if (p_ptr->kabenuke)
 	{
 #ifdef JP
-		c_put_str(TERM_SLATE, "ÊÉ", ROW_STATBAR, COL_STATBAR+22);
+		c_put_str(TERM_SLATE, "ÊÉ", row_statbar, COL_STATBAR+22);
 #else
-		c_put_str(TERM_SLATE, "Wp", ROW_STATBAR, COL_STATBAR+22);
+		c_put_str(TERM_SLATE, "Wp", row_statbar, COL_STATBAR+22);
 #endif
 	}
 	else if (p_ptr->tim_reflect)
 	{
 #ifdef JP
-		c_put_str(TERM_SLATE, "È¿", ROW_STATBAR, COL_STATBAR+22);
+		c_put_str(TERM_SLATE, "È¿", row_statbar, COL_STATBAR+22);
 #else
-		c_put_str(TERM_SLATE, "Rf", ROW_STATBAR, COL_STATBAR+22);
+		c_put_str(TERM_SLATE, "Rf", row_statbar, COL_STATBAR+22);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+22);
+		put_str("  ", row_statbar, COL_STATBAR+22);
 	}
 
 	/* Heroism */
 	if (p_ptr->hero || music_singing(MUSIC_HERO) || music_singing(MUSIC_SHERO))
 	{
 #ifdef JP
-		c_put_str(TERM_WHITE, "Í¦", ROW_STATBAR, COL_STATBAR+24);
+		c_put_str(TERM_WHITE, "Í¦", row_statbar, COL_STATBAR+24);
 #else
-		c_put_str(TERM_WHITE, "He", ROW_STATBAR, COL_STATBAR+24);
+		c_put_str(TERM_WHITE, "He", row_statbar, COL_STATBAR+24);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+24);
+		put_str("  ", row_statbar, COL_STATBAR+24);
 	}
 
 	/* Super Heroism / berserk */
 	if (p_ptr->shero)
 	{
 #ifdef JP
-		c_put_str(TERM_RED, "¶¸", ROW_STATBAR, COL_STATBAR+26);
+		c_put_str(TERM_RED, "¶¸", row_statbar, COL_STATBAR+26);
 #else
-		c_put_str(TERM_RED, "Br", ROW_STATBAR, COL_STATBAR+26);
+		c_put_str(TERM_RED, "Br", row_statbar, COL_STATBAR+26);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+26);
+		put_str("  ", row_statbar, COL_STATBAR+26);
 	}
 
 	/* Blessed */
 	if (p_ptr->blessed || music_singing(MUSIC_BLESS))
 	{
 #ifdef JP
-		c_put_str(TERM_WHITE, "½Ë", ROW_STATBAR, COL_STATBAR+28);
+		c_put_str(TERM_WHITE, "½Ë", row_statbar, COL_STATBAR+28);
 #else
-		c_put_str(TERM_WHITE, "Bs", ROW_STATBAR, COL_STATBAR+28);
+		c_put_str(TERM_WHITE, "Bs", row_statbar, COL_STATBAR+28);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+28);
+		put_str("  ", row_statbar, COL_STATBAR+28);
 	}
 
 	/* Shield */
 	if (p_ptr->magicdef)
 	{
 #ifdef JP
-		c_put_str(TERM_YELLOW, "Ëâ", ROW_STATBAR, COL_STATBAR+30);
+		c_put_str(TERM_YELLOW, "Ëâ", row_statbar, COL_STATBAR+30);
 #else
-		c_put_str(TERM_YELLOW, "Md", ROW_STATBAR, COL_STATBAR+30);
+		c_put_str(TERM_YELLOW, "Md", row_statbar, COL_STATBAR+30);
 #endif
 	}
 	else if (p_ptr->tsubureru)
 	{
 #ifdef JP
-		c_put_str(TERM_L_UMBER, "¿­", ROW_STATBAR, COL_STATBAR+30);
+		c_put_str(TERM_L_UMBER, "¿­", row_statbar, COL_STATBAR+30);
 #else
-		c_put_str(TERM_L_UMBER, "Eh", ROW_STATBAR, COL_STATBAR+30);
+		c_put_str(TERM_L_UMBER, "Eh", row_statbar, COL_STATBAR+30);
 #endif
 	}
 	else if (p_ptr->shield)
 	{
 #ifdef JP
-		c_put_str(TERM_WHITE, "ÀÐ", ROW_STATBAR, COL_STATBAR+30);
+		c_put_str(TERM_WHITE, "ÀÐ", row_statbar, COL_STATBAR+30);
 #else
-		c_put_str(TERM_WHITE, "Ss", ROW_STATBAR, COL_STATBAR+30);
+		c_put_str(TERM_WHITE, "Ss", row_statbar, COL_STATBAR+30);
 #endif
 	}
 	else if (p_ptr->special_defense & NINJA_KAWARIMI)
 	{
 #ifdef JP
-		c_put_str(TERM_VIOLET, "ÊÑ", ROW_STATBAR, COL_STATBAR+30);
+		c_put_str(TERM_VIOLET, "ÊÑ", row_statbar, COL_STATBAR+30);
 #else
-		c_put_str(TERM_VIOLET, "Qa", ROW_STATBAR, COL_STATBAR+30);
+		c_put_str(TERM_VIOLET, "Qa", row_statbar, COL_STATBAR+30);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+30);
+		put_str("  ", row_statbar, COL_STATBAR+30);
 	}
 
 	/* Oppose Acid */
 	if (p_ptr->special_defense & DEFENSE_ACID)
 	{
 #ifdef JP
-		c_put_str(TERM_L_GREEN, "»À", ROW_STATBAR, COL_STATBAR+32);
+		c_put_str(TERM_L_GREEN, "»À", row_statbar, COL_STATBAR+32);
 #else
-		c_put_str(TERM_L_GREEN, "Ac", ROW_STATBAR, COL_STATBAR+32);
+		c_put_str(TERM_L_GREEN, "Ac", row_statbar, COL_STATBAR+32);
 #endif
 	}
 	else if (p_ptr->oppose_acid || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
 	{
 #ifdef JP
-		c_put_str(TERM_GREEN, "»À", ROW_STATBAR, COL_STATBAR+32);
+		c_put_str(TERM_GREEN, "»À", row_statbar, COL_STATBAR+32);
 #else
-		c_put_str(TERM_GREEN, "Ac", ROW_STATBAR, COL_STATBAR+32);
+		c_put_str(TERM_GREEN, "Ac", row_statbar, COL_STATBAR+32);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+32);
+		put_str("  ", row_statbar, COL_STATBAR+32);
 	}
 
 	/* Oppose Lightning */
 	if (p_ptr->special_defense & DEFENSE_ELEC)
 	{
 #ifdef JP
-		c_put_str(TERM_L_BLUE, "ÅÅ", ROW_STATBAR, COL_STATBAR+34);
+		c_put_str(TERM_L_BLUE, "ÅÅ", row_statbar, COL_STATBAR+34);
 #else
-		c_put_str(TERM_L_BLUE, "El", ROW_STATBAR, COL_STATBAR+34);
+		c_put_str(TERM_L_BLUE, "El", row_statbar, COL_STATBAR+34);
 #endif
 	}
 	else if (p_ptr->oppose_elec || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
 	{
 #ifdef JP
-		c_put_str(TERM_BLUE, "ÅÅ", ROW_STATBAR, COL_STATBAR+34);
+		c_put_str(TERM_BLUE, "ÅÅ", row_statbar, COL_STATBAR+34);
 #else
-		c_put_str(TERM_BLUE, "El", ROW_STATBAR, COL_STATBAR+34);
+		c_put_str(TERM_BLUE, "El", row_statbar, COL_STATBAR+34);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+34);
+		put_str("  ", row_statbar, COL_STATBAR+34);
 	}
 
 	/* Oppose Fire */
 	if (p_ptr->special_defense & DEFENSE_FIRE)
 	{
 #ifdef JP
-		c_put_str(TERM_L_RED, "²Ð", ROW_STATBAR, COL_STATBAR+36);
+		c_put_str(TERM_L_RED, "²Ð", row_statbar, COL_STATBAR+36);
 #else
-		c_put_str(TERM_L_RED, "Fi", ROW_STATBAR, COL_STATBAR+36);
+		c_put_str(TERM_L_RED, "Fi", row_statbar, COL_STATBAR+36);
 #endif
 	}
 	else if (p_ptr->oppose_fire || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
 	{
 #ifdef JP
-		c_put_str(TERM_RED, "²Ð", ROW_STATBAR, COL_STATBAR+36);
+		c_put_str(TERM_RED, "²Ð", row_statbar, COL_STATBAR+36);
 #else
-		c_put_str(TERM_RED, "Fi", ROW_STATBAR, COL_STATBAR+36);
+		c_put_str(TERM_RED, "Fi", row_statbar, COL_STATBAR+36);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+36);
+		put_str("  ", row_statbar, COL_STATBAR+36);
 	}
 
 	/* Oppose Cold */
 	if (p_ptr->special_defense & DEFENSE_COLD)
 	{
 #ifdef JP
-		c_put_str(TERM_WHITE, "Îä", ROW_STATBAR, COL_STATBAR+38);
+		c_put_str(TERM_WHITE, "Îä", row_statbar, COL_STATBAR+38);
 #else
-		c_put_str(TERM_WHITE, "Co", ROW_STATBAR, COL_STATBAR+38);
+		c_put_str(TERM_WHITE, "Co", row_statbar, COL_STATBAR+38);
 #endif
 	}
 	else if (p_ptr->oppose_cold || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
 	{
 #ifdef JP
-		c_put_str(TERM_SLATE, "Îä", ROW_STATBAR, COL_STATBAR+38);
+		c_put_str(TERM_SLATE, "Îä", row_statbar, COL_STATBAR+38);
 #else
-		c_put_str(TERM_SLATE, "Co", ROW_STATBAR, COL_STATBAR+38);
+		c_put_str(TERM_SLATE, "Co", row_statbar, COL_STATBAR+38);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+38);
+		put_str("  ", row_statbar, COL_STATBAR+38);
 	}
 
 	/* Oppose Poison */
 	if (p_ptr->oppose_pois || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
 	{
 #ifdef JP
-		c_put_str(TERM_GREEN, "ÆÇ", ROW_STATBAR, COL_STATBAR+40);
+		c_put_str(TERM_GREEN, "ÆÇ", row_statbar, COL_STATBAR+40);
 #else
-		c_put_str(TERM_GREEN, "Po", ROW_STATBAR, COL_STATBAR+40);
+		c_put_str(TERM_GREEN, "Po", row_statbar, COL_STATBAR+40);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+40);
+		put_str("  ", row_statbar, COL_STATBAR+40);
 	}
 
 	/* Word of Recall */
 	if (p_ptr->word_recall)
 	{
 #ifdef JP
-		c_put_str(TERM_WHITE, "µ¢", ROW_STATBAR, COL_STATBAR+42);
+		c_put_str(TERM_WHITE, "µ¢", row_statbar, COL_STATBAR+42);
 #else
-		c_put_str(TERM_WHITE, "Wr", ROW_STATBAR, COL_STATBAR+42);
+		c_put_str(TERM_WHITE, "Wr", row_statbar, COL_STATBAR+42);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+42);
+		put_str("  ", row_statbar, COL_STATBAR+42);
 	}
 
 	/* Afraid */
 	if (p_ptr->afraid)
 	{
 #ifdef JP
-		c_put_str(TERM_BLUE, "¶²", ROW_STATBAR, COL_STATBAR+44);
+		c_put_str(TERM_BLUE, "¶²", row_statbar, COL_STATBAR+44);
 #else
-		c_put_str(TERM_BLUE, "Fe", ROW_STATBAR, COL_STATBAR+44);
+		c_put_str(TERM_BLUE, "Fe", row_statbar, COL_STATBAR+44);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+44);
+		put_str("  ", row_statbar, COL_STATBAR+44);
 	}
 
 	/* Blindness */
 	if (p_ptr->tim_res_time)
 	{
 #ifdef JP
-		c_put_str(TERM_L_BLUE, "»þ", ROW_STATBAR, COL_STATBAR+46);
+		c_put_str(TERM_L_BLUE, "»þ", row_statbar, COL_STATBAR+46);
 #else
-		c_put_str(TERM_L_BLUE, "Ti", ROW_STATBAR, COL_STATBAR+46);
+		c_put_str(TERM_L_BLUE, "Ti", row_statbar, COL_STATBAR+46);
 #endif
 	}
 	else if (p_ptr->multishadow)
 	{
 #ifdef JP
-		c_put_str(TERM_L_BLUE, "Ê¬", ROW_STATBAR, COL_STATBAR+46);
+		c_put_str(TERM_L_BLUE, "Ê¬", row_statbar, COL_STATBAR+46);
 #else
-		c_put_str(TERM_L_BLUE, "Ms", ROW_STATBAR, COL_STATBAR+46);
+		c_put_str(TERM_L_BLUE, "Ms", row_statbar, COL_STATBAR+46);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+46);
+		put_str("  ", row_statbar, COL_STATBAR+46);
 	}
 
 	/* Confusing Hands */
 	if (p_ptr->special_attack & ATTACK_CONFUSE)
 	{
 #ifdef JP
-		c_put_str(TERM_RED, "Íð", ROW_STATBAR, COL_STATBAR+48);
+		c_put_str(TERM_RED, "Íð", row_statbar, COL_STATBAR+48);
 #else
-		c_put_str(TERM_RED, "Cf", ROW_STATBAR, COL_STATBAR+48);
+		c_put_str(TERM_RED, "Cf", row_statbar, COL_STATBAR+48);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+48);
+		put_str("  ", row_statbar, COL_STATBAR+48);
 	}
 
 	if (p_ptr->resist_magic)
 	{
 #ifdef JP
-		c_put_str(TERM_SLATE, "ËÉ", ROW_STATBAR, COL_STATBAR+50);
+		c_put_str(TERM_SLATE, "ËÉ", row_statbar, COL_STATBAR+50);
 #else
-		c_put_str(TERM_SLATE, "Rm", ROW_STATBAR, COL_STATBAR+50);
+		c_put_str(TERM_SLATE, "Rm", row_statbar, COL_STATBAR+50);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+50);
+		put_str("  ", row_statbar, COL_STATBAR+50);
 	}
 
 	/* Ultimate-resistance */
 	if (p_ptr->ult_res)
 	{
 #ifdef JP
-		c_put_str(TERM_YELLOW, "µæ", ROW_STATBAR, COL_STATBAR+52);
+		c_put_str(TERM_YELLOW, "µæ", row_statbar, COL_STATBAR+52);
 #else
-		c_put_str(TERM_YELLOW, "Ul", ROW_STATBAR, COL_STATBAR+52);
+		c_put_str(TERM_YELLOW, "Ul", row_statbar, COL_STATBAR+52);
 #endif
 	}
 	/* tim levitation */
 	else if (p_ptr->tim_ffall)
 	{
 #ifdef JP
-		c_put_str(TERM_L_BLUE, "Éâ", ROW_STATBAR, COL_STATBAR+52);
+		c_put_str(TERM_L_BLUE, "Éâ", row_statbar, COL_STATBAR+52);
 #else
-		c_put_str(TERM_L_BLUE, "Lv", ROW_STATBAR, COL_STATBAR+52);
+		c_put_str(TERM_L_BLUE, "Lv", row_statbar, COL_STATBAR+52);
 #endif
 	}
 	else if (p_ptr->tim_res_nether)
 	{
 #ifdef JP
-		c_put_str(TERM_L_DARK, "¹ö", ROW_STATBAR, COL_STATBAR+52);
+		c_put_str(TERM_L_DARK, "¹ö", row_statbar, COL_STATBAR+52);
 #else
-		c_put_str(TERM_L_DARK, "Nt", ROW_STATBAR, COL_STATBAR+52);
+		c_put_str(TERM_L_DARK, "Nt", row_statbar, COL_STATBAR+52);
 #endif
 	}
 	else if (p_ptr->dustrobe)
 	{
 #ifdef JP
-		c_put_str(TERM_L_DARK, "¶À", ROW_STATBAR, COL_STATBAR+52);
+		c_put_str(TERM_L_DARK, "¶À", row_statbar, COL_STATBAR+52);
 #else
-		c_put_str(TERM_L_DARK, "Am", ROW_STATBAR, COL_STATBAR+52);
+		c_put_str(TERM_L_DARK, "Am", row_statbar, COL_STATBAR+52);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+52);
+		put_str("  ", row_statbar, COL_STATBAR+52);
 	}
 
 	/* Mahouken */
 	if (p_ptr->special_attack & ATTACK_FIRE)
 	{
 #ifdef JP
-		c_put_str(TERM_L_RED, "²Ð", ROW_STATBAR, COL_STATBAR+54);
+		c_put_str(TERM_L_RED, "²Ð", row_statbar, COL_STATBAR+54);
 #else
-		c_put_str(TERM_L_RED, "Fi", ROW_STATBAR, COL_STATBAR+54);
+		c_put_str(TERM_L_RED, "Fi", row_statbar, COL_STATBAR+54);
 #endif
 	}
 	else if (p_ptr->special_attack & ATTACK_COLD)
 	{
 #ifdef JP
-		c_put_str(TERM_WHITE, "Îä", ROW_STATBAR, COL_STATBAR+54);
+		c_put_str(TERM_WHITE, "Îä", row_statbar, COL_STATBAR+54);
 #else
-		c_put_str(TERM_WHITE, "Co", ROW_STATBAR, COL_STATBAR+54);
+		c_put_str(TERM_WHITE, "Co", row_statbar, COL_STATBAR+54);
 #endif
 	}
 	else if (p_ptr->special_attack & ATTACK_ELEC)
 	{
 #ifdef JP
-		c_put_str(TERM_L_BLUE, "ÅÅ", ROW_STATBAR, COL_STATBAR+54);
+		c_put_str(TERM_L_BLUE, "ÅÅ", row_statbar, COL_STATBAR+54);
 #else
-		c_put_str(TERM_L_BLUE, "El", ROW_STATBAR, COL_STATBAR+54);
+		c_put_str(TERM_L_BLUE, "El", row_statbar, COL_STATBAR+54);
 #endif
 	}
 	else if (p_ptr->special_attack & ATTACK_ACID)
 	{
 #ifdef JP
-		c_put_str(TERM_SLATE, "»À", ROW_STATBAR, COL_STATBAR+54);
+		c_put_str(TERM_SLATE, "»À", row_statbar, COL_STATBAR+54);
 #else
-		c_put_str(TERM_SLATE, "Ac", ROW_STATBAR, COL_STATBAR+54);
+		c_put_str(TERM_SLATE, "Ac", row_statbar, COL_STATBAR+54);
 #endif
 	}
 	else if (p_ptr->special_attack & ATTACK_POIS)
 	{
 #ifdef JP
-		c_put_str(TERM_L_GREEN, "ÆÇ", ROW_STATBAR, COL_STATBAR+54);
+		c_put_str(TERM_L_GREEN, "ÆÇ", row_statbar, COL_STATBAR+54);
 #else
-		c_put_str(TERM_L_GREEN, "Po", ROW_STATBAR, COL_STATBAR+54);
+		c_put_str(TERM_L_GREEN, "Po", row_statbar, COL_STATBAR+54);
 #endif
 	}
 	else if (p_ptr->special_defense & NINJA_S_STEALTH)
 	{
 #ifdef JP
-		c_put_str(TERM_YELLOW, "Ä¶", ROW_STATBAR, COL_STATBAR+54);
+		c_put_str(TERM_YELLOW, "Ä¶", row_statbar, COL_STATBAR+54);
 #else
-		c_put_str(TERM_YELLOW, "St", ROW_STATBAR, COL_STATBAR+54);
+		c_put_str(TERM_YELLOW, "St", row_statbar, COL_STATBAR+54);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+54);
+		put_str("  ", row_statbar, COL_STATBAR+54);
 	}
 
 	/* tim stealth */
 	if (p_ptr->tim_sh_fire)
 	{
 #ifdef JP
-		c_put_str(TERM_L_RED, "¥ª", ROW_STATBAR, COL_STATBAR+56);
+		c_put_str(TERM_L_RED, "¥ª", row_statbar, COL_STATBAR+56);
 #else
-		c_put_str(TERM_L_RED, "Sf", ROW_STATBAR, COL_STATBAR+56);
+		c_put_str(TERM_L_RED, "Sf", row_statbar, COL_STATBAR+56);
 #endif
 	}
 	else if (p_ptr->tim_stealth || music_singing(MUSIC_STEALTH))
 	{
 #ifdef JP
-		c_put_str(TERM_UMBER, "±£", ROW_STATBAR, COL_STATBAR+56);
+		c_put_str(TERM_UMBER, "±£", row_statbar, COL_STATBAR+56);
 #else
-		c_put_str(TERM_UMBER, "Sl", ROW_STATBAR, COL_STATBAR+56);
+		c_put_str(TERM_UMBER, "Sl", row_statbar, COL_STATBAR+56);
 #endif
 	}
 	else if (p_ptr->special_defense & NINJA_S_STEALTH)
 	{
 #ifdef JP
-		c_put_str(TERM_YELLOW, "±£", ROW_STATBAR, COL_STATBAR+56);
+		c_put_str(TERM_YELLOW, "±£", row_statbar, COL_STATBAR+56);
 #else
-		c_put_str(TERM_YELLOW, "lt", ROW_STATBAR, COL_STATBAR+56);
+		c_put_str(TERM_YELLOW, "lt", row_statbar, COL_STATBAR+56);
 #endif
 	}
 	else if (p_ptr->tim_sh_touki)
 	{
 #ifdef JP
-		c_put_str(TERM_WHITE, "Æ®", ROW_STATBAR, COL_STATBAR+56);
+		c_put_str(TERM_WHITE, "Æ®", row_statbar, COL_STATBAR+56);
 #else
-		c_put_str(TERM_WHITE, "Ae", ROW_STATBAR, COL_STATBAR+56);
+		c_put_str(TERM_WHITE, "Ae", row_statbar, COL_STATBAR+56);
 #endif
 	}
 	else
 	{
-		put_str("  ", ROW_STATBAR, COL_STATBAR+56);
+		put_str("  ", row_statbar, COL_STATBAR+56);
 	}
 }
 
@@ -1114,6 +1119,10 @@ static void prt_sp(void)
 static void prt_depth(void)
 {
 	char depths[32];
+	int wid, hgt, row_depth;
+
+	Term_get_size(&wid, &hgt);
+	row_depth = hgt - 1;
 
 	if (!dun_level)
 	{
@@ -1152,7 +1161,7 @@ sprintf(depths, "%d ³¬", dun_level);
 	}
 
 	/* Right-Adjust the "depth", and clear old values */
-	prt(format("%7s", depths), ROW_DEPTH, COL_DEPTH);
+	prt(format("%7s", depths), row_depth, COL_DEPTH);
 }
 
 
@@ -1417,6 +1426,10 @@ static void prt_speed(void)
 
 	byte attr = TERM_WHITE;
 	char buf[32] = "";
+	int wid, hgt, row_speed;
+
+	Term_get_size(&wid, &hgt);
+	row_speed = hgt - 1;
 
 	/* Hack -- Visually "undo" the Search Mode Slowdown */
 	if (p_ptr->action == ACTION_SEARCH) i += 10;
@@ -1470,30 +1483,40 @@ static void prt_speed(void)
 	}
 
 	/* Display the speed */
-	c_put_str(attr, format("%-9s", buf), ROW_SPEED, COL_SPEED);
+	c_put_str(attr, format("%-9s", buf), row_speed, COL_SPEED);
 }
 
 
 static void prt_study(void)
 {
+	int wid, hgt, row_study;
+
+	Term_get_size(&wid, &hgt);
+	row_study = hgt - 1;
+
 	if (p_ptr->new_spells)
 	{
 #ifdef JP
-		put_str("³Ø½¬", ROW_STUDY, COL_STUDY);
+		put_str("³Ø½¬", row_study, COL_STUDY);
 #else
-		put_str("Stud", ROW_STUDY, COL_STUDY);
+		put_str("Stud", row_study, COL_STUDY);
 #endif
 
 	}
 	else
 	{
-		put_str("    ", ROW_STUDY, COL_STUDY);
+		put_str("    ", row_study, COL_STUDY);
 	}
 }
 
 
 static void prt_mane(void)
 {
+	int wid, hgt, row_study;
+
+	Term_get_size(&wid, &hgt);
+	row_study = hgt - 1;
+
 	if (p_ptr->pclass == CLASS_IMITATOR)
 	{
 		if (mane_num)
@@ -1502,14 +1525,14 @@ static void prt_mane(void)
 			if (new_mane) attr = TERM_L_RED;
 			else attr = TERM_WHITE;
 #ifdef JP
-			c_put_str(attr, "¤Þ¤Í", ROW_STUDY, COL_STUDY);
+			c_put_str(attr, "¤Þ¤Í", row_study, COL_STUDY);
 #else
-			c_put_str(attr, "Mane", ROW_STUDY, COL_STUDY);
+			c_put_str(attr, "Mane", row_study, COL_STUDY);
 #endif
 		}
 		else
 		{
-			put_str("    ", ROW_STUDY, COL_STUDY);
+			put_str("    ", row_study, COL_STUDY);
 		}
 	}
 }

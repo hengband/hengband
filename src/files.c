@@ -5081,6 +5081,11 @@ bool show_file(bool show_version, cptr name, cptr what, int line, int mode)
 
 	bool reverse = (line < 0);
 
+	int wid, hgt, rows;
+
+	Term_get_size(&wid, &hgt);
+	rows = hgt - 4;
+
 	/* Wipe finder */
 	strcpy(finder, "");
 
@@ -5251,7 +5256,7 @@ msg_format("'%s'をオープンできません。", name);
 	size = next;
 
 	/* start from bottom when reverse mode */
-	if (line == -1) line = ((size-1)/20)*20;
+	if (line == -1) line = ((size-1)/rows)*rows;
 
 	/* Go to the tagged line */
 	if (tag) line = get_line(&tags, tag);
@@ -5295,8 +5300,8 @@ msg_format("'%s'をオープンできません。", name);
 			next++;
 		}
 
-		/* Dump the next 20 lines of the file */
-		for (i = 0; i < 20; )
+		/* Dump the next rows lines of the file */
+		for (i = 0; i < rows; )
 		{
 			/* Hack -- track the "first" line */
 			if (!i) line = next;
@@ -5393,21 +5398,21 @@ msg_format("'%s'をオープンできません。", name);
 		{
 			/* Wait for it */
 #ifdef JP
-prt("[ 番号を入力して下さい( ESCで終了 ) ]", 23, 0);
+prt("[ 番号を入力して下さい( ESCで終了 ) ]", hgt - 1, 0);
 #else
-			prt("[Press a Number, or ESC to exit.]", 23, 0);
+			prt("[Press a Number, or ESC to exit.]", hgt - 1, 0);
 #endif
 
 		}
 
 		/* Prompt -- small files */
-		else if (size <= 20)
+		else if (size <= rows)
 		{
 			/* Wait for it */
 #ifdef JP
-prt("[キー:(?)ヘルプ (ESC)終了]", 23, 0);
+prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 #else
-			prt("[Press ESC to exit.]", 23, 0);
+			prt("[Press ESC to exit.]", hgt - 1, 0);
 #endif
 
 		}
@@ -5417,11 +5422,11 @@ prt("[キー:(?)ヘルプ (ESC)終了]", 23, 0);
 		{
 #ifdef JP
 			if(reverse)
-				prt("[キー:(RET/スペース)↑ (-)↓ (?)ヘルプ (ESC)終了]", 23, 0);
+				prt("[キー:(RET/スペース)↑ (-)↓ (?)ヘルプ (ESC)終了]", hgt - 1, 0);
 			else
-				prt("[キー:(RET/スペース)↓ (-)↑ (?)ヘルプ (ESC)終了]", 23, 0);
+				prt("[キー:(RET/スペース)↓ (-)↑ (?)ヘルプ (ESC)終了]", hgt - 1, 0);
 #else
-			prt("[Press Return, Space, -, =, /, |, or ESC to exit.]", 23, 0);
+			prt("[Press Return, Space, -, =, /, |, or ESC to exit.]", hgt - 1, 0);
 #endif
 		}
 
@@ -5449,9 +5454,9 @@ prt("[キー:(?)ヘルプ (ESC)終了]", 23, 0);
 		{
 			/* Get "shower" */
 #ifdef JP
-prt("強調: ", 23, 0);
+prt("強調: ", hgt - 1, 0);
 #else
-			prt("Show: ", 23, 0);
+			prt("Show: ", hgt - 1, 0);
 #endif
 
 			(void)askfor_aux(shower, 80);
@@ -5462,9 +5467,9 @@ prt("強調: ", 23, 0);
 		{
 			/* Get "finder" */
 #ifdef JP
-prt("検索: ", 23, 0);
+prt("検索: ", hgt - 1, 0);
 #else
-			prt("Find: ", 23, 0);
+			prt("Find: ", hgt - 1, 0);
 #endif
 
 
@@ -5496,9 +5501,9 @@ prt("検索: ", 23, 0);
 		{
 			char tmp[81];
 #ifdef JP
-prt("行: ", 23, 0);
+prt("行: ", hgt - 1, 0);
 #else
-			prt("Goto Line: ", 23, 0);
+			prt("Goto Line: ", hgt - 1, 0);
 #endif
 
 			strcpy(tmp, "0");
@@ -5514,10 +5519,10 @@ prt("行: ", 23, 0);
 		{
 			char tmp[81];
 #ifdef JP
-prt("ファイル・ネーム: ", 23, 0);
+prt("ファイル・ネーム: ", hgt - 1, 0);
 strcpy(tmp, "jhelp.hlp");
 #else
-			prt("Goto File: ", 23, 0);
+			prt("Goto File: ", hgt - 1, 0);
 			strcpy(tmp, "help.hlp");
 #endif
 
@@ -5531,22 +5536,22 @@ strcpy(tmp, "jhelp.hlp");
 		/* Hack -- Allow backing up */
 		if (k == '-')
 		{
-			line = line + (reverse ? 20 : -20);
-			if (line < 0) line = ((size-1)/20)*20;
+			line = line + (reverse ? rows : -rows);
+			if (line < 0) line = ((size-1)/rows)*rows;
 		}
 
 		/* Hack -- Advance a single line */
 		if ((k == '\n') || (k == '\r'))
 		{
 			line = line + (reverse ? -1 : 1);
-			if (line < 0) line = ((size-1)/20)*20;
+			if (line < 0) line = ((size-1)/rows)*rows;
 		}
 
 		/* Advance one page */
 		if (k == ' ')
 		{
-			line = line + (reverse ? -20 : 20);
-			if (line < 0) line = ((size-1)/20)*20;
+			line = line + (reverse ? -rows : rows);
+			if (line < 0) line = ((size-1)/rows)*rows;
 		}
 
 		/* Recurse on numbers */
@@ -7399,6 +7404,11 @@ Term_putstr(0, 0, -1, TERM_WHITE, "熟慮の上の自殺！");
  */
 static void handle_signal_abort(int sig)
 {
+	int wid, hgt, rows;
+
+	Term_get_size(&wid, &hgt);
+	rows = hgt - 4;
+
 	/* Disable handler */
 	(void)signal(sig, SIG_IGN);
 
@@ -7412,10 +7422,10 @@ static void handle_signal_abort(int sig)
 	clear_mon_lite();
 
 	/* Clear the bottom line */
-	Term_erase(0, 23, 255);
+	Term_erase(0, hgt - 1, 255);
 
 	/* Give a warning */
-	Term_putstr(0, 23, -1, TERM_RED,
+	Term_putstr(0, hgt - 1, -1, TERM_RED,
 #ifdef JP
 "恐ろしいソフトのバグが飛びかかってきた！");
 #else
@@ -7425,9 +7435,9 @@ static void handle_signal_abort(int sig)
 
 	/* Message */
 #ifdef JP
-Term_putstr(45, 23, -1, TERM_RED, "緊急セーブ...");
+Term_putstr(45, hgt - 1, -1, TERM_RED, "緊急セーブ...");
 #else
-	Term_putstr(45, 23, -1, TERM_RED, "Panic save...");
+	Term_putstr(45, hgt - 1, -1, TERM_RED, "Panic save...");
 #endif
 
 
@@ -7452,9 +7462,9 @@ Term_putstr(45, 23, -1, TERM_RED, "緊急セーブ...");
 	if (save_player())
 	{
 #ifdef JP
-Term_putstr(45, 23, -1, TERM_RED, "緊急セーブ成功！");
+Term_putstr(45, hgt - 1, -1, TERM_RED, "緊急セーブ成功！");
 #else
-		Term_putstr(45, 23, -1, TERM_RED, "Panic save succeeded!");
+		Term_putstr(45, hgt - 1, -1, TERM_RED, "Panic save succeeded!");
 #endif
 
 	}
@@ -7463,9 +7473,9 @@ Term_putstr(45, 23, -1, TERM_RED, "緊急セーブ成功！");
 	else
 	{
 #ifdef JP
-Term_putstr(45, 23, -1, TERM_RED, "緊急セーブ失敗！");
+Term_putstr(45, hgt - 1, -1, TERM_RED, "緊急セーブ失敗！");
 #else
-		Term_putstr(45, 23, -1, TERM_RED, "Panic save failed!");
+		Term_putstr(45, hgt - 1, -1, TERM_RED, "Panic save failed!");
 #endif
 
 	}

@@ -2129,6 +2129,16 @@ msg_format("%^sに振り落とされた！", m_name);
 }
 
 
+/*
+ * Get term size and calculate screen size
+ */
+void get_screen_size(int *wid_p, int *hgt_p)
+{
+	Term_get_size(wid_p, hgt_p);
+	*hgt_p -= ROW_MAP + 2;
+	*wid_p -= COL_MAP + 2;
+	if (use_bigtile) *wid_p /= 2;
+}
 
 /*
  * Calculates current boundaries
@@ -2136,11 +2146,16 @@ msg_format("%^sに振り落とされた！", m_name);
  */
 void panel_bounds(void)
 {
-	panel_row_min = panel_row * (SCREEN_HGT / 2);
-	panel_row_max = panel_row_min + SCREEN_HGT - 1;
+	int wid, hgt;
+
+	/* Get size */
+	get_screen_size(&wid, &hgt);
+
+	panel_row_min = panel_row * hgt / 2;
+	panel_row_max = panel_row_min + hgt - 1;
 	panel_row_prt = panel_row_min - 1;
-	panel_col_min = panel_col * (SCREEN_WID / 2);
-	panel_col_max = panel_col_min + SCREEN_WID - 1;
+	panel_col_min = panel_col * wid / 2;
+	panel_col_max = panel_col_min + wid - 1;
 	panel_col_prt = panel_col_min - 13;
 }
 
@@ -2152,12 +2167,93 @@ void panel_bounds(void)
  */
 void panel_bounds_center(void)
 {
-	panel_row = panel_row_min / (SCREEN_HGT / 2);
-	panel_row_max = panel_row_min + SCREEN_HGT - 1;
+	int wid, hgt;
+
+	/* Get size */
+	get_screen_size(&wid, &hgt);
+
+	panel_row = panel_row_min / (hgt / 2);
+	panel_row_max = panel_row_min + hgt - 1;
 	panel_row_prt = panel_row_min - 1;
-	panel_col = panel_col_min / (SCREEN_WID / 2);
-	panel_col_max = panel_col_min + SCREEN_WID - 1;
+	panel_col = panel_col_min / (wid / 2);
+	panel_col_max = panel_col_min + wid - 1;
 	panel_col_prt = panel_col_min - 13;
+}
+
+
+/*
+ * Map resizing whenever the main term changes size
+ */
+void resize_map(void)
+{
+	/* Only if the dungeon exists */
+	if (!character_dungeon) return;
+	
+	/* Mega-Hack -- no panel yet */
+	panel_row_min = 0;
+	panel_row_max = 0;
+	panel_col_min = 0;
+	panel_col_max = 0;
+
+	/* Reset the panels */
+	panel_row_min = cur_hgt;
+	panel_col_min = cur_wid;
+				
+	verify_panel();
+
+	/* Update stuff */
+	p_ptr->update |= (PU_TORCH | PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+
+	/* Forget lite/view */
+	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
+
+	/* Update lite/view */
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
+
+	/* Update monsters */
+	p_ptr->update |= (PU_MONSTERS);
+
+	/* Redraw everything */
+	p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+
+	/* Hack -- update */
+	handle_stuff();
+	
+	/* Redraw */
+	Term_redraw();
+
+	/* Refresh */
+	Term_fresh();
+}
+
+/*
+ * Redraw a term when it is resized
+ */
+void redraw_window(void)
+{
+	/* Only if the dungeon exists */
+	if (!character_dungeon) return;
+	
+	/* Hack - Activate term zero for the redraw */
+	Term_activate(&term_screen[0]);
+	
+	/* Hack -- react to changes */
+	Term_xtra(TERM_XTRA_REACT, 0);
+
+	/* Window stuff */
+	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
+
+	/* Window stuff */
+	p_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
+
+	/* Hack -- update */
+	handle_stuff();
+
+	/* Redraw */
+	Term_redraw();
+
+	/* Refresh */
+	Term_fresh();
 }
 
 
@@ -2170,17 +2266,23 @@ void panel_bounds_center(void)
  */
 bool change_panel(int dy, int dx)
 {
+	int y, x;
+	int wid, hgt;
+
+	/* Get size */
+	get_screen_size(&wid, &hgt);
+
 	/* Apply the motion */
-	int y = panel_row_min + dy * (SCREEN_HGT / 2);
-	int x = panel_col_min + dx * (SCREEN_WID / 2);
+	y = panel_row_min + dy * hgt / 2;
+	x = panel_col_min + dx * wid / 2;
 
 	/* Verify the row */
-	if (y > max_panel_rows * (SCREEN_HGT / 2)) y = max_panel_rows * (SCREEN_HGT / 2);
-	else if (y < 0) y = 0;
+	if (y > cur_hgt - hgt) y = cur_hgt - hgt;
+	if (y < 0) y = 0;
 
 	/* Verify the col */
-	if (x > max_panel_cols * (SCREEN_WID / 2)) x = max_panel_cols * (SCREEN_WID / 2);
-	else if (x < 0) x = 0;
+	if (x > cur_wid - wid) x = cur_wid - wid;
+	if (x < 0) x = 0;
 
 	/* Handle "changes" */
 	if ((y != panel_row_min) || (x != panel_col_min))
@@ -2222,71 +2324,96 @@ void verify_panel(void)
 {
 	int y = py;
 	int x = px;
+	int wid, hgt;
 
-	/* Center on player */
+	int prow_min;
+	int pcol_min;
+	int max_prow_min;
+	int max_pcol_min;
+
+	/* Get size */
+	get_screen_size(&wid, &hgt);
+
+	max_prow_min = cur_hgt - hgt;
+	max_pcol_min = cur_wid - wid;
+
+	/* Bounds checking */
+	if (max_prow_min < 0) max_prow_min = 0;
+	if (max_pcol_min < 0) max_pcol_min = 0;
+
+		/* Center on player */
 	if (center_player && (center_running || !running))
 	{
-		int prow_min;
-		int pcol_min;
-
-		int max_prow_min = max_panel_rows * (SCREEN_HGT / 2);
-		int max_pcol_min = max_panel_cols * (SCREEN_WID / 2);
-
 		/* Center vertically */
-		prow_min = y - SCREEN_HGT / 2;
-		if (prow_min > max_prow_min) prow_min = max_prow_min;
-		else if (prow_min < 0) prow_min = 0;
+		prow_min = y - hgt / 2;
+		if (prow_min < 0) prow_min = 0;
+		else if (prow_min > max_prow_min) prow_min = max_prow_min;
 
-		/* Center horizontally */
-		pcol_min = x - SCREEN_WID / 2;
-		if (pcol_min > max_pcol_min) pcol_min = max_pcol_min;
-		else if (pcol_min < 0) pcol_min = 0;
-
-		/* Check for "no change" */
-		if ((prow_min == panel_row_min) && (pcol_min == panel_col_min)) return;
-
-		/* Save the new panel info */
-		panel_row_min = prow_min;
-		panel_col_min = pcol_min;
-
-		/* Recalculate the boundaries */
-		panel_bounds_center();
+			/* Center horizontally */
+		pcol_min = x - wid / 2;
+		if (pcol_min < 0) pcol_min = 0;
+		else if (pcol_min > max_pcol_min) pcol_min = max_pcol_min;
 	}
-
 	else
-  	{
-		int prow = panel_row;
-		int pcol = panel_col;
+	{
+		prow_min = panel_row_min;
+		pcol_min = panel_col_min;
 
 		/* Scroll screen when 2 grids from top/bottom edge */
-		if ((y < panel_row_min + 2) || (y > panel_row_max - 2))
+		if (y > panel_row_max - 2)
 		{
-			prow = ((y - SCREEN_HGT / 4) / (SCREEN_HGT / 2));
-			if (prow > max_panel_rows) prow = max_panel_rows;
-			else if (prow < 0) prow = 0;
+			while (y > prow_min + hgt - 2)
+			{
+				prow_min += (hgt / 2);
+			}
+
+			if (prow_min > max_prow_min) prow_min = max_prow_min;
+		}
+
+		if (y < panel_row_min + 2)
+		{
+			while (y < prow_min + 2)
+			{
+				prow_min -= (hgt / 2);
+			}
+
+			if (prow_min < 0) prow_min = 0;
 		}
 
 		/* Scroll screen when 4 grids from left/right edge */
-		if ((x < panel_col_min + 4) || (x > panel_col_max - 4))
+		if (x > panel_col_max - 4)
 		{
-			pcol = ((x - SCREEN_WID / 4) / (SCREEN_WID / 2));
-			if (pcol > max_panel_cols) pcol = max_panel_cols;
-			else if (pcol < 0) pcol = 0;
+			while (x > pcol_min + wid - 4)
+			{
+				pcol_min += (wid / 2);
+			}
+				
+			if (pcol_min > max_pcol_min) pcol_min = max_pcol_min;
 		}
+		
+		if (x < panel_col_min + 4)
+		{
+			while (x < pcol_min + 4)
+			{
+				pcol_min -= (wid / 2);
+			}
 
-		/* Check for "no change" */
-		if ((prow == panel_row) && (pcol == panel_col)) return;
-
-		/* Hack -- optional disturb on "panel change" */
-		if (disturb_panel && !center_player) disturb(0, 0);
-
-		/* Save the new panel info */
-		panel_row = prow;
-		panel_col = pcol;
-
-		/* Recalculate the boundaries */
-		panel_bounds();
+			if (pcol_min < 0) pcol_min = 0;
+		}
 	}
+
+	/* Check for "no change" */
+	if ((prow_min == panel_row_min) && (pcol_min == panel_col_min)) return;
+
+	/* Save the new panel info */
+	panel_row_min = prow_min;
+	panel_col_min = pcol_min;
+
+	/* Hack -- optional disturb on "panel change" */
+	if (disturb_panel && !center_player) disturb(0, 0);
+
+	/* Recalculate the boundaries */
+	panel_bounds_center();
 
 	/* Update stuff */
 	p_ptr->update |= (PU_MONSTERS);
@@ -2632,6 +2759,8 @@ static bool target_set_accept(int y, int x)
 
 	s16b this_o_idx, next_o_idx = 0;
 
+	/* Bounds */
+	if (!(in_bounds(y, x))) return (FALSE);
 
 	/* Player grid is always interesting */
 	if ((y == py) && (x == px)) return (TRUE);
@@ -2748,13 +2877,15 @@ static void target_set_prepare(int mode)
 	{
 		for (x = panel_col_min; x <= panel_col_max; x++)
 		{
-			cave_type *c_ptr = &cave[y][x];
+			cave_type *c_ptr;
 
 			/* Require line of sight, unless "look" is "expanded" */
 			if (!expand_look && !player_has_los_bold(y, x)) continue;
 
 			/* Require "interesting" contents */
 			if (!target_set_accept(y, x)) continue;
+
+			c_ptr = &cave[y][x];
 
 			/* Require target_able monsters for "TARGET_KILL" */
 			if ((mode & (TARGET_KILL)) && !target_able(c_ptr->m_idx)) continue;
@@ -3454,7 +3585,7 @@ s2 = "の入口";
 			/* Display a message */
 			if (wizard)
 #ifdef JP
-			sprintf(out_val, "%s%s%s%s[%s] %x %d %d %d %d", s1, name, s2, s3, info, c_ptr->info, c_ptr->feat, c_ptr->dist, c_ptr->cost, c_ptr->when);
+			sprintf(out_val, "%s%s%s%s[%s] %x %d %d %d %d (%d,%d)", s1, name, s2, s3, info, c_ptr->info, c_ptr->feat, c_ptr->dist, c_ptr->cost, c_ptr->when, x, y);
 #else
 			sprintf(out_val, "%s%s%s%s [%s] %x %d %d %d %d", s1, s2, s3, name, info, c_ptr->info, c_ptr->feat, c_ptr->dist, c_ptr->cost, c_ptr->when);
 #endif
@@ -3539,6 +3670,10 @@ bool target_set(int mode)
 
 	cave_type		*c_ptr;
 
+	int wid, hgt;
+
+	/* Get size */
+	get_screen_size(&wid, &hgt);
 
 	/* Cancel target */
 	target_who = 0;
@@ -3767,22 +3902,22 @@ strcpy(info, "q止 p自 o現 +次 -前");
 						y += dy;
 
 						/* Do not move horizontally if unnecessary */
-						if (((x < panel_col_min + SCREEN_WID / 2) && (dx > 0)) ||
-							 ((x > panel_col_min + SCREEN_WID / 2) && (dx < 0)))
+						if (((x < panel_col_min + wid / 2) && (dx > 0)) ||
+							 ((x > panel_col_min + wid / 2) && (dx < 0)))
 						{
 							dx = 0;
 						}
 
 						/* Do not move vertically if unnecessary */
-						if (((y < panel_row_min + SCREEN_HGT / 2) && (dy > 0)) ||
-							 ((y > panel_row_min + SCREEN_HGT / 2) && (dy < 0)))
+						if (((y < panel_row_min + hgt / 2) && (dy > 0)) ||
+							 ((y > panel_row_min + hgt / 2) && (dy < 0)))
 						{
 							dy = 0;
 						}
 
 						/* Apply the motion */
-						if ((y >= panel_row_min+SCREEN_HGT) || (y < panel_row_min) ||
-						    (x >= panel_col_min+SCREEN_WID) || (x < panel_col_min))
+						if ((y >= panel_row_min+hgt) || (y < panel_row_min) ||
+						    (x >= panel_col_min+wid) || (x < panel_col_min))
 						{
 							if (change_panel(dy, dx)) target_set_prepare(mode);
 						}
@@ -3934,22 +4069,22 @@ strcpy(info, "q止 t決 p自 m近 +次 -前");
 				y += dy;
 
 				/* Do not move horizontally if unnecessary */
-				if (((x < panel_col_min + SCREEN_WID / 2) && (dx > 0)) ||
-					 ((x > panel_col_min + SCREEN_WID / 2) && (dx < 0)))
+				if (((x < panel_col_min + wid / 2) && (dx > 0)) ||
+					 ((x > panel_col_min + wid / 2) && (dx < 0)))
 				{
 					dx = 0;
 				}
 
 				/* Do not move vertically if unnecessary */
-				if (((y < panel_row_min + SCREEN_HGT / 2) && (dy > 0)) ||
-					 ((y > panel_row_min + SCREEN_HGT / 2) && (dy < 0)))
+				if (((y < panel_row_min + hgt / 2) && (dy > 0)) ||
+					 ((y > panel_row_min + hgt / 2) && (dy < 0)))
 				{
 					dy = 0;
 				}
 
 				/* Apply the motion */
-				if ((y >= panel_row_min + SCREEN_HGT) || (y < panel_row_min) ||
-					 (x >= panel_col_min + SCREEN_WID) || (x < panel_col_min))
+				if ((y >= panel_row_min + hgt) || (y < panel_row_min) ||
+					 (x >= panel_col_min + wid) || (x < panel_col_min))
 				{
 					if (change_panel(dy, dx)) target_set_prepare(mode);
 				}
@@ -5362,6 +5497,11 @@ bool tgt_pt(int *x_ptr, int *y_ptr)
 	int d, x, y;
 	bool success = FALSE;
 
+	int wid, hgt;
+
+	/* Get size */
+	get_screen_size(&wid, &hgt);
+
 	x = px;
 	y = py;
 
@@ -5410,30 +5550,30 @@ msg_print("場所を選んでスペースキーを押して下さい。");
                                 /* XTRA HACK MOVEFAST */
                                 if (move_fast)
                                 {
-                                     x += dx * SCREEN_WID / 2;
-                                     y += dy * SCREEN_HGT / 2;
+                                     x += dx * wid / 2;
+                                     y += dy * hgt / 2;
                                 } else {
                                 x += dx;
                                 y += dy;
                                 }
 
 				/* Do not move horizontally if unnecessary */
-				if (((x < panel_col_min + SCREEN_WID / 2) && (dx > 0)) ||
-					 ((x > panel_col_min + SCREEN_WID / 2) && (dx < 0)))
+				if (((x < panel_col_min + wid / 2) && (dx > 0)) ||
+					 ((x > panel_col_min + wid / 2) && (dx < 0)))
 				{
 					dx = 0;
 				}
 
 				/* Do not move vertically if unnecessary */
-				if (((y < panel_row_min + SCREEN_HGT / 2) && (dy > 0)) ||
-					 ((y > panel_row_min + SCREEN_HGT / 2) && (dy < 0)))
+				if (((y < panel_row_min + hgt / 2) && (dy > 0)) ||
+					 ((y > panel_row_min + hgt / 2) && (dy < 0)))
 				{
 					dy = 0;
 				}
 
 				/* Apply the motion */
-				if ((y >= panel_row_min + SCREEN_HGT) || (y < panel_row_min) ||
-					 (x >= panel_col_min + SCREEN_WID) || (x < panel_col_min))
+				if ((y >= panel_row_min + hgt) || (y < panel_row_min) ||
+					 (x >= panel_col_min + wid) || (x < panel_col_min))
 				{
 					/* if (change_panel(dy, dx)) target_set_prepare(mode); */
 					change_panel(dy, dx);

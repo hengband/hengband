@@ -3700,6 +3700,13 @@ void do_cmd_visuals(void)
 
 				Term_putstr(40, 19, -1, TERM_WHITE, "<< ? >>");
 				Term_putch(43, 19, da, dc);
+				if (use_bigtile)
+				{
+					if (da & 0x80)
+						Term_putch(44, 19, 255, 255);
+					else
+						Term_putch(44, 19, 0, ' ');
+				}
 
 				/* Label the Current values */
 #ifdef JP
@@ -3712,6 +3719,13 @@ void do_cmd_visuals(void)
 
 				Term_putstr(40, 20, -1, TERM_WHITE, "<< ? >>");
 				Term_putch(43, 20, ca, cc);
+				if (use_bigtile)
+				{
+					if (ca & 0x80)
+						Term_putch(44, 20, 255, 255);
+					else
+						Term_putch(44, 20, 0, ' ');
+				}
 
 				/* Prompt */
 #ifdef JP
@@ -3799,6 +3813,13 @@ void do_cmd_visuals(void)
 
 				Term_putstr(40, 19, -1, TERM_WHITE, "<< ? >>");
 				Term_putch(43, 19, da, dc);
+				if (use_bigtile)
+				{
+					if (da & 0x80)
+						Term_putch(44, 19, 255, 255);
+					else
+						Term_putch(44, 19, 0, ' ');
+				}
 
 				/* Label the Current values */
 #ifdef JP
@@ -3811,6 +3832,13 @@ void do_cmd_visuals(void)
 
 				Term_putstr(40, 20, -1, TERM_WHITE, "<< ? >>");
 				Term_putch(43, 20, ca, cc);
+				if (use_bigtile)
+				{
+					if (ca & 0x80)
+						Term_putch(44, 20, 255, 255);
+					else
+						Term_putch(44, 20, 0, ' ');
+				}
 
 				/* Prompt */
 #ifdef JP
@@ -3898,6 +3926,13 @@ void do_cmd_visuals(void)
 
 				Term_putstr(40, 19, -1, TERM_WHITE, "<< ? >>");
 				Term_putch(43, 19, da, dc);
+				if (use_bigtile)
+				{
+					if (da & 0x80)
+						Term_putch(44, 19, 255, 255);
+					else
+						Term_putch(44, 19, 0, ' ');
+				}
 
 				/* Label the Current values */
 #ifdef JP
@@ -3910,6 +3945,13 @@ void do_cmd_visuals(void)
 
 				Term_putstr(40, 20, -1, TERM_WHITE, "<< ? >>");
 				Term_putch(43, 20, ca, cc);
+				if (use_bigtile)
+				{
+					if (ca & 0x80)
+						Term_putch(44, 20, 255, 255);
+					else
+						Term_putch(44, 20, 0, ' ');
+				}
 
 				/* Prompt */
 #ifdef JP
