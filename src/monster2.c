@@ -1455,6 +1455,8 @@ s16b get_mon_num(int level)
  *   0x20 --> Pronominalize visible monsters
  *   0x40 --> Assume the monster is hidden
  *   0x80 --> Assume the monster is visible
+ *  0x100 --> Chameleon's true name
+ *  0x200 --> Ignore hallucination
  *
  * Useful Modes:
  *   0x00 --> Full nominative name ("the kobold") or "it"
@@ -1486,7 +1488,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 	else name = (r_name + r_ptr->name);
 
 	/* Are we hallucinating? (Idea from Nethack...) */
-	if (p_ptr->image)
+	if (p_ptr->image && !(mode & 0x200))
 	{
 		if (one_in_(2))
 		{
@@ -1641,7 +1643,7 @@ if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
 	else
 	{
 		/* It could be a Unique */
-		if ((r_ptr->flags1 & RF1_UNIQUE) && !p_ptr->image)
+		if ((r_ptr->flags1 & RF1_UNIQUE) && !(p_ptr->image && !(mode & 0x200)))
 		{
 			/* Start with the name (thus nominative and objective) */
 			if ((m_ptr->mflag2 & MFLAG_CHAMELEON) && !(mode & 0x100))

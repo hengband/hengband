@@ -190,7 +190,7 @@ bool make_attack_normal(int m_idx)
 	monster_desc(m_name, m_ptr, 0);
 
 	/* Get the "died from" information (i.e. "a kobold") */
-	monster_desc(ddesc, m_ptr, 0x88);
+	monster_desc(ddesc, m_ptr, 0x288);
 
 	if (p_ptr->special_defense & KATA_IAI)
 	{

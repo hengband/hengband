@@ -4991,8 +4991,6 @@ bool take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 			/* Note cause of death */
 			(void)strcpy(died_from, hit_from);
 
-			if (p_ptr->image) strcat(died_from,"(?)");
-
 			/* No longer a winner */
 			total_winner = FALSE;
 

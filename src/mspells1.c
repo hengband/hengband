@@ -1476,7 +1476,7 @@ bool make_attack_spell(int m_idx)
 	monster_desc(m_poss, m_ptr, 0x22);
 
 	/* Hack -- Get the "died from" name */
-	monster_desc(ddesc, m_ptr, 0x88);
+	monster_desc(ddesc, m_ptr, 0x288);
 
 	if (stupid_monsters)
 	{

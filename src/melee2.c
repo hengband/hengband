@@ -1465,7 +1465,7 @@ static bool monst_attack_monst(int m_idx, int t_idx)
 	int             ap_cnt;
 	int             ac, rlev, pt;
 	char            m_name[80], t_name[80];
-	char            ddesc[80], temp[80];
+	char            temp[80];
 	bool            blinked, heal_effect;
 	bool            explode = FALSE, touched = FALSE, fear = FALSE;
 	int             y_saver = t_ptr->fy;
@@ -1501,9 +1501,6 @@ static bool monst_attack_monst(int m_idx, int t_idx)
 
 	/* Get the monster name (or "it") */
 	monster_desc(t_name, t_ptr, 0);
-
-	/* Get the "died from" information (i.e. "a kobold") */
-	monster_desc(ddesc, m_ptr, 0x88);
 
 	/* Assume no blink */
 	blinked = FALSE;

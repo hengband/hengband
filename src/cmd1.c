@@ -2169,7 +2169,7 @@ void touch_zap_player(monster_type *m_ptr)
 			aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
 
 			/* Hack -- Get the "died from" name */
-			monster_desc(aura_dam, m_ptr, 0x88);
+			monster_desc(aura_dam, m_ptr, 0x288);
 
 #ifdef JP
 			msg_print("突然とても熱くなった！");
@@ -2196,7 +2196,7 @@ void touch_zap_player(monster_type *m_ptr)
 			aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
 
 			/* Hack -- Get the "died from" name */
-			monster_desc(aura_dam, m_ptr, 0x88);
+			monster_desc(aura_dam, m_ptr, 0x288);
 
 #ifdef JP
 			msg_print("突然とても寒くなった！");
@@ -2223,7 +2223,7 @@ void touch_zap_player(monster_type *m_ptr)
 			aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
 
 			/* Hack -- Get the "died from" name */
-			monster_desc(aura_dam, m_ptr, 0x88);
+			monster_desc(aura_dam, m_ptr, 0x288);
 
 			if (p_ptr->oppose_elec) aura_damage = (aura_damage + 2) / 3;
 			if (p_ptr->resist_elec) aura_damage = (aura_damage + 2) / 3;

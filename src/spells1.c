@@ -2842,7 +2842,7 @@ msg_print("しかし効力を跳ね返した！");
 					else
 					{
 						/* Injure +/- confusion */
-						monster_desc(killer, m_ptr, 0x88);
+						monster_desc(killer, m_ptr, 0x288);
 						take_hit(DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
 						if (one_in_(4))
 						{
@@ -2980,7 +2980,7 @@ msg_print("あなたは効力を跳ね返した！");
 					else
 					{
 						/* Injure + mana drain */
-						monster_desc(killer, m_ptr, 0x88);
+						monster_desc(killer, m_ptr, 0x288);
 #ifdef JP
 msg_print("超能力パワーを吸いとられた！");
 #else
@@ -7924,7 +7924,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 	{
 		x1 = m_list[who].fx;
 		y1 = m_list[who].fy;
-		monster_desc(who_name, &m_list[who], 0x88);
+		monster_desc(who_name, &m_list[who], 0x288);
 	}
 
 	/* Oops */
