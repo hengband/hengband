@@ -2104,12 +2104,8 @@ static errr Term_text_mac(int x, int y, int n, byte a, const char *cp)
  *
  * Erase "n" characters starting at (x,y)
  */
-#ifdef USE_TRANSPARENCY
 static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp,
 			  const byte *tap, const char *tcp)
-#else
-static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp)
-#endif
 {
 	int i;
 	Rect r2;
@@ -2187,7 +2183,6 @@ static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp)
 			int col, row;
 			Rect r1;
 
-#ifdef USE_TRANSPARENCY
 			Rect terrain_r;
 			bool terrain_flag = FALSE;
 			byte ta = tap[i];
@@ -2208,7 +2203,6 @@ static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp)
 
 				terrain_flag = TRUE;
 			}
-#endif
 
 			/* Row and Col */
 			row = ((byte)a & 0x7F);
@@ -2232,7 +2226,6 @@ static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp)
 #endif
 			if (use_bigtile) r2.right += td->tile_wid;
 
-#ifdef USE_TRANSPARENCY
 			if (terrain_flag)
 			{
 				/*
@@ -2264,7 +2257,6 @@ static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp)
 #endif
 			}
 			else
-#endif /* USE_TRANSPARENCY */
 			{
 #if TARGET_API_MAC_CARBON
 				CopyBits( (BitMap *) *srcBitMap, (BitMap *) *destBitMap, &r1, &r2, srcCopy, NULL);

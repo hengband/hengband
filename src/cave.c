@@ -926,11 +926,7 @@ static byte lighting_colours[16][2] =
  * "x_ptr->xxx", is quicker than "x_info[x].xxx", if this is incorrect
  * then a whole lot of code should be changed...  XXX XXX
  */
-#ifdef USE_TRANSPARENCY
 void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
-#else /* USE_TRANSPARENCY */
-void map_info(int y, int x, byte *ap, char *cp)
-#endif /* USE_TRANSPARENCY */
 {
 	/* Get the cave */
 	cave_type *c_ptr = &cave[y][x];
@@ -1407,11 +1403,9 @@ void map_info(int y, int x, byte *ap, char *cp)
 		}
 	}
 
-#ifdef USE_TRANSPARENCY
 	/* Save the terrain info for the transparency effects */
 	(*tap) = a;
 	(*tcp) = c;
-#endif /* USE_TRANSPARENCY */
 
 	/* Save the info */
 	(*ap) = a;
@@ -1856,10 +1850,8 @@ void display_dungeon(void)
 	byte a;
 	char c;
 
-#ifdef USE_TRANSPARENCY
 	byte ta;
 	char tc;
-#endif /* USE_TRANSPARENCY */
 
 	for (x = px - Term->wid / 2 + 1; x <= px + Term->wid / 2; x++)
 	{
@@ -1868,13 +1860,8 @@ void display_dungeon(void)
 			if (in_bounds2(y, x))
 			{
 
-#ifdef USE_TRANSPARENCY
 				/* Examine the grid */
 				map_info(y, x, &a, &c, &ta, &tc);
-#else /* USE_TRANSPARENCY */
-				/* Examine the grid */
-				map_info(y, x, &a, &c);
-#endif /* USE_TRANSPARENCY */
 
 				/* Hack -- fake monochrome */
 				if (!use_graphics)
@@ -1884,14 +1871,8 @@ void display_dungeon(void)
 					else if (p_ptr->wraith_form) a = TERM_L_DARK;
 				}
 
-#ifdef USE_TRANSPARENCY
 				/* Hack -- Queue it */
 				Term_queue_char(x - px + Term->wid / 2 - 1, y - py + Term->hgt / 2 - 1, a, c, ta, tc);
-#else /* USE_TRANSPARENCY */
-				/* Hack -- Queue it */
-				Term_queue_char(x - px + Term->wid / 2 - 1, y - py + Term->hgt / 2 - 1, a, c);
-#endif /* USE_TRANSPARENCY */
-
 			}
 			else
 			{
@@ -1906,13 +1887,8 @@ void display_dungeon(void)
 				/* Normal char */
 				c = f_ptr->x_char;
 
-#ifdef USE_TRANSPARENCY
 				/* Hack -- Queue it */
 				Term_queue_char(x - px + Term->wid / 2 - 1, y - py + Term->hgt / 2 - 1, a, c, ta, tc);
-#else /* USE_TRANSPARENCY */
-				/* Hack -- Queue it */
-				Term_queue_char(x - px + Term->wid / 2 - 1, y - py + Term->hgt / 2 - 1, a, c);
-#endif /* USE_TRANSPARENCY */
 			}
 		}
 	}
@@ -1932,16 +1908,11 @@ void lite_spot(int y, int x)
 		byte a;
 		char c;
 
-#ifdef USE_TRANSPARENCY
 		byte ta;
 		char tc;
 
 		/* Examine the grid */
 		map_info(y, x, &a, &c, &ta, &tc);
-#else /* USE_TRANSPARENCY */
-		/* Examine the grid */
-		map_info(y, x, &a, &c);
-#endif /* USE_TRANSPARENCY */
 
 		/* Hack -- fake monochrome */
 		if (!use_graphics)
@@ -1963,17 +1934,10 @@ void lite_spot(int y, int x)
 		}
 #endif
 
-#ifdef USE_TRANSPARENCY
 		/* Hack -- Queue it */
 		Term_queue_char(panel_col_of(x), y-panel_row_prt, a, c, ta, tc);
 		if (use_bigtile)
 			Term_queue_char(panel_col_of(x)+1, y-panel_row_prt, 255, -1, 0, 0);
-#else /* USE_TRANSPARENCY */
-		/* Hack -- Queue it */
-		Term_queue_char(panel_col_of(x), y-panel_row_prt, a, c);
-		if (use_bigtile)
-			Term_queue_char(panel_col_of(x)+1, y-panel_row_prt, 255, -1);
-#endif /* USE_TRANSPARENCY */
 
 		/* Update sub-windows */
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -2040,16 +2004,11 @@ void prt_map(void)
 			byte a, a2;
 			char c, c2;
 
-#ifdef USE_TRANSPARENCY
 			byte ta;
 			char tc;
 
 			/* Determine what is there */
 			map_info(y, x, &a, &c, &ta, &tc);
-#else
-			/* Determine what is there */
-			map_info(y, x, &a, &c);
-#endif
 
 			/* Hack -- fake monochrome */
 			if (!use_graphics)
@@ -2062,13 +2021,8 @@ void prt_map(void)
 			if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
 
 			/* Efficiency -- Redraw that grid of the map */
-#ifdef USE_TRANSPARENCY
 			Term_queue_char(panel_col_of(x), y-panel_row_prt, a, c, ta, tc);
 			if (use_bigtile) Term_queue_char(panel_col_of(x)+1, y-panel_row_prt, a2, c2, 0, 0);
-#else
-			Term_queue_char(panel_col_of(x), y-panel_row_prt, a, c);
-			if (use_bigtile) Term_queue_char(panel_col_of(x)+1, y-panel_row_prt, a2, c2);
-#endif
 		}
 	}
 
@@ -2115,19 +2069,14 @@ void prt_path(int y, int x)
 			byte a2, a = default_color;
 			char c, c2;
 
-#ifdef USE_TRANSPARENCY
 			byte ta;
 			char tc;
-#endif
 
 			if (cave[ny][nx].m_idx && m_list[cave[ny][nx].m_idx].ml)
 			{
 				/* Determine what is there */
-#ifdef USE_TRANSPARENCY
 				map_info(ny, nx, &a, &c, &ta, &tc);
-#else
-				map_info(ny, nx, &a, &c);
-#endif
+
 				if (!is_ascii_graphics(a))
 					a = default_color;
 				else if (c == '.' && (a == TERM_WHITE || a == TERM_L_WHITE))
@@ -2147,13 +2096,8 @@ void prt_path(int y, int x)
 			if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
 
 			/* Hack -- Queue it */
-#ifdef USE_TRANSPARENCY
 			Term_queue_char(panel_col_of(nx), ny-panel_row_prt, a, c, ta, tc);
 			if (use_bigtile) Term_queue_char(panel_col_of(nx)+1, ny-panel_row_prt, a2, c2, 0, 0);
-#else
-			Term_queue_char(panel_col_of(nx), ny-panel_row_prt, a, c);
-			if (use_bigtile) Term_queue_char(panel_col_of(nx)+1, ny-panel_row_prt, a2, c2);
-#endif
 		}
 
 		/* Known Wall */
@@ -2374,11 +2318,7 @@ void display_map(int *cy, int *cx)
 			feat_priority = -1;
 
 			/* Extract the current attr/char at that map location */
-#ifdef USE_TRANSPARENCY
 			map_info(j, i, &ta, &tc, &ta, &tc);
-#else /* USE_TRANSPARENCY */
-			map_info(j, i, &ta, &tc);
-#endif /* USE_TRANSPARENCY */
 
 			/* Extract the priority */
 			tp = feat_priority;
