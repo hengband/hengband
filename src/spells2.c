@@ -1871,7 +1871,7 @@ info[i++] = "あなたの位置はひじょうに不安定だ。";
 #ifdef JP
 info[i++] = "あなたの武器は攻撃を外しやすい。";
 #else
-		info[i++] = "Your weapon causes you miss blows.";
+		info[i++] = "Your weapon causes you to miss blows.";
 #endif
 
 	}
@@ -1997,7 +1997,7 @@ info[i++] = "あなたの手は赤く輝いている。";
 #ifdef JP
 info[i++] = "あなたの手は火炎に覆われている。";
 #else
-		info[i++] = "You can strike enemy with flame.";
+		info[i++] = "You can strike the enemy with flame.";
 #endif
 
 	}
@@ -2006,7 +2006,7 @@ info[i++] = "あなたの手は火炎に覆われている。";
 #ifdef JP
 info[i++] = "あなたの手は冷気に覆われている。";
 #else
-		info[i++] = "You can strike enemy with cold.";
+		info[i++] = "You can strike the enemy with cold.";
 #endif
 
 	}
@@ -2015,7 +2015,7 @@ info[i++] = "あなたの手は冷気に覆われている。";
 #ifdef JP
 info[i++] = "あなたの手は酸に覆われている。";
 #else
-		info[i++] = "You can strike enemy with acid.";
+		info[i++] = "You can strike the enemy with acid.";
 #endif
 
 	}
@@ -2024,7 +2024,7 @@ info[i++] = "あなたの手は酸に覆われている。";
 #ifdef JP
 info[i++] = "あなたの手は電撃に覆われている。";
 #else
-		info[i++] = "You can strike enemy with electoric shock.";
+		info[i++] = "You can strike the enemy with electoric shock.";
 #endif
 
 	}
@@ -2033,7 +2033,7 @@ info[i++] = "あなたの手は電撃に覆われている。";
 #ifdef JP
 info[i++] = "あなたの手は毒に覆われている。";
 #else
-		info[i++] = "You can strike enemy with poison.";
+		info[i++] = "You can strike the enemy with poison.";
 #endif
 
 	}
@@ -2331,7 +2331,7 @@ info[i++] = "あなたの身体は光っている。";
 #ifdef JP
 info[i++] = "あなたは行動の前に危険を察知することができる。";
 #else
-		info[i++] = "You will be warn before dangerous action.";
+		info[i++] = "You will be warned before dangerous actions.";
 #endif
 
 	}
@@ -2340,7 +2340,7 @@ info[i++] = "あなたは行動の前に危険を察知することができる。";
 #ifdef JP
 info[i++] = "あなたは少ない消費魔力で魔法を唱えることができる。";
 #else
-		info[i++] = "You can cast spell with fewer mana.";
+		info[i++] = "You can cast spells with fewer mana points.";
 #endif
 
 	}
@@ -2358,7 +2358,7 @@ info[i++] = "あなたは低い失敗率で魔法を唱えることができる。";
 #ifdef JP
 info[i++] = "あなたは高い失敗率で魔法を唱えなければいけない。";
 #else
-		info[i++] = "Fail rate of your magic is incresed.";
+		info[i++] = "Fail rate of your magic is increased.";
 #endif
 
 	}
@@ -3370,7 +3370,7 @@ info[i++] = "あなたの手は赤く輝いている。";
 #ifdef JP
 info[i++] = "この後帰還の詔を発動する。";
 #else
-		info[i++] = "You waiting to be recalled";
+		info[i++] = "You are waiting to be recalled";
 #endif
 
 	}

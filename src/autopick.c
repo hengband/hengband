@@ -2166,8 +2166,8 @@ static bool entry_from_choosed_object(autopick_type *entry)
 	q = "どのアイテムを登録しますか? ";
 	s = "アイテムを持っていない。";
 #else
-	q = "Entry which item? ";
-	s = "You have nothing to entry.";
+	q = "Enter which item? ";
+	s = "You have nothing to enter.";
 #endif
 	o_ptr = choose_object(q, s);
 	if (!o_ptr) return FALSE;
@@ -2240,8 +2240,8 @@ static bool get_string_for_search(object_type **o_handle, cptr *search_strp)
 			q = "どのアイテムを検索しますか? ";
 			s = "アイテムを持っていない。";
 #else
-			q = "Entry which item? ";
-			s = "You have nothing to entry.";
+			q = "Enter which item? ";
+			s = "You have nothing to enter.";
 #endif
 			o_ptr = choose_object(q, s);
 			if (!o_ptr) return FALSE;
@@ -2894,7 +2894,7 @@ void do_cmd_edit_autopick(void)
 #ifdef JP
 				prt("この行はコメントです。", hgt - 3 + 1, 0);
 #else
-				prt("This line is comment.", hgt - 3 + 1, 0);
+				prt("This line is a comment.", hgt - 3 + 1, 0);
 #endif
 			}
 			else if (lines_list[cy][1] == ':')
@@ -2905,28 +2905,28 @@ void do_cmd_edit_autopick(void)
 #ifdef JP
 					prt("この行は条件分岐式です。", hgt - 3 + 1, 0);
 #else
-					prt("This line is Conditional Expression.", hgt - 3 + 1, 0);
+					prt("This line is a Conditional Expression.", hgt - 3 + 1, 0);
 #endif
 					break;
 				case 'A':
 #ifdef JP
 					prt("この行はマクロの実行内容を定義します。", hgt - 3 + 1, 0);
 #else
-					prt("This line defines Macro action.", hgt - 3 + 1, 0);
+					prt("This line defines a Macro action.", hgt - 3 + 1, 0);
 #endif
 					break;
 				case 'P':
 #ifdef JP
 					prt("この行はマクロのトリガー・キーを定義します。", hgt - 3 + 1, 0);
 #else
-					prt("This line defines Macro trigger key.", hgt - 3 + 1, 0);
+					prt("This line defines a Macro trigger key.", hgt - 3 + 1, 0);
 #endif
 					break;
 				case 'C':
 #ifdef JP
 					prt("この行はキー配置を定義します。", hgt - 3 + 1, 0);
 #else
-					prt("This line defines Keymap.", hgt - 3 + 1, 0);
+					prt("This line defines a Keymap.", hgt - 3 + 1, 0);
 #endif
 					break;
 				}
@@ -3489,7 +3489,7 @@ void do_cmd_edit_autopick(void)
 #ifdef JP
 			if (!get_check("全ての変更を破棄して元の状態に戻します。よろしいですか？ "))
 #else
-			if (!get_check("Discard all change and revert to original file. Are you sure? "))
+			if (!get_check("Discard all changes and revert to original file. Are you sure? "))
 #endif
 				break;
 

@@ -2453,13 +2453,13 @@ info[i++] = "それは相手を一撃で倒すことがある。";
 #ifdef JP
 info[i++] = "それは自分自身に攻撃が返ってくることがある。";
 #else
-		info[i++] = "It strikes yourself sometimes.";
+		info[i++] = "It causes you to strike yourself sometimes.";
 #endif
 
 #ifdef JP
 info[i++] = "それは無敵のバリアを切り裂く。";
 #else
-		info[i++] = "It will always penetrates invulnerability barrier.";
+		info[i++] = "It always penetrates invulnerability barriers.";
 #endif
 	}
 
@@ -2541,7 +2541,7 @@ info[i++] = "それは魔法抵抗力を下げる。";
 #ifdef JP
 			info[i++] = "それは全く光らない。";
 #else
-			info[i++] = "It provides no light..";
+			info[i++] = "It provides no light.";
 #endif
 
 			if (o_ptr->sval == SV_LITE_FEANOR ||
@@ -3717,7 +3717,7 @@ info[i++] = "それはランダムなテレポートを引き起こす。";
 #ifdef JP
 info[i++] = "それは攻撃を外しやすい。";
 #else
-		info[i++] = "It causes you miss blows.";
+		info[i++] = "It causes you to miss blows.";
 #endif
 
 	}
@@ -3726,7 +3726,7 @@ info[i++] = "それは攻撃を外しやすい。";
 #ifdef JP
 info[i++] = "それは攻撃を受けやすい。";
 #else
-		info[i++] = "It helps your enemys' blows.";
+		info[i++] = "It helps your enemies' blows.";
 #endif
 
 	}

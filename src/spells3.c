@@ -1241,7 +1241,7 @@ act = "は破壊力を増した！";
 #ifdef JP
 act = "は人間の血を求めている！";
 #else
-			act = "seems looking for human!";
+			act = "seems to be looking for humans!";
 #endif
 
 			o_ptr->name2 = EGO_SLAY_HUMAN;
@@ -1250,7 +1250,7 @@ act = "は人間の血を求めている！";
 #ifdef JP
 act = "は電撃に覆われた！";
 #else
-			act = "coverd with lightning!";
+			act = "covered with lightning!";
 #endif
 
 			o_ptr->name2 = EGO_BRAND_ELEC;
@@ -1268,7 +1268,7 @@ act = "は酸に覆われた！";
 #ifdef JP
 act = "は邪悪なる怪物を求めている！";
 #else
-			act = "seems looking for evil monster!";
+			act = "seems to be looking for evil monsters!";
 #endif
 
 			o_ptr->name2 = EGO_SLAY_EVIL;
@@ -1277,7 +1277,7 @@ act = "は邪悪なる怪物を求めている！";
 #ifdef JP
 act = "は異世界の住人の肉体を求めている！";
 #else
-			act = "seems looking for demon!";
+			act = "seems to be looking for demons!";
 #endif
 
 			o_ptr->name2 = EGO_SLAY_DEMON;
@@ -1286,7 +1286,7 @@ act = "は異世界の住人の肉体を求めている！";
 #ifdef JP
 act = "は屍を求めている！";
 #else
-			act = "seems looking for undead!";
+			act = "seems to be looking for undead!";
 #endif
 
 			o_ptr->name2 = EGO_SLAY_UNDEAD;
@@ -1295,7 +1295,7 @@ act = "は屍を求めている！";
 #ifdef JP
 act = "は動物の血を求めている！";
 #else
-			act = "seems looking for animal!";
+			act = "seems to be looking for animals!";
 #endif
 
 			o_ptr->name2 = EGO_SLAY_ANIMAL;
@@ -1304,7 +1304,7 @@ act = "は動物の血を求めている！";
 #ifdef JP
 act = "はドラゴンの血を求めている！";
 #else
-			act = "seems looking for dragon!";
+			act = "seems to be looking for dragons!";
 #endif
 
 			o_ptr->name2 = EGO_SLAY_DRAGON;
@@ -1313,7 +1313,7 @@ act = "はドラゴンの血を求めている！";
 #ifdef JP
 act = "はトロルの血を求めている！";
 #else
-			act = "seems looking for troll!";
+			act = "seems to be looking for troll!s";
 #endif
 
 			o_ptr->name2 = EGO_SLAY_TROLL;
@@ -1322,7 +1322,7 @@ act = "はトロルの血を求めている！";
 #ifdef JP
 act = "はオークの血を求めている！";
 #else
-			act = "seems looking for orc!";
+			act = "seems to be looking for orcs!";
 #endif
 
 			o_ptr->name2 = EGO_SLAY_ORC;
@@ -1331,7 +1331,7 @@ act = "はオークの血を求めている！";
 #ifdef JP
 act = "は巨人の血を求めている！";
 #else
-			act = "seems looking for giant!";
+			act = "seems to be looking for giants!";
 #endif
 
 			o_ptr->name2 = EGO_SLAY_GIANT;

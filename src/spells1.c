@@ -4984,7 +4984,7 @@ note_dies = "はドロドロに溶けた！";
 #ifdef JP
 msg_format("%sから精神エネルギーを吸いとった。",m_name);
 #else
-				msg_format("You draws psychic energy from %s.", m_name);
+				msg_format("You draw psychic energy from %s.", m_name);
 #endif
 
 				(void)hp_player(dam);
@@ -5009,7 +5009,7 @@ msg_format("%sには効果がなかった。",m_name);
 #ifdef JP
 msg_format("%sをじっと睨んだ。",m_name);
 #else
-			msg_format("You gazes intently at %s.", m_name);
+			msg_format("You gaze intently at %s.", m_name);
 #endif
 
 			if (r_ptr->flags3 & (RF3_RES_ALL))
@@ -5064,7 +5064,7 @@ note_dies = "の精神は崩壊し、肉体は抜け空となった。";
 #ifdef JP
 msg_format("%sをじっと睨んだ。",m_name);
 #else
-			msg_format("You gazes intently at %s.", m_name);
+			msg_format("You gaze intently at %s.", m_name);
 #endif
 
 			if (r_ptr->flags3 & (RF3_RES_ALL))
@@ -5123,7 +5123,7 @@ note_dies = "の精神は崩壊し、肉体は抜け空となった。";
 #ifdef JP
 msg_format("%sを指差して呪いをかけた。",m_name);
 #else
-			msg_format("You points at %s and curses.", m_name);
+			msg_format("You point at %s and curses.", m_name);
 #endif
 
 			if (r_ptr->flags3 & (RF3_RES_ALL))
@@ -5160,7 +5160,7 @@ note = "には効果がなかった。";
 #ifdef JP
 msg_format("%sを指差して恐ろしげに呪いをかけた。",m_name);
 #else
-			msg_format("You points at %s and curses horribly.", m_name);
+			msg_format("You point at %s and curses horribly.", m_name);
 #endif
 
 			if (r_ptr->flags3 & (RF3_RES_ALL))
@@ -5197,7 +5197,7 @@ note = "には効果がなかった。";
 #ifdef JP
 msg_format("%sを指差し、恐しげに呪文を唱えた！",m_name);
 #else
-			msg_format("You points at %s, incanting terribly!", m_name);
+			msg_format("You point at %s, incanting terribly!", m_name);
 #endif
 
 			if (r_ptr->flags3 & (RF3_RES_ALL))
@@ -5234,7 +5234,7 @@ note = "には効果がなかった。";
 #ifdef JP
 msg_format("%sの秘孔を突いて、「お前は既に死んでいる」と叫んだ。",m_name);
 #else
-			msg_format("You points at %s, screaming th word, 'DIE!'.", m_name);
+			msg_format("You point at %s, screaming th word, 'DIE!'.", m_name);
 #endif
 
 			if (r_ptr->flags3 & (RF3_RES_ALL))
@@ -5348,7 +5348,7 @@ msg_format("もっと弱らせないと。");
 #ifdef JP
 msg_format("%sを捕えた！",m_name);
 #else
-				msg_format("You captures %^s!", m_name);
+				msg_format("You capture %^s!", m_name);
 #endif
 				cap_mon = m_list[c_ptr->m_idx].r_idx;
 				cap_mspeed = m_list[c_ptr->m_idx].mspeed;
