@@ -45,8 +45,14 @@ void init_saved_floors(void)
 		/* File name */
 		sprintf(floor_savefile, "%s.F%02d", savefile, i);
 
+		/* Grab permissions */
+		safe_setuid_grab();
+
 		/* Try to create the file */
 		fd = fd_make(floor_savefile, mode);
+
+		/* Drop permissions */
+		safe_setuid_drop();
 
 		/* Failed! */
 		if (fd < 0)
@@ -75,8 +81,14 @@ void init_saved_floors(void)
 			(void)fd_close(fd);
 		}
 
+		/* Grab permissions */
+		safe_setuid_grab();
+
 		/* Simply kill the temporal file */ 
 		(void)fd_kill(floor_savefile);
+
+		/* Drop permissions */
+		safe_setuid_drop();
 
 		sf_ptr->floor_id = 0;
 	}
@@ -133,8 +145,14 @@ void clear_saved_floor_files(void)
 		/* File name */
 		sprintf(floor_savefile, "%s.F%02d", savefile, i);
 
+		/* Grab permissions */
+		safe_setuid_grab();
+
 		/* Simply kill the temporal file */ 
 		(void)fd_kill(floor_savefile);
+
+		/* Drop permissions */
+		safe_setuid_drop();
 	}
 
 #ifdef SET_UID
@@ -190,8 +208,14 @@ static void kill_saved_floor(saved_floor_type *sf_ptr)
 		/* File name */
 		sprintf(floor_savefile, "%s.F%02d", savefile, (int)sf_ptr->savefile_id);
 
+		/* Grab permissions */
+		safe_setuid_grab();
+
 		/* Simply kill the temporal file */ 
 		(void)fd_kill(floor_savefile);
+
+		/* Drop permissions */
+		safe_setuid_drop();
 	}
 
 	/* No longer exists */

@@ -551,11 +551,17 @@ static errr init_info(cptr filename, header *head,
 #endif
 
 
+		/* Grab permissions */
+		safe_setuid_grab();
+
 		/* Kill the old file */
 		(void)fd_kill(buf);
 
 		/* Attempt to create the raw file */
 		fd = fd_make(buf, mode);
+
+		/* Drop permissions */
+		safe_setuid_drop();
 
 		/* Dump to the file */
 		if (fd >= 0)
@@ -563,7 +569,7 @@ static errr init_info(cptr filename, header *head,
 			/* Dump it */
 			fd_write(fd, (cptr)(head), head->head_size);
 
-		/* Dump the "*_info" array */
+			/* Dump the "*_info" array */
 			fd_write(fd, head->info_ptr, head->info_size);
 
 			/* Dump the "*_name" array */
@@ -1975,7 +1981,7 @@ void init_angband(void)
 {
 	int fd = -1;
 
-	int mode = 0644;
+	int mode = 0664;
 
 	FILE *fp;
 
@@ -2066,8 +2072,14 @@ void init_angband(void)
 		/* File type is "DATA" */
 		FILE_TYPE(FILE_TYPE_DATA);
 
+		/* Grab permissions */
+		safe_setuid_grab();
+
 		/* Create a new high score file */
 		fd = fd_make(buf, mode);
+
+		/* Drop permissions */
+		safe_setuid_drop();
 
 		/* Failure */
 		if (fd < 0)

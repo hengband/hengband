@@ -29,6 +29,9 @@ static void quit_hook(cptr s)
 {
 	int j;
 
+	/* Unused */
+	(void)s;
+
 	/* Scan windows */
 	for (j = 8 - 1; j >= 0; j--)
 	{
@@ -73,9 +76,6 @@ static void create_user_dir(void)
 	char dirpath[1024];
 	char subdirpath[1024];
 
-	/* Drop privs */
-	safe_setuid_drop();
-
 	/* Get an absolute path from the filename */
 	path_parse(dirpath, 1024, PRIVATE_USER_PATH);
 
@@ -87,9 +87,6 @@ static void create_user_dir(void)
 
 	/* Create the directory */
 	mkdir(subdirpath, 0700);
-
-	/* Grab privs */
-	safe_setuid_grab();
 }
 
 #endif /* PRIVATE_USER_PATH */
@@ -364,6 +361,10 @@ int main(int argc, char *argv[])
 #endif
 
 
+	/* Drop permissions */
+	safe_setuid_drop();
+
+
 #ifdef SET_UID
 
 	/* Initialize the "time" checker */
@@ -615,9 +616,6 @@ int main(int argc, char *argv[])
 	quit_aux = quit_hook;
 
 
-	/* Drop privs (so X11 will work correctly) */
-	safe_setuid_drop();
-
 
 #ifdef USE_XAW
 	/* Attempt to use the "main-xaw.c" support */
@@ -767,10 +765,6 @@ int main(int argc, char *argv[])
 		}
 	}
 #endif
-
-
-	/* Grab privs (dropped above for X11) */
-	safe_setuid_grab();
 
 
 	/* Make sure we have a display! */

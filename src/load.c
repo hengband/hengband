@@ -3632,8 +3632,14 @@ errr rd_savefile_new(void)
 {
 	errr err;
 
+	/* Grab permissions */
+	safe_setuid_grab();
+
 	/* The savefile is a binary file */
 	fff = my_fopen(savefile, "rb");
+
+	/* Drop permissions */
+	safe_setuid_drop();
 
 	/* Paranoia */
 	if (!fff) return (-1);
@@ -3747,8 +3753,14 @@ bool load_floor(saved_floor_type *sf_ptr, u32b mode)
 	/* floor savefile */
 	sprintf(floor_savefile, "%s.F%02d", savefile, (int)sf_ptr->savefile_id);
 
+	/* Grab permissions */
+	safe_setuid_grab();
+
 	/* The savefile is a binary file */
 	fff = my_fopen(floor_savefile, "rb");
+
+	/* Drop permissions */
+	safe_setuid_drop();
 
 	/* Couldn't read */
 	if (!fff) ok = FALSE;
@@ -3765,8 +3777,14 @@ bool load_floor(saved_floor_type *sf_ptr, u32b mode)
 		/* Close the file */
 		my_fclose(fff);
 
+		/* Grab permissions */
+		safe_setuid_grab();
+
 		/* Delete the file */
 		if (!(mode & SLF_NO_KILL)) (void)fd_kill(floor_savefile);
+
+		/* Drop permissions */
+		safe_setuid_drop();
 	}
 
 	/* We have one file already opened */

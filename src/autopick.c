@@ -1831,8 +1831,6 @@ static cptr *read_text_lines(cptr filename, bool user)
 
 	if (user)
 	{
-		/* Hack -- drop permissions */
-		safe_setuid_drop();
 		path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
 	}
 	else
@@ -1859,9 +1857,6 @@ static cptr *read_text_lines(cptr filename, bool user)
 
 		my_fclose(fff);
 	}
-
-	/* Grab priv's */
-	safe_setuid_grab();
 
 	if (!fff) return NULL;
 	return lines_list;
@@ -1923,9 +1918,6 @@ static bool write_text_lines(cptr filename, cptr *lines_list)
 	int lines = 0;
 	char buf[1024];
 
-	/* Hack -- drop permissions */
-	safe_setuid_drop();
-
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
 	
@@ -1938,9 +1930,6 @@ static bool write_text_lines(cptr filename, cptr *lines_list)
 
 		my_fclose(fff);
 	}
-
-	/* Grab priv's */
-	safe_setuid_grab();
 
 	if (!fff) return FALSE;
 	return TRUE;

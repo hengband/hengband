@@ -1203,17 +1203,11 @@ errr process_pref_file(cptr name)
 	if (err1 > 0) return err1;
 
 
-	/* Drop priv's */
-	safe_setuid_drop();
-	
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 	
 	/* Process the user pref file */
 	err2 = process_pref_file_aux(buf, FALSE);
-
-	/* Grab priv's */
-	safe_setuid_grab();
 
 
 	/* User file does not exist, but read system pref file */
@@ -4831,9 +4825,6 @@ errr file_character(cptr name)
 	FILE		*fff = NULL;
 	char		buf[1024];
 
-	/* Drop priv's */
-	safe_setuid_drop();
-
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 
@@ -4887,8 +4878,6 @@ errr file_character(cptr name)
 	/* Close it */
 	my_fclose(fff);
 
-	/* Grab priv's */
-	safe_setuid_grab();
 
 	/* Message */
 #ifdef JP
@@ -5524,9 +5513,6 @@ strcpy(tmp, "jhelp.hlp");
 			/* Close it */
 			my_fclose(fff);
 
-			/* Drop priv's */
-			safe_setuid_drop();
-
 			/* Build the filename */
 			path_build(buff, sizeof(buff), ANGBAND_DIR_USER, xtmp);
 
@@ -5558,9 +5544,6 @@ msg_print("ファイルが開けません。");
 			/* Close it */
 			my_fclose(fff);
 			my_fclose(ffp);
-
-			/* Grab priv's */
-			safe_setuid_grab();
 
 			/* Hack -- Re-Open the file */
 			fff = my_fopen(path, "r");
@@ -6135,8 +6118,14 @@ static void make_bones(void)
 			/* File type is "TEXT" */
 			FILE_TYPE(FILE_TYPE_TEXT);
 
+			/* Grab permissions */
+			safe_setuid_grab();
+
 			/* Try to write a new "Bones File" */
 			fp = my_fopen(str, "w");
+
+			/* Drop permissions */
+			safe_setuid_drop();
 
 			/* Not allowed to write it?  Weird. */
 			if (!fp) return;
@@ -6697,9 +6686,14 @@ void close_game(void)
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
 
+	/* Grab permissions */
+	safe_setuid_grab();
+
 	/* Open the high score file, for reading/writing */
 	highscore_fd = fd_open(buf, O_RDWR);
 
+	/* Drop permissions */
+	safe_setuid_drop();
 
 	/* Handle death */
 	if (p_ptr->is_dead)
@@ -7054,16 +7048,10 @@ errr process_pickpref_file(cptr name)
 
 	errr err = 0;
 
-	/* Drop priv's */
-	safe_setuid_drop();
-
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 
 	err = process_pref_file_aux(buf, TRUE);
-
-	/* Grab priv's */
-	safe_setuid_grab();
 
 	/* Result */
 	return (err);
@@ -7135,13 +7123,22 @@ errr counts_write(int where, u32b count)
 {
 	int fd;
 	char buf[1024];
+	errr err;
 
 #ifdef JP
 	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, "z_info_j.raw");
 #else
 	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, "z_info.raw");
 #endif
+
+	/* Grab permissions */
+	safe_setuid_grab();
+
 	fd = fd_open(buf, O_RDWR);
+
+	/* Drop permissions */
+	safe_setuid_drop();
+
 	if (fd < 0)
 	{
 		/* File type is "DATA" */
@@ -7151,12 +7148,28 @@ errr counts_write(int where, u32b count)
 		fd = fd_make(buf, 0644);
 	}
 
-	if (fd_lock(fd, F_WRLCK)) return 1;
+	/* Grab permissions */
+	safe_setuid_grab();
+
+	err = fd_lock(fd, F_WRLCK);
+
+	/* Drop permissions */
+	safe_setuid_drop();
+
+	if (err) return 1;
 
 	counts_seek(fd, where, TRUE);
 	fd_write(fd, (char*)(&count), sizeof(u32b));
 
-	if (fd_lock(fd, F_UNLCK)) return 1;
+	/* Grab permissions */
+	safe_setuid_grab();
+
+	err = fd_lock(fd, F_UNLCK);
+
+	/* Drop permissions */
+	safe_setuid_drop();
+
+	if (err) return 1;
 
 	(void)fd_close(fd);
 

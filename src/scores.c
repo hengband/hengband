@@ -480,6 +480,8 @@ errr top_twenty(void)
 
 	time_t ct = time((time_t*)0);
 
+	errr err;
+
 	/* Clear the record */
 	(void)WIPE(&the_score, high_score);
 
@@ -541,14 +543,30 @@ errr top_twenty(void)
 		strcpy(the_score.how, p_ptr->died_from);
 	}
 
+	/* Grab permissions */
+	safe_setuid_grab();
+
 	/* Lock (for writing) the highscore file, or fail */
-	if (fd_lock(highscore_fd, F_WRLCK)) return (1);
+	err = fd_lock(highscore_fd, F_WRLCK);
+
+	/* Drop permissions */
+	safe_setuid_drop();
+
+	if (err) return (1);
 
 	/* Add a new entry to the score list, see where it went */
 	j = highscore_add(&the_score);
 
+	/* Grab permissions */
+	safe_setuid_grab();
+
 	/* Unlock the highscore file, or fail */
-	if (fd_lock(highscore_fd, F_UNLCK)) return (1);
+	err = fd_lock(highscore_fd, F_UNLCK);
+
+	/* Drop permissions */
+	safe_setuid_drop();
+
+	if (err) return (1);
 
 
 	/* Hack -- Display the top fifteen scores */

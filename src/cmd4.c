@@ -13,44 +13,86 @@
 #include "angband.h"
 
 
+
 /*
- *  mark strings for auto dump
+ * A set of functions to maintain automatic dumps of various kinds.
+ * -Mogami-
+ *
+ * remove_auto_dump(orig_file, mark)
+ *     Remove the old automatic dump of type "mark".
+ * auto_dump_printf(fmt, ...)
+ *     Dump a formatted string using fprintf().
+ * open_auto_dump(buf, mark, &line_num)
+ *     Open a file, remove old dump, and add new header.
+ * close_auto_dump(fff, mark, &line_num)
+ *     Add a footer, and close the file.
+ *
+ *    The dump commands of original Angband simply add new lines to
+ * existing files; these files will become bigger and bigger unless
+ * an user deletes some or all of these files by hand at some
+ * point.
+ *
+ *     These three functions automatically delete old dumped lines 
+ * before adding new ones.  Since there are various kinds of automatic 
+ * dumps in a single file, we add a header and a footer with a type 
+ * name for every automatic dump, and kill old lines only when the 
+ * lines have the correct type of header and footer.
+ *
+ *     We need to be quite paranoid about correctness; the user might 
+ * (mistakenly) edit the file by hand, and see all their work come
+ * to nothing on the next auto dump otherwise.  The current code only 
+ * detects changes by noting inconsistencies between the actual number 
+ * of lines and the number written in the footer.  Note that this will 
+ * not catch single-line edits.
+ */
+
+/*
+ *  Mark strings for auto dump
  */
 static char auto_dump_header[] = "# vvvvvvv== %s ==vvvvvvv";
 static char auto_dump_footer[] = "# ^^^^^^^== %s ==^^^^^^^";
 
 /*
+ * Variables for auto dump
+ */
+static FILE *auto_dump_stream;
+static cptr auto_dump_mark;
+static int auto_dump_line_num;
+
+/*
  * Remove old lines automatically generated before.
  */
-static void remove_auto_dump(cptr orig_file, cptr mark)
+static void remove_auto_dump(cptr orig_file)
 {
 	FILE *tmp_fff, *orig_fff;
 
 	char tmp_file[1024];
 	char buf[1024];
 	bool between_mark = FALSE;
-	bool success = FALSE;
+	bool changed = FALSE;
 	int line_num = 0;
 	long header_location = 0;
 	char header_mark_str[80];
 	char footer_mark_str[80];
 	size_t mark_len;
 
-	sprintf(header_mark_str, auto_dump_header, mark);
-	sprintf(footer_mark_str, auto_dump_footer, mark);
+	/* Prepare a header/footer mark string */
+	sprintf(header_mark_str, auto_dump_header, auto_dump_mark);
+	sprintf(footer_mark_str, auto_dump_footer, auto_dump_mark);
 
 	mark_len = strlen(footer_mark_str);
 
-	/* If original file is not exist, nothing to do */
+	/* Open an old dump file in read-only mode */
 	orig_fff = my_fopen(orig_file, "r");
-	if (!orig_fff)
-	{
-		return;
-	}
 
-	/* Open a new file */
+	/* If original file does not exist, nothing to do */
+	if (!orig_fff) return;
+
+	/* Open a new (temporary) file */
 	tmp_fff = my_fopen_temp(tmp_file, 1024);
-	if (!tmp_fff) {
+
+	if (!tmp_fff)
+	{
 #ifdef JP
 	    msg_format("一時ファイル %s を作成できませんでした。", tmp_file);
 #else
@@ -59,100 +101,180 @@ static void remove_auto_dump(cptr orig_file, cptr mark)
 	    msg_print(NULL);
 	    return;
 	}
-	
-	while (1)
+
+	/* Loop for every line */
+	while (TRUE)
 	{
+		/* Read a line */
 		if (my_fgets(orig_fff, buf, sizeof(buf)))
 		{
+			/* Read error: Assume End of File */
+
+			/*
+			 * Was looking for the footer, but not found.
+			 *
+			 * Since automatic dump might be edited by hand,
+			 * it's dangerous to kill these lines.
+			 * Seek back to the next line of the (pseudo) header,
+			 * and read again.
+			 */
 			if (between_mark)
 			{
 				fseek(orig_fff, header_location, SEEK_SET);
 				between_mark = FALSE;
 				continue;
 			}
+
+			/* Success -- End the loop */
 			else
 			{
 				break;
 			}
 		}
 
+		/* We are looking for the header mark of automatic dump */
 		if (!between_mark)
 		{
+			/* Is this line a header? */
 			if (!strcmp(buf, header_mark_str))
 			{
+				/* Memorise seek point of this line */
 				header_location = ftell(orig_fff);
+
+				/* Initialize counter for number of lines */
 				line_num = 0;
+
+				/* Look for the footer from now */
 				between_mark = TRUE;
-				success = TRUE;
+
+				/* There are some changes */
+				changed = TRUE;
 			}
+
+			/* Not a header */
 			else
 			{
+				/* Copy orginally lines */
 				fprintf(tmp_fff, "%s\n", buf);
 			}
 		}
+
+		/* We are looking for the footer mark of automatic dump */
 		else
 		{
+			/* Is this line a footer? */
 			if (!strncmp(buf, footer_mark_str, mark_len))
 			{
 				int tmp;
 
+				/*
+				 * Compare the number of lines
+				 *
+				 * If there is an inconsistency between
+				 * actual number of lines and the
+				 * number here, the automatic dump
+				 * might be edited by hand.  So it's
+				 * dangerous to kill these lines.
+				 * Seek back to the next line of the
+				 * (pseudo) header, and read again.
+				 */
 				if (!sscanf(buf + mark_len, " (%d)", &tmp)
 				    || tmp != line_num)
 				{
 					fseek(orig_fff, header_location, SEEK_SET);
 				}
 
+				/* Look for another header */
 				between_mark = FALSE;
 			}
+
+			/* Not a footer */
 			else
 			{
+				/* Ignore old line, and count number of lines */
 				line_num++;
 			}
 		}
 	}
+
+	/* Close files */
 	my_fclose(orig_fff);
 	my_fclose(tmp_fff);
 
-	if (success)
+	/* If there are some changes, overwrite the original file with new one */
+	if (changed)
 	{
-		/* copy contents of temporally file */
+		/* Copy contents of temporary file */
 
 		tmp_fff = my_fopen(tmp_file, "r");
 		orig_fff = my_fopen(orig_file, "w");
-		
+
 		while (!my_fgets(tmp_fff, buf, sizeof(buf)))
 			fprintf(orig_fff, "%s\n", buf);
-		
+
 		my_fclose(orig_fff);
 		my_fclose(tmp_fff);
 	}
+
+	/* Kill the temporary file */
 	fd_kill(tmp_file);
 
 	return;
 }
 
+
+/*
+ * Dump a formatted line, using "vstrnfmt()".
+ */
+static void auto_dump_printf(cptr fmt, ...)
+{
+	cptr p;
+	va_list vp;
+
+	char buf[1024];
+
+	/* Begin the Varargs Stuff */
+	va_start(vp, fmt);
+
+	/* Format the args, save the length */
+	(void)vstrnfmt(buf, sizeof(buf), fmt, vp);
+
+	/* End the Varargs Stuff */
+	va_end(vp);
+
+	/* Count number of lines */
+	for (p = buf; *p; p++)
+	{
+		if (*p == '\n') auto_dump_line_num++;
+	}
+
+	/* Dump it */
+	fprintf(auto_dump_stream, buf);
+}
+
+
 /*
  *  Open file to append auto dump.
  */
-static FILE *open_auto_dump(cptr buf, cptr mark, int *line)
+static bool open_auto_dump(cptr buf, cptr mark)
 {
-	FILE *fff;
 
 	char header_mark_str[80];
 
-	/* Drop priv's */
-	safe_setuid_drop();
+	/* Save the mark string */
+	auto_dump_mark = mark;
 
-	sprintf(header_mark_str, auto_dump_header, mark);
+	/* Prepare a header mark string */
+	sprintf(header_mark_str, auto_dump_header, auto_dump_mark);
 
 	/* Remove old macro dumps */
-	remove_auto_dump(buf, mark);
+	remove_auto_dump(buf);
 
 	/* Append to the file */
-	fff = my_fopen(buf, "a");
+	auto_dump_stream = my_fopen(buf, "a");
 
 	/* Failure */
-	if (!fff) {
+	if (!auto_dump_stream) {
 #ifdef JP
 		msg_format("%s を開くことができませんでした。", buf);
 #else
@@ -160,53 +282,52 @@ static FILE *open_auto_dump(cptr buf, cptr mark, int *line)
 #endif
 		msg_print(NULL);
 
-		/* Grab priv's */
-		safe_setuid_grab();
-		
-		return NULL;
+		/* Failed */
+		return FALSE;
 	}
 
 	/* Start dumping */
-	fprintf(fff, "%s\n", header_mark_str);
+	fprintf(auto_dump_stream, "%s\n", header_mark_str);
+
+	/* Initialize counter */
+	auto_dump_line_num = 0;
 
 #ifdef JP
-	fprintf(fff, "# *警告!!* 以降の行は自動生成されたものです。\n");
-	fprintf(fff, "# *警告!!* 後で自動的に削除されるので編集しないでください。\n");
+	auto_dump_printf("# *警告!!* 以降の行は自動生成されたものです。\n");
+	auto_dump_printf("# *警告!!* 後で自動的に削除されるので編集しないでください。\n");
 #else
-	fprintf(fff, "# *Warning!!* The lines below are automatic dump.\n");
-	fprintf(fff, "# *Warning!!* Don't edit these! These lines will be deleted automaticaly.\n");
+	auto_dump_printf("# *Warning!*  The lines below are an automatic dump.\n");
+	auto_dump_printf("# Don't edit them; changes will be deleted and replaced automatically.\n");
 #endif
-	*line = 2;
 
-	return fff;
+	/* Success */
+	return TRUE;
 }
 
 /*
  *  Append foot part and close auto dump.
  */
-static void close_auto_dump(FILE *fff, cptr mark, int line_num)
+static void close_auto_dump(void)
 {
 	char footer_mark_str[80];
 
-	sprintf(footer_mark_str, auto_dump_footer, mark);
+	/* Prepare a footer mark string */
+	sprintf(footer_mark_str, auto_dump_footer, auto_dump_mark);
 
-	/* End of dumping */
 #ifdef JP
-	fprintf(fff, "# *警告!!* 以上の行は自動生成されたものです。\n");
-	fprintf(fff, "# *警告!!* 後で自動的に削除されるので編集しないでください。\n");
+	auto_dump_printf("# *警告!!* 以上の行は自動生成されたものです。\n");
+	auto_dump_printf("# *警告!!* 後で自動的に削除されるので編集しないでください。\n");
 #else
-	fprintf(fff, "# *Warning!!* The lines above are automatic dump.\n");
-	fprintf(fff, "# *Warning!!* Don't edit these! These lines will be deleted automaticaly.\n");
+	auto_dump_printf("# *Warning!*  The lines above are an automatic dump.\n");
+	auto_dump_printf("# Don't edit them; changes will be deleted and replaced automatically.\n");
 #endif
-	line_num += 2;
 
-	fprintf(fff, "%s (%d)\n", footer_mark_str, line_num);
+	/* End of dump */
+	fprintf(auto_dump_stream, "%s (%d)\n", footer_mark_str, auto_dump_line_num);
 
-	my_fclose(fff);
+	/* Close */
+	my_fclose(auto_dump_stream);
 
-	/* Grab priv's */
-	safe_setuid_grab();
-		
 	return;
 }
 
@@ -257,9 +378,6 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 	sprintf(file_name,"playrec-%s.txt",savefile_base);
 #endif
 
-	/* Hack -- drop permissions */
-	safe_setuid_drop();
-
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
 
@@ -271,8 +389,6 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 	/* Failure */
 	if (!fff)
 	{
-		/* Hack -- grab permissions */
-		safe_setuid_grab();
 #ifdef JP
 		msg_format("%s を開くことができませんでした。プレイ記録を一時停止します。", buf);
 #else
@@ -672,9 +788,6 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 
 	my_fclose(fff);
 
-	/* Hack -- grab permissions */
-	safe_setuid_grab();
-
 	if (do_level) write_level = FALSE;
 
 	return (0);
@@ -761,9 +874,6 @@ static void do_cmd_disp_nikki(void)
 	sprintf(file_name,"playrec-%s.txt",savefile_base);
 #endif
 
-	/* Hack -- drop permissions */
-	safe_setuid_drop();
-
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
 
@@ -783,9 +893,6 @@ static void do_cmd_disp_nikki(void)
 
 	/* Display the file contents */
 	show_file(FALSE, buf, nikki_title, -1, 0);
-
-	/* Hack -- grab permissions */
-	safe_setuid_grab();
 }
 
 static void do_cmd_bunshou(void)
@@ -848,9 +955,6 @@ static void do_cmd_erase_nikki(void)
 	sprintf(file_name,"playrec-%s.txt",savefile_base);
 #endif
 
-	/* Hack -- drop permissions */
-	safe_setuid_drop();
-
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
 
@@ -873,9 +977,6 @@ static void do_cmd_erase_nikki(void)
 #endif
 	}
 	msg_print(NULL);
-
-	/* Hack -- grab permissions */
-	safe_setuid_grab();
 }
 
 
@@ -2573,9 +2674,7 @@ static errr macro_dump(cptr fname)
 {
 	static cptr mark = "Macro Dump";
 
-	int i, line_num;
-
-	FILE *fff;
+	int i;
 
 	char buf[1024];
 
@@ -2586,16 +2685,14 @@ static errr macro_dump(cptr fname)
 	FILE_TYPE(FILE_TYPE_TEXT);
 
 	/* Append to the file */
-	fff = open_auto_dump(buf, mark, &line_num);
-	if (!fff) return (-1);
+	if (!open_auto_dump(buf, mark)) return (-1);
 
 	/* Start dumping */
 #ifdef JP
-	fprintf(fff, "\n# 自動マクロセーブ\n\n");
+	auto_dump_printf("\n# 自動マクロセーブ\n\n");
 #else
-	fprintf(fff, "\n# Automatic macro dump\n\n");
+	auto_dump_printf("\n# Automatic macro dump\n\n");
 #endif
-	line_num += 3;
 
 	/* Dump them */
 	for (i = 0; i < macro__num; i++)
@@ -2604,23 +2701,20 @@ static errr macro_dump(cptr fname)
 		ascii_to_text(buf, macro__act[i]);
 
 		/* Dump the macro */
-		fprintf(fff, "A:%s\n", buf);
+		auto_dump_printf("A:%s\n", buf);
 
 		/* Extract the action */
 		ascii_to_text(buf, macro__pat[i]);
 
 		/* Dump normal macros */
-		fprintf(fff, "P:%s\n", buf);
+		auto_dump_printf("P:%s\n", buf);
 
 		/* End the macro */
-		fprintf(fff, "\n");
-
-		/* count number of lines */
-		line_num += 3;
+		auto_dump_printf("\n");
 	}
 
 	/* Close */
-	close_auto_dump(fff, mark, line_num);
+	close_auto_dump();
 
 	/* Success */
 	return (0);
@@ -2721,10 +2815,7 @@ static void do_cmd_macro_aux_keymap(char *buf)
 static errr keymap_dump(cptr fname)
 {
 	static cptr mark = "Keymap Dump";
-	int line_num;
 	int i;
-
-	FILE *fff;
 
 	char key[1024];
 	char buf[1024];
@@ -2751,16 +2842,14 @@ static errr keymap_dump(cptr fname)
 	FILE_TYPE(FILE_TYPE_TEXT);
 
 	/* Append to the file */
-	fff = open_auto_dump(buf, mark, &line_num);
-	if (!fff) return -1;
+	if (!open_auto_dump(buf, mark)) return -1;
 
 	/* Start dumping */
 #ifdef JP
-	fprintf(fff, "\n# 自動キー配置セーブ\n\n");
+	auto_dump_printf("\n# 自動キー配置セーブ\n\n");
 #else
-	fprintf(fff, "\n# Automatic keymap dump\n\n");
+	auto_dump_printf("\n# Automatic keymap dump\n\n");
 #endif
-	line_num += 3;
 
 	/* Dump them */
 	for (i = 0; i < 256; i++)
@@ -2782,13 +2871,12 @@ static errr keymap_dump(cptr fname)
 		ascii_to_text(buf, act);
 
 		/* Dump the macro */
-		fprintf(fff, "A:%s\n", buf);
-		fprintf(fff, "C:%d:%s\n", mode, key);
-		line_num += 2;
+		auto_dump_printf("A:%s\n", buf);
+		auto_dump_printf("C:%d:%s\n", mode, key);
 	}
 
 	/* Close */
-	close_auto_dump(fff, mark, line_num);
+	close_auto_dump();
 
 	/* Success */
 	return (0);
@@ -3422,8 +3510,6 @@ void do_cmd_visuals(void)
 {
 	int i;
 
-	FILE *fff;
-
 	char tmp[160];
 
 	char buf[1024];
@@ -3539,7 +3625,6 @@ void do_cmd_visuals(void)
 		else if (i == '2')
 		{
 			static cptr mark = "Monster attr/chars";
-			int line_num;
 
 			/* Prompt */
 #ifdef JP
@@ -3567,16 +3652,14 @@ void do_cmd_visuals(void)
 			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
 
 			/* Append to the file */
-			fff = open_auto_dump(buf, mark, &line_num);
-			if (!fff) continue;
+			if (!open_auto_dump(buf, mark)) continue;
 
 			/* Start dumping */
 #ifdef JP
-			fprintf(fff, "\n# モンスターの[色/文字]の設定\n\n");
+			auto_dump_printf("\n# モンスターの[色/文字]の設定\n\n");
 #else
-			fprintf(fff, "\n# Monster attr/char definitions\n\n");
+			auto_dump_printf("\n# Monster attr/char definitions\n\n");
 #endif
-			line_num += 3;
 
 			/* Dump monsters */
 			for (i = 1; i < max_r_idx; i++)
@@ -3587,17 +3670,15 @@ void do_cmd_visuals(void)
 				if (!r_ptr->name) continue;
 
 				/* Dump a comment */
-				fprintf(fff, "# %s\n", (r_name + r_ptr->name));
-				line_num++;
+				auto_dump_printf("# %s\n", (r_name + r_ptr->name));
 
 				/* Dump the monster attr/char info */
-				fprintf(fff, "R:%d:0x%02X/0x%02X\n\n", i,
+				auto_dump_printf("R:%d:0x%02X/0x%02X\n\n", i,
 					(byte)(r_ptr->x_attr), (byte)(r_ptr->x_char));
-				line_num += 2;
 			}
 
 			/* Close */
-			close_auto_dump(fff, mark, line_num);
+			close_auto_dump();
 
 			/* Message */
 #ifdef JP
@@ -3612,7 +3693,6 @@ void do_cmd_visuals(void)
 		else if (i == '3')
 		{
 			static cptr mark = "Object attr/chars";
-			int line_num;
 
 			/* Prompt */
 #ifdef JP
@@ -3640,16 +3720,14 @@ void do_cmd_visuals(void)
 			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
 
 			/* Append to the file */
-			fff = open_auto_dump(buf, mark, &line_num);
-			if (!fff) continue;
+			if (!open_auto_dump(buf, mark)) continue;
 
 			/* Start dumping */
 #ifdef JP
-			fprintf(fff, "\n# アイテムの[色/文字]の設定\n\n");
+			auto_dump_printf("\n# アイテムの[色/文字]の設定\n\n");
 #else
-			fprintf(fff, "\n# Object attr/char definitions\n\n");
+			auto_dump_printf("\n# Object attr/char definitions\n\n");
 #endif
-			line_num += 3;
 
 			/* Dump objects */
 			for (i = 1; i < max_k_idx; i++)
@@ -3667,17 +3745,15 @@ void do_cmd_visuals(void)
 				strip_name(o_name, i);
 
 				/* Dump a comment */
-				fprintf(fff, "# %s\n", o_name);
-				line_num++;
+				auto_dump_printf("# %s\n", o_name);
 
 				/* Dump the object attr/char info */
-				fprintf(fff, "K:%d:0x%02X/0x%02X\n\n", i,
+				auto_dump_printf("K:%d:0x%02X/0x%02X\n\n", i,
 					(byte)(k_ptr->x_attr), (byte)(k_ptr->x_char));
-				line_num += 2;
 			}
 
 			/* Close */
-			close_auto_dump(fff, mark, line_num);
+			close_auto_dump();
 
 			/* Message */
 #ifdef JP
@@ -3692,7 +3768,6 @@ void do_cmd_visuals(void)
 		else if (i == '4')
 		{
 			static cptr mark = "Feature attr/chars";
-			int line_num;
 
 			/* Prompt */
 #ifdef JP
@@ -3720,16 +3795,14 @@ void do_cmd_visuals(void)
 			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
 
 			/* Append to the file */
-			fff = open_auto_dump(buf, mark, &line_num);
-			if (!fff) continue;
+			if (!open_auto_dump(buf, mark)) continue;
 
 			/* Start dumping */
 #ifdef JP
-			fprintf(fff, "\n# 地形の[色/文字]の設定\n\n");
+			auto_dump_printf("\n# 地形の[色/文字]の設定\n\n");
 #else
-			fprintf(fff, "\n# Feature attr/char definitions\n\n");
+			auto_dump_printf("\n# Feature attr/char definitions\n\n");
 #endif
-			line_num += 3;
 
 			/* Dump features */
 			for (i = 1; i < max_f_idx; i++)
@@ -3743,17 +3816,15 @@ void do_cmd_visuals(void)
 				if (f_ptr->mimic != i) continue;
 
 				/* Dump a comment */
-				fprintf(fff, "# %s\n", (f_name + f_ptr->name));
-				line_num++;
+				auto_dump_printf("# %s\n", (f_name + f_ptr->name));
 
 				/* Dump the feature attr/char info */
-				fprintf(fff, "F:%d:0x%02X/0x%02X\n\n", i,
+				auto_dump_printf("F:%d:0x%02X/0x%02X\n\n", i,
 					(byte)(f_ptr->x_attr), (byte)(f_ptr->x_char));
-				line_num += 2;
 			}
 
 			/* Close */
-			close_auto_dump(fff, mark, line_num);
+			close_auto_dump();
 
 			/* Message */
 #ifdef JP
@@ -4141,8 +4212,6 @@ void do_cmd_colors(void)
 {
 	int i;
 
-	FILE *fff;
-
 	char tmp[160];
 
 	char buf[1024];
@@ -4243,7 +4312,6 @@ void do_cmd_colors(void)
 		else if (i == '2')
 		{
 			static cptr mark = "Colors";
-			int line_num;
 
 			/* Prompt */
 #ifdef JP
@@ -4271,16 +4339,14 @@ void do_cmd_colors(void)
 			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
 
 			/* Append to the file */
-			fff = open_auto_dump(buf, mark, &line_num);
-			if (!fff) continue;
+			if (!open_auto_dump(buf, mark)) continue;
 
 			/* Start dumping */
 #ifdef JP
-			fprintf(fff, "\n# カラーの設定\n\n");
+			auto_dump_printf("\n# カラーの設定\n\n");
 #else
-			fprintf(fff, "\n# Color redefinitions\n\n");
+			auto_dump_printf("\n# Color redefinitions\n\n");
 #endif
-			line_num += 3;
 
 			/* Dump colors */
 			for (i = 0; i < 256; i++)
@@ -4305,20 +4371,18 @@ void do_cmd_colors(void)
 
 				/* Dump a comment */
 #ifdef JP
-				fprintf(fff, "# カラー '%s'\n", name);
+				auto_dump_printf("# カラー '%s'\n", name);
 #else
-				fprintf(fff, "# Color '%s'\n", name);
+				auto_dump_printf("# Color '%s'\n", name);
 #endif
-				line_num++;
 
 				/* Dump the monster attr/char info */
-				fprintf(fff, "V:%d:0x%02X:0x%02X:0x%02X:0x%02X\n\n",
+				auto_dump_printf("V:%d:0x%02X:0x%02X:0x%02X:0x%02X\n\n",
 					i, kv, rv, gv, bv);
-				line_num += 2;
 			}
 
 			/* Close */
-			close_auto_dump(fff, mark, line_num);
+			close_auto_dump();
 
 			/* Message */
 #ifdef JP
@@ -5388,9 +5452,6 @@ void do_cmd_load_screen(void)
 
 	Term_get_size(&wid, &hgt);
 
-	/* Hack -- drop permissions */
-	safe_setuid_drop();
-
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
 
@@ -5466,9 +5527,6 @@ void do_cmd_load_screen(void)
 	/* Close it */
 	my_fclose(fff);
 
-	/* Hack -- grab permissions */
-	safe_setuid_grab();
-		
 
 	/* Message */
 #ifdef JP
@@ -5731,7 +5789,7 @@ static void do_cmd_knowledge_inven(void)
 #ifdef JP
 	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
 #else
-	    msg_format("Failed to create temporally file %s.", file_name);
+	    msg_format("Failed to create temporary file %s.", file_name);
 #endif
 	    msg_print(NULL);
 	    return;
@@ -5983,13 +6041,7 @@ static void do_cmd_save_screen_html(void)
 
 	msg_print(NULL);
 
-	/* Hack -- drop permissions */
-	safe_setuid_drop();
-
 	do_cmd_save_screen_html_aux(buf, 1);
-
-	/* Hack -- grab permissions */
-	safe_setuid_grab();
 }
 
 
@@ -6068,10 +6120,6 @@ void do_cmd_save_screen(void)
 
 		char buf[1024];
 
-
-		/* Hack -- drop permissions */
-		safe_setuid_drop();
-
 		/* Build the filename */
 		path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
 
@@ -6084,8 +6132,6 @@ void do_cmd_save_screen(void)
 		/* Oops */
 		if (!fff)
 		{
-			/* Hack -- grab permissions */
-			safe_setuid_grab();
 #ifdef JP
 			msg_format("ファイル %s を開けませんでした。", buf);
 #else
@@ -6150,9 +6196,6 @@ void do_cmd_save_screen(void)
 
 		/* Close it */
 		my_fclose(fff);
-
-		/* Hack -- grab permissions */
-		safe_setuid_grab();
 
 		/* Message */
 #ifdef JP
