@@ -5286,7 +5286,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 				msg_print("あなたは力強い突風を吹き鳴らした。周囲の敵が震え上っている!");
 #else
 				msg_print("You wind a mighty blast; your enemies tremble!");
-#end
+#endif
 				(void)turn_monsters((3 * p_ptr->lev / 2) + 10);
 				o_ptr->timeout = randint0(40) + 40;
 				break;
