@@ -455,7 +455,7 @@ void teleport_player_to(int ny, int nx, bool no_tele, bool passive)
 		}
 
 		/* Accept any grid when wizard mode */
-		if (p_ptr->wizard) break;
+		if (p_ptr->wizard && !passive) break;
 
 		/* Accept teleportable floor grids */
 		if (cave_teleportable_bold(y, x, passive)) break;
