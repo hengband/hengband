@@ -5519,8 +5519,9 @@ static void build_type14(int by0, int bx0)
 		trap = FEAT_TRAP_ARMAGEDDON;
 
 	/* Place a special trap */
-	cave[yval][xval].mimic = cave[yval][xval].feat;
-	cave[yval][xval].feat = trap;
+	c_ptr = &cave[rand_spread(yval, ysize/4)][rand_spread(xval, xsize/4)];
+	c_ptr->mimic = c_ptr->feat;
+	c_ptr->feat = trap;
 
 	/* Message */
 	if (cheat_room)
