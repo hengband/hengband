@@ -799,7 +799,7 @@ static byte lighting_colours[16][2] =
 			/* Use darkened colour */ \
 			a = !new_ascii_graphics ? TERM_L_DARK : lighting_colours[a][1]; \
 		} \
-		else if (use_graphics && feat_supports_lighting(feat)) \
+		else if (feat_supports_lighting(feat)) \
 		{ \
 			/* Use a dark tile */ \
 			c++; \
@@ -980,7 +980,12 @@ void map_info(int y, int x, byte *ap, char *cp)
 				/* Handle "blind" */
 				if (p_ptr->blind)
 				{
-					if (use_graphics)
+					if (is_ascii_graphics(a))
+					{
+						/* Use "dark gray" */
+						a = TERM_L_DARK;
+					}
+					else
 					{
 						/*
 						 * feat_supports_lighting(feat)
@@ -989,11 +994,6 @@ void map_info(int y, int x, byte *ap, char *cp)
 
 						/* Use a dark tile */
 						c++;
-					}
-					else
-					{
-						/* Use "dark gray" */
-						a = TERM_L_DARK;
 					}
 				}
 
@@ -1003,7 +1003,12 @@ void map_info(int y, int x, byte *ap, char *cp)
 					/* Torch lite */
 					if (view_yellow_lite && !p_ptr->wild_mode)
 					{
-						if (use_graphics)
+						if (is_ascii_graphics(a))
+						{
+							/* Use "yellow" */
+							a = TERM_YELLOW;
+						}
+						else
 						{
 							/*
 							 * feat_supports_lighting(feat)
@@ -1013,18 +1018,18 @@ void map_info(int y, int x, byte *ap, char *cp)
 							/* Use a brightly lit tile */
 							c += 2;
 						}
-						else
-						{
-							/* Use "yellow" */
-							a = TERM_YELLOW;
-						}
 					}
 				}
 
 				/* Handle "dark" grids */
 				else if ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
 				{
-					if (use_graphics)
+					if (is_ascii_graphics(a))
+					{
+						/* Use "dark gray" */
+						a = TERM_L_DARK;
+					}
+					else
 					{
 						/*
 						 * feat_supports_lighting(feat)
@@ -1034,11 +1039,6 @@ void map_info(int y, int x, byte *ap, char *cp)
 						/* Use a dark tile */
 						c++;
 					}
-					else
-					{
-						/* Use "dark gray" */
-						a = TERM_L_DARK;
-					}
 				}
 
 				/* Handle "out-of-sight" grids */
@@ -1047,7 +1047,12 @@ void map_info(int y, int x, byte *ap, char *cp)
 					/* Special flag */
 					if (view_bright_lite && !p_ptr->wild_mode)
 					{
-						if (use_graphics)
+						if (is_ascii_graphics(a))
+						{
+							/* Use "gray" */
+							a = TERM_SLATE;
+						}
+						else
 						{
 							/*
 							 * feat_supports_lighting(feat)
@@ -1056,11 +1061,6 @@ void map_info(int y, int x, byte *ap, char *cp)
 
 							/* Use a dark tile */
 							c++;
-						}
-						else
-						{
-							/* Use "gray" */
-							a = TERM_SLATE;
 						}
 					}
 				}
@@ -1118,7 +1118,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 						/* Use darkened colour */
 						a = lighting_colours[a][1];
 					}
-					else if (use_graphics && feat_supports_lighting(feat))
+					else if (feat_supports_lighting(feat))
 					{
 						/* Use a dark tile */
 						c++;
@@ -1129,15 +1129,14 @@ void map_info(int y, int x, byte *ap, char *cp)
 				else if (c_ptr->info & (CAVE_LITE | CAVE_MNLT))
 				{
 					/* Torch lite */
-					if (view_yellow_lite && !p_ptr->wild_mode && ((use_graphics && feat_supports_lighting(feat)) || is_ascii_graphics(a)))
+					if (view_yellow_lite && !p_ptr->wild_mode && (feat_supports_lighting(feat) || is_ascii_graphics(a)))
 					{
 						if (is_ascii_graphics(a))
 						{
 							/* Use lightened colour */
 							a = lighting_colours[a][0];
 						}
-						else if (use_graphics &&
-								feat_supports_lighting(feat))
+						else if (feat_supports_lighting(feat))
 						{
 							/* Use a brightly lit tile */
 							c += 2;
@@ -1146,7 +1145,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 				}
 
 				/* Handle "view_bright_lite" */
-				else if (view_bright_lite && !p_ptr->wild_mode && ((use_graphics && feat_supports_lighting(feat)) || is_ascii_graphics(a)))
+				else if (view_bright_lite && !p_ptr->wild_mode && (feat_supports_lighting(feat) || is_ascii_graphics(a)))
 				{
 					/* Not viewable */
 					if (!(c_ptr->info & CAVE_VIEW))
@@ -1156,7 +1155,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 							/* Use darkened colour */
 							a = lighting_colours[a][1];
 						}
-						else if (use_graphics && feat_supports_lighting(feat))
+						else if (feat_supports_lighting(feat))
 						{
 							/* Use a dark tile */
 							c++;
@@ -1183,15 +1182,15 @@ void map_info(int y, int x, byte *ap, char *cp)
 				/* Handle "blind" */
 				if (p_ptr->blind)
 				{
-					if (use_graphics)
-					{
-						/* Use a dark tile */
-						c++;
-					}
-					else
+					if (is_ascii_graphics(a))
 					{
 						/* Use "dark gray" */
 						a = TERM_L_DARK;
+					}
+					else
+					{
+						/* Use a dark tile */
+						c++;
 					}
 				}
 
@@ -1201,15 +1200,15 @@ void map_info(int y, int x, byte *ap, char *cp)
 					/* Torch lite */
 					if (view_yellow_lite && !p_ptr->wild_mode)
 					{
-						if (use_graphics)
-						{
-							/* Use a brightly lit tile */
-							c += 2;
-						}
-						else
+						if (is_ascii_graphics(a))
 						{
 							/* Use "yellow" */
 							a = TERM_YELLOW;
+						}
+						else
+						{
+							/* Use a brightly lit tile */
+							c += 2;
 						}
 					}
 				}
@@ -1220,29 +1219,29 @@ void map_info(int y, int x, byte *ap, char *cp)
 					/* Not viewable */
 					if (!(c_ptr->info & CAVE_VIEW))
 					{
-						if (use_graphics)
-						{
-							/* Use a dark tile */
-							c++;
-						}
-						else
+						if (is_ascii_graphics(a))
 						{
 							/* Use "gray" */
 							a = TERM_SLATE;
+						}
+						else
+						{
+							/* Use a dark tile */
+							c++;
 						}
 					}
 
 					/* Not glowing */
 					else if ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
 					{
-						if (use_graphics)
-						{
-							/* Use a lit tile */
-						}
-						else
+						if (is_ascii_graphics(a))
 						{
 							/* Use "gray" */
 							a = TERM_SLATE;
+						}
+						else
+						{
+							/* Use a lit tile */
 						}
 					}
 
@@ -1258,14 +1257,14 @@ void map_info(int y, int x, byte *ap, char *cp)
 						/* Check for "local" illumination */
 						if ((cave[yy][xx].info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
 						{
-							if (use_graphics)
-							{
-								/* Use a lit tile */
-							}
-							else
+							if (is_ascii_graphics(a))
 							{
 								/* Use "gray" */
 								a = TERM_SLATE;
+							}
+							else
+							{
+								/* Use a lit tile */
 							}
 						}
 					}
