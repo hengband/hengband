@@ -4950,7 +4950,24 @@ static int get_tag(int *cp, char tag)
 	return (FALSE);
 }
 
+/*
+ * Determine whether get_item() can get some item or not
+ * assuming mode = (USE_EQUIP | USE_INVEN | USE_FLOOR).
+ */
+bool can_get_item(void)
+{
+	int j, floor_list[23], floor_num = 0;
 
+	for (j = 0; j < INVEN_TOTAL; j++)
+		if (item_tester_okay(&inventory[j]))
+			return TRUE;
+
+	(void)scan_floor(floor_list, &floor_num, py, px, 0x01);
+	if (floor_num)
+		return TRUE;
+
+	return FALSE;
+}
 
 /*
  * Let the user select an item, save its "index"

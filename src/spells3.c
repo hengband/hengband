@@ -2606,6 +2606,18 @@ bool ident_spell(bool only_equip)
 	else
 		item_tester_hook = item_tester_hook_identify;
 
+	if (!can_get_item())
+	{
+		if (only_equip)
+		{
+			item_tester_hook = item_tester_hook_weapon_armour;
+		}
+		else
+		{
+			item_tester_hook = NULL;
+		}
+	}
+
 	/* Get an item */
 #ifdef JP
 q = "どのアイテムを鑑定しますか? ";
@@ -2767,6 +2779,14 @@ bool identify_fully(bool only_equip)
 		item_tester_hook = item_tester_hook_identify_fully_weapon_armour;
 	else
 		item_tester_hook = item_tester_hook_identify_fully;
+
+	if (!can_get_item())
+	{
+		if (only_equip)
+			item_tester_hook = item_tester_hook_weapon_armour;
+		else
+			item_tester_hook = NULL;
+	}
 
 	/* Get an item */
 #ifdef JP
