@@ -3169,7 +3169,7 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 			/* Now on insert mode */
 			color = TERM_WHITE;
 
-			/* No move at biggining of line */
+			/* No move at beginning of line */
 			if (0 == pos) break;
 
 			while (TRUE)
@@ -3246,7 +3246,7 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 			/* Now on insert mode */
 			color = TERM_WHITE;
 
-			/* No move at biggining of line */
+			/* No move at beginning of line */
 			if (0 == pos) break;
 
 			while (TRUE)
@@ -3278,6 +3278,9 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 
 			/* Now on insert mode */
 			color = TERM_WHITE;
+
+			/* No move at end of line */
+			if ('\0' == buf[pos]) break;
 
 			/* Position of next character */
 			src = pos + 1;
