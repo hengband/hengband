@@ -3433,9 +3433,9 @@ static bool pattern_seq(int c_y, int c_x, int n_y, int n_x)
 				default:
 					if (p_ptr->wizard)
 #ifdef JP
-						msg_format("おかしなパターン歩行、%d。", cave[c_y][c_x]);
+						msg_format("おかしなパターン歩行、%d。", cave[c_y][c_x].feat);
 #else
-						msg_format("Funny Pattern walking, %d.", cave[c_y][c_x]);
+						msg_format("Funny Pattern walking, %d.", cave[c_y][c_x].feat);
 #endif
 
 					return TRUE; /* Goof-up */

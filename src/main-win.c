@@ -545,11 +545,15 @@ static cptr AngList = "AngList";
 /*
  * Directory names
  */
-static cptr ANGBAND_DIR_XTRA_FONT;
 static cptr ANGBAND_DIR_XTRA_GRAF;
 static cptr ANGBAND_DIR_XTRA_SOUND;
-static cptr ANGBAND_DIR_XTRA_MUSIC;
 static cptr ANGBAND_DIR_XTRA_HELP;
+#ifndef JP
+static cptr ANGBAND_DIR_XTRA_FONT;
+#endif
+#ifdef USE_MUSIC
+static cptr ANGBAND_DIR_XTRA_MUSIC;
+#endif
 
 
 /*
@@ -781,6 +785,7 @@ static void DrawBG(HDC hdc, RECT *r)
 	DeleteDC(hdcSrc);
 }
 
+#if 0
 /*
  * Hack -- given a pathname, point at the filename
  */
@@ -797,6 +802,7 @@ static cptr extract_file_name(cptr s)
 	/* Return file name */
 	return (p+1);
 }
+#endif
 
 
 /*

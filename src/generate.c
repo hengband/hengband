@@ -1582,7 +1582,7 @@ void clear_cave(void)
  */
 void generate_cave(void)
 {
-	int y, x, num;
+	int num;
 
 	/* Generate */
 	for (num = 0; TRUE; num++)
