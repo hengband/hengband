@@ -738,3 +738,12 @@ G:*:v
 N:196:未知の地形 (未感知)
 E:unknown grid (not detected)
 G:x:D
+
+N:197:ハルマゲドン・トラップ
+E:Armageddon trap
+G:^:v
+
+N:198:ピラニア・トラップ
+E:Piranha trap
+G:^:b
+
