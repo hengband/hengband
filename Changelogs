@@ -1,4 +1,87 @@
+2002-06-02  Takeshi Mogami  <mogami@cvs>
+
+	* configure.in 1.15, lib/file/news.txt 1.8:
+	英語版用にバージョン修正。ついでに configure.in のバージョンも修正。
+
+2002-06-02  habu  <habu@cvs>
+
+	* src/load.c 1.29:
+	新しいプレイヤーのフラグを読む時にz_older_thanを使っていなくて古いセーブファイルが読めなかったので修正。
+
+	* src/defines.h 1.56, src/load.c 1.28, src/save.c 1.15:
+	バージョン1.1.-1にするため、load.cとsave.cのコメントアウトしていた部分を外した。
+	また、内部バージョンは1.0.99としている。
+
+2002-06-02  hoge  <hoge@cvs>
+
+	* lib/file/news_j.txt 1.8, lib/help/jversion.txt 1.9, lib/help/version.txt 1.9:
+	version.txtに日付入れる
+	news_jを1.1.-1→1.1.0RC1
+
+2002-06-01  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/jversion.txt 1.8, lib/help/version.txt 1.8:
+	version.txt編集。
+
+2002-06-01  _nothere  <_nothere@cvs>
+
+	* src/store.c 1.13:
+	店で買ったアイテムにも自動銘刻みを適用. 自動破壊は行わない.
+
+2002-06-01  Takeshi Mogami  <mogami@cvs>
+
+	* autopick.txt 1.12, autopick_eng.txt 1.14, lib/help/jpref.txt 1.10, lib/help/pref.txt 1.13:
+	自動拾いのキーワードにCrusade追加。
+
+	* lib/help/jmagic.txt 1.7, lib/help/jraceclas.txt 1.2, lib/help/magic.txt 1.9, lib/help/raceclas.txt 1.3, src/birth.c 1.40:
+	生命破邪に対応してヘルプの修正。
+
+	* src/birth.c 1.39, src/effects.c 1.23:
+	残っていた翻訳を完了。
+
+	* configure.in 1.14, src/birth.c 1.38, src/cmd5.c 1.31, src/spells3.c 1.35, src/tables.c 1.40:
+	生命破邪の説明修正、スターダストのダイスをd2に、破邪の英語版呪文名ちょっと修正。
+
+2002-06-01  hoge  <hoge@cvs>
+
+	* lib/edit/m_info_j.txt 1.9, lib/file/death_j.txt 1.2, lib/file/monspeak_j.txt 1.6, lib/file/news_j.txt 1.7, src/birth.c 1.37, src/cmd5.c 1.30, src/effects.c 1.22, src/spells3.c 1.34, src/spellstips.h 1.21:
+	クターの生い立ちを改良
+	破邪のバランス調整
+
+2002-06-01  habu  <habu@cvs>
+
+	* src/files.c 1.58:
+	簡単愚のほうでも修正した、クエスト達成後にセーブ&ロードでキャラクタ画面にクエスト名が出なくなるバグを修正。
+
+	* src/init1.c 1.39:
+	ワーニング除去作業で16進数を%dで受けるようにしたためにm_info_j.txtの解析に失敗するようになっていたのを修正。
+
+2002-05-31  Takeshi Mogami  <mogami@cvs>
+
+	* autopick.txt 1.11, autopick_eng.txt 1.13, lib/help/jpref.txt 1.9, lib/help/pref.txt 1.12, src/autopick.c 1.33:
+	キーワードの順番がおかしかったのを修正。
+	「エゴ修正値3以上の武器」→「修正値3以上のエゴ武器」
+
+	* autopick_eng.txt 1.12, lib/help/jpref.txt 1.8, lib/help/pref.txt 1.11, src/autopick.c 1.32, src/types.h 1.20, autopick.txt 1.10:
+	キーワード「修正値n以上の〜」追加。pvalがあるアイテムはpvalだけ、
+	無いアイテムはto-hit to-dam to-ac を見て、どれかが(+n)以上ならマッチ。
+
+	* autopick_eng.txt 1.11, lib/help/jpref.txt 1.7, lib/help/pref.txt 1.10, src/autopick.c 1.31:
+	自動拾いの、コード整理、ヘルプ修正。
+
+	* src/init1.c 1.38:
+	_strchr()の型の修正の仕方が違ったのを再修正。
+
+	* src/autopick.c 1.30:
+	鑑定時の自動破壊で装備品を壊していたバグ修正。
+
 2002-05-30  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.29:
+	^I や ^L で自動拾い設定行を挿入するとき、自動的に「アーティファクト武器」、
+	「エゴ兜」等のように正しく書くように修正。
+
+	* Changelogs 1.45: 更新
 
 	* src/autopick.c 1.28:
 	英語版で名詞型のキーワード「artifacts」を一応残しておいたのだが、
