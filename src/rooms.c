@@ -1473,9 +1473,9 @@ static bool vault_aux_mimic(int r_idx)
 
 	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
-  
+
 	/* Require mimic */
-	if (!my_strchr("!|$?=", r_ptr->d_char)) return (FALSE);
+	if (!my_strchr("!$&(/=?[\\|", r_ptr->d_char)) return (FALSE);
 
 	/* Okay */
 	return (TRUE);
