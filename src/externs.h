@@ -1304,6 +1304,7 @@ extern void handle_stuff(void);
 extern s16b empty_hands(bool is_monk);
 extern bool heavy_armor(void);
 extern void calc_bonuses(void);
+extern bool exp_need;
 
 /* effects.c */
 extern void set_action(int typ);

@@ -7054,6 +7054,14 @@ option_type option_info[] =
 	"hilite_player",                "Hilite the player with the cursor" },
 #endif
 
+#ifdef JP
+	{ &exp_need,                    FALSE, OPT_PAGE_OUTPUT, 2, 12,
+	"exp_need",                "次のレベルに必要な経験値を表示する" },
+#else
+	{ &exp_need,                    FALSE, OPT_PAGE_OUTPUT, 2, 12,
+	"exp_need",                "Show the experience needed for next level" },
+#endif
+
 	/*** Birth Options ***/
 
 #ifdef JP

@@ -281,6 +281,8 @@ bool fresh_after;   /* Flush output after monster's move */
 bool fresh_message;   /* Flush output after every message */
 bool compress_savefile;   /* Compress messages in savefiles */
 bool hilite_player;   /* Hilite the player with the cursor */
+bool exp_need;	/* Show the experience needed for next level */
+
 
 
 /*** Birth Options ***/

@@ -560,6 +560,14 @@ Hilite the player with the cursor    [hilite_player]
     machines, hiding the cursor often speeds up the game and looks
     better.
     
+***** <exp_need>
+Show the experience needed for the next level    [exp_need]
+    Setting this option to yes alters the display of experience on the
+    left of the main screen to the experience needed to reach the next
+    character level, instead of the character's current total
+    experience.
+
+
 ***** <AutoDestroyer>
 === Option set 6 -- Easy Auto-Destroyer ===
 

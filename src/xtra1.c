@@ -754,12 +754,29 @@ static void prt_exp(void)
 {
 	char out_val[32];
 
+	if ((!exp_need)||(p_ptr->prace == RACE_ANDROID))
+	{
 #ifdef JP
-(void)sprintf(out_val, "%7ld", (long)p_ptr->exp);
+	(void)sprintf(out_val, "%7ld", (long)p_ptr->exp);
 #else
 	(void)sprintf(out_val, "%8ld", (long)p_ptr->exp);
 #endif
-
+	}
+	else
+	{
+		if (p_ptr->lev >= PY_MAX_LEVEL)
+		{
+			(void)sprintf(out_val, "********");
+		}
+		else
+		{
+#ifdef JP
+			(void)sprintf(out_val, "%7ld", (long)(player_exp [p_ptr->lev - 1] * p_ptr->expfact / 100L) - p_ptr->exp);
+#else      
+			(void)sprintf(out_val, "%8ld", (long)(player_exp [p_ptr->lev - 1] * p_ptr->expfact / 100L) - p_ptr->exp);
+#endif
+		}
+	}
 
 	if (p_ptr->exp >= p_ptr->max_exp)
 	{
@@ -786,7 +803,6 @@ static void prt_exp(void)
 
 	}
 }
-
 
 /*
  * Prints current gold
