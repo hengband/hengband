@@ -1601,6 +1601,7 @@ s16b inscribe_flags(object_type *o_ptr, cptr out_val)
 	{
 		if ('%' == out_val[i] )
 		{
+			cptr start_percent = ptr;
 #ifdef JP
 			if ('%' == out_val[i+1])
 			{
@@ -1728,6 +1729,9 @@ s16b inscribe_flags(object_type *o_ptr, cptr out_val)
 				ADD_INSC("(");
 			}
 			ptr = inscribe_flags_aux(flag_insc_sust, flag, kanji, ptr);
+
+			if (ptr == start_percent)
+				ADD_INSC(" ");
 		}
 		else
 		{
