@@ -1485,6 +1485,7 @@ static bool store_will_buy(object_type *o_ptr)
 				case TV_ARCANE_BOOK:
 				case TV_ENCHANT_BOOK:
 				case TV_DAEMON_BOOK:
+				case TV_CRUSADE_BOOK:
 				case TV_MUSIC_BOOK:
 					break;
 				default:
