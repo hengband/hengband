@@ -1076,8 +1076,20 @@ static void trigger_text_to_ascii(char **bufptr, cptr *strptr)
 			break;
 		}
 	}
+
+	/* Invalid trigger name? */
 	if (i == max_macrotrigger)
+	{
+		str = strchr(str, ']');
+		if (str)
+		{
+			*s++ = (char)31;
+			*s++ = (char)13;
+			*bufptr = s;
+			*strptr = str; /* where **strptr == ']' */
+		}
 		return;
+	}
 	key_code = macro_trigger_keycode[shiftstatus][i];
 	str += len;
 
