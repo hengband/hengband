@@ -1316,13 +1316,6 @@ void map_info(int y, int x, byte *ap, char *cp)
 		}
 	}
 
-	/* Hack -- rare random hallucination, except on outer dungeon walls */
-	if (p_ptr->image && (c_ptr->feat < FEAT_PERM_SOLID) && !randint0(256))
-	{
-		/* Hallucinate */
-		image_random(ap, cp);
-	}
-
 #ifdef USE_TRANSPARENCY
 	/* Save the terrain info for the transparency effects */
 	(*tap) = a;
@@ -1332,6 +1325,13 @@ void map_info(int y, int x, byte *ap, char *cp)
 	/* Save the info */
 	(*ap) = a;
 	(*cp) = c;
+
+	/* Hack -- rare random hallucination, except on outer dungeon walls */
+	if (p_ptr->image && (c_ptr->feat < FEAT_PERM_SOLID) && !randint0(256))
+	{
+		/* Hallucinate */
+		image_random(ap, cp);
+	}
 
 	/* Objects */
 	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
