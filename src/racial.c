@@ -728,7 +728,6 @@ static int racial_chance(power_desc_type *pd_ptr)
 
 
 static int  racial_cost;
-static bool racial_use_hp;
 
 /*
  * Note: return value indicates that we have succesfully used the power
@@ -739,12 +738,12 @@ static int racial_aux(power_desc_type *pd_ptr)
 	s16b min_level  = pd_ptr->level;
 	int  use_stat   = pd_ptr->stat;
 	int  difficulty = pd_ptr->fail;
+	int  use_hp = 0;
 
-	racial_cost   = pd_ptr->cost;
-	racial_use_hp = FALSE;
+	racial_cost = pd_ptr->cost;
 
 	/* Not enough mana - use hp */
-	if (p_ptr->csp < racial_cost) racial_use_hp = TRUE;
+	if (p_ptr->csp < racial_cost) use_hp = racial_cost - p_ptr->csp;
 
 	/* Power is not available yet */
 	if (p_ptr->lev < min_level)
@@ -773,7 +772,7 @@ static int racial_aux(power_desc_type *pd_ptr)
 	}
 
 	/* Risk death? */
-	else if (racial_use_hp && (p_ptr->chp < racial_cost))
+	else if (p_ptr->chp < use_hp)
 	{
 #ifdef JP
 		if (!get_check("本当に今の衰弱した状態でこの能力を使いますか？"))
@@ -3777,20 +3776,20 @@ prt("                            Lv   MP 失率                            Lv   MP
 	{
 		if (racial_cost)
 		{
-			if (racial_use_hp)
+			int actual_racial_cost = racial_cost / 2 + randint1(racial_cost / 2);
+
+			/* If mana is not enough, player consumes hit point! */
+			if (p_ptr->csp < actual_racial_cost)
 			{
+				actual_racial_cost -= p_ptr->csp;
+				p_ptr->csp = 0;
 #ifdef JP
-				take_hit(DAMAGE_USELIFE, (racial_cost / 2) + randint1(racial_cost / 2),
-					 "過度の集中", -1);
+				take_hit(DAMAGE_USELIFE, actual_racial_cost, "過度の集中", -1);
 #else
-				take_hit(DAMAGE_USELIFE, (racial_cost / 2) + randint1(racial_cost / 2),
-					 "concentrating too hard", -1);
+				take_hit(DAMAGE_USELIFE, actual_racial_cost, "concentrating too hard", -1);
 #endif
 			}
-			else
-			{
-				p_ptr->csp -= (racial_cost / 2) + randint1(racial_cost / 2);
-			}
+			else p_ptr->csp -= actual_racial_cost;
 
 			/* Redraw mana and hp */
 			p_ptr->redraw |= (PR_HP | PR_MANA);
