@@ -500,6 +500,86 @@ static int mon_will_run(int m_idx)
 
 
 /*
+ * Search spell castable grid
+ */
+static bool get_moves_aux2(int m_idx, int *yp, int *xp)
+{
+	int i, y, x, y1, x1, best = 999;
+
+	cave_type *c_ptr;
+	bool can_open_door = FALSE;
+	int now_cost;
+
+	monster_type *m_ptr = &m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+	/* Monster location */
+	y1 = m_ptr->fy;
+	x1 = m_ptr->fx;
+
+	/* Monster can already cast spell to player */
+	if (projectable(y1, x1, py, px)) return (FALSE);
+
+	/* Set current grid cost */
+	now_cost = cave[y1][x1].cost;
+	if (now_cost == 0) now_cost = 999;
+
+	/* Can monster bash or open doors? */
+	if (r_ptr->flags2 & (RF2_BASH_DOOR | RF2_OPEN_DOOR))
+	{
+		can_open_door = TRUE;
+	}
+
+	/* Check nearby grids, diagonals first */
+	for (i = 7; i >= 0; i--)
+	{
+		int cost;
+
+		/* Get the location */
+		y = y1 + ddy_ddd[i];
+		x = x1 + ddx_ddd[i];
+
+		/* Ignore locations off of edge */
+		if (!in_bounds2(y, x)) continue;
+
+		/* Simply move to player */
+		if ((y == py) && (x == px)) return (FALSE);
+
+		c_ptr = &cave[y][x];
+
+		cost = c_ptr->cost;
+
+		/* Monster cannot kill or pass walls */
+		if (!(((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || p_ptr->pass_wall)) || (r_ptr->flags2 & RF2_KILL_WALL)))
+		{
+			if (cost == 0) continue;
+			if (!can_open_door && (c_ptr->feat >= FEAT_DOOR_HEAD && c_ptr->feat <= FEAT_SECRET)) continue;
+		}
+
+		/* Hack -- for kill or pass wall monster.. */
+		if (cost == 0) cost = 998;
+
+		if (now_cost < cost) continue;
+
+		if (!projectable(y, x, py, px)) continue;
+
+		/* Accept louder sounds */
+		if (best < cost) continue;
+		best = cost;
+
+		(*yp) = y1 + ddy_ddd[i];
+		(*xp) = x1 + ddx_ddd[i];
+	}
+
+	/* No legal move (?) */
+	if (best == 999) return (FALSE);
+
+	/* Success */
+	return (TRUE);
+}
+
+
+/*
  * Choose the "best" direction for "flowing"
  *
  * Note that ghosts and rock-eaters are never allowed to "flow",
@@ -534,6 +614,15 @@ static bool get_moves_aux(int m_idx, int *yp, int *xp)
 
 	/* Monster flowing disabled */
 	if (stupid_monsters) return (FALSE);
+
+	/* Can monster cast attack spell? */
+	if (r_ptr->flags4 & (RF4_ATTACK_MASK) ||
+	    r_ptr->flags5 & (RF5_ATTACK_MASK) ||
+	    r_ptr->flags6 & (RF6_ATTACK_MASK))
+	{
+		/* Can move spell castable grid? */
+		if (get_moves_aux2(m_idx, yp, xp)) return (TRUE);
+	}
 
 	/* Monster can go through rocks */
 	if ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || (p_ptr->pass_wall))) return (FALSE);
