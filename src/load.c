@@ -2736,6 +2736,9 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		real_r_ptr(m_ptr)->cur_num++;
 	}
 
+	/* Fill the arrays of floors and walls in the good proportions */
+	set_floor_and_wall(dungeon_type);
+
 	/* Success */
 	return 0;
 }
