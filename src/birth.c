@@ -22,7 +22,7 @@
 /*
  * Define this to cut down processor use while autorolling
  */
-/*#define AUTOROLLER_DELAY*/
+#define AUTOROLLER_DELAY
 
 /*
  * Maximum number of tries for selection of a proper quest monster
@@ -2593,17 +2593,17 @@ static void get_stats(void)
 
 	int		bonus;
 
-	int		dice[18];
+	int		dice[6];
 
 
 	/* Roll and verify some stats */
 	while (TRUE)
 	{
 		/* Roll some dice */
-		for (j = i = 0; i < 18; i++)
+		for (j = i = 0; i < 6; i++)
 		{
 			/* Roll the dice */
-			dice[i] = randint1(3 + i % 3);
+			dice[i] = rand_range(3, 12);
 
 			/* Collect the maximum */
 			j += dice[i];
@@ -2618,7 +2618,7 @@ static void get_stats(void)
 	for (i = 0; i < 6; i++)
 	{
 		/* Extract 5 + 1d3 + 1d4 + 1d5 */
-		j = 5 + dice[3*i] + dice[3*i+1] + dice[3*i+2];
+		j = 5 + dice[i];
 
 		/* Save that value */
 		p_ptr->stat_max[i] = j;
@@ -5618,7 +5618,7 @@ static bool player_birth_aux(void)
 
 #ifdef AUTOROLLER_DELAY
 				/* Delay 1/10 second */
-				if (flag) Term_xtra(TERM_XTRA_DELAY, 100);
+				if (flag) Term_xtra(TERM_XTRA_DELAY, 10);
 #endif
 
 				/* Make sure they see everything */
