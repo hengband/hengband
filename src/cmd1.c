@@ -5226,7 +5226,7 @@ static bool run_test(void)
 				case FEAT_DEEP_WATER:
 				{
 					/* Ignore */
-					if (p_ptr->ffall) notice = FALSE;
+					if (p_ptr->ffall || p_ptr->total_weight<= (((u32b)adj_str_wgt[p_ptr->stat_ind[A_STR]]*(p_ptr->pclass == CLASS_BERSERKER ? 150 : 100))/2)) notice = FALSE;
 
 					/* Done */
 					break;
