@@ -3253,7 +3253,7 @@ static bool place_monster_okay(int r_idx)
 
 	/* Skip different alignment */
 	if (((r_ptr->flags3 & RF3_EVIL) && (z_ptr->flags3 & RF3_GOOD)) ||
-	    ((r_ptr->flags3 & RF3_GOOD) && (r_ptr->flags3 & RF3_EVIL)))
+	    ((r_ptr->flags3 & RF3_GOOD) && (z_ptr->flags3 & RF3_EVIL)))
 		return FALSE;
 
 	if (r_ptr->flags7 & RF7_FRIENDLY)
