@@ -1552,14 +1552,24 @@ void reduce_charges(object_type *o_ptr, int amt)
  */
 
 /*
- *  Determine if an item can partly absorb a second item.
+ * A "stack" of items is limited to less than or equal to 99 items (hard-coded).
  */
-static bool object_similar_part(object_type *o_ptr, object_type *j_ptr)
+#define MAX_STACK_SIZE 99
+
+
+/*
+ *  Determine if an item can partly absorb a second item.
+ *  Return maximum number of stack.
+ */
+static int object_similar_part(object_type *o_ptr, object_type *j_ptr)
 {
 	int i;
 
+	/* Default maximum number of stack */
+	int max_num = MAX_STACK_SIZE;
+
 	/* Require identical object types */
-	if (o_ptr->k_idx != j_ptr->k_idx) return (0);
+	if (o_ptr->k_idx != j_ptr->k_idx) return 0;
 
 
 	/* Analyze the items */
@@ -1571,13 +1581,13 @@ static bool object_similar_part(object_type *o_ptr, object_type *j_ptr)
 		case TV_CAPTURE:
 		{
 			/* Never okay */
-			return (0);
+			return 0;
 		}
 
 		case TV_STATUE:
 		{
-			if ((o_ptr->sval != SV_PHOTO) || (j_ptr->sval != SV_PHOTO)) return (0);
-			if (o_ptr->pval != j_ptr->pval) return (0);
+			if ((o_ptr->sval != SV_PHOTO) || (j_ptr->sval != SV_PHOTO)) return 0;
+			if (o_ptr->pval != j_ptr->pval) return 0;
 			break;
 		}
 
@@ -1586,7 +1596,7 @@ static bool object_similar_part(object_type *o_ptr, object_type *j_ptr)
 		case TV_CORPSE:
 		{
 			/* Same monster */
-			if (o_ptr->pval != j_ptr->pval) return (0);
+			if (o_ptr->pval != j_ptr->pval) return 0;
 
 			/* Assume okay */
 			break;
@@ -1608,10 +1618,10 @@ static bool object_similar_part(object_type *o_ptr, object_type *j_ptr)
 			if ((!(o_ptr->ident & (IDENT_EMPTY)) &&
 				!object_known_p(o_ptr)) ||
 				(!(j_ptr->ident & (IDENT_EMPTY)) &&
-				!object_known_p(j_ptr))) return(0);
+				!object_known_p(j_ptr))) return 0;
 
 			/* Require identical charges, since staffs are bulky. */
-			if (o_ptr->pval != j_ptr->pval) return (0);
+			if (o_ptr->pval != j_ptr->pval) return 0;
 
 			/* Assume okay */
 			break;
@@ -1624,7 +1634,7 @@ static bool object_similar_part(object_type *o_ptr, object_type *j_ptr)
 			if ((!(o_ptr->ident & (IDENT_EMPTY)) &&
 				!object_known_p(o_ptr)) ||
 				(!(j_ptr->ident & (IDENT_EMPTY)) &&
-				!object_known_p(j_ptr))) return(0);
+				!object_known_p(j_ptr))) return 0;
 
 			/* Wand charges combine in O&ZAngband.  */
 
@@ -1635,6 +1645,9 @@ static bool object_similar_part(object_type *o_ptr, object_type *j_ptr)
 		/* Staffs and Wands and Rods */
 		case TV_ROD:
 		{
+			/* Prevent overflaw of timeout */
+			max_num = MIN(max_num, MAX_SHORT / k_info[o_ptr->k_idx].pval);
+
 			/* Assume okay */
 			break;
 		}
@@ -1656,7 +1669,7 @@ static bool object_similar_part(object_type *o_ptr, object_type *j_ptr)
 		case TV_DRAG_ARMOR:
 		{
 			/* Require permission */
-			if (!stack_allow_items) return (0);
+			if (!stack_allow_items) return 0;
 
 			/* Fall through */
 		}
@@ -1667,7 +1680,7 @@ static bool object_similar_part(object_type *o_ptr, object_type *j_ptr)
 		case TV_LITE:
 		{
 			/* Require full knowledge of both items */
-			if (!object_known_p(o_ptr) || !object_known_p(j_ptr)) return (0);
+			if (!object_known_p(o_ptr) || !object_known_p(j_ptr)) return 0;
 
 			/* Fall through */
 		}
@@ -1678,39 +1691,39 @@ static bool object_similar_part(object_type *o_ptr, object_type *j_ptr)
 		case TV_SHOT:
 		{
 			/* Require identical knowledge of both items */
-			if (object_known_p(o_ptr) != object_known_p(j_ptr)) return (0);
+			if (object_known_p(o_ptr) != object_known_p(j_ptr)) return 0;
 
 			/* Require identical "bonuses" */
-			if (o_ptr->to_h != j_ptr->to_h) return (FALSE);
-			if (o_ptr->to_d != j_ptr->to_d) return (FALSE);
-			if (o_ptr->to_a != j_ptr->to_a) return (FALSE);
+			if (o_ptr->to_h != j_ptr->to_h) return 0;
+			if (o_ptr->to_d != j_ptr->to_d) return 0;
+			if (o_ptr->to_a != j_ptr->to_a) return 0;
 
 			/* Require identical "pval" code */
-			if (o_ptr->pval != j_ptr->pval) return (FALSE);
+			if (o_ptr->pval != j_ptr->pval) return 0;
 
 			/* Require identical "artifact" names */
-			if (o_ptr->name1 != j_ptr->name1) return (FALSE);
+			if (o_ptr->name1 != j_ptr->name1) return 0;
 
 			/* Random artifacts never stack */
-			if (o_ptr->art_name || j_ptr->art_name) return (FALSE);
+			if (o_ptr->art_name || j_ptr->art_name) return 0;
 
 			/* Require identical "ego-item" names */
-			if (o_ptr->name2 != j_ptr->name2) return (FALSE);
+			if (o_ptr->name2 != j_ptr->name2) return 0;
 
 			/* Require identical added essence  */
-			if (o_ptr->xtra3 != j_ptr->xtra3) return (FALSE);
-			if (o_ptr->xtra4 != j_ptr->xtra4) return (FALSE);
+			if (o_ptr->xtra3 != j_ptr->xtra3) return 0;
+			if (o_ptr->xtra4 != j_ptr->xtra4) return 0;
 
 			/* Hack -- Never stack "powerful" items */
-			if (o_ptr->xtra1 || j_ptr->xtra1) return (FALSE);
+			if (o_ptr->xtra1 || j_ptr->xtra1) return 0;
 
 			/* Hack -- Never stack recharging items */
-			if (o_ptr->timeout || j_ptr->timeout) return (FALSE);
+			if (o_ptr->timeout || j_ptr->timeout) return 0;
 
 			/* Require identical "values" */
-			if (o_ptr->ac != j_ptr->ac) return (FALSE);
-			if (o_ptr->dd != j_ptr->dd) return (FALSE);
-			if (o_ptr->ds != j_ptr->ds) return (FALSE);
+			if (o_ptr->ac != j_ptr->ac) return 0;
+			if (o_ptr->dd != j_ptr->dd) return 0;
+			if (o_ptr->ds != j_ptr->ds) return 0;
 
 			/* Probably okay */
 			break;
@@ -1720,7 +1733,7 @@ static bool object_similar_part(object_type *o_ptr, object_type *j_ptr)
 		default:
 		{
 			/* Require knowledge */
-			if (!object_known_p(o_ptr) || !object_known_p(j_ptr)) return (0);
+			if (!object_known_p(o_ptr) || !object_known_p(j_ptr)) return 0;
 
 			/* Probably okay */
 			break;
@@ -1730,29 +1743,29 @@ static bool object_similar_part(object_type *o_ptr, object_type *j_ptr)
 
 	/* Hack -- Identical art_flags! */
 	for (i = 0; i < TR_FLAG_SIZE; i++)
-		if (o_ptr->art_flags[i] != j_ptr->art_flags[i]) return (0);
+		if (o_ptr->art_flags[i] != j_ptr->art_flags[i]) return 0;
 
 	/* Hack -- Require identical "cursed" status */
-	if (o_ptr->curse_flags != j_ptr->curse_flags) return (0);
+	if (o_ptr->curse_flags != j_ptr->curse_flags) return 0;
 
 	/* Hack -- Require identical "broken" status */
-	if ((o_ptr->ident & (IDENT_BROKEN)) != (j_ptr->ident & (IDENT_BROKEN))) return (0);
+	if ((o_ptr->ident & (IDENT_BROKEN)) != (j_ptr->ident & (IDENT_BROKEN))) return 0;
 
 
 	/* Hack -- require semi-matching "inscriptions" */
 	if (o_ptr->inscription && j_ptr->inscription &&
 	    (o_ptr->inscription != j_ptr->inscription))
-		return (0);
+		return 0;
 
 	/* Hack -- normally require matching "inscriptions" */
-	if (!stack_force_notes && (o_ptr->inscription != j_ptr->inscription)) return (0);
+	if (!stack_force_notes && (o_ptr->inscription != j_ptr->inscription)) return 0;
 
 	/* Hack -- normally require matching "discounts" */
-	if (!stack_force_costs && (o_ptr->discount != j_ptr->discount)) return (0);
+	if (!stack_force_costs && (o_ptr->discount != j_ptr->discount)) return 0;
 
 
 	/* They match, so they must be similar */
-	return (TRUE);
+	return max_num;
 }
 
 /*
@@ -1761,12 +1774,16 @@ static bool object_similar_part(object_type *o_ptr, object_type *j_ptr)
 bool object_similar(object_type *o_ptr, object_type *j_ptr)
 {
 	int total = o_ptr->number + j_ptr->number;
+	int max_num;
 
-	if (!object_similar_part(o_ptr, j_ptr))
-		return FALSE;
+	/* Are these objects similar? */
+	max_num = object_similar_part(o_ptr, j_ptr);
+
+	/* Return if not similar */
+	if (!max_num) return FALSE;
 
 	/* Maximal "stacking" limit */
-	if (total >= MAX_STACK_SIZE) return (0);
+	if (total > max_num) return (0);
 
 
 	/* They match, so they must be similar */
@@ -1780,10 +1797,8 @@ bool object_similar(object_type *o_ptr, object_type *j_ptr)
  */
 void object_absorb(object_type *o_ptr, object_type *j_ptr)
 {
-	int total = o_ptr->number + j_ptr->number;
-
 	/* Add together the item counts */
-	o_ptr->number = ((total < MAX_STACK_SIZE) ? total : (MAX_STACK_SIZE - 1));
+	o_ptr->number = o_ptr->number + j_ptr->number;
 
 	/* Hack -- blend "known" status */
 	if (object_known_p(j_ptr)) object_known(o_ptr);
@@ -3806,6 +3821,9 @@ static bool item_monster_okay(int r_idx)
 static void a_m_aux_4(object_type *o_ptr, int level, int power)
 {
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
+
+	/* Unused */
+	(void)level;
 
 	/* Apply magic (good or bad) according to type */
 	switch (o_ptr->tval)
@@ -6009,17 +6027,24 @@ void combine_pack(void)
 		/* Scan the items above that item */
 		for (j = 0; j < i; j++)
 		{
+			int max_num;
+
 			/* Get the item */
 			j_ptr = &inventory[j];
 
 			/* Skip empty items */
 			if (!j_ptr->k_idx) continue;
 
+			/*
+			 * Get maximum number of the stack if these
+			 * are similar, get zero otherwise.
+			 */
+			max_num = object_similar_part(j_ptr, o_ptr);
+
 			/* Can we (partialy) drop "o_ptr" onto "j_ptr"? */
-			if (object_similar_part(j_ptr, o_ptr)
-			    && j_ptr->number < MAX_STACK_SIZE-1)
+			if (max_num && j_ptr->number < max_num)
 			{
-				if (o_ptr->number + j_ptr->number < MAX_STACK_SIZE)
+				if (o_ptr->number + j_ptr->number <= max_num)
 				{
 					/* Take note */
 					flag = TRUE;
@@ -6042,7 +6067,7 @@ void combine_pack(void)
 				}
 				else
 				{
-					int remain = j_ptr->number + o_ptr->number - 99;
+					int remain = j_ptr->number + o_ptr->number - max_num;
 					
 					o_ptr->number -= remain;
 					

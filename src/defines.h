@@ -730,13 +730,6 @@
 
 
 /*
- * A "stack" of items is limited to less than 100 items (hard-coded).
- */
-#define MAX_STACK_SIZE                  100
-
-
-
-/*
  * Indexes of the various "stats" (hard-coded by savefiles, etc).
  */
 #define A_STR   0
