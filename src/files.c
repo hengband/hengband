@@ -1079,7 +1079,7 @@ static cptr process_pref_file_expr(char **sp, char *fp)
 /*
  * Open the "user pref file" and parse it.
  */
-static errr process_pref_file_aux(cptr name, bool preftype)
+static errr process_pref_file_aux(cptr name, int preftype)
 {
 	FILE *fp;
 
