@@ -4349,21 +4349,21 @@ errr make_character_dump(FILE *fff)
 
 	if (ironman_autoscum)
 #ifdef JP
-		fprintf(fff, "\n 自動選り好み  :     ALWAYS");
+		fprintf(fff, "\n 自動選り好み:       ALWAYS");
 #else
 		fprintf(fff, "\n Autoscum:           ALWAYS");
 #endif
 
 	else if (auto_scum)
 #ifdef JP
-		fprintf(fff, "\n 自動選り好み  :     ON");
+		fprintf(fff, "\n 自動選り好み:       ON");
 #else
 		fprintf(fff, "\n Autoscum:           ON");
 #endif
 
 	else
 #ifdef JP
-		fprintf(fff, "\n 自動選り好み  :     OFF");
+		fprintf(fff, "\n 自動選り好み:       OFF");
 #else
 		fprintf(fff, "\n Autoscum:           OFF");
 #endif
@@ -4400,7 +4400,7 @@ errr make_character_dump(FILE *fff)
 
 	if (vanilla_town)
 #ifdef JP
-		fprintf(fff, "\n 元祖の町のみ: ON");
+		fprintf(fff, "\n 元祖の町のみ:       ON");
 #else
 		fprintf(fff, "\n Vanilla Town:       ON");
 #endif
@@ -4425,15 +4425,15 @@ errr make_character_dump(FILE *fff)
 #ifdef JP
 		fprintf(fff, "\n 階段を上がれない:   ON");
 #else
-		fprintf(fff, "\n Diving only:        ON");
+		fprintf(fff, "\n Diving Only:        ON");
 #endif
 
 
 	if (ironman_rooms)
 #ifdef JP
-		fprintf(fff, "\n 普通でない部屋を生成:         ON");
+		fprintf(fff, "\n 普通でない部屋:     ON");
 #else
-		fprintf(fff, "\n Unusual rooms:      ON");
+		fprintf(fff, "\n Unusual Rooms:      ON");
 #endif
 
 
@@ -4454,7 +4454,7 @@ errr make_character_dump(FILE *fff)
 
 	else if (empty_levels)
 #ifdef JP
-		fprintf(fff, "\n アリーナ:           ON");
+		fprintf(fff, "\n アリーナ:           ENABLED");
 #else
 		fprintf(fff, "\n Arena Levels:       ENABLED");
 #endif
@@ -4473,51 +4473,56 @@ errr make_character_dump(FILE *fff)
 	fprintf(fff, "\n Num. Random Quests: %d", number_of_quests());
 #endif
 
-	if (p_ptr->arena_number < 0)
+	fprintf(fff, "\n");
+
+	if (!lite_town && !vanilla_town)
 	{
-		if (p_ptr->arena_number <= ARENA_DEFEATED_OLD_VER)
+		if (p_ptr->arena_number < 0)
+		{
+			if (p_ptr->arena_number <= ARENA_DEFEATED_OLD_VER)
+			{
+#ifdef JP
+				fprintf(fff, "\n 闘技場: 敗北\n");
+#else
+				fprintf(fff, "\n Arena: Defeated\n");
+#endif
+			}
+			else
+			{
+#ifdef JP
+				fprintf(fff, "\n 闘技場: %d回戦で%sの前に敗北\n", -p_ptr->arena_number,
+					r_name + r_info[arena_info[-1 - p_ptr->arena_number].r_idx].name);
+#else
+				fprintf(fff, "\n Arena: Defeated by %s in the %d%s fight\n",
+					r_name + r_info[arena_info[-1 - p_ptr->arena_number].r_idx].name,
+					-p_ptr->arena_number, get_ordinal_number_suffix(-p_ptr->arena_number));
+#endif
+			}
+		}
+		else if (p_ptr->arena_number > MAX_ARENA_MONS + 2)
 		{
 #ifdef JP
-			fprintf(fff, "\n 闘技場: 敗北\n");
+			fprintf(fff, "\n 闘技場: 真のチャンピオン\n");
 #else
-			fprintf(fff, "\n Arena: defeated\n");
+			fprintf(fff, "\n Arena: True Champion\n");
+#endif
+		}
+		else if (p_ptr->arena_number > MAX_ARENA_MONS - 1)
+		{
+#ifdef JP
+			fprintf(fff, "\n 闘技場: チャンピオン\n");
+#else
+			fprintf(fff, "\n Arena: Champion\n");
 #endif
 		}
 		else
 		{
 #ifdef JP
-			fprintf(fff, "\n 闘技場: %d回戦で%sの前に敗北\n", -p_ptr->arena_number,
-				r_name + r_info[arena_info[-1 - p_ptr->arena_number].r_idx].name);
+			fprintf(fff, "\n 闘技場: %2d勝\n", (p_ptr->arena_number > MAX_ARENA_MONS ? MAX_ARENA_MONS : p_ptr->arena_number));
 #else
-			fprintf(fff, "\n Arena: defeated by %s in the %d%s fight\n",
-				r_name + r_info[arena_info[-1 - p_ptr->arena_number].r_idx].name,
-				-p_ptr->arena_number, get_ordinal_number_suffix(-p_ptr->arena_number));
+			fprintf(fff, "\n Arena: %2d Victor%s\n", (p_ptr->arena_number > MAX_ARENA_MONS ? MAX_ARENA_MONS : p_ptr->arena_number), (p_ptr->arena_number > 1) ? "ies" : "y");
 #endif
 		}
-	}
-	else if (p_ptr->arena_number > MAX_ARENA_MONS + 2)
-	{
-#ifdef JP
-		fprintf(fff, "\n 闘技場: 真のチャンピオン\n");
-#else
-		fprintf(fff, "\n Arena: True Champion\n");
-#endif
-	}
-	else if (p_ptr->arena_number > MAX_ARENA_MONS - 1)
-	{
-#ifdef JP
-		fprintf(fff, "\n 闘技場: チャンピオン\n");
-#else
-		fprintf(fff, "\n Arena: Champion\n");
-#endif
-	}
-	else
-	{
-#ifdef JP
-		fprintf(fff, "\n 闘技場:   %2d勝\n", (p_ptr->arena_number > MAX_ARENA_MONS ? MAX_ARENA_MONS : p_ptr->arena_number));
-#else
-		fprintf(fff, "\n Arena:   %2d victor%s\n", (p_ptr->arena_number > MAX_ARENA_MONS ? MAX_ARENA_MONS : p_ptr->arena_number), (p_ptr->arena_number>1) ? "ies" : "y");
-#endif
 	}
 
 	if (p_ptr->noscore)
