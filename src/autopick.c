@@ -2240,7 +2240,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 			strcat(buff, "全体マップ('M')で'M'を押したときに表示する。");
 	}
 	else
-		strcat(buff, "全体マップには表示しない");
+		strcat(buff, "全体マップには表示しない。");
 
 #else /* JP */
 
