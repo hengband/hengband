@@ -488,47 +488,47 @@ msg_print("クエストを達成した！");
 	case INVEN_RARM:
 		if ((o_ptr->tval != TV_SHIELD) && (o_ptr->tval != TV_CAPTURE) && (o_ptr->tval != TV_CARD) && (empty_hands(FALSE) & EMPTY_HAND_LARM) && ((o_ptr->weight > 99) || (o_ptr->tval == TV_POLEARM)) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
 #ifdef JP
-			act = "を両手で構えた";
+			act = "%s(%c)を両手で構えた。";
 #else
-			act = "You are wielding";
+			act = "You are wielding %s (%c) with both hands.";
 #endif
 		else
 #ifdef JP
-			act = (left_hander ? "を左手に装備した" : "を右手に装備した");
+			act = (left_hander ? "%s(%c)を左手に装備した。" : "%s(%c)を右手に装備した。");
 #else
-			act = "You are wielding";
+			act = (left_hander ? "You are wielding %s (%c) on left hand." : "You are wielding %s (%c) on right hand.");
 #endif
 		break;
 
 	case INVEN_LARM:
 #ifdef JP
-		act = (left_hander ? "を右手に装備した" : "を左手に装備した");
+		act = (left_hander ? "%s(%c)を右手に装備した。" : "%s(%c)を左手に装備した。");
 #else
-		act = "You are wielding";
+		act = (left_hander ? "You are wielding %s (%c) on right hand." : "You are wielding %s (%c) on left hand.");
 #endif
 		break;
 
 	case INVEN_BOW:
 #ifdef JP
-		act = "を射撃用に装備した";
+		act = "%s(%c)を射撃用に装備した。";
 #else
-		act = "You are shooting with";
+		act = "You are shooting with %s (%c).";
 #endif
 		break;
 
 	case INVEN_LITE:
 #ifdef JP
-		act = "を光源にした";
+		act = "%s(%c)を光源にした。";
 #else
-		act = "Your light source is";
+		act = "Your light source is %s (%c).";
 #endif
 		break;
 
 	default:
 #ifdef JP
-		act = "を装備した";
+		act = "%s(%c)を装備した。";
 #else
-		act = "You are wearing";
+		act = "You are wearing %s (%c).";
 #endif
 		break;
 	}
@@ -537,11 +537,7 @@ msg_print("クエストを達成した！");
 	object_desc(o_name, o_ptr, TRUE, 3);
 
 	/* Message */
-#ifdef JP
-	msg_format("%s(%c)%s。", o_name, index_to_label(slot), act );
-#else
-	msg_format("%s %s (%c).", act, o_name, index_to_label(slot));
-#endif
+	msg_format(act, o_name, index_to_label(slot));
 
 
 	/* Cursed! */
@@ -656,13 +652,13 @@ void kamaenaoshi(int item)
 #ifdef JP
 			msg_format("%sを両手で構えた。", o_name );
 #else
-			msg_format("You are wielding %s with two-handed.", o_name );
+			msg_format("You are wielding %s with both hands.", o_name );
 #endif
 		 else
 #ifdef JP
 			msg_format("%sを%sで構えた。", o_name, (left_hander ? "左手" : "右手"));
 #else
-			msg_format("You are wielding %s with %s hand.", o_name, (left_hander ? "left":"right") );
+			msg_format("You are wielding %s on %s hand.", o_name, (left_hander ? "left":"right") );
 #endif
 	}
 	else if (item == INVEN_LARM)
@@ -675,7 +671,7 @@ void kamaenaoshi(int item)
 #ifdef JP
 				msg_format("%sを両手で構えた。", o_name );
 #else
-				msg_format("You are wielding %s with two-handed.", o_name );
+				msg_format("You are wielding %s with both hands.", o_name );
 #endif
 		}
 		else if (!(empty_hands(FALSE) & EMPTY_HAND_RARM))
