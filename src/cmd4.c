@@ -344,6 +344,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 	char buf[1024];
 	cptr note_level = "";
 	bool do_level = TRUE;
+	char note_level_buf[40];
 
 	static bool disable_nikki = FALSE;
 
@@ -420,11 +421,14 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 			note_level = "Quest:";
 #endif
 		else
+		{
 #ifdef JP
-			note_level = format("%d階(%s):", dun_level, d_name+d_info[dungeon_type].name);
+			sprintf(note_level_buf, "%d階(%s):", dun_level, d_name+d_info[dungeon_type].name);
 #else
-			note_level = format("%s L%d:", d_name+d_info[dungeon_type].name, dun_level);
+			sprintf(note_level_buf, "%s L%d:", d_name+d_info[dungeon_type].name, dun_level);
 #endif
+			note_level = note_level_buf;
+		}
 	}
 
 	switch(type)
@@ -545,11 +549,11 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 				if (!(dun_level+num)) to = "地上";
 				else to = format("%d階", dun_level+num);
 #else
-				if (!(dun_level+num)) to = "the surfice";
+				if (!(dun_level+num)) to = "the surface";
 				else to = format("level %d", dun_level+num);
 #endif
 			}
-				
+
 #ifdef JP 
 			fprintf(fff, " %2d:%02d %20s %sへ%s。\n", hour, min, note_level, to, note);
 #else
@@ -663,7 +667,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 #else
 				to = format("level %d of %s", dun_level, d_name+d_info[dungeon_type].name);
 #endif
-				
+
 #ifdef JP
 			fprintf(fff, " %2d:%02d %20s %sへとウィザード・テレポートで移動した。\n", hour, min, note_level, to);
 #else
@@ -686,7 +690,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 #else
 				to = format("level %d of %s", dun_level, d_name+d_info[dungeon_type].name);
 #endif
-				
+
 #ifdef JP
 			fprintf(fff, " %2d:%02d %20s %sへとパターンの力で移動した。\n", hour, min, note_level, to);
 #else
