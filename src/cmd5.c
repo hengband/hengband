@@ -5465,17 +5465,17 @@ bool rakuba(int dam, bool force)
 			    (dam / 2 + ridinglevel) > (cur / 30 + 10))
 			{
 				int inc = 0;
-				
+
 				if (ridinglevel > (cur / 100 + 15))
 					inc += 1 + (ridinglevel - cur / 100 - 15);
 				else
 					inc += 1;
-				
+
 				p_ptr->skill_exp[GINOU_RIDING] = MIN(max, cur + inc);
 			}
 
 			/* レベルの低い乗馬からは落馬しにくい */
-			if (randint0(dam / 2 + rakubalevel * 2) < cur / 30 + 10))
+			if (randint0(dam / 2 + rakubalevel * 2) < cur / 30 + 10)
 			{
 				if ((((p_ptr->pclass == CLASS_BEASTMASTER) || (p_ptr->pclass == CLASS_CAVALRY)) && !p_ptr->riding_ryoute) || !one_in_(p_ptr->lev*(p_ptr->riding_ryoute ? 2 : 3) + 30))
 				{
