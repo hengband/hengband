@@ -703,6 +703,7 @@ extern void do_cmd_magic_eater(bool only_browse);
 
 /* dungeon.c */
 extern void leave_quest_check(void);
+extern void extract_option_vars(void);
 extern void play_game(bool new_game);
 extern bool psychometry(void);
 extern void leave_level(int level);

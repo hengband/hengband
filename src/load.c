@@ -1220,6 +1220,9 @@ static void rd_options(void)
 		}
 	}
 
+	/* Extract the options */
+	extract_option_vars();
+
 	if (z_older_than(10, 4, 5))
 	{
 		if (option_flag[5] & (0x00000001 << 4)) option_flag[5] &= ~(0x00000001 << 4);

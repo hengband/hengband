@@ -6515,6 +6515,39 @@ static void load_all_pref_files(void)
 
 
 /*
+ * Extract option variables from bit sets
+ */
+void extract_option_vars(void)
+{
+	int i;
+
+	for (i = 0; option_info[i].o_desc; i++)
+	{
+		int os = option_info[i].o_set;
+		int ob = option_info[i].o_bit;
+
+		/* Set the "default" options */
+		if (option_info[i].o_var)
+		{
+			/* Set */
+			if (option_flag[os] & (1L << ob))
+			{
+				/* Set */
+				(*option_info[i].o_var) = TRUE;
+			}
+
+			/* Clear */
+			else
+			{
+				/* Clear */
+				(*option_info[i].o_var) = FALSE;
+			}
+		}
+	}
+}
+
+
+/*
  * Actually play a game
  *
  * If the "new_game" parameter is true, then, after loading the
@@ -6544,7 +6577,7 @@ void play_game(bool new_game)
 
 	/* Initialise the resize hooks */
 	angband_term[0]->resize_hook = resize_map;
-	
+
 	for (i = 1; i < 8; i++)
 	{
 		/* Does the term exist? */
@@ -6572,29 +6605,7 @@ quit("セーブファイルが壊れています");
 	}
 
 	/* Extract the options */
-	for (i = 0; option_info[i].o_desc; i++)
-	{
-		int os = option_info[i].o_set;
-		int ob = option_info[i].o_bit;
-
-		/* Set the "default" options */
-		if (option_info[i].o_var)
-		{
-			/* Set */
-			if (option_flag[os] & (1L << ob))
-			{
-				/* Set */
-				(*option_info[i].o_var) = TRUE;
-			}
-
-			/* Clear */
-			else
-			{
-				/* Clear */
-				(*option_info[i].o_var) = FALSE;
-			}
-		}
-	}
+	extract_option_vars();
 
 	/* Report waited score */
 	if (p_ptr->wait_report_score)
