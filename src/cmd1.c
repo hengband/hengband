@@ -642,7 +642,7 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode)
 			{
 				p_ptr->csp -= (1+(o_ptr->dd * o_ptr->ds / 5));
 				p_ptr->redraw |= (PR_MANA);
-				mult = MIN(60, mult * 7 / 2);
+				mult = mult * 3 / 2 + 20;
 			}
 			break;
 		}
@@ -2980,7 +2980,7 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 					{
 						p_ptr->csp -= (1+(p_ptr->msp / 30));
 						p_ptr->redraw |= (PR_MANA);
-						mult = mult * 35;
+						mult = mult * 3 / 2 + 20;
 					}
 					k *= mult;
 					k /= 10;

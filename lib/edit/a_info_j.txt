@@ -2517,7 +2517,7 @@ I:23:16:2
 W:30:50:150:100000
 P:0:2d5:15:15:0
 F:STR | DEX | HIDE_TYPE | FORCE_WEAPON |
-F:SHOW_MODS | RIDING | SLAY_DEMON
+F:SHOW_MODS | RIDING | KILL_DEMON
 D:かつて魔導都市サイラーグを破壊つくした魔獣、ザナッファー。
 D:それを滅ぼしたといわれるのが、この伝説の武器である。
 D:持つ者の、意思の力を刃と成して、魔族すらも両断する。
