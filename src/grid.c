@@ -128,12 +128,9 @@ void place_random_stairs(int y, int x)
  */
 void place_random_door(int y, int x, bool room)
 {
-	int tmp;
+	int tmp, type;
 	s16b feat = feat_none;
 	cave_type *c_ptr = &cave[y][x];
-
-	int type = ((d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
-		one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN : DOOR_DOOR;
 
 	/* Initialize mimic info */
 	c_ptr->mimic = 0;
@@ -143,6 +140,10 @@ void place_random_door(int y, int x, bool room)
 		place_floor_bold(y, x);
 		return;
 	}
+
+	type = ((d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
+		one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
+		((d_info[dungeon_type].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
 	/* Choose an object */
 	tmp = randint0(1000);

@@ -81,7 +81,7 @@ static void place_locked_door(int y, int x)
 	}
 	else
 	{
-		set_cave_feat(y, x, feat_locked_door_random(DOOR_DOOR));
+		set_cave_feat(y, x, feat_locked_door_random((d_info[dungeon_type].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
 		cave[y][x].info &= ~(CAVE_FLOOR);
 		delete_monster(y, x);
 	}
@@ -100,7 +100,8 @@ static void place_secret_door(int y, int x, int type)
 		if (type == DOOR_DEFAULT)
 		{
 			type = ((d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
-			        one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN : DOOR_DOOR;
+			        one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
+			        ((d_info[dungeon_type].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 		}
 
 		/* Create secret door */
@@ -1003,7 +1004,8 @@ static bool build_type3(void)
 				if (one_in_(3))
 				{
 					int door_type = ((d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
-						one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN : DOOR_DOOR;
+						one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
+						((d_info[dungeon_type].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
 					place_secret_door(yval, x1a - 1, door_type);
 					place_secret_door(yval, x2a + 1, door_type);
@@ -1243,7 +1245,8 @@ static bool build_type4(void)
 			if (one_in_(3))
 			{
 				int door_type = ((d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
-					one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN : DOOR_DOOR;
+					one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
+					((d_info[dungeon_type].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
 				/* Long horizontal walls */
 				for (x = xval - 5; x <= xval + 5; x++)
@@ -1319,7 +1322,8 @@ static bool build_type4(void)
 		case 5:
 		{
 			int door_type = ((d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
-				one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN : DOOR_DOOR;
+				one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
+				((d_info[dungeon_type].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
 			/* Inner "cross" */
 			for (y = y1; y <= y2; y++)
