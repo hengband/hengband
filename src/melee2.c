@@ -1416,6 +1416,12 @@ static int check_hit2(int power, int level, int ac, int stun)
 }
 
 
+#define BLOW_EFFECT_TYPE_NONE  0
+#define BLOW_EFFECT_TYPE_FEAR  1
+#define BLOW_EFFECT_TYPE_SLEEP 2
+#define BLOW_EFFECT_TYPE_HEAL  3
+
+
 /* Monster attacks monster */
 static bool monst_attack_monst(int m_idx, int t_idx)
 {
@@ -1429,10 +1435,11 @@ static bool monst_attack_monst(int m_idx, int t_idx)
 	int             ac, rlev, pt;
 	char            m_name[80], t_name[80];
 	char            temp[80];
-	bool            blinked, heal_effect;
+	bool            blinked;
 	bool            explode = FALSE, touched = FALSE, fear = FALSE;
 	int             y_saver = t_ptr->fy;
 	int             x_saver = t_ptr->fx;
+	int             effect_type;
 
 	bool see_m = is_seen(m_ptr);
 	bool see_t = is_seen(t_ptr);
@@ -1832,8 +1839,8 @@ act = "%sにむかって歌った。";
 			/* Roll out the damage */
 			damage = damroll(d_dice, d_side);
 
-			/* Assume no healing effect */
-			heal_effect = FALSE;
+			/* Assume no effect */
+			effect_type = BLOW_EFFECT_TYPE_NONE;
 
 			pt = GF_MISSILE;
 
@@ -1841,103 +1848,42 @@ act = "%sにむかって歌った。";
 			switch (effect)
 			{
 			case 0:
+			case RBE_DR_MANA:
+				damage = pt = 0;
+				break;
+
+			case RBE_SUPERHURT:
+				if ((randint1(rlev*2+250) > (ac+200)) || one_in_(13))
 				{
-					damage = 0;
-					pt = 0;
+					int tmp_damage = damage - (damage * ((ac < 150) ? ac : 150) / 250);
+					damage = MAX(damage, tmp_damage * 2);
 					break;
 				}
 
-			case RBE_SUPERHURT:
-				{
-					if ((randint1(rlev*2+250) > (ac+200)) || one_in_(13)) {
-						int tmp_damage = damage-(damage*((ac < 150) ? ac : 150)/250);
-						damage = MAX(damage, tmp_damage*2);
-						break;
-					}
-				}
+				/* Fall through */
+
 			case RBE_HURT:
-				{
-					damage -= (damage * ((ac < 150) ? ac : 150) / 250);
-					break;
-				}
+				damage -= (damage * ((ac < 150) ? ac : 150) / 250);
+				break;
 
 			case RBE_POISON:
 			case RBE_DISEASE:
-				{
-					pt = GF_POIS;
-					break;
-				}
+				pt = GF_POIS;
+				break;
 
 			case RBE_UN_BONUS:
 			case RBE_UN_POWER:
-				{
-					pt = GF_DISENCHANT;
-					break;
-				}
-
-			case RBE_EAT_FOOD:
-			case RBE_EAT_LITE:
-			case RBE_DR_MANA:
-				{
-					pt = damage = 0;
-					break;
-				}
+				pt = GF_DISENCHANT;
+				break;
 
 			case RBE_EAT_ITEM:
 			case RBE_EAT_GOLD:
-				{
-					pt = damage = 0;
-					if ((p_ptr->riding != m_idx) && one_in_(2)) blinked = TRUE;
-					break;
-				}
+				if ((p_ptr->riding != m_idx) && one_in_(2)) blinked = TRUE;
+				break;
 
-			case RBE_ACID:
-				{
-					pt = GF_ACID;
-					break;
-				}
-
-			case RBE_ELEC:
-				{
-					pt = GF_ELEC;
-					break;
-				}
-
-			case RBE_FIRE:
-				{
-					pt = GF_FIRE;
-					break;
-				}
-
-			case RBE_COLD:
-				{
-					pt = GF_COLD;
-					break;
-				}
-
+			case RBE_EAT_FOOD:
+			case RBE_EAT_LITE:
 			case RBE_BLIND:
-				{
-					break;
-				}
-
-			case RBE_CONFUSE:
-				{
-					pt = GF_CONFUSION;
-					break;
-				}
-
-			case RBE_TERRIFY:
-				{
-					pt = GF_TURN_ALL;
-					break;
-				}
-
-			case RBE_PARALYZE:
-				{
-					pt = GF_OLD_SLEEP; /* sort of close... */
-					break;
-				}
-
 			case RBE_LOSE_STR:
 			case RBE_LOSE_INT:
 			case RBE_LOSE_WIS:
@@ -1945,43 +1891,60 @@ act = "%sにむかって歌った。";
 			case RBE_LOSE_CON:
 			case RBE_LOSE_CHR:
 			case RBE_LOSE_ALL:
-				{
-					break;
-				}
+				break;
+
+			case RBE_ACID:
+				pt = GF_ACID;
+				break;
+
+			case RBE_ELEC:
+				pt = GF_ELEC;
+				break;
+
+			case RBE_FIRE:
+				pt = GF_FIRE;
+				break;
+
+			case RBE_COLD:
+				pt = GF_COLD;
+				break;
+
+			case RBE_CONFUSE:
+				pt = GF_CONFUSION;
+				break;
+
+			case RBE_TERRIFY:
+				effect_type = BLOW_EFFECT_TYPE_FEAR;
+				break;
+
+			case RBE_PARALYZE:
+				effect_type = BLOW_EFFECT_TYPE_SLEEP;
+				break;
+
 			case RBE_SHATTER:
-				{
-					damage -= (damage * ((ac < 150) ? ac : 150) / 250);
-					if (damage > 23)
-					{
-						earthquake(m_ptr->fy, m_ptr->fx, 8);
-					}
-					break;
-				}
+				damage -= (damage * ((ac < 150) ? ac : 150) / 250);
+				if (damage > 23) earthquake(m_ptr->fy, m_ptr->fx, 8);
+				break;
+
 			case RBE_EXP_10:
 			case RBE_EXP_20:
 			case RBE_EXP_40:
 			case RBE_EXP_80:
-				{
-					pt = GF_NETHER;
-					break;
-				}
+				pt = GF_NETHER;
+				break;
+
 			case RBE_TIME:
-				{
-					pt = GF_TIME;
-					break;
-				}
+				pt = GF_TIME;
+				break;
+
 			case RBE_EXP_VAMP:
-				{
-					pt = GF_OLD_DRAIN;
-					heal_effect = TRUE;
-					break;
-				}
+				pt = GF_OLD_DRAIN;
+				effect_type = BLOW_EFFECT_TYPE_HEAL;
+				break;
 
 			default:
-				{
-					pt = 0;
-					break;
-				}
+				pt = 0;
+				break;
 			}
 
 			if (pt)
@@ -1990,11 +1953,22 @@ act = "%sにむかって歌った。";
 				if (!explode)
 				{
 					project(m_idx, 0, t_ptr->fy, t_ptr->fx,
-						(pt == GF_OLD_SLEEP ? r_ptr->level : damage), pt, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
+						damage, pt, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
 				}
 
-				if (heal_effect)
+				switch (effect_type)
 				{
+				case BLOW_EFFECT_TYPE_FEAR:
+					project(m_idx, 0, t_ptr->fy, t_ptr->fx,
+						damage, GF_TURN_ALL, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
+					break;
+
+				case BLOW_EFFECT_TYPE_SLEEP:
+					project(m_idx, 0, t_ptr->fy, t_ptr->fx,
+						r_ptr->level, GF_OLD_SLEEP, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
+					break;
+
+				case BLOW_EFFECT_TYPE_HEAL:
 					if ((monster_living(tr_ptr)) && (damage > 2))
 					{
 						bool did_heal = FALSE;
@@ -2013,13 +1987,13 @@ act = "%sにむかって歌った。";
 						if (see_m && did_heal)
 						{
 #ifdef JP
-msg_format("%sは体力を回復したようだ。", m_name);
+							msg_format("%sは体力を回復したようだ。", m_name);
 #else
 							msg_format("%^s appears healthier.", m_name);
 #endif
-
 						}
 					}
+					break;
 				}
 
 				if (touched)
