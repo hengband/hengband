@@ -7078,7 +7078,7 @@ static bool select_magic_eater(bool only_browse)
  */
 void do_cmd_magic_eater(bool only_browse)
 {
-	int item, dir, chance, level, k_idx, tval, sval;
+	int item, chance, level, k_idx, tval, sval;
 	bool use_charge = TRUE;
 
 	/* Not when confused */
@@ -7146,6 +7146,8 @@ msg_print("呪文をうまく唱えられなかった！");
 	}
 	else
 	{
+                int dir = 0;
+
 		if (tval == TV_ROD)
 		{
 			if ((sval >= SV_ROD_MIN_DIRECTION) && (sval != SV_ROD_HAVOC) && (sval != SV_ROD_AGGRAVATE) && (sval != SV_ROD_PESTICIDE))
