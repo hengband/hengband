@@ -3471,7 +3471,7 @@ static bool eval_ac(int iAC)
 	}
 
 	/* Display note */
-	roff_to_buf(memo, 70, buf);
+	roff_to_buf(memo, 70, buf, sizeof(buf));
 	for (t = buf; t[0]; t += strlen(t) + 1)
 		put_str(t, (row++) + 4, 4);
 

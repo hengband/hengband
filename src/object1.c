@@ -2393,7 +2393,7 @@ bool screen_object(object_type *o_ptr, bool real)
 
 		roff_to_buf(o_ptr->name1 ? (a_text + a_info[o_ptr->name1].text) :
 			    (k_text + k_info[lookup_kind(o_ptr->tval, o_ptr->sval)].text),
-			    77 - 15, temp);
+			    77 - 15, temp, sizeof(temp));
 		for (j = 0; temp[j]; j += 1 + strlen(&temp[j]))
 		{ info[i] = &temp[j]; i++;}
 	}

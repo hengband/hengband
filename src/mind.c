@@ -2282,7 +2282,7 @@ void do_cmd_mind_browse(void)
 		Term_erase(12, 17, 255);
 		Term_erase(12, 16, 255);
 
-		roff_to_buf( mind_tips[use_mind][n],62,temp);
+		roff_to_buf(mind_tips[use_mind][n], 62, temp, sizeof(temp));
 		for(j=0, line = 17;temp[j];j+=(1+strlen(&temp[j])))
 		{
 			prt(&temp[j], line, 15);

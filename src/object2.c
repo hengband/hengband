@@ -8204,7 +8204,7 @@ void do_cmd_kaji(bool only_browse)
 		Term_erase(14, 17, 255);
 		Term_erase(14, 16, 255);
 
-		roff_to_buf( kaji_tips[mode-1],62,temp);
+		roff_to_buf(kaji_tips[mode-1], 62, temp, sizeof(temp));
 		for(j=0, line = 17;temp[j];j+=(1+strlen(&temp[j])))
 		{
 			prt(&temp[j], line, 15);

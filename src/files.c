@@ -3907,7 +3907,7 @@ void display_player(int mode)
 			if (*statmsg)
 			{
 				char temp[64*2], *t;
-				roff_to_buf(statmsg, 60, temp);
+				roff_to_buf(statmsg, 60, temp, sizeof(temp));
 				t = temp;
 				for(i=0 ; i<2 ; i++)
 				{

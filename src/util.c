@@ -4818,7 +4818,7 @@ void build_gamma_table(int gamma)
 
 #endif /* SUPPORT_GAMMA */
 
-void roff_to_buf(cptr str, int maxlen, char *tbuf)
+void roff_to_buf(cptr str, int maxlen, char *tbuf, size_t bufsize)
 {
 	int read_pt = 0;
 	int write_pt = 0;
@@ -4891,6 +4891,10 @@ void roff_to_buf(cptr str, int maxlen, char *tbuf)
 #ifdef JP
 		if (!kinsoku) word_punct = read_pt;
 #endif
+
+		/* Not enough buffer size */
+		if (write_pt + 3 >= bufsize) break;
+
 		tbuf[write_pt++] = ch[0];
 		line_len++;
 		read_pt++;

@@ -1190,7 +1190,7 @@ extern void pause_line(int row);
 extern void request_command(int shopping);
 extern bool is_a_vowel(int ch);
 extern int get_keymap_dir(char ch);
-extern void roff_to_buf(cptr str, int wlen, char *tbuf);
+extern void roff_to_buf(cptr str, int wlen, char *tbuf, size_t bufsize);
 
 #ifdef SORT_R_INFO
 extern void tag_sort(tag_type elements[], int number);

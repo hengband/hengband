@@ -2355,7 +2355,7 @@ static bool get_player_realms(void)
 		put_str("                                   ", 4, 40);
 		put_str("                                   ", 5, 40);
 
-		roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm1)-1], 74, temp);
+		roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm1)-1], 74, temp, sizeof(temp));
 		t = temp;
 		for (i = 0; i< 6; i++)
 		{
@@ -2418,7 +2418,7 @@ else
 			put_str("                                   ", 4, 40);
 			put_str("                                   ", 5, 40);
 
-			roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm2)-1], 74, temp);
+			roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm2)-1], 74, temp, sizeof(temp));
 			t = temp;
 			for (i = 0; i< 6; i++)
 			{
@@ -3062,7 +3062,7 @@ static void get_history(void)
 
        {
 	char temp[64*4];
-	roff_to_buf(s, 60, temp);
+	roff_to_buf(s, 60, temp, sizeof(temp));
 	t = temp;
 	for(i=0 ; i<4 ; i++){
 	     if(t[0]==0)break; 
@@ -5620,7 +5620,7 @@ static bool player_birth_aux(void)
 
 		clear_from(10);
 
-		roff_to_buf(race_jouhou[p_ptr->prace], 74, temp);
+		roff_to_buf(race_jouhou[p_ptr->prace], 74, temp, sizeof(temp));
 		t = temp;
 
 		for (i = 0; i< 10; i++)
@@ -5655,7 +5655,7 @@ static bool player_birth_aux(void)
 		if (!get_player_class()) return FALSE;
 
 		clear_from(10);
-		roff_to_buf(class_jouhou[p_ptr->pclass], 74, temp);
+		roff_to_buf(class_jouhou[p_ptr->pclass], 74, temp, sizeof(temp));
 		t = temp;
 
 		for (i = 0; i< 9; i++)
@@ -5690,7 +5690,7 @@ static bool player_birth_aux(void)
 		if (!get_player_seikaku()) return FALSE;
 
 		clear_from(10);
-		roff_to_buf(seikaku_jouhou[p_ptr->pseikaku], 74, temp);
+		roff_to_buf(seikaku_jouhou[p_ptr->pseikaku], 74, temp, sizeof(temp));
 		t = temp;
 
 		for (i = 0; i< 6; i++)
@@ -6415,13 +6415,13 @@ void player_birth(void)
 
 void dump_yourself(FILE *fff)
 {
-	char temp[80*8];
+	char temp[80*10];
 	int i;
 	cptr t;
 
 	if (!fff) return;
 
-	roff_to_buf(race_jouhou[p_ptr->prace], 78, temp);
+	roff_to_buf(race_jouhou[p_ptr->prace], 78, temp, sizeof(temp));
 	fprintf(fff, "\n\n");
 #ifdef JP
 	fprintf(fff, "¼ïÂ²: %s\n", race_info[p_ptr->prace].title);
@@ -6429,14 +6429,14 @@ void dump_yourself(FILE *fff)
 	fprintf(fff, "Race: %s\n", race_info[p_ptr->prace].title);
 #endif
 	t = temp;
-	for (i = 0; i < 8; i++)
+	for (i = 0; i < 10; i++)
 	{
 		if(t[0] == 0)
 			break; 
 		fprintf(fff, "%s\n",t);
 		t += strlen(t) + 1;
 	}
-	roff_to_buf(class_jouhou[p_ptr->pclass], 78, temp);
+	roff_to_buf(class_jouhou[p_ptr->pclass], 78, temp, sizeof(temp));
 	fprintf(fff, "\n");
 #ifdef JP
 	fprintf(fff, "¿¦¶È: %s\n", class_info[p_ptr->pclass].title);
@@ -6444,14 +6444,14 @@ void dump_yourself(FILE *fff)
 	fprintf(fff, "Class: %s\n", class_info[p_ptr->pclass].title);
 #endif
 	t = temp;
-	for (i = 0; i < 8; i++)
+	for (i = 0; i < 10; i++)
 	{
 		if(t[0] == 0)
 			break; 
 		fprintf(fff, "%s\n",t);
 		t += strlen(t) + 1;
 	}
-	roff_to_buf(seikaku_jouhou[p_ptr->pseikaku], 78, temp);
+	roff_to_buf(seikaku_jouhou[p_ptr->pseikaku], 78, temp, sizeof(temp));
 	fprintf(fff, "\n");
 #ifdef JP
 	fprintf(fff, "À­³Ê: %s\n", seikaku_info[p_ptr->pseikaku].title);
@@ -6469,7 +6469,7 @@ void dump_yourself(FILE *fff)
 	fprintf(fff, "\n");
 	if (p_ptr->realm1)
 	{
-		roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm1)-1], 78, temp);
+		roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm1)-1], 78, temp, sizeof(temp));
 #ifdef JP
 		fprintf(fff, "ËâË¡: %s\n", realm_names[p_ptr->realm1]);
 #else
@@ -6487,7 +6487,7 @@ void dump_yourself(FILE *fff)
 	fprintf(fff, "\n");
 	if (p_ptr->realm2)
 	{
-		roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm2)-1], 78, temp);
+		roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm2)-1], 78, temp, sizeof(temp));
 #ifdef JP
 		fprintf(fff, "ËâË¡: %s\n", realm_names[p_ptr->realm2]);
 #else

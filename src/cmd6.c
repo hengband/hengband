@@ -7139,7 +7139,7 @@ static bool select_magic_eater(bool only_browse)
 			Term_erase(7, 21, 255);
 			Term_erase(7, 20, 255);
 
-			roff_to_buf(k_text + k_info[lookup_kind(tval, i)].text, 62, temp);
+			roff_to_buf(k_text + k_info[lookup_kind(tval, i)].text, 62, temp, sizeof(temp));
 			for (j = 0, line = 21; temp[j]; j += 1 + strlen(&temp[j]))
 			{
 				prt(&temp[j], line, 10);

@@ -2940,7 +2940,7 @@ void do_cmd_edit_autopick(void)
 
 				describe_autopick(buf, entry);
 
-				roff_to_buf(buf, 81, temp);
+				roff_to_buf(buf, 81, temp, sizeof(temp));
 				t = temp;
 				for (i = 0; i< 2; i++)
 				{
