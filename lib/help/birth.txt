@@ -18,8 +18,7 @@ between the two most recent characters, until you are presented with a
 character that you feel comfortable with.
 
 You may start the entire process over at any time by pressing 'S' at
-any prompt (with the exception of the prompt for the number of random
-quests (see below [c])).
+any prompt.
 
 
 ***** <CharAttributes>
@@ -139,16 +138,6 @@ Perhaps one of the most important features of the birth options is the
 ability to decide what type of town level you want.  The various town
 options are discussed on the Town page (see dungeon.txt#TownLevel
 [f]).
-
-
-***** <RandomQuests>
-=== Random Quests ===
-
-Once you have chosen your race, class, personality and (if applicable)
-your magic realm(s), you will be asked how many random quests you wish
-to be assigned.  You may choose any number between 0 and 10.  A more
-detailed discussion of random quests can be found in the Dungeon
-section (see dungeon.txt#RandomQuests [g]).
 
 
 ***** <AutoRoller>
@@ -424,6 +413,5 @@ Updated    : Hengband 1.5.2
 ***** [d] birth.txt#PrimarySkills
 ***** [e] option.txt#Birth
 ***** [f] town.txt#TownLevel
-***** [g] dungeon.txt#RandomQuests
 ***** [h] raceclas.txt#StatBonusTable
 ***** [i] monster.txt#Pets

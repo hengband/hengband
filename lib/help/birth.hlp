@@ -5,13 +5,12 @@ Please choose one of the following online help files:
     (a) Creating a Character              (birth.txt)
     (b) Character Attributes              (birth.txt#CharAttributes)
     (c) Start-Up Options                  (birth.txt#BirthOptions)
-    (d) Random Quests                     (birth.txt#RandomQuests)
-    (e) The Auto-Roller                   (birth.txt#AutoRoller)
-    (f) Background Edit-Mode              (birth.txt#BackgroundEditor)
-    (g) Quick Start                       (birth.txt#QuickStart)
-    (h) Primary Statistics                (birth.txt#PrimaryStats)
-    (i) Primary Skills                    (birth.txt#PrimarySkills)
-    (j) Proficiency Levels                (birth.txt#Proficiency)
+    (d) The Auto-Roller                   (birth.txt#AutoRoller)
+    (e) Background Edit-Mode              (birth.txt#BackgroundEditor)
+    (f) Quick Start                       (birth.txt#QuickStart)
+    (g) Primary Statistics                (birth.txt#PrimaryStats)
+    (h) Primary Skills                    (birth.txt#PrimarySkills)
+    (i) Proficiency Levels                (birth.txt#Proficiency)
 
     (?) Help System Commands              (helpinfo.txt)
 
@@ -19,10 +18,9 @@ Please choose one of the following online help files:
 ***** [a] birth.txt
 ***** [b] birth.txt#CharAttributes
 ***** [c] birth.txt#BirthOptions
-***** [d] birth.txt#RandomQuests
-***** [e] birth.txt#AutoRoller
-***** [f] birth.txt#BackgroundEditor
-***** [g] birth.txt#QuickStart
-***** [h] birth.txt#PrimaryStats
-***** [i] birth.txt#PrimarySkills
-***** [j] birth.txt#Proficiency
+***** [d] birth.txt#AutoRoller
+***** [e] birth.txt#BackgroundEditor
+***** [f] birth.txt#QuickStart
+***** [g] birth.txt#PrimaryStats
+***** [h] birth.txt#PrimarySkills
+***** [i] birth.txt#Proficiency

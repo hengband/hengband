@@ -1367,7 +1367,6 @@ struct birther
 
 	char history[4][60];
 
-	byte quests;
 	bool quick_ok;
 };
 

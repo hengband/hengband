@@ -1480,7 +1480,8 @@ static void load_quick_start(void)
 
 	for (i = 0; i < 4; i++) rd_string(previous_char.history[i], sizeof(previous_char.history[i]));
 
-	rd_byte(&previous_char.quests);
+	/* UNUSED : Was number of random quests */
+	rd_byte(&tmp8u);
 
 	rd_byte(&tmp8u);
 	previous_char.quick_ok = (bool)tmp8u;

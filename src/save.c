@@ -516,7 +516,8 @@ static void save_quick_start(void)
 
 	for (i = 0; i < 4; i++) wr_string(previous_char.history[i]);
 
-	wr_byte(previous_char.quests);
+	/* UNUSED : Was number of random quests */
+	wr_byte(0);
 
 	/* No quick start after using debug mode or cheat options */
 	if (p_ptr->noscore) previous_char.quick_ok = FALSE;

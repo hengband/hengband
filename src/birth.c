@@ -3437,8 +3437,9 @@ void determine_random_questor(quest_type *q_ptr)
 /*
  *  Initialize random quests and final quests
  */
-static void init_dungeon_quests(int number_of_quests)
+static void init_dungeon_quests(void)
 {
+	int number_of_quests = MAX_RANDOM_QUEST - MIN_RANDOM_QUEST + 1;
 	int i;
 	monster_race    *r_ptr;
 
@@ -5569,7 +5570,6 @@ static void edit_history(void)
 static bool player_birth_aux(void)
 {
 	int i, k, n, cs, os;
-	int number_of_quests;
 
 	int mode = 0;
 
@@ -5589,7 +5589,6 @@ static bool player_birth_aux(void)
 	char b2 = ']';
 
 	char buf[80], cur[80];
-	char inp[80];
 
 
 	/*** Intro ***/
@@ -5906,80 +5905,6 @@ static bool player_birth_aux(void)
 	}
 
 #endif /* ALLOW_AUTOROLLER */
-
-	/* Clean up */
-	clear_from(10);
-
-	/*** User enters number of quests ***/
-	/* Heino Vander Sanden and Jimmy De Laet */
-
-	/* Extra info */
-#ifdef JP
-	put_str("必須のクエスト(オベロン及び混沌のサーペント)に加えて、追加のクエストの", 10, 5);
-	put_str("数を設定することが出来ます。", 11, 5);
-	put_str("追加クエストを行ないたくない場合は '0'を入力して下さい。", 12, 5);
-	put_str("ランダムに決定するには'*'を入力して下さい。", 13, 5);
-#else
-	put_str("You can enter the number of quests you'd like to perform in addition", 10, 5);
-	put_str("to the two obligatory ones ( Oberon and the Serpent of Chaos )", 11, 5);
-	put_str("In case you do not want any additional quests, just enter 0", 12, 5);
-	put_str("If you want a random number of random quests, just enter *", 13, 5);
-#endif
-
-	/* Ask the number of additional quests */
-	while (TRUE)
-	{
-
-#ifdef JP
-		put_str(format("追加クエストの数 (%u以下) ", MAX_RANDOM_QUEST - MIN_RANDOM_QUEST + 1), 15, 5);
-#else
-		put_str(format("Number of additional quests? (<%u) ", MAX_RANDOM_QUEST - MIN_RANDOM_QUEST + 2), 15, 5);
-#endif
-
-
-		/* Get a the number of additional quest */
-		while (TRUE)
-		{
-			/* Move the cursor */
-			put_str("", 15, 40);
-
-			/* Default */
-			strcpy(inp, "10");
-
-			/* Get a response (or escape) */
-			if (!askfor_aux(inp, 2, FALSE)) strcpy(inp, "10");
-
-			/* Quit */
-			if (inp[0] == 'Q') birth_quit();
-
-			/* Start over */
-			if (inp[0] == 'S') return (FALSE);
-
-			/* Check for random number of quests */
-			if (inp[0] == '*')
-			{
-				/* 0 to 10 random quests */
-				number_of_quests = randint0(11);
-			}
-			else if (inp[0] == '?')
-			{
-#ifdef JP
-				show_help("jbirth.txt#RandomQuests");
-#else
-				show_help("birth.txt#RandomQuests");
-#endif
-				continue;
-			}
-			else
-			{
-				number_of_quests = atoi(inp);
-			}
-
-			/* Break on valid input */
-			if ((number_of_quests <= MAX_RANDOM_QUEST - MIN_RANDOM_QUEST + 1) && (number_of_quests >= 0)) break;
-		}
-		break;
-	}
 
 	/* Clear */
 	clear_from(10);
@@ -6354,11 +6279,12 @@ static bool player_birth_aux(void)
 	/* Start over */
 	if (c == 'S') return (FALSE);
 
-	init_dungeon_quests(number_of_quests);
+
+	/* Initialize random quests */
+	init_dungeon_quests();
 
 	/* Save character data for quick start */
 	save_prev_data(&previous_char);
-	previous_char.quests = number_of_quests;
 	previous_char.quick_ok = TRUE;
 
 	/* Process the player name */
@@ -6423,7 +6349,7 @@ static bool ask_quick_start(void)
 	}
 
 	load_prev_data(FALSE);
-	init_dungeon_quests(previous_char.quests);
+	init_dungeon_quests();
 	init_turn();
 
 	sp_ptr = &sex_info[p_ptr->psex];

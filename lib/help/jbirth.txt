@@ -125,17 +125,6 @@
 街に関するヘルプ(jdungeon.txt#TownLevel [f])を参照してください。
 
 
-***** <RandomQuests>
-=== ランダムクエスト数決定 ===
-
-種族、職業、魔法領域、性格、選択すると '='を押したときと同じ初期オプショ
-ン選択画面になります。エスケープキーでオプション画面を抜けて、さらに後
-述のオートローラーの設定をすると、次にランダムクエストの数を聞かれます。
-0から10までの任意の数を選んでください。ランダムクエストに関するさらに
-詳しい解説はダンジョンのセクション(jdungeon.txt#RandomQuests [g])にあ
-ります。
-
-
 ***** <AutoRoller>
 === オートローラー ===
 
@@ -381,7 +370,6 @@ Updated    : Hengband 1.5.2
 ***** [d] jbirth.txt#PrimarySkills
 ***** [e] joption.txt#Birth
 ***** [f] jtown.txt#TownLevel
-***** [g] jdungeon.txt#RandomQuests
 ***** [h] jraceclas.txt#StatBonusTable
 ***** [i] jpref.txt#Condition
 ***** [j] jmonster.txt#Pets
