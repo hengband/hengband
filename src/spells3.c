@@ -2165,6 +2165,42 @@ bool item_tester_hook_weapon_armour(object_type *o_ptr)
 
 
 /*
+ * Check if an object is nameless weapon or armour
+ */
+bool item_tester_hook_nameless_weapon_armour(object_type *o_ptr)
+{
+	if (o_ptr->name1 || o_ptr->art_name || o_ptr->name2 || o_ptr->xtra3)
+		return FALSE;
+
+	switch (o_ptr->tval)
+	{
+		case TV_SWORD:
+		case TV_HAFTED:
+		case TV_POLEARM:
+		case TV_DIGGING:
+		case TV_BOW:
+		case TV_BOLT:
+		case TV_ARROW:
+		case TV_SHOT:
+		case TV_DRAG_ARMOR:
+		case TV_HARD_ARMOR:
+		case TV_SOFT_ARMOR:
+		case TV_SHIELD:
+		case TV_CLOAK:
+		case TV_CROWN:
+		case TV_HELM:
+		case TV_BOOTS:
+		case TV_GLOVES:
+		{
+			return (TRUE);
+		}
+	}
+
+	return (FALSE);
+}
+
+
+/*
  * Break the curse of an item
  */
 static void break_curse(object_type *o_ptr)
@@ -2409,7 +2445,7 @@ bool artifact_scroll(void)
 
 	item_tester_no_ryoute = TRUE;
 	/* Enchant weapon/armour */
-	item_tester_hook = item_tester_hook_weapon_armour;
+	item_tester_hook = item_tester_hook_nameless_weapon_armour;
 
 	/* Get an item */
 #ifdef JP
