@@ -3395,7 +3395,8 @@ if (!get_rnd_line("chainswd_j.txt", 0, noise))
 			(void)activate_ty_curse(FALSE, &count);
 		}
 		/* Handle experience draining */
-		if ((p_ptr->cursed & TRC_DRAIN_EXP) && one_in_(4))
+		if (p_ptr->prace != RACE_ANDROID && 
+			((p_ptr->cursed & TRC_DRAIN_EXP) && one_in_(4)))
 		{
 			p_ptr->exp -= (p_ptr->lev+1)/2;
 			if (p_ptr->exp < 0) p_ptr->exp = 0;
