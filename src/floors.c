@@ -455,7 +455,10 @@ static void place_pet(void)
 			m_ptr->fx = cx;
 			m_ptr->ml = TRUE;
 			m_ptr->csleep = 0;
-			set_pet(m_ptr);
+
+			/* Paranoia */
+			m_ptr->hold_o_idx = 0;
+			m_ptr->target_y = 0;
 
 			if ((r_ptr->flags1 & RF1_FORCE_SLEEP) && !ironman_nightmare)
 			{
@@ -542,6 +545,77 @@ static void update_unique_artifact(s16b cur_floor_id)
 		{
 			a_info[o_ptr->name1].floor_id = cur_floor_id;
 		}
+	}
+}
+
+
+/*
+ * When a monster is at a place where player will return,
+ * Get out of the my way!
+ */
+static void get_out_monster()
+{
+	int tries = 0;
+	int dis = 1;
+	int oy = py;
+	int ox = px;
+	int m_idx = cave[oy][ox].m_idx;
+
+	/* Nothing to do if no monster */
+	if (!m_idx) return;
+
+	/* Look until done */
+	while (TRUE)
+	{
+		monster_type *m_ptr;
+
+		/* Pick a (possibly illegal) location */
+		int ny = rand_spread(oy, dis);
+		int nx = rand_spread(ox, dis);
+
+		tries++;
+
+		/* Stop after 1000 tries */
+		if (tries > 10000) return;
+
+		/*
+		 * Increase distance after doing enough tries
+		 * compared to area of possible space
+		 */
+		if (tries > 20 * dis * dis) dis++;
+
+		/* Ignore illegal locations */
+		if (!in_bounds(ny, nx)) continue;
+
+		/* Require "empty" floor space */
+		if (!cave_empty_bold(ny, nx)) continue;
+
+		/* Hack -- no teleport onto glyph of warding */
+		if (is_glyph_grid(&cave[ny][nx])) continue;
+		if (is_explosive_rune_grid(&cave[ny][nx])) continue;
+
+		/* ...nor onto the Pattern */
+		if ((cave[ny][nx].feat >= FEAT_PATTERN_START) &&
+		    (cave[ny][nx].feat <= FEAT_PATTERN_XTRA2)) continue;
+
+		/*** It's a good place ***/
+
+		m_ptr = &m_list[m_idx];
+
+		/* Update the new location */
+		cave[ny][nx].m_idx = m_idx;
+
+		/* Update the old location */
+		cave[oy][ox].m_idx = 0;
+
+		/* Move the monster */
+		m_ptr->fy = ny;
+		m_ptr->fx = nx; 
+
+		/* No need to do update_mon() */
+
+		/* Success */
+		return;
 	}
 }
 
@@ -817,6 +891,9 @@ void leave_floor(void)
 	/* If you can return, you need to save previous floor */
 	if (!(change_floor_mode & (CFM_NO_RETURN | CFM_CLEAR_ALL)))
 	{
+		/* Get out of the my way! */
+		get_out_monster();
+
 		/* Record the last visit turn of current floor */
 		sf_ptr->last_visit = turn;
 

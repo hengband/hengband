@@ -5675,7 +5675,7 @@ msg_print("その場所にはモンスターはいません。");
 #ifdef JP
 msg_print("そのモンスターはペットではありません。");
 #else
-			msg_print("That monster is no a pet.");
+			msg_print("That monster is not a pet.");
 #endif
 
 			return FALSE;

@@ -1344,6 +1344,10 @@ msg_print("武器を持たないといけません。");
 					msg_format("You have thrown off by %s.",m_name);
 #endif
 					rakuba(1,TRUE);
+
+					/* Paranoia */
+					/* 落馬処理に失敗してもとにかく乗馬解除 */
+					p_ptr->riding = 0;
 				}
 			}
 			break;
