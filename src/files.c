@@ -4094,7 +4094,7 @@ void display_player(int mode)
 
 			if (p_ptr->stat_max[i] == p_ptr->stat_max_max[i])
 			{
-				c_put_str(TERM_WHITE, "!", 2+i, 64);
+				c_put_str(TERM_WHITE, "!", 2+i, 59);
 			}
 		}
 
