@@ -6040,24 +6040,27 @@ static void cave_temp_room_unlite(void)
 		/* Darken the grid */
 		if (do_dark)
 		{
-			for (j = 0; j < 9; j++)
+			if (dun_level || !is_daytime())
 			{
-				int by = y + ddy_ddd[j];
-				int bx = x + ddx_ddd[j];
-
-				if (in_bounds2(by, bx))
+				for (j = 0; j < 9; j++)
 				{
-					cave_type *cc_ptr = &cave[by][bx];
+					int by = y + ddy_ddd[j];
+					int bx = x + ddx_ddd[j];
 
-					if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
+					if (in_bounds2(by, bx))
 					{
-						do_dark = FALSE;
-						break;
+						cave_type *cc_ptr = &cave[by][bx];
+
+						if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
+						{
+							do_dark = FALSE;
+							break;
+						}
 					}
 				}
-			}
 
-			if (!do_dark) continue;
+				if (!do_dark) continue;
+			}
 
 			c_ptr->info &= ~(CAVE_GLOW);
 
