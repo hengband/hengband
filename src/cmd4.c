@@ -1496,6 +1496,8 @@ static void do_cmd_options_cheat(cptr info)
 	/* Interact with the player */
 	while (TRUE)
 	{
+                int dir;
+
 		/* Prompt XXX XXX XXX */
 #ifdef JP
 		sprintf(buf, "%s ( リターンで次へ, y/n でセット, ESC で決定 )", info);
@@ -1538,6 +1540,14 @@ static void do_cmd_options_cheat(cptr info)
 
 		/* Get a key */
 		ch = inkey();
+
+		/*
+		 * HACK - Try to translate the key into a direction
+		 * to allow using the roguelike keys for navigation.
+		 */
+		dir = get_keymap_dir(ch);
+		if ((dir == 2) || (dir == 4) || (dir == 6) || (dir == 8))
+			ch = I2D(dir);
 
 		/* Analyze */
 		switch (ch)
@@ -1798,6 +1808,8 @@ void do_cmd_options_aux(int page, cptr info)
 	/* Interact with the player */
 	while (TRUE)
 	{
+                int dir;
+
 		/* Prompt XXX XXX XXX */
 #ifdef JP
 		sprintf(buf, "%s ( リターンで次へ, y/n でセット, ESC で決定 ) ", info);
@@ -1831,11 +1843,20 @@ void do_cmd_options_aux(int page, cptr info)
 
 		if ((page == PAGE_AUTODESTROY) && (k > 2)) l = 3;
 		else l = 0;
+
 		/* Hilite current option */
 		move_cursor(k + 2 + l, 50);
 
 		/* Get a key */
 		ch = inkey();
+
+		/*
+		 * HACK - Try to translate the key into a direction
+		 * to allow using the roguelike keys for navigation.
+		 */
+		dir = get_keymap_dir(ch);
+		if ((dir == 2) || (dir == 4) || (dir == 6) || (dir == 8))
+			ch = I2D(dir);
 
 		/* Analyze */
 		switch (ch)
@@ -1847,8 +1868,6 @@ void do_cmd_options_aux(int page, cptr info)
 
 			case '-':
 			case '8':
-			case 'k':
-			case 'K':
 			{
 				k = (n + k - 1) % n;
 				break;
@@ -1858,8 +1877,6 @@ void do_cmd_options_aux(int page, cptr info)
 			case '\n':
 			case '\r':
 			case '2':
-			case 'j':
-			case 'J':
 			{
 				k = (k + 1) % n;
 				break;
@@ -1868,8 +1885,6 @@ void do_cmd_options_aux(int page, cptr info)
 			case 'y':
 			case 'Y':
 			case '6':
-			case 'l':
-			case 'L':
 			{
 				(*option_info[opt[k]].o_var) = TRUE;
 				k = (k + 1) % n;
@@ -1879,8 +1894,6 @@ void do_cmd_options_aux(int page, cptr info)
 			case 'n':
 			case 'N':
 			case '4':
-			case 'h':
-			case 'H':
 			{
 				(*option_info[opt[k]].o_var) = FALSE;
 				k = (k + 1) % n;
