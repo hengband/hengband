@@ -377,7 +377,7 @@
 /*
  * Maximum number of high scores in the high score file
  */
-#define MAX_HISCORES    100
+#define MAX_HISCORES    999
 
 
 /*
