@@ -1181,7 +1181,6 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 
 		case SV_POTION_ENLIGHTENMENT:
 		{
-			chg_virtue(V_ENLIGHTEN, 1);
 #ifdef JP
 			msg_print("自分の置かれている状況が脳裏に浮かんできた...");
 #else
@@ -1204,7 +1203,7 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 #endif
 
 			chg_virtue(V_KNOWLEDGE, 1);
-			chg_virtue(V_ENLIGHTEN, 1);
+			chg_virtue(V_ENLIGHTEN, 2);
 			msg_print(NULL);
 			wiz_lite(TRUE, FALSE);
 			(void)do_inc_stat(A_INT);
