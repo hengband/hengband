@@ -2,132 +2,132 @@
 
 ANGBAND MENU
 {
-	POPUP "ГtГ@ГCГЛ(&F)"
+	POPUP "е╒ебедеы(&F)"
 	{
-		MENUITEM "РVЛK(&N)", 100
-		MENUITEM "КJВн(&O)...", 101
+		MENUITEM "┐╖╡м(&N)", 100
+		MENUITEM "│лдп(&O)...", 101
 		MENUITEM SEPARATOR
-		MENUITEM "Х█С╢(&S)", 110
+		MENUITEM "╩▌┬╕(&S)", 110
 		MENUITEM SEPARATOR
-		MENUITEM "ГXГRГA(&C)", 120
+		MENUITEM "е╣е│ев(&C)", 120
 		MENUITEM SEPARATOR  
-		MENUITEM "ПIЧ╣(&X)", 130
+		MENUITEM "╜к╬╗(&X)", 130
 	}
 
-	POPUP "ГEГBГУГhГE(&W)"
+	POPUP "ежегеєе╔еж(&W)"
 	{
-		POPUP "Х\Ож(&V)"
+		POPUP "╔╜╝и(&V)"
 		{
-			MENUITEM "ГБГCГУГEГBГУГhГE", 200
-			MENUITEM "ГTГuГEГBГУГhГE 1", 201
-			MENUITEM "ГTГuГEГBГУГhГE 2", 202
-			MENUITEM "ГTГuГEГBГУГhГE 3", 203
-			MENUITEM "ГTГuГEГBГУГhГE 4", 204
-			MENUITEM "ГTГuГEГBГУГhГE 5", 205
-			MENUITEM "ГTГuГEГBГУГhГE 6", 206
-			MENUITEM "ГTГuГEГBГУГhГE 7", 207
+			MENUITEM "еседеєежегеєе╔еж", 200
+			MENUITEM "е╡е╓ежегеєе╔еж 1", 201
+			MENUITEM "е╡е╓ежегеєе╔еж 2", 202
+			MENUITEM "е╡е╓ежегеєе╔еж 3", 203
+			MENUITEM "е╡е╓ежегеєе╔еж 4", 204
+			MENUITEM "е╡е╓ежегеєе╔еж 5", 205
+			MENUITEM "е╡е╓ежегеєе╔еж 6", 206
+			MENUITEM "е╡е╓ежегеєе╔еж 7", 207
 		}
 
-		POPUP "ГtГHГУГg(&F)"
+		POPUP "е╒ейеєе╚(&F)"
 		{
-			MENUITEM "ГБГCГУГEГBГУГhГE", 210
-			MENUITEM "ГTГuГEГBГУГhГE 1", 211
-			MENUITEM "ГTГuГEГBГУГhГE 2", 212
-			MENUITEM "ГTГuГEГBГУГhГE 3", 213
-			MENUITEM "ГTГuГEГBГУГhГE 4", 214
-			MENUITEM "ГTГuГEГBГУГhГE 5", 215
-			MENUITEM "ГTГuГEГBГУГhГE 6", 216
-			MENUITEM "ГTГuГEГBГУГhГE 7", 217
+			MENUITEM "еседеєежегеєе╔еж", 210
+			MENUITEM "е╡е╓ежегеєе╔еж 1", 211
+			MENUITEM "е╡е╓ежегеєе╔еж 2", 212
+			MENUITEM "е╡е╓ежегеєе╔еж 3", 213
+			MENUITEM "е╡е╓ежегеєе╔еж 4", 214
+			MENUITEM "е╡е╓ежегеєе╔еж 5", 215
+			MENUITEM "е╡е╓ежегеєе╔еж 6", 216
+			MENUITEM "е╡е╓ежегеєе╔еж 7", 217
 		}
 
 		MENUITEM SEPARATOR
 
 		/*  POPUP "Bizarre Display"
 		{
-			MENUITEM "ГБГCГУГEГBГУГhГE", 230
-			MENUITEM "ГTГuГEГBГУГhГE 1", 231
-			MENUITEM "ГTГuГEГBГУГhГE 2", 232
-			MENUITEM "ГTГuГEГBГУГhГE 3", 233
-			MENUITEM "ГTГuГEГBГУГhГE 4", 234
-			MENUITEM "ГTГuГEГBГУГhГE 5", 235
-			MENUITEM "ГTГuГEГBГУГhГE 6", 236
-			MENUITEM "ГTГuГEГBГУГhГE 7", 237
+			MENUITEM "еседеєежегеєе╔еж", 230
+			MENUITEM "е╡е╓ежегеєе╔еж 1", 231
+			MENUITEM "е╡е╓ежегеєе╔еж 2", 232
+			MENUITEM "е╡е╓ежегеєе╔еж 3", 233
+			MENUITEM "е╡е╓ежегеєе╔еж 4", 234
+			MENUITEM "е╡е╓ежегеєе╔еж 5", 235
+			MENUITEM "е╡е╓ежегеєе╔еж 6", 236
+			MENUITEM "е╡е╓ежегеєе╔еж 7", 237
 		}
 		*/
 
-		POPUP "Г^ГCГЛВ╠ХЭВЁНLВ░Вщ"
+		POPUP "е┐едеыд╬╔¤дЄ╣нд▓ды"
 		{
-			MENUITEM "ГБГCГУГEГBГУГhГE", 240
-			MENUITEM "ГTГuГEГBГУГhГE 1", 241
-			MENUITEM "ГTГuГEГBГУГhГE 2", 242
-			MENUITEM "ГTГuГEГBГУГhГE 3", 243
-			MENUITEM "ГTГuГEГBГУГhГE 4", 244
-			MENUITEM "ГTГuГEГBГУГhГE 5", 245
-			MENUITEM "ГTГuГEГBГУГhГE 6", 246
-			MENUITEM "ГTГuГEГBГУГhГE 7", 247
+			MENUITEM "еседеєежегеєе╔еж", 240
+			MENUITEM "е╡е╓ежегеєе╔еж 1", 241
+			MENUITEM "е╡е╓ежегеєе╔еж 2", 242
+			MENUITEM "е╡е╓ежегеєе╔еж 3", 243
+			MENUITEM "е╡е╓ежегеєе╔еж 4", 244
+			MENUITEM "е╡е╓ежегеєе╔еж 5", 245
+			MENUITEM "е╡е╓ежегеєе╔еж 6", 246
+			MENUITEM "е╡е╓ежегеєе╔еж 7", 247
 		}
 
-		POPUP "Г^ГCГЛВ╠ХЭВЁПkВ▀Вщ"
+		POPUP "е┐едеыд╬╔¤дЄ╜╠дсды"
 		{
-			MENUITEM "ГБГCГУГEГBГУГhГE", 250
-			MENUITEM "ГTГuГEГBГУГhГE 1", 251
-			MENUITEM "ГTГuГEГBГУГhГE 2", 252
-			MENUITEM "ГTГuГEГBГУГhГE 3", 253
-			MENUITEM "ГTГuГEГBГУГhГE 4", 254
-			MENUITEM "ГTГuГEГBГУГhГE 5", 255
-			MENUITEM "ГTГuГEГBГУГhГE 6", 256
-			MENUITEM "ГTГuГEГBГУГhГE 7", 257
+			MENUITEM "еседеєежегеєе╔еж", 250
+			MENUITEM "е╡е╓ежегеєе╔еж 1", 251
+			MENUITEM "е╡е╓ежегеєе╔еж 2", 252
+			MENUITEM "е╡е╓ежегеєе╔еж 3", 253
+			MENUITEM "е╡е╓ежегеєе╔еж 4", 254
+			MENUITEM "е╡е╓ежегеєе╔еж 5", 255
+			MENUITEM "е╡е╓ежегеєе╔еж 6", 256
+			MENUITEM "е╡е╓ежегеєе╔еж 7", 257
 		}
 
-		POPUP "Г^ГCГЛВ╠НВВ│ВЁНLВ░Вщ"
+		POPUP "е┐едеыд╬╣тд╡дЄ╣нд▓ды"
 		{
-			MENUITEM "ГБГCГУГEГBГУГhГE", 260
-			MENUITEM "ГTГuГEГBГУГhГE 1", 261
-			MENUITEM "ГTГuГEГBГУГhГE 2", 262
-			MENUITEM "ГTГuГEГBГУГhГE 3", 263
-			MENUITEM "ГTГuГEГBГУГhГE 4", 264
-			MENUITEM "ГTГuГEГBГУГhГE 5", 265
-			MENUITEM "ГTГuГEГBГУГhГE 6", 266
-			MENUITEM "ГTГuГEГBГУГhГE 7", 267
+			MENUITEM "еседеєежегеєе╔еж", 260
+			MENUITEM "е╡е╓ежегеєе╔еж 1", 261
+			MENUITEM "е╡е╓ежегеєе╔еж 2", 262
+			MENUITEM "е╡е╓ежегеєе╔еж 3", 263
+			MENUITEM "е╡е╓ежегеєе╔еж 4", 264
+			MENUITEM "е╡е╓ежегеєе╔еж 5", 265
+			MENUITEM "е╡е╓ежегеєе╔еж 6", 266
+			MENUITEM "е╡е╓ежегеєе╔еж 7", 267
 		}
 
-		POPUP "Г^ГCГЛВ╠НВВ│ВЁПkВ▀Вщ"
+		POPUP "е┐едеыд╬╣тд╡дЄ╜╠дсды"
 		{
-			MENUITEM "ГБГCГУГEГBГУГhГE", 270
-			MENUITEM "ГTГuГEГBГУГhГE 1", 271
-			MENUITEM "ГTГuГEГBГУГhГE 2", 272
-			MENUITEM "ГTГuГEГBГУГhГE 3", 273
-			MENUITEM "ГTГuГEГBГУГhГE 4", 274
-			MENUITEM "ГTГuГEГBГУГhГE 5", 275
-			MENUITEM "ГTГuГEГBГУГhГE 6", 276
-			MENUITEM "ГTГuГEГBГУГhГE 7", 277
+			MENUITEM "еседеєежегеєе╔еж", 270
+			MENUITEM "е╡е╓ежегеєе╔еж 1", 271
+			MENUITEM "е╡е╓ежегеєе╔еж 2", 272
+			MENUITEM "е╡е╓ежегеєе╔еж 3", 273
+			MENUITEM "е╡е╓ежегеєе╔еж 4", 274
+			MENUITEM "е╡е╓ежегеєе╔еж 5", 275
+			MENUITEM "е╡е╓ежегеєе╔еж 6", 276
+			MENUITEM "е╡е╓ежегеєе╔еж 7", 277
 		}
 	}
 
-	POPUP "ГIГvГVГЗГУ(&O)"
+	POPUP "еке╫е╖ечеє(&O)"
 	{
-		POPUP "ГOГЙГtГBГNГX(&G)"
+		POPUP "е░еще╒егепе╣(&G)"
 		{
-			MENUITEM "В╚В╡(&N)", 400
-			MENUITEM "ЛМГ^ГCГЛ(&O)", 401
-			MENUITEM "&Adam BoltВ│ВёГ^ГCГЛ", 402
-			MENUITEM "Г^ГCГЛВЁ2Ф{ХЭВ┼Х\Ож", 409
+			MENUITEM "д╩д╖(&N)", 400
+			MENUITEM "╡ье┐едеы(&O)", 401
+			MENUITEM "&Adam Boltд╡дєе┐едеы", 402
+			MENUITEM "е┐едеыдЄ2╟▄╔¤д╟╔╜╝и", 409
 		}
-		MENUITEM "М°Й╩Й╣(&S)", 410
-		MENUITEM "Х╟ОЖВЁОgВд(&B)", 440
-		MENUITEM "Х╟ОЖВЁСIСЁ(&O)...", 441
-		MENUITEM "ЙцЦ╩ВЁHTMLВ┼Х█С╢(&H)...", 450
-		/*  MENUITEM "ТnР}(&M)", 430 */
+		MENUITEM "╕·▓╠▓╗(&S)", 410
+		MENUITEM "╩╔╗цдЄ╗╚дж(&B)", 440
+		MENUITEM "╩╔╗цдЄ┴к┬Є(&O)...", 441
+		MENUITEM "▓ш╠╠дЄHTMLд╟╩▌┬╕(&H)...", 450
+		/*  MENUITEM "├╧┐▐(&M)", 430 */
 		/*  MENUITEM SEPARATOR
-		MENUITEM "ЦвОgЧp", 410
-		MENUITEM "ЦвОgЧp", 411*/
+		MENUITEM "╠д╗╚═╤", 410
+		MENUITEM "╠д╗╚═╤", 411*/
 	}
 
 	/*
-	POPUP "ГwГЛГv(&H)"
+	POPUP "е╪еые╫(&H)"
 	{
-		MENUITEM "ИъФ╩(&G)",       901
-		MENUITEM "ГXГ|ГCГЙБ[(&S)", 902
+		MENUITEM "░ь╚╠(&G)",       901
+		MENUITEM "е╣е▌едещб╝(&S)", 902
 	}
 	*/
 }
