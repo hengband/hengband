@@ -719,7 +719,7 @@ static bool pattern_effect(void)
 		return FALSE;
 
 	if ((prace_is_(RACE_AMBERITE)) &&
-	    (p_ptr->cut > 0) && (randint(10) == 1))
+	    (p_ptr->cut > 0) && one_in_(10))
 	{
 		wreck_the_pattern();
 	}
@@ -777,7 +777,7 @@ take_hit(DAMAGE_NOESCAPE, 200, "²õ¤ì¤¿¡Ö¥Ñ¥¿¡¼¥ó¡×¤òÊâ¤¤¤¿¥À¥á¡¼¥¸", -1);
 	}
 	else
 	{
-		if ((prace_is_(RACE_AMBERITE)) && (randint(2) != 1))
+		if ((prace_is_(RACE_AMBERITE)) && !one_in_(2))
 			return TRUE;
 		else if (!p_ptr->invuln)
 #ifdef JP
@@ -978,7 +978,7 @@ static void regen_monsters(void)
 			frac = m_ptr->maxhp / 100;
 
 			/* Hack -- Minimal regeneration rate */
-			if (!frac) if (randint(2) == 1) frac = 1;
+			if (!frac) if (one_in_(2)) frac = 1;
 
 			/* Hack -- Some monsters regenerate quickly */
 			if (r_ptr->flags2 & RF2_REGENERATE) frac *= 2;
@@ -1028,7 +1028,7 @@ static void regen_captured_monsters(void)
 			frac = o_ptr->xtra5 / 100;
 
 			/* Hack -- Minimal regeneration rate */
-			if (!frac) if (randint(2) == 1) frac = 1;
+			if (!frac) if (one_in_(2)) frac = 1;
 
 			/* Hack -- Some monsters regenerate quickly */
 			if (r_ptr->flags2 & RF2_REGENERATE) frac *= 2;
@@ -1713,7 +1713,7 @@ if (cheat_xtra) msg_print("Êó½·¤ò¥ê¥»¥Ã¥È");
 	/*** Process the monsters ***/
 
 	/* Check for creature generation. */
-	if ((rand_int(d_info[dungeon_type].max_m_alloc_chance) == 0) &&
+	if (one_in_(d_info[dungeon_type].max_m_alloc_chance) &&
 	    !p_ptr->inside_arena && !p_ptr->inside_quest && !p_ptr->inside_battle)
 	{
 		/* Make a new monster */
@@ -2662,7 +2662,7 @@ msg_print("¤³¤ó¤Ê¤ËÂ¿¤¯¤Î¥Ú¥Ã¥È¤òÀ©¸æ¤Ç¤­¤Ê¤¤¡ª");
 	/*** Process mutation effects ***/
 	if (p_ptr->muta2 && !p_ptr->inside_battle && !p_ptr->wild_mode)
 	{
-		if ((p_ptr->muta2 & MUT2_BERS_RAGE) && (randint(3000) == 1))
+		if ((p_ptr->muta2 & MUT2_BERS_RAGE) && one_in_(3000))
 		{
 			disturb(0, 0);
 #ifdef JP
@@ -2788,7 +2788,7 @@ msg_print("¥Ö¥¥¡¼¡¼¥Ã¡ª¤ª¤Ã¤È¡£");
 		}
 
 		if ((p_ptr->muta2 & MUT2_PROD_MANA) &&
-		    !p_ptr->anti_magic && (randint(9000) == 1))
+		    !p_ptr->anti_magic && one_in_(9000))
 		{
 			int dire = 0;
 			disturb(0, 0);
@@ -2807,7 +2807,7 @@ msg_print("ËâË¡¤Î¥¨¥Í¥ë¥®¡¼¤¬ÆÍÁ³¤¢¤Ê¤¿¤ÎÃæ¤ËÎ®¤ì¹þ¤ó¤Ç¤­¤¿¡ª¥¨¥Í¥ë¥®¡¼¤ò²òÊü¤·¤
 		if ((p_ptr->muta2 & MUT2_ATT_DEMON) &&
 		    !p_ptr->anti_magic && (randint(6666) == 666))
 		{
-			bool pet = (randint(6) == 1);
+			bool pet = one_in_(6);
 			bool not_pet = (bool)(!pet);
 
 			if (summon_specific((pet ? -1 : 0), py, px,
@@ -2823,10 +2823,10 @@ msg_print("¤¢¤Ê¤¿¤Ï¥Ç¡¼¥â¥ó¤ò°ú¤­´ó¤»¤¿¡ª");
 			}
 		}
 
-		if ((p_ptr->muta2 & MUT2_SPEED_FLUX) && (randint(6000) == 1))
+		if ((p_ptr->muta2 & MUT2_SPEED_FLUX) && one_in_(6000))
 		{
 			disturb(0, 0);
-			if (randint(2) == 1)
+			if (one_in_(2))
 			{
 #ifdef JP
 msg_print("ÀºÎÏÅª¤Ç¤Ê¤¯¤Ê¤Ã¤¿µ¤¤¬¤¹¤ë¡£");
@@ -2862,7 +2862,7 @@ msg_print("ÀºÎÏÅª¤Ë¤Ê¤Ã¤¿µ¤¤¬¤¹¤ë¡£");
 			}
 			msg_print(NULL);
 		}
-		if ((p_ptr->muta2 & MUT2_BANISH_ALL) && (randint(9000) == 1))
+		if ((p_ptr->muta2 & MUT2_BANISH_ALL) && one_in_(9000))
 		{
 			disturb(0, 0);
 #ifdef JP
@@ -2939,7 +2939,7 @@ msg_print("¸÷¸»¤«¤é¥¨¥Í¥ë¥®¡¼¤òµÛ¼ý¤·¤¿¡ª");
 		if ((p_ptr->muta2 & MUT2_ATT_ANIMAL) &&
 		   !p_ptr->anti_magic && one_in_(7000))
 		{
-			bool pet = (randint(3) == 1);
+			bool pet = one_in_(3);
 			bool not_pet = (bool)(!pet);
 
 			if (summon_specific((pet ? -1 : 0), py, px, dun_level, SUMMON_ANIMAL,
@@ -3039,13 +3039,13 @@ msg_print("¼«Ê¬¤¬¿ê¼å¤·¤Æ¤¤¤¯¤Î¤¬Ê¬¤«¤ë¡ª");
 #endif
 
 				msg_print(NULL);
-				(void)dec_stat(which_stat, randint(6) + 6, randint(3) == 1);
+				(void)dec_stat(which_stat, randint(6) + 6, one_in_(3));
 			}
 		}
 		if ((p_ptr->muta2 & MUT2_ATT_DRAGON) &&
 		   !p_ptr->anti_magic && one_in_(3000))
 		{
-			bool pet = (randint(5) == 1);
+			bool pet = one_in_(5);
 			bool not_pet = (bool)(!pet);
 
 			if (summon_specific((pet ? -1 : 0), py, px, dun_level, SUMMON_DRAGON,
@@ -3274,7 +3274,7 @@ msg_print("Éð´ï¤òÍî¤·¤Æ¤·¤Þ¤Ã¤¿¡ª");
 	}
 
 	/* Rarely, take damage from the Jewel of Judgement */
-	if ((randint(999) == 1) && !p_ptr->anti_magic)
+	if (one_in_(999) && !p_ptr->anti_magic)
 	{
 		if ((inventory[INVEN_LITE].tval) &&
 		    (inventory[INVEN_LITE].sval == SV_LITE_THRAIN))
@@ -3305,7 +3305,7 @@ take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev, 50), "¿³È½¤ÎÊõÀÐ", -1);
 		if (!p_ptr->inside_battle)
 		{
 			/* TY Curse */
-			if ((f3 & TR3_TY_CURSE) && (randint(TY_CURSE_CHANCE) == 1))
+			if ((f3 & TR3_TY_CURSE) && one_in_(TY_CURSE_CHANCE))
 			{
 				int count = 0;
 
@@ -3313,7 +3313,7 @@ take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev, 50), "¿³È½¤ÎÊõÀÐ", -1);
 			}
 
 			/* Make a chainsword noise */
-			if ((o_ptr->name1 == ART_CHAINSWORD) && randint(CHAINSWORD_NOISE) == 1)
+			if ((o_ptr->name1 == ART_CHAINSWORD) && one_in_(CHAINSWORD_NOISE))
 			{
 				char noise[1024];
 #ifdef JP
@@ -4690,7 +4690,7 @@ msg_print("¥¢¥ê¡¼¥Ê¤¬ËâË¡¤òµÛ¼ý¤·¤¿¡ª");
 		default:
 		{
 			if (flush_failure) flush();
-			if (randint(2) == 1)
+			if (one_in_(2))
 			{
 				char error_m[1024];
 				sound(SOUND_ILLEGAL);

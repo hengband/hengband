@@ -1009,7 +1009,7 @@ msg_print("しかし効果がなかった！");
 #endif
 
 		}
-		else if (randint(2) == 1)
+		else if (one_in_(2))
 		{
 #ifdef JP
 msg_format("%sは床を突き破って沈んでいった。", m_name);

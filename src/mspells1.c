@@ -3602,7 +3602,7 @@ msg_format("%^sがテレポートした。", m_name);
 							if(get_check_strict("Do you follow it? ", 1))
 #endif
 							{
-								if (randint(3) == 1)
+								if (one_in_(3))
 								{
 									teleport_player(200);
 #ifdef JP

@@ -3326,7 +3326,7 @@ msg_print("頭がクラクラして意識が遠のいてきた。");
 			break;
 		}
 
-		if (randint(1000) < v || randint(16) == 1)
+		if (randint(1000) < v || one_in_(16))
 		{
 #ifdef JP
 msg_print("割れるような頭痛がする。");
@@ -3334,12 +3334,12 @@ msg_print("割れるような頭痛がする。");
 			msg_print("A vicious blow hits your head.");
 #endif
 
-			if (randint(3) == 1)
+			if (one_in_(3))
 			{
 				if (!p_ptr->sustain_int) (void)do_dec_stat(A_INT);
 				if (!p_ptr->sustain_wis) (void)do_dec_stat(A_WIS);
 			}
-			else if (randint(2) == 1)
+			else if (one_in_(2))
 			{
 				if (!p_ptr->sustain_int) (void)do_dec_stat(A_INT);
 			}
@@ -3610,7 +3610,7 @@ msg_print("致命的な傷を負ってしまった。");
 		/* Notice */
 		notice = TRUE;
 
-		if (randint(1000) < v || randint(16) == 1)
+		if (randint(1000) < v || one_in_(16))
 		{
 			if (!p_ptr->sustain_chr)
 			{
@@ -4529,7 +4529,7 @@ void do_poly_wounds(void)
 	s16b wounds = p_ptr->cut;
 	s16b hit_p = (p_ptr->mhp - p_ptr->chp);
 	s16b change = damroll(p_ptr->lev, 5);
-	bool Nasty_effect = (randint(5) == 1);
+	bool Nasty_effect = one_in_(5);
 
 	if (!(wounds || hit_p || Nasty_effect)) return;
 
@@ -4571,7 +4571,7 @@ msg_print("あなたは変化の訪れを感じた...");
 
 	chg_virtue(V_CHANCE, 1);
 
-	if ((power > rand_int(20)) && (rand_int(3) == 1) && (p_ptr->prace != RACE_ANDROID))
+	if ((power > rand_int(20)) && one_in_(3) && (p_ptr->prace != RACE_ANDROID))
 	{
 		char effect_msg[80] = "";
 		int new_race, expfact, goalexpfact, h_percent;
@@ -4579,7 +4579,7 @@ msg_print("あなたは変化の訪れを感じた...");
 		/* Some form of racial polymorph... */
 		power -= 10;
 
-		if ((power > rand_int(5)) && (rand_int(4) == 1))
+		if ((power > rand_int(5)) && one_in_(4))
 		{
 			/* sex change */
 			power -= 2;
@@ -4608,7 +4608,7 @@ sprintf(effect_msg, "男性の");
 			}
 		}
 
-		if ((power > rand_int(30)) && (rand_int(5) == 1))
+		if ((power > rand_int(30)) && one_in_(5))
 		{
 			int tmp = 0;
 
@@ -4617,9 +4617,9 @@ sprintf(effect_msg, "男性の");
 
 			while (tmp < 6)
 			{
-				if (rand_int(2) == 1)
+				if (one_in_(2))
 				{
-					(void)dec_stat(tmp, randint(6) + 6, (randint(3) == 1));
+					(void)dec_stat(tmp, randint(6) + 6, one_in_(3));
 					power -= 1;
 				}
 				tmp++;
@@ -4651,7 +4651,7 @@ sprintf(effect_msg, "男性の");
 			}
 		}
 
-		while ((power > rand_int(20)) && (rand_int(10) == 1))
+		while ((power > rand_int(20)) && one_in_(10))
 		{
 			/* Polymorph into a less mutated form */
 			power -= 10;
@@ -4755,7 +4755,7 @@ msg_print("奇妙なくらい普通になった気がする。");
 		lite_spot(py, px);
 	}
 
-	if ((power > rand_int(30)) && (rand_int(6) == 1))
+	if ((power > rand_int(30)) && one_in_(6))
 	{
 		int tmp = 0;
 
@@ -4770,10 +4770,10 @@ msg_format("%sの構成が変化した！", p_ptr->prace == RACE_ANDROID ? "機械" : "内臓
 
 		while (tmp < 6)
 		{
-			(void)dec_stat(tmp, randint(6) + 6, (randint(3) == 1));
+			(void)dec_stat(tmp, randint(6) + 6, one_in_(3));
 			tmp++;
 		}
-		if (randint(6) == 1)
+		if (one_in_(6))
 		{
 #ifdef JP
 msg_print("現在姿で生きていくのは困難なようだ！");
@@ -4787,7 +4787,7 @@ take_hit(DAMAGE_LOSELIFE, damroll(randint(10), p_ptr->lev), "致命的な突然変異", 
 		}
 	}
 
-	if ((power > rand_int(20)) && (rand_int(4) == 1))
+	if ((power > rand_int(20)) && one_in_(4))
 	{
 		power -= 10;
 
@@ -4795,7 +4795,7 @@ take_hit(DAMAGE_LOSELIFE, damroll(randint(10), p_ptr->lev), "致命的な突然変異", 
 		do_cmd_rerate(FALSE);
 	}
 
-	while ((power > rand_int(15)) && (rand_int(3) == 1))
+	while ((power > rand_int(15)) && one_in_(3))
 	{
 		power -= 7;
 		(void)gain_random_mutation(0);
@@ -4867,7 +4867,7 @@ bool take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 				msg_print("The attack cuts your shield of invulnerability open!");
 #endif
 			}
-			else if (randint(PENETRATE_INVULNERABILITY) == 1)
+			else if (one_in_(PENETRATE_INVULNERABILITY))
 			{
 #ifdef JP
 				msg_print("無敵のバリアを破って攻撃された！");
@@ -4916,14 +4916,14 @@ bool take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 			else
 			{
 				damage /= 2;
-				if ((damage == 0) && (randint(2) == 1)) damage = 1;
+				if ((damage == 0) && one_in_(2)) damage = 1;
 			}
 		}
 
 		if ((p_ptr->special_defense & KATA_MUSOU))
 		{
 			damage /= 2;
-			if ((damage == 0) && (randint(2) == 1)) damage = 1;
+			if ((damage == 0) && one_in_(2)) damage = 1;
 		}
 	} /* not if LOSELIFE USELIFE */
 

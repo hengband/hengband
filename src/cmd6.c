@@ -2610,7 +2610,7 @@ static void do_cmd_use_staff_aux(int item)
 	chance = chance - lev;
 
 	/* Give everyone a (slight) chance */
-	if ((chance < USE_DEVICE) && (rand_int(USE_DEVICE - chance + 1) == 0))
+	if ((chance < USE_DEVICE) && one_in_(USE_DEVICE - chance + 1))
 	{
 		chance = USE_DEVICE;
 	}
@@ -3143,7 +3143,7 @@ static void do_cmd_aim_wand_aux(int item)
 	chance = chance - lev;
 
 	/* Give everyone a (slight) chance */
-	if ((chance < USE_DEVICE) && (rand_int(USE_DEVICE - chance + 1) == 0))
+	if ((chance < USE_DEVICE) && one_in_(USE_DEVICE - chance + 1))
 	{
 		chance = USE_DEVICE;
 	}
@@ -5144,11 +5144,11 @@ msg_print("あなたの槍は電気でスパークしている...");
 #endif
 
 				/* Confusing. */
-				if (rand_int(5) == 0) (void)set_confused(p_ptr->confused +
+				if (one_in_(5)) (void)set_confused(p_ptr->confused +
 					randint(10));
 
 				/* Exercise a little care... */
-				if (rand_int(20) == 0)
+				if (one_in_(20))
 #ifdef JP
 					take_hit(DAMAGE_LOSELIFE, damroll(4, 10), "危険な秘密", -1);
 #else
@@ -5321,7 +5321,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 			}
 			case ART_ARRYU:
 			{
-				bool pet = (randint(5) != 1);
+				bool pet = !one_in_(5);
 
 				if (summon_specific((pet ? -1 : 0), py, px, ((p_ptr->lev * 3) / 2), SUMMON_HOUND, TRUE, FALSE, pet, FALSE, (bool)(!pet)))
 				{
@@ -5548,7 +5548,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 			}
 			case ART_JIZO:
 			{
-				bool pet = (randint(5) != 1);
+				bool pet = !one_in_(5);
 
 				if (summon_named_creature(py, px, MON_JIZOTAKO, FALSE, TRUE, FALSE, pet))
 				{

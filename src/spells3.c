@@ -2425,7 +2425,7 @@ msg_print("強化に失敗した。");
 		msg_print("The enchantment failed.");
 #endif
 
-		if (randint(3)==1) chg_virtue(V_ENCHANT, -1);
+		if (one_in_(3)) chg_virtue(V_ENCHANT, -1);
 	}
 	else
 		chg_virtue(V_ENCHANT, 1);
@@ -2563,7 +2563,7 @@ msg_print("強化に失敗した。");
 		msg_print("The enchantment failed.");
 #endif
 
-		if (randint(3)==1) chg_virtue(V_ENCHANT, -1);
+		if (one_in_(3)) chg_virtue(V_ENCHANT, -1);
 	}
 	else
 		chg_virtue(V_ENCHANT, 1);
@@ -3002,7 +3002,7 @@ s = "魔力を充填すべきアイテムがない。";
 
 
 		/* Back-fire */
-		if (rand_int(recharge_strength) == 0)
+		if (one_in_(recharge_strength))
 		{
 			/* Activate the failure code. */
 			fail = TRUE;
@@ -3041,7 +3041,7 @@ s = "魔力を充填すべきアイテムがない。";
 		if (recharge_strength < 0) recharge_strength = 0;
 
 		/* Back-fire */
-		if (rand_int(recharge_strength) == 0)
+		if (one_in_(recharge_strength))
 		{
 			/* Activate the failure code. */
 			fail = TRUE;
@@ -3119,19 +3119,19 @@ msg_format("魔力が逆流した！%sは完全に魔力を失った。", o_name);
 				/* 10% chance to blow up one rod, otherwise draining. */
 				if (o_ptr->tval == TV_ROD)
 				{
-					if (randint(10) == 1) fail_type = 2;
+					if (one_in_(10)) fail_type = 2;
 					else fail_type = 1;
 				}
 				/* 75% chance to blow up one wand, otherwise draining. */
 				else if (o_ptr->tval == TV_WAND)
 				{
-					if (randint(3) != 1) fail_type = 2;
+					if (!one_in_(3)) fail_type = 2;
 					else fail_type = 1;
 				}
 				/* 50% chance to blow up one staff, otherwise no effect. */
 				else if (o_ptr->tval == TV_STAFF)
 				{
-					if (randint(2) == 1) fail_type = 2;
+					if (one_in_(2)) fail_type = 2;
 					else fail_type = 0;
 				}
 			}
@@ -3142,13 +3142,13 @@ msg_format("魔力が逆流した！%sは完全に魔力を失った。", o_name);
 				/* 33% chance to blow up one rod, otherwise draining. */
 				if (o_ptr->tval == TV_ROD)
 				{
-					if (randint(3) == 1) fail_type = 2;
+					if (one_in_(3)) fail_type = 2;
 					else fail_type = 1;
 				}
 				/* 20% chance of the entire stack, else destroy one wand. */
 				else if (o_ptr->tval == TV_WAND)
 				{
-					if (randint(5) == 1) fail_type = 3;
+					if (one_in_(5)) fail_type = 3;
 					else fail_type = 2;
 				}
 				/* Blow up one staff. */
@@ -3384,7 +3384,7 @@ msg_format("%s は既に祝福されている。",
 		return TRUE;
 	}
 
-	if (!(o_ptr->art_name || o_ptr->name1 || o_ptr->name2) || (randint(3) == 1))
+	if (!(o_ptr->art_name || o_ptr->name1 || o_ptr->name2) || one_in_(3))
 	{
 		/* Describe */
 #ifdef JP
@@ -5033,7 +5033,7 @@ void acid_dam(int dam, cptr kb_str, int monspell)
 	if (double_resist) dam = (dam + 2) / 3;
 
 	if ((!(double_resist || p_ptr->resist_acid)) &&
-	    randint(HURT_CHANCE) == 1)
+	    one_in_(HURT_CHANCE))
 		(void)do_dec_stat(A_CHR);
 
 	/* If any armor gets hit, defend the player */
@@ -5073,7 +5073,7 @@ void elec_dam(int dam, cptr kb_str, int monspell)
 	if (double_resist) dam = (dam + 2) / 3;
 
 	if ((!(double_resist || p_ptr->resist_elec)) &&
-	    randint(HURT_CHANCE) == 1)
+	    one_in_(HURT_CHANCE))
 		(void)do_dec_stat(A_DEX);
 
 	/* Take damage */
@@ -5110,7 +5110,7 @@ void fire_dam(int dam, cptr kb_str, int monspell)
 	if (double_resist) dam = (dam + 2) / 3;
 
 	if ((!(double_resist || p_ptr->resist_fire)) &&
-	    randint(HURT_CHANCE) == 1)
+	    one_in_(HURT_CHANCE))
 		(void)do_dec_stat(A_STR);
 
 	/* Take damage */
@@ -5146,7 +5146,7 @@ void cold_dam(int dam, cptr kb_str, int monspell)
 	if (double_resist) dam = (dam + 2) / 3;
 
 	if ((!(double_resist || p_ptr->resist_cold)) &&
-	    randint(HURT_CHANCE) == 1)
+	    one_in_(HURT_CHANCE))
 		(void)do_dec_stat(A_STR);
 
 	/* Take damage */
@@ -5624,7 +5624,7 @@ s = "魔力を吸収できるアイテムがありません。";
 		recharge_strength = ((power > lev/2) ? (power - lev/2) : 0) / 5;
 
 		/* Back-fire */
-		if (rand_int(recharge_strength) == 0)
+		if (one_in_(recharge_strength))
 		{
 			/* Activate the failure code. */
 			fail = TRUE;
@@ -5656,7 +5656,7 @@ msg_print("充填中のロッドから魔力を吸収することはできません。");
 		if (recharge_strength < 0) recharge_strength = 0;
 
 		/* Back-fire */
-		if (rand_int(recharge_strength) == 0)
+		if (one_in_(recharge_strength))
 		{
 			/* Activate the failure code. */
 			fail = TRUE;
@@ -5748,19 +5748,19 @@ msg_format("魔力が逆流した！%sは完全に魔力を失った。", o_name);
 				/* 10% chance to blow up one rod, otherwise draining. */
 				if (o_ptr->tval == TV_ROD)
 				{
-					if (randint(10) == 1) fail_type = 2;
+					if (one_in_(10)) fail_type = 2;
 					else fail_type = 1;
 				}
 				/* 75% chance to blow up one wand, otherwise draining. */
 				else if (o_ptr->tval == TV_WAND)
 				{
-					if (randint(3) != 1) fail_type = 2;
+					if (!one_in_(3)) fail_type = 2;
 					else fail_type = 1;
 				}
 				/* 50% chance to blow up one staff, otherwise no effect. */
 				else if (o_ptr->tval == TV_STAFF)
 				{
-					if (randint(2) == 1) fail_type = 2;
+					if (one_in_(2)) fail_type = 2;
 					else fail_type = 0;
 				}
 			}
@@ -5771,13 +5771,13 @@ msg_format("魔力が逆流した！%sは完全に魔力を失った。", o_name);
 				/* 33% chance to blow up one rod, otherwise draining. */
 				if (o_ptr->tval == TV_ROD)
 				{
-					if (randint(3) == 1) fail_type = 2;
+					if (one_in_(3)) fail_type = 2;
 					else fail_type = 1;
 				}
 				/* 20% chance of the entire stack, else destroy one wand. */
 				else if (o_ptr->tval == TV_WAND)
 				{
-					if (randint(5) == 1) fail_type = 3;
+					if (one_in_(5)) fail_type = 3;
 					else fail_type = 2;
 				}
 				/* Blow up one staff. */

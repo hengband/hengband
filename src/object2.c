@@ -620,7 +620,7 @@ s16b get_obj_num(int level)
 	if ((level > 0) && !(d_info[dungeon_type].flags1 & DF1_BEGINNER))
 	{
 		/* Occasional "boost" */
-		if (rand_int(GREAT_OBJ) == 0)
+		if (one_in_(GREAT_OBJ))
 		{
 			/* What a bizarre calculation */
 			level = 1 + (level * MAX_DEPTH / randint(MAX_DEPTH));
@@ -2051,11 +2051,11 @@ static bool make_artifact_special(object_type *o_ptr)
 			int d = (a_ptr->level - dun_level) * 2;
 
 			/* Roll for out-of-depth creation */
-			if (rand_int(d) != 0) continue;
+			if (!one_in_(d)) continue;
 		}
 
 		/* Artifact "rarity roll" */
-		if (rand_int(a_ptr->rarity) != 0) continue;
+		if (!one_in_(a_ptr->rarity)) continue;
 
 		/* Find the base object */
 		k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
@@ -2067,7 +2067,7 @@ static bool make_artifact_special(object_type *o_ptr)
 			int d = (k_info[k_idx].level - object_level) * 5;
 
 			/* Roll for out-of-depth creation */
-			if (rand_int(d) != 0) continue;
+			if (!one_in_(d)) continue;
 		}
 
 		/* Assign the template */
@@ -2132,11 +2132,11 @@ static bool make_artifact(object_type *o_ptr)
 			int d = (a_ptr->level - dun_level) * 2;
 
 			/* Roll for out-of-depth creation */
-			if (rand_int(d) != 0) continue;
+			if (!one_in_(d)) continue;
 		}
 
 		/* We must make the "rarity roll" */
-		if (rand_int(a_ptr->rarity) != 0) continue;
+		if (!one_in_(a_ptr->rarity)) continue;
 
 		/* Hack -- mark the item as an artifact */
 		o_ptr->name1 = i;
@@ -2263,7 +2263,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 			/* Very good */
 			if (power > 1)
 			{
-				if (randint(30) == 1)
+				if (one_in_(30))
 					create_artifact(o_ptr, FALSE);
 				else
 					/* Special Ego-item */
@@ -2314,11 +2314,11 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 				switch (o_ptr->name2)
 				{
 				case EGO_HA:
-					if ((randint(4) == 1) && (level > 40))
+					if (one_in_(4) && (level > 40))
 						o_ptr->art_flags1 |= TR1_BLOWS;
 					break;
 				case EGO_DF:
-					if (randint(3) == 1)
+					if (one_in_(3))
 						o_ptr->art_flags2 |= TR2_RES_POIS;
 					random_resistance(o_ptr, FALSE, randint(22)+16);
 					break;
@@ -2327,18 +2327,18 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 					break;
 				case EGO_KILL_DRAGON:
 					random_resistance(o_ptr, FALSE, randint(12) + 4);
-					if (randint(3) == 1)
+					if (one_in_(3))
 						o_ptr->art_flags2 |= TR2_RES_POIS;
 					random_resistance(o_ptr, FALSE, randint(14) + 4);
 				case EGO_WEST:
-					if (randint(3) == 1)
+					if (one_in_(3))
 						o_ptr->art_flags2 |= TR2_RES_FEAR;
 					break;
 				case EGO_CHAOTIC:
 					random_resistance(o_ptr, FALSE, (randint(34) + 4));
 					break;
 				case EGO_SLAYING_WEAPON:
-					if (randint(3) == 1) /* double damage */
+					if (one_in_(3)) /* double damage */
 						o_ptr->dd *= 2;
 					else
 					{
@@ -2346,35 +2346,35 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 						{
 							o_ptr->dd++;
 						}
-						while (randint(o_ptr->dd) == 1);
+						while (one_in_(o_ptr->dd));
 						
 						do
 						{
 							o_ptr->ds++;
 						}
-						while (randint(o_ptr->ds) == 1);
+						while (one_in_(o_ptr->ds));
 					}
 					
-					if (randint(5) == 1)
+					if (one_in_(5))
 					{
 						o_ptr->art_flags1 |= TR1_BRAND_POIS;
 					}
-					if (o_ptr->tval == TV_SWORD && (randint(3) == 1))
+					if (o_ptr->tval == TV_SWORD && one_in_(3))
 					{
 						o_ptr->art_flags1 |= TR1_VORPAL;
 					}
 					break;
 				case EGO_TRUMP:
 					random_resistance(o_ptr, FALSE, (randint(22) + 16));
-					if (randint(5) == 1)
+					if (one_in_(5))
 						o_ptr->art_flags1 |= TR1_SLAY_DEMON;
 					break;
 				case EGO_PATTERN:
-					if (randint(3) == 1)
+					if (one_in_(3))
 						o_ptr->art_flags2 |= TR2_HOLD_LIFE;
-					if (randint(3) == 1)
+					if (one_in_(3))
 						o_ptr->art_flags1 |= TR1_DEX;
-					if (randint(5) == 1)
+					if (one_in_(5))
 						o_ptr->art_flags2 |= TR2_RES_FEAR;
 					random_resistance(o_ptr, FALSE, (randint(22) + 16));
 					break;
@@ -2382,7 +2382,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 					o_ptr->pval = m_bonus(5, level) + 1;
 					break;
 				case EGO_EARTHQUAKES:
-					if ((randint(3) == 1) && (level > 60))
+					if (one_in_(3) && (level > 60))
 						o_ptr->art_flags1 |= TR1_BLOWS;
 					else
 						o_ptr->pval = m_bonus(3, level);
@@ -2392,7 +2392,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 				if (!o_ptr->art_name)
 				{
 					/* Hack -- Super-charge the damage dice */
-					while (rand_int(10L * o_ptr->dd * o_ptr->ds) == 0) o_ptr->dd++;
+					while (one_in_(10L * o_ptr->dd * o_ptr->ds)) o_ptr->dd++;
 
 					/* Hack -- Lower the damage dice */
 					if (o_ptr->dd > 9) o_ptr->dd = 9;
@@ -2459,7 +2459,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 				}
 
 				/* Hack -- super-charge the damage dice */
-				while (rand_int(10L * o_ptr->dd * o_ptr->ds) == 0) o_ptr->dd++;
+				while (one_in_(10L * o_ptr->dd * o_ptr->ds)) o_ptr->dd++;
 
 				/* Hack -- restrict the damage dice */
 				if (o_ptr->dd > 9) o_ptr->dd = 9;
@@ -2487,12 +2487,12 @@ static void dragon_resist(object_type * o_ptr)
 	{
 		artifact_bias = 0;
 
-		if (randint(4) == 1)
+		if (one_in_(4))
 			random_resistance(o_ptr, FALSE, (randint(14) + 4));
 		else
 			random_resistance(o_ptr, FALSE, (randint(22) + 16));
 	}
-	while (randint(2) == 1);
+	while (one_in_(2));
 }
 
 
@@ -2549,7 +2549,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 		{
 			/* Rating boost */
 			rating += 30;
-			if(rand_int(50) == 1)
+			if(one_in_(50))
 				create_artifact(o_ptr, FALSE);
 
 			/* Mention the item */
@@ -2609,7 +2609,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 						}
 						else
 						{
-							if (randint(4) == 1)
+							if (one_in_(4))
 								o_ptr->art_flags1 |= TR1_CON;
 							break;
 						}
@@ -2634,7 +2634,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 				/* Mention the item */
 				if (cheat_peek) object_mention(o_ptr);
 				dragon_resist(o_ptr);
-				if (randint(3) != 1) break;
+				if (!one_in_(3)) break;
 			}
 
 			/* Very good */
@@ -2672,7 +2672,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 				/* Mention the item */
 				if (cheat_peek) object_mention(o_ptr);
 				dragon_resist(o_ptr);
-				if (randint(3) != 1) break;
+				if (!one_in_(3)) break;
 			}
 			if (power > 1)
 			{
@@ -2710,7 +2710,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 				/* Mention the item */
 				if (cheat_peek) object_mention(o_ptr);
 				dragon_resist(o_ptr);
-				if (randint(3) != 1) break;
+				if (!one_in_(3)) break;
 			}
 			/* Very good */
 			if (power > 1)
@@ -2801,7 +2801,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 				/* Mention the item */
 				if (cheat_peek) object_mention(o_ptr);
 				dragon_resist(o_ptr);
-				if (randint(3) != 1) break;
+				if (!one_in_(3)) break;
 			}
 
 			/* Very good */
@@ -2993,7 +2993,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					{
 						random_resistance(o_ptr, FALSE, randint(20) + 18);
 					}
-					while (randint(4) == 1);
+					while (one_in_(4));
 
 					/* Bonus to armor class */
 					o_ptr->to_a = 10 + randint(5) + m_bonus(10, level);
@@ -3190,7 +3190,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					break;
 				}
 			}
-			if (randint(400) == 1 && (power > 0) && !(o_ptr->ident & IDENT_CURSED) && (level > 79))
+			if (one_in_(400) && (power > 0) && !(o_ptr->ident & IDENT_CURSED) && (level > 79))
 			{
 				o_ptr->pval = MIN(o_ptr->pval,4);
 				/* Randart amulet */
@@ -3452,8 +3452,8 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 
 				case SV_AMULET_RESISTANCE:
 				{
-					if (randint(3) == 1) random_resistance(o_ptr, FALSE, (randint(34) + 4));
-					if (randint(5) == 1) o_ptr->art_flags2 |= TR2_RES_POIS;
+					if (one_in_(3)) random_resistance(o_ptr, FALSE, (randint(34) + 4));
+					if (one_in_(5)) o_ptr->art_flags2 |= TR2_RES_POIS;
 				}
 				break;
 
@@ -3530,7 +3530,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					break;
 				}
 			}
-			if (randint(150) == 1 && (power > 0) && !(o_ptr->ident & IDENT_CURSED) && (level > 79))
+			if (one_in_(150) && (power > 0) && !(o_ptr->ident & IDENT_CURSED) && (level > 79))
 			{
 				o_ptr->pval = MIN(o_ptr->pval,4);
 				/* Randart amulet */
@@ -4259,7 +4259,7 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 			/* Trump weapon */
 			case EGO_TRUMP:
 			{
-				if (randint(7) == 1) o_ptr->xtra1 = EGO_XTRA_ABILITY;
+				if (one_in_(7)) o_ptr->xtra1 = EGO_XTRA_ABILITY;
 				break;
 			}
 
@@ -4506,7 +4506,7 @@ bool make_object(object_type *j_ptr, bool good, bool great)
 
 
 	/* Generate a special object, or a normal object */
-	if ((rand_int(prob) != 0) || !make_artifact_special(j_ptr))
+	if (!one_in_(prob) || !make_artifact_special(j_ptr))
 	{
 		int k_idx;
 
@@ -4671,7 +4671,7 @@ bool make_gold(object_type *j_ptr)
 	i = ((randint(object_level + 2) + 2) / 2) - 1;
 
 	/* Apply "extra" magic */
-	if (rand_int(GREAT_OBJ) == 0)
+	if (one_in_(GREAT_OBJ))
 	{
 		i += randint(object_level + 1);
 	}
@@ -4921,7 +4921,7 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 			if (s > bs) bn = 0;
 
 			/* Apply the randomizer to equivalent values */
-			if ((++bn >= 2) && (rand_int(bn) != 0)) continue;
+			if ((++bn >= 2) && !one_in_(bn)) continue;
 
 			/* Keep score */
 			bs = s;
@@ -6402,7 +6402,7 @@ bool process_frakir(int xx, int yy)
 	else old_damage = old_damage/2;
 
 	c_ptr = &cave[yy][xx];
-	if (((is_trap(c_ptr->feat) && !easy_disarm) || (c_ptr->info & CAVE_TRAP)) && randint(13)!=1)
+	if (((is_trap(c_ptr->feat) && !easy_disarm) || (c_ptr->info & CAVE_TRAP)) && !one_in_(13))
 	{
 		object_type *o_ptr = choose_warning_item();
 

@@ -94,7 +94,7 @@ void check_experience(void)
 			}
 			if (p_ptr->prace == RACE_BEASTMAN)
 			{
-				if (randint(5) == 1) level_mutation = TRUE;
+				if (one_in_(5)) level_mutation = TRUE;
 			}
 			level_inc_stat = TRUE;
 
@@ -811,7 +811,7 @@ msg_print("地面に落とされた。");
 	}
 
 	/* Drop a dead corpse? */
-	if ((randint(r_ptr->flags1 & RF1_UNIQUE ? 1 : 4) == 1) &&
+	if (one_in_(r_ptr->flags1 & RF1_UNIQUE ? 1 : 4) &&
 	    ((r_ptr->flags9 & RF9_DROP_CORPSE) ||
 	     (r_ptr->flags9 & RF9_DROP_SKELETON)) &&
 	    !(p_ptr->inside_arena || p_ptr->inside_battle || (m_ptr->smart & SM_CLONED) || ((m_ptr->r_idx == today_mon) && is_pet(m_ptr))))
@@ -834,11 +834,11 @@ msg_print("地面に落とされた。");
 			/* Lots of damage in one blow */
 			if ((0 - ((m_ptr->maxhp) / 4)) > m_ptr->hp)
 			{
-				if (randint(5) == 1) corpse = TRUE;
+				if (one_in_(5)) corpse = TRUE;
 			}
 			else
 			{
-				if (randint(5) != 1) corpse = TRUE;
+				if (!one_in_(5)) corpse = TRUE;
 			}
 		}
 
@@ -866,7 +866,7 @@ msg_print("地面に落とされた。");
 	if (m_ptr->r_idx == MON_DAWN &&
 	    !(p_ptr->inside_arena || p_ptr->inside_battle))
 	{
-		if (randint(7) != 1)
+		if (!one_in_(7))
 		{
 			int wy = py, wx = px;
 			int attempts = 100;
@@ -1129,7 +1129,7 @@ msg_print("地面に落とされた。");
 
 			if (m_ptr->r_idx == MON_OBERON)
 			{
-				if (randint(3) == 1)
+				if (one_in_(3))
 				{
 					a_idx = ART_THRAIN;
 					chance = 33;
@@ -1197,7 +1197,7 @@ msg_print("地面に落とされた。");
 			}
 			else if (m_ptr->r_idx == MON_SAURON)
 			{
-				if (randint(10) == 1)
+				if (one_in_(10))
 				{
 					a_idx = ART_POWER;
 					chance = 100;
@@ -1210,7 +1210,7 @@ msg_print("地面に落とされた。");
 			}
 			else if (m_ptr->r_idx == MON_BRAND)
 			{
-				if (randint(3) != 1)
+				if (!one_in_(3))
 				{
 					a_idx = ART_BRAND;
 					chance = 25;
@@ -1223,7 +1223,7 @@ msg_print("地面に落とされた。");
 			}
 			else if (m_ptr->r_idx == MON_CORWIN)
 			{
-				if (randint(3) != 1)
+				if (!one_in_(3))
 				{
 					a_idx = ART_GRAYSWANDIR;
 					chance = 33;
@@ -1511,7 +1511,7 @@ int mon_damage_mod(monster_type *m_ptr, int dam, bool is_psy_spear)
 	if ((r_ptr->flags3 & RF3_RES_ALL) && dam > 0)
 	{
 		dam /= 100;
-		if((dam == 0) && (randint(3) == 1)) dam = 1;
+		if((dam == 0) && one_in_(3)) dam = 1;
 	}
 
 	if (m_ptr->invulner)
@@ -1527,7 +1527,7 @@ msg_print("バリアを切り裂いた！");
 #endif
 			}
 		}
-		else if (!(randint(PENETRATE_INVULNERABILITY) == 1))
+		else if (!one_in_(PENETRATE_INVULNERABILITY))
 		{
 			return (0);
 		}
@@ -1721,7 +1721,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 		monster_desc(m_name, m_ptr, 0x100);
 
 		/* Don't kill Amberites */
-		if ((r_ptr->flags3 & RF3_AMBERITE) && (randint(2) == 1))
+		if ((r_ptr->flags3 & RF3_AMBERITE) && one_in_(2))
 		{
 			int curses = 1 + randint(3);
 			bool stop_ty = FALSE;
@@ -1794,7 +1794,7 @@ msg_format("%^sは恐ろしい血の呪いをあなたにかけた！", m_name);
 			chg_virtue(V_VITALITY, -2);
 		}
 
-		if ((r_ptr->flags1 & RF1_UNIQUE) & (randint(3)==1))
+		if ((r_ptr->flags1 & RF1_UNIQUE) && one_in_(3))
 			chg_virtue(V_INDIVIDUALISM, -1);
 
 		if (m_ptr->r_idx == MON_BEGGAR || m_ptr->r_idx == MON_LEPER)
@@ -1873,7 +1873,7 @@ msg_format("%^sは恐ろしい血の呪いをあなたにかけた！", m_name);
 
 		if ((r_ptr->flags3 & RF3_ANIMAL) && !(r_ptr->flags3 & RF3_EVIL) && !(r_ptr->flags4 & ~(RF4_NOMAGIC_MASK))  && !(r_ptr->flags5 & ~(RF5_NOMAGIC_MASK)) && !(r_ptr->flags6 & ~(RF6_NOMAGIC_MASK)))
 		{
-			if (randint(4)==1) chg_virtue(V_NATURE, -1);
+			if (one_in_(4)) chg_virtue(V_NATURE, -1);
 		}
 
 		if((r_ptr->flags1 & RF1_UNIQUE) && record_destroy_uniq)
@@ -4423,7 +4423,7 @@ void gain_level_reward(int chosen_reward)
 	else if (!(p_ptr->lev % 13)) nasty_chance = 3;
 	else if (!(p_ptr->lev % 14)) nasty_chance = 12;
 
-	if (randint(nasty_chance) == 1)
+	if (one_in_(nasty_chance))
 		type = randint(20); /* Allow the 'nasty' effects */
 	else
 		type = randint(15) + 5; /* Or disallow them */
@@ -4444,7 +4444,7 @@ sprintf(wrath_reason, "%sの怒り",
 
 	effect = chaos_rewards[p_ptr->chaos_patron][type];
 
-	if ((randint(6) == 1) && !chosen_reward)
+	if (one_in_(6) && !chosen_reward)
 	{
 #ifdef JP
 msg_format("%^sは褒美としてあなたを突然変異させた。",
@@ -4874,7 +4874,7 @@ msg_print("「留まるのだ、下僕よ。余が汝の肉体を鍛えん。」");
 			msg_print("'Stay, mortal, and let me mold thee.'");
 #endif
 
-			if ((randint(3) == 1) && !(chaos_stats[p_ptr->chaos_patron] < 0))
+			if (one_in_(3) && !(chaos_stats[p_ptr->chaos_patron] < 0))
 				do_inc_stat(chaos_stats[p_ptr->chaos_patron]);
 			else
 				do_inc_stat(rand_int(6));
@@ -4899,7 +4899,7 @@ msg_print("「下僕よ、余は汝に飽みたり。」");
 			msg_print("'I grow tired of thee, mortal.'");
 #endif
 
-			if ((randint(3) == 1) && !(chaos_stats[p_ptr->chaos_patron] < 0))
+			if (one_in_(3) && !(chaos_stats[p_ptr->chaos_patron] < 0))
 				do_dec_stat(chaos_stats[p_ptr->chaos_patron]);
 			else
 				(void)do_dec_stat(rand_int(6));
@@ -5114,7 +5114,7 @@ msg_print("「我を怒りしめた罪を償うべし。」");
 #endif
 					break;
 				case 3:
-					if (randint(2) == 1)
+					if (one_in_(2))
 					{
 						if (!buki_motteruka(INVEN_RARM)) break;
 						object_desc(o_name, &inventory[INVEN_RARM], TRUE, 0);
@@ -5171,8 +5171,8 @@ msg_print("「死ぬがよい、下僕よ！」");
 			}
 			activate_hi_summon(py, px, FALSE);
 			(void)activate_ty_curse(FALSE, &count);
-			if (randint(2) == 1) (void)curse_weapon(FALSE, INVEN_RARM);
-			if (randint(2) == 1) (void)curse_armor();
+			if (one_in_(2)) (void)curse_weapon(FALSE, INVEN_RARM);
+			if (one_in_(2)) (void)curse_armor();
 			break;
 		case REW_DESTRUCT:
 #ifdef JP

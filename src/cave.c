@@ -1495,7 +1495,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 					}
 					else
 					{
-						(*cp) = (randint(25) == 1 ?
+						(*cp) = (one_in_(25) ?
 							image_object_hack[rand_int(strlen(image_object_hack))] :
 							image_monster_hack[rand_int(strlen(image_monster_hack))]);
 					}

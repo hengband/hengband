@@ -352,7 +352,7 @@ static void build_type1(int by0, int bx0)
 
 
 	/* Hack -- Occasional pillar room */
-	if (rand_int(20) == 0)
+	if (one_in_(20))
 	{
 		for (y = y1; y <= y2; y += 2)
 		{
@@ -365,7 +365,7 @@ static void build_type1(int by0, int bx0)
 	}
 
 	/* Hack -- Occasional room with four pillars */
-	else if (rand_int(20) == 0)
+	else if (one_in_(20))
 	{
 		if ((y1 + 4 < y2) && (x1 + 4 < x2))
 		{
@@ -384,7 +384,7 @@ static void build_type1(int by0, int bx0)
 	}
 
 	/* Hack -- Occasional ragged-edge room */
-	else if (rand_int(50) == 0)
+	else if (one_in_(50))
 	{
 		for (y = y1 + 2; y <= y2 - 2; y += 2)
 		{
@@ -402,7 +402,7 @@ static void build_type1(int by0, int bx0)
 		}
 	}
 	/* Hack -- Occasional divided room */
-	else if (rand_int(50) == 0)
+	else if (one_in_(50))
 	{
 		if (randint(100) < 50)
 		{
@@ -739,7 +739,7 @@ static void build_type3(int by0, int bx0)
 		case 3:
 		{
 			/* Occasionally pinch the center shut */
-			if (rand_int(3) == 0)
+			if (one_in_(3))
 			{
 				/* Pinch the east/west sides */
 				for (y = y1b; y <= y2b; y++)
@@ -762,7 +762,7 @@ static void build_type3(int by0, int bx0)
 				}
 
 				/* Sometimes shut using secret doors */
-				if (rand_int(3) == 0)
+				if (one_in_(3))
 				{
 					place_secret_door(yval, x1a - 1);
 					place_secret_door(yval, x2a + 1);
@@ -772,7 +772,7 @@ static void build_type3(int by0, int bx0)
 			}
 
 			/* Occasionally put a "plus" in the center */
-			else if (rand_int(3) == 0)
+			else if (one_in_(3))
 			{
 				c_ptr = &cave[yval][xval];
 				place_inner_grid(c_ptr);
@@ -787,7 +787,7 @@ static void build_type3(int by0, int bx0)
 			}
 
 			/* Occasionally put a pillar in the center */
-			else if (rand_int(3) == 0)
+			else if (one_in_(3))
 			{
 				c_ptr = &cave[yval][xval];
 				place_inner_grid(c_ptr);
@@ -978,7 +978,7 @@ static void build_type4(int by0, int bx0)
 			}
 
 			/* Occasionally, two more Large Inner Pillars */
-			if (rand_int(2) == 0)
+			if (one_in_(2))
 			{
 				tmp = randint(2);
 				for (y = yval - 1; y <= yval + 1; y++)
@@ -997,7 +997,7 @@ static void build_type4(int by0, int bx0)
 			}
 
 			/* Occasionally, some Inner rooms */
-			if (rand_int(3) == 0)
+			if (one_in_(3))
 			{
 				/* Long horizontal walls */
 				for (x = xval - 5; x <= xval + 5; x++)
@@ -1023,8 +1023,8 @@ static void build_type4(int by0, int bx0)
 				vault_monsters(yval, xval + 2, randint(2));
 
 				/* Objects */
-				if (rand_int(3) == 0) place_object(yval, xval - 2, FALSE, FALSE);
-				if (rand_int(3) == 0) place_object(yval, xval + 2, FALSE, FALSE);
+				if (one_in_(3)) place_object(yval, xval - 2, FALSE, FALSE);
+				if (one_in_(3)) place_object(yval, xval + 2, FALSE, FALSE);
 			}
 
 			break;
@@ -4115,7 +4115,7 @@ static void r_visit(int y1, int x1, int y2, int x2,
 	place_floor_bold(y, x);
 
 	/* setup order of adjacent node visits */
-	if (rand_int(3) == 0)
+	if (one_in_(3))
 	{
 		/* pick a random ordering */
 		for (i = 0; i < 4; i++)
@@ -4356,7 +4356,7 @@ static void build_mini_c_vault(int x0, int y0, int xsize, int ysize)
 	}
 
 	/* Make a couple of entrances */
-	if (randint(2) == 1)
+	if (one_in_(2))
 	{
 		/* left and right */
 		y = randint(dy) + dy / 2;
@@ -4447,7 +4447,7 @@ static void build_recursive_room(int x1, int y1, int x2, int y2, int power)
 			}
 
 			/* Make a couple of entrances */
-			if (randint(2) == 1)
+			if (one_in_(2))
 			{
 				/* left and right */
 				y = randint(ysize) + y1;
@@ -4524,7 +4524,7 @@ static void build_recursive_room(int x1, int y1, int x2, int y2, int power)
 			/* Make a door */
 			y = randint(ysize - 3) + y1 + 1;
 
-			if (randint(2) == 1)
+			if (one_in_(2))
 			{
 				/* left */
 				place_floor_bold(y, x1 + 1);
@@ -5091,7 +5091,7 @@ static void build_type12(int by0, int bx0)
 		}
 	}
 
-	if (emptyflag && (randint(2) == 1))
+	if (emptyflag && one_in_(2))
 	{
 		/* Build the vault */
 		build_small_room(x0, y0);

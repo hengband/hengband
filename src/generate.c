@@ -446,7 +446,7 @@ static bool cave_gen(void)
 	dun_tun_jct = rand_range(DUN_TUN_JCT_MIN, DUN_TUN_JCT_MAX);
 
 	/* Empty arena levels */
-	if (ironman_empty_levels || ((d_info[dungeon_type].flags1 & DF1_ARENA) && (empty_levels && (randint(EMPTY_LEVEL) == 1))))
+	if (ironman_empty_levels || ((d_info[dungeon_type].flags1 & DF1_ARENA) && (empty_levels && one_in_(EMPTY_LEVEL))))
 	{
 		empty_level = TRUE;
 
@@ -481,7 +481,7 @@ msg_print("アリーナレベル");
 
 #ifdef ALLOW_CAVERNS_AND_LAKES
 	/* Possible "destroyed" level */
-	if ((dun_level > 30) && (rand_int(DUN_DEST*2) == 0) && (small_levels) && (d_info[dungeon_type].flags1 & DF1_DESTROY))
+	if ((dun_level > 30) && one_in_(DUN_DEST*2) && (small_levels) && (d_info[dungeon_type].flags1 & DF1_DESTROY))
 	{
 		destroyed = TRUE;
 
@@ -490,7 +490,7 @@ msg_print("アリーナレベル");
 	}
 
 	/* Make a lake some of the time */
-	if ((rand_int(LAKE_LEVEL) == 0) && !empty_level && !destroyed &&
+	if (one_in_(LAKE_LEVEL) && !empty_level && !destroyed &&
 	    (d_info[dungeon_type].flags1 & DF1_LAKE_MASK))
 	{
 		int count = 0;
@@ -723,7 +723,7 @@ if (cheat_room) msg_print("小さな地下室を却下します。");
 	/* Make a hole in the dungeon roof sometimes at level 1 */
 	if ((dun_level == 1) && terrain_streams)
 	{
-		while (randint(DUN_MOS_DEN) == 1)
+		while (one_in_(DUN_MOS_DEN))
 		{
 			place_trees(randint(cur_wid - 2), randint(cur_hgt - 2));
 		}
@@ -733,7 +733,7 @@ if (cheat_room) msg_print("小さな地下室を却下します。");
 	if (destroyed) destroy_level();
 
 	/* Hack -- Add some rivers */
-	if ((randint(3) == 1) && (randint(dun_level) > 5) && terrain_streams)
+	if (one_in_(3) && (randint(dun_level) > 5) && terrain_streams)
 	{
 	 	/* Choose water or lava */
 		if ((randint(MAX_DEPTH * 2) - 1 > dun_level) && (d_info[dungeon_type].flags1 & DF1_WATER_RIVER))
@@ -1077,7 +1077,7 @@ msg_format("モンスター数基本値を %d から %d に減らします", small_tester, i);
                 }
 	}
 
-	if ((empty_level && ((randint(DARK_EMPTY) != 1) || (randint(100) > dun_level))) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS))
+	if ((empty_level && (!one_in_(DARK_EMPTY) || (randint(100) > dun_level))) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS))
 	{
 		/* Lite the cave */
 		for (y = 0; y < cur_hgt; y++)
@@ -1354,7 +1354,7 @@ static bool level_gen(cptr *why)
 	int level_height, level_width;
 
 	if ((always_small_levels || ironman_small_levels ||
-	    ((randint(SMALL_LEVEL) == 1) && small_levels) ||
+	    (one_in_(SMALL_LEVEL) && small_levels) ||
 	     (d_info[dungeon_type].flags1 & DF1_BEGINNER) ||
 	    (d_info[dungeon_type].flags1 & DF1_SMALLEST)) &&
 	    !(d_info[dungeon_type].flags1 & DF1_BIG))

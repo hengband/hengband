@@ -1817,7 +1817,7 @@ msg_print("¥Þ¥¸¥Ã¥¯¡¦¥ß¥µ¥¤¥ë¤òÊü¤Ã¤¿¡£");
 		case RACE_DRACONIAN:
 			if (racial_aux(1, plev, A_CON, 12))
 			{
-				int  Type = ((randint(3) == 1) ? GF_COLD : GF_FIRE);
+				int  Type = (one_in_(3) ? GF_COLD : GF_FIRE);
 #ifdef JP
 cptr Type_desc = ((Type == GF_COLD) ? "Îäµ¤" : "±ê");
 #else
@@ -1836,7 +1836,7 @@ cptr Type_desc = ((Type == GF_COLD) ? "Îäµ¤" : "±ê");
 						case CLASS_IMITATOR:
 						case CLASS_ARCHER:
 						case CLASS_SMITH:
-							if (randint(3) == 1)
+							if (one_in_(3))
 							{
 								Type = GF_MISSILE;
 #ifdef JP
@@ -1865,7 +1865,7 @@ Type_desc = "ÇËÊÒ";
 						case CLASS_RED_MAGE:
 						case CLASS_BLUE_MAGE:
 						case CLASS_MIRROR_MASTER:
-							if (randint(3) == 1)
+							if (one_in_(3))
 							{
 								Type = GF_MANA;
 #ifdef JP
@@ -1887,7 +1887,7 @@ Type_desc = "Îô²½";
 							}
 							break;
 						case CLASS_CHAOS_WARRIOR:
-							if (randint(3) != 1)
+							if (!one_in_(3))
 							{
 								Type = GF_CONFUSION;
 #ifdef JP
@@ -1911,7 +1911,7 @@ Type_desc = "¥«¥ª¥¹";
 						case CLASS_MONK:
 						case CLASS_SAMURAI:
 						case CLASS_FORCETRAINER:
-							if (randint(3) != 1)
+							if (!one_in_(3))
 							{
 								Type = GF_CONFUSION;
 #ifdef JP
@@ -1933,7 +1933,7 @@ Type_desc = "¹ì²»";
 							}
 							break;
 						case CLASS_MINDCRAFTER:
-							if (randint(3) != 1)
+							if (!one_in_(3))
 							{
 								Type = GF_CONFUSION;
 #ifdef JP
@@ -1956,7 +1956,7 @@ Type_desc = "Àº¿À¥¨¥Í¥ë¥®¡¼";
 							break;
 						case CLASS_PRIEST:
 						case CLASS_PALADIN:
-							if (randint(3) == 1)
+							if (one_in_(3))
 							{
 								Type = GF_HELL_FIRE;
 #ifdef JP
@@ -1979,7 +1979,7 @@ Type_desc = "À»¤Ê¤ë±ê";
 							break;
 						case CLASS_ROGUE:
 						case CLASS_NINJA:
-							if (randint(3) == 1)
+							if (one_in_(3))
 							{
 								Type = GF_DARK;
 #ifdef JP
@@ -2001,7 +2001,7 @@ Type_desc = "ÆÇ";
 							}
 							break;
 						case CLASS_BARD:
-							if (randint(3) != 1)
+							if (!one_in_(3))
 							{
 								Type = GF_SOUND;
 #ifdef JP

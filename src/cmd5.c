@@ -773,7 +773,7 @@ s = "ÆÉ¤á¤ëËÜ¤¬¤Ê¤¤¡£";
 				k++;
 
 				/* Hack -- Apply the randomizer */
-				if (rand_int(k) == 0) gift = spell;
+				if (one_in_(k)) gift = spell;
 			}
 		}
 
@@ -1823,7 +1823,7 @@ msg_print("¥í¥±¥Ã¥ÈÈ¯¼Í¡ª");
 		break;
 	case 23: /* Summon monster, demon */
 		{
-			bool pet = (randint(3) == 1);
+			bool pet = one_in_(3);
 			bool group = !(pet && (plev < 50));
 
 			if (summon_specific((pet ? -1 : 0), py, px, (plev * 3) / 2, SUMMON_DEMON, group, FALSE, pet, FALSE, (bool)(!pet)))
@@ -1955,7 +1955,7 @@ static bool cast_death_spell(int spell)
 		fire_ball(GF_HELL_FIRE, dir,
 			damroll(3 + ((plev - 1) / 5), 4), 0);
 
-		if (randint(5) == 1)
+		if (one_in_(5))
 		{   /* Special effect first */
 			dummy = randint(1000);
 			if (dummy == 666)
@@ -2258,14 +2258,14 @@ msg_print("±¢±µ¤ÊÀ¼¤¬¥¯¥¹¥¯¥¹¾Ð¤¦¡£¡Ö¤â¤¦¤¹¤°¤ª¤Þ¤¨¤Ï²æ¡¹¤ÎÃç´Ö¤Ë¤Ê¤ë¤À¤í¤¦¡£¼å¤
 		break;
 	case 25: /* Raise the Dead */
 		{
-			bool pet = (randint(3) == 1);
+			bool pet = one_in_(3);
 			bool group;
 			int type;
 
 			type = (plev > 47 ? SUMMON_HI_UNDEAD : SUMMON_UNDEAD);
 			if (pet)
 			{
-				group = (((plev > 24) && (randint(3) == 1)) ? TRUE : FALSE);
+				group = (((plev > 24) && one_in_(3)) ? TRUE : FALSE);
 			}
 			else
 			{
@@ -3028,7 +3028,7 @@ msg_print("¾¤´Ô¤µ¤ì¤¿¥Ï¥¦¥ó¥É¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
 		case 22: /* Living Trump */
 			if (success)
 			{
-				if (randint(7) == 1)
+				if (one_in_(7))
 					/* Teleport control */
 					dummy = 12;
 				else
@@ -3585,7 +3585,7 @@ msg_print("¥´¡¼¥ì¥à¤òºî¤Ã¤¿¡£");
 		brand_weapon(rand_int(17));
 		break;
 	case 30: /* Living Trump */
-		if (randint(7) == 1)
+		if (one_in_(7))
 			/* Teleport control */
 			dummy = 12;
 		else
@@ -3725,7 +3725,7 @@ msg_print("¸ÅÂå¤Î»àÎî¤Ï¸½¤ì¤Ê¤«¤Ã¤¿¡£");
 		break;
 	case 15: /* Summon monster, demon */
 	{
-		bool pet = (randint(3) != 1);
+		bool pet = !one_in_(3);
 		bool group = !(pet && (plev < 50));
 
 		if (summon_specific((pet ? -1 : 0), py, px, plev*2/3+randint(plev/2), SUMMON_DEMON, group, FALSE, pet, FALSE, (bool)(!pet)))
@@ -4612,7 +4612,7 @@ msg_print("¥«¥ª¥¹Åª¤Ê¸ú²Ì¤òÈ¯À¸¤·¤¿¡ª");
 		}
 		else if ((o_ptr->tval == TV_DEATH_BOOK) && (randint(100) < spell))
 		{
-			if ((sval == 3) && (randint(2) == 1))
+			if ((sval == 3) && one_in_(2))
 			{
 				sanity_blast(0, TRUE);
 			}
@@ -4630,7 +4630,7 @@ msg_print("¥«¥ª¥¹Åª¤Ê¸ú²Ì¤òÈ¯À¸¤·¤¿¡ª");
 				take_hit(DAMAGE_LOSELIFE, damroll(o_ptr->sval + 1, 6), "a miscast Death spell", -1);
 #endif
 
-				if ((spell > 15) && (randint(6) == 1) && !p_ptr->hold_life)
+				if ((spell > 15) && one_in_(6) && !p_ptr->hold_life)
 					lose_exp(spell * 250);
 			}
 		}

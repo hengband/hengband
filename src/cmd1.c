@@ -1865,7 +1865,7 @@ static void hit_trap(bool break_trap)
 				{
 					stop_ty = activate_ty_curse(stop_ty, &count);
 				}
-				while (randint(6) == 1);
+				while (one_in_(6));
 			}
 			break;
 		}
@@ -2545,7 +2545,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 		{
 			if (p_ptr->migite && p_ptr->hidarite)
 			{
-				success_hit = (randint(2) == 1);
+				success_hit = one_in_(2);
 			}
 			else success_hit = TRUE;
 		}
@@ -2610,9 +2610,9 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 			object_flags(o_ptr, &f1, &f2, &f3);
 
 			/* Select a chaotic effect (50% chance) */
-			if ((f1 & TR1_CHAOTIC) && (randint(2) == 1))
+			if ((f1 & TR1_CHAOTIC) && one_in_(2))
 			{
-				if (randint(10)==1)
+				if (one_in_(10))
 				chg_virtue(V_CHANCE, 1);
 
 				if (randint(5) < 3)
@@ -2620,17 +2620,17 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 					/* Vampiric (20%) */
 					chaos_effect = 1;
 				}
-				else if (randint(250) == 1)
+				else if (one_in_(250))
 				{
 					/* Quake (0.12%) */
 					chaos_effect = 2;
 				}
-				else if (randint(10) != 1)
+				else if (!one_in_(10))
 				{
 					/* Confusion (26.892%) */
 					chaos_effect = 3;
 				}
-				else if (randint(2) == 1)
+				else if (one_in_(2))
 				{
 					/* Teleport away (1.494%) */
 					chaos_effect = 4;
@@ -2840,7 +2840,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 					k = (3 * k) / 2;
 				}
 
-				if ((p_ptr->impact[hand] && ((k > 50) || randint(7) == 1)) ||
+				if ((p_ptr->impact[hand] && ((k > 50) || one_in_(7))) ||
 					 (chaos_effect == 2) || (mode == HISSATSU_QUAKE))
 				{
 					do_quake = TRUE;
@@ -2857,7 +2857,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 
 					int inc_chance = (o_ptr->name1 == ART_VORPAL_BLADE) ? 2 : 4;
 
-					if ((o_ptr->name1 == ART_CHAINSWORD) && (randint(2) != 1))
+					if ((o_ptr->name1 == ART_CHAINSWORD) && !one_in_(2))
 					{
 						char chainsword_noise[1024];
 #ifdef JP
@@ -3069,7 +3069,7 @@ msg_format("刃が%sに深々と突き刺さった！", m_name);
 					msg_format("You critically injured %s!", m_name);
 #endif
 				}
-				else if (((m_ptr->hp < maxhp/2) && one_in_((p_ptr->num_blow[0]+p_ptr->num_blow[1]+1)*10)) || (((one_in_(666)) || ((backstab || fuiuchi) && one_in_(11))) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2)))
+				else if (((m_ptr->hp < maxhp/2) && one_in_((p_ptr->num_blow[0]+p_ptr->num_blow[1]+1)*10)) || ((one_in_(666) || ((backstab || fuiuchi) && one_in_(11))) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2)))
 				{
 					if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_UNIQUE2) || (m_ptr->hp >= maxhp/2))
 					{
@@ -3393,7 +3393,7 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 			backstab = FALSE; /* Clumsy! */
 			fuiuchi = FALSE; /* Clumsy! */
 
-			if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE) && (randint(3) == 1))
+			if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE) && one_in_(3))
 			{
 				u32b f1, f2, f3;
 
@@ -3478,7 +3478,7 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 				}
 
 				k = critical_norm(o_ptr->weight, o_ptr->to_h, k, p_ptr->to_h[hand], mode);
-				if (randint(6) == 1)
+				if (one_in_(6))
 				{
 					int mult = 2;
 #ifdef JP
@@ -3524,7 +3524,7 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 
 	if (drain_left != MAX_VAMPIRIC_DRAIN)
 	{
-		if (randint(4)==1)
+		if (one_in_(4))
 		{
 			chg_virtue(V_UNLIFE, 1);
 		}

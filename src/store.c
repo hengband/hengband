@@ -319,7 +319,7 @@ static void say_comment_1(void)
 #endif
 
 
-	if (randint(RUMOR_CHANCE) == 1)
+	if (one_in_(RUMOR_CHANCE))
 	{
 #ifdef JP
 msg_print("店主は耳うちした:");
@@ -570,7 +570,7 @@ static void purchase_analyze(s32b price, s32b value, s32b guess)
 		msg_print(comment_7b[rand_int(MAX_COMMENT_7B)]);
 
 		chg_virtue(V_JUSTICE, -1);
-		if (randint(4)==1)
+		if (one_in_(4))
 			chg_virtue(V_HONOUR, -1);
 
 		/* Sound */
@@ -583,9 +583,9 @@ static void purchase_analyze(s32b price, s32b value, s32b guess)
 		/* Comment */
 		msg_print(comment_7c[rand_int(MAX_COMMENT_7C)]);
 
-		if (randint(4)==1)
+		if (one_in_(4))
 			chg_virtue(V_HONOUR, -1);
-		else if (randint(4)==1)
+		else if (one_in_(4))
 			chg_virtue(V_HONOUR, 1);
 
 		/* Sound */
@@ -598,9 +598,9 @@ static void purchase_analyze(s32b price, s32b value, s32b guess)
 		/* Comment */
 		msg_print(comment_7d[rand_int(MAX_COMMENT_7D)]);
 
-		if (randint(2)==1)
+		if (one_in_(2))
 			chg_virtue(V_HONOUR, -1);
-		if (randint(4)==1)
+		if (one_in_(4))
 			chg_virtue(V_HONOUR, 1);
 
 		if (10 * price < value)
@@ -1067,7 +1067,7 @@ static void mass_produce(object_type *o_ptr)
 		case TV_WAND:
 		case TV_STAFF:
 		{
-			if ((cur_store_num == STORE_BLACK) && (randint(3) == 1))
+			if ((cur_store_num == STORE_BLACK) && one_in_(3))
 			{
 				if (cost < 1601L) size += damroll(1, 5);
 				else if (cost < 3201L) size += damroll(1, 3);
@@ -1088,19 +1088,19 @@ static void mass_produce(object_type *o_ptr)
 	{
 		discount = 0;
 	}
-	else if (rand_int(25) == 0)
+	else if (one_in_(25))
 	{
 		discount = 25;
 	}
-	else if (rand_int(150) == 0)
+	else if (one_in_(150))
 	{
 		discount = 50;
 	}
-	else if (rand_int(300) == 0)
+	else if (one_in_(300))
 	{
 		discount = 75;
 	}
-	else if (rand_int(500) == 0)
+	else if (one_in_(500))
 	{
 		discount = 90;
 	}
@@ -3421,7 +3421,7 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 				if (st_ptr->stock_num == 0)
 				{
 					/* Shuffle */
-					if (rand_int(STORE_SHUFFLE) == 0)
+					if (one_in_(STORE_SHUFFLE))
 					{
 						char buf[80];
 						/* Message */

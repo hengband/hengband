@@ -745,7 +745,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 	if (trap & (CHEST_H_SUMMON))
 	{
 		/* Summon demons. */
-		if (rand_int(4) == 0)
+		if (one_in_(4))
 		{
 #ifdef JP
 			msg_print("炎と硫黄の雲の中に悪魔が姿を現した！");
@@ -761,7 +761,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 		}
 
 		/* Summon dragons. */
-		else if (rand_int(3) == 0)
+		else if (one_in_(3))
 		{
 #ifdef JP
 			msg_print("暗闇にドラゴンの影がぼんやりと現れた！");
@@ -776,7 +776,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 		}
 
 		/* Summon hybrids. */
-		else if (rand_int(2) == 0)
+		else if (one_in_(2))
 		{
 #ifdef JP
 			msg_print("奇妙な姿の怪物が襲って来た！");
@@ -826,12 +826,12 @@ static void chest_trap(int y, int x, s16b o_idx)
 			if (randint(100+o_ptr->pval*2) > p_ptr->skill_sav)
 			{
 #ifdef JP
-				if (rand_int(6) == 0) take_hit(DAMAGE_NOESCAPE, damroll(5, 20), "破滅のトラップの宝箱", -1);
+				if (one_in_(6)) take_hit(DAMAGE_NOESCAPE, damroll(5, 20), "破滅のトラップの宝箱", -1);
 #else
-				if (rand_int(6) == 0) take_hit(DAMAGE_NOESCAPE, damroll(5, 20), "a chest dispel-player trap", -1);
+				if (one_in_(6)) take_hit(DAMAGE_NOESCAPE, damroll(5, 20), "a chest dispel-player trap", -1);
 #endif
-				else if (rand_int(5) == 0) (void)set_cut(p_ptr->cut + 200);
-				else if (rand_int(4) == 0)
+				else if (one_in_(5)) (void)set_cut(p_ptr->cut + 200);
+				else if (one_in_(4))
 				{
 					if (!p_ptr->free_act) 
 						(void)set_paralyzed(p_ptr->paralyzed + 2 + 
@@ -840,8 +840,8 @@ static void chest_trap(int y, int x, s16b o_idx)
 						(void)set_stun(p_ptr->stun + 10 + 
 						rand_int(100));
 				}
-				else if (rand_int(3) == 0) apply_disenchant(0);
-				else if (rand_int(2) == 0)
+				else if (one_in_(3)) apply_disenchant(0);
+				else if (one_in_(2))
 				{
 					(void)do_dec_stat(A_STR);
 					(void)do_dec_stat(A_DEX);
@@ -4596,7 +4596,7 @@ msg_print("これはあまり良くない気がする。");
 		if (super_boomerang) back_chance += 100;
 		object_desc(o2_name, q_ptr, FALSE, 0);
 
-		if((back_chance > 30) && ((randint(100) != 1) || super_boomerang))
+		if((back_chance > 30) && (!one_in_(100) || super_boomerang))
 		{
 			for (i = cur_dis-1;i>0;i--)
 			{

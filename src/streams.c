@@ -72,7 +72,7 @@ static void recursive_river(int x1, int y1, int x2, int y2, int feat1, int feat2
 		recursive_river(x1 + dx + changex, y1 + dy + changey, x2, y2, feat1, feat2, width);
 
 		/* Split the river some of the time - junctions look cool */
-		if ((randint(DUN_WAT_CHG) == 1) && (width > 0))
+		if (one_in_(DUN_WAT_CHG) && (width > 0))
 		{
 			recursive_river(x1 + dx + changex, y1 + dy + changey,
 			                x1 + 8 * (dx + changex), y1 + 8 * (dy + changey),
@@ -259,7 +259,7 @@ void build_streamer(int feat, int chance)
 			c_ptr->feat = feat;
 
 			/* Hack -- Add some (known) treasure */
-			if (treasure && (rand_int(chance) == 0)) c_ptr->feat += 0x04;
+			if (treasure && one_in_(chance)) c_ptr->feat += 0x04;
 		}
 
 		if (dummy >= SAFE_MAX_ATTEMPTS)
@@ -332,7 +332,7 @@ void place_trees(int x, int y)
 	}
 
 	/* No up stairs in ironman mode */
-	if (!ironman_downward && (randint(3) == 1))
+	if (!ironman_downward && one_in_(3))
 	{
 		/* up stair */
 		cave[y][x].feat = FEAT_LESS;

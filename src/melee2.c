@@ -237,7 +237,7 @@ msg_format("%^sはダメージを受けない。", m_name);
 		if(dam > 0)
 		{
 			dam /= 100;
-			if((dam == 0) && (randint(3) == 1)) dam = 1;
+			if((dam == 0) && one_in_(3)) dam = 1;
 		}
 		if (dam==0)
 		{
@@ -1954,7 +1954,7 @@ act = "%sにむかって歌った。";
 			case RBE_EAT_GOLD:
 				{
 					pt = damage = 0;
-					if (randint(2) == 1) blinked = TRUE;
+					if (one_in_(2)) blinked = TRUE;
 					break;
 				}
 
@@ -2850,7 +2850,7 @@ msg_format("%^sは勇気を取り戻した。", m_name);
 	{
 		/* Hack! "Cyber" monster makes noise... */
 		if (m_ptr->r_idx == MON_CYBER &&
-		    (randint(CYBERNOISE) == 1) &&
+		    one_in_(CYBERNOISE) &&
 		    !m_ptr->ml && (m_ptr->cdis <= MAX_SIGHT))
 		{
 			if (disturb_minor) disturb(FALSE, FALSE);
@@ -2864,7 +2864,7 @@ msg_print("重厚な足音が聞こえた。");
 
 		/* Some monsters can speak */
 		if ((r_ptr->flags2 & RF2_CAN_SPEAK) && aware &&
-			(randint(SPEAK_CHANCE) == 1) &&
+			one_in_(SPEAK_CHANCE) &&
 			player_has_los_bold(oy, ox))
 		{
 			char m_name[80];
@@ -3152,7 +3152,7 @@ msg_format("%^s%s", m_name, monmessage);
 			/* Monster destroyed a wall */
 			did_kill_wall = TRUE;
 
-			if (randint(GRINDNOISE) == 1)
+			if (one_in_(GRINDNOISE))
 			{
 #ifdef JP
 msg_print("ギシギシいう音が聞こえる。");
@@ -4165,7 +4165,7 @@ void monster_gain_exp(int m_idx, int s_idx)
 		if (!(r_ptr->flags1 & RF1_UNIQUE) && !p_ptr->inside_arena)
 		{
 			/* Allow some small variation per monster */
-		  if(rand_int(4) == 1){
+		  if(one_in_(4)){
 			i = extract_energy[r_ptr->speed] / 3;
 			if (i) m_ptr->mspeed += rand_spread(0, i);
 		  }

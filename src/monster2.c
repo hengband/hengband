@@ -1488,7 +1488,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 	/* Are we hallucinating? (Idea from Nethack...) */
 	if (p_ptr->image)
 	{
-		if (randint(2) == 1)
+		if (one_in_(2))
 		{
 #ifdef JP
 if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
@@ -1884,7 +1884,7 @@ msg_format("%s%sの顔を見てしまった！",
 
 				funny_desc[rand_int(MAX_SAN_FUNNY)], m_name);
 
-			if (randint(3) == 1)
+			if (one_in_(3))
 			{
 				msg_print(funny_comments[rand_int(MAX_SAN_COMMENT)]);
 				p_ptr->image = p_ptr->image + randint(r_ptr->level);
@@ -2564,7 +2564,7 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 	m_ptr->mspeed = r_ptr->speed;
 	/* Hack -- small racial variety */
 	/* Allow some small variation per monster */
-	if(rand_int(4) == 1){
+	if(one_in_(4)){
 		i = extract_energy[r_ptr->speed] / 3;
 		if (i) m_ptr->mspeed += rand_spread(0, i);
 	}
@@ -2897,7 +2897,7 @@ msg_print("守りのルーンが壊れた！");
 	if (!(r_ptr->flags1 & RF1_UNIQUE) && !p_ptr->inside_arena)
 	{
 		/* Allow some small variation per monster */
-	  if(rand_int(4) == 1){
+	  if(one_in_(4)){
 		i = extract_energy[r_ptr->speed] / 3;
 		if (i) m_ptr->mspeed += rand_spread(0, i);
 	  }
@@ -3596,11 +3596,11 @@ static bool summon_specific_okay(int r_idx)
 		/* Do not summon enemies of the pets */
 		if ((p_ptr->align < -9) && (r_ptr->flags3 & RF3_GOOD))
 		{
-			if (!(one_in_((0-p_ptr->align)/2+1))) return FALSE;
+			if (!one_in_((0-p_ptr->align)/2+1)) return FALSE;
 		}
 		else if ((p_ptr->align > 9) && (r_ptr->flags3 & RF3_EVIL))
 		{
-			if (!(one_in_(p_ptr->align/2+1))) return FALSE;
+			if (!one_in_(p_ptr->align/2+1)) return FALSE;
 		}
 	}
 

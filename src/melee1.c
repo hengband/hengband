@@ -678,7 +678,7 @@ bool make_attack_normal(int m_idx)
 					}
 					else
 					{
-						if (randint(3) == 1)
+						if (one_in_(3))
 #ifdef JP
 							act = "は♪僕らは楽しい家族♪と歌っている。";
 						else
@@ -1740,7 +1740,7 @@ bool make_attack_normal(int m_idx)
 					if ((randint(100) < 11) && (p_ptr->prace != RACE_ANDROID))
 					{
 						/* 1% chance for perm. damage */
-						bool perm = (randint(10) == 1);
+						bool perm = one_in_(10);
 						if (dec_stat(A_CON, randint(10), perm)) obvious = TRUE;
 					}
 

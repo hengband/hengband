@@ -2053,7 +2053,7 @@ note = "には耐性がある。";
 				dam *= 3; dam /= randint(6) + 6;
 				if (seen) r_ptr->r_flags3 |= (RF3_IM_POIS);
 			}
-			else if (randint(3) == 1) do_poly = TRUE;
+			else if (one_in_(3)) do_poly = TRUE;
 			break;
 		}
 
@@ -2294,7 +2294,7 @@ note = "には耐性がある。";
 			do_conf = (5 + randint(11) + r) / (r + 1);
 			if ((r_ptr->flags4 & RF4_BR_CHAO) ||
 			    (m_ptr->r_idx == MON_STORMBRINGER) ||
-			    ((r_ptr->flags3 & RF3_DEMON) && (randint(3) == 1)))
+			    ((r_ptr->flags3 & RF3_DEMON) && one_in_(3)))
 			{
 #ifdef JP
 note = "には耐性がある。";
@@ -2818,7 +2818,7 @@ note = "には耐性がある。";
 				if (((r_ptr->flags3 & RF3_UNDEAD) ||
 					  (r_ptr->flags3 & RF3_DEMON)) &&
 					  (r_ptr->level > p_ptr->lev / 2) &&
-					  (randint(2) == 1))
+					  one_in_(2))
 				{
 					note = NULL;
 #ifdef JP
@@ -2844,7 +2844,7 @@ msg_print("しかし効力を跳ね返した！");
 						/* Injure +/- confusion */
 						monster_desc(killer, m_ptr, 0x88);
 						take_hit(DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
-						if (randint(4) == 1)
+						if (one_in_(4))
 						{
 							switch (randint(4))
 							{
@@ -2878,7 +2878,7 @@ note = "には効果がなかった。";
 				}
 			}
 
-			if ((dam > 0) && (randint(4) == 1))
+			if ((dam > 0) && one_in_(4))
 			{
 				switch (randint(4))
 				{
@@ -2956,7 +2956,7 @@ note = "には耐性がある。";
 				if (((r_ptr->flags3 & RF3_UNDEAD) ||
 				     (r_ptr->flags3 & RF3_DEMON)) &&
 				     (r_ptr->level > p_ptr->lev / 2) &&
-				     (randint(2) == 1))
+				     (one_in_(2)))
 				{
 					note = NULL;
 #ifdef JP
@@ -3130,7 +3130,7 @@ note_dies = "の精神は崩壊し、肉体は抜け殻となった。";
 				if (((r_ptr->flags3 & RF3_UNDEAD) ||
 				     (r_ptr->flags3 & RF3_DEMON)) &&
 				     (r_ptr->level > p_ptr->lev / 2) &&
-				     (randint(2) == 1))
+				     (one_in_(2)))
 				{
 					note = NULL;
 #ifdef JP
@@ -6043,7 +6043,7 @@ msg_print("地面が揺れた...");
 #endif
 
 					earthquake(ty, tx, 4 + rand_int(4));
-					if (randint(6) != 1) break;
+					if (!one_in_(6)) break;
 				}
 			case 3: case 4: case 5: case 6:
 				if (!count)
@@ -6056,7 +6056,7 @@ msg_print("純粋な魔力の次元への扉が開いた！");
 #endif
 
 					project(0, 8, ty,tx, dam, GF_MANA, curse_flg, -1);
-					if (randint(6) != 1) break;
+					if (!one_in_(6)) break;
 				}
 			case 7: case 8:
 				if (!count)
@@ -6069,7 +6069,7 @@ msg_print("空間が歪んだ！");
 
 					if (m_ptr->r_idx) teleport_away(c_ptr->m_idx, damroll(10, 10), FALSE);
 					if (one_in_(13)) count += activate_hi_summon(ty, tx, TRUE);
-					if (randint(6) != 1) break;
+					if (!one_in_(6)) break;
 				}
 			case 9: case 10: case 11:
 #ifdef JP
@@ -6079,13 +6079,13 @@ msg_print("エネルギーのうねりを感じた！");
 #endif
 
 				project(0, 7, ty, tx, 50, GF_DISINTEGRATE, curse_flg, -1);
-				if (randint(6) != 1) break;
+				if (!one_in_(6)) break;
 			case 12: case 13: case 14: case 15: case 16:
 				aggravate_monsters(0);
-				if (randint(6) != 1) break;
+				if (!one_in_(6)) break;
 			case 17: case 18:
 				count += activate_hi_summon(ty, tx, TRUE);
-				if (randint(6) != 1) break;
+				if (!one_in_(6)) break;
 			case 19: case 20: case 21: case 22:
 			{
 				bool pet = FALSE, friendly = FALSE;
@@ -6099,7 +6099,7 @@ msg_print("エネルギーのうねりを感じた！");
 					pet = TRUE;
 				}
 				count += summon_specific((pet ? -1 : 0), py, px, (pet ? p_ptr->lev*2/3+randint(p_ptr->lev/2) : dun_level), 0, TRUE, friendly, pet, FALSE, (bool)(!pet));
-				if (randint(6) != 1) break;
+				if (!one_in_(6)) break;
 			}
 			case 23: case 24: case 25:
 				if (p_ptr->hold_life && (rand_int(100) < 75)) break;
@@ -6111,7 +6111,7 @@ msg_print("生命力が体から吸い取られた気がする！");
 
 				if (p_ptr->hold_life) lose_exp(p_ptr->exp / 160);
 				else lose_exp(p_ptr->exp / 16);
-				if (randint(6) != 1) break;
+				if (!one_in_(6)) break;
 			case 26: case 27: case 28:
 			{
 				int i = 0;
@@ -6123,7 +6123,7 @@ msg_print("生命力が体から吸い取られた気がする！");
 						{
 							(void)do_dec_stat(i);
 						}
-						while (randint(2) == 1);
+						while (one_in_(2));
 
 						i++;
 					}
@@ -6136,7 +6136,7 @@ msg_print("生命力が体から吸い取られた気がする！");
 			}
 			}
 		}
-		while (randint(5) == 1);
+		while (one_in_(5));
 	}
 
 	if (p_ptr->inside_battle)
@@ -6272,7 +6272,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 	if (!who) return (FALSE);
 	if (who == p_ptr->riding) return (FALSE);
 
-	if ((p_ptr->reflect || p_ptr->tim_reflect || ((p_ptr->special_defense & KATA_FUUJIN) && !p_ptr->blind)) && !a_rad && (randint(10) != 1) && (typ != GF_PSY_SPEAR))
+	if ((p_ptr->reflect || p_ptr->tim_reflect || ((p_ptr->special_defense & KATA_FUUJIN) && !p_ptr->blind)) && !a_rad && !one_in_(10) && (typ != GF_PSY_SPEAR))
 	{
 		byte t_y, t_x;
 		int max_attempts = 10;
@@ -6399,7 +6399,7 @@ if (fuzzy) msg_print("毒で攻撃された！");
 			if (double_resist) dam = (dam + 2) / 3;
 
 			if ((!(double_resist || p_ptr->resist_pois)) &&
-			     randint(HURT_CHANCE) == 1)
+			     one_in_(HURT_CHANCE))
 			{
 				do_dec_stat(A_CON);
 			}
@@ -6430,7 +6430,7 @@ if (fuzzy) msg_print("放射能で攻撃された！");
 			{
 				set_poisoned(p_ptr->poisoned + rand_int(dam) + 10);
 
-				if (randint(5) == 1) /* 6 */
+				if (one_in_(5)) /* 6 */
 				{
 #ifdef JP
 msg_print("奇形的な変身を遂げた！");
@@ -6438,13 +6438,13 @@ msg_print("奇形的な変身を遂げた！");
 					msg_print("You undergo a freakish metamorphosis!");
 #endif
 
-					if (randint(4) == 1) /* 4 */
+					if (one_in_(4)) /* 4 */
 						do_poly_self();
 					else
 						mutate_player();
 				}
 
-				if (randint(6) == 1)
+				if (one_in_(6))
 				{
 					inven_damage(set_acid_destroy, 2);
 				}
@@ -6631,7 +6631,7 @@ if (fuzzy) msg_print("何か湿ったもので攻撃された！");
 				set_confused(p_ptr->confused + randint(5) + 5);
 			}
 
-			if (randint(5) == 1)
+			if (one_in_(5))
 			{
 				inven_damage(set_cold_destroy, 3);
 			}
@@ -6660,7 +6660,7 @@ if (fuzzy) msg_print("無秩序の波動で攻撃された！");
 			if (!p_ptr->resist_chaos)
 			{
 				(void)set_image(p_ptr->image + randint(10));
-				if (randint(3) == 1)
+				if (one_in_(3))
 				{
 #ifdef JP
 msg_print("あなたの身体はカオスの力で捻じ曲げられた！");
@@ -6706,7 +6706,7 @@ msg_print("生命力が体から吸い取られた気がする！");
 					lose_exp(5000 + (p_ptr->exp / 100) * MON_DRAIN_LIFE);
 				}
 			}
-			if (!p_ptr->resist_chaos || (randint(9) == 1))
+			if (!p_ptr->resist_chaos || one_in_(9))
 			{
 				inven_damage(set_elec_destroy, 2);
 				inven_damage(set_fire_destroy, 2);
@@ -6733,7 +6733,7 @@ if (fuzzy) msg_print("何か鋭いもので攻撃された！");
 				(void)set_cut(p_ptr->cut + dam);
 			}
 
-			if (!p_ptr->resist_shard || (randint(13) == 1))
+			if (!p_ptr->resist_shard || one_in_(13))
 			{
 				inven_damage(set_cold_destroy, 2);
 			}
@@ -6761,7 +6761,7 @@ if (fuzzy) msg_print("轟音で攻撃された！");
 				(void)set_stun(p_ptr->stun + k);
 			}
 
-			if (!p_ptr->resist_sound || (randint(13) == 1))
+			if (!p_ptr->resist_sound || one_in_(13))
 			{
 				inven_damage(set_cold_destroy, 2);
 			}
@@ -6873,7 +6873,7 @@ if (fuzzy) msg_print("爆発があった！");
 				(void)set_cut(p_ptr->  cut + ( dam / 2));
 			}
 
-			if ((!p_ptr->resist_shard) || (randint(12) == 1))
+			if ((!p_ptr->resist_shard) || one_in_(12))
 			{
 				inven_damage(set_cold_destroy, 3);
 			}
@@ -7096,7 +7096,7 @@ msg_print("周辺の重力がゆがんだ。");
 				dam = (dam * 2) / 3;
 			}
 
-			if (!p_ptr->ffall || (randint(13) == 1))
+			if (!p_ptr->ffall || one_in_(13))
 			{
 				inven_damage(set_cold_destroy, 2);
 			}
@@ -7228,7 +7228,7 @@ if (fuzzy) msg_print("何かが空からあなたの頭上に落ちてきた！");
 #endif
 
 			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
-			if (!p_ptr->resist_shard || (randint(13) == 1))
+			if (!p_ptr->resist_shard || one_in_(13))
 			{
 				if (!p_ptr->immune_fire) inven_damage(set_fire_destroy, 2);
 				inven_damage(set_cold_destroy, 2);
@@ -7256,7 +7256,7 @@ if (fuzzy) msg_print("何か鋭く冷たいもので攻撃された！");
 				(void)set_stun(p_ptr->stun + randint(15));
 			}
 
-			if ((!(p_ptr->resist_cold || p_ptr->oppose_cold || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))) || (randint(12) == 1))
+			if ((!(p_ptr->resist_cold || p_ptr->oppose_cold || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))) || one_in_(12))
 			{
 				if (!p_ptr->immune_cold) inven_damage(set_cold_destroy, 3);
 			}
@@ -8654,7 +8654,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			{
 				monster_race *ref_ptr = &r_info[m_list[cave[y][x].m_idx].r_idx];
 
-				if ((ref_ptr->flags2 & RF2_REFLECTING) && (randint(10) != 1 && !(flg & PROJECT_NO_REF) && (!who || dist_hack > 1)))
+				if ((ref_ptr->flags2 & RF2_REFLECTING) && (!one_in_(10) && !(flg & PROJECT_NO_REF) && (!who || dist_hack > 1)))
 				{
 					byte t_y, t_x;
 					int max_attempts = 10;

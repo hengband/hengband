@@ -6512,9 +6512,9 @@ void call_chaos(void)
 	};
 
 	Chaos_type = hurt_types[rand_int(31)];
-	if (randint(4) == 1) line_chaos = TRUE;
+	if (one_in_(4)) line_chaos = TRUE;
 
-	if (randint(6) == 1)
+	if (one_in_(6))
 	{
 		for (dummy = 1; dummy < 10; dummy++)
 		{
@@ -6527,7 +6527,7 @@ void call_chaos(void)
 			}
 		}
 	}
-	else if (randint(3) == 1)
+	else if (one_in_(3))
 	{
 		fire_ball(Chaos_type, 0, 500, 8);
 	}
@@ -6567,7 +6567,7 @@ msg_print("地面が揺れた...");
 #endif
 
 				earthquake(py, px, 5 + rand_int(10));
-				if (randint(6) != 1) break;
+				if (!one_in_(6)) break;
 			}
 		case 30: case 31:
 			if (!(*count))
@@ -6585,7 +6585,7 @@ msg_print("純粋な魔力の次元への扉が開いた！");
 #else
 				take_hit(DAMAGE_NOESCAPE, dam, "released pure mana", -1);
 #endif
-				if (randint(6) != 1) break;
+				if (!one_in_(6)) break;
 			}
 		case 32: case 33:
 			if (!(*count))
@@ -6598,7 +6598,7 @@ msg_print("周囲の空間が歪んだ！");
 
 				teleport_player(damroll(10, 10));
 				if (rand_int(13)) (*count) += activate_hi_summon(py, px, FALSE);
-				if (randint(6) != 1) break;
+				if (!one_in_(6)) break;
 			}
 		case 34:
 #ifdef JP
@@ -6617,16 +6617,16 @@ msg_print("エネルギーのうねりを感じた！");
 				take_hit(DAMAGE_NOESCAPE, 50, "surge of energy", -1);
 #endif
 			}
-			if (randint(6) != 1) break;
+			if (!one_in_(6)) break;
 		case 1: case 2: case 3: case 16: case 17:
 			aggravate_monsters(0);
-			if (randint(6) != 1) break;
+			if (!one_in_(6)) break;
 		case 4: case 5: case 6:
 			(*count) += activate_hi_summon(py, px, FALSE);
-			if (randint(6) != 1) break;
+			if (!one_in_(6)) break;
 		case 7: case 8: case 9: case 18:
 			(*count) += summon_specific(0, py, px, dun_level, 0, TRUE, FALSE, FALSE, TRUE, TRUE);
-			if (randint(6) != 1) break;
+			if (!one_in_(6)) break;
 		case 10: case 11: case 12:
 #ifdef JP
 msg_print("生命力が体から吸い取られた気がする！");
@@ -6635,7 +6635,7 @@ msg_print("生命力が体から吸い取られた気がする！");
 #endif
 
 			lose_exp(p_ptr->exp / 16);
-			if (randint(6) != 1) break;
+			if (!one_in_(6)) break;
 		case 13: case 14: case 15: case 19: case 20:
 			if (stop_ty || (p_ptr->free_act && (randint(125) < p_ptr->skill_sav)) || (p_ptr->pclass == CLASS_BERSERKER))
 			{
@@ -6655,10 +6655,10 @@ msg_print("彫像になった気分だ！");
 					set_paralyzed(p_ptr->paralyzed + randint(13));
 				stop_ty = TRUE;
 			}
-			if (randint(6) != 1) break;
+			if (!one_in_(6)) break;
 		case 21: case 22: case 23:
 			(void)do_dec_stat(rand_int(6));
-			if (randint(6) != 1) break;
+			if (!one_in_(6)) break;
 		case 24:
 #ifdef JP
 msg_print("ほえ？私は誰？ここで何してる？");
@@ -6667,7 +6667,7 @@ msg_print("ほえ？私は誰？ここで何してる？");
 #endif
 
 			lose_all_info();
-			if (randint(6) != 1) break;
+			if (!one_in_(6)) break;
 		case 25:
 			/*
 			 * Only summon Cyberdemons deep in the dungeon.
@@ -6678,7 +6678,7 @@ msg_print("ほえ？私は誰？ここで何してる？");
 				stop_ty = TRUE;
 				break;
 			}
-			if (randint(6) != 1) break;
+			if (!one_in_(6)) break;
 		default:
 			while (i < 6)
 			{
@@ -6686,13 +6686,13 @@ msg_print("ほえ？私は誰？ここで何してる？");
 				{
 					(void)do_dec_stat(i);
 				}
-				while (randint(2) == 1);
+				while (one_in_(2));
 
 				i++;
 			}
 		}
 	}
-	while ((randint(3) == 1) && !stop_ty);
+	while (one_in_(3) && !stop_ty);
 
 	return stop_ty;
 }
