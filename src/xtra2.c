@@ -3524,7 +3524,7 @@ if (o_ptr->number != 1) s1 = "それらは";
 		}
 
 		/* Terrain feature if needed */
-		if (boring || (feat > FEAT_INVIS))
+		if (boring || (feat > FEAT_INVIS) || (c_ptr->info & CAVE_IN_MIRROR))
 		{
 			cptr name;
 
