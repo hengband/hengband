@@ -4130,6 +4130,8 @@ void display_player(int mode)
 		/* Display "history" info */
 		if (mode == 1)
 		{
+			char statmsg[1000];
+
 #ifdef JP
 			put_str("(キャラクターの生い立ち)", 11, 25);
 #else
@@ -4141,13 +4143,14 @@ void display_player(int mode)
 				put_str(history[i], i + 12, 10);
 			}
 
+			*statmsg = '\0';
 
 			if (death && total_winner)
 			{
 #ifdef JP
-				put_str("…あなたは勝利の後引退した。", 5 + 12, 10);
+				strcpy(statmsg, "…あなたは勝利の後引退した。");
 #else
-				put_str("...You retired from the adventure after the winning.", 5 + 12, 10);
+				strcpy(statmsg, "...You retired from the adventure after the winning.");
 #endif
 			}
 			else if (death)
@@ -4157,25 +4160,25 @@ void display_player(int mode)
 					if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST))
 					{
 #ifdef JP
-						put_str(format("…あなたは クエスト「%s」で死んだ。", quest[p_ptr->inside_quest].name), 5 + 12, 10);
+						sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[p_ptr->inside_quest].name, died_from);
 #else
-						put_str(format("...You died in the quest '%s'.", quest[p_ptr->inside_quest].name), 5 + 12, 10);
+						sprintf(statmsg, "...You were killed by %s in the quest '%s'.", died_from, quest[p_ptr->inside_quest].name);
 #endif
 					}
 					else
 					{					
 #ifdef JP
-						put_str(format("…あなたは %s の %d 階で死んだ。", map_name(), dun_level), 5 + 12, 10);
+						sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), dun_level, died_from);
 #else
-						put_str(format("...You died on level %d of %s.", dun_level, map_name()), 5 + 12, 10);
+						sprintf(statmsg, "...You were killed by %s on level %d of %s.", died_from, dun_level, map_name());
 #endif
 					}
 				}
 				else
 #ifdef JP
-					put_str(format("…あなたは %s で死んだ。", map_name()), 5 + 12, 10);
+					sprintf(statmsg, "…あなたは%sで%sに殺された。", map_name(), died_from);
 #else
-					put_str(format("...You died in %s.", map_name()), 5 + 12, 10);
+					sprintf(statmsg, "...You were killed by %s in %s.", died_from, map_name());
 #endif
 			}
 			else if (character_dungeon)
@@ -4185,27 +4188,45 @@ void display_player(int mode)
 					if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST))
 					{
 #ifdef JP
-						put_str(format("…あなたは現在、 クエスト「%s」を遂行中だ。", quest[p_ptr->inside_quest].name), 5 + 12, 10);
+						sprintf(statmsg, "…あなたは現在、 クエスト「%s」を遂行中だ。", quest[p_ptr->inside_quest].name);
 #else
-						put_str(format("...Now, you are in the quest '%s'.", quest[p_ptr->inside_quest].name), 5 + 12, 10);
+						sprintf(statmsg, "...Now, you are in the quest '%s'.", quest[p_ptr->inside_quest].name);
 #endif
 					}							
 					else
 					{
 #ifdef JP
-						put_str(format("…あなたは現在、 %s の %d 階で探索している。", map_name(), dun_level), 5 + 12, 10);
+						sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(), dun_level);
 #else
-						put_str(format("...Now, you are exploring level %d of %s.", dun_level, map_name()), 5 + 12, 10);
+						sprintf(statmsg, "...Now, you are exploring level %d of %s.", dun_level, map_name());
 #endif
 					}
 				}
 				else
 #ifdef JP
-					put_str(format("…あなたは現在、 %s にいる。", map_name()), 5 + 12, 10);
+					sprintf(statmsg, "…あなたは現在、 %s にいる。", map_name());
 #else
-					put_str(format("...Now, you are in %s.", map_name()), 5 + 12, 10);
+				        sprintf(statmsg, "...Now, you are in %s.", map_name());
 #endif
 			}
+
+			if (*statmsg)
+			{
+				char temp[64*2], *t;
+				roff_to_buf(statmsg, 60, temp);
+				t = temp;
+				for(i=0 ; i<2 ; i++)
+				{
+					if(t[0]==0)
+						break; 
+					else
+					{
+						put_str(t, i + 5 + 12, 10);
+						t += strlen(t)+1;
+					}
+				}
+			}
+
 		}
 
 		/* Display "various" info */
@@ -4308,7 +4329,7 @@ errr make_character_dump(FILE *fff)
 	display_player(1);
 
 	/* Dump part of the screen */
-	for (y = 10; y < 18; y++)
+	for (y = 10; y < 19; y++)
 	{
 		/* Dump each row */
 		for (x = 0; x < 79; x++)
