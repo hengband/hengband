@@ -877,8 +877,6 @@ void map_info(int y, int x, byte *ap, char *cp)
 	/* Feature code */
 	feat = c_ptr->feat;
 
-	feat_priority = 10;
-
 	/* Floors (etc) */
 	if ((feat <= FEAT_INVIS) || (feat == FEAT_DIRT) || (feat == FEAT_GRASS))
 	{
@@ -1043,8 +1041,10 @@ void map_info(int y, int x, byte *ap, char *cp)
 		/* Unknown */
 		else
 		{
+			feat = FEAT_NONE;
+
 			/* Access darkness */
-			f_ptr = &f_info[FEAT_NONE];
+			f_ptr = &f_info[feat];
 
 			/* Normal attr */
 			a = f_ptr->x_attr;
@@ -1242,15 +1242,14 @@ void map_info(int y, int x, byte *ap, char *cp)
                 /* "Simple Lighting" */
                 else
                 {
-                        /* Access feature */
-                        f_ptr = &f_info[feat];
-
                         /* Handle "blind" */
                         if (!(c_ptr->info & CAVE_MARK))
                         {
-                                /* Access darkness */
-                                f_ptr = &f_info[FEAT_NONE];
+                                feat = FEAT_NONE;
                         }
+
+                        /* Access feature */
+                        f_ptr = &f_info[feat];
 
                         /* Normal attr */
                         a = f_ptr->x_attr;
@@ -1259,6 +1258,109 @@ void map_info(int y, int x, byte *ap, char *cp)
                         c = f_ptr->x_char;
                 }
         }
+
+	switch (feat)
+	{
+	case FEAT_NONE:
+	case FEAT_FLOOR:
+	case FEAT_INVIS:
+	case FEAT_TRAP_TRAPDOOR:
+	case FEAT_TRAP_PIT:
+	case FEAT_TRAP_SPIKED_PIT:
+	case FEAT_TRAP_POISON_PIT:
+	case FEAT_TRAP_TY_CURSE:
+	case FEAT_TRAP_TELEPORT:
+	case FEAT_TRAP_FIRE:
+	case FEAT_TRAP_ACID:
+	case FEAT_TRAP_SLOW:
+	case FEAT_TRAP_LOSE_STR:
+	case FEAT_TRAP_LOSE_DEX:
+	case FEAT_TRAP_LOSE_CON:
+	case FEAT_TRAP_BLIND:
+	case FEAT_TRAP_CONFUSE:
+	case FEAT_TRAP_POISON:
+	case FEAT_TRAP_SLEEP:
+	case FEAT_TRAP_TRAPS:
+	case FEAT_DIRT:
+	case FEAT_GRASS:
+	case FEAT_FLOWER:
+	case FEAT_DEEP_GRASS:
+	case FEAT_SWAMP:
+	case FEAT_TREES:
+		feat_priority = 0;
+		break;
+
+	case FEAT_OPEN:
+	case FEAT_BROKEN:
+		feat_priority = 5;
+		break;
+
+	case FEAT_SECRET:
+	case FEAT_RUBBLE:
+	case FEAT_MAGMA:
+	case FEAT_QUARTZ:
+	case FEAT_MAGMA_H:
+	case FEAT_QUARTZ_H:
+	case FEAT_WALL_EXTRA:
+	case FEAT_WALL_INNER:
+	case FEAT_WALL_OUTER:
+	case FEAT_WALL_SOLID:
+	case FEAT_DEEP_WATER:
+	case FEAT_SHAL_WATER:
+	case FEAT_DEEP_LAVA:
+	case FEAT_SHAL_LAVA:
+	case FEAT_DARK_PIT:
+		feat_priority = 6;
+		break;
+
+	case FEAT_MAGMA_K:
+	case FEAT_QUARTZ_K:
+		feat_priority = 7;
+		break;
+
+	case FEAT_MOUNTAIN:
+	case FEAT_PERM_EXTRA:
+	case FEAT_PERM_INNER:
+	case FEAT_PERM_OUTER:
+	case FEAT_PERM_SOLID:
+		feat_priority = 8;
+		break;
+
+	case FEAT_GLYPH:
+	case FEAT_MINOR_GLYPH:
+	case FEAT_MIRROR:
+	case FEAT_PATTERN_START:
+	case FEAT_PATTERN_1:
+	case FEAT_PATTERN_2:
+	case FEAT_PATTERN_3:
+	case FEAT_PATTERN_4:
+	case FEAT_PATTERN_END:
+	case FEAT_PATTERN_OLD:
+	case FEAT_PATTERN_XTRA1:
+	case FEAT_PATTERN_XTRA2:
+		feat_priority = 16;
+		break;
+
+		/* objects have feat_priority = 20 */ 
+		/* monsters have feat_priority = 30 */ 
+
+	case FEAT_LESS:
+	case FEAT_MORE:
+	case FEAT_QUEST_ENTER:
+	case FEAT_QUEST_EXIT:
+	case FEAT_QUEST_DOWN:
+	case FEAT_QUEST_UP:
+	case FEAT_LESS_LESS:
+	case FEAT_MORE_MORE:
+	case FEAT_TOWN:
+	case FEAT_ENTRANCE:
+		feat_priority = 35;
+		break;
+
+	default:
+		feat_priority = 10;
+		break;
+	}
 
 	/* Hack -- rare random hallucination, except on outer dungeon walls */
 	if (p_ptr->image && (c_ptr->feat < FEAT_PERM_SOLID) && !rand_int(256))
@@ -1317,7 +1419,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 			/* Normal attr */
 			(*ap) = object_attr(o_ptr);
 
-			feat_priority = 15;
+			feat_priority = 20;
 
 			/* Hack -- hallucination */
 			if (p_ptr->image) image_object(ap, cp);
@@ -1346,7 +1448,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 			/* Desired char */
 			c = r_ptr->x_char;
 
-			feat_priority = 20;
+			feat_priority = 30;
 
 			/* Mimics' colors vary */
 			if (strchr("\"!=", c) && !(r_ptr->flags1 & RF1_UNIQUE))
@@ -1481,7 +1583,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 	{
 		monster_race *r_ptr = &r_info[0];
 
-		feat_priority = 21;
+		feat_priority = 31;
 
 		/* Get the "player" attr */
 		a = r_ptr->x_attr;
@@ -2239,16 +2341,6 @@ static void display_shortened_item_name(object_type *o_ptr, int y)
 
 /*
  * Display a "small-scale" map of the dungeon in the active Term
- *
- * Note that the "map_info()" function must return fully colorized
- * data or this function will not work correctly.
- *
- * Note that this function must "disable" the special lighting
- * effects so that the "priority" function will work.
- *
- * Note the use of a specialized "priority" function to allow this
- * function to work with any graphic attr/char mappings, and the
- * attempts to optimize this function where possible.
  */
 void display_map(int *cy, int *cx)
 {
