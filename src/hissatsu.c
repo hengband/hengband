@@ -857,7 +857,7 @@ static bool cast_hissatsu_spell(int spell)
 				basedam *= 5;
 				basedam /= 3;
 			}
-			else if (object_known_p(o_ptr) && (have_flag(flgs, TR_VORPAL)))
+			else if (have_flag(flgs, TR_VORPAL))
 			{
 				/* vorpal flag only */
 				basedam *= 11;
@@ -1146,7 +1146,7 @@ msg_print("その方向にはモンスターはいません。");
 				basedam *= 5;
 				basedam /= 3;
 			}
-			else if (object_known_p(o_ptr) && (have_flag(flgs, TR_VORPAL)))
+			else if (have_flag(flgs, TR_VORPAL))
 			{
 				/* vorpal flag only */
 				basedam *= 11;
