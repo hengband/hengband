@@ -4857,7 +4857,7 @@ msg_print("キャラクタ情報のファイルへの書き出しに成功しました。");
  */
 bool show_file(bool show_version, cptr name, cptr what, int line, int mode)
 {
-	int i, n, k;
+	int i, n, skey;
 
 	/* Number of "real" lines passed by */
 	int next = 0;
@@ -5059,11 +5059,11 @@ msg_format("'%s'をオープンできません。", name);
 			/* Notice "menu" requests */
 			if ((str[6] == '[') && isalpha(str[7]))
 			{
+				/* Extract the menu item */
+				int k = str[7] - 'A';
+
 				/* This is a menu file */
 				menu = TRUE;
-
-				/* Extract the menu item */
-				k = str[7] - 'A';
 
 				if ((str[8] == ']') && (str[9] == ' '))
 				{
@@ -5292,14 +5292,11 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 #endif
 		}
 
-		/* Get a keypress */
-		k = inkey();
-
-		/* Hack -- return to last screen */
-		if (k == '<') break;
+		/* Get a special key code */
+		skey = inkey_special();
 
 		/* Show the help for the help */
-		if (k == '?')
+		if (skey == '?')
 		{
 			/* Hack - prevent silly recursion */
 #ifdef JP
@@ -5312,7 +5309,7 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 		}
 
 		/* Hack -- try showing */
-		if (k == '=')
+		if (skey == '=')
 		{
 			/* Get "shower" */
 #ifdef JP
@@ -5325,11 +5322,11 @@ prt("強調: ", hgt - 1, 0);
 		}
 
 		/* Hack -- try finding */
-		if (k == '/')
+		if (skey == '/' || skey == KTRL('s'))
 		{
 			/* Get "finder" */
 #ifdef JP
-prt("検索: ", hgt - 1, 0);
+			prt("検索: ", hgt - 1, 0);
 #else
 			prt("Find: ", hgt - 1, 0);
 #endif
@@ -5359,7 +5356,7 @@ prt("検索: ", hgt - 1, 0);
 		}
 
 		/* Hack -- go to a specific line */
-		if (k == '#')
+		if (skey == '#')
 		{
 			char tmp[81];
 #ifdef JP
@@ -5376,8 +5373,20 @@ prt("行: ", hgt - 1, 0);
 			}
 		}
 
+		/* Hack -- go to the top line */
+		if (skey == SKEY_TOP)
+		{
+			line = 0;
+		}
+
+		/* Hack -- go to the bottom line */
+		if (skey == SKEY_BOTTOM)
+		{
+			line = ((size-1)/rows)*rows;
+		}
+
 		/* Hack -- go to a specific file */
-		if (k == '%')
+		if (skey == '%')
 		{
 			char tmp[81];
 #ifdef JP
@@ -5391,19 +5400,19 @@ strcpy(tmp, "jhelp.hlp");
 
 			if (askfor_aux(tmp, 80))
 			{
-				if (!show_file(TRUE, tmp, NULL, 0, mode)) k = 'q';
+				if (!show_file(TRUE, tmp, NULL, 0, mode)) skey = 'q';
 			}
 		}
 
 		/* Allow backing up */
-		if (k == '-')
+		if (skey == '-' || skey == SKEY_PGUP)
 		{
 			line = line + (reverse ? rows : -rows);
 			if (line < 0) line = 0;
 		}
 
 		/* Advance a single line */
-		if ((k == '\n') || (k == '\r'))
+		if ((skey == '\n') || (skey == '\r'))
 		{
 			line = line + (reverse ? -1 : 1);
 			if (line < 0) line = 0;
@@ -5411,16 +5420,16 @@ strcpy(tmp, "jhelp.hlp");
 
 
 		/* Move up / down */
-		if (k == '8')
+		if (skey == '8' || skey == SKEY_UP)
 		{
 			line--;
 			if (line < 0) line = 0;
 		}
 
-		if (k == '2') line++;
+		if (skey == '2' || skey == SKEY_DOWN) line++;
 
 		/* Advance one page */
-		if (k == ' ')
+		if (skey == ' ' || skey == SKEY_PGDOWN)
 		{
 			line = line + (reverse ? -rows : rows);
 			if (line < 0) line = ((size-1)/rows)*rows;
@@ -5431,19 +5440,19 @@ strcpy(tmp, "jhelp.hlp");
 		{
 			int key = -1;
 
-			if (isalpha(k))
-				key = k - 'A';
+			if (!(skey & SKEY_MASK) && isalpha(skey))
+				key = skey - 'A';
 
 			if ((key > -1) && hook[key][0])
 			{
 				/* Recurse on that file */
 				if (!show_file(TRUE, hook[key], NULL, 0, mode))
-					k = 'q';
+					skey = 'q';
 			}
 		}
 
 		/* Hack, dump to file */
-		if (k == '|')
+		if (skey == '|')
 		{
 			FILE *ffp;
 			char buff[1024];
@@ -5480,7 +5489,7 @@ msg_print("ファイルが開けません。");
 				msg_print("Failed to open file.");
 #endif
 
-				k = ESCAPE;
+				skey = ESCAPE;
 				break;
 			}
 
@@ -5499,16 +5508,19 @@ msg_print("ファイルが開けません。");
 			fff = my_fopen(path, "r");
 		}
 
+		/* Return to last screen */
+		if (skey == ESCAPE) break;
+		if (skey == '<') break;
+
 		/* Exit on escape */
-		if (k == ESCAPE) break;
-		if (k == 'q') break;
+		if (skey == 'q') break;
 	}
 
 	/* Close the file */
 	my_fclose(fff);
 
 	/* Escape */
-	if (k == 'q') return (FALSE);
+	if (skey == 'q') return (FALSE);
 
 	/* Normal return */
 	return (TRUE);
