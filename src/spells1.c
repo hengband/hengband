@@ -1798,7 +1798,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ , int flg)
 	int ty = m_ptr->fy;
 	int tx = m_ptr->fx;
 
-	int caster_lev = (who > 0) ? (r_info[who].level / 2) : p_ptr->lev;
+	int caster_lev = (who > 0) ? (r_info[m_list[who].r_idx].level / 2) : p_ptr->lev;
 
 	/* Nobody here */
 	if (!c_ptr->m_idx) return (FALSE);
