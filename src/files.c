@@ -3870,7 +3870,7 @@ void display_player(int mode)
 					if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST))
 					{
 						/* Get the quest text */
-						init_flags = INIT_ASSIGN;
+						init_flags = INIT_SHOW_TEXT;
 
 						process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
 
@@ -4191,7 +4191,7 @@ errr make_character_dump(FILE *fff)
 				p_ptr->inside_quest = num;
 
 				/* Get the quest */
-				init_flags = INIT_ASSIGN;
+                                init_flags = INIT_SHOW_TEXT;
 
 				process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
 
