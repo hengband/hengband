@@ -48,7 +48,7 @@
 /* Savefile version for Hengband 1.1.1 and later */
 #define H_VER_MAJOR 1
 #define H_VER_MINOR 5
-#define H_VER_PATCH 3
+#define H_VER_PATCH 4
 #define H_VER_EXTRA 0
 
 /* Added for ZAngband */
