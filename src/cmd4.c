@@ -1769,11 +1769,12 @@ static void do_cmd_options_autosave(cptr info)
 				autosave_freq = toggle_frequency(autosave_freq);
 #ifdef JP
 				prt(format("自動セーブの頻度： %d ターン毎", 
+                                           autosave_freq), 5, 0);
 #else
 				prt(format("Timed autosave frequency: every %d turns",
+                                           autosave_freq), 5, 0);
 #endif
-
-				    autosave_freq), 5, 0);
+                                break;
 			}
 
                         case '?':
