@@ -1514,25 +1514,27 @@ s16b get_mon_num(int level)
  * so that "char desc[80];" is sufficiently large for any result.
  *
  * Mode Flags:
- *   0x01 --> Objective (or Reflexive)
- *   0x02 --> Possessive (or Reflexive)
- *   0x04 --> Use indefinites for hidden monsters ("something")
- *   0x08 --> Use indefinites for visible monsters ("a kobold")
- *   0x10 --> Pronominalize hidden monsters
- *   0x20 --> Pronominalize visible monsters
- *   0x40 --> Assume the monster is hidden
- *   0x80 --> Assume the monster is visible
- *  0x100 --> Chameleon's true name
- *  0x200 --> Ignore hallucination, and penetrate shape change
- *  0x400 --> Assume this monster pet waiting outside the floor
+ *  MD_OBJECTIVE      --> Objective (or Reflexive)
+ *  MD_POSSESSIVE     --> Possessive (or Reflexive)
+ *  MD_INDEF_HIDDEN   --> Use indefinites for hidden monsters ("something")
+ *  MD_INDEF_VISIBLE  --> Use indefinites for visible monsters ("a kobold")
+ *  MD_PRON_HIDDEN    --> Pronominalize hidden monsters
+ *  MD_PRON_VISIBLE   --> Pronominalize visible monsters
+ *  MD_ASSUME_HIDDEN  --> Assume the monster is hidden
+ *  MD_ASSUME_VISIBLE --> Assume the monster is visible
+ *  MD_TRUE_NAME      --> Chameleon's true name
+ *  MD_IGNORE_HALLU   --> Ignore hallucination, and penetrate shape change
+ *  MD_ASSUME_OUTSIDE --> Assume this monster pet waiting outside the floor
  *
  * Useful Modes:
- *   0x00 --> Full nominative name ("the kobold") or "it"
- *   0x04 --> Full nominative name ("the kobold") or "something"
- *   0x80 --> Genocide resistance name ("the kobold")
- *   0x88 --> Killing name ("a kobold")
- *   0x22 --> Possessive, genderized if visable ("his") or "its"
- *   0x23 --> Reflexive, genderized if visable ("himself") or "itself"
+ *  0x00 --> Full nominative name ("the kobold") or "it"
+ *  MD_INDEF_HIDDEN --> Full nominative name ("the kobold") or "something"
+ *  MD_ASSUME_VISIBLE --> Genocide resistance name ("the kobold")
+ *  MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE --> Killing name ("a kobold")
+ *  MD_PRON_VISIBLE | MD_POSSESSIVE
+ *    --> Possessive, genderized if visable ("his") or "its"
+ *  MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE
+ *    --> Reflexive, genderized if visable ("himself") or "itself"
  */
 void monster_desc(char *desc, monster_type *m_ptr, int mode)
 {
@@ -1547,17 +1549,17 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 
 	r_ptr = &r_info[m_ptr->ap_r_idx];
 
-	/* Mode of 0x100 will reveal Chameleon's true name */
-	if (mode & 0x100) name = (r_name + real_r_ptr(m_ptr)->name);
+	/* Mode of MD_TRUE_NAME will reveal Chameleon's true name */
+	if (mode & MD_TRUE_NAME) name = (r_name + real_r_ptr(m_ptr)->name);
 	else name = (r_name + r_ptr->name);
 
 	/* Are we hallucinating? (Idea from Nethack...) */
-	if (p_ptr->image && !(mode & 0x200))
+	if (p_ptr->image && !(mode & MD_IGNORE_HALLU))
 	{
 		if (one_in_(2))
 		{
 #ifdef JP
-if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
+			if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
 #else
 			if (!get_rnd_line("silly.txt", m_ptr->r_idx, silly_name))
 #endif
@@ -1583,10 +1585,10 @@ if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
 	}
 
 	/* Can we "see" it (exists + forced, or visible + not unforced) */
-	seen = (m_ptr && ((mode & 0x80) || (!(mode & 0x40) && m_ptr->ml)));
+	seen = (m_ptr && ((mode & MD_ASSUME_VISIBLE) || (!(mode & MD_ASSUME_HIDDEN) && m_ptr->ml)));
 
 	/* Sexed Pronouns (seen and allowed, or unseen and allowed) */
-	pron = (m_ptr && ((seen && (mode & 0x20)) || (!seen && (mode & 0x10))));
+	pron = (m_ptr && ((seen && (mode & MD_PRON_VISIBLE)) || (!seen && (mode & MD_PRON_HIDDEN))));
 
 
 	/* First, try using pronouns, or describing hidden monsters */
@@ -1612,73 +1614,72 @@ if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
 
 
 		/* Brute force: split on the possibilities */
-		switch (kind + (mode & 0x07))
+		switch (kind + (mode & (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE)))
 		{
 			/* Neuter, or unknown */
 #ifdef JP
-			case 0x00: res = "何か"; break;
-			case 0x01: res = "何か"; break;
-			case 0x02: res = "何かの"; break;
-			case 0x03: res = "何か自身"; break;
-			case 0x04: res = "何か"; break;
-			case 0x05: res = "何か"; break;
-			case 0x06: res = "何か"; break;
-			case 0x07: res = "それ自身"; break;
+			case 0x00:                                                    res = "何か"; break;
+			case 0x00 + (MD_OBJECTIVE):                                   res = "何か"; break;
+			case 0x00 + (MD_POSSESSIVE):                                  res = "何かの"; break;
+			case 0x00 + (MD_POSSESSIVE | MD_OBJECTIVE):                   res = "何か自身"; break;
+			case 0x00 + (MD_INDEF_HIDDEN):                                res = "何か"; break;
+			case 0x00 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):                 res = "何か"; break;
+			case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):                res = "何か"; break;
+			case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE): res = "それ自身"; break;
 #else
-			case 0x00: res = "it"; break;
-			case 0x01: res = "it"; break;
-			case 0x02: res = "its"; break;
-			case 0x03: res = "itself"; break;
-			case 0x04: res = "something"; break;
-			case 0x05: res = "something"; break;
-			case 0x06: res = "something's"; break;
-			case 0x07: res = "itself"; break;
+			case 0x00:                                                    res = "it"; break;
+			case 0x00 + (MD_OBJECTIVE):                                   res = "it"; break;
+			case 0x00 + (MD_POSSESSIVE):                                  res = "its"; break;
+			case 0x00 + (MD_POSSESSIVE | MD_OBJECTIVE):                   res = "itself"; break;
+			case 0x00 + (MD_INDEF_HIDDEN):                                res = "something"; break;
+			case 0x00 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):                 res = "something"; break;
+			case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):                res = "something's"; break;
+			case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE): res = "itself"; break;
 #endif
 
 
 			/* Male (assume human if vague) */
 #ifdef JP
-			case 0x10: res = "彼"; break;
-			case 0x11: res = "彼"; break;
-			case 0x12: res = "彼の"; break;
-			case 0x13: res = "彼自身"; break;
-			case 0x14: res = "誰か"; break;
-			case 0x15: res = "誰か"; break;
-			case 0x16: res = "誰かの"; break;
-			case 0x17: res = "彼自身"; break;
+			case 0x10:                                                    res = "彼"; break;
+			case 0x10 + (MD_OBJECTIVE):                                   res = "彼"; break;
+			case 0x10 + (MD_POSSESSIVE):                                  res = "彼の"; break;
+			case 0x10 + (MD_POSSESSIVE | MD_OBJECTIVE):                   res = "彼自身"; break;
+			case 0x10 + (MD_INDEF_HIDDEN):                                res = "誰か"; break;
+			case 0x10 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):                 res = "誰か"; break;
+			case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):                res = "誰かの"; break;
+			case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE): res = "彼自身"; break;
 #else
-			case 0x10: res = "he"; break;
-			case 0x11: res = "him"; break;
-			case 0x12: res = "his"; break;
-			case 0x13: res = "himself"; break;
-			case 0x14: res = "someone"; break;
-			case 0x15: res = "someone"; break;
-			case 0x16: res = "someone's"; break;
-			case 0x17: res = "himself"; break;
+			case 0x10:                                                    res = "he"; break;
+			case 0x10 + (MD_OBJECTIVE):                                   res = "him"; break;
+			case 0x10 + (MD_POSSESSIVE):                                  res = "his"; break;
+			case 0x10 + (MD_POSSESSIVE | MD_OBJECTIVE):                   res = "himself"; break;
+			case 0x10 + (MD_INDEF_HIDDEN):                                res = "someone"; break;
+			case 0x10 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):                 res = "someone"; break;
+			case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):                res = "someone's"; break;
+			case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE): res = "himself"; break;
 #endif
 
 
 			/* Female (assume human if vague) */
 #ifdef JP
-			case 0x20: res = "彼女"; break;
-			case 0x21: res = "彼女"; break;
-			case 0x22: res = "彼女の"; break;
-			case 0x23: res = "彼女自身"; break;
-			case 0x24: res = "誰か"; break;
-			case 0x25: res = "誰か"; break;
-			case 0x26: res = "誰かの"; break;
-			case 0x27: res = "彼女自身"; break;
+			case 0x20:                                                    res = "彼女"; break;
+			case 0x20 + (MD_OBJECTIVE):                                   res = "彼女"; break;
+			case 0x20 + (MD_POSSESSIVE):                                  res = "彼女の"; break;
+			case 0x20 + (MD_POSSESSIVE | MD_OBJECTIVE):                   res = "彼女自身"; break;
+			case 0x20 + (MD_INDEF_HIDDEN):                                res = "誰か"; break;
+			case 0x20 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):                 res = "誰か"; break;
+			case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):                res = "誰かの"; break;
+			case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE): res = "彼女自身"; break;
 #else
-			case 0x20: res = "she"; break;
-			case 0x21: res = "her"; break;
-			case 0x22: res = "her"; break;
-			case 0x23: res = "herself"; break;
-			case 0x24: res = "someone"; break;
-			case 0x25: res = "someone"; break;
-			case 0x26: res = "someone's"; break;
-			case 0x27: res = "herself"; break;
+			case 0x20:                                                    res = "she"; break;
+			case 0x20 + (MD_OBJECTIVE):                                   res = "her"; break;
+			case 0x20 + (MD_POSSESSIVE):                                  res = "her"; break;
+			case 0x20 + (MD_POSSESSIVE | MD_OBJECTIVE):                   res = "herself"; break;
+			case 0x20 + (MD_INDEF_HIDDEN):                                res = "someone"; break;
+			case 0x20 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):                 res = "someone"; break;
+			case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):                res = "someone's"; break;
+			case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE): res = "herself"; break;
 #endif
-
 		}
 
 		/* Copy the result */
@@ -1687,7 +1688,7 @@ if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
 
 
 	/* Handle visible monsters, "reflexive" request */
-	else if ((mode & 0x02) && (mode & 0x01))
+	else if (!(~mode & (MD_POSSESSIVE | MD_OBJECTIVE)))
 	{
 		/* The monster is visible, so use its gender */
 #ifdef JP
@@ -1699,7 +1700,6 @@ if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
 		else if (r_ptr->flags1 & RF1_MALE) strcpy(desc, "himself");
 		else strcpy(desc, "itself");
 #endif
-
 	}
 
 
@@ -1710,34 +1710,34 @@ if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
 		if (is_pet(m_ptr) && m_ptr->ap_r_idx != m_ptr->r_idx)
 		{
 #ifdef JP
-				char *t;
-				strcpy(buf, name);
-				t = buf;
-				while(strncmp(t, "』", 2) && *t) t++;
-				if (*t)
-				{
-					*t = '\0';
-					(void)sprintf(desc, "%s？』", buf);
-				}
-				else
-					(void)sprintf(desc, "%s？", name);
+			char *t;
+			strcpy(buf, name);
+			t = buf;
+			while(strncmp(t, "』", 2) && *t) t++;
+			if (*t)
+			{
+				*t = '\0';
+				(void)sprintf(desc, "%s？』", buf);
+			}
+			else
+				(void)sprintf(desc, "%s？", name);
 #else
-				(void)sprintf(desc, "%s?", name);
+			(void)sprintf(desc, "%s?", name);
 #endif
 		}
 		else
 
 		/* It could be a Unique */
-		if ((r_ptr->flags1 & RF1_UNIQUE) && !(p_ptr->image && !(mode & 0x200)))
+		if ((r_ptr->flags1 & RF1_UNIQUE) && !(p_ptr->image && !(mode & MD_IGNORE_HALLU)))
 		{
 			/* Start with the name (thus nominative and objective) */
-			if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && !(mode & 0x100))
+			if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && !(mode & MD_TRUE_NAME))
 			{
 #ifdef JP
 				char *t;
 				strcpy(buf, name);
 				t = buf;
-				while(strncmp(t, "』", 2) && *t) t++;
+				while (strncmp(t, "』", 2) && *t) t++;
 				if (*t)
 				{
 					*t = '\0';
@@ -1760,7 +1760,7 @@ if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
 		}
 
 		/* It could be an indefinite monster */
-		else if (mode & 0x08)
+		else if (mode & MD_INDEF_VISIBLE)
 		{
 			/* XXX Check plurality for "some" */
 
@@ -1814,7 +1814,7 @@ if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
 #endif
 		}
 
-		if ((mode & 0x200) && (m_ptr->mflag2 & MFLAG2_CHAMELEON))
+		if ((mode & MD_IGNORE_HALLU) && (m_ptr->mflag2 & MFLAG2_CHAMELEON))
 		{
 			if (r_ptr->flags1 & RF1_UNIQUE)
 			{
@@ -1834,12 +1834,12 @@ if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
 			}
 		}
 
-		if ((mode & 0x200) && m_ptr->ap_r_idx != m_ptr->r_idx)
+		if ((mode & MD_IGNORE_HALLU) && m_ptr->ap_r_idx != m_ptr->r_idx)
 		{
 			strcat(desc, format("(%s)", r_name + r_info[m_ptr->r_idx].name));
 		}
 
-		if (mode & 0x400)
+		if (mode & MD_ASSUME_OUTSIDE)
 		{
 #ifdef JP
 			strcat(desc,"(待機中)");
@@ -1849,7 +1849,7 @@ if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
 		}
 
 		/* Handle the Possessive as a special afterthought */
-		if (mode & 0x02)
+		if (mode & MD_POSSESSIVE)
 		{
 			/* XXX Check for trailing "s" */
 			
@@ -1859,7 +1859,6 @@ if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
 #else
 			(void)strcat(desc, "'s");
 #endif
-
 		}
 	}
 }

@@ -1781,7 +1781,9 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ , int flg)
 	/* Hold the monster name */
 	char m_name[80];
 
+#ifndef JP
 	char m_poss[10];
+#endif
 
 	int photo = 0;
 
@@ -1819,8 +1821,10 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ , int flg)
 	/* Get the monster name (BEFORE polymorphing) */
 	monster_desc(m_name, m_ptr, 0);
 
+#ifndef JP
 	/* Get the monster possessive ("his"/"her"/"its") */
-	monster_desc(m_poss, m_ptr, 0x22);
+	monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+#endif
 
 
 	/* Some monsters get "destroyed" */
@@ -2855,7 +2859,7 @@ msg_print("しかし効力を跳ね返した！");
 					else
 					{
 						/* Injure +/- confusion */
-						monster_desc(killer, m_ptr, 0x288);
+						monster_desc(killer, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 						take_hit(DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
 						if (one_in_(4))
 						{
@@ -2993,7 +2997,7 @@ msg_print("あなたは効力を跳ね返した！");
 					else
 					{
 						/* Injure + mana drain */
-						monster_desc(killer, m_ptr, 0x288);
+						monster_desc(killer, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 #ifdef JP
 msg_print("超能力パワーを吸いとられた！");
 #else
@@ -6073,7 +6077,7 @@ note = "は弱くなったようだ。";
 			/* Give detailed messages if destroyed */
 			if (known && note)
 			{
-				monster_desc(m_name, m_ptr, 0x100);
+				monster_desc(m_name, m_ptr, MD_TRUE_NAME);
 				if (see_s)
 				{
 					msg_format("%^s%s", m_name, note);
@@ -7639,9 +7643,9 @@ msg_print("あなたは命が薄まっていくように感じた！");
 		msg_format("攻撃が%s自身を傷つけた！", m_name);
 #else
 		char m_name_self[80];
-		
+
 		/* hisself */
-		monster_desc(m_name_self, m_ptr, 0x23);
+		monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
 
 		msg_format("The attack of %s has wounded %s!", m_name, m_name_self);
 #endif
@@ -8290,7 +8294,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 	{
 		x1 = m_list[who].fx;
 		y1 = m_list[who].fy;
-		monster_desc(who_name, &m_list[who], 0x288);
+		monster_desc(who_name, &m_list[who], MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 	}
 
 	/* Oops */

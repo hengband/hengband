@@ -1957,7 +1957,7 @@ note(format("§Œ√Ê", tmp16s));
 				if (record_named_pet && dummy_mon.nickname)
 				{
 					char m_name[80];
-					monster_desc(m_name, &dummy_mon, 0x08);
+					monster_desc(m_name, &dummy_mon, MD_INDEF_VISIBLE);
 					do_cmd_write_nikki(NIKKI_NAMED_PET, 5, m_name);
 				}
 				removed = TRUE;

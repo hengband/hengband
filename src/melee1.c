@@ -186,7 +186,7 @@ bool make_attack_normal(int m_idx)
 	monster_desc(m_name, m_ptr, 0);
 
 	/* Get the "died from" information (i.e. "a kobold") */
-	monster_desc(ddesc, m_ptr, 0x288);
+	monster_desc(ddesc, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 
 	if (p_ptr->special_defense & KATA_IAI)
 	{
@@ -2113,9 +2113,9 @@ msg_format("%^sから落ちてしまった！", m_name);
 		msg_format("攻撃が%s自身を傷つけた！", m_name);
 #else
 		char m_name_self[80];
-		
+
 		/* hisself */
-		monster_desc(m_name_self, m_ptr, 0x23);
+		monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
 
 		msg_format("The attack of %s has wounded %s!", m_name, m_name_self);
 #endif

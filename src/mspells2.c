@@ -182,8 +182,10 @@ bool monst_spell_monst(int m_idx)
 
 	char m_name[160];
 	char t_name[160];
+
+#ifndef JP
 	char m_poss[160];
-	char ddesc[160];
+#endif
 
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_type *t_ptr = NULL;
@@ -516,14 +518,13 @@ bool monst_spell_monst(int m_idx)
 	/* Get the monster name (or "it") */
 	monster_desc(m_name, m_ptr, 0x00);
 
+#ifndef JP
 	/* Get the monster possessive ("his"/"her"/"its") */
-	monster_desc(m_poss, m_ptr, 0x22);
+	monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+#endif
 
 	/* Get the target's name (or "it") */
 	monster_desc(t_name, t_ptr, 0x00);
-
-	/* Hack -- Get the "died from" name */
-	monster_desc(ddesc, m_ptr, 0x88);
 
 	/* Choose a spell to cast */
 	thrown_spell = spell[randint0(num)];
@@ -2147,7 +2148,6 @@ bool monst_spell_monst(int m_idx)
 #else
 			mon_take_hit_mon(t_idx, dam, &fear, " collapses, a mindless husk.", m_idx);
 #endif
-
 		}
 
 		wake_up = TRUE;
@@ -2215,7 +2215,6 @@ bool monst_spell_monst(int m_idx)
 #else
 			mon_take_hit_mon(t_idx, dam, &fear, " collapses, a mindless husk.", m_idx);
 #endif
-
 		}
 
 		wake_up = TRUE;
@@ -2304,7 +2303,6 @@ bool monst_spell_monst(int m_idx)
 		else
 		{
 			mon_take_hit_mon(t_idx, dam, &fear, NULL, m_idx);
-
 		}
 
 		wake_up = TRUE;
@@ -2961,7 +2959,7 @@ bool monst_spell_monst(int m_idx)
 			if (see_m)
 			{
 #ifdef JP
-				msg_format("%^sが自分の体に念を送った。", m_name, m_poss);
+				msg_format("%^sが自分の体に念を送った。", m_name);
 #else
 				msg_format("%^s concentrates on %s body.", m_name, m_poss);
 #endif

@@ -677,7 +677,7 @@ void monster_death(int m_idx, bool drop_item)
 	{
 		char m_name[80];
 
-		monster_desc(m_name, m_ptr, 0x08);
+		monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 		do_cmd_write_nikki(NIKKI_NAMED_PET, 3, m_name);
 	}
 
@@ -1752,7 +1752,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 		}
 
 		/* Extract monster name */
-		monster_desc(m_name, m_ptr, 0x100);
+		monster_desc(m_name, m_ptr, MD_TRUE_NAME);
 
 		/* Don't kill Amberites */
 		if ((r_ptr->flags3 & RF3_AMBERITE) && one_in_(2))
@@ -3157,7 +3157,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 		boring = FALSE;
 
 		/* Get the monster name ("a kobold") */
-		monster_desc(m_name, m_ptr, 0x08);
+		monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 
 		/* Hack -- track this monster race */
 		monster_race_track(m_ptr->ap_r_idx);

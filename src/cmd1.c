@@ -1725,7 +1725,7 @@ static void touch_zap_player(monster_type *m_ptr)
 			aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
 
 			/* Hack -- Get the "died from" name */
-			monster_desc(aura_dam, m_ptr, 0x288);
+			monster_desc(aura_dam, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 
 #ifdef JP
 			msg_print("突然とても熱くなった！");
@@ -1753,7 +1753,7 @@ static void touch_zap_player(monster_type *m_ptr)
 			aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
 
 			/* Hack -- Get the "died from" name */
-			monster_desc(aura_dam, m_ptr, 0x288);
+			monster_desc(aura_dam, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 
 #ifdef JP
 			msg_print("突然とても寒くなった！");
@@ -1780,7 +1780,7 @@ static void touch_zap_player(monster_type *m_ptr)
 			aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
 
 			/* Hack -- Get the "died from" name */
-			monster_desc(aura_dam, m_ptr, 0x288);
+			monster_desc(aura_dam, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 
 			if (prace_is_(RACE_ANDROID)) aura_damage += aura_damage / 3;
 			if (IS_OPPOSE_ELEC()) aura_damage = (aura_damage + 2) / 3;

@@ -5321,26 +5321,26 @@ void do_cmd_pet_dismiss(void)
 
 		delete_this = FALSE;
 		kakunin = ((pet_ctr == p_ptr->riding) || (m_ptr->nickname));
-		monster_desc(friend_name, m_ptr, 0x80);
-		
+		monster_desc(friend_name, m_ptr, MD_ASSUME_VISIBLE);
+
 		if (!all_pets)
 		{
 			/* Hack -- health bar for this monster */
 			health_track(pet_ctr);
-			
+
 			/* Hack -- handle stuff */
 			handle_stuff();
-			
+
 #ifdef JP
 			sprintf(buf, "%sを放しますか？ [Yes/No/Unnamed (%d匹)]", friend_name, max_pet-i);
 #else
 			sprintf(buf, "Dismiss %s? [Yes/No/Unnamed (%d remain)]", friend_name, max_pet-i);
 #endif
 			prt(buf, 0, 0);
-			
+
 			if (m_ptr->ml)
 				move_cursor_relative(m_ptr->fy, m_ptr->fx);
-			
+
 			while (TRUE)
 			{
 				char ch = inkey();
@@ -5348,7 +5348,7 @@ void do_cmd_pet_dismiss(void)
 				if (ch == 'Y' || ch == 'y')
 				{
 					delete_this = TRUE;
-					
+
 					if (kakunin)
 					{
 #ifdef JP
@@ -5361,30 +5361,30 @@ void do_cmd_pet_dismiss(void)
 					}
 					break;
 				}
-				
+
 				if (ch == 'U' || ch == 'u')
 				{
 					all_pets = TRUE;
 					break;
 				}
-				
+
 				if (ch == ESCAPE || ch == 'N' || ch == 'n')
 					break;
-				
+
 				bell();
 			}
 		}
-		
+
 		if ((all_pets && !kakunin) || (!all_pets && delete_this))
 		{
 			if (record_named_pet && m_ptr->nickname)
 			{
 				char m_name[80];
-				
-				monster_desc(m_name, m_ptr, 0x08);
+
+				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 				do_cmd_write_nikki(NIKKI_NAMED_PET, 2, m_name);
 			}
-			
+
 			if (pet_ctr == p_ptr->riding)
 			{
 #ifdef JP
@@ -5392,9 +5392,9 @@ void do_cmd_pet_dismiss(void)
 #else
 				msg_format("You have got off %s. ", friend_name);
 #endif
-				
+
 				p_ptr->riding = 0;
-				
+
 				/* Update the monsters */
 				p_ptr->update |= (PU_BONUS | PU_MONSTERS);
 				p_ptr->redraw |= (PR_EXTRA);
@@ -5414,7 +5414,7 @@ void do_cmd_pet_dismiss(void)
 			Dismissed++;
 		}
 	}
-	
+
 	Term->scr->cu = cu;
 	Term->scr->cv = cv;
 	Term_fresh();
@@ -5830,7 +5830,7 @@ static void do_name_pet(void)
 				{
 					char m_name[80];
 
-					monster_desc(m_name, m_ptr, 0x08);
+					monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 					do_cmd_write_nikki(NIKKI_NAMED_PET, 0, m_name);
 				}
 			}
@@ -5840,7 +5840,7 @@ static void do_name_pet(void)
 				{
 					char m_name[80];
 
-					monster_desc(m_name, m_ptr, 0x08);
+					monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 					do_cmd_write_nikki(NIKKI_NAMED_PET, 1, m_name);
 				}
 				m_ptr->nickname = 0;

@@ -411,7 +411,7 @@ static void preserve_pet(void)
 			if (!m_ptr->nickname) continue;
 			if (p_ptr->riding == i) continue;
 
-			monster_desc(m_name, m_ptr, 0x88);
+			monster_desc(m_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 			do_cmd_write_nikki(NIKKI_NAMED_PET, 4, m_name);
 		}
 	}
@@ -523,7 +523,7 @@ static void place_pet(void)
 #endif
 			if (record_named_pet && m_ptr->nickname)
 			{
-				monster_desc(m_name, m_ptr, 0x08);
+				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 				do_cmd_write_nikki(NIKKI_NAMED_PET, 5, m_name);
 			}
 

@@ -1410,11 +1410,15 @@ static void process_monsters_counters(void)
 				if (m_ptr->ml)
 				{
 					char m_name[80];
+#ifndef JP
 					char m_poss[80];
 
-					/* Acquire the monster name/poss */
+					/* Acquire the monster possessive */
+					monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+#endif
+
+					/* Acquire the monster name */
 					monster_desc(m_name, m_ptr, 0);
-					monster_desc(m_poss, m_ptr, 0x22);
 
 					/* Dump a message */
 #ifdef JP

@@ -7006,7 +7006,7 @@ static void do_cmd_knowledge_pets(void)
 		if (is_pet(m_ptr))
 		{
 			t_friends++;
-			monster_desc(pet_name, m_ptr, 0x88);
+			monster_desc(pet_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 			fprintf(fff, "%s (%s)\n", pet_name, look_mon_desc(m_ptr, 0x00));
 		}
 	}
@@ -7023,7 +7023,7 @@ static void do_cmd_knowledge_pets(void)
 		t_friends++;
 
 		/* List waiting pets */
-		monster_desc(pet_name, m_ptr, 0x488);
+		monster_desc(pet_name, m_ptr, MD_ASSUME_OUTSIDE | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 		fprintf(fff, "%s (%s)\n", pet_name, look_mon_desc(m_ptr, 0x00));
 	}
 

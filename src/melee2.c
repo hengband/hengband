@@ -279,7 +279,7 @@ msg_format("%^sはダメージを受けない。", m_name);
 
 			if (known)
 			{
-				monster_desc(m_name, m_ptr, 0x100);
+				monster_desc(m_name, m_ptr, MD_TRUE_NAME);
 				/* Unseen death by normal attack */
 				if (!seen)
 				{
@@ -3318,7 +3318,7 @@ msg_print("爆発のルーンは解除された。");
 					object_desc(o_name, o_ptr, TRUE, 3);
 
 					/* Acquire the monster name */
-					monster_desc(m_name, m_ptr, 0x04);
+					monster_desc(m_name, m_ptr, MD_INDEF_HIDDEN);
 
 					/* React to objects that hurt the monster */
 					if (have_flag(flgs, TR_KILL_DRAGON)) flg3 |= (RF3_DRAGON);

@@ -1240,8 +1240,9 @@ bool make_attack_spell(int m_idx)
 	monster_type    *m_ptr = &m_list[m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	char            m_name[80];
+#ifndef JP
 	char            m_poss[80];
-	char            ddesc[80];
+#endif
 	bool            no_inate = FALSE;
 	bool            do_disi = FALSE;
 	int             dam = 0;
@@ -1497,11 +1498,10 @@ bool make_attack_spell(int m_idx)
 	/* Get the monster name (or "it") */
 	monster_desc(m_name, m_ptr, 0x00);
 
+#ifndef JP
 	/* Get the monster possessive ("his"/"her"/"its") */
-	monster_desc(m_poss, m_ptr, 0x22);
-
-	/* Hack -- Get the "died from" name */
-	monster_desc(ddesc, m_ptr, 0x288);
+	monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+#endif
 
 	if (do_disi)
 		thrown_spell = 96+31;
@@ -3203,7 +3203,7 @@ msg_format("%^sが何かをつぶやいた。", m_name);
 			else
 			{
 #ifdef JP
-msg_format("%^sが自分の体に念を送った。", m_name, m_poss);
+msg_format("%^sが自分の体に念を送った。", m_name);
 #else
 				msg_format("%^s concentrates on %s body.", m_name, m_poss);
 #endif
@@ -3330,7 +3330,7 @@ msg_format("%^sは体力を回復したようだ。", m_name);
 
 				/* Message */
 #ifdef JP
-msg_format("%^sは勇気を取り戻した。", m_name, m_poss);
+msg_format("%^sは勇気を取り戻した。", m_name);
 #else
 				msg_format("%^s recovers %s courage.", m_name, m_poss);
 #endif
@@ -3584,7 +3584,7 @@ msg_format("%^sがテレポートした。", m_name);
 							char m_name_self[80];
 
 							/* hisself */
-							monster_desc(m_name_self, m_ptr, 0x23);
+							monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
 
 							msg_format("The attack of %s has wounded %s!", m_name, m_name_self);
 #endif

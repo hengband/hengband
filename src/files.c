@@ -4090,7 +4090,7 @@ errr make_character_dump(FILE *fff)
 #endif
 				pet = TRUE;
 			}
-			monster_desc(pet_name, m_ptr, 0x88);
+			monster_desc(pet_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 			fprintf(fff, "%s\n", pet_name);
 		}
 
@@ -4109,7 +4109,7 @@ errr make_character_dump(FILE *fff)
 #endif
 				pet = TRUE;
 			}
-			monster_desc(pet_name, m_ptr, 0x488);
+			monster_desc(pet_name, m_ptr, MD_ASSUME_OUTSIDE | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 			fprintf(fff, "%s\n", pet_name);
 		}
 

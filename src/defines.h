@@ -2631,6 +2631,19 @@
 #define PM_HASTE          0x00000100
 
 
+/* Bit flags for monster_desc() */
+#define MD_OBJECTIVE      0x00000001 /* Objective (or Reflexive) */
+#define MD_POSSESSIVE     0x00000002 /* Possessive (or Reflexive) */
+#define MD_INDEF_HIDDEN   0x00000004 /* Use indefinites for hidden monsters ("something") */
+#define MD_INDEF_VISIBLE  0x00000008 /* Use indefinites for visible monsters ("a kobold") */
+#define MD_PRON_HIDDEN    0x00000010 /* Pronominalize hidden monsters */
+#define MD_PRON_VISIBLE   0x00000020 /* Pronominalize visible monsters */
+#define MD_ASSUME_HIDDEN  0x00000040 /* Assume the monster is hidden */
+#define MD_ASSUME_VISIBLE 0x00000080 /* Assume the monster is visible */
+#define MD_TRUE_NAME      0x00000100 /* Chameleon's true name */
+#define MD_IGNORE_HALLU   0x00000200 /* Ignore hallucination, and penetrate shape change */
+#define MD_ASSUME_OUTSIDE 0x00000400 /* Assume this monster pet waiting outside the floor */
+
 /*
  * Bit flags for the "p_ptr->special_attack" variable. -LM-
  *

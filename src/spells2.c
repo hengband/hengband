@@ -5200,7 +5200,7 @@ bool probing(void)
 				lite_spot(m_ptr->fy, m_ptr->fx);
 			}
 			/* Get "the monster" or "something" */
-			monster_desc(m_name, m_ptr, 0x204);
+			monster_desc(m_name, m_ptr, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
 
 			speed = m_ptr->mspeed - 110;
 			if(m_ptr->fast) speed += 10;
@@ -5402,7 +5402,7 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
 					{
 						char m_name[80];
 
-						monster_desc(m_name, m_ptr, 0x08);
+						monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 						do_cmd_write_nikki(NIKKI_NAMED_PET, 6, m_name);
 					}
 
@@ -5922,7 +5922,7 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 							{
 								char m2_name[80];
 
-								monster_desc(m2_name, m_ptr, 0x08);
+								monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
 								do_cmd_write_nikki(NIKKI_NAMED_PET, 7, m2_name);
 							}
 						}
