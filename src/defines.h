@@ -3716,6 +3716,14 @@
 	(RF6_BREATH_MASK | RF6_SPECIAL)
 
 
+/*
+ * Hack -- unused spells
+ */
+
+#define RF4_XXX_MASK \
+	(RF4_XXX1 | RF4_XXX2 | RF4_XXX3 | RF4_XXX4)
+
+
 #define MR1_SINKA 0x01
 
 
@@ -4502,6 +4510,11 @@ extern int PlayerUID;
 
 #define MAX_MANE 16
 #define MAX_MONSPELLS 96
+#define MONSPELL_TYPE_BOLT 1
+#define MONSPELL_TYPE_BALL 2
+#define MONSPELL_TYPE_BREATH 3
+#define MONSPELL_TYPE_SUMMON 4
+#define MONSPELL_TYPE_OTHER 5
 
 #define EATER_EXT 36
 #define EATER_CHARGE 0x10000L

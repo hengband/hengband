@@ -385,36 +385,7 @@ cptr            p = "À‚À°";
 	}
 	}
 
-	if (mode == 1)
-	{
-		f4 = ((RF4_BOLT_MASK | RF4_BEAM_MASK) & ~(RF4_ROCKET));
-		f5 = RF5_BOLT_MASK | RF5_BEAM_MASK;
-		f6 = RF6_BOLT_MASK | RF6_BEAM_MASK;
-	}
-	else if (mode == 2)
-	{
-		f4 = (RF4_BALL_MASK & ~(RF4_BREATH_MASK));
-		f5 = (RF5_BALL_MASK & ~(RF5_BREATH_MASK));
-		f6 = (RF6_BALL_MASK & ~(RF6_BREATH_MASK));
-	}
-	else if (mode == 3)
-	{
-		f4 = RF4_BREATH_MASK;
-		f5 = RF5_BREATH_MASK;
-		f6 = RF6_BREATH_MASK;
-	}
-	else if (mode == 4)
-	{
-		f4 = RF4_SUMMON_MASK;
-		f5 = RF5_SUMMON_MASK;
-		f6 = RF6_SUMMON_MASK;
-	}
-	else if (mode == 5)
-	{
-		f4 = ~(RF4_BOLT_MASK | RF4_BEAM_MASK | RF4_BALL_MASK | RF4_SUMMON_MASK | RF4_INDIRECT_MASK | RF4_RIDING_MASK);
-		f5 = ~(RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_SUMMON_MASK | RF5_INDIRECT_MASK | RF5_RIDING_MASK);
-		f6 = (~(RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK | RF6_SUMMON_MASK | RF6_INDIRECT_MASK | RF6_RIDING_MASK)) | (RF6_TRAPS | RF6_DARKNESS);
-	}
+	set_rf_masks(&f4, &f5, &f6, mode);
 
 	for (i = 0, num = 0; i < 32; i++)
 	{
@@ -2171,4 +2142,43 @@ void learn_spell(int monspell)
 		new_mane = TRUE;
 		p_ptr->redraw |= (PR_STATE);
 	}
+}
+
+
+void set_rf_masks(s32b *f4,  s32b *f5, s32b *f6, int mode)
+{
+	switch(mode)
+	{
+		case MONSPELL_TYPE_BOLT:
+			*f4 = ((RF4_BOLT_MASK | RF4_BEAM_MASK) & ~(RF4_ROCKET));
+			*f5 = RF5_BOLT_MASK | RF5_BEAM_MASK;
+			*f6 = RF6_BOLT_MASK | RF6_BEAM_MASK;
+			break;
+
+		case MONSPELL_TYPE_BALL:
+			*f4 = (RF4_BALL_MASK & ~(RF4_BREATH_MASK));
+			*f5 = (RF5_BALL_MASK & ~(RF5_BREATH_MASK));
+			*f6 = (RF6_BALL_MASK & ~(RF6_BREATH_MASK));
+			break;
+
+		case MONSPELL_TYPE_BREATH:
+			*f4 = RF4_BREATH_MASK;
+			*f5 = RF5_BREATH_MASK;
+			*f6 = RF6_BREATH_MASK;
+			break;
+
+		case MONSPELL_TYPE_SUMMON:
+			*f4 = RF4_SUMMON_MASK;
+			*f5 = RF5_SUMMON_MASK;
+			*f6 = RF6_SUMMON_MASK;
+			break;
+
+		case MONSPELL_TYPE_OTHER:
+			*f4 = ~(RF4_BOLT_MASK | RF4_BEAM_MASK | RF4_BALL_MASK | RF4_SUMMON_MASK | RF4_INDIRECT_MASK | RF4_RIDING_MASK | RF4_XXX_MASK);
+			*f5 = ~(RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_SUMMON_MASK | RF5_INDIRECT_MASK | RF5_RIDING_MASK);
+			*f6 = (~(RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK | RF6_SUMMON_MASK | RF6_INDIRECT_MASK | RF6_RIDING_MASK)) | (RF6_TRAPS | RF6_DARKNESS);
+			break;
+	}
+
+	return;
 }

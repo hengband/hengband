@@ -113,6 +113,7 @@ extern cptr silly_attacks[MAX_SILLY_ATTACK];
 extern cptr silly_attacks2[MAX_SILLY_ATTACK];
 #endif
 extern monster_power monster_powers[MAX_MONSPELLS];
+extern cptr monster_powers_short[MAX_MONSPELLS];
 extern cptr ident_info[];
 extern mbe_info_type mbe_info[];
 
@@ -1394,6 +1395,7 @@ extern bool do_cmd_mane(bool baigaesi);
 /* mspells3.c */
 extern bool do_cmd_cast_learned(void);
 extern void learn_spell(int monspell);
+extern void set_rf_masks(s32b *f4, s32b *f5, s32b *f6, int mode);
 
 /* hissatsu.c */
 extern void hissatsu_info(char *p, int power);

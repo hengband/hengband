@@ -4096,6 +4096,144 @@ errr make_character_dump(FILE *fff)
 		if (pet) fprintf(fff, "\n");
 	}
 
+
+	if (p_ptr->pclass == CLASS_BLUE_MAGE) {
+
+		int             i = 0;
+		int	            j = 0;
+		int				l1 = 0;
+		int				l2 = 0;
+		int             num = 0;
+		int             spellnum[MAX_MONSPELLS];
+		s32b            f4 = 0, f5 = 0, f6 = 0;
+		char			p[60][80];
+		int				col = 0;
+		bool			pcol = FALSE;
+
+		for (i=0;i<60;i++) { p[i][0] = '\0'; }
+
+#ifdef JP
+		strcat(p[col], "\n  [学習済みの青魔法]\n");
+#else
+		strcat(p[col], "\n  [Learned blue magic]\n");
+#endif
+
+
+		for (j=1;j<6;j++)
+		{
+			col++;
+			set_rf_masks(&f4, &f5, &f6, j);
+			switch(j)
+			{
+				case MONSPELL_TYPE_BOLT:
+#ifdef JP
+					strcat(p[col], "\n     [ボルト型]\n");
+#else
+					strcat(p[col], "\n     [Bolt  type]\n");
+#endif
+					break;
+
+				case MONSPELL_TYPE_BALL:
+#ifdef JP
+					strcat(p[col], "\n     [ボール型]\n");
+#else
+					strcat(p[col], "\n     [Ball  type]\n");
+#endif
+					break;
+
+				case MONSPELL_TYPE_BREATH:
+#ifdef JP
+					strcat(p[col], "\n     [ブレス型]\n");
+#else
+					strcat(p[col], "\n     [  Breath  ]\n");
+#endif
+					break;
+
+				case MONSPELL_TYPE_SUMMON:
+#ifdef JP
+					strcat(p[col], "\n     [召喚魔法]\n");
+#else
+					strcat(p[col], "\n     [Summonning]\n");
+#endif
+					break;
+
+				case MONSPELL_TYPE_OTHER:
+#ifdef JP
+					strcat(p[col], "\n     [ その他 ]\n");
+#else
+					strcat(p[col], "\n     [Other type]\n");
+#endif
+					break;
+			}
+
+			for (i = 0, num = 0; i < 32; i++)
+			{
+				if ((0x00000001 << i) & f4) spellnum[num++] = i;
+			}
+			for (; i < 64; i++)
+			{
+				if ((0x00000001 << (i - 32)) & f5) spellnum[num++] = i;
+			}
+			for (; i < 96; i++)
+			{
+				if ((0x00000001 << (i - 64)) & f6) spellnum[num++] = i;
+			}
+
+			col++;
+			pcol = FALSE;
+			strcat(p[col], "       ");
+
+			for (i = 0; i < num; i++)
+			{
+				if (p_ptr->magic_num2[spellnum[i]])
+				{
+					pcol = TRUE;
+					/* Dump blue magic */
+					l1 = strlen(p[col]);
+					l2 = strlen(monster_powers_short[spellnum[i]]);
+					if ((l1 + l2) >= 75)
+					{
+						strcat(p[col], "\n");
+						col++;
+						strcat(p[col], "       ");
+					}
+					strcat(p[col], monster_powers_short[spellnum[i]]);
+					strcat(p[col], ", ");
+				}
+			}
+			
+			if (!pcol)
+			{
+#ifdef JP
+				strcat(p[col], "なし");
+#else
+				strcat(p[col], "None");
+#endif
+			}
+			else
+			{
+				if (p[col][strlen(p[col])-2] == ',')
+				{
+					p[col][strlen(p[col])-2] = '\0';
+				}
+				else
+				{
+					p[col][strlen(p[col])-10] = '\0';
+				}
+			}
+			
+			strcat(p[col], "\n");
+		}
+
+		for (i=0;i<=col;i++)
+		{
+			fprintf(fff, p[i]);
+		}
+	}
+
+	fprintf(fff, "\n");
+
+
 #ifdef JP
 	fprintf(fff, "\n  [クエスト情報]\n");
 #else

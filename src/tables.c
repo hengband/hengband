@@ -6217,6 +6217,44 @@ monster_power monster_powers[MAX_MONSPELLS] =
 };
 
 
+cptr monster_powers_short[MAX_MONSPELLS] = {
+#ifdef JP
+
+	"叫ぶ", "何か", "魔力消去", "ロケット", "射撃", "何か", "何か", "何か",
+	"酸", "電撃", "火炎", "冷気", "毒", "地獄", "閃光", "暗黒",
+	"混乱", "轟音", "カオス", "劣化", "因果混乱", "時間逆転", "遅鈍", "重力",
+	"破片", "プラズマ", "フォース", "魔力", "放射能球", "放射性廃棄物", "純ログルス", "分解",
+
+	"酸", "電撃", "火炎", "冷気", "悪臭雲", "地獄球", "ウォーター", "魔力の嵐",
+	"暗黒の嵐", "魔力吸収", "精神攻撃", "脳攻撃", "軽傷", "重傷", "致命傷", "秘孔を突く",
+	"酸", "電撃", "火炎", "冷気", "スターバースト", "地獄の矢", "ウォーター", "魔力の矢",
+	"プラズマ", "極寒", "マジックミサイル", "恐慌", "盲目", "混乱", "減速", "睡眠",
+
+	"加速", "破滅の手", "体力回復", "無傷の球", "ショートテレポート", "テレポート", "時を止める", "何か",
+	"引きよせる", "テレポートアウェイ", "テレポートレベル", "光の剣", "暗闇", "トラップ創造", "記憶喪失", "死者復活",
+	"援軍", "サイバーデーモン", "モンスター", "複数のモンスター", "蟻", "蜘蛛", "ハウンド", "ヒドラ",
+	"天使", "悪魔", "アンデッド", "ドラゴン", "上級アンデッド", "古代ドラゴン", "アンバーの王族", "ユニーク"
+
+#else
+
+	"Shriek", "Something", "Dispel-magic", "Rocket", "Arrow", "Arrows", "Missile", "Missiles",
+	"Acid", "Lightning", "Fire", "Cold", "Poison", "Nether", "Light", "Dark",
+	"Confusion", "Sound", "Chaos", "Disenchantment", "Nexus", "Time", "Inertia", "Gravity",
+	"Shards", "Plasma", "Force", "Mana", "Nuke", "Nuke", "Logrus", "Disintergrate",
+
+	"Acid", "Lightning", "Fire", "Frost", "Stinking Cloud", "Nether", "Water", "Mana storm",
+	"Darkness storm", "Drain mana", "Mind blast", "Brain smash", "Cause Light Wound", "Cause Serious Wound", "Cause Critical Wound", "Cause Mortal Wound",
+	"Acid", "Lightning", "Fire", "Frost", "Starburst", "Nether", "Water", "Mana",
+	"Plasm", "Ice", "Magic missile", "Scare", "Blind", "Confuse", "Slow", "Sleep",
+
+	"Speed", "Hand of doom", "Heal-self", "Invulnerable", "Blink", "Teleport", "The world", "Something",
+	"Teleport to", "Teleport away", "Teleport level", "Psycho-spear", "Create darkness", "Create traps", "Amnesia", "Raise dead",
+	"Aid", "Cyberdeamons", "A monster", "Monsters", "Ants", "Spiders", "Hounds", "Hydras",
+	"Angel", "Daemon", "Undead", "Dragon", "Greater Undead", "Ancient Dragon", "Lords of Amber", "Unique monsters"
+
+#endif
+};
+
 
 /*
  * Hack -- the "basic" color names (see "TERM_xxx")
