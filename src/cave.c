@@ -773,41 +773,10 @@ void apply_default_feat_lighting(byte f_attr[F_LIT_MAX], byte f_char[F_LIT_MAX])
 }
 
 
-/*
- * Mega-Hack -- Partial code of map_info() for darkened grids
- * Note: Each variable is declared in map_info().
- *       This macro modifies "feat", "f_ptr", "c" and "a".
- */
-#define darkened_grid_hack() \
-{ \
-	if (have_flag(f_ptr->flags, FF_LOS)) \
-	{ \
-		/* Unsafe cave grid -- idea borrowed from Unangband */ \
-		if (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) \
-			feat = FEAT_UNDETECTED; \
-		else \
-			feat = FEAT_NONE; \
-\
-		/* Access darkness */ \
-		f_ptr = &f_info[feat]; \
-\
-		/* Char and attr of darkness */ \
-		c = f_ptr->x_char[F_LIT_STANDARD]; \
-		a = f_ptr->x_attr[F_LIT_STANDARD]; \
-	} \
-	else if (view_granite_lite && view_yellow_lite) \
-	{ \
-		/* Use a darkly darkened colour/tile */ \
-		a = f_ptr->x_attr[F_LIT_DARKDARK]; \
-		c = f_ptr->x_char[F_LIT_DARKDARK]; \
-	} \
-} ;
-
-
 /* Is this grid "darkened" by monster? */
 #define darkened_grid(C) \
 	((((C)->info & (CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK)) == (CAVE_VIEW | CAVE_MNDK)) && \
-	!p_ptr->see_nocto && !p_ptr->blind)
+	!p_ptr->see_nocto)
 
 
 /*
@@ -962,43 +931,34 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 		    ((c_ptr->info & (CAVE_MARK | CAVE_LITE | CAVE_MNLT)) ||
 		     ((c_ptr->info & CAVE_VIEW) && (((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) || p_ptr->see_nocto))))
 		{
-			/* Normal char */
-			c = f_ptr->x_char[F_LIT_STANDARD];
-
-			/* Normal attr */
+			/* Normal attr/char */
 			a = f_ptr->x_attr[F_LIT_STANDARD];
+			c = f_ptr->x_char[F_LIT_STANDARD];
 
 			if (p_ptr->wild_mode)
 			{
-				/* Special lighting effects */
-				/* Handle "blind" */
-				if (view_special_lite && p_ptr->blind)
-				{
-					/* Use a darkly darkened colour/tile */
-					a = f_ptr->x_attr[F_LIT_DARKDARK];
-					c = f_ptr->x_char[F_LIT_DARKDARK];
-				}
+				/* Do nothing */
 			}
 
 			/* Mega-Hack -- Handle "in-sight" and "darkened" grids */
 			else if (darkened_grid(c_ptr))
 			{
-				darkened_grid_hack();
+				/* Unsafe cave grid -- idea borrowed from Unangband */
+				feat = (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) ? FEAT_UNDETECTED : FEAT_NONE;
+
+				/* Access darkness */
+				f_ptr = &f_info[feat];
+
+				/* Char and attr of darkness */
+				a = f_ptr->x_attr[F_LIT_STANDARD];
+				c = f_ptr->x_char[F_LIT_STANDARD];
 			}
 
 			/* Special lighting effects */
 			else if (view_special_lite)
 			{
-				/* Handle "blind" */
-				if (p_ptr->blind)
-				{
-					/* Use a darkly darkened colour/tile */
-					a = f_ptr->x_attr[F_LIT_DARKDARK];
-					c = f_ptr->x_char[F_LIT_DARKDARK];
-				}
-
 				/* Handle "torch-lit" grids */
-				else if (c_ptr->info & (CAVE_LITE | CAVE_MNLT))
+				if (c_ptr->info & (CAVE_LITE | CAVE_MNLT))
 				{
 					/* Torch lite */
 					if (view_yellow_lite)
@@ -1043,10 +1003,8 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 			/* Access darkness */
 			f_ptr = &f_info[feat];
 
-			/* Normal attr */
+			/* Normal attr/char */
 			a = f_ptr->x_attr[F_LIT_STANDARD];
-
-			/* Normal char */
 			c = f_ptr->x_char[F_LIT_STANDARD];
 		}
 	}
@@ -1057,11 +1015,9 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 		/* Memorized grids */
 		if (c_ptr->info & CAVE_MARK)
 		{
-			/* Normal char */
-			c = f_ptr->x_char[F_LIT_STANDARD];
-
-			/* Normal attr */
+			/* Normal attr/char */
 			a = f_ptr->x_attr[F_LIT_STANDARD];
+			c = f_ptr->x_char[F_LIT_STANDARD];
 
 			if (p_ptr->wild_mode)
 			{
@@ -1069,16 +1025,33 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 				/* Handle "blind" */
 				if (view_granite_lite && p_ptr->blind)
 				{
-					/* Use a darkened colour/tile */
-					a = f_ptr->x_attr[F_LIT_DARK];
-					c = f_ptr->x_char[F_LIT_DARK];
+					/* Use a darkly darkened colour/tile */
+					a = f_ptr->x_attr[F_LIT_DARKDARK];
+					c = f_ptr->x_char[F_LIT_DARKDARK];
 				}
 			}
 
 			/* Mega-Hack -- Handle "in-sight" and "darkened" grids */
-			else if (darkened_grid(c_ptr))
+			else if (darkened_grid(c_ptr) && !p_ptr->blind)
 			{
-				darkened_grid_hack();
+				if (have_flag(f_ptr->flags, FF_LOS))
+				{
+					/* Unsafe cave grid -- idea borrowed from Unangband */
+					feat = (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) ? FEAT_UNDETECTED : FEAT_NONE;
+
+					/* Access darkness */
+					f_ptr = &f_info[feat];
+
+					/* Char and attr of darkness */
+					a = f_ptr->x_attr[F_LIT_STANDARD];
+					c = f_ptr->x_char[F_LIT_STANDARD];
+				}
+				else if (view_granite_lite && view_bright_lite)
+				{
+					/* Use a darkly darkened colour/tile */
+					a = f_ptr->x_attr[F_LIT_DARKDARK];
+					c = f_ptr->x_char[F_LIT_DARKDARK];
+				}
 			}
 
 			/* Special lighting effects */
@@ -1087,9 +1060,9 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 				/* Handle "blind" */
 				if (p_ptr->blind)
 				{
-					/* Use a darkened colour/tile */
-					a = f_ptr->x_attr[F_LIT_DARK];
-					c = f_ptr->x_char[F_LIT_DARK];
+					/* Use a darkly darkened colour/tile */
+					a = f_ptr->x_attr[F_LIT_DARKDARK];
+					c = f_ptr->x_char[F_LIT_DARKDARK];
 				}
 
 				/* Handle "torch-lit" grids */
@@ -1146,10 +1119,8 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 			/* Access feature */
 			f_ptr = &f_info[feat];
 
-			/* Normal attr */
+			/* Normal attr/char */
 			a = f_ptr->x_attr[F_LIT_STANDARD];
-
-			/* Normal char */
 			c = f_ptr->x_char[F_LIT_STANDARD];
 		}
 	}
