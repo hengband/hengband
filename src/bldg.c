@@ -2127,7 +2127,7 @@ static void shoukinkubi(void)
 	clear_bldg(4,18);
 
 #ifdef JP
-	prt("死体を持ち帰ると賞金を差し上げます。",4 ,10);
+	prt("死体を持ち帰れば報酬を差し上げます。",4 ,10);
 c_put_str(TERM_YELLOW, "現在の賞金首", 6, 10);
 #else
 	prt("Offer a prize when you bring a wanted monster's corpse",4 ,10);
@@ -2136,22 +2136,27 @@ c_put_str(TERM_YELLOW, "Wanted monsters", 6, 10);
 
 	for (i = 0; i < MAX_KUBI; i++)
 	{
-		char buf[160];
+		byte color;
+		cptr done_mark;
 		monster_race *r_ptr = &r_info[(kubi_r_idx[i] > 10000 ? kubi_r_idx[i] - 10000 : kubi_r_idx[i])];
 
-		sprintf(buf,"%-40s ---- ",r_name + r_ptr->name);
-		prt(buf, y+7, 10);
 		if (kubi_r_idx[i] > 10000)
+		{
+			color = TERM_RED;
 #ifdef JP
-			c_put_str(TERM_RED,"済", y+7, 56);
+			done_mark = "(済)";
 #else
-			c_put_str(TERM_RED,"done", y+7, 56);
+			done_mark = "(done)";
 #endif
+		}
 		else
 		{
-			sprintf(buf,"$%d", 300 * (r_ptr->level + 1));
-			prt(buf, y+7, 56);
+			color = TERM_WHITE;
+			done_mark = "";
 		}
+
+		c_prt(color, format("%s %s", r_name + r_ptr->name, done_mark), y+7, 10);
+
 		y = (y+1) % 10;
 		if (!y && (i < MAX_KUBI -1))
 		{
@@ -2167,6 +2172,40 @@ c_put_str(TERM_YELLOW, "Wanted monsters", 6, 10);
 	}
 }
 
+
+/* List of prize object */
+static struct {
+	s16b tval;
+	s16b sval;
+} prize_list[MAX_KUBI] = 
+{
+	{TV_POTION, SV_POTION_CURING},
+	{TV_POTION, SV_POTION_SPEED},
+	{TV_POTION, SV_POTION_SPEED},
+	{TV_POTION, SV_POTION_RESISTANCE},
+	{TV_POTION, SV_POTION_ENLIGHTENMENT},
+
+	{TV_POTION, SV_POTION_HEALING},
+	{TV_POTION, SV_POTION_RESTORE_MANA},
+	{TV_SCROLL, SV_SCROLL_STAR_DESTRUCTION},
+	{TV_POTION, SV_POTION_STAR_ENLIGHTENMENT},
+	{TV_SCROLL, SV_SCROLL_SUMMON_PET},
+
+	{TV_SCROLL, SV_SCROLL_GENOCIDE},
+	{TV_POTION, SV_POTION_STAR_HEALING},
+	{TV_POTION, SV_POTION_STAR_HEALING},
+	{TV_POTION, SV_POTION_NEW_LIFE},
+	{TV_SCROLL, SV_SCROLL_MASS_GENOCIDE},
+
+	{TV_POTION, SV_POTION_LIFE},
+	{TV_POTION, SV_POTION_LIFE},
+	{TV_POTION, SV_POTION_AUGMENTATION},
+	{TV_POTION, SV_POTION_INVULNERABILITY},
+	{TV_SCROLL, SV_SCROLL_ARTIFACT},
+};
+
+
+/* Get prize */
 static bool kankin(void)
 {
 	int i, j;
@@ -2174,9 +2213,12 @@ static bool kankin(void)
 	char o_name[MAX_NLEN];
 	object_type *o_ptr;
 
-	for (i = 0;i <= INVEN_LARM; i++)
+	/* Loop for inventory and right/left arm */
+	for (i = 0; i <= INVEN_LARM; i++)
 	{
 		o_ptr = &inventory[i];
+
+		/* Living Tsuchinoko worthes $1000000 */
 		if ((o_ptr->tval == TV_CAPTURE) && (o_ptr->pval == MON_TSUCHINOKO))
 		{
 			char buf[MAX_NLEN+20];
@@ -2202,9 +2244,12 @@ static bool kankin(void)
 			change = TRUE;
 		}
 	}
-	for (i = 0;i <= INVEN_LARM; i++)
+
+	for (i = 0; i < INVEN_PACK; i++)
 	{
 		o_ptr = &inventory[i];
+
+		/* Corpse of Tsuchinoko worthes $200000 */
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (o_ptr->pval == MON_TSUCHINOKO))
 		{
 			char buf[MAX_NLEN+20];
@@ -2230,9 +2275,12 @@ static bool kankin(void)
 			change = TRUE;
 		}
 	}
-	for (i = 0;i <= INVEN_LARM; i++)
+
+	for (i = 0; i < INVEN_PACK; i++)
 	{
 		o_ptr = &inventory[i];
+
+		/* Bones of Tsuchinoko worthes $100000 */
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON) && (o_ptr->pval == MON_TSUCHINOKO))
 		{
 			char buf[MAX_NLEN+20];
@@ -2259,7 +2307,7 @@ static bool kankin(void)
 		}
 	}
 
-	for (i = 0;i <= INVEN_LARM; i++)
+	for (i = 0; i < INVEN_PACK; i++)
 	{
 		o_ptr = &inventory[i];
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (o_ptr->pval == today_mon))
@@ -2287,7 +2335,8 @@ static bool kankin(void)
 			change = TRUE;
 		}
 	}
-	for (i = 0;i <= INVEN_LARM; i++)
+
+	for (i = 0; i < INVEN_PACK; i++)
 	{
 		o_ptr = &inventory[i];
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON) && (o_ptr->pval == today_mon))
@@ -2318,33 +2367,84 @@ static bool kankin(void)
 
 	for (j = 0; j < MAX_KUBI; j++)
 	{
-		for (i = 0;i <= INVEN_LARM; i++)
+		/* Need reverse order --- Positions will be changed in the loop */
+		for (i = INVEN_PACK-1; i >= 0; i--)
 		{
 			o_ptr = &inventory[i];
 			if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (o_ptr->pval == kubi_r_idx[j]))
 			{
 				char buf[MAX_NLEN+20];
+				int num, k;
+				object_type forge;
+
 				object_desc(o_name, o_ptr, TRUE, 3);
 #ifdef JP
-				sprintf(buf, "%s を換金しますか？",o_name);
+				sprintf(buf, "%sを渡しますか？",o_name);
 #else
-				sprintf(buf, "Convert %s into money? ",o_name);
+				sprintf(buf, "Hand %s over? ",o_name);
 #endif
-				if (get_check(buf))
-				{
+				if (!get_check(buf)) continue;
+
+#if 0 /* Obsorated */
 #ifdef JP
-					msg_format("賞金 %ld＄を手に入れた。", (r_info[kubi_r_idx[j]].level + 1) * 300 * o_ptr->number);
+				msg_format("賞金 %ld＄を手に入れた。", (r_info[kubi_r_idx[j]].level + 1) * 300 * o_ptr->number);
 #else
-					msg_format("You get %ldgp.", (r_info[kubi_r_idx[j]].level + 1) * 300 * o_ptr->number);
+				msg_format("You get %ldgp.", (r_info[kubi_r_idx[j]].level + 1) * 300 * o_ptr->number);
 #endif
-					p_ptr->au += (r_info[kubi_r_idx[j]].level+1) * 300 * o_ptr->number;
-					p_ptr->redraw |= (PR_GOLD);
-					inven_item_increase(i, -o_ptr->number);
-					inven_item_describe(i);
-					inven_item_optimize(i);
-					chg_virtue(V_JUSTICE, 5);
-					kubi_r_idx[j] += 10000;
+				p_ptr->au += (r_info[kubi_r_idx[j]].level+1) * 300 * o_ptr->number;
+				p_ptr->redraw |= (PR_GOLD);
+				inven_item_increase(i, -o_ptr->number);
+				inven_item_describe(i);
+				inven_item_optimize(i);
+				chg_virtue(V_JUSTICE, 5);
+				kubi_r_idx[j] += 10000;
+
+				change = TRUE;
+#endif /* Obsorated */
+
+				/* Hand it first */
+				inven_item_increase(i, -o_ptr->number);
+				inven_item_describe(i);
+				inven_item_optimize(i);
+
+				chg_virtue(V_JUSTICE, 5);
+				kubi_r_idx[j] += 10000;
+
+				/* Count number of unique corpses already handed */
+				for (num = 0, k = 0; k < MAX_KUBI; k++)
+				{
+					if (kubi_r_idx[k] >= 10000) num++;
 				}
+
+#ifdef JP
+				msg_format("これで合計 %d ポイント獲得しました。", num);
+#else
+				msg_format("You earned %d point%s total.", num, (num > 1 ? "s" : ""));
+#endif
+
+				/* Prepare to make a prize */
+				object_prep(&forge, lookup_kind(prize_list[num-1].tval, prize_list[num-1].sval));
+				apply_magic(&forge, object_level, AM_NO_FIXED_ART);
+
+				/* Identify it fully */
+				object_aware(&forge);
+				object_known(&forge);
+
+				/*
+				 * Hand it --- Assume there is an empty slot.
+				 * Since a corpse is handed at first,
+				 * there is at least one empty slot.
+				 */
+				(void)inven_carry(&forge);
+
+				/* Describe the object */
+				object_desc(o_name, &forge, TRUE, 3);
+#ifdef JP
+				msg_format("%s を貰った。",o_name);
+#else
+				msg_format("You get %s. ",o_name);
+#endif
+
 				change = TRUE;
 			}
 		}
