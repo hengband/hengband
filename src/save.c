@@ -1240,8 +1240,22 @@ static bool wr_savefile_new(void)
 
 	/* Space */
 	wr_u32b(0L);
-	wr_u32b(0L);
+	wr_u16b(0);
+	wr_byte(0);
 
+#ifdef JP
+# ifdef EUC
+	/* EUC kanji code */
+	wr_byte(2);
+# endif
+# ifdef SJIS
+	/* SJIS kanji code */
+	wr_byte(3);
+# endif
+#else
+	/* ASCII */
+	wr_byte(1);
+#endif
 
 	/* Write the RNG state */
 	wr_randomizer();

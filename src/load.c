@@ -73,7 +73,14 @@ static u32b	v_check = 0L;
  */
 static u32b	x_check = 0L;
 
-
+/*
+ * Hack -- Japanese Kanji code
+ * 0: Unknown
+ * 1: ASCII
+ * 2: EUC
+ * 3: SJIS
+ */
+static byte kanji_code = 0;
 
 /*
  * This function determines if the version of the savefile
@@ -220,8 +227,45 @@ static void rd_string(char *str, int max)
 
 	/* Terminate */
 	str[max-1] = '\0';
+
+
 #ifdef JP
-	codeconv(str);
+	/* Convert Kanji code */
+	switch (kanji_code)
+	{
+#ifdef SJIS
+	case 2:
+		/* EUC to SJIS */
+		euc2sjis(str);
+		break;
+#endif
+
+#ifdef EUC
+	case 3:
+		/* SJIS to EUC */
+		sjis2euc(str);
+		break;
+#endif
+
+	case 0:
+		/* Unknown kanji code */
+		if (codeconv(str))
+		{
+#ifdef EUC
+			/* This save file is written in SJIS */
+			kanji_code = 3;
+#endif
+#ifdef SJIS
+			/* This save file is written in EUC */
+			kanji_code = 2;
+#endif
+		}
+		break;
+
+	default:
+		/* No conversion needed */
+		break;
+	}
 #endif
 }
 
@@ -3053,8 +3097,13 @@ static errr rd_savefile_new_aux(void)
 	rd_u32b(&tmp32u);
 
 	/* Later use (always zero) */
-	rd_u32b(&tmp32u);
+	rd_u16b(&tmp16u);
 
+	/* Later use (always zero) */
+	rd_byte(&tmp8u);
+
+	/* Kanji code */
+	rd_byte(&kanji_code);
 
 	/* Read RNG state */
 	rd_randomizer();
@@ -3644,6 +3693,23 @@ note("エンコードされたチェックサムがおかしい");
 		return (11);
 	}
 
+#endif
+
+	/*
+	 * Use system depended kanji code for saved floors
+	 */
+#ifdef JP
+# ifdef EUC
+	/* EUC kanji code */
+	kanji_code = 2;
+# endif
+# ifdef SJIS
+	/* SJIS kanji code */
+	kanji_code = 3;
+# endif
+#else
+	/* ASCII */
+	kanji_code = 1;
 #endif
 
 	/* Success */

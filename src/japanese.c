@@ -143,97 +143,129 @@ char* strstr_j(const char* s, const char* t)
 
 
 /*
+ * Convert SJIS string to EUC string
+ */
+void sjis2euc(char *str)
+{
+	int i;
+	unsigned char c1, c2;
+	unsigned char *tmp;
+
+	int len = strlen(str);
+
+	C_MAKE(tmp, len+1, byte);
+
+	for (i = 0; i < len; i++)
+	{
+		c1 = str[i];
+		if (c1 & 0x80)
+		{
+			i++;
+			c2 = str[i];
+			if (c2 >= 0x9f)
+			{
+				c1 = c1 * 2 - (c1 >= 0xe0 ? 0xe0 : 0x60);
+				c2 += 2;
+			}
+			else
+			{
+				c1 = c1 * 2 - (c1 >= 0xe0 ? 0xe1 : 0x61);
+				c2 += 0x60 + (c2 < 0x7f);
+			}
+			tmp[i - 1] = c1;
+			tmp[i] = c2;
+		}
+		else
+			tmp[i] = c1;
+	}
+	tmp[len] = 0;
+	strcpy(str, (char *)tmp);
+
+	C_KILL(tmp, len+1, byte);
+}  
+
+
+/*
+ * Convert EUC string to SJIS string
+ */
+void euc2sjis(char *str)
+{
+	int i;
+	unsigned char c1, c2;
+	unsigned char *tmp;
+	
+	int len = strlen(str);
+
+	C_MAKE(tmp, len+1, byte);
+
+	for (i = 0; i < len; i++)
+	{
+		c1 = str[i];
+		if (c1 & 0x80)
+		{
+			i++;
+			c2 = str[i];
+			if (c1 % 2)
+			{
+				c1 = (c1 >> 1) + (c1 < 0xdf ? 0x31 : 0x71);
+				c2 -= 0x60 + (c2 < 0xe0);
+			}
+			else
+			{
+				c1 = (c1 >> 1) + (c1 < 0xdf ? 0x30 : 0x70);
+				c2 -= 2;
+			}
+
+			tmp[i - 1] = c1;
+			tmp[i] = c2;
+		}
+		else
+			tmp[i] = c1;
+	}
+	tmp[len] = 0;
+	strcpy(str, (char *)tmp);
+
+	C_KILL(tmp, len+1, byte);
+}  
+
+
+/*
  * strを環境に合った文字コードに変換する。
  * strの長さに制限はない。
  */
-void codeconv(char *str)
+bool codeconv(char *str)
 {
 	int i;
 	int kanji = 0, iseuc = 1;
-	int len;
-	unsigned char c1, c2;
-	unsigned char *tmp;
 
 	/* 漢字が存在し、その漢字コードがEUCかどうか調べる。*/
 	for (i = 0; str[i]; i++)
 	{
-		c1 = str[i];
+		unsigned char c1 = str[i];
+
 		if (c1 & 0x80)  kanji = 1;
 		if ( c1>=0x80 && (c1 < 0xa1 || c1 > 0xfe)) iseuc = 0;
 	}
 
-	/* strの長さ+1(tmp確保用) */
-	len = i + 1;
-
 #ifdef EUC
 	if (kanji && !iseuc)	 /* SJIS -> EUC */
 	{
-		C_MAKE(tmp, len, byte);
+		sjis2euc(str);
 
-		for (i = 0; str[i]; i++)
-		{
-			c1 = str[i];
-			if (c1 & 0x80)
-			{
-				i++;
-				c2 = str[i];
-				if (c2 >= 0x9f)
-				{
-					c1 = c1 * 2 - (c1 >= 0xe0 ? 0xe0 : 0x60);
-					c2 += 2;
-				}
-				else
-				{
-					c1 = c1 * 2 - (c1 >= 0xe0 ? 0xe1 : 0x61);
-					c2 += 0x60 + (c2 < 0x7f);
-				}
-				tmp[i - 1] = c1;
-				tmp[i] = c2;
-			}
-			else
-				tmp[i] = c1;
-		}
-		tmp[i] = '\0';
-		strcpy(str, (char *)tmp);
-
-		C_KILL(tmp, len, byte);
+		return TRUE;
 	}
 #endif
 
 #ifdef SJIS
 	if (kanji && iseuc)	/* EUC -> SJIS */
 	{
-		C_MAKE(tmp, len, byte);
+		euc2sjis(str);
 
-		for (i = 0; str[i]; i++)
-		{
-			c1 = str[i];
-			if (c1 & 0x80)
-			{
-				i++;
-				c2 = str[i];
-				if (c1 % 2)
-				{
-					c1 = (c1 >> 1) + (c1 < 0xdf ? 0x31 : 0x71);
-					c2 -= 0x60 + (c2 < 0xe0);
-				}
-				else
-				{
-					c1 = (c1 >> 1) + (c1 < 0xdf ? 0x30 : 0x70);
-					c2 -= 2;
-				}
-				tmp[i - 1] = c1;
-				tmp[i] = c2;
-			}
-			else
-				tmp[i] = c1;
-		}
-		tmp[i] = '\0';
-		strcpy(str, tmp);
-
-		C_KILL(tmp, len, byte);
+		return TRUE;
 	}
 #endif
+
+	return FALSE;
 }
 
 /* 文字列sのxバイト目が漢字の1バイト目かどうか判定する */
