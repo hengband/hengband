@@ -2234,6 +2234,7 @@ static void process_world_aux_mutation(void)
 #endif
 
 		(void)set_shero(10 + randint1(p_ptr->lev), FALSE);
+		(void)set_afraid(0);
 	}
 
 	if ((p_ptr->muta2 & MUT2_COWARDICE) && (randint1(3000) == 13))

@@ -4475,6 +4475,7 @@ msg_print("天国の歌が聞こえる...");
 				(void)set_stun(0);
 				(void)set_confused(0);
 				(void)set_blind(0);
+				(void)set_afraid(0);
 				(void)set_hero(randint1(25) + 25, FALSE);
 				(void)hp_player(777);
 				o_ptr->timeout = 300;
@@ -5576,6 +5577,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 			case ART_MATOI:
 			case ART_AEGISFANG:
 			{
+				(void)set_afraid(0);
 				set_hero(randint1(25)+25, FALSE);
 				hp_player(10);
 				o_ptr->timeout = randint0(30) + 30;
@@ -5636,6 +5638,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 #else
 				msg_print("You stamp. (as if you are in a ring.)");
 #endif
+				(void)set_afraid(0);
 				(void)set_hero(randint1(20) + 20, FALSE);
 				dispel_evil(p_ptr->lev * 3);
 				o_ptr->timeout = 100 + randint1(100);
@@ -6221,6 +6224,7 @@ msg_print("あなたはエレメントのブレスを吐いた。");
 				o_ptr->timeout = 100;
 				break;
 			case EGO_RING_BERSERKER:
+				(void)set_afraid(0);
 				(void)set_shero(randint1(25) + 25, FALSE);
 				o_ptr->timeout = randint0(75)+75;
 				break;
