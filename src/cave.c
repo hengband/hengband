@@ -904,31 +904,20 @@ void map_info(int y, int x, byte *ap, char *cp)
 				/* Handle "blind" */
 				if (p_ptr->blind)
 				{
-                                        if (new_ascii_graphics)
+					if (use_graphics)
 					{
-						if (is_ascii_graphics(c,a))
-						{
-							/* Use darkened colour */
-							a = lighting_colours[a][1];
-						}
-						else if (use_graphics && feat_supports_lighting(feat))
-						{
-							/* Use a dark tile */
-							c++;
-						}
+						/*
+						 * feat_supports_lighting(feat)
+						 * is always TRUE here
+						 */
+						
+						/* Use a dark tile */
+						c++;
 					}
 					else
 					{
-						if (use_graphics)
-						{
-							/* Use a dark tile */
-							c++;
-						}
-						else
-						{
-							/* Use "dark gray" */
-							a = TERM_L_DARK;
-						}
+						/* Use "dark gray" */
+						a = TERM_L_DARK;
 					}
                                 }
 
@@ -938,36 +927,20 @@ void map_info(int y, int x, byte *ap, char *cp)
                                         /* Torch lite */
                                         if (view_yellow_lite && !p_ptr->wild_mode)
                                         {
-						if (new_ascii_graphics)
+						if (use_graphics)
 						{
-                                                	if (is_ascii_graphics(c,a))
-							{
-								/* Use lightened colour */
-								a = lighting_colours[a][0];
-							}
-							else if (use_graphics &&
-								 feat_supports_lighting(feat))
-							{
-								/* Use a brightly lit tile */
-								c += 2;
-							}
+							/*
+							 * feat_supports_lighting(feat)
+							 * is always TRUE here
+							 */
+
+							/* Use a brightly lit tile */
+							c += 2;
 						}
 						else
 						{
-							/* Torch lite */
-							if (view_yellow_lite)
-							{
-								if (use_graphics)
-								{
-									/* Use a brightly lit tile */
-									c += 2;
-								}
-								else
-								{
-								  	/* Use "yellow" */
-									a = TERM_YELLOW;
-								}
-							}
+							/* Use "yellow" */
+							a = TERM_YELLOW;
 						}
 					}
 				}
@@ -975,31 +948,20 @@ void map_info(int y, int x, byte *ap, char *cp)
                                 /* Handle "dark" grids */
                                 else if (!(c_ptr->info & CAVE_GLOW))
                                 {
-					if (new_ascii_graphics)
+					if (use_graphics)
 					{
-						if (is_ascii_graphics(c,a))
-						{
-							/* Use darkened colour */
-							a = lighting_colours[a][1];
-						}
-						else if (use_graphics && feat_supports_lighting(feat))
-						{
-							/* Use a dark tile */
-							c++;
-						}
+						/*
+						 * feat_supports_lighting(feat)
+						 * is always TRUE here
+						 */
+
+						/* Use a dark tile */
+						c++;
 					}
 					else
 					{
-						if (use_graphics)
-						{
-							/* Use a dark tile */
-							c++;
-						}
-						else
-						{
-							/* Use "dark gray" */
-							a = TERM_L_DARK;
-						}
+						/* Use "dark gray" */
+						a = TERM_L_DARK;
 					}
                                 }
 
@@ -1009,31 +971,20 @@ void map_info(int y, int x, byte *ap, char *cp)
 					/* Special flag */
 					if (view_bright_lite && !p_ptr->wild_mode)
 					{
-						if (new_ascii_graphics)
+						if (use_graphics)
 						{
-							if (is_ascii_graphics(c,a))
-							{
-								/* Use darkened colour */
-								a = lighting_colours[a][1];
-							}
-							else if (use_graphics && feat_supports_lighting(feat))
-							{
-								/* Use a dark tile */
-								c++;
-							}
+							/*
+							 * feat_supports_lighting(feat)
+							 * is always TRUE here
+							 */
+
+							/* Use a dark tile */
+							c++;
 						}
 						else
 						{
-							if (use_graphics)
-							{
-								/* Use a dark tile */
-								c++;
-							}
-							else
-							{
-								/* Use "gray" */
-								a = TERM_SLATE;
-							}
+							/* Use "gray" */
+							a = TERM_SLATE;
 						}
 					}
 				}
@@ -1060,7 +1011,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 	else
 	{
 		/* Memorized grids */
-		if ((c_ptr->info & CAVE_MARK) && (view_granite_lite || !new_ascii_graphics))
+		if ((c_ptr->info & CAVE_MARK) && (view_granite_lite || new_ascii_graphics))
 		{
 			/* Apply "mimic" field */
 			if (c_ptr->mimic)
