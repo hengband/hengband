@@ -198,7 +198,8 @@ o_name, index_to_label(slot),game_inscriptions[feel]);
 	/* Auto-inscription/destroy */
 	idx = is_autopick(o_ptr);
 	auto_inscribe_item(slot, idx);
-	auto_destroy_item(slot, idx, FALSE);
+        if (destroy_feeling)
+                auto_destroy_item(slot, idx, FALSE);
 
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);

@@ -7293,6 +7293,22 @@ option_type option_info[] =
 #endif
 
 #ifdef JP
+        { &destroy_feeling,               FALSE, 7, 7, 8,
+        "destroy_feeling",                "簡易鑑定したとき自動破壊を適用する" },
+#else
+        { &destroy_feeling,               FALSE, 7, 7, 8,
+        "destroy_feeling",                "Apply auto-destroy as sense feeling" },
+#endif
+
+#ifdef JP
+        { &destroy_identify,               FALSE, 7, 7, 9,
+        "destroy_identify",                "鑑定したとき自動破壊を適用する" },
+#else
+        { &destroy_identify,               FALSE, 7, 7, 9,
+        "destroy_identify",                "Apply auto-destroy as identify an item" },
+#endif
+
+#ifdef JP
         { &leave_worth,                 TRUE, 7, 7, 2,
         "leave_worth",                  "価値があるアイテムは壊さない" },
 #else

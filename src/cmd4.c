@@ -1790,9 +1790,9 @@ void do_cmd_options_aux(int page, cptr info)
 	Term_clear();
 
 #ifdef JP
-	if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "以下のオプションは、簡易自動破壊を使用するときのみ有効", 4, 6);
+	if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "以下のオプションは、簡易自動破壊を使用するときのみ有効", 6, 6);
 #else
-	if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "Following options will protect items from easy auto-destroyer.", 4, 3);
+	if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "Following options will protect items from easy auto-destroyer.", 6, 3);
 #endif
 
 	/* Interact with the player */
@@ -1825,11 +1825,11 @@ void do_cmd_options_aux(int page, cptr info)
 #endif
 
 			        option_info[opt[i]].o_text);
-			if ((page == PAGE_AUTODESTROY) && i > 0) c_prt(a, buf, i + 5, 0);
+			if ((page == PAGE_AUTODESTROY) && i > 2) c_prt(a, buf, i + 5, 0);
 			else c_prt(a, buf, i + 2, 0);
 		}
 
-		if ((page == PAGE_AUTODESTROY) && (k > 0)) l = 3;
+		if ((page == PAGE_AUTODESTROY) && (k > 2)) l = 3;
 		else l = 0;
 		/* Hilite current option */
 		move_cursor(k + 2 + l, 50);

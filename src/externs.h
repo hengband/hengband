@@ -282,6 +282,8 @@ extern bool use_command;
 extern bool center_player;
 extern bool center_running;
 extern bool destroy_items;
+extern bool destroy_feeling;
+extern bool destroy_identify;
 extern bool leave_worth;
 extern bool leave_equip;
 extern bool leave_wanted;

@@ -486,6 +486,17 @@ Use easy auto-destroyer    [destroy_items]
     objects which you touch unless the object is protected by various
     'leave_...'  options below.
 
+Apply auto-destroy as sense feeling    [destroy_feeling]
+    If this option is set, Hengband will apply auto-destroyer on an
+    item just when you sensed its feeling.  Typically it will destroy
+    {cursed} items just after the sensing.
+
+Apply auto-destroy as identify an item    [destroy_identify]
+    If this option is set, Hengband will apply auto-destroyer on an
+    item just when you identified it using magical items or spells.
+    Typically it will destroy {cursed} items and other useless items
+    which you set up to be auto-destroyed.
+
 Auto-destroyer leaves known worthy items    [leave_worth]
     This option protects known objects that can be sold in stores from 
     auto-destruction by the destroy_items option.

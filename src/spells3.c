@@ -2702,7 +2702,8 @@ s = "鑑定するべきアイテムがない。";
 	/* Auto-inscription/destroy */
 	idx = is_autopick(o_ptr);
 	auto_inscribe_item(item, idx);
-	if (!old_known) auto_destroy_item(item, idx, wait_optimize);
+	if (destroy_identify && !old_known)
+                auto_destroy_item(item, idx, wait_optimize);
 
 	/* Something happened */
 	return (TRUE);
@@ -2884,7 +2885,8 @@ s = "鑑定するべきアイテムがない。";
 	/* Auto-inscription/destroy */
 	idx = is_autopick(o_ptr);
 	auto_inscribe_item(item, idx);
-	if (!old_known) auto_destroy_item(item, idx, wait_optimize);
+	if (destroy_identify && !old_known)
+                auto_destroy_item(item, idx, wait_optimize);
 
 	/* Success */
 	return (TRUE);

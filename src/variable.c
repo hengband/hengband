@@ -952,6 +952,8 @@ bool center_running;
 
 /* Auto-destruction options */
 bool destroy_items;
+bool destroy_feeling;
+bool destroy_identify;
 bool leave_worth;
 bool leave_equip;
 bool leave_wanted;
