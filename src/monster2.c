@@ -2545,7 +2545,7 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 		else
 			get_mon_num_prep(monster_hook_chameleon, NULL);
 
-		while (attempt--)
+		while (--attempt)
 		{
 			int level;
 
