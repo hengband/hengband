@@ -314,7 +314,6 @@ D:$rock and about as tasty.
 D:日持ちを良くする為に二度焼きした乾パンの一種だ。
 D:岩のように固く、味もだいたいその程度。
 
-#JZ#
 #"鹿肉"は誤訳
 N:23:乾し肉
 E:& Strip~ of Venison
@@ -1322,6 +1321,10 @@ D:$are stiff and weakened.
 D:この鎧の各部の継ぎ目は錆で脆くなっており、朽ちた鎖の輪は固まってしまい弱まっ
 D:ている。
 
+# "hauberk"は元の意味は(袖無しの)胴鎧を指す言葉。 よく鎖かたびらで作ら
+# れたので後に転じてhauberkと言えば鎖かたびらの胴鎧、さらには鎖かたび
+# ら全般をも指すようになったが、ここでは「鎖かたびらの胴鎧」の意味で使
+# われていると思われる。 Mogami
 N:111:重鎖かたびら
 E:Augmented Chain Mail~
 G:[:s
@@ -1332,8 +1335,9 @@ P:16:1d4:-2:0:0
 D:$A hauberk, leggings, and sleeves of interlocking steel rings, 
 D:$strategically reinforced at vital locations with a second layer 
 D:$of chain, all over a layer of heavy padding.
-D:噛み合った鋼鉄の輪でできた鎖かたびらと脛当てと袖であり、2枚目の鎖の層で致命的
-D:な部分を戦略的に補強しており、至る所に重い詰め物の層がある。
+D:噛み合った鋼鉄の輪でできた鎖かたびらの胴鎧と脛当てと袖であり、
+D:2枚目の鎖の層で重要な部分を戦略的に補強しており、
+D:至る所に重い詰め物の層がある。
 
 N:112:強化鎖かたびら
 E:Bar Chain Mail~
@@ -1400,7 +1404,7 @@ F:IGNORE_ACID
 D:$Adamantite, hard as diamonds, forms this exquisite suit; nothing else 
 D:$in Middle Earth gives as much protection.
 D:ダイアモンドのように硬いアダマンタイトでできた精巧で美しい鎧であり、
-D:これほどの防御をもたらす鎧は中つ国には存在しない。
+D:これほどの防御をもたらす鎧は中つ国には他に存在しない。
 
 N:119:ミスリル製プレート・メイル
 E:Mithril Plate Mail~
@@ -1506,7 +1510,7 @@ W:50:0:40:100
 A:50/1
 P:5:1d1:0:0:0
 D:$A massive set of hand sheathings, bound with steel and thrice-cured leather.
-D:力強い手の覆いで、鋼鉄としっかり煮固めた革で縛ってある。
+D:重厚な手の覆いで、鋼鉄としっかり煮固めた革で縛ってある。
 
 
 ### The shields ###
@@ -4261,9 +4265,11 @@ A:70/8
 P:30:2d4:-2:0:10
 F:RES_POIS |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
-D:$A suit of scales, glistening in sickly green, out from which falls the 
-D:$skeleton of a rat who touched it and died in agony.
-D:病的な緑に光る鱗鎧で、それに触れたネズミは苦痛に死んで白骨化する。
+#D:$A suit of scales, glistening in sickly green, out from which falls the 
+#D:$skeleton of a rat who touched it and died in agony.
+#D:病的な緑に光る鱗鎧で、それに触れたネズミは苦痛に死んで白骨化する。
+D:$A suit of scales, glistening in sickly green.
+D:病的な緑に光る鱗鎧だ。
 
 N:405:万色ドラゴン・スケイルメイル
 E:Multi-Hued Dragon Scale Mail~
