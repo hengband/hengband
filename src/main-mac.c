@@ -3339,9 +3339,11 @@ static void cf_save_prefs()
 	save_pref_short("arg.graf_mode", graf_mode);
 	save_pref_short("arg.arg_bigtile", use_bigtile);
 
+#ifndef MACH_O_CARBON
 	/* SoundMode */
 	for( i = 0 ; i < 7 ; i++ )
 		save_pref_short(format("sound%d.on", i), soundmode[i]);
+#endif /* MACH_O_CARBON */
 
 	/* Windows */
 	for (i = 0; i < MAX_TERM_DATA; i++)
@@ -3424,11 +3426,13 @@ static void cf_load_prefs()
 
 	}
 
+#ifndef MACH_O_CARBON
 	/* SoundMode */
 	for( i = 0 ; i < 7 ; i++ )
 	{
 		query_load_pref_short(format("sound%d.on", i), &soundmode[i]);
 	}
+#endif /* MACH_O_CARBON */
 
 	/* Windows */
 	for (i = 0; i < MAX_TERM_DATA; i++)
