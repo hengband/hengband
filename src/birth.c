@@ -2018,6 +2018,7 @@ static char realm_subinfo[VALID_REALM][41] =
 "Very useful but poor a bit.",
 "Support to offence and defence.",
 "Good at both offence and defence.",
+"Terrible for evil creatures.",
 "Hey guy, sing a song! :-)",
 "Swing your sword without thinking."
 #endif
