@@ -1,5 +1,4 @@
 N: 1:BIAS_ELEC
-8
 'Registor'
 'Rubber Coat'
 'One Million Volt'
@@ -10,7 +9,6 @@ of Thunder
 of Helldiver
 
 N: 2:BIAS_POIS
-7
 'Poison Barrier'
 of Scorpio
 of Cleanness
@@ -20,7 +18,6 @@ of the Snake Master
 of the Bee Master
 
 N: 3:BIAS_FIRE
-11
 'Blessed Fusion'
 'Flameturner'
 'Red Sun'
@@ -34,7 +31,6 @@ of Desert
 of Lungorthin
 
 N: 4:BIAS_COLD
-7
 'Icy Princess'
 'White Snow'
 'Great Icefield'
@@ -44,7 +40,6 @@ of Arctic Ocean
 of Antarctic Land
 
 N: 5:BIAS_ACID
-7
 'Gelatinous Cube'
 'Skin of Dhole'
 'Shield of Water'
@@ -54,7 +49,6 @@ of the Devine Jewel
 of Diamond
 
 N:12:BIAS_CHAOS
-10
 'Day of the Dove'
 'Prince of Chaos'
 'Chaos Tile'
@@ -67,7 +61,6 @@ of Seldon
 of the Chaos Lord
 
 N:14:BIAS_NECROMANTIC
-9
 'Hand of Vecna'
 'Total Eclipse'
 'The Depth of Abyss'
@@ -81,7 +74,6 @@ of the Ruler of Wallachia
 N:15:BIAS_LAW
 N:13:BIAS_PRIESTLY
 N: 8:BIAS_WIS
-19
 'Enlightenment from Heven'
 'Holy Chant'
 'Holy Prayer'
@@ -104,7 +96,6 @@ of Rite
 
 N:16:BIAS_ROGUE
 N: 9:BIAS_DEX
-13
 'Silentwalker'
 'Mercury'
 'Darknesslurker'
@@ -121,7 +112,6 @@ of the Fairy
 
 N:17:BIAS_MAGE
 N: 7:BIAS_INT
-9
 'Magi's Seeing'
 'Sign of Brilliance'
 'Tome of Intelligence'
@@ -134,7 +124,6 @@ of Martin
 
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
-12
 'Steel Bull'
 'Avatar of Might'
 'Terminater'
@@ -150,7 +139,6 @@ of Sad Giant
 
 N:19:BIAS_RANGER
 N:10:BIAS_CON
-8
 'Hound'
 'Red Belet'
 'Bear's Hand'
@@ -161,7 +149,6 @@ of the Hunter
 of Marinera
 
 N:11:BIAS_CHR
-7
 'Snow White'
 'Maiden's Hope'
 'Undiscoverd Paradise'
@@ -171,7 +158,6 @@ of Benten
 of Nimue
 
 N:*:Default
-13
 'Dal-i-Thalion'
 'Guardian'
 'Defender'

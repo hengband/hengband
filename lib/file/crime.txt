@@ -1,10 +1,8 @@
 N:53:Grip, Farmer Maggot's dog
 N:54:Wolf, Farmer Maggot's dog
 N:55:Fang, Farmer Maggot's dog
-0
 
 N:*:Default
-38
 murder.
 arson.
 rape.

@@ -1,5 +1,4 @@
 N: 1:BIAS_ELEC
-11
 『鐘馗』
 『震電』
 『紫電』
@@ -13,7 +12,6 @@ N: 1:BIAS_ELEC
 雷帝の
 
 N: 2:BIAS_POIS
-12
 『蛇牙』
 『煉獄の針』
 『処刑の刃』
@@ -28,7 +26,6 @@ N: 2:BIAS_POIS
 暗殺者荊軻の
 
 N: 3:BIAS_FIRE
-12
 『火の鳥』
 『炎の棘』
 『悪魔の拳』
@@ -43,7 +40,6 @@ N: 3:BIAS_FIRE
 太陽神ラーの
 
 N: 4:BIAS_COLD
-10
 『絶対零度』
 『氷の支配者』
 『ベランギル』
@@ -56,7 +52,6 @@ N: 4:BIAS_COLD
 氷の巨人イミルの
 
 N: 5:BIAS_ACID
-8
 『錆の怪物』
 『ワームタン』
 『ディソルバー』
@@ -67,7 +62,6 @@ N: 5:BIAS_ACID
 龍神の
 
 N:12:BIAS_CHAOS
-12
 『モーンブレード』
 『ドゥームブレード』
 <コーン>の
@@ -82,7 +76,6 @@ N:12:BIAS_CHAOS
 剣の女王キシオムバーグの
 
 N:14:BIAS_NECROMANTIC
-14
 『死の嵐』
 『死の言魂』
 『布都御魂』
@@ -101,7 +94,6 @@ N:14:BIAS_NECROMANTIC
 N: 8:BIAS_WIS
 N:13:BIAS_PRIESTLY
 N:15:BIAS_LAW
-13
 『神威』
 『黙示録』
 『天の審判』
@@ -117,7 +109,6 @@ N:15:BIAS_LAW
 若きデルンヘルムの
 
 N:16:BIAS_ROGUE
-10
 『赤い彗星』
 『影の殺戮者』
 『クブラゴル』
@@ -131,7 +122,6 @@ N:16:BIAS_ROGUE
 
 N: 7:BIAS_INT
 N:17:BIAS_MAGE
-11
 『アゾット』
 『古の知恵』
 『魔力の石』
@@ -147,7 +137,6 @@ N:17:BIAS_MAGE
 N: 6:BIAS_STR
 N:10:BIAS_CON
 N:18:BIAS_WARRIOR
-12
 『正宗』
 『鉄砕牙』
 『疾風怒濤』
@@ -163,7 +152,6 @@ N:18:BIAS_WARRIOR
 
 N: 9:BIAS_DEX
 N:19:BIAS_RANGER
-13
 『隼』
 『疾風』
 『飛燕』
@@ -179,7 +167,6 @@ N:19:BIAS_RANGER
 アンバーの王子エリックの
 
 N:11:BIAS_CHR
-8
 『双股の剣』
 『千年女王』
 『アンドロメダ』
@@ -190,7 +177,6 @@ N:11:BIAS_CHR
 夢幻の司ローリエンの
 
 N:*:Default
-37
 『斬鉄』
 『侍魂』
 『黒星』

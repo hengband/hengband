@@ -1,5 +1,4 @@
 N: 1:BIAS_ELEC
-6
 of Galactic Barrier
 of Resist *Lightning*
 of Thor
@@ -8,7 +7,6 @@ of Zeus
 'Roaring Lightning Dragon'
 
 N: 2:BIAS_POIS
-8
 'Poison Barrier'
 'Great unclean one'
 'Tir-karakse'
@@ -19,7 +17,6 @@ of Hyper Resistance
 of Asklepios
 
 N: 3:BIAS_FIRE
-7
 'Firewall'
 'Phoenix'
 'Rengoku-Kaen'
@@ -30,7 +27,6 @@ of Uriel
 #of Allah
 
 N: 4:BIAS_COLD
-8
 'Helka-Turma'
 'White Diamond'
 'Great Snowfield'
@@ -41,7 +37,6 @@ of Snow Field
 of Soul Freeze
 
 N: 5:BIAS_ACID
-8
 'O-Parts'
 'Scale of Vrtra'
 of Baihu
@@ -52,7 +47,6 @@ of Eternity
 of Boldor
 
 N:12:BIAS_CHAOS
-11
 'Unbalancer'
 'Void'
 'Chain of Control'
@@ -66,7 +60,6 @@ of Collapsium
 of Great Destruction
 
 N:14:BIAS_NECROMANTIC
-8
 'Bloodmail of Lucifer'
 'Love of Demeter'
 'Bottomless Pit'
@@ -80,7 +73,6 @@ of Azriel
 N:15:BIAS_LAW
 N:13:BIAS_PRIESTLY
 N: 8:BIAS_WIS
-12
 'Weirding'
 'Ever-Faithful'
 'Talisman of Simplicity'
@@ -96,7 +88,6 @@ of the Holy Grail
 
 N: 9:BIAS_DEX
 N:16:BIAS_ROGUE
-9
 of Gimli
 (*Stealth*)
 'Beelzebub's wing'
@@ -109,7 +100,6 @@ of Idaten
 
 N:17:BIAS_MAGE
 N: 7:BIAS_INT
-9
 of Celebrimbor
 of Eol
 of Merlin's Pattern
@@ -122,7 +112,6 @@ of Loki
 
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
-10
 'Vajra'
 'Aegis'
 'Cloth of Vice'
@@ -135,7 +124,6 @@ of Kronos
 of Diomedes
 
 N:19:BIAS_RANGER
-10
 'Faroth'
 'Er-Draug'
 'Lifegiver'
@@ -148,7 +136,6 @@ of Nessa
 of Yavanna
 
 N:10:BIAS_CON
-7
 'Heart of Ahriman'
 'Living Armour'
 'Life Matrix'
@@ -158,7 +145,6 @@ of Corwin's Pattern
 of C('i)adan
 
 N:11:BIAS_CHR
-8
 'Brilliant of Laurelin'
 'Hand of Elbereth'
 of Eternity
@@ -169,7 +155,6 @@ of Vaire
 of Nienna
 
 N:*:Default
-25
 'Monolith'
 'Destiny Star'
 'Lawmaster'
@@ -195,4 +180,3 @@ of Deirdre
 of Random
 of Celeborn
 'Eternal Bastion'
-

@@ -1,5 +1,4 @@
 N: 1:BIAS_ELEC
-9
 『嵐雲招雷』
 『百万ボルト』
 『レジスター』
@@ -11,7 +10,6 @@ N: 1:BIAS_ELEC
 海底都市ルルイエの
 
 N: 2:BIAS_POIS
-10
 『薬師の壷』
 『大黄牡丹』
 『補中益気』
@@ -24,7 +22,6 @@ N: 2:BIAS_POIS
 コボルド王ムガッシュの
 
 N: 3:BIAS_FIRE
-11
 『祝融』
 『炎返し』
 『赤い太陽』
@@ -38,7 +35,6 @@ N: 3:BIAS_FIRE
 悪魔ルンゴルシンの
 
 N: 4:BIAS_COLD
-10
 『氷姫』
 『白雪』
 『白氷』
@@ -51,7 +47,6 @@ N: 4:BIAS_COLD
 極寒の地シベリアの
 
 N: 5:BIAS_ACID
-8
 『王水』
 『守護宝玉』
 『ドールの皮膚』
@@ -62,7 +57,6 @@ N: 5:BIAS_ACID
 黒髪のカランシアの
 
 N:12:BIAS_CHAOS
-9
 『凪の時』
 『法の番人』
 『カオス・タイル』
@@ -74,7 +68,6 @@ N:12:BIAS_CHAOS
 混世魔王の
 
 N:14:BIAS_NECROMANTIC
-11
 『深淵の底』
 『漆黒の烏』
 『皆既日食』
@@ -90,7 +83,6 @@ N:14:BIAS_NECROMANTIC
 #N:15:BIAS_LAW
 N:13:BIAS_PRIESTLY
 N: 8:BIAS_WIS
-14
 『天啓』
 『聖唱歌』
 『聖祈言』
@@ -108,7 +100,6 @@ N: 8:BIAS_WIS
 
 N:16:BIAS_ROGUE
 N: 9:BIAS_DEX
-12
 『影』
 『空蝉』
 『忍び足』
@@ -124,7 +115,6 @@ N: 9:BIAS_DEX
 
 N:17:BIAS_MAGE
 N: 7:BIAS_INT
-9
 『知性の証』
 『知識の書』
 『コンラの泉』
@@ -137,7 +127,6 @@ N: 7:BIAS_INT
 
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
-11
 『鋼の猛牛』
 『力の化身』
 『ダイ・ハード』
@@ -152,7 +141,6 @@ N: 6:BIAS_STR
 
 N:19:BIAS_RANGER
 N:10:BIAS_CON
-12
 『春眠』
 『青葉』
 『桜嵐』
@@ -167,7 +155,6 @@ N:10:BIAS_CON
 常春の都マリネラの
 
 N:11:BIAS_CHR
-9
 『乙女の願い』
 『秘密の花園』
 『麗しの白虎』
@@ -179,7 +166,6 @@ N:11:BIAS_CHR
 湖の姫ニミュエの
 
 N:*:Default
-18
 プラチナイェンダー印
 『鉄肌』
 『黒虎』

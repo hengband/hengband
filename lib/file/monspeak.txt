@@ -4,16 +4,15 @@
 # crash anything.  The format goes like so:
 # 
 # N:45:whoever this is
-# 3
 # says line 1
 # says line 2
 # says line 3
 #
+# Empty line is separater of blocks.
+#
 # The number after the N: is the "monster index number" obtained from
 # r_info.txt.  The text field after that number isn't actually used--it's
-# just there to help humans edit the file.  The numbers on lines by
-# themselves are the number of lines that the monster has.  Getting these
-# numbers wrong won't crash anything, but will produce strange lines.
+# just there to help humans edit the file.
 #
 # A '*' in the number field is a wildcard and applies to any monster.
 # It should only be placed at the end of the file, since all 'N:' lines
@@ -28,7 +27,6 @@
 # Entries by Matt Graham, Andrew Hill, and Topi Ylinen
 
 N:8:Farmer Maggot
-12
 seems sad about something.
 asks if you have seen his dogs.
 tells you to get off his land.
@@ -42,9 +40,7 @@ says, "I see you are in some kind of trouble."
 yells, "Hallo there!"
 says, "It's been a queer day, and no mistake."
 
-
 N:19:Lion Heart
-24
 says, 'We must stand up with firm resolve to strive for the eradication of terrorism, together with other nations of the world'
 says, 'Japan supports the U.S. position that it will not bow to terrorism. I think it is only natural for President Bush to hunt down the culprits and take firm steps against this serious crime.'
 says, 'The terrorist acts are extremely heinous and outrageous and cannot be forgiven.'
@@ -73,12 +69,10 @@ says, 'No structural reforms, no economic recovery.'
 says, 'The belief -A pain of today makes affluence of tommorow- '
 
 N:1059:Noborta Kesyta
-2
 says, 'Haw iz my 100,000,000 gold kasino?'
 says, 'I speek cleerly, My speech is anbiguity.'
 
 N:1060:Mori troll
-17
 says, 'We hope the Japanese people acknowledge that Japan is a divine nation centering on the emperor.'
 says, 'Lowbrow sex industries are always created first in Osaka. Excuse my language, but it is a spittoon.'
 says, 'When there was a Y2K problem, the Japanese bought water and noodles. Americans bought pistols and guns.'
@@ -104,7 +98,6 @@ says, 'foo are yu?'
 N:53:Grip, Farmer Maggot's dog
 N:54:Wolf, Farmer Maggot's dog
 N:55:Fang, Farmer Maggot's dog
-6
 chases its tail.
 barks loudly.
 froths at the mouth.
@@ -113,7 +106,6 @@ rolls over.
 growls.
 
 N:63:Smeagol
-27
 mutters, 'My precious, wheres my precious?'
 screams, 'Nasty Hobbitsisisisis...'
 says, 'Come on, quickly, follow Smeagol'
@@ -142,16 +134,13 @@ grovels, 'He has only four fingers on the black hand.'
 growls, 'Not nice Hobbits, not sensible!'
 says, 'If you findesis it, give it us back.'
 
-
 N:135:Mughash the Kobold Lord
-4
 says, 'I may be a kobold, but I'll kick your arse!'
 says, 'Feel my wrath, fool!'
 says, 'Death and destruction make me happy!'
 snickers evilly.
 
 N:137:Wormtongue, Agent of Saruman
-10
 whines and sniggers.
 whispers nasty things.
 says, 'I'll slaughter you slowly...'
@@ -164,7 +153,6 @@ says, 'No no!'
 hisses, 'You told me to; you made me do it!'
 
 N:138:Robin Hood, the Outlaw
-6
 is looking at your wallet with a wishful eyes.
 says, 'You look like Nottingham's man to me!'
 says, 'I bet I can shoot better than you...'
@@ -172,13 +160,11 @@ says, 'Give 'til it hurts!'
 says, 'Don't force me to put an arrow in your skull...'
 says, 'Kevin Costner has soiled my name!'
 
-
 #N:169:Brodda, the Easterling
 #N:291:Ulfast, Son of Ulfang
 
 N:180:Orfax, Son of Boldor
 N:237:Boldor, King of the Yeeks
-5
 wonders aloud about your sexual orientation.
 spouts torrents of obscenities.
 shouts, 'YEEK! YEEK! YEEK!'
@@ -186,7 +172,6 @@ says, 'I'll teach you to respect Yeeks!
 says, 'Feel lucky, punk?'
 
 N:200:Hobbes the Tiger
-4
 says, 'Why were people put here? TIGER FOOD!'
 says, 'Yum! Adventurer sandwiches!'
 says, 'I killed Calvin, now I'll kill YOU!'
@@ -194,7 +179,6 @@ says, 'I'll make your short life nasty and brutish!'
 
 N:140:Lagduf, the Snaga
 N:186:Grishnakh, the Hill Orc
-7
 says, 'Saruman is a fool, and a dirty treacherous fool.'
 says, 'I left a fool.'
 yells, 'Nazgul, Nazgul!'
@@ -211,7 +195,6 @@ N:330:Bolg, Son of Azog
 N:350:Ugluk, the Uruk
 N:356:Lugdush, the Uruk
 N:373:Azog, King of the Uruk-Hai
-19
 fingers his blade and grins evilly.
 snickers, 'Now, I strike a blow for *our* side!'
 says, 'Orcs don't get no respect... I'm gonna change that!'
@@ -233,7 +216,6 @@ says, 'You're not so tough, buttmunch!'
 says, 'Heh-heh, heh-heh, killing people is cool.'
 
 N:382:Mime, the Nibelung
-7
 says, 'Get away! This spot is mine!'
 says, 'I will soon close your eyes in eternal sleep.'
 says, 'I'll mess up all your stuff!'
@@ -243,7 +225,6 @@ grins.
 says, 'Maybe I will just hack your head off.'
 
 N:383:Hagen, son of Alberich
-10
 says, 'Did you hear what the ravens said? Revenge, that is what they cry!'
 shouts, 'Hoiho! Hoiho! To arms! To arms!'
 grumbles, 'I hate the happy, and I am never glad.'
@@ -256,7 +237,6 @@ shouts, 'Give the Ring here!'
 shouts, 'Hoiho! Hoiho-hoho!'
 
 N:419:Alberich the Nibelung King
-15
 says, 'I'll mess up all your stuff!'
 says, 'Give me the Rheingold, or die!'
 states, 'As I have renounced love, all who live shall soon renounce it!'
@@ -273,14 +253,12 @@ says, 'Feel my wrath, idle rascal!'
 says, 'I have discovered you, you stupid thief!'
 says, 'Are you still not afraid? You should be!'
 
-
 #N:392:Sangahyando of Umbar
 #N:380:Angamaite of Umbar
 
 #This next may be unnecessarily evil... :-]
 
 N:393:It
-9
 says, 'Nyah, nyah, betcha can't find me!'
 says, 'Come get some!'
 magically summons mighty undead opponents!
@@ -292,7 +270,6 @@ concentrates on its body. It starts moving faster.
 teleports away.
 
 N:409:Kharis the Powerslave
-2
 says, 'Open the gates of my hell, I will strike from the grave!'
 curses you.
 
@@ -301,7 +278,6 @@ curses you.
 
 N:441:Gachapin
 N:1061:Barney the Dinosaur
-7
 says, 'Cooperation! That's the magic word!'
 mutters, 'I *hate* those Teletubbies...'
 says, 'Won't you be my friend?'
@@ -314,30 +290,25 @@ chews up a 'Tinky Winky' doll.
 N:493:Bert the Stone Troll
 N:494:Bill the Stone Troll
 N:495:Tom the Stone Troll
-4
 complains, 'What's a burrahobbit got to do with my pocket, anyways?'
 rejoices, 'No more roast mutton! Roast adventurer today!'
 says, 'That'll teach yer!'
 says, 'I won't take that from you!'
 
 N:505:Goemon
-3
 says, 'Zantetsuken is sharp this night. '
 mumbles, 'Sign..Another trifling thing I've cut....'
 buttons his lips, '.....'
 
 N:1062:Groo the Wanderer
-1
 says, 'A fray! A fray!'
 
 N:506:Fasolt the Giant
-3
 grumbles, 'Stop, greedy one! Leave something for me!'
 shouts, 'Back, over-bold one!'
 whines, 'You swindler, do you seek to vilify me?'
 
 N:517:Jurt the Living Trump
-3
 shouts, 'All your fault!'
 shouts, 'Only your death will set things right!'
 says, 'Don't call me clumsy!'
@@ -345,7 +316,6 @@ says, 'Don't call me clumsy!'
 #N:551:Rogrog the Black Troll
 
 N:573:Lord Borel of Hendrake
-3
 says, 'I am Borel, Duke of Hendrake, Master of Arms of the Ways of Hendrake.'
 says, 'You smile at your own cowardice? Stand and fight, bastard!'
 says, 'You aren't a caitiff that throws a cloak?!'
@@ -354,7 +324,6 @@ says, 'You aren't a caitiff that throws a cloak?!'
 #N:596:Mother Hydra
 
 N:598:Mandor, Master of the Logrus
-4
 enjoys espresso coffee between battle.
 says, 'My slaves fight with you.'
 says, 'Excuse me, I have no time to continue a small fight.'
@@ -366,12 +335,10 @@ says, 'It is a great pleasure to fight with such a worthy opponent as you.'
 #N:628:Malekith the Accursed
 
 N:642:Jasra, Brand's Mistress
-2
 says, 'I will turn you into a coatrack.'
 says, 'I'm a master of the Keep of the Four Worlds!'
 
 N:651:Strygalldwir
-2
 says, 'Order will crumble.'
 says, 'Obey the power of chaos!'
 
@@ -379,14 +346,12 @@ N:654:Judge Fire
 N:656:Judge Mortis
 N:674:Judge Fear
 N:686:Judge Death
-4
 hisses, 'Thisssss dungeon issss guilty.'
 hisses, 'Your crime isssss life.'
 hisses, 'The sssentencce isss death!'
 hisses, 'Your crime issss life. The sssentencce isss death.'
 
 N:660:Rinaldo, son of Brand
-6
 says, 'I am Rinaldo I, Kashfan King and B.S. in Business Management, UC Berkeley.'
 says, 'Freezer? Glad you asked! A box to store your body!'
 says, 'If you buy a Grand-D machine, I'll throw Werewindle into the bargain.'
@@ -394,16 +359,13 @@ has an eye to stick you with a burial set.
 says, 'Sorry but I kill you.'
 says, 'Can I get you a chicken? Maybe some white mice and aluminum foil?'
 
-
 N:670:Jack of Shadows
-4
 says, 'Be made to realize my darkness hold.'
 says, 'Power of shadow is infinite.'
 says, 'With the Key of Kolwynia, I am invincible!'
 says, 'Soul? What is it of use to?'
 
 N:685:Shoggoth
-2
 says, 'barrels towards you horrifyingly.'
 wails, 'Tekeli-li!  Tekeli-li!'
 
@@ -411,7 +373,6 @@ wails, 'Tekeli-li!  Tekeli-li!'
 #N:687:Ariel, Queen of Air
 
 N:697:Smaug the Golden
-8
 speaks, 'I smell you and I feel your air. I hear your breath. Come along!'
 says, 'If you get off alive, you will be lucky.'
 grimaces.
@@ -422,7 +383,6 @@ boasts, 'My armour is like tenfold shields, no blade can pierce me.'
 boasts, 'My teeth are swords, my claws are spears, my breath is death.'
 
 N:712:Fafner the Dragon
-5
 says, 'You will make a fine meal.'
 says, 'I wanted a drink, now I have also found food.'
 says, 'My fangs are not for chattering, soon you will feel them.'
@@ -433,7 +393,6 @@ growls, 'Come here, young braggart.'
 
 N:715:Glaurung, Father of the Dragons
 N:766:Ancalagon the Black
-2
 says, 'You cannot avoid the ballyhack.'
 says, 'A mere mortal, Be burned to the ground by my fire.'
 
@@ -441,7 +400,6 @@ says, 'A mere mortal, Be burned to the ground by my fire.'
 #N:730:Baphomet the Minotaur Lord
 
 N:732:Bull Gates
-10
 says, '640K should be enough for ANYBODY!'
 says, 'Buy Windows 2000; the filesystem rocks!'
 says, 'Linux?  Never heard of it...'
@@ -454,7 +412,6 @@ says, 'Where will we let you go today?  HELL!'
 cackles diabolically.
 
 N:733:Santa Claus
-8
 says, 'Ho ho ho! You're gonna die!'
 says, 'You're gettin' COAL in your stocking!'
 says, 'On Smasher, on Whoop-Ass, now dash away all!'
@@ -475,7 +432,6 @@ says, 'I hate Christmas so much that I've gone psychotic!'
 N:764:Uriel, Angel of Fire
 N:765:Azriel, Angel of Death
 N:769:Raphael, the Messenger
-7
 says, 'Repent, evildoer!'
 says, 'My righteousness shall cleanse you!'
 says, 'Don't EVER steal from the collection plate!'
@@ -490,12 +446,10 @@ says, 'Verily, it is too late for thee.'
 #N:771:Saruman of Many Colours
 
 N:772:Gandalf the Grey
-2
 says, 'I am a Wielder of the Flame of Anor, you cannot pass.'
 says, 'The dark fire will not avail you, Flame of Udun.'
 
 N:773:Brand, Mad Visionary of Amber
-2
 says, 'I don't endure your sabotaging my plan!'
 says, 'You dare to oppose Amber?'
 
@@ -505,13 +459,11 @@ says, 'You dare to oppose Amber?'
 
 N:789:Bleys, Master of Manipulation
 N:799:Caine, the Conspirator
-3
 says, 'You dare to oppose Amber?'
 says, 'Who is Your malik? Eric? Corwin?'
 says, 'To barge into our blood feud is to die!'
 
 N:791:Fiona the Sorceress
-3
 says, 'You should not think me easy to deal with.'
 says, 'You dare to oppose Amber?'
 smiles diabolic.
@@ -519,7 +471,6 @@ smiles diabolic.
 #N:792:Tselakus, the Dreadlord
 
 N:794:Julian, Master of Forest Amber
-3
 belows a horn in a loud voice.
 says, 'This Haul offers resistance!'
 says, 'You'll become a good mounting'
@@ -528,13 +479,11 @@ says, 'You'll become a good mounting'
 #N:805:Omarax the Eye Tyrant
 
 N:807:Gerard, Strongman of Amber
-1
 rush toward you wordlessly.
 
 #N:809:Atlach-Nacha, the Spider God
 
 N:813:Eric the Usurper
-2
 says, 'I'm going to make you to have the same problem of Corwin.'
 says, 'Curse your daffiness that you make an enemy of a Lord of Amber.'
 
@@ -542,13 +491,11 @@ says, 'Curse your daffiness that you make an enemy of a Lord of Amber.'
 #N:817:Hela, Queen of the Dead
 
 N:820:Corwin, Lord of Avalon
-3
 says, 'I teach you bite of Grayswandir.'
 throws his cloak.
 says, 'Sorry but I have no time to continue a small fight like this.'
 
 N:824:Benedict, the Ideal Warrior
-3
 says, 'Back Down. This situation only results in my victory, I know.'
 says, 'I praise your bravery. But take good care of your life.'
 says, 'It's unlucky for you to see me.'
@@ -559,7 +506,6 @@ says, 'It's unlucky for you to see me.'
 #N:835:Loki the Trickster
 
 N:837:Surtur the Giant Fire Demon
-3
 says, 'You cannot get "Orb of Destiny" even if you bring me down into the dust.'
 says, 'Burn out! And turn to dust!'
 says, 'The level 14 valkyrie who came before was storonger than you!'
@@ -584,7 +530,6 @@ N:848:Shub-Niggurath, Black Goat of the Woods
 N:849:Nodens, Lord of the Great Abyss
 N:851:Nyarlathotep, the Crawling Chaos
 N:857:Great Cthulhu
-17
 slurps and gibbers disgustingly.
 shrieks fit to wake the dead.
 oozes nasty, glistening slime all over the dungeon.
@@ -606,7 +551,6 @@ snorts and slobbers with glee.
 N:850:Carcharoth, the Jaws of Thirst
 N:846:Fenris Wolf
 N:840:Draugluin, Sire of All Werewolves
-8
 barks and bellows frighteningly!
 says, 'Oh good, another chew toy!'
 says, 'Yummy! I was getting tired of chicken...'
@@ -617,7 +561,6 @@ says, 'Bad adventurer! No more living for you!'
 snarls and howls.
 
 N:819:Klingsor, Evil Master of Magic
-6
 states, 'The time has come.'
 bellows, 'Your master calls! Obey!'
 grunts, 'Beware!'
@@ -633,7 +576,6 @@ N:844:Kaschei the Immortal
 N:856:Gothmog, the High Captain of Balrogs
 #N:858:Sauron, the Sorcerer
 #N:860:Oberon, King of Amber
-12
 brags, 'My power is beyond compare!'
 snorts, 'A mere mortal dares challenge my might? HA!'
 says, 'Not another one! I just finished chewing on the last!'
@@ -649,7 +591,6 @@ says, 'I'm no god... God has MERCY!'
 
 N:862:The Serpent of Chaos
 N:883:Zombified Serpent of Chaos
-12
 says, 'Foolish worm, you are DOOMED!'
 says, 'I'm the Big Bad Guy, and you're toast!'
 shouts, 'MOO HA HA HA! I am DEATH incarnate!'
@@ -664,14 +605,12 @@ says, 'Such a doomed, pathetic gesture as yours  verges on the heroic!'
 says, 'Mere mortals such as you should not meddle the affair of the Powers!'
 
 N:873:Combat-Echizen
-4
 says, 'Somethig comes from above! Be careful!'
 says, 'What is this stair?'
 says, 'Because it's time, I choose this red door!'
 chunters, 'Tonight, someone dies again...'
 
 N:878:Dio Brando
-13
 shouts, 'You cannot escape!'
 says, 'You are checkmated!'
 says, 'Huh! Come on!'
@@ -687,7 +626,6 @@ says, 'You think that you have a little possibilities that you defeat me? You ar
 says, 'How many people I killed? Do you remember the amount of bread you ate?'
 
 N:880:Wong
-13
 says, 'I knew that you come'
 says, 'Make your dream come true in the heaven'
 says, 'I am only man who actuate the time...'
@@ -721,14 +659,11 @@ says, 'Everything is as I like... huh...'
 #「生きる為には血族でも踏み台にする…。当たり前の事ですよ。」
 #「全ては[運否天賦]、時の流れも私に味方しているのですよ。」
 
-
 N:921:Internet Exploder
-2
 is slow.
 throws off some dorky packets.
 
 N:931:Caldarm the third
-7
 says, 'Lookup failure, human race will go to ruin.'
 says, 'I am necessary for human race!'
 says, 'To kill me is to wipe off the future of human race!'
@@ -738,33 +673,27 @@ says, 'Empire have the glory back again. By me!'
 says, 'I have infinite days.'
 
 N:936:Kenshirou of hokuto
-4
 says, 'Count 3, then you die.'
 says, 'I came back to kill you.'
 says, 'Fist of the north star is invincible!!'
 shouts, 'AAATATATATATATATATATATATATATATATA!!!!'
 
 N:1003:The ghost 'Q'
-2
 says, 'Refill'
 says, 'Sho, I'm hungry..'
 
 N:1004:Pip, the Braver from Another World
-4
 shouts, 'Fire-ball!'
 shouts, 'Fire-finger1!'
 shouts, 'Fire-finger2!'
 shouts, 'Blockhead!'
 
 N:1005:Antharom, Magic Master in the Castle of Darkness
-3
 says, 'Go to 14!'
 shouts, 'Remember! Curiosity killed the cat!'
 says, 'Welcome, youth...'
 
-
 N:1029:Baby satan
-10
 magically summons Cyberdemons!
 magically summons special opponents!
 invokes a mana storm.
@@ -777,14 +706,12 @@ magically summons Lords of Amber!
 yells 'The World! Time has stopped!'
 
 N:1063:lousy, the King of louses
-4
 says, 'You, transform a louse!'
 says, 'Don't look me as I was a louse!'
 says, 'Here a louse.'
 says, 'Die. Die. Damn thing is strong!'
 
 N:*:Default lines
-103
 cackles evilly.
 cackles diabolically.
 says, 'Surrender, miserable flea!'

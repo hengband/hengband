@@ -1,5 +1,4 @@
 N: 1:BIAS_ELEC
-11
 'Vajra'
 'Aeglin'
 'Kaladbolg'
@@ -13,7 +12,6 @@ of Djinni
 of Poseidon
 
 N: 2:BIAS_POIS
-10
 'Dragon Fang'
 'Serpent's Tongue'
 'Assassin's Strike'
@@ -26,7 +24,6 @@ of Mortal Venom
 of Radioactivity
 
 N: 3:BIAS_FIRE
-9
 'Red Storm'
 'Phoenix'
 'Flame Tongue'
@@ -39,7 +36,6 @@ of Prominence
 #of Allah
 
 N: 4:BIAS_COLD
-11
 'Absolute Zero'
 'Ice Master'
 'Belangil'
@@ -53,7 +49,6 @@ of Ice
 of Ymir
 
 N: 5:BIAS_ACID
-10
 'Disintegrator'
 'Dissolver'
 'Acidic Drop'
@@ -66,7 +61,6 @@ of Fendilo
 of *Melting*
 
 N:12:BIAS_CHAOS
-16
 (*Chaotic*)
 'Doomblade'
 'Armageddon'
@@ -85,7 +79,6 @@ of Xiombarg
 of Vishnu
 
 N:14:BIAS_NECROMANTIC
-14
 'Soulsucker'
 'Hand of Vecna'
 'Deathstorm'
@@ -104,7 +97,6 @@ of Namo
 N:15:BIAS_LAW
 N:13:BIAS_PRIESTLY
 N: 8:BIAS_WIS
-15
 of the Guardian
 (*Holy Avenger*)
 'Word of God'
@@ -122,7 +114,6 @@ of the Guardian
 'Lawbringer'
 
 N:16:BIAS_ROGUE
-13
 'Cubragol'
 'Secret Weapon'
 'Shadow Murder'
@@ -139,7 +130,6 @@ of Manwe
 
 N:17:BIAS_MAGE
 N: 7:BIAS_INT
-12
 'Eternal Verities'
 'Mana Spectrum'
 'Invisible Hand'
@@ -156,7 +146,6 @@ of Ea
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
 N:10:BIAS_CON
-15
 'Masamune'
 'Undying Samurai'
 'Vanquisher'
@@ -175,7 +164,6 @@ of Benedict
 
 N: 9:BIAS_DEX
 N:19:BIAS_RANGER
-14
 'Lion Fang'
 'Shark Cutter'
 'Eagle Sword'
@@ -192,7 +180,6 @@ of Amras
 of Amrod
 
 N:11:BIAS_CHR
-7
 'Charm of Kaguya'
 'Andromeda'
 'Millennium Queen'
@@ -201,9 +188,7 @@ of Jeanne d'Arc
 of Irmo
 of Venus
 
-
 N:*:Default
-26
 'Impuls 255'
 'BGF-9000'
 'Bloodscourge'

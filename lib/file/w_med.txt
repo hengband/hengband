@@ -1,5 +1,4 @@
 N: 1:BIAS_ELEC
-13
 'Lightning'
 'Lightning Blade'
 'Thunder Fang'
@@ -15,7 +14,6 @@ of Electricity
 of Energy
 
 N: 2:BIAS_POIS
-18
 'Hornet'
 'Hydrazone'
 'Mercapto'
@@ -36,7 +34,6 @@ of Venoms
 of Poison
 
 N: 3:BIAS_FIRE
-13
 'Flame Saber'
 'Fire Whip'
 'Fire Thorn'
@@ -52,7 +49,6 @@ of Flame
 of Zhuque
 
 N: 4:BIAS_COLD
-10
 'Silver Frost'
 'Icicle'
 'Ice Edge'
@@ -65,7 +61,6 @@ of Alaska
 of Ezo
 
 N: 5:BIAS_ACID
-8
 'Rust Monster'
 'Sulfuric Acid'
 'Melted-in Balm'
@@ -76,7 +71,6 @@ N: 5:BIAS_ACID
 'Preoxy'
 
 N:12:BIAS_CHAOS
-13
 'Cyclcraze'
 'Armageddon'
 'Lunatic'
@@ -92,7 +86,6 @@ of Dara
 of Hionhurn
 
 N:14:BIAS_NECROMANTIC
-15
 'Reaper'
 'Hellwind'
 'Chief of Souls'
@@ -112,7 +105,6 @@ of Thuringwethil
 N:15:BIAS_LAW
 N:13:BIAS_PRIESTLY
 N: 8:BIAS_WIS
-20
 'Lawgiver'
 'Sun Sword'
 'Deamonbane'
@@ -136,7 +128,6 @@ of Soul
 
 
 N:16:BIAS_ROGUE
-10
 'Thiefbane'
 'Quylthulg Smasher'
 'Cat's Clow'
@@ -150,7 +141,6 @@ of Koga
 
 N:17:BIAS_MAGE
 N: 7:BIAS_INT
-10
 'Magicbane'
 'Hucker'
 'Manabringer'
@@ -165,7 +155,6 @@ of Ritual
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
 N:10:BIAS_CON
-14
 'Skullbasher'
 'Bonebreaker'
 'Skullbuster'
@@ -182,7 +171,6 @@ of Tomoe
 of Erkenbrando
 
 N: 9:BIAS_DEX
-10
 'Gilettar'
 'Elvagil'
 'Orchast'
@@ -194,7 +182,6 @@ of the Master
 of Charismatic Cook
 
 N:19:BIAS_RANGER
-14
 'Eaglesword'
 'Tigarbaton'
 'Lionfang'
@@ -211,7 +198,6 @@ of the Hunter
 of Marksmanship
 
 N:*:Default
-21
 'Weapon Alpha'
 'Werebane'
 'Dragon Clow'

@@ -1,5 +1,4 @@
 N: 1:BIAS_ELEC
-11
 'Stungun'
 'Grid Bug'
 'Spark'
@@ -13,7 +12,6 @@ N: 1:BIAS_ELEC
 of Shockness
 
 N: 2:BIAS_POIS
-8
 'Dioxin'
 'Poisonous Maggot'
 'Insect's Poison'
@@ -24,7 +22,6 @@ of mold
 of Depleted Uranium
 
 N: 3:BIAS_FIRE
-9
 'Salamander'
 'Cracker'
 'Red Hot Chili Pepper'
@@ -36,7 +33,6 @@ N: 3:BIAS_FIRE
 of the Damn
 
 N: 4:BIAS_COLD
-9
 'Freezing'
 'Polar Bear'
 'Snow Avalanche'
@@ -48,7 +44,6 @@ N: 4:BIAS_COLD
 of Liquid Helium
 
 N: 5:BIAS_ACID
-11
 'Adenine'
 'Guanine'
 'Thymine'
@@ -62,7 +57,6 @@ N: 5:BIAS_ACID
 'Acid Rain'
 
 N:12:BIAS_CHAOS
-12
 'Koch'
 'Julia'
 'Cotortion Blade'
@@ -77,7 +71,6 @@ of Change
 of Logrus
 
 N:14:BIAS_NECROMANTIC
-11
 'Blood'
 'Tombstone'
 'Evil Soldlier'
@@ -93,7 +86,6 @@ of Boodoo
 N:15:BIAS_LAW
 N:13:BIAS_PRIESTLY
 N: 8:BIAS_WIS
-13
 'Indulgence'
 'Angel's Love Song'
 'Monastery'
@@ -110,7 +102,6 @@ of Holy Smoke
 
 N: 9:BIAS_DEX
 N:16:BIAS_ROGUE
-11
 'Whirlwind'
 'Cat's Clow'
 'Sands of Time'
@@ -125,7 +116,6 @@ of Cowardice
 
 N:17:BIAS_MAGE
 N: 7:BIAS_INT
-8
 'Instant Mage Maker'
 'Force of Hand'
 'Kumon'
@@ -138,7 +128,6 @@ of Tips
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
 N:10:BIAS_CON
-14
 'Basher'
 'Body Power'
 'Muscle'
@@ -155,7 +144,6 @@ N:10:BIAS_CON
 of Slay Munchkin
 
 N:19:BIAS_RANGER
-10
 'Animalbane'
 'Sniper'
 'Naturebane'
@@ -168,7 +156,6 @@ of *Slay Bear*
 of *Slay Cat*
 
 N:11:BIAS_CHR
-8
 'Lolita'
 'Laughcaller'
 'S&M'
@@ -179,7 +166,6 @@ of Cuties
 of Alice
 
 N:*:Default
-26
 'Grayswandie'
 'Plutonium'
 'X-Winblow'

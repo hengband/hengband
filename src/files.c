@@ -6842,7 +6842,7 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 {
 	FILE    *fp;
 	char    buf[1024];
-	int     line, counter, test, numentries = 0;
+	int     counter, test;
 	int     line_num = 0;
 
 
@@ -6853,7 +6853,7 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 	fp = my_fopen(buf, "r");
 
 	/* Failed */
-	if (!fp) return (-1);
+	if (!fp) return -1;
 
 	/* Find the entry of the monster */
 	while (TRUE)
@@ -6875,34 +6875,24 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 				}
 				else if (buf[2] == 'M')
 				{
-					if (r_info[entry].flags1 & RF1_MALE)
-					{
-						break;
-					}
+					if (r_info[entry].flags1 & RF1_MALE) break;
 				}
 				else if (buf[2] == 'F')
 				{
-					if (r_info[entry].flags1 & RF1_FEMALE)
-					{
-						break;
-					}
+					if (r_info[entry].flags1 & RF1_FEMALE) break;
 				}
 				/* Get the monster number */
 				else if (sscanf(&(buf[2]), "%d", &test) != EOF)
 				{
-					/* Is it the right monster? */
-					if (test == entry)
-					{
-						break;
-					}
+					/* Is it the right number? */
+					if (test == entry) break;
 				}
 				else
 				{
-					/* Error while converting the monster number */
-					msg_format("Error in line %d of %s!",
-						  line_num, file_name);
+					/* Error while converting the number */
+					msg_format("Error in line %d of %s!", line_num, file_name);
 					my_fclose(fp);
-					return (-1);
+					return -1;
 				}
 			}
 		}
@@ -6910,119 +6900,60 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 		{
 			/* Reached end of file */
 			my_fclose(fp);
-			return (-1);
+			return -1;
 		}
 	}
 
-	/* Get the number of entries */
-	while (TRUE)
+	/* Get the random line */
+	for (counter = 0; ; counter++)
 	{
-		/* Get the line */
-		if (my_fgets(fp, buf, sizeof(buf)) == 0)
+		while (TRUE)
 		{
+			test = my_fgets(fp, buf, sizeof(buf));
+
 			/* Count the lines */
-			line_num++;
+			/* line_num++; No more needed */
 
-			/* Look for the number of entries */
-			if (isdigit(buf[0]))
+			if (!test)
 			{
-				int i;
-				bool digit = TRUE;
+				/* Ignore lines starting with 'N:' */
+				if ((buf[0] == 'N') && (buf[1] == ':')) continue;
 
-				for (i = 1; buf[i] && (buf[i] != '\n') && (buf[i] != '\r'); i++)
-				{
-					if (!isdigit(buf[i]))
-					{
-						digit = FALSE;
-						break;
-					}
-				}
-
-				/* Get the number of entries */
-				if (digit)
-				{
-					numentries = atoi(buf);
-					break;
-				}
+				if (buf[0] != '#') break;
 			}
+			else break;
 		}
-		else
-		{
-			/* Count the lines */
-			line_num++;
 
-			/* Reached end of file without finding the number */
-			msg_format("Error in line %d of %s!",
-				  line_num, file_name);
-
-			my_fclose(fp);
-			return (-1);
-		}
-	}
-
-	if (numentries > 0)
-	{
-		/* Grab an appropriate line number */
-		line = randint0(numentries);
-
-		/* Get the random line */
-		for (counter = 0; counter <= line; counter++)
-		{
-			/* Count the lines */
-			line_num++;
-
-			while(TRUE)
-			{
-				test = my_fgets(fp, buf, sizeof(buf));
-				if(test || buf[0] != '#')
-					break;
-			}
-
-			if (test==0)
-			{
-				/* Found the line */
-				if (counter == line) break;
-			}
-			else
-			{
-				/* Error - End of file */
-				msg_format("Error in line %d of %s!",
-					  line_num, file_name);
-
-				my_fclose(fp);
-				return (-1);
-			}
-		}
+		/* Abort */
+		if (!buf[0]) break;
 
 		/* Copy the line */
-		strcpy(output, buf);
-	}
-	else
-	{
-		return (-1);
+		if (one_in_(counter + 1)) strcpy(output, buf);
 	}
 
 	/* Close the file */
 	my_fclose(fp);
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
 #ifdef JP
 errr get_rnd_line_jonly(cptr file_name, int entry, char *output, int count)
 {
-  int i,j,kanji;
-  errr result=1;
-  for (i=0;i<count;i++){
-    result=get_rnd_line(file_name, entry, output);
-    if(result)break;
-    kanji=0;
-    for(j=0; output[j]; j++) kanji |= iskanji(output[j]);
-    if(kanji)break;
-  }
-  return(result);
+	int  i, j, kanji;
+	errr result = 1;
+
+	for (i = 0; i < count; i++)
+	{
+		result = get_rnd_line(file_name, entry, output);
+		if (result) break;
+		kanji = 0;
+		for (j = 0; output[j]; j++) kanji |= iskanji(output[j]);
+		if (kanji) break;
+	}
+	return result;
 }
 #endif
 

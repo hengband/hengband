@@ -1,5 +1,4 @@
 N:*:Default
-6
 KILL, KILL, KILL!
 The Chainsword roars noisily!
 VROOM! VROOM!

@@ -1,5 +1,4 @@
 N: 1:BIAS_ELEC
-9
 『避雷針』
 『静電気』
 『電離層』
@@ -11,7 +10,6 @@ N: 1:BIAS_ELEC
 電気の司ボルタの
 
 N: 2:BIAS_POIS
-11
 『薬指』
 『清浄化』
 『セボン』
@@ -25,7 +23,6 @@ N: 2:BIAS_POIS
 タランチュラの
 
 N: 3:BIAS_FIRE
-13
 燃えない
 『消火』
 『芭蕉扇』
@@ -41,7 +38,6 @@ N: 3:BIAS_FIRE
 常夏の地ハワイの
 
 N: 4:BIAS_COLD
-10
 『雪』
 『鉄面皮』
 『マフラー』
@@ -54,7 +50,6 @@ N: 4:BIAS_COLD
 母さんが夜なべした
 
 N: 5:BIAS_ACID
-13
 パワー
 祝福された錆びない
 『氷酢酸』
@@ -70,7 +65,6 @@ N: 5:BIAS_ACID
 『テフロン・コート』
 
 N:14:BIAS_NECROMANTIC
-11
 『常闇の刻』
 『邪悪なる力』
 『レヴナント』
@@ -84,7 +78,6 @@ N:14:BIAS_NECROMANTIC
 アレイスター・クロウリーの
 
 N:12:BIAS_CHAOS
-13
 『蜃気楼』
 『モザイク』
 『歪曲空間』
@@ -102,7 +95,6 @@ N:12:BIAS_CHAOS
 #N:15:BIAS_LAW
 N:13:BIAS_PRIESTLY
 N: 8:BIAS_WIS
-14
 『般若経』
 『安息日』
 『告解室』
@@ -120,7 +112,6 @@ N: 8:BIAS_WIS
 
 N:16:BIAS_ROGUE
 N: 9:BIAS_DEX
-10
 『驚速』
 『ＬＳＤ』
 『加速装置』
@@ -134,7 +125,6 @@ N: 9:BIAS_DEX
 
 N:17:BIAS_MAGE
 N: 7:BIAS_INT
-9
 『ヰ=ミダス』
 『デジャ=ヴ』
 『カフェイン』
@@ -147,7 +137,6 @@ N: 7:BIAS_INT
 
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
-7
 『ターボ』
 『象踏不壊』
 『筋肉番付』
@@ -157,7 +146,6 @@ N: 6:BIAS_STR
 ミノタウルスの
 
 N:10:BIAS_CON
-10
 『熊の掌』
 『ザ・我慢』
 『育ち盛り』
@@ -170,7 +158,6 @@ N:10:BIAS_CON
 プロレスラーの
 
 N:19:BIAS_RANGER
-10
 『雑草』
 『迷彩色』
 『探知機』
@@ -183,7 +170,6 @@ N:19:BIAS_RANGER
 レッサーパンダの
 
 N:11:BIAS_CHR
-11
 萌える
 『電撃成婚』
 『激情熱愛』
@@ -197,7 +183,6 @@ N:11:BIAS_CHR
 ナルキッソスの
 
 N:*:Default
-17
 『ピザ』
 『刀返ι』
 『サンボ』

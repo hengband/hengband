@@ -1,5 +1,4 @@
 N:*:Default
-80
 #What game do you think you are playing anyway?
 なんのゲームやってるつもりだい？
 #Aivan sairas kaveri kun tuollaista aikoo puuhata!

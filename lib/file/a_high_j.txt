@@ -1,5 +1,4 @@
 N: 1:BIAS_ELEC
-9
 『雷竜の鱗』
 『雷獣の咆哮』
 『シャンブラー』
@@ -11,7 +10,6 @@ N: 1:BIAS_ELEC
 全能の神ゼウスの
 
 N: 2:BIAS_POIS
-9
 『愛染明王』
 『浄魂癒身』
 『冬虫夏草』
@@ -23,7 +21,6 @@ N: 2:BIAS_POIS
 アスクレピオスの
 
 N: 3:BIAS_FIRE
-11
 『煉獄火炎』
 『閻魔大王』
 『アグニの護り』
@@ -37,7 +34,6 @@ N: 3:BIAS_FIRE
 天使ウリエルの
 
 N: 4:BIAS_COLD
-8
 『大雪原』
 『氷竜の鱗』
 『絶対零度』
@@ -48,7 +44,6 @@ N: 4:BIAS_COLD
 『ホワイト・ダイヤモンド』
 
 N: 5:BIAS_ACID
-8
 『蛟』
 『オーパーツ』
 『ヴリトラの鱗』
@@ -59,7 +54,6 @@ N: 5:BIAS_ACID
 大王ボルドールの
 
 N:12:BIAS_CHAOS
-10
 『制御の鎖』
 『完全なる無』
 『禁断の護り手』
@@ -72,7 +66,6 @@ N:12:BIAS_CHAOS
 官能の女神アルナラの
 
 N:14:BIAS_NECROMANTIC
-9
 『生殺与奪』
 『デメテルの愛』
 『コルウィニアの鍵』
@@ -86,7 +79,6 @@ N:14:BIAS_NECROMANTIC
 #N:15:BIAS_LAW
 N:13:BIAS_PRIESTLY
 N: 8:BIAS_WIS
-13
 『創世記』
 『光の化身』
 『神の権化』
@@ -103,7 +95,6 @@ N: 8:BIAS_WIS
 
 N: 9:BIAS_DEX
 N:16:BIAS_ROGUE
-8
 『神隠し』
 『疾風迅雷』
 『ペル=ヒーシエ』
@@ -115,7 +106,6 @@ N:16:BIAS_ROGUE
 
 N:17:BIAS_MAGE
 N: 7:BIAS_INT
-10
 『魔力の塔』
 『明鏡止水』
 『無想転生』
@@ -129,7 +119,6 @@ N: 7:BIAS_INT
 
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
-14
 『金剛』
 『万力の衣』
 『イージス』
@@ -147,7 +136,6 @@ N: 6:BIAS_STR
 
 N:10:BIAS_CON
 N:19:BIAS_RANGER
-15
 『ファロス』
 『自然の恵み』
 『大地の護り』
@@ -165,7 +153,6 @@ N:19:BIAS_RANGER
 大地の妃ヤヴァンナの
 
 N:11:BIAS_CHR
-10
 『凪の刻』
 『永遠の女神』
 『テルペリオン』
@@ -178,7 +165,6 @@ N:11:BIAS_CHR
 悲哀の女神ニエンナの
 
 N:*:Default
-28
 『要塞』
 『運命星』
 『モノリス』

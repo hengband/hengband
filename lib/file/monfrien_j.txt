@@ -4,16 +4,15 @@
 # crash anything.  The format goes like so:
 # 
 # N:45:whoever this is
-# 3
 # says line 1
 # says line 2
 # says line 3
 #
+# Empty line is separater of blocks.
+#
 # The number after the N: is the "monster index number" obtained from
 # r_info.txt.  The text field after that number isn't actually used--it's
-# just there to help humans edit the file.  The numbers on lines by
-# themselves are the number of lines that the monster has.  Getting these
-# numbers wrong won't crash anything, but will produce strange lines.
+# just there to help humans edit the file.
 #
 # A '*' in the number field is a wildcard and applies to any monster.
 # It should only be placed at the end of the file, since all 'N:' lines
@@ -26,7 +25,6 @@
 # its N: line.
 
 N:8:Farmer Maggot
-3
 #seems sad about something.
 は何か悲しそうだ。
 #asks if you have seen his dogs.
@@ -35,7 +33,6 @@ N:8:Farmer Maggot
 はキノコがどうのとつぶやいている。
 
 N:19:Lion Heart
-16
 「旧郵政省のわけのわからない論理はコイ○ミ内閣には通用しない！」
 「私は芸能人じゃない。政治家なんですよ。」
 「♪なんてったってコイ○ミ〜」
@@ -54,12 +51,10 @@ N:19:Lion Heart
 「今の痛みに耐えて、明日の豊かさ米百俵の精神。」
 
 N:1059:Noborta Kesyta
-2
 「わすの一億ゴールドでカズノ建てなはったさながどげなっちょますかいの」
 「わすはげんごめーりょ、えめふめーですけんの」
 
 N:1060:Mori troll
-29
 「日本の国、まさに天皇を中心にしている神の国であるぞということを、国民のみなさんにしっかりと承知をしていただく…」
 「まだ決めていない人が４０％ぐらいある。そのまま関心がない、といって寝てしまってくれればいいんですけれども。」
 「何も教育勅語に戻せとか超国家的なことに賛成している訳ではない。」
@@ -94,20 +89,16 @@ N:1060:Mori troll
 N:53:Grip, Farmer Maggot's dog
 N:54:Wolf, Farmer Maggot's dog
 N:55:Fang, Farmer Maggot's dog
-0
 
 N:772:Gandalf the Grey
-2
 「ボヤボヤせんでお前も手伝わんか！馬鹿もん！」
 「わしが火の魔法で敵を攻撃するから、お前さんも同時に攻撃しろ。」
 
 N:921:Internet Exploder
-2
 は重い。
 は妙なパケットを発している。
 
 N:1004:Pip, the Braver from Another World
-4
 「火の玉、発射！」
 「火の指1！」
 「火の指2！」
@@ -248,4 +239,3 @@ N:1004:Pip, the Braver from Another World
 #N:860:Oberon, King of Amber
 #N:862:The Serpent of Chaos
 #N:*:Default lines
-

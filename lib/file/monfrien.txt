@@ -4,16 +4,15 @@
 # crash anything.  The format goes like so:
 # 
 # N:45:whoever this is
-# 3
 # says line 1
 # says line 2
 # says line 3
 #
+# Empty line is separater of blocks.
+#
 # The number after the N: is the "monster index number" obtained from
 # r_info.txt.  The text field after that number isn't actually used--it's
-# just there to help humans edit the file.  The numbers on lines by
-# themselves are the number of lines that the monster has.  Getting these
-# numbers wrong won't crash anything, but will produce strange lines.
+# just there to help humans edit the file.
 #
 # A '*' in the number field is a wildcard and applies to any monster.
 # It should only be placed at the end of the file, since all 'N:' lines
@@ -26,13 +25,11 @@
 # its N: line.
 
 N:8:Farmer Maggot
-3
 seems sad about something.
 asks if you have seen his dogs.
 mumbles something about mushrooms.
 
 N:19:Lion Heart
-24
 says, 'We must stand up with firm resolve to strive for the eradication of terrorism, together with other nations of the world'
 says, 'Japan supports the U.S. position that it will not bow to terrorism. Ithink it is only natural for President Bush to hunt down the culprits and take firm steps against this serious crime.'
 says, 'The terrorist acts are extremely heinous and outrageous and cannot be forgiven.'
@@ -61,12 +58,10 @@ says, 'No structural reforms, no economic recovery.'
 says, 'The belief -A pain of today makes affluence of tommorow- '
 
 N:1059:Noborta Kesyta
-2
 says, 'Haw iz my 100,000,000 gold kasino?'
 says, 'I speek cleerly, My speech is anbiguity.'
 
 N:1060:Mori troll
-17
 says, 'We hope the Japanese people acknowledge that Japan is a divine nation centering on the emperor.'
 says, 'Lowbrow sex industries are always created first in Osaka. Excuse my language, but it is a spittoon.'
 says, 'When there was a Y2K problem, the Japanese bought water and noodles. Americans bought pistols and guns.'
@@ -90,20 +85,16 @@ says, 'foo are yu?'
 N:53:Grip, Farmer Maggot's dog
 N:54:Wolf, Farmer Maggot's dog
 N:55:Fang, Farmer Maggot's dog
-0
 
 N:772:Gandalf the Grey
-2
 says, 'Don't space out. Cover me! Bogan!'
 says, 'I'll invoke fire magic. Attack concurrently with me!'
 
 N:921:Internet Exploder
-2
 is slow.
 throws off some dorky packets.
 
 N:1004:Pip, the Braver from Another World
-4
 shouts, 'Fire-ball!'
 shouts, 'Fire-finger1!'
 shouts, 'Fire-finger2!'

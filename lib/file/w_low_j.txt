@@ -1,5 +1,4 @@
 N: 1:BIAS_ELEC
-15
 電撃
 稲妻の宿る
 エレクトリック
@@ -17,7 +16,6 @@ N: 1:BIAS_ELEC
 『びっくりサンダーマウンテン』
 
 N: 2:BIAS_POIS
-17
 『蝮』
 『毒虫』
 『蟲毒』
@@ -37,7 +35,6 @@ N: 2:BIAS_POIS
 劣化ウランの
 
 N: 3:BIAS_FIRE
-13
 『爆竹』
 『火蟻』
 『火車』
@@ -53,7 +50,6 @@ N: 3:BIAS_FIRE
 激辛の地シセンの
 
 N: 4:BIAS_COLD
-11
 『氷結』
 『雪崩』
 『白熊君』
@@ -67,7 +63,6 @@ N: 4:BIAS_COLD
 北風小僧の
 
 N: 5:BIAS_ACID
-14
 『白蟻』
 『酸性雨』
 『ペプツ』
@@ -84,7 +79,6 @@ N: 5:BIAS_ACID
 『トリプトファン』
 
 N:12:BIAS_CHAOS
-15
 『コッホ』
 『万華鏡』
 『歪曲刀』
@@ -102,7 +96,6 @@ N:12:BIAS_CHAOS
 遊星からの
 
 N:14:BIAS_NECROMANTIC
-14
 人々を窒息させてきた切断された
 『墓石』
 『卒塔婆』
@@ -121,7 +114,6 @@ N:14:BIAS_NECROMANTIC
 N:15:BIAS_LAW
 N:13:BIAS_PRIESTLY
 N: 8:BIAS_WIS
-17
 『盲信者』
 『免罪符』
 『チルミル』
@@ -142,7 +134,6 @@ N: 8:BIAS_WIS
 
 N: 9:BIAS_DEX
 N:16:BIAS_ROGUE
-10
 『襲』
 『猫爪』
 『タキオン』
@@ -156,7 +147,6 @@ N:16:BIAS_ROGUE
 
 N: 7:BIAS_INT
 N:17:BIAS_MAGE
-11
 『一夜漬』
 『ク=モン』
 『カンニング』
@@ -172,7 +162,6 @@ N:17:BIAS_MAGE
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
 N:10:BIAS_CON
-16
 『熱血漢』
 『豪力王』
 『超兄貴』
@@ -191,7 +180,6 @@ N:10:BIAS_CON
 究極無敵銀河最強の
 
 N:19:BIAS_RANGER
-13
 『時蔭』
 『星獣剣』
 『熊殺し』
@@ -207,7 +195,6 @@ N:19:BIAS_RANGER
 伝説の料理人味吉陽一の
 
 N:11:BIAS_CHR
-9
 『素薔薇』
 『ロリータ』
 『友好の証』
@@ -219,7 +206,6 @@ N:11:BIAS_CHR
 白馬の王子様の
 
 N:*:Default
-25
 魁！
 『紫雨』
 『腐卵』

@@ -1,5 +1,4 @@
 N: 1:BIAS_ELEC
-15
 『雷光』
 『雷牙』
 『電撃王』
@@ -17,7 +16,6 @@ N: 1:BIAS_ELEC
 稲妻バヤジットの
 
 N: 2:BIAS_POIS
-16
 『ホーネット』
 『ヒドラゾン』
 『メルカプト』
@@ -36,7 +34,6 @@ N: 2:BIAS_POIS
 『アサシン・ストライク』
 
 N: 3:BIAS_FIRE
-15
 『干将』
 『火の刺』
 『炎の鞭』
@@ -54,7 +51,6 @@ N: 3:BIAS_FIRE
 燃える神チェカラクの
 
 N: 4:BIAS_COLD
-11
 『莫耶』
 『樹氷』
 『氷柱』
@@ -68,7 +64,6 @@ N: 4:BIAS_COLD
 極寒の地エゾの
 
 N: 5:BIAS_ACID
-9
 『酸の刃』
 『酸の滴』
 『カルボライト』
@@ -80,7 +75,6 @@ N: 5:BIAS_ACID
 梅源郷キシュウの
 
 N:12:BIAS_CHAOS
-13
 『狂気の円環』
 『ハルマゲドン』
 『ルナティック』
@@ -96,7 +90,6 @@ N:12:BIAS_CHAOS
 混沌の神ハイオンハーンの
 
 N:14:BIAS_NECROMANTIC
-15
 『瘴気の刃』
 『デスソード』
 『魂の支配者』
@@ -116,7 +109,6 @@ N:14:BIAS_NECROMANTIC
 N:15:BIAS_LAW
 N:13:BIAS_PRIESTLY
 N: 8:BIAS_WIS
-16
 聖なる
 『畏怖』
 『降臨』
@@ -135,7 +127,6 @@ N: 8:BIAS_WIS
 英雄サラディンの
 
 N:16:BIAS_ROGUE
-11
 『忍』
 『鶏鳴狗盗』
 『電光石火』
@@ -150,7 +141,6 @@ N:16:BIAS_ROGUE
 
 N: 7:BIAS_INT
 N:17:BIAS_MAGE
-13
 『知嚢』
 『ハッカー』
 『予見の鏡』
@@ -169,7 +159,6 @@ N:17:BIAS_MAGE
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
 N:10:BIAS_CON
-14
 『小烏丸』
 『兜割り』
 『戦の巧み』
@@ -187,7 +176,6 @@ N:10:BIAS_CON
 
 N: 9:BIAS_DEX
 N:19:BIAS_RANGER
-14
 『大輪剣』
 『白虎真剣』
 『ギレッター』
@@ -204,7 +192,6 @@ N:19:BIAS_RANGER
 巧みのクルフィンの
 
 N:11:BIAS_CHR
-7
 『モナリザ』
 『天使の囁き』
 『ニンフの微笑み』
@@ -214,7 +201,6 @@ N:11:BIAS_CHR
 伶人マグロオルの
 
 N:*:Default
-23
 『龍爪』
 『憤激』
 『狼吠』
