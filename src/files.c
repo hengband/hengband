@@ -2797,7 +2797,6 @@ static void tim_player_flags(u32b flgs[TR_FLAG_SIZE], bool im_and_res)
 /* Mode flags for displaying player flags */
 #define DP_CURSE   0x01
 #define DP_IMM     0x02
-#define DP_ESP     0x04
 #define DP_WP      0x08
 
 
@@ -3004,35 +3003,6 @@ static void display_flag_aux(int row, int col, cptr header,
                         if ((mode & DP_CURSE) && (o_ptr->curse_flags & TRC_PERMA_CURSE))
                                 c_put_str(TERM_WHITE, "*", row, col);
                 }
-                else if (mode & DP_ESP)
-                {
-                        if (have_flag(flgs, TR_TELEPATHY))
-                                c_put_str(TERM_WHITE, "*", row, col);
-                        else if (have_flag(flgs, TR_ESP_EVIL))
-                                c_put_str(TERM_L_DARK, "*", row, col);
-                        else if (have_flag(flgs, TR_ESP_NONLIVING))
-                                c_put_str(TERM_BLUE, "+", row, col);
-                        else if (have_flag(flgs, TR_ESP_GOOD))
-                                c_put_str(TERM_WHITE, "+", row, col);
-                        else if (have_flag(flgs, TR_ESP_UNDEAD))
-                                c_put_str(TERM_L_DARK, "+", row, col);
-                        else if (have_flag(flgs, TR_ESP_DEMON))
-                                c_put_str(TERM_RED, "+", row, col);
-                        else if (have_flag(flgs, TR_ESP_DRAGON))
-                                c_put_str(TERM_GREEN, "+", row, col);
-                        else if (have_flag(flgs, TR_ESP_HUMAN))
-                                c_put_str(TERM_YELLOW, "+", row, col);
-                        else if (have_flag(flgs, TR_ESP_UNIQUE))
-                                c_put_str(TERM_VIOLET, "+", row, col);
-                        else if (have_flag(flgs, TR_ESP_ANIMAL))
-                                c_put_str(TERM_L_GREEN, "+", row, col);
-                        else if (have_flag(flgs, TR_ESP_ORC))
-                                c_put_str(TERM_L_UMBER, "+", row, col);
-                        else if (have_flag(flgs, TR_ESP_TROLL))
-                                c_put_str(TERM_SLATE, "+", row, col);
-                        else if (have_flag(flgs, TR_ESP_GIANT))
-                                c_put_str(TERM_ORANGE, "+", row, col);
-                }
                 else
                 {
                         if (have_flag(flgs, flag1))
@@ -3172,7 +3142,7 @@ display_flag_aux(row+0, col, "≤√¬Æ      :", TR_SPEED, &f, 0);
 display_flag_aux(row+1, col, "¬—À„·„    :", TR_FREE_ACT, &f, 0);
 display_flag_aux(row+2, col, "∆©Ã¿¬ŒªÎ«ß:", TR_SEE_INVIS, &f, 0);
 display_flag_aux(row+3, col, "∑–∏≥√Õ ›ª˝:", TR_HOLD_LIFE, &f, 0);
-display_flag_aux(row+4, col, "•∆•Ï•—•∑°º:", TR_TELEPATHY, &f, DP_ESP);
+display_flag_aux(row+4, col, "∑Ÿπ      :", TR_WARNING, &f, 0);
 display_flag_aux(row+5, col, "√Ÿæ√≤Ω    :", TR_SLOW_DIGEST, &f, 0);
 display_flag_aux(row+6, col, "µﬁ≤Û…¸    :", TR_REGEN, &f, 0);
 display_flag_aux(row+7, col, "…‚Õ∑      :", TR_FEATHER, &f, 0);
@@ -3183,7 +3153,7 @@ display_flag_aux(row+9, col, "ºˆ§§      :", 0, &f, DP_CURSE);
 	display_flag_aux(row+1, col, "FreeAction:", TR_FREE_ACT, &f, 0);
 	display_flag_aux(row+2, col, "SeeInvisi.:", TR_SEE_INVIS, &f, 0);
 	display_flag_aux(row+3, col, "Hold Life :", TR_HOLD_LIFE, &f, 0);
-	display_flag_aux(row+4, col, "Telepathy :", TR_TELEPATHY, &f, DP_ESP);
+	display_flag_aux(row+4, col, "Warning   :", TR_WARNING, &f, 0);
 	display_flag_aux(row+5, col, "SlowDigest:", TR_SLOW_DIGEST, &f, 0);
 	display_flag_aux(row+6, col, "Regene.   :", TR_REGEN, &f, 0);
 	display_flag_aux(row+7, col, "Levitation:", TR_FEATHER, &f, 0);
@@ -3215,7 +3185,7 @@ static void display_player_other_flag_info(void)
 	/*** Set 1 ***/
 
 	row = 3;
-	col = 2;
+	col = 1;
 
 	display_player_equippy(row-2, col+12, DP_WP);
 
@@ -3336,7 +3306,7 @@ static void display_player_other_flag_info(void)
 	/*** Set 3 ***/
 
 	row = 3;
-	col = col + 12 + 18;
+	col = col + 12 + 17;
 
 	display_player_equippy(row-2, col+14, 0);
 
@@ -3352,15 +3322,15 @@ static void display_player_other_flag_info(void)
 
         display_flag_aux(row+ 7, col, "æË«œ        :", TR_RIDING, &f, 0);
         display_flag_aux(row+ 8, col, "≈Í⁄≥        :", TR_THROW, &f, 0);
-        display_flag_aux(row+ 9, col, "»ø•∆•Ï•›°º•»:", TR_NO_TELE, &f, 0);
-        display_flag_aux(row+10, col, "»øÀ‚À°      :", TR_NO_MAGIC, &f, 0);
-        display_flag_aux(row+11, col, "æ√»ÒÀ‚Œœ∏∫æØ:", TR_DEC_MANA, &f, 0);
-        display_flag_aux(row+12, col, "∑Ÿπ        :", TR_WARNING, &f, 0);
-        display_flag_aux(row+13, col, "ΩÀ °        :", TR_BLESSED, &f, 0);
-        display_flag_aux(row+15, col, "∑–∏≥√Õ∏∫æØ  :", TR_DRAIN_EXP, &f, 0);
-        display_flag_aux(row+16, col, "Õ•∆•Ï•›°º•»:", TR_TELEPORT, &f, 0);
-        display_flag_aux(row+17, col, "»ø¥∂        :", TR_AGGRAVATE, &f, 0);
-        display_flag_aux(row+18, col, "¬¿∏≈§Œ±Â«∞  :", TR_TY_CURSE, &f, 0);
+        display_flag_aux(row+ 9, col, "ΩÀ °        :", TR_BLESSED, &f, 0);
+        display_flag_aux(row+10, col, "»ø•∆•Ï•›°º•»:", TR_NO_TELE, &f, 0);
+        display_flag_aux(row+11, col, "»øÀ‚À°      :", TR_NO_MAGIC, &f, 0);
+        display_flag_aux(row+12, col, "æ√»ÒÀ‚Œœ∏∫æØ:", TR_DEC_MANA, &f, 0);
+
+        display_flag_aux(row+14, col, "∑–∏≥√Õ∏∫æØ  :", TR_DRAIN_EXP, &f, 0);
+        display_flag_aux(row+15, col, "Õ•∆•Ï•›°º•»:", TR_TELEPORT, &f, 0);
+        display_flag_aux(row+16, col, "»ø¥∂        :", TR_AGGRAVATE, &f, 0);
+        display_flag_aux(row+17, col, "¬¿∏≈§Œ±Â«∞  :", TR_TY_CURSE, &f, 0);
 #else
         display_flag_aux(row+ 0, col, "Add Blows   :", TR_BLOWS, &f, 0);
         display_flag_aux(row+ 1, col, "Add Tunnel  :", TR_TUNNEL, &f, 0);
@@ -3371,15 +3341,15 @@ static void display_player_other_flag_info(void)
 
         display_flag_aux(row+ 7, col, "Riding      :", TR_RIDING, &f, 0);
         display_flag_aux(row+ 8, col, "Throw       :", TR_THROW, &f, 0);
-        display_flag_aux(row+ 9, col, "No Teleport :", TR_NO_TELE, &f, 0);
-        display_flag_aux(row+10, col, "Anti Magic  :", TR_NO_MAGIC, &f, 0);
-        display_flag_aux(row+11, col, "Econom. Mana:", TR_DEC_MANA, &f, 0);
-        display_flag_aux(row+12, col, "Warning     :", TR_WARNING, &f, 0);
-        display_flag_aux(row+13, col, "Blessed     :", TR_BLESSED, &f, 0);
-        display_flag_aux(row+15, col, "Drain Exp   :", TR_DRAIN_EXP, &f, 0);
-        display_flag_aux(row+16, col, "Rnd.Teleport:", TR_TELEPORT, &f, 0);
-        display_flag_aux(row+17, col, "Aggravate   :", TR_AGGRAVATE, &f, 0);
-        display_flag_aux(row+18, col, "TY Curse    :", TR_TY_CURSE, &f, 0);
+        display_flag_aux(row+ 9, col, "Blessed     :", TR_BLESSED, &f, 0);
+        display_flag_aux(row+10, col, "No Teleport :", TR_NO_TELE, &f, 0);
+        display_flag_aux(row+11, col, "Anti Magic  :", TR_NO_MAGIC, &f, 0);
+        display_flag_aux(row+12, col, "Econom. Mana:", TR_DEC_MANA, &f, 0);
+
+        display_flag_aux(row+14, col, "Drain Exp   :", TR_DRAIN_EXP, &f, 0);
+        display_flag_aux(row+15, col, "Rnd.Teleport:", TR_TELEPORT, &f, 0);
+        display_flag_aux(row+16, col, "Aggravate   :", TR_AGGRAVATE, &f, 0);
+        display_flag_aux(row+17, col, "TY Curse    :", TR_TY_CURSE, &f, 0);
 #endif
 
 }
@@ -4120,11 +4090,43 @@ errr make_character_dump(FILE *fff)
 	}
 
 	fprintf(fff, "\n");
-	/* Display history */
+
+	/* Display flags (part 1) */
 	display_player(2);
 
 	/* Dump part of the screen */
 	for (y = 2; y < 22; y++)
+	{
+		/* Dump each row */
+		for (x = 0; x < 79; x++)
+		{
+			/* Get the attr/char */
+			(void)(Term_what(x, y, &a, &c));
+
+			/* Dump it (Ignore equippy tile graphic) */
+			if (a < 128)
+				buf[x] = c;
+			else
+				buf[x] = ' ';
+		}
+
+		/* End the string */
+		buf[x] = '\0';
+
+		/* Kill trailing spaces */
+		while ((x > 0) && (buf[x-1] == ' ')) buf[--x] = '\0';
+
+		/* End the row */
+		fprintf(fff, "%s\n", buf);
+	}
+
+	fprintf(fff, "\n");
+
+	/* Display flags (part 2) */
+	display_player(3);
+
+	/* Dump part of the screen */
+	for (y = 1; y < 22; y++)
 	{
 		/* Dump each row */
 		for (x = 0; x < 79; x++)
