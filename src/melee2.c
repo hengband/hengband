@@ -3945,12 +3945,14 @@ void process_monsters(void)
 
 bool process_the_world(int num, int who, bool vs_player)
 {
+	monster_type *m_ptr = &m_list[hack_m_idx];  /* the world monster */
+
 	if(world_monster) return (FALSE);
 
 	if(vs_player)
 	{
 		char m_name[80];
-		monster_desc(m_name, &m_list[hack_m_idx], 0);
+		monster_desc(m_name, m_ptr, 0);
 
 		if (who == 1)
 #ifdef JP
@@ -3975,10 +3977,10 @@ bool process_the_world(int num, int who, bool vs_player)
 
 	while(num--)
 	{
-		if(!m_list[hack_m_idx].r_idx) return (TRUE);
+		if(m_ptr->r_idx) return (TRUE);
 		process_monster(hack_m_idx);
 
-		reset_target(&m_list[hack_m_idx]);
+		reset_target(m_ptr);
 
 		/* Notice stuff */
 		if (p_ptr->notice) notice_stuff();
@@ -4006,7 +4008,7 @@ bool process_the_world(int num, int who, bool vs_player)
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	world_monster = FALSE;
-	if (vs_player || los(py, px, m_list[hack_m_idx].fy, m_list[hack_m_idx].fx))
+	if (vs_player || los(py, px, m_ptr->fy, m_ptr->fx))
 	{
 #ifdef JP
 		msg_print("「時は動きだす…」");
