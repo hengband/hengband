@@ -1312,36 +1312,19 @@ int is_autopick(object_type *o_ptr)
 /*
  *  Auto inscription
  */
-void auto_inscribe_item(int item, int idx)
+static void auto_inscribe_item(object_type *o_ptr, int idx)
 {
-	object_type *o_ptr;
-
-	/* Get the item (in the pack) */
-	if (item >= 0) o_ptr = &inventory[item];
-
-	/* Get the item (on the floor) */
-	else o_ptr = &o_list[0 - item];
-
-	/* Auto-inscription or Re-inscribe for resistances {%} */
-	if ((idx < 0 || !autopick_list[idx].insc) && !o_ptr->inscription)
-		return;
+	/* Are there auto-inscription? */
+	if (idx < 0 || !autopick_list[idx].insc) return;
 
 	if (!o_ptr->inscription)
 		o_ptr->inscription = quark_add(autopick_list[idx].insc);
 
-	if (item > INVEN_PACK)
-	{
-		/* Redraw inscription */
-		p_ptr->window |= (PW_EQUIP);
+	/* Redraw inscription */
+	p_ptr->window |= (PW_EQUIP | PW_INVEN);
 
-		/* {.} and {$} effect p_ptr->warning and TRC_TELEPORT_SELF */
-		p_ptr->update |= (PU_BONUS);
-	}
-	else if (item >= 0)
-	{
-		/* Redraw inscription */
-		p_ptr->window |= (PW_INVEN);
-	}
+	/* {.} and {$} effect p_ptr->warning and TRC_TELEPORT_SELF */
+	p_ptr->update |= (PU_BONUS);
 }
 
 
@@ -1413,41 +1396,35 @@ static bool is_opt_confirm_destroy(object_type *o_ptr)
 
 /*
  * Automatically destroy an item if it is to be destroyed
+ *
+ * When always_pickup is 'yes', we disable auto-destroyer function of
+ * auto-picker/destroyer, and do only easy-auto-destroyer.
  */
 static object_type autopick_last_destroyed_object;
 
-bool auto_destroy_item(int item, int autopick_idx)
+static void auto_destroy_item(object_type *o_ptr, int autopick_idx)
 {
 	bool destroy = FALSE;
-	object_type *o_ptr;
 
-	/* Don't destroy equipped items */
-	if (item > INVEN_PACK) return FALSE;
-
-	/* Get the item (in the pack) */
-	if (item >= 0) o_ptr = &inventory[item];
-
-	/* Get the item (on the floor) */
-	else o_ptr = &o_list[0 - item];
-
-	/* Easy-Auto-Destroyer */
+	/* Easy-Auto-Destroyer (3rd priority) */
 	if (is_opt_confirm_destroy(o_ptr)) destroy = TRUE;
 
-	/* Protected by auto-picker */
+	/* Protected by auto-picker (2nd priotity) */
 	if (autopick_idx >= 0 &&
 	    !(autopick_list[autopick_idx].action & DO_AUTODESTROY))
 		destroy = FALSE;
 
+	/* Auto-destroyer works only when !always_pickup */
 	if (!always_pickup)
 	{
-		/* Auto-picker/destroyer */
+		/* Auto-picker/destroyer (1st priority) */
 		if (autopick_idx >= 0 &&
 		    (autopick_list[autopick_idx].action & DO_AUTODESTROY))
 			destroy = TRUE;
 	}
 
 	/* Not to be destroyed */
-	if (!destroy) return FALSE;
+	if (!destroy) return;
 
 	/* Now decided to destroy */
 
@@ -1469,7 +1446,7 @@ bool auto_destroy_item(int item, int autopick_idx)
 #endif
 
 		/* Done */
-		return TRUE;
+		return;
 	}
 
 	/* Record name of destroyed item */
@@ -1479,7 +1456,7 @@ bool auto_destroy_item(int item, int autopick_idx)
 	o_ptr->marked |= OM_AUTODESTROY;
 	p_ptr->notice |= PN_AUTODESTROY;
 
-	return TRUE;
+	return;
 }
 
 
@@ -1527,7 +1504,7 @@ static void delayed_auto_destroy_aux(int item)
 
 
 /*
- *  Auto-destroy marked item in inventry and on floor
+ *  Auto-destroy marked items in inventry and on floor
  */
 void delayed_auto_destroy(void)
 {
@@ -1552,6 +1529,35 @@ void delayed_auto_destroy(void)
 
 
 /*
+ * Auto-inscription and/or destroy
+ *
+ * Auto-destroyer works only on inventory or on floor stack only when
+ * requested.
+ */
+void auto_do_item(int item, bool destroy)
+{
+	object_type *o_ptr;
+	int idx;
+
+	/* Get the item (in the pack) */
+	if (item >= 0) o_ptr = &inventory[item];
+
+	/* Get the item (on the floor) */
+	else o_ptr = &o_list[0 - item];
+
+	/* Get the index in the auto-pick/destroy list */
+	idx = is_autopick(o_ptr);
+
+	/* Do auto-inscription */
+	auto_inscribe_item(o_ptr, idx);
+
+	/* Do auto-destroy if needed */
+	if (destroy && item <= INVEN_PACK)
+		auto_destroy_item(o_ptr, idx);
+}
+
+
+/*
  * Automatically pickup/destroy items in this grid.
  */
 void auto_pickup_items(cave_type *c_ptr)
@@ -1569,78 +1575,84 @@ void auto_pickup_items(cave_type *c_ptr)
 		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
 
+		/* Get the index of auto-picker list */
 		idx = is_autopick(o_ptr);
 
-		/* Item index for floor -1,-2,-3,...  */
-		auto_inscribe_item((-this_o_idx), idx);
+		/* Nothing defined on auto-picker? */
+		if (idx < 0) continue;
 
-		if (idx >= 0 &&
-			(autopick_list[idx].action & (DO_AUTOPICK | DO_QUERY_AUTOPICK)))
+		/* Always do auto-inscription first */
+		auto_inscribe_item(o_ptr, idx);
+
+		/* Do auto-destroy */
+		if (autopick_list[idx].action & DO_AUTODESTROY)
 		{
-			disturb(0,0);
+			auto_destroy_item(o_ptr, idx);
+			continue;
+		}
 
-			if (!inven_carry_okay(o_ptr))
-			{
-				char o_name[MAX_NLEN];
+		/* Disturb on auto-pick */
+		disturb(0,0);
 
-				/* Describe the object */
-				object_desc(o_name, o_ptr, TRUE, 3);
+		/* Is there an inventory space? */
+		if (!inven_carry_okay(o_ptr))
+		{
+			char o_name[MAX_NLEN];
 
-				/* Message */
+			/* Describe the object */
+			object_desc(o_name, o_ptr, TRUE, 3);
+
+			/* Message */
 #ifdef JP
-				msg_format("ザックには%sを入れる隙間がない。", o_name);
+			msg_format("ザックには%sを入れる隙間がない。", o_name);
 #else
-				msg_format("You have no room for %s.", o_name);
+			msg_format("You have no room for %s.", o_name);
 #endif
-				/* Hack - remember that the item has given a message here. */
-				o_ptr->marked |= OM_NOMSG;
-
-				continue;
-			}
-			else if (autopick_list[idx].action & DO_QUERY_AUTOPICK)
-			{
-				char out_val[MAX_NLEN+20];
-				char o_name[MAX_NLEN];
-
-				if (o_ptr->marked & OM_NO_QUERY)
-				{
-					/* Already answered as 'No' */
-					continue;
-				}
-
-				/* Describe the object */
-				object_desc(o_name, o_ptr, TRUE, 3);
-
-#ifdef JP
-				sprintf(out_val, "%sを拾いますか? ", o_name);
-#else
-				sprintf(out_val, "Pick up %s? ", o_name);
-#endif
-
-				if (!get_check(out_val))
-				{
-					/* Hack - remember that the item has given a message here. */
-					o_ptr->marked |= (OM_NOMSG | OM_NO_QUERY);
-					continue;
-				}
-
-			}
-			py_pickup_aux(this_o_idx);
+			/*
+			 * Hack - No duplicate messages.
+			 * remember that a message is given for the item here.
+			 */
+			o_ptr->marked |= OM_NOMSG;
 
 			continue;
 		}
-		
-		/*
-		 * Do auto-destroy;
-		 * When always_pickup is 'yes', we disable
-		 * auto-destroyer from autopick function, and do only
-		 * easy-auto-destroyer.
-		 */
-		else
+
+		/* Ask if needed */
+		if (autopick_list[idx].action & DO_QUERY_AUTOPICK)
 		{
-			if (auto_destroy_item((-this_o_idx), idx))
+			char out_val[MAX_NLEN+20];
+			char o_name[MAX_NLEN];
+
+			if (o_ptr->marked & OM_NO_QUERY)
+			{
+				/* Already answered as 'No' */
 				continue;
+			}
+
+			/* Describe the object */
+			object_desc(o_name, o_ptr, TRUE, 3);
+
+#ifdef JP
+			sprintf(out_val, "%sを拾いますか? ", o_name);
+#else
+			sprintf(out_val, "Pick up %s? ", o_name);
+#endif
+
+			if (!get_check(out_val))
+			{
+				/*
+				 * Hack - No duplicate messages/questions.
+				 * remember that a message is given
+				 * for the item here.
+				 */
+				o_ptr->marked |= (OM_NOMSG | OM_NO_QUERY);
+				continue;
+			}
+
 		}
+
+		/* Pick it up! */
+		py_pickup_aux(this_o_idx);
 	}
 }
 

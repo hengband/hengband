@@ -806,19 +806,13 @@ void py_pickup_aux(int o_idx)
 
 	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN)
 	{
-		int idx;
 		bool old_known = identify_item(o_ptr);
 
 		/* Auto-inscription/destroy */
-		idx = is_autopick(o_ptr);
-		auto_inscribe_item(slot, idx);
-		if (destroy_identify && !old_known)
-		{
-			if (auto_destroy_item(slot, idx))
-			{
-				if (o_ptr->marked & OM_AUTODESTROY) return;
-			}
-		}
+		auto_do_item(slot, (bool)(destroy_identify && !old_known));
+
+		/* If it is destroyed, don't pick it up */
+		if (o_ptr->marked & OM_AUTODESTROY) return;
 	}
 
 	/* Describe the object */

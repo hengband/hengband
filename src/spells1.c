@@ -1543,7 +1543,7 @@ note_kill = "壊れてしまった！";
 				identify_item(o_ptr);
 
 				/* Auto-inscription */
-				auto_inscribe_item(-this_o_idx, is_autopick(o_ptr));
+				auto_do_item((-this_o_idx), FALSE);
 				break;
 			}
 

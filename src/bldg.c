@@ -3841,7 +3841,7 @@ msg_format("%s ¤Ç¤¹¡£", tmp_str);
 #endif
 
 			/* Auto-inscription */
-			auto_inscribe_item(item, is_autopick(o_ptr));
+			auto_do_item(item, FALSE);
 
 			/* Update the gold display */
 			building_prt_gold();
@@ -4142,7 +4142,7 @@ static void building_recharge_all(void)
 			identify_item(o_ptr);
 
 			/* Auto-inscription */
-			auto_inscribe_item(i, is_autopick(o_ptr));
+			auto_do_item(i, FALSE);
 		}
 
 		/* Recharge */

@@ -2012,7 +2012,7 @@ void identify_pack(void)
 		identify_item(o_ptr);
 
 		/* Auto-inscription */
-		auto_inscribe_item(i, is_autopick(o_ptr));
+		auto_do_item(i, FALSE);
 	}
 }
 
@@ -2825,7 +2825,6 @@ bool ident_spell(bool only_equip)
 	char            o_name[MAX_NLEN];
 	cptr            q, s;
 	bool old_known;
-	int idx;
 
 	item_tester_no_ryoute = TRUE;
 
@@ -2902,10 +2901,7 @@ s = "鑑定するべきアイテムがない。";
 	}
 
 	/* Auto-inscription/destroy */
-	idx = is_autopick(o_ptr);
-	auto_inscribe_item(item, idx);
-	if (destroy_identify && !old_known)
-		auto_destroy_item(item, idx);
+	auto_do_item(item, (bool)(destroy_identify && !old_known));
 
 	/* Something happened */
 	return (TRUE);
@@ -3004,7 +3000,6 @@ bool identify_fully(bool only_equip)
 	char            o_name[MAX_NLEN];
 	cptr            q, s;
 	bool old_known;
-	int idx;
 
 	item_tester_no_ryoute = TRUE;
 	if (only_equip)
@@ -3087,10 +3082,7 @@ s = "鑑定するべきアイテムがない。";
 	(void)screen_object(o_ptr, TRUE);
 
 	/* Auto-inscription/destroy */
-	idx = is_autopick(o_ptr);
-	auto_inscribe_item(item, idx);
-	if (destroy_identify && !old_known)
-		auto_destroy_item(item, idx);
+	auto_do_item(item, (bool)(destroy_identify && !old_known));
 
 	/* Success */
 	return (TRUE);
