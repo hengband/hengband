@@ -156,6 +156,8 @@
 #include <Sound.h>
 #if TARGET_API_MAC_CARBON
 #include <Navigation.h>
+#include <CFPreferences.h>
+#include <CFNumber.h>
 # ifdef MAC_MPW
 # include <CarbonStdCLib.h>
 # endif
@@ -508,7 +510,7 @@ static int soundchoice[] = {
 	SND_TRAP,
 };
 
-static int			soundmode[8];
+static short			soundmode[8];
 
 static int ext_graf = 0;
 
@@ -2438,7 +2440,300 @@ static void SetupAppDir(void)
 
 
 
+#ifdef TARGET_API_MAC_CARBON
+/*
+ * Using Core Foundation's Preferences services -- pelpel
+ *
+ * Requires OS 8.6 or greater with CarbonLib 1.1 or greater. Or OS X,
+ * of course.
+ *
+ * Without this, we can support older versions of OS 8 as well
+ * (with CarbonLib 1.0.4).
+ *
+ * Frequent allocation/deallocation of small chunks of data is
+ * far from my liking, but since this is only called at the
+ * beginning and the end of a session, I hope this hardly matters.
+ */
 
+
+/*
+ * Store "value" as the value for preferences item name
+ * pointed by key
+ */
+static void save_pref_short(const char *key, short value)
+{
+	CFStringRef cf_key;
+	CFNumberRef cf_value;
+
+	/* allocate and initialise the key */
+	cf_key = CFStringCreateWithCString(NULL, key, kTextEncodingUS_ASCII);
+
+	/* allocate and initialise the value */
+	cf_value = CFNumberCreate(NULL, kCFNumberShortType, &value);
+
+	if ((cf_key != NULL) && (cf_value != NULL))
+	{
+		/* Store the key-value pair in the applications preferences */
+		CFPreferencesSetAppValue(
+			cf_key,
+			cf_value,
+			kCFPreferencesCurrentApplication);
+	}
+
+	/*
+	 * Free CF data - the reverse order is a vain attempt to
+	 * minimise memory fragmentation.
+	 */
+	if (cf_value) CFRelease(cf_value);
+	if (cf_key) CFRelease(cf_key);
+}
+
+
+/*
+ * Load preference value for key, returns TRUE if it succeeds with
+ * vptr updated appropriately, FALSE otherwise.
+ */
+static bool query_load_pref_short(const char *key, short *vptr)
+{
+	CFStringRef cf_key;
+	CFNumberRef cf_value;
+
+	/* allocate and initialise the key */
+	cf_key = CFStringCreateWithCString(NULL, key, kTextEncodingUS_ASCII);
+
+	/* Oops */
+	if (cf_key == NULL) return (FALSE);
+
+	/* Retrieve value for the key */
+	cf_value = CFPreferencesCopyAppValue(
+		cf_key,
+		kCFPreferencesCurrentApplication);
+
+	/* Value not found */
+	if (cf_value == NULL)
+	{
+		CFRelease(cf_key);
+		return (FALSE);
+	}
+
+	/* Convert the value to short */
+	CFNumberGetValue(
+		cf_value,
+		kCFNumberShortType,
+		vptr);
+
+	/* Free CF data */
+	CFRelease(cf_value);
+	CFRelease(cf_key);
+
+	/* Success */
+	return (TRUE);
+}
+
+
+/*
+ * Update short data pointed by vptr only if preferences
+ * value for key is located.
+ */
+static void load_pref_short(const char *key, short *vptr)
+{
+	short tmp;
+
+	if (query_load_pref_short(key, &tmp)) *vptr = tmp;
+	return;
+}
+
+
+/*
+ * Save preferences to preferences file for current host+current user+
+ * current application.
+ */
+static void cf_save_prefs()
+{
+	int i;
+
+	/* Version stamp */
+	save_pref_short("version.major", FAKE_VERSION);
+	save_pref_short("version.minor", FAKE_VER_MAJOR);
+	save_pref_short("version.patch", FAKE_VER_MINOR);
+	save_pref_short("version.extra", FAKE_VER_PATCH);
+
+	/* Gfx settings */
+	save_pref_short("arg.arg_sound", arg_sound);
+	save_pref_short("arg.arg_graphics", arg_graphics);
+	save_pref_short("arg.arg_newstyle_graphics", arg_newstyle_graphics);
+	save_pref_short("arg.arg_bigtile", arg_bigtile);
+
+	/* SoundMode */
+	for( i = 0 ; i < 7 ; i++ )
+		save_pref_short(format("sound%d.on", i), soundmode[i]);
+	
+	/* Windows */
+	for (i = 0; i < MAX_TERM_DATA; i++)
+	{
+		term_data *td = &data[i];
+
+		save_pref_short(format("term%d.mapped", i), td->mapped);
+
+		save_pref_short(format("term%d.font_id", i), td->font_id);
+		save_pref_short(format("term%d.font_size", i), td->font_size);
+		save_pref_short(format("term%d.font_face", i), td->font_face);
+
+		save_pref_short(format("term%d.tile_wid", i), td->tile_wid);
+		save_pref_short(format("term%d.tile_hgt", i), td->tile_hgt);
+
+		save_pref_short(format("term%d.cols", i), td->cols);
+		save_pref_short(format("term%d.rows", i), td->rows);
+		save_pref_short(format("term%d.left", i), td->r.left);
+		save_pref_short(format("term%d.top", i), td->r.top);
+	}
+
+	/*
+	 * Make sure preferences are persistent
+	 */
+	CFPreferencesAppSynchronize(
+		kCFPreferencesCurrentApplication);
+}
+
+
+/*
+ * Load preferences from preferences file for current host+current user+
+ * current application.
+ */
+static void cf_load_prefs()
+{
+	bool ok;
+	short pref_major, pref_minor, pref_patch, pref_extra;
+	int i;
+
+	MenuHandle m;
+
+	/* Assume nothing is wrong, yet */
+	ok = TRUE;
+
+	/* Load version information */
+	ok &= query_load_pref_short("version.major", &pref_major);
+	ok &= query_load_pref_short("version.minor", &pref_minor);
+	ok &= query_load_pref_short("version.patch", &pref_patch);
+	ok &= query_load_pref_short("version.extra", &pref_extra);
+
+	/* Any of the above failed */
+	if (!ok)
+	{
+		/* This may be the first run */
+#ifdef JP
+		mac_warning("初期設定ファイルが見つかりません。");
+#else
+		mac_warning("Preferences are not found.");
+#endif
+
+		/* Ignore the rest */
+		return;
+	}
+
+#if 0
+
+	/* Check version */
+	if ((pref_major != PREF_VER_MAJOR) ||
+		(pref_minor != PREF_VER_MINOR) ||
+		(pref_patch != PREF_VER_PATCH) ||
+		(pref_extra != PREF_VER_EXTRA))
+	{
+		/* Message */
+		mac_warning(
+			format("Ignoring %d.%d.%d.%d preferences.",
+				pref_major, pref_minor, pref_patch, pref_extra));
+
+		/* Ignore */
+		return;
+	}
+
+#endif
+
+	/* Gfx settings */
+	{
+		short pref_tmp;
+
+		/* sound */
+		if (query_load_pref_short("arg.arg_sound", &pref_tmp))
+			arg_sound = pref_tmp;
+
+		/* graphics */
+		if (query_load_pref_short("arg.arg_graphics", &pref_tmp))
+			arg_graphics = pref_tmp;
+
+		/*newstyle graphics*/
+		if (query_load_pref_short("arg.arg_newstyle_graphics", &pref_tmp))
+		{
+			use_newstyle_graphics = pref_tmp;
+		}
+
+		if (use_newstyle_graphics == true)
+		{
+			ANGBAND_GRAF = "new";
+			arg_newstyle_graphics = true;
+			grafWidth = grafHeight = 16;
+			pictID = 1002;
+		}
+		else
+		{
+			ANGBAND_GRAF = "old";
+			arg_newstyle_graphics = false;
+			grafWidth = grafHeight = 8;
+			pictID = 1001;
+		}
+
+		/* double-width tiles */
+		if (query_load_pref_short("arg.arg_bigtile", &pref_tmp))
+		{
+			use_bigtile = pref_tmp;
+		}
+
+	}
+
+	/* SoundMode */
+	for( i = 0 ; i < 7 ; i++ )
+	{
+		query_load_pref_short(format("sound%d.on", i), &soundmode[i]);
+	}
+
+	/* Special menu */
+	m = GetMenuHandle(134);
+
+	/* Item "arg_sound" */
+	CheckMenuItem(m, 1, arg_sound);
+
+	/* Item "arg_graphics" */
+	CheckMenuItem(m, 2, arg_graphics);
+	
+	/* Item "arg_newstyle_graphics"*/
+	CheckMenuItem(m, 8, arg_newstyle_graphics);
+
+	/* Item "arg_bigtile"*/
+	CheckMenuItem(m, 9, arg_bigtile);
+
+	/* Windows */
+	for (i = 0; i < MAX_TERM_DATA; i++)
+	{
+		term_data *td = &data[i];
+
+		load_pref_short(format("term%d.mapped", i), &td->mapped);
+
+		load_pref_short(format("term%d.font_id", i), &td->font_id);
+		load_pref_short(format("term%d.font_size", i), &td->font_size);
+		load_pref_short(format("term%d.font_face", i), &td->font_face);
+
+		load_pref_short(format("term%d.tile_wid", i), &td->tile_wid);
+		load_pref_short(format("term%d.tile_hgt", i), &td->tile_hgt);
+
+		load_pref_short(format("term%d.cols", i), &td->cols);
+		load_pref_short(format("term%d.rows", i), &td->rows);
+		load_pref_short(format("term%d.left", i), &td->r.left);
+		load_pref_short(format("term%d.top", i), &td->r.top);
+	}
+}
+
+#else
 /*
  * Global "preference" file pointer
  */
@@ -2629,7 +2924,7 @@ static void load_prefs(void)
 		if (feof(fff)) break;
 	}
 }
-
+#endif /* TARGET_API_MAC_CARBON */
 
 
 
@@ -2640,17 +2935,23 @@ static void term_data_hack(term_data *td)
 {
 	short fid;
 
-#ifdef JP
 #if TARGET_API_MAC_CARBON
+#ifdef JP
 	/* Default to Osaka font (Japanese) */
 	fid = FMGetFontFamilyFromName( "\pOsaka−等幅" );
 #else
+	/* Default to Monaco font */
+	fid = FMGetFontFamilyFromName("\pmonaco");
+#endif
+#else
+#ifdef JP
+	/* Default to 等幅明朝 font (Japanese) */
 	GetFNum( "\p等幅明朝", &fid);
 	SetFScaleDisable( true );
-#endif
 #else
 	/* Default to Monaco font */
 	GetFNum("\pmonaco", &fid);
+#endif
 #endif
 
 	/* Wipe it */
@@ -2749,7 +3050,10 @@ static void init_windows(void)
 
 
 	/*** Load preferences ***/
-
+	
+#ifdef TARGET_API_MAC_CARBON
+	cf_load_prefs();
+#else
 	/* Assume failure */
 	oops = TRUE;
 
@@ -2792,8 +3096,6 @@ static void init_windows(void)
 
 #endif /* USE_SFL_CODE */
 
-#if TARGET_API_MAC_CARBON
-#else
 	/* Oops */
 	if (oops)
 	{
@@ -2810,7 +3112,6 @@ static void init_windows(void)
 		/* Restore */
 		HSetVol(0, savev, saved);
 	}
-#endif
 
 	/* Load preferences */
 	if (fff)
@@ -2821,6 +3122,7 @@ static void init_windows(void)
 		/* Close the file */
 		my_fclose(fff);
 	}
+#endif
 
 
 	/*** Instantiate ***/
@@ -3122,6 +3424,12 @@ void SoundConfigDLog(void)
 /*
  * Exit the program
  */
+#if TARGET_API_MAC_CARBON
+static void save_pref_file(void)
+{
+	cf_save_prefs();
+}
+#else
 static void save_pref_file(void)
 {
 	bool oops;
@@ -3178,8 +3486,6 @@ static void save_pref_file(void)
 
 #endif /* USE_SFL_CODE */
 
-#if TARGET_API_MAC_CARBON
-#else
 	/* Oops */
 	if (oops)
 	{
@@ -3197,7 +3503,6 @@ static void save_pref_file(void)
 		/* Restore */
 		HSetVol(0, savev, saved);
 	}
-#endif
 
 	/* Save preferences */
 	if (fff)
@@ -3209,6 +3514,7 @@ static void save_pref_file(void)
 		my_fclose(fff);
 	}
 }
+#endif
 
 
 
