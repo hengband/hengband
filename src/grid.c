@@ -626,12 +626,6 @@ void build_tunnel(int row1, int col1, int row2, int col2)
 		/* Access the location */
 		c_ptr = &cave[tmp_row][tmp_col];
 
-		if (permanent_wall(&f_info[c_ptr->feat]))
-		{
-			/* Avoid the edge of vaults */
-			if (is_outer_grid(c_ptr)) continue;
-		}
-
 		/* Avoid "solid" walls */
 		if (is_solid_grid(c_ptr)) continue;
 
