@@ -2748,7 +2748,7 @@ bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 
 	/* Require empty space (if not ghostly) */
 	if (!(!dun_level && (cave[y][x].feat == FEAT_MOUNTAIN) && ((r_ptr->flags8 & RF8_WILD_MOUNTAIN) || (r_ptr->flags7 & RF7_CAN_FLY))) &&
-	    !(cave_empty_bold2(y, x) || (mode | PM_IGNORE_TERRAIN)) &&
+	    !(cave_empty_bold2(y, x) || (mode & PM_IGNORE_TERRAIN)) &&
 	    !((r_ptr->flags2 & RF2_PASS_WALL) &&
               !(cave_perma_bold(y, x) || cave[y][x].m_idx ||
                 ((y == py) && (x == px))))) return (FALSE);
