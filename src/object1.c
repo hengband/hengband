@@ -1242,9 +1242,9 @@ return "鑑定 : 10 ターン毎";
 		case ART_GANDALF:
 		{
 #ifdef JP
-return "探索、全感知、全鑑定 : 1000 ターン毎";
+return "調査、全感知、全鑑定 : 100 ターン毎";
 #else
-			return "probing, detection and full id every 1000 turns";
+			return "probing, detection and full id every 100 turns";
 #endif
 
 		}
@@ -1877,9 +1877,9 @@ return "*解呪*と調査: いつでも";
 		case ART_CHARMED:
 		{
 #ifdef JP
-return "魔力の嵐(200) : 150+d150 ターン毎";
+return "魔力復活: 777 ターン毎";
 #else
-			return "mana storm (200) every 150+d150 turns";
+			return "Restore Mana every 777 turns";
 #endif
 
 		}

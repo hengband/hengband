@@ -5104,7 +5104,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 				detect_all(DETECT_RAD_DEFAULT);
 				probing();
 				identify_fully(FALSE);
-				o_ptr->timeout = 1000;
+				o_ptr->timeout = 100;
 				break;
 			}
 
@@ -5766,9 +5766,42 @@ msg_print("あなたの槍は電気でスパークしている...");
 #else
 				msg_print("Your pendant glows pale...");
 #endif
-				if (!get_aim_dir(&dir)) return;
-				fire_ball(GF_MANA, dir, 200, 4);
-				o_ptr->timeout = randint0(150) + 150;
+				if (p_ptr->pclass == CLASS_MAGIC_EATER)
+				{
+					int i;
+					for (i = 0; i < EATER_EXT*2; i++)
+					{
+						p_ptr->magic_num1[i] += (p_ptr->magic_num2[i] < 10) ? EATER_CHARGE * 3 : p_ptr->magic_num2[i]*EATER_CHARGE/3;
+						if (p_ptr->magic_num1[i] > p_ptr->magic_num2[i]*EATER_CHARGE) p_ptr->magic_num1[i] = p_ptr->magic_num2[i]*EATER_CHARGE;
+					}
+					for (; i < EATER_EXT*3; i++)
+					{
+						int k_idx = lookup_kind(TV_ROD, i-EATER_EXT*2);
+						p_ptr->magic_num1[i] -= ((p_ptr->magic_num2[i] < 10) ? EATER_ROD_CHARGE*3 : p_ptr->magic_num2[i]*EATER_ROD_CHARGE/3)*k_info[k_idx].pval;
+						if (p_ptr->magic_num1[i] < 0) p_ptr->magic_num1[i] = 0;
+					}
+#ifdef JP
+					msg_print("頭がハッキリとした。");
+#else
+					msg_print("Your feel your head clear.");
+#endif
+					p_ptr->window |= (PW_PLAYER);
+				}
+				else if (p_ptr->csp < p_ptr->msp)
+				{
+					p_ptr->csp = p_ptr->msp;
+					p_ptr->csp_frac = 0;
+#ifdef JP
+					msg_print("頭がハッキリとした。");
+#else
+					msg_print("Your feel your head clear.");
+#endif
+
+					p_ptr->redraw |= (PR_MANA);
+					p_ptr->window |= (PW_PLAYER);
+					p_ptr->window |= (PW_SPELL);
+				}
+				o_ptr->timeout = 777;
 				break;
 			}
 		}
