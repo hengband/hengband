@@ -7,11 +7,11 @@
 
 #ifdef JP
 #undef strchr
-static char *_strchr(char *ptr, char ch)
+static char *_strchr(const char *ptr, char ch)
 {
 	for ( ; *ptr != '\0'; ++ptr)
 	{
-		if (*ptr == ch)	return ptr;
+		if (*ptr == ch)	return (char *)ptr;
 		if (iskanji(*ptr)) ++ptr;
 	}
 
@@ -3840,7 +3840,7 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
 	else
 	{
 		/* Accept all printables except spaces and brackets */
-		while (isprint(*s) && !strchr((char *)" []", *s)) ++s;
+		while (isprint(*s) && !strchr(" []", *s)) ++s;
 
 		/* Extract final and Terminate */
 		if ((f = *s) != '\0') *s++ = '\0';
