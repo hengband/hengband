@@ -263,7 +263,7 @@ Weapon of Poisoning
 
 Weapon of Force
     This weapon will attack monsters with your mana power and will
-    inflict damage with six times the normal dice.
+    inflict damage with 3.5 times the normal dice.
 
 --- Weapons of Slay {Monster-Type} ---
 
