@@ -404,7 +404,7 @@ struct _term_data
 	uint map_tile_hgt;
 
 	bool map_active;
-#ifdef JP
+#if 1 /* #ifdef JP */
 	LOGFONT lf;
 #endif
 
@@ -1084,12 +1084,16 @@ static void save_prefs_aux(term_data *td, cptr sec_name)
 #ifdef JP
 	strcpy(buf, td->lf.lfFaceName[0]!='\0' ? td->lf.lfFaceName : "£Í£Ó ¥´¥·¥Ã¥¯");
 #else
+#if 0
 	strcpy(buf, td->font_file ? td->font_file : "8X13.FON");
+#else
+	strcpy(buf, td->lf.lfFaceName[0]!='\0' ? td->lf.lfFaceName : "Courier");
+#endif
 #endif
 
 	WritePrivateProfileString(sec_name, "Font", buf, ini_file);
 
-#ifdef JP
+#if 1 /* #ifdef JP */
 	wsprintf(buf, "%d", td->lf.lfWidth);
 	WritePrivateProfileString(sec_name, "FontWid", buf, ini_file);
 	wsprintf(buf, "%d", td->lf.lfHeight);
@@ -1191,7 +1195,11 @@ static void load_prefs_aux(term_data *td, cptr sec_name)
 #ifdef JP
 	GetPrivateProfileString(sec_name, "Font", "£Í£Ó ¥´¥·¥Ã¥¯", tmp, 127, ini_file);
 #else
+#if 0
 	GetPrivateProfileString(sec_name, "Font", "8X13.FON", tmp, 127, ini_file);
+#else
+	GetPrivateProfileString(sec_name, "Font", "Courier", tmp, 127, ini_file);
+#endif
 #endif
 
 
@@ -1199,7 +1207,7 @@ static void load_prefs_aux(term_data *td, cptr sec_name)
 	td->bizarre = (GetPrivateProfileInt(sec_name, "Bizarre", td->bizarre, ini_file) != 0);
 
 	/* Analyze font, save desired font name */
-#ifdef JP
+#if 1 /* #ifdef JP */
 	td->font_want = string_make(tmp);
 	hgt = 15; wid = 0;
 	td->lf.lfWidth  = GetPrivateProfileInt(sec_name, "FontWid", wid, ini_file);
@@ -1211,7 +1219,7 @@ static void load_prefs_aux(term_data *td, cptr sec_name)
 
 
 	/* Tile size */
-#ifdef JP
+#if 1 /* #ifdef JP */
 	td->tile_wid = GetPrivateProfileInt(sec_name, "TileWid", td->lf.lfWidth, ini_file);
 	td->tile_hgt = GetPrivateProfileInt(sec_name, "TileHgt", td->lf.lfHeight, ini_file);
 #else
@@ -1643,7 +1651,7 @@ static errr term_force_font(term_data *td, cptr path)
 {
 	int wid, hgt;
 
-#ifndef JP
+#if 0 /* #ifndef JP */
 	int i;
 	char *base;
 	char buf[1024];
@@ -1652,7 +1660,7 @@ static errr term_force_font(term_data *td, cptr path)
 	/* Forget the old font (if needed) */
 	if (td->font_id) DeleteObject(td->font_id);
 
-#ifdef JP
+#if 1 /* #ifdef JP */
 	/* Unused */
 	(void)path;
 
@@ -1757,7 +1765,7 @@ static errr term_force_font(term_data *td, cptr path)
  */
 static void term_change_font(term_data *td)
 {
-#ifdef JP
+#if 1 /* #ifdef JP */
 	CHOOSEFONT cf;
 
 	memset(&cf, 0, sizeof(cf));
@@ -2441,8 +2449,7 @@ static errr Term_text_win(int x, int y, int n, byte a, const char *s)
 	RECT rc;
 	HDC hdc;
 
-
-#ifdef JP
+#if 1 /* #ifdef JP */
 	static HBITMAP  WALL;
 	static HBRUSH   myBrush, oldBrush;
 	static HPEN     oldPen;
@@ -2564,6 +2571,30 @@ static errr Term_text_win(int x, int y, int n, byte a, const char *s)
 				rc.right += td->tile_wid;
 			}
 #else
+#if 1
+			if (*(s+i)==127){
+				oldBrush = SelectObject(hdc, myBrush);
+				oldPen = SelectObject(hdc, GetStockObject(NULL_PEN) );
+
+				/* Dump the wall */
+				Rectangle(hdc, rc.left, rc.top, rc.right+1, rc.bottom+1);
+
+				SelectObject(hdc, oldBrush);
+				SelectObject(hdc, oldPen);
+
+				/* Advance */
+				rc.left += td->tile_wid;
+				rc.right += td->tile_wid;
+			} else {
+				/* Dump the text */
+				ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc,
+				       s+i, 1, NULL);
+
+				/* Advance */
+				rc.left += td->tile_wid;
+				rc.right += td->tile_wid;
+			}
+#else
 			/* Dump the text */
 			ExtTextOut(hdc, rc.left, rc.top, 0, &rc,
 				   s+i, 1, NULL);
@@ -2571,6 +2602,7 @@ static errr Term_text_win(int x, int y, int n, byte a, const char *s)
 			/* Advance */
 			rc.left += td->tile_wid;
 			rc.right += td->tile_wid;
+#endif
 #endif
 
 		}
@@ -2880,7 +2912,7 @@ static void init_windows(void)
 
 	term_data *td;
 
-#ifndef JP
+#if 0 /* #ifndef JP */
 	char buf[1024];
 #endif
 
@@ -2904,8 +2936,7 @@ static void init_windows(void)
 	td->pos_x = 7 * 30;
 	td->pos_y = 7 * 20;
 	td->posfix = FALSE;
-
-#ifdef JP
+#if 1 /* #ifdef JP */
 	td->bizarre = TRUE;
 #endif
 	/* Sub windows */
@@ -2925,7 +2956,7 @@ static void init_windows(void)
 		td->pos_x = (7 - i) * 30;
 		td->pos_y = (7 - i) * 20;
 		td->posfix = FALSE;
-#ifdef JP
+#if 1 /* #ifdef JP */
 			td->bizarre = TRUE;
 #endif
 	}
@@ -2957,7 +2988,7 @@ static void init_windows(void)
 	{
 		td = &data[i];
 
-#ifdef JP
+#if 1 /* #ifdef JP */
 		strncpy(td->lf.lfFaceName, td->font_want, LF_FACESIZE);
 		td->lf.lfCharSet = SHIFTJIS_CHARSET;
 		td->lf.lfPitchAndFamily = FIXED_PITCH | FF_DONTCARE;
