@@ -6582,19 +6582,19 @@ static int blow_damcalc(monster_type *m_ptr, monster_blow *blow_ptr)
 		case RBE_ACID:
 			spell_damcalc(m_ptr, GF_ACID, dam, 0, &dummy_max);
 			dam = dummy_max;
-			complete_immune = p_ptr->immune_cold;
+			complete_immune = p_ptr->immune_acid;
 			break;
 
 		case RBE_ELEC:
 			spell_damcalc(m_ptr, GF_ELEC, dam, 0, &dummy_max);
 			dam = dummy_max;
-			complete_immune = p_ptr->immune_cold;
+			complete_immune = p_ptr->immune_elec;
 			break;
 
 		case RBE_FIRE:
 			spell_damcalc(m_ptr, GF_FIRE, dam, 0, &dummy_max);
 			dam = dummy_max;
-			complete_immune = p_ptr->immune_cold;
+			complete_immune = p_ptr->immune_fire;
 			break;
 
 		case RBE_COLD:
