@@ -1883,9 +1883,9 @@ static void display_player_middle(void)
 
 		sprintf(buf, 
 #ifdef JP
-			"%ld日目 %2ld:%02ld", 
+			"%d日目 %2d:%02d", 
 #else
-			"Day %ld %2ld:%02ld", 
+			"Day %d %2d:%02d", 
 #endif
 			day, hour, min);
 	}
