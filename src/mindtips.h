@@ -190,7 +190,7 @@ static char *mind_tips[5][MAX_MIND_POWERS] =
 	"",
 },
 {
-	"detects visible monsters in the neighborhood and more and more. detects invisible monsters at level 15. gives telepathy at level 25. Magic mapping at level 35. All of additional effects need 4 more levels unless on a mirror.",
+	"detects visible monsters in the neighborhood and more and more. detects invisible monsters at level 15. gives telepathy at level 25. Magic mapping at level 35. All of effects need 4 more levels unless on a mirror.",
 	"makes a mirror under you.",
 	"fires bolt of flash light. or fires beam of light on a mirror at level 10",
 	"teleport short distance.",
