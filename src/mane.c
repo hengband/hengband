@@ -1004,7 +1004,7 @@ msg_format("%sを引き戻した。", m_name);
 			msg_format("%s are unaffected!", m_name);
 #endif
 		}
-		else if (one_in_(2))
+		else if (!dun_level || one_in_(2))
 		{
 #ifdef JP
 			msg_format("%sは床を突き破って沈んでいった。", m_name);
