@@ -277,7 +277,7 @@ D:$of the three Rings of Power created by the Elves and hidden by them from
 D:$Sauron.
 D:炎のように輝くルビーがはめられた火の指輪で、
 D:エルフにより作られサウロンから隠された三つの力の指輪のうちの一つだ。
-D:中つ国ではキアダンとガンダルフが所有していた。
+#D:中つ国ではキアダンとガンダルフが所有していた。
 
 # The Ring of Power (Nenya)
 
@@ -296,7 +296,7 @@ D:$of the three Rings of Power created by the Elves and hidden by them from
 D:$Sauron.
 D:冷気の凝縮した真っ白な宝石がはめられた指輪だ。
 D:エルフにより作られサウロンから隠された三つの力の指輪のうちの一つだ。
-D:中つ国ではガラドリエルが所有していた。
+#D:中つ国ではガラドリエルが所有していた。
 
 # The Ring of Power (Vilya)
 
@@ -316,7 +316,7 @@ D:$one of the three Rings of Power created by the Elves and hidden by them
 D:$from Sauron.
 D:星の様に輝く透き通ったサファイアの指輪だ。
 D:エルフにより作られサウロンから隠された三つの力の指輪のうちの一つだ。
-D:中つ国ではエルロンドが所有していた。
+#D:中つ国ではエルロンドが所有していた。
 
 # The Ring of Power (The One Ring)
 
@@ -875,7 +875,7 @@ D:of Elements.
 # The Cloak 'Holcolleth'
 
 #J0# ???
-N:45:『ホルコレス』
+N:45:『ホルコルレス』
 E:'Holcolleth'
 I:35:2:2
 W:20:15:5:43000
@@ -936,7 +936,7 @@ D:身に付けていたものだ。
 # The Cloak 'Colannon'
 
 #J0# ???
-N:48:『コラノン』
+N:48:『コランノン』
 E:'Colannon'
 I:35:1:3
 W:3:10:10:15000
@@ -950,7 +950,7 @@ D:秩序の勢力の静かなる使者が着ていた、紺碧の絹のマントだ。
 # The Shadow Cloak of Luthien
 
 #J0# p.369, wp.246
-N:49:ルシアン王女の
+N:49:ルシエン王女の
 E:of Luthien
 I:35:6:2
 W:40:40:5:80000
@@ -963,7 +963,7 @@ D:$this cloak swirl around you and you feel a hint, a fragment of the
 D:$knowledge and power to restore that lay in Luthien, the most beautiful 
 D:$being that ever knew death.
 D:自ら永遠の寿命を手放し、
-D:死を逃れえぬ者達の内では最も美しい者となったルシアン王女のクロークは、
+D:死を逃れえぬ者達の内では最も美しい者となったルシエン王女のクロークは、
 D:たなびく漆黒の闇を無数の小さなダイアモンドが飾っている。
 D:身に付ける者は王女の知識と力が自らの内に蘇ってくるのを感じる。
 
@@ -1481,7 +1481,7 @@ F:SEE_INVIS | REGEN | SHOW_MODS
 D:$Famed sea-defender of Lebennin.  A short, slightly curved chopping blade 
 D:$with a perfect edge shining cleanly in the sun, an object of hate to the 
 D:$men of Umbar who met it in combat.
-D:名高きレベニンの海の守護者だ。陽光に輝く完璧な刃は、ウンバール
+D:名高きレベンニンの海の守護者だ。陽光に輝く完璧な刃は、ウンバール
 D:の海賊達の憎悪の的であった。
 
 
@@ -1755,7 +1755,7 @@ D:この死の用心棒を振り降ろす時、内に宿る禍々しい破壊の魔力が渦巻いて踊る。
 # The Halberd 'Osondir'
 
 #J0# ???
-N:95:『オソンディル』
+N:95:『オソンディア』
 E:'Osondir'
 I:22:15:3
 W:20:8:190:22000
@@ -1772,7 +1772,7 @@ D:clear-eyed in barrows fell, wielding a halberd glowing ruby red.
 # The Pike 'Til-i-arc'
 
 #J0# ???
-N:96:『ティリ=イ=アルク』
+N:96:『ティル=イ=アルク』
 E:'Til-i-arc'
 I:22:8:2
 W:20:15:160:32000
@@ -1854,7 +1854,7 @@ D:$"Forth Eorlingas!". To the field of Cormallen came Eorl the Young
 D:$to save beleaguered Gondor, and from his lance fled massive trolls 
 D:$and dire wolves.
 D:「進め、エオルの子らよ！」包囲されたゴンドールを救うため、
-D:青年王エオルはコルマレンの荒野へと到来し、彼のランスは獰猛なるトロル
+D:青年王エオルはコルマルレンの荒野へと到来し、彼のランスは獰猛なるトロル
 D:と魔狼たちを敗走させた。
 
 # The Great Axe of Durin
@@ -2272,7 +2272,7 @@ D:「龍どもの畏怖」であり「亡者共の絶望」なのだ！
 # The Lucerne Hammer 'Turmil'
 
 #J0# ???
-N:122:『トゥルミル』
+N:122:『トゥアミル』
 E:'Turmil'
 I:22:12:4
 W:20:15:120:30000
@@ -2733,8 +2733,10 @@ P:0:3d4:28:22:-30
 F:DEX | CHAOTIC | CURSED | HEAVY_CURSE | TUNNEL | AGGRAVATE | BLOWS |
 F:RES_CONF | RES_CHAOS | RES_FEAR | RES_DISEN | NO_TELE
 
+#JH# 太公望、英和辞書に載ってました。
+#E:of Taikobo
 N:159:太公望の
-E:of Taikobo
+E:of the Angler
 I:22:40:0
 W:10:150:30:10000
 P:0:1d1:0:0:0
