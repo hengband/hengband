@@ -878,7 +878,6 @@ bool auto_destroy_item(s16b item, int autopick_idx)
 void auto_pickup_items(cave_type *c_ptr)
 {
 	s16b this_o_idx, next_o_idx = 0;
-	s16b inscribe_flags(object_type *o_ptr, cptr out_val);
 	
 	/* Scan the pile of objects */
 	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
