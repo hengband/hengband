@@ -2521,6 +2521,9 @@ void do_cmd_edit_autopick(void)
                 old_autosave_turn = turn;
         }
 
+        /* HACK -- Reset start_time to stop counting playtime while edit */
+        update_playtime();
+
 	/* Free old entries */
 	init_autopicker();
 
@@ -3609,4 +3612,7 @@ void do_cmd_edit_autopick(void)
 
 	/* Reload autopick pref */
 	process_pickpref_file(buf);
+
+        /* HACK -- reset start_time so that playtime is not increase while edit */
+        start_time = time(NULL);
 }
