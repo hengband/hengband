@@ -3312,7 +3312,7 @@ void calc_bonuses(void)
 			p_ptr->resist_lite = TRUE;
 			break;
 		case RACE_HOBBIT:
-			p_ptr->sustain_dex = TRUE;
+			p_ptr->hold_life = TRUE;
 			break;
 		case RACE_GNOME:
 			p_ptr->free_act = TRUE;

@@ -2325,7 +2325,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 		add_flag(flgs, TR_RES_LITE);
 		break;
 	case RACE_HOBBIT:
-		add_flag(flgs, TR_SUST_DEX);
+		add_flag(flgs, TR_HOLD_LIFE);
 		break;
 	case RACE_GNOME:
 		add_flag(flgs, TR_FREE_ACT);
