@@ -773,9 +773,9 @@ info[i++] = "あなたは杖/魔法棒/ロッドの魔力を自分のものにすることができる。";
 			if (plev > 47)
 			{
 #ifdef JP
-info[i++] = "あなたは1ターンに2回魔法を唱えることができる。(77 MP)";
+info[i++] = "あなたは1ターンに2回魔法を唱えることができる。(20 MP)";
 #else
-				info[i++] = "You can cast two spells in one time (cost 77).";
+				info[i++] = "You can cast two spells in one time (cost 20).";
 #endif
 			}
 			break;
