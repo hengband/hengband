@@ -6672,15 +6672,22 @@ static void do_cmd_knowledge_uniques(void)
 
 	if (n_alive_total)
 	{
-		fprintf(fff, "---------  -----------\n");
 #ifdef JP
-		fprintf(fff, "     合計  生存: %3d体\n", n_alive_total);
+		fputs("---------  -----------\n", fff);
+		fprintf(fff, "     合計  生存: %3d体\n\n", n_alive_total);
 #else
-		fprintf(fff, "        Total  alive: %3d\n", n_alive_total);
+		fputs("-------------  ----------\n", fff);
+		fprintf(fff, "        Total  alive: %3d\n\n", n_alive_total);
 #endif
-		fputc('\n', fff);
 	}
-	else fputs("現在は既知の生存ユニークはいません。\n", fff);
+	else
+	{
+#ifdef JP
+		fputs("現在は既知の生存ユニークはいません。\n", fff);
+#else
+		fputs("No known uniques alive.\n", fff);
+#endif
+	}
 
 	/* Scan the monster races */
 	for (k = 0; k < n; k++)
