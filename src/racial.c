@@ -470,7 +470,7 @@ static bool choose_kamae(void)
 			screen_load();
 			return FALSE;
 		}
-		else if ((choice == 'a') || (choice == 'A') || (choice == ESCAPE))
+		else if ((choice == 'a') || (choice == 'A'))
 		{
 			if (p_ptr->action == ACTION_KAMAE)
 			{
@@ -608,7 +608,7 @@ static bool choose_kata(void)
 			screen_load();
 			return FALSE;
 		}
-		else if ((choice == 'a') || (choice == 'A') || (choice == ESCAPE))
+		else if ((choice == 'a') || (choice == 'A'))
 		{
 			if (p_ptr->action == ACTION_KATA)
 			{
@@ -1021,10 +1021,8 @@ static bool cmd_racial_power_aux(s32b command)
 
 			if (command == -3)
 			{
-				if (choose_kamae()) energy_use = 100;
-				else energy_use = 0;
+				if (!choose_kamae()) return FALSE;
 				p_ptr->update |= (PU_BONUS);
-				p_ptr->redraw |= (PR_ARMOR);
 			}
 			else if (command == -4)
 			{
@@ -1205,10 +1203,8 @@ static bool cmd_racial_power_aux(s32b command)
 #endif
 					return FALSE;
 				}
-				if (choose_kata()) energy_use = 100;
-				else energy_use = 0;
+				if (!choose_kata()) return FALSE;
 				p_ptr->update |= (PU_BONUS);
-				p_ptr->redraw |= (PR_ARMOR);
 			}
 			break;
 		}
