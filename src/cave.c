@@ -930,8 +930,20 @@ void map_info(int y, int x, byte *ap, char *cp)
 					/* For feat_priority control */
 					feat = FEAT_NONE;
 
-					/* Use "black" */
-					a = TERM_DARK;
+					if (use_graphics)
+					{
+						/* Access darkness */
+						f_ptr = &f_info[feat];
+
+						/* Char and attr of darkness */
+						c = f_ptr->x_char;
+						a = f_ptr->x_attr;
+					}
+					else
+					{
+						/* Use "black" */
+						a = TERM_DARK;
+					}
 				}
 			}
 
@@ -1083,8 +1095,20 @@ void map_info(int y, int x, byte *ap, char *cp)
 					/* For feat_priority control */
 					feat = FEAT_NONE;
 
-					/* Use "black" */
-					a = TERM_DARK;
+					if (use_graphics)
+					{
+						/* Access darkness */
+						f_ptr = &f_info[feat];
+
+						/* Char and attr of darkness */
+						c = f_ptr->x_char;
+						a = f_ptr->x_attr;
+					}
+					else
+					{
+						/* Use "black" */
+						a = TERM_DARK;
+					}
 				}
 			}
 
@@ -1257,8 +1281,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 		else
 		{
 			/* Handle "blind" */
-			/* Mega-Hack -- Or handle "in-sight" and "darkened" and "unsafe" grids */
-			if (!(c_ptr->info & CAVE_MARK) || (darkened_grid && view_unsafe_grids))
+			if (!(c_ptr->info & CAVE_MARK))
 			{
 				/* Unsafe cave grid -- idea borrowed from Unangband */
 				if (view_unsafe_grids && (c_ptr->info & (CAVE_UNSAFE)))
@@ -1276,14 +1299,41 @@ void map_info(int y, int x, byte *ap, char *cp)
 			/* Normal char */
 			c = f_ptr->x_char;
 
-			/* Mega-Hack -- Handle "in-sight" and "darkened" and "safe" grids */
-			if (darkened_grid && !view_unsafe_grids)
+			/* Mega-Hack -- Handle "in-sight" and "darkened" grids */
+			if (darkened_grid)
 			{
-				/* For feat_priority control */
-				feat = FEAT_NONE;
+				/* Unsafe cave grid -- idea borrowed from Unangband */
+				if (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE))
+				{
+					feat = FEAT_UNDETECTD;
 
-				/* Use "black" */
-				a = TERM_DARK;
+					/* Access unsafe darkness */
+					f_ptr = &f_info[feat];
+
+					/* Char and attr of unsafe grid */
+					c = f_ptr->x_char;
+					a = f_ptr->x_attr;
+				}
+				else
+				{
+					/* For feat_priority control */
+					feat = FEAT_NONE;
+
+					if (use_graphics)
+					{
+						/* Access darkness */
+						f_ptr = &f_info[feat];
+
+						/* Char and attr of darkness */
+						c = f_ptr->x_char;
+						a = f_ptr->x_attr;
+					}
+					else
+					{
+						/* Use "black" */
+						a = TERM_DARK;
+					}
+				}
 			}
 		}
 	}
