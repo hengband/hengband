@@ -5477,7 +5477,7 @@ void calc_bonuses(void)
 #ifdef JP
 				msg_print("この武器は乗馬中に使うにはむかないようだ。");
 #else
-				msg_print("This weapon is not suitable for riding.");
+				msg_print("This weapon is not suitable for use while riding.");
 #endif
 
 			}
@@ -5486,7 +5486,7 @@ void calc_bonuses(void)
 #ifdef JP
 				msg_print("この武器は徒歩で使いやすい。");
 #else
-				msg_print("This weapon was not suitable for riding.");
+				msg_print("This weapon was not suitable for use while riding.");
 #endif
 
 			}
@@ -5495,7 +5495,7 @@ void calc_bonuses(void)
 #ifdef JP
 				msg_print("これなら乗馬中にぴったりだ。");
 #else
-				msg_print("This weapon is suitable for riding.");
+				msg_print("This weapon is suitable for use while riding.");
 #endif
 
 			}

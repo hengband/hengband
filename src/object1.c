@@ -2641,13 +2641,13 @@ info[i++] = "それは長いターン明かりを授ける。";
 #ifdef JP
 info[i++] = "それは乗馬中は非常に使いやすい。";
 #else
-			info[i++] = "It is made for riding.";
+			info[i++] = "It is made for use while riding.";
 #endif
 		else
 #ifdef JP
 info[i++] = "それは乗馬中でも使いやすい。";
 #else
-			info[i++] = "It is suitable for riding.";
+			info[i++] = "It is suitable for use while riding.";
 #endif
 
 	}
@@ -3546,7 +3546,7 @@ info[i++] = "それは攻撃を受けやすい。";
 #ifdef JP
 info[i++] = "それは魔法を唱えにくくする。";
 #else
-		info[i++] = "It is unsuitable for spellcasting.";
+		info[i++] = "It encumbers you while spellcasting.";
 #endif
 
 	}
