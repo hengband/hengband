@@ -554,20 +554,17 @@ Bs : blessed weapon                 |M : weapon of the force
 
 The {@x#} Inscription
 ---------------------
-The {@x#} inscription (where 'x' is the key to activate a specific
-command and '#' is a number from 0 to 9) is, perhaps the most commonly
-used inscription. When you select command 'x', followed by a number
-'#', the game searches for an object with the inscription {@x#} and
-performs that command upon it. Thus if the player inscribes a Potion of
-Healing as {@q1}, then pressing 'q1' will quaff it automatically. This
-feature is useful because as items are added or removed from your
-inventory, the actual slot that they are in changes. However, the
-inscription will work regardless of the position.
 
-There is an exception; when the command is 'm' (cast spell), you can
-use any alphabet letter as '#' instead of a number, such like {@ma} or
-{@mb}. This feature is added because pressing an alphabet key is
-easier and faster than pressing a number key in rogue-like keymap.
+The {@x#} inscription (where 'x' is the key to activate a specific
+command and '#' is an object tag (number or alphabet)) is, perhaps the
+most commonly used inscription. When you select command 'x', followed
+by the tag '#', the game searches for an object with the inscription
+{@x#} and performs that command upon it. Thus if the player inscribes
+a Potion of Healing as {@q1}, then pressing 'q1' will quaff it
+automatically. This feature is useful because as items are added or
+removed from your inventory, the actual slot that they are in
+changes. However, the inscription will work regardless of the
+position.
 
 Note that you can inscribe multiple different objects with the same
 inscription {@x#}. If you do so, the command 'x#' will act on the first
@@ -575,10 +572,10 @@ appropriately inscribed object in your inventory list and not on each
 of them.
 
 Also note that you can place multiple such inscriptions on a single
-object. So that a spell book might be inscribed {@m1@b1@G1} since the
+object. So that a spell book might be inscribed {@ma@ba@Ga} since the
 cast spell, browse book, and gain spell commands each require a spell
 book reference as an argument. You can also inscribe the same command
-more than one so that food item might be inscribed {@E@1E2}
+more than one so that food item might be inscribed {@E1@E2}
 
 Example 1:
     You have a primary weapon and a shovel. You normally use the
@@ -592,15 +589,16 @@ Example 1:
     'w0' whenever you want to exchange weapon and shovel.
 
 Example 2:
+
     To cast the first spell from your first spell book, you would
     normally type 'maa' and to cast the first spell from the second
-    book, you would type 'mba'. However, if your first book is stolen
+    book, you would type 'mba'.  However, if your first book is stolen
     or destroyed, pressing 'mba' would no longer cast the spell you
-    wanted. This often leads to people people to cast spells
-    incorrectly. Instead inscribe your first spell book with {@ma},
-    your second with {@mb}, etc. Cast spells by typing 'maa', 'mba',
-    etc. Even if your other spell books are lost, you will never need
-    to worry about casting the wrong spell.
+    wanted. People often cast the wrong spells in such situation.  To
+    prevent such mistake, you can inscribe your first spellbook with
+    {@ma}, second spellbook with {@mb}, etc.  Cast spells by typing
+    'maa', 'mba', etc.  Even if your other spell books are lost, you
+    will never need to worry about casting the wrong spell.
 
 Example 3:
     You are carrying some Rations of Food and some Elvish Waybread.
@@ -616,13 +614,10 @@ Example 3:
 
 The {@#} Inscription
 ---------------------
-The {@#} inscription (where '#' is a number from 0 to 9) is similar
-to the {@x#} inscription except that it works for any command. Thus, if
-you engrave both your digging instrument and your primary weapon with
-{@0}, pressing 'w0' will wield whichever one is not being currently
-wielded. However, if you had also inscribed a potion with {@0}, you
-would instead get an error message because the potion appears first in
-the inventory and you can not wield potions.
+
+The {@#} inscription (where '#' is a number from 0 to 9) is similar to
+the {@x#} inscription, but it works for any command, and any alphabet
+letters cannot be used as a tag.
 
 The {!x} Inscription
 --------------------
