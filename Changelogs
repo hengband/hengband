@@ -1,4 +1,117 @@
+2002-06-16  Takeshi Mogami  <mogami@cvs>
+
+	* src/spells3.c 1.42:
+	サブウィンドウの呪文リストを表示すると青魔道師と鏡使いで
+	クラッシュしていたバグ修正。同時に狂戦士、鏡使い、忍者で
+	呪文リストをちゃんと表示するようにした。
+
+	* src/object1.c 1.36:
+	Warningでないように、char変数へintを代入するところをcastした。
+
+	* src/birth.c 1.45: typo: paradin -> paladin
+
+	* src/cmd4.c 1.42, src/cmd5.c 1.38, src/defines.h 1.61, src/dungeon.c 1.54, src/hissatsu.c 1.12, src/object2.c 1.42, src/spells3.c 1.41, src/xtra1.c 1.42:
+	realmを表わす変数が0をLIFEとするときと、1をLIFEとするときの2種類あって
+	まぎらわしいので、1をLIFEとするように統一。
+	その過程でサブウィンドウの呪文リストの表示でバグを2個所発見、修正。
+	1つはis_magic()にわたす値が1ずれていた。もう1つはMIN_TECHNICHを引くときに括弧が不足。
+
+2002-06-15  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd5.c 1.37:
+	消費MPのバグ、大文字のアルファベットで入力したときの表示にバグが残って
+	いたので修正。
+
+2002-06-15  henkma  <henkma@cvs>
+
+	* src/monster1.c 1.19:
+	英語の思い出の速度表示修正, 単語間のスペース入れ忘れてた.
+
+	* src/cmd5.c 1.36:
+	魔法の消費MPが実際に使うときは表示より大きくなっていたバグを修正.
+	熟練度を見るときに一つずれた領域を見ようとしていた模様.
+
+2002-06-15  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/version.txt 1.10: 1.1.0対応。
+
+2002-06-15  hoge  <hoge@cvs>
+
+	* lib/help/jversion.txt 1.11:
+	jversionライトエリア追加
+
+2002-06-15  Takeshi Mogami  <mogami@cvs>
+
+	* src/birth.c 1.44: 1行説明書き変え。
+
+2002-06-15  hoge  <hoge@cvs>
+
+	* lib/help/jversion.txt 1.10: jversion
+
+2002-06-15  Takeshi Mogami  <mogami@cvs>
+
+	* src/tables.c 1.43: Zap -> Punishment
+
+2002-06-15  henkma  <henkma@cvs>
+
+	* src/birth.c 1.43:
+	魔法の簡易説明に関して, 英語の方が一文足りなかったのを修正. 修正前は
+	Crusadeの説明がSongの説明になってしまっていた.
+
+2002-06-15  hoge  <hoge@cvs>
+
+	* configure.in 1.17, lib/edit/m_info_j.txt 1.10, lib/file/news.txt 1.11, lib/file/news_j.txt 1.10, src/cmd5.c 1.35, src/defines.h 1.60, src/spells3.c 1.40, src/tables.c 1.42:
+	暗黒魔法の消費MPバグ修正
+	バージョンを1.1.0にする
+
+2002-06-15  henkma  <henkma@cvs>
+
+	* src/monster1.c 1.18:
+	思い出のモンスターの速度について, 英語版の表現も日本語版と同程度に細かくし,
+	同時にちゃんと色を付けるようにした. 表現にそれほど自信があるわけではないので
+	チェックよろしく > 自信のある人(主にMogamiさん(笑))
+
+2002-06-14  Takeshi Mogami  <mogami@cvs>
+
+	* src/bldg.c 1.16:
+	武器匠でのスレイの倍率表示訂正。
+
+	* src/wizard1.c 1.22.2.3, src/wizard2.c 1.23.2.2, src/melee2.c 1.25.2.3, src/monster2.c 1.34.2.2, src/object1.c 1.35.2.3, src/object2.c 1.41.2.3, src/spells2.c 1.37.2.3, lib/edit/a_info_j.txt 1.22.2.2, lib/edit/e_info_j.txt 1.21.2.2, src/artifact.c 1.24.2.2, src/bldg.c 1.15.2.3, src/cmd1.c 1.44.2.3, src/cmd3.c 1.23.2.3, src/defines.h 1.59.2.3:
+	各種KILL実装。SLAYが3倍なら5倍、2.5倍なら4倍、2倍なら3.5倍に設定した。
+	*〜スレイヤー*に付加。ただし、KILL_EVILは実装はしたが付加せず。
+
+	* src/object2.c 1.41.2.2, src/spells2.c 1.37.2.2, src/types.h 1.21.2.2, src/wizard1.c 1.22.2.2, src/xtra1.c 1.41.2.2, src/cmd3.c 1.23.2.2, src/cmd6.c 1.22.2.2, src/defines.h 1.59.2.2, src/init1.c 1.39.2.2, src/melee2.c 1.25.2.2, src/monster2.c 1.34.2.1, src/object1.c 1.35.2.2, lib/edit/a_info_j.txt 1.22.2.1, lib/edit/e_info_j.txt 1.21.2.1, src/bldg.c 1.15.2.2, src/cmd1.c 1.44.2.2:
+	KILL_GIANT と 各種ESP_ 実装。他の各種 KILL_ はフラグだけ作ってある。
+	KILL_GIANTはフランテング、ESP_は各*〜スレイヤー*に付加。
+
+	* lib/edit/k_info_j.txt 1.28:
+	k_infoにも修正追加。
+
+	* lib/edit/e_info_j.txt 1.22, src/mindtips.h 1.8, src/spellstips.h 1.22:
+	RGRAでのJohn Q. Smithさんによる 英訳の修正、 k_info以外。
+
+2002-06-13  Takeshi Mogami  <mogami@cvs>
+
+	* src/wizard2.c 1.23.2.1, src/xtra1.c 1.41.2.1, src/mspells2.c 1.20.2.1, src/object1.c 1.35.2.1, src/object2.c 1.41.2.1, src/save.c 1.18.2.1, src/spells1.c 1.24.2.1, src/spells2.c 1.37.2.1, src/spells3.c 1.39.2.1, src/store.c 1.13.2.1, src/types.h 1.21.2.1, src/wizard1.c 1.22.2.1, src/cmd4.c 1.41.2.1, src/cmd6.c 1.22.2.1, src/defines.h 1.59.2.1, src/externs.h 1.64.2.1, src/files.c 1.59.2.1, src/flavor.c 1.17.2.1, src/hissatsu.c 1.11.2.1, src/init1.c 1.39.2.1, src/load.c 1.30.2.1, src/melee2.c 1.25.2.1, src/mspells1.c 1.24.2.1, src/artifact.c 1.24.2.1, src/bldg.c 1.15.2.1, src/cmd1.c 1.44.2.1, src/cmd2.c 1.28.2.1, src/cmd3.c 1.23.2.1:
+	TR1 TR2 TR3 を統合。フラグをインデックス(現在は0から92まで)で表現し、
+	have_flag(配列, フラグ);
+	add_flag(配列, フラグ);
+	remove_flag(配列, フラグ);
+	の各マクロを定義した。
+
+2002-06-13  henkma  <henkma@cvs>
+
+	* lib/edit/k_info_j.txt 1.27:
+	rgraの英語の間違いの指摘を反映させ, 修正案のうち妥当だと思われるものを採用してみた.
+
+2002-06-13  Takeshi Mogami  <mogami@cvs>
+
+	* src/birth.c 1.42:
+	獣人でクイックスタートしたときに変異が起きなかったバグ修正。
+
 2002-06-12  Takeshi Mogami  <mogami@cvs>
+
+	* Changelogs 1.48: 更新
 
 	* src/hissatsu.c 1.11, src/load.c 1.30, src/mane.c 1.10, src/melee1.c 1.16, src/melee2.c 1.25, src/monster1.c 1.17, src/monster2.c 1.34, src/mspells1.c 1.24, src/mspells2.c 1.20, src/object2.c 1.41, src/racial.c 1.19, src/report.c 1.20, src/save.c 1.18, src/scores.c 1.7, src/spells1.c 1.24, src/spells2.c 1.37, src/spells3.c 1.39, src/types.h 1.21, src/util.c 1.28, src/variable.c 1.25, src/wild.c 1.14, src/wizard2.c 1.23, src/xtra1.c 1.41, src/xtra2.c 1.37, src/artifact.c 1.24, src/birth.c 1.41, src/cmd1.c 1.44, src/cmd2.c 1.28, src/cmd4.c 1.41, src/cmd5.c 1.34, src/dungeon.c 1.53, src/effects.c 1.24, src/externs.h 1.64, src/files.c 1.59:
 	Vanillaにならって、キャラクターの状態を表わすグローバル変数の多くを
