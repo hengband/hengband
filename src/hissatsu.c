@@ -791,7 +791,7 @@ static bool cast_hissatsu_spell(int spell)
 			m_ptr = &m_list[c_ptr->m_idx];
 
 			/* Hack -- attack monsters */
-			if (c_ptr->m_idx && (m_ptr->ml || cave_floor_bold(y, x)))
+			if (c_ptr->m_idx && (m_ptr->ml || have_flag(f_flags_bold(y, x), FF_PROJECT)))
 			{
 				if (!monster_living(&r_info[m_ptr->r_idx]))
 				{

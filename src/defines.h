@@ -4448,18 +4448,20 @@
 #define player_has_los_bold(Y,X) \
     (((cave[Y][X].info & (CAVE_VIEW)) != 0) || p_ptr->inside_battle)
 
+
+/*
+ * Determine if a "feature" is "permanent wall"
+ */
+#define permanent_wall(F) \
+	(have_flag((F)->flags, FF_WALL) && \
+	 have_flag((F)->flags, FF_PERMANENT))
+
 /*
  * Determine if a "boundary" grid is "floor mimic"
  */
-#define boundary_floor_bold(Y,X) \
-	(have_flag(f_flags_bold((Y), (X)), FF_WALL) && \
-	 have_flag(f_flags_bold((Y), (X)), FF_PERMANENT) && \
-	 cave[(Y)][(X)].mimic && feat_supports_los(cave[(Y)][(X)].mimic))
-
 #define boundary_floor_grid(C) \
-	(have_flag(f_flags_grid(C), FF_WALL) && \
-	 have_flag(f_flags_grid(C), FF_PERMANENT) && \
-	 (C)->mimic && feat_supports_los((C)->mimic))
+	((C)->mimic && feat_supports_los((C)->mimic) && \
+	 permanent_wall(&f_info[(C)->feat]))
 
 /*
  * Get feature mimic from f_info[] (applying "mimic" field)

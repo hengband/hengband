@@ -596,7 +596,7 @@ void build_tunnel(int row1, int col1, int row2, int col2)
 		c_ptr = &cave[tmp_row][tmp_col];
 		f_ptr = &f_info[c_ptr->feat];
 
-		if (have_flag(f_ptr->flags, FF_WALL) && have_flag(f_ptr->flags, FF_PERMANENT))
+		if (permanent_wall(f_ptr))
 		{
 			/* Avoid the edge of vaults */
 			if (is_inner_grid(c_ptr)) continue;

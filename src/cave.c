@@ -1431,6 +1431,20 @@ void note_spot(int y, int x)
 			c_ptr->info |= (CAVE_MARK);
 		}
 
+		/* Memorize torch-lit walls */
+		else if (c_ptr->info & (CAVE_LITE | CAVE_MNLT))
+		{
+			/* Memorize */
+			c_ptr->info |= (CAVE_MARK);
+		}
+
+		/* Memorize walls seen by noctovision of Ninja */
+		else if (p_ptr->see_nocto)
+		{
+			/* Memorize */
+			c_ptr->info |= (CAVE_MARK);
+		}
+
 		/* Memorize certain non-torch-lit wall grids */
 		else if (check_local_illumination(y, x))
 		{

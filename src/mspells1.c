@@ -1317,7 +1317,7 @@ bool make_attack_spell(int m_idx)
 	if (projectable(m_ptr->fy, m_ptr->fx, y, x))
 	{
 		/* Breath disintegration to the glyph if possible */
-		if ((!cave_floor_bold(y,x)) && (r_ptr->flags4 & RF4_BR_DISI) && one_in_(2)) do_disi = TRUE;
+		if (!have_flag(f_flags_bold(y, x), FF_PROJECT) && (f4 & RF4_BR_DISI) && one_in_(2)) do_disi = TRUE;
 	}
 
 	/* Check path to next grid */
@@ -1325,7 +1325,7 @@ bool make_attack_spell(int m_idx)
 	{
 		bool success = FALSE;
 
-		if ((r_ptr->flags4 & RF4_BR_DISI) &&
+		if ((f4 & RF4_BR_DISI) &&
 		    (m_ptr->cdis < MAX_RANGE/2) &&
 		    in_disintegration_range(m_ptr->fy, m_ptr->fx, y, x) &&
 		    (one_in_(10) || (projectable(y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
@@ -4294,17 +4294,17 @@ else msg_format("%^s¤¬ËâË¡¤ÇÍ©µ´ÀïÂâ¤ò¾¤´­¤·¤¿¡ª", m_name);
 
 				for (k = 0; k < 30; k++)
 				{
-					if (!summon_possible(cy, cx) || !cave_floor_bold(cy, cx))
+					if (!summon_possible(cy, cx) || !cave_empty_bold(cy, cx))
 					{
 						int j;
 						for (j = 100; j > 0; j--)
 						{
 							scatter(&cy, &cx, y, x, 2, 0);
-							if (cave_floor_bold(cy, cx)) break;
+							if (cave_empty_bold(cy, cx)) break;
 						}
 						if (!j) break;
 					}
-					if (!cave_floor_bold(cy, cx)) continue;
+					if (!cave_empty_bold(cy, cx)) continue;
 
 					if (summon_named_creature(m_idx, cy, cx, MON_NAZGUL, mode))
 					{

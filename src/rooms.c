@@ -5059,7 +5059,7 @@ static void add_outer_wall(int x, int y, int light, int x1, int y1, int x2, int 
 		place_outer_bold(y, x);
 		if (light) c_ptr->info |= CAVE_GLOW;
 	}
-	else if (have_flag(f_ptr->flags, FF_WALL) && have_flag(f_ptr->flags, FF_PERMANENT))
+	else if (permanent_wall(f_ptr))
 	{
 		/* Set bounding walls */
 		if (light) c_ptr->info |= CAVE_GLOW;

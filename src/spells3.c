@@ -1679,18 +1679,21 @@ static bool vanish_dungeon(void)
 void call_the_(void)
 {
 	int i;
-	int y, x;
+	cave_type *c_ptr;
 	bool do_call = TRUE;
 
 	for (i = 0; i < 9; i++)
 	{
-		y = py + ddy_ddd[i];
-		x = px + ddx_ddd[i];
+		c_ptr = &cave[py + ddy_ddd[i]][px + ddx_ddd[i]];
 
-		if (!cave_floor_bold(y, x) && !boundary_floor_bold(y, x))
+		if (!have_flag(f_flags_grid(c_ptr), FF_PROJECT))
 		{
-			do_call = FALSE;
-			break;
+			if (!c_ptr->mimic || !have_flag(f_info[c_ptr->mimic].flags, FF_PROJECT) ||
+			    !permanent_wall(&f_info[c_ptr->feat]))
+			{
+				do_call = FALSE;
+				break;
+			}
 		}
 	}
 
@@ -1859,7 +1862,7 @@ msg_print("そこはあなたの視界に入っていません。");
 			c_ptr = &cave[ty][tx];
 
 			if ((distance(py, px, ty, tx) > MAX_RANGE) ||
-			    !cave_floor_bold(ty, tx)) return;
+				!have_flag(f_flags_bold(ty, tx), FF_PROJECT)) return;
 		}
 		while (!c_ptr->o_idx);
 	}
