@@ -18,54 +18,55 @@
 /*
  * Macros for Keywords
  */
-#define FLG_ALL             0
-#define FLG_COLLECTING	    1
-#define FLG_UNAWARE	    2 
-#define FLG_UNIDENTIFIED    3 
-#define FLG_IDENTIFIED	    4 
-#define FLG_STAR_IDENTIFIED 5 
-#define FLG_BOOSTED	    6 
-#define FLG_MORE_DICE	    7 
-#define FLG_MORE_BONUS	    10 
-#define FLG_WORTHLESS	    11
-#define FLG_ARTIFACT	    12
-#define FLG_EGO		    13
-#define FLG_NAMELESS	    14
-#define FLG_RARE	    15
-#define FLG_COMMON	    16
-#define FLG_WANTED	    17
-#define FLG_UNIQUE	    18
-#define FLG_HUMAN	    19
-#define FLG_UNREADABLE	    20
-#define FLG_REALM1	    21
-#define FLG_REALM2	    22
-#define FLG_FIRST	    23
-#define FLG_SECOND	    24
-#define FLG_THIRD	    25
-#define FLG_FOURTH	    26
+#define FLG_ALL              0
+#define FLG_COLLECTING	     1
+#define FLG_UNAWARE	     2 
+#define FLG_UNIDENTIFIED     3 
+#define FLG_IDENTIFIED	     4 
+#define FLG_STAR_IDENTIFIED  5 
+#define FLG_BOOSTED	     6 
+#define FLG_MORE_DICE	     7 
+#define FLG_MORE_BONUS	     10 
+#define FLG_WORTHLESS	     11
+#define FLG_ARTIFACT	     12
+#define FLG_EGO		     13
+#define FLG_NAMELESS	     14
+#define FLG_RARE	     15
+#define FLG_COMMON	     16
+#define FLG_WANTED	     17
+#define FLG_UNIQUE	     18
+#define FLG_HUMAN	     19
+#define FLG_UNREADABLE	     20
+#define FLG_REALM1	     21
+#define FLG_REALM2	     22
+#define FLG_FIRST	     23
+#define FLG_SECOND	     24
+#define FLG_THIRD	     25
+#define FLG_FOURTH	     26
 
-#define FLG_ITEMS	    30
-#define FLG_WEAPONS	    31
-#define FLG_ARMORS	    32
-#define FLG_MISSILES	    33
-#define FLG_DEVICES	    34
-#define FLG_LIGHTS	    35
-#define FLG_JUNKS	    36
-#define FLG_SPELLBOOKS	    37
-#define FLG_HAFTED	    38
-#define FLG_SHIELDS	    39
-#define FLG_BOWS	    40
-#define FLG_RINGS	    41
-#define FLG_AMULETS	    42
-#define FLG_SUITS	    43
-#define FLG_CLOAKS	    44
-#define FLG_HELMS	    45
-#define FLG_GLOVES	    46
-#define FLG_BOOTS           47
-#define FLG_FAVORITE        48
+#define FLG_ITEMS	     30
+#define FLG_WEAPONS	     31
+#define FLG_FAVORITE_WEAPONS 32
+#define FLG_ARMORS	     33
+#define FLG_MISSILES	     34
+#define FLG_DEVICES	     35
+#define FLG_LIGHTS	     36
+#define FLG_JUNKS	     37
+#define FLG_CORPSES	     38
+#define FLG_SPELLBOOKS	     39
+#define FLG_HAFTED	     40
+#define FLG_SHIELDS	     41
+#define FLG_BOWS	     42
+#define FLG_RINGS	     43
+#define FLG_AMULETS	     44
+#define FLG_SUITS	     45
+#define FLG_CLOAKS	     46
+#define FLG_HELMS	     47
+#define FLG_GLOVES	     48
+#define FLG_BOOTS            49
 
 #define FLG_NOUN_BEGIN      FLG_ITEMS
-#define FLG_NOUN_END        FLG_FAVORITE
+#define FLG_NOUN_END        FLG_BOOTS
 
 #ifdef JP
 
@@ -108,11 +109,13 @@
 #define KEY_FOURTH "4ºýÌÜ¤Î"
 #define KEY_ITEMS "¥¢¥¤¥Æ¥à"
 #define KEY_WEAPONS "Éð´ï"
+#define KEY_FAVORITE_WEAPONS "ÆÀ°ÕÉð´ï"
 #define KEY_ARMORS "ËÉ¶ñ"
 #define KEY_MISSILES "Ìð"
 #define KEY_DEVICES "ËâË¡¥¢¥¤¥Æ¥à"
 #define KEY_LIGHTS "¸÷¸»"
 #define KEY_JUNKS "¤¬¤é¤¯¤¿"
+#define KEY_CORPSES "»àÂÎ¤ä¹ü"
 #define KEY_SPELLBOOKS "ËâË¡½ñ"
 #define KEY_HAFTED "Æß´ï"
 #define KEY_SHIELDS "½â"
@@ -124,7 +127,6 @@
 #define KEY_HELMS "³õ"
 #define KEY_GLOVES "äÆ¼ê"
 #define KEY_BOOTS "·¤"
-#define KEY_FAVORITE "ÆÀ°ÕÉð´ï"
 
 #else 
 
@@ -157,11 +159,13 @@
 #define KEY_FOURTH "fourth"
 #define KEY_ITEMS "items"
 #define KEY_WEAPONS "weapons"
+#define KEY_FAVORITE_WEAPONS "favorite weapons"
 #define KEY_ARMORS "armors"
 #define KEY_MISSILES "missiles"
 #define KEY_DEVICES "magical devices"
 #define KEY_LIGHTS "lights"
 #define KEY_JUNKS "junks"
+#define KEY_CORPSES "corpses or skeletons"
 #define KEY_SPELLBOOKS "spellbooks"
 #define KEY_HAFTED "hafted weapons"
 #define KEY_SHIELDS "shields"
@@ -173,7 +177,6 @@
 #define KEY_HELMS "helms"
 #define KEY_GLOVES "gloves"
 #define KEY_BOOTS "boots"
-#define KEY_FAVORITE "favorite weapons"
 
 #endif /* JP */
 
@@ -376,11 +379,13 @@ static bool autopick_new_entry(autopick_type *entry, cptr str, bool allow_defaul
 
 	if (MATCH_KEY2(KEY_ITEMS)) ADD_FLG_NOUN(FLG_ITEMS);
 	else if (MATCH_KEY2(KEY_WEAPONS)) ADD_FLG_NOUN(FLG_WEAPONS);
+	else if (MATCH_KEY2(KEY_FAVORITE_WEAPONS)) ADD_FLG_NOUN(FLG_FAVORITE_WEAPONS);
 	else if (MATCH_KEY2(KEY_ARMORS)) ADD_FLG_NOUN(FLG_ARMORS);
 	else if (MATCH_KEY2(KEY_MISSILES)) ADD_FLG_NOUN(FLG_MISSILES);
 	else if (MATCH_KEY2(KEY_DEVICES)) ADD_FLG_NOUN(FLG_DEVICES);
 	else if (MATCH_KEY2(KEY_LIGHTS)) ADD_FLG_NOUN(FLG_LIGHTS);
 	else if (MATCH_KEY2(KEY_JUNKS)) ADD_FLG_NOUN(FLG_JUNKS);
+	else if (MATCH_KEY2(KEY_CORPSES)) ADD_FLG_NOUN(FLG_CORPSES);
 	else if (MATCH_KEY2(KEY_SPELLBOOKS)) ADD_FLG_NOUN(FLG_SPELLBOOKS);
 	else if (MATCH_KEY2(KEY_HAFTED)) ADD_FLG_NOUN(FLG_HAFTED);
 	else if (MATCH_KEY2(KEY_SHIELDS)) ADD_FLG_NOUN(FLG_SHIELDS);
@@ -392,7 +397,6 @@ static bool autopick_new_entry(autopick_type *entry, cptr str, bool allow_defaul
 	else if (MATCH_KEY2(KEY_HELMS)) ADD_FLG_NOUN(FLG_HELMS);
 	else if (MATCH_KEY2(KEY_GLOVES)) ADD_FLG_NOUN(FLG_GLOVES);
 	else if (MATCH_KEY2(KEY_BOOTS)) ADD_FLG_NOUN(FLG_BOOTS);
-	else if (MATCH_KEY2(KEY_FAVORITE)) ADD_FLG_NOUN(FLG_FAVORITE);
 
 	/* Last 'keyword' must be at the correct location */
 	if (*ptr == ':')
@@ -776,6 +780,8 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 	else if (o_ptr->tval == TV_SKELETON || o_ptr->tval == TV_BOTTLE
 		 || o_ptr->tval == TV_JUNK || o_ptr->tval == TV_STATUE)
 		ADD_FLG(FLG_JUNKS);
+	else if (o_ptr->tval == TV_CORPSE)
+		ADD_FLG(FLG_CORPSES);
 	else if (o_ptr->tval >= TV_LIFE_BOOK)
 		ADD_FLG(FLG_SPELLBOOKS);
 	else if (o_ptr->tval == TV_POLEARM || o_ptr->tval == TV_SWORD
@@ -991,11 +997,13 @@ cptr autopick_line_from_entry(autopick_type *entry)
 
 	if (IS_FLG(FLG_ITEMS)) ADD_KEY2(KEY_ITEMS);
 	else if (IS_FLG(FLG_WEAPONS)) ADD_KEY2(KEY_WEAPONS);
+	else if (IS_FLG(FLG_FAVORITE_WEAPONS)) ADD_KEY2(KEY_FAVORITE_WEAPONS);
 	else if (IS_FLG(FLG_ARMORS)) ADD_KEY2(KEY_ARMORS);
 	else if (IS_FLG(FLG_MISSILES)) ADD_KEY2(KEY_MISSILES);
 	else if (IS_FLG(FLG_DEVICES)) ADD_KEY2(KEY_DEVICES);
 	else if (IS_FLG(FLG_LIGHTS)) ADD_KEY2(KEY_LIGHTS);
 	else if (IS_FLG(FLG_JUNKS)) ADD_KEY2(KEY_JUNKS);
+	else if (IS_FLG(FLG_CORPSES)) ADD_KEY2(KEY_CORPSES);
 	else if (IS_FLG(FLG_SPELLBOOKS)) ADD_KEY2(KEY_SPELLBOOKS);
 	else if (IS_FLG(FLG_HAFTED)) ADD_KEY2(KEY_HAFTED);
 	else if (IS_FLG(FLG_SHIELDS)) ADD_KEY2(KEY_SHIELDS);
@@ -1007,7 +1015,6 @@ cptr autopick_line_from_entry(autopick_type *entry)
 	else if (IS_FLG(FLG_HELMS)) ADD_KEY2(KEY_HELMS);
 	else if (IS_FLG(FLG_GLOVES)) ADD_KEY2(KEY_GLOVES);
 	else if (IS_FLG(FLG_BOOTS)) ADD_KEY2(KEY_BOOTS);
-	else if (IS_FLG(FLG_FAVORITE)) ADD_KEY2(KEY_FAVORITE);
 
 	/* You don't need sepalator after adjective */
 	/* 'artifact' is not true adjective */
@@ -1169,9 +1176,6 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 		if (!(TV_EQUIP_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_EQUIP_END))
 			return FALSE;
 
-		/* Inscription is a some sort of 'name' */
-		if (o_ptr->inscription) return FALSE;
-
 		/* Identified */
 		if (object_known_p(o_ptr))
 		{
@@ -1277,6 +1281,11 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 		if (!(TV_WEAPON_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_WEAPON_END))
 			return FALSE;
 	}
+	else if (IS_FLG(FLG_FAVORITE_WEAPONS))
+	{
+		if (!is_favorite(o_ptr))
+			return FALSE;
+	}
 	else if (IS_FLG(FLG_ARMORS))
 	{
 		if (!(TV_ARMOR_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_ARMOR_END))
@@ -1314,6 +1323,11 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 			break;
 		default: return FALSE;
 		}
+	}
+	else if (IS_FLG(FLG_CORPSES))
+	{
+		if (o_ptr->tval != TV_CORPSE && o_ptr->tval != TV_SKELETON)
+			return FALSE;
 	}
 	else if (IS_FLG(FLG_SPELLBOOKS))
 	{
@@ -1370,11 +1384,6 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 	else if (IS_FLG(FLG_BOOTS))
 	{
 		if (!(o_ptr->tval == TV_BOOTS))
-			return FALSE;
-	}
-	else if (IS_FLG(FLG_FAVORITE))
-	{
-		if (!is_favorite(o_ptr))
 			return FALSE;
 	}
 
@@ -2342,6 +2351,8 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		; /* Nothing to do */
 	else if (IS_FLG(FLG_WEAPONS))
 		body_str = "Éð´ï";
+	else if (IS_FLG(FLG_FAVORITE_WEAPONS))
+		body_str = "ÆÀ°ÕÉð´ï";
 	else if (IS_FLG(FLG_ARMORS))
 		body_str = "ËÉ¶ñ";
 	else if (IS_FLG(FLG_MISSILES))
@@ -2352,6 +2363,8 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		body_str = "¸÷¸»ÍÑ¤Î¥¢¥¤¥Æ¥à";
 	else if (IS_FLG(FLG_JUNKS))
 		body_str = "ÀÞ¤ì¤¿ËÀÅù¤Î¥¬¥é¥¯¥¿";
+	else if (IS_FLG(FLG_CORPSES))
+		body_str = "»àÂÎ¤ä¹ü";
 	else if (IS_FLG(FLG_SPELLBOOKS))
 		body_str = "ËâË¡½ñ";
 	else if (IS_FLG(FLG_HAFTED))
@@ -2374,8 +2387,6 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		body_str = "äÆ¼ê";
 	else if (IS_FLG(FLG_BOOTS))
 		body_str = "¥Ö¡¼¥Ä";
-	else if (IS_FLG(FLG_FAVORITE))
-		body_str = "ÆÀ°ÕÉð´ï";
 
 	*buff = '\0';
 	if (!before_n) 
@@ -2619,6 +2630,8 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		; /* Nothing to do */
 	else if (IS_FLG(FLG_WEAPONS))
 		body_str = "weapons";
+	else if (IS_FLG(FLG_FAVORITE_WEAPONS))
+		body_str = "favorite weapons";
 	else if (IS_FLG(FLG_ARMORS))
 		body_str = "armors";
 	else if (IS_FLG(FLG_MISSILES))
@@ -2629,6 +2642,8 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		body_str = "light sources";
 	else if (IS_FLG(FLG_JUNKS))
 		body_str = "junk such as broken sticks";
+	else if (IS_FLG(FLG_CORPSES))
+		body_str = "corpses or skeletons";
 	else if (IS_FLG(FLG_SPELLBOOKS))
 		body_str = "spellbooks";
 	else if (IS_FLG(FLG_HAFTED))
@@ -2651,8 +2666,6 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		body_str = "gloves";
 	else if (IS_FLG(FLG_BOOTS))
 		body_str = "boots";
-	else if (IS_FLG(FLG_FAVORITE))
-		body_str = "favorite weapons";
 
 	/* Prepare a string for item name */
 	if (*str)
@@ -3795,22 +3808,23 @@ static void search_for_string(text_body_type *tb, cptr search_str, bool forward)
 #define EC_OK_THIRD	       60
 #define EC_OK_FOURTH	       61
 #define EC_KK_WEAPONS	       62
-#define EC_KK_FAVORITE	       63
+#define EC_KK_FAVORITE_WEAPONS 63
 #define EC_KK_ARMORS	       64
 #define EC_KK_MISSILES	       65
 #define EC_KK_DEVICES	       66
 #define EC_KK_LIGHTS	       67
 #define EC_KK_JUNKS	       68
-#define EC_KK_SPELLBOOKS       69
-#define EC_KK_SHIELDS	       70
-#define EC_KK_BOWS	       71
-#define EC_KK_RINGS	       72
-#define EC_KK_AMULETS	       73
-#define EC_KK_SUITS	       74
-#define EC_KK_CLOAKS	       75
-#define EC_KK_HELMS	       76
-#define EC_KK_GLOVES	       77
-#define EC_KK_BOOTS	       78
+#define EC_KK_CORPSES	       69
+#define EC_KK_SPELLBOOKS       70
+#define EC_KK_SHIELDS	       71
+#define EC_KK_BOWS	       72
+#define EC_KK_RINGS	       73
+#define EC_KK_AMULETS	       74
+#define EC_KK_SUITS	       75
+#define EC_KK_CLOAKS	       76
+#define EC_KK_HELMS	       77
+#define EC_KK_GLOVES	       78
+#define EC_KK_BOOTS	       79
 
 
 /* Manu names */
@@ -4057,12 +4071,13 @@ command_menu_type menu_data[] =
 
  	{MN_NOUN, 0, -1, -1},
 	{KEY_WEAPONS, 1, -1, EC_KK_WEAPONS},
-	{KEY_FAVORITE, 1, -1, EC_KK_FAVORITE},
+	{KEY_FAVORITE_WEAPONS, 1, -1, EC_KK_FAVORITE_WEAPONS},
 	{KEY_ARMORS, 1, -1, EC_KK_ARMORS},
 	{KEY_MISSILES, 1, -1, EC_KK_MISSILES},
 	{KEY_DEVICES, 1, -1, EC_KK_DEVICES},
 	{KEY_LIGHTS, 1, -1, EC_KK_LIGHTS},
 	{KEY_JUNKS, 1, -1, EC_KK_JUNKS},
+	{KEY_CORPSES, 1, -1, EC_KK_CORPSES},
 	{KEY_SPELLBOOKS, 1, -1, EC_KK_SPELLBOOKS},
 	{KEY_SHIELDS, 1, -1, EC_KK_SHIELDS},
 	{KEY_BOWS, 1, -1, EC_KK_BOWS},
@@ -5689,12 +5704,13 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	case EC_IK_IDENTIFIED: toggle_keyword(tb, FLG_IDENTIFIED); break;
 	case EC_IK_STAR_IDENTIFIED: toggle_keyword(tb, FLG_STAR_IDENTIFIED); break;
 	case EC_KK_WEAPONS: toggle_keyword(tb, FLG_WEAPONS); break;
-	case EC_KK_FAVORITE: toggle_keyword(tb, FLG_FAVORITE); break;
+	case EC_KK_FAVORITE_WEAPONS: toggle_keyword(tb, FLG_FAVORITE_WEAPONS); break;
 	case EC_KK_ARMORS: toggle_keyword(tb, FLG_ARMORS); break;
 	case EC_KK_MISSILES: toggle_keyword(tb, FLG_MISSILES); break;
 	case EC_KK_DEVICES: toggle_keyword(tb, FLG_DEVICES); break;
 	case EC_KK_LIGHTS: toggle_keyword(tb, FLG_LIGHTS); break;
 	case EC_KK_JUNKS: toggle_keyword(tb, FLG_JUNKS); break;
+	case EC_KK_CORPSES: toggle_keyword(tb, FLG_CORPSES); break;
 	case EC_KK_SPELLBOOKS: toggle_keyword(tb, FLG_SPELLBOOKS); break;
 	case EC_KK_SHIELDS: toggle_keyword(tb, FLG_SHIELDS); break;
 	case EC_KK_BOWS: toggle_keyword(tb, FLG_BOWS); break;
