@@ -1590,85 +1590,76 @@ void auto_pickup_items(cave_type *c_ptr)
 		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
 
-		/* Get the index of auto-picker list */
 		idx = is_autopick(o_ptr);
 
-		/* Nothing defined on auto-picker? */
-		if (idx < 0) continue;
-
-		/* Always do auto-inscription first */
+		/* Item index for floor -1,-2,-3,...  */
 		auto_inscribe_item(o_ptr, idx);
 
-		/* Do auto-destroy */
-		if (autopick_list[idx].action & DO_AUTODESTROY)
+		if (idx >= 0 &&
+			(autopick_list[idx].action & (DO_AUTOPICK | DO_QUERY_AUTOPICK)))
+		{
+			disturb(0,0);
+
+			if (!inven_carry_okay(o_ptr))
+			{
+				char o_name[MAX_NLEN];
+
+				/* Describe the object */
+				object_desc(o_name, o_ptr, TRUE, 3);
+
+				/* Message */
+#ifdef JP
+				msg_format("ザックには%sを入れる隙間がない。", o_name);
+#else
+				msg_format("You have no room for %s.", o_name);
+#endif
+				/* Hack - remember that the item has given a message here. */
+				o_ptr->marked |= OM_NOMSG;
+
+				continue;
+			}
+			else if (autopick_list[idx].action & DO_QUERY_AUTOPICK)
+			{
+				char out_val[MAX_NLEN+20];
+				char o_name[MAX_NLEN];
+
+				if (o_ptr->marked & OM_NO_QUERY)
+				{
+					/* Already answered as 'No' */
+					continue;
+				}
+
+				/* Describe the object */
+				object_desc(o_name, o_ptr, TRUE, 3);
+
+#ifdef JP
+				sprintf(out_val, "%sを拾いますか? ", o_name);
+#else
+				sprintf(out_val, "Pick up %s? ", o_name);
+#endif
+
+				if (!get_check(out_val))
+				{
+					/* Hack - remember that the item has given a message here. */
+					o_ptr->marked |= (OM_NOMSG | OM_NO_QUERY);
+					continue;
+				}
+
+			}
+			py_pickup_aux(this_o_idx);
+		}
+		
+		/*
+		 * Do auto-destroy;
+		 * When always_pickup is 'yes', we disable
+		 * auto-destroyer from autopick function, and do only
+		 * easy-auto-destroyer.
+		 */
+		else
 		{
 			auto_destroy_item(o_ptr, idx);
-			continue;
 		}
-
-		/* Disturb on auto-pick */
-		disturb(0,0);
-
-		/* Is there an inventory space? */
-		if (!inven_carry_okay(o_ptr))
-		{
-			char o_name[MAX_NLEN];
-
-			/* Describe the object */
-			object_desc(o_name, o_ptr, TRUE, 3);
-
-			/* Message */
-#ifdef JP
-			msg_format("ザックには%sを入れる隙間がない。", o_name);
-#else
-			msg_format("You have no room for %s.", o_name);
-#endif
-			/*
-			 * Hack - No duplicate messages.
-			 * remember that a message is given for the item here.
-			 */
-			o_ptr->marked |= OM_NOMSG;
-
-			continue;
-		}
-
-		/* Ask if needed */
-		if (autopick_list[idx].action & DO_QUERY_AUTOPICK)
-		{
-			char out_val[MAX_NLEN+20];
-			char o_name[MAX_NLEN];
-
-			if (o_ptr->marked & OM_NO_QUERY)
-			{
-				/* Already answered as 'No' */
-				continue;
-			}
-
-			/* Describe the object */
-			object_desc(o_name, o_ptr, TRUE, 3);
-
-#ifdef JP
-			sprintf(out_val, "%sを拾いますか? ", o_name);
-#else
-			sprintf(out_val, "Pick up %s? ", o_name);
-#endif
-
-			if (!get_check(out_val))
-			{
-				/*
-				 * Hack - No duplicate messages/questions.
-				 * remember that a message is given
-				 * for the item here.
-				 */
-				o_ptr->marked |= (OM_NOMSG | OM_NO_QUERY);
-				continue;
-			}
-
-		}
-
-		/* Pick it up! */
-		py_pickup_aux(this_o_idx);
-	}
+	} /* for () */
 }
 
 
