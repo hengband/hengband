@@ -4369,7 +4369,7 @@ msg_print("ウィザードモード突入。");
 #ifdef JP
 					msg_print("ダンジョンが魔法を吸収した！");
 #else
-					msg_print("The arena absorbs all attempted magic!");
+					msg_print("The dungeon absorbs all attempted magic!");
 #endif
 					msg_print(NULL);
 				}
