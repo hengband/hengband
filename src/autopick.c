@@ -964,10 +964,10 @@ bool auto_destroy_item(int item, int autopick_idx, bool wait_optimize)
 		inven_item_increase(item, -(o_ptr->number));
 
 		/*
-		 * Optimize only equipment now.
+		 * Optimize equipment when wait_optimize is TRUE.
 		 * Optimize inventry later.
 		 */
-		if (wait_optimize && item > INVEN_PACK)
+		if (!wait_optimize || item > INVEN_PACK)
 			inven_item_optimize(item);
 	}
 
