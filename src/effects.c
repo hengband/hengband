@@ -5434,7 +5434,33 @@ void calc_android_exp(void)
 			level = (level + MAX(a_info[o_ptr->name1].level - 8, 5)) / 2;
 			level += MIN(20, a_info[o_ptr->name1].rarity/(a_info[o_ptr->name1].gen_flags & TRG_INSTA_ART ? 10 : 3));
 		}
-		else if (o_ptr->name2) level += MAX(3, (e_info[o_ptr->name2].rating - 5)/2);
+		else if (o_ptr->name2)
+		{
+			level += MAX(3, (e_info[o_ptr->name2].rating - 5)/2);
+		}
+		else if (o_ptr->art_name)
+		{
+			s32b total_flags = flag_cost(o_ptr, o_ptr->pval);
+			int fake_level;
+
+			if (o_ptr->tval >= TV_BOOTS)
+			{
+				/* For armors */
+				if (total_flags < 15000) fake_level = 10;
+				else if (total_flags < 35000) fake_level = 25;
+				else fake_level = 40;
+			}
+			else
+			{
+				/* For weapons */
+				if (total_flags < 20000) fake_level = 10;
+				else if (total_flags < 45000) fake_level = 25;
+				else fake_level = 40;
+			}
+
+			level = MAX(level, (level + MAX(fake_level - 8, 5)) / 2 + 3);
+		}
+
 		value = object_value_real(q_ptr);
 
 		if (value <= 0) continue;

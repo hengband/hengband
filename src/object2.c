@@ -865,16 +865,23 @@ static s32b object_value_base(object_type *o_ptr)
 
 
 /* Return the value of the flags the object has... */
-s32b flag_cost(object_type * o_ptr, int plusses)
+s32b flag_cost(object_type *o_ptr, int plusses)
 {
 	s32b total = 0;
 	u32b flgs[TR_FLAG_SIZE];
 	s32b tmp_cost;
 	int count;
 	int i;
+	object_kind *k_ptr;
 
 	object_flags(o_ptr, flgs);
 
+	/* Base item's value will be added later. */
+	k_ptr = &k_info[o_ptr->k_idx];
+	for (i = 0; i < TR_FLAG_SIZE; i++)
+		flgs[i] &= ~(k_ptr->flags[i]);
+
+	/* Fixed artifact's value will be added later. */
 	if (o_ptr->name1)
 	{
 		artifact_type *a_ptr = &a_info[o_ptr->name1];
@@ -882,30 +889,21 @@ s32b flag_cost(object_type * o_ptr, int plusses)
 		for (i = 0; i < TR_FLAG_SIZE; i++)
 			flgs[i] &= ~(a_ptr->flags[i]);
 	}
-	else
+
+	/* Fixed ego item's value will be added later. */
+	else if (o_ptr->name2)
 	{
-		if ((o_ptr->tval == TV_RING) || (o_ptr->tval == TV_AMULET))
-		{
-			object_kind *k_ptr = &k_info[o_ptr->k_idx];
+		ego_item_type *e_ptr = &e_info[o_ptr->name2];
 
-			for (i = 0; i < TR_FLAG_SIZE; i++)
-				flgs[i] &= ~(k_ptr->flags[i]);
-		}
+		for (i = 0; i < TR_FLAG_SIZE; i++)
+			flgs[i] &= ~(e_ptr->flags[i]);
 
-		if (o_ptr->name2)
-		{
-			ego_item_type *e_ptr = &e_info[o_ptr->name2];
-
-			for (i = 0; i < TR_FLAG_SIZE; i++)
-				flgs[i] &= ~(e_ptr->flags[i]);
-
-		}
-		else if (o_ptr->art_name)
-		{
-			total = 5000;
-		}
 	}
 
+
+	/*
+	 * Calucurate values of remaining flags
+	 */
 	if (have_flag(flgs, TR_STR)) total += (1700 * plusses);
 	if (have_flag(flgs, TR_INT)) total += (1700 * plusses);
 	if (have_flag(flgs, TR_WIS)) total += (1700 * plusses);
