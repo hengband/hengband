@@ -1017,7 +1017,7 @@ static void regen_monsters(void)
 
 
 /*
- * Regenerate the monsters (once per 100 game turns)
+ * Regenerate the captured monsters (once per 30 game turns)
  *
  * XXX XXX XXX Should probably be done during monster turns.
  */
@@ -1648,7 +1648,7 @@ msg_print("申し分けありませんが、この勝負は引き分けとさせていただきます。");
 		}
 	}
 
-	/* Every 20 game turns */
+	/* Every 10 game turns */
 	if (turn % TURNS_PER_TICK) return;
 
 	/*** Check the Time and Load ***/
@@ -2265,7 +2265,7 @@ take_hit(DAMAGE_NOESCAPE, i, "致命傷", -1);
 		/* Digest normally */
 		if (p_ptr->food < PY_FOOD_MAX)
 		{
-			/* Every 100 game turns */
+			/* Every 50 game turns */
 			if (!(turn % (TURNS_PER_TICK*5)))
 			{
 				/* Basic digestion rate based on speed */
