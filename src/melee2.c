@@ -2433,7 +2433,8 @@ msg_print("少しの間悲しい気分になった。");
 
 				if (m_ptr->ml)
 				{
-					if ((r_ptr->flags2 & RF2_CAN_SPEAK) && (m_ptr->r_idx != MON_GRIP) && (m_ptr->r_idx != MON_WOLF) && (m_ptr->r_idx != MON_FANG))
+					if ((r_ptr->flags2 & RF2_CAN_SPEAK) && (m_ptr->r_idx != MON_GRIP) && (m_ptr->r_idx != MON_WOLF) && (m_ptr->r_idx != MON_FANG) &&
+					    player_has_los_bold(m_ptr->fy, m_ptr->fx) && projectable(m_ptr->fy, m_ptr->fx, py, px))
 					{
 #ifdef JP
 						msg_format("%^s「ピンチだ！退却させてもらう！」", m_name);
