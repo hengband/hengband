@@ -875,6 +875,7 @@ bool apply_disenchant(int mode)
 	int             t = 0;
 	object_type     *o_ptr;
 	char            o_name[MAX_NLEN];
+	int to_h, to_d, to_a, pval;
 
 
 	/* Unused */
@@ -902,7 +903,7 @@ bool apply_disenchant(int mode)
 
 
 	/* Nothing to disenchant */
-	if ((o_ptr->to_h <= 0) && (o_ptr->to_d <= 0) && (o_ptr->to_a <= 0))
+	if ((o_ptr->to_h <= 0) && (o_ptr->to_d <= 0) && (o_ptr->to_a <= 0) && (o_ptr->pval <= 1))
 	{
 		/* Nothing to notice */
 		return (FALSE);
@@ -931,6 +932,12 @@ msg_format("%s(%c)は劣化を跳ね返した！",o_name, index_to_label(t) );
 	}
 
 
+	/* Memorize old value */
+	to_h = o_ptr->to_h;
+	to_d = o_ptr->to_d;
+	to_a = o_ptr->to_a;
+	pval = o_ptr->pval;
+
 	/* Disenchant tohit */
 	if (o_ptr->to_h > 0) o_ptr->to_h--;
 	if ((o_ptr->to_h > 5) && (randint0(100) < 20)) o_ptr->to_h--;
@@ -943,26 +950,33 @@ msg_format("%s(%c)は劣化を跳ね返した！",o_name, index_to_label(t) );
 	if (o_ptr->to_a > 0) o_ptr->to_a--;
 	if ((o_ptr->to_a > 5) && (randint0(100) < 20)) o_ptr->to_a--;
 
-	/* Message */
+	/* Disenchant pval (occasionally) */
+	if ((o_ptr->pval > 1) && one_in_(13)) o_ptr->pval--;
+
+	if ((to_h != o_ptr->to_h) || (to_d != o_ptr->to_d) ||
+	    (to_a != o_ptr->to_a) || (pval != o_ptr->pval))
+	{
+		/* Message */
 #ifdef JP
-msg_format("%s(%c)は劣化してしまった！",
-                   o_name, index_to_label(t) );
+		msg_format("%s(%c)は劣化してしまった！",
+			   o_name, index_to_label(t) );
 #else
-	msg_format("Your %s (%c) %s disenchanted!",
-		   o_name, index_to_label(t),
-		   ((o_ptr->number != 1) ? "were" : "was"));
+		msg_format("Your %s (%c) %s disenchanted!",
+			   o_name, index_to_label(t),
+			   ((o_ptr->number != 1) ? "were" : "was"));
 #endif
 
-	chg_virtue(V_HARMONY, 1);
-	chg_virtue(V_ENCHANT, -2);
+		chg_virtue(V_HARMONY, 1);
+		chg_virtue(V_ENCHANT, -2);
 
-	/* Recalculate bonuses */
-	p_ptr->update |= (PU_BONUS);
+		/* Recalculate bonuses */
+		p_ptr->update |= (PU_BONUS);
 
-	/* Window stuff */
-	p_ptr->window |= (PW_EQUIP | PW_PLAYER);
+		/* Window stuff */
+		p_ptr->window |= (PW_EQUIP | PW_PLAYER);
 
-	calc_android_exp();
+		calc_android_exp();
+	}
 
 	/* Notice */
 	return (TRUE);
