@@ -1871,7 +1871,7 @@ void print_rel(char c, byte a, int y, int x)
 		{
 			if (world_monster) a = TERM_DARK;
 			else if (p_ptr->invuln || world_player) a = TERM_WHITE;
-			else if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] == MUSIC_INVULN)) a = TERM_WHITE;
+			else if (music_singing(MUSIC_INVULN)) a = TERM_WHITE;
 			else if (p_ptr->wraith_form) a = TERM_L_DARK;
 		}
 
@@ -2059,7 +2059,7 @@ void display_dungeon(void)
 				{
 					if (world_monster) a = TERM_DARK;
 					else if (p_ptr->invuln || world_player) a = TERM_WHITE;
-					else if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] == MUSIC_INVULN)) a = TERM_WHITE;
+					else if (music_singing(MUSIC_INVULN)) a = TERM_WHITE;
 					else if (p_ptr->wraith_form) a = TERM_L_DARK;
 				}
 
@@ -2127,7 +2127,7 @@ void lite_spot(int y, int x)
 		{
 			if (world_monster) a = TERM_DARK;
 			else if (p_ptr->invuln || world_player) a = TERM_WHITE;
-			else if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] == MUSIC_INVULN)) a = TERM_WHITE;
+			else if (music_singing(MUSIC_INVULN)) a = TERM_WHITE;
 			else if (p_ptr->wraith_form) a = TERM_L_DARK;
 		}
 
@@ -2235,7 +2235,7 @@ void prt_map(void)
 			{
 				if (world_monster) a = TERM_DARK;
 				else if (p_ptr->invuln || world_player) a = TERM_WHITE;
-				else if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] == MUSIC_INVULN)) a = TERM_WHITE;
+				else if (music_singing(MUSIC_INVULN)) a = TERM_WHITE;
 				else if (p_ptr->wraith_form) a = TERM_L_DARK;
 			}
 
@@ -2321,7 +2321,7 @@ void prt_path(int y, int x)
 			{
 				if (world_monster) a = TERM_DARK;
 				else if (p_ptr->invuln || world_player) a = TERM_WHITE;
-				else if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] == MUSIC_INVULN)) a = TERM_WHITE;
+				else if (music_singing(MUSIC_INVULN)) a = TERM_WHITE;
 				else if (p_ptr->wraith_form) a = TERM_L_DARK;
 			}
 
@@ -2654,7 +2654,7 @@ void display_map(int *cy, int *cx)
 			{
 				if (world_monster) ta = TERM_DARK;
 				else if (p_ptr->invuln || world_player) ta = TERM_WHITE;
-				else if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] == MUSIC_INVULN)) ta = TERM_WHITE;
+				else if (music_singing(MUSIC_INVULN)) ta = TERM_WHITE;
 				else if (p_ptr->wraith_form) ta = TERM_L_DARK;
 			}
 

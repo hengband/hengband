@@ -821,7 +821,7 @@ msg_print("素早く動けるようになった！");
 	/* Shut */
 	else
 	{
-		if (p_ptr->fast && !p_ptr->lightspeed && ((p_ptr->pclass != CLASS_BARD) || ((p_ptr->magic_num1[0] != MUSIC_SPEED) && (p_ptr->magic_num1[0] != MUSIC_SHERO))))
+		if (p_ptr->fast && !p_ptr->lightspeed && !music_singing(MUSIC_SPEED) && !music_singing(MUSIC_SHERO))
 		{
 #ifdef JP
 msg_print("動きの素早さがなくなったようだ。");
@@ -1231,7 +1231,7 @@ msg_print("高潔な気分になった！");
 	/* Shut */
 	else
 	{
-		if (p_ptr->blessed && ((p_ptr->pclass != CLASS_BARD) || (p_ptr->magic_num1[0] != MUSIC_BLESS)))
+		if (p_ptr->blessed && !music_singing(MUSIC_BLESS))
 		{
 #ifdef JP
 msg_print("高潔な気分が消え失せた。");
@@ -1300,7 +1300,7 @@ msg_print("ヒーローになった気がする！");
 	/* Shut */
 	else
 	{
-		if (p_ptr->hero && ((p_ptr->pclass != CLASS_BARD) || ((p_ptr->magic_num1[0] != MUSIC_HERO) && (p_ptr->magic_num1[0] != MUSIC_SHERO))))
+		if (p_ptr->hero && !music_singing(MUSIC_HERO) && !music_singing(MUSIC_SHERO))
 		{
 #ifdef JP
 msg_print("ヒーローの気分が消え失せた。");
@@ -1620,7 +1620,7 @@ msg_print("無敵だ！");
 	/* Shut */
 	else
 	{
-		if (p_ptr->invuln && ((p_ptr->pclass != CLASS_BARD) || (p_ptr->magic_num1[0] != MUSIC_INVULN)))
+		if (p_ptr->invuln && !music_singing(MUSIC_INVULN))
 		{
 #ifdef JP
 msg_print("無敵ではなくなった。");
@@ -1700,7 +1700,7 @@ msg_print("意識が広がった気がする！");
 	/* Shut */
 	else
 	{
-		if (p_ptr->tim_esp && ((p_ptr->pclass != CLASS_BARD) || (p_ptr->magic_num1[0] != MUSIC_MIND)))
+		if (p_ptr->tim_esp && !music_singing(MUSIC_MIND))
 		{
 #ifdef JP
 msg_print("意識は元に戻った。");
@@ -1985,7 +1985,7 @@ msg_print("足音が小さくなった！");
 	/* Shut */
 	else
 	{
-		if (p_ptr->tim_stealth && ((p_ptr->pclass != CLASS_BARD) || (p_ptr->magic_num1[0] != MUSIC_STEALTH)))
+		if (p_ptr->tim_stealth && !music_singing(MUSIC_STEALTH))
 		{
 #ifdef JP
 msg_print("足音が大きくなった。");
@@ -3081,7 +3081,7 @@ msg_print("酸への耐性がついた気がする！");
 	/* Shut */
 	else
 	{
-		if (p_ptr->oppose_acid && ((p_ptr->pclass != CLASS_BARD) || (p_ptr->magic_num1[0] != MUSIC_RESIST)) && !(p_ptr->special_defense & KATA_MUSOU))
+		if (p_ptr->oppose_acid && !music_singing(MUSIC_RESIST) && !(p_ptr->special_defense & KATA_MUSOU))
 		{
 #ifdef JP
 msg_print("酸への耐性が薄れた気がする。");
@@ -3147,7 +3147,7 @@ msg_print("電撃への耐性がついた気がする！");
 	/* Shut */
 	else
 	{
-		if (p_ptr->oppose_elec && ((p_ptr->pclass != CLASS_BARD) || (p_ptr->magic_num1[0] != MUSIC_RESIST)) && !(p_ptr->special_defense & KATA_MUSOU))
+		if (p_ptr->oppose_elec && !music_singing(MUSIC_RESIST) && !(p_ptr->special_defense & KATA_MUSOU))
 		{
 #ifdef JP
 msg_print("電撃への耐性が薄れた気がする。");
@@ -3214,7 +3214,7 @@ msg_print("火への耐性がついた気がする！");
 	/* Shut */
 	else
 	{
-		if (p_ptr->oppose_fire && ((p_ptr->pclass != CLASS_BARD) || (p_ptr->magic_num1[0] != MUSIC_RESIST)) && !(p_ptr->special_defense & KATA_MUSOU))
+		if (p_ptr->oppose_fire && !music_singing(MUSIC_RESIST) && !(p_ptr->special_defense & KATA_MUSOU))
 		{
 #ifdef JP
 msg_print("火への耐性が薄れた気がする。");
@@ -3280,7 +3280,7 @@ msg_print("冷気への耐性がついた気がする！");
 	/* Shut */
 	else
 	{
-		if (p_ptr->oppose_cold && ((p_ptr->pclass != CLASS_BARD) || (p_ptr->magic_num1[0] != MUSIC_RESIST)) && !(p_ptr->special_defense & KATA_MUSOU))
+		if (p_ptr->oppose_cold && !music_singing(MUSIC_RESIST) && !(p_ptr->special_defense & KATA_MUSOU))
 		{
 #ifdef JP
 msg_print("冷気への耐性が薄れた気がする。");
@@ -3347,7 +3347,7 @@ msg_print("毒への耐性がついた気がする！");
 	/* Shut */
 	else
 	{
-		if (p_ptr->oppose_pois && ((p_ptr->pclass != CLASS_BARD) || (p_ptr->magic_num1[0] != MUSIC_RESIST)) && !(p_ptr->special_defense & KATA_MUSOU))
+		if (p_ptr->oppose_pois && !music_singing(MUSIC_RESIST) && !(p_ptr->special_defense & KATA_MUSOU))
 		{
 #ifdef JP
 msg_print("毒への耐性が薄れた気がする。");
@@ -5019,7 +5019,7 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 	/* Mega-Hack -- Apply "invulnerability" */
 	if ((damage_type != DAMAGE_USELIFE) && (damage_type != DAMAGE_LOSELIFE))
 	{
-		if ((p_ptr->invuln || ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] == MUSIC_INVULN))) && (damage < 9000))
+		if ((p_ptr->invuln || music_singing(MUSIC_INVULN)) && (damage < 9000))
 		{
 			if (damage_type == DAMAGE_FORCE)
 			{
