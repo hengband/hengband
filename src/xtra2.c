@@ -3439,7 +3439,9 @@ s2 = "¤ÎÆþ¸ý";
 			}
 			else if ((feat == FEAT_TOWN) || (feat == FEAT_FLOOR) || (feat == FEAT_DIRT) || (feat == FEAT_FLOWER))
 			{
+#ifndef JP
 				s3 ="";
+#endif
 			}
 			else
 			{
