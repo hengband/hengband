@@ -131,7 +131,11 @@ void user_name(char *buf, int id)
 
 #ifdef CAPITALIZE_USER_NAME
 		/* Hack -- capitalize the user name */
-		if (islower(buf[0])) buf[0] = toupper(buf[0]);
+#ifdef JP
+		if (!iskanji(buf[0]))
+#endif
+			if (islower(buf[0]))
+				buf[0] = toupper(buf[0]);
 #endif /* CAPITALIZE_USER_NAME */
 
 		return;
@@ -1674,7 +1678,7 @@ static char inkey_aux(void)
 
 	char buf[1024];
 
-	/* Hack : キー入力待ちで止まっているので、流れた行の記憶は不要。*/
+	/* Hack : キー入力待ちで止まっているので、流れた行の記憶は不要。 */
 	num_more = 0;
 
 	/* Wait for a keypress */
@@ -2391,7 +2395,7 @@ void message_add(cptr str)
 		}
 		else
 		{
-			num_more++;/*流れた行の数を数えておく*/
+			num_more++;/*流れた行の数を数えておく */
 			now_message++;
 		}
 
@@ -2574,7 +2578,7 @@ static void msg_flush(int x)
 	}
 	now_damaged = FALSE;
 
-	if (!nagasu)
+	if (!alive || !nagasu)
 	{
 		/* Pause for response */
 #ifdef JP
@@ -2589,13 +2593,13 @@ static void msg_flush(int x)
 		{
 			int cmd = inkey();
 			if (cmd == ESCAPE) {
-			    num_more = -9999; /*auto_moreのとき、全て流す。*/
+			    num_more = -9999; /*auto_moreのとき、全て流す。 */
 			    break;
 			} else if (cmd == ' ') {
-			    num_more = 0; /*１画面だけ流す。*/
+			    num_more = 0; /*１画面だけ流す。 */
 			    break;
 			} else if ((cmd == '\n') || (cmd == '\r')) {
-			    num_more--; /*１行だけ流す。*/
+			    num_more--; /*１行だけ流す。 */
 			    break;
 			}
 			if (quick_messages) break;
@@ -3048,7 +3052,7 @@ void c_roff(byte a, cptr str)
 
 		/* Dump */
 #ifdef JP
-                Term_addch(a|0x10, ch);
+                Term_addch((byte)(a|0x10), ch);
 #else
 		Term_addch(a, ch);
 #endif
@@ -3060,7 +3064,7 @@ void c_roff(byte a, cptr str)
 			s++;
 			x++;
 			ch = *s;
-			Term_addch(a|0x20, ch);
+			Term_addch((byte)(a|0x20), ch);
 		}
 #endif
 		/* Advance */
@@ -4795,3 +4799,4 @@ void roff_to_buf(cptr str, int maxlen, char *tbuf)
 
 	return;
 }
+

@@ -5613,7 +5613,11 @@ void discharge_minion(bool force)
 	}
 	if (!okay || p_ptr->riding)
 	{
+#ifdef JP
 		if (!get_check("本当に全ペットを爆破しますか？"))
+#else
+		if (!get_check("You will blast all pets. Are you sure? "))
+#endif
 			return;
 	}
 	for (i = 1; i < m_max; i++)
@@ -5631,7 +5635,11 @@ void discharge_minion(bool force)
 			{
 				char m_name[80];
 				monster_desc(m_name, m_ptr, 0x00);
+#ifdef JP
 				msg_format("%sは爆破されるのを嫌がり、勝手に自分の世界へと帰った。", m_name);
+#else
+				msg_format("%^s resists to be blasted, and run away.", m_name);
+#endif
 				delete_monster_idx(i);
 				continue;
 			}
@@ -5916,7 +5924,11 @@ bool lite_area(int dam, int rad)
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS)
 	{
+#ifdef JP
 		msg_print("ダンジョンが光を吸収した。");
+#else
+		msg_print("The darkness of this dungeon absorb your light.");
+#endif
 		return FALSE;
 	}
 
@@ -6165,8 +6177,8 @@ msg_print("テレポートを邪魔された！");
 	c_ptr->m_idx = p_ptr->riding;
 
 	/* Move the monster */
-	m_ptr->fy = (byte)py;
-	m_ptr->fx = (byte)px;
+	m_ptr->fy = py;
+	m_ptr->fx = px;
 
 	/* Move the player */
 	px = tx;
@@ -6705,7 +6717,7 @@ int activate_hi_summon(int y, int x, bool can_pet)
 {
 	int i;
 	int count = 0;
-	bool pet = FALSE, friendly = FALSE;
+	bool pet = FALSE, friendly = FALSE, not_pet;
 	int summon_lev;
 
 	if (can_pet)
@@ -6719,6 +6731,8 @@ int activate_hi_summon(int y, int x, bool can_pet)
 			pet = TRUE;
 		}
 	}
+	not_pet = (bool)(!pet);
+
 	summon_lev = (pet ? p_ptr->lev * 2 / 3 + randint(p_ptr->lev / 2) : dun_level);
 
 	for (i = 0; i < (randint(7) + (dun_level / 40)); i++)
@@ -6726,48 +6740,48 @@ int activate_hi_summon(int y, int x, bool can_pet)
 		switch (randint(25) + (dun_level / 20))
 		{
 			case 1: case 2:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_ANT, TRUE, friendly, pet, FALSE, !pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_ANT, TRUE, friendly, pet, FALSE, not_pet);
 				break;
 			case 3: case 4:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_SPIDER, TRUE, friendly, pet, FALSE, !pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_SPIDER, TRUE, friendly, pet, FALSE, not_pet);
 				break;
 			case 5: case 6:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HOUND, TRUE, friendly, pet, FALSE, !pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HOUND, TRUE, friendly, pet, FALSE, not_pet);
 				break;
 			case 7: case 8:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HYDRA, TRUE, friendly, pet, FALSE, !pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HYDRA, TRUE, friendly, pet, FALSE, not_pet);
 				break;
 			case 9: case 10:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_ANGEL, TRUE, friendly, pet, FALSE, !pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_ANGEL, TRUE, friendly, pet, FALSE, not_pet);
 				break;
 			case 11: case 12:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_UNDEAD, TRUE, friendly, pet, FALSE, !pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_UNDEAD, TRUE, friendly, pet, FALSE, not_pet);
 				break;
 			case 13: case 14:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_DRAGON, TRUE, friendly, pet, FALSE, !pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_DRAGON, TRUE, friendly, pet, FALSE, not_pet);
 				break;
 			case 15: case 16:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_DEMON, TRUE, friendly, pet, FALSE, !pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_DEMON, TRUE, friendly, pet, FALSE, not_pet);
 				break;
 			case 17:
 				if (pet || friendly) break;
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_AMBERITES, TRUE, friendly, pet, TRUE, !pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_AMBERITES, TRUE, friendly, pet, TRUE, not_pet);
 				break;
 			case 18: case 19:
 				if (pet || friendly) break;
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_UNIQUE, TRUE, friendly, pet, TRUE, !pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_UNIQUE, TRUE, friendly, pet, TRUE, not_pet);
 				break;
 			case 20: case 21:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HI_UNDEAD, TRUE, friendly, pet, (!friendly && !pet), !pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HI_UNDEAD, TRUE, friendly, pet, (bool)(!friendly && !pet), not_pet);
 				break;
 			case 22: case 23:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HI_DRAGON, TRUE, friendly, pet, (!friendly && !pet), !pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HI_DRAGON, TRUE, friendly, pet, (bool)(!friendly && !pet), not_pet);
 				break;
 			case 24:
-				count += summon_specific((pet ? -1 : 0), y, x, 100, SUMMON_CYBER, TRUE, friendly, pet, FALSE, !pet);
+				count += summon_specific((pet ? -1 : 0), y, x, 100, SUMMON_CYBER, TRUE, friendly, pet, FALSE, not_pet);
 				break;
 			default:
-				count += summon_specific((pet ? -1 : 0), y, x,pet ? summon_lev : (((summon_lev * 3) / 2) + 5), 0, TRUE, friendly, pet, (!friendly && !pet), !pet);
+				count += summon_specific((pet ? -1 : 0), y, x,pet ? summon_lev : (((summon_lev * 3) / 2) + 5), 0, TRUE, friendly, pet, (bool)(!friendly && !pet), not_pet);
 		}
 	}
 

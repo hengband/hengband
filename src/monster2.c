@@ -597,19 +597,19 @@ static bool summon_specific_aux(int r_idx)
 
 		case SUMMON_DEMON:
 		{
-			okay = (r_ptr->flags3 & RF3_DEMON);
+			okay = (bool)(r_ptr->flags3 & RF3_DEMON);
 			break;
 		}
 
 		case SUMMON_UNDEAD:
 		{
-			okay = (r_ptr->flags3 & RF3_UNDEAD);
+			okay = (bool)(r_ptr->flags3 & RF3_UNDEAD);
 			break;
 		}
 
 		case SUMMON_DRAGON:
 		{
-			okay = (r_ptr->flags3 & RF3_DRAGON);
+			okay = (bool)(r_ptr->flags3 & RF3_DRAGON);
 			break;
 		}
 
@@ -714,7 +714,7 @@ static bool summon_specific_aux(int r_idx)
 
 		case SUMMON_ANIMAL:
 		{
-			okay = (r_ptr->flags3 & (RF3_ANIMAL));
+			okay = (bool)(r_ptr->flags3 & (RF3_ANIMAL));
 			break;
 		}
 
@@ -2497,9 +2497,19 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 
 	if (m_idx == p_ptr->riding)
 	{
+		char m_name[80];
+		monster_desc(m_name, m_ptr, 0);
+#ifdef JP
 		msg_format("突然%sが変身した。", old_m_name);
+#else
+		msg_format("Suddenly, %s transforms!", old_m_name);
+#endif
 		if (!(r_ptr->flags7 & RF7_RIDING))
+#ifdef JP
 			if (rakuba(0, TRUE)) msg_print("地面に落とされた。");
+#else
+			if (rakuba(0, TRUE)) msg_format("You have fallen from %s.", m_name);
+#endif
 	}
 
 	/* Extract the monster base speed */
@@ -3591,7 +3601,7 @@ bool multiply_monster(int m_idx, bool clone, bool friendly, bool pet)
 		return FALSE;
 
 	/* Create a new monster (awake, no groups) */
-	if (!place_monster_aux(y, x, m_ptr->r_idx, FALSE, FALSE, friendly, pet, TRUE, (m_ptr->mflag2 & MFLAG_NOPET)))
+	if (!place_monster_aux(y, x, m_ptr->r_idx, FALSE, FALSE, friendly, pet, TRUE, (bool)(m_ptr->mflag2 & MFLAG_NOPET)))
 		return FALSE;
 
 	if (clone)

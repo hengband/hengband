@@ -1,4 +1,3 @@
-# CVS: Last edit by $Author$ on $Date$
 # File: t_pref.txt
 
 # Defines the preferences for the town features

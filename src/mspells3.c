@@ -618,7 +618,11 @@ put_str("MP 失率 効果", y, x + 33);
 
 					if (use_menu)
 					{
+#ifdef JP
 						if (i == (menu_line-1)) strcpy(psi_desc, "  》");
+#else
+						if (i == (menu_line-1)) strcpy(psi_desc, "  > ");
+#endif
 						else strcpy(psi_desc, "    ");
 					}
 					else sprintf(psi_desc, "  %c)", I2A(i));
@@ -734,6 +738,7 @@ static bool cast_learned_spell(int spell, bool success)
 	int             damage = 0;
 	bool    unique_okay = FALSE;
 	bool   pet = success;
+	bool   not_pet = (bool)(!pet);
 	bool   no_trump = FALSE;
 
 	if (!success || (randint(50+plev) < plev/10)) unique_okay = TRUE;
@@ -1397,7 +1402,11 @@ msg_print("無傷の球の呪文を唱えた。");
 		break;
 	case MS_WORLD:
 		world_player = TRUE;
+#ifdef JP
 		msg_print("「時よ！」");
+#else
+		msg_print("'Time!'");
+#endif
 		msg_print(NULL);
 
 		p_ptr->energy += (randint(200)+1200);
@@ -1569,7 +1578,11 @@ msg_print("援軍を召喚した。");
 			if (summon_kin_player(pet, summon_lev, py, px, FALSE))
 			{
 				if (!pet)
+#ifdef JP
 msg_print("召還された仲間は怒っている！");
+#else
+msg_print("Summoned fellows is angry!");
+#endif
 			}
 			else
 			{
@@ -1587,10 +1600,14 @@ msg_print("サイバーデーモンを召喚した！");
 			msg_print("You summons Cyberdemons!");
 #endif
 		for (k = 0 ;k < 1 ; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_CYBER, FALSE, FALSE, pet, FALSE, !pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_CYBER, FALSE, FALSE, pet, FALSE, not_pet))
 			{
 				if (!pet)
+#ifdef JP
 msg_print("召還されたサイバーデーモンは怒っている！");
+#else
+msg_print("Summoned Cyberdemons are angry!");
+#endif
 			}
 			else
 			{
@@ -1607,10 +1624,14 @@ msg_print("仲間を召喚した。");
 			msg_print("You summons help.");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, 0, FALSE, FALSE, pet, FALSE, !pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, 0, FALSE, FALSE, pet, FALSE, not_pet))
 			{
 				if (!pet)
+#ifdef JP
 msg_print("召還されたモンスターは怒っている！");
+#else
+msg_print("Summoned monster is angry!");
+#endif
 			}
 			else
 			{
@@ -1627,10 +1648,14 @@ msg_print("モンスターを召喚した！");
 			msg_print("You summons monsters!");
 #endif
 		for (k = 0;k < plev / 15 + 2; k++)
-			if(summon_specific((pet ? -1 : 0), py, px, summon_lev, 0, FALSE, FALSE, pet, unique_okay, !pet))
+			if(summon_specific((pet ? -1 : 0), py, px, summon_lev, 0, FALSE, FALSE, pet, unique_okay, not_pet))
 			{
 				if (!pet)
+#ifdef JP
 msg_print("召還されたモンスターは怒っている！");
+#else
+msg_print("Summoned monsters are angry!");
+#endif
 			}
 			else
 			{
@@ -1647,10 +1672,14 @@ msg_print("アリを召喚した。");
 			msg_print("You summons ants.");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_ANT, TRUE, FALSE, pet, FALSE, !pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_ANT, TRUE, FALSE, pet, FALSE, not_pet))
 			{
 				if (!pet)
+#ifdef JP
 msg_print("召還されたアリは怒っている！");
+#else
+msg_print("Summoned ants are angry!");
+#endif
 			}
 			else
 			{
@@ -1667,10 +1696,14 @@ msg_print("蜘蛛を召喚した。");
 			msg_print("You summons spiders.");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_SPIDER, TRUE, FALSE, pet, FALSE, !pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_SPIDER, TRUE, FALSE, pet, FALSE, not_pet))
 			{
 				if (!pet)
+#ifdef JP
 msg_print("召還された蜘蛛は怒っている！");
+#else
+msg_print("Summoned spiders are angry!");
+#endif
 			}
 			else
 			{
@@ -1687,10 +1720,14 @@ msg_print("ハウンドを召喚した。");
 			msg_print("You summons hounds.");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HOUND, TRUE, FALSE, pet, FALSE, !pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HOUND, TRUE, FALSE, pet, FALSE, not_pet))
 			{
 				if (!pet)
+#ifdef JP
 msg_print("召還されたハウンドは怒っている！");
+#else
+msg_print("Summoned hounds are angry!");
+#endif
 			}
 			else
 			{
@@ -1707,10 +1744,14 @@ msg_print("ヒドラを召喚した。");
 			msg_print("You summons hydras.");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HYDRA, !pet, FALSE, pet, FALSE, !pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HYDRA, not_pet, FALSE, pet, FALSE, not_pet))
 			{
 				if (!pet)
+#ifdef JP
 msg_print("召還されたヒドラは怒っている！");
+#else
+msg_print("Summoned hydras are angry!");
+#endif
 			}
 			else
 			{
@@ -1727,10 +1768,14 @@ msg_print("天使を召喚した！");
 			msg_print("You summons angel!");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_ANGEL, !pet, FALSE, pet, FALSE, !pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_ANGEL, not_pet, FALSE, pet, FALSE, not_pet))
 			{
 				if (!pet)
+#ifdef JP
 msg_print("召還された天使は怒っている！");
+#else
+msg_print("Summoned angel is angry!");
+#endif
 			}
 			else
 			{
@@ -1747,10 +1792,14 @@ msg_print("混沌の宮廷から悪魔を召喚した！");
 			msg_print("You summons a demon from the Courts of Chaos!");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_DEMON, !pet, FALSE, pet, FALSE, !pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_DEMON, not_pet, FALSE, pet, FALSE, not_pet))
 			{
 				if (!pet)
+#ifdef JP
 msg_print("召還されたデーモンは怒っている！");
+#else
+msg_print("Summoned demon is angry!");
+#endif
 			}
 			else
 			{
@@ -1767,10 +1816,14 @@ msg_print("アンデッドの強敵を召喚した！");
 			msg_print("You summons an undead adversary!");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_UNDEAD, !pet, FALSE, pet, FALSE, !pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_UNDEAD, not_pet, FALSE, pet, FALSE, not_pet))
 			{
 				if (!pet)
+#ifdef JP
 msg_print("召還されたアンデッドは怒っている！");
+#else
+msg_print("Summoned undead is angry!");
+#endif
 			}
 			else
 			{
@@ -1787,10 +1840,14 @@ msg_print("ドラゴンを召喚した！");
 			msg_print("You summons dragon!");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_DRAGON, !pet, FALSE, pet, FALSE, !pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_DRAGON, not_pet, FALSE, pet, FALSE, not_pet))
 			{
 				if (!pet)
+#ifdef JP
 msg_print("召還されたドラゴンは怒っている！");
+#else
+msg_print("Summoned dragon is angry!");
+#endif
 			}
 			else
 			{
@@ -1807,10 +1864,14 @@ msg_print("強力なアンデッドを召喚した！");
 			msg_print("You summons greater undead!");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_UNDEAD, !pet, FALSE, pet, unique_okay, !pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_UNDEAD, not_pet, FALSE, pet, unique_okay, not_pet))
 			{
 				if (!pet)
+#ifdef JP
 msg_print("召還された上級アンデッドは怒っている！");
+#else
+msg_print("Summoned greater undead is angry!");
+#endif
 			}
 			else
 			{
@@ -1827,10 +1888,14 @@ msg_print("古代ドラゴンを召喚した！");
 			msg_print("You summons ancient dragons!");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_DRAGON, !pet, FALSE, pet, unique_okay, !pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_DRAGON, not_pet, FALSE, pet, unique_okay, not_pet))
 			{
 				if (!pet)
+#ifdef JP
 msg_print("召還された古代ドラゴンは怒っている！");
+#else
+msg_print("Summoned ancient dragon is angry!");
+#endif
 			}
 			else
 			{
@@ -1847,10 +1912,14 @@ msg_print("アンバーの王を召喚した！");
 			msg_print("You summons Lords of Amber!");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_AMBERITES, !pet, FALSE, pet, unique_okay, !pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_AMBERITES, not_pet, FALSE, pet, unique_okay, not_pet))
 			{
 				if (!pet)
+#ifdef JP
 msg_print("召還されたアンバーの王は怒っている！");
+#else
+msg_print("Summoned Lords of Amber are angry!");
+#endif
 			}
 			else
 			{
@@ -1867,18 +1936,26 @@ msg_print("特別な強敵を召喚した！");
 			msg_print("You summons special opponents!");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_UNIQUE, !pet, FALSE, pet, TRUE, !pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_UNIQUE, not_pet, FALSE, pet, TRUE, not_pet))
 			{
 				count++;
 				if (!pet)
+#ifdef JP
 msg_print("召還されたユニーク・モンスターは怒っている！");
+#else
+msg_print("Summoned special opponents are angry!");
+#endif
 			}
 		for (k = count;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_UNDEAD, !pet, FALSE, pet, TRUE, !pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_UNDEAD, not_pet, FALSE, pet, TRUE, not_pet))
 			{
 				count++;
 				if (!pet)
+#ifdef JP
 msg_print("召還された上級アンデッドは怒っている！");
+#else
+msg_print("Summoned greater undead are angry!");
+#endif
 			}
 		if (!count)
 		{
@@ -1891,7 +1968,11 @@ msg_print("召還された上級アンデッドは怒っている！");
 	}
 	if (no_trump)
 	{
+#ifdef JP
 msg_print("何も現れなかった。");
+#else
+msg_print("No one have appeared.");
+#endif
 	}
 
 	return TRUE;
@@ -2091,7 +2172,11 @@ void learn_spell(int monspell)
 	if (randint(p_ptr->lev + 70) > monster_powers[monspell].level + 40)
 	{
 		p_ptr->magic_num2[monspell] = 1;
+#ifdef JP
 		msg_format("%sを学習した！", monster_powers[monspell].name);
+#else
+		msg_format("You have studyed %s!", monster_powers[monspell].name);
+#endif
 		gain_exp(monster_powers[monspell].level * monster_powers[monspell].smana);
 
 		/* Sound */

@@ -518,7 +518,11 @@ path_build(buf, 1024, ANGBAND_DIR_DATA, "r_info_j.raw");
 	/* Describe movement */
 	if (r_idx == MON_CHAMELEON)
 	{
+#ifdef JP
 		roff("、他のモンスターに化ける。");
+#else
+		roff("and can take the shape of other monster.");
+#endif
 		return;
 	}
 	else
@@ -819,8 +823,7 @@ else                            roff("モンスター");
 			       (long)1000 / (p_ptr->max_plv+2) + 5) / 10);
 
 			/* Mention the experience */
-			roff(format(" is worth %s%ld.%02ld point%s",
-				    (r_ptr->flags1 & RF1_UNIQUE) ? "" : "about ", 
+			roff(format(" is worth about %ld.%02ld point%s",
 			            (long)i, (long)j,
 			            (((i == 1) && (j == 0)) ? "" : "s")));
 
@@ -3051,7 +3054,7 @@ case RBE_DR_MANA:  q = "魔力を奪う"; break;
 	 * Notice "Quest" monsters, but only if you
 	 * already encountered the monster.
 	 */
-	if ((flags1 & RF1_QUESTOR) && (cheat_know || ((r_ptr->r_sights) && (r_ptr->max_num) && ((r_idx == MON_OBERON) || (r_idx == MON_SERPENT)))))
+	if ((flags1 & RF1_QUESTOR) && ((r_ptr->r_sights) && (r_ptr->max_num) && ((r_idx == MON_OBERON) || (r_idx == MON_SERPENT))))
 	{
 #ifdef JP
 		c_roff(TERM_VIOLET, "あなたはこのモンスターを殺したいという強い欲望を感じている...");
@@ -3387,7 +3390,7 @@ monster_hook_type get_monster_hook(void)
 	}
 	else
 	{
-		return monster_dungeon;
+		return (monster_hook_type)monster_dungeon;
 	}
 }
 
@@ -3398,12 +3401,12 @@ monster_hook_type get_monster_hook2(int y, int x)
 	switch (cave[y][x].feat)
 	{
 	case FEAT_SHAL_WATER:
-		return monster_shallow_water;
+		return (monster_hook_type)monster_shallow_water;
 	case FEAT_DEEP_WATER:
-		return monster_deep_water;
+		return (monster_hook_type)monster_deep_water;
 	case FEAT_DEEP_LAVA:
 	case FEAT_SHAL_LAVA:
-		return monster_lava;
+		return (monster_hook_type)monster_lava;
 	default:
 		return NULL;
 	}

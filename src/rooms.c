@@ -2799,7 +2799,7 @@ static void generate_hmap(int y0, int x0, int xsiz, int ysiz, int grd, int roug,
 	* Scale factor for middle points:
 	* About sqrt(2) * 256 - correct for a square lattice
 	* approximately correct for everything else.
-	*/
+	 */
 	diagsize = 362;
 
 	/* maximum of xsize and ysize */

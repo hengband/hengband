@@ -2144,7 +2144,11 @@ c_put_str(TERM_YELLOW, "Wanted monsters", 6, 10);
 		sprintf(buf,"%-40s ---- ",r_name + r_ptr->name);
 		prt(buf, y+7, 10);
 		if (kubi_r_idx[i] > 10000)
+#ifdef JP
 			c_put_str(TERM_RED,"済", y+7, 56);
+#else
+			c_put_str(TERM_RED,"done", y+7, 56);
+#endif
 		else
 		{
 			sprintf(buf,"$%d", 300 * (r_ptr->level + 1));
@@ -4406,7 +4410,7 @@ msg_print("ここにはクエストの入口はない。");
 			(quest[leaving_quest].status == QUEST_STATUS_TAKEN))
 		{
 			quest[leaving_quest].status = QUEST_STATUS_FAILED;
-			quest[leaving_quest].complev = p_ptr->lev;
+			quest[leaving_quest].complev = (byte)p_ptr->lev;
 			if (quest[leaving_quest].type == QUEST_TYPE_RANDOM)
 			{
 				r_info[quest[leaving_quest].r_idx].flags1 &= ~(RF1_QUESTOR);

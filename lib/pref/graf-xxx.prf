@@ -1,4 +1,3 @@
-# CVS: Last edit by $Author$ on $Date$
 ##### Special attr/char values #####
 
 
@@ -3152,12 +3151,69 @@ F:88:0xCB:0x84
 # Grass
 F:89:0xCB:0x85
 
+#compact rune (same tile as dart trap, nuke me)
+F:90:0xA2:0x92
+
+#flower
+F:93:203/138
+
+#brake
+F:94:207/136
+
+#museum
+F:95:0xD3:0x98
+
 # Tree
 F:96:0xCB:0x86
 
 # Mountain
 F:97:0xCB:0x87
 
+# Building
+F:128:0xD5:0x82
+F:129:0xD5:0x82
+F:130:0xD5:0x81
+F:131:0xD5:0x82
+F:132:0xD5:0x82
+F:133:0xD5:0x82
+F:134:0xD5:0x82
+F:135:0xD5:0x80
+F:136:0xD5:0x81
+F:137:0xD5:0x84
+F:138:0xD5:0x81
+F:139:0xD5:0x80
+F:140:0xD5:0x85
+F:141:0xD5:0x83
+F:142:0xD5:0x83
+F:143:0xD5:0x83
+F:144:0xD5:0x83
+F:145:0xD5:0x83
+F:146:0xD5:0x83
+F:147:0xD5:0x83
+F:148:0xD5:0x83
+F:149:0xD5:0x83
+F:150:0xD5:0x83
+F:151:0xD5:0x83
+F:152:0xD5:0x83
+F:153:0xD5:0x83
+F:154:0xD5:0x83
+F:155:0xD5:0x83
+F:156:0xD5:0x83
+F:157:0xD5:0x83
+F:158:0xD5:0x83
+F:159:0xD5:0x83
+
+#Town
+#F:192:
+
+#Entrance to dungeon
+F:193:0x81:0x9E
+
+#Swamp
+F:194:207/146
+
+#Mirror
+F:195:203/152
 
 # Object attr/char definitions
 
@@ -4747,12 +4803,155 @@ K:573:0xB4:0x87
 K:574:0xB4:0x88
 K:575:0xB4:0x89
 K:576:0xB4:0x8A
+K:577:0xD3:0x99
 
 # Generic Skeleton
-K:577:0xB4:0x8B
+K:578:0xB4:0x8B
 
 # Generic Corpse
-K:578:0xB4:0x8C
+K:579:0xB4:0x8C
+
+#T-shirt
+K:580:0xB4:0x8D
+
+#Wizardstaff
+#K:581:
+
+#Feanorian lamp
+#K:582:
+
+#Set of Gloves of Dragon
+#K:584:
+
+#Pair of Dragon Boots
+#K:585:
+
+#Gun
+#K:588:
+
+#Palantir
+#K:589:
+
+#Stone
+#K:590:
+
+#Poison Needle
+#K:592:
+
+#Capture Ball#
+#K:593:
+
+#Death Scythe 
+#K:594:
+
+#Card
+#K:597:
+
+#[Handbook for Pupils]
+#K:604:
+
+#[Grade Holder's Book]
+#K:605:
+
+#[Note of Acting Master]
+#K:606:
+
+#[Spiritual Enlightenment]
+#K:607:
+
+#Levitation Stone
+#K:609:
+
+#Bead
+#K:610:
+
+#Ethereal Cloak
+#K:611:
+
+#Mirror
+#K:612:
+
+#Black Arrow
+#K:613:
+
+#Sexy Swimsuit
+#K:614:
+
+#Fishingpole
+#K:615:
+
+#Steel Bolt
+K:619:0x89:0x9C
+
+#Can of Toys
+#K:620:
+
+#Stick
+K:621:0xCD:0x98
+
+#Yumi
+K:622:0x89:0x95
+
+#Cloth
+K:623:0xB4:0x8D
+
+#Knight's Shield
+#K:627:
+
+#[Apprentice Handbook]
+#K:631:
+
+#[Minstrel's Music]
+#K:632:
+
+#[Harps of Rivendell]
+#K:633:
+
+#[Lays of Beleriand]
+#K:634:
+
+#Falcon Sword
+K:635:0xCD:0x9E
+
+#Adventurer's guide to Middle Earth
+#K:636:
+
+#[Bugei Shofu]
+#K:637:
+
+#[Yagyuu Bugeichou]
+#K:638:
+
+#[Gorinnosho]
+#K:639:
+
+#[Hokusin Ittouryuu Kaiden]
+#K:640:
+
+#Photograph of #
+#K:643:203/152
+
+#Robe
+K:645:0x88:0x95
+
+#[Dark Incantations]
+#K:646:
+
+#[Immortal Rituals]
+#K:647:
+
+#[Demonthoughts]
+#K:648:
+
+#[Hellfire Tome]
+#K:649:
+
+#Magic Whistle
+#K:651:
+
+#Amulet(pitch dark night)
+#K:652:0xB6:0x9E
+
 
 # Load the special player pictures
 %:xtra-xxx.prf

@@ -12,6 +12,199 @@
 
 #include "angband.h"
 
+
+/*
+ *  mark strings for auto dump
+ */
+static char auto_dump_header[] = "# vvvvvvv== %s ==vvvvvvv";
+static char auto_dump_footer[] = "# ^^^^^^^== %s ==^^^^^^^";
+
+/*
+ * Remove old lines automatically generated before.
+ */
+static void remove_auto_dump(cptr orig_file, cptr mark)
+{
+	FILE *tmp_fff, *orig_fff;
+
+	char tmp_file[1024];
+	char buf[1024];
+	bool between_mark = FALSE;
+	bool success = FALSE;
+	int line_num = 0;
+	long header_location = 0;
+	char header_mark_str[80];
+	char footer_mark_str[80];
+	size_t mark_len;
+
+	sprintf(header_mark_str, auto_dump_header, mark);
+	sprintf(footer_mark_str, auto_dump_footer, mark);
+
+	mark_len = strlen(footer_mark_str);
+
+	/* If original file is not exist, nothing to do */
+	orig_fff = my_fopen(orig_file, "r");
+	if (!orig_fff)
+	{
+		return;
+	}
+
+	/* Open a new file */
+	tmp_fff = my_fopen_temp(tmp_file, 1024);
+	if (!tmp_fff) {
+#ifdef JP
+	    msg_format("一時ファイル %s を作成できませんでした。", tmp_file);
+#else
+	    msg_format("Failed to create temporary file %s.", tmp_file);
+#endif
+	    msg_print(NULL);
+	    return;
+	}
+	
+	while (1)
+	{
+		if (my_fgets(orig_fff, buf, 1024))
+		{
+			if (between_mark)
+			{
+				fseek(orig_fff, header_location, SEEK_SET);
+				between_mark = FALSE;
+				continue;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		if (!between_mark)
+		{
+			if (!strcmp(buf, header_mark_str))
+			{
+				header_location = ftell(orig_fff);
+				line_num = 0;
+				between_mark = TRUE;
+				success = TRUE;
+			}
+			else
+			{
+				fprintf(tmp_fff, "%s\n", buf);
+			}
+		}
+		else
+		{
+			if (!strncmp(buf, footer_mark_str, mark_len))
+			{
+				int tmp;
+
+			        if (!sscanf(buf + mark_len, " (%d)", &tmp)
+				    || tmp != line_num)
+				{
+					fseek(orig_fff, header_location, SEEK_SET);
+				}
+
+				between_mark = FALSE;
+			}
+			else
+			{
+				line_num++;
+			}
+		}
+	}
+	my_fclose(orig_fff);
+	my_fclose(tmp_fff);
+
+	if (success)
+	{
+		/* copy contents of temporally file */
+
+		tmp_fff = my_fopen(tmp_file, "r");
+		orig_fff = my_fopen(orig_file, "w");
+		
+		while (!my_fgets(tmp_fff, buf, 1024))
+			fprintf(orig_fff, "%s\n", buf);
+		
+		my_fclose(orig_fff);
+		my_fclose(tmp_fff);
+	}
+	fd_kill(tmp_file);
+
+	return;
+}
+
+/*
+ *  Open file to append auto dump.
+ */
+static FILE *open_auto_dump(cptr buf, cptr mark, int *line)
+{
+	FILE *fff;
+
+	char header_mark_str[80];
+
+	sprintf(header_mark_str, auto_dump_header, mark);
+
+	/* Remove old macro dumps */
+	remove_auto_dump(buf, mark);
+
+	/* Append to the file */
+	fff = my_fopen(buf, "a");
+
+	/* Failure */
+	if (!fff) {
+#ifdef JP
+		msg_format("%s を開くことができませんでした。", buf);
+#else
+		msg_format("Failed to open %s.", buf);
+#endif
+		msg_print(NULL);
+		return NULL;
+	}
+
+	/* Start dumping */
+	fprintf(fff, "%s\n", header_mark_str);
+
+#ifdef JP
+	fprintf(fff, "# *警告!!* 以降の行は自動生成されたものです。\n");
+	fprintf(fff, "# *警告!!* 後で自動的に削除されるので編集しないでください。\n");
+#else
+	fprintf(fff, "# *Warning!!* The lines below are automatic dump.\n");
+	fprintf(fff, "# *Warning!!* Don't edit these! These lines will be deleted automaticaly.\n");
+#endif
+	*line = 2;
+
+	return fff;
+}
+
+/*
+ *  Append foot part and close auto dump.
+ */
+static void close_auto_dump(FILE *fff, cptr mark, int line_num)
+{
+	char footer_mark_str[80];
+
+	sprintf(footer_mark_str, auto_dump_footer, mark);
+
+	/* End of dumping */
+#ifdef JP
+	fprintf(fff, "# *警告!!* 以上の行は自動生成されたものです。\n");
+	fprintf(fff, "# *警告!!* 後で自動的に削除されるので編集しないでください。\n");
+#else
+	fprintf(fff, "# *Warning!!* The lines above are automatic dump.\n");
+	fprintf(fff, "# *Warning!!* Don't edit these! These lines will be deleted automaticaly.\n");
+#endif
+	line_num += 2;
+
+	fprintf(fff, "%s (%d)\n", footer_mark_str, line_num);
+
+	my_fclose(fff);
+
+	return;
+}
+
+
+/*
+ *   Take note to the dialy.
+ */
+
 errr do_cmd_write_nikki(int type, int num, cptr note)
 {
 	int day, hour, min;
@@ -994,7 +1187,7 @@ void do_cmd_messages(int num_now)
 			msg = (strlen(msg) >= q) ? (msg + q) : "";
 
 			/* Dump the messages, bottom to top */
-			Term_putstr(0, 21-j, -1, (i+j < num_now ? TERM_WHITE : TERM_SLATE), msg);
+			Term_putstr(0, 21-j, -1, (bool)(i+j < num_now ? TERM_WHITE : TERM_SLATE), msg);
 
 			/* Hilite "shower" */
 			if (shower[0])
@@ -1540,9 +1733,9 @@ void do_cmd_options_aux(int page, cptr info)
 	Term_clear();
 
 #ifdef JP
-	if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "以下のオプションは、自動破壊を使用するときのみ有効", 7, 6);
+	if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "以下のオプションは、自動破壊を使用するときのみ有効", 4, 6);
 #else
-	if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "Following options will protect items from easy auto-destroyer.", 7, 3);
+	if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "Following options will protect items from easy auto-destroyer.", 4, 3);
 #endif
 
 	/* Interact with the player */
@@ -1575,11 +1768,11 @@ void do_cmd_options_aux(int page, cptr info)
 #endif
 
 			        option_info[opt[i]].o_text);
-			if ((page == PAGE_AUTODESTROY) && i > 3) c_prt(a, buf, i + 5, 0);
+			if ((page == PAGE_AUTODESTROY) && i > 0) c_prt(a, buf, i + 5, 0);
 			else c_prt(a, buf, i + 2, 0);
 		}
 
-		if ((page == PAGE_AUTODESTROY) && (k > 3)) l = 3;
+		if ((page == PAGE_AUTODESTROY) && (k > 0)) l = 3;
 		else l = 0;
 		/* Hilite current option */
 		move_cursor(k + 2 + l, 50);
@@ -1890,7 +2083,7 @@ void do_cmd_options(void)
 		prt("(3) Game-Play Options", 6, 5);
 		prt("(4) Disturbance Options", 7, 5);
 		prt("(5) Efficiency Options", 8, 5);
-		prt("(6) Object Auto-Pick/Destroy Options", 9, 5);
+		prt("(6) Easy Auto-Destroyer Options", 9, 5);
 		prt("(R) Play-record Options", 10, 5);
 
 		/* Special choices */
@@ -2188,8 +2381,8 @@ void do_cmd_pickpref(void)
 #endif
 	/* いままで使っていたメモリ解放 */
 	for( i = 0; i < max_autopick; i++){
-		free(autopick_name[i]);
-		free(autopick_insc[i]);
+		string_free(autopick_name[i]);
+		string_free(autopick_insc[i]);
 	}
 	max_autopick = 0;
 
@@ -2237,12 +2430,13 @@ void do_cmd_pickpref(void)
  */
 static errr macro_dump(cptr fname)
 {
-	int i;
+	static cptr mark = "Macro Dump";
+
+	int i, line_num;
 
 	FILE *fff;
 
 	char buf[1024];
-
 
 	/* Build the filename */
 	path_build(buf, 1024, ANGBAND_DIR_USER, fname);
@@ -2251,42 +2445,20 @@ static errr macro_dump(cptr fname)
 	FILE_TYPE(FILE_TYPE_TEXT);
 
 	/* Append to the file */
-	fff = my_fopen(buf, "a");
-
-	/* Failure */
-	if (!fff) {
-#ifdef JP
-		msg_format("%s を開くことができませんでした。", buf);
-#else
-		msg_format("Failed to open %s.", buf);
-#endif
-		msg_print(NULL);
-		return (-1);
-	}
-
-
-	/* Skip space */
-	fprintf(fff, "\n\n");
+	fff = open_auto_dump(buf, mark, &line_num);
+	if (!fff) return (-1);
 
 	/* Start dumping */
 #ifdef JP
-	fprintf(fff, "# 自動マクロセーブ\n\n");
+	fprintf(fff, "\n# 自動マクロセーブ\n\n");
 #else
-	fprintf(fff, "# Automatic macro dump\n\n");
+	fprintf(fff, "\n# Automatic macro dump\n\n");
 #endif
-
+	line_num += 3;
 
 	/* Dump them */
 	for (i = 0; i < macro__num; i++)
 	{
-		/* Start the macro */
-#ifdef JP
-	fprintf(fff, "# 自動キー配置セーブ\n\n");
-#else
-		fprintf(fff, "# Macro '%d'\n\n", i);
-#endif
-
-
 		/* Extract the action */
 		ascii_to_text(buf, macro__act[i]);
 
@@ -2300,15 +2472,14 @@ static errr macro_dump(cptr fname)
 		fprintf(fff, "P:%s\n", buf);
 
 		/* End the macro */
-		fprintf(fff, "\n\n");
+		fprintf(fff, "\n");
+
+		/* count number of lines */
+		line_num += 3;
 	}
 
-	/* Start dumping */
-	fprintf(fff, "\n\n\n\n");
-
-
 	/* Close */
-	my_fclose(fff);
+	close_auto_dump(fff, mark, line_num);
 
 	/* Success */
 	return (0);
@@ -2408,6 +2579,8 @@ static void do_cmd_macro_aux_keymap(char *buf)
  */
 static errr keymap_dump(cptr fname)
 {
+	static cptr mark = "Keymap Dump";
+	int line_num;
 	int i;
 
 	FILE *fff;
@@ -2416,7 +2589,6 @@ static errr keymap_dump(cptr fname)
 	char buf[1024];
 
 	int mode;
-
 
 	/* Roguelike */
 	if (rogue_like_commands)
@@ -2438,30 +2610,16 @@ static errr keymap_dump(cptr fname)
 	FILE_TYPE(FILE_TYPE_TEXT);
 
 	/* Append to the file */
-	fff = my_fopen(buf, "a");
-
-	/* Failure */
-	if (!fff) {
-#ifdef JP
-		msg_format("%s を開くことができませんでした。", buf);
-#else
-		msg_format("Failed to open %s.", buf);
-#endif
-		msg_print(NULL);
-		return (-1);
-	}
-
-
-	/* Skip space */
-	fprintf(fff, "\n\n");
+	fff = open_auto_dump(buf, mark, &line_num);
+	if (!fff) return -1;
 
 	/* Start dumping */
 #ifdef JP
-	fprintf(fff, "# 自動キー配置セーブ\n\n");
+	fprintf(fff, "\n# 自動キー配置セーブ\n\n");
 #else
-	fprintf(fff, "# Automatic keymap dump\n\n");
+	fprintf(fff, "\n# Automatic keymap dump\n\n");
 #endif
-
+	line_num += 3;
 
 	/* Dump them */
 	for (i = 0; i < 256; i++)
@@ -2485,14 +2643,11 @@ static errr keymap_dump(cptr fname)
 		/* Dump the macro */
 		fprintf(fff, "A:%s\n", buf);
 		fprintf(fff, "C:%d:%s\n", mode, key);
+		line_num += 2;
 	}
 
-	/* Start dumping */
-	fprintf(fff, "\n\n\n");
-
-
 	/* Close */
-	my_fclose(fff);
+	close_auto_dump(fff, mark, line_num);
 
 	/* Success */
 	return (0);
@@ -3208,6 +3363,9 @@ void do_cmd_visuals(void)
 		/* Dump monster attr/chars */
 		else if (i == '2')
 		{
+			static cptr mark = "Monster attr/chars";
+			int line_num;
+
 			/* Prompt */
 #ifdef JP
 			prt("コマンド: モンスターの[色/文字]をファイルに書き出します", 15, 0);
@@ -3237,30 +3395,19 @@ void do_cmd_visuals(void)
 			safe_setuid_drop();
 
 			/* Append to the file */
-			fff = my_fopen(buf, "a");
+			fff = open_auto_dump(buf, mark, &line_num);
+			if (!fff) continue;
 
 			/* Grab priv's */
 			safe_setuid_grab();
 
-			/* Failure */
-			if (!fff) {
-#ifdef JP
-				msg_format("%s を開くことができませんでした。", buf);
-#else
-				msg_format("Failed to open %s.", buf);
-#endif
-				msg_print(NULL);
-				continue;
-			}
-
 			/* Start dumping */
-			fprintf(fff, "\n\n");
 #ifdef JP
-			fprintf(fff, "# モンスターの[色/文字]の設定\n\n");
+			fprintf(fff, "\n# モンスターの[色/文字]の設定\n\n");
 #else
-			fprintf(fff, "# Monster attr/char definitions\n\n");
+			fprintf(fff, "\n# Monster attr/char definitions\n\n");
 #endif
-
+			line_num += 3;
 
 			/* Dump monsters */
 			for (i = 0; i < max_r_idx; i++)
@@ -3272,18 +3419,16 @@ void do_cmd_visuals(void)
 
 				/* Dump a comment */
 				fprintf(fff, "# %s\n", (r_name + r_ptr->name));
-
+				line_num++;
 
 				/* Dump the monster attr/char info */
 				fprintf(fff, "R:%d:0x%02X:0x%02X\n\n", i,
 				        (byte)(r_ptr->x_attr), (byte)(r_ptr->x_char));
+				line_num += 2;
 			}
 
-			/* All done */
-			fprintf(fff, "\n\n\n\n");
-
 			/* Close */
-			my_fclose(fff);
+			close_auto_dump(fff, mark, line_num);
 
 			/* Message */
 #ifdef JP
@@ -3297,6 +3442,9 @@ void do_cmd_visuals(void)
 		/* Dump object attr/chars */
 		else if (i == '3')
 		{
+			static cptr mark = "Object attr/chars";
+			int line_num;
+
 			/* Prompt */
 #ifdef JP
 			prt("コマンド: アイテムの[色/文字]をファイルに書き出します", 15, 0);
@@ -3326,30 +3474,19 @@ void do_cmd_visuals(void)
 			safe_setuid_drop();
 
 			/* Append to the file */
-			fff = my_fopen(buf, "a");
+			fff = open_auto_dump(buf, mark, &line_num);
+			if (!fff) continue;
 
 			/* Grab priv's */
 			safe_setuid_grab();
 
-			/* Failure */
-			if (!fff) {
-#ifdef JP
-				msg_format("%s を開くことができませんでした。", buf);
-#else
-				msg_format("Failed to open %s.", buf);
-#endif
-				msg_print(NULL);
-				continue;
-			}
-
 			/* Start dumping */
-			fprintf(fff, "\n\n");
 #ifdef JP
-			fprintf(fff, "# アイテムの[色/文字]の設定\n\n");
+			fprintf(fff, "\n# アイテムの[色/文字]の設定\n\n");
 #else
-			fprintf(fff, "# Object attr/char definitions\n\n");
+			fprintf(fff, "\n# Object attr/char definitions\n\n");
 #endif
-
+			line_num += 3;
 
 			/* Dump objects */
 			for (i = 0; i < max_k_idx; i++)
@@ -3361,18 +3498,16 @@ void do_cmd_visuals(void)
 
 				/* Dump a comment */
 				fprintf(fff, "# %s\n", (k_name + k_ptr->name));
-
+				line_num++;
 
 				/* Dump the object attr/char info */
 				fprintf(fff, "K:%d:0x%02X:0x%02X\n\n", i,
 				        (byte)(k_ptr->x_attr), (byte)(k_ptr->x_char));
+				line_num += 2;
 			}
 
-			/* All done */
-			fprintf(fff, "\n\n\n\n");
-
 			/* Close */
-			my_fclose(fff);
+			close_auto_dump(fff, mark, line_num);
 
 			/* Message */
 #ifdef JP
@@ -3386,6 +3521,9 @@ void do_cmd_visuals(void)
 		/* Dump feature attr/chars */
 		else if (i == '4')
 		{
+			static cptr mark = "Feature attr/chars";
+			int line_num;
+
 			/* Prompt */
 #ifdef JP
 			prt("コマンド: 地形の[色/文字]をファイルに書き出します", 15, 0);
@@ -3415,30 +3553,19 @@ void do_cmd_visuals(void)
 			safe_setuid_drop();
 
 			/* Append to the file */
-			fff = my_fopen(buf, "a");
+			fff = open_auto_dump(buf, mark, &line_num);
+			if (!fff) continue;
 
 			/* Grab priv's */
 			safe_setuid_grab();
 
-			/* Failure */
-			if (!fff) {
-#ifdef JP
-				msg_format("%s を開くことができませんでした。", buf);
-#else
-				msg_format("Failed to open %s.", buf);
-#endif
-				msg_print(NULL);
-				continue;
-			}
-
 			/* Start dumping */
-			fprintf(fff, "\n\n");
 #ifdef JP
-			fprintf(fff, "# 地形の[色/文字]の設定\n\n");
+			fprintf(fff, "\n# 地形の[色/文字]の設定\n\n");
 #else
-			fprintf(fff, "# Feature attr/char definitions\n\n");
+			fprintf(fff, "\n# Feature attr/char definitions\n\n");
 #endif
-
+			line_num += 3;
 
 			/* Dump features */
 			for (i = 0; i < max_f_idx; i++)
@@ -3450,17 +3577,16 @@ void do_cmd_visuals(void)
 
 				/* Dump a comment */
 				fprintf(fff, "# %s\n", (f_name + f_ptr->name));
+				line_num++;
 
 				/* Dump the feature attr/char info */
 				fprintf(fff, "F:%d:0x%02X:0x%02X\n\n", i,
 				        (byte)(f_ptr->x_attr), (byte)(f_ptr->x_char));
+				line_num += 2;
 			}
 
-			/* All done */
-			fprintf(fff, "\n\n\n\n");
-
 			/* Close */
-			my_fclose(fff);
+			close_auto_dump(fff, mark, line_num);
 
 			/* Message */
 #ifdef JP
@@ -3490,9 +3616,9 @@ void do_cmd_visuals(void)
 				monster_race *r_ptr = &r_info[r];
 
 				byte da = (r_ptr->d_attr);
-				char dc = (r_ptr->d_char);
+				byte dc = (r_ptr->d_char);
 				byte ca = (r_ptr->x_attr);
-				char cc = (r_ptr->x_char);
+				byte cc = (r_ptr->x_char);
 
 				/* Label the object */
 #ifdef JP
@@ -3575,9 +3701,9 @@ void do_cmd_visuals(void)
 				object_kind *k_ptr = &k_info[k];
 
 				byte da = (byte)k_ptr->d_attr;
-				char dc = (byte)k_ptr->d_char;
+				byte dc = (byte)k_ptr->d_char;
 				byte ca = (byte)k_ptr->x_attr;
-				char cc = (byte)k_ptr->x_char;
+				byte cc = (byte)k_ptr->x_char;
 
 				/* Label the object */
 #ifdef JP
@@ -3660,9 +3786,9 @@ void do_cmd_visuals(void)
 				feature_type *f_ptr = &f_info[f];
 
 				byte da = (byte)f_ptr->d_attr;
-				char dc = (byte)f_ptr->d_char;
+				byte dc = (byte)f_ptr->d_char;
 				byte ca = (byte)f_ptr->x_attr;
-				char cc = (byte)f_ptr->x_char;
+				byte cc = (byte)f_ptr->x_char;
 
 				/* Label the object */
 #ifdef JP
@@ -3867,6 +3993,9 @@ void do_cmd_colors(void)
 		/* Dump colors */
 		else if (i == '2')
 		{
+			static cptr mark = "Colors";
+			int line_num;
+
 			/* Prompt */
 #ifdef JP
 			prt("コマンド: カラーの設定をファイルに書き出します", 8, 0);
@@ -3896,30 +4025,19 @@ void do_cmd_colors(void)
 			safe_setuid_drop();
 
 			/* Append to the file */
-			fff = my_fopen(buf, "a");
+			fff = open_auto_dump(buf, mark, &line_num);
+			if (!fff) continue;
 
 			/* Grab priv's */
 			safe_setuid_grab();
 
-			/* Failure */
-			if (!fff) {
-#ifdef JP
-				msg_format("%s を開くことができませんでした。", buf);
-#else
-				msg_format("Failed to open %s.", buf);
-#endif
-				msg_print(NULL);
-				continue;
-			}
-
 			/* Start dumping */
-			fprintf(fff, "\n\n");
 #ifdef JP
-			fprintf(fff, "# カラーの設定\n\n");
+			fprintf(fff, "\n# カラーの設定\n\n");
 #else
-			fprintf(fff, "# Color redefinitions\n\n");
+			fprintf(fff, "\n# Color redefinitions\n\n");
 #endif
-
+			line_num += 3;
 
 			/* Dump colors */
 			for (i = 0; i < 256; i++)
@@ -3948,18 +4066,16 @@ void do_cmd_colors(void)
 #else
 				fprintf(fff, "# Color '%s'\n", name);
 #endif
-
+				line_num++;
 
 				/* Dump the monster attr/char info */
 				fprintf(fff, "V:%d:0x%02X:0x%02X:0x%02X:0x%02X\n\n",
 				        i, kv, rv, gv, bv);
+				line_num += 2;
 			}
 
-			/* All done */
-			fprintf(fff, "\n\n\n\n");
-
 			/* Close */
-			my_fclose(fff);
+			close_auto_dump(fff, mark, line_num);
 
 			/* Message */
 #ifdef JP
@@ -4819,7 +4935,7 @@ static void do_cmd_knowledge_inven(void)
 	store_type  *st_ptr;
 	object_type *o_ptr;
 
-	int tval;
+	byte tval;
 	int i=0;
         int j=0;
 
@@ -4892,7 +5008,7 @@ static void do_cmd_knowledge_inven(void)
 #ifdef JP
 	show_file(TRUE, file_name, "*鑑定*済み武器/防具の耐性リスト", 0, 0);
 #else
-	show_file(TRUE, file_name, "Resistances of *identifyed* equipment", 0, 0);
+	show_file(TRUE, file_name, "Resistances of *identified* equipment", 0, 0);
 #endif
 
 	/* Remove the file */
@@ -5072,7 +5188,11 @@ void do_cmd_save_screen_html(void)
 {
 	char buf[1024], tmp[256] = "screen.html";
 
+#ifdef JP
 	if (!get_string("ファイル名: ", tmp, 80))
+#else
+	if (!get_string("File name: ", tmp, 80))
+#endif
 		return;
 
 	/* Build the filename */
@@ -5447,7 +5567,7 @@ strcpy(base_name, "未知の伝説のアイテム");
 			object_prep(q_ptr, z);
 
 			/* Make it an artifact */
-			q_ptr->name1 = who[k];
+			q_ptr->name1 = (byte)who[k];
 
 			/* Describe the artifact */
 			object_desc_store(base_name, q_ptr, FALSE, 0);
@@ -5750,7 +5870,11 @@ static void do_cmd_knowledge_spell_exp(void)
 
 	if(p_ptr->realm1 != REALM_NONE)
 	{
+#ifdef JP
 		fprintf(fff,"%sの魔法書\n",realm_names[p_ptr->realm1]);
+#else
+		fprintf(fff,"%s Spellbook\n",realm_names[p_ptr->realm1]);
+#endif
 		for (i = 0; i < 32; i++)
 		{
 			if (!is_magic(p_ptr->realm1))
@@ -5783,7 +5907,7 @@ static void do_cmd_knowledge_spell_exp(void)
 
 	if(p_ptr->realm2 != REALM_NONE)
 	{
-		fprintf(fff,"\n%sの魔法書\n",realm_names[p_ptr->realm2]);
+		fprintf(fff,"\n%s Spellbook\n",realm_names[p_ptr->realm2]);
 		for (i = 0; i < 32; i++)
 		{
 			if (!is_magic(p_ptr->realm1))
@@ -6520,7 +6644,11 @@ void do_cmd_knowledge_dungeon(void)
 				if (!r_info[d_info[i].final_guardian].max_num) seiha = TRUE;
 			}
 			else if (max_dlv[i] == d_info[i].maxdepth) seiha = TRUE;
+#ifdef JP
 			fprintf(fff,"%c%-12s :  %3d 階\n", seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
+#else
+			fprintf(fff,"%c%-16s :  level %3d\n", seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
+#endif
 		}
 	}
 	
@@ -6961,7 +7089,11 @@ sprintf(rand_tmp_str,"%s (%d 階) - %sを倒す。\n",
 			fprintf(fff, tmp_str);
 		}
 	}
+#ifdef JP
 	if (!total) fprintf(fff, "なし\n");
+#else
+	if (!total) fprintf(fff, "Nothing.\n");
+#endif
 	}	
 
 	/* Close the file */
@@ -7073,147 +7205,250 @@ show_file(TRUE, file_name, "我が家のアイテム", 0, 0);
 	fd_kill(file_name);
 }
 
+
+/*
+ * Check the status of "autopick"
+ */
+static void do_cmd_knowledge_autopick(void)
+{
+	int k;
+	FILE *fff;
+	char file_name[1024];
+
+	/* Open a new file */
+	fff = my_fopen_temp(file_name, 1024);
+
+	if (!fff)
+	{
+#ifdef JP
+	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
+#else
+	    msg_format("Failed to create temporary file %s.", file_name);
+#endif
+	    msg_print(NULL);
+	    return;
+	}
+
+	if (!max_autopick)
+	{
+#ifdef JP
+	    fprintf(fff, "自動破壊/拾いには何も登録されていません。");
+#else
+	    fprintf(fff, "No preference for auto picker/destroyer.");
+#endif
+	}
+	else
+	{
+#ifdef JP
+	    fprintf(fff, "   自動拾い/破壊には現在 %d行登録されています。\n\n", max_autopick);
+#else
+	    fprintf(fff, "   There are %d registered lines for auto picker/destroyer.\n\n", max_autopick);
+#endif
+	}
+
+	for (k = 0; k < max_autopick; k++)
+	{
+		if (!(autopick_action[k] & DO_AUTOPICK))
+		{
+#ifdef JP
+			fprintf(fff, "     [放置]");
+#else
+			fprintf(fff, "    [Leave]");
+#endif
+		}
+		else if ((autopick_action[k] & DO_AUTODESTROY))
+		{
+#ifdef JP
+			fprintf(fff, "     [破壊]");
+#else
+			fprintf(fff, "  [Destroy]");
+#endif
+		}
+		else
+		{
+#ifdef JP
+			fprintf(fff, "     [拾う]");
+#else
+			fprintf(fff, "   [Pickup]");
+#endif
+		}
+
+		fprintf(fff, " %s", autopick_name[k]);
+		if(autopick_insc[k] != NULL)
+			fprintf(fff, " {%s}", autopick_insc[k]);
+		fprintf(fff, "\n");
+	}
+	/* Close the file */
+	my_fclose(fff);
+	/* Display the file contents */
+#ifdef JP
+	show_file(TRUE, file_name, "自動拾い/破壊 設定リスト", 0, 0);
+#else
+	show_file(TRUE, file_name, "Auto-picker/Destroyer", 0, 0);
+#endif
+
+	/* Remove the file */
+	fd_kill(file_name);
+}
+
+
+
 /*
  * Interact with "knowledge"
  */
 void do_cmd_knowledge(void)
 {
-	int i;
-
+	int i,p=0;
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
-
 	/* Save the screen */
 	screen_save();
-
 	/* Interact until done */
 	while (1)
 	{
 		/* Clear screen */
 		Term_clear();
-
 		/* Ask for a choice */
 #ifdef JP
-		prt("現在の知識を確認する", 2, 0);
+		prt(format("%d/2 ページ", (p+1)), 2, 65);
+		prt("現在の知識を確認する", 3, 0);
 #else
-		prt("Display current knowledge", 2, 0);
+		prt(format("page %d/2", (p+1)), 2, 65);
+		prt("Display current knowledge", 3, 0);
 #endif
-
 
 		/* Give some choices */
 #ifdef JP
-		prt("(1) 既知の伝説のアイテム                 の一覧", 4, 5);
-		prt("(2) 既知の生きているユニーク・モンスター の一覧", 5, 5);
-		prt("(3) 倒したユニーク・モンスター           の一覧", 6, 5);
-		prt("(4) 既知のアイテム                       の一覧", 7, 5);
-		prt("(5) 倒した敵の数                         の一覧", 8, 5);
-		prt("(6) 突然変異                             の一覧", 9, 5);
-		prt("(7) 現在のペット                         の一覧", 10, 5);
-		prt("(8) 実行中のクエスト                     の一覧", 11, 5);
-		prt("(9) プレイヤーの徳                       の一覧", 12, 5);
-		prt("(a) 武器の経験値                         の一覧", 13, 5);
-		prt("(b) 魔法の経験値                         の一覧", 14, 5);
-		prt("(c) 技能の経験値                         の一覧", 15, 5);
-		prt("(d) 賞金首                               の一覧", 16, 5);
-		prt("(e) 我が家のアイテム                     の一覧", 17, 5);
-		prt("(f) *鑑定*済み装備の耐性                 の一覧", 18, 5);
-		prt("(g) 自分に関する情報                     の一覧", 19, 5);
-		prt("(h) 入ったダンジョン                     の一覧", 20, 5);
+		if (p == 0) {
+			prt("(1) 既知の伝説のアイテム                 の一覧", 6, 5);
+			prt("(2) 既知のアイテム                       の一覧", 7, 5);
+			prt("(3) 既知の生きているユニーク・モンスター の一覧", 8, 5);
+			prt("(4) 倒したユニーク・モンスター           の一覧", 9, 5);
+			prt("(5) 倒した敵の数                         の一覧", 10, 5);
+			prt("(6) 賞金首                               の一覧", 11, 5);
+			prt("(7) 現在のペット                         の一覧", 12, 5);
+			prt("(8) 我が家のアイテム                     の一覧", 13, 5);
+			prt("(9) *鑑定*済み装備の耐性                 の一覧", 14, 5);
+		} else {
+			prt("(a) 自分に関する情報                     の一覧", 6, 5);
+			prt("(b) 突然変異                             の一覧", 7, 5);
+			prt("(c) 武器の経験値                         の一覧", 8, 5);
+			prt("(d) 魔法の経験値                         の一覧", 9, 5);
+			prt("(e) 技能の経験値                         の一覧", 10, 5);
+			prt("(f) プレイヤーの徳                       の一覧", 11, 5);
+			prt("(g) 入ったダンジョン                     の一覧", 12, 5);
+			prt("(h) 実行中のクエスト                     の一覧", 13, 5);
+			prt("(i) 現在の自動拾い/破壊設定              の一覧", 14, 5);
+		}
 #else
-		prt("(1) Display known artifacts", 4, 5);
-		prt("(2) Display known uniques", 5, 5);
-		prt("(3) Display dead uniques", 6, 5);
-		prt("(4) Display known objects", 7, 5);
-		prt("(5) Display kill count", 8, 5);
-		prt("(6) Display mutations", 9, 5);
-		prt("(7) Display current pets", 10, 5);
-		prt("(8) Display current quests", 11, 5);
-		prt("(9) Display virtues", 12, 5);
-		prt("(a) Display weapon proficiency", 13, 5);
-		prt("(b) Display spell proficiency", 14, 5);
-		prt("(c) Display misc. proficiency", 15, 5);
-		prt("(d) Display wanted monsters", 16, 5);
-		prt("(e) Display home inventory", 17, 5);
-		prt("(f) Display *identifyed* equip.", 18, 5);
-		prt("(g) Display about yourself", 19, 5);
-		prt("(h) Display dungeons", 20, 5);
+		if (p == 0) {
+			prt("(1) Display known artifacts", 6, 5);
+			prt("(2) Display known objects", 7, 5);
+			prt("(3) Display known uniques", 8, 5);
+			prt("(4) Display dead uniques", 9, 5);
+			prt("(5) Display kill count", 10, 5);
+			prt("(6) Display wanted monsters", 11, 5);
+			prt("(7) Display current pets", 12, 5);
+			prt("(8) Display home inventory", 13, 5);
+			prt("(9) Display *identified* equip.", 14, 5);
+		} else {
+			prt("(a) Display about yourself", 6, 5);
+			prt("(b) Display mutations", 7, 5);
+			prt("(c) Display weapon proficiency", 8, 5);
+			prt("(d) Display spell proficiency", 9, 5);
+			prt("(e) Display misc. proficiency", 10, 5);
+			prt("(f) Display virtues", 11, 5);
+			prt("(g) Display dungeons", 12, 5);
+			prt("(h) Display current quests", 13, 5);
+			prt("(i) Display auto pick/destroy", 14, 5);
+		}
 #endif
-
 		/* Prompt */
 #ifdef JP
-		prt("コマンド:", 22, 0);
+		prt("-続く-", 16, 8);
+		prt("ESC) 抜ける", 21, 1);
+		prt("SPACE) 次ページ", 21, 30);
+		/*prt("-) 前ページ", 21, 60);*/
+		prt("コマンド:", 20, 0);
 #else
-		prt("Command: ", 22, 0);
+		prt("-more-", 16, 8);
+		prt("ESC) Exit menu", 21, 1);
+		prt("SPACE) Next page", 21, 30);
+		/*prt("-) Previous page", 21, 60);*/
+		prt("Command: ", 20, 0);
 #endif
-
 
 		/* Prompt */
 		i = inkey();
-
 		/* Done */
 		if (i == ESCAPE) break;
-
 		switch (i)
 		{
+		case ' ': /* Page change */
+		case '-':
+			p = 1 - p;
+			break;
 		case '1': /* Artifacts */
 			do_cmd_knowledge_artifacts();
 			break;
-		case '2': /* Uniques */
-			do_cmd_knowledge_uniques();
+		case '2': /* Objects */
+			do_cmd_knowledge_objects();
 			break;
 		case '3': /* Uniques */
-			do_cmd_knowledge_uniques_dead();
+			do_cmd_knowledge_uniques();
 			break;
-		case '4': /* Objects */
-			do_cmd_knowledge_objects();
+		case '4': /* Uniques */
+			do_cmd_knowledge_uniques_dead();
 			break;
 		case '5': /* Kill count  */
 			do_cmd_knowledge_kill_count();
 			break;
-		case '6': /* Mutations */
-			do_cmd_knowledge_mutations();
+		case '6': /* wanted */
+			do_cmd_knowledge_kubi();
 			break;
 		case '7': /* Pets */
 			do_cmd_knowledge_pets();
 			break;
-		case '8': /* Quests */
-			do_cmd_knowledge_quests();
-			break;
-		case '9': /* Virtues */
-			do_cmd_knowledge_virtues();
-			break;
-		case 'a': /* weapon-exp */
-			do_cmd_knowledge_weapon_exp();
-			break;
-		case 'b': /* spell-exp */
-			do_cmd_knowledge_spell_exp();
-			break;
-		case 'c': /* skill-exp */
-			do_cmd_knowledge_skill_exp();
-			break;
-		case 'd': /* skill-exp */
-			do_cmd_knowledge_kubi();
-			break;
-		case 'e': /* skill-exp */
+		case '8': /* Home */
 			do_cmd_knowledge_home();
 			break;
-		case 'f': /* Resist list */
+		case '9': /* Resist list */
 			do_cmd_knowledge_inven();
 			break;
-		case 'g': /* Max stat */
+		/* Next page */
+		case 'a': /* Max stat */
 			do_cmd_knowledge_stat();
 			break;
-		case 'h': /* Dungeon */
+		case 'b': /* Mutations */
+			do_cmd_knowledge_mutations();
+			break;
+		case 'c': /* weapon-exp */
+			do_cmd_knowledge_weapon_exp();
+			break;
+		case 'd': /* spell-exp */
+			do_cmd_knowledge_spell_exp();
+			break;
+		case 'e': /* skill-exp */
+			do_cmd_knowledge_skill_exp();
+			break;
+		case 'f': /* Virtues */
+			do_cmd_knowledge_virtues();
+			break;
+		case 'g': /* Dungeon */
 			do_cmd_knowledge_dungeon();
+			break;
+		case 'h': /* Quests */
+			do_cmd_knowledge_quests();
+			break;
+		case 'i': /* Autopick */
+			do_cmd_knowledge_autopick();
 			break;
 		default: /* Unknown option */
 			bell();
 		}
-
 		/* Flush messages */
 		msg_print(NULL);
 	}
-
 	/* Restore the screen */
 	screen_load();
 }

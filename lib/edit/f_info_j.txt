@@ -1,4 +1,3 @@
-# CVS: Last edit by $Author$ on $Date$
 # File: f_info.txt
 
 
@@ -565,7 +564,7 @@ E:flower
 G:::G
 
 N:94:Áð¤à¤é
-E:kusamura
+E:brake
 G:#:g
 
 N:95:ÇîÊª´Û

@@ -1,4 +1,3 @@
-# CVS: Last edit by $Author$ on $Date$
 # File: e_info.txt
 #JZ# Zangband 日本語訳: 板倉
 #JZ# 「#J0#」で始まるコメントは日本語板 Angband のしとしんさんによる

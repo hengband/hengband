@@ -1904,7 +1904,7 @@ if (why) msg_format("生成やり直し(%s)", why);
 	/* The dungeon is ready */
 	character_dungeon = TRUE;
 
-	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN) wiz_lite(TRUE, (p_ptr->pclass == CLASS_NINJA));
+	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN) wiz_lite(TRUE, (bool)(p_ptr->pclass == CLASS_NINJA));
 
 	/* Remember when this level was "created" */
 	old_turn = turn;

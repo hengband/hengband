@@ -192,7 +192,11 @@ bool make_attack_normal(int m_idx)
 
 	if (p_ptr->special_defense & KATA_IAI)
 	{
+#ifdef JP
 		msg_print("相手が襲いかかる前に素早く武器を振るった。");
+#else
+		msg_format("You took sen, draw and cut in one motion before %s move.", m_name);
+#endif
 		if (py_attack(m_ptr->fy, m_ptr->fx, HISSATSU_IAI)) return TRUE;
 	}
 
@@ -308,7 +312,7 @@ bool make_attack_normal(int m_idx)
 				    msg_format("撃退した。");
 				else
 				    msg_format("%^sは撃退された。", m_name);
-				syouryaku = 1;/*２回目以降は省略*/
+				syouryaku = 1;/*２回目以降は省略 */
 #else
 				msg_format("%^s is repelled.", m_name);
 #endif
@@ -704,7 +708,7 @@ bool make_attack_normal(int m_idx)
 				    msg_format("%s", act);
 				else /*if(syouryaku==-1)*/
 				    msg_format("%^s%s", m_name, act);
-				syouryaku = 1;/*２回目以降は省略*/
+				syouryaku = 1;/*２回目以降は省略 */
 #else
 				msg_format("%^s %s", m_name, act);
 #endif
@@ -2193,7 +2197,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					    msg_format("%sかわした。", (p_ptr->special_attack & ATTACK_SUIKEN) ? "奇妙な動きで" : "");
 					else
 					    msg_format("%s%^sの攻撃をかわした。", (p_ptr->special_attack & ATTACK_SUIKEN) ? "奇妙な動きで" : "", m_name);
-					syouryaku = 1;/*２回目以降は省略*/
+					syouryaku = 1;/*２回目以降は省略 */
 #else
 					msg_format("%^s misses you.", m_name);
 #endif
@@ -2247,7 +2251,11 @@ msg_format("%^sから落ちてしまった！", m_name);
 		monster_desc(m_name, m_ptr, 0);
 
 		p_ptr->csp -= 7;
+#ifdef JP
 		msg_format("%^sに反撃した！", m_name);
+#else
+		msg_format("Your counterattack to %s!", m_name);
+#endif
 		py_attack(m_ptr->fy, m_ptr->fx, HISSATSU_COUNTER);
 		fear = FALSE;
 	}

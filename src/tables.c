@@ -14830,8 +14830,8 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 	/* Mage */
 	{
 				/*"¸«½¬¤¤",*/
-                "Îý½¬À¸",                 /*ÃúÃÕ¡¢Îý½¬À¸*/
-                "´ñ½Ñ»Õ",               /*º¾µ½»Õ¡¢¥Ú¥Æ¥ó»Õ*/
+                "Îý½¬À¸",                 /*ÃúÃÕ¡¢Îý½¬À¸ */
+                "´ñ½Ñ»Õ",               /*º¾µ½»Õ¡¢¥Ú¥Æ¥ó»Õ */
                 "¸¸½Ñ»Õ",
                 "¼ö½Ñ»Õ",
                 "¾¤Îî»Õ",
@@ -14844,26 +14844,26 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 
 	/* Priest */
 	{
-                "¿®¼Ô",                 /*¿®ÅÌ*/
-                "»øÁÎ",             /*¶µ²ñÊô»Å¼Ô¡¢¸«½¬¤¤ÁÎ¡¢È¼ÁÎ¡¢½¾¼Ô*/
+                "¿®¼Ô",                 /*¿®ÅÌ */
+                "»øÁÎ",             /*¶µ²ñÊô»Å¼Ô¡¢¸«½¬¤¤ÁÎ¡¢È¼ÁÎ¡¢½¾¼Ô */
                 "½ÏÎýÁÎ",
-                "À»¿¦¼Ô",                 /*À»¿¦¼Ô*/
-                "ÅÁÆ»»Õ",               /*»Êº×É¾µÄ°÷¡¢½¤Æ»²ñ²ñ°÷*/
-                "ËÒ»Õ",               /*¥é¥Þ¶µ¤ÎÁÎ*/
-                "À»¿Í",               /*Âç»Ê¶µ¡¢Áí¼ç¶µ¡¢ÁíÂç»Ê¶µ*/
-                "º×»Ê",                 /*º×»Ê¡¢»Êº×*/
-                "º×»ÊÄ¹",               /*Âçº×»Ê¡¢º×»ÊÄ¹*/
+                "À»¿¦¼Ô",                 /*À»¿¦¼Ô */
+                "ÅÁÆ»»Õ",               /*»Êº×É¾µÄ°÷¡¢½¤Æ»²ñ²ñ°÷ */
+                "ËÒ»Õ",               /*¥é¥Þ¶µ¤ÎÁÎ */
+                "À»¿Í",               /*Âç»Ê¶µ¡¢Áí¼ç¶µ¡¢ÁíÂç»Ê¶µ */
+                "º×»Ê",                 /*º×»Ê¡¢»Êº× */
+                "º×»ÊÄ¹",               /*Âçº×»Ê¡¢º×»ÊÄ¹ */
                 "¶µ¹Ä",
 	},
 
 	/* Rogues */
 	{
-		/* "¤´¤í¤Ä¤­",*/                     /*¤´¤í¤Ä¤­¡¢É÷ÍèË·¡¢ÉâÏ²¼Ô*/
+		/* "¤´¤í¤Ä¤­",*/                     /*¤´¤í¤Ä¤­¡¢É÷ÍèË·¡¢ÉâÏ²¼Ô */
                 "¤¹¤ê",
-                "ÄÉ¤¤¤Ï¤®",                     /*ÄÉ¤¤Çí¤®¡¢¶¯Åð¡¢Å¥ËÀ*/
-                "ÌëÅð",                         /*¶¯Åð¡¢ÌëÅð¡¢Å¥ËÀ*/
-                "¤³¤½Å¥",                       /*¤³¤½Å¥¡¢¾®Å¥ËÀ*/
-                "¥Ú¥Æ¥ó»Õ",                     /*ÇîÅÌ¡¢¥Ú¥Æ¥ó»Õ¡¢º¾µ½»Õ*/
+                "ÄÉ¤¤¤Ï¤®",                     /*ÄÉ¤¤Çí¤®¡¢¶¯Åð¡¢Å¥ËÀ */
+                "ÌëÅð",                         /*¶¯Åð¡¢ÌëÅð¡¢Å¥ËÀ */
+                "¤³¤½Å¥",                       /*¤³¤½Å¥¡¢¾®Å¥ËÀ */
+                "¥Ú¥Æ¥ó»Õ",                     /*ÇîÅÌ¡¢¥Ú¥Æ¥ó»Õ¡¢º¾µ½»Õ */
                 "¥í¥¦¥·¡¼¥Õ",
                 "¥Ï¥¤¥·¡¼¥Õ",
                 "¥Þ¥¹¥¿¡¼¥·¡¼¥Õ",
@@ -14875,11 +14875,11 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 	{
                 "»È¤¤Áö¤ê",
                 "ÃÚÉ×",
-                "ÀÍ¸õ",                         /*ÀÍ¸õ¡¢¸«Ä¥¤ê¡¢Äå»¡Ê¼*/
+                "ÀÍ¸õ",                         /*ÀÍ¸õ¡¢¸«Ä¥¤ê¡¢Äå»¡Ê¼ */
                 "¼í¿Í",
                 "ÄÉÀ×¼Ô",
                 "ÀèÆ³¼Ô",
-                "Ãµ¸±¼Ô",                       /*³«Âó¼Ô¡¢Ãµ¸±¼Ô*/
+                "Ãµ¸±¼Ô",                       /*³«Âó¼Ô¡¢Ãµ¸±¼Ô */
                 "ÌîÉú",
                 "ÌîÉúÆ¬",
                 "ÌîÉú¤ÎÁíÎÎ",
@@ -14887,7 +14887,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 
 	/* Paladins */
 	{
-                "Í¦»Î",                 /*¿§ÃË¡¢°¦¿Í¡¢¤·¤ã¤ì¼Ô¡¢Í¦´º¤Ê¿Í*/
+                "Í¦»Î",                 /*¿§ÃË¡¢°¦¿Í¡¢¤·¤ã¤ì¼Ô¡¢Í¦´º¤Ê¿Í */
                 "±Ò»Î",
                 "ÊÝ¸î¼Ô",
                 "ËÉ±Ò¼Ô",
@@ -14902,7 +14902,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 	/* Warrior-Mage */
 	{
 		"¸«½¬¤¤",
-		"ÅÌÄï",			/*ÃúÃÕ¡¢Îý½¬À¸*/
+		"ÅÌÄï",			/*ÃúÃÕ¡¢Îý½¬À¸ */
 		"°ì¿ÍÁ°",
 		"¸Å»²Ê¼",
 		"Ëâ½ÑÊ¼»Î",
@@ -14959,8 +14959,8 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 	/* High Mage; same as Mage */
 	{
 				/*"¸«½¬¤¤",*/
-                "Îý½¬À¸",                 /*ÃúÃÕ¡¢Îý½¬À¸*/
-                "´ñ½Ñ»Õ",               /*º¾µ½»Õ¡¢¥Ú¥Æ¥ó»Õ*/
+                "Îý½¬À¸",                 /*ÃúÃÕ¡¢Îý½¬À¸ */
+                "´ñ½Ñ»Õ",               /*º¾µ½»Õ¡¢¥Ú¥Æ¥ó»Õ */
                 "¸¸½Ñ»Õ",
                 "¼ö½Ñ»Õ",
                 "¾¤Îî»Õ",
@@ -15016,8 +15016,8 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 	/* Sorcerer; same as Mage */
 	{
 				/*"¸«½¬¤¤",*/
-                "Îý½¬À¸",                 /*ÃúÃÕ¡¢Îý½¬À¸*/
-                "´ñ½Ñ»Õ",               /*º¾µ½»Õ¡¢¥Ú¥Æ¥ó»Õ*/
+                "Îý½¬À¸",                 /*ÃúÃÕ¡¢Îý½¬À¸ */
+                "´ñ½Ñ»Õ",               /*º¾µ½»Õ¡¢¥Ú¥Æ¥ó»Õ */
                 "¸¸½Ñ»Õ",
                 "¼ö½Ñ»Õ",
                 "¾¤Îî»Õ",
@@ -15073,7 +15073,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 	/* Red Mage; same as Warrior-Mage */
 	{
 		"¸«½¬¤¤",
-		"ÅÌÄï",			/*ÃúÃÕ¡¢Îý½¬À¸*/
+		"ÅÌÄï",			/*ÃúÃÕ¡¢Îý½¬À¸ */
 		"°ì¿ÍÁ°",
 		"¸Å»²Ê¼",
 		"Ëâ½ÑÊ¼»Î",
@@ -15116,8 +15116,8 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 	/* Blue Mage; same as Mage */
 	{
 				/*"¸«½¬¤¤",*/
-                "Îý½¬À¸",                 /*ÃúÃÕ¡¢Îý½¬À¸*/
-                "´ñ½Ñ»Õ",               /*º¾µ½»Õ¡¢¥Ú¥Æ¥ó»Õ*/
+                "Îý½¬À¸",                 /*ÃúÃÕ¡¢Îý½¬À¸ */
+                "´ñ½Ñ»Õ",               /*º¾µ½»Õ¡¢¥Ú¥Æ¥ó»Õ */
                 "¸¸½Ñ»Õ",
                 "¼ö½Ñ»Õ",
                 "¾¤Îî»Õ",
@@ -16863,31 +16863,7 @@ option_type option_info[] =
 #endif
 
 
-	/*** Object Auto-Pick/Destroy ***/
-
-#ifdef JP
-        { &display_pick,                TRUE,  7, 7, 8,
-        "display_pick",                 "Á´ÂÎ¥Þ¥Ã¥×¤Ç¼«Æ°½¦¤¤¥¢¥¤¥Æ¥à¤òÉ½¼¨¤¹¤ë" },
-#else
-        { &display_pick,                TRUE,  7, 7, 8,
-        "display_pick",                 "Display auto-pick items on the small scale map" },
-#endif
-
-#ifdef JP
-        { &display_nopick,              FALSE, 7, 7, 9,
-        "display_nopick",               "Á´ÂÎ¥Þ¥Ã¥×¤Ç¾²¤ËÊüÃÖ¤¹¤ë¥¢¥¤¥Æ¥à¤òÉ½¼¨¤¹¤ë" },
-#else
-        { &display_nopick,              FALSE, 7, 7, 9,
-        "display_nopick",               "Display ignored items on the small scale map" },
-#endif
-
-#ifdef JP
-        { &display_destroy,             FALSE, 7, 7, 10,
-        "display_destroy",              "Á´ÂÎ¥Þ¥Ã¥×¤Ç¼«Æ°ÇË²õ¥¢¥¤¥Æ¥à¤òÉ½¼¨¤¹¤ë" },
-#else
-        { &display_destroy,             FALSE, 7, 7, 10,
-        "display_destroy",              "Display auto-destroy items on the small scale map" },
-#endif
+	/*** Easy Object Auto-Destroyer ***/
 
 #ifdef JP
         { &destroy_items,               FALSE, 7, 7, 0,

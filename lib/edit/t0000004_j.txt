@@ -1,4 +1,3 @@
-# CVS: Last edit by $Author$ on $Date$
 # Town Name: Angwil
 # Note: this is a mainly elven town, as you'll notice by the guild
 # leaders etc.
@@ -227,7 +226,7 @@ B:10:A:2:持ち物全てを鑑定:175:800:i:26:0
 B:$10:C:0:0:0:2:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0
 B:10:C:0:0:0:2:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0
 
-B:$11:N:Rangers Tavern:Celegail:Elf
+B:$11:N:Archers Tavern:Celegail:Elf
 B:11:N:アーチャーの酒場:ケレガイル:エルフ
 B:$11:A:0:Enchant missiles:22:44:a:30:0
 B:11:A:0:矢や石等を強化する:22:44:a:30:0

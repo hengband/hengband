@@ -1,4 +1,3 @@
-# CVS: Last edit by $Author$ on $Date$
 # q0000027.txt
 # The Old Castle
 # By Shayne Steele (steele@cs.fsu.edu)

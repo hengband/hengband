@@ -1536,14 +1536,13 @@ static void term_window_resize(term_data *td)
  */
 static errr term_force_font(term_data *td, cptr path)
 {
-	int i;
-
 	int wid, hgt;
 
+#ifndef JP
+	int i;
 	char *base;
-
 	char buf[1024];
-
+#endif
 
 	/* Forget the old font (if needed) */
 	if (td->font_id) DeleteObject(td->font_id);
@@ -1656,7 +1655,6 @@ static void term_change_font(term_data *td)
 {
 #ifdef JP
 	CHOOSEFONT cf;
-    LOGFONT    lf;
 
 	memset(&cf, 0, sizeof(cf));
 	cf.lStructSize = sizeof(cf);
@@ -2728,8 +2726,9 @@ static void init_windows(void)
 
 	term_data *td;
 
+#ifndef JP
 	char buf[1024];
-
+#endif
 
 	/* Main window */
 	td = &data[0];

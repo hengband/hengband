@@ -34,6 +34,8 @@
 #      this kind of object.  Starting a line with '~' indicates that you wish 
 #      to leave this kind of object on the floor.  Otherwise, your character 
 #      will automatically attempt to pick up the object.
+#           There is an additional command letter '('.  It indicates that 
+#      you don't wish this item to be displayed in full map. see below.
 #
 #      Notes:
 #      If you want to disable the effect of the '!' indicator temporally, 
@@ -133,10 +135,10 @@
 #      up, followed by a general item name with '!' to destroy useless items.
 #    
 #      ! Tips
-#      !  In full map command ('M'), you can press 'M' again to 
-#      !  display auto-pick items. The behavior of the display 
-#      !  is changed by options in 
-#      !  '(6) Object Auto-pick/Destroy Options'.
+#      !     In full map command ('M'), you can press M, N, K, or D to 
+#      ! display locations of items for auto-pickup, leaving, auto-destroy 
+#      ! or both auto-pickup and leaving.
+#      !     Additional command letter '(' prevents this display.
 #      !
 #
 #      If you begin the last string in a line with '#', this string will
@@ -227,6 +229,7 @@
 wanted corpse
 wanted Skeleton
 
+# Berserker cannot use magical devices; rods, wands, and scrolls.
 ?:[EQU $CLASS Berserker]
 !magical devices
 ?:1
@@ -234,24 +237,34 @@ wanted Skeleton
 unaware items
 
 #Artifact lights
-unidentified lites:^Jewel#!!
-unidentified lites:^stone
-unidentified lites:^star#!!
-unidentified lites:^Incandescent Light
-unidentified lites:^Phial#!!
+unidentified lights:^Jewel#!!
+unidentified lights:^levitatioin stone#!!
+unidentified lights:^Palantir#!!
+unidentified lights:^stone#@A0
+unidentified lights:^star#!!
+unidentified lights:^Incandescent Light
+unidentified lights:^Phial#!!
 
 # auto inscribe resistances...
-~*identified* weapons#%
-~*identified* armors#%
+~*identified* artifacts#%
 
+#
+# pick all items which can stack your inventry without inscription.
+#
+collecting rod
+collecting potion
+collecting scroll
+
+#
 # good items
-~rod of Perception#!k!!
+#
+~rod of Perception#@z0!k!!
 ~rod of speed#!k!!
 ~rod of Healing#!k!!
-~rod of Enlightenment#!k!!
-~rod of Detection#!k!d!!
+~rod of Enlightenment#k!!
+~rod of Detection#!k!!
 
-potion of Invulnerability#!*
+potion of Invulnerability#!k
 Acquirement#!k
 potion of Experience
 potion of Augmentation
@@ -265,14 +278,8 @@ potion of constitution
 potion of intelligence
 potion of Charisma
 
-potion of life#!*
+potion of life#!k
 healing#!k
-
-# pick all items which can stack your inventry
-
-collecting rod
-collecting potion
-collecting scroll
 
 #
 # Magic-Eaters pick up all magical device to absorb.
@@ -337,8 +344,8 @@ Iron Spike#@v0
 ?:1
 
 # higher rank of your spellbooks
-first realm's fourth Book of Samurai Arts#!k
-first realm's third Book of Samurai Arts#!k
+first realm's fourth Book of Kendo#!k
+first realm's third Book of Kendo#!k
 first realm's fourth spellbooks#@md!k
 first realm's third spellbooks#@mc!k
 second realm's fourth spellbooks#@mh!k

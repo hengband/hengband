@@ -1020,7 +1020,7 @@ static hist_type bg[] =
 	{"あなたは薄茶色の瞳、",                    70, 109, 110, 50},
 	{"あなたは緑色の瞳、",                    80, 109, 110, 50},
 	{"あなたは青い瞳、",                     90, 109, 110, 50},
-	{"あなたは淡青色の瞳、",               100, 109, 110, 50}, /*tansei.cc.u-tokyoの由来*/
+	{"あなたは淡青色の瞳、",               100, 109, 110, 50}, /*tansei.cc.u-tokyoの由来 */
 
 	{"なめらかな",                        70, 110, 111, 50},
 	{"波打った",                            90, 110, 111, 50},
@@ -1189,7 +1189,7 @@ static hist_type bg[] =
 	{"ニクシーでした。", 30, 125, 126, 25 },
 	{"森の妖精でした。", 75, 125, 126, 50 },
 	{"森の精霊でした。", 90, 125, 126, 75 },
-	{"妖精の貴族でした。", 100, 125, 126, 85 }, /*nuke me カタカナのほうがいいかも*/
+	{"妖精の貴族でした。", 100, 125, 126, 85 }, /*nuke me カタカナのほうがいいかも */
 #else
 	{"Your parents were ", 100, 124, 125, 50 },
 
@@ -2577,7 +2577,7 @@ static void get_extra(void)
 
 	/* Initialize arena and rewards information -KMW- */
 	p_ptr->arena_number = 0;
-	p_ptr->inside_arena = 0;
+	p_ptr->inside_arena = FALSE;
 	p_ptr->inside_quest = 0;
 	p_ptr->leftbldg = FALSE;
 	for (i = 0; i < MAX_MANE; i++)
@@ -3158,6 +3158,7 @@ static void player_wipe(void)
 
 	/* Assume no cheating */
 	noscore = 0;
+        wizard = FALSE;
 
 	/* Not waiting to report score */
 	wait_report_score = FALSE;
@@ -4680,33 +4681,25 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 	/* Heino Vander Sanden and Jimmy De Laet */
 
 	/* Extra info */
+#ifdef JP
 	Term_putstr(5, 14, -1, TERM_WHITE,
-#ifdef JP
 "必須のクエスト(オベロン及び混沌のサーペント)に加えて、追加のクエストの");
-#else
-		"You can enter the number of quests you'd like to perform in addition");
-#endif
-
 	Term_putstr(5, 15, -1, TERM_WHITE,
-#ifdef JP
 "数を設定することが出来ます。");
-#else
-		"to the two obligatory ones ( Oberon and the Serpent of Chaos )");
-#endif
-
 	Term_putstr(5, 17, -1, TERM_WHITE,
-#ifdef JP
 "追加クエストを行ないたくない場合は '0'を入力して下さい。");
-#else
-		"In case you do not want any additional quests, just enter 0");
-#endif
 	Term_putstr(5, 18, -1, TERM_WHITE,
-#ifdef JP
-	"ランダムに決定するには'*'を入力して下さい。");
+"ランダムに決定するには'*'を入力して下さい。");
 #else
-	"If you want a random number of random quests, just enter *");
+	Term_putstr(5, 14, -1, TERM_WHITE,
+		    "You can enter the number of quests you'd like to perform in addition");
+	Term_putstr(5, 15, -1, TERM_WHITE,
+		    "to the two obligatory ones ( Oberon and the Serpent of Chaos )");
+	Term_putstr(5, 17, -1, TERM_WHITE,
+		    "In case you do not want any additional quests, just enter 0");
+	Term_putstr(5, 18, -1, TERM_WHITE,
+		    "If you want a random number of random quests, just enter *");
 #endif
-
 
 	/* Ask the number of additional quests */
 	while (TRUE)
@@ -4824,6 +4817,21 @@ put_str(format("追加クエストの数 (%u以下) ", MAX_RANDOM_QUEST - MIN_RANDOM_QUEST
 
 	/* Clear */
 	clear_from(14);
+
+	/* Reset turn; before auto-roll and after choosing race */
+	if ((p_ptr->prace == RACE_VAMPIRE) ||
+	    (p_ptr->prace == RACE_SKELETON) ||
+	    (p_ptr->prace == RACE_ZOMBIE) ||
+	    (p_ptr->prace == RACE_SPECTRE))
+	{
+		/* Undead start just after midnight */
+		turn = (60L * TOWN_DAWN) / 4 + 1;
+	}
+	else
+	{
+		turn = 1;
+	}
+	dungeon_turn = 1;
 
 
 	/*** Generate ***/
@@ -5214,10 +5222,7 @@ void player_birth(void)
 	int i, j;
 	char buf[80];
 
-	playtime = 0;
-
-	/* Reset turn */
-	dungeon_turn = 1;
+        playtime = 0;
 
 	/* Create a new character */
 	while (1)
@@ -5227,21 +5232,6 @@ void player_birth(void)
 
 		/* Roll up a new character */
 		if (player_birth_aux()) break;
-	}
-
-
-	/* Hack -- enter the world */
-	if ((p_ptr->prace == RACE_VAMPIRE) ||
-	    (p_ptr->prace == RACE_SKELETON) ||
-	    (p_ptr->prace == RACE_ZOMBIE) ||
-	    (p_ptr->prace == RACE_SPECTRE))
-	{
-		/* Undead start just after midnight */
-		turn = (60L * TOWN_DAWN) / 4 + 1;
-	}
-	else
-	{
-		turn = 1;
 	}
 
 	/* Note player birth in the message recall */

@@ -1,4 +1,3 @@
-# CVS: Last edit by $Author$ on $Date$
 # File: t0000002.txt
 
 # Telmora
@@ -356,7 +355,7 @@ B:10:A:2:持ち物全てを鑑定:100:2000:i:26:0
 B:$10:C:0:0:0:2:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0
 B:10:C:0:0:0:2:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0
 
-B:$11:N:Rangers Guild:Trallin:Half-elf
+B:$11:N:Archers Guild:Trallin:Half-elf
 B:11:N:アーチャーのギルド:トゥラリン:ハーフエル
 B:$11:A:0:Enchant missiles:20:40:a:30:0
 B:11:A:0:矢や石等を強化する:20:40:a:30:0

@@ -440,7 +440,7 @@ void check_quest_completion(monster_type *m_ptr)
 					if (record_fix_quest) do_cmd_write_nikki(NIKKI_FIX_QUEST_C, i, NULL);
 					/* completed quest */
 					quest[i].status = QUEST_STATUS_COMPLETED;
-					quest[i].complev = p_ptr->lev;
+					quest[i].complev = (byte)p_ptr->lev;
 
 					if (!(quest[i].flags & QUEST_FLAG_SILENT))
 					{
@@ -481,7 +481,7 @@ msg_print("クエストを達成した！");
 					else
 					{
 						quest[i].status = QUEST_STATUS_COMPLETED;
-						quest[i].complev = p_ptr->lev;
+						quest[i].complev = (byte)p_ptr->lev;
 #ifdef JP
 msg_print("クエストを達成した！");
 #else
@@ -508,7 +508,7 @@ msg_print("クエストを達成した！");
 					if (record_rand_quest && (quest[i].type == QUEST_TYPE_RANDOM)) do_cmd_write_nikki(NIKKI_RAND_QUEST_C, i, NULL);
 					/* completed quest */
 					quest[i].status = QUEST_STATUS_COMPLETED;
-					quest[i].complev = p_ptr->lev;
+					quest[i].complev = (byte)p_ptr->lev;
 					if (!(quest[i].flags & QUEST_FLAG_PRESET))
 					{
 						create_stairs = TRUE;
@@ -548,7 +548,7 @@ msg_print("クエストを達成した！");
 					if (record_fix_quest) do_cmd_write_nikki(NIKKI_FIX_QUEST_C, i, NULL);
 					 /* completed quest */
 					quest[i].status = QUEST_STATUS_COMPLETED;
-					quest[i].complev = p_ptr->lev;
+					quest[i].complev = (byte)p_ptr->lev;
 
 					if (!quest[i].flags & QUEST_FLAG_SILENT)
 					{
@@ -2048,7 +2048,7 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 			else if (r_ptr->r_tkills < MAX_SHORT) r_ptr->r_tkills++;
 
 			/* Hack -- Auto-recall */
-			monster_race_track((m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
+			monster_race_track((bool)(m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
 		}
 
 		if ((m_ptr->r_idx == MON_BANOR) || (m_ptr->r_idx == MON_LUPART))
@@ -2969,7 +2969,7 @@ cptr name = "何か奇妙な物";
 				monster_desc(m_name, m_ptr, 0x08);
 
 				/* Hack -- track this monster race */
-				monster_race_track((m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
+				monster_race_track((bool)(m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
 
 				/* Hack -- health bar for this monster */
 				health_track(c_ptr->m_idx);
@@ -4553,7 +4553,11 @@ msg_print("「汝は良く行いたり！続けよ！」");
 
 			if (p_ptr->prace == RACE_ANDROID)
 			{
+#ifdef JP
 				msg_print("しかし何も起こらなかった。");
+#else
+				msg_print("But, nothing happen.");
+#endif
 			}
 			else if (p_ptr->exp < PY_MAX_EXP)
 			{
@@ -4590,7 +4594,11 @@ msg_print("「下僕よ、汝それに値せず。」");
 
 			if (p_ptr->prace == RACE_ANDROID)
 			{
+#ifdef JP
 				msg_print("しかし何も起こらなかった。");
+#else
+				msg_print("But, nothing happen.");
+#endif
 			}
 			else
 			{
@@ -5164,14 +5172,22 @@ msg_print("「我を怒りしめた罪を償うべし。」");
 						if (!buki_motteruka(INVEN_RARM)) break;
 						object_desc(o_name, &inventory[INVEN_RARM], TRUE, 0);
 						(void)curse_weapon(FALSE, INVEN_RARM);
+#ifdef JP
 						reward = format("%sが破壊された。", o_name);
+#else
+						reward = format("destroying %s", o_name);
+#endif
 					}
 					else
 					{
 						if (!inventory[INVEN_BODY].k_idx) break;
 						object_desc(o_name, &inventory[INVEN_BODY], TRUE, 0);
 						(void)curse_armor();
+#ifdef JP
 						reward = format("%sが破壊された。", o_name);
+#else
+						reward = format("destroying %s", o_name);
+#endif
 					}
 					break;
 				default:
@@ -5627,4 +5643,141 @@ msg_print("あなたは混乱している。");
 
 	/* A "valid" direction was entered */
 	return (TRUE);
+}
+
+
+/*
+ * エネルギーの増加量10d5を速く計算するための関数
+ */
+
+#define Go_no_JuuJou 5*5*5*5*5*5*5*5*5*5
+
+s16b gain_energy(void)
+{
+	int i;
+	s32b energy_result = 10;
+	s32b tmp;
+
+	tmp = rand_int(Go_no_JuuJou);
+
+	for (i = 0; i < 9; i ++){
+		energy_result += tmp % 5;
+		tmp /= 5;
+	}
+
+	return (s16b)(energy_result + tmp);
+}
+
+
+/*
+ * Return bow energy 
+ */
+s16b bow_energy(int sval)
+{
+	int energy = 100;
+
+	/* Analyze the launcher */
+	switch (sval)
+	{
+		/* Sling and ammo */
+		case SV_SLING:
+		{
+			energy = 8000;
+			break;
+		}
+
+		/* Short Bow and Arrow */
+		case SV_SHORT_BOW:
+		{
+			energy = 10000;
+			break;
+		}
+
+		/* Long Bow and Arrow */
+		case SV_LONG_BOW:
+		{
+			energy = 10000;
+			break;
+		}
+
+		/* Bow of irresponsiblity and Arrow */
+		case SV_NAMAKE_BOW:
+		{
+			energy = 7777;
+			break;
+		}
+
+		/* Light Crossbow and Bolt */
+		case SV_LIGHT_XBOW:
+		{
+			energy = 12000;
+			break;
+		}
+
+		/* Heavy Crossbow and Bolt */
+		case SV_HEAVY_XBOW:
+		{
+			energy = 13333;
+			break;
+		}
+	}
+
+	return (energy);
+}
+
+
+/*
+ * Return bow tmul
+ */
+int bow_tmul(int sval)
+{
+	int tmul = 0;
+
+	/* Analyze the launcher */
+	switch (sval)
+	{
+		/* Sling and ammo */
+		case SV_SLING:
+		{
+			tmul = 2;
+			break;
+		}
+
+		/* Short Bow and Arrow */
+		case SV_SHORT_BOW:
+		{
+			tmul = 2;
+			break;
+		}
+
+		/* Long Bow and Arrow */
+		case SV_LONG_BOW:
+		{
+			tmul = 3;
+			break;
+		}
+
+		/* Bow of irresponsiblity and Arrow */
+		case SV_NAMAKE_BOW:
+		{
+			tmul = 3;
+			break;
+		}
+
+		/* Light Crossbow and Bolt */
+		case SV_LIGHT_XBOW:
+		{
+			tmul = 3;
+			break;
+		}
+
+		/* Heavy Crossbow and Bolt */
+		case SV_HEAVY_XBOW:
+		{
+			tmul = 4;
+			break;
+		}
+	}
+
+	return (tmul);
 }

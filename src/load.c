@@ -1429,10 +1429,15 @@ static void rd_extra(void)
 
 	/* Read arena and rewards information */
 	rd_s16b(&p_ptr->arena_number);
-	rd_s16b(&p_ptr->inside_arena);
+	rd_s16b(&tmp16s);
+	p_ptr->inside_arena = (bool)tmp16s;
 	rd_s16b(&p_ptr->inside_quest);
 	if (z_older_than(10, 3, 5)) p_ptr->inside_battle = FALSE;
-	else rd_s16b(&p_ptr->inside_battle);
+	else
+	{
+		rd_s16b(&tmp16s);
+		p_ptr->inside_battle = (bool)tmp16s;
+	}
 	rd_byte(&p_ptr->exit_bldg);
 	rd_byte(&p_ptr->leftbldg);
 
@@ -1469,7 +1474,7 @@ note(format("の中", tmp16s));
 	}
 	else
 	{
-                byte max = max_d_idx;
+                byte max = (byte)max_d_idx;
 
                 rd_byte(&max);
 
@@ -1518,7 +1523,10 @@ note(format("の中", tmp16s));
 	if (z_older_than(10, 3, 8))
 		p_ptr->recall_dungeon = DUNGEON_ANGBAND;
 	else
-		rd_s16b(&p_ptr->recall_dungeon);
+	{
+		rd_s16b(&tmp16s);
+		p_ptr->recall_dungeon = (byte)tmp16s;
+	}
 	rd_s16b(&p_ptr->see_infra);
 	rd_s16b(&p_ptr->tim_infra);
 	rd_s16b(&p_ptr->oppose_fire);
@@ -1756,7 +1764,7 @@ note(format("の中", tmp16s));
 	}
 	if (!z_older_than(11, 0, 5))
 	{
-		rd_s32b(&p_ptr->count);
+		rd_u32b(&p_ptr->count);
 	}
 }
 
@@ -1918,8 +1926,10 @@ static errr rd_dungeon(void)
 	rd_s16b(&base_level);
 
 	rd_s16b(&num_repro);
-	rd_s16b(&py);
-	rd_s16b(&px);
+	rd_s16b(&tmp16s);
+	py = (int)tmp16s;
+	rd_s16b(&tmp16s);
+	px = (int)tmp16s;
 	if (z_older_than(10, 3, 13) && !dun_level && !p_ptr->inside_arena) {py = 33;px = 131;}
 	rd_s16b(&cur_hgt);
 	rd_s16b(&cur_wid);

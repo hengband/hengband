@@ -1,4 +1,3 @@
-# CVS: Last edit by $Author$ on $Date$
 # File: Makefile
 
 # This is not a very "nice" Makefile, but it usually works.
@@ -242,7 +241,8 @@ LIBS = -L/usr/X11R6/lib -lX11 -lncurses
 ##
 ## Variation -- compile for FreeBSD
 ##
-#CFLAGS = -Wall -O2  -fno-strength-reduce -m486 -pipe -g -D"USE_X11" $(JP_OPT) -D"USE_GCU" -I/usr/X11R6/include -DUSE_NCURSES
+# (for Japanese ver.)
+#CFLAGS = -Wall -O2  -fno-strength-reduce -m486 -pipe -g -D"USE_X11" -D"JP" -D"EUC" -D"USE_GCU" -I/usr/X11R6/include -DUSE_NCURSES -DDEFAULT_LOCALE="\"ja_JP.EUC\""
 #LIBS = -L/usr/X11R6/lib -lX11 -lncurses -lmytinfo -lxpg4
 
 ##

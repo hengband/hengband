@@ -1700,7 +1700,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ , int flg)
 	/* Is the monster "seen"? */
 	bool seen = m_ptr->ml;
 
-	bool slept = m_ptr->csleep;
+	bool slept = (bool)(m_ptr->csleep > 0);
 
 	/* Were the effects "obvious" (if seen)? */
 	bool obvious = FALSE;
@@ -3373,7 +3373,11 @@ note = "には効果がなかった。";
 
 			if (is_pet(m_ptr) || (r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & (RF7_UNIQUE_7 | RF7_UNIQUE2)))
 			{
+#ifdef JP
 note = "には効果がなかった。";
+#else
+ note = " is unaffected!";
+#endif
 			}
 			else
 			{
@@ -5530,9 +5534,17 @@ note = "には効果がなかった！";
 				else
 				{
 					delete_monster_idx(c_ptr->m_idx);
+#ifdef JP
 					msg_format("%sは消滅した！",m_name);
+#else
+					msg_format("%^s disappered!",m_name);
+#endif
 
+#ifdef JP
 					take_hit(DAMAGE_GENO, randint((r_ptr->level+1)/2), "モンスター消滅の呪文を唱えた疲労", -1);
+#else
+					take_hit(DAMAGE_GENO, randint((r_ptr->level+1)/2), "the strain of casting Genocide One", -1);
+#endif
 					dam = 0;
 
 					chg_virtue(V_VITALITY, -1);
@@ -5657,7 +5669,7 @@ note_dies = "は光を受けてしぼんでしまった！";
 
 	/* Modify the damage */
 	tmp = dam;
-	dam = mon_damage_mod(m_ptr, dam, (typ == GF_PSY_SPEAR));
+	dam = mon_damage_mod(m_ptr, dam, (bool)(typ == GF_PSY_SPEAR));
 #ifdef JP
 	if ((tmp > 0) && (dam == 0)) note = "はダメージを受けていない";
 #else
@@ -5724,7 +5736,7 @@ note = "が消え去った！";
 		chg_virtue(V_VALOUR, -1);
 
 		/* Teleport */
-		teleport_away(c_ptr->m_idx, do_dist, !who);
+		teleport_away(c_ptr->m_idx, do_dist, (bool)(!who));
 
 		/* Hack -- get new location */
 		y = m_ptr->fy;
@@ -6060,7 +6072,7 @@ msg_print("エネルギーのうねりを感じた！");
 				{
 					pet = TRUE;
 				}
-				count += summon_specific((pet ? -1 : 0), py, px, (pet ? p_ptr->lev*2/3+randint(p_ptr->lev/2) : dun_level), 0, TRUE, friendly, pet, FALSE, !pet);
+				count += summon_specific((pet ? -1 : 0), py, px, (pet ? p_ptr->lev*2/3+randint(p_ptr->lev/2) : dun_level), 0, TRUE, friendly, pet, FALSE, (bool)(!pet));
 				if (randint(6) != 1) break;
 			}
 			case 23: case 24: case 25:
@@ -6201,7 +6213,7 @@ msg_print("生命力が体から吸い取られた気がする！");
  * We return "TRUE" if any "obvious" effects were observed.  XXX XXX Actually,
  * we just assume that the effects were obvious, for historical reasons.
  */
-static bool project_p(int who, int r, int y, int x, int dam, int typ, int a_rad, int monspell)
+static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int typ, int a_rad, int monspell)
 {
 	int k = 0;
 
@@ -6295,9 +6307,8 @@ else msg_print("攻撃が跳ね返った！");
 	/* Get the monster name */
 	monster_desc(m_name, m_ptr, 0);
 
-	/* Get the monster's real name */
-	monster_desc(killer, m_ptr, 0x88);
-
+	/* Get the monster's real name (gotten before polymorph!) */
+	strcpy(killer, who_name);
 
 	/* Analyze the damage */
 	switch (typ)
@@ -6476,7 +6487,11 @@ if (fuzzy) msg_print("何か鋭いもので攻撃された！");
 
 			else if ((inventory[INVEN_RARM].name1 == ART_ZANTETSU) || (inventory[INVEN_LARM].name1 == ART_ZANTETSU))
 		       	{
+#ifdef JP
 				msg_print("矢を斬り捨てた！");
+#else
+				msg_print("You cut down the arrow!");
+#endif
 				break;
 			}
 			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
@@ -7855,6 +7870,9 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 
 	bool jump = FALSE;
 
+	/* Attacker's name (prepared before polymorph)*/
+	char who_name[80];
+
 	rakubadam_p = 0;
 	rakubadam_m = 0;
 
@@ -7886,6 +7904,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 	{
 		x1 = m_list[who].fx;
 		y1 = m_list[who].fy;
+		monster_desc(who_name, &m_list[who], 0x88);
 	}
 
 	/* Oops */
@@ -8052,7 +8071,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 					    monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
 
 					    /* Hack -- auto-recall */
-					    if (m_ptr->ml) monster_race_track((m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
+					    if (m_ptr->ml) monster_race_track((bool)(m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
 
 					    /* Hack - auto-track */
 					    if (m_ptr->ml) health_track(cave[project_m_y][project_m_x].m_idx);
@@ -8075,7 +8094,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			    monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
 			    
 			    /* Hack -- auto-recall */
-			    if (m_ptr->ml) monster_race_track((m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
+			    if (m_ptr->ml) monster_race_track((bool)(m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
 			    
 			    /* Hack - auto-track */
 			    if (m_ptr->ml) health_track(cave[project_m_y][project_m_x].m_idx);
@@ -8208,7 +8227,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			    monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
 			    
 			    /* Hack -- auto-recall */
-			    if (m_ptr->ml) monster_race_track((m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
+			    if (m_ptr->ml) monster_race_track((bool)(m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
 			    
 			    /* Hack - auto-track */
 			    if (m_ptr->ml) health_track(cave[project_m_y][project_m_x].m_idx);
@@ -8354,7 +8373,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 		{
 			flg &= ~(PROJECT_HIDE);
 
-			breath_shape(path_g, dist, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y2, x2, (typ == GF_DISINTEGRATE), TRUE);
+			breath_shape(path_g, dist, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y2, x2, (bool)(typ == GF_DISINTEGRATE), TRUE);
 		}
 		else
 		{
@@ -8680,7 +8699,7 @@ else msg_print("攻撃は跳ね返った！");
 				monster_type *m_ptr = &m_list[cave[y][x].m_idx];
 
 				/* Hack -- auto-recall */
-				if (m_ptr->ml) monster_race_track((m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
+				if (m_ptr->ml) monster_race_track((bool)(m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
 
 				/* Hack - auto-track */
 				if (m_ptr->ml) health_track(cave[y][x].m_idx);
@@ -8713,9 +8732,9 @@ else msg_print("攻撃は跳ね返った！");
 				/* Affect the player */
 				if ((y == y2) && (x == x2) && (y == py) && (x == px) && (flg & PROJECT_MONSTER))
 				{
-					if (project_p(who, d+1, y, x, dam, typ, rad, monspell)) notice = TRUE;
+					if (project_p(who, who_name, d+1, y, x, dam, typ, rad, monspell)) notice = TRUE;
 				}
-				else if (project_p(who, d, y, x, dam, typ, rad, monspell)) notice = TRUE;
+				else if (project_p(who, who_name, d, y, x, dam, typ, rad, monspell)) notice = TRUE;
 			}
 			else
 			{
@@ -8724,10 +8743,10 @@ else msg_print("攻撃は跳ね返った！");
 				{
 					if (!((flg & PROJECT_BEAM) || (flg & PROJECT_STOP)))
 					{
-						if (project_p(who, dist+1, y, x, dam, typ, rad, monspell)) notice = TRUE;
+						if (project_p(who, who_name, dist+1, y, x, dam, typ, rad, monspell)) notice = TRUE;
 					}
 				}
-				else if (project_p(who, dist, y, x, dam, typ, rad, monspell)) notice = TRUE;
+				else if (project_p(who, who_name, dist, y, x, dam, typ, rad, monspell)) notice = TRUE;
 			}
 		}
 	}

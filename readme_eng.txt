@@ -98,8 +98,8 @@ keyset, and by pushing 'x' in the Rogue-like keyset.
               b  j  n
 
   5/, Stay still
-  <   Go up staircase
-  >   Go down staircase
+  <   Go up staircase or Enter global map mode in the wilderness.
+  >   Go down staircase or return from global map mode in the wilderness
   Shift+direction   run
   Ctrl+direction   attack, open, close, or dig
 
@@ -158,22 +158,32 @@ Below, only the new features in Hengband are explained.
   Then, type these alphabet letter in 'm' command to cast from the spellbook.
 
 - You can inscribe on *identified* items with "%" or "%all".
-  Then, "%" or "%all" is automatically replaced by strings which describe the item's
-  abilities. 
-  Example:  You inscribe with "%all" on a pair of gauntlets of power which provide 
-  resistance to fire. The description will look like {St;Fi} which means 
-  bonus to Strength and resistance to fire.
-  If you inscribe it with "%", its description will look like {Fi} which means
-  its random added ability is resistance to fire.
+  Then, "%" or "%all" is automatically replaced by strings which describe the 
+  item's abilities. 
+  Example:  You inscribe with "%all" on a pair of gauntlets of power which 
+  provide resistance to fire. The description will look like {St;Fi} which 
+  means bonus to Strength and resistance to fire.
+  If you inscribe it with "%", its description will look like {Fi} which 
+  means its random added ability is resistance to fire.
 
 
----- Auto pickup
+---- Auto pickup/destroy
 
-Hengband offers a very powerful auto-pickup/auto-destroy system which you may customize.  Please read the file "autopick_eng.txt".
+Hengband offers two different methods of auto-pickup/destroy.
+- Powerful method
+  Hengband offers a very powerful auto-pickup/auto-destroy system 
+  which you may customize.  Please read the file "autopick_eng.txt".
+
+- Easy method
+  Since the powerful method is slightly difficult to use 
+  effectively, there is another very easy option.  you can turn on 
+  the destroy_items option and/or the always_pickup option to use 
+  this method.  These options are located in (6) Easy Auto-Destroyer 
+  Options and (1) Input Options in the Set options ('=') command.
 
 
 ------ Play Record
-Play record will be written to a file named 'playrec-(character's name).txt' 
+Play record will be written to a file named 'playrec-<character's name>.txt' 
 in the same directory as your user preference file.  It is in ~/.angband/
 Hengband/ for UNIX, or hengband/lib/user/ for other OS.
 '|' command displays play record in the game.

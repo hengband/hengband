@@ -132,11 +132,11 @@ struct feature_type
 	s16b unused;		/* Extra bytes (unused) */
 
 	byte d_attr;		/* Default feature attribute */
-	char d_char;		/* Default feature character */
+	byte d_char;		/* Default feature character */
 
 
 	byte x_attr;		/* Desired feature attribute */
-	char x_char;		/* Desired feature character */
+	byte x_char;		/* Desired feature character */
 };
 
 
@@ -185,11 +185,11 @@ struct object_kind
 
 
 	byte d_attr;		/* Default object attribute */
-	char d_char;		/* Default object character */
+	byte d_char;		/* Default object character */
 
 
 	byte x_attr;		/* Desired object attribute */
-	char x_char;		/* Desired object character */
+	byte x_char;		/* Desired object character */
 
 
 	byte flavor;			/* Special object flavor (or zero) */
@@ -375,11 +375,11 @@ struct monster_race
 
 
 	byte d_attr;			/* Default monster attribute */
-	char d_char;			/* Default monster character */
+	byte d_char;			/* Default monster character */
 
 
 	byte x_attr;			/* Desired monster attribute */
-	char x_char;			/* Desired monster character */
+	byte x_char;			/* Desired monster character */
 
 
 	byte max_num;			/* Maximum population allowed per level */
@@ -595,11 +595,11 @@ struct object_type
 	char *name;
 
 	byte d_attr;		/* Default object attribute */
-	char d_char;		/* Default object character */
+	byte d_char;		/* Default object character */
 
 
 	byte x_attr;		/* Desired object attribute */
-	char x_char;		/* Desired object character */
+	byte x_char;		/* Desired object character */
 
 
 	byte flavor;			/* Special object flavor (or zero) */
@@ -1055,9 +1055,9 @@ struct player_type
 
 	s16b town_num;			/* Current town number */
 	s16b arena_number;		/* monster number in arena -KMW- */
-	s16b inside_arena;		/* Is character inside arena? */
+	bool inside_arena;		/* Is character inside arena? */
 	s16b inside_quest;		/* Inside quest level */
-	s16b inside_battle;		/* Is character inside tougijou? */
+	bool inside_battle;		/* Is character inside tougijou? */
 
 	s16b rewards[MAX_BACT];	/* Status of rewards in town */
 
@@ -1079,7 +1079,7 @@ struct player_type
 	s16b stat_max_max[6];	/* Maximal "maximal" stat values */
 	s16b stat_cur[6];	/* Current "natural" stat values */
 
-	s32b count;
+	u32b count;
 
 	s16b fast;			/* Timed -- Fast */
 	s16b slow;			/* Timed -- Slow */
@@ -1144,7 +1144,7 @@ struct player_type
 	s16b vir_types[8];
 
 	s16b word_recall;	/* Word of recall counter */
-	s16b recall_dungeon;
+	byte recall_dungeon;
 
 	s16b energy;		/* Current energy */
 
@@ -1462,7 +1462,7 @@ struct wilderness_type
 	int         town;
 	int         road;
 	u32b        seed;
-	byte        level;
+	s16b        level;
 	byte        entrance;
 };
 
@@ -1561,21 +1561,21 @@ struct dungeon_info_type {
 	byte dy;
 	byte dx;
 
-	s16b floor1;		/* Floor tile 1 */
+	byte floor1;		/* Floor tile 1 */
 	byte floor_percent1;	/* Chance of type 1 */
-	s16b floor2;		/* Floor tile 2 */
+	byte floor2;		/* Floor tile 2 */
 	byte floor_percent2;	/* Chance of type 2 */
-	s16b floor3;		/* Floor tile 3 */
+	byte floor3;		/* Floor tile 3 */
 	byte floor_percent3;	/* Chance of type 3 */
-	s16b outer_wall;	/* Outer wall tile */
-	s16b inner_wall;	/* Inner wall tile */
+	byte outer_wall;	/* Outer wall tile */
+	byte inner_wall;	/* Inner wall tile */
 	s16b stream1;		/* stream tile */
 	s16b stream2;		/* stream tile */
-	s16b fill_type1;	/* Cave tile 1 */
+	byte fill_type1;	/* Cave tile 1 */
 	byte fill_percent1;	/* Chance of type 1 */
-	s16b fill_type2;	/* Cave tile 2 */
+	byte fill_type2;	/* Cave tile 2 */
 	byte fill_percent2;	/* Chance of type 2 */
-	s16b fill_type3;	/* Cave tile 3 */
+	byte fill_type3;	/* Cave tile 3 */
 	byte fill_percent3;	/* Chance of type 3 */
 	s16b mindepth;		/* Minimal depth */
 	s16b maxdepth;		/* Maximal depth */
@@ -1587,17 +1587,17 @@ struct dungeon_info_type {
 	int min_m_alloc_level;	/* Minimal number of monsters per level */
 	int max_m_alloc_chance;	/* There is a 1/max_m_alloc_chance chance per round of creating a new monster */
 
-	s32b flags1;		/* Flags 1 */
+	u32b flags1;		/* Flags 1 */
 
-	s32b mflags1;		/* The monster flags that are allowed */
-	s32b mflags2;
-	s32b mflags3;
-	s32b mflags4;
-	s32b mflags5;
-	s32b mflags6;
-	s32b mflags7;
-	s32b mflags8;
-	s32b mflags9;
+	u32b mflags1;		/* The monster flags that are allowed */
+	u32b mflags2;
+	u32b mflags3;
+	u32b mflags4;
+	u32b mflags5;
+	u32b mflags6;
+	u32b mflags7;
+	u32b mflags8;
+	u32b mflags9;
 
 	char r_char[5];		/* Monster race allowed */
 	int final_object;	/* The object you'll find at the bottom */
@@ -1609,3 +1609,7 @@ struct dungeon_info_type {
 	int obj_great;
 	int obj_good;
 };
+
+
+
+

@@ -337,7 +337,7 @@ int connect_chuukei_server(char *prf_name)
 	}
 
 	ask.sin_family = AF_INET;
-	ask.sin_port = htons(server_port);
+	ask.sin_port = htons((unsigned short)server_port);
 
 #ifndef WINDOWS
 	if ((sd=socket(PF_INET,SOCK_STREAM, 0)) < 0)
@@ -701,7 +701,7 @@ static int read_sock(void)
 
 
 #ifndef WINDOWS
-/* Win版の床の中点と壁の豆腐をピリオドとシャープにする。*/
+/* Win版の床の中点と壁の豆腐をピリオドとシャープにする。 */
 void win2unix(int col, char *buf)
 {
 	char kabe;
@@ -778,7 +778,7 @@ static bool flush_ringbuf_client(void)
 #ifdef SJIS
 			euc2sjis(mesg);
 #endif
-			(void)((*angband_term[0]->text_hook)(x, y, len, col, mesg));
+			(void)((*angband_term[0]->text_hook)(x, y, len, (byte)col, mesg));
 			strncpy(&Term->scr->c[y][x], mesg, len);
 			for (i = x; i < x+len; i++)
 			{
@@ -792,7 +792,7 @@ static bool flush_ringbuf_client(void)
 				mesg[i] = mesg[0];
 			}
 			mesg[i] = '\0';
-			(void)((*angband_term[0]->text_hook)(x, y, len, col, mesg));
+			(void)((*angband_term[0]->text_hook)(x, y, len, (byte)col, mesg));
 			strncpy(&Term->scr->c[y][x], mesg, len);
 			for (i = x; i < x+len; i++)
 			{
@@ -801,7 +801,7 @@ static bool flush_ringbuf_client(void)
 			break;
 
 		case 's': /* 一文字 */
-			(void)((*angband_term[0]->text_hook)(x, y, 1, col, mesg));
+			(void)((*angband_term[0]->text_hook)(x, y, 1, (byte)col, mesg));
 			strncpy(&Term->scr->c[y][x], mesg, 1);
 			Term->scr->a[y][x] = col;
 			break;

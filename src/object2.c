@@ -5771,7 +5771,7 @@ void inven_item_describe(int item)
         /* "no more" の場合はこちらで表示する */
         if (o_ptr->number <= 0)
         {
-                /*FIRST*//*ここはもう通らないかも*/
+                /*FIRST*//*ここはもう通らないかも */
                 msg_format("もう%sを持っていない。", o_name);
         }
         else
@@ -7175,8 +7175,8 @@ static void drain_essence(void)
 	u32b old_f1, old_f2, old_f3, new_f1, new_f2, new_f3;
 	object_type *o_ptr;
 	cptr            q, s;
-	byte iy, ix, marked;
-	s16b next_o_idx, weight, number;
+	byte iy, ix, marked, number;
+	s16b next_o_idx, weight;
 
 	for (i = 0; i < MAX_ESSENCE; i++)
 		drain_value[i] = 0;

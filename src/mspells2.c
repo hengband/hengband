@@ -189,6 +189,7 @@ bool monst_spell_monst(int m_idx)
 
 	bool friendly = is_friendly(m_ptr);
 	bool pet = is_pet(m_ptr);
+	bool not_pet = (bool)(!pet);
 
 	/* Cannot cast spells when confused */
 	if (m_ptr->confused) return (FALSE);
@@ -1098,7 +1099,11 @@ msg_format("%^sが%sに混乱のブレスを吐いた。", m_name, t_name);
 						disturb(1, 0);
 
 						if (m_ptr->r_idx == MON_JAIAN)
+#ifdef JP
 							msg_format("「ボォエ〜〜〜〜〜〜」");
+#else
+						        msg_format("'Booooeeeeee'");
+#endif
 						else if (blind)
 						{
 #ifdef JP
@@ -1401,7 +1406,11 @@ msg_format("%^sが%sに重力のブレスを吐いた。", m_name, t_name);
 						disturb(1, 0);
 
 						if (m_ptr->r_idx == MON_BOTEI)
+#ifdef JP
 							msg_format("「ボ帝ビルカッター！！！」");
+#else
+						        msg_format("'Boty-Build cutter!!!'");
+#endif
 						else if (blind)
 						{
 #ifdef JP
@@ -1821,8 +1830,17 @@ msg_format("%^sが%sに向かってサンダー・ボールの呪文を唱えた。", m_name, t_name);
 
 						if (m_ptr->r_idx == MON_ROLENTO)
 						{
-if (blind) msg_format("%^sが何かを投げた。", m_name);
-else msg_format("%^sが%^sに向かって手榴弾を投げた。", m_name, t_name);
+#ifdef JP
+if (blind)
+	msg_format("%^sが何かを投げた。", m_name);
+else
+	msg_format("%^sが%^sに向かって手榴弾を投げた。", m_name, t_name);
+#else
+if (blind)
+	msg_format("%^s throws something.", m_name);
+else
+	msg_format("%^s throws a hand grenade.", m_name);
+#endif
 						}
 						else
 						{
@@ -3354,12 +3372,20 @@ msg_format("%^sがテレポートした。", m_name);
 
 							if((f3 & TR3_TELEPORT) || (p_ptr->muta1 & MUT1_VTELEPORT) || (p_ptr->pclass == CLASS_IMITATOR))
 							{
+#ifdef JP
 								if(get_check("ついていきますか？"))
+#else
+								if(get_check("Do you follow it? "))
+#endif
 								{
 									if (randint(3) == 1)
 									{
 										teleport_player(200);
+#ifdef JP
 										msg_print("失敗！");
+#else
+										msg_print("Failed!");
+#endif
 									}
 									else teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE);
 									p_ptr->energy -= 100;
@@ -3737,7 +3763,7 @@ msg_format("%^sが魔法で仲間を召喚した！", m_name);
 					}
 				}
 
-				count += summon_specific(m_idx, y, x, rlev, 0, FALSE, friendly, pet, !pet, FALSE);
+				count += summon_specific(m_idx, y, x, rlev, 0, FALSE, friendly, pet, not_pet, FALSE);
 
 				if (known && !see_t && count)
 				{
@@ -3771,7 +3797,7 @@ msg_format("%^sが魔法でモンスターを召喚した！", m_name);
 
 				for (k = 0; k < s_num_6; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, 0, TRUE, friendly, pet, !pet, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, 0, TRUE, friendly, pet, not_pet, FALSE);
 				}
 
 				if (known && !see_t && count)
@@ -4092,7 +4118,7 @@ msg_format("%sが魔法でアンデッドを召喚した。", m_name);
 
 				for (k = 0; k < s_num_6; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_UNDEAD, TRUE, friendly, pet, !pet, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_UNDEAD, TRUE, friendly, pet, not_pet, FALSE);
 				}
 
 				if (known && !see_t && count)
@@ -4127,7 +4153,7 @@ msg_format("%^sが魔法で古代ドラゴンを召喚した！", m_name);
 
 				for (k = 0; k < s_num_4; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_DRAGON, TRUE, friendly, pet, !pet, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_DRAGON, TRUE, friendly, pet, not_pet, FALSE);
 				}
 
 				if (known && !see_t && count)

@@ -1,4 +1,3 @@
-# CVS: Last edit by $Author$ on $Date$
 # Killing Fields, (C) Topi Ylinen 1999
 
 # Name

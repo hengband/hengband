@@ -422,7 +422,7 @@ sprintf(dummy, "%sを装備すると吸血鬼になります。よろしいですか？", o_name);
 		{
 			if (record_fix_quest) do_cmd_write_nikki(NIKKI_FIX_QUEST_C, i, NULL);
 			quest[i].status = QUEST_STATUS_COMPLETED;
-			quest[i].complev = p_ptr->lev;
+			quest[i].complev = (byte)p_ptr->lev;
 #ifdef JP
 msg_print("クエストを達成した！");
 #else
@@ -2731,14 +2731,17 @@ void do_cmd_query_symbol(void)
 		all = TRUE;
 #ifdef JP
 		if (!get_string("名前(英語の場合小文字で可)",temp, 70))
-			temp[0]=0;
-		else
-			sprintf(buf, "名前:%sにマッチ",temp);
 #else
 		if (!get_string("Enter name:",temp, 70))
+#endif
+		{
 			temp[0]=0;
-		else
-			sprintf(buf, "List of '%s'",temp);
+			return;
+		}
+#ifdef JP
+		sprintf(buf, "名前:%sにマッチ",temp);
+#else
+		sprintf(buf, "Monsters with a name \"%s\"",temp);
 #endif
 	}
 	else if (ident_info[i])
@@ -3042,14 +3045,17 @@ if (!get_com("モンスターの文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前):
 		all = TRUE;
 #ifdef JP
 		if (!get_string("名前(英語の場合小文字で可)",temp, 70))
-			temp[0]=0;
-		else
-			sprintf(buf, "名前:%sにマッチ",temp);
 #else
 		if (!get_string("Enter name:",temp, 70))
+#endif
+		{
 			temp[0]=0;
-		else
-			sprintf(buf, "List of '%s'",temp);
+			return FALSE;
+		}
+#ifdef JP
+		sprintf(buf, "名前:%sにマッチ",temp);
+#else
+		sprintf(buf, "List of '%s'",temp);
 #endif
 	}
 	else if (ident_info[i])

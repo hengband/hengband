@@ -336,8 +336,8 @@
 #  define iskanji(x) ((((int)(x) & 0xff) >= 0xa1 && ((int)(x) & 0xff) <= 0xfe) || ((int)(x) & 0xff) == 0x8e)
 #  define iskana(x)  (0)
 # elif defined(SJIS)
-#  define iskanji(x)  ((0x81<=(unsigned char)(x) && (unsigned char)(x)<=0x9f)|| (0xe0<=(unsigned char)(x) && (unsigned char)(x)<=0xfc))
-#  define iskana(x)  (((x) >= 0xA0) && ((x)<= 0xDF))
+#  define iskanji(x)  ((0x81<=((int)(x) & 0xff) && ((int)(x) & 0xff)<=0x9f)|| (0xe0<=((int)(x) & 0xff) && ((int)(x) & 0xff)<=0xfc))
+#  define iskana(x)  ((((int)(x) & 0xff) >= 0xA0) && (((int)(x) & 0xff)<= 0xDF))
 # elif defined(MSDOS)
 #  include <jctype.h>
 # else

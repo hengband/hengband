@@ -33,7 +33,7 @@ N:780:Vlad Dracula, Prince of Darkness
 1
 says, 'Faugh, I'll be back...so long as human psyche has a blackness. Ho-ho.'
 
-N:873:Combat-Echizen, SEKKAKUDAKARA
+N:873:Combat-Echizen
 1
 says shiftlessly, 'Oh. No.'
 

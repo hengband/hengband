@@ -373,10 +373,6 @@
 #define MIND_MIRROR_MASTER  3
 #define MIND_NINJUTSU       4
 
-/* A hack for cave.c */
-#define BMP_FIRST_PC_CLASS 164
-#define BMP_FIRST_PC_RACE 128
-
 
 /*
  * Size of memory reserved for initialization of some arrays
@@ -2860,6 +2856,7 @@
 #define MFLAG_NOPET     0x02    /* Cannot make monster pet */
 #define MFLAG_NOGENO    0x04    /* Cannot genocide */
 #define MFLAG_CHAMELEON 0x08    /* Monster is chameleon */
+#define MFLAG_NOFLOW    0x10    /* Monster is in no_flow_by_smell mode */
 
 
 /*
@@ -3532,13 +3529,13 @@
 
 
 #define is_friendly(A) \
-	 (((A)->smart & SM_FRIENDLY) ? TRUE : FALSE)
+	 (bool)(((A)->smart & SM_FRIENDLY) ? TRUE : FALSE)
 
 #define is_pet(A) \
-	 (((A)->smart & SM_PET) ? TRUE : FALSE)
+	 (bool)(((A)->smart & SM_PET) ? TRUE : FALSE)
 
 #define is_hostile(A) \
-	 ((is_friendly(A) || is_pet(A)) ? FALSE : TRUE)
+	 (bool)((is_friendly(A) || is_pet(A)) ? FALSE : TRUE)
 
 
 /*** Macro Definitions ***/
@@ -4553,9 +4550,11 @@ extern int PlayerUID;
 #define MON_JIZOTAKO      1065
 
 #define MAX_AUTOPICK 1009
-#define DONT_AUTOPICK 0
-#define DO_AUTOPICK 1
-#define DO_AUTODESTROY 2
+#define DO_AUTOPICK    0x01
+#define DO_AUTODESTROY 0x02
+#define DO_DISPLAY     0x04
+#define DONT_AUTOPICK  0x08
+#define ITEM_DISPLAY   0x10
 
 #define MAGIC_GLOVE_REDUCE_MANA 0x0001
 #define MAGIC_FAIL_5PERCENT     0x0002

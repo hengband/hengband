@@ -2264,7 +2264,8 @@ t = object_desc_str(t, "(マルチ・トラップ)");
 	       (bow_ptr->sval == SV_HEAVY_XBOW)) && (o_ptr->tval == TV_BOLT))))
 	{
 		int avgdam = 10;
-		int tmul,energy_fire;
+		int tmul;
+		s16b energy_fire;
 
 		avgdam = o_ptr->dd * (o_ptr->ds + 1) * 10 / 2;
 
@@ -2277,60 +2278,8 @@ t = object_desc_str(t, "(マルチ・トラップ)");
 		/* effect of ammo */
 		if (known) avgdam += (o_ptr->to_d * 10);
 
-		/* Stop compiler warnings */
-		energy_fire = 100;
-		tmul = 1;
-
-		/* Analyze the launcher */
-		switch (bow_ptr->sval)
-		{
-			/* Sling and ammo */
-			case SV_SLING:
-			{
-				tmul = 2;
-				energy_fire = 8000;
-				break;
-			}
-
-			/* Short Bow and Arrow */
-			case SV_SHORT_BOW:
-			{
-				tmul = 2;
-				energy_fire = 10000;
-				break;
-			}
-
-			/* Long Bow and Arrow */
-			case SV_LONG_BOW:
-			{
-				tmul = 3;
-				energy_fire = 10000;
-				break;
-			}
-
-			case SV_NAMAKE_BOW:
-			{
-				tmul = 3;
-				energy_fire = 7777;
-				break;
-			}
-
-			/* Light Crossbow and Bolt */
-			case SV_LIGHT_XBOW:
-			{
-				tmul = 3;
-				energy_fire = 12000;
-				break;
-			}
-
-			/* Heavy Crossbow and Bolt */
-			case SV_HEAVY_XBOW:
-			{
-				tmul = 4;
-				energy_fire = 13333;
-				break;
-			}
-		}
+		energy_fire = bow_energy(bow_ptr->sval);
+		tmul = bow_tmul(bow_ptr->sval);
 
 		/* Get extra "power" from "extra might" */
 		if (p_ptr->xtra_might) tmul++;
@@ -2348,8 +2297,7 @@ t = object_desc_str(t, "(マルチ・トラップ)");
 		t = object_desc_num(t, avgdam);
 		t = object_desc_chr(t, '/');
 
-		tmul = p_ptr->num_fire;
-		if (tmul == 0)
+		if (p_ptr->num_fire == 0)
 		{
 			t = object_desc_chr(t, '0');
 		}

@@ -1599,7 +1599,11 @@ msg_format("%^sがかん高い金切り声をあげた。", m_name);
 			{
 				p_ptr->magic_num1[1] = p_ptr->magic_num1[0];
 				p_ptr->magic_num1[0] = 0;
+#ifdef JP
 				msg_print("歌が途切れた。");
+#else
+				msg_print("Your singing is interrupted.");
+#endif
 				p_ptr->action = ACTION_NONE;
 
 				/* Recalculate bonuses */
@@ -1625,8 +1629,11 @@ msg_format("%^sがかん高い金切り声をあげた。", m_name);
 				if (p_ptr->health_who == p_ptr->riding) p_ptr->redraw |= PR_HEALTH;
 				p_ptr->redraw |= (PR_UHEALTH);
 			}
+
+#ifdef JP
 			if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
 				msg_print("やりやがったな！");
+#endif
 			learn_spell(MS_DISPEL);
 			break;
 		}
@@ -1948,7 +1955,11 @@ else msg_format("%^sが混乱のブレスを吐いた。", m_name);
 		{
 			disturb(1, 0);
 			if (m_ptr->r_idx == MON_JAIAN)
+#ifdef JP
 				msg_format("「ボォエ〜〜〜〜〜〜」");
+#else
+				msg_format("'Booooeeeeee'");
+#endif
 #ifdef JP
 else if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
 #else
@@ -2101,7 +2112,11 @@ else msg_format("%^sが重力のブレスを吐いた。", m_name);
 		{
 			disturb(1, 0);
 			if (m_ptr->r_idx == MON_BOTEI)
+#ifdef JP
 				msg_format("「ボ帝ビルカッター！！！」");
+#else
+				msg_format("'Boty-Build cutter!!!'");
+#endif
 #ifdef JP
 else if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
 #else
@@ -3581,12 +3596,20 @@ msg_format("%^sがテレポートした。", m_name);
 
 						if((f3 & TR3_TELEPORT) || (p_ptr->muta1 & MUT1_VTELEPORT) || (p_ptr->pclass == CLASS_IMITATOR))
 						{
+#ifdef JP
 							if(get_check("ついていきますか？"))
+#else
+							if(get_check("Do you follow it? "))
+#endif
 							{
 								if (randint(3) == 1)
 								{
 									teleport_player(200);
+#ifdef JP
 									msg_print("失敗！");
+#else
+									msg_print("Failed!");
+#endif
 								}
 								else teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE);
 								p_ptr->energy -= 100;

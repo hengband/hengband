@@ -1,4 +1,3 @@
-# CVS: Last edit by $Author$ on $Date$
 # Town Name: Morivant
 # And in case you're wondering, that grand thing in the middle
 # of town is a fountain.
@@ -323,7 +322,7 @@ B:10:A:3:クエスト:0:0:q:6:0
 B:$10:C:0:0:0:2:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0
 B:10:C:0:0:0:2:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0
 
-B:$11:N:Rangers Guild:Angros:Elf
+B:$11:N:Archers Guild:Angros:Elf
 B:11:N:アーチャーのギルド:アングロス:エルフ
 B:$11:A:0:Enchant missiles:20:40:a:30:0
 B:11:A:0:矢や石等を強化する:20:40:a:30:0

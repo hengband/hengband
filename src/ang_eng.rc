@@ -41,7 +41,7 @@ ANGBAND MENU
 		}
 
 		MENUITEM SEPARATOR
-
+/*
 		POPUP "Bizarre Display"
 		{
 			MENUITEM "Term-0 window", 230
@@ -53,7 +53,7 @@ ANGBAND MENU
 			MENUITEM "Term-6 window", 236
 			MENUITEM "Term-7 window", 237
 		}
-
+*/
 		POPUP "Increase Tile Width"
 		{
 			MENUITEM "Term-0 window", 240
@@ -113,16 +113,17 @@ ANGBAND MENU
 		}
 
 		MENUITEM "&Sound", 410
-		MENUITEM SEPARATOR
-		MENUITEM "Low Priority", 420
-		MENUITEM "Activate Screensaver", 430
-		MENUITEM "&Map", 440
+		MENUITEM "&Back ground pict", 440
+		MENUITEM "Choose BG pict", 441
+		MENUITEM "&HTML dump", 450
 	}
 
+/*
 	POPUP "&Help"
 	{
 		MENUITEM "&Contents", 901
 	}
+*/
 }
 
 ANGBAND ICON "angband.ico"

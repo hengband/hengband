@@ -407,15 +407,6 @@ errr process_pref_file_command(char *buf)
 	char *zz[16];
 
 
-	/* Skip "empty" lines */
-	if (!buf[0]) return (0);
-
-	/* Skip "blank" lines */
-	if (isspace(buf[0])) return (0);
-
-	/* Skip comments */
-	if (buf[0] == '#') return (0);
-
 	/* Require "?:*" format */
 	if (buf[1] != ':') return (1);
 
@@ -1025,10 +1016,105 @@ static cptr process_pref_file_expr(char **sp, char *fp)
 }
 
 
+
+/*
+ *  Process line for auto picker/destroyer.
+ */
+static errr process_pickpref_file_line(char *buf)
+{
+	char *s, *s2;
+	int i;
+	byte act = 0;
+
+	/* Nuke illegal char */
+	for(i = 0; buf[i]; i++)
+	{
+#ifdef JP
+		if (iskanji(buf[i]))
+		{
+			i++;
+			continue;
+		}
+#endif
+		if (isspace(buf[i]) && buf[i] != ' ')
+			break;
+	}
+	buf[i] = 0;
+	
+	s = buf;
+
+	act = DO_AUTOPICK | DO_DISPLAY;
+	while (1)
+	{
+		if (*s == '!')
+		{
+			act &= ~DO_AUTOPICK;
+			act |= DO_AUTODESTROY;
+			s++;
+		}
+		else if (*s == '~')
+		{
+			act &= ~DO_AUTOPICK;
+			act |= DONT_AUTOPICK;
+			s++;
+		}
+		else if (*s == '(')
+		{
+			act &= ~DO_DISPLAY;
+			s++;
+		}
+		else
+			break;
+	}
+
+	/* don't mind upper or lower case */
+	s2 = NULL;
+	for (i = 0; s[i]; i++)
+	{
+#ifdef JP
+		if (iskanji(s[i]))
+		{
+			i++;
+			continue;
+		}
+#endif
+		if (isupper(s[i]))
+			s[i] = tolower(s[i]);
+
+		/* Auto-inscription? */
+		if (s[i] == '#')
+		{
+			s[i] = '\0';
+			s2 = s + i + 1;
+			break;
+		}
+	}
+	
+	/* Skip empty line */
+	if (*s == 0)
+		return 0;
+	if (max_autopick == MAX_AUTOPICK)
+		return 1;
+	
+	/* Already has the same entry? */ 
+	for(i = 0; i < max_autopick; i++)
+		if(!strcmp(s, autopick_name[i]))
+			return 0;
+
+	autopick_name[max_autopick] = string_make(s);
+	autopick_action[max_autopick] = act;
+
+	autopick_insc[max_autopick] = string_make(s2);
+	max_autopick++;
+	return 0;
+}
+
+
+
 /*
  * Open the "user pref file" and parse it.
  */
-static errr process_pref_file_aux(cptr name)
+static errr process_pref_file_aux(cptr name, bool read_pickpref)
 {
 	FILE *fp;
 
@@ -1055,11 +1141,13 @@ static errr process_pref_file_aux(cptr name)
 		/* Count lines */
 		line++;
 
-
 		/* Skip "empty" lines */
 		if (!buf[0]) continue;
 
 		/* Skip "blank" lines */
+#ifdef JP
+		if (!iskanji(buf[0]))
+#endif
 		if (isspace(buf[0])) continue;
 
 		/* Skip comments */
@@ -1098,7 +1186,10 @@ static errr process_pref_file_aux(cptr name)
 		if (buf[0] == '%')
 		{
 			/* Process that file if allowed */
-			(void)process_pref_file(buf + 2);
+			if (read_pickpref)
+				(void)process_pickpref_file(buf + 2);
+			else
+				(void)process_pref_file(buf + 2);
 
 			/* Continue */
 			continue;
@@ -1108,8 +1199,13 @@ static errr process_pref_file_aux(cptr name)
 		/* Process the line */
 		err = process_pref_file_command(buf);
 
-		/* Oops */
-		if (err) break;
+		/* This is not original pref line... */
+		if (err)
+		{
+			if (!read_pickpref)
+				break;
+			err = process_pickpref_file_line(buf);
+		}
 	}
 
 
@@ -1155,7 +1251,7 @@ errr process_pref_file(cptr name)
 	path_build(buf, 1024, ANGBAND_DIR_PREF, name);
 
 	/* Process the pref file */
-	err = process_pref_file_aux(buf);
+	err = process_pref_file_aux(buf, FALSE);
 
 	/* Stop at parser errors, but not at non-existing file */
 	if (err < 1)
@@ -1164,7 +1260,7 @@ errr process_pref_file(cptr name)
 		path_build(buf, 1024, ANGBAND_DIR_USER, name);
 
 		/* Process the pref file */
-		err = process_pref_file_aux(buf);
+		err = process_pref_file_aux(buf, FALSE);
 	}
 
 	/* Result */
@@ -1586,50 +1682,7 @@ static void display_player_middle(void)
 	
 	if (inventory[INVEN_BOW].k_idx)
 	{
-		switch (inventory[INVEN_BOW].sval)
-		{
-			/* Sling and ammo */
-			case SV_SLING:
-			{
-				tmul = 2;
-				break;
-			}
-
-			/* Short Bow and Arrow */
-			case SV_SHORT_BOW:
-			{
-				tmul = 2;
-				break;
-			}
-
-			/* Long Bow and Arrow */
-			case SV_LONG_BOW:
-			case SV_NAMAKE_BOW:
-			{
-				tmul = 3;
-				break;
-			}
-
-			/* Light Crossbow and Bolt */
-			case SV_LIGHT_XBOW:
-			{
-				tmul = 3;
-				break;
-			}
-
-			/* Heavy Crossbow and Bolt */
-			case SV_HEAVY_XBOW:
-			{
-				tmul = 4;
-				break;
-			}
-
-			/* Long Bow and Arrow */
-			{
-				tmul = 5;
-				break;
-			}
-		}
+		tmul = bow_tmul(inventory[INVEN_BOW].sval);
 
 		/* Get extra "power" from "extra might" */
 		if (p_ptr->xtra_might) tmul++;
@@ -1667,7 +1720,11 @@ prt_num("レベル     ", (int)p_ptr->lev, 9, 28, TERM_L_GREEN);
 
 	if (p_ptr->prace == RACE_ANDROID)
 	{
-put_str("経験値   ", 10, 28);
+#ifdef JP
+put_str("経験値     ", 10, 28);
+#else
+put_str("Experience ", 10, 28);
+#endif
 c_put_str(TERM_L_GREEN, "    *****", 10, 28+11);
 	}
 	else if (p_ptr->exp >= p_ptr->max_exp)
@@ -1691,7 +1748,11 @@ prt_lnum("経験値     ", p_ptr->exp, 10, 28, TERM_YELLOW);
 
 	if (p_ptr->prace == RACE_ANDROID)
 	{
-put_str("最大経験 ", 11, 28);
+#ifdef JP
+put_str("最大経験   ", 11, 28);
+#else
+put_str("Max Exo    ", 11, 28);
+#endif
 c_put_str(TERM_L_GREEN, "    *****", 11, 28+11);
 	}
 	else
@@ -1708,7 +1769,7 @@ prt_lnum("最大経験   ", p_ptr->max_exp, 11, 28, TERM_L_GREEN);
 put_str("次レベル   ", 12, 28);
 c_put_str(TERM_L_GREEN, "    *****", 12, 28+11);
 #else
-		put_str("Exp to Adv.", 12, 28);
+		put_str("Exp to Adv", 12, 28);
 		c_put_str(TERM_L_GREEN, "    *****", 12, 28+11);
 #endif
 
@@ -1718,7 +1779,7 @@ c_put_str(TERM_L_GREEN, "    *****", 12, 28+11);
 #ifdef JP
 prt_lnum("次レベル   ",
 #else
-		prt_lnum("Exp to Adv.",
+		prt_lnum("Exp to Adv ",
 #endif
 
 		         (s32b)(player_exp[p_ptr->lev - 1] * p_ptr->expfact / 100L),
@@ -1955,7 +2016,6 @@ static void display_player_various(void)
 	cptr		desc;
 	int         muta_att = 0;
 	u32b        f1, f2, f3;
-	int		energy_fire = 100;
 	int		shots, shot_frac;
 
 	object_type		*o_ptr;
@@ -1976,50 +2036,8 @@ static void display_player_various(void)
 	/* If the player is wielding one? */
 	if (o_ptr->k_idx)
 	{
-		/* Analyze the launcher */
-		switch (o_ptr->sval)
-		{
-			/* Sling and ammo */
-			case SV_SLING:
-			{
-				energy_fire = 8000;
-				break;
-			}
+		s16b energy_fire = bow_energy(o_ptr->sval);
 
-			/* Short Bow and Arrow */
-			case SV_SHORT_BOW:
-			{
-				energy_fire = 10000;
-				break;
-			}
-
-			/* Long Bow and Arrow */
-			case SV_LONG_BOW:
-			{
-				energy_fire = 10000;
-				break;
-			}
-		
-			case SV_NAMAKE_BOW:
-			{
-				energy_fire = 7777;
-				break;
-			}
-		
-			/* Light Crossbow and Bolt */
-			case SV_LIGHT_XBOW:
-			{
-				energy_fire = 12000;
-				break;
-			}
-
-			/* Heavy Crossbow and Bolt */
-			case SV_HEAVY_XBOW:
-			{		
-				energy_fire = 13333;
-				break;
-			}
-		}
 		/* Calculate shots per round */
 		shots = p_ptr->num_fire * 100;
 		shot_frac = (shots * 100 / energy_fire) % 100;
@@ -2951,10 +2969,10 @@ static void display_player_flag_aux(int row, int col, char *header,
 		object_flags_known(o_ptr, &f[0], &f[1], &f[2]);
 
 		/* Default */
-		c_put_str(vuln ? TERM_RED : TERM_SLATE, ".", row, col);
+		c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
 
 		/* Check flags */
-		if (f[n - 1] & flag1) c_put_str(vuln ? TERM_L_RED : TERM_WHITE, "+", row, col);
+		if (f[n - 1] & flag1) c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE), "+", row, col);
 		if (f[n - 1] & flag2) c_put_str(TERM_WHITE, "*", row, col);
 
 		/* Advance */
@@ -2965,16 +2983,16 @@ static void display_player_flag_aux(int row, int col, char *header,
 	player_flags(&f[0], &f[1], &f[2]);
 
 	/* Default */
-	c_put_str(vuln ? TERM_RED : TERM_SLATE, ".", row, col);
+	c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
 
 	/* Check flags */
-	if (f[n-1] & flag1) c_put_str(vuln ? TERM_L_RED : TERM_WHITE, "+", row, col);
+	if (f[n-1] & flag1) c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE), "+", row, col);
 
 	/* Timed player flags */
 	tim_player_flags(&f[0], &f[1], &f[2], TRUE);
 
 	/* Check flags */
-	if (f[n-1] & flag1) c_put_str(vuln ? TERM_ORANGE : TERM_YELLOW, "#", row, col);
+	if (f[n-1] & flag1) c_put_str((byte)(vuln ? TERM_ORANGE : TERM_YELLOW), "#", row, col);
 
 	/* Immunity */
 	if (im_f[2] & flag1) c_put_str(TERM_YELLOW, "*", row, col);
@@ -3775,12 +3793,12 @@ static void display_player_ben(void)
 	b[3] |= (f2 >> 16);
 	b[4] |= (f3 & 0xFFFF);
 	b[5] |= (f3 >> 16);
-	color[0] = (f1 & 0xFFFF);
-	color[1] = (f1 >> 16);
-	color[2] = (f2 & 0xFFFF);
-	color[3] = (f2 >> 16);
-	color[4] = (f3 & 0xFFFF);
-	color[5] = (f3 >> 16);
+	color[0] = (u16b)(f1 & 0xFFFF);
+	color[1] = (u16b)(f1 >> 16);
+	color[2] = (u16b)(f2 & 0xFFFF);
+	color[3] = (u16b)(f2 >> 16);
+	color[4] = (u16b)(f3 & 0xFFFF);
+	color[5] = (u16b)(f3 >> 16);
 
 	/* Scan cols */
 	for (x = 0; x < 6; x++)
@@ -3890,12 +3908,12 @@ static void display_player_ben_one(int mode)
 	b[n][3] |= (f2 >> 16);
 	b[n][4] |= (f3 & 0xFFFF);
 	b[n][5] |= (f3 >> 16);
-	color[0] = (f1 & 0xFFFF);
-	color[1] = (f1 >> 16);
-	color[2] = (f2 & 0xFFFF);
-	color[3] = (f2 >> 16);
-	color[4] = (f3 & 0xFFFF);
-	color[5] = (f3 >> 16);
+	color[0] = (u16b)(f1 & 0xFFFF);
+	color[1] = (u16b)(f1 >> 16);
+	color[2] = (u16b)(f2 & 0xFFFF);
+	color[3] = (u16b)(f2 >> 16);
+	color[4] = (u16b)(f3 & 0xFFFF);
+	color[5] = (u16b)(f3 >> 16);
 
 
 	/* Scan cols */
@@ -5171,7 +5189,12 @@ msg_format("'%s'をオープンできません。", name);
 
 			for (lc_buf_ptr = lc_buf; *lc_buf_ptr != 0; lc_buf_ptr++)
 			{
-				lc_buf[lc_buf_ptr-lc_buf] = tolower(*lc_buf_ptr);
+#ifdef JP
+				if (iskanji(*lc_buf_ptr))
+					lc_buf_ptr++;
+				else
+#endif
+					lc_buf[lc_buf_ptr-lc_buf] = tolower(*lc_buf_ptr);
 			}
 
 			/* Hack -- keep searching */
@@ -5327,7 +5350,12 @@ prt("検索: ", 23, 0);
 				/* Make finder lowercase */
 				for (cnt = 0; finder[cnt] != 0; cnt++)
 				{
-					finder[cnt] = tolower(finder[cnt]);
+#ifdef JP
+					if (iskanji(finder[cnt]))
+						cnt++;
+					else
+#endif
+						finder[cnt] = tolower(finder[cnt]);
 				}
 
 				/* Show it */
@@ -5734,15 +5762,15 @@ void get_name(void)
 	{
 		/* Use the name */
 		strcpy(player_name, tmp);
-
-		/* Process the player name */
-		process_player_name(FALSE);
 	}
-	else if (strlen(player_name))
+	else if (0 == strlen(player_name))
 	{
-		/* Process the player name */
-		process_player_name(FALSE);
+		/* Use default name */
+		strcpy(player_name, "PLAYER");
 	}
+
+	/* Process the player name */
+	process_player_name(FALSE);
 
 	strcpy(tmp,ap_ptr->title);
 #ifdef JP
@@ -6881,7 +6909,7 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 		}
 
 	}
-
+	
 	/* Get the number of entries */
 	while (TRUE)
 	{
@@ -6924,18 +6952,15 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 			/* Count the lines */
 			line_num++;
 
-#ifdef JP
-                      while(TRUE){
-                      test=my_fgets(fp, buf, 1024);
-                      if(test || buf[0]!='#')break;
-                                 }
-                        if (test==0){
-#else
-			/* Try to read the line */
-			if (my_fgets(fp, buf, 1024) == 0)
+			while(TRUE)
 			{
-#endif
+				test = my_fgets(fp, buf, 1024);
+				if(test || buf[0] != '#')
+					break;
+			}
 
+                        if (test==0)
+			{
 				/* Found the line */
 				if (counter == line) break;
 			}
@@ -6975,166 +7000,36 @@ errr get_rnd_line_jonly(cptr file_name, int entry, char *output, int count)
     result=get_rnd_line(file_name, entry, output);
     if(result)break;
     kanji=0;
-    for(j=0 ; j<strlen(output) ; j++) kanji|=iskanji( output[j] );
+    for(j=0; output[j]; j++) kanji |= iskanji(output[j]);
     if(kanji)break;
   }
   return(result);
 }
 #endif
 
-
-/*AUTOPICK*/
+/*
+ * Process file for auto picker/destroyer.
+ */
 errr process_pickpref_file(cptr name)
 {
-	FILE *fp;
-
-	char buf[1024] , *s, *s2, isnew;
-
-	int i;
-
-	int num = -1;
+	char buf[1024];
 
 	errr err = 0;
-
-	bool bypass = FALSE;
 
 	/* Build the filename */
 	path_build(buf, 1024, ANGBAND_DIR_USER, name);
 
-	/* Open the file */
-	fp = my_fopen(buf, "r");
+	err = process_pref_file_aux(buf, TRUE);
 
-	/* No such file */
-	if (!fp) return (-1);
-
-
-	/* Process the file */
-	while (0 == my_fgets(fp, buf, 1024))
-	{
-		/* Count lines */
-		num++;
-
-		/* Skip "empty" lines */
-		if (buf[0] == '\0') continue;
-
-		/* Skip comments */
-		if (buf[0] == '#') continue;
-
-		/* Process "?:<expr>" */
-		if ((buf[0] == '?') && (buf[1] == ':'))
-		{
-			char f;
-			cptr v;
-			char *s;
-
-			/* Start */
-			s = buf + 2;
-
-			/* Parse the expr */
-			v = process_pref_file_expr(&s, &f);
-
-			/* Set flag */
-			bypass = (streq(v, "0") ? TRUE : FALSE);
-
-			/* Continue */
-			continue;
-		}
-
-		/* Apply conditionals */
-		if (bypass) continue;
-
-		/* Process "%:<file>" */
-		if (buf[0] == '%')
-		{
-			/* Process that file if allowed */
-			(void)process_pickpref_file(buf + 2);
-
-			/* Continue */
-			continue;
-		}
-
-                /* Nuke illegal char */
-                for(i=0 ; buf[i]; i++)
-		{
-#ifdef JP
-			if (iskanji(buf[i]))
-			{
-				i++;
-				continue;
-			}
-#endif
-			if (isspace(buf[i]) && buf[i] != ' ')
-				break;
-		}
-		buf[i]=0;
-
-                s = buf;
-                /* Skip '!','~' */
-                if(buf[0] == '!' || buf[0] == '~') s++;
-
-                /* Auto-inscription? */
-                s2=strchr(s,'#');
-                if (s2) {*s2=0; s2++;}
-
-                /* Skip empty line */
-                if (*s == 0) continue;
-
-		/* don't mind upper or lower case */
-		for (i = 0; s[i]; i++)
-		{
-#ifdef JP
-			if (iskanji(s[i]))
-			{
-				i++;
-				continue;
-			}
-#endif
-			if ('#' == s[i])
-				break;
-			else if (isupper(s[i]))
-				s[i] = tolower(s[i]);
-		}
- 
-                /* Already has the same entry? */ 
-		isnew=1;
-                for(i=0;i<max_autopick;i++)
-			if( !strcmp(s,autopick_name[i]) ){isnew=0;break;} 
-
-		if(isnew==0) continue;
-		autopick_name [max_autopick] = malloc(strlen(s) + 1);
-		strcpy(autopick_name [max_autopick], s);
-		switch(buf[0]){
-		case '~':
-			autopick_action[max_autopick] = DONT_AUTOPICK;
-			break;
-		case '!':
-			autopick_action[max_autopick] = DO_AUTODESTROY;
-			break;
-		default:
-			autopick_action[max_autopick] = DO_AUTOPICK;
-			break;
-		}
-                if( s2 ) {
-                    autopick_insc[max_autopick] = malloc(strlen(s2) + 1);
-                    strcpy(autopick_insc[max_autopick], s2);
-                } else {
-                    autopick_insc[max_autopick]=NULL;
-		}
-		max_autopick++;
-		if(max_autopick==MAX_AUTOPICK) break;
-	}
-
-	/* Close the file */
-	my_fclose(fp);
 	/* Result */
 	return (err);
 }
 
-static errr counts_seek(int fd, s32b where, bool flag)
+static errr counts_seek(int fd, u32b where, bool flag)
 {
 	huge seekpoint;
 	char temp1[128], temp2[128];
-	s32b zero_header[3] = {0L, 0L, 0L};
+	u32b zero_header[3] = {0L, 0L, 0L};
 	int i;
 
 #ifdef SAVEFILE_USE_UID
@@ -7148,7 +7043,7 @@ static errr counts_seek(int fd, s32b where, bool flag)
 	seekpoint = 0;
 	while (1)
 	{
-		if (fd_seek(fd, seekpoint + 3 * sizeof(s32b)))
+		if (fd_seek(fd, seekpoint + 3 * sizeof(u32b)))
 			return 1;
 		if (fd_read(fd, (char*)(temp2), sizeof(temp2)))
 		{
@@ -7156,7 +7051,7 @@ static errr counts_seek(int fd, s32b where, bool flag)
 				return 1;
 			/* add new name */
 			fd_seek(fd, seekpoint);
-			fd_write(fd, (char*)zero_header, 3*sizeof(s32b));
+			fd_write(fd, (char*)zero_header, 3*sizeof(u32b));
 			fd_write(fd, (char*)(temp1), sizeof(temp1));
 			break;
 		}
@@ -7164,16 +7059,16 @@ static errr counts_seek(int fd, s32b where, bool flag)
 		if (strcmp(temp1, temp2) == 0)
 			break;
 
-		seekpoint += 128 + 3 * sizeof(s32b);
+		seekpoint += 128 + 3 * sizeof(u32b);
 	}
 
-	return fd_seek(fd, seekpoint + where * sizeof(s32b));
+	return fd_seek(fd, seekpoint + where * sizeof(u32b));
 }
 
-s32b counts_read(int where)
+u32b counts_read(int where)
 {
 	int fd;
-	s32b count = 0;
+	u32b count = 0;
 	char buf[1024];
 
 #ifdef JP
@@ -7184,7 +7079,7 @@ s32b counts_read(int where)
 	fd = fd_open(buf, O_RDONLY);
 
 	if (counts_seek(fd, where, FALSE) ||
-	    fd_read(fd, (char*)(&count), sizeof(s32b)))
+	    fd_read(fd, (char*)(&count), sizeof(u32b)))
 		count = 0;
 
 	(void)fd_close(fd);
@@ -7192,7 +7087,7 @@ s32b counts_read(int where)
 	return count;
 }
 
-errr counts_write(int where, s32b count)
+errr counts_write(int where, u32b count)
 {
 	int fd;
 	char buf[1024];
@@ -7215,7 +7110,7 @@ errr counts_write(int where, s32b count)
 	if (fd_lock(fd, F_WRLCK)) return 1;
 
 	counts_seek(fd, where, TRUE);
-	fd_write(fd, (char*)(&count), sizeof(s32b));
+	fd_write(fd, (char*)(&count), sizeof(u32b));
 
 	if (fd_lock(fd, F_UNLCK)) return 1;
 

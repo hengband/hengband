@@ -114,7 +114,7 @@ static void set_proxy()
 
 	path_build(buf, 1024, ANGBAND_DIR_PREF, "proxy.prf");
 
-	/* ファイルから設定を読む。*/
+	/* ファイルから設定を読む。 */
 	fp = my_fopen(buf, "r");
 
 	if (!fp)
@@ -132,10 +132,10 @@ static void set_proxy()
 
 	my_fclose(fp);
 
-	/* ポインタを用意。*/
+	/* ポインタを用意。 */
 	s = buf;
 
-	/* "http://" から始まっている場合はその部分をカットする。*/
+	/* "http://" から始まっている場合はその部分をカットする。 */
 #if defined(WINDOWS)
 	if (!strnicmp(s, "http://", 7))
 	{
@@ -163,7 +163,7 @@ static void set_proxy()
 	len = strlen(s);
 	proxy = malloc(len + 1);
 
-	/* ポート番号があるかどうかを調べ、あればproxy_portに設定。*/
+	/* ポート番号があるかどうかを調べ、あればproxy_portに設定。 */
 	--len;
 	while (len > 0 && isdigit(s[len]))
 		--len;
@@ -274,7 +274,7 @@ static int connect_server(int timeout, const char *host, int port)
 	val.it_value.tv_sec = timeout;
 	val.it_value.tv_usec = 0;
 
-	/* タイムアウト、もしくは中断した時の処理。*/
+	/* タイムアウト、もしくは中断した時の処理。 */
 	if ((ret = sigsetjmp(env,1)) != 0)
 	{
 #ifdef JP
@@ -332,9 +332,9 @@ static int connect_server(int timeout, const char *host, int port)
 	to.sin_family = AF_INET;
 
 	if(proxy && proxy[0] && proxy_port)
-		to.sin_port = htons(proxy_port);
+		to.sin_port = htons((unsigned short int)proxy_port);
 	else
-		to.sin_port = htons(port);
+		to.sin_port = htons((unsigned short int)port);
 
 #ifndef WINDOWS
 	if ((sd = socket(PF_INET, SOCK_STREAM, 0)) < 0)

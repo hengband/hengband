@@ -853,7 +853,7 @@ void wilderness_gen(void)
 	for (i = 0; i < lim; i++)
 	{
 		/* Make a resident */
-		(void)alloc_monster((generate_encounter==TRUE)?0:3, ((generate_encounter==TRUE) || (one_in_(2) && (!p_ptr->town_num)))?FALSE:TRUE);
+		(void)alloc_monster(generate_encounter ? 0 : 3, (bool)!(generate_encounter || (one_in_(2) && (!p_ptr->town_num))));
 	}
 
 	if(generate_encounter) ambush_flag = TRUE;
@@ -940,7 +940,7 @@ struct wilderness_grid
 {
 	int		terrain;    /* Terrain type */
 	int		town;       /* Town number */
-	byte	level;		/* Level of the wilderness */
+	s16b	level;		/* Level of the wilderness */
 	byte	road;       /* Road */
 	char	name[32];	/* Name of the town/wilderness */
 };

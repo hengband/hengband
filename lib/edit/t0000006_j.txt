@@ -1,4 +1,3 @@
-# CVS: Last edit by $Author$ on $Date$
 # t0000006.txt
 
 # The City beneath the Sea

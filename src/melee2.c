@@ -371,7 +371,7 @@ msg_format("%^sは殺された。", m_name);
 		/*
 		* Run (sometimes) if at 10% or less of max hit points,
 		* or (usually) when hit for half its current hit points
-		*/
+		 */
 		if (((percentage <= 10) && (rand_int(10) < percentage)) ||
 			((dam >= m_ptr->hp) && (rand_int(100) < 80)))
 		{
@@ -878,7 +878,7 @@ static bool find_safety(int m_idx, int *yp, int *xp)
 			if (!cave_floor_grid(c_ptr)) continue;
 
 			/* Check for "availability" (if monsters can flow) */
-			if (!stupid_monsters && !p_ptr->no_flowed)
+			if (!stupid_monsters && !(m_ptr->mflag2 & MFLAG_NOFLOW))
 			{
 				/* Ignore grids very far from the player */
 				if (c_ptr->when < cave[py][px].when) continue;
@@ -1026,7 +1026,7 @@ static bool get_moves(int m_idx, int *mm)
 	bool         done = FALSE;
 	bool         will_run = mon_will_run(m_idx);
 	cave_type	*c_ptr;
-	bool         no_flow = (p_ptr->no_flowed && (cave[m_ptr->fy][m_ptr->fx].cost > 2));
+	bool         no_flow = ((m_ptr->mflag2 & MFLAG_NOFLOW) && (cave[m_ptr->fy][m_ptr->fx].cost > 2));
 	bool         can_pass_wall;
 
 	/* Flow towards the player */
@@ -3537,12 +3537,10 @@ msg_print("爆発のルーンは解除された。");
 							{
 								/* Dump a message */
 #ifdef JP
-msg_format("%^sは%sを拾おうとしたが、だめだった。",
+msg_format("%^sは%sを拾おうとしたが、だめだった。", m_name, o_name);
 #else
-								msg_format("%^s tries to pick up %s, but fails.",
+msg_format("%^s tries to pick up %s, but fails.", m_name, o_name);
 #endif
-
-									m_name, o_name);
 							}
 						}
 					}
@@ -3613,6 +3611,12 @@ msg_format("%^sが%sを破壊した。", m_name, o_name);
 		if (do_turn) break;
 	}
 
+	/*
+	 *  Forward movements failed, but now recieved LOS attack!
+	 *  Try to flow by smell.
+	 */
+	if (p_ptr->no_flowed && i > 2 &&  m_ptr->target_y)
+		m_ptr->mflag2 &= ~MFLAG_NOFLOW;
 
 	/* If we haven't done anything, try casting a spell again */
 	if (!do_turn && !do_move && !m_ptr->monfear && !stupid_monsters && !(p_ptr->riding == m_idx) && aware)
@@ -3821,6 +3825,11 @@ void process_monsters(void)
 		fx = m_ptr->fx;
 		fy = m_ptr->fy;
 
+		/* Flow by smell is allowed */
+		if (!stupid_monsters && !p_ptr->no_flowed)
+		{
+			m_ptr->mflag2 &= ~MFLAG_NOFLOW;
+		}
 
 		/* Assume no move */
 		test = FALSE;
@@ -3842,7 +3851,7 @@ void process_monsters(void)
 
 		/* Hack -- Monsters can "smell" the player from far away */
 		/* Note that most monsters have "aaf" of "20" or so */
-		else if (!stupid_monsters && !p_ptr->no_flowed &&
+		else if (!stupid_monsters && !(m_ptr->mflag2 & MFLAG_NOFLOW) &&
 			(cave_floor_bold(py, px) || (cave[py][px].feat == FEAT_TREES)) &&
 			(cave[py][px].when == cave[fy][fx].when) &&
 			(cave[fy][fx].dist < MONSTER_FLOW_DEPTH) &&
@@ -3895,6 +3904,10 @@ void process_monsters(void)
 
 		m_ptr->target_y = 0;
 		m_ptr->target_x = 0;
+
+		/* Give up flow_by_smell when it might useless */
+		if (p_ptr->no_flowed && one_in_(3))
+			m_ptr->mflag2 |= MFLAG_NOFLOW;
 
 		/* Hack -- notice death or departure */
 		if (!alive || death) break;
@@ -4083,34 +4096,15 @@ void monster_gain_exp(int m_idx, int s_idx)
 
 		if (is_pet(m_ptr) || m_ptr->ml)
 		{
+#ifdef JP
 			msg_format("%sは%sに進化した。", m_name, r_name + r_ptr->name);
+#else
+			msg_format("%^s evolved into %s.", m_name, r_name + r_ptr->name);
+#endif
 			r_info[old_r_idx].r_xtra1 |= MR1_SINKA;
 		}
 		update_mon(m_idx, FALSE);
 		lite_spot(m_ptr->fy, m_ptr->fx);
 	}
 	if (m_idx == p_ptr->riding) p_ptr->update |= PU_BONUS;
-}
-
-
-/*
- * エネルギーの増加量10d5を速く計算するための関数
- */
-
-#define Go_no_JuuJou 5*5*5*5*5*5*5*5*5*5
-
-s32b gain_energy(void)
-{
-	int i;
-	s32b energy_result = 10;
-	s32b tmp;
-
-	tmp = rand_int(Go_no_JuuJou);
-
-	for (i = 0; i < 9; i ++){
-		energy_result += tmp % 5;
-		tmp /= 5;
-	}
-
-	return energy_result + tmp;
 }

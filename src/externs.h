@@ -24,9 +24,9 @@ extern char *macro_trigger_keycode[2][MAX_MACRO_TRIG];
 extern int level_up;
 
 extern int max_autopick;
-extern char *autopick_name[MAX_AUTOPICK];
-extern char *autopick_insc[MAX_AUTOPICK];
-extern s16b autopick_action[MAX_AUTOPICK];
+extern cptr autopick_name[MAX_AUTOPICK];
+extern cptr autopick_insc[MAX_AUTOPICK];
+extern byte autopick_action[MAX_AUTOPICK];
 
 /* tables.c */
 extern s16b ddd[9];
@@ -289,9 +289,6 @@ extern bool equippy_chars;
 extern bool use_command;
 extern bool center_player;
 extern bool center_running;
-extern bool display_pick;
-extern bool display_nopick;
-extern bool display_destroy;
 extern bool destroy_items;
 extern bool leave_worth;
 extern bool leave_equip;
@@ -329,8 +326,8 @@ extern s16b panel_row, panel_col;
 extern s16b panel_row_min, panel_row_max;
 extern s16b panel_col_min, panel_col_max;
 extern s16b panel_col_prt, panel_row_prt;
-extern s16b py;
-extern s16b px;
+extern int py;
+extern int px;
 extern s16b target_who;
 extern s16b target_col;
 extern s16b target_row;
@@ -553,7 +550,7 @@ extern s16b *max_dlv;
 extern byte feat_wall_outer;
 extern byte feat_wall_inner;
 extern byte feat_wall_solid;
-extern s16b floor_type[100], fill_type[100];
+extern byte floor_type[100], fill_type[100];
 extern bool now_damaged;
 extern s16b now_message;
 extern bool use_menu;
@@ -751,6 +748,9 @@ extern errr get_rnd_line(cptr file_name, int entry, char *output);
 #ifdef JP
 extern errr get_rnd_line_jonly(cptr file_name, int entry, char *output, int count);
 #endif
+extern errr counts_write(int where, u32b count);
+extern u32b counts_read(int where);
+
 /* generate.c */
 extern void place_closed_door(int y, int x);
 extern void generate_cave(void);
@@ -793,7 +793,6 @@ extern void curse_equipment(int chance, int heavy_chance);
 extern void mon_take_hit_mon(bool is_psy_spear, int m_idx, int dam, bool *fear, cptr note, int who);
 extern bool process_the_world(int num, int who, bool vs_player);
 extern void monster_gain_exp(int m_idx, int s_idx);
-extern s32b gain_energy(void);
 
 /* monster1.c */
 extern void screen_roff(int r_idx, int remember);
@@ -1307,6 +1306,9 @@ extern void gain_level_reward(int chosen_reward);
 extern bool tgt_pt (int *x, int *y);
 extern void do_poly_wounds(void);
 extern int mon_damage_mod(monster_type *m_ptr, int dam, bool is_psy_spear);
+extern s16b gain_energy(void);
+extern s16b bow_energy(int sval);
+extern int bow_tmul(int sval);
 
 /* mspells1.c */
 extern bool clean_shot(int y1, int x1, int y2, int x2, bool friend);
@@ -1519,5 +1521,3 @@ extern void send_curs_to_chuukei_server(int x, int y);
 extern void flush_ringbuf(void);
 #endif
 
-extern errr counts_write(int where, s32b count);
-extern s32b counts_read(int where);

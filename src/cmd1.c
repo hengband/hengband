@@ -752,7 +752,7 @@ void py_pickup_aux(int o_idx)
 			   (quest[i].k_idx == o_ptr->name1))
 		{
 			quest[i].status = QUEST_STATUS_COMPLETED;
-			quest[i].complev = p_ptr->lev;
+			quest[i].complev = (byte)p_ptr->lev;
 #ifdef JP
 			msg_print("クエストを達成した！");
 #else
@@ -938,6 +938,12 @@ int is_autopick(object_type *o_ptr)
 		/*** アイテムのカテゴリ指定予約語 ***/
 		if (!strncmp(str, "アイテム",8)) len = 8;
 		
+		else if (!strncmp(str, "アーティファクト", 16)){
+			if (object_known_p(o_ptr)
+			    && (artifact_p(o_ptr) || o_ptr->art_name))
+				len = 16;
+		}
+
 		else if (!strncmp(str, "武器", 4)){
 			switch( o_ptr->tval ){
 			case TV_BOW:
@@ -1364,7 +1370,7 @@ static void auto_pickup_items(cave_type *c_ptr)
 			o_ptr->inscription = inscribe_flags(o_ptr, autopick_insc[idx]);
 
 		if (is_autopick2(o_ptr) ||
-		   (idx >= 0 && autopick_action[idx] == DO_AUTOPICK))
+		   (idx >= 0 && (autopick_action[idx] & DO_AUTOPICK)))
 		{
 			disturb(0,0);
 
@@ -1385,7 +1391,7 @@ static void auto_pickup_items(cave_type *c_ptr)
 		}
 		
 		else if ((idx == -1 && is_opt_confirm_destroy(o_ptr)) ||
-			 (!always_pickup && (idx != -1 && autopick_action[idx] == DO_AUTODESTROY)))
+			 (!always_pickup && (idx != -1 && (autopick_action[idx] & DO_AUTODESTROY))))
 		{
 			disturb(0,0);
 			/* Describe the object (with {terrible/special}) */
@@ -1670,7 +1676,11 @@ static void hit_trap(bool break_trap)
 				if (autosave_l && (p_ptr->chp >= 0))
 					do_cmd_save_game(TRUE);
 
+#ifdef JP
 				do_cmd_write_nikki(NIKKI_STAIR, 1, "落し戸に落ちた");
+#else
+				do_cmd_write_nikki(NIKKI_STAIR, 1, "You have fallen through a trap door!");
+#endif
 				dun_level++;
 
 				/* Leaving */
@@ -2340,7 +2350,7 @@ static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
 
 
 		k = damroll(ddd, dss);
-		k = critical_norm(n_weight, bonus, k, bonus, 0);
+		k = critical_norm(n_weight, bonus, k, (s16b)bonus, 0);
 
 		/* Apply the player damage bonuses */
 		k += p_ptr->to_d_m;
@@ -3040,7 +3050,7 @@ msg_format("%s には効果がなかった。", m_name);
 			}
 
 			/* Modify the damage */
-			k = mon_damage_mod(m_ptr, k, (((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((p_ptr->pclass == CLASS_BERSERKER) && one_in_(2))));
+			k = mon_damage_mod(m_ptr, k, (bool)(((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((p_ptr->pclass == CLASS_BERSERKER) && one_in_(2))));
 			if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) || (mode == HISSATSU_KYUSHO))
 			{
 				if ((randint(randint(r_ptr->level/7)+5) == 1) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2))
@@ -3560,7 +3570,7 @@ bool py_attack(int y, int x, int mode)
 	monster_desc(m_name, m_ptr, 0);
 
 	/* Auto-Recall if possible and visible */
-	if (m_ptr->ml) monster_race_track((m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
+	if (m_ptr->ml) monster_race_track((bool)(m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
 
 	/* Track a new monster */
 	if (m_ptr->ml) health_track(c_ptr->m_idx);
@@ -4117,7 +4127,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 			monster_desc(m_name, m_ptr, 0);
 
 			/* Auto-Recall if possible and visible */
-			if (m_ptr->ml) monster_race_track((m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
+			if (m_ptr->ml) monster_race_track((bool)(m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
 
 			/* Track a new monster */
 			if (m_ptr->ml) health_track(c_ptr->m_idx);
@@ -4503,8 +4513,8 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 			msg_format("You push past %s.", m_name);
 #endif
 
-			m_ptr->fy = (byte)py;
-			m_ptr->fx = (byte)px;
+			m_ptr->fy = py;
+			m_ptr->fx = px;
 			cave[py][px].m_idx = c_ptr->m_idx;
 			c_ptr->m_idx = 0;
 			update_mon(cave[py][px].m_idx, TRUE);
@@ -4643,7 +4653,7 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 
 			energy_use = 0;
 			/* Hack -- Enter store */
-			command_new = '_';
+			command_new = 253;
 		}
 
 		/* Handle "building doors" -KMW- */
@@ -4675,7 +4685,7 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 			{
 				if (record_fix_quest) do_cmd_write_nikki(NIKKI_FIX_QUEST_C, p_ptr->inside_quest, NULL);
 				quest[p_ptr->inside_quest].status = QUEST_STATUS_COMPLETED;
-				quest[p_ptr->inside_quest].complev = p_ptr->lev;
+				quest[p_ptr->inside_quest].complev = (byte)p_ptr->lev;
 #ifdef JP
 				msg_print("クエストを達成した！");
 #else
@@ -4697,7 +4707,7 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 				else if (record_fix_quest)
 					do_cmd_write_nikki(NIKKI_FIX_QUEST_F, leaving_quest, NULL);
 				quest[leaving_quest].status = QUEST_STATUS_FAILED;
-				quest[leaving_quest].complev = p_ptr->lev;
+				quest[leaving_quest].complev = (byte)p_ptr->lev;
 				if (quest[leaving_quest].type == QUEST_TYPE_RANDOM)
 					r_info[quest[leaving_quest].r_idx].flags1 &= ~(RF1_QUESTOR);
 			}

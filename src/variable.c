@@ -36,9 +36,9 @@ char *macro_trigger_keycode[2][MAX_MACRO_TRIG];
 /* レベルアップの時に上昇量を表示するのに使う */
 int level_up = 0;
 int max_autopick=0;
-char *autopick_name[MAX_AUTOPICK];
-char *autopick_insc[MAX_AUTOPICK];
-s16b autopick_action[MAX_AUTOPICK];
+cptr autopick_name[MAX_AUTOPICK];
+cptr autopick_insc[MAX_AUTOPICK];
+byte autopick_action[MAX_AUTOPICK];
 
 /*
  * Executable version
@@ -353,8 +353,8 @@ s16b panel_col_prt, panel_row_prt;
 /*
  * Player location in dungeon
  */
-s16b py;
-s16b px;
+int py;
+int px;
 
 /*
  * Targetting variables
@@ -996,10 +996,6 @@ bool use_command;
 bool center_player;
 bool center_running;
 
-bool display_pick;
-bool display_nopick;
-bool display_destroy;
-
 /* Auto-destruction options */
 bool destroy_items;
 bool leave_worth;
@@ -1215,7 +1211,7 @@ s16b *max_dlv;
 byte feat_wall_outer;
 byte feat_wall_inner;
 byte feat_wall_solid;
-s16b floor_type[100], fill_type[100];
+byte floor_type[100], fill_type[100];
 
 bool now_damaged;
 s16b now_message;

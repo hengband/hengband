@@ -1651,14 +1651,14 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		while ((o_ptr->to_d+o_ptr->to_h) > 20)
 		{
 			if (one_in_(o_ptr->to_d) && one_in_(o_ptr->to_h)) break;
-			o_ptr->to_d -= rand_int(3);
-			o_ptr->to_h -= rand_int(3);
+			o_ptr->to_d -= (s16b)rand_int(3);
+			o_ptr->to_h -= (s16b)rand_int(3);
 		}
 		while ((o_ptr->to_d+o_ptr->to_h) > 10)
 		{
 			if (one_in_(o_ptr->to_d) || one_in_(o_ptr->to_h)) break;
-			o_ptr->to_d -= rand_int(3);
-			o_ptr->to_h -= rand_int(3);
+			o_ptr->to_d -= (s16b)rand_int(3);
+			o_ptr->to_h -= (s16b)rand_int(3);
 		}
 	}
 
@@ -2299,7 +2299,7 @@ bool activate_random_artifact(object_type * o_ptr)
 			bool pet = (randint(3) == 1);
 			bool group = !(pet && (plev < 50));
 
-			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), SUMMON_ELEMENTAL, group, FALSE, pet, FALSE, !pet))
+			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), SUMMON_ELEMENTAL, group, FALSE, pet, FALSE, (bool)(!pet)))
 			{
 #ifdef JP
 				msg_print("エレメンタルが現れた...");
@@ -2333,7 +2333,7 @@ bool activate_random_artifact(object_type * o_ptr)
 			bool pet = (randint(3) == 1);
 			bool group = !(pet && (plev < 50));
 
-			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), SUMMON_DEMON, group, FALSE, pet, FALSE, !pet))
+			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), SUMMON_DEMON, group, FALSE, pet, FALSE, (bool)(!pet)))
 			{
 #ifdef JP
 				msg_print("硫黄の悪臭が充満した。");
@@ -2381,7 +2381,7 @@ bool activate_random_artifact(object_type * o_ptr)
 			}
 
 			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), type,
-					    group, FALSE, pet, unique_okay, !pet))
+					    group, FALSE, pet, unique_okay, (bool)(!pet)))
 			{
 #ifdef JP
 				msg_print("冷たい風があなたの周りに吹き始めた。それは腐敗臭を運んでいる...");

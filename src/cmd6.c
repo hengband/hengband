@@ -1056,6 +1056,7 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			(void)do_res_stat(A_INT);
 			(void)do_res_stat(A_CHR);
 			(void)set_shero(0,TRUE);
+			update_stuff();
 			hp_player(5000);
 			ident = TRUE;
 			break;
@@ -5153,7 +5154,11 @@ msg_print("あなたの槍は電気でスパークしている...");
 			}
 			case ART_MURAMASA:
 			{
+#ifdef JP
 				if (get_check("本当に使いますか？"))
+#else
+				if (get_check("Are you sure?!"))
+#endif
 				{
 #ifdef JP
 					msg_print("村正が震えた．．．");
@@ -5236,7 +5241,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 			{
 				bool pet = (randint(5) != 1);
 
-				if (summon_specific((pet ? -1 : 0), py, px, ((p_ptr->lev * 3) / 2), SUMMON_HOUND, TRUE, FALSE, pet, FALSE, !pet))
+				if (summon_specific((pet ? -1 : 0), py, px, ((p_ptr->lev * 3) / 2), SUMMON_HOUND, TRUE, FALSE, pet, FALSE, (bool)(!pet)))
 				{
 
 					if (pet)
@@ -5577,7 +5582,11 @@ msg_print("あなたの槍は電気でスパークしている...");
 	{
 		if (!o_ptr->xtra4 && ((o_ptr->sval == SV_LITE_TORCH) || (o_ptr->sval == SV_LITE_LANTERN)))
 		{
+#ifdef JP
 			msg_print("燃料がない。");
+#else
+			msg_print("It has no fuel.");
+#endif
 			energy_use = 0;
 			return;
 		}
@@ -6812,7 +6821,16 @@ static bool select_magic_eater(int mode)
 					{
 						if (tval == TV_ROD)
 						{
-							strcat(dummy, format(" %-22.22s 充填:%2d/%2d%3d%%", k_name + k_info[k_idx].name, p_ptr->magic_num1[ctr+ext] ? (p_ptr->magic_num1[ctr+ext] - 1) / (0x10000L * k_info[k_idx].pval) +1 : 0, p_ptr->magic_num2[ctr+ext], chance));
+strcat(dummy, format(
+#ifdef JP
+	" %-22.22s 充填:%2d/%2d%3d%%",
+#else
+	" %-22.22s   (%2d/%2d) %3d%%",
+#endif
+	k_name + k_info[k_idx].name, 
+	p_ptr->magic_num1[ctr+ext] ? 
+	(p_ptr->magic_num1[ctr+ext] - 1) / (0x10000L * k_info[k_idx].pval) +1 : 0, 
+	p_ptr->magic_num2[ctr+ext], chance));
 							if (p_ptr->magic_num1[ctr+ext] > k_info[k_idx].pval * (p_ptr->magic_num2[ctr+ext]-1) * 0x10000L) col = TERM_RED;
 						}
 						else

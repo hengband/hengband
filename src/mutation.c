@@ -211,7 +211,7 @@ muta_desc = "体が変異しやすくなった。";
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_MIDAS_TCH;
 #ifdef JP
-muta_desc = "「ミダス王の手」の能力を得た。";/*トゥームレイダースにありましたね。*/
+muta_desc = "「ミダス王の手」の能力を得た。";/*トゥームレイダースにありましたね。 */
 #else
 			muta_desc = "You gain the Midas touch.";
 #endif

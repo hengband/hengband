@@ -87,11 +87,12 @@ of the Pickpocket
 
 N:17:BIAS_MAGE
 N: 7:BIAS_INT
-4
+5
 'Fractal'
 'Deja-Vu'
-of Martin
+for Ritual
 of Talisman
+of the wiZZard
 
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
@@ -100,7 +101,7 @@ N: 6:BIAS_STR
 'Turbo'
 of Resist Smasher
 of the Minotaur
-of the Sumo Warrior
+of Sumo Wrestler
 of Daddy
 
 N:10:BIAS_CON
@@ -108,7 +109,7 @@ N:10:BIAS_CON
 'Endurance'
 'Glowth Period'
 'Trollism'
-'Big Tree'
+'Big Useless Fellow'
 'Healthy One'
 of Pro Wrestler
 
@@ -117,7 +118,7 @@ N:19:BIAS_RANGER
 'Weeds'
 'Radar'
 'Planaria'
-of Stone
+of The Stone
 of Squirrel
 
 N:11:BIAS_CHR
@@ -128,9 +129,7 @@ of Super Model
 of Passion
 
 N:*:Default
-22
-of the Foo
-of the Bar
+19
 'Sambo'
 'Blink'
 'Pizza'
@@ -148,6 +147,6 @@ of Gurnemanz
 of Coral
 of Barahir
 'Generater'
-'Dal-i-Thalion'
 'Bladereturner'
 'Iron Virgin'
+

@@ -617,7 +617,11 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 				if (!isspace(tmp[q]))
 				{
 					/* Capitalize if possible */
-					if (islower(tmp[q])) tmp[q] = toupper(tmp[q]);
+#ifdef JP
+					if (!iskanji(tmp[q]))
+#endif
+						if (islower(tmp[q]))
+							tmp[q] = toupper(tmp[q]);
 
 					/* Done */
 					break;

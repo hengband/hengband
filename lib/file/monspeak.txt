@@ -323,9 +323,7 @@ says, 'I won't take that from you!'
 N:505:Goemon
 3
 says, 'Zantetsuken is sharp this night. '
-###########「今宵の斬鉄剣はひと味違うぞ！」
-############# 斬鉄剣ってどんな訳になってるんだろう？
-says, 'I cut an abbreviated piece of nothing again...'
+mumbles, 'Sign..Another trifling thing I've cut....'
 buttons his lips, '.....'
 
 N:1062:Groo the Wanderer
@@ -665,11 +663,11 @@ says, 'I can't be bothered... minions, slaughter this fool!'
 says, 'Such a doomed, pathetic gesture as yours  verges on the heroic!'
 says, 'Mere mortals such as you should not meddle the affair of the Powers!'
 
-N:873:Combat-Echizen, SEKKAKUDAKARA
+N:873:Combat-Echizen
 4
 says, 'Somethig comes from above! Be careful!'
 says, 'What is this stair?'
-says, 'Because of a reason, I choose this red door!'
+says, 'Because it's time, I choose this red door!'
 chunters, 'Tonight, someone dies again...'
 
 N:878:Dio Brando

@@ -1007,7 +1007,7 @@ static void wr_extra(void)
 
 	/* Max Player and Dungeon Levels */
 	wr_s16b(p_ptr->max_plv);
-        tmp8u = max_d_idx;
+        tmp8u = (byte)max_d_idx;
         wr_byte(tmp8u);
         for (i = 0; i < tmp8u; i++)
                 wr_s16b(max_dlv[i]);
@@ -1141,7 +1141,7 @@ static void wr_extra(void)
 
 	wr_s32b(p_ptr->visit);
 
-	wr_s32b(p_ptr->count);
+	wr_u32b(p_ptr->count);
 }
 
 
@@ -1170,8 +1170,8 @@ static void wr_dungeon(void)
 	wr_byte(dungeon_type);
 	wr_u16b(base_level);
 	wr_u16b(num_repro);
-	wr_u16b(py);
-	wr_u16b(px);
+	wr_u16b((u16b)py);
+	wr_u16b((u16b)px);
 	wr_u16b(cur_hgt);
 	wr_u16b(cur_wid);
 	wr_u16b(max_panel_rows);
@@ -2158,7 +2158,7 @@ msg_format("バージョン %d.%d.%d 用のセーブ・ファイルを変換しました。",
 		character_loaded = TRUE;
 
 		{
-			s32b tmp = counts_read(2);
+			u32b tmp = counts_read(2);
 			if (tmp > p_ptr->count)
 				p_ptr->count = tmp;
 			if (counts_read(0) > playtime || counts_read(1) == playtime)

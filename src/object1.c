@@ -7147,6 +7147,47 @@ if (ver && !verify("本当に", k))
 }
 
 
+bool py_pickup_floor_aux(void)
+{
+	s16b this_o_idx;
+
+	object_type *o_ptr;
+
+	cptr q, s;
+
+	int item;
+
+	/* Restrict the choices */
+	item_tester_hook = inven_carry_okay;
+
+	/* Get an object */
+#ifdef JP
+	q = "どれを拾いますか？";
+	s = "もうザックには床にあるどのアイテムも入らない。";
+#else
+	q = "Get which item? ";
+	s = "You no longer have any room for the objects on the floor.";
+#endif
+
+	if (get_item(&item, q, s, (USE_FLOOR)))
+	{
+		this_o_idx = 0 - item;
+	}
+	else
+	{
+		return (FALSE);
+	}
+
+	/* Access the object */
+	o_ptr = &o_list[this_o_idx];
+
+	/* Pick up the object */
+	py_pickup_aux(this_o_idx);
+
+	return (TRUE);
+}
+
+
 /*
  * Make the player carry everything in a grid
  *
@@ -7164,8 +7205,6 @@ void py_pickup_floor(int pickup)
 	int floor_num = 0, floor_list[23], floor_o_idx = 0;
 
 	int can_pickup = 0;
-
-	bool do_ask = TRUE;
 
 	/* Scan the pile of objects */
 	for (this_o_idx = cave[py][px].o_idx; this_o_idx; this_o_idx = next_o_idx)
@@ -7358,7 +7397,7 @@ void py_pickup_floor(int pickup)
 
 			/* Build a prompt */
 #ifdef JP
-                                        (void)sprintf(out_val, "%sを拾いますか? ", o_name);
+			(void) sprintf(out_val, "%sを拾いますか? ", o_name);
 #else
 			(void) sprintf(out_val, "Pick up %s? ", o_name);
 #endif
@@ -7372,78 +7411,32 @@ void py_pickup_floor(int pickup)
 			}
 		}
 
-		/* Don't ask */
-		do_ask = FALSE;
-
-		/* Remember the object to pick up */
-		this_o_idx = floor_o_idx;
-	}
-
-	/* Allow the user to choose an object */
-	if (do_ask)
-	{
-		cptr q, s;
-
-		int item;
+		/* Access the object */
+		o_ptr = &o_list[floor_o_idx];
 
 #ifdef ALLOW_EASY_SENSE
 
 		/* Option: Make object sensing easy */
 		if (easy_sense)
 		{
-			int i;
-
-			/* Sense each object in the stack */
-			for (i = 0; i < floor_num; i++)
-			{
-				/* Access the object */
-				o_ptr = &o_list[floor_list[i]];
-
-				/* Sense the object */
-				(void) sense_object(o_ptr);
-			}
+			/* Sense the object */
+			(void) sense_object(o_ptr);
 		}
 
 #endif /* ALLOW_EASY_SENSE */
 
-		/* Restrict the choices */
-		item_tester_hook = inven_carry_okay;
-
-		/* Get an object */
-#ifdef JP
-		q = "どれを拾いますか？";
-		s = "なにもありません。";
-#else
-		q = "Get which item? ";
-		s = "You see nothing there.";
-#endif
-
-		if (get_item(&item, q, s, (USE_FLOOR)))
-		{
-			this_o_idx = 0 - item;
-		}
-		else
-		{
-			return;
-		}
+		/* Pick up the object */
+		py_pickup_aux(floor_o_idx);
 	}
 
-	/* Access the object */
-	o_ptr = &o_list[this_o_idx];
-
-#ifdef ALLOW_EASY_SENSE
-
-	/* Option: Make object sensing easy */
-	if (easy_sense)
+	/* Allow the user to choose an object */
+	else
 	{
-		/* Sense the object */
-		(void) sense_object(o_ptr);
+		while (can_pickup--)
+		{
+			if (!py_pickup_floor_aux()) break;
+		}
 	}
-
-#endif /* ALLOW_EASY_SENSE */
-
-	/* Pick up the object */
-	py_pickup_aux(this_o_idx);
 }
 
 #endif /* ALLOW_EASY_FLOOR */

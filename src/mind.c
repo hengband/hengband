@@ -721,7 +721,11 @@ put_str(format("Lv   %s   Fail Info", ((use_mind == MIND_BERSERKER) || (use_mind
 
 					if (use_menu)
 					{
+#ifdef JP
 						if (i == (menu_line-1)) strcpy(psi_desc, "  》 ");
+#else
+						if (i == (menu_line-1)) strcpy(psi_desc, "  >  ");
+#endif
 						else strcpy(psi_desc, "     ");
 					}
 					else
@@ -2014,7 +2018,11 @@ msg_format("%sの集中に失敗した！",p);
 		{
 			if ((use_mind == MIND_KI) && (n != 5) && p_ptr->magic_num1[0])
 			{
+#ifdef JP
 				msg_print("気が散ってしまった．．．");
+#else
+				msg_print("Your improved Force has gone away...");
+#endif
 				p_ptr->magic_num1[0] = 0;
 			}
 

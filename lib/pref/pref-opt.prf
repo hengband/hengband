@@ -131,10 +131,7 @@ X:ironman_nightmare
 X:munchkin_death
 
 
-##### nanka #####
-Y:display_pick
-X:display_nopick
-X:display_destroy
+##### Easy auto-destroyer #####
 X:destroy_items
 Y:leave_worth
 X:leave_equip

@@ -424,11 +424,11 @@ N:883:Zombified Serpent of Chaos
 1
 screams, 'This CAN'T be happening!'
 
-N:873:Combat-Echizen, SEKKAKUDAKARA
+N:873:Combat-Echizen
 3
 says shiftlessly, 'Shit...!'
 says shiftlessly, 'Yegg...!'
-says shiftlessly, 'Be cheated!'
+says shiftlessly, 'yariyagattana!'
 
 N:878:Dio Brando
 1

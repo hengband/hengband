@@ -298,7 +298,7 @@ bool gain_magic(void)
 q = "どのアイテムの魔力を取り込みますか? ";
 s = "魔力を取り込めるアイテムがない。";
 #else
-	q = "Gain power which item? ";
+	q = "Gain power of which item? ";
 	s = "You have nothing to gain power.";
 #endif
 
@@ -318,13 +318,21 @@ s = "魔力を取り込めるアイテムがない。";
 
 	if (!object_known_p(o_ptr))
 	{
+#ifdef JP
 		msg_print("鑑定されていないと取り込めない。");
+#else
+		msg_print("You need to identify before absorbing.");
+#endif
 		return FALSE;
 	}
 
 	if (o_ptr->timeout)
 	{
+#ifdef JP
 		msg_print("充填中のアイテムは取り込めない。");
+#else
+		msg_print("This item is still charging.");
+#endif
 		return FALSE;
 	}
 
@@ -1052,9 +1060,17 @@ msg_print("素手じゃないとできません。");
 					if (cave[y][x].m_idx)
 					{
 						if (one_in_(2))
+#ifdef JP
 msg_print("あーたたたたたたたたたたたたたたたたたたたたたた！！！");
+#else
+msg_print("Ahhhtatatatatatatatatatatatatatataatatatatattaaaaa!!!!");
+#endif
 						else
+#ifdef JP
 msg_print("オラオラオラオラオラオラオラオラオラオラオラオラ！！！");
+#else
+msg_print("Oraoraoraoraoraoraoraoraoraoraoraoraoraoraoraoraora!!!!");
+#endif
 						py_attack(y, x, 0);
 						if (cave[y][x].m_idx)
 						{
@@ -1280,26 +1296,42 @@ msg_print("武器を持たないといけません。");
 
 				if (p_ptr->riding)
 				{
+#ifdef JP
 					msg_print("今は乗馬中だ。");
+#else
+					msg_print("You ARE riding.");
+#endif
 					return FALSE;
 				}
 				if (!do_riding(TRUE)) return TRUE;
 				m_ptr = &m_list[p_ptr->riding];
 				r_ptr = &r_info[m_ptr->r_idx];
 				monster_desc(m_name, m_ptr, 0);
+#ifdef JP
 				msg_format("%sに乗った。",m_name);
+#else
+				msg_format("You ride on %s.",m_name);
+#endif
 				if (is_pet(m_ptr)) break;
 				rlev = r_ptr->level;
 				if (r_ptr->flags1 & RF1_UNIQUE) rlev = rlev * 3 / 2;
 				if (rlev > 60) rlev = 60+(rlev-60)/2;
 				if ((randint(skill_exp[GINOU_RIDING]/120+p_ptr->lev*2/3) > rlev) && one_in_(2) && !p_ptr->inside_arena && !p_ptr->inside_battle && !(r_ptr->flags7 & (RF7_GUARDIAN)) && !(r_ptr->flags1 & (RF1_QUESTOR)) && (rlev < p_ptr->lev*3/2+rand_int(p_ptr->lev/5)))
 				{
+#ifdef JP
 					msg_format("%sを手なずけた。",m_name);
+#else
+					msg_format("You tame %s.",m_name);
+#endif
 					set_pet(m_ptr);
 				}
 				else
 				{
+#ifdef JP
 					msg_format("%sに振り落とされた！",m_name);
+#else
+					msg_format("You have thrown off by %s.",m_name);
+#endif
 					rakuba(1,TRUE);
 				}
 			}

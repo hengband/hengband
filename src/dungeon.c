@@ -894,10 +894,8 @@ static void regenmana(int percent)
 	{
 		new_mana *= 32;
 		p_ptr->csp--;
-		p_ptr->csp_frac += 0x10000L;
-
 		p_ptr->csp -= (s16b)(new_mana >> 16);	/* div 65536 */
-		new_mana_frac = p_ptr->csp_frac - (new_mana & 0xFFFF);
+		new_mana_frac = p_ptr->csp_frac + 0x10000L - (new_mana & 0xFFFF);
 	}
 	else
 	{
@@ -1246,7 +1244,7 @@ msg_format("%s¤Ï%s¤È¤¤¤¦´¶¤¸¤¬¤¹¤ë...",
 }
 
 
-static void gere_music(s16b music)
+static void gere_music(s32b music)
 {
         switch(music)
         {
@@ -1390,7 +1388,7 @@ else msg_format("%s¤ÏºÆ½¼Å¶¤µ¤ì¤¿¡£", o_name);
 static void check_music()
 {
         magic_type *s_ptr;
-	int shouhimana;
+	u32b shouhimana;
 
         /* Music singed by player */
         if(p_ptr->pclass != CLASS_BARD) return;
@@ -1413,20 +1411,27 @@ static void check_music()
         else
         {
                 p_ptr->csp -= shouhimana / 0x10000;
-		shouhimana = (shouhimana % 0x10000);
+		shouhimana = (shouhimana & 0xffff);
 		if (p_ptr->csp_frac < shouhimana)
 		{
 			p_ptr->csp--;
-			p_ptr->csp_frac += 0x10000;
+			p_ptr->csp_frac += (u16b)(0x10000L - shouhimana);
 		}
-		p_ptr->csp_frac -= shouhimana;
+		else
+		{
+			p_ptr->csp_frac -= (u16b)shouhimana;
+		}
 
                 p_ptr->redraw |= PR_MANA;
 		if (p_ptr->magic_num1[1])
 		{
 			p_ptr->magic_num1[0] = p_ptr->magic_num1[1];
 			p_ptr->magic_num1[1] = 0;
+#ifdef JP
 			msg_print("²Î¤òºÆ³«¤·¤¿¡£");
+#else
+			msg_print("You restart singing.");
+#endif
 			p_ptr->action = ACTION_SING;
 
 			/* Recalculate bonuses */
@@ -1894,7 +1899,7 @@ hit_from = "¿¼¤¤ÍÏ´äÎ®";
 
 	else if ((cave[py][px].feat == FEAT_DEEP_WATER) && !p_ptr->ffall && !p_ptr->can_swim)
 	{
-		if (p_ptr->total_weight > ((adj_str_wgt[p_ptr->stat_ind[A_STR]] * (p_ptr->pclass == CLASS_BERSERKER ? 150 : 100)) / 2))
+		if (p_ptr->total_weight > (((u32b)adj_str_wgt[p_ptr->stat_ind[A_STR]] * (p_ptr->pclass == CLASS_BERSERKER ? 150 : 100)) / 2))
 		{
 			/* Take damage */
 #ifdef JP
@@ -2833,9 +2838,10 @@ msg_print("ËâË¡¤Î¥¨¥Í¥ë¥®¡¼¤¬ÆÍÁ³¤¢¤Ê¤¿¤ÎÃæ¤ËÎ®¤ì¹þ¤ó¤Ç¤­¤¿¡ª¥¨¥Í¥ë¥®¡¼¤ò²òÊü¤·¤
 		    !p_ptr->anti_magic && (randint(6666) == 666))
 		{
 			bool pet = (randint(6) == 1);
+			bool not_pet = (bool)(!pet);
 
 			if (summon_specific((pet ? -1 : 0), py, px,
-				    dun_level, SUMMON_DEMON, TRUE, FALSE, pet, !pet, !pet))
+				    dun_level, SUMMON_DEMON, TRUE, FALSE, pet, not_pet, not_pet))
 			{
 #ifdef JP
 msg_print("¤¢¤Ê¤¿¤Ï¥Ç¡¼¥â¥ó¤ò°ú¤­´ó¤»¤¿¡ª");
@@ -2964,9 +2970,10 @@ msg_print("¸÷¸»¤«¤é¥¨¥Í¥ë¥®¡¼¤òµÛ¼ý¤·¤¿¡ª");
 		   !p_ptr->anti_magic && one_in_(7000))
 		{
 			bool pet = (randint(3) == 1);
+			bool not_pet = (bool)(!pet);
 
 			if (summon_specific((pet ? -1 : 0), py, px, dun_level, SUMMON_ANIMAL,
-			    TRUE, FALSE, pet, !pet, !pet))
+			    TRUE, FALSE, pet, not_pet, not_pet))
 			{
 #ifdef JP
 msg_print("Æ°Êª¤ò°ú¤­´ó¤»¤¿¡ª");
@@ -3069,9 +3076,10 @@ msg_print("¼«Ê¬¤¬¿ê¼å¤·¤Æ¤¤¤¯¤Î¤¬Ê¬¤«¤ë¡ª");
 		   !p_ptr->anti_magic && one_in_(3000))
 		{
 			bool pet = (randint(5) == 1);
+			bool not_pet = (bool)(!pet);
 
 			if (summon_specific((pet ? -1 : 0), py, px, dun_level, SUMMON_DRAGON,
-			    TRUE, FALSE, pet, !pet, !pet))
+			    TRUE, FALSE, pet, not_pet, not_pet))
 			{
 #ifdef JP
 msg_print("¥É¥é¥´¥ó¤ò°ú¤­´ó¤»¤¿¡ª");
@@ -3528,7 +3536,7 @@ msg_print("¾å¤Ë°ú¤ÃÄ¥¤ê¤¢¤²¤é¤ì¤ë´¶¤¸¤¬¤¹¤ë¡ª");
 					(quest[leaving_quest].status == QUEST_STATUS_TAKEN))
 				{
 					quest[leaving_quest].status = QUEST_STATUS_FAILED;
-					quest[leaving_quest].complev = p_ptr->lev;
+					quest[leaving_quest].complev = (byte)p_ptr->lev;
 					if (quest[leaving_quest].type == QUEST_TYPE_RANDOM)
 					{
 						r_info[quest[leaving_quest].r_idx].flags1 &= ~(RF1_QUESTOR);
@@ -3601,7 +3609,7 @@ msg_print("²¼¤Ë°ú¤­¤º¤ê¹ß¤í¤µ¤ì¤ë´¶¤¸¤¬¤¹¤ë¡ª");
 						    (quest[i].level < dun_level))
 						{
 							quest[i].status = QUEST_STATUS_FAILED;
-							quest[i].complev = p_ptr->lev;
+							quest[i].complev = (byte)p_ptr->lev;
 							r_info[quest[i].r_idx].flags1 &= ~(RF1_QUESTOR);
 						}
 					}
@@ -4022,7 +4030,7 @@ msg_print("¥¦¥£¥¶¡¼¥É¥â¡¼¥ÉÆÍÆþ¡£");
 		/*** Stairs and Doors and Chests and Traps ***/
 
 		/* Enter store */
-		case '_':
+		case 253:
 		{
 			if (!p_ptr->wild_mode) do_cmd_store();
 			break;
@@ -5079,14 +5087,15 @@ msg_format("%^s¤ò¶²ÉÝ¤«¤éÎ©¤ÁÄ¾¤é¤»¤¿¡£", m_name);
 		}
 		else
 		{
-			p_ptr->csp -= (hoge / 0x10000L);
+			p_ptr->csp -= (s16b)(hoge >> 16);
 			hoge &= 0xFFFFL;
 			if (p_ptr->csp_frac < hoge)
 			{
-				p_ptr->csp_frac += 0x10000L;
-				p_ptr->csp --;
+				p_ptr->csp_frac += 0x10000L - hoge;
+				p_ptr->csp--;
 			}
-			p_ptr->csp_frac -= hoge;
+			else
+				p_ptr->csp_frac -= hoge;
 		}
 		p_ptr->redraw |= PR_MANA;
 	}
@@ -5616,7 +5625,7 @@ static void dungeon(bool load_game)
 
 	/* Update stuff */
 	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_DISTANCE | PU_MON_LITE);
-	p_ptr->update |= (PU_MONSTERS);/*¼«Ê¬¤Ç¸÷¤Ã¤Æ¤¤¤ë¥â¥ó¥¹¥¿¡¼¤Î°Ù*/
+	p_ptr->update |= (PU_MONSTERS);/*¼«Ê¬¤Ç¸÷¤Ã¤Æ¤¤¤ë¥â¥ó¥¹¥¿¡¼¤Î°Ù */
 
 	/* Update stuff */
 	update_stuff();
@@ -6137,7 +6146,7 @@ quit("¥»¡¼¥Ö¥Õ¥¡¥¤¥ë¤¬²õ¤ì¤Æ¤¤¤Þ¤¹");
 		/* Start in town */
 		dun_level = 0;
 		p_ptr->inside_quest = 0;
-		p_ptr->inside_arena = 0;
+		p_ptr->inside_arena = FALSE;
 		p_ptr->inside_battle = FALSE;
 
 		write_level = TRUE;
@@ -6549,8 +6558,8 @@ msg_print("Ä¥¤ê¤Ä¤á¤¿Âçµ¤¤¬Î®¤ìµî¤Ã¤¿...");
 					death = FALSE;
 
 					dun_level = 0;
-					p_ptr->inside_arena = 0;
-					p_ptr->inside_battle = 0;
+					p_ptr->inside_arena = FALSE;
+					p_ptr->inside_battle = FALSE;
 					leaving_quest = 0;
 					p_ptr->inside_quest = 0;
 					p_ptr->recall_dungeon = dungeon_type;

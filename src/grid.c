@@ -1009,7 +1009,7 @@ bool build_tunnel2(int x1, int y1, int x2, int y2, int type, int cutoff)
 	{
 		/*
 		* Divide path in half and call routine twice.
-		*/
+		 */
 		dx = (x2 - x1) / 2;
 		dy = (y2 - y1) / 2;
 

@@ -814,7 +814,11 @@ static bool cast_hissatsu_spell(int spell)
 					char m_name[80];
 
 					monster_desc(m_name, &m_list[c_ptr->m_idx], 0);
+#ifdef JP
 					msg_format("%sには効果がない！", m_name);
+#else
+					msg_format("%s is unharmed!", m_name);
+#endif
 				}
 				else py_attack(y, x, HISSATSU_SEKIRYUKA);
 			}

@@ -338,7 +338,7 @@ msg_print("不思議な力がテレポートを防いだ！");
 
 #ifdef JP
 	if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
-				msg_format("『こっちだぁ、%s』", player_name);
+		msg_format("『こっちだぁ、%s』", player_name);
 #endif
 
 	/* Save the old location */
@@ -596,7 +596,7 @@ msg_print("あなたは天井を突き破って宙へ浮いていく。");
 			(quest[leaving_quest].status == QUEST_STATUS_TAKEN))
 		{
 			quest[leaving_quest].status = QUEST_STATUS_FAILED;
-			quest[leaving_quest].complev = p_ptr->lev;
+			quest[leaving_quest].complev = (byte)p_ptr->lev;
 			if (quest[leaving_quest].type == QUEST_TYPE_RANDOM)
 			{
 				r_info[quest[leaving_quest].r_idx].flags1 &= ~(RF1_QUESTOR);
@@ -2576,6 +2576,18 @@ void identify_item(object_type *o_ptr)
 }
 
 
+bool item_tester_hook_identify(object_type *o_ptr)
+{
+	return (bool)!object_known_p(o_ptr);
+}
+
+bool item_tester_hook_identify_weapon_armour(object_type *o_ptr)
+{
+	if (object_known_p(o_ptr))
+		return FALSE;
+	return item_tester_hook_weapon_armour(o_ptr);
+}
+
 /*
  * Identify an object in the inventory (or on the floor)
  * This routine does *not* automatically combine objects.
@@ -2591,12 +2603,14 @@ bool ident_spell(bool only_equip)
 	item_tester_no_ryoute = TRUE;
 
 	if (only_equip)
-		item_tester_hook = item_tester_hook_weapon_armour;
+		item_tester_hook = item_tester_hook_identify_weapon_armour;
+	else
+		item_tester_hook = item_tester_hook_identify;
 
 	/* Get an item */
 #ifdef JP
 q = "どのアイテムを鑑定しますか? ";
-s = "鑑定できるアイテムがない。";
+s = "鑑定するべきアイテムがない。";
 #else
 	q = "Identify which item? ";
 	s = "You have nothing to identify.";
@@ -2726,6 +2740,18 @@ msg_print("まばゆい閃光が走った！");
 
 
 
+bool item_tester_hook_identify_fully(object_type *o_ptr)
+{
+	return (bool)(!object_known_p(o_ptr) || !(o_ptr->ident & IDENT_MENTAL));
+}
+
+bool item_tester_hook_identify_fully_weapon_armour(object_type *o_ptr)
+{
+	if (!item_tester_hook_identify_fully(o_ptr))
+		return FALSE;
+	return item_tester_hook_weapon_armour(o_ptr);
+}
+
 /*
  * Fully "identify" an object in the inventory  -BEN-
  * This routine returns TRUE if an item was identified.
@@ -2739,12 +2765,14 @@ bool identify_fully(bool only_equip)
 
 	item_tester_no_ryoute = TRUE;
 	if (only_equip)
-		item_tester_hook = item_tester_hook_weapon_armour;
+		item_tester_hook = item_tester_hook_identify_fully_weapon_armour;
+	else
+		item_tester_hook = item_tester_hook_identify_fully;
 
 	/* Get an item */
 #ifdef JP
 q = "どのアイテムを鑑定しますか? ";
-s = "鑑定できるアイテムがない。";
+s = "鑑定するべきアイテムがない。";
 #else
 	q = "Identify which item? ";
 	s = "You have nothing to identify.";
@@ -4171,7 +4199,7 @@ static void spell_info(char *p, int spell, int realm)
 		case 16: sprintf(p, " %s25+d25", s_dur); break;
 		case 17: sprintf(p, " %s", s_random); break;
 		case 18: sprintf(p, " %s%dd8", s_dam, (4 + ((plev - 5) / 4))); break;
-		case 19: sprintf(p, " 最大%s50", s_dur); break;
+		case 19: sprintf(p, " %s25+d25", s_dur); break;
 		case 21: sprintf(p, " %s3*100", s_dam); break;
 		case 22: sprintf(p, " %sd%d", s_dam, plev * 3); break;
 		case 23: sprintf(p, " %s%d", s_dam, 100 + plev * 2); break;
@@ -5429,7 +5457,7 @@ bool polymorph_monster(int y, int x)
 		delete_monster_idx(c_ptr->m_idx);
 
 		/* Create a new monster (no groups) */
-		if (place_monster_aux(y, x, new_r_idx, FALSE, FALSE, friendly, pet, FALSE, (m_ptr->mflag2 & MFLAG_NOPET)))
+		if (place_monster_aux(y, x, new_r_idx, FALSE, FALSE, friendly, pet, FALSE, (bool)(m_ptr->mflag2 & MFLAG_NOPET)))
 		{
 			/* Success */
 			polymorphed = TRUE;
@@ -5439,7 +5467,7 @@ bool polymorph_monster(int y, int x)
 			monster_terrain_sensitive = FALSE;
 
 			/* Placing the new monster failed */
-			place_monster_aux(y, x, old_r_idx, FALSE, FALSE, friendly, pet, TRUE, (m_ptr->mflag2 & MFLAG_NOPET));
+			place_monster_aux(y, x, old_r_idx, FALSE, FALSE, friendly, pet, TRUE, (bool)(m_ptr->mflag2 & MFLAG_NOPET));
 
 			monster_terrain_sensitive = TRUE;
 		}
@@ -5914,5 +5942,5 @@ bool summon_kin_player(bool pet, int level, int y, int x, bool group)
 		summon_kin_type = 'V';
 		break;
 	}	
-	return summon_specific((pet ? -1 : 0), y, x, level, SUMMON_KIN, group, FALSE, pet, FALSE, !pet);
+	return summon_specific((pet ? -1 : 0), y, x, level, SUMMON_KIN, group, FALSE, pet, FALSE, (bool)(!pet));
 }

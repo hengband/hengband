@@ -2413,14 +2413,14 @@ D:地、水、火、風および霊的な力が調和し
 D:渾然一体となり、輝く護光となってこの鎧を包んでいる。
 
 N:131:イカヌスの
-E:of Icanus
+E:of Incanus
 I:36:2:3
 W:50:40:20:100000
 P:2:0d0:0:0:20
 F:INT | WIS | SEARCH | HIDE_TYPE | FEATHER | ACTIVATE 
 F:SUST_INT | SUST_WIS | FREE_ACT | SEE_INVIS | DEC_MANA |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD
-D:$The robe of the great wizard Gandalf, also known as Icanus in the 
+D:$The robe of the great wizard Gandalf, also known as Incanus in the 
 D:$lands of the South. It is proof against elements, for neither the 
 D:$heat of the South, nor the ice of the North, nor the acidy pits of Dol 
 D:$Guldur were able to hold back the defiant Maia in the pursuit of 
@@ -2979,7 +2979,7 @@ F:LITE | TELEPATHY | REGEN |
 F:HIDE_TYPE | SHOW_MODS | RIDING | QUESTITEM | INSTA_ART
 
 N:182:いいかげんな
-E:of irresponsiblity
+E:of irresponsibility
 I:19:63:7
 W:127:1:50:1000000
 P:0:1d1:22:22:10
@@ -3309,7 +3309,7 @@ D:（富士見書房「アイスウインド・サーガ１魔石の復活」 R・A・サルヴァトーレ著、
 D:風見潤訳）
 
 N:209:『隠者の紫』
-E:'hermit's perple'
+E:'hermit's purple'
 I:21:2:2
 W:40:40:30:40000
 P:0:1d6:10:5:0
