@@ -6646,6 +6646,8 @@ quit("セーブファイルが壊れています");
 		quit(0);
 	}
 
+	creating_savefile = new_game;
+
 	/* Nothing loaded */
 	if (!character_loaded)
 	{
@@ -6759,6 +6761,8 @@ quit("セーブファイルが壊れています");
 			}
 		}
 	}
+
+	creating_savefile = FALSE;
 
 	p_ptr->teleport_town = FALSE;
 	p_ptr->sutemi = FALSE;

@@ -6223,8 +6223,8 @@ static bool player_birth_aux(void)
 	/* Get a name, recolor it, prepare savefile */
 	get_name();
 
-	/* Process the player name (accept as savefile name) */
-	process_player_name(TRUE);
+	/* Process the player name */
+	process_player_name(creating_savefile);
 
 	/*** Edit character background ***/
 	edit_history();

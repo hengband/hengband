@@ -88,6 +88,8 @@ bool character_saved;		/* The character was just saved to a savefile */
 bool character_icky;		/* The game is in an icky full screen mode */
 bool character_xtra;		/* The game is in an icky startup mode */
 
+bool creating_savefile;		/* New savefile is currently created */
+
 u32b seed_flavor;		/* Hack -- consistent object colors */
 u32b seed_town;			/* Hack -- consistent town layout */
 
