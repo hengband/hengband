@@ -418,51 +418,6 @@ msg_print("あなたの飢えは新鮮な血によってのみ満たされる！");
 #endif
 
 	}
-	else if (p_ptr->prace == RACE_SKELETON)
-	{
-#if 0
-		if (o_ptr->tval == TV_SKELETON ||
-		    (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_SKELETON))
-		{
-#ifdef JP
-			msg_print("あなたは骨で自分の体を補った。");
-#else
-			msg_print("Your body absorbs the bone.");
-#endif
-			set_food(p_ptr->food + 5000);
-		}
-		else 
-#endif
-
-		if (!((o_ptr->sval == SV_FOOD_WAYBREAD) ||
-		      (o_ptr->sval < SV_FOOD_BISCUIT)))
-		{
-			object_type forge;
-			object_type *q_ptr = &forge;
-
-#ifdef JP
-msg_print("食べ物がアゴを素通りして落ちた！");
-#else
-			msg_print("The food falls through your jaws!");
-#endif
-
-
-			/* Create the item */
-			object_prep(q_ptr, lookup_kind(o_ptr->tval, o_ptr->sval));
-
-			/* Drop the object from heaven */
-			(void)drop_near(q_ptr, -1, py, px);
-		}
-		else
-		{
-#ifdef JP
-msg_print("食べ物がアゴを素通りして落ち、消えた！");
-#else
-			msg_print("The food falls through your jaws and vanishes!");
-#endif
-
-		}
-	}
 	else if ((p_ptr->prace == RACE_SKELETON ||
 		  p_ptr->prace == RACE_GOLEM ||
 		  p_ptr->prace == RACE_ZOMBIE ||
@@ -574,6 +529,51 @@ msg_print("食べ物がアゴを素通りして落ち、消えた！");
 		msg_format("%^s is burnt to ashes.  You absorb its vitality!");
 #endif
 		(void)set_food(PY_FOOD_MAX - 1);
+	}
+	else if (p_ptr->prace == RACE_SKELETON)
+	{
+#if 0
+		if (o_ptr->tval == TV_SKELETON ||
+		    (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_SKELETON))
+		{
+#ifdef JP
+			msg_print("あなたは骨で自分の体を補った。");
+#else
+			msg_print("Your body absorbs the bone.");
+#endif
+			set_food(p_ptr->food + 5000);
+		}
+		else 
+#endif
+
+		if (!((o_ptr->sval == SV_FOOD_WAYBREAD) ||
+		      (o_ptr->sval < SV_FOOD_BISCUIT)))
+		{
+			object_type forge;
+			object_type *q_ptr = &forge;
+
+#ifdef JP
+msg_print("食べ物がアゴを素通りして落ちた！");
+#else
+			msg_print("The food falls through your jaws!");
+#endif
+
+
+			/* Create the item */
+			object_prep(q_ptr, lookup_kind(o_ptr->tval, o_ptr->sval));
+
+			/* Drop the object from heaven */
+			(void)drop_near(q_ptr, -1, py, px);
+		}
+		else
+		{
+#ifdef JP
+msg_print("食べ物がアゴを素通りして落ち、消えた！");
+#else
+			msg_print("The food falls through your jaws and vanishes!");
+#endif
+
+		}
 	}
 	else if ((p_ptr->prace == RACE_GOLEM) ||
 		 (p_ptr->prace == RACE_ZOMBIE) ||
