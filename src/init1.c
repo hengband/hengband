@@ -3268,9 +3268,9 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				{
 					monster_index = -monster_index;
 					clone = TRUE;
-					old_cur_num = r_info[monster_index].cur_num;
-					old_max_num = r_info[monster_index].max_num;
 				}
+				old_cur_num = r_info[monster_index].cur_num;
+				old_max_num = r_info[monster_index].max_num;
 
 				/* Make alive again */
 				if (r_info[monster_index].flags1 & RF1_UNIQUE)
