@@ -4,8 +4,8 @@ of Galactic Barrier
 of Resist *Lightning*
 of Thor
 of Zeus
-of Super Resistance
-of Immunity
+'Shambler'
+'Roaring Lightning Dragon'
 
 N: 2:BIAS_POIS
 8
@@ -22,64 +22,80 @@ N: 3:BIAS_FIRE
 7
 'Firewall'
 'Phoenix'
+'Rengoku-Kaen'
 of hellfire
 of Corona
-of Allah
 of Yama
+of Uriel
+#of Allah
 
 N: 4:BIAS_COLD
-6
+8
 'Helka-Turma'
 'White Diamond'
 'Great Snowfield'
+'Scale of Ice Dragon'
+'Great Winter'
 of Ymir
 of Snow Field
 of Soul Freeze
 
 N: 5:BIAS_ACID
 8
-of Rebma
 'O-Parts'
-of Ultimate Defence
+'Scale of Vrtra'
+of Baihu
+of Heket
+of Rebma
 of the Everlasting
-of Ultimax
-of Immunity
 of Eternity
 of Boldor
 
+N:12:BIAS_CHAOS
+11
+'Unbalancer'
+'Void'
+'Chain of Control'
+of Balo
+of Nurgle
+of Pyaray
+of Arnara
+of Slortar
+of Slaanesh
+of Collapsium
+of Great Destruction
+
 N:14:BIAS_NECROMANTIC
-6
+8
 'Bloodmail of Lucifer'
+'Love of Demeter'
+'Bottomless Pit'
 of the Immortals
 of Hades
 of Sauron
 of Mephistopheles
 of the Demon Lord
-
-N:12:BIAS_CHAOS
-6
-'Unbalancer'
-'Prince of Chaos'
-'Void'
-of Collapsium
-of Nurgle
-of Slaanesh
+of Azriel
 
 N:15:BIAS_LAW
 N:13:BIAS_PRIESTLY
 N: 8:BIAS_WIS
-7
+11
 'Ever-Faithful'
+'Talisman of Simplicity'
+'God Mode'
+'Genesis'
+'Celestial Protection'
+'Avatar of Light'
 of the Gods
 of Divine Protection
-of Celestial Protection
 of the First Day
 of the Isles of the Blessed
 of the Holy Grail
 
 N: 9:BIAS_DEX
 N:16:BIAS_ROGUE
-8
+9
 of Gimli
 (*Stealth*)
 'Beelzebub's wing'
@@ -88,61 +104,73 @@ of Lupin
 of Eric
 of Achilles
 of Super Speed
+of Idaten
 
 N:17:BIAS_MAGE
 N: 7:BIAS_INT
-7
+9
 of Celebrimbor
 of Eol
 of Merlin's Pattern
-'Mana Prism'
-'The Tower of Power'
 of the Great Magi
+of Loki
+'Clear Mind'
+'the Eye of the Aethiopica'
+'Mana Prism'
+'Ivory Tower'
 
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
-9
-'Battle Force'
+10
+'Vajra'
 'Aegis'
-of the Force
-of Invincibility
+'Cloth of Vice'
 of Lions
-of Invulnerability
 of Samurai
 of Titans
 of *Power*
+of Nike
+of Kronos
+of Diomedes
 
 N:19:BIAS_RANGER
-7
+10
 'Faroth'
 'Er-Draug'
 'Lifegiver'
-of Gaia
+'Gaia's Blessing'
+'Nature's Gift'
 of Soil
 of Mind's Eye
 of the Red Beret
+of Nessa
+of Yavanna
 
 N:10:BIAS_CON
-5
+7
 'Heart of Ahriman'
 'Living Armour'
 'Life Matrix'
-of Immortality
+'Orb of Destiny'
+'Amber Prison'
 of Corwin's Pattern
+of C('i)adan
 
 N:11:BIAS_CHR
-5
-'Day of the Dove'
+8
+'Brilliant of Laurelin'
+'Hand of Elbereth'
 of Eternity
 of Heart's Desire
 of Cleopatra
 of Aphrodite
+of Vaire
+of Nienna
 
 N:*:Default
-26
+25
 'Monolith'
 'Destiny Star'
-of Destiny
 'Lawmaster'
 of Diamond
 'Living Armour'

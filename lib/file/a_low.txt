@@ -29,6 +29,7 @@ of Insulator
 
 N: 4:BIAS_COLD
 8
+'White Ice'
 'Cool Mint'
 'Snow'
 'Snowlets'

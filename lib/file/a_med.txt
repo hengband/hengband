@@ -1,48 +1,63 @@
 N: 1:BIAS_ELEC
-5
+8
 'Registor'
+'Rubber Coat'
+'One Million Volt'
+'Electron'
+'Call of Thundercloud'
 of R'lyeh
 of Thunder
-of Rubber Coat
-of One Million Volt
+of Helldiver
 
 N: 2:BIAS_POIS
-5
+7
+'Poison Barrier'
 of Scorpio
 of Cleanness
 of Immunity
 of Mughash
 of the Snake Master
-
-N: 5:BIAS_ACID
-5
-'Gelatinous Cube'
-'Skin of Dhole'
-of Aqua Regia
-of Immunity
-of the Devine Jewel
+of the Bee Master
 
 N: 3:BIAS_FIRE
-4
+11
+'Blessed Fusion'
+'Flameturner'
+'Red Sun'
+'Shimmering Wings'
+'Lion in Flame'
+'Salamander'
+'Flamecoat'
 of Libyan Desert
 of Tropics
 of Desert
 of Lungorthin
 
 N: 4:BIAS_COLD
-6
-'White Snow'
+7
 'Icy Princess'
+'White Snow'
+'Great Icefield'
 of Siberia
 of White Ice
 of Arctic Ocean
 of Antarctic Land
 
-#N:11:BIAS_CHR
-#0
+N: 5:BIAS_ACID
+7
+'Gelatinous Cube'
+'Skin of Dhole'
+'Shield of Water'
+'Oozearmor'
+of Aqua Regia
+of the Devine Jewel
+of Diamond
 
 N:12:BIAS_CHAOS
-7
+10
+'Day of the Dove'
+'Prince of Chaos'
+'Chaos Tile'
 'Sad Giant's Shield'
 'Ever-Faithful'
 'Guard of Law'
@@ -52,36 +67,53 @@ of Seldon
 of the Chaos Lord
 
 N:14:BIAS_NECROMANTIC
-6
+9
 'Hand of Vecna'
 'Total Eclipse'
 'The Depth of Abyss'
 'Jet-black Bird'
+'Necrologia'
+'Total Solar Eclipse'
+'Undertaker'
 of Rituals
 of the Ruler of Wallachia
 
 N:15:BIAS_LAW
 N:13:BIAS_PRIESTLY
 N: 8:BIAS_WIS
-8
-of Heaven
-of Holy Smoke
+19
+'Enlightenment from Heven'
+'Holy Chant'
+'Holy Prayer'
+'Righteousness'
+'Gospel'
+'Guardian Angel'
+'Hope and Glory'
+'AEther Flash'
+'Parament of Holy Brume'
+'Holy Destiny'
+'Keeper of Light'
+'Righteous Aura'
+'Nuts of Wisdom'
+of Eden
 of Piety
 of the Pious Believer
 of Ceremony
-of Guardian Angel
 of Revelation
 of Rite
 
 N:16:BIAS_ROGUE
 N: 9:BIAS_DEX
-10
-of Nevrast
+13
 'Silentwalker'
 'Mercury'
 'Darknesslurker'
 'Shadow'
 'Phantom'
+'Keeper of Darkness'
+'Crypt Creep'
+'Smoke Ball'
+of Nevrast
 of Quietness
 of the Ninja
 of Phasing
@@ -89,9 +121,11 @@ of the Fairy
 
 N:17:BIAS_MAGE
 N: 7:BIAS_INT
-7
+9
+'Magi's Seeing'
+'Sign of Brilliance'
+'Tome of Inteligence'
 of *intelligence*
-'Nuts of Wisdom'
 of the Wizard
 of Knowledge
 of the Spellcaster
@@ -100,36 +134,51 @@ of Martin
 
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
-6
+11
+'Steel Bull'
+'Avatar of Might'
 'Terminater'
 'Die Hard'
-'Force Shield'
+'Power Shield'
+'Power Matrix'
+'Stonecold'
 of the Valkyrie
 of Daybreak
 of Diamond
+of Sad Giant
 
 N:19:BIAS_RANGER
 N:10:BIAS_CON
 8
-of Hyper Nature
 'Hound'
 'Red Belet'
 'Bear's Hand'
 'Springsleeper'
 'Life of Leaf'
+of Hyper Nature
 of the Hunter
 of Marinera
+
+N:11:BIAS_CHR
+7
+'Snow White'
+'Maiden's Hope'
+'Undiscoverd Paradise'
+'Kiss of Saccubus'
+of Cinderella
+of Benten
+of Nimue
 
 N:*:Default
 13
 'Dal-i-Thalion'
 'Guardian'
-of Champion
 'Defender'
 'Steelskin'
+'Camelot'
+of Champion
 of Crystal
 of Icarus
-'Camelot'
 of the Dark Tiger
 of Kevlar
 of the Borg
