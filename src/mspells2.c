@@ -116,7 +116,11 @@ static bool breath_direct(int y1, int x1, int y2, int x2, int rad, int typ, bool
 {
 	/* Must be the same as projectable() */
 
-	int i, y, x;
+	int i;
+
+	/* Initial grid */
+	int y = y1;
+	int x = x1;
 
 	int grid_n = 0;
 	u16b grid_g[512];
@@ -147,7 +151,35 @@ static bool breath_direct(int y1, int x1, int y2, int x2, int rad, int typ, bool
 
 	/* Check the projection path */
 	grid_n = project_path(grid_g, MAX_RANGE, y1, x1, y2, x2, flg);
-	breath_shape(grid_g, grid_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y2, x2, typ);
+
+	/* Project along the path */
+	for (i = 0; i < grid_n; ++i)
+	{
+		int ny = GRID_Y(grid_g[i]);
+		int nx = GRID_X(grid_g[i]);
+
+		if (flg & PROJECT_DISI)
+		{
+			/* Hack -- Balls explode before reaching walls */
+			if (cave_stop_disintegration(ny, nx)) break;
+		}
+		else if (flg & PROJECT_LOS)
+		{
+			/* Hack -- Balls explode before reaching walls */
+			if (!cave_los_bold(ny, nx)) break;
+		}
+		else
+		{
+			/* Hack -- Balls explode before reaching walls */
+			if (!have_flag(f_flags_bold(ny, nx), FF_PROJECT)) break;
+		}
+
+		/* Save the "blast epicenter" */
+		y = ny;
+		x = nx;
+	}
+
+	breath_shape(grid_g, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y, x, typ);
 
 	for (i = 0; i < grids; i++)
 	{

@@ -7989,23 +7989,23 @@ bool in_disintegration_range(int y1, int x1, int y2, int x2)
 /*
  * breath shape
  */
-void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte *gm, int *pgm_rad, int rad, int y1, int x1, int y2, int x2, int typ)
+void breath_shape(u16b *path_g, int *pgrids, byte *gx, byte *gy, byte *gm, int *pgm_rad, int rad, int y1, int x1, int y2, int x2, int typ)
 {
 	int by = y1;
 	int bx = x1;
+	int tdis = distance(y1, x1, y2, x2);
+	int mdis = tdis + rad;
 	int brad = 0;
-	int brev = rad * rad / dist;
+	int brev = rad * rad / tdis;
 	int bdis = 0;
 	int cdis;
 	int path_n = 0;
-	int tdis = distance(y1, x1, y2, x2);
-	int mdis = tdis + rad;
 
 	while (bdis <= mdis)
 	{
 		int x, y;
 
-		if ((0 < dist) && (path_n < dist))
+		if ((0 < tdis) && (path_n < tdis))
 		{
 			int ny = GRID_Y(path_g[path_n]);
 			int nx = GRID_X(path_g[path_n]);
@@ -8066,7 +8066,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 		gm[bdis + 1] = *pgrids;
 
 		/* Increase the size */
-		brad = rad * (path_n + brev) / (dist + brev);
+		brad = rad * (path_n + brev) / (tdis + brev);
 
 		/* Find the next ripple */
 		bdis++;
@@ -8779,7 +8779,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 		{
 			flg &= ~(PROJECT_HIDE);
 
-			breath_shape(path_g, dist, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, typ);
+			breath_shape(path_g, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, typ);
 		}
 		else
 		{
