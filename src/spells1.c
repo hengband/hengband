@@ -665,7 +665,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 #else
 			msg_format("A tree %s", message);
 #endif
-			c_ptr->feat = (one_in_(3) ? FEAT_DEEP_GRASS : FEAT_GRASS);
+			cave_set_feat(y, x, (one_in_(3) ? FEAT_DEEP_GRASS : FEAT_GRASS));
 
 			/* Observe */
 			if (c_ptr->info & (CAVE_MARK)) obvious = TRUE;
@@ -874,7 +874,7 @@ msg_print("壁が溶けて泥になった！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Destroy the wall */
-				c_ptr->feat = floor_type[randint0(100)];
+                                cave_set_feat(y, x, floor_type[randint0(100)]);
 			}
 
 			/* Quartz / Magma with treasure */
@@ -898,7 +898,7 @@ msg_print("何かを発見した！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Destroy the wall */
-				c_ptr->feat = floor_type[randint0(100)];
+                                cave_set_feat(y, x, floor_type[randint0(100)]);
 
 				/* Place some gold */
 				place_gold(y, x);
@@ -923,7 +923,7 @@ msg_print("鉱脈が溶けて泥になった！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Destroy the wall */
-				c_ptr->feat = floor_type[randint0(100)];
+                                cave_set_feat(y, x, floor_type[randint0(100)]);
 			}
 
 			/* Rubble */
@@ -945,7 +945,7 @@ msg_print("岩石が溶けて泥になった！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Destroy the rubble */
-				c_ptr->feat = floor_type[randint0(100)];
+                                cave_set_feat(y, x, floor_type[randint0(100)]);
 
 				/* Hack -- place an object */
 				if (randint0(100) < 10)
@@ -986,7 +986,7 @@ msg_print("ドアが溶けて泥になった！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Destroy the feature */
-				c_ptr->feat = floor_type[randint0(100)];
+                                cave_set_feat(y, x, floor_type[randint0(100)]);
 			}
 
 			/* Notice */
@@ -8033,9 +8033,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 							if (cave[y][x].feat == FEAT_TREES)
 								cave_set_feat(y, x, FEAT_GRASS);
 							else
-							{
-								cave[y][x].feat = floor_type[randint0(100)];
-							}
+                                                                cave_set_feat(y, x, floor_type[randint0(100)]);
 						}
 						/* Update some things -- similar to GF_KILL_WALL */
 						p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
@@ -8818,9 +8816,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 								if (cave[y][x].feat == FEAT_TREES)
 									cave_set_feat(y, x, FEAT_GRASS);
 								else
-								{
-									cave[y][x].feat = floor_type[randint0(100)];
-								}
+                                                                        cave_set_feat(y, x, floor_type[randint0(100)]);
 							}
 
 							/* Update some things -- similar to GF_KILL_WALL */

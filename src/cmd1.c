@@ -3459,7 +3459,6 @@ bool player_can_enter(byte feature)
 void move_player(int dir, int do_pickup, bool break_trap)
 {
 	int y, x;
-	byte feat;
 
 	cave_type *c_ptr;
 	monster_type *m_ptr;
@@ -3478,9 +3477,6 @@ void move_player(int dir, int do_pickup, bool break_trap)
 
 	/* Examine the destination */
 	c_ptr = &cave[y][x];
-
-	/* Feature code (applying "mimic" field) */
-	feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
 
 	/* Exit the area */
 	if (!dun_level && !p_ptr->wild_mode &&
@@ -3841,7 +3837,12 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 	else if ((!cave_floor_bold(y, x)) &&
 		(!p_can_pass_walls))
 	{
+                byte feat;
+
 		oktomove = FALSE;
+
+                /* Feature code (applying "mimic" field) */
+                feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
 
 		/* Disturb the player */
 		disturb(0, 0);
@@ -4040,9 +4041,7 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 				if (cave[py][px].feat == FEAT_TREES)
 					cave_set_feat(py, px, FEAT_GRASS);
 				else
-				{
-					cave[py][px].feat = floor_type[randint0(100)];
-				}
+					cave_set_feat(py, px, floor_type[randint0(100)]);
 			}
 				/* Update some things -- similar to GF_KILL_WALL */
 			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);

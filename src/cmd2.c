@@ -1074,11 +1074,12 @@ static int coords_to_dir(int y, int x)
  *
  * Returns TRUE if repeated commands may continue
  */
-static bool do_cmd_open_aux(int y, int x, int dir)
+static bool do_cmd_open_aux(int y, int x)
 {
 	int i, j;
 
 	cave_type *c_ptr;
+        byte feat;
 
 	bool more = FALSE;
 
@@ -1089,8 +1090,11 @@ static bool do_cmd_open_aux(int y, int x, int dir)
 	/* Get requested grid */
 	c_ptr = &cave[y][x];
 
+        /* Feature code (applying "mimic" field) */
+        feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+                
 	/* Jammed door */
-	if (c_ptr->feat >= FEAT_DOOR_HEAD + 0x08)
+	if (feat >= FEAT_DOOR_HEAD + 0x08)
 	{
 		/* Stuck */
 #ifdef JP
@@ -1102,7 +1106,7 @@ static bool do_cmd_open_aux(int y, int x, int dir)
 	}
 
 	/* Locked door */
-	else if (c_ptr->feat >= FEAT_DOOR_HEAD + 0x01)
+	else if (feat >= FEAT_DOOR_HEAD + 0x01)
 	{
 		/* Disarm factor */
 		i = p_ptr->skill_dis;
@@ -1193,8 +1197,6 @@ void do_cmd_open(void)
 
 	s16b o_idx;
 
-	cave_type *c_ptr;
-
 	bool more = FALSE;
 
 	if (p_ptr->special_defense & KATA_MUSOU)
@@ -1242,6 +1244,9 @@ void do_cmd_open(void)
 	/* Get a "repeated" direction */
 	if (get_rep_dir(&dir, TRUE))
 	{
+                byte feat;
+                cave_type *c_ptr;
+
 		/* Get requested location */
 		y = py + ddy[dir];
 		x = px + ddx[dir];
@@ -1249,12 +1254,14 @@ void do_cmd_open(void)
 		/* Get requested grid */
 		c_ptr = &cave[y][x];
 
+                /* Feature code (applying "mimic" field) */
+                feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+                
 		/* Check for chest */
 		o_idx = chest_check(y, x);
 
 		/* Nothing useful */
-		if (!(is_closed_door(c_ptr->feat) && !c_ptr->mimic) &&
-                    !o_idx)
+		if (!is_closed_door(feat) && !o_idx)
 		{
 			/* Message */
 #ifdef JP
@@ -1294,7 +1301,7 @@ void do_cmd_open(void)
 		else
 		{
 			/* Open the door */
-			more = do_cmd_open_aux(y, x, dir);
+			more = do_cmd_open_aux(y, x);
 		}
 	}
 
@@ -1313,9 +1320,10 @@ void do_cmd_open(void)
  *
  * Returns TRUE if repeated commands may continue
  */
-static bool do_cmd_close_aux(int y, int x, int dir)
+static bool do_cmd_close_aux(int y, int x)
 {
 	cave_type	*c_ptr;
+        byte feat;
 
 	bool		more = FALSE;
 
@@ -1326,8 +1334,11 @@ static bool do_cmd_close_aux(int y, int x, int dir)
 	/* Get grid and contents */
 	c_ptr = &cave[y][x];
 
+        /* Feature code (applying "mimic" field) */
+        feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+                
 	/* Broken door */
-	if (c_ptr->feat == FEAT_BROKEN)
+	if (feat == FEAT_BROKEN)
 	{
 		/* Message */
 #ifdef JP
@@ -1362,8 +1373,6 @@ static bool do_cmd_close_aux(int y, int x, int dir)
 void do_cmd_close(void)
 {
 	int y, x, dir;
-
-	cave_type *c_ptr;
 
 	bool more = FALSE;
 
@@ -1402,6 +1411,9 @@ void do_cmd_close(void)
 	/* Get a "repeated" direction */
 	if (get_rep_dir(&dir,FALSE))
 	{
+                cave_type *c_ptr;
+                byte feat;
+
 		/* Get requested location */
 		y = py + ddy[dir];
 		x = px + ddx[dir];
@@ -1409,12 +1421,15 @@ void do_cmd_close(void)
 		/* Get grid and contents */
 		c_ptr = &cave[y][x];
 
+                /* Feature code (applying "mimic" field) */
+                feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+                
 		/* Require open/broken door */
-		if ((c_ptr->feat != FEAT_OPEN) && (c_ptr->feat != FEAT_BROKEN))
+		if ((feat != FEAT_OPEN) && (feat != FEAT_BROKEN))
 		{
 			/* Message */
 #ifdef JP
-		msg_print("そこには閉じるものが見当たらない。");
+                        msg_print("そこには閉じるものが見当たらない。");
 #else
 			msg_print("You see nothing there to close.");
 #endif
@@ -1443,7 +1458,7 @@ void do_cmd_close(void)
 		else
 		{
 			/* Close the door */
-			more = do_cmd_close_aux(y, x, dir);
+			more = do_cmd_close_aux(y, x);
 		}
 	}
 
@@ -1534,7 +1549,7 @@ static bool twall(int y, int x, byte feat)
  *
  * Returns TRUE if repeated commands may continue
  */
-static bool do_cmd_tunnel_aux(int y, int x, int dir)
+static bool do_cmd_tunnel_aux(int y, int x)
 {
 	cave_type *c_ptr;
 	byte feat;
@@ -1929,7 +1944,7 @@ void do_cmd_tunnel(void)
 		else
 		{
 			/* Tunnel through walls */
-			more = do_cmd_tunnel_aux(y, x, dir);
+			more = do_cmd_tunnel_aux(y, x);
 		}
 	}
 
@@ -2240,9 +2255,7 @@ static bool do_cmd_disarm_aux(int y, int x, int dir)
 		c_ptr->info &= ~(CAVE_MARK);
 
 		/* Remove the trap */
-		c_ptr->feat = floor_type[randint0(100)];
-		note_spot(y, x);
-		lite_spot(y, x);
+                cave_set_feat(y, x, floor_type[randint0(100)]);
 
 #ifdef ALLOW_EASY_DISARM /* TNB */
 
@@ -2313,8 +2326,6 @@ void do_cmd_disarm(void)
 
 	s16b o_idx;
 
-	cave_type *c_ptr;
-
 	bool more = FALSE;
 
 	if (p_ptr->special_defense & KATA_MUSOU)
@@ -2362,6 +2373,9 @@ void do_cmd_disarm(void)
 	/* Get a direction (or abort) */
 	if (get_rep_dir(&dir,TRUE))
 	{
+                cave_type *c_ptr;
+                byte feat;
+
 		/* Get location */
 		y = py + ddy[dir];
 		x = px + ddx[dir];
@@ -2369,15 +2383,18 @@ void do_cmd_disarm(void)
 		/* Get grid and contents */
 		c_ptr = &cave[y][x];
 
+                /* Feature code (applying "mimic" field) */
+                feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+
 		/* Check for chests */
 		o_idx = chest_check(y, x);
 
 		/* Disarm a trap */
-		if (!is_trap(c_ptr->feat) && !o_idx)
+		if (!is_trap(feat) && !o_idx)
 		{
 			/* Message */
 #ifdef JP
-		msg_print("そこには解除するものが見当たらない。");
+                        msg_print("そこには解除するものが見当たらない。");
 #else
 			msg_print("You see nothing there to disarm.");
 #endif
@@ -2580,6 +2597,8 @@ void do_cmd_bash(void)
 	/* Get a "repeated" direction */
 	if (get_rep_dir(&dir,FALSE))
 	{
+                byte feat;
+
 		/* Bash location */
 		y = py + ddy[dir];
 		x = px + ddx[dir];
@@ -2587,9 +2606,12 @@ void do_cmd_bash(void)
 		/* Get grid */
 		c_ptr = &cave[y][x];
 
+                /* Feature code (applying "mimic" field) */
+                feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+
 		/* Nothing useful */
-		if (!((c_ptr->feat >= FEAT_DOOR_HEAD) &&
-		      (c_ptr->feat <= FEAT_DOOR_TAIL)))
+		if (!((feat >= FEAT_DOOR_HEAD) &&
+		      (feat <= FEAT_DOOR_TAIL)))
 		{
 			/* Message */
 #ifdef JP
@@ -2671,12 +2693,17 @@ void do_cmd_alter(void)
 	/* Get a direction */
 	if (get_rep_dir(&dir,TRUE))
 	{
+                byte feat;
+
 		/* Get location */
 		y = py + ddy[dir];
 		x = px + ddx[dir];
 
 		/* Get grid */
 		c_ptr = &cave[y][x];
+
+                /* Feature code (applying "mimic" field) */
+                feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
 
 		/* Take a turn */
 		energy_use = 100;
@@ -2689,24 +2716,18 @@ void do_cmd_alter(void)
 		}
 
 		/* Tunnel through walls */
-		else if (((c_ptr->feat >= FEAT_RUBBLE) &&
-		          (c_ptr->feat < FEAT_MINOR_GLYPH)) ||
-		         ((c_ptr->feat == FEAT_TREES) ||
-		          (c_ptr->feat == FEAT_MOUNTAIN)))
+		else if (((feat >= FEAT_RUBBLE) &&
+		          (feat < FEAT_MINOR_GLYPH)) ||
+		         ((feat == FEAT_TREES) ||
+		          (feat == FEAT_MOUNTAIN)))
 		{
-			more = do_cmd_tunnel_aux(y, x, dir);
+			more = do_cmd_tunnel_aux(y, x);
 		}
 
-                else if (is_closed_door(c_ptr->feat))
+                else if (is_closed_door(feat))
                 {
-                        /* Tunnel hidden door */
-                        if (c_ptr->mimic)
-                        {
-                                more = do_cmd_tunnel_aux(y, x, dir);
-                        }
-
                         /* Bash jammed doors */
-                        else if (c_ptr->feat >= FEAT_DOOR_HEAD + 0x08)
+                        if (feat >= FEAT_DOOR_HEAD + 0x08)
                         {
                                 more = do_cmd_bash_aux(y, x, dir);
                         }
@@ -2714,19 +2735,19 @@ void do_cmd_alter(void)
                         /* Locked doors */
                         else
                         {
-                                more = do_cmd_open_aux(y, x, dir);
+                                more = do_cmd_open_aux(y, x);
                         }
                 }
 
 		/* Close open doors */
-		else if ((c_ptr->feat == FEAT_OPEN) ||
-		         (c_ptr->feat == FEAT_BROKEN))
+		else if ((feat == FEAT_OPEN) ||
+		         (feat == FEAT_BROKEN))
 		{
-			more = do_cmd_close_aux(y, x, dir);
+			more = do_cmd_close_aux(y, x);
 		}
 
 		/* Disarm traps */
-		else if (is_trap(c_ptr->feat))
+		else if (is_trap(feat))
 		{
 			more = do_cmd_disarm_aux(y, x, dir);
 		}
@@ -2789,10 +2810,7 @@ static bool get_spike(int *ip)
  */
 void do_cmd_spike(void)
 {
-	int y, x, dir, item;
-
-	cave_type *c_ptr;
-
+	int dir;
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
@@ -2802,6 +2820,10 @@ void do_cmd_spike(void)
 	/* Get a "repeated" direction */
 	if (get_rep_dir(&dir,FALSE))
 	{
+                int y, x, item;
+                cave_type *c_ptr;
+                byte feat;
+
 		/* Get location */
 		y = py + ddy[dir];
 		x = px + ddx[dir];
@@ -2809,9 +2831,12 @@ void do_cmd_spike(void)
 		/* Get grid and contents */
 		c_ptr = &cave[y][x];
 
+                /* Feature code (applying "mimic" field) */
+                feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+
 		/* Require closed door */
-		if (!((c_ptr->feat >= FEAT_DOOR_HEAD) &&
-		      (c_ptr->feat <= FEAT_DOOR_TAIL)))
+		if (!((feat >= FEAT_DOOR_HEAD) &&
+		      (feat <= FEAT_DOOR_TAIL)))
 		{
 			/* Message */
 #ifdef JP

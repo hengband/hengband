@@ -5324,9 +5324,6 @@ bool destroy_area(int y1, int x1, int r, int full)
 			/* Lose room and vault */
 			c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY | CAVE_UNSAFE | CAVE_OBJECT);
 
-                        /* Clear mimic type */
-                        c_ptr->mimic = 0;
-
 			/* Lose light and knowledge */
 			c_ptr->info &= ~(CAVE_MARK | CAVE_GLOW);
 
@@ -5402,28 +5399,28 @@ bool destroy_area(int y1, int x1, int r, int full)
 				if (t < 20)
 				{
 					/* Create granite wall */
-					c_ptr->feat = FEAT_WALL_EXTRA;
+                                        cave_set_feat(y, x, FEAT_WALL_EXTRA);
 				}
 
 				/* Quartz */
 				else if (t < 70)
 				{
 					/* Create quartz vein */
-					c_ptr->feat = FEAT_QUARTZ;
+                                        cave_set_feat(y, x, FEAT_QUARTZ);
 				}
 
 				/* Magma */
 				else if (t < 100)
 				{
 					/* Create magma vein */
-					c_ptr->feat = FEAT_MAGMA;
+                                        cave_set_feat(y, x, FEAT_MAGMA);
 				}
 
 				/* Floor */
 				else
 				{
 					/* Create floor */
-					c_ptr->feat = floor_type[randint0(100)];
+                                        cave_set_feat(y, x, floor_type[randint0(100)]);
 				}
 			}
 		}
@@ -5900,9 +5897,6 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 				/* Delete objects */
 				delete_object(yy, xx);
 
-                                /* Clear mimic type */
-                                c_ptr->mimic = 0;
-
                                 /* Clear mirror, runes flag */
                                 c_ptr->info &= ~CAVE_OBJECT;
 
@@ -5913,28 +5907,28 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 				if (t < 20)
 				{
 					/* Create granite wall */
-					c_ptr->feat = FEAT_WALL_EXTRA;
+                                        cave_set_feat(y, x, FEAT_WALL_EXTRA);
 				}
 
 				/* Quartz */
 				else if (t < 70)
 				{
 					/* Create quartz vein */
-					c_ptr->feat = FEAT_QUARTZ;
+                                        cave_set_feat(y, x, FEAT_QUARTZ);
 				}
 
 				/* Magma */
 				else if (t < 100)
 				{
 					/* Create magma vein */
-					c_ptr->feat = FEAT_MAGMA;
+                                        cave_set_feat(y, x, FEAT_MAGMA);
 				}
 
 				/* Floor */
 				else
 				{
 					/* Create floor */
-					c_ptr->feat = floor_type[randint0(100)];
+                                        cave_set_feat(y, x, floor_type[randint0(100)]);
 				}
 			}
 		}

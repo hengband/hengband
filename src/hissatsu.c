@@ -674,12 +674,10 @@ static bool cast_hissatsu_spell(int spell)
 		cave[y][x].info &= ~(CAVE_MARK);
 
 		/* Destroy the feature */
-		cave[y][x].feat = floor_type[randint0(100)];
+                cave_set_feat(y, x, floor_type[randint0(100)]);
 
 		/* Update some things */
 		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
-
-		lite_spot(y, x);
 
 		break;
 	}

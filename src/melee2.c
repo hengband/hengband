@@ -3156,11 +3156,8 @@ msg_print("ギシギシいう音が聞こえる。");
 			/* Forget the wall */
 			c_ptr->info &= ~(CAVE_MARK);
 
-                        /* Clear garbage of hidden trap or door */
-                        c_ptr->mimic = 0;
-
 			/* Notice */
-			c_ptr->feat = floor_type[randint0(100)];
+                        cave_set_feat(ny, nx, floor_type[randint0(100)]);
 
 			/* Note changes to viewable region */
 			if (player_has_los_bold(ny, nx)) do_view = TRUE;
@@ -3472,7 +3469,8 @@ msg_print("爆発のルーンは解除された。");
 			{
 				if (r_ptr->flags2 & RF2_KILL_WALL)
 				{
-					c_ptr->feat = FEAT_GRASS;
+                                        cave_set_feat(ny, nx, FEAT_GRASS);
+
 				}
 				if (!(r_ptr->flags7 & RF7_CAN_FLY) && !(r_ptr->flags8 & RF8_WILD_WOOD))
 				{
