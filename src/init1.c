@@ -1073,8 +1073,8 @@ errr parse_m_info(char *buf, header *head)
 
 
 		/* Scan for the values */
-		if (4 != sscanf(s, "%d:%d:%d:%d",
-				&xtra, &type, &first, &weight))	return (1);
+		if (4 != sscanf(s, "%x:%d:%d:%d",
+				(uint *)&xtra, &type, &first, &weight))	return (1);
 
 		m_ptr->spell_xtra = xtra;
 		m_ptr->spell_type = type;
