@@ -1236,6 +1236,11 @@ static bool vault_aux_chapel_g(int r_idx)
 	/* Require "priest" or Angel */
 	if (!((r_ptr->d_char == 'A') ||
 #ifdef JP
+strstr((r_name + r_ptr->E_name),"emplar") ||
+#else
+		strstr((r_name + r_ptr->name),"emplar") ||
+#endif
+#ifdef JP
 strstr((r_name + r_ptr->E_name),"aladin") ||
 #else
 		strstr((r_name + r_ptr->name),"aladin") ||

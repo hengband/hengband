@@ -483,6 +483,105 @@ static void rd_item(object_type *o_ptr)
 	rd_string(buf, 128);
 	if (buf[0]) o_ptr->art_name = quark_add(buf);
 
+	if (o_ptr->art_name && (o_ptr->art_flags3 & TR3_ACTIVATE) && !o_ptr->xtra4)
+	{
+		switch (o_ptr->xtra2)
+		{
+			case ACT_SUNLIGHT:
+			case ACT_BO_MISS_1:
+			case ACT_BA_POIS_1:
+			case ACT_CONFUSE:
+			case ACT_SLEEP:
+			case ACT_CURE_LW:
+			case ACT_CURE_POISON:
+			case ACT_BERSERK:
+			case ACT_LIGHT:
+			case ACT_DEST_DOOR:
+			case ACT_TELEPORT:
+				o_ptr->xtra4 = 10;
+				break;
+			case ACT_BO_ELEC_1:
+			case ACT_BO_ACID_1:
+			case ACT_BO_COLD_1:
+			case ACT_BO_FIRE_1:
+			case ACT_MAP_LIGHT:
+			case ACT_STONE_MUD:
+			case ACT_CURE_MW:
+			case ACT_QUAKE:
+				o_ptr->xtra4 = 20;
+				break;
+			case ACT_DRAIN_1:
+			case ACT_TELE_AWAY:
+			case ACT_ESP:
+			case ACT_RESIST_ALL:
+			case ACT_DETECT_ALL:
+			case ACT_RECALL:
+			case ACT_SATIATE:
+			case ACT_RECHARGE:
+				o_ptr->xtra4 = 30;
+				break;
+			case ACT_BA_COLD_1:
+			case ACT_BA_FIRE_1:
+			case ACT_TERROR:
+			case ACT_PROT_EVIL:
+			case ACT_ID_PLAIN:
+			case ACT_REST_LIFE:
+			case ACT_SPEED:
+			case ACT_BANISH_EVIL:
+				o_ptr->xtra4 = 40;
+				break;
+			case ACT_DRAIN_2:
+			case ACT_VAMPIRE_1:
+			case ACT_BO_MISS_2:
+			case ACT_BA_FIRE_2:
+			case ACT_WHIRLWIND:
+			case ACT_CHARM_ANIMAL:
+			case ACT_SUMMON_ANIMAL:
+			case ACT_DISP_EVIL:
+			case ACT_DISP_GOOD:
+			case ACT_XTRA_SPEED:
+			case ACT_DETECT_XTRA:
+			case ACT_ID_FULL:
+				o_ptr->xtra4 = 50;
+				break;
+			case ACT_VAMPIRE_2:
+			case ACT_BA_COLD_3:
+			case ACT_BA_ELEC_3:
+			case ACT_GENOCIDE:
+			case ACT_CHARM_UNDEAD:
+			case ACT_CHARM_OTHER:
+			case ACT_SUMMON_PHANTOM:
+			case ACT_SUMMON_ELEMENTAL:
+			case ACT_RUNE_EXPLO:
+				o_ptr->xtra4 = 60;
+				break;
+			case ACT_MASS_GENO:
+			case ACT_CHARM_ANIMALS:
+			case ACT_CHARM_OTHERS:
+			case ACT_CURE_700:
+			case ACT_RUNE_PROT:
+			case ACT_ALCHEMY:
+			case ACT_REST_ALL:
+				o_ptr->xtra4 = 70;
+				break;
+			case ACT_CALL_CHAOS:
+			case ACT_ROCKET:
+			case ACT_BA_MISS_3:
+			case ACT_CURE_1000:
+			case ACT_DIM_DOOR:
+			case ACT_SUMMON_UNDEAD:
+			case ACT_SUMMON_DEMON:
+				o_ptr->xtra4 = 80;
+				break;
+			case ACT_WRAITH:
+			case ACT_INVULN:
+				o_ptr->xtra4 = 100;
+				break;
+			default:
+				o_ptr->xtra4 = 0;
+		}
+	}
+	
 	/* The Python object */
 	{
 		s32b tmp32s;

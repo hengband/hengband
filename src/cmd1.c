@@ -2448,7 +2448,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 
 	if (((p_ptr->pclass == CLASS_ROGUE) || (p_ptr->pclass == CLASS_NINJA)) && inventory[INVEN_RARM+hand].tval)
 	{
-		int tmp = p_ptr->lev*8+50;
+		int tmp = p_ptr->lev*6+(p_ptr->skill_stl+10)*4;
 		if (p_ptr->monlite && (mode != HISSATSU_NYUSIN)) tmp /= 3;
 		if (p_ptr->aggravate) tmp /= 2;
 		if (r_ptr->level > (p_ptr->lev*p_ptr->lev/20+10)) tmp /= 3;
@@ -2457,7 +2457,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 			/* Can't backstab creatures that we can't see, right? */
 			backstab = TRUE;
 		}
-		else if ((p_ptr->special_defense & NINJA_S_STEALTH) && (rand_int(tmp) > (r_ptr->level+20)) && m_ptr->ml)
+		else if ((p_ptr->special_defense & NINJA_S_STEALTH) && (rand_int(tmp) > (r_ptr->level+20)) && m_ptr->ml && !(r_ptr->flags3 & RF3_RES_ALL))
 		{
 			fuiuchi = TRUE;
 		}

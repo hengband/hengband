@@ -2034,7 +2034,7 @@ msg_print("巻物は煙を立てて消え去った！");
 		}
 	}
 	}
-	else if (o_ptr->tval == TV_SOFT_ARMOR)
+	else if (o_ptr->name1 == ART_GHB)
 	{
 #ifdef JP
 		msg_print("私は苦労して『グレーター・ヘル=ビースト』を倒した。");
@@ -3876,6 +3876,7 @@ static void do_cmd_activate_aux(int item)
 
 	/* Hack -- use artifact level instead */
 	if (artifact_p(o_ptr)) lev = a_info[o_ptr->name1].level;
+	else if (o_ptr->art_name) lev = o_ptr->xtra4;
 	else if (((o_ptr->tval == TV_RING) || (o_ptr->tval == TV_AMULET)) && o_ptr->name2) lev = e_info[o_ptr->name2].level;
 
 	/* Base chance of success */

@@ -2254,7 +2254,7 @@ static void process_monster(int m_idx)
 	/* Players hidden in shadow are almost imperceptable. -LM- */
 	if (p_ptr->special_defense & NINJA_S_STEALTH)
 	{
-		int tmp = p_ptr->lev*8+50;
+		int tmp = p_ptr->lev*6+(p_ptr->skill_stl+10)*4;
 		if (p_ptr->monlite) tmp /= 3;
 		if (p_ptr->aggravate) tmp /= 2;
 		if (r_ptr->level > (p_ptr->lev*p_ptr->lev/20+10)) tmp /= 3;
