@@ -6761,10 +6761,10 @@ option_type option_info[] =
 
 
 #ifdef JP
-	{ &last_words,                  FALSE, 3, 0, 28,
+	{ &last_words,                  TRUE, 3, 0, 28,
 	"last_words",                   "キャラクターが死んだ時遺言をのこす" },
 #else
-	{ &last_words,                  FALSE, 3, 0, 28,
+	{ &last_words,                  TRUE, 3, 0, 28,
 	"last_words",                   "Leave last words when your character dies" },
 #endif
 
@@ -6819,10 +6819,10 @@ option_type option_info[] =
 
 
 #ifdef JP
-	{ &disturb_move,                TRUE,  4, 0, 20,
+	{ &disturb_move,                FALSE,  4, 0, 20,
         "disturb_move",                 "どこのモンスターが動いても行動を中止する" },
 #else
-	{ &disturb_move,                TRUE,  4, 0, 20,
+	{ &disturb_move,                FALSE,  4, 0, 20,
 	"disturb_move",                 "Disturb whenever any monster moves" },
 #endif
 
@@ -6882,10 +6882,10 @@ option_type option_info[] =
 
 
 #ifdef JP
-	{ &alert_hitpoint,              FALSE, 4, 0, 26,
+	{ &alert_hitpoint,              TRUE, 4, 0, 26,
         "alert_hitpoint",               "低ヒットポイントの警告時にビープを鳴らす" },
 #else
-	{ &alert_hitpoint,              FALSE, 4, 0, 26,
+	{ &alert_hitpoint,              TRUE, 4, 0, 26,
 	"alert_hitpoint",               "Alert user to critical hitpoints" },
 #endif
 
@@ -7185,10 +7185,10 @@ option_type option_info[] =
 #endif
 
 #ifdef JP
-        { &leave_worth,                 FALSE, 7, 7, 2,
+        { &leave_worth,                 TRUE, 7, 7, 2,
         "leave_worth",                  "価値があるアイテムは壊さない" },
 #else
-        { &leave_worth,                 FALSE, 7, 7, 2,
+        { &leave_worth,                 TRUE, 7, 7, 2,
         "leave_worth",                  "Auto-destroyer leaves known worthy items" },
 #endif
 
@@ -7201,18 +7201,18 @@ option_type option_info[] =
 #endif
 
 #ifdef JP
-        { &leave_chest,                 FALSE, 7, 7, 7,
+        { &leave_chest,                 TRUE, 7, 7, 7,
         "leave_chest",                  "開封されていない箱は壊さない" },
 #else
-        { &leave_chest,                 FALSE, 7, 7, 7,
+        { &leave_chest,                 TRUE, 7, 7, 7,
         "leave_chest",                  "Auto-destroyer leaves closed chests" },
 #endif
 
 #ifdef JP
-        { &leave_wanted,                FALSE, 7, 7, 4,
+        { &leave_wanted,                TRUE, 7, 7, 4,
         "leave_wanted",                 "賞金首の死体/骨は壊さない" },
 #else
-        { &leave_wanted,                FALSE, 7, 7, 4,
+        { &leave_wanted,                TRUE, 7, 7, 4,
         "leave_wanted",                 "Auto-destroyer leaves wanted corpses" },
 #endif
 
