@@ -1808,6 +1808,33 @@ static char ascii_to_zenkaku[2*128+1] =  "\
 #endif
 
 /*
+ * Prepare Bigtile or 2-bytes character attr/char pairs
+ */
+static void bigtile_attr(char *cp, byte *ap, char *cp2, byte *ap2)
+{
+	if (*ap & 0x80)
+	{
+		*ap2 = 255;
+		*cp2 = 255;
+		return;
+	}
+
+#ifdef JP
+	if (isprint(*cp))
+	{
+		*ap2 = *ap;
+		*cp2 = ascii_to_zenkaku[2*(*cp-' ') + 1];
+		*cp = ascii_to_zenkaku[2*(*cp-' ')];
+		return;
+	}
+#endif
+
+	*ap2 = TERM_WHITE;
+	*cp2 = ' ';
+}
+
+
+/*
  * Calculate panel colum of a location in the map
  */
 static int panel_col_of(int col)
@@ -1837,6 +1864,9 @@ void move_cursor_relative(int row, int col)
  */
 void print_rel(char c, byte a, int y, int x)
 {
+	char c2;
+	byte a2;
+
 	/* Only do "legal" locations */
 	if (panel_contains(y, x))
 	{
@@ -1849,8 +1879,12 @@ void print_rel(char c, byte a, int y, int x)
 			else if (p_ptr->wraith_form) a = TERM_L_DARK;
 		}
 
+		if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
+
 		/* Draw the char using the attr */
 		Term_draw(panel_col_of(x), y-panel_row_prt, a, c);
+		if (use_bigtile)
+			Term_draw(panel_col_of(x)+1, y-panel_row_prt, a2, c2);
 	}
 }
 
@@ -2071,7 +2105,7 @@ void display_dungeon(void)
 void lite_spot(int y, int x)
 {
 	/* Redraw if on screen */
-	if (panel_contains(y, x) && in_bounds(y, x))
+	if (panel_contains(y, x) && in_bounds2(y, x))
 	{
 		byte a, a2;
 		char c, c2;
@@ -2096,33 +2130,7 @@ void lite_spot(int y, int x)
 			else if (p_ptr->wraith_form) a = TERM_L_DARK;
 		}
 
-		if (use_bigtile)
-		{
-			if (a & 0x80)
-			{
-				a2 = 255;
-				c2 = 255;
-			}
-			else
-			{
-#ifdef JP
-				if (isprint(c))
-				{
-#ifdef USE_TRANSPARENCY
-					ta = tc = 0;
-#endif
-					a2 = a;
-					c2 = ascii_to_zenkaku[2*(c-' ') + 1];
-					c = ascii_to_zenkaku[2*(c-' ')];
-				}
-				else
-#endif
-				{
-					a2 = TERM_WHITE;
-					c2 = ' ';
-				}
-			}
-		}
+		if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
 
 #ifdef USE_TRANSPARENCY
 		/* Hack -- Queue it */
@@ -2220,33 +2228,7 @@ void prt_map(void)
 				else if (p_ptr->wraith_form) a = TERM_L_DARK;
 			}
 
-			if (use_bigtile)
-			{
-				if (a & 0x80)
-				{
-					a2 = 255;
-					c2 = 255;
-				}
-				else
-				{
-#ifdef JP
-					if (isprint(c))
-					{
-#ifdef USE_TRANSPARENCY
-						ta = tc = 0;
-#endif
-						a2 = a;
-						c2 = ascii_to_zenkaku[2*(c-' ') + 1];
-						c = ascii_to_zenkaku[2*(c-' ')];
-					}
-					else
-#endif
-					{
-						a2 = TERM_WHITE;
-						c2 = ' ';
-					}
-				}
-			}
+			if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
 
 			/* Efficiency -- Redraw that grid of the map */
 #ifdef USE_TRANSPARENCY
@@ -2300,7 +2282,7 @@ void prt_path(int y, int x)
 
 		if (panel_contains(ny, nx))
 		{
-			byte a = default_color;
+			byte a2, a = default_color;
 			char c, c2;
 
 #ifdef USE_TRANSPARENCY
@@ -2333,15 +2315,7 @@ void prt_path(int y, int x)
 			}
 
 			c = '*';
-			if (use_bigtile)
-			{
-#ifdef JP
-				c2 = ascii_to_zenkaku[2*(c-' ') + 1];
-				c = ascii_to_zenkaku[2*(c-' ')];
-#else
-				c2 = '*';
-#endif
-			}
+			if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
 
 			/* Hack -- Queue it */
 #ifdef USE_TRANSPARENCY
@@ -2673,30 +2647,7 @@ void display_map(int *cy, int *cx)
 				else if (p_ptr->wraith_form) ta = TERM_L_DARK;
 			}
 
-			if (use_bigtile)
-			{
-				if (ta & 0x80)
-				{
-					a2 = 255;
-					c2 = 255;
-				}
-				else
-				{
-#ifdef JP
-					if (isprint(tc))
-					{
-						a2 = ta;
-						c2 = ascii_to_zenkaku[2*(tc-' ') + 1];
-						tc = ascii_to_zenkaku[2*(tc-' ')];
-					}
-					else
-#endif
-					{
-						a2 = TERM_WHITE;
-						c2 = ' ';
-					}
-				}
-			}
+			if (use_bigtile) bigtile_attr(&tc, &ta, &c2, &a2);
 
 			/* Add the character */
 			Term_addch(ta, tc);
