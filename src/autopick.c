@@ -1754,8 +1754,6 @@ void do_cmd_edit_autopick()
 			break;
 		}
 	}
-	if (strlen(lines_list[cy]) < cx)
-		cy = cx = 0;
 
 	/* Save the screen */
 	screen_save();
@@ -1857,12 +1855,12 @@ void do_cmd_edit_autopick()
 		if (edit_mode)
 			prt("^Q ESC でコマンドモードへ移行、通常の文字はそのまま入力", 0, 0);
 		else
-			prt("q で終了、hjkl2468 で移動、^Q a i で入力モード", 0, 0);
+			prt("q _ で終了、hjkl2468 で移動、^Q a i で入力モード", 0, 0);
 #else	
 		if (edit_mode)
 			prt("Press ^Q ESC to command mode, any letters to insert", 0, 0);
 		else
-			prt("Press q to quit, hjkl2468 to move, ^Q a i to insert mode", 0, 0);
+			prt("Press q _ to quit, hjkl2468 to move, ^Q a i to insert mode", 0, 0);
 #endif
 		/* Display current position */
 		prt (format("(%d,%d)", cx, cy), 0, 70);
@@ -2007,7 +2005,7 @@ void do_cmd_edit_autopick()
 		else
 		{
 			/* Exit on 'q' */
-			if (key == 'q') break;
+			if (key == 'q' || key == '_') break;
 
 			switch(key)
 			{
