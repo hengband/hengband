@@ -282,9 +282,8 @@ static bool find_space(int *y, int *x, int height, int width)
 		filled = FALSE;
 
 		/* Pick a top left block at random */
-		block_y = randint0(dun->row_rooms - blocks_high);
-		block_x = randint0(dun->col_rooms - blocks_wide);
-
+		block_y = randint0(dun->row_rooms - blocks_high + 1);
+		block_x = randint0(dun->col_rooms - blocks_wide + 1);
 
 		/* Itty-bitty rooms can shift about within their rectangle */
 		if (blocks_wide < 3)
