@@ -1472,9 +1472,6 @@ static bool monst_attack_monst(int m_idx, int t_idx)
 
 	if (d_info[dungeon_type].flags1 & DF1_NO_MELEE) return (FALSE);
 
-	/* Wake it up */
-	t_ptr->csleep = 0;
-
 	/* Total armor */
 	ac = tr_ptr->ac;
 
@@ -1535,6 +1532,9 @@ static bool monst_attack_monst(int m_idx, int t_idx)
 		/* Monster hits */
 		if (!effect || check_hit2(power, rlev, ac, m_ptr->stunned))
 		{
+			/* Wake it up */
+			t_ptr->csleep = 0;
+
 			/* Describe the attack method */
 			switch (method)
 			{
@@ -2147,6 +2147,9 @@ msg_format("%sは体力を回復したようだ。", m_name);
 			case RBM_ENGULF:
 			case RBM_CHARGE:
 				{
+					/* Wake it up */
+					t_ptr->csleep = 0;
+
 					/* Visible monsters */
 					if (see_m)
 					{
