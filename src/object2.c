@@ -4168,7 +4168,7 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 	if (f1 > d_info[dungeon_type].obj_good) f1 = d_info[dungeon_type].obj_good;
 
 	/* Base chance of being "great" */
-	f2 = f1 / 2;
+	f2 = f1 * 2 / 3;
 
 	/* Maximal chance of being "great" */
 	if ((p_ptr->pseikaku != SEIKAKU_MUNCHKIN) && (f2 > d_info[dungeon_type].obj_great))

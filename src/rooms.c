@@ -2126,7 +2126,7 @@ static bool build_type5(void)
 		while (attempts--)
 		{
 			/* Get a (hard) monster type */
-			r_idx = get_mon_num(dun_level + 10);
+			r_idx = get_mon_num(dun_level + 11);
 			r_ptr = &r_info[r_idx];
 
 			/* Decline incorrect alignment */
@@ -2355,7 +2355,7 @@ static bool build_type6(void)
 		while (attempts--)
 		{
 			/* Get a (hard) monster type */
-			r_idx = get_mon_num(dun_level + 10);
+			r_idx = get_mon_num(dun_level + 11);
 			r_ptr = &r_info[r_idx];
 
 			/* Decline incorrect alignment */
