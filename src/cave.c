@@ -3205,27 +3205,26 @@ static void mon_lite_hack(int y, int x)
 	/* Hack XXX XXX - Is it a wall and monster not in LOS? */
 	if (!cave_floor_grid(c_ptr) && mon_invis) return;
 
-	if (temp_n < TEMP_MAX)
+	/* We trust temp_n does not exceed TEMP_MAX */
+
+	/* New grid */
+	if (!(c_ptr->info & CAVE_MNDK))
 	{
-		/* New grid */
-		if (!(c_ptr->info & CAVE_MNDK))
-		{
-			/* Save this square */
-			temp_x[temp_n] = x;
-			temp_y[temp_n] = y;
-			temp_n++;
-		}
-
-		/* Darkened grid */
-		else
-		{
-			/* No longer dark */
-			c_ptr->info &= ~(CAVE_MNDK);
-		}
-
-		/* Light it */
-		c_ptr->info |= CAVE_MNLT;
+		/* Save this square */
+		temp_x[temp_n] = x;
+		temp_y[temp_n] = y;
+		temp_n++;
 	}
+
+	/* Darkened grid */
+	else
+	{
+		/* No longer dark */
+		c_ptr->info &= ~(CAVE_MNDK);
+	}
+
+	/* Light it */
+	c_ptr->info |= CAVE_MNLT;
 }
 
 
@@ -3247,16 +3246,15 @@ static void mon_dark_hack(int y, int x)
 	/* Hack XXX XXX - Is it a wall and monster not in LOS? */
 	if (!cave_floor_grid(c_ptr) && mon_invis) return;
 
-	if (temp_n < TEMP_MAX)
-	{
-		/* Save this square */
-		temp_x[temp_n] = x;
-		temp_y[temp_n] = y;
-		temp_n++;
+	/* We trust temp_n does not exceed TEMP_MAX */
 
-		/* Darken it */
-		c_ptr->info |= CAVE_MNDK;
-	}
+	/* Save this square */
+	temp_x[temp_n] = x;
+	temp_y[temp_n] = y;
+	temp_n++;
+
+	/* Darken it */
+	c_ptr->info |= CAVE_MNDK;
 }
 
 

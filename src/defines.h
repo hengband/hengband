@@ -389,6 +389,14 @@
 #define LITE_MAX 600
 
 /*
+ * Maximum size of the "mon_lite" array (see "cave.c")
+ * Note that the "view radius" will NEVER exceed 20, monster illumination
+ * flags are dependent on CAVE_VIEW, and even if the "view" was octagonal,
+ * we would never require more than 1520 entries in the array.
+ */
+#define MON_LITE_MAX 1536
+
+/*
  * Maximum size of the "view" array (see "cave.c")
  * Note that the "view radius" will NEVER exceed 20, and even if the "view"
  * was octagonal, we would never require more than 1520 entries in the array.
@@ -403,7 +411,15 @@
  * must also be large enough to allow "good enough" use as a circular queue,
  * to calculate monster flow, but note that the flow code is "paranoid".
  */
-#define TEMP_MAX 1536
+#define TEMP_MAX 2298
+
+/*
+ * Maximum size of the "redraw" array (see "cave.c")
+ * We must be large for proper functioning of delayed redrawing.
+ * We must also be as large as two times of the largest view area.
+ * Note that maximum view grids are 1149 entries.
+ */
+#define REDRAW_MAX 2298
 
 
 /*
