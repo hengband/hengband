@@ -3467,14 +3467,13 @@ bool mutation_power_aux(u32b power)
 				c_ptr = &cave[y][x];
 				f_ptr = &f_info[c_ptr->feat];
 
-				if (cave_floor_bold(y, x) || boundary_floor_grid(c_ptr))
+				if (!have_flag(f_info[get_feat_mimic(c_ptr)].flags, FF_TUNNEL))
 				{
 #ifdef JP
-					msg_print("何もない場所に噛みついた！");
+					msg_print("この地形は食べられない。");
 #else
-					msg_print("You bite into thin air!");
+					msg_print("You cannot eat this feature.");
 #endif
-
 					break;
 				}
 				else if (have_flag(f_ptr->flags, FF_PERMANENT))
@@ -3484,17 +3483,18 @@ bool mutation_power_aux(u32b power)
 #else
 					msg_format("Ouch!  This %s is harder than your teeth!", f_name + f_info[get_feat_mimic(c_ptr)].name);
 #endif
-
 					break;
 				}
 				else if (c_ptr->m_idx)
 				{
+					monster_type *m_ptr = &m_list[c_ptr->m_idx];
 #ifdef JP
 					msg_print("何かが邪魔しています！");
 #else
 					msg_print("There's something in the way!");
 #endif
 
+					if (!m_ptr->ml || !is_pet(m_ptr)) py_attack(y, x, 0);
 					break;
 				}
 				else if (have_flag(f_ptr->flags, FF_TREE))
@@ -3504,33 +3504,27 @@ bool mutation_power_aux(u32b power)
 #else
 					msg_print("You don't like the woody taste!");
 #endif
-
-					break;
+				}
+				else if (have_flag(f_ptr->flags, FF_DOOR) || have_flag(f_ptr->flags, FF_HAS_ITEM))
+				{
+					(void)set_food(p_ptr->food + 3000);
+				}
+				else if (have_flag(f_ptr->flags, FF_MAY_HAVE_GOLD) || have_flag(f_ptr->flags, FF_HAS_GOLD))
+				{
+					(void)set_food(p_ptr->food + 5000);
 				}
 				else
 				{
-					if ((c_ptr->feat >= FEAT_DOOR_HEAD) &&
-						(c_ptr->feat <= FEAT_RUBBLE))
-					{
-						(void)set_food(p_ptr->food + 3000);
-					}
-					else if ((c_ptr->feat >= FEAT_MAGMA) &&
-						(c_ptr->feat <= FEAT_QUARTZ_K))
-					{
-						(void)set_food(p_ptr->food + 5000);
-					}
-					else
-					{
 #ifdef JP
-						msg_print("この花崗岩はとてもおいしい！");
+					msg_format("この%sはとてもおいしい！", f_name + f_info[get_feat_mimic(c_ptr)].name);
 #else
-						msg_print("This granite is very filling!");
+					msg_format("This %s is very filling!", f_name + f_info[get_feat_mimic(c_ptr)].name);
 #endif
-
-						(void)set_food(p_ptr->food + 10000);
-					}
+					(void)set_food(p_ptr->food + 10000);
 				}
-				(void)wall_to_mud(dir);
+
+				/* Destroy the wall */
+				cave_alter_feat(y, x, FF_TUNNEL);
 
 				oy = py;
 				ox = px;

@@ -346,7 +346,7 @@ static int next_to_corr(int y1, int x1)
 		c_ptr = &cave[y][x];
 
 		/* Skip non floors */
-		if (!cave_floor_grid(c_ptr)) continue;
+		if (have_flag(f_flags_grid(c_ptr), FF_WALL)) continue;
 
 		/* Skip non "empty floor" grids */
 		if (!is_floor_grid(c_ptr))
@@ -404,7 +404,7 @@ static void try_door(int y, int x)
 	if (!in_bounds(y, x)) return;
 
 	/* Ignore walls */
-	if (!cave_floor_bold(y, x)) return;
+	if (have_flag(f_flags_bold(y, x), FF_WALL)) return;
 
 	/* Ignore room grids */
 	if (cave[y][x].info & (CAVE_ROOM)) return;

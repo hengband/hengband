@@ -3468,7 +3468,7 @@ void move_player_effect(int do_pickup, bool break_trap)
 		else if (p_ptr->cur_lite <= 0) set_superstealth(TRUE);
 	}
 
-	if ((p_ptr->action == ACTION_HAYAGAKE) && !cave_floor_bold(py, px))
+	if ((p_ptr->action == ACTION_HAYAGAKE) && !have_flag(f_ptr->flags, FF_PROJECT))
 	{
 #ifdef JP
 		msg_print("ここでは素早く動けない。");
@@ -4706,7 +4706,7 @@ static bool run_test(void)
 		/* Hack -- look again */
 		for (i = -max; i < 0; i++)
 		{
-			/* Unknown grid or non-wall XXX XXX XXX cave_floor_grid(c_ptr)) */
+			/* Unknown grid or non-wall */
 			if (!see_wall(cycle[chome[prev_dir] + i], py, px))
 			{
 				/* Looking to break right */
@@ -4730,7 +4730,7 @@ static bool run_test(void)
 		/* Hack -- look again */
 		for (i = max; i > 0; i--)
 		{
-			/* Unknown grid or non-wall XXX XXX XXX cave_floor_grid(c_ptr)) */
+			/* Unknown grid or non-wall */
 			if (!see_wall(cycle[chome[prev_dir] + i], py, px))
 			{
 				/* Looking to break left */

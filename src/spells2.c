@@ -5877,8 +5877,6 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 			/* Destroy location (if valid) */
 			if (cave_valid_bold(yy, xx))
 			{
-				bool floor = cave_floor_bold(yy, xx);
-
 				/* Delete objects */
 				delete_object(yy, xx);
 
@@ -5886,7 +5884,7 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 				c_ptr->info &= ~CAVE_OBJECT;
 
 				/* Wall (or floor) type */
-				t = (floor ? randint0(100) : 200);
+				t = have_flag(f_flags_bold(yy, xx), FF_PROJECT) ? randint0(100) : 200;
 
 				/* Granite */
 				if (t < 20)
