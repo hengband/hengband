@@ -74,7 +74,7 @@ void one_high_resistance(object_type *o_ptr)
 /*
  * Choose one random high resistance ( except poison and disenchantment )
  */
-void one_loadly_high_resistance(object_type *o_ptr)
+void one_lordly_high_resistance(object_type *o_ptr)
 {
 	switch (randint0(10))
 	{
@@ -2898,7 +2898,7 @@ bool activate_random_artifact(object_type * o_ptr)
 }
 
 
-void random_artifact_resistance(object_type * o_ptr)
+void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
 {
 	bool give_resistance = FALSE, give_power = FALSE;
 
@@ -2921,7 +2921,7 @@ void random_artifact_resistance(object_type * o_ptr)
 	{
 		if (p_ptr->pclass != CLASS_SAMURAI)
 		{
-			o_ptr->art_flags3 |= (TR3_NO_TELE | TR3_NO_MAGIC | TR3_HEAVY_CURSE);
+			o_ptr->art_flags3 |= (TR3_NO_MAGIC | TR3_HEAVY_CURSE);
 			o_ptr->ident |= IDENT_CURSED;
 		}
 	}
@@ -2950,6 +2950,15 @@ void random_artifact_resistance(object_type * o_ptr)
 		}
 	}
 
+	if (a_ptr->gen_flags & (TRG_XTRA_POWER)) give_power = TRUE;
+	if (a_ptr->gen_flags & (TRG_XTRA_H_RES)) give_resistance = TRUE;
+	if (a_ptr->gen_flags & (TRG_XTRA_RES_OR_POWER))
+	{
+		/* Give a resistance OR a power */
+		if (one_in_(2)) give_resistance = TRUE;
+		else give_power = TRUE;
+	}
+#if 0
 	switch (o_ptr->name1)
 	{
 		case ART_JULIAN:
@@ -3014,6 +3023,7 @@ void random_artifact_resistance(object_type * o_ptr)
 			}
 			break;
 	}
+#endif
 
 	if (give_power)
 	{
@@ -3069,7 +3079,7 @@ void create_named_art(int a_idx, int y, int x)
 	/* Hack -- acquire "cursed" flag */
 	if (a_ptr->flags3 & TR3_CURSED) q_ptr->ident |= (IDENT_CURSED);
 
-	random_artifact_resistance(q_ptr);
+	random_artifact_resistance(q_ptr, a_ptr);
 
 	/* Drop the artifact from heaven */
 	(void)drop_near(q_ptr, -1, y, x);

@@ -447,7 +447,7 @@ static void spoil_obj_desc(cptr fname)
 			if (k_ptr->tval != group_item[i].tval) continue;
 
 			/* Hack -- Skip instant-artifacts */
-			if (k_ptr->flags3 & (TR3_INSTA_ART)) continue;
+			if (k_ptr->gen_flags & (TRG_INSTA_ART)) continue;
 
 			/* Save the index */
 			who[n++] = k;

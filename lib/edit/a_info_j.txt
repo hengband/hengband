@@ -290,7 +290,7 @@ F:STR | INT | WIS | DEX | CON | CHR | SPEED | HIDE_TYPE |
 F:ACTIVATE | HOLD_LIFE | FREE_ACT | SEE_INVIS |
 F:FEATHER | REGEN | SHOW_MODS |
 F:SUST_INT | SUST_WIS | IM_COLD |
-F:INSTA_ART
+F:XTRA_POWER | INSTA_ART
 D:$The Ring of Adamant, with a pure white stone as centerpiece.  Nenya is one 
 D:$of the three Rings of Power created by the Elves and hidden by them from 
 D:$Sauron.
@@ -309,7 +309,7 @@ F:STR | INT | WIS | DEX | CON | CHR | SPEED | HIDE_TYPE |
 F:ACTIVATE | HOLD_LIFE | FREE_ACT | SEE_INVIS |
 F:FEATHER | SLOW_DIGEST | REGEN |
 F:SUST_INT | SUST_WIS | SUST_STR | SUST_DEX | IM_ELEC |
-F:INSTA_ART
+F:INSTA_ART | XTRA_POWER
 D:$The Ring of Sapphire, with clear blue gems that shine like stars, 
 D:$glittering untouchable despite all that Morgoth ever wrought.  Vilya is 
 D:$one of the three Rings of Power created by the Elves and hidden by them 
@@ -331,7 +331,7 @@ F:AGGRAVATE | DRAIN_EXP | SEE_INVIS | REGEN | TY_CURSE |
 F:IM_FIRE | IM_COLD | IM_ELEC | IM_ACID |
 F:SUST_STR | SUST_DEX | SUST_CON |
 F:SUST_INT | SUST_WIS | SUST_CHR |
-F:INSTA_ART
+F:INSTA_ART | XTRA_POWER | XTRA_H_RES
 D:$"One Ring to rule them all, One Ring to find them, One Ring to bring 
 D:$them all and in the darkness bind them."  Made of massive gold, and 
 D:$set with runes in the foul speech of Mordor, Isildur's Bane possesses 
@@ -380,7 +380,7 @@ I:19:50:4
 W:60:150:100:100000
 P:0:0d0:20:20:0
 F:SPEED | STEALTH | RES_NETHER |
-F:ACTIVATE | SHOW_MODS | INSTA_ART
+F:ACTIVATE | SHOW_MODS | INSTA_ART | XTRA_POWER | XTRA_H_RES
 D:「―そこは街全体が魔物の住処と化していた。そのとき思わず
 D:使った銃−クリムゾンが越前を助け、そして、たたかうごとに、
 D:クリムゾンはより強力な武器へと進化していった。―」(デスク
@@ -480,7 +480,7 @@ E:of the Rohirrim
 I:37:9:2
 W:30:3:200:30000
 P:19:1d4:0:0:15
-F:STR | DEX | HIDE_TYPE |
+F:STR | DEX | HIDE_TYPE | XTRA_H_RES |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_CONF | RES_SOUND
 D:$Small metal plates cover an inner layer of sturdy canvas, and both bear 
 D:$scenes of hunting and war.  You feel the spirit of Eorl the Young, matchless 
@@ -516,7 +516,7 @@ W:40:15:250:120000
 P:15:2d4:-2:0:40
 F:STR | CHR | HIDE_TYPE |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_DARK |
-F:RES_DISEN | ACTIVATE
+F:RES_DISEN | XTRA_H_RES | ACTIVATE
 D:真世界アンバーのアーデンの森を守るジュリアンの銀の鎧だ。
 
 
@@ -533,7 +533,7 @@ E:of Arvedui
 I:37:4:2
 W:20:3:220:32000
 P:14:1d4:-2:0:15
-F:STR | CHR | HIDE_TYPE |
+F:STR | CHR | HIDE_TYPE | XTRA_H_RES |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_SHARDS | RES_NEXUS
 D:イシルドゥアの末裔であり、アングマール魔国と戦った
 D:北方王朝アルセダイン国の最後の王アルヴェドゥイが身に付けていた鎖帷子だ。
@@ -555,7 +555,7 @@ E:of Caspanion
 I:37:6:3
 W:25:9:270:40000
 P:16:1d4:-2:0:20
-F:INT | WIS | CON | HIDE_TYPE |
+F:INT | WIS | CON | HIDE_TYPE | XTRA_H_RES |
 F:RES_ACID | RES_POIS | RES_CONF | ACTIVATE
 D:$A hauberk, leggings, and sleeves of interlocking steel rings, strategically 
 D:$reinforced at vital locations with a second layer of chain.  Magics to 
@@ -588,7 +588,7 @@ E:'Hithlomir'
 I:36:4:4
 W:20:3:80:45000
 P:4:0d0:0:0:20
-F:STEALTH | RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_DARK
+F:STEALTH | RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_DARK | XTRA_H_RES
 D:$Familar with the secret ways hidden in darkness, this leather cuirass is 
 D:$truly more than it appears.
 D:「霧の宝石」を意味する名を持つ、この革の胴鎧は、
@@ -602,7 +602,7 @@ E:'Thalkettoth'
 I:36:11:3
 W:20:3:60:25000
 P:11:1d1:-1:0:25
-F:DEX | HIDE_TYPE | RES_ACID | RES_SHARDS
+F:DEX | HIDE_TYPE | RES_ACID | RES_SHARDS | XTRA_H_RES
 D:$An amazingly light tunic and skirt sewn with thick, overlapping scales of 
 D:$hardened leather whose wearer moves with agility and assurance.
 D:An amazingly light tunic and skirt sewn with thick, overlapping scales of 
@@ -620,6 +620,7 @@ I:34:3:4
 W:40:12:65:120000
 P:5:1d2:0:0:21
 F:STR | CON | HIDE_TYPE | FREE_ACT | IM_ACID | RES_SOUND | RES_CHAOS
+F:XTRA_H_RES
 D:$Invoking the strength and endurance of Thorin, King under the Mountain, 
 D:$this little metal shield is proof against the Element of Earth.
 D:山の下の王トーリン・オーケンシールドの強さと頑丈さを受け継いだ
@@ -638,7 +639,7 @@ E:of Celegorm
 I:34:4:0
 W:30:3:60:30000
 P:6:1d2:0:0:20
-F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_LITE | RES_DARK
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_LITE | RES_DARK | XTRA_H_RES
 D:$This shield emblazoned with a multitude of creatures not seen for ages 
 D:$once protected Celegorm, lord of Himlad; around it lies a mystic balance  
 D:$that contains the conflicts of the elements.
@@ -663,7 +664,7 @@ I:34:5:0
 W:40:9:120:160000
 P:8:1d3:0:0:18
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | SUST_STR | SUST_INT |
-F:SUST_WIS | SUST_DEX | SUST_CON | SUST_CHR
+F:SUST_WIS | SUST_DEX | SUST_CON | SUST_CHR | XTRA_H_RES
 D:$The great metal-bound shield of Anarion, son of Elendil, who Sauron found 
 D:$himself powerless to wither or diminish.
 D:かつてサウロンと勇敢に戦った
@@ -714,7 +715,7 @@ I:33:10:-25
 W:40:12:20:0
 P:0:1d1:0:0:25
 F:STR | DEX | CON | HIDE_TYPE | DEC_MANA
-F:FREE_ACT | SEE_INVIS | TELEPATHY | CURSED
+F:FREE_ACT | SEE_INVIS | TELEPATHY | CURSED | XTRA_POWER
 D:$The midnight-hued steel circlet of the sorceress-queen Beruthiel, which 
 D:$grants extraordinary powers of sight and awareness at a terrible physical 
 D:$cost.
@@ -730,7 +731,7 @@ E:of Thranduil
 I:32:2:2
 W:20:2:15:50000
 P:2:0d0:0:0:10
-F:INT | WIS | HIDE_TYPE | RES_BLIND | TELEPATHY
+F:INT | WIS | HIDE_TYPE | RES_BLIND | TELEPATHY | XTRA_H_RES
 D:$The hunting cap of King Thranduil, to whose ears come all the secrets of 
 D:$his forest domain.
 D:レゴラスの父であり、領土の森のあらゆる事を知るスランドウィル王
@@ -835,6 +836,7 @@ P:0:1d1:0:0:15
 F:STR | WIS | CON | HIDE_TYPE | SPEED |
 F:RES_COLD | RES_FIRE | RES_LITE | RES_BLIND | RES_ELEC | RES_CONF |
 F:RES_CHAOS | LITE | SEE_INVIS | REGEN | ACTIVATE
+F:XTRA_POWER | XTRA_H_RES
 D:アンバーの王位の象徴である、多数の宝石で飾られた金の王冠だ。
 D:これをめぐって骨肉の争いが王子たちの間で繰り広げられた。
 
@@ -900,7 +902,7 @@ E:of Thingol
 I:35:1:3
 W:10:90:10:45000
 P:1:0d0:0:0:18
-F:DEX | CHR | HIDE_TYPE |
+F:DEX | CHR | HIDE_TYPE | XTRA_POWER |
 F:FREE_ACT | RES_ACID | RES_FIRE | RES_COLD | ACTIVATE
 D:$A sable-hued cloak, with glowing elven-runes to restore magic showing calm 
 D:$and clear as moonlight on still water.
@@ -955,7 +957,7 @@ W:40:40:5:80000
 P:6:0d0:0:0:20
 F:INT | WIS | CHR | HIDE_TYPE | SPEED | STEALTH |
 F:RES_ACID | RES_FIRE | RES_COLD | ACTIVATE |
-F:RES_DARK | RES_LITE
+F:RES_DARK | RES_LITE | XTRA_H_RES
 D:$The opaque midnight folds, inset with a multitude of tiny diamonds, of 
 D:$this cloak swirl around you and you feel a hint, a fragment of the 
 D:$knowledge and power to restore that lay in Luthien, the most beautiful 
@@ -1092,7 +1094,7 @@ I:31:5:4
 W:40:15:40:110000
 P:5:1d1:10:10:20
 F:DEX | HIDE_TYPE |
-F:FREE_ACT | RES_ACID | ACTIVATE | SHOW_MODS
+F:FREE_ACT | RES_ACID | ACTIVATE | SHOW_MODS | XTRA_POWER
 D:$The hand-sheathing of Fingolfin, warrior-king of Elves and Men, who gave 
 D:$Morgoth seven mighty wounds and pain that will last forever.
 D:フェアノール亡き後中つ国のノルドールを率いて冥王と戦った
@@ -1153,7 +1155,7 @@ E:of Thror
 I:30:6:3
 W:30:25:80:85000
 P:6:1d1:0:0:20
-F:STR | CON | HIDE_TYPE | SPEED
+F:STR | CON | HIDE_TYPE | SPEED | XTRA_H_RES
 D:$Sturdy footwear of leather and steel as enduring as the long-suffering 
 D:$Dwarven King-in-exile who wore them.  Of dwarven make, the wearer of 
 D:$these boots will be completely at home in the mountains.
@@ -1186,7 +1188,7 @@ E:of Maedhros
 I:23:5:3
 W:15:30:30:62500
 P:0:2d5:12:15:0
-F:INT | DEX | HIDE_TYPE | SPEED |
+F:INT | DEX | HIDE_TYPE | SPEED | XTRA_RES_OR_POWER |
 F:SLAY_TROLL | SLAY_GIANT | FREE_ACT | SEE_INVIS | SHOW_MODS
 D:$A short thrusting blade with a large guard worn by Maedhros the Tall, 
 D:$eldest son of Feanor, and wielded with his left hand after the loss of 
@@ -1216,7 +1218,7 @@ E:'Narthanc'
 I:23:4:0
 W:4:10:12:12000
 P:0:1d4:4:6:0
-F:BRAND_FIRE | RES_FIRE | ACTIVATE | SHOW_MODS | LITE | THROW
+F:BRAND_FIRE | RES_FIRE | ACTIVATE | SHOW_MODS | LITE | THROW | XTRA_H_RES
 D:$A fiery dagger finely balanced for deadly throws.
 D:「焔の牙」を意味する名を持つこの燃え盛る短剣は、
 D:その刃から焔の矢を迸らせる力をもつ。
@@ -1229,7 +1231,7 @@ E:'Nimthanc'
 I:23:4:0
 W:3:10:12:11000
 P:0:1d4:4:6:0
-F:BRAND_COLD | RES_COLD | ACTIVATE | SHOW_MODS | THROW
+F:BRAND_COLD | RES_COLD | ACTIVATE | SHOW_MODS | THROW | XTRA_H_RES
 D:$A frosty dagger finely balanced for deadly throws.
 D:「白き牙」を意味する名を持つこの短剣は必殺の冷気をもって
 D:敵を凍てつかせ、刃からは氷の矢を迸らせる力をもつ。
@@ -1243,7 +1245,7 @@ E:'Dethanc'
 I:23:4:0
 W:5:10:12:13000
 P:0:1d4:4:6:0
-F:BRAND_ELEC | RES_ELEC | ACTIVATE | SHOW_MODS | THROW
+F:BRAND_ELEC | RES_ELEC | ACTIVATE | SHOW_MODS | THROW | XTRA_H_RES
 D:$A dagger covered in sparks and finely balanced for deadly throws.
 D:「黒の牙」を意味する名を持つ、この短剣は雷光に覆われ、
 D:その刃から雷の矢を迸らせる力をもつ。
@@ -1339,7 +1341,7 @@ W:20:20:150:40000
 P:0:2d5:10:15:0
 F:SEARCH |
 F:SLAY_EVIL | BRAND_FIRE | SLAY_ORC | RES_FIRE | RES_LITE | LITE |
-F:SLOW_DIGEST | SHOW_MODS | RIDING
+F:SLOW_DIGEST | SHOW_MODS | RIDING | XTRA_RES_OR_POWER
 D:$This fiery, shining blade earned its sobriquet "Foe-Hammer" from dying orcs 
 D:$who dared to come near hidden Gondolin.
 D:この燃えるように輝く剣は『オルクリスト』と対を成し、
@@ -1401,7 +1403,7 @@ I:23:16:3
 W:20:20:150:40000
 P:0:2d5:10:15:0
 F:STEALTH | SLAY_EVIL | BRAND_COLD | SLAY_ORC | RES_COLD | LITE |
-F:SLOW_DIGEST | SHOW_MODS | RIDING
+F:SLOW_DIGEST | SHOW_MODS | RIDING | XTRA_RES_OR_POWER
 D:$This coldly gleaming blade is called simply "Biter", by orcs who came to 
 D:$know its power all too well.
 D:この冷たく輝く剣は『グラムドリング』と対を成し、オークたちからは
@@ -1422,7 +1424,7 @@ E:'Gurthang'
 I:23:25:2
 W:30:30:200:100000
 P:0:3d6:13:17:0
-F:STR | HIDE_TYPE |
+F:STR | HIDE_TYPE | XTRA_RES_OR_POWER |
 F:KILL_DRAGON | SLAY_TROLL | FREE_ACT | SLOW_DIGEST | REGEN | SHOW_MODS
 D:$A giant sword once wielded by mighty Turin, and a great dragonbane which 
 D:$bathed in Glaurung's blood:  but beware, it will drink the blood of those 
@@ -1440,7 +1442,7 @@ E:'Zarcuthra'
 I:23:25:4
 W:30:180:250:205000
 P:0:4d6:19:21:0
-F:STR | CHR | INFRA | HIDE_TYPE | VORPAL |
+F:STR | CHR | INFRA | HIDE_TYPE | VORPAL | XTRA_RES_OR_POWER |
 F:KILL_DRAGON | SLAY_ANIMAL | SLAY_EVIL | BRAND_FIRE | LITE |
 F:SLAY_UNDEAD | SLAY_DEMON | SLAY_TROLL | SLAY_GIANT | SLAY_ORC |
 F:RES_FIRE | RES_CONF | RES_CHAOS | FREE_ACT | SEE_INVIS | AGGRAVATE |
@@ -1548,7 +1550,7 @@ E:'Anduril'
 I:23:17:4
 W:20:40:130:80000
 P:0:2d5:10:15:5
-F:STR | HIDE_TYPE | RIDING |
+F:STR | HIDE_TYPE | RIDING | XTRA_RES_OR_POWER |
 F:SLAY_EVIL | BRAND_FIRE | SLAY_TROLL | SLAY_ORC | FREE_ACT |
 F:RES_FIRE | SUST_DEX | SEE_INVIS | ACTIVATE | SHOW_MODS | LITE
 D:$The famed "Flame of the West", the sword that was broken and is forged 
@@ -1635,7 +1637,7 @@ I:23:8:2
 W:20:15:75:100000
 P:0:1d6:7:8:0
 F:STR | DEX | CON | BLOWS | SLAY_EVIL | SLAY_UNDEAD | SLAY_ORC |
-F:FREE_ACT | RES_LITE | LITE | SEE_INVIS | SHOW_MODS | QUESTITEM
+F:FREE_ACT | RES_LITE | LITE | SEE_INVIS | SHOW_MODS | XTRA_H_RES | QUESTITEM
 D:$"I will give you a name, and I shall call you Sting."  The perfect size 
 D:$for Bilbo, and stamped forever by the courage he found in Mirkwood, this 
 D:$sturdy little blade grants the wearer combat prowess and survival 
@@ -1657,7 +1659,7 @@ P:0:2d5:9:11:0
 F:INT | WIS | BLOWS | SEE_INVIS | BLESSED |
 F:SLAY_ANIMAL | SLAY_EVIL | SLAY_UNDEAD | SLAY_DRAGON | SLAY_DEMON |
 F:RES_CHAOS | RES_DISEN | RES_NEXUS | RES_NETHER | HOLD_LIFE |
-F:SHOW_MODS
+F:SHOW_MODS | XTRA_RES_OR_POWER
 
 
 # The Short Sword Gilettar -> of Merlin
@@ -2014,7 +2016,7 @@ E:of Ulmo
 I:22:5:4
 W:30:90:70:120000
 P:0:4d8:15:19:0
-F:DEX | HIDE_TYPE |
+F:DEX | HIDE_TYPE | XTRA_POWER |
 F:SLAY_DRAGON | SLAY_ANIMAL | FREE_ACT | HOLD_LIFE | IM_ACID |
 F:RES_NETHER | SEE_INVIS | SLOW_DIGEST | REGEN | ACTIVATE |
 F:BLESSED | SHOW_MODS | RIDING
@@ -2055,7 +2057,8 @@ W:40:120:130:250000
 P:0:3d5:20:20:0
 F:ACTIVATE | LITE | BRAND_FIRE | FREE_ACT | RES_FIRE | INFRA | RIDING |
 F:SLAY_EVIL | SLAY_DRAGON | SLAY_UNDEAD | SLAY_DEMON | VORPAL |
-F:CHR | SUST_CHR | RES_FEAR | RES_LITE | RES_BLIND | REGEN | SHOW_MODS
+F:CHR | SUST_CHR | RES_FEAR | RES_LITE | RES_BLIND | REGEN | SHOW_MODS |
+F:XTRA_RES_OR_POWER
 D:$Forged in the farthest East by a race of mighty spellcasters, this 
 D:$shiny pale sword gleams with the rays of rising sun as you invoke 
 D:$its power of commanding legions of powerful immortal warriors...
@@ -2180,7 +2183,7 @@ P:0:9d3:19:21:5
 F:WIS | HIDE_TYPE |
 F:KILL_DRAGON | SLAY_EVIL | BRAND_ELEC | SLAY_UNDEAD | SLAY_DEMON |
 F:FREE_ACT | RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_NEXUS |
-F:SEE_INVIS | SHOW_MODS
+F:SEE_INVIS | SHOW_MODS | XTRA_POWER | XTRA_H_RES
 D:$The wondrous hammer of Aule, creator of the wise Dwarven lords of old.  
 D:$It bears magics of demolishing that no serpent or demon can withstand, and 
 D:$invokes the strength of mountains to ward off the tumult of the elements.
@@ -2231,7 +2234,7 @@ I:21:21:4
 W:30:50:40:140000
 P:0:3d2:10:13:0
 F:INT | WIS | CHR | HIDE_TYPE | SEARCH | BRAND_FIRE | FORCE_WEAPON |
-F:SLAY_EVIL | SLAY_TROLL | SLAY_ORC | LITE | DEC_MANA |
+F:SLAY_EVIL | SLAY_TROLL | SLAY_ORC | LITE | DEC_MANA | XTRA_POWER |
 F:HOLD_LIFE | RES_FIRE | RES_NETHER | SEE_INVIS | ACTIVATE | SHOW_MODS
 D:$The staff of the great wizard Gandalf.  
 D:$It is tall and sturdy, with rough-hewn runes that invoke the element of 
@@ -2275,7 +2278,7 @@ W:20:15:120:30000
 P:0:2d5:10:6:8
 F:WIS | INFRA | HIDE_TYPE | BLESSED |
 F:BRAND_COLD | SLAY_ORC | RES_COLD | RES_LITE | LITE | REGEN |
-F:ACTIVATE | SHOW_MODS
+F:ACTIVATE | SHOW_MODS | XTRA_H_RES
 D:$Wielded by the High Priest of Meneltarma, this great mace gleams coldly as 
 D:$though moonlit, and it can strike as mighty a blow spiritually as 
 D:$physically.
@@ -2334,7 +2337,7 @@ E:of Brand
 I:19:23:10
 W:50:25:110:100000
 P:0:0d0:10:14:0
-F:SPEED | RES_FIRE | XTRA_MIGHT | ACTIVATE | SHOW_MODS
+F:SPEED | RES_FIRE | XTRA_MIGHT | ACTIVATE | SHOW_MODS | XTRA_RES_OR_POWER
 D:トランプの魔力を自分の物にし、新たな宇宙を創造しようとした
 D:アンバーの王子ブランドが使っていたクロスボウだ。
 D:その魔力により装備するものは非常に素早く行動できる。
@@ -2468,7 +2471,7 @@ I:19:2:3
 W:40:35:20:50000
 P:0:2d1:19:15:0
 F:SPEED | XTRA_MIGHT |
-F:RES_FEAR | RES_BLIND | RES_CONF | SHOW_MODS
+F:RES_FEAR | RES_BLIND | RES_CONF | SHOW_MODS | XTRA_RES_OR_POWER
 D:$A sling granting extraordinary clarity of mind amidst darkness and 
 D:$confusion, and which hurls shot with deadly speed.
 D:このスリングは暗闇と混乱のただ中に於いてさえ驚くほど明晰な思考を可能にし、
@@ -2479,7 +2482,7 @@ E:of Azaghal
 I:23:5:0
 W:15:30:30:40000
 P:0:2d5:12:14:0
-F:KILL_DRAGON | IM_FIRE
+F:KILL_DRAGON | IM_FIRE | XTRA_RES_OR_POWER
 D:$At the Nirnaeth the Dwarves stayed the onslaught of Glaurung, and 
 D:$Azaghal their lord drove this short blade into the drake's belly before 
 D:$he was trampled underfoot. The black blood of the Father of Dragons 
@@ -3380,7 +3383,7 @@ I:21:7:2
 W:35:40:70:125000
 P:0:1d7:8:8:8
 F:STR | WIS | BLOWS | TUNNEL | ACTIVATE | RES_ACID | RES_ELEC
-F:REGEN | FREE_ACT | BRAND_ELEC | BLESSED
+F:REGEN | FREE_ACT | BRAND_ELEC | BLESSED | XTRA_H_RES
 D:その昔、蛸を引き連れて岸和田の地を守るために戦かったという
 D:蛸法師こと地蔵大菩薩の化身が使っていた六環の錫杖だ。
 D:「…その時。一人の法師がどこからともなく現れて、何万という敵に飛びかかり、

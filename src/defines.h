@@ -2959,7 +2959,7 @@
 
 #define TR3_SH_FIRE             0x00000001L     /* Immolation (Fire) */
 #define TR3_SH_ELEC             0x00000002L     /* Electric Sheath */
-#define TR3_QUESTITEM           0x00000004L     /* quest level item -KMW- */
+#define TR3_XXX1                0x00000004L     /* quest level item -KMW- */
 #define TR3_SH_COLD             0x00000008L     /* cold aura */
 #define TR3_NO_TELE             0x00000010L     /* Anti-teleportation */
 #define TR3_NO_MAGIC            0x00000020L     /* Anti-magic */
@@ -2968,7 +2968,7 @@
 #define TR3_WARNING             0x00000100L     /* Warning */
 #define TR3_HIDE_TYPE           0x00000200L     /* Hide "pval" description */
 #define TR3_SHOW_MODS           0x00000400L     /* Always show Tohit/Todam */
-#define TR3_INSTA_ART           0x00000800L     /* Item must be an artifact */
+#define TR3_XXX2                0x00000800L     /* XXX1 */
 #define TR3_FEATHER             0x00001000L     /* Feather Falling */
 #define TR3_LITE                0x00002000L     /* Permanent Light */
 #define TR3_SEE_INVIS           0x00004000L     /* See Invisible */
@@ -2989,6 +2989,18 @@
 #define TR3_CURSED              0x20000000L     /* Item is Cursed */
 #define TR3_HEAVY_CURSE         0x40000000L     /* Item is Heavily Cursed */
 #define TR3_PERMA_CURSE         0x80000000L     /* Item is Perma Cursed */
+
+
+#define TRG_INSTA_ART           0x00000001L     /* Item must be an artifact */
+#define TRG_QUESTITEM           0x00000002L     /* quest level item -KMW- */
+#define TRG_XTRA_POWER          0x00000004L     /* Extra power */
+#define TRG_ONE_SUSTAIN         0x00000008L     /* One sustain */
+#define TRG_XTRA_RES_OR_POWER   0x00000010L     /* Extra resistance or power */
+#define TRG_XTRA_H_RES          0x00000020L     /* Extra high resistance */
+#define TRG_XTRA_E_RES          0x00000040L     /* Extra element resistance */
+#define TRG_XTRA_L_RES          0x00000080L     /* Extra lordly resistance */
+#define TRG_XTRA_D_RES          0x00000100L     /* Extra dragon resistance */
+#define TRG_XTRA_RES            0x00000200L     /* Extra resistance */
 
 
 /*

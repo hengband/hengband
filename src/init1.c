@@ -573,7 +573,7 @@ static cptr k_info_flags3[] =
 {
 	"SH_FIRE",
 	"SH_ELEC",
-	"QUESTITEM",
+	"XXX1",
 	"SH_COLD",
 	"NO_TELE",
 	"NO_MAGIC",
@@ -582,7 +582,7 @@ static cptr k_info_flags3[] =
 	"WARNING",
 	"HIDE_TYPE",
 	"SHOW_MODS",
-	"INSTA_ART",
+	"XXX2",
 	"FEATHER",
 	"LITE",
 	"SEE_INVIS",
@@ -603,6 +603,43 @@ static cptr k_info_flags3[] =
 	"CURSED",
 	"HEAVY_CURSE",
 	"PERMA_CURSE"
+};
+
+
+static cptr k_info_gen_flags[] =
+{
+	"INSTA_ART",
+	"QUESTITEM",
+	"XTRA_POWER",
+	"ONE_SUSTAIN",
+	"XTRA_RES_OR_POWER",
+	"XTRA_H_RES",
+	"XTRA_E_RES",
+	"XTRA_L_RES",
+	"XTRA_D_RES",
+	"XTRA_RES",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
 };
 
 
@@ -1252,6 +1289,16 @@ static errr grab_one_kind_flag(object_kind *k_ptr, cptr what)
 		}
 	}
 
+	/* Check gen_flags */
+	for (i = 0; i < 32; i++)
+	{
+		if (streq(what, k_info_gen_flags[i]))
+		{
+			k_ptr->gen_flags |= (1L << i);
+			return (0);
+		}
+	}
+
 	/* Oops */
 #ifdef JP
 	msg_format("未知のアイテム・フラグ '%s'。", what);
@@ -1525,6 +1572,16 @@ static errr grab_one_artifact_flag(artifact_type *a_ptr, cptr what)
 		}
 	}
 
+	/* Check gen_flags */
+	for (i = 0; i < 32; i++)
+	{
+		if (streq(what, k_info_gen_flags[i]))
+		{
+			a_ptr->gen_flags |= (1L << i);
+			return (0);
+		}
+	}
+
 	/* Oops */
 #ifdef JP
 	msg_format("未知の伝説のアイテム・フラグ '%s'。", what);
@@ -1755,8 +1812,18 @@ static bool grab_one_ego_item_flag(ego_item_type *e_ptr, cptr what)
 			return (0);
 		}
 	}
+	
+	/* Check gen_flags */
+	for (i = 0; i < 32; i++)
+	{
+		if (streq(what, k_info_gen_flags[i]))
+		{
+			e_ptr->gen_flags |= (1L << i);
+			return (0);
+		}
+	}
 
-	/* Oops */
+/* Oops */
 #ifdef JP
 	msg_format("未知の名のあるアイテム・フラグ '%s'。", what);
 #else
@@ -3437,7 +3504,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 					r_ptr->flags1 |= RF1_QUESTOR;
 
 				a_ptr = &a_info[q_ptr->k_idx];
-				a_ptr->flags3 |= TR3_QUESTITEM;
+				a_ptr->gen_flags |= TRG_QUESTITEM;
 			}
 			return (0);
 		}

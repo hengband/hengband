@@ -5241,7 +5241,7 @@ void calc_android_exp(void)
 		if (o_ptr->name1)
 		{
 			level = (level + MAX(a_info[o_ptr->name1].level - 8, 5)) / 2;
-			level += MIN(20, a_info[o_ptr->name1].rarity/(a_info[o_ptr->name1].flags3 & TR3_INSTA_ART ? 10 : 3));
+			level += MIN(20, a_info[o_ptr->name1].rarity/(a_info[o_ptr->name1].gen_flags & TRG_INSTA_ART ? 10 : 3));
 		}
 		else if (o_ptr->name2) level += MAX(3, (e_info[o_ptr->name2].rating - 5)/2);
 		value = object_value_real(q_ptr);

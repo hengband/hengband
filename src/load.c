@@ -2538,7 +2538,7 @@ note(format("クエストが多すぎる(%u)！", max_quests_load));
 					rd_s16b(&quest[i].k_idx);
 
 					if (quest[i].k_idx)
-						a_info[quest[i].k_idx].flags3 |= TR3_QUESTITEM;
+						a_info[quest[i].k_idx].gen_flags |= TRG_QUESTITEM;
 
 					rd_byte(&quest[i].flags);
 

@@ -108,6 +108,8 @@ struct object_kind
 	u32b flags2;		/* Flags, set 2 */
 	u32b flags3;		/* Flags, set 3 */
 
+	u32b gen_flags;		/* flags for generate */
+
 	byte locale[4];		/* Allocation level(s) */
 	byte chance[4];		/* Allocation chance(s) */
 
@@ -171,6 +173,8 @@ struct artifact_type
 	u32b flags2;		/* Artifact Flags, set 2 */
 	u32b flags3;		/* Artifact Flags, set 3 */
 
+	u32b gen_flags;		/* flags for generate */
+
 	byte level;			/* Artifact level */
 	byte rarity;		/* Artifact rarity */
 
@@ -207,6 +211,8 @@ struct ego_item_type
 	u32b flags1;		/* Ego-Item Flags, set 1 */
 	u32b flags2;		/* Ego-Item Flags, set 2 */
 	u32b flags3;		/* Ego-Item Flags, set 3 */
+
+	u32b gen_flags;		/* flags for generate */
 };
 
 

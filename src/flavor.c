@@ -1256,7 +1256,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			/* Known artifacts */
 			if (artifact_p(o_ptr) && aware) break;
 
-			if ((k_ptr->flags3 & TR3_INSTA_ART) && aware) break;
+			if ((k_ptr->gen_flags & TRG_INSTA_ART) && aware) break;
 
 			/* Color the object */
 			modstr = amulet_adj[indexx];
@@ -1283,7 +1283,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			/* Known artifacts */
 			if (artifact_p(o_ptr) && aware) break;
 
-			if ((k_ptr->flags3 & TR3_INSTA_ART) && aware) break;
+			if ((k_ptr->gen_flags & TRG_INSTA_ART) && aware) break;
 
 			/* Color the object */
 			modstr = ring_adj[indexx];

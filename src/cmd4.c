@@ -6581,7 +6581,7 @@ static void do_cmd_knowledge_objects(void)
 		object_kind *k_ptr = &k_info[k];
 
 		/* Hack -- skip artifacts */
-		if (k_ptr->flags3 & (TR3_INSTA_ART)) continue;
+		if (k_ptr->gen_flags & (TRG_INSTA_ART)) continue;
 
 		/* List known flavored objects */
 		if (k_ptr->flavor && k_ptr->aware)

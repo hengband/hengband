@@ -586,11 +586,11 @@ static void wiz_display_item(object_type *o_ptr)
 	prt_binary(f2, 23, j);
 
 	prt("+------------FLAGS3------------+", 10, j+32);
-	prt("fe cnn t   i  stdrmsiiii d abchp", 11, j+32);
-	prt("aa aoomyehsnlleeieihgggg rtgluvr", 12, j+32);
-	prt("uu utmacaihseielgggonnnnaaerercc", 13, j+32);
-	prt("rr reanusdotvtieeehtrrrrcilassuu", 14, j+32);
-	prt("aa algaryewaienpsntsaefctnevserr", 15, j+32);
+	prt("fe cnn t      stdrmsiiii d abchp", 11, j+32);
+	prt("aa aoomywhs lleeieihgggg rtgluvr", 12, j+32);
+	prt("uu utmacaih eielgggonnnnaaerercc", 13, j+32);
+	prt("rr reanurdo vtieeehtrrrrcilassuu", 14, j+32);
+	prt("aa algarnew ienpsntsaefctnevserr", 15, j+32);
 	prt_binary(f3, 16, j+32);
 }
 
@@ -1341,7 +1341,7 @@ static void wiz_create_item(void)
 	/* Create the item */
 	object_prep(q_ptr, k_idx);
 
-	if (k_info[k_idx].flags3 & TR3_INSTA_ART)
+	if (k_info[k_idx].gen_flags & TRG_INSTA_ART)
 	{
 		int i;
 
