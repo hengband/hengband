@@ -5618,32 +5618,12 @@ msg_print("あなたの槍は電気でスパークしている...");
 			}
 			case ART_BLOOD:
 			{
-				int dummy, i;
 #ifdef JP
 				msg_print("鎌が明るく輝いた...");
 #else
 				msg_print("Your scythe glows brightly!");
 #endif
-				for (i = 0; i < TR_FLAG_SIZE; i++)
-					o_ptr->art_flags[i] = a_info[ART_BLOOD].flags[i];
-
-				dummy = randint1(2)+randint1(2);
-				for (i = 0; i < dummy; i++)
-				{
-					int flag = randint0(19);
-					if (flag == 18) add_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
-					else add_flag(o_ptr->art_flags, TR_CHAOTIC + flag);
-				}
-				dummy = randint1(2);
-				for (i = 0; i < dummy; i++)
-					one_resistance(o_ptr);
-				dummy = 2;
-				for (i = 0; i < dummy; i++)
-				{
-					int tmp = randint0(11);
-					if (tmp < 6) add_flag(o_ptr->art_flags, TR_STR + tmp);
-					else add_flag(o_ptr->art_flags, TR_STEALTH + tmp - 6);
-				}
+				get_bloody_moon_flags(o_ptr);
 				o_ptr->timeout = 3333;
 				if (p_ptr->prace == RACE_ANDROID) calc_android_exp();
 				p_ptr->update |= (PU_BONUS | PU_HP);

@@ -3017,6 +3017,34 @@ bool activate_random_artifact(object_type * o_ptr)
 }
 
 
+void get_bloody_moon_flags(object_type *o_ptr)
+{
+	int dummy, i;
+
+	for (i = 0; i < TR_FLAG_SIZE; i++)
+		o_ptr->art_flags[i] = a_info[ART_BLOOD].flags[i];
+
+	dummy = randint1(2) + randint1(2);
+	for (i = 0; i < dummy; i++)
+	{
+		int flag = randint0(27);
+		if (flag >= 19) add_flag(o_ptr->art_flags, TR_KILL_ANIMAL + flag - 19);
+		else if (flag == 18) add_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
+		else add_flag(o_ptr->art_flags, TR_CHAOTIC + flag);
+	}
+
+	dummy = randint1(2);
+	for (i = 0; i < dummy; i++) one_resistance(o_ptr);
+
+	for (i = 0; i < 2; i++)
+	{
+		int tmp = randint0(11);
+		if (tmp < 6) add_flag(o_ptr->art_flags, TR_STR + tmp);
+		else add_flag(o_ptr->art_flags, TR_STEALTH + tmp - 6);
+	}
+}
+
+
 void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
 {
 	bool give_resistance = FALSE, give_power = FALSE;
@@ -3038,6 +3066,7 @@ void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
 			return;
 		}
 	}
+
 	if (o_ptr->name1 == ART_MURAMASA)
 	{
 		if (p_ptr->pclass != CLASS_SAMURAI)
@@ -3055,24 +3084,7 @@ void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
 
 	if (o_ptr->name1 == ART_BLOOD)
 	{
-		int dummy, i;
-		dummy = randint1(2)+randint1(2);
-		for (i = 0; i < dummy; i++)
-		{
-			int flag = randint0(19);
-			if (flag == 18) add_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
-			else add_flag(o_ptr->art_flags, TR_CHAOTIC + flag);
-		}
-		dummy = randint1(2);
-		for (i = 0; i < dummy; i++)
-			one_resistance(o_ptr);
-		dummy = 2;
-		for (i = 0; i < dummy; i++)
-		{
-			int tmp = randint0(11);
-			if (tmp < 6) add_flag(o_ptr->art_flags, TR_STR + tmp);
-			else add_flag(o_ptr->art_flags, TR_STEALTH + tmp - 6);
-		}
+		get_bloody_moon_flags(o_ptr);
 	}
 
 	if (a_ptr->gen_flags & (TRG_XTRA_POWER)) give_power = TRUE;
