@@ -1098,6 +1098,7 @@ static flag_insc_table flag_insc_misc[] =
 	{ "·Ù", "Wr", TR_WARNING, -1 },
 	{ "ÇÜ", "Xm", TR_XTRA_MIGHT, -1 },
 	{ "¼Í", "Xs", TR_XTRA_SHOTS, -1 },
+	{ "½Ö", "Te", TR_TELEPORT, -1 },
 	{ "ÅÜ", "Ag", TR_AGGRAVATE, -1 },
 	{ "½Ë", "Bs", TR_BLESSED, -1 },
 	{ "´÷", "Ty", TR_TY_CURSE, -1 },
@@ -1255,6 +1256,7 @@ static flag_insc_table flag_insc_misc[] =
 	{ "Wr", TR_WARNING, -1 },
 	{ "Xm", TR_XTRA_MIGHT, -1 },
 	{ "Xs", TR_XTRA_SHOTS, -1 },
+	{ "Te", TR_TELEPORT, -1 },
 	{ "Ag", TR_AGGRAVATE, -1 },
 	{ "Bs", TR_BLESSED, -1 },
 	{ "Ty", TR_TY_CURSE, -1 },
@@ -1422,14 +1424,10 @@ static char *get_ability_abbreviation(char *ptr, object_type *o_ptr, bool kanji,
 
 		if (o_ptr->name2)
 		{
-			bool teleport = have_flag(flgs, TR_TELEPORT);
 			ego_item_type *e_ptr = &e_info[o_ptr->name2];
 					
 			for (j = 0; j < TR_FLAG_SIZE; j++)
 				flgs[j] &= ~e_ptr->flags[j];
-
-			/* Always inscribe {.} for random teleport */
-			if (teleport) add_flag(flgs, TR_TELEPORT);
 		}
 	}
 
@@ -1517,12 +1515,6 @@ static char *get_ability_abbreviation(char *ptr, object_type *o_ptr, bool kanji,
 		if (have_flag_of(flag_insc_esp2, flgs))
 			ADD_INSC("~");
 		ptr = inscribe_flags_aux(flag_insc_esp2, flgs, kanji, ptr);
-	}
-
-	/* Random Teleport */
-	if (have_flag(flgs, TR_TELEPORT))
-	{
-		ADD_INSC(".");
 	}
 
 	/* sustain */
