@@ -1182,6 +1182,15 @@ void change_floor(void)
 			}
 		}
 
+		/* Break connection to killed floor */
+		else
+		{
+			if (change_floor_mode & CFM_UP)
+				sf_ptr->lower_floor_id = 0;
+			else if (change_floor_mode & CFM_DOWN)
+				sf_ptr->upper_floor_id = 0;
+		}
+
 		/* Maintain monsters and artifacts */
 		if (loaded)
 		{
