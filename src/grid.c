@@ -145,7 +145,7 @@ void place_random_door(int y, int x, bool room)
 		place_closed_door(y, x);
 
 		/* Hide. If on the edge of room, use outer wall. */
-		c_ptr->mimic = room ? feat_wall_outer : fill_type[randint0(100)];
+		c_ptr->mimic = f_info[room ? feat_wall_outer : fill_type[randint0(100)]].mimic;
 
 		/* Floor type terrain cannot hide a door */
 		if (feat_floor(c_ptr->mimic))
