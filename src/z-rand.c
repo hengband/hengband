@@ -342,4 +342,53 @@ s32b div_round(s32b n, s32b d)
 
 
 
+/*
+ * Extract a "random" number from 0 to m-1, using the "simple" RNG.
+ *
+ * This function should be used when generating random numbers in
+ * "external" program parts like the main-*.c files.  It preserves
+ * the current RNG state to prevent influences on game-play.
+ *
+ * Could also use rand() from <stdlib.h> directly. XXX XXX XXX
+ */
+u32b Rand_simple(u32b m)
+{
+	static bool initialized = FALSE;
+	static u32b simple_rand_value;
+	bool old_rand_quick;
+	u32b old_rand_value;
+	u32b result;
 
+
+	/* Save RNG state */
+	old_rand_quick = Rand_quick;
+	old_rand_value = Rand_value;
+
+	/* Use "simple" RNG */
+	Rand_quick = TRUE;
+
+	if (initialized)
+	{
+		/* Use stored seed */
+		Rand_value = simple_rand_value;
+	}
+	else
+	{
+		/* Initialize with new seed */
+		Rand_value = time(NULL);
+		initialized = TRUE;
+	}
+
+	/* Get a random number */
+	result = randint0(m);
+
+	/* Store the new seed */
+	simple_rand_value = Rand_value;
+
+	/* Restore RNG state */
+	Rand_quick = old_rand_quick;
+	Rand_value = old_rand_value;
+
+	/* Use the value */
+	return (result);
+}
