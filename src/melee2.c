@@ -1900,7 +1900,7 @@ act = "%sにむかって歌った。";
 			case RBE_EAT_GOLD:
 				{
 					pt = damage = 0;
-					if (one_in_(2)) blinked = TRUE;
+					if ((p_ptr->riding != m_idx) && one_in_(2)) blinked = TRUE;
 					break;
 				}
 
@@ -2213,7 +2213,7 @@ msg_print("泥棒は笑って逃げた！");
 			mon_fight = TRUE;
 		}
 
-		teleport_away(m_idx, MAX_SIGHT * 2 + 5, FALSE);
+		teleport_away(m_idx, MAX_SIGHT * 2 + 5, FALSE, FALSE);
 	}
 
 	return TRUE;

@@ -5289,7 +5289,7 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
 					m_ptr->hp = m_ptr->maxhp;
 
 					/* Try to teleport away quest monsters */
-					if (!teleport_away(c_ptr->m_idx, (r * 2) + 1, TRUE)) continue;
+					if (!teleport_away(c_ptr->m_idx, (r * 2) + 1, TRUE, FALSE)) continue;
 				}
 				else
 				{

@@ -1425,7 +1425,7 @@ msg_format("%sを引き戻した。", m_name);
 		msg_format("You command %s to return.", m_name);
 #endif
 
-		teleport_monster_to(cave[target_row][target_col].m_idx, py, px, 100);
+		teleport_monster_to(cave[target_row][target_col].m_idx, py, px, 100, TRUE);
 		break;
 	}
 	case MS_TELE_AWAY:

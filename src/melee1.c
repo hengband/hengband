@@ -2172,7 +2172,7 @@ msg_format("%^sから落ちてしまった！", m_name);
 		msg_print("The thief flees laughing!");
 #endif
 
-		teleport_away(m_idx, MAX_SIGHT * 2 + 5, FALSE);
+		teleport_away(m_idx, MAX_SIGHT * 2 + 5, FALSE, FALSE);
 	}
 
 

@@ -5935,7 +5935,7 @@ note = "には効果がなかった！";
 		chg_virtue(V_VALOUR, -1);
 
 		/* Teleport */
-		teleport_away(c_ptr->m_idx, do_dist, (bool)(!who));
+		teleport_away(c_ptr->m_idx, do_dist, (bool)(!who), TRUE);
 
 		/* Hack -- get new location */
 		y = m_ptr->fy;
@@ -6247,7 +6247,7 @@ msg_print("空間が歪んだ！");
 					msg_print("Space warps about you!");
 #endif
 
-					if (m_ptr->r_idx) teleport_away(c_ptr->m_idx, damroll(10, 10), FALSE);
+					if (m_ptr->r_idx) teleport_away(c_ptr->m_idx, damroll(10, 10), FALSE, TRUE);
 					if (one_in_(13)) count += activate_hi_summon(ty, tx, TRUE);
 					if (!one_in_(6)) break;
 				}

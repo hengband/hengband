@@ -2819,7 +2819,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 					msg_format("%^s disappears!", m_name);
 #endif
 
-					teleport_away(c_ptr->m_idx, 50, FALSE);
+					teleport_away(c_ptr->m_idx, 50, FALSE, TRUE);
 					num = num_blow + 1; /* Can't hit it anymore! */
 					*mdeath = TRUE;
 				}

@@ -19,6 +19,31 @@
 #define HURT_CHANCE 16
 
 
+static bool cave_monster_teleportable_bold(int m_idx, int y, int x, bool passive)
+{
+	monster_type *m_ptr = &m_list[m_idx];
+	cave_type    *c_ptr = &cave[y][x];
+	feature_type *f_ptr = &f_info[c_ptr->feat];
+
+	/* Require "teleportable" space */
+	if (!have_flag(f_ptr->flags, FF_TELEPORTABLE)) return FALSE;
+
+	if (c_ptr->m_idx && (c_ptr->m_idx != m_idx)) return FALSE;
+	if (player_bold(y, x)) return FALSE;
+
+	/* Hack -- no teleport onto glyph of warding */
+	if (is_glyph_grid(c_ptr)) return FALSE;
+	if (is_explosive_rune_grid(c_ptr)) return FALSE;
+
+	if (!passive)
+	{
+		if (!monster_can_cross_terrain(c_ptr->feat, &r_info[m_ptr->r_idx], 0)) return FALSE;
+	}
+
+	return TRUE;
+}
+
+
 /*
  * Teleport a monster, normally up to "dis" grids away.
  *
@@ -26,7 +51,7 @@
  *
  * But allow variation to prevent infinite loops.
  */
-bool teleport_away(int m_idx, int dis, bool dec_valour)
+bool teleport_away(int m_idx, int dis, bool dec_valour, bool passive)
 {
 	int oy, ox, d, i, min;
 	int tries = 0;
@@ -35,7 +60,6 @@ bool teleport_away(int m_idx, int dis, bool dec_valour)
 	bool look = TRUE;
 
 	monster_type *m_ptr = &m_list[m_idx];
-
 
 	/* Paranoia */
 	if (!m_ptr->r_idx) return (FALSE);
@@ -50,7 +74,7 @@ bool teleport_away(int m_idx, int dis, bool dec_valour)
 	if (dec_valour &&
 	    (((p_ptr->chp * 10) / p_ptr->mhp) > 5) &&
 		(4+randint1(5) < ((p_ptr->chp * 10) / p_ptr->mhp)))
-	{	
+	{
 		chg_virtue(V_VALOUR, -1);
 	}
 
@@ -77,15 +101,7 @@ bool teleport_away(int m_idx, int dis, bool dec_valour)
 			/* Ignore illegal locations */
 			if (!in_bounds(ny, nx)) continue;
 
-			/* Require "empty" floor space */
-			if (!cave_empty_bold(ny, nx)) continue;
-
-			/* Hack -- no teleport onto glyph of warding */
-			if (is_glyph_grid(&cave[ny][nx])) continue;
-			if (is_explosive_rune_grid(&cave[ny][nx])) continue;
-
-			/* ...nor onto the Pattern */
-			if (pattern_tile(ny, nx)) continue;
+			if (!cave_monster_teleportable_bold(m_idx, ny, nx, passive)) continue;
 
 			/* No teleporting into vaults and such */
 			if (!(p_ptr->inside_quest || p_ptr->inside_arena))
@@ -144,14 +160,13 @@ bool teleport_away(int m_idx, int dis, bool dec_valour)
 /*
  * Teleport monster next to a grid near the given location
  */
-void teleport_monster_to(int m_idx, int ty, int tx, int power)
+void teleport_monster_to(int m_idx, int ty, int tx, int power, bool passive)
 {
 	int ny, nx, oy, ox, d, i, min;
 	int attempts = 500;
 	int dis = 2;
 	bool look = TRUE;
 	monster_type *m_ptr = &m_list[m_idx];
-
 
 	/* Paranoia */
 	if (!m_ptr->r_idx) return;
@@ -179,8 +194,6 @@ void teleport_monster_to(int m_idx, int ty, int tx, int power)
 		/* Try several locations */
 		for (i = 0; i < 500; i++)
 		{
-			cave_type    *c_ptr;
-
 			/* Pick a (possibly illegal) location */
 			while (1)
 			{
@@ -193,20 +206,10 @@ void teleport_monster_to(int m_idx, int ty, int tx, int power)
 			/* Ignore illegal locations */
 			if (!in_bounds(ny, nx)) continue;
 
-			/* Require "empty" floor space */
-			if (!cave_empty_bold(ny, nx)) continue;
-
-			c_ptr = &cave[ny][nx];
-
-			/* Hack -- no teleport onto glyph of warding */
-			if (is_glyph_grid(c_ptr)) continue;
-			if (is_explosive_rune_grid(c_ptr)) continue;
-
-			/* ...nor onto the Pattern */
-			if (pattern_tile(ny, nx)) continue;
+			if (!cave_monster_teleportable_bold(m_idx, ny, nx, passive)) continue;
 
 			/* No teleporting into vaults and such */
-			/* if (c_ptr->info & (CAVE_ICKY)) continue; */
+			/* if (cave[ny][nx].info & (CAVE_ICKY)) continue; */
 
 			/* This grid looks good */
 			look = FALSE;
@@ -251,7 +254,7 @@ void teleport_monster_to(int m_idx, int ty, int tx, int power)
 }
 
 
-bool cave_teleportable_bold(int y, int x, bool passive)
+bool cave_player_teleportable_bold(int y, int x, bool passive)
 {
 	cave_type    *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
@@ -359,7 +362,7 @@ msg_print("不思議な力がテレポートを防いだ！");
 			/* Ignore illegal locations */
 			if (!in_bounds(y, x)) continue;
 
-			if (!cave_teleportable_bold(y, x, passive)) continue;
+			if (!cave_player_teleportable_bold(y, x, passive)) continue;
 
 			/* This grid looks good */
 			look = FALSE;
@@ -413,7 +416,7 @@ msg_print("不思議な力がテレポートを防いだ！");
 				if ((r_ptr->flags6 & RF6_TPORT) &&
 				    !(r_ptr->flagsr & RFR_RES_TELE))
 				{
-					if (!m_ptr->csleep) teleport_monster_to(tmp_m_idx, y, x, r_ptr->level);
+					if (!m_ptr->csleep) teleport_monster_to(tmp_m_idx, y, x, r_ptr->level, FALSE);
 				}
 			}
 		}
@@ -458,7 +461,7 @@ void teleport_player_to(int ny, int nx, bool no_tele, bool passive)
 		if (p_ptr->wizard && !passive) break;
 
 		/* Accept teleportable floor grids */
-		if (cave_teleportable_bold(y, x, passive)) break;
+		if (cave_player_teleportable_bold(y, x, passive)) break;
 
 		/* Occasionally advance the distance */
 		if (++ctr > (4 * dis * dis + 4 * dis + 1))
@@ -5691,7 +5694,7 @@ static bool dimension_door_aux(int x, int y)
 
 	p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
 
-	if (!cave_teleportable_bold(y, x, FALSE) ||
+	if (!cave_player_teleportable_bold(y, x, FALSE) ||
 	    (distance(y, x, py, px) > plev / 2 + 10) ||
 	    (!randint0(plev / 10 + 10)))
 	{
