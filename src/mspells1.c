@@ -1439,11 +1439,6 @@ bool make_attack_spell(int m_idx)
 		f6 &= ~(RF6_NOMAGIC_MASK);
 	}
 
-	if (!p_ptr->csp)
-	{
-		f5 &= ~(RF5_DRAIN_MANA);
-	}
-
 	if (f6 & RF6_DARKNESS)
 	{
 		if ((p_ptr->pclass == CLASS_NINJA) &&
@@ -1504,6 +1499,8 @@ bool make_attack_spell(int m_idx)
 
 	if (!(r_ptr->flags2 & RF2_STUPID))
 	{
+		if (!p_ptr->csp) f5 &= ~(RF5_DRAIN_MANA);
+
 		/* Check for a clean bolt shot */
 		if (((f4 & RF4_BOLT_MASK) ||
 		     (f5 & RF5_BOLT_MASK) ||
