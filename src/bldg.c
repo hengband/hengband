@@ -282,12 +282,11 @@ msg_print("君のために最強の挑戦者を用意しておいた。");
 					if (get_check("Do you fight? "))
 #endif
 					{
-						p_ptr->leftbldg = TRUE;
 						p_ptr->exit_bldg = FALSE;
 						reset_tim_flags();
 
-						/* Save the surface floor to preserve pets */
-						prepare_change_floor_mode(CFM_SAVE_SURFACE);
+						/* Save the surface floor as saved floor */
+						/* prepare_change_floor_mode(0); */
 
 						p_ptr->inside_arena = TRUE;
 						p_ptr->leaving = TRUE;
@@ -325,12 +324,11 @@ msg_print("ペットに乗ったままではアリーナへ入れさせてもらえなかった。");
 			}
 			else
 			{
-				p_ptr->leftbldg = TRUE;
 				p_ptr->exit_bldg = FALSE;
 				reset_tim_flags();
 
-				/* Save the surface floor to preserve pets */
-				prepare_change_floor_mode(CFM_SAVE_SURFACE);
+				/* Save the surface floor as saved floor */
+				/* prepare_change_floor_mode(0); */
 
 				p_ptr->inside_arena = TRUE;
 				p_ptr->leaving = TRUE;
@@ -2059,11 +2057,10 @@ msg_print("ＯＫ、１ゴールドでいこう。");
 			battle_odds = MAX(wager+1, wager * battle_odds / 100);
 			kakekin = wager;
 			p_ptr->au -= wager;
-			p_ptr->leftbldg = TRUE;
 			reset_tim_flags();
 
-			/* Save the surface floor to preserve pets */
-			prepare_change_floor_mode(CFM_SAVE_SURFACE);
+			/* Save the surface floor as saved floor */
+			/* prepare_change_floor_mode(0); */
 
 			p_ptr->inside_battle = TRUE;
 			p_ptr->leaving = TRUE;
@@ -2904,8 +2901,6 @@ msg_print("バーテンはいくらかの食べ物とビールをくれた。");
 #endif
 					}
 				}
-
-				p_ptr->leftbldg = TRUE;
 			}
 			break;
 
@@ -4275,7 +4270,10 @@ bool tele_town(void)
 			}
 		}
 	}
-	p_ptr->leftbldg = TRUE;
+
+	/* Clear all saved floors */
+	prepare_change_floor_mode(CFM_CLEAR_ALL);
+
 	p_ptr->leaving = TRUE;
 	leave_bldg = TRUE;
 	p_ptr->teleport_town = TRUE;
@@ -4909,9 +4907,12 @@ msg_print("ここにはクエストの入口はない。");
 
 		leave_quest_check();
 
+		if (quest[p_ptr->inside_quest].type != QUEST_TYPE_RANDOM) dun_level = 1;
 		p_ptr->inside_quest = cave[py][px].special;
-		if(quest[leaving_quest].type != QUEST_TYPE_RANDOM) dun_level = 1;
-		p_ptr->leftbldg = TRUE;
+
+		/* Clear all saved floors */
+		prepare_change_floor_mode(CFM_CLEAR_ALL);
+
 		p_ptr->leaving = TRUE;
 	}
 }
@@ -4970,8 +4971,8 @@ prt("ゲートは閉まっている。モンスターがあなたを待っている！",0,0);
 	}
 	else if ((which == 2) && p_ptr->inside_arena)
 	{
-		/* Restore the surface floor to preserve pets */
-		prepare_change_floor_mode(CFM_SAVE_SURFACE | CFM_NO_RETURN);
+		/* Don't save the arena as saved floor */
+		prepare_change_floor_mode(CFM_NO_RETURN);
 
 		p_ptr->inside_arena = FALSE;
 		p_ptr->leaving = TRUE;
@@ -4983,8 +4984,8 @@ prt("ゲートは閉まっている。モンスターがあなたを待っている！",0,0);
 	}
 	else if (p_ptr->inside_battle)
 	{
-		/* Restore the surface floor to preserve pets */
-		prepare_change_floor_mode(CFM_SAVE_SURFACE | CFM_NO_RETURN);
+		/* Don't save the arena as saved floor */
+		prepare_change_floor_mode(CFM_NO_RETURN);
 
 		p_ptr->leaving = TRUE;
 		p_ptr->inside_battle = FALSE;
@@ -5061,7 +5062,12 @@ prt("ゲートは閉まっている。モンスターがあなたを待っている！",0,0);
 
 	/* Reinit wilderness to activate quests ... */
 	if (reinit_wilderness)
+	{
+		/* Clear all saved floors */
+		prepare_change_floor_mode(CFM_CLEAR_ALL);
+
 		p_ptr->leaving = TRUE;
+	}
 
 	/* Hack -- Decrease "icky" depth */
 	character_icky--;

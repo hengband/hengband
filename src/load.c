@@ -1652,7 +1652,7 @@ static void rd_extra(void)
 		p_ptr->inside_battle = (bool)tmp16s;
 	}
 	rd_byte(&p_ptr->exit_bldg);
-	rd_byte(&p_ptr->leftbldg);
+	rd_byte(&tmp8u);
 
 	rd_s16b(&p_ptr->oldpx);
 	rd_s16b(&p_ptr->oldpy);
@@ -2859,12 +2859,9 @@ static errr rd_dungeon(void)
 	/* Number of the saved_floors array elements */
 	rd_byte(&num);
 
-	/*** On the surface  ***/
+	/*** No saved floor (On the surface etc.) ***/
 	if (!num)
 	{
-		/* It should be 0 */
-		if (num) err = 181;
-
 		/* Read the current floor data */
 		err = rd_saved_floor(NULL);
 	}
@@ -2962,14 +2959,6 @@ static errr rd_dungeon(void)
 		note("保存されたフロアのダンジョンデータが壊れています！");
 #else
 		note("Dungeon data of saved floors are broken!");
-#endif
-		break;
-
-	case 181:
-#ifdef JP
-		note("Error 181");
-#else
-		note("Error 181");
 #endif
 		break;
 
@@ -3171,24 +3160,6 @@ if (arg_fiddle) note("アイテムの記録をロードしました");
 	if (arg_fiddle) note("Loaded Object Memory");
 #endif
 
-
-#if 0
-	/*
-	 * Initialize arena and rewards information
-	 */
-	p_ptr->arena_number = 0;
-	p_ptr->inside_arena = 0;
-	p_ptr->inside_quest = 0;
-	p_ptr->leftbldg = FALSE;
-	p_ptr->exit_bldg = TRUE;
-
-	/* Start in town 1 */
-	p_ptr->town_num = 1;
-
-	p_ptr->wilderness_x = 4;
-	p_ptr->wilderness_y = 4;
-
-#endif
 
 	/* Init the wilderness seeds */
 	for (i = 0; i < max_wild_x; i++)

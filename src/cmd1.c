@@ -3655,7 +3655,9 @@ void move_player(int dir, int do_pickup, bool break_trap)
 				ambush_flag = FALSE;
 			}
 
-			p_ptr->leftbldg = TRUE;
+			/* Clear all saved floors */
+			prepare_change_floor_mode(CFM_CLEAR_ALL);
+
 			p_ptr->leaving = TRUE;
 			energy_use = 100;
 
@@ -4295,6 +4297,10 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 			dun_level = 0;
 			p_ptr->oldpx = 0;
 			p_ptr->oldpy = 0;
+
+			/* Clear all saved floors */
+			prepare_change_floor_mode(CFM_CLEAR_ALL);
+
 			p_ptr->leaving = TRUE;
 		}
 

@@ -671,15 +671,16 @@ msg_format("%d 階にテレポートしました。", command_arg);
 
 	/* Change level */
 	dun_level = command_arg;
-	prepare_change_floor_mode(CFM_CLEAR_ALL);
 
 	leave_quest_check();
 
 	if (record_stair) do_cmd_write_nikki(NIKKI_PAT_TELE,0,NULL);
 
 	p_ptr->inside_quest = 0;
-	p_ptr->leftbldg = FALSE;
 	energy_use = 0;
+
+	/* Clear all saved floors */
+	prepare_change_floor_mode(CFM_CLEAR_ALL);
 
 	/* Leaving */
 	p_ptr->leaving = TRUE;
@@ -4159,11 +4160,14 @@ msg_print("上に引っ張りあげられる感じがする！");
 
 				dun_level = 0;
 				dungeon_type = 0;
-				prepare_change_floor_mode(CFM_CLEAR_ALL);
 
 				leave_quest_check();
 
 				p_ptr->inside_quest = 0;
+
+				/* Clear all saved floors */
+				prepare_change_floor_mode(CFM_CLEAR_ALL);
+
 				p_ptr->leaving = TRUE;
 			}
 			else
@@ -4213,6 +4217,7 @@ msg_print("下に引きずり降ろされる感じがする！");
 				}
 				p_ptr->wild_mode = FALSE;
 
+				/* Clear all saved floors */
 				prepare_change_floor_mode(CFM_CLEAR_ALL);
 
 				/* Leaving */
@@ -4266,6 +4271,7 @@ msg_print("下に引きずり降ろされる感じがする！");
 				msg_print("The world changes!");
 #endif
 
+				/* Clear all saved floors */
 				prepare_change_floor_mode(CFM_CLEAR_ALL);
 
 				/* Leaving */
@@ -7217,6 +7223,10 @@ msg_print("張りつめた大気が流れ去った...");
 
 					/* Leaving */
 					p_ptr->wild_mode = FALSE;
+
+					/* Clear all saved floors */
+					prepare_change_floor_mode(CFM_CLEAR_ALL);
+
 					p_ptr->leaving = TRUE;
 
 #ifdef JP

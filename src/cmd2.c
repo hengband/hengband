@@ -59,9 +59,11 @@ void do_cmd_go_up(void)
 			dun_level = 0;
 		}
 
+		/* Clear all saved floors */
+		prepare_change_floor_mode(CFM_CLEAR_ALL);
+
 		/* Leaving */
 		p_ptr->leaving = TRUE;
-		p_ptr->leftbldg = TRUE;
 
 		p_ptr->oldpx = 0;
 		p_ptr->oldpy = 0;
@@ -118,22 +120,27 @@ void do_cmd_go_up(void)
 
 	if (autosave_l) do_cmd_save_game(TRUE);
 
-	if (p_ptr->inside_quest)
+	/* For a random quest */
+	if (p_ptr->inside_quest &&
+	    quest[p_ptr->inside_quest].type == QUEST_TYPE_RANDOM)
 	{
 		leave_quest_check();
 
-		if (quest[leaving_quest].type != QUEST_TYPE_RANDOM)
-		{
-			p_ptr->inside_quest = c_ptr->special;
-			dun_level = 0;
-		}
-		else
-		{
-			p_ptr->inside_quest = 0;
-		}
+		p_ptr->inside_quest = 0;
+	}
 
+	/* For a fixed quest */
+	if (p_ptr->inside_quest &&
+	    quest[p_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
+	{
+		leave_quest_check();
+
+		p_ptr->inside_quest = c_ptr->special;
+		dun_level = 0;
 		up_num = 0;
 	}
+
+	/* For normal dungeon and random quest */
 	else
 	{
 		/* New depth */
@@ -231,9 +238,11 @@ void do_cmd_go_down(void)
 			dun_level = 0;
 		}
 
+		/* Clear all saved floors */
+		prepare_change_floor_mode(CFM_CLEAR_ALL);
+
 		/* Leaving */
 		p_ptr->leaving = TRUE;
-		p_ptr->leftbldg = TRUE;
 
 		p_ptr->oldpx = 0;
 		p_ptr->oldpy = 0;
@@ -3086,6 +3095,10 @@ void do_cmd_stay(int pickup)
 		dun_level = 0;
 		p_ptr->oldpx = 0;
 		p_ptr->oldpy = 0;
+
+		/* Clear all saved floors */
+		prepare_change_floor_mode(CFM_CLEAR_ALL);
+
 		p_ptr->leaving = TRUE;
 	}
 }

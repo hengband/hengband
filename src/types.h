@@ -1146,7 +1146,6 @@ struct player_type
 	bool leaving;			/* True if player is leaving */
 
 	byte exit_bldg;			/* Goal obtained in arena? -KMW- */
-	byte leftbldg;			/* did we just leave a special area? -KMW- */
 
 	bool leaving_dungeon;	/* True if player is leaving the dungeon */
 	bool teleport_town;

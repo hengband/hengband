@@ -749,27 +749,23 @@ void leave_floor(void)
 	new_floor_id = 0;
 
 
-	/* From somewhere of the surface to somewhere of the surface */
-	if (!dungeon_type)
+	if (!p_ptr->floor_id)
 	{
-		if (change_floor_mode & CFM_SAVE_SURFACE)
-		{
-			/* Save surface floor to preserve pets (for Arena) */
-			if (!p_ptr->floor_id)
-			{
-				/* Get temporal floor_id */
-				p_ptr->floor_id = get_new_floor_id();
-
-				/* Record the dungeon level */
-				get_sf_ptr(p_ptr->floor_id)->dun_level = dun_level;
-			}
-		}
-		else
+		if (change_floor_mode & (CFM_NO_RETURN | CFM_CLEAR_ALL))
 		{
 			/* No need to save current floor */
 			return;
 		}
+		else
+		{
+			/* Get temporal floor_id */
+			p_ptr->floor_id = get_new_floor_id();
+
+			/* Record the dungeon level */
+			get_sf_ptr(p_ptr->floor_id)->dun_level = dun_level;
+		}
 	}
+
 
 	/* Search the quest monster index */
 	for (i = 0; i < max_quests; i++)
@@ -915,8 +911,7 @@ void leave_floor(void)
 		c_ptr = &cave[py][px];
 
 		/* Get back to old saved floor? */
-		if ((dun_level || (change_floor_mode & CFM_SAVE_SURFACE))
-		    && c_ptr->special && get_sf_ptr(c_ptr->special))
+		if (c_ptr->special && get_sf_ptr(c_ptr->special))
 		{
 			/* Saved floor is exist.  Use it. */
 			new_floor_id = c_ptr->special;
@@ -1071,13 +1066,13 @@ void change_floor(void)
 	/* Mega-Hack -- not ambushed on the wildness? */
 	ambush_flag = FALSE;
 
-	/* On the surface */
-	if (!dungeon_type && !(change_floor_mode & CFM_SAVE_SURFACE))
+	/* No saved floors (On the surface etc.) */
+	if (change_floor_mode & CFM_CLEAR_ALL)
 	{
 		/* Create cave */
 		generate_cave();
 
-		/* Paranoia -- Now on the surface */
+		/* Paranoia -- No new saved floor */
 		new_floor_id = 0;
 	}
 
@@ -1275,12 +1270,9 @@ void change_floor(void)
 			/* Set correct dun_level value */
 			sf_ptr->dun_level = dun_level;
 
-			/* Creat connected stairs */
-			if (!(change_floor_mode & (CFM_NO_RETURN | CFM_CLEAR_ALL))
-			    && (dun_level || (change_floor_mode & CFM_SAVE_SURFACE)))
+			/* Create connected stairs */
+			if (!(change_floor_mode & (CFM_NO_RETURN | CFM_CLEAR_ALL)))
 			{
-				bool ok = TRUE;
-
 				/* Extract stair position */
 				cave_type *c_ptr = &cave[py][px];
 
@@ -1304,26 +1296,11 @@ void change_floor(void)
 						c_ptr->feat = FEAT_LESS;
 				}
 
-				/* Enter to/leave the Arena */
-				else if (change_floor_mode & CFM_SAVE_SURFACE)
-				{
-					/* Nothing to do */
-				}
+				/* Paranoia -- Clear mimic */
+				c_ptr->mimic = 0;
 
-				else
-				{
-					/* Hum??? */
-					ok = FALSE;
-				}
-
-				if (ok)
-				{
-					/* Paranoia -- Clear mimic */
-					c_ptr->mimic = 0;
-
-					/* Connect to previous floor */
-					c_ptr->special = p_ptr->floor_id;
-				}
+				/* Connect to previous floor */
+				c_ptr->special = p_ptr->floor_id;
 			}
 		}
 

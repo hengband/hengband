@@ -1537,7 +1537,6 @@ static void do_cmd_wiz_jump(void)
 	if (record_stair) do_cmd_write_nikki(NIKKI_WIZ_TELE,0,NULL);
 
 	p_ptr->inside_quest = 0;
-	p_ptr->leftbldg = FALSE;
 	energy_use = 0;
 
 	/* Prevent energy_need from being too lower than 0 */

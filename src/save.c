@@ -612,7 +612,7 @@ static void wr_extra(void)
 	wr_s16b(p_ptr->inside_quest);
 	wr_s16b(p_ptr->inside_battle);
 	wr_byte(p_ptr->exit_bldg);
-	wr_byte(p_ptr->leftbldg); /* save building leave status -KMW- */
+	wr_byte(0); /* Unused */
 
 	wr_s16b(p_ptr->oldpx);
 	wr_s16b(p_ptr->oldpy);
@@ -1094,7 +1094,7 @@ static bool wr_dungeon(void)
 	wr_byte(dungeon_type);
 
 
-	/*** On the surface  ***/
+	/*** No saved floor (On the surface etc.) ***/
 	if (!p_ptr->floor_id)
 	{
 		/* No array elements */

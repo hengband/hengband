@@ -4834,6 +4834,9 @@ if (get_check("この階を去りますか？"))
 					{
 						if (autosave_l) do_cmd_save_game(TRUE);
 
+						/* Clear all saved floors */
+						prepare_change_floor_mode(CFM_CLEAR_ALL);
+
 						/* Leaving */
 						p_ptr->leaving = TRUE;
 					}
