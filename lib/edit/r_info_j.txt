@@ -21376,8 +21376,8 @@ F:UNDEAD | EVIL
 S:1_IN_2 |
 S:SHOOT | TELE_AWAY | TPORT | HASTE | BLINK | HEAL
 D:$He is one of the greatest trickster. Even greatest warrior cannot
-D:$defeat him, and his storm of holy might arrows from the dark have
-D:$defeated numerous victims.
+D:$ defeat him, and his storm of holy might arrows from the dark have
+D:$ defeated numerous victims.
 D:彼はこの世界で最も偉大ないかさま師だ。いかなる剣の達人も彼に深い傷を
 D:負わせる事は不可能であり、死角を付いて嵐のように射ち出される彼の聖な
 D:る矢は幾多の犠牲者を葬ってきた。
