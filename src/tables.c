@@ -4023,7 +4023,7 @@ s32b realm_choices1[MAX_CLASS] =
 	 CH_ARCANE | CH_ENCHANT | CH_DAEMON |
 	 CH_CRUSADE),                              /* High-Mage */
 	(CH_ARCANE),                            /* Tourist */
-	(CH_NONE),                              /* Imitation */
+	(CH_NONE),                              /* Imitator */
 	(CH_TRUMP),                             /* Beastmaster */
 	(CH_NONE),                              /* Sorcerer */
 	(CH_NONE),                              /* Archer */
@@ -4066,7 +4066,7 @@ s32b realm_choices2[MAX_CLASS] =
 	(CH_NONE),                              /* Mindcrafter */
 	(CH_NONE),                              /* High-Mage */
 	(CH_NONE),                              /* Tourist */
-	(CH_NONE),                              /* Imitation */
+	(CH_NONE),                              /* Imitator */
 	(CH_NONE),                              /* Beastmanster */
 	(CH_NONE),                              /* Sorcerer */
 	(CH_NONE),                              /* Archer */
