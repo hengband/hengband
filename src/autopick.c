@@ -1793,12 +1793,21 @@ void do_cmd_edit_autopick()
 		    old_wid != wid || old_hgt != hgt)
 			dirty_line = -2;
 
-		if (dirty_line == -2)
+		if (dirty_line != -1)
 		{
-			/* separator */
-			for (i = 0; i < wid - WID_DESC; i++)
+			int sepa_length = wid - WID_DESC;
+
+			/* Separator */
+			for (i = 0; i < sepa_length; i++)
 				buf[i] = '-';
 			buf[i] = '\0';
+
+			/* Mode line */
+			if (edit_mode)
+				strncpy(buf + sepa_length - 21, " (INSERT MODE)  ", 16);
+			else
+				strncpy(buf + sepa_length - 21, " (COMMAND MODE) ", 16);
+
 			prt(buf, hgt - 3, 0);
 
 			/* Display control command */
@@ -1961,7 +1970,12 @@ void do_cmd_edit_autopick()
 		if (edit_mode)
 		{
 			if (key == ESCAPE)
+			{
 				edit_mode = FALSE;
+
+				/* Mode line is now dirty */
+				dirty_line = -3;
+			}
 			else if (!iscntrl(key&0xff))
 			{
 				int next;
@@ -2011,6 +2025,9 @@ void do_cmd_edit_autopick()
 			{
 			case 'a': case 'i':
 				edit_mode = TRUE;
+
+				/* Mode line is now dirty */
+				dirty_line = -3;
 				break;
 			case '~':
 				if (!autopick_new_entry(entry, lines_list[cy]))
@@ -2204,6 +2221,9 @@ void do_cmd_edit_autopick()
 			break;
 		case KTRL('q'):
 			edit_mode = !edit_mode;
+			
+			/* Mode line is now dirty */
+			dirty_line = -3;
 			break;
 		case KTRL('r'):
 #ifdef JP
