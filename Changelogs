@@ -1,0 +1,378 @@
+2002-01-18  Takeshi Mogami  <mogami@akiru>
+
+	* src/object2.c:
+	エゴアイテムの生成時にレベルによって出現を制限するコードが
+	あったが、レベルは発動などの別の事に使うようなのでコメントアウト。
+
+	* lib/edit/e_info_j.txt, src/object2.c:
+	レアリティを間違えてbyteの範囲より大きくしてしまったていたので修正。
+
+2002-01-18  henkma  <henkma@akiru>
+
+	* src/birth.c:
+	キャラメイクのオートロール数値設定以外のところもBEEPのバグがあったので修正。
+	(カーソル移動のために2468を押すなど、別の設定画面に移らない行動全てにBEEPが出てました。)
+
+2002-01-18  habu  <habu@akiru>
+
+	* configure.in, src/Makefile.am:
+	CFLAGSへの-fno-strength-reduceの追加をconfigure.inで行なうようにした。
+
+2002-01-18  Takeshi Mogami  <mogami@akiru>
+
+	* lib/edit/e_info_j.txt, src/defines.h, src/object2.c:
+	switch文で書かれていた、生成するエゴアイテムを選ぶコードをe_infoに書いた
+	rarityを元にして決めるように書き変え。
+	ただし、指輪とアミュレットは例外的な処理が多すぎるのでとりあえず諦め。書き変えはなし。
+
+	* src/birth.c, src/defines.h, src/externs.h, src/init1.c, src/load.c, src/monster1.c, src/monster2.c, src/xtra2.c, lib/edit/r_info_j.txt:
+	init_r_info_txt() のMega Hackを無くすように修正。
+	- RF8_WILD_DUNGEON は RF8_WILD_ONLYに改名。
+	- WILD_TOO フラグ だけがあって外のWILD_* フラグがないモンスターは全て
+	  のWILD_* フラグを付けたす処理があったが、他には全くWILD_TOOを使って
+	  いなかったので r_info_j.txt を書き変えて 換わりに WILD_ALL を導入。
+
+2002-01-18  henkma  <henkma@akiru>
+
+	* src/birth.c:
+	オートロールの数値設定の時、警告BEEPのオプションをONにしてると殆どのキーでBEEP出てしまうのを、設定されていないキーを押した時だけ出るように修正。
+
+2002-01-18  habu  <habu@akiru>
+
+	* src/Makefile.am, src/cmd3.c, src/externs.h, src/init.h, src/init1.c, src/init2.c, src/rooms.c, src/types.h, src/variable.c, src/wizard1.c:
+	*_infoの初期化コードを大幅に書き変えてある程度まとめた。(最新版VやZを参考に)
+
+	* lib/edit/Makefile.am, lib/edit/s_info_j.txt, lib/edit/se_info_j.txt, lib/edit/we_info_j.txt, src/birth.c, src/cmd1.c, src/cmd2.c, src/cmd4.c, src/cmd5.c, src/dungeon.c, src/externs.h, src/init1.c, src/init2.c, src/load.c, src/types.h, src/variable.c, src/wizard2.c, src/xtra1.c:
+	se_info(技能熟練度)とwe_info(武器熟練度)をs_infoに統合。
+
+2002-01-17  Takeshi Mogami  <mogami@akiru>
+
+	* lib/edit/e_info_j.txt, src/defines.h, src/object2.c:
+	エゴアイテムの種類の決定をswitch文に依存せず、レアリティで決めるように修正。
+	コードだけ存在していた*オークスレイヤー*等が有効になったが、必要ならe_info.txt
+	をいじって無効にすれば良い。
+
+2002-01-17  habu  <habu@akiru>
+
+	* src/bldg.c, src/cmd3.c, src/cmd4.c, src/cmd6.c, src/spells3.c, src/wizard1.c:
+	C_MAKEに対応するC_KILLがなくてメモリリークしていた場所をすべて修正。
+
+	* src/init1.c:
+	k_infoだけname_sizeの領域が足りない時にreallocするようになっていたのを、他と同じくエラーを返すようにした。なぜk_infoだけ特別扱いされていたのか全く不明。
+
+	* src/report.c:
+	Vasprintfで確保する領域を1024バイトにした。
+
+2002-01-17  Takeshi Mogami  <mogami@akiru>
+
+	* configure.in, src/report.c:
+	vasprint()関数の存在を ./configure を使って知るように修正。
+
+2002-01-17  habu  <habu@akiru>
+
+	* src/init2.c:
+	博物館はBMや我が家と同じく店のアイテムを決定するテーブルは必要ないので確保しないようにした。
+
+	* lib/edit/Makefile.am:
+	tables.cから外に出したファイルをEXTRA_DISTに追加。
+
+	* src/types.h, src/variable.c, src/wizard2.c, src/xtra1.c, lib/edit/m_info_j.txt, lib/edit/se_info_j.txt, lib/edit/we_info_j.txt, src/birth.c, src/cmd1.c, src/cmd2.c, src/cmd4.c, src/cmd5.c, src/dungeon.c, src/externs.h, src/init1.c, src/init2.c, src/load.c, src/tables.c:
+	branch-habu-tables-improve枝での変更を幹にマージ。
+
+	* lib/edit/misc_j.txt, src/externs.h, src/init1.c, src/init2.c, src/variable.c:
+	max_we_idx, max_se_idxは使わないで、MAX_CLASSを使うようにした。
+
+	* src/load.c, src/tables.c, src/variable.c:
+	魔法の情報のテーブルをtables.cからlib/edit/m_info_j.txtに移動した。
+
+	* lib/edit/m_info_j.txt: New file.
+
+	* lib/edit/m_info_j.txt, src/birth.c, src/externs.h, src/init1.c, src/init2.c:
+	魔法の情報のテーブルをtables.cからlib/edit/m_info_j.txtに移動した。
+
+	* src/birth.c, src/dungeon.c, src/load.c:
+	セクシーギャルはムチの技能が最大まで上がるようにテーブルを変更するタイミングを変更。こうしないと次のキャラでも技能が最大まで上がるようになってしまう(一度セーブすると戻るが)。
+
+	* src/types.h, src/variable.c, src/wizard2.c, src/cmd4.c, src/cmd5.c, src/externs.h, src/init1.c, src/init2.c, src/load.c, src/tables.c:
+	武器熟練度と同様に技能熟練度もtables.cからlib/editに移動。
+
+	* lib/edit/se_info_j.txt: New file.
+
+	* lib/edit/misc_j.txt, lib/edit/se_info_j.txt, src/birth.c, src/cmd1.c, src/cmd2.c:
+	武器熟練度と同様に技能熟練度もtables.cからlib/editに移動。
+
+	* lib/edit/a_info_j.txt:
+	ホルコレスの重さを修正。(ベースアイテムをエルフのクロークに変更した時に重さを変え忘れていた)
+
+	* src/externs.h, src/init1.c, src/init2.c, src/load.c, src/tables.c, src/types.h, src/variable.c, src/wizard2.c, src/xtra1.c:
+	武器の熟練度のテーブルをtables.cではなくlib/edit以下に置くようにした。
+	熟練度テーブルはweapon_exp_tableという型の変数に格納される。
+
+	* lib/edit/we_info_j.txt: New file.
+
+	* lib/edit/misc_j.txt, lib/edit/we_info_j.txt, src/birth.c, src/cmd1.c, src/cmd2.c, src/cmd4.c:
+	武器の熟練度のテーブルをtables.cではなくlib/edit以下に置くようにした。
+	熟練度テーブルはweapon_exp_tableという型の変数に格納される。
+
+2002-01-17  Takeshi Mogami  <mogami@akiru>
+
+	* src/externs.h, src/object1.c, src/spells3.c:
+	鑑定する物がないとき、キャンセル扱いせずに全てのアイテムを選択可能にする。
+
+	* src/object1.c:
+	@0 等の刻みがあるアイテムが複数あるときに、'0'を押すと、
+	選択肢に含まれないアイテムに先にマッチしてしまう事があるのを修正。
+	例えば、クロスボウの矢{@f0}と矢{@f0}を持っているときに矢を0で選択できなかった。
+
+	* lib/edit/k_info_j.txt, src/spellstips.h, src/tables.c:
+	仙術の次元の扉等の変更と、黒装束の追加に英語版も対応。
+
+	* src/cmd3.c:
+	'/'コマンドの名前で検索 ^M でのメッセージ修正。
+
+2002-01-16  Takeshi Mogami  <mogami@akiru>
+
+	* autopick.txt, autopick_eng.txt, src/cmd1.c:
+	「収集中」を改良、「kvalが同じ」だけでなく実際に重ねられるものだけがマッチするようにした。。
+
+	* src/spells3.c:
+	簡易鑑定されたアーティファクトを鑑定したとき、「〜を発見した」の記録が
+	日記に残らなかったのを修正。
+
+	* lib/edit/a_info_j.txt, lib/edit/k_info_j.txt, lib/edit/misc_j.txt, lib/edit/r_info_j.txt, src/artifact.c, src/cmd5.c, src/cmd6.c, src/defines.h, src/melee2.c, src/monster2.c, src/mspells1.c, src/object2.c, src/spells3.c, src/spellstips.h, src/tables.c:
+	fix2r3における、hogeさんの変更をマージ。
+
+	* src/melee2.c, src/monster2.c, src/mspells1.c, src/object2.c, src/spells3.c, src/spellstips.h, src/tables.c, src/artifact.c, src/cmd3.c, src/cmd5.c, src/cmd6.c, src/defines.h, lib/edit/a_info_j.txt, lib/edit/k_info_j.txt, lib/edit/misc_j.txt, lib/edit/r_info_j.txt, mkinstalldirs:
+	１月16日現在のhogeさんの手元のソース。
+
+	* autopick.txt, autopick_eng.txt:
+	「無銘の」について実例の中で説明文を拡充。
+
+2002-01-16  habu  <habu@akiru>
+
+	* src/cmd4.c:
+	remove_auto_dump()のファイルコピー部分で fd_copy() を使うようにした。
+
+	* src/util.c:
+	雛型だけ存在していた、ファイルをコピーする関数 fd_copy() を実装した。
+
+2002-01-16  Takeshi Mogami  <mogami@akiru>
+
+	* autopick_eng.txt: 例に'('の使用を追加。
+
+2002-01-16  habu  <habu@akiru>
+
+	* src/flavor.c:
+	英語版で、アーティファクトにフェイク刻みできないようにした。
+	また、エゴにフェイク刻みをした時は単に最後に追加するようにした。
+
+	* configure.in: --disable-japaneseの説明を修正。
+	古い(?)FreeBSDでLocaleを使えるようにxpg4ライブラリのチェックを追加。
+
+	* src/autoconf.h.in:
+	このファイルもauto*関係のファイルなので削除。
+
+	* src/stamp-h.in:
+	これもautomake等が自動的に生成するので削除
+
+	* Makefile.in:
+	先の作業で消し忘れていたファイルを削除。
+
+	* Makefile.in, aclocal.m4, bootstrap, configure, install-sh, lib/Makefile.in, lib/apex/Makefile.in, lib/bone/Makefile.in, lib/data/Makefile.in, lib/edit/Makefile.in, lib/file/Makefile.in, lib/help/Makefile.in, lib/info/Makefile.in, lib/pref/Makefile.in, lib/save/Makefile.in, lib/script/Makefile.in, lib/user/Makefile.in, lib/xtra/Makefile.in, lib/xtra/font/Makefile.in, lib/xtra/graf/Makefile.in, lib/xtra/music/Makefile.in, lib/xtra/sound/Makefile.in, missing, mkinstalldirs, src/Makefile.in:
+	automake,autoconf等によって作られるファイルを削除。これらはcvsのリポジトリに入れるべきフィアルではない。
+	かわりに、自動的にこれらのファイルを生成するスクリプトbootstrapを追加。
+
+2002-01-16  Takeshi Mogami  <mogami@akiru>
+
+	* lib/edit/r_info_j.txt:
+	英語版のモンスターの名前のキャピタライズを統一。
+	*band のキャピタライズは以下のルールのようだ。
+	- モンスター名の先頭は大文字(当然)、
+	- 固有名詞の頭は大文字(dragon、troll等 は一般名詞と見なす。)
+	- ユニークの名前は全ての単語を大文字(ただし、of, the, in 等を除く)
+	- Wyrmの名前もユニークと同様に扱う。
+	- その他は全て小文字。
+
+2002-01-16  henkma  <henkma@akiru>
+
+	* src/cmd4.c:
+	情報コマンドのknown uniquesをremaining uniquesに
+
+	* lib/edit/r_info_j.txt:
+	Ashram(日本語名:黒衣の騎士『アシュラム』)を Ashram, the Ebony Knight に
+
+2002-01-15  habu  <habu@akiru>
+
+	* src/monster1.c:
+	英語版でスターバーストの思い出が表示されないバグを修正。
+
+	* .cvsignore, lib/.cvsignore, lib/apex/.cvsignore, lib/bone/.cvsignore, lib/data/.cvsignore, lib/edit/.cvsignore, lib/file/.cvsignore, lib/help/.cvsignore, lib/info/.cvsignore, lib/pref/.cvsignore, lib/save/.cvsignore, lib/script/.cvsignore, lib/user/.cvsignore, lib/xtra/.cvsignore, lib/xtra/font/.cvsignore, lib/xtra/graf/.cvsignore, lib/xtra/music/.cvsignore, lib/xtra/sound/.cvsignore, src/.cvsignore:
+	やはり各自のHOMEで指定するようにしたので、.cvsignoreを削除。
+
+	* lib/xtra/font/.cvsignore, lib/xtra/graf/.cvsignore, lib/xtra/music/.cvsignore, lib/xtra/sound/.cvsignore, src/.cvsignore, .cvsignore, lib/.cvsignore, lib/apex/.cvsignore, lib/bone/.cvsignore, lib/data/.cvsignore, lib/edit/.cvsignore, lib/file/.cvsignore, lib/help/.cvsignore, lib/info/.cvsignore, lib/pref/.cvsignore, lib/save/.cvsignore, lib/script/.cvsignore, lib/user/.cvsignore, lib/xtra/.cvsignore:
+	commit updateの時に関係ないファイルを無視するように.cvsignoreを設定。
+
+2002-01-15  Takeshi Mogami  <mogami@akiru>
+
+	* lib/edit/r_info_j.txt: Wong -> Richard Wong
+
+	* src/variable.c:
+	$GRAFのデフォルトの値を "ascii" に変更。
+	今迄は意味なく"old"になっていて、8x8タイルを使用中なのかasciiグラフィックなのか
+	prfファイルの中で判別できなかった。
+
+	* src/files.c:
+	なぜか、REALM1 REALM2 の処理が重複していたので片方削除。タイルグラフィック使用中でもダンプファイルの耐性表示欄の上が文字化けしないように修正。
+
+2002-01-15  iks  <iks@akiru>
+
+	* src/cave.c: 改行コード直した．
+
+2002-01-15  Takeshi Mogami  <mogami@akiru>
+
+	* src/files.c:
+	オプションの名前を変えたとき、古い名前の設定を含む prf ファイルを最後まで
+	読み込まずに問題を起すので、オプション設定行のエラーで読み込みを止めずに
+	単に無視するように修正。
+
+2002-01-15  iks  <iks@akiru>
+
+	* src/cave.c: 'M'コマンドの日本語メッセージの修正
+
+2002-01-13  iks  <iks@akiru>
+
+	* src/birth.c:
+	カーソルキーでキャラクタを作成できるように更新。
+
+2002-01-13  Takeshi Mogami  <mogami@akiru>
+
+	* src/racial.c, src/report.c, src/rooms.c, src/save.c, src/spells1.c, src/spells2.c, src/spells3.c, src/tables.c, src/types.h, src/util.c, src/variable.c, src/wild.c, src/wizard2.c, src/xtra1.c, src/xtra2.c, src/z-form.c, src/cmd6.c, src/defines.h, src/dungeon.c, src/effects.c, src/externs.h, src/files.c, src/flavor.c, src/generate.c, src/grid.c, src/h-config.h, src/hissatsu.c, src/inet.c, src/load.c, src/main-dos.c, src/main-win.c, src/makefile.dos, src/makefile.ibm, src/makefile.std, src/melee1.c, src/melee2.c, src/mind.c, src/mindtips.h, src/monster1.c, src/monster2.c, src/mspells1.c, src/mspells2.c, src/mspells3.c, src/mutation.c, src/object1.c, src/object2.c, lib/edit/t0000004_j.txt, lib/edit/t0000006_j.txt, lib/edit/t_basic_j.txt, lib/edit/t_info_j.txt, lib/edit/t_lite_j.txt, lib/edit/t_pref_j.txt, lib/edit/v_info_j.txt, lib/edit/w_info_j.txt, lib/file/a_low.txt, lib/file/a_med.txt, lib/file/mondeath.txt, lib/file/monfear.txt, lib/file/monspeak.txt, lib/file/news.txt, lib/pref/colors.prf, lib/pref/font-ami.prf, lib/pref/font-dos.prf, lib/pref/font-ibm.prf, lib/pref/font-mac.prf, lib/pref/font-mon.prf, lib/pref/font-win.prf, lib/pref/font-x11.prf, lib/pref/font-xxx.prf, lib/pref/font.prf, lib/pref/graf-ami.prf, lib/pref/graf-dos.prf, lib/pref/graf-gcu.prf, lib/pref/graf-ibm.prf, lib/pref/graf-mac.prf, lib/pref/graf-new.prf, lib/pref/graf-win.prf, lib/pref/graf-x11.prf, lib/pref/graf-xaw.prf, lib/pref/graf-xxx.prf, lib/pref/graf.prf, lib/pref/pref-acn.prf, lib/pref/pref-ami.prf, lib/pref/pref-gcu.prf, lib/pref/pref-mac.prf, lib/pref/pref-opt.prf, lib/pref/pref-win.prf, lib/pref/pref-x11.prf, lib/pref/user-win.prf, lib/pref/user.prf, lib/pref/xtra-gcu.prf, lib/pref/xtra-new.prf, lib/pref/xtra-xxx.prf, lib/xtra/sound/sound.cfg, src/ang_eng.rc, src/artifact.c, src/birth.c, src/bldg.c, src/cave.c, src/chuukei.c, src/cmd1.c, src/cmd2.c, src/cmd3.c, src/cmd4.c, src/cmd5.c, autopick.txt, autopick_eng.txt, lib/edit/a_info_j.txt, lib/edit/e_info_j.txt, lib/edit/f_info_j.txt, lib/edit/k_info_j.txt, lib/edit/misc_j.txt, lib/edit/q0000001_j.txt, lib/edit/q0000002_j.txt, lib/edit/q0000003_j.txt, lib/edit/q0000004_j.txt, lib/edit/q0000005_j.txt, lib/edit/q0000006_j.txt, lib/edit/q0000007_j.txt, lib/edit/q0000019_j.txt, lib/edit/q0000020_j.txt, lib/edit/q0000021_j.txt, lib/edit/q0000022_j.txt, lib/edit/q0000023_j.txt, lib/edit/q0000027_j.txt, lib/edit/q0000028_j.txt, lib/edit/q00000ms_j.txt, lib/edit/q000chao_j.txt, lib/edit/q000dekn_j.txt, lib/edit/q000eric_j.txt, lib/edit/q000lyeh_j.txt, lib/edit/q000natu_j.txt, lib/edit/q000sorc_j.txt, lib/edit/q00water_j.txt, lib/edit/q0fields_j.txt, lib/edit/q0thief1_j.txt, lib/edit/q0thief2_j.txt, lib/edit/q0willow_j.txt, lib/edit/q_info_j.txt, lib/edit/q_oberon_j.txt, lib/edit/q_pref_j.txt, lib/edit/q_random_j.txt, lib/edit/q_serpen_j.txt, lib/edit/q_warg_j.txt, lib/edit/qdarkelf_j.txt, lib/edit/qhaunted_j.txt, lib/edit/r_info_j.txt, lib/edit/t0000001_j.txt, lib/edit/t0000002_j.txt, lib/edit/t0000003_j.txt, mkinstalldirs, readme_eng.txt:
+	Hengband 108 fix2 revision 4
+	fix2 に英語版とmogamiのパッチとHabuさんのパッチをマージ。
+
+2002-01-13  habu  <habu@akiru>
+
+	* src/report.c:
+	前の変更で使わなくなった変数の宣言を削除。
+
+	* src/report.c:
+	日付と文字コードはもはやスコアサーバに送る必要はないので該当コードを削除。
+
+	* src/report.c:
+	無駄に二重に領域を確保していたのを修正。
+	さらにインデントを修正。
+
+	* src/report.c:
+	Angbandのコーディングスタイルに従ってインデントを付けなおした。
+
+2002-01-13  Takeshi Mogami  <mogami@akiru>
+
+	* src/spells1.c:
+	モンスターのブレスを浴びてunmakerが爆発したとき、ブレスを吐いたモンスター
+	が変身すると、プレイヤーに対するkillerの設定に失敗していたので、
+	変身前のモンスターの名前を保持するように修正。
+
+	* lib/edit/r_info_j.txt: Balrog -> Greater Balrog
+
+	* src/cmd3.c:
+	思い出の名前検索をキャンセル時にreturn に引数忘れ。
+
+	* lib/pref/graf-win.prf, lib/pref/graf-x11.prf, lib/pref/graf-xaw.prf, lib/pref/graf-xxx.prf, lib/pref/graf.prf, lib/pref/pref-acn.prf, lib/pref/pref-ami.prf, lib/pref/pref-gcu.prf, lib/pref/pref-mac.prf, lib/pref/pref-win.prf, lib/pref/user-win.prf, lib/pref/user.prf, lib/pref/xtra-gcu.prf, lib/pref/xtra-new.prf, lib/pref/xtra-xxx.prf, lib/xtra/sound/sound.cfg, src/birth.c, src/main-dos.c, src/makefile.dos, src/makefile.ibm, src/makefile.std, lib/edit/t0000001_j.txt, lib/edit/t0000002_j.txt, lib/edit/t0000003_j.txt, lib/edit/t0000004_j.txt, lib/edit/t0000006_j.txt, lib/edit/t_basic_j.txt, lib/edit/t_info_j.txt, lib/edit/t_lite_j.txt, lib/edit/t_pref_j.txt, lib/edit/v_info_j.txt, lib/edit/w_info_j.txt, lib/pref/colors.prf, lib/pref/font-ami.prf, lib/pref/font-dos.prf, lib/pref/font-ibm.prf, lib/pref/font-mac.prf, lib/pref/font-mon.prf, lib/pref/font-win.prf, lib/pref/font-x11.prf, lib/pref/font-xxx.prf, lib/pref/font.prf, lib/pref/graf-ami.prf, lib/pref/graf-dos.prf, lib/pref/graf-gcu.prf, lib/pref/graf-ibm.prf, lib/pref/graf-mac.prf, lib/pref/graf-new.prf, lib/edit/e_info_j.txt, lib/edit/f_info_j.txt, lib/edit/k_info_j.txt, lib/edit/misc_j.txt, lib/edit/q0000001_j.txt, lib/edit/q0000002_j.txt, lib/edit/q0000003_j.txt, lib/edit/q0000004_j.txt, lib/edit/q0000005_j.txt, lib/edit/q0000006_j.txt, lib/edit/q0000007_j.txt, lib/edit/q0000019_j.txt, lib/edit/q0000020_j.txt, lib/edit/q0000021_j.txt, lib/edit/q0000022_j.txt, lib/edit/q0000023_j.txt, lib/edit/q0000027_j.txt, lib/edit/q0000028_j.txt, lib/edit/q00000ms_j.txt, lib/edit/q000chao_j.txt, lib/edit/q000dekn_j.txt, lib/edit/q000eric_j.txt, lib/edit/q000lyeh_j.txt, lib/edit/q000natu_j.txt, lib/edit/q000sorc_j.txt, lib/edit/q00water_j.txt, lib/edit/q0fields_j.txt, lib/edit/q0thief1_j.txt, lib/edit/q0thief2_j.txt, lib/edit/q0willow_j.txt, lib/edit/q_info_j.txt, lib/edit/q_oberon_j.txt, lib/edit/q_pref_j.txt, lib/edit/q_random_j.txt, lib/edit/q_serpen_j.txt, lib/edit/q_warg_j.txt, lib/edit/qdarkelf_j.txt, lib/edit/qhaunted_j.txt, lib/edit/r_info_j.txt:
+	ヘッダのCVS情報を削除。その他、間違ったlib/ファイルのcommitを修正。
+
+	* lib/pref/graf-win.prf, lib/pref/graf-x11.prf, lib/pref/graf-xaw.prf, lib/pref/graf-xxx.prf, lib/pref/graf.prf, lib/pref/pref-acn.prf, lib/pref/pref-ami.prf, lib/pref/pref-gcu.prf, lib/pref/pref-mac.prf, lib/pref/pref-win.prf, lib/pref/user-win.prf, lib/pref/user.prf, lib/pref/xtra-gcu.prf, lib/pref/xtra-new.prf, lib/pref/xtra-xxx.prf, lib/xtra/sound/sound.cfg, src/main-dos.c, src/makefile.dos, src/makefile.ibm, src/makefile.std, lib/edit/t0000001_j.txt, lib/edit/t0000002_j.txt, lib/edit/t0000003_j.txt, lib/edit/t0000004_j.txt, lib/edit/t0000006_j.txt, lib/edit/t_basic_j.txt, lib/edit/t_info_j.txt, lib/edit/t_lite_j.txt, lib/edit/t_pref_j.txt, lib/edit/v_info_j.txt, lib/edit/w_info_j.txt, lib/pref/colors.prf, lib/pref/font-ami.prf, lib/pref/font-dos.prf, lib/pref/font-ibm.prf, lib/pref/font-mac.prf, lib/pref/font-mon.prf, lib/pref/font-win.prf, lib/pref/font-x11.prf, lib/pref/font-xxx.prf, lib/pref/font.prf, lib/pref/graf-ami.prf, lib/pref/graf-dos.prf, lib/pref/graf-gcu.prf, lib/pref/graf-ibm.prf, lib/pref/graf-mac.prf, lib/pref/graf-new.prf, lib/edit/e_info_j.txt, lib/edit/f_info_j.txt, lib/edit/k_info_j.txt, lib/edit/misc_j.txt, lib/edit/q0000001_j.txt, lib/edit/q0000002_j.txt, lib/edit/q0000003_j.txt, lib/edit/q0000004_j.txt, lib/edit/q0000005_j.txt, lib/edit/q0000006_j.txt, lib/edit/q0000007_j.txt, lib/edit/q0000019_j.txt, lib/edit/q0000020_j.txt, lib/edit/q0000021_j.txt, lib/edit/q0000022_j.txt, lib/edit/q0000023_j.txt, lib/edit/q0000027_j.txt, lib/edit/q0000028_j.txt, lib/edit/q00000ms_j.txt, lib/edit/q000chao_j.txt, lib/edit/q000dekn_j.txt, lib/edit/q000eric_j.txt, lib/edit/q000lyeh_j.txt, lib/edit/q000natu_j.txt, lib/edit/q000sorc_j.txt, lib/edit/q00water_j.txt, lib/edit/q0fields_j.txt, lib/edit/q0thief1_j.txt, lib/edit/q0thief2_j.txt, lib/edit/q0willow_j.txt, lib/edit/q_info_j.txt, lib/edit/q_oberon_j.txt, lib/edit/q_pref_j.txt, lib/edit/q_random_j.txt, lib/edit/q_serpen_j.txt, lib/edit/q_warg_j.txt, lib/edit/qdarkelf_j.txt, lib/edit/qhaunted_j.txt, lib/edit/r_info_j.txt:
+	ヘッダーのCVS情報を全部削除
+
+	* src/birth.c:
+	まちがって、iksさんのをbirth.cを上書きコピーして自分の最新の変更を
+	失なっていたので、戻した。
+	iksさんのbirth.cとのマージは後でもっと慎重にやる。
+
+2002-01-12  Takeshi Mogami  <mogami@akiru>
+
+	* lib/pref/colors.prf, lib/pref/font-ami.prf, lib/pref/font-dos.prf, lib/pref/font-ibm.prf, lib/pref/font-mac.prf, lib/pref/font-mon.prf, lib/pref/font-win.prf, lib/pref/font-x11.prf, lib/pref/font-xxx.prf, lib/pref/font.prf, lib/pref/graf-ami.prf, lib/pref/graf-dos.prf, lib/pref/graf-gcu.prf, lib/pref/graf-ibm.prf, lib/pref/graf-mac.prf, lib/pref/graf-new.prf, lib/pref/graf-win.prf, lib/pref/graf-x11.prf, lib/pref/graf-xaw.prf, lib/pref/graf-xxx.prf, lib/pref/graf.prf, lib/pref/pref-acn.prf, lib/pref/pref-ami.prf, lib/pref/pref-gcu.prf, lib/pref/pref-mac.prf, lib/pref/pref-win.prf, lib/pref/user-win.prf, lib/pref/user.prf, lib/pref/xtra-gcu.prf, lib/pref/xtra-new.prf, lib/pref/xtra-xxx.prf, lib/xtra/sound/sound.cfg, src/main-dos.c, src/makefile.dos, src/makefile.ibm, src/makefile.std, lib/edit/t0000001_j.txt, lib/edit/t0000002_j.txt, lib/edit/t0000003_j.txt, lib/edit/t0000004_j.txt, lib/edit/t0000006_j.txt, lib/edit/t_basic_j.txt, lib/edit/t_info_j.txt, lib/edit/t_lite_j.txt, lib/edit/t_pref_j.txt, lib/edit/v_info_j.txt, lib/edit/w_info_j.txt, lib/edit/misc_j.txt, lib/edit/q0000001_j.txt, lib/edit/q0000002_j.txt, lib/edit/q0000003_j.txt, lib/edit/q0000004_j.txt, lib/edit/q0000005_j.txt, lib/edit/q0000006_j.txt, lib/edit/q0000007_j.txt, lib/edit/q0000019_j.txt, lib/edit/q0000020_j.txt, lib/edit/q0000021_j.txt, lib/edit/q0000022_j.txt, lib/edit/q0000023_j.txt, lib/edit/q0000027_j.txt, lib/edit/q0000028_j.txt, lib/edit/q00000ms_j.txt, lib/edit/q000chao_j.txt, lib/edit/q000dekn_j.txt, lib/edit/q000eric_j.txt, lib/edit/q000lyeh_j.txt, lib/edit/q000natu_j.txt, lib/edit/q000sorc_j.txt, lib/edit/q00water_j.txt, lib/edit/q0fields_j.txt, lib/edit/q0thief1_j.txt, lib/edit/q0thief2_j.txt, lib/edit/q0willow_j.txt, lib/edit/q_info_j.txt, lib/edit/q_oberon_j.txt, lib/edit/q_pref_j.txt, lib/edit/q_random_j.txt, lib/edit/q_serpen_j.txt, lib/edit/q_warg_j.txt, lib/edit/qdarkelf_j.txt, lib/edit/qhaunted_j.txt, lib/edit/r_info_j.txt, lib/edit/e_info_j.txt, lib/edit/f_info_j.txt, lib/edit/k_info_j.txt, mkinstalldirs:
+	ヘッダのCVS情報が変に更新されててdiffをとりずらいので直した。
+
+	* src/xtra2.c, src/z-form.c, src/types.h, src/util.c, src/variable.c, src/wild.c, src/wizard2.c, src/xtra1.c, src/spells1.c, src/spells2.c, src/spells3.c, src/tables.c, src/mutation.c, src/object1.c, src/object2.c, src/racial.c, src/rooms.c, src/save.c, src/makefile.ibm, src/makefile.std, src/melee1.c, src/melee2.c, src/mind.c, src/mindtips.h, src/monster1.c, src/monster2.c, src/mspells1.c, src/mspells2.c, src/mspells3.c, src/externs.h, src/files.c, src/flavor.c, src/generate.c, src/grid.c, src/h-config.h, src/hissatsu.c, src/inet.c, src/load.c, src/main-dos.c, src/main-win.c, src/makefile.dos, src/cmd5.c, src/cmd6.c, src/defines.h, src/dungeon.c, src/effects.c, src/bldg.c, src/cave.c, src/chuukei.c, src/cmd1.c, src/cmd2.c, src/cmd3.c, src/cmd4.c, lib/pref/font.prf, lib/pref/graf-ami.prf, lib/pref/graf-dos.prf, lib/pref/graf-gcu.prf, lib/pref/graf-ibm.prf, lib/pref/graf-mac.prf, lib/pref/graf-new.prf, lib/pref/graf-win.prf, lib/pref/graf-x11.prf, lib/pref/graf-xaw.prf, lib/pref/graf-xxx.prf, lib/pref/graf.prf, lib/pref/pref-acn.prf, lib/pref/pref-ami.prf, lib/pref/pref-gcu.prf, lib/pref/pref-mac.prf, lib/pref/pref-opt.prf, lib/pref/pref-win.prf, lib/pref/pref-x11.prf, lib/pref/user-win.prf, lib/pref/user.prf, lib/pref/xtra-gcu.prf, lib/pref/xtra-new.prf, lib/pref/xtra-xxx.prf, lib/xtra/sound/sound.cfg, src/ang_eng.rc, src/artifact.c, lib/edit/t0000002_j.txt, lib/edit/t0000003_j.txt, lib/edit/t0000004_j.txt, lib/edit/t0000006_j.txt, lib/edit/t_basic_j.txt, lib/edit/t_info_j.txt, lib/edit/t_lite_j.txt, lib/edit/t_pref_j.txt, lib/edit/v_info_j.txt, lib/edit/w_info_j.txt, lib/file/a_low.txt, lib/file/a_med.txt, lib/file/mondeath.txt, lib/file/monfear.txt, lib/file/monspeak.txt, lib/file/news.txt, lib/pref/colors.prf, lib/pref/font-ami.prf, lib/pref/font-dos.prf, lib/pref/font-ibm.prf, lib/pref/font-mac.prf, lib/pref/font-mon.prf, lib/pref/font-win.prf, lib/pref/font-x11.prf, lib/pref/font-xxx.prf, lib/edit/t0000001_j.txt, lib/edit/q_serpen_j.txt, lib/edit/q_warg_j.txt, lib/edit/qdarkelf_j.txt, lib/edit/qhaunted_j.txt, lib/edit/r_info_j.txt, lib/edit/misc_j.txt, lib/edit/q0000001_j.txt, lib/edit/q0000002_j.txt, lib/edit/q0000003_j.txt, lib/edit/q0000004_j.txt, lib/edit/q0000005_j.txt, lib/edit/q0000006_j.txt, lib/edit/q0000007_j.txt, lib/edit/q0000019_j.txt, lib/edit/q0000020_j.txt, lib/edit/q0000021_j.txt, lib/edit/q0000022_j.txt, lib/edit/q0000023_j.txt, lib/edit/q0000027_j.txt, lib/edit/q0000028_j.txt, lib/edit/q00000ms_j.txt, lib/edit/q000chao_j.txt, lib/edit/q000dekn_j.txt, lib/edit/q000eric_j.txt, lib/edit/q000lyeh_j.txt, lib/edit/q000natu_j.txt, lib/edit/q000sorc_j.txt, lib/edit/q00water_j.txt, lib/edit/q0fields_j.txt, lib/edit/q0thief1_j.txt, lib/edit/q0thief2_j.txt, lib/edit/q0willow_j.txt, lib/edit/q_info_j.txt, lib/edit/q_oberon_j.txt, lib/edit/q_pref_j.txt, lib/edit/q_random_j.txt, autopick.txt, autopick_eng.txt, lib/edit/a_info_j.txt, lib/edit/e_info_j.txt, lib/edit/f_info_j.txt, lib/edit/k_info_j.txt, mkinstalldirs:
+	hengband 1.0.8 fix2 revision 3
+	+ for_r3.patch.0110
+	+ display_autopick.patch.0112
+	+ object1.c.0112.patch
+
+	最新版ではない。
+	たぶん、現在hogeさんが手元で適用していると思われるソースパッチをまとめたもの。
+	最新版とのdiffを取ってhogeさんに送るためだけに準備。
+
+	* autopick.txt:
+	add '(' in example. (first commit)
+
+	* src/xtra1.c, src/xtra2.c, src/z-form.c, src/tables.c, src/types.h, src/util.c, src/variable.c, src/wild.c, src/wizard2.c, src/spells1.c, src/spells2.c, src/spells3.c, src/mind.c, src/mindtips.h, src/monster1.c, src/monster2.c, src/mspells1.c, src/mspells2.c, src/mspells3.c, src/mutation.c, src/object1.c, src/object2.c, src/racial.c, src/rooms.c, src/save.c, src/dungeon.c, src/effects.c, src/externs.h, src/files.c, src/flavor.c, src/generate.c, src/grid.c, src/h-config.h, src/hissatsu.c, src/inet.c, src/load.c, src/main-dos.c, src/main-win.c, src/makefile.dos, src/makefile.ibm, src/makefile.std, src/melee1.c, src/melee2.c, src/bldg.c, src/cave.c, src/chuukei.c, src/cmd1.c, src/cmd2.c, src/cmd3.c, src/cmd4.c, src/cmd5.c, src/cmd6.c, src/defines.h, lib/pref/colors.prf, lib/pref/font-ami.prf, lib/pref/font-dos.prf, lib/pref/font-ibm.prf, lib/pref/font-mac.prf, lib/pref/font-mon.prf, lib/pref/font-win.prf, lib/pref/font-x11.prf, lib/pref/font-xxx.prf, lib/pref/font.prf, lib/pref/graf-ami.prf, lib/pref/graf-dos.prf, lib/pref/graf-gcu.prf, lib/pref/graf-ibm.prf, lib/pref/graf-mac.prf, lib/pref/graf-new.prf, lib/pref/graf-win.prf, lib/pref/graf-x11.prf, lib/pref/graf-xaw.prf, lib/pref/graf-xxx.prf, lib/pref/graf.prf, lib/pref/pref-acn.prf, lib/pref/pref-ami.prf, lib/pref/pref-gcu.prf, lib/pref/pref-mac.prf, lib/pref/pref-opt.prf, lib/pref/pref-win.prf, lib/pref/pref-x11.prf, lib/pref/user-win.prf, lib/pref/user.prf, lib/pref/xtra-gcu.prf, lib/pref/xtra-new.prf, lib/pref/xtra-xxx.prf, lib/xtra/sound/sound.cfg, src/ang_eng.rc, src/artifact.c, src/birth.c, lib/edit/t0000001_j.txt, lib/edit/t0000002_j.txt, lib/edit/t0000003_j.txt, lib/edit/t0000004_j.txt, lib/edit/t0000006_j.txt, lib/edit/t_basic_j.txt, lib/edit/t_info_j.txt, lib/edit/t_lite_j.txt, lib/edit/t_pref_j.txt, lib/edit/v_info_j.txt, lib/edit/w_info_j.txt, lib/file/a_low.txt, lib/file/a_med.txt, lib/file/mondeath.txt, lib/file/monfear.txt, lib/file/monspeak.txt, lib/file/news.txt, lib/edit/misc_j.txt, lib/edit/q0000001_j.txt, lib/edit/q0000002_j.txt, lib/edit/q0000003_j.txt, lib/edit/q0000004_j.txt, lib/edit/q0000005_j.txt, lib/edit/q0000006_j.txt, lib/edit/q0000007_j.txt, lib/edit/q0000019_j.txt, lib/edit/q0000020_j.txt, lib/edit/q0000021_j.txt, lib/edit/q0000022_j.txt, lib/edit/q0000023_j.txt, lib/edit/q0000027_j.txt, lib/edit/q0000028_j.txt, lib/edit/q00000ms_j.txt, lib/edit/q000chao_j.txt, lib/edit/q000dekn_j.txt, lib/edit/q000eric_j.txt, lib/edit/q000lyeh_j.txt, lib/edit/q000natu_j.txt, lib/edit/q000sorc_j.txt, lib/edit/q00water_j.txt, lib/edit/q0fields_j.txt, lib/edit/q0thief1_j.txt, lib/edit/q0thief2_j.txt, lib/edit/q0willow_j.txt, lib/edit/q_info_j.txt, lib/edit/q_oberon_j.txt, lib/edit/q_pref_j.txt, lib/edit/q_random_j.txt, lib/edit/q_serpen_j.txt, lib/edit/q_warg_j.txt, lib/edit/qdarkelf_j.txt, lib/edit/qhaunted_j.txt, lib/edit/r_info_j.txt, autopick.txt, autopick_eng.txt, lib/edit/a_info_j.txt, lib/edit/e_info_j.txt, lib/edit/f_info_j.txt, lib/edit/k_info_j.txt, mkinstalldirs, readme_eng.txt:
+	hengband 1.0.8 fix2 revision 4 by mogami
+	including iks's new birth.c and Habu's object1.c.0112.patch.
+
+	* src/spellstips.h, src/tables.c, src/util.c, src/variable.c, src/wild.c, src/wizard1.c, src/xtra1.c, src/xtra2.c, src/z-term.c, src/dungeon.c, src/effects.c, src/externs.h, src/files.c, src/flavor.c, src/inet.c, src/init1.c, src/japanese.c, src/load.c, src/main-mac.c, src/main-win.c, src/main-x11.c, src/makefile.bcc, src/monster1.c, src/monster2.c, src/mutation.c, src/object1.c, src/object2.c, src/report.c, src/rooms.c, src/scores.c, src/spells1.c, src/spells2.c, lib/edit/e_info_j.txt, lib/file/news.txt, lib/file/w_low_j.txt, lib/pref/pref-mac.prf, lib/pref/pref-win.prf, lib/pref/pref-x11.prf, src/artifact.c, src/birth.c, src/bldg.c, src/cave.c, src/chuukei.c, src/cmd1.c, src/cmd2.c, src/cmd4.c, src/cmd5.c, src/cmd6.c, src/defines.h:
+	hengband 1.0.8 fix2
+
+	* lib/xtra/font/9X15.FON, lib/xtra/font/9X15B.FON, lib/xtra/font/xm10x17.fnt, lib/xtra/font/xm10x17b.fnt, lib/xtra/font/xm12x20.fnt, lib/xtra/font/xm12x20b.fnt, lib/xtra/font/xm16x25.fnt, lib/xtra/font/xm16x25b.fnt, lib/xtra/font/xm4x6.fnt, lib/xtra/font/xm5x8.fnt, lib/xtra/font/xm6x12.fnt, lib/xtra/font/xm6x12b.fnt, lib/xtra/font/xm8x13.fnt, lib/xtra/font/xm8x13b.fnt, lib/xtra/font/xm8x16.fnt, lib/xtra/font/xm8x16b.fnt, lib/xtra/graf/Makefile.am, lib/xtra/graf/Makefile.in, lib/xtra/graf/delete.me, lib/xtra/music/Makefile.am, lib/xtra/music/Makefile.in, lib/xtra/music/delete.me, lib/xtra/sound/Makefile.am, lib/xtra/sound/Makefile.in, lib/xtra/sound/sound.cfg:
+	Hengband 1.0.8 start!
+
+
+	* lib/xtra/font/9X15.FON, lib/xtra/font/9X15B.FON, lib/xtra/font/xm10x17.fnt, lib/xtra/font/xm10x17b.fnt, lib/xtra/font/xm12x20.fnt, lib/xtra/font/xm12x20b.fnt, lib/xtra/font/xm16x25.fnt, lib/xtra/font/xm16x25b.fnt, lib/xtra/font/xm4x6.fnt, lib/xtra/font/xm5x8.fnt, lib/xtra/font/xm6x12.fnt, lib/xtra/font/xm6x12b.fnt, lib/xtra/font/xm8x13.fnt, lib/xtra/font/xm8x13b.fnt, lib/xtra/font/xm8x16.fnt, lib/xtra/font/xm8x16b.fnt, lib/xtra/graf/Makefile.am, lib/xtra/graf/Makefile.in, lib/xtra/graf/delete.me, lib/xtra/music/Makefile.am, lib/xtra/music/Makefile.in, lib/xtra/music/delete.me, lib/xtra/sound/Makefile.am, lib/xtra/sound/Makefile.in, lib/xtra/sound/sound.cfg:
+	New file.
+
+	* lib/file/a_cursed.txt, lib/file/a_high.txt, lib/file/a_low.txt, lib/file/a_med.txt, lib/file/chainswd.txt, lib/file/crime.txt, lib/file/dead.txt, lib/file/death.txt, lib/file/elvish.txt, lib/file/error.txt, lib/file/mondeath.txt, lib/file/monfear.txt, lib/file/monfrien.txt, lib/file/monfrien_j.txt, lib/file/monspeak.txt, lib/file/monspeak_j.txt, lib/file/news.txt, lib/file/news_j.txt, lib/file/rumors.txt, lib/file/rumors_j.txt, lib/file/seppuku.txt, lib/file/seppuku_j.txt, lib/file/silly.txt, lib/file/silly_j.txt, lib/file/timefun.txt, lib/file/timefun_j.txt, lib/file/timenorm.txt, lib/file/timenorm_j.txt, lib/file/w_cursed.txt, lib/file/w_cursed_j.txt, lib/file/w_high.txt, lib/file/w_high_j.txt, lib/file/w_low.txt, lib/file/w_low_j.txt, lib/file/w_med.txt, lib/file/w_med_j.txt, lib/help/Makefile.am, lib/help/Makefile.in, lib/help/arena.txt, lib/help/attack.hlp, lib/help/attack.txt, lib/help/birth.hlp, lib/help/birth.txt, lib/help/bldg.txt, lib/help/command.hlp, lib/help/command.txt, lib/help/commdesc.hlp, lib/help/commdesc.txt, lib/help/dungeon.hlp, lib/help/dungeon.txt, lib/help/gambling.txt, lib/help/general.hlp, lib/help/general.txt, lib/help/help.hlp, lib/help/helpinfo.txt, lib/help/j_name.txt, lib/help/japanese.txt, lib/help/jattack.txt, lib/help/jbirth.txt, lib/help/jcommand.hlp, lib/help/jcommand.txt, lib/help/jcommand0.txt, lib/help/jcommdesc.hlp, lib/help/jcommdesc.txt, lib/help/jdungeon.txt, lib/help/jgambling.txt, lib/help/jgeneral.txt, lib/help/jhelp.hlp, lib/help/jhelpinfo.txt, lib/help/joption.hlp, lib/help/joption.txt, lib/help/jplaying.txt, lib/help/jversion.txt, lib/help/magic.hlp, lib/help/magic.txt, lib/help/option.hlp, lib/help/option.txt, lib/help/pref.hlp, lib/help/pref.txt, lib/help/readme.txt, lib/help/spoiler.hlp, lib/help/tang.txt, lib/help/version.txt, lib/info/Makefile.am, lib/info/Makefile.in, lib/info/delete.me, lib/pref/Makefile.am, lib/pref/Makefile.in, lib/pref/colors.prf, lib/pref/font-ami.prf, lib/pref/font-dos.prf, lib/pref/font-ibm.prf, lib/pref/font-mac.prf, lib/pref/font-mon.prf, lib/pref/font-win.prf, lib/pref/font-x11.prf, lib/pref/font-xxx.prf, lib/pref/font.prf, lib/pref/graf-ami.prf, lib/pref/graf-dos.prf, lib/pref/graf-gcu.prf, lib/pref/graf-ibm.prf, lib/pref/graf-mac.prf, lib/pref/graf-new.prf, lib/pref/graf-win.prf, lib/pref/graf-x11.prf, lib/pref/graf-xaw.prf, lib/pref/graf-xxx.prf, lib/pref/graf.prf, lib/pref/pref-acn.prf, lib/pref/pref-ami.prf, lib/pref/pref-emx.prf, lib/pref/pref-gcu.prf, lib/pref/pref-key.prf, lib/pref/pref-mac.prf, lib/pref/pref-opt.prf, lib/pref/pref-win.prf, lib/pref/pref-x11.prf, lib/pref/pref.prf, lib/pref/proxy.prf, lib/pref/spell-xx.prf, lib/pref/user-win.prf, lib/pref/user.prf, lib/pref/xtra-gcu.prf, lib/pref/xtra-new.prf, lib/pref/xtra-xxx.prf, lib/save/Makefile.am, lib/save/Makefile.in, lib/save/delete.me, lib/script/Makefile.am, lib/script/Makefile.in, lib/script/delete.me, lib/user/Makefile.am, lib/user/Makefile.in, lib/user/delete.me, lib/xtra/Makefile.am, lib/xtra/Makefile.in, lib/xtra/font/10X20.FON, lib/xtra/font/12X24.FON, lib/xtra/font/5X8.FON, lib/xtra/font/6X10.FON, lib/xtra/font/6X12.FON, lib/xtra/font/6X13.FON, lib/xtra/font/6X13B.FON, lib/xtra/font/6X9.FON, lib/xtra/font/7X13.FON, lib/xtra/font/7X13B.FON, lib/xtra/font/8X13.FON, lib/xtra/font/8X13B.FON, lib/xtra/font/Makefile.am, lib/xtra/font/Makefile.in:
+	Hengband 1.0.8 start!
+
+
+	* lib/file/a_cursed.txt, lib/file/a_high.txt, lib/file/a_low.txt, lib/file/a_med.txt, lib/file/chainswd.txt, lib/file/crime.txt, lib/file/dead.txt, lib/file/death.txt, lib/file/elvish.txt, lib/file/error.txt, lib/file/mondeath.txt, lib/file/monfear.txt, lib/file/monfrien.txt, lib/file/monfrien_j.txt, lib/file/monspeak.txt, lib/file/monspeak_j.txt, lib/file/news.txt, lib/file/news_j.txt, lib/file/rumors.txt, lib/file/rumors_j.txt, lib/file/seppuku.txt, lib/file/seppuku_j.txt, lib/file/silly.txt, lib/file/silly_j.txt, lib/file/timefun.txt, lib/file/timefun_j.txt, lib/file/timenorm.txt, lib/file/timenorm_j.txt, lib/file/w_cursed.txt, lib/file/w_cursed_j.txt, lib/file/w_high.txt, lib/file/w_high_j.txt, lib/file/w_low.txt, lib/file/w_low_j.txt, lib/file/w_med.txt, lib/file/w_med_j.txt, lib/help/Makefile.am, lib/help/Makefile.in, lib/help/arena.txt, lib/help/attack.hlp, lib/help/attack.txt, lib/help/birth.hlp, lib/help/birth.txt, lib/help/bldg.txt, lib/help/command.hlp, lib/help/command.txt, lib/help/commdesc.hlp, lib/help/commdesc.txt, lib/help/dungeon.hlp, lib/help/dungeon.txt, lib/help/gambling.txt, lib/help/general.hlp, lib/help/general.txt, lib/help/help.hlp, lib/help/helpinfo.txt, lib/help/j_name.txt, lib/help/japanese.txt, lib/help/jattack.txt, lib/help/jbirth.txt, lib/help/jcommand.hlp, lib/help/jcommand.txt, lib/help/jcommand0.txt, lib/help/jcommdesc.hlp, lib/help/jcommdesc.txt, lib/help/jdungeon.txt, lib/help/jgambling.txt, lib/help/jgeneral.txt, lib/help/jhelp.hlp, lib/help/jhelpinfo.txt, lib/help/joption.hlp, lib/help/joption.txt, lib/help/jplaying.txt, lib/help/jversion.txt, lib/help/magic.hlp, lib/help/magic.txt, lib/help/option.hlp, lib/help/option.txt, lib/help/pref.hlp, lib/help/pref.txt, lib/help/readme.txt, lib/help/spoiler.hlp, lib/help/tang.txt, lib/help/version.txt, lib/info/Makefile.am, lib/info/Makefile.in, lib/info/delete.me, lib/pref/Makefile.am, lib/pref/Makefile.in, lib/pref/colors.prf, lib/pref/font-ami.prf, lib/pref/font-dos.prf, lib/pref/font-ibm.prf, lib/pref/font-mac.prf, lib/pref/font-mon.prf, lib/pref/font-win.prf, lib/pref/font-x11.prf, lib/pref/font-xxx.prf, lib/pref/font.prf, lib/pref/graf-ami.prf, lib/pref/graf-dos.prf, lib/pref/graf-gcu.prf, lib/pref/graf-ibm.prf, lib/pref/graf-mac.prf, lib/pref/graf-new.prf, lib/pref/graf-win.prf, lib/pref/graf-x11.prf, lib/pref/graf-xaw.prf, lib/pref/graf-xxx.prf, lib/pref/graf.prf, lib/pref/pref-acn.prf, lib/pref/pref-ami.prf, lib/pref/pref-emx.prf, lib/pref/pref-gcu.prf, lib/pref/pref-key.prf, lib/pref/pref-mac.prf, lib/pref/pref-opt.prf, lib/pref/pref-win.prf, lib/pref/pref-x11.prf, lib/pref/pref.prf, lib/pref/proxy.prf, lib/pref/spell-xx.prf, lib/pref/user-win.prf, lib/pref/user.prf, lib/pref/xtra-gcu.prf, lib/pref/xtra-new.prf, lib/pref/xtra-xxx.prf, lib/save/Makefile.am, lib/save/Makefile.in, lib/save/delete.me, lib/script/Makefile.am, lib/script/Makefile.in, lib/script/delete.me, lib/user/Makefile.am, lib/user/Makefile.in, lib/user/delete.me, lib/xtra/Makefile.am, lib/xtra/Makefile.in, lib/xtra/font/10X20.FON, lib/xtra/font/12X24.FON, lib/xtra/font/5X8.FON, lib/xtra/font/6X10.FON, lib/xtra/font/6X12.FON, lib/xtra/font/6X13.FON, lib/xtra/font/6X13B.FON, lib/xtra/font/6X9.FON, lib/xtra/font/7X13.FON, lib/xtra/font/7X13B.FON, lib/xtra/font/8X13.FON, lib/xtra/font/8X13B.FON, lib/xtra/font/Makefile.am, lib/xtra/font/Makefile.in:
+	New file.
+
+	* lib/Makefile.am, lib/Makefile.in, lib/apex/Makefile.am, lib/apex/Makefile.in, lib/apex/h_scores.raw, lib/apex/readme.txt, lib/bone/Makefile.am, lib/bone/Makefile.in, lib/bone/delete.me, lib/data/Makefile.am, lib/data/Makefile.in, lib/data/delete.me, lib/edit/Makefile.am, lib/edit/Makefile.in, lib/edit/a_info_j.txt, lib/edit/d_info_j.txt, lib/edit/e_info_j.txt, lib/edit/f_info_j.txt, lib/edit/k_info_j.txt, lib/edit/misc_j.txt, lib/edit/q0000001_j.txt, lib/edit/q0000002_j.txt, lib/edit/q0000003_j.txt, lib/edit/q0000004_j.txt, lib/edit/q0000005_j.txt, lib/edit/q0000006_j.txt, lib/edit/q0000007_j.txt, lib/edit/q0000019_j.txt, lib/edit/q0000020_j.txt, lib/edit/q0000021_j.txt, lib/edit/q0000022_j.txt, lib/edit/q0000023_j.txt, lib/edit/q0000027_j.txt, lib/edit/q0000028_j.txt, lib/edit/q00000ms_j.txt, lib/edit/q000chao_j.txt, lib/edit/q000dekn_j.txt, lib/edit/q000eric_j.txt, lib/edit/q000lyeh_j.txt, lib/edit/q000natu_j.txt, lib/edit/q000sorc_j.txt, lib/edit/q00water_j.txt, lib/edit/q0clone0_j.txt, lib/edit/q0fields_j.txt, lib/edit/q0thief1_j.txt, lib/edit/q0thief2_j.txt, lib/edit/q0willow_j.txt, lib/edit/q_info_j.txt, lib/edit/q_oberon_j.txt, lib/edit/q_pref_j.txt, lib/edit/q_random_j.txt, lib/edit/q_serpen_j.txt, lib/edit/q_warg_j.txt, lib/edit/qdarkelf_j.txt, lib/edit/qhaunted_j.txt, lib/edit/r_info_j.txt, lib/edit/t0000001_j.txt, lib/edit/t0000002_j.txt, lib/edit/t0000003_j.txt, lib/edit/t0000004_j.txt, lib/edit/t0000005_j.txt, lib/edit/t0000006_j.txt, lib/edit/t_basic_j.txt, lib/edit/t_info_j.txt, lib/edit/t_lite_j.txt, lib/edit/t_pref_j.txt, lib/edit/v_info_j.txt, lib/edit/w_info_j.txt, lib/file/Makefile.am, lib/file/Makefile.in, lib/file/a_cursed_j.txt, lib/file/a_high_j.txt, lib/file/a_low_j.txt, lib/file/a_med_j.txt, lib/file/aname_j.txt, lib/file/book-0_jp.txt, lib/file/chainswd_j.txt, lib/file/dead_j.txt, lib/file/death_j.txt, lib/file/elvish_j.txt, lib/file/error_j.txt, lib/file/mondeath_j.txt, lib/file/monfear_j.txt, src/main-ibm.c, src/makefile.bcc, src/makefile.dos, src/makefile.ibm, src/makefile.std, src/readdib.c, src/script.c, src/wall.bmp:
+	Hengband 1.0.8 start!
+
+
+	* lib/Makefile.am, lib/Makefile.in, lib/apex/Makefile.am, lib/apex/Makefile.in, lib/apex/h_scores.raw, lib/apex/readme.txt, lib/bone/Makefile.am, lib/bone/Makefile.in, lib/bone/delete.me, lib/data/Makefile.am, lib/data/Makefile.in, lib/data/delete.me, lib/edit/Makefile.am, lib/edit/Makefile.in, lib/edit/a_info_j.txt, lib/edit/d_info_j.txt, lib/edit/e_info_j.txt, lib/edit/f_info_j.txt, lib/edit/k_info_j.txt, lib/edit/misc_j.txt, lib/edit/q0000001_j.txt, lib/edit/q0000002_j.txt, lib/edit/q0000003_j.txt, lib/edit/q0000004_j.txt, lib/edit/q0000005_j.txt, lib/edit/q0000006_j.txt, lib/edit/q0000007_j.txt, lib/edit/q0000019_j.txt, lib/edit/q0000020_j.txt, lib/edit/q0000021_j.txt, lib/edit/q0000022_j.txt, lib/edit/q0000023_j.txt, lib/edit/q0000027_j.txt, lib/edit/q0000028_j.txt, lib/edit/q00000ms_j.txt, lib/edit/q000chao_j.txt, lib/edit/q000dekn_j.txt, lib/edit/q000eric_j.txt, lib/edit/q000lyeh_j.txt, lib/edit/q000natu_j.txt, lib/edit/q000sorc_j.txt, lib/edit/q00water_j.txt, lib/edit/q0clone0_j.txt, lib/edit/q0fields_j.txt, lib/edit/q0thief1_j.txt, lib/edit/q0thief2_j.txt, lib/edit/q0willow_j.txt, lib/edit/q_info_j.txt, lib/edit/q_oberon_j.txt, lib/edit/q_pref_j.txt, lib/edit/q_random_j.txt, lib/edit/q_serpen_j.txt, lib/edit/q_warg_j.txt, lib/edit/qdarkelf_j.txt, lib/edit/qhaunted_j.txt, lib/edit/r_info_j.txt, lib/edit/t0000001_j.txt, lib/edit/t0000002_j.txt, lib/edit/t0000003_j.txt, lib/edit/t0000004_j.txt, lib/edit/t0000005_j.txt, lib/edit/t0000006_j.txt, lib/edit/t_basic_j.txt, lib/edit/t_info_j.txt, lib/edit/t_lite_j.txt, lib/edit/t_pref_j.txt, lib/edit/v_info_j.txt, lib/edit/w_info_j.txt, lib/file/Makefile.am, lib/file/Makefile.in, lib/file/a_cursed_j.txt, lib/file/a_high_j.txt, lib/file/a_low_j.txt, lib/file/a_med_j.txt, lib/file/aname_j.txt, lib/file/book-0_jp.txt, lib/file/chainswd_j.txt, lib/file/dead_j.txt, lib/file/death_j.txt, lib/file/elvish_j.txt, lib/file/error_j.txt, lib/file/mondeath_j.txt, lib/file/monfear_j.txt, src/main-ibm.c, src/makefile.bcc, src/makefile.dos, src/makefile.ibm, src/makefile.std, src/readdib.c, src/script.c, src/wall.bmp:
+	New file.
+
+	* src/ang_eng.rc, src/angband.h, src/angband.ico, src/angband.rc, src/avatar.c, src/bldg.c, src/chuukei.c, src/defines.h, src/event.h, src/externs.h, src/generate.h, src/grid.h, src/h-basic.h, src/h-config.h, src/h-define.h, src/h-system.h, src/h-type.h, src/hissatsu.c, src/japanese.c, src/maid-x11.c, src/main-cap.c, src/main-dos.c, src/main-gcu.c, src/main-mac.c, src/main-win.c, src/main-x11.c, src/main-xaw.c, src/main.c, src/mane.c, src/mind.c, src/mindtips.h, src/mspells1.c, src/mspells2.c, src/mspells3.c, src/obj_kind.c, src/readdib.h, src/rooms.h, src/scores.c, src/spellstips.h, src/streams.h, src/types.h, src/wild.c, src/z-config.h, src/z-form.h, src/z-rand.h, src/z-term.h, src/z-util.h, src/z-virt.h:
+	Hengband 1.0.8 start!
+
+
+	* src/ang_eng.rc, src/angband.h, src/angband.ico, src/angband.rc, src/avatar.c, src/bldg.c, src/chuukei.c, src/defines.h, src/event.h, src/externs.h, src/generate.h, src/grid.h, src/h-basic.h, src/h-config.h, src/h-define.h, src/h-system.h, src/h-type.h, src/hissatsu.c, src/japanese.c, src/maid-x11.c, src/main-cap.c, src/main-dos.c, src/main-gcu.c, src/main-mac.c, src/main-win.c, src/main-x11.c, src/main-xaw.c, src/main.c, src/mane.c, src/mind.c, src/mindtips.h, src/mspells1.c, src/mspells2.c, src/mspells3.c, src/obj_kind.c, src/readdib.h, src/rooms.h, src/scores.c, src/spellstips.h, src/streams.h, src/types.h, src/wild.c, src/z-config.h, src/z-form.h, src/z-rand.h, src/z-term.h, src/z-util.h, src/z-virt.h:
+	New file.
+
+	* src/artifact.c, src/dungeon.c, src/effects.c, src/flavor.c, src/generate.c, src/grid.c, src/inet.c, src/init1.c, src/init2.c, src/load.c, src/mutation.c, src/racial.c, src/report.c, src/rooms.c, src/spells3.c, src/streams.c, src/wizard1.c, src/wizard2.c:
+	Hengband 1.0.8 start!
+
+
+	* src/artifact.c, src/dungeon.c, src/effects.c, src/flavor.c, src/generate.c, src/grid.c, src/inet.c, src/init1.c, src/init2.c, src/load.c, src/mutation.c, src/racial.c, src/report.c, src/rooms.c, src/spells3.c, src/streams.c, src/wizard1.c, src/wizard2.c:
+	New file.
+
+	* src/birth.c, src/cmd1.c, src/cmd2.c, src/cmd3.c, src/cmd4.c, src/cmd5.c, src/cmd6.c, src/files.c, src/store.c:
+	Hengband 1.0.8 start!
+
+
+	* src/birth.c, src/cmd1.c, src/cmd2.c, src/cmd3.c, src/cmd4.c, src/cmd5.c, src/cmd6.c, src/files.c, src/store.c:
+	New file.
+
+	* src/cave.c, src/kajitips.h, src/melee1.c, src/melee2.c, src/monster1.c, src/monster2.c, src/object1.c, src/object2.c, src/save.c, src/spells1.c, src/spells2.c, src/xtra1.c, src/xtra2.c:
+	Hengband 1.0.8 start!
+
+
+	* src/cave.c, src/kajitips.h, src/melee1.c, src/melee2.c, src/monster1.c, src/monster2.c, src/object1.c, src/object2.c, src/save.c, src/spells1.c, src/spells2.c, src/xtra1.c, src/xtra2.c:
+	New file.
+
+	* readme_angband, readme_eng.txt, src/Makefile.am, src/Makefile.in, src/autoconf.h.in, src/stamp-h.in, src/tables.c, src/util.c, src/variable.c, src/z-form.c, src/z-rand.c, src/z-term.c, src/z-util.c, src/z-virt.c:
+	Hengband 1.0.8 start!
+
+
+	* readme_angband, readme_eng.txt, src/Makefile.am, src/Makefile.in, src/autoconf.h.in, src/stamp-h.in, src/tables.c, src/util.c, src/variable.c, src/z-form.c, src/z-rand.c, src/z-term.c, src/z-util.c, src/z-virt.c:
+	New file.
+
+	* Makefile.am, Makefile.in, acconfig.h, aclocal.m4, autopick.txt, autopick_eng.txt, configure, configure.in, install-sh, missing, mkinstalldirs, readme.txt:
+	Hengband 1.0.8 start!
+
+
+	* Makefile.am, Makefile.in, acconfig.h, aclocal.m4, autopick.txt, autopick_eng.txt, configure, configure.in, install-sh, missing, mkinstalldirs, readme.txt:
+	New file.
+
