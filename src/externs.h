@@ -1239,6 +1239,7 @@ extern errr macro_add(cptr pat, cptr act);
 extern sint macro_find_exact(cptr pat);
 extern char inkey(void);
 extern cptr quark_str(s16b num);
+extern void quark_init(void);
 extern s16b quark_add(cptr str);
 extern s16b message_num(void);
 extern cptr message_str(int age);

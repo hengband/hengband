@@ -1627,7 +1627,7 @@ static errr init_other(void)
 	C_MAKE(macro__buf, 1024, char);
 
 	/* Quark variables */
-	C_MAKE(quark__str, QUARK_MAX, cptr);
+	quark_init();
 
 	/* Message variables */
 	C_MAKE(message__ptr, MESSAGE_MAX, u16b);

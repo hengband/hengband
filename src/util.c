@@ -2216,6 +2216,22 @@ char inkey(void)
  */
 
 /*
+ * Initialize the quark array
+ */
+void quark_init(void)
+{
+	/* Quark variables */
+	C_MAKE(quark__str, QUARK_MAX, cptr);
+
+	/* Prepare first quark, which is used when quark_add() is failed */
+	quark__str[1] = string_make("");
+
+	/* There is one quark (+ NULL) */
+	quark__num = 2;
+}
+
+
+/*
  * Add a new "quark" to the set of quarks.
  */
 s16b quark_add(cptr str)
@@ -2229,8 +2245,8 @@ s16b quark_add(cptr str)
 		if (streq(quark__str[i], str)) return (i);
 	}
 
-	/* Paranoia -- Require room */
-	if (quark__num == QUARK_MAX) return (0);
+	/* Return "" when no room is available */
+	if (quark__num == QUARK_MAX) return 1;
 
 	/* New maximal quark */
 	quark__num = i + 1;
@@ -2251,7 +2267,7 @@ cptr quark_str(s16b i)
 	cptr q;
 
 	/* Verify */
-	if ((i < 0) || (i >= quark__num)) i = 0;
+	if ((i < 1) || (i >= quark__num)) i = 1;
 
 	/* Access the quark */
 	q = quark__str[i];
