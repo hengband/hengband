@@ -997,117 +997,117 @@ F:RES_BLIND | SEE_INVIS
 
 # Ego Ring
 N:150:Í¦µ¤¤Î
-E:of Heroism
+E:and Heroism
 X:27:10
 W:5:0:0:300
 C:0:0:0:0
 F:ACTIVATE
 
 N:151:»¦Ù¤¤Î
-E:of Slaying
+E:and Slaying
 X:27:10
 W:0:0:0:300
 C:4:4:0:0
 
 N:152:ÂçËÉ¸æ¤Î
-E:of Defense
+E:(Extra Armor)
 X:27:5
 W:0:0:0:300
 C:0:0:8:0
 
 N:153:ËâË¡¤ÎÌð¤Î
-E:of Magic Missile
+E:and Magic Missile
 X:27:5
 W:2:0:0:200
 C:0:0:0:0
 F:ACTIVATE
 
 N:154:²Ð±ê¤ÎÌð¤Î
-E:of Fire bolt
+E:and Fire bolt
 X:27:5
 W:10:0:0:700
 C:0:0:0:0
 F:ACTIVATE
 
 N:155:Îäµ¤¤ÎÌð¤Î
-E:of Frost bolt
+E:and Frost bolt
 X:27:5
 W:9:0:0:600
 C:0:0:0:0
 F:ACTIVATE
 
 N:156:ÅÅ·â¤ÎÌð¤Î
-E:of Lightning bolt
+E:and Lightning bolt
 X:27:5
 W:7:0:0:400
 C:0:0:0:0
 F:ACTIVATE
 
 N:157:»À¤ÎÌð¤Î
-E:of Acid bolt
+E:and Acid bolt
 X:27:5
 W:8:0:0:500
 C:0:0:0:0
 F:ACTIVATE
 
 N:158:ËâÎÏ¤ÎÌð¤Î
-E:of Mana bolt
+E:and Mana bolt
 X:27:10
 W:50:0:0:1500
 C:0:0:0:0
 F:ACTIVATE
 
 N:159:²Ðµå¤Î
-E:of Fire ball
+E:and Fire ball
 X:27:10
 W:40:0:0:1500
 C:0:0:0:0
 F:ACTIVATE
 
 N:160:¥Ö¥ê¥¶¡¼¥É¤Î
-E:of Blizzard
+E:and Blizzard
 X:27:10
 W:40:0:0:1500
 C:0:0:0:0
 F:ACTIVATE
 
 N:161:Íëµå¤Î
-E:of Ball Lightning
+E:and Ball Lightning
 X:27:10
 W:40:0:0:1500
 C:0:0:0:0
 F:ACTIVATE
 
 N:162:»À¤Îµå¤Î
-E:of Acid ball
+E:and Acid ball
 X:27:10
 W:40:0:0:1500
 C:0:0:0:0
 F:ACTIVATE
 
 N:163:ËâÎÏ¤ÎÍò¤Î
-E:of Mana Storm
+E:and Mana Storm
 X:27:25
 W:100:0:0:8000
 C:0:0:0:0
 F:ACTIVATE
 
 N:164:¥É¥é¥´¥ó¤Î²Ð±ê¤Î
-E:of Dragon's Flame
+E:and Dragon's Flame
 X:27:20
 W:70:0:0:5000
 C:0:0:0:0
 F:ACTIVATE
 
 N:165:¥É¥é¥´¥ó¤ÎÎäµ¤¤Î
-E:of Dragon's Frost
+E:and Dragon's Frost
 X:27:20
 W:70:0:0:5000
 C:0:0:0:0
 F:ACTIVATE
 
 N:166:ÆóÃÊ²ÃÂ®¤Î
-E:of Acceleration
+E:and Haste
 X:27:20
 W:90:0:0:30000
 C:0:0:0:0
@@ -1128,74 +1128,74 @@ C:0:0:0:3
 F:STEALTH
 
 N:169:¶¯ÎÏÅêÚ³¤Î
-E:of Power Throwing
+E:and Power Throwing
 X:27:5
 W:30:0:0:500
 C:0:0:0:0
 
 N:170:³èÎÏ¤Î
-E:of Regeneration
+E:and Regeneration
 X:27:5
 W:30:0:0:800
 C:0:0:0:0
 F:REGEN
 
 N:171:µ±¤­¤Î
-E:of Light
+E:and Light
 X:27:5
 W:30:0:0:500
 C:0:0:0:0
 F:LITE
 
 N:172:´°Á´¥â¥ó¥¹¥¿¡¼´¶ÃÎ¤Î
-E:of Observe Monster
+E:and *Detect* Monster
 X:27:5
 W:30:0:0:1000
 C:0:0:0:0
 F:ACTIVATE
 
 N:173:Ç¦¤Ó¤Î
-E:of Stealth
+E:and Stealth
 X:27:5
 W:30:0:0:500
 C:0:0:0:0
 F:STEALTH
 
 N:174:²øÊªÈô¤Ð¤·¤Î
-E:of Teleport Other
+E:and Teleport Other
 X:27:10
 W:45:0:0:2000
 C:0:0:0:0
 F:ACTIVATE
 
 N:175:ÀºÅÙ¤Î
-E:of Accuracy
+E:and Accuracy
 X:27:5
 W:30:0:0:500
 C:5:0:0:0
 
 N:176:¥À¥á¡¼¥¸¤Î
-E:of Damage
+E:and Damage
 X:27:5
 W:30:0:0:500
 C:0:5:0:0
 
 N:177:ÂÑ¸÷¤Î
-E:of Resist Light
+E:and Resist Light
 X:27:10
 W:30:0:0:2000
 C:0:0:0:0
 F:RES_LITE
 
 N:178:ÂÑ°Å¤Î
-E:of Resist Darkness
+E:and Resist Darkness
 X:27:10
 W:30:0:0:2000
 C:0:0:0:0
 F:RES_DARK
 
 N:179:ËâÆ»»Õ¤Î
-E:of Wizardry
+E:and Wizardry
 X:27:10
 W:30:0:0:1500
 C:0:0:0:0
@@ -1208,7 +1208,7 @@ C:0:0:15:0
 F:ACTIVATE
 
 N:181:·Ð¸³ÃÍµÛ¼ý¤Î
-E:of Experience Drain
+E:and Experience Drain
 X:27:0
 W:0:0:0:0
 C:0:0:0:0
@@ -1222,34 +1222,34 @@ C:20:20:0:3
 F:CURSED | HEAVY_CURSE | STR | DEX
 
 N:183:È¿´¶¤Î
-E:of Aggravate
+E:and Aggravate
 X:27:0
 W:0:0:0:0
 C:0:0:0:0
 F:AGGRAVATE | CURSED | HEAVY_CURSE
 
 N:184:±åÇ°¤Î
-E:of Ancient Foul Curse
+E:and Ancient Foul Curse
 X:27:0
 W:0:0:0:0
 C:0:0:0:0
 F:TY_CURSE | CURSED | HEAVY_CURSE
 
 N:185:ÂÑ»þ´ÖµÕÅ¾¤Î
-E:of Resist Time
+E:and Resist Time
 X:27:25
 W:30:0:0:0
 C:0:0:0:0
 
 N:186:ÉÔ°ÂÄê¤Î
-E:of Random Teleportation
+E:and Random Teleportation
 X:27:3
 W:30:0:0:100
 C:0:0:0:0
 F:TELEPORT
 
 N:187:¥¢¥ë¥Ó¥Î¤Î
-E:of Albino
+E:and Albino
 X:27:0
 W:0:0:0:0
 C:0:0:20:3
@@ -1258,90 +1258,90 @@ F:CURSED | HEAVY_CURSE | CON
 
 # Ego Amulet
 N:210:ÃÙ¾Ã²½¤Î
-E:of Slow Digestion
+E:and Slow Digestion
 X:29:5
 W:30:0:0:200
 C:0:0:0:0
 F:SLOW_DIGEST
 
 N:211:°Å»ë¤Î
-E:of Infravision
+E:and Infravision
 X:29:5
 W:30:0:0:500
 C:0:0:0:3
 F:INFRA
 
 N:212:²Ä»ëÆ©ÌÀ¤Î
-E:of See Invisible
+E:and See Invisible
 X:29:5
 W:30:0:0:500
 C:0:0:0:0
 F:SEE_INVIS
 
 N:213:À¸Ì¿ÎÏÊÝ»ý¤Î
-E:of Hold Life
+E:and Hold Life
 X:29:5
 W:30:0:0:1000
 C:0:0:0:0
 F:HOLD_LIFE
 
 N:214:·Ð¸³ÃÍµÛ¼ý¤Î
-E:of Experience Drain
+E:and Experience Drain
 X:29:0
 W:0:0:0:0
 C:0:0:0:0
 F:DRAIN_EXP | CURSED | HEAVY_CURSE
 
 N:215:ÌµÃÎ¤Î
-E:of Stupidity
+E:and Stupidity
 X:27:0
 W:30:0:0:0
 C:0:0:0:3
 F:INT | CURSED | HEAVY_CURSE
 
 N:216:È¿´¶¤Î
-E:of Aggravate
+E:and Aggravate
 X:29:0
 W:0:0:0:0
 C:0:0:0:0
 F:AGGRAVATE | CURSED | HEAVY_CURSE
 
 N:217:±åÇ°¤Î
-E:of Ancient Foul Curse
+E:and Ancient Foul Curse
 X:29:0
 W:0:0:0:0
 C:0:0:0:0
 F:TY_CURSE | CURSED | HEAVY_CURSE
 
 N:218:¼é¤ê¤Î
-E:of Protection
+E:and Protection
 X:29:5
 W:0:0:0:200
 C:0:0:8:0
 
 N:219:ÃÎ¼±¤Î
-E:of Lore
+E:and Lore
 X:29:15
 W:60:0:0:8000
 C:0:0:0:0
 F:ACTIVATE
 
 N:220:Ì¥ÏÇ¤Î
-E:of Fascination
+E:and Fascination
 X:29:15
 W:40:0:0:2000
 C:0:0:0:0
 F:ACTIVATE
 
 N:221:Ç¦¤Ó¤Î
-E:of Stealth
+E:and Stealth
 X:29:10
 W:0:0:0:500
 C:0:0:0:0
 F:STEALTH
 
 N:222:Ä·Ìö¤Î
-E:of Jumping
+E:and Jumping
 X:29:5
 W:5:0:0:500
 C:0:0:0:0
@@ -1355,7 +1355,7 @@ C:0:0:0:0
 F:ACTIVATE
 
 N:224:¼¡¸µ¤Î
-E:of Dimension Door
+E:and Dimension Door
 X:29:30
 W:100:0:0:30000
 C:0:0:0:0
@@ -1369,63 +1369,63 @@ C:0:0:8:4
 F:STEALTH | FEATHER | REGEN | FREE_ACT | SEE_INVIS
 
 N:226:ÂÑ²Ð¤Î
-E:of Resist Fire
+E:and Resist Fire
 X:29:5
 W:0:0:0:500
 C:0:0:0:0
 F:RES_FIRE
 
 N:227:*ÂÑ²Ð*¤Î
-E:of *Resist* Fire
+E:and *Resist* Fire
 X:29:15
 W:80:0:0:5000
 C:0:0:0:0
 F:RES_FIRE | ACTIVATE
 
 N:228:ÂÑÎä¤Î
-E:of Resist Cold
+E:and Resist Cold
 X:29:5
 W:0:0:0:500
 C:0:0:0:0
 F:RES_COLD
 
 N:229:*ÂÑÎä*¤Î
-E:of *Resist* Cold
+E:and *Resist* Cold
 X:29:15
 W:80:0:0:5000
 C:0:0:0:0
 F:RES_COLD | ACTIVATE
 
 N:230:ÂÑÅÅ¤Î
-E:of Resist Lightning
+E:and Resist Lightning
 X:29:5
 W:0:0:0:500
 C:0:0:0:0
 F:RES_ELEC
 
 N:231:*ÂÑÅÅ*¤Î
-E:of *Resist* Lightning
+E:and *Resist* Lightning
 X:29:15
 W:80:0:0:5000
 C:0:0:0:0
 F:RES_ELEC | ACTIVATE
 
 N:232:ÂÑ»À¤Î
-E:of Resist Acid
+E:and Resist Acid
 X:29:5
 W:0:0:0:500
 C:0:0:0:0
 F:RES_ACID
 
 N:233:*ÂÑ»À*¤Î
-E:of *Resist* Acid
+E:and *Resist* Acid
 X:29:15
 W:80:0:0:5000
 C:0:0:0:0
 F:RES_ACID | ACTIVATE
 
 N:234:ÉâÍ·¤Î
-E:of Levitation
+E:and Levitation
 X:29:5
 W:0:0:0:1000
 C:0:0:0:0
@@ -1439,14 +1439,14 @@ C:0:0:5:5
 F:RES_BLIND | RES_CONF
 
 N:236:´¶ÃÎ¤Î
-E:of Detection
+E:and Detection
 X:29:20
 W:0:0:0:2000
 C:0:0:0:3
 F:SEARCH | ACTIVATE
 
 N:237:¶ò¼Ô¤Î
-E:of Naivety
+E:and Naivety
 X:27:0
 W:29:0:0:0
 C:0:0:0:3
