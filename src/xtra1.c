@@ -3115,7 +3115,7 @@ static void calc_torch(void)
 	/* see cave.c:update_lite() and defines.h:LITE_MAX */
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS && p_ptr->cur_lite > 1)
 		p_ptr->cur_lite = 1;
-	if (p_ptr->cur_lite > 11) p_ptr->cur_lite = 11;
+	if (p_ptr->cur_lite > 14) p_ptr->cur_lite = 14;
 	if (p_ptr->cur_lite < 0) p_ptr->cur_lite = 0;
 
 	/* check if the player doesn't have a lite source, */

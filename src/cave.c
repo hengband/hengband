@@ -3177,7 +3177,7 @@ void update_lite(void)
 		int d;
 
 		/* Paranoia -- see "LITE_MAX" */
-		if (p > 11) p = 11;
+		if (p > 14) p = 14;
 
 		/* South-East of the player */
 		if (cave_floor_bold(py+1, px+1))

@@ -391,10 +391,10 @@
 
 /*
  * Maximum size of the "lite" array (see "cave.c")
- * Note that the "lite radius" will NEVER exceed 11, and we would
- * never require more than 369 entries in the array for circular "lite".
+ * Note that the "lite radius" will NEVER exceed 14, and we would
+ * never require more than 581 entries in the array for circular "lite".
  */
-#define LITE_MAX 512
+#define LITE_MAX 600
 
 /*
  * Maximum size of the "view" array (see "cave.c")
