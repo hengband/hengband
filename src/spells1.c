@@ -5843,7 +5843,7 @@ note = "には効果がなかった。";
 	/* Quest monsters cannot be polymorphed */
 	if (r_ptr->flags1 & RF1_QUESTOR) do_poly = FALSE;
 
-	if (p_ptr->riding & (c_ptr->m_idx == p_ptr->riding)) do_poly = FALSE;
+	if (p_ptr->riding && (c_ptr->m_idx == p_ptr->riding)) do_poly = FALSE;
 
 	/* "Unique" and "quest" monsters can only be "killed" by the player. */
 	if (((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_UNIQUE_7) || (r_ptr->flags1 & RF1_QUESTOR)) && !p_ptr->inside_battle)
