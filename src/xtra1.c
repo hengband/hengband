@@ -930,7 +930,7 @@ static void prt_depth(void)
 {
 	char depths[32];
 	int wid, hgt, row_depth, col_depth;
-	byte attr = TERM_SLATE;
+	byte attr = TERM_WHITE;
 
 	Term_get_size(&wid, &hgt);
 	col_depth = wid + COL_DEPTH;
@@ -947,45 +947,40 @@ static void prt_depth(void)
 	else if (p_ptr->inside_quest && !dungeon_type)
 	{
 #ifdef JP
-strcpy(depths, "ÃÏ¾å");
+		strcpy(depths, "ÃÏ¾å");
 #else
 		strcpy(depths, "Quest");
 #endif
-
-	}
-	else if (depth_in_feet)
-	{
-#ifdef JP
-(void)sprintf(depths, "%d ft", dun_level * 50);
-#else
-		(void)sprintf(depths, "%d ft", dun_level * 50);
-#endif
-
 	}
 	else
 	{
 #ifdef JP
-sprintf(depths, "%d ³¬", dun_level);
+		if (depth_in_feet) (void)sprintf(depths, "%d ft", dun_level * 50);
+		else (void)sprintf(depths, "%d ³¬", dun_level);
 #else
-		(void)sprintf(depths, "Lev %d", dun_level);
+		if (depth_in_feet) (void)sprintf(depths, "%d ft", dun_level * 50);
+		else (void)sprintf(depths, "Lev %d", dun_level);
 #endif
 
-	}
+		attr = TERM_SLATE;
 
-	/* Get color of level based on feeling  -JSV- */
-	if (dun_level &&
-	    (turn - old_turn >= (150 - dun_level) * TURNS_PER_TICK || cheat_xtra))
-	{
-		if (feeling ==  1) attr = TERM_L_BLUE;	/* Special */
-		if (feeling ==  2) attr = TERM_VIOLET;	/* Horrible visions */
-		if (feeling ==  3) attr = TERM_RED;		/* Very dangerous */
-		if (feeling ==  4) attr = TERM_L_RED;	/* Very bad feeling */
-		if (feeling ==  5) attr = TERM_ORANGE;	/* Bad feeling */
-		if (feeling ==  6) attr = TERM_YELLOW;	/* Nervous */
-		if (feeling ==  7) attr = TERM_L_UMBER;	/* Luck is turning */
-		if (feeling ==  8) attr = TERM_L_WHITE;	/* Don't like */
-		if (feeling ==  9) attr = TERM_WHITE;	/* Reasonably safe */
-		if (feeling == 10) attr = TERM_WHITE;	/* Boring place */
+		/* Get color of level based on feeling  -JSV- */
+		if ((turn - old_turn >= (150 - dun_level) * TURNS_PER_TICK) || cheat_xtra)
+		{
+			switch (feeling)
+			{
+			case  1: attr = TERM_L_BLUE;  break; /* Special */
+			case  2: attr = TERM_VIOLET;  break; /* Horrible visions */
+			case  3: attr = TERM_RED;     break; /* Very dangerous */
+			case  4: attr = TERM_L_RED;   break; /* Very bad feeling */
+			case  5: attr = TERM_ORANGE;  break; /* Bad feeling */
+			case  6: attr = TERM_YELLOW;  break; /* Nervous */
+			case  7: attr = TERM_L_UMBER; break; /* Luck is turning */
+			case  8: attr = TERM_L_WHITE; break; /* Don't like */
+			case  9: attr = TERM_WHITE;   break; /* Reasonably safe */
+			case 10: attr = TERM_WHITE;   break; /* Boring place */
+			}
+		}
 	}
 
 	/* Right-Adjust the "depth", and clear old values */
