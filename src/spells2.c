@@ -2163,6 +2163,15 @@ info[i++] = "あなたは悪魔の存在を感じる能力を持っている。";
 #endif
 
 	}
+	if (p_ptr->esp_orc)
+	{
+#ifdef JP
+info[i++] = "あなたはオークの存在を感じる能力を持っている。";
+#else
+		info[i++] = "You sense orcs.";
+#endif
+
+	}
 	if (p_ptr->esp_troll)
 	{
 #ifdef JP
