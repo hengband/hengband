@@ -3236,7 +3236,7 @@ c_put_str(TERM_WHITE, "能力", row, stat_col+1);
 c_put_str(TERM_BLUE, "  基本", row, stat_col+7);
 c_put_str(TERM_L_BLUE, " 種 職 性 装 ", row, stat_col+13);
 c_put_str(TERM_L_GREEN, "合計", row, stat_col+28);
-c_put_str(TERM_YELLOW, "現在", row, stat_col+33);
+c_put_str(TERM_YELLOW, "現在", row, stat_col+35);
 #else
 	c_put_str(TERM_WHITE, "Stat", row, stat_col+1);
 	c_put_str(TERM_BLUE, "  Base", row, stat_col+7);
@@ -3290,12 +3290,11 @@ c_put_str(TERM_YELLOW, "現在", row, stat_col+33);
 		e_adj -= cp_ptr->c_adj[i];
 		e_adj -= ap_ptr->a_adj[i];
 
-		/* Reduced name of stat */
-#ifdef JP
-		c_put_str(TERM_WHITE, stat_names[i], row + i+1, stat_col+1);
-#else
-		c_put_str(TERM_WHITE, stat_names_reduced[i], row + i+1, stat_col+1);
-#endif
+		if (p_ptr->stat_cur[i] < p_ptr->stat_max[i])
+			/* Reduced name of stat */
+			c_put_str(TERM_WHITE, stat_names_reduced[i], row + i+1, stat_col+1);
+		else
+			c_put_str(TERM_WHITE, stat_names[i], row + i+1, stat_col+1);
 
 
 		/* Internal "natural" max value.  Maxes at 18/100 */
@@ -3303,7 +3302,11 @@ c_put_str(TERM_YELLOW, "現在", row, stat_col+33);
 		cnv_stat(p_ptr->stat_max[i], buf);
 		if (p_ptr->stat_max[i] == p_ptr->stat_max_max[i])
 		{
+#ifdef JP
 			c_put_str(TERM_WHITE, "!", row + i+1, stat_col + 6);
+#else
+			c_put_str(TERM_WHITE, "!", row + i+1, stat_col + 5);
+#endif
 		}
 		c_put_str(TERM_BLUE, buf, row + i+1, stat_col + 13 - strlen(buf));
 
@@ -4105,7 +4108,11 @@ void display_player(int mode)
 
 			if (p_ptr->stat_max[i] == p_ptr->stat_max_max[i])
 			{
+#ifdef JP
 				c_put_str(TERM_WHITE, "!", 3+i, 59);
+#else
+				c_put_str(TERM_WHITE, "!", 3+i, 59-1);
+#endif
 			}
 		}
 

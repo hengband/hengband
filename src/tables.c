@@ -6155,7 +6155,7 @@ cptr stat_names[6] =
 #ifdef JP
         "осно :", "цнг╫ :", "╦╜╓╣ :", "╢Омя :", "бя╣в :", "л╔но :"
 #else
-	"STR: ", "INT: ", "WIS: ", "DEX: ", "CON: ", "CHR: "
+	"STR : ", "INT : ", "WIS : ", "DEX : ", "CON : ", "CHR : "
 #endif
 
 };
@@ -6168,7 +6168,7 @@ cptr stat_names_reduced[6] =
 #ifdef JP
         "осноx:", "цнг╫x:", "╦╜╓╣x:", "╢Омяx:", "бя╣вx:", "л╔ноx:"
 #else
-	"Str: ", "Int: ", "Wis: ", "Dex: ", "Con: ", "Chr: "
+	"Str : ", "Int : ", "Wis : ", "Dex : ", "Con : ", "Chr : "
 #endif
 
 };
