@@ -500,15 +500,12 @@ static void generate_wilderness_area(int terrain, u32b seed, bool border, bool c
 	/* Hack -- Induce consistant town layout */
 	Rand_value = seed;
 
-	if (!corner)
+	/* Create level background */
+	for (y1 = 0; y1 < MAX_HGT; y1++)
 	{
-		/* Create level background */
-		for (y1 = 0; y1 < MAX_HGT; y1++)
+		for (x1 = 0; x1 < MAX_WID; x1++)
 		{
-			for (x1 = 0; x1 < MAX_WID; x1++)
-			{
-				cave[y1][x1].feat = table_size / 2;
-			}
+			cave[y1][x1].feat = table_size / 2;
 		}
 	}
 
