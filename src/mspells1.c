@@ -4595,7 +4595,7 @@ msg_print("多くの力強いものが間近に現れた音が聞こえる。");
 
 
 	/* Always take note of monsters that kill you */
-	if (death && (r_ptr->r_deaths < MAX_SHORT))
+	if (death && (r_ptr->r_deaths < MAX_SHORT) && !p_ptr->inside_arena)
 	{
 		r_ptr->r_deaths++;
 	}

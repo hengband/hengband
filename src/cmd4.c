@@ -536,6 +536,17 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		}
 		case NIKKI_ARENA:
 		{
+			if (num == 99)
+			{
+
+#ifdef JP
+				fprintf(fff, " %2d:%02d %20s 闘技場の%d回戦で、%sの前に敗れ去った。\n", hour, min, note_level, p_ptr->arena_number + 1, note);
+#else
+				int n =  p_ptr->arena_number + 1;
+				fprintf(fff, " %2d:%02d %20s beaten by %s in the %d%s fight.\n", hour, min, note_level, note, n, (n%10==1?"st":n%10==2?"nd":n%10==3?"rd":"th"));
+#endif
+				break;
+			}
 #ifdef JP
 			fprintf(fff, " %2d:%02d %20s 闘技場の%d回戦(%s)に勝利した。\n", hour, min, note_level, num, note);
 #else

@@ -2280,7 +2280,7 @@ msg_format("%^sから落ちてしまった！", m_name);
 
 
 	/* Always notice cause of death */
-	if (death && (r_ptr->r_deaths < MAX_SHORT))
+	if (death && (r_ptr->r_deaths < MAX_SHORT) && !p_ptr->inside_arena)
 	{
 		r_ptr->r_deaths++;
 	}

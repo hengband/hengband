@@ -4972,12 +4972,14 @@ bool take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 
 		if (p_ptr->inside_arena)
 		{
+			cptr m_name = r_name+r_info[arena_monsters[p_ptr->arena_number]].name;
 #ifdef JP
-msg_format("あなたは%sの前に敗れ去った。", r_name+r_info[arena_monsters[p_ptr->arena_number]].name);
+			msg_format("あなたは%sの前に敗れ去った。", m_name);
 #else
-msg_format("You are beaten by %s.", r_name+r_info[arena_monsters[p_ptr->arena_number]].name);
+			msg_format("You are beaten by %s.", m_name);
 #endif
 			msg_print(NULL);
+			if (record_arena) do_cmd_write_nikki(NIKKI_ARENA, 99, m_name);
 		}
 		else
 		{
