@@ -264,6 +264,9 @@ static bool alloc_stairs(int feat, int num, int walls)
 			/* Clear previous contents, add stairs */
 			c_ptr->feat = (i < shaft_num) ? feat_state(feat, FF_SHAFT) : feat;
 
+			/* No longer "FLOOR" */
+			c_ptr->info &= ~(CAVE_FLOOR);
+
 			/* Success */
 			break;
 		}
