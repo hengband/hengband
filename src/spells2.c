@@ -6143,7 +6143,7 @@ static void cave_temp_room_unlite(void)
 		if ((c_ptr->feat <= FEAT_INVIS) || (c_ptr->feat == FEAT_DIRT) || (c_ptr->feat == FEAT_GRASS))
 		{
 			/* Forget the grid */
-			c_ptr->info &= ~(CAVE_MARK);
+                        if (!view_torch_grids) c_ptr->info &= ~(CAVE_MARK);
 
 			/* Notice */
 			note_spot(y, x);
