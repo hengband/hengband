@@ -120,20 +120,13 @@ msg_format("レベル %d にようこそ。", p_ptr->lev);
 		/* Window stuff */
 		p_ptr->window |= (PW_PLAYER | PW_SPELL);
 
-#ifdef JP
+		/* HPとMPの上昇量を表示 */
                 level_up = 1;
-#endif
+
 		/* Handle stuff */
 		handle_stuff();
 
-#ifdef JP
                 level_up = 0;
-#endif
-		if (level_reward)
-		{
-			gain_level_reward(0);
-			level_reward = FALSE;
-		}
 
 		if (level_inc_stat)
 		{
@@ -208,6 +201,16 @@ msg_print("あなたは変わった気がする...");
 
 			(void)gain_random_mutation(0);
 			level_mutation = FALSE;
+		}
+
+		/*
+		 * 報酬でレベルが上ると再帰的に check_experience() が
+		 * 呼ばれるので順番を最後にする。
+		 */
+		if (level_reward)
+		{
+			gain_level_reward(0);
+			level_reward = FALSE;
 		}
 
 		/* Update some stuff */
