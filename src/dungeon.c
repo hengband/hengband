@@ -6442,7 +6442,6 @@ msg_print("試合開始！");
 static void load_all_pref_files(void)
 {
 	char buf[1024];
-	errr err;
 
 	/* Access the "user" pref file */
 	sprintf(buf, "user.prf");
