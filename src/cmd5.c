@@ -51,7 +51,7 @@ cptr spell_category_name(int tval)
  * The "known" should be TRUE for cast/pray, FALSE for study
  */
 
-bool select_the_force=FALSE;
+bool select_the_force = FALSE;
 
 static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm)
 {
@@ -361,6 +361,79 @@ static bool item_tester_learn_spell(object_type *o_ptr)
 }
 
 
+static bool player_has_no_spellbooks(void)
+{
+	int         i;
+	object_type *o_ptr;
+
+	for (i = 0; i < INVEN_PACK; i++)
+	{
+		o_ptr = &inventory[i];
+		if (o_ptr->k_idx && check_book_realm(o_ptr->tval, o_ptr->sval)) return FALSE;
+	}
+
+	for (i = cave[py][px].o_idx; i; i = o_ptr->next_o_idx)
+	{
+		o_ptr = &o_list[i];
+		if (o_ptr->k_idx && check_book_realm(o_ptr->tval, o_ptr->sval)) return FALSE;
+	}
+
+	return TRUE;
+}
+
+
+static void confirm_use_force(bool browse_only)
+{
+	int  item;
+	char which;
+
+#ifdef ALLOW_REPEAT
+
+	/* Get the item index */
+	if (repeat_pull(&item) && (item == INVEN_FORCE))
+	{
+		browse_only ? do_cmd_mind_browse() : do_cmd_mind();
+		return;
+	}
+
+#endif /* ALLOW_REPEAT */
+
+	/* Show the prompt */
+#ifdef JP
+	prt("('w'練気術, ESC) 'w'かESCを押してください。 ", 0, 0);
+#else
+	prt("(w for the Force, ESC) Hit 'w' or ESC. ", 0, 0);
+#endif
+
+	while (1)
+	{
+		/* Get a key */
+		which = inkey();
+
+		if (which == ESCAPE) break;
+		else if (which == 'w')
+		{
+
+#ifdef ALLOW_REPEAT
+
+			repeat_push(INVEN_FORCE);
+
+#endif /* ALLOW_REPEAT */
+
+			break;
+		}
+	}
+
+	/* Clear the prompt line */
+	prt("", 0, 0);
+
+	if (which == 'w')
+	{
+		browse_only ? do_cmd_mind_browse() : do_cmd_mind();
+	}
+}
+
+
 /*
  * Peruse the spells/prayers in a book
  *
@@ -386,7 +459,7 @@ void do_cmd_browse(void)
 	if (!(p_ptr->realm1 || p_ptr->realm2) && (p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_RED_MAGE))
 	{
 #ifdef JP
-msg_print("本を読むことができない！");
+		msg_print("本を読むことができない！");
 #else
 		msg_print("You cannot read books!");
 #endif
@@ -399,37 +472,48 @@ msg_print("本を読むことができない！");
 		set_action(ACTION_NONE);
 	}
 
+	if (p_ptr->pclass == CLASS_FORCETRAINER)
+	{
+		if (player_has_no_spellbooks())
+		{
+			confirm_use_force(TRUE);
+			return;
+		}
+		select_the_force = TRUE;
+	}
+
 	/* Restrict choices to "useful" books */
 	if (p_ptr->realm2 == REALM_NONE) item_tester_tval = mp_ptr->spell_book;
 	else item_tester_hook = item_tester_learn_spell;
 
 	/* Get an item */
 #ifdef JP
-q = "どの本を読みますか? ";
+	q = "どの本を読みますか? ";
 #else
 	q = "Browse which book? ";
 #endif
 
 #ifdef JP
-s = "読める本がない。";
+	s = "読める本がない。";
 #else
 	s = "You have no books that you can read.";
 #endif
 
-	if (p_ptr->pclass == CLASS_FORCETRAINER)
-		select_the_force = TRUE;
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))){
-	    select_the_force = FALSE;
-	    return;
+	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR)))
+	{
+		select_the_force = FALSE;
+		return;
 	}
 	select_the_force = FALSE;
 
-	if (item == INVEN_FORCE) { /* the_force */
-	    do_cmd_mind_browse();
-	    return;
-	} else
+	if (item == INVEN_FORCE) /* the_force */
+	{
+		do_cmd_mind_browse();
+		return;
+	}
+
 	/* Get the item (in the pack) */
-	if (item >= 0)
+	else if (item >= 0)
 	{
 		o_ptr = &inventory[item];
 	}
@@ -4671,7 +4755,7 @@ void do_cmd_cast(void)
 	if (!p_ptr->realm1 && (p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_RED_MAGE))
 	{
 #ifdef JP
-msg_print("呪文を唱えられない！");
+		msg_print("呪文を唱えられない！");
 #else
 		msg_print("You cannot cast spells!");
 #endif
@@ -4682,15 +4766,16 @@ msg_print("呪文を唱えられない！");
 	/* Require lite */
 	if (p_ptr->blind || no_lite())
 	{
-#ifdef JP
-msg_print("目が見えない！");
-#else
-		msg_print("You cannot see!");
-#endif
-		if (p_ptr->pclass == CLASS_FORCETRAINER)
-		    do_cmd_mind();
+		if (p_ptr->pclass == CLASS_FORCETRAINER) confirm_use_force(FALSE);
 		else
+		{
+#ifdef JP
+			msg_print("目が見えない！");
+#else
+			msg_print("You cannot see!");
+#endif
 			flush();
+		}
 		return;
 	}
 
@@ -4698,12 +4783,22 @@ msg_print("目が見えない！");
 	if (p_ptr->confused)
 	{
 #ifdef JP
-msg_print("混乱していて唱えられない！");
+		msg_print("混乱していて唱えられない！");
 #else
 		msg_print("You are too confused!");
 #endif
 		flush();
 		return;
+	}
+
+	if (p_ptr->pclass == CLASS_FORCETRAINER)
+	{
+		if (player_has_no_spellbooks())
+		{
+			confirm_use_force(FALSE);
+			return;
+		}
+		select_the_force = TRUE;
 	}
 
 	prayer = spell_category_name(mp_ptr->spell_book);
@@ -4713,31 +4808,32 @@ msg_print("混乱していて唱えられない！");
 
 	/* Get an item */
 #ifdef JP
-q = "どの呪文書を使いますか? ";
+	q = "どの呪文書を使いますか? ";
 #else
 	q = "Use which book? ";
 #endif
 
 #ifdef JP
-s = "呪文書がない！";
+	s = "呪文書がない！";
 #else
 	s = "You have no spell books!";
 #endif
 
-	if (p_ptr->pclass == CLASS_FORCETRAINER)
-		select_the_force = TRUE;
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))){
-	    select_the_force = FALSE;
-	    return;
+	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR)))
+	{
+		select_the_force = FALSE;
+		return;
 	}
 	select_the_force = FALSE;
 
-	if (item == INVEN_FORCE) { /* the_force */
-	    do_cmd_mind();
-	    return;
-	} else
+	if (item == INVEN_FORCE) /* the_force */
+	{
+		do_cmd_mind();
+		return;
+	}
+
 	/* Get the item (in the pack) */
-	if (item >= 0)
+	else if (item >= 0)
 	{
 		o_ptr = &inventory[item];
 	}

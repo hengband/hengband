@@ -5692,22 +5692,20 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 		{
 			/* Begin the prompt */
 #ifdef JP
-sprintf(out_val, "持ち物:");
+			sprintf(out_val, "持ち物:");
 #else
 			sprintf(out_val, "Inven:");
 #endif
-
 
 			/* Some legal items */
 			if ((i1 <= i2) && !use_menu)
 			{
 				/* Build the prompt */
 #ifdef JP
-sprintf(tmp_val, "%c-%c,'(',')',",
+				sprintf(tmp_val, "%c-%c,'(',')',",
 #else
 				sprintf(tmp_val, " %c-%c,'(',')',",
 #endif
-
 					index_to_label(i1), index_to_label(i2));
 
 				/* Append */
@@ -5716,23 +5714,17 @@ sprintf(tmp_val, "%c-%c,'(',')',",
 
 			/* Indicate ability to "view" */
 #ifdef JP
-if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
+			if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 #else
 			if (!command_see && !use_menu) strcat(out_val, " * to see,");
 #endif
 
-
 			/* Append */
 #ifdef JP
-if (equip) strcat(out_val, format(" %s 装備品,", use_menu ? "'4'or'6'" : "'/'"));
-else if (select_the_force)
-	strcat(out_val, " 'w'練気術,");
+			if (equip) strcat(out_val, format(" %s 装備品,", use_menu ? "'4'or'6'" : "'/'"));
 #else
-if (equip) strcat(out_val, format(" %s for Equip,", use_menu ? "4 or 6" : "/"));
-else if (select_the_force)
-	strcat(out_val, " w for the Force,");
+			if (equip) strcat(out_val, format(" %s for Equip,", use_menu ? "4 or 6" : "/"));
 #endif
-
 		}
 
 		/* Viewing equipment */
@@ -5740,22 +5732,20 @@ else if (select_the_force)
 		{
 			/* Begin the prompt */
 #ifdef JP
-sprintf(out_val, "装備品:");
+			sprintf(out_val, "装備品:");
 #else
 			sprintf(out_val, "Equip:");
 #endif
-
 
 			/* Some legal items */
 			if ((e1 <= e2) && !use_menu)
 			{
 				/* Build the prompt */
 #ifdef JP
-sprintf(tmp_val, "%c-%c,'(',')',",
+				sprintf(tmp_val, "%c-%c,'(',')',",
 #else
 				sprintf(tmp_val, " %c-%c,'(',')',",
 #endif
-
 					index_to_label(e1), index_to_label(e2));
 
 				/* Append */
@@ -5764,28 +5754,27 @@ sprintf(tmp_val, "%c-%c,'(',')',",
 
 			/* Indicate ability to "view" */
 #ifdef JP
-if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
+			if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 #else
 			if (!command_see) strcat(out_val, " * to see,");
 #endif
 
-
 			/* Append */
 #ifdef JP
-if (inven) strcat(out_val, format(" %s 持ち物,", use_menu ? "'4'or'6'" : "'/'"));
+			if (inven) strcat(out_val, format(" %s 持ち物,", use_menu ? "'4'or'6'" : "'/'"));
 #else
-if (inven) strcat(out_val, format(" %s for Inven,", use_menu ? "4 or 6" : "'/'"));
+			if (inven) strcat(out_val, format(" %s for Inven,", use_menu ? "4 or 6" : "'/'"));
 #endif
-
 		}
 
 		/* Indicate legality of the "floor" item */
 #ifdef JP
-if (allow_floor) strcat(out_val, " '-'床上,");
+		if (allow_floor) strcat(out_val, " '-'床上,");
+		if (select_the_force) strcat(out_val, " 'w'練気術,");
 #else
 		if (allow_floor) strcat(out_val, " - for floor,");
+		if (select_the_force) strcat(out_val, " w for the Force,");
 #endif
-
 
 		/* Finish the prompt */
 		strcat(out_val, " ESC");
@@ -5795,7 +5784,6 @@ if (allow_floor) strcat(out_val, " '-'床上,");
 
 		/* Show the prompt */
 		prt(tmp_val, 0, 0);
-
 
 		/* Get a key */
 		which = inkey();
@@ -6747,7 +6735,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 		{
 			/* Begin the prompt */
 #ifdef JP
-sprintf(out_val, "持ち物:");
+			sprintf(out_val, "持ち物:");
 #else
 			sprintf(out_val, "Inven:");
 #endif
@@ -6756,11 +6744,10 @@ sprintf(out_val, "持ち物:");
 			{
 				/* Build the prompt */
 #ifdef JP
-sprintf(tmp_val, "%c-%c,'(',')',",
+				sprintf(tmp_val, "%c-%c,'(',')',",
 #else
 				sprintf(tmp_val, " %c-%c,'(',')',",
 #endif
-
 					index_to_label(i1), index_to_label(i2));
 
 				/* Append */
@@ -6769,38 +6756,30 @@ sprintf(tmp_val, "%c-%c,'(',')',",
 
 			/* Indicate ability to "view" */
 #ifdef JP
-if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
+			if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 #else
 			if (!command_see && !use_menu) strcat(out_val, " * to see,");
 #endif
 
-
 			/* Append */
-#ifdef JP
 			if (allow_equip)
 			{
+#ifdef JP
 				if (!use_menu)
 					strcat(out_val, " '/' 装備品,");
 				else if (allow_floor)
 					strcat(out_val, " '6' 装備品,");
 				else
 					strcat(out_val, " '4'or'6' 装備品,");
-			}
-			else if (select_the_force)
-				strcat(out_val, " 'w'練気術,");
 #else
-			if (allow_equip)
-			{
 				if (!use_menu)
 					strcat(out_val, " / for Equip,");
 				else if (allow_floor)
 					strcat(out_val, " 6 for Equip,");
 				else
 					strcat(out_val, " 4 or 6 for Equip,");
-			}
-			else if (select_the_force)
-				strcat(out_val, " w for the Force,");
 #endif
+			}
 
 			/* Append */
 			if (allow_floor)
@@ -6821,7 +6800,6 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 					strcat(out_val, " 4 or 6 for floor,");
 #endif
 			}
-
 		}
 
 		/* Viewing equipment */
@@ -6829,21 +6807,19 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 		{
 			/* Begin the prompt */
 #ifdef JP
-sprintf(out_val, "装備品:");
+			sprintf(out_val, "装備品:");
 #else
 			sprintf(out_val, "Equip:");
 #endif
-
 
 			if (!use_menu)
 			{
 				/* Build the prompt */
 #ifdef JP
-sprintf(tmp_val, "%c-%c,'(',')',",
+				sprintf(tmp_val, "%c-%c,'(',')',",
 #else
 				sprintf(tmp_val, " %c-%c,'(',')',",
 #endif
-
 					index_to_label(e1), index_to_label(e2));
 
 				/* Append */
@@ -6852,11 +6828,10 @@ sprintf(tmp_val, "%c-%c,'(',')',",
 
 			/* Indicate ability to "view" */
 #ifdef JP
-if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
+			if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 #else
 			if (!command_see && !use_menu) strcat(out_val, " * to see,");
 #endif
-
 
 			/* Append */
 			if (allow_inven)
@@ -6869,7 +6844,6 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 				else
 					strcat(out_val, " '4'or'6' 持ち物,");
 #else
-
 				if (!use_menu)
 					strcat(out_val, " / for Inven,");
 				else if (allow_floor)
@@ -6910,16 +6884,14 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 			sprintf(out_val, "Floor:");
 #endif
 
-
 			if (!use_menu)
 			{
 				/* Build the prompt */
 #ifdef JP
-sprintf(tmp_val, "%c-%c,'(',')',", n1, n2);
+				sprintf(tmp_val, "%c-%c,'(',')',", n1, n2);
 #else
 				sprintf(tmp_val, " %c-%c,'(',')',", n1, n2);
 #endif
-
 
 				/* Append */
 				strcat(out_val, tmp_val);
@@ -6927,11 +6899,10 @@ sprintf(tmp_val, "%c-%c,'(',')',", n1, n2);
 
 			/* Indicate ability to "view" */
 #ifdef JP
-if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
+			if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 #else
 			if (!command_see && !use_menu) strcat(out_val, " * to see,");
 #endif
-
 
 			if (use_menu)
 			{
@@ -6942,7 +6913,6 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 #else
 					strcat(out_val, " 4 for Equip, 6 for Inven,");
 #endif
-
 				}
 				else if (allow_inven)
 				{
@@ -6951,7 +6921,6 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 #else
 					strcat(out_val, " 4 or 6 for Inven,");
 #endif
-
 				}
 				else if (allow_equip)
 				{
@@ -6960,7 +6929,6 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 #else
 					strcat(out_val, " 4 or 6 for Equip,");
 #endif
-
 				}
 			}
 			/* Append */
@@ -6971,7 +6939,6 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 #else
 				strcat(out_val, " / for Inven,");
 #endif
-
 			}
 			else if (allow_equip)
 			{
@@ -6980,7 +6947,6 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 #else
 				strcat(out_val, " / for Equip,");
 #endif
-
 			}
 
 			/* Append */
@@ -6993,6 +6959,13 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 #endif
 			}
 		}
+
+		/* Append */
+#ifdef JP
+		if (select_the_force) strcat(out_val, " 'w'練気術,");
+#else
+		if (select_the_force) strcat(out_val, " w for the Force,");
+#endif
 
 		/* Finish the prompt */
 		strcat(out_val, " ESC");
