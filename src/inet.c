@@ -441,11 +441,11 @@ static int connect_server(int timeout, const char *host, int port)
 			
 			sndCall.addr.len 	= sizeof(InetAddress);				
 			sndCall.addr.buf	= (unsigned char*) &inAddr;
-			sndCall.opt.buf 	= nil;		// no connection options
+			sndCall.opt.buf 	= nil;	      /* no connection options */
 			sndCall.opt.len 	= 0;
-			sndCall.udata.buf 	= nil;		// no connection data
+			sndCall.udata.buf 	= nil;	      /* no connection data */
 			sndCall.udata.len 	= 0;
-			sndCall.sequence 	= 0;		// ignored by OTConnect
+			sndCall.sequence 	= 0;	      /* ignored by OTConnect */
 			
 			err = OTConnect(ep, &sndCall, NULL);
 			

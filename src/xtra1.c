@@ -1012,7 +1012,7 @@ static void prt_hp(void)
 	byte color;
   
 	/* ¥¿¥¤¥È¥ë */
-//	put_str(" £È£Ð¡¦£Í£Ð", ROW_HPMP, COL_HPMP);
+/*	put_str(" £È£Ð¡¦£Í£Ð", ROW_HPMP, COL_HPMP); */
 
 	put_str("HP", ROW_CURHP, COL_CURHP);
 
@@ -1059,7 +1059,7 @@ static void prt_sp(void)
 	if (!mp_ptr->spell_book) return;
 
 	/* ¥¿¥¤¥È¥ë */
-//	put_str(" £Í£Ð / ºÇÂç", ROW_MAXSP, COL_MAXSP);
+/*	put_str(" £Í£Ð / ºÇÂç", ROW_MAXSP, COL_MAXSP); */
 
 #ifdef JP
 	put_str("MP", ROW_CURSP, COL_CURSP);
@@ -1804,8 +1804,8 @@ static void prt_frame_basic(void)
 		prt_field(mimic_info[p_ptr->mimic_form].title, ROW_RACE, COL_RACE);
 	else
 		prt_field(rp_ptr->title, ROW_RACE, COL_RACE);
-//	prt_field(cp_ptr->title, ROW_CLASS, COL_CLASS);
-//	prt_field(ap_ptr->title, ROW_SEIKAKU, COL_SEIKAKU);
+/*	prt_field(cp_ptr->title, ROW_CLASS, COL_CLASS); */
+/*	prt_field(ap_ptr->title, ROW_SEIKAKU, COL_SEIKAKU); */
 
 
 	/* Title */
@@ -2505,7 +2505,7 @@ static void calc_spells(void)
 			k++;
 		}
 		if (k>32) k = 32;
-		if ((p_ptr->new_spells > k) && (mp_ptr->spell_book == TV_LIFE_BOOK)) p_ptr->new_spells = k;
+		if ((p_ptr->new_spells > k) && ((mp_ptr->spell_book == TV_LIFE_BOOK) || (mp_ptr->spell_book == TV_HISSATSU_BOOK))) p_ptr->new_spells = k;
 	}
 
 	if (p_ptr->new_spells < 0) p_ptr->new_spells = 0;
@@ -5707,7 +5707,7 @@ void redraw_stuff(void)
 	{
 		p_ptr->redraw &= ~(PR_MISC);
 		prt_field(rp_ptr->title, ROW_RACE, COL_RACE);
-//		prt_field(cp_ptr->title, ROW_CLASS, COL_CLASS);
+/*		prt_field(cp_ptr->title, ROW_CLASS, COL_CLASS); */
 
 	}
 

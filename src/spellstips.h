@@ -689,7 +689,7 @@ static char *spell_tips[VALID_REALM][32] =
 	},
 
 	{
-		"gives improved infla-vision for a while.",
+		"gives infravision for a while.",
 		"gives regeneration ability for a while.",
 		"satisfis hunger.",
 		"gives resistance to cold. This resistance can be added to which from equipment for more powerful resistance.",

@@ -2125,7 +2125,6 @@ sprintf(buf, "領域を選んで下さい(%c-%c) '*'でランダム、'='で初期オプション設定: 
 do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 #else
 			do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
-//			do_cmd_options_aux(6, "Startup Options");
 #endif
 
 			screen_load();
@@ -2161,7 +2160,7 @@ static bool get_player_realms(void)
 	/* Select the first realm */
 	while (1)
 	{
-		unsigned char temp[80*8];
+		char temp[80*8];
 		cptr t;
 
                 p_ptr->realm1 = REALM_NONE;
@@ -2218,7 +2217,7 @@ put_str("Magic       :", 6, 1);
 		/* Select the second realm */
 		while (1)
 		{
-			unsigned char temp[80*8];
+			char temp[80*8];
 			cptr t;
 
 			count = 0;
@@ -2917,7 +2916,7 @@ static void get_history(void)
 	while ((n > 0) && (s[n-1] == ' ')) s[--n] = '\0';
 
        {
-        unsigned char temp[64*4];
+        char temp[64*4];
         roff_to_buf(s, 60, temp);
         t = temp;
         for(i=0 ; i<4 ; i++){
@@ -3420,9 +3419,6 @@ void player_outfit(void)
 			object_aware(q_ptr);
 			object_known(q_ptr);
 
-			/* These objects are "storebought" */
-//			q_ptr->ident |= IDENT_STOREB;
-
 #ifdef USE_SCRIPT
 			q_ptr->python = object_create_callback(q_ptr);
 #endif /* USE_SCRIPT */
@@ -3460,9 +3456,6 @@ void player_outfit(void)
 		object_aware(q_ptr);
 		object_known(q_ptr);
 
-		/* These objects are "storebought" */
-//		q_ptr->ident |= IDENT_STOREB;
-
 #ifdef USE_SCRIPT
 		q_ptr->python = object_create_callback(q_ptr);
 #endif /* USE_SCRIPT */
@@ -3494,9 +3487,6 @@ void player_outfit(void)
 		object_prep(q_ptr, lookup_kind(TV_ARROW, SV_AMMO_NORMAL));
 		q_ptr->number = (byte)rand_range(15, 20);
 
-		/* These objects are "storebought" */
-//		q_ptr->ident |= IDENT_STOREB;
-
 		object_aware(q_ptr);
 		object_known(q_ptr);
 
@@ -3510,9 +3500,6 @@ void player_outfit(void)
 	{
 		/* Hack -- Give the player some arrows */
 		object_prep(q_ptr, lookup_kind(TV_BOW, SV_SHORT_BOW));
-
-		/* These objects are "storebought" */
-//		q_ptr->ident |= IDENT_STOREB;
 
 		object_aware(q_ptr);
 		object_known(q_ptr);
@@ -3528,9 +3515,6 @@ void player_outfit(void)
 		/* Hack -- Give the player some arrows */
 		object_prep(q_ptr, lookup_kind(TV_ARROW, SV_AMMO_NORMAL));
 		q_ptr->number = (byte)rand_range(15, 20);
-
-		/* These objects are "storebought" */
-//		q_ptr->ident |= IDENT_STOREB;
 
 		object_aware(q_ptr);
 		object_known(q_ptr);
@@ -3548,9 +3532,6 @@ void player_outfit(void)
 		q_ptr->number = 1;
 		q_ptr->pval = (byte)rand_range(25, 30);
 
-		/* These objects are "storebought" */
-//		q_ptr->ident |= IDENT_STOREB;
-
 		object_aware(q_ptr);
 		object_known(q_ptr);
 
@@ -3567,9 +3548,6 @@ void player_outfit(void)
 			/* Hack -- Give the player some arrows */
 			object_prep(q_ptr, lookup_kind(i, 0));
 			q_ptr->number = 1;
-
-			/* These objects are "storebought" */
-//			q_ptr->ident |= IDENT_STOREB;
 
 			object_aware(q_ptr);
 			object_known(q_ptr);
@@ -3589,9 +3567,6 @@ void player_outfit(void)
 			object_prep(q_ptr, lookup_kind(TV_SHOT, SV_AMMO_LIGHT));
 			q_ptr->number = (byte)rand_range(15, 20);
 
-			/* These objects are "storebought" */
-//			q_ptr->ident |= IDENT_STOREB;
-
 			object_aware(q_ptr);
 			object_known(q_ptr);
 
@@ -3605,9 +3580,6 @@ void player_outfit(void)
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_BISCUIT));
 		q_ptr->number = (byte)rand_range(2, 4);
 
-		/* These objects are "storebought" */
-//		q_ptr->ident |= IDENT_STOREB;
-
 		object_aware(q_ptr);
 		object_known(q_ptr);
 
@@ -3619,9 +3591,6 @@ void player_outfit(void)
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_WAYBREAD));
 		q_ptr->number = (byte)rand_range(2, 4);
-
-		/* These objects are "storebought" */
-//		q_ptr->ident |= IDENT_STOREB;
 
 		object_aware(q_ptr);
 		object_known(q_ptr);
@@ -3635,9 +3604,6 @@ void player_outfit(void)
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_JERKY));
 		q_ptr->number = (byte)rand_range(1, 3);
 
-		/* These objects are "storebought" */
-//		q_ptr->ident |= IDENT_STOREB;
-
 		object_aware(q_ptr);
 		object_known(q_ptr);
 
@@ -3650,9 +3616,6 @@ void player_outfit(void)
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_PINT_OF_ALE));
 		q_ptr->number = (byte)rand_range(2, 4);
 
-		/* These objects are "storebought" */
-//		q_ptr->ident |= IDENT_STOREB;
-
 		object_aware(q_ptr);
 		object_known(q_ptr);
 
@@ -3664,9 +3627,6 @@ void player_outfit(void)
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_PINT_OF_WINE));
 		q_ptr->number = (byte)rand_range(2, 4);
-
-		/* These objects are "storebought" */
-//		q_ptr->ident |= IDENT_STOREB;
 
 		object_aware(q_ptr);
 		object_known(q_ptr);
@@ -3682,9 +3642,6 @@ void player_outfit(void)
 		/* Hack -- Give the player some arrows */
 		object_prep(q_ptr, lookup_kind(TV_SPIKE, 0));
 		q_ptr->number = (byte)rand_range(15, 20);
-
-		/* These objects are "storebought" */
-//		q_ptr->ident |= IDENT_STOREB;
 
 		object_aware(q_ptr);
 		object_known(q_ptr);
@@ -3738,9 +3695,6 @@ void player_outfit(void)
 		{
 			q_ptr->name2 = EGO_BRAND_POIS;
 		}
-
-		/* These objects are "storebought" */
-//		q_ptr->ident |= IDENT_STOREB;
 
 		object_aware(q_ptr);
 		object_known(q_ptr);
@@ -4377,7 +4331,7 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 
 	while(1)
 	{
-		unsigned char temp[80*9];
+		char temp[80*9];
 		cptr t;
 
 		/* Choose the players race */
@@ -4413,7 +4367,7 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 	/* Choose the players class */
 	while(1)
 	{
-		unsigned char temp[80*9];
+		char temp[80*9];
 		cptr t;
 
 		/* Choose the players race */
@@ -4448,7 +4402,7 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 	/* Choose the players seikaku */
 	while(1)
 	{
-		unsigned char temp[80*8];
+		char temp[80*8];
 		cptr t;
 
 		/* Choose the players race */
@@ -5367,7 +5321,7 @@ void player_birth(void)
 
 void dump_yourself(FILE *fff)
 {
-	unsigned char temp[80*8];
+	char temp[80*8];
 	int i;
 	cptr t;
 

@@ -2271,7 +2271,7 @@ static cptr simplify_list[][2] =
 
 static void display_shortened_item_name(object_type *o_ptr, int y)
 {
-	unsigned char buf[MAX_NLEN];
+	char buf[MAX_NLEN];
 	char *c = buf;
 	int len = 0;
 
@@ -2318,7 +2318,6 @@ static void display_shortened_item_name(object_type *o_ptr, int y)
 		}
 	}
 	*c='\0';
-//	put_str(buf,y,0); 
 	Term_putstr(0, y, 12, tval_to_attr[o_ptr->tval % 128], buf);
 }
 
@@ -2490,7 +2489,7 @@ void display_map(int *cy, int *cx)
 		  display_shortened_item_name(autopick_obj, y);
 #else
 	  {
-		  unsigned char buf[13] = "\0";
+		  char buf[13] = "\0";
 		  strncpy(buf,autopick_name[match_autopick],12);
 		  buf[12] = '\0';
 		  put_str(buf,y,0); 

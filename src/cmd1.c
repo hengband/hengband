@@ -802,7 +802,7 @@ bool can_player_destroy_object(object_type *o_ptr)
 int is_autopick(object_type *o_ptr)
 {
 	int i;
-	unsigned char o_name[MAX_NLEN];
+	char o_name[MAX_NLEN];
 	cptr str;
 #ifdef JP
 	static char kanji_colon[] = "：";
@@ -4655,7 +4655,7 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 
 			energy_use = 0;
 			/* Hack -- Enter building */
-			command_new = ']';
+			command_new = 254;
 		}
 
 		/* Handle quest areas -KMW- */
@@ -4666,7 +4666,6 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 
 			energy_use = 0;
 			/* Hack -- Enter quest level */
-//			command_new = '[';
 			command_new = 255;
 		}
 
@@ -4781,7 +4780,7 @@ static int see_wall(int dir, int y, int x)
 	if ((cave[y][x].feat >= FEAT_BLDG_HEAD) &&
 	    (cave[y][x].feat <= FEAT_BLDG_TAIL)) return (FALSE);
 
-//	if (cave[y][x].feat == FEAT_TREES) return (FALSE);
+/*	if (cave[y][x].feat == FEAT_TREES) return (FALSE); */
 
 	/* Must be known to the player */
 	if (!(cave[y][x].info & (CAVE_MARK))) return (FALSE);
@@ -5274,8 +5273,8 @@ static bool run_test(void)
 		}
 
 		/* Analyze unknown grids and floors */
-//		if (inv || cave_floor_bold(row, col) ||
-//		    (cave[row][col].feat == FEAT_TREES))
+/*		if (inv || cave_floor_bold(row, col) || */
+/*		    (cave[row][col].feat == FEAT_TREES)) */
 		if (inv || cave_floor_bold(row, col))
 		{
 			/* Looking for open area */

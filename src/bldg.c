@@ -1342,7 +1342,7 @@ sprintf(tmp_str, "現在の掛け金:     %9ld", wager);
 			prt(tmp_str, 21, 2);
 
 			/* Prevent savefile-scumming of the casino */
-//			Rand_quick = TRUE;
+/*			Rand_quick = TRUE; */
 			Rand_value = time(NULL);
 
 			do
@@ -1674,11 +1674,11 @@ static bool vault_aux_battle(int r_idx)
 	monster_race *r_ptr = &r_info[r_idx];
 
 	/* Decline town monsters */
-//	if (!monster_dungeon(r_idx)) return FALSE;
+/*	if (!monster_dungeon(r_idx)) return FALSE; */
 
 	/* Decline unique monsters */
-//	if (r_ptr->flags1 & (RF1_UNIQUE)) return (FALSE);
-//	if (r_ptr->flags7 & (RF7_UNIQUE_7)) return (FALSE);
+/*	if (r_ptr->flags1 & (RF1_UNIQUE)) return (FALSE); */
+/*	if (r_ptr->flags7 & (RF7_UNIQUE_7)) return (FALSE); */
 
 	if (r_ptr->flags1 & (RF1_NEVER_MOVE)) return (FALSE);
 	if (r_ptr->flags2 & (RF2_MULTIPLY)) return (FALSE);
@@ -2358,7 +2358,6 @@ static bool kankin(void)
 		msg_print(NULL);
 		return FALSE;
 	}
-//	msg_print(NULL);
 	return TRUE;
 }
 
@@ -2678,7 +2677,6 @@ msg_print("バーテンはいくらかの食べ物とビールをくれた。");
 			msg_print("The barkeep gives you some gruel and a beer.");
 #endif
 
-//			msg_print(NULL);
 			(void)set_food(PY_FOOD_MAX - 1);
 			break;
 
@@ -2701,7 +2699,6 @@ msg_print("すみません、でもうちで誰かに死なれちゃ困りますんで。");
 					msg_print("Sorry, but don't want anyone dying in here.");
 #endif
 
-//					return (FALSE);
 				}
 				else
 				{
@@ -2785,7 +2782,6 @@ msg_print("あなたはリフレッシュして目覚め、新たな日を迎えた。");
 #endif
 					}
 
-//					msg_print(NULL);
 					p_ptr->leftbldg = TRUE;
 				}
 			}
@@ -2797,7 +2793,6 @@ msg_print("部屋は夜だけ使用可能です。");
 				msg_print("The rooms are available only at night.");
 #endif
 
-//				msg_print(NULL);
 				return (FALSE);
 			}
 			break;
@@ -2812,7 +2807,6 @@ msg_print("部屋は夜だけ使用可能です。");
 #endif
 
 					msg_format("%s", Rumor);
-//				msg_print(NULL);
 				break;
 			}
 	}
@@ -2833,7 +2827,6 @@ msg_format("＄%d を手に入れた。", i);
 	msg_format("You collect %d gold pieces", i);
 #endif
 
-//	msg_print(NULL);
 	p_ptr->au += i;
 }
 
@@ -2999,7 +2992,6 @@ msg_format("クエスト: %sを %d体倒す", name,q_ptr->max_num);
 			msg_format("Your quest: kill %d %s", q_ptr->max_num, name);
 #endif
 
-//			msg_print(NULL);
 		}
 		else
 		{
@@ -3423,7 +3415,6 @@ msg_format("%sを改良するだけのゴールドがありません！", tmp_str);
 		msg_format("You do not have the gold to improve %s!", tmp_str);
 #endif
 
-//		msg_print(NULL);
 		return (FALSE);
 	}
 
@@ -3490,8 +3481,6 @@ msg_format("＄%d で%sを改良しました。", cost * o_ptr->number, tmp_str );
 #else
 		msg_format("Improved %s for %d gold.", tmp_str, cost * o_ptr->number);
 #endif
-
-//		msg_print(NULL);
 
 		/* Charge the money */
 		p_ptr->au -= (cost * o_ptr->number);
@@ -3633,7 +3622,6 @@ msg_format("それは再充填する必要はありません。");
 			msg_format("That doesn't need to be recharged.");
 #endif
 
-//			msg_print(NULL);
 			return;
 		}
 	}
@@ -3674,7 +3662,6 @@ msg_print("この魔法棒はもう充分に充填されています。");
 			msg_print("This wand is already fully charged.");
 #endif
 		}
-//		msg_print(NULL);
 		return;
 	}
 	else if (o_ptr->tval == TV_STAFF && o_ptr->pval >= k_ptr->pval)
@@ -3695,7 +3682,6 @@ msg_print("この杖はもう充分に充填されています。");
 			msg_print("This staff is already fully charged.");
 #endif
 		}
-//		msg_print(NULL);
 		return;
 	}
 
@@ -3709,7 +3695,6 @@ msg_format("%sを再充填するには＄%d 必要です！", tmp_str,price );
 		msg_format("You need %d gold to recharge %s!", price, tmp_str);
 #endif
 
-//		msg_print(NULL);
 		return;
 	}
 
@@ -3768,8 +3753,6 @@ msg_format("%sを＄%d で再充填しました。", tmp_str, price);
 #else
 	msg_format("%^s %s recharged for %d gold.", tmp_str, ((o_ptr->number > 1) ? "were" : "was"), price);
 #endif
-
-//	msg_print(NULL);
 
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
@@ -4068,8 +4051,6 @@ msg_print("それを選択する権利はありません！");
 #else
 		msg_print("You have no right to choose that!");
 #endif
-
-//		msg_print(NULL);
 		return;
 	}
 
@@ -4083,8 +4064,6 @@ msg_print("お金が足りません！");
 #else
 		msg_print("You do not have the gold!");
 #endif
-
-//		msg_print(NULL);
 		return;
 	}
 
@@ -4211,8 +4190,6 @@ msg_print("今日の分け前はすでに支払ったぞ！");
 #else
 					msg_print("You just had your daily allowance!");
 #endif
-
-//					msg_print(NULL);
 				}
 				break;
 			case BACT_ENCHANT_ARROWS:

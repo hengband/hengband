@@ -3066,7 +3066,7 @@ static void cave_fill(byte y, byte x)
 			{
 				/* affect boundary */
 				cave[j][i].info |= CAVE_ICKY;
-//				return;
+/*				return; */
 			}
 
 			/* If within bounds */

@@ -1706,7 +1706,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		char dummy_name[80];
 		strcpy(dummy_name, "");
 		(void)identify_fully_aux(o_ptr);
-//		o_ptr->ident |= IDENT_STOREB; /* This will be used later on... */
+
 #ifdef JP
 		if (!(get_string("このアーティファクトを何と名付けますか？", dummy_name, 80)))
 #else

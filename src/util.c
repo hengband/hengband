@@ -979,6 +979,118 @@ static int dehex(char c)
 }
 
 
+static int my_stricmp(cptr a, cptr b)
+{
+	cptr s1, s2;
+	char z1, z2;
+
+	/* Scan the strings */
+	for (s1 = a, s2 = b; TRUE; s1++, s2++)
+	{
+		z1 = FORCEUPPER(*s1);
+		z2 = FORCEUPPER(*s2);
+		if (z1 < z2) return (-1);
+		if (z1 > z2) return (1);
+		if (!z1) return (0);
+	}
+}
+
+static int my_strnicmp(cptr a, cptr b, int n)
+{
+	cptr s1, s2;
+	char z1, z2;
+
+	/* Scan the strings */
+	for (s1 = a, s2 = b; n > 0; s1++, s2++, n--)
+	{
+		z1 = FORCEUPPER(*s1);
+		z2 = FORCEUPPER(*s2);
+		if (z1 < z2) return (-1);
+		if (z1 > z2) return (1);
+		if (!z1) return (0);
+	}
+	return 0;
+}
+
+
+static void trigger_text_to_ascii(char **bufptr, cptr *strptr)
+{
+	char *s = *bufptr;
+	cptr str = *strptr;
+	bool mod_status[MAX_MACRO_MOD];
+
+	int i, len = 0;
+	int shiftstatus = 0;
+	cptr key_code;
+
+	if (macro_template == NULL)
+		return;
+	
+	for (i = 0; macro_modifier_chr[i]; i++)
+		mod_status[i] = FALSE;
+	str++;
+
+	/* Examine modifier keys */
+	while (1)
+	{
+		for (i=0; macro_modifier_chr[i]; i++)
+		{
+			len = strlen(macro_modifier_name[i]);
+			
+			if(!my_strnicmp(str, macro_modifier_name[i], len))
+				break;
+		}
+		if (!macro_modifier_chr[i]) break;
+		str += len;
+		mod_status[i] = TRUE;
+		if ('S' == macro_modifier_chr[i])
+			shiftstatus = 1;
+	}
+	for (i = 0; i < max_macrotrigger; i++)
+	{
+		len = strlen(macro_trigger_name[i]);
+		if (!my_strnicmp(str, macro_trigger_name[i], len) && ']' == str[len])
+		{
+			/* a trigger name found */
+			break;
+		}
+	}
+	if (i == max_macrotrigger)
+		return;
+	key_code = macro_trigger_keycode[shiftstatus][i];
+	str += len;
+
+	*s++ = (char)31;
+	for (i = 0; macro_template[i]; i++)
+	{
+		char ch = macro_template[i];
+		int j;
+
+		switch(ch)
+		{
+		case '&':
+			for (j = 0; macro_modifier_chr[j]; j++) {
+				if (mod_status[j])
+					*s++ = macro_modifier_chr[j];
+			}
+			break;
+		case '#':
+			strcpy(s, key_code);
+			s += strlen(key_code);
+			break;
+		default:
+			*s++ = ch;
+			break;
+		}
+	}
+	*s++ = (char)13;
+
+	*bufptr = s;
+	*strptr = str; /* where **strptr == ']' */
+	return;
+}
+
+
 /*
  * Hack -- convert a printable string into real ascii
  *
@@ -998,6 +1110,13 @@ void text_to_ascii(char *buf, cptr str)
 		{
 			/* Skip the backslash */
 			str++;
+
+                        /* Macro Trigger */
+			if (*str == '[')
+			{
+				trigger_text_to_ascii(&s, &str);
+			}
+			else
 
 			/* Hex-mode XXX */
 			if (*str == 'x')
@@ -1105,6 +1224,68 @@ void text_to_ascii(char *buf, cptr str)
 }
 
 
+bool trigger_ascii_to_text(char **bufptr, cptr *strptr)
+{
+	char *s = *bufptr;
+	cptr str = *strptr;
+	char key_code[100];
+	int i;
+	cptr tmp;
+
+	if (macro_template == NULL)
+		return FALSE;
+
+	*s++ = '\\';
+	*s++ = '[';
+
+	for (i = 0; macro_template[i]; i++)
+	{
+		int j;
+		char ch = macro_template[i];
+
+		switch(ch)
+		{
+		case '&':
+			while ((tmp = strchr(macro_modifier_chr, *str)))
+			{
+				j = (int)(tmp - macro_modifier_chr);
+				tmp = macro_modifier_name[j];
+				while(*tmp) *s++ = *tmp++;
+				str++;
+			}
+			break;
+		case '#':
+			for (j = 0; *str && *str != (char)13; j++)
+				key_code[j] = *str++;
+			key_code[j] = '\0';
+			break;
+		default:
+			if (ch != *str) return FALSE;
+			str++;
+		}
+	}
+	if (*str++ != (char)13) return FALSE;
+
+	for (i = 0; i < max_macrotrigger; i++)
+	{
+		if (!my_stricmp(key_code, macro_trigger_keycode[0][i])
+		    || !my_stricmp(key_code, macro_trigger_keycode[1][i]))
+			break;
+	}
+	if (i == max_macrotrigger)
+		return FALSE;
+
+	tmp = macro_trigger_name[i];
+	while (*tmp) *s++ = *tmp++;
+
+	*s++ = ']';
+	
+	*bufptr = s;
+	*strptr = str;
+	return TRUE;
+}
+
+
 /*
  * Hack -- convert a string into a printable form
  */
@@ -1116,6 +1297,17 @@ void ascii_to_text(char *buf, cptr str)
 	while (*str)
 	{
 		byte i = (byte)(*str++);
+
+		/* Macro Trigger */
+		if (i == 31)
+		{
+			if(!trigger_ascii_to_text(&s, &str))
+			{
+				*s++ = '^';
+				*s++ = '_';
+			}
+		}
+		else
 
 		if (i == ESCAPE)
 		{
@@ -1880,7 +2072,7 @@ char inkey(void)
 
 
 		/* Treat back-quote as escape */
-//		if (ch == '`') ch = ESCAPE;
+/*		if (ch == '`') ch = ESCAPE; */
 
 
 		/* End "macro trigger" */
@@ -3112,7 +3304,7 @@ bool get_check(cptr prompt)
 	while (TRUE)
 	{
 		i = inkey();
-//		if (quick_messages) break;
+/*		if (quick_messages) break; */
 		if (i == ESCAPE) break;
 		if (strchr("YyNn", i)) break;
 		bell();
@@ -3934,9 +4126,9 @@ prt(format("回数: %d", command_arg), 0, 0);
 			{
 				/* Get a real command */
 #ifdef JP
-				if (!get_com("コマンド: ", &cmd, FALSE))
+				if (!get_com("コマンド: ", (char *)&cmd, FALSE))
 #else
-				if (!get_com("Command: ", &cmd, FALSE))
+				if (!get_com("Command: ", (char *)&cmd, FALSE))
 #endif
 
 				{
@@ -3955,9 +4147,9 @@ prt(format("回数: %d", command_arg), 0, 0);
 		{
 			/* Get a real command */
 #ifdef JP
-			(void)get_com("コマンド: ", &cmd, FALSE);
+			(void)get_com("コマンド: ", (char *)&cmd, FALSE);
 #else
-			(void)get_com("Command: ", &cmd, FALSE);
+			(void)get_com("Command: ", (char *)&cmd, FALSE);
 #endif
 
 
@@ -3971,9 +4163,9 @@ prt(format("回数: %d", command_arg), 0, 0);
 		{
 			/* Get a new command and controlify it */
 #ifdef JP
-			if (get_com("CTRL: ", &cmd, FALSE)) cmd = KTRL(cmd);
+			if (get_com("CTRL: ", (char *)&cmd, FALSE)) cmd = KTRL(cmd);
 #else
-			if (get_com("Control: ", &cmd, FALSE)) cmd = KTRL(cmd);
+			if (get_com("Control: ", (char *)&cmd, FALSE)) cmd = KTRL(cmd);
 #endif
 
 		}
@@ -4557,7 +4749,7 @@ void roff_to_buf(cptr str, int maxlen, char *tbuf)
 			ch[0] = ' ';
 #endif
 
-		if (line_len >= maxlen || str[read_pt] == '\n')
+		if (line_len >= maxlen - 1 || str[read_pt] == '\n')
 		{
 			int word_len;
 
@@ -4582,8 +4774,8 @@ void roff_to_buf(cptr str, int maxlen, char *tbuf)
 			word_punct = read_pt;
 #ifdef JP
 		if (kanji &&
-		    strcmp(ch, "。") != 0 && strcmp(ch, "、") != 0 &&
-		    strcmp(ch, "ィ") != 0 && strcmp(ch, "ー") != 0)
+		    strcmp((char *)ch, "。") != 0 && strcmp((char *)ch, "、") != 0 &&
+		    strcmp((char *)ch, "ィ") != 0 && strcmp((char *)ch, "ー") != 0)
 			word_punct = read_pt;
 #endif
 		tbuf[write_pt++] = ch[0];

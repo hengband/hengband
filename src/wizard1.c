@@ -809,7 +809,7 @@ static const flag_desc misc_flags3_desc[] =
 	{ TR3_TELEPATHY,          "¥Æ¥ì¥Ñ¥·¡¼" },
 	{ TR3_SLOW_DIGEST,        "ÃÙ¾Ã²½" },
 	{ TR3_REGEN,              "µÞÂ®²óÉü" },
-//	{ TR3_XTRA_MIGHT,         "¶¯ÎÏ¼Í·â" },
+/*	{ TR3_XTRA_MIGHT,         "¶¯ÎÏ¼Í·â" }, */
 	{ TR3_XTRA_SHOTS,         "ÄÉ²Ã¼Í·â" },        /* always +1? */
 	{ TR3_DRAIN_EXP,          "·Ð¸³ÃÍµÛ¼ý" },
 	{ TR3_AGGRAVATE,          "È¿´¶" },
@@ -826,7 +826,7 @@ static const flag_desc misc_flags3_desc[] =
 	{ TR3_TELEPATHY,          "ESP" },
 	{ TR3_SLOW_DIGEST,        "Slow Digestion" },
 	{ TR3_REGEN,              "Regeneration" },
-//	{ TR3_XTRA_MIGHT,         "Extra Might" },
+/*	{ TR3_XTRA_MIGHT,         "Extra Might" }, */
 	{ TR3_XTRA_SHOTS,         "+1 Extra Shot" },        /* always +1? */
 	{ TR3_DRAIN_EXP,          "Drains Experience" },
 	{ TR3_AGGRAVATE,          "Aggravates" },
@@ -1174,7 +1174,7 @@ static void analyze_misc_magic (object_type *o_ptr, cptr *misc_list)
 	 * being "lightly cursed".
 	 */
 
-//	if (cursed_p(o_ptr))
+/*	if (cursed_p(o_ptr)) */
 	if (1)
 	{
 		if (f3 & TR3_TY_CURSE)
@@ -1201,7 +1201,7 @@ static void analyze_misc_magic (object_type *o_ptr, cptr *misc_list)
 			*misc_list++ = "Heavily Cursed";
 #endif
 		}
-//		else
+/*		else */
 		else if (f3 & TR3_CURSED)
 		{
 #ifdef JP
@@ -1688,7 +1688,7 @@ static void spoil_mon_desc(cptr fname)
 		if (r_ptr->flags7 & (RF7_KAGE)) continue;
 
 		/* Get the "name" */
-//		if (r_ptr->flags1 & (RF1_QUESTOR))
+/*		if (r_ptr->flags1 & (RF1_QUESTOR)) */
 		if (0)
 		{
 			sprintf(nam, "[Q] %s", name);

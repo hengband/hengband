@@ -508,7 +508,7 @@ msg_print("生者の食物はあなたにとってほとんど栄養にならない。");
  */
 static bool item_tester_hook_eatable(object_type *o_ptr)
 {
-//	if ((o_ptr->tval==TV_FOOD) || ((o_ptr->tval==TV_CORPSE) && o_ptr->sval)) return (TRUE);
+/*	if ((o_ptr->tval==TV_FOOD) || ((o_ptr->tval==TV_CORPSE) && o_ptr->sval)) return (TRUE); */
 	if (o_ptr->tval==TV_FOOD) return (TRUE);
 
 	/* Assume not */
@@ -3040,7 +3040,6 @@ static int wand_effect(int sval, int dir, bool magic)
 			break;
 		}
 
-//		case SV_WAND_ANNIHILATION:
 		case SV_WAND_DISINTEGRATE:
 		{
 			fire_ball(GF_DISINTEGRATE, dir, 200 + randint(p_ptr->lev * 2), 2);
@@ -5504,7 +5503,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 #ifdef JP
 				msg_print("アミュレットが深い闇に覆われた...");
 #else
-				msg_print("nanka.");
+				msg_print("Your amulet is coverd in pitch-darkness...");
 #endif
 				if (!get_aim_dir(&dir)) return;
 				fire_ball(GF_DARK, dir, 250, 4);

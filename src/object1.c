@@ -4278,7 +4278,7 @@ void display_equip(void)
 #ifdef JP
 			strcpy(o_name, "(武器を両手持ち)");
 #else
-			strcpy(o_name, "(wielding a weapon with two-handed.)");
+			strcpy(o_name, "(wielding with two-hands)");
 #endif
 			attr = 1;
 		}
@@ -4564,7 +4564,7 @@ int show_equip(int target_item)
 #ifdef JP
 			(void)strcpy(out_desc[k],"(武器を両手持ち)");
 #else
-			(void)strcpy(out_desc[k],"(wielding a weapon with two-handed.)");
+			(void)strcpy(out_desc[k],"(wielding with two-hands)");
 #endif
 			out_color[k] = 1;
 		}

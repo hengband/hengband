@@ -68,7 +68,7 @@ static int highscore_where(high_score *score)
 		int old_score;
 		if (highscore_read(&the_score)) return (i);
 		old_score = atoi(the_score.pts);
-//		if (strcmp(the_score.pts, score->pts) < 0) return (i);
+/*		if (strcmp(the_score.pts, score->pts) < 0) return (i); */
 		if (my_score > old_score) return (i);
 	}
 
@@ -249,7 +249,7 @@ sprintf(tmp_val, "( %d 位以下 )", k + 1);
 
 			/* Dump some info */
 #ifdef JP
-//sprintf(out_val, "%3d.%9s  %s%s%sという名の%sの%s (レベル %d)",
+/*sprintf(out_val, "%3d.%9s  %s%s%sという名の%sの%s (レベル %d)", */
 			sprintf(out_val, "%3d.%9s  %s%s%s - %s%s (レベル %d)",
 			        place, the_score.pts,
  				seikaku_info[pa].title, (seikaku_info[pa].no ? "の" : ""),
@@ -498,7 +498,7 @@ errr top_twenty(void)
 	(void)sprintf(the_score.day, "%-.6s %-.2s", ctime(&ct) + 4, ctime(&ct) + 22);
 #else
 	/* Save the date in standard form (8 chars) */
-//	(void)strftime(the_score.day, 9, "%m/%d/%y", localtime(&ct));
+/*	(void)strftime(the_score.day, 9, "%m/%d/%y", localtime(&ct)); */
 	/* Save the date in standard encoded form (9 chars) */
 	strftime(the_score.day, 10, "@%Y%m%d", localtime(&ct));
 #endif

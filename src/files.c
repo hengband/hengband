@@ -393,7 +393,13 @@ static named_num gf_desc[] =
  *
  * Specify the set of colors to use when drawing a zapped spell
  *   Z:<type>:<str>
+ *
+ * Specify a macro trigger template and macro trigger names.
+ *   T:<template>:<modifier chr>:<modifier name1>:<modifier name2>:...
+ *   T:<trigger>:<keycode>:<shift-keycode>
+ *
  */
+
 errr process_pref_file_command(char *buf)
 {
 	int i, j, n1, n2;
@@ -644,7 +650,95 @@ errr process_pref_file_command(char *buf)
 			}
 		}
 	}
+	/* set macro trigger names and a template */
+	/* Process "T:<trigger>:<keycode>:<shift-keycode>" */
+	/* Process "T:<template>:<modifier chr>:<modifier name>:..." */
+	else if (buf[0] == 'T')
+	{
+		int len, tok;
+		tok = tokenize(buf+2, 2+MAX_MACRO_MOD, zz, 0);
+		if (tok >= 4)
+		{
+			int i;
+			int num;
 
+			if (macro_template != NULL)
+			{
+				free(macro_template);
+				macro_template = NULL;
+				for (i = 0; i < max_macrotrigger; i++)
+					free(macro_trigger_name[i]);
+				max_macrotrigger = 0;
+			}
+			
+			if (*zz[0] == '\0') return 0; /* clear template */
+			num = strlen(zz[1]);
+			if (2 + num != tok) return 1; /* error */
+
+			len = strlen(zz[0])+1+num+1;
+			for (i = 0; i < num; i++)
+				len += strlen(zz[2+i])+1;
+			macro_template = malloc(len);
+
+			strcpy(macro_template, zz[0]);
+			macro_modifier_chr =
+				macro_template + strlen(macro_template) + 1;
+			strcpy(macro_modifier_chr, zz[1]);
+			macro_modifier_name[0] =
+				macro_modifier_chr + strlen(macro_modifier_chr) + 1;
+			for (i = 0; i < num; i++)
+			{
+				strcpy(macro_modifier_name[i], zz[2+i]);
+				macro_modifier_name[i+1] = macro_modifier_name[i] + 
+					strlen(macro_modifier_name[i]) + 1;
+			}
+		}
+		else if (tok >= 2)
+		{
+			int m;
+			char *t, *s;
+			if (max_macrotrigger >= MAX_MACRO_TRIG)
+			{
+#ifdef JP
+				msg_print("マクロトリガーの設定が多すぎます!");
+#else
+				msg_print("Too many macro triggers!");
+#endif
+				return 1;
+			}
+			m = max_macrotrigger;
+			max_macrotrigger++;
+
+			len = strlen(zz[0]) + 1 + strlen(zz[1]) + 1;
+			if (tok == 3)
+				len += strlen(zz[2]) + 1;
+			macro_trigger_name[m] = malloc(len);
+
+			t = macro_trigger_name[m];
+			s = zz[0];
+			while (*s)
+			{
+				if ('\\' == *s) s++;
+				*t++ = *s++;
+			}
+			*t = '\0';
+
+			macro_trigger_keycode[0][m] = macro_trigger_name[m] +
+				strlen(macro_trigger_name[m]) + 1;
+			strcpy(macro_trigger_keycode[0][m], zz[1]);
+			if (tok == 3)
+			{
+				macro_trigger_keycode[1][m] = macro_trigger_keycode[0][m] +
+					strlen(macro_trigger_keycode[0][m]) + 1;
+				strcpy(macro_trigger_keycode[1][m], zz[2]);
+			}
+			else
+			{
+				macro_trigger_keycode[1][m] = macro_trigger_keycode[0][m];
+			}
+		}
+		return 0;
+	}
 
 	/* Failure */
 	return (1);
@@ -818,6 +912,11 @@ static cptr process_pref_file_expr(char **sp, char *fp)
 			{
 				v = ANGBAND_SYS;
 			}
+
+                        else if (streq(b+1, "KEYBOARD"))
+                        {
+                                v = ANGBAND_KEYBOARD;
+                        }
 
 			/* Graphics */
 			else if (streq(b+1, "GRAF"))
@@ -2824,7 +2923,7 @@ static void player_vuln_flags(u32b *f1, u32b *f2, u32b *f3)
  */
 static void display_player_flag_aux(int row, int col, char *header,
 				    int n, u32b flag1, u32b flag2,
-				    s32b im_f[], s32b vul_f)
+				    u32b im_f[], u32b vul_f)
 {
 	int     i;
 	u32b    f[3];
@@ -4562,9 +4661,9 @@ fprintf(fff, "\n\n  [プレイヤーの徳]\n\n");
 #else
 	if (p_ptr->align > 150) disp_align = "lawful";
 	else if (p_ptr->align > 50) disp_align = "good";
-	else if (p_ptr->align > 10) disp_align = "nutral good";
-	else if (p_ptr->align > -11) disp_align = "nutral";
-	else if (p_ptr->align > -51) disp_align = "nutral evil";
+	else if (p_ptr->align > 10) disp_align = "neutral good";
+	else if (p_ptr->align > -11) disp_align = "neutral";
+	else if (p_ptr->align > -51) disp_align = "neutral evil";
 	else if (p_ptr->align > -151) disp_align = "evil";
 	else disp_align = "chaotic";
 	fprintf(fff, "Your alighnment : %s\n", disp_align);
@@ -4604,7 +4703,7 @@ fprintf(fff, "  [ キャラクタの装備 ]\n\n");
 #ifdef JP
 				strcpy(o_name, "(武器を両手持ち)");
 #else
-				strcpy(o_name, "(wielding a weapon with two-handed.)");
+				strcpy(o_name, "(wielding with two-hands)");
 #endif
 			fprintf(fff, "%c%s %s\n",
 				index_to_label(i), paren, o_name);
@@ -6511,7 +6610,7 @@ void close_game(void)
 	char buf[1024];
 	bool do_send = TRUE;
 
-//	cptr p = "[i:キャラクタの情報, f:ファイル書き出し, t:スコア, x:*鑑定*, ESC:ゲーム終了]";
+/*	cptr p = "[i:キャラクタの情報, f:ファイル書き出し, t:スコア, x:*鑑定*, ESC:ゲーム終了]"; */
 
 	/* Handle stuff */
 	handle_stuff();
@@ -6889,7 +6988,7 @@ errr process_pickpref_file(cptr name)
 {
 	FILE *fp;
 
-	unsigned char buf[1024] , *s, *s2, isnew;
+	char buf[1024] , *s, *s2, isnew;
 
 	int i;
 
@@ -6916,10 +7015,7 @@ errr process_pickpref_file(cptr name)
 		num++;
 
 		/* Skip "empty" lines */
-		if (buf[0]<32) continue;
-
-		/* Skip "blank" lines */
-		if (isspace(buf[0])) continue;
+		if (buf[0] == '\0') continue;
 
 		/* Skip comments */
 		if (buf[0] == '#') continue;
@@ -6958,7 +7054,19 @@ errr process_pickpref_file(cptr name)
 		}
 
                 /* Nuke illegal char */
-                for(i=0 ; buf[i]>31 ; i++){/* Do nothing */} buf[i]=0;
+                for(i=0 ; buf[i]; i++)
+		{
+#ifdef JP
+			if (iskanji(buf[i]))
+			{
+				i++;
+				continue;
+			}
+#endif
+			if (isspace(buf[i]) && buf[i] != ' ')
+				break;
+		}
+		buf[i]=0;
 
                 s = buf;
                 /* Skip '!','~' */

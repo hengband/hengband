@@ -162,7 +162,7 @@ static void roff_aux(int r_idx, int remem)
 		save_mem = *r_ptr;
 
 		/* Hack -- Maximal kills */
-//		r_ptr->r_tkills = MAX_SHORT;
+/*		r_ptr->r_tkills = MAX_SHORT; */
 
 		/* Hack -- Maximal info */
 		r_ptr->r_wake = r_ptr->r_ignore = MAX_UCHAR;

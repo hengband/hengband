@@ -283,7 +283,7 @@ static void rd_string(char *str, int max)
 					tmp[i] = c1;
 			}
 			tmp[l] = 0;
-			strcpy(str, tmp);
+			strcpy(str, (char *)tmp);
 		}
 #endif
 
@@ -1091,8 +1091,8 @@ static void rd_options(void)
 	cheat_know = (c & 0x1000) ? TRUE : FALSE;
 	cheat_live = (c & 0x2000) ? TRUE : FALSE;
 
-	rd_byte(&autosave_l);
-	rd_byte(&autosave_t);
+	rd_byte((byte *)&autosave_l);
+	rd_byte((byte *)&autosave_t);
 	rd_s16b(&autosave_freq);
 
 
@@ -1649,8 +1649,8 @@ note(format("の中", tmp16s));
 		rd_byte(&tmp8u);
 		if (tmp8u) p_ptr->action = ACTION_LEARN;
 	}
-	rd_byte(&preserve_mode);
-	rd_byte(&wait_report_score);
+	rd_byte((byte *)&preserve_mode);
+	rd_byte((byte *)&wait_report_score);
 
 	/* Future use */
 	for (i = 0; i < 48; i++) rd_byte(&tmp8u);
@@ -2604,9 +2604,9 @@ note(format("クエストが多すぎる(%u)！", max_quests_load));
 		}
 
 		if (z_older_than(10, 3, 7)) p_ptr->wild_mode = FALSE;
-		else rd_byte(&p_ptr->wild_mode);
+		else rd_byte((byte *)&p_ptr->wild_mode);
 		if (z_older_than(10, 3, 7)) ambush_flag = FALSE;
-		else rd_byte(&ambush_flag);
+		else rd_byte((byte *)&ambush_flag);
 
 		/* Size of the wilderness */
 		rd_s32b(&wild_x_size);

@@ -15,9 +15,8 @@
        ZAngband Jap ver.:    Mitsuhiro Itakera < m-itakura@geocities.co.jp >
 
 
-          Hengband: Mr.hoge (echizen @ s5.xrea.com) & Meny others
-                     http://echizen.s5.xrea.com/heng/
+           Hengband: Mr.Hoge (echizen @ s5.xrea.com) & Many others
+                       http://echizen.s5.xrea.com/heng/
 
-           Hengband is running on UNIX/X11, Windows, Macintosh.
-   Please report bugs at BBS "http://echizen.s5.xrea.com/heng/eng-hengband/".
-
+                 Send bug report to "echizen @ s5.xrea.com"
+                     or "mogami @ het.ph.tsukuba.ac.jp".

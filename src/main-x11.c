@@ -1956,7 +1956,7 @@ static errr CheckEvent(bool wait)
 	XNextEvent(Metadpy->dpy, xev);
 
 #ifdef USE_XIM
-// #define DEBUG_EVENT
+/* #define DEBUG_EVENT */
 #ifdef DEBUG_EVENT
 	{
 		printf("event: type=%d", xev->type);
@@ -2202,7 +2202,7 @@ static errr CheckEvent(bool wait)
 			if(iwin->xic){
 				XUnsetICFocus(iwin->xic);
 			}
-			// Focuswin = NULL;
+			/* Focuswin = NULL;*/
 			break;
 		}
 #endif
@@ -2993,7 +2993,7 @@ errr init_x11(int argc, char *argv[])
 #endif
 	{
 		char *current_locale = setlocale(LC_ALL, NULL);
-//		printf("set locale to \"%s\"\n", current_locale);
+/*		printf("set locale to \"%s\"\n", current_locale); */
 		if(!strcmp(current_locale, "C")){
 			printf("WARNING: Locale is not supported. Non-english font may be displayed incorrectly.\n");
 		}
@@ -3075,7 +3075,7 @@ errr init_x11(int argc, char *argv[])
 		if(!p || !*p){
 			p = XSetLocaleModifiers("@im=");
 		}
-//		printf("XMODIFIERS=\"%s\"\n", p);
+/*		printf("XMODIFIERS=\"%s\"\n", p); */
 	}
 	XRegisterIMInstantiateCallback(Metadpy->dpy, NULL, NULL, NULL, IMInstantiateCallback, NULL);
 #endif

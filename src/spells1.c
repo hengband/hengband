@@ -7646,7 +7646,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 		}
 		
 		/* Ripple outwards */
-//		mmove2(&by, &bx, y1, x1, y2, x2);
+/*		mmove2(&by, &bx, y1, x1, y2, x2); */
 		
 		by = GRID_Y(path_g[bdis]);
 		bx = GRID_X(path_g[bdis]);

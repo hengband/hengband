@@ -4599,7 +4599,7 @@ cptr inven_res_label =
 static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr, 
 				       int *j, byte tval, char *where)
 {
-  unsigned char o_name[MAX_NLEN];
+  char o_name[MAX_NLEN];
   u32b    f[3];
 
   if (!o_ptr->k_idx)return;
@@ -4823,7 +4823,7 @@ static void do_cmd_knowledge_inven(void)
 	int i=0;
         int j=0;
 
-	unsigned char  where[32];
+	char  where[32];
 
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
@@ -5715,7 +5715,7 @@ static void do_cmd_knowledge_weapon_exp(void)
 #ifdef JP
 	show_file(TRUE, file_name, "武器の経験値", 0, 0);
 #else
-	show_file(TRUE, file_name, "Weapon Experiment", 0, 0);
+	show_file(TRUE, file_name, "Weapon Proficiency", 0, 0);
 #endif
 
 
@@ -5816,7 +5816,7 @@ static void do_cmd_knowledge_spell_exp(void)
 #ifdef JP
 	show_file(TRUE, file_name, "魔法の経験値", 0, 0);
 #else
-	show_file(TRUE, file_name, "Spell Experiment", 0, 0);
+	show_file(TRUE, file_name, "Spell Proficiency", 0, 0);
 #endif
 
 
@@ -5838,7 +5838,7 @@ static void do_cmd_knowledge_skill_exp(void)
 #ifdef JP
 	char skill_name[3][17]={"マーシャルアーツ", "二刀流          ", "乗馬            "};
 #else
-	char skill_name[3][20]={"martial arts    ", "dual wielding   ", "riding          "};
+	char skill_name[3][20]={"Martial Arts    ", "Dual Wielding   ", "Riding          "};
 #endif
 
 	/* Open a new file */
@@ -5886,7 +5886,7 @@ static void do_cmd_knowledge_skill_exp(void)
 #ifdef JP
 	show_file(TRUE, file_name, "技能の経験値", 0, 0);
 #else
-	show_file(TRUE, file_name, "Skill Experiment", 0, 0);
+	show_file(TRUE, file_name, "Miscellaneous Proficiency", 0, 0);
 #endif
 
 
@@ -6457,9 +6457,9 @@ void do_cmd_knowledge_virtues(void)
 #else
 		if (p_ptr->align > 150) disp_align = "lawful";
 		else if (p_ptr->align > 50) disp_align = "good";
-		else if (p_ptr->align > 10) disp_align = "nutral good";
-		else if (p_ptr->align > -11) disp_align = "nutral";
-		else if (p_ptr->align > -51) disp_align = "nutral evil";
+		else if (p_ptr->align > 10) disp_align = "neutral good";
+		else if (p_ptr->align > -11) disp_align = "neutral";
+		else if (p_ptr->align > -51) disp_align = "neutral evil";
 		else if (p_ptr->align > -151) disp_align = "evil";
 		else disp_align = "chaotic";
 		fprintf(fff, "Your alighnment : %s\n", disp_align);
@@ -7129,9 +7129,9 @@ void do_cmd_knowledge(void)
 		prt("(7) Display current pets", 10, 5);
 		prt("(8) Display current quests", 11, 5);
 		prt("(9) Display virtues", 12, 5);
-		prt("(a) Display weapon experiment", 13, 5);
-		prt("(b) Display spell experiment", 14, 5);
-		prt("(c) Display skill experiment", 15, 5);
+		prt("(a) Display weapon proficiency", 13, 5);
+		prt("(b) Display spell proficiency", 14, 5);
+		prt("(c) Display misc. proficiency", 15, 5);
 		prt("(d) Display wanted monsters", 16, 5);
 		prt("(e) Display home inventory", 17, 5);
 		prt("(f) Display *identifyed* equip.", 18, 5);

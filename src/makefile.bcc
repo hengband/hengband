@@ -96,7 +96,7 @@ $(EXE_FILE): $(OBJ) angband.res
 	$(LINKER) -aa -x $(OBJ) c0w32.obj, $(EXE_FILE),, cw32.lib import32.lib,, angband.res
 
 angband.res: $(ANGBAND_RC)
-	$(RC) -r $(ANGBAND_RC)
+	$(RC) -r -foangband.res $(ANGBAND_RC)
 
 ########################### Implicit Rules ########################
 .c.obj:

@@ -7,7 +7,7 @@
 
 #ifdef JP
 #undef strchr
-char* _strchr(unsigned char* ptr, unsigned char ch)
+char* _strchr(char* ptr, char ch)
 {
   int k_flag = 0;
 
@@ -2965,7 +2965,7 @@ errr init_d_info_txt(FILE *fp, char *buf)
 
 			/* Scan for the values */
 			if (10 != sscanf(buf+2, "%d:%d:%d:%d:%d:%d:%d:%d:%x:%x",
-                                &min_lev, &max_lev, &min_plev, &mode, &min_alloc, &max_chance, &obj_good, &obj_great, &pit, &nest)) return (1);
+                                &min_lev, &max_lev, &min_plev, &mode, &min_alloc, &max_chance, &obj_good, &obj_great, (unsigned int *)&pit, (unsigned int *)&nest)) return (1);
 
 			/* Save the values */
                         d_ptr->mindepth = min_lev;

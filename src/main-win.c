@@ -580,7 +580,33 @@ static BYTE win_pal[256] =
  * Hack -- define which keys are "special"
  */
 static bool special_key[256];
+static bool ignore_key[256];
 
+#if 1
+/*
+ * Hack -- initialization list for "special_key"
+ */
+static byte special_key_list[] = {
+VK_CLEAR,VK_PAUSE,VK_CAPITAL,VK_KANA,VK_JUNJA,VK_FINAL,VK_KANJI,
+VK_CONVERT,VK_NONCONVERT,VK_ACCEPT,VK_MODECHANGE,
+VK_PRIOR,VK_NEXT,VK_END,VK_HOME,VK_LEFT,VK_UP,VK_RIGHT,VK_DOWN,
+VK_SELECT,VK_PRINT,VK_EXECUTE,VK_SNAPSHOT,VK_INSERT,VK_DELETE,
+VK_HELP,VK_APPS,
+VK_F1,VK_F2,VK_F3,VK_F4,VK_F5,VK_F6,VK_F7,VK_F8,VK_F9,VK_F10,
+VK_F11,VK_F12,VK_F13,VK_F14,VK_F15,VK_F16,VK_F17,VK_F18,VK_F19,VK_F20,
+VK_F21,VK_F22,VK_F23,VK_F24,VK_NUMLOCK,VK_SCROLL,
+VK_ATTN,VK_CRSEL,VK_EXSEL,VK_EREOF,VK_PLAY,VK_ZOOM,VK_NONAME,
+VK_PA1,0
+};
+
+static byte ignore_key_list[] = {
+VK_ESCAPE,VK_TAB,VK_SPACE,
+'F','W','O','H', /* these are menu characters.*/
+VK_SHIFT,VK_CONTROL,VK_MENU,VK_LWIN,VK_RWIN,
+VK_LSHIFT,VK_RSHIFT,VK_LCONTROL,VK_RCONTROL,VK_LMENU,VK_RMENU,0
+};
+
+#else
 /*
  * Hack -- initialization list for "special_key"
  *
@@ -660,6 +686,7 @@ static byte special_key_list[] =
 
 	0
 };
+#endif
 
 /* bg */
 static void delete_bg()
@@ -3917,7 +3944,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 			if (GetKeyState(VK_MENU)    & 0x8000) ma = TRUE;
 
 			/* Handle "special" keys */
-			if (special_key[(byte)(wParam)])
+			if (special_key[(byte)(wParam)] || (ma && !ignore_key[(byte)(wParam)]) )
 			{
 				/* Begin the macro trigger */
 				Term_keypress(31);
@@ -4259,7 +4286,7 @@ LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 			if (GetKeyState(VK_MENU)    & 0x8000) ma = TRUE;
 
 			/* Handle "special" keys */
-			if (special_key[(byte)(wParam)])
+			if (special_key[(byte)(wParam)] || (ma && !ignore_key[(byte)(wParam)]) )
 			{
 				/* Begin the macro trigger */
 				Term_keypress(31);
@@ -4794,6 +4821,11 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 	{
 		special_key[special_key_list[i]] = TRUE;
 	}
+	/* Initialize the keypress analyzer */
+	for (i = 0; ignore_key_list[i]; ++i)
+	{
+		ignore_key[ignore_key_list[i]] = TRUE;
+	}
 
 	/* Determine if display is 16/256/true color */
 	hdc = GetDC(NULL);
@@ -4831,6 +4863,27 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 
 	/* Set the system suffix */
 	ANGBAND_SYS = "win";
+
+	/* Set the keyboard suffix */
+	if (7 != GetKeyboardType(0))
+		ANGBAND_KEYBOARD = "0";
+	else
+	{
+		/* Japanese keyboard */
+		switch (GetKeyboardType(1))
+		{
+		case 0x0D01: case 0x0D02:
+		case 0x0D03: case 0x0D04:
+		case 0x0D05: case 0x0D06:
+			/* NEC PC-98x1 */
+			ANGBAND_KEYBOARD = "NEC98";
+			break;
+		default:
+			/* PC/AT */
+			ANGBAND_KEYBOARD = "JAPAN";
+		}
+	}
+
 
 	/* Initialize */
 	init_angband();

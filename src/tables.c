@@ -1211,13 +1211,13 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 
 #ifdef JP
                 { "フレンドリーなビルボ",       200,    170,  108,   5,  15,  RACE_HOBBIT},
-//                { "憶病者ラストリン",       200,    175,  108,   4,  12,  RACE_HUMAN}, 
+/*                { "憶病者ラストリン",       200,    175,  108,   4,  12,  RACE_HUMAN},  */
                 { "憶病者リンスウィンド",       200,    175,  108,   4,  12,  RACE_HUMAN}, 
                 { "背の低いサルタン",             300,    170,  107,   5,  15,  RACE_GNOME},
                 { "ハンサムなライア=エル",      300,    165,  107,   6,  18,  RACE_ELF},
 #else
 		{ "Bilbo the Friendly",         200,    170, 108,  5, 15, RACE_HOBBIT},
-//		{ "Raistlin the Chicken",       200,    175, 108,  4, 12, RACE_HUMAN},
+/*		{ "Raistlin the Chicken",       200,    175, 108,  4, 12, RACE_HUMAN}, */
 		{ "Rincewind the Chicken",       200,    175, 108,  4, 12, RACE_HUMAN},
 		{ "Sultan the Midget",          300,    170, 107,  5, 15, RACE_GNOME},
 		{ "Lyar-el the Comely",         300,    165, 107,  6, 18, RACE_ELF},
@@ -15682,7 +15682,6 @@ monster_power monster_powers[MAX_MONSPELLS] =
 { 48, 120,  90,    0,  50, A_INT,  "アンバーの王の召喚"	, "summon amberites"},
 { 50, 150,  95,    0,  50, A_INT,  "ユニークモンスターの召喚"	, "summon unique"},
 #else
-//...shouryaku.
 {  1,   1,  10,    0,  15, A_CON,  "shriek"},
 { 10,   4,  35,   89,  40, A_INT,  "XXX1"},
 { 40,  35,  85,    0,  40, A_INT,  "dispel magic"},

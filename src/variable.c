@@ -26,11 +26,18 @@ cptr copyright[5] =
 };
 
 
+int max_macrotrigger = 0;
+char *macro_template = NULL;
+char *macro_modifier_chr;
+char *macro_modifier_name[MAX_MACRO_MOD];
+char *macro_trigger_name[MAX_MACRO_TRIG];
+char *macro_trigger_keycode[2][MAX_MACRO_TRIG];
+
 /* レベルアップの時に上昇量を表示するのに使う */
 int level_up = 0;
 int max_autopick=0;
-unsigned char *autopick_name[MAX_AUTOPICK];
-unsigned char *autopick_insc[MAX_AUTOPICK];
+char *autopick_name[MAX_AUTOPICK];
+char *autopick_insc[MAX_AUTOPICK];
 s16b autopick_action[MAX_AUTOPICK];
 
 /*
@@ -824,6 +831,16 @@ char *d_text;
  * This variable is used to choose an appropriate "pref-xxx" file
  */
 cptr ANGBAND_SYS = "xxx";
+
+/*
+ * Hack -- The special Angband "Keyboard Suffix"
+ * This variable is used to choose an appropriate macro-trigger definition
+ */
+#ifdef JP
+cptr ANGBAND_KEYBOARD = "JAPAN";
+#else
+cptr ANGBAND_KEYBOARD = "0";
+#endif
 
 /*
  * Hack -- The special Angband "Graphics Suffix"

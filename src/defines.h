@@ -865,14 +865,14 @@
 #define ROW_RACE                1
 #define COL_RACE                0       /* <race name> */
 
-//#define ROW_CLASS               2
-//#define COL_CLASS               0       /* <class name> */
+/*#define ROW_CLASS               2 */
+/*#define COL_CLASS               0 */      /* <class name> */
 
 #define ROW_TITLE               2
 #define COL_TITLE               0       /* <title> or <mode> */
 
-//#define ROW_SEIKAKU		4
-//#define COL_SEIKAKU		0	/* <seikaku> */
+/*#define ROW_SEIKAKU		4 */
+/*#define COL_SEIKAKU      	0*/	/* <seikaku> */
 
 #define ROW_DAY                 21
 #define COL_DAY                 0       /* day */
@@ -4801,5 +4801,8 @@ extern int PlayerUID;
 #define HTTP_PROXY ""                   /* Default proxy url */
 #define HTTP_PROXY_PORT 0               /* Default proxy port */
 #define HTTP_TIMEOUT    20              /* Timeout length (second) */
-#define SCORE_SERVER "www.kmc.kyoto-u.ac.jp" /* Default score server url */
+#define SCORE_SERVER "www.kmc.gr.jp"    /* Default score server url */
 #define SCORE_PORT 80                   /* Default score server port */
+
+#define MAX_MACRO_MOD 12
+#define MAX_MACRO_TRIG 200

@@ -1314,7 +1314,7 @@ s16b get_mon_num(int level)
 			}
 
 			/* Some dungeon types restrict the possible monsters */
-//			if(!restrict_monster_to_dungeon(r_ptr) && dun_level) continue;
+/*			if(!restrict_monster_to_dungeon(r_ptr) && dun_level) continue; */
 		}
 
 		/* Accept */
@@ -2888,18 +2888,46 @@ bool place_monster_one(int y, int x, int r_idx, bool slp, bool friendly, bool pe
 		if (r_ptr->flags1 & RF1_UNIQUE)
 		{
 			if (r_ptr->level > p_ptr->lev + 30)
+#ifdef JP
 				color = "黒く";
+#else
+				color = "black";
+#endif
 			else if (r_ptr->level > p_ptr->lev + 15)
+#ifdef JP
 				color = "紫色に";
+#else
+				color = "perple";
+#endif
 			else if (r_ptr->level > p_ptr->lev + 5)
+#ifdef JP
 				color = "ルビー色に";
+#else
+				color = "deep red";
+#endif
 			else if (r_ptr->level > p_ptr->lev - 5)
+#ifdef JP
 				color = "赤く";
+#else
+				color = "red";
+#endif
 			else if (r_ptr->level > p_ptr->lev - 15)
+#ifdef JP
 				color = "ピンク色に";
+#else
+				color = "pink";
+#endif
 			else
+#ifdef JP
 				color = "白く";
+#else
+				color = "white";
+#endif
+#ifdef JP
 			msg_format("指輪は%s光った。",color);
+#else
+			msg_format("Your ring glows %s.",color);
+#endif
 		}
 	}
 
@@ -3244,7 +3272,7 @@ bool place_monster(int y, int x, bool slp, bool grp)
 bool alloc_horde(int y, int x)
 {
 	monster_race *r_ptr = NULL;
-	int r_idx;
+	int r_idx = 0;
 	int m_idx;
 	int attempts = 1000;
 	int cy = y;

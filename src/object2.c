@@ -7172,7 +7172,7 @@ static void drain_essence(void)
 	int dec = 4;
 	bool observe = FALSE;
 	int old_ds, old_dd, old_to_h, old_to_d, old_ac, old_to_a, old_pval, old_name2;
-	s32b old_f1, old_f2, old_f3, new_f1, new_f2, new_f3;
+	u32b old_f1, old_f2, old_f3, new_f1, new_f2, new_f3;
 	object_type *o_ptr;
 	cptr            q, s;
 	byte iy, ix, marked;
@@ -8126,7 +8126,7 @@ void erase_essence(void)
 	cptr q, s;
 	object_type *o_ptr;
 	char o_name[MAX_NLEN];
-	s32b f1, f2, f3;
+	u32b f1, f2, f3;
 
 	item_tester_hook = item_tester_hook_kaji;
 

@@ -1165,8 +1165,8 @@ static OSErr XDDSWCreateGWorldFromPict(
 	GDHandle saveGDevice;*/
 	GWorldPtr tempGWorld;
 	Rect pictRect;
-//	short depth;
-//	GDHandle theGDH;
+/*	short depth; */
+/*	GDHandle theGDH; */
 	
 	tempGWorld = NULL;
 	
@@ -1174,10 +1174,10 @@ static OSErr XDDSWCreateGWorldFromPict(
 	*pictGWorld = NULL;
 
 	/* Get depth */
-//	depth = td->pixelDepth;
+/*	depth = td->pixelDepth; */
 
 	/* Get GDH */
-//	theGDH = td->theGDH;
+/*	theGDH = td->theGDH; */
 
 	/* Obtain size rectangle */
 	pictRect.left = 0;
@@ -1198,19 +1198,19 @@ static OSErr XDDSWCreateGWorldFromPict(
 	*pictGWorld = tempGWorld;
 	
 	/* Save GWorld */
-//	GetGWorld(&saveGWorld, &saveGDevice);
+/*	GetGWorld(&saveGWorld, &saveGDevice); */
 
 	/* Activate */
-//	SetGWorld(tempGWorld, nil);
+/*	SetGWorld(tempGWorld, nil); */
 
 	/* Dump the pict into the GWorld */
-//	(void)LockPixels(GetGWorldPixMap(tempGWorld));
-//	EraseRect(&pictRect);
-	//DrawPicture(pictH, &pictRect);
-//	UnlockPixels(GetGWorldPixMap(tempGWorld));
+/*	(void)LockPixels(GetGWorldPixMap(tempGWorld)); */
+/*	EraseRect(&pictRect); */
+/*	DrawPicture(pictH, &pictRect); */
+/*	UnlockPixels(GetGWorldPixMap(tempGWorld)); */
 
 	/* Restore GWorld */
-//	SetGWorld(saveGWorld, saveGDevice);
+/*	SetGWorld(saveGWorld, saveGDevice); */
 	
 	return (0);
 }
@@ -1218,11 +1218,11 @@ static OSErr XDDSWCreateGWorldFromPict(
 
 static OSErr XDDSWUpDateGWorldFromPict( term_data *td )
 {
-//	GWorldPtr saveGWorld;
-//	GDHandle saveGDevice;
+/*	GWorldPtr saveGWorld; */
+/*	GDHandle saveGDevice; */
 	Rect pictRect;
-//	short depth;
-//	GDHandle theGDH;
+/*	short depth; */
+/*	GDHandle theGDH; */
 	
 	GWorldFlags	errflag;
 	
@@ -1231,10 +1231,10 @@ static OSErr XDDSWUpDateGWorldFromPict( term_data *td )
 	if( td->bufferPort == NULL )
 		return;
 	/* Get depth */
-//	depth = td->pixelDepth;
+/*	depth = td->pixelDepth; */
 
 	/* Get GDH */
-//	theGDH = td->theGDH;
+/*	theGDH = td->theGDH; */
 	
 	/* Obtain size rectangle */
 	pictRect.top = 0;
@@ -1252,19 +1252,19 @@ static OSErr XDDSWUpDateGWorldFromPict( term_data *td )
 	}
 	
 	/* Save GWorld */
-//	GetGWorld(&saveGWorld, &saveGDevice);
+/*	GetGWorld(&saveGWorld, &saveGDevice); */
 
 	/* Activate */
-//	SetGWorld(td->bufferPort, nil);
+/*	SetGWorld(td->bufferPort, nil); */
 
 	/* Dump the pict into the GWorld */
-//	(void)LockPixels(GetGWorldPixMap(td->bufferPort));
-//	EraseRect(&td->bufferPort->portRect);
+/*	(void)LockPixels(GetGWorldPixMap(td->bufferPort)); */
+/*	EraseRect(&td->bufferPort->portRect); */
 	
-//	UnlockPixels(GetGWorldPixMap(td->bufferPort));
+/*	UnlockPixels(GetGWorldPixMap(td->bufferPort)); */
 
 	/* Restore GWorld */
-//	SetGWorld(saveGWorld, saveGDevice);
+/*	SetGWorld(saveGWorld, saveGDevice); */
 	
 }
 #endif
@@ -3396,7 +3396,7 @@ static void setup_menus(void)
 	if (TRUE)
 	{
 		EnableItem(m, 7);
-//		EnableItem(m, 8);
+/*		EnableItem(m, 8); */
 	}
 
 
@@ -4409,7 +4409,7 @@ static bool CheckEvents(bool wait)
 				setup_menus();
 
 				/* Mega-Hack -- allow easy exit if nothing to save */
-//				if (!character_generated && (ch=='Q' || ch=='q')) ch = 'e';
+/*				if (!character_generated && (ch=='Q' || ch=='q')) ch = 'e'; */
 
 				/* Run the Menu-Handler */
 				menu(MenuKey(ch));

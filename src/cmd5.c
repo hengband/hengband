@@ -68,7 +68,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 	char        out_val[160];
 	cptr        p;
 #ifdef JP
-        unsigned char jverb_buf[128];
+        char jverb_buf[128];
 #endif
 	int menu_line = (use_menu ? 1 : 0);
 
@@ -1898,7 +1898,7 @@ msg_print("「卑しき者よ、我は汝の下僕にあらず！ お前の魂を頂くぞ！」");
 #ifdef JP
 		if (!get_check("変身します。よろしいですか？")) return FALSE;
 #else
-		if (!get_check("You will polymorph yourself. Are you sure?")) return FALSE;
+		if (!get_check("You will polymorph yourself. Are you sure? ")) return FALSE;
 #endif
 		do_poly_self();
 		break;

@@ -683,7 +683,7 @@ void Term_queue_chars(int x, int y, int n, byte a, cptr s)
 
 	byte *scr_aa = Term->scr->a[y];
 #ifdef JP
-        unsigned char *scr_cc = Term->scr->c[y];
+        unsigned char *scr_cc = (unsigned char *)Term->scr->c[y];
 
 #ifdef USE_TRANSPARENCY
 	byte *scr_taa = Term->scr->ta[y];

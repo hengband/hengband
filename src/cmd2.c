@@ -3140,7 +3140,7 @@ void do_cmd_stay(int pickup)
 
 		energy_use = 0;
 		/* Hack -- enter building */
-		command_new = ']';
+		command_new = 254;
 	}
 
 	/* Exit a quest if reach the quest exit */

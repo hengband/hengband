@@ -3637,7 +3637,11 @@ msg_print("この花崗岩はとてもおいしい！");
 		case MUT1_POLYMORPH:
 			if (racial_aux(18, 20, A_CON, 18))
 			{
+#ifdef JP
 				if (!get_check("変身します。よろしいですか？")) return;
+#else
+				if (!get_check("You will polymorph your self. Are you sure? ")) return;
+#endif
 				do_poly_self();
 			}
 			break;

@@ -1179,13 +1179,13 @@ C:0:0:0:0
 F:RES_DARK
 
 N:179:À‚∆ªª’§Œ
-E:of Wizard
+E:of Wizardry
 X:26:10
 W:30:0:0:1500
 C:0:0:0:0
 
 N:180:µÊ∂ÀÃµ≈®∂‰≤œ∫«∂Ø§Œ
-E:of the Strongest in the Galaxy
+E:of the Mightiest in the Galaxy
 X:26:30
 W:100:0:0:50000
 C:0:0:15:0

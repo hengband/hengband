@@ -1927,7 +1927,6 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		        strcpy(temp, quark_str(o_ptr->art_name));
 			/* MEGA HACK by ita*/
                                 if ( strncmp( temp , "『" , 2 ) == 0 ) t=object_desc_str(t,  temp);else
-//			 if( strcmp(temp,"'Stormbringer'")==0 ) t=object_desc_str(t,"『ストームブリンガー』");else
 			 if( temp[0]=='\'' ) { itemp=strlen(temp);temp[itemp-1]=0; 
 			 t=object_desc_str(t,"『");
 			 t=object_desc_str(t,&temp[1]);
@@ -1969,7 +1968,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 #else
 	if ((o_ptr->tval > TV_CAPTURE) && o_ptr->xtra3)
 	{
-		t = object_desc_str(t,format(" of %s, the smith",player_name));
+		t = object_desc_str(t,format(" of %s the smith",player_name));
 	}
 
 	/* Hack -- Append "Artifact" or "Special" names */

@@ -4078,7 +4078,7 @@ bool get_aim_dir(int *dp)
 		/* Verify */
 		if (!(*dp == 5 && !target_okay()))
 		{
-//			return (TRUE);
+/*			return (TRUE); */
 			dir = *dp;
 		}
 	}
@@ -4190,7 +4190,7 @@ msg_print("あなたは混乱している。");
 
 #ifdef ALLOW_REPEAT /* TNB */
 
-//	repeat_push(dir);
+/*	repeat_push(dir); */
 	repeat_push(command_dir);
 
 #endif /* ALLOW_REPEAT -- TNB */
@@ -4232,7 +4232,7 @@ bool get_rep_dir(int *dp, bool under)
 	if (repeat_pull(dp))
 	{
 		dir = *dp;
-//		return (TRUE);
+/*		return (TRUE); */
 	}
 
 #endif /* ALLOW_REPEAT -- TNB */
@@ -4345,7 +4345,7 @@ msg_format("You cannot control %s.", m_name);
 
 #ifdef ALLOW_REPEAT /* TNB */
 
-//	repeat_push(dir);
+/*	repeat_push(dir); */
 	repeat_push(command_dir);
 
 #endif /* ALLOW_REPEAT -- TNB */
@@ -4370,7 +4370,7 @@ bool get_rep_dir2(int *dp)
 	if (repeat_pull(dp))
 	{
 		dir = *dp;
-//		return (TRUE);
+/*		return (TRUE); */
 	}
 
 #endif /* ALLOW_REPEAT -- TNB */
@@ -4432,7 +4432,7 @@ msg_print("あなたは混乱している。");
 
 #ifdef ALLOW_REPEAT /* TNB */
 
-//	repeat_push(dir);
+/*	repeat_push(dir); */
 	repeat_push(command_dir);
 
 #endif /* ALLOW_REPEAT -- TNB */

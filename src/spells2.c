@@ -119,9 +119,9 @@ sprintf(Dummy, "現在の体力ランク : %d/100", percent);
 #else
 	if (p_ptr->align > 150) disp_align = "lawful";
 	else if (p_ptr->align > 50) disp_align = "good";
-	else if (p_ptr->align > 10) disp_align = "nutral good";
-	else if (p_ptr->align > -11) disp_align = "nutral";
-	else if (p_ptr->align > -51) disp_align = "nutral evil";
+	else if (p_ptr->align > 10) disp_align = "neutral good";
+	else if (p_ptr->align > -11) disp_align = "neutral";
+	else if (p_ptr->align > -51) disp_align = "neutral evil";
 	else if (p_ptr->align > -151) disp_align = "evil";
 	else disp_align = "chaotic";
 	sprintf(Dummy, "Your alighnment : %s(%ld)", disp_align, p_ptr->align);
@@ -4353,7 +4353,7 @@ void aggravate_monsters(int who)
 	for (i = 1; i < m_max; i++)
 	{
 		monster_type    *m_ptr = &m_list[i];
-//		monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+/*		monster_race    *r_ptr = &r_info[m_ptr->r_idx]; */
 
 		/* Paranoia -- Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
@@ -5530,7 +5530,7 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 			c_ptr = &cave[yy][xx];
 
 			/* Paranoia -- never affect player */
-//			if ((yy == py) && (xx == px)) continue;
+/*			if ((yy == py) && (xx == px)) continue; */
 
 			/* Destroy location (if valid) */
 			if (cave_valid_bold(yy, xx))
@@ -5807,7 +5807,7 @@ static void cave_temp_room_aux(int y, int x)
 	cave_type *c_ptr;
 
 	/* Verify */
-//	if (!in_bounds(y, x)) return;
+/*	if (!in_bounds(y, x)) return; */
 
 	/* Get the grid */
 	c_ptr = &cave[y][x];

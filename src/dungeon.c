@@ -2288,7 +2288,7 @@ msg_print("あまりにも空腹で気絶してしまった。");
 	upkeep_factor = calculate_upkeep();
 
 	/* Regenerate the mana */
-//	if (p_ptr->csp < p_ptr->msp)
+/*	if (p_ptr->csp < p_ptr->msp) */
 	{
 		if (upkeep_factor)
 		{
@@ -3836,7 +3836,6 @@ msg_print("ウィザードモード突入。");
 			/* Enter debug mode */
 			if (enter_debug_mode())
 			{
-//				if (!p_ptr->wild_mode) do_cmd_debug();
 				do_cmd_debug();
 			}
 			break;
@@ -4030,14 +4029,13 @@ msg_print("ウィザードモード突入。");
 		}
 
 		/* Enter building -KMW- */
-		case ']':
+		case 254:
 		{
 			if (!p_ptr->wild_mode) do_cmd_bldg();
 			break;
 		}
 
 		/* Enter quest level -KMW- */
-//		case '[':
 		case 255:
 		{
 			if (!p_ptr->wild_mode) do_cmd_quest();
@@ -4073,8 +4071,6 @@ msg_print("ウィザードモード突入。");
 						{
 							p_ptr->oldpx = px;
 							p_ptr->oldpy = py;
-//							py = p_ptr->wilderness_y;
-//							px = p_ptr->wilderness_x;
 						}
                                         }
                                 }
@@ -5210,7 +5206,7 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 			/* Place the cursor on the player */
 			move_cursor_relative(py, px);
 
-			command_cmd = ']';
+			command_cmd = 254;
 
 			/* Process the command */
 			process_command();
