@@ -5463,7 +5463,7 @@ void do_cmd_pet_dismiss(void)
 
 			/* HACK : Add the line to message buffer */
 #ifdef JP
-			sprintf(buf, "%s を離した。", friend_name);
+			sprintf(buf, "%s を放した。", friend_name);
 #else
 			sprintf(buf, "Dismissed %s.", friend_name);
 #endif
