@@ -2084,6 +2084,7 @@ void lite_spot(int y, int x)
 #ifdef JP
 		if (use_bigtile && !(a & 0x80) && (isprint(c) || c == 127))
 		{
+			/* Term_queue_chars は全角ASCII地形を正しくupdateする。 */
 			Term_queue_chars(panel_col_of(x), y-panel_row_prt, 2, a, &ascii_to_zenkaku[2*(c-' ')]);
 			return;
 		}

@@ -713,7 +713,7 @@ void Term_queue_chars(int x, int y, int n, byte a, cptr s)
          * 重なった文字の左部分を消去。
          * 表示開始位置が左端でないと仮定。
          */
-        if (scr_aa[x] & KANJI2)
+        if ((scr_aa[x] & KANJI2) && scr_aa[x] != 255)
         {
                 scr_cc[x - 1] = ' ';
                 scr_aa[x - 1] &= KANJIC;
