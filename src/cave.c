@@ -3210,9 +3210,13 @@ static void mon_lite_hack(int y, int x)
 		if (mon_invis) return;
 
 		/* Hack -- Prevent monster lite leakage in walls */
+
+		/* Horizontal walls between player and a monster */
 		if (((y < py) && (y > mon_fy)) || ((y > py) && (y < mon_fy)))
 		{
 			midpoint = (px + mon_fx) >> 1;
+
+			/* Only first wall viewed from mid-x is lit */
 			if (x < midpoint)
 			{
 				if (!cave_floor_bold(y, x + 1)) return;
@@ -3222,9 +3226,13 @@ static void mon_lite_hack(int y, int x)
 				if (!cave_floor_bold(y, x - 1)) return;
 			}
 		}
-		else if (((x < px) && (x > mon_fx)) || ((x > px) && (x < mon_fx)))
+
+		/* Vertical walls between player and a monster */
+		if (((x < px) && (x > mon_fx)) || ((x > px) && (x < mon_fx)))
 		{
 			midpoint = (py + mon_fy) >> 1;
+
+			/* Only first wall viewed from mid-y is lit */
 			if (y < midpoint)
 			{
 				if (!cave_floor_bold(y + 1, x)) return;
@@ -3281,9 +3289,13 @@ static void mon_dark_hack(int y, int x)
 		if (mon_invis) return;
 
 		/* Hack -- Prevent monster dark lite leakage in walls */
+
+		/* Horizontal walls between player and a monster */
 		if (((y < py) && (y > mon_fy)) || ((y > py) && (y < mon_fy)))
 		{
 			midpoint = (px + mon_fx) >> 1;
+
+			/* Only first wall viewed from mid-x is darkened */
 			if (x < midpoint)
 			{
 				if (!cave_floor_bold(y, x + 1)) return;
@@ -3293,9 +3305,13 @@ static void mon_dark_hack(int y, int x)
 				if (!cave_floor_bold(y, x - 1)) return;
 			}
 		}
-		else if (((x < px) && (x > mon_fx)) || ((x > px) && (x < mon_fx)))
+
+		/* Vertical walls between player and a monster */
+		if (((x < px) && (x > mon_fx)) || ((x > px) && (x < mon_fx)))
 		{
 			midpoint = (py + mon_fy) >> 1;
+
+			/* Only first wall viewed from mid-y is darkened */
 			if (y < midpoint)
 			{
 				if (!cave_floor_bold(y + 1, x)) return;
