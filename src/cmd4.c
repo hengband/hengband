@@ -930,9 +930,9 @@ static void do_cmd_bunshou(void)
 	char bunshou[80] = "\0";
 
 #ifdef JP
-	if (get_string("内容: ", tmp, 79, FALSE))
+	if (get_string("内容: ", tmp, 79))
 #else
-	if (get_string("diary note: ", tmp, 79, FALSE))
+	if (get_string("diary note: ", tmp, 79))
 #endif
 	{
 		strcpy(bunshou, tmp);
@@ -1225,9 +1225,9 @@ void do_cmd_change_name(void)
 		{
 			sprintf(tmp, "%s.txt", player_base);
 #ifdef JP
-			if (get_string("ファイル名: ", tmp, 80, FALSE))
+			if (get_string("ファイル名: ", tmp, 80))
 #else
-			if (get_string("File name: ", tmp, 80, FALSE))
+			if (get_string("File name: ", tmp, 80))
 #endif
 
 			{
@@ -1382,7 +1382,7 @@ void do_cmd_messages(int num_now)
 
 
 		/* Get a command */
-		skey = inkey_special(TRUE, FALSE);
+		skey = inkey_special(TRUE);
 
 		/* Exit on Escape */
 		if (skey == ESCAPE) break;
@@ -2712,9 +2712,9 @@ void do_cmd_pref(void)
 
 	/* Ask for a "user pref command" */
 #ifdef JP
-	if (!get_string("設定変更コマンド: ", buf, 80, FALSE)) return;
+	if (!get_string("設定変更コマンド: ", buf, 80)) return;
 #else
-	if (!get_string("Pref: ", buf, 80, FALSE)) return;
+	if (!get_string("Pref: ", buf, 80)) return;
 #endif
 
 
@@ -3597,7 +3597,7 @@ static bool cmd_visuals_aux(int i, int *num, int max)
 
 		sprintf(str, "%d", *num);
 
-		if (!get_string(format("Input new number(0-%d): ", max-1), str, 4, TRUE))
+		if (!get_string(format("Input new number(0-%d): ", max-1), str, 4))
 			return FALSE;
 
 		tmp = strtol(str, NULL, 0);
@@ -4703,9 +4703,9 @@ void do_cmd_note(void)
 
 	/* Input */
 #ifdef JP
-	if (!get_string("メモ: ", buf, 60, FALSE)) return;
+	if (!get_string("メモ: ", buf, 60)) return;
 #else
-	if (!get_string("Note: ", buf, 60, FALSE)) return;
+	if (!get_string("Note: ", buf, 60)) return;
 #endif
 
 
@@ -6097,9 +6097,9 @@ static void do_cmd_save_screen_html(void)
 	char buf[1024], tmp[256] = "screen.html";
 
 #ifdef JP
-	if (!get_string("ファイル名: ", tmp, 80, FALSE))
+	if (!get_string("ファイル名: ", tmp, 80))
 #else
-	if (!get_string("File name: ", tmp, 80, FALSE))
+	if (!get_string("File name: ", tmp, 80))
 #endif
 		return;
 

@@ -629,7 +629,7 @@ static void pattern_teleport(void)
 		sprintf(tmp_val, "%d", dun_level);
 
 		/* Ask for a level */
-		if (!get_string(ppp, tmp_val, 10, TRUE)) return;
+		if (!get_string(ppp, tmp_val, 10)) return;
 
 		/* Extract request */
 		command_arg = atoi(tmp_val);

@@ -8058,7 +8058,7 @@ static void add_essence(int mode)
 #endif
 				strcpy(tmp_val, "1");
 
-				if (!get_string(tmp, tmp_val, 1, TRUE)) return;
+				if (!get_string(tmp, tmp_val, 1)) return;
 				pval = atoi(tmp_val);
 				if (pval > limit) pval = limit;
 				else if (pval < 1) pval = 1;
@@ -8089,9 +8089,9 @@ static void add_essence(int mode)
 
 			strcpy(tmp_val, "1");
 #ifdef JP
-			if (!get_string(format("いくつ付加しますか？ (1-%d):", p_ptr->lev/7+3), tmp_val, 2, TRUE)) return;
+			if (!get_string(format("いくつ付加しますか？ (1-%d):", p_ptr->lev/7+3), tmp_val, 2)) return;
 #else
-			if (!get_string(format("Enchant how many? (1-%d):", p_ptr->lev/7+3), tmp_val, 2, TRUE)) return;
+			if (!get_string(format("Enchant how many? (1-%d):", p_ptr->lev/7+3), tmp_val, 2)) return;
 #endif
 			val = atoi(tmp_val);
 			if (val > p_ptr->lev/7+3) val = p_ptr->lev/7+3;

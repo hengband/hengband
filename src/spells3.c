@@ -1012,7 +1012,7 @@ sprintf(ppp, "何階にセットしますか (%d-%d):", d_info[select_dungeon].mindepth, m
 	sprintf(tmp_val, "%d", MAX(dun_level, 1));
 
 	/* Ask for a level */
-	if (get_string(ppp, tmp_val, 10, TRUE))
+	if (get_string(ppp, tmp_val, 10))
 	{
 		/* Extract request */
 		dummy = atoi(tmp_val);
@@ -1032,12 +1032,13 @@ sprintf(ppp, "何階にセットしますか (%d-%d):", d_info[select_dungeon].mindepth, m
 #else
 			do_cmd_write_nikki(NIKKI_TRUMP, select_dungeon, "using a scroll of reset recall");
 #endif
-		/* Accept request */
+					/* Accept request */
 #ifdef JP
-		msg_format("%sの帰還レベルを %d 階にセット。", d_name+d_info[select_dungeon].name, dummy, dummy * 50);
+msg_format("%sの帰還レベルを %d 階にセット。", d_name+d_info[select_dungeon].name, dummy, dummy * 50);
 #else
 		msg_format("Recall depth set to level %d (%d').", dummy, dummy * 50);
 #endif
+
 	}
 	else
 	{

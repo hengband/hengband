@@ -3196,7 +3196,7 @@ void clear_from(int row)
  * ESCAPE clears the buffer and the window and returns FALSE.
  * RETURN accepts the current buffer contents and returns TRUE.
  */
-bool askfor_aux(char *buf, int len, bool numpad_cursor, bool allow_ascii_macro_trigger)
+bool askfor_aux(char *buf, int len, bool numpad_cursor)
 {
 	int y, x;
 	int pos = 0;
@@ -3237,7 +3237,7 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor, bool allow_ascii_macro_t
 		Term_gotoxy(x + pos, y);
 
 		/* Get a special key code */
-		skey = inkey_special(numpad_cursor, allow_ascii_macro_trigger);
+		skey = inkey_special(numpad_cursor);
 
 		/* Analyze the key */
 		switch (skey)
@@ -3445,7 +3445,7 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor, bool allow_ascii_macro_t
  */
 bool askfor(char *buf, int len)
 {
-	return askfor_aux(buf, len, TRUE, FALSE);
+	return askfor_aux(buf, len, TRUE);
 }
 
 
@@ -3459,7 +3459,7 @@ bool askfor(char *buf, int len)
  *
  * We clear the input, and return FALSE, on "ESCAPE".
  */
-bool get_string(cptr prompt, char *buf, int len, bool allow_ascii_macro_trigger)
+bool get_string(cptr prompt, char *buf, int len)
 {
 	bool res;
 
@@ -3470,7 +3470,7 @@ bool get_string(cptr prompt, char *buf, int len, bool allow_ascii_macro_trigger)
 	prt(prompt, 0, 0);
 
 	/* Ask the user for a string */
-	res = askfor_aux(buf, len, TRUE, allow_ascii_macro_trigger);
+	res = askfor(buf, len);
 
 	/* Clear prompt */
 	prt("", 0, 0);
@@ -3713,7 +3713,7 @@ s16b get_quantity(cptr prompt, int max)
 	 * Ask for a quantity
 	 * Don't allow to use numpad as cursor key.
 	 */
-	res = askfor_aux(buf, 6, FALSE, TRUE);
+	res = askfor_aux(buf, 6, FALSE);
 
 	/* Clear prompt */
 	prt("", 0, 0);
@@ -5356,7 +5356,7 @@ void str_tolower(char *str)
  * This function is a Mega-Hack and depend on pref-xxx.prf's.
  * Currently works on Linux(UNIX), Windows, and Macintosh only.
  */
-int inkey_special(bool numpad_cursor, bool allow_ascii_macro_trigger)
+int inkey_special(bool numpad_cursor)
 {
 	static const struct {
 		cptr keyname;
@@ -5418,7 +5418,7 @@ int inkey_special(bool numpad_cursor, bool allow_ascii_macro_trigger)
 	/*
 	 * Hack -- Ignore macro defined on ASCII characters.
 	 */
-	if ((trig_len == 1) && parse_macro && !allow_ascii_macro_trigger)
+	if (trig_len == 1 && parse_macro)
 	{
 		char c = inkey_macro_trigger_string[0];
 

@@ -1378,9 +1378,9 @@ void do_cmd_inscribe(void)
 
 	/* Get a new inscription (possibly empty) */
 #ifdef JP
-	if (get_string("銘: ", out_val, 80, FALSE))
+	if (get_string("銘: ", out_val, 80))
 #else
-	if (get_string("Inscription: ", out_val, 80, FALSE))
+	if (get_string("Inscription: ", out_val, 80))
 #endif
 	{
 		/* Save the inscription */
@@ -2045,12 +2045,12 @@ void do_cmd_query_symbol(void)
 	{
 		all = TRUE;
 #ifdef JP
-		if (!get_string("名前(英語の場合小文字で可)", temp, 70, FALSE))
+		if (!get_string("名前(英語の場合小文字で可)",temp, 70))
 #else
-		if (!get_string("Enter name:", temp, 70, FALSE))
+		if (!get_string("Enter name:",temp, 70))
 #endif
 		{
-			temp[0] = 0;
+			temp[0]=0;
 			return;
 		}
 #ifdef JP

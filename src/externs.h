@@ -1274,9 +1274,9 @@ extern void prt(cptr str, int row, int col);
 extern void c_roff(byte attr, cptr str);
 extern void roff(cptr str);
 extern void clear_from(int row);
-extern bool askfor_aux(char *buf, int len, bool numpad_cursor, bool allow_ascii_macro_trigger);
+extern bool askfor_aux(char *buf, int len, bool numpad_cursor);
 extern bool askfor(char *buf, int len);
-extern bool get_string(cptr prompt, char *buf, int len, bool allow_ascii_macro_trigger);
+extern bool get_string(cptr prompt, char *buf, int len);
 extern bool get_check(cptr prompt);
 extern bool get_check_strict(cptr prompt, int mode);
 extern bool get_com(cptr prompt, char *command, bool z_escape);
@@ -1302,7 +1302,7 @@ extern size_t my_strcat(char *buf, const char *src, size_t bufsize);
 extern char *my_strstr(const char *haystack, const char *needle);
 extern char *my_strchr(const char *ptr, char ch);
 extern void str_tolower(char *str);
-extern int inkey_special(bool numpad_cursor, bool allow_ascii_macro_trigger);
+extern int inkey_special(bool numpad_cursor);
 
 
 /* xtra1.c */

@@ -2605,7 +2605,7 @@ static int get_haggle(cptr pmt, s32b *poffer, s32b price, int final)
 		 * Ask the user for a response.
 		 * Don't allow to use numpad as cursor key.
 		 */
-		res = askfor_aux(out_val, 32, FALSE, FALSE);
+		res = askfor_aux(out_val, 32, FALSE);
 
 		/* Clear prompt */
 		prt("", 0, 0);
