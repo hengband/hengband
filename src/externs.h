@@ -168,7 +168,9 @@ extern s16b object_level;
 extern s16b monster_level;
 extern s16b base_level;
 extern s32b turn;
+extern s32b turn_limit;
 extern s32b dungeon_turn;
+extern s32b dungeon_turn_limit;
 extern s32b old_turn;
 extern s32b old_battle;
 extern bool use_sound;
@@ -817,6 +819,7 @@ extern bool psychometry(void);
 extern void leave_level(int level);
 extern void enter_level(int level);
 extern s32b turn_real(s32b hoge);
+extern void prevent_turn_overflow(void);
 
 
 /* files.c */

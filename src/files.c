@@ -1897,13 +1897,13 @@ static void display_player_middle(void)
 		int day, hour, min;
 		extract_day_hour_min(&day, &hour, &min);
 
-		sprintf(buf, 
 #ifdef JP
-			"%d日目 %2d:%02d", 
+		if (day < MAX_DAYS) sprintf(buf, "%d日目 %2d:%02d", day, hour, min);
+		else sprintf(buf, "*****日目 %2d:%02d", hour, min);
 #else
-			"Day %d %2d:%02d", 
+		if (day < MAX_DAYS) sprintf(buf, "Day %d %2d:%02d", day, hour, min);
+		else sprintf(buf, "Day ***** %2d:%02d", hour, min);
 #endif
-			day, hour, min);
 	}
 	display_player_one_line(ENTRY_DAY, buf, TERM_L_GREEN);
 

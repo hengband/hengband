@@ -542,6 +542,7 @@
  */
 #define TOWN_DAWN         10000    /* Number of ticks from dawn to dawn XXX */
 #define TURNS_PER_TICK    10L      /* Number of energy-gain-turns per ticks */
+#define MAX_DAYS          20000    /* Maximum days */
 #define BREAK_GLYPH       550      /* Rune of protection resistance */
 #define BREAK_MINOR_GLYPH 299      /* For explosive runes */
 #define BTH_PLUS_ADJ       3       /* Adjust BTH per plus-to-hit */

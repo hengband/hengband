@@ -2042,6 +2042,20 @@ static void rd_extra(void)
 	/* Read "feeling" */
 	rd_byte(&p_ptr->feeling);
 
+	switch (p_ptr->start_race)
+	{
+	case RACE_VAMPIRE:
+	case RACE_SKELETON:
+	case RACE_ZOMBIE:
+	case RACE_SPECTRE:
+		turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+		break;
+	default:
+		turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+		break;
+	}
+	dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+
 	/* Turn when level began */
 	rd_s32b(&old_turn);
 

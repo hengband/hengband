@@ -2820,7 +2820,7 @@ msg_print("バーテンはいくらかの食べ物とビールをくれた。");
 			}
 			else
 			{
-				int oldturn = turn;
+				s32b oldturn = turn;
 				int prev_day, prev_hour, prev_min;
 
 				extract_day_hour_min(&prev_day, &prev_hour, &prev_min);
@@ -2831,10 +2831,16 @@ msg_print("バーテンはいくらかの食べ物とビールをくれた。");
 				else do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "stay over night at the inn.");
 #endif
 				turn = (turn / (TURNS_PER_TICK*TOWN_DAWN/2) + 1) * (TURNS_PER_TICK*TOWN_DAWN/2);
+				if (dungeon_turn < dungeon_turn_limit)
+				{
+					dungeon_turn += MIN(turn - oldturn, TURNS_PER_TICK*250);
+					if (dungeon_turn > dungeon_turn_limit) dungeon_turn = dungeon_turn_limit;
+				}
+
+				prevent_turn_overflow();
+
 				if ((prev_hour >= 18) && (prev_hour <= 23)) do_cmd_write_nikki(NIKKI_HIGAWARI, 0, NULL);
 				p_ptr->chp = p_ptr->mhp;
-
-				dungeon_turn += MIN(turn - oldturn, TURNS_PER_TICK*250);
 
 				if (ironman_nightmare)
 				{

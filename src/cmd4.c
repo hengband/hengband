@@ -461,9 +461,11 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		case NIKKI_HIGAWARI:
 		{
 #ifdef JP
-			fprintf(fff, "%d日目\n",day);
+			if (day < MAX_DAYS) fprintf(fff, "%d日目\n", day);
+			else fputs("*****日目\n", fff);
 #else
-			fprintf(fff, "Day %d\n",day);
+			if (day < MAX_DAYS) fprintf(fff, "Day %d\n", day);
+			else fputs("Day *****\n", fff);
 #endif
 			do_level = FALSE;
 			break;
@@ -9977,6 +9979,7 @@ void do_cmd_time(void)
 	char desc[1024];
 
 	char buf[1024];
+	char day_buf[10];
 
 	FILE *fff;
 
@@ -9996,14 +9999,17 @@ void do_cmd_time(void)
 #endif
 
 
+	if (day < MAX_DAYS) sprintf(day_buf, "%d", day);
+	else strcpy(day_buf, "*****");
+
 	/* Message */
 #ifdef JP
-	msg_format("%d 日目,時刻は%d:%02d %sです。",
-		   day, (hour % 12 == 0) ? 12 : (hour % 12),
+	msg_format("%s日目, 時刻は%d:%02d %sです。",
+		   day_buf, (hour % 12 == 0) ? 12 : (hour % 12),
 		   min, (hour < 12) ? "AM" : "PM");
 #else
-	msg_format("This is day %d. The time is %d:%02d %s.",
-		   day, (hour % 12 == 0) ? 12 : (hour % 12),
+	msg_format("This is day %s. The time is %d:%02d %s.",
+		   day_buf, (hour % 12 == 0) ? 12 : (hour % 12),
 		   min, (hour < 12) ? "AM" : "PM");
 #endif
 

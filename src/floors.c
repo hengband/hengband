@@ -1197,9 +1197,13 @@ void change_floor(void)
 		if (loaded)
 		{
 			int i;
-			s32b absence_ticks = (turn - sf_ptr->last_visit) / TURNS_PER_TICK;
+			s32b tmp_last_visit = sf_ptr->last_visit;
+			s32b absence_ticks;
 			int alloc_chance = d_info[dungeon_type].max_m_alloc_chance;
 			int alloc_times;
+
+			while (tmp_last_visit > turn) tmp_last_visit -= TURNS_PER_TICK * TOWN_DAWN;
+			absence_ticks = (turn - tmp_last_visit) / TURNS_PER_TICK;
 
 			/* Maintain monsters */
 			for (i = 1; i < m_max; i++)

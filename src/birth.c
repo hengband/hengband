@@ -3515,13 +3515,16 @@ static void init_turn(void)
 	{
 		/* Undead start just after midnight */
 		turn = (TURNS_PER_TICK*3 * TOWN_DAWN) / 4 + 1;
+		turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 	}
 	else
 	{
 		turn = 1;
+		turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 	}
 
 	dungeon_turn = 1;
+	dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 }
 
 /*

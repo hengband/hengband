@@ -6271,8 +6271,15 @@ msg_print("試合開始！");
 
 		/* Count game turns */
 		turn++;
-		if (!p_ptr->wild_mode || wild_regen) dungeon_turn++;
-		else if (p_ptr->wild_mode && !(turn % ((MAX_HGT + MAX_WID) / 2))) dungeon_turn++;
+
+		if (dungeon_turn < dungeon_turn_limit)
+		{
+			if (!p_ptr->wild_mode || wild_regen) dungeon_turn++;
+			else if (p_ptr->wild_mode && !(turn % ((MAX_HGT + MAX_WID) / 2))) dungeon_turn++;
+		}
+
+		prevent_turn_overflow();
+
 		if (wild_regen) wild_regen--;
 	}
 
@@ -7145,5 +7152,49 @@ s32b turn_real(s32b hoge)
 		return hoge - (TURNS_PER_TICK * TOWN_DAWN * 3 / 4);
 	default:
 		return hoge;
+	}
+}
+
+/*
+ * ターンのオーバーフローに対する対処
+ * ターン及びターンを記録する変数をターンの限界の1日前まで巻き戻す.
+ */
+void prevent_turn_overflow(void)
+{
+	int rollback_days, i, j;
+	s32b rollback_turns;
+
+	if (turn < turn_limit) return;
+
+	rollback_days = 1 + (turn - turn_limit) / (TURNS_PER_TICK * TOWN_DAWN);
+	rollback_turns = TURNS_PER_TICK * TOWN_DAWN * rollback_days;
+
+	if (turn > rollback_turns) turn -= rollback_turns;
+	else turn = 1; /* Paranoia */
+	if (old_turn > rollback_turns) old_turn -= rollback_turns;
+	else old_turn = 1;
+	if (old_battle > rollback_turns) old_battle -= rollback_turns;
+	else old_battle = 1;
+	if (p_ptr->feeling_turn > rollback_turns) p_ptr->feeling_turn -= rollback_turns;
+	else p_ptr->feeling_turn = 1;
+
+	for (i = 1; i < max_towns; i++)
+	{
+		for (j = 0; j < MAX_STORES; j++)
+		{
+			store_type *st_ptr = &town[i].store[j];
+
+			if (st_ptr->last_visit > -10L * TURNS_PER_TICK * STORE_TICKS)
+			{
+				st_ptr->last_visit -= rollback_turns;
+				if (st_ptr->last_visit < -10L * TURNS_PER_TICK * STORE_TICKS) st_ptr->last_visit = -10L * TURNS_PER_TICK * STORE_TICKS;
+			}
+
+			if (st_ptr->store_open)
+			{
+				st_ptr->store_open -= rollback_turns;
+				if (st_ptr->store_open < 1) st_ptr->store_open = 1;
+			}
+		}
 	}
 }
