@@ -614,6 +614,65 @@ F:198:0x06/0x5E:LIT
 
 ##### Object attr/char definitions #####
 
+# a Blue Mushroom
+K:1:0x85/0x95
+
+# a Black Mushroom
+K:2:0x85/0x91
+
+# a Black Spotted Mushroom
+K:3:0x85/0x91
+
+# a Brown Mushroom
+K:4:0x85/0x96
+
+# a Dark Blue Mushroom
+K:5:0x85/0x95
+
+# a Dark Green Mushroom
+K:6:0x85/0x94
+
+# a Dark Red Mushroom
+K:7:0x85/0x93
+
+# a Yellow Mushroom
+K:8:0x85/0x9A
+
+# a Furry Mushroom
+K:9:0x85/0x91
+
+# a Green Mushroom
+K:10:0x85/0x94
+
+# a Grey Mushroom
+K:11:0x85/0x98
+
+# a Light Blue Mushroom
+K:12:0x85/0x9D
+
+# a Light Green Mushroom
+K:13:0x85/0x9C
+
+# a Violet Mushroom
+K:14:0x85/0x99
+
+# a Red Mushroom
+K:15:0x85/0x93
+
+# a Slimy Mushroom
+K:16:0x85/0x98
+
+# a Tan Mushroom
+K:17:0x85/0x9E
+
+# a White Mushroom
+K:18:0x85/0x90
+
+# a White Spotted Mushroom
+K:19:0x85/0x90
+
+# a Wrinkled Mushroom
+K:20:0x85/0x96
 
 # Ration of Food
 K:21:0x8E/0x84
@@ -948,8 +1007,194 @@ K:130:0x88/0x96
 # Large Metal Shield
 K:131:0x88/0x97
 
+# an Alexandrite Ring
+K:132:0x84/0x84
+
+# an Amethyst Ring
+K:133:0x84/0x89
+
+# an Aquamarine Ring
+K:134:0x84/0x8D
+
+# an Azurite Ring
+K:135:0x84/0x8D
+
+# a Beryl Ring
+K:136:0x84/0x8C
+
+# a Bloodstone Ring
+K:137:0x84/0x83
+
+# a Calcite Ring
+K:138:0x84/0x80
+
+# a Carnelian Ring
+K:139:0x84/0x83
+
+# a Corundum Ring
+K:140:0x84/0x88
+
+# a Diamond Ring
+K:141:0x84/0x80
+
+# an Emerald Ring
+K:142:0x84/0x84
+
+# a Fluorite Ring
+K:143:0x84/0x8C
+
+# a Garnet Ring
+K:144:0x84/0x83
+
+# a Granite Ring
+K:145:0x84/0x81
+
+# a Jade Ring
+K:146:0x84/0x8C
+
+# a Jasper Ring
+K:147:0x84/0x86
+
+# a Lapis Lazuli Ring
+K:148:0x84/0x85
+
+# a Malachite Ring
+K:149:0x84/0x84
+
+# a Marble Ring
+K:150:0x84/0x80
+
+# a Moonstone Ring
+K:151:0x84/0x81
+
+# an Onyx Ring
+K:152:0x84/0x8B
+
+# an Opal Ring
+K:153:0x84/0x81
+
+# a Pearl Ring
+K:154:0x84/0x80
+
+# a Quartz Ring
+K:155:0x84/0x81
+
+# a Quartzite Ring
+K:156:0x84/0x81
+
+# a Rhodonite Ring
+K:157:0x84/0x8B
+
+# a Ruby Ring
+K:158:0x84/0x83
+
+# a Sapphire Ring
+K:159:0x84/0x85
+
+# a Tiger Eye Ring
+K:160:0x84/0x8A
+
+# a Topaz Ring
+K:161:0x84/0x8A
+
+# a Turquoise Ring
+K:162:0x84/0x8D
+
+# an Amber Amulet
+K:163:0x87/0x8A
+
+# a Driftwood Amulet
+K:164:0x87/0x8E
+
+# a Coral Amulet
+K:165:0x87/0x80
+
+# an Agate Amulet
+K:166:0x87/0x81
+
+# an Ivory Amulet
+K:167:0x87/0x80
+
+# an Obsidian Amulet
+K:168:0x87/0x81
+
+# a Bone Amulet
+K:169:0x87/0x80
+
 # Double Ring Mail
 K:170:0xB6/0x93
+
+# a Brass Amulet
+K:171:0x87/0x8E
+
+# a Bronze Amulet
+K:172:0x87/0x8E
+
+# a Scroll titled "mipay sun"
+K:173:0x83/0x9C
+
+# a Scroll titled "batuni blaame"
+K:174:0x83/0x9D
+
+# a Scroll titled "rolsan triple"
+K:175:0x83/0x9E
+
+# a Scroll titled "temeep aks el"
+K:176:0x83/0x9F
+
+# a Scroll titled "triapp trolpet"
+K:177:0x83/0x9C
+
+# a Scroll titled "an gan nagblaa"
+K:178:0x83/0x9D
+
+# a Scroll titled "comp turs"
+K:179:0x83/0x9E
+
+# a Scroll titled "byti sne"
+K:180:0x83/0x9F
+
+# a Scroll titled "misat dernin"
+K:181:0x83/0x9C
+
+# a Scroll titled "onip batsat"
+K:182:0x83/0x9D
+
+# a Scroll titled "shu urfor"
+K:183:0x83/0x9E
+
+# a Scroll titled "binvom cosmung"
+K:184:0x83/0x9F
+
+# a Scroll titled "ankh sanfu bit"
+K:185:0x83/0x9C
+
+# a Scroll titled "arzemi zunag"
+K:186:0x83/0x9D
+
+# a Scroll titled "bie xuxuval"
+K:187:0x83/0x9E
+
+# a Scroll titled "blaata arze"
+K:188:0x83/0x9F
+
+# a Scroll titled "rea fri elip"
+K:189:0x83/0x9C
+
+# a Scroll titled "sef unag famur"
+K:190:0x83/0x9D
+
+# a Scroll titled "bluju wex blu"
+K:191:0x83/0x9E
+
+# a Scroll titled "ner fidtri"
+K:192:0x83/0x9F
+
+# a Scroll titled "for mic rol"
+K:193:0x83/0x9C
+
+# a Scroll titled "sri nelgun"
+K:194:0x83/0x9D
 
 # Sheaf Arrow
 K:195:0xB6/0x91
@@ -957,8 +1202,404 @@ K:195:0xB6/0x91
 # Mithril Shot
 K:196:0xB6/0x8F
 
+# a Scroll titled "sehsat ulkab"
+K:197:0x83/0x9E
+
+# a Scroll titled "klinej ere"
+K:198:0x83/0x9F
+
+# a Scroll titled "snetrol uni"
+K:199:0x83/0x9C
+
+# a Scroll titled "trolsee mex"
+K:200:0x83/0x9D
+
+# a Scroll titled "stafoo lechi"
+K:201:0x83/0x9E
+
+# a Scroll titled "itemar habyt"
+K:202:0x83/0x9F
+
+# a Scroll titled "wahx our gre"
+K:203:0x83/0x9C
+
+# a Scroll titled "erk bieklis"
+K:204:0x83/0x9D
+
+# a Scroll titled "engsno argsan"
+K:205:0x83/0x9E
+
+# a Scroll titled "klis glenash"
+K:206:0x83/0x9F
+
+# a Scroll titled "ashval paylech"
+K:207:0x83/0x9C
+
+# a Scroll titled "fapay doea"
+K:208:0x83/0x9D
+
+# a Scroll titled "sefeng danod"
+K:209:0x83/0x9E
+
+# a Scroll titled "kli ing tadalf"
+K:210:0x83/0x9F
+
+# a Scroll titled "wah snofoo"
+K:211:0x83/0x9C
+
+# a Scroll titled "vlytox"
+K:212:0x83/0x9D
+
+# a Scroll titled "prokaks wahish"
+K:213:0x83/0x9E
+
+# a Scroll titled "klimon bieder"
+K:214:0x83/0x9F
+
+# a Scroll titled "alacre re org"
+K:215:0x83/0x9C
+
+# a Scroll titled "umgar danri"
+K:216:0x83/0x9D
+
+# a Scroll titled "ooder dokrog"
+K:217:0x83/0x9E
+
+# a Scroll titled "nihum khomar"
+K:218:0x83/0x9F
+
+# a Scroll titled "wexab jahnag"
+K:219:0x83/0x9C
+
+# a Scroll titled "re ab evssna"
+K:220:0x83/0x9D
+
+# a Scroll titled "denmung ishbul"
+K:221:0x83/0x9E
+
+# an Icky Green Potion
+K:222:0x85/0x84
+
+# a Light Brown Potion
+K:223:0x85/0x8E
+
+# a Clear Potion
+K:224:0x85/0x80
+
+# an Azure Potion
+K:225:0x85/0x8D
+
+# a Blue Potion
+K:226:0x85/0x85
+
+# a Blue Speckled Potion
+K:227:0x85/0x85
+
+# a Black Potion
+K:228:0x85/0x81
+
+# a Brown Potion
+K:229:0x85/0x86
+
+# a Brown Speckled Potion
+K:230:0x85/0x86
+
+# a Bubbling Potion
+K:231:0x85/0x81
+
+# a Chartreuse Potion
+K:232:0x85/0x8C
+
+# a Cloudy Potion
+K:233:0x85/0x80
+
+# a Copper Speckled Potion
+K:234:0x85/0x8E
+
+# a Crimson Potion
+K:235:0x85/0x83
+
+# a Cyan Potion
+K:236:0x85/0x8D
+
+# a Dark Blue Potion
+K:237:0x85/0x85
+
+# a Dark Green Potion
+K:238:0x85/0x84
+
+# a Dark Red Potion
+K:239:0x85/0x83
+
+# a Gold Speckled Potion
+K:240:0x85/0x8A
+
+# a Gray Potion
+K:241:0x85/0x88
+
+# a Gray Speckled Potion
+K:242:0x85/0x88
+
+# a Green Potion
+K:243:0x85/0x84
+
+# a Green Speckled Potion
+K:244:0x85/0x84
+
+# a Hazy Potion
+K:245:0x85/0x81
+
+# an Indigo Potion
+K:246:0x85/0x89
+
+# a Light Blue Potion
+K:247:0x85/0x8D
+
+# a Light Green Potion
+K:248:0x85/0x8C
+
+# a Magenta Potion
+K:249:0x85/0x83
+
+# a Metallic Blue Potion
+K:250:0x85/0x85
+
+# a Metallic Red Potion
+K:251:0x85/0x83
+
+# a Metallic Green Potion
+K:252:0x85/0x84
+
+# a Metallic Purple Potion
+K:253:0x85/0x89
+
+# an Orange Potion
+K:254:0x85/0x82
+
+# an Orange Speckled Potion
+K:255:0x85/0x82
+
+# a Pink Potion
+K:256:0x85/0x8B
+
+# a Pink Speckled Potion
+K:257:0x85/0x8B
+
+# a Puce Potion
+K:258:0x85/0x89
+
+# a Purple Potion
+K:259:0x85/0x89
+
+# a Red Potion
+K:260:0x85/0x83
+
+# a Red Speckled Potion
+K:261:0x85/0x83
+
+# a Silver Speckled Potion
+K:262:0x85/0x81
+
+# a Smoky Potion
+K:263:0x85/0x81
+
+# a Tangerine Potion
+K:264:0x85/0x82
+
+# a Violet Potion
+K:265:0x85/0x89
+
+# a Vermilion Potion
+K:266:0x85/0x83
+
+# a White Potion
+K:267:0x85/0x80
+
+# a Yellow Potion
+K:268:0x85/0x8A
+
+# an Aluminum Wand
+K:269:0x86/0x9D
+
+# a Cast Iron Wand
+K:270:0x86/0x91
+
+# a Chromium Wand
+K:271:0x86/0x90
+
+# a Copper Wand
+K:272:0x86/0x9E
+
+# a Gold Wand
+K:273:0x86/0x9A
+
+# an Iron Wand
+K:274:0x86/0x98
+
+# a Magnesium Wand
+K:275:0x86/0x91
+
+# a Molybdenum Wand
+K:276:0x86/0x91
+
+# a Nickel Wand
+K:277:0x86/0x9E
+
+# a Rusty Wand
+K:278:0x86/0x93
+
+# a Silver Wand
+K:279:0x86/0x91
+
+# a Steel Wand
+K:280:0x86/0x91
+
+# a Tin Wand
+K:281:0x86/0x91
+
+# a Titanium Wand
+K:282:0x86/0x90
+
+# a Tungsten Wand
+K:283:0x86/0x90
+
+# a Zirconium Wand
+K:284:0x86/0x91
+
+# a Zinc Wand
+K:285:0x86/0x91
+
+# a Copper-Plated Wand
+K:286:0x86/0x9E
+
+# a Gold-Plated Wand
+K:287:0x86/0x9A
+
+# a Silver-Plated Wand
+K:288:0x86/0x91
+
+# a Tin-Plated Wand
+K:289:0x86/0x91
+
+# a Zinc-Plated Wand
+K:290:0x86/0x91
+
+# a Mithril Wand
+K:291:0x86/0x9D
+
+# a Bronze Wand
+K:292:0x86/0x9E
+
 # Flight Arrow
 K:293:0xB6/0x90
+
+# a Brass Wand
+K:294:0x86/0x9E
+
+# a Platinum Wand
+K:295:0x86/0x90
+
+# a Lead Wand
+K:296:0x86/0x98
+
+# a Lead-Plated Wand
+K:297:0x86/0x98
+
+# an Ivory Wand
+K:298:0x86/0x90
+
+# an Adamantite Wand
+K:299:0x86/0x99
+
+# an Aspen Staff
+K:300:0x87/0x90
+
+# a Balsa Staff
+K:301:0x87/0x90
+
+# a Banyan Staff
+K:302:0x87/0x90
+
+# a Birch Staff
+K:303:0x87/0x90
+
+# a Cedar Staff
+K:304:0x87/0x90
+
+# a Cottonwood Staff
+K:305:0x87/0x90
+
+# a Cypress Staff
+K:306:0x87/0x90
+
+# a Dogwood Staff
+K:307:0x87/0x90
+
+# an Elm Staff
+K:308:0x87/0x90
+
+# an Eucalyptus Staff
+K:309:0x87/0x90
+
+# a Hemlock Staff
+K:310:0x87/0x90
+
+# a Hickory Staff
+K:311:0x87/0x90
+
+# an Ironwood Staff
+K:312:0x87/0x90
+
+# a Locust Staff
+K:313:0x87/0x90
+
+# a Mahogany Staff
+K:314:0x87/0x90
+
+# a Maple Staff
+K:315:0x87/0x90
+
+# a Mulberry Staff
+K:316:0x87/0x90
+
+# an Oak Staff
+K:317:0x87/0x90
+
+# a Pine Staff
+K:318:0x87/0x90
+
+# a Redwood Staff
+K:319:0x87/0x92
+
+# a Rosewood Staff
+K:320:0x87/0x92
+
+# a Spruce Staff
+K:321:0x87/0x90
+
+# a Sycamore Staff
+K:322:0x87/0x90
+
+# a Teak Staff
+K:323:0x87/0x90
+
+# a Walnut Staff
+K:324:0x87/0x90
+
+# a Mistletoe Staff
+K:325:0x87/0x93
+
+# a Hawthorn Staff
+K:326:0x87/0x90
+
+# a Bamboo Staff
+K:327:0x87/0x90
+
+# a Silver Staff
+K:328:0x87/0x95
+
+# a Runed Staff
+K:329:0x87/0x90
 
 # [Book of Common Prayer]
 K:330:0x8D/0x84
@@ -1019,6 +1660,93 @@ K:348:0x8E/0x88
 
 # Empty Bottle
 K:349:0x8E/0x87
+
+# an Aluminum Rod
+K:350:0x86/0x8D
+
+# a Cast Iron Rod
+K:351:0x86/0x81
+
+# a Chromium Rod
+K:352:0x86/0x80
+
+# a Copper Rod
+K:353:0x86/0x8E
+
+# a Gold Rod
+K:354:0x86/0x8A
+
+# an Iron Rod
+K:355:0x86/0x88
+
+# a Magnesium Rod
+K:356:0x86/0x81
+
+# a Molybdenum Rod
+K:357:0x86/0x81
+
+# a Nickel Rod
+K:358:0x86/0x8E
+
+# a Rusty Rod
+K:359:0x86/0x83
+
+# a Silver Rod
+K:360:0x86/0x81
+
+# a Steel Rod
+K:361:0x86/0x81
+
+# a Tin Rod
+K:362:0x86/0x81
+
+# a Titanium Rod
+K:363:0x86/0x80
+
+# a Tungsten Rod
+K:364:0x86/0x80
+
+# a Zirconium Rod
+K:365:0x86/0x81
+
+# a Zinc Rod
+K:366:0x86/0x81
+
+# a Copper-Plated Rod
+K:367:0x86/0x8E
+
+# a Gold-Plated Rod
+K:368:0x86/0x8A
+
+# a Silver-Plated Rod
+K:369:0x86/0x81
+
+# a Tin-Plated Rod
+K:370:0x86/0x81
+
+# a Zinc-Plated Rod
+K:371:0x86/0x81
+
+# a Mithril Rod
+K:372:0x86/0x8D
+
+# a Bronze Rod
+K:373:0x86/0x8E
+
+# a Brass Rod
+K:374:0x86/0x8E
+
+# a Platinum Rod
+K:375:0x86/0x80
+
+# a Lead Rod
+K:376:0x86/0x88
+
+# a Lead-Plated Rod
+K:377:0x86/0x88
+
+# an Ivory Rod
+K:378:0x86/0x80
 
 # [Call of the Wild]
 K:379:0x8D/0x80
@@ -1128,11 +1856,80 @@ K:413:0x88/0x82
 # Dragon Shield
 K:414:0x88/0x9C
 
+# a Violet Speckled Potion
+K:415:0x85/0x89
+
+# a Pungent Potion
+K:416:0x85/0x8B
+
+# a Clotted Red Potion
+K:417:0x85/0x83
+
+# a Viscous Pink Potion
+K:418:0x85/0x8B
+
+# an Oily Yellow Potion
+K:419:0x85/0x8A
+
+# a Gloopy Green Potion
+K:420:0x85/0x84
+
+# a Shimmering Potion
+K:421:0x85/0x89
+
+# a Yellow Speckled Potion
+K:422:0x85/0x8A
+
 # [Black Channels]
 K:423:0x8D/0x8A
 
 # [Necronomicon]
 K:424:0x8D/0x8B
+
+# a Zircon Ring
+K:425:0x84/0x8E
+
+# a Platinum Ring
+K:426:0x84/0x80
+
+# a Bronze Ring
+K:427:0x84/0x8E
+
+# a Gold Ring
+K:428:0x84/0x8A
+
+# an Obsidian Ring
+K:429:0x84/0x81
+
+# a Silver Ring
+K:430:0x84/0x81
+
+# a Tortoise Shell Ring
+K:431:0x84/0x84
+
+# a Mithril Ring
+K:432:0x84/0x8D
+
+# a Jet Ring
+K:433:0x84/0x81
+
+# an Engagement Ring
+K:434:0x84/0x8A
+
+# an Adamantite Ring
+K:435:0x84/0x89
+
+# a Wire Ring
+K:436:0x84/0x86
+
+# a Gold Potion
+K:437:0x85/0x8A
+
+# a Stinking Potion
+K:438:0x85/0x86
+
+# an Ivory White Potion
+K:439:0x85/0x80
 
 # copper
 K:480:0x83/0x91
@@ -1203,6 +2000,33 @@ K:501:0x8E/0x9E
 # Jewel
 K:502:0x8E/0x9F
 
+# a Pewter Amulet
+K:503:0x87/0x88
+
+# a Tortoise Shell Amulet
+K:504:0x87/0x84
+
+# a Golden Amulet
+K:505:0x87/0x8A
+
+# a Dilithium Ring
+K:506:0x84/0x81
+
+# a Wooden Ring
+K:507:0x84/0x86
+
+# a Serpent Ring
+K:508:0x84/0x84
+
+# a Wedding Ring
+K:509:0x84/0x8A
+
+# a Brass Ring
+K:510:0x84/0x82
+
+# a Plain Gold Ring
+K:511:0x84/0x8A
+
 # [Conjurings & Tricks]
 K:512:0x8D/0x90
 
@@ -1226,6 +2050,18 @@ K:518:0x8D/0x8E
 
 # [Manual of Mastery]
 K:519:0x8D/0x8F
+
+# an Azure Amulet
+K:520:0x87/0x8D
+
+# a Crystal Amulet
+K:521:0x87/0x8D
+
+# a Silver Amulet
+K:522:0x87/0x81
+
+# a Copper Amulet
+K:523:0x87/0x8E
 
 # Zweihander
 K:524:0xB5/0x8C
@@ -1350,6 +2186,9 @@ K:564:0x0B/0x21
 # Diamond Edge
 K:565:0xB5/0x9B
 
+# a Scroll titled "danseh nejood"
+K:566:0x83/0x9F
+
 # Magical Figurine of #
 K:567:0xB4/0xAF
 
@@ -1398,11 +2237,20 @@ K:581:0xA8/0xA0
 # Feanorian lamp
 K:582:0xB5/0xB6
 
+# an Adamantite Rod
+K:583:0x86/0x89
+
 # Set of Dragon Gloves
 K:584:0x0D/0x5D
 
 # Pair of Dragon Boots
 K:585:0x0D/0x5D
+
+# a Plain Goldarn Ring
+K:586:0x84/0x8A
+
+# a Swastika Amulet
+K:587:0x87/0x89
 
 # Gun
 K:588:0x04/0x7D
@@ -1413,6 +2261,9 @@ K:589:0xB6/0xA7
 # Stone
 K:590:0x0C/0x2A
 
+# a Platinum Amulet
+K:591:0x87/0x80
+
 # Poison Needle
 K:592:0x8E/0x92
 
@@ -1422,8 +2273,32 @@ K:593:0xB4/0xAB
 # Death Scythe 
 K:594:0x8B/0x97
 
+# a Sky Blue Potion
+K:595:0x85/0x8D
+
+# a Scarab Ring
+K:596:0x84/0x8C
+
 # Card
 K:597:0x0D/0x7E
+
+# a Rusty Ring
+K:598:0x84/0x83
+
+# a Steel Ring
+K:599:0x84/0x81
+
+# a Scroll titled "nin xuxucre"
+K:600:0x83/0x9C
+
+# a Scroll titled "he proktab"
+K:601:0x83/0x9D
+
+# a Rusty Amulet
+K:602:0x87/0x83
+
+# a Silver Potion
+K:603:0x85/0x80
 
 # [Handbook for Pupils]
 K:604:0x0B/0x3F
@@ -1437,8 +2312,14 @@ K:606:0x0F/0x3F
 # [Spiritual Enlightenment]
 K:607:0x0F/0x3F
 
+# a Golden Staff
+K:608:0x87/0x94
+
 # Levitation Stone
 K:609:0x0E/0x2A
+
+# a Curved Amulet
+K:610:0x87/0x84
 
 # Ethereal Cloak
 K:611:0x89/0x89
@@ -1455,6 +2336,15 @@ K:614:0x0A/0x28
 # Fishingpole
 K:615:0x0E/0x2F
 
+# a Dragon's claw Amulet
+K:616:0x87/0x8C
+
+# a Bronze Potion
+K:617:0x85/0x83
+
+# a Tanzanite Ring
+K:618:0x84/0x8D
+
 # Steel Bolt
 K:619:0xB6/0xA2
 
@@ -1470,8 +2360,26 @@ K:622:0xB6/0xBA
 # Clothes
 K:623:0x0B/0x28
 
+# a Rosary Amulet
+K:624:0x87/0x8C
+
+# a Jade Amulet
+K:625:0x87/0x84
+
+# a Nephrite Ring
+K:626:0x84/0x84
+
 # Knight's Shield
 K:627:0x88/0x99
+
+# an Uridium Wand
+K:628:0x86/0x9B
+
+# an Ashen Staff
+K:629:0x87/0x95
+
+# a Scroll titled "unjah blu comp"
+K:630:0x83/0x9E
 
 # [Apprentice Handbook]
 K:631:0x09/0x3F
@@ -1503,8 +2411,17 @@ K:639:0x07/0x3F
 # [Hokusin Ittouryuu Kaiden]
 K:640:0x07/0x3F
 
+# a Hexagonal Wand
+K:641:0x86/0x93
+
+# an Uridium Rod
+K:642:0x86/0x8B
+
 # Photograph of #
 K:643:0xB4/0xAC
+
+# a Mithril Amulet
+K:644:0x87/0x8D
 
 # Robe
 K:645:0x89/0x8C
@@ -1521,8 +2438,14 @@ K:648:0x04/0x3F
 # [Hellfire Tome]
 K:649:0x04/0x3F
 
+# a Scroll titled "bulther valish"
+K:650:0x83/0x9F
+
 # Magic Whistle
 K:651:0xB8/0x88
+
+# a Ruby Amulet
+K:652:0x87/0x83
 
 # Black Clothes
 K:653:0xB6/0x88
@@ -1538,6 +2461,21 @@ K:656:0x01/0x3F
 
 # [Wrath of God]
 K:657:0x01/0x3F
+
+# a Gnarled Staff
+K:658:0x87/0x95
+
+# an Emerald Amulet
+K:659:0x87/0x84
+
+# a Sapphire Amulet
+K:660:0x87/0x85
+
+# a Garnet Amulet
+K:661:0x87/0x83
+
+# a Diamond Amulet
+K:662:0x87/0x80
 
 
 ##### Monster attr/char definitions #####

@@ -3850,11 +3850,21 @@ void do_cmd_visuals(void)
 				/* Skip non-entries */
 				if (!k_ptr->name) continue;
 
-				/* Skip entries with flavor */
-				if (k_ptr->flavor) continue;
+				if (!k_ptr->flavor)
+				{
+					/* Tidy name */
+					strip_name(o_name, i);
+				}
+				else
+				{
+					object_type forge;
 
-				/* Tidy name */
-				strip_name(o_name, i);
+					/* Prepare dummy object */
+					object_prep(&forge, i);
+
+					/* Get un-shuffled flavor name */
+					object_desc(o_name, &forge, OD_FORCE_FLAVOR);
+				}
 
 				/* Dump a comment */
 				auto_dump_printf("# %s\n", o_name);
@@ -5431,7 +5441,7 @@ static int collect_objects(int grp_cur, int object_idx[], byte mode)
 
 		if (mode & 0x02)
 		{
-			if (k_ptr->flavor) continue;
+			/* Any objects will be displayed */
 		}
 		else
 		{
@@ -7937,6 +7947,7 @@ static void display_object_list(int col, int row, int per_page, int object_idx[]
 	{
 		char o_name[80];
 		byte a, c;
+		object_kind *flavor_k_ptr;
 
 		/* Get the object index */
 		int k_idx = object_idx[object_top + i];
@@ -7948,10 +7959,32 @@ static void display_object_list(int col, int row, int per_page, int object_idx[]
 		byte attr = ((k_ptr->aware || visual_only) ? TERM_WHITE : TERM_SLATE);
 		byte cursor = ((k_ptr->aware || visual_only) ? TERM_L_BLUE : TERM_BLUE);
 
+
+		if (k_ptr->flavor)
+		{
+			/* Appearance of this object is shuffled */
+			flavor_k_ptr = &k_info[k_ptr->flavor];
+		}
+		else
+		{
+			/* Appearance of this object is very normal */
+			flavor_k_ptr = k_ptr;
+		}
+
+
+
 		attr = ((i + object_top == object_cur) ? cursor : attr);
 
-		/* Tidy name */
-		strip_name(o_name, k_idx);
+		if (!k_ptr->flavor || k_ptr->aware)
+		{
+			/* Tidy name */
+			strip_name(o_name, k_idx);
+		}
+		else
+		{
+			/* Flavor name */
+			strcpy(o_name, k_name + flavor_k_ptr->flavor_name);
+		}
 
 		/* Display the name */
 		c_prt(attr, o_name, row + i, col);
@@ -7959,22 +7992,15 @@ static void display_object_list(int col, int row, int per_page, int object_idx[]
 		/* Hack -- visual_list mode */
 		if (per_page == 1)
 		{
-			c_prt(attr, format("%02x/%02x", k_ptr->x_attr, k_ptr->x_char), row + i, (p_ptr->wizard || visual_only) ? 64 : 68);
+			c_prt(attr, format("%02x/%02x", flavor_k_ptr->x_attr, flavor_k_ptr->x_char), row + i, (p_ptr->wizard || visual_only) ? 64 : 68);
 		}
 		if (p_ptr->wizard || visual_only)
 		{
 			c_prt(attr, format("%d", k_idx), row + i, 70);
 		}
 
-		a = k_ptr->flavor ? misc_to_attr[k_ptr->flavor] : k_ptr->x_attr;
-		c = k_ptr->flavor ? misc_to_char[k_ptr->flavor] : k_ptr->x_char;
-
-		/* Symbol is unknown */
-		if (!k_ptr->aware && !p_ptr->wizard)
-		{
-			c = ' ';
-			a = TERM_DARK;
-		}
+		a = flavor_k_ptr->x_attr;
+		c = flavor_k_ptr->x_char;
 
 		/* Display symbol */
 		Term_queue_bigchar(use_bigtile ? 76 : 77, row + i, a, c, 0, 0);
@@ -8090,6 +8116,20 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, int di
 	}
 	else
 	{
+		object_kind *k_ptr = &k_info[direct_k_idx];
+		object_kind *flavor_k_ptr;
+
+		if (k_ptr->flavor)
+		{
+			/* Appearance of this object is shuffled */
+			flavor_k_ptr = &k_info[k_ptr->flavor];
+		}
+		else
+		{
+			/* Appearance of this object is very normal */
+			flavor_k_ptr = k_ptr;
+		}
+
 		object_idx[0] = direct_k_idx;
 		object_old = direct_k_idx;
 		object_cnt = 1;
@@ -8098,7 +8138,7 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, int di
 		object_idx[1] = -1;
 
 		(void)visual_mode_command('v', &visual_list, browser_rows - 1, wid - (max + 3),
-			&attr_top, &char_left, &k_info[direct_k_idx].x_attr, &k_info[direct_k_idx].x_char, need_redraw);
+			&attr_top, &char_left, &flavor_k_ptr->x_attr, &flavor_k_ptr->x_char, need_redraw);
 	}
 
 	/* Terminate the list */
@@ -8116,7 +8156,7 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, int di
 	while (!flag)
 	{
 		char ch;
-		object_kind *k_ptr;
+		object_kind *k_ptr, *flavor_k_ptr;
 
 		if (redraw)
 		{
@@ -8195,17 +8235,28 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, int di
 		/* Get the current object */
 		k_ptr = &k_info[object_idx[object_cur]];
 
+		if (k_ptr->flavor)
+		{
+			/* Appearance of this object is shuffled */
+			flavor_k_ptr = &k_info[k_ptr->flavor];
+		}
+		else
+		{
+			/* Appearance of this object is very normal */
+			flavor_k_ptr = k_ptr;
+		}
+
 		/* Prompt */
 #ifdef JP
 		prt(format("<方向>%s%s%s, ESC",
 			(!visual_list && !visual_only) ? ", 'r'で詳細を見る" : "",
-			k_ptr->flavor ? "" : visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更",
+			visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更",
 			(attr_idx || char_idx) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"),
 			hgt - 1, 0);
 #else
 		prt(format("<dir>%s%s%s, ESC",
 			(!visual_list && !visual_only) ? ", 'r' to recall" : "",
-			k_ptr->flavor ? "" : visual_list ? ", ENTER to accept" : ", 'v' for visuals",
+			visual_list ? ", ENTER to accept" : ", 'v' for visuals",
 			(attr_idx || char_idx) ? ", 'c', 'p' to paste" : ", 'c' to copy"),
 			hgt - 1, 0);
 #endif
@@ -8228,7 +8279,7 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, int di
 
 		if (visual_list)
 		{
-			place_visual_list_cursor(max + 3, 7, k_ptr->x_attr, k_ptr->x_char, attr_top, char_left);
+			place_visual_list_cursor(max + 3, 7, flavor_k_ptr->x_attr, flavor_k_ptr->x_char, attr_top, char_left);
 		}
 		else if (!column)
 		{
@@ -8242,8 +8293,7 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, int di
 		ch = inkey();
 
 		/* Do visual mode command if needed */
-		/* Symbol of objects with flavor cannot be changed */
-		if (!k_ptr->flavor && visual_mode_command(ch, &visual_list, browser_rows-1, wid - (max + 3), &attr_top, &char_left, &k_ptr->x_attr, &k_ptr->x_char, need_redraw))
+		if (visual_mode_command(ch, &visual_list, browser_rows-1, wid - (max + 3), &attr_top, &char_left, &flavor_k_ptr->x_attr, &flavor_k_ptr->x_char, need_redraw))
 		{
 			if (direct_k_idx >= 0)
 			{

@@ -770,6 +770,7 @@ static cptr k_info_flags[] =
 	"ESP_NONLIVING",
 	"ESP_UNIQUE",
 	"FULL_NAME",
+	"FIXED_FLAVOR",
 };
 
 
@@ -1818,19 +1819,19 @@ errr parse_k_info(char *buf, header *head)
 	/* Process 'N' for "New/Number/Name" */
 	if (buf[0] == 'N')
 	{
+#ifdef JP
+		char *flavor;
+#endif
+
 		/* Find the colon before the name */
 		s = my_strchr(buf+2, ':');
 
-			/* Verify that colon */
+		/* Verify that colon */
 		if (!s) return (1);
 
 		/* Nuke the colon, advance to the name */
 		*s++ = '\0';
 
-#ifdef JP
-		/* Paranoia -- require a name */
-		if (!*s) return (1);
-#endif
 		/* Get the index */
 		i = atoi(buf+2);
 
@@ -1847,6 +1848,22 @@ errr parse_k_info(char *buf, header *head)
 		k_ptr = &k_info[i];
 
 #ifdef JP
+		/* Paranoia -- require a name */
+		if (!*s) return (1);
+
+		/* Find the colon before the flavor */
+		flavor = my_strchr(s, ':');
+
+		/* Verify that colon */
+		if (flavor)
+		{
+			/* Nuke the colon, advance to the flavor */
+			*flavor++ = '\0';
+
+			/* Store the flavor */
+			if (!add_name(&k_ptr->flavor_name, head, flavor)) return (7);
+		}
+
 		/* Store the name */
 		if (!add_name(&k_ptr->name, head, s)) return (7);
 #endif
@@ -1866,8 +1883,23 @@ errr parse_k_info(char *buf, header *head)
 #else
 	else if (buf[0] == 'E')
 	{
-		/* Acquire the Text */
+		char *flavor;
+
+		/* Acquire the name */
 		s = buf+2;
+
+		/* Find the colon before the flavor */
+		flavor = my_strchr(s, ':');
+
+		/* Verify that colon */
+		if (flavor)
+		{
+			/* Nuke the colon, advance to the flavor */
+			*flavor++ = '\0';
+
+			/* Store the flavor */
+			if (!add_name(&k_ptr->flavor_name, head, flavor)) return (7);
+		}
 
 		/* Store the name */
 		if (!add_name(&k_ptr->name, head, s)) return (7);

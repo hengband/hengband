@@ -10,374 +10,6 @@
 
 #include "angband.h"
 
-
-/*
- * Hack -- note that "TERM_MULTI" is now just "TERM_VIOLET".
- * We will have to find a cleaner method for "MULTI_HUED" later.
- * There were only two multi-hued "flavors" (one potion, one food).
- * Plus five multi-hued "base-objects" (3 dragon scales, one blade
- * of chaos, and one something else).  See the SHIMMER_OBJECTS code
- * in "dungeon.c" and the object color extractor in "cave.c".
- */
-#define TERM_MULTI      TERM_VIOLET
-
-
-/*
- * Max sizes of the following arrays
- */
-#define MAX_ROCKS      59       /* Used with rings (min 38) */
-#define MAX_AMULETS    30       /* Used with amulets (min 14) */
-#define MAX_WOODS      34       /* Used with staffs (min 30) */
-#define MAX_METALS     40       /* Used with wands/rods (min 29/29) */
-#define MAX_COLORS     70       /* Used with potions (min 60) */
-#define MAX_SHROOM     20       /* Used with mushrooms (min 20) */
-#define MAX_TITLES     55       /* Used with scrolls (min 48) */
-#define MAX_SYLLABLES 164       /* Used with scrolls (see below) */
-
-
-/*
- * Rings (adjectives and colors)
- */
-
-static cptr ring_adj[MAX_ROCKS]
-#ifndef JP
-= {
-	"Alexandrite", "Amethyst", "Aquamarine", "Azurite", "Beryl",
-	"Bloodstone", "Calcite", "Carnelian", "Corundum", "Diamond",
-	"Emerald", "Fluorite", "Garnet", "Granite", "Jade",
-	"Jasper", "Lapis Lazuli", "Malachite", "Marble", "Moonstone",
-	"Onyx", "Opal", "Pearl", "Quartz", "Quartzite",
-	"Rhodonite", "Ruby", "Sapphire", "Tiger Eye", "Topaz",
-	"Turquoise", "Zircon", "Platinum", "Bronze", "Gold",
-	"Obsidian", "Silver", "Tortoise Shell", "Mithril", "Jet",
-	"Engagement", "Adamantite",
-	"Wire", "Dilithium", "Bone", "Wooden",
-	"Spikard", "Serpent",   "Wedding", "Double",
-	"Plain", "Brass",  "Scarab","Shining",
-	"Rusty","Transparent", "Steel", "Tanzanite",
-	"Nephrite",
-};
-#else
-= {
-    "金緑石の","アメジストの","アクアマリンの","めのうの","緑柱石の",
-    "血玉随の","方解石の","赤めのうの","綱玉の","ダイアモンドの",
-    "エメラルドの","ホタル石の","ガーネットの","御影石の","ひすいの",
-    "ジャスパーの","青瑠璃の","クジャク石の","大理石の","ムーンストーンの",
-    "縞めのうの","オパールの","真珠の","水晶の","石英岩の",
-    "ザクロ石の","ルビーの","サファイアの","タイガーアイの","トパーズの",
-    "トルコ石の","ジルコンの","プラチナの","ブロンズの","金の",
-    "黒曜石の","銀の","べっ甲の","ミスリルの","黒玉の",
-    "婚約","アダマンタイトの",
-    "針金の","ディリシウムの","骨の","木の",
-    "スピカの" /*nuke me*/ ,"蛇の","結婚","二重の",
-    "飾りのない","青銅の","スカラベの" ,"輝く",
-    "錆びた","透明な","鋼鉄の","タンザナイトの",
-    "軟玉の",
-};
-#endif
-
-static byte ring_col[MAX_ROCKS] =
-{
-	TERM_GREEN, TERM_VIOLET, TERM_L_BLUE, TERM_L_BLUE, TERM_L_GREEN,
-	TERM_RED, TERM_WHITE, TERM_RED, TERM_SLATE, TERM_WHITE,
-	TERM_GREEN, TERM_L_GREEN, TERM_RED, TERM_L_DARK, TERM_L_GREEN,
-	TERM_UMBER, TERM_BLUE, TERM_GREEN, TERM_WHITE, TERM_L_WHITE,
-	TERM_L_RED, TERM_L_WHITE, TERM_WHITE, TERM_L_WHITE, TERM_L_WHITE,
-	TERM_L_RED, TERM_RED, TERM_BLUE, TERM_YELLOW, TERM_YELLOW,
-	TERM_L_BLUE, TERM_L_UMBER, TERM_WHITE, TERM_L_UMBER, TERM_YELLOW,
-	TERM_L_DARK, TERM_L_WHITE, TERM_GREEN, TERM_L_BLUE, TERM_L_DARK,
-	TERM_YELLOW, TERM_VIOLET,
-	TERM_UMBER, TERM_L_WHITE, TERM_WHITE, TERM_UMBER,
-	TERM_BLUE, TERM_GREEN, TERM_YELLOW, TERM_ORANGE,
-	TERM_YELLOW, TERM_ORANGE, TERM_L_GREEN, TERM_YELLOW,
-	TERM_RED, TERM_WHITE, TERM_WHITE, TERM_YELLOW,
-	TERM_GREEN,
-};
-
-
-/*
- * Amulets (adjectives and colors)
- */
-static cptr amulet_adj[MAX_AMULETS]
-#ifndef JP
-= {
-	"Amber", "Driftwood", "Coral", "Agate", "Ivory",
-	"Obsidian", "Bone", "Brass", "Bronze", "Pewter",
-	"Tortoise Shell", "Golden", "Azure", "Crystal", "Silver",
-	"Copper", "Swastika", "Platinum","Runed", "Rusty",
-	"Curved", "Dragon's claw", "Rosary", "Jade", "Mithril",
-	"Ruby", "Emerald", "Sapphire", "Garnet", "Diamond"
-};
-#else
-= {
-    "琥珀の","流木の","サンゴの","めのうの","象牙の",
-    "黒曜石の","骨の","真鍮の","青銅の","しろめの",
-    "べっ甲の","金の","瑠璃の","水晶の","銀の",
-    "銅の","卍の", "プラチナの", "ルーンが刻まれた","錆びた",
-    "曲がった", "ドラゴンの爪の", "数珠の", "ひすいの", "ミスリルの",
-    "ルビーの", "エメラルドの", "サファイアの", "ガーネットの", "ダイアモンドの"
-};
-#endif
-
-static byte amulet_col[MAX_AMULETS] =
-{
-	TERM_YELLOW, TERM_L_UMBER, TERM_WHITE, TERM_L_WHITE, TERM_WHITE,
-	TERM_L_DARK, TERM_WHITE, TERM_L_UMBER, TERM_L_UMBER, TERM_SLATE,
-	TERM_GREEN, TERM_YELLOW, TERM_L_BLUE, TERM_L_BLUE, TERM_L_WHITE,
-	TERM_L_UMBER, TERM_VIOLET, TERM_WHITE, TERM_UMBER, TERM_RED, 
-	TERM_GREEN, TERM_L_GREEN, TERM_L_GREEN, TERM_GREEN, TERM_L_BLUE, 
-	TERM_RED, TERM_GREEN, TERM_BLUE, TERM_RED, TERM_WHITE
-};
-
-
-/*
- * Staffs (adjectives and colors)
- */
-static cptr staff_adj[MAX_WOODS]
-#ifndef JP
-= {
-	"Aspen", "Balsa", "Banyan", "Birch", "Cedar",
-	"Cottonwood", "Cypress", "Dogwood", "Elm", "Eucalyptus",
-	"Hemlock", "Hickory", "Ironwood", "Locust", "Mahogany",
-	"Maple", "Mulberry", "Oak", "Pine", "Redwood",
-	"Rosewood", "Spruce", "Sycamore", "Teak", "Walnut",
-	"Mistletoe", "Hawthorn", "Bamboo", "Silver", "Runed",
-	"Golden", "Ashen", "Ivory","Gnarled"/*,"Willow"*/
-};
-#else
-= {
-    "ポプラの","バルサの","バンヤンの","カバの","西洋スギの",
-    "檜の","イトスギの","ミズキの","ニレの","ユーカリの",
-    "ツガの","ブナの","黒檀の","アカシアの","マホガニーの",
-    "カエデの","クワの","カシの","松の","杉の",
-    "紫檀の","エゾマツの","イチジクの","チークの","クルミの",
-    "ヤドリギの","サンザシの","竹の","銀の","ルーンの",
-    "金の","トネリコの", "象牙の", "月桂樹の"
-};
-#endif
-
-static byte staff_col[MAX_WOODS] =
-{
-	TERM_L_UMBER, TERM_L_UMBER, TERM_L_UMBER, TERM_L_UMBER, TERM_L_UMBER,
-	TERM_L_UMBER, TERM_L_UMBER, TERM_L_UMBER, TERM_L_UMBER, TERM_L_UMBER,
-	TERM_L_UMBER, TERM_L_UMBER, TERM_UMBER, TERM_L_UMBER, TERM_UMBER,
-	TERM_L_UMBER, TERM_L_UMBER, TERM_L_UMBER, TERM_L_UMBER, TERM_RED,
-	TERM_RED, TERM_L_UMBER, TERM_L_UMBER, TERM_L_UMBER, TERM_UMBER,
-	TERM_GREEN, TERM_L_UMBER, TERM_L_UMBER, TERM_L_WHITE, TERM_UMBER,
-	TERM_YELLOW, TERM_SLATE, TERM_WHITE, TERM_SLATE
-};
-
-
-/*
- * Wands (adjectives and colors)
- */
-static cptr wand_adj[MAX_METALS]
-#ifndef JP
-= {
-	"Aluminum", "Cast Iron", "Chromium", "Copper", "Gold",
-	"Iron", "Magnesium", "Molybdenum", "Nickel", "Rusty",
-	"Silver", "Steel", "Tin", "Titanium", "Tungsten",
-	"Zirconium", "Zinc", "Aluminum-Plated", "Copper-Plated", "Gold-Plated",
-	"Nickel-Plated", "Silver-Plated", "Steel-Plated", "Tin-Plated", "Zinc-Plated",
-	"Mithril-Plated", "Mithril", "Runed", "Bronze", "Brass",
-	"Platinum", "Lead","Lead-Plated", "Ivory" , "Adamantite",
-	"Uridium", "Long", "Short", "Hexagonal", "Carbonized"
-};
-#else
-= {
-    "アルミの","鋳鉄の","クロムの","銅の","金の",
-    "鉄の","マグネシウムの","モリブデンの","ニッケルの","錆びた",
-    "銀の","鋼鉄の","ブリキの","チタンの","タングステンの",
-    "ジルコンの","亜鉛の","アルミメッキの","銅メッキの","金メッキの",
-    "白銅メッキの","銀メッキの","鉄メッキの","スズメッキの","亜鉛メッキの",
-    "ミスリルメッキの","ミスリルの","ルーンが刻まれた","青銅の","真鍮の",
-    "プラチナの","鉛の","鉛メッキの","象牙の","アダマンタイトの",
-    "イリヂウムの","長い","短い","六角形の", "炭素の"
-};
-#endif
-
-static byte wand_col[MAX_METALS] =
-{
-	TERM_L_BLUE, TERM_L_DARK, TERM_WHITE, TERM_L_UMBER, TERM_YELLOW,
-	TERM_SLATE, TERM_L_WHITE, TERM_L_WHITE, TERM_L_UMBER, TERM_RED,
-	TERM_L_WHITE, TERM_L_WHITE, TERM_L_WHITE, TERM_WHITE, TERM_WHITE,
-	TERM_L_WHITE, TERM_L_WHITE, TERM_L_BLUE, TERM_L_UMBER, TERM_YELLOW,
-	TERM_L_UMBER, TERM_L_WHITE, TERM_L_WHITE, TERM_L_WHITE, TERM_L_WHITE,
-	TERM_L_BLUE, TERM_L_BLUE, TERM_UMBER, TERM_L_UMBER, TERM_L_UMBER,
-	TERM_WHITE, TERM_SLATE, TERM_SLATE, TERM_WHITE, TERM_VIOLET,
-	TERM_L_RED, TERM_L_BLUE, TERM_BLUE, TERM_RED, TERM_L_DARK
-};
-
-
-/*
- * Rods (adjectives and colors).
- * Efficiency -- copied from wand arrays
- */
-
-static cptr rod_adj[MAX_METALS];
-
-static byte rod_col[MAX_METALS];
-
-
-/*
- * Mushrooms (adjectives and colors)
- */
-
-static cptr food_adj[MAX_SHROOM]
-#ifndef JP
-= {
-	"Blue", "Black", "Black Spotted", "Brown", "Dark Blue",
-	"Dark Green", "Dark Red", "Yellow", "Furry", "Green",
-	"Grey", "Light Blue", "Light Green", "Violet", "Red",
-	"Slimy", "Tan", "White", "White Spotted", "Wrinkled",
-};
-#else
-= {
-    "青い","黒い","黒斑の","茶色の","群青の",
-    "深緑の","紅色の","黄色い","苔むした","緑の",
-    "グレーの","空色の","黄緑の","スミレ色の","赤い",
-    "ねばねばした","黄褐色の","白い","白斑の","しわしわの",
-};
-#endif
-
-static byte food_col[MAX_SHROOM] =
-{
-	TERM_BLUE, TERM_L_DARK, TERM_L_DARK, TERM_UMBER, TERM_BLUE,
-	TERM_GREEN, TERM_RED, TERM_YELLOW, TERM_L_WHITE, TERM_GREEN,
-	TERM_SLATE, TERM_L_BLUE, TERM_L_GREEN, TERM_VIOLET, TERM_RED,
-	TERM_SLATE, TERM_L_UMBER, TERM_WHITE, TERM_WHITE, TERM_UMBER
-};
-
-
-/*
- * Color adjectives and colors, for potions.
- * Hack -- The first four entries are hard-coded.
- * (water, apple juice, slime mold juice, something)
- */
-
-static cptr potion_adj[MAX_COLORS]
-#ifndef JP
-= {
-	"Clear", "Light Brown", "Icky Green", "xxx",
-	"Azure", "Blue", "Blue Speckled", "Black", "Brown", "Brown Speckled",
-	"Bubbling", "Chartreuse", "Cloudy", "Copper Speckled", "Crimson", "Cyan",
-	"Dark Blue", "Dark Green", "Dark Red", "Gold Speckled", "Green",
-	"Green Speckled", "Grey", "Grey Speckled", "Hazy", "Indigo",
-	"Light Blue", "Light Green", "Magenta", "Metallic Blue", "Metallic Red",
-	"Metallic Green", "Metallic Purple", "Misty", "Orange", "Orange Speckled",
-	"Pink", "Pink Speckled", "Puce", "Purple", "Purple Speckled",
-	"Red", "Red Speckled", "Silver Speckled", "Smoky", "Tangerine",
-	"Violet", "Vermilion", "White", "Yellow", "Violet Speckled",
-	"Pungent", "Clotted Red", "Viscous Pink", "Oily Yellow", "Gloopy Green",
-	"Shimmering", "Coagulated Crimson", "Yellow Speckled", "Gold",
-	"Manly", "Stinking", "Oily Black", "Ichor", "Ivory White", "Sky Blue",
-	"Gray", "Silver", "Bronze", "Flashing",
-};
-#else
-= {
-    "透明な","薄茶色の","よどんだ緑の","漆黒の",
-    "紺碧の","青い","青斑の","黒い","茶色の","茶斑の",
-    "泡だった","薄黄緑色の","濁った","銅斑の","紅色の","シアン色の",
-    "群青色の","深い緑の","深い赤色の","金斑の","緑色の",
-    "緑斑の","灰色の","灰斑の","ぼやけた色の","藍色の",
-    "薄い青色の","薄い緑色の","マゼンタ色の","青く輝く","赤く輝く",
-    "緑に輝く","紫に輝く","霧状の","オレンジ色の","オレンジ斑の",
-    "ピンク色の","ピンク斑の","黒褐色の","紫色の","うすい紫斑の",
-    "赤い","赤斑の","銀斑の","煙った","橙色の",
-    "スミレ色の","朱色の","白い","黄色い", "紫斑の",
-    "刺激臭のする","よどんだ赤の","ドロドロの","ねばった黄色の","暗緑色の",
-    "輝く","ねばった深紅の","黄斑の","金色の",
-    "男臭い" /*nuke me*/,"悪臭のする","黒油色の","脳漿の",
-    "象牙色の","空色の", "ねずみ色の", "銀色の", "赤銅色の",
-    "キラキラ光る"
-};
-#endif
-
-static byte potion_col[MAX_COLORS] =
-{
-	TERM_WHITE, TERM_L_UMBER, TERM_GREEN, 0,
-	TERM_L_BLUE, TERM_BLUE, TERM_BLUE, TERM_L_DARK, TERM_UMBER, TERM_UMBER,
-	TERM_L_WHITE, TERM_L_GREEN, TERM_WHITE, TERM_L_UMBER, TERM_RED, TERM_L_BLUE,
-	TERM_BLUE, TERM_GREEN, TERM_RED, TERM_YELLOW, TERM_GREEN,
-	TERM_GREEN, TERM_SLATE, TERM_SLATE, TERM_L_WHITE, TERM_VIOLET,
-	TERM_L_BLUE, TERM_L_GREEN, TERM_RED, TERM_BLUE, TERM_RED,
-	TERM_GREEN, TERM_VIOLET, TERM_L_WHITE, TERM_ORANGE, TERM_ORANGE,
-	TERM_L_RED, TERM_L_RED, TERM_VIOLET, TERM_VIOLET, TERM_VIOLET,
-	TERM_RED, TERM_RED, TERM_L_WHITE, TERM_L_DARK, TERM_ORANGE,
-	TERM_VIOLET, TERM_RED, TERM_WHITE, TERM_YELLOW, TERM_VIOLET,
-	TERM_L_RED, TERM_RED, TERM_L_RED, TERM_YELLOW, TERM_GREEN,
-	TERM_MULTI, TERM_RED, TERM_YELLOW, TERM_YELLOW,
-	TERM_L_UMBER, TERM_UMBER, TERM_L_DARK, TERM_RED,
-	TERM_WHITE, TERM_L_BLUE, TERM_L_WHITE, TERM_WHITE, TERM_RED,
-	TERM_YELLOW
-};
-
-
-/*
- * Syllables for scrolls (must be 1-4 letters each)
- */
-
-static cptr syllables[MAX_SYLLABLES]
-#ifdef JP
-= {
-	"天", "地", "無", "用", "一", "刀", "両", "断",
-	"衣", "縫", "日", "千", "秋", "満", "身", "創",
-	"痍", "七", "転", "八", "倒", "臥", "薪",
-	"嘗", "胆", "起", "死", "回", "生", "文",
-	"武", "道", "竜", "頭", "蛇", "尾", "単", "刀", "直", "入",
-	"進", "退", "五", "臓", "六", "腑", "大", "山", "鳴",
-	"動", "風", "林", "火", "絶", "体", "命", "四",
-	"面", "楚", "歌", "完", "全", "欠", "跳", "梁",
-	"跋", "扈", "魑", "魅", "魍", "魎", "縦",
-	"横", "尽", "神", "出", "鬼", "没", "温", "故", "知",
-	"新", "春", "夏", "冬", "純", "真", "垢", "興",
-	"味", "津", "確", "比", "苦", "心", "惨", "澹",
-	"念", "発", "前", "代", "未", "聞", "空", "後",
-	"攫", "金", "森", "羅", "万", "象", "変", "化",
-	"十", "中", "八", "九", "人", "色", "試", "行",
-	"錯", "誤", "事", "実", "根", "吸", "収", "合",
-	"併", "全", "国", "制", "覇", "焼", "肉", "定",
-	"食", "骨", "牙", "柳", "飛", "翔", "封", "印",
-	"疾", "乱", "武", "将", "軽", "忍", "剣", "能",
-	"聖", "邪", "呪", "識", "幻", "感", "毒", "闇",
-	"落", "陰", "陽"
-};
-#else
-= {
-	"a", "ab", "ag", "aks", "ala", "an", "ankh", "app",
-	"arg", "arze", "ash", "aus", "ban", "bar", "bat", "bek",
-	"bie", "bin", "bit", "bjor", "blu", "bot", "bu",
-	"byt", "comp", "con", "cos", "cre", "dalf", "dan",
-	"den", "der", "doe", "dok", "eep", "el", "eng", "er", "ere", "erk",
-	"esh", "evs", "fa", "fid", "flit", "for", "fri", "fu", "gan",
-	"gar", "glen", "gop", "gre", "ha", "he", "hyd", "i",
-	"ing", "ion", "ip", "ish", "it", "ite", "iv", "jo",
-	"kho", "kli", "klis", "la", "lech", "man", "mar",
-	"me", "mi", "mic", "mik", "mon", "mung", "mur", "nag", "nej",
-	"nelg", "nep", "ner", "nes", "nis", "nih", "nin", "o",
-	"od", "ood", "org", "orn", "ox", "oxy", "pay", "pet",
-	"ple", "plu", "po", "pot", "prok", "re", "rea", "rhov",
-	"ri", "ro", "rog", "rok", "rol", "sa", "san", "sat",
-	"see", "sef", "seh", "shu", "ski", "sna", "sne", "snik",
-	"sno", "so", "sol", "sri", "sta", "sun", "ta", "tab",
-	"tem", "ther", "ti", "tox", "trol", "tue", "turs", "u",
-	"ulk", "um", "un", "uni", "ur", "val", "viv", "vly",
-	"vom", "wah", "wed", "werg", "wex", "whon", "wun", "x",
-	"yerg", "yp", "zun", "tri", "blaa", "jah", "bul", "on",
-	"foo", "ju", "xuxu"
-};
-#endif
-
-
-/*
- * Hold the titles of scrolls, 6 to 14 characters each
- * Also keep an array of scroll colors (always WHITE for now)
- */
-static char scroll_adj[MAX_TITLES][16];
-
-static byte scroll_col[MAX_TITLES];
-
-
 /*
  * Certain items, if aware, are known instantly
  * This function is used only by "flavor_init()"
@@ -433,68 +65,6 @@ static bool object_easy_know(int i)
 
 
 /*
- * Certain items have a flavor
- * This function is used only by "flavor_init()"
- */
-static bool object_flavor(int k_idx)
-{
-	object_kind *k_ptr = &k_info[k_idx];
-
-	/* Analyze the item */
-	switch (k_ptr->tval)
-	{
-		case TV_AMULET:
-		{
-			return (0x80 + amulet_col[k_ptr->sval]);
-		}
-
-		case TV_RING:
-		{
-			return (0x90 + ring_col[k_ptr->sval]);
-		}
-
-		case TV_STAFF:
-		{
-			return (0xA0 + staff_col[k_ptr->sval]);
-		}
-
-		case TV_WAND:
-		{
-			return (0xB0 + wand_col[k_ptr->sval]);
-		}
-
-		case TV_ROD:
-		{
-			return (0xC0 + rod_col[k_ptr->sval]);
-		}
-
-		case TV_SCROLL:
-		{
-			return (0xD0 + scroll_col[k_ptr->sval]);
-		}
-
-		case TV_POTION:
-		{
-			return (0xE0 + potion_col[k_ptr->sval]);
-		}
-
-		case TV_FOOD:
-		{
-			if (k_ptr->sval < SV_FOOD_MIN_FOOD)
-			{
-				return (0xF0 + food_col[k_ptr->sval]);
-			}
-
-			break;
-		}
-	}
-
-	/* No flavor */
-	return (0);
-}
-
-
-/*
  * Create a name from random parts.
  */
 void get_table_name_aux(char *out_string)
@@ -506,6 +76,32 @@ void get_table_name_aux(char *out_string)
 	get_rnd_line("aname_j.txt", 2, Syllable);
 	strcat(out_string, Syllable);
 #else
+#define MAX_SYLLABLES 164       /* Used with scrolls (see below) */
+
+	static cptr syllables[MAX_SYLLABLES] = {
+		"a", "ab", "ag", "aks", "ala", "an", "ankh", "app",
+		"arg", "arze", "ash", "aus", "ban", "bar", "bat", "bek",
+		"bie", "bin", "bit", "bjor", "blu", "bot", "bu",
+		"byt", "comp", "con", "cos", "cre", "dalf", "dan",
+		"den", "der", "doe", "dok", "eep", "el", "eng", "er", "ere", "erk",
+		"esh", "evs", "fa", "fid", "flit", "for", "fri", "fu", "gan",
+		"gar", "glen", "gop", "gre", "ha", "he", "hyd", "i",
+		"ing", "ion", "ip", "ish", "it", "ite", "iv", "jo",
+		"kho", "kli", "klis", "la", "lech", "man", "mar",
+		"me", "mi", "mic", "mik", "mon", "mung", "mur", "nag", "nej",
+		"nelg", "nep", "ner", "nes", "nis", "nih", "nin", "o",
+		"od", "ood", "org", "orn", "ox", "oxy", "pay", "pet",
+		"ple", "plu", "po", "pot", "prok", "re", "rea", "rhov",
+		"ri", "ro", "rog", "rok", "rol", "sa", "san", "sat",
+		"see", "sef", "seh", "shu", "ski", "sna", "sne", "snik",
+		"sno", "so", "sol", "sri", "sta", "sun", "ta", "tab",
+		"tem", "ther", "ti", "tox", "trol", "tue", "turs", "u",
+		"ulk", "um", "un", "uni", "ur", "val", "viv", "vly",
+		"vom", "wah", "wed", "werg", "wex", "whon", "wun", "x",
+		"yerg", "yp", "zun", "tri", "blaa", "jah", "bul", "on",
+		"foo", "ju", "xuxu"
+	};
+
 	int testcounter = randint1(3) + 1;
 
 	strcpy(out_string, "");
@@ -550,6 +146,52 @@ void get_table_name(char *out_string)
 
 
 /*
+ * Shuffle flavor indices of a group of objects with given tval
+ */
+static void shuffle_flavors(byte tval)
+{
+	s16b *k_idx_list;
+	int k_idx_list_num = 0;
+	int i;
+
+	/* Allocate an array for a list of k_idx */
+	C_MAKE(k_idx_list, max_k_idx, s16b);
+
+	/* Search objects with given tval for shuffle */
+	for (i = 0; i < max_k_idx; i++)
+	{
+		object_kind *k_ptr = &k_info[i];
+
+		/* Skip non-Rings */
+		if (k_ptr->tval != tval) continue;
+
+		/* Paranoia -- Skip objects without flavor */
+		if (!k_ptr->flavor) continue;
+
+		/* Skip objects with a fixed flavor name */
+		if (have_flag(k_ptr->flags, TR_FIXED_FLAVOR)) continue;
+
+		/* Remember k_idx */
+		k_idx_list[k_idx_list_num] = i;
+
+		/* Increase number of remembered indices */
+		k_idx_list_num++;
+	}
+
+	/* Shuffle flavors */
+	for (i = 0; i < k_idx_list_num; i++)
+	{
+		object_kind *k1_ptr = &k_info[k_idx_list[i]];
+		object_kind *k2_ptr = &k_info[k_idx_list[randint0(k_idx_list_num)]];
+
+		/* Swap flavors of this pair */
+		s16b tmp = k1_ptr->flavor;
+		k1_ptr->flavor = k2_ptr->flavor;
+		k2_ptr->flavor = tmp;
+	}
+}
+
+/*
  * Prepare the "variable" part of the "k_info" array.
  *
  * The "color"/"metal"/"type" of an item is its "flavor".
@@ -582,12 +224,7 @@ void get_table_name(char *out_string)
  */
 void flavor_init(void)
 {
-	int     i, j;
-
-	byte    temp_col;
-
-	cptr    temp_adj;
-
+	int i;
 
 	/* Hack -- Use the "simple" RNG */
 	Rand_quick = TRUE;
@@ -596,195 +233,44 @@ void flavor_init(void)
 	Rand_value = seed_flavor;
 
 
-	/* Efficiency -- Rods/Wands share initial array */
-	for (i = 0; i < MAX_METALS; i++)
+	/* Initialize flavor index of each object by itself */
+	for (i = 0; i < max_k_idx; i++)
 	{
-		rod_adj[i] = wand_adj[i];
-		rod_col[i] = wand_col[i];
+		object_kind *k_ptr = &k_info[i];
+
+		/* Skip objects without flavor name */
+		if (!k_ptr->flavor_name) continue;
+
+		/*
+		 * Initialize flavor index to itself
+		 *  -> Shuffle it later
+		 */
+		k_ptr->flavor = i;
 	}
 
+	/* Shuffle Rings */
+	shuffle_flavors(TV_RING);
 
-	/* Rings have "ring colors" */
-	for (i = 0; i < MAX_ROCKS; i++)
-	{
-		j = randint0(MAX_ROCKS);
-		temp_adj = ring_adj[i];
-		ring_adj[i] = ring_adj[j];
-		ring_adj[j] = temp_adj;
+	/* Shuffle Amulets */
+	shuffle_flavors(TV_AMULET);
 
-		temp_col = ring_col[i];
-		ring_col[i] = ring_col[j];
-		ring_col[j] = temp_col;
-	}
+	/* Shuffle Staves */
+	shuffle_flavors(TV_STAFF);
 
-	/* Hack -- The One Ring */
-#ifdef JP
-	ring_adj[SV_RING_POWER] = "金無垢の";
-	ring_adj[SV_RING_AHO] = "金有垢の";
-#else
-	ring_adj[SV_RING_POWER] = "Plain Gold";
-	ring_adj[SV_RING_AHO] = "Plain Goldarn";
-#endif
+	/* Shuffle Wands */
+	shuffle_flavors(TV_WAND);
 
-	if (!use_graphics)
-	{
-		ring_col[SV_RING_POWER] = TERM_YELLOW;
-		ring_col[SV_RING_AHO] = TERM_YELLOW;
-	}
+	/* Shuffle Rods */
+	shuffle_flavors(TV_ROD);
 
-	/* Amulets have "amulet colors" */
-	for (i = 0; i < MAX_AMULETS; i++)
-	{
-		j = randint0(MAX_AMULETS);
-		temp_adj = amulet_adj[i];
-		amulet_adj[i] = amulet_adj[j];
-		amulet_adj[j] = temp_adj;
+	/* Shuffle Mushrooms */
+	shuffle_flavors(TV_FOOD);
 
-		temp_col = amulet_col[i];
-		amulet_col[i] = amulet_col[j];
-		amulet_col[j] = temp_col;
-	}
+	/* Shuffle Potions */
+	shuffle_flavors(TV_POTION);
 
-	/* Staffs */
-	for (i = 0; i < MAX_WOODS; i++)
-	{
-		j = randint0(MAX_WOODS);
-		temp_adj = staff_adj[i];
-		staff_adj[i] = staff_adj[j];
-		staff_adj[j] = temp_adj;
-
-		temp_col = staff_col[i];
-		staff_col[i] = staff_col[j];
-		staff_col[j] = temp_col;
-	}
-
-	/* Wands */
-	for (i = 0; i < MAX_METALS; i++)
-	{
-		j = randint0(MAX_METALS);
-		temp_adj = wand_adj[i];
-		wand_adj[i] = wand_adj[j];
-		wand_adj[j] = temp_adj;
-
-		temp_col = wand_col[i];
-		wand_col[i] = wand_col[j];
-		wand_col[j] = temp_col;
-	}
-
-	/* Rods */
-	for (i = 0; i < MAX_METALS; i++)
-	{
-		j = randint0(MAX_METALS);
-		temp_adj = rod_adj[i];
-		rod_adj[i] = rod_adj[j];
-		rod_adj[j] = temp_adj;
-
-		temp_col = rod_col[i];
-		rod_col[i] = rod_col[j];
-		rod_col[j] = temp_col;
-	}
-
-	/* Foods (Mushrooms) */
-	for (i = 0; i < MAX_SHROOM; i++)
-	{
-		j = randint0(MAX_SHROOM);
-		temp_adj = food_adj[i];
-		food_adj[i] = food_adj[j];
-		food_adj[j] = temp_adj;
-
-		temp_col = food_col[i];
-		food_col[i] = food_col[j];
-		food_col[j] = temp_col;
-	}
-
-	/* Potions */
-	for (i = 4; i < MAX_COLORS; i++)
-	{
-		j = randint0(MAX_COLORS - 4) + 4;
-		temp_adj = potion_adj[i];
-		potion_adj[i] = potion_adj[j];
-		potion_adj[j] = temp_adj;
-
-		temp_col = potion_col[i];
-		potion_col[i] = potion_col[j];
-		potion_col[j] = temp_col;
-	}
-
-	/* Scrolls (random titles, always white) */
-	for (i = 0; i < MAX_TITLES; i++)
-	{
-		/* Get a new title */
-		while (TRUE)
-		{
-			char buf[80];
-
-			bool okay;
-
-			/* Start a new title */
-			buf[0] = '\0';
-
-			/* Collect words until done */
-			while (1)
-			{
-				int q, s;
-
-				char tmp[80];
-
-				/* Start a new word */
-				tmp[0] = '\0';
-
-				/* Choose one or two syllables */
-				s = ((randint0(100) < 30) ? 1 : 2);
-
-				/* Add a one or two syllable word */
-				for (q = 0; q < s; q++)
-				{
-					/* Add the syllable */
-					strcat(tmp, syllables[randint0(MAX_SYLLABLES)]);
-				}
-
-				/* Stop before getting too long */
-				if (strlen(buf) + 1 + strlen(tmp) > 15) break;
-
-				/* Add a space */
-				strcat(buf, " ");
-
-				/* Add the word */
-				strcat(buf, tmp);
-			}
-
-			/* Save the title */
-			strcpy(scroll_adj[i], buf+1);
-
-			/* Assume okay */
-			okay = TRUE;
-
-			/* Check for "duplicate" scroll titles */
-			for (j = 0; j < i; j++)
-			{
-				cptr hack1 = scroll_adj[j];
-				cptr hack2 = scroll_adj[i];
-
-				/* Compare first four characters */
-				if (*hack1++ != *hack2++) continue;
-				if (*hack1++ != *hack2++) continue;
-				if (*hack1++ != *hack2++) continue;
-				if (*hack1++ != *hack2++) continue;
-
-				/* Not okay */
-				okay = FALSE;
-
-				/* Stop looking */
-				break;
-			}
-
-			/* Break when done */
-			if (okay) break;
-		}
-
-		/* All scrolls are white */
-		scroll_col[i] = TERM_WHITE;
-	}
+	/* Shuffle Scrolls */
+	shuffle_flavors(TV_SCROLL);
 
 
 	/* Hack -- Use the "complex" RNG */
@@ -797,9 +283,6 @@ void flavor_init(void)
 
 		/* Skip "empty" objects */
 		if (!k_ptr->name) continue;
-
-		/* Extract "flavor" (if any) */
-		k_ptr->flavor = object_flavor(i);
 
 		/* No flavor yields aware */
 		if (!k_ptr->flavor) k_ptr->aware = TRUE;
@@ -1662,6 +1145,7 @@ static void get_inscription(char *buff, object_type *o_ptr)
  *   OD_NO_PLURAL        : Forbidden use of plural 
  *   OD_STORE            : Assume to be aware and known
  *   OD_NO_FLAVOR        : Allow to hidden flavor
+ *   OD_FORCE_FLAVOR     : Get un-shuffled flavor name
  */
 void object_desc(char *buf, object_type *o_ptr, u32b mode)
 {
@@ -1673,9 +1157,6 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 
 	/* Assume no "modifier" string */
 	cptr            modstr = "";
-
-	/* Hack -- Extract the sub-type "indexx" */
-	int             indexx = o_ptr->sval;
 
 	int             power;
 
@@ -1702,6 +1183,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 	object_type *bow_ptr;
 
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
+	object_kind *flavor_k_ptr = &k_info[k_ptr->flavor];
 
 	/* Extract some flags */
 	object_flags(o_ptr, flgs);
@@ -1724,6 +1206,17 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		/* Pretend known and aware */
 		aware = TRUE;
 		known = TRUE;
+	}
+
+	/* Force to be flavor name only */
+	if (mode & OD_FORCE_FLAVOR)
+	{
+		aware = FALSE;
+		flavor = TRUE;
+		known = FALSE;
+
+		/* Cancel shuffling */
+		flavor_k_ptr = k_ptr;
 	}
 
 	/* Analyze the object */
@@ -1875,7 +1368,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			}
 
 			/* Color the object */
-			modstr = amulet_adj[indexx];
+			modstr = k_name + flavor_k_ptr->flavor_name;
 
 #ifdef JP
                         if (!flavor)    basenm = "%のアミュレット";
@@ -1901,7 +1394,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			}
 
 			/* Color the object */
-			modstr = ring_adj[indexx];
+			modstr = k_name + flavor_k_ptr->flavor_name;
 
 #ifdef JP
                         if (!flavor)    basenm = "%の指輪";
@@ -1926,7 +1419,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		case TV_STAFF:
 		{
 			/* Color the object */
-			modstr = staff_adj[indexx];
+			modstr = k_name + flavor_k_ptr->flavor_name;
 
 #ifdef JP
                         if (!flavor)    basenm = "%の杖";
@@ -1944,7 +1437,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		case TV_WAND:
 		{
 			/* Color the object */
-			modstr = wand_adj[indexx];
+			modstr = k_name + flavor_k_ptr->flavor_name;
 
 #ifdef JP
                         if (!flavor)    basenm = "%の魔法棒";
@@ -1962,7 +1455,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		case TV_ROD:
 		{
 			/* Color the object */
-			modstr = rod_adj[indexx];
+			modstr = k_name + flavor_k_ptr->flavor_name;
 
 #ifdef JP
 			if (!flavor)    basenm = "%のロッド";
@@ -1980,7 +1473,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		case TV_SCROLL:
 		{
 			/* Color the object */
-			modstr = scroll_adj[indexx];
+			modstr = k_name + flavor_k_ptr->flavor_name;
 
 #ifdef JP
                         if (!flavor)    basenm = "%の巻物";
@@ -1998,7 +1491,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		case TV_POTION:
 		{
 			/* Color the object */
-			modstr = potion_adj[indexx];
+			modstr = k_name + flavor_k_ptr->flavor_name;
 
 #ifdef JP
                         if (!flavor)    basenm = "%の薬";
@@ -2016,10 +1509,10 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		case TV_FOOD:
 		{
 			/* Ordinary food is "boring" */
-			if (o_ptr->sval >= SV_FOOD_MIN_FOOD) break;
+			if (!k_ptr->flavor_name) break;
 
 			/* Color the object */
-			modstr = food_adj[indexx];
+			modstr = k_name + flavor_k_ptr->flavor_name;
 
 #ifdef JP
                         if (!flavor)    basenm = "%のキノコ";

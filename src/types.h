@@ -106,6 +106,7 @@ struct object_kind
 {
 	u32b name;			/* Name (offset) */
 	u32b text;			/* Text (offset) */
+	u32b flavor_name;		/* Flavor name (offset) */
 
 	byte tval;			/* Object type */
 	byte sval;			/* Object sub type */
@@ -143,7 +144,7 @@ struct object_kind
 	byte x_char;		/* Desired object character */
 
 
-	byte flavor;			/* Special object flavor (or zero) */
+	s16b flavor;		/* Special object flavor (or zero) */
 
 	bool easy_know;		/* This object is always known (if aware) */
 

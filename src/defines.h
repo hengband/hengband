@@ -2899,6 +2899,7 @@
 #define OD_NO_PLURAL        0x00000010  /* Don't use plural */
 #define OD_STORE            0x00000020  /* Assume to be aware and known */
 #define OD_NO_FLAVOR        0x00000040  /* Allow to hidden flavor */
+#define OD_FORCE_FLAVOR     0x00000080  /* Get un-shuffled flavor name */
 
 
 /*
@@ -3406,8 +3407,9 @@
 #define TR_ESP_NONLIVING       114
 #define TR_ESP_UNIQUE          115
 #define TR_FULL_NAME           116
+#define TR_FIXED_FLAVOR        117
 
-#define TR_FLAG_MAX            117
+#define TR_FLAG_MAX            118
 #define TR_FLAG_SIZE           4
 
 
@@ -4152,7 +4154,7 @@
  */
 #define object_attr(T) \
 	((k_info[(T)->k_idx].flavor) ? \
-	 (misc_to_attr[k_info[(T)->k_idx].flavor]) : \
+	 (k_info[k_info[(T)->k_idx].flavor].x_attr) : \
 	 (k_info[(T)->k_idx].x_attr))
 
 /*
@@ -4162,7 +4164,7 @@
  */
 #define object_char(T) \
 	((k_info[(T)->k_idx].flavor) ? \
-	 (misc_to_char[k_info[(T)->k_idx].flavor]) : \
+	 (k_info[k_info[(T)->k_idx].flavor].x_char) : \
 	 (k_info[(T)->k_idx].x_char))
 
 
