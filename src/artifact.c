@@ -1543,13 +1543,13 @@ static void get_table_name_aux(char *out_string)
 #ifdef JP
 	char Syllable[80];
 	get_rnd_line("aname_j.txt", 1, Syllable);
-	strcat(out_string, Syllable);
+	strcpy(out_string, Syllable);
 	get_rnd_line("aname_j.txt", 2, Syllable);
 	strcat(out_string, Syllable);
 #else
 	int testcounter = randint1(3) + 1;
 
-	strcpy(out_string, "'");
+	strcpy(out_string, "");
 
 	if (randint1(3) == 2)
 	{
@@ -1568,8 +1568,6 @@ static void get_table_name_aux(char *out_string)
 	}
 
 	out_string[0] = toupper(out_string[1]);
-
-	strcat(out_string, "'");
 
 	out_string[16] = '\0';
 #endif
