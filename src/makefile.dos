@@ -52,7 +52,7 @@ OBJS = \
 	variable.o tables.o util.o cave.o \
 	object1.o object2.o monster1.o monster2.o \
 	xtra1.o xtra2.o spells1.o spells2.o \
-	melee1.o melee2.o save.o files.o \
+	melee1.o melee2.o save.o files.o floors.o \
 	cmd1.o cmd2.o cmd3.o cmd4.o cmd5.o cmd6.o \
 	store.o birth.o load.o \
 	wizard1.o wizard2.o grid.o streams.o rooms.o \

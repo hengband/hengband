@@ -39,15 +39,15 @@
 
 /* Savefile version for Hengband 1.1.1 and later */
 #define H_VER_MAJOR 1
-#define H_VER_MINOR 3
-#define H_VER_PATCH 2
+#define H_VER_MINOR 5
+#define H_VER_PATCH 0
 #define H_VER_EXTRA 0
 
 /* Added for ZAngband */
 #define FAKE_VERSION   0
 #define FAKE_VER_MAJOR 11
-#define FAKE_VER_MINOR 3
-#define FAKE_VER_PATCH 1
+#define FAKE_VER_MINOR 5
+#define FAKE_VER_PATCH 0
 
 #define ANGBAND_2_8_1
 #define ZANGBAND
@@ -361,6 +361,12 @@
  * Setting it below 128 may prevent the creation of some objects.
  */
 #define MAX_DEPTH       128
+
+
+/*
+ * Maximum number of saved floors.
+ */
+#define MAX_SAVED_FLOORS       20
 
 
 /*
@@ -4907,6 +4913,83 @@ extern int PlayerUID;
 #define DUNGEON_DARKNESS 19
 
 
+/*
+ * Flags for change floor mode
+ */
+#define CFM_UP        	 0x0001  /* Move up */
+#define CFM_DOWN      	 0x0002  /* Move down */
+#define CFM_LONG_STAIRS  0x0004  /* Randomly occurred long stairs/shaft */
+#define CFM_XXX  	 0x0008  /* XXX */
+#define CFM_SHAFT     	 0x0010  /* Shaft */
+#define CFM_RAND_PLACE   0x0020  /* Arrive at random grid */
+#define CFM_RAND_CONNECT 0x0040  /* Connect with random stairs */
+#define CFM_CLEAR_ALL    0x0080  /* Reach to the surface/Recall/Alter reality */
+#define CFM_NO_RETURN    0x0100  /* Flee from random quest etc... */
+
+
+/*
+ * Flags for save/load temporal saved floor file
+ */
+#define SLF_SECOND     	 0x0001  /* Called from another save/load function */
+#define SLF_NO_KILL      0x0002  /* Don't kill temporal files */
+
+
+/*
+ * Flags for wr_item()/rd_item()
+ */
+#define SAVE_ITEM_PVAL         0x00000001
+#define SAVE_ITEM_DISCOUNT     0x00000002
+#define SAVE_ITEM_NUMBER       0x00000004
+#define SAVE_ITEM_NAME1        0x00000008
+#define SAVE_ITEM_NAME2        0x00000010
+#define SAVE_ITEM_TIMEOUT      0x00000020
+#define SAVE_ITEM_TO_H         0x00000040
+#define SAVE_ITEM_TO_D         0x00000080
+#define SAVE_ITEM_TO_A         0x00000100
+#define SAVE_ITEM_AC           0x00000200
+#define SAVE_ITEM_DD           0x00000400
+#define SAVE_ITEM_DS           0x00000800
+#define SAVE_ITEM_IDENT        0x00001000
+#define SAVE_ITEM_MARKED       0x00002000
+#define SAVE_ITEM_ART_FLAGS0   0x00004000
+#define SAVE_ITEM_ART_FLAGS1   0x00008000
+#define SAVE_ITEM_ART_FLAGS2   0x00010000
+#define SAVE_ITEM_ART_FLAGS3   0x00020000
+#define SAVE_ITEM_CURSE_FLAGS  0x00040000
+#define SAVE_ITEM_HELD_M_IDX   0x00080000
+#define SAVE_ITEM_XTRA1        0x00100000
+#define SAVE_ITEM_XTRA2        0x00200000
+#define SAVE_ITEM_XTRA3        0x00400000
+#define SAVE_ITEM_XTRA4        0x00800000
+#define SAVE_ITEM_XTRA5        0x01000000
+#define SAVE_ITEM_FEELING      0x02000000
+#define SAVE_ITEM_INSCRIPTION  0x04000000
+#define SAVE_ITEM_ART_NAME     0x08000000
+
+
+/*
+ * Flags for wr_monster()/rd_monster()
+ */
+#define SAVE_MON_AP_R_IDX     0x00000001
+#define SAVE_MON_SUB_ALIGN    0x00000002
+#define SAVE_MON_CSLEEP       0x00000004
+#define SAVE_MON_FAST         0x00000008
+#define SAVE_MON_SLOW         0x00000010
+#define SAVE_MON_STUNNED      0x00000020
+#define SAVE_MON_CONFUSED     0x00000040
+#define SAVE_MON_MONFEAR      0x00000080
+#define SAVE_MON_TARGET_Y     0x00000100
+#define SAVE_MON_TARGET_X     0x00000200
+#define SAVE_MON_INVULNER     0x00000400
+#define SAVE_MON_SMART        0x00000800
+#define SAVE_MON_EXP          0x00001000
+#define SAVE_MON_MFLAG2       0x00002000
+#define SAVE_MON_NICKNAME     0x00004000
+
+
+/*
+ * Constant for kinds of mimic
+ */
 #define MIMIC_NONE       0
 #define MIMIC_DEMON      1
 #define MIMIC_DEMON_LORD 2

@@ -196,6 +196,7 @@ void reset_tim_flags(void)
 	p_ptr->oppose_pois = 0;     /* Timed -- oppose poison */
 
 	p_ptr->word_recall = FALSE;
+	p_ptr->alter_reality = FALSE;
 	p_ptr->sutemi = FALSE;
 	p_ptr->counter = FALSE;
 	p_ptr->ele_attack = 0;

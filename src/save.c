@@ -84,77 +84,91 @@ static void wr_string(cptr str)
  */
 static void wr_item(object_type *o_ptr)
 {
+	u32b flags = 0x00000000;
+
+	if (o_ptr->pval) flags |= SAVE_ITEM_PVAL;
+	if (o_ptr->discount) flags |= SAVE_ITEM_DISCOUNT;
+	if (o_ptr->number != 1) flags |= SAVE_ITEM_NUMBER;
+	if (o_ptr->name1) flags |= SAVE_ITEM_NAME1;
+	if (o_ptr->name2) flags |= SAVE_ITEM_NAME2;
+	if (o_ptr->timeout) flags |= SAVE_ITEM_TIMEOUT;
+	if (o_ptr->to_h) flags |= SAVE_ITEM_TO_H;
+	if (o_ptr->to_d) flags |= SAVE_ITEM_TO_D;
+	if (o_ptr->to_a) flags |= SAVE_ITEM_TO_A;
+	if (o_ptr->ac) flags |= SAVE_ITEM_AC;
+	if (o_ptr->dd) flags |= SAVE_ITEM_DD;
+	if (o_ptr->ds) flags |= SAVE_ITEM_DS;
+	if (o_ptr->ident) flags |= SAVE_ITEM_IDENT;
+	if (o_ptr->marked) flags |= SAVE_ITEM_MARKED;
+	if (o_ptr->art_flags[0]) flags |= SAVE_ITEM_ART_FLAGS0;
+	if (o_ptr->art_flags[1]) flags |= SAVE_ITEM_ART_FLAGS1;
+	if (o_ptr->art_flags[2]) flags |= SAVE_ITEM_ART_FLAGS2;
+	if (o_ptr->art_flags[3]) flags |= SAVE_ITEM_ART_FLAGS3;
+	if (o_ptr->curse_flags) flags |= SAVE_ITEM_CURSE_FLAGS;
+	if (o_ptr->held_m_idx) flags |= SAVE_ITEM_HELD_M_IDX;
+	if (o_ptr->xtra1) flags |= SAVE_ITEM_XTRA1;
+	if (o_ptr->xtra2) flags |= SAVE_ITEM_XTRA2;
+	if (o_ptr->xtra3) flags |= SAVE_ITEM_XTRA3;
+	if (o_ptr->xtra4) flags |= SAVE_ITEM_XTRA4;
+	if (o_ptr->xtra5) flags |= SAVE_ITEM_XTRA5;
+	if (o_ptr->feeling) flags |= SAVE_ITEM_FEELING;
+	if (o_ptr->inscription) flags |= SAVE_ITEM_INSCRIPTION;
+	if (o_ptr->art_name) flags |= SAVE_ITEM_ART_NAME;
+
+	/*** Item save flags ***/
+	wr_u32b(flags);
+
+	/*** Write only un-obvious elements ***/
 	wr_s16b(o_ptr->k_idx);
 
 	/* Location */
 	wr_byte(o_ptr->iy);
 	wr_byte(o_ptr->ix);
 
-	wr_byte(o_ptr->tval);
-	wr_byte(o_ptr->sval);
-	wr_s16b(o_ptr->pval);
+	if (flags & SAVE_ITEM_PVAL) wr_s16b(o_ptr->pval);
 
-	wr_byte(o_ptr->discount);
-	wr_byte(o_ptr->number);
+	if (flags & SAVE_ITEM_DISCOUNT) wr_byte(o_ptr->discount);
+	if (flags & SAVE_ITEM_NUMBER) wr_byte(o_ptr->number);
+
 	wr_s16b(o_ptr->weight);
 
-	wr_byte(o_ptr->name1);
-	wr_byte(o_ptr->name2);
-	wr_s16b(o_ptr->timeout);
+	if (flags & SAVE_ITEM_NAME1) wr_byte(o_ptr->name1);
+	if (flags & SAVE_ITEM_NAME2) wr_byte(o_ptr->name2);
+	if (flags & SAVE_ITEM_TIMEOUT) wr_s16b(o_ptr->timeout);
 
-	wr_s16b(o_ptr->to_h);
-	wr_s16b(o_ptr->to_d);
-	wr_s16b(o_ptr->to_a);
-	wr_s16b(o_ptr->ac);
-	wr_byte(o_ptr->dd);
-	wr_byte(o_ptr->ds);
+	if (flags & SAVE_ITEM_TO_H) wr_s16b(o_ptr->to_h);
+	if (flags & SAVE_ITEM_TO_D) wr_s16b(o_ptr->to_d);
+	if (flags & SAVE_ITEM_TO_A) wr_s16b(o_ptr->to_a);
+	if (flags & SAVE_ITEM_AC) wr_s16b(o_ptr->ac);
+	if (flags & SAVE_ITEM_DD) wr_byte(o_ptr->dd);
+	if (flags & SAVE_ITEM_DS) wr_byte(o_ptr->ds);
 
-	wr_byte(o_ptr->ident);
+	if (flags & SAVE_ITEM_IDENT) wr_byte(o_ptr->ident);
 
-	wr_byte(o_ptr->marked);
+	if (flags & SAVE_ITEM_MARKED) wr_byte(o_ptr->marked);
 
-	wr_u32b(o_ptr->art_flags[0]);
-	wr_u32b(o_ptr->art_flags[1]);
-	wr_u32b(o_ptr->art_flags[2]);
-	wr_u32b(o_ptr->art_flags[3]);
+	if (flags & SAVE_ITEM_ART_FLAGS0) wr_u32b(o_ptr->art_flags[0]);
+	if (flags & SAVE_ITEM_ART_FLAGS1) wr_u32b(o_ptr->art_flags[1]);
+	if (flags & SAVE_ITEM_ART_FLAGS2) wr_u32b(o_ptr->art_flags[2]);
+	if (flags & SAVE_ITEM_ART_FLAGS3) wr_u32b(o_ptr->art_flags[3]);
 
-	wr_u32b(o_ptr->curse_flags);
+	if (flags & SAVE_ITEM_CURSE_FLAGS) wr_u32b(o_ptr->curse_flags);
 
 	/* Held by monster index */
-	wr_s16b(o_ptr->held_m_idx);
+	if (flags & SAVE_ITEM_HELD_M_IDX) wr_s16b(o_ptr->held_m_idx);
 
 	/* Extra information */
-	wr_byte(o_ptr->xtra1);
-	wr_byte(o_ptr->xtra2);
-	wr_byte(o_ptr->xtra3);
-	wr_s16b(o_ptr->xtra4);
-	wr_s16b(o_ptr->xtra5);
+	if (flags & SAVE_ITEM_XTRA1) wr_byte(o_ptr->xtra1);
+	if (flags & SAVE_ITEM_XTRA2) wr_byte(o_ptr->xtra2);
+	if (flags & SAVE_ITEM_XTRA3) wr_byte(o_ptr->xtra3);
+	if (flags & SAVE_ITEM_XTRA4) wr_s16b(o_ptr->xtra4);
+	if (flags & SAVE_ITEM_XTRA5) wr_s16b(o_ptr->xtra5);
 
 	/* Feelings */
-	wr_byte(o_ptr->feeling);
+	if (flags & SAVE_ITEM_FEELING) wr_byte(o_ptr->feeling);
 
-	/* Save the inscription (if any) */
-	if (o_ptr->inscription)
-	{
-		wr_string(quark_str(o_ptr->inscription));
-	}
-	else
-	{
-		wr_string("");
-	}
-
-	/* If it is a "new" named artifact, save the name */
-	if (o_ptr->art_name)
-	{
-		wr_string(quark_str(o_ptr->art_name));
-	}
-	else
-	{
-		wr_string("");
-	}
-
-	/* No Python object */
-	wr_s32b(0);
+	if (flags & SAVE_ITEM_INSCRIPTION) wr_string(quark_str(o_ptr->inscription));
+	if (flags & SAVE_ITEM_ART_NAME) wr_string(quark_str(o_ptr->art_name));
 }
 
 
@@ -163,37 +177,57 @@ static void wr_item(object_type *o_ptr)
  */
 static void wr_monster(monster_type *m_ptr)
 {
+	u32b flags = 0x00000000;
+
+	if (m_ptr->ap_r_idx != m_ptr->r_idx) flags |= SAVE_MON_AP_R_IDX;
+	if (m_ptr->sub_align) flags |= SAVE_MON_SUB_ALIGN;
+	if (m_ptr->csleep) flags |= SAVE_MON_CSLEEP;
+	if (m_ptr->fast) flags |= SAVE_MON_FAST;
+	if (m_ptr->slow) flags |= SAVE_MON_SLOW;
+	if (m_ptr->stunned) flags |= SAVE_MON_STUNNED;
+	if (m_ptr->confused) flags |= SAVE_MON_CONFUSED;
+	if (m_ptr->monfear) flags |= SAVE_MON_MONFEAR;
+	if (m_ptr->target_y) flags |= SAVE_MON_TARGET_Y;
+	if (m_ptr->target_x) flags |= SAVE_MON_TARGET_X;
+	if (m_ptr->invulner) flags |= SAVE_MON_INVULNER;
+	if (m_ptr->smart) flags |= SAVE_MON_SMART;
+	if (m_ptr->exp) flags |= SAVE_MON_EXP;
+	if (m_ptr->mflag2) flags |= SAVE_MON_MFLAG2;
+	if (m_ptr->nickname) flags |= SAVE_MON_NICKNAME;
+
+	/*** Monster save flags ***/
+	wr_u32b(flags);
+
+	/*** Write only un-obvious elements ***/
 	wr_s16b(m_ptr->r_idx);
-	wr_s16b(m_ptr->ap_r_idx);
-	wr_byte(m_ptr->sub_align);
 	wr_byte(m_ptr->fy);
 	wr_byte(m_ptr->fx);
 	wr_s16b(m_ptr->hp);
 	wr_s16b(m_ptr->maxhp);
 	wr_s16b(m_ptr->max_maxhp);
-	wr_s16b(m_ptr->csleep);
+
+	/* Monster race index of its appearance */
+	if (flags & SAVE_MON_AP_R_IDX) wr_s16b(m_ptr->ap_r_idx);
+	else m_ptr->ap_r_idx = m_ptr->r_idx;
+
+	if (flags & SAVE_MON_SUB_ALIGN) wr_byte(m_ptr->sub_align);
+	if (flags & SAVE_MON_CSLEEP) wr_s16b(m_ptr->csleep);
+
 	wr_byte(m_ptr->mspeed);
 	wr_s16b(m_ptr->energy_need);
-	wr_byte(m_ptr->fast);
-	wr_byte(m_ptr->slow);
-	wr_byte(m_ptr->stunned);
-	wr_byte(m_ptr->confused);
-	wr_byte(m_ptr->monfear);
-	wr_s16b(m_ptr->target_y);
-	wr_s16b(m_ptr->target_x);
-	wr_byte(m_ptr->invulner);
-	wr_u32b(m_ptr->smart);
-	wr_u32b(m_ptr->exp);
-	wr_byte(m_ptr->mflag2);
-	if (m_ptr->nickname)
-	{
-		wr_string(quark_str(m_ptr->nickname));
-	}
-	else
-	{
-		wr_string("");
-	}
-	wr_byte(0);
+
+	if (flags & SAVE_MON_FAST) wr_byte(m_ptr->fast);
+	if (flags & SAVE_MON_SLOW) wr_byte(m_ptr->slow);
+	if (flags & SAVE_MON_STUNNED) wr_byte(m_ptr->stunned);
+	if (flags & SAVE_MON_CONFUSED) wr_byte(m_ptr->confused);
+	if (flags & SAVE_MON_MONFEAR) wr_byte(m_ptr->monfear);
+	if (flags & SAVE_MON_TARGET_Y) wr_s16b(m_ptr->target_y);
+	if (flags & SAVE_MON_TARGET_X) wr_s16b(m_ptr->target_x);
+	if (flags & SAVE_MON_INVULNER) wr_byte(m_ptr->invulner);
+	if (flags & SAVE_MON_SMART) wr_u32b(m_ptr->smart);
+	if (flags & SAVE_MON_EXP) wr_u32b(m_ptr->exp);
+	if (flags & SAVE_MON_MFLAG2) wr_byte(m_ptr->mflag2);
+	if (flags & SAVE_MON_NICKNAME) wr_string(quark_str(m_ptr->nickname));
 }
 
 
@@ -244,9 +278,10 @@ static void wr_lore(int r_idx)
 	/* Monster limit per level */
 	wr_byte(r_ptr->max_num);
 
+	/* Location in saved floor */
+	wr_s16b(r_ptr->floor_id);
+
 	/* Later (?) */
-	wr_byte(0);
-	wr_byte(0);
 	wr_byte(0);
 }
 
@@ -622,6 +657,7 @@ static void wr_extra(void)
 	wr_s16b(p_ptr->tim_invis);
 	wr_s16b(p_ptr->word_recall);
 	wr_s16b(p_ptr->recall_dungeon);
+	wr_s16b(p_ptr->alter_reality);
 	wr_s16b(p_ptr->see_infra);
 	wr_s16b(p_ptr->tim_infra);
 	wr_s16b(p_ptr->oppose_fire);
@@ -716,6 +752,9 @@ static void wr_extra(void)
 	wr_s16b(p_ptr->today_mon);
 	wr_s16b(p_ptr->riding);
 
+	/* Current floor_id */
+	wr_s16b(p_ptr->floor_id);
+
 	wr_u32b(playtime);
 
 	wr_s32b(p_ptr->visit);
@@ -726,10 +765,46 @@ static void wr_extra(void)
 
 
 /*
- * Write the current dungeon
+ * hook function to sort monsters by level
  */
-static void wr_dungeon(void)
+static bool ang_sort_comp_cave_temp(vptr u, vptr v, int a, int b)
 {
+	cave_template_type *who = (cave_template_type *)(u);
+
+	u16b o1 = who[a].occurrence;
+	u16b o2 = who[b].occurrence;
+
+	return o2 <= o1;
+}
+
+
+/*
+ * Sorting hook -- Swap function
+ */
+static void ang_sort_swap_cave_temp(vptr u, vptr v, int a, int b)
+{
+	cave_template_type *who = (cave_template_type *)(u);
+
+	cave_template_type holder;
+
+	/* Swap */
+	holder = who[a];
+	who[a] = who[b];
+	who[b] = holder;
+}
+
+
+/*
+ * Actually write a saved floor data
+ * using effectively compressed format.
+ */
+static void wr_saved_floor(saved_floor_type *sf_ptr)
+{
+	cave_template_type *template;
+	u16b max_num_temp;
+	u16b num_temp = 0;
+	int dummy_why;
+
 	int i, y, x;
 
 	byte tmp8u;
@@ -737,49 +812,176 @@ static void wr_dungeon(void)
 
 	byte count;
 	byte prev_char;
-	s16b prev_s16b;
+	u16b prev_u16b;
 
 	cave_type *c_ptr;
 
 
 	/*** Basic info ***/
 
-	/* Dungeon specific info follows */
-	wr_u16b(dun_level);
-	wr_byte(dungeon_type);
+	/* Dungeon floor specific info follows */
+
+	if (!sf_ptr)
+	{
+		/*** Not a saved floor ***/
+
+		wr_s16b(dun_level);
+	}
+	else
+	{
+		/*** The saved floor ***/
+
+		wr_s16b(sf_ptr->floor_id);
+		wr_byte(sf_ptr->savefile_id);
+		wr_s16b(sf_ptr->dun_level);
+		wr_s32b(sf_ptr->last_visit);
+		wr_u32b(sf_ptr->visit_mark);
+		wr_s16b(sf_ptr->upper_floor_id);
+		wr_s16b(sf_ptr->lower_floor_id);
+	}
+
 	wr_u16b(base_level);
 	wr_u16b(num_repro);
 	wr_u16b((u16b)py);
 	wr_u16b((u16b)px);
 	wr_u16b(cur_hgt);
 	wr_u16b(cur_wid);
-	wr_u16b(0); /* max_panel_rows */
-	wr_u16b(0); /* max_panel_cols */
+	wr_byte(feeling);
 
 
-	/*** Simple "Run-Length-Encoding" of cave ***/
+
+	/*********** Make template for cave_type **********/
+
+	/*
+	 * Usually number of templates are fewer than 255.  Even if
+	 * more than 254 are exist, the occurrence of each template
+	 * with larger ID is very small when we sort templates by
+	 * occurrence.  So we will use two (or more) bytes for
+	 * templete ID larger than 254.
+	 *
+	 * Ex: 256 will be "0xff" "0x01".
+	 *     515 will be "0xff" "0xff" "0x03"
+	 */
+
+	/* Fake max number */
+	max_num_temp = 255;
+
+	/* Allocate the "template" array */
+	C_MAKE(template, max_num_temp, cave_template_type);
+
+	/* Extract template array */
+	for (y = 0; y < cur_hgt; y++)
+	{
+		for (x = 0; x < cur_wid; x++)
+		{
+			cave_type *c_ptr = &cave[y][x];
+
+			for (i = 0; i < num_temp; i++)
+			{
+				if (template[i].info == c_ptr->info &&
+				    template[i].feat == c_ptr->feat &&
+				    template[i].mimic == c_ptr->mimic &&
+				    template[i].special == c_ptr->special)
+				{
+					/* Same terrain is exist */
+					template[i].occurrence++;
+					break;
+				}
+			}
+
+			/* Are there same one? */
+			if (i < num_temp) continue;
+
+			/* If the max_num_temp is too small, increase it. */
+			if (num_temp >= max_num_temp)
+			{
+				cave_template_type *old_template = template;
+
+				/* Re-allocate the "template" array */
+				C_MAKE(template, max_num_temp + 255, cave_template_type);
+				C_COPY(template, old_template, max_num_temp, cave_template_type);
+				C_FREE(old_template, max_num_temp, cave_template_type);
+				max_num_temp += 255;
+			}
+
+			/* Add new template */
+			template[num_temp].info = c_ptr->info;
+			template[num_temp].feat = c_ptr->feat;
+			template[num_temp].mimic = c_ptr->mimic;
+			template[num_temp].special = c_ptr->special;
+			template[num_temp].occurrence = 1;
+
+			/* Increase number of template */
+			num_temp++;
+		}
+	}
+
+	/* Select the sort method */
+	ang_sort_comp = ang_sort_comp_cave_temp;
+	ang_sort_swap = ang_sort_swap_cave_temp;
+
+	/* Sort by occurrence */
+	ang_sort(template, &dummy_why, num_temp);
+
+
+	/*** Dump templates ***/
+
+	/* Total templates */
+	wr_u16b(num_temp);
+
+	/* Dump the templates */
+	for (i = 0; i < num_temp; i++)
+	{
+		cave_template_type *ct_ptr = &template[i];
+
+		/* Dump it */
+		wr_u16b(ct_ptr->info);
+		wr_byte(ct_ptr->feat);
+		wr_byte(ct_ptr->mimic);
+		wr_s16b(ct_ptr->special);
+	}
+
+
+
+	/*** "Run-Length-Encoding" of cave ***/
 
 	/* Note that this will induce two wasted bytes */
 	count = 0;
-	prev_s16b = 0;
+	prev_u16b = 0;
 
 	/* Dump the cave */
 	for (y = 0; y < cur_hgt; y++)
 	{
 		for (x = 0; x < cur_wid; x++)
 		{
-			/* Get the cave */
-			c_ptr = &cave[y][x];
+			cave_type *c_ptr = &cave[y][x];
 
-			/* Extract a byte */
-			tmp16u = c_ptr->info;
+			for (i = 0; i < num_temp; i++)
+			{
+				if (template[i].info == c_ptr->info &&
+				    template[i].feat == c_ptr->feat &&
+				    template[i].mimic == c_ptr->mimic &&
+				    template[i].special == c_ptr->special)
+					break;
+			}
+
+			/* Extract an ID */
+			tmp16u = i;
 
 			/* If the run is broken, or too full, flush it */
-			if ((tmp16u != prev_s16b) || (count == MAX_UCHAR))
+			if ((tmp16u != prev_u16b) || (count == MAX_UCHAR))
 			{
 				wr_byte((byte)count);
-				wr_u16b((u16b)prev_s16b);
-				prev_s16b = tmp16u;
+
+				while (prev_u16b >= MAX_UCHAR)
+				{
+					/* Mark as actual data is larger than 254 */
+					wr_byte(MAX_UCHAR);
+					prev_u16b -= MAX_UCHAR;
+				}
+
+				wr_byte((byte)prev_u16b);
+				prev_u16b = tmp16u;
 				count = 1;
 			}
 
@@ -795,134 +997,19 @@ static void wr_dungeon(void)
 	if (count)
 	{
 		wr_byte((byte)count);
-		wr_u16b((byte)prev_s16b);
-	}
 
-
-	/*** Simple "Run-Length-Encoding" of cave ***/
-
-	/* Note that this will induce two wasted bytes */
-	count = 0;
-	prev_char = 0;
-
-	/* Dump the cave */
-	for (y = 0; y < cur_hgt; y++)
-	{
-		for (x = 0; x < cur_wid; x++)
+		while (prev_u16b >= MAX_UCHAR)
 		{
-			/* Get the cave */
-			c_ptr = &cave[y][x];
-
-			/* Extract a byte */
-			tmp8u = c_ptr->feat;
-
-			/* If the run is broken, or too full, flush it */
-			if ((tmp8u != prev_char) || (count == MAX_UCHAR))
-			{
-				wr_byte((byte)count);
-				wr_byte((byte)prev_char);
-				prev_char = tmp8u;
-				count = 1;
-			}
-
-			/* Continue the run */
-			else
-			{
-				count++;
-			}
+			/* Mark as actual data is larger than 254 */
+			wr_byte(MAX_UCHAR);
+			prev_u16b -= MAX_UCHAR;
 		}
-	}
-
-	/* Flush the data (if any) */
-	if (count)
-	{
-		wr_byte((byte)count);
-		wr_byte((byte)prev_char);
+		wr_byte((byte)prev_u16b);
 	}
 
 
-	/*** Simple "Run-Length-Encoding" of cave ***/
-
-	/* Note that this will induce two wasted bytes */
-	count = 0;
-	prev_char = 0;
-
-	/* Dump the cave */
-	for (y = 0; y < cur_hgt; y++)
-	{
-		for (x = 0; x < cur_wid; x++)
-		{
-			/* Get the cave */
-			c_ptr = &cave[y][x];
-
-			/* Extract a byte */
-			tmp8u = c_ptr->mimic;
-
-			/* If the run is broken, or too full, flush it */
-			if ((tmp8u != prev_char) || (count == MAX_UCHAR))
-			{
-				wr_byte((byte)count);
-				wr_byte((byte)prev_char);
-				prev_char = tmp8u;
-				count = 1;
-			}
-
-			/* Continue the run */
-			else
-			{
-				count++;
-			}
-		}
-	}
-
-	/* Flush the data (if any) */
-	if (count)
-	{
-		wr_byte((byte)count);
-		wr_byte((byte)prev_char);
-	}
-
-
-	/*** Simple "Run-Length-Encoding" of cave ***/
-
-	/* Note that this will induce two wasted bytes */
-	count = 0;
-	prev_s16b = 0;
-
-	/* Dump the cave */
-	for (y = 0; y < cur_hgt; y++)
-	{
-		for (x = 0; x < cur_wid; x++)
-		{
-			/* Get the cave */
-			c_ptr = &cave[y][x];
-
-			/* Extract a byte */
-			tmp16u = c_ptr->special;
-
-			/* If the run is broken, or too full, flush it */
-			if ((tmp16u != prev_s16b) || (count == MAX_UCHAR))
-			{
-				wr_byte((byte)count);
-				wr_u16b(prev_s16b);
-				prev_s16b = tmp16u;
-				count = 1;
-			}
-
-			/* Continue the run */
-			else
-			{
-				count++;
-			}
-		}
-	}
-
-	/* Flush the data (if any) */
-	if (count)
-	{
-		wr_byte((byte)count);
-		wr_u16b(prev_s16b);
-	}
+	/* Free the "template" array */
+	C_FREE(template, max_num_temp, cave_template_type);
 
 
 	/*** Dump objects ***/
@@ -942,7 +1029,6 @@ static void wr_dungeon(void)
 
 	/*** Dump the monsters ***/
 
-
 	/* Total monsters */
 	wr_u16b(m_max);
 
@@ -953,6 +1039,111 @@ static void wr_dungeon(void)
 
 		/* Dump it */
 		wr_monster(m_ptr);
+	}
+}
+
+
+/*
+ * Write the current dungeon (new method)
+ */
+static void wr_dungeon(void)
+{
+	saved_floor_type *cur_sf_ptr;
+	int i;
+
+	/*** Meta info ***/
+
+        /* Number of floor_id used from birth */
+	wr_s16b(max_floor_id);
+
+	/* Current dungeon type */
+	wr_byte(dungeon_type);
+
+
+	/*** On the surface  ***/
+	if (!p_ptr->floor_id)
+	{
+		/* No array elements */
+		wr_byte(0);
+
+		/* Write the current floor data */
+		wr_saved_floor(NULL);
+
+		return;
+	}
+
+
+	/*** In the dungeon ***/
+
+	/* Number of array elements */
+	wr_byte(MAX_SAVED_FLOORS);
+
+	/* Write the saved_floors array */
+	for (i = 0; i < MAX_SAVED_FLOORS; i++)
+	{
+		saved_floor_type *sf_ptr = &saved_floors[i];
+
+		wr_s16b(sf_ptr->floor_id);
+		wr_byte(sf_ptr->savefile_id);
+		wr_s16b(sf_ptr->dun_level);
+		wr_s32b(sf_ptr->last_visit);
+		wr_u32b(sf_ptr->visit_mark);
+		wr_s16b(sf_ptr->upper_floor_id);
+		wr_s16b(sf_ptr->lower_floor_id);
+	}
+
+	/* Extract pointer to current floor */
+	cur_sf_ptr = get_sf_ptr(p_ptr->floor_id);
+
+
+	/* Save current floor to temporal file */
+	if (!save_floor(cur_sf_ptr, (SLF_SECOND)))
+	{
+		/* Error */
+		/* Hack -- fflush(fff) will notice this error */
+		fclose(fff);
+
+		return;
+	}
+
+	/* Move data in temporal files to the savefile */
+	for (i = 0; i < MAX_SAVED_FLOORS; i++)
+	{
+		saved_floor_type *sf_ptr = &saved_floors[i];
+
+		/* Unused element */
+		if (!sf_ptr->floor_id) continue;
+
+		/* Wipe all cave */
+		clear_cave();
+
+		/* Load temporal saved floor file */
+		if (load_floor(sf_ptr, (SLF_SECOND | SLF_NO_KILL)))
+		{
+			/* Mark success */
+			wr_byte(0);
+
+			/* Write saved floor data to the save file */
+			wr_saved_floor(sf_ptr);
+		}
+		else
+		{
+			/* Mark failure */
+			wr_byte(1);
+		}
+	}
+
+	/* Wipe all cave */
+	clear_cave();
+
+	/* Restore current floor */
+	if (!load_floor(cur_sf_ptr, (SLF_SECOND)))
+	{
+		/* Error */
+		/* Hack -- fflush(fff) will notice this error */
+		fclose(fff);
+
+		return;
 	}
 }
 
@@ -1128,9 +1319,7 @@ static bool wr_savefile_new(void)
 	{
 		artifact_type *a_ptr = &a_info[i];
 		wr_byte(a_ptr->cur_num);
-		wr_byte(0);
-		wr_byte(0);
-		wr_byte(0);
+		wr_s16b(a_ptr->floor_id);
 	}
 
 
@@ -1400,7 +1589,6 @@ bool save_player(void)
 
 #endif
 
-
 	/* Return the result */
 	return (result);
 }
@@ -1655,11 +1843,11 @@ bool load_player(void)
 				/* Message */
 #ifdef JP
 				msg_format("バージョン %d.%d.%d 用のセーブ・ファイルを変換しました。",
+				    (z_major > 9) ? z_major-10 : z_major , z_minor, z_patch);
 #else
 				msg_format("Converted a %d.%d.%d savefile.",
-#endif
-
 				    (z_major > 9) ? z_major-10 : z_major , z_minor, z_patch);
+#endif
 			}
 			msg_print(NULL);
 		}
@@ -1728,11 +1916,11 @@ bool load_player(void)
 	/* Message */
 #ifdef JP
 	msg_format("エラー(%s)がバージョン%d.%d.%d 用セーブファイル読み込中に発生。",
+		   what, (z_major>9) ? z_major - 10 : z_major, z_minor, z_patch);
 #else
 	msg_format("Error (%s) reading %d.%d.%d savefile.",
-#endif
-
 		   what, (z_major>9) ? z_major - 10 : z_major, z_minor, z_patch);
+#endif
 	msg_print(NULL);
 
 	/* Oops */
@@ -1775,4 +1963,147 @@ void remove_loc(void)
 # endif /* SECURE */
 #endif /* SET_UID */
 
+}
+
+
+/*
+ * Actually write a temporal saved floor file
+ */
+static bool save_floor_aux(saved_floor_type *sf_ptr)
+{
+	byte tmp8u;
+
+	/* Compact the objects */
+	compact_objects(0);
+	/* Compact the monsters */
+	compact_monsters(0);
+
+
+	/*** Actually write the file ***/
+
+	/* Initial value of xor_byte */
+	tmp8u = (byte)randint0(256);
+	xor_byte = 0;
+	wr_byte(tmp8u);
+
+
+	/* Reset the checksum */
+	v_stamp = 0L;
+	x_stamp = 0L;
+
+	/* Write the sign of this process */
+	wr_u32b(saved_floor_file_sign);
+
+	/* Dump the dungeon floor */
+	wr_saved_floor(sf_ptr);
+
+
+	/* Write the "value check-sum" */
+	wr_u32b(v_stamp);
+
+	/* Write the "encoded checksum" */
+	wr_u32b(x_stamp);
+
+
+	/* Error in save */
+	if (ferror(fff) || (fflush(fff) == EOF)) return FALSE;
+
+	/* Successful save */
+	return TRUE;
+}
+
+
+/*
+ * Attempt to save the temporally saved-floor data
+ */
+bool save_floor(saved_floor_type *sf_ptr, u32b mode)
+{
+	FILE *old_fff = NULL;
+	byte old_xor_byte = 0;
+	u32b old_v_stamp = 0;
+	u32b old_x_stamp = 0;
+
+	char floor_savefile[1024];
+	int fd = -1;
+	bool ok = FALSE;
+
+	if (!(mode & SLF_SECOND))
+	{
+#ifdef SET_UID
+# ifdef SECURE
+		/* Get "games" permissions */
+		beGames();
+# endif
+#endif
+	}
+
+	/* We have one file already opened */
+	else
+	{
+		/* Backup original values */
+		old_fff = fff;
+		old_xor_byte = xor_byte;
+		old_v_stamp = v_stamp;
+		old_x_stamp = x_stamp;
+	}
+
+	/* New savefile */
+	sprintf(floor_savefile, "%s.F%02d", savefile, (int)sf_ptr->savefile_id);
+
+	/* Attempt to save the player */
+
+	/* No file yet */
+	fff = NULL;
+
+	/* File type is "SAVE" */
+	FILE_TYPE(FILE_TYPE_SAVE);
+
+	/* Create the savefile */
+	fd = fd_make(floor_savefile, 0644);
+
+	/* File is okay */
+	if (fd >= 0)
+	{
+		/* Close the "fd" */
+		(void)fd_close(fd);
+
+		/* Open the savefile */
+		fff = my_fopen(floor_savefile, "wb");
+
+		/* Successful open */
+		if (fff)
+		{
+			/* Write the savefile */
+			if (save_floor_aux(sf_ptr)) ok = TRUE;
+
+			/* Attempt to close it */
+			if (my_fclose(fff)) ok = FALSE;
+		}
+
+		/* Remove "broken" files */
+		if (!ok) (void)fd_kill(floor_savefile);
+	}
+
+	if (!(mode & SLF_SECOND))
+	{
+#ifdef SET_UID
+# ifdef SECURE
+		/* Drop "games" permissions */
+		bePlayer();
+# endif
+#endif
+	}
+
+	/* We have one file already opened */
+	else
+	{
+		/* Restore original values */
+		fff = old_fff;
+		xor_byte = old_xor_byte;
+		v_stamp = old_v_stamp;
+		x_stamp = old_x_stamp;
+	}
+
+	/* Return the result */
+	return ok;
 }

@@ -1302,7 +1302,8 @@ void map_info(int y, int x, byte *ap, char *cp)
 			
 		case FEAT_MAGMA_K:
 		case FEAT_QUARTZ_K:
-			feat_priority = 3;
+			/* Now a days treasere grid is too many */
+			feat_priority = 2;
 			break;
 			
 		case FEAT_MOUNTAIN:

@@ -35,10 +35,10 @@ void do_cmd_go_up(void)
 	{
 		/* Success */
 #ifdef JP
-	if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
-		msg_print("なんだこの階段は！");
-	else
-		msg_print("上の階に登った。");
+		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
+			msg_print("なんだこの階段は！");
+		else
+			msg_print("上の階に登った。");
 #else
 		msg_print("You enter the up staircase.");
 #endif
@@ -76,15 +76,21 @@ void do_cmd_go_up(void)
 		}
 		else
 		{
-			if (confirm_stairs)
+			quest_type *q_ptr = &quest[p_ptr->inside_quest];
+
+			/* Confirm leaving from once only quest */
+			if (confirm_quest && p_ptr->inside_quest &&
+			    (q_ptr->type == QUEST_TYPE_RANDOM ||
+			     (q_ptr->flags & QUEST_FLAG_ONCE &&
+			      q_ptr->status != QUEST_STATUS_COMPLETED)))
 			{
 #ifdef JP
-if (get_check("本当にこの階を去りますか？"))
+				msg_print("この階を一度去ると二度と戻って来られません。");
+				if (get_check("本当にこの階を去りますか？")) go_up = TRUE;
 #else
-				if (get_check("Really leave the level? "))
+				msg_print("You can't come back here once you leave this floor.");
+				if (get_check("Really leave this floor? ")) go_up = TRUE;
 #endif
-
-					go_up = TRUE;
 			}
 			else
 			{
@@ -102,28 +108,35 @@ if (get_check("本当にこの階を去りますか？"))
 
 			if (p_ptr->inside_quest)
 			{
-				if (quest[p_ptr->inside_quest].type != QUEST_TYPE_RANDOM) dun_level = 1;
-
 				leave_quest_check();
 
-				p_ptr->inside_quest = c_ptr->special;
+				if (quest[leaving_quest].type != QUEST_TYPE_RANDOM)
+				{
+					p_ptr->inside_quest = c_ptr->special;
+					dun_level = 0;
+				}
+				else
+				{
+					p_ptr->inside_quest = 0;
+				}
 			}
 
 			/* New depth */
 			if (c_ptr->feat == FEAT_LESS_LESS)
 			{
 				/* Create a way back */
-				create_down_stair = 2;
+				prepare_change_floor_mode(CFM_UP | CFM_SHAFT);
 
 				up_num += 2;
 			}
 			else
 			{
 				/* Create a way back */
-				create_down_stair = 1;
+				prepare_change_floor_mode(CFM_UP);
 
 				up_num += 1;
 			}
+#if 0
 			if (!c_ptr->special && dungeon_type && ((dun_level - up_num + 1) > d_info[dungeon_type].mindepth) && one_in_(13))
 			{
 				up_num++;
@@ -135,13 +148,14 @@ if (get_check("本当にこの階を去りますか？"))
 #endif
 				msg_print(NULL);
 			}
+#endif /* 0 */
+
 			if (dun_level-up_num+1 == d_info[dungeon_type].mindepth) up_num = dun_level;
 #ifdef JP
 			if (record_stair) do_cmd_write_nikki(NIKKI_STAIR, 0-up_num, "階段を上った");
 #else
 			if (record_stair) do_cmd_write_nikki(NIKKI_STAIR, 0-up_num, "go up the stairs to");
 #endif
-			dun_level -= up_num;
 
 			/* Success */
 #ifdef JP
@@ -157,21 +171,6 @@ if (get_check("本当にこの階を去りますか？"))
 			else
 				msg_print("You enter a maze of up staircases.");
 #endif
-
-
-			/* Leaving the dungeon to town */
-			if (!dun_level && dungeon_type)
-			{
-				p_ptr->leaving_dungeon = TRUE;
-				if (!vanilla_town && !lite_town)
-				{
-					p_ptr->wilderness_y = d_info[dungeon_type].dy;
-					p_ptr->wilderness_x = d_info[dungeon_type].dx;
-				}
-				p_ptr->recall_dungeon = dungeon_type;
-			}
-
-			if (!dun_level) dungeon_type = 0;
 
 			/* Leaving */
 			p_ptr->leaving = TRUE;
@@ -196,7 +195,6 @@ if (get_check("本当にこの階を去りますか？"))
 void do_cmd_go_down(void)
 {
 	cave_type *c_ptr;
-	bool go_down = FALSE;
 	bool fall_trap = FALSE;
 	int down_num = 0;
 
@@ -280,116 +278,92 @@ void do_cmd_go_down(void)
 				if (!get_check("Do you really get in this dungeon? ")) return;
 #endif
 			}
-			go_down = TRUE;
 
 			/* Save old player position */
 			p_ptr->oldpx = px;
 			p_ptr->oldpy = py;
 			dungeon_type = (byte)c_ptr->special;
 		}
+
+		/* Hack -- take a turn */
+		energy_use = 100;
+
+		if (autosave_l) do_cmd_save_game(TRUE);
+
+		/* Go down */
+		if (c_ptr->feat == FEAT_MORE_MORE) down_num += 2;
+		else down_num += 1;
+
+
+		if (!dun_level)
+		{
+			/* Enter the dungeon just now */
+			p_ptr->enter_dungeon = TRUE;
+			down_num = d_info[c_ptr->special].mindepth;
+		}
+
+		if (record_stair)
+		{
+#ifdef JP
+			if (fall_trap) do_cmd_write_nikki(NIKKI_STAIR, down_num, "落し戸に落ちた");
+			else do_cmd_write_nikki(NIKKI_STAIR, down_num, "階段を下りた");
+#else
+			if (fall_trap) do_cmd_write_nikki(NIKKI_STAIR, down_num, "fall from trap door");
+			else do_cmd_write_nikki(NIKKI_STAIR, down_num, "go down the stairs to");
+#endif
+		}
+
+		if (fall_trap)
+		{
+#ifdef JP
+			msg_print("わざと落し戸に落ちた。");
+#else
+			msg_print("You deliberately jump through the trap door.");
+#endif
+		}
 		else
 		{
-			if (confirm_stairs)
+			/* Success */
+			if(c_ptr->feat == FEAT_ENTRANCE)
 			{
 #ifdef JP
-if (get_check("本当にこの階を去りますか？"))
+				msg_format("%sへ入った。", d_text + d_info[dungeon_type].text);
 #else
-				if (get_check("Really leave the level? "))
+				msg_format("You entered %s.", d_text + d_info[dungeon_type].text);
 #endif
-
-					go_down = TRUE;
 			}
 			else
 			{
-				go_down = TRUE;
+#ifdef JP
+				if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
+					msg_print("なんだこの階段は！");
+				else
+					msg_print("階段を下りて新たなる迷宮へと足を踏み入れた。");
+#else
+				msg_print("You enter a maze of down staircases.");
+#endif
 			}
 		}
 
-		if (go_down)
+
+		/* Leaving */
+		p_ptr->leaving = TRUE;
+
+		if (fall_trap)
 		{
-
-			/* Hack -- take a turn */
-			energy_use = 100;
-
-			if (autosave_l) do_cmd_save_game(TRUE);
-
-			/* Go down */
-			if (c_ptr->feat == FEAT_MORE_MORE) down_num += 2;
-			else down_num += 1;
-			if (!quest_number(dun_level+down_num) && (dun_level < d_info[dungeon_type].maxdepth - 1 - down_num) && one_in_(13) && !fall_trap && dun_level && !ironman_downward)
+			prepare_change_floor_mode(CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+		}
+		else
+		{
+			if (c_ptr->feat == FEAT_MORE_MORE)
 			{
-				down_num++;
-#ifdef JP
-				if (c_ptr->feat == FEAT_MORE_MORE) msg_print("長い坑道を下りた。");
-				else msg_print("長い階段を下りた。");
-#else
-				msg_print("These were very long stairs.");
-#endif
-				msg_print(NULL);
-			}
-			else if (!dun_level) down_num = d_info[c_ptr->special].mindepth;
-			if (record_stair)
-			{
-#ifdef JP
-				if (fall_trap) do_cmd_write_nikki(NIKKI_STAIR, down_num, "落し戸に落ちた");
-				else do_cmd_write_nikki(NIKKI_STAIR, down_num, "階段を下りた");
-#else
-				if (fall_trap) do_cmd_write_nikki(NIKKI_STAIR, down_num, "fall from trap door");
-				else do_cmd_write_nikki(NIKKI_STAIR, down_num, "go down the stairs to");
-#endif
-			}
-
-			if (fall_trap)
-			{
-				dun_level += down_num;
-#ifdef JP
-				msg_print("わざと落し戸に落ちた。");
-#else
-				msg_print("You deliberately jump through the trap door.");
-#endif
+				/* Create a way back */
+				prepare_change_floor_mode(CFM_DOWN | CFM_SHAFT);
 			}
 			else
 			{
-				/* Success */
-				if(c_ptr->feat == FEAT_ENTRANCE)
-				{
-					dun_level = d_info[c_ptr->special].mindepth;
-#ifdef JP
-					msg_format("%sへ入った。", d_text + d_info[dungeon_type].text);
-#else
-					msg_format("You entered %s.", d_text + d_info[dungeon_type].text);
-#endif
-				}
-				else
-				{
-					dun_level += down_num;
-#ifdef JP
-					if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
-						msg_print("なんだこの階段は！");
-					else
-						msg_print("階段を下りて新たなる迷宮へと足を踏み入れた。");
-#else
-					msg_print("You enter a maze of down staircases.");
-#endif
-				}
-			}
-
-
-			/* Leaving */
-			p_ptr->leaving = TRUE;
-
-			if (!fall_trap)
-			{
-				if (c_ptr->feat == FEAT_MORE_MORE)
-				{
-					/* Create a way back */
-					create_up_stair = 2;
-				}
-				else
-				{
-					/* Create a way back */
-					create_up_stair = 1;
-				}
+				/* Create a way back */
+				prepare_change_floor_mode(CFM_DOWN);
 			}
 		}
 	}
@@ -3201,12 +3175,13 @@ void do_cmd_rest(void)
 	
 	/* Why are you sleeping when there's no need?  WAKE UP!*/
 	if ((p_ptr->chp == p_ptr->mhp) &&
-		(p_ptr->csp == p_ptr->msp) &&
-		!p_ptr->blind && !p_ptr->confused &&
-		!p_ptr->poisoned && !p_ptr->afraid &&
-		!p_ptr->stun && !p_ptr->cut &&
-		!p_ptr->slow && !p_ptr->paralyzed &&
-		!p_ptr->image && !p_ptr->word_recall)
+	    (p_ptr->csp == p_ptr->msp) &&
+	    !p_ptr->blind && !p_ptr->confused &&
+	    !p_ptr->poisoned && !p_ptr->afraid &&
+	    !p_ptr->stun && !p_ptr->cut &&
+	    !p_ptr->slow && !p_ptr->paralyzed &&
+	    !p_ptr->image && !p_ptr->word_recall &&
+	    !p_ptr->alter_reality)
 			chg_virtue(V_DILIGENCE, -1);
 
 	/* Save the rest code */

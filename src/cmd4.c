@@ -469,38 +469,10 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		}
 		case NIKKI_TELE_LEV:
 		{
-			cptr to;
-			if (!dun_level)
-			{
 #ifdef JP
-				to = "1階";
+			fprintf(fff, " %2d:%02d %20s レベル・テレポートで脱出した。\n", hour, min, note_level);
 #else
-				to = "level 1";
-#endif
-			}
-			else if (quest_number(dun_level) && ((quest_number(dun_level) < MIN_RANDOM_QUEST) && !(quest_number(dun_level) == QUEST_OBERON || quest_number(dun_level) == QUEST_SERPENT)))
-			{
-#ifdef JP
-				to = "地上";
-#else
-				to = "the surface";
-#endif
-			}
-			else
-			{
-#ifdef JP
-				if (!(dun_level+num)) to = "地上";
-				else to = format("%d階", dun_level+num);
-#else
-				if (!(dun_level+num)) to = "surface";
-				else to = format("level %d", dun_level+num);
-#endif
-			}
-				
-#ifdef JP
-			fprintf(fff, " %2d:%02d %20s %sへとテレポートで移動した。\n", hour, min, note_level, to);
-#else
-			fprintf(fff, " %2d:%02d %20s teleport level to %s.\n", hour, min, note_level, to);
+			fprintf(fff, " %2d:%02d %20s Get out using teleport level.\n", hour, min, note_level);
 #endif
 			break;
 		}

@@ -2065,6 +2065,15 @@ info[i++] = "あなたはすぐに帰還するだろう。";
 #endif
 
 	}
+	if (p_ptr->alter_reality)
+	{
+#ifdef JP
+		info[i++] = "あなたはすぐにこの世界を離れるだろう。";
+#else
+		info[i++] = "You will soon be altered.";
+#endif
+
+	}
 	if (p_ptr->see_infra)
 	{
 #ifdef JP
@@ -3368,9 +3377,19 @@ info[i++] = "あなたの手は赤く輝いている。";
 	{
 		info2[i]  = report_magics_aux(p_ptr->word_recall);
 #ifdef JP
-info[i++] = "この後帰還の詔を発動する。";
+		info[i++] = "この後帰還の詔を発動する。";
 #else
 		info[i++] = "You are waiting to be recalled";
+#endif
+
+	}
+	if (p_ptr->alter_reality)
+	{
+		info2[i]  = report_magics_aux(p_ptr->alter_reality);
+#ifdef JP
+		info[i++] = "この後現実変容が発動する。";
+#else
+		info[i++] = "You waiting to be altered";
 #endif
 
 	}
@@ -4490,7 +4509,10 @@ bool detect_all(int range)
 	if (detect_traps(range, TRUE)) detect = TRUE;
 	if (detect_doors(range)) detect = TRUE;
 	if (detect_stairs(range)) detect = TRUE;
-	if (detect_treasure(range)) detect = TRUE;
+
+	/* There are too many hidden treasure.  So... */
+	/* if (detect_treasure(range)) detect = TRUE; */
+
 	if (detect_objects_gold(range)) detect = TRUE;
 	if (detect_objects_normal(range)) detect = TRUE;
 	if (detect_monsters_invis(range)) detect = TRUE;

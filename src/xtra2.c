@@ -2897,14 +2897,16 @@ static bool target_set_accept(int y, int x)
 		if ((feat >= FEAT_DOOR_HEAD) &&
 		    (feat <= FEAT_DOOR_TAIL)) return (TRUE);
 
+#if 0
 		/* Notice rubble */
 		/* I think FEAT_RUBBLEs should not be "interesting" */
-#if 0
 		if (feat == FEAT_RUBBLE) return (TRUE);
-#endif
+
 		/* Notice veins with treasure */
+		/* Now veins with treasure are too many */
 		if (feat == FEAT_MAGMA_K) return (TRUE);
 		if (feat == FEAT_QUARTZ_K) return (TRUE);
+#endif
 
 		/* Notice quest features */
 		if (feat == FEAT_QUEST_ENTER) return (TRUE);

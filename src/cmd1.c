@@ -1123,11 +1123,11 @@ static void hit_trap(bool break_trap)
 					do_cmd_save_game(TRUE);
 
 #ifdef JP
-				do_cmd_write_nikki(NIKKI_STAIR, 1, "落し戸に落ちた");
+				do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "落し戸に落ちた");
 #else
-				do_cmd_write_nikki(NIKKI_STAIR, 1, "You have fallen through a trap door!");
+				do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "You have fallen through a trap door!");
 #endif
-				dun_level++;
+				prepare_change_floor_mode(CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 
 				/* Leaving */
 				p_ptr->leaving = TRUE;

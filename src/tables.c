@@ -6486,11 +6486,11 @@ option_type option_info[] =
 
 
 #ifdef JP
-	{ &confirm_stairs,              FALSE, 1, 5, 5,
-	"confirm_stairs",               "別の階に行く時確認する" },
+	{ &confirm_quest,               TRUE, 1, 1, 9,
+	"confirm_quest",                "クエストを諦めて階段で逃げる前に確認する" },
 #else
-	{ &confirm_stairs,              FALSE, 1, 5, 5,
-	"confirm_stairs",               "Prompt before exiting a dungeon level" },
+	{ &confirm_quest,               TRUE, 1, 1, 9,
+	"confirm_quest",                "Prompt before exiting a quest level" },
 #endif
 
 
@@ -6814,15 +6814,6 @@ option_type option_info[] =
 #else
 	{ &view_unsafe_grids,            FALSE, 3, 1, 8,
 	"view_unsafe_grids",             "Map marked by detect traps" },
-#endif
-
-
-#ifdef JP
-	{ &dungeon_stair,               TRUE,  3, 1, 9,
-	"dungeon_stair",                "階段をつなげてダンジョンを生成する" },
-#else
-	{ &dungeon_stair,               TRUE,  3, 1, 9,
-	"dungeon_stair",                "Generate dungeons with connected stairs" },
 #endif
 
 

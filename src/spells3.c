@@ -521,6 +521,8 @@ msg_print("不思議な力がテレポートを防いだ！");
  */
 void teleport_player_level(void)
 {
+	bool go_up;
+
 	/* No effect in arena or quest */
 	if (p_ptr->inside_arena || (p_ptr->inside_quest && !random_quest_number(dun_level)) ||
 	    (quest_number(dun_level) && (dun_level > 1) && ironman_downward))
@@ -545,6 +547,17 @@ msg_print("不思議な力がテレポートを防いだ！");
 		return;
 	}
 
+	/* Choose up or down */
+	if (randint0(100) < 50) go_up = TRUE;
+	else go_up = FALSE;
+
+	if (p_ptr->wizard)
+	{
+		if (get_check("Force to go up? ")) go_up = TRUE;
+		else if (get_check("Force to go down? ")) go_up = FALSE;
+	}
+
+	/* Down only */ 
 	if (ironman_downward || (dun_level <= d_info[dungeon_type].mindepth))
 	{
 #ifdef JP
@@ -566,15 +579,18 @@ msg_print("あなたは床を突き破って沈んでいく。");
 		if (!dun_level)
 		{
 			dun_level = d_info[dungeon_type].mindepth;
+			prepare_change_floor_mode(CFM_RAND_PLACE | CFM_CLEAR_ALL);
 		}
 		else
 		{
-			dun_level++;
+			prepare_change_floor_mode(CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 		}
 
 		/* Leaving */
 		p_ptr->leaving = TRUE;
 	}
+
+	/* Up only */
 	else if (quest_number(dun_level) || (dun_level >= d_info[dungeon_type].maxdepth))
 	{
 #ifdef JP
@@ -588,9 +604,7 @@ msg_print("あなたは天井を突き破って宙へ浮いていく。");
 
 		if (autosave_l) do_cmd_save_game(TRUE);
 
-		dun_level--;
-
-		if (!dun_level) dungeon_type = 0;
+		prepare_change_floor_mode(CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 
 		leave_quest_check();
 
@@ -598,7 +612,7 @@ msg_print("あなたは天井を突き破って宙へ浮いていく。");
 		p_ptr->inside_quest = 0;
 		p_ptr->leaving = TRUE;
 	}
-	else if (randint0(100) < 50)
+	else if (go_up)
 	{
 #ifdef JP
 msg_print("あなたは天井を突き破って宙へ浮いていく。");
@@ -611,9 +625,7 @@ msg_print("あなたは天井を突き破って宙へ浮いていく。");
 
 		if (autosave_l) do_cmd_save_game(TRUE);
 
-		dun_level--;
-
-		if (!dun_level) dungeon_type = 0;
+		prepare_change_floor_mode(CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 
 		/* Leaving */
 		p_ptr->leaving = TRUE;
@@ -626,27 +638,18 @@ msg_print("あなたは床を突き破って沈んでいく。");
 		msg_print("You sink through the floor.");
 #endif
 
-		if (!dun_level) dungeon_type = p_ptr->recall_dungeon;
+		/* Never reach this code on the surface */
+		/* if (!dun_level) dungeon_type = p_ptr->recall_dungeon; */
 
 		if (record_stair) do_cmd_write_nikki(NIKKI_TELE_LEV, 1, NULL);
 
 		if (autosave_l) do_cmd_save_game(TRUE);
 
-		dun_level++;
+		prepare_change_floor_mode(CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 
 		/* Leaving */
 		p_ptr->leaving = TRUE;
 	}
-
-	if (!dun_level && dungeon_type)
-	{
-		p_ptr->leaving_dungeon = TRUE;
-		p_ptr->wilderness_y = d_info[dungeon_type].dy;
-		p_ptr->wilderness_x = d_info[dungeon_type].dx;
-		p_ptr->recall_dungeon = dungeon_type;
-	}
-
-	if (!dun_level) dungeon_type = 0;
 
 	/* Sound */
 	sound(SOUND_TPLEVEL);
@@ -1621,29 +1624,42 @@ msg_format("%^sがあなたの足元に飛んできた。", o_name);
 
 void alter_reality(void)
 {
-	if (!quest_number(dun_level) && dun_level)
+	/* Ironman option */
+	if (p_ptr->inside_arena || ironman_downward)
 	{
 #ifdef JP
-msg_print("世界が変わった！");
+		msg_print("何も起こらなかった。");
 #else
-		msg_print("The world changes!");
+		msg_print("Nothing happens.");
+#endif
+		return;
+	}
+
+	if (!p_ptr->alter_reality)
+	{
+		int turns = randint0(21) + 15;
+
+		p_ptr->alter_reality = turns;
+#ifdef JP
+		msg_print("回りの景色が変わり始めた...");
+#else
+		msg_print("The view around you begins to change...");
 #endif
 
-
-		if (autosave_l) do_cmd_save_game(TRUE);
-
-		/* Leaving */
-		p_ptr->leaving = TRUE;
+		p_ptr->redraw |= (PR_STATUS);
 	}
 	else
 	{
+		p_ptr->alter_reality = 0;
 #ifdef JP
-msg_print("世界が少しの間変化したようだ。");
+		msg_print("景色が元に戻った...");
 #else
-		msg_print("The world seems to change for a moment!");
+		msg_print("The view around you got back...");
 #endif
 
+		p_ptr->redraw |= (PR_STATUS);
 	}
+	return;
 }
 
 
@@ -1994,57 +2010,6 @@ msg_format("%sを＄%d の金に変えた。", o_name, price);
 	return TRUE;
 }
 
-
-/*
- * Create stairs at the player location
- */
-void stair_creation(void)
-{
-	/* XXX XXX XXX */
-	if (!cave_valid_bold(py, px))
-	{
-#ifdef JP
-msg_print("床上のアイテムが呪文を跳ね返した。");
-#else
-		msg_print("The object resists the spell.");
-#endif
-
-		return;
-	}
-
-	/* XXX XXX XXX */
-	delete_object(py, px);
-
-	/* Create a staircase */
-	if (p_ptr->inside_arena || (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST)) || p_ptr->inside_battle || !dun_level)
-	{
-		/* arena or quest */
-#ifdef JP
-msg_print("効果がありません！");
-#else
-		msg_print("There is no effect!");
-#endif
-
-	}
-	else if (ironman_downward)
-	{
-		/* Town/wilderness or Ironman */
-		cave_set_feat(py, px, FEAT_MORE);
-	}
-	else if (quest_number(dun_level) || (dun_level >= d_info[dungeon_type].maxdepth))
-	{
-		/* Quest level */
-		cave_set_feat(py, px, FEAT_LESS);
-	}
-	else if (randint0(100) < 50)
-	{
-		cave_set_feat(py, px, FEAT_MORE);
-	}
-	else
-	{
-		cave_set_feat(py, px, FEAT_LESS);
-	}
-}
 
 
 /*

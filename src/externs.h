@@ -143,8 +143,6 @@ extern s16b command_gap;
 extern s16b command_wrk;
 extern s16b command_new;
 extern s16b energy_use;
-extern byte create_up_stair;
-extern byte create_down_stair;
 extern bool msg_flag;
 extern s16b running;
 extern s16b resting;
@@ -245,7 +243,7 @@ extern bool display_mutations;     /* Skip mutations screen in 'C'haracter displ
 extern bool plain_descriptions;
 extern bool confirm_destroy;
 extern bool confirm_wear;
-extern bool confirm_stairs;
+extern bool confirm_quest;
 extern bool disturb_pets;
 extern bool view_perma_grids;
 extern bool view_torch_grids;
@@ -261,7 +259,6 @@ extern bool manual_haggle;
 extern bool auto_scum;
 extern bool expand_look;
 extern bool expand_list;
-extern bool dungeon_stair;
 extern bool smart_learn;
 extern bool smart_cheat;
 extern bool show_labels;
@@ -368,6 +365,9 @@ extern char angband_term_name[8][16];
 extern byte angband_color_table[256][4];
 extern char angband_sound_name[SOUND_MAX][16];
 extern cave_type *cave[MAX_HGT];
+extern saved_floor_type saved_floors[MAX_SAVED_FLOORS];
+extern s16b max_floor_id;
+extern u32b saved_floor_file_sign;
 extern object_type *o_list;
 extern monster_type *m_list;
 extern u16b max_towns;
@@ -742,8 +742,20 @@ extern void flavor_init(void);
 extern char *object_desc_kosuu(char *t, object_type *o_ptr);
 extern void object_desc(char *buf, object_type *o_ptr, int pref, int mode);
 
+/* floors.c */
+extern void init_saved_floors(void);
+extern void clear_saved_floor_files(void);
+extern saved_floor_type *get_sf_ptr(s16b floor_id);
+extern s16b get_new_floor_id(void);
+extern void prepare_change_floor_mode(u32b mode);
+extern void leave_floor(void);
+extern void change_floor(void);
+extern void stair_creation(void);
+
 /* generate.c */
 extern void place_closed_door(int y, int x);
+extern void place_quest_monsters(void);
+extern void clear_cave(void);
 extern void generate_cave(void);
 
 /* init1.c */
@@ -760,6 +772,7 @@ extern cptr get_check_sum(void);
 
 /* load.c */
 extern errr rd_savefile_new(void);
+extern bool load_floor(saved_floor_type *sf_ptr, u32b mode);
 
 /* melee1.c */
 /* melee2.c */
@@ -922,6 +935,7 @@ extern void do_cmd_racial_power(void);
 extern bool save_player(void);
 extern bool load_player(void);
 extern void remove_loc(void);
+extern bool save_floor(saved_floor_type *sf_ptr, u32b mode);
 
 /* spells1.c */
 extern bool in_disintegration_range(int y1, int x1, int y2, int x2);
@@ -1065,7 +1079,6 @@ extern void identify_pack(void);
 extern bool remove_curse(void);
 extern bool remove_all_curse(void);
 extern bool alchemy(void);
-extern void stair_creation(void);
 extern bool item_tester_hook_weapon(object_type *o_ptr);
 extern bool item_tester_hook_armour(object_type *o_ptr);
 extern bool item_tester_hook_weapon_armour(object_type *o_ptr);

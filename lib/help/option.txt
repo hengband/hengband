@@ -84,13 +84,13 @@ Confirm to wear/wield known cursed items    [confirm_wear]
     will be prompted if you attempt to wear or wield an item if your
     character knows it is cursed.
 
-***** <confirm_stairs>
-Prompt before exiting a dungeon level    [confirm_stairs]
-    Some players (such as myself) often accidentally press the '<' key
-    and exit a Special feeling level. If this option is set, the
-    program asks for confirmation before you go up or down the stairs.
-    Others may find the prompt annoying, they should of course not set
-    this option. :-)
+***** <confirm_quest>
+Prompt before exiting a quest level    [confirm_quest]
+    In the dungeon, you can freely climb up/down stairs and can return
+    to former floors normally.  But in some quest level, including the
+    random quest, you can not return once you escaped from the level.
+    If this option is set, the program asks for confirmation before
+    you go up the stairs from such quest levels.
 
 ***** <target_pet>
 Allow targetting pets    [target_pet]
@@ -345,12 +345,6 @@ Map marked by detect traps    [view_unsafe_grids]
     are trap free. This option has no effect on surface grids, but
     outdoor locations cannot be trapped.
 
-***** <dungeon_stair>
-Generate dungeons with connected stairs    [dungeon_stair]
-    Always generate a staircase back to the level you came from, if you
-    used a staircase to get to the level. This is more "realistic", and
-    "safer", but less of a "challenge" for some people.
-    
 ***** <small_levels>
 Allow unusually small dungeon levels    [small_levels]
     This option enables the creation of levels of varying sizes. Levels

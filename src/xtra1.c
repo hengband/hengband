@@ -317,6 +317,7 @@ static void prt_stat(int stat)
 #define BAR_STEALTH 49
 #define BAR_SUPERSTEALTH 50
 #define BAR_RECALL 51
+#define BAR_ALTER 52
 
 
 static struct {
@@ -378,6 +379,7 @@ static struct {
 	{TERM_UMBER, "±£", "±£Ì©"},
 	{TERM_YELLOW, "±£", "Ä¶±£Ì©"},
 	{TERM_WHITE, "µ¢", "µ¢´Ô"},
+	{TERM_WHITE, "¸½", "¸½¼ÂÊÑÍÆ"},
 	{0, NULL, NULL}
 };
 #else
@@ -434,6 +436,7 @@ static struct {
 	{TERM_UMBER, "Sl", "Stealth"},
 	{TERM_YELLOW, "Stlt", "Stealth"},
 	{TERM_WHITE, "Rc", "Recall"},
+	{TERM_WHITE, "Al", "Alter"},
 	{0, NULL, NULL}
 };
 #endif
@@ -543,6 +546,9 @@ static void prt_status(void)
 
 	/* Word of Recall */
 	if (p_ptr->word_recall) ADD_FLG(BAR_RECALL);
+
+	/* Alter realiry */
+	if (p_ptr->alter_reality) ADD_FLG(BAR_ALTER);
 
 	/* Afraid */
 	if (p_ptr->afraid) ADD_FLG(BAR_AFRAID);

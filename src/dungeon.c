@@ -679,6 +679,7 @@ msg_format("%d 階にテレポートしました。", command_arg);
 
 	/* Change level */
 	dun_level = command_arg;
+	prepare_change_floor_mode(CFM_CLEAR_ALL);
 
 	leave_quest_check();
 
@@ -1155,6 +1156,9 @@ void leave_quest_check(void)
 			r_info[quest[leaving_quest].r_idx].flags1 &= ~(RF1_QUESTOR);
 			if (record_rand_quest)
 				do_cmd_write_nikki(NIKKI_RAND_QUEST_F, leaving_quest, NULL);
+
+			/* Floor of random quest will be blocked */
+			prepare_change_floor_mode(CFM_NO_RETURN);
 		}
 		else if (record_fix_quest)
 			do_cmd_write_nikki(NIKKI_FIX_QUEST_F, leaving_quest, NULL);
@@ -3773,6 +3777,7 @@ msg_print("上に引っ張りあげられる感じがする！");
 
 				dun_level = 0;
 				dungeon_type = 0;
+				prepare_change_floor_mode(CFM_CLEAR_ALL);
 
 				leave_quest_check();
 
@@ -3826,6 +3831,8 @@ msg_print("下に引きずり降ろされる感じがする！");
 				}
 				p_ptr->wild_mode = FALSE;
 
+				prepare_change_floor_mode(CFM_CLEAR_ALL);
+
 				/* Leaving */
 				p_ptr->leaving = TRUE;
 
@@ -3843,6 +3850,52 @@ msg_print("下に引きずり降ろされる感じがする！");
 						}
 					}
 				}
+			}
+
+			/* Sound */
+			sound(SOUND_TPLEVEL);
+		}
+	}
+
+
+	/* Delayed Alter reality */
+	if (p_ptr->alter_reality)
+	{
+		if (autosave_l && (p_ptr->alter_reality == 1) && !p_ptr->inside_battle)
+			do_cmd_save_game(TRUE);
+
+		/* Count down towards alter */
+		p_ptr->alter_reality--;
+
+		p_ptr->redraw |= (PR_STATUS);
+
+		/* Activate the alter reality */
+		if (!p_ptr->alter_reality)
+		{
+			/* Disturbing! */
+			disturb(0, 0);
+
+			/* Determine the level */
+			if (!quest_number(dun_level) && dun_level)
+			{
+#ifdef JP
+				msg_print("世界が変わった！");
+#else
+				msg_print("The world changes!");
+#endif
+
+				prepare_change_floor_mode(CFM_CLEAR_ALL);
+
+				/* Leaving */
+				p_ptr->leaving = TRUE;
+			}
+			else
+			{
+#ifdef JP
+				msg_print("世界が少しの間変化したようだ。");
+#else
+				msg_print("The world seems to change for a moment!");
+#endif
 			}
 
 			/* Sound */
@@ -5087,7 +5140,8 @@ msg_print("何か変わった気がする！");
 			    !p_ptr->poisoned && !p_ptr->afraid &&
 			    !p_ptr->stun && !p_ptr->cut &&
 			    !p_ptr->slow && !p_ptr->paralyzed &&
-			    !p_ptr->image && !p_ptr->word_recall)
+			    !p_ptr->image && !p_ptr->word_recall &&
+			    !p_ptr->alter_reality)
 			{
 				set_action(ACTION_NONE);
 			}
@@ -5724,7 +5778,7 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
  */
 static void dungeon(bool load_game)
 {
-	int quest_num = 0, i, num;
+	int quest_num = 0, i;
 
 	/* Set the base level */
 	base_level = dun_level;
@@ -5784,47 +5838,6 @@ static void dungeon(bool load_game)
 	{
 		max_dlv[dungeon_type] = dun_level;
 		if (record_maxdeapth) do_cmd_write_nikki(NIKKI_MAXDEAPTH, dun_level, NULL);
-	}
-
-	/* No stairs down from Quest */
-	if (quest_number(dun_level))
-	{
-		create_down_stair = 0;
-	}
-
-	/* Paranoia -- no stairs from town or wilderness */
-	if (!dun_level) create_down_stair = create_up_stair = 0;
-
-	/* Option -- no connected stairs */
-	if (!dungeon_stair) create_down_stair = create_up_stair = 0;
-
-	/* Option -- no up stairs */
-	if (ironman_downward) create_down_stair = create_up_stair = 0;
-
-	/* Make a stairway. */
-	if (create_up_stair || create_down_stair)
-	{
-		/* Place a stairway */
-		if (cave_valid_bold(py, px))
-		{
-			/* XXX XXX XXX */
-			delete_object(py, px);
-
-			/* Make stairs */
-			if (create_down_stair)
-			{
-				if (create_down_stair == 2) cave_set_feat(py, px, FEAT_MORE_MORE);
-				else cave_set_feat(py, px, FEAT_MORE);
-			}
-			else
-			{
-				if (create_up_stair == 2) cave_set_feat(py, px, FEAT_LESS_LESS);
-				else cave_set_feat(py, px, FEAT_LESS);
-			}
-		}
-
-		/* Cancel the stair request */
-		create_down_stair = create_up_stair = 0;
 	}
 
 	/* Validate the panel */
@@ -6067,77 +6080,17 @@ msg_print("試合開始！");
 	/* Not save-and-quit and not dead? */
 	if (p_ptr->playing && !p_ptr->is_dead)
 	{
-		for(num = 0; num < 21; num++)
-		{
-			party_mon[num].r_idx = 0;
-		}
-
-		if (p_ptr->riding)
-		{
-			COPY(&party_mon[0], &m_list[p_ptr->riding], monster_type);
-		}
-
-		for(i = m_max - 1, num = 1; (i >= 1 && num < 21); i--)
-		{
-			monster_type *m_ptr = &m_list[i];
-			
-			if (!m_ptr->r_idx) continue;
-			if (!is_pet(m_ptr)) continue;
-			if (i == p_ptr->riding) continue;
-
-			if (reinit_wilderness)
-			{
-				/* Don't lose sight of pets when getting a Quest */
-			}
-			else
-			{
-				int dis = distance(py, px, m_ptr->fy, m_ptr->fx);
-
-				/*
-				 * Pets with nickname will follow even from 3 blocks away
-				 * when you or the pet can see the other.
-				 */
-				if (m_ptr->nickname && 
-				    (player_has_los_bold(m_ptr->fy, m_ptr->fx) ||
-				     los(m_ptr->fy, m_ptr->fx, py, px)))
-				{
-					if (dis > 3) continue;
-				}
-				else
-				{
-					if (dis > 1) continue;
-				}
-				if (m_ptr->confused || m_ptr->stunned || m_ptr->csleep) continue;
-			}
-
-			COPY(&party_mon[num], &m_list[i], monster_type);
-			num++;
-
-			/* Mark as followed */
-			delete_monster_idx(i);
-		}
+		/*
+		 * Maintain Unique monsters and artifact, save current
+		 * floor, then prepare next floor
+		 */
+		leave_floor();
 
 		/* Forget the flag */
 		reinit_wilderness = FALSE;
-
-		if (record_named_pet)
-		{
-			for (i = m_max - 1; i >=1; i--)
-			{
-				monster_type *m_ptr = &m_list[i];
-				char m_name[80];
-				
-				if (!m_ptr->r_idx) continue;
-				if (!is_pet(m_ptr)) continue;
-				if (!m_ptr->nickname) continue;
-				if (p_ptr->riding == i) continue;
-				
-				monster_desc(m_name, m_ptr, 0x88);
-				do_cmd_write_nikki(NIKKI_NAMED_PET, 4, m_name);
-			}
-		}
 	}
 
+	/* Write about current level on the play record once per level */
 	write_level = TRUE;
 }
 
@@ -6390,6 +6343,16 @@ quit("セーブファイルが壊れています");
 
 		/* Prepare to init the RNG */
 		Rand_quick = TRUE;
+
+		/* Initialize the saved floors data */
+		init_saved_floors();
+	}
+
+	/* Old game is loaded.  But new game is requested. */
+	else if (new_game)
+	{
+		/* Delete expanded temporal files */
+		clear_saved_floor_files();
 	}
 
 	/* Process old character */
@@ -6629,7 +6592,7 @@ if (init_v_info()) quit("建築物初期化不能");
 #endif
 
 	/* Generate a dungeon level if needed */
-	if (!character_dungeon) generate_cave();
+	if (!character_dungeon) change_floor();
 
 
 	/* Character is now "complete" */
@@ -6828,6 +6791,14 @@ msg_print("張りつめた大気が流れ去った...");
 						p_ptr->redraw |= (PR_STATUS);
 					}
 
+					/* Hack -- cancel alter */
+					if (p_ptr->alter_reality)
+					{
+						/* Hack -- Prevent alter */
+						p_ptr->alter_reality = 0;
+						p_ptr->redraw |= (PR_STATUS);
+					}
+
 					/* Note cause of death XXX XXX XXX */
 #ifdef JP
 (void)strcpy(p_ptr->died_from, "死の欺き");
@@ -6886,7 +6857,7 @@ msg_print("張りつめた大気が流れ去った...");
 		if (p_ptr->is_dead) break;
 
 		/* Make a new level */
-		generate_cave();
+		change_floor();
 	}
 
 	/* Close stuff */

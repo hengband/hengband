@@ -176,6 +176,8 @@ struct artifact_type
 
 	byte cur_num;		/* Number created (0 or 1) */
 	byte max_num;		/* Unused (should be "1") */
+
+	s16b floor_id;          /* Leaved on this location last time */
 };
 
 
@@ -310,6 +312,8 @@ struct monster_race
 	byte max_num;			/* Maximum population allowed per level */
 
 	byte cur_num;			/* Monster population on current level */
+
+	s16b floor_id;                  /* Location of unique monster */
 
 
 	s16b r_sights;			/* Count sightings of this monster */
@@ -1080,6 +1084,7 @@ struct player_type
 	s16b vir_types[8];
 
 	s16b word_recall;	  /* Word of recall counter */
+	s16b alter_reality;	  /* Alter reality counter */
 	byte recall_dungeon;      /* Dungeon set to be recalled */
 
 	s16b energy_need;	  /* Energy needed for next move */
@@ -1138,7 +1143,7 @@ struct player_type
 	s16b today_mon;           /* Wanted monster */
 
 	bool dtrap;               /* Whether you are on trap-safe grids */
-
+	s16b floor_id;            /* Current floor location */ 
 
 	/*** Temporary fields ***/
 
@@ -1150,6 +1155,7 @@ struct player_type
 
 	bool leaving_dungeon;	/* True if player is leaving the dungeon */
 	bool teleport_town;
+	bool enter_dungeon;     /* Just enter the dungeon */
 
 	s16b health_who;	/* Health bar trackee */
 
@@ -1631,4 +1637,32 @@ typedef struct {
 	byte dice;          /* Weapons which have more than 'dice' dice match */
 	byte bonus;         /* Items which have more than 'bonus' magical bonus match */
 } autopick_type;
+
+
+/*
+ *  A structure type for the saved floor
+ */
+typedef struct 
+{
+	s16b floor_id;        /* No recycle until 65536 IDs are all used */
+	byte savefile_id;     /* ID for savefile (from 0 to MAX_SAVED_FLOOR) */
+	s16b dun_level;
+	s32b last_visit;      /* Time count of last visit. 0 for new floor. */
+	u32b visit_mark;      /* Older has always smaller mark. */
+	s16b upper_floor_id;  /* a floor connected with level teleportation */
+	s16b lower_floor_id;  /* a floor connected with level tel. and trap door */
+} saved_floor_type;
+
+
+/*
+ *  A structure type for terrain template of saving dungeon floor
+ */
+typedef struct
+{
+	u16b info;
+	byte feat;
+	byte mimic;
+	s16b special;
+	u16b occurrence;
+} cave_template_type;
 

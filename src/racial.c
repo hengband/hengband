@@ -961,11 +961,10 @@ msg_print("敵を調査した...");
 				if (racial_aux(25, 0, A_INT, 10))
 				{
 					int gain_sp;
-					if ((gain_sp = take_hit(DAMAGE_USELIFE, p_ptr->lev, 
 #ifdef JP
-"ＨＰからＭＰへの無謀な変換", -1)))
+					if ((gain_sp = take_hit(DAMAGE_USELIFE, p_ptr->lev, "ＨＰからＭＰへの無謀な変換", -1)))
 #else
-"thoughtless convertion from HP to SP", -1)))
+					if ((gain_sp = take_hit(DAMAGE_USELIFE, p_ptr->lev, "thoughtless convertion from HP to SP", -1)))
 #endif
 					{
 						p_ptr->csp += gain_sp / 5;
@@ -1644,30 +1643,12 @@ msg_print("あなたは「パターン」を心に描いてその上を歩いた...");
 			{
 				if (racial_aux(30, 50, A_INT, 50))
 				{
-					/* No effect in arena or quest */
-					if (p_ptr->inside_arena || p_ptr->inside_quest)
-					{
 #ifdef JP
-msg_print("効果がなかった。");
+					msg_print("あなたは歩き周り始めた。");
 #else
-						msg_print("There is no effect.");
+					msg_print("You start walking around. ");
 #endif
-
-					}
-					else
-					{
-#ifdef JP
-msg_print("あなたは歩き周り始めた。周囲が変化している。");
-#else
-						msg_print("You start walking around. Your surroundings change.");
-#endif
-
-
-						if (autosave_l) do_cmd_save_game(TRUE);
-
-						/* Leaving */
-						p_ptr->leaving = TRUE;
-					}
+					alter_reality();
 				}
 			}
 			break;

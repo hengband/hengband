@@ -215,8 +215,8 @@ void build_streamer(int feat, int chance)
 	cave_type *c_ptr;
 
 	/* Hack -- Choose starting point */
-	y = rand_spread(cur_hgt / 2, 10);
-	x = rand_spread(cur_wid / 2, 15);
+	y = rand_spread(cur_hgt / 2, cur_hgt / 6);
+	x = rand_spread(cur_wid / 2, cur_wid / 6);
 
 	/* Choose a random compass direction */
 	dir = ddd[randint0(8)];
@@ -264,8 +264,13 @@ void build_streamer(int feat, int chance)
 			/* Paranoia: Clear mimic field */
 			c_ptr->mimic = 0;
 
-			/* Hack -- Add some (known) treasure */
-			if (treasure && one_in_(chance)) c_ptr->feat += 0x04;
+			/* Hack -- Add some known treasure */
+			if (treasure && one_in_(chance))
+				c_ptr->feat += (FEAT_MAGMA_K - FEAT_MAGMA);
+
+			/* Hack -- Add some hidden treasure */
+			else if (treasure && one_in_(chance/4))
+				c_ptr->feat += (FEAT_MAGMA_H - FEAT_MAGMA);
 		}
 
 		if (dummy >= SAFE_MAX_ATTEMPTS)

@@ -22,7 +22,7 @@ X:use_old_target
 Y:always_repeat
 X:confirm_destroy
 Y:confirm_wear
-X:confirm_stairs
+Y:confirm_quest
 X:target_pet
 Y:easy_open
 Y:easy_disarm
@@ -65,7 +65,6 @@ Y:expand_list
 Y:view_perma_grids
 X:view_torch_grids
 X:view_unsafe_grids
-Y:dungeon_stair
 Y:small_levels
 X:always_small_levels
 Y:empty_levels

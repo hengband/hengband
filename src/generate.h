@@ -43,11 +43,11 @@ extern int dun_tun_jct;
  * Dungeon streamer generation values
  */
 #define DUN_STR_DEN     5	/* Density of streamers */
-#define DUN_STR_RNG     2	/* Width of streamers */
-#define DUN_STR_MAG     3	/* Number of magma streamers */
-#define DUN_STR_MC     90	/* 1/chance of treasure per magma */
-#define DUN_STR_QUA	    2	/* Number of quartz streamers */
-#define DUN_STR_QC     40	/* 1/chance of treasure per quartz */
+#define DUN_STR_RNG     5	/* Width of streamers */
+#define DUN_STR_MAG     6	/* Number of magma streamers */
+#define DUN_STR_MC     30	/* 1/chance of treasure per magma */
+#define DUN_STR_QUA	4	/* Number of quartz streamers */
+#define DUN_STR_QC     15	/* 1/chance of treasure per quartz */
 #define DUN_STR_WLW     1	/* Width of lava & water streamers -KMW- */
 #define DUN_STR_DWLW    8	/* Density of water & lava streams -KMW- */
 

@@ -105,9 +105,6 @@ s16b command_new;		/* Command chaining from inven/equip view */
 
 s16b energy_use;		/* Energy use this turn */
 
-byte create_up_stair;	/* Auto-create "up stairs" */
-byte create_down_stair;	/* Auto-create "down stairs" */
-
 bool msg_flag;			/* Used in msg_print() for "buffering" */
 
 s16b running;			/* Current counter for running, if any */
@@ -231,7 +228,7 @@ bool equippy_chars;		/* Back by popular demand... */
 bool display_mutations;		/* Skip mutations screen even if we have it */
 bool plain_descriptions;	/* Plain object descriptions */
 bool confirm_destroy;		/* Known worthless items are destroyed without confirmation */
-bool confirm_stairs;		/* Prompt before staircases... */
+bool confirm_quest;		/* Prompt before staircases... */
 bool confirm_wear;		/* Confirm before putting on known cursed items */
 bool disturb_pets;		/* Pets moving nearby disturb us */
 
@@ -253,7 +250,6 @@ bool view_torch_grids;		/* Map remembers all torch-lit grids */
 bool view_unsafe_grids;		/* Map marked by detect traps */
 
 bool dungeon_align;			/* Generate dungeons with aligned rooms */
-bool dungeon_stair;			/* Generate dungeons with connected stairs */
 
 bool track_follow;			/* Monsters follow the player */
 bool track_target;			/* Monsters target the player */
@@ -613,6 +609,26 @@ char angband_sound_name[SOUND_MAX][16] =
  * Not completely hardcoded, that would overflow memory
  */
 cave_type *cave[MAX_HGT];
+
+
+/*
+ * The array of saved floors
+ */
+saved_floor_type saved_floors[MAX_SAVED_FLOORS];
+
+
+/*
+ * Number of floor_id used from birth
+ */
+s16b max_floor_id;
+
+
+/*
+ * Sign for current process used in temporal files.
+ * Actually it is the start time of current process.
+ */
+u32b saved_floor_file_sign;
+
 
 /*
  * The array of dungeon items [max_o_idx]
