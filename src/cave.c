@@ -874,22 +874,22 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 void map_info(int y, int x, byte *ap, char *cp)
 #endif /* USE_TRANSPARENCY */
 {
-	cave_type *c_ptr;
+	/* Get the cave */
+	cave_type *c_ptr = &cave[y][x];
 
 	feature_type *f_ptr;
 
 	s16b this_o_idx, next_o_idx = 0;
 
-	byte feat;
+	/* Feature code (applying "mimic" field) */
+	byte feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
 
 	byte a;
 	byte c;
 
-	/* Get the cave */
-	c_ptr = &cave[y][x];
-
-	/* Feature code (applying "mimic" field) */
-	feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+	/* Is this grid "darkened" by monster? */
+	bool darkened_grid = ((c_ptr->info & (CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK)) == (CAVE_VIEW | CAVE_MNDK)) &&
+							!p_ptr->see_nocto && !p_ptr->blind;
 
 	/* Floors (etc) */
 	if ((feat <= FEAT_INVIS) || (feat == FEAT_DIRT) || (feat == FEAT_GRASS))
@@ -910,8 +910,33 @@ void map_info(int y, int x, byte *ap, char *cp)
 			/* Normal attr */
 			a = f_ptr->x_attr;
 
+			/* Mega-Hack -- Handle "in-sight" and "darkened" grids first */
+			if (darkened_grid)
+			{
+				/* Unsafe cave grid -- idea borrowed from Unangband */
+				if (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE))
+				{
+					feat = FEAT_UNDETECTD;
+
+					/* Access unsafe darkness */
+					f_ptr = &f_info[feat];
+
+					/* Char and attr of unsafe grid */
+					c = f_ptr->x_char;
+					a = f_ptr->x_attr;
+				}
+				else
+				{
+					/* For feat_priority control */
+					feat = FEAT_NONE;
+
+					/* Use "black" */
+					a = TERM_DARK;
+				}
+			}
+
 			/* Special lighting effects */
-			if (view_special_lite && (!p_ptr->wild_mode) && ((a == TERM_WHITE) || use_graphics))
+			else if (view_special_lite && (!p_ptr->wild_mode) && ((a == TERM_WHITE) || use_graphics))
 			{
 				/* Handle "blind" */
 				if (p_ptr->blind)
@@ -922,7 +947,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 						 * feat_supports_lighting(feat)
 						 * is always TRUE here
 						 */
-						
+
 						/* Use a dark tile */
 						c++;
 					}
@@ -1038,7 +1063,32 @@ void map_info(int y, int x, byte *ap, char *cp)
 			/* Normal attr */
 			a = f_ptr->x_attr;
 
-			if (new_ascii_graphics)
+			/* Mega-Hack -- Handle "in-sight" and "darkened" grids first */
+			if (darkened_grid)
+			{
+				/* Unsafe cave grid -- idea borrowed from Unangband */
+				if (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE))
+				{
+					feat = FEAT_UNDETECTD;
+
+					/* Access unsafe darkness */
+					f_ptr = &f_info[feat];
+
+					/* Char and attr of unsafe grid */
+					c = f_ptr->x_char;
+					a = f_ptr->x_attr;
+				}
+				else
+				{
+					/* For feat_priority control */
+					feat = FEAT_NONE;
+
+					/* Use "black" */
+					a = TERM_DARK;
+				}
+			}
+
+			else if (new_ascii_graphics)
 			{
 				/* Handle "blind" */
 				if (p_ptr->blind)
@@ -1104,6 +1154,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 					}
 				}
 			}
+
 			/* Special lighting effects */
 			else if (view_granite_lite && !p_ptr->wild_mode &&
 			   (((a == TERM_WHITE) && !use_graphics) ||
@@ -1206,7 +1257,8 @@ void map_info(int y, int x, byte *ap, char *cp)
 		else
 		{
 			/* Handle "blind" */
-			if (!(c_ptr->info & CAVE_MARK))
+			/* Mega-Hack -- Or handle "in-sight" and "darkened" and "unsafe" grids */
+			if (!(c_ptr->info & CAVE_MARK) || (darkened_grid && view_unsafe_grids))
 			{
 				/* Unsafe cave grid -- idea borrowed from Unangband */
 				if (view_unsafe_grids && (c_ptr->info & (CAVE_UNSAFE)))
@@ -1223,6 +1275,16 @@ void map_info(int y, int x, byte *ap, char *cp)
 
 			/* Normal char */
 			c = f_ptr->x_char;
+
+			/* Mega-Hack -- Handle "in-sight" and "darkened" and "safe" grids */
+			if (darkened_grid && !view_unsafe_grids)
+			{
+				/* For feat_priority control */
+				feat = FEAT_NONE;
+
+				/* Use "black" */
+				a = TERM_DARK;
+			}
 		}
 	}
 
