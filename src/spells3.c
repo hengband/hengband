@@ -5049,8 +5049,9 @@ msg_format("%sがダメージを受けた！", o_name);
 /*
  * Hurt the player with Acid
  */
-void acid_dam(int dam, cptr kb_str, int monspell)
+int acid_dam(int dam, cptr kb_str, int monspell)
 {
+	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
 	bool double_resist = (p_ptr->oppose_acid  || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU));
 
@@ -5077,19 +5078,21 @@ void acid_dam(int dam, cptr kb_str, int monspell)
 	if (minus_ac()) dam = (dam + 1) / 2;
 
 	/* Take damage */
-	take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage=take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
 	if (!(double_resist && p_ptr->resist_acid))
 		inven_damage(set_acid_destroy, inv);
+	return get_damage;
 }
 
 
 /*
  * Hurt the player with electricity
  */
-void elec_dam(int dam, cptr kb_str, int monspell)
+int elec_dam(int dam, cptr kb_str, int monspell)
 {
+	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
 	bool double_resist = (p_ptr->oppose_elec  || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU));
 
@@ -5114,19 +5117,22 @@ void elec_dam(int dam, cptr kb_str, int monspell)
 		(void)do_dec_stat(A_DEX);
 
 	/* Take damage */
-	take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage=take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
 	if (!(double_resist && p_ptr->resist_elec))
 		inven_damage(set_elec_destroy, inv);
+
+	return get_damage;
 }
 
 
 /*
  * Hurt the player with Fire
  */
-void fire_dam(int dam, cptr kb_str, int monspell)
+int fire_dam(int dam, cptr kb_str, int monspell)
 {
+	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
 	bool double_resist = (p_ptr->oppose_fire  || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU));
 
@@ -5151,19 +5157,22 @@ void fire_dam(int dam, cptr kb_str, int monspell)
 		(void)do_dec_stat(A_STR);
 
 	/* Take damage */
-	take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage=take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
 	if (!(double_resist && p_ptr->resist_fire))
 		inven_damage(set_fire_destroy, inv);
+
+	return get_damage;
 }
 
 
 /*
  * Hurt the player with Cold
  */
-void cold_dam(int dam, cptr kb_str, int monspell)
+int cold_dam(int dam, cptr kb_str, int monspell)
 {
+	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
 	bool double_resist = (p_ptr->oppose_cold  || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU));
 
@@ -5187,11 +5196,13 @@ void cold_dam(int dam, cptr kb_str, int monspell)
 		(void)do_dec_stat(A_STR);
 
 	/* Take damage */
-	take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage=take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
 	if (!(double_resist && p_ptr->resist_cold))
 		inven_damage(set_cold_destroy, inv);
+
+	return get_damage;
 }
 
 

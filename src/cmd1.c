@@ -1359,9 +1359,9 @@ static void hit_trap(bool break_trap)
 
 			dam = damroll(4, 6);
 #ifdef JP
-			fire_dam(dam, "炎のトラップ", -1);
+			(void)fire_dam(dam, "炎のトラップ", -1);
 #else
-			fire_dam(dam, "a fire trap", -1);
+			(void)fire_dam(dam, "a fire trap", -1);
 #endif
 
 			break;
@@ -1377,9 +1377,9 @@ static void hit_trap(bool break_trap)
 
 			dam = damroll(4, 6);
 #ifdef JP
-			acid_dam(dam, "酸のトラップ", -1);
+			(void)acid_dam(dam, "酸のトラップ", -1);
 #else
-			acid_dam(dam, "an acid trap", -1);
+			(void)acid_dam(dam, "an acid trap", -1);
 #endif
 
 			break;

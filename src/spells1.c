@@ -6501,8 +6501,8 @@ if (fuzzy) msg_print("»À¤Ç¹¶·â¤µ¤ì¤¿¡ª");
 #else
 			if (fuzzy) msg_print("You are hit by acid!");
 #endif
-
-			acid_dam(dam, killer, monspell);
+			
+			get_damage = acid_dam(dam, killer, monspell);
 			break;
 		}
 
@@ -6515,7 +6515,7 @@ if (fuzzy) msg_print("²Ð±ê¤Ç¹¶·â¤µ¤ì¤¿¡ª");
 			if (fuzzy) msg_print("You are hit by fire!");
 #endif
 
-			fire_dam(dam, killer, monspell);
+			get_damage = fire_dam(dam, killer, monspell);
 			break;
 		}
 
@@ -6528,7 +6528,7 @@ if (fuzzy) msg_print("Îäµ¤¤Ç¹¶·â¤µ¤ì¤¿¡ª");
 			if (fuzzy) msg_print("You are hit by cold!");
 #endif
 
-			cold_dam(dam, killer, monspell);
+			get_damage = cold_dam(dam, killer, monspell);
 			break;
 		}
 
@@ -6541,7 +6541,7 @@ if (fuzzy) msg_print("ÅÅ·â¤Ç¹¶·â¤µ¤ì¤¿¡ª");
 			if (fuzzy) msg_print("You are hit by lightning!");
 #endif
 
-			elec_dam(dam, killer, monspell);
+			get_damage = elec_dam(dam, killer, monspell);
 			break;
 		}
 
