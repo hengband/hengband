@@ -4821,7 +4821,6 @@ msg_print("何か変わった気がする！");
 			if ((p_ptr->chp == p_ptr->mhp) &&
 			    (p_ptr->csp >= p_ptr->msp))
 			{
-				disturb(0, 0);
 				set_action(ACTION_NONE);
 			}
 		}
@@ -4838,7 +4837,6 @@ msg_print("何か変わった気がする！");
 			    !p_ptr->slow && !p_ptr->paralyzed &&
 			    !p_ptr->image && !p_ptr->word_recall)
 			{
-				disturb(0, 0);
 				set_action(ACTION_NONE);
 			}
 		}
