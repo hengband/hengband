@@ -2513,7 +2513,7 @@ strcpy(power_desc[num].name, "幻惑の光");
 #ifdef JP
 strcpy(power_desc[num].name, "構える");
 #else
-		strcpy(power_desc[num].name, "Asuume a Posture");
+		strcpy(power_desc[num].name, "Assume a Posture");
 #endif
 
 		power_desc[num].level = 25;
