@@ -1,21 +1,24 @@
 === Online Help Commands ===
 
-q      : Leave the online help system.
-?      : Get help for the online help (this file).
-Esc    : Return to the previous help file, or leave the online help.
-Space  : Advance one page (wraps to the start at the end of the file).
-Return : Advance one line (wraps to the start at the end of the file).
-(-)    : Back-up half a page.
-(#)    : Jump to a specific line (defaults to line zero).
-(%)    : Jump to a specific file (defaults to "help.hlp").
-(=)    : Highlight lines containing a string (case sensitive).
-(/)    : Search for a string (use '/' + Return to continue a search).
-         (Use '#' + '0' + Return + '/' + Return to restart a search.)
-(|)    : Save the current document to a file.
-[0..9] [a..p] [r..z] [A..Z] : Press the indicated number to activate a link.
+q     : Leave the online help system.
+Esc   : Return to the previous help file, or leave the online help.
+?     : Get help for the online help (this file).
+
+-     : Go back one page
+k 8   : Go up one line
+j 2   : Go down one line
+Space : Advance one page
+
+#     : Jump to a specific line (defaults to line zero).
+%     : Jump to a specific file (defaults to "help.hlp").
+=     : Highlight lines containing a string.
+/     : Search for a string (use '/' + Return to continue a search).
+          (Use '#' + '0' + Return + '/' + Return to restart a search.)
+|     : Save the current document to a file.
+[a..p] [r..z] [A..Z] : Press the indicated number to activate a link.
 
 
 --
 Original   : (??)
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.0.11
+Updated    : Hengband 1.1.0
