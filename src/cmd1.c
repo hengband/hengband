@@ -4176,21 +4176,18 @@ static int see_wall(int dir, int y, int x)
 	{
 		/* Feature code (applying "mimic" field) */
 		s16b         feat = get_feat_mimic(c_ptr);
-		feature_type *f_ptr;
+		feature_type *f_ptr = &f_info[feat];
 
 		/* Wall grids are known walls */
-		if (!player_can_enter(feat, 0)) return TRUE;
-
-		f_ptr = &f_info[feat];
+		if (!player_can_enter(feat, 0)) return !have_flag(f_ptr->flags, FF_DOOR);
 
 		/* Don't run on a tree unless explicitly requested */
 		if (have_flag(f_ptr->flags, FF_AVOID_RUN) && !ignore_avoid_run)
 			return TRUE;
 
 		/* Don't run in a wall */
-		if (!have_flag(f_ptr->flags, FF_MOVE) &&
-		    !have_flag(f_ptr->flags, FF_CAN_FLY))
-			return TRUE;
+		if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY))
+			return !have_flag(f_ptr->flags, FF_DOOR);
 	}
 
 	return FALSE;
