@@ -17,17 +17,17 @@ Q:$33:T:creatures for gladiatorial combat.  Something has gone very wrong in
 Q:$33:T:the Cloning Pits. Please eliminate ALL the clones, you will be well
 Q:$33:T:rewarded.  The active security systems have stopped working. The
 Q:$33:T:clones can use magic, teleport, summon, etc..   "The Ultimate Dungeon 
-Q:$33:T:Cleaner" and "Little Boy" security bots are no longer controlled, so 
-Q:$33:T:you will eliminate them too.  Levitation and a good distance weapon 
-Q:$33:T:are needed.  The entrance to the pits is in a building behind the inn.  
+Q:$33:T:Cleaner" security bots are no longer controlled, so you will 
+Q:$33:T:eliminate them too.  Levitation and a good distance weapon are
+Q:$33:T:needed.  The entrance to the pits is in a building behind the inn.  
 Q:33:T:ここ数年、我々は強い剣闘士の軍勢を作るため、特別に強力な生物の
 Q:33:T:クローンを作って来ました。しかしクローン研究所で何か非常にまずい
 Q:33:T:ことが起きてしまいました。どうか全てのクローンを破壊して下さい。
 Q:33:T:報酬ははずみます。内部の自動保安システムは止まってしまったため、
 Q:33:T:クローンは魔法やテレポートや召喚をすることが出来ます。
-Q:33:T:保安ロボットである『究極ダンジョンクリーナー』と『リトルボーイ』も
-Q:33:T:暴走してしまったので、それらも破壊して下さい。浮遊と強力な飛び道具が
-Q:33:T:必要になるでしょう。入口は宿屋の裏の建物にあります。
+Q:33:T:保安ロボットである『究極ダンジョンクリーナー』も暴走してしまった
+Q:33:T:ので、それらも破壊して下さい。浮遊と強力な飛び道具が必要になる
+Q:33:T:でしょう。入口は宿屋の裏の建物にあります。
 ?:1
 
 # Description for quest reward
@@ -73,8 +73,8 @@ F:P:1:8:c506
 # Jurt the Living Trump (level:34, Speed:120, XP:1200, #:3)
 F:p:1:8:c517
 
-# Little Boy (level:35, Speed:120, XP:200, #:4) 
-F:t:1:8:c531
+# The Borshin (level:10, Speed:110, XP:45, #:4)
+F:t:1:8:c177
 
 # Rogrog the Black Troll (level:36, Speed:120, XP:5000, #:5)
 F:r:1:8:c551
