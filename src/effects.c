@@ -858,6 +858,9 @@ msg_print("やっとはっきりと物が見えるようになった。");
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
+	/* Update the health bar */
+	p_ptr->redraw |= (PR_HEALTH | PR_UHEALTH);
+
 	/* Update monsters */
 	p_ptr->update |= (PU_MONSTERS);
 

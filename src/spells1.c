@@ -8461,11 +8461,14 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 					  if(cave[project_m_y][project_m_x].m_idx >0 ){
 					    monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
 
-					    /* Hack -- auto-recall */
-					    if (m_ptr->ml) monster_race_track(m_ptr->ap_r_idx);
+					    if (m_ptr->ml)
+					    {
+					      /* Hack -- auto-recall */
+					      if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
 
-					    /* Hack - auto-track */
-					    if (m_ptr->ml) health_track(cave[project_m_y][project_m_x].m_idx);
+					      /* Hack - auto-track */
+					      health_track(cave[project_m_y][project_m_x].m_idx);
+					    }
 					  }
 					}
 					(void)project_f(0,0,y,x,dam,GF_SEEKER);
@@ -8483,12 +8486,15 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			if(!who && (project_m_n==1) && !jump ){
 			  if(cave[project_m_y][project_m_x].m_idx >0 ){
 			    monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
-			    
-			    /* Hack -- auto-recall */
-			    if (m_ptr->ml) monster_race_track(m_ptr->ap_r_idx);
-			    
-			    /* Hack - auto-track */
-			    if (m_ptr->ml) health_track(cave[project_m_y][project_m_x].m_idx);
+
+			    if (m_ptr->ml)
+			    {
+			      /* Hack -- auto-recall */
+			      if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+
+			      /* Hack - auto-track */
+			      health_track(cave[project_m_y][project_m_x].m_idx);
+			    }
 			  }
 			}
 			(void)project_f(0,0,y,x,dam,GF_SEEKER);
@@ -8612,12 +8618,15 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			if(!who && (project_m_n==1) && !jump ){
 			  if(cave[project_m_y][project_m_x].m_idx >0 ){
 			    monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
-			    
-			    /* Hack -- auto-recall */
-			    if (m_ptr->ml) monster_race_track(m_ptr->ap_r_idx);
-			    
-			    /* Hack - auto-track */
-			    if (m_ptr->ml) health_track(cave[project_m_y][project_m_x].m_idx);
+
+			    if (m_ptr->ml)
+			    {
+			      /* Hack -- auto-recall */
+			      if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+
+			      /* Hack - auto-track */
+			      health_track(cave[project_m_y][project_m_x].m_idx);
+			    }
 			  }
 			}
 			(void)project_f(0,0,y,x,dam,GF_SUPER_RAY);
@@ -9143,11 +9152,14 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			{
 				monster_type *m_ptr = &m_list[cave[y][x].m_idx];
 
-				/* Hack -- auto-recall */
-				if (m_ptr->ml) monster_race_track(m_ptr->ap_r_idx);
+				if (m_ptr->ml)
+				{
+					/* Hack -- auto-recall */
+					if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
 
-				/* Hack - auto-track */
-				if (m_ptr->ml) health_track(cave[y][x].m_idx);
+					/* Hack - auto-track */
+					if (m_ptr->ml) health_track(cave[y][x].m_idx);
+				}
 			}
 		}
 	}

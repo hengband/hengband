@@ -1719,7 +1719,7 @@ msg_print("その方向にはモンスターはいません。");
 		if (m_ptr->ml)
 		{
 			/* Auto-Recall if possible and visible */
-			monster_race_track(m_ptr->ap_r_idx);
+			if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
 
 			/* Track a new monster */
 			health_track(m_idx);

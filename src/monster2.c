@@ -2371,7 +2371,7 @@ void update_mon(int m_idx, bool full)
 				/* Detectable */
 				flag = TRUE;
 
-				if (is_original_ap(m_ptr))
+				if (is_original_ap(m_ptr) && !p_ptr->image)
 				{
 					/* Hack -- Memorize mental flags */
 					if (r_ptr->flags2 & (RF2_SMART)) r_ptr->r_flags2 |= (RF2_SMART);
@@ -2386,7 +2386,7 @@ void update_mon(int m_idx, bool full)
 				if (r_ptr->flags2 & (RF2_EMPTY_MIND))
 				{
 					/* Memorize flags */
-					if (is_original_ap(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
+					if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
 				}
 
 				/* Weird mind, occasional telepathy */
@@ -2398,7 +2398,7 @@ void update_mon(int m_idx, bool full)
 						/* Detectable */
 						flag = TRUE;
 
-						if (is_original_ap(m_ptr))
+						if (is_original_ap(m_ptr) && !p_ptr->image)
 						{
 							/* Memorize flags */
 							r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
@@ -2416,7 +2416,7 @@ void update_mon(int m_idx, bool full)
 					/* Detectable */
 					flag = TRUE;
 
-					if (is_original_ap(m_ptr))
+					if (is_original_ap(m_ptr) && !p_ptr->image)
 					{
 						/* Hack -- Memorize mental flags */
 						if (r_ptr->flags2 & (RF2_SMART)) r_ptr->r_flags2 |= (RF2_SMART);
@@ -2429,70 +2429,70 @@ void update_mon(int m_idx, bool full)
 			if ((p_ptr->esp_animal) && (r_ptr->flags3 & (RF3_ANIMAL)))
 			{
 				flag = TRUE;
-				if (is_original_ap(m_ptr)) r_ptr->r_flags3 |= (RF3_ANIMAL);
+				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_ANIMAL);
 			}
 
 			/* Magical sensing */
 			if ((p_ptr->esp_undead) && (r_ptr->flags3 & (RF3_UNDEAD)))
 			{
 				flag = TRUE;
-				if (is_original_ap(m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
+				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_UNDEAD);
 			}
 
 			/* Magical sensing */
 			if ((p_ptr->esp_demon) && (r_ptr->flags3 & (RF3_DEMON)))
 			{
 				flag = TRUE;
-				if (is_original_ap(m_ptr)) r_ptr->r_flags3 |= (RF3_DEMON);
+				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_DEMON);
 			}
 
 			/* Magical sensing */
 			if ((p_ptr->esp_orc) && (r_ptr->flags3 & (RF3_ORC)))
 			{
 				flag = TRUE;
-				if (is_original_ap(m_ptr)) r_ptr->r_flags3 |= (RF3_ORC);
+				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_ORC);
 			}
 
 			/* Magical sensing */
 			if ((p_ptr->esp_troll) && (r_ptr->flags3 & (RF3_TROLL)))
 			{
 				flag = TRUE;
-				if (is_original_ap(m_ptr)) r_ptr->r_flags3 |= (RF3_TROLL);
+				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_TROLL);
 			}
 
 			/* Magical sensing */
 			if ((p_ptr->esp_giant) && (r_ptr->flags3 & (RF3_GIANT)))
 			{
 				flag = TRUE;
-				if (is_original_ap(m_ptr)) r_ptr->r_flags3 |= (RF3_GIANT);
+				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_GIANT);
 			}
 
 			/* Magical sensing */
 			if ((p_ptr->esp_dragon) && (r_ptr->flags3 & (RF3_DRAGON)))
 			{
 				flag = TRUE;
-				if (is_original_ap(m_ptr)) r_ptr->r_flags3 |= (RF3_DRAGON);
+				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_DRAGON);
 			}
 
 			/* Magical sensing */
 			if ((p_ptr->esp_human) && (r_ptr->flags2 & (RF2_HUMAN)))
 			{
 				flag = TRUE;
-				if (is_original_ap(m_ptr)) r_ptr->r_flags2 |= (RF2_HUMAN);
+				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags2 |= (RF2_HUMAN);
 			}
 
 			/* Magical sensing */
 			if ((p_ptr->esp_evil) && (r_ptr->flags3 & (RF3_EVIL)))
 			{
 				flag = TRUE;
-				if (is_original_ap(m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
+				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_EVIL);
 			}
 
 			/* Magical sensing */
 			if ((p_ptr->esp_good) && (r_ptr->flags3 & (RF3_GOOD)))
 			{
 				flag = TRUE;
-				if (is_original_ap(m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
+				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_GOOD);
 			}
 
 			/* Magical sensing */
@@ -2500,14 +2500,14 @@ void update_mon(int m_idx, bool full)
 			    ((r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) == RF3_NONLIVING))
 			{
 				flag = TRUE;
-				if (is_original_ap(m_ptr)) r_ptr->r_flags3 |= (RF3_NONLIVING);
+				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_NONLIVING);
 			}
 
 			/* Magical sensing */
 			if ((p_ptr->esp_unique) && (r_ptr->flags1 & (RF1_UNIQUE)))
 			{
 				flag = TRUE;
-				if (is_original_ap(m_ptr)) r_ptr->r_flags1 |= (RF1_UNIQUE);
+				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags1 |= (RF1_UNIQUE);
 			}
 		}
 
@@ -2563,7 +2563,7 @@ void update_mon(int m_idx, bool full)
 			/* Visible */
 			if (flag)
 			{
-				if (is_original_ap(m_ptr))
+				if (is_original_ap(m_ptr) && !p_ptr->image)
 				{
 					/* Memorize flags */
 					if (do_invisible) r_ptr->r_flags2 |= (RF2_INVISIBLE);
@@ -2591,10 +2591,13 @@ void update_mon(int m_idx, bool full)
 			if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 
 			/* Hack -- Count "fresh" sightings */
-			if ((m_ptr->ap_r_idx == MON_KAGE) && (r_info[MON_KAGE].r_sights < MAX_SHORT))
-				r_info[MON_KAGE].r_sights++;
-			else if (is_original_ap(m_ptr) && (r_ptr->r_sights < MAX_SHORT))
-				r_ptr->r_sights++;
+			if (!p_ptr->image)
+			{
+				if ((m_ptr->ap_r_idx == MON_KAGE) && (r_info[MON_KAGE].r_sights < MAX_SHORT))
+					r_info[MON_KAGE].r_sights++;
+				else if (is_original_ap(m_ptr) && (r_ptr->r_sights < MAX_SHORT))
+					r_ptr->r_sights++;
+			}
 
 			/* Eldritch Horror */
 			if (r_info[m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR)

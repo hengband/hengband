@@ -2460,13 +2460,10 @@ static void process_monster(int m_idx)
 #endif
 		}
 
-		if (m_ptr->ml)
+		/* Hack -- Count the wakings */
+		if (is_original_ap_and_seen(m_ptr) && (r_ptr->r_wake < MAX_UCHAR))
 		{
-			/* Hack -- Count the wakings */
-			if ((r_ptr->r_wake < MAX_UCHAR) && is_original_ap(m_ptr))
-			{
-				r_ptr->r_wake++;
-			}
+			r_ptr->r_wake++;
 		}
 	}
 

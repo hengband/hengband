@@ -3625,12 +3625,14 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 					msg_format("The %s hits %s.", o_name, m_name);
 #endif
 
+					if (m_ptr->ml)
+					{
+						/* Hack -- Track this monster race */
+						if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
 
-					/* Hack -- Track this monster race */
-					if (m_ptr->ml) monster_race_track(m_ptr->ap_r_idx);
-
-					/* Hack -- Track this monster */
-					if (m_ptr->ml) health_track(c_ptr->m_idx);
+						/* Hack -- Track this monster */
+						health_track(c_ptr->m_idx);
+					}
 				}
 
 				/* Apply special damage XXX XXX XXX */
@@ -4180,12 +4182,14 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 					msg_format("The %s hits %s.", o_name, m_name);
 #endif
 
+					if (m_ptr->ml)
+					{
+						/* Hack -- Track this monster race */
+						if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
 
-					/* Hack -- Track this monster race */
-					if (m_ptr->ml) monster_race_track(m_ptr->ap_r_idx);
-
-					/* Hack -- Track this monster */
-					if (m_ptr->ml) health_track(c_ptr->m_idx);
+						/* Hack -- Track this monster */
+						health_track(c_ptr->m_idx);
+					}
 				}
 
 				/* Hack -- Base damage from thrown object */

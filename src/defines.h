@@ -4021,7 +4021,7 @@
 	 (bool)(((A)->ap_r_idx == (A)->r_idx) ? TRUE : FALSE)
 
 #define is_original_ap_and_seen(A) \
-	 (bool)((A)->ml && ((A)->ap_r_idx == (A)->r_idx))
+	 (bool)((A)->ml && !p_ptr->image && ((A)->ap_r_idx == (A)->r_idx))
 
 /*
  * Is the monster seen by the player?
