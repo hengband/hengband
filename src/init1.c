@@ -659,7 +659,7 @@ static cptr d_info_flags1[] =
 static bool add_text(u32b *offset, header *head, cptr buf)
 {
 	/* Hack -- Verify space */
-	if (head->text_size + strlen(buf) + 8 > fake_text_size)
+	if (head->text_size + strlen(buf) + 8 > FAKE_TEXT_SIZE)
 		return (FALSE);
 
 	/* New text? */
@@ -689,7 +689,7 @@ static bool add_text(u32b *offset, header *head, cptr buf)
 static bool add_name(u32b *offset, header *head, cptr buf)
 {
 	/* Hack -- Verify space */
-	if (head->name_size + strlen(buf) + 8 > fake_name_size)
+	if (head->name_size + strlen(buf) + 8 > FAKE_NAME_SIZE)
 		return (FALSE);
 
 	/* New name? */

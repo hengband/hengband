@@ -245,14 +245,6 @@ int error_line;
 
 
 /*
- * Hack -- help initialize the fake "name" and "text" arrays when
- * parsing an "ascii" template file.
- */
-u32b fake_name_size;
-u32b fake_text_size;
-
-
-/*
  * Standard error message text
  */
 cptr err_str[PARSE_ERROR_MAX] =
@@ -479,16 +471,12 @@ static errr init_info(cptr filename, header *head,
 	{
 		/*** Make the fake arrays ***/
 
-		/* Assume the size of "*_name" and "*_text" */
-		fake_name_size = FAKE_NAME_SIZE;
-		fake_text_size = FAKE_TEXT_SIZE;
-
 		/* Allocate the "*_info" array */
 		C_MAKE(head->info_ptr, head->info_size, char);
 
 		/* Hack -- make "fake" arrays */
-		if (name) C_MAKE(head->name_ptr, fake_name_size, char);
-		if (text) C_MAKE(head->text_ptr, fake_text_size, char);
+		if (name) C_MAKE(head->name_ptr, FAKE_NAME_SIZE, char);
+		if (text) C_MAKE(head->text_ptr, FAKE_TEXT_SIZE, char);
 
 		if (info) (*info) = head->info_ptr;
 		if (name) (*name) = head->name_ptr;
@@ -596,12 +584,8 @@ static errr init_info(cptr filename, header *head,
 		C_KILL(head->info_ptr, head->info_size, char);
 
 		/* Hack -- Free the "fake" arrays */
-		if (name) C_KILL(head->name_ptr, fake_name_size, char);
-		if (text) C_KILL(head->text_ptr, fake_text_size, char);
-
-		/* Forget the array sizes */
-		fake_name_size = 0;
-		fake_text_size = 0;
+		if (name) C_KILL(head->name_ptr, FAKE_NAME_SIZE, char);
+		if (text) C_KILL(head->text_ptr, FAKE_TEXT_SIZE, char);
 
 #endif	/* ALLOW_TEMPLATES */
 

@@ -745,10 +745,6 @@ extern errr init_v_info(void);
 extern void init_file_paths(char *path);
 extern void init_angband(void);
 extern errr init_buildings(void);
-#ifdef ALLOW_TEMPLATES
-extern u32b fake_name_size;
-extern u32b fake_text_size;
-#endif /* ALLOW_TEMPLATES */
 
 /* load.c */
 extern errr rd_savefile_new(void);
