@@ -3096,7 +3096,7 @@ void calc_bonuses(void)
 	p_ptr->hidarite = FALSE;
 	p_ptr->no_flowed = FALSE;
 
-	p_ptr->align = 0;
+	p_ptr->align = friend_align;
 
 	if (p_ptr->mimic_form) tmp_rp_ptr = &mimic_info[p_ptr->mimic_form];
 	else tmp_rp_ptr = &race_info[p_ptr->prace];
@@ -3254,27 +3254,28 @@ void calc_bonuses(void)
 	/***** Races ****/
 	if (p_ptr->mimic_form)
 	{
-		switch(p_ptr->mimic_form)
+		switch (p_ptr->mimic_form)
 		{
 		case MIMIC_DEMON:
-			p_ptr->hold_life=TRUE;
-			p_ptr->resist_chaos=TRUE;
-			p_ptr->resist_neth=TRUE;
-			p_ptr->resist_fire=TRUE;
+			p_ptr->hold_life = TRUE;
+			p_ptr->resist_chaos = TRUE;
+			p_ptr->resist_neth = TRUE;
+			p_ptr->resist_fire = TRUE;
 			p_ptr->oppose_fire = 1;
 			p_ptr->see_inv=TRUE;
 			new_speed += 3;
 			p_ptr->redraw |= PR_STATUS;
 			p_ptr->to_a += 10;
 			p_ptr->dis_to_a += 10;
+			p_ptr->align -= 200;
 			break;
 		case MIMIC_DEMON_LORD:
-			p_ptr->hold_life=TRUE;
-			p_ptr->resist_chaos=TRUE;
-			p_ptr->resist_neth=TRUE;
-			p_ptr->immune_fire=TRUE;
+			p_ptr->hold_life = TRUE;
+			p_ptr->resist_chaos = TRUE;
+			p_ptr->resist_neth = TRUE;
+			p_ptr->immune_fire = TRUE;
 			p_ptr->resist_acid = TRUE;
-			p_ptr->resist_fire=TRUE;
+			p_ptr->resist_fire = TRUE;
 			p_ptr->resist_cold = TRUE;
 			p_ptr->resist_elec = TRUE;
 			p_ptr->resist_pois = TRUE;
@@ -3290,6 +3291,7 @@ void calc_bonuses(void)
 			new_speed += 5;
 			p_ptr->to_a += 20;
 			p_ptr->dis_to_a += 20;
+			p_ptr->align -= 200;
 			break;
 		case MIMIC_VAMPIRE:
 			p_ptr->resist_dark = TRUE;
@@ -3307,8 +3309,8 @@ void calc_bonuses(void)
 	}
 	else
 	{
-	switch (p_ptr->prace)
-	{
+		switch (p_ptr->prace)
+		{
 		case RACE_ELF:
 			p_ptr->resist_lite = TRUE;
 			break;
@@ -3481,18 +3483,19 @@ void calc_bonuses(void)
 		case RACE_ANGEL:
 			p_ptr->ffall = TRUE;
 			p_ptr->see_inv = TRUE;
+			p_ptr->align += 200;
 			break;
 		case RACE_DEMON:
 			p_ptr->resist_fire  = TRUE;
 			p_ptr->resist_neth  = TRUE;
 			p_ptr->hold_life = TRUE;
-			if (p_ptr->lev > 9)
-				p_ptr->see_inv = TRUE;
+			if (p_ptr->lev > 9) p_ptr->see_inv = TRUE;
 			if (p_ptr->lev > 44)
 			{
 				p_ptr->oppose_fire = 1;
 				p_ptr->redraw |= PR_STATUS;
 			}
+			p_ptr->align -= 200;
 			break;
 		case RACE_DUNADAN:
 			p_ptr->sustain_con = TRUE;
@@ -3512,7 +3515,7 @@ void calc_bonuses(void)
 		default:
 			/* Do nothing */
 			;
-	}
+		}
 	}
 
 	if (p_ptr->ult_res || (p_ptr->special_defense & KATA_MUSOU))
@@ -5074,7 +5077,7 @@ void calc_bonuses(void)
 		monk_armour_aux = TRUE;
 	}
 
-	for (i = 0 ; i < 2 ; i++)
+	for (i = 0; i < 2; i++)
 	{
 		if (buki_motteruka(INVEN_RARM+i))
 		{
@@ -5083,17 +5086,14 @@ void calc_bonuses(void)
 
 			p_ptr->to_h[i] += (p_ptr->weapon_exp[tval][sval] - WEAPON_EXP_BEGINNER) / 200;
 			p_ptr->dis_to_h[i] += (p_ptr->weapon_exp[tval][sval] - WEAPON_EXP_BEGINNER) / 200;
-			if ((p_ptr->pclass == CLASS_MONK) && !(s_info[CLASS_MONK].w_max[tval][sval]))
+			if ((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER))
 			{
-				p_ptr->to_h[i] -= 40;
-				p_ptr->dis_to_h[i] -= 40;
-				p_ptr->icky_wield[i] = TRUE;
-			}
-			else if ((p_ptr->pclass == CLASS_FORCETRAINER) && !(s_info[CLASS_FORCETRAINER].w_max[tval][sval]))
-			{
-				p_ptr->to_h[i] -= 40;
-				p_ptr->dis_to_h[i] -= 40;
-				p_ptr->icky_wield[i] = TRUE;
+				if (!s_info[p_ptr->pclass].w_max[tval][sval])
+				{
+					p_ptr->to_h[i] -= 40;
+					p_ptr->dis_to_h[i] -= 40;
+					p_ptr->icky_wield[i] = TRUE;
+				}
 			}
 			else if (p_ptr->pclass == CLASS_NINJA)
 			{
@@ -5106,6 +5106,8 @@ void calc_bonuses(void)
 					if (p_ptr->num_blow[i] < 1) p_ptr->num_blow[i] = 1;
 				}
 			}
+
+			if (inventory[INVEN_RARM + i].name1 == ART_IRON_BALL) p_ptr->align -= 1000;
 		}
 	}
 
@@ -5232,6 +5234,44 @@ void calc_bonuses(void)
 	if (p_ptr->immune_fire) p_ptr->resist_fire = TRUE;
 	if (p_ptr->immune_cold) p_ptr->resist_cold = TRUE;
 
+	/* Determine player alignment */
+	for (i = 0, j = 0; i < 8; i++)
+	{
+		switch (p_ptr->vir_types[i])
+		{
+		case V_JUSTICE:
+			p_ptr->align += p_ptr->virtues[i] * 2;
+			break;
+		case V_CHANCE:
+			/* Do nothing */
+			break;
+		case V_NATURE:
+		case V_HARMONY:
+			neutral[j++] = i;
+			break;
+		case V_UNLIFE:
+			p_ptr->align -= p_ptr->virtues[i];
+			break;
+		default:
+			p_ptr->align += p_ptr->virtues[i];
+			break;
+		}
+	}
+
+	for (i = 0; i < j; i++)
+	{
+		if (p_ptr->align > 0)
+		{
+			p_ptr->align -= p_ptr->virtues[neutral[i]] / 2;
+			if (p_ptr->align < 0) p_ptr->align = 0;
+		}
+		else if (p_ptr->align < 0)
+		{
+			p_ptr->align += p_ptr->virtues[neutral[i]] / 2;
+			if (p_ptr->align > 0) p_ptr->align = 0;
+		}
+	}
+
 	/* Hack -- handle "xtra" mode */
 	if (character_xtra) return;
 
@@ -5271,7 +5311,7 @@ void calc_bonuses(void)
 		p_ptr->old_heavy_shoot = p_ptr->heavy_shoot;
 	}
 
-	for(i = 0 ; i < 2 ; i++)
+	for (i = 0 ; i < 2 ; i++)
 	{
 		/* Take note when "heavy weapon" changes */
 		if (p_ptr->old_heavy_wield[i] != p_ptr->heavy_wield[i])
@@ -5439,39 +5479,6 @@ msg_print("バランスがとれるようになった。");
 #endif
 
 		monk_notify_aux = monk_armour_aux;
-	}
-
-	j = 0;
-	p_ptr->align = friend_align;
-
-	/* Determine player alignment */
-	for (i = 0; i < 8; i++)
-	{
-		if ((p_ptr->vir_types[i] == V_HARMONY) || (p_ptr->vir_types[i] == V_NATURE))
-		{
-			neutral[j] = i;
-			j++;
-		}
-		else if (p_ptr->vir_types[i] == V_UNLIFE) p_ptr->align -= p_ptr->virtues[i];
-		else if (p_ptr->vir_types[i] == V_JUSTICE) p_ptr->align += (p_ptr->virtues[i]*2);
-		else if (p_ptr->vir_types[i] != V_CHANCE) p_ptr->align += p_ptr->virtues[i];
-	}
-	if ((inventory[INVEN_RARM].name1 == ART_IRON_BALL) || (inventory[INVEN_LARM].name1 == ART_IRON_BALL)) p_ptr->align -= 1000;
-	if (prace_is_(RACE_ANGEL)) p_ptr->align += 200;
-	if ((prace_is_(RACE_DEMON)) || (p_ptr->mimic_form == MIMIC_DEMON_LORD) || (p_ptr->mimic_form == MIMIC_DEMON)) p_ptr->align -= 200;
-	while (j)
-	{
-		j--;
-		if (p_ptr->align > 0)
-		{
-			p_ptr->align -= (p_ptr->virtues[neutral[j]]/2);
-			if (p_ptr->align < 0) p_ptr->align = 0;
-		}
-		else if (p_ptr->align < 0)
-		{
-			p_ptr->align += (p_ptr->virtues[neutral[j]]/2);
-			if (p_ptr->align > 0) p_ptr->align = 0;
-		}
 	}
 
 	for (i = 0; i < INVEN_PACK; i++)
