@@ -1572,30 +1572,15 @@ static void wipe_generate_cave_flags(void)
 		}
 	}
 
-	if (!dun_level)
+	if (dun_level)
 	{
-		for (y = 0; y < cur_hgt; y++)
+		for (y = 1; y < cur_hgt - 1; y++)
 		{
-			for (x = 0; x < cur_wid; x++)
+			for (x = 1; x < cur_wid - 1; x++)
 			{
-				/* There are no traps on the surface */
-				cave[y][x].info |= CAVE_DETECT;
+				/* There might be trap */
+				cave[y][x].info |= CAVE_UNSAFE;
 			}
-		}
-	}
-	else
-	{
-		/* There are no traps on map edge */
-		for (y = 0; y < cur_hgt; y++)
-		{
-			cave[y][0].info |= CAVE_DETECT;
-			cave[y][cur_wid-1].info |= CAVE_DETECT;
-		}
-		
-		for (x = 0; x < cur_wid; x++)
-		{
-			cave[0][x].info |= CAVE_DETECT;
-			cave[cur_hgt-1][x].info |= CAVE_DETECT;
 		}
 	}
 }

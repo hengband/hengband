@@ -2367,7 +2367,7 @@
 #define CAVE_MASK (CAVE_FLOOR | CAVE_EXTRA | CAVE_INNER | CAVE_OUTER | CAVE_SOLID | CAVE_VAULT)
 
 /* Used only after cave generation */
-#define CAVE_DETECT     0x3000    /* trap detected area (include edge) */
+#define CAVE_UNSAFE     0x3000    /* Might have trap */
 #define CAVE_IN_DETECT  0x4000    /* trap detected area (inner circle only) */
 
 

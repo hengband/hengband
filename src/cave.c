@@ -995,7 +995,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 		else
 		{
 			/* Unsafe cave grid -- idea borrowed from Unangband */
-			if (view_unsafe_grids && !(c_ptr->info & (CAVE_DETECT)))
+			if (view_unsafe_grids && (c_ptr->info & (CAVE_UNSAFE)))
 				feat = FEAT_UNDETECTD;
 			else
 				feat = FEAT_NONE;
@@ -1203,7 +1203,7 @@ void map_info(int y, int x, byte *ap, char *cp)
                         if (!(c_ptr->info & CAVE_MARK))
                         {
 				/* Unsafe cave grid -- idea borrowed from Unangband */
-				if (view_unsafe_grids && !(c_ptr->info & (CAVE_DETECT)))
+				if (view_unsafe_grids && (c_ptr->info & (CAVE_UNSAFE)))
 					feat = FEAT_UNDETECTD;
 				else
 					feat = FEAT_NONE;

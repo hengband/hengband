@@ -4098,7 +4098,7 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 			p_ptr->dtrap = FALSE;
 
 			/* You are just on the edge */
-			if (cave[py][px].info & CAVE_DETECT)
+			if (!(cave[py][px].info & CAVE_UNSAFE))
 			{
 				if (alert_trap_detect)
 				{
@@ -4498,7 +4498,7 @@ static bool run_test(void)
 		p_ptr->dtrap = FALSE;
 
 		/* You are just on the edge */
-		if (cave[py][px].info & CAVE_DETECT)
+		if (!(cave[py][px].info & CAVE_UNSAFE))
 		{
 			if (alert_trap_detect)
 			{
