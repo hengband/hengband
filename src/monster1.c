@@ -602,9 +602,12 @@ path_build(buf, 1024, ANGBAND_DIR_DATA, "r_info_j.raw");
 			else if (speed < 120) hook_c_roff(TERM_L_UMBER, "やや");
 			hook_c_roff(TERM_L_RED, "素早く");
 #else
-			if (speed > 130) hooked_roff(" incredibly");
-			else if (speed > 120) hooked_roff(" very");
-			hooked_roff(" quickly");
+			if (speed > 139) hook_c_roff(TERM_RED, "incredibly");
+			else if (speed > 134) hook_c_roff(TERM_ORANGE, "extremely");
+			else if (speed > 129) hook_c_roff(TERM_ORANGE, "very");
+			else if (speed > 124) hook_c_roff(TERM_UMBER, "fairly");
+			else if (speed < 120) hook_c_roff(TERM_L_UMBER, "somewhat");
+			hook_c_roff(TERM_L_RED, "quickly");
 #endif
 
 		}
@@ -617,9 +620,11 @@ path_build(buf, 1024, ANGBAND_DIR_DATA, "r_info_j.raw");
 			else if (speed > 104) hook_c_roff(TERM_GREEN, "やや");
 			hook_c_roff(TERM_L_BLUE, "ゆっくりと");
 #else
-			if (speed < 90) hooked_roff(" incredibly");
-			else if (speed < 100) hooked_roff(" very");
-			hooked_roff(" slowly");
+			if (speed < 90) hook_c_roff(TERM_L_GREEN, "incredibly");
+			else if (speed < 95) hook_c_roff(TERM_BLUE, "very");
+			else if (speed < 100) hook_c_roff(TERM_BLUE, "fairly");
+			else if (speed > 104) hook_c_roff(TERM_GREEN, "somewhat");
+			hook_c_roff(TERM_L_BLUE, "slowly");
 #endif
 
 		}
