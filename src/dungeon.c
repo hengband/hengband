@@ -5179,6 +5179,7 @@ msg_print("アリーナが魔法を吸収した！");
 		case '=':
 		{
 			do_cmd_options();
+			(void)combine_and_reorder_home(STORE_HOME);
 			do_cmd_redraw();
 			break;
 		}
@@ -6923,6 +6924,9 @@ prt("お待ち下さい...", 0, 0);
 		m_ptr->hp = r_ptr->hdice*(r_ptr->hside+1)/2;
 		m_ptr->energy_need = ENERGY_NEED() + ENERGY_NEED();
 	}
+
+	(void)combine_and_reorder_home(STORE_HOME);
+	(void)combine_and_reorder_home(STORE_MUSEUM);
 
 	/* Process */
 	while (TRUE)

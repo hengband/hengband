@@ -1520,6 +1520,165 @@ static bool store_will_buy(object_type *o_ptr)
 }
 
 
+/*
+ * Combine and reorder items in the home
+ */
+bool combine_and_reorder_home(int store_num)
+{
+	int         i, j, k;
+	s32b        o_value;
+	object_type forge, *o_ptr, *j_ptr;
+	bool        flag = FALSE, combined_or_reordered;
+	store_type  *old_st_ptr = st_ptr;
+	bool        old_stack_force_notes = stack_force_notes;
+	bool        old_stack_force_costs = stack_force_costs;
+
+	st_ptr = &town[1].store[store_num];
+	if (store_num != STORE_HOME)
+	{
+		stack_force_notes = FALSE;
+		stack_force_costs = FALSE;
+	}
+
+	do
+	{
+		combined_or_reordered = FALSE;
+
+		/* Combine the items in the home (backwards) */
+		for (i = st_ptr->stock_num - 1; i > 0; i--)
+		{
+			/* Get the item */
+			o_ptr = &st_ptr->stock[i];
+
+			/* Skip empty items */
+			if (!o_ptr->k_idx) continue;
+
+			/* Scan the items above that item */
+			for (j = 0; j < i; j++)
+			{
+				int max_num;
+
+				/* Get the item */
+				j_ptr = &st_ptr->stock[j];
+
+				/* Skip empty items */
+				if (!j_ptr->k_idx) continue;
+
+				/*
+				 * Get maximum number of the stack if these
+				 * are similar, get zero otherwise.
+				 */
+				max_num = object_similar_part(j_ptr, o_ptr);
+
+				/* Can we (partialy) drop "o_ptr" onto "j_ptr"? */
+				if (max_num && j_ptr->number < max_num)
+				{
+					if (o_ptr->number + j_ptr->number <= max_num)
+					{
+						/* Add together the item counts */
+						object_absorb(j_ptr, o_ptr);
+
+						/* One object is gone */
+						st_ptr->stock_num--;
+
+						/* Slide everything down */
+						for (k = i; k < st_ptr->stock_num; k++)
+						{
+							/* Structure copy */
+							st_ptr->stock[k] = st_ptr->stock[k + 1];
+						}
+
+						/* Erase the "final" slot */
+						object_wipe(&st_ptr->stock[k]);
+					}
+					else
+					{
+						int old_num = o_ptr->number;
+						int remain = j_ptr->number + o_ptr->number - max_num;
+
+						/* Add together the item counts */
+						object_absorb(j_ptr, o_ptr);
+
+						o_ptr->number = remain;
+
+						/* Hack -- if rods are stacking, add the pvals (maximum timeouts) and current timeouts together. -LM- */
+						if (o_ptr->tval == TV_ROD)
+						{
+							o_ptr->pval =  o_ptr->pval * remain / old_num;
+							o_ptr->timeout = o_ptr->timeout * remain / old_num;
+						}
+
+						/* Hack -- if wands are stacking, combine the charges. -LM- */
+						else if (o_ptr->tval == TV_WAND)
+						{
+							o_ptr->pval = o_ptr->pval * remain / old_num;
+						}
+					}
+
+					/* Take note */
+					combined_or_reordered = TRUE;
+
+					/* Done */
+					break;
+				}
+			}
+		}
+
+		/* Re-order the items in the home (forwards) */
+		for (i = 0; i < st_ptr->stock_num; i++)
+		{
+			/* Get the item */
+			o_ptr = &st_ptr->stock[i];
+
+			/* Skip empty slots */
+			if (!o_ptr->k_idx) continue;
+
+			/* Get the "value" of the item */
+			o_value = object_value(o_ptr);
+
+			/* Scan every occupied slot */
+			for (j = 0; j < st_ptr->stock_num; j++)
+			{
+				if (object_sort_comp(o_ptr, o_value, &st_ptr->stock[j])) break;
+			}
+
+			/* Never move down */
+			if (j >= i) continue;
+
+			/* Take note */
+			combined_or_reordered = TRUE;
+
+			/* Get local object */
+			j_ptr = &forge;
+
+			/* Save a copy of the moving item */
+			object_copy(j_ptr, &st_ptr->stock[i]);
+
+			/* Slide the objects */
+			for (k = i; k > j; k--)
+			{
+				/* Slide the item */
+				object_copy(&st_ptr->stock[k], &st_ptr->stock[k - 1]);
+			}
+
+			/* Insert the moving item */
+			object_copy(&st_ptr->stock[j], j_ptr);
+		}
+
+		flag |= combined_or_reordered;
+	}
+	while (combined_or_reordered);
+
+	st_ptr = old_st_ptr;
+	if (store_num != STORE_HOME)
+	{
+		stack_force_notes = old_stack_force_notes;
+		stack_force_costs = old_stack_force_costs;
+	}
+
+	return flag;
+}
+
 
 /*
  * Add the item "o_ptr" to the inventory of the "Home"
@@ -1534,7 +1693,7 @@ static bool store_will_buy(object_type *o_ptr)
 static int home_carry(object_type *o_ptr)
 {
 	int 				slot;
-	s32b			   value, j_value;
+	s32b			   value;
 	int 	i;
 	object_type *j_ptr;
 
@@ -1562,7 +1721,7 @@ static int home_carry(object_type *o_ptr)
 	 *           我が家が 20 ページまで使える
 	 */
 	/* No space? */
-	if ( powerup_home == TRUE) {
+	if ((cur_store_num != STORE_HOME) || (powerup_home == TRUE)) {
 		if (st_ptr->stock_num >= st_ptr->stock_size) {
 			return (-1);
 		}
@@ -1580,50 +1739,7 @@ static int home_carry(object_type *o_ptr)
 	/* Check existing slots to see if we must "slide" */
 	for (slot = 0; slot < st_ptr->stock_num; slot++)
 	{
-		/* Get that item */
-		j_ptr = &st_ptr->stock[slot];
-
-		/* Hack -- readable books always come first */
-		if ((o_ptr->tval == mp_ptr->spell_book) &&
-			(j_ptr->tval != mp_ptr->spell_book)) break;
-		if ((j_ptr->tval == mp_ptr->spell_book) &&
-			(o_ptr->tval != mp_ptr->spell_book)) continue;
-
-		/* Objects sort by decreasing type */
-		if (o_ptr->tval > j_ptr->tval) break;
-		if (o_ptr->tval < j_ptr->tval) continue;
-
-		/* Can happen in the home */
-		if (!object_is_aware(o_ptr)) continue;
-		if (!object_is_aware(j_ptr)) break;
-
-		/* Objects sort by increasing sval */
-		if (o_ptr->sval < j_ptr->sval) break;
-		if (o_ptr->sval > j_ptr->sval) continue;
-
-		/* Objects in the home can be unknown */
-		if (!object_is_known(o_ptr)) continue;
-		if (!object_is_known(j_ptr)) break;
-
-		/*
-		 * Hack:  otherwise identical rods sort by
-		 * increasing recharge time --dsb
-		 */
-		if (o_ptr->tval == TV_ROD)
-		{
-			if (o_ptr->pval < j_ptr->pval) break;
-			if (o_ptr->pval > j_ptr->pval) continue;
-		}
-		if ((o_ptr->tval == TV_CORPSE) || (o_ptr->tval == TV_FIGURINE) || (o_ptr->tval == TV_STATUE))
-		{
-			if (r_info[o_ptr->pval].level < r_info[j_ptr->pval].level) break;
-			if ((r_info[o_ptr->pval].level == r_info[j_ptr->pval].level) && (o_ptr->pval < j_ptr->pval)) break;
-		}
-
-		/* Objects sort by decreasing value */
-		j_value = object_value(j_ptr);
-		if (value > j_value) break;
-		if (value < j_value) continue;
+		if (object_sort_comp(o_ptr, value, &st_ptr->stock[slot])) break;
 	}
 
 	/* Slide the others up */
@@ -1639,6 +1755,8 @@ static int home_carry(object_type *o_ptr)
 	st_ptr->stock[slot] = *o_ptr;
 
 	chg_virtue(V_SACRIFICE, -1);
+
+	(void)combine_and_reorder_home(cur_store_num);
 
 	/* Return the location */
 	return (slot);
@@ -3553,6 +3671,8 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 	/* Home is much easier */
 	else
 	{
+		bool combined_or_reordered;
+
 		/* Distribute charges of wands/rods */
 		distribute_charges(o_ptr, j_ptr, amt);
 
@@ -3580,11 +3700,16 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 		store_item_increase(item, -amt);
 		store_item_optimize(item);
 
+		combined_or_reordered = combine_and_reorder_home(STORE_HOME);
+
 		/* Hack -- Item is still here */
 		if (i == st_ptr->stock_num)
 		{
+			/* Redraw everything */
+			if (combined_or_reordered) display_inventory();
+
 			/* Redraw the item */
-			display_entry(item);
+			else display_entry(item);
 		}
 
 		/* The item is gone */
@@ -4177,6 +4302,8 @@ static void museum_remove_object(void)
 	store_item_increase(item, -o_ptr->number);
 	store_item_optimize(item);
 
+	(void)combine_and_reorder_home(STORE_MUSEUM);
+
 	/* The item is gone */
 
 	/* Nothing left */
@@ -4491,6 +4618,9 @@ static void store_process_command(void)
 		case '=':
 		{
 			do_cmd_options();
+			(void)combine_and_reorder_home(STORE_HOME);
+			do_cmd_redraw();
+			display_store();
 			break;
 		}
 

@@ -1019,6 +1019,7 @@ extern s32b object_value_real(object_type *o_ptr);
 extern bool can_player_destroy_object(object_type *o_ptr);
 extern void distribute_charges(object_type *o_ptr, object_type *q_ptr, int amt);
 extern void reduce_charges(object_type *o_ptr, int amt);
+extern int object_similar_part(object_type *o_ptr, object_type *j_ptr);
 extern bool object_similar(object_type *o_ptr, object_type *j_ptr);
 extern void object_absorb(object_type *o_ptr, object_type *j_ptr);
 extern s16b lookup_kind(int tval, int sval);
@@ -1045,6 +1046,7 @@ extern void floor_item_describe(int item);
 extern void floor_item_increase(int item, int num);
 extern void floor_item_optimize(int item);
 extern bool inven_carry_okay(object_type *o_ptr);
+extern bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr);
 extern s16b inven_carry(object_type *o_ptr);
 extern s16b inven_takeoff(int item, int amt);
 extern void inven_drop(int item, int amt);
@@ -1258,6 +1260,7 @@ extern bool mirror_tunnel(void);
 extern bool summon_kin_player(int level, int y, int x, u32b mode);
 
 /* store.c */
+extern bool combine_and_reorder_home(int store_num);
 extern void do_cmd_store(void);
 extern void store_shuffle(int which);
 extern void store_maint(int town_num, int store_num);

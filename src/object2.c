@@ -1556,7 +1556,7 @@ void reduce_charges(object_type *o_ptr, int amt)
  *  Determine if an item can partly absorb a second item.
  *  Return maximum number of stack.
  */
-static int object_similar_part(object_type *o_ptr, object_type *j_ptr)
+int object_similar_part(object_type *o_ptr, object_type *j_ptr)
 {
 	int i;
 
@@ -5696,6 +5696,76 @@ bool inven_carry_okay(object_type *o_ptr)
 }
 
 
+bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr)
+{
+	/* Use empty slots */
+	if (!j_ptr->k_idx) return TRUE;
+
+	/* Hack -- readable books always come first */
+	if ((o_ptr->tval == REALM1_BOOK) &&
+	    (j_ptr->tval != REALM1_BOOK)) return TRUE;
+	if ((j_ptr->tval == REALM1_BOOK) &&
+	    (o_ptr->tval != REALM1_BOOK)) return FALSE;
+
+	if ((o_ptr->tval == REALM2_BOOK) &&
+	    (j_ptr->tval != REALM2_BOOK)) return TRUE;
+	if ((j_ptr->tval == REALM2_BOOK) &&
+	    (o_ptr->tval != REALM2_BOOK)) return FALSE;
+
+	/* Objects sort by decreasing type */
+	if (o_ptr->tval > j_ptr->tval) return TRUE;
+	if (o_ptr->tval < j_ptr->tval) return FALSE;
+
+	/* Non-aware (flavored) items always come last */
+	/* Can happen in the home */
+	if (!object_is_aware(o_ptr)) return FALSE;
+	if (!object_is_aware(j_ptr)) return TRUE;
+
+	/* Objects sort by increasing sval */
+	if (o_ptr->sval < j_ptr->sval) return TRUE;
+	if (o_ptr->sval > j_ptr->sval) return FALSE;
+
+	/* Unidentified objects always come last */
+	/* Objects in the home can be unknown */
+	if (!object_is_known(o_ptr)) return FALSE;
+	if (!object_is_known(j_ptr)) return TRUE;
+
+	/* Fixed artifacts, random artifacts and ego items */
+	if (!object_is_fixed_artifact(o_ptr) ^ !object_is_fixed_artifact(j_ptr)) return !object_is_fixed_artifact(j_ptr);
+	if (!o_ptr->art_name ^ !j_ptr->art_name) return !j_ptr->art_name;
+	if (!object_is_ego(o_ptr) ^ !object_is_ego(j_ptr)) return !object_is_ego(j_ptr);
+
+	switch (o_ptr->tval)
+	{
+	case TV_FIGURINE:
+	case TV_STATUE:
+	case TV_CORPSE:
+	case TV_CAPTURE:
+		if (r_info[o_ptr->pval].level < r_info[j_ptr->pval].level) return TRUE;
+		if ((r_info[o_ptr->pval].level == r_info[j_ptr->pval].level) && (o_ptr->pval < j_ptr->pval)) return TRUE;
+		break;
+
+	case TV_SHOT:
+	case TV_ARROW:
+	case TV_BOLT:
+		/* Objects sort by increasing hit/damage bonuses */
+		if (o_ptr->to_h + o_ptr->to_d < j_ptr->to_h + j_ptr->to_d) return TRUE;
+		if (o_ptr->to_h + o_ptr->to_d > j_ptr->to_h + j_ptr->to_d) return FALSE;
+		break;
+
+	/* Hack:  otherwise identical rods sort by
+	increasing recharge time --dsb */
+	case TV_ROD:
+		if (o_ptr->pval < j_ptr->pval) return TRUE;
+		if (o_ptr->pval > j_ptr->pval) return FALSE;
+		break;
+	}
+
+	/* Objects sort by decreasing value */
+	return o_value > object_value(j_ptr);
+}
+
+
 /*
  * Add an item to the players inventory, and return the slot used.
  *
@@ -5772,60 +5842,13 @@ s16b inven_carry(object_type *o_ptr)
 	/* Reorder the pack */
 	if (i < INVEN_PACK)
 	{
-		s32b o_value, j_value;
-
 		/* Get the "value" of the item */
-		o_value = object_value(o_ptr);
+		s32b o_value = object_value(o_ptr);
 
 		/* Scan every occupied slot */
 		for (j = 0; j < INVEN_PACK; j++)
 		{
-			j_ptr = &inventory[j];
-
-			/* Use empty slots */
-			if (!j_ptr->k_idx) break;
-
-			/* Hack -- readable books always come first */
-			if ((o_ptr->tval == REALM1_BOOK) &&
-			    (j_ptr->tval != REALM1_BOOK)) break;
-			if ((j_ptr->tval == REALM1_BOOK) &&
-			    (o_ptr->tval != REALM1_BOOK)) continue;
-
-			if ((o_ptr->tval == REALM2_BOOK) &&
-			    (j_ptr->tval != REALM2_BOOK)) break;
-			if ((j_ptr->tval == REALM2_BOOK) &&
-			    (o_ptr->tval != REALM2_BOOK)) continue;
-
-			/* Objects sort by decreasing type */
-			if (o_ptr->tval > j_ptr->tval) break;
-			if (o_ptr->tval < j_ptr->tval) continue;
-
-			/* Non-aware (flavored) items always come last */
-			if (!object_is_aware(o_ptr)) continue;
-			if (!object_is_aware(j_ptr)) break;
-
-			/* Objects sort by increasing sval */
-			if (o_ptr->sval < j_ptr->sval) break;
-			if (o_ptr->sval > j_ptr->sval) continue;
-
-			/* Unidentified objects always come last */
-			if (!object_is_known(o_ptr)) continue;
-			if (!object_is_known(j_ptr)) break;
-
-			/* Hack:  otherwise identical rods sort by
-			increasing recharge time --dsb */
-			if (o_ptr->tval == TV_ROD)
-			{
-				if (o_ptr->pval < j_ptr->pval) break;
-				if (o_ptr->pval > j_ptr->pval) continue;
-			}
-
-			/* Determine the "value" of the pack item */
-			j_value = object_value(j_ptr);
-
-			/* Objects sort by decreasing value */
-			if (o_value > j_value) break;
-			if (o_value < j_value) continue;
+			if (object_sort_comp(o_ptr, o_value, &inventory[j])) break;
 		}
 
 		/* Use that slot */
@@ -6176,10 +6199,8 @@ void reorder_pack(void)
 {
 	int             i, j, k;
 	s32b            o_value;
-	s32b            j_value;
 	object_type     forge;
 	object_type     *q_ptr;
-	object_type     *j_ptr;
 	object_type     *o_ptr;
 	bool            flag = FALSE;
 
@@ -6202,55 +6223,7 @@ void reorder_pack(void)
 		/* Scan every occupied slot */
 		for (j = 0; j < INVEN_PACK; j++)
 		{
-			/* Get the item already there */
-			j_ptr = &inventory[j];
-
-			/* Use empty slots */
-			if (!j_ptr->k_idx) break;
-
-			/* Hack -- readable books always come first */
-			if ((o_ptr->tval == REALM1_BOOK) &&
-			    (j_ptr->tval != REALM1_BOOK)) break;
-			if ((j_ptr->tval == REALM1_BOOK) &&
-			    (o_ptr->tval != REALM1_BOOK)) continue;
-
-			if ((o_ptr->tval == REALM2_BOOK) &&
-			    (j_ptr->tval != REALM2_BOOK)) break;
-			if ((j_ptr->tval == REALM2_BOOK) &&
-			    (o_ptr->tval != REALM2_BOOK)) continue;
-
-			/* Objects sort by decreasing type */
-			if (o_ptr->tval > j_ptr->tval) break;
-			if (o_ptr->tval < j_ptr->tval) continue;
-
-			/* Non-aware (flavored) items always come last */
-			if (!object_is_aware(o_ptr)) continue;
-			if (!object_is_aware(j_ptr)) break;
-
-			/* Objects sort by increasing sval */
-			if (o_ptr->sval < j_ptr->sval) break;
-			if (o_ptr->sval > j_ptr->sval) continue;
-
-			/* Unidentified objects always come last */
-			if (!object_is_known(o_ptr)) continue;
-			if (!object_is_known(j_ptr)) break;
-
-			/* Hack:  otherwise identical rods sort by
-			increasing recharge time --dsb */
-			if (o_ptr->tval == TV_ROD)
-			{
-				if (o_ptr->pval < j_ptr->pval) break;
-				if (o_ptr->pval > j_ptr->pval) continue;
-			}
-
-			/* Determine the "value" of the pack item */
-			j_value = object_value(j_ptr);
-
-
-
-			/* Objects sort by decreasing value */
-			if (o_value > j_value) break;
-			if (o_value < j_value) continue;
+			if (object_sort_comp(o_ptr, o_value, &inventory[j])) break;
 		}
 
 		/* Never move down */
