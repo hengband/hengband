@@ -1,4 +1,148 @@
+2002-07-13  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/r_info_j.txt 1.45, src/mspells1.c 1.26:
+	大鷲を強くした。
+
+2002-07-13  hoge  <hoge@cvs>
+
+	* lib/edit/a_info_j.txt 1.23, src/xtra1.c 1.43:
+	ヒーローバグ修正
+
+2002-07-10  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.56:
+	自動拾いエディタの起動時にゲームを自動セーブする。エディタを終了してから
+	100ターン以内に再起動したときは自動セーブは省略。
+
+2002-07-09  henkma  <henkma@cvs>
+
+	* src/xtra2.c 1.44:
+	クエスト達成時に, 階段が鏡の上(下？)に作られるのを禁止.
+
+2002-07-08  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/r_info_j.txt 1.44:
+	ドルジの経験値半減。
+
+	* lib/edit/r_info_j.txt 1.43:
+	大鷲の経験値適当に修正。エオグゴーレムの説明和訳訂正。
+
+	* lib/edit/r_info_j.txt 1.42:
+	ディオニソスの説明文で空白が抜けていたのを追加。
+
+	* src/xtra2.c 1.43:
+	Kieronさんからの報告で、店の中でアンドロイドが装備を変えてレベルが上下したとき
+	店の中なのに'@'が表示されていたのを修正。
+
+2002-07-07  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/d_info_j.txt 1.4: コメント追加。
+
+	* lib/edit/d_info_j.txt 1.3, lib/edit/r_info_j.txt 1.41, src/defines.h 1.65, src/monster2.c 1.37, src/mspells1.c 1.25, src/mspells2.c 1.21:
+	大鷲を強化。SPECIALの行動として、「@を掴んで空中から落す(=引き戻し+ダメージ2d8)」
+	と「急上昇して瞬時に移動(=ショートテレポート」を実装。
+	大鷲と大鷲のユニークは全てこれを使う+スピードを速くしてHPを増した。
+	さらにユニーク3体のみSUMMON_KINで大鷲を呼ぶ(ユニーク可)。
+
+	* src/xtra2.c 1.42:
+	'l'ookコマンドで、レベルアップまでに必要な数 [???] がたぬきを考慮していなかったので修正。
+
+2002-07-07  henkma  <henkma@cvs>
+
+	* src/spells2.c 1.41:
+	*破壊*, 地震の時, 鏡が壁の中(上？)に残ったままになっていたので消去するようにした.
+
+	* src/spells1.c 1.29:
+	分解ブレスで鏡が壊れてなかったので壊れるように修正. 壊れ方は前と同じで, 単に消えるだけ.
+
+2002-07-07  habu  <habu@cvs>
+
+	* Makefile.am 1.2:
+	EXTRA_DISTにhengband.specを追加。
+
+	* hengband.spec 1.1:
+	TOWさん作のRPMパッケージ用specファイルを追加。
+
+2002-07-06  Takeshi Mogami  <mogami@cvs>
+
+	* src/object1.c 1.40:
+	魔法書選択時のリスト表示で、a) b) の欄は @mc @md 等の刻みを反映して変わるが、
+	@mwと@mz及び大文字で@mA等と刻んであると表示欄が空白になってしまっていたので修正。
+
+	* src/xtra2.c 1.41:
+	'l'ookコマンドでレベル???の表示が、たぬきとあやしい影を考慮していなかったので修正。
+
+2002-07-06  henkma  <henkma@cvs>
+
+	* src/store.c 1.16:
+	破邪の本も魔法書屋で売れるようにした.
+
+	* src/spells1.c 1.28:
+	トラップ生成のとき, 鏡の上にも生成されてしまっていたのを修正.
+
+	* src/xtra2.c 1.40:
+	敵が鏡の上にいるとき, 「〜は鏡の上にいる」が出ないようになってたので
+	出るようにした.
+
+2002-07-05  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.55:
+	^W等のコマンドによって行の内容が完全に消えるとき(または、「靴」等の一部の
+	名詞型のキーワードだけが残るとき)に変愚蛮怒が落ちるのを修正。
+
+	* src/load.c 1.33:
+	トラップ未感知グリッドの表示を実装する以前のバージョンのセーブデータを
+	ロードすると部屋の外壁が全部鏡に変わってしまうバグを修正。
+
+	* src/autopick.c 1.54:
+	ユーザーフォルダにpicktype.prfだけがあって、picktype-<名前>.prfが無いときには、
+	自動拾いエディタはpicktype.prfだけを読み書きして、picktype-<名前>.prfを勝手に
+	作らないようにした。
+
+2002-07-04  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/joption.txt 1.13, lib/help/option.txt 1.14, src/cmd4.c 1.46, src/dungeon.c 1.61, src/externs.h 1.69, src/spells3.c 1.46, src/tables.c 1.45, src/variable.c 1.28:
+	簡易鑑定した瞬間と、魔法やアイテムを使って鑑定した瞬間に、自動破壊を適
+	用するかどうかをdestroy_feeling オプションと destroy_identify オプショ
+	ンで設定するようにした。
+
+	* src/autopick.c 1.53:
+	'~'の自動拾いリストからも使用している autopick_line_from_entry() の仕様を
+	不用意に変えて、使用中のentryをfreeするようにしてしまっていたので修正。
+
+2002-07-02  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.52:
+	"アーティファクト"+キーワードでない文字列、という組み合わせには
+	区切り記号が必要(アーティファクト生成の巻物に対する対策)なのに、
+	^Xで切り換えたときに付け忘れていたので修正。
+	「エゴなんとか」→「アーティファクト:なんとか」という風にする。
+
+2002-07-01  habu  <habu@cvs>
+
+	* src/spells2.c 1.40:
+	self_knowledge()で混乱攻撃の表示がなぜか重複していたので削除。
+
+2002-06-30  henkma  <henkma@cvs>
+
+	* src/spellstips.h 1.24:
+	tipsに大量のtypoがあったので修正.
+
+2002-06-29  Takeshi Mogami  <mogami@cvs>
+
+	* src/melee2.c 1.26:
+	寝ているモンスターは無敵、加速、減速のカウンタが減っていなかったので、
+	減るようにした。朦朧、混乱等は現行のまま(減らない)。
+
+	* src/wizard2.c 1.24:
+	^AcでINSTA_ARTの★を作成したとき、追加耐性等も正常に付くようにした。
+
+	* src/dungeon.c 1.60, src/effects.c 1.25:
+	英文修正。一時的効果が付いたときの説明は現在形が正しい。
+
 2002-06-28  Takeshi Mogami  <mogami@cvs>
+
+	* Changelogs 1.51: 更新
 
 	* src/monster1.c 1.23:
 	WILD_ONLYが付いているモンスターで、WILD_MOUNTAINを持っていないモンスターでも
