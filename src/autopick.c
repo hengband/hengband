@@ -408,7 +408,7 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
 	}
 
 	if (MATCH_KEY(KEY_WORTHLESS)) ADD_FLG(FLG_WORTHLESS);
-	if (MATCH_KEY(KEY_ARTIFACT)) ADD_FLG(FLG_ARTIFACT);
+	if (MATCH_KEY(KEY_ARTIFACT)) ADD_FLG2(FLG_ARTIFACT);
 	if (MATCH_KEY(KEY_EGO)) ADD_FLG(FLG_EGO);
 	if (MATCH_KEY(KEY_NAMELESS)) ADD_FLG(FLG_NAMELESS);
 	if (MATCH_KEY(KEY_UNAWARE)) ADD_FLG(FLG_UNAWARE);
@@ -422,9 +422,6 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
 	if (MATCH_KEY(KEY_SECOND)) ADD_FLG(FLG_SECOND);
 	if (MATCH_KEY(KEY_THIRD)) ADD_FLG(FLG_THIRD);
 	if (MATCH_KEY(KEY_FOURTH)) ADD_FLG(FLG_FOURTH);
-
-	/* Reset previous word location */
-	prev_ptr = ptr;
 
 	if (MATCH_KEY(KEY_ITEMS)) ADD_FLG2(FLG_ITEMS);
 	else if (MATCH_KEY(KEY_WEAPONS)) ADD_FLG2(FLG_WEAPONS);
