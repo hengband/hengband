@@ -8615,12 +8615,10 @@ static void do_cmd_knowledge_stat(void)
 
 
 /*
- * Print quest status of all active quests
+ * Print all active quests
  */
-static void do_cmd_knowledge_quests(void)
+static void do_cmd_knowledge_quests_current(FILE *fff)
 {
-	FILE *fff;
-	char file_name[1024];
 	char tmp_str[120];
 	char rand_tmp_str[120] = "\0";
 	char name[80];
@@ -8628,18 +8626,6 @@ static void do_cmd_knowledge_quests(void)
 	int i;
 	int rand_level = 100;
 	int total = 0;
-
-	/* Open a new file */
-	fff = my_fopen_temp(file_name, 1024);
-	if (!fff) {
-#ifdef JP
-	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
-#else
-	    msg_format("Failed to create temporary file %s.", file_name);
-#endif
-	    msg_print(NULL);
-	    return;
-	}
 
 #ifdef JP
 	fprintf(fff, "《遂行中のクエスト》\n");
@@ -8649,21 +8635,16 @@ static void do_cmd_knowledge_quests(void)
 
 	for (i = 1; i < max_quests; i++)
 	{
-		if (quest[i].status == QUEST_STATUS_TAKEN || quest[i].status == QUEST_STATUS_COMPLETED)
+		if ((quest[i].status == QUEST_STATUS_TAKEN) || (quest[i].status == QUEST_STATUS_COMPLETED))
 		{
-			int old_quest;
+			/* Set the quest number temporary */
+			int old_quest = p_ptr->inside_quest;
 			int j;
 
 			/* Clear the text */
-			for (j = 0; j < 10; j++)
-			{
-				quest_text[j][0] = '\0';
-			}
-
+			for (j = 0; j < 10; j++) quest_text[j][0] = '\0';
 			quest_text_line = 0;
 
-			/* Set the quest number temporary */
-			old_quest = p_ptr->inside_quest;
 			p_ptr->inside_quest = i;
 
 			/* Get the quest text */
@@ -8685,17 +8666,21 @@ static void do_cmd_knowledge_quests(void)
 
 				if (quest[i].status == QUEST_STATUS_TAKEN)
 				{
-					if (quest[i].type == QUEST_TYPE_KILL_LEVEL || quest[i].type == QUEST_TYPE_KILL_ANY_LEVEL)
+					switch (quest[i].type)
 					{
+					case QUEST_TYPE_KILL_LEVEL:
+					case QUEST_TYPE_KILL_ANY_LEVEL:
 						r_ptr = &r_info[quest[i].r_idx];
 						strcpy(name, r_name + r_ptr->name);
 						if (quest[i].max_num > 1)
 						{
 #ifdef JP
-							sprintf(note," - %d 体の%sを倒す。(あと %d 体)",quest[i].max_num, name, quest[i].max_num-quest[i].cur_num);
+							sprintf(note," - %d 体の%sを倒す。(あと %d 体)",
+								quest[i].max_num, name, quest[i].max_num - quest[i].cur_num);
 #else
 							plural_aux(name);
-							sprintf(note," - kill %d %s, have killed %d.",quest[i].max_num, name, quest[i].cur_num);
+							sprintf(note," - kill %d %s, have killed %d.",
+								quest[i].max_num, name, quest[i].cur_num);
 #endif
 						}
 						else
@@ -8704,44 +8689,51 @@ static void do_cmd_knowledge_quests(void)
 #else
 							sprintf(note," - kill %s.",name);
 #endif
-					}
-					else if (quest[i].type == QUEST_TYPE_KILL_NUMBER)
-					{
-#ifdef JP
-						sprintf(note," - %d 体のモンスターを倒す。(あと %d 体)",quest[i].max_num, quest[i].max_num-quest[i].cur_num);
-#else
-						sprintf(note," - Kill %d monsters, have killed %d.",quest[i].max_num, quest[i].cur_num);
-#endif
-					}
-					else if (quest[i].type == QUEST_TYPE_FIND_ARTIFACT)
-					{
+						break;
+
+					case QUEST_TYPE_FIND_ARTIFACT:
 						strcpy(name, a_name + a_info[quest[i].k_idx].name);
 #ifdef JP
 						sprintf(note," - %sを見つけ出す。", name);
 #else
 						sprintf(note," - Find out %s.", name);
 #endif
-					}
-					else if (quest[i].type == QUEST_TYPE_FIND_EXIT)
+						break;
+
+					case QUEST_TYPE_FIND_EXIT:
 #ifdef JP
 						sprintf(note," - 探索する。");
 #else
 						sprintf(note," - Search.");
 #endif
-					else if (quest[i].type == QUEST_TYPE_KILL_ALL)
+						break;
+
+					case QUEST_TYPE_KILL_NUMBER:
+#ifdef JP
+						sprintf(note," - %d 体のモンスターを倒す。(あと %d 体)",
+							quest[i].max_num, quest[i].max_num - quest[i].cur_num);
+#else
+						sprintf(note," - Kill %d monsters, have killed %d.",
+							quest[i].max_num, quest[i].cur_num);
+#endif
+						break;
+
+					case QUEST_TYPE_KILL_ALL:
 #ifdef JP
 						sprintf(note," - 全てのモンスターを倒す。");
 #else
 						sprintf(note," - Kill all monsters.");
 #endif
+						break;
+					}
 				}
 
 				/* Print the quest info */
 #ifdef JP
-				sprintf(tmp_str, "%s (危険度:%d階相当)%s\n",
+				sprintf(tmp_str, "  %s (危険度:%d階相当)%s\n",
 					quest[i].name, quest[i].level, note);
 #else
-				sprintf(tmp_str, "%s (Danger level: %d)%s\n",
+				sprintf(tmp_str, "  %s (Danger level: %d)%s\n",
 					quest[i].name, quest[i].level, note);
 #endif
 
@@ -8750,11 +8742,10 @@ static void do_cmd_knowledge_quests(void)
 				if (quest[i].status == QUEST_STATUS_COMPLETED)
 				{
 #ifdef JP
-					sprintf(tmp_str, "  クエスト達成 - まだ報酬を受けとってない。\n");
+					sprintf(tmp_str, "    クエスト達成 - まだ報酬を受けとってない。\n");
 #else
-					sprintf(tmp_str, "  Quest Completed - Unrewarded\n");
+					sprintf(tmp_str, "    Quest Completed - Unrewarded\n");
 #endif
-
 					fprintf(fff, tmp_str);
 				}
 				else
@@ -8763,13 +8754,12 @@ static void do_cmd_knowledge_quests(void)
 
 					while (quest_text[j][0] && j < 10)
 					{
-						fprintf(fff, "  %s\n", quest_text[j]);
+						fprintf(fff, "    %s\n", quest_text[j]);
 						j++;
 					}
 				}
 			}
-			else if ((quest[i].type == QUEST_TYPE_RANDOM) &&
-				 (quest[i].level < rand_level))
+			else if (quest[i].level < rand_level) /* QUEST_TYPE_RANDOM */
 			{
 				/* New random */
 				rand_level = quest[i].level;
@@ -8783,13 +8773,13 @@ static void do_cmd_knowledge_quests(void)
 					if (quest[i].max_num > 1)
 					{
 #ifdef JP
-						sprintf(rand_tmp_str,"%s (%d 階) - %d 体の%sを倒す。(あと %d 体)\n",
+						sprintf(rand_tmp_str,"  %s (%d 階) - %d 体の%sを倒す。(あと %d 体)\n",
 							quest[i].name, quest[i].level,
-							quest[i].max_num, name, quest[i].max_num-quest[i].cur_num);
+							quest[i].max_num, name, quest[i].max_num - quest[i].cur_num);
 #else
 						plural_aux(name);
 
-						sprintf(rand_tmp_str,"%s (Dungeon level: %d)\n  Kill %d %s, have killed %d.\n",
+						sprintf(rand_tmp_str,"  %s (Dungeon level: %d)\n  Kill %d %s, have killed %d.\n",
 							quest[i].name, quest[i].level,
 							quest[i].max_num, name, quest[i].cur_num);
 #endif
@@ -8797,10 +8787,10 @@ static void do_cmd_knowledge_quests(void)
 					else
 					{
 #ifdef JP
-						sprintf(rand_tmp_str,"%s (%d 階) - %sを倒す。\n",
+						sprintf(rand_tmp_str,"  %s (%d 階) - %sを倒す。\n",
 							quest[i].name, quest[i].level, name);
 #else
-						sprintf(rand_tmp_str,"%s (Dungeon level: %d)\n  Kill %s.\n",
+						sprintf(rand_tmp_str,"  %s (Dungeon level: %d)\n  Kill %s.\n",
 							quest[i].name, quest[i].level, name);
 #endif
 					}
@@ -8813,28 +8803,39 @@ static void do_cmd_knowledge_quests(void)
 	if (rand_tmp_str[0]) fprintf(fff, rand_tmp_str);
 
 #ifdef JP
-	if (!total) fprintf(fff, "なし\n");
+	if (!total) fprintf(fff, "  なし\n");
 #else
-	if (!total) fprintf(fff, "Nothing.\n");
+	if (!total) fprintf(fff, "  Nothing.\n");
 #endif
+}
+
+
+/*
+ * Print all finished quests
+ */
+void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
+{
+	char tmp_str[120];
+	int i;
+	int total = 0;
 
 #ifdef JP
-	fprintf(fff, "\n《達成したクエスト》\n");
+	fprintf(fff, "《達成したクエスト》\n");
 #else
-	fprintf(fff, "\n< Completed Quest >\n");
+	fprintf(fff, "< Completed Quest >\n");
 #endif
-	total = 0;
 	for (i = 1; i < max_quests; i++)
 	{
-		if (quest[i].status == QUEST_STATUS_FINISHED)
-		{
-			if (is_fixed_quest_idx(i))
-			{
-				int old_quest;
+		int q_idx = quest_num[i];
 
+		if (quest[q_idx].status == QUEST_STATUS_FINISHED)
+		{
+			if (is_fixed_quest_idx(q_idx))
+			{
 				/* Set the quest number temporary */
-				old_quest = p_ptr->inside_quest;
-				p_ptr->inside_quest = i;
+				int old_quest = p_ptr->inside_quest;
+
+				p_ptr->inside_quest = q_idx;
 
 				/* Get the quest */
 				init_flags = INIT_ASSIGN;
@@ -8845,48 +8846,48 @@ static void do_cmd_knowledge_quests(void)
 				p_ptr->inside_quest = old_quest;
 
 				/* No info from "silent" quests */
-				if (quest[i].flags & QUEST_FLAG_SILENT) continue;
+				if (quest[q_idx].flags & QUEST_FLAG_SILENT) continue;
 			}
 
 			total++;
 
-			if (!is_fixed_quest_idx(i) && quest[i].r_idx)
+			if (!is_fixed_quest_idx(q_idx) && quest[q_idx].r_idx)
 			{
 				/* Print the quest info */
 
-				if (quest[i].complev == 0)
+				if (quest[q_idx].complev == 0)
 				{
-					sprintf(tmp_str, 
+					sprintf(tmp_str,
 #ifdef JP
-						"%s (%d階) - 不戦勝\n",
+						"  %s (%d階) - 不戦勝\n",
 #else
-						"%s (Dungeon level: %d) - (Cancelled)\n",
+						"  %s (Dungeon level: %d) - (Cancelled)\n",
 #endif
-						r_name+r_info[quest[i].r_idx].name,
-						quest[i].level);
+						r_name+r_info[quest[q_idx].r_idx].name,
+						quest[q_idx].level);
 				}
 				else
 				{
-					sprintf(tmp_str, 
+					sprintf(tmp_str,
 #ifdef JP
-						"%s (%d階) - レベル%d\n",
+						"  %s (%d階) - レベル%d\n",
 #else
-						"%s (Dungeon level: %d) - level %d\n",
+						"  %s (Dungeon level: %d) - level %d\n",
 #endif
-						r_name+r_info[quest[i].r_idx].name,
-						quest[i].level,
-						quest[i].complev);
+						r_name+r_info[quest[q_idx].r_idx].name,
+						quest[q_idx].level,
+						quest[q_idx].complev);
 				}
 			}
 			else
 			{
 				/* Print the quest info */
 #ifdef JP
-				sprintf(tmp_str, "%s (危険度:%d階相当) - レベル%d\n",
-					quest[i].name, quest[i].level, quest[i].complev);
+				sprintf(tmp_str, "  %s (危険度:%d階相当) - レベル%d\n",
+					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev);
 #else
-				sprintf(tmp_str, "%s (Danger level: %d) - level %d\n",
-					quest[i].name, quest[i].level, quest[i].complev);
+				sprintf(tmp_str, "  %s (Danger level: %d) - level %d\n",
+					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev);
 #endif
 			}
 
@@ -8894,28 +8895,39 @@ static void do_cmd_knowledge_quests(void)
 		}
 	}
 #ifdef JP
-	if (!total) fprintf(fff, "なし\n");
+	if (!total) fprintf(fff, "  なし\n");
 #else
-	if (!total) fprintf(fff, "Nothing.\n");
+	if (!total) fprintf(fff, "  Nothing.\n");
 #endif
+}
+
+
+/*
+ * Print all failed quests
+ */
+void do_cmd_knowledge_quests_failed(FILE *fff, int quest_num[])
+{
+	char tmp_str[120];
+	int i;
+	int total = 0;
 
 #ifdef JP
-	fprintf(fff, "\n《失敗したクエスト》\n");
+	fprintf(fff, "《失敗したクエスト》\n");
 #else
-	fprintf(fff, "\n< Failed Quest >\n");
+	fprintf(fff, "< Failed Quest >\n");
 #endif
-	total = 0;
 	for (i = 1; i < max_quests; i++)
 	{
-		if ((quest[i].status == QUEST_STATUS_FAILED_DONE) || (quest[i].status == QUEST_STATUS_FAILED))
-		{
-			if (is_fixed_quest_idx(i))
-			{
-				int old_quest;
+		int q_idx = quest_num[i];
 
+		if ((quest[q_idx].status == QUEST_STATUS_FAILED_DONE) || (quest[q_idx].status == QUEST_STATUS_FAILED))
+		{
+			if (is_fixed_quest_idx(q_idx))
+			{
 				/* Set the quest number temporary */
-				old_quest = p_ptr->inside_quest;
-				p_ptr->inside_quest = i;
+				int old_quest = p_ptr->inside_quest;
+
+				p_ptr->inside_quest = q_idx;
 
 				/* Get the quest text */
 				init_flags = INIT_ASSIGN;
@@ -8926,49 +8938,58 @@ static void do_cmd_knowledge_quests(void)
 				p_ptr->inside_quest = old_quest;
 
 				/* No info from "silent" quests */
-				if (quest[i].flags & QUEST_FLAG_SILENT) continue;
+				if (quest[q_idx].flags & QUEST_FLAG_SILENT) continue;
 			}
 
 			total++;
 
-			if (!is_fixed_quest_idx(i) && quest[i].r_idx)
+			if (!is_fixed_quest_idx(q_idx) && quest[q_idx].r_idx)
 			{
 				/* Print the quest info */
 #ifdef JP
-				sprintf(tmp_str, "%s (%d階) - レベル%d\n",
-					r_name+r_info[quest[i].r_idx].name, quest[i].level, quest[i].complev);
+				sprintf(tmp_str, "  %s (%d階) - レベル%d\n",
+					r_name+r_info[quest[q_idx].r_idx].name, quest[q_idx].level, quest[q_idx].complev);
 #else
-				sprintf(tmp_str, "%s (Dungeon level: %d) - level %d\n",
-					r_name+r_info[quest[i].r_idx].name, quest[i].level, quest[i].complev);
+				sprintf(tmp_str, "  %s (Dungeon level: %d) - level %d\n",
+					r_name+r_info[quest[q_idx].r_idx].name, quest[q_idx].level, quest[q_idx].complev);
 #endif
 			}
 			else
 			{
 				/* Print the quest info */
 #ifdef JP
-				sprintf(tmp_str, "%s (危険度:%d階相当) - レベル%d\n",
-					quest[i].name, quest[i].level, quest[i].complev);
+				sprintf(tmp_str, "  %s (危険度:%d階相当) - レベル%d\n",
+					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev);
 #else
-				sprintf(tmp_str, "%s (Danger level: %d) - level %d\n",
-					quest[i].name, quest[i].level, quest[i].complev);
+				sprintf(tmp_str, "  %s (Danger level: %d) - level %d\n",
+					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev);
 #endif
 			}
 			fprintf(fff, tmp_str);
 		}
 	}
 #ifdef JP
-	if (!total) fprintf(fff, "なし\n");
+	if (!total) fprintf(fff, "  なし\n");
 #else
-	if (!total) fprintf(fff, "Nothing.\n");
+	if (!total) fprintf(fff, "  Nothing.\n");
 #endif
+}
 
-	if (p_ptr->wizard) {
+
+/*
+ * Print all random quests
+ */
+static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
+{
+	char tmp_str[120];
+	int i;
+	int total = 0;
+
 #ifdef JP
-	fprintf(fff, "\n《残りのランダムクエスト》\n");
+	fprintf(fff, "《残りのランダムクエスト》\n");
 #else
-	fprintf(fff, "\n< Remaining Random Quest >\n");
+	fprintf(fff, "< Remaining Random Quest >\n");
 #endif
-	total = 0;
 	for (i = 1; i < max_quests; i++)
 	{
 		/* No info from "silent" quests */
@@ -8980,21 +9001,94 @@ static void do_cmd_knowledge_quests(void)
 
 			/* Print the quest info */
 #ifdef JP
-			sprintf(tmp_str, "%s (%d階, %s)\n",
+			sprintf(tmp_str, "  %s (%d階, %s)\n",
 				quest[i].name, quest[i].level, r_name+r_info[quest[i].r_idx].name);
 #else
-			sprintf(tmp_str, "%s (%d, %s)\n",
+			sprintf(tmp_str, "  %s (%d, %s)\n",
 				quest[i].name, quest[i].level, r_name+r_info[quest[i].r_idx].name);
 #endif
 			fprintf(fff, tmp_str);
 		}
 	}
 #ifdef JP
-	if (!total) fprintf(fff, "なし\n");
+	if (!total) fprintf(fff, "  なし\n");
 #else
-	if (!total) fprintf(fff, "Nothing.\n");
+	if (!total) fprintf(fff, "  Nothing.\n");
 #endif
-	}	
+}
+
+
+bool ang_sort_comp_quest_num(vptr u, vptr v, int a, int b)
+{
+	int *q_num = (int *)u;
+	quest_type *qa = &quest[q_num[a]];
+	quest_type *qb = &quest[q_num[b]];
+
+	/* Unused */
+	(void)v;
+
+	if (qa->complev < qb->complev) return TRUE;
+	if (qa->complev > qb->complev) return FALSE;
+	if (qa->level <= qb->level) return TRUE;
+	return FALSE;
+}
+
+void ang_sort_swap_quest_num(vptr u, vptr v, int a, int b)
+{
+	int *q_num = (int *)u;
+	int tmp;
+
+	/* Unused */
+	(void)v;
+
+	tmp = q_num[a];
+	q_num[a] = q_num[b];
+	q_num[b] = tmp;
+}
+
+
+/*
+ * Print quest status of all active quests
+ */
+static void do_cmd_knowledge_quests(void)
+{
+	FILE *fff;
+	char file_name[1024];
+	int *quest_num, dummy, i;
+
+	/* Open a new file */
+	fff = my_fopen_temp(file_name, 1024);
+	if (!fff)
+	{
+#ifdef JP
+	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
+#else
+	    msg_format("Failed to create temporary file %s.", file_name);
+#endif
+	    msg_print(NULL);
+	    return;
+	}
+
+	/* Allocate Memory */
+	C_MAKE(quest_num, max_quests, int);
+
+	/* Sort by compete level */
+	for (i = 1; i < max_quests; i++) quest_num[i] = i;
+	ang_sort_comp = ang_sort_comp_quest_num;
+	ang_sort_swap = ang_sort_swap_quest_num;
+	ang_sort(quest_num, &dummy, max_quests);
+
+	/* Dump Quest Information */
+	do_cmd_knowledge_quests_current(fff);
+	fputc('\n', fff);
+	do_cmd_knowledge_quests_completed(fff, quest_num);
+	fputc('\n', fff);
+	do_cmd_knowledge_quests_failed(fff, quest_num);
+	if (p_ptr->wizard)
+	{
+		fputc('\n', fff);
+		do_cmd_knowledge_quests_wiz_random(fff);
+	}
 
 	/* Close the file */
 	my_fclose(fff);
@@ -9006,11 +9100,12 @@ static void do_cmd_knowledge_quests(void)
 	show_file(TRUE, file_name, "Quest status", 0, 0);
 #endif
 
-
 	/* Remove the file */
 	fd_kill(file_name);
-}
 
+	/* Free Memory */
+	C_KILL(quest_num, max_quests, int);
+}
 
 
 /*

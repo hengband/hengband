@@ -3922,33 +3922,6 @@ void display_player(int mode)
 	}
 }
 
-static bool ang_sort_comp_quest_num(vptr u, vptr v, int a, int b)
-{
-	int *q_num = (int *)u;
-	quest_type *qa = &quest[q_num[a]];
-	quest_type *qb = &quest[q_num[b]];
-
-	/* Unused */
-	(void)v;
-
-	if (qa->complev < qb->complev) return TRUE;
-	if (qa->complev > qb->complev) return FALSE;
-	if (qa->level <= qb->level) return TRUE;
-	return FALSE;
-}
-
-static void ang_sort_swap_quest_num(vptr u, vptr v, int a, int b)
-{
-	int *q_num = (int *)u;
-	int tmp;
-
-	/* Unused */
-	(void)v;
-
-	tmp = q_num[a];
-	q_num[a] = q_num[b];
-	q_num[b] = tmp;
-}
 
 errr make_character_dump(FILE *fff)
 {
@@ -3959,7 +3932,6 @@ errr make_character_dump(FILE *fff)
 	store_type  *st_ptr;
 	char		o_name[MAX_NLEN];
 	char		buf[1024];
-	int		total;
 	int		*quest_num;
 	int		dummy;
 
@@ -4130,166 +4102,20 @@ errr make_character_dump(FILE *fff)
 	fprintf(fff, "\n  [Quest information]\n");
 #endif
 
-#ifdef JP
-	fprintf(fff, "\n《達成したクエスト》\n");
-#else
-	fprintf(fff, "\n< Completed Quest >\n");
-#endif
-
 	/* Allocate Memory */
 	C_MAKE(quest_num, max_quests, int);
 
 	/* Sort by compete level */
-	for (i = 1; i < max_quests; i++)
-	{
-		quest_num[i] = i;
-	}
+	for (i = 1; i < max_quests; i++) quest_num[i] = i;
 	ang_sort_comp = ang_sort_comp_quest_num;
 	ang_sort_swap = ang_sort_swap_quest_num;
 	ang_sort(quest_num, &dummy, max_quests);
 
 	/* Dump Quest Information */
-	total = 0;
-	for (i = 1; i < max_quests; i++)
-	{
-		int num = quest_num[i];
-
-		if (quest[num].status == QUEST_STATUS_FINISHED)
-		{
-			if (is_fixed_quest_idx(num))
-			{
-				int old_quest;
-
-				/* Set the quest number temporary */
-				old_quest = p_ptr->inside_quest;
-				p_ptr->inside_quest = num;
-
-				/* Get the quest */
-				init_flags = INIT_ASSIGN;
-
-				process_dungeon_file("q_info.txt", 0, 0, 0, 0);
-
-				/* Reset the old quest number */
-				p_ptr->inside_quest = old_quest;
-
-				/* No info from "silent" quests */
-				if (quest[num].flags & QUEST_FLAG_SILENT) continue;
-			}
-
-			total++;
-
-			if (!is_fixed_quest_idx(num) && quest[num].r_idx)
-			{
-				/* Print the quest info */
-
-				if (quest[num].complev == 0)
-				{
-					fprintf(fff,
-#ifdef JP
-						"  %s (%d階) - 不戦勝\n",
-#else
-						"  %s (Dungeon level: %d) - (Cancelled)\n",
-#endif
-						r_name+r_info[quest[num].r_idx].name,
-						quest[num].level);
-				}
-				else
-				{
-					fprintf(fff,
-#ifdef JP
-						"  %s (%d階) - レベル%d\n",
-#else
-						"  %s (Dungeon level: %d) - level %d\n",
-#endif
-						r_name+r_info[quest[num].r_idx].name,
-						quest[num].level,
-						quest[num].complev);
-				}
-			}
-			else
-			{
-				/* Print the quest info */
-#ifdef JP
-				fprintf(fff, "  %s (危険度:%d階相当) - レベル%d\n",
-#else
-				fprintf(fff, "  %s (Danger level: %d) - level %d\n",
-#endif
-
-					quest[num].name, quest[num].level, quest[num].complev);
-			}
-		}
-	}
-#ifdef JP
-	if (!total) fprintf(fff, "  なし\n");
-#else
-	if (!total) fprintf(fff, "  Nothing.\n");
-#endif
-
-#ifdef JP
-	fprintf(fff, "\n《失敗したクエスト》\n");
-#else
-	fprintf(fff, "\n< Failed Quest >\n");
-#endif
-	total = 0;
-	for (i = 1; i < max_quests; i++)
-	{
-		int num = quest_num[i];
-
-		if ((quest[num].status == QUEST_STATUS_FAILED_DONE) || (quest[num].status == QUEST_STATUS_FAILED))
-		{
-			if (is_fixed_quest_idx(num))
-			{
-				int old_quest;
-
-				/* Set the quest number temporary */
-				old_quest = p_ptr->inside_quest;
-				p_ptr->inside_quest = num;
-
-				/* Get the quest text */
-				init_flags = INIT_ASSIGN;
-
-				process_dungeon_file("q_info.txt", 0, 0, 0, 0);
-
-				/* Reset the old quest number */
-				p_ptr->inside_quest = old_quest;
-
-				/* No info from "silent" quests */
-				if (quest[num].flags & QUEST_FLAG_SILENT) continue;
-			}
-
-			total++;
-
-			if (!is_fixed_quest_idx(num) && quest[num].r_idx)
-			{
-				/* Print the quest info */
-#ifdef JP
-				fprintf(fff, "  %s (%d階) - レベル%d\n",
-#else
-				fprintf(fff, "  %s (Dungeon level: %d) - level %d\n",
-#endif
-
-					r_name+r_info[quest[num].r_idx].name, quest[num].level, quest[num].complev);
-			}
-			else
-			{
-				/* Print the quest info */
-#ifdef JP
-				fprintf(fff, "  %s (危険度:%d階相当) - レベル%d\n",
-#else
-				fprintf(fff, "  %s (Danger level: %d) - level %d\n",
-#endif
-
-					quest[num].name, quest[num].level, quest[num].complev);
-			}
-		}
-	}
-
-#ifdef JP
-	if (!total) fprintf(fff, "  なし\n");
-#else
-	if (!total) fprintf(fff, "  Nothing.\n");
-#endif
-	fprintf(fff, "\n");
+	fputc('\n', fff);
+	do_cmd_knowledge_quests_completed(fff, quest_num);
+	fputc('\n', fff);
+	do_cmd_knowledge_quests_failed(fff, quest_num);
 
 	/* Free Memory */
 	C_KILL(quest_num, max_quests, int);
