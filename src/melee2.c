@@ -1510,11 +1510,6 @@ static bool monst_attack_monst(int m_idx, int t_idx)
 		/* Hack -- no more attacks */
 		if (!method) break;
 
-		if (blinked) /* Stop! */
-		{
-			/* break; */
-		}
-
 		if (method == RBM_SHOOT) continue;
 
 		/* Extract the attack "power" */
@@ -2044,7 +2039,6 @@ msg_format("%sは体力を回復したようだ。", m_name);
 						{
 							if (see_either)
 							{
-								blinked = FALSE;
 #ifdef JP
 								msg_format("%^sは突然熱くなった！", m_name);
 #else
@@ -2071,7 +2065,6 @@ msg_format("%sは体力を回復したようだ。", m_name);
 						{
 							if (see_either)
 							{
-								blinked = FALSE;
 #ifdef JP
 								msg_format("%^sは突然寒くなった！", m_name);
 #else
@@ -2098,7 +2091,6 @@ msg_format("%sは体力を回復したようだ。", m_name);
 						{
 							if (see_either)
 							{
-								blinked = FALSE;
 #ifdef JP
 								msg_format("%^sは電撃を食らった！", m_name);
 #else
@@ -2186,27 +2178,24 @@ msg_format("%sは%^sの攻撃をかわした。", t_name,m_name);
 		if (m_ptr->invulner) m_ptr->invulner = 0;
 
 #ifdef JP
-mon_take_hit_mon(m_idx, m_ptr->hp + 1, &fear, "は爆発して粉々になった。", m_idx);
+		mon_take_hit_mon(m_idx, m_ptr->hp + 1, &fear, "は爆発して粉々になった。", m_idx);
 #else
 		mon_take_hit_mon(m_idx, m_ptr->hp + 1, &fear, " explodes into tiny shreds.", m_idx);
 #endif
 
-
 		blinked = FALSE;
 	}
 
-
 	/* Blink away */
-	if (blinked)
+	if (blinked && m_ptr->r_idx)
 	{
 		if (see_m)
 		{
 #ifdef JP
-msg_print("泥棒は笑って逃げた！");
+			msg_print("泥棒は笑って逃げた！");
 #else
 			msg_print("The thief flees laughing!");
 #endif
-
 		}
 		else if (known)
 		{
