@@ -620,11 +620,10 @@ W:0:18:0:5000
 F:VORPAL | TUNNEL
 
 #JZ#
-# rarity is 0, hard coded in object2.c
 N:79:цо©л╓н
 E:of Earthquakes
 X:24:20
-W:0:0:0:4000
+W:0:18:0:4000
 C:0:0:0:3
 F:TUNNEL | IMPACT | ACTIVATE
 
