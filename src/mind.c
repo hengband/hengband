@@ -2012,7 +2012,7 @@ msg_format("%sの力が制御できない氾流となって解放された！", p);
 					msg_print("Your mind unleashes its power in an uncontrollable storm!");
 #endif
 
-					project(1, 2 + plev / 10, py, px, plev * 2,
+					project(PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, py, px, plev * 2,
 						GF_MANA, PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
 					p_ptr->csp = MAX(0, p_ptr->csp - plev * MAX(1, plev / 10));
 				}
@@ -2050,7 +2050,7 @@ msg_format("%sの力が制御できない氾流となって解放された！", p);
 					msg_print("Your mind unleashes its power in an uncontrollable storm!");
 #endif
 
-					project(1, 2 + plev / 10, py, px, plev * 2,
+					project(PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, py, px, plev * 2,
 						GF_MANA, PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
 					p_ptr->csp = MAX(0, p_ptr->csp - plev * MAX(1, plev / 10));
 				}

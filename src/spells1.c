@@ -6348,18 +6348,26 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 
 
 		/* Choose 'new' target */
-		do
+		if (who > 0)
 		{
-			t_y = m_list[who].fy - 1 + randint1(3);
-			t_x = m_list[who].fx - 1 + randint1(3);
-			max_attempts--;
-		}
-		while (max_attempts && in_bounds2u(t_y, t_x) && !projectable(py, px, t_y, t_x));
+			do
+			{
+				t_y = m_list[who].fy - 1 + randint1(3);
+				t_x = m_list[who].fx - 1 + randint1(3);
+				max_attempts--;
+			}
+			while (max_attempts && in_bounds2u(t_y, t_x) && !projectable(py, px, t_y, t_x));
 
-		if (max_attempts < 1)
+			if (max_attempts < 1)
+			{
+				t_y = m_list[who].fy;
+				t_x = m_list[who].fx;
+			}
+		}
+		else
 		{
-			t_y = m_list[who].fy;
-			t_x = m_list[who].fx;
+			t_y = py - 1 + randint1(3);
+			t_x = px - 1 + randint1(3);
 		}
 
 		project(0, 0, t_y, t_x, dam, typ, (PROJECT_STOP|PROJECT_KILL|PROJECT_REFLECTABLE), monspell);
@@ -6393,13 +6401,29 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Get the monster's real name (gotten before polymorph!) */
 		strcpy(killer, who_name);
 	}
-	else if (who < 0)
+	else
 	{
+		switch (who)
+		{
+		case PROJECT_WHO_UNCTRL_POWER:
 #ifdef JP
-		strcpy(killer, "罠");
+			strcpy(killer, "制御できない力の氾流");
 #else
-		strcpy(killer, "a trap");
+			strcpy(killer, "uncontrollable power storm");
 #endif
+			break;
+
+		default:
+#ifdef JP
+			strcpy(killer, "罠");
+#else
+			strcpy(killer, "a trap");
+#endif
+			break;
+		}
+
+		/* Paranoia */
+		strcpy(m_name, killer);
 	}
 
 	/* Analyze the damage */
@@ -7600,7 +7624,7 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 		}
 	}
 
-	if (p_ptr->tim_eyeeye && get_damage > 0 && !p_ptr->is_dead)
+	if (p_ptr->tim_eyeeye && (get_damage > 0) && !p_ptr->is_dead && (who > 0))
 	{
 #ifdef JP
 		msg_format("攻撃が%s自身を傷つけた！", m_name);

@@ -2702,6 +2702,13 @@
 #define PROJECT_FAST        0x4000
 #define PROJECT_LOS         0x8000
 
+
+/*
+ * Special caster ID for project()
+ */
+#define PROJECT_WHO_UNCTRL_POWER -1
+
+
 /*
  * Bit flags for the "enchant()" function
  */
