@@ -1406,7 +1406,7 @@ msg_format("There are too many mirrors to control!");
 #else
 	  msg_print("Go through the world of mirror...");
 #endif
-	  return dimension_door();
+	  return dimension_door(TRUE);
 	/* mirror of recall */
 	case 17:
 		return word_of_recall();

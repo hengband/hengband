@@ -1186,7 +1186,7 @@ extern bool curse_armor(void);
 extern bool curse_weapon(bool force, int slot);
 extern bool brand_bolts(void);
 extern bool polymorph_monster(int y, int x);
-extern bool dimension_door(void);
+extern bool dimension_door(bool use_mirror);
 extern bool summon_kin_player(int level, int y, int x, u32b mode);
 
 /* store.c */

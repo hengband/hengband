@@ -5877,7 +5877,7 @@ bool polymorph_monster(int y, int x)
 /*
  * Dimension Door
  */
-bool dimension_door(void)
+bool dimension_door(bool use_mirror)
 {
 	int	plev = p_ptr->lev;
 	int	x = 0, y = 0;
@@ -5891,7 +5891,7 @@ bool dimension_door(void)
 	    (distance(y, x, py, px) > plev / 2 + 10) ||
 	    (!randint0(plev / 10 + 10)))
 	{
-		if (p_ptr->pclass != CLASS_MIRROR_MASTER)
+		if (!use_mirror)
 		{
 #ifdef JP
 			msg_print("精霊界から物質界に戻る時うまくいかなかった！");
@@ -5904,7 +5904,7 @@ bool dimension_door(void)
 #ifdef JP
 			msg_print("鏡の世界をうまく通れなかった！");
 #else
-			msg_print("You fail to exit the astral plane correctly!");
+			msg_print("You fail to pass the mirror plane correctly!");
 #endif
 		}
 		p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
