@@ -4655,7 +4655,7 @@ bool genocide_aux(int m_idx, int power, bool player_cast, int dam_side, cptr spe
 
 	else if (m_idx == p_ptr->riding) resist = TRUE;
 
-	else if (p_ptr->inside_quest || p_ptr->inside_arena || p_ptr->inside_battle) resist = TRUE;
+	else if ((p_ptr->inside_quest && !random_quest_number(dun_level)) || p_ptr->inside_arena || p_ptr->inside_battle) resist = TRUE;
 
 	else if (player_cast && (r_ptr->level > randint0(power))) resist = TRUE;
 
