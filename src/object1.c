@@ -3349,7 +3349,7 @@ info[i++] = "それはテレパシー能力を授ける。";
 	if (have_flag(flgs, TR_ESP_ANIMAL))
 	{
 #ifdef JP
-info[i++] = "それは自然界の生物の存在を感じとる。";
+info[i++] = "それは自然界の生物を感知する。";
 #else
 		info[i++] = "It senses natural creatures.";
 #endif
@@ -3358,7 +3358,7 @@ info[i++] = "それは自然界の生物の存在を感じとる。";
 	if (have_flag(flgs, TR_ESP_UNDEAD))
 	{
 #ifdef JP
-info[i++] = "それはアンデッドの存在を感じとる。";
+info[i++] = "それはアンデッドを感知する。";
 #else
 		info[i++] = "It senses undead.";
 #endif
@@ -3367,7 +3367,7 @@ info[i++] = "それはアンデッドの存在を感じとる。";
 	if (have_flag(flgs, TR_ESP_DEMON))
 	{
 #ifdef JP
-info[i++] = "それは悪魔の存在を感じとる。";
+info[i++] = "それは悪魔を感知する。";
 #else
 		info[i++] = "It senses demons.";
 #endif
@@ -3376,7 +3376,7 @@ info[i++] = "それは悪魔の存在を感じとる。";
 	if (have_flag(flgs, TR_ESP_ORC))
 	{
 #ifdef JP
-info[i++] = "それはオークの存在を感じとる。";
+info[i++] = "それはオークを感知する。";
 #else
 		info[i++] = "It senses orcs.";
 #endif
@@ -3385,7 +3385,7 @@ info[i++] = "それはオークの存在を感じとる。";
 	if (have_flag(flgs, TR_ESP_TROLL))
 	{
 #ifdef JP
-info[i++] = "それはトロルの存在を感じとる。";
+info[i++] = "それはトロルを感知する。";
 #else
 		info[i++] = "It senses trolls.";
 #endif
@@ -3394,7 +3394,7 @@ info[i++] = "それはトロルの存在を感じとる。";
 	if (have_flag(flgs, TR_ESP_GIANT))
 	{
 #ifdef JP
-info[i++] = "それは巨人の存在を感じとる。";
+info[i++] = "それは巨人を感知する。";
 #else
 		info[i++] = "It senses giants.";
 #endif
@@ -3403,7 +3403,7 @@ info[i++] = "それは巨人の存在を感じとる。";
 	if (have_flag(flgs, TR_ESP_DRAGON))
 	{
 #ifdef JP
-info[i++] = "それはドラゴンの存在を感じとる。";
+info[i++] = "それはドラゴンを感知する。";
 #else
 		info[i++] = "It senses dragons.";
 #endif
@@ -3412,7 +3412,7 @@ info[i++] = "それはドラゴンの存在を感じとる。";
 	if (have_flag(flgs, TR_ESP_HUMAN))
 	{
 #ifdef JP
-info[i++] = "それは人間の存在を感じとる。";
+info[i++] = "それは人間を感知する。";
 #else
 		info[i++] = "It senses humans.";
 #endif
@@ -3421,7 +3421,7 @@ info[i++] = "それは人間の存在を感じとる。";
 	if (have_flag(flgs, TR_ESP_EVIL))
 	{
 #ifdef JP
-info[i++] = "それは邪悪な生き物の存在を感じとる。";
+info[i++] = "それは邪悪な存在を感知する。";
 #else
 		info[i++] = "It senses evil creatures.";
 #endif
@@ -3430,7 +3430,7 @@ info[i++] = "それは邪悪な生き物の存在を感じとる。";
 	if (have_flag(flgs, TR_ESP_GOOD))
 	{
 #ifdef JP
-info[i++] = "それは善良な生き物の存在を感じとる。";
+info[i++] = "それは善良な存在を感知する。";
 #else
 		info[i++] = "It senses good creatures.";
 #endif
@@ -3439,7 +3439,7 @@ info[i++] = "それは善良な生き物の存在を感じとる。";
 	if (have_flag(flgs, TR_ESP_NONLIVING))
 	{
 #ifdef JP
-info[i++] = "それは活動する無生物体の存在を感じとる。";
+info[i++] = "それは活動する無生物体を感知する。";
 #else
 		info[i++] = "It senses non-living creatures.";
 #endif
@@ -3448,7 +3448,7 @@ info[i++] = "それは活動する無生物体の存在を感じとる。";
 	if (have_flag(flgs, TR_ESP_UNIQUE))
 	{
 #ifdef JP
-info[i++] = "それは特別な強敵の存在を感じとる。";
+info[i++] = "それは特別な強敵を感知する。";
 #else
 		info[i++] = "It senses unique monsters.";
 #endif
