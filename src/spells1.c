@@ -1591,7 +1591,7 @@ note_kill = "灰になった。";
 							}
 							continue;
 						}
-						else if (summon_named_creature(y, x, o_ptr->pval, FALSE, FALSE, friendly, pet))
+						else if (summon_named_creature(who, y, x, o_ptr->pval, FALSE, FALSE, friendly, pet))
 						{
 #ifdef JP
 note_kill = "生き返った。";

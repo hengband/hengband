@@ -5513,7 +5513,7 @@ bool polymorph_monster(int y, int x)
 		delete_monster_idx(c_ptr->m_idx);
 
 		/* Create a new monster (no groups) */
-		if (place_monster_aux(y, x, new_r_idx, FALSE, FALSE, friendly, pet, FALSE, (bool)(m_ptr->mflag2 & MFLAG_NOPET)))
+		if (place_monster_aux(0, y, x, new_r_idx, FALSE, FALSE, friendly, pet, FALSE, (bool)(m_ptr->mflag2 & MFLAG_NOPET)))
 		{
 			/* Success */
 			polymorphed = TRUE;
@@ -5523,7 +5523,7 @@ bool polymorph_monster(int y, int x)
 			monster_terrain_sensitive = FALSE;
 
 			/* Placing the new monster failed */
-			place_monster_aux(y, x, old_r_idx, FALSE, FALSE, friendly, pet, TRUE, (bool)(m_ptr->mflag2 & MFLAG_NOPET));
+			place_monster_aux(0, y, x, old_r_idx, FALSE, FALSE, friendly, pet, TRUE, (bool)(m_ptr->mflag2 & MFLAG_NOPET));
 			m_list[hack_m_idx_ii] = back_m;
 
 			monster_terrain_sensitive = TRUE;

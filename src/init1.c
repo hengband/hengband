@@ -3357,7 +3357,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				}
 
 				/* Place it */
-				place_monster_aux(*y, *x, monster_index, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE);
+				place_monster_aux(0, *y, *x, monster_index, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE);
 				if (clone)
 				{
 					/* clone */

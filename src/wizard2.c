@@ -1564,7 +1564,7 @@ static void do_cmd_wiz_named(int r_idx, bool slp)
 		if (!cave_empty_bold(y, x)) continue;
 
 		/* Place it (allow groups) */
-		if (place_monster_aux(y, x, r_idx, slp, TRUE, FALSE, FALSE, FALSE, FALSE)) break;
+		if (place_monster_aux(0, y, x, r_idx, slp, TRUE, FALSE, FALSE, FALSE, FALSE)) break;
 	}
 }
 
@@ -1576,7 +1576,7 @@ static void do_cmd_wiz_named(int r_idx, bool slp)
  */
 static void do_cmd_wiz_named_friendly(int r_idx, bool slp)
 {
-	(void) summon_named_creature(py, px, r_idx, slp, TRUE, TRUE, TRUE);
+	(void) summon_named_creature(0, py, px, r_idx, slp, TRUE, TRUE, TRUE);
 }
 
 

@@ -522,6 +522,17 @@ static void rd_monster(monster_type *m_ptr)
 	else
 		rd_s16b(&m_ptr->ap_r_idx);
 
+	if (z_older_than(11, 0, 14))
+	{
+		monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+		m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
+		if (r_ptr->flags3 & RF3_EVIL) m_ptr->sub_align |= SUB_ALIGN_EVIL;
+		if (r_ptr->flags3 & RF3_GOOD) m_ptr->sub_align |= SUB_ALIGN_GOOD;
+	}
+	else
+		rd_byte(&m_ptr->sub_align);
+
 	/* Read the other information */
 	rd_byte(&m_ptr->fy);
 	rd_byte(&m_ptr->fx);

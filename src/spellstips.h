@@ -67,7 +67,7 @@ static char *spell_tips[VALID_REALM][32] =
 		"地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。",
 		"短距離内の指定した場所にテレポートする。",
 
-		"モンスターの残り体力、最大体力、スピード、正体を知る。",
+		"モンスターの属性、残り体力、最大体力、スピード、正体を知る。",
 		"自分のいる床の上に、モンスターが通ると爆発してダメージを与えるルーンを描く。",
 		"アイテムを自分の足元へ移動させる。",
 		"その階全体を永久に照らし、ダンジョン内すべてのアイテムを感知する。さらに、一定時間テレパシー能力を得る。",
@@ -487,7 +487,7 @@ static char *spell_tips[VALID_REALM][32] =
 		"teleport to up or down stairs in a moment.",
 		"recalls player from dungeon to town, or from town to the deepest level of dungeon.",
 		"teleport to given location.",
-		"proves all monsters' HP, speed and their true character.",
+		"proves all monsters' alignment, HP, speed and their true character.",
 		"sets a glyph under you. The glyph will explode when a monster moves on it.",
 		"pulls a distant item close to you.",
 		"maps and lights whole dungeon level. knows all objects location. and gives telepathy for a while.",

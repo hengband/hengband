@@ -571,6 +571,7 @@ struct monster_type
 {
 	s16b r_idx;		/* Monster race index */
 	s16b ap_r_idx;		/* Monster race appearance index */
+	byte sub_align;		/* Sub-alignment for a neutral monster */
 
 	byte fy;		/* Y location on map */
 	byte fx;		/* X location on map */

@@ -1873,7 +1873,7 @@ msg_format("モンスター部屋(%s)", n_ptr->name);
 			int r_idx = what[randint0(64)];
 
 			/* Place that "random" monster (no groups) */
-			(void)place_monster_aux(y, x, r_idx, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
+			(void)place_monster_aux(0, y, x, r_idx, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 		}
 	}
 }
@@ -2133,51 +2133,51 @@ msg_format("%sの巣", n_ptr->name);
 	/* Top and bottom rows */
 	for (x = xval - 9; x <= xval + 9; x++)
 	{
-		place_monster_aux(yval - 2, x, what[0], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
-		place_monster_aux(yval + 2, x, what[0], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, yval - 2, x, what[0], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, yval + 2, x, what[0], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
 	}
 
 	/* Middle columns */
 	for (y = yval - 1; y <= yval + 1; y++)
 	{
-		place_monster_aux(y, xval - 9, what[0], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
-		place_monster_aux(y, xval + 9, what[0], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, y, xval - 9, what[0], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, y, xval + 9, what[0], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
 
-		place_monster_aux(y, xval - 8, what[1], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
-		place_monster_aux(y, xval + 8, what[1], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, y, xval - 8, what[1], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, y, xval + 8, what[1], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
 
-		place_monster_aux(y, xval - 7, what[1], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
-		place_monster_aux(y, xval + 7, what[1], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, y, xval - 7, what[1], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, y, xval + 7, what[1], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
 
-		place_monster_aux(y, xval - 6, what[2], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
-		place_monster_aux(y, xval + 6, what[2], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, y, xval - 6, what[2], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, y, xval + 6, what[2], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
 
-		place_monster_aux(y, xval - 5, what[2], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
-		place_monster_aux(y, xval + 5, what[2], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, y, xval - 5, what[2], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, y, xval + 5, what[2], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
 
-		place_monster_aux(y, xval - 4, what[3], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
-		place_monster_aux(y, xval + 4, what[3], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, y, xval - 4, what[3], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, y, xval + 4, what[3], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
 
-		place_monster_aux(y, xval - 3, what[3], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
-		place_monster_aux(y, xval + 3, what[3], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, y, xval - 3, what[3], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, y, xval + 3, what[3], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
 
-		place_monster_aux(y, xval - 2, what[4], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
-		place_monster_aux(y, xval + 2, what[4], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, y, xval - 2, what[4], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, y, xval + 2, what[4], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
 	}
 
 	/* Above/Below the center monster */
 	for (x = xval - 1; x <= xval + 1; x++)
 	{
-		place_monster_aux(yval + 1, x, what[5], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
-		place_monster_aux(yval - 1, x, what[5], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, yval + 1, x, what[5], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+		place_monster_aux(0, yval - 1, x, what[5], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
 	}
 
 	/* Next to the center monster */
-	place_monster_aux(yval, xval + 1, what[6], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
-	place_monster_aux(yval, xval - 1, what[6], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+	place_monster_aux(0, yval, xval + 1, what[6], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+	place_monster_aux(0, yval, xval - 1, what[6], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
 
 	/* Center monster */
-	place_monster_aux(yval, xval, what[7], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
+	place_monster_aux(0, yval, xval, what[7], FALSE, FALSE, FALSE, FALSE, TRUE, FALSE);
 }
 
 

@@ -4938,6 +4938,7 @@ bool probing(void)
 	int cu, cv;
 	bool    probe = FALSE;
 	char buf[256];
+	char *align;
 
 	cu = Term->scr->cu;
 	cv = Term->scr->cv;
@@ -4982,11 +4983,31 @@ bool probing(void)
 			speed = m_ptr->mspeed - 110;
 			if(m_ptr->fast) speed += 10;
 			if(m_ptr->slow) speed -= 10;
+
+			/* Get the monster's alignment */
+#ifdef JP
+			if ((r_ptr->flags3 & RF3_EVIL) && (r_ptr->flags3 & RF3_GOOD)) align = "善悪";
+			else if (r_ptr->flags3 & RF3_EVIL) align = "邪悪";
+			else if (r_ptr->flags3 & RF3_GOOD) align = "善良";
+			else if ((m_ptr->sub_align & SUB_ALIGN_EVIL) && (m_ptr->sub_align & SUB_ALIGN_GOOD)) align = "中立(善悪)";
+			else if (m_ptr->sub_align & SUB_ALIGN_EVIL) align = "中立(邪悪)";
+			else if (m_ptr->sub_align & SUB_ALIGN_GOOD) align = "中立(善良)";
+			else align = "中立";
+#else
+			if ((r_ptr->flags3 & RF3_EVIL) && (r_ptr->flags3 & RF3_GOOD)) align = "good and evil";
+			else if (r_ptr->flags3 & RF3_EVIL) align = "evil";
+			else if (r_ptr->flags3 & RF3_GOOD) align = "good";
+			else if ((m_ptr->sub_align & SUB_ALIGN_EVIL) && (m_ptr->sub_align & SUB_ALIGN_GOOD)) align = "neutral(good and evil)";
+			else if (m_ptr->sub_align & SUB_ALIGN_EVIL) align = "neutral(evil)";
+			else if (m_ptr->sub_align & SUB_ALIGN_GOOD) align = "neutral(good)";
+			else align = "neutral";
+#endif
+
 			/* Describe the monster */
 #ifdef JP
-sprintf(buf,"%s ... HP:%d/%d AC:%d 速度:%s%d 経験:", m_name, m_ptr->hp, m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
+sprintf(buf,"%s ... 属性:%s HP:%d/%d AC:%d 速度:%s%d 経験:", m_name, align, m_ptr->hp, m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
 #else
-sprintf(buf, "%s ... HP:%d/%d AC:%d speed:%s%d exp:", m_name, m_ptr->hp, m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
+sprintf(buf, "%s ... alignment:%s HP:%d/%d AC:%d speed:%s%d exp:", m_name, align, m_ptr->hp, m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
 #endif
 			if (r_ptr->next_r_idx)
 			{

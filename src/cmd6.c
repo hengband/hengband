@@ -5367,7 +5367,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 				cptr kakusan = "";
 #endif
 
-				if (summon_named_creature(py, px, MON_SUKE, FALSE, FALSE, TRUE, TRUE))
+				if (summon_named_creature(0, py, px, MON_SUKE, FALSE, FALSE, TRUE, TRUE))
 				{
 #ifdef JP
 					msg_print("『助さん』が現れた。");
@@ -5377,7 +5377,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 #endif
 					count++;
 				}
-				if (summon_named_creature(py, px, MON_KAKU, FALSE, FALSE, TRUE, TRUE))
+				if (summon_named_creature(0, py, px, MON_KAKU, FALSE, FALSE, TRUE, TRUE))
 				{
 #ifdef JP
 					msg_print("『格さん』が現れた。");
@@ -5553,7 +5553,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 			{
 				bool pet = !one_in_(5);
 
-				if (summon_named_creature(py, px, MON_JIZOTAKO, FALSE, TRUE, FALSE, pet))
+				if (summon_named_creature(0, py, px, MON_JIZOTAKO, FALSE, TRUE, FALSE, pet))
 				{
 					if (pet)
 #ifdef JP
@@ -6271,7 +6271,7 @@ msg_print("あなたはエレメントのブレスを吐いた。");
 			if (!get_rep_dir2(&dir)) return;
 			if (cave_floor_bold(py+ddy[dir],px+ddx[dir]))
 			{
-				if (place_monster_aux(py + ddy[dir], px + ddx[dir], o_ptr->pval, FALSE, FALSE, TRUE, TRUE, TRUE, FALSE))
+				if (place_monster_aux(0, py + ddy[dir], px + ddx[dir], o_ptr->pval, FALSE, FALSE, TRUE, TRUE, TRUE, FALSE))
 				{
 					if (o_ptr->xtra3) m_list[hack_m_idx_ii].mspeed = o_ptr->xtra3;
 					if (o_ptr->xtra5) m_list[hack_m_idx_ii].max_maxhp = o_ptr->xtra5;

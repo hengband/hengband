@@ -2649,7 +2649,7 @@ static int initial_r_appearance(int r_idx)
  * This is the only function which may place a monster in the dungeon,
  * except for the savefile loading code.
  */
-bool place_monster_one(int y, int x, int r_idx, bool slp, bool friendly, bool pet, bool no_pet)
+bool place_monster_one(int who, int y, int x, int r_idx, bool slp, bool friendly, bool pet, bool no_pet)
 {
 	int			i;
 	int rune_dam = 0;
@@ -2847,6 +2847,16 @@ msg_print("守りのルーンが壊れた！");
 	/* Save the race */
 	m_ptr->r_idx = r_idx;
 	m_ptr->ap_r_idx = initial_r_appearance(r_idx);
+
+	/* Sub-alignment of a monster */
+	if ((who > 0) && !(r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)))
+		m_ptr->sub_align = m_list[who].sub_align;
+	else
+	{
+		m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
+		if (r_ptr->flags3 & RF3_EVIL) m_ptr->sub_align |= SUB_ALIGN_EVIL;
+		if (r_ptr->flags3 & RF3_GOOD) m_ptr->sub_align |= SUB_ALIGN_GOOD;
+	}
 
 	/* Place the monster at the location */
 	m_ptr->fy = y;
@@ -3184,7 +3194,7 @@ static bool mon_scatter(int *yp, int *xp, int y, int x, int max_dist)
 /*
  * Attempt to place a "group" of monsters around the given location
  */
-static bool place_monster_group(int y, int x, int r_idx, bool slp, bool friendly, bool pet, bool no_pet)
+static bool place_monster_group(int who, int y, int x, int r_idx, bool slp, bool friendly, bool pet, bool no_pet)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -3253,7 +3263,7 @@ static bool place_monster_group(int y, int x, int r_idx, bool slp, bool friendly
 			if (!cave_empty_bold2(my, mx)) continue;
 
 			/* Attempt to place another monster */
-			if (place_monster_one(my, mx, r_idx, slp, friendly, pet, no_pet))
+			if (place_monster_one(who, my, mx, r_idx, slp, friendly, pet, no_pet))
 			{
 				/* Add it to the "hack" set */
 				hack_y[hack_n] = my;
@@ -3276,6 +3286,7 @@ static bool place_monster_group(int y, int x, int r_idx, bool slp, bool friendly
  * Hack -- help pick an escort type
  */
 static int place_monster_idx = 0;
+static int place_monster_m_idx = 0;
 
 /*
  * Hack -- help pick an escort type
@@ -3283,6 +3294,7 @@ static int place_monster_idx = 0;
 static bool place_monster_okay(int r_idx)
 {
 	monster_race *r_ptr = &r_info[place_monster_idx];
+	monster_type *m_ptr = &m_list[place_monster_m_idx];
 
 	monster_race *z_ptr = &r_info[r_idx];
 
@@ -3302,8 +3314,8 @@ static bool place_monster_okay(int r_idx)
 	if (place_monster_idx == r_idx) return (FALSE);
 
 	/* Skip different alignment */
-	if (((r_ptr->flags3 & RF3_EVIL) && (z_ptr->flags3 & RF3_GOOD)) ||
-	    ((r_ptr->flags3 & RF3_GOOD) && (z_ptr->flags3 & RF3_EVIL)))
+	if (((m_ptr->sub_align & SUB_ALIGN_EVIL) && (z_ptr->flags3 & RF3_GOOD)) ||
+	    ((m_ptr->sub_align & SUB_ALIGN_GOOD) && (z_ptr->flags3 & RF3_EVIL)))
 		return FALSE;
 
 	if (r_ptr->flags7 & RF7_FRIENDLY)
@@ -3339,7 +3351,7 @@ static bool place_monster_okay(int r_idx)
  * Note the use of the new "monster allocation table" code to restrict
  * the "get_mon_num()" function to "legal" escort types.
  */
-bool place_monster_aux(int y, int x, int r_idx, bool slp, bool grp, bool friendly, bool pet, bool no_kage, bool no_pet)
+bool place_monster_aux(int who, int y, int x, int r_idx, bool slp, bool grp, bool friendly, bool pet, bool no_kage, bool no_pet)
 {
 	int             i;
 	monster_race    *r_ptr = &r_info[r_idx];
@@ -3348,18 +3360,19 @@ bool place_monster_aux(int y, int x, int r_idx, bool slp, bool grp, bool friendl
 	else is_kage = FALSE;
 
 	/* Place one monster, or fail */
-	if (!place_monster_one(y, x, r_idx, slp, friendly, pet, no_pet)) return (FALSE);
+	if (!place_monster_one(who, y, x, r_idx, slp, friendly, pet, no_pet)) return (FALSE);
 
 
 	/* Require the "group" flag */
 	if (!grp) return (TRUE);
+	place_monster_m_idx = hack_m_idx_ii;
 
 
 	/* Friends for certain monsters */
 	if (r_ptr->flags1 & (RF1_FRIENDS))
 	{
 		/* Attempt to place a group */
-		(void)place_monster_group(y, x, r_idx, slp, friendly, pet, no_pet);
+		(void)place_monster_group(who, y, x, r_idx, slp, friendly, pet, no_pet);
 	}
 
 
@@ -3390,14 +3403,14 @@ bool place_monster_aux(int y, int x, int r_idx, bool slp, bool grp, bool friendl
 			if (!z) break;
 
 			/* Place a single escort */
-			(void)place_monster_one(ny, nx, z, slp, friendly, pet, no_pet);
+			(void)place_monster_one(place_monster_m_idx, ny, nx, z, slp, friendly, pet, no_pet);
 
 			/* Place a "group" of escorts if needed */
 			if ((r_info[z].flags1 & RF1_FRIENDS) ||
 			    (r_ptr->flags1 & RF1_ESCORTS))
 			{
 				/* Place a group of monsters */
-				(void)place_monster_group(ny, nx, z, slp, friendly, pet, no_pet);
+				(void)place_monster_group(place_monster_m_idx, ny, nx, z, slp, friendly, pet, no_pet);
 			}
 		}
 	}
@@ -3426,7 +3439,7 @@ bool place_monster(int y, int x, bool slp, bool grp)
 	if (!r_idx) return (FALSE);
 
 	/* Attempt to place the monster */
-	if (place_monster_aux(y, x, r_idx, slp, grp, FALSE, FALSE, FALSE, FALSE)) return (TRUE);
+	if (place_monster_aux(0, y, x, r_idx, slp, grp, FALSE, FALSE, FALSE, FALSE)) return (TRUE);
 
 	/* Oops */
 	return (FALSE);
@@ -3472,7 +3485,7 @@ bool alloc_horde(int y, int x)
 	while (--attempts)
 	{
 		/* Attempt to place the monster */
-		if (place_monster_aux(y, x, r_idx, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE)) break;
+		if (place_monster_aux(0, y, x, r_idx, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE)) break;
 	}
 
 	if (attempts < 1) {horde_align = 0;return FALSE;}
@@ -3533,7 +3546,7 @@ bool alloc_monster(int dis, bool slp)
                         if (cave_empty_bold2(oy, ox) && monster_can_cross_terrain(cave[oy][ox].feat, &r_info[guardian]))
 			{
 				/* Place the guardian */
-				if (place_monster_aux(oy, ox, guardian, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE)) break;
+				if (place_monster_aux(0, oy, ox, guardian, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE)) break;
 			}
                         /* One less try */
                         try--;
@@ -3624,15 +3637,14 @@ static bool summon_specific_okay(int r_idx)
 	if (summon_specific_who > 0)
 	{
 		monster_type *m_ptr = &m_list[summon_specific_who];
-		monster_race *s_ptr = &r_info[m_ptr->r_idx];
 
 		/* Do not summon enemies */
 
 		/* Friendly vs. opposite aligned normal or pet */
 		if (((r_ptr->flags3 & RF3_EVIL) &&
-			  (s_ptr->flags3 & RF3_GOOD)) ||
+			  (m_ptr->sub_align & SUB_ALIGN_GOOD)) ||
 			 ((r_ptr->flags3 & RF3_GOOD) &&
-			  (s_ptr->flags3 & RF3_EVIL)))
+			  (m_ptr->sub_align & SUB_ALIGN_EVIL)))
 		{
 			return FALSE;
 		}
@@ -3738,7 +3750,7 @@ bool summon_specific(int who, int y1, int x1, int lev, int type, bool group, boo
 	if ((type == SUMMON_BLUE_HORROR) || (type == SUMMON_DAWN)) no_kage = TRUE;
 
 	/* Attempt to place the monster (awake, allow groups) */
-	if (!place_monster_aux(y, x, r_idx, FALSE, group, friendly, pet, no_kage, no_pet))
+	if (!place_monster_aux(who, y, x, r_idx, FALSE, group, friendly, pet, no_kage, no_pet))
 	{
 		summon_specific_type = 0;
 		return (FALSE);
@@ -3750,7 +3762,7 @@ bool summon_specific(int who, int y1, int x1, int lev, int type, bool group, boo
 }
 
 /* A "dangerous" function, creates a pet of the specified type */
-bool summon_named_creature (int oy, int ox, int r_idx, bool slp, bool group_ok, bool friendly, bool pet)
+bool summon_named_creature (int who, int oy, int ox, int r_idx, bool slp, bool group_ok, bool friendly, bool pet)
 {
 	int x, y;
 
@@ -3765,7 +3777,7 @@ bool summon_named_creature (int oy, int ox, int r_idx, bool slp, bool group_ok, 
 	if (!mon_scatter(&y, &x, oy, ox, 2)) return FALSE;
 
 	/* Place it (allow groups) */
-	return place_monster_aux(y, x, r_idx, slp, group_ok, friendly, pet, TRUE, FALSE);
+	return place_monster_aux(who, y, x, r_idx, slp, group_ok, friendly, pet, TRUE, FALSE);
 }
 
 
@@ -3784,7 +3796,7 @@ bool multiply_monster(int m_idx, bool clone, bool friendly, bool pet)
 		return FALSE;
 
 	/* Create a new monster (awake, no groups) */
-	if (!place_monster_aux(y, x, m_ptr->r_idx, FALSE, FALSE, friendly, pet, TRUE, (bool)(m_ptr->mflag2 & MFLAG_NOPET)))
+	if (!place_monster_aux(m_idx, y, x, m_ptr->r_idx, FALSE, FALSE, friendly, pet, TRUE, (bool)(m_ptr->mflag2 & MFLAG_NOPET)))
 		return FALSE;
 
 	if (clone)

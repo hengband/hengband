@@ -4486,7 +4486,7 @@ note_dies = "は爆発して粉々になった。";
 	{
 		j = 100;
 
-		if (!(summon_named_creature(y, x, q_ptr->pval, FALSE, FALSE, FALSE,
+		if (!(summon_named_creature(0, y, x, q_ptr->pval, FALSE, FALSE, FALSE,
 		      (bool)!(cursed_p(q_ptr)))))
 #ifdef JP
 msg_print("人形は捻じ曲がり砕け散ってしまった！");

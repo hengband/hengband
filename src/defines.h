@@ -51,7 +51,7 @@
 #define FAKE_VERSION   0
 #define FAKE_VER_MAJOR 11
 #define FAKE_VER_MINOR 0
-#define FAKE_VER_PATCH 13
+#define FAKE_VER_PATCH 14
 
 #define ANGBAND_2_8_1
 #define ZANGBAND
@@ -4888,6 +4888,10 @@ extern int PlayerUID;
 
 #define prace_is_(A) (!p_ptr->mimic_form && (p_ptr->prace == A))
 
+/* Sub-alignment flags for neutral monsters */
+#define SUB_ALIGN_NEUTRAL 0x0000
+#define SUB_ALIGN_EVIL    0x0001
+#define SUB_ALIGN_GOOD    0x0002
 
 /*
  * World Score -- internet resource value

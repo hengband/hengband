@@ -985,7 +985,7 @@ if (cheat_room) msg_print("小さな地下室を却下します。");
 							group = TRUE;
 
 						/* Try to place the monster */
-						if (place_monster_aux(y, x, quest[i].r_idx, FALSE, group, FALSE, FALSE, TRUE, TRUE))
+						if (place_monster_aux(0, y, x, quest[i].r_idx, FALSE, group, FALSE, FALSE, TRUE, TRUE))
 						{
 							/* Success */
 							break;
@@ -1070,7 +1070,7 @@ msg_format("モンスター数基本値を %d から %d に減らします", small_tester, i);
                         if (cave_empty_bold2(oy, ox) && monster_can_cross_terrain(cave[oy][ox].feat, &r_info[d_info[dungeon_type].final_guardian]))
 			{
 				/* Place the guardian */
-				if (place_monster_aux(oy, ox, d_info[dungeon_type].final_guardian, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE)) break;
+				if (place_monster_aux(0, oy, ox, d_info[dungeon_type].final_guardian, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE)) break;
 			}
                         /* One less try */
                         try--;
@@ -1192,7 +1192,7 @@ static void arena_gen(void)
 
 	build_arena();
 
-	place_monster_aux(py + 5, px, arena_monsters[p_ptr->arena_number],
+	place_monster_aux(0, py + 5, px, arena_monsters[p_ptr->arena_number],
 	    FALSE, FALSE, FALSE, FALSE, TRUE, TRUE);
 }
 
@@ -1291,7 +1291,7 @@ static void battle_gen(void)
 
 	for(i=0;i<4;i++)
 	{
-		place_monster_aux(py + 5 + (i/2)*4, px - 2 + (i%2)*4, battle_mon[i],
+		place_monster_aux(0, py + 5 + (i/2)*4, px - 2 + (i%2)*4, battle_mon[i],
 				  FALSE, FALSE, FALSE, FALSE, TRUE, TRUE);
 		set_friendly(&m_list[cave[py+5+(i/2)*4][px-2+(i%2)*4].m_idx]);
 	}

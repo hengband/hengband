@@ -3577,7 +3577,7 @@ msg_format("%sが魔法で%sを召喚した。", m_name,
 					int num = 1 + randint1(3);
 					for (k = 0; k < num; k++)
 					{
-						count += summon_named_creature(y, x, MON_SHURYUUDAN, FALSE, FALSE, is_friendly(m_ptr), pet);
+						count += summon_named_creature(m_idx, y, x, MON_SHURYUUDAN, FALSE, FALSE, is_friendly(m_ptr), pet);
 					}
 				}
 				else if(m_ptr->r_idx == MON_LOUSY)
@@ -3593,7 +3593,7 @@ msg_format("%sが魔法で%sを召喚した。", m_name,
 					int num = 2 + randint1(3);
 					for (k = 0; k < num; k++)
 					{
-						count += summon_named_creature(y, x, 921, FALSE, FALSE, is_friendly(m_ptr), FALSE);
+						count += summon_named_creature(m_idx, y, x, 921, FALSE, FALSE, is_friendly(m_ptr), FALSE);
 					}
 				}
 				else if (m_ptr->r_idx == MON_CALDARM)
@@ -3601,7 +3601,7 @@ msg_format("%sが魔法で%sを召喚した。", m_name,
 					int num = randint1(3);
 					for (k = 0; k < num; k++)
 					{
-						count += summon_named_creature(y, x, 930, FALSE, FALSE, is_friendly(m_ptr), FALSE);
+						count += summon_named_creature(m_idx, y, x, 930, FALSE, FALSE, is_friendly(m_ptr), FALSE);
 					}
 				}
 				else if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)

@@ -5015,7 +5015,7 @@ msg_print("何か変わった気がする！");
 				int y, x;
 				y = py+ddy[tsuri_dir];
 				x = px+ddx[tsuri_dir];
-				if (place_monster_aux(y, x, r_idx, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE))
+				if (place_monster_aux(0, y, x, r_idx, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE))
 				{
 					char m_name[80];
 					monster_desc(m_name, &m_list[cave[y][x].m_idx], 0);
@@ -6570,7 +6570,7 @@ if (init_v_info()) quit("建築物初期化不能");
 		monster_type *m_ptr;
 		int pet_r_idx = ((p_ptr->pclass == CLASS_CAVALRY) ? MON_HORSE : MON_YASE_HORSE);
 		monster_race *r_ptr = &r_info[pet_r_idx];
-		place_monster_aux(py, px - 1, pet_r_idx,
+		place_monster_aux(0, py, px - 1, pet_r_idx,
 				  FALSE, FALSE, TRUE, TRUE, TRUE, FALSE);
 		m_ptr = &m_list[hack_m_idx_ii];
 		m_ptr->mspeed = r_ptr->speed;

@@ -2036,7 +2036,7 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 			/* Delete the monster */
 			delete_monster_idx(m_idx);
 
-			if (summon_named_creature(dummy_y, dummy_x, MON_BIKETAL, FALSE, FALSE, friend, pet))
+			if (summon_named_creature(0, dummy_y, dummy_x, MON_BIKETAL, FALSE, FALSE, friend, pet))
 			{
 #ifdef JP
 				msg_print("「ハァッハッハッハ！！私がバイケタルだ！！」");

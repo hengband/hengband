@@ -3148,9 +3148,9 @@ I:55:23:9
 W:30:0:50:2000
 A:30/1
 P:0:1d2:0:0:0
-D:$It probes all monsters' HP, AC, speed, current experience and true 
-D:$character in sight when you use it.
-D:それは使うと視界内のモンスターのHP・AC・スピード・現在の経験値・正体を
+D:$It probes all monsters' alignment, HP, AC, speed, current experience and 
+D:$true character in sight when you use it.
+D:それは使うと視界内のモンスターの属性・HP・AC・スピード・現在の経験値・正体を
 D:表示する。
 
 N:322:暗闇
@@ -3463,9 +3463,9 @@ I:66:7:50
 W:40:0:15:4000
 A:20/16:40/4
 P:0:1d1:0:0:0
-D:$It probes all monsters' HP, AC, speed, current experience and true 
-D:$character in sight when you zap it.
-D:それは振ると視界内のモンスターのHP・AC・スピード・現在の経験値・正体を
+D:$It probes all monsters' alignment, HP, AC, speed, current experience and 
+D:$true character in sight when you zap it.
+D:それは振ると視界内のモンスターの属性・HP・AC・スピード・現在の経験値・正体を
 D:表示する。
 
 N:354:帰還

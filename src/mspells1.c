@@ -3663,10 +3663,10 @@ msg_format("%^sがテレポートした。", m_name);
 
 					if (p_ptr->inside_arena || p_ptr->inside_battle || !summon_possible(m_ptr->fy, m_ptr->fx)) return FALSE;
 					delete_monster_idx(cave[m_ptr->fy][m_ptr->fx].m_idx);
-					summon_named_creature(dummy_y, dummy_x, MON_BANOR, FALSE, FALSE, is_friendly(m_ptr), FALSE);
+					summon_named_creature(0, dummy_y, dummy_x, MON_BANOR, FALSE, FALSE, is_friendly(m_ptr), FALSE);
 					m_list[hack_m_idx_ii].hp = dummy_hp;
 					m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
-					summon_named_creature(dummy_y, dummy_x, MON_LUPART, FALSE, FALSE, is_friendly(m_ptr), FALSE);
+					summon_named_creature(0, dummy_y, dummy_x, MON_LUPART, FALSE, FALSE, is_friendly(m_ptr), FALSE);
 					m_list[hack_m_idx_ii].hp = dummy_hp;
 					m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
 
@@ -3701,7 +3701,7 @@ msg_format("%^sがテレポートした。", m_name);
 							delete_monster_idx(k);
 						}
 					}
-					summon_named_creature(dummy_y, dummy_x, MON_BANORLUPART, FALSE, FALSE, is_friendly(m_ptr), FALSE);
+					summon_named_creature(0, dummy_y, dummy_x, MON_BANORLUPART, FALSE, FALSE, is_friendly(m_ptr), FALSE);
 					m_list[hack_m_idx_ii].hp = dummy_hp;
 					m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
 
@@ -3984,7 +3984,7 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 				int num = 1 + randint1(3);
 				for (k = 0; k < num; k++)
 				{
-					count += summon_named_creature(y, x, MON_SHURYUUDAN, FALSE, FALSE, is_friendly(m_ptr), is_pet(m_ptr));
+					count += summon_named_creature(m_idx, y, x, MON_SHURYUUDAN, FALSE, FALSE, is_friendly(m_ptr), is_pet(m_ptr));
 				}
 			}
 			else if(m_ptr->r_idx == MON_LOUSY)
@@ -4000,7 +4000,7 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 				int num = 2 + randint1(3);
 				for (k = 0; k < num; k++)
 				{
-					count += summon_named_creature(y, x, 921, FALSE, FALSE, is_friendly(m_ptr), is_pet(m_ptr));
+					count += summon_named_creature(m_idx, y, x, 921, FALSE, FALSE, is_friendly(m_ptr), is_pet(m_ptr));
 				}
 			}
 			else if (m_ptr->r_idx == MON_CALDARM)
@@ -4008,7 +4008,7 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 				int num = randint1(3);
 				for (k = 0; k < num; k++)
 				{
-					count += summon_named_creature(y, x, 930, FALSE, FALSE, is_friendly(m_ptr), is_pet(m_ptr));
+					count += summon_named_creature(m_idx, y, x, 930, FALSE, FALSE, is_friendly(m_ptr), is_pet(m_ptr));
 				}
 			}
 			else if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
@@ -4422,7 +4422,7 @@ else msg_format("%^sが魔法で幽鬼戦隊を召喚した！", m_name);
 					}
 					if (!cave_floor_bold(cy, cx)) continue;
 
-					if (summon_named_creature(cy, cx, MON_NAZGUL, FALSE, FALSE, is_friendly(m_ptr), is_pet(m_ptr)))
+					if (summon_named_creature(m_idx, cy, cx, MON_NAZGUL, FALSE, FALSE, is_friendly(m_ptr), is_pet(m_ptr)))
 					{
 						y = cy;
 						x = cx;
