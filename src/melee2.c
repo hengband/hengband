@@ -2045,74 +2045,85 @@ msg_format("%sは体力を回復したようだ。", m_name);
 				if (touched)
 				{
 					/* Aura fire */
-					if ((tr_ptr->flags2 & RF2_AURA_FIRE) &&
-						!(r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK) &&
-						m_ptr->r_idx)
+					if ((tr_ptr->flags2 & RF2_AURA_FIRE) && m_ptr->r_idx)
 					{
-						if (see_either)
+						if (!(r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK))
 						{
-							blinked = FALSE;
+							if (see_either)
+							{
+								blinked = FALSE;
 #ifdef JP
-msg_format("%^sは突然熱くなった！", m_name);
+								msg_format("%^sは突然熱くなった！", m_name);
 #else
-							msg_format("%^s is suddenly very hot!", m_name);
+								msg_format("%^s is suddenly very hot!", m_name);
 #endif
 
-							if (t_ptr->ml)
-								tr_ptr->r_flags2 |= RF2_AURA_FIRE;
+								if (see_t) tr_ptr->r_flags2 |= RF2_AURA_FIRE;
+							}
+							project(t_idx, 0, m_ptr->fy, m_ptr->fx,
+								damroll (1 + ((tr_ptr->level) / 26),
+								1 + ((tr_ptr->level) / 17)),
+								GF_FIRE, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER, -1);
 						}
-						project(t_idx, 0, m_ptr->fy, m_ptr->fx,
-							damroll (1 + ((tr_ptr->level) / 26),
-							1 + ((tr_ptr->level) / 17)),
-							GF_FIRE, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER, -1);
+						else
+						{
+							if (see_m) r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK);
+						}
 					}
 
 					/* Aura cold */
-					if ((tr_ptr->flags3 & RF3_AURA_COLD) &&
-						!(r_ptr->flags3 & RF3_EFF_IM_COLD_MASK) &&
-						m_ptr->r_idx)
+					if ((tr_ptr->flags3 & RF3_AURA_COLD) && m_ptr->r_idx)
 					{
-						if (see_either)
+						if (!(r_ptr->flags3 & RF3_EFF_IM_COLD_MASK))
 						{
-							blinked = FALSE;
+							if (see_either)
+							{
+								blinked = FALSE;
 #ifdef JP
-msg_format("%^sは突然寒くなった！", m_name);
+								msg_format("%^sは突然寒くなった！", m_name);
 #else
-							msg_format("%^s is suddenly very cold!", m_name);
+								msg_format("%^s is suddenly very cold!", m_name);
 #endif
 
-							if (t_ptr->ml)
-								tr_ptr->r_flags3 |= RF3_AURA_COLD;
+								if (see_t) tr_ptr->r_flags3 |= RF3_AURA_COLD;
+							}
+							project(t_idx, 0, m_ptr->fy, m_ptr->fx,
+								damroll (1 + ((tr_ptr->level) / 26),
+								1 + ((tr_ptr->level) / 17)),
+								GF_COLD, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER, -1);
 						}
-						project(t_idx, 0, m_ptr->fy, m_ptr->fx,
-							damroll (1 + ((tr_ptr->level) / 26),
-							1 + ((tr_ptr->level) / 17)),
-							GF_COLD, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER, -1);
+						else
+						{
+							if (see_m) r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_COLD_MASK);
+						}
 					}
 
 					/* Aura elec */
-					if ((tr_ptr->flags2 & RF2_AURA_ELEC) &&
-						!(r_ptr->flags3 & RF3_EFF_IM_ELEC_MASK) &&
-						m_ptr->r_idx)
+					if ((tr_ptr->flags2 & RF2_AURA_ELEC) && m_ptr->r_idx)
 					{
-						if (see_either)
+						if (!(r_ptr->flags3 & RF3_EFF_IM_ELEC_MASK))
 						{
-							blinked = FALSE;
+							if (see_either)
+							{
+								blinked = FALSE;
 #ifdef JP
-msg_format("%^sは電撃を食らった！", m_name);
+								msg_format("%^sは電撃を食らった！", m_name);
 #else
-							msg_format("%^s gets zapped!", m_name);
+								msg_format("%^s gets zapped!", m_name);
 #endif
 
-							if (t_ptr->ml)
-								tr_ptr->r_flags2 |= RF2_AURA_ELEC;
+								if (see_t) tr_ptr->r_flags2 |= RF2_AURA_ELEC;
+							}
+							project(t_idx, 0, m_ptr->fy, m_ptr->fx,
+								damroll (1 + ((tr_ptr->level) / 26),
+								1 + ((tr_ptr->level) / 17)),
+								GF_ELEC, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER, -1);
 						}
-						project(t_idx, 0, m_ptr->fy, m_ptr->fx,
-							damroll (1 + ((tr_ptr->level) / 26),
-							1 + ((tr_ptr->level) / 17)),
-							GF_ELEC, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER, -1);
+						else
+						{
+							if (see_m) r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_ELEC_MASK);
+						}
 					}
-
 				}
 			}
 		}
