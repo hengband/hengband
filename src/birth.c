@@ -2723,6 +2723,9 @@ void get_max_stats(void)
 			p_ptr->stat_cur[i] = j;
 	}
 	p_ptr->knowledge &= ~(KNOW_STAT);
+
+	/* Redisplay the stats later */
+	p_ptr->redraw |= (PR_STATS);
 }
 
 
