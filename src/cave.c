@@ -368,6 +368,8 @@ bool los(int y1, int x1, int y2, int x2)
 
 
 
+#define COMPLEX_WALL_ILLUMINATION
+
 /*
  * Check for "local" illumination
  */
@@ -378,7 +380,41 @@ static bool check_local_illumination(int y, int x)
 	int xx = (x < px) ? (x + 1) : (x > px) ? (x - 1) : x;
 
 	/* Check for "local" illumination */
+
+#ifdef COMPLEX_WALL_ILLUMINATION /* COMPLEX_WALL_ILLUMINATION */
+
+	/* Check for "complex" illumination */
+	if ((feat_supports_los(get_feat_mimic(&cave[yy][xx])) &&
+	     (cave[yy][xx].info & CAVE_GLOW)) ||
+	    (feat_supports_los(get_feat_mimic(&cave[y][xx])) &&
+	     (cave[y][xx].info & CAVE_GLOW)) ||
+	    (feat_supports_los(get_feat_mimic(&cave[yy][x])) &&
+	     (cave[yy][x].info & CAVE_GLOW)))
+	{
+		return TRUE;
+	}
+	else return FALSE;
+
+#else /* COMPLEX_WALL_ILLUMINATION */
+
+	/* Check for "simple" illumination */
 	return (cave[yy][xx].info & CAVE_GLOW) ? TRUE : FALSE;
+
+#endif /* COMPLEX_WALL_ILLUMINATION */
+}
+
+
+#define update_local_illumination_aux(Y, X) \
+{ \
+	if (player_has_los_bold((Y), (X))) \
+	{ \
+		/* Update the monster */ \
+		if (cave[(Y)][(X)].m_idx) update_mon(cave[(Y)][(X)].m_idx, FALSE); \
+\
+		/* Notice and redraw */ \
+		note_spot((Y), (X)); \
+		lite_spot((Y), (X)); \
+	} \
 }
 
 
@@ -391,53 +427,76 @@ void update_local_illumination(int y, int x)
 
 	if (!in_bounds(y, x)) return;
 
+#ifdef COMPLEX_WALL_ILLUMINATION /* COMPLEX_WALL_ILLUMINATION */
+
 	if ((y != py) && (x != px))
 	{
 		yy = (y < py) ? (y - 1) : (y + 1);
 		xx = (x < px) ? (x - 1) : (x + 1);
-
-		if (player_has_los_bold(yy, xx))
-		{
-			/* Update the monster */
-			if (cave[yy][xx].m_idx) update_mon(cave[yy][xx].m_idx, FALSE);
-
-			/* Notice and redraw */
-			note_spot(yy, xx);
-			lite_spot(yy, xx);
-		}
+		update_local_illumination_aux(yy, xx);
+		update_local_illumination_aux(y, xx);
+		update_local_illumination_aux(yy, x);
 	}
 	else if (x != px) /* y == py */
 	{
 		xx = (x < px) ? (x - 1) : (x + 1);
-
 		for (i = -1; i <= 1; i++)
 		{
 			yy = y + i;
-			if (!player_has_los_bold(yy, xx)) continue;
+			update_local_illumination_aux(yy, xx);
+		}
+		yy = y - 1;
+		update_local_illumination_aux(yy, x);
+		yy = y + 1;
+		update_local_illumination_aux(yy, x);
+	}
+	else if (y != py) /* x == px */
+	{
+		yy = (y < py) ? (y - 1) : (y + 1);
+		for (i = -1; i <= 1; i++)
+		{
+			xx = x + i;
+			update_local_illumination_aux(yy, xx);
+		}
+		xx = x - 1;
+		update_local_illumination_aux(y, xx);
+		xx = x + 1;
+		update_local_illumination_aux(y, xx);
+	}
+	else /* Player's grid */
+	{
+		for (i = 0; i < 8; i++)
+		{
+			yy = y + ddy_cdd[i];
+			xx = x + ddx_cdd[i];
+			update_local_illumination_aux(yy, xx);
+		}
+	}
 
-			/* Update the monster */
-			if (cave[yy][xx].m_idx) update_mon(cave[yy][xx].m_idx, FALSE);
+#else /* COMPLEX_WALL_ILLUMINATION */
 
-			/* Notice and redraw */
-			note_spot(yy, xx);
-			lite_spot(yy, xx);
+	if ((y != py) && (x != px))
+	{
+		yy = (y < py) ? (y - 1) : (y + 1);
+		xx = (x < px) ? (x - 1) : (x + 1);
+		update_local_illumination_aux(yy, xx);
+	}
+	else if (x != px) /* y == py */
+	{
+		xx = (x < px) ? (x - 1) : (x + 1);
+		for (i = -1; i <= 1; i++)
+		{
+			yy = y + i;
+			update_local_illumination_aux(yy, xx);
 		}
 	}
 	else if (y != py) /* x == px */
 	{
 		yy = (y < py) ? (y - 1) : (y + 1);
-
 		for (i = -1; i <= 1; i++)
 		{
 			xx = x + i;
-			if (!player_has_los_bold(yy, xx)) continue;
-
-			/* Update the monster */
-			if (cave[yy][xx].m_idx) update_mon(cave[yy][xx].m_idx, FALSE);
-
-			/* Notice and redraw */
-			note_spot(yy, xx);
-			lite_spot(yy, xx);
+			update_local_illumination_aux(yy, xx);
 		}
 	}
 	else /* Player's grid */
@@ -446,16 +505,11 @@ void update_local_illumination(int y, int x)
 		{
 			yy = y + ddy_cdd[i];
 			xx = x + ddx_cdd[i];
-			if (!player_has_los_bold(yy, xx)) continue;
-
-			/* Update the monster */
-			if (cave[yy][xx].m_idx) update_mon(cave[yy][xx].m_idx, FALSE);
-
-			/* Notice and redraw */
-			note_spot(yy, xx);
-			lite_spot(yy, xx);
+			update_local_illumination_aux(yy, xx);
 		}
 	}
+
+#endif /* COMPLEX_WALL_ILLUMINATION */
 }
 
 
@@ -4555,6 +4609,13 @@ void cave_set_feat(int y, int x, int feat)
 		/* Check if los has changed */
 		if (old_los ^ have_flag(f_ptr->flags, FF_LOS))
 		{
+
+#ifdef COMPLEX_WALL_ILLUMINATION /* COMPLEX_WALL_ILLUMINATION */
+
+			update_local_illumination(y, x);
+
+#endif /* COMPLEX_WALL_ILLUMINATION */
+
 			/* Update the visuals */
 			p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE | PU_MONSTERS);
 		}
