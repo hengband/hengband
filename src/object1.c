@@ -4925,6 +4925,9 @@ static int get_tag(int *cp, char tag)
 		/* Skip empty inscriptions */
 		if (!o_ptr->inscription) continue;
 
+		/* Skip non-choice */
+		if (!item_tester_okay(o_ptr)) continue;
+
 		/* Find a '@' */
 		s = strchr(quark_str(o_ptr->inscription), '@');
 
