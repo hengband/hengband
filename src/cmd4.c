@@ -1246,7 +1246,7 @@ void do_cmd_messages(int num_now)
 					int len = strlen(shower);
 
 					/* Display the match */
-					Term_putstr(str-msg, 21-j, len, TERM_YELLOW, shower);
+					Term_putstr(str-msg, hgt-j-3, len, TERM_YELLOW, shower);
 
 					/* Advance */
 					str += len;
