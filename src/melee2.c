@@ -601,7 +601,7 @@ static bool get_moves_aux2(int m_idx, int *yp, int *xp)
  * being close enough to chase directly.  I have no idea what will
  * happen if you combine "smell" with low "aaf" values.
  */
-static bool get_moves_aux(int m_idx, int *yp, int *xp)
+static bool get_moves_aux(int m_idx, int *yp, int *xp, bool no_flow)
 {
 	int i, y, x, y1, x1, best;
 
@@ -623,6 +623,9 @@ static bool get_moves_aux(int m_idx, int *yp, int *xp)
 		/* Can move spell castable grid? */
 		if (get_moves_aux2(m_idx, yp, xp)) return (TRUE);
 	}
+
+	/* Monster can't flow */
+	if (no_flow) return (FALSE);
 
 	/* Monster can go through rocks */
 	if ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || (p_ptr->pass_wall))) return (FALSE);
@@ -1122,10 +1125,10 @@ static bool get_moves(int m_idx, int *mm)
 	bool         can_pass_wall;
 
 	/* Flow towards the player */
-	if (!stupid_monsters && !no_flow)
+	if (!stupid_monsters)
 	{
 		/* Flow towards the player */
-		(void)get_moves_aux(m_idx, &y2, &x2);
+		(void)get_moves_aux(m_idx, &y2, &x2, no_flow);
 	}
 
 	can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || (p_ptr->pass_wall)));
