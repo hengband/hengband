@@ -3011,7 +3011,10 @@ void calc_bonuses(void)
 	bool            omoi = FALSE;
 	bool            yoiyami = FALSE;
 	bool            down_saving = FALSE;
-	bool            have_dd_s, have_dd_t, have_sw, have_kabe;
+#if 0
+	bool            have_dd_s = FALSE, have_dd_t = FALSE;
+#endif
+	bool            have_sw = FALSE, have_kabe = FALSE;
 	bool            easy_2weapon = FALSE;
 	s16b this_o_idx, next_o_idx = 0;
 	player_race *tmp_rp_ptr;
@@ -5499,14 +5502,12 @@ msg_print("バランスがとれるようになった。");
 		}
 	}
 
-	have_dd_s = FALSE;
-	have_dd_t = FALSE;
-	have_sw = FALSE;
-	have_kabe = FALSE;
 	for (i = 0; i < INVEN_PACK; i++)
 	{
+#if 0
 		if ((inventory[i].tval == TV_SORCERY_BOOK) && (inventory[i].sval == 2)) have_dd_s = TRUE;
 		if ((inventory[i].tval == TV_TRUMP_BOOK) && (inventory[i].sval == 1)) have_dd_t = TRUE;
+#endif
 		if ((inventory[i].tval == TV_NATURE_BOOK) && (inventory[i].sval == 2)) have_sw = TRUE;
 		if ((inventory[i].tval == TV_ENCHANT_BOOK) && (inventory[i].sval == 2)) have_kabe = TRUE;
 	}
@@ -5520,8 +5521,10 @@ msg_print("バランスがとれるようになった。");
 		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
 
+#if 0
 		if ((o_ptr->tval == TV_SORCERY_BOOK) && (o_ptr->sval == 3)) have_dd_s = TRUE;
 		if ((o_ptr->tval == TV_TRUMP_BOOK) && (o_ptr->sval == 1)) have_dd_t = TRUE;
+#endif
 		if ((o_ptr->tval == TV_NATURE_BOOK) && (o_ptr->sval == 2)) have_sw = TRUE;
 		if ((o_ptr->tval == TV_ENCHANT_BOOK) && (o_ptr->sval == 2)) have_kabe = TRUE;
 	}

@@ -1732,8 +1732,6 @@ static s16b toggle_frequency(s16b current)
 	case 10000: return 25000;
 	default: return 0;
 	}
-
-	return 0; /* Paranoia */
 }
 
 
@@ -6972,13 +6970,11 @@ static void do_cmd_knowledge_pets(void)
 	/* Process the monsters (backwards) */
 	for (i = m_max - 1; i >= 1; i--)
 	{
-		monster_race *r_ptr;
 		/* Access the monster */
 		m_ptr = &m_list[i];
 
 		/* Ignore "dead" monsters */
 		if (!m_ptr->r_idx) continue;
-		r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Calculate "upkeep" for pets */
 		if (is_pet(m_ptr))

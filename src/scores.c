@@ -691,7 +691,7 @@ void show_highclass(void)
 {
 
 	register int i = 0, j, m = 0;
-	int pr, pc, pa, clev/*, al*/;
+	int pr, clev/*, al*/;
 	high_score the_score;
 	char buf[1024], out_val[256];
 
@@ -728,8 +728,6 @@ msg_print("スコア・ファイルが使用できません。");
 		if (highscore_seek(j)) break;
 		if (highscore_read(&the_score)) break;
 		pr = atoi(the_score.p_r);
-		pc = atoi(the_score.p_c);
-		pa = atoi(the_score.p_a);
 		clev = atoi(the_score.cur_lev);
 
 #ifdef JP
@@ -777,7 +775,7 @@ msg_print("スコア・ファイルが使用できません。");
 void race_score(int race_num)
 {
 	register int i = 0, j, m = 0;
-	int pr, pc, pa, clev, lastlev;
+	int pr, clev, lastlev;
 	high_score the_score;
 	char buf[1024], out_val[256], tmp_str[80];
 
@@ -824,8 +822,6 @@ msg_print("スコア・ファイルが使用できません。");
 		if (highscore_seek(j)) break;
 		if (highscore_read(&the_score)) break;
 		pr = atoi(the_score.p_r);
-		pc = atoi(the_score.p_c);
-		pa = atoi(the_score.p_a);
 		clev = atoi(the_score.cur_lev);
 
 		if (pr == race_num)

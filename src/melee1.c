@@ -155,8 +155,6 @@ bool make_attack_normal(int m_idx)
 
 	object_type *o_ptr;
 
-	object_kind *k_ptr;
-
 	char o_name[MAX_NLEN];
 
 	char m_name[80];
@@ -166,7 +164,6 @@ bool make_attack_normal(int m_idx)
 	bool blinked;
 	bool touched = FALSE, fear = FALSE, alive = TRUE;
 	bool explode = FALSE;
-	bool resist_drain = FALSE;
 	bool do_silly_attack = (one_in_(2) && p_ptr->image);
 	int syouryaku = 0;
 	int get_damage = 0;
@@ -1027,7 +1024,6 @@ bool make_attack_normal(int m_idx)
 							 */
 							if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
 							{
-								k_ptr = &k_info[o_ptr->k_idx];
 								j_ptr->pval = o_ptr->pval / o_ptr->number;
 								o_ptr->pval -= j_ptr->pval;
 							}
@@ -1679,6 +1675,7 @@ bool make_attack_normal(int m_idx)
 				case RBE_EXP_VAMP:
 				{
 					s32b d = damroll(60, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
+					bool resist_drain;
 
 					/* Obvious */
 					obvious = TRUE;
@@ -1727,7 +1724,7 @@ bool make_attack_normal(int m_idx)
 						if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 
 						/* Special message */
-						if ((m_ptr->ml) && (did_heal))
+						if (m_ptr->ml && did_heal)
 						{
 #ifdef JP
 msg_format("%sは体力を回復したようだ。", m_name);
@@ -1742,8 +1739,6 @@ msg_format("%sは体力を回復したようだ。", m_name);
 				}
 				case RBE_DR_MANA:
 				{
-					bool did_heal = FALSE;
-
 					/* Obvious */
 					obvious = TRUE;
 
@@ -1756,8 +1751,6 @@ msg_format("%sは体力を回復したようだ。", m_name);
 						p_ptr->csp = 0;
 						p_ptr->csp_frac = 0;
 					}
-
-					if (m_ptr->hp < m_ptr->maxhp) did_heal = TRUE;
 
 					p_ptr->redraw |= (PR_MANA);
 

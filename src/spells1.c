@@ -1291,10 +1291,14 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 
 		bool is_art = FALSE;
 		bool ignore = FALSE;
-		bool plural = FALSE;
 		bool do_kill = FALSE;
 
 		cptr note_kill = NULL;
+
+#ifndef JP
+		/* Get the "plural"-ness */
+		bool plural = (o_ptr->number > 1);
+#endif
 
 		/* Acquire object */
 		o_ptr = &o_list[this_o_idx];
@@ -1304,9 +1308,6 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 
 		/* Extract the flags */
 		object_flags(o_ptr, flgs);
-
-		/* Get the "plural"-ness */
-		if (o_ptr->number > 1) plural = TRUE;
 
 		/* Check for artifact */
 		if ((artifact_p(o_ptr) || o_ptr->art_name)) is_art = TRUE;

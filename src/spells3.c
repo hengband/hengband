@@ -1491,7 +1491,6 @@ take_hit(DAMAGE_NOESCAPE, 100 + randint1(150), "自殺的な虚無招来", -1);
 void fetch(int dir, int wgt, bool require_los)
 {
 	int             ty, tx, i;
-	bool            flag;
 	cave_type       *c_ptr;
 	object_type     *o_ptr;
 	char            o_name[MAX_NLEN];
@@ -1568,7 +1567,6 @@ msg_print("そこはあなたの視界に入っていません。");
 		/* Use a direction */
 		ty = py; /* Where to drop the item */
 		tx = px;
-		flag = FALSE;
 
 		do
 		{
@@ -3518,7 +3516,6 @@ bool potion_smash_effect(int who, int y, int x, int k_idx)
 	int     radius = 2;
 	int     dt = 0;
 	int     dam = 0;
-	bool    ident = FALSE;
 	bool    angry = FALSE;
 
 	object_kind *k_ptr = &k_info[k_idx];
@@ -3572,92 +3569,76 @@ bool potion_smash_effect(int who, int y, int x, int k_idx)
 		case SV_POTION_SLOWNESS:
 			dt = GF_OLD_SLOW;
 			dam = 5;
-			ident = TRUE;
 			angry = TRUE;
 			break;
 		case SV_POTION_POISON:
 			dt = GF_POIS;
 			dam = 3;
-			ident = TRUE;
 			angry = TRUE;
 			break;
 		case SV_POTION_BLINDNESS:
 			dt = GF_DARK;
-			ident = TRUE;
 			angry = TRUE;
 			break;
 		case SV_POTION_CONFUSION: /* Booze */
 			dt = GF_OLD_CONF;
-			ident = TRUE;
 			angry = TRUE;
 			break;
 		case SV_POTION_SLEEP:
 			dt = GF_OLD_SLEEP;
 			angry = TRUE;
-			ident = TRUE;
 			break;
 		case SV_POTION_RUINATION:
 		case SV_POTION_DETONATIONS:
 			dt = GF_SHARDS;
 			dam = damroll(25, 25);
 			angry = TRUE;
-			ident = TRUE;
 			break;
 		case SV_POTION_DEATH:
 			dt = GF_DEATH_RAY;    /* !! */
 			dam = k_ptr->level * 10;
 			angry = TRUE;
 			radius = 1;
-			ident = TRUE;
 			break;
 		case SV_POTION_SPEED:
 			dt = GF_OLD_SPEED;
-			ident = TRUE;
 			break;
 		case SV_POTION_CURE_LIGHT:
 			dt = GF_OLD_HEAL;
 			dam = damroll(2, 3);
-			ident = TRUE;
 			break;
 		case SV_POTION_CURE_SERIOUS:
 			dt = GF_OLD_HEAL;
 			dam = damroll(4, 3);
-			ident = TRUE;
 			break;
 		case SV_POTION_CURE_CRITICAL:
 		case SV_POTION_CURING:
 			dt = GF_OLD_HEAL;
 			dam = damroll(6, 3);
-			ident = TRUE;
 			break;
 		case SV_POTION_HEALING:
 			dt = GF_OLD_HEAL;
 			dam = damroll(10, 10);
-			ident = TRUE;
 			break;
 		case SV_POTION_RESTORE_EXP:
 			dt = GF_STAR_HEAL;
 			dam = 0;
 			radius = 1;
-			ident = TRUE;
 			break;
 		case SV_POTION_LIFE:
 			dt = GF_STAR_HEAL;
 			dam = damroll(50, 50);
 			radius = 1;
-			ident = TRUE;
 			break;
 		case SV_POTION_STAR_HEALING:
 			dt = GF_OLD_HEAL;
 			dam = damroll(50, 50);
 			radius = 1;
-			ident = TRUE;
 			break;
 		case SV_POTION_RESTORE_MANA:   /* MANA */
 			dt = GF_MANA;
 			dam = damroll(10, 10);
 			radius = 1;
-			ident = TRUE;
 			break;
 		default:
 			/* Do nothing */  ;

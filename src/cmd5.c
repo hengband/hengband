@@ -149,21 +149,20 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 
 	/* Get a spell from the user */
 
-	choice = (always_show_list || use_menu) ? ESCAPE:1;
+	choice = (always_show_list || use_menu) ? ESCAPE : 1;
 	while (!flag)
 	{
-		if( choice==ESCAPE ) choice = ' '; 
-		else if( !get_com(out_val, &choice, TRUE) )break; 
+		if (choice == ESCAPE) choice = ' '; 
+		else if (!get_com(out_val, &choice, TRUE))break;
 
 		if (use_menu && choice != ' ')
 		{
-			switch(choice)
+			switch (choice)
 			{
 				case '0':
 				{
 					screen_load();
-					return (FALSE);
-					break;
+					return FALSE;
 				}
 
 				case '8':
@@ -329,7 +328,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 
 
 	/* Abort if needed */
-	if (!flag) return (FALSE);
+	if (!flag) return FALSE;
 
 	/* Save the choice */
 	(*sn) = spell;
@@ -341,7 +340,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 #endif /* ALLOW_REPEAT -- TNB */
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -383,13 +382,11 @@ void do_cmd_browse(void)
 	int		item, sval, use_realm = 0, j, line;
 	int		spell = -1;
 	int		num = 0;
-	int             increment = 0;
 
 	byte		spells[64];
 	char            temp[62*4];
 
 	object_type	*o_ptr;
-	magic_type      *s_ptr;
 
 	cptr q, s;
 
@@ -455,11 +452,6 @@ s = "読める本がない。";
 	sval = o_ptr->sval;
 
 	use_realm = tval2realm(o_ptr->tval);
-	if ((p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_RED_MAGE) && is_magic(use_realm))
-	{
-		if (o_ptr->tval == REALM2_BOOK) increment = 32;
-		else if (o_ptr->tval != REALM1_BOOK) increment = 64;
-	}
 
 	/* Track the object kind */
 	object_kind_track(o_ptr->k_idx);
@@ -516,13 +508,13 @@ s = "読める本がない。";
 				prt("No spells to browse.", 0, 0);
 #endif
 			(void)inkey();
-			
+
 
 			/* Restore the screen */
 			screen_load();
 
 			return;
-		}				  
+		}
 
 		/* Clear lines, position cursor  (really should use strlen here) */
 		Term_erase(14, 14, 255);
@@ -530,18 +522,8 @@ s = "読める本がない。";
 		Term_erase(14, 12, 255);
 		Term_erase(14, 11, 255);
 
-		/* Access the spell */
-		if (!is_magic(use_realm))
-		{
-			s_ptr = &technic_info[use_realm - MIN_TECHNIC][spell];
-		}
-		else
-		{
-			s_ptr = &mp_ptr->info[use_realm - 1][spell];
-		}
-
-		roff_to_buf(spell_tips[technic2magic(use_realm)-1][spell] ,62, temp, sizeof(temp));
-		for(j=0, line = 11;temp[j];j+=(1+strlen(&temp[j])))
+		roff_to_buf(spell_tips[technic2magic(use_realm) - 1][spell], 62, temp, sizeof(temp));
+		for (j = 0, line = 11; temp[j]; j += 1 + strlen(&temp[j]))
 		{
 			prt(&temp[j], line, 15);
 			line++;
@@ -1124,8 +1106,7 @@ static bool cast_life_spell(int spell)
 		fire_ball_hide(GF_WOUNDS, dir, damroll(5+((plev - 5) / 3), 15), 0);
 		break;
 	case 21: /* Word of Recall */
-		if (!word_of_recall()) return FALSE;
-		break;
+		return word_of_recall();
 	case 22: /* Alter Reality */
 		alter_reality();
 		break;
@@ -1265,7 +1246,6 @@ static bool cast_sorcery_spell(int spell)
 		break;
 	case 19: /* Teleport to town */
 		return tele_town();
-		break;
 	case 20: /* Self knowledge */
 		(void)self_knowledge();
 		break;
@@ -1278,8 +1258,7 @@ static bool cast_sorcery_spell(int spell)
 		(void)teleport_player_level();
 		break;
 	case 22: /* Word of Recall */
-		if (!word_of_recall()) return FALSE;
-		break;
+		return word_of_recall();
 	case 23: /* Dimension Door */
 #ifdef JP
 msg_print("次元の扉が開いた。目的地を選んで下さい。");
@@ -1339,7 +1318,6 @@ static bool cast_nature_spell(int spell)
 	int	    dir;
 	int	    beam;
 	int	    plev = p_ptr->lev;
-	bool    no_trump = FALSE;
 
 	if (p_ptr->pclass == CLASS_MAGE) beam = plev;
 	else if (p_ptr->pclass == CLASS_HIGH_MAGE || p_ptr->pclass == CLASS_SORCERER) beam = plev + 10;
@@ -1450,7 +1428,13 @@ msg_print("太陽光線が現れた。");
 		break;
 	case 14: /* Summon Animals */
 		if (!(summon_specific(-1, py, px, plev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET))))
-			no_trump = TRUE;
+		{
+#ifdef JP
+			msg_print("動物は現れなかった。");
+#else
+			msg_print("No animals arrive.");
+#endif
+		}
 		break;
 	case 15: /* Herbal Healing */
 		(void)hp_player(500);
@@ -1560,14 +1544,6 @@ msg_format("あなたは不明なネイチャーの呪文 %d を唱えた。", spell);
 
 		msg_print(NULL);
 	}
-
-	if (no_trump)
-#ifdef JP
-msg_print("動物は現れなかった。");
-#else
-		msg_print("No animals arrive.");
-#endif
-
 
 	return TRUE;
 }
@@ -1718,7 +1694,6 @@ msg_print("あなたは力がみなぎるのを感じた！");
 				sleep_monsters();
 				hp_player(300);
 			}
-			break;
 		}
 		break;
 	case 9: /* Chaos Bolt */
@@ -2279,7 +2254,6 @@ msg_print("死者が甦った。眠りを妨げるあなたを罰するために！");
 			return ident_spell(FALSE);
 		else
 			return identify_fully(FALSE);
-		break;
 	case 27: /* Mimic vampire */
 		(void)set_mimic(10+plev/2 + randint1(10+plev/2), MIMIC_VAMPIRE, FALSE);
 		break;
@@ -2315,17 +2289,11 @@ take_hit(DAMAGE_USELIFE, 20 + randint1(30), "地獄の劫火の呪文を唱えた疲労", -1);
 static bool cast_trump_spell(int spell, bool success)
 {
 	int     dir;
-	int     beam;
 	int     plev = p_ptr->lev;
 	int     summon_lev = plev * 2 / 3 + randint1(plev/2);
 	int     dummy = 0;
 	bool	no_trump = FALSE;
 	bool    unique_okay = FALSE;
-
-
-	if (p_ptr->pclass == CLASS_MAGE) beam = plev;
-	else if (p_ptr->pclass == CLASS_HIGH_MAGE || p_ptr->pclass == CLASS_SORCERER) beam = plev + 10;
-	else beam = plev / 2;
 
 	if (summon_lev < 1) summon_lev = 1;
 	if (!success || (randint1(50+plev) < plev/10)) unique_okay = TRUE;
@@ -2850,7 +2818,7 @@ msg_print("次元の扉が開いた。目的地を選んで下さい。");
 		case 14: /* Word of Recall */
 			if (success)
 			{
-				if (!word_of_recall()) return FALSE;
+				return word_of_recall();
 			}
 			break;
 		case 15: /* Banish */
@@ -3304,7 +3272,6 @@ static bool cast_arcane_spell(int spell)
 	int	beam;
 	int	plev = p_ptr->lev;
 	int	dummy = 0;
-	bool	no_trump = FALSE;
 
 	if (p_ptr->pclass == CLASS_MAGE) beam = plev;
 	else if (p_ptr->pclass == CLASS_HIGH_MAGE || p_ptr->pclass == CLASS_SORCERER) beam = plev + 10;
@@ -3410,7 +3377,13 @@ msg_print("光線が放たれた。");
 		break;
 	case 25: /* Conjure Elemental */
 		if (!summon_specific(-1, py, px, plev, SUMMON_ELEMENTAL, (PM_ALLOW_GROUP | PM_FORCE_PET)))
-			no_trump = TRUE;
+		{
+#ifdef JP
+			msg_print("エレメンタルは現れなかった。");
+#else
+			msg_print("No Elementals arrive.");
+#endif
+		}
 		break;
 	case 26: /* Teleport Level */
 #ifdef JP
@@ -3441,8 +3414,7 @@ msg_print("光線が放たれた。");
 		(void)detect_all(DETECT_RAD_DEFAULT);
 		break;
 	case 30: /* Word of Recall */
-		if (!word_of_recall()) return FALSE;
-		break;
+		return word_of_recall();
 	case 31: /* Clairvoyance */
 		chg_virtue(V_KNOWLEDGE, 1);
 		chg_virtue(V_ENLIGHTEN, 1);
@@ -3457,13 +3429,6 @@ msg_print("光線が放たれた。");
 		msg_print(NULL);
 	}
 
-	if (no_trump)
-#ifdef JP
-msg_print("エレメンタルは現れなかった。");
-#else
-		msg_print("No Elementals arrive.");
-#endif
-
 	return TRUE;
 }
 
@@ -3472,7 +3437,6 @@ static bool cast_enchant_spell(int spell)
 {
 	int	plev = p_ptr->lev;
 	int	dummy = 0;
-	bool	no_trump = FALSE;
 
 	switch (spell)
 	{
@@ -3537,7 +3501,6 @@ static bool cast_enchant_spell(int spell)
 		break;
 	case 15: /* Mana Branding */
 		return choose_ele_attack();
-		break;
 	case 16: /* Telepathy */
 		(void)set_tim_esp(randint1(30) + 25, FALSE);
 		break;
@@ -3564,14 +3527,18 @@ static bool cast_enchant_spell(int spell)
 		if (summon_specific(-1, py, px, plev, SUMMON_GOLEM, PM_FORCE_PET))
 		{
 #ifdef JP
-msg_print("ゴーレムを作った。");
+			msg_print("ゴーレムを作った。");
 #else
-		msg_print("You make a golem.");
+			msg_print("You make a golem.");
 #endif
 		}
 		else
 		{
-			no_trump = TRUE;
+#ifdef JP
+			msg_print("うまくゴーレムを作れなかった。");
+#else
+			msg_print("No Golems arrive.");
+#endif
 		}
 		break;
 	case 23: /* Magic armor */
@@ -3592,13 +3559,10 @@ msg_print("ゴーレムを作った。");
 		break;
 	case 26: /* Total Knowledge */
 		return identify_fully(FALSE);
-		break;
 	case 27: /* Enchant Weapon */
 		return enchant_spell(randint0(4) + 1, randint0(4) + 1, 0);
-		break;
 	case 28: /* Enchant Armor */
 		return enchant_spell(0, 0, randint0(3) + 2);
-		break;
 	case 29: /* Brand Weapon */
 		brand_weapon(randint0(18));
 		break;
@@ -3618,19 +3582,11 @@ msg_print("あなたは生きているカードに変わった。");
 #endif
 		break;
 	case 31: /* Immune */
-		return (choose_ele_immune(13 + randint1(13)));
-		break;
+		return choose_ele_immune(13 + randint1(13));
 	default:
 		msg_format("You cast an unknown Craft spell: %d.", spell);
 		msg_print(NULL);
 	}
-
-	if (no_trump)
-#ifdef JP
-msg_print("うまくゴーレムを作れなかった。");
-#else
-		msg_print("No Golems arrive.");
-#endif
 
 	return TRUE;
 }

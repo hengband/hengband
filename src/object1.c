@@ -1887,7 +1887,6 @@ return "釣りをする : いつでも";
 #else
 			return "resist acid every 50+d50 turns";
 #endif
-			break;
 
 		case ESSENCE_TMP_RES_ELEC:
 #ifdef JP
@@ -1895,7 +1894,6 @@ return "釣りをする : いつでも";
 #else
 			return "resist elec every 50+d50 turns";
 #endif
-			break;
 
 		case ESSENCE_TMP_RES_FIRE:
 #ifdef JP
@@ -1903,7 +1901,6 @@ return "釣りをする : いつでも";
 #else
 			return "resist fire every 50+d50 turns";
 #endif
-			break;
 
 		case ESSENCE_TMP_RES_COLD:
 #ifdef JP
@@ -1911,7 +1908,6 @@ return "釣りをする : いつでも";
 #else
 			return "resist cold every 50+d50 turns";
 #endif
-			break;
 
 		case TR_IMPACT:
 #ifdef JP
@@ -1919,7 +1915,6 @@ return "釣りをする : いつでも";
 #else
 			return "earthquake every 100+d100 turns";
 #endif
-			break;
 		}
 	}
 
@@ -2141,74 +2136,64 @@ return "サンダー・ボール (100) と電撃への耐性 : 50+d50 ターン毎";
 			{
 			case EGO_AMU_IDENT:
 #ifdef JP
-return "鑑定 : 10 ターン毎";
+				return "鑑定 : 10 ターン毎";
 #else
 				return "identify every 10 turns";
 #endif
-				break;
 			case EGO_AMU_CHARM:
 #ifdef JP
-return "モンスター魅了 : 200 ターン毎";
+				return "モンスター魅了 : 200 ターン毎";
 #else
 				return "charm monster every 200 turns";
 #endif
-				break;
 			case EGO_AMU_JUMP:
 #ifdef JP
-return "ショート・テレポート : 10+d10 ターン毎";
+				return "ショート・テレポート : 10+d10 ターン毎";
 #else
 				return "blink every 10+d10 turns";
 #endif
-				break;
 			case EGO_AMU_TELEPORT:
 #ifdef JP
-return "テレポート : 50+d50 ターン毎";
+				return "テレポート : 50+d50 ターン毎";
 #else
 				return "teleport every 50+d50 turns";
 #endif
-				break;
 			case EGO_AMU_D_DOOR:
 #ifdef JP
-return "次元の扉 : 200 ターン毎";
+				return "次元の扉 : 200 ターン毎";
 #else
 				return "dimension door every 200 turns";
 #endif
-				break;
 			case EGO_AMU_RES_FIRE_:
 #ifdef JP
-return "火炎への耐性 : 50+d50ターン毎";
+				return "火炎への耐性 : 50+d50ターン毎";
 #else
 				return "resist fire every 50+d50 turns";
 #endif
-				break;
 			case EGO_AMU_RES_COLD_:
 #ifdef JP
-return "冷気への耐性 : 50+d50ターン毎";
+				return "冷気への耐性 : 50+d50ターン毎";
 #else
 				return "resist cold every 50+d50 turns";
 #endif
-				break;
 			case EGO_AMU_RES_ELEC_:
 #ifdef JP
-return "電撃への耐性 : 50+d50ターン毎";
+				return "電撃への耐性 : 50+d50ターン毎";
 #else
 				return "resist elec every 50+d50 turns";
 #endif
-				break;
 			case EGO_AMU_RES_ACID_:
 #ifdef JP
-return "酸への耐性 : 50+d50ターン毎";
+				return "酸への耐性 : 50+d50ターン毎";
 #else
 				return "resist acid every 50+d50 turns";
 #endif
-				break;
 			case EGO_AMU_DETECTION:
 #ifdef JP
-return "全感知 : 55+d55ターン毎";
+				return "全感知 : 55+d55ターン毎";
 #else
 				return "detect all floor every 55+d55 turns";
 #endif
-				break;
 			}
 		}
 	}
@@ -5329,7 +5314,7 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 {
 	s16b this_o_idx, next_o_idx = 0;
 
-	char n1, n2, which = ' ';
+	char which = ' ';
 
 	int j, k, i1, i2, e1, e2;
 
@@ -5590,10 +5575,6 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 		/* Inventory screen */
 		if (!command_wrk)
 		{
-			/* Extract the legal requests */
-			n1 = I2A(i1);
-			n2 = I2A(i2);
-
 			/* Redraw if needed */
 			if (command_see) get_item_label = show_inven(menu_line);
 		}
@@ -5601,10 +5582,6 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 		/* Equipment screen */
 		else
 		{
-			/* Extract the legal requests */
-			n1 = I2A(e1 - INVEN_RARM);
-			n2 = I2A(e2 - INVEN_RARM);
-
 			/* Redraw if needed */
 			if (command_see) get_item_label = show_equip(menu_line);
 		}
@@ -5986,7 +5963,6 @@ if (other_query_flag && !verify("本当に", k)) continue;
 #if 0
 			case '\n':
 			case '\r':
-#endif
 			{
 				/* Choose "default" inventory item */
 				if (!command_wrk)
@@ -6020,6 +5996,7 @@ if (other_query_flag && !verify("本当に", k)) continue;
 				done = TRUE;
 				break;
 			}
+#endif
 
 			case 'w':
 			{
@@ -7556,8 +7533,6 @@ static bool py_pickup_floor_aux(void)
 {
 	s16b this_o_idx;
 
-	object_type *o_ptr;
-
 	cptr q, s;
 
 	int item;
@@ -7582,9 +7557,6 @@ static bool py_pickup_floor_aux(void)
 	{
 		return (FALSE);
 	}
-
-	/* Access the object */
-	o_ptr = &o_list[this_o_idx];
 
 	/* Pick up the object */
 	py_pickup_aux(this_o_idx);

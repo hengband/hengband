@@ -1652,7 +1652,9 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 	bool            aware = FALSE;
 	bool            known = FALSE;
 
+#ifndef JP
 	bool            append_name = FALSE;
+#endif
 
 	bool            show_weapon = FALSE;
 	bool            show_armour = FALSE;
@@ -1849,8 +1851,6 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			/* Color the object */
 			modstr = amulet_adj[indexx];
 
-			if (aware) append_name = TRUE;
-
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
 #ifdef JP
 				basenm = aware ? "%のアミュレット" : "アミュレット";
@@ -1860,6 +1860,8 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 				basenm = "& Amulet~";
 			else
 				basenm = aware ? "& # Amulet~" : "& # Amulet~";
+
+			if (aware) append_name = TRUE;
 #endif
 
 			break;
@@ -1876,8 +1878,6 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			/* Color the object */
 			modstr = ring_adj[indexx];
 
-			if (aware) append_name = TRUE;
-
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
 #ifdef JP
 				basenm = aware ? "%の指輪" : "指輪";
@@ -1887,6 +1887,8 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 				basenm = "& Ring~";
 			else
 				basenm = aware ? "& # Ring~" : "& # Ring~";
+
+			if (aware) append_name = TRUE;
 #endif
 
 			if (!k_ptr->to_h && !k_ptr->to_d && (o_ptr->to_h || o_ptr->to_d)) show_weapon = TRUE;
@@ -1904,7 +1906,6 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			/* Color the object */
 			modstr = staff_adj[indexx];
 
-			if (aware) append_name = TRUE;
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
 #ifdef JP
 				basenm = aware ? "%の杖" : "杖";
@@ -1914,6 +1915,8 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 				basenm = "& Staff~";
 			else
 				basenm = aware ? "& # Staff~" : "& # Staff~";
+
+			if (aware) append_name = TRUE;
 #endif
 
 			break;
@@ -1924,7 +1927,6 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			/* Color the object */
 			modstr = wand_adj[indexx];
 
-			if (aware) append_name = TRUE;
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
 #ifdef JP
 				basenm = aware? "%の魔法棒":"魔法棒";
@@ -1934,6 +1936,8 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 				basenm = "& Wand~";
 			else
 				basenm = aware ? "& # Wand~" : "& # Wand~";
+
+			if (aware) append_name = TRUE;
 #endif
 
 			break;
@@ -1944,7 +1948,6 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			/* Color the object */
 			modstr = rod_adj[indexx];
 
-			if (aware) append_name = TRUE;
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
 #ifdef JP
 				basenm = aware? "%のロッド":"ロッド";
@@ -1954,6 +1957,8 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 				basenm = "& Rod~";
 			else
 				basenm = aware ? "& # Rod~" : "& # Rod~";
+
+			if (aware) append_name = TRUE;
 #endif
 
 			break;
@@ -1963,7 +1968,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		{
 			/* Color the object */
 			modstr = scroll_adj[indexx];
-			if (aware) append_name = TRUE;
+
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
 #ifdef JP
 				basenm = aware ? "%の巻物" : "巻物";
@@ -1973,6 +1978,8 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 				basenm = "& Scroll~";
 			else
 				basenm = aware ? "& Scroll~ titled \"#\"" : "& Scroll~ titled \"#\"";
+
+			if (aware) append_name = TRUE;
 #endif
 
 			break;
@@ -1983,7 +1990,6 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			/* Color the object */
 			modstr = potion_adj[indexx];
 
-			if (aware) append_name = TRUE;
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
 #ifdef JP
 				basenm = aware ? "%の薬" : "薬";
@@ -1993,6 +1999,8 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 				basenm = "& Potion~";
 			else
 				basenm = aware ? "& # Potion~" : "& # Potion~";
+
+			if (aware) append_name = TRUE;
 #endif
 
 			break;
@@ -2006,7 +2014,6 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			/* Color the object */
 			modstr = food_adj[indexx];
 
-			if (aware) append_name = TRUE;
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
 #ifdef JP
 				basenm = aware ? "%のキノコ" : "キノコ";
@@ -2016,6 +2023,8 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 				basenm = "& Mushroom~";
 			else
 				basenm = aware ? "& # Mushroom~" : "& # Mushroom~";
+
+			if (aware) append_name = TRUE;
 #endif
 
 			break;
@@ -2229,7 +2238,9 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 	{
 		if (known && o_ptr->name1) basenm = a_name + a_info[o_ptr->name1].name;
 		else basenm = get_object_name(o_ptr);
+#ifndef JP
 		append_name = FALSE;
+#endif
 	}
 
 	/* Start dumping the result */

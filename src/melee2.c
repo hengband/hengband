@@ -604,7 +604,6 @@ static bool get_moves_aux(int m_idx, int *yp, int *xp, bool no_flow)
 	int i, y, x, y1, x1, best;
 
 	cave_type *c_ptr;
-	bool use_sound = FALSE;
 	bool use_scent = FALSE;
 
 	monster_type *m_ptr = &m_list[m_idx];
@@ -640,7 +639,6 @@ static bool get_moves_aux(int m_idx, int *yp, int *xp, bool no_flow)
 	/* If we can hear noises, advance towards them */
 	if (c_ptr->cost)
 	{
-		use_sound = TRUE;
 		best = 999;
 	}
 

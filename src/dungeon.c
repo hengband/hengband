@@ -1446,15 +1446,15 @@ static void check_music(void)
 	u32b need_mana;
 
 	/* Music singed by player */
-	if(p_ptr->pclass != CLASS_BARD) return;
-	if(!p_ptr->magic_num1[0] && !p_ptr->magic_num1[1]) return;
+	if (p_ptr->pclass != CLASS_BARD) return;
+	if (!p_ptr->magic_num1[0] && !p_ptr->magic_num1[1]) return;
 
 	spell = p_ptr->magic_num2[0];
 	s_ptr = &technic_info[REALM_MUSIC - MIN_TECHNIC][spell];
 
 	need_mana = mod_need_mana(s_ptr->smana, spell, REALM_MUSIC);
 	need_mana *= 0x8000;
-	if (((u16b)(p_ptr->csp) < (need_mana / 0x10000)) || (p_ptr->anti_magic))
+	if (((u32b)p_ptr->csp < (need_mana / 0x10000)) || (p_ptr->anti_magic))
 	{
 		stop_singing();
 		return;
@@ -1463,7 +1463,7 @@ static void check_music(void)
 	{
 		p_ptr->csp -= (u16b) (need_mana / 0x10000);
 		need_mana = (need_mana & 0xffff);
-		if (p_ptr->csp_frac < need_mana)
+		if ((u32b)p_ptr->csp_frac < need_mana)
 		{
 			p_ptr->csp--;
 			p_ptr->csp_frac += (u16b)(0x10000L - need_mana);

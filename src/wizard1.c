@@ -1229,7 +1229,6 @@ static void analyze_misc_magic(object_type *o_ptr, cptr *misc_list)
 	 */
 
 /*	if (cursed_p(o_ptr)) */
-	if (1)
 	{
 		if (have_flag(flgs, TR_TY_CURSE))
 		{
@@ -1758,11 +1757,12 @@ static void spoil_mon_desc(cptr fname)
 		if (r_ptr->flags7 & (RF7_KAGE)) continue;
 
 		/* Get the "name" */
-/*		if (r_ptr->flags1 & (RF1_QUESTOR)) */
-		if (0)
+		/*
+		else if (r_ptr->flags1 & (RF1_QUESTOR))
 		{
 			sprintf(nam, "[Q] %s", name);
 		}
+		*/
 		else if (r_ptr->flags1 & (RF1_UNIQUE))
 		{
 			sprintf(nam, "[U] %s", name);
@@ -1978,9 +1978,8 @@ static void roff_func(byte attr, cptr str)
 static void spoil_mon_info(cptr fname)
 {
 	char buf[1024];
-	int msex, i, l, n=0;
-	bool breath, magic;
-	u32b flags1, flags2, flags3, flags4, flags5, flags6, flags7;
+	int i, l, n = 0;
+	u32b flags1;
 
 	u16b why = 2;
 	s16b *who;
@@ -2038,20 +2037,6 @@ static void spoil_mon_info(cptr fname)
 
 		/* Extract the flags */
 		flags1 = r_ptr->flags1;
-		flags2 = r_ptr->flags2;
-		flags3 = r_ptr->flags3;
-		flags4 = r_ptr->flags4;
-		flags5 = r_ptr->flags5;
-		flags6 = r_ptr->flags6;
-		flags7 = r_ptr->flags7;
-		breath = FALSE;
-		magic = FALSE;
-
-		/* Extract a gender (if applicable) */
-		if (flags1 & (RF1_FEMALE)) msex = 2;
-		else if (flags1 & (RF1_MALE)) msex = 1;
-		else msex = 0;
-
 
 		/* Prefix */
 		if (flags1 & (RF1_QUESTOR))

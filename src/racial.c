@@ -838,7 +838,6 @@ static bool cmd_racial_power_aux(s32b command)
 		{
 			int y = 0, x = 0, i;
 			cave_type       *c_ptr;
-			monster_type    *m_ptr;
 
 			for (i = 0; i < 6; i++)
 			{
@@ -846,9 +845,6 @@ static bool cmd_racial_power_aux(s32b command)
 				y = py + ddy_ddd[dir];
 				x = px + ddx_ddd[dir];
 				c_ptr = &cave[y][x];
-
-				/* Get the monster */
-				m_ptr = &m_list[c_ptr->m_idx];
 
 				/* Hack -- attack monsters */
 				if (c_ptr->m_idx)
@@ -944,14 +940,14 @@ static bool cmd_racial_power_aux(s32b command)
 		{
 			if (command == -3)
 			{
-				int gain_sp;
 #ifdef JP
-				if ((gain_sp = take_hit(DAMAGE_USELIFE, p_ptr->lev, "£È£Ð¤«¤é£Í£Ð¤Ø¤ÎÌµËÅ¤ÊÊÑ´¹", -1)))
+				int gain_sp = take_hit(DAMAGE_USELIFE, p_ptr->lev, "£È£Ð¤«¤é£Í£Ð¤Ø¤ÎÌµËÅ¤ÊÊÑ´¹", -1) / 5;
 #else
-				if ((gain_sp = take_hit(DAMAGE_USELIFE, p_ptr->lev, "thoughtless convertion from HP to SP", -1)))
+				int gain_sp = take_hit(DAMAGE_USELIFE, p_ptr->lev, "thoughtless convertion from HP to SP", -1) / 5;
 #endif
+				if (gain_sp)
 				{
-					p_ptr->csp += gain_sp / 5;
+					p_ptr->csp += gain_sp;
 					if (p_ptr->csp > p_ptr->msp)
 					{
 						p_ptr->csp = p_ptr->msp;
@@ -967,7 +963,7 @@ static bool cmd_racial_power_aux(s32b command)
 			}
 			else if (command == -4)
 			{
-				if (p_ptr->csp >= p_ptr->lev/5)
+				if (p_ptr->csp >= p_ptr->lev / 5)
 				{
 					p_ptr->csp -= p_ptr->lev / 5;
 					hp_player(p_ptr->lev);

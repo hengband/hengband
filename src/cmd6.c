@@ -6708,11 +6708,11 @@ msg_print("混乱していて読めない！");
 	}
 }
 
-static bool select_magic_eater(bool only_browse)
+static int select_magic_eater(bool only_browse)
 {
 	int ext=0;
 	char choice;
-	bool flag, redraw, request_list;
+	bool flag, request_list;
 	int tval = 0;
 	int             ask = TRUE, i = 0;
 	char            out_val[160];
@@ -6847,9 +6847,6 @@ static bool select_magic_eater(bool only_browse)
 	/* Nothing chosen yet */
 	flag = FALSE;
 
-	/* No redraw yet */
-	redraw = FALSE;
-
 	/* Build a prompt */
 #ifdef JP
 (void) strnfmt(out_val, 78, "('*'で一覧, ESCで中断) どの魔力を使いますか？");
@@ -6972,17 +6969,16 @@ static bool select_magic_eater(bool only_browse)
 			}
 		}
 
-		if(!get_com(out_val, &choice, FALSE)) break; 
+		if (!get_com(out_val, &choice, FALSE)) break;
 
 		if (use_menu && choice != ' ')
 		{
-			switch(choice)
+			switch (choice)
 			{
 				case '0':
 				{
 					screen_load();
-					return (FALSE);
-					break;
+					return 0;
 				}
 
 				case '8':

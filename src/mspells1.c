@@ -3540,7 +3540,6 @@ msg_format("%^sがテレポートした。", m_name);
 #endif
 						teleport_away(m_idx, 10, FALSE);
 						p_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
-						break;
 					}
 					else
 					{
@@ -3583,7 +3582,7 @@ msg_format("%^sがテレポートした。", m_name);
 							msg_format("攻撃が%s自身を傷つけた！", m_name);
 #else
 							char m_name_self[80];
-		
+
 							/* hisself */
 							monster_desc(m_name_self, m_ptr, 0x23);
 

@@ -3206,7 +3206,6 @@ bool monst_spell_monst(int m_idx)
 					}
 					teleport_away(m_idx, 10, FALSE);
 					p_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
-					break;
 				}
 				else
 				{
@@ -3215,7 +3214,7 @@ bool monst_spell_monst(int m_idx)
 				}
 				break;
 			}
-					
+
 			/* Something is wrong */
 			else return FALSE;
 		}

@@ -3384,7 +3384,6 @@ static void display_player_stat_info(void)
 
 	object_type *o_ptr;
 	u32b flgs[TR_FLAG_SIZE];
-	s16b k_idx;
 
 	byte a;
 	char c;
@@ -3517,9 +3516,6 @@ c_put_str(TERM_L_GREEN, "Ç½ÎÏ½¤Àµ", row - 1, col);
 	{
 		/* Access object */
 		o_ptr = &inventory[i];
-
-		/* Object kind */
-		k_idx = o_ptr->k_idx;
 
 		/* Acquire "known" flags */
 		object_flags_known(o_ptr, flgs);
@@ -6848,7 +6844,6 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 	char    buf[1024];
 	int     line, counter, test, numentries;
 	int     line_num = 0;
-	bool    found = FALSE;
 
 
 	/* Build the filename */
@@ -6876,14 +6871,12 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 				if (buf[2] == '*')
 				{
 					/* Default lines */
-					found = TRUE;
 					break;
 				}
 				else if (buf[2] == 'M')
 				{
 					if (r_info[entry].flags1 & RF1_MALE)
 					{
-						found = TRUE;
 						break;
 					}
 				}
@@ -6891,7 +6884,6 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 				{
 					if (r_info[entry].flags1 & RF1_FEMALE)
 					{
-						found = TRUE;
 						break;
 					}
 				}
@@ -6901,7 +6893,6 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 					/* Is it the right monster? */
 					if (test == entry)
 					{
-						found = TRUE;
 						break;
 					}
 				}

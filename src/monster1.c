@@ -134,7 +134,6 @@ static void roff_aux(int r_idx, int mode)
 	monster_race    *r_ptr = &r_info[r_idx];
 
 	bool            old = FALSE;
-	bool            sin = FALSE;
 
 	int             m, n, r;
 
@@ -142,6 +141,8 @@ static void roff_aux(int r_idx, int mode)
 
 #ifdef JP
 	char            jverb_buf[64];
+#else
+	bool            sin = FALSE;
 #endif
 	int             msex = 0;
 
@@ -408,7 +409,6 @@ static void roff_aux(int r_idx, int mode)
 	}
 
 	/* Descriptions */
-	if (1)
 	{
 		char buf[2048];
 
@@ -809,7 +809,6 @@ else                            hooked_roff("モンスター");
 		hooked_roff("を倒すことは");
 #endif
 		/* Group some variables */
-		if (TRUE)
 		{
 			long i, j;
 
@@ -2410,14 +2409,14 @@ if ((flags3 & RF3_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "テレポー
 	/* Drops gold and/or items */
 	if (drop_gold || drop_item)
 	{
-		/* No "n" needed */
-		sin = FALSE;
-
 		/* Intro */
 #ifdef JP
 		hooked_roff(format("%^sは", wd_he[msex]));
 #else
 		hooked_roff(format("%^s may carry", wd_he[msex]));
+
+		/* No "n" needed */
+		sin = FALSE;
 #endif
 
 
@@ -2431,9 +2430,8 @@ if ((flags3 & RF3_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "テレポー
 			hooked_roff("一つの");
 #else
 			hooked_roff(" a");
-#endif
-
 			sin = TRUE;
+#endif
 		}
 
 		/* Two drops */
@@ -2477,9 +2475,8 @@ if ((flags3 & RF3_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "テレポー
 			p = "上質な";
 #else
 			p = " good";
-#endif
-
 			sin = FALSE;
+#endif
 		}
 
 		/* Okay */
@@ -2495,8 +2492,8 @@ if ((flags3 & RF3_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "テレポー
 			/* Handle singular "an" */
 #ifndef JP
 			if (sin) hooked_roff("n");
-#endif
 			sin = FALSE;
+#endif
 
 			/* Dump "object(s)" */
 			if (p) hooked_roff(p);
@@ -2520,14 +2517,14 @@ if ((flags3 & RF3_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "テレポー
 		/* Treasures */
 		if (drop_gold)
 		{
+#ifndef JP
 			/* Cancel prefix */
 			if (!p) sin = FALSE;
 
 			/* Handle singular "an" */
-#ifndef JP
 			if (sin) hooked_roff("n");
-#endif
 			sin = FALSE;
+#endif
 
 			/* Dump "treasure(s)" */
 			if (p) hooked_roff(p);
@@ -3100,16 +3097,13 @@ void roff_top(int r_idx)
 	/* Reset the cursor */
 	Term_gotoxy(0, 0);
 
+#ifndef JP
 	/* A title (use "The" for non-uniques) */
-#ifdef JP
-	if (0)
-#else
 	if (!(r_ptr->flags1 & RF1_UNIQUE))
-#endif
-
 	{
 		Term_addstr(-1, TERM_WHITE, "The ");
 	}
+#endif
 
 	/* Dump the name */
 	Term_addstr(-1, TERM_WHITE, (r_name + r_ptr->name));

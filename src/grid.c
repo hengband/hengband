@@ -1018,7 +1018,6 @@ bool build_tunnel2(int x1, int y1, int x2, int y2, int type, int cutoff)
 {
 	int x3, y3, dx, dy;
 	int changex, changey;
-	int midval;
 	int length;
 	int i;
 	bool retval, firstsuccede;
@@ -1050,9 +1049,8 @@ bool build_tunnel2(int x1, int y1, int x2, int y2, int type, int cutoff)
 			x3 = (x1 + x2) / 2;
 			y3 = (y1 + y2) / 2;
 		}
-		/* cache midvalue */
+		/* cache c_ptr */
 		c_ptr = &cave[y3][x3];
-		midval = cave[y3][x3].feat;
 		if (is_solid_grid(c_ptr))
 		{
 			/* move midpoint a bit to avoid problem. */
@@ -1083,7 +1081,6 @@ bool build_tunnel2(int x1, int y1, int x2, int y2, int type, int cutoff)
 			y3 += dy;
 			x3 += dx;
 			c_ptr = &cave[y3][x3];
-			midval = cave[y3][x3].feat;
 		}
 
 		if (is_floor_grid(c_ptr))

@@ -852,7 +852,6 @@ static s32b object_value_base(object_type *o_ptr)
 			else if (level < 40) return 2500+(level-30)*350L;
 			else if (level < 50) return 6000+(level-40)*800L;
 			else return 14000+(level-50)*2000L;
-			break;
 		}
 
 		case TV_CAPTURE:
@@ -4896,11 +4895,10 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 	bool flag = FALSE;
 	bool done = FALSE;
 
-	bool plural = FALSE;
-
-
+#ifndef JP
 	/* Extract plural */
-	if (j_ptr->number != 1) plural = TRUE;
+	bool plural = (j_ptr->number != 1);
+#endif
 
 	/* Describe object */
 	object_desc(o_name, j_ptr, FALSE, 0);
@@ -7640,7 +7638,6 @@ static void add_essence(int mode)
 				{
 					screen_load();
 					return;
-					break;
 				}
 
 				case '8':

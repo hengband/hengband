@@ -588,7 +588,6 @@ void mindcraft_info(char *p, int use_mind, int power)
 				{
 					if (!only_browse) screen_load();
 					return (FALSE);
-					break;
 				}
 
 				case '8':
@@ -932,7 +931,6 @@ if (!b) msg_print("安全な気がする。");
 			return psychometry();
 		else
 			return ident_spell(FALSE);
-		break;
 	case 8:
 		/* Mindwave */
 #ifdef JP
@@ -1407,8 +1405,7 @@ msg_format("There are too many mirrors to control!");
 	  return dimension_door();
 	/* mirror of recall */
 	case 17:
-	  if(!word_of_recall())return FALSE;
-	  break;
+		return word_of_recall();
 	/* multi-shadow */
 	case 18:
 	  set_multishadow(6+randint1(6),FALSE);
@@ -1676,7 +1673,6 @@ msg_print("その方向にはモンスターはいません。");
 	}
 	case 7:
 		return ident_spell(FALSE);
-		break;
 	case 8:
 		set_tim_ffall(randint1(20) + 20, FALSE);
 		break;
@@ -2300,6 +2296,4 @@ void do_cmd_mind_browse(void)
 		  (void)inkey();
 		}
 	}
-
-	screen_load();
 }

@@ -473,7 +473,6 @@ cptr            p = "À‚À°";
 				{
 					screen_load();
 					return (FALSE);
-					break;
 				}
 
 				case '8':

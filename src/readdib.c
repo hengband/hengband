@@ -72,7 +72,7 @@ static DWORD PASCAL lread(int fh, VOID FAR *pv, DWORD ul)
 		ul -= MAXREAD;
 		hp += MAXREAD;
 	}
-	if (_lread(fh, (LPSTR)hp, (WORD)ul) != (WORD)ul)
+	if (_lread(fh, (LPSTR)hp, (WORD)ul) != ul)
 		return 0;
 	return ulT;
 }
@@ -108,7 +108,7 @@ static HPALETTE PASCAL NEAR MakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
 		lpRGB = (RGBQUAD FAR *)((LPSTR)lpInfo + lpInfo->biSize);
 
 		/* copy colors from the color table to the LogPalette structure */
-		for (i = 0; i < lpInfo->biClrUsed; i++, lpRGB++)
+		for (i = 0; i < (WORD)lpInfo->biClrUsed; i++, lpRGB++)
 		{
 			npPal->palPalEntry[i].peRed = lpRGB->rgbRed;
 			npPal->palPalEntry[i].peGreen = lpRGB->rgbGreen;

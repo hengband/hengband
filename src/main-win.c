@@ -701,7 +701,7 @@ static byte special_key_list[] =
 #endif
 
 /* bg */
-static void delete_bg()
+static void delete_bg(void)
 {
 	if (hBG != NULL)
 	{
@@ -710,7 +710,7 @@ static void delete_bg()
 	}
 }
 
-static int init_bg()
+static int init_bg(void)
 {
 	char * bmfile = bg_bitmap_file;
 
@@ -729,15 +729,15 @@ static int init_bg()
 	int i, j;
 
 	delete_bg();
-	
+
 	wnddc = GetDC(hwnd);
 	dcimage = CreateCompatibleDC(wnddc);
 	dcbg = CreateCompatibleDC(wnddc);
-	
+
 	bmimage = LoadImage(NULL, "bg.bmp", LR_LOADFROMFILE, 0, 0, 0);
 	if (!bmimage) quit("bg.bmpが読みこめない！");
 	bmimage_old = SelectObject(dcimage, bmimage);
-	
+
 	CreateCompatibleBitmap();
 
 	ReleaseDC(hwnd, wnddc);
@@ -1948,7 +1948,7 @@ static errr Term_xtra_win_react(void)
 		term_data *td = &data[i];
 
 		/* Update resized windows */
-		if ((td->cols != td->t.wid) || (td->rows != td->t.hgt))
+		if ((td->cols != (uint)td->t.wid) || (td->rows != (uint)td->t.hgt))
 		{
 			/* Activate */
 			Term_activate(&td->t);

@@ -20,15 +20,11 @@
  */
 void check_experience(void)
 {
-	int		i;
 	bool level_reward = FALSE;
 	bool level_mutation = FALSE;
 	bool level_inc_stat = FALSE;
 	bool android = (p_ptr->prace == RACE_ANDROID ? TRUE : FALSE);
 
-
-	/* Note current level */
-	i = p_ptr->lev;
 
 	/* Hack -- lower limit */
 	if (p_ptr->exp < 0) p_ptr->exp = 0;
@@ -3389,12 +3385,12 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 
 				/* Remove the first object from the list. */
 				excise_object_idx(o_idx);
-	
+
 				/* Find end of the list. */
 				i = c_ptr->o_idx;
 				while (o_list[i].next_o_idx)
 					i = o_list[i].next_o_idx;
-	
+
 				/* Add after the last object. */
 				o_list[i].next_o_idx = o_idx;
 
@@ -3402,8 +3398,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 			}
 		}
 
-		/* End this grid */
-		return query;
+		/* NOTREACHED */
 	}
 #endif /* ALLOW_EASY_FLOOR */
 

@@ -3549,7 +3549,6 @@ s16b get_quantity(cptr prompt, int max)
  */
 void pause_line(int row)
 {
-	int i;
 	prt("", row, 0);
 #ifdef JP
 	put_str("[ 何かキーを押して下さい ]", row, 26);
@@ -3557,7 +3556,7 @@ void pause_line(int row)
 	put_str("[Press any key to continue]", row, 23);
 #endif
 
-	i = inkey();
+	(void)inkey();
 	prt("", row, 0);
 }
 
@@ -4921,7 +4920,7 @@ void roff_to_buf(cptr str, int maxlen, char *tbuf, size_t bufsize)
 #endif
 
 		/* Not enough buffer size */
-		if (write_pt + 3 >= bufsize) break;
+		if ((size_t)(write_pt + 3) >= bufsize) break;
 
 		tbuf[write_pt++] = ch[0];
 		line_len++;

@@ -2947,7 +2947,6 @@ static int initial_r_appearance(int r_idx)
 bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 {
 	int			i;
-	int rune_dam = 0;
 
 	cave_type		*c_ptr;
 
@@ -3068,7 +3067,6 @@ msg_print("守りのルーンが壊れた！");
 
 			/* Notice */
 			note_spot(y, x);
-			rune_dam = 1000;
 		}
 		else return FALSE;
 	}

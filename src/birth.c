@@ -4831,10 +4831,8 @@ static bool get_stat_limits(void)
 		switch ( c ){
 		case 'Q':
 			birth_quit();
-			break;
 		case 'S':
-			return (FALSE); 
-			break;
+			return FALSE;
 		case ESCAPE:
 			break;
 		case ' ':
@@ -5081,7 +5079,6 @@ static bool get_chara_limits(void)
 		switch (c){
 		case 'Q':
 			birth_quit();
-			break;
 		case 'S':
 			return (FALSE);
 		case ESCAPE:
@@ -5234,7 +5231,6 @@ static char histpref_buf[240];
 
 void add_history_from_pref_line(cptr t)
 {
-	int  line_size = strlen(t);
 	int  limit = (sizeof histpref_buf) - 1;
 	int  i;
 

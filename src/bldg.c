@@ -2381,48 +2381,32 @@ bool get_nightmare(int r_idx)
 void have_nightmare(int r_idx)
 {
 	bool happened = FALSE;
-
-	int power = 100;
-
 	monster_race *r_ptr = &r_info[r_idx];
-
+	int power = r_ptr->level + 10;
 	char m_name[80];
 	cptr desc = r_name + r_ptr->name;
 
-
-	power = r_ptr->level + 10;
-
-#ifdef JP
-	if (0)
-#else
+	/* Describe it */
+#ifndef JP
 	if (!(r_ptr->flags1 & RF1_UNIQUE))
-#endif
-
-	{
-		/* Describe it */
 		sprintf(m_name, "%s %s", (is_a_vowel(desc[0]) ? "an" : "a"), desc);
-
-		if (r_ptr->flags1 & RF1_FRIENDS)
-		{
-			power /= 2;
-		}
-	}
 	else
-	{
-		/* Describe it */
+#endif
 		sprintf(m_name, "%s", desc);
 
-		power *= 2;
+	if (!(r_ptr->flags1 & RF1_UNIQUE))
+	{
+		if (r_ptr->flags1 & RF1_FRIENDS) power /= 2;
 	}
+	else power *= 2;
 
 	if (saving_throw(p_ptr->skill_sav * 100 / power))
 	{
 #ifdef JP
-	msg_format("夢の中で%sに追いかけられた。", m_name);
+		msg_format("夢の中で%sに追いかけられた。", m_name);
 #else
-	msg_format("%^s chases you through your dreams.", m_name);
+		msg_format("%^s chases you through your dreams.", m_name);
 #endif
-
 
 		/* Safe */
 		return;
@@ -2432,7 +2416,7 @@ void have_nightmare(int r_idx)
 	{
 		/* Something silly happens... */
 #ifdef JP
-msg_format("%s%sの顔を見てしまった！",
+		msg_format("%s%sの顔を見てしまった！",
 #else
 		msg_format("You behold the %s visage of %s!",
 #endif
@@ -2451,7 +2435,7 @@ msg_format("%s%sの顔を見てしまった！",
 
 	/* Something frightening happens... */
 #ifdef JP
-msg_format("%s%sの顔を見てしまった！",
+	msg_format("%s%sの顔を見てしまった！",
 #else
 	msg_format("You behold the %s visage of %s!",
 #endif
@@ -2460,7 +2444,7 @@ msg_format("%s%sの顔を見てしまった！",
 
 	r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
 
-	switch(p_ptr->prace)
+	switch (p_ptr->prace)
 	{
 		/* Imps may make a saving throw */
 		case RACE_IMP:
@@ -4454,7 +4438,6 @@ static void bldg_process_command(building_type *bldg, int i)
 	int bact = bldg->actions[i];
 	int bcost;
 	bool paid = FALSE;
-	bool set_reward = FALSE;
 	int amt;
 
 	/* Flush messages XXX XXX XXX */
@@ -4491,12 +4474,10 @@ msg_print("お金が足りません！");
 		return;
 	}
 
-	if (!bcost) set_reward = TRUE;
-
 	switch (bact)
 	{
 	case BACT_NOTHING:
-				/* Do nothing */
+		/* Do nothing */
 		break;
 	case BACT_RESEARCH_ITEM:
 		paid = identify_fully(FALSE);
