@@ -3360,7 +3360,7 @@ static void process_menus(WORD wCmd)
 #else /* ZANGBAND */
 				/* do_cmd_save_game(); */
 #endif /* ZANGBAND */
-				Term_key_push(KTRL('X'));
+				Term_key_push(252);
 				break;
 			}
 			quit(NULL);
@@ -4058,7 +4058,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 #else /* ZANGBAND */
 				/* do_cmd_save_game(); */
 #endif /* ZANGBAND */
-				Term_key_push(KTRL('X'));
+				Term_key_push(252);
 				return 0;
 			}
 			quit(NULL);

@@ -4837,6 +4837,7 @@ msg_print("アリーナが魔法を吸収した！");
 
 		/* Save and quit */
 		case KTRL('X'):
+		case 252:
 		{
 			do_cmd_save_and_exit();
 			break;
