@@ -6703,7 +6703,7 @@ static essence_type essence_info[MAX_ESSENCE] = {
 {"","resist cold activation", 52, 5, 50},
 {"","fiery sheath", 0, 5, 30},
 {"","electric sheath", 0, 5, 30},
-{"","coldly sheath", 0, 5, 30},
+{"","sheath of coldness", 0, 5, 30},
 {"","resistance", 0, 2, 150},
 {"","elements proof", 0, 6, 10},
 {"","gauntlets of slay", 97, 1, 200},

@@ -2285,7 +2285,7 @@ info[i++] = "あなたは電気に包まれている。";
 #ifdef JP
 info[i++] = "あなたは冷気のオーラに包まれている。";
 #else
-		info[i++] = "You are surrounded with a coldly aura.";
+		info[i++] = "You are surrounded with an aura of coldness.";
 #endif
 
 	}
