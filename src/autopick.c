@@ -3238,18 +3238,37 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 			break;
 
 		case '\010':
+		{
 			/* Backspace */
+
+			int i = 0;
 
 			/* Now on insert mode */
 			color = TERM_WHITE;
 
 			/* No move at biggining of line */
-			if (!pos) break;
+			if (0 == pos) break;
 
-			/* Go left 1 unit */
-			pos--;
+			while (TRUE)
+			{
+				int next_pos = i + 1;
+
+#ifdef JP
+				if (iskanji(buf[i])) next_pos++;
+#endif
+
+				/* Is there the cursor at next position? */ 
+				if (next_pos >= pos) break;
+
+				/* Move to next */
+				i = next_pos;
+			}
+
+			/* Get previous position */
+			pos = i;
 
 			/* Fall through to 'Delete key' */
+		}
 
 		case 0x7F:
 		case KTRL('d'):
@@ -3265,7 +3284,7 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 
 #ifdef JP
 			/* Next character is one more byte away */
-			if (iskanji(src)) src++;
+			if (iskanji(buf[pos])) src++;
 #endif
 
 			dst = pos;
