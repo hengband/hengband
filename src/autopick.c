@@ -898,9 +898,11 @@ void auto_inscribe_item(int item, int idx)
 
 /*
  * Automatically destroy an item if it is to be destroyed
+ *
  */
 bool auto_destroy_item(int item, int autopick_idx)
 {
+	bool destroy = FALSE;
 	char o_name[MAX_NLEN];
 	object_type *o_ptr;
 
@@ -913,56 +915,73 @@ bool auto_destroy_item(int item, int autopick_idx)
 	/* Get the item (on the floor) */
 	else o_ptr = &o_list[0 - item];
 
-	if ((autopick_idx == -1 && is_opt_confirm_destroy(o_ptr)) ||
-	    (autopick_idx >= 0 && (autopick_list[autopick_idx].action & DO_AUTODESTROY)))
+	/* Easy-Auto-Destroyer */
+	if (is_opt_confirm_destroy(o_ptr)) destroy = TRUE;
+
+	if (always_pickup)
 	{
-		disturb(0,0);
+		/* Protected by auto-picker */
+		if (autopick_idx >= 0 &&
+		    !(autopick_list[autopick_idx].action & DO_AUTODESTROY))
+			destroy = FALSE;
+	}
+	else
+	{
+		/* Auto-picker/destroyer */
+		if (autopick_idx >= 0 &&
+		    (autopick_list[autopick_idx].action & DO_AUTODESTROY))
+			destroy = TRUE;
+	}
 
-		/* Describe the object (with {terrible/special}) */
-		object_desc(o_name, o_ptr, TRUE, 3);
+	/* Not to be destroyed */
+	if (!destroy) return FALSE;
 
-		/* Artifact? */
-		if (!can_player_destroy_object(o_ptr))
-		{
-			/* Message */
+	/* Now decided to destroy */
+
+	disturb(0,0);
+
+	/* Describe the object (with {terrible/special}) */
+	object_desc(o_name, o_ptr, TRUE, 3);
+
+	/* Artifact? */
+	if (!can_player_destroy_object(o_ptr))
+	{
+		/* Message */
 #ifdef JP
-			msg_format("%sは破壊不能だ。", o_name);
+		msg_format("%sは破壊不能だ。", o_name);
 #else
-			msg_format("You cannot auto-destroy %s.", o_name);
+		msg_format("You cannot auto-destroy %s.", o_name);
 #endif
 
-			/* Done */
-			return TRUE;
-		}
-
-		/* Record name of destroyed item */
-		autopick_free_entry(&autopick_entry_last_destroyed);
-		autopick_entry_from_object(&autopick_entry_last_destroyed, o_ptr);
-
-		/* Eliminate the item (from the pack) */
-		if (item >= 0)
-		{
-			inven_item_increase(item, -(o_ptr->number));
-			inven_item_optimize(item);
-		}
-
-		/* Eliminate the item (from the floor) */
-		else
-		{
-			delete_object_idx(0 - item);
-		}
-
-		/* Print a message */
-#ifdef JP
-		msg_format("%sを自動破壊します。", o_name);
-#else
-		msg_format("Auto-destroying %s.", o_name);
-#endif
-			
+		/* Done */
 		return TRUE;
 	}
 
-	return FALSE;
+	/* Record name of destroyed item */
+	autopick_free_entry(&autopick_entry_last_destroyed);
+	autopick_entry_from_object(&autopick_entry_last_destroyed, o_ptr);
+
+	/* Eliminate the item (from the pack) */
+	if (item >= 0)
+	{
+		inven_item_increase(item, -(o_ptr->number));
+		inven_item_optimize(item);
+	}
+
+	/* Eliminate the item (from the floor) */
+	else
+	{
+		delete_object_idx(0 - item);
+	}
+
+	/* Print a message */
+#ifdef JP
+	msg_format("%sを自動破壊します。", o_name);
+#else
+	msg_format("Auto-destroying %s.", o_name);
+#endif
+			
+	return TRUE;
 }
 
 
@@ -1021,7 +1040,7 @@ void auto_pickup_items(cave_type *c_ptr)
 		 */
 		else
 		{
-			if (auto_destroy_item((-this_o_idx), (!always_pickup ? idx : -2)))
+			if (auto_destroy_item((-this_o_idx), idx))
 				continue;
 		}
 	}
