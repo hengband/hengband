@@ -5809,7 +5809,8 @@ msg_print("試合開始！");
 		r_info[quest[quest_num].r_idx].flags1 &= ~RF1_QUESTOR;
 	}
 
-	if (alive)
+	/* Not save-and-quit and not dead? */
+	if (alive && !death)
 	{
 		for(num = 0; num < 21; num++)
 		{
@@ -5829,23 +5830,15 @@ msg_print("試合開始！");
 			if (!is_pet(m_ptr)) continue;
 			if (i == p_ptr->riding) continue;
 
-			/* 死んだときには主なペットの表示用に、距離制限を撤廃する。 */
-			if (death)
+			if (m_ptr->nickname && (player_has_los_bold(m_ptr->fy, m_ptr->fx) || los(m_ptr->fy, m_ptr->fx, py, px)))
 			{
-				if (!m_ptr->nickname) continue;
+				if (distance(py, px, m_ptr->fy, m_ptr->fx) > 3) continue;
 			}
 			else
 			{
-				if (m_ptr->nickname && (player_has_los_bold(m_ptr->fy, m_ptr->fx) || los(m_ptr->fy, m_ptr->fx, py, px)))
-				{
-					if (distance(py, px, m_ptr->fy, m_ptr->fx) > 3) continue;
-				}
-				else
-				{
-					if (distance(py, px, m_ptr->fy, m_ptr->fx) > 1) continue;
-				}
-				if (m_ptr->confused || m_ptr->stunned || m_ptr->csleep) continue;
+				if (distance(py, px, m_ptr->fy, m_ptr->fx) > 1) continue;
 			}
+			if (m_ptr->confused || m_ptr->stunned || m_ptr->csleep) continue;
 
 			COPY(&party_mon[num], &m_list[i], monster_type);
 			delete_monster_idx(i);
@@ -5868,7 +5861,6 @@ msg_print("試合開始！");
 			}
 		}
 	}
-	if (p_ptr->riding) p_ptr->riding = -1;
 
 	write_level = TRUE;
 }
@@ -6212,7 +6204,11 @@ quit("セーブファイルが壊れています");
 		do_cmd_write_nikki(NIKKI_GAMESTART, 1, "                            ---- Restart Game ----");
 #endif
 
-		if (p_ptr->riding)
+/*
+ * 1.0.9 以前はセーブ前に p_ptr->riding = -1 としていたので、再設定が必要だった。
+ * もう不要だが、以前のセーブファイルとの互換のために残しておく。
+ */
+		if (p_ptr->riding == -1)
 		{
 			p_ptr->riding = 0;
 			for(i = m_max; i > 0; i--)

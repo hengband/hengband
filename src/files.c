@@ -4336,36 +4336,18 @@ errr make_character_dump(FILE *fff)
 	fprintf(fff, "\n");
 	for (i = 0; i < p_ptr->count % 80; i++)
 		fprintf(fff, " ");
+
 	{
 		bool pet = FALSE;
-		int max_num, min_num, riding_num;
 
-		if (death)
+		for (i = m_max - 1; i >= 1; i--)
 		{
-			max_num = 21;
-			min_num = 0;
-			riding_num = 0;
-		}
-		else
-		{
-			max_num = m_max;
-			min_num = 1;
-			riding_num = p_ptr->riding;
-		}
-
-		for (i = max_num - 1; i >= min_num; i--)
-		{
-			monster_type *m_ptr;
+			monster_type *m_ptr = &m_list[i];
 			char pet_name[80];
-
-			if (death)
-				m_ptr = &party_mon[i];
-			else
-				m_ptr = &m_list[i];
 
 			if (!m_ptr->r_idx) continue;
 			if (!is_pet(m_ptr)) continue;
-			if (!m_ptr->nickname && (riding_num != i)) continue;
+			if (!m_ptr->nickname && (p_ptr->riding != i)) continue;
 			if (!pet)
 			{
 #ifdef JP
@@ -4377,7 +4359,7 @@ errr make_character_dump(FILE *fff)
 			}
 			monster_desc(pet_name, m_ptr, 0x88);
 			fprintf(fff, "%s", pet_name);
-			if (riding_num == i)
+			if (p_ptr->riding == i)
 #ifdef JP
 				fprintf(fff, " æË«œ√Ê");
 #else
