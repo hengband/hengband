@@ -1501,7 +1501,7 @@ msg_print("しかし効果がなかった！");
 #endif
 
 		}
-		else if (one_in_(2))
+		else if (!dun_level || one_in_(2))
 		{
 #ifdef JP
 msg_format("%sは床を突き破って沈んでいった。", m_name);
