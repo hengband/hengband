@@ -3794,7 +3794,7 @@ note = "には効果がなかった！";
 
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG_NOPET;
 			}
-			else if (p_ptr->aggravate)
+			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
 #ifdef JP
 note = "はあなたに敵意を抱いている！";
@@ -3873,7 +3873,7 @@ note = "には効果がなかった！";
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG_NOPET;
 			}
-			else if (p_ptr->aggravate)
+			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
 #ifdef JP
 note = "はあなたに敵意を抱いている！";
@@ -3948,7 +3948,7 @@ note = "には効果がなかった！";
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG_NOPET;
 			}
-			else if (p_ptr->aggravate)
+			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
 #ifdef JP
 note = "はあなたに敵意を抱いている！";
@@ -4032,7 +4032,7 @@ note = "には効果がなかった！";
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG_NOPET;
 			}
-			else if (p_ptr->aggravate)
+			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
 #ifdef JP
 note = "はあなたに敵意を抱いている！";
@@ -4121,7 +4121,7 @@ note = "には効果がなかった！";
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG_NOPET;
 			}
-			else if (p_ptr->aggravate)
+			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
 #ifdef JP
 note = "はあなたに敵意を抱いている！";

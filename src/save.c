@@ -568,6 +568,8 @@ static void wr_item(object_type *o_ptr)
 	wr_u32b(o_ptr->art_flags2);
 	wr_u32b(o_ptr->art_flags3);
 
+	wr_u32b(o_ptr->curse_flags);
+
 	/* Held by monster index */
 	wr_s16b(o_ptr->held_m_idx);
 

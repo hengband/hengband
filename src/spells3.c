@@ -1766,8 +1766,6 @@ static int remove_curse_aux(int all)
 	/* Attempt to uncurse items being worn */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		u32b f1, f2, f3;
-
 		object_type *o_ptr = &inventory[i];
 
 		/* Skip non-objects */
@@ -1776,26 +1774,17 @@ static int remove_curse_aux(int all)
 		/* Uncursed already */
 		if (!cursed_p(o_ptr)) continue;
 
-		/* Extract the flags */
-		object_flags(o_ptr, &f1, &f2, &f3);
-
 		/* Heavily Cursed Items need a special spell */
-		if (!all && (f3 & TR3_HEAVY_CURSE)) continue;
+		if (!all && (o_ptr->curse_flags & TRC_HEAVY_CURSE)) continue;
 
 		/* Perma-Cursed Items can NEVER be uncursed */
-		if (f3 & TR3_PERMA_CURSE) continue;
+		if (o_ptr->curse_flags & TRC_PERMA_CURSE) continue;
 
 		/* Uncurse it */
-		o_ptr->ident &= ~(IDENT_CURSED);
+		o_ptr->curse_flags = 0L;
 
 		/* Hack -- Assume felt */
 		o_ptr->ident |= (IDENT_SENSE);
-
-		if (o_ptr->art_flags3 & TR3_CURSED)
-			o_ptr->art_flags3 &= ~(TR3_CURSED);
-
-		if (o_ptr->art_flags3 & TR3_HEAVY_CURSE)
-			o_ptr->art_flags3 &= ~(TR3_HEAVY_CURSE);
 
 		/* Take note */
 		o_ptr->feeling = FEEL_NONE;
@@ -2206,12 +2195,7 @@ bool item_tester_hook_nameless_weapon_armour(object_type *o_ptr)
  */
 static void break_curse(object_type *o_ptr)
 {
-	u32b    f1, f2, f3;
-
-	/* Extract the flags */
-	object_flags(o_ptr, &f1, &f2, &f3);
-
-	if (cursed_p(o_ptr) && !(f3 & TR3_PERMA_CURSE) && !(f3 & TR3_HEAVY_CURSE) && (randint0(100) < 25))
+	if (cursed_p(o_ptr) && !(o_ptr->curse_flags & TRC_PERMA_CURSE) && !(o_ptr->curse_flags & TRC_HEAVY_CURSE) && (randint0(100) < 25))
 	{
 #ifdef JP
 msg_print("かけられていた呪いが打ち破られた！");
@@ -2219,12 +2203,9 @@ msg_print("かけられていた呪いが打ち破られた！");
 		msg_print("The curse is broken!");
 #endif
 
+		o_ptr->curse_flags = 0L;
 
-		o_ptr->ident &= ~(IDENT_CURSED);
 		o_ptr->ident |= (IDENT_SENSE);
-
-		if (o_ptr->art_flags3 & TR3_CURSED)
-			o_ptr->art_flags3 &= ~(TR3_CURSED);
 
 		o_ptr->feeling = FEEL_NONE;
 	}
@@ -3319,10 +3300,10 @@ s = "祝福できる武器がありません。";
 	/* Extract the flags */
 	object_flags(o_ptr, &f1, &f2, &f3);
 
-	if (o_ptr->ident & IDENT_CURSED)
+	if (cursed_p(o_ptr))
 	{
-		if (((f3 & TR3_HEAVY_CURSE) && (randint1(100) < 33)) ||
-		    (f3 & TR3_PERMA_CURSE))
+		if (((o_ptr->curse_flags & TRC_HEAVY_CURSE) && (randint1(100) < 33)) ||
+		    (o_ptr->curse_flags & TRC_PERMA_CURSE))
 		{
 #ifdef JP
 msg_format("%sを覆う黒いオーラは祝福を跳ね返した！",
@@ -3345,7 +3326,7 @@ msg_format("%s から邪悪なオーラが消えた。",
 
 
 		/* Uncurse it */
-		o_ptr->ident &= ~(IDENT_CURSED);
+		o_ptr->curse_flags = 0L;
 
 		/* Hack -- Assume felt */
 		o_ptr->ident |= (IDENT_SENSE);
@@ -3984,9 +3965,7 @@ s16b spell_chance(int spell, int realm)
 		chance += 5 * (shouhimana - p_ptr->csp);
 	}
 
-	if (p_ptr->pseikaku == SEIKAKU_NAMAKE) chance += 10;
-	if (p_ptr->pseikaku == SEIKAKU_KIREMONO) chance -= 3;
-	if ((p_ptr->pseikaku == SEIKAKU_GAMAN) || (p_ptr->pseikaku == SEIKAKU_CHIKARA)) chance++;
+	chance += p_ptr->to_m_chance;
 	if (((realm + 1) != p_ptr->realm1) && ((p_ptr->pclass == CLASS_MAGE) || (p_ptr->pclass == CLASS_PRIEST))) chance += 5;
 
 	/* Extract the minimum failure rate */
@@ -5196,7 +5175,7 @@ s = "錆止めできるものがありません。";
 
 	o_ptr->art_flags3 |= TR3_IGNORE_ACID;
 
-	if ((o_ptr->to_a < 0) && !(o_ptr->ident & IDENT_CURSED))
+	if ((o_ptr->to_a < 0) && !cursed_p(o_ptr))
 	{
 #ifdef JP
 msg_format("%sは新品同様になった！",o_name);
@@ -5284,7 +5263,7 @@ msg_format("恐怖の暗黒オーラがあなたの%sを包み込んだ！", o_name);
 		o_ptr->art_flags3 = 0;
 
 		/* Curse it */
-		o_ptr->ident |= (IDENT_CURSED);
+		o_ptr->curse_flags = TRC_CURSED;
 
 		/* Break it */
 		o_ptr->ident |= (IDENT_BROKEN);
@@ -5364,7 +5343,7 @@ if (!force) msg_format("恐怖の暗黒オーラがあなたの%sを包み込んだ！", o_name);
 
 
 		/* Curse it */
-		o_ptr->ident |= (IDENT_CURSED);
+		o_ptr->curse_flags = TRC_CURSED;
 
 		/* Break it */
 		o_ptr->ident |= (IDENT_BROKEN);

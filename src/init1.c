@@ -600,9 +600,9 @@ static cptr k_info_flags3[] =
 	"TELEPORT",
 	"AGGRAVATE",
 	"BLESSED",
-	"CURSED",
-	"HEAVY_CURSE",
-	"PERMA_CURSE"
+	"XXX1",
+	"XXX2",
+	"XXX3",
 };
 
 
@@ -618,12 +618,12 @@ static cptr k_info_gen_flags[] =
 	"XTRA_L_RES",
 	"XTRA_D_RES",
 	"XTRA_RES",
-	"XXX",
-	"XXX",
-	"XXX",
-	"XXX",
-	"XXX",
-	"XXX",
+	"CURSED",
+	"HEAVY_CURSE",
+	"PERMA_CURSE",
+	"RANDOM_CURSE0",
+	"RANDOM_CURSE1",
+	"RANDOM_CURSE2",
 	"XXX",
 	"XXX",
 	"XXX",

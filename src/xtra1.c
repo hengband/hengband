@@ -3215,6 +3215,8 @@ void calc_bonuses(void)
 	p_ptr->to_h_m = 0;
 	p_ptr->to_d_m = 0;
 
+	p_ptr->to_m_chance = 0;
+
 	/* Start with "normal" speed */
 	p_ptr->pspeed = 110;
 
@@ -3232,9 +3234,7 @@ void calc_bonuses(void)
 	p_ptr->tval_ammo = 0;
 
 	/* Clear all the flags */
-	p_ptr->aggravate = FALSE;
-	p_ptr->teleport = FALSE;
-	p_ptr->exp_drain = FALSE;
+	p_ptr->cursed = 0L;
 	p_ptr->bless_blade = FALSE;
 	p_ptr->xtra_might = FALSE;
 	p_ptr->impact[0] = FALSE;
@@ -3773,7 +3773,10 @@ void calc_bonuses(void)
 	}
 
 	/* Sexy Gal */
-	if (p_ptr->pseikaku == SEIKAKU_SEXY) p_ptr->aggravate = TRUE;
+	if (p_ptr->pseikaku == SEIKAKU_SEXY) p_ptr->cursed |= (TRC_AGGRAVATE);
+	if (p_ptr->pseikaku == SEIKAKU_NAMAKE) p_ptr->to_m_chance += 10;
+	if (p_ptr->pseikaku == SEIKAKU_KIREMONO) p_ptr->to_m_chance -= 3;
+	if ((p_ptr->pseikaku == SEIKAKU_GAMAN) || (p_ptr->pseikaku == SEIKAKU_CHIKARA)) p_ptr->to_m_chance++;
 
 	/* Lucky man */
 	if (p_ptr->pseikaku == SEIKAKU_LUCKY) p_ptr->muta3 |= MUT3_GOOD_LUCK;
@@ -3992,10 +3995,12 @@ void calc_bonuses(void)
 
 		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
-		if (o_ptr->tval == TV_CAPTURE) continue;
 
 		/* Extract the item flags */
 		object_flags(o_ptr, &f1, &f2, &f3);
+
+		p_ptr->cursed |= (o_ptr->curse_flags & (0xFFFFFFF0L));
+		if (o_ptr->name1 == ART_CHAINSWORD) p_ptr->cursed |= TRC_CHAINSWORD;
 
 		/* Affect stats */
 		if (f1 & (TR1_STR)) p_ptr->stat_add[A_STR] += o_ptr->pval;
@@ -4040,10 +4045,10 @@ void calc_bonuses(void)
 		if (f3 & (TR3_XTRA_SHOTS)) extra_shots++;
 
 		/* Various flags */
+		if (f3 & (TR3_AGGRAVATE))   p_ptr->cursed |= TRC_AGGRAVATE;
+		if (f3 & (TR3_DRAIN_EXP))   p_ptr->cursed |= TRC_DRAIN_EXP;
+		if (f3 & (TR3_TY_CURSE))    p_ptr->cursed |= TRC_TY_CURSE;
 		if (f3 & (TR3_DEC_MANA))    p_ptr->dec_mana = TRUE;
-		if (f3 & (TR3_AGGRAVATE))   p_ptr->aggravate = TRUE;
-		if (f3 & (TR3_TELEPORT))    p_ptr->teleport = TRUE;
-		if (f3 & (TR3_DRAIN_EXP))   p_ptr->exp_drain = TRUE;
 		if (f3 & (TR3_BLESSED))     p_ptr->bless_blade = TRUE;
 		if (f3 & (TR3_XTRA_MIGHT))  p_ptr->xtra_might = TRUE;
 		if (f3 & (TR3_SLOW_DIGEST)) p_ptr->slow_digest = TRUE;
@@ -4054,6 +4059,13 @@ void calc_bonuses(void)
 		if (f2 & (TR2_FREE_ACT))    p_ptr->free_act = TRUE;
 		if (f2 & (TR2_HOLD_LIFE))   p_ptr->hold_life = TRUE;
 		if (f3 & (TR3_WARNING))     p_ptr->warning = TRUE;
+
+		if (f3 & (TR3_TELEPORT))
+		{
+			if (cursed_p(o_ptr)) p_ptr->cursed |= TRC_TELEPORT;
+			else if (!o_ptr->inscription || !(strchr(quark_str(o_ptr->inscription),'.')))
+				p_ptr->cursed |= TRC_TELEPORT_SELF;
+		}
 
 		/* Immunity flags */
 		if (f2 & (TR2_IM_FIRE)) p_ptr->immune_fire = TRUE;
@@ -4102,6 +4114,20 @@ void calc_bonuses(void)
 		if (o_ptr->name2 == EGO_AMU_FOOL) p_ptr->heavy_spell = TRUE;
 		if (o_ptr->name2 == EGO_AMU_NAIVETY) down_saving = TRUE;
 
+		if (o_ptr->curse_flags & TRC_LOW_MAGIC)
+		{
+			if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
+			{
+				p_ptr->to_m_chance += 10;
+			}
+			else
+			{
+				p_ptr->to_m_chance += 3;
+			}
+		}
+
+		if (o_ptr->tval == TV_CAPTURE) continue;
+
 		/* Modify the base armor class */
 		p_ptr->ac += o_ptr->ac;
 
@@ -4113,6 +4139,51 @@ void calc_bonuses(void)
 
 		/* Apply the mental bonuses to armor class, if known */
 		if (object_known_p(o_ptr)) p_ptr->dis_to_a += o_ptr->to_a;
+
+		if (o_ptr->curse_flags & TRC_LOW_MELEE)
+		{
+			int slot = i - INVEN_RARM;
+			if (slot < 2)
+			{
+				if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
+				{
+					p_ptr->to_h[slot] -= 15;
+					if (o_ptr->ident & IDENT_MENTAL) p_ptr->dis_to_h[slot] -= 15;
+				}
+				else
+				{
+					p_ptr->to_h[slot] -= 5;
+					if (o_ptr->ident & IDENT_MENTAL) p_ptr->dis_to_h[slot] -= 5;
+				}
+			}
+			else
+			{
+				if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
+				{
+					p_ptr->to_h_b -= 15;
+					if (o_ptr->ident & IDENT_MENTAL) p_ptr->dis_to_h_b -= 15;
+				}
+				else
+				{
+					p_ptr->to_h_b -= 5;
+					if (o_ptr->ident & IDENT_MENTAL) p_ptr->dis_to_h_b -= 5;
+				}
+			}
+		}
+
+		if (o_ptr->curse_flags & TRC_LOW_AC)
+		{
+			if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
+			{
+				p_ptr->to_a -= 30;
+				if (o_ptr->ident & IDENT_MENTAL) p_ptr->dis_to_a -= 30;
+			}
+			else
+			{
+				p_ptr->to_a -= 10;
+				if (o_ptr->ident & IDENT_MENTAL) p_ptr->dis_to_a -= 10;
+			}
+		}
 
 		/* Hack -- do not apply "weapon" bonuses */
 		if (i == INVEN_RARM && buki_motteruka(i)) continue;
@@ -4185,6 +4256,8 @@ void calc_bonuses(void)
 			}
 		}
 	}
+
+	if (p_ptr->cursed & TRC_TELEPORT) p_ptr->cursed &= ~(TRC_TELEPORT_SELF);
 
 	/* Monks get extra ac for armour _not worn_ */
 	if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER)) && !heavy_armor())
@@ -5247,9 +5320,9 @@ void calc_bonuses(void)
 	p_ptr->skill_tht += ((cp_ptr->x_thb * p_ptr->lev / 10) + (ap_ptr->a_thb * p_ptr->lev / 50));
 
 
-	if ((prace_is_(RACE_S_FAIRY)) && (p_ptr->pseikaku != SEIKAKU_SEXY) && p_ptr->aggravate)
+	if ((prace_is_(RACE_S_FAIRY)) && (p_ptr->pseikaku != SEIKAKU_SEXY) && (p_ptr->cursed & TRC_AGGRAVATE))
 	{
-		p_ptr->aggravate = FALSE;
+		p_ptr->cursed &= ~(TRC_AGGRAVATE);
 		p_ptr->skill_stl = MIN(p_ptr->skill_stl - 3, (p_ptr->skill_stl + 2) / 2);
 	}
 

@@ -116,10 +116,6 @@ void object_flags(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3)
 		(*f1) = a_ptr->flags1;
 		(*f2) = a_ptr->flags2;
 		(*f3) = a_ptr->flags3;
-		if (!cursed_p(o_ptr))
-		{
-			(*f3) &= ~(TR3_HEAVY_CURSE | TR3_CURSED);
-		}
 	}
 
 	/* Ego-item */
@@ -276,11 +272,6 @@ void object_flags_known(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3)
 			(*f1) = a_ptr->flags1;
 			(*f2) = a_ptr->flags2;
 			(*f3) = a_ptr->flags3;
-
-			if (!cursed_p(o_ptr))
-			{
-				(*f3) &= ~(TR3_HEAVY_CURSE | TR3_CURSED);
-			}
 		}
 
 		/* Random artifact ! */
@@ -341,14 +332,6 @@ void object_flags_known(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3)
 		{
 			(*f2) |= (TR2_RES_ACID | TR2_RES_ELEC | TR2_RES_FIRE | TR2_RES_COLD);;
 		}
-	}
-
-	if (cursed_p(o_ptr))
-	{
-		if (o_ptr->art_flags3 & TR3_CURSED)
-			(*f3) |= (TR3_CURSED);
-		if (o_ptr->art_flags3 & TR3_HEAVY_CURSE)
-			(*f3) |= (TR3_HEAVY_CURSE);
 	}
 }
 
@@ -3389,34 +3372,6 @@ info[i++] = "それは矢／ボルト／弾を非常に早く発射することができる。";
 
 	}
 
-	if (f3 & (TR3_DRAIN_EXP))
-	{
-#ifdef JP
-info[i++] = "それは経験値を吸い取る。";
-#else
-		info[i++] = "It drains experience.";
-#endif
-
-	}
-	if (f3 & (TR3_TELEPORT))
-	{
-#ifdef JP
-info[i++] = "それはランダムなテレポートを引き起こす。";
-#else
-		info[i++] = "It induces random teleportation.";
-#endif
-
-	}
-	if (f3 & TR3_AGGRAVATE)
-	{
-#ifdef JP
-info[i++] = "それは付近のモンスターを怒らせる。";
-#else
-		info[i++] = "It aggravates nearby creatures.";
-#endif
-
-	}
-
 	if (f3 & TR3_BLESSED)
 	{
 #ifdef JP
@@ -3429,7 +3384,7 @@ info[i++] = "それは神に祝福されている。";
 
 	if (cursed_p(o_ptr))
 	{
-		if (f3 & TR3_PERMA_CURSE)
+		if (o_ptr->curse_flags & TRC_PERMA_CURSE)
 		{
 #ifdef JP
 info[i++] = "それは永遠の呪いがかけられている。";
@@ -3438,7 +3393,7 @@ info[i++] = "それは永遠の呪いがかけられている。";
 #endif
 
 		}
-		else if (f3 & TR3_HEAVY_CURSE)
+		else if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
 		{
 #ifdef JP
 info[i++] = "それは強力な呪いがかけられている。";
@@ -3458,12 +3413,156 @@ info[i++] = "それは呪われている。";
 		}
 	}
 
-	if (f3 & TR3_TY_CURSE)
+	if ((f3 & TR3_TY_CURSE) || (o_ptr->curse_flags & TRC_TY_CURSE))
 	{
 #ifdef JP
 info[i++] = "それは太古の禍々しい怨念が宿っている。";
 #else
 		info[i++] = "It carries an ancient foul curse.";
+#endif
+
+	}
+	if ((f3 & TR3_AGGRAVATE) || (o_ptr->curse_flags & TRC_AGGRAVATE))
+	{
+#ifdef JP
+info[i++] = "それは付近のモンスターを怒らせる。";
+#else
+		info[i++] = "It aggravates nearby creatures.";
+#endif
+
+	}
+	if ((f3 & (TR3_DRAIN_EXP)) || (o_ptr->curse_flags & TRC_DRAIN_EXP))
+	{
+#ifdef JP
+info[i++] = "それは経験値を吸い取る。";
+#else
+		info[i++] = "It drains experience.";
+#endif
+
+	}
+	if (o_ptr->curse_flags & TRC_SLOW_REGEN)
+	{
+#ifdef JP
+info[i++] = "それは回復力を弱める。";
+#else
+		info[i++] = "It nanka.";
+#endif
+
+	}
+	if (o_ptr->curse_flags & TRC_ADD_L_CURSE)
+	{
+#ifdef JP
+info[i++] = "それは弱い呪いを増やす。";
+#else
+		info[i++] = "It nanka.";
+#endif
+
+	}
+	if (o_ptr->curse_flags & TRC_ADD_H_CURSE)
+	{
+#ifdef JP
+info[i++] = "それは強力な呪いを増やす。";
+#else
+		info[i++] = "It nanka.";
+#endif
+
+	}
+	if (o_ptr->curse_flags & TRC_CALL_ANIMAL)
+	{
+#ifdef JP
+info[i++] = "それは動物を呼び寄せる。";
+#else
+		info[i++] = "It nanka.";
+#endif
+
+	}
+	if (o_ptr->curse_flags & TRC_CALL_DEMON)
+	{
+#ifdef JP
+info[i++] = "それは悪魔を呼び寄せる。";
+#else
+		info[i++] = "It nanka.";
+#endif
+
+	}
+	if (o_ptr->curse_flags & TRC_CALL_DRAGON)
+	{
+#ifdef JP
+info[i++] = "それはドラゴンを呼び寄せる。";
+#else
+		info[i++] = "It nanka.";
+#endif
+
+	}
+	if (o_ptr->curse_flags & TRC_COWARDICE)
+	{
+#ifdef JP
+info[i++] = "それは恐怖感を引き起こす。";
+#else
+		info[i++] = "It nanka.";
+#endif
+
+	}
+	if ((f3 & (TR3_TELEPORT)) || (o_ptr->curse_flags & TRC_TELEPORT))
+	{
+#ifdef JP
+info[i++] = "それはランダムなテレポートを引き起こす。";
+#else
+		info[i++] = "It induces random teleportation.";
+#endif
+
+	}
+	if (o_ptr->curse_flags & TRC_LOW_MELEE)
+	{
+#ifdef JP
+info[i++] = "それは攻撃を外しやすい。";
+#else
+		info[i++] = "It nanka.";
+#endif
+
+	}
+	if (o_ptr->curse_flags & TRC_LOW_AC)
+	{
+#ifdef JP
+info[i++] = "それは攻撃を受けやすい。";
+#else
+		info[i++] = "It nanka.";
+#endif
+
+	}
+	if (o_ptr->curse_flags & TRC_LOW_MAGIC)
+	{
+#ifdef JP
+info[i++] = "それは魔法を唱えにくくする。";
+#else
+		info[i++] = "It nanka.";
+#endif
+
+	}
+	if (o_ptr->curse_flags & TRC_FAST_DIGEST)
+	{
+#ifdef JP
+info[i++] = "それはあなたの新陳代謝を速くする。";
+#else
+		info[i++] = "It nanka.";
+#endif
+
+	}
+	if (o_ptr->curse_flags & TRC_DRAIN_HP)
+	{
+#ifdef JP
+info[i++] = "それはあなたの体力を吸い取る。";
+#else
+		info[i++] = "It nanka.";
+#endif
+
+	}
+	if (o_ptr->curse_flags & TRC_DRAIN_MANA)
+	{
+#ifdef JP
+info[i++] = "それはあなたの魔力を吸い取る。";
+#else
+		info[i++] = "It nanka.";
 #endif
 
 	}

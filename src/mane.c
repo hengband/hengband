@@ -175,9 +175,7 @@ put_str("¼ºÎ¨ ¸ú²Ì", y, x + 36);
 
 					if (spell.manedam) chance = chance * mane_dam[i] / spell.manedam;
 
-					if (p_ptr->pseikaku == SEIKAKU_NAMAKE) chance += 10;
-					if (p_ptr->pseikaku == SEIKAKU_KIREMONO) chance -= 3;
-					if ((p_ptr->pseikaku == SEIKAKU_GAMAN) || (p_ptr->pseikaku == SEIKAKU_CHIKARA)) chance++;
+					chance += p_ptr->to_m_chance;
 
 					/* Extract the minimum failure rate */
 					minfail = adj_mag_fail[p_ptr->stat_ind[spell.use_stat]];

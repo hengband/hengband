@@ -51,7 +51,7 @@
 #define FAKE_VERSION   0
 #define FAKE_VER_MAJOR 11
 #define FAKE_VER_MINOR 0
-#define FAKE_VER_PATCH 10
+#define FAKE_VER_PATCH 11
 
 #define ANGBAND_2_8_1
 #define ZANGBAND
@@ -2845,7 +2845,9 @@
 #define IDENT_KNOWN     0x08    /* Item abilities are known */
 #define IDENT_STOREB    0x10    /* Item is storebought !!!! */
 #define IDENT_MENTAL    0x20    /* Item information is known */
+#if 0
 #define IDENT_CURSED    0x40    /* Item is temporarily cursed */
+#endif
 #define IDENT_BROKEN    0x80    /* Item is permanently worthless */
 
 
@@ -2930,7 +2932,7 @@
 #define TR2_SUST_DEX            0x00000008L
 #define TR2_SUST_CON            0x00000010L
 #define TR2_SUST_CHR            0x00000020L
-#define TR2_RIDING               0x00000040L     /* Later */
+#define TR2_RIDING              0x00000040L     /* Later */
 #define TR2_XXX2                0x00000080L     /* Later */
 #define TR2_IM_ACID             0x00000100L
 #define TR2_IM_ELEC             0x00000200L
@@ -2987,9 +2989,6 @@
 #define TR3_TELEPORT            0x04000000L     /* Item teleports player */
 #define TR3_AGGRAVATE           0x08000000L     /* Item aggravates monsters */
 #define TR3_BLESSED             0x10000000L     /* Item is Blessed */
-#define TR3_CURSED              0x20000000L     /* Item is Cursed */
-#define TR3_HEAVY_CURSE         0x40000000L     /* Item is Heavily Cursed */
-#define TR3_PERMA_CURSE         0x80000000L     /* Item is Perma Cursed */
 
 
 #define TRG_INSTA_ART           0x00000001L     /* Item must be an artifact */
@@ -3002,6 +3001,12 @@
 #define TRG_XTRA_L_RES          0x00000080L     /* Extra lordly resistance */
 #define TRG_XTRA_D_RES          0x00000100L     /* Extra dragon resistance */
 #define TRG_XTRA_RES            0x00000200L     /* Extra resistance */
+#define TRG_CURSED              0x00000400L     /* Item is Cursed */
+#define TRG_HEAVY_CURSE         0x00000800L     /* Item is Heavily Cursed */
+#define TRG_PERMA_CURSE         0x00001000L     /* Item is Perma Cursed */
+#define TRG_RANDOM_CURSE0       0x00002000L     /* Item is Random Cursed */
+#define TRG_RANDOM_CURSE1       0x00004000L     /* Item is Random Cursed */
+#define TRG_RANDOM_CURSE2       0x00008000L     /* Item is Random Cursed */
 
 
 /*
@@ -3014,6 +3019,42 @@
 	 TR1_MAGIC_MASTERY | TR1_STEALTH | TR1_SEARCH | TR1_INFRA | \
 	 TR1_TUNNEL | TR1_SPEED | TR1_BLOWS)
 
+
+#define MAX_CURSE 17
+
+#define TRC_CURSED              0x00000001L
+#define TRC_HEAVY_CURSE         0x00000002L
+#define TRC_PERMA_CURSE         0x00000004L
+#define TRC_XXX1                0x00000008L
+#define TRC_TY_CURSE            0x00000010L
+#define TRC_AGGRAVATE           0x00000020L
+#define TRC_DRAIN_EXP           0x00000040L
+#define TRC_SLOW_REGEN          0x00000080L
+#define TRC_ADD_L_CURSE         0x00000100L
+#define TRC_ADD_H_CURSE         0x00000200L
+#define TRC_CALL_ANIMAL         0x00000400L
+#define TRC_CALL_DEMON          0x00000800L
+#define TRC_CALL_DRAGON         0x00001000L
+#define TRC_COWARDICE           0x00002000L
+#define TRC_TELEPORT            0x00004000L
+#define TRC_LOW_MELEE           0x00008000L
+#define TRC_LOW_AC              0x00010000L
+#define TRC_LOW_MAGIC           0x00020000L
+#define TRC_FAST_DIGEST         0x00040000L
+#define TRC_DRAIN_HP            0x00080000L
+#define TRC_DRAIN_MANA          0x00100000L
+
+#define TRC_TELEPORT_SELF       0x00000001L
+#define TRC_CHAINSWORD          0x00000002L
+
+#define TRC_HEAVY_MASK   \
+	(TRC_TY_CURSE | TRC_AGGRAVATE | TRC_DRAIN_EXP | TRC_ADD_H_CURSE | \
+	 TRC_CALL_DEMON | TRC_CALL_DRAGON)
+
+#define TRC_P_FLAG_MASK  \
+	(TRC_TY_CURSE | TRC_DRAIN_EXP | TRC_ADD_L_CURSE | TRC_ADD_H_CURSE | \
+	 TRC_CALL_ANIMAL | TRC_CALL_DEMON | TRC_CALL_DRAGON | TRC_COWARDICE | \
+	 TRC_TELEPORT | TRC_DRAIN_HP | TRC_DRAIN_MANA)
 
 
 /*** Monster blow constants ***/
@@ -3689,7 +3730,7 @@
  * Cursed items.
  */
 #define cursed_p(T) \
-	((T)->ident & (IDENT_CURSED))
+	((T)->curse_flags)
 
 
 /*

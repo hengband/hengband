@@ -5242,8 +5242,7 @@ void calc_android_exp(void)
 
 		object_copy(q_ptr, o_ptr);
 		q_ptr->discount = 0;
-		q_ptr->ident &= ~(IDENT_CURSED);
-		q_ptr->art_flags3 &= ~(TR3_CURSED | TR3_HEAVY_CURSE | TR3_PERMA_CURSE | TR3_TY_CURSE);
+		q_ptr->curse_flags = 0L;
 
 		if (o_ptr->name1)
 		{

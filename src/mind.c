@@ -693,9 +693,7 @@ put_str(format("Lv   %s   Fail Info", ((use_mind == MIND_BERSERKER) || (use_mind
 							chance += 5 * (mana_cost - p_ptr->csp);
 						}
 
-						if (p_ptr->pseikaku == SEIKAKU_NAMAKE) chance += 10;
-						if (p_ptr->pseikaku == SEIKAKU_KIREMONO) chance -= 3;
-						if ((p_ptr->pseikaku == SEIKAKU_GAMAN) || (p_ptr->pseikaku == SEIKAKU_CHIKARA)) chance++;
+						chance += p_ptr->to_m_chance;
 
 						/* Extract the minimum failure rate */
 						minfail = adj_mag_fail[p_ptr->stat_ind[mp_ptr->spell_stat]];
@@ -1971,9 +1969,7 @@ if (!get_check("それでも挑戦しますか? ")) return;
 		/* Reduce failure rate by "effective" level adjustment */
 		chance -= 3 * (plev - spell.min_lev);
 
-		if (p_ptr->pseikaku == SEIKAKU_NAMAKE) chance += 10;
-		if (p_ptr->pseikaku == SEIKAKU_KIREMONO) chance -= 3;
-		if ((p_ptr->pseikaku == SEIKAKU_GAMAN) || (p_ptr->pseikaku == SEIKAKU_CHIKARA)) chance++;
+		chance += p_ptr->to_m_chance;
 
 		/* Reduce failure rate by INT/WIS adjustment */
 		chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[mp_ptr->spell_stat]] - 1);

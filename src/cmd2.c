@@ -4475,14 +4475,14 @@ note_dies = "は爆発して粉々になった。";
 		j = 100;
 
 		if (!(summon_named_creature(y, x, q_ptr->pval, FALSE, FALSE, FALSE,
-		      (bool)!(q_ptr->ident & IDENT_CURSED))))
+		      (bool)!(cursed_p(q_ptr)))))
 #ifdef JP
 msg_print("人形は捻じ曲がり砕け散ってしまった！");
 #else
 			msg_print("The Figurine writhes and then shatters.");
 #endif
 
-		else if (q_ptr->ident & IDENT_CURSED)
+		else if (cursed_p(q_ptr))
 #ifdef JP
 msg_print("これはあまり良くない気がする。");
 #else

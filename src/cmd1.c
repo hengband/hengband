@@ -2468,7 +2468,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 	{
 		int tmp = p_ptr->lev*6+(p_ptr->skill_stl+10)*4;
 		if (p_ptr->monlite && (mode != HISSATSU_NYUSIN)) tmp /= 3;
-		if (p_ptr->aggravate) tmp /= 2;
+		if (p_ptr->cursed & TRC_AGGRAVATE) tmp /= 2;
 		if (r_ptr->level > (p_ptr->lev*p_ptr->lev/20+10)) tmp /= 3;
 		if (m_ptr->csleep && m_ptr->ml)
 		{

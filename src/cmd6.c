@@ -6885,7 +6885,7 @@ static bool select_magic_eater(int mode)
 					{
 						chance -= 3 * (p_ptr->lev - level);
 					}
-					if (p_ptr->pseikaku == SEIKAKU_NAMAKE) chance += 10;
+					chance += p_ptr->to_m_chance;
 					if (p_ptr->heavy_spell) chance += 20;
 					if(p_ptr->dec_mana && p_ptr->easy_spell) chance-=4;
 					else if (p_ptr->easy_spell) chance-=3;
@@ -7070,7 +7070,7 @@ msg_print("混乱していて唱えられない！");
 	{
 		chance -= 3 * (p_ptr->lev - level);
 	}
-	if (p_ptr->pseikaku == SEIKAKU_NAMAKE) chance += 10;
+	chance += p_ptr->to_m_chance;
 	if (p_ptr->heavy_spell) chance += 20;
 	if(p_ptr->dec_mana && p_ptr->easy_spell) chance-=4;
 	else if (p_ptr->easy_spell) chance-=3;

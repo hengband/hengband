@@ -526,6 +526,8 @@ struct object_type
 	u32b art_flags2;        /* Flags, set 2  for the random artifacts of*/
 	u32b art_flags3;        /* Flags, set 3  Zangband */
 
+	u32b curse_flags;        /* Flags for curse */
+
 	s16b next_o_idx;	/* Next object in stack (if any) */
 
 	s16b held_m_idx;	/* Monster holding us (if any) */
@@ -1180,12 +1182,9 @@ struct player_type
 	bool sustain_con;	/* Keep constitution */
 	bool sustain_chr;	/* Keep charisma */
 
-	bool aggravate;		/* Aggravate monsters */
-	bool teleport;		/* Random teleporting */
+	u32b cursed;            /* Player is cursed */
 	bool sutemi;
 	bool counter;
-
-	bool exp_drain;		/* Experience draining */
 
 	bool can_swim;			/* No damage falling */
 	bool ffall;			/* No damage falling */
@@ -1220,6 +1219,8 @@ struct player_type
 	s16b to_d[2];			/* Bonus to dam (wield) */
 	s16b to_d_m;			/* Bonus to dam (misc) */
 	s16b to_a;			/* Bonus to ac */
+
+	s16b to_m_chance;		/* Minusses to cast chance */
 
 	bool ryoute;
 	bool migite;

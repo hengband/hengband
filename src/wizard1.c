@@ -1193,7 +1193,7 @@ static void analyze_misc_magic (object_type *o_ptr, cptr *misc_list)
 			*misc_list++ = "Ancient Curse";
 #endif
 		}
-		if (f3 & TR3_PERMA_CURSE)
+		if (o_ptr->curse_flags & TRC_PERMA_CURSE)
 		{
 #ifdef JP
 			*misc_list++ = "捩棄及熱中";
@@ -1201,7 +1201,7 @@ static void analyze_misc_magic (object_type *o_ptr, cptr *misc_list)
 			*misc_list++ = "Permanently Cursed";
 #endif
 		}
-		else if (f3 & TR3_HEAVY_CURSE)
+		else if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
 		{
 #ifdef JP
 			*misc_list++ = "雄恘卅熱中";
@@ -1210,7 +1210,7 @@ static void analyze_misc_magic (object_type *o_ptr, cptr *misc_list)
 #endif
 		}
 /*		else */
-		else if (f3 & TR3_CURSED)
+		else if (o_ptr->curse_flags & TRC_CURSED)
 		{
 #ifdef JP
 			*misc_list++ = "熱中";

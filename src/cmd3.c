@@ -749,12 +749,7 @@ void do_cmd_takeoff(void)
 	/* Item is cursed */
 	if (cursed_p(o_ptr))
 	{
-		u32b f1, f2, f3;
-
-		/* Extract the flags */
-		object_flags(o_ptr, &f1, &f2, &f3);
-
-		if ((f3 & TR3_PERMA_CURSE) || (p_ptr->pclass != CLASS_BERSERKER))
+		if ((o_ptr->curse_flags & TRC_PERMA_CURSE) || (p_ptr->pclass != CLASS_BERSERKER))
 		{
 			/* Oops */
 #ifdef JP
@@ -767,7 +762,7 @@ void do_cmd_takeoff(void)
 			return;
 		}
 
-		if (((f3 & TR3_HEAVY_CURSE) && one_in_(7)) || one_in_(4))
+		if (((o_ptr->curse_flags & TRC_HEAVY_CURSE) && one_in_(7)) || one_in_(4))
 		{
 #ifdef JP
 			msg_print("呪われた装備を力づくで剥がした！");
@@ -775,17 +770,10 @@ void do_cmd_takeoff(void)
 			msg_print("You teared a cursed equipment off by sheer strength!");
 #endif
 
-			/* Uncurse it */
-			o_ptr->ident &= ~(IDENT_CURSED);
-
 			/* Hack -- Assume felt */
 			o_ptr->ident |= (IDENT_SENSE);
 
-			if (o_ptr->art_flags3 & TR3_CURSED)
-				o_ptr->art_flags3 &= ~(TR3_CURSED);
-
-			if (o_ptr->art_flags3 & TR3_HEAVY_CURSE)
-			o_ptr->art_flags3 &= ~(TR3_HEAVY_CURSE);
+			o_ptr->curse_flags = 0L;
 
 			/* Take note */
 			o_ptr->feeling = FEEL_NONE;
@@ -1214,7 +1202,6 @@ void do_cmd_observe(void)
 	msg_format("Examining %s...", o_name);
 #endif
 
-
 	/* Describe it fully */
 #ifdef JP
 	if (!identify_fully_aux(o_ptr)) msg_print("特に変わったところはないようだ。");
@@ -1373,9 +1360,11 @@ static flag_insc_table flag_insc_misc[] =
 	{ "射", "Xs", TR3_XTRA_SHOTS, 3, 0 },
 	{ "怒", "Ag", TR3_AGGRAVATE, 3, 0 },
 	{ "祝", "Bs", TR3_BLESSED, 3, 0 },
+#if 0
 	{ "永呪", "Pc", TR3_PERMA_CURSE, 3, 0 },
 	{ "呪", "Cu", TR3_HEAVY_CURSE, 3, TR3_PERMA_CURSE },
 	{ "忌", "Ty", TR3_TY_CURSE, 3, 0 },
+#endif
 	{ NULL, 0, 0, 0 }
 };
 
@@ -1495,9 +1484,11 @@ static flag_insc_table flag_insc_misc[] =
   	{ "Xs", TR3_XTRA_SHOTS, 3, 0 },
   	{ "Ag", TR3_AGGRAVATE, 3, 0 },
   	{ "Bs", TR3_BLESSED, 3, 0 },
+#if 0
   	{ "Pc", TR3_PERMA_CURSE, 3, 0 },
   	{ "Cu", TR3_HEAVY_CURSE, 3, TR3_PERMA_CURSE },
   	{ "Ty", TR3_TY_CURSE, 3, 0 },
+#endif
 #if 0
   	{ "De", TR3_DRAIN_EXP, 3, 0 },
 #endif

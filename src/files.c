@@ -2971,7 +2971,7 @@ static void display_player_flag_aux(int row, int col, char *header,
 				    u32b im_f[], u32b vul_f)
 {
 	int     i;
-	u32b    f[3];
+	u32b    f[4];
 	bool    vuln = FALSE;
 
 	if ((vul_f & flag1) && !((im_f[0] | im_f[1] | im_f[2]) & flag1))
@@ -2987,13 +2987,14 @@ static void display_player_flag_aux(int row, int col, char *header,
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
 		object_type *o_ptr;
-		f[0] = f[1] = f[2] = 0L;
+		f[0] = f[1] = f[2] = f[3] = 0L;
 
 		/* Object */
 		o_ptr = &inventory[i];
 
 		/* Known flags */
 		object_flags_known(o_ptr, &f[0], &f[1], &f[2]);
+		f[3] = o_ptr->curse_flags;
 
 		/* Default */
 		c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
@@ -3008,6 +3009,7 @@ static void display_player_flag_aux(int row, int col, char *header,
 
 	/* Player flags */
 	player_flags(&f[0], &f[1], &f[2]);
+	f[3] = 0L;
 
 	/* Default */
 	c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
@@ -3017,6 +3019,7 @@ static void display_player_flag_aux(int row, int col, char *header,
 
 	/* Timed player flags */
 	tim_player_flags(&f[0], &f[1], &f[2], TRUE);
+	f[3] = 0L;
 
 	/* Check flags */
 	if (f[n-1] & flag1) c_put_str((byte)(vuln ? TERM_ORANGE : TERM_YELLOW), "#", row, col);
@@ -3132,7 +3135,7 @@ display_player_flag_aux(row+5, col, "贊壅祭    :", 3, TR3_SLOW_DIGEST, 0, im_f[2
 display_player_flag_aux(row+6, col, "萌莢汊    :", 3, TR3_REGEN, 0, im_f[2], vul_f[2]);
 display_player_flag_aux(row+7, col, "忏芛      :", 3, TR3_FEATHER, 0, im_f[2], vul_f[2]);
 display_player_flag_aux(row+8, col, "捩棄跪蜓  :", 3, TR3_LITE, 0, im_f[2], vul_f[2]);
-display_player_flag_aux(row+9, col, "熱中      :", 3, (TR3_CURSED | TR3_HEAVY_CURSE), TR3_PERMA_CURSE, im_f[2], vul_f[2]);
+display_player_flag_aux(row+9, col, "熱中      :", 4, (TRC_CURSED | TRC_HEAVY_CURSE), TRC_PERMA_CURSE, im_f[2], vul_f[2]);
 #else
 	display_player_flag_aux(row+0, col, "Speed     :", 1, TR1_SPEED, 0, im_f[0], vul_f[0]);
 	display_player_flag_aux(row+1, col, "FreeAction:", 2, TR2_FREE_ACT, 0, im_f[1], vul_f[1]);
@@ -3143,7 +3146,7 @@ display_player_flag_aux(row+9, col, "熱中      :", 3, (TR3_CURSED | TR3_HEAVY_CU
 	display_player_flag_aux(row+6, col, "Regene.   :", 3, TR3_REGEN, 0, im_f[2], vul_f[2]);
 	display_player_flag_aux(row+7, col, "Levitation:", 3, TR3_FEATHER, 0, im_f[2], vul_f[2]);
 	display_player_flag_aux(row+8, col, "Perm Lite :", 3, TR3_LITE, 0, im_f[2], vul_f[2]);
-	display_player_flag_aux(row+9, col, "Cursed    :", 3, (TR3_CURSED | TR3_HEAVY_CURSE), TR3_PERMA_CURSE, im_f[2], vul_f[2]);
+	display_player_flag_aux(row+9, col, "Cursed    :", 4, (TRC_CURSED | TRC_HEAVY_CURSE), TRC_PERMA_CURSE, im_f[2], vul_f[2]);
 #endif
 
 }
@@ -3720,9 +3723,9 @@ NULL,
 "氾伊禾□玄",
 "�艘�",
 "誼吽",
-"熱中",
-"褐中熱中",
-"捩棄及熱中"
+NULL,
+NULL,
+NULL,
 #else
 	"NoTeleport",
 	"AntiMagic",
@@ -3749,9 +3752,9 @@ NULL,
 	"Teleport",
 	"Aggravate",
 	"Blessed",
-	"Cursed",
-	"Hvy Curse",
-	"Prm Curse"
+	NULL,
+	NULL,
+	NULL,
 #endif
 
 };

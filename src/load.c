@@ -344,6 +344,34 @@ static void rd_item(object_type *o_ptr)
 	rd_u32b(&o_ptr->art_flags2);
 	rd_u32b(&o_ptr->art_flags3);
 
+	if (z_older_than(11, 0, 11))
+	{
+		o_ptr->curse_flags = 0L;
+		if (o_ptr->ident & 0x40)
+		{
+			o_ptr->curse_flags |= TRC_CURSED;
+			if (o_ptr->art_flags3 & 0x40000000L) o_ptr->curse_flags |= TRC_HEAVY_CURSE;
+			if (o_ptr->art_flags3 & 0x80000000L) o_ptr->curse_flags |= TRC_PERMA_CURSE;
+			if (o_ptr->name1)
+			{
+				artifact_type *a_ptr = &a_info[o_ptr->name1];
+				if (a_ptr->gen_flags & (TRG_HEAVY_CURSE)) o_ptr->curse_flags |= TRC_HEAVY_CURSE;
+				if (a_ptr->gen_flags & (TRG_PERMA_CURSE)) o_ptr->curse_flags |= TRC_PERMA_CURSE;
+			}
+			else if (o_ptr->name2)
+			{
+				ego_item_type *e_ptr = &e_info[o_ptr->name2];
+				if (e_ptr->gen_flags & (TRG_HEAVY_CURSE)) o_ptr->curse_flags |= TRC_HEAVY_CURSE;
+				if (e_ptr->gen_flags & (TRG_PERMA_CURSE)) o_ptr->curse_flags |= TRC_PERMA_CURSE;
+			}
+		}
+		o_ptr->art_flags3 &= (0x1FFFFFFFL);
+	}
+	else
+	{
+		rd_u32b(&o_ptr->curse_flags);
+	}
+
 	/* Monster holding object */
 	rd_s16b(&o_ptr->held_m_idx);
 

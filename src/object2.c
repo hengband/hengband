@@ -1010,16 +1010,16 @@ s32b flag_cost(object_type * o_ptr, int plusses)
 	if (f3 & TR3_DRAIN_EXP) total -= 12500;
 	if (f3 & TR3_TELEPORT)
 	{
-		if (o_ptr->ident & IDENT_CURSED)
+		if (cursed_p(o_ptr))
 			total -= 7500;
 		else
 			total += 250;
 	}
 	if (f3 & TR3_AGGRAVATE) total -= 10000;
 	if (f3 & TR3_BLESSED) total += 750;
-	if (f3 & TR3_CURSED) total -= 5000;
-	if (f3 & TR3_HEAVY_CURSE) total -= 12500;
-	if (f3 & TR3_PERMA_CURSE) total -= 15000;
+	if (o_ptr->curse_flags & TRC_CURSED) total -= 5000;
+	if (o_ptr->curse_flags & TRC_HEAVY_CURSE) total -= 12500;
+	if (o_ptr->curse_flags & TRC_PERMA_CURSE) total -= 15000;
 
 	/* Also, give some extra for activatable powers... */
 	if (o_ptr->art_name && (o_ptr->art_flags3 & TR3_ACTIVATE))
@@ -1675,7 +1675,7 @@ bool object_similar_part(object_type *o_ptr, object_type *j_ptr)
 		return (0);
 
 	/* Hack -- Require identical "cursed" status */
-	if ((o_ptr->ident & (IDENT_CURSED)) != (j_ptr->ident & (IDENT_CURSED))) return (0);
+	if (o_ptr->curse_flags != j_ptr->curse_flags) return (0);
 
 	/* Hack -- Require identical "broken" status */
 	if ((o_ptr->ident & (IDENT_BROKEN)) != (j_ptr->ident & (IDENT_BROKEN))) return (0);
@@ -1877,7 +1877,12 @@ void object_prep(object_type *o_ptr, int k_idx)
 	if (get_object_cost(o_ptr) <= 0) o_ptr->ident |= (IDENT_BROKEN);
 
 	/* Hack -- cursed items are always "cursed" */
-	if (k_ptr->flags3 & (TR3_CURSED)) o_ptr->ident |= (IDENT_CURSED);
+	if (k_ptr->gen_flags & (TRG_CURSED)) o_ptr->curse_flags |= (TRC_CURSED);
+	if (k_ptr->gen_flags & (TRG_HEAVY_CURSE)) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
+	if (k_ptr->gen_flags & (TRG_PERMA_CURSE)) o_ptr->curse_flags |= (TRC_PERMA_CURSE);
+	if (k_ptr->gen_flags & (TRG_RANDOM_CURSE0)) o_ptr->curse_flags |= get_curse(0, o_ptr);
+	if (k_ptr->gen_flags & (TRG_RANDOM_CURSE1)) o_ptr->curse_flags |= get_curse(1, o_ptr);
+	if (k_ptr->gen_flags & (TRG_RANDOM_CURSE2)) o_ptr->curse_flags |= get_curse(2, o_ptr);
 }
 
 
@@ -2260,7 +2265,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 		}
 
 		/* Cursed (if "bad") */
-		if (o_ptr->to_h + o_ptr->to_d < 0) o_ptr->ident |= (IDENT_CURSED);
+		if (o_ptr->to_h + o_ptr->to_d < 0) o_ptr->curse_flags |= TRC_CURSED;
 	}
 
 	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE)) return;
@@ -2529,7 +2534,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 		}
 
 		/* Cursed (if "bad") */
-		if (o_ptr->to_a < 0) o_ptr->ident |= (IDENT_CURSED);
+		if (o_ptr->to_a < 0) o_ptr->curse_flags |= TRC_CURSED;
 	}
 
 
@@ -2893,7 +2898,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						o_ptr->ident |= (IDENT_BROKEN);
 
 						/* Cursed */
-						o_ptr->ident |= (IDENT_CURSED);
+						o_ptr->curse_flags |= TRC_CURSED;
 
 						/* Reverse pval */
 						o_ptr->pval = 0 - (o_ptr->pval);
@@ -2922,7 +2927,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						o_ptr->ident |= (IDENT_BROKEN);
 
 						/* Cursed */
-						o_ptr->ident |= (IDENT_CURSED);
+						o_ptr->curse_flags |= TRC_CURSED;
 
 						/* Reverse pval */
 						o_ptr->pval = 0 - (o_ptr->pval);
@@ -2947,7 +2952,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						o_ptr->ident |= (IDENT_BROKEN);
 
 						/* Cursed */
-						o_ptr->ident |= (IDENT_CURSED);
+						o_ptr->curse_flags |= TRC_CURSED;
 
 						/* Reverse pval */
 						o_ptr->pval = 0 - (o_ptr->pval);
@@ -2991,7 +2996,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						o_ptr->ident |= (IDENT_BROKEN);
 
 						/* Cursed */
-						o_ptr->ident |= (IDENT_CURSED);
+						o_ptr->curse_flags |= TRC_CURSED;
 
 						/* Reverse pval */
 						o_ptr->pval = 0 - (o_ptr->pval);
@@ -3019,7 +3024,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					o_ptr->ident |= (IDENT_BROKEN);
 
 					/* Cursed */
-					o_ptr->ident |= (IDENT_CURSED);
+					o_ptr->curse_flags |= TRC_CURSED;
 
 					/* Penalize */
 					o_ptr->pval = 0 - (1 + m_bonus(5, level));
@@ -3035,7 +3040,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					o_ptr->ident |= (IDENT_BROKEN);
 
 					/* Cursed */
-					o_ptr->ident |= (IDENT_CURSED);
+					o_ptr->curse_flags |= TRC_CURSED;
 
 					/* Penalize */
 					o_ptr->to_a = 0 - (5 + m_bonus(10, level));
@@ -3058,7 +3063,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						o_ptr->ident |= (IDENT_BROKEN);
 
 						/* Cursed */
-						o_ptr->ident |= (IDENT_CURSED);
+						o_ptr->curse_flags |= TRC_CURSED;
 
 						/* Reverse bonus */
 						o_ptr->to_d = 0 - o_ptr->to_d;
@@ -3080,7 +3085,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						o_ptr->ident |= (IDENT_BROKEN);
 
 						/* Cursed */
-						o_ptr->ident |= (IDENT_CURSED);
+						o_ptr->curse_flags |= TRC_CURSED;
 
 						/* Reverse tohit */
 						o_ptr->to_h = 0 - o_ptr->to_h;
@@ -3102,7 +3107,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						o_ptr->ident |= (IDENT_BROKEN);
 
 						/* Cursed */
-						o_ptr->ident |= (IDENT_CURSED);
+						o_ptr->curse_flags |= TRC_CURSED;
 
 						/* Reverse toac */
 						o_ptr->to_a = 0 - o_ptr->to_a;
@@ -3125,7 +3130,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						o_ptr->ident |= (IDENT_BROKEN);
 
 						/* Cursed */
-						o_ptr->ident |= (IDENT_CURSED);
+						o_ptr->curse_flags |= TRC_CURSED;
 
 						/* Reverse bonuses */
 						o_ptr->to_h = 0 - o_ptr->to_h;
@@ -3147,7 +3152,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						o_ptr->ident |= (IDENT_BROKEN);
 
 						/* Cursed */
-						o_ptr->ident |= (IDENT_CURSED);
+						o_ptr->curse_flags |= TRC_CURSED;
 
 						/* Reverse bonuses */
 						o_ptr->pval = 0 - o_ptr->pval;
@@ -3161,13 +3166,13 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					o_ptr->ident |= (IDENT_BROKEN);
 
 					/* Cursed */
-					o_ptr->ident |= (IDENT_CURSED);
+					o_ptr->curse_flags |= TRC_CURSED;
 
 					if (power > 0) power = 0 - power;
 					break;
 				}
 			}
-			if (one_in_(400) && (power > 0) && !(o_ptr->ident & IDENT_CURSED) && (level > 79))
+			if (one_in_(400) && (power > 0) && !cursed_p(o_ptr) && (level > 79))
 			{
 				o_ptr->pval = MIN(o_ptr->pval,4);
 				/* Randart amulet */
@@ -3318,13 +3323,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					}
 				}
 				/* Uncurse it */
-				o_ptr->ident &= ~(IDENT_CURSED);
-
-				if (o_ptr->art_flags3 & TR3_CURSED)
-					o_ptr->art_flags3 &= ~(TR3_CURSED);
-
-				if (o_ptr->art_flags3 & TR3_HEAVY_CURSE)
-					o_ptr->art_flags3 &= ~(TR3_HEAVY_CURSE);
+				o_ptr->curse_flags = 0L;
 			}
 			else if ((power == -2) && one_in_(2))
 			{
@@ -3363,7 +3362,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				o_ptr->ident |= (IDENT_BROKEN);
 
 				/* Cursed */
-				o_ptr->ident |= (IDENT_CURSED);
+				o_ptr->curse_flags |= (TRC_CURSED | TRC_HEAVY_CURSE);
 			}
 			break;
 		}
@@ -3387,7 +3386,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						o_ptr->ident |= (IDENT_BROKEN);
 
 						/* Cursed */
-						o_ptr->ident |= (IDENT_CURSED);
+						o_ptr->curse_flags |= (TRC_CURSED);
 
 						/* Reverse bonuses */
 						o_ptr->pval = 0 - o_ptr->pval;
@@ -3409,7 +3408,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						o_ptr->ident |= (IDENT_BROKEN);
 
 						/* Cursed */
-						o_ptr->ident |= (IDENT_CURSED);
+						o_ptr->curse_flags |= (TRC_CURSED);
 
 						/* Reverse bonuses */
 						o_ptr->pval = 0 - o_ptr->pval;
@@ -3422,7 +3421,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				{
 					if (power < 0)
 					{
-						o_ptr->ident |= (IDENT_CURSED);
+						o_ptr->curse_flags |= (TRC_CURSED);
 					}
 					break;
 				}
@@ -3446,7 +3445,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						o_ptr->ident |= (IDENT_BROKEN);
 
 						/* Cursed */
-						o_ptr->ident |= (IDENT_CURSED);
+						o_ptr->curse_flags |= (TRC_CURSED);
 
 						/* Reverse bonuses */
 						o_ptr->pval = 0 - (o_ptr->pval);
@@ -3477,7 +3476,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					o_ptr->ident |= (IDENT_BROKEN);
 
 					/* Cursed */
-					o_ptr->ident |= (IDENT_CURSED);
+					o_ptr->curse_flags |= (TRC_CURSED);
 
 					/* Penalize */
 					o_ptr->pval = 0 - (randint1(5) + m_bonus(5, level));
@@ -3498,7 +3497,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						o_ptr->ident |= (IDENT_BROKEN);
 
 						/* Cursed */
-						o_ptr->ident |= (IDENT_CURSED);
+						o_ptr->curse_flags |= (TRC_CURSED);
 
 						/* Reverse bonuses */
 						o_ptr->pval = 0 - o_ptr->pval;
@@ -3507,7 +3506,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					break;
 				}
 			}
-			if (one_in_(150) && (power > 0) && !(o_ptr->ident & IDENT_CURSED) && (level > 79))
+			if (one_in_(150) && (power > 0) && !cursed_p(o_ptr) && (level > 79))
 			{
 				o_ptr->pval = MIN(o_ptr->pval,4);
 				/* Randart amulet */
@@ -3609,13 +3608,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					}
 				}
 				/* Uncurse it */
-				o_ptr->ident &= ~(IDENT_CURSED);
-
-				if (o_ptr->art_flags3 & TR3_CURSED)
-					o_ptr->art_flags3 &= ~(TR3_CURSED);
-
-				if (o_ptr->art_flags3 & TR3_HEAVY_CURSE)
-					o_ptr->art_flags3 &= ~(TR3_HEAVY_CURSE);
+				o_ptr->curse_flags = 0L;
 			}
 			else if ((power == -2) && one_in_(2))
 			{
@@ -3654,7 +3647,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				o_ptr->ident |= (IDENT_BROKEN);
 
 				/* Cursed */
-				o_ptr->ident |= (IDENT_CURSED);
+				o_ptr->curse_flags |= (TRC_CURSED | TRC_HEAVY_CURSE);
 			}
 			break;
 		}
@@ -3704,7 +3697,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 				o_ptr->ident |= (IDENT_BROKEN);
 
 				/* Cursed */
-				o_ptr->ident |= (IDENT_CURSED);
+				o_ptr->curse_flags |= (TRC_CURSED);
 			}
 #endif
 			break;
@@ -3823,7 +3816,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 			o_ptr->pval = i;
 
 			/* Some figurines are cursed */
-			if (one_in_(6)) o_ptr->ident |= IDENT_CURSED;
+			if (one_in_(6)) o_ptr->curse_flags |= TRC_CURSED;
 
 			if (cheat_peek)
 			{
@@ -3834,7 +3827,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 #endif
 
 							  r_name + r_ptr->name, check - 1,
-							  !(o_ptr->ident & IDENT_CURSED) ? "" : " {cursed}");
+							  !cursed_p(o_ptr) ? "" : " {cursed}");
 			}
 
 			break;
@@ -4107,7 +4100,12 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 		if (!a_ptr->cost) o_ptr->ident |= (IDENT_BROKEN);
 
 		/* Hack -- extract the "cursed" flag */
-		if (a_ptr->flags3 & TR3_CURSED) o_ptr->ident |= (IDENT_CURSED);
+		if (a_ptr->gen_flags & TRG_CURSED) o_ptr->curse_flags |= (TRC_CURSED);
+		if (a_ptr->gen_flags & TRG_HEAVY_CURSE) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
+		if (a_ptr->gen_flags & TRG_PERMA_CURSE) o_ptr->curse_flags |= (TRC_PERMA_CURSE);
+		if (a_ptr->gen_flags & (TRG_RANDOM_CURSE0)) o_ptr->curse_flags |= get_curse(0, o_ptr);
+		if (a_ptr->gen_flags & (TRG_RANDOM_CURSE1)) o_ptr->curse_flags |= get_curse(1, o_ptr);
+		if (a_ptr->gen_flags & (TRG_RANDOM_CURSE2)) o_ptr->curse_flags |= get_curse(2, o_ptr);
 
 		/* Mega-Hack -- increase the rating */
 		rating += 10;
@@ -4217,7 +4215,12 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 		if (!e_ptr->cost) o_ptr->ident |= (IDENT_BROKEN);
 
 		/* Hack -- acquire "cursed" flag */
-		if (e_ptr->flags3 & (TR3_CURSED)) o_ptr->ident |= (IDENT_CURSED);
+		if (e_ptr->gen_flags & TRG_CURSED) o_ptr->curse_flags |= (TRC_CURSED);
+		if (e_ptr->gen_flags & TRG_HEAVY_CURSE) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
+		if (e_ptr->gen_flags & TRG_PERMA_CURSE) o_ptr->curse_flags |= (TRC_PERMA_CURSE);
+		if (e_ptr->gen_flags & (TRG_RANDOM_CURSE0)) o_ptr->curse_flags |= get_curse(0, o_ptr);
+		if (e_ptr->gen_flags & (TRG_RANDOM_CURSE1)) o_ptr->curse_flags |= get_curse(1, o_ptr);
+		if (e_ptr->gen_flags & (TRG_RANDOM_CURSE2)) o_ptr->curse_flags |= get_curse(2, o_ptr);
 
 		if (e_ptr->gen_flags & (TRG_ONE_SUSTAIN)) one_sustain(o_ptr);
 		if (e_ptr->gen_flags & (TRG_XTRA_POWER)) one_ability(o_ptr);
@@ -4314,7 +4317,12 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 		if (!get_object_cost(o_ptr)) o_ptr->ident |= (IDENT_BROKEN);
 
 		/* Hack -- acquire "cursed" flag */
-		if (k_ptr->flags3 & (TR3_CURSED)) o_ptr->ident |= (IDENT_CURSED);
+		if (k_ptr->gen_flags & (TRG_CURSED)) o_ptr->curse_flags |= (TRC_CURSED);
+		if (k_ptr->gen_flags & (TRG_HEAVY_CURSE)) o_ptr->curse_flags |= TRC_HEAVY_CURSE;
+		if (k_ptr->gen_flags & (TRG_PERMA_CURSE)) o_ptr->curse_flags |= TRC_PERMA_CURSE;
+		if (k_ptr->gen_flags & (TRG_RANDOM_CURSE0)) o_ptr->curse_flags |= get_curse(0, o_ptr);
+		if (k_ptr->gen_flags & (TRG_RANDOM_CURSE1)) o_ptr->curse_flags |= get_curse(1, o_ptr);
+		if (k_ptr->gen_flags & (TRG_RANDOM_CURSE2)) o_ptr->curse_flags |= get_curse(2, o_ptr);
 	}
 }
 
@@ -6709,7 +6717,7 @@ static void drain_essence(void)
 	old_dd = o_ptr->dd;
 	old_pval = o_ptr->pval;
 	old_name2 = o_ptr->name2;
-	if (old_f3 & (TR3_CURSED | TR3_HEAVY_CURSE | TR3_PERMA_CURSE)) dec--;
+	if (o_ptr->curse_flags & (TRC_CURSED | TRC_HEAVY_CURSE | TRC_PERMA_CURSE)) dec--;
 	if (old_f3 & (TR3_AGGRAVATE)) dec--;
 	if (old_f3 & (TR3_NO_TELE)) dec--;
 	if (old_f3 & (TR3_DRAIN_EXP)) dec--;

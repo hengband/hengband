@@ -3266,7 +3266,7 @@ msg_format("%^sがテレポートした。", m_name);
 					for (i=INVEN_RARM;i<INVEN_TOTAL;i++)
 					{
 						o_ptr = &inventory[i];
-						if(!(o_ptr->ident & IDENT_CURSED))
+						if(!cursed_p(o_ptr))
 						{
 							object_flags(o_ptr, &f1, &f2, &f3);
 

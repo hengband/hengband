@@ -529,11 +529,36 @@ static void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool b
 }
 
 
+u32b get_curse(int power, object_type *o_ptr)
+{
+	u32b new_curse;
+
+	while(1)
+	{
+		new_curse = (1 << (randint0(MAX_CURSE)+4));
+		if (power == 2)
+		{
+			if (!(new_curse & TRC_HEAVY_MASK)) continue;
+		}
+		else if (power == 0)
+		{
+			if (new_curse & TRC_HEAVY_MASK) continue;
+		}
+		if (((o_ptr->tval < TV_BOW) || (o_ptr->tval > TV_SWORD)) && (new_curse == TRC_LOW_MELEE)) continue;
+		if (((o_ptr->tval < TV_BOOTS) || (o_ptr->tval > TV_DRAG_ARMOR)) && (new_curse == TRC_LOW_AC)) continue;
+		break;
+	}
+	return new_curse;
+}
+
 void curse_equipment(int chance, int heavy_chance)
 {
 	bool        changed = FALSE;
+	int         curse_power = 0;
+	u32b        new_curse;
 	u32b        o1, o2, o3;
 	object_type *o_ptr = &inventory[INVEN_RARM + randint0(12)];
+	char o_name[MAX_NLEN];
 
 	if (randint1(100) > chance) return;
 
@@ -541,12 +566,11 @@ void curse_equipment(int chance, int heavy_chance)
 
 	object_flags(o_ptr, &o1, &o2, &o3);
 
+	object_desc(o_name, o_ptr, FALSE, 0);
 
 	/* Extra, biased saving throw for blessed items */
 	if ((o3 & TR3_BLESSED) && (randint1(888) > chance))
 	{
-		char o_name[MAX_NLEN];
-		object_desc(o_name, o_ptr, FALSE, 0);
 #ifdef JP
 msg_format("%sは呪いを跳ね返した！", o_name,
 #else
@@ -561,30 +585,38 @@ msg_format("%sは呪いを跳ね返した！", o_name,
 	if ((randint1(100) <= heavy_chance) &&
 		(o_ptr->name1 || o_ptr->name2 || o_ptr->art_name))
 	{
-		if (!(o3 & TR3_HEAVY_CURSE))
+		if (!(o_ptr->curse_flags & TRC_HEAVY_CURSE))
 			changed = TRUE;
-		o_ptr->art_flags3 |= TR3_HEAVY_CURSE;
-		o_ptr->art_flags3 |= TR3_CURSED;
-		o_ptr->ident |= IDENT_CURSED;
+		o_ptr->curse_flags |= TRC_HEAVY_CURSE;
+		o_ptr->curse_flags |= TRC_CURSED;
+		curse_power++;
 	}
 	else
 	{
-		if (!(o_ptr->ident & IDENT_CURSED))
+		if (!cursed_p(o_ptr))
 			changed = TRUE;
-		o_ptr->art_flags3 |= TR3_CURSED;
-		o_ptr->ident |= IDENT_CURSED;
+		o_ptr->curse_flags |= TRC_CURSED;
+	}
+	if (heavy_chance >= 50) curse_power = 2;
+
+	new_curse = get_curse(curse_power, o_ptr);
+	if (!(o_ptr->curse_flags & new_curse))
+	{
+		changed = TRUE;
+		o_ptr->curse_flags |= new_curse;
 	}
 
 	if (changed)
 	{
 #ifdef JP
-msg_print("悪意に満ちた黒いオーラがあなたをとりまいた...");
+msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
 #else
-		msg_print("There is a malignant black aura surrounding you...");
+		msg_format("There is a malignant black aura surrounding %s...", o_name);
 #endif
 
 		o_ptr->feeling = FEEL_NONE;
 	}
+	p_ptr->update |= (PU_BONUS);
 }
 
 
@@ -3558,7 +3590,7 @@ msg_format("%^sがテレポートした。", m_name);
 				for (i=INVEN_RARM;i<INVEN_TOTAL;i++)
 				{
 					o_ptr = &inventory[i];
-					if(!(o_ptr->ident & IDENT_CURSED))
+					if(!cursed_p(o_ptr))
 					{
 						object_flags(o_ptr, &f1, &f2, &f3);
 

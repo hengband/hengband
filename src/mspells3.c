@@ -574,9 +574,7 @@ put_str("MP 失率 効果", y, x + 33);
 					if (plev > spell.level) chance -= 3 * (plev - spell.level);
 					else chance += (spell.level - plev);
 
-					if (p_ptr->pseikaku == SEIKAKU_NAMAKE) chance += 10;
-					if (p_ptr->pseikaku == SEIKAKU_KIREMONO) chance -= 3;
-					if ((p_ptr->pseikaku == SEIKAKU_GAMAN) || (p_ptr->pseikaku == SEIKAKU_CHIKARA)) chance++;
+					chance += p_ptr->to_m_chance;
 
 					/* Reduce failure rate by INT/WIS adjustment */
 					chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[A_INT]] - 1);
@@ -2036,9 +2034,7 @@ if (!get_check("それでも挑戦しますか? ")) return FALSE;
 	if (plev > spell.level) chance -= 3 * (plev - spell.level);
 	else chance += (spell.level - plev);
 
-	if (p_ptr->pseikaku == SEIKAKU_NAMAKE) chance += 10;
-	if (p_ptr->pseikaku == SEIKAKU_KIREMONO) chance -= 3;
-	if ((p_ptr->pseikaku == SEIKAKU_GAMAN) || (p_ptr->pseikaku == SEIKAKU_CHIKARA)) chance++;
+	chance += p_ptr->to_m_chance;
 
 	/* Reduce failure rate by INT/WIS adjustment */
 	chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[A_INT]] - 1);

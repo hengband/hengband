@@ -2346,7 +2346,7 @@ static void process_monster(int m_idx)
 	{
 		int tmp = p_ptr->lev*6+(p_ptr->skill_stl+10)*4;
 		if (p_ptr->monlite) tmp /= 3;
-		if (p_ptr->aggravate) tmp /= 2;
+		if (p_ptr->cursed & TRC_AGGRAVATE) tmp /= 2;
 		if (r_ptr->level > (p_ptr->lev*p_ptr->lev/20+10)) tmp /= 3;
 		/* Low-level monsters will find it difficult to locate the player. */
 		if (randint0(tmp) > (r_ptr->level+20)) aware = FALSE;
@@ -2489,7 +2489,7 @@ msg_print("地面に落とされた。");
 		u32b notice = 0;
 
 		/* Hack -- handle non-aggravation */
-		if (!p_ptr->aggravate) notice = randint0(1024);
+		if (!(p_ptr->cursed & TRC_AGGRAVATE)) notice = randint0(1024);
 
 		/* Nightmare monsters are more alert */
 		if (ironman_nightmare) notice /= 2;
@@ -2504,7 +2504,7 @@ msg_print("地面に落とされた。");
 			if (m_ptr->cdis < 50) d = (100 / m_ptr->cdis);
 
 			/* Hack -- handle aggravation */
-			if (p_ptr->aggravate) d = m_ptr->csleep;
+			if (p_ptr->cursed & TRC_AGGRAVATE) d = m_ptr->csleep;
 
 			/* Still asleep */
 			if (m_ptr->csleep > d)
@@ -2738,7 +2738,7 @@ msg_format("%^sはもう減速されていない。", m_name);
 	}
 
 	/* No one wants to be your friend if you're aggravating */
-	if (is_friendly(m_ptr) && p_ptr->aggravate)
+	if (is_friendly(m_ptr) && (p_ptr->cursed & TRC_AGGRAVATE))
 		gets_angry = TRUE;
 
 	/* Paranoia... no pet uniques outside wizard mode -- TY */
@@ -3930,7 +3930,7 @@ void process_monsters(void)
 
 		/* Handle "sight" and "aggravation" */
 		else if ((m_ptr->cdis <= MAX_SIGHT) &&
-			(player_has_los_bold(fy, fx) || p_ptr->aggravate))
+			(player_has_los_bold(fy, fx) || (p_ptr->cursed & TRC_AGGRAVATE)))
 		{
 			/* We can "see" or "feel" the player */
 			test = TRUE;

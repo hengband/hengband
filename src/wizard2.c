@@ -571,26 +571,26 @@ static void wiz_display_item(object_type *o_ptr)
 
 	prt("+------------FLAGS1------------+", 10, j);
 	prt("AFFECT........SLAY........BRAND.", 11, j);
-	prt("      mr      cvae      xsqpaefc", 12, j);
-	prt("siwdccsissidsahanvudotgddhuoclio", 13, j);
-	prt("tnieohtrtrnipttmiinmrrnrrraiierl", 14, j);
-	prt("rtsxnarylcfgdkcpmldncltggpksdced", 15, j);
+	prt("      mf      cvae      xsqpaefc", 12, j);
+	prt("siwdccsossidsahanvudotgddhuoclio", 13, j);
+	prt("tnieohtctrnipttmiinmrrnrrraiierl", 14, j);
+	prt("rtsxnarelcfgdkcpmldncltggpksdced", 15, j);
 	prt_binary(f1, 16, j);
 
 	prt("+------------FLAGS2------------+", 17, j);
 	prt("SUST....IMMUN.RESIST............", 18, j);
-	prt("        aefctrpsaefcpfldbc sn   ", 19, j);
-	prt("siwdcc  clioheatcliooeialoshtncd", 20, j);
-	prt("tnieoh  ierlrfraierliatrnnnrhehi", 21, j);
-	prt("rtsxna..dcedwlatdcedsrekdfddrxss", 22, j);
+	prt("      r aefctrpsaefcpfldbc sn   ", 19, j);
+	prt("siwdcci clioheatcliooeialoshtncd", 20, j);
+	prt("tnieohd ierlrfraierliatrnnnrhehi", 21, j);
+	prt("rtsxnae.dcedwlatdcedsrekdfddrxss", 22, j);
 	prt_binary(f2, 23, j);
 
 	prt("+------------FLAGS3------------+", 10, j+32);
-	prt("fe cnn t      stdrmsiiii d abchp", 11, j+32);
-	prt("aa aoomywhs lleeieihgggg rtgluvr", 12, j+32);
-	prt("uu utmacaih eielgggonnnnaaerercc", 13, j+32);
-	prt("rr reanurdo vtieeehtrrrrcilassuu", 14, j+32);
-	prt("aa algarnew ienpsntsaefctnevserr", 15, j+32);
+	prt("fe cnn t      stdrmsiiii d ab   ", 11, j+32);
+	prt("aa aoomywhs lleeieihgggg rtgl   ", 12, j+32);
+	prt("uu utmacaih eielgggonnnnaaere   ", 13, j+32);
+	prt("rr reanurdo vtieeehtrrrrcilas   ", 14, j+32);
+	prt("aa algarnew ienpsntsaefctnevs   ", 15, j+32);
 	prt_binary(f3, 16, j+32);
 }
 
@@ -1382,7 +1382,7 @@ static void wiz_create_item(void)
 static void do_cmd_wiz_cure_all(void)
 {
 	/* Remove curses */
-	(void)remove_all_curse();
+//	(void)remove_all_curse();
 
 	/* Restore stats */
 	(void)res_stat(A_STR);

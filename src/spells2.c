@@ -1773,7 +1773,16 @@ info[i++] = "あなたは幻覚を見ている。";
 #endif
 
 	}
-	if (p_ptr->aggravate)
+	if (p_ptr->cursed & TRC_TY_CURSE)
+	{
+#ifdef JP
+info[i++] = "あなたは邪悪な怨念に包まれている。";
+#else
+		info[i++] = "You nanka.";
+#endif
+
+	}
+	if (p_ptr->cursed & TRC_AGGRAVATE)
 	{
 #ifdef JP
 info[i++] = "あなたはモンスターを怒らせている。";
@@ -1782,12 +1791,138 @@ info[i++] = "あなたはモンスターを怒らせている。";
 #endif
 
 	}
-	if (p_ptr->teleport)
+	if (p_ptr->cursed & TRC_DRAIN_EXP)
+	{
+#ifdef JP
+info[i++] = "あなたは経験値を吸われている。";
+#else
+		info[i++] = "You nanka.";
+#endif
+
+	}
+	if (p_ptr->cursed & TRC_SLOW_REGEN)
+	{
+#ifdef JP
+info[i++] = "あなたの回復力は非常に遅い。";
+#else
+		info[i++] = "You nanka.";
+#endif
+
+	}
+	if (p_ptr->cursed & TRC_ADD_L_CURSE)
+	{
+#ifdef JP
+info[i++] = "あなたは..."; /* nanka */
+#else
+		info[i++] = "You nanka.";
+#endif
+
+	}
+	if (p_ptr->cursed & TRC_ADD_H_CURSE)
+	{
+#ifdef JP
+info[i++] = "あなたは..."; /* nanka */
+#else
+		info[i++] = "You nanka.";
+#endif
+
+	}
+	if (p_ptr->cursed & TRC_CALL_ANIMAL)
+	{
+#ifdef JP
+info[i++] = "あなたは動物に狙われている。";
+#else
+		info[i++] = "You nanka.";
+#endif
+
+	}
+	if (p_ptr->cursed & TRC_CALL_DEMON)
+	{
+#ifdef JP
+info[i++] = "あなたは悪魔に狙われている。";
+#else
+		info[i++] = "You nanka.";
+#endif
+
+	}
+	if (p_ptr->cursed & TRC_CALL_DRAGON)
+	{
+#ifdef JP
+info[i++] = "あなたはドラゴンに狙われている。";
+#else
+		info[i++] = "You nanka.";
+#endif
+
+	}
+	if (p_ptr->cursed & TRC_COWARDICE)
+	{
+#ifdef JP
+info[i++] = "あなたは時々臆病になる。";
+#else
+		info[i++] = "You are subject to cowardice.";
+#endif
+
+	}
+	if (p_ptr->cursed & TRC_TELEPORT)
 	{
 #ifdef JP
 info[i++] = "あなたの位置はひじょうに不安定だ。";
 #else
 		info[i++] = "Your position is very uncertain.";
+#endif
+
+	}
+	if (p_ptr->cursed & TRC_LOW_MELEE)
+	{
+#ifdef JP
+info[i++] = "あなたの武器は攻撃を外しやすい。";
+#else
+		info[i++] = "You nanka.";
+#endif
+
+	}
+	if (p_ptr->cursed & TRC_LOW_AC)
+	{
+#ifdef JP
+info[i++] = "あなたは攻撃を受けやすい。";
+#else
+		info[i++] = "You nanka.";
+#endif
+
+	}
+	if (p_ptr->cursed & TRC_LOW_MAGIC)
+	{
+#ifdef JP
+info[i++] = "あなたは魔法を失敗しやすい。";
+#else
+		info[i++] = "You nanka.";
+#endif
+
+	}
+	if (p_ptr->cursed & TRC_FAST_DIGEST)
+	{
+#ifdef JP
+info[i++] = "あなたはすぐお腹がへる。";
+#else
+		info[i++] = "You nanka.";
+#endif
+
+	}
+	if (p_ptr->cursed & TRC_DRAIN_HP)
+	{
+#ifdef JP
+info[i++] = "あなたは体力を吸われている。";
+#else
+		info[i++] = "You nanka.";
+#endif
+
+	}
+	if (p_ptr->cursed & TRC_DRAIN_MANA)
+	{
+#ifdef JP
+info[i++] = "あなたは魔力を吸われている。";
+#else
+		info[i++] = "You nanka.";
 #endif
 
 	}
