@@ -2413,10 +2413,9 @@ void do_cmd_pickpref(void)
 #else
 	if(!get_check("Reload auto-pick preference file? ")) return;
 #endif
-	/* いままで使っていたメモリ解放 */
-	for( i = 0; i < max_autopick; i++)
-		autopick_free_entry(&autopick_list[i]);
-	max_autopick = 0;
+
+	/* Free old entries */
+	init_autopicker();
 
 	/* キャラ毎の設定ファイルの読み込み */
 #ifdef JP

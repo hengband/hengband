@@ -6104,6 +6104,9 @@ static void load_all_pref_files(void)
 	/* Process that file */
 	process_pref_file(buf);
 
+	/* Free old entries */
+	init_autopicker();
+
 #ifdef JP
         sprintf(buf, "picktype-%s.prf", player_base);
 #else

@@ -774,33 +774,6 @@ static bool is_opt_confirm_destroy(object_type *o_ptr)
 
 
 /*
- * Determines whether an item has '=g' in its inscription for easy-auto-picker
- */
-static bool is_autopick2( object_type *o_ptr) {
-      cptr s;
-
-      /* No inscription */
-      if (!o_ptr->inscription) return (FALSE);
-
-      /* Find a '=' */
-      s = strchr(quark_str(o_ptr->inscription), '=');
-
-      /* Process inscription */
-      while (s)
-      {
-              /* Auto-pickup on "=g" */
-              if (s[1] == 'g') return (TRUE);
-
-              /* Find another '=' */
-              s = strchr(s + 1, '=');
-      }
-
-      /* Don't auto-pickup */
-      return (FALSE);
-}
-
-
-/*
  *  Auto inscription
  */
 void auto_inscribe_item(s16b item, int idx)
@@ -847,9 +820,6 @@ bool auto_destroy_item(s16b item, int autopick_idx)
 
 	/* Get the item (on the floor) */
 	else o_ptr = &o_list[0 - item];
-
-	/* Don't destroy an item inscribed {=g} */
-	if (is_autopick2(o_ptr)) return FALSE;
 
 	if ((autopick_idx == -1 && is_opt_confirm_destroy(o_ptr)) ||
 	    (autopick_idx >= 0 && (autopick_list[autopick_idx].action & DO_AUTODESTROY)))
@@ -927,8 +897,7 @@ void auto_pickup_items(cave_type *c_ptr)
 		/* Item index for floor -1,-2,-3,...  */
 		auto_inscribe_item((-this_o_idx), idx);
 
-		if (is_autopick2(o_ptr) ||
-		    (idx >= 0 && (autopick_list[idx].action & DO_AUTOPICK)))
+		if (idx >= 0 && (autopick_list[idx].action & DO_AUTOPICK))
 		{
 			disturb(0,0);
 
@@ -1860,6 +1829,27 @@ static bool entry_from_object(autopick_type *entry)
 
 
 /*
+ * Initialize auto-picker preference
+ */
+void init_autopicker(void)
+{
+	static const char easy_autopick_inscription[] = "(:=g";
+	autopick_type entry;
+	int i;
+
+	/* Clear old entries */
+	for( i = 0; i < max_autopick; i++)
+		autopick_free_entry(&autopick_list[i]);
+
+	max_autopick = 0;
+
+	/* There is always one entry "=g" */
+	autopick_new_entry(&entry, easy_autopick_inscription);
+	autopick_list[max_autopick++] = entry;
+}
+
+
+/*
  * Description of control commands
  */
 
@@ -1950,6 +1940,9 @@ void do_cmd_edit_autopick()
 	int dirty_line = -1;
 
 	int wid, hgt, old_wid = -1, old_hgt = -1;
+
+	/* Free old entries */
+	init_autopicker();
 
 	/* Name of the Last Destroyed Item */
 	last_destroyed = autopick_line_from_entry(&autopick_entry_last_destroyed);
@@ -2749,11 +2742,6 @@ void do_cmd_edit_autopick()
 #endif
 	write_text_lines(buf, lines_list);
 	free_text_lines(lines_list);
-
-	/* Clear old entries */
-	for( i = 0; i < max_autopick; i++)
-		autopick_free_entry(&autopick_list[i]);
-	max_autopick = 0;
 
 	string_free(last_destroyed);
 

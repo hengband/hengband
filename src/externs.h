@@ -549,6 +549,7 @@ extern void auto_inscribe_item(s16b item, int idx);
 extern bool auto_destroy_item(s16b item, int autopick_idx);
 extern void auto_pickup_items(cave_type *c_ptr);
 extern void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr);
+extern void init_autopicker(void);
 extern void do_cmd_edit_autopick();
 
 /* birth.c */
