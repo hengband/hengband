@@ -2949,6 +2949,8 @@ void c_roff(byte a, cptr str)
 
 			/* Clear line, move cursor */
 			Term_erase(x, y, 255);
+
+                        break;
 		}
 
 		/* Clean up the char */
