@@ -3386,7 +3386,6 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 			while (1)
 			{
 				int i, o_idx;
-				cave_type *c_ptr;
 
 				/* Save screen */
 				screen_save();
@@ -3418,8 +3417,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 				}
 
 				/* Get the object being moved. */
-				c_ptr = &cave[y][x];
-				o_idx =	c_ptr->o_idx;
+				o_idx = c_ptr->o_idx;
  
 				/* Only rotate a pile of two or more objects. */
 				if (!(o_idx && o_list[o_idx].next_o_idx)) continue;
