@@ -2823,7 +2823,7 @@ void do_cmd_stay(bool pickup)
 	energy_use = 100;
 
 	if (pickup) mpe_mode |= MPE_DO_PICKUP;
-	(void)move_player_effect(py, px, py, px, mpe_mode);
+	(void)move_player_effect(py, px, mpe_mode);
 }
 
 

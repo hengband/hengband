@@ -3316,7 +3316,7 @@ msg_format("%^s%s", m_name, monmessage);
 				/* sound(SOUND_WALK); */
 
 				/* Move the player */
-				if (!move_player_effect(py, px, ny, nx, MPE_DONT_PICKUP)) break;
+				if (!move_player_effect(ny, nx, MPE_DONT_PICKUP)) break;
 			}
 
 			/* Possible disturb */

@@ -5615,7 +5615,7 @@ msg_format("%sから振り落とされそうになって、壁にぶつかった。",m_name);
 
 	/* Move the player */
 	if (sy && !p_ptr->is_dead)
-		(void)move_player_effect(py, px, py, px, MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
+		(void)move_player_effect(py, px, MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
 
 	return fall_dam;
 }
@@ -5776,7 +5776,7 @@ bool do_riding(bool force)
 	p_ptr->redraw |= (PR_UHEALTH);
 
 	/* Move the player */
-	(void)move_player_effect(py, px, y, x, MPE_HANDLE_STUFF | MPE_ENERGY_USE | MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
+	(void)move_player_effect(y, x, MPE_HANDLE_STUFF | MPE_ENERGY_USE | MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
 
 	return TRUE;
 }

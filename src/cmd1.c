@@ -3441,13 +3441,15 @@ bool player_can_enter(s16b feature, u16b mode)
 /*
  * Move the player
  */
-bool move_player_effect(int oy, int ox, int ny, int nx, u32b mpe_mode)
+bool move_player_effect(int ny, int nx, u32b mpe_mode)
 {
 	cave_type *c_ptr = &cave[ny][nx];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 
 	if (!(mpe_mode & MPE_STAYING))
 	{
+		int oy = py;
+		int ox = px;
 		cave_type *oc_ptr = &cave[oy][ox];
 		int om_idx = oc_ptr->m_idx;
 		int nm_idx = c_ptr->m_idx;
@@ -4196,7 +4198,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 		if (break_trap) mpe_mode |= MPE_BREAK_TRAP;
 
 		/* Move the player */
-		(void)move_player_effect(py, px, y, x, mpe_mode);
+		(void)move_player_effect(y, x, mpe_mode);
 	}
 }
 

@@ -391,7 +391,7 @@ msg_print("不思議な力がテレポートを防いだ！");
 	ox = px;
 
 	/* Move the player */
-	(void)move_player_effect(py, px, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+	(void)move_player_effect(y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 
 	/* Monsters with teleport ability may follow the player */
 	for (xx = -1; xx < 2; xx++)
@@ -472,7 +472,7 @@ void teleport_player_to(int ny, int nx, bool no_tele, bool passive)
 	sound(SOUND_TELEPORT);
 
 	/* Move the player */
-	(void)move_player_effect(py, px, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+	(void)move_player_effect(y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 }
 
 

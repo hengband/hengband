@@ -504,7 +504,7 @@ static bool cast_hissatsu_spell(int spell)
 			msg_print(NULL);
 
 			/* Move the player */
-			(void)move_player_effect(py, px, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+			(void)move_player_effect(y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 		}
 		break;
 	}
@@ -910,7 +910,7 @@ static bool cast_hissatsu_spell(int spell)
 			if (player_can_enter(c_ptr->feat, 0))
 			{
 				/* Move the player */
-				if (!move_player_effect(py, px, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP)) break;
+				if (!move_player_effect(y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP)) break;
 			}
 
 			/* -more- */

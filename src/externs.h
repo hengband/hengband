@@ -660,7 +660,7 @@ extern void carry(bool pickup);
 extern bool py_attack(int y, int x, int mode);
 extern bool pattern_seq(int c_y, int c_x, int n_y, int n_x);
 extern bool player_can_enter(s16b feature, u16b mode);
-extern bool move_player_effect(int oy, int ox, int ny, int nx, u32b mpe_mode);
+extern bool move_player_effect(int ny, int nx, u32b mpe_mode);
 extern bool trap_can_be_ignored(int feat);
 extern void move_player(int dir, bool do_pickup, bool break_trap);
 extern void run_step(int dir);

@@ -5660,7 +5660,7 @@ msg_print("あなたは床と壁との間に挟まれてしまった！");
 			}
 
 			/* Move the player to the safe location */
-			(void)move_player_effect(py, px, sy, sx, MPE_DONT_PICKUP);
+			(void)move_player_effect(sy, sx, MPE_DONT_PICKUP);
 		}
 
 		/* Important -- no wall on player */
@@ -6684,7 +6684,7 @@ msg_print("テレポートを邪魔された！");
 	sound(SOUND_TELEPORT);
 
 	/* Swap the player and monster */
-	(void)move_player_effect(py, px, ty, tx, MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+	(void)move_player_effect(ty, tx, MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 
 	/* Success */
 	return TRUE;
