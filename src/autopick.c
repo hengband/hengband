@@ -3135,7 +3135,7 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 		trig_len = strlen(inkey_macro_trigger_string);
 
 		/* HACK -- ignore macro defined on ASCII keys */
-		if (trig_len == 1)
+		if (trig_len == 1 && !iskanji(inkey_macro_trigger_string[0]))
 		{
 			/* Get original key */
 			key = inkey_macro_trigger_string[0];
@@ -5485,7 +5485,7 @@ void do_cmd_edit_autopick(void)
 		trig_len = strlen(inkey_macro_trigger_string);
 
 		/* HACK -- ignore macro defined on ASCII keys */
-		if (trig_len == 1)
+		if (trig_len == 1 && !iskanji(inkey_macro_trigger_string[0]))
 		{
 			/* Get original key */
 			key = inkey_macro_trigger_string[0];
