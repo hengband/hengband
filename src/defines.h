@@ -2683,6 +2683,8 @@
 #define SUMMON_KNIGHTS              63
 #define SUMMON_EAGLES               64
 #define SUMMON_PIRANHAS             65
+#define SUMMON_ARMAGE_GOOD          66
+#define SUMMON_ARMAGE_EVIL          67
 
 
 /*

@@ -1112,7 +1112,23 @@ static bool get_moves(int m_idx, int *mm)
 	y = m_ptr->fy - y2;
 	x = m_ptr->fx - x2;
 
-	if (!will_run && is_hostile(m_ptr) &&
+	/* Counter attack to an enemy monster */
+	if (!will_run && m_ptr->target_y)
+	{
+		int t_m_idx = cave[m_ptr->target_y][m_ptr->target_x].m_idx;
+
+		/* The monster must be an enemy, and in LOS */
+		if (t_m_idx &&
+		    are_enemies(m_ptr, &m_list[t_m_idx]) &&
+		    los(m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
+		{
+			y = m_ptr->target_y;
+			x = m_ptr->target_x;
+			done = TRUE;
+		}
+	}
+
+	if (!done && !will_run && is_hostile(m_ptr) &&
 	    (r_ptr->flags1 & RF1_FRIENDS) &&
 	    (los(m_ptr->fy, m_ptr->fx, py, px) ||
 	    (cave[m_ptr->fy][m_ptr->fx].dist < MAX_SIGHT / 2)))

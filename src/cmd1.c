@@ -1626,7 +1626,7 @@ msg_print("まばゆい閃光が走った！");
 		case FEAT_TRAP_ARMAGEDDON:
 		{
 			static int levs[10] = {0, 0, 20, 10, 5, 3, 2, 1, 1, 1};
-			int demon_idx = 0, angel_idx = 0;
+			int evil_idx = 0, good_idx = 0;
 
 			int lev;
 #ifdef JP
@@ -1653,21 +1653,23 @@ msg_print("まばゆい閃光が走った！");
 					/* Require line of sight */
 					if (!player_has_los_bold(y1, x1)) continue;
 
-					if (summon_specific(0, y1, x1, lev, SUMMON_DEMON, (PM_NO_PET)))
-						demon_idx = hack_m_idx_ii;
+					if (summon_specific(0, y1, x1, lev, SUMMON_ARMAGE_EVIL, (PM_NO_PET)))
+						evil_idx = hack_m_idx_ii;
 
-					if (summon_specific(0, y1, x1, lev, SUMMON_ANGEL, (PM_NO_PET)))
-						angel_idx = hack_m_idx_ii;
+					if (summon_specific(0, y1, x1, lev, SUMMON_ARMAGE_GOOD, (PM_NO_PET)))
+					{
+						good_idx = hack_m_idx_ii;
+					}
 
 					/* Let them fight each other */
-					if (demon_idx && angel_idx)
+					if (evil_idx && good_idx)
 					{
-						monster_type *demon_ptr = &m_list[demon_idx];
-						monster_type *angel_ptr = &m_list[angel_idx];
-						demon_ptr->target_y = angel_ptr->fy;
-						demon_ptr->target_x = angel_ptr->fx;
-						angel_ptr->target_y = demon_ptr->fy;
-						angel_ptr->target_x = demon_ptr->fx;
+						monster_type *evil_ptr = &m_list[evil_idx];
+						monster_type *good_ptr = &m_list[good_idx];
+						evil_ptr->target_y = good_ptr->fy;
+						evil_ptr->target_x = good_ptr->fx;
+						good_ptr->target_y = evil_ptr->fy;
+						good_ptr->target_x = evil_ptr->fx;
 					}
 				}
 			}
