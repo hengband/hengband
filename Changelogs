@@ -1,4 +1,111 @@
+2002-02-21  Takeshi Mogami  <mogami@akiru>
+
+	* src/object2.c:
+	矢等のアイテムの束をなるべくうまく詰めて持つようにした。
+	具体的には、80本の束と70本の束を持っていたら99本と51本にまとめ直す。
+	これによって次に例えば40本の束を拾う時に、いちいち束の一部を落して
+	数を揃えなおす手間がなくなる。
+
+	* src/cmd3.c:
+	'%'刻みでデフォだった場合にスペース一文字だけ刻むようにした。
+
+	* lib/pref/xtra-new.prf:
+	プレイヤーキャラクターの16x16タイル定義。(適当に割り当ててある。)
+
+	* lib/pref/graf-new.prf:
+	16x16タイルに対応。Z26xとPernのタイルを合成した巨大なbmpファイルを使用。
+
+2002-02-21  henkma  <henkma@akiru>
+
+	* lib/edit/m_info_j.txt:
+	勘違いでした. m_info_j.txtの変更取り消し.
+
+	* lib/edit/m_info_j.txt:
+	プリーストの魔法の難易度を修正. なぜか第二領域系の魔法が昔より5%減ってて, (一部しか調べてないが)メイジよりうまくなってた.
+
+2002-02-20  henkma  <henkma@akiru>
+
+	* lib/file/w_high.txt:
+	The Bastard Sword of Eowynが入ったのでrand art nameからof Eowynを削除.
+
+2002-02-19  habu  <habu@akiru>
+
+	* lib/edit/a_info_j.txt, lib/edit/misc_j.txt:
+	Vから、The Bastard Sword of Eowynを導入。レア度100は出にくすぎる(ベースがバッソだからリンギルより出にくいし)と思うので50にした。
+
+	* lib/edit/e_info_j.txt:
+	新エゴ、聖なる矢を追加(from angband 2.9.6)。
+
+2002-02-19  Takeshi Mogami  <mogami@akiru>
+
+	* src/birth.c:
+	職業選択時の忍者の説明も修正(見ること見ること)
+
+2002-02-19  habu  <habu@akiru>
+
+	* lib/edit/r_info_j.txt:
+	ビホルダーの訳もtwelveを20と間違っていたので修正。
+
+	* lib/edit/r_info_j.txt:
+	twelveが二十と間違って訳されていたので修正。
+
+	* lib/help/jcharattr.txt:
+	インプの項がバルログになっていたのを修正。「見ること見ること」を修正。
+
+2002-02-19  Takeshi Mogami  <mogami@akiru>
+
+	* lib/edit/e_info_j.txt:
+	地震の武器のレアリティが0だったので修正。コード書き始めは
+	0でいい予定だったけど、予定変更したのを忘れてた。
+
+2002-02-19  habu  <habu@akiru>
+
+	* lib/edit/misc_j.txt, lib/edit/v_info_j.txt:
+	Zangから新しいvaultを9個導入。
+
+	* src/rooms.c:
+	malloc, freeを使っていた場所をC_MAKE, C_KILLを使って書き変え。
+
+	* lib/edit/a_info_j.txt, lib/edit/e_info_j.txt, src/artifact.c, src/bldg.c, src/cmd1.c, src/cmd2.c, src/cmd3.c, src/defines.h, src/files.c, src/init1.c, src/object1.c, src/object2.c, src/spells2.c, src/wizard1.c:
+	FORCE_WEPON -> FORCE_WEAPON
+
+	* lib/edit/a_info_j.txt:
+	PYECにWARNINGフラグ追加。
+
+2002-02-18  Takeshi Mogami  <mogami@akiru>
+
+	* src/wizard2.c:
+	^A o の生成率の表示をlogグラフにしてみた。
+	log_{sqrt(2)}^{生成率} としたので、'*'が2つでちょうど生成率2倍を意味する。
+
+	* src/wizard2.c:
+	再び修正。boost効果は1/20の確率でしか起きないので小さすぎて見えない方が
+	正常だった。いままではまだオーバーフローがあった。
+
+2002-02-17  Takeshi Mogami  <mogami@akiru>
+
+	* src/wizard2.c: オーバーフローしていたので修正。
+
+2002-02-17  habu  <habu@akiru>
+
+	* src/monster2.c:
+	属性の比較で、z_ptrであるべき所がr_ptrになっていたため、違う属性のモンスターをESCORTする可能性があるバグを修正。
+
+2002-02-17  Takeshi Mogami  <mogami@akiru>
+
+	* lib/edit/q_serpen_j.txt: 原凶→元凶
+
+	* src/wizard2.c:
+	ウィザードコマンド ^A o で左端のグラフの表示を改良。
+	選択しているアイテムの出現率を階別に相対評価で表示してある。
+	今までのは全然表示が正しくない上に見てもわからなかった。
+
 2002-02-16  Takeshi Mogami  <mogami@akiru>
+
+	* src/melee2.c:
+	敵の時止めがバグっていたので修正。
+
+	* Changelogs: 更新
 
 	* src/cmd4.c, src/effects.c, src/melee1.c, src/mspells1.c, src/mspells2.c:
 	闘技場で敗れたとき、彼はあなたの先祖を？人葬っているが の表記がでないように修正。
