@@ -1,5 +1,27 @@
 === History of Hengband ===
 
+Aug. 12th, 2003  hengband 1.5.4 (Development branch) released.
+
+- New artifatct amulets.
+- Special inscription {@ma},{@0} etc. on equip/floor lists are allowed.
+- Tags, "a)" etc., are always effected by above inscription.
+- 'x' mark of view_unsafe_grids will be cleared by disarming spell.
+
+- Various bug fixes:
+  Pval didn't effect on values of normal objects.
+  Proficiency of missile weapons were not increased.
+
+- All changes for 1.4.4 are also included in 1.5.4.
+
+
+Aug. 12th, 2003  hengband 1.4.4 (Stable branch) released.
+
+- Various bug fixes:
+  Hidden doors were not hidden on tile graphics mode.
+  'Stop singing' didn't take time. (It should take 1/10 turn.)
+  Repeat didn't work correctly for Forcetrainers when blinded.
+
+
 Jul. 20th, 2003  hengband 1.5.3 (Development branch) released.
 
 - Improved Warning ability a bit.
@@ -8,8 +30,9 @@ Jul. 20th, 2003  hengband 1.5.3 (Development branch) released.
 - Various bug fixes:
   Crash after every auto-save.
   view_unsafe_grids allowed to see trails in the Maze.
+  Repeat didn't work correctly for Forcetrainers when blinded.
 
-- All changes for 1.4.3 is also included in 1.5.3.
+- All changes for 1.4.3 are also included in 1.5.3.
 
 
 Jul. 20th, 2003  hengband 1.4.3 (Stable branch) released.
@@ -18,7 +41,6 @@ Jul. 20th, 2003  hengband 1.4.3 (Stable branch) released.
   Experience gain for killing monsters was zero.
   When using manual_haggle, selling items didn't work.
   Mana point was not updated correctly after Clear Mind.
-  Repeat didn't work correctly for Forcetrainers when blinded.
 
 
 Jul. 10th, 2003  hengband 1.5.2 (Development branch) released.
@@ -54,7 +76,7 @@ Jul. 10th, 2003  hengband 1.5.2 (Development branch) released.
   Inconsistent message about the effect of the jewel.
   Incomplete update for sub-windows.  etc...
 
-- All changes for 1.4.2 is also included in 1.5.2.
+- All changes for 1.4.2 are also included in 1.5.2.
 
 
 Jul. 10th, 2003  hengband 1.4.2 (Stable branch) released.
@@ -94,7 +116,7 @@ Jul. 10th, 2003  hengband 1.4.2 (Stable branch) released.
   Monsters on saved floors awake, Error handling while save,
   Monster data is broken while save and then crash,
   Shaft takes you to wrong levels.
-- All changes for 1.4.1 is also included in 1.5.1.
+- All changes for 1.4.1 are also included in 1.5.1.
 
 
   Dec. 24th, 2002  hengband 1.4.1 (Stable branch) released.
