@@ -5249,16 +5249,10 @@ int calculate_upkeep(void)
 			}
 			else
 				total_friend_levels += r_ptr->level;
-			
+
 			/* Determine pet alignment */
-			if (r_ptr->flags3 & RF3_GOOD)
-			{
-				friend_align += r_ptr->level;
-			}
-			else if (r_ptr->flags3 & RF3_EVIL)
-			{
-				friend_align -= r_ptr->level;
-			}
+			if (r_ptr->flags3 & RF3_GOOD) friend_align += r_ptr->level;
+			if (r_ptr->flags3 & RF3_EVIL) friend_align -= r_ptr->level;
 		}
 	}
 	if (old_friend_align != friend_align) p_ptr->update |= (PU_BONUS);
