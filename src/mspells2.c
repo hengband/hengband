@@ -317,6 +317,16 @@ bool monst_spell_monst(int m_idx)
 	/* Extract the monster level */
 	rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
 
+	/* Remove unimplemented spells */
+	f4 &= ~(RF4_DISPEL);
+	f6 &= ~(RF6_WORLD | RF6_FORGET);
+
+	/* Remove unimplemented special moves */
+	if (f6 & RF6_SPECIAL)
+	{
+		if (r_ptr->d_char != 'B') f6 &= ~(RF6_SPECIAL);
+	}
+
 	if (in_no_magic_dungeon && !(r_ptr->flags2 & RF2_STUPID))
 	{
 		f4 &= (RF4_NOMAGIC_MASK);
@@ -606,7 +616,7 @@ bool monst_spell_monst(int m_idx)
 	case 96+2:
 		return FALSE;
 
-	/* RF4_XXX4X4 */
+	/* RF4_ROCKET */
 	case 96+3:
 		if (known)
 		{
@@ -1567,7 +1577,7 @@ bool monst_spell_monst(int m_idx)
 
 		break;
 
-	/* RF4_RF4_BR_NUKE */
+	/* RF4_BR_NUKE */
 	case 96+29:
 		if (known)
 		{
