@@ -1,5 +1,24 @@
 === History of Hengband from 1.0.7 to 1.0.10 ===
 
+  Apl. 6th, 2002  hengband 1.0.11 released.
+
+- The on-line help files is translated to English
+- Warning ability of an object can be canceled by its inscription {$}.
+- The terrain feature of brake changed '#' -> ':' 
+- Format of the mon-info.spo is revised
+- HUMAN flag for monsters and SLAY_HUMAN flag for weapons
+- 'Muramasa' and 'Chainsword' are modified and have SLAY_HUMAN now.
+- The cause of death is written in character dump.
+- Paralyzation status is written in the text of the cause of death.
+- Cursed items have various random unpleasant effects.
+- Bigtile graphics mode, each tile have double width and become a square.
+- Bigscreen from OAngband
+- Correct cause of death when hallucination
+- Savefile name longer then 8 letters can be used. (For Windows)
+- Normal magic items have descriptions when *identified*
+- Some bugs fixed.
+
+
   Mar. 6th, 2002  hengband 1.0.10 released.
                   - New artifact, ego-ammo and vault.
 		  - Class power of Red-Mage is more useful.
