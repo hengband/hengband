@@ -5290,6 +5290,26 @@ char *my_strchr(const char *ptr, char ch)
 
 
 /*
+ * Convert string to lower case
+ */
+void str_tolower(char *str)
+{
+	/* Force to be lower case string */
+	for (; *str; str++)
+	{
+#ifdef JP
+		if (iskanji(*str))
+		{
+			str++;
+			continue;
+		}
+#endif
+		*str = tolower(*str);
+	}
+}
+
+
+/*
  * Get a keypress from the user.
  * And interpret special keys as internal code.
  *

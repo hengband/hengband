@@ -557,26 +557,6 @@ static bool is_rare(object_type *o_ptr)
 
 
 /*
- * Convert string to lower case
- */
-static void str_tolower(char *str)
-{
-	/* Force to be lower case string */
-	for (; *str; str++)
-	{
-#ifdef JP
-		if (iskanji(*str))
-		{
-			str++;
-			continue;
-		}
-#endif
-		*str = tolower(*str);
-	}
-}
-
-
-/*
  * Get auto-picker entry from o_ptr.
  */
 static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)

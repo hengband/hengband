@@ -5051,72 +5051,108 @@ msg_print("キャラクタ情報のファイルへの書き出しに成功しました。");
 /*
  * Display single line of on-line help file
  */
-static void show_file_aux_line(cptr str, int cy, byte color)
+static void show_file_aux_line(cptr str, int cy, cptr shower)
 {
+	byte color = TERM_WHITE;
+	bool in_tag = FALSE;
 	int cx = 0;
+	int i;
+	char lcstr[1024];
+
+	if (shower)
+	{
+		/* Make a lower case version of str for searching */
+		strcpy(lcstr, str);
+		str_tolower(lcstr);
+	}
 
 	/* Initial cursor position */
 	Term_gotoxy(cx, cy);
 
-
-	while (*str)
+	for (i = 0; str[i];)
 	{
-		cptr leftb = my_strchr(str, '[');
-		int len;
+		int len = strlen(&str[i]);
+		int showercol = len + 1;
+		int bracketcol = len + 1;
+		int endcol = len;
+		cptr ptr;
 
-		/* Get length of white text */
-		if (NULL == leftb)
+		/* Search for a shower string in the line */
+		if (shower)
 		{
-			len = strlen(str);
-		}
-		else
-		{
-			len = (int)(leftb - str);
+		        ptr = my_strstr(&lcstr[i], shower);
+			if (ptr) showercol = ptr - &lcstr[i];
 		}
 
-		/* Print a white (actually default colored) text */
-		Term_addstr(len, color, str);
-		cx += len;
-		str += len;
+		/* Search for a color segment tag */
+		ptr = in_tag ? my_strchr(&str[i], ']') : my_strstr(&str[i], "[[[[[");
+		if (ptr) bracketcol = ptr - &str[i];
+
+		/* A color tag is found */
+		if (bracketcol < endcol) endcol = bracketcol;
+
+		/* The shower string is found before the color tag */
+		if (showercol < endcol) endcol = showercol;
+
+		/* Print a segment of the line */
+		Term_addstr(endcol, color, &str[i]);
+		cx += endcol;
+		i += endcol;
+
+		/* Shower string? */
+		if (endcol == showercol)
+		{
+			int showerlen = strlen(shower);
+
+			/* Print the shower string in yellow */
+			Term_addstr(showerlen, TERM_YELLOW, &str[i]);
+			cx += showerlen;
+			i += showerlen;
+		}
 
 		/* Colored segment? */
-		if (prefix(str, "[[[[["))
+		else if (endcol == bracketcol)
 		{
-			cptr rightb;
-			byte attr;
+			if (in_tag)
+			{
+				/* Found a ']', the end of colored segment */
+				i++;
 
-			str += 5;
+				/* Now looking for an another "[[[[[" */
+				in_tag = FALSE;
 
-			/* Illigal end of line */
-			if (!isalpha((int)((unsigned char)*str))) break;
+				/* Set back to the default color */
+				color = TERM_WHITE;
+			}
+			else
+			{
+				/* Found a "[[[[[", and get a tag color */
+				i += 5;
 
-			/* Get color attr */
-			attr = color_char_to_attr(*str);
+				/* Get tag color */
+				color = color_char_to_attr(str[i]);
 
-			str++;
+				if (color == 255)
+				{
+					/* Illegal color tag */
+					color = TERM_WHITE;
 
-			rightb = my_strchr(str, ']');
+					/* Print the broken tag as a string */
+					Term_addstr(-1, TERM_WHITE, "[[[[[");
+					cx += 5;
+				}
+				else
+				{
+					/* Skip the color tag */
+					i++;
 
-			/* No close-bracket? */
-			if (NULL == rightb) break;
-
-			len = (int)(rightb - str);
-
-			/* Ok print a colored text */
-			Term_addstr(len, attr, str);
-			cx += len;
-			str = rightb + 1;
+					/* Now looking for a ']' */
+					in_tag = TRUE;
+				}
+			}
 		}
 
-		/* This '[' was not a part of color tag */
-		else if (*str == '[')
-		{
-			/* Print the '[' */
-			Term_addstr(1, color, str);
-			cx++;
-			str++;
-		}
-	}
+	} /* for (i = 0; str[i];) */
 
 	/* Clear rest of line */
 	Term_erase(cx, cy, 255);
@@ -5144,12 +5180,6 @@ bool show_file(bool show_version, cptr name, cptr what, int line, int mode)
 	/* Backup value for "line" */
 	int back = 0;
 
-	/* Color of the next line */
-	byte color = TERM_WHITE;
-
-	/* Loop counter */
-	int cnt;
-
 	/* This screen has sub-screens */
 	bool menu = FALSE;
 
@@ -5162,11 +5192,12 @@ bool show_file(bool show_version, cptr name, cptr what, int line, int mode)
 	/* Jump to this tag */
 	cptr tag = NULL;
 
-	/* Hold a string to find */
-	char finder[81];
+	/* Hold strings to find/show */
+	char finder_str[81];
+	char shower_str[81];
 
-	/* Hold a string to show */
-	char shower[81];
+	/* String to show */
+	cptr shower = NULL;
 
 	/* Filename */
 	char filename[1024];
@@ -5180,12 +5211,6 @@ bool show_file(bool show_version, cptr name, cptr what, int line, int mode)
 	/* General buffer */
 	char buf[1024];
 
-	/* Lower case version of the buffer, for searching */
-	char lc_buf[1024];
-
-	/* Aux pointer for making lc_buf (and find!) lowercase */
-	cptr lc_buf_ptr;
-
 	/* Sub-menu information */
 	char hook[68][32];
 
@@ -5197,10 +5222,10 @@ bool show_file(bool show_version, cptr name, cptr what, int line, int mode)
 	rows = hgt - 4;
 
 	/* Wipe finder */
-	strcpy(finder, "");
+	strcpy(finder_str, "");
 
 	/* Wipe shower */
-	strcpy(shower, "");
+	strcpy(shower_str, "");
 
 	/* Wipe caption */
 	strcpy(caption, "");
@@ -5425,63 +5450,26 @@ msg_format("'%s'をオープンできません。", name);
 			/* Hack -- skip "special" lines */
 			if (prefix(buf, "***** ")) continue;
 
-			/* Get a color */
-			if (prefix(str, "#####"))
-			{
-				if (str[5] && isalpha(str[5]))
-				{
-					str += 5;
-					color = color_char_to_attr(*str);
-					str++;
-				}
-			}
-			else
-			{
-				color = TERM_WHITE;
-			}
-
 			/* Count the "real" lines */
 			next++;
 
-			/* Make a lower case version of str for searching */
-			strcpy(lc_buf, str);
-
-			for (lc_buf_ptr = lc_buf; *lc_buf_ptr != 0; lc_buf_ptr++)
-			{
-#ifdef JP
-				if (iskanji(*lc_buf_ptr))
-					lc_buf_ptr++;
-				else
-#endif
-					lc_buf[lc_buf_ptr-lc_buf] = tolower(*lc_buf_ptr);
-			}
-
 			/* Hack -- keep searching */
-			if (find && !i && !my_strstr(lc_buf, find)) continue;
+			if (find && !i)
+			{
+				char lc_buf[1024];
+
+				/* Make a lower case version of str for searching */
+				strcpy(lc_buf, str);
+				str_tolower(lc_buf);
+
+				if (!my_strstr(lc_buf, find)) continue;
+			}
 
 			/* Hack -- stop searching */
 			find = NULL;
 
 			/* Dump the line */
-			show_file_aux_line(str, i + 2, color);
-
-			/* Hilite "shower" */
-			if (shower[0])
-			{
-				cptr s2 = lc_buf;
-
-				/* Display matches */
-				while ((s2 = my_strstr(s2, shower)) != NULL)
-				{
-					int len = strlen(shower);
-
-					/* Display the match */
-					Term_putstr(s2-lc_buf, i+2, len, TERM_YELLOW, &str[s2-lc_buf]);
-
-					/* Advance */
-					s2 += len;
-				}
-			}
+			show_file_aux_line(str, i + 2, shower);
 
 			/* Count the printed lines */
 			i++;
@@ -5575,12 +5563,18 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 		{
 			/* Get "shower" */
 #ifdef JP
-prt("強調: ", hgt - 1, 0);
+			prt("強調: ", hgt - 1, 0);
 #else
 			prt("Show: ", hgt - 1, 0);
 #endif
 
-			(void)askfor_aux(shower, 80);
+			(void)askfor_aux(shower_str, 80);
+
+			/* Make it lowercase */
+			str_tolower(shower_str);
+
+			/* Show it */
+			shower = shower_str;
 		}
 
 		/* Hack -- try finding */
@@ -5594,26 +5588,18 @@ prt("強調: ", hgt - 1, 0);
 #endif
 
 
-			if (askfor_aux(finder, 80))
+			if (askfor_aux(finder_str, 80))
 			{
 				/* Find it */
-				find = finder;
+				find = finder_str;
 				back = line;
 				line = line + 1;
 
 				/* Make finder lowercase */
-				for (cnt = 0; finder[cnt] != 0; cnt++)
-				{
-#ifdef JP
-					if (iskanji(finder[cnt]))
-						cnt++;
-					else
-#endif
-						finder[cnt] = tolower(finder[cnt]);
-				}
+				str_tolower(finder_str);
 
 				/* Show it */
-				strcpy(shower, finder);
+				shower = finder_str;
 			}
 		}
 
