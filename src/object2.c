@@ -561,7 +561,7 @@ s16b o_pop(void)
 /*
  * Apply a "object restriction function" to the "object allocation table"
  */
-errr get_obj_num_prep(void)
+static errr get_obj_num_prep(void)
 {
 	int i;
 
@@ -4617,31 +4617,26 @@ bool make_object(object_type *j_ptr, u32b mode)
 	{
 		int k_idx;
 
-		/*
-		 * Hack -- If restriction is already specified, allocation table is
-		 * should be prepared by get_obj_num_prep().
-		 * We rely previous preparation before reaching here.
-		 */
 		/* Good objects */
 		if ((mode & AM_GOOD) && !get_obj_num_hook)
 		{
-			/* Activate restriction (if already specified, use it) */
+			/* Activate restriction (if already specified, use that) */
 			get_obj_num_hook = kind_is_good;
-
-			/* Prepare allocation table */
-			get_obj_num_prep();
 		}
+
+		/* Restricted objects - prepare allocation table */
+		if (get_obj_num_hook) get_obj_num_prep();
 
 		/* Pick a random object */
 		k_idx = get_obj_num(base);
 
-		/* Good objects */
+		/* Restricted objects */
 		if (get_obj_num_hook)
 		{
 			/* Clear restriction */
 			get_obj_num_hook = NULL;
 
-			/* Prepare allocation table */
+			/* Reset allocation table to default */
 			get_obj_num_prep();
 		}
 

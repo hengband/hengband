@@ -897,7 +897,6 @@ extern void delete_object(int y, int x);
 extern void compact_objects(int size);
 extern void wipe_o_list(void);
 extern s16b o_pop(void);
-extern errr get_obj_num_prep(void);
 extern s16b get_obj_num(int level);
 extern void object_known(object_type *o_ptr);
 extern void object_aware(object_type *o_ptr);

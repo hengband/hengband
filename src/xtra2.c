@@ -915,9 +915,6 @@ msg_print("地面に落とされた。");
 			else
 				get_obj_num_hook = kind_is_book;
 
-			/* Prepare allocation table */
-			get_obj_num_prep();
-
 			/* Make a book */
 			make_object(q_ptr, mo_mode);
 
@@ -1099,9 +1096,6 @@ msg_print("地面に落とされた。");
 				/* Activate restriction */
 				get_obj_num_hook = kind_is_cloak;
 
-				/* Prepare allocation table */
-				get_obj_num_prep();
-
 				/* Make a cloak */
 				make_object(q_ptr, mo_mode);
 
@@ -1121,9 +1115,6 @@ msg_print("地面に落とされた。");
 
 				/* Activate restriction */
 				get_obj_num_hook = kind_is_polearm;
-
-				/* Prepare allocation table */
-				get_obj_num_prep();
 
 				/* Make a poleweapon */
 				make_object(q_ptr, mo_mode);
@@ -1145,9 +1136,6 @@ msg_print("地面に落とされた。");
 				/* Activate restriction */
 				get_obj_num_hook = kind_is_armor;
 
-				/* Prepare allocation table */
-				get_obj_num_prep();
-
 				/* Make a hard armor */
 				make_object(q_ptr, mo_mode);
 
@@ -1167,9 +1155,6 @@ msg_print("地面に落とされた。");
 
 				/* Activate restriction */
 				get_obj_num_hook = kind_is_sword;
-
-				/* Prepare allocation table */
-				get_obj_num_prep();
 
 				/* Make a sword */
 				make_object(q_ptr, mo_mode);
