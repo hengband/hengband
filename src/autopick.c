@@ -1681,6 +1681,10 @@ static cptr ctrl_command_desc[] =
 
 
 #define MAX_YANK 1024
+#define DIRTY_ALL 0x01
+#define DIRTY_COMMAND 0x02
+#define DIRTY_MODE 0x04
+#define DIRTY_SCREEN 0x04
 
 /*
  * In-game editor of Object Auto-picker/Destoryer
@@ -1707,14 +1711,8 @@ void do_cmd_edit_autopick()
 
 	bool edit_mode = FALSE;
 
-	/*
-	 * dirty_line
-	 * 0,1,2,... : this line is dirty
-	 * -1 : perfectly clean
-	 * -2 : need redraw whole screen
-	 * -3 : mode is changed
-	 */
-	int dirty_line = -2;
+	byte dirty_flags = DIRTY_ALL | DIRTY_COMMAND | DIRTY_MODE;
+	int dirty_line = -1;
 
 	int wid, hgt, old_wid = -1, old_hgt = -1;
 
@@ -1798,22 +1796,30 @@ void do_cmd_edit_autopick()
 
 		/* Redraw whole window after resize */
 		if (old_wid != wid || old_hgt != hgt)
+			dirty_flags |= DIRTY_SCREEN;
+
+		/* Redraw all text after scroll */
+		else if (old_upper != upper || old_left != left)
+			dirty_flags |= DIRTY_ALL;
+
+
+		if (dirty_flags & DIRTY_SCREEN)
 		{
-			dirty_line = -2;
+			dirty_flags = DIRTY_ALL | DIRTY_COMMAND | DIRTY_MODE;
 
 			/* Clear screen */
 			Term_clear();
+		}
 
+		if (dirty_flags & DIRTY_COMMAND)
+		{
 			/* Display control command */
 			for (i = 0; ctrl_command_desc[i]; i++)
 				Term_putstr(wid - WID_DESC, i + 1, WID_DESC, TERM_WHITE, ctrl_command_desc[i]);
 		}
-		/* Redraw all text after scroll */
-		else if (old_upper != upper || old_left != left)
-			dirty_line = -2;
 
-		/* Redraw mode line unless perfectly clean */
-		if (dirty_line != -1)
+		/* Redraw mode line */
+		if (dirty_line & DIRTY_MODE)
 		{
 			int sepa_length = wid - WID_DESC;
 
@@ -1838,7 +1844,7 @@ void do_cmd_edit_autopick()
 			cptr msg;
 
 			/* clean or dirty? */
-			if (dirty_line != -2 && dirty_line != upper+i)
+			if (!(dirty_flags & DIRTY_ALL) && (dirty_line != upper+i))
 				continue;
 
 			msg = lines_list[upper+i];
@@ -1891,7 +1897,7 @@ void do_cmd_edit_autopick()
 		prt (format("(%d,%d)", cx, cy), 0, 70);
 
 		/* Display information when updated */
-		if (old_cy != cy || dirty_line == -2 || dirty_line == cy)
+		if (old_cy != cy || (dirty_flags & DIRTY_ALL) || dirty_line == cy)
 		{
 			/* Clear information line */
 			Term_erase(0, hgt - 3 + 1, wid);
@@ -1969,6 +1975,7 @@ void do_cmd_edit_autopick()
 		Term_gotoxy(cx - left, cy - upper + 1);
 
 		/* Now clean */
+		dirty_flags = 0;
 		dirty_line = -1;
 
 		/* Save old key and location */
@@ -1992,7 +1999,7 @@ void do_cmd_edit_autopick()
 				edit_mode = FALSE;
 
 				/* Mode line is now dirty */
-				dirty_line = -3;
+				dirty_flags |= DIRTY_MODE;
 			}
 			else if (!iscntrl(key&0xff))
 			{
@@ -2045,7 +2052,7 @@ void do_cmd_edit_autopick()
 				edit_mode = TRUE;
 
 				/* Mode line is now dirty */
-				dirty_line = -3;
+				dirty_flags |= DIRTY_MODE;
 				break;
 			case '~':
 				if (!autopick_new_entry(entry, lines_list[cy]))
@@ -2154,7 +2161,7 @@ void do_cmd_edit_autopick()
 			cx = 0;
 
 			/* Now dirty */
-			dirty_line = -2;
+			dirty_flags |= DIRTY_ALL;
 			break;
 		case KTRL('e'):
 			/* End of line */
@@ -2195,7 +2202,7 @@ void do_cmd_edit_autopick()
 			if (!entry_from_object(entry))
 			{
 				/* Now dirty because of item/equip menu */
-				dirty_line = -2;
+				dirty_flags |= DIRTY_SCREEN;
 				break;
 			}
 			tmp = autopick_line_from_entry(entry);
@@ -2207,7 +2214,7 @@ void do_cmd_edit_autopick()
 				cx = 0;
 
 				/* Now dirty because of item/equip menu */
-				dirty_line = -2;
+				dirty_flags |= DIRTY_SCREEN;
 			}
 			break;
 		case KTRL('l'):
@@ -2219,7 +2226,7 @@ void do_cmd_edit_autopick()
 				cx = 0;
 
 				/* Now dirty */
-				dirty_line = -2;
+				dirty_flags |= DIRTY_ALL;
 			}
 			break;
 		case '\n': case '\r':
@@ -2229,7 +2236,7 @@ void do_cmd_edit_autopick()
 			cx = 0;
 
 			/* Now dirty */
-			dirty_line = -2;
+			dirty_flags |= DIRTY_ALL;
 			break;
 		case KTRL('n'):
 			/* Next line */
@@ -2245,6 +2252,7 @@ void do_cmd_edit_autopick()
 
 			/* Now dirty */
 			dirty_line = cy;
+			dirty_flags |= DIRTY_MODE;
 			break;
 		case KTRL('p'):
 			/* Previous line */
@@ -2255,7 +2263,7 @@ void do_cmd_edit_autopick()
 			edit_mode = !edit_mode;
 			
 			/* Mode line is now dirty */
-			dirty_line = -3;
+			dirty_flags |= DIRTY_MODE;
 			break;
 		case KTRL('r'):
 			/* Revert to original */
@@ -2268,7 +2276,7 @@ void do_cmd_edit_autopick()
 
 			free_text_lines(lines_list);
 			lines_list = read_pickpref_text_lines();
-			dirty_line = -2;
+			dirty_flags |= DIRTY_ALL | DIRTY_MODE;
 			cx = cy = 0;
 			edit_mode = FALSE;
 			break;
@@ -2380,7 +2388,7 @@ void do_cmd_edit_autopick()
 				}
 
 				/* Now dirty */
-				dirty_line = -2;
+				dirty_flags |= DIRTY_ALL;
 			}
 			break;
 		case KTRL('z'):
@@ -2465,7 +2473,7 @@ void do_cmd_edit_autopick()
 				cy--;
 
 				/* Now dirty */
-				dirty_line = -2;
+				dirty_flags |= DIRTY_ALL;
 				break;
 			}
 
