@@ -6499,7 +6499,11 @@ else msg_print("攻撃が跳ね返った！");
 	}
 	else if (who < 0)
 	{
+#ifdef JP
 		strcpy(killer, "罠");
+#else
+		strcpy(killer, "a trap");
+#endif
 	}
 
 	/* Analyze the damage */
