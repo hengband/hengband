@@ -5525,13 +5525,17 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 	/* Get the item index */
 	if (repeat_pull(cp))
 	{
-		if (*cp == INVEN_FORCE) { /* the_force */
-		    item_tester_tval = 0;
-		    item_tester_hook = NULL;
-		    return (TRUE);
-		} else
+		/* the_force */
+		if (*cp == INVEN_FORCE)
+		{
+			item_tester_tval = 0;
+			item_tester_hook = NULL;
+			command_cmd = 0; /* Hack -- command_cmd is no longer effective */
+			return (TRUE);
+		}
+
 		/* Floor item? */
-		if (*cp < 0)
+		else if (*cp < 0)
 		{
 			object_type *o_ptr;
 
@@ -5550,6 +5554,8 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 				/* Forget the item_tester_hook restriction */
 				item_tester_hook = NULL;
 
+				command_cmd = 0; /* Hack -- command_cmd is no longer effective */
+
 				/* Success */
 				return (TRUE);
 			}
@@ -5563,6 +5569,8 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 
 			/* Forget the item_tester_hook restriction */
 			item_tester_hook = NULL;
+
+			command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 
 			/* Success */
 			return (TRUE);
@@ -6312,9 +6320,14 @@ if (ver && !verify("本当に", k))
 	/* Warning if needed */
 	if (oops && str) msg_print(str);
 
+	if (item)
+	{
 #ifdef ALLOW_REPEAT
-	if (item) repeat_push(*cp);
+		repeat_push(*cp);
 #endif /* ALLOW_REPEAT */
+
+		command_cmd = 0; /* Hack -- command_cmd is no longer effective */
+	}
 
 	/* Result */
 	return (item);
@@ -6544,13 +6557,17 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 	/* Get the item index */
 	if (repeat_pull(cp))
 	{
-		if (*cp == INVEN_FORCE) { /* the_force */
-		    item_tester_tval = 0;
-		    item_tester_hook = NULL;
-		    return (TRUE);
-		} else
+		/* the_force */
+		if (*cp == INVEN_FORCE)
+		{
+			item_tester_tval = 0;
+			item_tester_hook = NULL;
+			command_cmd = 0; /* Hack -- command_cmd is no longer effective */
+			return (TRUE);
+		}
+
 		/* Floor item? */
-		if (*cp < 0)
+		else if (*cp < 0)
 		{
 			object_type *o_ptr;
 
@@ -6569,6 +6586,8 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 				/* Forget the item_tester_hook restriction */
 				item_tester_hook = NULL;
 
+				command_cmd = 0; /* Hack -- command_cmd is no longer effective */
+
 				/* Success */
 				return (TRUE);
 			}
@@ -6582,6 +6601,8 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 
 			/* Forget the item_tester_hook restriction */
 			item_tester_hook = NULL;
+
+			command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 
 			/* Success */
 			return (TRUE);
@@ -7737,9 +7758,14 @@ if (ver && !verify("本当に", k))
 	/* Warning if needed */
 	if (oops && str) msg_print(str);
 
+	if (item)
+	{
 #ifdef ALLOW_REPEAT
-	if (item) repeat_push(*cp);
+		repeat_push(*cp);
 #endif /* ALLOW_REPEAT */
+
+		command_cmd = 0; /* Hack -- command_cmd is no longer effective */
+	}
 
 	/* Result */
 	return (item);
