@@ -612,23 +612,7 @@ struct monster_type
 
 	u32b exp;
 
-#ifdef WDT_TRACK_OPTIONS
-
-	byte ty;			/* Y location of target */
-	byte tx;			/* X location of target */
-
-	byte t_dur;			/* How long are we tracking */
-
-	byte t_bit;			/* Up to eight bit flags */
-
-#endif /* WDT_TRACK_OPTIONS */
-
-#ifdef DRS_SMART_OPTIONS
-
 	u32b smart;			/* Field for "smart_learn" */
-
-#endif /* DRS_SMART_OPTIONS */
-
 };
 
 

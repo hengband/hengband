@@ -120,11 +120,6 @@ static void hooked_roff(cptr str)
 /*
  * Hack -- display monster information using "hooked_roff()"
  *
- * Note that there is now a compiler option to only read the monster
- * descriptions from the raw file when they are actually needed, which
- * saves about 60K of memory at the cost of disk access during monster
- * recall, which is optional to the user.
- *
  * This function should only be called with the cursor placed at the
  * left edge of the screen, on a cleared line, in which the recall is
  * to take place.  One extra blank line is left after the recall.
@@ -413,57 +408,12 @@ static void roff_aux(int r_idx, int mode)
 
 	/* Descriptions */
 	{
-		char buf[2048];
+		cptr tmp = r_text + r_ptr->text;
 
-#ifdef DELAY_LOAD_R_TEXT
-
-		int fd;
-
-		/* Build the filename */
-#ifdef JP
-path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, "r_info_j.raw");
-#else
-		path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, "r_info.raw");
-#endif
-
-
-		/* Open the "raw" file */
-		fd = fd_open(buf, O_RDONLY);
-
-		/* Use file */
-		if (fd >= 0)
-		{
-			huge pos;
-
-			/* Starting position */
-			pos = r_ptr->text;
-
-			/* Additional offsets */
-			pos += r_head->head_size;
-			pos += r_head->info_size;
-			pos += r_head->name_size;
-
-			/* Seek */
-			(void)fd_seek(fd, pos);
-
-			/* Read a chunk of data */
-			(void)fd_read(fd, buf, 2048);
-
-			/* Close it */
-			(void)fd_close(fd);
-		}
-
-#else
-
-		/* Simple method */
-		strcpy(buf, r_text + r_ptr->text);
-
-#endif
-
-		if (buf[0])
+		if (tmp[0])
 		{
 			/* Dump it */
-			hooked_roff(buf);
+			hooked_roff(tmp);
 
 			/* Start a new line */
 			hooked_roff("\n");

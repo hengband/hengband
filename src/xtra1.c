@@ -1482,9 +1482,6 @@ static void prt_stun(void)
  */
 static void health_redraw(bool riding)
 {
-
-#ifdef DRS_SHOW_HEALTH_BAR
-
 	s16b health_who;
 	int row, col;
 	monster_type *m_ptr;
@@ -1572,9 +1569,6 @@ static void health_redraw(bool riding)
 		/* Dump the current "health" (use '*' symbols) */
 		Term_putstr(col + 1, row, len, attr, "**********");
 	}
-
-#endif
-
 }
 
 

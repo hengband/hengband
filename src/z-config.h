@@ -337,48 +337,6 @@
 #define MONSTER_FLOW_DEPTH 32
 
 
-
-/*
- * OPTION: Allow use of extended spell info	-DRS-
- */
-#define DRS_SHOW_SPELL_INFO
-
-/*
- * OPTION: Allow use of the monster health bar	-DRS-
- */
-#define DRS_SHOW_HEALTH_BAR
-
-
-/*
- * OPTION: Enable the "smart_learn" and "smart_cheat" options.
- * They let monsters make more "intelligent" choices about attacks
- * (including spell attacks) based on their observations of the
- * player's reactions to previous attacks.  The "smart_cheat" option
- * lets the monster know how the player would react to an attack
- * without actually needing to make the attack.  The "smart_learn"
- * option requires that a monster make a "failed" attack before
- * learning that the player is not harmed by that attack.
- *
- * This adds about 3K to the memory and about 5K to the executable.
- *
- * SPECIAL NOTE: In Z, the "smart" field is also used to store such
- * monster information as "friendly" and "cloned". Therefore this
- * option should always be defined when compiling Zangband 2.1.0
- * or later.
- */
-#define DRS_SMART_OPTIONS
-
-
-
-/*
- * OPTION: Enable the "track_follow" and "track_target" options.
- * They let monsters follow the player's foot-prints, or remember
- * the player's recent locations.  This code has been removed from
- * the current version because it is being rewritten by Billy, and
- * until it is ready, it will not work.  Do not define this option.
- */
-/* #define WDT_TRACK_OPTIONS */
-
 #ifdef USE_SPECIAL
 
 /*
@@ -622,8 +580,6 @@
 # undef ALLOW_COLORS
 # undef ALLOW_VISUALS
 # undef ALLOW_MACROS
-# undef WDT_TRACK_OPTIONS
-# undef DRS_SMART_OPTIONS
 # undef ALLOW_OLD_SAVEFILES
 # undef ALLOW_BORG
 # undef ALLOW_WIZARD
@@ -651,11 +607,6 @@
 #endif
 
 /* Zangband options: */
-
-/* (see above) */
-#ifndef DRS_SMART_OPTIONS
- #define DRS_SMART_OPTIONS
-#endif
 
 /* Allow hordes of 'similar' monsters */
 # define MONSTER_HORDES
