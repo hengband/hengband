@@ -1773,7 +1773,7 @@ static void bigtile_attr(char *cp, byte *ap, char *cp2, byte *ap2)
 #ifdef JP
 	if (isprint(*cp) || *cp == 127)
 	{
-		*ap2 = *ap;
+		*ap2 = 255;
 		*cp2 = ascii_to_zenkaku[2*(*cp-' ') + 1];
 		*cp = ascii_to_zenkaku[2*(*cp-' ')];
 		return;

@@ -569,6 +569,9 @@ void Term_queue_char(int x, int y, byte a, char c)
 	/* Check for new min/max col info for this row */
 	if (x < Term->x1[y]) Term->x1[y] = x;
 	if (x > Term->x2[y]) Term->x2[y] = x;
+
+	if (scrn->a[y][x] == 255)
+		if ((x - 1) < Term->x1[y]) Term->x1[y]--;
 }
 
 
