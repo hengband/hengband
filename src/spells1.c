@@ -6396,7 +6396,7 @@ msg_print("生命力が体から吸い取られた気がする！");
 static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int typ, int flg, int monspell)
 {
 	int k = 0;
-	int rlev;
+	int rlev = 0;
 
 	/* Hack -- assume obvious */
 	bool obvious = TRUE;
@@ -6408,7 +6408,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 	bool fuzzy = FALSE;
 
 	/* Source monster */
-	monster_type *m_ptr;
+	monster_type *m_ptr = NULL;
 
 	/* Monster name (for attacks) */
 	char m_name[80];
@@ -6484,16 +6484,23 @@ else msg_print("攻撃が跳ね返った！");
 	if (blind) fuzzy = TRUE;
 
 
-	/* Get the source monster */
-	m_ptr = &m_list[who];
-	/* Extract the monster level */
-	rlev = (((&r_info[m_ptr->r_idx])->level >= 1) ? (&r_info[m_ptr->r_idx])->level : 1);
+	if (who > 0)
+	{
+		/* Get the source monster */
+		m_ptr = &m_list[who];
+		/* Extract the monster level */
+		rlev = (((&r_info[m_ptr->r_idx])->level >= 1) ? (&r_info[m_ptr->r_idx])->level : 1);
 
-	/* Get the monster name */
-	monster_desc(m_name, m_ptr, 0);
+		/* Get the monster name */
+		monster_desc(m_name, m_ptr, 0);
 
-	/* Get the monster's real name (gotten before polymorph!) */
-	strcpy(killer, who_name);
+		/* Get the monster's real name (gotten before polymorph!) */
+		strcpy(killer, who_name);
+	}
+	else if (who < 0)
+	{
+		strcpy(killer, "罠");
+	}
 
 	/* Analyze the damage */
 	switch (typ)
