@@ -70,9 +70,13 @@ F:b:129:3:0:0:0:0:0:1
 F:b:129:3:0:0:0:0:0:2
 F:!:1:3:0:42
 
-?:[AND [EQU $QUEST1 3] [IOR [EQU $CLASS BeastMaster] [EQU $CLASS Cavalry] [EQU $CLASS Monk] ] ]
+?:[AND [EQU $QUEST1 3] [IOR [EQU $CLASS BeastMaster] [EQU $CLASS Cavalry] ] ]
 F:b:129:3:0:0:0:0:0:2
 F:!:1:3:0:543
+
+?:[AND [EQU $QUEST1 3] [EQU $CLASS Monk] [EQU $CLASS ForceTrainer] ]
+F:b:129:3:0:0:0:0:0:2
+F:!:1:3:0:126
 
 ?:[AND [EQU $QUEST1 3] [EQU $CLASS Priest] ]
 F:b:129:3:0:0:0:0:0:2
@@ -80,7 +84,8 @@ F:!:1:3:0:55
 
 ?:[AND [EQU $QUEST1 3] [EQU $CLASS Archer] ]
 F:b:129:3:0:0:0:0:0:2
-F:!:1:3:0:74
+
+F:!:1:3:0:73
 
 ?:[AND [EQU $QUEST1 3] [EQU $CLASS Weaponsmith] ]
 F:b:129:3:0:0:0:0:0:2
@@ -269,11 +274,11 @@ F:@:1:3:0:405
 F:b:129:3:0:0:0:0:0:15
 F:!:1:3:0:0:0:141
 
-# Quest 27 rewarding (Ranger, Archer gets Belthronding)
+# Quest 27 rewarding (Ranger, Archer gets Long Bow of Bard)
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [IOR [EQU $CLASS Ranger] [EQU $CLASS Archer] ] ]
 F:b:129:3:0:0:0:0:0:15
-F:!:1:3:0:0:0:124
+F:!:1:3:0:0:0:125
 
 # Quest 27 rewarding (Warrior gets Glaive of Pain)
 # continue with quest 33

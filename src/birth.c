@@ -3419,7 +3419,7 @@ static byte player_init[MAX_CLASS][3][2] =
 
 	{
 		/* Archer */
-		{ TV_BOW, SV_LONG_BOW },
+		{ TV_BOW, SV_SHORT_BOW },
 		{ TV_SOFT_ARMOR, SV_LEATHER_SCALE_MAIL},
 		{ TV_SWORD, SV_SHORT_SWORD },
 	},

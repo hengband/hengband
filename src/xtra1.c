@@ -4697,7 +4697,7 @@ void calc_bonuses(void)
 			if (p_ptr->pclass == CLASS_ARCHER)
 			{
 				if (p_ptr->tval_ammo == TV_ARROW)
-					p_ptr->num_fire += (p_ptr->lev * 6);
+					p_ptr->num_fire += ((p_ptr->lev * 5)+50);
 				else if ((p_ptr->tval_ammo == TV_BOLT) || (p_ptr->tval_ammo == TV_SHOT))
 					p_ptr->num_fire += (p_ptr->lev * 4);
 			}

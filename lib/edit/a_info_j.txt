@@ -2316,7 +2316,7 @@ D:淡い金色の輝きを微かに放つエルフの髪を弦に張ってある。
 N:125:射手バルド王の
 E:of Bard
 I:19:13:3
-W:30:20:40:20000
+W:30:20:40:40000
 P:0:0d0:17:19:0
 F:DEX | HIDE_TYPE | FREE_ACT | XTRA_MIGHT | SHOW_MODS
 D:$The great yew bow of grim-faced Bard, who shot the mightiest arrow that 
