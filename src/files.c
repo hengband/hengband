@@ -5044,11 +5044,19 @@ msg_print("キャラクタ情報のファイルへの書き出しに成功しました。");
 
 /*
  * Display single line of on-line help file
+ *
+ * You can insert some special color tag to change text color.
+ * Such as...
+ * WHITETEXT [[[[y|SOME TEXT WHICH IS DISPLAYED IN YELLOW| WHITETEXT
+ *
+ * A colored segment is between "[[[[y|" and the last "|".
+ * You can use any single character in place of the "|".
  */
 static void show_file_aux_line(cptr str, int cy, cptr shower)
 {
+	static const char tag_str[] = "[[[[";
 	byte color = TERM_WHITE;
-	bool in_tag = FALSE;
+	char in_tag = '\0';
 	int cx = 0;
 	int i;
 	char lcstr[1024];
@@ -5079,7 +5087,7 @@ static void show_file_aux_line(cptr str, int cy, cptr shower)
 		}
 
 		/* Search for a color segment tag */
-		ptr = in_tag ? my_strchr(&str[i], ']') : my_strstr(&str[i], "[[[[[");
+		ptr = in_tag ? my_strchr(&str[i], in_tag) : my_strstr(&str[i], tag_str);
 		if (ptr) bracketcol = ptr - &str[i];
 
 		/* A color tag is found */
@@ -5109,39 +5117,43 @@ static void show_file_aux_line(cptr str, int cy, cptr shower)
 		{
 			if (in_tag)
 			{
-				/* Found a ']', the end of colored segment */
+				/* Found the end of colored segment */
 				i++;
 
-				/* Now looking for an another "[[[[[" */
-				in_tag = FALSE;
+				/* Now looking for an another tag_str */
+				in_tag = '\0';
 
 				/* Set back to the default color */
 				color = TERM_WHITE;
 			}
 			else
 			{
-				/* Found a "[[[[[", and get a tag color */
-				i += 5;
+				/* Found a tag_str, and get a tag color */
+				i += sizeof(tag_str)-1;
 
 				/* Get tag color */
 				color = color_char_to_attr(str[i]);
 
-				if (color == 255)
+				/* Illegal color tag */
+				if (color == 255 || str[i+1] == '\0')
 				{
 					/* Illegal color tag */
 					color = TERM_WHITE;
 
 					/* Print the broken tag as a string */
-					Term_addstr(-1, TERM_WHITE, "[[[[[");
-					cx += 5;
+					Term_addstr(-1, TERM_WHITE, tag_str);
+					cx += sizeof(tag_str)-1;
 				}
 				else
 				{
 					/* Skip the color tag */
 					i++;
 
-					/* Now looking for a ']' */
-					in_tag = TRUE;
+					/* Now looking for a close tag */
+					in_tag = str[i];
+
+					/* Skip the close-tag-indicator */
+					i++;
 				}
 			}
 		}
