@@ -500,12 +500,15 @@ static void generate_wilderness_area(int terrain, u32b seed, bool border, bool c
 	/* Hack -- Induce consistant town layout */
 	Rand_value = seed;
 
-	/* Create level background */
-	for (y1 = 0; y1 < MAX_HGT; y1++)
+	if (!corner)
 	{
-		for (x1 = 0; x1 < MAX_WID; x1++)
+		/* Create level background */
+		for (y1 = 0; y1 < MAX_HGT; y1++)
 		{
-			cave[y1][x1].feat = table_size / 2;
+			for (x1 = 0; x1 < MAX_WID; x1++)
+			{
+				cave[y1][x1].feat = table_size / 2;
+			}
 		}
 	}
 
@@ -521,20 +524,39 @@ static void generate_wilderness_area(int terrain, u32b seed, bool border, bool c
 
 	if (!corner)
 	{
+		/* Hack -- preserve four corners */
+		s16b north_west = cave[1][1].feat;
+		s16b south_west = cave[MAX_HGT - 2][1].feat;
+		s16b north_east = cave[1][MAX_WID - 2].feat;
+		s16b south_east = cave[MAX_HGT - 2][MAX_WID - 2].feat;
+
 		/* x1, y1, x2, y2, num_depths, roughness */
 		plasma_recursive(1, 1, MAX_WID-2, MAX_HGT-2, table_size-1, roughness);
+
+		/* Hack -- copyback four corners */
+		cave[1][1].feat = north_west;
+		cave[MAX_HGT - 2][1].feat = south_west;
+		cave[1][MAX_WID - 2].feat = north_east;
+		cave[MAX_HGT - 2][MAX_WID - 2].feat = south_east;
+
+		for (y1 = 1; y1 < MAX_HGT - 1; y1++)
+		{
+			for (x1 = 1; x1 < MAX_WID - 1; x1++)
+			{
+				cave[y1][x1].feat = terrain_table[terrain][cave[y1][x1].feat];
+			}
+		}
+	}
+	else /* Hack -- only four corners */
+	{
+		cave[1][1].feat = terrain_table[terrain][cave[1][1].feat];
+		cave[MAX_HGT - 2][1].feat = terrain_table[terrain][cave[MAX_HGT - 2][1].feat];
+		cave[1][MAX_WID - 2].feat = terrain_table[terrain][cave[1][MAX_WID - 2].feat];
+		cave[MAX_HGT - 2][MAX_WID - 2].feat = terrain_table[terrain][cave[MAX_HGT - 2][MAX_WID - 2].feat];
 	}
 
 	/* Use the complex RNG */
 	Rand_quick = FALSE;
-
-	for (y1 = 1; y1 < MAX_HGT-1; y1++)
-	{
-		for (x1 = 1; x1 < MAX_WID-1; x1++)
-		{
-			cave[y1][x1].feat = terrain_table[terrain][cave[y1][x1].feat];
-		}
-	}
 }
 
 
