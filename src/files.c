@@ -3191,7 +3191,7 @@ static void display_player_other_flag_info(void)
 	display_flag_aux(row+13, col, "Poison Brd:", TR_BRAND_POIS, &f, DP_WP);
 	display_flag_aux(row+14, col, "Sharpness :", TR_VORPAL, &f, DP_WP);
 	display_flag_aux(row+15, col, "Quake     :", TR_IMPACT, &f, DP_WP);
-	display_flag_aux(row+16, col, "Vampicic  :", TR_VAMPIRIC, &f, DP_WP);
+	display_flag_aux(row+16, col, "Vampiric  :", TR_VAMPIRIC, &f, DP_WP);
 	display_flag_aux(row+17, col, "Chatic    :", TR_CHAOTIC, &f, DP_WP);
 	display_flag_aux(row+18, col, "Force Wep.:", TR_FORCE_WEAPON, &f, DP_WP);
 #endif
