@@ -403,11 +403,11 @@ Alert user to critical hitpoints    [alert_hitpoint]
 
 Disturb when leaving trap detected area    [disturb_trap_detect]
     This option causes you to be disturbed when the player is running
-    out of the trap detected area.
+    out of trap-detected area.
 
 Alert when leaving trap detected area    [alert_trap_detect]
-    This option alert you displaying special message when the player
-    is running out of the trap detected area.
+    This option alerts you with message when the player is moving out
+    of the trap-detected area.
 
 
 ***** <Efficiency>
