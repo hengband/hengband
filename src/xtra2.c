@@ -1463,7 +1463,7 @@ msg_print("地面に落とされた。");
 #ifdef JP
 		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "見事に変愚蛮怒の勝利者となった！");
 #else
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "become *WINNER* of Hengband finly!");
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "become *WINNER* of Hengband finely!");
 #endif
 
 		if (p_ptr->pclass == CLASS_CHAOS_WARRIOR)
@@ -1723,9 +1723,42 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 
 		if (r_info[m_ptr->r_idx].flags7 & RF7_TANUKI)
 		{
+			/* You might have unmasked Tanuki first time */
 			r_ptr = &r_info[m_ptr->r_idx];
 			m_ptr->ap_r_idx = m_ptr->r_idx;
 			if (r_ptr->r_sights < MAX_SHORT) r_ptr->r_sights++;
+		}
+
+		if (m_ptr->mflag2 & MFLAG_CHAMELEON)
+		{
+			/* You might have unmasked Chameleon first time */
+			if (r_ptr->flags1 & RF1_UNIQUE)
+				r_ptr = &r_info[MON_CHAMELEON_K];
+			else
+				r_ptr = &r_info[MON_CHAMELEON];
+			if (r_ptr->r_sights < MAX_SHORT) r_ptr->r_sights++;
+		}
+
+		/* When the player kills a Unique, it stays dead */
+		if (r_ptr->flags1 & RF1_UNIQUE && !(m_ptr->smart & SM_CLONED))
+			r_ptr->max_num = 0;
+
+		/* When the player kills a Nazgul, it stays dead */
+		if (r_ptr->flags7 & RF7_UNIQUE_7) r_ptr->max_num--;
+
+		/* Recall even invisible uniques or winners */
+		if (m_ptr->ml || (r_ptr->flags1 & RF1_UNIQUE))
+		{
+			/* Count kills this life */
+			if ((m_ptr->mflag2 & MFLAG_KAGE) && (r_info[MON_KAGE].r_pkills < MAX_SHORT)) r_info[MON_KAGE].r_pkills++;
+			else if (r_ptr->r_pkills < MAX_SHORT) r_ptr->r_pkills++;
+
+			/* Count kills in all lives */
+			if ((m_ptr->mflag2 & MFLAG_KAGE) && (r_info[MON_KAGE].r_tkills < MAX_SHORT)) r_info[MON_KAGE].r_tkills++;
+			else if (r_ptr->r_tkills < MAX_SHORT) r_ptr->r_tkills++;
+
+			/* Hack -- Auto-recall */
+			monster_race_track(m_ptr->ap_r_idx);
 		}
 
 		/* Extract monster name */
@@ -1980,37 +2013,6 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 
 		/* Generate treasure */
 		monster_death(m_idx, TRUE);
-		if (m_ptr->mflag2 & MFLAG_CHAMELEON)
-		{
-			if (r_ptr->flags1 & RF1_UNIQUE)
-				r_ptr = &r_info[MON_CHAMELEON_K];
-			else
-				r_ptr = &r_info[MON_CHAMELEON];
-			if (r_ptr->r_sights < MAX_SHORT) r_ptr->r_sights++;
-		}
-
-		/* When the player kills a Unique, it stays dead */
-		if (r_ptr->flags1 & RF1_UNIQUE && !(m_ptr->smart & SM_CLONED))
-			r_ptr->max_num = 0;
-
-		/* When the player kills a Nazgul, it stays dead */
-		if (r_ptr->flags7 & RF7_UNIQUE_7) r_ptr->max_num--;
-
-		/* Recall even invisible uniques or winners */
-		if (m_ptr->ml || (r_ptr->flags1 & RF1_UNIQUE))
-		{
-			/* Count kills this life */
-			if ((m_ptr->mflag2 & MFLAG_KAGE) && (r_info[MON_KAGE].r_pkills < MAX_SHORT)) r_info[MON_KAGE].r_pkills++;
-			else if (r_ptr->r_pkills < MAX_SHORT) r_ptr->r_pkills++;
-
-			/* Count kills in all lives */
-			if ((m_ptr->mflag2 & MFLAG_KAGE) && (r_info[MON_KAGE].r_tkills < MAX_SHORT)) r_info[MON_KAGE].r_tkills++;
-			else if (r_ptr->r_tkills < MAX_SHORT) r_ptr->r_tkills++;
-
-			/* Hack -- Auto-recall */
-			monster_race_track(m_ptr->ap_r_idx);
-		}
-
 		if ((m_ptr->r_idx == MON_BANOR) || (m_ptr->r_idx == MON_LUPART))
 		{
 			r_info[MON_BANORLUPART].max_num = 0;
