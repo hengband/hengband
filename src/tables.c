@@ -4963,14 +4963,14 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 	/* Mirror Master */
 	{
 		"Mirrorstarer",
-		"Mirrorpolisher",
+		"Mirrorcleaner",
 		"Mirrormaker",
 		"Mirrormagician",
-		"Guru of Mirror ",
+		"Mirror Guru",
 		"Mirror Mage",
 		"Mirror King",
 		"Mirror Emperror",
-		"Avatar of Mirror",
+		"Mirror Avatar",
 		"Ruffnor King",
 	},
 
