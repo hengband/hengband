@@ -5296,10 +5296,8 @@ static bool do_cmd_histpref(void)
 	{
 #ifdef JP
 		msg_print("生い立ち設定ファイルの読み込みに失敗しました。");
-		msg_print("histedit.prfが見つかりません。");
 #else
 		msg_print("Failed to load background history preference.");
-		msg_print("Can't find histpref.prf");
 #endif
 		msg_print(NULL);
 
