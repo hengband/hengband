@@ -2862,9 +2862,6 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 
 		case TV_CLOAK:
 		{
-			if (o_ptr->sval == SV_ELVEN_CLOAK)
-				o_ptr->pval = randint1(4); /* No cursed elven cloaks...? */
-
 			/* Very good */
 			if (power > 1)
 			{
@@ -4204,13 +4201,15 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 		case TV_GLOVES:
 		case TV_BOOTS:
 		{
+			/* Elven Cloak and Black Clothes ... */
+			if (o_ptr->pval) o_ptr->pval = randint1(o_ptr->pval);
+
 #if 1
 			if (power ||
 			     ((o_ptr->tval == TV_HELM) && (o_ptr->sval == SV_DRAGON_HELM)) ||
 			     ((o_ptr->tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD)) ||
 			     ((o_ptr->tval == TV_GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES)) ||
-			     ((o_ptr->tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)) ||
-			     ((o_ptr->tval == TV_CLOAK) && (o_ptr->sval == SV_ELVEN_CLOAK)))
+			     ((o_ptr->tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)))
 				a_m_aux_2(o_ptr, lev, power);
 #else
 			if (power) a_m_aux_2(o_ptr, lev, power);
