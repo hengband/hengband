@@ -1967,7 +1967,8 @@ static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp)
 			byte ta = tap[i];
 			char tc = tcp[i];
 
-			if (a != ta || c != tc)
+			if ((a != ta || c != tc) &&
+			    ((byte)ta & 0x80) && ((byte)tc & 0x80))
 			{
 				/* Row and Col */
 				row = ((byte)ta & 0x7F);

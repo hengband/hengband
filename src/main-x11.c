@@ -2535,7 +2535,8 @@ static errr Term_pict_x11(int x, int y, int n, const byte *ap, const char *cp)
 		y2 = (ta&0x7F) * td->fnt->hgt;
 		
 		/* Optimise the common case */
-		if ((x1 == x2) && (y1 == y2))
+		if (((x1 == x2) && (y1 == y2)) ||
+		    !(((byte)ta & 0x80) && ((byte)tc & 0x80)))
 		{
 			/* Draw object / terrain */
 			XPutImage(Metadpy->dpy, td->win->win,
