@@ -5431,7 +5431,7 @@ static void edit_history(void)
 		if (!(skey & SKEY_MASK)) c = (char)skey;
 		else c = 0;
 
-		if (skey == SKEY_UP)
+		if (skey == SKEY_UP || c == KTRL('p'))
 		{
 			y--;
 			if (y < 0) y = 3;
@@ -5439,7 +5439,7 @@ static void edit_history(void)
 			if ((x > 0) && (iskanji2(p_ptr->history[y], x-1))) x--;
 #endif
 		}
-		else if (skey == SKEY_DOWN)
+		else if (skey == SKEY_DOWN || c == KTRL('n'))
 		{
 			y++;
 			if (y > 3) y = 0;
@@ -5447,7 +5447,7 @@ static void edit_history(void)
 			if ((x > 0) && (iskanji2(p_ptr->history[y], x-1))) x--;
 #endif
 		}
-		else if (skey == SKEY_RIGHT)
+		else if (skey == SKEY_RIGHT || c == KTRL('f'))
 		{
 #ifdef JP
 			if (iskanji2(p_ptr->history[y], x)) x++;
@@ -5459,7 +5459,7 @@ static void edit_history(void)
 				if (y < 3) y++;
 			}
 		}
-		else if (skey == SKEY_LEFT)
+		else if (skey == SKEY_LEFT || c == KTRL('b'))
 		{
 			x--;
 			if (x < 0)
@@ -5476,7 +5476,7 @@ static void edit_history(void)
 			if ((x > 0) && (iskanji2(p_ptr->history[y], x-1))) x--;
 #endif
 		}
-		else if (c == '\r')
+		else if (c == '\r' || c == '\n')
 		{
 			Term_erase(0, 11, 255);
 			Term_erase(0, 17, 255);
