@@ -1634,9 +1634,9 @@ int calculate_upkeep(void)
 	s32b old_friend_align = friend_align;
 	int m_idx;
 	bool have_a_unique = FALSE;
+	s32b total_friend_levels = 0;
 
 	total_friends = 0;
-	total_friend_levels = 0;
 	friend_align = 0;
 
 	for (m_idx = m_max - 1; m_idx >=1; m_idx--)

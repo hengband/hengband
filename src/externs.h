@@ -197,7 +197,6 @@ extern s16b m_cnt;
 extern s16b hack_m_idx;
 extern s16b hack_m_idx_ii;
 extern int total_friends;
-extern s32b total_friend_levels;
 extern s32b friend_align;
 extern int leaving_quest;
 extern bool reinit_wilderness;
