@@ -1782,15 +1782,15 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 
 #ifdef JP
-			sprintf(tmp_val2, "& #%s", basenm + 2);
+			sprintf(tmp_val2, "#%s", basenm);
 #else
 			if (r_ptr->flags1 & RF1_UNIQUE)
 			{
-				sprintf(tmp_val2, "%s %s", basenm, "of #");
+				sprintf(tmp_val2, "& %s %s", basenm, "of #");
 			}
 			else
 			{
-				sprintf(tmp_val2, "& # %s", basenm + 2);
+				sprintf(tmp_val2, "& # %s", basenm);
 			}
 #endif
 
@@ -1851,9 +1851,9 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
 #ifdef JP
-				basenm = aware ? "& %のアミュレット" : "& アミュレット";
+				basenm = aware ? "%のアミュレット" : "アミュレット";
 			else
-				basenm = aware ? "& #%のアミュレット" : "& #アミュレット";
+				basenm = aware ? "#%のアミュレット" : "#アミュレット";
 #else
 				basenm = "& Amulet~";
 			else
@@ -1878,9 +1878,9 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
 #ifdef JP
-				basenm = aware ? "& %の指輪" : "& 指輪";
+				basenm = aware ? "%の指輪" : "指輪";
 			else
-				basenm = aware ? "& #%の指輪" : "& #指輪";
+				basenm = aware ? "#%の指輪" : "#指輪";
 #else
 				basenm = "& Ring~";
 			else
@@ -1905,9 +1905,9 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			if (aware) append_name = TRUE;
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
 #ifdef JP
-				basenm = aware ? "& %の杖" : "& 杖";
+				basenm = aware ? "%の杖" : "杖";
 			else
-				basenm = aware ? "& #%の杖" : "& #杖";
+				basenm = aware ? "#%の杖" : "#杖";
 #else
 				basenm = "& Staff~";
 			else
@@ -1925,9 +1925,9 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			if (aware) append_name = TRUE;
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
 #ifdef JP
-				basenm = aware? "& %の魔法棒":"& 魔法棒";
+				basenm = aware? "%の魔法棒":"魔法棒";
 			else
-				basenm = aware ? "& #%の魔法棒" : "& #魔法棒";
+				basenm = aware ? "#%の魔法棒" : "#魔法棒";
 #else
 				basenm = "& Wand~";
 			else
@@ -1945,9 +1945,9 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			if (aware) append_name = TRUE;
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
 #ifdef JP
-				basenm = aware? "& %のロッド":"& ロッド";
+				basenm = aware? "%のロッド":"ロッド";
 			else
-				basenm = aware ? "& #%のロッド" : "& #ロッド";
+				basenm = aware ? "#%のロッド" : "#ロッド";
 #else
 				basenm = "& Rod~";
 			else
@@ -1964,9 +1964,9 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			if (aware) append_name = TRUE;
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
 #ifdef JP
-				basenm = aware ? "& %の巻物" : "& 巻物";
+				basenm = aware ? "%の巻物" : "巻物";
 			else
-				basenm = aware ? "& 「#」と書かれた%の巻物" : "& 「#」と書かれた巻物";
+				basenm = aware ? "「#」と書かれた%の巻物" : "「#」と書かれた巻物";
 #else
 				basenm = "& Scroll~";
 			else
@@ -1984,9 +1984,9 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			if (aware) append_name = TRUE;
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
 #ifdef JP
-				basenm = aware ? "& %の薬" : "& 薬";
+				basenm = aware ? "%の薬" : "薬";
 			else
-				basenm = aware ? "& #%の薬" : "& #薬";
+				basenm = aware ? "#%の薬" : "#薬";
 #else
 				basenm = "& Potion~";
 			else
@@ -2007,9 +2007,9 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			if (aware) append_name = TRUE;
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
 #ifdef JP
-				basenm = aware ? "& %のキノコ" : "& キノコ";
+				basenm = aware ? "%のキノコ" : "キノコ";
 			else
-				basenm = aware ? "& #%のキノコ" : "& #キノコ";
+				basenm = aware ? "#%のキノコ" : "#キノコ";
 #else
 				basenm = "& Mushroom~";
 			else
@@ -2023,7 +2023,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		{
 			modstr = basenm;
 #ifdef JP
-			basenm = "& 羊皮紙 - #";
+			basenm = "羊皮紙 - #";
 #else
 			basenm = "& Parchement~ - #";
 #endif
@@ -2035,7 +2035,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		{
 			modstr = basenm;
 #ifdef JP
-				basenm = "& 生命の魔法書#";
+				basenm = "生命の魔法書#";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
 				basenm = "& Book~ of Life Magic #";
@@ -2050,7 +2050,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		{
 			modstr = basenm;
 #ifdef JP
-				basenm = "& 仙術の魔法書#";
+				basenm = "仙術の魔法書#";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
 				basenm = "& Book~ of Sorcery #";
@@ -2065,7 +2065,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		{
 			modstr = basenm;
 #ifdef JP
-				basenm = "& 自然の魔法書#";
+				basenm = "自然の魔法書#";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
 				basenm = "& Book~ of Nature Magic #";
@@ -2080,7 +2080,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		{
 			modstr = basenm;
 #ifdef JP
-				basenm = "& カオスの魔法書#";
+				basenm = "カオスの魔法書#";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
 				basenm = "& Book~ of Chaos Magic #";
@@ -2095,7 +2095,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		{
 			modstr = basenm;
 #ifdef JP
-				basenm = "& 暗黒の魔法書#";
+				basenm = "暗黒の魔法書#";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
 				basenm = "& Book~ of Death Magic #";
@@ -2110,7 +2110,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		{
 			modstr = basenm;
 #ifdef JP
-				basenm = "& トランプの魔法書#";
+				basenm = "トランプの魔法書#";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
 				basenm = "& Book~ of Trump Magic #";
@@ -2125,7 +2125,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		{
 			modstr = basenm;
 #ifdef JP
-				basenm = "& 秘術の魔法書#";
+				basenm = "秘術の魔法書#";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
 				basenm = "& Book~ of Arcane Magic #";
@@ -2139,7 +2139,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		{
 			modstr = basenm;
 #ifdef JP
-				basenm = "& 匠の魔法書#";
+				basenm = "匠の魔法書#";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
 				basenm = "& Book~ of Craft Magic #";
@@ -2153,7 +2153,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		{
 			modstr = basenm;
 #ifdef JP
-				basenm = "& 悪魔の魔法書#";
+				basenm = "悪魔の魔法書#";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
 				basenm = "& Book~ of Daemon Magic #";
@@ -2167,7 +2167,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		{
 			modstr = basenm;
 #ifdef JP
-				basenm = "& 破邪の魔法書#";
+				basenm = "破邪の魔法書#";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
 				basenm = "& Book~ of Crusade Magic #";
@@ -2181,7 +2181,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		{
 			modstr = basenm;
 #ifdef JP
-				basenm = "& 歌集#";
+				basenm = "歌集#";
 #else
 				basenm = "& Song Book~ #";
 #endif
@@ -2194,7 +2194,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 #ifdef JP
 				basenm = "& 武芸の書#";
 #else
-				basenm = "& Book~ of Kendo #";
+				basenm = "Book~ of Kendo #";
 #endif
 
 			break;
