@@ -3139,7 +3139,7 @@ void calc_bonuses(void)
 		if (!p_ptr->migite) default_hand = 1;
 	}
 
-	if (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE))
+	if (CAN_TWO_HANDS_WIELDING())
 	{
 		if (p_ptr->migite && (empty_hands(FALSE) == EMPTY_HAND_LARM) &&
 			object_allow_two_hands_wielding(&inventory[INVEN_RARM]))

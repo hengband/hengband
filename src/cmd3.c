@@ -550,14 +550,14 @@ msg_print("クエストを達成した！");
 	switch (slot)
 	{
 	case INVEN_RARM:
-		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(FALSE) == EMPTY_HAND_LARM) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
+		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(FALSE) == EMPTY_HAND_LARM) && CAN_TWO_HANDS_WIELDING())
 			act = STR_WIELD_ARMS;
 		else
 			act = (left_hander ? STR_WIELD_LARM : STR_WIELD_RARM);
 		break;
 
 	case INVEN_LARM:
-		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(FALSE) == EMPTY_HAND_RARM) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
+		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(FALSE) == EMPTY_HAND_RARM) && CAN_TWO_HANDS_WIELDING())
 			act = STR_WIELD_ARMS;
 		else
 			act = (left_hander ? STR_WIELD_RARM : STR_WIELD_LARM);
@@ -656,7 +656,7 @@ void kamaenaoshi(int item)
 				p_ptr->total_weight += o_ptr->weight;
 				inven_item_increase(INVEN_LARM, -((int)o_ptr->number));
 				inven_item_optimize(INVEN_LARM);
-				if (object_allow_two_hands_wielding(o_ptr) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
+				if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
 #ifdef JP
 					msg_format("%sを両手で構えた。", o_name);
 #else
@@ -671,7 +671,7 @@ void kamaenaoshi(int item)
 			}
 			else
 			{
-				if (object_allow_two_hands_wielding(o_ptr) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
+				if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
 #ifdef JP
 					msg_format("%sを両手で構えた。", o_name);
 #else
@@ -687,7 +687,7 @@ void kamaenaoshi(int item)
 
 		if (buki_motteruka(INVEN_RARM))
 		{
-			if (object_allow_two_hands_wielding(o_ptr) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
+			if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
 #ifdef JP
 				msg_format("%sを両手で構えた。", o_name);
 #else
