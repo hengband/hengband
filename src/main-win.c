@@ -611,28 +611,35 @@ static bool ignore_key[256];
  * Hack -- initialization list for "special_key"
  */
 static byte special_key_list[] = {
-VK_CLEAR,VK_PAUSE,VK_CAPITAL,VK_KANA,VK_JUNJA,VK_FINAL,VK_KANJI,
-VK_CONVERT,VK_NONCONVERT,VK_ACCEPT,VK_MODECHANGE,
-VK_PRIOR,VK_NEXT,VK_END,VK_HOME,VK_LEFT,VK_UP,VK_RIGHT,VK_DOWN,
-VK_SELECT,VK_PRINT,VK_EXECUTE,VK_SNAPSHOT,VK_INSERT,VK_DELETE,
-VK_HELP,VK_APPS,
-VK_NUMPAD0,VK_NUMPAD1,VK_NUMPAD2,VK_NUMPAD3,VK_NUMPAD4,
-VK_NUMPAD5,VK_NUMPAD6,VK_NUMPAD7,VK_NUMPAD8,VK_NUMPAD9,
-VK_MULTIPLY,VK_ADD,VK_SEPARATOR,VK_SUBTRACT,VK_DECIMAL,VK_DIVIDE,
-VK_F1,VK_F2,VK_F3,VK_F4,VK_F5,VK_F6,VK_F7,VK_F8,VK_F9,VK_F10,
-VK_F11,VK_F12,VK_F13,VK_F14,VK_F15,VK_F16,VK_F17,VK_F18,VK_F19,VK_F20,
-VK_F21,VK_F22,VK_F23,VK_F24,VK_NUMLOCK,VK_SCROLL,
-VK_ATTN,VK_CRSEL,VK_EXSEL,VK_EREOF,VK_PLAY,VK_ZOOM,VK_NONAME,
-VK_PA1,0
+	VK_CLEAR, VK_PAUSE, VK_CAPITAL,
+	VK_KANA, VK_JUNJA, VK_FINAL, VK_KANJI,
+	VK_CONVERT, VK_NONCONVERT, VK_ACCEPT, VK_MODECHANGE,
+	VK_PRIOR, VK_NEXT, VK_END, VK_HOME,
+	VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN,
+	VK_SELECT, VK_PRINT, VK_EXECUTE, VK_SNAPSHOT,
+	VK_INSERT, VK_DELETE, VK_HELP, VK_APPS,
+	VK_NUMPAD0, VK_NUMPAD1, VK_NUMPAD2, VK_NUMPAD3,
+	VK_NUMPAD4, VK_NUMPAD5, VK_NUMPAD6, VK_NUMPAD7,
+	VK_NUMPAD8, VK_NUMPAD9, VK_MULTIPLY, VK_ADD,
+	VK_SEPARATOR, VK_SUBTRACT, VK_DECIMAL, VK_DIVIDE,
+	VK_F1, VK_F2, VK_F3, VK_F4, VK_F5, VK_F6,
+	VK_F7, VK_F8, VK_F9, VK_F10, VK_F11, VK_F12,
+	VK_F13, VK_F14, VK_F15, VK_F16, VK_F17, VK_F18,
+	VK_F19,VK_F20, VK_F21, VK_F22, VK_F23, VK_F24,
+	VK_NUMLOCK, VK_SCROLL, VK_ATTN, VK_CRSEL,
+	VK_EXSEL, VK_EREOF, VK_PLAY, VK_ZOOM,
+	VK_NONAME, VK_PA1,
+	0	/* End of List */
 };
 
 static byte ignore_key_list[] = {
-VK_ESCAPE,VK_TAB,VK_SPACE,
-'F','W','O','H', /* these are menu characters.*/
-VK_SHIFT,VK_CONTROL,VK_MENU,VK_LWIN,VK_RWIN,
-VK_LSHIFT,VK_RSHIFT,VK_LCONTROL,VK_RCONTROL,VK_LMENU,VK_RMENU,0
+	VK_ESCAPE, VK_TAB, VK_SPACE,
+	'F', 'W', 'O', /*'H',*/ /* these are menu characters.*/
+	VK_SHIFT, VK_CONTROL, VK_MENU, VK_LWIN, VK_RWIN,
+	VK_LSHIFT, VK_RSHIFT, VK_LCONTROL, VK_RCONTROL,
+	VK_LMENU, VK_RMENU,
+	0	/* End of List */
 };
-
 #else
 /*
  * Hack -- initialization list for "special_key"
@@ -666,7 +673,6 @@ static byte special_key_list[] =
 	VK_INSERT,		/* 0x2D (KP<0>) */
 	VK_DELETE,		/* 0x2E (KP<.>) */
 	VK_HELP,		/* 0x2F (?????) */
-
 #if 0
 	VK_NUMPAD0,		/* 0x60 (KP<0>) */
 	VK_NUMPAD1,		/* 0x61 (KP<1>) */
@@ -685,7 +691,6 @@ static byte special_key_list[] =
 	VK_DECIMAL,		/* 0x6E (KP<.>) */
 	VK_DIVIDE,		/* 0x6F (KP</>) */
 #endif
-
 	VK_F1,			/* 0x70 */
 	VK_F2,			/* 0x71 */
 	VK_F3,			/* 0x72 */
@@ -710,7 +715,6 @@ static byte special_key_list[] =
 	VK_F22,			/* 0x85 */
 	VK_F23,			/* 0x86 */
 	VK_F24,			/* 0x87 */
-
 	0
 };
 #endif
@@ -4107,6 +4111,95 @@ static void process_menus(WORD wCmd)
 }
 
 
+static bool process_keydown(WPARAM wParam, LPARAM lParam)
+{
+	int i;
+	bool mc = FALSE;
+	bool ms = FALSE;
+	bool ma = FALSE;
+
+	/* Extract the modifiers */
+	if (GetKeyState(VK_CONTROL) & 0x8000) mc = TRUE;
+	if (GetKeyState(VK_SHIFT)   & 0x8000) ms = TRUE;
+	if (GetKeyState(VK_MENU)    & 0x8000) ma = TRUE;
+
+	Term_no_press = (ma) ? TRUE : FALSE;
+
+	/* Handle "special" keys */
+	if (special_key[(byte)(wParam)] || (ma && !ignore_key[(byte)(wParam)]) )
+	{
+		bool ext_key = (lParam & 0x1000000L) ? TRUE : FALSE;
+		bool numpad = FALSE;
+
+		/* Begin the macro trigger */
+		Term_keypress(31);
+
+		/* Send the modifiers */
+		if (mc) Term_keypress('C');
+		if (ms) Term_keypress('S');
+		if (ma) Term_keypress('A');
+
+		/* Extract "scan code" */
+		i = LOBYTE(HIWORD(lParam));
+
+		/* Introduce the scan code */
+		Term_keypress('x');
+
+		/* Extended key bit */
+		switch (wParam)
+		{
+			/* Numpad Enter and '/' are extended key */
+		case VK_DIVIDE:
+			Term_no_press = TRUE;
+		case VK_RETURN:	/* Enter */
+			numpad = ext_key;
+			break;
+			/* Other extended keys are on full keyboard */
+		case VK_NUMPAD0:
+		case VK_NUMPAD1:
+		case VK_NUMPAD2:
+		case VK_NUMPAD3:
+		case VK_NUMPAD4:
+		case VK_NUMPAD5:
+		case VK_NUMPAD6:
+		case VK_NUMPAD7:
+		case VK_NUMPAD8:
+		case VK_NUMPAD9:
+		case VK_ADD:
+		case VK_MULTIPLY:
+		case VK_SUBTRACT:
+		case VK_SEPARATOR:
+		case VK_DECIMAL:
+			Term_no_press = TRUE;
+		case VK_HOME:
+		case VK_END:
+		case VK_PRIOR:	/* Page Up */
+		case VK_NEXT:	/* Page Down */
+		case VK_INSERT:
+		case VK_DELETE:
+		case VK_UP:
+		case VK_DOWN:
+		case VK_LEFT:
+		case VK_RIGHT:
+			numpad = !ext_key;
+		}
+
+		/* Special modifiers for keypad keys */
+		if (numpad) Term_keypress('K');
+
+		/* Encode the hexidecimal scan code */
+		Term_keypress(hexsym[i/16]);
+		Term_keypress(hexsym[i%16]);
+
+		/* End the macro trigger */
+		Term_keypress(13);
+
+		return 1;
+	}
+
+	return 0;
+}
+
 
 #ifdef __MWERKS__
 LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
@@ -4184,87 +4277,8 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 		case WM_SYSKEYDOWN:
 		case WM_KEYDOWN:
 		{
-			bool mc = FALSE;
-			bool ms = FALSE;
-			bool ma = FALSE;
-
-			/* Extract the modifiers */
-			if (GetKeyState(VK_CONTROL) & 0x8000) mc = TRUE;
-			if (GetKeyState(VK_SHIFT)   & 0x8000) ms = TRUE;
-			if (GetKeyState(VK_MENU)    & 0x8000) ma = TRUE;
-
-			/* Handle "special" keys */
-			if (special_key[(byte)(wParam)] || (ma && !ignore_key[(byte)(wParam)]) )
-			{
-				bool ext_key = (lParam & 0x1000000L) ? TRUE : FALSE;
-				bool numpad = FALSE;
-
-				/* Begin the macro trigger */
-				Term_keypress(31);
-
-				/* Send the modifiers */
-				if (mc) Term_keypress('C');
-				if (ms) Term_keypress('S');
-				if (ma) Term_keypress('A');
-
-				/* Extract "scan code" */
-				i = LOBYTE(HIWORD(lParam));
-
-				/* Introduce the scan code */
-				Term_keypress('x');
-
-				/* Extended key bit */
-				switch (wParam)
-				{
-				/* Numpad Enter and '/' are extended key */
-				case VK_DIVIDE:
-					Term_no_press = TRUE;
-				case VK_RETURN:	/* Enter */
-					numpad = ext_key;
-					break;
-				/* Other extended keys are on full keyboard */
-				case VK_NUMPAD0:
-				case VK_NUMPAD1:
-				case VK_NUMPAD2:
-				case VK_NUMPAD3:
-				case VK_NUMPAD4:
-				case VK_NUMPAD5:
-				case VK_NUMPAD6:
-				case VK_NUMPAD7:
-				case VK_NUMPAD8:
-				case VK_NUMPAD9:
-				case VK_ADD:
-				case VK_MULTIPLY:
-				case VK_SUBTRACT:
-				case VK_SEPARATOR:
-				case VK_DECIMAL:
-					Term_no_press = TRUE;
-				case VK_HOME:
-				case VK_END:
-				case VK_PRIOR:	/* Page Up */
-				case VK_NEXT:	/* Page Down */
-				case VK_INSERT:
-				case VK_DELETE:
-				case VK_UP:
-				case VK_DOWN:
-				case VK_LEFT:
-				case VK_RIGHT:
-					numpad = !ext_key;
-				}
-
-				/* Special modifiers for keypad keys */
-				if (numpad) Term_keypress('K');
-
-				/* Encode the hexidecimal scan code */
-				Term_keypress(hexsym[i/16]);
-				Term_keypress(hexsym[i%16]);
-
-				/* End the macro trigger */
-				Term_keypress(13);
-
+			if (process_keydown(wParam, lParam))
 				return 0;
-			}
-
 			break;
 		}
 
@@ -4587,48 +4601,15 @@ LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 		case WM_SYSKEYDOWN:
 		case WM_KEYDOWN:
 		{
-			bool mc = FALSE;
-			bool ms = FALSE;
-			bool ma = FALSE;
-
-			/* Extract the modifiers */
-			if (GetKeyState(VK_CONTROL) & 0x8000) mc = TRUE;
-			if (GetKeyState(VK_SHIFT)   & 0x8000) ms = TRUE;
-			if (GetKeyState(VK_MENU)    & 0x8000) ma = TRUE;
-
-			/* Handle "special" keys */
-			if (special_key[(byte)(wParam)] || (ma && !ignore_key[(byte)(wParam)]) )
-			{
-				/* Begin the macro trigger */
-				Term_keypress(31);
-
-				/* Send the modifiers */
-				if (mc) Term_keypress('C');
-				if (ms) Term_keypress('S');
-				if (ma) Term_keypress('A');
-
-				/* Extract "scan code" */
-				i = LOBYTE(HIWORD(lParam));
-
-				/* Introduce the scan code */
-				Term_keypress('x');
-
-				/* Encode the hexidecimal scan code */
-				Term_keypress(hexsym[i/16]);
-				Term_keypress(hexsym[i%16]);
-
-				/* End the macro trigger */
-				Term_keypress(13);
-
+			if (process_keydown(wParam, lParam))
 				return 0;
-			}
-
 			break;
 		}
 
 		case WM_CHAR:
 		{
-			Term_keypress(wParam);
+			if (Term_no_press) Term_no_press = FALSE;
+			else Term_keypress(wParam);
 			return 0;
 		}
 
