@@ -1,4 +1,60 @@
+2002-01-20  habu  <habu@akiru>
+
+	* src/defines.h, src/dungeon.c:
+	update_time()で、tmpとstart_timeが等しかったら1秒プレイ時間を増やすコードを削除し、かわりに起動時にプレイ時間を1秒増やすように変更。
+
+2002-01-20  Takeshi Mogami  <mogami@akiru>
+
+	* src/files.c:
+	英語版の現在地の文を忘れていたので追加。
+
+	* src/cmd4.c, src/externs.h, src/files.c, src/spells2.c, src/xtra1.c, src/xtra2.c:
+	キャラクター情報画面を変更。
+	ターン数表示は日付にする予定だが、まだ作業してない。
+
+2002-01-20  henkma  <henkma@akiru>
+
+	* src/melee1.c:
+	モンスターの充填エネルギーを奪う攻撃にバグがあったのを修正(魔法棒がn本重なってると、本来吸われるべき量のn倍吸われてた)
+
+2002-01-20  Takeshi Mogami  <mogami@akiru>
+
+	* src/tables.c, lib/help/readme.txt, src/cmd4.c, src/files.c:
+	- 自動破壊オプションのタイトルを少し修正、
+	- ヘルプシステムでESCを「ヘルプの終了」から、「一つ以前の画面に戻る」に変更。
+	  一番上の画面でESCを押すと終了。また、'q'を押しても終了。
+	- 間違ってreadme.txtをhelpディレクトリにaddしたままだったのを削除。
+
+2002-01-20  habu  <habu@akiru>
+
+	* src/init1.c:
+	add_name(),add_text()を作って、名前と説明の格納を関数化した。
+
+	* src/object2.c:
+	ランダムアーティファクトになる確率を整理。(武器1/40、弓・防具1/20)
+	ついでにインデントを整理。
+
 2002-01-19  Takeshi Mogami  <mogami@akiru>
+
+	* lib/help/help.hlp:
+	間違って日本語のreadme.txtを参照していたので修正。
+
+	* lib/help/help.hlp, lib/help/jhelp.hlp, readme.txt, src/files.c:
+	オンラインヘルプ'?'コマンドから、readme.txt と autopick.txtを参照
+	できるようにした。
+
+	* src/files.c:
+	近く行なうキャラクター情報'C'の画面の変更に備えて、表示する各行の
+	位置やラベルを配列で管理するように書き換え。
+
+	* src/flavor.c:
+	@nothereさんのパッチ。金無垢と金有垢を黄色にする。
+
+	* src/store.c:
+	@nothereさんのパッチ。店や家でアイテム'z'を買えてしまうバグの修正。
+
+	* Changelogs, src/init1.c, src/mind.c, src/tables.c, src/types.h:
+	使っていない E_name を全て削除。
 
 	* src/rooms.c:
 	r_info で Monk -> monk に修正したのでそれに合わせて教会のコードを修正。
