@@ -2512,6 +2512,15 @@ void do_cmd_edit_autopick(void)
 
 	int wid, hgt, old_wid = -1, old_hgt = -1;
 
+        static s32b old_autosave_turn = 0L;
+
+        /* Autosave */
+        if (turn > old_autosave_turn + 100L)
+        {
+                do_cmd_save_game(TRUE);
+                old_autosave_turn = turn;
+        }
+
 	/* Free old entries */
 	init_autopicker();
 
