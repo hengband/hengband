@@ -5129,7 +5129,7 @@ int cold_dam(int dam, cptr kb_str, int monspell)
 {
 	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
-	bool double_resist = IS_OPPOSE_POIS();
+	bool double_resist = IS_OPPOSE_COLD();
 
 	/* Total immunity */
 	if (p_ptr->immune_cold || (dam <= 0))
