@@ -4644,16 +4644,120 @@ void aggravate_monsters(int who)
 }
 
 
+/*
+ * Delete a non-unique/non-quest monster
+ */
+bool genocide_aux(int m_idx, int power, bool player_cast, int dam_side, cptr spell_name)
+{
+	int          msec = delay_factor * delay_factor * delay_factor;
+	monster_type *m_ptr = &m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	bool         resist = FALSE;
+
+	if (is_pet(m_ptr) && !player_cast) return FALSE;
+
+	/* Hack -- Skip Unique Monsters or Quest Monsters */
+	if (r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) resist = TRUE;
+
+	else if (r_ptr->flags7 & RF7_UNIQUE2) resist = TRUE;
+
+	else if (m_idx == p_ptr->riding) resist = TRUE;
+
+	else if (player_cast && (r_ptr->level > randint0(power))) resist = TRUE;
+
+	else if (player_cast && (m_ptr->mflag2 & MFLAG2_NOGENO)) resist = TRUE;
+
+	/* Delete the monster */
+	else delete_monster_idx(m_idx);
+
+	if (resist && player_cast)
+	{
+		bool see_m = is_seen(m_ptr);
+		char m_name[80];
+
+		monster_desc(m_name, m_ptr, 0);
+		if (see_m)
+		{
+#ifdef JP
+			msg_format("%^sには効果がなかった。", m_name);
+#else
+			msg_format("%^s is unaffected.", m_name);
+#endif
+		}
+		if (m_ptr->csleep)
+		{
+			m_ptr->csleep = 0;
+			if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+			if (m_ptr->ml)
+			{
+				/* Redraw (later) if needed */
+				if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
+				if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
+			}
+			if (see_m)
+			{
+#ifdef JP
+				msg_format("%^sが目を覚ました。", m_name);
+#else
+				msg_format("%^s wakes up.", m_name);
+#endif
+			}
+		}
+		if (is_friendly(m_ptr) && !is_pet(m_ptr))
+		{
+			if (see_m)
+			{
+#ifdef JP
+				msg_format("%sは怒った！", m_name);
+#else
+				msg_format("%^s gets angry!", m_name);
+#endif
+			}
+			set_hostile(m_ptr);
+		}
+		if (one_in_(13)) m_ptr->mflag2 |= MFLAG2_NOGENO;
+	}
+
+	if (player_cast)
+	{
+		/* Take damage */
+#ifdef JP
+		take_hit(DAMAGE_GENO, randint1(dam_side), format("%^sの呪文を唱えた疲労", spell_name), -1);
+#else
+		take_hit(DAMAGE_GENO, randint1(dam_side), format("the strain of casting %^s", spell_name), -1);
+#endif
+	}
+
+	/* Visual feedback */
+	move_cursor_relative(py, px);
+
+	/* Redraw */
+	p_ptr->redraw |= (PR_HP);
+
+	/* Window stuff */
+	p_ptr->window |= (PW_PLAYER);
+
+	/* Handle */
+	handle_stuff();
+
+	/* Fresh */
+	Term_fresh();
+
+	/* Delay */
+	Term_xtra(TERM_XTRA_DELAY, msec);
+
+	return !resist;
+}
+
 
 /*
  * Delete all non-unique/non-quest monsters of a given "type" from the level
  */
-bool symbol_genocide(int power, int player_cast)
+bool symbol_genocide(int power, bool player_cast)
 {
-	int     i;
-	char    typ;
-	bool    result = FALSE;
-	int     msec = delay_factor * delay_factor * delay_factor;
+	int  i;
+	char typ;
+	bool result = FALSE;
 
 	/* Prevent genocide in quest levels */
 	if (p_ptr->inside_quest && !random_quest_number(dun_level))
@@ -4663,19 +4767,16 @@ bool symbol_genocide(int power, int player_cast)
 
 	/* Mega-Hack -- Get a monster symbol */
 #ifdef JP
-while(!get_com("どの種類(文字)のモンスターを抹殺しますか: ", &typ, FALSE));
+	while (!get_com("どの種類(文字)のモンスターを抹殺しますか: ", &typ, FALSE)) ;
 #else
-	while(!get_com("Choose a monster race (by symbol) to genocide: ", &typ, FALSE));
+	while (!get_com("Choose a monster race (by symbol) to genocide: ", &typ, FALSE)) ;
 #endif
-
 
 	/* Delete the monsters of that "type" */
 	for (i = 1; i < m_max; i++)
 	{
-		monster_type    *m_ptr = &m_list[i];
-		monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-		bool angry = FALSE;
-		char m_name[80];
+		monster_type *m_ptr = &m_list[i];
+		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Paranoia -- Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
@@ -4683,123 +4784,31 @@ while(!get_com("どの種類(文字)のモンスターを抹殺しますか: ", &typ, FALSE));
 		/* Skip "wrong" monsters */
 		if (r_ptr->d_char != typ) continue;
 
-		if (is_pet(m_ptr) && !player_cast) continue;
-
-		/* Hack -- Skip Unique Monsters */
-		if (r_ptr->flags1 & (RF1_UNIQUE)) angry = TRUE;
-
-		/* Hack -- Skip Quest Monsters */
-		else if (r_ptr->flags1 & RF1_QUESTOR) angry = TRUE;
-
-		else if (r_ptr->flags7 & RF7_UNIQUE2) angry = TRUE;
-
-		else if (i == p_ptr->riding) angry = TRUE;
-
-		else if (player_cast && (r_ptr->level > randint0(power))) angry = TRUE;
-
-		else if (player_cast && (m_ptr->mflag2 & MFLAG2_NOGENO)) angry = TRUE;
-
-		/* Delete the monster */
-		else delete_monster_idx(i);
-
-		if (angry && player_cast)
-		{
-			bool see_m = is_seen(m_ptr);
-
-			monster_desc(m_name, m_ptr, 0);
-			if (see_m && !p_ptr->blind)
-			{
-#ifdef JP
-msg_format("%^sには効果がなかった。", m_name);
-#else
-				msg_format("%^s is unaffected.", m_name);
-#endif
-			}
-			if (m_ptr->csleep)
-			{
-				m_ptr->csleep = 0;
-				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
-				if (m_ptr->ml)
-				{
-					/* Redraw (later) if needed */
-					if (p_ptr->health_who == i) p_ptr->redraw |= (PR_HEALTH);
-					if (p_ptr->riding == i) p_ptr->redraw |= (PR_UHEALTH);
-				}
-				if (see_m && !p_ptr->blind)
-				{
-#ifdef JP
-msg_format("%^sが目を覚ました。", m_name);
-#else
-					msg_format("%^s wakes up.", m_name);
-#endif
-				}
-			}
-			if (is_friendly(m_ptr) && !is_pet(m_ptr))
-			{
-				if (see_m && !p_ptr->blind)
-				{
-#ifdef JP
-					msg_format("%sは怒った！", m_name);
-#else
-					msg_format("%^s gets angry!", m_name);
-#endif
-				}
-				set_hostile(m_ptr);
-			}
-			if (one_in_(13)) m_ptr->mflag2 |= MFLAG2_NOGENO;
-		}
-
-		if (player_cast)
-		{
-			/* Take damage */
-#ifdef JP
-take_hit(DAMAGE_GENO, randint1(4), "抹殺の呪文を唱えた疲労", -1);
-#else
-			take_hit(DAMAGE_GENO, randint1(4), "the strain of casting Genocide", -1);
-#endif
-
-		}
-
-		/* Visual feedback */
-		move_cursor_relative(py, px);
-
-		/* Redraw */
-		p_ptr->redraw |= (PR_HP);
-
-		/* Window stuff */
-		p_ptr->window |= (PW_PLAYER);
-
-		/* Handle */
-		handle_stuff();
-
-		/* Fresh */
-		Term_fresh();
-
-		/* Delay */
-		Term_xtra(TERM_XTRA_DELAY, msec);
-
 		/* Take note */
-		result = TRUE;
+#ifdef JP
+		result |= genocide_aux(i, power, player_cast, 4, "抹殺");
+#else
+		result |= genocide_aux(i, power, player_cast, 4, "Genocide");
+#endif
 	}
+
 	if (result)
 	{
 		chg_virtue(V_VITALITY, -2);
 		chg_virtue(V_CHANCE, -1);
 	}
 
-	return (result);
+	return result;
 }
 
 
 /*
  * Delete all nearby (non-unique) monsters
  */
-bool mass_genocide(int power, int player_cast)
+bool mass_genocide(int power, bool player_cast)
 {
-	int     i;
-	bool    result = FALSE;
-	int     msec = delay_factor * delay_factor * delay_factor;
-
+	int  i;
+	bool result = FALSE;
 
 	/* Prevent mass genocide in quest levels */
 	if (p_ptr->inside_quest && !random_quest_number(dun_level))
@@ -4810,10 +4819,7 @@ bool mass_genocide(int power, int player_cast)
 	/* Delete the (nearby) monsters */
 	for (i = 1; i < m_max; i++)
 	{
-		monster_type    *m_ptr = &m_list[i];
-		monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-		bool angry = FALSE;
-		char m_name[80];
+		monster_type *m_ptr = &m_list[i];
 
 		/* Paranoia -- Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
@@ -4821,102 +4827,12 @@ bool mass_genocide(int power, int player_cast)
 		/* Skip distant monsters */
 		if (m_ptr->cdis > MAX_SIGHT) continue;
 
-		if (is_pet(m_ptr) && !player_cast) continue;
-
-		/* Hack -- Skip unique monsters */
-		if (r_ptr->flags1 & (RF1_UNIQUE)) angry = TRUE;
-
-		/* Hack -- Skip Quest Monsters */
-		else if (r_ptr->flags1 & RF1_QUESTOR) angry = TRUE;
-
-		else if (r_ptr->flags7 & RF7_UNIQUE2) angry = TRUE;
-
-		else if (i == p_ptr->riding) angry = TRUE;
-
-		else if (player_cast && (r_ptr->level > randint0(power))) angry = TRUE;
-
-		else if (player_cast && (m_ptr->mflag2 & MFLAG2_NOGENO)) angry = TRUE;
-
-		/* Delete the monster */
-		else delete_monster_idx(i);
-
-		if (angry && player_cast)
-		{
-			bool see_m = is_seen(m_ptr);
-
-			monster_desc(m_name, m_ptr, 0);
-			if (see_m && !p_ptr->blind)
-			{
-#ifdef JP
-msg_format("%^sには効果がなかった。", m_name);
-#else
-				msg_format("%^s is unaffected.", m_name);
-#endif
-			}
-			if (m_ptr->csleep)
-			{
-				m_ptr->csleep = 0;
-				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
-				if (m_ptr->ml)
-				{
-					/* Redraw (later) if needed */
-					if (p_ptr->health_who == i) p_ptr->redraw |= (PR_HEALTH);
-					if (p_ptr->riding == i) p_ptr->redraw |= (PR_UHEALTH);
-				}
-				if (see_m && !p_ptr->blind)
-				{
-#ifdef JP
-msg_format("%^sが目を覚ました。", m_name);
-#else
-					msg_format("%^s wakes up.", m_name);
-#endif
-				}
-			}
-			if (is_friendly(m_ptr) && !is_pet(m_ptr))
-			{
-				if (see_m && !p_ptr->blind)
-				{
-#ifdef JP
-					msg_format("%sは怒った！", m_name);
-#else
-					msg_format("%^s gets angry!", m_name);
-#endif
-				}
-				set_hostile(m_ptr);
-			}
-			if (one_in_(13)) m_ptr->mflag2 |= MFLAG2_NOGENO;
-		}
-
-		if (player_cast)
-		{
-			/* Hack -- visual feedback */
-#ifdef JP
-take_hit(DAMAGE_GENO, randint1(3), "周辺抹殺の呪文を唱えた疲労", -1);
-#else
-			take_hit(DAMAGE_GENO, randint1(3), "the strain of casting Mass Genocide", -1);
-#endif
-
-		}
-
-		move_cursor_relative(py, px);
-
-		/* Redraw */
-		p_ptr->redraw |= (PR_HP);
-
-		/* Window stuff */
-		p_ptr->window |= (PW_PLAYER);
-
-		/* Handle */
-		handle_stuff();
-
-		/* Fresh */
-		Term_fresh();
-
-		/* Delay */
-		Term_xtra(TERM_XTRA_DELAY, msec);
-
 		/* Note effect */
-		result = TRUE;
+#ifdef JP
+		result |= genocide_aux(i, power, player_cast, 3, "周辺抹殺");
+#else
+		result |= genocide_aux(i, power, player_cast, 3, "Mass Genocide");
+#endif
 	}
 
 	if (result)
@@ -4925,7 +4841,7 @@ take_hit(DAMAGE_GENO, randint1(3), "周辺抹殺の呪文を唱えた疲労", -1);
 		chg_virtue(V_CHANCE, -1);
 	}
 
-	return (result);
+	return result;
 }
 
 
@@ -4933,12 +4849,10 @@ take_hit(DAMAGE_GENO, randint1(3), "周辺抹殺の呪文を唱えた疲労", -1);
 /*
  * Delete all nearby (non-unique) undead
  */
-bool mass_genocide_undead(int power, int player_cast)
+bool mass_genocide_undead(int power, bool player_cast)
 {
-	int     i;
-	bool    result = FALSE;
-	int     msec = delay_factor * delay_factor * delay_factor;
-
+	int  i;
+	bool result = FALSE;
 
 	/* Prevent mass genocide in quest levels */
 	if (p_ptr->inside_quest && !random_quest_number(dun_level))
@@ -4949,10 +4863,8 @@ bool mass_genocide_undead(int power, int player_cast)
 	/* Delete the (nearby) monsters */
 	for (i = 1; i < m_max; i++)
 	{
-		monster_type    *m_ptr = &m_list[i];
-		monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-		bool angry = FALSE;
-		char m_name[80];
+		monster_type *m_ptr = &m_list[i];
+		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Paranoia -- Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
@@ -4962,102 +4874,12 @@ bool mass_genocide_undead(int power, int player_cast)
 		/* Skip distant monsters */
 		if (m_ptr->cdis > MAX_SIGHT) continue;
 
-		if (is_pet(m_ptr) && !player_cast) continue;
-
-		/* Hack -- Skip unique monsters */
-		if (r_ptr->flags1 & (RF1_UNIQUE)) angry = TRUE;
-
-		/* Hack -- Skip Quest Monsters */
-		else if (r_ptr->flags1 & RF1_QUESTOR) angry = TRUE;
-
-		else if (r_ptr->flags7 & RF7_UNIQUE2) angry = TRUE;
-
-		else if (i == p_ptr->riding) angry = TRUE;
-
-		else if (player_cast && (r_ptr->level > randint0(power))) angry = TRUE;
-
-		else if (player_cast && (m_ptr->mflag2 & MFLAG2_NOGENO)) angry = TRUE;
-
-		/* Delete the monster */
-		else delete_monster_idx(i);
-
-		if (angry && player_cast)
-		{
-			bool see_m = is_seen(m_ptr);
-
-			monster_desc(m_name, m_ptr, 0);
-			if (see_m && !p_ptr->blind)
-			{
-#ifdef JP
-msg_format("%^sには効果がなかった。", m_name);
-#else
-				msg_format("%^s is unaffected.", m_name);
-#endif
-			}
-			if (m_ptr->csleep)
-			{
-				m_ptr->csleep = 0;
-				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
-				if (m_ptr->ml)
-				{
-					/* Redraw (later) if needed */
-					if (p_ptr->health_who == i) p_ptr->redraw |= (PR_HEALTH);
-					if (p_ptr->riding == i) p_ptr->redraw |= (PR_UHEALTH);
-				}
-				if (see_m && !p_ptr->blind)
-				{
-#ifdef JP
-msg_format("%^sが目を覚ました。", m_name);
-#else
-					msg_format("%^s wakes up.", m_name);
-#endif
-				}
-			}
-			if (is_friendly(m_ptr) && !is_pet(m_ptr))
-			{
-				if (see_m && !p_ptr->blind)
-				{
-#ifdef JP
-					msg_format("%sは怒った！", m_name);
-#else
-					msg_format("%^s gets angry!", m_name);
-#endif
-				}
-				set_hostile(m_ptr);
-			}
-			if (one_in_(13)) m_ptr->mflag2 |= MFLAG2_NOGENO;
-		}
-
-		if (player_cast)
-		{
-			/* Hack -- visual feedback */
-#ifdef JP
-take_hit(DAMAGE_GENO, randint1(3), "アンデッド消滅の呪文を唱えた疲労", -1);
-#else
-			take_hit(DAMAGE_GENO, randint1(3), "the strain of casting Mass Genocide", -1);
-#endif
-
-		}
-
-		move_cursor_relative(py, px);
-
-		/* Redraw */
-		p_ptr->redraw |= (PR_HP);
-
-		/* Window stuff */
-		p_ptr->window |= (PW_PLAYER);
-
-		/* Handle */
-		handle_stuff();
-
-		/* Fresh */
-		Term_fresh();
-
-		/* Delay */
-		Term_xtra(TERM_XTRA_DELAY, msec);
-
 		/* Note effect */
-		result = TRUE;
+#ifdef JP
+		result |= genocide_aux(i, power, player_cast, 3, "アンデッド消滅");
+#else
+		result |= genocide_aux(i, power, player_cast, 3, "Annihilate Undead");
+#endif
 	}
 
 	if (result)
@@ -5066,7 +4888,7 @@ take_hit(DAMAGE_GENO, randint1(3), "アンデッド消滅の呪文を唱えた疲労", -1);
 		chg_virtue(V_CHANCE, -1);
 	}
 
-	return (result);
+	return result;
 }
 
 

@@ -5558,7 +5558,6 @@ note = "には効果がなかった！";
 		/* GENOCIDE */
 		case GF_GENOCIDE:
 		{
-			bool angry = FALSE;
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
@@ -5573,56 +5572,22 @@ note = "には効果がなかった！";
 				break;
 			}
 
-			if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & (RF7_UNIQUE2)) || (c_ptr->m_idx == p_ptr->riding)) || p_ptr->inside_arena || p_ptr->inside_quest)
-			{
-				dam = 0;
-				angry = TRUE;
-			}
-			else
-			{
-				if ((r_ptr->level > randint0(dam)) || (m_ptr->mflag2 & MFLAG2_NOGENO))
-				{
-					dam = 0;
-					angry = TRUE;
-				}
-				else
-				{
-					delete_monster_idx(c_ptr->m_idx);
 #ifdef JP
-					msg_format("%sは消滅した！",m_name);
+			if (genocide_aux(c_ptr->m_idx, dam, !who, (r_ptr->level + 1) / 2, "モンスター消滅"))
 #else
-					msg_format("%^s disappered!",m_name);
+			if (genocide_aux(c_ptr->m_idx, dam, !who, (r_ptr->level + 1) / 2, "Genocide One"))
 #endif
-
-#ifdef JP
-					take_hit(DAMAGE_GENO, randint1((r_ptr->level+1)/2), "モンスター消滅の呪文を唱えた疲労", -1);
-#else
-					take_hit(DAMAGE_GENO, randint1((r_ptr->level+1)/2), "the strain of casting Genocide One", -1);
-#endif
-					dam = 0;
-
-					chg_virtue(V_VITALITY, -1);
-
-					skipped = TRUE;
-
-					/* Redraw */
-					p_ptr->redraw |= (PR_HP);
-
-					/* Window stuff */
-					p_ptr->window |= (PW_PLAYER);
-					return TRUE;
-				}
-			}
-			if (angry)
 			{
 #ifdef JP
-note = "には効果がなかった！";
+				if (seen_msg) msg_format("%sは消滅した！", m_name);
 #else
-				note = "is unaffected!";
+				if (seen_msg) msg_format("%^s disappered!", m_name);
 #endif
-				get_angry = TRUE;
-				if (one_in_(13)) m_ptr->mflag2 |= MFLAG2_NOGENO;
+				chg_virtue(V_VITALITY, -1);
+				return TRUE;
 			}
+
+			skipped = TRUE;
 			break;
 		}
 
