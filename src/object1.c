@@ -1856,11 +1856,30 @@ return "鞣及釐歇黎揚 : 300+d150正□件咍";
 #endif
 		}
 		case ART_NIGHT:
+		case ART_HELL:
 		{
 #ifdef JP
 return "剪幕及勀(250) : 150+d150 正□件咍";
 #else
 			return "darkness storm (250) every 150+d150 turns";
+#endif
+
+		}
+		case ART_SACRED_KNIGHTS:
+		{
+#ifdef JP
+return "*荸熱*午譬犖: 中勾匹手";
+#else
+			return "Dispel Curse and Probing every turn";
+#endif
+
+		}
+		case ART_CHARMED:
+		{
+#ifdef JP
+return "呺恘及勀(200) : 150+d150 正□件咍";
+#else
+			return "mana storm (200) every 150+d150 turns";
 #endif
 
 		}

@@ -6286,3 +6286,31 @@ P:0:1d2:0:0:0
 D:$It does nothing when you use it.
 D:それは使っても何も起こらない。
 F:FULL_NAME
+
+N:659:首飾
+E:& Amulet~
+G:":d
+I:40:25:0
+W:50:0:2:77777
+F:INSTA_ART
+
+N:660:首輪
+E:& Collar Harness~
+G:":d
+I:40:26:0
+W:50:0:30:66666
+F:INSTA_ART
+
+N:661:ペンダント
+E:& Pendant~
+G:":d
+I:40:27:0
+W:50:0:2:100000
+F:INSTA_ART
+
+N:662:ペンダント
+E:& Pendant~
+G:":d
+I:40:28:0
+W:50:0:2:55555
+F:INSTA_ART

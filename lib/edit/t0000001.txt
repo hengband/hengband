@@ -410,10 +410,18 @@ F:@:1:3:0:0:0:33
 F:a:128:3
 F:@:1:3:0:0:0:15
 
+#--- this is old ---
 # Quest 27 rewarding (Magiceater, Mirror-Master)
 # get The Jewel Encrusted Crown of Numenor
 # continue with quest 33
-?:[AND [EQU $QUEST27 3] [IOR [EQU $CLASS Magiceater] [EQU $CLASS Mirror-Master] ] ] ]
+#?:[AND [EQU $QUEST27 3] [IOR [EQU $CLASS Magiceater] [EQU $CLASS Mirror-Master] ] ] ]
+#F:a:128:3
+#F:@:1:3:0:0:0:132
+
+# Quest 27 rewarding (Mirror-Master)
+# get The Jewel Encrusted Crown of Numenor
+# continue with quest 33
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Mirror-Master] ]
 F:a:128:3
 F:@:1:3:0:0:0:132
 
@@ -423,6 +431,34 @@ F:@:1:3:0:0:0:132
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Samurai] ]
 F:a:128:3
 F:@:1:3:0:0:0:81
+
+# Quest 27 rewarding (crusade Paladin)
+# get the Amulet of Sacred Knights
+# continue with quest 33
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Paladin] [EQU $REALM1 Crusade] ]
+F:a:128:3
+F:@:1:3:0:0:0:217
+
+# Quest 27 rewarding (death Paladin)
+# get the Collar Harness of the Hell
+# continue with quest 33
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Paladin] [EQU $REALM1 Death] ]
+F:a:128:3
+F:@:1:3:0:0:0:218
+
+# Quest 27 rewarding (Warrior-Mage, Red-Mage, Magic-Eater )
+# get the Charmed Pendant
+# continue with quest 33
+?:[AND [EQU $QUEST27 3] [IOR [EQU $CLASS Warrior-Mage] [EQU $CLASS Red-Mage] [EQU $CLASS Magic-Eater] ] ]
+F:a:128:3
+F:@:1:3:0:0:0:219
+
+# Quest 27 rewarding (Imitator)
+# get the Pendant of Gogo
+# continue with quest 33
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Imitator] ]
+F:a:128:3
+F:@:1:3:0:0:0:220
 
 # Quest 27 finished, continue with quest 33
 ?:[EQU $QUEST27 4]

@@ -26,7 +26,7 @@
  * Max sizes of the following arrays
  */
 #define MAX_ROCKS      59       /* Used with rings (min 38) */
-#define MAX_AMULETS    26       /* Used with amulets (min 14) */
+#define MAX_AMULETS    30       /* Used with amulets (min 14) */
 #define MAX_WOODS      34       /* Used with staffs (min 30) */
 #define MAX_METALS     40       /* Used with wands/rods (min 29/29) */
 #define MAX_COLORS     70       /* Used with potions (min 60) */
@@ -106,7 +106,7 @@ static cptr amulet_adj[MAX_AMULETS]
 	"Tortoise Shell", "Golden", "Azure", "Crystal", "Silver",
 	"Copper", "Swastika", "Platinum","Runed", "Rusty",
 	"Curved", "Dragon's claw", "Rosary", "Jade", "Mithril",
-	"Ruby"
+	"Ruby", "Emerald", "Sapphire", "Garnet", "Diamond"
 };
 #else
 = {
@@ -115,7 +115,7 @@ static cptr amulet_adj[MAX_AMULETS]
     "べっ甲の","金の","瑠璃の","水晶の","銀の",
     "銅の","卍の", "プラチナの", "ルーンが刻まれた","錆びた",
     "曲がった", "ドラゴンの爪の", "数珠の", "ひすいの", "ミスリルの",
-    "ルビーの"
+    "ルビーの", "エメラルドの", "サファイアの", "ガーネットの", "ダイアモンドの"
 };
 #endif
 
@@ -126,7 +126,7 @@ static byte amulet_col[MAX_AMULETS] =
 	TERM_GREEN, TERM_YELLOW, TERM_L_BLUE, TERM_L_BLUE, TERM_L_WHITE,
 	TERM_L_UMBER, TERM_VIOLET, TERM_WHITE, TERM_UMBER, TERM_RED, 
 	TERM_GREEN, TERM_L_GREEN, TERM_L_GREEN, TERM_GREEN, TERM_L_BLUE, 
-	TERM_RED
+	TERM_RED, TERM_GREEN, TERM_BLUE, TERM_RED, TERM_WHITE
 };
 
 

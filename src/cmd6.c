@@ -5729,6 +5729,48 @@ msg_print("あなたの槍は電気でスパークしている...");
 				o_ptr->timeout = randint0(150) + 150;
 				break;
 			}
+			case ART_HELL:
+			{
+#ifdef JP
+				msg_print("首輪が深い闇に覆われた...");
+#else
+				msg_print("Your collar harness is coverd in pitch-darkness...");
+#endif
+				if (!get_aim_dir(&dir)) return;
+				fire_ball(GF_DARK, dir, 250, 4);
+				o_ptr->timeout = randint0(150) + 150;
+				break;
+			}
+			case ART_SACRED_KNIGHTS:
+			{
+#ifdef JP
+				msg_print("首飾が真実を照らし出す...");
+#else
+				msg_print("Your amulet exhibits the truth...");
+#endif
+				if (remove_all_curse())
+				{
+#ifdef JP
+					msg_print("誰かに見守られているような気がする。");
+#else
+					msg_print("You feel as if someone is watching over you.");
+#endif
+				}
+				(void)probing();
+				break;
+			}
+			case ART_CHARMED:
+			{
+#ifdef JP
+				msg_print("ペンダントが青白く光った．．．");
+#else
+				msg_print("Your pendant glows pale...");
+#endif
+				if (!get_aim_dir(&dir)) return;
+				fire_ball(GF_MANA, dir, 200, 4);
+				o_ptr->timeout = randint0(150) + 150;
+				break;
+			}
 		}
 
 		/* Window stuff */
