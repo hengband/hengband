@@ -1501,7 +1501,7 @@ static void process_world(void)
 	s32b tick = turn % len + len / 4;
 
 	extract_day_hour_min(&day, &hour, &min);
-	prev_min = (1440 * (tick - 20) / len) % 60;
+	prev_min = (1440 * (tick - TURNS_PER_TICK) / len) % 60;
 
         if ((turn - old_turn == (150 - dun_level) * TURNS_PER_TICK)
 	    && (dun_level) &&
