@@ -1321,26 +1321,39 @@ static bool do_cmd_close_aux(int y, int x)
 	/* Open door */
 	if (have_flag(f_info[old_feat].flags, FF_CLOSE))
 	{
-		/* Close the door */
-		cave_alter_feat(y, x, FF_CLOSE);
-
-		/* Broken door */
-		if (old_feat == c_ptr->feat)
+		/* Hack -- object in the way */
+		if ((c_ptr->o_idx || (c_ptr->info & CAVE_OBJECT)) && (feat_state(old_feat, FF_CLOSE) != old_feat))
 		{
 			/* Message */
 #ifdef JP
-			msg_print("ドアは壊れてしまっている。");
+			msg_print("何かがつっかえて閉まらない。");
 #else
-			msg_print("The door appears to be broken.");
+			msg_print("There seems stuck.");
 #endif
 		}
 		else
 		{
-			/* Update some things */
-			p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
+			/* Close the door */
+			cave_alter_feat(y, x, FF_CLOSE);
 
-			/* Sound */
-			sound(SOUND_SHUTDOOR);
+			/* Broken door */
+			if (old_feat == c_ptr->feat)
+			{
+				/* Message */
+#ifdef JP
+				msg_print("ドアは壊れてしまっている。");
+#else
+				msg_print("The door appears to be broken.");
+#endif
+			}
+			else
+			{
+				/* Update some things */
+				p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
+
+				/* Sound */
+				sound(SOUND_SHUTDOOR);
+			}
 		}
 	}
 
