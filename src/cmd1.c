@@ -3521,12 +3521,14 @@ bool move_player_effect(int ny, int nx, u32b mpe_mode)
 			else if (p_ptr->cur_lite <= 0) set_superstealth(TRUE);
 		}
 
-		if ((p_ptr->action == ACTION_HAYAGAKE) && !have_flag(f_ptr->flags, FF_PROJECT))
+		if ((p_ptr->action == ACTION_HAYAGAKE) &&
+		    (!have_flag(f_ptr->flags, FF_PROJECT) ||
+		     (!p_ptr->levitation && have_flag(f_ptr->flags, FF_DEEP))))
 		{
 #ifdef JP
 			msg_print("ここでは素早く動けない。");
 #else
-			msg_print("You cannot run in wall.");
+			msg_print("You cannot run in here.");
 #endif
 			set_action(ACTION_NONE);
 		}
