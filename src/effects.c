@@ -5157,7 +5157,7 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 #ifdef JP
 				strcpy(buf,"цо╬Е");
 #else
-				strcpy(buf,"on The surface");
+				strcpy(buf,"on the surface");
 #endif
 			else if (quest_number(dun_level) && ((quest_number(dun_level) < MIN_RANDOM_QUEST) && !(quest_number(dun_level) == QUEST_OBERON || quest_number(dun_level) == QUEST_SERPENT)))
 #ifdef JP
