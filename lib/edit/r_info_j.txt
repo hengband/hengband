@@ -14092,6 +14092,8 @@ F:EVIL | IM_ELEC | NO_CONF | NO_SLEEP | IM_POIS | IM_FIRE | RIDING
 S:1_IN_6 | 
 S:BLIND | CONF | SCARE | CAUSE_4 | CAUSE_3 |
 S:BA_WATE | DARKNESS | BR_DARK | TELE_TO 
+D:$An enormously fearsome and powerful inhabitant of the depths. It 
+D:$resembles a gargantuan octopus and its evil is almost tangible.
 D:An enormously fearsome and powerful inhabitant of the depths. It 
 D:resembles a gargantuan octopus and its evil is almost tangible.
 
@@ -15050,6 +15052,8 @@ F:EVIL | IM_ELEC | NO_CONF | NO_SLEEP | IM_POIS | IM_FIRE | RIDING
 S:1_IN_6 | 
 S:BLIND | CONF | SCARE | CAUSE_4 | CAUSE_3 | TELE_TO | TELE_AWAY |
 S:BA_WATE | DARKNESS | BR_DARK | BR_ACID | BR_POIS
+D:$An enormously fearsome and powerful inhabitant of the depths. It 
+D:$resembles a gargantuan octopus and its evil is almost tangible.
 D:An enormously fearsome and powerful inhabitant of the depths. It 
 D:resembles a gargantuan octopus and its evil is almost tangible.
 
@@ -15483,6 +15487,8 @@ S:1_IN_3 |
 S:SCARE | BLIND | CONF | TPORT | BLINK | TELE_AWAY | TELE_TO
 S:TRAPS | CAUSE_4 | BA_POIS | S_DEMON
 S:S_MONSTERS | PSY_SPEAR
+D:$She is beautiful and deadly. "...I have always been very fond of Fiona. 
+D:$She is certainly the loveliest, most civilized of (all Amberites)."
 D:She is beautiful and deadly. "...I have always been very fond of Fiona. 
 D:She is certainly the loveliest, most civilized of (all Amberites)."
 
@@ -18258,6 +18264,7 @@ F:TAKE_ITEM | GOOD | IM_ELEC | NO_FEAR | NO_CONF | NO_SLEEP |
 F:CAN_FLY |
 S:1_IN_6 |
 S:BO_ELEC | MISSILE | BLINK | S_MONSTER | BA_ELEC
+D:$Supported by a whirlwind, the djinni turns to face you.
 D:Supported by a whirlwind, the djinni turns to face you.
 
 N:893:イフリート
@@ -18271,6 +18278,7 @@ F:DROP_60 | AURA_FIRE | OPEN_DOOR | BASH_DOOR | TAKE_ITEM | SELF_LITE_2 |
 F:EVIL | IM_FIRE | RES_PLAS | NO_FEAR | NO_CONF | NO_SLEEP |
 S:1_IN_6 |
 S:BO_FIRE | BO_PLAS | BA_FIRE
+D:$Wrapped in fire, this giant red figure turns to face you.
 D:Wrapped in fire, this giant red figure turns to face you.
 
 N:894:トロルの王
@@ -18287,6 +18295,8 @@ F:SMART | BASH_DOOR | TAKE_ITEM | DROP_CORPSE | DROP_SKELETON
 F:EVIL | TROLL | IM_POIS | NO_CONF | NO_SLEEP | NO_FEAR | REGENERATE
 S:1_IN_8 |
 S:BLINK
+D:$This troll is a king, which means it's still stupid, but has even more power.
+D:$It never comes alone, and can call out to other trolls.
 D:This troll is a king, which means it's still stupid, but has even more power.
 D:It never comes alone, and can call out to other trolls.
 
@@ -18303,6 +18313,8 @@ F:EMPTY_MIND | BASH_DOOR
 F:IM_COLD | NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING | FORCE_MAXHP
 S:1_IN_5
 S:BR_LITE | BA_COLD | BR_COLD | BO_ICEE | BO_COLD | BR_TIME | ARROW_4
+D:$Obsidian eyes stare at you as you bend before the shower of heavenly
+D:$powers and spells...
 D:Obsidian eyes stare at you as you bend before the shower of heavenly
 D:powers and spells...
 
@@ -18319,6 +18331,7 @@ F:MALE | FORCE_SLEEP | FORCE_MAXHP | DROP_1D2 | SMART
 F:DROP_CORPSE | DROP_SKELETON | CAN_SWIM
 S:1_IN_5 |
 S:ROCKET
+D:$You watch in horror as he aims his massive weapon at you.
 D:You watch in horror as he aims his massive weapon at you.
 
 N:897:破片ボルテックス
@@ -18333,6 +18346,8 @@ F:FORCE_SLEEP | RAND_50 | EMPTY_MIND | BASH_DOOR | CAN_FLY |
 F:NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN | POWERFUL | NONLIVING
 S:1_IN_4 | 
 S:BR_SHAR
+D:$A howling blast of razor-sharp mountain fragments, kept intact by perilous 
+D:$magics.
 D:A howling blast of razor-sharp mountain fragments, kept intact by perilous 
 D:magics.
 
@@ -18346,6 +18361,7 @@ B:TOUCH:PARALYZE:3d3
 F:NEVER_MOVE | MULTIPLY | ONLY_GOLD | DROP_90 | ANIMAL | HURT_ROCK |
 F:NO_FEAR | NO_SLEEP | NO_CONF | NO_STUN | EMPTY_MIND
 F:IM_COLD | IM_FIRE | IM_ELEC | IM_POIS
+D:$Just a normal wall, boring gray rock. But wait! It seems to be growing...
 D:Just a normal wall, boring gray rock. But wait! It seems to be growing...
 
 N:899:ファイア・トロル
@@ -18359,6 +18375,9 @@ B:BITE:FIRE:3d4
 F:MALE | FRIENDS | DROP_60 | DROP_SKELETON | DROP_CORPSE | SELF_LITE_1 |
 F:OPEN_DOOR | BASH_DOOR | EVIL | TROLL | HURT_LITE | REGENERATE |
 F:HURT_COLD | IM_FIRE | WILD_VOLCANO
+D:$Fire trolls are believed to have been created by an
+D:$evil wizard trying to make forest trolls immune to
+D:$fire.
 D:Fire trolls are believed to have been created by an
 D:evil wizard trying to make forest trolls immune to
 D:fire.
@@ -18375,6 +18394,7 @@ F:MALE | ONLY_ITEM | DROP_1D2 | DROP_GOOD | OPEN_DOOR | BASH_DOOR |
 F:NO_SLEEP | FRIENDLY | GOOD | 
 S:1_IN_3 |
 S:HEAL | BLINK | TPORT | BA_FIRE | ARROW_2 | BA_COLD | ARROW_4
+D:$A powerful elven leader who knows some magic as well.
 D:A powerful elven leader who knows some magic as well.
 
 N:901:サムライ
@@ -18405,6 +18425,7 @@ B:TOUCH:PARALYZE:3d3
 F:NEVER_MOVE | MULTIPLY | ONLY_GOLD | DROP_60 | DROP_90 | EMPTY_MIND
 F:ANIMAL | HURT_ROCK | COLD_BLOOD | NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN |
 F:IM_ACID | IM_ELEC | IM_POIS | IM_FIRE
+D:$It's just a block of dark rock. But wait! It seems to be growing...
 D:It's just a block of dark rock. But wait! It seems to be growing...
 
 N:903:クラーケンの子
@@ -18418,6 +18439,7 @@ F:AQUATIC | SMART | WEIRD_MIND | IM_POIS | ANIMAL | NO_CONF
 F:NO_SLEEP | NO_FEAR | DROP_CORPSE
 S:1_IN_4 |
 S:DARKNESS | BO_ACID | HOLD
+D:$A kraken with a tough, scaly hide.
 D:A kraken with a tough, scaly hide.
 
 N:904:混沌おばけキノコ
@@ -18432,6 +18454,9 @@ F:NEVER_MOVE | STUPID | EMPTY_MIND | IM_POIS | RES_DISE
 F:NO_CONF | NO_SLEEP | NO_FEAR
 S:1_IN_11 |
 S:BR_NUKE | BR_POIS
+D:$It is a massive mushroom that seems to have a huge mouth. The air is thick
+D:$with miasma, and you notice to your horror that the fungus is sprouting
+D:$everywhere!
 D:It is a massive mushroom that seems to have a huge mouth. The air is thick
 D:with miasma, and you notice to your horror that the fungus is sprouting
 D:everywhere!
@@ -18446,6 +18471,8 @@ B:HIT:ELEC:4d4
 F:EMPTY_MIND | BASH_DOOR |
 F:IM_ELEC | IM_COLD | CAN_FLY |
 F:NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING
+D:$Lighting crackes around this huge animated cloud entity, sending shivers
+D:$down your spine.
 D:Lighting crackes around this huge animated cloud entity, sending shivers
 D:down your spine.
 
@@ -18460,6 +18487,8 @@ B:HIT:FIRE:6d4
 F:EMPTY_MIND | BASH_DOOR
 F:IM_FIRE | NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING | KILL_BODY
 F:KILL_ITEM
+D:$It burns everything in its path with the heat its magma-like body
+D:$produces.
 D:It burns everything in its path with the heat its magma-like body
 D:produces.
 
@@ -18486,6 +18515,9 @@ B:CRUSH:HURT:2d6
 F:COLD_BLOOD | NO_SLEEP | NO_CONF | NO_FEAR | NONLIVING
 S:1_IN_6
 S:SCARE | BLIND | CONF | S_MONSTER
+D:$A powerful weapon from a time long past when heroes walked the earth, and
+D:$magical weapons of power unmatched were created. Blood drips from its
+D:$wicked blade.
 D:A powerful weapon from a time long past when heroes walked the earth, and
 D:magical weapons of power unmatched were created. Blood drips from its
 D:wicked blade.
@@ -18518,6 +18550,8 @@ B:HIT:HURT:3d10
 F:COLD_BLOOD | EMPTY_MIND | AQUATIC |
 F:IM_FIRE | IM_COLD | IM_POIS
 F:NO_CONF | NO_SLEEP | NO_FEAR
+D:$An ingenious gnomish invention -- a golem designed for underwater
+D:$usage.
 D:An ingenious gnomish invention -- a golem designed for underwater
 D:usage.
 
@@ -18531,6 +18565,7 @@ B:TOUCH:PARALYZE:3d3
 F:NEVER_MOVE | ONLY_GOLD | DROP_1D2 | DROP_90 | MULTIPLY | EMPTY_MIND
 F:ANIMAL | COLD_BLOOD | NO_FEAR | NO_SLEEP | NO_CONF | NO_STUN
 F:HURT_ROCK | IM_FIRE | IM_ACID | IM_POIS | IM_COLD
+D:$Look! A nice vein of rock to dig in for gold! Wait a minute...
 D:Look! A nice vein of rock to dig in for gold! Wait a minute...
 
 N:912:宙に浮かぶ宝珠
@@ -18542,6 +18577,8 @@ F:NEVER_BLOW | NEVER_MOVE | NO_SLEEP | NO_FEAR | NO_CONF | CAN_FLY
 F:IM_COLD | IM_FIRE | IM_POIS | IM_ACID | ONLY_ITEM | DROP_60 | NONLIVING
 S:1_IN_1
 S:MISSILE
+D:$A metallic ball floating in the air, that turns to track you with evil
+D:$intent.
 D:A metallic ball floating in the air, that turns to track you with evil
 D:intent.
 
@@ -18554,6 +18591,7 @@ F:NEVER_BLOW | ATTR_MULTI | AQUATIC | INVISIBLE | NO_CONF | UNDEAD | DROP_CORPSE
 F:EVIL
 S:1_IN_8 |
 S:BR_NETH | BR_DISE | BR_TIME | BR_NEXU | BR_POIS
+D:$A devilfish brought back from the dead.
 D:A devilfish brought back from the dead.
 
 #
@@ -18674,6 +18712,8 @@ F:ONLY_ITEM | DROP_90 | DROP_2D2 |
 F:EVIL | NO_CONF | NO_SLEEP | SMART
 S:1_IN_7 |
 S:DARKNESS | CAUSE_4 | BO_ICEE
+D:$A naga adapted to underwater life. She has a fish-like tail and a pair
+D:$of gills.
 D:A naga adapted to underwater life. She has a fish-like tail and a pair
 D:of gills.
 
@@ -19072,6 +19112,7 @@ F:RES_NETH | RES_PLAS | RES_NEXU | RES_DISE | NO_FEAR | NO_STUN |
 F:NO_CONF | NO_SLEEP | DROP_SKELETON | RIDING
 S:1_IN_10
 S:BR_NETH
+D:$An undead dragon skeleton.
 D:An undead dragon skeleton.
 
 N:942:プラネター
