@@ -3057,10 +3057,10 @@ R:917:0x9D/0x87
 #R:920:
 
 # Internet Exploder
-#R:921:
+R:921:0xC6/0x81
 
 # Electric rat
-#R:922:
+R:922:0xC6/0x82
 
 # Yukionnna
 #R:923:
@@ -3141,7 +3141,7 @@ R:943:0x8E/0x96
 #R:948:
 
 # Iketa, the brave
-#R:949:
+R:949:0xC6/0x80
 
 # Hammer bors
 #R:950:
@@ -3169,16 +3169,16 @@ R:953:0x89:0x83
 #R:957:
 
 # Red puyo
-#R:958:
+R:958:0xC6/0x83
 
 # Blue puyo
-#R:959:
+R:959:0xC6/0x84
 
 # Yellow puyo
-#R:960:
+R:960:0xC6/0x86
 
 # Green puyo
-#R:961:
+R:961:0xC6/0x85
 
 # Slime Mold
 R:962:0x8A:0x9F
