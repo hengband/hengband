@@ -1,4 +1,41 @@
-=== History of Hengband from 1.0.7 to 1.0.10 ===
+=== History of Hengband from 1.0.7 to 1.1.0 ===
+
+  Jun. ?th, 2002  hengband 1.1.0 Release Candidate 1 released.
+
+- Splited Life realm into two and new spells added; New 'Life' realm
+  and New 'Crusade' realm.
+- Speed system modified; multiple-moves got fewer at early stage.
+- Vi-like in-game editor(the _ key) of Auto-picker/destroyer
+  preference.
+- Character background can be edited by player at birth.
+- Auto-destoy/Auto-inscription is now performed just after identify
+  objects (like auto-squelch).
+- Indicators of temporal effects(status bar) are now have variable
+  size and position.
+- new option view_unsafe_grids from Unangband; Unkown grids that have
+  not beed trap detecteted are marked with gray 'x'.
+- new option disturb_trap_detect from Oangband; disturbs you when
+  player is running out of trap-detected area.
+- new option alert_trap_detect; alerts you with message when the
+  player is moving out of the trap-detected area.
+- Ninja can now throw(v) Iron Spikes in the Arena.
+- Known monster level is displayed together with monster name in look
+  command.
+- The game loads only either pickpref-<name>.prf or pickpref.prf, not
+  both.
+- Fake inscriptions({cursed} {empty} etc..) are not hidden under real
+  inscriptions.
+- A stack of more than 23 objects on floor can be listed when
+  easy_floor is on; you can scroll the list with the enter key.
+- Expanded limit radius of light from player's light source.
+- Downstairs don't become 'very long stairs' when ironman_downward is
+  on.
+- Added Essence of Slay human and Essence of Warning for Weaponsmith.
+- Added new monsters.
+- Default color of permanent walls is now Light Umber.
+- Added a few new tiles.
+- Some bugs fixed.
+
 
   Apl. 6th, 2002  hengband 1.0.11 released.
 
@@ -20,100 +57,131 @@
 
 
   Mar. 6th, 2002  hengband 1.0.10 released.
-                  - New artifact, ego-ammo and vault.
-		  - Class power of Red-Mage is more useful.
-		  - Force Trainer becomes more and more powerful in melee when
-		    they use 'Improve Force'. 
-		  - Monster AI is a bit improved.
-		  - The Serpent of Chaos summons guardians of each dungeons.
-		  - Random artifact names list was expanded.
-		  - Iron Spikes has (dmg per shot/dmg per turn) display.
-		  - Automatically tidy up bundles of ammo to 99 ammo and the rest.
-		  - Interact with visual command takes ^N ^A ^C.
-		  - Support 16x16 tile. Selected by extra option -- -a on X11.
-		  - 8x8 tile supports lighting effects.
-		  - Screen shot is supported in graphics mode.
-		  - Support in MPW environment of Macintosh.
 
-  Feb. 7th, 2002  Macintosh and Amiga binary for hengband 1.0.9 revision 1 are
-                  now available.
-  Feb. 1st, 2002  Windows binary for hengband 1.0.9 revision 1 is now available.
+- New artifact, ego-ammo and vault.
+- Class power of Red-Mage is more useful.
+- Force Trainer becomes more and more powerful in melee when
+  they use 'Improve Force'. 
+- Monster AI is a bit improved.
+- The Serpent of Chaos summons guardians of each dungeons.
+- Random artifact names list was expanded.
+- Iron Spikes has (dmg per shot/dmg per turn) display.
+- Automatically tidy up bundles of ammo to 99 ammo and the rest.
+- Interact with visual command takes ^N ^A ^C.
+- Support 16x16 tile. Selected by extra option -- -a on X11.
+- 8x8 tile supports lighting effects.
+- Screen shot is supported in graphics mode.
+- Support in MPW environment of Macintosh.
 
   Jan.30th, 2002  hengband 1.0.9 revision 1 released.
-                  Fixed one more bug which cause crash (English version only).
+
+- Fixed one more bug which cause crash (English version only).
 
   Jan.27th, 2002  hengband 1.0.9 released.
-                  - New character making screen
-		  - New character information 'C' screen
-		  - Range and accuracy of crossbow are changed.
-		  - Rod of Pesticide was changed.
-		  - The score server now holds colored screenshots at dying and winning.
-		    screenshots will be placed at:
- 		    'http://www.kmc.gr.jp/~habu/local/hengscore-en/screens/'.
-		    But links on the webpage to the screenshots are not yet available.
-		  - Limited support of 8x8 tile graphics.
-		  - Hengband online help in *Japanese*. 
-		    (sadly English version of online help is not yet available)
-		  - Rune of explosion no longer has anti-summoning effects.
-		  - Rune of protection no longer has perfect
-		    anti-summoning effects. Sea of runes are no longer
-		    perfect. But this change has a good side effect:
-		    monsters can waste its time to try summoning.
-		  - Identify spell now shows only unidentified items in the list.
-		  - Difficulty to activate random artifact is changed.
+
+- New character making screen
+- New character information 'C' screen
+- Range and accuracy of crossbow are changed.
+- Rod of Pesticide was changed.
+- The score server now holds colored screenshots at dying and winning.
+  screenshots will be placed at:
+  'http://www.kmc.gr.jp/~habu/local/hengscore-en/screens/'.
+  But links on the webpage to the screenshots are not yet available.
+- Limited support of 8x8 tile graphics.
+- Hengband online help in *Japanese*. 
+  (sadly English version of online help is not yet available)
+- Rune of explosion no longer has anti-summoning effects.
+- Rune of protection no longer has perfect
+  anti-summoning effects. Sea of runes are no longer
+  perfect. But this change has a good side effect:
+  monsters can waste its time to try summoning.
+- Identify spell now shows only unidentified items in the list.
+- Difficulty to activate random artifact is changed.
+
 
   Dec.31th, 2001  hengband 108fix2 revision 1 released.
-		  - 'fix2' is japanese bug fixed version but this bug was 
-		    not effect on English version.
-                  - The 'interact with knowledge' command changed. 
-		    You can get display of lines of auto picker/destroyer.
+
+- 'fix2' is japanese bug fixed version but this bug was 
+  not effect on English version.
+- The 'interact with knowledge' command changed. 
+  You can get display of lines of auto picker/destroyer.
+
 
   Dec.31th, 2001  hengband 108fix1 version 3 released.
-                  - Auto macro dump and other auto dump is now 
-		    more useful. Old dump lines will be deleted 
-		    before appending new dump.
-		  - A minor typo and a minor bug fixed.
+
+- Auto macro dump and other auto dump is now 
+  more useful. Old dump lines will be deleted 
+  before appending new dump.
+- A minor typo and a minor bug fixed.
+
  
   Dec.30th, 2001  hengband 108fix1 version 2 released.
-                  - All remained japanese messages are found and fixed, 
-		    using a exclusive C program.
-		  - You can now define macros in the 'pickpref.prf'.
+
+- All remained japanese messages are found and fixed, 
+  using a exclusive C program.
+- You can now define macros in the 'pickpref.prf'.
+
 
   Dec.29th, 2001  hengband 108fix1 released.
-                  This is a bug fixed japanese version, and almost 
-		  same as 108eng3, but a few more bugs are fixed.
+
+- This is a bug fixed japanese version, and almost 
+- same as 108eng3, but a few more bugs are fixed.
+
 
   Dec.25th, 2001  hengband 108eng2(stable) and 108eng3(test version) released.
-                  108eng2: fixed some typo. ']' key now can be used as macro key.
-                  108eng3: macro trigger is displayed in more suitable way;
-		     such that \[F1] or \[control-shift-alt-HOME]. 
-		     And you can use alt-key plus alphabet-key as macro 
-		     key on Windows now; \[alt-A] or \[shift-alt-B].
+
+-  108eng2: fixed some typo. ']' key now can be used as macro key.
+-  108eng3: macro trigger is displayed in more suitable way;
+     such that \[F1] or \[control-shift-alt-HOME]. 
+     And you can use alt-key plus alphabet-key as macro 
+     key on Windows now; \[alt-A] or \[shift-alt-B].
+
 
   Dec.24th, 2001  hengband 108eng1: makefile.bcc was not work. now fixed.
+
   Dec.24th, 2001  hengband 1.0.8 released. This is a new Japanese version. 
-                  The source can be used to compile English version too.
-		  - The address of the world score server is changed.
-		  - Makefiles was changed again.
-		  - New item: Magic Whistle.
-		  - Ninja had been a bit weakened. 
-		  - can study known spells using 'G' command for more proficiency.
-		  - Some minor bugs was fixed.
-		  - Yet another japanese massage was translated.
+
+The source can be used to compile English version too.
+- The address of the world score server is changed.
+- Makefiles was changed again.
+- New item: Magic Whistle.
+- Ninja had been a bit weakened. 
+- can study known spells using 'G' command for more proficiency.
+- Some minor bugs was fixed.
+- Yet another japanese massage was translated.
+
+
   Dec.17th, 2001  hengband 1.0.7fix2 english beta4 released.
-		  Yet another remained japanese messages are now translated.
-		  Changed some option info texts and names again.
-		  Inventory lists of Home and Museum in the character dump is fixed.
-		  Some bugs related groo and Metal Babble is fixed.
+
+- Yet another remained japanese messages are now translated.
+- Changed some option info texts and names again.
+- Inventory lists of Home and Museum in the character dump is fixed.
+- Some bugs related groo and Metal Babble is fixed.
+
+
   Dec.11th, 2001  hengband 1.0.7fix2 english beta3 released.
-                  fixed a compile error. English info message of artifacts added.
-		  changed some info text and name of options.
-  Dec. 9th, 2001  hengband 1.0.7fix2 english beta2 released. fixed a terrible bug,
-                  items in the home was not saved when more than 24 items stored.
-                  Binary for Macintosh (ppc, osX) is now available.
+
+- fixed a compile error. English info message of artifacts added.
+- changed some info text and name of options.
+
+
+  Dec. 9th, 2001  hengband 1.0.7fix2 english beta2 released.
+
+- fixed a terrible bug,
+- items in the home was not saved when more than 24 items stored.
+- Binary for Macintosh (ppc, osX) is now available.
+
+
   Dec. 8th, 2001  hengband 1.0.7fix2 english beta released.
-                  Many mistakes of English messages, and bugs are fixed.
-  Dec. 5th, 2001  fixed some mistakes of archives. 1.0.7fix2 english alpha2 released.
+
+- Many mistakes of English messages, and bugs are fixed.
+
+
+  Dec. 5th, 2001  1.0.7fix2 english alpha2 released.
+
+- fixed some mistakes of archives. 
+
+
   Dec. 4th, 2001  hengband 1.0.7fix2 english alpha version released.
 
 
