@@ -1574,7 +1574,7 @@ static flag_insc_table flag_insc_esp1[] =
 	{ "Good", TR_ESP_GOOD, -1 },
 	{ "Nolv", TR_ESP_NONLIVING, -1 },
 	{ "Uniq", TR_ESP_UNIQUE, -1 },
-	{ NULL, NULL, 0, -1 }
+	{ NULL, 0, -1 }
 };
 
 static flag_insc_table flag_insc_esp2[] =
@@ -1587,7 +1587,7 @@ static flag_insc_table flag_insc_esp2[] =
 	{ "U", TR_ESP_DEMON, -1 },
 	{ "L", TR_ESP_UNDEAD, -1 },
 	{ "Z", TR_ESP_ANIMAL, -1 },
-	{ NULL, NULL, 0, -1 }
+	{ NULL, 0, -1 }
 };
 
 static flag_insc_table flag_insc_sust[] =
