@@ -6913,7 +6913,7 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 	my_fclose(fp);
 
 	/* Success */
-	return 0;
+	return counter ? 0 : -1;
 }
 
 
