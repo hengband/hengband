@@ -632,7 +632,7 @@ static void image_random(byte *ap, char *cp)
  */
 static bool feat_supports_lighting(byte feat)
 {
-	if (is_trap(feat)) return TRUE;
+	if (is_trap(feat)) return streq(ANGBAND_GRAF, "new");
 
 	switch (feat)
 	{
