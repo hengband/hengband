@@ -1519,7 +1519,7 @@ static struct
 	{ 1, 11, 25, ""},
 	{ 1, 15, 25, "¼Í·â¹¶·â½¤Àµ"},
 	{ 1, 16, 25, "¼Í·âÉð´ïÇÜÎ¨"},
-	{01, 20, 25, "²ÃÂ®"},
+	{ 1, 20, 25, "²ÃÂ®"},
 	{ 1, 19, 25, "£Á£Ã"},
 	{29, 13, 21, "¥ì¥Ù¥ë"},
 	{29, 14, 21, "·Ð¸³ÃÍ"},
@@ -1530,18 +1530,18 @@ static struct
 	{29, 10, 21, "£È£Ð"},
 	{29, 11, 21, "£Í£Ð"},
 	{29, 20, 21, "¥×¥ì¥¤»þ´Ö"},
-	{54, 10, -1, "ÂÇ·â¹¶·â  :"},
-	{54, 11, -1, "¼Í·â¹¶·â  :"},
-	{54, 12, -1, "ËâË¡ËÉ¸æ  :"},
-	{54, 13, -1, "±£Ì©¹ÔÆ°  :"},
-	{54, 15, -1, "ÃÎ³Ð      :"},
-	{54, 16, -1, "Ãµº÷      :"},
-	{54, 17, -1, "²ò½ü      :"},
-	{54, 18, -1, "ËâË¡Æ»¶ñ  :"},
-	{01, 12, 25, "ÂÇ·â²ó¿ô"},
-	{01, 17, 25, "¼Í·â²ó¿ô"},
-	{01, 13, 25, "Ê¿¶Ñ¥À¥á¡¼¥¸"},
-	{54, 20, -1, "ÀÖ³°Àþ»ëÎÏ:"},
+	{53, 10, -1, "ÂÇ·â¹¶·â  :"},
+	{53, 11, -1, "¼Í·â¹¶·â  :"},
+	{53, 12, -1, "ËâË¡ËÉ¸æ  :"},
+	{53, 13, -1, "±£Ì©¹ÔÆ°  :"},
+	{53, 15, -1, "ÃÎ³Ð      :"},
+	{53, 16, -1, "Ãµº÷      :"},
+	{53, 17, -1, "²ò½ü      :"},
+	{53, 18, -1, "ËâË¡Æ»¶ñ  :"},
+	{ 1, 12, 25, "ÂÇ·â²ó¿ô"},
+	{ 1, 17, 25, "¼Í·â²ó¿ô"},
+	{ 1, 13, 25, "Ê¿¶Ñ¥À¥á¡¼¥¸"},
+	{53, 20, -1, "ÀÖ³°Àþ»ëÎÏ:"},
 	{26,  1, -1, "Ì¾Á°  : "},
 	{ 1,  3, -1, "À­ÊÌ     : "},
 	{ 1,  4, -1, "¼ïÂ²     : "},
@@ -1567,7 +1567,7 @@ static struct
 	{ 1, 11, 25, "Posture"},
 	{ 1, 15, 25, "Shooting"},
 	{ 1, 16, 25, "Multiplier"},
-	{01, 20, 25, "Speed"},
+	{ 1, 20, 25, "Speed"},
 	{ 1, 19, 25, "AC"},
 	{29, 13, 21, "Level"},
 	{29, 14, 21, "Experience"},
@@ -1578,18 +1578,18 @@ static struct
 	{29, 10, 21, "Hit point"},
 	{29, 11, 21, "SP (Mana)"},
 	{29, 20, 21, "Play time"},
-	{54, 10, -1, "Fighting    : "},
-	{54, 11, -1, "Bows/Throw  : "},
-	{54, 12, -1, "Saving Throw: "},
-	{54, 13, -1, "Stealth     : "},
-	{54, 15, -1, "Perception  : "},
-	{54, 16, -1, "Searching   : "},
-	{54, 17, -1, "Disarming   : "},
-	{54, 18, -1, "Magic Device: "},
-	{01, 12, 25, "Blows/Round"},
-	{01, 17, 25, "Shots/Round"},
-	{01, 13, 25, "AverageDmg/Rnd"},
-	{54, 20, -1, "Infra-Vision: "},
+	{53, 10, -1, "Fighting   : "},
+	{53, 11, -1, "Bows/Throw : "},
+	{53, 12, -1, "SavingThrow: "},
+	{53, 13, -1, "Stealth    : "},
+	{53, 15, -1, "Perception : "},
+	{53, 16, -1, "Searching  : "},
+	{53, 17, -1, "Disarming  : "},
+	{53, 18, -1, "MagicDevice: "},
+	{ 1, 12, 25, "Blows/Round"},
+	{ 1, 17, 25, "Shots/Round"},
+	{ 1, 13, 25, "AverageDmg/Rnd"},
+	{53, 20, -1, "Infra-Vision: "},
 	{26,  1, -1, "Name  : "},
 	{ 1,  3, -1, "Sex      : "},
 	{ 1,  4, -1, "Race     : "},
@@ -1917,117 +1917,97 @@ static cptr likert(int x, int y)
 	{
 		likert_color = TERM_L_DARK;
 #ifdef JP
-return ("ºÇÄã");
+		return "ºÇÄã";
 #else
-		return ("Very Bad");
+		return "Very Bad";
 #endif
-
 	}
 
 	/* Analyze the value */
 	switch ((x / y))
 	{
-		case 0:
-		case 1:
-		{
-			likert_color = TERM_RED;
+	case 0:
+	case 1:
+		likert_color = TERM_RED;
 #ifdef JP
-return ("°­¤¤");
+		return "°­¤¤";
 #else
-			return ("Bad");
+		return "Bad";
 #endif
 
-		}
-		case 2:
-		{
-			likert_color = TERM_L_RED;
+	case 2:
+		likert_color = TERM_L_RED;
 #ifdef JP
-return ("Îô¤ë");
+		return "Îô¤ë";
 #else
-			return ("Poor");
+		return "Poor";
 #endif
 
-		}
-		case 3:
-		case 4:
-		{
-			likert_color = TERM_ORANGE;
+	case 3:
+	case 4:
+		likert_color = TERM_ORANGE;
 #ifdef JP
-return ("ÉáÄÌ");
+		return "ÉáÄÌ";
 #else
-			return ("Fair");
+		return "Fair";
 #endif
 
-		}
-		case 5:
-		{
-			likert_color = TERM_YELLOW;
+	case 5:
+		likert_color = TERM_YELLOW;
 #ifdef JP
-return ("ÎÉ¤¤");
+		return "ÎÉ¤¤";
 #else
-			return ("Good");
+		return "Good";
 #endif
 
-		}
-		case 6:
-		{
-			likert_color = TERM_YELLOW;
+	case 6:
+		likert_color = TERM_YELLOW;
 #ifdef JP
-return ("ÂçÊÑÎÉ¤¤");
+		return "ÂçÊÑÎÉ¤¤";
 #else
-			return ("Very Good");
+		return "Very Good";
 #endif
 
-		}
-		case 7:
-		case 8:
-		{
-			likert_color = TERM_L_GREEN;
+	case 7:
+	case 8:
+		likert_color = TERM_L_GREEN;
 #ifdef JP
-return ("Âî±Û");
+		return "Âî±Û";
 #else
-			return ("Excellent");
+		return "Excellent";
 #endif
 
-		}
-		case 9:
-		case 10:
-		case 11:
-		case 12:
-		case 13:
-		{
-			likert_color = TERM_GREEN;
+	case 9:
+	case 10:
+	case 11:
+	case 12:
+	case 13:
+		likert_color = TERM_GREEN;
 #ifdef JP
-return ("Ä¶±Û");
+		return "Ä¶±Û";
 #else
-			return ("Superb");
+		return "Superb";
 #endif
 
-		}
-		case 14:
-		case 15:
-		case 16:
-		case 17:
-		{
-			likert_color = TERM_BLUE;
+	case 14:
+	case 15:
+	case 16:
+	case 17:
+		likert_color = TERM_BLUE;
 #ifdef JP
-return ("¥«¥ª¥¹¥é¥ó¥¯");
+		return "±ÑÍºÅª";
 #else
-			return ("Chaos Rank");
+		return "Heroic";
 #endif
 
-		}
-		default:
-		{
-			likert_color = TERM_VIOLET;
+	default:
+		likert_color = TERM_VIOLET;
 #ifdef JP
-sprintf(dummy,"¥¢¥ó¥Ð¡¼ [%d]", (int) ((((x/y)-17)*5)/2));
+		sprintf(dummy, "ÅÁÀâÅª[%d]", (int)((((x / y) - 17) * 5) / 2));
 #else
-			sprintf(dummy,"Amber [%d]", (int) ((((x/y)-17)*5)/2));
+		sprintf(dummy, "Legendary[%d]", (int)((((x / y) - 17) * 5) / 2));
 #endif
-
-			return dummy;
-		}
+		return dummy;
 	}
 }
 
@@ -3751,7 +3731,7 @@ void display_player(int mode)
 				int value;
 
 				/* Use lowercase stat name */
-				put_str(stat_names_reduced[i], 3 + i, 54);
+				put_str(stat_names_reduced[i], 3 + i, 53);
 
 				/* Get the current stat */
 				value = p_ptr->stat_use[i];
@@ -3760,7 +3740,7 @@ void display_player(int mode)
 				cnv_stat(value, buf);
 
 				/* Display the current stat (modified) */
-				c_put_str(TERM_YELLOW, buf, 3 + i, 61);
+				c_put_str(TERM_YELLOW, buf, 3 + i, 60);
 
 				/* Acquire the max stat */
 				value = p_ptr->stat_top[i];
@@ -3769,28 +3749,28 @@ void display_player(int mode)
 				cnv_stat(value, buf);
 
 				/* Display the maximum stat (modified) */
-				c_put_str(TERM_L_GREEN, buf, 3 + i, 68);
+				c_put_str(TERM_L_GREEN, buf, 3 + i, 67);
 			}
 
 			/* Normal treatment of "normal" stats */
 			else
 			{
 				/* Assume uppercase stat name */
-				put_str(stat_names[i], 3 + i, 54);
+				put_str(stat_names[i], 3 + i, 53);
 
 				/* Obtain the current stat (modified) */
 				cnv_stat(p_ptr->stat_use[i], buf);
 
 				/* Display the current stat (modified) */
-				c_put_str(TERM_L_GREEN, buf, 3 + i, 61);
+				c_put_str(TERM_L_GREEN, buf, 3 + i, 60);
 			}
 
 			if (p_ptr->stat_max[i] == p_ptr->stat_max_max[i])
 			{
 #ifdef JP
-				c_put_str(TERM_WHITE, "!", 3+i, 59);
+				c_put_str(TERM_WHITE, "!", 3 + i, 58);
 #else
-				c_put_str(TERM_WHITE, "!", 3+i, 59-2);
+				c_put_str(TERM_WHITE, "!", 3 + i, 58-2);
 #endif
 			}
 		}
