@@ -6530,13 +6530,6 @@ prt("お待ち下さい...", 0, 0);
 	}
 
 
-	/* Initialize vault info */
-#ifdef JP
-if (init_v_info()) quit("建築物初期化不能");
-#else
-	if (init_v_info()) quit("Cannot initialize vaults");
-#endif
-
 	/* Generate a dungeon level if needed */
 	if (!character_dungeon) change_floor();
 

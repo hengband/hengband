@@ -2266,6 +2266,14 @@ if (init_quests()) quit("クエストを初期化できません");
 #endif
 
 
+	/* Initialize vault info */
+#ifdef JP
+	if (init_v_info()) quit("vault 初期化不能");
+#else
+	if (init_v_info()) quit("Cannot initialize vaults");
+#endif
+
+
 	/* Initialize some other arrays */
 #ifdef JP
 	note("[データの初期化中... (その他)]");
