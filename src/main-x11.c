@@ -3728,13 +3728,13 @@ errr init_x11(int argc, char *argv[])
 		setlocale(LC_ALL, DEFAULT_LOCALE);
 	}
 #endif
+
+#ifdef JP
+	if(!strcmp(setlocale(LC_ALL, NULL), "C"))
 	{
-		char *current_locale = setlocale(LC_ALL, NULL);
-/*		printf("set locale to \"%s\"\n", current_locale); */
-		if(!strcmp(current_locale, "C")){
-			printf("WARNING: Locale is not supported. Non-english font may be displayed incorrectly.\n");
-		}
+		printf("WARNING: Locale is not supported. Non-english font may be displayed incorrectly.\n");
 	}
+#endif
 
 	if(!XSupportsLocale()){
 		printf("can't support locale in X\n");
