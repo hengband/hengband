@@ -2828,7 +2828,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 /*
  * Read whole lines of a file to memory
  */
-static cptr *read_text_lines(cptr filename, bool user)
+static cptr *read_text_lines(cptr filename)
 {
 	cptr *lines_list = NULL;
 	FILE *fff;
@@ -2836,14 +2836,7 @@ static cptr *read_text_lines(cptr filename, bool user)
 	int lines = 0;
 	char buf[1024];
 
-	if (user)
-	{
-		path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
-	}
-	else
-	{
-		path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, filename);
-	}
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
 	
 	/* Open the file */
 	fff = my_fopen(buf, "r");
@@ -2870,26 +2863,102 @@ static cptr *read_text_lines(cptr filename, bool user)
 }
 
 
+/*
+ * Copy the default autopick file to the user directory
+ */
+static void prepare_default_pickpref(void)
+{
+	static char *messages[] = {
+#ifdef JP
+		"あなたは「自動拾いエディタ」を初めて起動しました。",
+		"自動拾いのユーザー設定ファイルがまだ書かれていないので、",
+		"基本的な自動拾い設定ファイルをlib/pref/picktype.prfからコピーします。",
+		NULL
+#else
+		"You have activated the Auto-Picker Editor for the first time.",
+		"Since no user preference file for autopick is not yet created,",
+		"the default setting is loaded from lib/pref/pickpref.prf .",
+		NULL
+#endif
+	};
+
+	char buf[1024];
+	FILE *pref_fp;
+	FILE *user_fp;
+	int i;
+	cptr filename = pickpref_filename(PT_DEFAULT);
+
+	/* Display messages */
+	for (i = 0; messages[i]; i++) msg_print(messages[i]);
+	msg_print(NULL);
+
+
+	/* Open new file */
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
+	user_fp = my_fopen(buf, "w");
+
+	/* Failed */
+	if (!user_fp) return;
+
+	/* Write header messages for a notification */
+	fprintf(user_fp, "#***\n");
+	for (i = 0; messages[i]; i++)
+	{
+		fprintf(user_fp, "#***  %s\n", messages[i]);
+	}
+	fprintf(user_fp, "#***\n\n\n");
+
+
+	/* Open the default file */
+	path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, filename);
+	pref_fp = my_fopen(buf, "r");
+
+	/* Failed */
+	if (!pref_fp)
+	{
+		my_fclose(user_fp);
+		return;
+	}
+
+	/* Copy the contents of default file */
+	while (!my_fgets(pref_fp, buf, sizeof(buf)))
+		fprintf(user_fp, "%s\n", buf);
+
+	my_fclose(user_fp);
+	my_fclose(pref_fp);
+}
+
+/*
+ * Read an autopick prefence file to memory
+ * Prepare default if no user file is found
+ */
 static cptr *read_pickpref_text_lines(int *filename_mode_p)
 {
 	char buf[1024];
 	cptr *lines_list;
 
+	/* Try a filename with player name */
 	*filename_mode_p = PT_WITH_PNAME;
 	strcpy(buf, pickpref_filename(*filename_mode_p));
-	lines_list = read_text_lines(buf, TRUE);
+	lines_list = read_text_lines(buf);
 
 	if (!lines_list)
 	{
+		/* Use default name */
 		*filename_mode_p = PT_DEFAULT;
 		strcpy(buf, pickpref_filename(*filename_mode_p));
-		lines_list = read_text_lines(buf, TRUE);
+		lines_list = read_text_lines(buf);
 	}
 
 	if (!lines_list)
 	{
-		strcpy(buf, pickpref_filename(*filename_mode_p));
-		lines_list = read_text_lines(buf, FALSE);
+		/* There is no preference file in the user directory */
+
+		/* Copy the default autopick file to the user directory */
+		prepare_default_pickpref();
+
+		/* Use default name again */
+		lines_list = read_text_lines(buf);
 	}
 
 	if (!lines_list)
