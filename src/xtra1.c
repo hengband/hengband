@@ -2470,7 +2470,7 @@ static void calc_mana(void)
 		if (o_ptr->k_idx &&
 		    !(have_flag(flgs, TR_FREE_ACT)) &&
 		    !(have_flag(flgs, TR_MAGIC_MASTERY)) &&
-		    !(have_flag(flgs, TR_DEX)) && (o_ptr->pval > 0))
+		    !((have_flag(flgs, TR_DEX)) && (o_ptr->pval > 0)))
 		{
 			/* Encumbered */
 			p_ptr->cumber_glove = TRUE;
