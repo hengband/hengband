@@ -197,3 +197,6 @@ However, please do not register a score, if you have cheated
 by modifying data or source files, or by restoring from a backed 
 up savefile.
 
+The score server is here:
+  http://echizen.s5.xrea.com/heng/eng-hengband/score.html
+
