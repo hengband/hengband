@@ -3287,6 +3287,8 @@ bool monst_spell_monst(int m_idx)
 					if (t_idx == p_ptr->riding) teleport_player_to(m_ptr->fy, m_ptr->fx, FALSE);
 					else teleport_monster_to(t_idx, m_ptr->fy, m_ptr->fx, 100);
 
+					sound(SOUND_FALL);
+
 					if (tr_ptr->flags7 & RF7_CAN_FLY)
 					{
 #ifdef JP
@@ -3303,6 +3305,31 @@ bool monst_spell_monst(int m_idx)
 						if (see_t) msg_format("%^s crashed into the ground.", t_name);
 #endif
 						dam += damroll(6, 8);
+					}
+
+					if (p_ptr->riding)
+					{
+						int get_damage = 0;
+
+						/* Mega hack -- this special action deals damage to the player. Therefore the code of "eyeeye" is necessary.
+						   -- henkma
+						 */
+						get_damage = take_hit(DAMAGE_NOESCAPE, dam, m_name, -1);
+						if (p_ptr->tim_eyeeye && get_damage > 0 && !p_ptr->is_dead)
+						{
+#ifdef JP
+							msg_format("攻撃が%s自身を傷つけた！", m_name);
+#else
+							char m_name_self[80];
+
+							/* hisself */
+							monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+
+							msg_format("The attack of %s has wounded %s!", m_name, m_name_self);
+#endif
+							project(0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
+							set_tim_eyeeye(p_ptr->tim_eyeeye-5, TRUE);
+						}
 					}
 
 					mon_take_hit_mon(t_idx, dam, &fear, NULL, m_idx);

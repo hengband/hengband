@@ -3556,13 +3556,15 @@ msg_format("%^sがテレポートした。", m_name);
 					}
 					else
 					{
-						int dam = damroll(4, 8);
 						int get_damage = 0;
+						bool fear; /* dummy */
+
 #ifdef JP
 						msg_format("%^sがあなたを掴んで空中から投げ落した。", m_name);
 #else
 						msg_format("%^s holds you, and drops from the sky.", m_name);
 #endif
+						dam = damroll(4, 8);
 						teleport_player_to(m_ptr->fy, m_ptr->fx, FALSE);
 
 						sound(SOUND_FALL);
@@ -3604,6 +3606,8 @@ msg_format("%^sがテレポートした。", m_name);
 							project(0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
 							set_tim_eyeeye(p_ptr->tim_eyeeye-5, TRUE);
 						}
+
+						if (p_ptr->riding) mon_take_hit_mon(p_ptr->riding, dam, &fear, NULL, m_idx);
 					}
 					break;
 				}
