@@ -3826,17 +3826,17 @@ void display_player(int mode)
 
 			*statmsg = '\0';
 
-			if (p_ptr->is_dead && p_ptr->total_winner)
+			if (p_ptr->is_dead)
 			{
+				if (p_ptr->total_winner)
+				{
 #ifdef JP
-				strcpy(statmsg, "…あなたは勝利の後引退した。");
+					sprintf(statmsg, "…あなたは勝利の後%sした。", streq(p_ptr->died_from, "Seppuku") ? "切腹" : "引退");
 #else
-				strcpy(statmsg, "...You retired from the adventure after the winning.");
+					sprintf(statmsg, "...You %s after the winning.", streq(p_ptr->died_from, "Seppuku") ? "did Seppuku" : "retired from the adventure");
 #endif
-			}
-			else if (p_ptr->is_dead)
-			{
-				if (!dun_level)
+				}
+				else if (!dun_level)
 				{
 #ifdef JP
 					sprintf(statmsg, "…あなたは%sで%sに殺された。", map_name(), p_ptr->died_from);

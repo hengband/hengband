@@ -11381,11 +11381,10 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			{
 #ifdef JP
 				msg_print("武士道とは、死ぬことと見つけたり。");
-				take_hit(DAMAGE_FORCE, 9999, "切腹", -1);
 #else
 				msg_print("Meaning of Bushi-do is found in the death.");
-				take_hit(DAMAGE_FORCE, 9999, "Seppuku", -1);
 #endif
+				take_hit(DAMAGE_FORCE, 9999, "Seppuku", -1);
 			}
 		}
 		break;
