@@ -2707,30 +2707,32 @@ s = "使えるものがありません。";
 
 	/* Oops */
 #ifdef JP
-msg_print("まばゆい閃光が走った！");
+	msg_print("まばゆい閃光が走った！");
 #else
 	msg_print("There is a bright flash of light!");
 #endif
-{
-  byte iy = o_ptr->iy;                /* Y-position on map, or zero */
-  byte ix = o_ptr->ix;                /* X-position on map, or zero */
-  s16b next_o_idx= o_ptr->next_o_idx; /* Next object in stack (if any) */
-  byte marked=o_ptr->marked;          /* Object is marked */
-  s16b weight = (o_ptr->number*o_ptr->weight);
+	{
+		byte iy = o_ptr->iy;                 /* Y-position on map, or zero */
+		byte ix = o_ptr->ix;                 /* X-position on map, or zero */
+		s16b next_o_idx = o_ptr->next_o_idx; /* Next object in stack (if any) */
+		byte marked = o_ptr->marked;         /* Object is marked */
+		s16b weight = o_ptr->number * o_ptr->weight;
+		u16b inscription = o_ptr->inscription;
 
-   /* Wipe it clean */
-   object_prep(o_ptr, o_ptr->k_idx);
+		/* Wipe it clean */
+		object_prep(o_ptr, o_ptr->k_idx);
 
-  o_ptr->iy=iy;
-  o_ptr->ix=ix;
-  o_ptr->next_o_idx=next_o_idx;
-  o_ptr->marked=marked;
-  if (item >= 0) p_ptr->total_weight += (o_ptr->weight - weight);
-}
+		o_ptr->iy = iy;
+		o_ptr->ix = ix;
+		o_ptr->next_o_idx = next_o_idx;
+		o_ptr->marked = marked;
+		o_ptr->inscription = inscription;
+		if (item >= 0) p_ptr->total_weight += (o_ptr->weight - weight);
+	}
 	calc_android_exp();
 
 	/* Something happened */
-	return (TRUE);
+	return TRUE;
 }
 
 
