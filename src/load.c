@@ -287,12 +287,7 @@ static void strip_bytes(int n)
  */
 static void rd_item(object_type *o_ptr)
 {
-	byte old_dd;
-	byte old_ds;
-
 	u32b f1, f2, f3;
-
-	object_kind *k_ptr;
 
 	char buf[128];
 
@@ -332,8 +327,8 @@ static void rd_item(object_type *o_ptr)
 
 	rd_s16b(&o_ptr->ac);
 
-	rd_byte(&old_dd);
-	rd_byte(&old_ds);
+	rd_byte(&o_ptr->dd);
+	rd_byte(&o_ptr->ds);
 
 	rd_byte(&o_ptr->ident);
 
@@ -515,44 +510,6 @@ static void rd_item(object_type *o_ptr)
 
 	if (z_older_than(10, 4, 10) && (o_ptr->name2 == EGO_YOIYAMI)) o_ptr->k_idx = lookup_kind(TV_SOFT_ARMOR, SV_YOIYAMI_ROBE);
 
-	/* Obtain the "kind" template */
-	k_ptr = &k_info[o_ptr->k_idx];
-
-	/* Obtain tval/sval from k_info */
-	o_ptr->tval = k_ptr->tval;
-	o_ptr->sval = k_ptr->sval;
-
-	/* Hack -- notice "broken" items */
-	if (k_ptr->cost <= 0) o_ptr->ident |= (IDENT_BROKEN);
-
-
-	/* Repair non "wearable" items */
-	if (!wearable_p(o_ptr))
-	{
-		/* Acquire correct fields */
-		o_ptr->to_h = k_ptr->to_h;
-		o_ptr->to_d = k_ptr->to_d;
-		o_ptr->to_a = k_ptr->to_a;
-
-		/* Acquire correct fields */
-		o_ptr->ac = k_ptr->ac;
-		o_ptr->dd = k_ptr->dd;
-		o_ptr->ds = k_ptr->ds;
-
-		/* Acquire correct weight */
-		o_ptr->weight = k_ptr->weight;
-
-		/* Paranoia */
-		o_ptr->name1 = o_ptr->name2 = 0;
-
-		/* All done */
-		return;
-	}
-
-
-	/* Extract the flags */
-	object_flags(o_ptr, &f1, &f2, &f3);
-
 	if (z_older_than(10, 4, 9))
 	{
 		if (o_ptr->art_flags1 & TR1_MAGIC_MASTERY)
@@ -585,67 +542,6 @@ static void rd_item(object_type *o_ptr)
 		/* Verify that ego-item */
 		if (!e_ptr->name) o_ptr->name2 = 0;
 
-	}
-
-	/* Acquire standard fields */
-	o_ptr->ac = k_ptr->ac;
-	o_ptr->dd = k_ptr->dd;
-	o_ptr->ds = k_ptr->ds;
-
-	/* Acquire standard weight */
-	o_ptr->weight = k_ptr->weight;
-
-	/* Hack -- extract the "broken" flag */
-	if (!o_ptr->pval < 0) o_ptr->ident |= (IDENT_BROKEN);
-
-	/* Artifacts */
-	if (o_ptr->name1)
-	{
-		artifact_type *a_ptr;
-
-		/* Obtain the artifact info */
-		a_ptr = &a_info[o_ptr->name1];
-
-		/* Acquire new artifact "pval" */
-		o_ptr->pval = a_ptr->pval;
-
-		/* Acquire new artifact fields */
-		o_ptr->ac = a_ptr->ac;
-		o_ptr->dd = a_ptr->dd;
-		o_ptr->ds = a_ptr->ds;
-
-		/* Acquire new artifact weight */
-		o_ptr->weight = a_ptr->weight;
-
-		/* Hack -- extract the "broken" flag */
-		if (!a_ptr->cost) o_ptr->ident |= (IDENT_BROKEN);
-	}
-
-	/* Ego items */
-	if (o_ptr->name2)
-	{
-		ego_item_type *e_ptr;
-
-		/* Obtain the ego-item info */
-		e_ptr = &e_info[o_ptr->name2];
-
-		o_ptr->dd = old_dd;
-		o_ptr->ds = old_ds;
-
-		if (o_ptr->name2 == EGO_DWARVEN)
-		{
-			o_ptr->ac += 5;
-			o_ptr->weight = (2 * k_info[o_ptr->k_idx].weight / 3);
-		}
-
-		/* Hack -- extract the "broken" flag */
-		if (!e_ptr->cost) o_ptr->ident |= (IDENT_BROKEN);
-	}
-
-	if (o_ptr->art_name) /* A random artifact */
-	{
-		o_ptr->dd = old_dd;
-		o_ptr->ds = old_ds;
 	}
 }
 
