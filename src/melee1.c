@@ -200,8 +200,7 @@ bool make_attack_normal(int m_idx)
 
 	if ((p_ptr->special_defense & NINJA_KAWARIMI) && (randint0(55) < (p_ptr->lev*3/5+20)))
 	{
-		kawarimi(TRUE);
-		return TRUE;
+		if (kawarimi(TRUE)) return TRUE;
 	}
 
 	/* Assume no blink */
@@ -2137,10 +2136,10 @@ msg_format("%^sから落ちてしまった！", m_name);
 #endif
 			}
 		}
+
 		if (p_ptr->special_defense & NINJA_KAWARIMI)
 		{
-			kawarimi(FALSE);
-			return TRUE;
+			if (kawarimi(FALSE)) return TRUE;
 		}
 	}
 

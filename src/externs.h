@@ -1185,7 +1185,7 @@ extern bool project_hook(int typ, int dir, int dam, int flg);
 extern bool project_hack(int typ, int dam);
 extern bool eat_magic(int power);
 extern void discharge_minion(void);
-extern void kawarimi(bool success);
+extern bool kawarimi(bool success);
 extern bool rush_attack(bool *mdeath);
 extern void remove_all_mirrors(bool explode);
 

@@ -7379,14 +7379,15 @@ bool charm_living(int dir, int plev)
 }
 
 
-void kawarimi(bool success)
+bool kawarimi(bool success)
 {
 	object_type forge;
 	object_type *q_ptr = &forge;
 	int y, x;
 
-	if (p_ptr->confused || p_ptr->blind || p_ptr->paralyzed || p_ptr->image) return;
-	if (randint0(200) < p_ptr->stun) return;
+	if (p_ptr->is_dead) return FALSE;
+	if (p_ptr->confused || p_ptr->blind || p_ptr->paralyzed || p_ptr->image) return FALSE;
+	if (randint0(200) < p_ptr->stun) return FALSE;
 
 	if (!success && one_in_(3))
 	{
@@ -7397,7 +7398,7 @@ void kawarimi(bool success)
 #endif
 		p_ptr->special_defense &= ~(NINJA_KAWARIMI);
 		p_ptr->redraw |= (PR_STATUS);
-		return;
+		return FALSE;
 	}
 
 	y = py;
@@ -7424,6 +7425,9 @@ void kawarimi(bool success)
 
 	p_ptr->special_defense &= ~(NINJA_KAWARIMI);
 	p_ptr->redraw |= (PR_STATUS);
+
+	/* Teleported */
+	return TRUE;
 }
 
 

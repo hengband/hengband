@@ -6366,8 +6366,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 
 	if ((p_ptr->special_defense & NINJA_KAWARIMI) && dam && (randint0(55) < (p_ptr->lev*3/5+20)) && who && (who != p_ptr->riding))
 	{
-		kawarimi(TRUE);
-		return FALSE;
+		if (kawarimi(TRUE)) return FALSE;
 	}
 
 	/* Player cannot hurt himself */
@@ -7734,8 +7733,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 
 	if ((p_ptr->special_defense & NINJA_KAWARIMI) && dam && who && (who != p_ptr->riding))
 	{
-		kawarimi(FALSE);
-		return obvious;
+		(void)kawarimi(FALSE);
 	}
 
 	/* Return "Anything seen?" */
