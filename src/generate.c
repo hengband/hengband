@@ -1568,9 +1568,6 @@ void clear_cave(void)
 
 	/* Nothing good here yet */
 	rating = 0;
-
-	/* Fill the arrays of floors and walls in the good proportions */
-	set_floor_and_wall(0);
 }
 
 
@@ -1584,6 +1581,9 @@ void clear_cave(void)
 void generate_cave(void)
 {
 	int num;
+
+	/* Fill the arrays of floors and walls in the good proportions */
+	set_floor_and_wall(dungeon_type);
 
 	/* Generate */
 	for (num = 0; TRUE; num++)

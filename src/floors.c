@@ -309,6 +309,9 @@ static void build_dead_end(void)
 	/* Clear and empty the cave */
 	clear_cave();
 
+	/* Fill the arrays of floors and walls in the good proportions */
+	set_floor_and_wall(0);
+
 	/* Smallest area */
 	cur_hgt = SCREEN_HGT;
 	cur_wid = SCREEN_WID;
