@@ -14,13 +14,15 @@
 
 void set_action(int typ)
 {
-	if (typ == p_ptr->action)
+	int prev_typ = p_ptr->action;
+
+	if (typ == prev_typ)
 	{
 		return;
 	}
 	else
 	{
-		switch(p_ptr->action)
+		switch (prev_typ)
 		{
 			case ACTION_SEARCH:
 			{
@@ -92,7 +94,10 @@ void set_action(int typ)
 
 	p_ptr->action = typ;
 
-	switch(p_ptr->action)
+	/* If we are requested other action, stop singing */
+	if (prev_typ == ACTION_SING) stop_singing();
+
+	switch (p_ptr->action)
 	{
 		case ACTION_SEARCH:
 		{

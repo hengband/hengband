@@ -4220,7 +4220,8 @@ void stop_singing(void)
 	}
 	if (!p_ptr->magic_num1[0]) return;
 
-	set_action(ACTION_NONE);
+	/* Hack -- if called from set_action(), avoid recursive loop */
+	if (p_ptr->action == ACTION_SING) set_action(ACTION_NONE);
 
 	switch(p_ptr->magic_num1[0])
 	{
