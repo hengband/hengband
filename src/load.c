@@ -1246,7 +1246,7 @@ static void rd_options(void)
 	hitpoint_warn = b;
 
 	/* Read "mana_warn" */
-	if(h_older_than(1,6,0,1))
+	if(h_older_than(1, 7, 0, 0))
 	{
 		mana_warn=2;
 	}
