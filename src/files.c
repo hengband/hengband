@@ -5183,13 +5183,13 @@ msg_format("'%s'をオープンできません。", name);
 		if (prefix(buf, "***** "))
 		{
 			/* Notice "menu" requests */
-			if ((buf[6] == '[') && (isdigit(buf[7]) || isalpha(buf[7])))
+			if ((buf[6] == '[') && isalpha(buf[7]))
 			{
 				/* This is a menu file */
 				menu = TRUE;
 
 				/* Extract the menu item */
-				k = isdigit(buf[7]) ? D2I(buf[7]) : buf[7] - 'A' + 10;
+				k = buf[7] - 'A';
 
 				if ((buf[8] == ']') && (buf[9] == ' '))
 				{
@@ -5231,8 +5231,8 @@ msg_format("'%s'をオープンできません。", name);
 		Term_clear();
 
 		/* Restart when necessary */
-		if (line >= size) line = 0;
-
+		if (line >= size - rows) line = size - rows;
+		if (line < 0) line = 0;
 
 		/* Re-open the file if needed */
 		if (next > line)
@@ -5356,20 +5356,8 @@ msg_format("'%s'をオープンできません。", name);
 				caption, line, size), 0, 0);
 		}
 
-		/* Prompt -- menu screen */
-		if (menu)
-		{
-			/* Wait for it */
-#ifdef JP
-prt("[ 番号を入力して下さい( ESCで終了 ) ]", hgt - 1, 0);
-#else
-			prt("[Press a Number, or ESC to exit.]", hgt - 1, 0);
-#endif
-
-		}
-
 		/* Prompt -- small files */
-		else if (size <= rows)
+		if (size <= rows)
 		{
 			/* Wait for it */
 #ifdef JP
@@ -5496,18 +5484,25 @@ strcpy(tmp, "jhelp.hlp");
 			}
 		}
 
-		/* Hack -- Allow backing up */
+		/* Allow backing up */
 		if (k == '-')
 		{
 			line = line + (reverse ? rows : -rows);
-			if (line < 0) line = ((size-1)/rows)*rows;
+			if (line < 0) line = 0;
 		}
 
-		/* Hack -- Advance a single line */
-		if ((k == '\n') || (k == '\r'))
+		/* Advance a single line */
+		if ((k == '\n') || (k == '\r') || (k == '2'))
 		{
 			line = line + (reverse ? -1 : 1);
-			if (line < 0) line = ((size-1)/rows)*rows;
+			if (line < 0) line = 0;
+		}
+
+		/* Advance a single line back */
+		if (k == '8')
+		{
+			line = line + (reverse ? 1 : -1);
+			if (line < 0) line = 0;
 		}
 
 		/* Advance one page */
@@ -5522,8 +5517,8 @@ strcpy(tmp, "jhelp.hlp");
 		{
 			int key = -1;
 
-			if (isdigit(k)) key = D2I(k);
-			else if (isalpha(k)) key = k - 'A' + 10;
+			if (isalpha(k))
+				key = k - 'A';
 
 			if ((key > -1) && hook[key][0])
 			{
