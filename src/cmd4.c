@@ -5038,6 +5038,7 @@ cptr make_screen_dump(void)
 	char file_name[1024];
 	char buf[4096];
 	char screen_buf[SCREEN_BUF_SIZE];
+	int total_len = 0;
 
 	char *html_head[] = {
 		"<html>\n<body text=\"#ffffff\" bgcolor=\"#000000\">\n",
@@ -5124,7 +5125,8 @@ cptr make_screen_dump(void)
 
 	while (fgets(buf, 4096, fff))
 	{
-		if (strlen(screen_buf) + strlen(buf) + 1 > SCREEN_BUF_SIZE)
+		total_len += strlen(buf);
+		if (total_len + 1 > SCREEN_BUF_SIZE)
 		{
 			/* Too big screen dump size */
 			return (NULL);
