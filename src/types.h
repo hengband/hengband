@@ -491,7 +491,7 @@ struct object_type
 	byte name1;			/* Artifact type, if any */
 	byte name2;			/* Ego-Item type, if any */
 
-	byte xtra1;			/* Extra info type */
+	byte xtra1;			/* Extra info type (now unused) */
 	byte xtra2;			/* Extra info index */
 	byte xtra3;			/* Extra info */
 	s16b xtra4;			/* Extra info */

@@ -351,23 +351,25 @@ static void rd_item(object_type *o_ptr)
 	rd_byte(&o_ptr->xtra1);
 	rd_byte(&o_ptr->xtra2);
 
-	if (o_ptr->xtra1 == EGO_XTRA_SUSTAIN)
+	if (z_older_than(11, 0, 10))
 	{
-		switch (o_ptr->xtra2 % 6)
+		if (o_ptr->xtra1 == EGO_XTRA_SUSTAIN)
 		{
+			switch (o_ptr->xtra2 % 6)
+			{
 			case 0: o_ptr->art_flags2 |= (TR2_SUST_STR); break;
 			case 1: o_ptr->art_flags2 |= (TR2_SUST_INT); break;
 			case 2: o_ptr->art_flags2 |= (TR2_SUST_WIS); break;
 			case 3: o_ptr->art_flags2 |= (TR2_SUST_DEX); break;
 			case 4: o_ptr->art_flags2 |= (TR2_SUST_CON); break;
 			case 5: o_ptr->art_flags2 |= (TR2_SUST_CHR); break;
+			}
+			o_ptr->xtra2 = 0;
 		}
-		o_ptr->xtra1 = o_ptr->xtra2 = 0;
-	}
-	else if (o_ptr->xtra1 == EGO_XTRA_POWER)
-	{
-		switch (o_ptr->xtra2 % 11)
+		else if (o_ptr->xtra1 == EGO_XTRA_POWER)
 		{
+			switch (o_ptr->xtra2 % 11)
+			{
 			case  0: o_ptr->art_flags2 |= (TR2_RES_BLIND);  break;
 			case  1: o_ptr->art_flags2 |= (TR2_RES_CONF);   break;
 			case  2: o_ptr->art_flags2 |= (TR2_RES_SOUND);  break;
@@ -379,13 +381,13 @@ static void rd_item(object_type *o_ptr)
 			case  8: o_ptr->art_flags2 |= (TR2_RES_POIS);   break;
 			case  9: o_ptr->art_flags2 |= (TR2_RES_DARK);   break;
 			case 10: o_ptr->art_flags2 |= (TR2_RES_LITE);   break;
-		}
-		o_ptr->xtra1 = o_ptr->xtra2 = 0;
-	}		
-	else if (o_ptr->xtra1 == EGO_XTRA_ABILITY)
-	{
-		switch (o_ptr->xtra2 % 8)
+			}
+			o_ptr->xtra2 = 0;
+		}		
+		else if (o_ptr->xtra1 == EGO_XTRA_ABILITY)
 		{
+			switch (o_ptr->xtra2 % 8)
+			{
 			case 0: o_ptr->art_flags3 |= (TR3_FEATHER);     break;
 			case 1: o_ptr->art_flags3 |= (TR3_LITE);        break;
 			case 2: o_ptr->art_flags3 |= (TR3_SEE_INVIS);   break;
@@ -394,8 +396,10 @@ static void rd_item(object_type *o_ptr)
 			case 5: o_ptr->art_flags3 |= (TR3_REGEN);       break;
 			case 6: o_ptr->art_flags2 |= (TR2_FREE_ACT);    break;
 			case 7: o_ptr->art_flags2 |= (TR2_HOLD_LIFE);   break;
+			}
+			o_ptr->xtra2 = 0;
 		}
-		o_ptr->xtra1 = o_ptr->xtra2 = 0;
+		o_ptr->xtra1 = 0;
 	}
 
 	if (z_older_than(10, 2, 3))
