@@ -5764,7 +5764,7 @@ msg_print("ファイルが開けません。");
 				break;
 			}
 
-			sprintf(xtmp, "%s: %s", player_name, what);
+			sprintf(xtmp, "%s: %s", player_name, what ? what : caption);
 			my_fputs(ffp, xtmp, 80);
 			my_fputs(ffp, "\n", 80);
 
