@@ -3416,8 +3416,8 @@ static bool mon_scatter(int r_idx, int *yp, int *xp, int y, int x, int max_dist)
 			/* Ignore annoying locations */
 			if (!in_bounds(ny, nx)) continue;
 
-			/* Require "line of sight" */
-			if (!los(y, x, ny, nx)) continue;
+			/* Require "line of projection" */
+			if (!projectable(y, x, ny, nx)) continue;
 
 			if (r_idx > 0)
 			{
@@ -3431,7 +3431,7 @@ static bool mon_scatter(int r_idx, int *yp, int *xp, int y, int x, int max_dist)
 			{
 				/* Walls and Monsters block flow */
 				if (!cave_empty_bold2(ny, nx)) continue;
-				
+
 				/* ... nor on the Pattern */
 				if (pattern_tile(ny, nx)) continue;
 			}
@@ -3444,7 +3444,7 @@ static bool mon_scatter(int r_idx, int *yp, int *xp, int y, int x, int max_dist)
 			num[i]++;
 
 			/* random swap */
-			if(one_in_(num[i]))
+			if (one_in_(num[i]))
 			{
 				place_x[i] = nx;
 				place_y[i] = ny;

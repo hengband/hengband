@@ -4848,8 +4848,8 @@ void scatter(int *yp, int *xp, int y, int x, int d, int m)
 		/* Ignore "excessively distant" locations */
 		if ((d > 1) && (distance(y, x, ny, nx) > d)) continue;
 
-		/* Require "line of sight" */
-		if (los(y, x, ny, nx)) break;
+		/* Require "line of projection" */
+		if (projectable(y, x, ny, nx)) break;
 	}
 
 	/* Save the location */
