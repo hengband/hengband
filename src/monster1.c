@@ -3225,7 +3225,7 @@ bool monster_dungeon(int r_idx)
         {
                 dungeon_info_type *d_ptr = &d_info[dungeon_type];
                 if ((d_ptr->mflags8 & RF8_WILD_MOUNTAIN) &&
-                    (r_ptr->flags8 & RF8_WILD_ONLY)) return TRUE;
+                    (r_ptr->flags8 & RF8_WILD_MOUNTAIN)) return TRUE;
 		return FALSE;
         }
 }
