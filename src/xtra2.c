@@ -3081,6 +3081,8 @@ static void evaluate_monster_exp(char *buf, monster_type *m_ptr)
 }
 
 
+bool show_gold_on_floor = FALSE;
+
 /*
  * Examine a grid, return a keypress.
  *
@@ -3432,7 +3434,9 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 				screen_save();
 
 				/* Display */
+				show_gold_on_floor = TRUE;
 				(void)show_floor(0, y, x, &min_width);
+				show_gold_on_floor = FALSE;
 
 				/* Prompt */
 #ifdef JP

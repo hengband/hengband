@@ -4305,7 +4305,13 @@ bool item_tester_okay(object_type *o_ptr)
 	if (!o_ptr->k_idx) return (FALSE);
 
 	/* Hack -- ignore "gold" */
-	if (o_ptr->tval == TV_GOLD) return (FALSE);
+	if (o_ptr->tval == TV_GOLD)
+	{
+		/* See xtra2.c */
+		extern bool show_gold_on_floor;
+
+		if (!show_gold_on_floor) return (FALSE);
+	}
 
 	/* Check the tval */
 	if (item_tester_tval)
@@ -6322,6 +6328,8 @@ int show_floor(int target_item, int y, int x, int *min_width)
 	int wid, hgt;
 	char floor_label[52 + 1];
 
+	bool dont_need_to_show_weights = TRUE;
+
 	/* Get size */
 	Term_get_size(&wid, &hgt);
 
@@ -6355,12 +6363,16 @@ int show_floor(int target_item, int y, int x, int *min_width)
 		/* Be sure to account for the weight */
 		if (show_weights) l += 9;
 
+		if (o_ptr->tval != TV_GOLD) dont_need_to_show_weights = FALSE;
+
 		/* Maintain the maximum length */
 		if (l > len) len = l;
 
 		/* Advance to next "line" */
 		k++;
 	}
+
+	if (show_weights && dont_need_to_show_weights) len -= 9;
 
 	/* Save width */
 	*min_width = len;
@@ -6408,7 +6420,7 @@ int show_floor(int target_item, int y, int x, int *min_width)
 		c_put_str(out_color[j], out_desc[j], j + 1, col + 3);
 
 		/* Display the weight if needed */
-		if (show_weights)
+		if (show_weights && (o_ptr->tval != TV_GOLD))
 		{
 			int wgt = o_ptr->weight * o_ptr->number;
 #ifdef JP

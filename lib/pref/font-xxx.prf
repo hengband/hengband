@@ -456,3 +456,6 @@ E:50:0x0D
 
 # WHISTLE
 E:4:0x03
+
+# GOLD
+E:127:0x0B
