@@ -4498,12 +4498,6 @@ static void dump_aux_options(FILE *fff)
 #endif
 
 
-#ifdef JP
-	fprintf(fff, "\n ランダムクエスト数: %d", number_of_quests());
-#else
-	fprintf(fff, "\n Num. Random Quests: %d", number_of_quests());
-#endif
-
 	fprintf(fff,"\n");
 
 	if (p_ptr->noscore)
