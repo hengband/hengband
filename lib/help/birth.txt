@@ -197,7 +197,7 @@ The computer will randomly generate background information text of the
 character for you.  But you can modify or rewrite it after rolling up
 the character in Background edit-mode.  Use key-pad or cursor keys to
 move cursor, the Enter key to finish edit-mode, and the Escape key to
-finish edit-mode with discarding changes. Use Ctrl-F key to load the
+finish edit-mode with discarding changes. Use Ctrl-A key to load the
 background information text from "histpref-<<playername>>.prf" or
 "histpref.prf" on lib/user.
 
