@@ -456,7 +456,7 @@ Special Notes:
 ###############################################################
 ---------------------------------------------------------------
 
- Below is an example 'pickpref.prf' file.
+ There is an example 'pickpref.prf' file below.
  You can copy this file to lib\user\ or ~/.angband/Hengband/.
  (UNIX user must copy to ~/.angband/Hengband/. Others must copy 
  to  lib\user\ .)
@@ -484,8 +484,8 @@ unidentified lights:^star#!!
 unidentified lights:^Incandescent Light
 unidentified lights:^Phial#!!
 
-# auto inscribe resistances...
-~*identified* artifacts#%
+# auto inscribe resistances (see lib/help/objects.txt#Inscriptions)
+~*identified* artifacts#%all
 
 #
 # pick all items which can stack your inventory without inscription.

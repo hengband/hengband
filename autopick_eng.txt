@@ -263,8 +263,8 @@ unidentified lights:^star#!!
 unidentified lights:^Incandescent Light
 unidentified lights:^Phial#!!
 
-# auto inscribe resistances...
-~*identified* artifacts#%
+# auto inscribe resistances (see lib/help/objects.txt#Inscriptions)
+~*identified* artifacts#%all
 
 #
 # pick all items which can stack your inventory without inscription.
