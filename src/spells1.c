@@ -38,7 +38,7 @@ int project_length = 0;
 /*
  * Get another mirror. for SEEKER 
  */
-static void next_mirror( int* next_y , int* next_x )
+static void next_mirror( int* next_y , int* next_x , int cury, int curx)
 {
 	int mirror_x[10],mirror_y[10]; /* 鏡はもっと少ない */
 	int mirror_num=0;              /* 鏡の数 */
@@ -63,8 +63,8 @@ static void next_mirror( int* next_y , int* next_x )
 		*next_x=mirror_x[num];
 		return;
 	}
-	*next_y=randint0(cur_hgt);
-	*next_x=randint0(cur_wid);
+	*next_y=cury+randint0(5)-2;
+	*next_x=curx+randint0(5)-2;
 	return;
 }
 		
@@ -8252,7 +8252,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 				monster_target_x=(s16b)x;
 
 				remove_mirror(y,x);
-				next_mirror( &oy,&ox );
+				next_mirror( &oy,&ox,y,x );
 
 				path_n = i+project_path(&(path_g[i+1]), (project_length ? project_length : MAX_RANGE), y, x, oy, ox, flg);
 				for( j = last_i; j <=i ; j++ )
