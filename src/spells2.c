@@ -5214,18 +5214,18 @@ bool probing(void)
 
 			/* Get the monster's alignment */
 #ifdef JP
-			if ((r_ptr->flags3 & RF3_EVIL) && (r_ptr->flags3 & RF3_GOOD)) align = "善悪";
+			if ((r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)) == (RF3_EVIL | RF3_GOOD)) align = "善悪";
 			else if (r_ptr->flags3 & RF3_EVIL) align = "邪悪";
 			else if (r_ptr->flags3 & RF3_GOOD) align = "善良";
-			else if ((m_ptr->sub_align & SUB_ALIGN_EVIL) && (m_ptr->sub_align & SUB_ALIGN_GOOD)) align = "中立(善悪)";
+			else if ((m_ptr->sub_align & (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD)) == (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD)) align = "中立(善悪)";
 			else if (m_ptr->sub_align & SUB_ALIGN_EVIL) align = "中立(邪悪)";
 			else if (m_ptr->sub_align & SUB_ALIGN_GOOD) align = "中立(善良)";
 			else align = "中立";
 #else
-			if ((r_ptr->flags3 & RF3_EVIL) && (r_ptr->flags3 & RF3_GOOD)) align = "good&evil";
+			if ((r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)) == (RF3_EVIL | RF3_GOOD)) align = "good&evil";
 			else if (r_ptr->flags3 & RF3_EVIL) align = "evil";
 			else if (r_ptr->flags3 & RF3_GOOD) align = "good";
-			else if ((m_ptr->sub_align & SUB_ALIGN_EVIL) && (m_ptr->sub_align & SUB_ALIGN_GOOD)) align = "neutral(good&evil)";
+			else if ((m_ptr->sub_align & (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD)) == (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD)) align = "neutral(good&evil)";
 			else if (m_ptr->sub_align & SUB_ALIGN_EVIL) align = "neutral(evil)";
 			else if (m_ptr->sub_align & SUB_ALIGN_GOOD) align = "neutral(good)";
 			else align = "neutral";
