@@ -5343,7 +5343,7 @@ get_rnd_line("death_j.txt", 0, death_message);
 #endif
 
 #ifdef JP
-			sprintf(tmp,"%sによってピンチに陥いった。",hit_from);
+			sprintf(tmp,"%sによってピンチに陥った。",hit_from);
 #else
 			sprintf(tmp,"A critical situation because of %s.",hit_from);
 #endif
