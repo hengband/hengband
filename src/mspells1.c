@@ -523,6 +523,9 @@ static void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool b
 	if (breath) rad = 0 - rad;
 
 	if (typ == GF_ROCKET) flg |= PROJECT_STOP;
+	if (typ == GF_MIND_BLAST || typ == GF_BRAIN_SMASH ||
+	    typ == GF_CAUSE_1 || typ == GF_CAUSE_2 || typ == GF_CAUSE_3 ||
+	    typ == GF_CAUSE_4 || typ == GF_HAND_DOOM) flg |= PROJECT_HIDE;
 
 	/* Target the player with a ball attack */
 	(void)project(m_idx, rad, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
