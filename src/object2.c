@@ -6743,7 +6743,7 @@ bool process_warning(int xx, int yy)
 #ifdef JP
 			return get_check("本当にこのまま進むか？");
 #else
-			return get_check("Realy want to go ahead? ");
+			return get_check("Really want to go ahead? ");
 #endif
 		}
 	}
