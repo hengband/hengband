@@ -2732,6 +2732,7 @@
 #define GF_SEEKER 110
 #define GF_SUPER_RAY 111
 #define GF_STAR_HEAL 112
+#define GF_WATER_FLOW   113
 
 #define MAX_GF				113
 
@@ -4484,6 +4485,7 @@ extern int PlayerUID;
 #define MON_CYBER_KING    843
 #define MON_WYRM_POWER    847
 #define MON_NODENS        849
+#define MON_JORMUNGAND    854
 #define MON_DESTROYER     855
 #define MON_GOTHMOG       856
 #define MON_G_CTHULHU     857

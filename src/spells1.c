@@ -1115,6 +1115,32 @@ msg_print("ドアが溶けて泥になった！");
 			break;
 		}
 
+                case GF_WATER_FLOW:
+		{
+                        /* Shallow Water */
+                        if(dam == 1)
+                        {
+                                /* Require a "naked" floor grid */
+                                if (!cave_naked_bold(y, x)) break;
+
+                                /* Place a shallow lava */
+                                cave_set_feat(y, x, FEAT_SHAL_WATER);
+                        }
+                        /* Deep Water */
+                        else
+                        {
+                                /* Require a "naked" floor grid */
+                                if (cave_perma_bold(y, x) || !dam) break;
+
+                                /* Place a deep lava */
+                                cave_set_feat(y, x, FEAT_DEEP_WATER);
+
+                                /* Dam is used as a counter for the number of grid to convert */
+                                dam--;
+                        }
+			break;
+		}
+
 		/* Lite up the grid */
 		case GF_LITE_WEAK:
 		case GF_LITE:

@@ -4012,6 +4012,17 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 			else if (m_ptr->r_idx == MON_SERPENT)
 			{
 				int num = 2 + randint(3);
+
+				if (r_info[MON_JORMUNGAND].cur_num < r_info[MON_JORMUNGAND].max_num && one_in_(6))
+				{
+#ifdef JP
+					msg_print("地面から水が吹き出した！");
+#else
+					msg_print("Water blew off from the ground!");
+#endif
+					fire_ball_hide(GF_WATER_FLOW, 0, 3, 8);
+				}
+
 				for (k = 0; k < num; k++)
 				{
 					count += summon_specific(m_idx, y, x, rlev, SUMMON_GUARDIANS, TRUE, FALSE, FALSE, TRUE, FALSE);
