@@ -2097,9 +2097,9 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 
 		/* Prevent bug of chaos patron's reward */
 		if (r_ptr->flags7 & RF7_KILL_EXP)
-			get_exp_from_mon((long)m_ptr->max_maxhp*2, &exp_mon);
+			get_exp_from_mon((long)exp_mon.max_maxhp*2, &exp_mon);
 		else
-			get_exp_from_mon(((long)m_ptr->max_maxhp+1L) * 9L / 10L, &exp_mon);
+			get_exp_from_mon(((long)exp_mon.max_maxhp+1L) * 9L / 10L, &exp_mon);
 
 		/* Not afraid */
 		(*fear) = FALSE;
