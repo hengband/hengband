@@ -749,7 +749,7 @@ info[i++] = "あなたは怪物の特殊攻撃をダメージ2倍でまねることができる。(100 MP)";
 			break;
 		case CLASS_BEASTMASTER:
 #ifdef JP
-info[i++] = "あなたは1匹の生命のあるモンスターを支配することができる。(レベル/4 MP)";
+info[i++] = "あなたは1体の生命のあるモンスターを支配することができる。(レベル/4 MP)";
 #else
 			info[i++] = "You can dominate a monster (cost level/4).";
 #endif

@@ -347,7 +347,7 @@ void mindcraft_info(char *p, int use_mind, int power)
 	  case 8:  sprintf(p, " %s10d6+%d", s_dam, plev * 3 / 2 + boost * 3 / 5); break;
 	  case 9:  break;
 #ifdef JP
-	  case 10: sprintf(p, " 最大%d匹", 1+boost/100); break;
+	  case 10: sprintf(p, " 最大%d体", 1+boost/100); break;
 #else
 	  case 10: sprintf(p, " max %d", 1+boost/100); break;
 #endif

@@ -7047,7 +7047,7 @@ static void do_cmd_knowledge_pets(void)
 
 	fprintf(fff, "----------------------------------------------\n");
 #ifdef JP
-	fprintf(fff, "    合計: %d 匹のペット\n", t_friends);
+	fprintf(fff, "    合計: %d 体のペット\n", t_friends);
 	fprintf(fff, " 維持コスト: %d%% MP\n", show_upkeep);
 #else
 	fprintf(fff, "   Total: %d pet%s.\n",
@@ -7141,21 +7141,12 @@ static void do_cmd_knowledge_kill_count(void)
 #else
 			fprintf(fff,"You have defeated no enemies yet.\n\n");
 #endif
-
-		else if (Total == 1)
-#ifdef JP
-			fprintf(fff,"あなたは一匹の敵を倒している。\n\n");
-#else
-			fprintf(fff,"You have defeated one enemy.\n\n");
-#endif
-
 		else
 #ifdef JP
-			fprintf(fff,"あなたは %lu 匹の敵を倒している。\n\n", Total);
+			fprintf(fff,"あなたは%ld体の敵を倒している。\n\n", Total);
 #else
-			fprintf(fff,"You have defeated %lu enemies.\n\n", Total);
+			fprintf(fff,"You have defeated %ld %s.\n\n", Total, (Total == 1) ? "enemy" : "enemies");
 #endif
-
 	}
 
 	Total = 0;
@@ -7200,11 +7191,11 @@ static void do_cmd_knowledge_kill_count(void)
 			if (This > 0)
 			{
 #ifdef JP
-				/* p,tは人と数える by ita*/
-				if(my_strchr("pt",r_ptr->d_char))
+				/* p,tは人と数える by ita */
+				if (my_strchr("pt", r_ptr->d_char))
 					fprintf(fff, "     %3d 人の %s\n", This, r_name + r_ptr->name);
 				else
-					fprintf(fff, "     %3d 匹の %s\n", This, r_name + r_ptr->name);
+					fprintf(fff, "     %3d 体の %s\n", This, r_name + r_ptr->name);
 #else
 				if (This < 2)
 				{
@@ -7234,7 +7225,7 @@ static void do_cmd_knowledge_kill_count(void)
 
 	fprintf(fff,"----------------------------------------------\n");
 #ifdef JP
-	fprintf(fff,"    合計: %lu 匹を倒した。\n", Total);
+	fprintf(fff,"    合計: %lu 体を倒した。\n", Total);
 #else
 	fprintf(fff,"   Total: %lu creature%s killed.\n",
 		Total, (Total == 1 ? "" : "s"));

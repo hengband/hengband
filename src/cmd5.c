@@ -1732,9 +1732,9 @@ void do_cmd_pet_dismiss(void)
 			handle_stuff();
 
 #ifdef JP
-			sprintf(buf, "%sを放しますか？ [Yes/No/Unnamed (%d匹)]", friend_name, max_pet-i);
+			sprintf(buf, "%sを放しますか？ [Yes/No/Unnamed (%d体)]", friend_name, max_pet - i);
 #else
-			sprintf(buf, "Dismiss %s? [Yes/No/Unnamed (%d remain)]", friend_name, max_pet-i);
+			sprintf(buf, "Dismiss %s? [Yes/No/Unnamed (%d remain)]", friend_name, max_pet - i);
 #endif
 			prt(buf, 0, 0);
 
@@ -1822,7 +1822,7 @@ void do_cmd_pet_dismiss(void)
 	C_KILL(who, max_m_idx, u16b);
 
 #ifdef JP
-	msg_format("%d 匹のペットを放しました。", Dismissed);
+	msg_format("%d 体のペットを放しました。", Dismissed);
 #else
 	msg_format("You have dismissed %d pet%s.", Dismissed,
 		   (Dismissed == 1 ? "" : "s"));
