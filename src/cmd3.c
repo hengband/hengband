@@ -566,7 +566,7 @@ msg_print("クエストを達成した！");
 		}
 		else
 		{
-			p_ptr->old_race2 = 1L << (p_ptr->prace-32);
+			p_ptr->old_race2 |= 1L << (p_ptr->prace-32);
 		}
 		p_ptr->prace = RACE_VAMPIRE;
 #ifdef JP
