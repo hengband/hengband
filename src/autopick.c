@@ -3695,10 +3695,18 @@ static void search_for_string(text_body_type *tb, cptr search_str, bool forward)
 #define MN_INSERT_MACRO "マクロ定義を挿入" 
 #define MN_INSERT_KEYMAP "キーマップ定義を挿入" 
 
+#ifdef MAC_MPW
+#define MN_COMMAND_LETTER "拾い/破壊/\x95\xfa置の選択" 
+#else
 #define MN_COMMAND_LETTER "拾い/破壊/放置の選択" 
+#endif
 #define MN_CL_AUTOPICK "「 」 (自動拾い)" 
 #define MN_CL_DESTROY "「!」 (自動破壊)" 
+#ifdef MAC_MPW
+#define MN_CL_LEAVE "「~」 (\x95\xfa置)" 
+#else
 #define MN_CL_LEAVE "「~」 (放置)" 
+#endif
 #define MN_CL_QUERY "「;」 (確認して拾う)" 
 #define MN_CL_NO_DISP "「(」 (マップコマンドで表示しない)" 
 
