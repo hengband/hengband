@@ -1454,7 +1454,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 				else
 				{
 					/***  Monster's attr  ***/
-					if ((r_ptr->flags1 & RF1_ATTR_CLEAR) && !use_graphics)
+					if ((r_ptr->flags1 & RF1_ATTR_CLEAR) && (*ap != TERM_DARK) && !use_graphics)
 					{
 						/* Clear-attr */
 						/* Do nothing */
