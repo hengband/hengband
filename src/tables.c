@@ -7707,7 +7707,7 @@ cptr shougou_moji[5]=
 #ifdef JP
 {"[初心者]", "[入門者]", "[熟練者]", "[エキスパート]", "[達人]"};
 #else
-{"[Unskilled]", "[Beginer]", "[Skilled]", "[Expert]", "[Master]"};
+{"[Unskilled]", "[Beginner]", "[Skilled]", "[Expert]", "[Master]"};
 #endif
 
 byte conv_terrain2feat[MAX_WILDERNESS] =
