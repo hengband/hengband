@@ -184,6 +184,12 @@
 /* #define USE_MALLOC */
 
 
+/* Default creator signature */
+#ifndef ANGBAND_CREATOR
+# define ANGBAND_CREATOR 'Heng'
+#endif
+
+
 #if defined(powerc) || defined(__powerc)
 
 /*
@@ -3556,6 +3562,189 @@ static pascal Boolean ynfilter(DialogPtr dialog, EventRecord *event, short *ip)
 }
 
 
+#if TARGET_API_MAC_CARBON
+
+
+#ifdef MACH_O_CARBON
+
+/* Carbon File Manager utilities by pelpel */
+
+/*
+ * (Carbon)
+ * Convert a pathname to a corresponding FSSpec.
+ * Returns noErr on success.
+ */
+static OSErr path_to_spec(const char *path, FSSpec *spec)
+{
+	OSErr err;
+	FSRef ref;
+
+	/* Convert pathname to FSRef ... */
+	err = FSPathMakeRef(path, &ref, NULL);
+	if (err != noErr) return (err);
+
+	/* ... then FSRef to FSSpec */
+	err = FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, spec, NULL);
+	
+	/* Inform caller of success or failure */
+	return (err);
+}
+
+
+/*
+ * (Carbon)
+ * Convert a FSSpec to a corresponding pathname.
+ * Returns noErr on success.
+ */
+static OSErr spec_to_path(const FSSpec *spec, char *buf, size_t size)
+{
+	OSErr err;
+	FSRef ref;
+
+	/* Convert FSSpec to FSRef ... */
+	err = FSpMakeFSRef(spec, &ref);
+	if (err != noErr) return (err);
+
+	/* ... then FSRef to pathname */
+	err = FSRefMakePath(&ref, buf, size);
+
+	/* Inform caller of success or failure */
+	return (err);
+}
+
+
+#endif /* MACH_O_CARBON */
+
+
+/*
+ * Prepare savefile dialogue and set the variable
+ * savefile accordingly. Returns true if it succeeds, false (or
+ * aborts) otherwise. If all is false, only allow files whose type
+ * is 'SAVE'.
+ * Originally written by Peter Ammon
+ */
+static bool select_savefile(bool all)
+{
+	OSErr err;
+	FSSpec theFolderSpec;
+	FSSpec savedGameSpec;
+	NavDialogOptions dialogOptions;
+	NavReplyRecord reply;
+	/* Used only when 'all' is true */
+	NavTypeList types = {ANGBAND_CREATOR, 1, 1, {'SAVE'}};
+	NavTypeListHandle myTypeList;
+	AEDesc defaultLocation;
+
+#ifdef MACH_O_CARBON
+
+	/* Find the save folder */
+	err = path_to_spec(ANGBAND_DIR_SAVE, &theFolderSpec);
+
+#else
+
+	/* Find :lib:save: folder */
+	err = FSMakeFSSpec(app_vol, app_dir, "\p:lib:save:", &theFolderSpec);
+
+#endif
+
+	/* Oops */
+	if (err != noErr) quit("Unable to find the folder :lib:save:");
+
+	/* Get default Navigator dialog options */
+	err = NavGetDefaultDialogOptions(&dialogOptions);
+
+	/* Clear preview option */
+	dialogOptions.dialogOptionFlags &= ~kNavAllowPreviews;
+
+	/* Disable multiple file selection */
+	dialogOptions.dialogOptionFlags &= ~kNavAllowMultipleFiles;
+
+	/* Make descriptor for default location */
+	err = AECreateDesc(typeFSS, &theFolderSpec, sizeof(FSSpec),
+		&defaultLocation);
+
+	/* Oops */
+	if (err != noErr) quit("Unable to allocate descriptor");
+
+	/* We are indifferent to signature and file types */
+	if (all)
+	{
+		myTypeList = (NavTypeListHandle)nil;
+	}
+
+	/* Set up type handle */
+	else
+	{
+		err = PtrToHand(&types, (Handle *)&myTypeList, sizeof(NavTypeList));
+
+		/* Oops */
+		if (err != noErr) quit("Error in PtrToHand. Try enlarging heap");
+
+	}
+
+	/* Call NavGetFile() with the types list */
+	err = NavChooseFile(&defaultLocation, &reply, &dialogOptions, NULL,
+		NULL, NULL, myTypeList, NULL);
+
+	/* Free type list */
+	if (!all) DisposeHandle((Handle)myTypeList);
+
+	/* Error */
+	if (err != noErr)
+	{
+		/* Nothing */
+	}
+
+	/* Invalid response -- allow the user to cancel */
+	else if (!reply.validRecord)
+	{
+		/* Hack -- Fake error */
+		err = -1;
+	}
+
+	/* Retrieve FSSpec from the reply */
+	else
+	{
+		AEKeyword theKeyword;
+		DescType actualType;
+		Size actualSize;
+
+		/* Get a pointer to selected file */
+		(void)AEGetNthPtr(&reply.selection, 1, typeFSS, &theKeyword,
+			&actualType, &savedGameSpec, sizeof(FSSpec), &actualSize);
+
+		/* Dispose NavReplyRecord, resources and descriptors */
+		(void)NavDisposeReply(&reply);
+	}
+
+	/* Dispose location info */
+	AEDisposeDesc(&defaultLocation);
+
+	/* Error */
+	if (err != noErr) return (FALSE);
+
+#ifdef MACH_O_CARBON
+
+	/* Convert FSSpec to pathname and store it in variable savefile */
+	(void)spec_to_path(&savedGameSpec, savefile, sizeof(savefile));
+
+#else
+
+	/* Convert FSSpec to pathname and store it in variable savefile */
+	refnum_to_name(
+		savefile,
+		savedGameSpec.parID,
+		savedGameSpec.vRefNum,
+		(char *)savedGameSpec.name);
+
+#endif
+
+	/* Success */
+	return (TRUE);
+}
+#endif
+
+
 /*
  * Handle menu: "File" + "New"
  */
@@ -3584,37 +3773,11 @@ static void do_menu_file_new(void)
 #if TARGET_API_MAC_CARBON
 static void do_menu_file_open(bool all)
 {
-	int err;
-	short vrefnum;
-	long drefnum;
-	long junk;
-	DirInfo pb;
-	SFTypeList types;
-	SFReply reply;
-	Point topleft;
-	BitMap screen;
-	FSSpec	fsp;
-	char path[1024];
-	
-	refnum_to_name(path, app_dir, app_vol, (char*)("\plib:save:"));
-	
-	FSpLocationFromFullPath( strlen(path), path, &fsp );
-	
-	/* Get any file */
-	ChooseFile( (StringPtr)savefile, fsp );
-	
-	/* Allow cancel */
-	if (err != noErr) return;
-
-	/* Extract textual file name for save file */
-/*	GetWDInfo(reply.vRefNum, &vrefnum, &drefnum, &junk);
-	refnum_to_name(savefile, drefnum, vrefnum, (char*)reply.fName);
-*/
-	/* Hack */
-	HiliteMenu(0);
+	/* Let the player to choose savefile */
+	if (!select_savefile(all)) return;
 
 	/* Game is in progress */
-	game_in_progress = 1;
+	game_in_progress = TRUE;
 
 	/* Flush input */
 	flush();
@@ -6232,7 +6395,7 @@ void main(void)
 
 
 	/* Mark ourself as the file creator */
-	_fcreator = 'Heng';
+	_fcreator = ANGBAND_CREATOR;
 
 	/* Default to saving a "text" file */
 	_ftype = 'TEXT';
