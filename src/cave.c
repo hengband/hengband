@@ -4572,8 +4572,22 @@ void wiz_dark(void)
 void cave_set_feat(int y, int x, int feat)
 {
 	cave_type *c_ptr = &cave[y][x];
-	feature_type *f_ptr = &f_info[feat];
-	bool old_los = cave_have_flag_bold(y, x, FF_LOS);
+	feature_type *f_ptr;
+	bool old_los, old_mirror;
+
+	if (!character_dungeon)
+	{
+		/* Clear mimic type */
+		c_ptr->mimic = 0;
+
+		/* Change the feature */
+		c_ptr->feat = feat;
+
+		return;
+	}
+
+	old_los = cave_have_flag_bold(y, x, FF_LOS);
+	old_mirror = is_mirror_grid(c_ptr);
 
 	/* Clear mimic type */
 	c_ptr->mimic = 0;
@@ -4581,44 +4595,43 @@ void cave_set_feat(int y, int x, int feat)
 	/* Change the feature */
 	c_ptr->feat = feat;
 
-	if (character_dungeon)
+	/* Remove flag for mirror/glyph */
+	c_ptr->info &= ~(CAVE_OBJECT);
+
+	if (old_mirror && (d_info[dungeon_type].flags1 & DF1_DARKNESS))
 	{
-		if (is_mirror_grid(c_ptr) && (d_info[dungeon_type].flags1 & DF1_DARKNESS))
-		{
-			c_ptr->info &= ~(CAVE_GLOW);
-			if (!view_torch_grids) c_ptr->info &= ~(CAVE_MARK);
+		c_ptr->info &= ~(CAVE_GLOW);
+		if (!view_torch_grids) c_ptr->info &= ~(CAVE_MARK);
 
-			update_local_illumination(y, x);
-		}
+		update_local_illumination(y, x);
+	}
 
-		/* Remove flag for mirror/glyph */
-		c_ptr->info &= ~(CAVE_OBJECT);
+	f_ptr = &f_info[feat];
 
-		/* Check for change to boring grid */
-		if (!have_flag(f_ptr->flags, FF_REMEMBER)) c_ptr->info &= ~(CAVE_MARK);
+	/* Check for change to boring grid */
+	if (!have_flag(f_ptr->flags, FF_REMEMBER)) c_ptr->info &= ~(CAVE_MARK);
 
-		/* Update the monster */
-		if (c_ptr->m_idx) update_mon(c_ptr->m_idx, FALSE);
+	/* Update the monster */
+	if (c_ptr->m_idx) update_mon(c_ptr->m_idx, FALSE);
 
-		/* Notice */
-		note_spot(y, x);
+	/* Notice */
+	note_spot(y, x);
 
-		/* Redraw */
-		lite_spot(y, x);
+	/* Redraw */
+	lite_spot(y, x);
 
-		/* Check if los has changed */
-		if (old_los ^ have_flag(f_ptr->flags, FF_LOS))
-		{
+	/* Check if los has changed */
+	if (old_los ^ have_flag(f_ptr->flags, FF_LOS))
+	{
 
 #ifdef COMPLEX_WALL_ILLUMINATION /* COMPLEX_WALL_ILLUMINATION */
 
-			update_local_illumination(y, x);
+		update_local_illumination(y, x);
 
 #endif /* COMPLEX_WALL_ILLUMINATION */
 
-			/* Update the visuals */
-			p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE | PU_MONSTERS);
-		}
+		/* Update the visuals */
+		p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE | PU_MONSTERS);
 	}
 
 	/* Hack -- glow the deep lava */
@@ -4634,27 +4647,25 @@ void cave_set_feat(int y, int x, int feat)
 			if (!in_bounds2(yy, xx)) continue;
 			cc_ptr = &cave[yy][xx];
 			cc_ptr->info |= CAVE_GLOW;
-			if (character_dungeon)
+
+			if (player_has_los_grid(cc_ptr))
 			{
-				if (player_has_los_grid(cc_ptr))
-				{
-					/* Update the monster */
-					if (cc_ptr->m_idx) update_mon(cc_ptr->m_idx, FALSE);
+				/* Update the monster */
+				if (cc_ptr->m_idx) update_mon(cc_ptr->m_idx, FALSE);
 
-					/* Notice */
-					note_spot(yy, xx);
+				/* Notice */
+				note_spot(yy, xx);
 
-					/* Redraw */
-					lite_spot(yy, xx);
-				}
-
-				update_local_illumination(yy, xx);
+				/* Redraw */
+				lite_spot(yy, xx);
 			}
+
+			update_local_illumination(yy, xx);
 		}
 
 		if (p_ptr->special_defense & NINJA_S_STEALTH)
 		{
-			if (character_dungeon && (cave[py][px].info & CAVE_GLOW)) set_superstealth(FALSE);
+			if (cave[py][px].info & CAVE_GLOW) set_superstealth(FALSE);
 		}
 	}
 }
