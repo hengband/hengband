@@ -5747,7 +5747,7 @@ s16b inven_carry(object_type *o_ptr)
 	j_ptr->iy = j_ptr->ix = 0;
 
 	/* No longer marked */
-	j_ptr->marked = FALSE;
+	j_ptr->marked = 0;
 
 	/* Increase the weight */
 	p_ptr->total_weight += (j_ptr->number * j_ptr->weight);

@@ -3933,7 +3933,7 @@ note_dies = "は爆発して粉々になった。";
 		object_copy(o_ptr, q_ptr);
 
 		/* Forget mark */
-		o_ptr->marked = FALSE;
+		o_ptr->marked = 0;
 
 		/* Forget location */
 		o_ptr->iy = o_ptr->ix = 0;

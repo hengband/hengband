@@ -3654,7 +3654,7 @@ msg_format("%^sが%sを拾った。", m_name, o_name);
 						excise_object_idx(this_o_idx);
 
 						/* Forget mark */
-						o_ptr->marked = FALSE;
+						o_ptr->marked = 0;
 
 						/* Forget location */
 						o_ptr->iy = o_ptr->ix = 0;

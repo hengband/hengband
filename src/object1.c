@@ -7618,6 +7618,13 @@ void py_pickup_floor(int pickup)
 			/* Check the next object */
 			continue;
 		}
+		else if (o_ptr->marked & OM_NOMSG)
+		{
+			/* If 0 or 1 non-NOMSG items are in the pile, the NOMSG ones are
+			 * ignored. Otherwise, they are included in the prompt. */
+			o_ptr->marked &= ~(OM_NOMSG);
+			continue;
+		}
 
 		/* Count non-gold objects that can be picked up. */
 		if (inven_carry_okay(o_ptr))

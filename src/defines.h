@@ -2895,6 +2895,17 @@
 #define IDENT_BROKEN    0x80    /* Item is permanently worthless */
 
 
+/* 
+ * How object is marked (flags in object_type.mark)
+ * OM_FOUND --- original boolean flag
+ * OM_NOMSG --- temporary flag to suppress messages which were
+ *              already printed in auto_pickup_items().
+ */
+#define OM_FOUND        0x01
+#define OM_NOMSG        0x02
+#define OM_NO_QUERY     0x04
+
+
 
 /*
  * Special Monster Flags (all temporary)
@@ -4733,11 +4744,13 @@ extern int PlayerUID;
 #define MON_TANUKI        1067
 
 #define MAX_AUTOPICK 1009
-#define DO_AUTOPICK    0x01
-#define DO_AUTODESTROY 0x02
-#define DO_DISPLAY     0x04
-#define DONT_AUTOPICK  0x08
-#define ITEM_DISPLAY   0x10
+#define DO_AUTOPICK       0x01
+#define DO_AUTODESTROY    0x02
+#define DO_DISPLAY        0x04
+#define DONT_AUTOPICK     0x08
+#define ITEM_DISPLAY      0x10
+#define DO_QUERY_AUTOPICK 0x20
+
 
 #define MAGIC_GLOVE_REDUCE_MANA 0x0001
 #define MAGIC_FAIL_5PERCENT     0x0002
@@ -4931,3 +4944,4 @@ extern int PlayerUID;
 #define MAX_MACRO_TRIG 200
 
 #define SCREEN_BUF_SIZE 65536           /* max screen dump buffer size */
+

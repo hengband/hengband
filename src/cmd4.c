@@ -7505,12 +7505,20 @@ static void do_cmd_knowledge_autopick(void)
 			tmp = "Destroy";
 #endif
 		}
-		else
+		else if (act & DO_AUTOPICK)
 		{
 #ifdef JP
 			tmp = "½¦¤¦";
 #else
 			tmp = "Pickup";
+#endif
+		}
+		else if (act & DO_QUERY_AUTOPICK)
+		{
+#ifdef JP
+			tmp = "³ÎÇ§";
+#else
+			tmp = "Query";
 #endif
 		}
 

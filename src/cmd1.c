@@ -986,8 +986,14 @@ void carry(int pickup)
 		/* Pick up objects */
 		else
 		{
+			/* Hack - some objects were handled in auto_pickup_items(). */
+			if (o_ptr->marked & OM_NOMSG)
+			{
+				/* Clear the flag. */
+				o_ptr->marked &= ~OM_NOMSG;
+			}
 			/* Describe the object */
-			if (!pickup)
+			else if (!pickup)
 
 			{
 #ifdef JP
@@ -2875,7 +2881,7 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 
 					object_desc(o_name, q_ptr, TRUE, 0);
 					q_ptr->held_m_idx = 0;
-					q_ptr->marked = FALSE;
+					q_ptr->marked = 0;
 					m_ptr->hold_o_idx = q_ptr->next_o_idx;
 					q_ptr->next_o_idx = 0;
 #ifdef JP

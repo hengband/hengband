@@ -3793,7 +3793,7 @@ bool detect_objects_gold(int range)
 		if (o_ptr->tval == TV_GOLD)
 		{
 			/* Hack -- memorize it */
-			o_ptr->marked = TRUE;
+			o_ptr->marked |= OM_FOUND;
 
 			/* Redraw */
 			lite_spot(y, x);
@@ -3860,7 +3860,7 @@ bool detect_objects_normal(int range)
 		if (o_ptr->tval != TV_GOLD)
 		{
 			/* Hack -- memorize it */
-			o_ptr->marked = TRUE;
+			o_ptr->marked |= OM_FOUND;
 
 			/* Redraw */
 			lite_spot(y, x);
@@ -3958,7 +3958,7 @@ bool detect_objects_magic(int range)
 		    ((o_ptr->to_a > 0) || (o_ptr->to_h + o_ptr->to_d > 0)))
 		{
 			/* Memorize the item */
-			o_ptr->marked = TRUE;
+			o_ptr->marked |= OM_FOUND;
 
 			/* Redraw */
 			lite_spot(y, x);

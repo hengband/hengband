@@ -191,6 +191,7 @@ cptr autopick_line_from_entry(autopick_type *entry)
 
 	*buf = '\0';
 	if (!(entry->action & DO_DISPLAY)) strcat(buf, "(");
+	if (entry->action & DO_QUERY_AUTOPICK) strcat(buf, "*");
 	if (entry->action & DO_AUTODESTROY) strcat(buf, "!");
 	if (entry->action & DONT_AUTOPICK) strcat(buf, "~");
 
@@ -346,6 +347,12 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
 		{
 			act &= ~DO_AUTOPICK;
 			act |= DONT_AUTOPICK;
+			str++;
+		}
+		else if ((act & DO_AUTOPICK) && *str == '*')
+		{
+			act &= ~DO_AUTOPICK;
+			act |= DO_QUERY_AUTOPICK;
 			str++;
 		}
 		else if ((act & DO_DISPLAY) && *str == '(')
@@ -1088,7 +1095,8 @@ void auto_pickup_items(cave_type *c_ptr)
 		/* Item index for floor -1,-2,-3,...  */
 		auto_inscribe_item((-this_o_idx), idx);
 
-		if (idx >= 0 && (autopick_list[idx].action & DO_AUTOPICK))
+		if (idx >= 0 &&
+			(autopick_list[idx].action & (DO_AUTOPICK | DO_QUERY_AUTOPICK)))
 		{
 			disturb(0,0);
 
@@ -1105,7 +1113,38 @@ void auto_pickup_items(cave_type *c_ptr)
 #else
 				msg_format("You have no room for %s.", o_name);
 #endif
+				/* Hack - remember that the item has given a message here. */
+				o_ptr->marked |= OM_NOMSG;
+
 				continue;
+			}
+			else if (autopick_list[idx].action & DO_QUERY_AUTOPICK)
+			{
+				char out_val[MAX_NLEN+20];
+				char o_name[MAX_NLEN];
+
+                                if (o_ptr->marked & OM_NO_QUERY)
+                                {
+                                        /* Already answered as 'No' */
+                                        continue;
+                                }
+
+				/* Describe the object */
+				object_desc(o_name, o_ptr, TRUE, 3);
+
+#ifdef JP
+                                sprintf(out_val, "%sを拾いますか? ", o_name);
+#else
+                                sprintf(out_val, "Pick up %s? ", o_name);
+#endif
+
+				if (!get_check(out_val))
+				{
+					/* Hack - remember that the item has given a message here. */
+					o_ptr->marked |= (OM_NOMSG | OM_NO_QUERY);
+					continue;
+				}
+
 			}
 			py_pickup_aux(this_o_idx);
 
@@ -1375,6 +1414,8 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		strcat(buff, "放置する。");
 	else if (act & DO_AUTODESTROY)
 		strcat(buff, "破壊する。");
+	else if (act & DO_QUERY_AUTOPICK)
+		strcat(buff, "確認の後に拾う。");
 	else
 		strcat(buff, "拾う。");
 
@@ -1605,6 +1646,8 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		strcpy(buff, "Leave on floor ");
 	else if (act & DO_AUTODESTROY)
 		strcpy(buff, "Destroy ");
+	else if (act & DO_QUERY_AUTOPICK)
+		strcpy(buff, "Ask to pick up ");
 	else
 		strcpy(buff, "Pickup ");
 
@@ -2953,6 +2996,7 @@ void do_cmd_edit_autopick(void)
                                 }
 
 				entry->action &= ~DO_AUTODESTROY;
+				entry->action &= ~DO_QUERY_AUTOPICK;
 				if (!repeated_clearing)
 				{
 					entry->action &= ~DO_AUTOPICK;
@@ -2994,6 +3038,7 @@ void do_cmd_edit_autopick(void)
                                 }
 
 				entry->action &= ~DONT_AUTOPICK;
+				entry->action &= ~DO_QUERY_AUTOPICK;
 				if (!repeated_clearing)
 				{
 					entry->action &= ~DO_AUTOPICK;
@@ -3002,6 +3047,48 @@ void do_cmd_edit_autopick(void)
 				else 
 				{
 					entry->action &= ~DO_AUTODESTROY;
+					entry->action |= DO_AUTOPICK;
+				}
+
+				lines_list[cy] = autopick_line_from_entry_kill(entry);
+
+				/* Now dirty */
+				dirty_line = cy;
+
+                                /* Next line */
+                                if (lines_list[cy + 1]) cy++;
+                                cx = 0;
+				break;
+			case '*':
+				if (!autopick_new_entry(entry, lines_list[cy]))
+                                {
+                                        if (old_key != key) repeated_clearing = FALSE;
+
+                                        /* Next line */
+                                        if (lines_list[cy + 1]) cy++;
+                                        cx = 0;
+					break;
+                                }
+				string_free(lines_list[cy]);
+
+                                if (old_key != key)
+                                {
+                                        if (entry->action & DO_QUERY_AUTOPICK)
+                                                repeated_clearing = TRUE;
+                                        else
+                                                repeated_clearing = FALSE;
+                                }
+
+				entry->action &= ~DO_AUTODESTROY;
+				entry->action &= ~DONT_AUTOPICK;
+				if (!repeated_clearing)
+				{
+					entry->action &= ~DO_AUTOPICK;
+					entry->action |= DO_QUERY_AUTOPICK;
+				}
+				else 
+				{
+					entry->action &= ~DO_QUERY_AUTOPICK;
 					entry->action |= DO_AUTOPICK;
 				}
 

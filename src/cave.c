@@ -1927,7 +1927,7 @@ void note_spot(int y, int x)
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Memorize objects */
-		o_ptr->marked = TRUE;
+		o_ptr->marked |= OM_FOUND;
 	}
 
 
@@ -2758,13 +2758,13 @@ prt("お待ち下さい...", 0, 0);
 			i = inkey();
 
 			if ('M' == i)
-				flag = DO_AUTOPICK;
+				flag = (DO_AUTOPICK | DO_QUERY_AUTOPICK);
 			else if ('N' == i)
 				flag = DONT_AUTOPICK;
 			else if ('K' == i)
 				flag = DO_AUTODESTROY;
 			else if ('D' == i)
-				flag = (DO_AUTOPICK | DONT_AUTOPICK);
+				flag = (DO_AUTOPICK | DO_QUERY_AUTOPICK | DONT_AUTOPICK);
 			else
 				break;
 
@@ -4696,7 +4696,7 @@ void wiz_lite(bool wizard, bool ninja)
 #endif
 
 		/* Memorize */
-		o_ptr->marked = TRUE;
+		o_ptr->marked |= OM_FOUND;
 	}
 
 	/* Scan all normal grids */
@@ -4794,7 +4794,7 @@ void wiz_dark(void)
 		if (o_ptr->held_m_idx) continue;
 
 		/* Forget the object */
-		o_ptr->marked = FALSE;
+		o_ptr->marked = 0;
 	}
 
 	/* Mega-Hack -- Forget the view and lite */
