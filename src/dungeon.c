@@ -2130,7 +2130,7 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 						c_ptr = &cave[y][x];
 
 						/* Feature code (applying "mimic" field) */
-						feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+						feat = c_ptr->mimic ? f_info[c_ptr->mimic].mimic : f_info[c_ptr->feat].mimic;
 
 						if (!is_mirror_grid(c_ptr) && (feat != FEAT_QUEST_ENTER) && (feat != FEAT_ENTRANCE))
 						{
