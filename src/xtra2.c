@@ -1337,6 +1337,11 @@ msg_print("地面に落とされた。");
 	}
 	if ((r_ptr->flags7 & RF7_GUARDIAN) && !p_ptr->inside_battle && (d_info[dungeon_type].final_guardian == m_ptr->r_idx))
 	{
+		s16b k_idx = 198; /* Acquirement */;
+
+		if (d_info[dungeon_type].final_object)
+			k_idx = d_info[dungeon_type].final_object;
+
 		if (d_info[dungeon_type].final_artifact)
 		{
 			byte a_idx = d_info[dungeon_type].final_artifact;
@@ -1346,16 +1351,12 @@ msg_print("地面に落とされた。");
 				create_named_art(a_idx, y, x);
 
 				a_info[a_idx].cur_num = 1;
+				k_idx = 0;
 			}
 		}
-		else
+
+		if (k_idx)
 		{
-			s16b k_idx;
-
-			if (d_info[dungeon_type].final_object)
-				k_idx = d_info[dungeon_type].final_object;
-			else k_idx = 198;/* Acquirement */
-
 			/* Get local object */
 			q_ptr = &forge;
 

@@ -3555,7 +3555,7 @@ void player_outfit(void)
 	/* Get local object */
 	q_ptr = &forge;
 
-	if (p_ptr->prace == RACE_VAMPIRE)
+	if ((p_ptr->prace == RACE_VAMPIRE) && (p_ptr->pclass != CLASS_NINJA))
 	{
 		/* Hack -- Give the player scrolls of DARKNESS! */
 		object_prep(q_ptr, lookup_kind(TV_SCROLL, SV_SCROLL_DARKNESS));

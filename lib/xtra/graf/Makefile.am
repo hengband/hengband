@@ -1,4 +1,4 @@
 ## Makefile.am -- Process this file with automake to process Makefile.in
 
 EXTRA_DIST = \
-	delete.me
+	8x8.bmp

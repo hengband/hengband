@@ -1803,7 +1803,10 @@ static void display_player_middle(void)
 	if (object_known_p(o_ptr)) show_tohit += o_ptr->to_h;
 	if (object_known_p(o_ptr)) show_todam += o_ptr->to_d;
 
-	show_tohit += (weapon_exp[0][o_ptr->sval]-4000)/200;
+	if ((o_ptr->sval == SV_LIGHT_XBOW) || (o_ptr->sval == SV_HEAVY_XBOW))
+		show_tohit += (weapon_exp[0][o_ptr->sval])/400;
+	else
+		show_tohit += (weapon_exp[0][o_ptr->sval]-4000)/200;
 
 	/* Range attacks */
 	display_player_one_line(ENTRY_SHOOT_HIT_DAM, format("(%+d,%+d)", show_tohit, show_todam), TERM_L_BLUE);

@@ -741,6 +741,7 @@ void py_pickup_aux(int o_idx)
 		    (quest[i].status == QUEST_STATUS_TAKEN) &&
 			   (quest[i].k_idx == o_ptr->name1))
 		{
+			if (record_fix_quest) do_cmd_write_nikki(NIKKI_FIX_QUEST_C, i, NULL);
 			quest[i].status = QUEST_STATUS_COMPLETED;
 			quest[i].complev = (byte)p_ptr->lev;
 #ifdef JP

@@ -1674,8 +1674,7 @@ info[i++] = "あなたはいつも関節に痛みを感じている。(器用-3)";
 #endif
 
 		}
-		if (((p_ptr->muta3 & MUT3_VULN_ELEM) || (p_ptr->special_defense & KATA_KOUKIJIN))
-		    && !(p_ptr->immune_acid && p_ptr->immune_elec && p_ptr->immune_fire && p_ptr->immune_cold))
+		if (p_ptr->muta3 & MUT3_VULN_ELEM)
 		{
 #ifdef JP
 info[i++] = "あなたは元素の攻撃に弱い。";

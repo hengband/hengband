@@ -3613,7 +3613,10 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 
 	/* Actually "fire" the object */
 	bonus = (p_ptr->to_h_b + o_ptr->to_h + j_ptr->to_h);
-	chance = (p_ptr->skill_thb + ((weapon_exp[0][j_ptr->sval]-4000)/200 + bonus) * BTH_PLUS_ADJ);
+	if ((j_ptr->sval == SV_LIGHT_XBOW) || (j_ptr->sval == SV_HEAVY_XBOW))
+		chance = (p_ptr->skill_thb + ((weapon_exp[0][j_ptr->sval])/400 + bonus) * BTH_PLUS_ADJ);
+	else
+		chance = (p_ptr->skill_thb + ((weapon_exp[0][j_ptr->sval]-4000)/200 + bonus) * BTH_PLUS_ADJ);
 
 	energy_use = bow_energy(j_ptr->sval);
 	tmul = bow_tmul(j_ptr->sval);
@@ -3630,7 +3633,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	/* Base range */
 	tdis = 10 + tmul/40;
 	if ((j_ptr->sval == SV_LIGHT_XBOW) || (j_ptr->sval == SV_HEAVY_XBOW))
-		tdis += 5;
+		tdis -= 5;
 
 	project_length = tdis + 1;
 
