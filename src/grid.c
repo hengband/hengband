@@ -146,6 +146,13 @@ void place_random_door(int y, int x)
 
                 /* Hide */
                 c_ptr->mimic = fill_type[randint0(100)];
+
+                /* Floor type terrain cannot hide a door */
+                if (!(c_ptr->mimic & 0x20))
+                {
+                        c_ptr->feat = c_ptr->mimic;
+                        c_ptr->mimic = 0;
+                }
 	}
 
 	/* Closed, locked, or stuck doors (400/1000) */
