@@ -4178,17 +4178,18 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 			bool mc = FALSE;
 			bool ms = FALSE;
 			bool ma = FALSE;
-			bool keypad = FALSE;
 
 			/* Extract the modifiers */
 			if (GetKeyState(VK_CONTROL) & 0x8000) mc = TRUE;
 			if (GetKeyState(VK_SHIFT)   & 0x8000) ms = TRUE;
 			if (GetKeyState(VK_MENU)    & 0x8000) ma = TRUE;
-			if (lParam & 0x1000000L) keypad = TRUE;
 
 			/* Handle "special" keys */
 			if (special_key[(byte)(wParam)] || (ma && !ignore_key[(byte)(wParam)]) )
 			{
+				bool ext_key = (lParam & 0x1000000L) ? TRUE : FALSE;
+				bool numpad = FALSE;
+
 				/* Begin the macro trigger */
 				Term_keypress(31);
 
@@ -4203,8 +4204,20 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 				/* Introduce the scan code */
 				Term_keypress('x');
 
+				/* Extended key bit */
+				switch (i)
+				{
+				case VK_ENTER:
+				case '/':
+					/* Numpad Enter and '/' are extended key */
+					numpad = ext_key;
+				default:
+					/* Other extended keys are on full keyboard */
+					numpad = !ext_key;
+				}
+
 				/* Special modifiers for keypad keys */
-				if (keypad) Term_keypress('K');
+				if (numpad) Term_keypress('K');
 
 				/* Encode the hexidecimal scan code */
 				Term_keypress(hexsym[i/16]);
