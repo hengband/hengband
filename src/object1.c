@@ -430,7 +430,7 @@ return "ファイア・ボルト(9d8) : 8+d8 ターン毎";
 			case ACT_BA_COLD_1:
 			{
 #ifdef JP
-return "コールド・ボール (48) : 400 ターン毎";
+return "アイス・ボール (48) : 400 ターン毎";
 #else
 				return "ball of cold (48) every 400 turns";
 #endif
@@ -448,7 +448,7 @@ return "ファイア・ボール (72) : 400 ターン毎";
 			case ACT_DRAIN_1:
 			{
 #ifdef JP
-return "ヒットポイント吸収 (100) : 100+d100 ターン毎";
+return "生命力吸収 (100) : 100+d100 ターン毎";
 #else
 				return "drain life (100) every 100+d100 turns";
 #endif
@@ -457,7 +457,7 @@ return "ヒットポイント吸収 (100) : 100+d100 ターン毎";
 			case ACT_BA_COLD_2:
 			{
 #ifdef JP
-return "コールド・ボール (100) : 300 ターン毎";
+return "アイス・ボール (100) : 300 ターン毎";
 #else
 				return "ball of cold (100) every 300 turns";
 #endif
@@ -475,7 +475,7 @@ return "サンダー・ボール (100) : 500 ターン毎";
 			case ACT_DRAIN_2:
 			{
 #ifdef JP
-return "ヒットポイント吸収(120) : 400 ターン毎";
+return "生命力吸収(120) : 400 ターン毎";
 #else
 				return "drain life (120) every 400 turns";
 #endif
@@ -511,7 +511,7 @@ return "ファイア・ボール (120) : 225+d225 ターン毎";
 			case ACT_BA_COLD_3:
 			{
 #ifdef JP
-return "コールド・ボール (200) : 325+d325 ターン毎";
+return "アイス・ボール (200) : 325+d325 ターン毎";
 #else
 				return "ball of cold (200) every 325+d325 turns";
 #endif
@@ -547,7 +547,7 @@ return "吸血ドレイン (3*100) : 400 ターン毎";
 			case ACT_CALL_CHAOS:
 			{
 #ifdef JP
-return "call chaos : 350 ターン毎"; /*nuke me*/
+return "混沌召来 : 350 ターン毎"; /*nuke me*/
 #else
 				return "call chaos every 350 turns";
 #endif
@@ -673,7 +673,7 @@ return "動物魅了 : 300 ターン毎";
 			case ACT_CHARM_UNDEAD:
 			{
 #ifdef JP
-return "不死従属 : 333 ターン毎";
+return "アンデッド従属 : 333 ターン毎";
 #else
 				return "enslave undead every 333 turns";
 #endif
@@ -718,7 +718,7 @@ return "動物召喚 : 200+d300 ターン毎";
 			case ACT_SUMMON_PHANTOM:
 			{
 #ifdef JP
-return "使い霊召喚 : 200+d200 ターン毎";
+return "幻霊召喚 : 200+d200 ターン毎";
 #else
 				return "summon phantasmal servant every 200+d200 turns";
 #endif
@@ -745,7 +745,7 @@ return "悪魔召喚 : 666+d333 ターン毎";
 			case ACT_SUMMON_UNDEAD:
 			{
 #ifdef JP
-return "不死召喚 : 666+d333 ターン毎";
+return "アンデッド召喚 : 666+d333 ターン毎";
 #else
 				return "summon undead every 666+d333 turns";
 #endif
@@ -754,7 +754,7 @@ return "不死召喚 : 666+d333 ターン毎";
 			case ACT_CURE_LW:
 			{
 #ifdef JP
-return "勇気回復 & 30 hp 回復 : 10 ターン毎";
+return "恐怖除去 & 30 hp 回復 : 10 ターン毎";
 #else
 				return "remove fear & heal 30 hp every 10 turns";
 #endif
@@ -772,7 +772,7 @@ return "4d8 hp & 傷回復 : 3+d3 ターン毎";
 			case ACT_CURE_POISON:
 			{
 #ifdef JP
-return "勇気回復/毒消し : 5 ターン毎";
+return "恐怖除去/毒消し : 5 ターン毎";
 #else
 				return "remove fear and cure poison every 5 turns";
 #endif
@@ -790,7 +790,7 @@ return "経験値復活 : 450 ターン毎";
 			case ACT_REST_ALL:
 			{
 #ifdef JP
-return "全ステータスと経験値回復 : 750 ターン毎";
+return "全ステータスと経験値復活 : 750 ターン毎";
 #else
 				return "restore stats and life levels every 750 turns";
 #endif
@@ -817,9 +817,9 @@ return "1000 hp 回復 : 888 ターン毎";
 			case ACT_ESP:
 			{
 #ifdef JP
-return "一時的な ESP (期間 25+d30) : 200 ターン毎";
+return "テレパシー (期間 25+d30) : 200 ターン毎";
 #else
-				return "temporary ESP (dur 25+d30) every 200 turns";
+				return "telepathy (dur 25+d30) every 200 turns";
 #endif
 
 			}
@@ -844,7 +844,7 @@ return "対邪悪結界 (期間 level*3 + d25) : 225+d225 ターン毎";
 			case ACT_RESIST_ALL:
 			{
 #ifdef JP
-return "炎冷酸電毒への耐性 (期間 40+d40) : 200 ターン毎";
+return "全耐性 (期間 40+d40) : 200 ターン毎";
 #else
 				return "resist elements (dur 40+d40) every 200 turns";
 #endif
@@ -871,16 +871,16 @@ return "加速 (期間 75+d75) : 200+d200 ターン毎";
 			case ACT_WRAITH:
 			{
 #ifdef JP
-return "レイス化 (level/2 + d(level/2)) : 1000 ターン毎";
+return "幽体化 (期間 level/2 + d(level/2)) : 1000 ターン毎";
 #else
-				return "wraith form (level/2 + d(level/2)) every 1000 turns";
+				return "wraith form (dur level/2 + d(level/2)) every 1000 turns";
 #endif
 
 			}
 			case ACT_INVULN:
 			{
 #ifdef JP
-return "無敵 (期間 8+d8) : 1000 ターン毎";
+return "無敵化 (期間 8+d8) : 1000 ターン毎";
 #else
 				return "invulnerability (dur 8+d8) every 1000 turns";
 #endif
@@ -943,7 +943,7 @@ return "鑑定 : 10 ターン毎";
 			case ACT_RUNE_EXPLO:
 			{
 #ifdef JP
-return "爆発ルーン : 200 ターン毎";
+return "爆発のルーン : 200 ターン毎";
 #else
 				return "explosive rune every 200 turns";
 #endif
@@ -988,7 +988,7 @@ return "岩石溶解 : 5 ターン毎";
 			case ACT_RECHARGE:
 			{
 #ifdef JP
-return "再充填 : 70 ターン毎";
+return "魔力充填 : 70 ターン毎";
 #else
 				return "recharging every 70 turns";
 #endif
@@ -1229,9 +1229,9 @@ return "周辺抹殺 : 1000 ターン毎";
 		case ART_LOTHARANG:
 		{
 #ifdef JP
-return "傷の治癒(4d7) : 3+d3 ターン毎";
+return "傷の治癒(4d8) : 3+d3 ターン毎";
 #else
-			return "cure wounds (4d7) every 3+d3 turns";
+			return "cure wounds (4d8) every 3+d3 turns";
 #endif
 
 		}
@@ -1286,7 +1286,7 @@ return "サンダー・ボール (100) : 200 ターン毎";
 #ifdef JP
 return "アイス・ボール (100) : 200 ターン毎";
 #else
-			return "Frost ball (100) every 200 turns";
+			return "frost ball (100) every 200 turns";
 #endif
 
 		}
@@ -1368,7 +1368,7 @@ return "全耐性(20+d20ターン) : 111 ターン毎";
 #ifdef JP
 return "スリープ(II) : 55 ターン毎";
 #else
-			return "Sleep II every 55 turns";
+			return "sleep II every 55 turns";
 #endif
 
 		}
@@ -1679,15 +1679,15 @@ return "眩しい光 : 250 ターン毎";
 #ifdef JP
 return "魔力充填 : 200 ターン毎";
 #else
-			return "Recharge item every 200 turns";
+			return "recharge item every 200 turns";
 #endif
 		}
 		case ART_MURAMASA:
 		{
 #ifdef JP
-return "腕力の上昇 : 確率50%で壊れる。";
+return "腕力の上昇 : 確率50%で壊れる";
 #else
-			return "Increase STR (destroyed 50%)";
+			return "increase STR (destroyed 50%)";
 #endif
 		}
 		case ART_FLY_STONE:
@@ -1839,7 +1839,7 @@ return "暗黒の嵐(250) : 150+d150 ターン毎";
 #ifdef JP
 return "*解呪*と調査: いつでも";
 #else
-			return "Dispel Curse and Probing every turn";
+			return "dispel curse and probing every turn";
 #endif
 
 		}
@@ -1848,7 +1848,7 @@ return "*解呪*と調査: いつでも";
 #ifdef JP
 return "魔力復活: 777 ターン毎";
 #else
-			return "Restore Mana every 777 turns";
+			return "restore mana every 777 turns";
 #endif
 
 		}
@@ -2001,7 +2001,7 @@ return "ファイア・ボール (100) : 80+d80 ターン毎";
 #endif
 			case EGO_RING_COLD_BALL:
 #ifdef JP
-return "コールド・ボール (100) : 80+d80 ターン毎";
+return "アイス・ボール (100) : 80+d80 ターン毎";
 #else
 				return "cold ball (100) every 80+d80 turns";
 #endif
@@ -2092,7 +2092,7 @@ return "ファイア・ボール (100) と火への耐性 : 50+d50 ターン毎";
 
 			case SV_RING_ICE:
 #ifdef JP
-return "コールド・ボール (100) と冷気への耐性 : 50+d50 ターン毎";
+return "アイス・ボール (100) と冷気への耐性 : 50+d50 ターン毎";
 #else
 				return "ball of cold (100) and resist cold every 50+d50 turns";
 #endif
