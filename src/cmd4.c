@@ -22,9 +22,9 @@
  *     Remove the old automatic dump of type "mark".
  * auto_dump_printf(fmt, ...)
  *     Dump a formatted string using fprintf().
- * open_auto_dump(buf, mark, &line_num)
+ * open_auto_dump(buf, mark)
  *     Open a file, remove old dump, and add new header.
- * close_auto_dump(fff, mark, &line_num)
+ * close_auto_dump(void)
  *     Add a footer, and close the file.
  *
  *    The dump commands of original Angband simply add new lines to
