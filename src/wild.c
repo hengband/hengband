@@ -1134,6 +1134,7 @@ errr init_wilderness(void)
 bool change_wild_mode(void)
 {
 	int i;
+	bool have_pet = FALSE;
 
 	if (lite_town || vanilla_town)
 	{
@@ -1151,6 +1152,7 @@ bool change_wild_mode(void)
 			monster_type *m_ptr = &m_list[i];
 
 			if (!m_ptr->r_idx) continue;
+			if (is_pet(m_ptr) && i != p_ptr->riding) have_pet = TRUE;
 			if (m_ptr->csleep) continue;
 			if (m_ptr->cdis > MAX_SIGHT) continue;
 			if (!is_hostile(m_ptr)) continue;
@@ -1162,6 +1164,20 @@ bool change_wild_mode(void)
 			energy_use = 0;
 			return FALSE;
 		}
+
+		if (have_pet)
+		{
+#ifdef JP
+			if(!get_check_strict("ペットを置いて広域マップに入りますか？", 1))
+#else
+			if(!get_check_strict("Do you leave your pets behind? ", 1))
+#endif
+			{
+				energy_use = 0;
+				return FALSE;
+			}
+		}
+			
 		energy_use = 1000;
 	}
 
