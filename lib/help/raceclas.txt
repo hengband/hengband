@@ -362,7 +362,7 @@ by the racial/class power command ("U"/"O").
     all skills except stealth.
 
 
---- Dunedain ---
+--- Dunadan ---
 
     Dunedain are a race of hardy men from the West.  This elder race
     surpasses human abilities in every field, especially constitution.
@@ -930,13 +930,15 @@ its own adjustments to a character's stats and abilities.
 
     "Mighty" raises your physical stats and skills, but reduces stats
     and skills which influence magic.  It makes your stats suitable
-    for a warrior.
+    for a warrior.  Also it directly influences your hit-points and
+    spell fail rate.
 
 
 --- Shrewd ---
 
     "Shrewd" reduces your physical stats, and raises your intelligence
     and magical skills.  It makes your stats suitable for a mage.
+    Also it directly influences your hit-points and spell fail rate.
 
 
 --- Pious ---
@@ -954,7 +956,8 @@ its own adjustments to a character's stats and abilities.
 --- Fearless ---
 
     "Fearless" raises both your melee and magical ability.  Stats such
-    as magic defense and constitution are reduced.
+    as magic defense and constitution are reduced.  Also it has a
+    direct bad influence on your hit-points.
 
 
 --- Combat ---
@@ -968,7 +971,8 @@ its own adjustments to a character's stats and abilities.
 
 --- Lazy ---
 
-    A "Lazy" person has no good stats and can do no action well.
+    A "Lazy" person has no good stats and can do no action well.  Also
+    it has a direct bad influence on your spell fail rate.
 
 
 --- Sexy ---
@@ -988,7 +992,7 @@ its own adjustments to a character's stats and abilities.
 
     A "Patient" person does things carefully.  Patient people have
     high constitution, and high resilience, but poor abilities in most
-    other skills.
+    other skills.  Also it directly influences your hit-points.
 
 
 --- Munchkin ---
