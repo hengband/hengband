@@ -1,3 +1,52 @@
+2002-01-23  habu  <habu@akiru>
+
+	* src/cmd6.c, src/defines.h, src/dungeon.c, src/externs.h, src/generate.c, src/init1.c, src/init2.c, src/load.c, src/main-win.c, src/main.c, src/melee2.c, src/monster2.c, src/object2.c, src/racial.c, src/save.c, src/spells1.c, src/spells2.c, src/store.c, src/types.h, src/util.c, src/wild.c, src/wizard2.c, src/xtra1.c, src/xtra2.c, src/angband.h, src/artifact.c, src/birth.c, src/bldg.c, src/cmd1.c, src/cmd2.c, src/cmd3.c, src/cmd4.c, src/cmd5.c:
+	無駄に残ってソース汚しになっていたPython関係のコードを削除。script.cと、z-config.hの中のUSE_SCRIPT辺りの記述は一応残している。
+
+2002-01-23  Takeshi Mogami  <mogami@akiru>
+
+	* src/flavor.c:
+	巻物の未識別名を日本語と英語ひっくりかえしてたので修正。
+
+2002-01-23  habu  <habu@akiru>
+
+	* lib/help/jmonster.txt:
+	モンスターの記号の表のずれを修正。
+
+2002-01-23  Takeshi Mogami  <mogami@akiru>
+
+	* src/flavor.c:
+	コード整理、日本語版でオプションによって英語名を表示していた頃の名残を抹消。
+
+2002-01-23  habu  <habu@akiru>
+
+	* lib/help/jdungeon.txt:
+	階の雰囲気に関する記述の間違いを修正。
+
+	* lib/help/jbirth.txt:
+	魔法領域の表のずれを修正。(TABがあるとずれるようだ。)
+	ついでに縦線を入れて見やすくした。
+
+2002-01-23  Takeshi Mogami  <mogami@akiru>
+
+	* lib/pref/graf-xxx.prf:
+	Pernの8x8.bmpを使うようにして、いくつかのモンスターに対応。
+	変愚独自のモンスターは手付かず。
+
+	* src/files.c: 再び '!'。 1行上に修正。
+
+	* src/files.c: '!'の表示位置修正。
+
+	* lib/edit/r_info_j.txt:
+	説明文が英語のままのモンスターが英語版ではせっかくの説明文を表示してなかったので修正。
+
+	* Changelogs, src/cmd4.c, src/files.c, src/wizard1.c:
+	pernの掲示板で報告されていた、safe_setuid_drop();と safe_setuid_grab(); を
+	ちゃんとしたところで呼ぶように修正。
+
+	* lib/help/jcharattr.txt, lib/help/jcommand.txt, lib/help/jcommdesc.txt, lib/help/jgeneral.hlp, lib/help/jgeneral.txt:
+	ちょっと修正
+
 2002-01-22  habu  <habu@akiru>
 
 	* src/cave.c, src/dungeon.c, src/externs.h, src/melee2.c:

@@ -3537,11 +3537,11 @@ F:11:0x82/0x8C
 # town exit
 F:12:0x82/0x91
 
-# shaft down
-F:13:0x82/0x90
-
 # shaft up
-F:14:0x82/0x8D
+F:13:0x82/0x8D
+
+# shaft down
+F:14:0x82/0x90
 
 # trap door
 F:16:0xA2:0x97
@@ -5513,22 +5513,22 @@ K:623:0xB4:0x8D
 #K:627:
 
 #[Apprentice Handbook]
-#K:631:
+K:631:0xA3/0x81
 
 #[Minstrel's Music]
-#K:632:
+K:632:0xA3/0x81
 
 #[Harps of Rivendell]
-#K:633:
+K:633:0x8A/0x90
 
 #[Lays of Beleriand]
-#K:634:
+K:634:0x8A/0x90
 
 #Falcon Sword
 K:635:0xCD:0x9E
 
 #Adventurer's guide to Middle Earth
-#K:636:
+K:636:0xD8/0x80
 
 #[Bugei Shofu]
 #K:637:
@@ -5549,16 +5549,16 @@ K:635:0xCD:0x9E
 K:645:0x88:0x95
 
 #[Dark Incantations]
-#K:646:
+#K:646:0xCE/0x94
 
 #[Immortal Rituals]
-#K:647:
+#K:647:0xCE/0x94
 
 #[Demonthoughts]
-#K:648:
+#K:648:0xCE/0x95
 
 #[Hellfire Tome]
-#K:649:
+#K:649:0xCE/0x95
 
 #Magic Whistle
 #K:651:
