@@ -4299,8 +4299,24 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 				/* Hack -- Forget messages */
 				msg_flag = FALSE;
 
-				/* Save the game */
-				exit_game_panic(FALSE);
+				/* Mega-Hack -- Delay death */
+				if (p_ptr->chp < 0) p_ptr->is_dead = FALSE;
+
+				/* Hardcode panic save */
+				p_ptr->panic_save = 1;
+
+				/* Forbid suspend */
+				signals_ignore_tstp();
+
+				/* Indicate panic save */
+#ifdef JP
+				(void)strcpy(p_ptr->died_from, "(¶ÛµÞ¥»¡¼¥Ö)");
+#else
+				(void)strcpy(p_ptr->died_from, "(panic save)");
+#endif
+
+				/* Panic save */
+				(void)save_player();
 			}
 			quit(NULL);
 			return 0;
