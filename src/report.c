@@ -259,12 +259,12 @@ cptr make_screen_dump(void)
 	byte a = 0, old_a = 0;
 	char c = ' ';
 
-	char *html_head[] = {
+	static char *html_head[] = {
 		"<html>\n<body text=\"#ffffff\" bgcolor=\"#000000\">\n",
 		"<pre>",
 		0,
 	};
-	char *html_foot[] = {
+	static char *html_foot[] = {
 		"</pre>\n",
 		"</body>\n</html>\n",
 		0,
