@@ -3359,7 +3359,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 void do_cmd_fire_aux(int item, object_type *j_ptr)
 {
 	int dir;
-	int j, y, x, ny, nx, ty, tx;
+	int j, y, x, ny, nx, ty, tx, prev_y, prev_x;
 	int tdam, tdis, thits, tmul;
 	int bonus, chance;
 	int cur_dis, visible;
@@ -3501,6 +3501,9 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	/* Hack -- Handle stuff */
 	handle_stuff();
 
+	/* Save the old location */
+	prev_y = y;
+	prev_x = x;
 
 	/* Travel until stopped */
 	for (cur_dis = 0; cur_dis <= tdis; )
@@ -3541,6 +3544,10 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 			/* Pause anyway, for consistancy */
 			Term_xtra(TERM_XTRA_DELAY, msec);
 		}
+
+		/* Save the old location */
+		prev_y = y;
+		prev_x = x;
 
 		/* Save the new location */
 		x = nx;
@@ -3720,27 +3727,27 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	/* Chance of breakage (during attacks) */
 	j = (hit_body ? breakage_chance(q_ptr) : 0);
 
-	if(stick_to)
+	if (stick_to)
 	{
 		int m_idx = cave[y][x].m_idx;
 		monster_type *m_ptr = &m_list[m_idx];
 		int o_idx = o_pop();
 
 		if (!o_idx)
-		  {
+		{
 #ifdef JP
-		    msg_format("%sはどこかへ行った。", o_name);
+			msg_format("%sはどこかへ行った。", o_name);
 #else
-		    msg_format("The %s have gone to somewhere.", o_name);
+			msg_format("The %s have gone to somewhere.", o_name);
 #endif
-		    if (object_is_fixed_artifact(q_ptr))
-		      {
-			a_info[j_ptr->name1].cur_num = 0;
-		      }
-		    return;
-		  }
+			if (object_is_fixed_artifact(q_ptr))
+			{
+				a_info[j_ptr->name1].cur_num = 0;
+			}
+			return;
+		}
 
-		o_ptr = &o_list[ o_idx ];
+		o_ptr = &o_list[o_idx];
 		object_copy(o_ptr, q_ptr);
 
 		/* Forget mark */
@@ -3757,11 +3764,17 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 
 		/* Carry object */
 		m_ptr->hold_o_idx = o_idx;
-
 	}
-	else
+	else if (cave_have_flag_bold(y, x, FF_PROJECT))
+	{
 		/* Drop (or break) near that location */
 		(void)drop_near(q_ptr, j, y, x);
+	}
+	else
+	{
+		/* Drop (or break) near that location */
+		(void)drop_near(q_ptr, j, prev_y, prev_x);
+	}
 }
 
 
@@ -3847,7 +3860,7 @@ static bool item_tester_hook_boomerang(object_type *o_ptr)
 bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 {
 	int dir, item;
-	int i, j, y, x, ty, tx;
+	int i, j, y, x, ty, tx, prev_y, prev_x;
 	int ny[19], nx[19];
 	int chance, tdam, tdis;
 	int mul, div;
@@ -4073,6 +4086,10 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 
 	if (shuriken) chance *= 2;
 
+	/* Save the old location */
+	prev_y = y;
+	prev_x = x;
+
 	/* Travel until stopped */
 	for (cur_dis = 0; cur_dis <= tdis; )
 	{
@@ -4088,24 +4105,21 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 		if (!cave_have_flag_bold(ny[cur_dis], nx[cur_dis], FF_PROJECT))
 		{
 			hit_wall = TRUE;
-			break;
+			if ((q_ptr->tval == TV_FIGURINE) || object_is_potion(q_ptr) || !cave[ny[cur_dis]][nx[cur_dis]].m_idx) break;
 		}
 
-		/* Advance the distance */
-		cur_dis++;
-
 		/* The player can see the (on screen) missile */
-		if (panel_contains(ny[cur_dis-1], nx[cur_dis-1]) && player_can_see_bold(ny[cur_dis-1], nx[cur_dis-1]))
+		if (panel_contains(ny[cur_dis], nx[cur_dis]) && player_can_see_bold(ny[cur_dis], nx[cur_dis]))
 		{
 			char c = object_char(q_ptr);
 			byte a = object_attr(q_ptr);
 
 			/* Draw, Hilite, Fresh, Pause, Erase */
-			print_rel(c, a, ny[cur_dis-1], nx[cur_dis-1]);
-			move_cursor_relative(ny[cur_dis-1], nx[cur_dis-1]);
+			print_rel(c, a, ny[cur_dis], nx[cur_dis]);
+			move_cursor_relative(ny[cur_dis], nx[cur_dis]);
 			Term_fresh();
 			Term_xtra(TERM_XTRA_DELAY, msec);
-			lite_spot(ny[cur_dis-1], nx[cur_dis-1]);
+			lite_spot(ny[cur_dis], nx[cur_dis]);
 			Term_fresh();
 		}
 
@@ -4116,10 +4130,16 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 			Term_xtra(TERM_XTRA_DELAY, msec);
 		}
 
-		/* Save the new location */
-		x = nx[cur_dis-1];
-		y = ny[cur_dis-1];
+		/* Save the old location */
+		prev_y = y;
+		prev_x = x;
 
+		/* Save the new location */
+		x = nx[cur_dis];
+		y = ny[cur_dis];
+
+		/* Advance the distance */
+		cur_dis++;
 
 		/* Monster here, Try to hit it */
 		if (cave[y][x].m_idx)
@@ -4346,7 +4366,7 @@ msg_print("これはあまり良くない気がする。");
 
 		if((back_chance > 30) && (!one_in_(100) || super_boomerang))
 		{
-			for (i = cur_dis-1;i>0;i--)
+			for (i = cur_dis - 1; i > 0; i--)
 			{
 				if (panel_contains(ny[i], nx[i]) && player_can_see_bold(ny[i], nx[i]))
 				{
@@ -4449,7 +4469,19 @@ msg_print("これはあまり良くない気がする。");
 	}
 
 	/* Drop (or break) near that location */
-	if (do_drop) (void)drop_near(q_ptr, j, y, x);
+	if (do_drop)
+	{
+		if (cave_have_flag_bold(y, x, FF_PROJECT))
+		{
+			/* Drop (or break) near that location */
+			(void)drop_near(q_ptr, j, y, x);
+		}
+		else
+		{
+			/* Drop (or break) near that location */
+			(void)drop_near(q_ptr, j, prev_y, prev_x);
+		}
+	}
 
 	return TRUE;
 }
