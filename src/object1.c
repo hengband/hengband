@@ -5341,7 +5341,7 @@ bool can_get_item(void)
 		if (item_tester_okay(&inventory[j]))
 			return TRUE;
 
-	floor_num = scan_floor(floor_list, py, px, 0x01);
+	floor_num = scan_floor(floor_list, py, px, 0x03);
 	if (floor_num)
 		return TRUE;
 
@@ -5569,7 +5569,7 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 			next_o_idx = o_ptr->next_o_idx;
 
 			/* Accept the item on the floor if legal */
-			if (item_tester_okay(o_ptr)) allow_floor = TRUE;
+			if (item_tester_okay(o_ptr) && (o_ptr->marked & OM_FOUND)) allow_floor = TRUE;
 		}
 	}
 
@@ -6324,7 +6324,7 @@ int show_floor(int target_item, int y, int x, int *min_width)
 
 
 	/* Scan for objects in the grid, using item_tester_okay() */
-	floor_num = scan_floor(floor_list, y, x, 0x01);
+	floor_num = scan_floor(floor_list, y, x, 0x03);
 
 	/* Display the floor objects */
 	for (k = 0, i = 0; i < floor_num && i < 23; i++)
@@ -6584,7 +6584,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 	if (floor)
 	{
 		/* Scan all objects in the grid */
-		floor_num = scan_floor(floor_list, py, px, 0x01);
+		floor_num = scan_floor(floor_list, py, px, 0x03);
 	}
 
 	/* Accept inventory */
@@ -7223,28 +7223,28 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 			{
 				int i, o_idx;
 				cave_type *c_ptr = &cave[py][px];
- 
+
 				if (command_wrk != (USE_FLOOR)) break;
 
 				/* Get the object being moved. */
-				o_idx =	c_ptr->o_idx;
- 
+				o_idx = c_ptr->o_idx;
+
 				/* Only rotate a pile of two or more objects. */
 				if (!(o_idx && o_list[o_idx].next_o_idx)) break;
 
 				/* Remove the first object from the list. */
 				excise_object_idx(o_idx);
-	
+
 				/* Find end of the list. */
 				i = c_ptr->o_idx;
 				while (o_list[i].next_o_idx)
 					i = o_list[i].next_o_idx;
-	
+
 				/* Add after the last object. */
 				o_list[i].next_o_idx = o_idx;
-	
+
 				/* Re-scan floor list */ 
-				floor_num = scan_floor(floor_list, py, px, 0x01);
+				floor_num = scan_floor(floor_list, py, px, 0x03);
 
 				/* Hack -- Fix screen */
 				if (command_see)
