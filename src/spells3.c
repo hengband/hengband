@@ -5059,7 +5059,7 @@ int acid_dam(int dam, cptr kb_str, int monspell)
 	if (p_ptr->immune_acid || (dam <= 0))
 	{
 		learn_spell(monspell);
-		return;
+		return 0;
 	}
 
 	/* Vulnerability (Ouch!) */
@@ -5100,7 +5100,7 @@ int elec_dam(int dam, cptr kb_str, int monspell)
 	if (p_ptr->immune_elec || (dam <= 0))
 	{
 		learn_spell(monspell);
-		return;
+		return 0;
 	}
 
 	/* Vulnerability (Ouch!) */
@@ -5140,7 +5140,7 @@ int fire_dam(int dam, cptr kb_str, int monspell)
 	if (p_ptr->immune_fire || (dam <= 0))
 	{
 		learn_spell(monspell);
-		return;
+		return 0;
 	}
 
 	/* Vulnerability (Ouch!) */
@@ -5180,7 +5180,7 @@ int cold_dam(int dam, cptr kb_str, int monspell)
 	if (p_ptr->immune_cold || (dam <= 0))
 	{
 		learn_spell(monspell);
-		return;
+		return 0;
 	}
 
 	/* Vulnerability (Ouch!) */
