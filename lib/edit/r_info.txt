@@ -15625,7 +15625,7 @@ D:$passion nor compassion. He was dressed completely in scaled white armor,
 D:$not silver or metallic-colored, but looking as if it had been enameled."
 D:ジュリアンは野性の森林を快適に思っている。彼の楽しみは狩りがいのある獲物、
 D:すなわちあなたをしとめることだ。
-D:「黒い髪を長く伸ばし、青い目には熱情も同乗も表れていない。白い小札鎧に身
+D:「黒い髪を長く伸ばし、青い目には熱情も同情も表れていない。白い小札鎧に身
 D:を包んでいる。銀とかその他の金属的な色ではなくて、まるでエナメルを塗っ
 D:たように見える。」
 D:（ロジャー・ゼラズニイ、岡部宏之訳「アンバーの九王子」早川書房、p.46）
@@ -19542,7 +19542,7 @@ F:RES_TELE | CAN_SWIM | WILD_SWAMP
 S:1_IN_10 |
 S:SHRIEK | MIND_BLAST
 D:$It`s a slime colony.
-D:$If you so much as DARE to touch it
+D:$If you so much as DARE to touch it.
 D:可愛らしい純心無垢なスライムモルドだ。
 D:触れて死ね！
 
