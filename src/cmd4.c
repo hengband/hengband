@@ -7333,17 +7333,21 @@ static void display_visual_list(int col, int row, int height, int width, byte at
 			char c, c2;
 			int x = col + j;
 			int y = row + i;
+			int ia, ic;
 
 			/* Bigtile mode uses double width */
 			if (use_bigtile) x += j;
 
-			a = attr_top + i;
-			c = char_left + j;
+			ia = attr_top + i;
+			ic = char_left + j;
 
 			/* Ignore illegal characters */
-			if ((int)attr_top + i > 0x7f || (int)char_left + j > 0xff ||
-			    c < ' ' || (!use_graphics && c > 0x7f))
+			if (ia > 0x7f || ic > 0xff || ic < ' ' ||
+			    (!use_graphics && ic > 0x7f))
 				continue;
+
+			a = (byte)ia;
+			c = (char)ic;
 
 			/* Force correct code for both ASCII character and tile */
 			if (c & 0x80) a |= 0x80;
@@ -8025,18 +8029,18 @@ static void do_cmd_knowledge_objects(void)
 			display_visual_list(max + 3, 7, browser_rows-1, wid - (max + 3), attr_top, char_left);
 		}
 
-		/* Prompt */
-#ifdef JP
-		prt(format("<方向>, 'r'で思い出を見る%s%s, ESC", visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更", (attr_idx||char_idx) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"), hgt - 1, 0);
-#else
-		prt(format("<dir>, 'r' to recall%s%s, ESC", visual_list ? ", ENTER to accept" : ", 'v' for visuals", (attr_idx||char_idx) ? ", 'c', 'p' to paste" : ", 'c' to copy"), hgt - 1, 0);
-#endif
-
 		/* Get the current object */
 		k_ptr = &k_info[object_idx[object_cur]];
 
 		/* Mega Hack -- track this object */
 		if (object_cnt) object_kind_track(object_idx[object_cur]);
+
+		/* Prompt */
+#ifdef JP
+		prt(format("<方向>, 'r'で思い出を見る%s%s, ESC", k_ptr->flavor ? "" : visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更", (attr_idx||char_idx) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"), hgt - 1, 0);
+#else
+		prt(format("<dir>, 'r' to recall%s%s, ESC", k_ptr->flavor ? "" : visual_list ? ", ENTER to accept" : ", 'v' for visuals", (attr_idx||char_idx) ? ", 'c', 'p' to paste" : ", 'c' to copy"), hgt - 1, 0);
+#endif
 
 		/* The "current" object changed */
 		if (object_old != object_idx[object_cur])
