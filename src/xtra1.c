@@ -3335,8 +3335,8 @@ void calc_bonuses(void)
 			if (!(heavy_armor()))
 			{
 				if (!((p_ptr->prace == RACE_KLACKON) ||
-					(p_ptr->prace == RACE_SPRITE) ||
-					(p_ptr->pseikaku == SEIKAKU_MUNCHKIN)))
+				      (p_ptr->prace == RACE_SPRITE) ||
+				      (p_ptr->pseikaku == SEIKAKU_MUNCHKIN)))
 					p_ptr->pspeed += (p_ptr->lev) / 10;
 
 				/* Free action if unencumbered at level 25 */
@@ -3382,21 +3382,18 @@ void calc_bonuses(void)
 				p_ptr->pspeed -= (p_ptr->lev) / 10;
 				p_ptr->skill_stl -= (p_ptr->lev)/10;
 			}
-			else
+			else if (!inventory[INVEN_LARM].tval || p_ptr->hidarite)
 			{
-				if (!inventory[INVEN_LARM].tval || p_ptr->hidarite)
-				{
-					p_ptr->pspeed += 3;
+				p_ptr->pspeed += 3;
 				if (!((p_ptr->prace == RACE_KLACKON) ||
-					(p_ptr->prace == RACE_SPRITE) ||
-					(p_ptr->pseikaku == SEIKAKU_MUNCHKIN)))
+				      (p_ptr->prace == RACE_SPRITE) ||
+				      (p_ptr->pseikaku == SEIKAKU_MUNCHKIN)))
 					p_ptr->pspeed += (p_ptr->lev) / 10;
-					p_ptr->skill_stl += (p_ptr->lev)/10;
+				p_ptr->skill_stl += (p_ptr->lev)/10;
 
 				/* Free action if unencumbered at level 25 */
 				if  (p_ptr->lev > 24)
 					p_ptr->free_act = TRUE;
-				}
 			}
 			if (!inventory[INVEN_LARM].tval || p_ptr->hidarite)
 			{
