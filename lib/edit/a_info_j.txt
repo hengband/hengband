@@ -715,7 +715,7 @@ E:of Beruthiel
 I:33:10:-25
 W:40:12:20:0
 P:0:1d1:0:0:25
-F:STR | DEX | CON | HIDE_TYPE | DEC_MANA
+F:STR | DEX | CON | HIDE_TYPE | DEC_MANA | EASY_SPELL |
 F:FREE_ACT | SEE_INVIS | TELEPATHY | CURSED | XTRA_POWER
 D:$The midnight-hued steel circlet of the sorceress-queen Beruthiel, which 
 D:$grants extraordinary powers of sight and awareness at a terrible physical 
