@@ -7279,7 +7279,20 @@ static void browser_cursor(char ch, int *column, int *grp_cur, int grp_cnt,
 	int list = *list_cur;
 
 	/* Extract direction */
-	d = get_keymap_dir(ch);
+	if (ch == ' ')
+	{
+		/* Hack -- scroll up full screen */
+		d = 3;
+	}
+	else if (ch == '-')
+	{
+		/* Hack -- scroll down full screen */
+		d = 9;
+	}
+	else
+	{
+		d = get_keymap_dir(ch);
+	}
 
 	if (!d) return;
 
@@ -7292,7 +7305,7 @@ static void browser_cursor(char ch, int *column, int *grp_cur, int grp_cnt,
 			int old_grp = grp;
 
 			/* Move up or down */
-			grp += ddy[d] * BROWSER_ROWS;
+			grp += ddy[d] * (BROWSER_ROWS - 1);
 
 			/* Verify */
 			if (grp >= grp_cnt)	grp = grp_cnt - 1;
