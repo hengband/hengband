@@ -786,6 +786,7 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 					}
 				}
 			}
+
 			else if (change_floor_mode & CFM_DOWN)
 			{
 				if (c_ptr->feat == FEAT_MORE ||
@@ -800,6 +801,15 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 						sx = x;
 						sy = y;
 					}
+				}
+			}
+
+			else
+			{
+				if (FEAT_BLDG_HEAD <= c_ptr->feat &&
+				    c_ptr->feat <= FEAT_BLDG_TAIL)
+				{
+					ok = TRUE;
 				}
 			}
 

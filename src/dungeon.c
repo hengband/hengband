@@ -7109,6 +7109,12 @@ prt("お待ち下さい...", 0, 0);
 				p_ptr->chp_frac = 0;
 				p_ptr->exit_bldg = TRUE;
 				reset_tim_flags();
+
+				/* Leave through the exit */
+				prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_RAND_CONNECT);
+
+				/* prepare next floor */
+				leave_floor();
 			}
 			else
 			{
