@@ -27,13 +27,13 @@
 #endif
 
 #ifdef JP
-#define SCORE_PATH "http://www.kmc.gr.jp/~habu/local/hengscore/score.cgi"
+//#define SCORE_PATH "http://www.kmc.gr.jp/~habu/local/hengscore/score.cgi"
 #else
 #define SCORE_PATH "http://www.kmc.gr.jp/~habu/local/hengscore-en/score.cgi"
 #endif
 
 /* for debug */
-#if 0
+#if 1
 #define SCORE_PATH "http://www.kmc.gr.jp/~habu/local/scoretest/score.cgi"
 #endif
 
@@ -283,6 +283,10 @@ cptr make_screen_dump(void)
 
 	bool old_use_graphics = use_graphics;
 
+	int wid, hgt;
+
+	Term_get_size(&wid, &hgt);
+
 	/* Alloc buffer */
 	screen_buf = buf_new();
 	if (screen_buf == NULL) return (NULL);
@@ -303,14 +307,14 @@ cptr make_screen_dump(void)
 		buf_sprintf(screen_buf, html_head[i]);
 
 	/* Dump the screen */
-	for (y = 0; y < 24; y++)
+	for (y = 0; y < hgt; y++)
 	{
 		/* Start the row */
 		if (y != 0)
 			buf_sprintf(screen_buf, "\n");
 
 		/* Dump each row */
-		for (x = 0; x < 79; x++)
+		for (x = 0; x < wid - 1; x++)
 		{
 			int rv, gv, bv;
 			char *cc = NULL;

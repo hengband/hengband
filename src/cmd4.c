@@ -4742,6 +4742,9 @@ void do_cmd_load_screen(void)
 
 	char buf[1024];
 
+	int wid, hgt;
+
+	Term_get_size(&wid, &hgt);
 
 	/* Hack -- drop permissions */
 	safe_setuid_drop();
@@ -4772,13 +4775,13 @@ void do_cmd_load_screen(void)
 
 
 	/* Load the screen */
-	for (y = 0; okay && (y < 24); y++)
+	for (y = 0; okay && (y < hgt); y++)
 	{
 		/* Get a line of data */
 		if (photo_fgets(fff, buf, 1024)) okay = FALSE;
 
 		/* Show each row */
-		for (x = 0; x < 79; x++)
+		for (x = 0; x < wid - 1; x++)
 		{
 			/* Put the attr/char */
 			Term_draw(x, y, TERM_WHITE, buf[x]);
@@ -4790,13 +4793,13 @@ void do_cmd_load_screen(void)
 
 
 	/* Dump the screen */
-	for (y = 0; okay && (y < 24); y++)
+	for (y = 0; okay && (y < hgt); y++)
 	{
 		/* Get a line of data */
 		if (photo_fgets(fff, buf, 1024)) okay = FALSE;
 
 		/* Dump each row */
-		for (x = 0; x < 79; x++)
+		for (x = 0; x < wid - 1; x++)
 		{
 			/* Get the attr/char */
 			(void)(Term_what(x, y, &a, &c));
@@ -5184,6 +5187,10 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 		0,
 	};
 
+	int wid, hgt;
+
+	Term_get_size(&wid, &hgt);
+
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
 
@@ -5231,14 +5238,14 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	}
 
 	/* Dump the screen */
-	for (y = 0; y < 24; y++)
+	for (y = 0; y < hgt; y++)
 	{
 		/* Start the row */
 		if (y != 0)
 			fprintf(fff, "\n");
 
 		/* Dump each row */
-		for (x = 0; x < 79; x++)
+		for (x = 0; x < wid - 1; x++)
 		{
 			int rv, gv, bv;
 			char *cc = NULL;
@@ -5357,6 +5364,10 @@ void do_cmd_save_screen(void)
 {
 	bool old_use_graphics = use_graphics;
 
+	int wid, hgt;
+
+	Term_get_size(&wid, &hgt);
+
 	if (old_use_graphics)
 	{
 		use_graphics = FALSE;
@@ -5429,10 +5440,10 @@ void do_cmd_save_screen(void)
 
 
 		/* Dump the screen */
-		for (y = 0; y < 24; y++)
+		for (y = 0; y < hgt; y++)
 		{
 			/* Dump each row */
-			for (x = 0; x < 79; x++)
+			for (x = 0; x < wid - 1; x++)
 			{
 				/* Get the attr/char */
 				(void)(Term_what(x, y, &a, &c));
@@ -5453,10 +5464,10 @@ void do_cmd_save_screen(void)
 
 
 		/* Dump the screen */
-		for (y = 0; y < 24; y++)
+		for (y = 0; y < hgt; y++)
 		{
 			/* Dump each row */
-			for (x = 0; x < 79; x++)
+			for (x = 0; x < wid - 1; x++)
 			{
 				/* Get the attr/char */
 				(void)(Term_what(x, y, &a, &c));
