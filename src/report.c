@@ -33,7 +33,9 @@
 #endif
 
 /* for debug */
-/*#define SCORE_PATH "http://www.kmc.gr.jp/~habu/local/scoretest/score.cgi" */
+#if 0
+#define SCORE_PATH "http://www.kmc.gr.jp/~habu/local/scoretest/score.cgi"
+#endif
 
 /*
  * simple buffer library
@@ -279,12 +281,23 @@ cptr make_screen_dump(void)
 		0,
 	};
 
-	if (use_graphics)
-		return NULL;
+	bool old_use_graphics = use_graphics;
 
 	/* Alloc buffer */
 	screen_buf = buf_new();
 	if (screen_buf == NULL) return (NULL);
+
+	if (old_use_graphics)
+	{
+		use_graphics = FALSE;
+		reset_visuals();
+
+		/* Redraw everything */
+		p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+
+		/* Hack -- update */
+		handle_stuff();
+	}
 
 	for (i = 0; html_head[i]; i++)
 		buf_sprintf(screen_buf, html_head[i]);
@@ -338,17 +351,30 @@ cptr make_screen_dump(void)
 	/* Screen dump size is too big ? */
 	if (screen_buf->size + 1> SCREEN_BUF_SIZE)
 	{
-		buf_delete(screen_buf);
-		return (NULL);
+		ret = NULL;
 	}
+	else
+	{
+		/* Terminate string */
+		buf_append(screen_buf, "", 1);
 
-	/* Terminate string */
-	buf_append(screen_buf, "", 1);
-
-	ret = string_make(screen_buf->data);
+		ret = string_make(screen_buf->data);
+	}
 
 	/* Free buffer */
 	buf_delete(screen_buf);
+
+	if (old_use_graphics)
+	{
+		use_graphics = TRUE;
+		reset_visuals();
+
+		/* Redraw everything */
+		p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+
+		/* Hack -- update */
+		handle_stuff();
+	}
 
 	return ret;
 }

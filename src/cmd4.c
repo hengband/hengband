@@ -5309,6 +5309,20 @@ void (*screendump_aux)(void) = NULL;
  */
 void do_cmd_save_screen(void)
 {
+	bool old_use_graphics = use_graphics;
+
+	if (old_use_graphics)
+	{
+		use_graphics = FALSE;
+		reset_visuals();
+
+		/* Redraw everything */
+		p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+
+		/* Hack -- update */
+		handle_stuff();
+	}
+
 #ifdef JP
 	if (get_check("HTMLで出力しますか？"))
 #else
@@ -5316,11 +5330,11 @@ void do_cmd_save_screen(void)
 #endif
 	{
 		do_cmd_save_screen_html();
-		return;
+		do_cmd_redraw();
 	}
 
 	/* Do we use a special screendump function ? */
-	if (screendump_aux)
+	else if (screendump_aux)
 	{
 		/* Dump the screen to a graphics file */
 		(*screendump_aux)();
@@ -5434,6 +5448,18 @@ void do_cmd_save_screen(void)
 
 		/* Restore the screen */
 		screen_load();
+	}
+
+	if (old_use_graphics)
+	{
+		use_graphics = TRUE;
+		reset_visuals();
+
+		/* Redraw everything */
+		p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+
+		/* Hack -- update */
+		handle_stuff();
 	}
 }
 

@@ -67,15 +67,31 @@ void reset_visuals(void)
 
 	if (use_graphics)
 	{
+		char buf[1024];
+
 		/* Process "graf.prf" */
 		process_pref_file("graf.prf");
+
+		/* Access the "character" pref file */
+		sprintf(buf, "graf-%s.prf", player_base);
+
+		/* Process "graf-<playername>.prf" */
+		process_pref_file(buf);
 	}
 
 	/* Normal symbols */
 	else
 	{
+		char buf[1024];
+
 		/* Process "font.prf" */
 		process_pref_file("font.prf");
+
+		/* Access the "character" pref file */
+		sprintf(buf, "font-%s.prf", player_base);
+
+		/* Process "font-<playername>.prf" */
+		process_pref_file(buf);
 	}
 }
 
