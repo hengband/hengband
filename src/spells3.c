@@ -3150,9 +3150,9 @@ msg_format("魔力が逆流した！%sは完全に魔力を失った。", o_name);
 				if (o_ptr->tval == TV_ROD)
 				{
 #ifdef JP
-msg_print("魔力を吸い取るのに失敗した。ロッドの魔力は全て発散してしまった。");
+msg_print("魔力が逆噴射して、ロッドからさらに魔力を吸い取ってしまった！");
 #else
-					msg_print("You failed to absorb magic power. All magic power of your rod had gone!");
+					msg_print("The recharge backfires, draining the rod further!");
 #endif
 
 					if (o_ptr->timeout < 10000)
@@ -5779,9 +5779,9 @@ msg_format("魔力が逆流した！%sは完全に魔力を失った。", o_name);
 				if (o_ptr->tval == TV_ROD)
 				{
 #ifdef JP
-msg_print("魔力が逆噴射して、ロッドからさらに魔力を吸い取ってしまった！");
+msg_print("ロッドは破損を免れたが、魔力は全て失なわれた。");
 #else
-					msg_print("The recharge backfires, draining the rod further!");
+					msg_format("You save your rod from destruction, but all charges are lost.", o_name);
 #endif
 
 					o_ptr->timeout = k_ptr->pval * o_ptr->number;
