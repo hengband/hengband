@@ -280,17 +280,6 @@
 
 
 /*
- * OPTION: Hack -- Make sure "strchr()" and "strrchr()" will work
- */
-#if defined(SYS_III) || defined(SYS_V) || defined(MSDOS)
-# if !defined(__TURBOC__) && !defined(__WATCOMC__) && !defined(__DJGPP__)
-#  define strchr index
-#  define strrchr rindex
-# endif
-#endif
-
-
-/*
  * OPTION: Define "HAS_STRICMP" only if "stricmp()" exists.
  * Note that "stricmp()" is not actually used by Angband.
  */
