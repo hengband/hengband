@@ -5956,8 +5956,8 @@ void generate_rooms(void)
 	int area_size = 100 * (cur_hgt*cur_wid) / (MAX_HGT*MAX_WID);
 	int level_index = MIN(10, div_round(dun_level, 10));
 
-        /* Number of each type of room on this level */
-        s16b room_num[ROOM_T_MAX];
+	/* Number of each type of room on this level */
+	s16b room_num[ROOM_T_MAX];
 
 	/* Limit number of rooms */
 	int dun_rooms = rand_range(DUN_ROOMS_MIN, DUN_ROOMS_MAX * area_size / 100);
@@ -6134,6 +6134,12 @@ void generate_rooms(void)
 		if (!remain) break;
 	}
 
+	if (cheat_room)
+	{
+#ifdef JP
+		msg_format("Éô²°¿ô: %d", rooms_built);
+#else
+		msg_format("Number of Rooms: %d", rooms_built);
+#endif
+	}
 }
-
-
