@@ -6623,114 +6623,138 @@ static essence_type essence_info[MAX_ESSENCE] = {
 };
 #else
 static essence_type essence_info[MAX_ESSENCE] = {
-{"strength","strength", 0, 4, 20},
-{"intelligen.","intelligence", 1, 4, 20},
-{"wisdom","wisdom", 2, 4, 20},
-{"dexterity","dexterity", 3, 4, 20},
-{"constitut.","constitution", 4, 4, 20},
-{"charisma","charisma", 5, 4, 20},
-{"magic mast.","magic mastery", 6, 4, 20},
+{"strength","strength", TR_STR, 4, 20},
+{"intelligen.","intelligence", TR_INT, 4, 20},
+{"wisdom","wisdom", TR_WIS, 4, 20},
+{"dexterity","dexterity", TR_DEX, 4, 20},
+{"constitut.","constitution", TR_CON, 4, 20},
+{"charisma","charisma", TR_CHR, 4, 20},
+{"magic mast.","magic mastery", TR_MAGIC_MASTERY, 4, 20},
 {"","", -1, 0, 0},
-{"stealth","stealth", 8, 4, 40},
-{"serching","serching", 9, 4, 15},
-{"inflavision","inflavision", 10, 4, 15},
-{"digging","digging", 11, 4, 15},
-{"speed","speed", 12, 4, 12},
-{"extra atk","extra attack", 13, 1, 20},
-{"chaos brand","chaos brand", 14, 1, 15},
-{"vampiric","vampiric brand", 15, 1, 60},
-{"slay animal","slay animal", 16, 1, 20},
-{"slay evil","slay evil", 17, 1, 100},
-{"slay undead","slay undead", 18, 1, 20},
-{"slay demon","slay demon", 19, 1, 20},
-{"slay orc","slay orc", 20, 1, 15},
-{"slay troll","slay troll", 21, 1, 15},
-{"slay giant","slay giant", 22, 1, 20},
-{"slay dragon","slay dragon", 23, 1, 20},
-{"","kill dragon", 23, 1, 60},
+{"stealth","stealth", TR_STEALTH, 4, 40},
+{"serching","serching", TR_SEARCH, 4, 15},
+{"inflavision","inflavision", TR_INFRA, 4, 15},
+{"digging","digging", TR_TUNNEL, 4, 15},
+{"speed","speed", TR_SPEED, 4, 12},
+{"extra atk","extra attack", TR_BLOWS, 1, 20},
+{"chaos brand","chaos brand", TR_CHAOTIC, 1, 15},
+{"vampiric","vampiric brand", TR_VAMPIRIC, 1, 60},
+{"slay animal","slay animal", TR_SLAY_ANIMAL, 5, 20},
+{"slay evil","slay evil", TR_SLAY_EVIL, 5, 100},
+{"slay undead","slay undead", TR_SLAY_UNDEAD, 5, 20},
+{"slay demon","slay demon", TR_SLAY_DEMON, 5, 20},
+{"slay orc","slay orc", TR_SLAY_ORC, 5, 15},
+{"slay troll","slay troll", TR_SLAY_TROLL, 5, 15},
+{"slay giant","slay giant", TR_SLAY_GIANT, 5, 20},
+{"slay dragon","slay dragon", TR_SLAY_DRAGON, 5, 20},
+{"","kill dragon", TR_SLAY_DRAGON, 5, 60},
 {"","", -1, 0, 0},
-{"quake","quake activation", 26, 5, 15},
-{"pois. brand","poison brand", 27, 1, 20},
-{"acid brand","acid brand", 28, 1, 20},
-{"elec. brand","electric brand", 29, 1, 20},
-{"fire brand","fire brand", 30, 1, 20},
-{"cold brand","cold brand", 31, 1, 20},
-{"sustain","sustain strength", 32, 3, 15},
-{"","sustain intelligence", 32, 3, 15},
-{"","sustain wisdom", 32, 3, 15},
-{"","sustain dexterity", 32, 3, 15},
-{"","sustain constitution", 32, 3, 15},
-{"","sustain charisma", 32, 3, 15},
-{"","", -1, 0, 0},
-{"","", -1, 0, 0},
-{"immunity","acid immunity", 40, 2, 20},
-{"","electric immunity", 40, 2, 20},
-{"","fire immunity", 40, 2, 20},
-{"","cold immunity", 40, 2, 20},
-{"","", -1, 0, 0},
-{"reflection","reflection", 45, 2, 20},
-{"free action","free action", 46, 3, 20},
-{"hold life","hold life", 47, 3, 20},
-{"res. acid","resistance to acid", 48, 2, 15},
-{"res. elec.","resistance to electric", 49, 2, 15},
-{"res. fire","resistance to fire", 50, 2, 15},
-{"res. cold","resistance to cold", 51, 2, 15},
-{"res. poison","resistance to poison", 52, 2, 25},
-{"res. fear","resistance to fear", 53, 2, 20},
-{"res. light","resistance to light", 54, 2, 20},
-{"res. dark","resistance to dark", 55, 2, 20},
-{"res. blind","resistance to blind", 56, 2, 20},
-{"res.confuse","resistance to confusion", 57, 2, 20},
-{"res. sound","resistance to sound", 58, 2, 20},
-{"res. shard","resistance to shard", 59, 2, 20},
-{"res. nether","resistance to nether", 60, 2, 20},
-{"res. nexus","resistance to nexus", 61, 2, 20},
-{"res. chaos","resistance to chaos", 62, 2, 20},
-{"res. disen.","resistance to disenchantment", 63, 2, 20},
-{"","", -2, 0, 0},
-{"","", -2, 0, 0},
-{"slay human","slay human", 66, 1, 20},
-{"","", -2, 0, 0},
-{"","", -1, 0, 0},
-{"anti magic","anti magic", 69, 3, 15},
+{"quake","quake activation", TR_IMPACT, 7, 15},
+{"pois. brand","poison brand", TR_BRAND_POIS, 1, 20},
+{"acid brand","acid brand", TR_BRAND_ACID, 1, 20},
+{"elec. brand","electric brand", TR_BRAND_ELEC, 1, 20},
+{"fire brand","fire brand", TR_BRAND_FIRE, 1, 20},
+{"cold brand","cold brand", TR_BRAND_COLD, 1, 20},
+{"sustain","sustain strength", TR_SUST_STR, 3, 15},
+{"","sustain intelligence", TR_SUST_STR, 3, 15},
+{"","sustain wisdom", TR_SUST_STR, 3, 15},
+{"","sustain dexterity", TR_SUST_STR, 3, 15},
+{"","sustain constitution", TR_SUST_STR, 3, 15},
+{"","sustain charisma", TR_SUST_STR, 3, 15},
 {"","", -1, 0, 0},
 {"","", -1, 0, 0},
-{"warning","warning", 72, 3, 20},
+{"immunity","acid immunity", TR_IM_ACID, 2, 20},
+{"","electric immunity", TR_IM_ACID, 2, 20},
+{"","fire immunity", TR_IM_ACID, 2, 20},
+{"","cold immunity", TR_IM_ACID, 2, 20},
+{"","", -1, 0, 0},
+{"reflection","reflection", TR_REFLECT, 2, 20},
+{"free action","free action", TR_FREE_ACT, 3, 20},
+{"hold life","hold life", TR_HOLD_LIFE, 3, 20},
+{"res. acid","resistance to acid", TR_RES_ACID, 2, 15},
+{"res. elec.","resistance to electric", TR_RES_ELEC, 2, 15},
+{"res. fire","resistance to fire", TR_RES_FIRE, 2, 15},
+{"res. cold","resistance to cold", TR_RES_COLD, 2, 15},
+{"res. poison","resistance to poison", TR_RES_POIS, 2, 25},
+{"res. fear","resistance to fear", TR_RES_FEAR, 2, 20},
+{"res. light","resistance to light", TR_RES_LITE, 2, 20},
+{"res. dark","resistance to dark", TR_RES_DARK, 2, 20},
+{"res. blind","resistance to blind", TR_RES_BLIND, 2, 20},
+{"res.confuse","resistance to confusion", TR_RES_CONF, 2, 20},
+{"res. sound","resistance to sound", TR_RES_SOUND, 2, 20},
+{"res. shard","resistance to shard", TR_RES_SHARDS, 2, 20},
+{"res. nether","resistance to nether", TR_RES_NETHER, 2, 20},
+{"res. nexus","resistance to nexus", TR_RES_NEXUS, 2, 20},
+{"res. chaos","resistance to chaos", TR_RES_CHAOS, 2, 20},
+{"res. disen.","resistance to disenchantment", TR_RES_DISEN, 2, 20},
+{"","", -2, 0, 0}, /* 火炎オーラフラグ */
+{"","", -2, 0, 0}, /* 電撃オーラフラグ */
+{"slay human","slay human", TR_SLAY_HUMAN, 5, 20},
+{"","", -2, 0, 0}, /* 冷気オーラフラグ */
+{"","", -1, 0, 0},
+{"anti magic","anti magic", TR_NO_MAGIC, 3, 15},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+{"warning","warning", TR_WARNING, 3, 20},
 {"","", -1, 0, 0},
 {"","", -1, 0, 0},
 {"","", -1, 0, 0},
-{"levitation","levitation", 76, 3, 20},
-{"perm. light","permanent light", 77, 3, 15},
-{"see invis.","see invisible", 78, 3, 20},
-{"telepathy","telepathy", 79, 3, 15},
-{"slow dige.","slow digestion", 80, 3, 15},
-{"regen.","regeneration", 81, 3, 20},
-{"","", -1, 0, 0},
-{"","", -1, 0, 0},
+{"levitation","levitation", TR_FEATHER, 3, 20},
+{"perm. light","permanent light", TR_LITE, 3, 15},
+{"see invis.","see invisible", TR_SEE_INVIS, 3, 20},
+{"telepathy","telepathy", TR_TELEPATHY, 6, 15},
+{"slow dige.","slow digestion", TR_SLOW_DIGEST, 3, 15},
+{"regen.","regeneration", TR_REGEN, 3, 20},
 {"","", -1, 0, 0},
 {"","", -1, 0, 0},
 {"","", -1, 0, 0},
 {"","", -1, 0, 0},
 {"","", -1, 0, 0},
 {"","", -1, 0, 0},
-{"teleport","teleport", 90, 3, 25},
 {"","", -1, 0, 0},
 {"","", -1, 0, 0},
+{"teleport","teleport", TR_TELEPORT, 3, 25},
 {"","", -1, 0, 0},
 {"","", -1, 0, 0},
+{"weapon enc.","", -1, 0, 0},
+{"armor enc.","", -1, 0, 0},
 {"","", -1, 0, 0},
-{"weapon enc.","weapon enchant", 96, 6, 30},
-{"armor enc.","armor enchant", 97, 6, 15},
-{"","resist acid activation", 48, 5, 50},
-{"","resist electricity activation", 49, 5, 50},
-{"","resist fire activation", 50, 5, 50},
-{"","resist cold activation", 51, 5, 50},
-{"","fiery sheath", -1, 5, 30},
-{"","electric sheath", -1, 5, 30},
-{"","sheath of coldness", -1, 5, 30},
+{"","kill animal", TR_SLAY_ANIMAL, 5, 60},
+{"","kill evil", TR_SLAY_EVIL, 0, 60},
+{"","kill undead", TR_SLAY_UNDEAD, 5, 60},
+{"","kill demon", TR_SLAY_DEMON, 5, 60},
+{"","kill orc", TR_SLAY_ORC, 5, 60},
+{"","kill troll", TR_SLAY_TROLL, 5, 60},
+{"","kill giant", TR_SLAY_GIANT, 5, 60},       
+{"","kill human", TR_SLAY_HUMAN, 5, 60},
+{"","sense animal", TR_SLAY_ANIMAL, 6, 40},
+{"","sense undead", TR_SLAY_UNDEAD, 6, 40}, 
+{"","sense demon", TR_SLAY_DEMON, 6, 40},       
+{"","sense orc", TR_SLAY_ORC, 6, 40},     
+{"","sense troll", TR_SLAY_TROLL, 6, 40},   
+{"","sense giant", TR_SLAY_GIANT, 6, 40},       
+{"","sense dragon", TR_SLAY_DRAGON, 6, 40},
+{"","sense human", TR_SLAY_HUMAN, 6, 40},
+{"","sense evil", -1, 0, 15},
+{"","sense good", -1, 0, 15},
+{"","sense nonliving", -1, 0, 15},
+{"","", -1, 0, 0},
+{"","", -1, 0, 0},
+
+/* MAX_TR_FLAG_ESSENCE 117 */
+
+{"","weapon enchant", TR_ES_ATTACK, 10, 30},
+{"","armor enchant", TR_ES_AC, 10, 15},
+{"","resist acid activation", TR_RES_ACID, 7, 50},
+{"","resist electricity activation", TR_RES_ELEC, 7, 50},
+{"","resist fire activation", TR_RES_FIRE, 7, 50},
+{"","resist cold activation", TR_RES_COLD, 7, 50},
+{"","fiery sheath", -1, 7, 30},
+{"","electric sheath", -1, 7, 30},
+{"","sheath of coldness", -1, 7, 30},
 {"","resistance", -1, 2, 150},
-{"","elements proof", -1, 6, 10},
-{"","gauntlets of slay", 96, 1, 200},
+{"","elements proof", -1, 10, 10},
+{"","gauntlets of slay", TR_ES_ATTACK, 1, 200},
 };
 #endif
 
@@ -7265,6 +7289,13 @@ static void add_essence(int mode)
 				/* Print list */
 				for (ctr = 0; ctr < max_num; ctr++)
 				{
+                                        es_ptr = &essence_info[num[ctr]];
+
+                                        if (num[ctr] < MAX_TR_FLAG_ESSENCE)
+                                                essence_id = num[ctr];
+                                        else
+                                                essence_id = num[ctr] - MAX_TR_FLAG_ESSENCE + MIN_OTHER_ESSENCE;
+
 					if (use_menu)
 					{
 						if (ctr == (menu_line-1))
@@ -7282,19 +7313,19 @@ static void add_essence(int mode)
 						sprintf(dummy, "%c) ",I2A(ctr));
 					}
 
-					strcat(dummy, essence_info[num[ctr]].add_name);
+					strcat(dummy, es_ptr->add_name);
 
 					col = TERM_WHITE;
 					able[ctr] = TRUE;
 
-					if (essence_info[num[ctr]].link != -1)
+					if (es_ptr->link != -1)
 					{
-						strcat(dummy, format("(%s)", essence_info[essence_info[num[ctr]].link].drain_name));
-						if (p_ptr->magic_num1[essence_info[num[ctr]].link] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+						strcat(dummy, format("(%s)", essence_info[es_ptr->link].drain_name));
+						if (p_ptr->magic_num1[es_ptr->link] < es_ptr->value) able[ctr] = FALSE;
 					}
 					else
 					{
-						switch(num[ctr])
+						switch(essence_id)
 						{
 						case ESSENCE_SH_FIRE:
 #ifdef JP
@@ -7302,8 +7333,8 @@ static void add_essence(int mode)
 #else
 							strcat(dummy, "(brand fire + res.fire)              ");
 #endif
-							if (p_ptr->magic_num1[ESSENCE_B_FIRE] < essence_info[num[ctr]].value) able[ctr] = FALSE;
-							if (p_ptr->magic_num1[ESSENCE_RES_FIRE] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_B_FIRE] < es_ptr->value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_FIRE] < es_ptr->value) able[ctr] = FALSE;
 							break;
 						case ESSENCE_SH_ELEC:
 #ifdef JP
@@ -7311,8 +7342,8 @@ static void add_essence(int mode)
 #else
 							strcat(dummy, "(brand elec. + res. elec.)              ");
 #endif
-							if (p_ptr->magic_num1[ESSENCE_B_ELEC] < essence_info[num[ctr]].value) able[ctr] = FALSE;
-							if (p_ptr->magic_num1[ESSENCE_RES_ELEC] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_B_ELEC] < es_ptr->value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_ELEC] < es_ptr->value) able[ctr] = FALSE;
 							break;
 						case ESSENCE_SH_COLD:
 #ifdef JP
@@ -7320,8 +7351,8 @@ static void add_essence(int mode)
 #else
 							strcat(dummy, "(brand cold + res. cold)              ");
 #endif
-							if (p_ptr->magic_num1[ESSENCE_B_COLD] < essence_info[num[ctr]].value) able[ctr] = FALSE;
-							if (p_ptr->magic_num1[ESSENCE_RES_COLD] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_B_COLD] < es_ptr->value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_COLD] < es_ptr->value) able[ctr] = FALSE;
 							break;
 						case ESSENCE_RESISTANCE:
 #ifdef JP
@@ -7329,10 +7360,10 @@ static void add_essence(int mode)
 #else
 							strcat(dummy, "(r.fire+r.cold+r.elec+r.acid)");
 #endif
-							if (p_ptr->magic_num1[ESSENCE_RES_FIRE] < essence_info[num[ctr]].value) able[ctr] = FALSE;
-							if (p_ptr->magic_num1[ESSENCE_RES_COLD] < essence_info[num[ctr]].value) able[ctr] = FALSE;
-							if (p_ptr->magic_num1[ESSENCE_RES_ELEC] < essence_info[num[ctr]].value) able[ctr] = FALSE;
-							if (p_ptr->magic_num1[ESSENCE_RES_ACID] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_FIRE] < es_ptr->value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_COLD] < es_ptr->value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_ELEC] < es_ptr->value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_ACID] < es_ptr->value) able[ctr] = FALSE;
 							break;
 						case ESSENCE_SUSTAIN:
 #ifdef JP
@@ -7340,10 +7371,10 @@ static void add_essence(int mode)
 #else
 							strcat(dummy, "(r.fire+r.cold+r.elec+r.acid)");
 #endif
-							if (p_ptr->magic_num1[ESSENCE_RES_FIRE] < essence_info[num[ctr]].value) able[ctr] = FALSE;
-							if (p_ptr->magic_num1[ESSENCE_RES_COLD] < essence_info[num[ctr]].value) able[ctr] = FALSE;
-							if (p_ptr->magic_num1[ESSENCE_RES_ELEC] < essence_info[num[ctr]].value) able[ctr] = FALSE;
-							if (p_ptr->magic_num1[ESSENCE_RES_ACID] < essence_info[num[ctr]].value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_FIRE] < es_ptr->value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_COLD] < es_ptr->value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_ELEC] < es_ptr->value) able[ctr] = FALSE;
+							if (p_ptr->magic_num1[ESSENCE_RES_ACID] < es_ptr->value) able[ctr] = FALSE;
 							break;
 						}
 					}
@@ -7352,13 +7383,13 @@ static void add_essence(int mode)
 
 					strcpy(dummy2, format("%-50s",dummy));
 
-					if (essence_info[num[ctr]].link != -1)
+					if (es_ptr->link != -1)
 					{
-						strcat(dummy2, format(" %d/%d",essence_info[num[ctr]].value, p_ptr->magic_num1[essence_info[num[ctr]].link]));
+						strcat(dummy2, format(" %d/%d",es_ptr->value, p_ptr->magic_num1[es_ptr->link]));
 					}
 					else
 					{
-						strcat(dummy2, format(" %d/(\?\?)",essence_info[num[ctr]].value));
+						strcat(dummy2, format(" %d/(\?\?)",es_ptr->value));
 					}
 
 					c_prt(col, dummy2, ctr+2, x);
