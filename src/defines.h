@@ -2957,7 +2957,7 @@
 #define TR3_NO_MAGIC            0x00000020L     /* Anti-magic */
 #define TR3_DEC_MANA            0x00000040L     /* ??? */
 #define TR3_TY_CURSE            0x00000080L     /* The Ancient Curse */
-#define TR3_WARNING             0x00000100L     /* Warning */
+#define TR3_XXX1                0x00000100L
 #define TR3_HIDE_TYPE           0x00000200L     /* Hide "pval" description */
 #define TR3_SHOW_MODS           0x00000400L     /* Always show Tohit/Todam */
 #define TR3_INSTA_ART           0x00000800L     /* Item must be an artifact */

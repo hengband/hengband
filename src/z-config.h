@@ -709,6 +709,11 @@
 /* # define SCRIPT_OBJ_KIND */
 #endif /* USE_SCRIPT */
 
+/*
+ * The Frakir can predict danger when equipped
+ */
+#define USE_FRAKIR
+
 #ifndef HAVE_CONFIG_H
 #ifndef MSDOS
 #define WORLD_SCORE
