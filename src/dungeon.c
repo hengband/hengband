@@ -4319,7 +4319,7 @@ static bool enter_wizard_mode(void)
 	if (!p_ptr->noscore)
 	{
 		/* Wizard mode is not permitted */
-		if (!allow_debug_opts)
+		if (!allow_debug_opts || arg_wizard)
 		{
 #ifdef JP
 			msg_print("ウィザードモードは許可されていません。 ");
@@ -6953,8 +6953,23 @@ prt("お待ち下さい...", 0, 0);
 	/* Hack -- Enter wizard mode */
 	if (arg_wizard)
 	{
-		if (enter_wizard_mode()) p_ptr->wizard = TRUE;
-		else if (p_ptr->is_dead) quit("Already dead.");
+		if (enter_wizard_mode())
+		{
+			p_ptr->wizard = TRUE;
+
+			if (p_ptr->is_dead)
+			{
+				/* Initialize the saved floors data */
+				init_saved_floors(TRUE);
+
+				/* Avoid crash in update_view() */
+				py = px = 10;
+			}
+		}
+		else if (p_ptr->is_dead)
+		{
+			quit("Already dead.");
+		}
 	}
 
 	/* Initialize the town-buildings if necessary */
