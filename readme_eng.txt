@@ -13,7 +13,11 @@
   If you are a super user, --with-setgid=games option works.
 
   then try
-  ./hengband -- -n
+  ./hengband -- -n<number of windows>  ## for normal ASCII graphics
+  or
+  ./hengband -g -- -n<# of windows>    ## for 8x8 tile graphics 
+  ./hengband -g -- -b -n<# of windows> ## for Bigtile graphics
+  ./hengband -g -- -a -n<# of windows> ## for 16x16 tile (need heng_graf.tar.gz)
   to play.
 
 You can change game windows' font, location, and size, by environment 
