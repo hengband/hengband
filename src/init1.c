@@ -808,7 +808,7 @@ errr init_info_txt(FILE *fp, char *buf, header *head,
 	head->text_size = 0;
 
 	/* Parse */
-	while (0 == my_fgets(fp, buf, sizeof(buf)))
+	while (0 == my_fgets(fp, buf, 1024))
 	{
 		/* Advance the line number */
 		error_line++;
