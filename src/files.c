@@ -5276,6 +5276,7 @@ bool show_file(bool show_version, cptr name, cptr what, int line, int mode)
 	/* Hold strings to find/show */
 	char finder_str[81];
 	char shower_str[81];
+	char back_str[81];
 
 	/* String to show */
 	cptr shower = NULL;
@@ -5626,9 +5627,10 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 		/* Get a special key code */
 		skey = inkey_special(TRUE);
 
-		/* Show the help for the help */
-		if (skey == '?')
+		switch (skey)
 		{
+		/* Show the help for the help */
+		case '?':
 			/* Hack - prevent silly recursion */
 #ifdef JP
 			if (strcmp(name, "jhelpinfo.txt") != 0)
@@ -5637,11 +5639,10 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 			if (strcmp(name, "helpinfo.txt") != 0)
 				show_file(TRUE, "helpinfo.txt", NULL, 0, mode);
 #endif
-		}
+			break;
 
 		/* Hack -- try showing */
-		if (skey == '=')
-		{
+		case '=':
 			/* Get "shower" */
 #ifdef JP
 			prt("強調: ", hgt - 1, 0);
@@ -5649,18 +5650,21 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 			prt("Show: ", hgt - 1, 0);
 #endif
 
-			(void)askfor(shower_str, 80);
+			strcpy(back_str, shower_str);
+			if (askfor(shower_str, 80))
+			{
+				/* Make it lowercase */
+				str_tolower(shower_str);
 
-			/* Make it lowercase */
-			str_tolower(shower_str);
-
-			/* Show it */
-			shower = shower_str;
-		}
+				/* Show it */
+				shower = shower_str;
+			}
+			else strcpy(shower_str, back_str);
+			break;
 
 		/* Hack -- try finding */
-		if (skey == '/' || skey == KTRL('s'))
-		{
+		case '/':
+		case KTRL('s'):
 			/* Get "finder" */
 #ifdef JP
 			prt("検索: ", hgt - 1, 0);
@@ -5668,7 +5672,7 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 			prt("Find: ", hgt - 1, 0);
 #endif
 
-
+			strcpy(back_str, finder_str);
 			if (askfor(finder_str, 80))
 			{
 				/* Find it */
@@ -5682,99 +5686,95 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 				/* Show it */
 				shower = finder_str;
 			}
-		}
+			else strcpy(finder_str, back_str);
+			break;
 
 		/* Hack -- go to a specific line */
-		if (skey == '#')
-		{
-			char tmp[81];
+		case '#':
+			{
+				char tmp[81];
 #ifdef JP
-prt("行: ", hgt - 1, 0);
+				prt("行: ", hgt - 1, 0);
 #else
-			prt("Goto Line: ", hgt - 1, 0);
+				prt("Goto Line: ", hgt - 1, 0);
 #endif
 
-			strcpy(tmp, "0");
+				strcpy(tmp, "0");
 
-			if (askfor(tmp, 80))
-			{
-				line = atoi(tmp);
+				if (askfor(tmp, 80)) line = atoi(tmp);
 			}
-		}
+			break;
 
 		/* Hack -- go to the top line */
-		if (skey == SKEY_TOP)
-		{
+		case SKEY_TOP:
 			line = 0;
-		}
+			break;
 
 		/* Hack -- go to the bottom line */
-		if (skey == SKEY_BOTTOM)
-		{
-			line = ((size-1)/rows)*rows;
-		}
+		case SKEY_BOTTOM:
+			line = ((size - 1) / rows) * rows;
+			break;
 
 		/* Hack -- go to a specific file */
-		if (skey == '%')
-		{
-			char tmp[81];
+		case '%':
+			{
+				char tmp[81];
 #ifdef JP
-prt("ファイル・ネーム: ", hgt - 1, 0);
-strcpy(tmp, "jhelp.hlp");
+				prt("ファイル・ネーム: ", hgt - 1, 0);
+				strcpy(tmp, "jhelp.hlp");
 #else
-			prt("Goto File: ", hgt - 1, 0);
-			strcpy(tmp, "help.hlp");
+				prt("Goto File: ", hgt - 1, 0);
+				strcpy(tmp, "help.hlp");
 #endif
 
-
-			if (askfor(tmp, 80))
-			{
-				if (!show_file(TRUE, tmp, NULL, 0, mode)) skey = 'q';
+				if (askfor(tmp, 80))
+				{
+					if (!show_file(TRUE, tmp, NULL, 0, mode)) skey = 'q';
+				}
 			}
-		}
+			break;
 
 		/* Allow backing up */
-		if (skey == '-')
-		{
+		case '-':
 			line = line + (reverse ? rows : -rows);
 			if (line < 0) line = 0;
-		}
+			break;
 
 		/* One page up */
-		if (skey == SKEY_PGUP)
-		{
+		case SKEY_PGUP:
 			line = line - rows;
 			if (line < 0) line = 0;
-		}
+			break;
 
 		/* Advance a single line */
-		if ((skey == '\n') || (skey == '\r'))
-		{
+		case '\n':
+		case '\r':
 			line = line + (reverse ? -1 : 1);
 			if (line < 0) line = 0;
-		}
-
+			break;
 
 		/* Move up / down */
-		if (skey == '8' || skey == SKEY_UP)
-		{
+		case '8':
+		case SKEY_UP:
 			line--;
 			if (line < 0) line = 0;
-		}
+			break;
 
-		if (skey == '2' || skey == SKEY_DOWN) line++;
+		case '2':
+		case SKEY_DOWN:
+			line++;
+			break;
 
 		/* Advance one page */
-		if (skey == ' ')
-		{
+		case ' ':
 			line = line + (reverse ? -rows : rows);
 			if (line < 0) line = 0;
-		}
+			break;
 
 		/* One page down */
-		if (skey == SKEY_PGDOWN)
-		{
+		case SKEY_PGDOWN:
 			line = line + rows;
+			break;
 		}
 
 		/* Recurse on numbers */
@@ -5803,14 +5803,11 @@ strcpy(tmp, "jhelp.hlp");
 			strcpy (xtmp, "");
 
 #ifdef JP
-			if (!get_string("ファイル名: ", xtmp, 80))
+			if (!get_string("ファイル名: ", xtmp, 80)) continue;
 #else
-			if (!get_string("File name: ", xtmp, 80))
+			if (!get_string("File name: ", xtmp, 80)) continue;
 #endif
-			{
-				continue;
-			}
- 
+
 			/* Close it */
 			my_fclose(fff);
 
@@ -5826,11 +5823,10 @@ strcpy(tmp, "jhelp.hlp");
 			if (!(fff && ffp))
 			{
 #ifdef JP
-msg_print("ファイルが開けません。");
+				msg_print("ファイルを開けません。");
 #else
 				msg_print("Failed to open file.");
 #endif
-
 				skey = ESCAPE;
 				break;
 			}
@@ -5851,8 +5847,7 @@ msg_print("ファイルが開けません。");
 		}
 
 		/* Return to last screen */
-		if (skey == ESCAPE) break;
-		if (skey == '<') break;
+		if ((skey == ESCAPE) || (skey == '<')) break;
 
 		/* Exit on the ^q */
 		if (skey == KTRL('q')) skey = 'q';
