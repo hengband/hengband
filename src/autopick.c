@@ -5172,7 +5172,9 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		if (0 < tb->cx)
 		{
 			int len;
+#ifdef JP
 			int i;
+#endif
 
 			tb->cx--;
 			len = strlen(tb->lines_list[tb->cy]);
