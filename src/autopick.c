@@ -1100,7 +1100,7 @@ void delayed_auto_destroy(void)
          * Scan inventry in reverse order to prevent
          * skipping after inven_item_optimize()
          */
-	for (item = INVEN_TOTAL; item >= 0 ; item--)
+	for (item = INVEN_TOTAL - 1; item >= 0 ; item--)
                 delayed_auto_destroy_aux(item);
 
 	/* Scan the pile of objects */
