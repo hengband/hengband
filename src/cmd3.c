@@ -1396,6 +1396,7 @@ static flag_insc_table flag_insc_brand[] =
 static flag_insc_table flag_insc_slay[] =
 {
 	{ "¼Ù", "*", TR1_SLAY_EVIL, 1, 0 },
+	{ "¿Í", "H", TR3_SLAY_HUMAN, 3, 0 },
 	{ "Î¶", "D", TR1_KILL_DRAGON, 1, 0 },
 	{ "Îµ", "d", TR1_SLAY_DRAGON, 1, TR1_KILL_DRAGON },
 	{ "¥ª", "o", TR1_SLAY_ORC, 1, 0 },
@@ -1523,6 +1524,7 @@ static flag_insc_table flag_insc_brand[] =
 static flag_insc_table flag_insc_slay[] =
 {
   	{ "*", TR1_SLAY_EVIL, 1, 0 },
+	{ "H", TR3_SLAY_HUMAN, 3, 0 },
   	{ "D", TR1_KILL_DRAGON, 1, 0 },
   	{ "d", TR1_SLAY_DRAGON, 1, TR1_KILL_DRAGON },
   	{ "o", TR1_SLAY_ORC, 1, 0 },

@@ -3584,6 +3584,7 @@ msg_print("爆発のルーンは解除された。");
 				{
 					u32b f1, f2, f3;
 
+					u32b flg2 = 0L;
 					u32b flg3 = 0L;
 
 					char m_name[80];
@@ -3608,9 +3609,10 @@ msg_print("爆発のルーンは解除された。");
 					if (f1 & TR1_SLAY_UNDEAD) flg3 |= (RF3_UNDEAD);
 					if (f1 & TR1_SLAY_ANIMAL) flg3 |= (RF3_ANIMAL);
 					if (f1 & TR1_SLAY_EVIL)   flg3 |= (RF3_EVIL);
+					if (f3 & TR3_SLAY_HUMAN)  flg2 |= (RF2_HUMAN);
 
 					/* The object cannot be picked up by the monster */
-					if (artifact_p(o_ptr) || (r_ptr->flags3 & flg3) ||
+					if (artifact_p(o_ptr) || (r_ptr->flags3 & flg3) || (r_ptr->flags2 & flg2) ||
 						(o_ptr->art_name))
 					{
 						/* Only give a message for "take_item" */

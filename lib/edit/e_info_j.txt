@@ -780,7 +780,11 @@ C:0:0:0:5
 F:TUNNEL | BRAND_ACID | 
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-# 101 (unused)
+N:101:人斬りの
+E:of Slay Human
+X:24:10
+W:0:23:0:2500
+F:SLAY_HUMAN
 
 N:102:モルグルの
 E:of Morgul

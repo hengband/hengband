@@ -3285,6 +3285,18 @@ s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 				if (mult < 15) mult = 15;
 			}
 
+			/* Slay Human */
+			if ((f3 & TR3_SLAY_HUMAN) &&
+			    (r_ptr->flags2 & RF2_HUMAN))
+			{
+				if (m_ptr->ml)
+				{
+					r_ptr->r_flags2 |= RF2_HUMAN;
+				}
+
+				if (mult < 17) mult = 17;
+			}
+
 			/* Slay Undead */
 			if ((f1 & TR1_SLAY_UNDEAD) &&
 			    (r_ptr->flags3 & RF3_UNDEAD))

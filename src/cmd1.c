@@ -262,6 +262,18 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode)
 				if (mult < 20) mult = 20;
 			}
 
+			/* Slay Human */
+			if ((f3 & TR3_SLAY_HUMAN) &&
+			    (r_ptr->flags2 & RF2_HUMAN))
+			{
+				if (m_ptr->ml)
+				{
+					r_ptr->r_flags2 |= RF2_HUMAN;
+				}
+
+				if (mult < 20) mult = 20;
+			}
+
 			/* Slay Undead */
 			if ((f1 & TR1_SLAY_UNDEAD) &&
 			    (r_ptr->flags3 & RF3_UNDEAD))
@@ -2582,6 +2594,8 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 		/* Test for hit */
 		if (success_hit)
 		{
+			int vorpal_chance = ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)) ? 2 : 4;
+
 			/* Sound */
 			sound(SOUND_HIT);
 
@@ -2669,7 +2683,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 					can_drain = FALSE;
 			}
 
-			if ((f1 & TR1_VORPAL) && (randint1((o_ptr->name1 == ART_VORPAL_BLADE) ? 3 : 6) == 1) && !zantetsu_mukou)
+			if ((f1 & TR1_VORPAL) && (randint1(vorpal_chance*3/2) == 1) && !zantetsu_mukou)
 				vorpal_cut = TRUE;
 			else vorpal_cut = FALSE;
 
@@ -2880,8 +2894,6 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				{
 					int mult = 2;
 
-					int inc_chance = (o_ptr->name1 == ART_VORPAL_BLADE) ? 2 : 4;
-
 					if ((o_ptr->name1 == ART_CHAINSWORD) && !one_in_(2))
 					{
 						char chainsword_noise[1024];
@@ -2916,7 +2928,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 					}
 
 					/* Try to increase the damage */
-					while (one_in_(inc_chance))
+					while (one_in_(vorpal_chance))
 					{
 						mult++;
 					}

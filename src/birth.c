@@ -5395,6 +5395,8 @@ static bool player_birth_aux(void)
 
 			if(!(r_ptr->flags1 & RF1_UNIQUE)) continue;
 
+			if(r_ptr->flags1 & RF1_QUESTOR) continue;
+
 			if(r_ptr->flags6 & RF6_SPECIAL) continue;
 
 			if(r_ptr->flags7 & RF7_FRIENDLY) continue;

@@ -1025,7 +1025,7 @@ static void random_slay(object_type *o_ptr)
 		break;
 	}
 
-	switch (randint1(34))
+	switch (randint1(36))
 	{
 		case 1:
 		case 2:
@@ -1127,6 +1127,10 @@ static void random_slay(object_type *o_ptr)
 			o_ptr->art_flags1 |= TR1_FORCE_WEAPON;
 			if (!artifact_bias)
 				artifact_bias = (one_in_(2) ? BIAS_MAGE : BIAS_PRIESTLY);
+			break;
+		case 33:
+		case 34:
+			o_ptr->art_flags3 |= TR3_SLAY_HUMAN;
 			break;
 		default:
 			o_ptr->art_flags1 |= TR1_CHAOTIC;
@@ -1748,6 +1752,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		o_ptr->art_flags1 &= ~(TR1_SLAY_GIANT);
 		o_ptr->art_flags1 &= ~(TR1_SLAY_DRAGON);
 		o_ptr->art_flags1 &= ~(TR1_KILL_DRAGON);
+		o_ptr->art_flags3 &= ~(TR3_SLAY_HUMAN);
 		o_ptr->art_flags1 &= ~(TR1_VORPAL);
 		o_ptr->art_flags1 &= ~(TR1_BRAND_POIS);
 		o_ptr->art_flags1 &= ~(TR1_BRAND_ACID);
@@ -2938,7 +2943,11 @@ void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
 		int dummy, i;
 		dummy = randint1(2)+randint1(2);
 		for (i = 0; i < dummy; i++)
-			o_ptr->art_flags1 |= (TR1_CHAOTIC << randint0(18));
+		{
+			int flag = randint0(19);
+			if (flag == 18) o_ptr->art_flags3 |= TR3_SLAY_HUMAN;
+			else o_ptr->art_flags1 |= (TR1_CHAOTIC << flag);
+		}
 		dummy = randint1(2);
 		for (i = 0; i < dummy; i++)
 			one_resistance(o_ptr);

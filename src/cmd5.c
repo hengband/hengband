@@ -3583,7 +3583,7 @@ msg_print("ゴーレムを作った。");
 		return enchant_spell(0, 0, randint0(3) + 2);
 		break;
 	case 29: /* Brand Weapon */
-		brand_weapon(randint0(17));
+		brand_weapon(randint0(18));
 		break;
 	case 30: /* Living Trump */
 		if (one_in_(7))

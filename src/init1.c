@@ -207,7 +207,7 @@ static cptr r_info_flags2[] =
 	"BRAIN_4",
 	"BRAIN_5",
 	"BRAIN_6",
-	"BRAIN_7",
+	"HUMAN",
 	"QUANTUM"
 };
 
@@ -573,7 +573,7 @@ static cptr k_info_flags3[] =
 {
 	"SH_FIRE",
 	"SH_ELEC",
-	"XXX1",
+	"SLAY_HUMAN",
 	"SH_COLD",
 	"NO_TELE",
 	"NO_MAGIC",
@@ -582,7 +582,7 @@ static cptr k_info_flags3[] =
 	"WARNING",
 	"HIDE_TYPE",
 	"SHOW_MODS",
-	"XXX2",
+	"XXX1",
 	"FEATHER",
 	"LITE",
 	"SEE_INVIS",

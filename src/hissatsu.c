@@ -860,7 +860,7 @@ static bool cast_hissatsu_spell(int spell)
 			basedam = (o_ptr->dd * (o_ptr->ds + 1)) * 50;
 			damage = o_ptr->to_d * 100;
 			object_flags(o_ptr, &f1, &f2, &f3);
-			if (o_ptr->name1 == ART_VORPAL_BLADE)
+			if ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD))
 			{
 				/* vorpal blade */
 				basedam *= 5;
@@ -1126,17 +1126,17 @@ msg_print("その方向にはモンスターはいません。");
 			basedam = (o_ptr->dd * (o_ptr->ds + 1)) * 50;
 			damage = o_ptr->to_d * 100;
 			object_flags(o_ptr, &f1, &f2, &f3);
-			if (o_ptr->name1 == ART_VORPAL_BLADE)
+			if ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD))
 			{
 				/* vorpal blade */
-				basedam *= 786;
-				basedam /= 500;
+				basedam *= 5;
+				basedam /= 3;
 			}
 			else if (object_known_p(o_ptr) && (f1 & TR1_VORPAL))
 			{
 				/* vorpal flag only */
-				basedam *= 609;
-				basedam /= 500;
+				basedam *= 11;
+				basedam /= 9;
 			}
 			damage += basedam;
 			damage += p_ptr->to_d[i] * 100;

@@ -1450,7 +1450,7 @@
 #define EGO_TRUMP               98
 #define EGO_PATTERN             99
 #define EGO_DIGGING             100
-/* xxx */
+#define EGO_SLAY_HUMAN          101
 #define EGO_MORGUL              102
 /* xxx */
 
@@ -2962,7 +2962,7 @@
 
 #define TR3_SH_FIRE             0x00000001L     /* Immolation (Fire) */
 #define TR3_SH_ELEC             0x00000002L     /* Electric Sheath */
-#define TR3_XXX1                0x00000004L     /* quest level item -KMW- */
+#define TR3_SLAY_HUMAN          0x00000004L     /* Slay human */
 #define TR3_SH_COLD             0x00000008L     /* cold aura */
 #define TR3_NO_TELE             0x00000010L     /* Anti-teleportation */
 #define TR3_NO_MAGIC            0x00000020L     /* Anti-magic */
@@ -2971,7 +2971,7 @@
 #define TR3_WARNING             0x00000100L     /* Warning */
 #define TR3_HIDE_TYPE           0x00000200L     /* Hide "pval" description */
 #define TR3_SHOW_MODS           0x00000400L     /* Always show Tohit/Todam */
-#define TR3_XXX2                0x00000800L     /* XXX1 */
+#define TR3_XXX1                0x00000800L     /* XXX1 */
 #define TR3_FEATHER             0x00001000L     /* Feather Falling */
 #define TR3_LITE                0x00002000L     /* Permanent Light */
 #define TR3_SEE_INVIS           0x00004000L     /* See Invisible */
@@ -3200,7 +3200,7 @@
 #define RF2_BRAIN_4         0x08000000
 #define RF2_BRAIN_5         0x10000000
 #define RF2_BRAIN_6         0x20000000
-#define RF2_BRAIN_7         0x40000000
+#define RF2_HUMAN           0x40000000
 #define RF2_QUANTUM         0x80000000  /* Monster has quantum behavior */
 
 /*

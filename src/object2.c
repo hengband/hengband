@@ -931,6 +931,7 @@ s32b flag_cost(object_type * o_ptr, int plusses)
 	if (f1 & TR1_FORCE_WEAPON) {tmp_cost += 2500;count++;}
 	if (f1 & TR1_SLAY_ANIMAL) {tmp_cost += 1800;count++;}
 	if (f1 & TR1_SLAY_EVIL) {tmp_cost += 2300;count++;}
+	if (f3 & TR3_SLAY_HUMAN) {tmp_cost += 1800;count++;}
 	if (f1 & TR1_SLAY_UNDEAD) {tmp_cost += 1800;count++;}
 	if (f1 & TR1_SLAY_DEMON) {tmp_cost += 1800;count++;}
 	if (f1 & TR1_SLAY_ORC) {tmp_cost += 1500;count++;}
@@ -2393,6 +2394,10 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 						o_ptr->art_flags1 |= TR1_BLOWS;
 					else
 						o_ptr->pval = m_bonus(3, level);
+					break;
+				case EGO_VAMPIRIC:
+					if (one_in_(5))
+						o_ptr->art_flags3 |= TR3_SLAY_HUMAN;
 					break;
 				}
 

@@ -2943,6 +2943,15 @@ info[i++] = "それは自然界の動物に対して特に恐るべき力を発揮する。";
 #endif
 
 	}
+	if (f3 & (TR3_SLAY_HUMAN))
+	{
+#ifdef JP
+info[i++] = "それは人間に対して特に恐るべき力を発揮する。";
+#else
+		info[i++] = "It is especially deadly against humans.";
+#endif
+
+	}
 
 	if (f1 & (TR1_FORCE_WEAPON))
 	{

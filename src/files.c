@@ -2197,7 +2197,7 @@ static void display_player_various(void)
 			if (object_known_p(o_ptr)) damage[i] += o_ptr->to_d*100;
 			basedam = (o_ptr->dd * (o_ptr->ds + 1))*50;
 			object_flags(o_ptr, &f1, &f2, &f3);
-			if ((o_ptr->ident & IDENT_MENTAL) && (o_ptr->name1 == ART_VORPAL_BLADE))
+			if ((o_ptr->ident & IDENT_MENTAL) && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)))
 			{
 				/* vorpal blade */
 				basedam *= 5;

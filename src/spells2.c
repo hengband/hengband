@@ -2850,6 +2850,15 @@ info[i++] = "あなたの武器は邪悪なる存在に対して強い力を発揮する。";
 #endif
 
 		}
+		if (f3 & (TR3_SLAY_HUMAN))
+		{
+#ifdef JP
+info[i++] = "あなたの武器は人間に対して特に強い力を発揮する。";
+#else
+			info[i++] = "Your weapon is especially deadly against humans.";
+#endif
+
+		}
 		if (f1 & (TR1_SLAY_UNDEAD))
 		{
 #ifdef JP

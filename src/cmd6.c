@@ -5494,7 +5494,11 @@ msg_print("あなたの槍は電気でスパークしている...");
 				o_ptr->art_flags2 = a_info[ART_BLOOD].flags2;
 				dummy = randint1(2)+randint1(2);
 				for (i = 0; i < dummy; i++)
-					o_ptr->art_flags1 |= (TR1_CHAOTIC << randint0(18));
+				{
+					int flag = randint0(19);
+					if (flag == 18) o_ptr->art_flags3 |= TR3_SLAY_HUMAN;
+					else o_ptr->art_flags1 |= (TR1_CHAOTIC << flag);
+				}
 				dummy = randint1(2);
 				for (i = 0; i < dummy; i++)
 					one_resistance(o_ptr);

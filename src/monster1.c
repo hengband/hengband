@@ -247,6 +247,7 @@ static void roff_aux(int r_idx, int remem)
 		if (r_ptr->flags3 & RF3_GOOD)     flags3 |= (RF3_GOOD);
 		if (r_ptr->flags3 & RF3_ANIMAL)   flags3 |= (RF3_ANIMAL);
 		if (r_ptr->flags3 & RF3_AMBERITE) flags3 |= (RF3_AMBERITE);
+		if (r_ptr->flags2 & RF2_HUMAN)    flags2 |= (RF2_HUMAN);
 
 		/* Know 'quantum' flag */
 		if (r_ptr->flags2 & RF2_QUANTUM)  flags2 |= (RF2_QUANTUM);
@@ -739,9 +740,14 @@ if (flags3 & RF3_UNDEAD)          c_roff(TERM_VIOLET, "アンデッドの");
 #else
 		if (flags3 & RF3_UNDEAD)          roff(" undead");
 #endif
+#ifdef JP
+if (flags3 & RF3_AMBERITE)        c_roff(TERM_VIOLET, "アンバーの王族の");
+#else
+		if (flags3 & RF3_AMBERITE)        roff(" Amberite");
+#endif
 
 
-	if ((flags3 & (RF3_DRAGON | RF3_DEMON | RF3_GIANT | RF3_TROLL | RF3_ORC | RF3_AMBERITE)) || (flags2 & RF2_QUANTUM))
+	if ((flags3 & (RF3_DRAGON | RF3_DEMON | RF3_GIANT | RF3_TROLL | RF3_ORC)) || (flags2 & (RF2_QUANTUM | RF2_HUMAN)))
 	{
 	/* Describe the "race" */
 #ifdef JP
@@ -775,9 +781,9 @@ if (flags3 & RF3_ORC)      c_roff(TERM_UMBER, "オーク");
 #endif
 
 #ifdef JP
-if (flags3 & RF3_AMBERITE) c_roff(TERM_L_WHITE, "アンバーの王族");
+if (flags2 & RF2_HUMAN) c_roff(TERM_L_WHITE, "人間");
 #else
-		if (flags3 & RF3_AMBERITE) roff(" Amberite");
+		if (flags2 & RF2_HUMAN) roff(" Human");
 #endif
 
 #ifdef JP

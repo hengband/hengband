@@ -634,6 +634,7 @@ static flag_desc slay_flags_desc[] =
 #ifdef JP
 	{ TR1_SLAY_ANIMAL,        "動物" },
 	{ TR1_SLAY_EVIL,          "邪悪" },
+	{ TR3_SLAY_HUMAN,         "人間" },
 	{ TR1_SLAY_UNDEAD,        "アンデッド" },
 	{ TR1_SLAY_DEMON,         "悪魔" },
 	{ TR1_SLAY_ORC,           "オーク" },
@@ -644,6 +645,7 @@ static flag_desc slay_flags_desc[] =
 #else
 	{ TR1_SLAY_ANIMAL,        "Animal" },
 	{ TR1_SLAY_EVIL,          "Evil" },
+	{ TR3_SLAY_HUMAN,         "Human" },
 	{ TR1_SLAY_UNDEAD,        "Undead" },
 	{ TR1_SLAY_DEMON,         "Demon" },
 	{ TR1_SLAY_ORC,           "Orc" },
@@ -2101,15 +2103,16 @@ if (flags3 & RF3_ANIMAL)          spoil_out("自然界の");
 if (flags3 & RF3_EVIL)            spoil_out("邪悪なる");
 if (flags3 & RF3_GOOD)            spoil_out("善良な");
 if (flags3 & RF3_UNDEAD)          spoil_out("アンデッドの");
+if (flags3 & RF3_AMBERITE)        spoil_out("アンバーの王族の");
 
-if ((flags3 & (RF3_DRAGON | RF3_DEMON | RF3_GIANT | RF3_TROLL | RF3_ORC | RF3_AMBERITE)) || (flags2 & RF2_QUANTUM))
+if ((flags3 & (RF3_DRAGON | RF3_DEMON | RF3_GIANT | RF3_TROLL | RF3_ORC)) || (flags2 & (RF2_QUANTUM | RF2_HUMAN)))
 {
      if (flags3 & RF3_DRAGON)   spoil_out("ドラゴン");
      if (flags3 & RF3_DEMON)    spoil_out("デーモン");
      if (flags3 & RF3_GIANT)    spoil_out("ジャイアント");
      if (flags3 & RF3_TROLL)    spoil_out("トロル");
      if (flags3 & RF3_ORC)      spoil_out("オーク");
-     if (flags3 & RF3_AMBERITE) spoil_out("アンバーの王族");/*nuke me*/
+     if (flags2 & RF2_HUMAN)    spoil_out("人間");/*nuke me*/
      if (flags2 & RF2_QUANTUM)  spoil_out("量子生物");
 }
 else                            spoil_out("モンスター");
@@ -2121,13 +2124,14 @@ else                            spoil_out("モンスター");
 		if (flags3 & (RF3_EVIL)) spoil_out(" evil");
 		if (flags3 & (RF3_GOOD)) spoil_out(" good");
 		if (flags3 & (RF3_UNDEAD)) spoil_out(" undead");
+		if (flags3 & (RF3_AMBERITE)) spoil_out (" Amberite");
 
 		if (flags3 & (RF3_DRAGON)) spoil_out(" dragon");
 		else if (flags3 & (RF3_DEMON)) spoil_out(" demon");
 		else if (flags3 & (RF3_GIANT)) spoil_out(" giant");
 		else if (flags3 & (RF3_TROLL)) spoil_out(" troll");
 		else if (flags3 & (RF3_ORC)) spoil_out(" orc");
-		else if (flags3 & (RF3_AMBERITE)) spoil_out (" Amberite");
+		else if (flags2 & (RF2_HUMAN)) spoil_out (" Human");
 		else spoil_out(" creature");
 #endif
 

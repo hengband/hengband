@@ -1219,7 +1219,7 @@ s = "強化できる武器がない。";
 
 		switch (brand_type)
 		{
-		case 16:
+		case 17:
 			if (o_ptr->tval == TV_SWORD)
 			{
 #ifdef JP
@@ -1242,6 +1242,15 @@ act = "は破壊力を増した！";
 				o_ptr->name2 = EGO_EARTHQUAKES;
 				o_ptr->pval = m_bonus(3, dun_level);
 			}
+			break;
+		case 16:
+#ifdef JP
+act = "は人間の血を求めている！";
+#else
+			act = "seems looking for human!";
+#endif
+
+			o_ptr->name2 = EGO_SLAY_HUMAN;
 			break;
 		case 15:
 #ifdef JP
