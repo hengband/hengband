@@ -4211,7 +4211,7 @@ G:[:s
 I:38:1:0
 W:60:0:200:30000
 A:60/8
-P:30:2d4:-2:0:10
+P:40:2d4:-2:0:10
 F:RES_ACID |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of utterly black scales, against which no metal or wood can rest.
@@ -4223,7 +4223,7 @@ G:[:b
 I:38:2:0
 W:40:0:200:35000
 A:40/8
-P:30:2d4:-2:0:10
+P:40:2d4:-2:0:10
 F:RES_ELEC |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of scales as blue as sapphires, emitting eerie sparks and flashes as 
@@ -4236,7 +4236,7 @@ G:[:w
 I:38:3:0
 W:50:0:200:40000
 A:50/8
-P:30:2d4:-2:0:10
+P:40:2d4:-2:0:10
 F:RES_COLD |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of scales, coldly gleaming in frosty white.  A shiver runs down 
@@ -4249,7 +4249,7 @@ G:[:r
 I:38:4:0
 W:80:0:200:100000
 A:80/8
-P:30:2d4:-2:0:10
+P:40:2d4:-2:0:10
 F:RES_FIRE |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of scales, with all the reds of every fire ever lit.  The scar 
@@ -4262,7 +4262,7 @@ G:[:g
 I:38:5:0
 W:70:0:200:80000
 A:70/8
-P:30:2d4:-2:0:10
+P:40:2d4:-2:0:10
 F:RES_POIS |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 #D:$A suit of scales, glistening in sickly green, out from which falls the 
@@ -4277,7 +4277,7 @@ G:[:v
 I:38:6:0
 W:100:0:200:150000
 A:100/16
-P:30:2d4:-2:0:10
+P:40:2d4:-2:0:10
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_POIS
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of scales that throbs with angry energies; it takes all your energy 
@@ -4292,7 +4292,7 @@ G:[:v
 I:38:10:0
 W:65:0:200:60000
 A:65/16
-P:30:2d4:-2:0:10
+P:40:2d4:-2:0:10
 F:RES_LITE | RES_DARK |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
@@ -4302,7 +4302,7 @@ G:[:B
 I:38:12:0
 W:80:0:200:80000
 A:80/16
-P:30:2d4:-2:0:10
+P:40:2d4:-2:0:10
 F:RES_SOUND | RES_SHARDS |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of scales in stern blue and silver.  You feel the slightest tremor 
@@ -4316,7 +4316,7 @@ G:[:U
 I:38:14:0
 W:55:0:200:30000
 A:55/8
-P:30:2d4:-2:0:10
+P:40:2d4:-2:0:10
 F:RES_CONF |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of scales, gleaming in rich engraved bronze.  The more you look at 
@@ -4331,7 +4331,7 @@ G:[:y
 I:38:16:0
 W:65:0:200:40000
 A:65/8
-P:30:2d4:-2:0:10
+P:40:2d4:-2:0:10
 F:RES_SOUND |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of scales in mirror-like gold.  You hear nothing unusual as you 
@@ -4346,7 +4346,7 @@ G:[:v
 I:38:18:0
 W:75:0:200:70000
 A:75/16
-P:30:2d4:-2:0:10
+P:40:2d4:-2:0:10
 F:RES_CHAOS | RES_DISEN |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of scales.  Every shape, in every color imaginable, riot and 
@@ -4360,7 +4360,7 @@ G:[:v
 I:38:20:0
 W:90:0:200:100000
 A:90/16
-P:30:2d4:-2:0:10
+P:40:2d4:-2:0:10
 F:RES_CHAOS | RES_DISEN | RES_SOUND | RES_SHARDS |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$A suit of scales.  Featureless grey to casual inspection, yet a closer 
