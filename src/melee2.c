@@ -2046,8 +2046,8 @@ msg_format("%sは体力を回復したようだ。", m_name);
 				{
 					/* Aura fire */
 					if ((tr_ptr->flags2 & RF2_AURA_FIRE) &&
-						!(r_ptr->flags3 & RF3_IM_FIRE) &&
-						!(r_ptr->flags3 & RF3_RES_ALL) && m_ptr->r_idx)
+						!(r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK) &&
+						m_ptr->r_idx)
 					{
 						if (see_either)
 						{
@@ -2069,8 +2069,8 @@ msg_format("%^sは突然熱くなった！", m_name);
 
 					/* Aura cold */
 					if ((tr_ptr->flags3 & RF3_AURA_COLD) &&
-						!(r_ptr->flags3 & RF3_IM_COLD) &&
-						!(r_ptr->flags3 & RF3_RES_ALL) && m_ptr->r_idx)
+						!(r_ptr->flags3 & RF3_EFF_IM_COLD_MASK) &&
+						m_ptr->r_idx)
 					{
 						if (see_either)
 						{
@@ -2091,9 +2091,9 @@ msg_format("%^sは突然寒くなった！", m_name);
 					}
 
 					/* Aura elec */
-					if ((tr_ptr->flags2 & (RF2_AURA_ELEC)) &&
-						!(r_ptr->flags3 & (RF3_IM_ELEC)) &&
-						!(r_ptr->flags3 & RF3_RES_ALL) && m_ptr->r_idx)
+					if ((tr_ptr->flags2 & RF2_AURA_ELEC) &&
+						!(r_ptr->flags3 & RF3_EFF_IM_ELEC_MASK) &&
+						m_ptr->r_idx)
 					{
 						if (see_either)
 						{

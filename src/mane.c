@@ -995,7 +995,7 @@ msg_format("%sを引き戻した。", m_name);
 			msg_format("You gesture at %s's feet.", m_name);
 #endif
 
-		if ((r_ptr->flags3 & RF3_RES_NEXU) || (r_ptr->flags3 & RF3_RES_TELE) ||
+		if ((r_ptr->flags3 & (RF3_EFF_RES_NEXU_MASK | RF3_RES_TELE)) ||
 			(r_ptr->flags1 & RF1_QUESTOR) || (r_ptr->level + randint1(50) > plev + randint1(60)))
 		{
 #ifdef JP

@@ -1849,7 +1849,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 			{
 				if (p_ptr->sh_fire && alive && !p_ptr->is_dead)
 				{
-					if (!(r_ptr->flags3 & RF3_IM_FIRE))
+					if (!(r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK))
 					{
 						int dam = damroll(2, 6);
 
@@ -1875,13 +1875,13 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					else
 					{
 						if (m_ptr->ml)
-							r_ptr->r_flags3 |= RF3_IM_FIRE;
+							r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK);
 					}
 				}
 
 				if (p_ptr->sh_elec && alive && !p_ptr->is_dead)
 				{
-					if (!(r_ptr->flags3 & RF3_IM_ELEC))
+					if (!(r_ptr->flags3 & RF3_EFF_IM_ELEC_MASK))
 					{
 						int dam = damroll(2, 6);
 
@@ -1907,13 +1907,13 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					else
 					{
 						if (m_ptr->ml)
-							r_ptr->r_flags3 |= RF3_IM_ELEC;
+							r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_ELEC_MASK);
 					}
 				}
 
 				if (p_ptr->sh_cold && alive && !p_ptr->is_dead)
 				{
-					if (!(r_ptr->flags3 & RF3_IM_COLD))
+					if (!(r_ptr->flags3 & RF3_EFF_IM_COLD_MASK))
 					{
 						int dam = damroll(2, 6);
 
@@ -1939,7 +1939,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					else
 					{
 						if (m_ptr->ml)
-							r_ptr->r_flags3 |= RF3_IM_COLD;
+							r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_COLD_MASK);
 					}
 				}
 

@@ -3370,7 +3370,7 @@ bool monster_lava(int r_idx)
 
 	if (!monster_dungeon(r_idx)) return FALSE;
 
-	if (((r_ptr->flags3 & RF3_IM_FIRE) ||
+	if (((r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK) ||
 	     (r_ptr->flags7 & RF7_CAN_FLY)) &&
 	    !(r_ptr->flags3 & RF3_AURA_COLD))
 		return TRUE;
@@ -3530,7 +3530,7 @@ bool monster_can_cross_terrain(byte feat, monster_race *r_ptr)
 	else if ((feat == FEAT_SHAL_LAVA) ||
 	    (feat == FEAT_DEEP_LAVA))
 	{
-		if ((r_ptr->flags3 & RF3_IM_FIRE) ||
+		if ((r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK) ||
 		    (r_ptr->flags7 & RF7_CAN_FLY))
 			return TRUE;
 		else
@@ -3622,7 +3622,7 @@ bool monster_can_enter(int y, int x, monster_race *r_ptr)
 	else if ((feat == FEAT_SHAL_LAVA) ||
 	    (feat == FEAT_DEEP_LAVA))
 	{
-		if ((r_ptr->flags3 & RF3_IM_FIRE) ||
+		if ((r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK) ||
 		    (r_ptr->flags7 & RF7_CAN_FLY))
 			return TRUE;
 		else

@@ -3583,6 +3583,16 @@
 
 
 /*
+ * Hack -- effective elemental and poison immunity mask
+ */
+#define RF3_EFF_IM_ACID_MASK  (RF3_IM_ACID | RF3_RES_ALL)
+#define RF3_EFF_IM_ELEC_MASK  (RF3_IM_ELEC | RF3_RES_ALL)
+#define RF3_EFF_IM_FIRE_MASK  (RF3_IM_FIRE | RF3_RES_ALL)
+#define RF3_EFF_IM_COLD_MASK  (RF3_IM_COLD | RF3_RES_ALL)
+#define RF3_EFF_IM_POIS_MASK  (RF3_IM_POIS | RF3_RES_ALL)
+#define RF3_EFF_RES_NEXU_MASK (RF3_RES_NEXU | RF3_RES_ALL)
+
+/*
  * Hack -- choose "intelligent" spells when desperate
  * Including "summon" spells
  */

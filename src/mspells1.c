@@ -894,11 +894,11 @@ static bool dispel_check(int m_idx)
 	if (p_ptr->tsuyoshi) return (TRUE);
 
 	/* Elemental Brands */
-	if ((p_ptr->special_attack & ATTACK_ACID) && !(r_ptr->flags3 & RF3_IM_ACID)) return (TRUE);
-	if ((p_ptr->special_attack & ATTACK_FIRE) && !(r_ptr->flags3 & RF3_IM_FIRE)) return (TRUE);
-	if ((p_ptr->special_attack & ATTACK_ELEC) && !(r_ptr->flags3 & RF3_IM_ELEC)) return (TRUE);
-	if ((p_ptr->special_attack & ATTACK_COLD) && !(r_ptr->flags3 & RF3_IM_COLD)) return (TRUE);
-	if ((p_ptr->special_attack & ATTACK_POIS) && !(r_ptr->flags3 & RF3_IM_POIS)) return (TRUE);
+	if ((p_ptr->special_attack & ATTACK_ACID) && !(r_ptr->flags3 & RF3_EFF_IM_ACID_MASK)) return (TRUE);
+	if ((p_ptr->special_attack & ATTACK_FIRE) && !(r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK)) return (TRUE);
+	if ((p_ptr->special_attack & ATTACK_ELEC) && !(r_ptr->flags3 & RF3_EFF_IM_ELEC_MASK)) return (TRUE);
+	if ((p_ptr->special_attack & ATTACK_COLD) && !(r_ptr->flags3 & RF3_EFF_IM_COLD_MASK)) return (TRUE);
+	if ((p_ptr->special_attack & ATTACK_POIS) && !(r_ptr->flags3 & RF3_EFF_IM_POIS_MASK)) return (TRUE);
 
 	/* Speed */
 	if (p_ptr->pspeed < 145)

@@ -3471,11 +3471,11 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_BRAND_ACID)) || (p_ptr->special_attack & (ATTACK_ACID)))
 			{
 				/* Notice immunity */
-				if (r_ptr->flags3 & RF3_IM_ACID)
+				if (r_ptr->flags3 & RF3_EFF_IM_ACID_MASK)
 				{
 					if (m_ptr->ml)
 					{
-						r_ptr->r_flags3 |= RF3_IM_ACID;
+						r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_ACID_MASK);
 					}
 				}
 
@@ -3490,11 +3490,11 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_BRAND_ELEC)) || (p_ptr->special_attack & (ATTACK_ELEC)))
 			{
 				/* Notice immunity */
-				if (r_ptr->flags3 & RF3_IM_ELEC)
+				if (r_ptr->flags3 & RF3_EFF_IM_ELEC_MASK)
 				{
 					if (m_ptr->ml)
 					{
-						r_ptr->r_flags3 |= RF3_IM_ELEC;
+						r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_ELEC_MASK);
 					}
 				}
 
@@ -3509,11 +3509,11 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_BRAND_FIRE)) || (p_ptr->special_attack & (ATTACK_FIRE)))
 			{
 				/* Notice immunity */
-				if (r_ptr->flags3 & RF3_IM_FIRE)
+				if (r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK)
 				{
 					if (m_ptr->ml)
 					{
-						r_ptr->r_flags3 |= RF3_IM_FIRE;
+						r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK);
 					}
 				}
 
@@ -3528,11 +3528,11 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_BRAND_COLD)) || (p_ptr->special_attack & (ATTACK_COLD)))
 			{
 				/* Notice immunity */
-				if (r_ptr->flags3 & RF3_IM_COLD)
+				if (r_ptr->flags3 & RF3_EFF_IM_COLD_MASK)
 				{
 					if (m_ptr->ml)
 					{
-						r_ptr->r_flags3 |= RF3_IM_COLD;
+						r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_COLD_MASK);
 					}
 				}
 				/* Otherwise, take the damage */
@@ -3546,11 +3546,11 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_BRAND_POIS)) || (p_ptr->special_attack & (ATTACK_POIS)))
 			{
 				/* Notice immunity */
-				if (r_ptr->flags3 & RF3_IM_POIS)
+				if (r_ptr->flags3 & RF3_EFF_IM_POIS_MASK)
 				{
 					if (m_ptr->ml)
 					{
-						r_ptr->r_flags3 |= RF3_IM_POIS;
+						r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_POIS_MASK);
 					}
 				}
 
