@@ -2888,6 +2888,13 @@ bool buki_motteruka(int i)
 	return ((inventory[i].k_idx && inventory[i].tval >= TV_DIGGING && inventory[i].tval <= TV_SWORD) ? TRUE : FALSE);
 }
 
+
+#ifdef JP
+#undef strchr
+#define strchr strchr_j
+#endif
+
+
 /*
  * Calculate the players current "state", taking into account
  * not only race/class intrinsics, but also objects being worn

@@ -4347,6 +4347,12 @@ prt(format("²ó¿ô: %d", command_arg), 0, 0);
 	if (!caretcmd)
 		caretcmd = command_cmd;
 #endif
+
+#ifdef JP
+#undef strchr
+#define strchr strchr_j
+#endif
+
 	/* Hack -- Scan equipment */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{

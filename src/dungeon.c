@@ -1755,7 +1755,11 @@ static void recharged_notice(object_type *o_ptr)
 	if (!o_ptr->inscription) return;
 
 	/* Find a '!' */
+#ifdef JP
+	s = strchr_j(quark_str(o_ptr->inscription), '!');
+#else
 	s = strchr(quark_str(o_ptr->inscription), '!');
+#endif
 
 	/* Process notification request. */
 	while (s)
@@ -1783,7 +1787,11 @@ static void recharged_notice(object_type *o_ptr)
 		}
 
 		/* Keep looking for '!'s */
+#ifdef JP
+		s = strchr_j(s + 1, '!');
+#else
 		s = strchr(s + 1, '!');
+#endif
 	}
 }
 

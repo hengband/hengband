@@ -15,17 +15,7 @@
 
 #ifdef JP
 #undef strchr
-static char *_strchr(const char *ptr, char ch)
-{
-	for ( ; *ptr != '\0'; ++ptr)
-	{
-		if (*ptr == ch)	return (char *)ptr;
-		if (iskanji(*ptr)) ++ptr;
-	}
-
-	return NULL;
-}
-#define strchr _strchr
+#define strchr strchr_j
 #endif
 /*
  * This file is used to initialize various variables and arrays for the

@@ -4605,6 +4605,12 @@ void display_equip(void)
 }
 
 
+#ifdef JP
+#undef strchr
+#define strchr strchr_j
+#endif
+
+
 /*
  * Find the "first" inventory object with the given "tag".
  *

@@ -142,6 +142,18 @@ char* strstr_j(const char* s, const char* t)
 }
 
 
+char *strchr_j(const char *ptr, char ch)
+{
+	for ( ; *ptr != '\0'; ++ptr)
+	{
+		if (*ptr == ch) return (char *)ptr;
+		if (iskanji(*ptr)) ++ptr;
+	}
+
+	return NULL;
+}
+
+
 /*
  * Convert SJIS string to EUC string
  */
