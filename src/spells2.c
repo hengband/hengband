@@ -6243,10 +6243,7 @@ static void cave_temp_room_aux(int y, int x, bool only_room)
 		if (only_room) return;
 
 		/* Verify */
-		if (!in_bounds(y, x)) return;
-
-		/* If a wall, exit */
-		if (!cave_floor_bold(y, x)) return;
+		if (!in_bounds2(y, x)) return;
 
 		/* Do not exceed the maximum spell range */
 		if (distance(py, px, y, x) > MAX_RANGE) return;
@@ -6260,7 +6257,8 @@ static void cave_temp_room_aux(int y, int x, bool only_room)
 		 * properly.
 		 * This leaves only a check for 6 bounding walls!
 		 */
-		if ((next_to_walls_adj(y, x) == 6) && (next_to_open(y, x) <= 1)) return;
+		if (in_bounds(y, x) && cave_floor_bold(y, x) &&
+                    (next_to_walls_adj(y, x) == 6) && (next_to_open(y, x) <= 1)) return;
 	}
 
 	/* Paranoia -- verify space */
