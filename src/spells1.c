@@ -8033,15 +8033,23 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 	int brad = 0;
 	int bdis = 0;
 	int cdis;
+	int path_n = 0;
+	int max_dis = distance(y1, x1, y2, x2) + rad;
 	
-	/* Not done yet */
-	bool done = FALSE;
-	
+	/* Start from origin */	
 	by = y1;
 	bx = x1;
 	
-	while (bdis <= distance(y1, x1, y2, x2) + rad)
+	while (bdis <= max_dis)
 	{
+		if ((path_n < dist) && (distance(by, bx, y1, x1) < bdis))
+		{
+			/* Get next base point */
+			by = GRID_Y(path_g[path_n]);
+			bx = GRID_X(path_g[path_n]);
+			path_n++;
+		}
+
 		/* Travel from center outward */
 		for (cdis = 0; cdis <= brad; cdis++)
 		{
@@ -8056,10 +8064,11 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 					
 					/* Enforce a circular "ripple" */
 					if (distance(y1, x1, y, x) != bdis) continue;
-					
+
 					/* Enforce an arc */
 					if (distance(by, bx, y, x) != cdis) continue;
-					
+
+
 					if (disint_ball)
 					{
 						/* Disintegration are stopped only by perma-walls */
@@ -8090,28 +8099,12 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 		
 		/* Encode some more "radius" info */
 		gm[bdis + 1] = *pgrids;
-		
-		/* Stop moving */
-		if ((by == y2) && (bx == x2)) done = TRUE;
-		
-		/* Finish */
-		if (done)
-		{
-			bdis++;
-			continue;
-		}
-		
-		/* Ripple outwards */
-/*		mmove2(&by, &bx, y1, x1, y2, x2); */
-		
-		by = GRID_Y(path_g[bdis]);
-		bx = GRID_X(path_g[bdis]);
-	
+
 		/* Find the next ripple */
 		bdis++;
 		
 		/* Increase the size */
-		brad = (rad * bdis) / dist;
+		brad = (rad * bdis) / max_dis;
 	}
 	
 	/* Store the effect size */
