@@ -2044,7 +2044,7 @@ msg_format("%sを葬り去った。", m_name);
 #endif
 
 		}
-		if ((r_ptr->flags1 & RF1_UNIQUE) && !(m_ptr->smart & SM_CLONED))
+		if ((r_ptr->flags1 & RF1_UNIQUE) && !(m_ptr->smart & SM_CLONED) && !vanilla_town)
 		{
 			for (i = 0; i < MAX_KUBI; i++)
 			{
