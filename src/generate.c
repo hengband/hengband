@@ -1049,11 +1049,11 @@ static void build_arena(void)
 
 	place_extra_perm_bold(y_height+6, x_left+18);
 	cave[y_height+6][x_left+18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(y_height-6, x_left+18);
+	place_extra_perm_bold(y_depth-6, x_left+18);
 	cave[y_depth-6][x_left+18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(y_height+6, x_left-18);
+	place_extra_perm_bold(y_height+6, x_right-18);
 	cave[y_height+6][x_right-18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(y_height-6, x_left-18);
+	place_extra_perm_bold(y_depth-6, x_right-18);
 	cave[y_depth-6][x_right-18].info |= (CAVE_GLOW | CAVE_MARK);
 
 	i = y_height + 5;
@@ -1150,11 +1150,11 @@ static void build_battle(void)
 
 	place_extra_perm_bold(y_height+6, x_left+18);
 	cave[y_height+6][x_left+18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(y_height-4, x_left+18);
+	place_extra_perm_bold(y_depth-4, x_left+18);
 	cave[y_depth-4][x_left+18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(y_height+6, x_left-18);
+	place_extra_perm_bold(y_height+6, x_right-18);
 	cave[y_height+6][x_right-18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(y_height-4, x_left-18);
+	place_extra_perm_bold(y_depth-4, x_right-18);
 	cave[y_depth-4][x_right-18].info |= (CAVE_GLOW | CAVE_MARK);
 
 	i = y_height + 4;
