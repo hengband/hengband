@@ -5573,7 +5573,7 @@ N:335:大鷲
 E:Great eagle
 G:B:u
 I:125:5d100:20:65:20
-W:35:2:0:150:10000:640
+W:35:2:0:450:0:0
 B:CLAW:HURT:6d3
 B:CLAW:HURT:6d3
 B:BITE:HURT:3d6
@@ -6444,7 +6444,7 @@ N:384:疾翼『メネルドール』
 E:Meneldor the Swift
 G:B:u
 I:130:13d100:20:65:20
-W:38:1:0:360:0:0
+W:38:1:0:7000:0:0
 B:CLAW:HURT:7d3
 B:CLAW:HURT:7d3
 B:BITE:HURT:3d7
@@ -6912,7 +6912,7 @@ N:410:風早彦『グワイヒア』
 E:Gwaihir the Windlord
 G:B:u
 I:132:15d100:20:65:20
-W:40:1:0:360:0:0
+W:40:1:0:8000:0:0
 B:CLAW:HURT:15d2
 B:CLAW:HURT:15d2
 B:BITE:HURT:3d10
@@ -8054,7 +8054,7 @@ N:468:大鷲王『ソロンドール』
 E:Thorondor
 G:B:u
 I:132:30d100:20:65:20
-W:55:1:0:555:0:0
+W:55:1:0:22222:0:0
 B:CLAW:HURT:16d2
 B:CLAW:HURT:16d2
 B:BITE:HURT:4d10
@@ -9294,8 +9294,11 @@ F:NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING
 D:$It is a massive deep brown statue, striding towards you with an 
 D:$all-too-familiar purpose.  Your magic surprisingly feels much less 
 D:$powerful now.
-D:それは深い茶色の堂々たる巨像で、みんなと仲良くしようと思って大股で歩み寄って
-D:くる。このモンスターに対してはあまりの魔法の無力さに呆然とするであろう。
+#D:それは深い茶色の堂々たる巨像で、みんなと仲良くしようと思って大股で歩み寄って
+#D:くる。このモンスターに対してはあまりの魔法の無力さに呆然とするであろう。
+D:それは深い茶色の堂々たる巨像で、誰にも明らかなありふれた目的
+D:――侵入者を殺す事！――を果たす為にあなたに向って大股で歩み寄ってくる。
+D:このモンスターに対してはあまりの魔法の無力さに呆然とするであろう。
 
 #JZ#
 N:531:『Little Boy』
