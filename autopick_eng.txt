@@ -211,8 +211,8 @@
 #         Returns player name.
 #        $REALM1
 #         Returns player's first magic realm
-#          Life, Sorcery, Nature, Chaos, Death, Trump Arcane, Craft,
-#          Daemon, Music, Kendo
+#          none, Life, Sorcery, Nature, Chaos, Death, Trump Arcane,
+#          Craft, Daemon, Music, Kendo
 #        $REALM2
 #         Returns player's second magic realm
 #        $LEVEL

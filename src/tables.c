@@ -4085,7 +4085,7 @@ cptr E_realm_names[]
 cptr realm_names[]
 #endif
 = {
-	"no magic",
+	"none",
 	"Life",
 	"Sorcery",
 	"Nature",
