@@ -589,7 +589,7 @@ static bool cave_gen(void)
 		destroyed = TRUE;
 
 		/* extra rubble around the place looks cool */
-		build_lake(3+randint0(2));
+		build_lake(one_in_(2) ? GEN_LAKE_TYPE_CAVE : GEN_LAKE_TYPE_EARTH_VAULT);
 	}
 
 	/* Make a lake some of the time */
@@ -605,40 +605,40 @@ static bool cave_gen(void)
 		if (d_info[dungeon_type].flags1 & DF1_LAKE_LAVA)
 		{
 			/* Lake of Lava */
-			if ((dun_level > 80) && (randint0(count) < 2)) laketype = 1;
+			if ((dun_level > 80) && (randint0(count) < 2)) laketype = GEN_LAKE_TYPE_LAVA;
 			count -= 2;
 
 			/* Lake of Lava2 */
-			if (!laketype && (dun_level > 80) && one_in_(count)) laketype = 7;
+			if (!laketype && (dun_level > 80) && one_in_(count)) laketype = GEN_LAKE_TYPE_FIRE_VAULT;
 			count--;
 		}
 
 		if ((d_info[dungeon_type].flags1 & DF1_LAKE_WATER) && !laketype)
 		{
 			/* Lake of Water */
-			if ((dun_level > 50) && randint0(count) < 2) laketype = 2;
+			if ((dun_level > 50) && randint0(count) < 2) laketype = GEN_LAKE_TYPE_WATER;
 			count -= 2;
 
 			/* Lake of Water2 */
-			if (!laketype && (dun_level > 50) && one_in_(count)) laketype = 6;
+			if (!laketype && (dun_level > 50) && one_in_(count)) laketype = GEN_LAKE_TYPE_WATER_VAULT;
 			count--;
 		}
 
 		if ((d_info[dungeon_type].flags1 & DF1_LAKE_RUBBLE) && !laketype)
 		{
 			/* Lake of rubble */
-			if ((dun_level > 35) && (randint0(count) < 2)) laketype = 3;
+			if ((dun_level > 35) && (randint0(count) < 2)) laketype = GEN_LAKE_TYPE_CAVE;
 			count -= 2;
 
 			/* Lake of rubble2 */
-			if (!laketype && (dun_level > 35) && one_in_(count)) laketype = 4;
+			if (!laketype && (dun_level > 35) && one_in_(count)) laketype = GEN_LAKE_TYPE_EARTH_VAULT;
 			count--;
 		}
 
 		/* Lake of tree */
-		if ((dun_level > 5) && (d_info[dungeon_type].flags1 & DF1_LAKE_TREE) && !laketype) laketype = 5;
+		if ((dun_level > 5) && (d_info[dungeon_type].flags1 & DF1_LAKE_TREE) && !laketype) laketype = GEN_LAKE_TYPE_AIR_VAULT;
 
-		if (laketype != 0)
+		if (laketype)
 		{
 			if (cheat_room)
 #ifdef JP
@@ -653,7 +653,7 @@ static bool cave_gen(void)
 
 	if ((dun_level > DUN_CAVERN) && !empty_level &&
 	    (d_info[dungeon_type].flags1 & DF1_CAVERN) &&
-	    (laketype == 0) && !destroyed && (randint1(1000) < dun_level))
+	    !laketype && !destroyed && (randint1(1000) < dun_level))
 	{
 		cavern = TRUE;
 
@@ -803,7 +803,9 @@ static bool cave_gen(void)
 			k = randint1(100);
 
 			/* No caves when a cavern exists: they look bad */
-			if (((k < dun_level) || (d_info[dungeon_type].flags1 & DF1_CAVE)) && (!cavern) && (!empty_level) && (laketype == 0) && !(d_info[dungeon_type].flags1 & DF1_NO_CAVE))
+			if (((k < dun_level) || (d_info[dungeon_type].flags1 & DF1_CAVE))
+			    && !cavern && !empty_level && !laketype
+			    && !(d_info[dungeon_type].flags1 & DF1_NO_CAVE))
 			{
 				/* Type 9 -- Fractal cave */
 				if (room_build(y, x, ROOM_BUILD_TYPE_FRACAVE)) continue;
@@ -847,9 +849,9 @@ static bool cave_gen(void)
 
 
 			/* Only add river if matches lake type or if have no lake at all */
-			if ((((laketype == 1) && (feat1 == FEAT_DEEP_LAVA)) ||
-			    ((laketype == 2) && (feat1 == FEAT_DEEP_WATER)) ||
-			     (laketype == 0)) && feat1)
+			if ((((laketype == GEN_LAKE_TYPE_LAVA) && (feat1 == FEAT_DEEP_LAVA)) ||
+			     ((laketype == GEN_LAKE_TYPE_WATER) && (feat1 == FEAT_DEEP_WATER)) ||
+			      !laketype) && feat1)
 			{
 				add_river(feat1, feat2);
 			}

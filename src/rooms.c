@@ -3413,51 +3413,44 @@ static bool generate_lake(int y0, int x0, int xsize, int ysize, int c1, int c2, 
 	/* Get features based on type */
 	switch (type)
 	{
-		case 1: {
-				/* Lava */
-				feat1 = FEAT_DEEP_LAVA;
-				feat2 = FEAT_SHAL_LAVA;
-				feat3 = floor_type[randint0(100)];
-				}; break;
-		case 2:{
-				/* Water */
-				feat1 = FEAT_DEEP_WATER;
-				feat2 = FEAT_SHAL_WATER;
-				feat3 = floor_type[randint0(100)];
-				}; break;
-		case 3: {
-				/* Collapsed cave */
-				feat1 = floor_type[randint0(100)];
-				feat2 = floor_type[randint0(100)];
-				feat3 = FEAT_RUBBLE;
-				}; break;
-		case 4: {
-				/* Earth vault */
-				feat1 = FEAT_RUBBLE;
-				feat2 = floor_type[randint0(100)];
-				feat3 = FEAT_RUBBLE;
-				}; break;
-		case 5: {
-				/* Air vault */
-				feat1 = FEAT_GRASS;
-				feat2 = FEAT_TREES;
-				feat3 = FEAT_GRASS;
-				}; break;
-		case 6: {
-				/* Water vault */
-				feat1 = FEAT_SHAL_WATER;
-				feat2 = FEAT_DEEP_WATER;
-				feat3 = FEAT_SHAL_WATER;
-				}; break;
-		case 7: {
-				/* Fire Vault */
-				feat1 = FEAT_SHAL_LAVA;
-				feat2 = FEAT_DEEP_LAVA;
-				feat3 = FEAT_SHAL_LAVA;
-				}; break;
+	case GEN_LAKE_TYPE_LAVA: /* Lava */
+		feat1 = FEAT_DEEP_LAVA;
+		feat2 = FEAT_SHAL_LAVA;
+		feat3 = floor_type[randint0(100)];
+		break;
+	case GEN_LAKE_TYPE_WATER: /* Water */
+		feat1 = FEAT_DEEP_WATER;
+		feat2 = FEAT_SHAL_WATER;
+		feat3 = floor_type[randint0(100)];
+		break;
+	case GEN_LAKE_TYPE_CAVE: /* Collapsed cave */
+		feat1 = floor_type[randint0(100)];
+		feat2 = floor_type[randint0(100)];
+		feat3 = FEAT_RUBBLE;
+		break;
+	case GEN_LAKE_TYPE_EARTH_VAULT: /* Earth vault */
+		feat1 = FEAT_RUBBLE;
+		feat2 = floor_type[randint0(100)];
+		feat3 = FEAT_RUBBLE;
+		break;
+	case GEN_LAKE_TYPE_AIR_VAULT: /* Air vault */
+		feat1 = FEAT_GRASS;
+		feat2 = FEAT_TREES;
+		feat3 = FEAT_GRASS;
+		break;
+	case GEN_LAKE_TYPE_WATER_VAULT: /* Water vault */
+		feat1 = FEAT_SHAL_WATER;
+		feat2 = FEAT_DEEP_WATER;
+		feat3 = FEAT_SHAL_WATER;
+		break;
+	case GEN_LAKE_TYPE_FIRE_VAULT: /* Fire Vault */
+		feat1 = FEAT_SHAL_LAVA;
+		feat2 = FEAT_DEEP_LAVA;
+		feat3 = FEAT_SHAL_LAVA;
+		break;
 
-		/* Paranoia */
-		default: return FALSE;
+	/* Paranoia */
+	default: return FALSE;
 	}
 
 	/*
@@ -3465,7 +3458,7 @@ static bool generate_lake(int y0, int x0, int xsize, int ysize, int c1, int c2, 
 	 * this gets rid of alot of isolated one-sqaures that
 	 * can make teleport traps instadeaths...
 	 */
-	
+
 	/* cutoffs */
 	fill_data.c1 = c1;
 	fill_data.c2 = c2;
@@ -3563,7 +3556,7 @@ void build_lake(int type)
 	int c1, c2, c3;
 
 	/* paranoia - exit if lake type out of range. */
-	if ((type < 1) || (type > 7))
+	if ((type < GEN_LAKE_TYPE_LAVA) || (type > GEN_LAKE_TYPE_FIRE_VAULT))
 	{
 		msg_format("Invalid lake type (%d)", type);
 		return;
@@ -4876,22 +4869,22 @@ static void build_elemental_vault(int x0, int y0, int xsiz, int ysiz)
 	if (dun_level < 25)
 	{
 		/* Earth vault  (Rubble) */
-		type = 4;
+		type = GEN_LAKE_TYPE_EARTH_VAULT;
 	}
 	else if (dun_level < 50)
 	{
 		/* Air vault (Trees) */
-		type = 5;
+		type = GEN_LAKE_TYPE_AIR_VAULT;
 	}
 	else if (dun_level < 75)
 	{
 		/* Water vault (shallow water) */
-		type = 6;
+		type = GEN_LAKE_TYPE_WATER_VAULT;
 	}
 	else
 	{
 		/* Fire vault (shallow lava) */
-		type = 7;
+		type = GEN_LAKE_TYPE_FIRE_VAULT;
 	}
 
 	while (!done)
