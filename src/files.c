@@ -4378,28 +4378,6 @@ static void dump_aux_options(FILE *fff)
 #endif
 
 
-	if (ironman_autoscum)
-#ifdef JP
-		fprintf(fff, "\n 自動選り好み:       ALWAYS");
-#else
-		fprintf(fff, "\n Autoscum:           ALWAYS");
-#endif
-
-	else if (auto_scum)
-#ifdef JP
-		fprintf(fff, "\n 自動選り好み:       ON");
-#else
-		fprintf(fff, "\n Autoscum:           ON");
-#endif
-
-	else
-#ifdef JP
-		fprintf(fff, "\n 自動選り好み:       OFF");
-#else
-		fprintf(fff, "\n Autoscum:           OFF");
-#endif
-
-
 	if (ironman_small_levels)
 #ifdef JP
 		fprintf(fff, "\n 小さいダンジョン:   ALWAYS");

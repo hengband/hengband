@@ -624,7 +624,7 @@
  * during the creation of an object (see "get_obj_num()" in "object.c").
  * Lower values yield better objects more often.
  */
-#define GREAT_OBJ       20
+#define GREAT_OBJ       10
 
 /*
  * There is a 1/50 (2%) chance of inflating the requested monster_level

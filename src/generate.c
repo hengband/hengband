@@ -1536,37 +1536,6 @@ why = "モンスターが多すぎる";
 			okay = FALSE;
 		}
 
-		/* Mega-Hack -- "auto-scum" */
-		else if ((auto_scum || ironman_autoscum) && (num < 100) &&
-			 !p_ptr->inside_quest &&
-			 !(d_info[dungeon_type].flags1 & DF1_BEGINNER) &&
-			 !p_ptr->enter_dungeon)
-		{
-			/* Require "goodness" */
-			if ((feeling > 9) ||
-			    ((dun_level >= 7) && (feeling > 8)) ||
-			    ((dun_level >= 15) && (feeling > 7)) ||
-			    ((dun_level >= 35) && (feeling > 6)) ||
-			    ((dun_level >= 70) && (feeling > 5)))
-			{
-				/* Give message to cheaters */
-				if (cheat_room || cheat_hear ||
-				    cheat_peek || cheat_xtra)
-				{
-					/* Message */
-#ifdef JP
-why = "退屈な階";
-#else
-					why = "boring level";
-#endif
-
-				}
-
-				/* Try again */
-				okay = FALSE;
-			}
-		}
-
 		/* Accept */
 		if (okay) break;
 

@@ -233,7 +233,6 @@ bool abbrev_all;   /* Describe obj's all resistances by abbreviation */
 
 /*** Game-Play ***/
 
-bool auto_scum;   /* Auto-scum for good levels */
 bool stack_force_notes;   /* Merge inscriptions when stacking */
 bool stack_force_costs;   /* Merge discounts when stacking */
 bool expand_list;   /* Expand the power of the list commands */
@@ -296,7 +295,6 @@ bool lite_town;   /* Use 'lite' town without a wilderness */
 bool ironman_shops;   /* Stores are permanently closed (*) */
 bool ironman_small_levels;   /* Always create unusually small dungeon levels (*) */
 bool ironman_downward;   /* Disable recall and use of up stairs (*) */
-bool ironman_autoscum;   /* Permanently enable the autoscummer */
 bool ironman_empty_levels;   /* Always create empty 'arena' levels (*) */
 bool ironman_rooms;   /* Always generate very unusual rooms (*) */
 bool ironman_nightmare;   /* Nightmare mode(it isn't even remotely fair!)(*) */
@@ -1156,7 +1154,6 @@ bool vanilla_town;            /* Use "vanilla" town without set quests */
 bool ironman_shops;           /* Stores are permanently closed */
 bool ironman_small_levels;    /* Always create unusually small dungeon levels */
 bool ironman_downward;        /* Don't allow climbing upwards/recalling */
-bool ironman_autoscum;        /* Permanently enable the autoscummer */
 bool lite_town;               /* Use "lite" town without wilderness */
 bool ironman_empty_levels;    /* Always create empty 'arena' levels */
 bool ironman_rooms;           /* Always generate very unusual rooms */

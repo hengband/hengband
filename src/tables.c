@@ -6761,14 +6761,6 @@ option_type option_info[] =
 	/*** Game-Play ***/
 
 #ifdef JP
-	{ &auto_scum,                   FALSE, OPT_PAGE_GAMEPLAY, 1, 1,
-	"auto_scum",                    "階の雰囲気自動選り好み" },
-#else
-	{ &auto_scum,                   FALSE, OPT_PAGE_GAMEPLAY, 1, 1,
-	"auto_scum",                    "Auto-scum for good levels" },
-#endif
-
-#ifdef JP
 	{ &stack_force_notes,           TRUE,  OPT_PAGE_GAMEPLAY, 0, 8,
 	"stack_force_notes",            "異なる銘のアイテムをまとめる" },
 #else
@@ -7134,14 +7126,6 @@ option_type option_info[] =
 #else
 	{ &ironman_downward,            FALSE, OPT_PAGE_BIRTH, 6, 4,
 	"ironman_downward",             "Disable recall and use of up stairs (*)" },
-#endif
-
-#ifdef JP
-	{ &ironman_autoscum,            FALSE, OPT_PAGE_BIRTH, 6, 5,
-	"ironman_autoscum",             "(鉄人用)常に階の雰囲気を自動選り好みする" },
-#else
-	{ &ironman_autoscum,            FALSE, OPT_PAGE_BIRTH, 6, 5,
-	"ironman_autoscum",             "Permanently enable the autoscummer" },
 #endif
 
 #ifdef JP

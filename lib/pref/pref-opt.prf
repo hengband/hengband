@@ -57,7 +57,6 @@ X:abbrev_all
 ##### Game-Play #####
 
 X:manual_haggle
-X:auto_scum
 Y:stack_force_notes
 X:stack_force_costs
 Y:expand_list
@@ -110,7 +109,6 @@ X:lite_town
 X:ironman_shops
 X:ironman_small_levels
 X:ironman_downward
-X:ironman_autoscum
 X:ironman_empty_levels
 X:ironman_rooms
 X:ironman_nightmare
