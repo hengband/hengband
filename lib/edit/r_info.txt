@@ -12924,7 +12924,7 @@ D:$A constructed dragon, the drolem has massive strength.  Powerful spells
 D:$weaved during its creation make it a fearsome adversary.  Its eyes show 
 D:$little intelligence, but it has been instructed to destroy all it meets.
 D:人工的に作られたドラゴンであるドローレムは屈強な力強さを持っている。
-D:その創造に際しては強力な呪文が用いられだが、それがこのモンスターを恐るべき
+D:その創造に際しては強力な呪文が用いられ、それがこのモンスターを恐るべき
 D:強敵に仕立て上げているのだ。その目には知性のかけらも見いだすことはできず、
 D:唯一知っていることは、出会ったもの全てを倒すということだけだ。
 
