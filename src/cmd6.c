@@ -5744,7 +5744,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 			case ART_SACRED_KNIGHTS:
 			{
 #ifdef JP
-				msg_print("首飾が真実を照らし出す...");
+				msg_print("首飾りが真実を照らし出す...");
 #else
 				msg_print("Your amulet exhibits the truth...");
 #endif
