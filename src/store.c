@@ -307,13 +307,13 @@ static void say_comment_1(void)
 	char rumour[1024];
 
 #ifdef JP
-        /* ブラックマーケットのときは別のメッセージを出す */
-        if ( cur_store_num == STORE_BLACK ) {
-                msg_print(comment_1_B[randint0(MAX_COMMENT_1)]);
-        }
-        else{
-                msg_print(comment_1[randint0(MAX_COMMENT_1)]);
-        }
+	/* ブラックマーケットのときは別のメッセージを出す */
+	if ( cur_store_num == STORE_BLACK ) {
+		msg_print(comment_1_B[randint0(MAX_COMMENT_1)]);
+	}
+	else{
+		msg_print(comment_1[randint0(MAX_COMMENT_1)]);
+	}
 #else
 	msg_print(comment_1[randint0(MAX_COMMENT_1)]);
 #endif
@@ -419,15 +419,15 @@ static void say_comment_3(s32b value, int annoyed)
 static void say_comment_4(void)
 {
 #ifdef JP
-        /* ブラックマーケットの時は別のメッセージを出す */
-        if ( cur_store_num == STORE_BLACK ){
-                msg_print(comment_4a_B[randint0(MAX_COMMENT_4A)]);
-                msg_print(comment_4b_B[randint0(MAX_COMMENT_4B)]);
-        }
-        else{
-                msg_print(comment_4a[randint0(MAX_COMMENT_4A)]);
-                msg_print(comment_4b[randint0(MAX_COMMENT_4B)]);
-        }
+	/* ブラックマーケットの時は別のメッセージを出す */
+	if ( cur_store_num == STORE_BLACK ){
+		msg_print(comment_4a_B[randint0(MAX_COMMENT_4A)]);
+		msg_print(comment_4b_B[randint0(MAX_COMMENT_4B)]);
+	}
+	else{
+		msg_print(comment_4a[randint0(MAX_COMMENT_4A)]);
+		msg_print(comment_4b[randint0(MAX_COMMENT_4B)]);
+	}
 #else
 	msg_print(comment_4a[randint0(MAX_COMMENT_4A)]);
 	msg_print(comment_4b[randint0(MAX_COMMENT_4B)]);
@@ -442,13 +442,13 @@ static void say_comment_4(void)
 static void say_comment_5(void)
 {
 #ifdef JP
-        /* ブラックマーケットの時は別のメッセージを出す */
-        if ( cur_store_num == STORE_BLACK ){
-                msg_print(comment_5_B[randint0(MAX_COMMENT_5)]);
-        }
-        else{
-                msg_print(comment_5[randint0(MAX_COMMENT_5)]);
-        }
+	/* ブラックマーケットの時は別のメッセージを出す */
+	if ( cur_store_num == STORE_BLACK ){
+		msg_print(comment_5_B[randint0(MAX_COMMENT_5)]);
+	}
+	else{
+		msg_print(comment_5[randint0(MAX_COMMENT_5)]);
+	}
 #else
 	msg_print(comment_5[randint0(MAX_COMMENT_5)]);
 #endif
@@ -2090,8 +2090,8 @@ static void display_entry(int pos)
 			/* Only show the weight of an individual item */
 			int wgt = o_ptr->weight;
 #ifdef JP
-                        sprintf(out_val, "%3d.%1d kg", lbtokg1(wgt) , lbtokg2(wgt) );
-                        put_str(out_val, i+6, 67);
+			sprintf(out_val, "%3d.%1d kg", lbtokg1(wgt) , lbtokg2(wgt) );
+			put_str(out_val, i+6, 67);
 #else
 			(void)sprintf(out_val, "%3d.%d lb", wgt / 10, wgt % 10);
 			put_str(out_val, i+6, 68);
@@ -2120,8 +2120,8 @@ static void display_entry(int pos)
 			/* Only show the weight of an individual item */
 			int wgt = o_ptr->weight;
 #ifdef JP
-                        sprintf(out_val, "%3d.%1d", lbtokg1(wgt) , lbtokg2(wgt) );
-                        put_str(out_val, i+6, 60);
+			sprintf(out_val, "%3d.%1d", lbtokg1(wgt) , lbtokg2(wgt) );
+			put_str(out_val, i+6, 60);
 #else
 			(void)sprintf(out_val, "%3d.%d", wgt / 10, wgt % 10);
 			put_str(out_val, i+6, 61);
@@ -2402,8 +2402,8 @@ static int get_stock(int *com_val, cptr pmt, int i, int j)
 
 	/* Build the prompt */
 #ifdef JP
-        (void)sprintf(out_val, "(%s:%c-%c, ESCで中断) %s",
-                (((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM)) ? "アイテム" : "商品"), 
+	(void)sprintf(out_val, "(%s:%c-%c, ESCで中断) %s",
+		(((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM)) ? "アイテム" : "商品"), 
 				  I2A(i), I2A(j), pmt);
 #else
 	(void)sprintf(out_val, "(Items %c-%c, ESC to exit) %s",
@@ -2660,8 +2660,8 @@ static int get_haggle(cptr pmt, s32b *poffer, s32b price, int final)
  * Return TRUE if offer is NOT okay
  */
 static bool receive_offer(cptr pmt, s32b *poffer,
-                          s32b last_offer, int factor,
-                          s32b price, int final)
+			  s32b last_offer, int factor,
+			  s32b price, int final)
 {
 	/* Haggle till done */
 	while (TRUE)
@@ -2801,7 +2801,7 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 			cancel = receive_offer("What do you offer? ",
 #endif
 
-			                       &offer, last_offer, 1, cur_ask, final);
+					       &offer, last_offer, 1, cur_ask, final);
 
 			if (cancel)
 			{
@@ -3117,7 +3117,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 				prt("", 1, 0);
 				(void)sprintf(out_val,
 #ifdef JP
-				              "前回の提示価格 $%ld", (long)last_offer);
+					      "前回の提示価格 $%ld", (long)last_offer);
 #else
 							  "Your last bid %ld", (long)last_offer);
 #endif
@@ -3198,18 +3198,18 @@ static void store_purchase(void)
 
 	/* Prompt */
 #ifdef JP
-        /* ブラックマーケットの時は別のメッセージ */
-        switch( cur_store_num ) {
-                case 7:
-                        sprintf(out_val, "どのアイテムを取りますか? ");
-                        break;
-                case 6:
-                        sprintf(out_val, "どれ? ");
-                        break;
-                default:
-                        sprintf(out_val, "どの品物が欲しいんだい? ");
-                        break;
-        }
+	/* ブラックマーケットの時は別のメッセージ */
+	switch( cur_store_num ) {
+		case 7:
+			sprintf(out_val, "どのアイテムを取りますか? ");
+			break;
+		case 6:
+			sprintf(out_val, "どれ? ");
+			break;
+		default:
+			sprintf(out_val, "どの品物が欲しいんだい? ");
+			break;
+	}
 #else
 	if (cur_store_num == STORE_HOME)
 	{
@@ -3993,21 +3993,21 @@ static void store_examine(void)
 	{
 		if (cur_store_num == STORE_HOME)
 #ifdef JP
-                        msg_print("我が家には何も置いてありません。");
+			msg_print("我が家には何も置いてありません。");
 #else
 			msg_print("Your home is empty.");
 #endif
 
-                else if (cur_store_num == STORE_MUSEUM)
+		else if (cur_store_num == STORE_MUSEUM)
 #ifdef JP
-                        msg_print("博物館には何も置いてありません。");
+			msg_print("博物館には何も置いてありません。");
 #else
 			msg_print("Museum is empty.");
 #endif
 
 		else
 #ifdef JP
-                        msg_print("現在商品の在庫を切らしています。");
+			msg_print("現在商品の在庫を切らしています。");
 #else
 			msg_print("I am currently out of stock.");
 #endif
@@ -4151,23 +4151,23 @@ static void store_process_command(void)
 			else
 			{
 				store_top += 12;
-                                /*
-                                 * 隠しオプション(powerup_home)がセットされていないときは
-                                 * 我が家では 2 ページまでしか表示しない
-                                 */
-                                if ((cur_store_num == STORE_HOME) && 
-                                    (powerup_home == FALSE) && 
-                                        (st_ptr->stock_num >= STORE_INVEN_MAX))
-                                {
-                                        if (store_top >= (STORE_INVEN_MAX - 1))
-                                        {
-                                                store_top = 0;
-                                        }
-                                }
-                                else
-                                {
-                                        if (store_top >= st_ptr->stock_num) store_top = 0;
-                                }
+				/*
+				 * 隠しオプション(powerup_home)がセットされていないときは
+				 * 我が家では 2 ページまでしか表示しない
+				 */
+				if ((cur_store_num == STORE_HOME) && 
+				    (powerup_home == FALSE) && 
+					(st_ptr->stock_num >= STORE_INVEN_MAX))
+				{
+					if (store_top >= (STORE_INVEN_MAX - 1))
+					{
+						store_top = 0;
+					}
+				}
+				else
+				{
+					if (store_top >= st_ptr->stock_num) store_top = 0;
+				}
 
 				display_inventory();
 			}
@@ -4589,8 +4589,8 @@ void do_cmd_store(void)
 		if (cur_store_num == STORE_HOME)
 		{
 #ifdef JP
-                   prt("g) アイテムを取る", 21, 27);
-                   prt("d) アイテムを置く", 22, 27);
+		   prt("g) アイテムを取る", 21, 27);
+		   prt("d) アイテムを置く", 22, 27);
 		   prt("x) 家のアイテムを調べる", 23,27);
 #else
 		   prt("g) Get an item.", 21, 27);
@@ -4604,7 +4604,7 @@ void do_cmd_store(void)
 		else if (cur_store_num == STORE_MUSEUM)
 		{
 #ifdef JP
-                   prt("d) アイテムを置く", 21, 27);
+		   prt("d) アイテムを置く", 21, 27);
 		   prt("x) 博物館のアイテムを調べる", 23,27);
 #else
 		   prt("d) Drop an item.", 21, 27);
@@ -4617,8 +4617,8 @@ void do_cmd_store(void)
 		else
 		{
 #ifdef JP
-                        prt("p) 商品を買う", 21, 30);
-                        prt("s) アイテムを売る", 22, 30);
+			prt("p) 商品を買う", 21, 30);
+			prt("s) アイテムを売る", 22, 30);
 			prt("x) 商品を調べる", 23,30);
 #else
 		   prt("p) Purchase an item.", 21, 30);
@@ -4629,29 +4629,29 @@ void do_cmd_store(void)
 		}
 
 #ifdef JP
-                /* 基本的なコマンドの追加表示 */
+		/* 基本的なコマンドの追加表示 */
 
-                prt("i/e) 持ち物/装備の一覧", 21, 56);
+		prt("i/e) 持ち物/装備の一覧", 21, 56);
 
-                if( rogue_like_commands == TRUE )
-                {
-                        prt("w/T) 装備する/はずす", 22, 56);
-                }
-                else
-                {
-                        prt("w/t) 装備する/はずす", 22, 56);
-                }
+		if( rogue_like_commands == TRUE )
+		{
+			prt("w/T) 装備する/はずす", 22, 56);
+		}
+		else
+		{
+			prt("w/t) 装備する/はずす", 22, 56);
+		}
 #else
-                prt("i/e) Inventry/Equipment list", 21, 56);
+		prt("i/e) Inventry/Equipment list", 21, 56);
 
-                if( rogue_like_commands == TRUE )
-                {
-                        prt("w/T) Wear/Take off equipment", 22, 56);
-                }
-                else
-                {
-                        prt("w/t) Wear/Take off equipment", 22, 56);
-                }
+		if( rogue_like_commands == TRUE )
+		{
+			prt("w/T) Wear/Take off equipment", 22, 56);
+		}
+		else
+		{
+			prt("w/t) Wear/Take off equipment", 22, 56);
+		}
 #endif
 		/* Prompt */
 #ifdef JP

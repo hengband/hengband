@@ -119,12 +119,12 @@ msg_format("レベル %d にようこそ。", p_ptr->lev);
 		p_ptr->window |= (PW_PLAYER | PW_SPELL);
 
 		/* HPとMPの上昇量を表示 */
-                level_up = 1;
+		level_up = 1;
 
 		/* Handle stuff */
 		handle_stuff();
 
-                level_up = 0;
+		level_up = 0;
 
 		if (level_inc_stat)
 		{
@@ -935,7 +935,7 @@ msg_print("地面に落とされた。");
 	/* Bloodletters of Khorne may drop a blade of chaos */
 	else if (m_ptr->r_idx == MON_BLOODLETTER &&
 
-	         (randint1(100) < 15) &&
+		 (randint1(100) < 15) &&
 	    !(p_ptr->inside_arena || p_ptr->inside_battle))
 	{
 		/* Get local object */
@@ -1613,15 +1613,15 @@ static void get_exp_from_mon(int dam, monster_type *m_ptr)
 #define M_INT_RSHIFT63(h1,l1) {l1=(l1>>1)|(h1<<30);h1>>=1;}
 #define M_INT_DIV63(h1,l1,h2,l2,result) \
 		do{ \
-	          int bit=1; \
-                  result = 0; \
+		  int bit=1; \
+		  result = 0; \
 		  while( M_INT_GREATER63(h1,l1, h2, l2) ){M_INT_LSHIFT63(h2, l2); bit<<=1;} \
 		  for(bit>>=1; bit>=1; bit>>=1){ \
 		    M_INT_RSHIFT63(h2, l2); \
 		    if(M_INT_GREATER63(h1, l1, h2, l2)) \
 		      {result|=bit;M_INT_SUB63(h1, l1, h2, l2);} \
 		  } \
-                } while(0)
+		} while(0)
 
 		/* Give some experience for the kill */
 		M_INT_DIV63(m_exp_h, m_exp_l, div_h, div_l, new_exp);
@@ -2101,7 +2101,7 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 		 * Run (sometimes) if at 10% or less of max hit points,
 		 * or (usually) when hit for half its current hit points
 		 */
-                if ((randint1(10) >= percentage) ||
+		if ((randint1(10) >= percentage) ||
 		    ((dam >= m_ptr->hp) && (randint0(100) < 80)))
 		{
 			/* Hack -- note fear */
@@ -2109,8 +2109,8 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 
 			/* XXX XXX XXX Hack -- Add some timed fear */
 			m_ptr->monfear = (randint1(10) +
-			                  (((dam >= m_ptr->hp) && (percentage > 7)) ?
-			                   20 : ((11 - percentage) * 5)));
+					  (((dam >= m_ptr->hp) && (percentage > 7)) ?
+					   20 : ((11 - percentage) * 5)));
 		}
 	}
 
@@ -2810,10 +2810,10 @@ static bool target_set_accept(int y, int x)
 	/* Interesting memorized features */
 	if (c_ptr->info & (CAVE_MARK))
 	{
-                byte feat;
+		byte feat;
 
-                /* Feature code (applying "mimic" field) */
-                feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+		/* Feature code (applying "mimic" field) */
+		feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
 
 		/* Notice glyphs */
 		if (c_ptr->info & CAVE_OBJECT) return (TRUE);
@@ -3305,8 +3305,8 @@ s2 = "をまた";
 
 				/* Use a preposition */
 #ifdef JP
-                              s2 = "の上";
-                              s3 = "にいる";
+			      s2 = "の上";
+			      s3 = "にいる";
 #else
 				s2 = "on ";
 #endif
@@ -3416,12 +3416,12 @@ s1, o_name, s2, s3, info);
 
 							/* Remove the first object from the list. */
 							excise_object_idx(o_idx);
- 	
+	
 							/* Find end of the list. */
 							i = c_ptr->o_idx;
 							while (o_list[i].next_o_idx)
 								i = o_list[i].next_o_idx;
- 	
+	
 							/* Add after the last object. */
 							o_list[i].next_o_idx = o_idx;
 						}
@@ -3505,8 +3505,8 @@ if (o_ptr->number != 1) s1 = "それらは";
 		/* Double break */
 		if (this_o_idx) break;
 
-                /* Feature code (applying "mimic" field) */
-                feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+		/* Feature code (applying "mimic" field) */
+		feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
 
 		/* Require knowledge about grid, or ability to see grid */
 		if (!(c_ptr->info & CAVE_MARK) && !player_can_see_bold(y, x))
@@ -3532,11 +3532,11 @@ if (o_ptr->number != 1) s1 = "それらは";
 #else
 				name = format("%s(level %d)", d_text + d_info[c_ptr->special].text, d_info[c_ptr->special].mindepth);
 #endif
-                        }
+			}
 			else if (feat == FEAT_TOWN)
 			{
 				name = town[c_ptr->special].name;
-                        }
+			}
 			else if (p_ptr->wild_mode && (feat == FEAT_FLOOR))
 			{
 #ifdef JP
@@ -5574,15 +5574,15 @@ msg_print("場所を選んでスペースキーを押して下さい。");
 				int dx = ddx[d];
 				int dy = ddy[d];
 
-                                /* XTRA HACK MOVEFAST */
-                                if (move_fast)
-                                {
-                                     x += dx * wid / 2;
-                                     y += dy * hgt / 2;
-                                } else {
-                                x += dx;
-                                y += dy;
-                                }
+				/* XTRA HACK MOVEFAST */
+				if (move_fast)
+				{
+				     x += dx * wid / 2;
+				     y += dy * hgt / 2;
+				} else {
+				x += dx;
+				y += dy;
+				}
 
 				/* Do not move horizontally if unnecessary */
 				if (((x < panel_col_min + wid / 2) && (dx > 0)) ||

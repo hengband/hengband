@@ -1024,7 +1024,7 @@ msg_print("普通になった気がする。");
 		/*
 		  some races are apt to gain specified mutations
 		  This should be allowed only if "choose_mut" is 0.
-		                                        --- henkma
+							--- henkma
 		*/
 		if(!choose_mut){
 			if (p_ptr->prace == RACE_VAMPIRE &&
@@ -1045,12 +1045,12 @@ muta_desc = "眼が幻惑的になった...";
 				 !(p_ptr->muta2 & MUT2_HORNS) &&
 				 (randint1(10) < 7))
 			  {
-			  	muta_class = &(p_ptr->muta2);
-			  	muta_which = MUT2_HORNS;
+				muta_class = &(p_ptr->muta2);
+				muta_which = MUT2_HORNS;
 #ifdef JP
 muta_desc = "角が額から生えてきた！";
 #else
-			   	muta_desc = "Horns pop forth into your forehead!";
+				muta_desc = "Horns pop forth into your forehead!";
 #endif
 
 			}
@@ -3260,8 +3260,8 @@ int count_bits(u32b x)
 static int count_mutations(void)
 {
 	return (count_bits(p_ptr->muta1) +
-	        count_bits(p_ptr->muta2) +
-	        count_bits(p_ptr->muta3));
+		count_bits(p_ptr->muta2) +
+		count_bits(p_ptr->muta3));
 }
 
 

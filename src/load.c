@@ -300,13 +300,13 @@ static void rd_item(object_type *o_ptr)
 	rd_u32b(&o_ptr->art_flags[1]);
 	rd_u32b(&o_ptr->art_flags[2]);
 	if (h_older_than(1, 3, 0, 0)) o_ptr->art_flags[3] = 0L;
-        else rd_u32b(&o_ptr->art_flags[3]);
+	else rd_u32b(&o_ptr->art_flags[3]);
 
-        if (h_older_than(1, 3, 0, 0))
-        {
-                if (o_ptr->name2 == EGO_TELEPATHY)
-                        add_flag(o_ptr->art_flags, TR_TELEPATHY);
-        }
+	if (h_older_than(1, 3, 0, 0))
+	{
+		if (o_ptr->name2 == EGO_TELEPATHY)
+			add_flag(o_ptr->art_flags, TR_TELEPATHY);
+	}
 
 	if (z_older_than(11, 0, 11))
 	{
@@ -420,11 +420,11 @@ static void rd_item(object_type *o_ptr)
 	else
 	{
 		rd_byte(&o_ptr->xtra3);
-                if (h_older_than(1, 3, 0, 1))
-                {
-                        if (o_ptr->tval > TV_CAPTURE && o_ptr->xtra3 >= 1+96)
-                                o_ptr->xtra3 += -96 + MIN_SPECIAL_ESSENCE;
-                }
+		if (h_older_than(1, 3, 0, 1))
+		{
+			if (o_ptr->tval > TV_CAPTURE && o_ptr->xtra3 >= 1+96)
+				o_ptr->xtra3 += -96 + MIN_SPECIAL_ESSENCE;
+		}
 
 		rd_s16b(&o_ptr->xtra4);
 		rd_s16b(&o_ptr->xtra5);
@@ -436,7 +436,7 @@ static void rd_item(object_type *o_ptr)
 		o_ptr->pval = 0;
 	}
 
-        rd_byte(&o_ptr->feeling);
+	rd_byte(&o_ptr->feeling);
 
 	/* Inscription */
 	rd_string(buf, sizeof(buf));
@@ -580,7 +580,7 @@ static void rd_monster(monster_type *m_ptr)
 		rd_s16b(&m_ptr->target_x);
 	}
 
-        rd_byte(&m_ptr->invulner);
+	rd_byte(&m_ptr->invulner);
 
 	if (!(z_major == 2 && z_minor == 0 && z_patch == 6))
 		rd_u32b(&m_ptr->smart);
@@ -1223,16 +1223,16 @@ static void rd_extra(void)
 	{
 		for (i = 0; i < 108; i++) rd_s32b(&p_ptr->magic_num1[i]);
 		for (i = 0; i < 108; i++) rd_byte(&p_ptr->magic_num2[i]);
-                if (h_older_than(1, 3, 0, 1))
-                {
-                        if (p_ptr->pclass == CLASS_SMITH)
-                        {
-                                p_ptr->magic_num1[TR_ES_ATTACK] = p_ptr->magic_num1[96];
-                                p_ptr->magic_num1[96] = 0;
-                                p_ptr->magic_num1[TR_ES_AC] = p_ptr->magic_num1[97];
-                                p_ptr->magic_num1[97] = 0;
-                        }
-                }
+		if (h_older_than(1, 3, 0, 1))
+		{
+			if (p_ptr->pclass == CLASS_SMITH)
+			{
+				p_ptr->magic_num1[TR_ES_ATTACK] = p_ptr->magic_num1[96];
+				p_ptr->magic_num1[96] = 0;
+				p_ptr->magic_num1[TR_ES_AC] = p_ptr->magic_num1[97];
+				p_ptr->magic_num1[97] = 0;
+			}
+		}
 	}
 	if ((p_ptr->pclass == CLASS_BARD) && p_ptr->magic_num1[0]) p_ptr->action = ACTION_SING;
 
@@ -1404,16 +1404,16 @@ note(format("の中", tmp16s));
 	}
 	else
 	{
-                byte max = (byte)max_d_idx;
+		byte max = (byte)max_d_idx;
 
-                rd_byte(&max);
+		rd_byte(&max);
 
-                for(i = 0; i < max; i++)
+		for(i = 0; i < max; i++)
 		{
-                        rd_s16b(&max_dlv[i]);
+			rd_s16b(&max_dlv[i]);
 			if (max_dlv[i] > d_info[i].maxdepth) max_dlv[i] = d_info[i].maxdepth;
 		}
-        }
+	}
 
 	/* Repair maximum player level XXX XXX XXX */
 	if (p_ptr->max_plv < p_ptr->lev) p_ptr->max_plv = p_ptr->lev;
@@ -1872,7 +1872,7 @@ static errr rd_dungeon(void)
 
 	/* Header info */
 	rd_s16b(&dun_level);
-        if (z_older_than(10, 3, 8)) dungeon_type = DUNGEON_ANGBAND;
+	if (z_older_than(10, 3, 8)) dungeon_type = DUNGEON_ANGBAND;
 	else rd_byte(&dungeon_type);
 
 	/* Set the base level for old versions */
@@ -1905,22 +1905,22 @@ static errr rd_dungeon(void)
 	/* Load the dungeon data */
 	for (x = y = 0; y < ymax; )
 	{
-                u16b info;
+		u16b info;
 
 		/* Grab RLE info */
 		rd_byte(&count);
 		if (z_older_than(10,3,6))
-                {
+		{
 			rd_byte(&tmp8u);
-                        info = (u16b)tmp8u;
-                }
+			info = (u16b)tmp8u;
+		}
 		else
-                {
+		{
 			rd_u16b(&info);
 
-                        /* Decline invalid flags */
-                        info &= ~(CAVE_LITE | CAVE_VIEW | CAVE_MNLT);
-                }
+			/* Decline invalid flags */
+			info &= ~(CAVE_LITE | CAVE_VIEW | CAVE_MNLT);
+		}
 
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
@@ -1929,7 +1929,7 @@ static errr rd_dungeon(void)
 			c_ptr = &cave[y][x];
 
 			/* Extract "info" */
-                        c_ptr->info = info;
+			c_ptr->info = info;
 
 			/* Advance/Wrap */
 			if (++x >= xmax)
@@ -2034,84 +2034,84 @@ static errr rd_dungeon(void)
 		}
 	}
 
-        /* Convert cave data */
-        if (z_older_than(11, 0, 99))
-        {
-                for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
-                {
+	/* Convert cave data */
+	if (z_older_than(11, 0, 99))
+	{
+		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
+		{
 			/* Wipe old unused flags */
 			cave[y][x].info &= ~(CAVE_MASK);
-                }
-        }
+		}
+	}
 
-        if (h_older_than(1, 1, 1, 0))
-        {
-                for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
-                {
+	if (h_older_than(1, 1, 1, 0))
+	{
+		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
+		{
 			/* Access the cave */
 			c_ptr = &cave[y][x];
 
-                        /* Very old */
-                        if (c_ptr->feat == FEAT_INVIS)
-                        {
-                                c_ptr->feat = FEAT_FLOOR;
-                                c_ptr->info |= CAVE_TRAP;
-                        }
-                
-                        /* Older than 1.1.1 */
-                        if (c_ptr->feat == FEAT_MIRROR)
-                        {
-                                c_ptr->feat = FEAT_FLOOR;
-                                c_ptr->info |= CAVE_OBJECT;
-                        }
-                }
-        }
+			/* Very old */
+			if (c_ptr->feat == FEAT_INVIS)
+			{
+				c_ptr->feat = FEAT_FLOOR;
+				c_ptr->info |= CAVE_TRAP;
+			}
+		
+			/* Older than 1.1.1 */
+			if (c_ptr->feat == FEAT_MIRROR)
+			{
+				c_ptr->feat = FEAT_FLOOR;
+				c_ptr->info |= CAVE_OBJECT;
+			}
+		}
+	}
 
-        if (h_older_than(1, 3, 1, 0))
-        {
-                for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
-                {
+	if (h_older_than(1, 3, 1, 0))
+	{
+		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
+		{
 			/* Access the cave */
 			c_ptr = &cave[y][x];
 
-                        /* Old CAVE_IN_MIRROR flag */
-                        if (c_ptr->info & CAVE_OBJECT)
-                        {
-                                c_ptr->mimic = FEAT_MIRROR;
-                        }
+			/* Old CAVE_IN_MIRROR flag */
+			if (c_ptr->info & CAVE_OBJECT)
+			{
+				c_ptr->mimic = FEAT_MIRROR;
+			}
 
-                        /* Runes will be mimics and flags */
-                        else if (c_ptr->feat == FEAT_MINOR_GLYPH ||
-                                 c_ptr->feat == FEAT_GLYPH)
-                        {
-                                c_ptr->info |= CAVE_OBJECT;
-                                c_ptr->mimic = c_ptr->feat;
-                                c_ptr->feat = FEAT_FLOOR;
-                        }
+			/* Runes will be mimics and flags */
+			else if (c_ptr->feat == FEAT_MINOR_GLYPH ||
+				 c_ptr->feat == FEAT_GLYPH)
+			{
+				c_ptr->info |= CAVE_OBJECT;
+				c_ptr->mimic = c_ptr->feat;
+				c_ptr->feat = FEAT_FLOOR;
+			}
 
-                        /* Hidden traps will be trap terrains mimicing floor */
-                        else if (c_ptr->info & CAVE_TRAP)
-                        {
-                                c_ptr->info &= ~CAVE_TRAP;
-                                c_ptr->mimic = c_ptr->feat;
-                                c_ptr->feat = choose_random_trap();
-                        }
+			/* Hidden traps will be trap terrains mimicing floor */
+			else if (c_ptr->info & CAVE_TRAP)
+			{
+				c_ptr->info &= ~CAVE_TRAP;
+				c_ptr->mimic = c_ptr->feat;
+				c_ptr->feat = choose_random_trap();
+			}
 
-                        /* Another hidden trap */
-                        else if (c_ptr->feat == FEAT_INVIS)
-                        {
-                                c_ptr->mimic = FEAT_FLOOR;
-                                c_ptr->feat = FEAT_TRAP_OPEN;
-                        }
+			/* Another hidden trap */
+			else if (c_ptr->feat == FEAT_INVIS)
+			{
+				c_ptr->mimic = FEAT_FLOOR;
+				c_ptr->feat = FEAT_TRAP_OPEN;
+			}
 
-                        /* Hidden doors will be closed doors mimicing wall */
-                        else if (c_ptr->feat == FEAT_SECRET)
-                        {
-                                place_closed_door(y, x);
-                                c_ptr->mimic = FEAT_WALL_EXTRA;
-                        }
-                }
-        }
+			/* Hidden doors will be closed doors mimicing wall */
+			else if (c_ptr->feat == FEAT_SECRET)
+			{
+				place_closed_door(y, x);
+				c_ptr->mimic = FEAT_WALL_EXTRA;
+			}
+		}
+	}
 
 	/*** Objects ***/
 
@@ -2293,13 +2293,13 @@ static errr rd_savefile_new_aux(void)
 
 
 	/* Mention the savefile version */
-        note(format(
+	note(format(
 #ifdef JP
-                     "バージョン %d.%d.%d のセーブ・ファイルをロード中...",
+		     "バージョン %d.%d.%d のセーブ・ファイルをロード中...",
 #else
-                     "Loading a %d.%d.%d savefile...",
+		     "Loading a %d.%d.%d savefile...",
 #endif
-                     (z_major > 9) ? z_major - 10 : z_major, z_minor, z_patch));
+		     (z_major > 9) ? z_major - 10 : z_major, z_minor, z_patch));
 
 
 	/* Strip the version bytes */
@@ -2314,11 +2314,11 @@ static errr rd_savefile_new_aux(void)
 	x_check = 0L;
 
 	/* Read the version number of the savefile */
-        /* Old savefile will be version 0.0.0.3 */
-        rd_byte(&h_ver_extra);
-        rd_byte(&h_ver_patch);
-        rd_byte(&h_ver_minor);
-        rd_byte(&h_ver_major);
+	/* Old savefile will be version 0.0.0.3 */
+	rd_byte(&h_ver_extra);
+	rd_byte(&h_ver_patch);
+	rd_byte(&h_ver_minor);
+	rd_byte(&h_ver_major);
 
 	/* Operating system info */
 	rd_u32b(&sf_system);

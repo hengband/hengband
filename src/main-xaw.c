@@ -345,13 +345,13 @@ static XtResource resources[] =
 static void Initialize(AngbandWidget request, AngbandWidget new);
 static void Redisplay(AngbandWidget w, XEvent *event, Region region);
 static Boolean SetValues(AngbandWidget current, AngbandWidget request,
-                         AngbandWidget new, ArgList args, Cardinal *num_args);
+			 AngbandWidget new, ArgList args, Cardinal *num_args);
 static void Destroy(AngbandWidget widget);
 
 /* Forward declaration for internal functions */
 static void calculateSizeHints(AngbandWidget new);
 static XFontStruct *getFont(AngbandWidget widget,
-                            String font, Boolean fallback);
+			    String font, Boolean fallback);
 
 
 /* Class record constanst */
@@ -411,7 +411,7 @@ WidgetClass angbandWidgetClass = (WidgetClass) &angbandClassRec;
  * Public procedures
  */
 static void AngbandOutputText(AngbandWidget widget, int x, int y,
-                              String txt, int len, int color)
+			      String txt, int len, int color)
 {
 	/* Do nothing if the string is null */
 	if (!txt || !*txt)
@@ -428,11 +428,11 @@ static void AngbandOutputText(AngbandWidget widget, int x, int y,
 
 	/* Place the string */
 	XDrawImageString (XtDisplay(widget), XtWindow(widget),
-	                  widget->angband.gc[color], x, y, txt, len);
+			  widget->angband.gc[color], x, y, txt, len);
 }
 
 static void AngbandClearArea(AngbandWidget widget,
-                             int x, int y, int w, int h, int color)
+			     int x, int y, int w, int h, int color)
 {
 	/* Figure out which area to clear */
 	y = y * widget->angband.fontheight + widget->angband.internal_border;
@@ -440,9 +440,9 @@ static void AngbandClearArea(AngbandWidget widget,
 
 	/* Clear the area */
 	XFillRectangle(XtDisplay(widget), XtWindow(widget),
-	               widget->angband.gc[color],
-	               x, y, widget->angband.fontwidth*w,
-	               widget->angband.fontheight*h);
+		       widget->angband.gc[color],
+		       x, y, widget->angband.fontwidth*w,
+		       widget->angband.fontheight*h);
 }
 
 /*
@@ -485,8 +485,8 @@ static void Initialize(AngbandWidget request, AngbandWidget new)
 		else
 			gcv.foreground = new->angband.color[n];
 		new->angband.gc[n] = XtGetGC((Widget)new, GCFont | GCForeground |
-		                             GCBackground | GCGraphicsExposures,
-		                             &gcv);
+					     GCBackground | GCGraphicsExposures,
+					     &gcv);
 	}
 
 	/* Create a special GC for highlighting */
@@ -494,8 +494,8 @@ static void Initialize(AngbandWidget request, AngbandWidget new)
 	WhitePixelOfScreen(XtScreen((Widget)new));
 	gcv.function = GXxor;
 	new->angband.gc[NUM_COLORS] = XtGetGC((Widget)new, GCFunction |
-	                                      GCGraphicsExposures |
-	                                      GCForeground, &gcv);
+					      GCGraphicsExposures |
+					      GCForeground, &gcv);
 
 	/* Calculate window geometry */
 	new->core.height = new->angband.start_rows * new->angband.fontheight +
@@ -544,8 +544,8 @@ static void Redisplay(AngbandWidget widget, XEvent *event, Region region)
  * can potentially have effects that spans the whole widget).
  */
 static Boolean SetValues(AngbandWidget current, AngbandWidget request,
-                         AngbandWidget new, ArgList args,
-                         Cardinal *num_args)
+			 AngbandWidget new, ArgList args,
+			 Cardinal *num_args)
 {
 	int depth = DefaultDepthOfScreen(XtScreen((Widget) new));
 	Boolean font_changed = FALSE;
@@ -604,8 +604,8 @@ static Boolean SetValues(AngbandWidget current, AngbandWidget request,
 			XtReleaseGC((Widget)current, current->angband.gc[n]);
 			/* Get the new GC */
 			new->angband.gc[n] = XtGetGC((Widget)new, GCFont | GCForeground |
-			                             GCBackground | GCGraphicsExposures,
-			                             &gcv);
+						     GCBackground | GCGraphicsExposures,
+						     &gcv);
 		}
 
 		/* Replace the old XOR/highlighting GC */
@@ -614,8 +614,8 @@ static Boolean SetValues(AngbandWidget current, AngbandWidget request,
 		gcv.function = GXxor;
 		XtReleaseGC((Widget)current, current->angband.gc[NUM_COLORS]);
 		new->angband.gc[NUM_COLORS] = XtGetGC((Widget)new, GCFunction |
-		                                      GCGraphicsExposures |
-		                                      GCForeground, &gcv);
+						      GCGraphicsExposures |
+						      GCForeground, &gcv);
 		/* Fix the background color */
 		new->core.background_pixel = new->angband.color[0];
 	}
@@ -696,7 +696,7 @@ static void calculateSizeHints(AngbandWidget new)
  * Load a font
  */
 static XFontStruct *getFont(AngbandWidget widget,
-                            String font, Boolean fallback)
+			    String font, Boolean fallback)
 {
 	Display *dpy = XtDisplay((Widget) widget);
 	char buf[256];
@@ -880,7 +880,7 @@ static String fallback[] =
  * Do a redraw
  */
 static void react_redraw(Widget widget,
-                         XtPointer client_data, XtPointer call_data)
+			 XtPointer client_data, XtPointer call_data)
 {
 	term_data *old_td = (term_data*)(Term->data);
 	term_data *td = (term_data*)client_data;
@@ -954,18 +954,18 @@ static void react_keypress(XKeyEvent *ev)
 	if (ks)
 	{
 		sprintf(msg, "%c%s%s%s%s_%lX%c", 31,
-		        mc ? "N" : "", ms ? "S" : "",
-		        mo ? "O" : "", mx ? "M" : "",
-		        (unsigned long)(ks), 13);
+			mc ? "N" : "", ms ? "S" : "",
+			mo ? "O" : "", mx ? "M" : "",
+			(unsigned long)(ks), 13);
 	}
 
 	/* Hack -- Use the Keycode */
 	else
 	{
 		sprintf(msg, "%c%s%s%s%sK_%X%c", 31,
-		        mc ? "N" : "", ms ? "S" : "",
-		        mo ? "O" : "", mx ? "M" : "",
-		        ev->keycode, 13);
+			mc ? "N" : "", ms ? "S" : "",
+			mo ? "O" : "", mx ? "M" : "",
+			ev->keycode, 13);
 	}
 
 	/* Enqueue the "fake" string */
@@ -989,7 +989,7 @@ static void react_keypress(XKeyEvent *ev)
 
 
 static void handle_event (Widget widget, XtPointer client_data, XEvent *event,
-                          Boolean *continue_to_dispatch)
+			  Boolean *continue_to_dispatch)
 {
 	term_data *old_td = (term_data*)(Term->data);
 	term_data *td = (term_data *)client_data;
@@ -1085,7 +1085,7 @@ static errr Term_xtra_xaw(int n, int v)
 		for (i=0; i<MAX_TERM_DATA; i++) {
 		    if (Term == &data[i].t)
 			XClearWindow(XtDisplay((Widget)data[i].widget),
-			             XtWindow((Widget)data[i].widget));
+				     XtWindow((Widget)data[i].widget));
 		}
 		return (0);
 	}
@@ -1157,20 +1157,20 @@ static void term_raise(term_data win)
  * Initialize a term_data
  */
 static errr term_data_init(term_data *td, Widget topLevel,
-                           int key_buf, String name,
-                           ArgList widget_arg, Cardinal widget_arg_no)
+			   int key_buf, String name,
+			   ArgList widget_arg, Cardinal widget_arg_no)
 {
 	Widget parent;
 	term *t = &td->t;
 
 	/* Create the shell widget */
 	parent = XtCreatePopupShell(name, topLevelShellWidgetClass, topLevel,
-	                            NULL, 0);
+				    NULL, 0);
 
 	/* Create the interior widget */
 	td->widget = (AngbandWidget)
 	XtCreateManagedWidget (name, angbandWidgetClass,
-	                       parent, widget_arg, widget_arg_no);
+			       parent, widget_arg, widget_arg_no);
 
 	/* Initialize the term (full size) */
 	term_init(t, 80, 24, key_buf);
@@ -1193,11 +1193,11 @@ static errr term_data_init(term_data *td, Widget topLevel,
 
 	/* Register the keypress event handler */
 	XtAddEventHandler((Widget)td->widget, KeyPressMask,
-	                  False, (XtEventHandler) handle_event, td);
+			  False, (XtEventHandler) handle_event, td);
 
 	/* Redraw callback */
 	XtAddCallback((Widget)td->widget, XtNredrawCallback,
-	              react_redraw, td);
+		      react_redraw, td);
 
 	/* Realize the widget */
 	XtRealizeWidget(parent);
@@ -1255,7 +1255,7 @@ errr init_xaw(void)
 
 	/* Initialize the toolkit */
 	topLevel = XtAppInitialize (&appcon, "Angband", NULL, 0, &argc, argv,
-	                            fallback, NULL, 0);
+				    fallback, NULL, 0);
 
 	/* Initialize the windows */
 	for (i=0; i<MAX_TERM_DATA; i++) {

@@ -110,11 +110,11 @@ void place_random_stairs(int y, int x)
 void place_random_door(int y, int x)
 {
 	int tmp;
-        cave_type *c_ptr = &cave[y][x];
+	cave_type *c_ptr = &cave[y][x];
 
-        /* Initialize mimic info */
-        c_ptr->mimic = 0;
-        
+	/* Initialize mimic info */
+	c_ptr->mimic = 0;
+	
 	if (d_info[dungeon_type].flags1 & DF1_NO_DOORS)
 	{
 		place_floor_bold(y, x);
@@ -142,17 +142,17 @@ void place_random_door(int y, int x)
 	else if (tmp < 600)
 	{
 		/* Create secret door */
-                place_closed_door(y, x);
+		place_closed_door(y, x);
 
-                /* Hide */
-                c_ptr->mimic = fill_type[randint0(100)];
+		/* Hide */
+		c_ptr->mimic = fill_type[randint0(100)];
 
-                /* Floor type terrain cannot hide a door */
-                if (!(c_ptr->mimic & 0x20))
-                {
-                        c_ptr->feat = c_ptr->mimic;
-                        c_ptr->mimic = 0;
-                }
+		/* Floor type terrain cannot hide a door */
+		if (!(c_ptr->mimic & 0x20))
+		{
+			c_ptr->feat = c_ptr->mimic;
+			c_ptr->mimic = 0;
+		}
 	}
 
 	/* Closed, locked, or stuck doors (400/1000) */

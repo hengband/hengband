@@ -1210,11 +1210,11 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
  */
 
 #ifdef JP
-                { "フレンドリーなビルボ",       200,    170,  108,   5,  15,  RACE_HOBBIT},
+		{ "フレンドリーなビルボ",       200,    170,  108,   5,  15,  RACE_HOBBIT},
 /*                { "憶病者ラストリン",       200,    175,  108,   4,  12,  RACE_HUMAN},  */
-                { "憶病者リンスウィンド",       200,    175,  108,   4,  12,  RACE_HUMAN}, 
-                { "背の低いサルタン",             300,    170,  107,   5,  15,  RACE_GNOME},
-                { "ハンサムなライア=エル",      300,    165,  107,   6,  18,  RACE_ELF},
+		{ "憶病者リンスウィンド",       200,    175,  108,   4,  12,  RACE_HUMAN}, 
+		{ "背の低いサルタン",             300,    170,  107,   5,  15,  RACE_GNOME},
+		{ "ハンサムなライア=エル",      300,    165,  107,   6,  18,  RACE_ELF},
 #else
 		{ "Bilbo the Friendly",         200,    170, 108,  5, 15, RACE_HOBBIT},
 /*		{ "Raistlin the Chicken",       200,    175, 108,  4, 12, RACE_HUMAN}, */
@@ -1367,10 +1367,10 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 	{
 		/* Armoury - 28 unique names */
 #ifdef JP
-                { "醜悪コン=ダー",      5000,   210,  115,   5,   7,  RACE_HALF_ORC},
-                { "頑固者ダーグ=ロウ",  10000,  190,  111,   4,   9,  RACE_HUMAN},
-                { "賢者デカド",                 25000,  200,  112,   4,  10,  RACE_DUNADAN},
-                { "鍛冶屋のウィーランド",   30000,  200,  112,   4,   5,  RACE_DWARF},
+		{ "醜悪コン=ダー",      5000,   210,  115,   5,   7,  RACE_HALF_ORC},
+		{ "頑固者ダーグ=ロウ",  10000,  190,  111,   4,   9,  RACE_HUMAN},
+		{ "賢者デカド",                 25000,  200,  112,   4,  10,  RACE_DUNADAN},
+		{ "鍛冶屋のウィーランド",   30000,  200,  112,   4,   5,  RACE_DWARF},
 #else
 		{ "Kon-Dar the Ugly",           5000,   210, 115,  5,  7, RACE_HALF_ORC},
 		{ "Darg-Low the Grim",          10000,  190, 111,  4,  9, RACE_HUMAN},
@@ -1394,9 +1394,9 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "Decado the Handsome",            25000,  200, 112,  4, 10, RACE_AMBERITE},
 #endif
 #ifdef JP
-        { "エロー・ドラゴンスケイル",          30000,  200, 112,  4,  5, RACE_ELF},
+	{ "エロー・ドラゴンスケイル",          30000,  200, 112,  4,  5, RACE_ELF},
 #else
-        { "Elo Dragonscale",          30000,  200, 112,  4,  5, RACE_ELF},
+	{ "Elo Dragonscale",          30000,  200, 112,  4,  5, RACE_ELF},
 #endif
 #ifdef JP
 { "デリカトス",           10000,   210, 115,  5,  7, RACE_SPRITE},
@@ -1414,9 +1414,9 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "Animus",            25000,  200, 112,  4, 10, RACE_GOLEM},
 #endif
 #ifdef JP
-        { "マルヴァス",          30000,  200, 112,  4,  5, RACE_HALF_TITAN},
+	{ "マルヴァス",          30000,  200, 112,  4,  5, RACE_HALF_TITAN},
 #else
-        { "Malvus",          30000,  200, 112,  4,  5, RACE_HALF_TITAN},
+	{ "Malvus",          30000,  200, 112,  4,  5, RACE_HALF_TITAN},
 #endif
 #ifdef JP
 { "セラクシス",           10000,   210, 115,  5,  7, RACE_ZOMBIE},
@@ -1434,9 +1434,9 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "Drios the Faint",            25000,  200, 112,  4, 10, RACE_SPECTRE},
 #endif
 #ifdef JP
-        { "冷たいバスリック",          30000,  200, 112,  4,  5, RACE_VAMPIRE},
+	{ "冷たいバスリック",          30000,  200, 112,  4,  5, RACE_VAMPIRE},
 #else
-        { "Bathric the Cold",          30000,  200, 112,  4,  5, RACE_VAMPIRE},
+	{ "Bathric the Cold",          30000,  200, 112,  4,  5, RACE_VAMPIRE},
 #endif
 #ifdef JP
 { "冷酷ヴェンジェラ",           10000,   210, 115,  5,  7, RACE_HALF_TROLL},
@@ -1454,9 +1454,9 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "Yojo II",            25000,  200, 112,  4, 10, RACE_DWARF},
 #endif
 #ifdef JP
-        { "優しいラナラー",          30000,  200, 112,  4,  5, RACE_AMBERITE},
+	{ "優しいラナラー",          30000,  200, 112,  4,  5, RACE_AMBERITE},
 #else
-        { "Ranalar the Sweet",          30000,  200, 112,  4,  5, RACE_AMBERITE},
+	{ "Ranalar the Sweet",          30000,  200, 112,  4,  5, RACE_AMBERITE},
 #endif
 #ifdef JP
 { "不浄のホルバグ",           5000,   210, 115,  5,  7, RACE_HALF_ORC},
@@ -1474,9 +1474,9 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "Isedrelias",            25000,  200, 112,  4, 10, RACE_SPRITE},
 #endif
 #ifdef JP
-        { "一つ目ヴェグナー",          5000,  200, 112,  4,  5, RACE_CYCLOPS},
+	{ "一つ目ヴェグナー",          5000,  200, 112,  4,  5, RACE_CYCLOPS},
 #else
-        { "Vegnar One-eye",          5000,  200, 112,  4,  5, RACE_CYCLOPS},
+	{ "Vegnar One-eye",          5000,  200, 112,  4,  5, RACE_CYCLOPS},
 #endif
 #ifdef JP
 { "混沌のロディッシュ",           10000,   210, 115,  5,  7, RACE_BEASTMAN},
@@ -1494,9 +1494,9 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "Elvererith the Cheat",           10000,  200, 112,  4, 10, RACE_DARK_ELF},
 #endif
 #ifdef JP
-        { "インプのザサス",          30000,  200, 112,  4,  5, RACE_IMP},
+	{ "インプのザサス",          30000,  200, 112,  4,  5, RACE_IMP},
 #else
-        { "Zzathath the Imp",          30000,  200, 112,  4,  5, RACE_IMP},
+	{ "Zzathath the Imp",          30000,  200, 112,  4,  5, RACE_IMP},
 #endif
 #ifdef JP
 { "醜悪コン=ダー",           5000,   210, 115,  5,  7, RACE_HALF_ORC},
@@ -1522,10 +1522,10 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 	{
 		/* Weapon Smith - 28 unique names */
 #ifdef JP
-                { "残忍なるアーノルド",        5000,   210,  115,   6,   6,  RACE_HALF_TROLL},
-                { "獣殺しのアーンダル", 10000,  185,  110,   5,   9,  RACE_HALF_ELF},
-                { "獣マスターのエディー", 25000,  190,  115,   5,   7,  RACE_HOBBIT},
-                { "竜殺しのオグライン", 30000,  195,  112,   4,   8,  RACE_DWARF},
+		{ "残忍なるアーノルド",        5000,   210,  115,   6,   6,  RACE_HALF_TROLL},
+		{ "獣殺しのアーンダル", 10000,  185,  110,   5,   9,  RACE_HALF_ELF},
+		{ "獣マスターのエディー", 25000,  190,  115,   5,   7,  RACE_HOBBIT},
+		{ "竜殺しのオグライン", 30000,  195,  112,   4,   8,  RACE_DWARF},
 #else
 		{ "Arnold the Beastly",      5000,   210, 115,  6,  6, RACE_BARBARIAN},
 		{ "Arndal Beast-Slayer",        10000,  185, 110,  5,  9, RACE_HALF_ELF},
@@ -1677,10 +1677,10 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 	{
 		/* Temple - 22 unique names */
 #ifdef JP
-                { "質素なルードヴィヒ",         5000,   175,  109,   6,  15,  RACE_HUMAN},
-                { "パラディンのガンナー",       10000,  185,  110,   5,  23,  RACE_HUMAN},
-                { "選ばれしトリン",                     25000,  180,  107,   6,  20,  RACE_ELF},
-                { "賢明なるサラストロ",                     30000,  185,  109,   5,  15,  RACE_DWARF},
+		{ "質素なルードヴィヒ",         5000,   175,  109,   6,  15,  RACE_HUMAN},
+		{ "パラディンのガンナー",       10000,  185,  110,   5,  23,  RACE_HUMAN},
+		{ "選ばれしトリン",                     25000,  180,  107,   6,  20,  RACE_ELF},
+		{ "賢明なるサラストロ",                     30000,  185,  109,   5,  15,  RACE_DWARF},
 #else
 		{ "Ludwig the Humble",          5000,   175, 109,  6, 15, RACE_DWARF},
 		{ "Gunnar the Paladin",         10000,  185, 110,  5, 23, RACE_HALF_TROLL},
@@ -1832,10 +1832,10 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 	{
 		/* Alchemist - 26 unique names */
 #ifdef JP
-                { "化学者マウザー",             10000,  190,  111,   5,   8,  RACE_HALF_ELF},
-                { "カオスのウィズル",   10000,  190,  110,   6,   8,  RACE_HOBBIT},
-                { "強欲ミダス",              15000,  200,  116,   6,   9,  RACE_GNOME},
-                { "貧弱ジャ=ファー",                   15000,  220,  111,   4,   9,  RACE_ELF},/*FIRST*/
+		{ "化学者マウザー",             10000,  190,  111,   5,   8,  RACE_HALF_ELF},
+		{ "カオスのウィズル",   10000,  190,  110,   6,   8,  RACE_HOBBIT},
+		{ "強欲ミダス",              15000,  200,  116,   6,   9,  RACE_GNOME},
+		{ "貧弱ジャ=ファー",                   15000,  220,  111,   4,   9,  RACE_ELF},/*FIRST*/
 #else
 		{ "Mauser the Chemist",         10000,  190, 111,  5,  8, RACE_HALF_ELF},
 		{ "Wizzle the Chaotic",         10000,  190, 110,  6,  8, RACE_HOBBIT},
@@ -1844,14 +1844,14 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 #endif
 
 #ifdef JP
-        { "カカルラカカル",           15000,  200, 116,  6,  9, RACE_KLACKON},
+	{ "カカルラカカル",           15000,  200, 116,  6,  9, RACE_KLACKON},
 #else
-        { "Kakalrakakal",           15000,  200, 116,  6,  9, RACE_KLACKON},
+	{ "Kakalrakakal",           15000,  200, 116,  6,  9, RACE_KLACKON},
 #endif
 #ifdef JP
-        { "錬金術師ジャル=エス",       15000,  220, 111,  4,  9, RACE_ELF},
+	{ "錬金術師ジャル=エス",       15000,  220, 111,  4,  9, RACE_ELF},
 #else
-        { "Jal-Eth the Alchemist",       15000,  220, 111,  4,  9, RACE_ELF},
+	{ "Jal-Eth the Alchemist",       15000,  220, 111,  4,  9, RACE_ELF},
 #endif
 #ifdef JP
 { "用心深いファネラス",         10000,  190, 111,  5,  8, RACE_DWARF},
@@ -1864,14 +1864,14 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "Runcie the Insane",         10000,  190, 110,  6,  8, RACE_HUMAN},
 #endif
 #ifdef JP
-        { "グランブルワース",           15000,  200, 116,  6,  9, RACE_GNOME},
+	{ "グランブルワース",           15000,  200, 116,  6,  9, RACE_GNOME},
 #else
-        { "Grumbleworth",           15000,  200, 116,  6,  9, RACE_GNOME},
+	{ "Grumbleworth",           15000,  200, 116,  6,  9, RACE_GNOME},
 #endif
 #ifdef JP
-        { "フリッター",       15000,  220, 111,  4,  9, RACE_SPRITE},
+	{ "フリッター",       15000,  220, 111,  4,  9, RACE_SPRITE},
 #else
-        { "Flitter",       15000,  220, 111,  4,  9, RACE_SPRITE},
+	{ "Flitter",       15000,  220, 111,  4,  9, RACE_SPRITE},
 #endif
 #ifdef JP
 { "ザリルス",         10000,  190, 111,  5,  8, RACE_HUMAN},
@@ -1884,14 +1884,14 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "Egbert the Old",         10000,  190, 110,  6,  8, RACE_DWARF},
 #endif
 #ifdef JP
-        { "誇り高きヴァリンドラ",           15000,  200, 116,  6,  9, RACE_HIGH_ELF},
+	{ "誇り高きヴァリンドラ",           15000,  200, 116,  6,  9, RACE_HIGH_ELF},
 #else
-        { "Valindra the Proud",           15000,  200, 116,  6,  9, RACE_HIGH_ELF},
+	{ "Valindra the Proud",           15000,  200, 116,  6,  9, RACE_HIGH_ELF},
 #endif
 #ifdef JP
-        { "錬金術師タエン",       15000,  220, 111,  4,  9, RACE_HUMAN},
+	{ "錬金術師タエン",       15000,  220, 111,  4,  9, RACE_HUMAN},
 #else
-        { "Taen the Alchemist",       15000,  220, 111,  4,  9, RACE_HUMAN},
+	{ "Taen the Alchemist",       15000,  220, 111,  4,  9, RACE_HUMAN},
 #endif
 #ifdef JP
 { "巧言カイド",         10000,  190, 111,  5,  8, RACE_VAMPIRE},
@@ -1904,14 +1904,14 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "Fulir the Dark",         10000,  190, 110,  6,  8, RACE_NIBELUNG},
 #endif
 #ifdef JP
-        { "質素なドムリ",           15000,  200, 116,  6,  9, RACE_DWARF},
+	{ "質素なドムリ",           15000,  200, 116,  6,  9, RACE_DWARF},
 #else
-        { "Domli the Humble",           15000,  200, 116,  6,  9, RACE_DWARF},
+	{ "Domli the Humble",           15000,  200, 116,  6,  9, RACE_DWARF},
 #endif
 #ifdef JP
-        { "魔の子ヤァジュッカ",       15000,  220, 111,  4,  9, RACE_IMP},
+	{ "魔の子ヤァジュッカ",       15000,  220, 111,  4,  9, RACE_IMP},
 #else
-        { "Yaarjukka Demonspawn",       15000,  220, 111,  4,  9, RACE_IMP},
+	{ "Yaarjukka Demonspawn",       15000,  220, 111,  4,  9, RACE_IMP},
 #endif
 #ifdef JP
 { "薬草師ジェララルドール",         10000,  190, 111,  5,  8, RACE_HIGH_ELF},
@@ -1924,14 +1924,14 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "Olelaldan the Wise",         10000,  190, 110,  6,  8, RACE_BARBARIAN},
 #endif
 #ifdef JP
-        { "デモニシストのフゾグロ",           15000,  200, 116,  6,  9, RACE_IMP},
+	{ "デモニシストのフゾグロ",           15000,  200, 116,  6,  9, RACE_IMP},
 #else
-        { "Fthoglo the Demonicist",           15000,  200, 116,  6,  9, RACE_IMP},
+	{ "Fthoglo the Demonicist",           15000,  200, 116,  6,  9, RACE_IMP},
 #endif
 #ifdef JP
-        { "錬金術師ドゥリアシュ",       15000,  220, 111,  4,  9, RACE_HALF_ORC},
+	{ "錬金術師ドゥリアシュ",       15000,  220, 111,  4,  9, RACE_HALF_ORC},
 #else
-        { "Dridash the Alchemist",       15000,  220, 111,  4,  9, RACE_HALF_ORC},
+	{ "Dridash the Alchemist",       15000,  220, 111,  4,  9, RACE_HALF_ORC},
 #endif
 #ifdef JP
 { "強者ネリア",         10000,  190, 111,  5,  8, RACE_CYCLOPS},
@@ -1944,14 +1944,14 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "Lignus the Pungent",         10000,  190, 110,  6,  8, RACE_HALF_ORC},
 #endif
 #ifdef JP
-        { "ティルバ",           15000,  200, 116,  6,  9, RACE_HOBBIT},
+	{ "ティルバ",           15000,  200, 116,  6,  9, RACE_HOBBIT},
 #else
-        { "Tilba",           15000,  200, 116,  6,  9, RACE_HOBBIT},
+	{ "Tilba",           15000,  200, 116,  6,  9, RACE_HOBBIT},
 #endif
 #ifdef JP
-        { "金持ちミリルドリック",       15000,  220, 111,  4,  9, RACE_HUMAN},
+	{ "金持ちミリルドリック",       15000,  220, 111,  4,  9, RACE_HUMAN},
 #else
-        { "Myrildric the Wealthy",       15000,  220, 111,  4,  9, RACE_HUMAN},
+	{ "Myrildric the Wealthy",       15000,  220, 111,  4,  9, RACE_HUMAN},
 #endif
 #ifdef JP
 { "科学者マウザー",         10000,  190, 111,  5,  8, RACE_HALF_ELF},
@@ -1974,23 +1974,23 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "Ja-Far the Alchemist",       15000,  220, 111,  4,  9, RACE_ELF},
 #endif
 #ifdef JP
-        { "カカルラカカル",           15000,  200, 116,  6,  9, RACE_KLACKON},
+	{ "カカルラカカル",           15000,  200, 116,  6,  9, RACE_KLACKON},
 #else
-        { "Kakalrakakal",           15000,  200, 116,  6,  9, RACE_KLACKON},
+	{ "Kakalrakakal",           15000,  200, 116,  6,  9, RACE_KLACKON},
 #endif
 #ifdef JP
-        { "錬金術師ジャル=エス",       15000,  220, 111,  4,  9, RACE_ELF},
+	{ "錬金術師ジャル=エス",       15000,  220, 111,  4,  9, RACE_ELF},
 #else
-        { "Jal-Eth the Alchemist",       15000,  220, 111,  4,  9, RACE_ELF},
+	{ "Jal-Eth the Alchemist",       15000,  220, 111,  4,  9, RACE_ELF},
 #endif
 	},
 	{
 		/* Magic Shop - 23 unique names */
 #ifdef JP
-                { "ソーサラーのロ=パン",       20000,  200,  110,   7,   8,  RACE_HALF_ELF},
-                { "偉大なるブガービイ",         20000,  215,  113,   6,  10,  RACE_GNOME},
-                { "イェンダーの魔法使い",     30000,  200,  110,   7,  10,  RACE_HUMAN},
-                { "死霊使いリャク",30000,      175,  110,   5,  11,  RACE_HIGH_ELF},
+		{ "ソーサラーのロ=パン",       20000,  200,  110,   7,   8,  RACE_HALF_ELF},
+		{ "偉大なるブガービイ",         20000,  215,  113,   6,  10,  RACE_GNOME},
+		{ "イェンダーの魔法使い",     30000,  200,  110,   7,  10,  RACE_HUMAN},
+		{ "死霊使いリャク",30000,      175,  110,   5,  11,  RACE_HIGH_ELF},
 #else
 		{ "Lo Pan the Sorcerer",        20000,  200, 110,  7,  8, RACE_HALF_ELF},
 		{ "Buggerby the Great",         20000,  215, 113,  6, 10, RACE_GNOME},
@@ -1999,24 +1999,24 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 #endif
 
 #ifdef JP
-        { "魔術師スキドゥニー",        15000,  200, 110,  7,  8, RACE_HALF_ELF},
+	{ "魔術師スキドゥニー",        15000,  200, 110,  7,  8, RACE_HALF_ELF},
 #else
-        { "Skidney the Sorcerer",        15000,  200, 110,  7,  8, RACE_HALF_ELF},
+	{ "Skidney the Sorcerer",        15000,  200, 110,  7,  8, RACE_HALF_ELF},
 #endif
 #ifdef JP
-        { "幻術師キリア",       30000,  200, 110,  7, 10, RACE_HUMAN},
+	{ "幻術師キリア",       30000,  200, 110,  7, 10, RACE_HUMAN},
 #else
-        { "Kyria the Illusionist",       30000,  200, 110,  7, 10, RACE_HUMAN},
+	{ "Kyria the Illusionist",       30000,  200, 110,  7, 10, RACE_HUMAN},
 #endif
 #ifdef JP
-        { "死霊術師ニッキ",       30000,  175, 110,  5, 11, RACE_DARK_ELF},
+	{ "死霊術師ニッキ",       30000,  175, 110,  5, 11, RACE_DARK_ELF},
 #else
-        { "Nikki the Necromancer",       30000,  175, 110,  5, 11, RACE_DARK_ELF},
+	{ "Nikki the Necromancer",       30000,  175, 110,  5, 11, RACE_DARK_ELF},
 #endif
 #ifdef JP
-        { "ソロストラン",        15000,  200, 110,  7,  8, RACE_SPRITE},
+	{ "ソロストラン",        15000,  200, 110,  7,  8, RACE_SPRITE},
 #else
-        { "Solostoran",        15000,  200, 110,  7,  8, RACE_SPRITE},
+	{ "Solostoran",        15000,  200, 110,  7,  8, RACE_SPRITE},
 #endif
 #ifdef JP
 { "烏賊口アチシェ",         20000,  215, 113,  6, 10, RACE_MIND_FLAYER},
@@ -2024,19 +2024,19 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "Achshe the Tentacled",         20000,  215, 113,  6, 10, RACE_MIND_FLAYER},
 #endif
 #ifdef JP
-        { "貴族のカザ",       30000,  200, 110,  7, 10, RACE_HIGH_ELF},
+	{ "貴族のカザ",       30000,  200, 110,  7, 10, RACE_HIGH_ELF},
 #else
-        { "Kaza the Noble",       30000,  200, 110,  7, 10, RACE_HIGH_ELF},
+	{ "Kaza the Noble",       30000,  200, 110,  7, 10, RACE_HIGH_ELF},
 #endif
 #ifdef JP
-        { "暗きファジル",       30000,  175, 110,  5, 11, RACE_DARK_ELF},
+	{ "暗きファジル",       30000,  175, 110,  5, 11, RACE_DARK_ELF},
 #else
-        { "Fazzil the Dark",       30000,  175, 110,  5, 11, RACE_DARK_ELF},
+	{ "Fazzil the Dark",       30000,  175, 110,  5, 11, RACE_DARK_ELF},
 #endif
 #ifdef JP
-        { "偉大なるケルドーン",        15000,  200, 110,  7,  8, RACE_DWARF},
+	{ "偉大なるケルドーン",        15000,  200, 110,  7,  8, RACE_DWARF},
 #else
-        { "Keldorn the Grand",        15000,  200, 110,  7,  8, RACE_DWARF},
+	{ "Keldorn the Grand",        15000,  200, 110,  7,  8, RACE_DWARF},
 #endif
 #ifdef JP
 { "フィランスロプス",         20000,  215, 113,  6, 10, RACE_HOBBIT},
@@ -2044,19 +2044,19 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "Philanthropus",         20000,  215, 113,  6, 10, RACE_HOBBIT},
 #endif
 #ifdef JP
-        { "魔女のアグナー",       30000,  200, 110,  7, 10, RACE_HUMAN},
+	{ "魔女のアグナー",       30000,  200, 110,  7, 10, RACE_HUMAN},
 #else
-        { "Agnar the Enchantress",       30000,  200, 110,  7, 10, RACE_HUMAN},
+	{ "Agnar the Enchantress",       30000,  200, 110,  7, 10, RACE_HUMAN},
 #endif
 #ifdef JP
-        { "死霊術師ビュリアンス",       30000,  175, 110,  5, 11, RACE_BEASTMAN},
+	{ "死霊術師ビュリアンス",       30000,  175, 110,  5, 11, RACE_BEASTMAN},
 #else
-        { "Buliance the Necromancer",       30000,  175, 110,  5, 11, RACE_BEASTMAN},
+	{ "Buliance the Necromancer",       30000,  175, 110,  5, 11, RACE_BEASTMAN},
 #endif
 #ifdef JP
-        { "ハイメイジのヴイラク",        15000,  200, 110,  7,  8, RACE_BEASTMAN},
+	{ "ハイメイジのヴイラク",        15000,  200, 110,  7,  8, RACE_BEASTMAN},
 #else
-        { "Vuirak the High-Mage",        15000,  200, 110,  7,  8, RACE_BEASTMAN},
+	{ "Vuirak the High-Mage",        15000,  200, 110,  7,  8, RACE_BEASTMAN},
 #endif
 #ifdef JP
 { "知恵者マディッシュ",         20000,  215, 113,  6, 10, RACE_BEASTMAN},
@@ -2064,19 +2064,19 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "Madish the Smart",         20000,  215, 113,  6, 10, RACE_BEASTMAN},
 #endif
 #ifdef JP
-        { "ファレブリンボール",       30000,  200, 110,  7, 10, RACE_HIGH_ELF},
+	{ "ファレブリンボール",       30000,  200, 110,  7, 10, RACE_HIGH_ELF},
 #else
-        { "Falebrimbor",       30000,  200, 110,  7, 10, RACE_HIGH_ELF},
+	{ "Falebrimbor",       30000,  200, 110,  7, 10, RACE_HIGH_ELF},
 #endif
 #ifdef JP
-        { "陰険フェリル=ガンド",       30000,  175, 110,  5, 11, RACE_DARK_ELF},
+	{ "陰険フェリル=ガンド",       30000,  175, 110,  5, 11, RACE_DARK_ELF},
 #else
-        { "Felil-Gand the Subtle",       30000,  175, 110,  5, 11, RACE_DARK_ELF},
+	{ "Felil-Gand the Subtle",       30000,  175, 110,  5, 11, RACE_DARK_ELF},
 #endif
 #ifdef JP
-        { "呪術師サレゴード",        15000,  200, 110,  7,  8, RACE_BARBARIAN},
+	{ "呪術師サレゴード",        15000,  200, 110,  7,  8, RACE_BARBARIAN},
 #else
-        { "Thalegord the Shaman",        15000,  200, 110,  7,  8, RACE_BARBARIAN},
+	{ "Thalegord the Shaman",        15000,  200, 110,  7,  8, RACE_BARBARIAN},
 #endif
 #ifdef JP
 { "神秘家クトゥアロス",         20000,  215, 113,  6, 10, RACE_MIND_FLAYER},
@@ -2084,14 +2084,14 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "Cthoaloth the Mystic",         20000,  215, 113,  6, 10, RACE_MIND_FLAYER},
 #endif
 #ifdef JP
-        { "幻術師イベリ",       30000,  200, 110,  7, 10, RACE_SKELETON},
+	{ "幻術師イベリ",       30000,  200, 110,  7, 10, RACE_SKELETON},
 #else
-        { "Ibeli the Illusionist",       30000,  200, 110,  7, 10, RACE_SKELETON},
+	{ "Ibeli the Illusionist",       30000,  200, 110,  7, 10, RACE_SKELETON},
 #endif
 #ifdef JP
-        { "死霊術師ヘトー",       30000,  175, 110,  5, 11, RACE_YEEK},
+	{ "死霊術師ヘトー",       30000,  175, 110,  5, 11, RACE_YEEK},
 #else
-        { "Heto the Necromancer",       30000,  175, 110,  5, 11, RACE_YEEK},
+	{ "Heto the Necromancer",       30000,  175, 110,  5, 11, RACE_YEEK},
 #endif
 #ifdef JP
 { "魔術師ロ=パン",        20000,  200, 110,  7,  8, RACE_HALF_ELF},
@@ -2114,24 +2114,24 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "Rjak the Necromancer",       30000,  175, 110,  5, 11, RACE_DARK_ELF},
 #endif
 #ifdef JP
-        { "魔術師スキドゥニー",        15000,  200, 110,  7,  8, RACE_HALF_ELF},
+	{ "魔術師スキドゥニー",        15000,  200, 110,  7,  8, RACE_HALF_ELF},
 #else
-        { "Skidney the Sorcerer",        15000,  200, 110,  7,  8, RACE_HALF_ELF},
+	{ "Skidney the Sorcerer",        15000,  200, 110,  7,  8, RACE_HALF_ELF},
 #endif
 #ifdef JP
-        { "幻術師キリア",       30000,  200, 110,  7, 10, RACE_HUMAN},
+	{ "幻術師キリア",       30000,  200, 110,  7, 10, RACE_HUMAN},
 #else
-        { "Kyria the Illusionist",       30000,  200, 110,  7, 10, RACE_HUMAN},
+	{ "Kyria the Illusionist",       30000,  200, 110,  7, 10, RACE_HUMAN},
 #endif
 #ifdef JP
-        { "死霊術師ニッキ",       30000,  175, 110,  5, 11, RACE_DARK_ELF},
+	{ "死霊術師ニッキ",       30000,  175, 110,  5, 11, RACE_DARK_ELF},
 #else
-        { "Nikki the Necromancer",       30000,  175, 110,  5, 11, RACE_DARK_ELF},
+	{ "Nikki the Necromancer",       30000,  175, 110,  5, 11, RACE_DARK_ELF},
 #endif
 #ifdef JP
-        { "ソロストラン",        15000,  200, 110,  7,  8, RACE_SPRITE},
+	{ "ソロストラン",        15000,  200, 110,  7,  8, RACE_SPRITE},
 #else
-        { "Solostoran",        15000,  200, 110,  7,  8, RACE_SPRITE},
+	{ "Solostoran",        15000,  200, 110,  7,  8, RACE_SPRITE},
 #endif
 #ifdef JP
 { "烏賊口アチシェ",         20000,  215, 113,  6, 10, RACE_MIND_FLAYER},
@@ -2142,10 +2142,10 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 	{
 		/* Black Market - 32 unique names */
 #ifdef JP
-                { "ガリー=ギガズ",            20000,  250,  150,  10,   5,  RACE_HALF_TROLL},
-                { "ゴブリンのヒストーア",       20000,  250,  150,  10,   5,  RACE_HALF_ORC},
-                { "フェレンギ人クアーク",           30000,  250,  150,  10,   5,  RACE_HUMAN},
-                { "公正なる(?)トッピ",                     30000,  250,  150,  10,   5,  RACE_ELF},
+		{ "ガリー=ギガズ",            20000,  250,  150,  10,   5,  RACE_HALF_TROLL},
+		{ "ゴブリンのヒストーア",       20000,  250,  150,  10,   5,  RACE_HALF_ORC},
+		{ "フェレンギ人クアーク",           30000,  250,  150,  10,   5,  RACE_HUMAN},
+		{ "公正なる(?)トッピ",                     30000,  250,  150,  10,   5,  RACE_ELF},
 #else
 		{ "Gary Gygaz",                 20000,  250, 150, 10,  5, RACE_HALF_TROLL},
 		{ "Histor the Goblin",          20000,  250, 150, 10,  5, RACE_HALF_ORC},
@@ -2772,16 +2772,16 @@ player_sex sex_info[MAX_SEXES] =
 {
 	{
 #ifdef JP
-                "女性",
-                "クイーン",
+		"女性",
+		"クイーン",
 #endif
 		"Female",
 		"Queen"
 	},
 	{
 #ifdef JP
-                "男性",
-                "キング",
+		"男性",
+		"キング",
 #endif
 		"Male",
 		"King"
@@ -2817,11 +2817,11 @@ player_race race_info[MAX_RACES] =
 		72,  6, 180, 25,
 		66,  4, 150, 20,
 		0,
-                0x7FFFFFF,
+		0x7FFFFFF,
 	},
 	{
 #ifdef JP
-	        "ハーフエルフ",
+		"ハーフエルフ",
 #endif
 		"Half-Elf",
 
@@ -2832,11 +2832,11 @@ player_race race_info[MAX_RACES] =
 		66,  6, 130, 15,
 		62,  6, 100, 10,
 		2,
-                0x677E7FF,
+		0x677E7FF,
 	},
 	{
 #ifdef JP
-	        "エルフ",
+		"エルフ",
 #endif
 		"Elf",
 
@@ -2847,7 +2847,7 @@ player_race race_info[MAX_RACES] =
 		60,  4, 100,  6,
 		54,  4, 80,  6,
 		3,
-                0x677E75B,
+		0x677E75B,
 
 	},
 	{
@@ -2863,7 +2863,7 @@ player_race race_info[MAX_RACES] =
 		36,  3, 60,  3,
 		33,  3, 50,  3,
 		4,
-                0x76FFC0B,
+		0x76FFC0B,
 	},
 	{
 #ifdef JP
@@ -2878,7 +2878,7 @@ player_race race_info[MAX_RACES] =
 		42,  3, 90,  6,
 		39,  3, 75,  3,
 		4,
-                0x767D60F,
+		0x767D60F,
 	},
 	{
 #ifdef JP
@@ -2893,7 +2893,7 @@ player_race race_info[MAX_RACES] =
 		48,  3, 150, 10,
 		46,  3, 120, 10,
 		5,
-                0x1890005,
+		0x1890005,
 	},
 	{
 #ifdef JP
@@ -2908,7 +2908,7 @@ player_race race_info[MAX_RACES] =
 		66,  1, 150,  5,
 		62,  1, 120,  5,
 		3,
-                0x5D8818D,
+		0x5D8818D,
 	},
 	{
 #ifdef JP
@@ -2923,11 +2923,11 @@ player_race race_info[MAX_RACES] =
 		96, 10, 250, 50,
 		84,  8, 225, 40,
 		3,
-                0x0880005,
+		0x0880005,
 	},
 	{
 #ifdef JP
-                "アンバライト",
+		"アンバライト",
 #endif
 		"Amberite",
 
@@ -2938,11 +2938,11 @@ player_race race_info[MAX_RACES] =
 		82, 5, 190, 20,
 		78,  6, 180, 15,
 		0,
-                0x7FFF7FF,
+		0x7FFF7FF,
 	},
 	{
 #ifdef JP
-                "ハイエルフ",
+		"ハイエルフ",
 #endif
 		"High-Elf",
 
@@ -3267,11 +3267,11 @@ player_race race_info[MAX_RACES] =
 		111, 11, 255, 50,
 		99, 11, 250, 45,
 		  0,
-                0x0010005,
+		0x0010005,
 	},
 	{
 #ifdef JP
-                "アルコン",
+		"アルコン",
 #endif
 		"Archon",
 
@@ -3282,11 +3282,11 @@ player_race race_info[MAX_RACES] =
 		82, 5, 190, 20,
 		78,  6, 180, 15,
 		3,
-                0x779F777,
+		0x779F777,
 	},
 	{
 #ifdef JP
-                "バルログ",
+		"バルログ",
 		"Balrog",
 #else
 		"Balrog",
@@ -3299,11 +3299,11 @@ player_race race_info[MAX_RACES] =
 		100,10, 255, 65,
 		80, 10, 240, 64,
 		5,
-                0x7EDC4DB,
+		0x7EDC4DB,
 	},
 	{
 #ifdef JP
-                "ドゥナダン",
+		"ドゥナダン",
 #endif
 		"Dunadan",
 
@@ -3314,7 +3314,7 @@ player_race race_info[MAX_RACES] =
 		82, 5, 190, 20,
 		78,  6, 180, 15,
 		0,
-                0x7FFF7FF,
+		0x7FFF7FF,
 	},
 	{
 #ifdef JP
@@ -3343,7 +3343,7 @@ player_race race_info[MAX_RACES] =
 		48,  6, 150, 25,
 		44,  4, 130, 20,
 		0,
-                0x418B7AD,
+		0x418B7AD,
 	},
 	{
 #ifdef JP
@@ -3579,11 +3579,11 @@ player_class class_info[MAX_CLASS] =
 #ifdef JP
 		"吟遊詩人",
 #endif
-                "Bard",              /* Note : spell stat is Charisma */
-                {-2, 1, 2, -1, -2, 4},
-                20, 33, 34, -5, 16, 20, 34, 20,
-                8,  13, 11, 0,  0,  0,  10, 8,
-                2, 40, 25
+		"Bard",              /* Note : spell stat is Charisma */
+		{-2, 1, 2, -1, -2, 4},
+		20, 33, 34, -5, 16, 20, 34, 20,
+		8,  13, 11, 0,  0,  0,  10, 8,
+		2, 40, 25
 	},
 
 	{
@@ -3832,7 +3832,7 @@ player_race mimic_info[] =
 		0,  0, 0, 0,
 		0,  0, 0, 0,
 		0,
-                0x000000,
+		0x000000,
 	},
 	{
 #ifdef JP
@@ -3847,7 +3847,7 @@ player_race mimic_info[] =
 		0,  0, 0, 0,
 		0,  0, 0, 0,
 		5,
-                0x000003,
+		0x000003,
 	},
 	{
 #ifdef JP
@@ -3862,7 +3862,7 @@ player_race mimic_info[] =
 		0,  0, 0, 0,
 		0,  0, 0, 0,
 		20,
-                0x000003,
+		0x000003,
 	},
 	{
 #ifdef JP
@@ -3877,7 +3877,7 @@ player_race mimic_info[] =
 		0,  0, 0, 0,
 		0,  0, 0, 0,
 		5,
-                0x000005,
+		0x000005,
 	},
 };
 
@@ -5227,88 +5227,88 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 {
 	/* Warrior */
 	{
-                "新参兵",
-                "兵士",
-                "傭兵",
-                "古参兵",
-                "剣士",
-                "闘士",
-                "英雄",
-                "男爵",
-                "伯爵",
-                "領主",
+		"新参兵",
+		"兵士",
+		"傭兵",
+		"古参兵",
+		"剣士",
+		"闘士",
+		"英雄",
+		"男爵",
+		"伯爵",
+		"領主",
 	},
 
 	/* Mage */
 	{
 				/*"見習い",*/
-                "練習生",                 /*丁稚、練習生 */
-                "奇術師",               /*詐欺師、ペテン師 */
-                "幻術師",
-                "呪術師",
-                "召霊師",
-                "召魔師",
-                "魔術師",
-                "魔道師",
-                "イプシシマス",
-                "大魔道師",
+		"練習生",                 /*丁稚、練習生 */
+		"奇術師",               /*詐欺師、ペテン師 */
+		"幻術師",
+		"呪術師",
+		"召霊師",
+		"召魔師",
+		"魔術師",
+		"魔道師",
+		"イプシシマス",
+		"大魔道師",
 	},
 
 	/* Priest */
 	{
-                "信者",                 /*信徒 */
-                "侍僧",             /*教会奉仕者、見習い僧、伴僧、従者 */
-                "熟練僧",
-                "聖職者",                 /*聖職者 */
-                "伝道師",               /*司祭評議員、修道会会員 */
-                "牧師",               /*ラマ教の僧 */
-                "聖人",               /*大司教、総主教、総大司教 */
-                "祭司",                 /*祭司、司祭 */
-                "祭司長",               /*大祭司、祭司長 */
-                "教皇",
+		"信者",                 /*信徒 */
+		"侍僧",             /*教会奉仕者、見習い僧、伴僧、従者 */
+		"熟練僧",
+		"聖職者",                 /*聖職者 */
+		"伝道師",               /*司祭評議員、修道会会員 */
+		"牧師",               /*ラマ教の僧 */
+		"聖人",               /*大司教、総主教、総大司教 */
+		"祭司",                 /*祭司、司祭 */
+		"祭司長",               /*大祭司、祭司長 */
+		"教皇",
 	},
 
 	/* Rogues */
 	{
 		/* "ごろつき",*/                     /*ごろつき、風来坊、浮浪者 */
-                "すり",
-                "追いはぎ",                     /*追い剥ぎ、強盗、泥棒 */
-                "夜盗",                         /*強盗、夜盗、泥棒 */
-                "こそ泥",                       /*こそ泥、小泥棒 */
-                "ペテン師",                     /*博徒、ペテン師、詐欺師 */
-                "ロウシーフ",
-                "ハイシーフ",
-                "マスターシーフ",
-                "アサシン",						/* 暗殺者 */
-                "ギルドマスター",
+		"すり",
+		"追いはぎ",                     /*追い剥ぎ、強盗、泥棒 */
+		"夜盗",                         /*強盗、夜盗、泥棒 */
+		"こそ泥",                       /*こそ泥、小泥棒 */
+		"ペテン師",                     /*博徒、ペテン師、詐欺師 */
+		"ロウシーフ",
+		"ハイシーフ",
+		"マスターシーフ",
+		"アサシン",						/* 暗殺者 */
+		"ギルドマスター",
 	},
 
 	/* Rangers */
 	{
-                "使い走り",
-                "馳夫",
-                "斥候",                         /*斥候、見張り、偵察兵 */
-                "狩人",
-                "追跡者",
-                "先導者",
-                "探険者",                       /*開拓者、探険者 */
-                "野伏",
-                "野伏頭",
-                "野伏の総領",
+		"使い走り",
+		"馳夫",
+		"斥候",                         /*斥候、見張り、偵察兵 */
+		"狩人",
+		"追跡者",
+		"先導者",
+		"探険者",                       /*開拓者、探険者 */
+		"野伏",
+		"野伏頭",
+		"野伏の総領",
 	},
 
 	/* Paladins */
 	{
-                "勇士",                 /*色男、愛人、しゃれ者、勇敢な人 */
-                "衛士",
-                "保護者",
-                "防衛者",
-                "護衛者",
-                "騎士",
-                "重騎士",
-                "聖騎士",
-                "上級聖騎士",
-                "聖騎士長",
+		"勇士",                 /*色男、愛人、しゃれ者、勇敢な人 */
+		"衛士",
+		"保護者",
+		"防衛者",
+		"護衛者",
+		"騎士",
+		"重騎士",
+		"聖騎士",
+		"上級聖騎士",
+		"聖騎士長",
 	},
 
 	/* Warrior-Mage */
@@ -5328,16 +5328,16 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 
 	/* Chaos Warrior */
 	{
-                "新参兵",
-                "兵士",
-                "傭兵",
-                "古参兵",
-                "剣士",
-                "闘士",
-                "混沌の英雄",
-                "混沌の男爵",
-                "混沌の公爵",
-                "混沌の王者",
+		"新参兵",
+		"兵士",
+		"傭兵",
+		"古参兵",
+		"剣士",
+		"闘士",
+		"混沌の英雄",
+		"混沌の男爵",
+		"混沌の公爵",
+		"混沌の王者",
 	},
 
 	/* Monk */
@@ -5371,16 +5371,16 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 	/* High Mage; same as Mage */
 	{
 				/*"見習い",*/
-                "練習生",                 /*丁稚、練習生 */
-                "奇術師",               /*詐欺師、ペテン師 */
-                "幻術師",
-                "呪術師",
-                "召霊師",
-                "召魔師",
-                "魔術師",
-                "魔道師",
-                "イプシシマス",
-                "大魔道師",
+		"練習生",                 /*丁稚、練習生 */
+		"奇術師",               /*詐欺師、ペテン師 */
+		"幻術師",
+		"呪術師",
+		"召霊師",
+		"召魔師",
+		"魔術師",
+		"魔道師",
+		"イプシシマス",
+		"大魔道師",
 	},
 
 	/* Tourist */
@@ -5428,58 +5428,58 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 	/* Sorcerer; same as Mage */
 	{
 				/*"見習い",*/
-                "練習生",                 /*丁稚、練習生 */
-                "奇術師",               /*詐欺師、ペテン師 */
-                "幻術師",
-                "呪術師",
-                "召霊師",
-                "召魔師",
-                "魔術師",
-                "魔道師",
-                "イプシシマス",
-                "大魔道師",
+		"練習生",                 /*丁稚、練習生 */
+		"奇術師",               /*詐欺師、ペテン師 */
+		"幻術師",
+		"呪術師",
+		"召霊師",
+		"召魔師",
+		"魔術師",
+		"魔道師",
+		"イプシシマス",
+		"大魔道師",
 	},
 
 	/* Archer */
 	{
-                "新参兵",
-                "兵士",
-                "傭兵",
-                "古参兵",
-                "剣士",
-                "闘士",
-                "英雄",
-                "男爵",
-                "伯爵",
-                "領主",
+		"新参兵",
+		"兵士",
+		"傭兵",
+		"古参兵",
+		"剣士",
+		"闘士",
+		"英雄",
+		"男爵",
+		"伯爵",
+		"領主",
 	},
 
 	/* Magic eater */
 	{
-                "無知なる者",
-                "入門者",
-                "奇術師",
-                "秘術師",
-                "秘術師",
-                "熟練者",
-                "達人",
-                "達人",
-                "魔道師",
-                "全てを知る者",
+		"無知なる者",
+		"入門者",
+		"奇術師",
+		"秘術師",
+		"秘術師",
+		"熟練者",
+		"達人",
+		"達人",
+		"魔道師",
+		"全てを知る者",
 	},
 
-        /* Harper */
+	/* Harper */
 	{
-                "見習い",	/*"Apprentice"*/
-                "作曲家",	/*"Songsmith"*/
-                "吟遊詩人",	/*"Bard"*/
-                "コンパニオン",	/*"Companion"*/
-                "心の癒し手",	/*"Minstrel"*/
-                "竪琴師",	/*"Harper"*/
-                "伝承の紡ぎ手",	/*"Loreweaver"*/
-                "詩神の申し子",	/*"Muse"*/
-                "夢紡ぎ",	/*"Dreamweaver"*/
-                "マスター",	/*"Master Harper"*/
+		"見習い",	/*"Apprentice"*/
+		"作曲家",	/*"Songsmith"*/
+		"吟遊詩人",	/*"Bard"*/
+		"コンパニオン",	/*"Companion"*/
+		"心の癒し手",	/*"Minstrel"*/
+		"竪琴師",	/*"Harper"*/
+		"伝承の紡ぎ手",	/*"Loreweaver"*/
+		"詩神の申し子",	/*"Muse"*/
+		"夢紡ぎ",	/*"Dreamweaver"*/
+		"マスター",	/*"Master Harper"*/
 	},
 
 	/* Red Mage; same as Warrior-Mage */
@@ -5528,30 +5528,30 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 	/* Blue Mage; same as Mage */
 	{
 				/*"見習い",*/
-                "練習生",                 /*丁稚、練習生 */
-                "奇術師",               /*詐欺師、ペテン師 */
-                "幻術師",
-                "呪術師",
-                "召霊師",
-                "召魔師",
-                "魔術師",
-                "魔道師",
-                "イプシシマス",
-                "大魔道師",
+		"練習生",                 /*丁稚、練習生 */
+		"奇術師",               /*詐欺師、ペテン師 */
+		"幻術師",
+		"呪術師",
+		"召霊師",
+		"召魔師",
+		"魔術師",
+		"魔道師",
+		"イプシシマス",
+		"大魔道師",
 	},
 
 	/* Kihei */
 	{
-                "新参兵",
-                "兵士",
-                "傭兵",
-                "古参兵",
-                "剣士",
-                "闘士",
-                "英雄",
-                "男爵",
-                "伯爵",
-                "領主",
+		"新参兵",
+		"兵士",
+		"傭兵",
+		"古参兵",
+		"剣士",
+		"闘士",
+		"英雄",
+		"男爵",
+		"伯爵",
+		"領主",
 	},
 
 	/* Berserker */
@@ -5839,30 +5839,30 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 
 	/* Magic eater */
 	{
-                "Apprentice",
-                "Beginner",
-                "Jagguler",
-                "Skilled",
-                "Conjurer",
-                "Magician",
-                "Master",
-                "Master",
-                "Wizard",
-                "Almighty",
+		"Apprentice",
+		"Beginner",
+		"Jagguler",
+		"Skilled",
+		"Conjurer",
+		"Magician",
+		"Master",
+		"Master",
+		"Wizard",
+		"Almighty",
 	},
 
-        /* Harper */
+	/* Harper */
 	{
-                "Apprentice",	/*"Apprentice"*/
-                "Songsmith",	/*"Songsmith"*/
-                "Bard",	/*"Bard"*/
-                "Companion",	/*"Companion"*/
-                "Minstrel",	/*"Minstrel"*/
-                "Harper",	/*"Harper"*/
-                "Loreweaver",	/*"Loreweaver"*/
-                "Muse",	/*"Muse"*/
-                "Dreamweaver",	/*"Dreamweaver"*/
-                "Master Harper",	/*"Master Harper"*/
+		"Apprentice",	/*"Apprentice"*/
+		"Songsmith",	/*"Songsmith"*/
+		"Bard",	/*"Bard"*/
+		"Companion",	/*"Companion"*/
+		"Minstrel",	/*"Minstrel"*/
+		"Harper",	/*"Harper"*/
+		"Loreweaver",	/*"Loreweaver"*/
+		"Muse",	/*"Muse"*/
+		"Dreamweaver",	/*"Dreamweaver"*/
+		"Master Harper",	/*"Master Harper"*/
 	},
 
 	/* Red Mage */
@@ -5951,16 +5951,16 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 
 	/* Kaji */
 	{
-                "Copper smith",
-                "Iron smith",
-                "Steel smith",
-                "Silver smith",
-                "Dragon smith",
-                "Spirit smith",
-                "Magic smith",
-                "Soul smith",
-                "God smith",
-                "AlmightySmith",
+		"Copper smith",
+		"Iron smith",
+		"Steel smith",
+		"Silver smith",
+		"Dragon smith",
+		"Spirit smith",
+		"Magic smith",
+		"Soul smith",
+		"God smith",
+		"AlmightySmith",
 	},
 
 	/* Mirror Master */
@@ -6202,22 +6202,22 @@ monster_power monster_powers[MAX_MONSPELLS] =
 cptr color_names[16] =
 {
 #ifdef JP
-        "黒",
-        "白",
-        "青灰色",
-        "オレンジ",
-        "赤",
-        "緑",
-        "青",
-        "琥珀色",
-        "灰色",
-        "明青灰色",
-        "紫",
-        "黄",
-        "明るい赤",
-        "明るい緑",
-        "明るい青",
-        "明琥珀色",
+	"黒",
+	"白",
+	"青灰色",
+	"オレンジ",
+	"赤",
+	"緑",
+	"青",
+	"琥珀色",
+	"灰色",
+	"明青灰色",
+	"紫",
+	"黄",
+	"明るい赤",
+	"明るい緑",
+	"明るい青",
+	"明琥珀色",
 #else
 	"Dark",
 	"White",
@@ -6246,7 +6246,7 @@ cptr color_names[16] =
 cptr stat_names[6] =
 {
 #ifdef JP
-        "腕力 :", "知能 :", "賢さ :", "器用 :", "耐久 :", "魅力 :"
+	"腕力 :", "知能 :", "賢さ :", "器用 :", "耐久 :", "魅力 :"
 #else
 	"STR : ", "INT : ", "WIS : ", "DEX : ", "CON : ", "CHR : "
 #endif
@@ -6259,7 +6259,7 @@ cptr stat_names[6] =
 cptr stat_names_reduced[6] =
 {
 #ifdef JP
-        "腕力x:", "知能x:", "賢さx:", "器用x:", "耐久x:", "魅力x:"
+	"腕力x:", "知能x:", "賢さx:", "器用x:", "耐久x:", "魅力x:"
 #else
 	"Str : ", "Int : ", "Wis : ", "Dex : ", "Con : ", "Chr : "
 #endif
@@ -6284,25 +6284,25 @@ cptr stat_names_reduced[6] =
 cptr window_flag_desc[32] =
 {
 #ifdef JP
-        "持ち物/装備一覧",
+	"持ち物/装備一覧",
 #else
 	"Display inven/equip",
 #endif
 
 #ifdef JP
-        "装備/持ち物一覧",
+	"装備/持ち物一覧",
 #else
 	"Display equip/inven",
 #endif
 
 #ifdef JP
-        "呪文一覧",
+	"呪文一覧",
 #else
 	"Display spell list",
 #endif
 
 #ifdef JP
-        "キャラクタ情報",
+	"キャラクタ情報",
 #else
 	"Display character",
 #endif
@@ -6310,37 +6310,37 @@ cptr window_flag_desc[32] =
 	NULL,
 	NULL,
 #ifdef JP
-        "メッセージ",
+	"メッセージ",
 #else
 	"Display messages",
 #endif
 
 #ifdef JP
-        "ダンジョン全体図",
+	"ダンジョン全体図",
 #else
 	"Display overhead view",
 #endif
 
 #ifdef JP
-        "モンスターの思い出",
+	"モンスターの思い出",
 #else
 	"Display monster recall",
 #endif
 
 #ifdef JP
-        "アイテムの詳細",
+	"アイテムの詳細",
 #else
 	"Display object recall",
 #endif
 
 #ifdef JP
-        "自分の周囲を表示", 
+	"自分の周囲を表示", 
 #else
 	"Display dungeon view",
 #endif
 
 #ifdef JP
-        "記念撮影",
+	"記念撮影",
 #else
 	"Display snap-shot",
 #endif
@@ -6348,13 +6348,13 @@ cptr window_flag_desc[32] =
 	NULL,
 	NULL,
 #ifdef JP
-        "ボーグ・メッセージ",
+	"ボーグ・メッセージ",
 #else
 	"Display borg messages",
 #endif
 
 #ifdef JP
-        "ボーグ・ステータス",
+	"ボーグ・ステータス",
 #else
 	"Display borg status",
 #endif
@@ -6388,7 +6388,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &rogue_like_commands,         FALSE, 1, 0, 0,
-        "rogue_like_commands",          "ローグ風キー配置を使用する" },
+	"rogue_like_commands",          "ローグ風キー配置を使用する" },
 #else
 	{ &rogue_like_commands,         FALSE, 1, 0, 0,
 	"rogue_like_commands",          "Rogue-like commands" },
@@ -6397,7 +6397,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &always_pickup,               FALSE, 1, 0, 5,
-        "always_pickup",                "常にアイテムを拾う" },
+	"always_pickup",                "常にアイテムを拾う" },
 #else
 	{ &always_pickup,               FALSE,  1, 0, 5,
 	"always_pickup",                "Pick things up by default" },
@@ -6424,7 +6424,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &auto_more,                   FALSE, 1, 2, 6,
-        "auto_more",                    "キー待ちしないで連続でメッセージを表示する" },
+	"auto_more",                    "キー待ちしないで連続でメッセージを表示する" },
 #else
 	{ &auto_more,                   FALSE, 1, 2, 6,
 	"auto_more",                    "Automatically clear '-more-' prompts" },
@@ -6433,7 +6433,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &command_menu,                TRUE,  1, 2, 7,
-        "command_menu",                 "メニューによりコマンド選択を有効にする" },
+	"command_menu",                 "メニューによりコマンド選択を有効にする" },
 #else
 	{ &command_menu,                TRUE,  1, 2, 7,
 	"command_menu",                 "Enable command selection menu" },
@@ -6460,7 +6460,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &always_repeat,               TRUE,  1, 0, 6,
-        "always_repeat",                "コマンド自動繰り返し" },
+	"always_repeat",                "コマンド自動繰り返し" },
 #else
 	{ &always_repeat,               TRUE,  1, 0, 6,
 	"always_repeat",                "Repeat obvious commands" },
@@ -6496,7 +6496,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &target_pet,                  FALSE,  1, 2, 5,
-        "target_pet",                   "ペットをターゲットにする" },
+	"target_pet",                   "ペットをターゲットにする" },
 #else
 	{ &target_pet,                  FALSE,  1, 2, 5,
 	"target_pet",                   "Allow targetting pets" },
@@ -6558,7 +6558,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &depth_in_feet,               FALSE, 2, 0, 7,
-        "depth_in_feet",                "ダンジョンの深さをフィートで表示する" },
+	"depth_in_feet",                "ダンジョンの深さをフィートで表示する" },
 #else
 	{ &depth_in_feet,               FALSE, 2, 0, 7,
 	"depth_in_feet",                "Show dungeon level in feet" },
@@ -6567,7 +6567,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &show_labels,                 TRUE,  2, 0, 10,
-        "show_labels",                  "装備一覧で装備場所を表示する" },
+	"show_labels",                  "装備一覧で装備場所を表示する" },
 #else
 	{ &show_labels,                 TRUE,  2, 0, 10,
 	"show_labels",                  "Show labels in object listings" },
@@ -6576,7 +6576,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &show_weights,                TRUE,  2, 0, 11,
-        "show_weights",                 "アイテム一覧で重量を表示する" },
+	"show_weights",                 "アイテム一覧で重量を表示する" },
 #else
 	{ &show_weights,                TRUE,  2, 0, 11,
 	"show_weights",                 "Show weights in object listings" },
@@ -6594,7 +6594,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &show_choices,                TRUE,  2, 0, 12,
-        "show_choices",                 "持ち物/装備ウィンドウに選択アイテム表示" },
+	"show_choices",                 "持ち物/装備ウィンドウに選択アイテム表示" },
 #else
 	{ &show_choices,                TRUE,  2, 0, 12,
 	"show_choices",                 "Show choices in certain sub-windows" },
@@ -6603,7 +6603,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &plain_pickup,                FALSE, 2, 6, 6,
-        "plain_pickup",                 "「拾った」メッセージを簡略化する" },
+	"plain_pickup",                 "「拾った」メッセージを簡略化する" },
 #else
 	{ &plain_pickup,                FALSE,99, 6, 6,
 	"plain_pickup",                 "Plain pickup messages(japanese only)" },
@@ -6647,8 +6647,8 @@ option_type option_info[] =
 
 
 #ifdef JP
-        { &center_player,               FALSE, 2, 5, 11,
-        "center_player",                "常にプレイヤーを中心に置く(*遅い*)" },
+	{ &center_player,               FALSE, 2, 5, 11,
+	"center_player",                "常にプレイヤーを中心に置く(*遅い*)" },
 #else
 	{ &center_player,               FALSE, 2, 5, 11,
 	"center_player",                "Center map while walking (*slow*)" },
@@ -6656,8 +6656,8 @@ option_type option_info[] =
 
 
 #ifdef JP
-        { &center_running,              TRUE,  2, 5, 12,
-        "center_running",               "走っている時でも中心に置く" },
+	{ &center_running,              TRUE,  2, 5, 12,
+	"center_running",               "走っている時でも中心に置く" },
 #else
 	{ &center_running,              TRUE,  2, 5, 12,
 	"center_running",               "Centering even while running" },
@@ -6666,7 +6666,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &view_yellow_lite,            TRUE,  2, 1, 28,
-        "view_yellow_lite",              "明かりの範囲を特別な色で表示する" },
+	"view_yellow_lite",              "明かりの範囲を特別な色で表示する" },
 #else
 	{ &view_yellow_lite,            TRUE,  2, 1, 28,
 	"view_yellow_lite",             "Use special colors for torch-lit grids" },
@@ -6675,7 +6675,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &view_bright_lite,            TRUE,  2, 1, 29,
-        "view_bright_lite",             "視界の範囲を特別な色で表示する" },
+	"view_bright_lite",             "視界の範囲を特別な色で表示する" },
 #else
 	{ &view_bright_lite,            TRUE,  2, 1, 29,
 	"view_bright_lite",             "Use special colors for 'viewable' grids" },
@@ -6684,7 +6684,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &view_granite_lite,           TRUE,  2, 1, 30,
-        "view_granite_lite",            "壁を特別な色で表示する(重い)" },
+	"view_granite_lite",            "壁を特別な色で表示する(重い)" },
 #else
 	{ &view_granite_lite,           TRUE,  2, 1, 30,
 	"view_granite_lite",            "Use special colors for wall grids (slow)" },
@@ -6693,7 +6693,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &view_special_lite,           TRUE,  2, 1, 31,
-        "view_special_lite",            "床を特別な色で表示する(重い)" },
+	"view_special_lite",            "床を特別な色で表示する(重い)" },
 #else
 	{ &view_special_lite,           TRUE,  2, 1, 31,
 	"view_special_lite",            "Use special colors for floor grids (slow)" },
@@ -6701,7 +6701,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &new_ascii_graphics,          FALSE, 2, 2, 4,
-        "new_ascii_graphics",           "地形の明暗をはっきりと表示する" },
+	"new_ascii_graphics",           "地形の明暗をはっきりと表示する" },
 #else
 	{ &new_ascii_graphics,          FALSE, 2, 2, 4,
 	"new_ascii_graphics",           "Show a clear contrast between light and dark" },
@@ -6709,7 +6709,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &display_path,                FALSE, 2, 2, 8,
-        "display_path",                 "魔法や矢の軌跡を表示する" },
+	"display_path",                 "魔法や矢の軌跡を表示する" },
 #else
 	{ &display_path,                FALSE, 2, 2, 8,
 	"display_path",                 "Display actual path before shooting" },
@@ -6718,19 +6718,19 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &always_show_list,            TRUE,  2, 4, 0,
-        "always_show_list",             "選択時には常に一覧を表示する" },
+	"always_show_list",             "選択時には常に一覧を表示する" },
 #else
 	{ &always_show_list,            TRUE,  2, 4, 0,
-        "always_show_list",             "Always show list at first when select items" },
+	"always_show_list",             "Always show list at first when select items" },
 #endif
 
 
 #ifdef JP
 	{ &change_numeral,              TRUE,  2, 4, 5,
-        "change_numeral",               "アイテムの種類によって数え方を変える" },
+	"change_numeral",               "アイテムの種類によって数え方を変える" },
 #else
 	{ &change_numeral,              TRUE,  99, 4, 5,
-        "change_numeral",               "Change a way to counting (japanese only)" },
+	"change_numeral",               "Change a way to counting (japanese only)" },
 #endif
 
 
@@ -6738,7 +6738,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &auto_scum,                   FALSE, 3, 1, 1,
-        "auto_scum",                    "階の雰囲気自動選り好み" },
+	"auto_scum",                    "階の雰囲気自動選り好み" },
 #else
 	{ &auto_scum,                   FALSE, 3, 1, 1,
 	"auto_scum",                    "Auto-scum for good levels" },
@@ -6747,7 +6747,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &stack_force_notes,           TRUE,  3, 0, 8,
-        "stack_force_notes",            "異なる銘のアイテムをまとめる" },
+	"stack_force_notes",            "異なる銘のアイテムをまとめる" },
 #else
 	{ &stack_force_notes,           TRUE,  3, 0, 8,
 	"stack_force_notes",            "Merge inscriptions when stacking" },
@@ -6756,7 +6756,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &stack_force_costs,           FALSE, 3, 0, 9,
-        "stack_force_costs",            "異なる割引表示のアイテムをまとめる" },
+	"stack_force_costs",            "異なる割引表示のアイテムをまとめる" },
 #else
 	{ &stack_force_costs,           FALSE, 3, 0, 9,
 	"stack_force_costs",            "Merge discounts when stacking" },
@@ -6774,7 +6774,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &expand_look,                 TRUE,  3, 1, 4,
-        "expand_look",                  "「回りを調べる」コマンドを拡張する" },
+	"expand_look",                  "「回りを調べる」コマンドを拡張する" },
 #else
 	{ &expand_look,                 TRUE,  3, 1, 4,
 	"expand_look",                  "Expand the power of the look command" },
@@ -6783,7 +6783,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &expand_list,                 TRUE,  3, 1, 5,
-        "expand_list",                  "「一覧」コマンドを拡張する" },
+	"expand_list",                  "「一覧」コマンドを拡張する" },
 #else
 	{ &expand_list,                 TRUE,  3, 1, 5,
 	"expand_list",                  "Expand the power of the list commands" },
@@ -6792,7 +6792,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &view_perma_grids,            TRUE,  3, 1, 6,
-        "view_perma_grids",             "明るい場所はそのままにする" },
+	"view_perma_grids",             "明るい場所はそのままにする" },
 #else
 	{ &view_perma_grids,            TRUE,  3, 1, 6,
 	"view_perma_grids",             "Map remembers all perma-lit grids" },
@@ -6801,7 +6801,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &view_torch_grids,            FALSE, 3, 1, 7,
-        "view_torch_grids",             "明かりで照らした場所はそのままにする" },
+	"view_torch_grids",             "明かりで照らした場所はそのままにする" },
 #else
 	{ &view_torch_grids,            FALSE, 3, 1, 7,
 	"view_torch_grids",             "Map remembers all torch-lit grids" },
@@ -6810,7 +6810,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &view_unsafe_grids,            FALSE, 3, 1, 8,
-        "view_unsafe_grids",             "トラップ感知済みでない場所を表示する" },
+	"view_unsafe_grids",             "トラップ感知済みでない場所を表示する" },
 #else
 	{ &view_unsafe_grids,            FALSE, 3, 1, 8,
 	"view_unsafe_grids",             "Map marked by detect traps" },
@@ -6819,7 +6819,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &dungeon_stair,               TRUE,  3, 1, 9,
-        "dungeon_stair",                "階段をつなげてダンジョンを生成する" },
+	"dungeon_stair",                "階段をつなげてダンジョンを生成する" },
 #else
 	{ &dungeon_stair,               TRUE,  3, 1, 9,
 	"dungeon_stair",                "Generate dungeons with connected stairs" },
@@ -6846,7 +6846,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &empty_levels,                TRUE,  3, 0, 31,
-        "empty_levels",                 "空っぽの「アリーナ」レベルの生成を可能にする" },
+	"empty_levels",                 "空っぽの「アリーナ」レベルの生成を可能にする" },
 #else
 	{ &empty_levels,                TRUE,  3, 0, 31,
 	"empty_levels",                 "Allow empty 'arena' levels" },
@@ -6865,10 +6865,10 @@ option_type option_info[] =
 #ifdef WORLD_SCORE
 #ifdef JP
 	{ &send_score,                  TRUE,  3, 4, 6,
-        "send_score",                   "スコアサーバにスコアを送る" },
+	"send_score",                   "スコアサーバにスコアを送る" },
 #else
 	{ &send_score,                  TRUE,  3, 4, 6,
-        "send_score",                   "Send score dump to the world score server" },
+	"send_score",                   "Send score dump to the world score server" },
 #endif
 #endif
 
@@ -6924,7 +6924,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &disturb_move,                FALSE,  4, 0, 20,
-        "disturb_move",                 "どこのモンスターが動いても行動を中止する" },
+	"disturb_move",                 "どこのモンスターが動いても行動を中止する" },
 #else
 	{ &disturb_move,                FALSE,  4, 0, 20,
 	"disturb_move",                 "Disturb whenever any monster moves" },
@@ -6933,7 +6933,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &disturb_high,                FALSE,  4, 1, 3,
-        "disturb_high",                 "レベルの高いモンスターが動いたら行動を中止する"},
+	"disturb_high",                 "レベルの高いモンスターが動いたら行動を中止する"},
 #else
 	{ &disturb_high,                FALSE,  4, 1, 3,
 	"disturb_high",                 "Disturb whenever high-level monster moves" },
@@ -6942,7 +6942,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &disturb_near,                TRUE,  4, 0, 21,
-        "disturb_near",                 "視界内のモンスターが動いたら行動を中止する" },
+	"disturb_near",                 "視界内のモンスターが動いたら行動を中止する" },
 #else
 	{ &disturb_near,                TRUE,  4, 0, 21,
 	"disturb_near",                 "Disturb whenever viewable monster moves" },
@@ -6960,7 +6960,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &disturb_panel,               TRUE,  4, 0, 22,
-        "disturb_panel",                "画面スクロール時に行動を中止する" },
+	"disturb_panel",                "画面スクロール時に行動を中止する" },
 #else
 	{ &disturb_panel,               TRUE,  4, 0, 22,
 	"disturb_panel",                "Disturb whenever map panel changes" },
@@ -6969,7 +6969,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &disturb_state,               TRUE,  4, 0, 23,
-        "disturb_state",                "自分のステータス変化時に行動を中止する" },
+	"disturb_state",                "自分のステータス変化時に行動を中止する" },
 #else
 	{ &disturb_state,               TRUE,  4, 0, 23,
 	"disturb_state",                "Disturb whenever player state changes" },
@@ -6978,7 +6978,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &disturb_minor,               TRUE,  4, 0, 24,
-        "disturb_minor",                "些細なことが起きても行動を中止する" },
+	"disturb_minor",                "些細なことが起きても行動を中止する" },
 #else
 	{ &disturb_minor,               TRUE,  4, 0, 24,
 	"disturb_minor",                "Disturb whenever boring things happen" },
@@ -6987,7 +6987,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &ring_bell,                   FALSE, 4, 0, 14,
-        "ring_bell",                    "エラー時にビープ音を鳴らす" },
+	"ring_bell",                    "エラー時にビープ音を鳴らす" },
 #else
 	{ &ring_bell,                   FALSE, 4, 0, 14,
 	"ring_bell",                    "Audible bell (on errors, etc)" },
@@ -6996,7 +6996,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &alert_hitpoint,              TRUE, 4, 0, 26,
-        "alert_hitpoint",               "低ヒットポイントの警告時にビープを鳴らす" },
+	"alert_hitpoint",               "低ヒットポイントの警告時にビープを鳴らす" },
 #else
 	{ &alert_hitpoint,              TRUE, 4, 0, 26,
 	"alert_hitpoint",               "Alert user to critical hitpoints" },
@@ -7005,7 +7005,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &disturb_trap_detect,         TRUE, 4, 0, 27,
-        "disturb_trap_detect",          "トラップ感知範囲外に出る直前に行動を中止する" },
+	"disturb_trap_detect",          "トラップ感知範囲外に出る直前に行動を中止する" },
 #else
 	{ &disturb_trap_detect,         TRUE, 4, 0, 27,
 	"disturb_trap_detect",          "Disturb when leaving trap detected area"},
@@ -7013,7 +7013,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &alert_trap_detect,           FALSE, 4, 0, 25,
-        "alert_trap_detect",            "トラップ感知範囲外に出る直前に警告する" },
+	"alert_trap_detect",            "トラップ感知範囲外に出る直前に警告する" },
 #else
 	{ &alert_trap_detect,           FALSE, 4, 0, 25,
 	"alert_trap_detect",            "Alert when leaving trap detected area"},
@@ -7042,7 +7042,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &check_abort,                 TRUE,  5, 1, 18,
-        "check_abort",                  "連続コマンドはキー入力で中断する" },
+	"check_abort",                  "連続コマンドはキー入力で中断する" },
 #else
 	{ &check_abort,                 TRUE,  5, 1, 18,
 	"check_abort",                  "Check for user abort while continuous command" },
@@ -7051,7 +7051,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &flush_failure,               TRUE,  5, 1, 20,
-        "flush_failure",                "様々なミス発生時に入力をクリアする" },
+	"flush_failure",                "様々なミス発生時に入力をクリアする" },
 #else
 	{ &flush_failure,               TRUE,  5, 1, 20,
 	"flush_failure",                "Flush input on various failures" },
@@ -7060,7 +7060,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &flush_disturb,               FALSE, 5, 1, 21,
-        "flush_disturb",                "障害発生時に入力をクリアする" },
+	"flush_disturb",                "障害発生時に入力をクリアする" },
 #else
 	{ &flush_disturb,               FALSE, 5, 1, 21,
 	"flush_disturb",                "Flush input whenever disturbed" },
@@ -7069,16 +7069,16 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &fresh_before,                TRUE,  5, 1, 23,
-        "fresh_before",                 "連続コマンド中に画面を再描画し続ける" },
+	"fresh_before",                 "連続コマンド中に画面を再描画し続ける" },
 #else
 	{ &fresh_before,                TRUE,  5, 1, 23,
-        "fresh_before",                 "Flush output while continuous command" },
+	"fresh_before",                 "Flush output while continuous command" },
 #endif
 
 
 #ifdef JP
 	{ &fresh_after,                 FALSE, 5, 1, 24,
-        "fresh_after",                  "コマンド後に画面を常に再描画し続ける" },
+	"fresh_after",                  "コマンド後に画面を常に再描画し続ける" },
 #else
 	{ &fresh_after,                 FALSE, 5, 1, 24,
 	"fresh_after",                  "Flush output after monster's move" },
@@ -7096,7 +7096,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &compress_savefile,           FALSE, 5, 1, 26,
-        "compress_savefile",            "セーブ・ファイル中のメッセージを圧縮する" },
+	"compress_savefile",            "セーブ・ファイル中のメッセージを圧縮する" },
 #else
 	{ &compress_savefile,           FALSE, 5, 1, 26,
 	"compress_savefile",            "Compress messages in savefiles" },
@@ -7116,7 +7116,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &manual_haggle,               FALSE, 6, 1, 0,
-        "manual_haggle",                "店で値切り交渉をする" },
+	"manual_haggle",                "店で値切り交渉をする" },
 #else
 	{ &manual_haggle,               FALSE, 6, 1, 0,
 	"manual_haggle",                "Manually haggle in stores" },
@@ -7125,7 +7125,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &easy_band,                   FALSE, 6, 6, 31,
-        "easy_band",                    "初心者用簡単モード(*)" },
+	"easy_band",                    "初心者用簡単モード(*)" },
 #else
 	{ &easy_band,                   FALSE, 6, 6, 31,
 	"easy_band",                    "Easy Mode (*)" },
@@ -7134,7 +7134,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &smart_learn,                 TRUE,  6, 1, 14,
-        "smart_learn",                  "モンスターは失敗を学習する(*)" },
+	"smart_learn",                  "モンスターは失敗を学習する(*)" },
 #else
 	{ &smart_learn,                 TRUE,  6, 1, 14,
 	"smart_learn",                  "Monsters learn from their mistakes (*)" },
@@ -7143,7 +7143,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &smart_cheat,                 FALSE, 6, 1, 15,
-        "smart_cheat",                  "モンスターはプレイヤーの弱みを突く(*)" },
+	"smart_cheat",                  "モンスターはプレイヤーの弱みを突く(*)" },
 #else
 	{ &smart_cheat,                 FALSE, 6, 1, 15,
 	"smart_cheat",                  "Monsters exploit players weaknesses (*)" },
@@ -7224,15 +7224,15 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &ironman_nightmare,           FALSE, 6, 6, 18,
-        "ironman_nightmare",	        "（鉄人用）悪夢モード(これは全く不条理です！)(*)" },
+	"ironman_nightmare",	        "（鉄人用）悪夢モード(これは全く不条理です！)(*)" },
 #else
 	{ &ironman_nightmare,           FALSE, 6, 6, 18,
-        "ironman_nightmare",	        "Nightmare mode(it isn't even remotely fair!)(*)" },
+	"ironman_nightmare",	        "Nightmare mode(it isn't even remotely fair!)(*)" },
 #endif
 
 #ifdef JP
-        { &left_hander,                 FALSE, 6, 6, 13,
-        "left_hander",                  "左利きである" },
+	{ &left_hander,                 FALSE, 6, 6, 13,
+	"left_hander",                  "左利きである" },
 #else
 	{ &left_hander,                 FALSE, 6, 6, 13,
 	"left_hander",                  "Left-Hander" },
@@ -7240,8 +7240,8 @@ option_type option_info[] =
 
 
 #ifdef JP
-        { &preserve_mode,               TRUE,  6, 6, 14,
-        "preserve_mode",                "伝説のアイテムを取り逃しても再生成される(*)" },
+	{ &preserve_mode,               TRUE,  6, 6, 14,
+	"preserve_mode",                "伝説のアイテムを取り逃しても再生成される(*)" },
 #else
 	{ &preserve_mode,               TRUE,  6, 6, 14,
 	"preserve_mode",                "Preserve artifacts (*)" },
@@ -7249,8 +7249,8 @@ option_type option_info[] =
 
 
 #ifdef JP
-        { &autoroller,                  TRUE,  6, 6, 15,
-        "autoroller",                   "能力値にオートローラー使用(*)" },
+	{ &autoroller,                  TRUE,  6, 6, 15,
+	"autoroller",                   "能力値にオートローラー使用(*)" },
 #else
 	{ &autoroller,                  TRUE,  6, 6, 15,
 	"autoroller",                   "Allow use of autoroller for stats (*)" },
@@ -7258,8 +7258,8 @@ option_type option_info[] =
 
 
 #ifdef JP
-        { &autochara,                   FALSE, 6, 6, 16,
-        "autochara",                   "体格/地位にオートローラー使用" },
+	{ &autochara,                   FALSE, 6, 6, 16,
+	"autochara",                   "体格/地位にオートローラー使用" },
 #else
 	{ &autochara,                   FALSE, 6, 6, 16,
 	"autochara",                    "Autoroll for weight, height and social status" },
@@ -7268,193 +7268,193 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &powerup_home,                TRUE,  6, 4, 3,
-        "powerup_home",                 "我が家を拡張する(*)" },
+	"powerup_home",                 "我が家を拡張する(*)" },
 
 #else
 	{ &powerup_home,                TRUE,  6, 4, 3,
-        "powerup_home",                 "Increase capacity of your home (*)" },
+	"powerup_home",                 "Increase capacity of your home (*)" },
 #endif
 
 
 	/*** Easy Object Auto-Destroyer ***/
 
 #ifdef JP
-        { &destroy_items,               FALSE, 7, 7, 0,
-        "destroy_items",                "アイテムの簡易自動破壊を使用する" },
+	{ &destroy_items,               FALSE, 7, 7, 0,
+	"destroy_items",                "アイテムの簡易自動破壊を使用する" },
 #else
-        { &destroy_items,               FALSE, 7, 7, 0,
-        "destroy_items",                "Use easy auto-destroyer" },
+	{ &destroy_items,               FALSE, 7, 7, 0,
+	"destroy_items",                "Use easy auto-destroyer" },
 #endif
 
 #ifdef JP
-        { &destroy_feeling,               FALSE, 7, 7, 8,
-        "destroy_feeling",                "簡易鑑定したとき自動破壊を適用する" },
+	{ &destroy_feeling,               FALSE, 7, 7, 8,
+	"destroy_feeling",                "簡易鑑定したとき自動破壊を適用する" },
 #else
-        { &destroy_feeling,               FALSE, 7, 7, 8,
-        "destroy_feeling",                "Apply auto-destroy as sense feeling" },
+	{ &destroy_feeling,               FALSE, 7, 7, 8,
+	"destroy_feeling",                "Apply auto-destroy as sense feeling" },
 #endif
 
 #ifdef JP
-        { &destroy_identify,               FALSE, 7, 7, 9,
-        "destroy_identify",                "鑑定したとき自動破壊を適用する" },
+	{ &destroy_identify,               FALSE, 7, 7, 9,
+	"destroy_identify",                "鑑定したとき自動破壊を適用する" },
 #else
-        { &destroy_identify,               FALSE, 7, 7, 9,
-        "destroy_identify",                "Apply auto-destroy as identify an item" },
+	{ &destroy_identify,               FALSE, 7, 7, 9,
+	"destroy_identify",                "Apply auto-destroy as identify an item" },
 #endif
 
 #ifdef JP
-        { &leave_worth,                 TRUE, 7, 7, 2,
-        "leave_worth",                  "価値があるアイテムは壊さない" },
+	{ &leave_worth,                 TRUE, 7, 7, 2,
+	"leave_worth",                  "価値があるアイテムは壊さない" },
 #else
-        { &leave_worth,                 TRUE, 7, 7, 2,
-        "leave_worth",                  "Auto-destroyer leaves known worthy items" },
+	{ &leave_worth,                 TRUE, 7, 7, 2,
+	"leave_worth",                  "Auto-destroyer leaves known worthy items" },
 #endif
 
 #ifdef JP
-        { &leave_equip,                 FALSE, 7, 7, 3,
-        "leave_equip",                  "武器/防具は壊さない" },
+	{ &leave_equip,                 FALSE, 7, 7, 3,
+	"leave_equip",                  "武器/防具は壊さない" },
 #else
-        { &leave_equip,                 FALSE, 7, 7, 3,
-        "leave_equip",                  "Auto-destroyer leaves weapons and armour" },
+	{ &leave_equip,                 FALSE, 7, 7, 3,
+	"leave_equip",                  "Auto-destroyer leaves weapons and armour" },
 #endif
 
 #ifdef JP
-        { &leave_chest,                 TRUE, 7, 7, 7,
-        "leave_chest",                  "開封されていない箱は壊さない" },
+	{ &leave_chest,                 TRUE, 7, 7, 7,
+	"leave_chest",                  "開封されていない箱は壊さない" },
 #else
-        { &leave_chest,                 TRUE, 7, 7, 7,
-        "leave_chest",                  "Auto-destroyer leaves closed chests" },
+	{ &leave_chest,                 TRUE, 7, 7, 7,
+	"leave_chest",                  "Auto-destroyer leaves closed chests" },
 #endif
 
 #ifdef JP
-        { &leave_wanted,                TRUE, 7, 7, 4,
-        "leave_wanted",                 "賞金首の死体/骨は壊さない" },
+	{ &leave_wanted,                TRUE, 7, 7, 4,
+	"leave_wanted",                 "賞金首の死体/骨は壊さない" },
 #else
-        { &leave_wanted,                TRUE, 7, 7, 4,
-        "leave_wanted",                 "Auto-destroyer leaves wanted corpses" },
+	{ &leave_wanted,                TRUE, 7, 7, 4,
+	"leave_wanted",                 "Auto-destroyer leaves wanted corpses" },
 #endif
 
 #ifdef JP
-        { &leave_corpse,                FALSE, 7, 7, 5,
-        "leave_corpse",                 "死体/骨は壊さない" },
+	{ &leave_corpse,                FALSE, 7, 7, 5,
+	"leave_corpse",                 "死体/骨は壊さない" },
 #else
-        { &leave_corpse,                FALSE, 7, 7, 5,
-        "leave_corpse",                 "Auto-destroyer leaves corpses and skeletons" },
+	{ &leave_corpse,                FALSE, 7, 7, 5,
+	"leave_corpse",                 "Auto-destroyer leaves corpses and skeletons" },
 #endif
 
 #ifdef JP
-        { &leave_junk,                  FALSE, 7, 7, 6,
-        "leave_junk",                   "がらくたは壊さない" },
+	{ &leave_junk,                  FALSE, 7, 7, 6,
+	"leave_junk",                   "がらくたは壊さない" },
 #else
-        { &leave_junk,                  FALSE, 7, 7, 6,
-        "leave_junk",                   "Auto-destroyer leaves junk" },
+	{ &leave_junk,                  FALSE, 7, 7, 6,
+	"leave_junk",                   "Auto-destroyer leaves junk" },
 #endif
 
 
 	/*** Play-record Options ***/
 
 #ifdef JP
-        { &record_fix_art,              TRUE, 10, 4, 11,
-        "record_fix_art",               "固定アーティファクトの入手を記録する" },
+	{ &record_fix_art,              TRUE, 10, 4, 11,
+	"record_fix_art",               "固定アーティファクトの入手を記録する" },
 #else
-        { &record_fix_art,              TRUE, 10, 4, 11,
-        "record_fix_art",               "Record fixed artifacts" },
+	{ &record_fix_art,              TRUE, 10, 4, 11,
+	"record_fix_art",               "Record fixed artifacts" },
 #endif
 
 #ifdef JP
-        { &record_rand_art,             TRUE, 10, 4, 12,
-        "record_rand_art",              "ランダムアーティファクトの入手を記録する" },
+	{ &record_rand_art,             TRUE, 10, 4, 12,
+	"record_rand_art",              "ランダムアーティファクトの入手を記録する" },
 #else
-        { &record_rand_art,             TRUE, 10, 4, 12,
-        "record_rand_art",              "Record random artifacts" },
+	{ &record_rand_art,             TRUE, 10, 4, 12,
+	"record_rand_art",              "Record random artifacts" },
 #endif
 
 #ifdef JP
-        { &record_destroy_uniq,         TRUE, 10, 4, 13,
-        "record_destroy_uniq",          "ユニークモンスターを倒したときを記録する" },
+	{ &record_destroy_uniq,         TRUE, 10, 4, 13,
+	"record_destroy_uniq",          "ユニークモンスターを倒したときを記録する" },
 #else
-        { &record_destroy_uniq,         TRUE, 10, 4, 13,
-        "record_destroy_uniq",          "Record when destroy unique monster" },
+	{ &record_destroy_uniq,         TRUE, 10, 4, 13,
+	"record_destroy_uniq",          "Record when destroy unique monster" },
 #endif
 
 #ifdef JP
-        { &record_fix_quest,            TRUE, 10, 4, 14,
-        "record_fix_quest",             "固定クエストの達成を記録する" },
+	{ &record_fix_quest,            TRUE, 10, 4, 14,
+	"record_fix_quest",             "固定クエストの達成を記録する" },
 #else
-        { &record_fix_quest,            TRUE, 10, 4, 14,
-        "record_fix_quest",             "Record fixed quests" },
+	{ &record_fix_quest,            TRUE, 10, 4, 14,
+	"record_fix_quest",             "Record fixed quests" },
 #endif
 
 #ifdef JP
-        { &record_rand_quest,           TRUE, 10, 4, 15,
-        "record_rand_quest",            "ランダムクエストの達成を記録する" },
+	{ &record_rand_quest,           TRUE, 10, 4, 15,
+	"record_rand_quest",            "ランダムクエストの達成を記録する" },
 #else
-        { &record_rand_quest,           TRUE, 10, 4, 15,
-        "record_rand_quest",            "Record random quests" },
+	{ &record_rand_quest,           TRUE, 10, 4, 15,
+	"record_rand_quest",            "Record random quests" },
 #endif
 
 #ifdef JP
-        { &record_maxdeapth,            TRUE, 10, 4, 16,
-        "record_maxdeapth",             "最深階を更新したときに記録する" },
+	{ &record_maxdeapth,            TRUE, 10, 4, 16,
+	"record_maxdeapth",             "最深階を更新したときに記録する" },
 #else
-        { &record_maxdeapth,            TRUE, 10, 4, 16,
-        "record_maxdeapth",             "Record movements to deepest level" },
+	{ &record_maxdeapth,            TRUE, 10, 4, 16,
+	"record_maxdeapth",             "Record movements to deepest level" },
 #endif
 
 #ifdef JP
-        { &record_stair,                TRUE, 10, 4, 17,
-        "record_stair",                 "階の移動を記録する" },
+	{ &record_stair,                TRUE, 10, 4, 17,
+	"record_stair",                 "階の移動を記録する" },
 #else
-        { &record_stair,                TRUE, 10, 4, 17,
-        "record_stair",                 "Record recall and stair movements" },
+	{ &record_stair,                TRUE, 10, 4, 17,
+	"record_stair",                 "Record recall and stair movements" },
 #endif
 
 #ifdef JP
-        { &record_buy,                  TRUE, 10, 4, 18,
-        "record_buy",                   "アイテムの購入を記録する" },
+	{ &record_buy,                  TRUE, 10, 4, 18,
+	"record_buy",                   "アイテムの購入を記録する" },
 #else
-        { &record_buy,                  TRUE, 10, 4, 18,
-        "record_buy",                   "Record purchased items" },
+	{ &record_buy,                  TRUE, 10, 4, 18,
+	"record_buy",                   "Record purchased items" },
 #endif
 
 #ifdef JP
-        { &record_sell,                 FALSE, 10, 4, 19,
-        "record_sell",                  "アイテムの売却を記録する" },
+	{ &record_sell,                 FALSE, 10, 4, 19,
+	"record_sell",                  "アイテムの売却を記録する" },
 #else
-        { &record_sell,                 FALSE, 10, 4, 19,
-        "record_sell",                  "Record sold items" },
+	{ &record_sell,                 FALSE, 10, 4, 19,
+	"record_sell",                  "Record sold items" },
 #endif
 
 #ifdef JP
-        { &record_danger,               TRUE, 10, 4, 20,
-        "record_danger",                "ピンチになったときを記録する" },
+	{ &record_danger,               TRUE, 10, 4, 20,
+	"record_danger",                "ピンチになったときを記録する" },
 #else
-        { &record_danger,               TRUE, 10, 4, 20,
-        "record_danger",                "Record hitpoint warning" },
+	{ &record_danger,               TRUE, 10, 4, 20,
+	"record_danger",                "Record hitpoint warning" },
 #endif
 
 #ifdef JP
-        { &record_arena,                TRUE, 10, 4, 21,
-        "record_arena",                 "アリーナでの勝利を記録する" },
+	{ &record_arena,                TRUE, 10, 4, 21,
+	"record_arena",                 "アリーナでの勝利を記録する" },
 #else
-        { &record_arena,                TRUE, 10, 4, 21,
-        "record_arena",                 "Record arena victories" },
+	{ &record_arena,                TRUE, 10, 4, 21,
+	"record_arena",                 "Record arena victories" },
 #endif
 
 #ifdef JP
-        { &record_ident,                TRUE, 10, 4, 22,
-        "record_ident",                 "未判明のアイテムの識別を記録する" },
+	{ &record_ident,                TRUE, 10, 4, 22,
+	"record_ident",                 "未判明のアイテムの識別を記録する" },
 #else
-        { &record_ident,                TRUE, 10, 4, 22,
-        "record_ident",                 "Record first identified items" },
+	{ &record_ident,                TRUE, 10, 4, 22,
+	"record_ident",                 "Record first identified items" },
 #endif
 
 #ifdef JP
-        { &record_named_pet,            FALSE, 10, 4, 23,
-        "record_named_pet",             "名前つきペットの情報を記録する" },
+	{ &record_named_pet,            FALSE, 10, 4, 23,
+	"record_named_pet",             "名前つきペットの情報を記録する" },
 #else
-        { &record_named_pet,            FALSE, 10, 4, 23,
-        "record_named_pet",             "Record informations of named pets" },
+	{ &record_named_pet,            FALSE, 10, 4, 23,
+	"record_named_pet",             "Record informations of named pets" },
 #endif
 
 

@@ -386,7 +386,7 @@ struct infofnt
 /* Init an infowin by giving father as an (info_win*) (or NULL), and data */
 #define Infowin_init_dad(D,X,Y,W,H,B,FG,BG) \
 	Infowin_init_data(((D) ? ((D)->win) : (Window)(None)), \
-	                  X,Y,W,H,B,FG,BG)
+			  X,Y,W,H,B,FG,BG)
 
 
 /* Init a top level infowin by pos,size,bord,Colors */
@@ -470,7 +470,7 @@ static infofnt *Infofnt = (infofnt*)(NULL);
 
 #ifdef _JP
 #define Infokfnt_set(I) \
-        (Infokfnt = (I))
+	(Infokfnt = (I))
 #endif
 /*
  * Init the current metadpy, with various initialization stuff.
@@ -745,7 +745,7 @@ static errr Infowin_init_real(Window xid)
  *	If 'dad == None' assume 'dad == root'
  */
 static errr Infowin_init_data(Window dad, int x, int y, int w, int h,
-                              int b, Pixell fg, Pixell bg)
+			      int b, Pixell fg, Pixell bg)
 {
 	Window xid;
 
@@ -935,7 +935,7 @@ static errr Infowin_fill(void)
 {
 	/* Execute the request */
 	XFillRectangle(Metadpy->dpy, Infowin->win, Infoclr->gc,
-	               0, 0, Infowin->w, Infowin->h);
+		       0, 0, Infowin->w, Infowin->h);
 
 	/* Success */
 	return (0);
@@ -1161,7 +1161,7 @@ static errr Infoclr_init_data(Pixell fg, Pixell bg, int op, int stip)
 
 	/* Set up the GC mask */
 	gc_mask = (GCFunction | GCBackground | GCForeground |
-	           GCFillStyle | GCGraphicsExposures);
+		   GCFillStyle | GCGraphicsExposures);
 
 	/* Create the GC detailed above */
 	gc = XCreateGC(Metadpy->dpy, Metadpy->root, gc_mask, &gcv);
@@ -1529,65 +1529,65 @@ XDrawMultiString(display,d,gc, x, y, string, len, afont,
 
 #ifdef TOFU      
       if ( (*str) == 0x7f ) {
-          
-          /* 0x7Fは■で決め打ち */
-          
-          /* 連続する0x7Fの長さを検出 */
-          slen = 0;
-          while ( str < endp && (*str) == 0x7f ) {
-              slen++; 
+	  
+	  /* 0x7Fは■で決め打ち */
+	  
+	  /* 連続する0x7Fの長さを検出 */
+	  slen = 0;
+	  while ( str < endp && (*str) == 0x7f ) {
+	      slen++; 
 	      str++;
-          }
-          
-          /* 描画 */
-          XFillRectangle( display, d, gc, x, y-afont_ascent, 
-                          slen * afont_width, afont_height);
+	  }
+	  
+	  /* 描画 */
+	  XFillRectangle( display, d, gc, x, y-afont_ascent, 
+			  slen * afont_width, afont_height);
  
-          /* ポインタを進める */
-          x += afont_width * slen;
+	  /* ポインタを進める */
+	  x += afont_width * slen;
       } 
       else  
 #endif
       if ( iskanji(*str) ) {
-          
-          /* UJISの始まり */
-          
-          /* 連続するUJIS文字の長さを検出 */
-          slen = 0;
-          while ( str < endp && *str && iskanji(*str) ) {
-              kanji[slen].byte1 = *str++ & 0x7f;
-              kanji[slen++].byte2 = *str++ & 0x7f;
-          }
-          
-          /* 描画 */
-          XSetFont( display, gc, kfont->fid );
-          XDrawImageString16( display, d, gc, x, y, kanji, slen );
+	  
+	  /* UJISの始まり */
+	  
+	  /* 連続するUJIS文字の長さを検出 */
+	  slen = 0;
+	  while ( str < endp && *str && iskanji(*str) ) {
+	      kanji[slen].byte1 = *str++ & 0x7f;
+	      kanji[slen++].byte2 = *str++ & 0x7f;
+	  }
+	  
+	  /* 描画 */
+	  XSetFont( display, gc, kfont->fid );
+	  XDrawImageString16( display, d, gc, x, y, kanji, slen );
 
  
-          /* ポインタを進める */
-          x += kfont_width * slen;
-          
+	  /* ポインタを進める */
+	  x += kfont_width * slen;
+	  
       } else {
-          
-          /* 非漢字(=ASCIIと仮定)の始まり */
-          
-          /* 連続するASCII文字を検出 */
-          p = str;
-          slen = 0;
-          while ( str < endp && *str && !iskanji(*str) ) {
+	  
+	  /* 非漢字(=ASCIIと仮定)の始まり */
+	  
+	  /* 連続するASCII文字を検出 */
+	  p = str;
+	  slen = 0;
+	  while ( str < endp && *str && !iskanji(*str) ) {
 #ifdef TOFU
-              if (*str == 0x7f)break;
+	      if (*str == 0x7f)break;
 #endif
-              str++;
-              slen++;
-          }
-          
-          /* 描画 */
-          XSetFont( display, gc, afont->fid );
-          XDrawImageString( display, d, gc, x, y, p, slen );
-          
-          /* ポインタを進める */
-          x += afont_width * slen;
+	      str++;
+	      slen++;
+	  }
+	  
+	  /* 描画 */
+	  XSetFont( display, gc, afont->fid );
+	  XDrawImageString( display, d, gc, x, y, p, slen );
+	  
+	  /* ポインタを進める */
+	  x += afont_width * slen;
       }
     }
 }
@@ -1644,7 +1644,7 @@ static errr Infofnt_text_std(int x, int y, cptr str, int len)
 		{
 			/* Note that the Infoclr is set up to contain the Infofnt */
 			XDrawImageString(Metadpy->dpy, Infowin->win, Infoclr->gc,
-			                 x + i * Infofnt->wid + Infofnt->off, y, str + i, 1);
+					 x + i * Infofnt->wid + Infofnt->off, y, str + i, 1);
 		}
 	}
 
@@ -1655,17 +1655,17 @@ static errr Infofnt_text_std(int x, int y, cptr str, int len)
 #ifdef _JP
 		/* 漢字フォントの表示幅は ASCIIフォントの2倍に固定 */
 		XDrawMultiString(Metadpy->dpy, Infowin->win, Infoclr->gc,
-		                 x, y, str, len,
-		                 Infofnt->info, Infofnt->wid, Infofnt->hgt,
-                                 Infofnt->asc, 
-                                 Infokfnt->info, Infofnt->wid * 2);
+				 x, y, str, len,
+				 Infofnt->info, Infofnt->wid, Infofnt->hgt,
+				 Infofnt->asc, 
+				 Infokfnt->info, Infofnt->wid * 2);
 #else
 #ifdef USE_FONTSET
 		XmbDrawImageString(Metadpy->dpy, Infowin->win, Infofnt->info,
-		                   Infoclr->gc, x, y, str, len);
+				   Infoclr->gc, x, y, str, len);
 #else
 		XDrawImageString(Metadpy->dpy, Infowin->win, Infoclr->gc,
-		                 x, y, str, len);
+				 x, y, str, len);
 #endif
 #endif
 
@@ -1908,18 +1908,18 @@ static void react_keypress(XKeyEvent *xev)
 	if (ks)
 	{
 		sprintf(msg, "%c%s%s%s%s_%lX%c", 31,
-		        mc ? "N" : "", ms ? "S" : "",
-		        mo ? "O" : "", mx ? "M" : "",
-		        (unsigned long)(ks), 13);
+			mc ? "N" : "", ms ? "S" : "",
+			mo ? "O" : "", mx ? "M" : "",
+			(unsigned long)(ks), 13);
 	}
 
 	/* Hack -- Use the Keycode */
 	else
 	{
 		sprintf(msg, "%c%s%s%s%sK_%X%c", 31,
-		        mc ? "N" : "", ms ? "S" : "",
-		        mo ? "O" : "", mx ? "M" : "",
-		        ev->keycode, 13);
+			mc ? "N" : "", ms ? "S" : "",
+			mo ? "O" : "", mx ? "M" : "",
+			ev->keycode, 13);
 	}
 
 	/* Enqueue the "macro trigger" string */
@@ -2357,9 +2357,9 @@ static errr Term_xtra_x11_react(void)
 
 				/* Create pixel */
 				pixel = create_pixel(Metadpy->dpy,
-				                     color_table[i][1],
-				                     color_table[i][2],
-				                     color_table[i][3]);
+						     color_table[i][1],
+						     color_table[i][2],
+						     color_table[i][3]);
 
 				/* Change the foreground */
 				Infoclr_set(clr[i]);
@@ -2386,7 +2386,7 @@ static errr Term_xtra_x11(int n, int v)
 
 #ifdef USE_SOUND
 		/* Make a special sound */
- 	        case TERM_XTRA_SOUND: return (Term_xtra_x11_sound(v));
+		case TERM_XTRA_SOUND: return (Term_xtra_x11_sound(v));
 #endif
 
 		/* Flush the output XXX XXX */
@@ -2446,7 +2446,7 @@ static errr Term_bigcurs_x11(int x, int y)
 	Infoclr_set(xor);
 
 	/* Hilite the cursor character */
-        Infofnt_text_non(x, y, "  ", 2);
+	Infofnt_text_non(x, y, "  ", 2);
 
 	/* Success */
 	return (0);
@@ -2544,11 +2544,11 @@ static errr Term_pict_x11(int x, int y, int n, const byte *ap, const char *cp)
 		{
 			/* Draw object / terrain */
 			XPutImage(Metadpy->dpy, td->win->win,
-		  	        clr[0]->gc,
-		  	        td->tiles,
-		  	        x1, y1,
-		  	        x, y,
-		  	        td->fnt->twid, td->fnt->hgt);	
+				clr[0]->gc,
+				td->tiles,
+				x1, y1,
+				x, y,
+				td->fnt->twid, td->fnt->hgt);	
 		}
 		else
 		{
@@ -2576,21 +2576,21 @@ static errr Term_pict_x11(int x, int y, int n, const byte *ap, const char *cp)
 			/* Draw to screen */
 
 			XPutImage(Metadpy->dpy, td->win->win,
-		    	      clr[0]->gc,
-		     	     td->TmpImage,
-		     	     0, 0, x, y,
-		     	     td->fnt->twid, td->fnt->hgt);
+			      clr[0]->gc,
+			     td->TmpImage,
+			     0, 0, x, y,
+			     td->fnt->twid, td->fnt->hgt);
 		}
 
 #else /* USE_TRANSPARENCY */
 
 		/* Draw object / terrain */
 		XPutImage(Metadpy->dpy, td->win->win,
-		          clr[0]->gc,
-		          td->tiles,
-		          x1, y1,
-		          x, y,
-		          td->fnt->twid, td->fnt->hgt);
+			  clr[0]->gc,
+			  td->tiles,
+			  x1, y1,
+			  x, y,
+			  td->fnt->twid, td->fnt->hgt);
 
 #endif /* USE_TRANSPARENCY */
 	}
@@ -2912,7 +2912,7 @@ static errr term_data_init(term_data *td, int i)
 	MAKE(td->win, infowin);
 	Infowin_set(td->win);
 	Infowin_init_top(x, y, wid, hgt, 0,
-	                 Metadpy->fg, Metadpy->bg);
+			 Metadpy->fg, Metadpy->bg);
 
 	/* Ask for certain events */
 #if defined(USE_XIM)
@@ -3161,9 +3161,9 @@ errr init_x11(int argc, char *argv[])
 		{
 			/* Create pixel */
 			pixel = create_pixel(Metadpy->dpy,
-			                     color_table[i][1],
-			                     color_table[i][2],
-			                     color_table[i][3]);
+					     color_table[i][1],
+					     color_table[i][2],
+					     color_table[i][3]);
 		}
 
 		/* Initialize the color */
@@ -3273,8 +3273,8 @@ errr init_x11(int argc, char *argv[])
 			/* Resize tiles */
 			td->tiles =
 			ResizeImage(dpy, tiles_raw,
-			            pict_wid, pict_hgt,
-			            td->fnt->twid, td->fnt->hgt);
+				    pict_wid, pict_hgt,
+				    td->fnt->twid, td->fnt->hgt);
 		}
 
 #ifdef USE_TRANSPARENCY

@@ -96,7 +96,7 @@ static void remove_auto_dump(cptr orig_file, cptr mark)
 			{
 				int tmp;
 
-			        if (!sscanf(buf + mark_len, " (%d)", &tmp)
+				if (!sscanf(buf + mark_len, " (%d)", &tmp)
 				    || tmp != line_num)
 				{
 					fseek(orig_fff, header_location, SEEK_SET);
@@ -1127,8 +1127,8 @@ void do_cmd_change_name(void)
 		{
 			get_name();
 
-                        /* Process the player name */
-                        process_player_name(FALSE);
+			/* Process the player name */
+			process_player_name(FALSE);
 		}
 
 		/* File dump */
@@ -1272,7 +1272,7 @@ void do_cmd_messages(int num_now)
 #ifdef JP
 		/* translation */
 		prt(format("以前のメッセージ %d-%d 全部で(%d) オフセット(%d)",
-		           i, i+j-1, n, q), 0, 0);
+			   i, i+j-1, n, q), 0, 0);
 #else
 		prt(format("Message Recall (%d-%d of %d), Offset %d",
 		    i, i+j-1, n, q), 0, 0);
@@ -1438,7 +1438,7 @@ static option_type cheat_info[CHEAT_MAX] =
 #else
 	"cheat_peek",		"Peek into object creation"
 #endif
-        },
+	},
 
 	{ &cheat_hear,		FALSE,	255,	0x02, 0x00,
 #ifdef JP
@@ -1446,7 +1446,7 @@ static option_type cheat_info[CHEAT_MAX] =
 #else
 	"cheat_hear",		"Peek into monster creation"
 #endif
-        },
+	},
 
 	{ &cheat_room,		FALSE,	255,	0x04, 0x00,
 #ifdef JP
@@ -1454,7 +1454,7 @@ static option_type cheat_info[CHEAT_MAX] =
 #else
 	"cheat_room",		"Peek into dungeon creation"
 #endif
-        },
+	},
 
 	{ &cheat_xtra,		FALSE,	255,	0x08, 0x00,
 #ifdef JP
@@ -1462,7 +1462,7 @@ static option_type cheat_info[CHEAT_MAX] =
 #else
 	"cheat_xtra",		"Peek into something else"
 #endif
-        },
+	},
 
 	{ &cheat_know,		FALSE,	255,	0x10, 0x00,
 #ifdef JP
@@ -1470,7 +1470,7 @@ static option_type cheat_info[CHEAT_MAX] =
 #else
 	"cheat_know",		"Know complete monster info"
 #endif
-        },
+	},
 
 	{ &cheat_live,		FALSE,	255,	0x20, 0x00,
 #ifdef JP
@@ -1478,7 +1478,7 @@ static option_type cheat_info[CHEAT_MAX] =
 #else
 	"cheat_live",		"Allow player to avoid death"
 #endif
-        },
+	},
 
 	{ &cheat_save,		FALSE,	255,	0x40, 0x00,
 #ifdef JP
@@ -1486,7 +1486,7 @@ static option_type cheat_info[CHEAT_MAX] =
 #else
 	"cheat_save",		"Ask for saving death"
 #endif
-        }
+	}
 };
 
 /*
@@ -1507,7 +1507,7 @@ static void do_cmd_options_cheat(cptr info)
 	/* Interact with the player */
 	while (TRUE)
 	{
-                int dir;
+		int dir;
 
 		/* Prompt XXX XXX XXX */
 #ifdef JP
@@ -1609,19 +1609,19 @@ static void do_cmd_options_cheat(cptr info)
 				break;
 			}
 
-                        case '?':
-                        {
+			case '?':
+			{
 #ifdef JP
-                                strnfmt(buf, sizeof(buf), "joption.txt#%s", cheat_info[k].o_text);
+				strnfmt(buf, sizeof(buf), "joption.txt#%s", cheat_info[k].o_text);
 #else
-                                strnfmt(buf, sizeof(buf), "option.txt#%s", cheat_info[k].o_text);
+				strnfmt(buf, sizeof(buf), "option.txt#%s", cheat_info[k].o_text);
 #endif
-                                /* Peruse the help file */
-                                (void)show_file(TRUE, buf, NULL, 0, 0);
+				/* Peruse the help file */
+				(void)show_file(TRUE, buf, NULL, 0, 0);
 
 				Term_clear(); 
-                                break;
-                        }
+				break;
+			}
 
 			default:
 			{
@@ -1780,26 +1780,26 @@ static void do_cmd_options_autosave(cptr info)
 				autosave_freq = toggle_frequency(autosave_freq);
 #ifdef JP
 				prt(format("自動セーブの頻度： %d ターン毎", 
-                                           autosave_freq), 5, 0);
+					   autosave_freq), 5, 0);
 #else
 				prt(format("Timed autosave frequency: every %d turns",
-                                           autosave_freq), 5, 0);
+					   autosave_freq), 5, 0);
 #endif
-                                break;
+				break;
 			}
 
-                        case '?':
-                        {
+			case '?':
+			{
 #ifdef JP
-                                (void)show_file(TRUE, "joption.txt#Autosave", NULL, 0, 0);
+				(void)show_file(TRUE, "joption.txt#Autosave", NULL, 0, 0);
 #else
-                                (void)show_file(TRUE, "option.txt#Autosave", NULL, 0, 0);
+				(void)show_file(TRUE, "option.txt#Autosave", NULL, 0, 0);
 #endif
 
 
 				Term_clear(); 
-                                break;
-                        }
+				break;
+			}
 
 			default:
 			{
@@ -1841,7 +1841,7 @@ void do_cmd_options_aux(int page, cptr info)
 	/* Interact with the player */
 	while (TRUE)
 	{
-                int dir;
+		int dir;
 
 		/* Prompt XXX XXX XXX */
 #ifdef JP
@@ -1853,11 +1853,11 @@ void do_cmd_options_aux(int page, cptr info)
 		prt(buf, 0, 0);
 
 
-                /* HACK -- description for easy-auto-destroy options */
+		/* HACK -- description for easy-auto-destroy options */
 #ifdef JP
-                if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "以下のオプションは、簡易自動破壊を使用するときのみ有効", 6, 6);
+		if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "以下のオプションは、簡易自動破壊を使用するときのみ有効", 6, 6);
 #else
-                if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "Following options will protect items from easy auto-destroyer.", 6, 3);
+		if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "Following options will protect items from easy auto-destroyer.", 6, 3);
 #endif
 
 		/* Display the options */
@@ -1870,14 +1870,14 @@ void do_cmd_options_aux(int page, cptr info)
 
 			/* Display the option text */
 			sprintf(buf, "%-48s: %s (%.19s)",
-			        option_info[opt[i]].o_desc,
+				option_info[opt[i]].o_desc,
 #ifdef JP
-			        (*option_info[opt[i]].o_var ? "はい  " : "いいえ"),
+				(*option_info[opt[i]].o_var ? "はい  " : "いいえ"),
 #else
-			        (*option_info[opt[i]].o_var ? "yes" : "no "),
+				(*option_info[opt[i]].o_var ? "yes" : "no "),
 #endif
 
-			        option_info[opt[i]].o_text);
+				option_info[opt[i]].o_text);
 			if ((page == PAGE_AUTODESTROY) && i > 2) c_prt(a, buf, i + 5, 0);
 			else c_prt(a, buf, i + 2, 0);
 		}
@@ -1948,19 +1948,19 @@ void do_cmd_options_aux(int page, cptr info)
 				break;
 			}
 
-                        case '?':
-                        {
+			case '?':
+			{
 #ifdef JP
-                                strnfmt(buf, sizeof(buf), "joption.txt#%s", option_info[opt[k]].o_text);
+				strnfmt(buf, sizeof(buf), "joption.txt#%s", option_info[opt[k]].o_text);
 #else
-                                strnfmt(buf, sizeof(buf), "option.txt#%s", option_info[opt[k]].o_text);
+				strnfmt(buf, sizeof(buf), "option.txt#%s", option_info[opt[k]].o_text);
 #endif
-                                /* Peruse the help file */
-                                (void)show_file(TRUE, buf, NULL, 0, 0);
+				/* Peruse the help file */
+				(void)show_file(TRUE, buf, NULL, 0, 0);
 
 				Term_clear(); 
-                                break;
-                        }
+				break;
+			}
 
 			default:
 			{
@@ -2116,18 +2116,18 @@ static void do_cmd_options_win(void)
 				break;
 			}
 
-                        case '?':
-                        {
+			case '?':
+			{
 #ifdef JP
-                                (void)show_file(TRUE, "joption.txt#Window", NULL, 0, 0);
+				(void)show_file(TRUE, "joption.txt#Window", NULL, 0, 0);
 #else
-                                (void)show_file(TRUE, "option.txt#Window", NULL, 0, 0);
+				(void)show_file(TRUE, "option.txt#Window", NULL, 0, 0);
 #endif
 
 
 				Term_clear(); 
-                                break;
-                        }
+				break;
+			}
 
 			default:
 			{
@@ -2186,8 +2186,8 @@ void do_cmd_options(void)
 	/* Interact */
 	while (1)
 	{
-                /* Clear screen */
-                Term_clear();
+		/* Clear screen */
+		Term_clear();
 
 		/* Why are we here */
 #ifdef JP
@@ -2231,15 +2231,15 @@ void do_cmd_options(void)
 		prt("(W) Window Flags", 15, 5);
 #endif
 
-                if (p_ptr->noscore || allow_debug_opts)
-                {
-                        /* Cheating */
+		if (p_ptr->noscore || allow_debug_opts)
+		{
+			/* Cheating */
 #ifdef JP
-                        prt("(C)       詐欺            オプション", 16, 5);
+			prt("(C)       詐欺            オプション", 16, 5);
 #else
-                        prt("(C) Cheating Options", 16, 5);
+			prt("(C) Cheating Options", 16, 5);
 #endif
-                }
+		}
 
 
 		/* Prompt */
@@ -2324,40 +2324,40 @@ void do_cmd_options(void)
 				break;
 			}
 
-                        /* Object auto-destruction Options */
-                        case '6':
-                        {
-                                /* Spawn */
+			/* Object auto-destruction Options */
+			case '6':
+			{
+				/* Spawn */
 #ifdef JP
-                                do_cmd_options_aux(7, "簡易アイテム自動破壊オプション");
+				do_cmd_options_aux(7, "簡易アイテム自動破壊オプション");
 #else
-                                do_cmd_options_aux(7, "Easy Auto-Destroyer Options");
+				do_cmd_options_aux(7, "Easy Auto-Destroyer Options");
 #endif
-                                break;
-                        }
+				break;
+			}
 
-                        /* Play-record Options */
-                        case 'R':
-                        case 'r':
-                        {
-                                /* Spawn */
+			/* Play-record Options */
+			case 'R':
+			case 'r':
+			{
+				/* Spawn */
 #ifdef JP
-                                do_cmd_options_aux(10, "プレイ記録オプション");
+				do_cmd_options_aux(10, "プレイ記録オプション");
 #else
-                                do_cmd_options_aux(10, "Play-record Option");
+				do_cmd_options_aux(10, "Play-record Option");
 #endif
-                                break;
-                        }
+				break;
+			}
 
 			/* Cheating Options */
 			case 'C':
 			{
-                                if (!p_ptr->noscore && !allow_debug_opts)
-                                {
-                                        /* Cheat options are not permitted */
-                                        bell();
-                                        break;
-                                }
+				if (!p_ptr->noscore && !allow_debug_opts)
+				{
+					/* Cheat options are not permitted */
+					bell();
+					break;
+				}
 
 				/* Spawn */
 #ifdef JP
@@ -2388,9 +2388,9 @@ void do_cmd_options(void)
 				/* Spawn */
 				do_cmd_options_win();
 				p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL |
-				                  PW_PLAYER | PW_MESSAGE | PW_OVERHEAD |
-				                  PW_MONSTER | PW_OBJECT | PW_SNAPSHOT |
-				                  PW_BORG_1 | PW_BORG_2 | PW_DUNGEON);
+						  PW_PLAYER | PW_MESSAGE | PW_OVERHEAD |
+						  PW_MONSTER | PW_OBJECT | PW_SNAPSHOT |
+						  PW_BORG_1 | PW_BORG_2 | PW_DUNGEON);
 				break;
 			}
 
@@ -2412,10 +2412,10 @@ void do_cmd_options(void)
 					int msec = delay_factor * delay_factor * delay_factor;
 #ifdef JP
 					prt(format("現在のウェイト: %d (%dミリ秒)",
-					           delay_factor, msec), 22, 0);
+						   delay_factor, msec), 22, 0);
 #else
 					prt(format("Current base delay factor: %d (%d msec)",
-					           delay_factor, msec), 22, 0);
+						   delay_factor, msec), 22, 0);
 #endif
 
 #ifdef JP
@@ -2426,15 +2426,15 @@ void do_cmd_options(void)
 
 					k = inkey();
 					if (k == ESCAPE) break;
-                                        else if (k == '?')
-                                        {
+					else if (k == '?')
+					{
 #ifdef JP
-                                                (void)show_file(TRUE, "joption.txt#BaseDelay", NULL, 0, 0);
+						(void)show_file(TRUE, "joption.txt#BaseDelay", NULL, 0, 0);
 #else
-                                                (void)show_file(TRUE, "option.txt#BaseDelay", NULL, 0, 0);
+						(void)show_file(TRUE, "option.txt#BaseDelay", NULL, 0, 0);
 #endif
-                                                Term_clear(); 
-                                        }
+						Term_clear(); 
+					}
 					else if (isdigit(k)) delay_factor = D2I(k);
 					else bell();
 				}
@@ -2458,30 +2458,30 @@ void do_cmd_options(void)
 				while (1)
 				{
 #ifdef JP
-                                        prt(format("現在の低ヒットポイント警告: %d0%%",
-                                                   hitpoint_warn), 22, 0);
+					prt(format("現在の低ヒットポイント警告: %d0%%",
+						   hitpoint_warn), 22, 0);
 #else
 					prt(format("Current hitpoint warning: %d0%%",
-					           hitpoint_warn), 22, 0);
+						   hitpoint_warn), 22, 0);
 #endif
 
 #ifdef JP
-                                        prt("低ヒットポイント警告 (0-9) ESCで決定: ", 20, 0);
+					prt("低ヒットポイント警告 (0-9) ESCで決定: ", 20, 0);
 #else
 					prt("Hitpoint Warning (0-9 or ESC to accept): ", 20, 0);
 #endif
 
 					k = inkey();
 					if (k == ESCAPE) break;
-                                        else if (k == '?')
-                                        {
+					else if (k == '?')
+					{
 #ifdef JP
-                                                (void)show_file(TRUE, "joption.txt#Hitpoint", NULL, 0, 0);
+						(void)show_file(TRUE, "joption.txt#Hitpoint", NULL, 0, 0);
 #else
-                                                (void)show_file(TRUE, "option.txt#Hitpoint", NULL, 0, 0);
+						(void)show_file(TRUE, "option.txt#Hitpoint", NULL, 0, 0);
 #endif
-                                                Term_clear(); 
-                                        }
+						Term_clear(); 
+					}
 					else if (isdigit(k)) hitpoint_warn = D2I(k);
 					else bell();
 				}
@@ -2489,14 +2489,14 @@ void do_cmd_options(void)
 				break;
 			}
 
-                        case '?':
+			case '?':
 #ifdef JP
-                                (void)show_file(TRUE, "joption.txt", NULL, 0, 0);
+				(void)show_file(TRUE, "joption.txt", NULL, 0, 0);
 #else
-                                (void)show_file(TRUE, "option.txt", NULL, 0, 0);
+				(void)show_file(TRUE, "option.txt", NULL, 0, 0);
 #endif
 				Term_clear(); 
-                                break;
+				break;
 
 			/* Unknown option */
 			default:
@@ -2914,15 +2914,15 @@ void do_cmd_macros(void)
 
 #ifdef ALLOW_MACROS
 #ifdef JP
-                prt("(2) ファイルにマクロを追加", 5, 5);
-                prt("(3) マクロの確認", 6, 5);
-                prt("(4) マクロの作成", 7, 5);
-                prt("(5) マクロの削除", 8, 5);
-                prt("(6) ファイルにキー配置を追加", 9, 5);
-                prt("(7) キー配置の確認", 10, 5);
-                prt("(8) キー配置の作成", 11, 5);
-                prt("(9) キー配置の削除", 12, 5);
-                prt("(0) マクロ行動の入力", 13, 5);
+		prt("(2) ファイルにマクロを追加", 5, 5);
+		prt("(3) マクロの確認", 6, 5);
+		prt("(4) マクロの作成", 7, 5);
+		prt("(5) マクロの削除", 8, 5);
+		prt("(6) ファイルにキー配置を追加", 9, 5);
+		prt("(7) キー配置の確認", 10, 5);
+		prt("(8) キー配置の作成", 11, 5);
+		prt("(9) キー配置の削除", 12, 5);
+		prt("(0) マクロ行動の入力", 13, 5);
 #else
 		prt("(2) Append macros to a file", 5, 5);
 		prt("(3) Query a macro", 6, 5);
@@ -3630,7 +3630,7 @@ void do_cmd_visuals(void)
 
 				/* Dump the monster attr/char info */
 				fprintf(fff, "R:%d:0x%02X:0x%02X\n\n", i,
-				        (byte)(r_ptr->x_attr), (byte)(r_ptr->x_char));
+					(byte)(r_ptr->x_attr), (byte)(r_ptr->x_char));
 				line_num += 2;
 			}
 
@@ -3703,7 +3703,7 @@ void do_cmd_visuals(void)
 
 				/* Dump the object attr/char info */
 				fprintf(fff, "K:%d:0x%02X:0x%02X\n\n", i,
-				        (byte)(k_ptr->x_attr), (byte)(k_ptr->x_char));
+					(byte)(k_ptr->x_attr), (byte)(k_ptr->x_char));
 				line_num += 2;
 			}
 
@@ -3776,7 +3776,7 @@ void do_cmd_visuals(void)
 
 				/* Dump the feature attr/char info */
 				fprintf(fff, "F:%d:0x%02X:0x%02X\n\n", i,
-				        (byte)(f_ptr->x_attr), (byte)(f_ptr->x_char));
+					(byte)(f_ptr->x_attr), (byte)(f_ptr->x_char));
 				line_num += 2;
 			}
 
@@ -3820,22 +3820,22 @@ void do_cmd_visuals(void)
 				/* Label the object */
 #ifdef JP
 				Term_putstr(5, 17, -1, TERM_WHITE,
-				            format("モンスター = %d, 名前 = %-40.40s",
-				                   r, (r_name + r_ptr->name)));
+					    format("モンスター = %d, 名前 = %-40.40s",
+						   r, (r_name + r_ptr->name)));
 #else
 				Term_putstr(5, 17, -1, TERM_WHITE,
-				            format("Monster = %d, Name = %-40.40s",
-				                   r, (r_name + r_ptr->name)));
+					    format("Monster = %d, Name = %-40.40s",
+						   r, (r_name + r_ptr->name)));
 #endif
 
 
 				/* Label the Default values */
 #ifdef JP
 				Term_putstr(10, 19, -1, TERM_WHITE,
-				            format("初期値  色 / 文字 = %3u / %3u", da, dc));
+					    format("初期値  色 / 文字 = %3u / %3u", da, dc));
 #else
 				Term_putstr(10, 19, -1, TERM_WHITE,
-				            format("Default attr/char = %3u / %3u", da, dc));
+					    format("Default attr/char = %3u / %3u", da, dc));
 #endif
 
 				Term_putstr(40, 19, -1, TERM_WHITE, "<< ? >>");
@@ -3851,10 +3851,10 @@ void do_cmd_visuals(void)
 				/* Label the Current values */
 #ifdef JP
 				Term_putstr(10, 20, -1, TERM_WHITE,
-				            format("現在値  色 / 文字 = %3u / %3u", ca, cc));
+					    format("現在値  色 / 文字 = %3u / %3u", ca, cc));
 #else
 				Term_putstr(10, 20, -1, TERM_WHITE,
-				            format("Current attr/char = %3u / %3u", ca, cc));
+					    format("Current attr/char = %3u / %3u", ca, cc));
 #endif
 
 				Term_putstr(40, 20, -1, TERM_WHITE, "<< ? >>");
@@ -3870,10 +3870,10 @@ void do_cmd_visuals(void)
 				/* Prompt */
 #ifdef JP
 				Term_putstr(0, 22, -1, TERM_WHITE,
-				            "コマンド (n/N/^N/a/A/^A/c/C/^C): ");
+					    "コマンド (n/N/^N/a/A/^A/c/C/^C): ");
 #else
 				Term_putstr(0, 22, -1, TERM_WHITE,
-				            "Command (n/N/^N/a/A/^A/c/C/^C): ");
+					    "Command (n/N/^N/a/A/^A/c/C/^C): ");
 #endif
 
 				/* Get a command */
@@ -3933,22 +3933,22 @@ void do_cmd_visuals(void)
 				/* Label the object */
 #ifdef JP
 				Term_putstr(5, 17, -1, TERM_WHITE,
-				            format("アイテム = %d, 名前 = %-40.40s",
-				                   k, (k_name + k_ptr->name)));
+					    format("アイテム = %d, 名前 = %-40.40s",
+						   k, (k_name + k_ptr->name)));
 #else
 				Term_putstr(5, 17, -1, TERM_WHITE,
-				            format("Object = %d, Name = %-40.40s",
-				                   k, (k_name + k_ptr->name)));
+					    format("Object = %d, Name = %-40.40s",
+						   k, (k_name + k_ptr->name)));
 #endif
 
 
 				/* Label the Default values */
 #ifdef JP
 				Term_putstr(10, 19, -1, TERM_WHITE,
-				            format("初期値  色 / 文字 = %3d / %3d", da, dc));
+					    format("初期値  色 / 文字 = %3d / %3d", da, dc));
 #else
 				Term_putstr(10, 19, -1, TERM_WHITE,
-				            format("Default attr/char = %3d / %3d", da, dc));
+					    format("Default attr/char = %3d / %3d", da, dc));
 #endif
 
 				Term_putstr(40, 19, -1, TERM_WHITE, "<< ? >>");
@@ -3964,10 +3964,10 @@ void do_cmd_visuals(void)
 				/* Label the Current values */
 #ifdef JP
 				Term_putstr(10, 20, -1, TERM_WHITE,
-				            format("現在値  色 / 文字 = %3d / %3d", ca, cc));
+					    format("現在値  色 / 文字 = %3d / %3d", ca, cc));
 #else
 				Term_putstr(10, 20, -1, TERM_WHITE,
-				            format("Current attr/char = %3d / %3d", ca, cc));
+					    format("Current attr/char = %3d / %3d", ca, cc));
 #endif
 
 				Term_putstr(40, 20, -1, TERM_WHITE, "<< ? >>");
@@ -3983,10 +3983,10 @@ void do_cmd_visuals(void)
 				/* Prompt */
 #ifdef JP
 				Term_putstr(0, 22, -1, TERM_WHITE,
-				            "コマンド (n/N/^N/a/A/^A/c/C/^C): ");
+					    "コマンド (n/N/^N/a/A/^A/c/C/^C): ");
 #else
 				Term_putstr(0, 22, -1, TERM_WHITE,
-				            "Command (n/N/^N/a/A/^A/c/C/^C): ");
+					    "Command (n/N/^N/a/A/^A/c/C/^C): ");
 #endif
 
 				/* Get a command */
@@ -4046,22 +4046,22 @@ void do_cmd_visuals(void)
 				/* Label the object */
 #ifdef JP
 				Term_putstr(5, 17, -1, TERM_WHITE,
-				            format("地形 = %d, 名前 = %-40.40s",
-				                   f, (f_name + f_ptr->name)));
+					    format("地形 = %d, 名前 = %-40.40s",
+						   f, (f_name + f_ptr->name)));
 #else
 				Term_putstr(5, 17, -1, TERM_WHITE,
-				            format("Terrain = %d, Name = %-40.40s",
-				                   f, (f_name + f_ptr->name)));
+					    format("Terrain = %d, Name = %-40.40s",
+						   f, (f_name + f_ptr->name)));
 #endif
 
 
 				/* Label the Default values */
 #ifdef JP
 				Term_putstr(10, 19, -1, TERM_WHITE,
-				            format("初期値  色 / 文字 = %3d / %3d", da, dc));
+					    format("初期値  色 / 文字 = %3d / %3d", da, dc));
 #else
 				Term_putstr(10, 19, -1, TERM_WHITE,
-				            format("Default attr/char = %3d / %3d", da, dc));
+					    format("Default attr/char = %3d / %3d", da, dc));
 #endif
 
 				Term_putstr(40, 19, -1, TERM_WHITE, "<< ? >>");
@@ -4077,10 +4077,10 @@ void do_cmd_visuals(void)
 				/* Label the Current values */
 #ifdef JP
 				Term_putstr(10, 20, -1, TERM_WHITE,
-				            format("現在値  色 / 文字 = %3d / %3d", ca, cc));
+					    format("現在値  色 / 文字 = %3d / %3d", ca, cc));
 #else
 				Term_putstr(10, 20, -1, TERM_WHITE,
-				            format("Current attr/char = %3d / %3d", ca, cc));
+					    format("Current attr/char = %3d / %3d", ca, cc));
 #endif
 
 				Term_putstr(40, 20, -1, TERM_WHITE, "<< ? >>");
@@ -4096,10 +4096,10 @@ void do_cmd_visuals(void)
 				/* Prompt */
 #ifdef JP
 				Term_putstr(0, 22, -1, TERM_WHITE,
-				            "コマンド (n/N/^N/a/A/^A/c/C/^C): ");
+					    "コマンド (n/N/^N/a/A/^A/c/C/^C): ");
 #else
 				Term_putstr(0, 22, -1, TERM_WHITE,
-				            "Command (n/N/^N/a/A/^A/c/C/^C): ");
+					    "Command (n/N/^N/a/A/^A/c/C/^C): ");
 #endif
 
 				/* Get a command */
@@ -4209,8 +4209,8 @@ void do_cmd_colors(void)
 
 #ifdef ALLOW_COLORS
 #ifdef JP
-                prt("(2) カラーの設定をファイルに書き出す", 5, 5);
-                prt("(3) カラーの設定を変更する", 6, 5);
+		prt("(2) カラーの設定をファイルに書き出す", 5, 5);
+		prt("(3) カラーの設定を変更する", 6, 5);
 #else
 		prt("(2) Dump colors", 5, 5);
 		prt("(3) Modify colors", 6, 5);
@@ -4343,7 +4343,7 @@ void do_cmd_colors(void)
 
 				/* Dump the monster attr/char info */
 				fprintf(fff, "V:%d:0x%02X:0x%02X:0x%02X:0x%02X\n\n",
-				        i, kv, rv, gv, bv);
+					i, kv, rv, gv, bv);
 				line_num += 2;
 			}
 
@@ -4402,28 +4402,28 @@ void do_cmd_colors(void)
 				/* Describe the color */
 #ifdef JP
 				Term_putstr(5, 10, -1, TERM_WHITE,
-				            format("カラー = %d, 名前 = %s", a, name));
+					    format("カラー = %d, 名前 = %s", a, name));
 #else
 				Term_putstr(5, 10, -1, TERM_WHITE,
-				            format("Color = %d, Name = %s", a, name));
+					    format("Color = %d, Name = %s", a, name));
 #endif
 
 
 				/* Label the Current values */
 				Term_putstr(5, 12, -1, TERM_WHITE,
-				            format("K = 0x%02x / R,G,B = 0x%02x,0x%02x,0x%02x",
-				                   angband_color_table[a][0],
-				                   angband_color_table[a][1],
-				                   angband_color_table[a][2],
-				                   angband_color_table[a][3]));
+					    format("K = 0x%02x / R,G,B = 0x%02x,0x%02x,0x%02x",
+						   angband_color_table[a][0],
+						   angband_color_table[a][1],
+						   angband_color_table[a][2],
+						   angband_color_table[a][3]));
 
 				/* Prompt */
 #ifdef JP
 				Term_putstr(0, 14, -1, TERM_WHITE,
-				            "コマンド (n/N/k/K/r/R/g/G/b/B): ");
+					    "コマンド (n/N/k/K/r/R/g/G/b/B): ");
 #else
 				Term_putstr(0, 14, -1, TERM_WHITE,
-				            "Command (n/N/k/K/r/R/g/G/b/B): ");
+					    "Command (n/N/k/K/r/R/g/G/b/B): ");
 #endif
 
 
@@ -4511,10 +4511,10 @@ void do_cmd_version(void)
 	/* Silly message */
 #ifdef JP
 	msg_format("変愚蛮怒(Hengband) %d.%d.%d",
-	            FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+		    FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 #else
 	msg_format("You are playing Hengband %d.%d.%d.",
-	            FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+		    FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 #endif
 }
 
@@ -4756,20 +4756,20 @@ void do_cmd_feeling(void)
 	}
 
 	/* Display the feeling */
-        if (turn - old_turn >= (150 - dun_level)*TURNS_PER_TICK || cheat_xtra)
-        {
-                if (p_ptr->muta3 & MUT3_GOOD_LUCK) msg_print(do_cmd_feeling_text_lucky[feeling]);
-                else {
+	if (turn - old_turn >= (150 - dun_level)*TURNS_PER_TICK || cheat_xtra)
+	{
+		if (p_ptr->muta3 & MUT3_GOOD_LUCK) msg_print(do_cmd_feeling_text_lucky[feeling]);
+		else {
 					if((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON)){
 						msg_print(do_cmd_feeling_text_combat[feeling]);
 					}else
 						msg_print(do_cmd_feeling_text[feeling]);
 				}
-        }
-        else
-        {
-                msg_print(do_cmd_feeling_text[0]);
-        }
+	}
+	else
+	{
+		msg_print(do_cmd_feeling_text[0]);
+	}
 }
 
 
@@ -4994,8 +4994,8 @@ static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr,
 
        /* 
 	* HACK:Ring of Lordly protection and Dragon shield/helm
-        * have random resistances.
-        */
+	* have random resistances.
+	*/
   if ( ((o_ptr->tval >= TV_BOW && o_ptr->tval<= TV_DRAG_ARMOR && o_ptr->name2)
        || (o_ptr->tval == TV_RING && o_ptr->sval == SV_RING_LORDLY) 
        || (o_ptr->tval == TV_SHIELD && o_ptr->sval == SV_DRAGON_SHIELD) 
@@ -5208,7 +5208,7 @@ static void do_cmd_knowledge_inven(void)
 
 	byte tval;
 	int i=0;
-        int j=0;
+	int j=0;
 
 	char  where[32];
 
@@ -5225,11 +5225,11 @@ static void do_cmd_knowledge_inven(void)
 	}
 	fprintf(fff,"%s\n",inven_res_label);
 
-        for (tval=TV_BOW; tval <= TV_RING; tval++){
+	for (tval=TV_BOW; tval <= TV_RING; tval++){
 
-          if (j!=0) {
-              for (;j<9;j++) fprintf(fff, "\n");
-              j=0;
+	  if (j!=0) {
+	      for (;j<9;j++) fprintf(fff, "\n");
+	      j=0;
 	      fprintf(fff,"%s\n",inven_res_label);              
 	  }
 	  
@@ -5859,12 +5859,12 @@ static void do_cmd_knowledge_artifacts(void)
 		if (okay[k]) who[n++] = k;
 	}
 
-        /* Select the sort method */
-        ang_sort_comp = ang_sort_art_comp;
-        ang_sort_swap = ang_sort_art_swap;
+	/* Select the sort method */
+	ang_sort_comp = ang_sort_art_comp;
+	ang_sort_swap = ang_sort_art_swap;
 
-        /* Sort the array by dungeon depth of monsters */
-        ang_sort(who, &why, n);
+	/* Sort the array by dungeon depth of monsters */
+	ang_sort(who, &why, n);
 
 	/* Scan the artifacts */
 	for (k = 0; k < n; k++)
@@ -5970,12 +5970,12 @@ static void do_cmd_knowledge_uniques(void)
 		if (r_ptr->name) who[n++] = i;
 	}
 
-        /* Select the sort method */
-        ang_sort_comp = ang_sort_comp_hook;
-        ang_sort_swap = ang_sort_swap_hook;
+	/* Select the sort method */
+	ang_sort_comp = ang_sort_comp_hook;
+	ang_sort_swap = ang_sort_swap_hook;
 
-        /* Sort the array by dungeon depth of monsters */
-        ang_sort(who, &why, n);
+	/* Sort the array by dungeon depth of monsters */
+	ang_sort(who, &why, n);
 
 	/* Scan the monster races */
 	for (k = 0; k < n; k++)
@@ -5995,10 +5995,10 @@ static void do_cmd_knowledge_uniques(void)
 				/* Print a message */
 #ifdef JP
 				fprintf(fff, "     %sはまだ生きている。\n",
-				        (r_name + r_ptr->name));
+					(r_name + r_ptr->name));
 #else
 				fprintf(fff, "     %s is alive\n",
-				        (r_name + r_ptr->name));
+					(r_name + r_ptr->name));
 #endif
 
 			}
@@ -6062,12 +6062,12 @@ static void do_cmd_knowledge_uniques_dead(void)
 		if (r_ptr->name) who[n++] = i;
 	}
 
-        /* Select the sort method */
-        ang_sort_comp = ang_sort_comp_hook;
-        ang_sort_swap = ang_sort_swap_hook;
+	/* Select the sort method */
+	ang_sort_comp = ang_sort_comp_hook;
+	ang_sort_swap = ang_sort_swap_hook;
 
-        /* Sort the array by dungeon depth of monsters */
-        ang_sort(who, &why, n);
+	/* Sort the array by dungeon depth of monsters */
+	ang_sort(who, &why, n);
 
 	/* Scan the monster races */
 	for (k = 0; k < n; k++)
@@ -6087,10 +6087,10 @@ static void do_cmd_knowledge_uniques_dead(void)
 				/* Print a message */
 #ifdef JP
 				fprintf(fff, "     %sは既に死んでいる。\n",
-				        (r_name + r_ptr->name));
+					(r_name + r_ptr->name));
 #else
 				fprintf(fff, "     %s is dead\n",
-				        (r_name + r_ptr->name));
+					(r_name + r_ptr->name));
 #endif
 
 			}
@@ -6471,7 +6471,7 @@ void plural_aux(char *Name)
 		strcpy(&(Name[NameLen - 2]), "lves");
 	}
 	else if (suffix(Name, "ch") ||
-	         suffix(Name, "sh") ||
+		 suffix(Name, "sh") ||
 			 suffix(Name, "nx") ||
 			 suffix(Name, "s") ||
 			 suffix(Name, "o"))
@@ -6545,7 +6545,7 @@ static void do_cmd_knowledge_pets(void)
 	fprintf(fff, " 維持コスト: %d%% MP\n", show_upkeep);
 #else
 	fprintf(fff, "   Total: %d pet%s.\n",
-	        t_friends, (t_friends == 1 ? "" : "s"));
+		t_friends, (t_friends == 1 ? "" : "s"));
 	fprintf(fff, "   Upkeep: %d%% mana.\n", show_upkeep);
 #endif
 
@@ -6663,12 +6663,12 @@ static void do_cmd_knowledge_kill_count(void)
 		if (r_ptr->name) who[n++] = i;
 	}
 
-        /* Select the sort method */
-        ang_sort_comp = ang_sort_comp_hook;
-        ang_sort_swap = ang_sort_swap_hook;
+	/* Select the sort method */
+	ang_sort_comp = ang_sort_comp_hook;
+	ang_sort_swap = ang_sort_swap_hook;
 
-        /* Sort the array by dungeon depth of monsters */
-        ang_sort(who, &why, n);
+	/* Sort the array by dungeon depth of monsters */
+	ang_sort(who, &why, n);
 
 	/* Scan the monster races */
 	for (k = 0; k < n; k++)
@@ -6731,7 +6731,7 @@ fprintf(fff, "     %3d 匹の %s\n", This, r_name + r_ptr->name);
 	fprintf(fff,"    合計: %lu 匹を倒した。\n", Total);
 #else
 	fprintf(fff,"   Total: %lu creature%s killed.\n",
-	        Total, (Total == 1 ? "" : "s"));
+		Total, (Total == 1 ? "" : "s"));
 #endif
 
 
@@ -7118,8 +7118,8 @@ static void do_cmd_knowledge_quests(void)
 			/* Reset the old quest number */
 			p_ptr->inside_quest = old_quest;
 
-                        /* No info from "silent" quests */
-                        if (quest[i].flags & QUEST_FLAG_SILENT) continue;
+			/* No info from "silent" quests */
+			if (quest[i].flags & QUEST_FLAG_SILENT) continue;
 
 			total++;
 
@@ -7214,7 +7214,7 @@ static void do_cmd_knowledge_quests(void)
 				}
 			}
 			else if ((quest[i].type == QUEST_TYPE_RANDOM) &&
-			         (quest[i].level < rand_level))
+				 (quest[i].level < rand_level))
 			{
 				/* New random */
 				rand_level = quest[i].level;
@@ -7276,7 +7276,7 @@ sprintf(rand_tmp_str,"%s (%d 階) - %sを倒す。\n",
 		{
 			if (i < MIN_RANDOM_QUEST)
 			{
-                                int old_quest;
+				int old_quest;
 
 				/* Set the quest number temporary */
 				old_quest = p_ptr->inside_quest;
@@ -7290,8 +7290,8 @@ sprintf(rand_tmp_str,"%s (%d 階) - %sを倒す。\n",
 				/* Reset the old quest number */
 				p_ptr->inside_quest = old_quest;
 
-                                /* No info from "silent" quests */
-                                if (quest[i].flags & QUEST_FLAG_SILENT) continue;
+				/* No info from "silent" quests */
+				if (quest[i].flags & QUEST_FLAG_SILENT) continue;
 			}
 
 			total++;
@@ -7300,29 +7300,29 @@ sprintf(rand_tmp_str,"%s (%d 階) - %sを倒す。\n",
 			{
 				/* Print the quest info */
 
-                                if (quest[i].complev == 0)
-                                {
-                                        sprintf(tmp_str, 
+				if (quest[i].complev == 0)
+				{
+					sprintf(tmp_str, 
 #ifdef JP
-                                                "%s (%d階) - 不戦勝\n",
+						"%s (%d階) - 不戦勝\n",
 #else
-                                                "%s (Dungeon level: %d) - (Cancelled)\n",
+						"%s (Dungeon level: %d) - (Cancelled)\n",
 #endif
-                                                r_name+r_info[quest[i].r_idx].name,
-                                                quest[i].level);
-                                }
-                                else
-                                {
-                                        sprintf(tmp_str, 
+						r_name+r_info[quest[i].r_idx].name,
+						quest[i].level);
+				}
+				else
+				{
+					sprintf(tmp_str, 
 #ifdef JP
-                                                "%s (%d階) - レベル%d\n",
+						"%s (%d階) - レベル%d\n",
 #else
-                                                "%s (Dungeon level: %d) - level %d\n",
+						"%s (Dungeon level: %d) - level %d\n",
 #endif
-                                                r_name+r_info[quest[i].r_idx].name,
-                                                quest[i].level,
-                                                quest[i].complev);
-                                }
+						r_name+r_info[quest[i].r_idx].name,
+						quest[i].level,
+						quest[i].complev);
+				}
 			}
 			else
 			{
@@ -7357,7 +7357,7 @@ sprintf(rand_tmp_str,"%s (%d 階) - %sを倒す。\n",
 		{
 			if (i < MIN_RANDOM_QUEST)
 			{
-                                int old_quest;
+				int old_quest;
 
 				/* Set the quest number temporary */
 				old_quest = p_ptr->inside_quest;
@@ -7371,8 +7371,8 @@ sprintf(rand_tmp_str,"%s (%d 階) - %sを倒す。\n",
 				/* Reset the old quest number */
 				p_ptr->inside_quest = old_quest;
 
-                                /* No info from "silent" quests */
-                                if (quest[i].flags & QUEST_FLAG_SILENT) continue;
+				/* No info from "silent" quests */
+				if (quest[i].flags & QUEST_FLAG_SILENT) continue;
 			}
 
 			total++;
@@ -7507,7 +7507,7 @@ static void do_cmd_knowledge_home(void)
 			for (i = 0; i < st_ptr->stock_num; i++)
 			{
 #ifdef JP
-		                if ((i % 12) == 0) fprintf(fff, "\n ( %d ページ )\n", x++);
+				if ((i % 12) == 0) fprintf(fff, "\n ( %d ページ )\n", x++);
 				object_desc(o_name, &st_ptr->stock[i], TRUE, 3);
 				if (strlen(o_name) <= 80-3)
 				{

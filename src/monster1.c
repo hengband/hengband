@@ -141,7 +141,7 @@ static void roff_aux(int r_idx, int mode)
 	cptr            p, q;
 
 #ifdef JP
-        char            jverb_buf[64];
+	char            jverb_buf[64];
 #endif
 	int             msex = 0;
 
@@ -267,10 +267,10 @@ static void roff_aux(int r_idx, int mode)
 			/* Killed ancestors */
 #ifdef JP
 			hooked_roff(format("%^sはあなたの先祖を %d 人葬っている",
-                                           wd_he[msex], r_ptr->r_deaths));
+					   wd_he[msex], r_ptr->r_deaths));
 #else
 			hooked_roff(format("%^s has slain %d of your ancestors",
-                                           wd_he[msex], r_ptr->r_deaths));
+					   wd_he[msex], r_ptr->r_deaths));
 #endif
 
 
@@ -281,7 +281,7 @@ static void roff_aux(int r_idx, int mode)
 				hooked_roff(format("が、すでに仇討ちは果たしている！"));
 #else
 				hooked_roff(format(", but you have avenged %s!  ",
-				            plural(r_ptr->r_deaths, "him", "them")));
+					    plural(r_ptr->r_deaths, "him", "them")));
 #endif
 
 			}
@@ -293,13 +293,13 @@ static void roff_aux(int r_idx, int mode)
 				hooked_roff(format("のに、まだ仇討ちを果たしていない。"));
 #else
 				hooked_roff(format(", who %s unavenged.  ",
-				            plural(r_ptr->r_deaths, "remains", "remain")));
+					    plural(r_ptr->r_deaths, "remains", "remain")));
 #endif
 
 			}
 
-                        /* Start a new line */
-                        hooked_roff("\n");
+			/* Start a new line */
+			hooked_roff("\n");
 		}
 
 		/* Dead unique who never hurt us */
@@ -311,8 +311,8 @@ static void roff_aux(int r_idx, int mode)
 			hooked_roff("You have slain this foe.  ");
 #endif
 
-                        /* Start a new line */
-                        hooked_roff("\n");
+			/* Start a new line */
+			hooked_roff("\n");
 		}
 	}
 
@@ -322,10 +322,10 @@ static void roff_aux(int r_idx, int mode)
 		/* Dead ancestors */
 #ifdef JP
 		hooked_roff(format("このモンスターはあなたの先祖を %d 人葬っている",
-		            r_ptr->r_deaths ));
+			    r_ptr->r_deaths ));
 #else
 		hooked_roff(format("%d of your ancestors %s been killed by this creature, ",
-		            r_ptr->r_deaths, plural(r_ptr->r_deaths, "has", "have")));
+			    r_ptr->r_deaths, plural(r_ptr->r_deaths, "has", "have")));
 #endif
 
 
@@ -345,10 +345,10 @@ static void roff_aux(int r_idx, int mode)
 		{
 #ifdef JP
 			hooked_roff(format("が、%sはこのモンスターを少なくとも %d 体は倒している。",
-			            "あなたの先祖", r_ptr->r_tkills));
+				    "あなたの先祖", r_ptr->r_tkills));
 #else
 			hooked_roff(format("and %s have exterminated at least %d of the creatures.  ",
-			            "your ancestors", r_ptr->r_tkills));
+				    "your ancestors", r_ptr->r_tkills));
 #endif
 
 		}
@@ -364,8 +364,8 @@ static void roff_aux(int r_idx, int mode)
 
 		}
 
-                /* Start a new line */
-                hooked_roff("\n");
+		/* Start a new line */
+		hooked_roff("\n");
 	}
 
 	/* Normal monsters */
@@ -403,8 +403,8 @@ static void roff_aux(int r_idx, int mode)
 #endif
 		}
 
-                /* Start a new line */
-                hooked_roff("\n");
+		/* Start a new line */
+		hooked_roff("\n");
 	}
 
 	/* Descriptions */
@@ -457,14 +457,14 @@ path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, "r_info_j.raw");
 
 #endif
 
-                if (buf[0])
-                {
-                        /* Dump it */
-                        hooked_roff(buf);
+		if (buf[0])
+		{
+			/* Dump it */
+			hooked_roff(buf);
 
-                        /* Start a new line */
-                        hooked_roff("\n");
-                }
+			/* Start a new line */
+			hooked_roff("\n");
+		}
 	}
 
 	if (r_idx == MON_KAGE)
@@ -499,7 +499,7 @@ path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, "r_info_j.raw");
 			hooked_roff(format("%^s is normally found at depths of %d feet",
 #endif
 
-			            wd_he[msex], r_ptr->level * 50));
+				    wd_he[msex], r_ptr->level * 50));
 		}
 		else
 		{
@@ -509,7 +509,7 @@ path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, "r_info_j.raw");
 			hooked_roff(format("%^s is normally found on dungeon level %d",
 #endif
 
-			            wd_he[msex], r_ptr->level));
+				    wd_he[msex], r_ptr->level));
 		}
 		old = TRUE;
 	}
@@ -822,7 +822,7 @@ else                            hooked_roff("モンスター");
 			       (long)1000 / (p_ptr->max_plv+2) + 5) / 10);
 
 			hooked_roff(format(" 約%ld.%02ld ポイントの経験となる。",
-			        (long)i, (long)j ));
+				(long)i, (long)j ));
 #else
 			/* calculate the integer exp part */
 			i = (long)r_ptr->mexp * r_ptr->level / (p_ptr->max_plv+2);
@@ -834,8 +834,8 @@ else                            hooked_roff("モンスター");
 
 			/* Mention the experience */
 			hooked_roff(format(" is worth about %ld.%02ld point%s",
-			            (long)i, (long)j,
-			            (((i == 1) && (j == 0)) ? "" : "s")));
+				    (long)i, (long)j,
+				    (((i == 1) && (j == 0)) ? "" : "s")));
 
 			/* Take account of annoying English */
 			p = "th";
@@ -852,7 +852,7 @@ else                            hooked_roff("モンスター");
 
 			/* Mention the dependance on the player's level */
 			hooked_roff(format(" for a%s %lu%s level character.  ",
-			            q, (long)i, p));
+				    q, (long)i, p));
 #endif
 
 		}
@@ -941,7 +941,7 @@ hooked_roff(format("%^sは矢の呪文を跳ね返す。", wd_he[msex]));
 		hooked_roff(format("%^s usually appears with escorts.  ",
 #endif
 
-		            wd_he[msex]));
+			    wd_he[msex]));
 	}
 
 	/* Describe friends */
@@ -953,7 +953,7 @@ hooked_roff(format("%^sは矢の呪文を跳ね返す。", wd_he[msex]));
 		hooked_roff(format("%^s usually appears in groups.  ",
 #endif
 
-		            wd_he[msex]));
+			    wd_he[msex]));
 	}
 
 
@@ -1428,7 +1428,7 @@ if (flags6 & (RF6_HEAL))            {vp[vn] = "治癒";color[vn++] = TERM_WHITE;}
 #endif
 
 #ifdef JP
-        if (flags6 & (RF6_INVULNER))        {vp[vn] = "無敵化";color[vn++] = TERM_WHITE;}
+	if (flags6 & (RF6_INVULNER))        {vp[vn] = "無敵化";color[vn++] = TERM_WHITE;}
 #else
 	if (flags6 & (RF6_INVULNER))        {vp[vn] = "make invulnerable";color[vn++] = TERM_WHITE;}
 #endif
@@ -1654,7 +1654,7 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 			hook_c_roff(color[n], vp[n]);
 		}
 #ifdef JP
-                hooked_roff("の呪文を唱えることがある");
+		hooked_roff("の呪文を唱えることがある");
 #endif
 	}
 
@@ -1710,7 +1710,7 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 		hooked_roff(format("%^s has an armor rating of %d",
 #endif
 
-		            wd_he[msex], r_ptr->ac));
+			    wd_he[msex], r_ptr->ac));
 
 		/* Maximized hitpoints */
 		if (flags1 & RF1_FORCE_MAXHP)
@@ -1721,7 +1721,7 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 			hooked_roff(format(" and a life rating of %d.  ",
 #endif
 
-			            r_ptr->hdice * r_ptr->hside));
+				    r_ptr->hdice * r_ptr->hside));
 		}
 
 		/* Variable hitpoints */
@@ -1733,7 +1733,7 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 			hooked_roff(format(" and a life rating of %dd%d.  ",
 #endif
 
-			            r_ptr->hdice, r_ptr->hside));
+				    r_ptr->hdice, r_ptr->hside));
 		}
 	}
 
@@ -2291,7 +2291,7 @@ if ((flags3 & RF3_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "テレポー
 
 	/* Do we know how aware it is? */
 	if ((((int)r_ptr->r_wake * (int)r_ptr->r_wake) > r_ptr->sleep) ||
-	          (r_ptr->r_ignore == MAX_UCHAR) ||
+		  (r_ptr->r_ignore == MAX_UCHAR) ||
 	    (r_ptr->sleep == 0 && r_ptr->r_tkills >= 10) || know_everything)
 	{
 		cptr act;
@@ -2401,7 +2401,7 @@ if ((flags3 & RF3_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "テレポー
 		     wd_he[msex], act, 10 * r_ptr->aaf));
 #else
 		hooked_roff(format("%^s %s intruders, which %s may notice from %d feet.  ",
-		            wd_he[msex], act, wd_he[msex], 10 * r_ptr->aaf));
+			    wd_he[msex], act, wd_he[msex], 10 * r_ptr->aaf));
 #endif
 
 	}
@@ -2931,11 +2931,11 @@ case RBE_DR_MANA:  q = "魔力を奪う"; break;
 
 
 #ifdef JP
-                if ( r == 0 ) hooked_roff( format("%^sは", wd_he[msex]) );
+		if ( r == 0 ) hooked_roff( format("%^sは", wd_he[msex]) );
 
 		/***若干表現を変更 ita ***/
 
-                        /* Describe damage (if known) */
+			/* Describe damage (if known) */
 		if (d1 && d2 && (know_everything || know_damage(r_idx, m)))
 		  {
 		    
@@ -3102,7 +3102,7 @@ void roff_top(int r_idx)
 
 	/* A title (use "The" for non-uniques) */
 #ifdef JP
-        if (0)
+	if (0)
 #else
 	if (!(r_ptr->flags1 & RF1_UNIQUE))
 #endif
@@ -3231,12 +3231,12 @@ bool monster_dungeon(int r_idx)
 	if (!(r_ptr->flags8 & RF8_WILD_ONLY))
 		return TRUE;
 	else
-        {
-                dungeon_info_type *d_ptr = &d_info[dungeon_type];
-                if ((d_ptr->mflags8 & RF8_WILD_MOUNTAIN) &&
-                    (r_ptr->flags8 & RF8_WILD_MOUNTAIN)) return TRUE;
+	{
+		dungeon_info_type *d_ptr = &d_info[dungeon_type];
+		if ((d_ptr->mflags8 & RF8_WILD_MOUNTAIN) &&
+		    (r_ptr->flags8 & RF8_WILD_MOUNTAIN)) return TRUE;
 		return FALSE;
-        }
+	}
 }
 
 
@@ -3536,42 +3536,42 @@ bool monster_can_cross_terrain(byte feat, monster_race *r_ptr)
  */
 bool monster_can_enter(int y, int x, monster_race *r_ptr)
 {
-        cave_type *c_ptr = &cave[y][x];
-        byte feat = c_ptr->feat;
+	cave_type *c_ptr = &cave[y][x];
+	byte feat = c_ptr->feat;
 
-        /* Player or other monster */
-        if ((y == py) && (x == px)) return FALSE;
-        if (c_ptr->m_idx) return FALSE;
+	/* Player or other monster */
+	if ((y == py) && (x == px)) return FALSE;
+	if (c_ptr->m_idx) return FALSE;
 
-        /* Permanent wall */
-        if ((c_ptr->feat >= FEAT_PERM_EXTRA) &&
-            (c_ptr->feat <= FEAT_PERM_SOLID))
-                return FALSE;
+	/* Permanent wall */
+	if ((c_ptr->feat >= FEAT_PERM_EXTRA) &&
+	    (c_ptr->feat <= FEAT_PERM_SOLID))
+		return FALSE;
 
-        /* Can fly over the Pattern */
-        if ((c_ptr->feat >= FEAT_PATTERN_START) &&
-            (c_ptr->feat <= FEAT_PATTERN_XTRA2))
-        {
-            if (!(r_ptr->flags7 & RF7_CAN_FLY))
-                    return FALSE;
-            else
-                    return TRUE;
-        }
+	/* Can fly over the Pattern */
+	if ((c_ptr->feat >= FEAT_PATTERN_START) &&
+	    (c_ptr->feat <= FEAT_PATTERN_XTRA2))
+	{
+	    if (!(r_ptr->flags7 & RF7_CAN_FLY))
+		    return FALSE;
+	    else
+		    return TRUE;
+	}
 
-        /* Can fly over mountain on the surface */
-        if (feat == FEAT_MOUNTAIN)
-        {
-            if (!dun_level && 
-                ((r_ptr->flags7 & RF7_CAN_FLY) ||
-                 (r_ptr->flags8 & RF8_WILD_MOUNTAIN)))
-                    return TRUE;
-            else
-                    return FALSE;
-        }
+	/* Can fly over mountain on the surface */
+	if (feat == FEAT_MOUNTAIN)
+	{
+	    if (!dun_level && 
+		((r_ptr->flags7 & RF7_CAN_FLY) ||
+		 (r_ptr->flags8 & RF8_WILD_MOUNTAIN)))
+		    return TRUE;
+	    else
+		    return FALSE;
+	}
 
-        /* Cannot enter wall without pass wall ability */
-        if (!cave_floor_grid(c_ptr) && !(r_ptr->flags2 & RF2_PASS_WALL))
-                return FALSE;
+	/* Cannot enter wall without pass wall ability */
+	if (!cave_floor_grid(c_ptr) && !(r_ptr->flags2 & RF2_PASS_WALL))
+		return FALSE;
 
 	/* Pit */
 	if (feat == FEAT_DARK_PIT)

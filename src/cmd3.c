@@ -45,9 +45,9 @@ void do_cmd_inven(void)
 	item_tester_full = FALSE;
 
 #ifdef JP
-        sprintf(out_val, "持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ",
-            lbtokg1(p_ptr->total_weight) , lbtokg2(p_ptr->total_weight) ,
-            (p_ptr->total_weight * 100) / ((adj_str_wgt[p_ptr->stat_ind[A_STR]] * (p_ptr->pclass == CLASS_BERSERKER ? 150 : 100)) 
+	sprintf(out_val, "持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ",
+	    lbtokg1(p_ptr->total_weight) , lbtokg2(p_ptr->total_weight) ,
+	    (p_ptr->total_weight * 100) / ((adj_str_wgt[p_ptr->stat_ind[A_STR]] * (p_ptr->pclass == CLASS_BERSERKER ? 150 : 100)) 
 / 2));
 #else
 	sprintf(out_val, "Inventory: carrying %d.%d pounds (%ld%% of capacity). Command: ",
@@ -120,9 +120,9 @@ void do_cmd_equip(void)
 
 	/* Build a prompt */
 #ifdef JP
-        sprintf(out_val, "装備： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ",
-            lbtokg1(p_ptr->total_weight) , lbtokg2(p_ptr->total_weight) ,
-            (p_ptr->total_weight * 100) / ((adj_str_wgt[p_ptr->stat_ind[A_STR]] * (p_ptr->pclass == CLASS_BERSERKER ? 150 : 100)) 
+	sprintf(out_val, "装備： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ",
+	    lbtokg1(p_ptr->total_weight) , lbtokg2(p_ptr->total_weight) ,
+	    (p_ptr->total_weight * 100) / ((adj_str_wgt[p_ptr->stat_ind[A_STR]] * (p_ptr->pclass == CLASS_BERSERKER ? 150 : 100)) 
 / 2));
 #else
 	sprintf(out_val, "Equipment: carrying %d.%d pounds (%ld%% of capacity). Command: ",
@@ -373,11 +373,11 @@ s = "おっと。";
 
 		/* Message */
 #ifdef JP
-                msg_format("%s%sは呪われているようだ。",
-                           describe_use(slot) , o_name );
+		msg_format("%s%sは呪われているようだ。",
+			   describe_use(slot) , o_name );
 #else
 		msg_format("The %s you are %s appears to be cursed.",
-		           o_name, describe_use(slot));
+			   o_name, describe_use(slot));
 #endif
 
 
@@ -549,7 +549,7 @@ msg_print("クエストを達成した！");
 
 	/* Message */
 #ifdef JP
-        msg_format("%s(%c)%s。", o_name, index_to_label(slot), act );
+	msg_format("%s(%c)%s。", o_name, index_to_label(slot), act );
 #else
 	msg_format("%s %s (%c).", act, o_name, index_to_label(slot));
 #endif
@@ -697,9 +697,9 @@ void kamaenaoshi(int item)
 		inven_item_optimize(INVEN_RARM);
 		object_desc(o_name, o_ptr, TRUE, 3);
 #ifdef JP
-                msg_format("%sを持ち替えた。", o_name );
+		msg_format("%sを持ち替えた。", o_name );
 #else
-                msg_format("You switched hand of %s.", o_name );
+		msg_format("You switched hand of %s.", o_name );
 #endif
 	}
 }
@@ -862,7 +862,7 @@ void do_cmd_drop(void)
 	{
 		/* Oops */
 #ifdef JP
-                msg_print("ふーむ、どうやら呪われているようだ。");
+		msg_print("ふーむ、どうやら呪われているようだ。");
 #else
 		msg_print("Hmmm, it seems to be cursed.");
 #endif
@@ -1328,7 +1328,7 @@ void do_cmd_inscribe(void)
 
 	/* Get a new inscription (possibly empty) */
 #ifdef JP
-        if (get_string("銘: ", out_val, 80))
+	if (get_string("銘: ", out_val, 80))
 #else
 	if (get_string("Inscription: ", out_val, 80))
 #endif
@@ -1735,7 +1735,7 @@ void do_cmd_locate(void)
 		if ((y2 == y1) && (x2 == x1))
 		{
 #ifdef JP
-                        strcpy(tmp_val, "真上");
+			strcpy(tmp_val, "真上");
 #else
 			tmp_val[0] = '\0';
 #endif
@@ -1745,12 +1745,12 @@ void do_cmd_locate(void)
 		{
 #ifdef JP
 			sprintf(tmp_val, "%s%s",
-			        ((y2 < y1) ? "北" : (y2 > y1) ? "南" : ""),
-			        ((x2 < x1) ? "西" : (x2 > x1) ? "東" : ""));
+				((y2 < y1) ? "北" : (y2 > y1) ? "南" : ""),
+				((x2 < x1) ? "西" : (x2 > x1) ? "東" : ""));
 #else
 			sprintf(tmp_val, "%s%s of",
-			        ((y2 < y1) ? " North" : (y2 > y1) ? " South" : ""),
-			        ((x2 < x1) ? " West" : (x2 > x1) ? " East" : ""));
+				((y2 < y1) ? " North" : (y2 > y1) ? " South" : ""),
+				((x2 < x1) ? " West" : (x2 > x1) ? " East" : ""));
 #endif
 
 		}
@@ -1758,13 +1758,13 @@ void do_cmd_locate(void)
 		/* Prepare to ask which way to look */
 		sprintf(out_val,
 #ifdef JP
-                        "マップ位置 [%d(%02d),%d(%02d)] (プレイヤーの%s)  方向?",
+			"マップ位置 [%d(%02d),%d(%02d)] (プレイヤーの%s)  方向?",
 #else
-		        "Map sector [%d(%02d),%d(%02d)], which is%s your sector.  Direction?",
+			"Map sector [%d(%02d),%d(%02d)], which is%s your sector.  Direction?",
 #endif
 
-		        y2 / (hgt / 2), y2 % (hgt / 2),
-		        x2 / (wid / 2), x2 % (wid / 2), tmp_val);
+			y2 / (hgt / 2), y2 % (hgt / 2),
+			x2 / (wid / 2), x2 % (wid / 2), tmp_val);
 
 		/* Assume no direction */
 		dir = 0;
@@ -2507,7 +2507,7 @@ if (!get_com("モンスターの文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前):
 		strcpy(buf, "Non-unique monster list.");
 #endif
 	}
-        else if (sym == KTRL('M'))
+	else if (sym == KTRL('M'))
 	{
 		all = TRUE;
 #ifdef JP
@@ -2518,8 +2518,8 @@ if (!get_com("モンスターの文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前):
 		{
 			temp[0]=0;
 
-                        /* Restore */
-                        screen_load();
+			/* Restore */
+			screen_load();
 
 			return FALSE;
 		}
@@ -2533,8 +2533,8 @@ if (!get_com("モンスターの文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前):
 	{
 		sprintf(buf, "%c - %s.", sym, ident_info[i] + 2);
 	}
-  	else
-  	{
+	else
+	{
 #ifdef JP
 sprintf(buf, "%c - %s", sym, "無効な文字");
 #else

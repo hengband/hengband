@@ -550,24 +550,24 @@ static void wiz_display_item(object_type *o_ptr)
 	prt(buf, 2, j);
 
 	prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d",
-	           o_ptr->k_idx, get_object_level(o_ptr),
-	           o_ptr->tval, o_ptr->sval), 4, j);
+		   o_ptr->k_idx, get_object_level(o_ptr),
+		   o_ptr->tval, o_ptr->sval), 4, j);
 
 	prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d",
-	           o_ptr->number, o_ptr->weight,
-	           o_ptr->ac, o_ptr->dd, o_ptr->ds), 5, j);
+		   o_ptr->number, o_ptr->weight,
+		   o_ptr->ac, o_ptr->dd, o_ptr->ds), 5, j);
 
 	prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d",
-	           o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), 6, j);
+		   o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), 6, j);
 
 	prt(format("name1 = %-4d  name2 = %-4d  cost = %ld",
-	           o_ptr->name1, o_ptr->name2, (long)object_value(o_ptr)), 7, j);
+		   o_ptr->name1, o_ptr->name2, (long)object_value(o_ptr)), 7, j);
 
 	prt(format("ident = %04x  xtra1 = %-4d  xtra2 = %-4d  timeout = %-d",
-	           o_ptr->ident, o_ptr->xtra1, o_ptr->xtra2, o_ptr->timeout), 8, j);
+		   o_ptr->ident, o_ptr->xtra1, o_ptr->xtra2, o_ptr->timeout), 8, j);
 
 	prt(format("xtra3 = %-4d  xtra4 = %-4d  xtra5 = %-4d  cursed  = %-d",
-	           o_ptr->xtra3, o_ptr->xtra4, o_ptr->xtra5, o_ptr->curse_flags), 9, j);
+		   o_ptr->xtra3, o_ptr->xtra4, o_ptr->xtra5, o_ptr->curse_flags), 9, j);
 
 	prt("+------------FLAGS1------------+", 10, j);
 	prt("AFFECT........SLAY........BRAND.", 11, j);
@@ -1225,7 +1225,7 @@ static void do_cmd_wiz_play(void)
 	{
 		o_ptr = &o_list[0 - item];
 	}
-        
+	
 	/* The item was not changed */
 	changed = FALSE;
 
@@ -1292,12 +1292,12 @@ static void do_cmd_wiz_play(void)
 		/* Message */
 		msg_print("Changes accepted.");
 
-                /* Recalcurate object's weight */
-                if (item >= 0)
-                {
-                        p_ptr->total_weight += (q_ptr->weight * q_ptr->number)
-                                - (o_ptr->weight * o_ptr->number);
-                }
+		/* Recalcurate object's weight */
+		if (item >= 0)
+		{
+			p_ptr->total_weight += (q_ptr->weight * q_ptr->number)
+				- (o_ptr->weight * o_ptr->number);
+		}
 
 		/* Change */
 		object_copy(o_ptr, q_ptr);
@@ -1365,12 +1365,12 @@ static void wiz_create_item(void)
 			if (a_info[i].sval != k_info[k_idx].sval) continue;
 
 			/* Create this artifact */
-                        create_named_art(i, py, px);
+			create_named_art(i, py, px);
 
-                        /* All done */
-                        msg_print("Allocated(INSTA_ART).");
+			/* All done */
+			msg_print("Allocated(INSTA_ART).");
 
-                        return;
+			return;
 		}
 	}
 
@@ -1380,8 +1380,8 @@ static void wiz_create_item(void)
 	/* Create the item */
 	object_prep(q_ptr, k_idx);
 
-        /* Apply magic */
-        apply_magic(q_ptr, dun_level, FALSE, FALSE, FALSE, FALSE);
+	/* Apply magic */
+	apply_magic(q_ptr, dun_level, FALSE, FALSE, FALSE, FALSE);
 
 	/* Drop the object from heaven */
 	(void)drop_near(q_ptr, -1, py, px);
@@ -1499,8 +1499,8 @@ static void do_cmd_wiz_jump(void)
 	p_ptr->leftbldg = FALSE;
 	energy_use = 0;
 
-        /* Prevent energy_need from being too lower than 0 */
-        p_ptr->energy_need = 0;
+	/* Prevent energy_need from being too lower than 0 */
+	p_ptr->energy_need = 0;
 
 	/* Leaving */
 	p_ptr->leaving = TRUE;

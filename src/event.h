@@ -33,7 +33,7 @@ extern void create_monster_callback(int m_idx);
 extern void delete_monster_callback(int m_idx);
 extern void copy_monster_callback(int i1, int i2);
 extern char inkey_borg_callback(bool inkey_base, bool inkey_xtra,
-                                bool inkey_flag, bool inkey_scan);
+				bool inkey_flag, bool inkey_scan);
 extern char inkey_callback(char key);
 
 /* Birth */

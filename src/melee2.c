@@ -1103,8 +1103,8 @@ static bool get_moves(int m_idx, int *mm)
 	bool         no_flow = ((m_ptr->mflag2 & MFLAG_NOFLOW) && (cave[m_ptr->fy][m_ptr->fx].cost > 2));
 	bool         can_pass_wall;
 
-        /* Flow towards the player */
-        (void)get_moves_aux(m_idx, &y2, &x2, no_flow);
+	/* Flow towards the player */
+	(void)get_moves_aux(m_idx, &y2, &x2, no_flow);
 
 	can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || (p_ptr->pass_wall)));
 
@@ -1233,8 +1233,8 @@ static bool get_moves(int m_idx, int *mm)
 	}
 
 
-        /* Check for no move */
-        if (!x && !y) return (FALSE);
+	/* Check for no move */
+	if (!x && !y) return (FALSE);
 
 
 	/* Extract the "absolute distances" */
@@ -2071,7 +2071,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					/* Aura fire */
 					if ((tr_ptr->flags2 & RF2_AURA_FIRE) &&
 						!(r_ptr->flags3 & RF3_IM_FIRE) &&
-					        !(r_ptr->flags3 & RF3_RES_ALL) && m_ptr->r_idx)
+						!(r_ptr->flags3 & RF3_RES_ALL) && m_ptr->r_idx)
 					{
 						if (see_either)
 						{
@@ -2094,7 +2094,7 @@ msg_format("%^sは突然熱くなった！", m_name);
 					/* Aura cold */
 					if ((tr_ptr->flags3 & RF3_AURA_COLD) &&
 						!(r_ptr->flags3 & RF3_IM_COLD) &&
-					        !(r_ptr->flags3 & RF3_RES_ALL) && m_ptr->r_idx)
+						!(r_ptr->flags3 & RF3_RES_ALL) && m_ptr->r_idx)
 					{
 						if (see_either)
 						{
@@ -2116,8 +2116,8 @@ msg_format("%^sは突然寒くなった！", m_name);
 
 					/* Aura elec */
 					if ((tr_ptr->flags2 & (RF2_AURA_ELEC)) &&
-					        !(r_ptr->flags3 & (RF3_IM_ELEC)) &&
-					        !(r_ptr->flags3 & RF3_RES_ALL) && m_ptr->r_idx)
+						!(r_ptr->flags3 & (RF3_IM_ELEC)) &&
+						!(r_ptr->flags3 & RF3_RES_ALL) && m_ptr->r_idx)
 					{
 						if (see_either)
 						{
@@ -2448,7 +2448,7 @@ msg_format("%^sが消え去った。", m_name);
 #ifdef JP
 msg_print("地面に落とされた。");
 #else
-                                                msg_print("You have fallen from riding pet.");
+						msg_print("You have fallen from riding pet.");
 #endif
 					}
 				}
@@ -2931,7 +2931,7 @@ msg_format("%^s%s", m_name, monmessage);
 	/* 75% random movement */
 	else if ((r_ptr->flags1 & RF1_RAND_50) &&
 				(r_ptr->flags1 & RF1_RAND_25) &&
-	         (randint0(100) < 75))
+		 (randint0(100) < 75))
 	{
 		/* Memorize flags */
 		if (m_ptr->ml) r_ptr->r_flags1 |= (RF1_RAND_50);
@@ -3140,7 +3140,7 @@ msg_print("ギシギシいう音が聞こえる。");
 			c_ptr->info &= ~(CAVE_MARK);
 
 			/* Notice */
-                        cave_set_feat(ny, nx, floor_type[randint0(100)]);
+			cave_set_feat(ny, nx, floor_type[randint0(100)]);
 
 			/* Note changes to viewable region */
 			if (player_has_los_bold(ny, nx)) do_view = TRUE;
@@ -3268,8 +3268,8 @@ msg_print("守りのルーンが壊れた！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Break the rune */
-                                c_ptr->info &= ~(CAVE_OBJECT);
-                                c_ptr->mimic = 0;
+				c_ptr->info &= ~(CAVE_OBJECT);
+				c_ptr->mimic = 0;
 
 				/* Allow movement */
 				do_move = TRUE;
@@ -3279,7 +3279,7 @@ msg_print("守りのルーンが壊れた！");
 			}
 		}
 		else if (do_move && is_explosive_rune_grid(c_ptr) &&
-		         !((r_ptr->flags1 & RF1_NEVER_BLOW) && (py == ny) && (px == nx)))
+			 !((r_ptr->flags1 & RF1_NEVER_BLOW) && (py == ny) && (px == nx)))
 		{
 			/* Assume no move allowed */
 			do_move = FALSE;
@@ -3315,8 +3315,8 @@ msg_print("爆発のルーンは解除された。");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Break the rune */
-                                c_ptr->info &= ~(CAVE_OBJECT);
-                                c_ptr->mimic = 0;
+				c_ptr->info &= ~(CAVE_OBJECT);
+				c_ptr->mimic = 0;
 
 				note_spot(ny, nx);
 				lite_spot(ny, nx);
@@ -3452,7 +3452,7 @@ msg_print("爆発のルーンは解除された。");
 			{
 				if (r_ptr->flags2 & RF2_KILL_WALL)
 				{
-                                        cave_set_feat(ny, nx, FEAT_GRASS);
+					cave_set_feat(ny, nx, FEAT_GRASS);
 
 				}
 				if (!(r_ptr->flags7 & RF7_CAN_FLY) && !(r_ptr->flags8 & RF8_WILD_WOOD))
@@ -3513,9 +3513,9 @@ msg_print("爆発のルーンは解除された。");
 
 			/* Possible disturb */
 			if (m_ptr->ml &&
-                            (disturb_move ||
-                             (disturb_near && (m_ptr->mflag & MFLAG_VIEW)) ||
-                             (disturb_high && ap_r_ptr->r_tkills && ap_r_ptr->level >= p_ptr->lev)))
+			    (disturb_move ||
+			     (disturb_near && (m_ptr->mflag & MFLAG_VIEW)) ||
+			     (disturb_high && ap_r_ptr->r_tkills && ap_r_ptr->level >= p_ptr->lev)))
 			{
 				/* Disturb */
 				if (is_hostile(m_ptr))
@@ -3821,8 +3821,8 @@ void process_monsters(void)
 
 	int speed;
 
-        /* Clear monster fighting indicator */
-        mon_fight = FALSE;
+	/* Clear monster fighting indicator */
+	mon_fight = FALSE;
 
 	/* Memorize old race */
 	old_monster_race_idx = p_ptr->monster_race_idx;
@@ -4032,7 +4032,7 @@ bool process_the_world(int num, int who, bool vs_player)
 #ifdef JP
 			msg_print("「時よ！」");
 #else
-		        msg_format("%s yells 'Time!'", m_name);
+			msg_format("%s yells 'Time!'", m_name);
 #endif
 		else msg_print("hek!");
 

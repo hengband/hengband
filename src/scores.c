@@ -247,7 +247,7 @@ sprintf(tmp_val, "( %d 位以下 )", k + 1);
 			if ((*when == '@') && strlen(when) == 9)
 			{
 				sprintf(tmp_val, "%.4s-%.2s-%.2s",
-				        when + 1, when + 5, when + 7);
+					when + 1, when + 5, when + 7);
 				when = tmp_val;
 			}
 
@@ -255,18 +255,18 @@ sprintf(tmp_val, "( %d 位以下 )", k + 1);
 #ifdef JP
 /*sprintf(out_val, "%3d.%9s  %s%s%sという名の%sの%s (レベル %d)", */
 			sprintf(out_val, "%3d.%9s  %s%s%s - %s%s (レベル %d)",
-			        place, the_score.pts,
- 				seikaku_info[pa].title, (seikaku_info[pa].no ? "の" : ""),
+				place, the_score.pts,
+				seikaku_info[pa].title, (seikaku_info[pa].no ? "の" : ""),
 				the_score.who,
 				race_info[pr].title, class_info[pc].title,
-			        clev);
+				clev);
 
 #else
 			sprintf(out_val, "%3d.%9s  %s %s the %s %s, Level %d",
-			        place, the_score.pts,
+				place, the_score.pts,
 				seikaku_info[pa].title,
 				the_score.who, race_info[pr].title, class_info[pc].title,
-			        clev);
+				clev);
 #endif
 
 
@@ -289,13 +289,13 @@ if (mlev > clev) strcat(out_val, format(" (最高%d)", mlev));
 				sprintf(out_val, "             ");
 
 
-                        /* 死亡原因をオリジナルより細かく表示 */
-                        if (streq(the_score.how, "yet"))
-                        {
-                                sprintf(out_val+13, "  まだ生きている (%d%s)",
-                                       cdun, "階");
-                        }
-                        else
+			/* 死亡原因をオリジナルより細かく表示 */
+			if (streq(the_score.how, "yet"))
+			{
+				sprintf(out_val+13, "  まだ生きている (%d%s)",
+				       cdun, "階");
+			}
+			else
 			if (streq(the_score.how, "ripe"))
 			{
 				sprintf(out_val+13, "  勝利の後に引退 (%d%s)",
@@ -338,23 +338,23 @@ if (mlev > clev) strcat(out_val, format(" (最高%d)", mlev));
 
 			/* And still another line of info */
 #ifdef JP
-                        {
-                                char buf[11];
+			{
+				char buf[11];
 
-                                /* 日付を 19yy/mm/dd の形式に変更する */
-                                if (strlen(when) == 8 && when[2] == '/' && when[5] == '/') {
-                                        sprintf(buf, "%d%s/%.5s", 19 + (when[6] < '8'), when + 6, when);
-                                        when = buf;
-                                }
-                                sprintf(out_val,
-                                                "        (ユーザー:%s, 日付:%s, 所持金:%s, ターン:%s)",
-                                                user, when, gold, aged);
-                        }
+				/* 日付を 19yy/mm/dd の形式に変更する */
+				if (strlen(when) == 8 && when[2] == '/' && when[5] == '/') {
+					sprintf(buf, "%d%s/%.5s", 19 + (when[6] < '8'), when + 6, when);
+					when = buf;
+				}
+				sprintf(out_val,
+						"        (ユーザー:%s, 日付:%s, 所持金:%s, ターン:%s)",
+						user, when, gold, aged);
+			}
 
 #else
 			sprintf(out_val,
-			        "               (User %s, Date %s, Gold %s, Turn %s).",
-			        user, when, gold, aged);
+				"               (User %s, Date %s, Gold %s, Turn %s).",
+				user, when, gold, aged);
 #endif
 
 			c_put_str(attr, out_val, n*4 + 4, 0);
@@ -422,7 +422,7 @@ if (highscore_fd < 0) quit("スコア・ファイルが使用できません。");
 bool send_world_score(bool do_send)
 {
 #ifdef WORLD_SCORE
-        if(send_score && do_send)
+	if(send_score && do_send)
 	{
 		if(easy_band)
 		{
@@ -461,7 +461,7 @@ bool send_world_score(bool do_send)
 			(void)inkey();
 		}
 		else return FALSE;
-        }
+	}
 #endif
 	return TRUE;
 }
@@ -485,7 +485,7 @@ errr top_twenty(void)
 
 	/* Save the version */
 	sprintf(the_score.what, "%u.%u.%u",
-	        FAKE_VER_MAJOR, FAKE_VER_MINOR, FAKE_VER_PATCH);
+		FAKE_VER_MAJOR, FAKE_VER_MINOR, FAKE_VER_PATCH);
 
 	/* Calculate and save the points */
 	sprintf(the_score.pts, "%9ld", (long)total_points());
@@ -537,9 +537,9 @@ errr top_twenty(void)
 #endif
 	}
 	else
-        {
+	{
 		strcpy(the_score.how, p_ptr->died_from);
-        }
+	}
 
 	/* Lock (for writing) the highscore file, or fail */
 	if (fd_lock(highscore_fd, F_WRLCK)) return (1);
@@ -596,7 +596,7 @@ msg_print("スコア・ファイルが使用できません。");
 
 	/* Save the version */
 	sprintf(the_score.what, "%u.%u.%u",
-	        FAKE_VER_MAJOR, FAKE_VER_MINOR, FAKE_VER_PATCH);
+		FAKE_VER_MAJOR, FAKE_VER_MINOR, FAKE_VER_PATCH);
 
 	/* Calculate and save the points */
 	sprintf(the_score.pts, "%9ld", (long)total_points());
@@ -633,8 +633,8 @@ strcpy(the_score.day, "今日");
 
 	/* Hack -- no cause of death */
 #ifdef JP
-        /* まだ死んでいないときの識別文字 */
-        strcpy(the_score.how, "yet");
+	/* まだ死んでいないときの識別文字 */
+	strcpy(the_score.how, "yet");
 #else
 	strcpy(the_score.how, "nobody (yet!)");
 #endif
@@ -883,8 +883,8 @@ void kingly(void)
 	/* Fake death */
 	if (!streq(p_ptr->died_from, "Seppuku"))
 #ifdef JP
-	        /* 引退したときの識別文字 */
-        	(void)strcpy(p_ptr->died_from, "ripe");
+		/* 引退したときの識別文字 */
+		(void)strcpy(p_ptr->died_from, "ripe");
 #else
 		(void)strcpy(p_ptr->died_from, "Ripe Old Age");
 #endif

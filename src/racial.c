@@ -458,7 +458,7 @@ static bool choose_kamae(void)
 #ifdef JP
 				msg_print("もともと構えていない。");
 #else
-			        msg_print("You are not assuming a posture.");
+				msg_print("You are not assuming a posture.");
 #endif
 			screen_load();
 			return TRUE;
@@ -1399,7 +1399,7 @@ msg_print("今はペットを操ることに集中していないと。");
 				  return FALSE;
 			  }
 			  if (racial_aux(30, 0, A_INT, 20)){
-			        if( is_mirror_grid(&cave[py][px]))
+				if( is_mirror_grid(&cave[py][px]))
 				{
 #ifdef JP
 msg_print("少し頭がハッキリした。");
@@ -3722,9 +3722,9 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 	if (use_menu) screen_save();
 	 /* Get a spell from the user */
 
-        choice = (always_show_list || use_menu) ? ESCAPE:1;
-        while (!flag)
-        {
+	choice = (always_show_list || use_menu) ? ESCAPE:1;
+	while (!flag)
+	{
 		if( choice==ESCAPE ) choice = ' '; 
 		else if( !get_com(out_val, &choice, FALSE) )break; 
 

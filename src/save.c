@@ -584,10 +584,10 @@ static void wr_extra(void)
 
 	/* Max Player and Dungeon Levels */
 	wr_s16b(p_ptr->max_plv);
-        tmp8u = (byte)max_d_idx;
-        wr_byte(tmp8u);
-        for (i = 0; i < tmp8u; i++)
-                wr_s16b(max_dlv[i]);
+	tmp8u = (byte)max_d_idx;
+	wr_byte(tmp8u);
+	for (i = 0; i < tmp8u; i++)
+		wr_s16b(max_dlv[i]);
 
 	/* More info */
 	wr_s16b(0);     /* oops */
@@ -621,7 +621,7 @@ static void wr_extra(void)
 	wr_s16b(p_ptr->blessed);
 	wr_s16b(p_ptr->tim_invis);
 	wr_s16b(p_ptr->word_recall);
-        wr_s16b(p_ptr->recall_dungeon);
+	wr_s16b(p_ptr->recall_dungeon);
 	wr_s16b(p_ptr->see_infra);
 	wr_s16b(p_ptr->tim_infra);
 	wr_s16b(p_ptr->oppose_fire);
@@ -1001,7 +1001,7 @@ static bool wr_savefile_new(void)
 	wr_byte(FAKE_VER_PATCH);
 	xor_byte = 0;
 
-        /* Initial value of xor_byte */
+	/* Initial value of xor_byte */
 	tmp8u = (byte)randint0(256);
 	wr_byte(tmp8u);
 
@@ -1583,8 +1583,8 @@ bool load_player(void)
 		/* Clear screen */
 		Term_clear();
 
-                /* Attempt to load */
-                err = rd_savefile_new();
+		/* Attempt to load */
+		err = rd_savefile_new();
 
 		/* Message (below) */
 #ifdef JP

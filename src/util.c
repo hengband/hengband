@@ -684,12 +684,12 @@ int fd_make(cptr file, int mode)
 # if defined(MACINTOSH) && defined(MAC_MPW)
 
 	/* setting file type and creator -- AR */
-        {
-                errr errr_tmp;
-                errr_tmp = open(buf, O_CREAT | O_EXCL | O_WRONLY | O_BINARY, mode);
-                fsetfileinfo(file, _fcreator, _ftype);
-                return(errr_tmp);
-        }
+	{
+		errr errr_tmp;
+		errr_tmp = open(buf, O_CREAT | O_EXCL | O_WRONLY | O_BINARY, mode);
+		fsetfileinfo(file, _fcreator, _ftype);
+		return(errr_tmp);
+	}
 
 # else
 	/* Create the file, fail if exists, write-only, binary */
@@ -1149,7 +1149,7 @@ void text_to_ascii(char *buf, cptr str)
 			/* Skip the backslash */
 			str++;
 
-                        /* Macro Trigger */
+			/* Macro Trigger */
 			if (*str == '[')
 			{
 				trigger_text_to_ascii(&s, &str);
@@ -1636,7 +1636,7 @@ static bool parse_under = FALSE;
 void flush(void)
 {
 	/* Do it later */
-        inkey_xtra = TRUE;
+	inkey_xtra = TRUE;
 }
 
 
@@ -2359,7 +2359,7 @@ void message_add(cptr str)
  for (t = buf; *t && (*t != '<' || (*(t+1) != 'x' )); t++) 
      if( iskanji(*t))t++;
 #else
-                for (t = buf; *t && (*t != '<'); t++);
+		for (t = buf; *t && (*t != '<'); t++);
 #endif
 
 		if (*t)
@@ -2953,7 +2953,7 @@ void c_roff(byte a, cptr str)
 			/* Clear line, move cursor */
 			Term_erase(x, y, 255);
 
-                        break;
+			break;
 		}
 
 		/* Clean up the char */
@@ -3053,7 +3053,7 @@ void c_roff(byte a, cptr str)
 
 		/* Dump */
 #ifdef JP
-                Term_addch((byte)(a|0x10), ch);
+		Term_addch((byte)(a|0x10), ch);
 #else
 		Term_addch(a, ch);
 #endif
@@ -3192,28 +3192,28 @@ bool askfor_aux(char *buf, int len)
 		default:
 #ifdef JP
        {			/* 片山さん作成 */
-                int next;
+		int next;
 
-                                if (iskanji (i)) {
-                                        inkey_base = TRUE;
-                                        next = inkey ();
-                                        if (k+1 < len) {
-                                                buf[k++] = i;
-                                                buf[k] = next;
-                                                k_flag[k++] = 1;
-                                        } else
-                                                bell();
-                                } else {
+				if (iskanji (i)) {
+					inkey_base = TRUE;
+					next = inkey ();
+					if (k+1 < len) {
+						buf[k++] = i;
+						buf[k] = next;
+						k_flag[k++] = 1;
+					} else
+						bell();
+				} else {
 #ifdef SJIS
-                    if(k<len && (isprint(i) || (0xa0<=i && i<=0xdf))){
+		    if(k<len && (isprint(i) || (0xa0<=i && i<=0xdf))){
 #else
-                    if(k<len && isprint(i)){
+		    if(k<len && isprint(i)){
 #endif
-                                                buf[k] = i;
-                                                k_flag[k++] = 0;
-                                        } else
-                                                bell();
-		               }
+						buf[k] = i;
+						k_flag[k++] = 0;
+					} else
+						bell();
+			       }
 		 }
 #else
 			if ((k < len) && (isprint(i)))
@@ -4015,7 +4015,7 @@ void request_command(int shopping)
 	cptr act;
 
 #ifdef JP
-        int caretcmd = 0;
+	int caretcmd = 0;
 #endif
 	/* Roguelike */
 	if (rogue_like_commands)
@@ -4290,20 +4290,20 @@ prt(format("回数: %d", command_arg), 0, 0);
 	}
 
 #ifdef JP
-        for (i = 0; i < 256; i++)
-        {
-                cptr s;
-                if ((s = keymap_act[mode][i]) != NULL)
-                {
-                        if (*s == command_cmd && *(s+1) == 0)
-                        {
-                                caretcmd = i;
-                                break;
-                        }
-                }
-        }
-        if (!caretcmd)
-                caretcmd = command_cmd;
+	for (i = 0; i < 256; i++)
+	{
+		cptr s;
+		if ((s = keymap_act[mode][i]) != NULL)
+		{
+			if (*s == command_cmd && *(s+1) == 0)
+			{
+				caretcmd = i;
+				break;
+			}
+		}
+	}
+	if (!caretcmd)
+		caretcmd = command_cmd;
 #endif
 	/* Hack -- Scan equipment */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
@@ -4329,7 +4329,7 @@ prt(format("回数: %d", command_arg), 0, 0);
 		{
 			/* Check the "restriction" character */
 #ifdef JP
-                        if ((s[1] == caretcmd) || (s[1] == '*'))
+			if ((s[1] == caretcmd) || (s[1] == '*'))
 #else
 			if ((s[1] == command_cmd) || (s[1] == '*'))
 #endif
@@ -4462,8 +4462,8 @@ int get_keymap_dir(char ch)
 	}
 	else
 	{
-                int mode;
-                cptr act, s;
+		int mode;
+		cptr act, s;
 
 		/* Roguelike */
 		if (rogue_like_commands)
@@ -4921,16 +4921,16 @@ size_t my_strcpy(char *buf, const char *src, size_t bufsize)
 
 	/* Copy as many bytes as will fit */
 	while (len < bufsize)
-        {
+	{
 		if (iskanji(*s))
-                {
+		{
 			if (len + 1 >= bufsize || !*(s+1)) break;
 			*d++ = *s++;
 			*d++ = *s++;
 			len += 2;
 		}
-                else
-                {
+		else
+		{
 			*d++ = *s++;
 			len++;
 		}

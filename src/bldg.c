@@ -644,7 +644,7 @@ static int yaku_check_straight(void)
 	joker_is_used = FALSE;
 	for (i = 0; i < 5; i++)
 	{
-	  	if (!find_card_num(lowest + i)){
+		if (!find_card_num(lowest + i)){
 		  if( have_joker() && !joker_is_used )
 		    joker_is_used = TRUE;
 		  else
@@ -2393,7 +2393,7 @@ void have_nightmare(int r_idx)
 	power = r_ptr->level + 10;
 
 #ifdef JP
-        if (0)
+	if (0)
 #else
 	if (!(r_ptr->flags1 & RF1_UNIQUE))
 #endif
@@ -2418,9 +2418,9 @@ void have_nightmare(int r_idx)
 	if (saving_throw(p_ptr->skill_sav * 100 / power))
 	{
 #ifdef JP
-   	msg_format("夢の中で%sに追いかけられた。", m_name);
+	msg_format("夢の中で%sに追いかけられた。", m_name);
 #else
-   	msg_format("%^s chases you through your dreams.", m_name);
+	msg_format("%^s chases you through your dreams.", m_name);
 #endif
 
 
@@ -3032,7 +3032,7 @@ static void town_history(void)
  * the current +dam of the player.
  */
 static void compare_weapon_aux2(object_type *o_ptr, int numblows,
-                                int r, int c, int mult, cptr attr,
+				int r, int c, int mult, cptr attr,
 				byte color)
 {
 	char tmp_str[80];
@@ -3398,99 +3398,99 @@ msg_print("現在の技量から判断すると、あなたの武器は以下のような威力を発揮します:
 static bool eval_ac(int iAC)
 {
 #ifdef JP
-        const char memo[] =
-                "ダメージ軽減率とは、敵の攻撃が当たった時そのダメージを\n"
-                "何パーセント軽減するかを示します。\n"
-                "ダメージ軽減は通常の直接攻撃(種類が「攻撃する」と「粉砕する」の物)\n"
-                "に対してのみ効果があります。\n \n"
-                "敵のレベルとは、その敵が通常何階に現れるかを示します。\n \n"
-                "回避率は敵の直接攻撃を何パーセントの確率で避けるかを示し、\n"
-                "敵のレベルとあなたのACによって決定されます。\n \n"
-                "ダメージ期待値とは、敵の１００ポイントの通常攻撃に対し、\n"
-                "回避率とダメージ軽減率を考慮したダメージの期待値を示します。\n";
+	const char memo[] =
+		"ダメージ軽減率とは、敵の攻撃が当たった時そのダメージを\n"
+		"何パーセント軽減するかを示します。\n"
+		"ダメージ軽減は通常の直接攻撃(種類が「攻撃する」と「粉砕する」の物)\n"
+		"に対してのみ効果があります。\n \n"
+		"敵のレベルとは、その敵が通常何階に現れるかを示します。\n \n"
+		"回避率は敵の直接攻撃を何パーセントの確率で避けるかを示し、\n"
+		"敵のレベルとあなたのACによって決定されます。\n \n"
+		"ダメージ期待値とは、敵の１００ポイントの通常攻撃に対し、\n"
+		"回避率とダメージ軽減率を考慮したダメージの期待値を示します。\n";
 #else
-        const char memo[] =
-                "'Protection Rate' means how much damage is reduced by your armor.\n"
-                "Note that the Protection rate is effective only against normal "
-                "'attack' and 'shatter' type melee attacks, "
-                "and has no effect against any other types such as 'poison'.\n \n"
-                "'Dodge Rate' indicates the success rate on dodging the "
-                "monster's melee attacks.  "
-                "It is depend on the level of the monster and your AC.\n \n"
-                "'Average Damage' indicates the expected amount of damage "
-                "when you are attacked by normal melee attacks with power=100.";
+	const char memo[] =
+		"'Protection Rate' means how much damage is reduced by your armor.\n"
+		"Note that the Protection rate is effective only against normal "
+		"'attack' and 'shatter' type melee attacks, "
+		"and has no effect against any other types such as 'poison'.\n \n"
+		"'Dodge Rate' indicates the success rate on dodging the "
+		"monster's melee attacks.  "
+		"It is depend on the level of the monster and your AC.\n \n"
+		"'Average Damage' indicates the expected amount of damage "
+		"when you are attacked by normal melee attacks with power=100.";
 #endif
 
-        int protection;
-        int col, row = 2;
-        int lvl, i;
-        char buf[80*20], *t;
+	int protection;
+	int col, row = 2;
+	int lvl, i;
+	char buf[80*20], *t;
 
-        /* AC lower than zero has no effect */
-        if (iAC < 0) iAC = 0;
+	/* AC lower than zero has no effect */
+	if (iAC < 0) iAC = 0;
 
-        /* ダメージ軽減率を計算 */
-        protection = 100 * MIN(iAC, 150) / 250;
+	/* ダメージ軽減率を計算 */
+	protection = 100 * MIN(iAC, 150) / 250;
 
-        screen_save();
-        clear_bldg(0, 22);
+	screen_save();
+	clear_bldg(0, 22);
 
 #ifdef JP
-        put_str(format("あなたの現在のAC: %3d", iAC), row++, 0);
-        put_str(format("ダメージ軽減率  : %3d%%", protection), row++, 0);
-        row++;
+	put_str(format("あなたの現在のAC: %3d", iAC), row++, 0);
+	put_str(format("ダメージ軽減率  : %3d%%", protection), row++, 0);
+	row++;
 
-        put_str("敵のレベル      :", row + 0, 0);
-        put_str("回避率          :", row + 1, 0);
-        put_str("ダメージ期待値  :", row + 2, 0);
+	put_str("敵のレベル      :", row + 0, 0);
+	put_str("回避率          :", row + 1, 0);
+	put_str("ダメージ期待値  :", row + 2, 0);
 #else
-        put_str(format("Your current AC : %3d", iAC), row++, 0);
-        put_str(format("Protection rate : %3d%%", protection), row++, 0);
-        row++;
+	put_str(format("Your current AC : %3d", iAC), row++, 0);
+	put_str(format("Protection rate : %3d%%", protection), row++, 0);
+	row++;
 
-        put_str("Level of Monster:", row + 0, 0);
-        put_str("Dodge Rate      :", row + 1, 0);
-        put_str("Average Damage  :", row + 2, 0);
+	put_str("Level of Monster:", row + 0, 0);
+	put_str("Dodge Rate      :", row + 1, 0);
+	put_str("Average Damage  :", row + 2, 0);
 #endif
     
-        for (col = 17 + 1, lvl = 0; lvl <= 100; lvl += 10, col += 5)
-        {
-                int quality = 60 + lvl * 3; /* attack quality with power 60 */
-                int dodge;   /* 回避率(%) */
-                int average; /* ダメージ期待値 */
-                float rateA,rateR=0.0;
-                float damage;
-                char tmp_str[100];
+	for (col = 17 + 1, lvl = 0; lvl <= 100; lvl += 10, col += 5)
+	{
+		int quality = 60 + lvl * 3; /* attack quality with power 60 */
+		int dodge;   /* 回避率(%) */
+		int average; /* ダメージ期待値 */
+		float rateA,rateR=0.0;
+		float damage;
+		char tmp_str[100];
 
-                put_str(format("%3d", lvl), row + 0, col);
+		put_str(format("%3d", lvl), row + 0, col);
 
-                /* 回避率を計算 */
-                dodge = 5 + (MIN(100, 100 * (iAC * 3 / 4) / quality) * 9 + 5) / 10;
-                put_str(format("%3d%%", dodge), row + 1, col);
+		/* 回避率を計算 */
+		dodge = 5 + (MIN(100, 100 * (iAC * 3 / 4) / quality) * 9 + 5) / 10;
+		put_str(format("%3d%%", dodge), row + 1, col);
 
-                /* 100点の攻撃に対してのダメージ期待値を計算 */
-                average = (100 - dodge) * (100 - protection) / 100;
-                put_str(format("%3d", average), row + 2, col);
-        }
+		/* 100点の攻撃に対してのダメージ期待値を計算 */
+		average = (100 - dodge) * (100 - protection) / 100;
+		put_str(format("%3d", average), row + 2, col);
+	}
 
-        /* Display note */
-        roff_to_buf(memo, 70, buf);
-        for (t = buf; t[0]; t += strlen(t) + 1)
-                put_str(t, (row++) + 4, 4);
+	/* Display note */
+	roff_to_buf(memo, 70, buf);
+	for (t = buf; t[0]; t += strlen(t) + 1)
+		put_str(t, (row++) + 4, 4);
 
 #ifdef JP
-        prt("現在のあなたの装備からすると、あなたの防御力は"
-                   "これくらいです:", 0, 0);
+	prt("現在のあなたの装備からすると、あなたの防御力は"
+		   "これくらいです:", 0, 0);
 #else
-        prt("Defense abilities from your current Armor Class are evaluated below.", 0, 0);
+	prt("Defense abilities from your current Armor Class are evaluated below.", 0, 0);
 #endif
   
-        flush();
-        (void)inkey();
-        screen_load();
+	flush();
+	(void)inkey();
+	screen_load();
 
-        /* Done */
-        return (TRUE);
+	/* Done */
+	return (TRUE);
 }
 
 
@@ -3858,7 +3858,7 @@ charges = get_quantity(format("一回分＄%d で何回分充填しますか？",
 		charges = get_quantity(format("Add how many charges for %d gold? ",
 #endif
 
-		              price), MIN(p_ptr->au / price, max_charges));
+			      price), MIN(p_ptr->au / price, max_charges));
 
 		/* Do nothing */
 		if (charges < 1) return;
@@ -3916,7 +3916,7 @@ static void building_recharge_all(void)
 
 
 	/* Display some info */
-        msg_flag = FALSE;
+	msg_flag = FALSE;
 	clear_bldg(4, 18);
 #ifdef JP
 	prt("  再充填の費用はアイテムの種類によります。", 6, 0);
@@ -4737,26 +4737,26 @@ void quest_discovery(int q_idx)
 	{
 		/* Unique */
 
-                /* Hack -- "unique" monsters must be "unique" */
-                if ((r_ptr->flags1 & RF1_UNIQUE) &&
-                    (0 == r_ptr->max_num))
-                {
+		/* Hack -- "unique" monsters must be "unique" */
+		if ((r_ptr->flags1 & RF1_UNIQUE) &&
+		    (0 == r_ptr->max_num))
+		{
 #ifdef JP
-                        msg_print("この階は以前は誰かによって守られていたようだ…。");
+			msg_print("この階は以前は誰かによって守られていたようだ…。");
 #else
-                        msg_print("It seems that this level was protected by someone before...");
+			msg_print("It seems that this level was protected by someone before...");
 #endif
-                        /* The unique is already dead */
-                        quest[q_idx].status = QUEST_STATUS_FINISHED;
-                }
-                else
-                {
+			/* The unique is already dead */
+			quest[q_idx].status = QUEST_STATUS_FINISHED;
+		}
+		else
+		{
 #ifdef JP
-                        msg_format("注意せよ！この階は%sによって守られている！", name);
+			msg_format("注意せよ！この階は%sによって守られている！", name);
 #else
-                        msg_format("Beware, this level is protected by %s!", name);
+			msg_format("Beware, this level is protected by %s!", name);
 #endif
-                }
+		}
 	}
 	else
 	{

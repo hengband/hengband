@@ -75,8 +75,8 @@ static void recursive_river(int x1, int y1, int x2, int y2, int feat1, int feat2
 		if (one_in_(DUN_WAT_CHG) && (width > 0))
 		{
 			recursive_river(x1 + dx + changex, y1 + dy + changey,
-			                x1 + 8 * (dx + changex), y1 + 8 * (dy + changey),
-			                feat1, feat2, width - 1);
+					x1 + 8 * (dx + changex), y1 + 8 * (dy + changey),
+					feat1, feat2, width - 1);
 		}
 	}
 	else
@@ -116,8 +116,8 @@ static void recursive_river(int x1, int y1, int x2, int y2, int feat1, int feat2
 						else
 							c_ptr->feat = feat1;
 
-                                                /* Clear garbage of hidden trap or door */
-                                                c_ptr->mimic = 0;
+						/* Clear garbage of hidden trap or door */
+						c_ptr->mimic = 0;
 
 						/* Lava terrain glows */
 						if ((feat1 == FEAT_DEEP_LAVA) ||  (feat1 == FEAT_SHAL_LAVA))
@@ -261,8 +261,8 @@ void build_streamer(int feat, int chance)
 			/* Clear previous contents, add proper vein type */
 			c_ptr->feat = feat;
 
-                        /* Paranoia: Clear mimic field */
-                        c_ptr->mimic = 0;
+			/* Paranoia: Clear mimic field */
+			c_ptr->mimic = 0;
 
 			/* Hack -- Add some (known) treasure */
 			if (treasure && one_in_(chance)) c_ptr->feat += 0x04;
@@ -330,8 +330,8 @@ void place_trees(int x, int y)
 					cave[j][i].feat = FEAT_RUBBLE;
 				}
 
-                                /* Clear garbage of hidden trap or door */
-                                c_ptr->mimic = 0;
+				/* Clear garbage of hidden trap or door */
+				c_ptr->mimic = 0;
 
 				/* Light area since is open above */
 				cave[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
@@ -429,8 +429,8 @@ if (cheat_room) msg_print("ÇË²õ¤µ¤ì¤¿³¬");
 						place_floor_grid(c_ptr);
 					}
 
-                                        /* Clear garbage of hidden trap or door */
-                                        c_ptr->mimic = 0;
+					/* Clear garbage of hidden trap or door */
+					c_ptr->mimic = 0;
 
 					/* No longer part of a room or vault */
 					c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);

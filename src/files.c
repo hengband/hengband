@@ -946,10 +946,10 @@ static cptr process_pref_file_expr(char **sp, char *fp)
 				v = ANGBAND_SYS;
 			}
 
-                        else if (streq(b+1, "KEYBOARD"))
-                        {
-                                v = ANGBAND_KEYBOARD;
-                        }
+			else if (streq(b+1, "KEYBOARD"))
+			{
+				v = ANGBAND_KEYBOARD;
+			}
 
 			/* Graphics */
 			else if (streq(b+1, "GRAF"))
@@ -970,7 +970,7 @@ static cptr process_pref_file_expr(char **sp, char *fp)
 			else if (streq(b+1, "RACE"))
 			{
 #ifdef JP
-                                v = rp_ptr->E_title;
+				v = rp_ptr->E_title;
 #else
 				v = rp_ptr->title;
 #endif
@@ -980,7 +980,7 @@ static cptr process_pref_file_expr(char **sp, char *fp)
 			else if (streq(b+1, "CLASS"))
 			{
 #ifdef JP
-                                v = cp_ptr->E_title;
+				v = cp_ptr->E_title;
 #else
 				v = cp_ptr->title;
 #endif
@@ -998,7 +998,7 @@ static cptr process_pref_file_expr(char **sp, char *fp)
 #ifdef JP
 				v = E_realm_names[p_ptr->realm1];
 #else
-                                v = realm_names[p_ptr->realm1];
+				v = realm_names[p_ptr->realm1];
 #endif
 			}
 
@@ -1006,7 +1006,7 @@ static cptr process_pref_file_expr(char **sp, char *fp)
 			else if (streq(b+1, "REALM2"))
 			{
 #ifdef JP
-                                v = E_realm_names[p_ptr->realm2];
+				v = E_realm_names[p_ptr->realm2];
 #else
 				v = realm_names[p_ptr->realm2];
 #endif
@@ -1143,8 +1143,8 @@ static errr process_pref_file_aux(cptr name, bool read_pickpref)
 		/* Print error message */
 		/* ToDo: Add better error messages */
 #ifdef JP
-              msg_format("ファイル'%s'の%d行でエラー番号%dのエラー。", name, line, err);
-              msg_format("('%s'を解析中)", old);
+	      msg_format("ファイル'%s'の%d行でエラー番号%dのエラー。", name, line, err);
+	      msg_format("('%s'を解析中)", old);
 #else
 		msg_format("Error %d in line %d of file '%s'.", err, line, name);
 		msg_format("Parsing '%s'", old);
@@ -1632,11 +1632,11 @@ static void display_player_one_line(int entry, cptr val, byte attr)
  */
 static void display_player_middle(void)
 {
-        char buf[160];
+	char buf[160];
 	int show_tohit, show_todam;
 	object_type *o_ptr;
 	int tmul = 0;
-        int e;
+	int e;
 
 	if(p_ptr->migite)
 	{
@@ -1824,7 +1824,7 @@ static void display_player_middle(void)
 
 	/* Dump experience */
 	if (p_ptr->prace == RACE_ANDROID) e = ENTRY_EXP_ANDR;
-        else e = ENTRY_CUR_EXP;
+	else e = ENTRY_CUR_EXP;
 
 	if (p_ptr->exp >= p_ptr->max_exp)
 		display_player_one_line(e, format("%ld", p_ptr->exp), TERM_L_GREEN);
@@ -1840,7 +1840,7 @@ static void display_player_middle(void)
 	/* Dump exp to advance */
 	if (p_ptr->lev >= PY_MAX_LEVEL)
 		display_player_one_line(ENTRY_EXP_TO_ADV, "*****", TERM_L_GREEN);
-        else if (p_ptr->prace == RACE_ANDROID)
+	else if (p_ptr->prace == RACE_ANDROID)
 		display_player_one_line(ENTRY_EXP_TO_ADV, format("%ld", (s32b)(player_exp_a[p_ptr->lev - 1] * p_ptr->expfact / 100L)), TERM_L_GREEN);
 	else
 		display_player_one_line(ENTRY_EXP_TO_ADV, format("%ld", (s32b)(player_exp[p_ptr->lev - 1] * p_ptr->expfact / 100L)), TERM_L_GREEN);
@@ -2772,9 +2772,9 @@ static void display_player_equippy(int y, int x, u16b mode)
 
 	object_type *o_ptr;
 
-        /* Weapon flags need only two column */
-        if (mode & DP_WP) max_i = INVEN_LARM + 1;
-        else max_i = INVEN_TOTAL;
+	/* Weapon flags need only two column */
+	if (mode & DP_WP) max_i = INVEN_LARM + 1;
+	else max_i = INVEN_TOTAL;
 
 	/* Dump equippy chars */
 	for (i = INVEN_RARM; i < max_i; i++)
@@ -2904,12 +2904,12 @@ static void player_vuln_flags(u32b flgs[TR_FLAG_SIZE])
  * A struct for storing misc. flags
  */
 typedef struct {
-        u32b player_flags[TR_FLAG_SIZE];
-        u32b tim_player_flags[TR_FLAG_SIZE];
-        u32b player_imm[TR_FLAG_SIZE];
-        u32b tim_player_imm[TR_FLAG_SIZE];
-        u32b player_vuln[TR_FLAG_SIZE];
-        u32b known_obj_imm[TR_FLAG_SIZE];
+	u32b player_flags[TR_FLAG_SIZE];
+	u32b tim_player_flags[TR_FLAG_SIZE];
+	u32b player_imm[TR_FLAG_SIZE];
+	u32b tim_player_imm[TR_FLAG_SIZE];
+	u32b player_vuln[TR_FLAG_SIZE];
+	u32b known_obj_imm[TR_FLAG_SIZE];
 } all_player_flags;
 
 
@@ -2921,12 +2921,12 @@ static void display_flag_aux(int row, int col, cptr header,
 {
 	int     i;
 	bool    vuln = FALSE;
-        int max_i;
+	int max_i;
 
 	if (have_flag(f->player_vuln, flag1) &&
-            !(have_flag(f->known_obj_imm, flag1) ||
-              have_flag(f->player_imm, flag1) ||
-              have_flag(f->tim_player_imm, flag1)))
+	    !(have_flag(f->known_obj_imm, flag1) ||
+	      have_flag(f->player_imm, flag1) ||
+	      have_flag(f->tim_player_imm, flag1)))
 		vuln = TRUE;
 
 	/* Header */
@@ -2935,14 +2935,14 @@ static void display_flag_aux(int row, int col, cptr header,
 	/* Advance */
 	col += strlen(header) + 1;
 
-        /* Weapon flags need only two column */
-        if (mode & DP_WP) max_i = INVEN_LARM + 1;
-        else max_i = INVEN_TOTAL;
+	/* Weapon flags need only two column */
+	if (mode & DP_WP) max_i = INVEN_LARM + 1;
+	else max_i = INVEN_TOTAL;
 
 	/* Check equipment */
 	for (i = INVEN_RARM; i < max_i; i++)
 	{
-                u32b flgs[TR_FLAG_SIZE];
+		u32b flgs[TR_FLAG_SIZE];
 		object_type *o_ptr;
 
 		/* Object */
@@ -2952,30 +2952,30 @@ static void display_flag_aux(int row, int col, cptr header,
 		object_flags_known(o_ptr, flgs);
 
 		/* Default */
-                if (!(mode & DP_IMM))
-                        c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
+		if (!(mode & DP_IMM))
+			c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
 
 		/* Check flags */
-                if (mode & DP_CURSE)
-                {
-                        if ((mode & DP_CURSE) && (o_ptr->curse_flags & (TRC_CURSED | TRC_HEAVY_CURSE)))
-                                c_put_str(TERM_WHITE, "+", row, col);
-                        if ((mode & DP_CURSE) && (o_ptr->curse_flags & TRC_PERMA_CURSE))
-                                c_put_str(TERM_WHITE, "*", row, col);
-                }
-                else
-                {
-                        if (have_flag(flgs, flag1))
-                                c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE),
-                                          (mode & DP_IMM) ? "*" : "+", row, col);
-                }
+		if (mode & DP_CURSE)
+		{
+			if ((mode & DP_CURSE) && (o_ptr->curse_flags & (TRC_CURSED | TRC_HEAVY_CURSE)))
+				c_put_str(TERM_WHITE, "+", row, col);
+			if ((mode & DP_CURSE) && (o_ptr->curse_flags & TRC_PERMA_CURSE))
+				c_put_str(TERM_WHITE, "*", row, col);
+		}
+		else
+		{
+			if (have_flag(flgs, flag1))
+				c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE),
+					  (mode & DP_IMM) ? "*" : "+", row, col);
+		}
 
 		/* Advance */
 		col++;
 	}
 
-        /* Assume that player flag is already written */
-        if (mode & DP_IMM) return;
+	/* Assume that player flag is already written */
+	if (mode & DP_IMM) return;
 
 	/* Default */
 	c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
@@ -3003,9 +3003,9 @@ static void display_player_flag_info(void)
 	int row;
 	int col;
 
-        all_player_flags f;
+	all_player_flags f;
 
-        /* Extract flags and store */
+	/* Extract flags and store */
 	player_flags(f.player_flags);
 	tim_player_flags(f.tim_player_flags, TRUE);
 	player_immunity(f.player_imm);
@@ -3132,9 +3132,9 @@ static void display_player_other_flag_info(void)
 	int row;
 	int col;
 
-        all_player_flags f;
+	all_player_flags f;
 
-        /* Extract flags and store */
+	/* Extract flags and store */
 	player_flags(f.player_flags);
 	tim_player_flags(f.tim_player_flags, TRUE);
 	player_immunity(f.player_imm);
@@ -3152,63 +3152,63 @@ static void display_player_other_flag_info(void)
 	c_put_str(TERM_WHITE, "ab@", row-1, col+12);
 
 #ifdef JP
-        display_flag_aux(row+ 0, col, "邪悪 倍打 :", TR_SLAY_EVIL, &f, DP_WP);
-        display_flag_aux(row+ 0, col, "邪悪 倍打 :", TR_KILL_EVIL, &f, (DP_WP|DP_IMM));
-        display_flag_aux(row+ 1, col, "不死 倍打 :", TR_SLAY_UNDEAD, &f, DP_WP);
-        display_flag_aux(row+ 1, col, "不死 倍打 :", TR_KILL_UNDEAD, &f, (DP_WP|DP_IMM));
-        display_flag_aux(row+ 2, col, "悪魔 倍打 :", TR_SLAY_DEMON, &f, DP_WP);
-        display_flag_aux(row+ 2, col, "悪魔 倍打 :", TR_KILL_DEMON, &f, (DP_WP|DP_IMM));
-        display_flag_aux(row+ 3, col, "龍 倍打   :", TR_SLAY_DRAGON, &f, DP_WP);
-        display_flag_aux(row+ 3, col, "龍 倍打   :", TR_KILL_DRAGON, &f, (DP_WP|DP_IMM));
-        display_flag_aux(row+ 4, col, "人間 倍打 :", TR_SLAY_HUMAN, &f, DP_WP);
-        display_flag_aux(row+ 4, col, "人間 倍打 :", TR_KILL_HUMAN, &f, (DP_WP|DP_IMM));
-        display_flag_aux(row+ 5, col, "動物 倍打 :", TR_SLAY_ANIMAL, &f, DP_WP);
-        display_flag_aux(row+ 5, col, "動物 倍打 :", TR_KILL_ANIMAL, &f, (DP_WP|DP_IMM));
-        display_flag_aux(row+ 6, col, "オーク倍打:", TR_SLAY_ORC, &f, DP_WP);
-        display_flag_aux(row+ 6, col, "オーク倍打:", TR_KILL_ORC, &f, (DP_WP|DP_IMM));
-        display_flag_aux(row+ 7, col, "トロル倍打:", TR_SLAY_TROLL, &f, DP_WP);
-        display_flag_aux(row+ 7, col, "トロル倍打:", TR_KILL_TROLL, &f, (DP_WP|DP_IMM));
-        display_flag_aux(row+ 8, col, "巨人 倍打 :", TR_SLAY_GIANT, &f, DP_WP);
-        display_flag_aux(row+ 8, col, "巨人 倍打 :", TR_KILL_GIANT, &f, (DP_WP|DP_IMM));
-        display_flag_aux(row+ 9, col, "溶解      :", TR_BRAND_ACID, &f, DP_WP);
-        display_flag_aux(row+10, col, "電撃      :", TR_BRAND_ELEC, &f, DP_WP);
-        display_flag_aux(row+11, col, "焼棄      :", TR_BRAND_FIRE, &f, DP_WP);
-        display_flag_aux(row+12, col, "凍結      :", TR_BRAND_COLD, &f, DP_WP);
-        display_flag_aux(row+13, col, "毒殺      :", TR_BRAND_POIS, &f, DP_WP);
-        display_flag_aux(row+14, col, "切れ味    :", TR_VORPAL, &f, DP_WP);
-        display_flag_aux(row+15, col, "地震      :", TR_IMPACT, &f, DP_WP);
-        display_flag_aux(row+16, col, "吸血      :", TR_VAMPIRIC, &f, DP_WP);
-        display_flag_aux(row+17, col, "カオス効果:", TR_CHAOTIC, &f, DP_WP);
-        display_flag_aux(row+18, col, "理力      :", TR_FORCE_WEAPON, &f, DP_WP);
+	display_flag_aux(row+ 0, col, "邪悪 倍打 :", TR_SLAY_EVIL, &f, DP_WP);
+	display_flag_aux(row+ 0, col, "邪悪 倍打 :", TR_KILL_EVIL, &f, (DP_WP|DP_IMM));
+	display_flag_aux(row+ 1, col, "不死 倍打 :", TR_SLAY_UNDEAD, &f, DP_WP);
+	display_flag_aux(row+ 1, col, "不死 倍打 :", TR_KILL_UNDEAD, &f, (DP_WP|DP_IMM));
+	display_flag_aux(row+ 2, col, "悪魔 倍打 :", TR_SLAY_DEMON, &f, DP_WP);
+	display_flag_aux(row+ 2, col, "悪魔 倍打 :", TR_KILL_DEMON, &f, (DP_WP|DP_IMM));
+	display_flag_aux(row+ 3, col, "龍 倍打   :", TR_SLAY_DRAGON, &f, DP_WP);
+	display_flag_aux(row+ 3, col, "龍 倍打   :", TR_KILL_DRAGON, &f, (DP_WP|DP_IMM));
+	display_flag_aux(row+ 4, col, "人間 倍打 :", TR_SLAY_HUMAN, &f, DP_WP);
+	display_flag_aux(row+ 4, col, "人間 倍打 :", TR_KILL_HUMAN, &f, (DP_WP|DP_IMM));
+	display_flag_aux(row+ 5, col, "動物 倍打 :", TR_SLAY_ANIMAL, &f, DP_WP);
+	display_flag_aux(row+ 5, col, "動物 倍打 :", TR_KILL_ANIMAL, &f, (DP_WP|DP_IMM));
+	display_flag_aux(row+ 6, col, "オーク倍打:", TR_SLAY_ORC, &f, DP_WP);
+	display_flag_aux(row+ 6, col, "オーク倍打:", TR_KILL_ORC, &f, (DP_WP|DP_IMM));
+	display_flag_aux(row+ 7, col, "トロル倍打:", TR_SLAY_TROLL, &f, DP_WP);
+	display_flag_aux(row+ 7, col, "トロル倍打:", TR_KILL_TROLL, &f, (DP_WP|DP_IMM));
+	display_flag_aux(row+ 8, col, "巨人 倍打 :", TR_SLAY_GIANT, &f, DP_WP);
+	display_flag_aux(row+ 8, col, "巨人 倍打 :", TR_KILL_GIANT, &f, (DP_WP|DP_IMM));
+	display_flag_aux(row+ 9, col, "溶解      :", TR_BRAND_ACID, &f, DP_WP);
+	display_flag_aux(row+10, col, "電撃      :", TR_BRAND_ELEC, &f, DP_WP);
+	display_flag_aux(row+11, col, "焼棄      :", TR_BRAND_FIRE, &f, DP_WP);
+	display_flag_aux(row+12, col, "凍結      :", TR_BRAND_COLD, &f, DP_WP);
+	display_flag_aux(row+13, col, "毒殺      :", TR_BRAND_POIS, &f, DP_WP);
+	display_flag_aux(row+14, col, "切れ味    :", TR_VORPAL, &f, DP_WP);
+	display_flag_aux(row+15, col, "地震      :", TR_IMPACT, &f, DP_WP);
+	display_flag_aux(row+16, col, "吸血      :", TR_VAMPIRIC, &f, DP_WP);
+	display_flag_aux(row+17, col, "カオス効果:", TR_CHAOTIC, &f, DP_WP);
+	display_flag_aux(row+18, col, "理力      :", TR_FORCE_WEAPON, &f, DP_WP);
 #else
-        display_flag_aux(row+ 0, col, "Slay Evil :", TR_SLAY_EVIL, &f, DP_WP);
-        display_flag_aux(row+ 0, col, "Slay Evil :", TR_KILL_EVIL, &f, (DP_WP|DP_IMM));
-        display_flag_aux(row+ 1, col, "Slay Und. :", TR_SLAY_UNDEAD, &f, DP_WP);
-        display_flag_aux(row+ 1, col, "Slay Und. :", TR_KILL_UNDEAD, &f, (DP_WP|DP_IMM));
-        display_flag_aux(row+ 2, col, "Slay Demon:", TR_SLAY_DEMON, &f, DP_WP);
-        display_flag_aux(row+ 2, col, "Slay Demon:", TR_KILL_DEMON, &f, (DP_WP|DP_IMM));
-        display_flag_aux(row+ 3, col, "Slay Drag.:", TR_SLAY_DRAGON, &f, DP_WP);
-        display_flag_aux(row+ 3, col, "Slay Drag.:", TR_KILL_DRAGON, &f, (DP_WP|DP_IMM));
-        display_flag_aux(row+ 4, col, "Slay Human:", TR_SLAY_HUMAN, &f, DP_WP);
-        display_flag_aux(row+ 4, col, "Slay Human:", TR_KILL_HUMAN, &f, (DP_WP|DP_IMM));
-        display_flag_aux(row+ 5, col, "Slay Anim.:", TR_SLAY_ANIMAL, &f, DP_WP);
-        display_flag_aux(row+ 5, col, "Slay Anim.:", TR_KILL_ANIMAL, &f, (DP_WP|DP_IMM));
-        display_flag_aux(row+ 6, col, "Slay Orc  :", TR_SLAY_ORC, &f, DP_WP);
-        display_flag_aux(row+ 6, col, "Slay Orc  :", TR_KILL_ORC, &f, (DP_WP|DP_IMM));
-        display_flag_aux(row+ 7, col, "Slay Troll:", TR_SLAY_TROLL, &f, DP_WP);
-        display_flag_aux(row+ 7, col, "Slay Troll:", TR_KILL_TROLL, &f, (DP_WP|DP_IMM));
-        display_flag_aux(row+ 8, col, "Slay Giant:", TR_SLAY_GIANT, &f, DP_WP);
-        display_flag_aux(row+ 8, col, "Slay Giant:", TR_KILL_GIANT, &f, (DP_WP|DP_IMM));
-        display_flag_aux(row+ 9, col, "Acid Brand:", TR_BRAND_ACID, &f, DP_WP);
-        display_flag_aux(row+10, col, "Elec Brand:", TR_BRAND_ELEC, &f, DP_WP);
-        display_flag_aux(row+11, col, "Fire Brand:", TR_BRAND_FIRE, &f, DP_WP);
-        display_flag_aux(row+12, col, "Cold Brand:", TR_BRAND_COLD, &f, DP_WP);
-        display_flag_aux(row+13, col, "Poison Brd:", TR_BRAND_POIS, &f, DP_WP);
-        display_flag_aux(row+14, col, "Sharpness :", TR_VORPAL, &f, DP_WP);
-        display_flag_aux(row+15, col, "Quake     :", TR_IMPACT, &f, DP_WP);
-        display_flag_aux(row+16, col, "Vampicic  :", TR_VAMPIRIC, &f, DP_WP);
-        display_flag_aux(row+17, col, "Chatic    :", TR_CHAOTIC, &f, DP_WP);
-        display_flag_aux(row+18, col, "Force Wep.:", TR_FORCE_WEAPON, &f, DP_WP);
+	display_flag_aux(row+ 0, col, "Slay Evil :", TR_SLAY_EVIL, &f, DP_WP);
+	display_flag_aux(row+ 0, col, "Slay Evil :", TR_KILL_EVIL, &f, (DP_WP|DP_IMM));
+	display_flag_aux(row+ 1, col, "Slay Und. :", TR_SLAY_UNDEAD, &f, DP_WP);
+	display_flag_aux(row+ 1, col, "Slay Und. :", TR_KILL_UNDEAD, &f, (DP_WP|DP_IMM));
+	display_flag_aux(row+ 2, col, "Slay Demon:", TR_SLAY_DEMON, &f, DP_WP);
+	display_flag_aux(row+ 2, col, "Slay Demon:", TR_KILL_DEMON, &f, (DP_WP|DP_IMM));
+	display_flag_aux(row+ 3, col, "Slay Drag.:", TR_SLAY_DRAGON, &f, DP_WP);
+	display_flag_aux(row+ 3, col, "Slay Drag.:", TR_KILL_DRAGON, &f, (DP_WP|DP_IMM));
+	display_flag_aux(row+ 4, col, "Slay Human:", TR_SLAY_HUMAN, &f, DP_WP);
+	display_flag_aux(row+ 4, col, "Slay Human:", TR_KILL_HUMAN, &f, (DP_WP|DP_IMM));
+	display_flag_aux(row+ 5, col, "Slay Anim.:", TR_SLAY_ANIMAL, &f, DP_WP);
+	display_flag_aux(row+ 5, col, "Slay Anim.:", TR_KILL_ANIMAL, &f, (DP_WP|DP_IMM));
+	display_flag_aux(row+ 6, col, "Slay Orc  :", TR_SLAY_ORC, &f, DP_WP);
+	display_flag_aux(row+ 6, col, "Slay Orc  :", TR_KILL_ORC, &f, (DP_WP|DP_IMM));
+	display_flag_aux(row+ 7, col, "Slay Troll:", TR_SLAY_TROLL, &f, DP_WP);
+	display_flag_aux(row+ 7, col, "Slay Troll:", TR_KILL_TROLL, &f, (DP_WP|DP_IMM));
+	display_flag_aux(row+ 8, col, "Slay Giant:", TR_SLAY_GIANT, &f, DP_WP);
+	display_flag_aux(row+ 8, col, "Slay Giant:", TR_KILL_GIANT, &f, (DP_WP|DP_IMM));
+	display_flag_aux(row+ 9, col, "Acid Brand:", TR_BRAND_ACID, &f, DP_WP);
+	display_flag_aux(row+10, col, "Elec Brand:", TR_BRAND_ELEC, &f, DP_WP);
+	display_flag_aux(row+11, col, "Fire Brand:", TR_BRAND_FIRE, &f, DP_WP);
+	display_flag_aux(row+12, col, "Cold Brand:", TR_BRAND_COLD, &f, DP_WP);
+	display_flag_aux(row+13, col, "Poison Brd:", TR_BRAND_POIS, &f, DP_WP);
+	display_flag_aux(row+14, col, "Sharpness :", TR_VORPAL, &f, DP_WP);
+	display_flag_aux(row+15, col, "Quake     :", TR_IMPACT, &f, DP_WP);
+	display_flag_aux(row+16, col, "Vampicic  :", TR_VAMPIRIC, &f, DP_WP);
+	display_flag_aux(row+17, col, "Chatic    :", TR_CHAOTIC, &f, DP_WP);
+	display_flag_aux(row+18, col, "Force Wep.:", TR_FORCE_WEAPON, &f, DP_WP);
 #endif
 
 
@@ -3221,45 +3221,45 @@ static void display_player_other_flag_info(void)
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row-1, col+12);
 
 #ifdef JP
-        display_flag_aux(row+ 0, col, "テレパシー:", TR_TELEPATHY, &f, 0);
-        display_flag_aux(row+ 1, col, "邪悪ESP   :", TR_ESP_EVIL, &f, 0);
-        display_flag_aux(row+ 2, col, "無生物ESP :", TR_ESP_NONLIVING, &f, 0);
-        display_flag_aux(row+ 3, col, "善良ESP   :", TR_ESP_GOOD, &f, 0);
-        display_flag_aux(row+ 4, col, "不死ESP   :", TR_ESP_UNDEAD, &f, 0);
-        display_flag_aux(row+ 5, col, "悪魔ESP   :", TR_ESP_DEMON, &f, 0);
-        display_flag_aux(row+ 6, col, "龍ESP     :", TR_ESP_DRAGON, &f, 0);
-        display_flag_aux(row+ 7, col, "人間ESP   :", TR_ESP_HUMAN, &f, 0);
-        display_flag_aux(row+ 8, col, "動物ESP   :", TR_ESP_ANIMAL, &f, 0);
-        display_flag_aux(row+ 9, col, "オークESP :", TR_ESP_ORC, &f, 0);
-        display_flag_aux(row+10, col, "トロルESP :", TR_ESP_TROLL, &f, 0);
-        display_flag_aux(row+11, col, "巨人ESP   :", TR_ESP_GIANT, &f, 0);
+	display_flag_aux(row+ 0, col, "テレパシー:", TR_TELEPATHY, &f, 0);
+	display_flag_aux(row+ 1, col, "邪悪ESP   :", TR_ESP_EVIL, &f, 0);
+	display_flag_aux(row+ 2, col, "無生物ESP :", TR_ESP_NONLIVING, &f, 0);
+	display_flag_aux(row+ 3, col, "善良ESP   :", TR_ESP_GOOD, &f, 0);
+	display_flag_aux(row+ 4, col, "不死ESP   :", TR_ESP_UNDEAD, &f, 0);
+	display_flag_aux(row+ 5, col, "悪魔ESP   :", TR_ESP_DEMON, &f, 0);
+	display_flag_aux(row+ 6, col, "龍ESP     :", TR_ESP_DRAGON, &f, 0);
+	display_flag_aux(row+ 7, col, "人間ESP   :", TR_ESP_HUMAN, &f, 0);
+	display_flag_aux(row+ 8, col, "動物ESP   :", TR_ESP_ANIMAL, &f, 0);
+	display_flag_aux(row+ 9, col, "オークESP :", TR_ESP_ORC, &f, 0);
+	display_flag_aux(row+10, col, "トロルESP :", TR_ESP_TROLL, &f, 0);
+	display_flag_aux(row+11, col, "巨人ESP   :", TR_ESP_GIANT, &f, 0);
 
-        display_flag_aux(row+13, col, "腕力維持  :", TR_SUST_STR, &f, 0);
-        display_flag_aux(row+14, col, "知力維持  :", TR_SUST_INT, &f, 0);
-        display_flag_aux(row+15, col, "賢さ維持  :", TR_SUST_WIS, &f, 0);
-        display_flag_aux(row+16, col, "器用維持  :", TR_SUST_DEX, &f, 0);
-        display_flag_aux(row+17, col, "耐久維持  :", TR_SUST_CON, &f, 0);
-        display_flag_aux(row+18, col, "魅力維持  :", TR_SUST_CHR, &f, 0);
+	display_flag_aux(row+13, col, "腕力維持  :", TR_SUST_STR, &f, 0);
+	display_flag_aux(row+14, col, "知力維持  :", TR_SUST_INT, &f, 0);
+	display_flag_aux(row+15, col, "賢さ維持  :", TR_SUST_WIS, &f, 0);
+	display_flag_aux(row+16, col, "器用維持  :", TR_SUST_DEX, &f, 0);
+	display_flag_aux(row+17, col, "耐久維持  :", TR_SUST_CON, &f, 0);
+	display_flag_aux(row+18, col, "魅力維持  :", TR_SUST_CHR, &f, 0);
 #else
-        display_flag_aux(row+ 0, col, "Telepathy :", TR_TELEPATHY, &f, 0);
-        display_flag_aux(row+ 1, col, "ESP Evil  :", TR_ESP_EVIL, &f, 0);
-        display_flag_aux(row+ 2, col, "ESP Noliv.:", TR_ESP_NONLIVING, &f, 0);
-        display_flag_aux(row+ 3, col, "ESP Good  :", TR_ESP_GOOD, &f, 0);
-        display_flag_aux(row+ 4, col, "ESP Undead:", TR_ESP_UNDEAD, &f, 0);
-        display_flag_aux(row+ 5, col, "ESP Demon :", TR_ESP_DEMON, &f, 0);
-        display_flag_aux(row+ 6, col, "ESP Dragon:", TR_ESP_DRAGON, &f, 0);
-        display_flag_aux(row+ 7, col, "ESP Human :", TR_ESP_HUMAN, &f, 0);
-        display_flag_aux(row+ 8, col, "ESP Animal:", TR_ESP_ANIMAL, &f, 0);
-        display_flag_aux(row+ 9, col, "ESP Orc   :", TR_ESP_ORC, &f, 0);
-        display_flag_aux(row+10, col, "ESP Troll :", TR_ESP_TROLL, &f, 0);
-        display_flag_aux(row+11, col, "ESP Giant :", TR_ESP_GIANT, &f, 0);
+	display_flag_aux(row+ 0, col, "Telepathy :", TR_TELEPATHY, &f, 0);
+	display_flag_aux(row+ 1, col, "ESP Evil  :", TR_ESP_EVIL, &f, 0);
+	display_flag_aux(row+ 2, col, "ESP Noliv.:", TR_ESP_NONLIVING, &f, 0);
+	display_flag_aux(row+ 3, col, "ESP Good  :", TR_ESP_GOOD, &f, 0);
+	display_flag_aux(row+ 4, col, "ESP Undead:", TR_ESP_UNDEAD, &f, 0);
+	display_flag_aux(row+ 5, col, "ESP Demon :", TR_ESP_DEMON, &f, 0);
+	display_flag_aux(row+ 6, col, "ESP Dragon:", TR_ESP_DRAGON, &f, 0);
+	display_flag_aux(row+ 7, col, "ESP Human :", TR_ESP_HUMAN, &f, 0);
+	display_flag_aux(row+ 8, col, "ESP Animal:", TR_ESP_ANIMAL, &f, 0);
+	display_flag_aux(row+ 9, col, "ESP Orc   :", TR_ESP_ORC, &f, 0);
+	display_flag_aux(row+10, col, "ESP Troll :", TR_ESP_TROLL, &f, 0);
+	display_flag_aux(row+11, col, "ESP Giant :", TR_ESP_GIANT, &f, 0);
 
-        display_flag_aux(row+13, col, "Sust Str  :", TR_SUST_STR, &f, 0);
-        display_flag_aux(row+14, col, "Sust Int  :", TR_SUST_INT, &f, 0);
-        display_flag_aux(row+15, col, "Sust Wis  :", TR_SUST_WIS, &f, 0);
-        display_flag_aux(row+16, col, "Sust Dex  :", TR_SUST_DEX, &f, 0);
-        display_flag_aux(row+17, col, "Sust Con  :", TR_SUST_CON, &f, 0);
-        display_flag_aux(row+18, col, "Sust Chr  :", TR_SUST_CHR, &f, 0);
+	display_flag_aux(row+13, col, "Sust Str  :", TR_SUST_STR, &f, 0);
+	display_flag_aux(row+14, col, "Sust Int  :", TR_SUST_INT, &f, 0);
+	display_flag_aux(row+15, col, "Sust Wis  :", TR_SUST_WIS, &f, 0);
+	display_flag_aux(row+16, col, "Sust Dex  :", TR_SUST_DEX, &f, 0);
+	display_flag_aux(row+17, col, "Sust Con  :", TR_SUST_CON, &f, 0);
+	display_flag_aux(row+18, col, "Sust Chr  :", TR_SUST_CHR, &f, 0);
 #endif
 
 
@@ -3273,43 +3273,43 @@ static void display_player_other_flag_info(void)
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row-1, col+14);
 
 #ifdef JP
-        display_flag_aux(row+ 0, col, "追加攻撃    :", TR_BLOWS, &f, 0);
-        display_flag_aux(row+ 1, col, "採掘        :", TR_TUNNEL, &f, 0);
-        display_flag_aux(row+ 2, col, "赤外線視力  :", TR_INFRA, &f, 0);
-        display_flag_aux(row+ 3, col, "魔法道具支配:", TR_MAGIC_MASTERY, &f, 0);
-        display_flag_aux(row+ 4, col, "隠密        :", TR_STEALTH, &f, 0);
-        display_flag_aux(row+ 5, col, "探索        :", TR_SEARCH, &f, 0);
+	display_flag_aux(row+ 0, col, "追加攻撃    :", TR_BLOWS, &f, 0);
+	display_flag_aux(row+ 1, col, "採掘        :", TR_TUNNEL, &f, 0);
+	display_flag_aux(row+ 2, col, "赤外線視力  :", TR_INFRA, &f, 0);
+	display_flag_aux(row+ 3, col, "魔法道具支配:", TR_MAGIC_MASTERY, &f, 0);
+	display_flag_aux(row+ 4, col, "隠密        :", TR_STEALTH, &f, 0);
+	display_flag_aux(row+ 5, col, "探索        :", TR_SEARCH, &f, 0);
 
-        display_flag_aux(row+ 7, col, "乗馬        :", TR_RIDING, &f, 0);
-        display_flag_aux(row+ 8, col, "投擲        :", TR_THROW, &f, 0);
-        display_flag_aux(row+ 9, col, "祝福        :", TR_BLESSED, &f, 0);
-        display_flag_aux(row+10, col, "反テレポート:", TR_NO_TELE, &f, 0);
-        display_flag_aux(row+11, col, "反魔法      :", TR_NO_MAGIC, &f, 0);
-        display_flag_aux(row+12, col, "消費魔力減少:", TR_DEC_MANA, &f, 0);
+	display_flag_aux(row+ 7, col, "乗馬        :", TR_RIDING, &f, 0);
+	display_flag_aux(row+ 8, col, "投擲        :", TR_THROW, &f, 0);
+	display_flag_aux(row+ 9, col, "祝福        :", TR_BLESSED, &f, 0);
+	display_flag_aux(row+10, col, "反テレポート:", TR_NO_TELE, &f, 0);
+	display_flag_aux(row+11, col, "反魔法      :", TR_NO_MAGIC, &f, 0);
+	display_flag_aux(row+12, col, "消費魔力減少:", TR_DEC_MANA, &f, 0);
 
-        display_flag_aux(row+14, col, "経験値減少  :", TR_DRAIN_EXP, &f, 0);
-        display_flag_aux(row+15, col, "乱テレポート:", TR_TELEPORT, &f, 0);
-        display_flag_aux(row+16, col, "反感        :", TR_AGGRAVATE, &f, 0);
-        display_flag_aux(row+17, col, "太古の怨念  :", TR_TY_CURSE, &f, 0);
+	display_flag_aux(row+14, col, "経験値減少  :", TR_DRAIN_EXP, &f, 0);
+	display_flag_aux(row+15, col, "乱テレポート:", TR_TELEPORT, &f, 0);
+	display_flag_aux(row+16, col, "反感        :", TR_AGGRAVATE, &f, 0);
+	display_flag_aux(row+17, col, "太古の怨念  :", TR_TY_CURSE, &f, 0);
 #else
-        display_flag_aux(row+ 0, col, "Add Blows   :", TR_BLOWS, &f, 0);
-        display_flag_aux(row+ 1, col, "Add Tunnel  :", TR_TUNNEL, &f, 0);
-        display_flag_aux(row+ 2, col, "Add Infra   :", TR_INFRA, &f, 0);
-        display_flag_aux(row+ 3, col, "Add Device  :", TR_MAGIC_MASTERY, &f, 0);
-        display_flag_aux(row+ 4, col, "Add Stealth :", TR_STEALTH, &f, 0);
-        display_flag_aux(row+ 5, col, "Add Search  :", TR_SEARCH, &f, 0);
+	display_flag_aux(row+ 0, col, "Add Blows   :", TR_BLOWS, &f, 0);
+	display_flag_aux(row+ 1, col, "Add Tunnel  :", TR_TUNNEL, &f, 0);
+	display_flag_aux(row+ 2, col, "Add Infra   :", TR_INFRA, &f, 0);
+	display_flag_aux(row+ 3, col, "Add Device  :", TR_MAGIC_MASTERY, &f, 0);
+	display_flag_aux(row+ 4, col, "Add Stealth :", TR_STEALTH, &f, 0);
+	display_flag_aux(row+ 5, col, "Add Search  :", TR_SEARCH, &f, 0);
 
-        display_flag_aux(row+ 7, col, "Riding      :", TR_RIDING, &f, 0);
-        display_flag_aux(row+ 8, col, "Throw       :", TR_THROW, &f, 0);
-        display_flag_aux(row+ 9, col, "Blessed     :", TR_BLESSED, &f, 0);
-        display_flag_aux(row+10, col, "No Teleport :", TR_NO_TELE, &f, 0);
-        display_flag_aux(row+11, col, "Anti Magic  :", TR_NO_MAGIC, &f, 0);
-        display_flag_aux(row+12, col, "Econom. Mana:", TR_DEC_MANA, &f, 0);
+	display_flag_aux(row+ 7, col, "Riding      :", TR_RIDING, &f, 0);
+	display_flag_aux(row+ 8, col, "Throw       :", TR_THROW, &f, 0);
+	display_flag_aux(row+ 9, col, "Blessed     :", TR_BLESSED, &f, 0);
+	display_flag_aux(row+10, col, "No Teleport :", TR_NO_TELE, &f, 0);
+	display_flag_aux(row+11, col, "Anti Magic  :", TR_NO_MAGIC, &f, 0);
+	display_flag_aux(row+12, col, "Econom. Mana:", TR_DEC_MANA, &f, 0);
 
-        display_flag_aux(row+14, col, "Drain Exp   :", TR_DRAIN_EXP, &f, 0);
-        display_flag_aux(row+15, col, "Rnd.Teleport:", TR_TELEPORT, &f, 0);
-        display_flag_aux(row+16, col, "Aggravate   :", TR_AGGRAVATE, &f, 0);
-        display_flag_aux(row+17, col, "TY Curse    :", TR_TY_CURSE, &f, 0);
+	display_flag_aux(row+14, col, "Drain Exp   :", TR_DRAIN_EXP, &f, 0);
+	display_flag_aux(row+15, col, "Rnd.Teleport:", TR_TELEPORT, &f, 0);
+	display_flag_aux(row+16, col, "Aggravate   :", TR_AGGRAVATE, &f, 0);
+	display_flag_aux(row+17, col, "TY Curse    :", TR_TY_CURSE, &f, 0);
 #endif
 
 }
@@ -3833,35 +3833,35 @@ void display_player(int mode)
 			else if (p_ptr->is_dead)
 			{
 				if (!dun_level)
-                                {
+				{
 #ifdef JP
 					sprintf(statmsg, "…あなたは%sで%sに殺された。", map_name(), p_ptr->died_from);
 #else
 					sprintf(statmsg, "...You were killed by %s in %s.", p_ptr->died_from, map_name());
 #endif
-                                }
-                                else if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST))
-                                {
-                                        /* Get the quest text */
-                                        /* Bewere that INIT_ASSIGN resets the cur_num. */
-                                        init_flags = INIT_ASSIGN;
+				}
+				else if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST))
+				{
+					/* Get the quest text */
+					/* Bewere that INIT_ASSIGN resets the cur_num. */
+					init_flags = INIT_ASSIGN;
 
-                                        process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+					process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
 
 #ifdef JP
-                                        sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[p_ptr->inside_quest].name, p_ptr->died_from);
+					sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[p_ptr->inside_quest].name, p_ptr->died_from);
 #else
-                                        sprintf(statmsg, "...You were killed by %s in the quest '%s'.", p_ptr->died_from, quest[p_ptr->inside_quest].name);
+					sprintf(statmsg, "...You were killed by %s in the quest '%s'.", p_ptr->died_from, quest[p_ptr->inside_quest].name);
 #endif
-                                }
-                                else
-                                {					
+				}
+				else
+				{					
 #ifdef JP
-                                        sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), dun_level, p_ptr->died_from);
+					sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), dun_level, p_ptr->died_from);
 #else
-                                        sprintf(statmsg, "...You were killed by %s on level %d of %s.", p_ptr->died_from, dun_level, map_name());
+					sprintf(statmsg, "...You were killed by %s on level %d of %s.", p_ptr->died_from, dun_level, map_name());
 #endif
-                                }
+				}
 			}
 			else if (character_dungeon)
 			{
@@ -3870,38 +3870,38 @@ void display_player(int mode)
 #ifdef JP
 					sprintf(statmsg, "…あなたは現在、 %s にいる。", map_name());
 #else
-				        sprintf(statmsg, "...Now, you are in %s.", map_name());
+					sprintf(statmsg, "...Now, you are in %s.", map_name());
 #endif
-                                }
-                                else if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST))
-                                {
-                                        /* Clear the text */
-                                        /* Must be done before doing INIT_SHOW_TEXT */
-                                        for (i = 0; i < 10; i++)
-                                        {
-                                                quest_text[i][0] = '\0';
-                                        }
-                                        quest_text_line = 0;
+				}
+				else if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST))
+				{
+					/* Clear the text */
+					/* Must be done before doing INIT_SHOW_TEXT */
+					for (i = 0; i < 10; i++)
+					{
+						quest_text[i][0] = '\0';
+					}
+					quest_text_line = 0;
 
-                                        /* Get the quest text */
-                                        init_flags = INIT_SHOW_TEXT;
+					/* Get the quest text */
+					init_flags = INIT_SHOW_TEXT;
 
-                                        process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+					process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
 
 #ifdef JP
-                                        sprintf(statmsg, "…あなたは現在、 クエスト「%s」を遂行中だ。", quest[p_ptr->inside_quest].name);
+					sprintf(statmsg, "…あなたは現在、 クエスト「%s」を遂行中だ。", quest[p_ptr->inside_quest].name);
 #else
-                                        sprintf(statmsg, "...Now, you are in the quest '%s'.", quest[p_ptr->inside_quest].name);
+					sprintf(statmsg, "...Now, you are in the quest '%s'.", quest[p_ptr->inside_quest].name);
 #endif
-                                }							
-                                else
-                                {
+				}							
+				else
+				{
 #ifdef JP
-                                        sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(), dun_level);
+					sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(), dun_level);
 #else
-                                        sprintf(statmsg, "...Now, you are exploring level %d of %s.", dun_level, map_name());
+					sprintf(statmsg, "...Now, you are exploring level %d of %s.", dun_level, map_name());
 #endif
-                                }
+				}
 			}
 
 			if (*statmsg)
@@ -3945,7 +3945,7 @@ void display_player(int mode)
 	/* Special */
 	else if (mode == 3)
 	{
-                display_player_other_flag_info();
+		display_player_other_flag_info();
 	}
 
 	else if (mode == 4)
@@ -3957,13 +3957,13 @@ void display_player(int mode)
 static bool ang_sort_comp_quest_num(vptr u, vptr v, int a, int b)
 {
 	int *q_num = (int *)u;
-        quest_type *qa = &quest[q_num[a]];
-        quest_type *qb = &quest[q_num[b]];
+	quest_type *qa = &quest[q_num[a]];
+	quest_type *qb = &quest[q_num[b]];
 
 	if (qa->complev < qb->complev) return TRUE;
 	if (qa->complev > qb->complev) return FALSE;
 	if (qa->level <= qb->level) return TRUE;
-        return FALSE;
+	return FALSE;
 }
 
 static void ang_sort_swap_quest_num(vptr u, vptr v, int a, int b)
@@ -3991,10 +3991,10 @@ errr make_character_dump(FILE *fff)
 
 #ifdef JP
 	fprintf(fff, "  [変愚蛮怒 %d.%d.%d キャラクタ情報]\n\n",
-	        FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+		FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 #else
 	fprintf(fff, "  [Hengband %d.%d.%d Character Dump]\n\n",
-	        FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+		FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 #endif
 
 	update_playtime();
@@ -4023,7 +4023,7 @@ errr make_character_dump(FILE *fff)
 
 		/* End the row */
 #ifdef JP
-                        fprintf(fff, "%s\n", buf);
+			fprintf(fff, "%s\n", buf);
 #else
 		fprintf(fff, "%s\n", buf);
 #endif
@@ -4191,22 +4191,22 @@ errr make_character_dump(FILE *fff)
 		{
 			if (num < MIN_RANDOM_QUEST)
 			{
-                                int old_quest;
-                        
+				int old_quest;
+			
 				/* Set the quest number temporary */
 				old_quest = p_ptr->inside_quest;
 				p_ptr->inside_quest = num;
 
 				/* Get the quest */
-                                init_flags = INIT_ASSIGN;
+				init_flags = INIT_ASSIGN;
 
 				process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
 
 				/* Reset the old quest number */
 				p_ptr->inside_quest = old_quest;
 
-                                /* No info from "silent" quests */
-                                if (quest[num].flags & QUEST_FLAG_SILENT) continue;
+				/* No info from "silent" quests */
+				if (quest[num].flags & QUEST_FLAG_SILENT) continue;
 			}
 
 			total++;
@@ -4215,29 +4215,29 @@ errr make_character_dump(FILE *fff)
 			{
 				/* Print the quest info */
 
-                                if (quest[num].complev == 0)
-                                {
-                                        fprintf(fff, 
+				if (quest[num].complev == 0)
+				{
+					fprintf(fff, 
 #ifdef JP
-                                                "  %s (%d階) - 不戦勝\n",
+						"  %s (%d階) - 不戦勝\n",
 #else
-                                                "  %s (Dungeon level: %d) - (Cancelled)\n",
+						"  %s (Dungeon level: %d) - (Cancelled)\n",
 #endif
-                                                r_name+r_info[quest[num].r_idx].name,
-                                                quest[num].level);
-                                }
-                                else
-                                {
-                                        fprintf(fff, 
+						r_name+r_info[quest[num].r_idx].name,
+						quest[num].level);
+				}
+				else
+				{
+					fprintf(fff, 
 #ifdef JP
-                                                "  %s (%d階) - レベル%d\n",
+						"  %s (%d階) - レベル%d\n",
 #else
-                                                "  %s (Dungeon level: %d) - level %d\n",
+						"  %s (Dungeon level: %d) - level %d\n",
 #endif
-                                                r_name+r_info[quest[num].r_idx].name,
-                                                quest[num].level,
-                                                quest[num].complev);
-                                }
+						r_name+r_info[quest[num].r_idx].name,
+						quest[num].level,
+						quest[num].complev);
+				}
 			}
 			else
 			{
@@ -4272,7 +4272,7 @@ errr make_character_dump(FILE *fff)
 		{
 			if (num < MIN_RANDOM_QUEST)
 			{
-                                int old_quest;
+				int old_quest;
 
 				/* Set the quest number temporary */
 				old_quest = p_ptr->inside_quest;
@@ -4286,8 +4286,8 @@ errr make_character_dump(FILE *fff)
 				/* Reset the old quest number */
 				p_ptr->inside_quest = old_quest;
 
-                                /* No info from "silent" quests */
-                                if (quest[num].flags & QUEST_FLAG_SILENT) continue;
+				/* No info from "silent" quests */
+				if (quest[num].flags & QUEST_FLAG_SILENT) continue;
 			}
 
 			total++;
@@ -4350,7 +4350,7 @@ errr make_character_dump(FILE *fff)
 #ifdef JP
 	fprintf(fff, "\n 帰還場所:\n");
 #else
-        fprintf(fff, "\n Recall Depth:\n");
+	fprintf(fff, "\n Recall Depth:\n");
 #endif
 	for (y = 1; y < max_d_idx; y++)
 	{
@@ -4388,21 +4388,21 @@ errr make_character_dump(FILE *fff)
 
 	if (ironman_autoscum)
 #ifdef JP
-	        fprintf(fff, "\n 自動選り好み  :     ALWAYS");
+		fprintf(fff, "\n 自動選り好み  :     ALWAYS");
 #else
 		fprintf(fff, "\n Autoscum:           ALWAYS");
 #endif
 
 	else if (auto_scum)
 #ifdef JP
-	        fprintf(fff, "\n 自動選り好み  :     ON");
+		fprintf(fff, "\n 自動選り好み  :     ON");
 #else
 		fprintf(fff, "\n Autoscum:           ON");
 #endif
 
 	else
 #ifdef JP
-	        fprintf(fff, "\n 自動選り好み  :     OFF");
+		fprintf(fff, "\n 自動選り好み  :     OFF");
 #else
 		fprintf(fff, "\n Autoscum:           OFF");
 #endif
@@ -4500,7 +4500,7 @@ errr make_character_dump(FILE *fff)
 
 	else
 #ifdef JP
-	        fprintf(fff, "\n アリーナ:           OFF");
+		fprintf(fff, "\n アリーナ:           OFF");
 #else
 		fprintf(fff, "\n Arena Levels:       OFF");
 #endif
@@ -4742,7 +4742,7 @@ fprintf(fff, "  [ キャラクタの持ち物 ]\n\n");
 #ifdef JP
 				fprintf(fff, "\n ( %d ページ )\n", x++);
 #else
-			        fprintf(fff, "\n ( page %d )\n", x++);
+				fprintf(fff, "\n ( page %d )\n", x++);
 #endif
 			object_desc(o_name, &st_ptr->stock[i], TRUE, 3);
 			fprintf(fff, "%c%s %s\n", I2A(i%12), paren, o_name);
@@ -4771,11 +4771,11 @@ fprintf(fff, "  [ キャラクタの持ち物 ]\n\n");
 		for (i = 0; i < st_ptr->stock_num; i++)
 		{
 #ifdef JP
-                if ((i % 12) == 0) fprintf(fff, "\n ( %d ページ )\n", x++);
+		if ((i % 12) == 0) fprintf(fff, "\n ( %d ページ )\n", x++);
 			object_desc(o_name, &st_ptr->stock[i], TRUE, 3);
 			fprintf(fff, "%c%s %s\n", I2A(i%12), paren, o_name);
 #else
-                if ((i % 12) == 0) fprintf(fff, "\n ( page %d )\n", x++);
+		if ((i % 12) == 0) fprintf(fff, "\n ( page %d )\n", x++);
 			object_desc(o_name, &st_ptr->stock[i], TRUE, 3);
 			fprintf(fff, "%c%s %s\n", I2A(i%12), paren, o_name);
 #endif
@@ -4787,9 +4787,9 @@ fprintf(fff, "  [ キャラクタの持ち物 ]\n\n");
 	}
 
 #ifdef JP
-        fprintf(fff, "  [チェックサム: \"%s\"]\n\n", get_check_sum());
+	fprintf(fff, "  [チェックサム: \"%s\"]\n\n", get_check_sum());
 #else
-        fprintf(fff, "  [Check Sum: \"%s\"]\n\n", get_check_sum());
+	fprintf(fff, "  [Check Sum: \"%s\"]\n\n", get_check_sum());
 #endif
 
 	return 0;
@@ -4829,7 +4829,7 @@ errr file_character(cptr name, bool full)
 
 		/* Build query */
 #ifdef JP
-                (void)sprintf(out_val, "現存するファイル %s に上書きしますか? ", buf);
+		(void)sprintf(out_val, "現存するファイル %s に上書きしますか? ", buf);
 #else
 		(void)sprintf(out_val, "Replace existing file %s? ", buf);
 #endif
@@ -4847,12 +4847,12 @@ errr file_character(cptr name, bool full)
 	{
 		/* Message */
 #ifdef JP
-                prt("キャラクタ情報のファイルへの書き出しに失敗しました！", 0, 0);
+		prt("キャラクタ情報のファイルへの書き出しに失敗しました！", 0, 0);
 #else
 		prt("Character dump failed!", 0, 0);
 #endif
 
-                (void)inkey();
+		(void)inkey();
 
 		/* Error */
 		return (-1);
@@ -5115,7 +5115,7 @@ msg_format("'%s'をオープンできません。", name);
 			else if (str[6] == '<')
 			{
 				str[strlen(str) - 1] = '\0';
-                                if (tag && streq(str + 7, tag)) line = next;
+				if (tag && streq(str + 7, tag)) line = next;
 			}
 
 			/* Skip this */
@@ -5290,8 +5290,8 @@ msg_format("'%s'をオープンできません。", name);
 				"[Hengband %d.%d.%d, %s, Line %d/%d]",
 #endif
 
-		           FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH,
-		           caption, line, size), 0, 0);
+			   FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH,
+			   caption, line, size), 0, 0);
 		}
 		else
 		{
@@ -5500,7 +5500,7 @@ strcpy(tmp, "jhelp.hlp");
 			/* Close it */
 			my_fclose(fff);
 
-                        /* Drop priv's */
+			/* Drop priv's */
 			safe_setuid_drop();
 
 			/* Build the filename */
@@ -6012,9 +6012,9 @@ long total_points(void)
 
 	if (mult < 5) mult = 5;
 
-        for (i = 0; i < max_d_idx; i++)
-                if(max_dlv[i] > max_dl)
-                        max_dl = max_dlv[i];
+	for (i = 0; i < max_d_idx; i++)
+		if(max_dlv[i] > max_dl)
+			max_dl = max_dlv[i];
 
 	point_l = (p_ptr->max_exp + (100 * max_dl));
 	point_h = point_l / 0x10000L;
@@ -6203,7 +6203,7 @@ static void print_tomb(void)
 		if (p_ptr->total_winner || (p_ptr->lev > PY_MAX_LEVEL))
 		{
 #ifdef JP
-                /* 英日切り替え */
+		/* 英日切り替え */
 		  p= "偉大なる者";
 #else
 			p = "Magnificent";
@@ -6261,57 +6261,57 @@ static void print_tomb(void)
 		put_str(buf, 13, 11);
 
 #ifdef JP
-        /* 墓に刻む言葉をオリジナルより細かく表示 */
-        if (streq(p_ptr->died_from, "途中終了"))
-        {
-                strcpy(tmp, "<自殺>");
-        }
-        else
-        {
-                if (streq(p_ptr->died_from, "ripe"))
-                {
-                        strcpy(tmp, "引退後に天寿を全う");
-                }
-                else if (streq(p_ptr->died_from, "Seppuku"))
-                {
-                        strcpy(tmp, "勝利の後、切腹");
-                }
-                else
-                {
-                        strcpy(tmp, p_ptr->died_from);
-                }
-        }
-        center_string(buf, tmp);
-        put_str(buf, 14, 11);
+	/* 墓に刻む言葉をオリジナルより細かく表示 */
+	if (streq(p_ptr->died_from, "途中終了"))
+	{
+		strcpy(tmp, "<自殺>");
+	}
+	else
+	{
+		if (streq(p_ptr->died_from, "ripe"))
+		{
+			strcpy(tmp, "引退後に天寿を全う");
+		}
+		else if (streq(p_ptr->died_from, "Seppuku"))
+		{
+			strcpy(tmp, "勝利の後、切腹");
+		}
+		else
+		{
+			strcpy(tmp, p_ptr->died_from);
+		}
+	}
+	center_string(buf, tmp);
+	put_str(buf, 14, 11);
 
-        if(!streq(p_ptr->died_from, "ripe") && !streq(p_ptr->died_from, "Seppuku"))
-        {
-                if( dun_level == 0 )
-                {
+	if(!streq(p_ptr->died_from, "ripe") && !streq(p_ptr->died_from, "Seppuku"))
+	{
+		if( dun_level == 0 )
+		{
 			cptr town = (p_ptr->town_num ? "街" : "荒野");
-                        if(streq(p_ptr->died_from, "途中終了"))
-                        {
-                                sprintf(tmp, "%sで死んだ", town);
-                        }
-                        else
-                        {
-                                sprintf(tmp, "に%sで殺された", town);
-                        }
-                }
-                else
-                {
-                        if(streq(p_ptr->died_from, "途中終了"))
-                        {
-                                sprintf(tmp, "地下 %d 階で死んだ", dun_level);
-                        }
-                        else
-                        {
-                                sprintf(tmp, "に地下 %d 階で殺された", dun_level);
-                        }
-                }
-                center_string(buf, tmp);
-                put_str(buf, 15, 11);
-        }
+			if(streq(p_ptr->died_from, "途中終了"))
+			{
+				sprintf(tmp, "%sで死んだ", town);
+			}
+			else
+			{
+				sprintf(tmp, "に%sで殺された", town);
+			}
+		}
+		else
+		{
+			if(streq(p_ptr->died_from, "途中終了"))
+			{
+				sprintf(tmp, "地下 %d 階で死んだ", dun_level);
+			}
+			else
+			{
+				sprintf(tmp, "に地下 %d 階で殺された", dun_level);
+			}
+		}
+		center_string(buf, tmp);
+		put_str(buf, 15, 11);
+	}
 #else
 		(void)sprintf(tmp, "Killed on Level %d", dun_level);
 		center_string(buf, tmp);
@@ -6907,7 +6907,7 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 				{
 					/* Error while converting the monster number */
 					msg_format("Error in line %d of %s!",
-					          line_num, file_name);
+						  line_num, file_name);
 					my_fclose(fp);
 					return (-1);
 				}
@@ -6946,7 +6946,7 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 
 			/* Reached end of file without finding the number */
 			msg_format("Error in line %d of %s!",
-			          line_num, file_name);
+				  line_num, file_name);
 
 			my_fclose(fp);
 			return (-1);
@@ -6971,7 +6971,7 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 					break;
 			}
 
-                        if (test==0)
+			if (test==0)
 			{
 				/* Found the line */
 				if (counter == line) break;
@@ -6980,7 +6980,7 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 			{
 				/* Error - End of file */
 				msg_format("Error in line %d of %s!",
-				          line_num, file_name);
+					  line_num, file_name);
 
 				my_fclose(fp);
 				return (-1);
@@ -7334,7 +7334,7 @@ static void handle_signal_abort(int sig)
 #ifdef JP
 "恐ろしいソフトのバグが飛びかかってきた！");
 #else
-	            "A gruesome software bug LEAPS out at you!");
+		    "A gruesome software bug LEAPS out at you!");
 #endif
 
 

@@ -88,15 +88,15 @@ cptr            p = "É¬»¦·õ";
 #else
 	(void)strnfmt(out_val, 78, "(%^ss %c-%c, *=List, ESC=exit) Use which %s? ",
 #endif
-        p, I2A(0), "abcdefghijklmnopqrstuvwxyz012345"[num-1], p);
+	p, I2A(0), "abcdefghijklmnopqrstuvwxyz012345"[num-1], p);
 
 	if (use_menu) screen_save();
 
 	/* Get a spell from the user */
 
-        choice= always_show_list ? ESCAPE:1 ;
-        while (!flag)
-        {
+	choice= always_show_list ? ESCAPE:1 ;
+	while (!flag)
+	{
 		if(choice==ESCAPE) choice = ' '; 
 		else if( !get_com(out_val, &choice, FALSE) )break;
 
@@ -235,8 +235,8 @@ put_str("name              Lv  SP      name              Lv  SP ", y, x + 5);
 
 					/* Dump the spell --(-- */
 					strcat(psi_desc, format(" %-18s%2d %3d",
-					        spell_names[technic2magic(REALM_HISSATSU)-1][i],
-					        spell.slevel, spell.smana));
+						spell_names[technic2magic(REALM_HISSATSU)-1][i],
+						spell.slevel, spell.smana));
 					prt(psi_desc, y + (line%17) + (line >= 17), x+(line/17)*30);
 					prt("", y + (line%17) + (line >= 17) + 1, x+(line/17)*30);
 				}
@@ -674,7 +674,7 @@ static bool cast_hissatsu_spell(int spell)
 		cave[y][x].info &= ~(CAVE_MARK);
 
 		/* Destroy the feature */
-                cave_set_feat(y, x, floor_type[randint0(100)]);
+		cave_set_feat(y, x, floor_type[randint0(100)]);
 
 		/* Update some things */
 		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
@@ -894,13 +894,13 @@ static bool cast_hissatsu_spell(int spell)
 		if (dir == 5) return FALSE;
 		for (i = 0; i < 3; i++)
 		{
-                        int oy, ox;
-                        int ny, nx;
-                        int m_idx;
-                        monster_type *m_ptr;
+			int oy, ox;
+			int ny, nx;
+			int m_idx;
+			monster_type *m_ptr;
 
-                        y = py + ddy[dir];
-                        x = px + ddx[dir];
+			y = py + ddy[dir];
+			x = px + ddx[dir];
 
 			if (cave[y][x].m_idx)
 				py_attack(y, x, HISSATSU_3DAN);
@@ -919,78 +919,78 @@ static bool cast_hissatsu_spell(int spell)
 				return TRUE;
 			}
 
-                        /* Monster is dead? */
+			/* Monster is dead? */
 			if (!cave[y][x].m_idx) break;
 
-                        ny = y + ddy[dir];
-                        nx = x + ddx[dir];
-                        m_idx = cave[y][x].m_idx;
-                        m_ptr = &m_list[m_idx];
+			ny = y + ddy[dir];
+			nx = x + ddx[dir];
+			m_idx = cave[y][x].m_idx;
+			m_ptr = &m_list[m_idx];
 
-                        /* Monster cannot move back? */
-                        if (!monster_can_enter(ny, nx, &r_info[m_ptr->r_idx])) continue;
+			/* Monster cannot move back? */
+			if (!monster_can_enter(ny, nx, &r_info[m_ptr->r_idx])) continue;
 
-                        cave[y][x].m_idx = 0;
-                        cave[ny][nx].m_idx = m_idx;
-                        m_ptr->fy = ny;
-                        m_ptr->fx = nx;
+			cave[y][x].m_idx = 0;
+			cave[ny][nx].m_idx = m_idx;
+			m_ptr->fy = ny;
+			m_ptr->fx = nx;
 
-                        update_mon(m_idx, TRUE);
+			update_mon(m_idx, TRUE);
 
-                        /* Player can move forward? */
-                        if (player_can_enter(cave[y][x].feat))
-                        {
-                                /* Save the old location */
-                                oy = py;
-                                ox = px;
+			/* Player can move forward? */
+			if (player_can_enter(cave[y][x].feat))
+			{
+				/* Save the old location */
+				oy = py;
+				ox = px;
 
-                                /* Move the player */
-                                py = y;
-                                px = x;
+				/* Move the player */
+				py = y;
+				px = x;
 
-                                if (p_ptr->riding)
-                                {
-                                        int tmp;
-                                        tmp = cave[py][px].m_idx;
-                                        cave[py][px].m_idx = cave[oy][ox].m_idx;
-                                        cave[oy][ox].m_idx = tmp;
-                                        m_list[p_ptr->riding].fy = py;
-                                        m_list[p_ptr->riding].fx = px;
-                                        update_mon(cave[py][px].m_idx, TRUE);
-                                }
+				if (p_ptr->riding)
+				{
+					int tmp;
+					tmp = cave[py][px].m_idx;
+					cave[py][px].m_idx = cave[oy][ox].m_idx;
+					cave[oy][ox].m_idx = tmp;
+					m_list[p_ptr->riding].fy = py;
+					m_list[p_ptr->riding].fx = px;
+					update_mon(cave[py][px].m_idx, TRUE);
+				}
 
-                                forget_flow();
+				forget_flow();
 
-                                /* Redraw the old spot */
-                                lite_spot(oy, ox);
+				/* Redraw the old spot */
+				lite_spot(oy, ox);
 
-                                /* Redraw the new spot */
-                                lite_spot(py, px);
-                        }
+				/* Redraw the new spot */
+				lite_spot(py, px);
+			}
 
-                        /* Redraw the old spot */
-                        lite_spot(y, x);
+			/* Redraw the old spot */
+			lite_spot(y, x);
 
-                        /* Redraw the new spot */
-                        lite_spot(ny, nx);
+			/* Redraw the new spot */
+			lite_spot(ny, nx);
 
-                        /* Check for new panel (redraw map) */
-                        verify_panel();
+			/* Check for new panel (redraw map) */
+			verify_panel();
 
-                        /* Update stuff */
-                        p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW);
+			/* Update stuff */
+			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW);
 
-                        /* Update the monsters */
-                        p_ptr->update |= (PU_DISTANCE);
+			/* Update the monsters */
+			p_ptr->update |= (PU_DISTANCE);
 
-                        /* Window stuff */
-                        p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+			/* Window stuff */
+			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
-                        /* Handle stuff */
-                        handle_stuff();
+			/* Handle stuff */
+			handle_stuff();
 
-                        /* -more- */
-                        if (i < 2) msg_print(NULL);
+			/* -more- */
+			if (i < 2) msg_print(NULL);
 		}
 		break;
 	}

@@ -613,7 +613,7 @@ static void generate_area(int y, int x, bool border, bool corner)
 		Rand_quick = TRUE;
 
 		/* Hack -- Induce consistant town layout */
-                Rand_value = wilderness[y][x].seed;
+		Rand_value = wilderness[y][x].seed;
 
 		dy = rand_range(6, cur_hgt - 6);
 		dx = rand_range(6, cur_wid - 6);
@@ -641,7 +641,7 @@ void wilderness_gen(void)
 	int i, y, x, lim;
 	cave_type *c_ptr;
 
-   	/* Big town */
+	/* Big town */
 	cur_hgt = MAX_HGT;
 	cur_wid = MAX_WID;
 
@@ -864,21 +864,21 @@ void wilderness_gen(void)
  */
 void wilderness_gen_small()
 {
-        int i, j;
+	int i, j;
 
-        /* To prevent stupid things */
-        for (i = 0; i < MAX_WID; i++)
-        for (j = 0; j < MAX_HGT; j++)
+	/* To prevent stupid things */
+	for (i = 0; i < MAX_WID; i++)
+	for (j = 0; j < MAX_HGT; j++)
 	{
-                cave[j][i].feat = FEAT_PERM_SOLID;
+		cave[j][i].feat = FEAT_PERM_SOLID;
 	}
 
 	/* Init the wilderness */
 	process_dungeon_file("w_info_j.txt", 0, 0, max_wild_y, max_wild_x);
 
-        /* Fill the map */
-        for (i = 0; i < max_wild_x; i++)
-        for (j = 0; j < max_wild_y; j++)
+	/* Fill the map */
+	for (i = 0; i < max_wild_x; i++)
+	for (j = 0; j < max_wild_y; j++)
 	{
 		if (wilderness[j][i].town && (wilderness[j][i].town != NO_TOWN))
 		{
@@ -891,9 +891,9 @@ void wilderness_gen_small()
 			cave[j][i].feat = FEAT_ENTRANCE;
 			cave[j][i].special = (byte)wilderness[j][i].entrance;
 		}
-                else cave[j][i].feat = conv_terrain2feat[wilderness[j][i].terrain];
+		else cave[j][i].feat = conv_terrain2feat[wilderness[j][i].terrain];
 
-                cave[j][i].info |= (CAVE_GLOW | CAVE_MARK);
+		cave[j][i].info |= (CAVE_GLOW | CAVE_MARK);
 	}
 
 	cur_hgt = (max_wild_y / SCREEN_HGT + 1) * SCREEN_HGT;
@@ -906,9 +906,9 @@ void wilderness_gen_small()
 	panel_row_min = cur_hgt;
 	panel_col_min = cur_wid;
 
-        /* Place the player */
-        px = p_ptr->wilderness_x;
-        py = p_ptr->wilderness_y;
+	/* Place the player */
+	px = p_ptr->wilderness_x;
+	py = p_ptr->wilderness_y;
 
 	p_ptr->town_num = 0;
 }

@@ -3529,16 +3529,16 @@ bool detect_traps(int range, bool known)
 				/* Hack -- Memorize */
 				c_ptr->info |= (CAVE_MARK);
 
-                                if (c_ptr->mimic)
-                                {
-                                        /* Disclose a hidden trap */
-                                        disclose_grid(y, x);
-                                }
-                                else
-                                {
-                                        /* Redraw */
-                                        lite_spot(y, x);
-                                }
+				if (c_ptr->mimic)
+				{
+					/* Disclose a hidden trap */
+					disclose_grid(y, x);
+				}
+				else
+				{
+					/* Redraw */
+					lite_spot(y, x);
+				}
 
 				/* Obvious */
 				detect = TRUE;
@@ -3659,7 +3659,7 @@ bool detect_stairs(int range)
 			    (c_ptr->feat == FEAT_LESS_LESS) ||
 			    (c_ptr->feat == FEAT_MORE) ||
 			    (c_ptr->feat == FEAT_MORE_MORE) ||
-    			    (c_ptr->feat == FEAT_ENTRANCE))
+			    (c_ptr->feat == FEAT_ENTRANCE))
 			{
 				/* Hack -- Memorize */
 				c_ptr->info |= (CAVE_MARK);
@@ -5399,28 +5399,28 @@ bool destroy_area(int y1, int x1, int r, int full)
 				if (t < 20)
 				{
 					/* Create granite wall */
-                                        cave_set_feat(y, x, FEAT_WALL_EXTRA);
+					cave_set_feat(y, x, FEAT_WALL_EXTRA);
 				}
 
 				/* Quartz */
 				else if (t < 70)
 				{
 					/* Create quartz vein */
-                                        cave_set_feat(y, x, FEAT_QUARTZ);
+					cave_set_feat(y, x, FEAT_QUARTZ);
 				}
 
 				/* Magma */
 				else if (t < 100)
 				{
 					/* Create magma vein */
-                                        cave_set_feat(y, x, FEAT_MAGMA);
+					cave_set_feat(y, x, FEAT_MAGMA);
 				}
 
 				/* Floor */
 				else
 				{
 					/* Create floor */
-                                        cave_set_feat(y, x, floor_type[randint0(100)]);
+					cave_set_feat(y, x, floor_type[randint0(100)]);
 				}
 			}
 		}
@@ -5897,8 +5897,8 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 				/* Delete objects */
 				delete_object(yy, xx);
 
-                                /* Clear mirror, runes flag */
-                                c_ptr->info &= ~CAVE_OBJECT;
+				/* Clear mirror, runes flag */
+				c_ptr->info &= ~CAVE_OBJECT;
 
 				/* Wall (or floor) type */
 				t = (floor ? randint0(100) : 200);
@@ -5907,28 +5907,28 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 				if (t < 20)
 				{
 					/* Create granite wall */
-                                        cave_set_feat(yy, xx, FEAT_WALL_EXTRA);
+					cave_set_feat(yy, xx, FEAT_WALL_EXTRA);
 				}
 
 				/* Quartz */
 				else if (t < 70)
 				{
 					/* Create quartz vein */
-                                        cave_set_feat(yy, xx, FEAT_QUARTZ);
+					cave_set_feat(yy, xx, FEAT_QUARTZ);
 				}
 
 				/* Magma */
 				else if (t < 100)
 				{
 					/* Create magma vein */
-                                        cave_set_feat(yy, xx, FEAT_MAGMA);
+					cave_set_feat(yy, xx, FEAT_MAGMA);
 				}
 
 				/* Floor */
 				else
 				{
 					/* Create floor */
-                                        cave_set_feat(yy, xx, floor_type[randint0(100)]);
+					cave_set_feat(yy, xx, floor_type[randint0(100)]);
 				}
 			}
 		}
@@ -6086,8 +6086,8 @@ msg_format("%^sが目を覚ました。", m_name);
 #else
 					msg_format("%^s wakes up.", m_name);
 #endif
-                                        /* Redraw the health bar */
-                                        if (p_ptr->health_who == c_ptr->m_idx)
+					/* Redraw the health bar */
+					if (p_ptr->health_who == c_ptr->m_idx)
 						p_ptr->redraw |= (PR_HEALTH);
 
 				}
@@ -6140,7 +6140,7 @@ static void cave_temp_room_unlite(void)
 		if ((c_ptr->feat <= FEAT_INVIS) || (c_ptr->feat == FEAT_DIRT) || (c_ptr->feat == FEAT_GRASS))
 		{
 			/* Forget the grid */
-                        if (!view_torch_grids) c_ptr->info &= ~(CAVE_MARK);
+			if (!view_torch_grids) c_ptr->info &= ~(CAVE_MARK);
 
 			/* Notice */
 			note_spot(y, x);
@@ -6255,7 +6255,7 @@ static void cave_temp_room_aux(int y, int x, bool only_room)
 		 * This leaves only a check for 6 bounding walls!
 		 */
 		if (in_bounds(y, x) && cave_floor_bold(y, x) &&
-                    (next_to_walls_adj(y, x) == 6) && (next_to_open(y, x) <= 1)) return;
+		    (next_to_walls_adj(y, x) == 6) && (next_to_open(y, x) <= 1)) return;
 	}
 
 	/* Paranoia -- verify space */

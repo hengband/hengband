@@ -260,7 +260,7 @@ struct monster_race
 {
 	u32b name;				/* Name (offset) */
 #ifdef JP
-        u32b E_name;                    /* ±Ñ¸ìÌ¾ (offset) */
+	u32b E_name;                    /* ±Ñ¸ìÌ¾ (offset) */
 #endif
 	u32b text;				/* Text (offset) */
 
@@ -1066,7 +1066,7 @@ struct player_type
 	s16b tim_sh_holy;
 	s16b tim_eyeeye;
 
-        /* for mirror master */
+	/* for mirror master */
 	s16b tim_reflect;       /* Timed -- Reflect */
 	s16b multishadow;       /* Timed -- Multi-shadow */
 	s16b dustrobe;          /* Timed -- Robe of dust */

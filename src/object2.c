@@ -885,13 +885,13 @@ s32b flag_cost(object_type * o_ptr, int plusses)
 	}
 	else
 	{
-                if ((o_ptr->tval == TV_RING) || (o_ptr->tval == TV_AMULET))
-                {
-                        object_kind *k_ptr = &k_info[o_ptr->k_idx];
+		if ((o_ptr->tval == TV_RING) || (o_ptr->tval == TV_AMULET))
+		{
+			object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
-                        for (i = 0; i < TR_FLAG_SIZE; i++)
-                                flgs[i] &= ~(k_ptr->flags[i]);
-                }
+			for (i = 0; i < TR_FLAG_SIZE; i++)
+				flgs[i] &= ~(k_ptr->flags[i]);
+		}
 
 		if (o_ptr->name2)
 		{
@@ -1194,12 +1194,12 @@ s32b object_value_real(object_type *o_ptr)
 	}
 
 	else
-        {
-                int i;
-                bool flag = FALSE;
+	{
+		int i;
+		bool flag = FALSE;
 
-                for (i = 0; i < TR_FLAG_SIZE; i++) 
-                        if (o_ptr->art_flags[i]) flag = TRUE;
+		for (i = 0; i < TR_FLAG_SIZE; i++) 
+			if (o_ptr->art_flags[i]) flag = TRUE;
 
 		if (flag) value += flag_cost(o_ptr, o_ptr->pval);
 	}
@@ -2560,41 +2560,41 @@ static void dragon_resist(object_type * o_ptr)
 
 static void add_esp_strong(object_type *o_ptr)
 {
-        switch (randint1(3))
-        {
-        case 1: add_flag(o_ptr->art_flags, TR_ESP_EVIL); break;
-        case 2: add_flag(o_ptr->art_flags, TR_ESP_NONLIVING); break;
-        case 3: add_flag(o_ptr->art_flags, TR_TELEPATHY); break;
-        }
+	switch (randint1(3))
+	{
+	case 1: add_flag(o_ptr->art_flags, TR_ESP_EVIL); break;
+	case 2: add_flag(o_ptr->art_flags, TR_ESP_NONLIVING); break;
+	case 3: add_flag(o_ptr->art_flags, TR_TELEPATHY); break;
+	}
 }
 
 
 static void add_esp_weak(object_type *o_ptr)
 {
-        int idx[3];
-        int n = randint1(3);
+	int idx[3];
+	int n = randint1(3);
 
-        idx[0] = randint1(9);
+	idx[0] = randint1(9);
 
-        idx[1] = randint1(8);
-        if (idx[1] >= idx[0]) idx[1]++;
+	idx[1] = randint1(8);
+	if (idx[1] >= idx[0]) idx[1]++;
 
-        idx[2] = randint1(7);
-        if (idx[2] >= idx[0]) idx[2]++;
-        if (idx[2] >= idx[1]) idx[2]++;
+	idx[2] = randint1(7);
+	if (idx[2] >= idx[0]) idx[2]++;
+	if (idx[2] >= idx[1]) idx[2]++;
 
-        while (n--) switch (idx[n])
-        {
-        case 1: add_flag(o_ptr->art_flags, TR_ESP_ANIMAL); break;
-        case 2: add_flag(o_ptr->art_flags, TR_ESP_UNDEAD); break;
-        case 3: add_flag(o_ptr->art_flags, TR_ESP_DEMON); break;
-        case 4: add_flag(o_ptr->art_flags, TR_ESP_ORC); break;
-        case 5: add_flag(o_ptr->art_flags, TR_ESP_TROLL); break;
-        case 6: add_flag(o_ptr->art_flags, TR_ESP_GIANT); break;
-        case 7: add_flag(o_ptr->art_flags, TR_ESP_DRAGON);   break;
-        case 8: add_flag(o_ptr->art_flags, TR_ESP_HUMAN); break;
-        case 9: add_flag(o_ptr->art_flags, TR_ESP_GOOD); break;
-        }
+	while (n--) switch (idx[n])
+	{
+	case 1: add_flag(o_ptr->art_flags, TR_ESP_ANIMAL); break;
+	case 2: add_flag(o_ptr->art_flags, TR_ESP_UNDEAD); break;
+	case 3: add_flag(o_ptr->art_flags, TR_ESP_DEMON); break;
+	case 4: add_flag(o_ptr->art_flags, TR_ESP_ORC); break;
+	case 5: add_flag(o_ptr->art_flags, TR_ESP_TROLL); break;
+	case 6: add_flag(o_ptr->art_flags, TR_ESP_GIANT); break;
+	case 7: add_flag(o_ptr->art_flags, TR_ESP_DRAGON);   break;
+	case 8: add_flag(o_ptr->art_flags, TR_ESP_HUMAN); break;
+	case 9: add_flag(o_ptr->art_flags, TR_ESP_GOOD); break;
+	}
 }
 
 
@@ -2857,9 +2857,9 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					switch (o_ptr->name2)
 					{
 					case EGO_TELEPATHY:
-                                                add_esp_strong(o_ptr);
-                                                add_esp_weak(o_ptr);
-                                                break;
+						add_esp_strong(o_ptr);
+						add_esp_weak(o_ptr);
+						break;
 					case EGO_MAGI:
 					case EGO_MIGHT:
 					case EGO_REGENERATION:
@@ -2867,10 +2867,10 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 						break;
 					case EGO_SEEING:
 						if (one_in_(3))
-                                                {
-                                                        if (one_in_(2)) add_esp_strong(o_ptr);
-                                                        else add_esp_weak(o_ptr);
-                                                }
+						{
+							if (one_in_(2)) add_esp_strong(o_ptr);
+							else add_esp_weak(o_ptr);
+						}
 						break;
 					default:/* not existing crown (wisdom,lite, etc...) */
 						ok_flag = FALSE;
@@ -3098,11 +3098,11 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				}
 				break;
 
-                                case SV_RING_WARNING:
-                                {
-                                        if (one_in_(3)) one_low_esp(o_ptr);
-                                        break;
-                                }
+				case SV_RING_WARNING:
+				{
+					if (one_in_(3)) one_low_esp(o_ptr);
+					break;
+				}
 
 				/* Searching */
 				case SV_RING_SEARCHING:
@@ -4872,7 +4872,7 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 	{
 		/* Message */
 #ifdef JP
-                msg_format("%s¤Ï¾Ã¤¨¤¿¡£", o_name);
+		msg_format("%s¤Ï¾Ã¤¨¤¿¡£", o_name);
 #else
 		msg_format("The %s disappear%s.",
 			   o_name, (plural ? "" : "s"));
@@ -4937,7 +4937,7 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 			    (c_ptr->feat != FEAT_FLOWER) &&
 			    (c_ptr->feat != FEAT_DEEP_GRASS) &&
 			    (c_ptr->feat != FEAT_SHAL_LAVA) &&
-                            (c_ptr->feat != FEAT_TREES)) continue;
+			    (c_ptr->feat != FEAT_TREES)) continue;
 			if (c_ptr->info & (CAVE_OBJECT)) continue;
 
 			/* No objects */
@@ -4997,7 +4997,7 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 	{
 		/* Message */
 #ifdef JP
-                msg_format("%s¤Ï¾Ã¤¨¤¿¡£", o_name);
+		msg_format("%s¤Ï¾Ã¤¨¤¿¡£", o_name);
 #else
 		msg_format("The %s disappear%s.",
 			   o_name, (plural ? "" : "s"));
@@ -5092,7 +5092,7 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 	{
 		/* Message */
 #ifdef JP
-                msg_format("%s¤Ï¾Ã¤¨¤¿¡£", o_name);
+		msg_format("%s¤Ï¾Ã¤¨¤¿¡£", o_name);
 #else
 		msg_format("The %s disappear%s.",
 			   o_name, (plural ? "" : "s"));
@@ -5258,7 +5258,7 @@ byte choose_random_trap(void)
 		break;
 	}
 
-        return feat;
+	return feat;
 }
 
 /*
@@ -5271,8 +5271,8 @@ void disclose_grid(int y, int x)
 	/* Paranoia */
 	if (!c_ptr->mimic) return;
 
-        /* No longer hidden */
-        c_ptr->mimic = 0;
+	/* No longer hidden */
+	c_ptr->mimic = 0;
 
 	/* Notice */
 	note_spot(y, x);
@@ -5302,8 +5302,8 @@ void place_trap(int y, int x)
 	if (!cave_naked_bold(y, x)) return;
 
 	/* Place an invisible trap */
-        c_ptr->mimic = c_ptr->feat;
-        c_ptr->feat = choose_random_trap();
+	c_ptr->mimic = c_ptr->feat;
+	c_ptr->feat = choose_random_trap();
 }
 
 
@@ -5321,14 +5321,14 @@ void inven_item_charges(int item)
 	if (!object_known_p(o_ptr)) return;
 
 #ifdef JP
-        if (o_ptr->pval <= 0)
-        {
-                msg_print("¤â¤¦ËâÎÏ¤¬»Ä¤Ã¤Æ¤¤¤Ê¤¤¡£");
-        }
-        else
-        {
-                msg_format("¤¢¤È %d ²óÊ¬¤ÎËâÎÏ¤¬»Ä¤Ã¤Æ¤¤¤ë¡£", o_ptr->pval);
-        }
+	if (o_ptr->pval <= 0)
+	{
+		msg_print("¤â¤¦ËâÎÏ¤¬»Ä¤Ã¤Æ¤¤¤Ê¤¤¡£");
+	}
+	else
+	{
+		msg_format("¤¢¤È %d ²óÊ¬¤ÎËâÎÏ¤¬»Ä¤Ã¤Æ¤¤¤ë¡£", o_ptr->pval);
+	}
 #else
 	/* Multiple charges */
 	if (o_ptr->pval != 1)
@@ -5361,17 +5361,17 @@ void inven_item_describe(int item)
 
 	/* Print a message */
 #ifdef JP
-        /* "no more" ¤Î¾ì¹ç¤Ï¤³¤Á¤é¤ÇÉ½¼¨¤¹¤ë */
-        if (o_ptr->number <= 0)
-        {
-                /*FIRST*//*¤³¤³¤Ï¤â¤¦ÄÌ¤é¤Ê¤¤¤«¤â */
-                msg_format("¤â¤¦%s¤ò»ý¤Ã¤Æ¤¤¤Ê¤¤¡£", o_name);
-        }
-        else
-        {
-                /* ¥¢¥¤¥Æ¥àÌ¾¤ò±ÑÆüÀÚ¤êÂØ¤¨µ¡Ç½ÂÐ±þ */
-                msg_format("¤Þ¤À %s¤ò»ý¤Ã¤Æ¤¤¤ë¡£", o_name);
-        }
+	/* "no more" ¤Î¾ì¹ç¤Ï¤³¤Á¤é¤ÇÉ½¼¨¤¹¤ë */
+	if (o_ptr->number <= 0)
+	{
+		/*FIRST*//*¤³¤³¤Ï¤â¤¦ÄÌ¤é¤Ê¤¤¤«¤â */
+		msg_format("¤â¤¦%s¤ò»ý¤Ã¤Æ¤¤¤Ê¤¤¡£", o_name);
+	}
+	else
+	{
+		/* ¥¢¥¤¥Æ¥àÌ¾¤ò±ÑÆüÀÚ¤êÂØ¤¨µ¡Ç½ÂÐ±þ */
+		msg_format("¤Þ¤À %s¤ò»ý¤Ã¤Æ¤¤¤ë¡£", o_name);
+	}
 #else
 	msg_format("You have %s.", o_name);
 #endif
@@ -5496,14 +5496,14 @@ void floor_item_charges(int item)
 	if (!object_known_p(o_ptr)) return;
 
 #ifdef JP
-        if (o_ptr->pval <= 0)
-        {
-                msg_print("¤³¤Î¾²¾å¤Î¥¢¥¤¥Æ¥à¤Ï¡¢¤â¤¦ËâÎÏ¤¬»Ä¤Ã¤Æ¤¤¤Ê¤¤¡£");
-        }
-        else
-        {
-                msg_format("¤³¤Î¾²¾å¤Î¥¢¥¤¥Æ¥à¤Ï¡¢¤¢¤È %d ²óÊ¬¤ÎËâÎÏ¤¬»Ä¤Ã¤Æ¤¤¤ë¡£", o_ptr->pval);
-        }
+	if (o_ptr->pval <= 0)
+	{
+		msg_print("¤³¤Î¾²¾å¤Î¥¢¥¤¥Æ¥à¤Ï¡¢¤â¤¦ËâÎÏ¤¬»Ä¤Ã¤Æ¤¤¤Ê¤¤¡£");
+	}
+	else
+	{
+		msg_format("¤³¤Î¾²¾å¤Î¥¢¥¤¥Æ¥à¤Ï¡¢¤¢¤È %d ²óÊ¬¤ÎËâÎÏ¤¬»Ä¤Ã¤Æ¤¤¤ë¡£", o_ptr->pval);
+	}
 #else
 	/* Multiple charges */
 	if (o_ptr->pval != 1)
@@ -5536,15 +5536,15 @@ void floor_item_describe(int item)
 
 	/* Print a message */
 #ifdef JP
-        /* "no more" ¤Î¾ì¹ç¤Ï¤³¤Á¤é¤ÇÉ½¼¨¤òÊ¬¤±¤ë */
-        if (o_ptr->number <= 0)
-        {
-                msg_format("¾²¾å¤Ë¤Ï¡¢¤â¤¦%s¤Ï¤Ê¤¤¡£", o_name);
-        }
-        else
-        {
-                msg_format("¾²¾å¤Ë¤Ï¡¢¤Þ¤À %s¤¬¤¢¤ë¡£", o_name);
-        }
+	/* "no more" ¤Î¾ì¹ç¤Ï¤³¤Á¤é¤ÇÉ½¼¨¤òÊ¬¤±¤ë */
+	if (o_ptr->number <= 0)
+	{
+		msg_format("¾²¾å¤Ë¤Ï¡¢¤â¤¦%s¤Ï¤Ê¤¤¡£", o_name);
+	}
+	else
+	{
+		msg_format("¾²¾å¤Ë¤Ï¡¢¤Þ¤À %s¤¬¤¢¤ë¡£", o_name);
+	}
 #else
 	msg_format("You see %s.", o_name);
 #endif
@@ -5902,7 +5902,7 @@ s16b inven_takeoff(int item, int amt)
 
 	/* Message */
 #ifdef JP
-        msg_format("%s(%c)%s¡£", o_name, index_to_label(slot), act);
+	msg_format("%s(%c)%s¡£", o_name, index_to_label(slot), act);
 #else
 	msg_format("%s %s (%c).", act, o_name, index_to_label(slot));
 #endif
@@ -6334,12 +6334,12 @@ bool process_frakir(int xx, int yy)
 
 #define DAMCALC(f,val,max,im,vln,res,resx,resy,op,opx,opy,dmax) \
 	   if (f){ int dam = (val)>(max)? (max):(val); \
-           if (im) dam=0; \
-           if (vln) dam *= 2; \
-           if (res) {dam = (dam * resx) / resy;} \
-           if (op) {dam = (dam * opx) / opy;} \
-           if (dam>dmax) dmax = dam; \
-           }
+	   if (im) dam=0; \
+	   if (vln) dam *= 2; \
+	   if (res) {dam = (dam * resx) / resy;} \
+	   if (op) {dam = (dam * opx) / opy;} \
+	   if (dam>dmax) dmax = dam; \
+	   }
 
 				DAMCALC(f4 & (RF4_BR_FIRE), m_ptr->hp / 3, 1600, 
 					p_ptr->immune_fire, p_ptr->muta3 & MUT3_VULN_ELEM,
@@ -6491,7 +6491,7 @@ bool process_frakir(int xx, int yy)
 
 	c_ptr = &cave[yy][xx];
 	if (((!easy_disarm && (is_trap(c_ptr->feat) || c_ptr->feat == FEAT_INVIS))
-            || (c_ptr->mimic && is_trap(c_ptr->feat))) && !one_in_(13))
+	    || (c_ptr->mimic && is_trap(c_ptr->feat))) && !one_in_(13))
 	{
 		object_type *o_ptr = choose_warning_item();
 
@@ -6553,220 +6553,220 @@ typedef struct {
 #ifdef JP
 static essence_type essence_info[] = 
 {
-        {TR_STR, "ÏÓÎÏ", 4, TR_STR, 20},
-        {TR_INT, "ÃÎÇ½", 4, TR_INT, 20},
-        {TR_WIS, "¸­¤µ", 4, TR_WIS, 20},
-        {TR_DEX, "´ïÍÑ¤µ", 4, TR_DEX, 20},
-        {TR_CON, "ÂÑµ×ÎÏ", 4, TR_CON, 20},
-        {TR_CHR, "Ì¥ÎÏ", 4, TR_CHR, 20},
-        {TR_MAGIC_MASTERY, "ËâÎÏ»ÙÇÛ", 4, TR_MAGIC_MASTERY, 20},
-        {TR_STEALTH, "±£Ì©", 4, TR_STEALTH, 40},
-        {TR_SEARCH, "Ãµº÷", 4, TR_SEARCH, 15},
-        {TR_INFRA, "ÀÖ³°Àþ»ëÎÏ", 4, TR_INFRA, 15},
-        {TR_TUNNEL, "ºÎ·¡", 4, TR_TUNNEL, 15},
-        {TR_SPEED, "¥¹¥Ô¡¼¥É", 4, TR_SPEED, 12},
-        {TR_BLOWS, "ÄÉ²Ã¹¶·â", 1, TR_BLOWS, 20},
-        {TR_CHAOTIC, "¥«¥ª¥¹¹¶·â", 1, TR_CHAOTIC, 15},
-        {TR_VAMPIRIC, "µÛ·ì¹¶·â", 1, TR_VAMPIRIC, 60},
-        {TR_IMPACT, "ÃÏ¿ÌÈ¯Æ°", 7, TR_IMPACT, 15},
-        {TR_BRAND_POIS, "ÆÇ»¦", 1, TR_BRAND_POIS, 20},
-        {TR_BRAND_ACID, "ÍÏ²ò", 1, TR_BRAND_ACID, 20},
-        {TR_BRAND_ELEC, "ÅÅ·â", 1, TR_BRAND_ELEC, 20},
-        {TR_BRAND_FIRE, "¾Æ´þ", 1, TR_BRAND_FIRE, 20},
-        {TR_BRAND_COLD, "Åà·ë", 1, TR_BRAND_COLD, 20},
-        {TR_SUST_STR, "ÏÓÎÏ°Ý»ý", 3, TR_SUST_STR, 15},
-        {TR_SUST_INT, "ÃÎÇ½°Ý»ý", 3, TR_SUST_STR, 15},
-        {TR_SUST_WIS, "¸­¤µ°Ý»ý", 3, TR_SUST_STR, 15},
-        {TR_SUST_DEX, "´ïÍÑ¤µ°Ý»ý", 3, TR_SUST_STR, 15},
-        {TR_SUST_CON, "ÂÑµ×ÎÏ°Ý»ý", 3, TR_SUST_STR, 15},
-        {TR_SUST_CHR, "Ì¥ÎÏ°Ý»ý", 3, TR_SUST_STR, 15},
-        {TR_IM_ACID, "»ÀÌÈ±Ö", 2, TR_IM_ACID, 20},
-        {TR_IM_ELEC, "ÅÅ·âÌÈ±Ö", 2, TR_IM_ACID, 20},
-        {TR_IM_FIRE, "²Ð±êÌÈ±Ö", 2, TR_IM_ACID, 20},
-        {TR_IM_COLD, "Îäµ¤ÌÈ±Ö", 2, TR_IM_ACID, 20},
-        {TR_REFLECT, "È¿¼Í", 2, TR_REFLECT, 20},
-        {TR_FREE_ACT, "ËãáãÃÎ¤é¤º", 3, TR_FREE_ACT, 20},
-        {TR_HOLD_LIFE, "À¸Ì¿ÎÏ°Ý»ý", 3, TR_HOLD_LIFE, 20},
-        {TR_RES_ACID, "ÂÑ»À", 2, TR_RES_ACID, 15},
-        {TR_RES_ELEC, "ÂÑÅÅ·â", 2, TR_RES_ELEC, 15},
-        {TR_RES_FIRE, "ÂÑ²Ð±ê", 2, TR_RES_FIRE, 15},
-        {TR_RES_COLD, "ÂÑÎäµ¤", 2, TR_RES_COLD, 15},
-        {TR_RES_POIS, "ÂÑÆÇ", 2, TR_RES_POIS, 25},
-        {TR_RES_FEAR, "ÂÑ¶²ÉÝ", 2, TR_RES_FEAR, 20},
-        {TR_RES_LITE, "ÂÑÁ®¸÷", 2, TR_RES_LITE, 20},
-        {TR_RES_DARK, "ÂÑ°Å¹õ", 2, TR_RES_DARK, 20},
-        {TR_RES_BLIND, "ÂÑÌÕÌÜ", 2, TR_RES_BLIND, 20},
-        {TR_RES_CONF, "ÂÑº®Íð", 2, TR_RES_CONF, 20},
-        {TR_RES_SOUND, "ÂÑ¹ì²»", 2, TR_RES_SOUND, 20},
-        {TR_RES_SHARDS, "ÂÑÇËÊÒ", 2, TR_RES_SHARDS, 20},
-        {TR_RES_NETHER, "ÂÑÃÏ¹ö", 2, TR_RES_NETHER, 20},
-        {TR_RES_NEXUS, "ÂÑ°ø²Ìº®Íð", 2, TR_RES_NEXUS, 20},
-        {TR_RES_CHAOS, "ÂÑ¥«¥ª¥¹", 2, TR_RES_CHAOS, 20},
-        {TR_RES_DISEN, "ÂÑÎô²½", 2, TR_RES_DISEN, 20},
-        {TR_SH_FIRE, "", 0, -2, 0},
-        {TR_SH_ELEC, "", 0, -2, 0},
-        {TR_SH_COLD, "", 0, -2, 0},
-        {TR_NO_MAGIC, "È¿ËâË¡", 3, TR_NO_MAGIC, 15},
-        {TR_WARNING, "·Ù¹ð", 3, TR_WARNING, 20},
-        {TR_FEATHER, "ÉâÍ·", 3, TR_FEATHER, 20},
-        {TR_LITE, "±Êµ×¸÷¸»", 3, TR_LITE, 15},
-        {TR_SEE_INVIS, "²Ä»ëÆ©ÌÀ", 3, TR_SEE_INVIS, 20},
-        {TR_TELEPATHY, "¥Æ¥ì¥Ñ¥·¡¼", 6, TR_TELEPATHY, 15},
-        {TR_SLOW_DIGEST, "ÃÙ¾Ã²½", 3, TR_SLOW_DIGEST, 15},
-        {TR_REGEN, "µÞÂ®²óÉü", 3, TR_REGEN, 20},
-        {TR_TELEPORT, "¥Æ¥ì¥Ý¡¼¥È", 3, TR_TELEPORT, 25},
+	{TR_STR, "ÏÓÎÏ", 4, TR_STR, 20},
+	{TR_INT, "ÃÎÇ½", 4, TR_INT, 20},
+	{TR_WIS, "¸­¤µ", 4, TR_WIS, 20},
+	{TR_DEX, "´ïÍÑ¤µ", 4, TR_DEX, 20},
+	{TR_CON, "ÂÑµ×ÎÏ", 4, TR_CON, 20},
+	{TR_CHR, "Ì¥ÎÏ", 4, TR_CHR, 20},
+	{TR_MAGIC_MASTERY, "ËâÎÏ»ÙÇÛ", 4, TR_MAGIC_MASTERY, 20},
+	{TR_STEALTH, "±£Ì©", 4, TR_STEALTH, 40},
+	{TR_SEARCH, "Ãµº÷", 4, TR_SEARCH, 15},
+	{TR_INFRA, "ÀÖ³°Àþ»ëÎÏ", 4, TR_INFRA, 15},
+	{TR_TUNNEL, "ºÎ·¡", 4, TR_TUNNEL, 15},
+	{TR_SPEED, "¥¹¥Ô¡¼¥É", 4, TR_SPEED, 12},
+	{TR_BLOWS, "ÄÉ²Ã¹¶·â", 1, TR_BLOWS, 20},
+	{TR_CHAOTIC, "¥«¥ª¥¹¹¶·â", 1, TR_CHAOTIC, 15},
+	{TR_VAMPIRIC, "µÛ·ì¹¶·â", 1, TR_VAMPIRIC, 60},
+	{TR_IMPACT, "ÃÏ¿ÌÈ¯Æ°", 7, TR_IMPACT, 15},
+	{TR_BRAND_POIS, "ÆÇ»¦", 1, TR_BRAND_POIS, 20},
+	{TR_BRAND_ACID, "ÍÏ²ò", 1, TR_BRAND_ACID, 20},
+	{TR_BRAND_ELEC, "ÅÅ·â", 1, TR_BRAND_ELEC, 20},
+	{TR_BRAND_FIRE, "¾Æ´þ", 1, TR_BRAND_FIRE, 20},
+	{TR_BRAND_COLD, "Åà·ë", 1, TR_BRAND_COLD, 20},
+	{TR_SUST_STR, "ÏÓÎÏ°Ý»ý", 3, TR_SUST_STR, 15},
+	{TR_SUST_INT, "ÃÎÇ½°Ý»ý", 3, TR_SUST_STR, 15},
+	{TR_SUST_WIS, "¸­¤µ°Ý»ý", 3, TR_SUST_STR, 15},
+	{TR_SUST_DEX, "´ïÍÑ¤µ°Ý»ý", 3, TR_SUST_STR, 15},
+	{TR_SUST_CON, "ÂÑµ×ÎÏ°Ý»ý", 3, TR_SUST_STR, 15},
+	{TR_SUST_CHR, "Ì¥ÎÏ°Ý»ý", 3, TR_SUST_STR, 15},
+	{TR_IM_ACID, "»ÀÌÈ±Ö", 2, TR_IM_ACID, 20},
+	{TR_IM_ELEC, "ÅÅ·âÌÈ±Ö", 2, TR_IM_ACID, 20},
+	{TR_IM_FIRE, "²Ð±êÌÈ±Ö", 2, TR_IM_ACID, 20},
+	{TR_IM_COLD, "Îäµ¤ÌÈ±Ö", 2, TR_IM_ACID, 20},
+	{TR_REFLECT, "È¿¼Í", 2, TR_REFLECT, 20},
+	{TR_FREE_ACT, "ËãáãÃÎ¤é¤º", 3, TR_FREE_ACT, 20},
+	{TR_HOLD_LIFE, "À¸Ì¿ÎÏ°Ý»ý", 3, TR_HOLD_LIFE, 20},
+	{TR_RES_ACID, "ÂÑ»À", 2, TR_RES_ACID, 15},
+	{TR_RES_ELEC, "ÂÑÅÅ·â", 2, TR_RES_ELEC, 15},
+	{TR_RES_FIRE, "ÂÑ²Ð±ê", 2, TR_RES_FIRE, 15},
+	{TR_RES_COLD, "ÂÑÎäµ¤", 2, TR_RES_COLD, 15},
+	{TR_RES_POIS, "ÂÑÆÇ", 2, TR_RES_POIS, 25},
+	{TR_RES_FEAR, "ÂÑ¶²ÉÝ", 2, TR_RES_FEAR, 20},
+	{TR_RES_LITE, "ÂÑÁ®¸÷", 2, TR_RES_LITE, 20},
+	{TR_RES_DARK, "ÂÑ°Å¹õ", 2, TR_RES_DARK, 20},
+	{TR_RES_BLIND, "ÂÑÌÕÌÜ", 2, TR_RES_BLIND, 20},
+	{TR_RES_CONF, "ÂÑº®Íð", 2, TR_RES_CONF, 20},
+	{TR_RES_SOUND, "ÂÑ¹ì²»", 2, TR_RES_SOUND, 20},
+	{TR_RES_SHARDS, "ÂÑÇËÊÒ", 2, TR_RES_SHARDS, 20},
+	{TR_RES_NETHER, "ÂÑÃÏ¹ö", 2, TR_RES_NETHER, 20},
+	{TR_RES_NEXUS, "ÂÑ°ø²Ìº®Íð", 2, TR_RES_NEXUS, 20},
+	{TR_RES_CHAOS, "ÂÑ¥«¥ª¥¹", 2, TR_RES_CHAOS, 20},
+	{TR_RES_DISEN, "ÂÑÎô²½", 2, TR_RES_DISEN, 20},
+	{TR_SH_FIRE, "", 0, -2, 0},
+	{TR_SH_ELEC, "", 0, -2, 0},
+	{TR_SH_COLD, "", 0, -2, 0},
+	{TR_NO_MAGIC, "È¿ËâË¡", 3, TR_NO_MAGIC, 15},
+	{TR_WARNING, "·Ù¹ð", 3, TR_WARNING, 20},
+	{TR_FEATHER, "ÉâÍ·", 3, TR_FEATHER, 20},
+	{TR_LITE, "±Êµ×¸÷¸»", 3, TR_LITE, 15},
+	{TR_SEE_INVIS, "²Ä»ëÆ©ÌÀ", 3, TR_SEE_INVIS, 20},
+	{TR_TELEPATHY, "¥Æ¥ì¥Ñ¥·¡¼", 6, TR_TELEPATHY, 15},
+	{TR_SLOW_DIGEST, "ÃÙ¾Ã²½", 3, TR_SLOW_DIGEST, 15},
+	{TR_REGEN, "µÞÂ®²óÉü", 3, TR_REGEN, 20},
+	{TR_TELEPORT, "¥Æ¥ì¥Ý¡¼¥È", 3, TR_TELEPORT, 25},
 
-        {TR_SLAY_EVIL, "¼Ù°­ÇÜÂÇ", 5, TR_SLAY_EVIL, 100},
-        {TR_KILL_EVIL, "¼Ù°­ÇÜÇÜÂÇ", 0, TR_SLAY_EVIL, 60},
-        {TR_SLAY_ANIMAL, "Æ°ÊªÇÜÂÇ", 5, TR_SLAY_ANIMAL, 20},
-        {TR_KILL_ANIMAL, "Æ°ÊªÇÜÇÜÂÇ", 5, TR_SLAY_ANIMAL, 60},
-        {TR_SLAY_UNDEAD, "ÉÔ»àÇÜÂÇ", 5, TR_SLAY_UNDEAD, 20},
-        {TR_KILL_UNDEAD, "ÉÔ»àÇÜÇÜÂÇ", 5, TR_SLAY_UNDEAD, 60},
-        {TR_SLAY_DEMON, "°­ËâÇÜÂÇ", 5, TR_SLAY_DEMON, 20},
-        {TR_KILL_DEMON, "°­ËâÇÜÇÜÂÇ", 5, TR_SLAY_DEMON, 60},
-        {TR_SLAY_ORC, "¥ª¡¼¥¯ÇÜÂÇ", 5, TR_SLAY_ORC, 15},
-        {TR_KILL_ORC, "¥ª¡¼¥¯ÇÜÇÜÂÇ", 5, TR_SLAY_ORC, 60},
-        {TR_SLAY_TROLL, "¥È¥í¥ëÇÜÂÇ", 5, TR_SLAY_TROLL, 15},
-        {TR_KILL_TROLL, "¥È¥í¥ëÇÜÇÜÂÇ", 5, TR_SLAY_TROLL, 60},
-        {TR_SLAY_GIANT, "µð¿ÍÇÜÂÇ", 5, TR_SLAY_GIANT, 20},
-        {TR_KILL_GIANT, "µð¿ÍÇÜÇÜÂÇ", 5, TR_SLAY_GIANT, 60},       
-        {TR_SLAY_DRAGON, "ÎµÇÜÂÇ", 5, TR_SLAY_DRAGON, 20},
-        {TR_KILL_DRAGON, "ÎµÇÜÇÜÂÇ", 5, TR_SLAY_DRAGON, 60},
-        {TR_SLAY_HUMAN, "¿Í´ÖÇÜÂÇ", 5, TR_SLAY_HUMAN, 20},
-        {TR_KILL_HUMAN, "¿Í´ÖÇÜÇÜÂÇ", 5, TR_SLAY_HUMAN, 60},
+	{TR_SLAY_EVIL, "¼Ù°­ÇÜÂÇ", 5, TR_SLAY_EVIL, 100},
+	{TR_KILL_EVIL, "¼Ù°­ÇÜÇÜÂÇ", 0, TR_SLAY_EVIL, 60},
+	{TR_SLAY_ANIMAL, "Æ°ÊªÇÜÂÇ", 5, TR_SLAY_ANIMAL, 20},
+	{TR_KILL_ANIMAL, "Æ°ÊªÇÜÇÜÂÇ", 5, TR_SLAY_ANIMAL, 60},
+	{TR_SLAY_UNDEAD, "ÉÔ»àÇÜÂÇ", 5, TR_SLAY_UNDEAD, 20},
+	{TR_KILL_UNDEAD, "ÉÔ»àÇÜÇÜÂÇ", 5, TR_SLAY_UNDEAD, 60},
+	{TR_SLAY_DEMON, "°­ËâÇÜÂÇ", 5, TR_SLAY_DEMON, 20},
+	{TR_KILL_DEMON, "°­ËâÇÜÇÜÂÇ", 5, TR_SLAY_DEMON, 60},
+	{TR_SLAY_ORC, "¥ª¡¼¥¯ÇÜÂÇ", 5, TR_SLAY_ORC, 15},
+	{TR_KILL_ORC, "¥ª¡¼¥¯ÇÜÇÜÂÇ", 5, TR_SLAY_ORC, 60},
+	{TR_SLAY_TROLL, "¥È¥í¥ëÇÜÂÇ", 5, TR_SLAY_TROLL, 15},
+	{TR_KILL_TROLL, "¥È¥í¥ëÇÜÇÜÂÇ", 5, TR_SLAY_TROLL, 60},
+	{TR_SLAY_GIANT, "µð¿ÍÇÜÂÇ", 5, TR_SLAY_GIANT, 20},
+	{TR_KILL_GIANT, "µð¿ÍÇÜÇÜÂÇ", 5, TR_SLAY_GIANT, 60},       
+	{TR_SLAY_DRAGON, "ÎµÇÜÂÇ", 5, TR_SLAY_DRAGON, 20},
+	{TR_KILL_DRAGON, "ÎµÇÜÇÜÂÇ", 5, TR_SLAY_DRAGON, 60},
+	{TR_SLAY_HUMAN, "¿Í´ÖÇÜÂÇ", 5, TR_SLAY_HUMAN, 20},
+	{TR_KILL_HUMAN, "¿Í´ÖÇÜÇÜÂÇ", 5, TR_SLAY_HUMAN, 60},
 
-        {TR_ESP_ANIMAL, "Æ°ÊªESP", 6, TR_SLAY_ANIMAL, 40},
-        {TR_ESP_UNDEAD, "ÉÔ»àESP", 6, TR_SLAY_UNDEAD, 40}, 
-        {TR_ESP_DEMON, "°­ËâESP", 6, TR_SLAY_DEMON, 40},       
-        {TR_ESP_ORC, "¥ª¡¼¥¯ESP", 6, TR_SLAY_ORC, 40},     
-        {TR_ESP_TROLL, "¥È¥í¥ëESP", 6, TR_SLAY_TROLL, 40},   
-        {TR_ESP_GIANT, "µð¿ÍESP", 6, TR_SLAY_GIANT, 40},       
-        {TR_ESP_DRAGON, "ÎµESP", 6, TR_SLAY_DRAGON, 40},
-        {TR_ESP_HUMAN, "¿Í´ÖESP", 6, TR_SLAY_HUMAN, 40},
+	{TR_ESP_ANIMAL, "Æ°ÊªESP", 6, TR_SLAY_ANIMAL, 40},
+	{TR_ESP_UNDEAD, "ÉÔ»àESP", 6, TR_SLAY_UNDEAD, 40}, 
+	{TR_ESP_DEMON, "°­ËâESP", 6, TR_SLAY_DEMON, 40},       
+	{TR_ESP_ORC, "¥ª¡¼¥¯ESP", 6, TR_SLAY_ORC, 40},     
+	{TR_ESP_TROLL, "¥È¥í¥ëESP", 6, TR_SLAY_TROLL, 40},   
+	{TR_ESP_GIANT, "µð¿ÍESP", 6, TR_SLAY_GIANT, 40},       
+	{TR_ESP_DRAGON, "ÎµESP", 6, TR_SLAY_DRAGON, 40},
+	{TR_ESP_HUMAN, "¿Í´ÖESP", 6, TR_SLAY_HUMAN, 40},
 
-        {ESSENCE_ATTACK, "¹¶·â", 10, TR_ES_ATTACK, 30},
-        {ESSENCE_AC, "ËÉ¸æ", 10, TR_ES_AC, 15},
-        {ESSENCE_TMP_RES_ACID, "»ÀÂÑÀ­È¯Æ°", 7, TR_RES_ACID, 50},
-        {ESSENCE_TMP_RES_ELEC, "ÅÅ·âÂÑÀ­È¯Æ°", 7, TR_RES_ELEC, 50},
-        {ESSENCE_TMP_RES_FIRE, "²Ð±êÂÑÀ­È¯Æ°", 7, TR_RES_FIRE, 50},
-        {ESSENCE_TMP_RES_COLD, "Îäµ¤ÂÑÀ­È¯Æ°", 7, TR_RES_COLD, 50},
-        {ESSENCE_SH_FIRE, "²Ð±ê¥ª¡¼¥é", 7, -1, 50},
-        {ESSENCE_SH_ELEC, "ÅÅ·â¥ª¡¼¥é", 7, -1, 50},
-        {ESSENCE_SH_COLD, "Îäµ¤¥ª¡¼¥é", 7, -1, 50},
-        {ESSENCE_RESISTANCE, "Á´ÂÑÀ­", 2, -1, 150},
-        {ESSENCE_SUSTAIN, "ÁõÈ÷ÊÝ»ý", 10, -1, 10},
-        {ESSENCE_SLAY_GLOVE, "»¦Ù¤¤Î¾®¼ê", 1, TR_ES_ATTACK, 200},
+	{ESSENCE_ATTACK, "¹¶·â", 10, TR_ES_ATTACK, 30},
+	{ESSENCE_AC, "ËÉ¸æ", 10, TR_ES_AC, 15},
+	{ESSENCE_TMP_RES_ACID, "»ÀÂÑÀ­È¯Æ°", 7, TR_RES_ACID, 50},
+	{ESSENCE_TMP_RES_ELEC, "ÅÅ·âÂÑÀ­È¯Æ°", 7, TR_RES_ELEC, 50},
+	{ESSENCE_TMP_RES_FIRE, "²Ð±êÂÑÀ­È¯Æ°", 7, TR_RES_FIRE, 50},
+	{ESSENCE_TMP_RES_COLD, "Îäµ¤ÂÑÀ­È¯Æ°", 7, TR_RES_COLD, 50},
+	{ESSENCE_SH_FIRE, "²Ð±ê¥ª¡¼¥é", 7, -1, 50},
+	{ESSENCE_SH_ELEC, "ÅÅ·â¥ª¡¼¥é", 7, -1, 50},
+	{ESSENCE_SH_COLD, "Îäµ¤¥ª¡¼¥é", 7, -1, 50},
+	{ESSENCE_RESISTANCE, "Á´ÂÑÀ­", 2, -1, 150},
+	{ESSENCE_SUSTAIN, "ÁõÈ÷ÊÝ»ý", 10, -1, 10},
+	{ESSENCE_SLAY_GLOVE, "»¦Ù¤¤Î¾®¼ê", 1, TR_ES_ATTACK, 200},
 
-        {-1, NULL, 0, -1, 0}
+	{-1, NULL, 0, -1, 0}
 };
 #else
 static essence_type essence_info[] = 
 {
-        {TR_STR, "strength", 4, TR_STR, 20},
-        {TR_INT, "intelligence", 4, TR_INT, 20},
-        {TR_WIS, "wisdom", 4, TR_WIS, 20},
-        {TR_DEX, "dexterity", 4, TR_DEX, 20},
-        {TR_CON, "constitution", 4, TR_CON, 20},
-        {TR_CHR, "charisma", 4, TR_CHR, 20},
-        {TR_MAGIC_MASTERY, "magic mastery", 4, TR_MAGIC_MASTERY, 20},
-        {TR_STEALTH, "stealth", 4, TR_STEALTH, 40},
-        {TR_SEARCH, "serching", 4, TR_SEARCH, 15},
-        {TR_INFRA, "inflavision", 4, TR_INFRA, 15},
-        {TR_TUNNEL, "digging", 4, TR_TUNNEL, 15},
-        {TR_SPEED, "speed", 4, TR_SPEED, 12},
-        {TR_BLOWS, "extra attack", 1, TR_BLOWS, 20},
-        {TR_CHAOTIC, "chaos brand", 1, TR_CHAOTIC, 15},
-        {TR_VAMPIRIC, "vampiric brand", 1, TR_VAMPIRIC, 60},
-        {TR_IMPACT, "quake activation", 7, TR_IMPACT, 15},
-        {TR_BRAND_POIS, "poison brand", 1, TR_BRAND_POIS, 20},
-        {TR_BRAND_ACID, "acid brand", 1, TR_BRAND_ACID, 20},
-        {TR_BRAND_ELEC, "electric brand", 1, TR_BRAND_ELEC, 20},
-        {TR_BRAND_FIRE, "fire brand", 1, TR_BRAND_FIRE, 20},
-        {TR_BRAND_COLD, "cold brand", 1, TR_BRAND_COLD, 20},
-        {TR_SUST_STR, "sustain strength", 3, TR_SUST_STR, 15},
-        {TR_SUST_INT, "sustain intelligence", 3, TR_SUST_STR, 15},
-        {TR_SUST_WIS, "sustain wisdom", 3, TR_SUST_STR, 15},
-        {TR_SUST_DEX, "sustain dexterity", 3, TR_SUST_STR, 15},
-        {TR_SUST_CON, "sustain constitution", 3, TR_SUST_STR, 15},
-        {TR_SUST_CHR, "sustain charisma", 3, TR_SUST_STR, 15},
-        {TR_IM_ACID, "acid immunity", 2, TR_IM_ACID, 20},
-        {TR_IM_ELEC, "electric immunity", 2, TR_IM_ACID, 20},
-        {TR_IM_FIRE, "fire immunity", 2, TR_IM_ACID, 20},
-        {TR_IM_COLD, "cold immunity", 2, TR_IM_ACID, 20},
-        {TR_REFLECT, "reflection", 2, TR_REFLECT, 20},
-        {TR_FREE_ACT, "free action", 3, TR_FREE_ACT, 20},
-        {TR_HOLD_LIFE, "hold life", 3, TR_HOLD_LIFE, 20},
-        {TR_RES_ACID, "resistance to acid", 2, TR_RES_ACID, 15},
-        {TR_RES_ELEC, "resistance to electric", 2, TR_RES_ELEC, 15},
-        {TR_RES_FIRE, "resistance to fire", 2, TR_RES_FIRE, 15},
-        {TR_RES_COLD, "resistance to cold", 2, TR_RES_COLD, 15},
-        {TR_RES_POIS, "resistance to poison", 2, TR_RES_POIS, 25},
-        {TR_RES_FEAR, "resistance to fear", 2, TR_RES_FEAR, 20},
-        {TR_RES_LITE, "resistance to light", 2, TR_RES_LITE, 20},
-        {TR_RES_DARK, "resistance to dark", 2, TR_RES_DARK, 20},
-        {TR_RES_BLIND, "resistance to blind", 2, TR_RES_BLIND, 20},
-        {TR_RES_CONF, "resistance to confusion", 2, TR_RES_CONF, 20},
-        {TR_RES_SOUND, "resistance to sound", 2, TR_RES_SOUND, 20},
-        {TR_RES_SHARDS, "resistance to shard", 2, TR_RES_SHARDS, 20},
-        {TR_RES_NETHER, "resistance to nether", 2, TR_RES_NETHER, 20},
-        {TR_RES_NEXUS, "resistance to nexus", 2, TR_RES_NEXUS, 20},
-        {TR_RES_CHAOS, "resistance to chaos", 2, TR_RES_CHAOS, 20},
-        {TR_RES_DISEN, "resistance to disenchantment", 2, TR_RES_DISEN, 20},
-        {TR_SH_FIRE, "", 0, -2, 0},
-        {TR_SH_ELEC, "", 0, -2, 0},
-        {TR_SH_COLD, "", 0, -2, 0},
-        {TR_NO_MAGIC, "anti magic", 3, TR_NO_MAGIC, 15},
-        {TR_WARNING, "warning", 3, TR_WARNING, 20},
-        {TR_FEATHER, "levitation", 3, TR_FEATHER, 20},
-        {TR_LITE, "permanent light", 3, TR_LITE, 15},
-        {TR_SEE_INVIS, "see invisible", 3, TR_SEE_INVIS, 20},
-        {TR_TELEPATHY, "telepathy", 6, TR_TELEPATHY, 15},
-        {TR_SLOW_DIGEST, "slow digestion", 3, TR_SLOW_DIGEST, 15},
-        {TR_REGEN, "regeneration", 3, TR_REGEN, 20},
-        {TR_TELEPORT, "teleport", 3, TR_TELEPORT, 25},
+	{TR_STR, "strength", 4, TR_STR, 20},
+	{TR_INT, "intelligence", 4, TR_INT, 20},
+	{TR_WIS, "wisdom", 4, TR_WIS, 20},
+	{TR_DEX, "dexterity", 4, TR_DEX, 20},
+	{TR_CON, "constitution", 4, TR_CON, 20},
+	{TR_CHR, "charisma", 4, TR_CHR, 20},
+	{TR_MAGIC_MASTERY, "magic mastery", 4, TR_MAGIC_MASTERY, 20},
+	{TR_STEALTH, "stealth", 4, TR_STEALTH, 40},
+	{TR_SEARCH, "serching", 4, TR_SEARCH, 15},
+	{TR_INFRA, "inflavision", 4, TR_INFRA, 15},
+	{TR_TUNNEL, "digging", 4, TR_TUNNEL, 15},
+	{TR_SPEED, "speed", 4, TR_SPEED, 12},
+	{TR_BLOWS, "extra attack", 1, TR_BLOWS, 20},
+	{TR_CHAOTIC, "chaos brand", 1, TR_CHAOTIC, 15},
+	{TR_VAMPIRIC, "vampiric brand", 1, TR_VAMPIRIC, 60},
+	{TR_IMPACT, "quake activation", 7, TR_IMPACT, 15},
+	{TR_BRAND_POIS, "poison brand", 1, TR_BRAND_POIS, 20},
+	{TR_BRAND_ACID, "acid brand", 1, TR_BRAND_ACID, 20},
+	{TR_BRAND_ELEC, "electric brand", 1, TR_BRAND_ELEC, 20},
+	{TR_BRAND_FIRE, "fire brand", 1, TR_BRAND_FIRE, 20},
+	{TR_BRAND_COLD, "cold brand", 1, TR_BRAND_COLD, 20},
+	{TR_SUST_STR, "sustain strength", 3, TR_SUST_STR, 15},
+	{TR_SUST_INT, "sustain intelligence", 3, TR_SUST_STR, 15},
+	{TR_SUST_WIS, "sustain wisdom", 3, TR_SUST_STR, 15},
+	{TR_SUST_DEX, "sustain dexterity", 3, TR_SUST_STR, 15},
+	{TR_SUST_CON, "sustain constitution", 3, TR_SUST_STR, 15},
+	{TR_SUST_CHR, "sustain charisma", 3, TR_SUST_STR, 15},
+	{TR_IM_ACID, "acid immunity", 2, TR_IM_ACID, 20},
+	{TR_IM_ELEC, "electric immunity", 2, TR_IM_ACID, 20},
+	{TR_IM_FIRE, "fire immunity", 2, TR_IM_ACID, 20},
+	{TR_IM_COLD, "cold immunity", 2, TR_IM_ACID, 20},
+	{TR_REFLECT, "reflection", 2, TR_REFLECT, 20},
+	{TR_FREE_ACT, "free action", 3, TR_FREE_ACT, 20},
+	{TR_HOLD_LIFE, "hold life", 3, TR_HOLD_LIFE, 20},
+	{TR_RES_ACID, "resistance to acid", 2, TR_RES_ACID, 15},
+	{TR_RES_ELEC, "resistance to electric", 2, TR_RES_ELEC, 15},
+	{TR_RES_FIRE, "resistance to fire", 2, TR_RES_FIRE, 15},
+	{TR_RES_COLD, "resistance to cold", 2, TR_RES_COLD, 15},
+	{TR_RES_POIS, "resistance to poison", 2, TR_RES_POIS, 25},
+	{TR_RES_FEAR, "resistance to fear", 2, TR_RES_FEAR, 20},
+	{TR_RES_LITE, "resistance to light", 2, TR_RES_LITE, 20},
+	{TR_RES_DARK, "resistance to dark", 2, TR_RES_DARK, 20},
+	{TR_RES_BLIND, "resistance to blind", 2, TR_RES_BLIND, 20},
+	{TR_RES_CONF, "resistance to confusion", 2, TR_RES_CONF, 20},
+	{TR_RES_SOUND, "resistance to sound", 2, TR_RES_SOUND, 20},
+	{TR_RES_SHARDS, "resistance to shard", 2, TR_RES_SHARDS, 20},
+	{TR_RES_NETHER, "resistance to nether", 2, TR_RES_NETHER, 20},
+	{TR_RES_NEXUS, "resistance to nexus", 2, TR_RES_NEXUS, 20},
+	{TR_RES_CHAOS, "resistance to chaos", 2, TR_RES_CHAOS, 20},
+	{TR_RES_DISEN, "resistance to disenchantment", 2, TR_RES_DISEN, 20},
+	{TR_SH_FIRE, "", 0, -2, 0},
+	{TR_SH_ELEC, "", 0, -2, 0},
+	{TR_SH_COLD, "", 0, -2, 0},
+	{TR_NO_MAGIC, "anti magic", 3, TR_NO_MAGIC, 15},
+	{TR_WARNING, "warning", 3, TR_WARNING, 20},
+	{TR_FEATHER, "levitation", 3, TR_FEATHER, 20},
+	{TR_LITE, "permanent light", 3, TR_LITE, 15},
+	{TR_SEE_INVIS, "see invisible", 3, TR_SEE_INVIS, 20},
+	{TR_TELEPATHY, "telepathy", 6, TR_TELEPATHY, 15},
+	{TR_SLOW_DIGEST, "slow digestion", 3, TR_SLOW_DIGEST, 15},
+	{TR_REGEN, "regeneration", 3, TR_REGEN, 20},
+	{TR_TELEPORT, "teleport", 3, TR_TELEPORT, 25},
 
-        {TR_SLAY_EVIL, "slay evil", 5, TR_SLAY_EVIL, 100},
-        {TR_SLAY_ANIMAL, "slay animal", 5, TR_SLAY_ANIMAL, 20},
-        {TR_KILL_ANIMAL, "kill animal", 5, TR_SLAY_ANIMAL, 60},
-        {TR_KILL_EVIL, "kill evil", 0, TR_SLAY_EVIL, 60},
-        {TR_SLAY_UNDEAD, "slay undead", 5, TR_SLAY_UNDEAD, 20},
-        {TR_KILL_UNDEAD, "kill undead", 5, TR_SLAY_UNDEAD, 60},
-        {TR_SLAY_DEMON, "slay demon", 5, TR_SLAY_DEMON, 20},
-        {TR_KILL_DEMON, "kill demon", 5, TR_SLAY_DEMON, 60},
-        {TR_SLAY_ORC, "slay orc", 5, TR_SLAY_ORC, 15},
-        {TR_KILL_ORC, "kill orc", 5, TR_SLAY_ORC, 60},
-        {TR_SLAY_TROLL, "slay troll", 5, TR_SLAY_TROLL, 15},
-        {TR_KILL_TROLL, "kill troll", 5, TR_SLAY_TROLL, 60},
-        {TR_SLAY_GIANT, "slay giant", 5, TR_SLAY_GIANT, 20},
-        {TR_KILL_GIANT, "kill giant", 5, TR_SLAY_GIANT, 60},       
-        {TR_SLAY_DRAGON, "slay dragon", 5, TR_SLAY_DRAGON, 20},
-        {TR_KILL_DRAGON, "kill dragon", 5, TR_SLAY_DRAGON, 60},
-        {TR_SLAY_HUMAN, "slay human", 5, TR_SLAY_HUMAN, 20},
-        {TR_KILL_HUMAN, "kill human", 5, TR_SLAY_HUMAN, 60},
+	{TR_SLAY_EVIL, "slay evil", 5, TR_SLAY_EVIL, 100},
+	{TR_SLAY_ANIMAL, "slay animal", 5, TR_SLAY_ANIMAL, 20},
+	{TR_KILL_ANIMAL, "kill animal", 5, TR_SLAY_ANIMAL, 60},
+	{TR_KILL_EVIL, "kill evil", 0, TR_SLAY_EVIL, 60},
+	{TR_SLAY_UNDEAD, "slay undead", 5, TR_SLAY_UNDEAD, 20},
+	{TR_KILL_UNDEAD, "kill undead", 5, TR_SLAY_UNDEAD, 60},
+	{TR_SLAY_DEMON, "slay demon", 5, TR_SLAY_DEMON, 20},
+	{TR_KILL_DEMON, "kill demon", 5, TR_SLAY_DEMON, 60},
+	{TR_SLAY_ORC, "slay orc", 5, TR_SLAY_ORC, 15},
+	{TR_KILL_ORC, "kill orc", 5, TR_SLAY_ORC, 60},
+	{TR_SLAY_TROLL, "slay troll", 5, TR_SLAY_TROLL, 15},
+	{TR_KILL_TROLL, "kill troll", 5, TR_SLAY_TROLL, 60},
+	{TR_SLAY_GIANT, "slay giant", 5, TR_SLAY_GIANT, 20},
+	{TR_KILL_GIANT, "kill giant", 5, TR_SLAY_GIANT, 60},       
+	{TR_SLAY_DRAGON, "slay dragon", 5, TR_SLAY_DRAGON, 20},
+	{TR_KILL_DRAGON, "kill dragon", 5, TR_SLAY_DRAGON, 60},
+	{TR_SLAY_HUMAN, "slay human", 5, TR_SLAY_HUMAN, 20},
+	{TR_KILL_HUMAN, "kill human", 5, TR_SLAY_HUMAN, 60},
 
-        {TR_ESP_ANIMAL, "sense animal", 6, TR_SLAY_ANIMAL, 40},
-        {TR_ESP_UNDEAD, "sense undead", 6, TR_SLAY_UNDEAD, 40}, 
-        {TR_ESP_DEMON, "sense demon", 6, TR_SLAY_DEMON, 40},       
-        {TR_ESP_ORC, "sense orc", 6, TR_SLAY_ORC, 40},     
-        {TR_ESP_TROLL, "sense troll", 6, TR_SLAY_TROLL, 40},   
-        {TR_ESP_GIANT, "sense giant", 6, TR_SLAY_GIANT, 40},       
-        {TR_ESP_DRAGON, "sense dragon", 6, TR_SLAY_DRAGON, 40},
-        {TR_ESP_HUMAN, "sense human", 6, TR_SLAY_HUMAN, 40},
+	{TR_ESP_ANIMAL, "sense animal", 6, TR_SLAY_ANIMAL, 40},
+	{TR_ESP_UNDEAD, "sense undead", 6, TR_SLAY_UNDEAD, 40}, 
+	{TR_ESP_DEMON, "sense demon", 6, TR_SLAY_DEMON, 40},       
+	{TR_ESP_ORC, "sense orc", 6, TR_SLAY_ORC, 40},     
+	{TR_ESP_TROLL, "sense troll", 6, TR_SLAY_TROLL, 40},   
+	{TR_ESP_GIANT, "sense giant", 6, TR_SLAY_GIANT, 40},       
+	{TR_ESP_DRAGON, "sense dragon", 6, TR_SLAY_DRAGON, 40},
+	{TR_ESP_HUMAN, "sense human", 6, TR_SLAY_HUMAN, 40},
 
-        {ESSENCE_ATTACK, "weapon enchant", 10, TR_ES_ATTACK, 30},
-        {ESSENCE_AC, "armor enchant", 10, TR_ES_AC, 15},
-        {ESSENCE_TMP_RES_ACID, "resist acid activation", 7, TR_RES_ACID, 50},
-        {ESSENCE_TMP_RES_ELEC, "resist electricity activation", 7, TR_RES_ELEC, 50},
-        {ESSENCE_TMP_RES_FIRE, "resist fire activation", 7, TR_RES_FIRE, 50},
-        {ESSENCE_TMP_RES_COLD, "resist cold activation", 7, TR_RES_COLD, 50},
-        {ESSENCE_SH_FIRE, "fiery sheath", 7, -1, 50},
-        {ESSENCE_SH_ELEC, "electric sheath", 7, -1, 50},
-        {ESSENCE_SH_COLD, "sheath of coldness", 7, -1, 50},
-        {ESSENCE_RESISTANCE, "resistance", 2, -1, 150},
-        {ESSENCE_SUSTAIN, "elements proof", 10, -1, 10},
-        {ESSENCE_SLAY_GLOVE, "gauntlets of slaying", 1, TR_ES_ATTACK, 200},
+	{ESSENCE_ATTACK, "weapon enchant", 10, TR_ES_ATTACK, 30},
+	{ESSENCE_AC, "armor enchant", 10, TR_ES_AC, 15},
+	{ESSENCE_TMP_RES_ACID, "resist acid activation", 7, TR_RES_ACID, 50},
+	{ESSENCE_TMP_RES_ELEC, "resist electricity activation", 7, TR_RES_ELEC, 50},
+	{ESSENCE_TMP_RES_FIRE, "resist fire activation", 7, TR_RES_FIRE, 50},
+	{ESSENCE_TMP_RES_COLD, "resist cold activation", 7, TR_RES_COLD, 50},
+	{ESSENCE_SH_FIRE, "fiery sheath", 7, -1, 50},
+	{ESSENCE_SH_ELEC, "electric sheath", 7, -1, 50},
+	{ESSENCE_SH_COLD, "sheath of coldness", 7, -1, 50},
+	{ESSENCE_RESISTANCE, "resistance", 2, -1, 150},
+	{ESSENCE_SUSTAIN, "elements proof", 10, -1, 10},
+	{ESSENCE_SLAY_GLOVE, "gauntlets of slaying", 1, TR_ES_ATTACK, 200},
 
-        {-1, NULL, 0, -1, 0}
+	{-1, NULL, 0, -1, 0}
 };
 #endif
 
@@ -6777,206 +6777,206 @@ static essence_type essence_info[] =
 #ifdef JP
 static cptr essence_name[] = 
 {
-        "ÏÓÎÏ",
-        "ÃÎÇ½",
-        "¸­¤µ",
-        "´ïÍÑ¤µ",
-        "ÂÑµ×ÎÏ",
-        "Ì¥ÎÏ",
-        "ËâÎÏ»ÙÇÛ",
-        "",
-        "±£Ì©",
-        "Ãµº÷",
-        "ÀÖ³°Àþ»ëÎÏ",
-        "ºÎ·¡",
-        "¥¹¥Ô¡¼¥É",
-        "ÄÉ²Ã¹¶·â",
-        "¥«¥ª¥¹¹¶·â",
-        "µÛ·ì¹¶·â",
-        "Æ°ÊªÇÜÂÇ",
-        "¼Ù°­ÇÜÂÇ",
-        "ÉÔ»àÇÜÂÇ",
-        "°­ËâÇÜÂÇ",
-        "¥ª¡¼¥¯ÇÜÂÇ",
-        "¥È¥í¥ëÇÜÂÇ",
-        "µð¿ÍÇÜÂÇ",
-        "ÎµÇÜÂÇ",
-        "",
-        "",
-        "ÃÏ¿Ì",
-        "ÆÇ»¦",
-        "ÍÏ²ò",
-        "ÅÅ·â",
-        "¾Æ´þ",
-        "Åà·ë",
-        "Ç½ÎÏ°Ý»ý",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "ÌÈ±Ö",
-        "",
-        "",
-        "",
-        "",
-        "È¿¼Í",
-        "ËãáãÃÎ¤é¤º",
-        "À¸Ì¿ÎÏ°Ý»ý",
-        "ÂÑ»À",
-        "ÂÑÅÅ·â",
-        "ÂÑ²Ð±ê",
-        "ÂÑÎäµ¤",
-        "ÂÑÆÇ",
-        "ÂÑ¶²ÉÝ",
-        "ÂÑÁ®¸÷",
-        "ÂÑ°Å¹õ",
-        "ÂÑÌÕÌÜ",
-        "ÂÑº®Íð",
-        "ÂÑ¹ì²»",
-        "ÂÑÇËÊÒ",
-        "ÂÑÃÏ¹ö",
-        "ÂÑ°ø²Ìº®Íð",
-        "ÂÑ¥«¥ª¥¹",
-        "ÂÑÎô²½",
-        "",
-        "",
-        "¿Í´ÖÇÜÂÇ",
-        "",
-        "",
-        "È¿ËâË¡",
-        "",
-        "",
-        "·Ù¹ð",
-        "",
-        "",
-        "",
-        "ÉâÍ·",
-        "±Êµ×¸÷¸»",
-        "²Ä»ëÆ©ÌÀ",
-        "¥Æ¥ì¥Ñ¥·¡¼",
-        "ÃÙ¾Ã²½",
-        "µÞÂ®²óÉü",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "¥Æ¥ì¥Ý¡¼¥È",
-        "",
-        "",
-        "¹¶·â",
-        "ËÉ¸æ",
+	"ÏÓÎÏ",
+	"ÃÎÇ½",
+	"¸­¤µ",
+	"´ïÍÑ¤µ",
+	"ÂÑµ×ÎÏ",
+	"Ì¥ÎÏ",
+	"ËâÎÏ»ÙÇÛ",
+	"",
+	"±£Ì©",
+	"Ãµº÷",
+	"ÀÖ³°Àþ»ëÎÏ",
+	"ºÎ·¡",
+	"¥¹¥Ô¡¼¥É",
+	"ÄÉ²Ã¹¶·â",
+	"¥«¥ª¥¹¹¶·â",
+	"µÛ·ì¹¶·â",
+	"Æ°ÊªÇÜÂÇ",
+	"¼Ù°­ÇÜÂÇ",
+	"ÉÔ»àÇÜÂÇ",
+	"°­ËâÇÜÂÇ",
+	"¥ª¡¼¥¯ÇÜÂÇ",
+	"¥È¥í¥ëÇÜÂÇ",
+	"µð¿ÍÇÜÂÇ",
+	"ÎµÇÜÂÇ",
+	"",
+	"",
+	"ÃÏ¿Ì",
+	"ÆÇ»¦",
+	"ÍÏ²ò",
+	"ÅÅ·â",
+	"¾Æ´þ",
+	"Åà·ë",
+	"Ç½ÎÏ°Ý»ý",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"ÌÈ±Ö",
+	"",
+	"",
+	"",
+	"",
+	"È¿¼Í",
+	"ËãáãÃÎ¤é¤º",
+	"À¸Ì¿ÎÏ°Ý»ý",
+	"ÂÑ»À",
+	"ÂÑÅÅ·â",
+	"ÂÑ²Ð±ê",
+	"ÂÑÎäµ¤",
+	"ÂÑÆÇ",
+	"ÂÑ¶²ÉÝ",
+	"ÂÑÁ®¸÷",
+	"ÂÑ°Å¹õ",
+	"ÂÑÌÕÌÜ",
+	"ÂÑº®Íð",
+	"ÂÑ¹ì²»",
+	"ÂÑÇËÊÒ",
+	"ÂÑÃÏ¹ö",
+	"ÂÑ°ø²Ìº®Íð",
+	"ÂÑ¥«¥ª¥¹",
+	"ÂÑÎô²½",
+	"",
+	"",
+	"¿Í´ÖÇÜÂÇ",
+	"",
+	"",
+	"È¿ËâË¡",
+	"",
+	"",
+	"·Ù¹ð",
+	"",
+	"",
+	"",
+	"ÉâÍ·",
+	"±Êµ×¸÷¸»",
+	"²Ä»ëÆ©ÌÀ",
+	"¥Æ¥ì¥Ñ¥·¡¼",
+	"ÃÙ¾Ã²½",
+	"µÞÂ®²óÉü",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"¥Æ¥ì¥Ý¡¼¥È",
+	"",
+	"",
+	"¹¶·â",
+	"ËÉ¸æ",
 
-        NULL
+	NULL
 };
 
 #else
 
 static cptr essence_name[] = 
 {
-        "strength",
-        "intelligen.",
-        "wisdom",
-        "dexterity",
-        "constitut.",
-        "charisma",
-        "magic mast.",
-        "",
-        "stealth",
-        "serching",
-        "inflavision",
-        "digging",
-        "speed",
-        "extra atk",
-        "chaos brand",
-        "vampiric",
-        "slay animal",
-        "slay evil",
-        "slay undead",
-        "slay demon",
-        "slay orc",
-        "slay troll",
-        "slay giant",
-        "slay dragon",
-        "",
-        "",
-        "quake",
-        "pois. brand",
-        "acid brand",
-        "elec. brand",
-        "fire brand",
-        "cold brand",
-        "sustain",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "immunity",
-        "",
-        "",
-        "",
-        "",
-        "reflection",
-        "free action",
-        "hold life",
-        "res. acid",
-        "res. elec.",
-        "res. fire",
-        "res. cold",
-        "res. poison",
-        "res. fear",
-        "res. light",
-        "res. dark",
-        "res. blind",
-        "res.confuse",
-        "res. sound",
-        "res. shard",
-        "res. nether",
-        "res. nexus",
-        "res. chaos",
-        "res. disen.",
-        "",
-        "",
-        "slay human",
-        "",
-        "",
-        "anti magic",
-        "",
-        "",
-        "warning",
-        "",
-        "",
-        "",
-        "levitation",
-        "perm. light",
-        "see invis.",
-        "telepathy",
-        "slow dige.",
-        "regen.",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "teleport",
-        "",
-        "",
-        "weapon enc.",
-        "armor enc.",
+	"strength",
+	"intelligen.",
+	"wisdom",
+	"dexterity",
+	"constitut.",
+	"charisma",
+	"magic mast.",
+	"",
+	"stealth",
+	"serching",
+	"inflavision",
+	"digging",
+	"speed",
+	"extra atk",
+	"chaos brand",
+	"vampiric",
+	"slay animal",
+	"slay evil",
+	"slay undead",
+	"slay demon",
+	"slay orc",
+	"slay troll",
+	"slay giant",
+	"slay dragon",
+	"",
+	"",
+	"quake",
+	"pois. brand",
+	"acid brand",
+	"elec. brand",
+	"fire brand",
+	"cold brand",
+	"sustain",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"immunity",
+	"",
+	"",
+	"",
+	"",
+	"reflection",
+	"free action",
+	"hold life",
+	"res. acid",
+	"res. elec.",
+	"res. fire",
+	"res. cold",
+	"res. poison",
+	"res. fear",
+	"res. light",
+	"res. dark",
+	"res. blind",
+	"res.confuse",
+	"res. sound",
+	"res. shard",
+	"res. nether",
+	"res. nexus",
+	"res. chaos",
+	"res. disen.",
+	"",
+	"",
+	"slay human",
+	"",
+	"",
+	"anti magic",
+	"",
+	"",
+	"warning",
+	"",
+	"",
+	"",
+	"levitation",
+	"perm. light",
+	"see invis.",
+	"telepathy",
+	"slow dige.",
+	"regen.",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"teleport",
+	"",
+	"",
+	"weapon enc.",
+	"armor enc.",
 
-        NULL
+	NULL
 };
 #endif
 
@@ -7113,15 +7113,15 @@ static void drain_essence(void)
 
 	for (i = 0; essence_info[i].add_name; i++)
 	{
-                essence_type *es_ptr = &essence_info[i];
+		essence_type *es_ptr = &essence_info[i];
 		int pval = 0;
 
 		if (es_ptr->add < TR_FLAG_MAX && is_pval_flag(es_ptr->add) && old_pval)
-                        pval = (have_flag(new_flgs, es_ptr->add)) ? old_pval - o_ptr->pval : old_pval;
+			pval = (have_flag(new_flgs, es_ptr->add)) ? old_pval - o_ptr->pval : old_pval;
 
 		if (es_ptr->add < TR_FLAG_MAX &&
-                    (!have_flag(new_flgs, es_ptr->add) || pval) &&
-                    have_flag(old_flgs, es_ptr->add))
+		    (!have_flag(new_flgs, es_ptr->add) || pval) &&
+		    have_flag(old_flgs, es_ptr->add))
 		{
 			if (pval)
 			{
@@ -7217,7 +7217,7 @@ static void drain_essence(void)
 #endif
 		for (i = 0; essence_name[i]; i++)
 		{
-                        if (!essence_name[i][0]) continue;
+			if (!essence_name[i][0]) continue;
 			if (!drain_value[i]) continue;
 
 			p_ptr->magic_num1[i] += drain_value[i];
@@ -7243,27 +7243,27 @@ static int choose_essence(void)
 	int menu_line = (use_menu ? 1 : 0);
 
 #ifdef JP
-        cptr menu_name[] = {
-                "Éð´ïÂ°À­", 
-                "ÂÑÀ­",
-                "Ç½ÎÏ",
-                "¿ôÃÍ",
-                "¥¹¥ì¥¤",
-                "ESP",
-                "¤½¤ÎÂ¾"
-        };
+	cptr menu_name[] = {
+		"Éð´ïÂ°À­", 
+		"ÂÑÀ­",
+		"Ç½ÎÏ",
+		"¿ôÃÍ",
+		"¥¹¥ì¥¤",
+		"ESP",
+		"¤½¤ÎÂ¾"
+	};
 #else
-        cptr menu_name[] = {
-                "Brand weapon",
-                "Resistance",
-                "Ability",
-                "Magic number", 
-                "Slay",
-                "ESP",
-                "Others"
-        };
+	cptr menu_name[] = {
+		"Brand weapon",
+		"Resistance",
+		"Ability",
+		"Magic number", 
+		"Slay",
+		"ESP",
+		"Others"
+	};
 #endif
-        const int mode_max = 7;
+	const int mode_max = 7;
 
 #ifdef ALLOW_REPEAT
 	if (repeat_pull(&mode) && 1 <= mode && mode <= mode_max)
@@ -7277,13 +7277,13 @@ static int choose_essence(void)
 
 		while(!mode)
 		{
-                        int i;
-                        for (i = 0; i < mode_max; i++)
+			int i;
+			for (i = 0; i < mode_max; i++)
 #ifdef JP
-                                prt(format(" %s %s", (menu_line == 1+i) ? "¡Õ" : "  ", menu_name[i]), 2 + i, 14);
+				prt(format(" %s %s", (menu_line == 1+i) ? "¡Õ" : "  ", menu_name[i]), 2 + i, 14);
 			prt("¤É¤Î¼ïÎà¤Î¥¨¥Ã¥»¥ó¥¹ÉÕ²Ã¤ò¹Ô¤¤¤Þ¤¹¤«¡©", 0, 0);
 #else
-                                prt(format(" %s %s", (menu_line == 1+i) ? "> " : "  ", menu_name[i]), 2 + i, 14);
+				prt(format(" %s %s", (menu_line == 1+i) ? "> " : "  ", menu_name[i]), 2 + i, 14);
 			prt("Choose from menu.", 0, 0);
 #endif
 
@@ -7321,10 +7321,10 @@ static int choose_essence(void)
 		screen_save();
 		while (!mode)
 		{
-                        int i;
+			int i;
 
-                        for (i = 0; i < mode_max; i++)
-                                prt(format("  %c) %s", 'a' + i, menu_name[i]), 2 + i, 14);
+			for (i = 0; i < mode_max; i++)
+				prt(format("  %c) %s", 'a' + i, menu_name[i]), 2 + i, 14);
 
 #ifdef JP
 			if (!get_com("²¿¤òÉÕ²Ã¤·¤Þ¤¹¤«:", &choice, TRUE))
@@ -7336,10 +7336,10 @@ static int choose_essence(void)
 				return 0;
 			}
 
-                        if (isupper(choice)) choice = tolower(choice);
+			if (isupper(choice)) choice = tolower(choice);
 
-                        if ('a' <= choice && choice <= 'a' + (char)mode_max - 1)
-                                mode = (int)choice - 'a' + 1;
+			if ('a' <= choice && choice <= 'a' + (char)mode_max - 1)
+				mode = (int)choice - 'a' + 1;
 		}
 		screen_load();
 	}
@@ -7363,13 +7363,13 @@ static void add_essence(int mode)
 	int num[22];
 	char o_name[MAX_NLEN];
 	int use_essence;
-        essence_type *es_ptr;
+	essence_type *es_ptr;
 
 	int menu_line = (use_menu ? 1 : 0);
 
 	for (i = 0; essence_info[i].add_name; i++)
 	{
-                es_ptr = &essence_info[i];
+		es_ptr = &essence_info[i];
 
 		if (es_ptr->type != mode) continue;
 		num[max_num++] = i;
@@ -7397,9 +7397,9 @@ static void add_essence(int mode)
 
 	/* Get a spell from the user */
 
-        choice = (always_show_list || use_menu) ? ESCAPE:1;
-        while (!flag)
-        {
+	choice = (always_show_list || use_menu) ? ESCAPE:1;
+	while (!flag)
+	{
 		bool able[22];
 		if( choice==ESCAPE ) choice = ' '; 
 		else if( !get_com(out_val, &choice, FALSE) )break; 
@@ -7490,7 +7490,7 @@ static void add_essence(int mode)
 				/* Print list */
 				for (ctr = 0; ctr < max_num; ctr++)
 				{
-                                        es_ptr = &essence_info[num[ctr]];
+					es_ptr = &essence_info[num[ctr]];
 
 					if (use_menu)
 					{
@@ -7653,7 +7653,7 @@ static void add_essence(int mode)
 	}
 #endif /* ALLOW_REPEAT */
 
-        es_ptr = &essence_info[num[i]];
+	es_ptr = &essence_info[num[i]];
 
 	if (es_ptr->add == ESSENCE_SLAY_GLOVE)
 		item_tester_tval = TV_GLOVES;
@@ -7860,7 +7860,7 @@ static void add_essence(int mode)
 		}
 		else
 		{
-                        o_ptr->xtra3 = es_ptr->add + 1;
+			o_ptr->xtra3 = es_ptr->add + 1;
 		}
 	}
 	else
@@ -7926,9 +7926,9 @@ static void add_essence(int mode)
 			add_flag(o_ptr->art_flags, TR_IGNORE_COLD);
 		}
 		else
-                {
-                        o_ptr->xtra3 = es_ptr->add + 1;
-                }
+		{
+			o_ptr->xtra3 = es_ptr->add + 1;
+		}
 	}
 
 	energy_use = 100;
@@ -8212,7 +8212,7 @@ void do_cmd_kaji(bool only_browse)
 	} while (only_browse);
 #ifdef ALLOW_REPEAT
 	repeat_push(mode);
-        }
+	}
 #endif /* ALLOW_REPEAT */
 
 	switch(mode)

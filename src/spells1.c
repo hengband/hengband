@@ -391,8 +391,8 @@ sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-                                    ((y == py && x == px) || cave[y][x].m_idx != 0))
-                                        break;
+				    ((y == py && x == px) || cave[y][x].m_idx != 0))
+					break;
 			}
 
 			if (!in_bounds(y, x)) break;
@@ -476,8 +476,8 @@ sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-                                    ((y == py && x == px) || cave[y][x].m_idx != 0))
-                                        break;
+				    ((y == py && x == px) || cave[y][x].m_idx != 0))
+					break;
 			}
 
 			if (!in_bounds(y, x)) break;
@@ -543,8 +543,8 @@ sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-                                    ((y == py && x == px) || cave[y][x].m_idx != 0))
-                                        break;
+				    ((y == py && x == px) || cave[y][x].m_idx != 0))
+					break;
 			}
 
 			if (!in_bounds(y, x)) break;
@@ -786,10 +786,10 @@ msg_print("カチッと音がした！");
 		{
 			/* Destroy all doors and traps */
 			if ((c_ptr->feat == FEAT_OPEN) ||
-                            (c_ptr->feat == FEAT_BROKEN) ||
-                            is_trap(c_ptr->feat) ||
-                            ((c_ptr->feat >= FEAT_DOOR_HEAD) &&
-                             (c_ptr->feat <= FEAT_DOOR_TAIL)))
+			    (c_ptr->feat == FEAT_BROKEN) ||
+			    is_trap(c_ptr->feat) ||
+			    ((c_ptr->feat >= FEAT_DOOR_HEAD) &&
+			     (c_ptr->feat <= FEAT_DOOR_TAIL)))
 			{
 				/* Check line of sight */
 				if (known)
@@ -880,7 +880,7 @@ msg_print("壁が溶けて泥になった！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Destroy the wall */
-                                cave_set_feat(y, x, floor_type[randint0(100)]);
+				cave_set_feat(y, x, floor_type[randint0(100)]);
 			}
 
 			/* Quartz / Magma with treasure */
@@ -904,7 +904,7 @@ msg_print("何かを発見した！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Destroy the wall */
-                                cave_set_feat(y, x, floor_type[randint0(100)]);
+				cave_set_feat(y, x, floor_type[randint0(100)]);
 
 				/* Place some gold */
 				place_gold(y, x);
@@ -929,7 +929,7 @@ msg_print("鉱脈が溶けて泥になった！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Destroy the wall */
-                                cave_set_feat(y, x, floor_type[randint0(100)]);
+				cave_set_feat(y, x, floor_type[randint0(100)]);
 			}
 
 			/* Rubble */
@@ -951,7 +951,7 @@ msg_print("岩石が溶けて泥になった！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Destroy the rubble */
-                                cave_set_feat(y, x, floor_type[randint0(100)]);
+				cave_set_feat(y, x, floor_type[randint0(100)]);
 
 				/* Hack -- place an object */
 				if (randint0(100) < 10)
@@ -992,7 +992,7 @@ msg_print("ドアが溶けて泥になった！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Destroy the feature */
-                                cave_set_feat(y, x, floor_type[randint0(100)]);
+				cave_set_feat(y, x, floor_type[randint0(100)]);
 			}
 
 			/* Notice */
@@ -1068,15 +1068,15 @@ msg_print("ドアが溶けて泥になった！");
 			/* Require a "naked" floor grid */
 			if (!cave_naked_bold(y, x)) break;
 
-                        /* Create a glyph */
-                        cave[y][x].info |= CAVE_OBJECT;
-                        cave[y][x].mimic = FEAT_GLYPH;
+			/* Create a glyph */
+			cave[y][x].info |= CAVE_OBJECT;
+			cave[y][x].mimic = FEAT_GLYPH;
 
-                        /* Notice */
-                        note_spot(y, x);
+			/* Notice */
+			note_spot(y, x);
 	
-                        /* Redraw */
-                        lite_spot(y, x);
+			/* Redraw */
+			lite_spot(y, x);
 
 			break;
 		}
@@ -1099,55 +1099,55 @@ msg_print("ドアが溶けて泥になった！");
 		}
 
 
-                case GF_LAVA_FLOW:
+		case GF_LAVA_FLOW:
 		{
-                        /* Shallow Lava */
-                        if(dam == 1)
-                        {
-                                /* Require a "naked" floor grid */
-                                if (!cave_naked_bold(y, x)) break;
+			/* Shallow Lava */
+			if(dam == 1)
+			{
+				/* Require a "naked" floor grid */
+				if (!cave_naked_bold(y, x)) break;
 
-                                /* Place a shallow lava */
-                                cave_set_feat(y, x, FEAT_SHAL_LAVA);
-                        }
-                        /* Deep Lava */
-                        else
-                        {
-                                /* Require a "naked" floor grid */
-                                if (cave_perma_bold(y, x) || !dam) break;
+				/* Place a shallow lava */
+				cave_set_feat(y, x, FEAT_SHAL_LAVA);
+			}
+			/* Deep Lava */
+			else
+			{
+				/* Require a "naked" floor grid */
+				if (cave_perma_bold(y, x) || !dam) break;
 
-                                /* Place a deep lava */
-                                cave_set_feat(y, x, FEAT_DEEP_LAVA);
+				/* Place a deep lava */
+				cave_set_feat(y, x, FEAT_DEEP_LAVA);
 
-                                /* Dam is used as a counter for the number of grid to convert */
-                                dam--;
-                        }
+				/* Dam is used as a counter for the number of grid to convert */
+				dam--;
+			}
 			break;
 		}
 
-                case GF_WATER_FLOW:
+		case GF_WATER_FLOW:
 		{
-                        /* Shallow Water */
-                        if(dam == 1)
-                        {
-                                /* Require a "naked" floor grid */
-                                if (!cave_naked_bold(y, x)) break;
+			/* Shallow Water */
+			if(dam == 1)
+			{
+				/* Require a "naked" floor grid */
+				if (!cave_naked_bold(y, x)) break;
 
-                                /* Place a shallow lava */
-                                cave_set_feat(y, x, FEAT_SHAL_WATER);
-                        }
-                        /* Deep Water */
-                        else
-                        {
-                                /* Require a "naked" floor grid */
-                                if (cave_perma_bold(y, x) || !dam) break;
+				/* Place a shallow lava */
+				cave_set_feat(y, x, FEAT_SHAL_WATER);
+			}
+			/* Deep Water */
+			else
+			{
+				/* Require a "naked" floor grid */
+				if (cave_perma_bold(y, x) || !dam) break;
 
-                                /* Place a deep lava */
-                                cave_set_feat(y, x, FEAT_DEEP_WATER);
+				/* Place a deep lava */
+				cave_set_feat(y, x, FEAT_DEEP_WATER);
 
-                                /* Dam is used as a counter for the number of grid to convert */
-                                dam--;
-                        }
+				/* Dam is used as a counter for the number of grid to convert */
+				dam--;
+			}
 			break;
 		}
 
@@ -1517,11 +1517,11 @@ note_kill = "壊れてしまった！";
 				break;
 			}
 
-                        case GF_IDENTIFY:
-                        {
+			case GF_IDENTIFY:
+			{
 				identify_item(o_ptr);
 				break;
-                        }
+			}
 
 			/* Unlock chests */
 			case GF_KILL_TRAP:
@@ -1747,8 +1747,8 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ , int flg)
 	/* Can the player know about this effect? */
 	bool known = ((m_ptr->cdis <= MAX_SIGHT) || p_ptr->inside_battle);
 
-        /* Can the player see the source of this effect? */
-        bool see_s = ((who <= 0) || m_list[who].ml);
+	/* Can the player see the source of this effect? */
+	bool see_s = ((who <= 0) || m_list[who].ml);
 
 	/* Were the effects "irrelevant"? */
 	bool skipped = FALSE;
@@ -2950,8 +2950,8 @@ note = "には完全な耐性がある！";
 
 			}
 			else if ((r_ptr->flags2 & RF2_STUPID) ||
-			         (r_ptr->flags2 & RF2_WEIRD_MIND) ||
-			         (r_ptr->flags3 & RF3_ANIMAL) ||
+				 (r_ptr->flags2 & RF2_WEIRD_MIND) ||
+				 (r_ptr->flags3 & RF3_ANIMAL) ||
 						(r_ptr->level > randint1(3 * dam)))
 			{
 				dam /= 3;
@@ -4150,7 +4150,7 @@ msg_format("%sを見つめた。",m_name);
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & (RF1_QUESTOR)) ||
 			    (m_ptr->mflag2 & MFLAG_NOPET) ||
-			         (r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) ||
+				 (r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) ||
 				 ((r_ptr->level+10) > randint1(dam)))
 			{
 				/* Resist */
@@ -6071,17 +6071,17 @@ note = "は弱くなったようだ。";
 
 			/* Give detailed messages if destroyed */
 			if (known && note)
-                        {
-                                monster_desc(m_name, m_ptr, 0x100);
-                                if (see_s)
-                                {
-                                        msg_format("%^s%s", m_name, note);
-                                }
-                                else
-                                {
-                                        mon_fight = TRUE;
-                                }
-                        }
+			{
+				monster_desc(m_name, m_ptr, 0x100);
+				if (see_s)
+				{
+					msg_format("%^s%s", m_name, note);
+				}
+				else
+				{
+					mon_fight = TRUE;
+				}
+			}
 
 			monster_gain_exp(who, m_ptr->r_idx);
 
@@ -6109,14 +6109,14 @@ msg_print("少し悲しい気分がした。");
 			if (note && seen) msg_format("%^s%s", m_name, note);
 
 			/* Hack -- Pain message */
-                        else if (see_s)
-                        {
-                                message_pain(c_ptr->m_idx, dam);
-                        }
-                        else
-                        {
-                                mon_fight = TRUE;
-                        }
+			else if (see_s)
+			{
+				message_pain(c_ptr->m_idx, dam);
+			}
+			else
+			{
+				mon_fight = TRUE;
+			}
 
 			/* Hack -- handle sleep */
 			if (do_sleep) m_ptr->csleep = do_sleep;
@@ -6682,7 +6682,7 @@ if (fuzzy) msg_print("何か鋭いもので攻撃された！");
 #endif
 
 			else if ((inventory[INVEN_RARM].name1 == ART_ZANTETSU) || (inventory[INVEN_LARM].name1 == ART_ZANTETSU))
-		       	{
+			{
 #ifdef JP
 				msg_print("矢を斬り捨てた！");
 #else
@@ -7994,33 +7994,33 @@ bool in_disintegration_range(int y1, int x1, int y2, int x2)
  */
 static bool do_disintegration(int by, int bx, int y, int x)
 {
-        byte feat;
+	byte feat;
 
-        /* Disintegration balls explosions are stopped by perma-walls */
-        if (!in_disintegration_range(by, bx, y, x)) return FALSE;
+	/* Disintegration balls explosions are stopped by perma-walls */
+	if (!in_disintegration_range(by, bx, y, x)) return FALSE;
 						
-        /* Permanent walls and artifacts don't get effect */
-        /* But not protect monsters and other objects */
-        if (!cave_valid_bold(y, x)) return TRUE;
+	/* Permanent walls and artifacts don't get effect */
+	/* But not protect monsters and other objects */
+	if (!cave_valid_bold(y, x)) return TRUE;
 
-        /* Destroy mirror/glyph */
-        remove_mirror(y,x);
+	/* Destroy mirror/glyph */
+	remove_mirror(y,x);
 
-        feat = cave[y][x].feat;
+	feat = cave[y][x].feat;
 
-        if ((feat < FEAT_PATTERN_START || feat > FEAT_PATTERN_XTRA2) &&
-            (feat < FEAT_DEEP_WATER || feat > FEAT_GRASS))
-        {
-                if (feat == FEAT_TREES || feat == FEAT_FLOWER || feat == FEAT_DEEP_GRASS)
-                        cave_set_feat(y, x, FEAT_GRASS);
-                else
-                        cave_set_feat(y, x, floor_type[randint0(100)]);
-        }
+	if ((feat < FEAT_PATTERN_START || feat > FEAT_PATTERN_XTRA2) &&
+	    (feat < FEAT_DEEP_WATER || feat > FEAT_GRASS))
+	{
+		if (feat == FEAT_TREES || feat == FEAT_FLOWER || feat == FEAT_DEEP_GRASS)
+			cave_set_feat(y, x, FEAT_GRASS);
+		else
+			cave_set_feat(y, x, floor_type[randint0(100)]);
+	}
 
-        /* Update some things -- similar to GF_KILL_WALL */
-        p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
+	/* Update some things -- similar to GF_KILL_WALL */
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
 
-        return TRUE;
+	return TRUE;
 }
 
 
@@ -8062,17 +8062,17 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 					
 					if (disint_ball)
 					{
-                                                /* Disintegration are stopped only by perma-walls */
-                                                if (real_breath)
-                                                {
-                                                        /* Destroy terrains */
-                                                        if (!do_disintegration(by, bx, y, x)) continue;
-                                                }
-                                                else
-                                                {
-                                                        /* No actual disintegration */
-                                                        if (!in_disintegration_range(by, bx, y, x)) continue;
-                                                }
+						/* Disintegration are stopped only by perma-walls */
+						if (real_breath)
+						{
+							/* Destroy terrains */
+							if (!do_disintegration(by, bx, y, x)) continue;
+						}
+						else
+						{
+							/* No actual disintegration */
+							if (!in_disintegration_range(by, bx, y, x)) continue;
+						}
 					}
 					else
 					{
@@ -8324,8 +8324,8 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 	monster_target_y=py;
 	monster_target_x=px;
 
-        /* Initialize with nul string */
-        who_name[0] = '\0';
+	/* Initialize with nul string */
+	who_name[0] = '\0';
 
 	/* Hack -- Jump to target */
 	if (flg & (PROJECT_JUMP))
@@ -8501,7 +8501,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			if( is_mirror_grid(&cave[y][x]))
 			{
 			  /* The target of monsterspell becomes tha mirror(broken) */
-			        monster_target_y=(s16b)y;
+				monster_target_y=(s16b)y;
 				monster_target_x=(s16b)x;
 
 				remove_mirror(y,x);
@@ -8634,14 +8634,14 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			    cave[y][x].feat == FEAT_DOOR_TAIL ||
 			    (cave[y][x].feat >= FEAT_WALL_EXTRA &&
 			     cave[y][x].feat <= FEAT_PERM_SOLID ))
-       			{
+			{
 				if( second_step )continue;
 				break;
 			}
 			if( is_mirror_grid(&cave[y][x]) && !second_step )
 			{
 			  /* The target of monsterspell becomes tha mirror(broken) */
-			        monster_target_y=(s16b)y;
+				monster_target_y=(s16b)y;
 				monster_target_x=(s16b)x;
 
 				remove_mirror(y,x);
@@ -8840,8 +8840,8 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 
 						if (typ == GF_DISINTEGRATE)
 						{
-                                                        /* Disintegration are stopped only by perma-walls */
-                                                        if (!do_disintegration(y2, x2, y, x)) continue;
+							/* Disintegration are stopped only by perma-walls */
+							if (!do_disintegration(y2, x2, y, x)) continue;
 						}
 						else
 						{

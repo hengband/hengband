@@ -1889,7 +1889,7 @@ static errr Term_text_mac(int x, int y, int n, byte a, const char *cp)
  */
 #ifdef USE_TRANSPARENCY
 static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp,
-                          const byte *tap, const char *tcp)
+			  const byte *tap, const char *tcp)
 #else
 static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp)
 #endif
@@ -2591,7 +2591,7 @@ static void init_windows(void)
 
 		/* Find the folder */
 		err = FindFolder(kOnSystemDisk, kPreferencesFolderType, kCreateFolder,
-		                 &vref, &dirID);
+				 &vref, &dirID);
 
 		/* Success */
 		if (!err)
@@ -2973,7 +2973,7 @@ static void save_pref_file(void)
 
 		/* Find the folder */
 		err = FindFolder(kOnSystemDisk, kPreferencesFolderType, kCreateFolder,
-		                 &vref, &dirID);
+				 &vref, &dirID);
 
 		/* Success */
 		if (!err)
@@ -4224,7 +4224,7 @@ static void menu(long mc)
 					break;
 				}
 
-                                case 9: /* bigtile mode */
+				case 9: /* bigtile mode */
 				{
 					term_data *td = &data[0];
 
@@ -4332,7 +4332,7 @@ static OSErr CheckRequiredAEParams(const AppleEvent *theAppleEvent)
 	Size	actualSize;
 
 	aeError = AEGetAttributePtr(theAppleEvent, keyMissedKeywordAttr, typeWildCard,
-	                            &returnedType, NULL, 0, &actualSize);
+				    &returnedType, NULL, 0, &actualSize);
 
 	if (aeError == errAEDescNotFound) return (noErr);
 
@@ -4346,7 +4346,7 @@ static OSErr CheckRequiredAEParams(const AppleEvent *theAppleEvent)
  * Apple Event Handler -- Open Application
  */
 static pascal OSErr AEH_Start(const AppleEvent *theAppleEvent,
-                              const AppleEvent *reply, long handlerRefCon)
+			      const AppleEvent *reply, long handlerRefCon)
 {
 #pragma unused(reply, handlerRefCon)
 
@@ -4358,7 +4358,7 @@ static pascal OSErr AEH_Start(const AppleEvent *theAppleEvent,
  * Apple Event Handler -- Quit Application
  */
 static pascal OSErr AEH_Quit(const AppleEvent *theAppleEvent,
-                             const AppleEvent *reply, long handlerRefCon)
+			     const AppleEvent *reply, long handlerRefCon)
 {
 #pragma unused(reply, handlerRefCon)
 
@@ -4374,7 +4374,7 @@ static pascal OSErr AEH_Quit(const AppleEvent *theAppleEvent,
  * Apple Event Handler -- Print Documents
  */
 static pascal OSErr AEH_Print(const AppleEvent *theAppleEvent,
-                              const AppleEvent *reply, long handlerRefCon)
+			      const AppleEvent *reply, long handlerRefCon)
 {
 #pragma unused(theAppleEvent, reply, handlerRefCon)
 
@@ -4397,7 +4397,7 @@ static pascal OSErr AEH_Print(const AppleEvent *theAppleEvent,
  * "shamelessly swiped & hacked")
  */
 static pascal OSErr AEH_Open(AppleEvent *theAppleEvent,
-                             AppleEvent* reply, long handlerRefCon)
+			     AppleEvent* reply, long handlerRefCon)
 {
 #pragma unused(reply, handlerRefCon)
 
@@ -4420,7 +4420,7 @@ static pascal OSErr AEH_Open(AppleEvent *theAppleEvent,
 	 */
 
 	err = AEGetNthPtr(&docList, 1L, typeFSS, &keywd,
-	                  &returnedType, (Ptr) &myFSS, sizeof(myFSS), &actualSize);
+			  &returnedType, (Ptr) &myFSS, sizeof(myFSS), &actualSize);
 	if (err) return err;
 
 	/* Only needed to check savefile type below */
@@ -5304,28 +5304,28 @@ void main(void)
 
 	/* Install the hook (ignore error codes) */
 	AEInstallEventHandler(kCoreEventClass, kAEOpenApplication, AEH_Start_UPP,
-	                      0L, FALSE);
+			      0L, FALSE);
 
 	/* Obtain a "Universal Procedure Pointer" */
 	AEH_Quit_UPP = NewAEEventHandlerProc(AEH_Quit);
 
 	/* Install the hook (ignore error codes) */
 	AEInstallEventHandler(kCoreEventClass, kAEQuitApplication, AEH_Quit_UPP,
-	                      0L, FALSE);
+			      0L, FALSE);
 
 	/* Obtain a "Universal Procedure Pointer" */
 	AEH_Print_UPP = NewAEEventHandlerProc(AEH_Print);
 
 	/* Install the hook (ignore error codes) */
 	AEInstallEventHandler(kCoreEventClass, kAEPrintDocuments, AEH_Print_UPP,
-	                      0L, FALSE);
+			      0L, FALSE);
 
 	/* Obtain a "Universal Procedure Pointer" */
 	AEH_Open_UPP = NewAEEventHandlerProc(AEH_Open);
 
 	/* Install the hook (ignore error codes) */
 	AEInstallEventHandler(kCoreEventClass, kAEOpenDocuments, AEH_Open_UPP,
-	                      0L, FALSE);
+			      0L, FALSE);
 
 #endif
 

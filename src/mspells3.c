@@ -453,15 +453,15 @@ cptr            p = "ËâË¡";
 	(void)strnfmt(out_val, 78, "(%c-%c, *=List, ESC=exit) Use which %s? ",
 #endif
 
-	        I2A(0), I2A(num - 1), p);
+		I2A(0), I2A(num - 1), p);
 
 	if (use_menu) screen_save();
 
 	/* Get a spell from the user */
 
-        choice= (always_show_list || use_menu) ? ESCAPE:1 ;
-        while (!flag)
-        {
+	choice= (always_show_list || use_menu) ? ESCAPE:1 ;
+	while (!flag)
+	{
 		if(choice==ESCAPE) choice = ' '; 
 		else if( !get_com(out_val, &choice, TRUE) )break; 
 
@@ -629,8 +629,8 @@ put_str("MP ¼ºÎ¨ ¸ú²Ì", y, x + 33);
 
 					/* Dump the spell --(-- */
 					strcat(psi_desc, format(" %-26s %3d %3d%%%s",
-					        spell.name, shouhimana,
-					        chance, comment));
+						spell.name, shouhimana,
+						chance, comment));
 					prt(psi_desc, y + i + 1, x);
 				}
 

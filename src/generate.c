@@ -137,17 +137,17 @@ static bool alloc_stairs(int feat, int num, int walls)
 	}
 	else if (feat == FEAT_MORE)
 	{
-                int q_idx = quest_number(dun_level);
+		int q_idx = quest_number(dun_level);
 
 		/* No downstairs on quest levels */
 		if (dun_level > 1 && q_idx)
-                {
+		{
 			monster_race *r_ptr = &r_info[quest[q_idx].r_idx];
 
 			/* The quest monster(s) is still alive? */
 			if (!(r_ptr->flags1 & RF1_UNIQUE) || 0 < r_ptr->max_num)
-                                return TRUE;
-                }
+				return TRUE;
+		}
 
 		/* No downstairs at the bottom */
 		if (dun_level >= d_info[dungeon_type].maxdepth) return TRUE;
@@ -178,8 +178,8 @@ static bool alloc_stairs(int feat, int num, int walls)
 				/* Require a certain number of adjacent walls */
 				if (next_to_walls(y, x) < walls) continue;
 
-                                /* Clear possible garbage of hidden trap */
-                                c_ptr->mimic = 0;
+				/* Clear possible garbage of hidden trap */
+				c_ptr->mimic = 0;
 
 				/* Clear previous contents, add stairs */
 				if (i < more_num) c_ptr->feat = feat+0x07;
@@ -317,7 +317,7 @@ static int next_to_corr(int y1, int x1)
 
 		/* Skip non "empty floor" grids */
 		if (!is_floor_grid(c_ptr))
-                        continue;
+			continue;
 
 		/* Skip grids inside rooms */
 		if (c_ptr->info & (CAVE_ROOM)) continue;
@@ -409,14 +409,14 @@ static bool cave_gen(void)
 
 	dun_data dun_body;
 
-        /* Fill the arrays of floors and walls in the good proportions */
-        for (i = 0; i < 100; i++)
-        {
-                int lim1, lim2, lim3;
+	/* Fill the arrays of floors and walls in the good proportions */
+	for (i = 0; i < 100; i++)
+	{
+		int lim1, lim2, lim3;
 
-                lim1 = d_info[dungeon_type].floor_percent1;
-                lim2 = lim1 + d_info[dungeon_type].floor_percent2;
-                lim3 = lim2 + d_info[dungeon_type].floor_percent3;
+		lim1 = d_info[dungeon_type].floor_percent1;
+		lim2 = lim1 + d_info[dungeon_type].floor_percent2;
+		lim3 = lim2 + d_info[dungeon_type].floor_percent3;
 
 		if (i < lim1)
 			floor_type[i] = d_info[dungeon_type].floor1;
@@ -434,14 +434,14 @@ static bool cave_gen(void)
 			fill_type[i] = d_info[dungeon_type].fill_type2;
 		else if (i < lim3)
 			fill_type[i] = d_info[dungeon_type].fill_type3;
-        }
+	}
 
 	/* Prepare allocation table */
 	get_mon_num_prep(get_monster_hook(), NULL);
 
-        feat_wall_outer = d_info[dungeon_type].outer_wall;
-        feat_wall_inner = d_info[dungeon_type].inner_wall;
-        feat_wall_solid = d_info[dungeon_type].outer_wall;
+	feat_wall_outer = d_info[dungeon_type].outer_wall;
+	feat_wall_inner = d_info[dungeon_type].inner_wall;
+	feat_wall_solid = d_info[dungeon_type].outer_wall;
 
 	/* Global data */
 	dun = &dun_body;
@@ -753,7 +753,7 @@ if (cheat_room) msg_print("小さな地下室を却下します。");
 	/* Hack -- Add some rivers */
 	if (one_in_(3) && (randint1(dun_level) > 5))
 	{
-	 	/* Choose water or lava */
+		/* Choose water or lava */
 		if ((randint1(MAX_DEPTH * 2) - 1 > dun_level) && (d_info[dungeon_type].flags1 & DF1_WATER_RIVER))
 		{
 			feat1 = FEAT_DEEP_WATER;
@@ -767,11 +767,11 @@ if (cheat_room) msg_print("小さな地下室を却下します。");
 		else feat1 = 0;
 
 
-	 	/* Only add river if matches lake type or if have no lake at all */
-	 	if ((((laketype == 1) && (feat1 == FEAT_DEEP_LAVA)) ||
-	 	    ((laketype == 2) && (feat1 == FEAT_DEEP_WATER)) ||
+		/* Only add river if matches lake type or if have no lake at all */
+		if ((((laketype == 1) && (feat1 == FEAT_DEEP_LAVA)) ||
+		    ((laketype == 2) && (feat1 == FEAT_DEEP_WATER)) ||
 		     (laketype == 0)) && feat1)
-	 	{
+		{
 			add_river(feat1, feat2);
 		}
 	}
@@ -1067,29 +1067,29 @@ msg_format("モンスター数基本値を %d から %d に減らします", small_tester, i);
 	alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_OBJECT, randnor(DUN_AMT_ITEM, 3));
 	alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_GOLD, randnor(DUN_AMT_GOLD, 3));
 
-        /* Put an Artifact and Artifact Guardian is requested */
-        if(d_info[dungeon_type].final_guardian && (d_info[dungeon_type].maxdepth == dun_level))
-        {
-                int oy;
-                int ox;
-                int try = 4000;
+	/* Put an Artifact and Artifact Guardian is requested */
+	if(d_info[dungeon_type].final_guardian && (d_info[dungeon_type].maxdepth == dun_level))
+	{
+		int oy;
+		int ox;
+		int try = 4000;
 
-                /* Find a good position */
-                while(try)
-                {
-                        /* Get a random spot */
-                        oy = randint1(cur_hgt - 4) + 2;
-                        ox = randint1(cur_wid - 4) + 2;
+		/* Find a good position */
+		while(try)
+		{
+			/* Get a random spot */
+			oy = randint1(cur_hgt - 4) + 2;
+			ox = randint1(cur_wid - 4) + 2;
 
-                        /* Is it a good spot ? */
-                        if (cave_empty_bold2(oy, ox) && monster_can_cross_terrain(cave[oy][ox].feat, &r_info[d_info[dungeon_type].final_guardian]))
+			/* Is it a good spot ? */
+			if (cave_empty_bold2(oy, ox) && monster_can_cross_terrain(cave[oy][ox].feat, &r_info[d_info[dungeon_type].final_guardian]))
 			{
 				/* Place the guardian */
 				if (place_monster_aux(0, oy, ox, d_info[dungeon_type].final_guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) break;
 			}
-                        /* One less try */
-                        try--;
-                }
+			/* One less try */
+			try--;
+		}
 	}
 
 	if ((empty_level && (!one_in_(DARK_EMPTY) || (randint1(100) > dun_level))) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS))
@@ -1441,7 +1441,7 @@ static byte extract_feeling(void)
 	/* Hack -- Have a special feeling sometimes */
 	if (good_item_flag && !preserve_mode) return 1;
 
- 	if (rating > 100) return 2;
+	if (rating > 100) return 2;
 	if (rating > 80) return 3;
 	if (rating > 60) return 4;
 	if (rating > 40) return 5;
@@ -1510,7 +1510,7 @@ static void place_pet(void)
 			cave[cy][cx].m_idx = m_idx;
 
 			m_ptr->r_idx = party_mon[i].r_idx;
-                        r_ptr = &r_info[m_ptr->r_idx];
+			r_ptr = &r_info[m_ptr->r_idx];
 
 			m_ptr->ap_r_idx = party_mon[i].ap_r_idx;
 			m_ptr->sub_align = party_mon[i].sub_align;

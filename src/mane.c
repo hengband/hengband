@@ -120,13 +120,13 @@ cptr            p = "能力";
 	(void)strnfmt(out_val, 78, "(%c-%c, *=List, ESC=exit) Use which %s? ",
 #endif
 
-	        I2A(0), I2A(num - 1), p);
+		I2A(0), I2A(num - 1), p);
 
 	/* Get a spell from the user */
 
-        choice= always_show_list ? ESCAPE:1 ;
-        while (!flag)
-        {
+	choice= always_show_list ? ESCAPE:1 ;
+	while (!flag)
+	{
 		if(choice==ESCAPE) choice = ' '; 
 		else if( !get_com(out_val, &choice, TRUE) )break; 
 
@@ -195,8 +195,8 @@ put_str("失率 効果", y, x + 36);
 
 					/* Dump the spell --(-- */
 					sprintf(psi_desc, "  %c) %-30s %3d%%%s",
-					        I2A(i), spell.name,
-					        chance, comment);
+						I2A(i), spell.name,
+						chance, comment);
 					prt(psi_desc, y + i + 1, x);
 				}
 

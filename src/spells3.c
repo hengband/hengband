@@ -1666,7 +1666,7 @@ msg_print("床上のアイテムが呪文を跳ね返した。");
 
 	/* Create a glyph */
 	cave[py][px].info |= CAVE_OBJECT;
-        cave[py][px].mimic = FEAT_GLYPH;
+	cave[py][px].mimic = FEAT_GLYPH;
 
 	/* Notice */
 	note_spot(py, px);
@@ -1693,7 +1693,7 @@ msg_print("床上のアイテムが呪文を跳ね返した。");
 
 	/* Create a mirror */
 	cave[py][px].info |= CAVE_OBJECT;
-        cave[py][px].mimic = FEAT_MIRROR;
+	cave[py][px].mimic = FEAT_MIRROR;
 
 	/* Turn on the light */
 	cave[py][px].info |= CAVE_GLOW;
@@ -1727,7 +1727,7 @@ msg_print("床上のアイテムが呪文を跳ね返した。");
 
 	/* Create a glyph */
 	cave[py][px].info |= CAVE_OBJECT;
-        cave[py][px].mimic = FEAT_MINOR_GLYPH;
+	cave[py][px].mimic = FEAT_MINOR_GLYPH;
 
 	/* Notice */
 	note_spot(py, px);
@@ -2473,8 +2473,8 @@ s = "強化できるアイテムがない。";
 msg_format("%s は眩い光を発した！",o_name);
 #else
 	msg_format("%s %s radiate%s a blinding light!",
-	          ((item >= 0) ? "Your" : "The"), o_name,
-	          ((o_ptr->number > 1) ? "" : "s"));
+		  ((item >= 0) ? "Your" : "The"), o_name,
+		  ((o_ptr->number > 1) ? "" : "s"));
 #endif
 
 	if (o_ptr->name1 || o_ptr->art_name)
@@ -2718,7 +2718,7 @@ s = "鑑定するべきアイテムがない。";
 	idx = is_autopick(o_ptr);
 	auto_inscribe_item(item, idx);
 	if (destroy_identify && !old_known)
-                auto_destroy_item(item, idx);
+		auto_destroy_item(item, idx);
 
 	/* Something happened */
 	return (TRUE);
@@ -2901,7 +2901,7 @@ s = "鑑定するべきアイテムがない。";
 	idx = is_autopick(o_ptr);
 	auto_inscribe_item(item, idx);
 	if (destroy_identify && !old_known)
-                auto_destroy_item(item, idx);
+		auto_destroy_item(item, idx);
 
 	/* Success */
 	return (TRUE);
@@ -5319,7 +5319,7 @@ msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返した！",
 "恐怖の暗黒オーラ", "防具", o_name);
 #else
 		msg_format("A %s tries to %s, but your %s resists the effects!",
-		           "terrible black aura", "surround your armor", o_name);
+			   "terrible black aura", "surround your armor", o_name);
 #endif
 
 	}
@@ -5400,7 +5400,7 @@ msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返した！",
 "恐怖の暗黒オーラ", "武器", o_name);
 #else
 		msg_format("A %s tries to %s, but your %s resists the effects!",
-		           "terrible black aura", "surround your weapon", o_name);
+			   "terrible black aura", "surround your weapon", o_name);
 #endif
 
 	}
@@ -5605,7 +5605,7 @@ bool polymorph_monster(int y, int x)
 		{
 			/* Placing the new monster failed */
 			if (place_monster_aux(0, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN)))
-                                m_list[hack_m_idx_ii] = back_m;
+				m_list[hack_m_idx_ii] = back_m;
 		}
 
 		if (targeted) target_who = hack_m_idx_ii;

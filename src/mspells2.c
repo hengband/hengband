@@ -315,10 +315,10 @@ bool monst_spell_monst(int m_idx)
 		/* Prevent collateral damage */
 		if (!(p_ptr->pet_extra_flags & PF_BALL_SPELL) && pet && (m_idx != p_ptr->riding))
 		{
-                        int dist = distance(py, px, y, x);
+			int dist = distance(py, px, y, x);
 
-                        /* Expected breath radius */
-                        int rad = (r_ptr->flags2 & RF2_POWERFUL) ? 3 : 2;
+			/* Expected breath radius */
+			int rad = (r_ptr->flags2 & RF2_POWERFUL) ? 3 : 2;
 
 			if (dist <= 2)
 			{
@@ -361,30 +361,30 @@ bool monst_spell_monst(int m_idx)
 
 		/* Remove some spells if necessary */
 
-                /* Check for a clean bolt shot */
-                if (((f4 & RF4_BOLT_MASK) ||
-                     (f5 & RF5_BOLT_MASK) ||
-                     (f6 & RF6_BOLT_MASK)) &&
-                    !(r_ptr->flags2 & RF2_STUPID) &&
-                    !clean_shot(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, pet))
-                {
-                        f4 &= ~(RF4_BOLT_MASK);
-                        f5 &= ~(RF5_BOLT_MASK);
-                        f6 &= ~(RF6_BOLT_MASK);
-                }
+		/* Check for a clean bolt shot */
+		if (((f4 & RF4_BOLT_MASK) ||
+		     (f5 & RF5_BOLT_MASK) ||
+		     (f6 & RF6_BOLT_MASK)) &&
+		    !(r_ptr->flags2 & RF2_STUPID) &&
+		    !clean_shot(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, pet))
+		{
+			f4 &= ~(RF4_BOLT_MASK);
+			f5 &= ~(RF5_BOLT_MASK);
+			f6 &= ~(RF6_BOLT_MASK);
+		}
 
-                /* Check for a possible summon */
-                if (((f4 & RF4_SUMMON_MASK) ||
-                     (f5 & RF5_SUMMON_MASK) ||
-                     (f6 & RF6_SUMMON_MASK)) &&
-                    !(r_ptr->flags2 & RF2_STUPID) &&
-                    !(summon_possible(t_ptr->fy, t_ptr->fx)))
-                {
-                        /* Remove summoning spells */
-                        f4 &= ~(RF4_SUMMON_MASK);
-                        f5 &= ~(RF5_SUMMON_MASK);
-                        f6 &= ~(RF6_SUMMON_MASK);
-                }
+		/* Check for a possible summon */
+		if (((f4 & RF4_SUMMON_MASK) ||
+		     (f5 & RF5_SUMMON_MASK) ||
+		     (f6 & RF6_SUMMON_MASK)) &&
+		    !(r_ptr->flags2 & RF2_STUPID) &&
+		    !(summon_possible(t_ptr->fy, t_ptr->fx)))
+		{
+			/* Remove summoning spells */
+			f4 &= ~(RF4_SUMMON_MASK);
+			f5 &= ~(RF5_SUMMON_MASK);
+			f6 &= ~(RF6_SUMMON_MASK);
+		}
 
 		/* Hack -- allow "desperate" spells */
 		if ((r_ptr->flags2 & RF2_SMART) &&
@@ -487,7 +487,7 @@ msg_format("%^sが%sに向かって叫んだ。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -539,7 +539,7 @@ msg_format("%^sが%sにロケットを発射した。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -578,7 +578,7 @@ msg_format("%^sが%sに矢を放った。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_SHOOT);
@@ -641,7 +641,7 @@ msg_format("%^sが%sに酸のブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -684,7 +684,7 @@ msg_format("%^sが%sに稲妻のブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -727,7 +727,7 @@ msg_format("%^sが%sに火炎のブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -770,7 +770,7 @@ msg_format("%^sが%sに冷気のブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -812,7 +812,7 @@ msg_format("%^sが%sにガスのブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -855,7 +855,7 @@ msg_format("%^sが%sに地獄のブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -898,7 +898,7 @@ msg_format("%^sが%sに閃光のブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -941,7 +941,7 @@ msg_format("%^sが%sに暗黒のブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -984,7 +984,7 @@ msg_format("%^sが%sに混乱のブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -1010,7 +1010,7 @@ msg_format("%^sが%sに混乱のブレスを吐いた。", m_name, t_name);
 #ifdef JP
 							msg_format("「ボォエ〜〜〜〜〜〜」");
 #else
-						        msg_format("'Booooeeeeee'");
+							msg_format("'Booooeeeeee'");
 #endif
 						else if (blind)
 						{
@@ -1033,7 +1033,7 @@ msg_format("%^sが%sに轟音のブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -1076,7 +1076,7 @@ msg_format("%^sが%sにカオスのブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -1119,7 +1119,7 @@ msg_format("%^sが%sに劣化のブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -1162,7 +1162,7 @@ msg_format("%^sが%sに因果混乱のブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -1205,7 +1205,7 @@ msg_format("%^sが%sに時間逆転のブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -1248,7 +1248,7 @@ msg_format("%^sが%sに遅鈍のブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -1291,7 +1291,7 @@ msg_format("%^sが%sに重力のブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -1317,7 +1317,7 @@ msg_format("%^sが%sに重力のブレスを吐いた。", m_name, t_name);
 #ifdef JP
 							msg_format("「ボ帝ビルカッター！！！」");
 #else
-						        msg_format("'Boty-Build cutter!!!'");
+							msg_format("'Boty-Build cutter!!!'");
 #endif
 						else if (blind)
 						{
@@ -1340,7 +1340,7 @@ msg_format("%^sが%sに破片のブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -1383,7 +1383,7 @@ msg_format("%^sが%sにプラズマのブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -1426,7 +1426,7 @@ msg_format("%^sが%sにフォースのブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -1468,7 +1468,7 @@ msg_format("%^sが%sに魔力のブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -1511,7 +1511,7 @@ msg_format("%^sが%sに放射能球を放った。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -1552,7 +1552,7 @@ msg_format("%^sが%sに放射性廃棄物のブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -1594,7 +1594,7 @@ msg_format("%^sが%sに純ログルスを放った。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -1635,7 +1635,7 @@ msg_format("%^sが%sに分解のブレスを吐いた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 
 					sound(SOUND_BREATH);
@@ -1677,7 +1677,7 @@ msg_format("%^sが%sに向かってアシッド・ボールの呪文を唱えた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -1717,7 +1717,7 @@ msg_format("%^sが%sに向かってサンダー・ボールの呪文を唱えた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -1774,7 +1774,7 @@ msg_format("%^sが%sに向かってファイア・ボールの呪文を唱えた。", m_name, t_name);
 					}
 					else
 					{
-                                       	        mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -1814,7 +1814,7 @@ msg_format("%^sが%sに向かってアイス・ボールの呪文を唱えた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -1854,7 +1854,7 @@ msg_format("%^sが%sに向かって悪臭雲の呪文を唱えた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -1894,7 +1894,7 @@ msg_format("%^sが%sに向かって地獄球の呪文を唱えた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -1940,7 +1940,7 @@ msg_format("%^sは渦巻に飲み込まれた。", t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -1980,7 +1980,7 @@ msg_format("%^sが%sに対して魔力の嵐の呪文を念じた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2020,7 +2020,7 @@ msg_format("%^sが%sに対して暗黒の嵐の呪文を念じた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2244,7 +2244,7 @@ msg_format("%^sは%sを指さして呪いをかけた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2290,7 +2290,7 @@ msg_format("%^sは%sを指さして恐ろしげに呪いをかけた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2337,7 +2337,7 @@ msg_format("%^sは%sを指さし、恐ろしげに呪文を唱えた！", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2383,7 +2383,7 @@ msg_format("%^sが%sの秘孔を突いて、「お前は既に死んでいる」と叫んだ。", m_name, 
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2429,7 +2429,7 @@ msg_format("%sが%sに向かってアシッド・ボルトの呪文を唱えた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2456,7 +2456,7 @@ msg_format("%^sが%sに向かってサンダー・ボルトの呪文を唱えた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2483,7 +2483,7 @@ msg_format("%^sが%sに向かってファイア・ボルトの呪文を唱えた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2510,7 +2510,7 @@ msg_format("%^sが%sに向かってアイス・ボルトの呪文を唱えた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2551,7 +2551,7 @@ msg_format("%^sが%sに対してスターバーストの呪文を念じた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2577,7 +2577,7 @@ msg_format("%^sが%sに向かって地獄の矢の呪文を唱えた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2604,7 +2604,7 @@ msg_format("%^sが%sに向かってウォーター・ボルトの呪文を唱えた。", m_name, t_name
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2631,7 +2631,7 @@ msg_format("%^sが%sに向かって魔力の矢の呪文を唱えた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2658,7 +2658,7 @@ msg_format("%^sが%sに向かってプラズマ・ボルトの呪文を唱えた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2685,7 +2685,7 @@ msg_format("%^sが%sに向かって極寒の矢の呪文を唱えた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2712,7 +2712,7 @@ msg_format("%^sが%sに向かってマジック・ミサイルの呪文を唱えた。", m_name, t_name
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2739,7 +2739,7 @@ msg_format("%^sが恐ろしげな幻覚を作り出した。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2790,7 +2790,7 @@ msg_format("%sは呪文を唱えて%sの目を焼き付かせた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2846,7 +2846,7 @@ msg_format("%^sが%sの前に幻惑的な幻をつくり出した。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2902,7 +2902,7 @@ msg_format("%sが%sの筋肉から力を吸いとった。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -2959,7 +2959,7 @@ msg_format("%^sは%sをじっと見つめた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -3016,7 +3016,7 @@ msg_format("%^sが自分の体に念を送った。", m_name, m_poss);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -3051,7 +3051,7 @@ msg_format("%^sが%sに<破滅の手>を放った！", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -3111,7 +3111,7 @@ msg_format("%^sは自分の傷に念を集中した。", m_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -3199,7 +3199,7 @@ msg_format("%sは無傷の球の呪文を唱えた。", m_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -3300,7 +3300,7 @@ msg_format("%^sがテレポートした。", m_name);
 				return FALSE;
 			}
 
-                        /* RF6_SPECIAL */
+			/* RF6_SPECIAL */
 			case 160+7:
 			{
 				int k;
@@ -3315,38 +3315,38 @@ msg_format("%^sがテレポートした。", m_name);
 						}
 						return FALSE;
 					}
-                                default:
-                                        if (r_ptr->d_char == 'B')
-                                        {
-                                                if (one_in_(3))
-                                                {
-                                                        if (see_m)
-                                                        {
+				default:
+					if (r_ptr->d_char == 'B')
+					{
+						if (one_in_(3))
+						{
+							if (see_m)
+							{
 #ifdef JP
-                                                                msg_format("%^sは突然急上昇して視界から消えた!", m_name);
+								msg_format("%^sは突然急上昇して視界から消えた!", m_name);
 #else
-                                                                msg_format("%^s suddenly go out of your sight!", m_name);
+								msg_format("%^s suddenly go out of your sight!", m_name);
 #endif
-                                                        }
-                                                        teleport_away(m_idx, 10, FALSE);
-                                                        p_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
-                                                        break;
-                                                }
-                                                else
-                                                {
-                                                        /* Not implemented */
-                                                        return FALSE;
-                                                }
-                                                break;
-                                        }
-                                        
-                                        /* Something is wrong */
-                                        else return FALSE;
-                                }
+							}
+							teleport_away(m_idx, 10, FALSE);
+							p_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
+							break;
+						}
+						else
+						{
+							/* Not implemented */
+							return FALSE;
+						}
+						break;
+					}
+					
+					/* Something is wrong */
+					else return FALSE;
+				}
 
-                                /* done */
-                                break;
-                        }
+				/* done */
+				break;
+			}
 			/* RF6_TELE_TO */
 			case 160+8:
 			{
@@ -3372,7 +3372,7 @@ msg_format("%^sは%sをテレポートさせた。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -3442,7 +3442,7 @@ msg_format("%^sが%sに向かって光の剣を放った。", m_name, t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -3478,7 +3478,7 @@ msg_format("%^sは暗闇に包まれた。", t_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -3547,7 +3547,7 @@ msg_format("%^sが何かをつぶやいた。", m_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 				animate_dead(m_idx, m_ptr->fy, m_ptr->fx);
@@ -3595,7 +3595,7 @@ msg_format("%sが魔法で%sを召喚した。", m_name,
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -3607,16 +3607,16 @@ msg_format("%sが魔法で%sを召喚した。", m_name,
 						count += summon_named_creature(m_idx, y, x, MON_SHURYUUDAN, p_mode);
 					}
 				}
-                                else if(m_ptr->r_idx == MON_THORONDOR ||
-                                        m_ptr->r_idx == MON_GWAIHIR ||
-                                        m_ptr->r_idx == MON_MENELDOR)
-                                {
-                                        int num = 4 + randint1(3);
-                                        for (k = 0; k < num; k++)
-                                        {
-                                                count += summon_specific(m_idx, y, x, rlev, SUMMON_EAGLES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | p_mode));
-                                        }
-                                }
+				else if(m_ptr->r_idx == MON_THORONDOR ||
+					m_ptr->r_idx == MON_GWAIHIR ||
+					m_ptr->r_idx == MON_MENELDOR)
+				{
+					int num = 4 + randint1(3);
+					for (k = 0; k < num; k++)
+					{
+						count += summon_specific(m_idx, y, x, rlev, SUMMON_EAGLES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | p_mode));
+					}
+				}
 				else if(m_ptr->r_idx == MON_LOUSY)
 				{
 					int num = 2 + randint1(3);
@@ -3685,7 +3685,7 @@ msg_format("%^sがサイバーデーモンを召喚した！", m_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -3724,7 +3724,7 @@ msg_format("%^sが魔法で仲間を召喚した！", m_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -3756,7 +3756,7 @@ msg_format("%^sが魔法でモンスターを召喚した！", m_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -3791,7 +3791,7 @@ msg_format("%^sが魔法でアリを召喚した。", m_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -3826,7 +3826,7 @@ msg_format("%^sが魔法でクモを召喚した。", m_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -3861,7 +3861,7 @@ msg_format("%^sが魔法でハウンドを召喚した。", m_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -3896,7 +3896,7 @@ msg_format("%^sが魔法でヒドラを召喚した。", m_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -3932,7 +3932,7 @@ msg_format("%^sが魔法で天使を召喚した！", m_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -3972,7 +3972,7 @@ msg_format("%^sが魔法で混沌の宮廷からデーモンを召喚した！", m_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -4007,7 +4007,7 @@ msg_format("%sが魔法でアンデッドを召喚した。", m_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -4042,7 +4042,7 @@ msg_format("%^sが魔法でドラゴンを召喚した！", m_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -4077,7 +4077,7 @@ msg_format("%sが魔法でアンデッドを召喚した。", m_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -4112,7 +4112,7 @@ msg_format("%^sが魔法で古代ドラゴンを召喚した！", m_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -4147,7 +4147,7 @@ msg_format("%^sがアンバーの王族を召喚した！", m_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 
@@ -4182,7 +4182,7 @@ msg_format("%^sが魔法で特別な強敵を召喚した！", m_name);
 					}
 					else
 					{
-                                                mon_fight = TRUE;
+						mon_fight = TRUE;
 					}
 				}
 

@@ -568,15 +568,15 @@ void mindcraft_info(char *p, int use_mind, int power)
 #else
 		(void)strnfmt(out_val, 78, "(%^ss %c-%c, *=List, ESC=exit) Use which %s? ",
 #endif
-	        p, I2A(0), I2A(num - 1), p);
+		p, I2A(0), I2A(num - 1), p);
 	}
 
 	if (use_menu && !only_browse) screen_save();
 	/* Get a spell from the user */
 
-        choice= (always_show_list || use_menu) ? ESCAPE:1 ;
-        while (!flag)
-        {
+	choice= (always_show_list || use_menu) ? ESCAPE:1 ;
+	while (!flag)
+	{
 		if(choice==ESCAPE) choice = ' '; 
 		else if( !get_com(out_val, &choice, TRUE) )break;
 
@@ -1765,7 +1765,7 @@ msg_print("その方向にはモンスターはいません。");
 		/* Update the old location */
 		cave[target_row][target_col].m_idx = 0;
 
-	        /* Update the new location */
+		/* Update the new location */
 		cave[ty][tx].m_idx = m_idx;
 
 		/* Move the monster */

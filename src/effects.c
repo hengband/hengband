@@ -245,14 +245,14 @@ bool set_mimic(int v, int p, bool do_dec)
 		{
 			if (p_ptr->tim_mimic > v) return FALSE;
 		}
-                else if ((!p_ptr->tim_mimic) || (p_ptr->mimic_form != p))
+		else if ((!p_ptr->tim_mimic) || (p_ptr->mimic_form != p))
 		{
 #ifdef JP
-                        msg_print("自分の体が変わってゆくのを感じた。");
+			msg_print("自分の体が変わってゆくのを感じた。");
 #else
-                        msg_print("You feel that your body changes.");
+			msg_print("You feel that your body changes.");
 #endif
-                        p_ptr->mimic_form=p;
+			p_ptr->mimic_form=p;
 			notice = TRUE;
 		}
 	}
@@ -260,22 +260,22 @@ bool set_mimic(int v, int p, bool do_dec)
 	/* Shut */
 	else
 	{
-                if (p_ptr->tim_mimic)
+		if (p_ptr->tim_mimic)
 		{
 #ifdef JP
-                        msg_print("変身が解けた。");
+			msg_print("変身が解けた。");
 #else
-                        msg_print("You are no longer transformed.");
+			msg_print("You are no longer transformed.");
 #endif
 			if (p_ptr->mimic_form == MIMIC_DEMON) set_oppose_fire(0, TRUE);
-                        p_ptr->mimic_form=0;
+			p_ptr->mimic_form=0;
 			notice = TRUE;
 			p = 0;
 		}
 	}
 
 	/* Use the value */
-        p_ptr->tim_mimic = v;
+	p_ptr->tim_mimic = v;
 
 	/* Nothing to notice */
 	if (!notice)
@@ -285,11 +285,11 @@ bool set_mimic(int v, int p, bool do_dec)
 	if (disturb_state)
 		disturb(0, 0);
 
-        /* Redraw title */
-        p_ptr->redraw |= (PR_BASIC | PR_STATUS);
+	/* Redraw title */
+	p_ptr->redraw |= (PR_BASIC | PR_STATUS);
 
 	/* Recalculate bonuses */
-        p_ptr->update |= (PU_BONUS | PU_HP);
+	p_ptr->update |= (PU_BONUS | PU_HP);
 
 	handle_stuff();
 
@@ -2905,16 +2905,16 @@ bool set_ele_attack(u32b attack_type, int v)
 			     ((attack_type == ATTACK_ACID) ? "酸" :
 			      ((attack_type == ATTACK_ELEC) ? "電撃" :
 			       ((attack_type == ATTACK_FIRE) ? "火炎" : 
-			        ((attack_type == ATTACK_COLD) ? "冷気" : 
-			         ((attack_type == ATTACK_POIS) ? "毒" : 
+				((attack_type == ATTACK_COLD) ? "冷気" : 
+				 ((attack_type == ATTACK_POIS) ? "毒" : 
 					"(なし)"))))));
 #else
 		msg_format("For a while, the blows you deal will %s",
 			     ((attack_type == ATTACK_ACID) ? "melt with acid!" :
 			      ((attack_type == ATTACK_ELEC) ? "shock your foes!" :
 			       ((attack_type == ATTACK_FIRE) ? "burn with fire!" : 
-			        ((attack_type == ATTACK_COLD) ? "chill to the bone!" : 
-			         ((attack_type == ATTACK_POIS) ? "poison your enemies!" : 
+				((attack_type == ATTACK_COLD) ? "chill to the bone!" : 
+				 ((attack_type == ATTACK_POIS) ? "poison your enemies!" : 
 					"do nothing special."))))));
 #endif
 	}
@@ -3004,16 +3004,16 @@ bool set_ele_immune(u32b immune_type, int v)
 			     ((immune_type == DEFENSE_ACID) ? "酸" :
 			      ((immune_type == DEFENSE_ELEC) ? "電撃" :
 			       ((immune_type == DEFENSE_FIRE) ? "火炎" : 
-			        ((immune_type == DEFENSE_COLD) ? "冷気" : 
-			         ((immune_type == DEFENSE_POIS) ? "毒" : 
+				((immune_type == DEFENSE_COLD) ? "冷気" : 
+				 ((immune_type == DEFENSE_POIS) ? "毒" : 
 					"(なし)"))))));
 #else
 		msg_format("For a while, You are immune to %s",
 			     ((immune_type == DEFENSE_ACID) ? "acid!" :
 			      ((immune_type == DEFENSE_ELEC) ? "electricity!" :
 			       ((immune_type == DEFENSE_FIRE) ? "fire!" : 
-			        ((immune_type == DEFENSE_COLD) ? "cold!" : 
-			         ((immune_type == DEFENSE_POIS) ? "poison!" : 
+				((immune_type == DEFENSE_COLD) ? "cold!" : 
+				 ((immune_type == DEFENSE_POIS) ? "poison!" : 
 					"do nothing special."))))));
 #endif
 	}
@@ -4261,8 +4261,8 @@ bool dec_stat(int stat, int amount, int permanent)
 		p_ptr->stat_cur[stat] = cur;
 		p_ptr->stat_max[stat] = max;
 
-                /* Redisplay the stats later */
-                p_ptr->redraw |= (PR_STATS);
+		/* Redisplay the stats later */
+		p_ptr->redraw |= (PR_STATS);
 
 		/* Recalculate bonuses */
 		p_ptr->update |= (PU_BONUS);
@@ -4287,8 +4287,8 @@ bool res_stat(int stat)
 		/* Recalculate bonuses */
 		p_ptr->update |= (PU_BONUS);
 
-                /* Redisplay the stats later */
-                p_ptr->redraw |= (PR_STATS);
+		/* Redisplay the stats later */
+		p_ptr->redraw |= (PR_STATS);
 
 		/* Success */
 		return (TRUE);
@@ -5228,7 +5228,7 @@ get_rnd_line("death_j.txt", 0, death_message);
 #endif
 				}
 #ifdef JP
-			        while (!get_string(streq(p_ptr->died_from, "Seppuku") ? "辞世の句: " : "断末魔の叫び: ", death_message, 1024)) ;
+				while (!get_string(streq(p_ptr->died_from, "Seppuku") ? "辞世の句: " : "断末魔の叫び: ", death_message, 1024)) ;
 #else
 				while (!get_string("Last word: ", death_message, 1024)) ;
 #endif
@@ -5281,16 +5281,16 @@ get_rnd_line("death_j.txt", 0, death_message);
 				    if (*str == 0) break;
 				  }
 
-                                  /* Hide cursor */
-                                  Term_putstr(w-1, h-1, 1, TERM_WHITE, " ");
+				  /* Hide cursor */
+				  Term_putstr(w-1, h-1, 1, TERM_WHITE, " ");
 
 				  flush();
 #ifdef WORLD_SCORE
-                                  /* Make screen dump */
-                                  screen_dump = make_screen_dump();
+				  /* Make screen dump */
+				  screen_dump = make_screen_dump();
 #endif
 
-                                  /* Wait a key press */
+				  /* Wait a key press */
 				  (void)inkey();
 #else
 					msg_print(death_message);

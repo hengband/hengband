@@ -166,7 +166,7 @@ bool make_attack_normal(int m_idx)
 	bool blinked;
 	bool touched = FALSE, fear = FALSE, alive = TRUE;
 	bool explode = FALSE;
-        bool resist_drain = FALSE;
+	bool resist_drain = FALSE;
 	bool do_silly_attack = (one_in_(2) && p_ptr->image);
 	int syouryaku = 0;
 	int get_damage = 0;
@@ -487,7 +487,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_CHARGE:
 				{
 #ifdef JP
-				        syouryaku = -1;
+					syouryaku = -1;
 					act = "は請求書をよこした。";
 #else
 					act = "charges you.";
@@ -501,7 +501,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_CRAWL:
 				{
 #ifdef JP
-				        syouryaku = -1;
+					syouryaku = -1;
 					act = "が体の上を這い回った。";
 #else
 					act = "crawls on you.";
@@ -538,7 +538,7 @@ bool make_attack_normal(int m_idx)
 
 				case RBM_EXPLODE:
 				{
-				        syouryaku = -1;
+					syouryaku = -1;
 #ifdef JP
 					act = "は爆発した。";
 #else
@@ -586,7 +586,7 @@ bool make_attack_normal(int m_idx)
 
 				case RBM_XXX4:
 				{
-				        syouryaku = -1;
+					syouryaku = -1;
 #ifdef JP
 					act = "が XXX4 を発射した。";
 #else
@@ -610,7 +610,7 @@ bool make_attack_normal(int m_idx)
 
 				case RBM_INSULT:
 				{
-				        syouryaku = -1;
+					syouryaku = -1;
 					act = desc_insult[randint0(m_ptr->r_idx == MON_DEBBY ? 10 : 8)];
 					sound(SOUND_MOAN);
 					break;
@@ -618,7 +618,7 @@ bool make_attack_normal(int m_idx)
 
 				case RBM_MOAN:
 				{
-				        syouryaku = -1;
+					syouryaku = -1;
 					act = desc_moan[randint0(4)];
 					sound(SOUND_MOAN);
 					break;
@@ -626,7 +626,7 @@ bool make_attack_normal(int m_idx)
 
 				case RBM_SHOW:
 				{
-				        syouryaku = -1;
+					syouryaku = -1;
 					if (m_ptr->r_idx == MON_JAIAN)
 					{
 #ifdef JP
@@ -901,7 +901,7 @@ bool make_attack_normal(int m_idx)
 					/* Saving throw (unless paralyzed) based on dex and level */
 					if (!p_ptr->paralyzed &&
 					    (randint0(100) < (adj_dex_safe[p_ptr->stat_ind[A_DEX]] +
-					                      p_ptr->lev)))
+							      p_ptr->lev)))
 					{
 						/* Saving throw message */
 #ifdef JP
@@ -982,7 +982,7 @@ bool make_attack_normal(int m_idx)
 					/* Saving throw (unless paralyzed) based on dex and level */
 					if (!p_ptr->paralyzed &&
 					    (randint0(100) < (adj_dex_safe[p_ptr->stat_ind[A_DEX]] +
-					                      p_ptr->lev)))
+							      p_ptr->lev)))
 					{
 						/* Saving throw message */
 #ifdef JP
@@ -1025,12 +1025,12 @@ bool make_attack_normal(int m_idx)
 						/* Message */
 #ifdef JP
 						msg_format("%s(%c)を%s盗まれた！",
-						           o_name, index_to_label(i),
-						           ((o_ptr->number > 1) ? "一つ" : ""));
+							   o_name, index_to_label(i),
+							   ((o_ptr->number > 1) ? "一つ" : ""));
 #else
 						msg_format("%sour %s (%c) was stolen!",
-						           ((o_ptr->number > 1) ? "One of y" : "Y"),
-						           o_name, index_to_label(i));
+							   ((o_ptr->number > 1) ? "One of y" : "Y"),
+							   o_name, index_to_label(i));
 #endif
 
 						chg_virtue(V_SACRIFICE, 1);
@@ -1122,12 +1122,12 @@ bool make_attack_normal(int m_idx)
 						/* Message */
 #ifdef JP
 						msg_format("%s(%c)を%s食べられてしまった！",
-						          o_name, index_to_label(i),
-						          ((o_ptr->number > 1) ? "一つ" : ""));
+							  o_name, index_to_label(i),
+							  ((o_ptr->number > 1) ? "一つ" : ""));
 #else
 						msg_format("%sour %s (%c) was eaten!",
-						           ((o_ptr->number > 1) ? "One of y" : "Y"),
-						           o_name, index_to_label(i));
+							   ((o_ptr->number > 1) ? "One of y" : "Y"),
+							   o_name, index_to_label(i));
 #endif
 
 
@@ -1640,7 +1640,7 @@ bool make_attack_normal(int m_idx)
 					else if (p_ptr->hold_life && (randint0(100) < 75))
 					{
 #ifdef JP
-                                                msg_print("しかし自己の生命力を守りきった！");
+						msg_print("しかし自己の生命力を守りきった！");
 #else
 						msg_print("You keep hold of your life force!");
 #endif
@@ -1652,7 +1652,7 @@ bool make_attack_normal(int m_idx)
 						if (p_ptr->hold_life)
 						{
 #ifdef JP
-                                                        msg_print("生命力を少し吸い取られた気がする！");
+							msg_print("生命力を少し吸い取られた気がする！");
 #else
 							msg_print("You feel your life slipping away!");
 #endif
@@ -1662,7 +1662,7 @@ bool make_attack_normal(int m_idx)
 						else
 						{
 #ifdef JP
-                                                        msg_print("生命力が体から吸い取られた気がする！");
+							msg_print("生命力が体から吸い取られた気がする！");
 #else
 							msg_print("You feel your life draining away!");
 #endif
@@ -1689,7 +1689,7 @@ bool make_attack_normal(int m_idx)
 					else if (p_ptr->hold_life && (randint0(100) < 50))
 					{
 #ifdef JP
-                                                msg_print("しかし自己の生命力を守りきった！");
+						msg_print("しかし自己の生命力を守りきった！");
 #else
 						msg_print("You keep hold of your life force!");
 #endif
@@ -1701,7 +1701,7 @@ bool make_attack_normal(int m_idx)
 						if (p_ptr->hold_life)
 						{
 #ifdef JP
-                                                        msg_print("生命力を少し吸い取られた気がする！");
+							msg_print("生命力を少し吸い取られた気がする！");
 #else
 							msg_print("You feel your life slipping away!");
 #endif
@@ -1711,7 +1711,7 @@ bool make_attack_normal(int m_idx)
 						else
 						{
 #ifdef JP
-                                                        msg_print("生命力が体から吸い取られた気がする！");
+							msg_print("生命力が体から吸い取られた気がする！");
 #else
 							msg_print("You feel your life draining away!");
 #endif
@@ -1817,7 +1817,7 @@ bool make_attack_normal(int m_idx)
 							case 10:
 							{
 #ifdef JP
-	                                        msg_print("あなたは以前ほど力強くなくなってしまった...。");
+						msg_print("あなたは以前ほど力強くなくなってしまった...。");
 #else
 								msg_print("You're not as powerful as you used to be...");
 #endif

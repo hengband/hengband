@@ -175,7 +175,7 @@ cptr map_name(void)
 #ifdef JP
 		return "クエスト";
 #else
-          	return "Quest";
+		return "Quest";
 #endif
 	else if (p_ptr->wild_mode)
 #ifdef JP
@@ -563,7 +563,7 @@ static void prt_status(void)
 	/* tim levitation */
 	if (p_ptr->tim_ffall) ADD_FLG(BAR_LEVITATE);
 
- 	if (p_ptr->tim_res_nether) ADD_FLG(BAR_RESNETH);
+	if (p_ptr->tim_res_nether) ADD_FLG(BAR_RESNETH);
 
 	if (p_ptr->dustrobe) ADD_FLG(BAR_DUSTROBE);
 
@@ -655,7 +655,7 @@ static void prt_title(void)
 	if (p_ptr->wizard)
 	{
 #ifdef JP
-                /* 英日切り替え機能 称号 */
+		/* 英日切り替え機能 称号 */
 		p = "[ウィザード]";
 #else
 		p = "[=-WIZARD-=]";
@@ -679,7 +679,7 @@ static void prt_title(void)
 		else
 		{
 #ifdef JP
-	                /* 英日切り替え機能 称号 */
+			/* 英日切り替え機能 称号 */
 			p = "***勝利者***";
 
 #else
@@ -755,11 +755,11 @@ static void prt_exp(void)
 	if (p_ptr->exp >= p_ptr->max_exp)
 	{
 #ifdef JP
-                if (p_ptr->prace == RACE_ANDROID) put_str("強化 ", ROW_EXP, 0);
+		if (p_ptr->prace == RACE_ANDROID) put_str("強化 ", ROW_EXP, 0);
 		else put_str("経験 ", ROW_EXP, 0);
 		c_put_str(TERM_L_GREEN, out_val, ROW_EXP, COL_EXP + 5);
 #else
-                if (p_ptr->prace == RACE_ANDROID) put_str("Cst ", ROW_EXP, 0);
+		if (p_ptr->prace == RACE_ANDROID) put_str("Cst ", ROW_EXP, 0);
 		else put_str("EXP ", ROW_EXP, 0);
 		c_put_str(TERM_L_GREEN, out_val, ROW_EXP, COL_EXP + 4);
 #endif
@@ -2106,17 +2106,17 @@ static void calc_spells(void)
 		if (num_allowed>(80+bonus)) num_allowed = 80+bonus;
 	}
 
-        /* Count the number of spells we know */
-        for (j = 0; j < 64; j++)
+	/* Count the number of spells we know */
+	for (j = 0; j < 64; j++)
 	{
 		/* Count known spells */
 		if ((j < 32) ?
-                    (p_ptr->spell_forgotten1 & (1L << j)) :
-                    (p_ptr->spell_forgotten2 & (1L << (j - 32))))
+		    (p_ptr->spell_forgotten1 & (1L << j)) :
+		    (p_ptr->spell_forgotten2 & (1L << (j - 32))))
 		{
 			num_boukyaku++;
-                }
-        }
+		}
+	}
 
 	/* See how many spells we must forget or may learn */
 	p_ptr->new_spells = num_allowed + p_ptr->add_spells + num_boukyaku - p_ptr->learned_spells;
@@ -2181,7 +2181,7 @@ static void calc_spells(void)
 
 			/* Message */
 #ifdef JP
-                        msg_format("%sの%sを忘れてしまった。",
+			msg_format("%sの%sを忘れてしまった。",
 				   spell_names[technic2magic(which)-1][j%32], p );
 #else
 			msg_format("You have forgotten the %s of %s.", p,
@@ -2241,11 +2241,11 @@ static void calc_spells(void)
 
 			/* Message */
 #ifdef JP
-                        msg_format("%sの%sを忘れてしまった。",
+			msg_format("%sの%sを忘れてしまった。",
 				   spell_names[technic2magic(which)-1][j%32], p );
 #else
 			msg_format("You have forgotten the %s of %s.", p,
-			           spell_names[technic2magic(which)-1][j%32]);
+				   spell_names[technic2magic(which)-1][j%32]);
 #endif
 
 
@@ -2317,11 +2317,11 @@ static void calc_spells(void)
 
 			/* Message */
 #ifdef JP
-                        msg_format("%sの%sを思い出した。",
+			msg_format("%sの%sを思い出した。",
 				   spell_names[technic2magic(which)-1][j%32], p );
 #else
 			msg_format("You have remembered the %s of %s.",
-			           p, spell_names[technic2magic(which)-1][j%32]);
+				   p, spell_names[technic2magic(which)-1][j%32]);
 #endif
 
 
@@ -2373,8 +2373,8 @@ static void calc_spells(void)
 			}
 #else
 			msg_format("You can learn %d more %s%s.",
-			           p_ptr->new_spells, p,
-			           (p_ptr->new_spells != 1) ? "s" : "");
+				   p_ptr->new_spells, p,
+				   (p_ptr->new_spells != 1) ? "s" : "");
 #endif
 
 		}
@@ -2385,8 +2385,8 @@ static void calc_spells(void)
 		/* Redraw Study Status */
 		p_ptr->redraw |= (PR_STUDY);
 
-                /* Redraw object recall */
-                p_ptr->window |= (PW_OBJECT);
+		/* Redraw object recall */
+		p_ptr->window |= (PW_OBJECT);
 	}
 }
 
@@ -2647,12 +2647,12 @@ static void calc_mana(void)
 		}
 
 #ifdef JP
-                /* レベルアップの時は上昇量を表示する */
-                if ((level_up == 1) && (msp > p_ptr->msp))
-                {
-                        msg_format("最大マジック・ポイントが %d 増加した！",
-                                   (msp - p_ptr->msp));
-                }
+		/* レベルアップの時は上昇量を表示する */
+		if ((level_up == 1) && (msp > p_ptr->msp))
+		{
+			msg_format("最大マジック・ポイントが %d 増加した！",
+				   (msp - p_ptr->msp));
+		}
 #endif
 		/* Save new mana */
 		p_ptr->msp = msp;
@@ -2786,12 +2786,12 @@ static void calc_hitpoints(void)
 		}
 
 #ifdef JP
-                /* レベルアップの時は上昇量を表示する */
-                if ((level_up == 1) && (mhp > p_ptr->mhp))
-                {
-                        msg_format("最大ヒット・ポイントが %d 増加した！",
-                                   (mhp - p_ptr->mhp) );
-                }
+		/* レベルアップの時は上昇量を表示する */
+		if ((level_up == 1) && (mhp > p_ptr->mhp))
+		{
+			msg_format("最大ヒット・ポイントが %d 増加した！",
+				   (mhp - p_ptr->mhp) );
+		}
 #endif
 		/* Save the new max-hitpoints */
 		p_ptr->mhp = mhp;
@@ -2896,9 +2896,9 @@ static void calc_torch(void)
 		p_ptr->cur_lite = 1;
 
 	/*
-         * check if the player doesn't have light radius, 
+	 * check if the player doesn't have light radius, 
 	 * but does weakly glow as an intrinsic.
-         */
+	 */
 	if (p_ptr->cur_lite <= 0 && p_ptr->lite) p_ptr->cur_lite++;
 
 	if (p_ptr->cur_lite > 14) p_ptr->cur_lite = 14;
@@ -3303,33 +3303,33 @@ void calc_bonuses(void)
 		switch(p_ptr->mimic_form)
 		{
 		case MIMIC_DEMON:
-                        p_ptr->hold_life=TRUE;
-                        p_ptr->resist_chaos=TRUE;
-                        p_ptr->resist_neth=TRUE;
-                        p_ptr->resist_fire=TRUE;
+			p_ptr->hold_life=TRUE;
+			p_ptr->resist_chaos=TRUE;
+			p_ptr->resist_neth=TRUE;
+			p_ptr->resist_fire=TRUE;
 			p_ptr->oppose_fire = 1;
-                        p_ptr->see_inv=TRUE;
+			p_ptr->see_inv=TRUE;
 			p_ptr->pspeed += 3;
 			p_ptr->redraw |= PR_STATUS;
 			p_ptr->to_a += 10;
 			p_ptr->dis_to_a += 10;
 			break;
 		case MIMIC_DEMON_LORD:
-                        p_ptr->hold_life=TRUE;
-                        p_ptr->resist_chaos=TRUE;
-                        p_ptr->resist_neth=TRUE;
-                        p_ptr->immune_fire=TRUE;
-                        p_ptr->resist_acid = TRUE;
-                        p_ptr->resist_fire=TRUE;
-                        p_ptr->resist_cold = TRUE;
-                        p_ptr->resist_elec = TRUE;
-                        p_ptr->resist_pois = TRUE;
-                        p_ptr->resist_conf = TRUE;
-                        p_ptr->resist_disen = TRUE;
-                        p_ptr->resist_nexus = TRUE;
-                        p_ptr->resist_fear = TRUE;
-                        p_ptr->sh_fire = TRUE;
-                        p_ptr->see_inv = TRUE;
+			p_ptr->hold_life=TRUE;
+			p_ptr->resist_chaos=TRUE;
+			p_ptr->resist_neth=TRUE;
+			p_ptr->immune_fire=TRUE;
+			p_ptr->resist_acid = TRUE;
+			p_ptr->resist_fire=TRUE;
+			p_ptr->resist_cold = TRUE;
+			p_ptr->resist_elec = TRUE;
+			p_ptr->resist_pois = TRUE;
+			p_ptr->resist_conf = TRUE;
+			p_ptr->resist_disen = TRUE;
+			p_ptr->resist_nexus = TRUE;
+			p_ptr->resist_fear = TRUE;
+			p_ptr->sh_fire = TRUE;
+			p_ptr->see_inv = TRUE;
 			p_ptr->telepathy = TRUE;
 			p_ptr->ffall = TRUE;
 			p_ptr->kill_wall = TRUE;
@@ -3928,23 +3928,23 @@ void calc_bonuses(void)
 		{
 			if (cursed_p(o_ptr)) p_ptr->cursed |= TRC_TELEPORT;
 			else
-                        {
-                                cptr insc = quark_str(o_ptr->inscription);
+			{
+				cptr insc = quark_str(o_ptr->inscription);
 
-                                if (o_ptr->inscription &&
-                                    (strchr(insc, '.') || strchr(insc, '%')))
-                                {
-                                        /*
-                                         * {.} will stop random teleportation.
-                                         * {%} includes '.' after conversion.
-                                         */
-                                }
-                                else
-                                {
-                                        /* Controlled random teleportation */
-                                        p_ptr->cursed |= TRC_TELEPORT_SELF;
-                                }
-                        }
+				if (o_ptr->inscription &&
+				    (strchr(insc, '.') || strchr(insc, '%')))
+				{
+					/*
+					 * {.} will stop random teleportation.
+					 * {%} includes '.' after conversion.
+					 */
+				}
+				else
+				{
+					/* Controlled random teleportation */
+					p_ptr->cursed |= TRC_TELEPORT_SELF;
+				}
+			}
 		}
 
 		/* Immunity flags */
@@ -5458,9 +5458,9 @@ msg_print("バランスがとれるようになった。");
 	j = 0;
 	p_ptr->align = friend_align;
 
-        /* Determine player alignment */
-        for (i = 0; i < 8; i++)
-        {
+	/* Determine player alignment */
+	for (i = 0; i < 8; i++)
+	{
 		if ((p_ptr->vir_types[i] == V_HARMONY) || (p_ptr->vir_types[i] == V_NATURE))
 		{
 			neutral[j] = i;
@@ -5469,7 +5469,7 @@ msg_print("バランスがとれるようになった。");
 		else if (p_ptr->vir_types[i] == V_UNLIFE) p_ptr->align -= p_ptr->virtues[i];
 		else if (p_ptr->vir_types[i] == V_JUSTICE) p_ptr->align += (p_ptr->virtues[i]*2);
 		else if (p_ptr->vir_types[i] != V_CHANCE) p_ptr->align += p_ptr->virtues[i];
-        }
+	}
 	if ((inventory[INVEN_RARM].name1 == ART_IRON_BALL) || (inventory[INVEN_LARM].name1 == ART_IRON_BALL)) p_ptr->align -= 1000;
 	if (prace_is_(RACE_ANGEL)) p_ptr->align += 200;
 	if ((prace_is_(RACE_DEMON)) || (p_ptr->mimic_form == MIMIC_DEMON_LORD) || (p_ptr->mimic_form == MIMIC_DEMON)) p_ptr->align -= 200;
@@ -5659,7 +5659,7 @@ void update_stuff(void)
 	{
 		p_ptr->update &= ~(PU_DISTANCE);
 
-                /* Still need to call update_monsters(FALSE) after update_mon_lite() */ 
+		/* Still need to call update_monsters(FALSE) after update_mon_lite() */ 
 		/* p_ptr->update &= ~(PU_MONSTERS); */
 
 		update_monsters(TRUE);
@@ -6016,20 +6016,20 @@ bool heavy_armor(void)
 
 int number_of_quests(void)
 {
-        int i, j;
+	int i, j;
 
-        /* Clear the counter */
-        i = 0;
+	/* Clear the counter */
+	i = 0;
 
-        for (j = MIN_RANDOM_QUEST; j < MAX_RANDOM_QUEST+1; j++)
-        {
-                if (quest[j].status != QUEST_STATUS_UNTAKEN)
-                {
-                        /* Increment count of quests taken. */
-                        i++;
-                }
-        }
+	for (j = MIN_RANDOM_QUEST; j < MAX_RANDOM_QUEST+1; j++)
+	{
+		if (quest[j].status != QUEST_STATUS_UNTAKEN)
+		{
+			/* Increment count of quests taken. */
+			i++;
+		}
+	}
 
-        /* Return the number of quests taken */
-        return (i);
+	/* Return the number of quests taken */
+	return (i);
 }

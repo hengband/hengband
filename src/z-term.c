@@ -612,7 +612,7 @@ void Term_queue_line(int x, int y, int n, byte *a, char *c)
 
 		/* Hack -- Ignore non-changes */
 		if ((*scr_aa == *a) && (*scr_cc == *c) &&
-		 	(*scr_taa == *ta) && (*scr_tcc == *tc))
+			(*scr_taa == *ta) && (*scr_tcc == *tc))
 		{
 			x++;
 			a++;
@@ -687,7 +687,7 @@ void Term_queue_chars(int x, int y, int n, byte a, cptr s)
 
 	byte *scr_aa = Term->scr->a[y];
 #ifdef JP
-        char *scr_cc = Term->scr->c[y];
+	char *scr_cc = Term->scr->c[y];
 
 #ifdef USE_TRANSPARENCY
 	byte *scr_taa = Term->scr->ta[y];
@@ -707,19 +707,19 @@ void Term_queue_chars(int x, int y, int n, byte a, cptr s)
 
 
 #ifdef JP
-        /* 表示文字なし */
-        if (n == 0 || *s == 0) return;
-        /*
-         * 全角文字の右半分から文字を表示する場合、
-         * 重なった文字の左部分を消去。
-         * 表示開始位置が左端でないと仮定。
-         */
-        if ((scr_aa[x] & KANJI2) && !(scr_aa[x] & 0x80))
-        {
-                scr_cc[x - 1] = ' ';
-                scr_aa[x - 1] &= KANJIC;
-                x1 = x2 = x - 1;
-        }
+	/* 表示文字なし */
+	if (n == 0 || *s == 0) return;
+	/*
+	 * 全角文字の右半分から文字を表示する場合、
+	 * 重なった文字の左部分を消去。
+	 * 表示開始位置が左端でないと仮定。
+	 */
+	if ((scr_aa[x] & KANJI2) && !(scr_aa[x] & 0x80))
+	{
+		scr_cc[x - 1] = ' ';
+		scr_aa[x - 1] &= KANJIC;
+		x1 = x2 = x - 1;
+	}
 #endif
 	/* Queue the attr/chars */
 	for ( ; n; x++, s++, n--)
@@ -808,7 +808,7 @@ void Term_queue_chars(int x, int y, int n, byte a, cptr s)
 		if (x != w && !(scr_aa[x] & 0x80) && (scr_aa[x] & KANJI2))
 		{
 			scr_cc[x] = ' ';
-                        scr_aa[x] &= KANJIC;
+			scr_aa[x] &= KANJIC;
 			if (x1 < 0) x1 = x;
 			x2 = x;
 		}
@@ -918,9 +918,9 @@ static void Term_fresh_row_pict(int y, int x1, int x2)
 #ifdef JP
 		if ((na == oa) && (nc == oc) && (nta == ota) && (ntc == otc)
 		    &&(!kanji || (scr_aa[x + 1] == old_aa[x + 1] &&
-		                  scr_cc[x + 1] == old_cc[x + 1] &&
-                                  scr_taa[x + 1] == old_taa[x + 1] &&
-                                  scr_tcc[x + 1] == old_tcc[x + 1])))
+				  scr_cc[x + 1] == old_cc[x + 1] &&
+				  scr_taa[x + 1] == old_taa[x + 1] &&
+				  scr_tcc[x + 1] == old_tcc[x + 1])))
 #else
 		if ((na == oa) && (nc == oc) && (nta == ota) && (ntc == otc))
 #endif
@@ -932,7 +932,7 @@ static void Term_fresh_row_pict(int y, int x1, int x2)
 #ifdef JP
 		if ((na == oa) && (nc == oc) &&
 		    (!kanji || (scr_aa[x + 1] == old_aa[x + 1] &&
-		                scr_cc[x + 1] == old_cc[x + 1])))
+				scr_cc[x + 1] == old_cc[x + 1])))
 #else
 		if ((na == oa) && (nc == oc))
 #endif
@@ -1084,9 +1084,9 @@ static void Term_fresh_row_both(int y, int x1, int x2)
 #ifdef JP
 		if ((na == oa) && (nc == oc) && (nta == ota) && (ntc == otc)&&
 		    (!kanji || (scr_aa[x + 1] == old_aa[x + 1] &&
-		                scr_cc[x + 1] == old_cc[x + 1] &&
-                                scr_taa[x + 1] == old_taa[x + 1] &&
-                                scr_tcc[x + 1] == old_tcc[x + 1])))
+				scr_cc[x + 1] == old_cc[x + 1] &&
+				scr_taa[x + 1] == old_taa[x + 1] &&
+				scr_tcc[x + 1] == old_tcc[x + 1])))
 #else
 		if ((na == oa) && (nc == oc) && (nta == ota) && (ntc == otc))
 #endif
@@ -1098,7 +1098,7 @@ static void Term_fresh_row_both(int y, int x1, int x2)
 #ifdef JP
 		if ((na == oa) && (nc == oc) &&
 		    (!kanji || (scr_aa[x + 1] == old_aa[x + 1] &&
-		                scr_cc[x + 1] == old_cc[x + 1])))
+				scr_cc[x + 1] == old_cc[x + 1])))
 #else
 		if ((na == oa) && (nc == oc))
 #endif
@@ -1352,7 +1352,7 @@ static void Term_fresh_row_text(int y, int x1, int x2)
 #ifdef JP
 		if ((na == oa) && (nc == oc) &&
 		    (!kanji || (scr_aa[x + 1] == old_aa[x + 1] &&
-		                scr_cc[x + 1] == old_cc[x + 1])))
+				scr_cc[x + 1] == old_cc[x + 1])))
 #else
 		if ((na == oa) && (nc == oc))
 #endif
@@ -1833,26 +1833,26 @@ errr Term_fresh(void)
 		if (!scr->cu && scr->cv)
 		{
 #ifdef CHUUKEI
-                        send_curs_to_chuukei_server(scr->cx, scr->cy);
+			send_curs_to_chuukei_server(scr->cx, scr->cy);
 #endif
 
 #ifdef JP
 			if ((scr->cx + 1 < w) &&
-                            ((old->a[scr->cy][scr->cx + 1] == 255) ||
-                             (!(old->a[scr->cy][scr->cx] & 0x80) &&
-                              iskanji(old->c[scr->cy][scr->cx]))))
+			    ((old->a[scr->cy][scr->cx + 1] == 255) ||
+			     (!(old->a[scr->cy][scr->cx] & 0x80) &&
+			      iskanji(old->c[scr->cy][scr->cx]))))
 #else
 			if ((scr->cx + 1 < w) && (old->a[scr->cy][scr->cx + 1] == 255))
 #endif
 			{
 				/* Double width cursor for the Bigtile mode */
-                                (void)((*Term->bigcurs_hook)(scr->cx, scr->cy));
-                        }
-                        else
-                        {
-                                /* Call the cursor display routine */
-                                (void)((*Term->curs_hook)(scr->cx, scr->cy));
-                        }
+				(void)((*Term->bigcurs_hook)(scr->cx, scr->cy));
+			}
+			else
+			{
+				/* Call the cursor display routine */
+				(void)((*Term->curs_hook)(scr->cx, scr->cy));
+			}
 		}
 	}
 
@@ -2199,19 +2199,19 @@ errr Term_erase(int x, int y, int n)
 #endif /* USE_TRANSPARENCY */
 
 #ifdef JP
-        /*
-         * 全角文字の右半分から文字を表示する場合、
-         * 重なった文字の左部分を消去。
-         */
-        if (n > 0 && (((scr_aa[x] & KANJI2) && !(scr_aa[x] & 0x80))
+	/*
+	 * 全角文字の右半分から文字を表示する場合、
+	 * 重なった文字の左部分を消去。
+	 */
+	if (n > 0 && (((scr_aa[x] & KANJI2) && !(scr_aa[x] & 0x80))
 		      || ((byte)scr_cc[x] == 255 && scr_aa[x] == 255)))
 #else
-        if (n > 0 && (byte)scr_cc[x] == 255 && scr_aa[x] == 255)
+	if (n > 0 && (byte)scr_cc[x] == 255 && scr_aa[x] == 255)
 #endif
-        {
-                x--;
-                n++;
-        }
+	{
+		x--;
+		n++;
+	}
 
 	/* Scan every column */
 	for (i = 0; i < n; i++, x++)
@@ -2223,15 +2223,15 @@ errr Term_erase(int x, int y, int n)
 		if ((oa == na) && (oc == nc)) continue;
 
 #ifdef JP
-                /*
-                 * 全角文字の左半分で表示を終了する場合、
-                 * 重なった文字の右部分を消去。
+		/*
+		 * 全角文字の左半分で表示を終了する場合、
+		 * 重なった文字の右部分を消去。
 		 *
 		 * 2001/04/29 -- Habu
 		 * 行の右端の場合はこの処理をしないように修正。
-                 */
-                if ((oa & KANJI1) && (i + 1) == n && x != w - 1)
-                        n++;
+		 */
+		if ((oa & KANJI1) && (i + 1) == n && x != w - 1)
+			n++;
 #endif
 		/* Save the "literal" information */
 		scr_aa[x] = na;

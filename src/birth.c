@@ -1246,15 +1246,15 @@ static hist_type bg[] =
 
 
 #ifdef JP
-        {"山羊の蹄があります。",      50, 133, 0, 50 },
-        {"人間の足が生えています。",  75, 133, 0, 50 },
-        {"鳥の足が生えています。",    85, 133, 0, 50 },
-        {"爬虫類の足が生えています。",90, 133, 0, 50 },
-        {"牛の足が生えています。",    95, 133, 0, 50 },
-        {"猫の足が生えています。",    97, 133, 0, 50 },
-        {"犬の足が生えています。",   100, 133, 0, 50 },
+	{"山羊の蹄があります。",      50, 133, 0, 50 },
+	{"人間の足が生えています。",  75, 133, 0, 50 },
+	{"鳥の足が生えています。",    85, 133, 0, 50 },
+	{"爬虫類の足が生えています。",90, 133, 0, 50 },
+	{"牛の足が生えています。",    95, 133, 0, 50 },
+	{"猫の足が生えています。",    97, 133, 0, 50 },
+	{"犬の足が生えています。",   100, 133, 0, 50 },
 
-        {"あなたは", 100, 134, 120, 50 },
+	{"あなたは", 100, 134, 120, 50 },
 #else
 	{"and the hooves of a goat.",      50, 133, 0, 50 },
 	{"and human feet.",        75, 133, 0, 50 },
@@ -2059,7 +2059,7 @@ static void show_help(cptr helpfile)
 	screen_save();
 
 	/* Peruse the help file */
-        (void)show_file(TRUE, helpfile, NULL, 0, 0);
+	(void)show_file(TRUE, helpfile, NULL, 0, 0);
 
 	/* Load screen */
 	screen_load();
@@ -2296,13 +2296,13 @@ static byte choose_realm(s32b choices, int *count)
 		}
 		else k = -1;
 		if (c == '?')
-                {
+		{
 #ifdef JP                 
-                        show_help("jmagic.txt#MagicRealms");
+			show_help("jmagic.txt#MagicRealms");
 #else
-                        show_help("magic.txt#MagicRealms");
+			show_help("magic.txt#MagicRealms");
 #endif
-                }
+		}
 		else if (c == '=')
 		{
 			screen_save();
@@ -2329,7 +2329,7 @@ static byte choose_realm(s32b choices, int *count)
  */
 static bool get_player_realms(void)
 {
-        int i, count;
+	int i, count;
 
 	/* Clean up infomation of modifications */
 	put_str("                                   ", 3, 40);
@@ -2378,12 +2378,12 @@ static bool get_player_realms(void)
 			(void)inkey();
 			prt("", 0, 0);
 			break;
-                }
+		}
 else
 #ifdef JP
-                if (get_check("よろしいですか？")) break;
+		if (get_check("よろしいですか？")) break;
 #else
-                if (get_check("Are you sure? ")) break;
+		if (get_check("Are you sure? ")) break;
 #endif
 	}
 
@@ -2445,7 +2445,7 @@ else
 #ifdef JP
 			else if (get_check("よろしいですか？")) break;
 #else
-                        else if (get_check("Are you sure? ")) break;
+			else if (get_check("Are you sure? ")) break;
 #endif
 		}
 		if (p_ptr->realm2)
@@ -3061,13 +3061,13 @@ static void get_history(void)
 	while ((n > 0) && (s[n-1] == ' ')) s[--n] = '\0';
 
        {
-        char temp[64*4];
-        roff_to_buf(s, 60, temp);
-        t = temp;
-        for(i=0 ; i<4 ; i++){
-             if(t[0]==0)break; 
-             else {strcpy(p_ptr->history[i], t);t += strlen(t)+1;}
-             }
+	char temp[64*4];
+	roff_to_buf(s, 60, temp);
+	t = temp;
+	for(i=0 ; i<4 ; i++){
+	     if(t[0]==0)break; 
+	     else {strcpy(p_ptr->history[i], t);t += strlen(t)+1;}
+	     }
        }
 }
 
@@ -3319,7 +3319,7 @@ static void player_wipe(void)
 
 	/* Assume no cheating */
 	p_ptr->noscore = 0;
-        p_ptr->wizard = FALSE;
+	p_ptr->wizard = FALSE;
 
 	/* Not waiting to report score */
 	p_ptr->wait_report_score = FALSE;
@@ -3328,16 +3328,16 @@ static void player_wipe(void)
 	p_ptr->pet_follow_distance = PET_FOLLOW_DIST;
 	p_ptr->pet_extra_flags = (PF_TELEPORT | PF_ATTACK_SPELL | PF_SUMMON_SPELL);
 
-        /* Wipe the recall depths */
-        for (i = 0; i < max_d_idx; i++)
-        {
+	/* Wipe the recall depths */
+	for (i = 0; i < max_d_idx; i++)
+	{
 		max_dlv[i] = 0;
-        }
+	}
 
 	p_ptr->visit = 1;
 
-        /* Reset wild_mode to FALSE */
-        p_ptr->wild_mode = FALSE;
+	/* Reset wild_mode to FALSE */
+	p_ptr->wild_mode = FALSE;
 
 	for (i = 0; i < 108; i++)
 	{
@@ -4109,13 +4109,13 @@ static bool get_player_race(void)
 		}
 		else k = -1;
 		if (c == '?')
-                {
+		{
 #ifdef JP                 
-                        show_help("jraceclas.txt#TheRaces");
+			show_help("jraceclas.txt#TheRaces");
 #else
-                        show_help("raceclas.txt#TheRaces");
+			show_help("raceclas.txt#TheRaces");
 #endif
-                }
+		}
 		else if (c == '=')
 		{
 			screen_save();
@@ -4324,13 +4324,13 @@ static bool get_player_class(void)
 		}
 		else k = -1;
 		if (c == '?')
-                {
+		{
 #ifdef JP                 
-                        show_help("jraceclas.txt#TheClasses");
+			show_help("jraceclas.txt#TheClasses");
 #else
-                        show_help("raceclas.txt#TheClasses");
+			show_help("raceclas.txt#TheClasses");
 #endif
-                }
+		}
 		else if (c == '=')
 		{
 			screen_save();
@@ -4566,13 +4566,13 @@ static bool get_player_seikaku(void)
 		}
 		else k = -1;
 		if (c == '?')
-                {
+		{
 #ifdef JP                 
-                        show_help("jraceclas.txt#ThePersonalities");
+			show_help("jraceclas.txt#ThePersonalities");
 #else
-                        show_help("raceclas.txt#ThePersonalities");
+			show_help("raceclas.txt#ThePersonalities");
 #endif
-                }
+		}
 		else if (c == '=')
 		{
 			screen_save();
@@ -4770,13 +4770,13 @@ static bool get_stat_limits(void)
 		c = inkey();
 		switch ( c ){
 		case 'Q':
-		        birth_quit();
+			birth_quit();
 			break;
 		case 'S':
-		        return (FALSE); 
+			return (FALSE); 
 			break;
 		case ESCAPE:
-		        break;
+			break;
 		case ' ':
 		case '\r':
 		case '\n':
@@ -4841,13 +4841,13 @@ static bool get_stat_limits(void)
 			}
 			break;
 		case '?':
-                {
+		{
 #ifdef JP                 
-                        show_help("jbirth.txt#AutoRoller");
+			show_help("jbirth.txt#AutoRoller");
 #else
-                        show_help("birth.txt#AutoRoller");
+			show_help("birth.txt#AutoRoller");
 #endif
-                }
+		}
 			break;
 		case '=':
 			screen_save();
@@ -4860,7 +4860,7 @@ static bool get_stat_limits(void)
 			screen_load();
 			break;
 		default:
-		        bell();
+			bell();
 			break;
 		}
 		if(c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == 6))break;
@@ -5138,9 +5138,9 @@ static bool get_chara_limits(void)
 			break;
 		case '?':
 #ifdef JP                 
-                        show_help("jbirth.txt#AutoRoller");
+			show_help("jbirth.txt#AutoRoller");
 #else
-                        show_help("birth.txt#AutoRoller");
+			show_help("birth.txt#AutoRoller");
 #endif
 			break;
 		case '=':
@@ -5175,17 +5175,17 @@ static bool get_chara_limits(void)
  */
 static void edit_history(void)
 {
-        char old_history[4][60];
+	char old_history[4][60];
 	char c;
 	int y = 0, x = 0;
 	int i, j;
 
-        /* Edit character background */
-        for (i = 0; i < 4; i++)
-        {
-                sprintf(old_history[i], "%s", p_ptr->history[i]);
-        }
-        /* Turn 0 to space */
+	/* Edit character background */
+	for (i = 0; i < 4; i++)
+	{
+		sprintf(old_history[i], "%s", p_ptr->history[i]);
+	}
+	/* Turn 0 to space */
 	for (i = 0; i < 4; i++)
 	{
 		for (j = 0; p_ptr->history[i][j]; j++) /* loop */;
@@ -5193,62 +5193,62 @@ static void edit_history(void)
 		for (; j < 59; j++) p_ptr->history[i][j] = ' ';
 		p_ptr->history[i][59] = '\0';
 	}
-        display_player(1);
+	display_player(1);
 #ifdef JP
-        c_put_str(TERM_L_GREEN, "(キャラクターの生い立ち - 編集モード)", 11, 20);
+	c_put_str(TERM_L_GREEN, "(キャラクターの生い立ち - 編集モード)", 11, 20);
 #else
-        c_put_str(TERM_L_GREEN, "(Character Background - Edit Mode)", 11, 20);
+	c_put_str(TERM_L_GREEN, "(Character Background - Edit Mode)", 11, 20);
 #endif
 
-        while (TRUE)
-        {
-                for (i = 0; i < 4; i++)
-                {
-                        put_str(p_ptr->history[i], i + 12, 10);
-                }
+	while (TRUE)
+	{
+		for (i = 0; i < 4; i++)
+		{
+			put_str(p_ptr->history[i], i + 12, 10);
+		}
 #ifdef JP
 		if (iskanji2(p_ptr->history[y], x))
 			c_put_str(TERM_L_BLUE, format("%c%c", p_ptr->history[y][x],p_ptr->history[y][x+1]), y + 12, x + 10);
 		else
 #endif
-                c_put_str(TERM_L_BLUE, format("%c", p_ptr->history[y][x]), y + 12, x + 10);
+		c_put_str(TERM_L_BLUE, format("%c", p_ptr->history[y][x]), y + 12, x + 10);
 
 		/* Place cursor just after cost of current stat */
-                Term_gotoxy(x + 10, y + 12);
+		Term_gotoxy(x + 10, y + 12);
 
-                c = inkey();
+		c = inkey();
 
-                if (c == '8')
-                {
-                        y--;
-                        if (y < 0) y = 3;
+		if (c == '8')
+		{
+			y--;
+			if (y < 0) y = 3;
 #ifdef JP
 			if ((x > 0) && (iskanji2(p_ptr->history[y], x-1))) x--;
 #endif
-                }
-                else if (c == '2')
-                {
-                        y++;
-                        if (y > 3) y = 0;
+		}
+		else if (c == '2')
+		{
+			y++;
+			if (y > 3) y = 0;
 #ifdef JP
 			if ((x > 0) && (iskanji2(p_ptr->history[y], x-1))) x--;
 #endif
-                }
-                else if (c == '6')
-                {
+		}
+		else if (c == '6')
+		{
 #ifdef JP
 			if (iskanji2(p_ptr->history[y], x)) x++;
 #endif
-                        x++;
-                        if (x > 58)
+			x++;
+			if (x > 58)
 			{
 				x = 0;
 				if (y < 3) y++;
 			}
-                }
-                else if (c == '4')
-                {
-                        x--;
+		}
+		else if (c == '4')
+		{
+			x--;
 			if (x < 0)
 			{
 				if (y)
@@ -5262,20 +5262,20 @@ static void edit_history(void)
 #ifdef JP
 			if ((x > 0) && (iskanji2(p_ptr->history[y], x-1))) x--;
 #endif
-                }
-                else if (c == '\r')
-                {
-                        break;
-                }
-                else if (c == ESCAPE)
-                {
-                        for (i = 0; i < 4; i++)
-                        {
-                                sprintf(p_ptr->history[i], "%s", old_history[i]);
-                                put_str(p_ptr->history[i], i + 12, 10);
-                        }
-                        break;
-                }
+		}
+		else if (c == '\r')
+		{
+			break;
+		}
+		else if (c == ESCAPE)
+		{
+			for (i = 0; i < 4; i++)
+			{
+				sprintf(p_ptr->history[i], "%s", old_history[i]);
+				put_str(p_ptr->history[i], i + 12, 10);
+			}
+			break;
+		}
 		else if (c == '\010')
 		{
 			x--;
@@ -5289,7 +5289,7 @@ static void edit_history(void)
 				else x = 0;
 			}
 
-                        p_ptr->history[y][x] = ' ';
+			p_ptr->history[y][x] = ' ';
 #ifdef JP
 			if ((x > 0) && (iskanji2(p_ptr->history[y], x - 1)))
 			{
@@ -5301,9 +5301,9 @@ static void edit_history(void)
 #ifdef JP
 		else if (iskanji(c) || isprint(c))
 #else
-                else if (isprint(c)) /* BUGFIX */
+		else if (isprint(c)) /* BUGFIX */
 #endif
-                {
+		{
 #ifdef JP
 			if (iskanji2(p_ptr->history[y], x))
 			{
@@ -5329,15 +5329,15 @@ static void edit_history(void)
 				c = inkey();
 			}
 #endif
-                        p_ptr->history[y][x++] = c;
+			p_ptr->history[y][x++] = c;
 			if (x > 58)
 			{
 				x = 0;
 				y++;
 				if (y > 3) y = 0;
 			}
-                }
-        } /* while (TRUE) */
+		}
+	} /* while (TRUE) */
 
 }
 
@@ -5744,15 +5744,15 @@ static bool player_birth_aux(void)
 				/* 0 to 10 random quests */
 				number_of_quests = randint0(11);
 			}
-                        else if (inp[0] == '?')
-                        {
+			else if (inp[0] == '?')
+			{
 #ifdef JP                 
-                                show_help("jbirth.txt#RandomQuests");
+				show_help("jbirth.txt#RandomQuests");
 #else
-                                show_help("birth.txt#RandomQuests");
+				show_help("birth.txt#RandomQuests");
 #endif
-                                continue;
-                        }
+				continue;
+			}
 			else
 			{
 				number_of_quests = atoi(inp);
@@ -5952,7 +5952,7 @@ static bool player_birth_aux(void)
 					/* Roll for age/height/weight */
 					get_ahw();
 
-	       				/* Roll for social class */
+					/* Roll for social class */
 					get_history();
 
 					break;
@@ -6066,9 +6066,9 @@ static bool player_birth_aux(void)
 			if (c == '?')
 			{
 #ifdef JP                 
-                                show_help("jbirth.txt#AutoRoller");
+				show_help("jbirth.txt#AutoRoller");
 #else
-                                show_help("birth.txt#AutoRoller");
+				show_help("birth.txt#AutoRoller");
 #endif
 				continue;
 			}
@@ -6156,83 +6156,83 @@ static bool player_birth_aux(void)
  */
 static bool ask_quick_start(void)
 {
-        /* Doesn't have previous data */
+	/* Doesn't have previous data */
 	if (!previous_char.quick_ok) return FALSE;
 
 
 	/* Clear screen */
 	Term_clear();
 
-        /* Extra info */
+	/* Extra info */
 #ifdef JP
-        put_str("クイック・スタートを使うと以前と全く同じキャラクターで始められます。", 11, 5);
+	put_str("クイック・スタートを使うと以前と全く同じキャラクターで始められます。", 11, 5);
 #else
-        put_str("Do you want to use the quick start function(same character as your last one).", 11, 2);
+	put_str("Do you want to use the quick start function(same character as your last one).", 11, 2);
 #endif
 
-        /* Choose */
-        while (1)
-        {
-                char c;
+	/* Choose */
+	while (1)
+	{
+		char c;
 
 #ifdef JP
-                put_str("クイック・スタートを使いますか？[y/n]", 14, 10);
+		put_str("クイック・スタートを使いますか？[y/n]", 14, 10);
 #else
-                put_str("Use quick start? [y/n]", 14, 10);
+		put_str("Use quick start? [y/n]", 14, 10);
 #endif
-                c = inkey();
+		c = inkey();
 
-                if (c == 'Q') quit(NULL);
-                else if (c == 'S') return (FALSE);
-                else if (c == '?')
-                {
+		if (c == 'Q') quit(NULL);
+		else if (c == 'S') return (FALSE);
+		else if (c == '?')
+		{
 #ifdef JP                 
-                        show_help("jbirth.txt#QuickStart");
+			show_help("jbirth.txt#QuickStart");
 #else
-                        show_help("birth.txt#QuickStart");
+			show_help("birth.txt#QuickStart");
 #endif
-                }
-                else if ((c == 'y') || (c == 'Y'))
-                {
-                        /* Yes */
-                        break;
-                }
-                else
-                {
-                        /* No */
-                        return FALSE;
-                }
-        }
+		}
+		else if ((c == 'y') || (c == 'Y'))
+		{
+			/* Yes */
+			break;
+		}
+		else
+		{
+			/* No */
+			return FALSE;
+		}
+	}
 
-        load_prev_data(FALSE);
-        init_dungeon_quests(previous_char.quests);
-        init_turn();
+	load_prev_data(FALSE);
+	init_dungeon_quests(previous_char.quests);
+	init_turn();
 
-        sp_ptr = &sex_info[p_ptr->psex];
-        rp_ptr = &race_info[p_ptr->prace];
-        cp_ptr = &class_info[p_ptr->pclass];
-        mp_ptr = &m_info[p_ptr->pclass];
-        ap_ptr = &seikaku_info[p_ptr->pseikaku];
+	sp_ptr = &sex_info[p_ptr->psex];
+	rp_ptr = &race_info[p_ptr->prace];
+	cp_ptr = &class_info[p_ptr->pclass];
+	mp_ptr = &m_info[p_ptr->pclass];
+	ap_ptr = &seikaku_info[p_ptr->pseikaku];
 
-        /* Calc hitdie, but don't roll */
-        get_extra(FALSE);
+	/* Calc hitdie, but don't roll */
+	get_extra(FALSE);
 
-        /* Calculate the bonuses and hitpoints */
-        p_ptr->update |= (PU_BONUS | PU_HP);
+	/* Calculate the bonuses and hitpoints */
+	p_ptr->update |= (PU_BONUS | PU_HP);
 
-        /* Update stuff */
-        update_stuff();
+	/* Update stuff */
+	update_stuff();
 
-        /* Fully healed */
-        p_ptr->chp = p_ptr->mhp;
+	/* Fully healed */
+	p_ptr->chp = p_ptr->mhp;
 
-        /* Fully rested */
-        p_ptr->csp = p_ptr->msp;
+	/* Fully rested */
+	p_ptr->csp = p_ptr->msp;
 
-        /* Process the player name */
-        process_player_name(FALSE);
+	/* Process the player name */
+	process_player_name(FALSE);
 
-        return TRUE;
+	return TRUE;
 }
 
 
@@ -6247,7 +6247,7 @@ void player_birth(void)
 	int i, j;
 	char buf[80];
 
-        playtime = 0;
+	playtime = 0;
 
 	/* 
 	 * Wipe monsters in old dungeon
@@ -6255,24 +6255,24 @@ void player_birth(void)
 	 */
 	wipe_m_list();
 
-        /* Wipe the player */
-        player_wipe();
+	/* Wipe the player */
+	player_wipe();
 
 	/* Create a new character */
 
-        /* Quick start? */
-        if (!ask_quick_start())
-        {
-                /* No, normal start */
-                while (1)
-                {
-                        /* Roll up a new character */
-                        if (player_birth_aux()) break;
+	/* Quick start? */
+	if (!ask_quick_start())
+	{
+		/* No, normal start */
+		while (1)
+		{
+			/* Roll up a new character */
+			if (player_birth_aux()) break;
 
-                        /* Wipe the player */
-                        player_wipe();
-                }
-        }
+			/* Wipe the player */
+			player_wipe();
+		}
+	}
 
 	/* Note player birth in the message recall */
 	message_add(" ");

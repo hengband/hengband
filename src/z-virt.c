@@ -48,7 +48,7 @@ vptr rnfree(vptr p, huge len)
 	{
 		char buf[80];
 		sprintf(buf, "Kill (%ld): %ld - %ld = %ld.",
-		        len, virt_make, virt_kill, virt_make - virt_kill);
+			len, virt_make, virt_kill, virt_make - virt_kill);
 		plog(buf);
 	}
 
@@ -115,7 +115,7 @@ vptr ralloc(huge len)
 	{
 		char buf[80];
 		sprintf(buf, "Make (%ld): %ld - %ld = %ld.",
-		        len, virt_make, virt_kill, virt_make - virt_kill);
+			len, virt_make, virt_kill, virt_make - virt_kill);
 		plog(buf);
 	}
 

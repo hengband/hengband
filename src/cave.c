@@ -76,9 +76,9 @@ bool is_trap(int feat)
 		case FEAT_TRAP_SLEEP:
 		case FEAT_TRAP_TRAPS:
 		case FEAT_TRAP_ALARM:
-                case FEAT_TRAP_OPEN:
-                case FEAT_TRAP_ARMAGEDDON:
-                case FEAT_TRAP_PIRANHA:
+		case FEAT_TRAP_OPEN:
+		case FEAT_TRAP_ARMAGEDDON:
+		case FEAT_TRAP_PIRANHA:
 		{
 			/* A trap */
 			return (TRUE);
@@ -97,8 +97,8 @@ bool is_trap(int feat)
  */
 bool is_known_trap(cave_type *c_ptr)
 {
-        if (!c_ptr->mimic && is_trap(c_ptr->feat)) return TRUE;
-        else return FALSE;
+	if (!c_ptr->mimic && is_trap(c_ptr->feat)) return TRUE;
+	else return FALSE;
 }
 
 
@@ -107,7 +107,7 @@ bool is_known_trap(cave_type *c_ptr)
  */
 bool is_closed_door(int feat)
 {
-        return (feat >= FEAT_DOOR_HEAD && feat <= FEAT_DOOR_TAIL);
+	return (feat >= FEAT_DOOR_HEAD && feat <= FEAT_DOOR_TAIL);
 }
 
 
@@ -116,11 +116,11 @@ bool is_closed_door(int feat)
  */
 bool is_hidden_door(cave_type *c_ptr)
 {
-        if (c_ptr->mimic &&
-            is_closed_door(c_ptr->feat))
-                return TRUE;
-        else 
-                return FALSE;
+	if (c_ptr->mimic &&
+	    is_closed_door(c_ptr->feat))
+		return TRUE;
+	else 
+		return FALSE;
 }
 
 
@@ -953,14 +953,14 @@ void map_info(int y, int x, byte *ap, char *cp)
 						/* Use "dark gray" */
 						a = TERM_L_DARK;
 					}
-                                }
+				}
 
 				/* Handle "torch-lit" grids */
 				else if (c_ptr->info & (CAVE_LITE | CAVE_MNLT))
 				{
-                                        /* Torch lite */
-                                        if (view_yellow_lite && !p_ptr->wild_mode)
-                                        {
+					/* Torch lite */
+					if (view_yellow_lite && !p_ptr->wild_mode)
+					{
 						if (use_graphics)
 						{
 							/*
@@ -979,9 +979,9 @@ void map_info(int y, int x, byte *ap, char *cp)
 					}
 				}
 
-                                /* Handle "dark" grids */
-                                else if (!(c_ptr->info & CAVE_GLOW))
-                                {
+				/* Handle "dark" grids */
+				else if (!(c_ptr->info & CAVE_GLOW))
+				{
 					if (use_graphics)
 					{
 						/*
@@ -997,7 +997,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 						/* Use "dark gray" */
 						a = TERM_L_DARK;
 					}
-                                }
+				}
 
 				/* Handle "out-of-sight" grids */
 				else if (!(c_ptr->info & CAVE_VIEW))
@@ -1224,29 +1224,29 @@ void map_info(int y, int x, byte *ap, char *cp)
 			}
 		}
 
-                /* "Simple Lighting" */
-                else
-                {
-                        /* Handle "blind" */
-                        if (!(c_ptr->info & CAVE_MARK))
-                        {
+		/* "Simple Lighting" */
+		else
+		{
+			/* Handle "blind" */
+			if (!(c_ptr->info & CAVE_MARK))
+			{
 				/* Unsafe cave grid -- idea borrowed from Unangband */
 				if (view_unsafe_grids && (c_ptr->info & (CAVE_UNSAFE)))
 					feat = FEAT_UNDETECTD;
 				else
 					feat = FEAT_NONE;
-                        }
+			}
 
-                        /* Access feature */
-                        f_ptr = &f_info[feat];
+			/* Access feature */
+			f_ptr = &f_info[feat];
 
-                        /* Normal attr */
-                        a = f_ptr->x_attr;
+			/* Normal attr */
+			a = f_ptr->x_attr;
 
-                        /* Normal char */
-                        c = f_ptr->x_char;
-                }
-        }
+			/* Normal char */
+			c = f_ptr->x_char;
+		}
+	}
 
 	if (feat_priority == -1)
 	{
@@ -2461,7 +2461,7 @@ void display_map(int *cy, int *cx)
 
 	int hgt, wid, yrat, xrat;
 
-        int **match_autopick_yx;
+	int **match_autopick_yx;
 	object_type ***object_autopick_yx;
 
 	/* Get size */
@@ -2655,7 +2655,7 @@ void display_map(int *cy, int *cx)
 	}
 
 
-        for (y = 1; y < hgt + 1; ++y)
+	for (y = 1; y < hgt + 1; ++y)
 	{
 	  match_autopick = -1;
 	  for (x = 1; x <= wid; x++){
@@ -2722,7 +2722,7 @@ void display_map(int *cy, int *cx)
 		C_FREE(bigmp[y], (cur_wid + 2), byte);
 	}
 
- 	/* Free each line map */
+	/* Free each line map */
 	C_FREE(bigma, (cur_hgt + 2), byte_ptr);
 	C_FREE(bigmc, (cur_hgt + 2), char_ptr);
 	C_FREE(bigmp, (cur_hgt + 2), byte_ptr);
@@ -2755,13 +2755,13 @@ prt("お待ち下さい...", 0, 0);
 	/* Clear the screen */
 	Term_clear();
 
-        display_autopick = 0;
+	display_autopick = 0;
 
 	/* Display the map */
 	display_map(&cy, &cx);
 
 	/* Wait for it */
-        if(max_autopick && !p_ptr->wild_mode)
+	if(max_autopick && !p_ptr->wild_mode)
 	{
 		display_autopick = ITEM_DISPLAY;
 
@@ -4621,8 +4621,8 @@ void map_area(int range)
 
 			c_ptr = &cave[y][x];
 
-                        /* Feature code (applying "mimic" field) */
-                        feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+			/* Feature code (applying "mimic" field) */
+			feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
 
 			/* All non-walls are "checked" */
 			if ((feat <= FEAT_DOOR_TAIL) ||
@@ -4643,8 +4643,8 @@ void map_area(int range)
 				{
 					c_ptr = &cave[y + ddy_ddd[i]][x + ddx_ddd[i]];
 
-                                        /* Feature code (applying "mimic" field) */
-                                        feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+					/* Feature code (applying "mimic" field) */
+					feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
 
 					/* Memorize walls (etc) */
 					if ((feat >= FEAT_RUBBLE) && (feat != FEAT_DIRT) && (feat != FEAT_GRASS))
@@ -4716,8 +4716,8 @@ void wiz_lite(bool wizard, bool ninja)
 		{
 			cave_type *c_ptr = &cave[y][x];
 
-                        /* Feature code (applying "mimic" field) */
-                        feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+			/* Feature code (applying "mimic" field) */
+			feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
 
 			/* Process all non-walls */
 			if (cave_floor_bold(y, x) || (feat == FEAT_RUBBLE) || (feat == FEAT_TREES) || (feat == FEAT_MOUNTAIN))
@@ -4731,8 +4731,8 @@ void wiz_lite(bool wizard, bool ninja)
 					/* Get the grid */
 					c_ptr = &cave[yy][xx];
 
-                                        /* Feature code (applying "mimic" field) */
-                                        feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+					/* Feature code (applying "mimic" field) */
+					feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
 
 					/* Memorize normal features */
 					if (ninja)
@@ -4839,10 +4839,10 @@ void cave_set_feat(int y, int x, int feat)
 {
 	cave_type *c_ptr = &cave[y][x];
 
-        /* Clear mimic type */
-        c_ptr->mimic = 0;
+	/* Clear mimic type */
+	c_ptr->mimic = 0;
 
-        /* Remove flag for mirror/glyph */
+	/* Remove flag for mirror/glyph */
 	c_ptr->info &= ~(CAVE_OBJECT);
 
 	/* Change the feature */
@@ -4860,7 +4860,7 @@ void remove_mirror(int y, int x)
 {
 	/* Remove the mirror */
 	cave[y][x].info &= ~(CAVE_OBJECT);
-        cave[y][x].mimic = 0;
+	cave[y][x].mimic = 0;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS)
 	{
@@ -4880,10 +4880,10 @@ void remove_mirror(int y, int x)
  */
 bool is_mirror_grid(cave_type *c_ptr)
 {
-        if ((c_ptr->info & CAVE_OBJECT) && c_ptr->mimic == FEAT_MIRROR)
-                return TRUE;
-        else
-                return FALSE;
+	if ((c_ptr->info & CAVE_OBJECT) && c_ptr->mimic == FEAT_MIRROR)
+		return TRUE;
+	else
+		return FALSE;
 }
 
 
@@ -4892,10 +4892,10 @@ bool is_mirror_grid(cave_type *c_ptr)
  */
 bool is_glyph_grid(cave_type *c_ptr)
 {
-        if ((c_ptr->info & CAVE_OBJECT) && c_ptr->mimic == FEAT_GLYPH)
-                return TRUE;
-        else
-                return FALSE;
+	if ((c_ptr->info & CAVE_OBJECT) && c_ptr->mimic == FEAT_GLYPH)
+		return TRUE;
+	else
+		return FALSE;
 }
 
 
@@ -4904,10 +4904,10 @@ bool is_glyph_grid(cave_type *c_ptr)
  */
 bool is_explosive_rune_grid(cave_type *c_ptr)
 {
-        if ((c_ptr->info & CAVE_OBJECT) && c_ptr->mimic == FEAT_MINOR_GLYPH)
-                return TRUE;
-        else
-                return FALSE;
+	if ((c_ptr->info & CAVE_OBJECT) && c_ptr->mimic == FEAT_MINOR_GLYPH)
+		return TRUE;
+	else
+		return FALSE;
 }
 
 

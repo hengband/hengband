@@ -1314,7 +1314,7 @@ static void print_header(void)
 	char buf[80];
 
 	sprintf(buf, "Artifact Spoilers for Hengband Version %d.%d.%d",
-	        FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+		FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 	spoiler_underline(buf);
 }
 
@@ -1682,7 +1682,7 @@ static void spoil_mon_desc(cptr fname)
 
 	/* Dump the header */
 	fprintf(fff, "Monster Spoilers for Hengband Version %d.%d.%d\n",
-	        FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+		FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 	fprintf(fff, "------------------------------------------\n\n");
 
 	/* Dump the header */
@@ -1701,12 +1701,12 @@ static void spoil_mon_desc(cptr fname)
 		if (r_ptr->name) who[n++] = i;
 	}
 
-        /* Select the sort method */
-        ang_sort_comp = ang_sort_comp_hook;
-        ang_sort_swap = ang_sort_swap_hook;
+	/* Select the sort method */
+	ang_sort_comp = ang_sort_comp_hook;
+	ang_sort_swap = ang_sort_swap_hook;
 
-        /* Sort the array by dungeon depth of monsters */
-        ang_sort(who, &why, n);
+	/* Sort the array by dungeon depth of monsters */
+	ang_sort(who, &why, n);
 
 	/* Scan again */
 	for (i = 0; i < n; i++)
@@ -1847,21 +1847,21 @@ static void spoil_out(cptr str)
 	for (; *str; str++)
 	{
 #ifdef JP
-	        char cbak;
-                int k_flag = iskanji((unsigned char)(*str));
+		char cbak;
+		int k_flag = iskanji((unsigned char)(*str));
 #endif
 		char ch = *str;
 		int wrap = (ch == '\n');
 
 #ifdef JP
-                if (!isprint(ch) && !k_flag && !iskanji2) ch = ' ';
+		if (!isprint(ch) && !k_flag && !iskanji2) ch = ' ';
 		if(k_flag && !iskanji2)iskanji2=1;else iskanji2=0;
 #else
 		if (!isprint(ch)) ch = ' ';
 #endif
 
 #ifdef JP
-                if ( roff_p >= roff_buf+( (k_flag) ? 74 : 75) ) wrap=1;
+		if ( roff_p >= roff_buf+( (k_flag) ? 74 : 75) ) wrap=1;
 		if ((ch == ' ') && (roff_p + 2 >= roff_buf + ((k_flag) ? 74 : 75))) wrap = 1;
 #else
 		if (roff_p >= roff_buf + 75) wrap = 1;
@@ -1875,12 +1875,12 @@ static void spoil_out(cptr str)
 			*roff_p = '\0';
 			r = roff_p;
 #ifdef JP
-                                cbak=' ';
+				cbak=' ';
 #endif
 			if (roff_s && (ch != ' '))
 			{
 #ifdef JP
-			        cbak=*roff_s;
+				cbak=*roff_s;
 #endif
 				*roff_s = '\0';
 				r = roff_s + 1;
@@ -1903,9 +1903,9 @@ static void spoil_out(cptr str)
 		  }
 		  else{
 		    if( iskanji2 && 
-                        strncmp(str, "。", 2) != 0 && 
+			strncmp(str, "。", 2) != 0 && 
 			strncmp(str, "、", 2) != 0 &&
-		        strncmp(str, "ィ", 2) != 0 &&
+			strncmp(str, "ィ", 2) != 0 &&
 			strncmp(str, "ー", 2) != 0) roff_s = roff_p;
 		  }
 #else

@@ -450,11 +450,11 @@ msg_print("食べ物がアゴを素通りして落ち、消えた！");
 		}
 	}
 	else if ((p_ptr->prace == RACE_GOLEM) ||
-	         (p_ptr->prace == RACE_ZOMBIE) ||
-	         (p_ptr->prace == RACE_ENT) ||
-	         (p_ptr->prace == RACE_DEMON) ||
-	         (p_ptr->prace == RACE_ANDROID) ||
-	         (p_ptr->prace == RACE_SPECTRE) ||
+		 (p_ptr->prace == RACE_ZOMBIE) ||
+		 (p_ptr->prace == RACE_ENT) ||
+		 (p_ptr->prace == RACE_DEMON) ||
+		 (p_ptr->prace == RACE_ANDROID) ||
+		 (p_ptr->prace == RACE_SPECTRE) ||
 		 (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING))
 	{
 #ifdef JP
@@ -561,10 +561,10 @@ static void do_cmd_quaff_potion_aux(int item)
 		return;
 	}
 
-        if((p_ptr->pclass == CLASS_BARD) && p_ptr->magic_num1[0])
-        {
-                stop_singing();
-        }
+	if((p_ptr->pclass == CLASS_BARD) && p_ptr->magic_num1[0])
+	{
+		stop_singing();
+	}
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
@@ -742,9 +742,9 @@ msg_print("何も思い出せない。どうやってここへ来たのかも分からない！");
 			if (!p_ptr->free_act)
 			{
 #ifdef JP
-         	msg_print("あなたは眠ってしまった。");
+		msg_print("あなたは眠ってしまった。");
 #else
-         	msg_print("You fall asleep.");
+		msg_print("You fall asleep.");
 #endif
 
 
@@ -1518,10 +1518,10 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 		return;
 	}
 
-        if((p_ptr->pclass == CLASS_BARD) && p_ptr->magic_num1[0])
-        {
-                stop_singing();
-        }
+	if((p_ptr->pclass == CLASS_BARD) && p_ptr->magic_num1[0])
+	{
+		stop_singing();
+	}
 
 	/* Not identified yet */
 	ident = FALSE;
@@ -2055,7 +2055,7 @@ msg_print("巻物は煙を立てて消え去った！");
 		msg_print(NULL);
 		msg_print("暗闇の中に繋ぎとめる。」");
 #else
- 		msg_print("'One Ring to rule them all, ");
+		msg_print("'One Ring to rule them all, ");
 		msg_print(NULL);
 		msg_print("One Ring to find them, ");
 		msg_print(NULL);
@@ -2328,7 +2328,7 @@ static int staff_effect(int sval, bool *use_charge, bool magic, bool known)
 			}
 			for (k = 0; k < num; k++)
 			{
-         	attempts = 1000;
+		attempts = 1000;
 
 				while(attempts--)
 				{
@@ -2666,7 +2666,7 @@ static void do_cmd_use_staff_aux(int item)
 
 		/* Combine / Reorder the pack (later) */
 		p_ptr->notice |= (PN_COMBINE | PN_REORDER);
-                p_ptr->window |= (PW_INVEN);
+		p_ptr->window |= (PW_INVEN);
 
 		return;
 	}
@@ -3200,7 +3200,7 @@ static void do_cmd_aim_wand_aux(int item)
 
 		/* Combine / Reorder the pack (later) */
 		p_ptr->notice |= (PN_COMBINE | PN_REORDER);
-                p_ptr->window |= (PW_INVEN);
+		p_ptr->window |= (PW_INVEN);
 
 		return;
 	}
@@ -3527,7 +3527,7 @@ static int rod_effect(int sval, int dir, bool *use_charge, bool magic)
 static void do_cmd_zap_rod_aux(int item)
 {
 	int ident, chance, lev, fail;
-        int dir = 0;
+	int dir = 0;
 	object_type *o_ptr;
 	bool success;
 
@@ -4275,7 +4275,7 @@ msg_print("あなたはフラキアに敵を締め殺すよう命じた。");
 
 				for (k = 0; k < num; k++)
 				{
-            	attempts = 1000;
+		attempts = 1000;
 
 					while(attempts--)
 					{
@@ -5056,41 +5056,41 @@ msg_print("あなたの槍は電気でスパークしている...");
 				o_ptr->timeout = 15;
 				break;
 			}
-                        case ART_PALANTIR:
-                        {
-                                monster_type *m_ptr;
-                                monster_race *r_ptr;
-                                int i;
+			case ART_PALANTIR:
+			{
+				monster_type *m_ptr;
+				monster_race *r_ptr;
+				int i;
 
 #ifdef JP
-                                msg_print("奇妙な場所が頭の中に浮かんだ．．．");
+				msg_print("奇妙な場所が頭の中に浮かんだ．．．");
 #else
-                                msg_print("Some strange places show up in your mind. And you see ...");
+				msg_print("Some strange places show up in your mind. And you see ...");
 #endif
 
-                                /* Process the monsters (backwards) */
-                                for (i = m_max - 1; i >= 1; i--)
-                                {
-                                        /* Access the monster */
-                                        m_ptr = &m_list[i];
+				/* Process the monsters (backwards) */
+				for (i = m_max - 1; i >= 1; i--)
+				{
+					/* Access the monster */
+					m_ptr = &m_list[i];
 
-                                        /* Ignore "dead" monsters */
-                                        if (!m_ptr->r_idx) continue;
+					/* Ignore "dead" monsters */
+					if (!m_ptr->r_idx) continue;
 
-                                        r_ptr = &r_info[m_ptr->r_idx];
+					r_ptr = &r_info[m_ptr->r_idx];
 
-                                        if(r_ptr->flags1 & RF1_UNIQUE)
-                                        {
+					if(r_ptr->flags1 & RF1_UNIQUE)
+					{
 #ifdef JP
 						msg_format("%s． ",r_name + r_ptr->name);
 #else
-                                                msg_format("%s. ",r_name + r_ptr->name);
+						msg_format("%s. ",r_name + r_ptr->name);
 #endif
-                                        }
-                                }
-                                o_ptr->timeout = 200;
-                                break;
-                        }
+					}
+				}
+				o_ptr->timeout = 200;
+				break;
+			}
 
 			case ART_STONE_LORE:
 			{
@@ -5204,7 +5204,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 				o_ptr->timeout = randint0(120) + 120;
 				break;
 			}
-		        case ART_HURIN:
+			case ART_HURIN:
 			{
 				(void)set_fast(randint1(50) + 50, FALSE);
 				hp_player(10);
@@ -5463,7 +5463,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 				(void)set_image(0);
 
 				o_ptr->timeout = 100;
- 				break;
+				break;
 			}
 
 			case ART_BOLISHOI:
@@ -5472,7 +5472,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 				(void)charm_animal(dir, p_ptr->lev);
 
 				o_ptr->timeout = 200;
- 				break;
+				break;
 			}
 
 			case ART_ARUNRUTH:
@@ -5619,40 +5619,40 @@ msg_print("あなたの槍は電気でスパークしている...");
 	}
 
 	else if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3))
-        {
-                switch (o_ptr->xtra3-1)
-                {
-                case ESSENCE_TMP_RES_ACID:
-                        (void)set_oppose_acid(randint1(20) + 20, FALSE);
-                        o_ptr->timeout = randint0(50) + 50;
-                        return;
+	{
+		switch (o_ptr->xtra3-1)
+		{
+		case ESSENCE_TMP_RES_ACID:
+			(void)set_oppose_acid(randint1(20) + 20, FALSE);
+			o_ptr->timeout = randint0(50) + 50;
+			return;
 
-                case ESSENCE_TMP_RES_ELEC:
-                        (void)set_oppose_elec(randint1(20) + 20, FALSE);
-                        o_ptr->timeout = randint0(50) + 50;
-                        return;
+		case ESSENCE_TMP_RES_ELEC:
+			(void)set_oppose_elec(randint1(20) + 20, FALSE);
+			o_ptr->timeout = randint0(50) + 50;
+			return;
 
-                case ESSENCE_TMP_RES_FIRE:
-                        (void)set_oppose_fire(randint1(20) + 20, FALSE);
-                        o_ptr->timeout = randint0(50) + 50;
-                        return;
+		case ESSENCE_TMP_RES_FIRE:
+			(void)set_oppose_fire(randint1(20) + 20, FALSE);
+			o_ptr->timeout = randint0(50) + 50;
+			return;
 
-                case ESSENCE_TMP_RES_COLD:
-                        (void)set_oppose_cold(randint1(20) + 20, FALSE);
-                        o_ptr->timeout = randint0(50) + 50;
-                        return;
+		case ESSENCE_TMP_RES_COLD:
+			(void)set_oppose_cold(randint1(20) + 20, FALSE);
+			o_ptr->timeout = randint0(50) + 50;
+			return;
 
-                case TR_IMPACT:
-                        earthquake(py, px, 5);
-                        o_ptr->timeout = 100 + randint1(100);
-                        
-                        /* Window stuff */
-                        p_ptr->window |= (PW_INVEN | PW_EQUIP);
+		case TR_IMPACT:
+			earthquake(py, px, 5);
+			o_ptr->timeout = 100 + randint1(100);
+			
+			/* Window stuff */
+			p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
-                        /* Done */
-                        return;
-                }
-        }
+			/* Done */
+			return;
+		}
+	}
 
 
 	else if (o_ptr->name2 == EGO_TRUMP)
@@ -5795,23 +5795,23 @@ msg_print("あなたの槍は電気でスパークしている...");
 				chance = randint0(5);
 #ifdef JP
 				msg_format("あなたは%sのブレスを吐いた。",
-				           ((chance == 1) ? "稲妻" :
-				            ((chance == 2) ? "冷気" :
-				             ((chance == 3) ? "酸" :
-				              ((chance == 4) ? "毒ガス" : "火炎")))));
+					   ((chance == 1) ? "稲妻" :
+					    ((chance == 2) ? "冷気" :
+					     ((chance == 3) ? "酸" :
+					      ((chance == 4) ? "毒ガス" : "火炎")))));
 #else
 				msg_format("You breathe %s.",
-				           ((chance == 1) ? "lightning" :
-				            ((chance == 2) ? "frost" :
-				             ((chance == 3) ? "acid" :
-				              ((chance == 4) ? "poison gas" : "fire")))));
+					   ((chance == 1) ? "lightning" :
+					    ((chance == 2) ? "frost" :
+					     ((chance == 3) ? "acid" :
+					      ((chance == 4) ? "poison gas" : "fire")))));
 #endif
 
 				fire_ball(((chance == 1) ? GF_ELEC :
-				           ((chance == 2) ? GF_COLD :
-				            ((chance == 3) ? GF_ACID :
-				             ((chance == 4) ? GF_POIS : GF_FIRE)))),
-				          dir, 250, -2);
+					   ((chance == 2) ? GF_COLD :
+					    ((chance == 3) ? GF_ACID :
+					     ((chance == 4) ? GF_POIS : GF_FIRE)))),
+					  dir, 250, -2);
 				o_ptr->timeout = randint0(200) + 200;
 				break;
 			}
@@ -5847,14 +5847,14 @@ msg_print("あなたの槍は電気でスパークしている...");
 				chance = randint0(2);
 #ifdef JP
 				msg_format("あなたは%sのブレスを吐いた。",
-				           ((chance == 1 ? "カオス" : "劣化")));
+					   ((chance == 1 ? "カオス" : "劣化")));
 #else
 				msg_format("You breathe %s.",
-				           ((chance == 1 ? "chaos" : "disenchantment")));
+					   ((chance == 1 ? "chaos" : "disenchantment")));
 #endif
 
 				fire_ball((chance == 1 ? GF_CHAOS : GF_DISENCHANT),
-				          dir, 220, -2);
+					  dir, 220, -2);
 				o_ptr->timeout = randint0(200) + 200;
 				break;
 			}
@@ -5864,14 +5864,14 @@ msg_print("あなたの槍は電気でスパークしている...");
 				chance = randint0(2);
 #ifdef JP
 				msg_format("あなたは%sのブレスを吐いた。",
-				           ((chance == 1 ? "轟音" : "破片")));
+					   ((chance == 1 ? "轟音" : "破片")));
 #else
 				msg_format("You breathe %s.",
-				           ((chance == 1 ? "sound" : "shards")));
+					   ((chance == 1 ? "sound" : "shards")));
 #endif
 
 				fire_ball((chance == 1 ? GF_SOUND : GF_SHARDS),
-				          dir, 230, -2);
+					  dir, 230, -2);
 				o_ptr->timeout = randint0(200) + 200;
 				break;
 			}
@@ -5881,20 +5881,20 @@ msg_print("あなたの槍は電気でスパークしている...");
 				chance = randint0(4);
 #ifdef JP
 				msg_format("あなたは%sのブレスを吐いた",
-				           ((chance == 1) ? "カオス" :
-				            ((chance == 2) ? "劣化" :
-				             ((chance == 3) ? "轟音" : "破片"))));
+					   ((chance == 1) ? "カオス" :
+					    ((chance == 2) ? "劣化" :
+					     ((chance == 3) ? "轟音" : "破片"))));
 #else
 				msg_format("You breathe %s.",
-				           ((chance == 1) ? "chaos" :
-				            ((chance == 2) ? "disenchantment" :
-				             ((chance == 3) ? "sound" : "shards"))));
+					   ((chance == 1) ? "chaos" :
+					    ((chance == 2) ? "disenchantment" :
+					     ((chance == 3) ? "sound" : "shards"))));
 #endif
 
 				fire_ball(((chance == 1) ? GF_CHAOS :
-				           ((chance == 2) ? GF_DISENCHANT :
-				            ((chance == 3) ? GF_SOUND : GF_SHARDS))),
-				          dir, 250, -2);
+					   ((chance == 2) ? GF_DISENCHANT :
+					    ((chance == 3) ? GF_SOUND : GF_SHARDS))),
+					  dir, 250, -2);
 				o_ptr->timeout = randint0(200) + 200;
 				break;
 			}
@@ -5904,10 +5904,10 @@ msg_print("あなたの槍は電気でスパークしている...");
 				chance = randint0(2);
 #ifdef JP
 				msg_format("あなたは%sのブレスを吐いた。",
-				           ((chance == 0 ? "閃光" : "暗黒")));
+					   ((chance == 0 ? "閃光" : "暗黒")));
 #else
 				msg_format("You breathe %s.",
-				           ((chance == 0 ? "light" : "darkness")));
+					   ((chance == 0 ? "light" : "darkness")));
 #endif
 
 				fire_ball((chance == 0 ? GF_LITE : GF_DARK), dir, 200, -2);
@@ -6740,11 +6740,11 @@ static bool select_magic_eater(bool only_browse)
 	/* Save the screen */
 	screen_save();
 
-        request_list = always_show_list;
+	request_list = always_show_list;
 
 	/* Get a spell from the user */
-        while (!flag)
-        {
+	while (!flag)
+	{
 		/* Show the list */
 		if (request_list || use_menu)
 		{
@@ -7146,7 +7146,7 @@ msg_print("呪文をうまく唱えられなかった！");
 	}
 	else
 	{
-                int dir = 0;
+		int dir = 0;
 
 		if (tval == TV_ROD)
 		{

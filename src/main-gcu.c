@@ -664,14 +664,14 @@ static bool init_sound(void)
       /* Prepare the sounds */
       for (i = 1; i < SOUND_MAX; i++)
       {
-         /* Extract name of sound file */
-         sprintf(wav, "%s.wav", angband_sound_name[i]);
+	 /* Extract name of sound file */
+	 sprintf(wav, "%s.wav", angband_sound_name[i]);
 
-         /* Access the sound */
-         path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_SOUND, wav);
+	 /* Access the sound */
+	 path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_SOUND, wav);
 
-         /* Save the sound filename, if it exists */
-         if (check_file(buf)) sound_file[i] = string_make(buf);
+	 /* Save the sound filename, if it exists */
+	 if (check_file(buf)) sound_file[i] = string_make(buf);
       }
 
       /* Sound available */
@@ -929,8 +929,8 @@ static errr Term_xtra_gcu_react(void)
 	{
 		/* Set one color (note scaling) */
 		init_color(i, angband_color_table[i][1] * 1000 / 255,
-		              angband_color_table[i][2] * 1000 / 255,
-		              angband_color_table[i][3] * 1000 / 255);
+			      angband_color_table[i][2] * 1000 / 255,
+			      angband_color_table[i][3] * 1000 / 255);
 	}
 
 #endif
@@ -964,7 +964,7 @@ static errr Term_xtra_gcu(int n, int v)
 #ifdef USE_SOUND
       /* Make a special sound */
       case TERM_XTRA_SOUND:
-         return (Term_xtra_gcu_sound(v));
+	 return (Term_xtra_gcu_sound(v));
 #endif
 
       /* Flush the Curses buffer */
@@ -1233,12 +1233,12 @@ errr init_gcu(int argc, char *argv[])
 
    /* Do we have color, and enough color, available? */
    can_use_color = ((start_color() != ERR) && has_colors() &&
-                    (COLORS >= 8) && (COLOR_PAIRS >= 8));
+		    (COLORS >= 8) && (COLOR_PAIRS >= 8));
 
 #ifdef REDEFINE_COLORS
 	/* Can we change colors? */
 	can_fix_color = (can_use_color && can_change_color() &&
-	                 (COLORS >= 16) && (COLOR_PAIRS > 8));
+			 (COLORS >= 16) && (COLOR_PAIRS > 8));
 #endif
 
    /* Attempt to use customized colors */
@@ -1247,17 +1247,17 @@ errr init_gcu(int argc, char *argv[])
       /* Prepare the color pairs */
       for (i = 1; i <= 63; i++)
       {
-         /* Reset the color */
-         if (init_pair(i, (i - 1) % 8, (i - 1) / 8) == ERR)
-         {
-            quit("Color pair init failed");
-         }
+	 /* Reset the color */
+	 if (init_pair(i, (i - 1) % 8, (i - 1) / 8) == ERR)
+	 {
+	    quit("Color pair init failed");
+	 }
 
 	/* Set up the colormap */
 	colortable[i - 1] = (COLOR_PAIR(i) | A_NORMAL);
 	colortable[i + 7] = (COLOR_PAIR(i) | A_BRIGHT);
 
-        /* XXX XXX XXX Take account of "gamma correction" */
+	/* XXX XXX XXX Take account of "gamma correction" */
 
 	/* Prepare the "Angband Colors" */
 	Term_xtra_gcu_react();
@@ -1266,7 +1266,7 @@ errr init_gcu(int argc, char *argv[])
    /* Attempt to use colors */
    else if (can_use_color)
    {
-                /* Color-pair 0 is *always* WHITE on BLACK */
+		/* Color-pair 0 is *always* WHITE on BLACK */
 
 		/* Prepare the color pairs */
 		init_pair(1, COLOR_RED,     COLOR_BLACK);
@@ -1307,11 +1307,11 @@ errr init_gcu(int argc, char *argv[])
       /* Initialize (if needed) */
       if (arg_sound && !init_sound())
       {
-         /* Warning */
-         plog("Cannot initialize sound!");
+	 /* Warning */
+	 plog("Cannot initialize sound!");
 
-         /* Cannot enable */
-         arg_sound = FALSE;
+	 /* Cannot enable */
+	 arg_sound = FALSE;
       }
 
       /* Change setting */
@@ -1361,33 +1361,33 @@ errr init_gcu(int argc, char *argv[])
 
       switch (i)
       {
-         /* Upper left */
-         case 0: rows = 24;
-            cols = 80;
-            y = x = 0;
-            break;
-         /* Lower left */
-         case 1: rows = LINES - 25;
-            cols = 80;
-            y = 24;
-            x = 0;
-            break;
-         /* Upper right */
-         case 2: rows = 24;
-            cols = COLS - 81;
-            y = 0;
-            x = 81;
-            break;
-         /* Lower right */
-         case 3: rows = LINES - 25;
-            cols = COLS - 81;
-            y = 24;
-            x = 81;
-            break;
-         /* XXX */
-         default: rows = cols = 0;
-             y = x = 0;
-             break;
+	 /* Upper left */
+	 case 0: rows = 24;
+	    cols = 80;
+	    y = x = 0;
+	    break;
+	 /* Lower left */
+	 case 1: rows = LINES - 25;
+	    cols = 80;
+	    y = 24;
+	    x = 0;
+	    break;
+	 /* Upper right */
+	 case 2: rows = 24;
+	    cols = COLS - 81;
+	    y = 0;
+	    x = 81;
+	    break;
+	 /* Lower right */
+	 case 3: rows = LINES - 25;
+	    cols = COLS - 81;
+	    y = 24;
+	    x = 81;
+	    break;
+	 /* XXX */
+	 default: rows = cols = 0;
+	     y = x = 0;
+	     break;
       }
 
       /* No non-windows */

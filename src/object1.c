@@ -146,7 +146,7 @@ void object_flags(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 
 	if ((o_ptr->tval > TV_CAPTURE) && o_ptr->xtra3)
 	{
-                int add = o_ptr->xtra3 - 1;
+		int add = o_ptr->xtra3 - 1;
 
 		if (add < TR_FLAG_MAX)
 		{
@@ -279,7 +279,7 @@ void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 
 	if ((o_ptr->tval > TV_CAPTURE) && o_ptr->xtra3)
 	{
-                int add = o_ptr->xtra3 - 1;
+		int add = o_ptr->xtra3 - 1;
 
 		if (add < TR_FLAG_MAX)
 		{
@@ -1878,49 +1878,49 @@ return "釣りをする : いつでも";
 	}
 
 	if ((o_ptr->tval > TV_CAPTURE) && o_ptr->xtra3)
-        {
-                switch (o_ptr->xtra3 - 1)
-                {
-                case ESSENCE_TMP_RES_ACID:
+	{
+		switch (o_ptr->xtra3 - 1)
+		{
+		case ESSENCE_TMP_RES_ACID:
 #ifdef JP
-                        return "酸への耐性 : 50+d50ターン毎";
+			return "酸への耐性 : 50+d50ターン毎";
 #else
-                        return "resist acid every 50+d50 turns";
+			return "resist acid every 50+d50 turns";
 #endif
-                        break;
+			break;
 
-                case ESSENCE_TMP_RES_ELEC:
+		case ESSENCE_TMP_RES_ELEC:
 #ifdef JP
-                        return "電撃への耐性 : 50+d50ターン毎";
+			return "電撃への耐性 : 50+d50ターン毎";
 #else
-                        return "resist elec every 50+d50 turns";
+			return "resist elec every 50+d50 turns";
 #endif
-                        break;
+			break;
 
-                case ESSENCE_TMP_RES_FIRE:
+		case ESSENCE_TMP_RES_FIRE:
 #ifdef JP
-                        return "火への耐性 : 50+d50ターン毎";
+			return "火への耐性 : 50+d50ターン毎";
 #else
-                        return "resist fire every 50+d50 turns";
+			return "resist fire every 50+d50 turns";
 #endif
-                        break;
+			break;
 
-                case ESSENCE_TMP_RES_COLD:
+		case ESSENCE_TMP_RES_COLD:
 #ifdef JP
-                        return "冷気への耐性 : 50+d50ターン毎";
+			return "冷気への耐性 : 50+d50ターン毎";
 #else
-                        return "resist cold every 50+d50 turns";
+			return "resist cold every 50+d50 turns";
 #endif
-                        break;
+			break;
 
-                case TR_IMPACT:
+		case TR_IMPACT:
 #ifdef JP
-                        return "地震 : 100+d100 ターン毎";
+			return "地震 : 100+d100 ターン毎";
 #else
-                        return "earthquake every 100+d100 turns";
+			return "earthquake every 100+d100 turns";
 #endif
-                        break;
-                }
+			break;
+		}
 	}
 
 	if (o_ptr->name2 == EGO_TRUMP)
@@ -2392,8 +2392,8 @@ bool identify_fully_aux(object_type *o_ptr)
 		char temp[70 * 20];
 
 		roff_to_buf(o_ptr->name1 ? (a_text + a_info[o_ptr->name1].text) :
-		            (k_text + k_info[lookup_kind(o_ptr->tval, o_ptr->sval)].text),
-		            77 - 15, temp);
+			    (k_text + k_info[lookup_kind(o_ptr->tval, o_ptr->sval)].text),
+			    77 - 15, temp);
 		for (j = 0; temp[j]; j += 1 + strlen(&temp[j]))
 		{ info[i] = &temp[j]; i++;}
 	}
@@ -2539,16 +2539,16 @@ info[i++] = "それは魔法抵抗力を下げる。";
 		if (o_ptr->name2 == EGO_LITE_DARKNESS)
 		{
 #ifdef JP
-                        info[i++] = "それは全く光らない。";
+			info[i++] = "それは全く光らない。";
 #else
 			info[i++] = "It provides no light..";
 #endif
 
 			if (o_ptr->sval == SV_LITE_FEANOR ||
-                            o_ptr->sval == SV_LITE_LANTERN)
+			    o_ptr->sval == SV_LITE_LANTERN)
 			{
 #ifdef JP
-                                info[i++] = "それは明りの半径を狭める(半径に-2)。";
+				info[i++] = "それは明りの半径を狭める(半径に-2)。";
 #else
 				info[i++] = "It decreases radius of light source by 2.";
 #endif
@@ -2556,7 +2556,7 @@ info[i++] = "それは魔法抵抗力を下げる。";
 			else
 			{
 #ifdef JP
-                                info[i++] = "それは明りの半径を狭める(半径に-1)。";
+				info[i++] = "それは明りの半径を狭める(半径に-1)。";
 #else
 				info[i++] = "It decreases radius of light source by 1.";
 #endif
@@ -4600,14 +4600,14 @@ int show_inven(int target_item)
 		strcpy(inven_spellbook_label, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 		for (i = 0; i < 52; i++)
 		{
-                        char c;
-                        if (i < 26) c = (char)('a' + i);
-                        else c = (char)('A' + i - 26);
+			char c;
+			if (i < 26) c = (char)('a' + i);
+			else c = (char)('A' + i - 26);
 
 			if (get_tag(&index, c))
 			{
 				if (inven_spellbook_label[i] == c)
-                                        inven_spellbook_label[i] = ' ';
+					inven_spellbook_label[i] = ' ';
 				inven_spellbook_label[index] = c;
 			}
 		}
@@ -4810,7 +4810,7 @@ int show_equip(int target_item)
 
 		/* Extract the maximal length (see below) */
 #ifdef JP
-                l = strlen(out_desc[k]) + (2 + 1);
+		l = strlen(out_desc[k]) + (2 + 1);
 #else
 		l = strlen(out_desc[k]) + (2 + 3);
 #endif
@@ -4818,7 +4818,7 @@ int show_equip(int target_item)
 
 		/* Increase length for labels (if needed) */
 #ifdef JP
-                if (show_labels) l += (7 + 2);
+		if (show_labels) l += (7 + 2);
 #else
 		if (show_labels) l += (14 + 2);
 #endif
@@ -4838,7 +4838,7 @@ int show_equip(int target_item)
 
 	/* Hack -- Find a column to start in */
 #ifdef JP
-        col = (len > wid - 6) ? 0 : (wid - len - 1);
+	col = (len > wid - 6) ? 0 : (wid - len - 1);
 #else
 	col = (len > wid - 4) ? 0 : (wid - len - 1);
 #endif
@@ -4930,7 +4930,7 @@ int show_equip(int target_item)
 		{
 			int wgt = o_ptr->weight * o_ptr->number;
 #ifdef JP
-                        (void)sprintf(tmp_val, "%3d.%1d kg", lbtokg1(wgt) , lbtokg2(wgt) );
+			(void)sprintf(tmp_val, "%3d.%1d kg", lbtokg1(wgt) , lbtokg2(wgt) );
 #else
 			(void)sprintf(tmp_val, "%3d.%d lb", wgt / 10, wgt % 10);
 #endif
@@ -5300,7 +5300,7 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 	/* Get the item index */
 	if (repeat_pull(cp))
 	{
-	        if (*cp == 1111) { /* the_force */
+		if (*cp == 1111) { /* the_force */
 		    item_tester_tval = 0;
 		    item_tester_hook = NULL;
 		    return (TRUE);
@@ -5466,10 +5466,10 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 	}
 
 
-        /*
-         * 追加オプション(always_show_list)が設定されている場合は常に一覧を表示する
-         */
-        if ((always_show_list == TRUE) || use_menu) command_see = TRUE;
+	/*
+	 * 追加オプション(always_show_list)が設定されている場合は常に一覧を表示する
+	 */
+	if ((always_show_list == TRUE) || use_menu) command_see = TRUE;
 
 	/* Hack -- start out in "display" mode */
 	if (command_see)
@@ -5564,7 +5564,7 @@ sprintf(tmp_val, "%c-%c,'(',')',",
 				sprintf(tmp_val, " %c-%c,'(',')',",
 #endif
 
-				        index_to_label(i1), index_to_label(i2));
+					index_to_label(i1), index_to_label(i2));
 
 				/* Append */
 				strcat(out_val, tmp_val);
@@ -5612,7 +5612,7 @@ sprintf(tmp_val, "%c-%c,'(',')',",
 				sprintf(tmp_val, " %c-%c,'(',')',",
 #endif
 
-				        index_to_label(e1), index_to_label(e2));
+					index_to_label(e1), index_to_label(e2));
 
 				/* Append */
 				strcat(out_val, tmp_val);
@@ -5753,7 +5753,7 @@ if (allow_floor) strcat(out_val, " '-'床上,");
 				done = TRUE;
 				break;
 			}
-		        case 'w':
+			case 'w':
 			{
 				if (select_the_force) {
 					*cp = 1111;
@@ -5955,7 +5955,7 @@ if (other_query_flag && !verify("本当に", k)) continue;
 				break;
 			}
 
-		        case 'w':
+			case 'w':
 			{
 				if (select_the_force) {
 					*cp = 1111;
@@ -5969,32 +5969,32 @@ if (other_query_flag && !verify("本当に", k)) continue;
 			{
 				int ver;
 				if(select_spellbook){
-                                    bool not_found = FALSE;
-                                    /* Look up the tag */
-                                    if (!get_tag(&k, which))
-                                    {
+				    bool not_found = FALSE;
+				    /* Look up the tag */
+				    if (!get_tag(&k, which))
+				    {
 					not_found = TRUE;
-                                    }
+				    }
 
-                                    /* Hack -- Validate the item */
-                                    if ((k < INVEN_RARM) ? !inven : !equip)
-                                    {
+				    /* Hack -- Validate the item */
+				    if ((k < INVEN_RARM) ? !inven : !equip)
+				    {
 					not_found = TRUE;
-                                    }
+				    }
 
-                                    /* Validate the item */
-                                    if (!get_item_okay(k))
-                                    {
+				    /* Validate the item */
+				    if (!get_item_okay(k))
+				    {
 					not_found = TRUE;
-                                    }
+				    }
 
-                                    if( !not_found ){
-                                        /* Accept that choice */
-                                        (*cp) = k;
-                                        item = TRUE;
-                                        done = TRUE;
-                                        break;
-                                    }
+				    if( !not_found ){
+					/* Accept that choice */
+					(*cp) = k;
+					item = TRUE;
+					done = TRUE;
+					break;
+				    }
 				}				
 
 				/* Extract "query" setting */
@@ -6004,16 +6004,16 @@ if (other_query_flag && !verify("本当に", k)) continue;
 				/* Convert letter to inventory index */
 				if (!command_wrk)
 				{
-                                        if (which == '(') k = i1;
-                                        else if (which == ')') k = i2;
-                                        else k = label_to_inven(which);
+					if (which == '(') k = i1;
+					else if (which == ')') k = i2;
+					else k = label_to_inven(which);
 				}
 
 				/* Convert letter to equipment index */
 				else
 				{
-                                        if (which == '(') k = e1;
-                                        else if (which == ')') k = e2;
+					if (which == '(') k = e1;
+					else if (which == ')') k = e2;
 					else k = label_to_equip(which);
 				}
 
@@ -6321,7 +6321,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 	/* Get the item index */
 	if (repeat_pull(cp))
 	{
-	        if (*cp == 1111) { /* the_force */
+		if (*cp == 1111) { /* the_force */
 		    item_tester_tval = 0;
 		    item_tester_hook = NULL;
 		    return (TRUE);
@@ -6485,10 +6485,10 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 		}
 	}
 
-        /*
-         * 追加オプション(always_show_list)が設定されている場合は常に一覧を表示する
-         */
-        if ((always_show_list == TRUE) || use_menu) command_see = TRUE;
+	/*
+	 * 追加オプション(always_show_list)が設定されている場合は常に一覧を表示する
+	 */
+	if ((always_show_list == TRUE) || use_menu) command_see = TRUE;
 
 	/* Hack -- start out in "display" mode */
 	if (command_see)
@@ -6594,7 +6594,7 @@ sprintf(tmp_val, "%c-%c,'(',')',",
 				sprintf(tmp_val, " %c-%c,'(',')',",
 #endif
 
-				        index_to_label(i1), index_to_label(i2));
+					index_to_label(i1), index_to_label(i2));
 
 				/* Append */
 				strcat(out_val, tmp_val);
@@ -6677,7 +6677,7 @@ sprintf(tmp_val, "%c-%c,'(',')',",
 				sprintf(tmp_val, " %c-%c,'(',')',",
 #endif
 
-				        index_to_label(e1), index_to_label(e2));
+					index_to_label(e1), index_to_label(e2));
 
 				/* Append */
 				strcat(out_val, tmp_val);
@@ -7028,7 +7028,7 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 				done = TRUE;
 				break;
 			}
-		        case 'w':
+			case 'w':
 			{
 				if (select_the_force) {
 					*cp = 1111;
@@ -7094,15 +7094,15 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 
 				/* Remove the first object from the list. */
 				excise_object_idx(o_idx);
- 	
+	
 				/* Find end of the list. */
 				i = c_ptr->o_idx;
 				while (o_list[i].next_o_idx)
 					i = o_list[i].next_o_idx;
- 	
+	
 				/* Add after the last object. */
 				o_list[i].next_o_idx = o_idx;
- 	
+	
 				/* Re-scan floor list */ 
 				floor_num = scan_floor(floor_list, py, px, 0x01);
 
@@ -7324,7 +7324,7 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 			}
 #endif
 
-		        case 'w':
+			case 'w':
 			{
 				if (select_the_force) {
 					*cp = 1111;
@@ -7339,32 +7339,32 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 				int ver;
 
 				if(select_spellbook){
-                                    bool not_found = FALSE;
-                                    /* Look up the tag */
-                                    if (!get_tag(&k, which))
-                                    {
+				    bool not_found = FALSE;
+				    /* Look up the tag */
+				    if (!get_tag(&k, which))
+				    {
 					not_found = TRUE;
-                                    }
+				    }
 
-                                    /* Hack -- Validate the item */
-                                    if ((k < INVEN_RARM) ? !inven : !equip)
-                                    {
+				    /* Hack -- Validate the item */
+				    if ((k < INVEN_RARM) ? !inven : !equip)
+				    {
 					not_found = TRUE;
-                                    }
+				    }
 
-                                    /* Validate the item */
-                                    if (!get_item_okay(k))
-                                    {
+				    /* Validate the item */
+				    if (!get_item_okay(k))
+				    {
 					not_found = TRUE;
-                                    }
+				    }
 
-                                    if( !not_found ){
-                                        /* Accept that choice */
-                                        (*cp) = k;
-                                        item = TRUE;
-                                        done = TRUE;
-                                        break;
-                                    }
+				    if( !not_found ){
+					/* Accept that choice */
+					(*cp) = k;
+					item = TRUE;
+					done = TRUE;
+					break;
+				    }
 				}				
 
 				/* Extract "query" setting */
@@ -7374,24 +7374,24 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 				/* Convert letter to inventory index */
 				if (command_wrk == (USE_INVEN))
 				{
-                                        if (which == '(') k = i1;
-                                        else if (which == ')') k = i2;
+					if (which == '(') k = i1;
+					else if (which == ')') k = i2;
 					else k = label_to_inven(which);
 				}
 
 				/* Convert letter to equipment index */
 				else if (command_wrk == (USE_EQUIP))
 				{
-                                        if (which == '(') k = e1;
-                                        else if (which == ')') k = e2;
+					if (which == '(') k = e1;
+					else if (which == ')') k = e2;
 					else k = label_to_equip(which);
 				}
 
 				/* Convert letter to floor index */
 				else if (command_wrk == USE_FLOOR)
 				{
-                                        if (which == '(') k = 0;
-                                        else if (which == ')') k = floor_num - 1;
+					if (which == '(') k = 0;
+					else if (which == ')') k = floor_num - 1;
 					else k = islower(which) ? A2I(which) : -1;
 					if (k < 0 || k >= floor_num || k >= 23)
 					{
@@ -7567,8 +7567,8 @@ void py_pickup_floor(int pickup)
 		{
 			/* Message */
 #ifdef JP
-                msg_format(" $%ld の価値がある%sを見つけた。",
-                           (long)o_ptr->pval, o_name);
+		msg_format(" $%ld の価値がある%sを見つけた。",
+			   (long)o_ptr->pval, o_name);
 #else
 			msg_format("You have found %ld gold pieces worth of %s.",
 				(long) o_ptr->pval, o_name);
@@ -7644,7 +7644,7 @@ void py_pickup_floor(int pickup)
 
 			/* Message */
 #ifdef JP
-                                msg_format("%sがある。", o_name);
+				msg_format("%sがある。", o_name);
 #else
 			msg_format("You see %s.", o_name);
 #endif
@@ -7692,7 +7692,7 @@ void py_pickup_floor(int pickup)
 
 			/* Message */
 #ifdef JP
-                                msg_format("ザックには%sを入れる隙間がない。", o_name);
+				msg_format("ザックには%sを入れる隙間がない。", o_name);
 #else
 			msg_format("You have no room for %s.", o_name);
 #endif
@@ -7704,7 +7704,7 @@ void py_pickup_floor(int pickup)
 		{
 			/* Message */
 #ifdef JP
-                        msg_format("ザックには床にあるどのアイテムも入らない。", o_name);
+			msg_format("ザックには床にあるどのアイテムも入らない。", o_name);
 #else
 			msg_print("You have no room for any of the objects on the floor.");
 #endif

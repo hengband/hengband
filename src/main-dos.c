@@ -616,7 +616,7 @@ static void Term_xtra_dos_clear(void)
 	{
 		/* Draw the Term black */
 		rectfill(screen,
-	        	x1, y1, x1 + w1 - 1, y1 + h1 - 1,
+			x1, y1, x1 + w1 - 1, y1 + h1 - 1,
 			COLOR_OFFSET + TERM_DARK);
 	}
 }
@@ -1097,7 +1097,7 @@ static errr Term_wipe_dos(int x, int y, int n)
 	{
 		/* Draw a black block */
 		rectfill(screen, x1, y1, x1 + w1 - 1, y1 + h1 - 1,
-	        	COLOR_OFFSET + TERM_DARK);
+			COLOR_OFFSET + TERM_DARK);
 	}
 
 	/* Success */
@@ -1147,7 +1147,7 @@ static errr Term_text_dos(int x, int y, int n, byte a, const char *cp)
 
 		/* Dump the text */
 		textout(screen, td->font, text, x1, y1,
-		       	COLOR_OFFSET + (a & 0x0F));
+			COLOR_OFFSET + (a & 0x0F));
 	}
 	/* Stretch needed */
 	else
@@ -1163,7 +1163,7 @@ static errr Term_text_dos(int x, int y, int n, byte a, const char *cp)
 
 			/* Dump some text */
 			textout(screen, td->font, text, x1, y1,
-		        	COLOR_OFFSET + (a & 0x0F));
+				COLOR_OFFSET + (a & 0x0F));
 
 			/* Advance */
 			x1 += td->tile_wid;

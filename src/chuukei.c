@@ -414,7 +414,7 @@ int connect_chuukei_server(char *prf_name)
 			bind = (err == noErr);
 	    }
 	    if (err == noErr){
-	    	OTInitInetAddress(&inAddr, server_port, host_addr);
+		OTInitInetAddress(&inAddr, server_port, host_addr);
 			
 			sndCall.addr.len 	= sizeof(InetAddress);				
 			sndCall.addr.buf	= (unsigned char*) &inAddr;
