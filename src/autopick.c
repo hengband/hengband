@@ -970,7 +970,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	/*** Collecting items ***/
 	/*** Which can be absorbed into a slot as a bundle ***/
 	if (IS_FLG(FLG_COLLECTING))
-		which_str[which_n++] = "can be absorbed into an existing slot";
+		which_str[which_n++] = "can be absorbed into an existing inventory slot";
 	
 	/*** Unidentified ***/
 	if (IS_FLG(FLG_UNIDENTIFIED))
@@ -988,7 +988,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	if (IS_FLG(FLG_NAMELESS))
 	{
 		body_str = "equipment";
-		which_str[which_n++] = "is neither an ego-item nor an artifact";
+		which_str[which_n++] = "is neither ego-item nor artifact";
 	}
 
 	/*** Unaware items ***/
@@ -1146,11 +1146,11 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	}
 
 	if (act & DONT_AUTOPICK)
-		strcpy(buff, "leave on floor ");
+		strcpy(buff, "Leave on floor ");
 	else if (act & DO_AUTODESTROY)
-		strcpy(buff, "destroy ");
+		strcpy(buff, "Destroy ");
 	else
-		strcpy(buff, "pickup ");
+		strcpy(buff, "Pickup ");
 
 	if (insc)
 		strncat(buff, format("and inscribe \"%s\" on ", insc), 80);
@@ -1209,13 +1209,12 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	if (act & DO_DISPLAY)
 	{
 		if (act & DONT_AUTOPICK)
-			strcat(buff, "And display it when you press 'N' in the full map('N').");
+			strcat(buff, "  Display these items when you press 'N' in the full map('M').");
 		else if (act & DO_AUTODESTROY)
-			strcat(buff, "And display it when you press 'K' in the full map('N').");
+			strcat(buff, "  Display these items when you press 'K' in the full map('M').");
 		else
-			strcat(buff, "And display it when you press 'M' in the full map('N').");
+			strcat(buff, "  Display these items when you press 'M' in the full map('M').");
 	}
-		strcat(buff, " It will be displayed in the full map.");
 	else
 		strcat(buff, " Not displayed in the full map.");
 #endif /* JP */
@@ -1498,10 +1497,16 @@ void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 
 	if ((o_ptr->tval == TV_CORPSE || o_ptr->tval == TV_STATUE)
 	    && (r_info[o_ptr->pval].flags1 & RF1_UNIQUE))
+	{
+		REM_FLG(FLG_WORTHLESS);
 		ADD_FLG(FLG_UNIQUE);
+	}
 
 	if (o_ptr->tval == TV_CORPSE && strchr("pht", r_info[o_ptr->pval].d_char))
+	{
+		REM_FLG(FLG_WORTHLESS);
 		ADD_FLG(FLG_HUMAN);
+	}
 
 	if (o_ptr->tval >= TV_LIFE_BOOK &&
 	    !check_book_realm(o_ptr->tval, o_ptr->sval))
@@ -1544,6 +1549,9 @@ void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 		ADD_FLG(FLG_SPELLBOOKS);
 	else if (o_ptr->tval == TV_HAFTED)
 		ADD_FLG(FLG_HAFTED);
+	else if (o_ptr->tval == TV_POLEARM || o_ptr->tval == TV_SWORD
+		 || o_ptr->tval == TV_DIGGING)
+		ADD_FLG(FLG_WEAPONS);
 	else if (o_ptr->tval == TV_SHIELD)
 		ADD_FLG(FLG_SHIELDS);
 	else if (o_ptr->tval == TV_BOW)
@@ -1825,9 +1833,9 @@ void do_cmd_edit_autopick()
 			prt("q で終了、hjkl2468 で移動、^Q a i で入力モード", 0, 0);
 #else	
 		if (edit_mode)
-			prt("Press ^Q ESC to command mode, any letter to input", 0, 0);
+			prt("Press ^Q ESC to command mode, any letters to insert", 0, 0);
 		else
-			prt("Press q to quit, hjkl2468 to move, ^Q a i to edit mode", 0, 0);
+			prt("Press q to quit, hjkl2468 to move, ^Q a i to insert mode", 0, 0);
 #endif
 		/* Display current position */
 		prt (format("(%d,%d)", cx, cy), 0, 70);
@@ -1845,7 +1853,7 @@ void do_cmd_edit_autopick()
 #ifdef JP
 				prt("この行はコメントです。", hgt - 3 + 1, 0);
 #else
-				prt("This line is comment", hgt - 3 + 1, 0);
+				prt("This line is comment.", hgt - 3 + 1, 0);
 #endif
 			}
 			else if (lines_list[cy][1] == ':')
@@ -2142,7 +2150,7 @@ void do_cmd_edit_autopick()
 				cx = 0;
 
 				/* Now dirty */
-				dirty_line = cy;
+				dirty_line = -2;
 			}
 			break;
 		case '\n': case '\r':
