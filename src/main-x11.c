@@ -9,7 +9,7 @@
  */
 
 
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 /*
  * 日本語(EUC-JAPAN)対応 (-DJP)
  *    ・漢字フォントの扱いを追加
@@ -456,7 +456,7 @@ static infowin *Infowin = (infowin*)(NULL);
 static infowin *Focuswin = (infowin*)(NULL);
 #endif
 static infoclr *Infoclr = (infoclr*)(NULL);
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 static infofnt *Infofnt = (infofnt*)(NULL);
 static infofnt *Infokfnt = (infofnt*)(NULL);
 #else
@@ -469,7 +469,7 @@ static infofnt *Infofnt = (infofnt*)(NULL);
 /**** Generic code ****/
 
 
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 #define Infokfnt_set(I) \
 	(Infokfnt = (I))
 #endif
@@ -1228,7 +1228,7 @@ static errr Infofnt_nuke(void)
 {
 	infofnt *ifnt = Infofnt;
 
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 	infofnt *ikfnt = Infokfnt;
 #endif
 	/* Deal with 'name' */
@@ -1238,21 +1238,26 @@ static errr Infofnt_nuke(void)
 		string_free(ifnt->name);
 	}
 
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 	if (ikfnt->name)
 	{
 		/* Free the name */
 		string_free(ikfnt->name);
 	}
 #endif
+
 	/* Nuke info if needed */
 	if (ifnt->nuke)
 	{
 		/* Free the font */
+#ifdef USE_FONTSET
+		XFreeFontSet(Metadpy->dpy, ifnt->info);
+#else
 		XFreeFont(Metadpy->dpy, ifnt->info);
+#endif
 	}
 
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 	if (ikfnt->nuke)
 	{
 		/* Free the font */
@@ -1269,7 +1274,7 @@ static errr Infofnt_nuke(void)
 /*
  * Prepare a new 'infofnt'
  */
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 static errr Infofnt_prepare(XFontStruct *info, XFontStruct *kinfo)
 #else
 #ifdef USE_FONTSET
@@ -1282,7 +1287,7 @@ static errr Infofnt_prepare(XFontStruct *info)
 {
 	infofnt *ifnt = Infofnt;
 
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 	infofnt *ikfnt = Infokfnt;
 #endif
 	XCharStruct *cs;
@@ -1331,7 +1336,7 @@ static errr Infofnt_prepare(XFontStruct *info)
 	else
 		ifnt->twid = ifnt->wid;
 
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
     /* Assign the struct */
     ikfnt->info = kinfo;
  
@@ -1362,7 +1367,7 @@ static errr Infofnt_prepare(XFontStruct *info)
 /*
  * Initialize a new 'infofnt'.
  */
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 static errr Infofnt_init_real(XFontStruct *info, XFontStruct *kinfo)
 #else
 #ifdef USE_FONTSET
@@ -1376,17 +1381,17 @@ static errr Infofnt_init_real(XFontStruct *info)
 	/* Wipe the thing */
 	(void)WIPE(Infofnt, infofnt);
 
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 	WIPE(Infokfnt, infofnt);
 #endif
 	/* No nuking */
 	Infofnt->nuke = 0;
 
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 	Infokfnt->nuke = 0;
 #endif
 	/* Attempt to prepare it */
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 	return (Infofnt_prepare (info, kinfo));
 #else
 	return (Infofnt_prepare(info));
@@ -1403,7 +1408,7 @@ static errr Infofnt_init_real(XFontStruct *info)
  * Inputs:
  *	name: The name of the requested Font
  */
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 static void Infofnt_init_data(cptr name, cptr kname)
 #else
 static void Infofnt_init_data(cptr name)
@@ -1420,7 +1425,7 @@ static void Infofnt_init_data(cptr name)
 #endif
 
 
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 	XFontStruct *kinfo;
 #endif
 	/*** Load the info Fresh, using the name ***/
@@ -1428,7 +1433,7 @@ static void Infofnt_init_data(cptr name)
 	/* If the name is not given, report an error */
 	if (!name || !*name) quit("Missing font!");
 
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 	if (!kname || !*kname) quit("Missing kanji font!");
 #endif
 	/* Attempt to load the font */
@@ -1443,7 +1448,7 @@ static void Infofnt_init_data(cptr name)
 	}
 #else
 	info = XLoadQueryFont(Metadpy->dpy, name);
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 	kinfo = XLoadQueryFont(Metadpy->dpy, kname);
 #endif
 #endif
@@ -1451,7 +1456,7 @@ static void Infofnt_init_data(cptr name)
 
 	/* The load failed, try to recover */
 	if (!info) quit_fmt("Failed to find font:\"%s\"", name);
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 	if (!kinfo) quit_fmt("Failed to find font:\"%s\"", kname);
 #endif
 
@@ -1462,11 +1467,11 @@ static void Infofnt_init_data(cptr name)
 	/* Wipe the thing */
 	(void)WIPE(Infofnt, infofnt);
 
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 	WIPE(Infokfnt, infofnt);
 #endif
 	/* Attempt to prepare it */
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 	if (Infofnt_prepare(info, kinfo))
 #else
 	if (Infofnt_prepare(info))
@@ -1478,7 +1483,7 @@ static void Infofnt_init_data(cptr name)
 		XFreeFontSet(Metadpy->dpy, info);
 #else
 		XFreeFont(Metadpy->dpy, info);
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 		XFreeFont(Metadpy->dpy, kinfo);
 #endif
 #endif
@@ -1488,19 +1493,19 @@ static void Infofnt_init_data(cptr name)
 
 	/* Save a copy of the font name */
 	Infofnt->name = string_make(name);
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 	Infokfnt->name = string_make(kname);
 #endif
 
 	/* Mark it as nukable */
 	Infofnt->nuke = 1;
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 	Infokfnt->nuke = 1;
 #endif
 }
 
 
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 /*
  * EUC日本語コードを含む文字列を表示する (Xlib)
  */
@@ -1624,11 +1629,9 @@ static errr Infofnt_text_std(int x, int y, cptr str, int len)
 
 	/*** Actually draw 'str' onto the infowin ***/
 
-#if 1
-#ifndef JP
+#ifndef USE_FONTSET
 	/* Be sure the correct font is ready */
 	XSetFont(Metadpy->dpy, Infoclr->gc, Infofnt->info->fid);
-#endif
 #endif
 
 	/*** Handle the fake mono we can enforce on fonts ***/
@@ -1636,7 +1639,7 @@ static errr Infofnt_text_std(int x, int y, cptr str, int len)
 	/* Monotize the font */
 	if (Infofnt->mono)
 	{
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 		/* Be sure the correct font is ready */
 		XSetFont(Metadpy->dpy, Infoclr->gc, Infofnt->info->fid);
 #endif
@@ -1653,7 +1656,7 @@ static errr Infofnt_text_std(int x, int y, cptr str, int len)
 	else
 	{
 		/* Note that the Infoclr is set up to contain the Infofnt */
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 		/* 漢字フォントの表示幅は ASCIIフォントの2倍に固定 */
 		XDrawMultiString(Metadpy->dpy, Infowin->win, Infoclr->gc,
 				 x, y, str, len,
@@ -1757,7 +1760,7 @@ struct term_data
 	term t;
 
 	infofnt *fnt;
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 	infofnt *kfnt;
 #endif
 
@@ -2897,7 +2900,7 @@ static errr Term_xtra_x11_level(int v)
 
 		/* Activate the font */
 		Infofnt_set(td->fnt);
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 		Infokfnt_set(td->kfnt);
 #endif
 	}
@@ -3305,7 +3308,7 @@ static errr term_data_init(term_data *td, int i)
 	cptr name = angband_term_name[i];
 
 	cptr font;
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 	cptr kfont;
 #endif
 
@@ -3398,7 +3401,7 @@ static errr term_data_init(term_data *td, int i)
 		}
 	}
 
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 	/* Window specific font name */
 	sprintf(buf, "ANGBAND_X11_KFONT_%d", i);
 
@@ -3504,7 +3507,7 @@ static errr term_data_init(term_data *td, int i)
 
 
 	/* Prepare the standard font */
-#ifdef _JP
+#ifdef USE_JP_FONTSTRUCT
 	MAKE(td->fnt, infofnt);
 	Infofnt_set(td->fnt);
 	MAKE(td->kfnt, infofnt);

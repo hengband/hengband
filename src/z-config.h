@@ -22,8 +22,9 @@
  * USE_FONTSET and/or USE_XIM can be commented out
  * when you don't want to use it.
  */
-#ifdef JP
 #define USE_FONTSET
+
+#ifdef JP
 #define USE_XIM
 #endif
 
@@ -32,7 +33,7 @@
 #endif
 
 #if defined(JP) && !defined(USE_FONTSET)
-#define _JP
+#define USE_JP_FONTSTRUCT
 #endif
 
 #endif /* HAVE_CONFIG_H */

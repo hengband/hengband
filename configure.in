@@ -71,21 +71,26 @@ if test "$have_x" = yes; then
   AC_DEFINE(USE_X11, 1, [Allow -mX11 environment])
   CFLAGS="$X_CFLAGS $CFLAGS"
   LDFLAGS="$X_LIBS $LDFLAGS"
-  if test "$use_japanese" != no; then
-    if test "$use_fontset" = yes; then
-      AC_DEFINE(USE_FONTSET, 1, [Use FontSet])
-    else
-      AC_DEFINE(_JP, 1, [Use Kanji without FontSet])
+
+  if test "$use_fontset" = yes; then
+    AC_DEFINE(USE_FONTSET, 1, [Use FontSet])
+  else
+    if test "$use_japanese" != no; then
+      AC_DEFINE(USE_JP_FONTSTRUCT, 1, [Use Kanji without FontSet])
     fi
-    if test "$use_xim" = yes; then
-      AC_DEFINE(USE_XIM, 1, [Use X Imput Method])
-    fi
-    if test "$use_fontset" = yes || test "$use_xim" = yes; then
-      AC_DEFINE(USE_LOCALE, 1, [Support Locale])
+  fi
+
+  if test "$use_xim" = yes; then
+    AC_DEFINE(USE_XIM, 1, [Use X Imput Method])
+  fi
+
+  if test "$use_fontset" = yes || test "$use_xim" = yes; then
+    AC_DEFINE(USE_LOCALE, 1, [Support Locale])
+    if test "$use_japanese" != no; then
       AC_DEFINE(DEFAULT_LOCALE, "ja_JP.eucJP", Default Japanese Locale)
-      AC_CHECK_LIB(X11, _Xsetlocale, AC_DEFINE(X_LOCALE, 1, [Use XLocale]))
-      AC_CHECK_LIB(xpg4, setlocale, LIBS="$LIBS -lxpg4")
     fi
+    AC_CHECK_LIB(X11, _Xsetlocale, AC_DEFINE(X_LOCALE, 1, [Use XLocale]))
+    AC_CHECK_LIB(xpg4, setlocale, LIBS="$LIBS -lxpg4")
   fi
 fi
 
