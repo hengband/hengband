@@ -4899,6 +4899,57 @@ msg_print("キャラクタ情報のファイルへの書き出しに成功しました。");
 }
 
 
+typedef struct file_tag
+{
+	char name[32];
+	int line_number;
+} file_tag;
+
+
+typedef struct file_tags
+{
+	file_tag tags[64];
+	int index;
+} file_tags;
+
+
+static void add_tag(file_tags *the_tags, cptr name, int line)
+{
+	if (the_tags->index < 64)
+	{
+		file_tag *tag = &(the_tags->tags[the_tags->index]);
+
+		/* Set the name and end it with '\0' */
+		strncpy(tag->name, name, 31);
+		tag->name[31] = '\0';
+
+		/* Set the line-number */
+		tag->line_number = line;
+
+		/* Increase the number of tags */
+		the_tags->index++;
+	}
+}
+
+
+static int get_line(file_tags *the_tags, cptr name)
+{
+	int i;
+
+	/* Search for the tag */
+	for (i = 0; i < the_tags->index; i++)
+	{
+		if (streq(the_tags->tags[i].name, name))
+		{
+			return the_tags->tags[i].line_number;
+		}
+	}
+
+	/* Not found */
+	return 0;
+}
+
+
 /*
  * Recursive file perusal.
  *
@@ -4967,7 +5018,7 @@ bool show_file(bool show_version, cptr name, cptr what, int line, int mode)
 	char hook[68][32];
 
 	/* Tags for in-file references */
-	int tags[68];
+	file_tags tags;
 
 	bool reverse = (line < 0);
 
@@ -4985,6 +5036,9 @@ bool show_file(bool show_version, cptr name, cptr what, int line, int mode)
 	{
 		hook[i][0] = '\0';
 	}
+
+	/* No tags yet */
+	tags.index = 0;
 
 	/* Copy the filename */
 	strcpy(filename, name);
@@ -5113,18 +5167,17 @@ msg_format("'%s'をオープンできません。", name);
 				if ((buf[8] == ']') && (buf[9] == ' '))
 				{
 					/* Extract the menu item */
-					strcpy(hook[k], buf + 10);
+					strncpy(hook[k], buf + 10, 31);
+
+					/* Make sure it's null-terminated */
+					hook[k][31] = '\0';
 				}
 			}
 			/* Notice "tag" requests */
-			else if ((buf[6] == '<') && (isdigit(buf[7]) || isalpha(buf[7])) &&
-			    (buf[8] == '>'))
+			else if (buf[6] == '<')
 			{
-				/* Extract the menu item */
-				k = isdigit(buf[7]) ? D2I(buf[7]) : buf[7] - 'A' + 10;
-
-				/* Extract the menu item */
-				tags[k] = next;
+				buf[strlen(buf) - 1] = '\0';
+				add_tag(&tags, buf + 7, next);
 			}
 
 			/* Skip this */
@@ -5138,11 +5191,8 @@ msg_format("'%s'をオープンできません。", name);
 	/* Save the number of "real" lines */
 	size = next;
 
-	if (line == -1) line = ((size-1)/20)*20;
-
 	/* Go to the tagged line */
-	if (tag)
-		line = tags[isdigit(tag[0]) ? D2I(tag[0]) : tag[0] - 'A' + 10];
+	if (tag) line = get_line(&tags, tag);
 
 	/* Display the file */
 	while (TRUE)

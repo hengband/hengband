@@ -1,0 +1,22 @@
+Zangband の魔法システム
+
+参照したいオンライン・ヘルプの番号を押して下さい:
+
+    (0) Zangband の魔法システム           (jmagic.txt)
+    (1) 職業別魔法使用能力                (jmagic.txt#ClassSpellAbil)
+    (2) 魔法の領域                        (jmagic.txt#MagicRealms)
+    (3) 呪文の使用                        (jmagic.txt#CastingSpells)
+    (4) 呪文の種類                        (jmagic.txt#SpellTypes)
+    (5) ヒントと豆知識                    (jmagic.txt#Hints)
+    (6) 呪文リスト                        (jmagic.txt#SpellLists)
+
+    (?) ヘルプシステムの使用法            (jhelpinfo.txt)
+
+
+***** [0] jmagic.txt
+***** [1] jmagic.txt#ClassSpellAbil
+***** [2] jmagic.txt#MagicRealms
+***** [3] jmagic.txt#CastingSpells
+***** [4] jmagic.txt#SpellTypes
+***** [5] jmagic.txt#Hints
+***** [6] jmagic.txt#SpellLists

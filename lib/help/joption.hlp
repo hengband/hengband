@@ -1,34 +1,37 @@
-Zangband オプション
+変愚蛮怒オプション
 
  参照したいオンライン・ヘルプを選んで下さい:
 
-    (0) Zangband オプション一覧          (joption.txt)
-    (1) オプション１ -- インターフェース (joption.txt#A)
-    (2) オプション２ -- 行動中止         (joption.txt#B)
-    (3) オプション３ -- ゲームプレイ     (joption.txt#C)
-    (4) オプション４ -- 効率化           (joption.txt#D)
-    (5) ZAngband 固有オプション          (joption.txt#E)
-    (6) アイテム結合オプション           (joption.txt#F)
-    (7) 基本ウェイト量                   (joption.txt#G)
-    (8) 低ヒットポイント警告             (joption.txt#H)
-    (9) 自動セーブオプション             (joption.txt#I)
-    (a) ウィンドウ フラグ                (joption.txt#J)
-    (b) 詐欺オプション                   (joption.txt#K)
-    (c) 初期オプション                   (joption.txt#L)
+    (0) 変愚蛮怒 オプション一覧             (joption.txt)
+    (1) オプション1 -- キー入力             (joption.txt#Input)
+    (2) オプション2 -- 画面出力             (joption.txt#Output)
+    (3) オプション3 -- ゲームプレイ         (joption.txt#GamePlay)
+    (4) オプション4 -- 行動中止             (joption.txt#Disturbance)
+    (5) オプション5 -- 効率化               (joption.txt#Efficiency)
+    (6) オプション6 -- 簡易アイテム自動破壊 (joption.txt#AutoDestroyer)
+    (7) オプションD -- 基本ウェイト量       (joption.txt#BaseDelay)
+    (8) オプションH -- 低ヒットポイント警告 (joption.txt#Hitpoint)
+    (9) オプションA -- 自動セーブオプション (joption.txt#Autosave)
+    (a) オプションW -- ウィンドウ フラグ    (joption.txt#Window)
+    (b) オプションC -- 詐欺オプション       (joption.txt#Cheating)
+    (c) 初期オプション                      (joption.txt#StartUp)
 
     (?) ヘルプシステムの使用法      (jhelpinfo.txt)
 
 
 ***** [0] joption.txt
-***** [1] joption.txt#A
-***** [2] joption.txt#B
-***** [3] joption.txt#C
-***** [4] joption.txt#D
-***** [5] joption.txt#E
-***** [6] joption.txt#F
-***** [7] joption.txt#G
-***** [8] joption.txt#H
-***** [9] joption.txt#I
-***** [a] joption.txt#J
-***** [b] joption.txt#K
-***** [c] joption.txt#L
+***** [1] joption.txt#Input
+***** [2] joption.txt#Output
+***** [3] joption.txt#GamePlay
+***** [4] joption.txt#Disturbance
+***** [5] joption.txt#Efficiency
+***** [6] joption.txt#AutoDestroyer
+***** [7] joption.txt#BaseDelay
+***** [8] joption.txt#Hitpoint
+***** [9] joption.txt#Autosave
+***** [a] joption.txt#Window
+***** [b] joption.txt#Cheating
+***** [c] joption.txt#StartUp
+
+
+

@@ -1,0 +1,21 @@
+種族、職業、性格(キャラクターの特性)
+
+参照したいオンライン・ヘルプの番号を押して下さい:
+
+    (0) キャラクタの作成              (jcharattr.txt)
+    (1) 種族                          (jcharattr.txt#TheRaces)
+    (2) 職業                          (jcharattr.txt#TheClasses)
+    (3) 性格                          (jcharattr.txt#ThePersonality)
+    (4) 主要能力値                    (jcharattr.txt#PrimaryStats)
+    (5) 主要技能                      (jcharattr.txt#PrimarySkills)
+
+    (?) ヘルプシステムの使用法        (jhelpinfo.txt)
+
+
+***** [0] jcharattr.txt
+***** [1] jcharattr.txt#TheRaces
+***** [2] jcharattr.txt#TheClasses
+***** [3] jcharattr.txt#ThePersonality
+***** [4] jcharattr.txt#PrimaryStats
+***** [5] jcharattr.txt#PrimarySkills
+

@@ -1,0 +1,33 @@
+=== 街の概要 ===
+
+街はアイテムを扱う店とその他のサービスを提供する建物からなります。
+
+標準的な店：
+魔法の店: ワンド、スタッフ、指輪、アミュレットなどを売っています。
+錬金術の店: あらゆる種類の巻物や薬を売っています。
+武器店: they deal in anything sharp and to the point.
+防具店: ダンジョンのto offer protection from the ravages of the dungeon.
+雑貨屋: 食べ物、松、弾、food, torches, ammo, some necessities.
+寺院: those items permitted to the pious in life.
+ブラックマーケット: the prices are usurious, but some depths items!
+我が家: to store some of your precious treasures.
+
+ZAngband で追加されたもの (鉄人-元祖の街モードの場合は追加なし):
+戦士の集会所、パラディンのギルド、レンジャーの酒場, 盗賊のギルド, 
+様々な魔法領域の塔は全ての職業に解放されています。
+しかしいくつかのサービスは特定の職業しか利用できません。
+Look out for ambitious quests! 
+
+Buildings that anyone can visit if in need of some diversion:
+カジノ: 遊ぶ前にルールを読みましょう。ぼったくりはありません。
+        常識的なオッズです。
+村長や王: クエストを承ることができます。成功すれば報酬や名声が
+        得られます。
+図書館: For information indexes of all kinds.
+宿屋: Resting will refresh, and those ghosts prowl at night...
+      Rumors will be helpful or just a bit ironic.
+
+All buildings are made of stone and unlikely to move around.
+
+This file is accurate for Zangband 2.2.4
+

@@ -1,0 +1,34 @@
+街と荒野
+
+参照したいオンライン・ヘルプの番号を押して下さい:
+
+    (0) 街と荒野                           (jtown.txt)
+    (1) 街と荒野に現れる文字               (jtown.txt#MapSymbols)
+    (2) 街のマップ                         (jtown.txt#TownLevel)
+    (3) 標準の街                           (jtown.txt#StandardTown)
+    (4) 小規模な街                         (jtown.txt#LiteTown)
+    (5) 元祖の町                           (jtown.txt#VanillaTown)
+    (6) 街の住民                           (jtown.txt#Townspeople)
+    (7) 街での買い物                       (jtown.txt#Shopping)
+    (8) 売買交渉                           (jtown.txt#Bartering)
+    (9) アイテムの価格                     (jtown.txt#ObjectPricing)
+    (a) 店の一覧                           (jtown.txt#TheShops)
+    (b) 特別な建物                         (jtown.txt#Buildings)
+    (c) 固定クエスト                       (jtown.txt#FixedQuests)
+
+    (?) ヘルプシステムの使用法             (jhelpinfo.txt)
+
+
+***** [0] jtown.txt
+***** [1] jtown.txt#MapSymbols
+***** [2] jtown.txt#TownLevel
+***** [3] jtown.txt#StandardTown
+***** [4] jtown.txt#LiteTown
+***** [5] jtown.txt#VanillaTown
+***** [6] jtown.txt#Townspeople
+***** [7] jtown.txt#Shopping
+***** [8] jtown.txt#Bartering
+***** [9] jtown.txt#ObjectPricing
+***** [a] jtown.txt#TheShops
+***** [b] jtown.txt#Buildings
+***** [c] jtown.txt#FixedQuests

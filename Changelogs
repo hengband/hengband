@@ -1,4 +1,33 @@
+2002-01-22  habu  <habu@akiru>
+
+	* src/cmd5.c, src/externs.h, src/spells2.c:
+	ペット爆破の魔法でユニークモンスターを破壊できないように修正。
+
+	* src/externs.h, src/init1.c, src/init2.c:
+	fake_{text,name}_sizeの変数をわざわざ使わずに、FAKE_{NAME,TEXT}_SIZEの定数を直接使うようにした。
+
+2002-01-22  Takeshi Mogami  <mogami@akiru>
+
+	* src/dungeon.c:
+	休憩終了時に全く無意味に disturb() を実行しているので削除。
+	休憩を含むマクロが使いやすくなる。
+
+	* lib/help/jhelp.hlp: *** empty log message ***
+
 2002-01-21  Takeshi Mogami  <mogami@akiru>
+
+	* src/object1.c:
+	@+アルファベット+数字について、選択肢にないアイテムを選択しようとしてしまう
+	というのを以前修正したが、@+数字について適用されていなかったのでこちらも修正。
+
+	* autopick.txt, autopick_eng.txt, src/tables.c:
+	-「常にアイテムを拾う」、と「アイテムを拾うとき確認する」は初心者に
+	  見付けられずに困る事が多いようなので、目立つようにオプションの上から
+	  2番目と3番目に持って来た。
+	- autopick で、lib/user/ を lib\user\ に訂正。その他長すぎる行等を整理。
+
+	* Changelogs, lib/edit/e_info_j.txt:
+	通常の武器に穴掘りのエゴが出ていたバグを修正。
 
 	* lib/file/a_high.txt, lib/file/a_low.txt, lib/file/a_med.txt, lib/file/w_high.txt, lib/file/w_low.txt, lib/file/w_med.txt:
 	英語の☆名を拡充。
