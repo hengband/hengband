@@ -140,7 +140,7 @@ G:,:d
 I:80:4:500
 W:10:0:1:0
 A:10/1
-D:$It hallucinate you when you eat it.
+D:$It makes you hallucinate when you eat it.
 D:それは食べると幻覚に侵される。
 
 N:5:毒消し
@@ -1709,7 +1709,7 @@ G:?:d
 I:70:24:0
 W:0:0:5:15
 A:0/1:3/1:10/1
-D:$It lights up nearby area or current room permanently when you read it.
+D:$It lights up nearby area or the current room permanently when you read it.
 D:それは読むと自分の周囲もしくは部屋全体を永久に照らす。
 
 #JZ#
@@ -1743,7 +1743,7 @@ G:?:d
 I:70:4:0
 W:1:0:5:0
 A:1/1
-D:$It summons several monsters as enemy when you read it.
+D:$It summons several monsters as enemies when you read it.
 D:それは読むと複数のモンスターを敵として召喚する。
 
 N:185:ショート・テレポート
@@ -1770,7 +1770,7 @@ G:?:d
 I:70:10:0
 W:20:0:5:50
 A:20/1
-D:$It teleports you dungeon level up or down immediately when you read it.
+D:$It teleports you one dungeon level up or down immediately when you read it.
 D:それは読むと瞬時に上か下の階にテレポートする。
 
 N:188:パニック・モンスター
@@ -1788,7 +1788,7 @@ G:?:d
 I:70:25:0
 W:5:0:5:40
 A:5/1
-D:$It maps in the neighborhood when you read it.
+D:$It maps the neighborhood when you read it.
 D:それは読むと自分の周辺の地形を感知する。
 
 N:190:守りのルーン
@@ -1922,7 +1922,7 @@ G:?:d
 I:70:7:0
 W:10:0:5:0
 A:10/1
-D:$It creates traps on the floors adjacent to you when you read it.
+D:$It creates traps on the squares adjacent to you when you read it.
 D:それは読むと自分と隣接する床にトラップを作り出す。
 
 N:204:トラップ/ドア破壊
@@ -1941,7 +1941,7 @@ G:?:d
 I:70:52:0
 W:90:0:5:200000
 A:90/16
-D:$It creates an artifact from nameless weapon or armour when you read it. In 
+D:$It creates an artifact from a nameless weapon or armour when you read it. In 
 D:$this process, extra stack of the equipment will be destroyed.
 D:それは読むと無銘の武器・防具からアーティファクトを作り出す。装備品が
 D:積み重なっていた場合は1個を残して壊れる。
@@ -1982,7 +1982,7 @@ G:?:d
 I:70:37:0
 W:30:0:5:250
 A:30/1
-D:$It gives temporary protection from lesser evil creature when you read it.
+D:$It gives temporary protection from lesser evil creatures when you read it.
 D:それは読むと一時的に弱い邪悪な者の攻撃を回避しやすくなる結界を張る。
 
 N:210:空腹充足
@@ -2018,7 +2018,7 @@ G:?:d
 I:70:3:0
 W:50:0:5:0
 A:50/1
-D:$It makes your weapon in strong hand (Shattered) when you read it.
+D:$It makes your main weapon (Shattered) when you read it.
 D:それは読むと利き腕に装備中の武器を(不良品)に変える。
 
 N:214:*防具強化*
@@ -2036,7 +2036,7 @@ G:?:d
 I:70:2:0
 W:50:0:5:0
 A:50/1
-D:$It makes your armour wearing (Blasted) when you read it.
+D:$It makes your current armour (Blasted) when you read it.
 D:それは読むと着ている鎧を(粗悪品)に変える。
 
 N:216:サモン・アンデッド
@@ -2045,7 +2045,7 @@ G:?:d
 I:70:5:0
 W:15:0:5:0
 A:15/1
-D:$It summons several undead monsters as enemy when you read it.
+D:$It summons several undead monsters as enemies when you read it.
 D:それは読むと複数のアンデッドのモンスターを敵として召喚する。
 
 N:217:天恵
@@ -2081,7 +2081,7 @@ G:?:d
 I:70:11:0
 W:5:0:5:150
 A:5/1
-D:$It recalls you to the town, or back into the dungeon you has entered when 
+D:$It recalls you to the town, or back into the dungeon you have entered when 
 D:$you read it.
 D:それは読むと地上にいる時は行ったことのあるダンジョンの最深階へ、
 D:ダンジョンにいる時は地上へと移動する。
@@ -2446,7 +2446,7 @@ I:75:5:0
 W:0:0:4:0
 A:0/1
 P:0:1d1:0:0:0
-D:$You turn just before stavation and it paralyzes you, but it cures poison 
+D:$You nearly faint from hunger and it paralyzes you, but it cures poison 
 D:$when you quaff it.
 D:それは飲むと餓死寸前になり麻痺するが、毒を癒す。
 
@@ -2987,7 +2987,7 @@ I:55:3:5
 W:10:0:50:0
 A:10/1:50/1
 P:0:1d2:0:0:0
-D:$It summons several monsters as enemy when you use it.
+D:$It summons several monsters as enemies when you use it.
 D:それは使うと複数のモンスターを敵として召喚する。
 
 N:306:光
@@ -3227,7 +3227,7 @@ I:55:9:11
 W:20:0:50:750
 A:20/1
 P:0:1d2:0:0:0
-D:$It maps in the neighborhood when you use it.
+D:$It maps the neighborhood when you use it.
 D:それは使うと自分の周辺の地形を感知する。
 
 N:329:体力回復
@@ -3475,7 +3475,7 @@ I:66:3:60
 W:30:0:15:4000
 A:15/16:30/4
 P:0:1d1:0:0:0
-D:$It recalls you to the town, or back into the dungeon you has entered when 
+D:$It recalls you to the town, or back into the dungeon you have entered when 
 D:$you zap it.
 D:それは振ると地上にいる時は行ったことのあるダンジョンの最深階へ、
 D:ダンジョンにいる時は地上へと移動する。
@@ -3648,7 +3648,7 @@ I:66:5:99
 W:65:0:15:10000
 A:33/16:65/4
 P:0:1d1:0:0:0
-D:$It maps in the neighborhood when you zap it.
+D:$It maps the neighborhood when you zap it.
 D:それは振ると自分の周辺の地形を感知する。
 
 N:372:鑑定
@@ -5149,8 +5149,8 @@ G:?:d
 I:70:23:0
 W:13:0:5:3000
 A:13/10
-D:$It makes an item into normal when you read it. In this process, extra stack 
-D:$of the item will be destroyed.
+D:$This removes the ego or artifact status of an item. As a bonus, 
+D:$if you have a stack of them, the extras are destroyed.
 D:それは読むとアイテム1個を並のアイテムに変える。複数のアイテムがまとまって
 D:いる場合は1個を残して壊れる。
 
@@ -5470,7 +5470,7 @@ I:75:65:0
 W:10:0:4:0
 A:10/2
 P:0:1d1:0:0:0
-D:$It decreases your strength and constitution permanently and hallucinate you 
+D:$It decreases your strength and constitution permanently and makes you hallucinate 
 D:$when you quaff it.
 D:それは飲むと腕力と耐久力の最大値が下がり、幻覚に侵される。
 
