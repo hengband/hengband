@@ -872,6 +872,7 @@ extern void display_equip(void);
 extern int show_inven(int target_item);
 extern int show_equip(int target_item);
 extern void toggle_inven_equip(void);
+extern int get_tag(int *cp, char tag);
 extern bool can_get_item(void);
 extern bool get_item(int *cp, cptr pmt, cptr str, int mode);
 

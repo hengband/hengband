@@ -4375,7 +4375,10 @@ int show_inven(int target_item)
 	char            out_desc[23][MAX_NLEN];
 	int             target_item_label = 0;
 	int             wid, hgt;
+	char inven_spellbook_label[24];
 
+	/* See cmd5.c */
+	extern bool select_spellbook;
 
 	/* Starting column */
 	col = command_gap;
@@ -4409,6 +4412,21 @@ int show_inven(int target_item)
 
 		/* Track */
 		z = i + 1;
+	}
+
+	if (select_spellbook)
+	{
+		int index;
+
+		strcpy(inven_spellbook_label, "abcdefghijklmnopqrstuvw");
+		for (i = 0; i < INVEN_PACK; i++)
+		{
+			if (get_tag(&index, ('a' + i)))
+			{
+				inven_spellbook_label[i] = ' ';
+				inven_spellbook_label[index] = ('a' + i);
+			}
+		}
 	}
 
 	/* Display the inventory */
@@ -4485,9 +4503,15 @@ int show_inven(int target_item)
 			}
 			else strcpy(tmp_val, "  ");
 		}
+		else if (i <= INVEN_PACK && select_spellbook)
+		{
+			sprintf(tmp_val, "%c)", inven_spellbook_label[i]);
+		}
 		else
+		{
 			/* Prepare an index --(-- */
 			sprintf(tmp_val, "%c)", index_to_label(i));
+		}
 
 		/* Clear the line with the (possibly indented) index */
 		put_str(tmp_val, j + 1, col);
@@ -4928,7 +4952,7 @@ static bool get_item_okay(int i)
  * Also, the tag "@xn" will work as well, where "n" is a tag-char,
  * and "x" is the "current" command_cmd code.
  */
-static int get_tag(int *cp, char tag)
+int get_tag(int *cp, char tag)
 {
 	int i;
 	cptr s;
@@ -6464,14 +6488,14 @@ if (!command_see && !use_menu) strcat(out_val, " '*'°ìÍ÷,");
 #ifdef JP
 				if (!use_menu)
 					strcat(out_val, " '-'¾²¾å,");
-				if (allow_equip)
+				else if (allow_equip)
 					strcat(out_val, " '4' ¾²¾å,");
 				else
 					strcat(out_val, " '4'or'6' ¾²¾å,");
 #else
 				if (!use_menu)
 					strcat(out_val, " - for floor,");
-				if (allow_equip)
+				else if (allow_equip)
 					strcat(out_val, " 4 for floor,");
 				else
 					strcat(out_val, " 4 or 6 for floor,");
