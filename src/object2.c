@@ -3943,6 +3943,9 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 				/* Ignore dead monsters */
 				if (!r_ptr->rarity) continue;
 
+				/* Ignore uncommon monsters */
+				if (r_ptr->rarity > 100) continue;
+
 				/* Prefer less out-of-depth monsters */
 				if (randint0(check)) continue;
 
