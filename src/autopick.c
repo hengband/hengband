@@ -5369,6 +5369,121 @@ static void insert_single_letter(text_body_type *tb, int key)
 	tb->changed = TRUE;
 }
 
+
+/*
+ * Mega-Hack:
+ * Get macro trigger string directly and translate it to the command id.
+ */
+static int analyze_move_key(text_body_type *tb)
+{
+	static const struct {
+		cptr keyname;
+		int com_id;
+	} move_key_list[] = {
+		{"Down]", EC_DOWN},
+		{"Left]", EC_LEFT},
+		{"Right]", EC_RIGHT},
+		{"Up]", EC_UP},
+		{"Page_Up]", EC_PGUP},
+		{"Page_Down]", EC_PGDOWN},
+		{"Home]", EC_TOP},
+		{"End]", EC_BOTTOM},
+		{"KP_Down]", EC_DOWN},
+		{"KP_Left]", EC_LEFT},
+		{"KP_Right]", EC_RIGHT},
+		{"KP_Up]", EC_UP},
+		{"KP_Page_Up]", EC_PGUP},
+		{"KP_Page_Down]", EC_PGDOWN},
+		{"KP_Home]", EC_TOP},
+		{"KP_End]", EC_BOTTOM},
+		{"KP_2]", EC_DOWN},
+		{"KP_4]", EC_LEFT},
+		{"KP_6]", EC_RIGHT},
+		{"KP_8]", EC_UP},
+		{"KP_9]", EC_PGUP},
+		{"KP_3]", EC_PGDOWN},
+		{"KP_7]", EC_TOP},
+		{"KP_1]", EC_BOTTOM},
+		{NULL, 0},
+	};
+
+	static const char shiftstr[] = "shift-";
+	bool shifted = FALSE;
+	char buf[1024];
+	cptr str = buf;
+	int com_id = 0;
+	int i;
+
+	/* Get ascii form */
+	ascii_to_text(buf, inkey_macro_trigger_string);
+
+	/* Skip "\[" */
+	str += 2;
+
+	if (prefix(str, shiftstr))
+	{
+		str += sizeof(shiftstr) - 1;
+		shifted = TRUE;
+	}
+
+	for (i = 0; move_key_list[i].keyname; i++)
+	{
+		if (streq(str, move_key_list[i].keyname))
+		{
+			com_id = move_key_list[i].com_id;
+			break;
+		}
+	}
+
+	if (!com_id) return 0;
+
+	/* Kill further macro expansion */
+	flush();
+
+	if (!shifted)
+	{
+		/*
+		 * Un-shifted cursor keys cancells
+		 * selection created by shift+cursor.
+		 */
+		if (tb->mark & MARK_BY_SHIFT)
+		{
+			tb->mark = 0;
+
+			/* Now dirty */
+			tb->dirty_flags |= DIRTY_ALL;
+		}
+	}
+	else
+	{
+		/* Start selection by shift + cursor keys */
+		if (!tb->mark)
+		{
+			int len = strlen(tb->lines_list[tb->cy]);
+
+			tb->mark = MARK_MARK | MARK_BY_SHIFT;
+			tb->my = tb->cy;
+			tb->mx = tb->cx;
+
+			/* Correct cursor location */
+			if (tb->cx > len) tb->mx = len;
+						
+			/* Need to redraw text */
+			if (com_id == EC_UP || com_id == EC_DOWN)
+			{
+				/* Redraw all text */
+				tb->dirty_flags |= DIRTY_ALL;
+			}
+			else
+			{
+				tb->dirty_line = tb->cy;
+			}
+		}
+	}
+
+	return com_id;
+}
+
 /*
  * In-game editor of Object Auto-picker/Destoryer
  */
@@ -5506,88 +5621,8 @@ void do_cmd_edit_autopick(void)
 		if (key == 0x7F) key = KTRL('d');
 
 
-		/* Cursor key macroes to direction command */
-		if (trig_len > 1)
-		{
-			switch (key)
-			{
-			case '2':
-				com_id = EC_DOWN;
-				break;
-			case '4':
-				com_id = EC_LEFT;
-				break;
-			case '6':
-				com_id = EC_RIGHT;
-				break;
-			case '8':
-				com_id = EC_UP;
-				break;
-			}
-
-			if (com_id)
-			{
-				/*
-				 * Un-shifted cursor keys cancells
-				 * selection created by shift+cursor.
-				 */
-				if (tb->mark & MARK_BY_SHIFT)
-				{
-					tb->mark = 0;
-
-					/* Now dirty */
-					tb->dirty_flags |= DIRTY_ALL;
-				}
-			}
-
-			/* Mega Hack!!! Start selection with shift + cursor keys */
-			else
-			{
-				char buf[1024];
-
-				/* Get ascii form */
-				ascii_to_text(buf, inkey_macro_trigger_string);
-
-				if (strstr(buf, "shift-Down"))
-					com_id = EC_DOWN;
-				else if (strstr(buf, "shift-Left"))
-					com_id = EC_LEFT;
-				else if (strstr(buf, "shift-Right"))
-					com_id = EC_RIGHT;
-				else if (strstr(buf, "shift-Up"))
-					com_id = EC_UP;
-
-				if (com_id)
-				{
-					/* Kill further macro expansion */
-					flush();
-
-					/* Start selection */
-					if (!tb->mark)
-					{
-						int len = strlen(tb->lines_list[tb->cy]);
-
-						tb->mark = MARK_MARK | MARK_BY_SHIFT;
-						tb->my = tb->cy;
-						tb->mx = tb->cx;
-
-						/* Correct cursor location */
-						if (tb->cx > len) tb->mx = len;
-						
-						/* Need to redraw text */
-						if (com_id == EC_UP || com_id == EC_DOWN)
-						{
-							/* Redraw all text */
-							tb->dirty_flags |= DIRTY_ALL;
-						}
-						else
-						{
-							tb->dirty_line = tb->cy;
-						}
-					}
-				}
-			}
-		}
+		/* Movement special keys */
+		if (trig_len > 1) com_id = analyze_move_key(tb);
 
 		if (com_id)
 		{
