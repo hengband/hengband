@@ -1731,6 +1731,9 @@ static void do_cmd_wiz_create_feature(void)
 			c_ptr->info |= (CAVE_OBJECT);
 	}
 
+	/* Update some things */
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
+
 	prev_feat = tmp_feat;
 	prev_mimic = tmp_mimic;
 }
