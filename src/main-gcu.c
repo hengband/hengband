@@ -496,9 +496,6 @@ static void keymap_game_prepare(void)
    game_termios.c_cc[VMIN] = 1;
    game_termios.c_cc[VTIME] = 0;
 
-   /* Turn off flow control */
-   game_termios.c_iflag &= ~IXON;
-
 #endif
 
 #ifdef USE_TERMIO
@@ -537,9 +534,6 @@ static void keymap_game_prepare(void)
    game_termio.c_cc[VMIN] = 1;
    game_termio.c_cc[VTIME] = 0;
 
-   /* Turn off flow control */
-   game_termio.c_iflag &= ~IXON;
-   
 #endif
 
 #ifdef USE_TCHARS
@@ -571,9 +565,7 @@ static void keymap_game_prepare(void)
    game_tchars.t_quitc = (char)-1;
    game_tchars.t_eofc = (char)-1;
    game_tchars.t_brkc = (char)-1;
-   
-   /* XXX XXX XXX  Should maybe turn off flow control too.  How? */
-   
+
 #endif
 
 }
@@ -1343,6 +1335,7 @@ errr init_gcu(int argc, char *argv[])
    cbreak();
    noecho();
    nonl();
+   raw();
 
    /* Extract the game keymap */
    keymap_game_prepare();
