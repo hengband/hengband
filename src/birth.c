@@ -4672,24 +4672,31 @@ static bool get_stat_limits(void)
 		
 		/* Prompt for the minimum stats */
 		c = inkey();
-		if (c == 'Q') birth_quit();
-		if (c == 'S') return (FALSE);
-		if (c == ESCAPE) break;
-		if (c == ' ' || c == '\r')
-		{
+		switch ( c ){
+		case 'Q':
+		        birth_quit();
+			break;
+		case 'S':
+		        return (FALSE); 
+			break;
+		case ESCAPE:
+		        break;
+		case ' ':
+		case '\r':
 			if(cs == 6) break;
-			else cs++;
-		}
-		if (c == '8' || c == 'k')
-		{
+			cs++;
+			c = '2';
+			break;
+		case '8':
+		case 'k':
 			if (cs > 0) cs--;
-		}
-		if (c == '2' || c == 'j')
-		{
+			break;
+		case '2':
+		case 'j':
 			if (cs < 6) cs++;
-		}
-		if (c == '4' || c == 'h')
-		{
+			break;
+		case '4':
+		case 'h':
 			if (cs != 6)
 			{
 				if (cval[cs] == 3)
@@ -4704,9 +4711,9 @@ static bool get_stat_limits(void)
 				}
 				else return FALSE;
 			}
-		}
-		if (c == '6' || c == 'l')
-		{
+			break;
+		case '6':
+		case 'l':
 			if (cs != 6)
 			{
 				if (cval[cs] == 17)
@@ -4721,26 +4728,25 @@ static bool get_stat_limits(void)
 				}
 				else return FALSE;
 			}
-		}
-		if (c == 'm')
-		{
+			break;
+		case 'm':
 			if(cs != 6 && cval[cs] < 17)
 			{
 				cval[cs] = 17;
 				os = 7;
 			}
-		}
-		if (c == 'n')
-		{
+			break;
+		case 'n':
 			if(cs != 6 && cval[cs] > 3)
 			{
 				cval[cs] = 3;
 				os = 7;
 			}
-		}
-		if (c == '?') do_cmd_help();
-		else if (c == '=')
-		{
+			break;
+		case '?':
+			do_cmd_help();
+			break;
+		case '=':
 			screen_save();
 #ifdef JP
 			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
@@ -4749,8 +4755,12 @@ static bool get_stat_limits(void)
 #endif
 
 			screen_load();
+			break;
+		default:
+		        bell();
+			break;
 		}
-		else bell();
+		if(c == ESCAPE || ((c == ' ' || c == '\r') && cs == 6))break;
 	}
 	
 	for (i = 0; i < 6; i++)
