@@ -2374,7 +2374,7 @@ msg_print("少しの間悲しい気分になった。");
 				riding_pinch++;
 				disturb(1, 0);
 			}
-			else 
+			else
 			{
 				if (m_idx == p_ptr->riding)
 				{
@@ -2420,6 +2420,9 @@ msg_print("少しの間悲しい気分になった。");
 					msg_print("You have fallen from riding pet.");
 #endif
 				}
+
+				/* Check for quest completion */
+				check_quest_completion(m_ptr);
 
 				delete_monster_idx(m_idx);
 
