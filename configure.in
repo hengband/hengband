@@ -75,17 +75,17 @@ if test "$have_x" = yes; then
   if test "$use_japanese" != no; then
     if test "$use_fontset" = yes; then
       AC_DEFINE(USE_FONTSET)
+    else
+      AC_DEFINE(_JP)
     fi
     if test "$use_xim" = yes; then
       AC_DEFINE(USE_XIM)
     fi
-    if test "$use_fontset" = yes || "$use_xim" = yes; then
+    if test "$use_fontset" = yes || test "$use_xim" = yes; then
       AC_DEFINE(USE_LOCALE)
       AC_DEFINE(DEFAULT_LOCALE, "ja_JP.eucJP", Default Japanese Locale)
       AC_CHECK_LIB(X11, _Xsetlocale, AC_DEFINE(X_LOCALE))
       AC_CHECK_LIB(xpg4, setlocale, LIBS="$LIBS -lxpg4")
-    else
-      AC_DEFINE(_JP)
     fi
   fi
 fi
