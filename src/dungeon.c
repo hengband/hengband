@@ -859,7 +859,6 @@ static void regenhp(int percent)
 
 /*
  * Regenerate mana points
- * Get ((new_mana) / 2^32) mana point once called.
  */
 static void regenmana(int percent)
 {
@@ -871,10 +870,15 @@ static void regenmana(int percent)
 	 */
 	if (p_ptr->csp > p_ptr->msp)
 	{
-		u32b decay_frac = (p_ptr->msp * 32 * PY_REGEN_NORMAL + PY_REGEN_MNBASE) << 16;
+		/* PY_REGEN_NORMAL is Regen factor in unit (1/2^16) */
+		s32b decay = 0;
+		u32b decay_frac = (p_ptr->msp * 32 * PY_REGEN_NORMAL + PY_REGEN_MNBASE);
+
+		/* Convert the unit (1/2^16) to (1/2^32) */
+		s64b_LSHIFT(decay, decay_frac, 16);
 
 		/* Decay */
-		s64b_sub(&(p_ptr->csp), &(p_ptr->csp_frac), 0, decay_frac);
+		s64b_sub(&(p_ptr->csp), &(p_ptr->csp_frac), decay, decay_frac);
 
 		/* Stop decaying */
 		if (p_ptr->csp < p_ptr->msp)
@@ -884,18 +888,15 @@ static void regenmana(int percent)
 		}
 	}
 
-	/* Regerating mana (unless the player has excess mana) */
+	/* Regenerating mana (unless the player has excess mana) */
 	else if (percent > 0)
 	{
-		/*
-		 * (percent/100) is from constants PY_REGEN_* , 
-		 * which is Regen factor*2^16 . 
-		 */
+		/* (percent/100) is Regen factor in unit (1/2^16) */
 		s32b new_mana = 0;
 		u32b new_mana_frac = (p_ptr->msp * percent / 100 + PY_REGEN_MNBASE);
 
-		/* Convert the unit x2^16 -> x2^32 */
-		s64b_mul(&new_mana, &new_mana_frac, 0, 0x1L<<16);
+		/* Convert the unit (1/2^16) to (1/2^32) */
+		s64b_LSHIFT(new_mana, new_mana_frac, 16);
 
 		/* Regenerate */
 		s64b_add(&(p_ptr->csp), &(p_ptr->csp_frac), new_mana, new_mana_frac);
@@ -912,12 +913,17 @@ static void regenmana(int percent)
 	/* Reduce mana (even when the player has excess mana) */
 	if (percent < 0)
 	{
-		u32b reduce_mana_frac = (p_ptr->msp * PY_REGEN_NORMAL + PY_REGEN_MNBASE) << 16;
+		/* PY_REGEN_NORMAL is Regen factor in unit (1/2^16) */
+		s32b reduce_mana = 0;
+		u32b reduce_mana_frac = (p_ptr->msp * PY_REGEN_NORMAL + PY_REGEN_MNBASE);
+
+		/* Convert the unit (1/2^16) to (1/2^32) */
+		s64b_LSHIFT(reduce_mana, reduce_mana_frac, 16);
 
 		/* Reduce mana */
-		s64b_sub(&(p_ptr->csp), &(p_ptr->csp_frac), 0, reduce_mana_frac);
+		s64b_sub(&(p_ptr->csp), &(p_ptr->csp_frac), reduce_mana, reduce_mana_frac);
 
-		/* check for overflow */
+		/* Check overflow */
 		if (p_ptr->csp < 0)
 		{
 			p_ptr->csp = 0;
@@ -957,7 +963,7 @@ static void regenmagic(int percent)
 		new_mana = ((long)p_ptr->magic_num2[i]+adj_mag_mana[A_INT]+13) * percent / 8;
 		p_ptr->magic_num1[i] += new_mana;
 
-		/* Must set frac to zero even if equal */
+		/* Check maximum charge */
 		if (p_ptr->magic_num1[i] > (p_ptr->magic_num2[i] << 16))
 		{
 			p_ptr->magic_num1[i] = ((long)p_ptr->magic_num2[i] << 16);
@@ -1821,7 +1827,8 @@ static void check_music(void)
 	need_mana = mod_need_mana(s_ptr->smana, spell, REALM_MUSIC);
 	need_mana_frac = 0;
 
-	s64b_RSHIFT(need_mana, need_mana_frac);
+	/* Divide by 2 */
+	s64b_RSHIFT(need_mana, need_mana_frac, 1);
 
 	if (s64b_cmp(p_ptr->csp, p_ptr->csp_frac, need_mana, need_mana_frac) < 0)
 	{

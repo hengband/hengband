@@ -52,8 +52,8 @@ extern void core(cptr str);
 
 
 /* 64-bit integer operations */
-#define s64b_LSHIFT(V1, V2) {V1 = (V1<<1) | (V2>>31); V2 <<= 1;}
-#define s64b_RSHIFT(V1, V2) {V2 = (V1<<31) | (V2>>1); V1 >>= 1;}
+#define s64b_LSHIFT(V1, V2, N) {V1 = (V1<<(N)) | (V2>>(32-(N))); V2 <<= (N);}
+#define s64b_RSHIFT(V1, V2, N) {V2 = (V1<<(32-(N))) | (V2>>(N)); V1 >>= (N);}
 extern void s64b_add(s32b *A1, u32b *A2, s32b B1, u32b B2);
 extern void s64b_sub(s32b *A1, u32b *A2, s32b B1, u32b B2);
 extern int s64b_cmp(s32b A1, u32b A2, s32b B1, u32b B2);

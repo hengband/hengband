@@ -1645,8 +1645,7 @@ static void get_exp_from_mon(int dam, monster_type *m_ptr)
 		while (monnum_penarty--)
 		{
 			/* Divide by 4 */
-			s64b_RSHIFT(new_exp, new_exp_frac);
-			s64b_RSHIFT(new_exp, new_exp_frac);
+			s64b_RSHIFT(new_exp, new_exp_frac, 2);
 		}
 	}
 

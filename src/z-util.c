@@ -229,7 +229,7 @@ void s64b_div(s32b *A1, u32b *A2, s32b B1, u32b B2)
 	 */
 	while (s64b_cmp(A1val, A2val, B1, B2) == 1)
 	{
-		s64b_LSHIFT(B1, B2);
+		s64b_LSHIFT(B1, B2, 1);
 		bit++;
 	}
 
@@ -246,7 +246,7 @@ void s64b_div(s32b *A1, u32b *A2, s32b B1, u32b B2)
 			s64b_sub(&A1val, &A2val, B1, B2);
 		}
 	
-		s64b_RSHIFT(B1, B2);
+		s64b_RSHIFT(B1, B2, 1);
 		bit--;
 	}
 
