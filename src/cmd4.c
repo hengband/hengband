@@ -1431,51 +1431,51 @@ static option_type cheat_info[CHEAT_MAX] =
 {
 	{ &cheat_peek,		FALSE,	255,	0x01, 0x00,
 #ifdef JP
-	"cheat_peek",		"アイテムの生成をのぞき見る" },
+	"cheat_peek",		"アイテムの生成をのぞき見る"
 #else
-	"cheat_peek",		"Peek into object creation" },
+	"cheat_peek",		"Peek into object creation"
 #endif
-
+        },
 
 	{ &cheat_hear,		FALSE,	255,	0x02, 0x00,
 #ifdef JP
-	"cheat_hear",		"モンスターの生成をのぞき見る" },
+	"cheat_hear",		"モンスターの生成をのぞき見る"
 #else
-	"cheat_hear",		"Peek into monster creation" },
+	"cheat_hear",		"Peek into monster creation"
 #endif
-
+        },
 
 	{ &cheat_room,		FALSE,	255,	0x04, 0x00,
 #ifdef JP
-	"cheat_room",		"ダンジョンの生成をのぞき見る" },
+	"cheat_room",		"ダンジョンの生成をのぞき見る"
 #else
-	"cheat_room",		"Peek into dungeon creation" },
+	"cheat_room",		"Peek into dungeon creation"
 #endif
-
+        },
 
 	{ &cheat_xtra,		FALSE,	255,	0x08, 0x00,
 #ifdef JP
-	"cheat_xtra",		"その他の事をのぞき見る" },
+	"cheat_xtra",		"その他の事をのぞき見る"
 #else
-	"cheat_xtra",		"Peek into something else" },
+	"cheat_xtra",		"Peek into something else"
 #endif
-
+        },
 
 	{ &cheat_know,		FALSE,	255,	0x10, 0x00,
 #ifdef JP
-	"cheat_know",		"完全なモンスターの思い出を知る" },
+	"cheat_know",		"完全なモンスターの思い出を知る"
 #else
-	"cheat_know",		"Know complete monster info" },
+	"cheat_know",		"Know complete monster info"
 #endif
-
+        },
 
 	{ &cheat_live,		FALSE,	255,	0x20, 0x00,
 #ifdef JP
-	"cheat_live",		"死を回避することを可能にする" }
+	"cheat_live",		"死を回避することを可能にする"
 #else
-	"cheat_live",		"Allow player to avoid death" }
+	"cheat_live",		"Allow player to avoid death"
 #endif
-
+        }
 };
 
 /*
@@ -1597,6 +1597,20 @@ static void do_cmd_options_cheat(cptr info)
 				k = (k + 1) % n;
 				break;
 			}
+
+                        case '?':
+                        {
+#ifdef JP
+                                strnfmt(buf, sizeof(buf), "joption.txt#%s", cheat_info[k].o_text);
+#else
+                                strnfmt(buf, sizeof(buf), "option.txt#%s", cheat_info[k].o_text);
+#endif
+                                /* Peruse the help file */
+                                (void)show_file(TRUE, buf, NULL, 0, 0);
+
+				Term_clear(); 
+                                break;
+                        }
 
 			default:
 			{
@@ -1762,6 +1776,19 @@ static void do_cmd_options_autosave(cptr info)
 				    autosave_freq), 5, 0);
 			}
 
+                        case '?':
+                        {
+#ifdef JP
+                                (void)show_file(TRUE, "joption.txt#Autosave", NULL, 0, 0);
+#else
+                                (void)show_file(TRUE, "option.txt#Autosave", NULL, 0, 0);
+#endif
+
+
+				Term_clear(); 
+                                break;
+                        }
+
 			default:
 			{
 				bell();
@@ -1799,12 +1826,6 @@ void do_cmd_options_aux(int page, cptr info)
 	/* Clear screen */
 	Term_clear();
 
-#ifdef JP
-	if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "以下のオプションは、簡易自動破壊を使用するときのみ有効", 6, 6);
-#else
-	if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "Following options will protect items from easy auto-destroyer.", 6, 3);
-#endif
-
 	/* Interact with the player */
 	while (TRUE)
 	{
@@ -1812,12 +1833,20 @@ void do_cmd_options_aux(int page, cptr info)
 
 		/* Prompt XXX XXX XXX */
 #ifdef JP
-		sprintf(buf, "%s ( リターンで次へ, y/n でセット, ESC で決定 ) ", info);
+		sprintf(buf, "%s (リターン:次, y/n:変更, ESC:終了, ?:ヘルプ) ", info);
 #else
-		sprintf(buf, "%s (RET to advance, y/n to set, ESC to accept) ", info);
+		sprintf(buf, "%s (RET:next, y/n:change, ESC:accept, ?:help) ", info);
 #endif
 
 		prt(buf, 0, 0);
+
+
+                /* HACK -- description for easy-auto-destroy options */
+#ifdef JP
+                if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "以下のオプションは、簡易自動破壊を使用するときのみ有効", 6, 6);
+#else
+                if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "Following options will protect items from easy auto-destroyer.", 6, 3);
+#endif
 
 		/* Display the options */
 		for (i = 0; i < n; i++)
@@ -1906,6 +1935,20 @@ void do_cmd_options_aux(int page, cptr info)
 				(*option_info[opt[k]].o_var) = !(*option_info[opt[k]].o_var);
 				break;
 			}
+
+                        case '?':
+                        {
+#ifdef JP
+                                strnfmt(buf, sizeof(buf), "joption.txt#%s", option_info[opt[k]].o_text);
+#else
+                                strnfmt(buf, sizeof(buf), "option.txt#%s", option_info[opt[k]].o_text);
+#endif
+                                /* Peruse the help file */
+                                (void)show_file(TRUE, buf, NULL, 0, 0);
+
+				Term_clear(); 
+                                break;
+                        }
 
 			default:
 			{
@@ -2061,6 +2104,19 @@ static void do_cmd_options_win(void)
 				break;
 			}
 
+                        case '?':
+                        {
+#ifdef JP
+                                (void)show_file(TRUE, "joption.txt#Window", NULL, 0, 0);
+#else
+                                (void)show_file(TRUE, "option.txt#Window", NULL, 0, 0);
+#endif
+
+
+				Term_clear(); 
+                                break;
+                        }
+
 			default:
 			{
 				d = get_keymap_dir(ch);
@@ -2115,12 +2171,11 @@ void do_cmd_options(void)
 	/* Save the screen */
 	screen_save();
 
-
 	/* Interact */
 	while (1)
 	{
-		/* Clear screen */
-		Term_clear();
+                /* Clear screen */
+                Term_clear();
 
 		/* Why are we here */
 #ifdef JP
@@ -2333,11 +2388,12 @@ void do_cmd_options(void)
 					int msec = delay_factor * delay_factor * delay_factor;
 #ifdef JP
 					prt(format("現在のウェイト: %d (%dミリ秒)",
+					           delay_factor, msec), 22, 0);
 #else
 					prt(format("Current base delay factor: %d (%d msec)",
+					           delay_factor, msec), 22, 0);
 #endif
 
-					           delay_factor, msec), 22, 0);
 #ifdef JP
 					prt("ウェイト (0-9) ESCで決定: ", 20, 0);
 #else
@@ -2346,7 +2402,16 @@ void do_cmd_options(void)
 
 					k = inkey();
 					if (k == ESCAPE) break;
-					if (isdigit(k)) delay_factor = D2I(k);
+                                        else if (k == '?')
+                                        {
+#ifdef JP
+                                                (void)show_file(TRUE, "joption.txt#BaseDelay", NULL, 0, 0);
+#else
+                                                (void)show_file(TRUE, "option.txt#BaseDelay", NULL, 0, 0);
+#endif
+                                                Term_clear(); 
+                                        }
+					else if (isdigit(k)) delay_factor = D2I(k);
 					else bell();
 				}
 
@@ -2369,27 +2434,45 @@ void do_cmd_options(void)
 				while (1)
 				{
 #ifdef JP
-	    prt(format("現在の低ヒットポイント警告: %d0%%",
-		       hitpoint_warn), 22, 0);
+                                        prt(format("現在の低ヒットポイント警告: %d0%%",
+                                                   hitpoint_warn), 22, 0);
 #else
 					prt(format("Current hitpoint warning: %d0%%",
 					           hitpoint_warn), 22, 0);
 #endif
 
 #ifdef JP
-			prt("低ヒットポイント警告 (0-9) ESCで決定: ", 20, 0);
+                                        prt("低ヒットポイント警告 (0-9) ESCで決定: ", 20, 0);
 #else
 					prt("Hitpoint Warning (0-9 or ESC to accept): ", 20, 0);
 #endif
 
 					k = inkey();
 					if (k == ESCAPE) break;
-					if (isdigit(k)) hitpoint_warn = D2I(k);
+                                        else if (k == '?')
+                                        {
+#ifdef JP
+                                                (void)show_file(TRUE, "joption.txt#Hitpoint", NULL, 0, 0);
+#else
+                                                (void)show_file(TRUE, "option.txt#Hitpoint", NULL, 0, 0);
+#endif
+                                                Term_clear(); 
+                                        }
+					else if (isdigit(k)) hitpoint_warn = D2I(k);
 					else bell();
 				}
 
 				break;
 			}
+
+                        case '?':
+#ifdef JP
+                                (void)show_file(TRUE, "joption.txt", NULL, 0, 0);
+#else
+                                (void)show_file(TRUE, "option.txt", NULL, 0, 0);
+#endif
+				Term_clear(); 
+                                break;
 
 			/* Unknown option */
 			default:

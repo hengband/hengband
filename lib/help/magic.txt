@@ -83,6 +83,7 @@ See raceclas.tx#TheClasses [a] for more details.
 === The Realms of Spellbook Magic ===
 
 
+***** <Life>
 --- Life ---
 
      Life magic is very good for healing; it relies mostly on healing,
@@ -93,6 +94,7 @@ See raceclas.tx#TheClasses [a] for more details.
      evil.
 
 
+***** <Sorcery>
 --- Sorcery ---
 
      Sorcery is a `meta` realm, including enchantment and general
@@ -109,6 +111,7 @@ See raceclas.tx#TheClasses [a] for more details.
      to your enemies.
 
 
+***** <Nature>
 --- Nature ---
 
      Nature magic makes you a master of the elements; it provides
@@ -120,6 +123,7 @@ See raceclas.tx#TheClasses [a] for more details.
      becomes very good or evil.
 
 
+***** <Chaos>
 --- Chaos ---
 
      Chaos is the very element of unmaking, and Chaos spells are the
@@ -135,6 +139,7 @@ See raceclas.tx#TheClasses [a] for more details.
      undesired effects.
 
 
+***** <Death>
 --- Death ---
 
      There is no fouler nor more evil category of spells than the
@@ -150,6 +155,7 @@ See raceclas.tx#TheClasses [a] for more details.
      rate of Death spells goes up for casters aligned to good.
 
 
+***** <Trump>
 --- Trump ---
 
      Trump magic seems an independent source of power, although its
@@ -171,6 +177,7 @@ See raceclas.tx#TheClasses [a] for more details.
      own (but can develop one, if you treat them badly).
 
 
+***** <Arcane>
 --- Arcane ---
 
      Even more than Sorcery, Arcane magic is a general purpose realm
@@ -187,6 +194,7 @@ See raceclas.tx#TheClasses [a] for more details.
      in the selection of utility spells in another realm.
 
 
+***** <Craft>
 --- Craft ---
 
      Craft magic is an original realm in Hengband.  It provides spells
@@ -198,6 +206,7 @@ See raceclas.tx#TheClasses [a] for more details.
      temporary telepathy spell.
 
 
+***** <Daemon>
 --- Daemon ---
 
      Daemon magic is an original realm in Hengband.  It offers
@@ -208,6 +217,7 @@ See raceclas.tx#TheClasses [a] for more details.
      Demon or a Demon Lord.  The fail rate of Daemon spells goes up
      for casters aligned towards good.
 
+***** <Crusade>
 --- Crusade ---
 
      Crusade is a realm of 'Justice'; It does have many attack spells

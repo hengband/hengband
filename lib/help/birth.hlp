@@ -7,9 +7,11 @@ Please choose one of the following online help files:
     (c) Start-Up Options                  (birth.txt#StartupOptions)
     (d) Random Quests                     (birth.txt#RandomQuests)
     (e) The Auto-Roller                   (birth.txt#AutoRoller)
-    (f) Primary Statistics                (birth.txt#PrimaryStats)
-    (g) Primary Skills                    (birth.txt#PrimarySkills)
-    (h) Proficiency Levels                (birth.txt#Proficiency)
+    (f) Background Edit-Mode              (birth.txt#BackgroundEditor)
+    (g) Quick Start                       (birth.txt#QuickStart)
+    (h) Primary Statistics                (birth.txt#PrimaryStats)
+    (i) Primary Skills                    (birth.txt#PrimarySkills)
+    (j) Proficiency Levels                (birth.txt#Proficiency)
 
     (?) Help System Commands              (helpinfo.txt)
 
@@ -19,6 +21,8 @@ Please choose one of the following online help files:
 ***** [c] birth.txt#StartupOptions
 ***** [d] birth.txt#RandomQuests
 ***** [e] birth.txt#AutoRoller
-***** [f] birth.txt#PrimaryStats
-***** [g] birth.txt#PrimarySkills
-***** [h] birth.txt#Proficiency
+***** [f] birth.txt#BackgroundEditor
+***** [g] birth.txt#QuickStart
+***** [h] birth.txt#PrimaryStats
+***** [i] birth.txt#PrimarySkills
+***** [j] birth.txt#Proficiency

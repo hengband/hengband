@@ -4837,7 +4837,7 @@ errr file_character(cptr name, bool full)
 
 		/* Build query */
 #ifdef JP
-(void)sprintf(out_val, "現存するファイル %s に上書きしますか? ", buf);
+                (void)sprintf(out_val, "現存するファイル %s に上書きしますか? ", buf);
 #else
 		(void)sprintf(out_val, "Replace existing file %s? ", buf);
 #endif
@@ -4885,57 +4885,6 @@ msg_print("キャラクタ情報のファイルへの書き出しに成功しました。");
 
 	/* Success */
 	return (0);
-}
-
-
-typedef struct file_tag
-{
-	char name[32];
-	int line_number;
-} file_tag;
-
-
-typedef struct file_tags
-{
-	file_tag tags[64];
-	int index;
-} file_tags;
-
-
-static void add_tag(file_tags *the_tags, cptr name, int line)
-{
-	if (the_tags->index < 64)
-	{
-		file_tag *tag = &(the_tags->tags[the_tags->index]);
-
-		/* Set the name and end it with '\0' */
-		strncpy(tag->name, name, 31);
-		tag->name[31] = '\0';
-
-		/* Set the line-number */
-		tag->line_number = line;
-
-		/* Increase the number of tags */
-		the_tags->index++;
-	}
-}
-
-
-static int get_line(file_tags *the_tags, cptr name)
-{
-	int i;
-
-	/* Search for the tag */
-	for (i = 0; i < the_tags->index; i++)
-	{
-		if (streq(the_tags->tags[i].name, name))
-		{
-			return the_tags->tags[i].line_number;
-		}
-	}
-
-	/* Not found */
-	return 0;
 }
 
 
@@ -5009,9 +4958,6 @@ bool show_file(bool show_version, cptr name, cptr what, int line, int mode)
 	/* Sub-menu information */
 	char hook[68][32];
 
-	/* Tags for in-file references */
-	file_tags tags;
-
 	bool reverse = (line < 0);
 
 	int wid, hgt, rows;
@@ -5033,9 +4979,6 @@ bool show_file(bool show_version, cptr name, cptr what, int line, int mode)
 	{
 		hook[i][0] = '\0';
 	}
-
-	/* No tags yet */
-	tags.index = 0;
 
 	/* Copy the filename */
 	strcpy(filename, name);
@@ -5180,7 +5123,7 @@ msg_format("'%s'をオープンできません。", name);
 			else if (str[6] == '<')
 			{
 				str[strlen(str) - 1] = '\0';
-				add_tag(&tags, str + 7, next);
+                                if (tag && streq(str + 7, tag)) line = next;
 			}
 
 			/* Skip this */
@@ -5196,9 +5139,6 @@ msg_format("'%s'をオープンできません。", name);
 
 	/* start from bottom when reverse mode */
 	if (line == -1) line = ((size-1)/rows)*rows;
-
-	/* Go to the tagged line */
-	if (tag) line = get_line(&tags, tag);
 
 	/* Display the file */
 	while (TRUE)

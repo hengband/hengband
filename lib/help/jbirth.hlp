@@ -1,15 +1,17 @@
 キャラクターの作成
 
-参照したいオンライン・ヘルプの番号を押して下さい:
+参照したいオンライン・ヘルプの記号を押して下さい:
 
     (a) キャラクターの作成                (jbirth.txt)
     (b) キャラクタの個性(基本的な特性値)  (jbirth.txt#CharAttributes)
     (c) 初期オプション                    (jbirth.txt#StartupOptions)
     (d) ランダムクエスト数決定            (jbirth.txt#RandomQuests)
     (e) オートローラー                    (jbirth.txt#AutoRoller)
-    (f) ６つの主要能力値                  (jbirth.txt#PrimaryStats)
-    (g) 主要技能                          (jbirth.txt#PrimarySkills)
-    (h) 熟練度(武器、魔法、技能の経験値)  (jbirth.txt#Proficiency)
+    (f) 生い立ちエディタ                  (jbirth.txt#BackgroundEditor)
+    (g) クイック・スタート                (jbirth.txt#QuickStart)
+    (h) ６つの主要能力値                  (jbirth.txt#PrimaryStats)
+    (i) 主要技能                          (jbirth.txt#PrimarySkills)
+    (j) 熟練度(武器、魔法、技能の経験値)  (jbirth.txt#Proficiency)
 
     (?) ヘルプシステムの使用法            (jhelpinfo.txt)
 
@@ -19,6 +21,8 @@
 ***** [c] jbirth.txt#StartupOptions
 ***** [d] jbirth.txt#RandomQuests
 ***** [e] jbirth.txt#AutoRoller
-***** [f] jbirth.txt#PrimaryStats
-***** [g] jbirth.txt#PrimarySkills
-***** [h] jbirth.txt#Proficiency
+***** [f] jbirth.txt#BackgroundEditor
+***** [g] jbirth.txt#QuickStart
+***** [h] jbirth.txt#PrimaryStats
+***** [i] jbirth.txt#PrimarySkills
+***** [j] jbirth.txt#Proficiency

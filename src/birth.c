@@ -2049,6 +2049,23 @@ static void birth_quit(void)
 	quit(NULL);
 }
 
+
+/*
+ *  Show specific help file
+ */
+static void show_help(cptr helpfile)
+{
+	/* Save screen */
+	screen_save();
+
+	/* Peruse the help file */
+        (void)show_file(TRUE, helpfile, NULL, 0, 0);
+
+	/* Load screen */
+	screen_load();
+}
+
+
 /*
  * Choose from one of the available magical realms
  */
@@ -2278,7 +2295,14 @@ static byte choose_realm(s32b choices, int *count)
 			continue;
 		}
 		else k = -1;
-		if (c == '?') do_cmd_help();
+		if (c == '?')
+                {
+#ifdef JP                 
+                        show_help("jmagic.txt#MagicRealms");
+#else
+                        show_help("magic.txt#MagicRealms");
+#endif
+                }
 		else if (c == '=')
 		{
 			screen_save();
@@ -4083,7 +4107,14 @@ static bool get_player_race(void)
 			continue;
 		}
 		else k = -1;
-		if (c == '?') do_cmd_help();
+		if (c == '?')
+                {
+#ifdef JP                 
+                        show_help("jraceclas.txt#TheRaces");
+#else
+                        show_help("raceclas.txt#TheRaces");
+#endif
+                }
 		else if (c == '=')
 		{
 			screen_save();
@@ -4291,7 +4322,14 @@ static bool get_player_class(void)
 			continue;
 		}
 		else k = -1;
-		if (c == '?') do_cmd_help();
+		if (c == '?')
+                {
+#ifdef JP                 
+                        show_help("jraceclas.txt#TheClasses");
+#else
+                        show_help("raceclas.txt#TheClasses");
+#endif
+                }
 		else if (c == '=')
 		{
 			screen_save();
@@ -4526,7 +4564,14 @@ static bool get_player_seikaku(void)
 			}
 		}
 		else k = -1;
-		if (c == '?') do_cmd_help();
+		if (c == '?')
+                {
+#ifdef JP                 
+                        show_help("jraceclas.txt#ThePersonalities");
+#else
+                        show_help("raceclas.txt#ThePersonalities");
+#endif
+                }
 		else if (c == '=')
 		{
 			screen_save();
@@ -4795,7 +4840,13 @@ static bool get_stat_limits(void)
 			}
 			break;
 		case '?':
-			do_cmd_help();
+                {
+#ifdef JP                 
+                        show_help("jbirth.txt#AutoRoller");
+#else
+                        show_help("birth.txt#AutoRoller");
+#endif
+                }
 			break;
 		case '=':
 			screen_save();
@@ -5085,7 +5136,11 @@ static bool get_chara_limits(void)
 			}
 			break;
 		case '?':
-			do_cmd_help();
+#ifdef JP                 
+                        show_help("jbirth.txt#AutoRoller");
+#else
+                        show_help("birth.txt#AutoRoller");
+#endif
 			break;
 		case '=':
 			screen_save();
@@ -5388,6 +5443,14 @@ static bool player_birth_aux(void)
 			c = inkey();
 			if (c == 'Q') quit(NULL);
 			else if (c == 'S') return (FALSE);
+                        else if (c == '?')
+                        {
+#ifdef JP                 
+                                show_help("jbirth.txt#QuickStart");
+#else
+                                show_help("birth.txt#QuickStart");
+#endif
+                        }
 			else if ((c == 'y') || (c == 'Y'))
 			{
 				do_quick_start = TRUE;
@@ -5759,9 +5822,18 @@ static bool player_birth_aux(void)
 			/* Check for random number of quests */
 			if (inp[0] == '*')
 			{
-				/* 0 to 49 random quests */
+				/* 0 to 10 random quests */
 				number_of_quests = randint0(11);
 			}
+                        else if (inp[0] == '?')
+                        {
+#ifdef JP                 
+                                show_help("jbirth.txt#RandomQuests");
+#else
+                                show_help("birth.txt#RandomQuests");
+#endif
+                                continue;
+                        }
 			else
 			{
 				number_of_quests = atoi(inp);
@@ -6074,7 +6146,11 @@ static bool player_birth_aux(void)
 			/* Help */
 			if (c == '?')
 			{
-				do_cmd_help();
+#ifdef JP                 
+                                show_help("jbirth.txt#AutoRoller");
+#else
+                                show_help("birth.txt#AutoRoller");
+#endif
 				continue;
 			}
 			else if (c == '=')

@@ -240,7 +240,7 @@
 #          プレイヤーの名前を返す。
 #        $REALM1
 #          第１魔法領域を英語名で返す。
-#          none, Life, Sorcery, Nature, Chaos, Death, Trump Arcane,
+#          none, Life, Sorcery, Nature, Chaos, Death, Trump, Arcane,
 #          Craft, Daemon, Crusade, Music, Kendo
 #          のどれか。魔法書を使えない場合は none になる。
 #        $REALM2
