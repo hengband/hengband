@@ -128,10 +128,10 @@ static int next_to_walls(int y, int x)
 {
 	int k = 0;
 
-	if (is_extra_bold(y + 1, x)) k++;
-	if (is_extra_bold(y - 1, x)) k++;
-	if (is_extra_bold(y, x + 1)) k++;
-	if (is_extra_bold(y, x - 1)) k++;
+	if (in_bounds(y + 1, x) && is_extra_bold(y + 1, x)) k++;
+	if (in_bounds(y - 1, x) && is_extra_bold(y - 1, x)) k++;
+	if (in_bounds(y, x + 1) && is_extra_bold(y, x + 1)) k++;
+	if (in_bounds(y, x - 1) && is_extra_bold(y, x - 1)) k++;
 
 	return (k);
 }
