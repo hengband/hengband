@@ -134,7 +134,7 @@ of Martin
 
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
-11
+12
 'Steel Bull'
 'Avatar of Might'
 'Terminater'
@@ -142,6 +142,7 @@ N: 6:BIAS_STR
 'Power Shield'
 'Power Matrix'
 'Stonecold'
+of Vader
 of the Valkyrie
 of Daybreak
 of Diamond

@@ -1,34 +1,41 @@
 N: 1:BIAS_ELEC
-6
+8
 'Lightning Conductor'
 'Electorostatic Barrier'
 'Shocking!'
+'Static Charge'
 of Insulation
 of 1.5 volts
 of the Thunderer
+of Volta
 
 N: 2:BIAS_POIS
-7
+8
 'Drug Puncher'
 'Vaccination'
 'Oblate'
+'Cosmocleaner'
 of Resist *Poison*
 of Kobold
 of Tarantula
 of Talos
 
 N: 3:BIAS_FIRE
-7
+11
 'Sunglasses'
 'Fan'
 'Fire Extinguisher'
 'Burning Student'
+'Keeper of Flame'
+'Dewar vessel'
+'Dead Heat'
+'Heatsink'
 of the Hawaiian Islands
 of Halloween
 of Insulator
 
 N: 4:BIAS_COLD
-8
+9
 'White Ice'
 'Cool Mint'
 'Snow'
@@ -37,31 +44,47 @@ N: 4:BIAS_COLD
 'Refrigerator'
 'Antarctic II'
 'Cool Boy'
-that Mam made
+'Muffler'
 
 N: 5:BIAS_ACID
-5
-(Rustproof)
+8
+'Rustproof'
 'Melting'
 'Acidic Rain'
-may resist acid
+'halogen'
+'Iron Will'
+'Stainless'
+'Glacial Acetic Acid'
 of Teflon
 
 N:14:BIAS_NECROMANTIC
-5
+11
+'Darkest Hour'
+'Unholy Strength'
+'Revenant'
+'Infernal Contract'
 'Sacrifice to void'
-of Zombi
+'Forgotten Fear'
+'Zombi Master'
+of Arcam
 of Deformity
 of Sabbath
 of Aleister Crowley
 
 N:12:BIAS_CHAOS
-5
+12
+'Mirage'
 'Mosaic'
-'the Fourth Dimension'
-'Klein'
 'Tranqilizer'
 'Shuffle'
+'Warp-Space'
+'Fractal'
+'Time Warp'
+'Tranquility'
+'Puzzle Box'
+'Reality Ripple'
+'Strange Attractor'
+of iridescence
 
 N:13:BIAS_PRIESTLY
 N: 8:BIAS_WIS
@@ -70,60 +93,84 @@ N: 8:BIAS_WIS
 'Holiday'
 'Confession'
 'Soul Helper'
-with Amulet
+'Spiritual Focus'
+'Holy Strength'
+'Avatar of Hope'
+'Keeper of Minde'
+'Oracle's Attendant'
+'Peacehoper'
+'Seeker of Skybreak'
 of the Buddhist Scriptures
 of Angel
 
 N:16:BIAS_ROGUE
 N: 9:BIAS_DEX
-7
-of Avoidance
+8
 'Speed'
-of Escapee
 'Accelerator'
+'Hide-and-Seek'
+of Avoidance
+of Escapee
 of the Joker
 of Illusion
 of the Pickpocket
 
 N:17:BIAS_MAGE
 N: 7:BIAS_INT
-5
-'Fractal'
+8
 'Deja-Vu'
-for Ritual
+'Caffein'
+'Oath of Mages'
+'Whispers of Muse'
 of Talisman
-of the wiZZard
+of Martine
+of Quiz King
+of Knowing
 
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
-6
+8
 'Tournament'
 'Turbo'
+'Muscle Curtain'
 of Resist Smasher
 of the Minotaur
 of Sumo Wrestler
-of Daddy
+of Minotaur
+of Meng Huo
 
 N:10:BIAS_CON
-6
+8
 'Endurance'
 'Glowth Period'
 'Trollism'
 'Big Useless Fellow'
 'Healthy One'
+'Abtronic'
 of Pro Wrestler
+of Bullroarer
 
 N:19:BIAS_RANGER
-5
+9
 'Weeds'
+'Camouflage'
 'Radar'
 'Planaria'
+'Hound'
+'Ammonite'
 of The Stone
 of Squirrel
+of lesser panda
 
 N:11:BIAS_CHR
-4
+10
 'Cutie Girls'
+'Sudden Marriage'
+'Bridal'
+'Brunet Hair of Maiden'
+'Rose Bouquet'
+'Innocent Dress'
+'Mini=Skirt'
 of Companion
 of Super Model
 of Passion
@@ -134,19 +181,21 @@ N:*:Default
 'Blink'
 'Pizza'
 'Virgin Hair'
+'Curator'
+'Babel'
+'Grand Prix'
+'Generater'
+'Bladereturner'
+'Iron Maiden'
 of Normally
 of Glass
 of Clay
 of Sand
 of Modesty
-'Curator'
-'Babel'
-'Grand Prix'
 of Transylvania
 of Gurnemanz
 of Coral
 of Barahir
-'Generater'
-'Bladereturner'
-'Iron Virgin'
+
+
 
