@@ -2199,7 +2199,7 @@ note(format("アイテム配置エラー (%d <> %d)", i, o_idx));
 	rd_u16b(&limit);
 
 	/* Hack -- verify */
-	if (limit >= max_m_idx)
+	if (limit > max_m_idx)
 	{
 #ifdef JP
 note(format("モンスターの配列が大きすぎる(%d)！", limit));
