@@ -49,11 +49,14 @@
 #    ---------
 #
 #    Command letter:
-#           Each line determines the actions taken when you step over a kind 
-#      of object.  Starting a line with '!' indicates that you wish to destroy 
-#      this kind of object.  Starting a line with '~' indicates that you wish 
-#      to leave this kind of object on the floor.  Otherwise, your character 
-#      will automatically attempt to pick up the object.
+#           Each line determines the actions taken when you step over
+#      a kind of object.  Starting a line with '!' indicates that you
+#      wish to destroy this kind of object.  Starting a line with '~'
+#      indicates that you wish to leave this kind of object on the
+#      floor.  Starting a line with '*' indicates that you wish to
+#      force the game to ask you if you want to pick the item up or
+#      not.  Otherwise, your character will automatically attempt to
+#      pick up the object.
 #           There is an additional command letter '('.  It indicates that 
 #      you don't wish this item to be displayed in full map. see below.
 #
@@ -169,7 +172,7 @@
 #
 #      Strict syntax of each line is below.
 #      
-#      [! ~ (]
+#      [! ~ * (]
 #      [[all] [collecting]
 #       [unaware] [unidentified] [identified] [*identified*] 
 #       [dice boosted] [more than N dice] [more bonus than N] 
