@@ -857,7 +857,7 @@ static cptr d_info_flags1[] =
  * Returns FALSE when there isn't enough space available to store
  * the text.
  */
-static bool add_text(u32b *offset, header *head, cptr buf)
+static bool add_text(u32b *offset, header *head, cptr buf, bool normal_text)
 {
 	/* Hack -- Verify space */
 	if (head->text_size + strlen(buf) + 8 > FAKE_TEXT_SIZE)
@@ -867,11 +867,11 @@ static bool add_text(u32b *offset, header *head, cptr buf)
 	if (*offset == 0)
 	{
 		/* Advance and save the text index */
-		*offset = ++head->text_size;	
+		*offset = ++head->text_size;
 	}
 
 	/* Additional text */
-	else
+	else if (normal_text)
 	{
 		/*
 		 * If neither the end of the last line nor
@@ -1136,7 +1136,7 @@ errr parse_v_info(char *buf, header *head)
 		s = buf+2;
 
 		/* Store the text */
-		if (!add_text(&v_ptr->text, head, s)) return (7);
+		if (!add_text(&v_ptr->text, head, s, FALSE)) return (7);
 	}
 
 	/* Process 'X' for "Extra info" (one line only) */
@@ -1949,7 +1949,7 @@ errr parse_k_info(char *buf, header *head)
 #endif
 
 		/* Store the text */
-		if (!add_text(&k_ptr->text, head, s)) return (7);
+		if (!add_text(&k_ptr->text, head, s, TRUE)) return (7);
 	}
 
 	/* Process 'G' for "Graphics" (one line only) */
@@ -2217,7 +2217,7 @@ errr parse_a_info(char *buf, header *head)
 #endif
 
 		/* Store the text */
-		if (!add_text(&a_ptr->text, head, s)) return (7);
+		if (!add_text(&a_ptr->text, head, s, TRUE)) return (7);
 	}
 
 
@@ -2424,7 +2424,7 @@ errr parse_e_info(char *buf, header *head)
 		s = buf+2;
 
 		/* Store the text */
-		if (!add_text(&e_ptr->text, head, s)) return (7);
+		if (!add_text(&e_ptr->text, head, s, TRUE)) return (7);
 	}
 
 #endif
@@ -2664,7 +2664,7 @@ errr parse_r_info(char *buf, header *head)
 #endif
 
 		/* Store the text */
-		if (!add_text(&r_ptr->text, head, s)) return (7);
+		if (!add_text(&r_ptr->text, head, s, TRUE)) return (7);
 	}
 
 	/* Process 'G' for "Graphics" (one line only) */
@@ -3018,7 +3018,7 @@ errr parse_d_info(char *buf, header *head)
 #endif
 
 		/* Store the text */
-		if (!add_text(&d_ptr->text, head, s)) return (7);
+		if (!add_text(&d_ptr->text, head, s, TRUE)) return (7);
 	}
 
 	/* Process 'W' for "More Info" (one line only) */
