@@ -112,6 +112,9 @@ static void build_small_room(int x0, int y0)
 		case 3: place_secret_door(y0 + 1, x0); break;
 	}
 
+	/* Clear mimic type */
+	cave[y0][x0].mimic = 0;
+
 	/* Add inner open space */
 	place_floor_bold(y0, x0);
 }

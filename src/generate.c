@@ -884,6 +884,9 @@ if (cheat_room) msg_print("小さな地下室を却下します。");
 			if ((c_ptr->feat < FEAT_DEEP_WATER) ||
 			    (c_ptr->feat > FEAT_SHAL_LAVA))
 			{
+				/* Clear mimic type */
+				c_ptr->mimic = 0;
+
 				place_floor_grid(c_ptr);
 			}
 		}
@@ -897,6 +900,9 @@ if (cheat_room) msg_print("小さな地下室を却下します。");
 
 			/* Access the grid */
 			c_ptr = &cave[y][x];
+
+			/* Clear mimic type */
+			c_ptr->mimic = 0;
 
 			/* Clear previous contents, add up floor */
 			place_floor_grid(c_ptr);

@@ -788,6 +788,10 @@ static bool set_tunnel(int *x, int *y, bool affectwall)
 				}
 			}
 		}
+
+		/* Clear mimic type */
+		cave[*y][*x].mimic = 0;
+
 		place_floor_bold(*y, *x);
 
 		return TRUE;
