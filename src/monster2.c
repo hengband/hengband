@@ -1732,7 +1732,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 			strcat(desc,buf);
 		}
 
-		if (player_bold(m_ptr->fy, m_ptr->fx))
+		if (cave[m_ptr->fy][m_ptr->fx].m_idx == p_ptr->riding)
 		{
 #ifdef JP
 			strcat(desc,"(¾èÇÏÃæ)");
