@@ -1241,9 +1241,9 @@ strstr((r_name + r_ptr->E_name),"aladin") ||
 		strstr((r_name + r_ptr->name),"aladin") ||
 #endif
 #ifdef JP
-strstr((r_name + r_ptr->E_name),"Monk") ||
+strstr((r_name + r_ptr->E_name)," monk") ||
 #else
-		strstr((r_name + r_ptr->name),"Monk") ||
+		strstr((r_name + r_ptr->name)," monk") ||
 #endif
 #ifdef JP
 strstr((r_name + r_ptr->E_name),"riest")))
