@@ -209,7 +209,7 @@ static char *mind_tips[5][MAX_MIND_POWERS] =
 	"teleport to given location.",
 	"recalls player from dungeon to town, or from town to the deepest level of dungeon.",
 	"completely protects you from any attacks at one in two chance.",
-	"generates a magical triangle which damages all monsters in the area. The virtices of the triangle is you and two mirrors in sight. ",
+	"generates a magical triangle which damages all monsters in the area. The vertices of the triangle is you and two mirrors in sight. ",
 	"generates barrier which completly protect you from almost all damages. takes a few your turns when the barrier breaks or duration time is exceeded.",
 },
 
