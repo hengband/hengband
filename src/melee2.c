@@ -1836,17 +1836,19 @@ act = "%sにむかって歌った。";
 			/* Message */
 			if (act && see_either)
 			{
+#ifdef JP
+				if (do_silly_attack) act = silly_attacks2[randint0(MAX_SILLY_ATTACK)];
+				strfmt(temp, act, t_name);
+				msg_format("%^sは%s", m_name, temp);
+#else
 				if (do_silly_attack)
 				{
 					act = silly_attacks[randint0(MAX_SILLY_ATTACK)];
+					strfmt(temp, "%s %s.", act, t_name);
 				}
-				strfmt(temp, act, t_name);
-#ifdef JP
-				msg_format("%^sは%s", m_name, temp);
-#else
+				else strfmt(temp, act, t_name);
 				msg_format("%^s %s", m_name, temp);
 #endif
-
 			}
 
 			/* Hack -- assume all attacks are obvious */

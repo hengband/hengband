@@ -109,6 +109,9 @@ extern kamae kata_shurui[MAX_KATA];
 extern cptr exp_level_str[5];
 extern byte conv_terrain2feat[MAX_WILDERNESS];
 extern cptr silly_attacks[MAX_SILLY_ATTACK];
+#ifdef JP
+extern cptr silly_attacks2[MAX_SILLY_ATTACK];
+#endif
 extern monster_power monster_powers[MAX_MONSPELLS];
 extern cptr ident_info[];
 extern mbe_info_type mbe_info[];
