@@ -1652,7 +1652,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 	else
 	{
 		/* Tanuki? */
-		if (is_pet(m_ptr) && m_ptr->ap_r_idx != m_ptr->r_idx)
+		if (is_pet(m_ptr) && !is_original_ap(m_ptr))
 		{
 #ifdef JP
 			char *t;
@@ -1788,7 +1788,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 			}
 		}
 
-		if ((mode & MD_IGNORE_HALLU) && m_ptr->ap_r_idx != m_ptr->r_idx)
+		if ((mode & MD_IGNORE_HALLU) && !is_original_ap(m_ptr))
 		{
 			strcat(desc, format("(%s)", r_name + r_info[m_ptr->r_idx].name));
 		}
@@ -2593,11 +2593,11 @@ void update_mon(int m_idx, bool full)
 			/* Hack -- Count "fresh" sightings */
 			if ((m_ptr->ap_r_idx == MON_KAGE) && (r_info[MON_KAGE].r_sights < MAX_SHORT))
 				r_info[MON_KAGE].r_sights++;
-			else if (m_ptr->ap_r_idx == m_ptr->r_idx && 
-				 r_ptr->r_sights < MAX_SHORT) r_ptr->r_sights++;
+			else if (is_original_ap(m_ptr) && (r_ptr->r_sights < MAX_SHORT))
+				r_ptr->r_sights++;
 
 			/* Eldritch Horror */
-			if (r_ptr->flags2 & RF2_ELDRITCH_HORROR)
+			if (r_info[m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR)
 			{
 				sanity_blast(m_ptr, FALSE);
 			}
@@ -3118,6 +3118,10 @@ msg_print("守りのルーンが壊れた！");
 	/* Save the race */
 	m_ptr->r_idx = r_idx;
 	m_ptr->ap_r_idx = initial_r_appearance(r_idx);
+
+	/* Hack -- Appearance transfer */
+	if ((mode & PM_MULTIPLY) && (who > 0) && !is_original_ap(&m_list[who]))
+		m_ptr->ap_r_idx = m_list[who].ap_r_idx;
 
 	/* Sub-alignment of a monster */
 	if ((who > 0) && !(r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)))
@@ -4067,7 +4071,7 @@ bool multiply_monster(int m_idx, bool clone, u32b mode)
 	if (m_ptr->mflag2 & MFLAG2_KAGE) mode |= PM_KAGE;
 
 	/* Create a new monster (awake, no groups) */
-	if (!place_monster_aux(m_idx, y, x, m_ptr->r_idx, (mode | PM_NO_KAGE)))
+	if (!place_monster_aux(m_idx, y, x, m_ptr->r_idx, (mode | PM_NO_KAGE | PM_MULTIPLY)))
 		return FALSE;
 
 	/* Hack -- Transfer "clone" flag */
@@ -4076,9 +4080,6 @@ bool multiply_monster(int m_idx, bool clone, u32b mode)
 		m_list[hack_m_idx_ii].smart |= SM_CLONED;
 		m_list[hack_m_idx_ii].mflag2 |= MFLAG2_NOPET;
 	}
-
-	/* Hack -- Appearance transfer */
-	if (!is_original_ap(m_ptr)) m_list[hack_m_idx_ii].ap_r_idx = m_ptr->ap_r_idx;
 
 	return TRUE;
 }

@@ -2870,6 +2870,7 @@
 #define PM_IGNORE_TERRAIN 0x00000080
 #define PM_HASTE          0x00000100
 #define PM_KAGE           0x00000200
+#define PM_MULTIPLY       0x00000400
 
 
 /* Bit flags for monster_desc() */

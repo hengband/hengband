@@ -4923,7 +4923,7 @@ bool probing(void)
 
 			msg_print(NULL);
 
-			if (m_ptr->ap_r_idx != m_ptr->r_idx)
+			if (!is_original_ap(m_ptr))
 			{
 				if (m_ptr->mflag2 & MFLAG2_KAGE)
 					m_ptr->mflag2 &= ~(MFLAG2_KAGE);

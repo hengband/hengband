@@ -188,7 +188,7 @@ static void wr_monster(monster_type *m_ptr)
 	u32b flags = 0x00000000;
 	byte tmp8u;
 
-	if (m_ptr->ap_r_idx != m_ptr->r_idx) flags |= SAVE_MON_AP_R_IDX;
+	if (!is_original_ap(m_ptr)) flags |= SAVE_MON_AP_R_IDX;
 	if (m_ptr->sub_align) flags |= SAVE_MON_SUB_ALIGN;
 	if (MON_CSLEEP(m_ptr)) flags |= SAVE_MON_CSLEEP;
 	if (MON_FAST(m_ptr)) flags |= SAVE_MON_FAST;
