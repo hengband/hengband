@@ -920,8 +920,8 @@ static void save_quick_start(void)
 
 	wr_byte(previous_char.quests);
 
-	/* No quick start after using debug mode */
-	if (noscore) previous_char.quick_ok = FALSE;
+	/* No quick start after using debug mode or cheat options */
+	if (noscore || munchkin_death) previous_char.quick_ok = FALSE;
 
 	wr_byte((byte)previous_char.quick_ok);
 }
