@@ -2691,6 +2691,54 @@ bool target_okay(void)
 }
 
 
+/*
+ * Examine importance level of the grid.
+ *
+ * Unknown unique monster -> 5000
+ * Unique monster         -> 4000 + level 
+ * Unknown normal monster -> 3000
+ * Shadower        	  -> 2999
+ * Normal monster  	  -> 2000 + level
+ * Object          	  -> 1000
+ * Empty           	  -> priotity of the terrain
+ */
+static int get_grid_importance(int y, int x)
+{
+	cave_type *c_ptr = &cave[y][x];
+
+	/* A monster */
+	if (c_ptr->m_idx && m_list[c_ptr->m_idx].ml)
+	{
+		monster_type *m_ptr = &m_list[c_ptr->m_idx];
+		monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
+
+		/* Unique monster */
+		if (ap_r_ptr->flags1 & RF1_UNIQUE)
+		{
+			/* Unknown unique monster */
+			if (!ap_r_ptr->r_tkills) return 5000;
+
+			/* Known unique monster */
+			return 4000 + ap_r_ptr->level;
+		}
+
+		/* あやしい影 (Shadower) */
+		if (m_ptr->mflag2 & MFLAG2_KAGE) return 2999;
+
+		/* Unknown monster */
+		if (!ap_r_ptr->r_tkills) return 3000;
+
+		/* Known normal monster */
+		return 2000 + ap_r_ptr->level;
+	}
+
+	/* Object */
+	if (c_ptr->o_idx) return 1000;
+
+	/* Empty floor or other terrain */
+	return f_info[c_ptr->feat].priority;
+}
+
 
 /*
  * Sorting hook -- comp function -- by "distance to player"
@@ -2721,6 +2769,27 @@ static bool ang_sort_comp_distance(vptr u, vptr v, int a, int b)
 
 	/* Compare the distances */
 	return (da <= db);
+}
+
+
+/*
+ * Sorting hook -- comp function -- by importance level of grids
+ *
+ * We use "u" and "v" to point to arrays of "x" and "y" positions,
+ * and sort the arrays by level of monster
+ */
+static bool ang_sort_comp_importance(vptr u, vptr v, int a, int b)
+{
+	byte *x = (byte*)(u);
+	byte *y = (byte*)(v);
+
+	int la = get_grid_importance(y[a], x[a]);
+	int lb = get_grid_importance(y[b], x[b]);
+
+	if (la < lb) return FALSE;
+	if (la > lb) return TRUE;
+
+	return ang_sort_comp_distance(u, v, a, b);
 }
 
 
@@ -2901,8 +2970,18 @@ static void target_set_prepare(int mode)
 	}
 
 	/* Set the sort hooks */
-	ang_sort_comp = ang_sort_comp_distance;
-	ang_sort_swap = ang_sort_swap_distance;
+	if (mode & (TARGET_KILL))
+	{
+		/* Target the nearest monster for shooting */
+		ang_sort_comp = ang_sort_comp_distance;
+		ang_sort_swap = ang_sort_swap_distance;
+	}
+	else
+	{
+		/* Look important grids first in Look command */
+		ang_sort_comp = ang_sort_comp_importance;
+		ang_sort_swap = ang_sort_swap_distance;
+	}
 
 	/* Sort the positions */
 	ang_sort(temp_x, temp_y, temp_n);
