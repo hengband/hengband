@@ -4153,7 +4153,7 @@ msg_print("神聖な力が邪悪を打ち払った！");
 				mmove2(&ny, &nx, py, px, ty, tx);
 
 				/* Stop at maximum range */
-				if (MAX_SIGHT*2 < distance(py, px, ny, nx)) break;
+				if (MAX_RANGE <= distance(py, px, ny, nx)) break;
 
 				/* Stopped by walls/doors */
 				if (!cave_floor_bold(ny, nx)) break;
