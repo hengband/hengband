@@ -2811,10 +2811,10 @@ static void known_obj_immunity(u32b flgs[TR_FLAG_SIZE])
 		/* Known flags */
 		object_flags_known(o_ptr, o_flgs);
 
-		if (have_flag(flgs, TR_IM_ACID)) add_flag(flgs, TR_RES_ACID);
-		if (have_flag(flgs, TR_IM_ELEC)) add_flag(flgs, TR_RES_ELEC);
-		if (have_flag(flgs, TR_IM_FIRE)) add_flag(flgs, TR_RES_FIRE);
-		if (have_flag(flgs, TR_IM_COLD)) add_flag(flgs, TR_RES_COLD);
+		if (have_flag(o_flgs, TR_IM_ACID)) add_flag(flgs, TR_RES_ACID);
+		if (have_flag(o_flgs, TR_IM_ELEC)) add_flag(flgs, TR_RES_ELEC);
+		if (have_flag(o_flgs, TR_IM_FIRE)) add_flag(flgs, TR_RES_FIRE);
+		if (have_flag(o_flgs, TR_IM_COLD)) add_flag(flgs, TR_RES_COLD);
 	}
 }
 
