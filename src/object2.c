@@ -339,7 +339,7 @@ void compact_objects(int size)
 	{
 		/* Message */
 #ifdef JP
-msg_print("アイテム情報を圧縮しています...");
+		msg_print("アイテム情報を圧縮しています...");
 #else
 		msg_print("Compacting objects...");
 #endif
@@ -563,7 +563,7 @@ s16b o_pop(void)
 
 	/* Warn the player (except during dungeon creation) */
 #ifdef JP
-if (character_dungeon) msg_print("アイテムが多すぎる！");
+	if (character_dungeon) msg_print("アイテムが多すぎる！");
 #else
 	if (character_dungeon) msg_print("Too many objects!");
 #endif
@@ -1808,7 +1808,7 @@ s16b lookup_kind(int tval, int sval)
 #if 0
 	/* Oops */
 #ifdef JP
-msg_format("アイテムがない (%d,%d)", tval, sval);
+	msg_format("アイテムがない (%d,%d)", tval, sval);
 #else
 	msg_format("No object (%d,%d)", tval, sval);
 #endif
@@ -1985,7 +1985,7 @@ static void object_mention(object_type *o_ptr)
 	{
 		/* Silly message */
 #ifdef JP
-msg_format("伝説のアイテム (%s)", o_name);
+		msg_format("伝説のアイテム (%s)", o_name);
 #else
 		msg_format("Artifact (%s)", o_name);
 #endif
@@ -1996,7 +1996,7 @@ msg_format("伝説のアイテム (%s)", o_name);
 	else if (o_ptr->art_name)
 	{
 #ifdef JP
-msg_print("ランダム・アーティファクト");
+		msg_print("ランダム・アーティファクト");
 #else
 		msg_print("Random artifact");
 #endif
@@ -2008,7 +2008,7 @@ msg_print("ランダム・アーティファクト");
 	{
 		/* Silly message */
 #ifdef JP
-msg_format("名のあるアイテム (%s)", o_name);
+		msg_format("名のあるアイテム (%s)", o_name);
 #else
 		msg_format("Ego-item (%s)", o_name);
 #endif
@@ -2020,7 +2020,7 @@ msg_format("名のあるアイテム (%s)", o_name);
 	{
 		/* Silly message */
 #ifdef JP
-msg_format("アイテム (%s)", o_name);
+		msg_format("アイテム (%s)", o_name);
 #else
 		msg_format("Object (%s)", o_name);
 #endif
@@ -2311,7 +2311,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 			/* Very Good */
 			if (power > 1)
 			{
-				if (one_in_((o_ptr->tval == TV_POLEARM) ? 42 : 44))
+				if (one_in_(40))
 				{
 					create_artifact(o_ptr, FALSE);
 					break;
@@ -2439,7 +2439,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 			/* Very good */
 			if (power > 1)
 			{
-				if (one_in_(21))
+				if (one_in_(20))
 				{
 					create_artifact(o_ptr, FALSE);
 					break;
@@ -2598,7 +2598,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					break;
 				}
 
-				if (one_in_((o_ptr->tval == TV_HARD_ARMOR) ? 21 : 19))
+				if (one_in_(20))
 				{
 					create_artifact(o_ptr, FALSE);
 					break;
@@ -2656,7 +2656,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 			/* Very good */
 			if (power > 1)
 			{
-				if (one_in_(23))
+				if (one_in_(20))
 				{
 					create_artifact(o_ptr, FALSE);
 					break;
@@ -3867,7 +3867,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 			if (cheat_peek)
 			{
 #ifdef JP
-msg_format("%sの人形, 深さ +%d%s",
+				msg_format("%sの人形, 深さ +%d%s",
 #else
 				msg_format("Figurine of %s, depth +%d%s",
 #endif
@@ -3926,7 +3926,7 @@ msg_format("%sの人形, 深さ +%d%s",
 			if (cheat_peek)
 			{
 #ifdef JP
-msg_format("%sの死体,深さ +%d",
+				msg_format("%sの死体,深さ +%d",
 #else
 				msg_format("Corpse of %s, depth +%d",
 #endif
@@ -3963,7 +3963,7 @@ msg_format("%sの死体,深さ +%d",
 			if (cheat_peek)
 			{
 #ifdef JP
-msg_format("%sの像,", r_name + r_ptr->name);
+				msg_format("%sの像,", r_name + r_ptr->name);
 #else
 				msg_format("Statue of %s", r_name + r_ptr->name);
 #endif
@@ -4848,7 +4848,7 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 
 		/* Debug */
 #ifdef JP
-if (wizard) msg_print("(破損)");
+		if (wizard) msg_print("(破損)");
 #else
 		if (wizard) msg_print("(breakage)");
 #endif
@@ -4974,7 +4974,7 @@ if (wizard) msg_print("(破損)");
 
 		/* Debug */
 #ifdef JP
-if (wizard) msg_print("(床スペースがない)");
+		if (wizard) msg_print("(床スペースがない)");
 #else
 		if (wizard) msg_print("(no floor space)");
 #endif
@@ -5069,7 +5069,7 @@ if (wizard) msg_print("(床スペースがない)");
 
 		/* Debug */
 #ifdef JP
-if (wizard) msg_print("(アイテムが多過ぎる)");
+		if (wizard) msg_print("(アイテムが多過ぎる)");
 #else
 		if (wizard) msg_print("(too many objects)");
 #endif
@@ -5125,7 +5125,7 @@ if (wizard) msg_print("(アイテムが多過ぎる)");
 	if (chance && (by == py) && (bx == px))
 	{
 #ifdef JP
-msg_print("何かが足下に転がってきた。");
+		msg_print("何かが足下に転がってきた。");
 #else
 		msg_print("You feel something roll beneath your feet.");
 #endif
@@ -5821,7 +5821,7 @@ s16b inven_takeoff(int item, int amt)
 	if (item == INVEN_RARM)
 	{
 #ifdef JP
-act = "を装備からはずした";
+		act = "を装備からはずした";
 #else
 		act = "You were wielding";
 #endif
@@ -5832,7 +5832,7 @@ act = "を装備からはずした";
 	else if (item == INVEN_BOW)
 	{
 #ifdef JP
-act = "を装備からはずした";
+		act = "を装備からはずした";
 #else
 		act = "You were holding";
 #endif
@@ -5843,7 +5843,7 @@ act = "を装備からはずした";
 	else if (item == INVEN_LITE)
 	{
 #ifdef JP
-act = "を光源からはずした";
+		act = "を光源からはずした";
 #else
 		act = "You were holding";
 #endif
@@ -5854,7 +5854,7 @@ act = "を光源からはずした";
 	else
 	{
 #ifdef JP
-act = "を装備からはずした";
+		act = "を装備からはずした";
 #else
 		act = "You were wearing";
 #endif
@@ -5934,7 +5934,7 @@ void inven_drop(int item, int amt)
 
 	/* Message */
 #ifdef JP
-msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
+	msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 #else
 	msg_format("You drop %s (%c).", o_name, index_to_label(item));
 #endif
@@ -6018,7 +6018,7 @@ void combine_pack(void)
 
 	/* Message */
 #ifdef JP
-if (flag) msg_print("ザックの中のアイテムをまとめ直した。");
+	if (flag) msg_print("ザックの中のアイテムをまとめ直した。");
 #else
 	if (flag) msg_print("You combine some items in your pack.");
 #endif
@@ -6140,7 +6140,7 @@ void reorder_pack(void)
 
 	/* Message */
 #ifdef JP
-if (flag) msg_print("ザックの中のアイテムを並べ直した。");
+	if (flag) msg_print("ザックの中のアイテムを並べ直した。");
 #else
 	if (flag) msg_print("You reorder some items in your pack.");
 #endif
@@ -6219,37 +6219,41 @@ void display_koff(int k_idx)
 }
 
 /* Examine the grid (xx,yy) and warn the player if there are any danger */
-bool process_frakir(int xx, int yy){
-  int mx,my;
-  cave_type *c_ptr;
+bool process_frakir(int xx, int yy)
+{
+	int mx,my;
+	cave_type *c_ptr;
 
 #define FRAKIR_AWARE_RANGE 12
-  int dam_max=0;
-  static int old_damage = 0;
-  
-  for (mx=xx-FRAKIR_AWARE_RANGE;mx<xx+FRAKIR_AWARE_RANGE+1;mx++){
-    for (my=yy-FRAKIR_AWARE_RANGE;my<yy+FRAKIR_AWARE_RANGE+1;my++){
-      if (!in_bounds(my,mx) || (distance(my,mx,yy,xx)>FRAKIR_AWARE_RANGE))continue;
-      
-      c_ptr = &cave[my][mx];
-      if (c_ptr->m_idx > 0){
-	
-	int dam_max0=0;
-	int m_idx = c_ptr->m_idx;
-	monster_type *m_ptr = &m_list[m_idx];
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	int dam_max = 0;
+	static int old_damage = 0;
 
-	u32b  f4 = r_ptr->flags4;
-	u32b  f5 = r_ptr->flags5;
-	u32b  f6 = r_ptr->flags6;
+	for (mx = xx-FRAKIR_AWARE_RANGE; mx < xx+FRAKIR_AWARE_RANGE+1; mx++)
+	{
+		for (my = yy-FRAKIR_AWARE_RANGE; my < yy+FRAKIR_AWARE_RANGE+1; my++)
+		{
+			if (!in_bounds(my,mx) || (distance(my,mx,yy,xx)>FRAKIR_AWARE_RANGE)) continue;
 
-	int   rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+			c_ptr = &cave[my][mx];
+			if (c_ptr->m_idx > 0)
+			{
+				int dam_max0=0;
+				int m_idx = c_ptr->m_idx;
+				monster_type *m_ptr = &m_list[m_idx];
+				monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	if (m_ptr->csleep) continue;
-	if (is_pet(m_ptr)) continue;
+				u32b f4 = r_ptr->flags4;
+				u32b f5 = r_ptr->flags5;
+				u32b f6 = r_ptr->flags6;
 
-	/* Monster spells (only powerful ones)*/
-	if(projectable(my,mx,yy,xx)){
+				int rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+
+				if (m_ptr->csleep) continue;
+				if (is_pet(m_ptr)) continue;
+
+				/* Monster spells (only powerful ones)*/
+				if(projectable(my,mx,yy,xx))
+				{
 
 #define DAMCALC(f,val,max,im,vln,res,resx,resy,op,opx,opy,dmax) \
 	   if (f){ int dam = (val)>(max)? (max):(val); \
@@ -6260,169 +6264,171 @@ bool process_frakir(int xx, int yy){
            if (dam>dmax) dmax = dam; \
            }
 
-           DAMCALC(f4 & (RF4_BR_FIRE), m_ptr->hp / 3, 1600, 
-                   p_ptr->immune_fire, p_ptr->muta3 & MUT3_VULN_ELEM,
-                   p_ptr->resist_fire, 1, 3,
-                   p_ptr->oppose_fire, 1, 3, dam_max0);
+					DAMCALC(f4 & (RF4_BR_FIRE), m_ptr->hp / 3, 1600, 
+						p_ptr->immune_fire, p_ptr->muta3 & MUT3_VULN_ELEM,
+						p_ptr->resist_fire, 1, 3,
+						p_ptr->oppose_fire, 1, 3, dam_max0);
 
-           DAMCALC(f4 & (RF4_BR_COLD), m_ptr->hp / 3, 1600, 
-                   p_ptr->immune_cold, p_ptr->muta3 & MUT3_VULN_ELEM,
-                   p_ptr->resist_cold, 1, 3,
-                   p_ptr->oppose_cold, 1, 3, dam_max0);
+					DAMCALC(f4 & (RF4_BR_COLD), m_ptr->hp / 3, 1600, 
+						p_ptr->immune_cold, p_ptr->muta3 & MUT3_VULN_ELEM,
+						p_ptr->resist_cold, 1, 3,
+						p_ptr->oppose_cold, 1, 3, dam_max0);
 
-           DAMCALC(f4 & (RF4_BR_ELEC), m_ptr->hp / 3, 1600, 
-                   p_ptr->immune_elec, p_ptr->muta3 & MUT3_VULN_ELEM,
-                   p_ptr->resist_elec, 1, 3,
-                   p_ptr->oppose_elec, 1, 3, dam_max0);
+					DAMCALC(f4 & (RF4_BR_ELEC), m_ptr->hp / 3, 1600, 
+						p_ptr->immune_elec, p_ptr->muta3 & MUT3_VULN_ELEM,
+						p_ptr->resist_elec, 1, 3,
+						p_ptr->oppose_elec, 1, 3, dam_max0);
 
-           DAMCALC(f4 & (RF4_BR_ACID), m_ptr->hp / 3, 1600, 
-                   p_ptr->immune_acid, p_ptr->muta3 & MUT3_VULN_ELEM,
-                   p_ptr->resist_acid, 1, 3,
-                   p_ptr->oppose_acid, 1, 3, dam_max0);
+					DAMCALC(f4 & (RF4_BR_ACID), m_ptr->hp / 3, 1600, 
+						p_ptr->immune_acid, p_ptr->muta3 & MUT3_VULN_ELEM,
+						p_ptr->resist_acid, 1, 3,
+						p_ptr->oppose_acid, 1, 3, dam_max0);
 
-           DAMCALC(f4 & (RF4_BR_POIS), m_ptr->hp / 3, 800,
-                   FALSE , FALSE,
-                   p_ptr->resist_pois, 1, 3,
-                   p_ptr->oppose_pois, 1, 3, dam_max0);
-
-
-           DAMCALC(f4 & (RF4_BR_NETH), m_ptr->hp / 6, 550, FALSE , FALSE,
-                   p_ptr->resist_neth, 6, 9, FALSE, 1, 1, dam_max0);
-
-           DAMCALC(f4 & (RF4_BR_LITE), m_ptr->hp / 6, 400, FALSE , FALSE,
-                   p_ptr->resist_lite, 4, 9, FALSE, 1, 1, dam_max0);
-
-           DAMCALC(f4 & (RF4_BR_DARK), m_ptr->hp / 6, 400, FALSE , FALSE,
-                   p_ptr->resist_dark, 4, 9, FALSE, 1, 1, dam_max0);
-
-           DAMCALC(f4 & (RF4_BR_CONF), m_ptr->hp / 6, 450, FALSE , FALSE,
-                   p_ptr->resist_conf, 5, 9, FALSE, 1, 1, dam_max0);
-
-           DAMCALC(f4 & (RF4_BR_SOUN), m_ptr->hp / 6, 450, FALSE , FALSE,
-                   p_ptr->resist_sound, 5, 9, FALSE, 1, 1, dam_max0);
-
-           DAMCALC(f4 & (RF4_BR_CHAO), m_ptr->hp / 6, 600, FALSE , FALSE,
-                   p_ptr->resist_chaos, 6, 9, FALSE, 1, 1, dam_max0);
-
-           DAMCALC(f4 & (RF4_BR_DISE), m_ptr->hp / 6, 500, FALSE , FALSE,
-                   p_ptr->resist_disen, 6, 9, FALSE, 1, 1, dam_max0);
-
-           DAMCALC(f4 & (RF4_BR_NEXU), m_ptr->hp / 3, 250, FALSE , FALSE,
-                   p_ptr->resist_nexus, 6, 9, FALSE, 1, 1, dam_max0);
-
-           DAMCALC(f4 & (RF4_BR_TIME), m_ptr->hp / 3, 150, FALSE , FALSE,
-                   FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-           DAMCALC(f4 & (RF4_BR_INER), m_ptr->hp / 6, 200, FALSE , FALSE,
-                   FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-           DAMCALC(f4 & (RF4_BR_GRAV), m_ptr->hp / 3, 200, FALSE , FALSE,
-                   FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-           DAMCALC(f4 & (RF4_BR_SHAR), m_ptr->hp / 6, 500, FALSE , FALSE,
-                   p_ptr->resist_shard, 6, 9, FALSE, 1, 1, dam_max0);
-
-           DAMCALC(f4 & (RF4_BR_PLAS), m_ptr->hp / 6, 150, FALSE , FALSE,
-                   FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-           DAMCALC(f4 & (RF4_BR_WALL), m_ptr->hp / 6, 200, FALSE , FALSE,
-                   FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-           DAMCALC(f4 & (RF4_BR_MANA), m_ptr->hp / 3, 250, FALSE , FALSE,
-                   FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-           DAMCALC(f4 & (RF4_BR_NUKE), m_ptr->hp / 3, 800, FALSE , FALSE,
-                   p_ptr->resist_pois, 2, 5, 
-                   p_ptr->oppose_pois, 2, 5, dam_max0);
-
-           DAMCALC(f4 & (RF4_BR_DISI), m_ptr->hp / 3, 300, FALSE , FALSE,
-                   FALSE, 1, 1, FALSE, 1, 1, dam_max0);
+					DAMCALC(f4 & (RF4_BR_POIS), m_ptr->hp / 3, 800,
+						FALSE , FALSE,
+						p_ptr->resist_pois, 1, 3,
+						p_ptr->oppose_pois, 1, 3, dam_max0);
 
 
-           DAMCALC(f4 & (RF4_ROCKET), m_ptr->hp / 4, 800, FALSE , FALSE,
-                   p_ptr->resist_shard, 1, 2, FALSE, 1, 1, dam_max0);
+					DAMCALC(f4 & (RF4_BR_NETH), m_ptr->hp / 6, 550, FALSE , FALSE,
+						p_ptr->resist_neth, 6, 9, FALSE, 1, 1, dam_max0);
 
-           DAMCALC(f5 & (RF5_BA_MANA), rlev*4 + 150, 9999, FALSE , FALSE,
-                   FALSE, 1, 1, FALSE, 1, 1, dam_max0);
+					DAMCALC(f4 & (RF4_BR_LITE), m_ptr->hp / 6, 400, FALSE , FALSE,
+						p_ptr->resist_lite, 4, 9, FALSE, 1, 1, dam_max0);
 
-           DAMCALC(f5 & (RF5_BA_DARK), rlev*4 + 150, 9999, FALSE , FALSE,
-                   p_ptr->resist_dark, 4, 9, FALSE, 1, 1, dam_max0);
+					DAMCALC(f4 & (RF4_BR_DARK), m_ptr->hp / 6, 400, FALSE , FALSE,
+						p_ptr->resist_dark, 4, 9, FALSE, 1, 1, dam_max0);
 
-           DAMCALC(f5 & (RF5_BA_LITE), rlev*4 + 150, 9999, FALSE , FALSE,
-                   p_ptr->resist_lite, 4, 9, FALSE, 1, 1, dam_max0);
+					DAMCALC(f4 & (RF4_BR_CONF), m_ptr->hp / 6, 450, FALSE , FALSE,
+						p_ptr->resist_conf, 5, 9, FALSE, 1, 1, dam_max0);
+
+					DAMCALC(f4 & (RF4_BR_SOUN), m_ptr->hp / 6, 450, FALSE , FALSE,
+						p_ptr->resist_sound, 5, 9, FALSE, 1, 1, dam_max0);
+
+					DAMCALC(f4 & (RF4_BR_CHAO), m_ptr->hp / 6, 600, FALSE , FALSE,
+						p_ptr->resist_chaos, 6, 9, FALSE, 1, 1, dam_max0);
+
+					DAMCALC(f4 & (RF4_BR_DISE), m_ptr->hp / 6, 500, FALSE , FALSE,
+						p_ptr->resist_disen, 6, 9, FALSE, 1, 1, dam_max0);
+
+					DAMCALC(f4 & (RF4_BR_NEXU), m_ptr->hp / 3, 250, FALSE , FALSE,
+						p_ptr->resist_nexus, 6, 9, FALSE, 1, 1, dam_max0);
+
+					DAMCALC(f4 & (RF4_BR_TIME), m_ptr->hp / 3, 150, FALSE , FALSE,
+						FALSE, 1, 1, FALSE, 1, 1, dam_max0);
+
+					DAMCALC(f4 & (RF4_BR_INER), m_ptr->hp / 6, 200, FALSE , FALSE,
+						FALSE, 1, 1, FALSE, 1, 1, dam_max0);
+
+					DAMCALC(f4 & (RF4_BR_GRAV), m_ptr->hp / 3, 200, FALSE , FALSE,
+						FALSE, 1, 1, FALSE, 1, 1, dam_max0);
+
+					DAMCALC(f4 & (RF4_BR_SHAR), m_ptr->hp / 6, 500, FALSE , FALSE,
+						p_ptr->resist_shard, 6, 9, FALSE, 1, 1, dam_max0);
+
+					DAMCALC(f4 & (RF4_BR_PLAS), m_ptr->hp / 6, 150, FALSE , FALSE,
+						FALSE, 1, 1, FALSE, 1, 1, dam_max0);
+
+					DAMCALC(f4 & (RF4_BR_WALL), m_ptr->hp / 6, 200, FALSE , FALSE,
+						FALSE, 1, 1, FALSE, 1, 1, dam_max0);
+
+					DAMCALC(f4 & (RF4_BR_MANA), m_ptr->hp / 3, 250, FALSE , FALSE,
+						FALSE, 1, 1, FALSE, 1, 1, dam_max0);
+
+					DAMCALC(f4 & (RF4_BR_NUKE), m_ptr->hp / 3, 800, FALSE , FALSE,
+						p_ptr->resist_pois, 2, 5, 
+						p_ptr->oppose_pois, 2, 5, dam_max0);
+
+					DAMCALC(f4 & (RF4_BR_DISI), m_ptr->hp / 3, 300, FALSE , FALSE,
+						FALSE, 1, 1, FALSE, 1, 1, dam_max0);
 
 
-           DAMCALC(f4 & (RF4_ROCKET),m_ptr->hp / 4, 800, FALSE , FALSE,
-                   p_ptr->resist_shard, 1, 2, FALSE, 1, 1, dam_max0);
+					DAMCALC(f4 & (RF4_ROCKET), m_ptr->hp / 4, 800, FALSE , FALSE,
+						p_ptr->resist_shard, 1, 2, FALSE, 1, 1, dam_max0);
 
-           DAMCALC(f6 & (RF6_HAND_DOOM), p_ptr->chp*6/10, 9999, FALSE , FALSE,
-                   FALSE, 1, 1, FALSE, 1, 1, dam_max0);
+					DAMCALC(f5 & (RF5_BA_MANA), rlev*4 + 150, 9999, FALSE , FALSE,
+						FALSE, 1, 1, FALSE, 1, 1, dam_max0);
 
+					DAMCALC(f5 & (RF5_BA_DARK), rlev*4 + 150, 9999, FALSE , FALSE,
+						p_ptr->resist_dark, 4, 9, FALSE, 1, 1, dam_max0);
+
+					DAMCALC(f5 & (RF5_BA_LITE), rlev*4 + 150, 9999, FALSE , FALSE,
+						p_ptr->resist_lite, 4, 9, FALSE, 1, 1, dam_max0);
+
+
+					DAMCALC(f4 & (RF4_ROCKET),m_ptr->hp / 4, 800, FALSE , FALSE,
+						p_ptr->resist_shard, 1, 2, FALSE, 1, 1, dam_max0);
+
+					DAMCALC(f6 & (RF6_HAND_DOOM), p_ptr->chp*6/10, 9999, FALSE , FALSE,
+						FALSE, 1, 1, FALSE, 1, 1, dam_max0);
+
+				}
+
+				/* Monster melee attacks */
+				if(mx <= xx+1 && mx >= xx-1 && my <=yy+1 && my >= yy-1)
+				{
+					int m;
+					int dam_melee=0;
+					for (m = 0; m < 4; m++)
+					{
+						int d1, d2;
+
+						/* Skip non-attacks */
+						if (!r_ptr->blow[m].method) continue;
+
+						/* Extract the attack info */
+						d1 = r_ptr->blow[m].d_dice;
+						d2 = r_ptr->blow[m].d_side;
+
+						dam_melee += d1*d2;
+					}
+					if(dam_melee>dam_max0)dam_max0=dam_melee;
+				}
+
+				/* Contribution from this monster */
+				dam_max+=dam_max0;
+			}
+		}
 	}
 
-	/* Monster melee attacks */
-	if( mx <= xx+1 && mx >= xx-1 && my <=yy+1 && my >= yy-1 ){
-	  int m;
-	  int dam_melee=0;
-	  for (m = 0; m < 4; m++)
-	    {
-	      int d1, d2;
-	      
-	      /* Skip non-attacks */
-	      if (!r_ptr->blow[m].method) continue;
-	      
-	      /* Extract the attack info */
-	      d1 = r_ptr->blow[m].d_dice;
-	      d2 = r_ptr->blow[m].d_side;
-	      
-	      dam_melee += d1*d2;
-	    }
-        if(dam_melee>dam_max0)dam_max0=dam_melee;
+	/* Prevent excessive warning */
+	if(dam_max > old_damage)
+	{
+		old_damage=dam_max * 3 / 2;
+
+		if (dam_max>(p_ptr->chp)/2)
+		{
+#ifdef JP
+			msg_print("指輪が鋭く震えた！");
+#else
+			msg_print("The Ring pulsates sharply!");
+#endif
+			disturb(0,0);
+#ifdef JP
+			return (get_check("本当にこのまま進むか？"));
+#else
+			return (get_check("Realy want to go ahead? "));
+#endif
+		}
 	}
+	else old_damage = old_damage/2;
 
-	/* Contribution from this monster */
-	dam_max+=dam_max0;
-      }
-      
-      
-    }
-  }
-
-  /* Prevent excessive warning */
-  if(dam_max>old_damage){
-    old_damage=dam_max * 3 / 2;
-    
-    if (dam_max>(p_ptr->chp)/2){
+	c_ptr = &cave[yy][xx];
+	if (((is_trap(c_ptr->feat) && !easy_disarm) || (c_ptr->info & CAVE_TRAP)) && randint(13)!=1)
+	{
 #ifdef JP
-      msg_print("指輪が鋭く震えた！");
+		msg_print("指輪が震えた！");
 #else
-      msg_print("The Ring pulsates sharply!");
+		msg_print("The Ring pulsates!");
 #endif
-      disturb(0,0);
+		disturb(0,0);
 #ifdef JP
-      return(get_check("本当にこのまま進むか？"));
+		return (get_check("本当にこのまま進むか？"));
 #else
-      return(get_check("Realy want to go ahead? "));
+		return (get_check("Realy want to go ahead? "));
 #endif
-    }
-  }
-  else old_damage = old_damage/2;
-
-  c_ptr = &cave[yy][xx];
-  if (((is_trap(c_ptr->feat) && !easy_disarm) || (c_ptr->info & CAVE_TRAP)) && randint(13)!=1){
-#ifdef JP
-    msg_print("指輪が震えた！");
-#else
-    msg_print("The Ring pulsates!");
-#endif
-    disturb(0,0);
-#ifdef JP
-      return(get_check("本当にこのまま進むか？"));
-#else
-      return(get_check("Realy want to go ahead? "));
-#endif
-  }
-  return(TRUE);
+	}
+	return(TRUE);
 }
 
 
@@ -6734,8 +6740,8 @@ static void drain_essence(void)
 
 	/* Get an item */
 #ifdef JP
-q = "どのアイテムから抽出しますか？";
-s = "抽出できるアイテムがありません。";
+	q = "どのアイテムから抽出しますか？";
+	s = "抽出できるアイテムがありません。";
 #else
 	q = "Extract from which item? ";
 	s = "You have nothing you can extract from.";
@@ -7091,7 +7097,7 @@ static void add_essence(int mode)
 
 	/* Build a prompt */
 #ifdef JP
-(void) strnfmt(out_val, 78, "('*'で一覧, ESCで中断) どの能力を付加しますか？");
+	(void) strnfmt(out_val, 78, "('*'で一覧, ESCで中断) どの能力を付加しますか？");
 #else
 	(void)strnfmt(out_val, 78, "(*=List, ESC=exit) Add which ability? ");
 #endif
@@ -7368,8 +7374,8 @@ static void add_essence(int mode)
 
 	/* Get an item */
 #ifdef JP
-q = "どのアイテムを改良しますか？";
-s = "改良できるアイテムがありません。";
+	q = "どのアイテムを改良しますか？";
+	s = "改良できるアイテムがありません。";
 #else
 	q = "Improve which item? ";
 	s = "You have nothing to improve.";
@@ -7680,8 +7686,8 @@ void erase_essence(void)
 
 	/* Get an item */
 #ifdef JP
-q = "どのアイテムのエッセンスを消去しますか？";
-s = "エッセンスを付加したアイテムがありません。";
+	q = "どのアイテムのエッセンスを消去しますか？";
+	s = "エッセンスを付加したアイテムがありません。";
 #else
 	q = "Remove from which item? ";
 	s = "You have nothing to remove essence.";
@@ -7744,7 +7750,7 @@ void do_cmd_kaji(bool only_browse)
 		if (p_ptr->confused)
 		{
 #ifdef JP
-msg_print("混乱していて作業できない！");
+			msg_print("混乱していて作業できない！");
 #else
 			msg_print("You are too confused!");
 #endif
@@ -7754,7 +7760,7 @@ msg_print("混乱していて作業できない！");
 		if (p_ptr->blind)
 		{
 #ifdef JP
-msg_print("目が見えなくて作業できない！");
+			msg_print("目が見えなくて作業できない！");
 #else
 			msg_print("You are blind!");
 #endif
@@ -7764,7 +7770,7 @@ msg_print("目が見えなくて作業できない！");
 		if (p_ptr->image)
 		{
 #ifdef JP
-msg_print("うまく見えなくて作業できない！");
+			msg_print("うまく見えなくて作業できない！");
 #else
 			msg_print("You are hullcinating!");
 #endif
