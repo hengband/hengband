@@ -2536,7 +2536,7 @@ strcpy(power_desc[num].name, "¹½¤¨¤ë");
 
 		power_desc[num].level = 25;
 		power_desc[num].cost = 0;
-		power_desc[num].fail = 100 - racial_chance(20, A_DEX, 0);
+		power_desc[num].fail = 100 - racial_chance(25, A_DEX, 0);
 		power_desc[num++].number = -3;
 #ifdef JP
 strcpy(power_desc[num].name, "É´Îö·ý");
