@@ -319,7 +319,7 @@ static bool kind_is_book(int k_idx)
 	object_kind *k_ptr = &k_info[k_idx];
 
 	/* Analyze the item type */
-	if ((k_ptr->tval >= TV_LIFE_BOOK) && (k_ptr->tval <= TV_HAJA_BOOK))
+	if ((k_ptr->tval >= TV_LIFE_BOOK) && (k_ptr->tval <= TV_CRUSADE_BOOK))
 	{
 		return (TRUE);
 	}
@@ -337,7 +337,7 @@ static bool kind_is_good_book(int k_idx)
 	object_kind *k_ptr = &k_info[k_idx];
 
 	/* Analyze the item type */
-	if ((k_ptr->tval >= TV_LIFE_BOOK) && (k_ptr->tval <= TV_HAJA_BOOK) && (k_ptr->tval != TV_ARCANE_BOOK) && (k_ptr->sval > 1))
+	if ((k_ptr->tval >= TV_LIFE_BOOK) && (k_ptr->tval <= TV_CRUSADE_BOOK) && (k_ptr->tval != TV_ARCANE_BOOK) && (k_ptr->sval > 1))
 	{
 		return (TRUE);
 	}

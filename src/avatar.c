@@ -445,7 +445,7 @@ void get_virtues()
           p_ptr->vir_types[i++] = V_FAITH;
          else p_ptr->vir_types[i++] = V_JUSTICE;
         break;
-        case REALM_HAJA:
+        case REALM_CRUSADE:
          if (virtue_number(V_JUSTICE))
           p_ptr->vir_types[i++] = V_HONOUR;
          else p_ptr->vir_types[i++] = V_JUSTICE;
@@ -497,7 +497,7 @@ void get_virtues()
           p_ptr->vir_types[i++] = V_FAITH;
          else p_ptr->vir_types[i++] = V_JUSTICE;
         break;
-        case REALM_HAJA:
+        case REALM_CRUSADE:
          if (virtue_number(V_JUSTICE))
           p_ptr->vir_types[i++] = V_HONOUR;
          else p_ptr->vir_types[i++] = V_JUSTICE;

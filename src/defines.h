@@ -664,7 +664,7 @@
 #define CH_ARCANE       0x40
 #define CH_ENCHANT      0x80
 #define CH_DAEMON       0x100
-#define CH_HAJA         0x200
+#define CH_CRUSADE      0x200
 
 #define CH_MUSIC        0x10000
 #define CH_HISSATSU     0x20000
@@ -683,7 +683,7 @@
 #define REALM_ARCANE       7
 #define REALM_ENCHANT      8
 #define REALM_DAEMON       9
-#define REALM_HAJA         10
+#define REALM_CRUSADE      10
 #define MAX_MAGIC          10
 #define MIN_TECHNIC        15
 #define REALM_MUSIC        16
@@ -696,7 +696,7 @@
 #define is_magic(A) ((A) < MAX_MAGIC + 1 ? TRUE : FALSE)
 #define tval2realm(A) ((A) - TV_LIFE_BOOK + 1)
 #define technic2magic(A)      (is_magic(A) ? (A) : (A) - MIN_TECHNIC + MAX_MAGIC)
-#define is_good_realm(REALM)   ((REALM) == REALM_LIFE || (REALM) == REALM_HAJA)
+#define is_good_realm(REALM)   ((REALM) == REALM_LIFE || (REALM) == REALM_CRUSADE)
 
 /*
  * Magic-books for the realms
@@ -1718,7 +1718,7 @@
 #define TV_ARCANE_BOOK  96
 #define TV_ENCHANT_BOOK 97
 #define TV_DAEMON_BOOK  98
-#define TV_HAJA_BOOK    99
+#define TV_CRUSADE_BOOK 99
 #define TV_MUSIC_BOOK   105
 #define TV_HISSATSU_BOOK 106
 #define TV_GOLD         127     /* Gold can only be picked up by players */

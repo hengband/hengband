@@ -367,7 +367,7 @@ static bool item_tester_learn_spell(object_type *o_ptr)
 		}
 		else
 		{
-			choices &= ~(CH_LIFE | CH_HAJA);
+			choices &= ~(CH_LIFE | CH_CRUSADE);
 		}
 	}
 
@@ -3938,7 +3938,7 @@ take_hit(DAMAGE_USELIFE, 20 + randint1(30), "血の呪い", -1);
 }
 
 
-static bool cast_haja_spell(int spell)
+static bool cast_crusade_spell(int spell)
 {
 	int	dir;
 	int	beam;
@@ -4918,7 +4918,7 @@ msg_format("%sをうまく唱えられなかった！", prayer);
 			if (randint1(100) < chance)
 				chg_virtue(V_JUSTICE, 1);
 		}
-		if (realm == REALM_HAJA)
+		if (realm == REALM_CRUSADE)
 		{
 			if (randint1(100) < chance)
 				chg_virtue(V_JUSTICE, -1);
@@ -5013,8 +5013,8 @@ msg_print("An infernal sound echoed.");
 		case REALM_DAEMON: /* DAEMON */
 			cast = cast_daemon_spell(spell);
 			break;
-		case REALM_HAJA: /* HAJA */
-			cast = cast_haja_spell(spell);
+		case REALM_CRUSADE: /* CRUSADE */
+			cast = cast_crusade_spell(spell);
 			break;
 		case REALM_MUSIC: /* MUSIC */
 			cast = cast_music_spell(spell);
@@ -5074,7 +5074,7 @@ msg_print("An infernal sound echoed.");
 				chg_virtue(V_HONOUR, -1);
 				chg_virtue(V_TEMPERANCE, -1);
 			}
-			else if (realm == REALM_HAJA)
+			else if (realm == REALM_CRUSADE)
 			{
 				chg_virtue(V_FAITH, 1);
 				chg_virtue(V_JUSTICE, 1);
@@ -5110,7 +5110,7 @@ msg_print("An infernal sound echoed.");
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_HONOUR, -1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_TEMPERANCE, -1);
 		}
-		else if (realm == REALM_HAJA)
+		else if (realm == REALM_CRUSADE)
 		{
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_FAITH, 1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_JUSTICE, 1);
@@ -5173,7 +5173,7 @@ msg_print("精神を集中しすぎて気を失ってしまった！");
 			chg_virtue(V_JUSTICE, 10);
 		else if (realm == REALM_NATURE)
 			chg_virtue(V_NATURE, -10);
-		else if (realm == REALM_HAJA)
+		else if (realm == REALM_CRUSADE)
 			chg_virtue(V_JUSTICE, -10);
 		else
 			chg_virtue(V_KNOWLEDGE, -10);

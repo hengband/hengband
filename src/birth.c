@@ -2030,10 +2030,10 @@ static byte choose_realm(s32b choices, int *count)
 		(*count)++;
 		auto_select = REALM_DAEMON;
 	}
-	if (choices & CH_HAJA)
+	if (choices & CH_CRUSADE)
 	{
 		(*count)++;
-		auto_select = REALM_HAJA;
+		auto_select = REALM_CRUSADE;
 	}
 	if (choices & CH_MUSIC)
 	{
@@ -2062,7 +2062,7 @@ static byte choose_realm(s32b choices, int *count)
 			}
 			else
 			{
-				choices &= ~(CH_LIFE | CH_HAJA);
+				choices &= ~(CH_LIFE | CH_CRUSADE);
 			}
 		}
 	}

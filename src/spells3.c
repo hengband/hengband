@@ -3986,7 +3986,7 @@ s16b spell_chance(int spell, int realm)
 	else if (p_ptr->dec_mana) chance-=2;
 
 	if ((realm+1 == REALM_NATURE) && ((p_ptr->align > 50) || (p_ptr->align < -50))) chance += penalty;
-	if (((realm+1 == REALM_LIFE) || (realm+1 == REALM_HAJA)) && (p_ptr->align < -20)) chance += penalty;
+	if (((realm+1 == REALM_LIFE) || (realm+1 == REALM_CRUSADE)) && (p_ptr->align < -20)) chance += penalty;
 	if (((realm+1 == REALM_DEATH) || (realm+1 == REALM_DAEMON)) && (p_ptr->align > 20)) chance += penalty;
 
 	/* Minimum failure rate */
@@ -4332,7 +4332,7 @@ static void spell_info(char *p, int spell, int realm)
 		}
 		break;
 		
-	case 9: /* Haja */
+	case 9: /* Crusade */
 		switch (spell)
 		{
 		case  0: sprintf(p, " %s%dd4", s_dam, 3 + ((plev - 1) / 5)); break;
@@ -4739,7 +4739,7 @@ bool hates_fire(object_type *o_ptr)
 		case TV_ARCANE_BOOK:
 		case TV_ENCHANT_BOOK:
 		case TV_DAEMON_BOOK:
-		case TV_HAJA_BOOK:
+		case TV_CRUSADE_BOOK:
 		case TV_MUSIC_BOOK:
 		case TV_HISSATSU_BOOK:
 		{

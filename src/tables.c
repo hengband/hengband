@@ -3984,13 +3984,13 @@ s32b realm_choices1[] =
 	(CH_LIFE | CH_SORCERY | CH_NATURE |
 	 CH_CHAOS | CH_DEATH | CH_TRUMP |
 	 CH_ARCANE | CH_ENCHANT | CH_DAEMON |
-	 CH_HAJA),                              /* Mage */
+	 CH_CRUSADE),                              /* Mage */
 	(CH_LIFE | CH_DEATH | CH_DAEMON |
-	 CH_HAJA),                              /* Priest */
+	 CH_CRUSADE),                              /* Priest */
 	(CH_SORCERY | CH_DEATH | CH_TRUMP |
 	 CH_ARCANE | CH_ENCHANT),               /* Rogue */
 	(CH_NATURE),                            /* Ranger */
-	(CH_HAJA | CH_DEATH),                   /* Paladin */
+	(CH_CRUSADE | CH_DEATH),                   /* Paladin */
 	(CH_ARCANE),                            /* Warrior-Mage */
 	(CH_CHAOS | CH_DAEMON),                 /* Chaos-Warrior */
 	(CH_LIFE | CH_NATURE | CH_DEATH |
@@ -3999,7 +3999,7 @@ s32b realm_choices1[] =
 	(CH_LIFE | CH_SORCERY | CH_NATURE |
 	 CH_CHAOS | CH_DEATH | CH_TRUMP |
 	 CH_ARCANE | CH_ENCHANT | CH_DAEMON |
-	 CH_HAJA),                              /* High-Mage */
+	 CH_CRUSADE),                              /* High-Mage */
 	(CH_ARCANE),                            /* Tourist */
 	(CH_NONE),                              /* Imitation */
 	(CH_TRUMP),                             /* Beastmaster */
@@ -4010,7 +4010,7 @@ s32b realm_choices1[] =
 	(CH_NONE),                              /* Red Mage */
 	(CH_HISSATSU),                          /* Samurai */
 	(CH_LIFE | CH_NATURE | CH_DEATH |
-	 CH_ENCHANT | CH_HAJA),                 /* ForceTrainer */
+	 CH_ENCHANT | CH_CRUSADE),                 /* ForceTrainer */
 	(CH_NONE),                              /* Blue Mage */
 	(CH_NONE),				/* Kihei */
 	(CH_NONE),				/* Berserker */
@@ -4025,11 +4025,11 @@ s32b realm_choices2[] =
 	(CH_LIFE | CH_SORCERY | CH_NATURE |
 	 CH_CHAOS | CH_DEATH | CH_TRUMP |
 	 CH_ARCANE | CH_ENCHANT | CH_DAEMON |
-	 CH_HAJA),                              /* Mage */
+	 CH_CRUSADE),                              /* Mage */
 	(CH_LIFE | CH_SORCERY | CH_NATURE |
 	 CH_CHAOS | CH_DEATH | CH_TRUMP |
 	 CH_ARCANE | CH_ENCHANT | CH_DAEMON |
-	 CH_HAJA),                              /* Priest */
+	 CH_CRUSADE),                              /* Priest */
 	(CH_NONE),                              /* Rogue */
 	(CH_SORCERY | CH_CHAOS | CH_DEATH |
 	 CH_TRUMP | CH_ARCANE | CH_DAEMON),     /* Ranger */
@@ -4037,7 +4037,7 @@ s32b realm_choices2[] =
 	(CH_LIFE | CH_NATURE | CH_CHAOS |
 	 CH_DEATH | CH_TRUMP | CH_ARCANE |
 	 CH_SORCERY | CH_ENCHANT | CH_DAEMON |
-	 CH_HAJA),                              /* Warrior-Mage */
+	 CH_CRUSADE),                              /* Warrior-Mage */
 	(CH_NONE),                              /* Chaos-Warrior */
 	(CH_NONE),                              /* Monk */
 	(CH_NONE),                              /* Mindcrafter */
