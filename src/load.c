@@ -2261,8 +2261,18 @@ static void rd_messages(void)
 /*** Terrain Feature Indexes (see "lib/edit/f_info.txt") ***/
 #define OLD_FEAT_INVIS              0x02
 #define OLD_FEAT_GLYPH              0x03
+#define OLD_FEAT_QUEST_ENTER        0x08
+#define OLD_FEAT_QUEST_EXIT         0x09
 #define OLD_FEAT_MINOR_GLYPH        0x40
+#define OLD_FEAT_BLDG_1             0x81
 #define OLD_FEAT_MIRROR             0xc3
+
+/* Old quests */
+#define OLD_QUEST_WATER_CAVE 18
+
+/* Quest constants */
+#define QUEST_OLD_CASTLE  27
+#define QUEST_ROYAL_CRYPT 28
 
 /*
  * Read the dungeon (old method)
@@ -2515,6 +2525,35 @@ static errr rd_dungeon_old(void)
 			{
 				c_ptr->mimic = feat_floor;
 				c_ptr->feat = feat_trap_open;
+			}
+		}
+	}
+
+	/* Quest 18 was removed */
+	if (h_older_than(1, 7, 0, 6) && !vanilla_town)
+	{
+		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
+		{
+			/* Access the cave */
+			c_ptr = &cave[y][x];
+
+			if ((c_ptr->special == OLD_QUEST_WATER_CAVE) && !dun_level)
+			{
+				if (c_ptr->feat == OLD_FEAT_QUEST_ENTER)
+				{
+					c_ptr->feat = feat_tree;
+					c_ptr->special = 0;
+				}
+				else if (c_ptr->feat == OLD_FEAT_BLDG_1)
+				{
+					c_ptr->special = lite_town ? QUEST_OLD_CASTLE : QUEST_ROYAL_CRYPT;
+				}
+			}
+			else if ((c_ptr->feat == OLD_FEAT_QUEST_EXIT) &&
+			         (p_ptr->inside_quest == OLD_QUEST_WATER_CAVE))
+			{
+				c_ptr->feat = feat_up_stair;
+				c_ptr->special = 0;
 			}
 		}
 	}
@@ -2820,6 +2859,35 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 				/* Advance/Wrap */
 				if (++y >= ymax) break;
+			}
+		}
+	}
+
+	/* Quest 18 was removed */
+	if (h_older_than(1, 7, 0, 6) && !vanilla_town)
+	{
+		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
+		{
+			/* Access the cave */
+			cave_type *c_ptr = &cave[y][x];
+
+			if ((c_ptr->special == OLD_QUEST_WATER_CAVE) && !dun_level)
+			{
+				if (c_ptr->feat == OLD_FEAT_QUEST_ENTER)
+				{
+					c_ptr->feat = feat_tree;
+					c_ptr->special = 0;
+				}
+				else if (c_ptr->feat == OLD_FEAT_BLDG_1)
+				{
+					c_ptr->special = lite_town ? QUEST_OLD_CASTLE : QUEST_ROYAL_CRYPT;
+				}
+			}
+			else if ((c_ptr->feat == OLD_FEAT_QUEST_EXIT) &&
+			         (p_ptr->inside_quest == OLD_QUEST_WATER_CAVE))
+			{
+				c_ptr->feat = feat_up_stair;
+				c_ptr->special = 0;
 			}
 		}
 	}
@@ -3353,7 +3421,9 @@ note(format("クエストが多すぎる(%u)！", max_quests_load));
 				}
 
 				/* Load quest status if quest is running */
-				if (quest[i].status == QUEST_STATUS_TAKEN || (!z_older_than(10, 3, 14) && (quest[i].status == QUEST_STATUS_COMPLETED)) || (!z_older_than(11, 0, 7) && (i >= MIN_RANDOM_QUEST) && (i <= (MIN_RANDOM_QUEST+max_rquests_load))))
+				if ((quest[i].status == QUEST_STATUS_TAKEN) ||
+				    (!z_older_than(10, 3, 14) && (quest[i].status == QUEST_STATUS_COMPLETED)) ||
+				    (!z_older_than(11, 0, 7) && (i >= MIN_RANDOM_QUEST) && (i <= (MIN_RANDOM_QUEST + max_rquests_load))))
 				{
 					rd_s16b(&quest[i].cur_num);
 					rd_s16b(&quest[i].max_num);
@@ -3414,6 +3484,13 @@ note(format("クエストが多すぎる(%u)！", max_quests_load));
 				 * since status should be 0 for these quests anyway
 				 */
 			}
+		}
+
+		/* Quest 18 was removed */
+		if (h_older_than(1, 7, 0, 6))
+		{
+			WIPE(&quest[OLD_QUEST_WATER_CAVE], quest_type);
+			quest[OLD_QUEST_WATER_CAVE].status = QUEST_STATUS_UNTAKEN;
 		}
 
 		/* Position in the wilderness */
@@ -3720,6 +3797,17 @@ note("ダンジョンデータ読み込み失敗");
 
 			rd_s32b(&tmp32s);
 			strip_bytes(tmp32s);
+		}
+	}
+
+	/* Quest 18 was removed */
+	if (h_older_than(1, 7, 0, 6))
+	{
+		if (p_ptr->inside_quest == OLD_QUEST_WATER_CAVE)
+		{
+			dungeon_type = lite_town ? DUNGEON_ANGBAND : DUNGEON_GALGALS;
+			dun_level = 1;
+			p_ptr->inside_quest = 0;
 		}
 	}
 
