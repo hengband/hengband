@@ -36,6 +36,7 @@ static s16b roomdep[] =
 	 3, /* 11 = Circular rooms (22x22) */
 	10, /* 12 = Crypts (22x22) */
 	20, /* 13 = Trapped monster pit */
+        20, /* 14 = Piranha/Armageddon trap room */ 
 };
 
 
@@ -2274,8 +2275,11 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
 			/* Lay down a floor */
 			place_floor_grid(c_ptr);
 
+                        /* Remove any mimic */
+                        c_ptr->mimic = 0;
+
 			/* Part of a vault */
-			c_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
+			c_ptr->info |= (CAVE_ICKY);
 
 			/* Analyze the grid */
 			switch (*t)
@@ -2318,6 +2322,48 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
 			case '^':
 				place_trap(y, x);
 				break;
+
+                                /* Black market in a dungeon */
+                        case 'S':
+                                set_cave_feat(y, x, FEAT_SHOP_HEAD + STORE_BLACK);
+                                store_init(NO_TOWN, STORE_BLACK);
+                                break;
+                                
+                                /* The Pattern */
+                        case 'p':
+                                set_cave_feat(y, x, FEAT_PATTERN_START);
+                                break;
+                                
+                        case 'a':
+                                set_cave_feat(y, x, FEAT_PATTERN_1);
+                                break;
+                                
+                        case 'b':
+                                set_cave_feat(y, x, FEAT_PATTERN_2);
+                                break;
+                                
+                        case 'c':
+                                set_cave_feat(y, x, FEAT_PATTERN_3);
+                                break;
+                                
+                        case 'd':
+                                set_cave_feat(y, x, FEAT_PATTERN_4);
+                                break;
+                                
+                        case 'P':
+                                set_cave_feat(y, x, FEAT_PATTERN_END);
+                                break;
+                                
+                        case 'B':
+                                set_cave_feat(y, x, FEAT_PATTERN_XTRA1);
+                                break;
+
+                        case 'A':
+                                /* Reward for Pattern walk */
+                                object_level = base_level + 12;
+                                place_object(y, x, TRUE, FALSE);
+                                object_level = base_level;
+                                break;
 			}
 		}
 	}
@@ -2415,46 +2461,6 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
 					break;
 				}
 
-				case 'S':
-					cave_set_feat(y, x, FEAT_SHOP_HEAD + STORE_BLACK);
-					store_init(NO_TOWN, STORE_BLACK);
-					break;
-
-				case 'p':
-					cave_set_feat(y, x, FEAT_PATTERN_START);
-					break;
-
-				case 'a':
-					cave_set_feat(y, x, FEAT_PATTERN_1);
-					break;
-
-				case 'b':
-					cave_set_feat(y, x, FEAT_PATTERN_2);
-					break;
-
-				case 'c':
-					cave_set_feat(y, x, FEAT_PATTERN_3);
-					break;
-
-				case 'd':
-					cave_set_feat(y, x, FEAT_PATTERN_4);
-					break;
-
-				case 'P':
-					cave_set_feat(y, x, FEAT_PATTERN_END);
-					break;
-
-				case 'B':
-					cave_set_feat(y, x, FEAT_PATTERN_XTRA1);
-					break;
-
-				case 'A':
-				{
-					object_level = base_level + 12;
-					place_object(y, x, TRUE, FALSE);
-					object_level = base_level;
-				}
-				break;
 			}
 		}
 	}
