@@ -4964,10 +4964,13 @@ static bool insert_keymap_line(text_body_type *tb)
 	/* Look up the keymap */
 	act = keymap_act[mode][(byte)(buf[0])];
 
+	/* Analyze the current action */
+	ascii_to_text(tmp, act);
+
 	/* Insert blank action preference line */
 	insert_return_code(tb);
 	string_free(tb->lines_list[tb->cy]);
-	tb->lines_list[tb->cy] = string_make(format("A:%s", act));
+	tb->lines_list[tb->cy] = string_make(format("A:%s", tmp));
 
 	return TRUE;
 }
