@@ -4421,10 +4421,10 @@ int show_inven(int target_item)
 		strcpy(inven_spellbook_label, "abcdefghijklmnopqrstuvw");
 		for (i = 0; i < INVEN_PACK; i++)
 		{
-			if (get_tag(&index, ('a' + i)))
+			if (get_tag(&index, (char)('a' + i)))
 			{
 				inven_spellbook_label[i] = ' ';
-				inven_spellbook_label[index] = ('a' + i);
+				inven_spellbook_label[index] = (char)('a' + i);
 			}
 		}
 	}
