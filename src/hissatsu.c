@@ -1025,6 +1025,7 @@ static bool cast_hissatsu_spell(int spell)
 			project_length = 5;
 			if (!get_aim_dir(&dir)) break;
 			if (new)
+				/* Reserve needed mana point */
 				p_ptr->csp -= technic_info[TECHNIC_HISSATSU][26].smana;
 			else
 				p_ptr->csp -= 8;
@@ -1036,6 +1037,10 @@ static bool cast_hissatsu_spell(int spell)
 			handle_stuff();
 		} while (p_ptr->csp > 8);
 		if (new) return FALSE;
+
+		/* Restore reserved mana */
+		p_ptr->csp += technic_info[TECHNIC_HISSATSU][26].smana;
+
 		break;
 	}
 	case 27:
