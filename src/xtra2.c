@@ -3559,11 +3559,16 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 
 		/* Display a message */
 		if (p_ptr->wizard)
+		{
+			char f_idx_str[32];
+			if (c_ptr->mimic) sprintf(f_idx_str, "%d/%d", c_ptr->feat, c_ptr->mimic);
+			else sprintf(f_idx_str, "%d", c_ptr->feat);
 #ifdef JP
-			sprintf(out_val, "%s%s%s%s[%s] %x %d %d %d %d (%d,%d)", s1, name, s2, s3, info, c_ptr->info, c_ptr->feat, c_ptr->dist, c_ptr->cost, c_ptr->when, x, y);
+			sprintf(out_val, "%s%s%s%s[%s] %x %s %d %d %d (%d,%d)", s1, name, s2, s3, info, c_ptr->info, f_idx_str, c_ptr->dist, c_ptr->cost, c_ptr->when, y, x);
 #else
-			sprintf(out_val, "%s%s%s%s [%s] %x %d %d %d %d (%d,%d)", s1, s2, s3, name, info, c_ptr->info, c_ptr->feat, c_ptr->dist, c_ptr->cost, c_ptr->when, x, y);
+			sprintf(out_val, "%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", s1, s2, s3, name, info, c_ptr->info, f_idx_str, c_ptr->dist, c_ptr->cost, c_ptr->when, y, x);
 #endif
+		}
 		else
 #ifdef JP
 			sprintf(out_val, "%s%s%s%s[%s]", s1, name, s2, s3, info);
