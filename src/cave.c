@@ -991,17 +991,14 @@ void map_info(int y, int x, byte *ap, char *cp)
 			}
 		}
 
-		/* Hack -- Safe cave grid -- idea borrowed from Unangband */
-		else if (view_unsafe_grids && !(c_ptr->info & (CAVE_DETECT)))
-		{
-			a = TERM_L_DARK;
-			c = 'x';
-		}
-
 		/* Unknown */
 		else
 		{
-			feat = FEAT_NONE;
+			/* Unsafe cave grid -- idea borrowed from Unangband */
+			if (view_unsafe_grids && !(c_ptr->info & (CAVE_DETECT)))
+				feat = FEAT_UNDETECTD;
+			else
+				feat = FEAT_NONE;
 
 			/* Access darkness */
 			f_ptr = &f_info[feat];
@@ -1199,20 +1196,17 @@ void map_info(int y, int x, byte *ap, char *cp)
 			}
 		}
 
-		/* Hack -- Safe cave grid -- idea borrowed from Unangband */
-		else if (view_unsafe_grids && !(c_ptr->info & (CAVE_DETECT)))
-		{
-			a = TERM_L_DARK;
-			c = 'x';
-		}
-
                 /* "Simple Lighting" */
                 else
                 {
                         /* Handle "blind" */
                         if (!(c_ptr->info & CAVE_MARK))
                         {
-                                feat = FEAT_NONE;
+				/* Unsafe cave grid -- idea borrowed from Unangband */
+				if (view_unsafe_grids && !(c_ptr->info & (CAVE_DETECT)))
+					feat = FEAT_UNDETECTD;
+				else
+					feat = FEAT_NONE;
                         }
 
                         /* Access feature */

@@ -1065,6 +1065,8 @@
 /* for mirror master */
 #define FEAT_MIRROR             0xc3
 
+/* unknown grid (not detected)  */
+#define FEAT_UNDETECTD          0xc4
 
 /*
  * Wilderness terrains

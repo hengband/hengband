@@ -3558,13 +3558,6 @@ if (o_ptr->number != 1) s1 = "それらは";
 				name = f_name + f_info[feat].name;
 			}
 
-			/* Hack -- handle unknown grids */
-#ifdef JP
-if (feat == FEAT_NONE) name = "未知の地形";
-#else
-			if (feat == FEAT_NONE) name = "unknown grid";
-#endif
-
 
 			/* Pick a prefix */
 			if (*s2 && ((feat >= FEAT_MINOR_GLYPH) &&
