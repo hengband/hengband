@@ -5492,11 +5492,16 @@ bool polymorph_monster(int y, int x)
 	if (new_r_idx != old_r_idx)
 	{
 		u32b mode = 0L;
+		bool preserve_hold_objects = back_m.hold_o_idx ? TRUE : FALSE;
+		s16b this_o_idx, next_o_idx = 0;
 
 		/* Get the monsters attitude */
 		if (is_friendly(m_ptr)) mode |= PM_FORCE_FRIENDLY;
 		if (is_pet(m_ptr)) mode |= PM_FORCE_PET;
 		if (m_ptr->mflag2 & MFLAG2_NOPET) mode |= PM_NO_PET;
+
+		/* Mega-hack -- ignore held objects */
+		m_ptr->hold_o_idx = 0;
 
 		/* "Kill" the "old" monster */
 		delete_monster_idx(c_ptr->m_idx);
@@ -5506,6 +5511,7 @@ bool polymorph_monster(int y, int x)
 		{
 			m_list[hack_m_idx_ii].nickname = back_m.nickname;
 			m_list[hack_m_idx_ii].parent_m_idx = back_m.parent_m_idx;
+			m_list[hack_m_idx_ii].hold_o_idx = back_m.hold_o_idx;
 
 			/* Success */
 			polymorphed = TRUE;
@@ -5519,6 +5525,35 @@ bool polymorph_monster(int y, int x)
 
 				/* Re-initialize monster process */
 				mproc_init();
+			}
+			else preserve_hold_objects = FALSE;
+		}
+
+		/* Mega-hack -- preserve held objects */
+		if (preserve_hold_objects)
+		{
+			for (this_o_idx = back_m.hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
+			{
+				/* Acquire object */
+				object_type *o_ptr = &o_list[this_o_idx];
+
+				/* Acquire next object */
+				next_o_idx = o_ptr->next_o_idx;
+
+				/* Held by new monster */
+				o_ptr->held_m_idx = hack_m_idx_ii;
+			}
+		}
+		else if (back_m.hold_o_idx) /* Failed (paranoia) */
+		{
+			/* Delete objects */
+			for (this_o_idx = back_m.hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
+			{
+				/* Acquire next object */
+				next_o_idx = o_list[this_o_idx].next_o_idx;
+
+				/* Delete the object */
+				delete_object_idx(this_o_idx);
 			}
 		}
 
