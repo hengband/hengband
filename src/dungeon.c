@@ -4298,7 +4298,7 @@ static bool enter_wizard_mode(void)
 
 		/* Mention effects */
 #ifdef JP
-		msg_print("ウィザードモードはデバグと実験のためのモードです。 ");
+		msg_print("ウィザードモードはデバッグと実験のためのモードです。 ");
 		msg_print("一度ウィザードモードに入るとスコアは記録されません。");
 #else
 		msg_print("Wizard mode is for debugging and experimenting.");
@@ -4354,8 +4354,8 @@ static bool enter_debug_mode(void)
 
 		/* Mention effects */
 #ifdef JP
-		msg_print("デバグ・コマンドはデバグと実験のためのコマンドです。 ");
-		msg_print("デバグ・コマンドを使うとスコアは記録されません。");
+		msg_print("デバッグ・コマンドはデバッグと実験のためのコマンドです。 ");
+		msg_print("デバッグ・コマンドを使うとスコアは記録されません。");
 #else
 		msg_print("The debug commands are for debugging and experimenting.");
 		msg_print("The game will not be scored if you use debug commands.");
@@ -4365,7 +4365,7 @@ static bool enter_debug_mode(void)
 
 		/* Verify request */
 #ifdef JP
-		if (!get_check("本当にデバグ・コマンドを使いますか? "))
+		if (!get_check("本当にデバッグ・コマンドを使いますか? "))
 #else
 		if (!get_check("Are you sure you want to use debug commands? "))
 #endif
@@ -4406,7 +4406,7 @@ static bool enter_borg_mode(void)
 	{
 		/* Mention effects */
 #ifdef JP
-		msg_print("ボーグ・コマンドはデバグと実験のためのコマンドです。 ");
+		msg_print("ボーグ・コマンドはデバッグと実験のためのコマンドです。 ");
 		msg_print("ボーグ・コマンドを使うとスコアは記録されません。");
 #else
 		msg_print("The borg commands are for debugging and experimenting.");
