@@ -5129,7 +5129,7 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
 					m_ptr->hp = m_ptr->maxhp;
 
 					/* Try to teleport away quest monsters */
-					if (!teleport_away(c_ptr->m_idx, (r * 2) + 1, TRUE, FALSE)) continue;
+					if (!teleport_away(c_ptr->m_idx, (r * 2) + 1, TELEPORT_DEC_VALOUR)) continue;
 				}
 				else
 				{
@@ -6978,7 +6978,7 @@ msg_print("周囲の空間が歪んだ！");
 				msg_print("Space warps about you!");
 #endif
 
-				teleport_player(damroll(10, 10), TRUE);
+				teleport_player(damroll(10, 10), TELEPORT_PASSIVE);
 				if (randint0(13)) (*count) += activate_hi_summon(py, px, FALSE);
 				if (!one_in_(6)) break;
 			}
@@ -7381,7 +7381,7 @@ void kawarimi(bool success)
 	y = py;
 	x = px;
 
-	teleport_player(10 + randint1(90), FALSE);
+	teleport_player(10 + randint1(90), 0L);
 
 	object_wipe(q_ptr);
 
@@ -7488,7 +7488,7 @@ bool rush_attack(bool *mdeath)
 		}
 
 		/* Move player before updating the monster */
-		if (!player_bold(ty, tx)) teleport_player_to(ty, tx, FALSE, FALSE);
+		if (!player_bold(ty, tx)) teleport_player_to(ty, tx, TELEPORT_NONMAGICAL);
 
 		/* Update the monster */
 		update_mon(cave[ny][nx].m_idx, TRUE);
@@ -7519,14 +7519,14 @@ bool rush_attack(bool *mdeath)
 #endif
 		}
 
-		if (!player_bold(ty, tx)) teleport_player_to(ty, tx, FALSE, FALSE);
+		if (!player_bold(ty, tx)) teleport_player_to(ty, tx, TELEPORT_NONMAGICAL);
 		moved = TRUE;
 		tmp_mdeath = py_attack(ny, nx, HISSATSU_NYUSIN);
 
 		break;
 	}
 
-	if (!moved && !player_bold(ty, tx)) teleport_player_to(ty, tx, FALSE, FALSE);
+	if (!moved && !player_bold(ty, tx)) teleport_player_to(ty, tx, TELEPORT_NONMAGICAL);
 
 	if (mdeath) *mdeath = tmp_mdeath;
 	return TRUE;

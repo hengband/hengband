@@ -998,16 +998,16 @@ static void wild_magic(int spell)
 	case 1:
 	case 2:
 	case 3:
-		teleport_player(10, TRUE);
+		teleport_player(10, TELEPORT_PASSIVE);
 		break;
 	case 4:
 	case 5:
 	case 6:
-		teleport_player(100, TRUE);
+		teleport_player(100, TELEPORT_PASSIVE);
 		break;
 	case 7:
 	case 8:
-		teleport_player(200, TRUE);
+		teleport_player(200, TELEPORT_PASSIVE);
 		break;
 	case 9:
 	case 10:

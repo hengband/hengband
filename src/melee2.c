@@ -2188,7 +2188,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 			mon_fight = TRUE;
 		}
 
-		teleport_away(m_idx, MAX_SIGHT * 2 + 5, FALSE, FALSE);
+		teleport_away(m_idx, MAX_SIGHT * 2 + 5, 0L);
 	}
 
 	return TRUE;

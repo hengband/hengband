@@ -108,7 +108,7 @@ static bool wiz_dimension_door(void)
 
 	if (!tgt_pt(&x, &y)) return FALSE;
 
-	teleport_player_to(y, x, FALSE, FALSE);
+	teleport_player_to(y, x, TELEPORT_NONMAGICAL);
 
 	return (TRUE);
 }
@@ -339,7 +339,7 @@ static void do_cmd_wiz_bamf(void)
 	if (!target_who) return;
 
 	/* Teleport to the target */
-	teleport_player_to(target_row, target_col, FALSE, FALSE);
+	teleport_player_to(target_row, target_col, TELEPORT_NONMAGICAL);
 }
 
 
@@ -2021,7 +2021,7 @@ void do_cmd_debug(void)
 
 	/* Phase Door */
 	case 'p':
-		teleport_player(10, FALSE);
+		teleport_player(10, 0L);
 		break;
 
 #if 0
@@ -2065,7 +2065,7 @@ void do_cmd_debug(void)
 
 	/* Teleport */
 	case 't':
-		teleport_player(100, FALSE);
+		teleport_player(100, 0L);
 		break;
 
 	/* Very Good Objects */

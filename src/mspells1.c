@@ -3399,7 +3399,7 @@ msg_format("%^sが瞬時に消えた。", m_name);
 			msg_format("%^s blinks away.", m_name);
 #endif
 
-			teleport_away(m_idx, 10, FALSE, FALSE);
+			teleport_away(m_idx, 10, 0L);
 			p_ptr->update |= (PU_MONSTERS);
 			break;
 		}
@@ -3538,7 +3538,7 @@ msg_format("%^sが瞬時に消えた。", m_name);
 #else
 						msg_format("%^s suddenly go out of your sight!", m_name);
 #endif
-						teleport_away(m_idx, 10, FALSE, FALSE);
+						teleport_away(m_idx, 10, TELEPORT_NONMAGICAL);
 						p_ptr->update |= (PU_MONSTERS);
 					}
 					else
@@ -3552,7 +3552,7 @@ msg_format("%^sが瞬時に消えた。", m_name);
 						msg_format("%^s holds you, and drops from the sky.", m_name);
 #endif
 						dam = damroll(4, 8);
-						teleport_player_to(m_ptr->fy, m_ptr->fx, FALSE, TRUE);
+						teleport_player_to(m_ptr->fy, m_ptr->fx, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
 
 						sound(SOUND_FALL);
 
@@ -3616,7 +3616,7 @@ msg_format("%^sがあなたを引き戻した。", m_name);
 			msg_format("%^s commands you to return.", m_name);
 #endif
 
-			teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE, TRUE);
+			teleport_player_to(m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
 			learn_spell(MS_TELE_TO);
 			break;
 		}

@@ -889,11 +889,11 @@ if (!b) msg_print("安全な気がする。");
 		break;
 	case 2:
 		/* Minor displace */
-		teleport_player(10, FALSE);
+		teleport_player(10, 0L);
 		break;
 	case 3:
 		/* Major displace */
-		teleport_player(plev * 5, FALSE);
+		teleport_player(plev * 5, 0L);
 		break;
 	case 4:
 		/* Domination */
@@ -1290,7 +1290,7 @@ msg_format("There are too many mirrors to control!");
 	  break;
 	/* warped mirror */
 	case 3:
-	  teleport_player(10, FALSE);
+	  teleport_player(10, 0L);
 	  break;
 	/* mirror of light */
 	case 4:
@@ -1298,7 +1298,7 @@ msg_format("There are too many mirrors to control!");
 	  break;
 	/* mirror of wandering */
 	case 5:
-	  teleport_player(plev * 5, FALSE);
+	  teleport_player(plev * 5, 0L);
 	  break;
 	/* robe of dust */
 	case 6:
@@ -1549,7 +1549,7 @@ static bool cast_ninja_spell(int spell)
 		break;
 	case 2:
 	{
-		teleport_player(10, FALSE);
+		teleport_player(10, 0L);
 		break;
 	}
 	case 3:
@@ -1569,7 +1569,7 @@ static bool cast_ninja_spell(int spell)
 	}
 	case 4:
 	{
-		teleport_player(p_ptr->lev * 5, FALSE);
+		teleport_player(p_ptr->lev * 5, 0L);
 		break;
 	}
 	case 5:
@@ -1588,7 +1588,7 @@ msg_print("うまく逃げられなかった。");
 #endif
 			else
 			{
-				teleport_player(30, FALSE);
+				teleport_player(30, 0L);
 			}
 		}
 		else
@@ -1616,7 +1616,7 @@ msg_print("その方向にはモンスターはいません。");
 		break;
 	case 9:
 		fire_ball(GF_FIRE, 0, 50+plev, plev/10+2);
-		teleport_player(30, FALSE);
+		teleport_player(30, 0L);
 		set_oppose_fire(plev, FALSE);
 		break;
 	case 10:
@@ -1753,7 +1753,7 @@ msg_print("その方向にはモンスターはいません。");
 		fire_ball(GF_POIS, 0, 75+plev*2/3, plev/5+2);
 		fire_ball(GF_OLD_DRAIN, 0, 75+plev*2/3, plev/5+2);
 		fire_ball(GF_CONFUSION, 0, 75+plev*2/3, plev/5+2);
-		teleport_player(30, FALSE);
+		teleport_player(30, 0L);
 		break;
 	case 18:
 	{
@@ -2029,7 +2029,7 @@ msg_print("鏡の世界の干渉を受けた！");
 #else
 					msg_print("Weird visions seem to dance before your eyes...");
 #endif
-					teleport_player(10, TRUE);
+					teleport_player(10, TELEPORT_PASSIVE);
 				}
 				else if (b < 96)
 				{

@@ -5919,7 +5919,8 @@ note = "には効果がなかった。";
 			if (!who) chg_virtue(V_VALOUR, -1);
 
 			/* Teleport */
-			teleport_away(c_ptr->m_idx, do_dist, (bool)(!who), TRUE);
+			teleport_away(c_ptr->m_idx, do_dist,
+						(!who ? TELEPORT_DEC_VALOUR : 0L) | TELEPORT_PASSIVE);
 
 			/* Hack -- get new location */
 			y = m_ptr->fy;
@@ -6127,7 +6128,7 @@ msg_print("空間が歪んだ！");
 					msg_print("Space warps about you!");
 #endif
 
-					if (m_ptr->r_idx) teleport_away(c_ptr->m_idx, damroll(10, 10), FALSE, TRUE);
+					if (m_ptr->r_idx) teleport_away(c_ptr->m_idx, damroll(10, 10), TELEPORT_PASSIVE);
 					if (one_in_(13)) count += activate_hi_summon(ty, tx, TRUE);
 					if (!one_in_(6)) break;
 				}
@@ -7091,7 +7092,7 @@ msg_print("あなたは以前ほど力強くなくなってしまった...。");
 			msg_print("Gravity warps around you.");
 #endif
 
-			teleport_player(5, TRUE);
+			teleport_player(5, TELEPORT_PASSIVE);
 			if (!p_ptr->levitation)
 				(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
 			if (!(p_ptr->resist_sound || p_ptr->levitation))

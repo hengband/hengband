@@ -1335,7 +1335,7 @@ static void hit_trap(bool break_trap)
 			msg_print("You hit a teleport trap!");
 #endif
 
-			teleport_player(100, TRUE);
+			teleport_player(100, TELEPORT_PASSIVE);
 			break;
 		}
 
@@ -2818,7 +2818,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 					msg_format("%^s disappears!", m_name);
 #endif
 
-					teleport_away(c_ptr->m_idx, 50, FALSE, TRUE);
+					teleport_away(c_ptr->m_idx, 50, TELEPORT_PASSIVE);
 					num = num_blow + 1; /* Can't hit it anymore! */
 					*mdeath = TRUE;
 				}

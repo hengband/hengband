@@ -3062,7 +3062,7 @@ bool monst_spell_monst(int m_idx)
 
 		}
 
-		teleport_away(m_idx, 10, FALSE, FALSE);
+		teleport_away(m_idx, 10, 0L);
 
 		break;
 
@@ -3145,7 +3145,7 @@ bool monst_spell_monst(int m_idx)
 						msg_format("%^s suddenly go out of your sight!", m_name);
 #endif
 					}
-					teleport_away(m_idx, 10, FALSE, FALSE);
+					teleport_away(m_idx, 10, TELEPORT_NONMAGICAL);
 					p_ptr->update |= (PU_MONSTERS);
 				}
 				else
@@ -3169,8 +3169,8 @@ bool monst_spell_monst(int m_idx)
 
 					dam = damroll(4, 8);
 
-					if (t_idx == p_ptr->riding) teleport_player_to(m_ptr->fy, m_ptr->fx, FALSE, TRUE);
-					else teleport_monster_to(t_idx, m_ptr->fy, m_ptr->fx, 100, TRUE);
+					if (t_idx == p_ptr->riding) teleport_player_to(m_ptr->fy, m_ptr->fx, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
+					else teleport_monster_to(t_idx, m_ptr->fy, m_ptr->fx, 100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
 
 					sound(SOUND_FALL);
 
@@ -3282,8 +3282,8 @@ bool monst_spell_monst(int m_idx)
 
 		if (!resists_tele)
 		{
-			if (t_idx == p_ptr->riding) teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE, TRUE);
-			else teleport_monster_to(t_idx, m_ptr->fy, m_ptr->fx, 100, TRUE);
+			if (t_idx == p_ptr->riding) teleport_player_to(m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
+			else teleport_monster_to(t_idx, m_ptr->fy, m_ptr->fx, 100, TELEPORT_PASSIVE);
 		}
 
 		wake_up = TRUE;
@@ -3343,7 +3343,7 @@ bool monst_spell_monst(int m_idx)
 		if (!resists_tele)
 		{
 			if (t_idx == p_ptr->riding) teleport_player_away(m_idx, MAX_SIGHT * 2 + 5);
-			else teleport_away(t_idx, MAX_SIGHT * 2 + 5, FALSE, TRUE);
+			else teleport_away(t_idx, MAX_SIGHT * 2 + 5, TELEPORT_PASSIVE);
 		}
 
 		wake_up = TRUE;

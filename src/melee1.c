@@ -1969,7 +1969,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 
 					if (is_mirror_grid(&cave[py][px]))
 					{
-						teleport_player(10, FALSE);
+						teleport_player(10, 0L);
 					}
 				}
 
@@ -2165,7 +2165,7 @@ msg_format("%^sから落ちてしまった！", m_name);
 		msg_print("The thief flees laughing!");
 #endif
 
-		teleport_away(m_idx, MAX_SIGHT * 2 + 5, FALSE, FALSE);
+		teleport_away(m_idx, MAX_SIGHT * 2 + 5, 0L);
 	}
 
 

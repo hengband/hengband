@@ -1311,6 +1311,14 @@
 #define FAF_NO_DROP 0x02
 
 
+/*
+ * Bit flags for teleportation
+ */
+#define TELEPORT_NONMAGICAL 0x00000001
+#define TELEPORT_PASSIVE    0x00000002
+#define TELEPORT_DEC_VALOUR 0x00000004
+
+
 /* Type of pattern tiles */
 #define NOT_PATTERN_TILE      -1
 #define PATTERN_TILE_START    0

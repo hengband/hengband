@@ -1139,13 +1139,13 @@ extern bool rush_attack(bool *mdeath);
 extern void remove_all_mirrors(bool explode);
 
 /* spells3.c */
-extern bool teleport_away(int m_idx, int dis, bool dec_valour, bool passive);
-extern void teleport_monster_to(int m_idx, int ty, int tx, int power, bool passive);
-extern bool cave_player_teleportable_bold(int y, int x, bool passive, bool nonmagical);
-extern bool teleport_player_aux(int dis, bool passive, bool nonmagical);
-extern void teleport_player(int dis, bool passive);
+extern bool teleport_away(int m_idx, int dis, u32b mode);
+extern void teleport_monster_to(int m_idx, int ty, int tx, int power, u32b mode);
+extern bool cave_player_teleportable_bold(int y, int x, u32b mode);
+extern bool teleport_player_aux(int dis, u32b mode);
+extern void teleport_player(int dis, u32b mode);
 extern void teleport_player_away(int m_idx, int dis);
-extern void teleport_player_to(int ny, int nx, bool no_tele, bool passive);
+extern void teleport_player_to(int ny, int nx, u32b mode);
 extern void teleport_away_followable(int m_idx);
 extern void teleport_level(int m_idx);
 extern int choose_dungeon(cptr note, int y, int x);

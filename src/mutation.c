@@ -3360,7 +3360,7 @@ bool mutation_power_aux(u32b power)
 			msg_print("You concentrate...");
 #endif
 
-			teleport_player(10 + 4 * lvl, FALSE);
+			teleport_player(10 + 4 * lvl, 0L);
 			break;
 
 		case MUT1_MIND_BLST:
@@ -3458,7 +3458,7 @@ bool mutation_power_aux(u32b power)
 			break;
 
 		case MUT1_BLINK:
-			teleport_player(10, FALSE);
+			teleport_player(10, 0L);
 			break;
 
 		case MUT1_EAT_ROCK:
@@ -3681,7 +3681,7 @@ bool mutation_power_aux(u32b power)
 #else
 						msg_print("You failed to teleport.");
 #endif
-					else teleport_player(30, FALSE);
+					else teleport_player(30, 0L);
 				}
 				else
 				{

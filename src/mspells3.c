@@ -1316,10 +1316,10 @@ msg_print("無傷の球の呪文を唱えた。");
 		(void)set_invuln(randint1(4) + 4, FALSE);
 		break;
 	case MS_BLINK:
-		teleport_player(10, FALSE);
+		teleport_player(10, 0L);
 		break;
 	case MS_TELEPORT:
-		teleport_player(plev * 5, FALSE);
+		teleport_player(plev * 5, 0L);
 		break;
 	case MS_WORLD:
 		world_player = TRUE;
@@ -1390,7 +1390,7 @@ msg_format("%sを引き戻した。", m_name);
 		msg_format("You command %s to return.", m_name);
 #endif
 
-		teleport_monster_to(cave[target_row][target_col].m_idx, py, px, 100, TRUE);
+		teleport_monster_to(cave[target_row][target_col].m_idx, py, px, 100, TELEPORT_PASSIVE);
 		break;
 	}
 	case MS_TELE_AWAY:

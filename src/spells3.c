@@ -19,7 +19,7 @@
 #define HURT_CHANCE 16
 
 
-static bool cave_monster_teleportable_bold(int m_idx, int y, int x, bool passive)
+static bool cave_monster_teleportable_bold(int m_idx, int y, int x, u32b mode)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	cave_type    *c_ptr = &cave[y][x];
@@ -35,7 +35,7 @@ static bool cave_monster_teleportable_bold(int m_idx, int y, int x, bool passive
 	if (is_glyph_grid(c_ptr)) return FALSE;
 	if (is_explosive_rune_grid(c_ptr)) return FALSE;
 
-	if (!passive)
+	if (!(mode & TELEPORT_PASSIVE))
 	{
 		if (!monster_can_cross_terrain(c_ptr->feat, &r_info[m_ptr->r_idx], 0)) return FALSE;
 	}
@@ -51,7 +51,7 @@ static bool cave_monster_teleportable_bold(int m_idx, int y, int x, bool passive
  *
  * But allow variation to prevent infinite loops.
  */
-bool teleport_away(int m_idx, int dis, bool dec_valour, bool passive)
+bool teleport_away(int m_idx, int dis, u32b mode)
 {
 	int oy, ox, d, i, min;
 	int tries = 0;
@@ -71,7 +71,7 @@ bool teleport_away(int m_idx, int dis, bool dec_valour, bool passive)
 	/* Minimum distance */
 	min = dis / 2;
 
-	if (dec_valour &&
+	if ((mode & TELEPORT_DEC_VALOUR) &&
 	    (((p_ptr->chp * 10) / p_ptr->mhp) > 5) &&
 		(4+randint1(5) < ((p_ptr->chp * 10) / p_ptr->mhp)))
 	{
@@ -101,7 +101,7 @@ bool teleport_away(int m_idx, int dis, bool dec_valour, bool passive)
 			/* Ignore illegal locations */
 			if (!in_bounds(ny, nx)) continue;
 
-			if (!cave_monster_teleportable_bold(m_idx, ny, nx, passive)) continue;
+			if (!cave_monster_teleportable_bold(m_idx, ny, nx, mode)) continue;
 
 			/* No teleporting into vaults and such */
 			if (!(p_ptr->inside_quest || p_ptr->inside_arena))
@@ -160,7 +160,7 @@ bool teleport_away(int m_idx, int dis, bool dec_valour, bool passive)
 /*
  * Teleport monster next to a grid near the given location
  */
-void teleport_monster_to(int m_idx, int ty, int tx, int power, bool passive)
+void teleport_monster_to(int m_idx, int ty, int tx, int power, u32b mode)
 {
 	int ny, nx, oy, ox, d, i, min;
 	int attempts = 500;
@@ -206,7 +206,7 @@ void teleport_monster_to(int m_idx, int ty, int tx, int power, bool passive)
 			/* Ignore illegal locations */
 			if (!in_bounds(ny, nx)) continue;
 
-			if (!cave_monster_teleportable_bold(m_idx, ny, nx, passive)) continue;
+			if (!cave_monster_teleportable_bold(m_idx, ny, nx, mode)) continue;
 
 			/* No teleporting into vaults and such */
 			/* if (cave[ny][nx].info & (CAVE_ICKY)) continue; */
@@ -254,7 +254,7 @@ void teleport_monster_to(int m_idx, int ty, int tx, int power, bool passive)
 }
 
 
-bool cave_player_teleportable_bold(int y, int x, bool passive, bool nonmagical)
+bool cave_player_teleportable_bold(int y, int x, u32b mode)
 {
 	cave_type    *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
@@ -263,11 +263,11 @@ bool cave_player_teleportable_bold(int y, int x, bool passive, bool nonmagical)
 	if (!have_flag(f_ptr->flags, FF_TELEPORTABLE)) return FALSE;
 
 	/* No magical teleporting into vaults and such */
-	if (!nonmagical && (c_ptr->info & CAVE_ICKY)) return FALSE;
+	if (!(mode & TELEPORT_NONMAGICAL) && (c_ptr->info & CAVE_ICKY)) return FALSE;
 
 	if (c_ptr->m_idx && (c_ptr->m_idx != p_ptr->riding)) return FALSE;
 
-	if (!passive)
+	if (!(mode & TELEPORT_PASSIVE))
 	{
 		if (!player_can_enter(c_ptr->feat, 0)) return FALSE;
 
@@ -314,7 +314,7 @@ bool cave_player_teleportable_bold(int y, int x, bool passive, bool nonmagical)
 
 #define MAX_TELEPORT_DISTANCE 200
 
-bool teleport_player_aux(int dis, bool passive, bool nonmagical)
+bool teleport_player_aux(int dis, u32b mode)
 {
 	int candidates_at[MAX_TELEPORT_DISTANCE + 1];
 	int total_candidates, cur_candidates;
@@ -327,7 +327,7 @@ bool teleport_player_aux(int dis, bool passive, bool nonmagical)
 
 	if (p_ptr->wild_mode) return FALSE;
 
-	if (p_ptr->anti_tele && !nonmagical)
+	if (p_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL))
 	{
 #ifdef JP
 		msg_print("不思議な力がテレポートを防いだ！");
@@ -354,7 +354,7 @@ bool teleport_player_aux(int dis, bool passive, bool nonmagical)
 			int d;
 
 			/* Skip illegal locations */
-			if (!cave_player_teleportable_bold(y, x, passive, nonmagical)) continue;
+			if (!cave_player_teleportable_bold(y, x, mode)) continue;
 
 			/* Calculate distance */
 			d = distance(py, px, y, x);
@@ -393,7 +393,7 @@ bool teleport_player_aux(int dis, bool passive, bool nonmagical)
 			int d;
 
 			/* Skip illegal locations */
-			if (!cave_player_teleportable_bold(y, x, passive, nonmagical)) continue;
+			if (!cave_player_teleportable_bold(y, x, mode)) continue;
 
 			/* Calculate distance */
 			d = distance(py, px, y, x);
@@ -429,7 +429,7 @@ bool teleport_player_aux(int dis, bool passive, bool nonmagical)
 	return TRUE;
 }
 
-void teleport_player(int dis, bool passive)
+void teleport_player(int dis, u32b mode)
 {
 	int yy, xx;
 
@@ -437,7 +437,7 @@ void teleport_player(int dis, bool passive)
 	int oy = py;
 	int ox = px;
 
-	if (!teleport_player_aux(dis, passive, FALSE)) return;
+	if (!teleport_player_aux(dis, mode)) return;
 
 	/* Monsters with teleport ability may follow the player */
 	for (xx = -1; xx < 2; xx++)
@@ -459,7 +459,7 @@ void teleport_player(int dis, bool passive)
 				if ((r_ptr->flags6 & RF6_TPORT) &&
 				    !(r_ptr->flagsr & RFR_RES_TELE))
 				{
-					if (!MON_CSLEEP(m_ptr)) teleport_monster_to(tmp_m_idx, py, px, r_ptr->level, FALSE);
+					if (!MON_CSLEEP(m_ptr)) teleport_monster_to(tmp_m_idx, py, px, r_ptr->level, 0L);
 				}
 			}
 		}
@@ -475,7 +475,7 @@ void teleport_player_away(int m_idx, int dis)
 	int oy = py;
 	int ox = px;
 
-	if (!teleport_player_aux(dis, TRUE, FALSE)) return;
+	if (!teleport_player_aux(dis, TELEPORT_PASSIVE)) return;
 
 	/* Monsters with teleport ability may follow the player */
 	for (xx = -1; xx < 2; xx++)
@@ -497,7 +497,7 @@ void teleport_player_away(int m_idx, int dis)
 				if ((r_ptr->flags6 & RF6_TPORT) &&
 				    !(r_ptr->flagsr & RFR_RES_TELE))
 				{
-					if (!MON_CSLEEP(m_ptr)) teleport_monster_to(tmp_m_idx, py, px, r_ptr->level, FALSE);
+					if (!MON_CSLEEP(m_ptr)) teleport_monster_to(tmp_m_idx, py, px, r_ptr->level, 0L);
 				}
 			}
 		}
@@ -511,11 +511,11 @@ void teleport_player_away(int m_idx, int dis)
  * This function is slightly obsessive about correctness.
  * This function allows teleporting into vaults (!)
  */
-void teleport_player_to(int ny, int nx, bool no_tele, bool passive)
+void teleport_player_to(int ny, int nx, u32b mode)
 {
 	int y, x, dis = 0, ctr = 0;
 
-	if (p_ptr->anti_tele && no_tele)
+	if (p_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL))
 	{
 #ifdef JP
 		msg_print("不思議な力がテレポートを防いだ！");
@@ -538,10 +538,10 @@ void teleport_player_to(int ny, int nx, bool no_tele, bool passive)
 		}
 
 		/* Accept any grid when wizard mode */
-		if (p_ptr->wizard && !passive && (!cave[y][x].m_idx || (cave[y][x].m_idx == p_ptr->riding))) break;
+		if (p_ptr->wizard && !(mode & TELEPORT_PASSIVE) && (!cave[y][x].m_idx || (cave[y][x].m_idx == p_ptr->riding))) break;
 
 		/* Accept teleportable floor grids */
-		if (cave_player_teleportable_bold(y, x, passive, !no_tele)) break;
+		if (cave_player_teleportable_bold(y, x, mode)) break;
 
 		/* Occasionally advance the distance */
 		if (++ctr > (4 * dis * dis + 4 * dis + 1))
@@ -567,7 +567,7 @@ void teleport_away_followable(int m_idx)
 	bool         old_ml = m_ptr->ml;
 	int          old_cdis = m_ptr->cdis;
 
-	teleport_away(m_idx, MAX_SIGHT * 2 + 5, FALSE, FALSE);
+	teleport_away(m_idx, MAX_SIGHT * 2 + 5, 0L);
 
 	if (old_ml && (old_cdis <= MAX_SIGHT) && !world_monster && los(py, px, oldfy, oldfx))
 	{
@@ -605,14 +605,14 @@ void teleport_away_followable(int m_idx)
 			{
 				if (one_in_(3))
 				{
-					teleport_player(200, TRUE);
+					teleport_player(200, TELEPORT_PASSIVE);
 #ifdef JP
 					msg_print("失敗！");
 #else
 					msg_print("Failed!");
 #endif
 				}
-				else teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE, FALSE);
+				else teleport_player_to(m_ptr->fy, m_ptr->fx, 0L);
 				p_ptr->energy_need += ENERGY_NEED();
 			}
 		}
@@ -1204,13 +1204,13 @@ void apply_nexus(monster_type *m_ptr)
 	{
 		case 1: case 2: case 3:
 		{
-			teleport_player(200, TRUE);
+			teleport_player(200, TELEPORT_PASSIVE);
 			break;
 		}
 
 		case 4: case 5:
 		{
-			teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE, TRUE);
+			teleport_player_to(m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
 			break;
 		}
 
@@ -5506,19 +5506,19 @@ static bool dimension_door_aux(int x, int y)
 
 	p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
 
-	if (!cave_player_teleportable_bold(y, x, FALSE, FALSE) ||
+	if (!cave_player_teleportable_bold(y, x, 0L) ||
 	    (distance(y, x, py, px) > plev / 2 + 10) ||
 	    (!randint0(plev / 10 + 10)))
 	{
 		p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
-		teleport_player((plev + 2) * 2, TRUE);
+		teleport_player((plev + 2) * 2, TELEPORT_PASSIVE);
 
 		/* Failed */
 		return FALSE;
 	}
 	else
 	{
-		teleport_player_to(y, x, TRUE, FALSE);
+		teleport_player_to(y, x, 0L);
 
 		/* Success */
 		return TRUE;
