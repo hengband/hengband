@@ -6065,6 +6065,7 @@ msg_print("試合開始！");
 static void load_all_pref_files(void)
 {
 	char buf[1024];
+	errr err;
 
 	/* Access the "user" pref file */
 	sprintf(buf, "user.prf");
@@ -6101,12 +6102,18 @@ static void load_all_pref_files(void)
 #else
         sprintf(buf, "pickpref-%s.prf", player_base);
 #endif
-	process_pickpref_file(buf);
+
+	err = process_pickpref_file(buf);
+
+	/* Process 'pick????.prf' if 'pick????-<name>.prf' doesn't exist */
+	if (0 > err)
+	{
 #ifdef JP
-	process_pickpref_file("picktype.prf");
+		process_pickpref_file("picktype.prf");
 #else
-	process_pickpref_file("pickpref.prf");
+		process_pickpref_file("pickpref.prf");
 #endif
+	}
 
 	/* Access the "realm 1" pref file */
 	if (p_ptr->realm1 != REALM_NONE)

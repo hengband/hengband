@@ -2405,7 +2405,7 @@ void do_cmd_pref(void)
 void do_cmd_pickpref(void)
 {
 	char buf[80];
-	errr err = -1; 
+	errr err;
 	int i;
 
 #ifdef JP
@@ -2424,8 +2424,10 @@ void do_cmd_pickpref(void)
 #else
 	sprintf(buf, "pickpref-%s.prf", player_name);
 #endif
-	if( process_pickpref_file(buf) == 0 ){
-		err = 0;
+	err = process_pickpref_file(buf);
+
+	if(err == 0)
+	{
 #ifdef JP
 		msg_format("%sを読み込みました。", buf);
 #else
@@ -2434,19 +2436,26 @@ void do_cmd_pickpref(void)
 	}
 
 	/* 共通の設定ファイル読み込み */
-#ifdef JP
-	if( process_pickpref_file("picktype.prf") == 0 )
-#else
-	if( process_pickpref_file("pickpref.prf") == 0 )
-#endif
+
+	/* Process 'pick????.prf' if 'pick????-<name>.prf' doesn't exist */
+	if (0 > err)
 	{
-		err = 0;
 #ifdef JP
-		msg_print("picktype.prfを読み込みました。");
+		err = process_pickpref_file("picktype.prf");
 #else
-		msg_print("loaded 'pickpref.prf'.");
+		err = process_pickpref_file("pickpref.prf");
 #endif
+
+		if(err == 0)
+		{
+#ifdef JP
+			msg_print("picktype.prfを読み込みました。");
+#else
+			msg_print("loaded 'pickpref.prf'.");
+#endif
+		}
 	}
+
 
 #ifdef JP
 	if(err) msg_print("自動拾い設定ファイルの読み込みに失敗しました。");
