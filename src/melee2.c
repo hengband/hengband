@@ -1021,8 +1021,6 @@ static bool find_hiding(int m_idx, int *yp, int *xp)
 	int gy = 0, gx = 0, gdis = 999;
 
 	sint *y_offsets, *x_offsets;
-	
-	cave_type *c_ptr;
 
 	/* Start with adjacent locations, spread further */
 	for (d = 1; d < 10; d++)
@@ -1038,17 +1036,15 @@ static bool find_hiding(int m_idx, int *yp, int *xp)
 		{
 			y = fy + dy;
 			x = fx + dx;
-			
+
 			/* Skip illegal locations */
 			if (!in_bounds(y, x)) continue;
-
-			c_ptr = &cave[y][x];
 
 			/* Skip occupied locations */
 			if (!monster_can_enter(y, x, r_ptr, 0)) continue;
 
 			/* Check for hidden, available grid */
-			if (!player_has_los_grid(c_ptr) && clean_shot(fy, fx, y, x, FALSE))
+			if (!projectable(py, px, y, x) && clean_shot(fy, fx, y, x, FALSE))
 			{
 				/* Calculate distance from player */
 				dis = distance(y, x, py, px);
