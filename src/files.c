@@ -954,26 +954,6 @@ static cptr process_pref_file_expr(char **sp, char *fp)
 #endif
 			}
 
-			/* First realm */
-			else if (streq(b+1, "REALM1"))
-			{
-#ifdef JP
-				v = E_realm_names[p_ptr->realm1];
-#else
-                                v = realm_names[p_ptr->realm1];
-#endif
-			}
-
-			/* Second realm */
-			else if (streq(b+1, "REALM2"))
-			{
-#ifdef JP
-                                v = E_realm_names[p_ptr->realm2];
-#else
-				v = realm_names[p_ptr->realm2];
-#endif
-			}
-
 			/* Player */
 			else if (streq(b+1, "PLAYER"))
 			{
@@ -4286,8 +4266,11 @@ errr make_character_dump(FILE *fff)
 			/* Get the attr/char */
 			(void)(Term_what(x, y, &a, &c));
 
-			/* Dump it */
-			buf[x] = c;
+			/* Dump it (Ignore equippy tile graphic) */
+			if (a < 128)
+				buf[x] = c;
+			else
+				buf[x] = ' ';
 		}
 
 		/* End the string */
