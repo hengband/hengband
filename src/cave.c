@@ -561,6 +561,11 @@ static char image_monster_hack[] = \
 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 /*
+ * Hack -- Legal object codes
+ */
+static char image_object_hack[] = "?/|\\\"!$()_-=[]{},~";
+
+/*
  * Mega-Hack -- Hallucinatory monster
  */
 static void image_monster(byte *ap, char *cp)
@@ -576,21 +581,15 @@ static void image_monster(byte *ap, char *cp)
 	else
 	/* Text mode */
 	{
-		int n = sizeof(image_monster_hack) - 1;
-
-		*cp = image_monster_hack[randint0(n)];
+		*cp = (one_in_(25) ?
+		       image_object_hack[randint0(sizeof(image_object_hack) - 1)] :
+		       image_monster_hack[randint0(sizeof(image_monster_hack) - 1)]);
 
 		/* Random color */
 		*ap = randint1(15);
 	}
 }
 
-
-
-/*
- * Hack -- Legal object codes
- */
-static char image_object_hack[] = "?/|\\\"!$()_-=[]{},~";
 
 /*
  * Mega-Hack -- Hallucinatory object
