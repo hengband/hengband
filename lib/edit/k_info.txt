@@ -5614,7 +5614,7 @@ P:0:1d2:0:0:0
 F:SHOW_MODS | DEC_MANA
 
 N:582:フェアノールのランプ
-E:& Feanorian lamp~
+E:& Feanorian Lamp~
 G:~:o
 I:39:2:0
 W:15:40:60:450
