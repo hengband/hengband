@@ -387,6 +387,15 @@ Send score dump to the world score server    [send_score]
     record of your character to the world score board on the Internet
     when your character dies.
 
+***** <allow_debug_opts>
+Allow use of debug/cheat options  [allow_debug_opts]
+    Since use of debug command(^A), wizard mode(^W), and Cheating
+    options ('C' in options panel) mark the player as "Cheater" who
+    can't register their score, these debug/cheat options are
+    forbidden to use on default.  The allow_debug_opts option removes
+    these restrictions, and allow the player to become "Cheater".
+
+
 ***** <Disturbance>
 === Option set 4 -- Disturbance ===
 
@@ -815,6 +824,11 @@ Know complete monster info    [cheat_know]
 Allow player to avoid death    [cheat_live]
     Cheaters never win.  But they can cheat death.
 
+***** <cheat_save>
+Ask for saving death    [cheat_save]
+    Cheaters never win.  But they can choose whether they save dead
+    character data or not when they die.
+
 
 ***** <StartUp>
 === Start up options ===
@@ -900,12 +914,6 @@ Permanently enable the autoscummer    [ironman_autoscum]
 Always create empty 'arena' levels (*)    [ironman_empty_levels]
     If this option is enabled, then every level will be empty 'arena'
     level . See the "Allow empty 'arena' levels" option above.
-
-***** <munchkin_death>
-(Cheating) Ask for death saves (*)    [munchkin_death]
-    If this option is enabled, Hengband asks you whether you save dead
-    character data or not when you die. If you use it, you cannot send
-    score record to the world score board.
 
 ***** <ironman_rooms>
 Always generate very unusual rooms (*)    [ironman_rooms]
