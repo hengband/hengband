@@ -1071,7 +1071,7 @@ msg_format("モンスター数基本値を %d から %d に減らします", small_tester, i);
 	object_level = base_level;
 
 	/* Put the Guardian */
-	(void)alloc_guardian();
+	if (!alloc_guardian(TRUE)) return FALSE;
 
 	if (dun->empty_level && (!one_in_(DARK_EMPTY) || (randint1(100) > dun_level)) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS))
 	{

@@ -3804,7 +3804,7 @@ bool alloc_horde(int y, int x)
 /*
  * Put the Guardian
  */
-bool alloc_guardian(void)
+bool alloc_guardian(bool def_val)
 {
 	int guardian = d_info[dungeon_type].final_guardian;
 
@@ -3831,9 +3831,11 @@ bool alloc_guardian(void)
 			/* One less try */
 			try--;
 		}
+
+		return FALSE;
 	}
 
-	return FALSE;
+	return def_val;
 }
 
 
@@ -3852,7 +3854,7 @@ bool alloc_monster(int dis, u32b mode)
 	int         attempts_left = 10000;
 
 	/* Put the Guardian */
-	if (alloc_guardian()) return TRUE;
+	if (alloc_guardian(FALSE)) return TRUE;
 
 	/* Find a legal, distant, unoccupied, space */
 	while (attempts_left--)
