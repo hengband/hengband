@@ -2800,11 +2800,19 @@ void do_cmd_edit_autopick(void)
 			/* Paste killed text */
 			if (strlen(yank_buf))
 			{
-				cx = 0;
 				for (j = 0; yank_buf[j]; j += strlen(yank_buf + j) + 1)
 				{
-					insert_return_code(lines_list, 0, cy);
-					lines_list[cy] = string_make(yank_buf + j);
+					/* Split current line */
+					insert_return_code(lines_list, cx, cy);
+
+					/* Paste yank buffer */
+					strcpy(buf, lines_list[cy]);
+					strncat(buf, yank_buf + j, 1024);
+					string_free(lines_list[cy]);
+					lines_list[cy] = string_make(buf);
+
+					/* Move to the beggining of next line */
+					cx = 0;
 					cy++;
 				}
 
@@ -2821,29 +2829,34 @@ void do_cmd_edit_autopick(void)
 
 		case KTRL('k'):
 			/* Kill rest of line */
-			if (lines_list[cy][0] != '\0' && (unsigned int) cx < strlen(lines_list[cy]))
+			if (lines_list[cy][0] != '\0' && (uint)cx < strlen(lines_list[cy]))
 			{
-				for (i = j = 0; lines_list[cy][i] && i < cx; i++)
+				/* Save preceding string */
+				for (i = 0; lines_list[cy][i] && i < cx; i++)
 				{
 #ifdef JP
 					if (iskanji(lines_list[cy][i]))
-						buf[j++] = lines_list[cy][i++];
+					{
+						buf[i] = lines_list[cy][i];
+						i++;
+					}
 #endif
-					buf[j++] = lines_list[cy][i];
+					buf[i] = lines_list[cy][i];
 				}
-				buf[j] = '\0';
+				buf[i] = '\0';
 
 				j = 0;
 				if (old_key == KTRL('k'))
 					while (yank_buf[j])
 						j += strlen(yank_buf + j) + 1;
 
-				if (j < MAX_YANK - 2)
-				{
-					strncpy(yank_buf + j, lines_list[cy] + i, MAX_YANK-j-2);
-					yank_buf[MAX_YANK-2] = '\0';
-					yank_buf[j + strlen(lines_list[cy] + i) + 1] = '\0';
-				}
+				/* Copy following to yank buffer */
+				while (lines_list[cy][i] && j < MAX_YANK - 2)
+					yank_buf[j++] = lines_list[cy][i++];
+				yank_buf[j++] = '\0';
+				yank_buf[j] = '\0';
+
+				/* Replace current line with 'preceding string' */
 				string_free(lines_list[cy]);
 				lines_list[cy] = string_make(buf);
 
@@ -2859,6 +2872,11 @@ void do_cmd_edit_autopick(void)
 			if (iskanji(lines_list[cy][cx])) cx++;
 #endif
 			cx++;
+
+			/* fall through */
+
+		case '\010':
+			/* BACK SPACE */
 			len = strlen(lines_list[cy]);
 			if (len < cx)
 			{
@@ -2874,10 +2892,6 @@ void do_cmd_edit_autopick(void)
 				}
 			}
 
-			/* fall through */
-
-		case '\010':
-			/* BACK SPACE */
 			if (cx == 0)
 			{
 				/* delete a return code and union two lines */
