@@ -4855,10 +4855,8 @@ static bool run_test(void)
 			inv = FALSE;
 		}
 
-		/* Analyze unknown grids and floors */
-/*		if (inv || cave_floor_bold(row, col) || */
-/*		    (cave[row][col].feat == FEAT_TREES)) */
-		if (inv || cave_floor_bold(row, col))
+		/* Analyze unknown grids and floors considering mimic */
+		if (inv || (!(feat & 0x20)))
 		{
 			/* Looking for open area */
 			if (find_openarea)
