@@ -20,6 +20,8 @@ static int store_top = 0;
 static store_type *st_ptr = NULL;
 static owner_type *ot_ptr = NULL;
 #endif
+static s16b old_town_num = 0;
+static s16b inner_town_num = 0;
 #define RUMOR_CHANCE 8
 
 #define MAX_COMMENT_1	6
@@ -4316,7 +4318,9 @@ static void store_process_command(void)
 		/* Character description */
 		case 'C':
 		{
+			p_ptr->town_num = old_town_num;
 			do_cmd_change_name();
+			p_ptr->town_num = inner_town_num;
 			display_store();
 			break;
 		}
@@ -4462,7 +4466,6 @@ void do_cmd_store(void)
 	int         tmp_chr;
 	int         i;
 	cave_type   *c_ptr;
-	s16b        old_town_num;
 
 
 	/* Access the player grid */
@@ -4489,6 +4492,7 @@ void do_cmd_store(void)
 	old_town_num = p_ptr->town_num;
 	if ((which == STORE_HOME) || (which == STORE_MUSEUM)) p_ptr->town_num = 1;
 	if (dun_level) p_ptr->town_num = NO_TOWN;
+	inner_town_num = p_ptr->town_num;
 
 	/* Hack -- Check the "locked doors" */
 	if ((town[p_ptr->town_num].store[which].store_open >= turn) ||
