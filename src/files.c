@@ -6103,7 +6103,8 @@ void get_name(void)
 		/* Use the name */
 		strcpy(player_name, tmp);
 	}
-	else if (0 == strlen(player_name))
+
+	if (0 == strlen(player_name))
 	{
 		/* Use default name */
 		strcpy(player_name, "PLAYER");
