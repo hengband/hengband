@@ -1270,7 +1270,7 @@ msg_print("武器を持たないと必殺技は使えない！");
 #ifdef JP
 msg_print("何も技を知らない。");
 #else
-		msg_print("You don't know any martial arts.");
+		msg_print("You don't know any special attacks.");
 #endif
 
 		return;
