@@ -203,76 +203,169 @@ extern bool multi_rew;
 extern char summon_kin_type;
 extern bool hack_mind;
 extern bool hack_mutation;
-extern bool show_item_graph;
-extern bool numpad_as_cursorkey;
-extern bool rogue_like_commands;
-extern bool quick_messages;
-extern bool auto_more;
-extern bool command_menu;
-extern bool other_query_flag;
-extern bool carry_query_flag;
-extern bool always_pickup;
-extern bool always_repeat;
-extern bool use_old_target;
-extern bool depth_in_feet;
-extern bool compress_savefile;
-extern bool hilite_player;
-extern bool ring_bell;
-extern bool find_ignore_stairs;
-extern bool find_ignore_doors;
-extern bool find_cut;
-extern bool disturb_near;
-extern bool disturb_high;
-extern bool disturb_move;
-extern bool disturb_panel;
-extern bool disturb_state;
-extern bool disturb_minor;
-extern bool check_abort;
-extern bool avoid_other;
-extern bool flush_disturb;
-extern bool flush_failure;
-extern bool fresh_before;
-extern bool fresh_after;
-extern bool fresh_message;
-extern bool disturb_trap_detect;
-extern bool alert_trap_detect;
-extern bool view_yellow_lite;
-extern bool view_bright_lite;
-extern bool view_granite_lite;
-extern bool view_special_lite;
-extern bool new_ascii_graphics;
-extern bool target_pet;
-extern bool display_path;
-extern bool always_show_list;
-extern bool abbrev_extra;
-extern bool abbrev_all;
-extern bool plain_pickup;
 
-extern bool powerup_home;
-extern bool send_score;
+
+/*** Input Options ***/
+
+extern bool rogue_like_commands;   /* Rogue-like commands */
+extern bool always_pickup;   /* Pick things up by default */
+extern bool carry_query_flag;   /* Prompt before picking things up */
+extern bool quick_messages;   /* Activate quick messages */
+extern bool auto_more;   /* Automatically clear '-more-' prompts */
+extern bool command_menu;   /* Enable command selection menu */
+extern bool other_query_flag;   /* Prompt for floor item selection */
+extern bool use_old_target;   /* Use old target by default */
+extern bool always_repeat;   /* Repeat obvious commands */
+extern bool confirm_destroy;   /* Prompt for destruction of known worthless items */
+extern bool confirm_wear;   /* Confirm to wear/wield known cursed items */
+extern bool confirm_quest;   /* Prompt before exiting a quest level */
+extern bool target_pet;   /* Allow targetting pets */
+
+#ifdef ALLOW_EASY_OPEN
+extern bool easy_open;   /* Automatically open doors */
+#endif
+
+#ifdef ALLOW_EASY_DISARM
+extern bool easy_disarm;   /* Automatically disarm traps */
+#endif
+
+#ifdef ALLOW_EASY_FLOOR
+extern bool easy_floor;   /* Display floor stacks in a list */
+#endif
+
+extern bool use_command;   /* Allow unified use command */
+extern bool over_exert;   /* Allow casting spells when short of mana */
+extern bool numpad_as_cursorkey;   /* Use numpad keys as cursor key in editor mode */
+
+
+/*** Output Options ***/
+
+extern bool depth_in_feet;   /* Show dungeon level in feet */
+extern bool show_labels;   /* Show labels in object listings */
+extern bool show_weights;   /* Show weights in object listings */
+extern bool show_item_graph;   /* Show items graphics */
+extern bool plain_pickup;   /* Plain pickup messages(japanese only) */
+extern bool equippy_chars;   /* Display 'equippy' chars */
+extern bool display_mutations;   /* Display mutations in 'C'haracter Display */
+extern bool plain_descriptions;   /* Plain object descriptions */
+extern bool center_player;   /* Center map while walking (*slow*) */
+extern bool center_running;   /* Centering even while running */
+extern bool view_yellow_lite;   /* Use special colors for torch-lit grids */
+extern bool view_bright_lite;   /* Use special colors for 'viewable' grids */
+extern bool view_granite_lite;   /* Use special colors for wall grids (slow) */
+extern bool view_special_lite;   /* Use special colors for floor grids (slow) */
+extern bool new_ascii_graphics;   /* Show a clear contrast between light and dark */
+extern bool display_path;   /* Display actual path before shooting */
+extern bool always_show_list;   /* Always show list at first when select items */
+extern bool abbrev_extra;   /* Describe obj's extra resistances by abbreviation */
+extern bool abbrev_all;   /* Describe obj's all resistances by abbreviation */
+
+
+/*** Game-Play ***/
+
+extern bool auto_scum;   /* Auto-scum for good levels */
+extern bool stack_force_notes;   /* Merge inscriptions when stacking */
+extern bool stack_force_costs;   /* Merge discounts when stacking */
+extern bool expand_list;   /* Expand the power of the list commands */
+extern bool view_perma_grids;   /* Map remembers all perma-lit grids */
+extern bool view_torch_grids;   /* Map remembers all torch-lit grids */
+extern bool view_unsafe_grids;   /* Map marked by detect traps */
+extern bool small_levels;   /* Allow unusually small dungeon levels */
+extern bool always_small_levels;   /* Always create unusually small dungeon levels */
+extern bool empty_levels;   /* Allow empty 'arena' levels */
+extern bool bound_walls_perm;   /* Boundary walls become 'permanent wall' */
+extern bool last_words;   /* Leave last words when your character dies */
+
+#ifdef WORLD_SCORE
+extern bool send_score;   /* Send score dump to the world score server */
+#endif
+
 extern bool allow_debug_opts;   /* Allow use of debug/cheat options */
 
-extern bool display_mutations;     /* Skip mutations screen in 'C'haracter display */
-extern bool plain_descriptions;
-extern bool confirm_destroy;
-extern bool confirm_wear;
-extern bool confirm_quest;
-extern bool disturb_pets;
-extern bool view_perma_grids;
-extern bool view_torch_grids;
-extern bool view_unsafe_grids;
-extern bool track_follow;
-extern bool track_target;
-extern bool stack_force_notes;
-extern bool stack_force_costs;
-extern bool view_reduce_view;
-extern bool manual_haggle;
-extern bool auto_scum;
-extern bool expand_list;
-extern bool smart_learn;
-extern bool smart_cheat;
-extern bool show_labels;
-extern bool show_weights;
+
+/*** Disturbance ***/
+
+extern bool find_ignore_stairs;   /* Run past stairs */
+extern bool find_ignore_doors;   /* Run through open doors */
+extern bool find_cut;   /* Run past known corners */
+extern bool disturb_move;   /* Disturb whenever any monster moves */
+extern bool disturb_high;   /* Disturb whenever high-level monster moves */
+extern bool disturb_near;   /* Disturb whenever viewable monster moves */
+extern bool disturb_pets;   /* Disturb when visible pets move */
+extern bool disturb_panel;   /* Disturb whenever map panel changes */
+extern bool disturb_state;   /* Disturb whenever player state changes */
+extern bool disturb_minor;   /* Disturb whenever boring things happen */
+extern bool ring_bell;   /* Audible bell (on errors, etc) */
+extern bool disturb_trap_detect;   /* Disturb when leaving trap detected area */
+extern bool alert_trap_detect;   /* Alert when leaving trap detected area */
+
+
+/*** Efficiency ***/
+
+extern bool view_reduce_view;   /* Reduce view-radius in town */
+extern bool check_abort;   /* Check for user abort while continuous command */
+extern bool flush_failure;   /* Flush input on various failures */
+extern bool flush_disturb;   /* Flush input whenever disturbed */
+extern bool fresh_before;   /* Flush output while continuous command */
+extern bool fresh_after;   /* Flush output after monster's move */
+extern bool fresh_message;   /* Flush output after every message */
+extern bool compress_savefile;   /* Compress messages in savefiles */
+extern bool hilite_player;   /* Hilite the player with the cursor */
+
+
+/*** Birth Options ***/
+
+extern bool manual_haggle;   /* Manually haggle in stores */
+extern bool easy_band;   /* Easy Mode (*) */
+extern bool smart_learn;   /* Monsters learn from their mistakes (*) */
+extern bool smart_cheat;   /* Monsters exploit players weaknesses (*) */
+extern bool vanilla_town;   /* Use 'vanilla' town without quests and wilderness */
+extern bool lite_town;   /* Use 'lite' town without a wilderness */
+extern bool ironman_shops;   /* Stores are permanently closed (*) */
+extern bool ironman_small_levels;   /* Always create unusually small dungeon levels (*) */
+extern bool ironman_downward;   /* Disable recall and use of up stairs (*) */
+extern bool ironman_autoscum;   /* Permanently enable the autoscummer */
+extern bool ironman_empty_levels;   /* Always create empty 'arena' levels (*) */
+extern bool ironman_rooms;   /* Always generate very unusual rooms (*) */
+extern bool ironman_nightmare;   /* Nightmare mode(it isn't even remotely fair!)(*) */
+extern bool left_hander;   /* Left-Hander */
+extern bool preserve_mode;   /* Preserve artifacts (*) */
+extern bool autoroller;   /* Allow use of autoroller for stats (*) */
+extern bool autochara;   /* Autoroll for weight, height and social status */
+extern bool powerup_home;   /* Increase capacity of your home (*) */
+
+
+/*** Easy Object Auto-Destroyer ***/
+
+extern bool destroy_items;   /* Use easy auto-destroyer */
+extern bool destroy_feeling;   /* Apply auto-destroy as sense feeling */
+extern bool destroy_identify;   /* Apply auto-destroy as identify an item */
+extern bool leave_worth;   /* Auto-destroyer leaves known worthy items */
+extern bool leave_equip;   /* Auto-destroyer leaves weapons and armour */
+extern bool leave_chest;   /* Auto-destroyer leaves closed chests */
+extern bool leave_wanted;   /* Auto-destroyer leaves wanted corpses */
+extern bool leave_corpse;   /* Auto-destroyer leaves corpses and skeletons */
+extern bool leave_junk;   /* Auto-destroyer leaves junk */
+extern bool leave_special;   /* Auto-destroyer leaves items your race/class needs */
+
+
+/*** Play-record Options ***/
+
+extern bool record_fix_art;   /* Record fixed artifacts */
+extern bool record_rand_art;   /* Record random artifacts */
+extern bool record_destroy_uniq;   /* Record when destroy unique monster */
+extern bool record_fix_quest;   /* Record fixed quests */
+extern bool record_rand_quest;   /* Record random quests */
+extern bool record_maxdeapth;   /* Record movements to deepest level */
+extern bool record_stair;   /* Record recall and stair movements */
+extern bool record_buy;   /* Record purchased items */
+extern bool record_sell;   /* Record sold items */
+extern bool record_danger;   /* Record hitpoint warning */
+extern bool record_arena;   /* Record arena victories */
+extern bool record_ident;   /* Record first identified items */
+extern bool record_named_pet;   /* Record informations of named pets */
+
+
 extern bool cheat_peek;
 extern bool cheat_hear;
 extern bool cheat_room;
@@ -280,40 +373,7 @@ extern bool cheat_xtra;
 extern bool cheat_know;
 extern bool cheat_live;
 extern bool cheat_save;
-extern bool last_words;              /* Zangband options */
-extern bool over_exert;
-extern bool small_levels;
-extern bool always_small_levels;
-extern bool empty_levels;
-extern bool bound_walls_perm;
-extern bool equippy_chars;
-extern bool use_command;
-extern bool center_player;
-extern bool center_running;
-extern bool destroy_items;
-extern bool destroy_feeling;
-extern bool destroy_identify;
-extern bool leave_worth;
-extern bool leave_equip;
-extern bool leave_wanted;
-extern bool leave_corpse;
-extern bool leave_junk;
-extern bool destroy_items;
-extern bool leave_chest;
-extern bool leave_special;
-extern bool record_fix_art;
-extern bool record_rand_art;
-extern bool record_destroy_uniq;
-extern bool record_fix_quest;
-extern bool record_rand_quest;
-extern bool record_maxdeapth;
-extern bool record_stair;
-extern bool record_buy;
-extern bool record_sell;
-extern bool record_danger;
-extern bool record_arena;
-extern bool record_ident;
-extern bool record_named_pet;
+
 extern char record_o_name[MAX_NLEN];
 extern s32b record_turn;
 extern byte hitpoint_warn;

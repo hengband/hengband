@@ -175,117 +175,166 @@ bool reinit_wilderness = FALSE;
  * Software options (set via the '=' command).  See "tables.c"
  */
 
+/*** Input Options ***/
 
-/* Option Set 1 -- User Interface */
+bool rogue_like_commands;   /* Rogue-like commands */
+bool always_pickup;   /* Pick things up by default */
+bool carry_query_flag;   /* Prompt before picking things up */
+bool quick_messages;   /* Activate quick messages */
+bool auto_more;   /* Automatically clear '-more-' prompts */
+bool command_menu;   /* Enable command selection menu */
+bool other_query_flag;   /* Prompt for floor item selection */
+bool use_old_target;   /* Use old target by default */
+bool always_repeat;   /* Repeat obvious commands */
+bool confirm_destroy;   /* Prompt for destruction of known worthless items */
+bool confirm_wear;   /* Confirm to wear/wield known cursed items */
+bool confirm_quest;   /* Prompt before exiting a quest level */
+bool target_pet;   /* Allow targetting pets */
 
-bool rogue_like_commands;	/* Rogue-like commands */
-bool quick_messages;		/* Activate quick messages */
-bool auto_more;
-bool command_menu;
-bool other_query_flag;		/* Prompt for various information */
-bool carry_query_flag;		/* Prompt before picking things up */
-bool use_old_target;		/* Use old target by default */
-bool always_pickup;			/* Pick things up by default */
-bool always_repeat;			/* Repeat obvious commands */
-bool depth_in_feet;			/* Show dungeon level in feet */
+#ifdef ALLOW_EASY_OPEN
+bool easy_open;   /* Automatically open doors */
+#endif
 
-bool stack_force_notes;		/* Merge inscriptions when stacking */
-bool stack_force_costs;		/* Merge discounts when stacking */
+#ifdef ALLOW_EASY_DISARM
+bool easy_disarm;   /* Automatically disarm traps */
+#endif
 
-bool show_labels;			/* Show labels in object listings */
-bool show_weights;			/* Show weights in object listings */
+#ifdef ALLOW_EASY_FLOOR
+bool easy_floor;   /* Display floor stacks in a list */
+#endif
 
-bool ring_bell;				/* Ring the bell (on errors, etc) */
-
-bool show_item_graph;
-bool numpad_as_cursorkey;
-
-
-/* Option Set 2 -- Disturbance */
-
-bool find_ignore_stairs;	/* Run past stairs */
-bool find_ignore_doors;		/* Run through open doors */
-bool find_cut;				/* Run past known corners */
-
-bool disturb_move;			/* Disturb whenever any monster moves */
-bool disturb_near;			/* Disturb whenever viewable monster moves */
-bool disturb_high;                      /* Disturb whenever high-level monster moves */
-bool disturb_panel;			/* Disturb whenever map panel changes */
-bool disturb_state;			/* Disturn whenever player state changes */
-bool disturb_minor;			/* Disturb whenever boring things happen */
-
-bool disturb_trap_detect;       /* Disturb when leaving trap detected area */
-bool alert_trap_detect;         /* Alert when leaving trap detected area */
-bool last_words;		/* Get last words upon dying */
-bool over_exert;
-bool small_levels;		/* Allow unusually small dungeon levels */
-bool always_small_levels;		/* Use always unusually small dungeon levels */
-bool empty_levels;		/* Allow empty 'arena' levels */
-bool bound_walls_perm;		/* Boundary walls are created by permanent wall */
-bool equippy_chars;		/* Back by popular demand... */
-bool display_mutations;		/* Skip mutations screen even if we have it */
-bool plain_descriptions;	/* Plain object descriptions */
-bool confirm_destroy;		/* Known worthless items are destroyed without confirmation */
-bool confirm_quest;		/* Prompt before staircases... */
-bool confirm_wear;		/* Confirm before putting on known cursed items */
-bool disturb_pets;		/* Pets moving nearby disturb us */
+bool use_command;   /* Allow unified use command */
+bool over_exert;   /* Allow casting spells when short of mana */
+bool numpad_as_cursorkey;   /* Use numpad keys as cursor key in editor mode */
 
 
+/*** Output Options ***/
 
-/* Option Set 3 -- Game-Play */
+bool depth_in_feet;   /* Show dungeon level in feet */
+bool show_labels;   /* Show labels in object listings */
+bool show_weights;   /* Show weights in object listings */
+bool show_item_graph;   /* Show items graphics */
+bool plain_pickup;   /* Plain pickup messages(japanese only) */
+bool equippy_chars;   /* Display 'equippy' chars */
+bool display_mutations;   /* Display mutations in 'C'haracter Display */
+bool plain_descriptions;   /* Plain object descriptions */
+bool center_player;   /* Center map while walking (*slow*) */
+bool center_running;   /* Centering even while running */
+bool view_yellow_lite;   /* Use special colors for torch-lit grids */
+bool view_bright_lite;   /* Use special colors for 'viewable' grids */
+bool view_granite_lite;   /* Use special colors for wall grids (slow) */
+bool view_special_lite;   /* Use special colors for floor grids (slow) */
+bool new_ascii_graphics;   /* Show a clear contrast between light and dark */
+bool display_path;   /* Display actual path before shooting */
+bool always_show_list;   /* Always show list at first when select items */
+bool abbrev_extra;   /* Describe obj's extra resistances by abbreviation */
+bool abbrev_all;   /* Describe obj's all resistances by abbreviation */
 
-bool manual_haggle;			/* Auto-haggle in stores */
 
-bool auto_scum;				/* Auto-scum for good levels */
+/*** Game-Play ***/
 
-bool expand_list;			/* Expand the power of the list commands */
+bool auto_scum;   /* Auto-scum for good levels */
+bool stack_force_notes;   /* Merge inscriptions when stacking */
+bool stack_force_costs;   /* Merge discounts when stacking */
+bool expand_list;   /* Expand the power of the list commands */
+bool view_perma_grids;   /* Map remembers all perma-lit grids */
+bool view_torch_grids;   /* Map remembers all torch-lit grids */
+bool view_unsafe_grids;   /* Map marked by detect traps */
+bool small_levels;   /* Allow unusually small dungeon levels */
+bool always_small_levels;   /* Always create unusually small dungeon levels */
+bool empty_levels;   /* Allow empty 'arena' levels */
+bool bound_walls_perm;   /* Boundary walls become 'permanent wall' */
+bool last_words;   /* Leave last words when your character dies */
 
-bool view_perma_grids;		/* Map remembers all perma-lit grids */
-bool view_torch_grids;		/* Map remembers all torch-lit grids */
-bool view_unsafe_grids;		/* Map marked by detect traps */
+#ifdef WORLD_SCORE
+bool send_score;   /* Send score dump to the world score server */
+#endif
 
-bool dungeon_align;			/* Generate dungeons with aligned rooms */
-
-bool track_follow;			/* Monsters follow the player */
-bool track_target;			/* Monsters target the player */
-
-bool smart_learn;			/* Monsters learn from their mistakes */
-bool smart_cheat;			/* Monsters exploit player weaknesses */
-
-
-/* Option Set 4 -- Efficiency */
-
-bool view_reduce_view;		/* Reduce view-radius in town */
-
-bool check_abort;			/* Avoid checking for user abort */
-
-bool flush_failure;			/* Flush input on any failure */
-bool flush_disturb;			/* Flush input on disturbance */
-
-bool fresh_before;			/* Flush output before normal commands */
-bool fresh_after;			/* Flush output after normal commands */
-bool fresh_message;			/* Flush output after all messages */
-
-bool compress_savefile;		/* Compress messages in savefiles */
-
-bool hilite_player;			/* Hilite the player with the cursor */
-
-bool view_yellow_lite;		/* Use special colors for torch-lit grids */
-bool view_bright_lite;		/* Use special colors for 'viewable' grids */
-
-bool view_granite_lite;		/* Use special colors for wall grids (slow) */
-bool view_special_lite;		/* Use special colors for floor grids (slow) */
-bool new_ascii_graphics;
-bool display_path;
-bool always_show_list;
-bool abbrev_extra;
-bool abbrev_all;
-bool target_pet;
-bool plain_pickup;
-
-bool powerup_home;
-bool send_score;
 bool allow_debug_opts;   /* Allow use of debug/cheat options */
+
+
+/*** Disturbance ***/
+
+bool find_ignore_stairs;   /* Run past stairs */
+bool find_ignore_doors;   /* Run through open doors */
+bool find_cut;   /* Run past known corners */
+bool disturb_move;   /* Disturb whenever any monster moves */
+bool disturb_high;   /* Disturb whenever high-level monster moves */
+bool disturb_near;   /* Disturb whenever viewable monster moves */
+bool disturb_pets;   /* Disturb when visible pets move */
+bool disturb_panel;   /* Disturb whenever map panel changes */
+bool disturb_state;   /* Disturb whenever player state changes */
+bool disturb_minor;   /* Disturb whenever boring things happen */
+bool ring_bell;   /* Audible bell (on errors, etc) */
+bool disturb_trap_detect;   /* Disturb when leaving trap detected area */
+bool alert_trap_detect;   /* Alert when leaving trap detected area */
+
+
+/*** Efficiency ***/
+
+bool view_reduce_view;   /* Reduce view-radius in town */
+bool check_abort;   /* Check for user abort while continuous command */
+bool flush_failure;   /* Flush input on various failures */
+bool flush_disturb;   /* Flush input whenever disturbed */
+bool fresh_before;   /* Flush output while continuous command */
+bool fresh_after;   /* Flush output after monster's move */
+bool fresh_message;   /* Flush output after every message */
+bool compress_savefile;   /* Compress messages in savefiles */
+bool hilite_player;   /* Hilite the player with the cursor */
+
+
+/*** Birth Options ***/
+
+bool manual_haggle;   /* Manually haggle in stores */
+bool easy_band;   /* Easy Mode (*) */
+bool smart_learn;   /* Monsters learn from their mistakes (*) */
+bool smart_cheat;   /* Monsters exploit players weaknesses (*) */
+bool vanilla_town;   /* Use 'vanilla' town without quests and wilderness */
+bool lite_town;   /* Use 'lite' town without a wilderness */
+bool ironman_shops;   /* Stores are permanently closed (*) */
+bool ironman_small_levels;   /* Always create unusually small dungeon levels (*) */
+bool ironman_downward;   /* Disable recall and use of up stairs (*) */
+bool ironman_autoscum;   /* Permanently enable the autoscummer */
+bool ironman_empty_levels;   /* Always create empty 'arena' levels (*) */
+bool ironman_rooms;   /* Always generate very unusual rooms (*) */
+bool ironman_nightmare;   /* Nightmare mode(it isn't even remotely fair!)(*) */
+bool left_hander;   /* Left-Hander */
+bool preserve_mode;   /* Preserve artifacts (*) */
+bool autoroller;   /* Allow use of autoroller for stats (*) */
+bool autochara;   /* Autoroll for weight, height and social status */
+bool powerup_home;   /* Increase capacity of your home (*) */
+
+
+/*** Easy Object Auto-Destroyer ***/
+
+bool destroy_items;   /* Use easy auto-destroyer */
+bool destroy_feeling;   /* Apply auto-destroy as sense feeling */
+bool destroy_identify;   /* Apply auto-destroy as identify an item */
+bool leave_worth;   /* Auto-destroyer leaves known worthy items */
+bool leave_equip;   /* Auto-destroyer leaves weapons and armour */
+bool leave_chest;   /* Auto-destroyer leaves closed chests */
+bool leave_wanted;   /* Auto-destroyer leaves wanted corpses */
+bool leave_corpse;   /* Auto-destroyer leaves corpses and skeletons */
+bool leave_junk;   /* Auto-destroyer leaves junk */
+bool leave_special;   /* Auto-destroyer leaves items your race/class needs */
+
+
+/*** Play-record Options ***/
+
+bool record_fix_art;   /* Record fixed artifacts */
+bool record_rand_art;   /* Record random artifacts */
+bool record_destroy_uniq;   /* Record when destroy unique monster */
+bool record_fix_quest;   /* Record fixed quests */
+bool record_rand_quest;   /* Record random quests */
+bool record_maxdeapth;   /* Record movements to deepest level */
+bool record_stair;   /* Record recall and stair movements */
+bool record_buy;   /* Record purchased items */
+bool record_sell;   /* Record sold items */
+bool record_danger;   /* Record hitpoint warning */
+bool record_arena;   /* Record arena victories */
+bool record_ident;   /* Record first identified items */
+bool record_named_pet;   /* Record informations of named pets */
+
 
 /* Cheating options */
 
