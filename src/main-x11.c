@@ -3721,7 +3721,11 @@ errr init_x11(int argc, char *argv[])
 	}
 
 #ifdef USE_LOCALE
+
+#ifdef JP
+	/* Get locale information from environment variables */
 	setlocale(LC_ALL, "");
+
 #ifdef DEFAULT_LOCALE
 	if(!strcmp(setlocale(LC_ALL, NULL), "C")){
 		printf("try default locale \"%s\"\n", DEFAULT_LOCALE);
@@ -3729,17 +3733,20 @@ errr init_x11(int argc, char *argv[])
 	}
 #endif
 
-#ifdef JP
 	if(!strcmp(setlocale(LC_ALL, NULL), "C"))
 	{
 		printf("WARNING: Locale is not supported. Non-english font may be displayed incorrectly.\n");
 	}
-#endif
 
 	if(!XSupportsLocale()){
 		printf("can't support locale in X\n");
 		setlocale(LC_ALL, "C");
 	}
+#else
+	/* Set locale to "C" without using environment variables */
+	setlocale(LC_ALL, "C");
+#endif /* JP */
+
 #endif /* USE_LOCALE */
 
 
