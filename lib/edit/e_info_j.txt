@@ -1438,7 +1438,7 @@ E:of High Rank
 X:29:15
 W:0:0:0:10000
 C:0:0:5:5
-F:RES_BLIND | RES_CONF
+F:RES_BLIND | RES_CONF | WARNING
 
 N:236:¥∂√Œ§Œ
 E:and Detection
