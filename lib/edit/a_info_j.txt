@@ -876,7 +876,7 @@ D:of Elements.
 N:45:『ホルコレス』
 E:'Holcolleth'
 I:35:2:2
-W:20:15:10:43000
+W:20:15:5:43000
 P:4:0d0:0:0:4
 F:INT | WIS | STEALTH | HIDE_TYPE | RES_ACID | SEARCH | ACTIVATE
 D:$This elven-grey mantle possesses great powers of tranquility and of 
