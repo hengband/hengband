@@ -542,8 +542,12 @@ void Term_queue_char(int x, int y, byte a, char c, byte ta, char tc)
 	if (x < Term->x1[y]) Term->x1[y] = x;
 	if (x > Term->x2[y]) Term->x2[y] = x;
 
+#ifdef JP
 	if (((scrn->a[y][x] & AF_BIGTILE2) == AF_BIGTILE2) ||
 	    (scrn->a[y][x] & AF_KANJI2))
+#else
+	if ((scrn->a[y][x] & AF_BIGTILE2) == AF_BIGTILE2)
+#endif
 		if ((x - 1) < Term->x1[y]) Term->x1[y]--;
 }
 
