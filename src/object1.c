@@ -4605,8 +4605,8 @@ static int get_tag(int *cp, char tag)
 
 	/**** Find a tag in the form of {@x#} (allow alphabet tag) ***/
 
-	/* Check every object */
-	for (i = 0; i < INVEN_TOTAL; ++i)
+	/* Check every inventory object */
+	for (i = 0; i < INVEN_PACK; ++i)
 	{
 		object_type *o_ptr = &inventory[i];
 
