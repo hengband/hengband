@@ -5134,6 +5134,9 @@ msg_format("'%s'をオープンできません。", name);
 	/* Save the number of "real" lines */
 	size = next;
 
+	/* start from bottom when reverse mode */
+	if (line == -1) line = ((size-1)/20)*20;
+
 	/* Go to the tagged line */
 	if (tag) line = get_line(&tags, tag);
 
