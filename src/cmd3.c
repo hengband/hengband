@@ -485,7 +485,7 @@ msg_print("クエストを達成した！");
 	/* Where is the item now */
 	if (slot == INVEN_RARM)
 	{
-		if((o_ptr->tval != TV_SHIELD) && (o_ptr->tval != TV_CAPTURE) && (o_ptr->tval != TV_CARD) && (empty_hands(FALSE) & 0x00000001) && ((o_ptr->weight > 99) || (o_ptr->tval == TV_POLEARM)) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
+		if ((o_ptr->tval != TV_SHIELD) && (o_ptr->tval != TV_CAPTURE) && (o_ptr->tval != TV_CARD) && (empty_hands(FALSE) & EMPTY_HAND_LARM) && ((o_ptr->weight > 99) || (o_ptr->tval == TV_POLEARM)) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
 #ifdef JP
 			act = "を両手で構えた";
 #else
@@ -679,7 +679,7 @@ void kamaenaoshi(int item)
 			msg_format("You are wielding %s with two-handed.", o_name );
 #endif
 	}
-	else if ((item == INVEN_LARM) && !(empty_hands(FALSE) & 0x0002))
+	else if ((item == INVEN_LARM) && !(empty_hands(FALSE) & EMPTY_HAND_RARM))
 	{
 		o_ptr = &inventory[INVEN_LARM];
 		o2_ptr = &inventory[INVEN_RARM];

@@ -2720,6 +2720,12 @@
 #define ACTION_SING     7
 #define ACTION_HAYAGAKE 8
 
+
+/* Empty hand status */
+#define EMPTY_HAND_NONE 0x0000 /* Both hands are used */
+#define EMPTY_HAND_LARM 0x0001 /* Left hand is empty */
+#define EMPTY_HAND_RARM 0x0002 /* Right hand is empty */
+
 /*** General index values ***/
 
 

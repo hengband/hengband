@@ -3127,14 +3127,14 @@ void calc_bonuses(void)
 	/* Base skill -- digging */
 	p_ptr->skill_dig = 0;
 
-	if (buki_motteruka(INVEN_RARM) && (empty_hands(FALSE) & 0x00000001) && ((inventory[INVEN_RARM].weight > 99) || (inventory[INVEN_RARM].tval == TV_POLEARM)) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE))) p_ptr->ryoute = TRUE;
-	if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_BERSERKER)) && (empty_hands(TRUE) == 3) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE))) p_ptr->ryoute = TRUE;
+	if (buki_motteruka(INVEN_RARM) && (empty_hands(FALSE) & EMPTY_HAND_LARM) && ((inventory[INVEN_RARM].weight > 99) || (inventory[INVEN_RARM].tval == TV_POLEARM)) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE))) p_ptr->ryoute = TRUE;
+	if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_BERSERKER)) && (empty_hands(TRUE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE))) p_ptr->ryoute = TRUE;
 	if (buki_motteruka(INVEN_RARM) || !buki_motteruka(INVEN_LARM)) p_ptr->migite = TRUE;
 	if (buki_motteruka(INVEN_LARM)) p_ptr->hidarite = TRUE;
 
 	if (p_ptr->special_defense & KAMAE_MASK)
 	{
-		if (empty_hands(TRUE) < 2)
+		if (!(empty_hands(TRUE) & EMPTY_HAND_RARM))
 		{
 			set_action(ACTION_NONE);
 		}
@@ -4947,7 +4947,7 @@ void calc_bonuses(void)
 		int penalty = 0;
 
 		p_ptr->riding_ryoute = FALSE;
-		if (p_ptr->ryoute || !empty_hands(FALSE)) p_ptr->riding_ryoute = TRUE;
+		if (p_ptr->ryoute || (empty_hands(FALSE) == EMPTY_HAND_NONE)) p_ptr->riding_ryoute = TRUE;
 
 		if ((p_ptr->pclass == CLASS_BEASTMASTER) || (p_ptr->pclass == CLASS_CAVALRY))
 		{
@@ -4965,7 +4965,7 @@ void calc_bonuses(void)
 	}
 
 	/* Different calculation for monks with empty hands */
-	if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_BERSERKER)) && (empty_hands(TRUE) > 1))
+	if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_BERSERKER)) && (empty_hands(TRUE) & EMPTY_HAND_RARM))
 	{
 		int blow_base = p_ptr->lev + adj_dex_blow[p_ptr->stat_ind[A_DEX]];
 		p_ptr->num_blow[0] = 0;
@@ -5137,7 +5137,7 @@ void calc_bonuses(void)
 		p_ptr->dis_to_d[0] += MAX(bonus_to_d,1);
 	}
 
-	if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_BERSERKER)) && (empty_hands(TRUE) == 3)) p_ptr->ryoute = FALSE;
+	if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_BERSERKER)) && (empty_hands(TRUE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM))) p_ptr->ryoute = FALSE;
 
 	/* Affect Skill -- stealth (bonus one) */
 	p_ptr->skill_stl += 1;
@@ -5958,12 +5958,12 @@ void handle_stuff(void)
 
 s16b empty_hands(bool is_monk)
 {
-	s16b kaerichi = 0;
-	if (is_monk && (p_ptr->pclass != CLASS_MONK) && (p_ptr->pclass != CLASS_FORCETRAINER) && (p_ptr->pclass != CLASS_BERSERKER)) return FALSE;
+	s16b status = EMPTY_HAND_NONE;
+	if (is_monk && (p_ptr->pclass != CLASS_MONK) && (p_ptr->pclass != CLASS_FORCETRAINER) && (p_ptr->pclass != CLASS_BERSERKER)) return EMPTY_HAND_NONE;
 
-	if (!(inventory[INVEN_RARM].k_idx)) kaerichi +=2;
-	if (!(inventory[INVEN_LARM].k_idx)) kaerichi +=1;
-	return kaerichi;
+	if (!(inventory[INVEN_RARM].k_idx)) status |= EMPTY_HAND_RARM;
+	if (!(inventory[INVEN_LARM].k_idx)) status |= EMPTY_HAND_LARM;
+	return status;
 }
 
 

@@ -6072,7 +6072,7 @@ power_desc[num] = "離れていろ";
 
 	powers[num++] = PET_NAME;
 
-	if (p_ptr->riding && buki_motteruka(INVEN_RARM) && (empty_hands(FALSE) & 0x00000001) && ((inventory[INVEN_RARM].weight > 99) || (inventory[INVEN_RARM].tval == TV_POLEARM)))
+	if (p_ptr->riding && buki_motteruka(INVEN_RARM) && (empty_hands(FALSE) & EMPTY_HAND_LARM) && ((inventory[INVEN_RARM].weight > 99) || (inventory[INVEN_RARM].tval == TV_POLEARM)))
 	{
 		if (p_ptr->pet_extra_flags & PF_RYOUTE)
 		{

@@ -2174,7 +2174,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				    m_name);
 			else
 			{
-				if (!(((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_BERSERKER)) && (empty_hands(TRUE) > 1)))
+				if (!(((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_BERSERKER)) && (empty_hands(TRUE) & EMPTY_HAND_RARM)))
 #ifdef JP
 			msg_format("%s¤ò¹¶·â¤·¤¿¡£", m_name);
 #else
@@ -2235,7 +2235,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				vorpal_cut = TRUE;
 			else vorpal_cut = FALSE;
 
-			if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_BERSERKER)) && (empty_hands(TRUE) > 1))
+			if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_BERSERKER)) && (empty_hands(TRUE) & EMPTY_HAND_RARM))
 			{
 				int special_effect = 0, stun_effect = 0, times = 0, max_times;
 				int min_level = 1;

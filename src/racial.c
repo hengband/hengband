@@ -989,7 +989,7 @@ static bool cmd_racial_power_aux(s32b command)
 		}
 		case CLASS_MONK:
 		{
-			if (empty_hands(TRUE) < 2)
+			if (!(empty_hands(TRUE) & EMPTY_HAND_RARM))
 			{
 #ifdef JP
 				msg_print("素手じゃないとできません。");
