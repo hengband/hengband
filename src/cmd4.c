@@ -1902,7 +1902,7 @@ static void do_cmd_options_autosave(cptr info)
 }
 
 
-#define PAGE_STARTUP     6
+#define PAGE_BIRTH       6
 #define PAGE_AUTODESTROY 7
 
 /*
@@ -1914,7 +1914,7 @@ void do_cmd_options_aux(int page, cptr info)
 	int     i, k = 0, n = 0, l;
 	int     opt[24];
 	char    buf[80];
-	bool    browse_only = (page == PAGE_STARTUP) && character_generated &&
+	bool    browse_only = (page == PAGE_BIRTH) && character_generated &&
 	                      (!p_ptr->wizard || !allow_debug_opts);
 
 
@@ -1939,9 +1939,9 @@ void do_cmd_options_aux(int page, cptr info)
 
 		/* Prompt XXX XXX XXX */
 #ifdef JP
-		sprintf(buf, "%s (リターン:次, y/n:変更, ESC:終了, ?:ヘルプ) ", info);
+		sprintf(buf, "%s (リターン:次, %sESC:終了, ?:ヘルプ) ", info, browse_only ? "" : "y/n:変更, ");
 #else
-		sprintf(buf, "%s (RET:next, y/n:change, ESC:accept, ?:help) ", info);
+		sprintf(buf, "%s (RET:next, %s, ?:help) ", info, browse_only ? "ESC:exit" : "y/n:change, ESC:accept");
 #endif
 
 		prt(buf, 0, 0);
@@ -2021,7 +2021,8 @@ void do_cmd_options_aux(int page, cptr info)
 			case 'Y':
 			case '6':
 			{
-				if (!browse_only) (*option_info[opt[k]].o_var) = TRUE;
+				if (browse_only) break;
+				(*option_info[opt[k]].o_var) = TRUE;
 				k = (k + 1) % n;
 				break;
 			}
@@ -2030,7 +2031,8 @@ void do_cmd_options_aux(int page, cptr info)
 			case 'N':
 			case '4':
 			{
-				if (!browse_only) (*option_info[opt[k]].o_var) = FALSE;
+				if (browse_only) break;
+				(*option_info[opt[k]].o_var) = FALSE;
 				k = (k + 1) % n;
 				break;
 			}
@@ -2327,20 +2329,20 @@ void do_cmd_options(void)
 
 		if (!p_ptr->wizard || !allow_debug_opts)
 		{
-			/* Startup */
+			/* Birth */
 #ifdef JP
-			prt("(S)       初期            オプション (参照のみ)", 16, 5);
+			prt("(B)       初期            オプション (参照のみ)", 16, 5);
 #else
-			prt("(S) Startup Options (Browse Only)", 16, 5);
+			prt("(B) Birth Options (Browse Only)", 16, 5);
 #endif
 		}
 		else
 		{
-			/* Startup */
+			/* Birth */
 #ifdef JP
-			prt("(S)       初期            オプション", 16, 5);
+			prt("(B)       初期            オプション", 16, 5);
 #else
-			prt("(S) Startup Options", 16, 5);
+			prt("(B) Birth Options", 16, 5);
 #endif
 		}
 
@@ -2458,20 +2460,20 @@ void do_cmd_options(void)
 #ifdef JP
 				do_cmd_options_aux(10, "プレイ記録オプション");
 #else
-				do_cmd_options_aux(10, "Play-record Option");
+				do_cmd_options_aux(10, "Play-record Options");
 #endif
 				break;
 			}
 
-			/* Startup Options */
-			case 'S':
-			case 's':
+			/* Birth Options */
+			case 'B':
+			case 'b':
 			{
 				/* Spawn */
 #ifdef JP
 				do_cmd_options_aux(6, (!p_ptr->wizard || !allow_debug_opts) ? "初期オプション(参照のみ)" : "初期オプション((*)はスコアに影響)");
 #else
-				do_cmd_options_aux(6, (!p_ptr->wizard || !allow_debug_opts) ? "Startup Opts(browse only)" : "Startup Opts((*)s effect score)");
+				do_cmd_options_aux(6, (!p_ptr->wizard || !allow_debug_opts) ? "Birth Options(browse only)" : "Birth Options((*)s effect score)");
 #endif
 
 				break;
