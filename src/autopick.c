@@ -20,19 +20,19 @@
  */
 #define FLG_ALL             0
 #define FLG_COLLECTING	    1
-#define FLG_UNIDENTIFIED    2
-#define FLG_IDENTIFIED	    3
-#define FLG_STAR_IDENTIFIED 4
-#define FLG_BOOSTED	    5
-#define FLG_MORE_THAN	    6
-#define FLG_DICE	    7
-#define FLG_MORE_BONUS	    8
-#define FLG_MORE_BONUS2	    9
-#define FLG_WORTHLESS	    10
-#define FLG_ARTIFACT	    11
-#define FLG_EGO		    12
-#define FLG_NAMELESS	    13
-#define FLG_UNAWARE	    14
+#define FLG_UNAWARE	    2 
+#define FLG_UNIDENTIFIED    3 
+#define FLG_IDENTIFIED	    4 
+#define FLG_STAR_IDENTIFIED 5 
+#define FLG_BOOSTED	    6 
+#define FLG_MORE_THAN	    7 
+#define FLG_DICE	    8 
+#define FLG_MORE_BONUS	    9 
+#define FLG_MORE_BONUS2	    10
+#define FLG_WORTHLESS	    11
+#define FLG_ARTIFACT	    12
+#define FLG_EGO		    13
+#define FLG_NAMELESS	    14
 #define FLG_WANTED	    15
 #define FLG_UNIQUE	    16
 #define FLG_HUMAN	    17
@@ -1390,6 +1390,9 @@ void auto_pickup_items(cave_type *c_ptr)
 
 #define MAX_YANK MAX_LINELEN
 
+#define MARK_MARK     0x01
+#define MARK_BY_SHIFT 0x02
+
 /* 
  * Struct for yank buffer
  */
@@ -1410,13 +1413,17 @@ typedef struct {
 	int old_cy;
 	int old_upper, old_left;
 	int mx, my;
-	bool mark;
+	byte mark;
+
 	object_type *search_o_ptr;
 	cptr search_str;
 	cptr last_destroyed;
+
 	chain_str_type *yank;
 	bool yank_eol;
+
 	cptr *lines_list;
+
 	byte dirty_flags;
 	int dirty_line;
 	int filename_mode;
@@ -2195,17 +2202,33 @@ static void toggle_keyword(text_body_type *tb, int flg)
 		{
 			/* Add? or Remove? */
 			if (!IS_FLG(flg)) add = TRUE;
-			else add = TRUE;
+			else add = FALSE;
 
 			/* No more change */
 			fixed = TRUE;
 		}
 
-		/* Remove all noun flag */
+		/* You can use only one noun flag */
 		if (FLG_NOUN_BEGIN <= flg && flg <= FLG_NOUN_END)
 		{
 			int i;
 			for (i = FLG_NOUN_BEGIN; i <= FLG_NOUN_END; i++)
+				REM_FLG(i);
+		}
+		
+		/* You can use only one identify state flag */
+		else if (FLG_UNAWARE <= flg && flg <= FLG_STAR_IDENTIFIED)
+		{
+			int i;
+			for (i = FLG_UNAWARE; i <= FLG_STAR_IDENTIFIED; i++)
+				REM_FLG(i);
+		}
+		
+		/* You can use only one flag in artifact/ego/nameless */
+		else if (FLG_ARTIFACT <= flg && flg <= FLG_NAMELESS)
+		{
+			int i;
+			for (i = FLG_ARTIFACT; i <= FLG_NAMELESS; i++)
 				REM_FLG(i);
 		}
 		
@@ -2215,7 +2238,7 @@ static void toggle_keyword(text_body_type *tb, int flg)
 		tb->lines_list[y] = autopick_line_from_entry_kill(entry);
 		
 		/* Now dirty */
-		tb->dirty_flags = DIRTY_ALL;
+		tb->dirty_flags |= DIRTY_ALL;
 	}
 }
 
@@ -2806,7 +2829,7 @@ static bool search_for_string(cptr *lines_list, cptr search_str, int *cxp, int *
 
 
 /*
- * Editor commands
+ * Editor command id's
  */
 #define EC_QUIT                1 
 #define EC_REVERT	       2 
@@ -2844,48 +2867,197 @@ static bool search_for_string(cptr *lines_list, cptr search_str, int *cxp, int *
 #define EC_CL_LEAVE	       34
 #define EC_CL_QUERY	       35
 #define EC_CL_NO_DISP	       36
-#define EC_IK_UNAWARE	       37
-#define EC_IK_UNIDENTIFIED     38
-#define EC_IK_IDENTIFIED       39
-#define EC_IK_STAR_IDENTIFIED  40
-#define EC_KK_WEAPONS	       41
-#define EC_KK_FAVORITE	       42
-#define EC_KK_ARMORS	       43
-#define EC_KK_MISSILES	       44
-#define EC_KK_DEVICES	       45
-#define EC_KK_LIGHTS	       46
-#define EC_KK_JUNKS	       47
-#define EC_KK_SPELLBOOKS       48
-#define EC_KK_SHIELDS	       49
-#define EC_KK_BOWS	       50
-#define EC_KK_RINGS	       51
-#define EC_KK_AMULETS	       52
-#define EC_KK_SUITS	       53
-#define EC_KK_CLOAKS	       54
-#define EC_KK_HELMS	       55
-#define EC_KK_GLOVES	       56
-#define EC_KK_BOOTS	       57
-#define EC_OK_COLLECTING       58
-#define EC_OK_BOOSTED	       59
-#define EC_OK_MORE_THAN	       60
-#define EC_OK_MORE_BONUS       61
-#define EC_OK_WORTHLESS	       62
-#define EC_OK_ARTIFACT	       63
-#define EC_OK_EGO	       64
-#define EC_OK_NAMELESS	       65
-#define EC_OK_WANTED	       66
-#define EC_OK_UNIQUE	       67
-#define EC_OK_HUMAN	       68
-#define EC_OK_UNREADABLE       69
-#define EC_OK_REALM1	       70
-#define EC_OK_REALM2	       71
-#define EC_OK_FIRST	       72
-#define EC_OK_SECOND	       73
-#define EC_OK_THIRD	       74
-#define EC_OK_FOURTH	       75
+#define EC_OK_COLLECTING       37
+#define EC_IK_UNAWARE	       38
+#define EC_IK_UNIDENTIFIED     39
+#define EC_IK_IDENTIFIED       40
+#define EC_IK_STAR_IDENTIFIED  41
+#define EC_OK_BOOSTED	       42
+#define EC_OK_MORE_THAN	       43
+#define EC_OK_MORE_BONUS       44
+#define EC_OK_WORTHLESS	       45
+#define EC_OK_ARTIFACT	       46
+#define EC_OK_EGO	       47
+#define EC_OK_NAMELESS	       48
+#define EC_OK_WANTED	       49
+#define EC_OK_UNIQUE	       50
+#define EC_OK_HUMAN	       51
+#define EC_OK_UNREADABLE       52
+#define EC_OK_REALM1	       53
+#define EC_OK_REALM2	       54
+#define EC_OK_FIRST	       55
+#define EC_OK_SECOND	       56
+#define EC_OK_THIRD	       57
+#define EC_OK_FOURTH	       58
+#define EC_KK_WEAPONS	       59
+#define EC_KK_FAVORITE	       60
+#define EC_KK_ARMORS	       61
+#define EC_KK_MISSILES	       62
+#define EC_KK_DEVICES	       63
+#define EC_KK_LIGHTS	       64
+#define EC_KK_JUNKS	       65
+#define EC_KK_SPELLBOOKS       66
+#define EC_KK_SHIELDS	       67
+#define EC_KK_BOWS	       68
+#define EC_KK_RINGS	       69
+#define EC_KK_AMULETS	       70
+#define EC_KK_SUITS	       71
+#define EC_KK_CLOAKS	       72
+#define EC_KK_HELMS	       73
+#define EC_KK_GLOVES	       74
+#define EC_KK_BOOTS	       75
+
+
+/* Manu names */
+#ifdef JP
+
+#define MN_QUIT "セーブして終了" 
+#define MN_REVERT "全ての変更を破棄" 
+#define MN_HELP "ヘルプ" 
+
+#define MN_MOVE "カーソル移動" 
+#define MN_LEFT "左" 
+#define MN_DOWN "下" 
+#define MN_UP "上" 
+#define MN_RIGHT "右" 
+#define MN_BOL "行の先頭" 
+#define MN_EOL "行の終端" 
+#define MN_PGUP "上のページ" 
+#define MN_PGDOWN "下のページ" 
+#define MN_TOP "1行目へ移動" 
+#define MN_BOTTOM "最下行へ移動" 
+
+#define MN_EDIT "編集" 
+#define MN_CUT "選択範囲をカット" 
+#define MN_COPY "選択範囲をコピー" 
+#define MN_PASTE "ペースト" 
+#define MN_BLOCK "選択範囲の指定" 
+#define MN_KILL_LINE "行の残りを削除" 
+#define MN_DELETE_CHAR "1文字削除" 
+#define MN_BACKSPACE "バックスペース" 
+#define MN_RETURN "改行" 
+#define MN_RETURN "改行" 
+
+#define MN_SEARCH "検索" 
+#define MN_SEARCH_STR "文字列で検索" 
+#define MN_SEARCH_FORW "前方へ再検索" 
+#define MN_SEARCH_BACK "後方へ再検索" 
+#define MN_SEARCH_OBJ "アイテムを選択して検索" 
+#define MN_SEARCH_DESTROYED "自動破壊されたアイテムで検索" 
+
+#define MN_INSERT "色々挿入" 
+#define MN_INSERT_OBJECT "選択したアイテムの名前を挿入" 
+#define MN_INSERT_DESTROYED "自動破壊されたアイテムの名前を挿入" 
+#define MN_INSERT_BLOCK "条件分岐ブロックの例を挿入" 
+#define MN_INSERT_MACRO "マクロ定義を挿入" 
+#define MN_INSERT_KEYMAP "キーマップ定義を挿入" 
+
+#define MN_COMMAND_LETTER "拾い/破壊/放置の選択" 
+#define MN_CL_AUTOPICK "「 」 (自動拾い)" 
+#define MN_CL_DESTROY "「!」 (自動破壊)" 
+#define MN_CL_LEAVE "「~」 (放置)" 
+#define MN_CL_QUERY "「;」 (確認して拾う)" 
+#define MN_CL_NO_DISP "「(」 (マップコマンドで表示しない)" 
+
+#define MN_ADJECTIVE_GEN "形容詞(一般)の選択" 
+
+#define MN_ADJECTIVE_SPECIAL "形容詞(特殊)の選択" 
+#define MN_BOOSTED "ダイス目の違う (武器)" 
+#define MN_MORE_THAN "ダイス目 # 以上の (武器)" 
+#define MN_MORE_BONUS "修正値 # 以上の (指輪等)" 
+#define MN_ARTIFACT "アーティファクト (装備)" 
+#define MN_EGO "エゴ (装備)" 
+#define MN_NAMELESS "無銘の (装備)" 
+#define MN_WANTED "賞金首の (死体)" 
+#define MN_UNIQUE "ユニーク・モンスターの (死体)" 
+#define MN_HUMAN "人間の (死体)" 
+#define MN_UNREADABLE "読めない (魔法書)" 
+#define MN_REALM1 "第一領域の (魔法書)" 
+#define MN_REALM2 "第二領域の (魔法書)" 
+#define MN_FIRST "1冊目の (魔法書)" 
+#define MN_SECOND "2冊目の (魔法書)" 
+#define MN_THIRD "3冊目の (魔法書)" 
+#define MN_FOURTH "4冊目の (魔法書)" 
+
+#define MN_NOUN "名詞の選択" 
+
+#else
+
+#define MN_QUIT "Save & Quit" 
+#define MN_REVERT "Revert all changes" 
+#define MN_HELP "Help" 
+
+#define MN_MOVE "Move cursor" 
+#define MN_LEFT "Left" 
+#define MN_DOWN "Down" 
+#define MN_UP "Up" 
+#define MN_RIGHT "Right" 
+#define MN_BOL "Beggining of line" 
+#define MN_EOL "End of line" 
+#define MN_PGUP "Page up" 
+#define MN_PGDOWN "Page down" 
+#define MN_TOP "Top" 
+#define MN_BOTTOM "Bottom" 
+
+#define MN_EDIT "Edit" 
+#define MN_CUT "Cut" 
+#define MN_COPY "Copy" 
+#define MN_PASTE "Paste" 
+#define MN_BLOCK "Select block" 
+#define MN_KILL_LINE "Kill rest of line" 
+#define MN_DELETE_CHAR "Delete character" 
+#define MN_BACKSPACE "Backspace" 
+#define MN_RETURN "Return" 
+#define MN_RETURN "Return" 
+
+#define MN_SEARCH "Search" 
+#define MN_SEARCH_STR "Search by string" 
+#define MN_SEARCH_FORW "Search forward" 
+#define MN_SEARCH_BACK "Search backward" 
+#define MN_SEARCH_OBJ "Search by inventory object" 
+#define MN_SEARCH_DESTROYED "Search by destroyed object" 
+
+#define MN_INSERT "Insert..." 
+#define MN_INSERT_OBJECT "Insert name of choosen object" 
+#define MN_INSERT_DESTROYED "Insert name of destroyed object" 
+#define MN_INSERT_BLOCK "Insert conditional block" 
+#define MN_INSERT_MACRO "Insert a macro definition" 
+#define MN_INSERT_KEYMAP "Insert a keymap definition" 
+
+#define MN_COMMAND_LETTER "Command letter" 
+#define MN_CL_AUTOPICK "' ' (Auto pick)" 
+#define MN_CL_DESTROY "'!' (Auto destroy)" 
+#define MN_CL_LEAVE "'~' (Leave it on the floor)" 
+#define MN_CL_QUERY "';' (Query to pick up)" 
+#define MN_CL_NO_DISP "'(' (No display on the large map)" 
+
+#define MN_ADJECTIVE_GEN "Adjective (general)" 
+
+#define MN_ADJECTIVE_SPECIAL "Adjective (special)" 
+#define MN_BOOSTED "dice boosted (weapons)" 
+#define MN_MORE_THAN "more than # dice (weapons)" 
+#define MN_MORE_BONUS "more bonus than # (rings etc.)" 
+#define MN_ARTIFACT "artifact (equipments)" 
+#define MN_EGO "ego (equipments)" 
+#define MN_NAMELESS "nameless (equipments)" 
+#define MN_WANTED "wanted (corpse)" 
+#define MN_UNIQUE "unique (corpse)" 
+#define MN_HUMAN "human (corpse)" 
+#define MN_UNREADABLE "unreadable (spellbooks)" 
+#define MN_REALM1 "realm1 (spellbooks)" 
+#define MN_REALM2 "realm2 (spellbooks)" 
+#define MN_FIRST "first (spellbooks)" 
+#define MN_SECOND "second (spellbooks)" 
+#define MN_THIRD "third (spellbooks)" 
+#define MN_FOURTH "fourth (spellbooks)" 
+
+#define MN_NOUN "Keywords (noun)" 
+
+#endif
 
 
 typedef struct {
+	cptr name;
 	int level;
 	int key;
 	int com_id;
@@ -2894,296 +3066,102 @@ typedef struct {
 
 command_menu_type menu_data[] =
 {
-	{0, KTRL('q'), EC_QUIT}, 
-	{0, KTRL('z'), EC_REVERT},
-	{0, -1, EC_HELP},
+	{MN_QUIT, 0, KTRL('q'), EC_QUIT}, 
+	{MN_REVERT, 0, KTRL('z'), EC_REVERT},
+	{MN_HELP, 0, -1, EC_HELP},
 
-	{0, -1, -1},
-	{1, KTRL('b'), EC_LEFT},
-	{1, KTRL('n'), EC_DOWN},
-	{1, KTRL('p'), EC_UP},
-	{1, KTRL('f'), EC_RIGHT},
-	{1, KTRL('a'), EC_BOL},
-	{1, KTRL('e'), EC_EOL},
-	{1, KTRL('o'), EC_PGUP},
-	{1, KTRL('l'), EC_PGDOWN},
-	{1, KTRL('y'), EC_TOP},
-	{1, KTRL('u'), EC_BOTTOM},
+	{MN_MOVE, 0, -1, -1},
+	{MN_LEFT, 1, KTRL('b'), EC_LEFT},
+	{MN_DOWN, 1, KTRL('n'), EC_DOWN},
+	{MN_UP, 1, KTRL('p'), EC_UP},
+	{MN_RIGHT, 1, KTRL('f'), EC_RIGHT},
+	{MN_BOL, 1, KTRL('a'), EC_BOL},
+	{MN_EOL, 1, KTRL('e'), EC_EOL},
+	{MN_PGUP, 1, KTRL('o'), EC_PGUP},
+	{MN_PGDOWN, 1, KTRL('l'), EC_PGDOWN},
+	{MN_TOP, 1, KTRL('y'), EC_TOP},
+	{MN_BOTTOM, 1, KTRL('u'), EC_BOTTOM},
 
-	{0, -1, -1},
-	{1, KTRL('x'), EC_CUT},
-	{1, KTRL('c'), EC_COPY},
-	{1, KTRL('v'), EC_PASTE},
-	{1, KTRL('g'), EC_BLOCK},
-	{1, KTRL('k'), EC_KILL_LINE},
-	{1, KTRL('d'), EC_DELETE_CHAR},
-	{1, KTRL('h'), EC_BACKSPACE},
-	{1, KTRL('j'), EC_RETURN},
-	{1, KTRL('m'), EC_RETURN},
+	{MN_EDIT, 0, -1, -1},
+	{MN_CUT, 1, KTRL('x'), EC_CUT},
+	{MN_COPY, 1, KTRL('c'), EC_COPY},
+	{MN_PASTE, 1, KTRL('v'), EC_PASTE},
+	{MN_BLOCK, 1, KTRL('g'), EC_BLOCK},
+	{MN_KILL_LINE, 1, KTRL('k'), EC_KILL_LINE},
+	{MN_DELETE_CHAR, 1, KTRL('d'), EC_DELETE_CHAR},
+	{MN_BACKSPACE, 1, KTRL('h'), EC_BACKSPACE},
+	{MN_RETURN, 1, KTRL('j'), EC_RETURN},
+	{MN_RETURN, 1, KTRL('m'), EC_RETURN},
 
-	{0, -1, -1},
-	{1, KTRL('s'), EC_SEARCH_STR},
-	{1, -1, EC_SEARCH_FORW},
-	{1, KTRL('r'), EC_SEARCH_BACK},
-	{1, -1, EC_SEARCH_OBJ},
-	{1, -1, EC_SEARCH_DESTROYED},
+	{MN_SEARCH, 0, -1, -1},
+	{MN_SEARCH_STR, 1, KTRL('s'), EC_SEARCH_STR},
+	{MN_SEARCH_FORW, 1, -1, EC_SEARCH_FORW},
+	{MN_SEARCH_BACK, 1, KTRL('r'), EC_SEARCH_BACK},
+	{MN_SEARCH_OBJ, 1, -1, EC_SEARCH_OBJ},
+	{MN_SEARCH_DESTROYED, 1, -1, EC_SEARCH_DESTROYED},
 
-	{0, -1, -1},
-	{1, KTRL('i'), EC_INSERT_OBJECT},
-	{1, -1, EC_INSERT_DESTROYED},
-	{1, -1, EC_INSERT_BLOCK},
-	{1, -1, EC_INSERT_MACRO},
-	{1, -1, EC_INSERT_KEYMAP},
+	{MN_INSERT, 0, -1, -1},
+	{MN_INSERT_OBJECT, 1, KTRL('i'), EC_INSERT_OBJECT},
+	{MN_INSERT_DESTROYED, 1, -1, EC_INSERT_DESTROYED},
+	{MN_INSERT_BLOCK, 1, -1, EC_INSERT_BLOCK},
+	{MN_INSERT_MACRO, 1, -1, EC_INSERT_MACRO},
+	{MN_INSERT_KEYMAP, 1, -1, EC_INSERT_KEYMAP},
 
- 	{0, -1, -1},
-	{1, -1, EC_CL_AUTOPICK},
-	{1, -1, EC_CL_DESTROY},
-	{1, -1, EC_CL_LEAVE},
-	{1, -1, EC_CL_QUERY},
-	{1, -1, EC_CL_NO_DISP},
+ 	{MN_COMMAND_LETTER, 0, -1, -1},
+	{MN_CL_AUTOPICK, 1, -1, EC_CL_AUTOPICK},
+	{MN_CL_DESTROY, 1, -1, EC_CL_DESTROY},
+	{MN_CL_LEAVE, 1, -1, EC_CL_LEAVE},
+	{MN_CL_QUERY, 1, -1, EC_CL_QUERY},
+	{MN_CL_NO_DISP, 1, -1, EC_CL_NO_DISP},
 
- 	{0, -1, -1},
-	{1, -1, EC_IK_UNAWARE},
-	{1, -1, EC_IK_UNIDENTIFIED},
-	{1, -1, EC_IK_IDENTIFIED},
-	{1, -1, EC_IK_STAR_IDENTIFIED},
+ 	{MN_ADJECTIVE_GEN, 0, -1, -1},
+	{KEY_UNAWARE, 1, -1, EC_IK_UNAWARE},
+	{KEY_UNIDENTIFIED, 1, -1, EC_IK_UNIDENTIFIED},
+	{KEY_IDENTIFIED, 1, -1, EC_IK_IDENTIFIED},
+	{KEY_STAR_IDENTIFIED, 1, -1, EC_IK_STAR_IDENTIFIED},
+	{KEY_COLLECTING, 1, -1, EC_OK_COLLECTING},
+	{KEY_WORTHLESS, 1, -1, EC_OK_WORTHLESS},
 
- 	{0, -1, -1},
-	{1, -1, EC_KK_WEAPONS},
-	{1, -1, EC_KK_FAVORITE},
-	{1, -1, EC_KK_ARMORS},
-	{1, -1, EC_KK_MISSILES},
-	{1, -1, EC_KK_DEVICES},
-	{1, -1, EC_KK_LIGHTS},
-	{1, -1, EC_KK_JUNKS},
-	{1, -1, EC_KK_SPELLBOOKS},
-	{1, -1, EC_KK_SHIELDS},
-	{1, -1, EC_KK_BOWS},
-	{1, -1, EC_KK_RINGS},
-	{1, -1, EC_KK_AMULETS},
-	{1, -1, EC_KK_SUITS},
-	{1, -1, EC_KK_CLOAKS},
-	{1, -1, EC_KK_HELMS},
-	{1, -1, EC_KK_GLOVES},
-	{1, -1, EC_KK_BOOTS},
+ 	{MN_ADJECTIVE_SPECIAL, 0, -1, -1},
+	{MN_BOOSTED, 1, -1, EC_OK_BOOSTED},
+	{MN_MORE_THAN, 1, -1, EC_OK_MORE_THAN},
+	{MN_MORE_BONUS, 1, -1, EC_OK_MORE_BONUS},
+	{MN_ARTIFACT, 1, -1, EC_OK_ARTIFACT},
+	{MN_EGO, 1, -1, EC_OK_EGO},
+	{MN_NAMELESS, 1, -1, EC_OK_NAMELESS},
+	{MN_WANTED, 1, -1, EC_OK_WANTED},
+	{MN_UNIQUE, 1, -1, EC_OK_UNIQUE},
+	{MN_HUMAN, 1, -1, EC_OK_HUMAN},
+	{MN_UNREADABLE, 1, -1, EC_OK_UNREADABLE},
+	{MN_REALM1, 1, -1, EC_OK_REALM1},
+	{MN_REALM2, 1, -1, EC_OK_REALM2},
+	{MN_FIRST, 1, -1, EC_OK_FIRST},
+	{MN_SECOND, 1, -1, EC_OK_SECOND},
+	{MN_THIRD, 1, -1, EC_OK_THIRD},
+	{MN_FOURTH, 1, -1, EC_OK_FOURTH},
 
- 	{0, -1, -1},
-	{1, -1, EC_OK_COLLECTING},
-	{1, -1, EC_OK_BOOSTED},
-	{1, -1, EC_OK_MORE_THAN},
-	{1, -1, EC_OK_MORE_BONUS},
-	{1, -1, EC_OK_WORTHLESS},
-	{1, -1, EC_OK_ARTIFACT},
-	{1, -1, EC_OK_EGO},
-	{1, -1, EC_OK_NAMELESS},
-	{1, -1, EC_OK_WANTED},
-	{1, -1, EC_OK_UNIQUE},
-	{1, -1, EC_OK_HUMAN},
-	{1, -1, EC_OK_UNREADABLE},
-	{1, -1, EC_OK_REALM1},
-	{1, -1, EC_OK_REALM2},
-	{1, -1, EC_OK_FIRST},
-	{1, -1, EC_OK_SECOND},
-	{1, -1, EC_OK_THIRD},
-	{1, -1, EC_OK_FOURTH},
+ 	{MN_NOUN, 0, -1, -1},
+	{KEY_WEAPONS, 1, -1, EC_KK_WEAPONS},
+	{KEY_FAVORITE, 1, -1, EC_KK_FAVORITE},
+	{KEY_ARMORS, 1, -1, EC_KK_ARMORS},
+	{KEY_MISSILES, 1, -1, EC_KK_MISSILES},
+	{KEY_DEVICES, 1, -1, EC_KK_DEVICES},
+	{KEY_LIGHTS, 1, -1, EC_KK_LIGHTS},
+	{KEY_JUNKS, 1, -1, EC_KK_JUNKS},
+	{KEY_SPELLBOOKS, 1, -1, EC_KK_SPELLBOOKS},
+	{KEY_SHIELDS, 1, -1, EC_KK_SHIELDS},
+	{KEY_BOWS, 1, -1, EC_KK_BOWS},
+	{KEY_RINGS, 1, -1, EC_KK_RINGS},
+	{KEY_AMULETS, 1, -1, EC_KK_AMULETS},
+	{KEY_SUITS, 1, -1, EC_KK_SUITS},
+	{KEY_CLOAKS, 1, -1, EC_KK_CLOAKS},
+	{KEY_HELMS, 1, -1, EC_KK_HELMS},
+	{KEY_GLOVES, 1, -1, EC_KK_GLOVES},
+	{KEY_BOOTS, 1, -1, EC_KK_BOOTS},
 
-	{-1, -1, 0}
+	{NULL, -1, -1, 0}
 };
 
-
-cptr menu_name[] =
-#ifdef JP
-{
-	"セーブして終了", 
-	"全ての変更を破棄", 
-	"ヘルプ", 
-
-	"カーソル移動", 
-	"左", 
-	"下", 
-	"上", 
-	"右", 
-	"行の先頭", 
-	"行の終端", 
-	"上のページ", 
-	"下のページ", 
-	"1行目へ移動", 
-	"最下行へ移動", 
-
-	"編集", 
-	"選択範囲をカット", 
-	"選択範囲をコピー", 
-	"ペースト", 
-	"選択範囲の指定", 
-	"行の残りを削除", 
-	"1文字削除", 
-	"バックスペース", 
-	"改行", 
-	"改行", 
-
-	"検索", 
-	"文字列で検索", 
-	"前方へ再検索", 
-	"後方へ再検索", 
-	"アイテムを選択して検索", 
-	"自動破壊されたアイテムで検索", 
-
-	"色々挿入...", 
-	"選択したアイテムの名前を挿入", 
-	"自動破壊されたアイテムの名前を挿入", 
-	"条件分岐ブロックの例を挿入", 
-	"マクロ定義を挿入", 
-	"キーマップ定義を挿入", 
-
- 	"拾い/破壊/放置の選択", 
-	"「 」 (自動拾い)", 
-	"「!」 (自動破壊)", 
-	"「~」 (放置)", 
-	"「;」 (確認して拾う)", 
-	"「(」 (マップコマンドで表示しない)", 
-
- 	"識別状態キーワード", 
-	"未判明", 
-	"未鑑定", 
-	"鑑定済み", 
-	"*鑑定*済み", 
-
- 	"キーワード (名詞)", 
-	"武器", 
-	"得意武器", 
-	"防具", 
-	"矢", 
-	"魔法アイテム", 
-	"光源", 
-	"がらくた", 
-	"魔法書", 
-	"盾", 
-	"弓", 
-	"指輪", 
-	"アミュレット", 
-	"鎧", 
-	"クローク", 
-	"兜", 
-	"籠手", 
-	"靴", 
-
- 	"キーワード (形容詞)", 
-	"収集中の", 
-	"ダイス目の違う (武器)", 
-	"ダイス目 # 以上の (武器)", 
-	"修正値 # 以上の", 
-	"無価値の", 
-	"アーティファクト", 
-	"エゴ (装備)", 
-	"無銘の (装備)", 
-	"賞金首の", 
-	"ユニーク・モンスターの", 
-	"人間の", 
-	"読めない (魔法書)", 
-	"第一領域の (魔法書)", 
-	"第二領域の (魔法書)", 
-	"1冊目の (魔法書)", 
-	"2冊目の (魔法書)", 
-	"3冊目の (魔法書)", 
-	"4冊目の (魔法書)", 
-};
-#else
-{
-	"Save & Quit", 
-	"Revert all changes", 
-	"Help", 
-
-	"Move cursor", 
-	"Left", 
-	"Down", 
-	"Up", 
-	"Right", 
-	"Beggining of line", 
-	"End of line", 
-	"Page up", 
-	"Page down", 
-	"Top", 
-	"Bottom", 
-
-	"Edit", 
-	"Cut", 
-	"Copy", 
-	"Paste", 
-	"Select block", 
-	"Kill rest of line", 
-	"Delete character", 
-	"Backspace", 
-	"Return", 
-	"Return", 
-
-	"Search", 
-	"Search by string", 
-	"Search forward", 
-	"Search backward", 
-	"Search by inventory object", 
-	"Search by destroyed object", 
-
-	"Insert...", 
-	"Insert name of choosen object", 
-	"Insert name of destroyed object", 
-	"Insert conditional block", 
-	"Insert a macro definition", 
-	"Insert a keymap definition", 
-
- 	"Command letter", 
-	"' ' (Auto pick)", 
-	"'!' (Auto destroy)", 
-	"'~' (Leave it on the floor)", 
-	"';' (Query to pick up)", 
-	"'(' (No display on the large map)", 
-
- 	"Identify states", 
-	"unaware", 
-	"unidentified", 
-	"identified", 
-	"*identified*", 
-
- 	"Keywords (noun)", 
-	"weapons", 
-	"favorite", 
-	"armors", 
-	"missiles", 
-	"devices", 
-	"lights", 
-	"junks", 
-	"spellbooks", 
-	"shields", 
-	"bows", 
-	"rings", 
-	"amulets", 
-	"suits", 
-	"cloaks", 
-	"helms", 
-	"gloves", 
-	"boots", 
-
- 	"Keywords (adjective)", 
-	"collecting", 
-	"dice boosted (weapons)", 
-	"more than # dice (weapons)", 
-	"more bonus than #", 
-	"worthless", 
-	"artifact", 
-	"ego (equipments)", 
-	"nameless (equipments)", 
-	"wanted", 
-	"unique", 
-	"human", 
-	"unreadable (spellbooks)", 
-	"realm1 (spellbooks)", 
-	"realm2 (spellbooks)", 
-	"first (spellbooks)", 
-	"second (spellbooks)", 
-	"third (spellbooks)", 
-	"fourth (spellbooks)", 
-};
-
-#endif
 
 /*
  * Find a command by 'key'.
@@ -3192,7 +3170,7 @@ static int get_com_id(char key)
 {
 	int i;
 
-	for (i = 0; menu_name[i]; i++)
+	for (i = 0; menu_data[i].name; i++)
 	{
 		if (menu_data[i].key == key)
 		{
@@ -3212,8 +3190,8 @@ static int do_command_menu(int level, int start)
 	int i;
 	int max_len = 0;
 	int max_menu_wid;
-	int col0 = 5 + level*4;
-	int row0 = 1 + level*2;
+	int col0 = 5 + level*7;
+	int row0 = 1 + level*3;
 	byte menu_key = 0;
 	int menu_id_list[26];
 	bool redraw = TRUE;
@@ -3228,7 +3206,7 @@ static int do_command_menu(int level, int start)
 		/* Ignore lower level sub menus */
 		if (menu_data[i].level > level) continue;
 
-		len = strlen(menu_name[i]);
+		len = strlen(menu_data[i].name);
 		if (len > max_len) max_len = len;
 
 		menu_id_list[menu_key] = i;
@@ -3295,7 +3273,7 @@ static int do_command_menu(int level, int start)
 					com_key_str[0] = '\0';
 				}
 
-				str = format("| %c) %-*s %2s | ", menu_key + 'a', max_len, menu_name[i], com_key_str);
+				str = format("| %c) %-*s %2s | ", menu_key + 'a', max_len, menu_data[i].name, com_key_str);
 
 				Term_putstr(col0, row1++, -1, TERM_WHITE, str);
 
@@ -3308,7 +3286,11 @@ static int do_command_menu(int level, int start)
 			/* The menu was shown */
 			redraw = FALSE;
 		}
+#ifdef JP
 		prt(format("(a-%c) コマンド:", menu_key + 'a' - 1), 0, 0);
+#else
+		prt(format("(a-%c) Command:", menu_key + 'a' - 1), 0, 0);
+#endif
 		key = inkey();
 
 		if (key == ESCAPE) return 0;
@@ -3324,6 +3306,7 @@ static int do_command_menu(int level, int start)
 				if (com_id == -1)
 				{
 					com_id = do_command_menu(level + 1, menu_id + 1);
+
 					if (com_id) return com_id;
 					else redraw = TRUE;
 				}
@@ -3715,21 +3698,10 @@ static void kill_line_segment(text_body_type *tb, int y, int x0, int x1)
 /*
  * Kill text in the block selection
  */
-static bool kill_text_in_selection(text_body_type *tb, bool force)
+static bool kill_text_in_selection(text_body_type *tb)
 {
 	int by1, bx1, by2, bx2;
 	int y;
-
-	if (!force && tb->mark == -1)
-	{
-		/* Don't kill auto selection block (by paste) */
-		tb->mark = 0;
-
-		/* Now dirty */
-		tb->dirty_flags |= DIRTY_ALL;
-
-		return FALSE;
-	}
 
 	/* Correct cursor location */
 	if ((uint)tb->cx > strlen(tb->lines_list[tb->cy]))
@@ -3934,9 +3906,9 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	case EC_HELP:
 		/* Peruse the main help file */
 #ifdef JP
-		(void)show_file(TRUE, "jhelp.hlp", NULL, 0, 0);
+		(void)show_file(TRUE, "jeditor.txt", NULL, 0, 0);
 #else
-		(void)show_file(TRUE, "help.hlp", NULL, 0, 0);
+		(void)show_file(TRUE, "editor.txt", NULL, 0, 0);
 #endif
 		/* Redraw all */
 		tb->dirty_flags |= DIRTY_SCREEN;
@@ -3950,7 +3922,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		 * If there is a selection, kill it, and replace it
 		 * with return code.
 		 */
-		if (tb->mark) kill_text_in_selection(tb, FALSE);
+		if (tb->mark) kill_text_in_selection(tb);
 
 		insert_return_code(tb->lines_list, tb->cx, tb->cy);
 		tb->cy++;
@@ -4045,14 +4017,11 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 	case EC_CUT:
 	{	
-		/* Need block selection */
-		if (!tb->mark) break;
-
 		/* Copy the text first */
 		do_editor_command(tb, EC_COPY);
 
 		/* Kill all */
-		kill_text_in_selection(tb, TRUE);
+		kill_text_in_selection(tb);
 
 		break;
 	}
@@ -4062,8 +4031,23 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		int by1, bx1, by2, bx2;
 		int y;
 
-		/* Need block selection */
-		if (!tb->mark) break;
+		/* Use single line? */
+		if (!tb->mark)
+		{
+			tb->my = tb->cy;
+			tb->mx = 0;
+			if (!tb->lines_list[tb->cy])
+			{
+				/* Select bottom line */
+				tb->cx = strlen(tb->lines_list[tb->cy]);
+			}
+			else
+			{
+				/* Select a single line */
+				tb->cx = 0;
+				tb->cy++;
+			}
+		}
 
 		/* Correct cursor location */
 		if ((uint)tb->cx > strlen(tb->lines_list[tb->cy]))
@@ -4134,12 +4118,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		 * If there is a selection, kill text, and
 		 * replace it with the yank text.
 		 */
-		if (tb->mark) kill_text_in_selection(tb, FALSE);
-
-		/* Auto select pasted text */
-		tb->mark = -1;
-		tb->mx = tb->cx;
-		tb->my = tb->cy;
+		if (tb->mark) kill_text_in_selection(tb);
 
 		/* Paste text */
 		while (chain)
@@ -4221,7 +4200,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		}
 		else
 		{
-			tb->mark = 1;
+			tb->mark = MARK_MARK;
 
 			/* Repeating this command swaps cursor position */
 			if (com_id == tb->old_com_id)
@@ -4258,7 +4237,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		/* If there is a selection, kill it */
 		if (tb->mark)
 		{
-			if (kill_text_in_selection(tb, FALSE)) break;
+			if (kill_text_in_selection(tb)) break;
 		}
 
 		/* Correct cursor location */
@@ -4318,7 +4297,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		/* If there is a selection, kill it */
 		if (tb->mark)
 		{
-			if (kill_text_in_selection(tb, FALSE)) break;
+			if (kill_text_in_selection(tb)) break;
 		}
 
 #ifdef JP
@@ -4339,7 +4318,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		/* If there is a selection, kill it */
 		if (tb->mark)
 		{
-			if (kill_text_in_selection(tb, FALSE)) break;
+			if (kill_text_in_selection(tb)) break;
 		}
 
 		len = strlen(tb->lines_list[tb->cy]);
@@ -4833,7 +4812,7 @@ void do_cmd_edit_autopick(void)
 
 
 		/* Cursor key macroes to direction command */
-		if (strlen(inkey_macro_trigger_string) > 1)
+		if (trig_len > 1)
 		{
 			switch (key)
 			{
@@ -4851,8 +4830,23 @@ void do_cmd_edit_autopick(void)
 				break;
 			}
 
+			if (com_id)
+			{
+				/*
+				 * Un-shifted cursor keys cancells
+				 * selection created by shift+cursor.
+				 */
+				if (tb->mark & MARK_BY_SHIFT)
+				{
+					tb->mark = 0;
+
+					/* Now dirty */
+					tb->dirty_flags |= DIRTY_ALL;
+				}
+			}
+
 			/* Mega Hack!!! Start selection with shift + cursor keys */
-			if (!com_id)
+			else
 			{
 				char buf[1024];
 
@@ -4876,15 +4870,19 @@ void do_cmd_edit_autopick(void)
 					/* Start selection */
 					if (!tb->mark)
 					{
-						tb->mark = 1;
+						tb->mark = MARK_MARK | MARK_BY_SHIFT;
 						tb->my = tb->cy;
 						tb->mx = tb->cx;
 						
 						/* Need to redraw text */
 						if (com_id == EC_UP || com_id == EC_DOWN)
 						{
-							/* Now dirty */
+							/* Redraw all text */
 							tb->dirty_flags |= DIRTY_ALL;
+						}
+						else
+						{
+							tb->dirty_line = tb->cy;
 						}
 					}
 				}
@@ -4901,7 +4899,7 @@ void do_cmd_edit_autopick(void)
 		{
 			com_id = do_command_menu(0, 0);
 
-			/* Redraw all */
+			/* Redraw all text later */
 			tb->dirty_flags |= DIRTY_SCREEN;
 		}
 
@@ -4912,7 +4910,7 @@ void do_cmd_edit_autopick(void)
 			 * If there is a selection, kill text, and
 			 * replace it with a single letter.
 			 */
-			if (tb->mark) kill_text_in_selection(tb, FALSE);
+			if (tb->mark) kill_text_in_selection(tb);
 
 			insert_single_letter(tb, key);
 
