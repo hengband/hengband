@@ -5127,14 +5127,10 @@ static void show_file_aux_line(cptr str, int cy, byte color)
 /*
  * Recursive file perusal.
  *
- * Return FALSE on 'Q', otherwise TRUE.
- *
  * Process various special text in the input file, including
  * the "menu" structures used by the "help file" system.
  *
- * XXX XXX XXX Consider using a temporary file.
- *
- * XXX XXX XXX Allow the user to "save" the current file.
+ * Return FALSE on 'q' to exit from a deep, otherwise TRUE.
  */
 bool show_file(bool show_version, cptr name, cptr what, int line, int mode)
 {
@@ -5792,7 +5788,10 @@ msg_print("ファイルが開けません。");
 		if (skey == ESCAPE) break;
 		if (skey == '<') break;
 
-		/* Exit on escape */
+		/* Exit on the ^q */
+		if (skey == KTRL('q')) skey = 'q';
+
+		/* Exit on the q key */
 		if (skey == 'q') break;
 	}
 
