@@ -2138,6 +2138,243 @@ static void spoil_mon_info(cptr fname)
 
 
 
+#define MAX_EVOL_DEPTH 64
+
+
+/*
+ * Compare two int-type array like strncmp() and return TRUE if equals
+ */
+static bool int_n_cmp(int *a, int *b, int length)
+{
+	/* Null-string comparation is always TRUE */
+	if (!length) return TRUE;
+
+	do
+	{
+		if (*a != *(b++)) return FALSE;
+		if (!(*(a++))) break;
+	}
+	while (--length);
+
+	return TRUE;
+}
+
+
+/*
+ * Returns TRUE if an evolution tree is "partial tree"
+ */
+static bool is_partial_tree(int *tree, int *partial_tree)
+{
+	int pt_head = *(partial_tree++);
+	int pt_len = 0;
+
+	while (partial_tree[pt_len]) pt_len++;
+
+	while (*tree)
+	{
+		if (*(tree++) == pt_head)
+		{
+			if (int_n_cmp(tree, partial_tree, pt_len)) return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+
+/*
+ * Sorting hook -- Comp function
+ */
+static bool ang_sort_comp_evol_tree(vptr u, vptr v, int a, int b)
+{
+	int **evol_tree = (int **)u;
+
+	int w1 = evol_tree[a][0];
+	int w2 = evol_tree[b][0];
+	monster_race *r1_ptr = &r_info[w1];
+	monster_race *r2_ptr = &r_info[w2];
+
+	/* Unused */
+	(void)v;
+
+	/* Used tree first */
+	if (w1 && !w2) return TRUE;
+	if (!w1 && w2) return FALSE;
+
+	/* Sort by monster level */
+	if (r1_ptr->level < r2_ptr->level) return TRUE;
+	if (r1_ptr->level > r2_ptr->level) return FALSE;
+
+	/* Sort by monster experience */
+	if (r1_ptr->mexp < r2_ptr->mexp) return TRUE;
+	if (r1_ptr->mexp > r2_ptr->mexp) return FALSE;
+
+	/* Compare indexes */
+	return w1 <= w2;
+}
+
+
+/*
+ * Sorting hook -- Swap function
+ */
+static void ang_sort_swap_evol_tree(vptr u, vptr v, int a, int b)
+{
+	int **evol_tree = (int **)u;
+	int *holder;
+
+	/* Unused */
+	(void)v;
+
+	/* Swap */
+	holder = evol_tree[a];
+	evol_tree[a] = evol_tree[b];
+	evol_tree[b] = holder;
+}
+
+
+/*
+ * Print monsters' evolution information to file
+ */
+static void spoil_mon_evol(cptr fname)
+{
+	char buf[1024];
+	monster_race *r_ptr;
+	int **evol_tree, i, j, n, r_idx;
+	int *evol_tree_zero; /* For C_KILL() */
+
+	/* Build the filename */
+	path_build(buf, sizeof buf, ANGBAND_DIR_USER, fname);
+
+	/* File type is "TEXT" */
+	FILE_TYPE(FILE_TYPE_TEXT);
+
+	/* Open the file */
+	fff = my_fopen(buf, "w");
+
+	/* Oops */
+	if (!fff)
+	{
+		msg_print("Cannot create spoiler file.");
+	    return;
+	}
+
+	/* Dump the header */
+	sprintf(buf, "Monster Spoilers for Hengband Version %d.%d.%d\n",
+	     FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+
+	spoil_out(buf);
+	spoil_out("------------------------------------------\n\n");
+
+	/* Allocate the "evol_tree" array (2-dimension) */
+	C_MAKE(evol_tree, max_r_idx, int *);
+	C_MAKE(*evol_tree, max_r_idx * (MAX_EVOL_DEPTH + 1), int);
+	for (i = 1; i < max_r_idx; i++) evol_tree[i] = *evol_tree + i * (MAX_EVOL_DEPTH + 1);
+	evol_tree_zero = *evol_tree;
+
+	/* Step 1: Build the evolution tree */
+	for (i = 1; i < max_r_idx; i++)
+	{
+		r_ptr = &r_info[i];
+
+		/* No evolution */
+		if (!r_ptr->next_exp) continue;
+
+		/* Trace evolution */
+		n = 0;
+		evol_tree[i][n++] = i;
+		do
+		{
+			evol_tree[i][n++] = r_ptr->next_r_idx;
+			r_ptr = &r_info[r_ptr->next_r_idx];
+		}
+		while (r_ptr->next_exp && (n < MAX_EVOL_DEPTH));
+	}
+
+	/* Step 2: Scan the evolution trees and remove "partial tree" */
+	for (i = 1; i < max_r_idx; i++)
+	{
+		/* Not evolution tree */
+		if (!evol_tree[i][0]) continue;
+
+		for (j = 1; j < max_r_idx; j++)
+		{
+			/* Same tree */
+			if (i == j) continue;
+
+			/* Not evolution tree */
+			if (!evol_tree[j][0]) continue;
+
+			/* Is evolution tree[i] is part of [j]? */
+			if (is_partial_tree(evol_tree[j], evol_tree[i]))
+			{
+				/* Remove this evolution tree */
+				evol_tree[i][0] = 0;
+				break;
+			}
+		}
+	}
+
+	/* Step 3: Sort the evolution trees */
+
+	/* Select the sort method */
+	ang_sort_comp = ang_sort_comp_evol_tree;
+	ang_sort_swap = ang_sort_swap_evol_tree;
+
+	/* Sort the array */
+	ang_sort(evol_tree, NULL, max_r_idx);
+
+	/* Step 4: Print the evolution trees */
+	for (i = 0; i < max_r_idx; i++)
+	{
+		r_idx = evol_tree[i][0];
+
+		/* No evolution or removed evolution tree */
+		if (!r_idx) continue;
+
+		/* Trace the evolution tree */
+		r_ptr = &r_info[r_idx];
+#ifdef JP
+		fprintf(fff, "[%d]: %s (レベル%d, '%c')\n", r_idx,
+			r_name + r_ptr->name, r_ptr->level, r_ptr->d_char);
+#else
+		fprintf(fff, "[%d]: %s (Level %d, '%c')\n", r_idx,
+			r_name + r_ptr->name, r_ptr->level, r_ptr->d_char);
+#endif
+		for (n = 1; r_ptr->next_exp; n++)
+		{
+			fprintf(fff, "%*s-(%d)-> ", n * 2, "", r_ptr->next_exp);
+			fprintf(fff, "[%d]: ", r_ptr->next_r_idx);
+			r_ptr = &r_info[r_ptr->next_r_idx];
+#ifdef JP
+			fprintf(fff, "%s (レベル%d, '%c')\n",
+				r_name + r_ptr->name, r_ptr->level, r_ptr->d_char);
+#else
+			fprintf(fff, "%s (Level %d, '%c')\n",
+				r_name + r_ptr->name, r_ptr->level, r_ptr->d_char);
+#endif
+		}
+
+		/* End of evolution tree */
+		fputc('\n', fff);
+	}
+
+	/* Free the "evol_tree" array (2-dimension) */
+	C_KILL(evol_tree_zero, max_r_idx * (MAX_EVOL_DEPTH + 1), int);
+	C_KILL(evol_tree, max_r_idx, int *);
+
+	/* Check for errors */
+	if (ferror(fff) || my_fclose(fff))
+	{
+		msg_print("Cannot close spoiler file.");
+		return;
+	}
+
+	/* Message */
+	msg_print("Successfully created a spoiler file.");
+}
+
+
+
 /*
  * Forward declare
  */
@@ -2148,12 +2385,8 @@ extern void do_cmd_spoilers(void);
  */
 void do_cmd_spoilers(void)
 {
-	int i;
-
-
 	/* Save the screen */
 	screen_save();
-
 
 	/* Interact */
 	while (1)
@@ -2169,61 +2402,58 @@ void do_cmd_spoilers(void)
 		prt("(2) Brief Artifact Info (artifact.spo)", 6, 5);
 		prt("(3) Brief Monster Info (mon-desc.spo)", 7, 5);
 		prt("(4) Full Monster Info (mon-info.spo)", 8, 5);
+		prt("(5) Monster Evolution Info (mon-evol.spo)", 9, 5);
 
 		/* Prompt */
 #ifdef JP
-prt("コマンド:", 18, 0);
+		prt("コマンド:", 18, 0);
 #else
 		prt("Command: ", 12, 0);
 #endif
 
-
 		/* Get a choice */
-		i = inkey();
-
-		/* Escape */
-		if (i == ESCAPE)
+		switch (inkey())
 		{
-			break;
-		}
+		/* Escape */
+		case ESCAPE:
+			/* Restore the screen */
+			screen_load();
+			return;
 
 		/* Option (1) */
-		else if (i == '1')
-		{
+		case '1':
 			spoil_obj_desc("obj-desc.spo");
-		}
+			break;
 
 		/* Option (2) */
-		else if (i == '2')
-		{
+		case '2':
 			spoil_artifact("artifact.spo");
-		}
+			break;
 
 		/* Option (3) */
-		else if (i == '3')
-		{
+		case '3':
 			spoil_mon_desc("mon-desc.spo");
-		}
+			break;
 
 		/* Option (4) */
-		else if (i == '4')
-		{
+		case '4':
 			spoil_mon_info("mon-info.spo");
-		}
+			break;
+
+		/* Option (5) */
+		case '5':
+			spoil_mon_evol("mon-evol.spo");
+			break;
 
 		/* Oops */
-		else
-		{
+		default:
 			bell();
+			break;
 		}
 
 		/* Flush messages */
 		msg_print(NULL);
 	}
-
-
-	/* Restore the screen */
-	screen_load();
 }
 
 /*
