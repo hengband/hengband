@@ -12314,7 +12314,7 @@ F:ANIMAL | NO_CONF | NO_SLEEP | CAN_SWIM | RIDING
 S:1_IN_8
 S:BR_POIS | BR_DARK | BR_NETH
 D:$A large basilisk, whose shape resembles that of a great wyrm.
-D:大型のバジリスクで、ワイアームに似た姿をしている。
+D:大型のバシリスクで、ワイアームに似た姿をしている。
 
 #JZ#
 N:669:『カリブディス』
