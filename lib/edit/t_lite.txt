@@ -232,21 +232,22 @@ F:b:BUILDING_1:3:0:0:0:0:NONE:18
 
 ############### Quest 18 - Water Cave ###############
 
-# Quest 15 assigned, entrance is quest entrance
+# Quest 18 assigned, entrance is quest entrance
 ?:[EQU $QUEST18 1]
 F:y:QUEST_ENTER:3:0:0:0:0:NONE:18
 F:b:BUILDING_1:3:0:0:0:0:NONE:18
 
-# Quest 15 completed
+# Quest 18 completed
 ?:[EQU $QUEST18 2]
 F:b:BUILDING_1:3:0:0:0:0:NONE:18
 
-# Quest 15 rewarding, reward is Ring of Lordly Protection, no new quest available
+# Quest 18 rewarding, reward is Ring of Poison Resistance,
+# continue with quest 27
 ?:[EQU $QUEST18 3]
 F:b:BUILDING_1:3:0:0:0:0:NONE:27
 F:!:FLOOR:3:0:143
 
-# Quest 15 finished, no new quest available
+# Quest 18 finished, continue with quest 27
 ?:[EQU $QUEST18 4]
 F:b:BUILDING_1:3:0:0:0:0:NONE:27
 
@@ -265,98 +266,104 @@ F:b:BUILDING_1:3:0:0:0:0:NONE:27
 
 # Quest 27 rewarding (default reward if not given one from below)
 # the Executioner's Sword 'Crisdurian'
-# continue with quest 33
 ?:[EQU $QUEST27 3]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:80
 
+# Quest 27 rewarding (Weaponsmith gets Multi-Hued Dragon Scale Mail)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Weaponsmith] ]
-F:a:BUILDING_0:3
-F:@:FLOOR:3:0:405
+F:b:BUILDING_1:3:0:0:0:0:NONE:15
+F:!:FLOOR:3:0:405
 
-# Quest 27 rewarding (Tourist gets Platinum Yendorian Express Card)
-# continue with quest 33
+# Quest 27 rewarding (Tourist gets The Platinum Yendorian Express Card)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Tourist] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:141
 
-# Quest 27 rewarding (Ranger, Archer gets Long Bow of Bard)
-# continue with quest 33
+# Quest 27 rewarding (Ranger and Archer get The Long Bow of Bard)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Ranger Archer] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:125
 
-# Quest 27 rewarding (Warrior gets Glaive of Pain)
-# continue with quest 33
-?:[AND [EQU $QUEST27 3] [EQU $CLASS Warrior] ]
+# Quest 27 rewarding (Warrior and Berserker get The Glaive of Pain)
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Warrior Berserker] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:94
 
-# Quest 27 rewarding (BeastMaster gets Lance of Eorlingas)
-# continue with quest 33
+# Quest 27 rewarding (BeastMaster gets The Lance of Eorlingas)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS BeastMaster] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:100
 
-# Quest 27 rewarding (Kihei gets GaeBolg)
-# continue with quest 33
+# Quest 27 rewarding (Cavalry gets GaeBolg)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Cavalry] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:163
 
 # Quest 27 rewarding (Chaos-Warrior gets Zarcuthra)
-# continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Chaos-Warrior] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:77
 
-# Quest 27 rewarding (Rogue gets Sling of Buckland)
-# continue with quest 33
+# Quest 27 rewarding (Rogue gets The Sling of Buckland)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Rogue] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:134
 
 # Quest 27 rewarding (Monk gets The Leather Jacket of Shiva's Avatar)
-# continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Monk] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:26
 
 # Quest 27 rewarding (Ninja gets The Amulet of the Pitch Dark Night)
-# continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Ninja] ]
-F:a:BUILDING_0:3
-F:@:FLOOR:3:0:0:0:215
+F:b:BUILDING_1:3:0:0:0:0:NONE:15
+F:!:FLOOR:3:0:0:0:215
 
-# Quest 27 rewarding (Mage, High-Mage)
-# get Hard Leather Cap of Ben Franklin
-# continue with quest 33
+# Quest 27 rewarding (Mage, High-Mage, Sorcerer and Blue-Mage
+# get The Hard Leather Cap of Indra)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Mage High-Mage Sorcerer Blue-Mage] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:33
 
-# Quest 27 rewarding (Priest, Bard, ForceTrainer)
-# get Palantir of Westernesse
-# continue with quest 33
+# Quest 27 rewarding (Priest, Bard and ForceTrainer
+# get The Palantir of Westernesse)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Priest Bard ForceTrainer Mindcrafter] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:15
 
-# Quest 27 rewarding (Magiceater, Mirror-Master)
-# get Numenor
-# continue with quest 33
-?:[AND [EQU $QUEST27 3] [EQU $CLASS Magiceater Mirror-Master] ]
-F:a:BUILDING_0:3
-F:@:FLOOR:3:0:0:0:132
+# Quest 27 rewarding (Mirror-Master gets The Jewel Encrusted Crown of Numenor)
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Mirror-Master] ]
+F:b:BUILDING_1:3:0:0:0:0:NONE:15
+F:!:FLOOR:3:0:0:0:132
 
-# Quest 27 rewarding (Samurai)
-# get Groo
-# continue with quest 33
+# Quest 27 rewarding (Samurai gets The Katana 'Aglarang')
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Samurai] ]
-F:b:BUILDING_1:3
+F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:81
 
-# Quest 27 finished, continue with quest 33
+# Quest 27 rewarding (Crusade Paladin gets the Amulet of Sacred Knights)
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Paladin] [EQU $REALM1 Crusade] ]
+F:b:BUILDING_1:3:0:0:0:0:NONE:15
+F:!:FLOOR:3:0:0:0:217
+
+# Quest 27 rewarding (Death Paladin gets the Collar Harness of the Hell)
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Paladin] [EQU $REALM1 Death] ]
+F:b:BUILDING_1:3:0:0:0:0:NONE:15
+F:!:FLOOR:3:0:0:0:218
+
+# Quest 27 rewarding (Warrior-Mage, Red-Mage and Magic-Eater
+# get The Charmed Pendant)
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Warrior-Mage Red-Mage Magic-Eater] ]
+F:b:BUILDING_1:3:0:0:0:0:NONE:15
+F:!:FLOOR:3:0:0:0:219
+
+# Quest 27 rewarding (Imitator gets the Pendant of Gogo)
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Imitator] ]
+F:b:BUILDING_1:3:0:0:0:0:NONE:15
+F:!:FLOOR:3:0:0:0:220
+
+# Quest 27 finished, continue with quest 15
 ?:[EQU $QUEST27 4]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 
@@ -364,7 +371,7 @@ F:b:BUILDING_1:3:0:0:0:0:NONE:15
 ?:[EQU $QUEST27 5]
 F:b:BUILDING_1:3:0:0:0:0:NONE:27
 
-# Quest 27 failed but done, continue with quest 33
+# Quest 27 failed but done, continue with quest 15
 ?:[EQU $QUEST27 6]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 
