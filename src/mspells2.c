@@ -492,13 +492,13 @@ msg_format("%^sが%sに向かって叫んだ。", m_name, t_name);
 			case 96+1:
 			{
 				/* XXX XXX XXX */
-				return FALSE
+				return FALSE;
 			}
 
 			/* RF4_DISPEL */
 			case 96+2:
 			{
-				return FALSE
+				return FALSE;
 			}
 
 			/* RF4_XXX4X4 */
@@ -586,21 +586,21 @@ msg_format("%^sが%sに矢を放った。", m_name, t_name);
 			case 96+5:
 			{
 				/* XXX XXX XXX */
-				return FALSE
+				return FALSE;
 			}
 
 			/* RF4_XXX3 */
 			case 96+6:
 			{
 				/* XXX XXX XXX */
-				return FALSE
+				return FALSE;
 			}
 
 			/* RF4_XXX4 */
 			case 96+7:
 			{
 				/* XXX XXX XXX */
-				return FALSE
+				return FALSE;
 			}
 
 			/* RF4_BR_ACID */
@@ -3308,7 +3308,7 @@ msg_format("%^sがテレポートした。", m_name);
 				dam = who;
 				if(!process_the_world(randint1(2)+2, who, los(py, px, m_ptr->fy, m_ptr->fx))) return (FALSE);
 #endif
-				return FALSE
+				return FALSE;
 			}
 
 			/* RF6_XXX4X6 */
@@ -3334,7 +3334,7 @@ msg_format("%^sがテレポートした。", m_name);
 			case 160+8:
 			{
 				/* Not implemented */
-				return FALSE
+				return FALSE;
 			}
 
 			/* RF6_TELE_AWAY */
@@ -3406,7 +3406,7 @@ msg_format("%^sは耐性を持っている！", t_name);
 			case 160+10:
 			{
 				/* Not implemented */
-				return FALSE
+				return FALSE;
 			}
 
 			/* RF6_PSY_SPEAR */
@@ -3505,7 +3505,7 @@ msg_format("%^sが何かをつぶやいた。", m_name);
 			case 160+14:
 			{
 				/* Not implemented */
-				return FALSE
+				return FALSE;
 			}
 
 			/* RF6_RAISE_DEAD */
