@@ -6410,6 +6410,57 @@ option_type option_info[] =
 #endif
 
 
+#ifdef ALLOW_EASY_OPEN
+#ifdef JP
+	{ &easy_open,                   TRUE,  1, 5, 7,
+	"easy_open",                    "自動的にドアを開ける" },
+#else
+	{ &easy_open,                   TRUE,  1, 5, 7,
+	"easy_open",                    "Automatically open doors" },
+#endif
+#endif /* ALLOW_EASY_OPEN */
+
+
+#ifdef ALLOW_EASY_DISARM
+#ifdef JP
+	{ &easy_disarm,                 TRUE,  1, 5, 8,
+	"easy_disarm",                  "自動的に罠を解除する" },
+#else
+	{ &easy_disarm,                 TRUE,  1, 5, 8,
+	"easy_disarm",                  "Automatically disarm traps" },
+#endif
+#endif /* ALLOW_EASY_DISARM */
+
+
+#ifdef ALLOW_EASY_FLOOR /* TNB */
+#ifdef JP
+	{ &easy_floor,                  FALSE, 1, 5, 9,
+	"easy_floor",                   "床上で重なったアイテムをリストする" },
+#else
+	{ &easy_floor,                  FALSE, 1, 5, 9,
+	"easy_floor",                   "Display floor stacks in a list" },
+#endif
+#endif /* ALLOW_EASY_FLOOR -- TNB */
+
+
+#ifdef JP
+	{ &use_command,                 FALSE, 1, 5, 10,
+	"use_command",                  "「使う(a)」コマンドでアイテムを何でも使える" },
+#else
+	{ &use_command,                 FALSE, 1, 5, 10,
+	"use_command",                  "Allow unified use command" },
+#endif
+
+
+#ifdef JP
+	{ &over_exert,                  TRUE,  1, 0, 29,
+	"over_exert",                   "MPが足りなくても魔法に挑戦する" },
+#else
+	{ &over_exert,                  TRUE,  1, 0, 29,
+	"over_exert",                   "Allow casting spells when short of mana" },
+#endif
+
+
 	/*** Output Options ***/
 
 #ifdef JP
@@ -6718,63 +6769,12 @@ option_type option_info[] =
 #endif
 
 
-#ifdef ALLOW_EASY_OPEN
-#ifdef JP
-	{ &easy_open,                   TRUE,  3, 5, 7,
-	"easy_open",                    "自動的にドアを開ける" },
-#else
-	{ &easy_open,                   TRUE,  3, 5, 7,
-	"easy_open",                    "Automatically open doors" },
-#endif
-#endif /* ALLOW_EASY_OPEN */
-
-
-#ifdef ALLOW_EASY_DISARM
-#ifdef JP
-	{ &easy_disarm,                 TRUE,  3, 5, 8,
-	"easy_disarm",                  "自動的に罠を解除する" },
-#else
-	{ &easy_disarm,                 TRUE,  3, 5, 8,
-	"easy_disarm",                  "Automatically disarm traps" },
-#endif
-#endif /* ALLOW_EASY_DISARM */
-
-
-#ifdef ALLOW_EASY_FLOOR /* TNB */
-#ifdef JP
-	{ &easy_floor,                  FALSE, 3, 5, 9,
-	"easy_floor",                   "床上で重なったアイテムをリストする" },
-#else
-	{ &easy_floor,                  FALSE, 3, 5, 9,
-	"easy_floor",                   "Display floor stacks in a list" },
-#endif
-#endif /* ALLOW_EASY_FLOOR -- TNB */
-
-
-#ifdef JP
-	{ &use_command,                 FALSE, 3, 5, 10,
-	"use_command",                  "「使う(a)」コマンドでアイテムを何でも使える" },
-#else
-	{ &use_command,                 FALSE, 3, 5, 10,
-	"use_command",                  "Allow unified use command" },
-#endif
-
-
 #ifdef JP
 	{ &last_words,                  FALSE, 3, 0, 28,
 	"last_words",                   "キャラクターが死んだ時遺言をのこす" },
 #else
 	{ &last_words,                  FALSE, 3, 0, 28,
 	"last_words",                   "Leave last words when your character dies" },
-#endif
-
-
-#ifdef JP
-	{ &over_exert,                  TRUE,  3, 0, 29,
-	"over_exert",                   "MPが足りなくても魔法に挑戦する" },
-#else
-	{ &over_exert,                  TRUE,  3, 0, 29,
-	"over_exert",                   "Allow casting spells when short of mana" },
 #endif
 
 
