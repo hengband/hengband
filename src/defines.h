@@ -696,6 +696,7 @@
 #define is_magic(A) ((A) < MAX_MAGIC + 1 ? TRUE : FALSE)
 #define tval2realm(A) ((A) - TV_LIFE_BOOK + 1)
 #define technic2magic(A)      (is_magic(A) ? (A) : (A) - MIN_TECHNIC + MAX_MAGIC)
+#define is_good_realm(REALM)   ((REALM) == REALM_LIFE || (REALM) == REALM_HAJA)
 
 /*
  * Magic-books for the realms

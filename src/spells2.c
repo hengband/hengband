@@ -598,7 +598,7 @@ info[i++] = "あなたはアイテムの魔力を吸収することができる。(1 MP)";
 			}
 			break;
 		case CLASS_PRIEST:
-			if (p_ptr->realm1 == REALM_LIFE)
+			if (is_good_realm(p_ptr->realm1))
 			{
 				if (plev > 34)
 				{
@@ -642,7 +642,7 @@ info[i++] = "あなたは怪物を調査することができる。(20 MP)";
 			}
 			break;
 		case CLASS_PALADIN:
-			if (p_ptr->realm1 == REALM_LIFE)
+			if (is_good_realm(p_ptr->realm1))
 			{
 				if (plev > 29)
 				{
@@ -6329,7 +6329,7 @@ bool fire_blast(int typ, int dir, int dd, int ds, int num, int dev)
 		}
 
 		/* Analyze the "dir" and the "target". */
-		if (!project(-1, 0, y, x, damroll(dd, ds), typ, flg, -1))
+		if (!project(0, 0, y, x, damroll(dd, ds), typ, flg, -1))
 		{
 			result = FALSE;
 		}

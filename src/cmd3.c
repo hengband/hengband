@@ -1069,13 +1069,13 @@ void do_cmd_destroy(void)
 		}
 		else if (p_ptr->pclass == CLASS_PALADIN)
 		{
-			if (p_ptr->realm1 == REALM_LIFE)
+			if (is_good_realm(p_ptr->realm1))
 			{
-				if (q_ptr->tval != TV_LIFE_BOOK) gain_expr = TRUE;
+				if (!is_good_realm(tval2realm(q_ptr->tval))) gain_expr = TRUE;
 			}
 			else
 			{
-				if (q_ptr->tval == TV_LIFE_BOOK) gain_expr = TRUE;
+				if (is_good_realm(tval2realm(q_ptr->tval))) gain_expr = TRUE;
 			}
 		}
 

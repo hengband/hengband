@@ -869,7 +869,7 @@ msg_print("攻撃が空をきった。");
 		}
 		case CLASS_PRIEST:
 		{
-			if (p_ptr->realm1 == REALM_LIFE)
+			if (is_good_realm(p_ptr->realm1))
 			{
 				if (racial_aux(35, 70, A_WIS, 50))
 				{
@@ -936,7 +936,7 @@ msg_print("敵を調査した...");
 		}
 		case CLASS_PALADIN:
 		{
-			if (p_ptr->realm1 == REALM_LIFE)
+			if (is_good_realm(p_ptr->realm1))
 			{
 				if (racial_aux(30, 30, A_WIS, 20))
 				{
@@ -2403,7 +2403,7 @@ strcpy(power_desc[num].name, "魔力食い");
 	}
 	case CLASS_PRIEST:
 	{
-		if (p_ptr->realm1 == REALM_LIFE)
+		if (is_good_realm(p_ptr->realm1))
 		{
 #ifdef JP
 strcpy(power_desc[num].name, "武器祝福");
@@ -2461,7 +2461,7 @@ strcpy(power_desc[num].name, "モンスター調査");
 	}
 	case CLASS_PALADIN:
 	{
-		if (p_ptr->realm1 == REALM_LIFE)
+		if (is_good_realm(p_ptr->realm1))
 		{
 #ifdef JP
 strcpy(power_desc[num].name, "ホーリー・ランス");

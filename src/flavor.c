@@ -1586,9 +1586,9 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 				basenm = "& ÇË¼Ù¤ÎËâË¡½ñ#";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
-				basenm = "& Book~ of nanka Magic #";
+				basenm = "& Book~ of Crusade Magic #";
 			else
-				basenm = "& nanka Spellbook~ #";
+				basenm = "& Crusade Spellbook~ #";
 #endif
 
 			break;

@@ -2056,11 +2056,11 @@ static byte choose_realm(s32b choices, int *count)
 	{
 		if (p_ptr->pclass == CLASS_PRIEST)
 		{
-			if ((p_ptr->realm1 == REALM_LIFE) || (p_ptr->realm1 == REALM_HAJA))
+			if (is_good_realm(p_ptr->realm1))
 			{
 				choices &= ~(CH_DEATH | CH_DAEMON);
 			}
-			else if ((p_ptr->realm1 == REALM_DEATH) || (p_ptr->realm1 == REALM_DAEMON))
+			else
 			{
 				choices &= ~(CH_LIFE | CH_HAJA);
 			}

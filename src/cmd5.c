@@ -361,11 +361,11 @@ static bool item_tester_learn_spell(object_type *o_ptr)
 
 	if (p_ptr->pclass == CLASS_PRIEST)
 	{
-		if ((p_ptr->realm1 == REALM_LIFE) || (p_ptr->realm1 == REALM_HAJA))
+		if (is_good_realm(p_ptr->realm1))
 		{
 			choices &= ~(CH_DEATH | CH_DAEMON);
 		}
-		else if ((p_ptr->realm1 == REALM_DEATH) || (p_ptr->realm1 == REALM_DAEMON))
+		else
 		{
 			choices &= ~(CH_LIFE | CH_HAJA);
 		}
@@ -4160,13 +4160,7 @@ msg_print("神の御力が邪悪を打ち払った！");
 			ty = py;
 
 			/* Hack -- Use an actual "target" */
-			if ((dir == 5) && target_okay())
-			{
-				tx = target_col;
-				ty = target_row;
-			}
-			else
-			{
+			if (dir != 5) {
 				while(1)
 				{
 					tx += ddx[dir];
@@ -4174,6 +4168,13 @@ msg_print("神の御力が邪悪を打ち払った！");
 					if (!cave_floor_bold(ty,tx) || !player_has_los_bold(ty, tx) || cave[ty][tx].m_idx) break;
 				}
 			}
+			else if (target_okay() &&
+				 in_disintegration_range(py, px, target_row, target_col))
+			{
+				tx = target_col;
+				ty = target_row;
+			}
+
 
 			for (i = 0; i < b; i++)
 			{

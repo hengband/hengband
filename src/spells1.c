@@ -7391,7 +7391,16 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 
 	if (p_ptr->tim_eyeeye && get_damage > 0 && !death)
 	{
-		msg_format("攻撃が%s自身を傷つけた！", who_name);
+#ifdef JP
+		msg_format("攻撃が%s自身を傷つけた！", m_name);
+#else
+		char m_name_self[80];
+		
+		/* hisself */
+		monster_desc(m_name_self, m_ptr, 0x23);
+
+		msg_format("The attack of %s has wounded %s!", m_name, m_name_self);
+#endif
 		project(0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL | PROJECT_NO_REF, -1);
 		set_tim_eyeeye(p_ptr->tim_eyeeye-5, TRUE);
 	}

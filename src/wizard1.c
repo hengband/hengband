@@ -193,7 +193,7 @@ static grouper group_item[] =
 	{ TV_ARCANE_BOOK,   "Books (Arcane)" },
 	{ TV_ENCHANT_BOOK,  "Books (Craft)" },
 	{ TV_DAEMON_BOOK,   "Books (Daemon)" },
-	{ TV_HAJA_BOOK,     "Books (nanka)" },
+	{ TV_HAJA_BOOK,     "Books (Crusade)" },
 	{ TV_MUSIC_BOOK,    "Song Books" },
 	{ TV_HISSATSU_BOOK, "Books (Kendo)" },
 #endif

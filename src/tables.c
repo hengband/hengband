@@ -5011,47 +5011,46 @@ cptr spell_names[VALID_REALM][32] =
 		"Polymorph Demonlord",
 	},
 
-	/*** nanka Spells ***/
+	/*** Crusade Spells ***/
 
 	{
-		/* Common nanka Spellbooks */
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
+		/* Common Crusade Spellbooks */
+		"Zap",
+		"Detect Evil",
+		"Bless",
+		"Remove Fear",
+		"Scare Monster",
+		"Sanctuary",
+		"Portal",
+		"Star Dust",
 
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
+		"Purify",
+		"Scatter Evil",
+		"Exorcism",
+		"Holy Orb",
+		"Sense Unseen",
+		"Protection from Evil",
+		"Judgment Thunder",
+		"Warding True",
 
-		/* Rare nanka Spellbooks */
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
+		/* Rare Crusade Spellbooks */
+		"Unbarring Ways",
+		"Remove Curse",
+		"Holy Aura",
+		"Dispel Undead & Demons",
+		"Dispel Evil",
+		"Holy Blade",
+		"Star Burst",
+		"Summon Angel",
 
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-
+		"Heroism",
+		"Dispel Curse",
+		"Banish Evil",
+		"Armageddon",
+		"An Eye for an Eye",
+		"Wrath of the God",
+		"Divine Intervention",
+		"Crusade",
 	},
 
 	/*** Music Spells ***/
