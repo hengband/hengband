@@ -6559,7 +6559,7 @@ static int blow_damcalc(monster_type *m_ptr, monster_blow *blow_ptr)
 {
 	int  dam = blow_ptr->d_dice * blow_ptr->d_side;
 	int  dummy_max = 0;
-	bool complete_immune = FALSE;
+	bool check_wraith_form = TRUE;
 
 	if (blow_ptr->method != RBM_EXPLODE)
 	{
@@ -6582,37 +6582,37 @@ static int blow_damcalc(monster_type *m_ptr, monster_blow *blow_ptr)
 		case RBE_ACID:
 			spell_damcalc(m_ptr, GF_ACID, dam, 0, &dummy_max);
 			dam = dummy_max;
-			complete_immune = p_ptr->immune_acid;
+			check_wraith_form = FALSE;
 			break;
 
 		case RBE_ELEC:
 			spell_damcalc(m_ptr, GF_ELEC, dam, 0, &dummy_max);
 			dam = dummy_max;
-			complete_immune = p_ptr->immune_elec;
+			check_wraith_form = FALSE;
 			break;
 
 		case RBE_FIRE:
 			spell_damcalc(m_ptr, GF_FIRE, dam, 0, &dummy_max);
 			dam = dummy_max;
-			complete_immune = p_ptr->immune_fire;
+			check_wraith_form = FALSE;
 			break;
 
 		case RBE_COLD:
 			spell_damcalc(m_ptr, GF_COLD, dam, 0, &dummy_max);
 			dam = dummy_max;
-			complete_immune = p_ptr->immune_cold;
+			check_wraith_form = FALSE;
 			break;
 
 		case RBE_DR_MANA:
 			dam = 0;
-			complete_immune = TRUE;
+			check_wraith_form = FALSE;
 			break;
 		}
 
-		if (p_ptr->wraith_form)
+		if (check_wraith_form && p_ptr->wraith_form)
 		{
 			dam /= 2;
-			if (!dam && !complete_immune) dam = 1;
+			if (!dam) dam = 1;
 		}
 	}
 	else
