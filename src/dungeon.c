@@ -6800,11 +6800,14 @@ msg_print("張りつめた大気が流れ去った...");
 
 s32b turn_real(s32b hoge)
 {
-	if ((p_ptr->prace == RACE_VAMPIRE) ||
-	    (p_ptr->prace == RACE_SKELETON) ||
-	    (p_ptr->prace == RACE_ZOMBIE) ||
-	    (p_ptr->prace == RACE_SPECTRE))
-		return hoge-(TURNS_PER_TICK * TOWN_DAWN *3/ 4);
-	else
+	switch (p_ptr->start_race)
+	{
+	case RACE_VAMPIRE:
+	case RACE_SKELETON:
+	case RACE_ZOMBIE:
+	case RACE_SPECTRE:
+		return hoge - (TURNS_PER_TICK * TOWN_DAWN * 3 / 4);
+	default:
 		return hoge;
+	}
 }

@@ -132,13 +132,18 @@ void extract_day_hour_min(int *day, int *hour, int *min)
 	s32b len = TURNS_PER_TICK * TOWN_DAWN;
 	s32b tick = turn % len + len / 4;
 
-	if ((p_ptr->prace == RACE_VAMPIRE) ||
-	    (p_ptr->prace == RACE_SKELETON) ||
-	    (p_ptr->prace == RACE_ZOMBIE) ||
-	    (p_ptr->prace == RACE_SPECTRE))
-		*day = (turn - (TURNS_PER_TICK * TOWN_DAWN *3/4)) / len + 1;
-	else
-		*day = (turn + (TURNS_PER_TICK * TOWN_DAWN /4))/ len + 1;
+	switch (p_ptr->start_race)
+	{
+	case RACE_VAMPIRE:
+	case RACE_SKELETON:
+	case RACE_ZOMBIE:
+	case RACE_SPECTRE:
+		*day = (turn - (TURNS_PER_TICK * TOWN_DAWN * 3 / 4)) / len + 1;
+		break;
+	default:
+		*day = (turn + (TURNS_PER_TICK * TOWN_DAWN / 4)) / len + 1;
+		break;
+	}
 	*hour = (24 * tick / len) % 24;
 	*min = (1440 * tick / len) % 60;
 }
