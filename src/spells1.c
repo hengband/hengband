@@ -5859,7 +5859,7 @@ note = "には効果がなかった。";
 	tmp = dam;
 	dam = mon_damage_mod(m_ptr, dam, (bool)(typ == GF_PSY_SPEAR));
 #ifdef JP
-	if ((tmp > 0) && (dam == 0)) note = "はダメージを受けていない";
+	if ((tmp > 0) && (dam == 0)) note = "はダメージを受けていない。";
 #else
 	if ((tmp > 0) && (dam == 0)) note = " is unharmed.";
 #endif
