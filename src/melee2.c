@@ -2521,7 +2521,7 @@ msg_format("%^sは突然敵にまわった！", m_name);
 			if (multiply_monster(m_idx, FALSE, (is_pet(m_ptr) ? PM_FORCE_PET : 0)))
 			{
 				/* Take note if visible */
-				if (m_ptr->ml)
+				if (m_ptr->ml && m_list[hack_m_idx_ii].ml)
 				{
 					r_ptr->r_flags2 |= (RF2_MULTIPLY);
 				}
