@@ -543,6 +543,10 @@ static void rd_monster(monster_type *m_ptr)
 		m_ptr->energy_need = (s16b)tmp8u;
 	}
 	else rd_s16b(&m_ptr->energy_need);
+
+	if (z_older_than(11, 0, 13))
+		m_ptr->energy_need = 100 - m_ptr->energy_need;
+
 	if (z_older_than(10,0,7))
 	{
 		m_ptr->fast = 0;
@@ -1089,7 +1093,49 @@ static void rd_ghost(void)
 }
 
 
+/*
+ * Save quick start data
+ */
+void load_quick_start()
+{
+	byte tmp8u;
+	int i;
 
+	if (z_older_than(11, 0, 13))
+	{
+		previous_char.quick_ok = FALSE;
+		return;
+	}
+
+	rd_byte(&previous_char.psex);
+	rd_byte(&previous_char.prace);
+	rd_byte(&previous_char.pclass);
+	rd_byte(&previous_char.pseikaku);
+	rd_byte(&previous_char.realm1);
+	rd_byte(&previous_char.realm2);
+
+	rd_s16b(&previous_char.age);
+	rd_s16b(&previous_char.ht);
+	rd_s16b(&previous_char.wt);
+	rd_s16b(&previous_char.sc);
+	rd_s32b(&previous_char.au);
+
+	for (i = 0; i < 6; i++) rd_s16b(&previous_char.stat_max[i]);
+	for (i = 0; i < 6; i++) rd_s16b(&previous_char.stat_max_max[i]);
+
+	for (i = 0; i < PY_MAX_LEVEL; i++) rd_s16b(&previous_char.player_hp[i]);
+
+	rd_s16b(&previous_char.chaos_patron);
+
+	for (i = 0; i < 8; i++) rd_s16b(&previous_char.vir_types[i]);
+
+	for (i = 0; i < 4; i++) rd_string(previous_char.history[i], 60);
+
+	rd_byte(&previous_char.quests);
+
+	rd_byte(&tmp8u);
+	previous_char.quick_ok = (bool)tmp8u;
+}
 
 /*
  * Read the "extra" information
@@ -1104,6 +1150,8 @@ static void rd_extra(void)
 	rd_string(player_name, 32);
 
 	rd_string(died_from, 80);
+
+	load_quick_start();
 
 	for (i = 0; i < 4; i++)
 	{
@@ -1372,7 +1420,11 @@ note(format("の中", tmp16s));
 	rd_s16b(&p_ptr->confused);
 	rd_s16b(&p_ptr->food);
 	strip_bytes(4); /* Old "food_digested" / "protection" */
+
 	rd_s16b(&p_ptr->energy_need);
+	if (z_older_than(11, 0, 13))
+		p_ptr->energy_need = 100 - p_ptr->energy_need;
+
 	rd_s16b(&p_ptr->fast);
 	rd_s16b(&p_ptr->slow);
 	rd_s16b(&p_ptr->afraid);
@@ -2557,6 +2609,7 @@ if (arg_fiddle) note("伝説のアイテムをロードしました");
 	/* Read the extra stuff */
 	rd_extra();
 	if (p_ptr->energy_need < -999) world_player = TRUE;
+
 #ifdef JP
 if (arg_fiddle) note("特別情報をロードしました");
 #else

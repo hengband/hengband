@@ -1284,6 +1284,42 @@ struct player_type
 };
 
 
+/*
+ * A structure to hold "rolled" information
+ */
+typedef struct birther birther;
+
+struct birther
+{
+	byte psex;         /* Sex index */
+	byte prace;        /* Race index */
+	byte pclass;       /* Class index */
+	byte pseikaku;     /* Seikaku index */
+	byte realm1;       /* First magic realm */
+	byte realm2;       /* Second magic realm */
+
+	s16b age;
+	s16b ht;
+	s16b wt;
+	s16b sc;
+
+	s32b au;
+
+	s16b stat_max[6];	/* Current "maximal" stat values */
+	s16b stat_max_max[6];	/* Maximal "maximal" stat values */
+	s16b player_hp[PY_MAX_LEVEL];
+
+	s16b chaos_patron;
+
+	s16b vir_types[8];
+
+	char history[4][60];
+
+	byte quests;
+	bool quick_ok;
+};
+
+
 /* For Monk martial arts */
 
 typedef struct martial_arts martial_arts;

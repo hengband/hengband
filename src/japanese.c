@@ -262,5 +262,19 @@ void codeconv(char *str)
 #endif
 }
 
+/* 文字列sのxバイト目が漢字の1バイト目かどうか判定する */
+bool iskanji2(cptr s, int x)
+{
+	int i;
+
+	for (i = 0; i < x; i++)
+	{
+		if (iskanji(s[i])) i++;
+	}
+	if ((x == i) && iskanji(s[x])) return TRUE;
+
+	return FALSE;
+}
+
 #endif /* JP */
 

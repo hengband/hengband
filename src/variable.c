@@ -755,6 +755,13 @@ s16b player_hp[PY_MAX_LEVEL];
 
 
 /*
+ * The last character rolled,
+ * holded for quick start
+ */
+birther previous_char;
+
+
+/*
  * The vault generation arrays
  */
 vault_type *v_info;

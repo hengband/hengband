@@ -400,6 +400,7 @@ extern u32b spell_forgotten1;
 extern u32b spell_forgotten2;
 extern byte spell_order[64];
 extern s16b player_hp[PY_MAX_LEVEL];
+extern birther previous_char;
 extern vault_type *v_info;
 extern char *v_name;
 extern char *v_text;
@@ -1486,6 +1487,7 @@ extern void jverb( const char *in , char *out , int flag);
 extern char* strstr_j(cptr str1, cptr str2);
 extern size_t mb_strlcpy(char *dst, const char *src, size_t size);
 extern void codeconv(char *str);
+extern bool iskanji2(cptr s, int x);
 #endif
 
 #ifdef WORLD_SCORE

@@ -34,40 +34,6 @@
 /*
  * Forward declare
  */
-typedef struct birther birther;
-
-/*
- * A structure to hold "rolled" information
- */
-struct birther
-{
-	s16b age;
-	s16b wt;
-	s16b ht;
-	s16b sc;
-
-	s32b au;
-
-	s16b stat[6];
-	s16b hp[50];
-
-	s16b chaos_patron;
-
-	char history[4][60];
-};
-
-
-
-/*
- * The last character displayed
- */
-static birther prev;
-
-
-
-/*
- * Forward declare
- */
 typedef struct hist_type hist_type;
 
 /*
@@ -2386,37 +2352,48 @@ else
 /*
  * Save the current data for later
  */
-static void save_prev_data(void)
+static void save_prev_data(birther *birther_ptr)
 {
 	int i;
 
-
-	/*** Save the current data ***/
-
 	/* Save the data */
-	prev.age = p_ptr->age;
-	prev.wt = p_ptr->wt;
-	prev.ht = p_ptr->ht;
-	prev.sc = p_ptr->sc;
-	prev.au = p_ptr->au;
+	birther_ptr->psex = p_ptr->psex;
+	birther_ptr->prace = p_ptr->prace;
+	birther_ptr->pclass = p_ptr->pclass;
+	birther_ptr->pseikaku = p_ptr->pseikaku;
+	birther_ptr->realm1 = p_ptr->realm1;
+	birther_ptr->realm2 = p_ptr->realm2;
+	birther_ptr->age = p_ptr->age;
+	birther_ptr->ht = p_ptr->ht;
+	birther_ptr->wt = p_ptr->wt;
+	birther_ptr->sc = p_ptr->sc;
+	birther_ptr->au = p_ptr->au;
 
 	/* Save the stats */
 	for (i = 0; i < 6; i++)
 	{
-		prev.stat[i] = p_ptr->stat_max[i];
+		birther_ptr->stat_max[i] = p_ptr->stat_max[i];
+		birther_ptr->stat_max_max[i] = p_ptr->stat_max_max[i];
 	}
 
-	for(i = 0; i < 50; i++)
+	/* Save the hp */
+	for (i = 0; i < PY_MAX_LEVEL; i++)
 	{
-		prev.hp[i] = player_hp[i];
+		birther_ptr->player_hp[i] = player_hp[i];
 	}
 
-	prev.chaos_patron = p_ptr->chaos_patron;
+	birther_ptr->chaos_patron = p_ptr->chaos_patron;
+
+	/* Save the virtues */
+	for (i = 0; i < 8; i++)
+	{
+		birther_ptr->vir_types[i] = p_ptr->vir_types[i];
+	}
 
 	/* Save the history */
 	for (i = 0; i < 4; i++)
 	{
-		strcpy(prev.history[i], history[i]);
+		strcpy(birther_ptr->history[i], history[i]);
 	}
 }
 
@@ -2424,103 +2401,63 @@ static void save_prev_data(void)
 /*
  * Load the previous data
  */
-static void load_prev_data(void)
+static void load_prev_data(bool swap)
 {
 	int i;
 
 	birther	temp;
 
-
 	/*** Save the current data ***/
-
-	/* Save the data */
-	temp.age = p_ptr->age;
-	temp.wt = p_ptr->wt;
-	temp.ht = p_ptr->ht;
-	temp.sc = p_ptr->sc;
-	temp.au = p_ptr->au;
-
-	/* Save the stats */
-	for (i = 0; i < 6; i++)
-	{
-		temp.stat[i] = p_ptr->stat_max[i];
-	}
-
-	/* Save the hp */
-	for (i = 0; i < 50; i++)
-	{
-		temp.hp[i] = player_hp[i];
-	}
-
-	temp.chaos_patron = p_ptr->chaos_patron;
-
-	/* Save the history */
-	for (i = 0; i < 4; i++)
-	{
-		strcpy(temp.history[i], history[i]);
-	}
+	if (swap) save_prev_data(&temp);
 
 
 	/*** Load the previous data ***/
 
 	/* Load the data */
-	p_ptr->age = prev.age;
-	p_ptr->wt = prev.wt;
-	p_ptr->ht = prev.ht;
-	p_ptr->sc = prev.sc;
-	p_ptr->au = prev.au;
+	p_ptr->psex = previous_char.psex;
+	p_ptr->prace = previous_char.prace;
+	p_ptr->pclass = previous_char.pclass;
+	p_ptr->pseikaku = previous_char.pseikaku;
+	p_ptr->realm1 = previous_char.realm1;
+	p_ptr->realm2 = previous_char.realm2;
+	p_ptr->age = previous_char.age;
+	p_ptr->ht = previous_char.ht;
+	p_ptr->wt = previous_char.wt;
+	p_ptr->sc = previous_char.sc;
+	p_ptr->au = previous_char.au;
 
 	/* Load the stats */
 	for (i = 0; i < 6; i++)
 	{
-		p_ptr->stat_max[i] = prev.stat[i];
-		p_ptr->stat_cur[i] = prev.stat[i];
+		p_ptr->stat_cur[i] = p_ptr->stat_max[i] = previous_char.stat_max[i];
+		p_ptr->stat_max_max[i] = previous_char.stat_max_max[i];
 	}
 
 	/* Load the hp */
-	for (i = 0; i < 50; i++)
+	for (i = 0; i < PY_MAX_LEVEL; i++)
 	{
-		player_hp[i] = prev.hp[i];
+		player_hp[i] = previous_char.player_hp[i];
 	}
 	p_ptr->mhp = player_hp[0];
 	p_ptr->chp = player_hp[0];
 
-	p_ptr->chaos_patron = prev.chaos_patron;
+	p_ptr->chaos_patron = previous_char.chaos_patron;
+
+	for (i = 0; i < 8; i++)
+	{
+		p_ptr->vir_types[i] = previous_char.vir_types[i];
+	}
 
 	/* Load the history */
 	for (i = 0; i < 4; i++)
 	{
-		strcpy(history[i], prev.history[i]);
+		strcpy(history[i], previous_char.history[i]);
 	}
 
-
-	/*** Save the current data ***/
-
-	/* Save the data */
-	prev.age = temp.age;
-	prev.wt = temp.wt;
-	prev.ht = temp.ht;
-	prev.sc = temp.sc;
-	prev.au = temp.au;
-
-	/* Save the stats */
-	for (i = 0; i < 6; i++)
+	/*** Save the previous data ***/
+	if (swap)
 	{
-		prev.stat[i] = temp.stat[i];
-	}
-
-	/* Save the hp */
-	for (i = 0; i < 50; i++)
-	{
-		prev.hp[i] = temp.hp[i];
-	}
-
-	prev.chaos_patron = temp.chaos_patron;
-
-	/* Save the history */
-	for (i = 0; i < 4; i++)
-	{
-		strcpy(prev.history[i], temp.history[i]);
+		COPY(&previous_char, &temp, birther);
 	}
 }
 
@@ -2677,12 +2614,9 @@ void get_max_stats(void)
 /*
  * Roll for some info that the auto-roller ignores
  */
-static void get_extra(void)
+static void get_extra(bool roll_hitdie)
 {
 	int		i, j, min_value, max_value;
-
-	/* Level one */
-	p_ptr->max_plv = p_ptr->lev = 1;
 
 	/* Experience factor */
 	if (p_ptr->prace == RACE_ANDROID) p_ptr->expfact = rp_ptr->r_exp;
@@ -2691,19 +2625,7 @@ static void get_extra(void)
 	if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_NINJA)) && ((p_ptr->prace == RACE_KLACKON) || (p_ptr->prace == RACE_SPRITE)))
 		p_ptr->expfact -= 15;
 
-	/* Initialize arena and rewards information -KMW- */
-	p_ptr->arena_number = 0;
-	p_ptr->inside_arena = FALSE;
-	p_ptr->inside_quest = 0;
-	p_ptr->leftbldg = FALSE;
-	for (i = 0; i < MAX_MANE; i++)
-	{
-		mane_spell[i] = -1;
-		mane_dam[i] = 0;
-	}
-	mane_num = 0;
-	p_ptr->exit_bldg = TRUE; /* only used for arena now -KMW- */
-
+	/* Reset record of race/realm changes */
 	p_ptr->start_race = p_ptr->prace;
 	p_ptr->old_race1 = 0L;
 	p_ptr->old_race2 = 0L;
@@ -2727,55 +2649,51 @@ static void get_extra(void)
 	for (i = 0; i < 10; i++)
 		skill_exp[i] = s_info[p_ptr->pclass].s_start[i];
 
-	/* Reset rewards */
-	for (i = 0; i < MAX_BACT; i++)
-	{
-		p_ptr->rewards[i] = 0;
-	}
-
-	p_ptr->today_mon = 0;
-
 	/* Hitdice */
 	if (p_ptr->pclass == CLASS_SORCERER)
 		p_ptr->hitdie = rp_ptr->r_mhp/2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
 	else
 		p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 
-	/* Minimum hitpoints at highest level */
-	min_value = ((PY_MAX_LEVEL+2) * (p_ptr->hitdie + 1)) * 3 / 8;
-	min_value += p_ptr->hitdie;
-
-	/* Maximum hitpoints at highest level */
-	max_value = ((PY_MAX_LEVEL+2) * (p_ptr->hitdie + 1)) * 5 / 8;
-	max_value += p_ptr->hitdie;
-
-	/* Roll out the hitpoints */
-	while (TRUE)
+	/* Roll for hit point unless quick-start */
+	if (roll_hitdie)
 	{
-		/* Pre-calculate level 1 hitdice */
-		player_hp[0] = p_ptr->hitdie;
+		/* Minimum hitpoints at highest level */
+		min_value = ((PY_MAX_LEVEL+2) * (p_ptr->hitdie + 1)) * 3 / 8;
+		min_value += p_ptr->hitdie;
 
-		for (i = 1; i < 4; i++)
+		/* Maximum hitpoints at highest level */
+		max_value = ((PY_MAX_LEVEL+2) * (p_ptr->hitdie + 1)) * 5 / 8;
+		max_value += p_ptr->hitdie;
+
+		/* Roll out the hitpoints */
+		while (TRUE)
 		{
-			j = randint1(p_ptr->hitdie);
-			player_hp[0] += j;
+			/* Pre-calculate level 1 hitdice */
+			player_hp[0] = p_ptr->hitdie;
+
+			for (i = 1; i < 4; i++)
+			{
+				j = randint1(p_ptr->hitdie);
+				player_hp[0] += j;
+			}
+
+			/* Roll the hitpoint values */
+			for (i = 1; i < PY_MAX_LEVEL; i++)
+			{
+				j = randint1(p_ptr->hitdie);
+				player_hp[i] = player_hp[i - 1] + j;
+			}
+
+			/* XXX Could also require acceptable "mid-level" hitpoints */
+
+			/* Require "valid" hitpoints at highest level */
+			if (player_hp[PY_MAX_LEVEL - 1] < min_value) continue;
+			if (player_hp[PY_MAX_LEVEL - 1] > max_value) continue;
+
+			/* Acceptable */
+			break;
 		}
-
-		/* Roll the hitpoint values */
-		for (i = 1; i < PY_MAX_LEVEL; i++)
-		{
-			j = randint1(p_ptr->hitdie);
-			player_hp[i] = player_hp[i - 1] + j;
-		}
-
-		/* XXX Could also require acceptable "mid-level" hitpoints */
-
-		/* Require "valid" hitpoints at highest level */
-		if (player_hp[PY_MAX_LEVEL - 1] < min_value) continue;
-		if (player_hp[PY_MAX_LEVEL - 1] > max_value) continue;
-
-		/* Acceptable */
-		break;
 	}
 
 	/* Initial hitpoints */
@@ -3304,10 +3222,156 @@ static void player_wipe(void)
 		p_ptr->magic_num2[i] = 0;
 	}
 
+	/* Level one */
+	p_ptr->max_plv = p_ptr->lev = 1;
+
+	/* Initialize arena and rewards information -KMW- */
+	p_ptr->arena_number = 0;
+	p_ptr->inside_arena = FALSE;
+	p_ptr->inside_quest = 0;
+	p_ptr->leftbldg = FALSE;
+	for (i = 0; i < MAX_MANE; i++)
+	{
+		mane_spell[i] = -1;
+		mane_dam[i] = 0;
+	}
+	mane_num = 0;
+	p_ptr->exit_bldg = TRUE; /* only used for arena now -KMW- */
+
+	/* Reset rewards */
+	for (i = 0; i < MAX_BACT; i++)
+	{
+		p_ptr->rewards[i] = 0;
+	}
+
+	/* Bounty */
+	p_ptr->today_mon = 0;
+
 	/* Reset monster arena */
 	battle_monsters();
+
+	/* Reset mutations */
+	p_ptr->muta1 = 0;
+	p_ptr->muta2 = 0;
+	p_ptr->muta3 = 0;
+
+	/* Reset virtues*/
+	for (i = 0; i < 8; i++) p_ptr->virtues[i]=0;
+
+	/* Set the recall dungeon accordingly */
+	if (vanilla_town)
+	{
+		dungeon_type = 0;
+		p_ptr->recall_dungeon = DUNGEON_ANGBAND;
+	}
+	else
+	{
+		dungeon_type = 0;
+		p_ptr->recall_dungeon = DUNGEON_GALGALS;
+	}
 }
 
+/*
+ *  Initialize random quests and final quests
+ */
+static void init_dungeon_quests(int number_of_quests)
+{
+	int i;
+
+	/* Init the random quests */
+	init_flags = INIT_ASSIGN;
+	p_ptr->inside_quest = MIN_RANDOM_QUEST;
+
+	process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+
+	p_ptr->inside_quest = 0;
+
+	/* Prepare allocation table */
+	get_mon_num_prep(monster_quest, NULL);
+
+	/* Generate quests */
+	for (i = MIN_RANDOM_QUEST + number_of_quests - 1; i >= MIN_RANDOM_QUEST; i--)
+	{
+		quest_type      *q_ptr = &quest[i];
+		monster_race    *r_ptr;
+		monster_race    *quest_r_ptr;
+		int             r_idx;
+
+		q_ptr->status = QUEST_STATUS_TAKEN;
+
+		while (1)
+		{
+			/*
+			 * Random monster 5 - 10 levels out of depth
+			 * (depending on level)
+			 */
+			r_idx = get_mon_num(q_ptr->level + 5 + randint1(q_ptr->level / 10));
+			r_ptr = &r_info[r_idx];
+
+			if(!(r_ptr->flags1 & RF1_UNIQUE)) continue;
+
+			if(r_ptr->flags1 & RF1_QUESTOR) continue;
+
+			if(r_ptr->flags6 & RF6_SPECIAL) continue;
+
+			if(r_ptr->flags7 & RF7_FRIENDLY) continue;
+
+			if(r_ptr->flags7 & RF7_AQUATIC) continue;
+
+			if(r_ptr->flags8 & RF8_WILD_ONLY) continue;
+
+			/*
+			 * Accept monsters that are 2 - 6 levels
+			 * out of depth depending on the quest level
+			 */
+			if (r_ptr->level > (q_ptr->level + (q_ptr->level / 20))) break;
+		}
+
+		q_ptr->r_idx = r_idx;
+		quest_r_ptr = &r_info[q_ptr->r_idx];
+
+		/* Mark uniques */
+		quest_r_ptr->flags1 |= RF1_QUESTOR;
+
+		q_ptr->max_num = 1;
+	}
+
+	/* Init the two main quests (Oberon + Serpent) */
+	init_flags = INIT_ASSIGN;
+	p_ptr->inside_quest = QUEST_OBERON;
+
+	process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+
+	quest[QUEST_OBERON].status = QUEST_STATUS_TAKEN;
+
+	p_ptr->inside_quest = QUEST_SERPENT;
+
+	process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+
+	quest[QUEST_SERPENT].status = QUEST_STATUS_TAKEN;
+	p_ptr->inside_quest = 0;
+}
+
+/*
+ * Reset turn
+ */
+static void init_turn(void)
+{
+	if ((p_ptr->prace == RACE_VAMPIRE) ||
+	    (p_ptr->prace == RACE_SKELETON) ||
+	    (p_ptr->prace == RACE_ZOMBIE) ||
+	    (p_ptr->prace == RACE_SPECTRE))
+	{
+		/* Undead start just after midnight */
+		turn = (TURNS_PER_TICK*3 * TOWN_DAWN) / 4 + 1;
+	}
+	else
+	{
+		turn = 1;
+	}
+
+	dungeon_turn = 1;
+}
 
 /*
  * Each player starts out with a few items, given as tval/sval pairs.
@@ -4952,6 +5016,155 @@ static bool get_chara_limits(void)
 #endif
 
 /*
+ *  Character background edit-mode
+ */
+static void edit_history(void)
+{
+        char old_history[4][60];
+	char c;
+	int y = 0, x = 0;
+	int i, j;
+
+        /* Edit character background */
+        for (i = 0; i < 4; i++)
+        {
+                sprintf(old_history[i], "%s", history[i]);
+        }
+        /* Turn 0 to space */
+	for (i = 0; i < 4; i++)
+	{
+		for (j = 0; history[i][j]; j++) /* loop */;
+
+		for (; j < 59; j++) history[i][j] = ' ';
+	}
+        display_player(1);
+#ifdef JP
+        c_put_str(TERM_L_GREEN, "(キャラクターの生い立ち - 編集モード)", 15, 20);
+#else
+        c_put_str(TERM_L_GREEN, "(Character Background - Edit Mode)", 15, 20);
+#endif
+
+        while (TRUE)
+        {
+                for (i = 0; i < 4; i++)
+                {
+                        put_str(history[i], i + 12, 10);
+                }
+#ifdef JP
+		if (iskanji2(history[y], x))
+			c_put_str(TERM_L_BLUE, format("%c%c", history[y][x],history[y][x+1]), y + 12, x + 10);
+		else
+#endif
+                c_put_str(TERM_L_BLUE, format("%c", history[y][x]), y + 12, x + 10);
+
+		/* Place cursor just after cost of current stat */
+                Term_gotoxy(x + 10, y + 12);
+
+                c = inkey();
+
+                if (c == '8')
+                {
+                        y--;
+                        if (y < 0) y = 3;
+#ifdef JP
+			if ((x > 0) && (iskanji2(history[y], x-1))) x--;
+#endif
+                }
+                else if (c == '2')
+                {
+                        y++;
+                        if (y > 3) y = 0;
+#ifdef JP
+			if ((x > 0) && (iskanji2(history[y], x-1))) x--;
+#endif
+                }
+                else if (c == '6')
+                {
+#ifdef JP
+			if (iskanji2(history[y], x)) x++;
+#endif
+                        x++;
+                        if (x > 59) x = 0;
+                }
+                else if (c == '4')
+                {
+                        x--;
+#ifdef JP
+			if ((x > 0) && (iskanji2(history[y], x-1))) x--;
+#endif
+                        if (x < 0) x = 59;
+                }
+                else if (c == '\r')
+                {
+                        break;
+                }
+                else if (c == ESCAPE)
+                {
+                        for (i = 0; i < 4; i++)
+                        {
+                                sprintf(history[i], "%s", old_history[i]);
+                                put_str(history[i], i + 12, 10);
+                        }
+                        break;
+                }
+		else if (c == '\010')
+		{
+			x--;
+                        history[y][x] = ' ';
+#ifdef JP
+			if ((x > 0) && (iskanji2(history[y], x-1)))
+			{
+				x--;
+				history[y][x] = ' ';
+			}
+#endif
+			if (x < 0) x = 59;
+		}
+#ifdef JP
+		else if (iskanji(c) || isprint(c))
+#else
+                else if (isprint(c)) /* BUGFIX */
+#endif
+                {
+#ifdef JP
+			if (iskanji2(history[y], x))
+			{
+				history[y][x+1] = ' ';
+			}
+
+			if (iskanji(c))
+			{
+				if (x > 57)
+				{
+					x = 0;
+					y++;
+					if (y > 3) y = 0;
+				}
+
+				if (iskanji2(history[y], x+1))
+				{
+					history[y][x+2] = ' ';
+				}
+
+				history[y][x++] = c;
+
+				c = inkey();
+			}
+#endif
+                        history[y][x++] = c;
+			if (x > 58)
+			{
+				x = 0;
+				y++;
+				if (y > 3) y = 0;
+			}
+                }
+        } /* while (TRUE) */
+
+}
+
+
+/*
  * Helper function for 'player_birth()'
  *
  * The delay may be reduced, but is recommended to keep players
@@ -4960,7 +5173,8 @@ static bool get_chara_limits(void)
  */
 static bool player_birth_aux(void)
 {
-	int i, k, n, v, cs, os;
+	int i, k, n, cs, os;
+	int number_of_quests;
 
 	int mode = 0;
 
@@ -5026,6 +5240,74 @@ static bool player_birth_aux(void)
 #else
 	put_str("Make your charactor. ('S' Restart, 'Q' Quit, '?' Help)", 8, 10);
 #endif
+
+
+	/*** Quick Start ***/
+
+	if (previous_char.quick_ok)
+	{
+		bool do_quick_start = FALSE;
+
+		/* Extra info */
+#ifdef JP
+	put_str("クイック・スタートを使うと以前と全く同じキャラクターで始められます。", 11, 5);
+#else
+	put_str("Do you want to use the quick start function(same character as your last one).", 11, 5);
+#endif
+
+		/* Choose */
+		while (1)
+		{
+#ifdef JP
+			put_str("クイック・スタートを使いますか？[y/n]", 14, 10);
+#else
+			put_str("Use quick start? [y/n]", 14, 10);
+#endif
+			c = inkey();
+			if (c == 'Q') quit(NULL);
+			else if (c == 'S') return (FALSE);
+			else if ((c == 'y') || (c == 'Y'))
+			{
+				do_quick_start = TRUE;
+				break;
+			}
+			else
+			{
+				do_quick_start = FALSE;
+				break;
+			}
+		}
+
+		if (do_quick_start)
+		{
+			load_prev_data(FALSE);
+			init_dungeon_quests(previous_char.quests);
+			init_turn();
+
+			/* Calc hitdie, but don't roll */
+			get_extra(FALSE);
+
+			/* Calculate the bonuses and hitpoints */
+			p_ptr->update |= (PU_BONUS | PU_HP);
+
+			/* Update stuff */
+			update_stuff();
+
+			/* Fully healed */
+			p_ptr->chp = p_ptr->mhp;
+
+			/* Fully rested */
+			p_ptr->csp = p_ptr->msp;
+
+			/* Process the player name */
+			process_player_name(FALSE);
+
+			return TRUE;
+		}
+
+		/* Clean up */
+		clear_from(10);
+	}
 
 
 	/*** Player sex ***/
@@ -5350,15 +5632,15 @@ static bool player_birth_aux(void)
 			if (inp[0] == '*')
 			{
 				/* 0 to 49 random quests */
-				v = randint0(11);
+				number_of_quests = randint0(11);
 			}
 			else
 			{
-				v = atoi(inp);
+				number_of_quests = atoi(inp);
 			}
 
 			/* Break on valid input */
-			if ((v <= MAX_RANDOM_QUEST - MIN_RANDOM_QUEST + 1) && (v >= 0)) break;
+			if ((number_of_quests <= MAX_RANDOM_QUEST - MIN_RANDOM_QUEST + 1) && (number_of_quests >= 0)) break;
 		}
 		break;
 	}
@@ -5366,97 +5648,10 @@ static bool player_birth_aux(void)
 	/* Clear */
 	clear_from(10);
 
-	/* Init the random quests */
-	init_flags = INIT_ASSIGN;
-	p_ptr->inside_quest = MIN_RANDOM_QUEST;
-
-	process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
-
-	p_ptr->inside_quest = 0;
-
-	/* Prepare allocation table */
-	get_mon_num_prep(monster_quest, NULL);
-
-	/* Generate quests */
-	for (i = MIN_RANDOM_QUEST + v - 1; i >= MIN_RANDOM_QUEST; i--)
-	{
-		quest_type      *q_ptr = &quest[i];
-		monster_race    *r_ptr;
-		monster_race    *quest_r_ptr;
-		int             r_idx;
-
-		q_ptr->status = QUEST_STATUS_TAKEN;
-
-		while (1)
-		{
-			/*
-			 * Random monster 5 - 10 levels out of depth
-			 * (depending on level)
-			 */
-			r_idx = get_mon_num(q_ptr->level + 5 + randint1(q_ptr->level / 10));
-			r_ptr = &r_info[r_idx];
-
-			if(!(r_ptr->flags1 & RF1_UNIQUE)) continue;
-
-			if(r_ptr->flags1 & RF1_QUESTOR) continue;
-
-			if(r_ptr->flags6 & RF6_SPECIAL) continue;
-
-			if(r_ptr->flags7 & RF7_FRIENDLY) continue;
-
-			if(r_ptr->flags7 & RF7_AQUATIC) continue;
-
-			if(r_ptr->flags8 & RF8_WILD_ONLY) continue;
-
-			/*
-			 * Accept monsters that are 2 - 6 levels
-			 * out of depth depending on the quest level
-			 */
-			if (r_ptr->level > (q_ptr->level + (q_ptr->level / 20))) break;
-		}
-
-		q_ptr->r_idx = r_idx;
-		quest_r_ptr = &r_info[q_ptr->r_idx];
-
-		/* Mark uniques */
-		quest_r_ptr->flags1 |= RF1_QUESTOR;
-
-		q_ptr->max_num = 1;
-	}
-
-	/* Init the two main quests (Oberon + Serpent) */
-	init_flags = INIT_ASSIGN;
-	p_ptr->inside_quest = QUEST_OBERON;
-
-	process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
-
-	quest[QUEST_OBERON].status = QUEST_STATUS_TAKEN;
-
-	p_ptr->inside_quest = QUEST_SERPENT;
-
-	process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
-
-	quest[QUEST_SERPENT].status = QUEST_STATUS_TAKEN;
-	p_ptr->inside_quest = 0;
-
-	/* Clear */
-	clear_from(10);
+	init_dungeon_quests(number_of_quests);
 
 	/* Reset turn; before auto-roll and after choosing race */
-	if ((p_ptr->prace == RACE_VAMPIRE) ||
-	    (p_ptr->prace == RACE_SKELETON) ||
-	    (p_ptr->prace == RACE_ZOMBIE) ||
-	    (p_ptr->prace == RACE_SPECTRE))
-	{
-		/* Undead start just after midnight */
-		turn = (TURNS_PER_TICK*3 * TOWN_DAWN) / 4 + 1;
-	}
-	else
-	{
-		turn = 1;
-	}
-	dungeon_turn = 1;
-
+	init_turn();
 
 	/*** Generate ***/
 
@@ -5658,17 +5853,13 @@ static bool player_birth_aux(void)
 		mode = 0;
 
 		/* Roll for base hitpoints */
-		get_extra();
+		get_extra(TRUE);
 
 		/* Roll for gold */
 		get_money();
 
 		/* Hack -- get a chaos patron even if you are not a chaos warrior */
 		p_ptr->chaos_patron = (s16b)randint0(MAX_PATRON);
-
-		p_ptr->muta1 = 0;
-		p_ptr->muta2 = 0;
-		p_ptr->muta3 = 0;
 
 		/* Input loop */
 		while (TRUE)
@@ -5741,7 +5932,7 @@ static bool player_birth_aux(void)
 			/* Previous character */
 			if (prev && (c == 'p'))
 			{
-				load_prev_data();
+				load_prev_data(TRUE);
 				continue;
 			}
 
@@ -5784,7 +5975,8 @@ static bool player_birth_aux(void)
 		if (c == '\r' || c == '\n' || c == ESCAPE) break;
 
 		/* Save this for the "previous" character */
-		save_prev_data();
+		save_prev_data(&previous_char);
+		previous_char.quick_ok = FALSE;
 
 		/* Note that a previous roll exists */
 		prev = TRUE;
@@ -5793,27 +5985,18 @@ static bool player_birth_aux(void)
 	/* Clear prompt */
 	clear_from(23);
 
-	get_max_stats();
+	/*** Edit character background ***/
+	edit_history();
 
 	/*** Finish up ***/
+
+	get_max_stats();
 
 	/* Get a name, recolor it, prepare savefile */
 
 	get_name();
 
 	get_virtues();
-
-	/* Set the recall dungeon accordingly */
-	if (vanilla_town)
-	{
-		dungeon_type = 0;
-		p_ptr->recall_dungeon = DUNGEON_ANGBAND;
-	}
-	else
-	{
-		dungeon_type = 0;
-		p_ptr->recall_dungeon = DUNGEON_GALGALS;
-	}
 
 	/* Prompt for it */
 #ifdef JP
@@ -5831,6 +6014,11 @@ static bool player_birth_aux(void)
 
 	/* Start over */
 	if (c == 'S') return (FALSE);
+
+	/* Save character data for quick start */
+	save_prev_data(&previous_char);
+	previous_char.quests = number_of_quests;
+	previous_char.quick_ok = TRUE;
 
 	/* Accept */
 	return (TRUE);

@@ -887,6 +887,41 @@ static void wr_ghost(void)
 
 
 /*
+ * Save quick start data
+ */
+void save_quick_start()
+{
+	int i;
+
+	wr_byte(previous_char.psex);
+	wr_byte(previous_char.prace);
+	wr_byte(previous_char.pclass);
+	wr_byte(previous_char.pseikaku);
+	wr_byte(previous_char.realm1);
+	wr_byte(previous_char.realm2);
+
+	wr_s16b(previous_char.age);
+	wr_s16b(previous_char.ht);
+	wr_s16b(previous_char.wt);
+	wr_s16b(previous_char.sc);
+	wr_s32b(previous_char.au);
+
+	for (i = 0; i < 6; i++) wr_s16b(previous_char.stat_max[i]);
+	for (i = 0; i < 6; i++) wr_s16b(previous_char.stat_max_max[i]);
+
+	for (i = 0; i < PY_MAX_LEVEL; i++) wr_s16b(previous_char.player_hp[i]);
+
+	wr_s16b(previous_char.chaos_patron);
+
+	for (i = 0; i < 8; i++) wr_s16b(previous_char.vir_types[i]);
+
+	for (i = 0; i < 4; i++) wr_string(previous_char.history[i]);
+
+	wr_byte(previous_char.quests);
+	wr_byte((byte)previous_char.quick_ok);
+}
+
+/*
  * Write some "extra" info
  */
 static void wr_extra(void)
@@ -897,6 +932,8 @@ static void wr_extra(void)
 	wr_string(player_name);
 
 	wr_string(died_from);
+
+	save_quick_start();
 
 	for (i = 0; i < 4; i++)
 	{
