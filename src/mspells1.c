@@ -3464,13 +3464,9 @@ msg_format("%^sがテレポートした。", m_name);
 			switch(m_ptr->r_idx)
 			{
 			case MON_OHMU:
-				if (p_ptr->inside_arena || p_ptr->inside_battle) return FALSE;
-				for (k = 0; k < 6; k++)
-				{
-					count += summon_specific(m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_BIZARRE1, PM_ALLOW_GROUP);
-				}
+				/* Moved to process_monster(), like multiplication */
 				return FALSE;
-				
+
 			case MON_BANORLUPART:
 				{
 					int dummy_hp = (m_ptr->hp + 1) / 2;

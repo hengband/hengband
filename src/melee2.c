@@ -2521,6 +2521,31 @@ msg_format("%^sは突然敵にまわった！", m_name);
 	}
 
 
+	if (r_ptr->flags6 & RF6_SPECIAL)
+	{
+		/* Hack -- Ohmu scatters molds! */
+		if (m_ptr->r_idx == MON_OHMU)
+		{
+			if (!p_ptr->inside_arena && !p_ptr->inside_battle)
+			{
+				if (r_ptr->freq_spell && (randint1(100) <= r_ptr->freq_spell))
+				{
+					int  k, count = 0;
+					int  rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+					u32b p_mode = is_pet(m_ptr) ? PM_FORCE_PET : 0L;
+
+					for (k = 0; k < 6; k++)
+					{
+						count += summon_specific(m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_BIZARRE1, (PM_ALLOW_GROUP | p_mode));
+					}
+
+					if (count && m_ptr->ml) r_ptr->r_flags6 |= (RF6_SPECIAL);
+				}
+			}
+		}
+	}
+
+
 	if (!p_ptr->inside_battle)
 	{
 		/* Hack! "Cyber" monster makes noise... */

@@ -3240,11 +3240,7 @@ bool monst_spell_monst(int m_idx)
 		switch (m_ptr->r_idx)
 		{
 		case MON_OHMU:
-			if (p_ptr->inside_arena || p_ptr->inside_battle) return FALSE;
-			for (k = 0; k < 6; k++)
-			{
-				summon_specific(m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_BIZARRE1, (PM_ALLOW_GROUP | p_mode));
-			}
+			/* Moved to process_monster(), like multiplication */
 			return FALSE;
 
 		default:
