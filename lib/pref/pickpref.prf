@@ -94,13 +94,9 @@ unidentified dice boosted weapons
 !nameless common armors
 
 ?:[GEQ $LEVEL 20]
-# Destroy identified average equipments.
-!nameless common weapons:) (+0,+0)
-!nameless common armors:,+0]
-
-# Destroy pseudo-identified average equipments.
-!nameless common weapons:{average}
-!nameless common armors:{average}
+# Destroy known average equipments.
+!average common weapons
+!average common armors
 ?:1
 
 #

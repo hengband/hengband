@@ -18,31 +18,33 @@
 /*
  * Macros for Keywords
  */
-#define FLG_ALL              0
-#define FLG_COLLECTING	     1
-#define FLG_UNAWARE	     2 
-#define FLG_UNIDENTIFIED     3 
-#define FLG_IDENTIFIED	     4 
-#define FLG_STAR_IDENTIFIED  5 
-#define FLG_BOOSTED	     6 
-#define FLG_MORE_DICE	     7 
-#define FLG_MORE_BONUS	     10 
-#define FLG_WORTHLESS	     11
-#define FLG_ARTIFACT	     12
-#define FLG_EGO		     13
-#define FLG_NAMELESS	     14
-#define FLG_RARE	     15
-#define FLG_COMMON	     16
-#define FLG_WANTED	     17
-#define FLG_UNIQUE	     18
-#define FLG_HUMAN	     19
-#define FLG_UNREADABLE	     20
-#define FLG_REALM1	     21
-#define FLG_REALM2	     22
-#define FLG_FIRST	     23
-#define FLG_SECOND	     24
-#define FLG_THIRD	     25
-#define FLG_FOURTH	     26
+#define FLG_ALL              0 
+#define FLG_UNAWARE	     1 
+#define FLG_UNIDENTIFIED     2 
+#define FLG_IDENTIFIED	     3 
+#define FLG_STAR_IDENTIFIED  4 
+#define FLG_COLLECTING	     5 
+#define FLG_ARTIFACT	     6 
+#define FLG_EGO		     7 
+#define FLG_GOOD	     10
+#define FLG_NAMELESS	     11
+#define FLG_AVERAGE	     12
+#define FLG_WORTHLESS	     13
+#define FLG_RARE	     14
+#define FLG_COMMON	     15
+#define FLG_BOOSTED	     16
+#define FLG_MORE_DICE	     17
+#define FLG_MORE_BONUS	     18 
+#define FLG_WANTED	     19
+#define FLG_UNIQUE	     20
+#define FLG_HUMAN	     21
+#define FLG_UNREADABLE	     22
+#define FLG_REALM1	     23
+#define FLG_REALM2	     24
+#define FLG_FIRST	     25
+#define FLG_SECOND	     26
+#define FLG_THIRD	     27
+#define FLG_FOURTH	     28
 
 #define FLG_ITEMS	     30
 #define FLG_WEAPONS	     31
@@ -71,22 +73,24 @@
 #ifdef JP
 
 static char KEY_ALL[] = "すべての";
-static char KEY_COLLECTING[] = "収集中の";
 static char KEY_UNAWARE[] = "未判明の";
 static char KEY_UNIDENTIFIED[] = "未鑑定の";
 static char KEY_IDENTIFIED[] = "鑑定済みの";
 static char KEY_STAR_IDENTIFIED[] = "*鑑定*済みの";
+static char KEY_COLLECTING[] = "収集中の";
+static char KEY_ARTIFACT[] = "アーティファクト";
+static char KEY_EGO[] = "エゴ";
+static char KEY_GOOD[] = "上質の";
+static char KEY_NAMELESS[] = "無銘の";
+static char KEY_AVERAGE[] = "並の";
+static char KEY_WORTHLESS[] = "無価値の";
+static char KEY_RARE[] = "レアな";
+static char KEY_COMMON[] = "ありふれた";
 static char KEY_BOOSTED[] = "ダイス目の違う";
 static char KEY_MORE_THAN[] =  "ダイス目";
 static char KEY_DICE[] =  "以上の";
 static char KEY_MORE_BONUS[] =  "修正値";
 static char KEY_MORE_BONUS2[] =  "以上の";
-static char KEY_WORTHLESS[] = "無価値の";
-static char KEY_ARTIFACT[] = "アーティファクト";
-static char KEY_EGO[] = "エゴ";
-static char KEY_NAMELESS[] = "無銘の";
-static char KEY_RARE[] = "レアな";
-static char KEY_COMMON[] = "ありふれた";
 static char KEY_WANTED[] = "賞金首の";
 static char KEY_UNIQUE[] = "ユニーク・モンスターの";
 static char KEY_HUMAN[] = "人間の";
@@ -121,22 +125,24 @@ static char KEY_BOOTS[] = "靴";
 #else 
 
 static char KEY_ALL[] = "all";
-static char KEY_COLLECTING[] = "collecting";
 static char KEY_UNAWARE[] = "unaware";
 static char KEY_UNIDENTIFIED[] = "unidentified";
 static char KEY_IDENTIFIED[] = "identified";
 static char KEY_STAR_IDENTIFIED[] = "*identified*";
+static char KEY_COLLECTING[] = "collecting";
+static char KEY_ARTIFACT[] = "artifact";
+static char KEY_EGO[] = "ego";
+static char KEY_GOOD[] = "good";
+static char KEY_NAMELESS[] = "nameless";
+static char KEY_AVERAGE[] = "average";
+static char KEY_WORTHLESS[] = "worthless";
+static char KEY_RARE[] = "rare";
+static char KEY_COMMON[] = "common";
 static char KEY_BOOSTED[] = "dice boosted";
 static char KEY_MORE_THAN[] =  "more than";
 static char KEY_DICE[] =  " dice";
 static char KEY_MORE_BONUS[] =  "more bonus than";
 static char KEY_MORE_BONUS2[] =  "";
-static char KEY_WORTHLESS[] = "worthless";
-static char KEY_ARTIFACT[] = "artifact";
-static char KEY_EGO[] = "ego";
-static char KEY_NAMELESS[] = "nameless";
-static char KEY_RARE[] = "rare";
-static char KEY_COMMON[] = "common";
 static char KEY_WANTED[] = "wanted";
 static char KEY_UNIQUE[] = "unique monster's";
 static char KEY_HUMAN[] = "human";
@@ -351,7 +357,9 @@ static bool autopick_new_entry(autopick_type *entry, cptr str, bool allow_defaul
 
 		if (MATCH_KEY(KEY_WORTHLESS)) ADD_FLG(FLG_WORTHLESS);
 		if (MATCH_KEY(KEY_EGO)) ADD_FLG(FLG_EGO);
+		if (MATCH_KEY(KEY_GOOD)) ADD_FLG(FLG_GOOD);
 		if (MATCH_KEY(KEY_NAMELESS)) ADD_FLG(FLG_NAMELESS);
+		if (MATCH_KEY(KEY_AVERAGE)) ADD_FLG(FLG_AVERAGE);
 		if (MATCH_KEY(KEY_RARE)) ADD_FLG(FLG_RARE);
 		if (MATCH_KEY(KEY_COMMON)) ADD_FLG(FLG_COMMON);
 		if (MATCH_KEY(KEY_WANTED)) ADD_FLG(FLG_WANTED);
@@ -1054,7 +1062,9 @@ cptr autopick_line_from_entry(autopick_type *entry)
 	if (IS_FLG(FLG_UNIQUE)) ADD_KEY(KEY_UNIQUE);
 	if (IS_FLG(FLG_HUMAN)) ADD_KEY(KEY_HUMAN);
 	if (IS_FLG(FLG_WORTHLESS)) ADD_KEY(KEY_WORTHLESS);
+	if (IS_FLG(FLG_GOOD)) ADD_KEY(KEY_GOOD);
 	if (IS_FLG(FLG_NAMELESS)) ADD_KEY(KEY_NAMELESS);
+	if (IS_FLG(FLG_AVERAGE)) ADD_KEY(KEY_AVERAGE);
 	if (IS_FLG(FLG_RARE)) ADD_KEY(KEY_RARE);
 	if (IS_FLG(FLG_COMMON)) ADD_KEY(KEY_COMMON);
 	if (IS_FLG(FLG_EGO)) ADD_KEY(KEY_EGO);
@@ -1236,6 +1246,47 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 			return FALSE;
 	}
 
+	/*** Good ***/
+	if (IS_FLG(FLG_GOOD))
+	{
+		if (!(TV_EQUIP_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_EQUIP_END))
+			return FALSE;
+
+		/* Identified */
+		if (object_known_p(o_ptr))
+		{
+			/* Artifacts and Ego objects are not okay */
+			if (o_ptr->name1 || o_ptr->art_name || o_ptr->name2)
+				return FALSE;
+
+			/* Average are not okay */
+			if (o_ptr->to_a <= 0 && (o_ptr->to_h + o_ptr->to_d) <= 0)
+				return FALSE;
+		}
+
+		/* Pseudo-identified */
+		else if (o_ptr->ident & IDENT_SENSE)
+		{
+			switch (o_ptr->feeling)
+			{
+			case FEEL_GOOD:
+				/* It's good */
+				break;
+
+			default:
+				/* It's not good */
+				return FALSE;
+			}
+		}
+
+		/* Unidentified */
+		else
+		{
+			/* Not known to be good */
+			return FALSE;
+		}
+	}
+
 	/*** Nameless ***/
 	if (IS_FLG(FLG_NAMELESS))
 	{
@@ -1272,6 +1323,47 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 		else
 		{
 			/* Not known to be nameless */
+			return FALSE;
+		}
+	}
+
+	/*** Average ***/
+	if (IS_FLG(FLG_AVERAGE))
+	{
+		if (!(TV_EQUIP_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_EQUIP_END))
+			return FALSE;
+
+		/* Identified */
+		if (object_known_p(o_ptr))
+		{
+			/* Artifacts and Ego objects are not okay */
+			if (o_ptr->name1 || o_ptr->art_name || o_ptr->name2)
+				return FALSE;
+
+			/* Good are not okay */
+			if (o_ptr->to_a > 0 || (o_ptr->to_h + o_ptr->to_d) > 0)
+				return FALSE;
+		}
+
+		/* Pseudo-identified */
+		else if (o_ptr->ident & IDENT_SENSE)
+		{
+			switch (o_ptr->feeling)
+			{
+			case FEEL_AVERAGE:
+				/* It's average */
+				break;
+
+			default:
+				/* It's not average */
+				return FALSE;
+			}
+		}
+
+		/* Unidentified */
+		else
+		{
+			/* Not known to be average */
 			return FALSE;
 		}
 	}
@@ -2293,10 +2385,24 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		body_str = "装備";
 	}
 
+	/*** Good ***/
+	if (IS_FLG(FLG_GOOD))
+	{
+		before_str[before_n++] = "上質の";
+		body_str = "装備";
+	}
+
 	/*** Nameless ***/
 	if (IS_FLG(FLG_NAMELESS))
 	{
 		before_str[before_n++] = "エゴでもアーティファクトでもない";
+		body_str = "装備";
+	}
+
+	/*** Average ***/
+	if (IS_FLG(FLG_AVERAGE))
+	{
+		before_str[before_n++] = "並の";
 		body_str = "装備";
 	}
 
@@ -2555,11 +2661,25 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		before_str[before_n++] = "ego";
 	}
 
+	/*** Good ***/
+	if (IS_FLG(FLG_GOOD))
+	{
+		body_str = "equipment";
+		which_str[which_n++] = "have good quality";
+	}
+
 	/*** Nameless ***/
 	if (IS_FLG(FLG_NAMELESS))
 	{
 		body_str = "equipment";
 		which_str[which_n++] = "is neither ego-item nor artifact";
+	}
+
+	/*** Average ***/
+	if (IS_FLG(FLG_AVERAGE))
+	{
+		body_str = "equipment";
+		which_str[which_n++] = "have average quality";
 	}
 
 	/*** Dice boosted (weapon of slaying) ***/
@@ -3067,10 +3187,10 @@ static void toggle_keyword(text_body_type *tb, int flg)
 		}
 		
 		/* You can use only one flag in artifact/ego/nameless */
-		else if (FLG_ARTIFACT <= flg && flg <= FLG_NAMELESS)
+		else if (FLG_ARTIFACT <= flg && flg <= FLG_AVERAGE)
 		{
 			int i;
-			for (i = FLG_ARTIFACT; i <= FLG_NAMELESS; i++)
+			for (i = FLG_ARTIFACT; i <= FLG_AVERAGE; i++)
 				REM_FLG(i);
 		}
 		
@@ -3901,37 +4021,39 @@ static void search_for_string(text_body_type *tb, cptr search_str, bool forward)
 #define EC_OK_WORTHLESS	       46
 #define EC_OK_ARTIFACT	       47
 #define EC_OK_EGO	       48
-#define EC_OK_NAMELESS	       49
-#define EC_OK_RARE	       50       
-#define EC_OK_COMMON	       51
-#define EC_OK_WANTED	       52
-#define EC_OK_UNIQUE	       53
-#define EC_OK_HUMAN	       54
-#define EC_OK_UNREADABLE       55
-#define EC_OK_REALM1	       56
-#define EC_OK_REALM2	       57
-#define EC_OK_FIRST	       58
-#define EC_OK_SECOND	       59
-#define EC_OK_THIRD	       60
-#define EC_OK_FOURTH	       61
-#define EC_KK_WEAPONS	       62
-#define EC_KK_FAVORITE_WEAPONS 63
-#define EC_KK_ARMORS	       64
-#define EC_KK_MISSILES	       65
-#define EC_KK_DEVICES	       66
-#define EC_KK_LIGHTS	       67
-#define EC_KK_JUNKS	       68
-#define EC_KK_CORPSES	       69
-#define EC_KK_SPELLBOOKS       70
-#define EC_KK_SHIELDS	       71
-#define EC_KK_BOWS	       72
-#define EC_KK_RINGS	       73
-#define EC_KK_AMULETS	       74
-#define EC_KK_SUITS	       75
-#define EC_KK_CLOAKS	       76
-#define EC_KK_HELMS	       77
-#define EC_KK_GLOVES	       78
-#define EC_KK_BOOTS	       79
+#define EC_OK_GOOD	       49
+#define EC_OK_NAMELESS	       50
+#define EC_OK_AVERAGE	       51
+#define EC_OK_RARE	       52       
+#define EC_OK_COMMON	       53
+#define EC_OK_WANTED	       54
+#define EC_OK_UNIQUE	       55
+#define EC_OK_HUMAN	       56
+#define EC_OK_UNREADABLE       57
+#define EC_OK_REALM1	       58
+#define EC_OK_REALM2	       59
+#define EC_OK_FIRST	       60
+#define EC_OK_SECOND	       61
+#define EC_OK_THIRD	       62
+#define EC_OK_FOURTH	       63
+#define EC_KK_WEAPONS	       64
+#define EC_KK_FAVORITE_WEAPONS 65
+#define EC_KK_ARMORS	       66
+#define EC_KK_MISSILES	       67
+#define EC_KK_DEVICES	       68
+#define EC_KK_LIGHTS	       69
+#define EC_KK_JUNKS	       70
+#define EC_KK_CORPSES	       71
+#define EC_KK_SPELLBOOKS       72
+#define EC_KK_SHIELDS	       73
+#define EC_KK_BOWS	       74
+#define EC_KK_RINGS	       75
+#define EC_KK_AMULETS	       76
+#define EC_KK_SUITS	       77
+#define EC_KK_CLOAKS	       78
+#define EC_KK_HELMS	       79
+#define EC_KK_GLOVES	       80
+#define EC_KK_BOOTS	       81
 
 
 /* Manu names */
@@ -3986,16 +4108,13 @@ static char MN_CL_QUERY[] = "「;」 (確認して拾う)";
 static char MN_CL_NO_DISP[] = "「(」 (マップコマンドで表示しない)";
 
 static char MN_ADJECTIVE_GEN[] = "形容詞(一般)の選択";
+static char MN_RARE[] = "レアな (装備)";
+static char MN_COMMON[] = "ありふれた (装備)";
 
 static char MN_ADJECTIVE_SPECIAL[] = "形容詞(特殊)の選択";
 static char MN_BOOSTED[] = "ダイス目の違う (武器)";
 static char MN_MORE_DICE[] = "ダイス目 # 以上の (武器)";
 static char MN_MORE_BONUS[] = "修正値 # 以上の (指輪等)";
-static char MN_ARTIFACT[] = "アーティファクト (装備)";
-static char MN_EGO[] = "エゴ (装備)";
-static char MN_NAMELESS[] = "無銘の (装備)";
-static char MN_RARE[] = "レアな (装備)";
-static char MN_COMMON[] = "ありふれた (装備)";
 static char MN_WANTED[] = "賞金首の (死体)";
 static char MN_UNIQUE[] = "ユニーク・モンスターの (死体)";
 static char MN_HUMAN[] = "人間の (死体)";
@@ -4060,16 +4179,13 @@ static char MN_CL_QUERY[] = "';' (Query to pick up)";
 static char MN_CL_NO_DISP[] = "'(' (No display on the large map)";
 
 static char MN_ADJECTIVE_GEN[] = "Adjective (general)";
+static char MN_RARE[] = "rare (equipments)";
+static char MN_COMMON[] = "common (equipments)";
 
 static char MN_ADJECTIVE_SPECIAL[] = "Adjective (special)";
 static char MN_BOOSTED[] = "dice boosted (weapons)";
 static char MN_MORE_DICE[] = "more than # dice (weapons)";
 static char MN_MORE_BONUS[] = "more bonus than # (rings etc.)";
-static char MN_ARTIFACT[] = "artifact (equipments)";
-static char MN_EGO[] = "ego (equipments)";
-static char MN_NAMELESS[] = "nameless (equipments)";
-static char MN_RARE[] = "rare (equipments)";
-static char MN_COMMON[] = "common (equipments)";
 static char MN_WANTED[] = "wanted (corpse)";
 static char MN_UNIQUE[] = "unique (corpse)";
 static char MN_HUMAN[] = "human (corpse)";
@@ -4144,17 +4260,19 @@ command_menu_type menu_data[] =
 	{KEY_IDENTIFIED, 1, -1, EC_IK_IDENTIFIED},
 	{KEY_STAR_IDENTIFIED, 1, -1, EC_IK_STAR_IDENTIFIED},
 	{KEY_COLLECTING, 1, -1, EC_OK_COLLECTING},
+	{KEY_ARTIFACT, 1, -1, EC_OK_ARTIFACT},
+	{KEY_EGO, 1, -1, EC_OK_EGO},
+	{KEY_GOOD, 1, -1, EC_OK_GOOD},
+	{KEY_NAMELESS, 1, -1, EC_OK_NAMELESS},
+	{KEY_AVERAGE, 1, -1, EC_OK_AVERAGE},
 	{KEY_WORTHLESS, 1, -1, EC_OK_WORTHLESS},
+	{MN_RARE, 1, -1, EC_OK_RARE},
+	{MN_COMMON, 1, -1, EC_OK_COMMON},
 
  	{MN_ADJECTIVE_SPECIAL, 0, -1, -1},
 	{MN_BOOSTED, 1, -1, EC_OK_BOOSTED},
 	{MN_MORE_DICE, 1, -1, EC_OK_MORE_DICE},
 	{MN_MORE_BONUS, 1, -1, EC_OK_MORE_BONUS},
-	{MN_ARTIFACT, 1, -1, EC_OK_ARTIFACT},
-	{MN_EGO, 1, -1, EC_OK_EGO},
-	{MN_NAMELESS, 1, -1, EC_OK_NAMELESS},
-	{MN_RARE, 1, -1, EC_OK_RARE},
-	{MN_COMMON, 1, -1, EC_OK_COMMON},
 	{MN_WANTED, 1, -1, EC_OK_WANTED},
 	{MN_UNIQUE, 1, -1, EC_OK_UNIQUE},
 	{MN_HUMAN, 1, -1, EC_OK_HUMAN},
@@ -5208,6 +5326,9 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		/* Now dirty */
 		tb->dirty_flags |= DIRTY_ALL;
 
+		/* Text is changed */
+		tb->changed = TRUE;
+
 		break;
 	}
 
@@ -5834,7 +5955,9 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	case EC_OK_WORTHLESS: toggle_keyword(tb, FLG_WORTHLESS); break;
 	case EC_OK_ARTIFACT: toggle_keyword(tb, FLG_ARTIFACT); break;
 	case EC_OK_EGO: toggle_keyword(tb, FLG_EGO); break;
+	case EC_OK_GOOD: toggle_keyword(tb, FLG_GOOD); break;
 	case EC_OK_NAMELESS: toggle_keyword(tb, FLG_NAMELESS); break;
+	case EC_OK_AVERAGE: toggle_keyword(tb, FLG_AVERAGE); break;
 	case EC_OK_RARE: toggle_keyword(tb, FLG_RARE); break;
 	case EC_OK_COMMON: toggle_keyword(tb, FLG_COMMON); break;
 	case EC_OK_WANTED: toggle_keyword(tb, FLG_WANTED); break;

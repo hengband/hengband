@@ -162,7 +162,11 @@ Keywords:
   worthless         : Items which you cannot sell match.
   artifact          : Artifacts items match.
   ego               : Ego items match.
+  good              : {good} items match.
   nameless          : Non ego/non artifact items match.
+  average           : {average} items match.
+  rare              : Rare equipment such as Dragon armors etc. match.
+  common            : Any equipments except 'rare' equpment match.
   wanted            : Wanted monster's corpses or skeletons match.
   unique monster's  : Unique monster's corpses, skeletons or statues match.
   human             : Human corpses or skeletons match.
@@ -258,8 +262,9 @@ Special Notes:
   [! ~ ; (]
   [[all] [collecting]
    [unaware] [unidentified] [identified] [*identified*] 
+   [artifact] [ego] [good] [nameless] [average]
+   [worthless] [rare] [common]
    [dice boosted] [more than N dice] [more bonus than N] 
-   [worthless] [artifact] [ego] [nameless] 
    [wanted] [unique monster's] [human] [unreadable] 
    [first realm's] [second realm's] [first] [second] [third] [fourth] 
    [items | weapons | armors | missiles | magical devices | 
