@@ -12,6 +12,9 @@ collecting scroll
 collecting missiles
 (collecting items
 
+# Auto-inscribe resistances...
+~*identified* artifacts#%
+
 *Destruction*
 Genocide
 
