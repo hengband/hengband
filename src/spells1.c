@@ -1177,8 +1177,9 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 
 		case GF_DISINTEGRATE:
 		{
-			/* Destroy mirror */
-			if (is_mirror_grid(c_ptr)) remove_mirror(y, x);
+			/* Destroy mirror/glyph */
+			if (is_mirror_grid(c_ptr) || is_glyph_grid(c_ptr) || is_explosive_rune_grid(c_ptr))
+				remove_mirror(y, x);
 
 			/* Permanent features don't get effect */
 			/* But not protect monsters and other objects */
