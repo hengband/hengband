@@ -813,7 +813,7 @@ static char *spell_tips[VALID_REALM][32] =
 		"attacks monster with your weapons normaly, then move through counter side of the monster.",
 
 		"attacks a monster with more damage unless it has resistance to poison.",
-		"attacks an unliving monster with greate damage. No effect to other  monsters.",
+		"attacks an evil unliving monster with greate damage. No effect to other  monsters.",
 		"attacks an adjacent monster, and blow it away.",
 		"identifies a weapon or armor. or *identifies* these at level 45.",
 
