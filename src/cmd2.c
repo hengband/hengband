@@ -3684,7 +3684,6 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 
 		return;
 	}
-	project_length = 0; /* reset to default */
 
 	/* Get local object */
 	q_ptr = &forge;
@@ -3734,6 +3733,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 		ty = target_row;
 	}
 
+	project_length = 0; /* reset to default */
 
 	/* Hack -- Handle stuff */
 	handle_stuff();
@@ -4282,8 +4282,6 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 		/* Get a direction (or cancel) */
 		if (!get_aim_dir(&dir)) return FALSE;
 
-		project_length = 0;  /* reset to default */
-
 		/* Predict the "target" location */
 		tx = px + 99 * ddx[dir];
 		ty = py + 99 * ddy[dir];
@@ -4294,6 +4292,8 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 			tx = target_col;
 			ty = target_row;
 		}
+
+		project_length = 0;  /* reset to default */
 	}
 
 	if ((q_ptr->name1 == ART_MJOLLNIR) ||
@@ -4308,7 +4308,7 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 			inven_item_describe(item);
 		inven_item_optimize(item);
 	}
-	
+
 	/* Reduce and describe floor item */
 	else
 	{
@@ -4320,7 +4320,7 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 		equiped_item = TRUE;
 		p_ptr->redraw |= (PR_EQUIPPY);
 	}
-	
+
 	/* Take a turn */
 	energy_use = 100;
 
