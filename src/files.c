@@ -5145,7 +5145,7 @@ msg_format("'%s'をオープンできません。", name);
 			if (!i) line = next;
 
 			/* Get a line of the file or stop */
-			if (my_fgets(fff, buf, sizeof(buf))) buf[0] = '\0';
+			if (my_fgets(fff, buf, sizeof(buf))) break;
 
 			/* Hack -- skip "special" lines */
 			if (prefix(buf, "***** ")) continue;
@@ -5244,6 +5244,14 @@ msg_format("'%s'をオープンできません。", name);
 			}
 
 			/* Count the printed lines */
+			i++;
+		}
+
+		while (i < rows)
+		{
+			/* Clear rest of line */
+			Term_erase(0, i + 2, 255);
+
 			i++;
 		}
 
