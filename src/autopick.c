@@ -70,113 +70,103 @@
 
 #ifdef JP
 
-#define KEY_ALL "すべての"
-
-#ifdef MAC_MPW
-/*
- * MEGA HACK -- MPWのバグ除け。
- * pre-process中に「収」の字の2バイト目が勝手に消えてしまう。
- */
-#define KEY_COLLECTING "\x8e\xfb集中の"
-#else
-#define KEY_COLLECTING "収集中の"
-#endif
-
-#define KEY_UNAWARE "未判明の"
-#define KEY_UNIDENTIFIED "未鑑定の"
-#define KEY_IDENTIFIED "鑑定済みの"
-#define KEY_STAR_IDENTIFIED "*鑑定*済みの"
-#define KEY_BOOSTED "ダイス目の違う"
-#define KEY_MORE_THAN  "ダイス目"
-#define KEY_DICE  "以上の"
-#define KEY_MORE_BONUS  "修正値"
-#define KEY_MORE_BONUS2  "以上の"
-#define KEY_WORTHLESS "無価値の"
-#define KEY_ARTIFACT "アーティファクト"
-#define KEY_EGO "エゴ"
-#define KEY_NAMELESS "無銘の"
-#define KEY_RARE "レアな"
-#define KEY_COMMON "ありふれた"
-#define KEY_WANTED "賞金首の"
-#define KEY_UNIQUE "ユニーク・モンスターの"
-#define KEY_HUMAN "人間の"
-#define KEY_UNREADABLE "読めない"
-#define KEY_REALM1 "第一領域の"
-#define KEY_REALM2 "第二領域の"
-#define KEY_FIRST "1冊目の"
-#define KEY_SECOND "2冊目の"
-#define KEY_THIRD "3冊目の"
-#define KEY_FOURTH "4冊目の"
-#define KEY_ITEMS "アイテム"
-#define KEY_WEAPONS "武器"
-#define KEY_FAVORITE_WEAPONS "得意武器"
-#define KEY_ARMORS "防具"
-#define KEY_MISSILES "矢"
-#define KEY_DEVICES "魔法アイテム"
-#define KEY_LIGHTS "光源"
-#define KEY_JUNKS "がらくた"
-#define KEY_CORPSES "死体や骨"
-#define KEY_SPELLBOOKS "魔法書"
-#define KEY_HAFTED "鈍器"
-#define KEY_SHIELDS "盾"
-#define KEY_BOWS "弓"
-#define KEY_RINGS "指輪"
-#define KEY_AMULETS "アミュレット"
-#define KEY_SUITS "鎧"
-#define KEY_CLOAKS "クローク"
-#define KEY_HELMS "兜"
-#define KEY_GLOVES "籠手"
-#define KEY_BOOTS "靴"
+static char KEY_ALL[] = "すべての";
+static char KEY_COLLECTING[] = "収集中の";
+static char KEY_UNAWARE[] = "未判明の";
+static char KEY_UNIDENTIFIED[] = "未鑑定の";
+static char KEY_IDENTIFIED[] = "鑑定済みの";
+static char KEY_STAR_IDENTIFIED[] = "*鑑定*済みの";
+static char KEY_BOOSTED[] = "ダイス目の違う";
+static char KEY_MORE_THAN[] =  "ダイス目";
+static char KEY_DICE[] =  "以上の";
+static char KEY_MORE_BONUS[] =  "修正値";
+static char KEY_MORE_BONUS2[] =  "以上の";
+static char KEY_WORTHLESS[] = "無価値の";
+static char KEY_ARTIFACT[] = "アーティファクト";
+static char KEY_EGO[] = "エゴ";
+static char KEY_NAMELESS[] = "無銘の";
+static char KEY_RARE[] = "レアな";
+static char KEY_COMMON[] = "ありふれた";
+static char KEY_WANTED[] = "賞金首の";
+static char KEY_UNIQUE[] = "ユニーク・モンスターの";
+static char KEY_HUMAN[] = "人間の";
+static char KEY_UNREADABLE[] = "読めない";
+static char KEY_REALM1[] = "第一領域の";
+static char KEY_REALM2[] = "第二領域の";
+static char KEY_FIRST[] = "1冊目の";
+static char KEY_SECOND[] = "2冊目の";
+static char KEY_THIRD[] = "3冊目の";
+static char KEY_FOURTH[] = "4冊目の";
+static char KEY_ITEMS[] = "アイテム";
+static char KEY_WEAPONS[] = "武器";
+static char KEY_FAVORITE_WEAPONS[] = "得意武器";
+static char KEY_ARMORS[] = "防具";
+static char KEY_MISSILES[] = "矢";
+static char KEY_DEVICES[] = "魔法アイテム";
+static char KEY_LIGHTS[] = "光源";
+static char KEY_JUNKS[] = "がらくた";
+static char KEY_CORPSES[] = "死体や骨";
+static char KEY_SPELLBOOKS[] = "魔法書";
+static char KEY_HAFTED[] = "鈍器";
+static char KEY_SHIELDS[] = "盾";
+static char KEY_BOWS[] = "弓";
+static char KEY_RINGS[] = "指輪";
+static char KEY_AMULETS[] = "アミュレット";
+static char KEY_SUITS[] = "鎧";
+static char KEY_CLOAKS[] = "クローク";
+static char KEY_HELMS[] = "兜";
+static char KEY_GLOVES[] = "籠手";
+static char KEY_BOOTS[] = "靴";
 
 #else 
 
-#define KEY_ALL "all"
-#define KEY_COLLECTING "collecting"
-#define KEY_UNAWARE "unaware"
-#define KEY_UNIDENTIFIED "unidentified"
-#define KEY_IDENTIFIED "identified"
-#define KEY_STAR_IDENTIFIED "*identified*"
-#define KEY_BOOSTED "dice boosted"
-#define KEY_MORE_THAN  "more than"
-#define KEY_DICE  " dice"
-#define KEY_MORE_BONUS  "more bonus than"
-#define KEY_MORE_BONUS2  ""
-#define KEY_WORTHLESS "worthless"
-#define KEY_ARTIFACT "artifact"
-#define KEY_EGO "ego"
-#define KEY_NAMELESS "nameless"
-#define KEY_RARE "rare"
-#define KEY_COMMON "common"
-#define KEY_WANTED "wanted"
-#define KEY_UNIQUE "unique monster's"
-#define KEY_HUMAN "human"
-#define KEY_UNREADABLE "unreadable"
-#define KEY_REALM1 "first realm's"
-#define KEY_REALM2 "second realm's"
-#define KEY_FIRST "first"
-#define KEY_SECOND "second"
-#define KEY_THIRD "third"
-#define KEY_FOURTH "fourth"
-#define KEY_ITEMS "items"
-#define KEY_WEAPONS "weapons"
-#define KEY_FAVORITE_WEAPONS "favorite weapons"
-#define KEY_ARMORS "armors"
-#define KEY_MISSILES "missiles"
-#define KEY_DEVICES "magical devices"
-#define KEY_LIGHTS "lights"
-#define KEY_JUNKS "junks"
-#define KEY_CORPSES "corpses or skeletons"
-#define KEY_SPELLBOOKS "spellbooks"
-#define KEY_HAFTED "hafted weapons"
-#define KEY_SHIELDS "shields"
-#define KEY_BOWS "bows"
-#define KEY_RINGS "rings"
-#define KEY_AMULETS "amulets"
-#define KEY_SUITS "suits"
-#define KEY_CLOAKS "cloaks"
-#define KEY_HELMS "helms"
-#define KEY_GLOVES "gloves"
-#define KEY_BOOTS "boots"
+static char KEY_ALL[] = "all";
+static char KEY_COLLECTING[] = "collecting";
+static char KEY_UNAWARE[] = "unaware";
+static char KEY_UNIDENTIFIED[] = "unidentified";
+static char KEY_IDENTIFIED[] = "identified";
+static char KEY_STAR_IDENTIFIED[] = "*identified*";
+static char KEY_BOOSTED[] = "dice boosted";
+static char KEY_MORE_THAN[] =  "more than";
+static char KEY_DICE[] =  " dice";
+static char KEY_MORE_BONUS[] =  "more bonus than";
+static char KEY_MORE_BONUS2[] =  "";
+static char KEY_WORTHLESS[] = "worthless";
+static char KEY_ARTIFACT[] = "artifact";
+static char KEY_EGO[] = "ego";
+static char KEY_NAMELESS[] = "nameless";
+static char KEY_RARE[] = "rare";
+static char KEY_COMMON[] = "common";
+static char KEY_WANTED[] = "wanted";
+static char KEY_UNIQUE[] = "unique monster's";
+static char KEY_HUMAN[] = "human";
+static char KEY_UNREADABLE[] = "unreadable";
+static char KEY_REALM1[] = "first realm's";
+static char KEY_REALM2[] = "second realm's";
+static char KEY_FIRST[] = "first";
+static char KEY_SECOND[] = "second";
+static char KEY_THIRD[] = "third";
+static char KEY_FOURTH[] = "fourth";
+static char KEY_ITEMS[] = "items";
+static char KEY_WEAPONS[] = "weapons";
+static char KEY_FAVORITE_WEAPONS[] = "favorite weapons";
+static char KEY_ARMORS[] = "armors";
+static char KEY_MISSILES[] = "missiles";
+static char KEY_DEVICES[] = "magical devices";
+static char KEY_LIGHTS[] = "lights";
+static char KEY_JUNKS[] = "junks";
+static char KEY_CORPSES[] = "corpses or skeletons";
+static char KEY_SPELLBOOKS[] = "spellbooks";
+static char KEY_HAFTED[] = "hafted weapons";
+static char KEY_SHIELDS[] = "shields";
+static char KEY_BOWS[] = "bows";
+static char KEY_RINGS[] = "rings";
+static char KEY_AMULETS[] = "amulets";
+static char KEY_SUITS[] = "suits";
+static char KEY_CLOAKS[] = "cloaks";
+static char KEY_HELMS[] = "helms";
+static char KEY_GLOVES[] = "gloves";
+static char KEY_BOOTS[] = "boots";
 
 #endif /* JP */
 
@@ -348,7 +338,11 @@ static bool autopick_new_entry(autopick_type *entry, cptr str, bool allow_defaul
 
 			if (k > 0 && k <= 2)
 			{
+#ifdef JP
 				(void)MATCH_KEY(KEY_MORE_BONUS2);
+#else
+				if (' ' == *ptr) ptr++;
+#endif
 				ADD_FLG(FLG_MORE_BONUS);
 			}
 			else
@@ -3943,161 +3937,151 @@ static void search_for_string(text_body_type *tb, cptr search_str, bool forward)
 /* Manu names */
 #ifdef JP
 
-#define MN_QUIT "セーブ無しで終了" 
-#define MN_SAVEQUIT "セーブして終了" 
-#define MN_REVERT "全ての変更を破棄" 
-#define MN_HELP "ヘルプ" 
+static char MN_QUIT[] = "セーブ無しで終了";
+static char MN_SAVEQUIT[] = "セーブして終了";
+static char MN_REVERT[] = "全ての変更を破棄";
+static char MN_HELP[] = "ヘルプ";
 
-#define MN_MOVE "カーソル移動" 
-#define MN_LEFT   "左          (←矢印キー)" 
-#define MN_DOWN   "下          (↓矢印キー)" 
-#define MN_UP     "上          (↑矢印キー)" 
-#define MN_RIGHT  "右          (→矢印キー)" 
-#define MN_BOL    "行の先頭" 
-#define MN_EOL    "行の終端" 
-#define MN_PGUP   "上のページ  (PageUpキー)" 
-#define MN_PGDOWN "下のページ  (PageDownキー)" 
-#define MN_TOP    "1行目へ移動 (Homeキー)" 
-#define MN_BOTTOM "最下行へ移動(Endキー)" 
+static char MN_MOVE[] = "カーソル移動";
+static char MN_LEFT[] =   "左          (←矢印キー)";
+static char MN_DOWN[] =   "下          (↓矢印キー)";
+static char MN_UP[] =     "上          (↑矢印キー)";
+static char MN_RIGHT[] =  "右          (→矢印キー)";
+static char MN_BOL[] =    "行の先頭";
+static char MN_EOL[] =    "行の終端";
+static char MN_PGUP[] =   "上のページ  (PageUpキー)";
+static char MN_PGDOWN[] = "下のページ  (PageDownキー)";
+static char MN_TOP[] =    "1行目へ移動 (Homeキー)";
+static char MN_BOTTOM[] = "最下行へ移動(Endキー)";
 
-#define MN_EDIT "編集" 
-#define MN_CUT "カット" 
-#define MN_COPY "コピー" 
-#define MN_PASTE "ペースト" 
-#define MN_BLOCK "選択範囲の指定" 
-#define MN_KILL_LINE "行の残りを削除" 
-#define MN_DELETE_CHAR "1文字削除" 
-#define MN_BACKSPACE "バックスペース" 
-#define MN_RETURN "改行" 
-#define MN_RETURN "改行" 
+static char MN_EDIT[] = "編集";
+static char MN_CUT[] = "カット";
+static char MN_COPY[] = "コピー";
+static char MN_PASTE[] = "ペースト";
+static char MN_BLOCK[] = "選択範囲の指定";
+static char MN_KILL_LINE[] = "行の残りを削除";
+static char MN_DELETE_CHAR[] = "1文字削除";
+static char MN_BACKSPACE[] = "バックスペース";
+static char MN_RETURN[] = "改行";
 
-#define MN_SEARCH "検索" 
-#define MN_SEARCH_STR "文字列で検索" 
-#define MN_SEARCH_FORW "前方へ再検索" 
-#define MN_SEARCH_BACK "後方へ再検索" 
-#define MN_SEARCH_OBJ "アイテムを選択して検索" 
-#define MN_SEARCH_DESTROYED "自動破壊されたアイテムで検索" 
+static char MN_SEARCH[] = "検索";
+static char MN_SEARCH_STR[] = "文字列で検索";
+static char MN_SEARCH_FORW[] = "前方へ再検索";
+static char MN_SEARCH_BACK[] = "後方へ再検索";
+static char MN_SEARCH_OBJ[] = "アイテムを選択して検索";
+static char MN_SEARCH_DESTROYED[] = "自動破壊されたアイテムで検索";
 
-#define MN_INSERT "色々挿入" 
-#define MN_INSERT_OBJECT "選択したアイテムの名前を挿入" 
-#define MN_INSERT_DESTROYED "自動破壊されたアイテムの名前を挿入" 
-#define MN_INSERT_BLOCK "条件分岐ブロックの例を挿入" 
-#define MN_INSERT_MACRO "マクロ定義を挿入" 
-#define MN_INSERT_KEYMAP "キーマップ定義を挿入" 
+static char MN_INSERT[] = "色々挿入";
+static char MN_INSERT_OBJECT[] = "選択したアイテムの名前を挿入";
+static char MN_INSERT_DESTROYED[] = "自動破壊されたアイテムの名前を挿入";
+static char MN_INSERT_BLOCK[] = "条件分岐ブロックの例を挿入";
+static char MN_INSERT_MACRO[] = "マクロ定義を挿入";
+static char MN_INSERT_KEYMAP[] = "キーマップ定義を挿入";
 
-#ifdef MAC_MPW
-#define MN_COMMAND_LETTER "拾い/破壊/\x95\xfa置の選択" 
-#else
-#define MN_COMMAND_LETTER "拾い/破壊/放置の選択" 
-#endif
-#define MN_CL_AUTOPICK "「 」 (自動拾い)" 
-#define MN_CL_DESTROY "「!」 (自動破壊)" 
-#ifdef MAC_MPW
-#define MN_CL_LEAVE "「~」 (\x95\xfa置)" 
-#else
-#define MN_CL_LEAVE "「~」 (放置)" 
-#endif
-#define MN_CL_QUERY "「;」 (確認して拾う)" 
-#define MN_CL_NO_DISP "「(」 (マップコマンドで表示しない)" 
+static char MN_COMMAND_LETTER[] = "拾い/破壊/放置の選択";
+static char MN_CL_AUTOPICK[] = "「 」 (自動拾い)";
+static char MN_CL_DESTROY[] = "「!」 (自動破壊)";
+static char MN_CL_LEAVE[] = "「~」 (放置)";
+static char MN_CL_QUERY[] = "「;」 (確認して拾う)";
+static char MN_CL_NO_DISP[] = "「(」 (マップコマンドで表示しない)";
 
-#define MN_ADJECTIVE_GEN "形容詞(一般)の選択" 
+static char MN_ADJECTIVE_GEN[] = "形容詞(一般)の選択";
 
-#define MN_ADJECTIVE_SPECIAL "形容詞(特殊)の選択" 
-#define MN_BOOSTED "ダイス目の違う (武器)" 
-#define MN_MORE_DICE "ダイス目 # 以上の (武器)" 
-#define MN_MORE_BONUS "修正値 # 以上の (指輪等)" 
-#define MN_ARTIFACT "アーティファクト (装備)" 
-#define MN_EGO "エゴ (装備)" 
-#define MN_NAMELESS "無銘の (装備)" 
-#define MN_RARE "レアな (装備)" 
-#define MN_COMMON "ありふれた (装備)" 
-#define MN_WANTED "賞金首の (死体)" 
-#define MN_UNIQUE "ユニーク・モンスターの (死体)" 
-#define MN_HUMAN "人間の (死体)" 
-#define MN_UNREADABLE "読めない (魔法書)" 
-#define MN_REALM1 "第一領域の (魔法書)" 
-#define MN_REALM2 "第二領域の (魔法書)" 
-#define MN_FIRST "1冊目の (魔法書)" 
-#define MN_SECOND "2冊目の (魔法書)" 
-#define MN_THIRD "3冊目の (魔法書)" 
-#define MN_FOURTH "4冊目の (魔法書)" 
+static char MN_ADJECTIVE_SPECIAL[] = "形容詞(特殊)の選択";
+static char MN_BOOSTED[] = "ダイス目の違う (武器)";
+static char MN_MORE_DICE[] = "ダイス目 # 以上の (武器)";
+static char MN_MORE_BONUS[] = "修正値 # 以上の (指輪等)";
+static char MN_ARTIFACT[] = "アーティファクト (装備)";
+static char MN_EGO[] = "エゴ (装備)";
+static char MN_NAMELESS[] = "無銘の (装備)";
+static char MN_RARE[] = "レアな (装備)";
+static char MN_COMMON[] = "ありふれた (装備)";
+static char MN_WANTED[] = "賞金首の (死体)";
+static char MN_UNIQUE[] = "ユニーク・モンスターの (死体)";
+static char MN_HUMAN[] = "人間の (死体)";
+static char MN_UNREADABLE[] = "読めない (魔法書)";
+static char MN_REALM1[] = "第一領域の (魔法書)";
+static char MN_REALM2[] = "第二領域の (魔法書)";
+static char MN_FIRST[] = "1冊目の (魔法書)";
+static char MN_SECOND[] = "2冊目の (魔法書)";
+static char MN_THIRD[] = "3冊目の (魔法書)";
+static char MN_FOURTH[] = "4冊目の (魔法書)";
 
-#define MN_NOUN "名詞の選択" 
+static char MN_NOUN[] = "名詞の選択";
 
 #else
 
-#define MN_QUIT "Quit without save" 
-#define MN_SAVEQUIT "Save & Quit" 
-#define MN_REVERT "Revert all changes" 
-#define MN_HELP "Help" 
+static char MN_QUIT[] = "Quit without save";
+static char MN_SAVEQUIT[] = "Save & Quit";
+static char MN_REVERT[] = "Revert all changes";
+static char MN_HELP[] = "Help";
 
-#define MN_MOVE   "Move cursor" 
-#define MN_LEFT   "Left     (Left Arrow key)" 
-#define MN_DOWN   "Down     (Down Arrow key)" 
-#define MN_UP     "Up       (Up Arrow key)" 
-#define MN_RIGHT  "Right    (Right Arrow key)" 
-#define MN_BOL    "Beggining of line" 
-#define MN_EOL    "End of line" 
-#define MN_PGUP   "Page up  (PageUp key)" 
-#define MN_PGDOWN "Page down(PageDown key)" 
-#define MN_TOP    "Top      (Home key)" 
-#define MN_BOTTOM "Bottom   (End key)" 
+static char MN_MOVE[] =   "Move cursor";
+static char MN_LEFT[] =   "Left     (Left Arrow key)";
+static char MN_DOWN[] =   "Down     (Down Arrow key)";
+static char MN_UP[] =     "Up       (Up Arrow key)";
+static char MN_RIGHT[] =  "Right    (Right Arrow key)";
+static char MN_BOL[] =    "Beggining of line";
+static char MN_EOL[] =    "End of line";
+static char MN_PGUP[] =   "Page up  (PageUp key)";
+static char MN_PGDOWN[] = "Page down(PageDown key)";
+static char MN_TOP[] =    "Top      (Home key)";
+static char MN_BOTTOM[] = "Bottom   (End key)";
 
-#define MN_EDIT "Edit" 
-#define MN_CUT "Cut" 
-#define MN_COPY "Copy" 
-#define MN_PASTE "Paste" 
-#define MN_BLOCK "Select block" 
-#define MN_KILL_LINE "Kill rest of line" 
-#define MN_DELETE_CHAR "Delete character" 
-#define MN_BACKSPACE "Backspace" 
-#define MN_RETURN "Return" 
-#define MN_RETURN "Return" 
+static char MN_EDIT[] = "Edit";
+static char MN_CUT[] = "Cut";
+static char MN_COPY[] = "Copy";
+static char MN_PASTE[] = "Paste";
+static char MN_BLOCK[] = "Select block";
+static char MN_KILL_LINE[] = "Kill rest of line";
+static char MN_DELETE_CHAR[] = "Delete character";
+static char MN_BACKSPACE[] = "Backspace";
+static char MN_RETURN[] = "Return";
 
-#define MN_SEARCH "Search" 
-#define MN_SEARCH_STR "Search by string" 
-#define MN_SEARCH_FORW "Search forward" 
-#define MN_SEARCH_BACK "Search backward" 
-#define MN_SEARCH_OBJ "Search by inventory object" 
-#define MN_SEARCH_DESTROYED "Search by destroyed object" 
+static char MN_SEARCH[] = "Search";
+static char MN_SEARCH_STR[] = "Search by string";
+static char MN_SEARCH_FORW[] = "Search forward";
+static char MN_SEARCH_BACK[] = "Search backward";
+static char MN_SEARCH_OBJ[] = "Search by inventory object";
+static char MN_SEARCH_DESTROYED[] = "Search by destroyed object";
 
-#define MN_INSERT "Insert..." 
-#define MN_INSERT_OBJECT "Insert name of choosen object" 
-#define MN_INSERT_DESTROYED "Insert name of destroyed object" 
-#define MN_INSERT_BLOCK "Insert conditional block" 
-#define MN_INSERT_MACRO "Insert a macro definition" 
-#define MN_INSERT_KEYMAP "Insert a keymap definition" 
+static char MN_INSERT[] = "Insert...";
+static char MN_INSERT_OBJECT[] = "Insert name of choosen object";
+static char MN_INSERT_DESTROYED[] = "Insert name of destroyed object";
+static char MN_INSERT_BLOCK[] = "Insert conditional block";
+static char MN_INSERT_MACRO[] = "Insert a macro definition";
+static char MN_INSERT_KEYMAP[] = "Insert a keymap definition";
 
-#define MN_COMMAND_LETTER "Command letter" 
-#define MN_CL_AUTOPICK "' ' (Auto pick)" 
-#define MN_CL_DESTROY "'!' (Auto destroy)" 
-#define MN_CL_LEAVE "'~' (Leave it on the floor)" 
-#define MN_CL_QUERY "';' (Query to pick up)" 
-#define MN_CL_NO_DISP "'(' (No display on the large map)" 
+static char MN_COMMAND_LETTER[] = "Command letter";
+static char MN_CL_AUTOPICK[] = "' ' (Auto pick)";
+static char MN_CL_DESTROY[] = "'!' (Auto destroy)";
+static char MN_CL_LEAVE[] = "'~' (Leave it on the floor)";
+static char MN_CL_QUERY[] = "';' (Query to pick up)";
+static char MN_CL_NO_DISP[] = "'(' (No display on the large map)";
 
-#define MN_ADJECTIVE_GEN "Adjective (general)" 
+static char MN_ADJECTIVE_GEN[] = "Adjective (general)";
 
-#define MN_ADJECTIVE_SPECIAL "Adjective (special)" 
-#define MN_BOOSTED "dice boosted (weapons)" 
-#define MN_MORE_DICE "more than # dice (weapons)" 
-#define MN_MORE_BONUS "more bonus than # (rings etc.)" 
-#define MN_ARTIFACT "artifact (equipments)" 
-#define MN_EGO "ego (equipments)" 
-#define MN_NAMELESS "nameless (equipments)" 
-#define MN_RARE "rare (equipments)" 
-#define MN_COMMON "common (equipments)" 
-#define MN_WANTED "wanted (corpse)" 
-#define MN_UNIQUE "unique (corpse)" 
-#define MN_HUMAN "human (corpse)" 
-#define MN_UNREADABLE "unreadable (spellbooks)" 
-#define MN_REALM1 "realm1 (spellbooks)" 
-#define MN_REALM2 "realm2 (spellbooks)" 
-#define MN_FIRST "first (spellbooks)" 
-#define MN_SECOND "second (spellbooks)" 
-#define MN_THIRD "third (spellbooks)" 
-#define MN_FOURTH "fourth (spellbooks)" 
+static char MN_ADJECTIVE_SPECIAL[] = "Adjective (special)";
+static char MN_BOOSTED[] = "dice boosted (weapons)";
+static char MN_MORE_DICE[] = "more than # dice (weapons)";
+static char MN_MORE_BONUS[] = "more bonus than # (rings etc.)";
+static char MN_ARTIFACT[] = "artifact (equipments)";
+static char MN_EGO[] = "ego (equipments)";
+static char MN_NAMELESS[] = "nameless (equipments)";
+static char MN_RARE[] = "rare (equipments)";
+static char MN_COMMON[] = "common (equipments)";
+static char MN_WANTED[] = "wanted (corpse)";
+static char MN_UNIQUE[] = "unique (corpse)";
+static char MN_HUMAN[] = "human (corpse)";
+static char MN_UNREADABLE[] = "unreadable (spellbooks)";
+static char MN_REALM1[] = "realm1 (spellbooks)";
+static char MN_REALM2[] = "realm2 (spellbooks)";
+static char MN_FIRST[] = "first (spellbooks)";
+static char MN_SECOND[] = "second (spellbooks)";
+static char MN_THIRD[] = "third (spellbooks)";
+static char MN_FOURTH[] = "fourth (spellbooks)";
 
-#define MN_NOUN "Keywords (noun)" 
+static char MN_NOUN[] = "Keywords (noun)";
 
 #endif
 
