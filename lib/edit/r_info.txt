@@ -9567,9 +9567,13 @@ S:BR_WALL
 D:$A deep brown shape is visible before you, its canine form strikes you with 
 D:$an almost physical force.  The dungeon floor buckles as if struck by a 
 D:$powerful blow as it stalks towards you.
-D:深茶色の体をしたこの犬は精神的な力で冒険者を攻撃をしてくるが、
-D:その力はあまりに強いためにほとんど物理的な力とかわりがない。
-D:それが忍び寄ってくると、ダンジョンの床がまるで何かに叩かれたようにゆがむ。
+#D:深茶色の体をしたこの犬は精神的な力で冒険者を攻撃をしてくるが、
+#D:その力はあまりに強いためにほとんど物理的な力とかわりがない。
+#D:それが忍び寄ってくると、ダンジョンの床がまるで何かに叩かれたようにゆがむ。
+D:深い褐色の何かの形が目の前に浮かんでいる。
+D:その犬のような形があなたに触れるとあたかも物体が当ったかのような衝撃を受ける。
+D:それが"歩く"時、ダンジョンの床がまるで強い打撃を受けたようにへこむのが見える。
+
 
 #JZ#
 N:544:海トロル
