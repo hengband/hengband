@@ -117,7 +117,14 @@ static void remove_auto_dump(cptr orig_file, cptr mark)
 	{
 		/* copy contents of temporally file */
 
-		fd_copy(tmp_file, orig_file);
+		tmp_fff = my_fopen(tmp_file, "r");
+		orig_fff = my_fopen(orig_file, "w");
+		
+		while (!my_fgets(tmp_fff, buf, 1024))
+			fprintf(orig_fff, "%s\n", buf);
+		
+		my_fclose(orig_fff);
+		my_fclose(tmp_fff);
 	}
 	fd_kill(tmp_file);
 
