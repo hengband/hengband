@@ -324,7 +324,7 @@ bool monst_spell_monst(int m_idx)
 		t_ptr = &m_list[t_idx];
 
 		/* Cancel if not projectable (for now) */
-		if (!projectable(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
+		if ((m_idx == t_idx) || !projectable(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
 		{
 			t_idx = 0;
 		}
@@ -340,8 +340,8 @@ bool monst_spell_monst(int m_idx)
 			t_ptr = &m_list[t_idx];
 
 			/* Cancel if neither enemy nor a given target */
-			if (t_idx != pet_t_m_idx &&
-			    !are_enemies(m_ptr, t_ptr))
+			if ((m_idx == t_idx) ||
+			    ((t_idx != pet_t_m_idx) && !are_enemies(m_ptr, t_ptr)))
 			{
 				t_idx = 0;
 			}
@@ -381,7 +381,7 @@ bool monst_spell_monst(int m_idx)
 			if (!t_ptr->r_idx) continue;
 
 			/* Monster must be 'an enemy' */
-			if (!are_enemies(m_ptr, t_ptr)) continue;
+			if ((m_idx == t_idx) || !are_enemies(m_ptr, t_ptr)) continue;
 
 			/* Monster must be projectable */
 			if (!projectable(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;
