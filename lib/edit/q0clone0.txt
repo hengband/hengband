@@ -114,8 +114,8 @@ F:e:1:8:0:25
 
 # Dungeon layout
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-D:X                    |              | |  | |             |                     X
-D:X  O  E         O    |   r          | |  | |       M     |       P       E  P  X
+D:X                    |              | |  | |              |                    X
+D:X  O  E         O    |   r          | |  | |       M      |      P       E  P  X
 D:X        O         %%%         EE   %%%gg%%%   EE         %%%                  X
 D:X   E              %       E        LCW  WCL        E       % P            E   X
 D:X            O     %  r   E  r      LCW  WCL     M   E   M  %    P    P        X
