@@ -2574,7 +2574,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 			{
 				if ((randint1(randint1(r_ptr->level/7)+5) == 1) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2))
 				{
-					if (k < m_ptr->hp + 1) k = m_ptr->hp + 1;
+					k = m_ptr->hp + 1;
 #ifdef JP
 					msg_format("%sの急所を突き刺した！", m_name);
 #else
@@ -2610,7 +2610,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 					}
 					else
 					{
-						if (k < m_ptr->hp + 1) k = m_ptr->hp + 1;
+						k = m_ptr->hp + 1;
 #ifdef JP
 						msg_format("刃が%sの急所を貫いた！", m_name);
 #else
