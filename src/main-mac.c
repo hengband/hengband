@@ -162,6 +162,15 @@
 #endif
 
 /*
+ * Cleaning up a couple of things to make these easier to change --AR
+ */
+#ifdef JP
+#define PREF_FILE_NAME "Hengband Preferences"
+#else
+#define PREF_FILE_NAME "Angband Preferences"
+#endif
+
+/*
  * Use "malloc()" instead of "NewPtr()"
  */
 /* #define USE_MALLOC */
@@ -2503,11 +2512,8 @@ static void init_windows(void)
 			ptocstr((StringPtr)foo);
 
 			/* Append the preference file name */
-#ifdef JP
-			strcat(foo, "Hengband Preferences");
-#else
-			strcat(foo, "Angband Preferences");
-#endif
+			strcat(foo, PREF_FILE_NAME);
+
 			/* Open the preference file */
 			fff = fopen(foo, "r");
 
@@ -2529,13 +2535,8 @@ static void init_windows(void)
 		SetVol(0, env.sysVRefNum);
 
 		/* Open the file */
-#ifdef JP
-		fff = fopen(":Preferences:Hengband Preferences", "r");
-		if (!fff) fff = fopen(":Hengband Preferences", "r");
-#else
-		fff = fopen(":Preferences:Angband Preferences", "r");
-		if (!fff) fff = fopen(":Angband Preferences", "r");
-#endif
+		fff = fopen(PREF_FILE_NAME, "r");
+
 		/* Restore */
 		HSetVol(0, savev, saved);
 	}
@@ -2831,11 +2832,8 @@ static void save_pref_file(void)
 			ptocstr((StringPtr)foo);
 
 			/* Append the preference file name */
-#ifdef JP
-			strcat(foo, "Hengband Preferences");
-#else
-			strcat(foo, "Angband Preferences");
-#endif
+			strcat(foo, PREF_FILE_NAME);
+
 			/* Open the preference file */
 			/* my_fopen set file type and file creator for MPW */
 			fff = my_fopen(foo, "w");
@@ -2859,14 +2857,8 @@ static void save_pref_file(void)
 
 		/* Open the preference file */
 		/* my_fopen set file type and file creator for MPW */
-#ifdef JP
-		fff = my_fopen(":Preferences:Hengband Preferences", "w");
-		if (!fff) fff = my_fopen(":Hengband Preferences", "w");
+		fff = fopen(PREF_FILE_NAME, "w");
 
-#else
-		fff = my_fopen(":Preferences:Angband Preferences", "w");
-		if (!fff) fff = my_fopen(":Angband Preferences", "w");
-#endif
 		/* Restore */
 		HSetVol(0, savev, saved);
 	}
