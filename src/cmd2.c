@@ -1298,7 +1298,7 @@ static bool do_cmd_close_aux(int y, int x)
 	c_ptr = &cave[y][x];
 
 	/* Seeing true feature code (ignore mimic) */
-		
+
 	/* Broken door */
 	if (c_ptr->feat == FEAT_BROKEN)
 	{
@@ -1983,7 +1983,7 @@ bool easy_open_door(int y, int x)
 			cave_set_feat(y, x, FEAT_OPEN);
 
 			/* Update some things */
-			p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS);
+			p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
 
 			/* Sound */
 			sound(SOUND_OPENDOOR);
@@ -2015,7 +2015,7 @@ bool easy_open_door(int y, int x)
 		cave_set_feat(y, x, FEAT_OPEN);
 
 		/* Update some things */
-		p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS);
+		p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
 
 		/* Sound */
 		sound(SOUND_OPENDOOR);
@@ -2482,7 +2482,7 @@ static bool do_cmd_bash_aux(int y, int x, int dir)
 		move_player(dir, FALSE, FALSE);
 
 		/* Update some things */
-		p_ptr->update |= (PU_VIEW | PU_LITE);
+		p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
 		p_ptr->update |= (PU_DISTANCE);
 	}
 

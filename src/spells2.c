@@ -6805,14 +6805,7 @@ msg_print("テレポートを邪魔された！");
 	verify_panel();
 
 	/* Update stuff */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW);
-
-	/* Notice changes in view */
-	if (r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2 | RF7_SELF_LITE_1 | RF7_SELF_LITE_2))
-	{
-		/* Update some things */
-		p_ptr->update |= (PU_MON_LITE);
-	}
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
 
 	/* Update the monsters */
 	p_ptr->update |= (PU_DISTANCE);
@@ -7072,7 +7065,7 @@ bool wall_stone(void)
 	bool dummy = (project(0, 1, py, px, 0, GF_STONE_WALL, flg, -1));
 
 	/* Update stuff */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW);
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
 
 	/* Update the monsters */
 	p_ptr->update |= (PU_MONSTERS);

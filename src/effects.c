@@ -387,7 +387,7 @@ msg_print("やっと目が見えるようになった。");
 	if (disturb_state) disturb(0, 0);
 
 	/* Fully update the visuals */
-	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_MONSTERS);
+	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
 
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);

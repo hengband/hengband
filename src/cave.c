@@ -4559,7 +4559,7 @@ void wiz_dark(void)
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
 
 	/* Update the view and lite */
-	p_ptr->update |= (PU_VIEW | PU_LITE);
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
 
 	/* Update the monsters */
 	p_ptr->update |= (PU_MONSTERS);

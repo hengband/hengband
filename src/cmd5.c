@@ -5547,7 +5547,7 @@ msg_format("%sから振り落とされそうになって、壁にぶつかった。",m_name);
 	p_ptr->update |= (PU_BONUS);
 
 	/* Update stuff */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW);
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
 
 	/* Update the monsters */
 	p_ptr->update |= (PU_DISTANCE);
@@ -5733,7 +5733,7 @@ msg_format("%sを起こした。", m_name);
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
 
 	/* Update stuff */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW);
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
 
 	/* Update the monsters */
 	p_ptr->update |= (PU_DISTANCE);

@@ -4824,7 +4824,7 @@ void do_cmd_store(void)
 
 
 	/* Update everything */
-	p_ptr->update |= (PU_VIEW | PU_LITE);
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
 	p_ptr->update |= (PU_MONSTERS);
 
 	/* Redraw entire screen */

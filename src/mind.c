@@ -1513,7 +1513,7 @@ static bool cast_berserk_spell(int spell)
 			verify_panel();
 
 			/* Update stuff */
-			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW);
+			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
 
 			/* Update the monsters */
 			p_ptr->update |= (PU_DISTANCE);

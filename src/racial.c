@@ -137,7 +137,7 @@ static bool do_cmd_archer(void)
 #endif
 
 			(void)wall_to_mud(dir);
-			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW);
+			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
 			p_ptr->window |= (PW_OVERHEAD);
 		}
 		else
