@@ -18845,7 +18845,7 @@ S:1_IN_3 |
 S:BR_FIRE | SCARE
 
 N:929:巨大サイバーワイアーム天使悪魔リッチ
-E:Greater cyber wyrm angel deamon lich
+E:Greater cyber wyrm angel daemon lich
 G:N:W
 I:150:99d99:50:200:1
 W:99:50:0:30000:0:0

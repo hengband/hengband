@@ -6090,7 +6090,7 @@ monster_power monster_powers[MAX_MONSPELLS] =
 { 35,  26,  75,    0,  40, A_INT,  "summon hounds"},
 { 30,  23,  70,    0,  35, A_INT,  "summon hydras"},
 { 40,  50,  85,    0,  40, A_INT,  "summon an angel"},
-{ 35,  50,  80,    0,  35, A_INT,  "summon a deamon"},
+{ 35,  50,  80,    0,  35, A_INT,  "summon a daemon"},
 { 30,  30,  75,    0,  35, A_INT,  "summon an undead"},
 { 39,  70,  80,    0,  40, A_INT,  "summon a dragon"},
 { 43,  85,  85,    0,  45, A_INT,  "summon Greater Undead"},
