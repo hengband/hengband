@@ -130,10 +130,10 @@ F: :1:8
 F:]:49:12
 
 # Secret door
-F:s:+58:8
+F:s:58:8:0:0:0:0:32
 
 # Secret door on no Teleportation grid 
-F:u:+58:12
+F:u:58:12:0:0:0:0:32
 
 # Door on no Teleportation grid
 F:U:32:12
