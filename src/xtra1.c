@@ -3146,6 +3146,7 @@ void calc_bonuses(void)
 	s16b this_o_idx, next_o_idx = 0;
 	player_race *tmp_rp_ptr;
 
+	monster_type *riding_m_ptr;
 
 	/* Save the old speed */
 	old_speed = p_ptr->pspeed;
@@ -3260,6 +3261,12 @@ void calc_bonuses(void)
 	p_ptr->no_flowed = FALSE;
 
 	p_ptr->align = 0;
+
+	/* Your horse or riding monster */
+	if (death)
+		riding_m_ptr = &riding_mon;
+	else
+		riding_m_ptr = &m_list[p_ptr->riding];
 
 	if (p_ptr->mimic_form) tmp_rp_ptr = &mimic_info[p_ptr->mimic_form];
 	else tmp_rp_ptr = &race_info[p_ptr->prace];
@@ -3749,9 +3756,9 @@ void calc_bonuses(void)
 
 	if (p_ptr->riding)
 	{
-		if (!(r_info[m_list[p_ptr->riding].r_idx].flags2 & RF2_PASS_WALL))
+		if (!(r_info[riding_m_ptr->r_idx].flags2 & RF2_PASS_WALL))
 			p_ptr->pass_wall = FALSE;
-		if (r_info[m_list[p_ptr->riding].r_idx].flags2 & RF2_KILL_WALL)
+		if (r_info[riding_m_ptr->r_idx].flags2 & RF2_KILL_WALL)
 			p_ptr->pass_wall = TRUE;
 	}
 	if (music_singing(MUSIC_WALL)) p_ptr->kill_wall = TRUE;
@@ -4553,8 +4560,10 @@ void calc_bonuses(void)
 
 	if (p_ptr->riding)
 	{
-		int speed = m_list[p_ptr->riding].mspeed;
-		if (m_list[p_ptr->riding].mspeed > 110)
+		int speed;
+
+		speed = riding_m_ptr->mspeed;
+		if (riding_m_ptr->mspeed > 110)
 		{
 			p_ptr->pspeed = 110 + (s16b)((speed-110)*(skill_exp[GINOU_RIDING]*3 + p_ptr->lev*160L - 10000L)/(22000L));
 			if (p_ptr->pspeed < 110) p_ptr->pspeed = 110;
@@ -4563,14 +4572,14 @@ void calc_bonuses(void)
 		{
 			p_ptr->pspeed = speed;
 		}
-		if (m_list[p_ptr->riding].fast) p_ptr->pspeed += 10;
-		if (m_list[p_ptr->riding].slow) p_ptr->pspeed -= 10;
-		if (r_info[m_list[p_ptr->riding].r_idx].flags7 & RF7_CAN_FLY) p_ptr->ffall = TRUE;
-		if (r_info[m_list[p_ptr->riding].r_idx].flags7 & (RF7_CAN_SWIM | RF7_AQUATIC)) p_ptr->can_swim = TRUE;
+		if (riding_m_ptr->fast) p_ptr->pspeed += 10;
+		if (riding_m_ptr->slow) p_ptr->pspeed -= 10;
+		if (r_info[riding_m_ptr->r_idx].flags7 & RF7_CAN_FLY) p_ptr->ffall = TRUE;
+		if (r_info[riding_m_ptr->r_idx].flags7 & (RF7_CAN_SWIM | RF7_AQUATIC)) p_ptr->can_swim = TRUE;
 
 		if (skill_exp[GINOU_RIDING] < 2000) j += (p_ptr->wt*3*(2000 - skill_exp[GINOU_RIDING]))/2000;
 
-		i = 3000 + r_info[m_list[p_ptr->riding].r_idx].level * 50;
+		i = 3000 + r_info[riding_m_ptr->r_idx].level * 50;
 	}
 
 	/* XXX XXX XXX Apply "encumbrance" from weight */
@@ -4958,7 +4967,7 @@ void calc_bonuses(void)
 				}
 				else
 				{
-					penalty = r_info[m_list[p_ptr->riding].r_idx].level - skill_exp[GINOU_RIDING] / 80;
+					penalty = r_info[riding_m_ptr->r_idx].level - skill_exp[GINOU_RIDING] / 80;
 					penalty += 30;
 					if (penalty < 30) penalty = 30;
 				}
@@ -4984,7 +4993,7 @@ void calc_bonuses(void)
 		}
 		else
 		{
-			penalty = r_info[m_list[p_ptr->riding].r_idx].level - skill_exp[GINOU_RIDING] / 80;
+			penalty = r_info[riding_m_ptr->r_idx].level - skill_exp[GINOU_RIDING] / 80;
 			penalty += 30;
 			if (penalty < 30) penalty = 30;
 		}
