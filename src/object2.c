@@ -7957,11 +7957,11 @@ static void add_essence(int mode)
 #ifdef JP
 		msg_print("そのアイテムはこれ以上改良できない。");
 #else
-		msg_print("This item is no more able to be improved");
+		msg_print("This item is no more able to be improved.");
 #endif
 		return;
 	}
-	
+
 	object_desc(o_name, o_ptr, FALSE, 0);
 
 	use_essence = es_ptr->value;
@@ -8000,15 +8000,23 @@ static void add_essence(int mode)
 					if (!get_check("The magic number of this weapon will become 1. Are you sure? ")) return;
 #endif
 				}
+
+				/* Hack -- Negative pval takes more essence */
+				use_essence *= 1 - ((o_ptr->pval >= 0) ? 0 : o_ptr->pval);
 				o_ptr->pval = 1;
+#ifdef JP
+				msg_format("エッセンスを%d個使用します。", use_essence);
+#else
+				msg_format("It will take %d essences.", use_essence);
+#endif
 			}
-			else if (o_ptr->pval)
+			else if (o_ptr->pval > 0)
 			{
 				use_essence *= o_ptr->pval;
 #ifdef JP
-				msg_format("エッセンスを%d個使用します。",use_essence);
+				msg_format("エッセンスを%d個使用します。", use_essence);
 #else
-				msg_format("It will take %d essences.",use_essence);
+				msg_format("It will take %d essences.", use_essence);
 #endif
 			}
 			else
@@ -8018,7 +8026,7 @@ static void add_essence(int mode)
 				int pval;
 				int limit = MIN(5, p_ptr->magic_num1[es_ptr->essence]/es_ptr->value);
 
-
+				if (o_ptr->pval < 0) limit -= o_ptr->pval;
 #ifdef JP
 				sprintf(tmp, "いくつ付加しますか？ (1-%d): ", limit);
 #else
@@ -8030,14 +8038,15 @@ static void add_essence(int mode)
 				pval = atoi(tmp_val);
 				if (pval > limit) pval = limit;
 				else if (pval < 1) pval = 1;
-				o_ptr->pval = pval;
+				o_ptr->pval += pval;
 				use_essence *= pval;
 #ifdef JP
-				msg_format("エッセンスを%d個使用します。",use_essence);
+				msg_format("エッセンスを%d個使用します。", use_essence);
 #else
-				msg_format("It will take %d essences.",use_essence);
+				msg_format("It will take %d essences.", use_essence);
 #endif
 			}
+
 			if (p_ptr->magic_num1[es_ptr->essence] < use_essence)
 			{
 #ifdef JP
@@ -8295,7 +8304,7 @@ static void erase_essence(void)
 #ifdef JP
 	msg_print("エッセンスを取り去った。");
 #else
-	msg_print("You removed all essence you have added");
+	msg_print("You removed all essence you have added.");
 #endif
 
 	/* Combine the pack */
