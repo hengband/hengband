@@ -1,4 +1,59 @@
+2002-02-06  Takeshi Mogami  <mogami@akiru>
+
+	* src/spells2.c:
+	ダンジョンの主召喚で出たユニークが*破壊*で消えるように、
+	*破壊*のコードでテレポートで逃げるのをQUESTORだけに修正した。
+	これは仕様が少し変るが、墓地で手下ごとベクナを破壊して1対1の
+	戦いに持ち込む事等が出来なくなるので、良い変更だと思う。
+	ランダムクエストのユニークはQUESTORだから影響なし。
+
+	* src/defines.h, src/mspells1.c, src/spells1.c:
+	ヨルムンガンドが生きている時にダンジョンの主の召喚で水が吹き出して
+	あたりが浅い水になるようにした。ヨルムンガンド以外が出にくくなるように、
+	プレイヤーに隣接する床は深い水にしているが、問題が出るようなら全て
+	浅い水にすればいいと思う。吹き出す確率は1/6にしてある。要調整。
+
+	* src/birth.c, src/defines.h, src/dungeon.c, src/monster2.c, src/mspells1.c, src/mspells2.c, lib/edit/r_info_j.txt:
+	ダンジョンの主召喚の実装。関連してモンスターが現在ダンジョン内にいる数、cur_num
+	の取り扱いの整理とバグフィックス、カメレオンの王の召喚のために必須だった。
+
+2002-02-05  Takeshi Mogami  <mogami@akiru>
+
+	* src/flavor.c:
+	鉄くさびに、(1発のダメージ/1ターンのダメージ)表示を実装。
+
+	* lib/file/monfear_j.txt, lib/file/monspeak_j.txt:
+	ラオウのセリフ。
+
 2002-02-04  Takeshi Mogami  <mogami@akiru>
+
+	* src/cmd5.c:
+	ペットの解放の仕様変更。'All'を廃止して'Unnamed'を導入。名前のない乗馬以外のペット
+	だけを全て解放し、名前付きや乗馬には質問すらしない。
+
+	* src/main-mac.c:
+	初期設定ファイルの名前がいろいろなところに散らばっているのを#define文で
+	整理。kuwaさんより。
+
+2002-02-04  henkma  <henkma@akiru>
+
+	* src/spellstips.h: samurai tips typo修正.
+
+	* src/spellstips.h:
+	さらに剣術家tips(英語)のtypo修正.
+
+2002-02-04  Takeshi Mogami  <mogami@akiru>
+
+	* src/dungeon.c:
+	「こんなに多くのペットを維持できない」の表示の後の-more-が変だったのを修正。
+
+2002-02-04  henkma  <henkma@akiru>
+
+	* src/spellstips.h: 剣術家の英語のtips修正。
+
+2002-02-04  Takeshi Mogami  <mogami@akiru>
+
+	* Changelogs: 更新
 
 	* src/dungeon.c, src/files.c, src/xtra1.c:
 	20匹以上の名前付きペットを持って死ぬと、「主なペット」に表示されず、
