@@ -939,8 +939,8 @@ void wilderness_gen_small()
 		cave[j][i].info |= (CAVE_GLOW | CAVE_MARK);
 	}
 
-	cur_hgt = max_wild_y;
-	cur_wid = max_wild_x;
+	cur_hgt = (s16b) max_wild_y;
+	cur_wid = (s16b) max_wild_x;
 
 	if (cur_hgt > MAX_HGT) cur_hgt = MAX_HGT;
 	if (cur_wid > MAX_WID) cur_wid = MAX_WID;

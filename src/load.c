@@ -751,7 +751,6 @@ static void rd_monster_old(monster_type *m_ptr)
 static void rd_monster(monster_type *m_ptr)
 {
 	u32b flags;
-	byte tmp8u;
 	char buf[128];
 
 	if (h_older_than(1, 5, 0, 0))
@@ -2501,7 +2500,6 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	u16b limit;
 
 	cave_template_type *template;
-	u16b num_temp;
 
 
 	/*** Wipe all cave ***/
@@ -3660,7 +3658,6 @@ errr rd_savefile_new(void)
 static bool load_floor_aux(saved_floor_type *sf_ptr)
 {
 	byte tmp8u;
-	u16b tmp16u;
 	u32b tmp32u;
 
 #ifdef VERIFY_CHECKSUMS

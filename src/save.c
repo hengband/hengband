@@ -807,14 +807,10 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 
 	int i, y, x;
 
-	byte tmp8u;
 	u16b tmp16u;
 
 	byte count;
-	byte prev_char;
 	u16b prev_u16b;
-
-	cave_type *c_ptr;
 
 
 	/*** Basic info ***/

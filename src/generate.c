@@ -1585,7 +1585,6 @@ void clear_cave(void)
 void generate_cave(void)
 {
 	int y, x, num;
-	int i;
 
 	/* Generate */
 	for (num = 0; TRUE; num++)

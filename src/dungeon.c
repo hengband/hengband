@@ -5784,7 +5784,7 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
  */
 static void dungeon(bool load_game)
 {
-	int quest_num = 0, i;
+	int quest_num = 0;
 
 	/* Set the base level */
 	base_level = dun_level;
@@ -5977,8 +5977,6 @@ msg_print("試合開始！");
 	/* Main loop */
 	while (TRUE)
 	{
-		int i;
-
 		/* Hack -- Compact the monster list occasionally */
 		if ((m_cnt + 32 > max_m_idx) && !p_ptr->inside_battle) compact_monsters(64);
 

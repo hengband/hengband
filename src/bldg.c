@@ -3423,7 +3423,7 @@ static bool eval_ac(int iAC)
 
 	int protection;
 	int col, row = 2;
-	int lvl, i;
+	int lvl;
 	char buf[80*20], *t;
 
 	/* AC lower than zero has no effect */

@@ -1187,7 +1187,6 @@ void stair_creation(void)
 	bool up = TRUE;
 	bool down = TRUE;
 	s16b dest_floor_id = 0;
-	int i;
 
 
 	/* Forbid up staircases on Ironman mode */
