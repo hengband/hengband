@@ -2187,7 +2187,7 @@ static byte get_random_ego(byte slot, bool good, int level)
 		    && ((good && e_ptr->rating) || (!good && !e_ptr->rating)) )
 		{
 			if (e_ptr->rarity)
-				total += (240 / e_ptr->rarity);
+				total += (255 / e_ptr->rarity);
 		}
 	}
 
@@ -2201,7 +2201,7 @@ static byte get_random_ego(byte slot, bool good, int level)
 		    && ((good && e_ptr->rating) || (!good && !e_ptr->rating)) )
 		{
 			if (e_ptr->rarity)
-				value -= (240 / e_ptr->rarity);
+				value -= (255 / e_ptr->rarity);
 			if (value <= 0L) break;
 		}
 	}
