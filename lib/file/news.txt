@@ -10,7 +10,7 @@
     Japanese version 1.2:    Sitoshin, sayu, FIRST, TeO
 
        Old ZAngband code:    (Mr) Topi Ylinen < f1toyl@uta.fi >
-       New ZAngband code:    Robert Ruehlmann < rr9@angband.org >
+       New ZAngband code:    Robert Ruehlmann < rr9@thangorodrim.net >
     ZAngband 2.3.0 - ???:    The ZAngband DevTeam
        ZAngband Jap ver.:    Mitsuhiro Itakura < m-itakura@geocities.co.jp >
 
