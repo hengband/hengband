@@ -1271,7 +1271,7 @@ static void hit_trap(bool break_trap)
 					dam = dam * 2;
 					(void)set_cut(p_ptr->cut + randint1(dam));
 
-					if (p_ptr->resist_pois || p_ptr->oppose_pois)
+					if (p_ptr->resist_pois || IS_OPPOSE_POIS())
 					{
 #ifdef JP
 						msg_print("しかし毒の影響はなかった！");
@@ -1530,7 +1530,7 @@ static void hit_trap(bool break_trap)
 			msg_print("A pungent green gas surrounds you!");
 #endif
 
-			if (!p_ptr->resist_pois && !p_ptr->oppose_pois)
+			if (!p_ptr->resist_pois && !IS_OPPOSE_POIS())
 			{
 				(void)set_poisoned(p_ptr->poisoned + randint0(20) + 10);
 			}
@@ -1734,7 +1734,8 @@ static void touch_zap_player(monster_type *m_ptr)
 #endif
 
 
-			if (p_ptr->oppose_fire) aura_damage = (aura_damage + 2) / 3;
+			if (prace_is_(RACE_ENT)) aura_damage += aura_damage / 3;
+			if (IS_OPPOSE_FIRE()) aura_damage = (aura_damage + 2) / 3;
 			if (p_ptr->resist_fire) aura_damage = (aura_damage + 2) / 3;
 
 			take_hit(DAMAGE_NOESCAPE, aura_damage, aura_dam, -1);
@@ -1761,7 +1762,7 @@ static void touch_zap_player(monster_type *m_ptr)
 #endif
 
 
-			if (p_ptr->oppose_cold) aura_damage = (aura_damage + 2) / 3;
+			if (IS_OPPOSE_COLD()) aura_damage = (aura_damage + 2) / 3;
 			if (p_ptr->resist_cold) aura_damage = (aura_damage + 2) / 3;
 
 			take_hit(DAMAGE_NOESCAPE, aura_damage, aura_dam, -1);
@@ -1781,7 +1782,8 @@ static void touch_zap_player(monster_type *m_ptr)
 			/* Hack -- Get the "died from" name */
 			monster_desc(aura_dam, m_ptr, 0x288);
 
-			if (p_ptr->oppose_elec) aura_damage = (aura_damage + 2) / 3;
+			if (prace_is_(RACE_ANDROID)) aura_damage += aura_damage / 3;
+			if (IS_OPPOSE_ELEC()) aura_damage = (aura_damage + 2) / 3;
 			if (p_ptr->resist_elec) aura_damage = (aura_damage + 2) / 3;
 
 #ifdef JP
@@ -3023,15 +3025,15 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 
 					if (p_ptr->align < 0 && mult < 20)
 						mult = 20;
-					if (!(p_ptr->resist_acid || p_ptr->oppose_acid) && (mult < 25))
+					if (!(p_ptr->resist_acid || IS_OPPOSE_ACID() || p_ptr->immune_acid) && (mult < 25))
 						mult = 25;
-					if (!(p_ptr->resist_elec || p_ptr->oppose_elec) && (mult < 25))
+					if (!(p_ptr->resist_elec || IS_OPPOSE_ELEC() || p_ptr->immune_elec) && (mult < 25))
 						mult = 25;
-					if (!(p_ptr->resist_fire || p_ptr->oppose_fire) && (mult < 25))
+					if (!(p_ptr->resist_fire || IS_OPPOSE_FIRE() || p_ptr->immune_fire) && (mult < 25))
 						mult = 25;
-					if (!(p_ptr->resist_cold || p_ptr->oppose_cold) && (mult < 25))
+					if (!(p_ptr->resist_cold || IS_OPPOSE_COLD() || p_ptr->immune_cold) && (mult < 25))
 						mult = 25;
-					if (!(p_ptr->resist_pois || p_ptr->oppose_pois) && (mult < 25))
+					if (!(p_ptr->resist_pois || IS_OPPOSE_POIS()) && (mult < 25))
 						mult = 25;
 
 					if ((p_ptr->pclass != CLASS_SAMURAI) && (have_flag(flgs, TR_FORCE_WEAPON)) && (p_ptr->csp > (p_ptr->msp / 30)))
@@ -4835,7 +4837,7 @@ static bool run_test(void)
 				case FEAT_SHAL_LAVA:
 				{
 					/* Ignore */
-					if (p_ptr->invuln || p_ptr->immune_fire) notice = FALSE;
+					if (IS_INVULN() || p_ptr->immune_fire) notice = FALSE;
 
 					/* Done */
 					break;

@@ -1738,7 +1738,6 @@ static void display_player_middle(void)
 
 	/* Dump speed */
 	{
-		bool is_fast = (p_ptr->fast || music_singing(MUSIC_SPEED) || music_singing(MUSIC_SHERO));
 		int tmp_speed = 0;
 		byte attr;
 		int i;
@@ -1772,7 +1771,7 @@ static void display_player_middle(void)
 
 		if (!p_ptr->riding)
 		{
-			if (is_fast) tmp_speed += 10;
+			if (IS_FAST()) tmp_speed += 10;
 			if (p_ptr->slow) tmp_speed -= 10;
 			if (p_ptr->lightspeed) tmp_speed = 99;
 		}
@@ -2630,47 +2629,39 @@ static void tim_player_flags(u32b flgs[TR_FLAG_SIZE], bool im_and_res)
 	for (i = 0; i < TR_FLAG_SIZE; i++)
 		flgs[i] = 0L;
 
-	if (p_ptr->hero || p_ptr->shero || music_singing(MUSIC_HERO) || music_singing(MUSIC_SHERO))
+	if (IS_HERO() || p_ptr->shero)
 		add_flag(flgs, TR_RES_FEAR);
 	if (p_ptr->tim_invis)
 		add_flag(flgs, TR_SEE_INVIS);
 	if (p_ptr->tim_regen)
 		add_flag(flgs, TR_REGEN);
-	if (p_ptr->tim_esp || music_singing(MUSIC_MIND))
+	if (IS_TIM_ESP())
 		add_flag(flgs, TR_TELEPATHY);
-	if (p_ptr->fast || p_ptr->slow || music_singing(MUSIC_SPEED) || music_singing(MUSIC_SHERO))
+	if (IS_FAST() || p_ptr->slow)
 		add_flag(flgs, TR_SPEED);
-	if  ((p_ptr->special_defense & KATA_MUSOU) || music_singing(MUSIC_RESIST))
-	{
-		add_flag(flgs, TR_RES_FIRE);
-		add_flag(flgs, TR_RES_COLD);
-		add_flag(flgs, TR_RES_ACID);
-		add_flag(flgs, TR_RES_ELEC);
-		add_flag(flgs, TR_RES_POIS);
-	}
 	if (im_and_res)
 	{
-		if (p_ptr->oppose_acid && !(p_ptr->special_defense & DEFENSE_ACID) && !((prace_is_(RACE_YEEK)) && (p_ptr->lev > 19)))
+		if (IS_OPPOSE_ACID() && !(p_ptr->special_defense & DEFENSE_ACID) && !(prace_is_(RACE_YEEK) && (p_ptr->lev > 19)))
 			add_flag(flgs, TR_RES_ACID);
-		if (p_ptr->oppose_elec && !(p_ptr->special_defense & DEFENSE_ELEC))
+		if (IS_OPPOSE_ELEC() && !(p_ptr->special_defense & DEFENSE_ELEC))
 			add_flag(flgs, TR_RES_ELEC);
-		if (p_ptr->oppose_fire && !(p_ptr->special_defense & DEFENSE_FIRE))
+		if (IS_OPPOSE_FIRE() && !(p_ptr->special_defense & DEFENSE_FIRE))
 			add_flag(flgs, TR_RES_FIRE);
-		if (p_ptr->oppose_cold && !(p_ptr->special_defense & DEFENSE_COLD))
+		if (IS_OPPOSE_COLD() && !(p_ptr->special_defense & DEFENSE_COLD))
 			add_flag(flgs, TR_RES_COLD);
 	}
 	else
 	{
-		if (p_ptr->oppose_acid)
+		if (IS_OPPOSE_ACID())
 			add_flag(flgs, TR_RES_ACID);
-		if (p_ptr->oppose_elec)
+		if (IS_OPPOSE_ELEC())
 			add_flag(flgs, TR_RES_ELEC);
-		if (p_ptr->oppose_fire)
+		if (IS_OPPOSE_FIRE())
 			add_flag(flgs, TR_RES_FIRE);
-		if (p_ptr->oppose_cold)
+		if (IS_OPPOSE_COLD())
 			add_flag(flgs, TR_RES_COLD);
 	}
-	if (p_ptr->oppose_pois)
+	if (IS_OPPOSE_POIS())
 		add_flag(flgs, TR_RES_POIS);
 	if (p_ptr->special_attack & ATTACK_ACID)
 		add_flag(flgs, TR_BRAND_ACID);

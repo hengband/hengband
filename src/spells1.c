@@ -6564,7 +6564,7 @@ if (fuzzy) msg_print("電撃で攻撃された！");
 		/* Standard damage -- also poisons player */
 		case GF_POIS:
 		{
-			bool double_resist = (p_ptr->oppose_pois  || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU));
+			bool double_resist = IS_OPPOSE_POIS();
 #ifdef JP
 if (fuzzy) msg_print("毒で攻撃された！");
 #else
@@ -6592,7 +6592,7 @@ if (fuzzy) msg_print("毒で攻撃された！");
 		/* Standard damage -- also poisons / mutates player */
 		case GF_NUKE:
 		{
-			bool double_resist = (p_ptr->oppose_pois  || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU));
+			bool double_resist = IS_OPPOSE_POIS();
 #ifdef JP
 if (fuzzy) msg_print("放射能で攻撃された！");
 #else
@@ -6712,8 +6712,7 @@ if (fuzzy) msg_print("何かとても熱いものでで攻撃された！");
 			}
 
 			if (!(p_ptr->resist_fire ||
-			      p_ptr->oppose_fire ||
-			      music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU) ||
+			      IS_OPPOSE_FIRE() ||
 			      p_ptr->immune_fire))
 			{
 				inven_damage(set_acid_destroy, 3);
@@ -7370,7 +7369,7 @@ if (fuzzy) msg_print("何か鋭く冷たいもので攻撃された！");
 				(void)set_stun(p_ptr->stun + randint1(15));
 			}
 
-			if ((!(p_ptr->resist_cold || p_ptr->oppose_cold || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))) || one_in_(12))
+			if ((!(p_ptr->resist_cold || IS_OPPOSE_COLD())) || one_in_(12))
 			{
 				if (!p_ptr->immune_cold) inven_damage(set_cold_destroy, 3);
 			}

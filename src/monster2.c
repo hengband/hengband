@@ -4840,31 +4840,31 @@ void update_smart_learn(int m_idx, int what)
 	{
 	case DRS_ACID:
 		if (p_ptr->resist_acid) m_ptr->smart |= (SM_RES_ACID);
-		if (p_ptr->oppose_acid) m_ptr->smart |= (SM_OPP_ACID);
+		if (IS_OPPOSE_ACID()) m_ptr->smart |= (SM_OPP_ACID);
 		if (p_ptr->immune_acid) m_ptr->smart |= (SM_IMM_ACID);
 		break;
 
 	case DRS_ELEC:
 		if (p_ptr->resist_elec) m_ptr->smart |= (SM_RES_ELEC);
-		if (p_ptr->oppose_elec) m_ptr->smart |= (SM_OPP_ELEC);
+		if (IS_OPPOSE_ELEC()) m_ptr->smart |= (SM_OPP_ELEC);
 		if (p_ptr->immune_elec) m_ptr->smart |= (SM_IMM_ELEC);
 		break;
 
 	case DRS_FIRE:
 		if (p_ptr->resist_fire) m_ptr->smart |= (SM_RES_FIRE);
-		if (p_ptr->oppose_fire) m_ptr->smart |= (SM_OPP_FIRE);
+		if (IS_OPPOSE_FIRE()) m_ptr->smart |= (SM_OPP_FIRE);
 		if (p_ptr->immune_fire) m_ptr->smart |= (SM_IMM_FIRE);
 		break;
 
 	case DRS_COLD:
 		if (p_ptr->resist_cold) m_ptr->smart |= (SM_RES_COLD);
-		if (p_ptr->oppose_cold) m_ptr->smart |= (SM_OPP_COLD);
+		if (IS_OPPOSE_COLD()) m_ptr->smart |= (SM_OPP_COLD);
 		if (p_ptr->immune_cold) m_ptr->smart |= (SM_IMM_COLD);
 		break;
 
 	case DRS_POIS:
 		if (p_ptr->resist_pois) m_ptr->smart |= (SM_RES_POIS);
-		if (p_ptr->oppose_pois) m_ptr->smart |= (SM_OPP_POIS);
+		if (IS_OPPOSE_POIS()) m_ptr->smart |= (SM_OPP_POIS);
 		break;
 
 

@@ -591,7 +591,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 		msg_print("A puff of green gas surrounds you!");
 #endif
 
-		if (!(p_ptr->resist_pois || p_ptr->oppose_pois))
+		if (!(p_ptr->resist_pois || IS_OPPOSE_POIS()))
 		{
 			(void)set_poisoned(p_ptr->poisoned + 10 + randint1(20));
 		}

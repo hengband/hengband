@@ -90,7 +90,7 @@ static void do_cmd_eat_food_aux(int item)
 		{
 			case SV_FOOD_POISON:
 			{
-				if (!(p_ptr->resist_pois || p_ptr->oppose_pois))
+				if (!(p_ptr->resist_pois || IS_OPPOSE_POIS()))
 				{
 					if (set_poisoned(p_ptr->poisoned + randint0(10) + 10))
 					{
@@ -840,7 +840,7 @@ static void do_cmd_quaff_potion_aux(int item)
 			break;
 
 		case SV_POTION_POISON:
-			if (!(p_ptr->resist_pois || p_ptr->oppose_pois))
+			if (!(p_ptr->resist_pois || IS_OPPOSE_POIS()))
 			{
 				if (set_poisoned(p_ptr->poisoned + randint0(15) + 10))
 				{
@@ -2006,7 +2006,7 @@ msg_print("¥À¥ó¥¸¥ç¥ó¤¬ÍÉ¤ì¤¿...");
 		{
 			fire_ball(GF_FIRE, 0, 666, 4);
 			/* Note: "Double" damage since it is centered on the player ... */
-			if (!(p_ptr->oppose_fire || p_ptr->resist_fire || p_ptr->immune_fire))
+			if (!(IS_OPPOSE_FIRE() || p_ptr->resist_fire || p_ptr->immune_fire))
 #ifdef JP
 take_hit(DAMAGE_NOESCAPE, 50+randint1(50), "±ê¤Î´¬Êª", -1);
 #else
@@ -2021,7 +2021,7 @@ take_hit(DAMAGE_NOESCAPE, 50+randint1(50), "±ê¤Î´¬Êª", -1);
 		case SV_SCROLL_ICE:
 		{
 			fire_ball(GF_ICE, 0, 777, 4);
-			if (!(p_ptr->oppose_cold || p_ptr->resist_cold || p_ptr->immune_cold))
+			if (!(IS_OPPOSE_COLD() || p_ptr->resist_cold || p_ptr->immune_cold))
 #ifdef JP
 take_hit(DAMAGE_NOESCAPE, 100+randint1(100), "É¹¤Î´¬Êª", -1);
 #else

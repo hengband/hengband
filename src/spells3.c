@@ -5008,7 +5008,7 @@ int acid_dam(int dam, cptr kb_str, int monspell)
 {
 	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
-	bool double_resist = (p_ptr->oppose_acid  || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU));
+	bool double_resist = IS_OPPOSE_ACID();
 
 	/* Total Immunity */
 	if (p_ptr->immune_acid || (dam <= 0))
@@ -5049,7 +5049,7 @@ int elec_dam(int dam, cptr kb_str, int monspell)
 {
 	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
-	bool double_resist = (p_ptr->oppose_elec  || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU));
+	bool double_resist = IS_OPPOSE_ELEC();
 
 	/* Total immunity */
 	if (p_ptr->immune_elec || (dam <= 0))
@@ -5089,7 +5089,7 @@ int fire_dam(int dam, cptr kb_str, int monspell)
 {
 	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
-	bool double_resist = (p_ptr->oppose_fire  || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU));
+	bool double_resist = IS_OPPOSE_FIRE();
 
 	/* Totally immune */
 	if (p_ptr->immune_fire || (dam <= 0))
@@ -5129,7 +5129,7 @@ int cold_dam(int dam, cptr kb_str, int monspell)
 {
 	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
-	bool double_resist = (p_ptr->oppose_cold  || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU));
+	bool double_resist = IS_OPPOSE_POIS();
 
 	/* Total immunity */
 	if (p_ptr->immune_cold || (dam <= 0))

@@ -1920,7 +1920,7 @@ info[i++] = "あなたは魔力を吸われている。";
 #endif
 
 	}
-	if (p_ptr->blessed)
+	if (IS_BLESSED())
 	{
 #ifdef JP
 info[i++] = "あなたは公正さを感じている。";
@@ -1929,7 +1929,7 @@ info[i++] = "あなたは公正さを感じている。";
 #endif
 
 	}
-	if (p_ptr->hero)
+	if (IS_HERO())
 	{
 #ifdef JP
 info[i++] = "あなたはヒーロー気分だ。";
@@ -1965,7 +1965,7 @@ info[i++] = "あなたは神秘のシールドで守られている。";
 #endif
 
 	}
-	if (p_ptr->invuln)
+	if (IS_INVULN())
 	{
 #ifdef JP
 info[i++] = "あなたは現在傷つかない。";
@@ -2390,7 +2390,7 @@ info[i++] = "あなたは酸に対する完全なる免疫を持っている。";
 #endif
 
 	}
-	else if ((p_ptr->resist_acid) && (p_ptr->oppose_acid))
+	else if (p_ptr->resist_acid && IS_OPPOSE_ACID())
 	{
 #ifdef JP
 info[i++] = "あなたは酸への強力な耐性を持っている。";
@@ -2399,7 +2399,7 @@ info[i++] = "あなたは酸への強力な耐性を持っている。";
 #endif
 
 	}
-	else if ((p_ptr->resist_acid) || (p_ptr->oppose_acid))
+	else if (p_ptr->resist_acid || IS_OPPOSE_ACID())
 	{
 #ifdef JP
 info[i++] = "あなたは酸への耐性を持っている。";
@@ -2418,7 +2418,7 @@ info[i++] = "あなたは電撃に対する完全なる免疫を持っている。";
 #endif
 
 	}
-	else if ((p_ptr->resist_elec) && (p_ptr->oppose_elec))
+	else if (p_ptr->resist_elec && IS_OPPOSE_ELEC())
 	{
 #ifdef JP
 info[i++] = "あなたは電撃への強力な耐性を持っている。";
@@ -2427,7 +2427,7 @@ info[i++] = "あなたは電撃への強力な耐性を持っている。";
 #endif
 
 	}
-	else if ((p_ptr->resist_elec) || (p_ptr->oppose_elec))
+	else if (p_ptr->resist_elec || IS_OPPOSE_ELEC())
 	{
 #ifdef JP
 info[i++] = "あなたは電撃への耐性を持っている。";
@@ -2456,7 +2456,7 @@ info[i++] = "あなたは火に対する完全なる免疫を持っている。";
 #endif
 
 	}
-	else if ((p_ptr->resist_fire) && (p_ptr->oppose_fire))
+	else if (p_ptr->resist_fire && IS_OPPOSE_FIRE())
 	{
 #ifdef JP
 info[i++] = "あなたは火への強力な耐性を持っている。";
@@ -2465,7 +2465,7 @@ info[i++] = "あなたは火への強力な耐性を持っている。";
 #endif
 
 	}
-	else if ((p_ptr->resist_fire) || (p_ptr->oppose_fire))
+	else if (p_ptr->resist_fire || IS_OPPOSE_FIRE())
 	{
 #ifdef JP
 info[i++] = "あなたは火への耐性を持っている。";
@@ -2494,7 +2494,7 @@ info[i++] = "あなたは冷気に対する完全なる免疫を持っている。";
 #endif
 
 	}
-	else if ((p_ptr->resist_cold) && (p_ptr->oppose_cold))
+	else if (p_ptr->resist_cold && IS_OPPOSE_COLD())
 	{
 #ifdef JP
 info[i++] = "あなたは冷気への強力な耐性を持っている。";
@@ -2503,7 +2503,7 @@ info[i++] = "あなたは冷気への強力な耐性を持っている。";
 #endif
 
 	}
-	else if ((p_ptr->resist_cold) || (p_ptr->oppose_cold))
+	else if (p_ptr->resist_cold || IS_OPPOSE_COLD())
 	{
 #ifdef JP
 info[i++] = "あなたは冷気への耐性を持っている。";
@@ -2513,7 +2513,7 @@ info[i++] = "あなたは冷気への耐性を持っている。";
 
 	}
 
-	if ((p_ptr->resist_pois) && (p_ptr->oppose_pois))
+	if (p_ptr->resist_pois && IS_OPPOSE_POIS())
 	{
 #ifdef JP
 info[i++] = "あなたは毒への強力な耐性を持っている。";
@@ -2522,7 +2522,7 @@ info[i++] = "あなたは毒への強力な耐性を持っている。";
 #endif
 
 	}
-	else if ((p_ptr->resist_pois) || (p_ptr->oppose_pois))
+	else if (p_ptr->resist_pois || IS_OPPOSE_POIS())
 	{
 #ifdef JP
 info[i++] = "あなたは毒への耐性を持っている。";

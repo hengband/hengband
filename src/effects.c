@@ -804,7 +804,7 @@ bool set_fast(int v, bool do_dec)
 		{
 			if (p_ptr->fast > v) return FALSE;
 		}
-		else if (!p_ptr->fast && !p_ptr->lightspeed)
+		else if (!IS_FAST() && !p_ptr->lightspeed)
 		{
 #ifdef JP
 msg_print("素早く動けるようになった！");
@@ -1216,7 +1216,7 @@ bool set_blessed(int v, bool do_dec)
 		{
 			if (p_ptr->blessed > v) return FALSE;
 		}
-		else if (!p_ptr->blessed)
+		else if (!IS_BLESSED())
 		{
 #ifdef JP
 msg_print("高潔な気分になった！");
@@ -1285,7 +1285,7 @@ bool set_hero(int v, bool do_dec)
 		{
 			if (p_ptr->hero > v) return FALSE;
 		}
-		else if (!p_ptr->hero)
+		else if (!IS_HERO())
 		{
 #ifdef JP
 msg_print("ヒーローになった気がする！");
@@ -1591,7 +1591,7 @@ bool set_invuln(int v, bool do_dec)
 		{
 			if (p_ptr->invuln > v) return FALSE;
 		}
-		else if (!p_ptr->invuln)
+		else if (!IS_INVULN())
 		{
 #ifdef JP
 msg_print("無敵だ！");
@@ -1685,7 +1685,7 @@ bool set_tim_esp(int v, bool do_dec)
 		{
 			if (p_ptr->tim_esp > v) return FALSE;
 		}
-		else if (!p_ptr->tim_esp)
+		else if (!IS_TIM_ESP())
 		{
 #ifdef JP
 msg_print("意識が広がった気がする！");
@@ -1970,7 +1970,7 @@ bool set_tim_stealth(int v, bool do_dec)
 		{
 			if (p_ptr->tim_stealth > v) return FALSE;
 		}
-		else if (!p_ptr->tim_stealth)
+		else if (!IS_TIM_STEALTH())
 		{
 #ifdef JP
 msg_print("足音が小さくなった！");
@@ -3066,7 +3066,7 @@ bool set_oppose_acid(int v, bool do_dec)
 		{
 			if (p_ptr->oppose_acid > v) return FALSE;
 		}
-		else if (!p_ptr->oppose_acid)
+		else if (!IS_OPPOSE_ACID())
 		{
 #ifdef JP
 msg_print("酸への耐性がついた気がする！");
@@ -3132,7 +3132,7 @@ bool set_oppose_elec(int v, bool do_dec)
 		{
 			if (p_ptr->oppose_elec > v) return FALSE;
 		}
-		else if (!p_ptr->oppose_elec)
+		else if (!IS_OPPOSE_ELEC())
 		{
 #ifdef JP
 msg_print("電撃への耐性がついた気がする！");
@@ -3199,7 +3199,7 @@ bool set_oppose_fire(int v, bool do_dec)
 		{
 			if (p_ptr->oppose_fire > v) return FALSE;
 		}
-		else if (!p_ptr->oppose_fire)
+		else if (!IS_OPPOSE_FIRE())
 		{
 #ifdef JP
 msg_print("火への耐性がついた気がする！");
@@ -3265,7 +3265,7 @@ bool set_oppose_cold(int v, bool do_dec)
 		{
 			if (p_ptr->oppose_cold > v) return FALSE;
 		}
-		else if (!p_ptr->oppose_cold)
+		else if (!IS_OPPOSE_COLD())
 		{
 #ifdef JP
 msg_print("冷気への耐性がついた気がする！");
@@ -3332,7 +3332,7 @@ bool set_oppose_pois(int v, bool do_dec)
 		{
 			if (p_ptr->oppose_pois > v) return FALSE;
 		}
-		else if (!p_ptr->oppose_pois)
+		else if (!IS_OPPOSE_POIS())
 		{
 #ifdef JP
 msg_print("毒への耐性がついた気がする！");
@@ -5019,7 +5019,7 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 	/* Mega-Hack -- Apply "invulnerability" */
 	if ((damage_type != DAMAGE_USELIFE) && (damage_type != DAMAGE_LOSELIFE))
 	{
-		if ((p_ptr->invuln || music_singing(MUSIC_INVULN)) && (damage < 9000))
+		if (IS_INVULN() && (damage < 9000))
 		{
 			if (damage_type == DAMAGE_FORCE)
 			{
@@ -5042,7 +5042,7 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 				return 0;
 			}
 		}
- 
+
 		/* Multishadow effects is determined by turn */
 		if (p_ptr->multishadow && (turn & 1))
 		{
@@ -5064,7 +5064,7 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 				return 0;
 			}
 		}
-		    
+
 		if (p_ptr->wraith_form)
 		{
 			if (damage_type == DAMAGE_FORCE)
@@ -5082,7 +5082,7 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 			}
 		}
 
-		if ((p_ptr->special_defense & KATA_MUSOU))
+		if (p_ptr->special_defense & KATA_MUSOU)
 		{
 			damage /= 2;
 			if ((damage == 0) && one_in_(2)) damage = 1;

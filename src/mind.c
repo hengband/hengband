@@ -954,7 +954,7 @@ msg_print("精神を捻じ曲げる波動を発生させた！");
 		 * Only heal when Adrenalin Channeling is not active. We check
 		 * that by checking if the player isn't fast and 'heroed' atm.
 		 */
-		if (!p_ptr->fast || !p_ptr->hero)
+		if (!IS_FAST() || !IS_HERO())
 		{
 			hp_player(plev);
 		}

@@ -6370,14 +6370,14 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 		if (p_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
 		if (prace_is_(RACE_ANDROID)) dam += dam / 3;
 		if (p_ptr->resist_elec) dam = (dam + 2) / 3;
-		if (p_ptr->oppose_elec || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
+		if (IS_OPPOSE_ELEC())
 			dam = (dam + 2) / 3;
 		if (p_ptr->immune_elec) dam = 0;
 		break;
 
 	case GF_POIS:
 		if (p_ptr->resist_pois) dam = (dam + 2) / 3;
-		if (p_ptr->oppose_pois || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
+		if (IS_OPPOSE_POIS())
 			dam = (dam + 2) / 3;
 		break;
 
@@ -6385,7 +6385,7 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 		if (p_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
 		if (p_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
 		if (p_ptr->resist_acid) dam = (dam + 2) / 3;
-		if (p_ptr->oppose_acid || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
+		if (IS_OPPOSE_ACID())
 			dam = (dam + 2) / 3;
 		if (p_ptr->immune_acid) dam = 0;
 		break;
@@ -6395,7 +6395,7 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 		if (p_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
 		if (p_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
 		if (p_ptr->resist_cold) dam = (dam + 2) / 3;
-		if (p_ptr->oppose_cold || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
+		if (IS_OPPOSE_COLD())
 			dam = (dam + 2) / 3;
 		if (p_ptr->immune_cold) dam = 0;
 		break;
@@ -6405,7 +6405,7 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 		if (prace_is_(RACE_ENT)) dam += dam / 3;
 		if (p_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
 		if (p_ptr->resist_fire) dam = (dam + 2) / 3;
-		if (p_ptr->oppose_fire || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
+		if (IS_OPPOSE_FIRE())
 			dam = (dam + 2) / 3;
 		if (p_ptr->immune_fire) dam = 0;
 		break;
@@ -6476,7 +6476,7 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 
 	case GF_NUKE:
 		if (p_ptr->resist_pois) dam = (2 * dam + 2) / 5;
-		if (p_ptr->oppose_pois || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
+		if (IS_OPPOSE_POIS())
 			dam = (2 * dam + 2) / 5;
 		break;
 

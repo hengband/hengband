@@ -705,9 +705,9 @@ msg_print("何か恐ろしい事が起こった！");
 #endif
 
 
-	if (!p_ptr->invuln)
+	if (!IS_INVULN())
 #ifdef JP
-take_hit(DAMAGE_NOESCAPE, damroll(10, 8), "パターン損壊", -1);
+		take_hit(DAMAGE_NOESCAPE, damroll(10, 8), "パターン損壊", -1);
 #else
 		take_hit(DAMAGE_NOESCAPE, damroll(10, 8), "corrupting the Pattern", -1);
 #endif
@@ -786,11 +786,11 @@ msg_print("「パターン」のこの部分は他の部分より強力でないようだ。");
 	}
 	else if (cave[py][px].feat == FEAT_PATTERN_XTRA2)
 	{
-		if (!p_ptr->invuln)
+		if (!IS_INVULN())
 #ifdef JP
-take_hit(DAMAGE_NOESCAPE, 200, "壊れた「パターン」を歩いたダメージ", -1);
+			take_hit(DAMAGE_NOESCAPE, 200, "壊れた「パターン」を歩いたダメージ", -1);
 #else
-		take_hit(DAMAGE_NOESCAPE, 200, "walking the corrupted Pattern", -1);
+			take_hit(DAMAGE_NOESCAPE, 200, "walking the corrupted Pattern", -1);
 #endif
 
 	}
@@ -798,9 +798,9 @@ take_hit(DAMAGE_NOESCAPE, 200, "壊れた「パターン」を歩いたダメージ", -1);
 	{
 		if ((prace_is_(RACE_AMBERITE)) && !one_in_(2))
 			return TRUE;
-		else if (!p_ptr->invuln)
+		else if (!IS_INVULN())
 #ifdef JP
-take_hit(DAMAGE_NOESCAPE, damroll(1,3), "「パターン」を歩いたダメージ", -1);
+			take_hit(DAMAGE_NOESCAPE, damroll(1, 3), "「パターン」を歩いたダメージ", -1);
 #else
 			take_hit(DAMAGE_NOESCAPE, damroll(1, 3), "walking the Pattern", -1);
 #endif
@@ -1842,11 +1842,11 @@ if (cheat_xtra) msg_print("報酬をリセット");
 	/*** Damage over Time ***/
 
 	/* Take damage from poison */
-	if (p_ptr->poisoned && !p_ptr->invuln)
+	if (p_ptr->poisoned && !IS_INVULN())
 	{
 		/* Take damage */
 #ifdef JP
-take_hit(DAMAGE_NOESCAPE, 1, "毒", -1);
+		take_hit(DAMAGE_NOESCAPE, 1, "毒", -1);
 #else
 		take_hit(DAMAGE_NOESCAPE, 1, "poison", -1);
 #endif
@@ -1857,7 +1857,7 @@ take_hit(DAMAGE_NOESCAPE, 1, "毒", -1);
 	/* (Vampires) Take damage from sunlight */
 	if (prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE))
 	{
-		if (!dun_level && !p_ptr->resist_lite && !p_ptr->invuln && is_daytime())
+		if (!dun_level && !p_ptr->resist_lite && !IS_INVULN() && is_daytime())
 		{
 			if (cave[py][px].info & CAVE_GLOW)
 			{
@@ -1902,19 +1902,18 @@ sprintf(ouch, "%sを装備したダメージ", o_name);
 			sprintf(ouch, "wielding %s", o_name);
 #endif
 
-			if (!p_ptr->invuln) take_hit(DAMAGE_NOESCAPE, 1, ouch, -1);
+			if (!IS_INVULN()) take_hit(DAMAGE_NOESCAPE, 1, ouch, -1);
 		}
 	}
 
 	if ((cave[py][px].feat == FEAT_SHAL_LAVA) &&
-		!p_ptr->invuln && !p_ptr->immune_fire && !p_ptr->ffall)
+		!IS_INVULN() && !p_ptr->immune_fire && !p_ptr->ffall)
 	{
 		int damage = 3000 + randint0(2000);
 
 		if (prace_is_(RACE_ENT)) damage += damage/3;
-
 		if (p_ptr->resist_fire) damage = damage / 3;
-		if (p_ptr->oppose_fire) damage = damage / 3;
+		if (IS_OPPOSE_FIRE()) damage = damage / 3;
 		damage = damage / 100 + (randint0(100) < (damage % 100));
 
 		if (damage)
@@ -1933,7 +1932,7 @@ take_hit(DAMAGE_NOESCAPE, damage, "浅い溶岩流", -1);
 	}
 
 	else if ((cave[py][px].feat == FEAT_DEEP_LAVA) &&
-		!p_ptr->invuln && !p_ptr->immune_fire)
+		!IS_INVULN() && !p_ptr->immune_fire)
 	{
 		int damage = 6000 + randint0(4000);
 
@@ -1941,7 +1940,7 @@ take_hit(DAMAGE_NOESCAPE, damage, "浅い溶岩流", -1);
 		cptr hit_from;
 
 		if (p_ptr->resist_fire) damage = damage / 3;
-		if (p_ptr->oppose_fire) damage = damage / 3;
+		if (IS_OPPOSE_FIRE()) damage = damage / 3;
 
 		if (p_ptr->ffall)
 		{
@@ -2002,9 +2001,9 @@ take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->lev), "溺れ", -1);
 		if ((r_info[m_list[p_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !p_ptr->immune_fire)
 		{
 			damage = r_info[m_list[p_ptr->riding].r_idx].level / 2;
-			if (prace_is_(RACE_ENT)) damage += damage/3;
+			if (prace_is_(RACE_ENT)) damage += damage / 3;
 			if (p_ptr->resist_fire) damage = damage / 3;
-			if (p_ptr->oppose_fire) damage = damage / 3;
+			if (IS_OPPOSE_FIRE()) damage = damage / 3;
 #ifdef JP
 msg_print("熱い！");
 take_hit(DAMAGE_NOESCAPE, damage, "炎のオーラ", -1);
@@ -2016,8 +2015,9 @@ take_hit(DAMAGE_NOESCAPE, damage, "炎のオーラ", -1);
 		if ((r_info[m_list[p_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !p_ptr->immune_elec)
 		{
 			damage = r_info[m_list[p_ptr->riding].r_idx].level / 2;
+			if (prace_is_(RACE_ANDROID)) damage += damage / 3;
 			if (p_ptr->resist_elec) damage = damage / 3;
-			if (p_ptr->oppose_elec) damage = damage / 3;
+			if (IS_OPPOSE_ELEC()) damage = damage / 3;
 #ifdef JP
 msg_print("痛い！");
 take_hit(DAMAGE_NOESCAPE, damage, "電気のオーラ", -1);
@@ -2030,7 +2030,7 @@ take_hit(DAMAGE_NOESCAPE, damage, "電気のオーラ", -1);
 		{
 			damage = r_info[m_list[p_ptr->riding].r_idx].level / 2;
 			if (p_ptr->resist_cold) damage = damage / 3;
-			if (p_ptr->oppose_cold) damage = damage / 3;
+			if (IS_OPPOSE_COLD()) damage = damage / 3;
 #ifdef JP
 msg_print("冷たい！");
 take_hit(DAMAGE_NOESCAPE, damage, "冷気のオーラ", -1);
@@ -2055,7 +2055,7 @@ take_hit(DAMAGE_NOESCAPE, damage, "冷気のオーラ", -1);
 		{
 			/* Do nothing */
 		}
-		else if (!p_ptr->invuln && !p_ptr->wraith_form && !p_ptr->kabenuke &&
+		else if (!IS_INVULN() && !p_ptr->wraith_form && !p_ptr->kabenuke &&
 		    ((p_ptr->chp > (p_ptr->lev / 5)) || !p_ptr->pass_wall))
 		{
 			cptr dam_desc;
@@ -2202,7 +2202,7 @@ msg_print("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。");
 	}
 
 	/* Take damage from cuts */
-	if (p_ptr->cut && !p_ptr->invuln)
+	if (p_ptr->cut && !IS_INVULN())
 	{
 		/* Mortal wound or Deep Gash */
 		if (p_ptr->cut > 1000)
@@ -2301,9 +2301,9 @@ take_hit(DAMAGE_NOESCAPE, i, "致命傷", -1);
 
 		/* Take damage */
 #ifdef JP
-if (!p_ptr->invuln) take_hit(DAMAGE_LOSELIFE, i, "空腹", -1);
+		if (!IS_INVULN()) take_hit(DAMAGE_LOSELIFE, i, "空腹", -1);
 #else
-		if (!p_ptr->invuln) take_hit(DAMAGE_LOSELIFE, i, "starvation", -1);
+		if (!IS_INVULN()) take_hit(DAMAGE_LOSELIFE, i, "starvation", -1);
 #endif
 
 	}
@@ -2810,7 +2810,7 @@ msg_print("激怒の発作に襲われた！");
 
 		if ((p_ptr->muta2 & MUT2_COWARDICE) && (randint1(3000) == 13))
 		{
-			if (!(p_ptr->resist_fear || p_ptr->hero || p_ptr->shero))
+			if (!p_ptr->resist_fear)
 			{
 				disturb(0, 0);
 #ifdef JP
@@ -3554,7 +3554,7 @@ msg_format("%sがドラゴンを引き寄せた！", o_name);
 		}
 		if ((p_ptr->cursed & TRC_COWARDICE) && one_in_(1500))
 		{
-			if (!(p_ptr->resist_fear || p_ptr->hero || p_ptr->shero))
+			if (!p_ptr->resist_fear)
 			{
 				disturb(0, 0);
 #ifdef JP
