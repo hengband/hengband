@@ -13,8 +13,7 @@
 
 
 /* Number of rooms to attempt (was 50) */
-#define DUN_ROOMS_MIN	10
-#define DUN_ROOMS_MAX	100
+#define DUN_ROOMS_MAX	40
 
 
 /* Room types for generate_lake() */

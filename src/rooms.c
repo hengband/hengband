@@ -5960,7 +5960,7 @@ void generate_rooms(void)
 	s16b room_num[ROOM_T_MAX];
 
 	/* Limit number of rooms */
-	int dun_rooms = rand_range(DUN_ROOMS_MIN, DUN_ROOMS_MAX * area_size / 100);
+	int dun_rooms = DUN_ROOMS_MAX * area_size / 100;
 
 	/* Assume normal cave */
 	room_info_type *room_info_ptr = room_info_normal;
