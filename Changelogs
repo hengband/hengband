@@ -1,4 +1,81 @@
+2002-04-17  Takeshi Mogami  <mogami@cvs>
+
+	* src/cave.c 1.38, src/z-term.c 1.10:
+	Bigtileのタイルモードで全角ASCIIしかないモンスター等が動いたときに、
+	Term_queue_chars()が背景のタイルの1byte目を漢字の2byte目と勘違いして
+	その前のタイルの右半分を消してしまっていたので修正。
+
+	* src/main-mac.c 1.15, src/main-x11.c 1.15:
+	USE_TRANSPARENCYでASCII文字地形の上にタイルの敵等が乗ると、
+	ASCIIコードをタイルと間違えて表示しようとしてバグっていたので修正。
+
+2002-04-17  _nothere  <_nothere@cvs>
+
+	* src/dungeon.c 1.33, src/wild.c 1.12:
+	夜に街の中の山が光らないように変更. 他, 地上で夜になった場合に周辺を光らなくした.
+
+	* lib/edit/v_info_j.txt 1.4:
+	No.113 (Devided) のvault内のパターンが最後まで歩けないパターンだったので修正.
+
+2002-04-17  Takeshi Mogami  <mogami@cvs>
+
+	* src/main-mac.c 1.14: いろいろ修正。
+	- USE_TRANSPARENCY対応。
+	- タイル高、タイル幅、メニューをちゃんとサポートしていなかったのを修正。
+	- Bigtileの右半分の再描画ができていなかったのを修正。
+	- ウィンドウのサイズをマウスで変えたとき変なサイズになってしまうバグ修正。
+	  (MPWのLowWord()が余計なhighbitを持つintを返すというバグだった。)
+
+	!!!! To do: 全角ASCIIのモンスターが動いた跡の地形タイルの右半分が再描画されないバグが残っている。
+
+2002-04-16  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.8, src/types.h 1.14:
+	コメント追加。typo修正。
+
+2002-04-16  henkma  <henkma@cvs>
+
+	* lib/edit/k_info_j.txt 1.19:
+	typo修正. 三人称単数現在の's'.
+
+	* lib/edit/k_info_j.txt 1.18:
+	typo修正corrensond→correspond
+
+2002-04-16  Takeshi Mogami  <mogami@cvs>
+
+	* lib/pref/pickpref.prf 1.3, lib/pref/picktype.prf 1.3:
+	耐性自動刻みの例をサンプルに入れておく。(英語版で誰も使ってくれないので宣伝。)
+
 2002-04-14  Takeshi Mogami  <mogami@cvs>
+
+	* src/object1.c 1.26, src/xtra1.c 1.33:
+	rgraで教えてもらったので、武器が「suitable for riding」を
+	「suitable for use while riding」に修正。
+
+	* src/generate.c 1.15, src/load.c 1.22, src/mane.c 1.7, src/melee2.c 1.20, src/mind.c 1.8, src/monster2.c 1.20, src/mspells1.c 1.19, src/mspells2.c 1.15, src/mspells3.c 1.10, src/racial.c 1.11, src/save.c 1.10, src/spells3.c 1.18, src/types.h 1.13, src/defines.h 1.34, src/dungeon.c 1.32, src/effects.c 1.18:
+	スピードシステム改造。
+	行動1回に必要なエネルギーは ENERGY_NEED() = randnor(100, 31) * 2 。
+	後で、TURNS_PER_TICK を 10 にしたときにはこの「* 2」は取り除く。
+
+2002-04-14  _nothere  <_nothere@cvs>
+
+	* src/cave.c 1.37:
+	幻覚時にただの地形が1/256でランダムな文字に変わって見えるコードが上書き代入で無効になっていたので, 有効になるように修正. 幻覚時の難易度増加につながるので, 問題が出たらいつでも無効化して構わない.
+
+2002-04-14  habu  <habu@cvs>
+
+	* src/monster2.c 1.19:
+	dungeon_turnに応じて深層のモンスターを出やすくするコードをTURNS_PER_TICKを使って書き変え。
+
+2002-04-14  Takeshi Mogami  <mogami@cvs>
+
+	* src/files.c 1.49:
+	reverse モードで 2 8 の上下が逆なのを修正。
+
+	* src/autopick.c 1.7:
+	&& と || の優先順位が曖昧なところに括弧追加。
+
+	* Changelogs 1.35: 更新
 
 	* src/files.c 1.48:
 	8 2 で1行上下に移動できるように。
