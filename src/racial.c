@@ -114,7 +114,25 @@ static bool do_cmd_archer(void)
 		y = py + ddy[dir];
 		x = px + ddx[dir];
 		c_ptr = &cave[y][x];
-		if (c_ptr->feat == FEAT_RUBBLE)
+
+		if (!have_flag(f_info[get_feat_mimic(c_ptr)].flags, FF_CAN_DIG))
+		{
+#ifdef JP
+			msg_print("そこには岩石がない。");
+#else
+			msg_print("You need pile of rubble.");
+#endif
+			return FALSE;
+		}
+		else if (!have_flag(f_flags_grid(c_ptr), FF_CAN_DIG) || !have_flag(f_flags_grid(c_ptr), FF_HURT_ROCK))
+		{
+#ifdef JP
+			msg_print("硬すぎて崩せなかった。");
+#else
+			msg_print("You failed to make ammo.");
+#endif
+		}
+		else
 		{
 			/* Get local object */
 			q_ptr = &forge;
@@ -131,22 +149,16 @@ static bool do_cmd_archer(void)
 
 			object_desc(o_name, q_ptr, 0);
 #ifdef JP
-			msg_format("岩石を削って%sを作った。",o_name);
+			msg_format("%sを作った。", o_name);
 #else
 			msg_print("You make some ammo.");
 #endif
 
-			(void)wall_to_mud(dir);
+			/* Destroy the wall */
+			cave_alter_feat(y, x, FF_HURT_ROCK);
+
 			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
 			p_ptr->window |= (PW_OVERHEAD);
-		}
-		else
-		{
-#ifdef JP
-			msg_print("そこには岩石がない。");
-#else
-			msg_print("You need pile of rubble.");
-#endif
 		}
 	}
 	/**********Create arrows*********/

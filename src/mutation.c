@@ -3506,7 +3506,7 @@ bool mutation_power_aux(u32b power)
 #endif
 					break;
 				}
-				else if (have_flag(f_ptr->flags, FF_DOOR) || have_flag(f_ptr->flags, FF_HAS_ITEM))
+				else if (have_flag(f_ptr->flags, FF_DOOR) || have_flag(f_ptr->flags, FF_CAN_DIG))
 				{
 					(void)set_food(p_ptr->food + 3000);
 				}
