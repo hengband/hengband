@@ -6121,7 +6121,7 @@ power_desc[num] = "離れていろ";
 	powers[num++] = PET_RIDING;
 
 #ifdef JP
-	power_desc[num] = "ペットに名前をつける。";
+	power_desc[num] = "ペットに名前をつける";
 #else
 	power_desc[num] = "name pets";
 #endif
