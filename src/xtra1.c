@@ -4058,7 +4058,10 @@ void calc_bonuses(void)
 		if (f3 & (TR3_FEATHER))     p_ptr->ffall = TRUE;
 		if (f2 & (TR2_FREE_ACT))    p_ptr->free_act = TRUE;
 		if (f2 & (TR2_HOLD_LIFE))   p_ptr->hold_life = TRUE;
-		if (f3 & (TR3_WARNING))     p_ptr->warning = TRUE;
+		if (f3 & (TR3_WARNING)){
+			if (!o_ptr->inscription || !(strchr(quark_str(o_ptr->inscription),'$')))
+			  p_ptr->warning = TRUE;
+		}
 
 		if (f3 & (TR3_TELEPORT))
 		{

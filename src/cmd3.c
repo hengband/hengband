@@ -1277,6 +1277,10 @@ void do_cmd_uninscribe(void)
 
 	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
+
+	/* .や$の関係で, 再計算が必要なはず -- henkma */
+	p_ptr->update |= (PU_BONUS);
+
 }
 
 /*
@@ -1756,6 +1760,7 @@ s16b inscribe_flags(object_type *o_ptr, cptr out_val)
 		buff[MAX_NLEN-1] = '\0';
 #endif
 	}
+
 	return quark_add(buff);
 }
 
@@ -1835,6 +1840,9 @@ void do_cmd_inscribe(void)
 
 		/* Window stuff */
 		p_ptr->window |= (PW_INVEN | PW_EQUIP);
+
+		/* .や$の関係で, 再計算が必要なはず -- henkma */
+		p_ptr->update |= (PU_BONUS);
 	}
 }
 
