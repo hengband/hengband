@@ -2034,6 +2034,8 @@ bool do_riding(bool force)
 	x = px + ddx[dir];
 	c_ptr = &cave[y][x];
 
+	if (p_ptr->special_defense & KATA_MUSOU) set_action(ACTION_NONE);
+
 	if (p_ptr->riding)
 	{
 		/* Skip non-empty grids */
