@@ -2571,7 +2571,7 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
 			case 'A':
 				/* Reward for Pattern walk */
 				object_level = base_level + 12;
-				place_object(y, x, AM_GOOD);
+				place_object(y, x, AM_GOOD | AM_GREAT);
 				object_level = base_level;
 				break;
 			}
