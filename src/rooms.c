@@ -1603,9 +1603,6 @@ static void vault_prep_dragon(void)
 }
 
 
-#define ROOM_PIT 0
-#define ROOM_NEST 1
-
 typedef struct vault_aux_type vault_aux_type;
 
 
@@ -1619,7 +1616,7 @@ struct vault_aux_type
 };
 
 
-static vault_aux_type *pick_vault_type(vault_aux_type *l_ptr, int room)
+static int pick_vault_type(vault_aux_type *l_ptr, s16b allow_flag_mask)
 {
 	int tmp, total, count;
 
@@ -1634,14 +1631,8 @@ static vault_aux_type *pick_vault_type(vault_aux_type *l_ptr, int room)
 		/* Ignore excessive depth */
 		if (n_ptr->level > dun_level) continue;
 
-		if (room == ROOM_PIT)
-		{
-			if (!(d_info[dungeon_type].pit & (1L << count))) continue;
-		}
-		else if (room == ROOM_NEST)
-		{
-			if(!(d_info[dungeon_type].nest & (1L << count))) continue;
-		}
+		/* Not matched with pit/nest flag */
+		if (!(allow_flag_mask & (1L << count))) continue;
 
 		/* Count this possibility */
 		total += n_ptr->chance * MAX_DEPTH / (MIN(dun_level, MAX_DEPTH - 1) - n_ptr->level + 5);
@@ -1659,14 +1650,8 @@ static vault_aux_type *pick_vault_type(vault_aux_type *l_ptr, int room)
 		/* Ignore excessive depth */
 		if (n_ptr->level > dun_level) continue;
 
-		if (room == ROOM_PIT)
-		{
-			if (!(d_info[dungeon_type].pit & (1L << count))) continue;
-		}
-		else if (room == ROOM_NEST)
-		{
-			if(!(d_info[dungeon_type].nest & (1L << count))) continue;
-		}
+		/* Not matched with pit/nest flag */
+		if (!(allow_flag_mask & (1L << count))) continue;
 
 		/* Count this possibility */
 		total += n_ptr->chance * MAX_DEPTH / (MIN(dun_level, MAX_DEPTH - 1) - n_ptr->level + 5);
@@ -1675,7 +1660,7 @@ static vault_aux_type *pick_vault_type(vault_aux_type *l_ptr, int room)
 		if (tmp < total) break;
 	}
 
-	return (n_ptr->name ? n_ptr : NULL);
+	return n_ptr->name ? count : -1;
 }
 
 static void build_type6(int by0, int bx0, bool nest);
@@ -1710,6 +1695,119 @@ static vault_aux_type nest_types[] =
 #endif
 };
 
+static vault_aux_type pit_types[] =
+{
+#ifdef JP
+	{"オーク",	vault_aux_orc,		NULL,			5,	6},
+	{"トロル",	vault_aux_troll,	NULL,			20,	6},
+	{"ジャイアント",vault_aux_giant,	NULL,			50,	6},
+	{"狂気",	vault_aux_cthulhu,	NULL,			80,	2},
+	{"シンボル(善)",vault_aux_symbol_g,	vault_prep_symbol,	70,	1},
+	{"シンボル(悪)",vault_aux_symbol_e,	vault_prep_symbol,	70,	1},
+	{"教会",	vault_aux_chapel_g,	NULL,			65,	2},
+	{"ドラゴン",	vault_aux_dragon,	vault_prep_dragon,	70,	6},
+	{"デーモン",	vault_aux_demon,	NULL,   		80,	6},
+	{NULL,		NULL,			NULL,			0,	0},
+#else
+	{"orc",		vault_aux_orc,		NULL,			5,	6},
+	{"troll",	vault_aux_troll,	NULL,			20,	6},
+	{"giant",	vault_aux_giant,	NULL,			50,	6},
+	{"lovecraftian",vault_aux_cthulhu,	NULL,			80,	2},
+	{"symbol good",vault_aux_symbol_g,	vault_prep_symbol,	70,	1},
+	{"symbol evil",vault_aux_symbol_e,	vault_prep_symbol,	70,	1},
+	{"chapel",	vault_aux_chapel_g,	NULL,			65,	2},
+	{"dragon",	vault_aux_dragon,	vault_prep_dragon,	70,	6},
+	{"demon",	vault_aux_demon,	NULL,   		80,	6},
+	{NULL,		NULL,			NULL,			0,	0},
+#endif
+};
+
+
+/* Nest types code */
+#define NEST_TYPE_CLONE        0
+#define NEST_TYPE_JELLY        1
+#define NEST_TYPE_SYMBOL_GOOD  2
+#define NEST_TYPE_SYMBOL_EVIL  3
+#define NEST_TYPE_MIMIC        4
+#define NEST_TYPE_LOVECRAFTIAN 5
+#define NEST_TYPE_KENNEL       6
+#define NEST_TYPE_ANIMAL       7
+#define NEST_TYPE_CHAPEL       8
+#define NEST_TYPE_UNDEAD       9
+
+/* Pit types code */
+#define PIT_TYPE_ORC           0
+#define PIT_TYPE_TROLL         1
+#define PIT_TYPE_GIANT         2
+#define PIT_TYPE_LOVECRAFTIAN  3
+#define PIT_TYPE_SYMBOL_GOOD   4
+#define PIT_TYPE_SYMBOL_EVIL   5
+#define PIT_TYPE_CHAPEL        6
+#define PIT_TYPE_DRAGON        7
+#define PIT_TYPE_DEMON         8
+
+
+/*
+ * Hack -- Get the string describing subtype of pit/nest
+ * Determined in prepare function (some pit/nest only)
+ */
+static cptr pit_subtype_string(int type, bool nest)
+{
+	static char inner_buf[256] = "";
+
+	inner_buf[0] = '\0'; /* Init string */
+
+	if (nest) /* Nests */
+	{
+		switch (type)
+		{
+		case NEST_TYPE_CLONE:
+			sprintf(inner_buf, "(%s)", r_name + r_info[vault_aux_race].name);
+			break;
+		case NEST_TYPE_SYMBOL_GOOD:
+		case NEST_TYPE_SYMBOL_EVIL:
+			sprintf(inner_buf, "(%c)", vault_aux_char);
+			break;
+		}
+	}
+	else /* Pits */
+	{
+		switch (type)
+		{
+		case PIT_TYPE_SYMBOL_GOOD:
+		case PIT_TYPE_SYMBOL_EVIL:
+			sprintf(inner_buf, "(%c)", vault_aux_char);
+			break;
+		case PIT_TYPE_DRAGON:
+			switch (vault_aux_dragon_mask4)
+			{
+#ifdef JP
+			case RF4_BR_ACID: strcpy(inner_buf, "(酸)");   break;
+			case RF4_BR_ELEC: strcpy(inner_buf, "(稲妻)"); break;
+			case RF4_BR_FIRE: strcpy(inner_buf, "(火炎)"); break;
+			case RF4_BR_COLD: strcpy(inner_buf, "(冷気)"); break;
+			case RF4_BR_POIS: strcpy(inner_buf, "(毒)");   break;
+			case (RF4_BR_ACID | RF4_BR_ELEC | RF4_BR_FIRE | RF4_BR_COLD | RF4_BR_POIS):
+				strcpy(inner_buf, "(万色)"); break;
+			default: strcpy(inner_buf, "(未定義)"); break;
+#else
+			case RF4_BR_ACID: strcpy(inner_buf, "(acid)");      break;
+			case RF4_BR_ELEC: strcpy(inner_buf, "(lightning)"); break;
+			case RF4_BR_FIRE: strcpy(inner_buf, "(fire)");      break;
+			case RF4_BR_COLD: strcpy(inner_buf, "(frost)");     break;
+			case RF4_BR_POIS: strcpy(inner_buf, "(poison)");    break;
+			case (RF4_BR_ACID | RF4_BR_ELEC | RF4_BR_FIRE | RF4_BR_COLD | RF4_BR_POIS):
+				strcpy(inner_buf, "(multi-hued)"); break;
+			default: strcpy(inner_buf, "(undefined)"); break;
+#endif
+			}
+			break;
+		}
+	}
+
+	return inner_buf;
+}
+
 
 /*
  * Type 5 -- Monster nests
@@ -1740,17 +1838,24 @@ static void build_type5(int by0, int bx0, bool pit)
 
 	cave_type *c_ptr;
 
-	vault_aux_type *n_ptr = pick_vault_type(nest_types, ROOM_NEST);
+	int cur_nest_type = pick_vault_type(nest_types, d_info[dungeon_type].nest);
+	vault_aux_type *n_ptr;
 
 	/* Try to allocate space for room. */
 	if (!room_alloc(25, 11, TRUE, by0, bx0, &xval, &yval)) return;
 
 	/* No type available */
-	if (!n_ptr)
+	if (cur_nest_type < 0)
 	{
 		if (pit) return;
-		else {build_type6(by0, bx0, TRUE);return;}
+		else
+		{
+			build_type6(by0, bx0, TRUE);
+			return;
+		}
 	}
+
+	n_ptr = &nest_types[cur_nest_type];
 
 	/* Process a preparation function if necessary */
 	if (n_ptr->prep_func) (*(n_ptr->prep_func))();
@@ -1869,13 +1974,11 @@ static void build_type5(int by0, int bx0, bool pit)
 	{
 		/* Room type */
 #ifdef JP
-msg_format("モンスター部屋(%s)", n_ptr->name);
+		msg_format("モンスター部屋(nest)(%s%s)", n_ptr->name, pit_subtype_string(cur_nest_type, TRUE));
 #else
-		msg_format("Monster nest (%s)", n_ptr->name);
+		msg_format("Monster nest (%s%s)", n_ptr->name, pit_subtype_string(cur_nest_type, TRUE));
 #endif
-
 	}
-
 
 	/* Increase the level rating */
 	rating += 10;
@@ -1898,34 +2001,6 @@ msg_format("モンスター部屋(%s)", n_ptr->name);
 		}
 	}
 }
-
-
-static vault_aux_type pit_types[] =
-{
-#ifdef JP
-	{"オーク",	vault_aux_orc,		NULL,			5,	6},
-	{"トロル",	vault_aux_troll,	NULL,			20,	6},
-	{"ジャイアント",vault_aux_giant,	NULL,			50,	6},
-	{"狂気",	vault_aux_cthulhu,	NULL,			80,	2},
-	{"シンボル(善)",vault_aux_symbol_g,	vault_prep_symbol,	70,	1},
-	{"シンボル(悪)",vault_aux_symbol_e,	vault_prep_symbol,	70,	1},
-	{"教会",	vault_aux_chapel_g,	NULL,			65,	2},
-	{"ドラゴン",	vault_aux_dragon,	vault_prep_dragon,	70,	6},
-	{"デーモン",	vault_aux_demon,	NULL,   		80,	6},
-	{NULL,		NULL,			NULL,			0,	0},
-#else
-	{"orc",		vault_aux_orc,		NULL,			5,	6},
-	{"troll",	vault_aux_troll,	NULL,			20,	6},
-	{"giant",	vault_aux_giant,	NULL,			50,	6},
-	{"lovecraftian",vault_aux_cthulhu,	NULL,			80,	2},
-	{"symbol good",vault_aux_symbol_g,	vault_prep_symbol,	70,	1},
-	{"symbol evil",vault_aux_symbol_e,	vault_prep_symbol,	70,	1},
-	{"chapel",	vault_aux_chapel_g,	NULL,			65,	2},
-	{"dragon",	vault_aux_dragon,	vault_prep_dragon,	70,	6},
-	{"demon",	vault_aux_demon,	NULL,   		80,	6},
-	{NULL,		NULL,			NULL,			0,	0},
-#endif
-};
 
 
 /*
@@ -1975,17 +2050,24 @@ static void build_type6(int by0, int bx0, bool nest)
 
 	cave_type *c_ptr;
 
-	vault_aux_type *n_ptr = pick_vault_type(pit_types, ROOM_PIT);
+	int cur_pit_type = pick_vault_type(pit_types, d_info[dungeon_type].pit);
+	vault_aux_type *n_ptr;
 
 	/* Try to allocate space for room. */
 	if (!room_alloc(25, 11, TRUE, by0, bx0, &xval, &yval)) return;
 
 	/* No type available */
-	if (!n_ptr)
+	if (cur_pit_type < 0)
 	{
 		if (nest) return;
-		else {build_type5(by0, bx0, TRUE);return;}
+		else
+		{
+			build_type5(by0, bx0, TRUE);
+			return;
+		}
 	}
+
+	n_ptr = &pit_types[cur_pit_type];
 
 	/* Process a preparation function if necessary */
 	if (n_ptr->prep_func) (*(n_ptr->prep_func))();
@@ -2121,11 +2203,11 @@ static void build_type6(int by0, int bx0, bool nest)
 	/* Message */
 	if (cheat_room)
 	{
-#ifdef JP
-msg_format("%sの巣", n_ptr->name);
-#else
 		/* Room type */
-		msg_format("Monster pit (%s)", n_ptr->name);
+#ifdef JP
+		msg_format("モンスター部屋(pit)(%s%s)", n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
+#else
+		msg_format("Monster pit (%s%s)", n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
 #endif
 	}
 
@@ -5227,7 +5309,8 @@ static void build_type13(int by0, int bx0)
 
 	cave_type *c_ptr;
 
-	vault_aux_type *n_ptr = pick_vault_type(pit_types, ROOM_PIT);
+	int cur_pit_type = pick_vault_type(pit_types, d_info[dungeon_type].pit);
+	vault_aux_type *n_ptr;
 
 	/* Only in Angband */
 	if (dungeon_type != 1) return;
@@ -5236,7 +5319,9 @@ static void build_type13(int by0, int bx0)
 	if (!room_alloc(25, 13, TRUE, by0, bx0, &xval, &yval)) return;
 
 	/* No type available */
-	if (!n_ptr) return;
+	if (cur_pit_type < 0) return;
+
+	n_ptr = &pit_types[cur_pit_type];
 
 	/* Process a preparation function if necessary */
 	if (n_ptr->prep_func) (*(n_ptr->prep_func))();
@@ -5400,11 +5485,11 @@ static void build_type13(int by0, int bx0)
 	/* Message */
 	if (cheat_room)
 	{
-#ifdef JP
-		msg_format("%sの罠ピット", n_ptr->name);
-#else
 		/* Room type */
-		msg_format("Trapped monster pit (%s)", n_ptr->name);
+#ifdef JP
+		msg_format("%s%sの罠ピット", n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
+#else
+		msg_format("Trapped monster pit (%s%s)", n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
 #endif
 	}
 
