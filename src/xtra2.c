@@ -2692,55 +2692,6 @@ bool target_okay(void)
 
 
 /*
- * Examine importance level of the grid.
- *
- * Unknown unique monster -> 5000
- * Unique monster         -> 4000 + level 
- * Unknown normal monster -> 3000
- * Shadower        	  -> 2999
- * Normal monster  	  -> 2000 + level
- * Object          	  -> 1000
- * Empty           	  -> priotity of the terrain
- */
-static int get_grid_importance(int y, int x)
-{
-	cave_type *c_ptr = &cave[y][x];
-
-	/* A monster */
-	if (c_ptr->m_idx && m_list[c_ptr->m_idx].ml)
-	{
-		monster_type *m_ptr = &m_list[c_ptr->m_idx];
-		monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
-
-		/* Unique monster */
-		if (ap_r_ptr->flags1 & RF1_UNIQUE)
-		{
-			/* Unknown unique monster */
-			if (!ap_r_ptr->r_tkills) return 5000;
-
-			/* Known unique monster */
-			return 4000 + ap_r_ptr->level;
-		}
-
-		/* あやしい影 (Shadower) */
-		if (m_ptr->mflag2 & MFLAG2_KAGE) return 2999;
-
-		/* Unknown monster */
-		if (!ap_r_ptr->r_tkills) return 3000;
-
-		/* Known normal monster */
-		return 2000 + ap_r_ptr->level;
-	}
-
-	/* Object */
-	if (c_ptr->o_idx) return 1000;
-
-	/* Empty floor or other terrain */
-	return f_info[c_ptr->feat].priority;
-}
-
-
-/*
  * Sorting hook -- comp function -- by "distance to player"
  *
  * We use "u" and "v" to point to arrays of "x" and "y" positions,
@@ -2782,13 +2733,62 @@ static bool ang_sort_comp_importance(vptr u, vptr v, int a, int b)
 {
 	byte *x = (byte*)(u);
 	byte *y = (byte*)(v);
+	cave_type *ca_ptr = &cave[y[a]][x[a]];
+	cave_type *cb_ptr = &cave[y[b]][x[b]];
+	monster_type *ma_ptr = &m_list[ca_ptr->m_idx];
+	monster_type *mb_ptr = &m_list[cb_ptr->m_idx];
+	monster_race *ap_ra_ptr, *ap_rb_ptr;
+	int la, lb;
 
-	int la = get_grid_importance(y[a], x[a]);
-	int lb = get_grid_importance(y[b], x[b]);
+	/* The player grid */
+	if (y[a] == py && x[a] == px) return TRUE;
+	if (y[b] == py && x[b] == px) return FALSE;
 
-	if (la < lb) return FALSE;
-	if (la > lb) return TRUE;
+	/* Extract monster race */
+	if (ca_ptr->m_idx && ma_ptr->ml) ap_ra_ptr = &r_info[ma_ptr->ap_r_idx];
+	else ap_ra_ptr = NULL;
+	if (cb_ptr->m_idx && mb_ptr->ml) ap_rb_ptr = &r_info[mb_ptr->ap_r_idx];
+	else ap_rb_ptr = NULL;
 
+	if (ap_ra_ptr && !ap_rb_ptr) return TRUE;
+	if (!ap_ra_ptr && ap_rb_ptr) return FALSE;
+
+	/* Compare two monsters */
+	if (ap_ra_ptr && ap_rb_ptr)
+	{
+		/* Unique monsters first */
+		if ((ap_ra_ptr->flags1 & RF1_UNIQUE) && !(ap_rb_ptr->flags1 & RF1_UNIQUE)) return TRUE;
+		if (!(ap_ra_ptr->flags1 & RF1_UNIQUE) && (ap_rb_ptr->flags1 & RF1_UNIQUE)) return FALSE;
+
+		/* Shadowers first (あやしい影) */
+		if ((ma_ptr->mflag2 & MFLAG2_KAGE) && !(mb_ptr->mflag2 & MFLAG2_KAGE)) return TRUE;
+		if (!(ma_ptr->mflag2 & MFLAG2_KAGE) && (mb_ptr->mflag2 & MFLAG2_KAGE)) return FALSE;
+
+ 		/* Unknown monsters first */
+		if (!ap_ra_ptr->r_tkills && ap_rb_ptr->r_tkills) return TRUE;
+		if (ap_ra_ptr->r_tkills && !ap_rb_ptr->r_tkills) return FALSE;
+
+		/* Higher level monsters first (if known) */
+		if (ap_ra_ptr->r_tkills && ap_rb_ptr->r_tkills)
+		{
+			if (ap_ra_ptr->level > ap_rb_ptr->level) return TRUE;
+			if (ap_ra_ptr->level < ap_rb_ptr->level) return FALSE;
+		}
+
+		/* Sort by index if all conditions are same */
+		if (ma_ptr->ap_r_idx > mb_ptr->ap_r_idx) return TRUE;
+		if (ma_ptr->ap_r_idx < mb_ptr->ap_r_idx) return FALSE;
+	}
+
+	/* An object get higher priority */
+	if (cave[y[a]][x[a]].o_idx && !cave[y[b]][x[b]].o_idx) return TRUE;
+	if (!cave[y[a]][x[a]].o_idx && cave[y[b]][x[b]].o_idx) return FALSE;
+
+	/* Priority from the terrain */
+	if (f_info[ca_ptr->feat].priority > f_info[cb_ptr->feat].priority) return TRUE;
+	if (f_info[ca_ptr->feat].priority < f_info[cb_ptr->feat].priority) return FALSE;
+
+	/* If all conditions are same, compare distance */
 	return ang_sort_comp_distance(u, v, a, b);
 }
 
