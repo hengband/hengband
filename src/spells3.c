@@ -1430,6 +1430,139 @@ msg_print("属性付加に失敗した。");
 }
 
 
+/*
+ * Determine if a "feature" is a "vanishable"
+ * Non-permanent walls, trees, mountains, or doors
+ */
+#define vanishable_feat(F) \
+	((!feat_floor(F) && (((F) < FEAT_PERM_EXTRA) || ((F) > FEAT_PERM_SOLID))) || \
+	 ((F) == FEAT_OPEN) || ((F) == FEAT_BROKEN))
+
+/*
+ * Vanish all walls in this floor
+ */
+static bool vanish_dungeon(void)
+{
+	int          y, x;
+	cave_type    *c_ptr;
+	monster_type *m_ptr;
+	char         m_name[80];
+	byte         feat;
+
+	/* Prevent vasishing of quest levels and town */
+	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !dun_level)
+	{
+		return FALSE;
+	}
+
+	/* Scan all normal grids */
+	for (y = 1; y < cur_hgt - 1; y++)
+	{
+		for (x = 1; x < cur_wid - 1; x++)
+		{
+			c_ptr = &cave[y][x];
+
+			/* Seeing true feature code (ignore mimic) */
+			feat = c_ptr->feat;
+
+			/* Lose room and vault */
+			c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
+
+			/* Awake monster */
+			if (c_ptr->m_idx)
+			{
+				m_ptr = &m_list[c_ptr->m_idx];
+
+				/* Reset sleep counter */
+				m_ptr->csleep = 0;
+
+				/* Notice the "waking up" */
+				if (m_ptr->ml)
+				{
+					/* Acquire the monster name */
+					monster_desc(m_name, m_ptr, 0);
+
+					/* Dump a message */
+#ifdef JP
+					msg_format("%^sが目を覚ました。", m_name);
+#else
+					msg_format("%^s wakes up.", m_name);
+#endif
+
+					/* Redraw the health bar */
+					if (p_ptr->health_who == c_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
+					if (p_ptr->riding == c_ptr->m_idx) p_ptr->redraw |= (PR_UHEALTH);
+				}
+			}
+
+			/* Process all walls, doors and patterns */
+			if (vanishable_feat(feat) || pattern_tile(y, x))
+			{
+				/* Create floor */
+				cave_set_feat(y, x, floor_type[randint0(100)]);
+			}
+		}
+	}
+
+	/* Special boundary walls -- Top and bottom */
+	for (x = 0; x < cur_wid; x++)
+	{
+		c_ptr = &cave[0][x];
+
+		/* Lose room and vault */
+		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
+
+		/* Set boundary mimic if needed */
+		if (c_ptr->mimic && vanishable_feat(c_ptr->mimic)) c_ptr->mimic = floor_type[randint0(100)];
+
+		c_ptr = &cave[cur_hgt - 1][x];
+
+		/* Lose room and vault */
+		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
+
+		/* Set boundary mimic if needed */
+		if (c_ptr->mimic && vanishable_feat(c_ptr->mimic)) c_ptr->mimic = floor_type[randint0(100)];
+	}
+
+	/* Special boundary walls -- Left and right */
+	for (y = 1; y < (cur_hgt - 1); y++)
+	{
+		c_ptr = &cave[y][0];
+
+		/* Lose room and vault */
+		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
+
+		/* Set boundary mimic if needed */
+		if (c_ptr->mimic && vanishable_feat(c_ptr->mimic)) c_ptr->mimic = floor_type[randint0(100)];
+
+		c_ptr = &cave[y][cur_wid - 1];
+
+		/* Lose room and vault */
+		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
+
+		/* Set boundary mimic if needed */
+		if (c_ptr->mimic && vanishable_feat(c_ptr->mimic)) c_ptr->mimic = floor_type[randint0(100)];
+	}
+
+	/* Mega-Hack -- Forget the view and lite */
+	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
+
+	/* Update stuff */
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
+
+	/* Update the monsters */
+	p_ptr->update |= (PU_MONSTERS);
+
+	/* Redraw map */
+	p_ptr->redraw |= (PR_MAP);
+
+	/* Window stuff */
+	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+
+	return TRUE;
+}
+
+
 void call_the_(void)
 {
 	int i;
@@ -1489,21 +1622,30 @@ void call_the_(void)
 		msg_print("There is a loud explosion!");
 #endif
 
-
-		if (destroy_area(py, px, 15 + p_ptr->lev + randint0(11), FALSE))
+		if (one_in_(666))
+		{
 #ifdef JP
-			msg_print("ダンジョンが崩壊した...");
+			if (!vanish_dungeon()) msg_print("ダンジョンは一瞬静まり返った。");
 #else
-			msg_print("The dungeon collapses...");
+			if (!vanish_dungeon()) msg_print("The dungeon silences a moment.");
 #endif
-
+		}
 		else
+		{
+			if (destroy_area(py, px, 15 + p_ptr->lev + randint0(11), FALSE))
 #ifdef JP
-			msg_print("ダンジョンは大きく揺れた。");
+				msg_print("ダンジョンが崩壊した...");
 #else
-			msg_print("The dungeon trembles.");
+				msg_print("The dungeon collapses...");
 #endif
 
+			else
+#ifdef JP
+				msg_print("ダンジョンは大きく揺れた。");
+#else
+				msg_print("The dungeon trembles.");
+#endif
+		}
 
 #ifdef JP
 		take_hit(DAMAGE_NOESCAPE, 100 + randint1(150), "自殺的な虚無招来", -1);
