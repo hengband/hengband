@@ -2959,10 +2959,10 @@ static void display_player_flag_aux(int row, int col, cptr header,
 		c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
 
 		/* Check flags */
-		if (((flag1 != -1) && have_flag(flgs, flag1)) ||
+		if (((flag1 > 0) && have_flag(flgs, flag1)) ||
 		    ((flag1 == -1) && (cflgs & (TRC_CURSED | TRC_HEAVY_CURSE))))
 			c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE), "+", row, col);
-		if (((flag2 != -1) && have_flag(flgs, flag2)) ||
+		if (((flag2 > 0) && have_flag(flgs, flag2)) ||
 		    ((flag2 == -1) && (cflgs & TRC_PERMA_CURSE)))
 			c_put_str(TERM_WHITE, "*", row, col);
 
@@ -3023,23 +3023,23 @@ display_player_flag_aux(row+0, col, "ÂÑ»À  :", TR_RES_ACID, TR_IM_ACID, im_f, vu
 display_player_flag_aux(row+1, col, "ÂÑÅÅ·â:", TR_RES_ELEC, TR_IM_ELEC, im_f, vul_f);
 display_player_flag_aux(row+2, col, "ÂÑ²Ð±ê:", TR_RES_FIRE, TR_IM_FIRE, im_f, vul_f);
 display_player_flag_aux(row+3, col, "ÂÑÎäµ¤:", TR_RES_COLD, TR_IM_COLD, im_f, vul_f);
-display_player_flag_aux(row+4, col, "ÂÑÆÇ  :", TR_RES_POIS, 0, im_f, vul_f);
-display_player_flag_aux(row+5, col, "ÂÑÁ®¸÷:", TR_RES_LITE, 0, im_f, vul_f);
-display_player_flag_aux(row+6, col, "ÂÑ°Å¹õ:", TR_RES_DARK, 0, im_f, vul_f);
-display_player_flag_aux(row+7, col, "ÂÑÇËÊÒ:", TR_RES_SHARDS, 0, im_f, vul_f);
-display_player_flag_aux(row+8, col, "ÂÑÌÕÌÜ:", TR_RES_BLIND, 0, im_f, vul_f);
-display_player_flag_aux(row+9, col, "ÂÑº®Íð:", TR_RES_CONF, 0, im_f, vul_f);
+display_player_flag_aux(row+4, col, "ÂÑÆÇ  :", TR_RES_POIS, -2, im_f, vul_f);
+display_player_flag_aux(row+5, col, "ÂÑÁ®¸÷:", TR_RES_LITE, -2, im_f, vul_f);
+display_player_flag_aux(row+6, col, "ÂÑ°Å¹õ:", TR_RES_DARK, -2, im_f, vul_f);
+display_player_flag_aux(row+7, col, "ÂÑÇËÊÒ:", TR_RES_SHARDS, -2, im_f, vul_f);
+display_player_flag_aux(row+8, col, "ÂÑÌÕÌÜ:", TR_RES_BLIND, -2, im_f, vul_f);
+display_player_flag_aux(row+9, col, "ÂÑº®Íð:", TR_RES_CONF, -2, im_f, vul_f);
 #else
 	display_player_flag_aux(row+0, col, "Acid  :", TR_RES_ACID, TR_IM_ACID, im_f, vul_f);
 	display_player_flag_aux(row+1, col, "Elec  :", TR_RES_ELEC, TR_IM_ELEC, im_f, vul_f);
 	display_player_flag_aux(row+2, col, "Fire  :", TR_RES_FIRE, TR_IM_FIRE, im_f, vul_f);
 	display_player_flag_aux(row+3, col, "Cold  :", TR_RES_COLD, TR_IM_COLD, im_f, vul_f);
-	display_player_flag_aux(row+4, col, "Poison:", TR_RES_POIS, 0, im_f, vul_f);
-	display_player_flag_aux(row+5, col, "Light :", TR_RES_LITE, 0, im_f, vul_f);
-	display_player_flag_aux(row+6, col, "Dark  :", TR_RES_DARK, 0, im_f, vul_f);
-	display_player_flag_aux(row+7, col, "Shard :", TR_RES_SHARDS, 0, im_f, vul_f);
-	display_player_flag_aux(row+8, col, "Blind :", TR_RES_BLIND, 0, im_f, vul_f);
-	display_player_flag_aux(row+9, col, "Conf  :", TR_RES_CONF, 0, im_f, vul_f);
+	display_player_flag_aux(row+4, col, "Poison:", TR_RES_POIS, -2, im_f, vul_f);
+	display_player_flag_aux(row+5, col, "Light :", TR_RES_LITE, -2, im_f, vul_f);
+	display_player_flag_aux(row+6, col, "Dark  :", TR_RES_DARK, -2, im_f, vul_f);
+	display_player_flag_aux(row+7, col, "Shard :", TR_RES_SHARDS, -2, im_f, vul_f);
+	display_player_flag_aux(row+8, col, "Blind :", TR_RES_BLIND, -2, im_f, vul_f);
+	display_player_flag_aux(row+9, col, "Conf  :", TR_RES_CONF, -2, im_f, vul_f);
 #endif
 
 
@@ -3053,27 +3053,27 @@ display_player_flag_aux(row+9, col, "ÂÑº®Íð:", TR_RES_CONF, 0, im_f, vul_f);
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row-1, col+8);
 
 #ifdef JP
-display_player_flag_aux(row+0, col, "ÂÑ¹ì²»:", TR_RES_SOUND, 0, im_f, vul_f);
-display_player_flag_aux(row+1, col, "ÂÑÃÏ¹ö:", TR_RES_NETHER, 0, im_f, vul_f);
-display_player_flag_aux(row+2, col, "ÂÑ°øº®:", TR_RES_NEXUS, 0, im_f, vul_f);
-display_player_flag_aux(row+3, col, "ÂÑ¥«¥ª:", TR_RES_CHAOS, 0, im_f, vul_f);
-display_player_flag_aux(row+4, col, "ÂÑÎô²½:", TR_RES_DISEN, 0, im_f, vul_f);
-display_player_flag_aux(row+5, col, "ÂÑ¶²ÉÝ:", TR_RES_FEAR, 0, im_f, vul_f);
-display_player_flag_aux(row+6, col, "È¿¼Í  :", TR_REFLECT, 0, im_f, vul_f);
-display_player_flag_aux(row+7, col, "²Ð±ê¥ª:", TR_SH_FIRE, 0, im_f, vul_f);
-display_player_flag_aux(row+8, col, "ÅÅµ¤¥ª:", TR_SH_ELEC, 0, im_f, vul_f);
-display_player_flag_aux(row+9, col, "Îäµ¤¥ª:", TR_SH_COLD, 0, im_f, vul_f);
+display_player_flag_aux(row+0, col, "ÂÑ¹ì²»:", TR_RES_SOUND, -2, im_f, vul_f);
+display_player_flag_aux(row+1, col, "ÂÑÃÏ¹ö:", TR_RES_NETHER, -2, im_f, vul_f);
+display_player_flag_aux(row+2, col, "ÂÑ°øº®:", TR_RES_NEXUS, -2, im_f, vul_f);
+display_player_flag_aux(row+3, col, "ÂÑ¥«¥ª:", TR_RES_CHAOS, -2, im_f, vul_f);
+display_player_flag_aux(row+4, col, "ÂÑÎô²½:", TR_RES_DISEN, -2, im_f, vul_f);
+display_player_flag_aux(row+5, col, "ÂÑ¶²ÉÝ:", TR_RES_FEAR, -2, im_f, vul_f);
+display_player_flag_aux(row+6, col, "È¿¼Í  :", TR_REFLECT, -2, im_f, vul_f);
+display_player_flag_aux(row+7, col, "²Ð±ê¥ª:", TR_SH_FIRE, -2, im_f, vul_f);
+display_player_flag_aux(row+8, col, "ÅÅµ¤¥ª:", TR_SH_ELEC, -2, im_f, vul_f);
+display_player_flag_aux(row+9, col, "Îäµ¤¥ª:", TR_SH_COLD, -2, im_f, vul_f);
 #else
-	display_player_flag_aux(row+0, col, "Sound :", TR_RES_SOUND, 0, im_f, vul_f);
-	display_player_flag_aux(row+1, col, "Nether:", TR_RES_NETHER, 0, im_f, vul_f);
-	display_player_flag_aux(row+2, col, "Nexus :", TR_RES_NEXUS, 0, im_f, vul_f);
-	display_player_flag_aux(row+3, col, "Chaos :", TR_RES_CHAOS, 0, im_f, vul_f);
-	display_player_flag_aux(row+4, col, "Disnch:", TR_RES_DISEN, 0, im_f, vul_f);
-	display_player_flag_aux(row+5, col, "Fear  :", TR_RES_FEAR, 0, im_f, vul_f);
-	display_player_flag_aux(row+6, col, "Reflct:", TR_REFLECT, 0, im_f, vul_f);
-	display_player_flag_aux(row+7, col, "AuFire:", TR_SH_FIRE, 0, im_f, vul_f);
-	display_player_flag_aux(row+8, col, "AuElec:", TR_SH_ELEC, 0, im_f, vul_f);
-	display_player_flag_aux(row+9, col, "AuCold:", TR_SH_COLD, 0, im_f, vul_f);
+	display_player_flag_aux(row+0, col, "Sound :", TR_RES_SOUND, -2, im_f, vul_f);
+	display_player_flag_aux(row+1, col, "Nether:", TR_RES_NETHER, -2, im_f, vul_f);
+	display_player_flag_aux(row+2, col, "Nexus :", TR_RES_NEXUS, -2, im_f, vul_f);
+	display_player_flag_aux(row+3, col, "Chaos :", TR_RES_CHAOS, -2, im_f, vul_f);
+	display_player_flag_aux(row+4, col, "Disnch:", TR_RES_DISEN, -2, im_f, vul_f);
+	display_player_flag_aux(row+5, col, "Fear  :", TR_RES_FEAR, -2, im_f, vul_f);
+	display_player_flag_aux(row+6, col, "Reflct:", TR_REFLECT, -2, im_f, vul_f);
+	display_player_flag_aux(row+7, col, "AuFire:", TR_SH_FIRE, -2, im_f, vul_f);
+	display_player_flag_aux(row+8, col, "AuElec:", TR_SH_ELEC, -2, im_f, vul_f);
+	display_player_flag_aux(row+9, col, "AuCold:", TR_SH_COLD, -2, im_f, vul_f);
 #endif
 
 
@@ -3087,26 +3087,26 @@ display_player_flag_aux(row+9, col, "Îäµ¤¥ª:", TR_SH_COLD, 0, im_f, vul_f);
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row-1, col+12);
 
 #ifdef JP
-display_player_flag_aux(row+0, col, "²ÃÂ®      :", TR_SPEED, 0, im_f, vul_f);
-display_player_flag_aux(row+1, col, "ÂÑËãáã    :", TR_FREE_ACT, 0, im_f, vul_f);
-display_player_flag_aux(row+2, col, "Æ©ÌÀÂÎ»ëÇ§:", TR_SEE_INVIS, 0, im_f, vul_f);
-display_player_flag_aux(row+3, col, "·Ð¸³ÃÍÊÝ»ý:", TR_HOLD_LIFE, 0, im_f, vul_f);
-display_player_flag_aux(row+4, col, "¥Æ¥ì¥Ñ¥·¡¼:", TR_TELEPATHY, 0, im_f, vul_f);
-display_player_flag_aux(row+5, col, "ÃÙ¾Ã²½    :", TR_SLOW_DIGEST, 0, im_f, vul_f);
-display_player_flag_aux(row+6, col, "µÞ²óÉü    :", TR_REGEN, 0, im_f, vul_f);
-display_player_flag_aux(row+7, col, "ÉâÍ·      :", TR_FEATHER, 0, im_f, vul_f);
-display_player_flag_aux(row+8, col, "±Ê±ó¸÷¸»  :", TR_LITE, 0, im_f, vul_f);
+display_player_flag_aux(row+0, col, "²ÃÂ®      :", TR_SPEED, -2, im_f, vul_f);
+display_player_flag_aux(row+1, col, "ÂÑËãáã    :", TR_FREE_ACT, -2, im_f, vul_f);
+display_player_flag_aux(row+2, col, "Æ©ÌÀÂÎ»ëÇ§:", TR_SEE_INVIS, -2, im_f, vul_f);
+display_player_flag_aux(row+3, col, "·Ð¸³ÃÍÊÝ»ý:", TR_HOLD_LIFE, -2, im_f, vul_f);
+display_player_flag_aux(row+4, col, "¥Æ¥ì¥Ñ¥·¡¼:", TR_TELEPATHY, -2, im_f, vul_f);
+display_player_flag_aux(row+5, col, "ÃÙ¾Ã²½    :", TR_SLOW_DIGEST, -2, im_f, vul_f);
+display_player_flag_aux(row+6, col, "µÞ²óÉü    :", TR_REGEN, -2, im_f, vul_f);
+display_player_flag_aux(row+7, col, "ÉâÍ·      :", TR_FEATHER, -2, im_f, vul_f);
+display_player_flag_aux(row+8, col, "±Ê±ó¸÷¸»  :", TR_LITE, -2, im_f, vul_f);
 display_player_flag_aux(row+9, col, "¼ö¤¤      :", -1, -1, im_f, vul_f);
 #else
-	display_player_flag_aux(row+0, col, "Speed     :", TR_SPEED, 0, im_f, vul_f);
-	display_player_flag_aux(row+1, col, "FreeAction:", TR_FREE_ACT, 0, im_f, vul_f);
-	display_player_flag_aux(row+2, col, "SeeInvisi.:", TR_SEE_INVIS, 0, im_f, vul_f);
-	display_player_flag_aux(row+3, col, "Hold Life :", TR_HOLD_LIFE, 0, im_f, vul_f);
-	display_player_flag_aux(row+4, col, "Telepathy :", TR_TELEPATHY, 0, im_f, vul_f);
-	display_player_flag_aux(row+5, col, "SlowDigest:", TR_SLOW_DIGEST, 0, im_f, vul_f);
-	display_player_flag_aux(row+6, col, "Regene.   :", TR_REGEN, 0, im_f, vul_f);
-	display_player_flag_aux(row+7, col, "Levitation:", TR_FEATHER, 0, im_f, vul_f);
-	display_player_flag_aux(row+8, col, "Perm Lite :", TR_LITE, 0, im_f, vul_f);
+	display_player_flag_aux(row+0, col, "Speed     :", TR_SPEED, -2, im_f, vul_f);
+	display_player_flag_aux(row+1, col, "FreeAction:", TR_FREE_ACT, -2, im_f, vul_f);
+	display_player_flag_aux(row+2, col, "SeeInvisi.:", TR_SEE_INVIS, -2, im_f, vul_f);
+	display_player_flag_aux(row+3, col, "Hold Life :", TR_HOLD_LIFE, -2, im_f, vul_f);
+	display_player_flag_aux(row+4, col, "Telepathy :", TR_TELEPATHY, -2, im_f, vul_f);
+	display_player_flag_aux(row+5, col, "SlowDigest:", TR_SLOW_DIGEST, -2, im_f, vul_f);
+	display_player_flag_aux(row+6, col, "Regene.   :", TR_REGEN, -2, im_f, vul_f);
+	display_player_flag_aux(row+7, col, "Levitation:", TR_FEATHER, -2, im_f, vul_f);
+	display_player_flag_aux(row+8, col, "Perm Lite :", TR_LITE, -2, im_f, vul_f);
 	display_player_flag_aux(row+9, col, "Cursed    :", -1, -1, im_f, vul_f);
 #endif
 
