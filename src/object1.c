@@ -4819,7 +4819,7 @@ static bool get_tag_floor(int *cp, char tag, int floor_list[], int floor_num)
  */
 static void prepare_label_string(char *label, int mode)
 {
-	cptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	cptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	int  offset = (mode == USE_EQUIP) ? INVEN_RARM : 0;
 	int  i;
 
@@ -4827,7 +4827,7 @@ static void prepare_label_string(char *label, int mode)
 	strcpy(label, alphabet_chars);
 
 	/* Move each label */
-	for (i = 0; i < 52 + 10; i++)
+	for (i = 0; i < 52; i++)
 	{
 		int index;
 		char c = alphabet_chars[i];
@@ -4850,14 +4850,14 @@ static void prepare_label_string(char *label, int mode)
  */
 static void prepare_label_string_floor(char *label, int floor_list[], int floor_num)
 {
-	cptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	cptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	int  i;
 
 	/* Prepare normal labels */
 	strcpy(label, alphabet_chars);
 
 	/* Move each label */
-	for (i = 0; i < 52 + 10; i++)
+	for (i = 0; i < 52; i++)
 	{
 		int index;
 		char c = alphabet_chars[i];
@@ -4892,7 +4892,7 @@ int show_inven(int target_item)
 	char            out_desc[23][MAX_NLEN];
 	int             target_item_label = 0;
 	int             wid, hgt;
-	char            inven_label[52 + 10 + 1];
+	char            inven_label[52 + 1];
 
 	/* Starting column */
 	col = command_gap;
@@ -5069,7 +5069,7 @@ int show_equip(int target_item)
 	char            out_desc[23][MAX_NLEN];
 	int             target_item_label = 0;
 	int             wid, hgt;
-	char            equip_label[52 + 10 + 1];
+	char            equip_label[52 + 1];
 
 	/* Starting column */
 	col = command_gap;
@@ -6396,7 +6396,7 @@ int show_floor(int target_item, int y, int x, int *min_width)
 
 	int floor_list[23], floor_num;
 	int wid, hgt;
-	char floor_label[52 + 10 + 1];
+	char floor_label[52 + 1];
 
 	/* Get size */
 	Term_get_size(&wid, &hgt);
