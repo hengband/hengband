@@ -3611,17 +3611,23 @@ msg_format("%sはあなたの魔力を吸収した！", o_name);
 	/* Rarely, take damage from the Jewel of Judgement */
 	if (one_in_(999) && !p_ptr->anti_magic)
 	{
-		if ((inventory[INVEN_LITE].tval) &&
-		    (inventory[INVEN_LITE].sval == SV_LITE_JUDGE))
+		object_type *o_ptr = &inventory[INVEN_LITE];
+
+		if (o_ptr->name1 == ART_JUDGE)
 		{
 #ifdef JP
-msg_print("『審判の宝石』はあなたの体力を吸収した！");
-take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev, 50), "審判の宝石", -1);
+			if (object_known_p(o_ptr))
+				msg_print("『審判の宝石』はあなたの体力を吸収した！");
+			else
+				msg_print("なにかがあなたの体力を吸収した！");
+			take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev, 50), "審判の宝石", -1);
 #else
-			msg_print("The Jewel of Judgement drains life from you!");
+			if (object_known_p(o_ptr))
+				msg_print("The Jewel of Judgement drains life from you!");
+			else
+				msg_print("Something drains life from you!");
 			take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev, 50), "the Jewel of Judgement", -1);
 #endif
-
 		}
 	}
 
