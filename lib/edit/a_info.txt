@@ -606,8 +606,8 @@ P:11:1d1:-1:0:25
 F:DEX | HIDE_TYPE | RES_ACID | RES_SHARDS | XTRA_H_RES
 D:$An amazingly light tunic and skirt sewn with thick, overlapping scales of 
 D:$hardened leather whose wearer moves with agility and assurance.
-D:An amazingly light tunic and skirt sewn with thick, overlapping scales of 
-D:hardened leather whose wearer moves with agility and assurance.
+D:硬くした革製の鱗を厚く覆うように縫い付けた驚くほど軽い鎧であり、
+D:着る者に機敏さと自信を与える。
 
 
 #  Artifact 29 is unused
@@ -869,8 +869,7 @@ P:1:0d0:0:0:15
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_POIS | ACTIVATE
 D:$A cape worn by a hero from Valinor, a land utterly beyond the strife 
 D:$of Elements.
-D:A cape worn by a hero from Valinor, a land utterly beyond the strife 
-D:of Elements.
+D:精霊達が争う渦中の地ヴァリノールの英雄が身に付けていたマントだ。
 
 
 # The Cloak 'Holcolleth'
@@ -885,9 +884,8 @@ F:INT | WIS | STEALTH | HIDE_TYPE | RES_ACID | SEARCH | ACTIVATE
 D:$This elven-grey mantle possesses great powers of tranquility and of 
 D:$concealment, and grants the wearer the knowledge and understanding of 
 D:$the Sindar.
-D:This elven-grey mantle possesses great powers of tranquility and of 
-D:concealment, and grants the wearer the knowledge and understanding of 
-D:the Sindar.
+D:静寂と隠密の偉大なる力を持つエルフの灰色の外套であり、着用者にはシンダールの
+D:知識と思慮を与える。
 
 
 # The Cloak of Thingol
@@ -1011,8 +1009,8 @@ P:1:0d0:0:0:10
 F:FREE_ACT | RES_LITE | SUST_CON | LITE | ACTIVATE
 D:$These gloves glow so brightly as to light the way for their owner and cast 
 D:$magical bolts with great frequency.
-D:These gloves glow so brightly as to light the way for their owner and cast 
-D:magical bolts with great frequency.
+D:この篭手は使用者の道を照らすほど明るく輝き、非常に短い周期で魔法の矢を
+D:放つことができる。
 
 
 # The Set of Gauntlets 'Paurhach'
@@ -1502,9 +1500,8 @@ F:SLAY_HUMAN | SLAY_ORC | SEE_INVIS | SHOW_MODS | VORPAL | BRAND_POIS
 D:$A giant's weapon, with a long blade tall and straight thrusting out from a 
 D:$massive double-pronged hint.  On its blade are written doomspells against 
 D:$both the living and undead.
-D:A giant's weapon, with a long blade tall and straight thrusting out from a 
-D:massive double-pronged hint.  On its blade are written doomspells against 
-D:both the living and undead.
+D:重厚な二又の柄から真っすぐ突き出た長い刀身を持つ巨人の武器だ。
+D:刀身には生ける者と不死の者の双方にとっての破滅の呪文が刻まれている。
 
 
 # The Katana 'Aglarang'
@@ -1517,7 +1514,7 @@ P:0:8d4:0:0:0
 F:DEX | HIDE_TYPE | BLOWS | VORPAL |
 F:SUST_DEX | SHOW_MODS | SPEED
 D:$An utterly perfect, cleanly chiseled sword, with a edge that effortlessly
-D:$ slices rock and bone and spells to render the wearer lithe and nimble.　It
+D:$ slices rock and bone and spells to render the wearer lithe and nimble. It
 D:$ is combat incarnate.
 D:シンダール語で「誉の鋼」を意味する美しい完全無欠の刀だ。
 D:の刃は岩や骨を苦もなく切り裂き、
@@ -1616,8 +1613,7 @@ P:0:1d6:12:19:0
 F:SLAY_ANIMAL | BRAND_COLD | RES_COLD | RES_LITE | LITE | SHOW_MODS
 D:$A slender, tapered blade whose wielder strikes icy blows with deadly 
 D:$accuracy.
-D:A slender, tapered blade whose wielder strikes icy blows with deadly 
-D:accuracy.
+D:細身で先が細い剣であり、使用者は恐るべき正確さで凍てつく攻撃を繰り出す。
 
 
 # The Sabre 'Careth Asdriag'
@@ -1772,8 +1768,8 @@ F:BRAND_FIRE | SLAY_UNDEAD | SLAY_GIANT | RES_FIRE | RES_SOUND |
 F:FEATHER | SEE_INVIS | SHOW_MODS | LITE
 D:$Lordly and tall did Osondir stand against the wrath of giants, and 
 D:$clear-eyed in barrows fell, wielding a halberd glowing ruby red.
-D:Lordly and tall did Osondir stand against the wrath of giants, and 
-D:clear-eyed in barrows fell, wielding a halberd glowing ruby red.
+D:巨人の怒りに立ち向かうようにオソンディアは堂々として高く、
+D:構えるハルベルトはルビー色に輝き、塚山の中でも視力を妨げない。
 
 
 # The Pike 'Til-i-arc'
@@ -1839,7 +1835,7 @@ W:15:12:50:30000
 P:0:1d6:11:13:0
 F:STEALTH | RES_DARK | INFRA | SPEED | RIDING |
 F:BRAND_COLD | SLAY_UNDEAD | RES_COLD | SEE_INVIS | SHOW_MODS | THROW
-D:ハーゲンが進み出た。　
+D:ハーゲンが進み出た。
 D:「わたしの槍をどうぞ。この穂先が誓いの証人となりましょう。」
 D:ジーグフリードとハーゲンを囲んで家来たちは輪を作った。
 D:ハーゲンが槍をかまえると、ジーグフリードはその穂先に右手の指を二本
@@ -1951,9 +1947,8 @@ F:SHOW_MODS
 D:$A massive axe with twin razor-sharp heads, so large that it usually 
 D:$requires two hands to wield, intricately engraved in gold with spells 
 D:$to ward off the elements and smite evil.
-D:A massive axe with twin razor-sharp heads, so large that it usually 
-D:requires two hands to wield, intricately engraved in gold with spells 
-D:to ward off the elements and smite evil.
+D:剃刀のように鋭い2枚の刃を持つ重厚な斧で、その大きさ故構えるのにしばしば両手
+D:が必要になるが、元素の力を防ぎ邪悪を打ち倒す呪文が金で複雑に刻まれている。
 
 
 # The Broad Axe 'Barukkheled'
@@ -2144,8 +2139,8 @@ F:SLAY_ANIMAL | SLAY_TROLL | SLAY_ORC | RES_NEXUS | SEE_INVIS |
 F:SHOW_MODS
 D:$You feel strong and firm of foot as you whip the chain-suspended spiked orb 
 D:$around - and bathe it in the blood of your foes.
-D:You feel strong and firm of foot as you whip the chain-suspended spiked orb 
-D:around - and bathe it in the blood of your foes.
+D:鎖でつながれた刺付きの球を振り回す時強くしっかりとした足取りを感じ、
+D:鉄球は敵の血に浸かる。
 
 
 # The Morning Star 'Firestar'
@@ -2213,8 +2208,7 @@ F:INT | HIDE_TYPE |
 F:SLAY_ANIMAL | BRAND_FIRE | RES_FIRE | SHOW_MODS | LITE
 D:$Named for a fiery star and set with gems of great worth binding mystic 
 D:$virtues of protection and thought.
-D:Named for a fiery star and set with gems of great worth binding mystic 
-D:virtues of protection and thought.
+D:燃える星と名付けられ、守りと思慮の神秘的な力を封じた高価な宝石が付いている。
 
 
 # The Quarterstaff 'Eriril'
@@ -2986,8 +2980,8 @@ F:WIS | STEALTH | XTRA_SHOTS | XTRA_MIGHT | AGGRAVATE | RES_LITE | RES_DARK |
 F:HIDE_TYPE | SHOW_MODS | TY_CURSE
 D:$A great brazen arbalest with arms of gleaming steel shooting quarrels with 
 D:$speed and power for those brave enough to risk betrayal.
-D:A great brazen arbalest with arms of gleaming steel shooting quarrels with 
-D:speed and power for those brave enough to risk betrayal.
+D:裏切りの危険を冒す勇気のある者が用いる真鍮製の大きな弩弓であり、アームに
+D:張られた輝く鋼鉄製の弦からは高速かつ力強い矢が放たれる。
 
 N:181:適当な
 E:of halfheart
