@@ -121,7 +121,7 @@ static cptr mind_tips[5][MAX_MIND_POWERS] =
 static cptr mind_tips[5][MAX_MIND_POWERS] =
 {
 {
-	"detects visible monsters in the neighborhood and more and more. detects traps and doors at level 5, invisible monsters at level 15, items at level 30. And magic mapping at level 20. lights and know the whole level at level 45. gives telepathy at level 25",
+	"detects visible monsters in your vicinity and more and more. detects traps and doors at level 5, invisible monsters at level 15, items at level 30. And magic mapping at level 20. lights and know the whole level at level 45. gives telepathy at level 25",
 	"fires a beam or ball which inflicts PSI damage.",
 	"teleport short distance.",
 	"teleport long distance.",
@@ -167,7 +167,7 @@ static cptr mind_tips[5][MAX_MIND_POWERS] =
 	"",
 },
 {
-	"detects all monsters except mindless in the neighborhood.",
+	"detects all monsters except mindless in your vicinity.",
 	"attacks monster with your weapons normaly, then move through counter side of the monster.",
 	"sets off a trap, then destroy that trap.",
 	"shakes dungeon structure, and results in random swaping of floors and walls.",
@@ -190,7 +190,7 @@ static cptr mind_tips[5][MAX_MIND_POWERS] =
 	"",
 },
 {
-	"detects visible monsters in the neighborhood and more and more. detects invisible monsters at level 15. gives telepathy at level 25. Magic mapping at level 35. All of effects need 4 more levels unless on a mirror.",
+	"detects visible monsters in your vicinity and more and more. detects invisible monsters at level 15. gives telepathy at level 25. Magic mapping at level 35. All of effects need 4 more levels unless on a mirror.",
 	"makes a mirror under you.",
 	"fires bolt of flash light. or fires beam of light on a mirror at level 10",
 	"teleport short distance.",
@@ -215,7 +215,7 @@ static cptr mind_tips[5][MAX_MIND_POWERS] =
 
 {
 	"darken nearby area and inside of a room.",
-	"detects visible monsters in the neighborhood and more and more. detects traps, doors and stairs at level 5, items at level 15. lights and know the whole level at level 45.",
+	"detects visible monsters in your vicinity and more and more. detects traps, doors and stairs at level 5, items at level 15. lights and know the whole level at level 45.",
 	"teleport short distance.",
 	"teleport as you recieve an attack. might be able to teleport just before recieveing damages at higher level.",
 	"teleport long distance.",

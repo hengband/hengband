@@ -933,7 +933,7 @@ C:0:0:10:0
 # Aura, Coldly
 #JZ#
 N:128:¶Ë´¨¤Î
-E:of Coldly
+E:of Freezing
 X:32:16
 W:0:36:0:4000
 C:0:0:4:0
