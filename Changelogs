@@ -1,4 +1,138 @@
+2003-07-19  Takeshi Mogami  <mogami@cvs>
+
+	* configure.in 1.22.2.4, lib/file/news.txt 1.16.2.4, lib/file/news_j.txt 1.15.2.4, src/defines.h 1.81.2.6:
+	versionを1.4.3へ。
+
+	* lib/help/version.txt 1.14.2.3, lib/help/jversion.txt 1.14.2.4:
+	1.4.3と1.5.3の変更点。
+
+	* src/defines.h 1.129:
+	セーブファイルバージョン H_VER_* の付け方が違ったので付け直し。
+	最初の3桁はセーブファイルバージョンを変更した時点での
+	プログラムバージョン(今回は1.5.3)と同じにするという
+	ルールに従って、1.5.3.0 にした。
+
+	4桁目の数字はCVSで開発中に何度もセーブファイルバージョンを
+	変える必要が生じた時にのみ使う。
+
+	* src/birth.c 1.75: Andy Choco氏の魔法領域説明文の修正。
+
+2003-07-19  nothere  <nothere@cvs>
+
+	* src/mind.c 1.27:
+	練気術を使用した直後に盲目になった状況で, その練気術を'n'や'['で繰り
+	返して使用しようとするとrepeat_pull()でのスタックの読み出し順序が狂
+	い, get_mind_power()が呪文番号INVEN_FORCEを返し, その結果配列外アクセ
+	スを起こしたりMPが異常な値になったりしていたので, get_mind_power()で
+	repeat_pull()された呪文番号がINVEN_FORCEだった場合はもう1度だけ
+	repeat_pull()して正しい呪文番号を取得するように仮修正. その場しのぎに
+	過ぎないので, 後で別の方法を考える必要はある.
+
+2003-07-18  nothere  <nothere@cvs>
+
+	* src/xtra2.c 1.54.2.3:
+	モンスターに止めを刺した際に経験値が全く入らなくなるというバグを修正.
+	クエスト判定のバグ修正によるエンバグだった. 開発版より.
+
+	* src/xtra2.c 1.89:
+	モンスターに止めを刺した際に経験値が全く入らなくなるというバグを修正.
+	クエスト判定のバグ修正によるエンバグだった.
+
+	* src/store.c 1.20.2.6:
+	自宅/博物館内でpref読み込みが行われた際に, $TOWNを使う処理で誤った街
+	IDが返される可能性が考えられるので, それに対処した. 開発版より.
+
+	* src/store.c 1.33:
+	自宅/博物館内でpref読み込みが行われた際に, $TOWNを使う処理で誤った街
+	IDが返される可能性が考えられるので, それに対処した.
+
+2003-07-16  Takeshi Mogami  <mogami@cvs>
+
+	* src/object1.c 1.64:
+	装備品の中で{@wf}等の銘があると、get_tag()が反応してしまい、持ちものリスト
+	の中で 「f)」のタグが消えてしまうバグ修正。
+
+	* lib/edit/t0000001.txt 1.2: 「換金する」→「報酬を受け取る」
+
+2003-07-15  nothere  <nothere@cvs>
+
+	* src/object2.c 1.94:
+	変数check_wraith_formは不要なので, ignore_wraith_formで統一. また,
+	幽体化時の閃光属性に対してはダメージ0の時のランダムな1ダメージがある
+	ため, ignore_wraith_formを使わず "厳密な" 計算を使うことにした.
+
+	* src/object2.c 1.93:
+	1.91で殴りに対して幽体化が考慮されないバグへの修正を行ったが, この時
+	にACID, ELEC, FIRE, COLDの殴りに対しては2重に幽体化の判定を行ってし
+	まっていたバグを修正.
+
+	* src/object2.c 1.92: 変数名のミスの修正.
+
+	* src/monster2.c 1.77, src/object2.c 1.91: 警告機能に対する修正と変更.
+	* 幽体化時にダメージ0の場合わずか1ポイントのダメージを受ける場合と受
+	  けない場合があるが, それが致命的になるという極めて稀な場合にも対応
+	  するように修正.
+	* ユニーク・モンスターが現れる際に警告アイテムが光るコードがあるが,
+	  choose_warning_item()でNULLが返されても普通に動作するようにした.
+	* 少々のコード整理.
+	* 警告対象に純ログルスを追加.
+
+	* src/cmd4.c 1.95:
+	達成クエスト表示でサーペントのクエストの行だけずれていたので, 階の表
+	示には%2dではなく%3dを使って桁を合わせた.
+
+	* src/store.c 1.20.2.5:
+	価格オーバーフローバグの修正でエンバグしており, 手動交渉で魅力が極端
+	に低い場合などに提示価格がおかしくなるバグを修正. 売却時はadjustは負
+	になり得るのにu32bにしてしまっていたことが原因. 開発版より.
+
+	* src/store.c 1.32:
+	価格オーバーフローバグの修正でエンバグしており, 手動交渉で魅力が極端
+	に低い場合などに提示価格がおかしくなるバグを修正. 売却時はadjustは負
+	になり得るのにu32bにしてしまっていたことが原因.
+
+	* src/cave.c 1.116:
+	wiz_dark()で間違えて外周部にCAVE_UNSAFEを立てていたので修正.
+
+	* src/cave.c 1.115:
+	FORGETダンジョンでの行動後や記憶喪失などでwiz_dark()が呼ばれた場合は,
+	CAVE_IN_DETECTを破棄しCAVE_UNSAFEを立て直すようにした. これにより,
+	FORGETダンジョンで'x'だけで歩いた道筋がわかるバグを修正.
+
+2003-07-13  henkma  <henkma@cvs>
+
+	* src/files.c 1.88.2.5, src/birth.c 1.57.2.5:
+	Andyさん指摘のtypoを修正。
+
+2003-07-12  Takeshi Mogami  <mogami@cvs>
+
+	* src/defines.h 1.128, lib/file/news.txt 1.21, lib/file/news_j.txt 1.19, configure.in 1.26:
+	バージョンを1.5.3へ。
+
+	* lib/help/jversion.txt 1.18, lib/help/version.txt 1.18:
+	変更履歴に書き忘れ：X11 portのcopy&paste機能。
+
+2003-07-11  nothere  <nothere@cvs>
+
+	* src/files.c 1.122:
+	セーブした後に再ロードされる過程でモンスターの距離情報が0になってお
+	り, 睡眠の計算の際に0除算で変愚蛮怒が落ちていたバグを修正.
+
+	* src/spells3.c 1.56.2.6, src/melee1.c 1.22.2.2, src/racial.c 1.26.2.5, src/dungeon.c 1.78.2.7:
+	MP操作が行われた後に再描画が必要な部分の修正. 開発版より.
+
+	* src/melee1.c 1.38, src/racial.c 1.40, src/spells3.c 1.89, src/dungeon.c 1.124:
+	MP操作が行われた後に再描画が必要な部分の修正.
+
+2003-07-10  nothere  <nothere@cvs>
+
+	* src/dungeon.c 1.123:
+	自分自身が光源ではない光源持ちのモンスターが目を覚ました際に, その
+	モンスターが見えずに物陰にいる場合に光源がupdateされないバグを修正.
+
 2003-07-10  Takeshi Mogami  <mogami@cvs>
+
+	* Changelogs 1.70: 更新。
 
 	* lib/help/attack.txt 1.11, lib/help/jattack.txt 1.9, lib/help/joption.txt 1.23, lib/help/option.txt 1.23, configure.in 1.25, lib/file/news.txt 1.20, lib/file/news_j.txt 1.18:
 	バージョン表記を1.5.2へ。
