@@ -615,7 +615,11 @@ if (get_check("他の階にテレポートしますか？"))
 			else if (dun_level == 100)
 				max_level = 100;
 		}
-		else max_level = d_info[dungeon_type].maxdepth;
+		else
+                {
+                        max_level = d_info[dungeon_type].maxdepth;
+                        min_level = d_info[dungeon_type].mindepth;
+                }
 
 		/* Prompt */
 #ifdef JP
