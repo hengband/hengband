@@ -1083,30 +1083,8 @@ msg_format("モンスター数基本値を %d から %d に減らします", small_tester, i);
 		alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_GOLD, randnor(DUN_AMT_GOLD, 3));
 	}
 
-	/* Put an Artifact and Artifact Guardian is requested */
-	if (d_info[dungeon_type].final_guardian && (d_info[dungeon_type].maxdepth == dun_level))
-	{
-		int oy;
-		int ox;
-		int try = 4000;
-
-		/* Find a good position */
-		while(try)
-		{
-			/* Get a random spot */
-			oy = randint1(cur_hgt - 4) + 2;
-			ox = randint1(cur_wid - 4) + 2;
-
-			/* Is it a good spot ? */
-			if (cave_empty_bold2(oy, ox) && monster_can_cross_terrain(cave[oy][ox].feat, &r_info[d_info[dungeon_type].final_guardian]))
-			{
-				/* Place the guardian */
-				if (place_monster_aux(0, oy, ox, d_info[dungeon_type].final_guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) break;
-			}
-			/* One less try */
-			try--;
-		}
-	}
+	/* Put the Guardian */
+	(void)alloc_guardian();
 
 	if (empty_level && (!one_in_(DARK_EMPTY) || (randint1(100) > dun_level)) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS))
 	{

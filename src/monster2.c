@@ -3846,6 +3846,41 @@ bool alloc_horde(int y, int x)
 #endif /* MONSTER_HORDES */
 
 
+/*
+ * Put the Guardian
+ */
+bool alloc_guardian(void)
+{
+	int guardian = d_info[dungeon_type].final_guardian;
+
+	if (guardian && (d_info[dungeon_type].maxdepth == dun_level) && (r_info[guardian].cur_num < r_info[guardian].max_num))
+	{
+		int oy;
+		int ox;
+		int try = 4000;
+
+		/* Find a good position */
+		while (try)
+		{
+			/* Get a random spot */
+			oy = randint1(cur_hgt - 4) + 2;
+			ox = randint1(cur_wid - 4) + 2;
+
+			/* Is it a good spot ? */
+			if (cave_empty_bold2(oy, ox) && monster_can_cross_terrain(cave[oy][ox].feat, &r_info[guardian]))
+			{
+				/* Place the guardian */
+				if (place_monster_aux(0, oy, ox, guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) return TRUE;
+			}
+
+			/* One less try */
+			try--;
+		}
+	}
+
+	return FALSE;
+}
+
 
 /*
  * Attempt to allocate a random monster in the dungeon.
@@ -3860,33 +3895,9 @@ bool alloc_monster(int dis, u32b mode)
 {
 	int			y = 0, x = 0;
 	int         attempts_left = 10000;
-	int guardian = d_info[dungeon_type].final_guardian;
 
-	/* Put an Guardian */
-	if(guardian && d_info[dungeon_type].maxdepth == dun_level && r_info[guardian].cur_num < r_info[guardian].max_num )
-	{
-		int oy;
-		int ox;
-		int try = 4000;
-
-		/* Find a good position */
-		while(try)
-		{
-			/* Get a random spot */
-			oy = randint1(cur_hgt - 4) + 2;
-			ox = randint1(cur_wid - 4) + 2;
-
-			/* Is it a good spot ? */
-			if (cave_empty_bold2(oy, ox) && monster_can_cross_terrain(cave[oy][ox].feat, &r_info[guardian]))
-			{
-				/* Place the guardian */
-				if (place_monster_aux(0, oy, ox, guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) break;
-			}
-			/* One less try */
-			try--;
-		}
-	}
-
+	/* Put the Guardian */
+	if (alloc_guardian()) return TRUE;
 
 	/* Find a legal, distant, unoccupied, space */
 	while (attempts_left--)
