@@ -1107,10 +1107,10 @@ static void build_arena(void)
 
 	yval = SCREEN_HGT / 2;
 	xval = SCREEN_WID / 2;
-	y_height = yval - 10 + SCREEN_HGT;
-	y_depth = yval + 10 + SCREEN_HGT;
-	x_left = xval - 32 + SCREEN_WID;
-	x_right = xval + 32 + SCREEN_WID;
+	y_height = yval - 10;
+	y_depth = yval + 10;
+	x_left = xval - 32;
+	x_right = xval + 32;
 
 	for (i = y_height; i <= y_height + 5; i++)
 		for (j = x_left; j <= x_right; j++)
@@ -1147,7 +1147,7 @@ static void build_arena(void)
 	cave[y_depth-6][x_right-18].info |= (CAVE_GLOW | CAVE_MARK);
 
 	i = y_height + 5;
-	j = xval + SCREEN_WID;
+	j = xval;
 	cave[i][j].feat = FEAT_BLDG_HEAD + 2;
 	cave[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 	player_place(i + 1, j);
@@ -1160,8 +1160,12 @@ static void build_arena(void)
 static void arena_gen(void)
 {
 	int y, x;
-	int qy = SCREEN_HGT;
-	int qx = SCREEN_WID;
+	int qy = 0;
+	int qx = 0;
+
+	/* Smallest area */
+	cur_hgt = SCREEN_HGT;
+	cur_wid = SCREEN_WID;
 
 	/* Start with solid walls */
 	for (y = 0; y < MAX_HGT; y++)
