@@ -4249,7 +4249,8 @@ void calc_bonuses(void)
 	{
 		for (i = 0; i < 6; i++)
 			p_ptr->stat_add[i] += 5;
-		p_ptr->ac -= 50;
+		p_ptr->to_a -= 50;
+		p_ptr->dis_to_a -= 50;
 	}
 
 	/* Hack -- aura of fire also provides light */
