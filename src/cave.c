@@ -921,12 +921,20 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 	/* Boring grids (floors, etc) */
 	if (!have_flag(f_ptr->flags, FF_REMEMBER))
 	{
-		/* Memorized (or visible) floor */
-		if ((c_ptr->info & CAVE_MARK) ||
-		  (((c_ptr->info & (CAVE_LITE | CAVE_MNLT)) ||
-		   ((c_ptr->info & CAVE_VIEW) &&
-		  (((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) || p_ptr->see_nocto))) &&
-		   !p_ptr->blind))
+		/*
+		 * Handle Memorized or visible floor
+		 *
+		 * No visual when blinded.
+		 *   (to prevent strange effects on darkness breath)
+		 * otherwise,
+		 * - Can see grids with CAVE_MARK.
+		 * - Can see grids with CAVE_LITE or CAVE_MNLT.
+		 *   (Such grids also have CAVE_VIEW)
+		 * - Can see grids with CAVE_VIEW unless darkened by monsters.
+		 */
+		if (!p_ptr->blind &&
+		    ((c_ptr->info & (CAVE_MARK | CAVE_LITE | CAVE_MNLT)) ||
+		     ((c_ptr->info & CAVE_VIEW) && (((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) || p_ptr->see_nocto))))
 		{
 			/* Normal char */
 			c = f_ptr->x_char[F_LIT_STANDARD];
