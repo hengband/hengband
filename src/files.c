@@ -417,11 +417,6 @@ errr process_pref_file_command(char *buf)
 
 	switch (buf[0])
 	{
-	/* Process "%:<fname>" */
-	case '%':
-		/* Attempt to Process the given file */
-		return process_pref_file(buf + 2);
-
 	/* Mega-Hack -- read external player's history file */
 	/* Process "H:<history>" */
 	case 'H':
@@ -1120,6 +1115,14 @@ static errr process_pref_file_aux(cptr name, int preftype)
 		/* Process "%:<file>" */
 		if (buf[0] == '%')
 		{
+			static int depth_count = 0;
+
+			/* Ignore if deeper than 20 level */
+			if (depth_count > 20) continue;
+
+			/* Count depth level */
+			depth_count++;
+
   			/* Process that file if allowed */
 			switch (preftype)
 			{
@@ -1133,6 +1136,9 @@ static errr process_pref_file_aux(cptr name, int preftype)
 				(void)process_pref_file(buf + 2);
 				break;
 			}
+
+			/* Set back depth level */
+			depth_count--;
 
 			/* Continue */
 			continue;
