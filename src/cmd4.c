@@ -2287,22 +2287,24 @@ void do_cmd_options(void)
 
 		/* Why are we here */
 #ifdef JP
-		prt("[ オプションの設定 ]", 2, 0);
+		prt("[ オプションの設定 ]", 1, 0);
 #else
-		prt("Options", 2, 0);
+		prt("Options", 1, 0);
 #endif
 
 
 		/* Give some choices */
 #ifdef JP
-		prt("(1)     キー入力          オプション", 3, 5);
-		prt("(2)     画面出力          オプション", 4, 5);
-		prt("(3)   ゲームプレイ        オプション", 5, 5);
-		prt("(4)   行動中止関係        オプション", 6, 5);
-		prt("(5)      効率化           オプション", 7, 5);
-		prt("(6) 簡易アイテム自動破壊  オプション", 8, 5);
-		prt("(R)    プレイ記録         オプション", 9, 5);
+		prt("(1)     キー入力          オプション", 2, 5);
+		prt("(2)     画面出力          オプション", 3, 5);
+		prt("(3)   ゲームプレイ        オプション", 4, 5);
+		prt("(4)   行動中止関係        オプション", 5, 5);
+		prt("(5)      効率化           オプション", 6, 5);
+		prt("(6) 簡易アイテム自動破壊  オプション", 7, 5);
+		prt("(R)    プレイ記録         オプション", 8, 5);
+
 		/* Special choices */
+		prt("(P) 自動拾いエディタ", 10, 5);
 		prt("(D)  基本ウェイト量", 11, 5);
 		prt("(H) 低ヒットポイント警告", 12, 5);
 		prt("(M)   低魔力色閾値", 13, 5);
@@ -2310,14 +2312,15 @@ void do_cmd_options(void)
 		/* Window flags */
 		prt("(W) ウインドウフラグ", 15, 5);
 #else
-		prt("(1) Input Options", 3, 5);
-		prt("(2) Output Options", 4, 5);
-		prt("(3) Game-Play Options", 5, 5);
-		prt("(4) Disturbance Options", 6, 5);
-		prt("(5) Efficiency Options", 7, 5);
-		prt("(6) Easy Auto-Destroyer Options", 8, 5);
-		prt("(R) Play-record Options", 9, 5);
+		prt("(1) Input Options", 2, 5);
+		prt("(2) Output Options", 3, 5);
+		prt("(3) Game-Play Options", 4, 5);
+		prt("(4) Disturbance Options", 5, 5);
+		prt("(5) Efficiency Options", 6, 5);
+		prt("(6) Easy Auto-Destroyer Options", 7, 5);
+		prt("(R) Play-record Options", 8, 5);
 		/* Special choices */
+		prt("(P) Auto-picker/destroyer editor", 10, 5);
 		prt("(D) Base Delay Factor", 11, 5);
 		prt("(H) Hitpoint Warning", 12, 5);
 		prt("(M) Mana Color Threshold", 13, 5);
@@ -2330,7 +2333,7 @@ void do_cmd_options(void)
 		{
 			/* Birth */
 #ifdef JP
-			prt("(B)       初期            オプション (参照のみ)", 16, 5);
+			prt("(B)      初期            オプション (参照のみ)", 16, 5);
 #else
 			prt("(B) Birth Options (Browse Only)", 16, 5);
 #endif
@@ -2339,7 +2342,7 @@ void do_cmd_options(void)
 		{
 			/* Birth */
 #ifdef JP
-			prt("(B)       初期            オプション", 16, 5);
+			prt("(B)      初期            オプション", 16, 5);
 #else
 			prt("(B) Birth Options", 16, 5);
 #endif
@@ -2350,7 +2353,7 @@ void do_cmd_options(void)
 		{
 			/* Cheating */
 #ifdef JP
-			prt("(C)       詐欺            オプション", 17, 5);
+			prt("(C)      詐欺            オプション", 17, 5);
 #else
 			prt("(C) Cheating Options", 17, 5);
 #endif
@@ -2520,6 +2523,14 @@ void do_cmd_options(void)
 						  PW_PLAYER | PW_MESSAGE | PW_OVERHEAD |
 						  PW_MONSTER | PW_OBJECT | PW_SNAPSHOT |
 						  PW_BORG_1 | PW_BORG_2 | PW_DUNGEON);
+				break;
+			}
+
+			/* Auto-picker/destroyer editor */
+			case 'P':
+			case 'p':
+			{
+				do_cmd_edit_autopick();
 				break;
 			}
 

@@ -274,10 +274,8 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
 	}
 	buf[i] = '\0';
 
-#if 0	
-	/* Skip empty line */
-	if (*buf == 0) return FALSE;
-#endif
+	/* Skip comment line */
+	if (*buf == 0 && insc) return FALSE;
 
 	ptr = prev_ptr = buf;
 	old_ptr = NULL;
@@ -1427,6 +1425,16 @@ typedef struct {
 
 
 /*
+ * Dirty flag for text editor
+ */
+#define DIRTY_ALL 0x01
+#define DIRTY_MODE 0x04
+#define DIRTY_SCREEN 0x08
+#define DIRTY_NOT_FOUND 0x10
+#define DIRTY_NO_SEARCH 0x20
+
+
+/*
  * Describe which kind of object is Auto-picked/destroyed
  */
 static void describe_autopick(char *buff, autopick_type *entry)
@@ -2146,32 +2154,161 @@ static void free_text_lines(cptr *lines_list)
  */
 static void toggle_keyword(text_body_type *tb, int flg)
 {
-	autopick_type an_entry, *entry = &an_entry;
+	int by1, by2, bx1, bx2, y;
+	bool add = TRUE;
+	bool fixed = FALSE;
 
-	if (!autopick_new_entry(entry, tb->lines_list[tb->cy]))
-		return;
+	/* Select this line */
+	if (!tb->mark) tb->my = tb->cy;
 
-	string_free(tb->lines_list[tb->cy]);
-
-	/* Remove all noun flag */
-	if (FLG_NOUN_BEGIN <= flg && flg <= FLG_NOUN_END)
+	if (tb->my < tb->cy)
 	{
-		int i;
-		for (i = FLG_NOUN_BEGIN; i <= FLG_NOUN_END; i++)
-			REM_FLG(i);
+		by1 = tb->my;
+		by2 = tb->cy;
+		bx1 = tb->mx;
+		bx2 = tb->cx;
+	}
+	else
+	{
+		by2 = tb->my;
+		by1 = tb->cy;
+		bx2 = tb->mx;
+		bx1 = tb->cx;
 	}
 
-	if (IS_FLG(flg)) 
-		REM_FLG(flg);
-	else
-		ADD_FLG(flg);
+	/* String on these lines are not really selected */  
+	if (tb->lines_list[by1][bx1] == '\0' && by1 < tb->cy) by1++;
+	if (bx2 == 0 && tb->cy < by2) by2--;
 
-	tb->lines_list[tb->cy] = autopick_line_from_entry_kill(entry);
 
-	/* Now dirty */
-	tb->dirty_line = tb->cy;
+	/* Set/Reset flag of each line */
+	for (y = by1; y <= by2; y++)
+	{
+		autopick_type an_entry, *entry = &an_entry;
+
+		if (!autopick_new_entry(entry, tb->lines_list[y]))
+			return;
+
+		string_free(tb->lines_list[y]);
+
+		if (!fixed)
+		{
+			/* Add? or Remove? */
+			if (!IS_FLG(flg)) add = TRUE;
+			else add = TRUE;
+
+			/* No more change */
+			fixed = TRUE;
+		}
+
+		/* Remove all noun flag */
+		if (FLG_NOUN_BEGIN <= flg && flg <= FLG_NOUN_END)
+		{
+			int i;
+			for (i = FLG_NOUN_BEGIN; i <= FLG_NOUN_END; i++)
+				REM_FLG(i);
+		}
+		
+		if (add) ADD_FLG(flg);
+		else REM_FLG(flg);
+		
+		tb->lines_list[y] = autopick_line_from_entry_kill(entry);
+		
+		/* Now dirty */
+		tb->dirty_flags = DIRTY_ALL;
+	}
 }
 
+
+/*
+ * Change command letter
+ */
+static void toggle_command_letter(text_body_type *tb, byte flg)
+{
+	autopick_type an_entry, *entry = &an_entry;
+	int by1, by2, bx1, bx2, y;
+	bool add = TRUE;
+	bool fixed = FALSE;
+
+	/* Select this line */
+	if (!tb->mark) tb->my = tb->cy;
+
+	if (tb->my < tb->cy)
+	{
+		by1 = tb->my;
+		by2 = tb->cy;
+		bx1 = tb->mx;
+		bx2 = tb->cx;
+	}
+	else
+	{
+		by2 = tb->my;
+		by1 = tb->cy;
+		bx2 = tb->mx;
+		bx1 = tb->cx;
+	}
+
+	/* String on these lines are not really selected */  
+	if (tb->lines_list[by1][bx1] == '\0' && by1 < tb->cy) by1++;
+	if (bx2 == 0 && tb->cy < by2) by2--;
+
+
+	/* Set/Reset flag of each line */
+	for (y = by1; y <= by2; y++)
+	{
+		int wid = 0;
+
+		if (!autopick_new_entry(entry, tb->lines_list[y])) continue;
+
+		string_free(tb->lines_list[y]);
+
+		if (!fixed)
+		{
+			/* Add? or Remove? */
+			if (!(entry->action & flg)) add = TRUE;
+			else add = FALSE;
+
+			/* No more change */
+			fixed = TRUE;
+		}
+
+		/* Count number of letter (by negative number) */
+		if (entry->action & DONT_AUTOPICK) wid--;
+		else if (entry->action & DO_AUTODESTROY) wid--;
+		else if (entry->action & DO_QUERY_AUTOPICK) wid--;
+		if (!(entry->action & DO_DISPLAY)) wid--;
+
+		/* Set/Reset the flag */
+		if (flg != DO_DISPLAY)
+		{
+			entry->action &= ~(DO_AUTOPICK | DONT_AUTOPICK | DO_AUTODESTROY | DO_QUERY_AUTOPICK);
+			if (add) entry->action |= flg;
+			else entry->action |= DO_AUTOPICK;
+		}
+		else
+		{
+			entry->action &= ~(DO_DISPLAY);
+			if (add) entry->action |= flg;
+		}
+
+		/* Correct cursor location */
+		if (tb->cy == y)
+		{
+			if (entry->action & DONT_AUTOPICK) wid++;
+			else if (entry->action & DO_AUTODESTROY) wid++;
+			else if (entry->action & DO_QUERY_AUTOPICK) wid++;
+			if (!(entry->action & DO_DISPLAY)) wid++;
+
+			if (wid > 0) tb->cx++;
+			if (wid < 0 && tb->cx > 0) tb->cx--;
+		}
+			
+		tb->lines_list[y] = autopick_line_from_entry_kill(entry);
+			
+		/* Now dirty */
+		tb->dirty_flags |= DIRTY_ALL;
+	}
+}
 
 /*
  * Delete or insert string
@@ -2898,7 +3035,7 @@ cptr menu_name[] =
 	"マクロ定義を挿入", 
 	"キーマップ定義を挿入", 
 
- 	"自動コマンド指定文字", 
+ 	"拾い/破壊/放置の選択", 
 	"「 」 (自動拾い)", 
 	"「!」 (自動破壊)", 
 	"「~」 (放置)", 
@@ -3267,16 +3404,6 @@ static void add_str_to_yank(text_body_type *tb, cptr str)
 }
 
 
-/*
- * Dirty flag for text editor
- */
-#define DIRTY_ALL 0x01
-#define DIRTY_MODE 0x04
-#define DIRTY_SCREEN 0x08
-#define DIRTY_NOT_FOUND 0x10
-#define DIRTY_NO_SEARCH 0x20
-
-
 #define DESCRIPT_HGT 3
 
 /*
@@ -3354,22 +3481,25 @@ static void draw_text_editor(text_body_type *tb)
 
 	if (tb->mark)
 	{
+		/* Correct cursor location */
+		int tmp_cx = MIN(tb->cx, (int)strlen(tb->lines_list[tb->cy]));
+
 		tb->dirty_flags |= DIRTY_ALL;
 
 		if (tb->my < tb->cy ||
-		    (tb->my == tb->cy && tb->mx < tb->cx))
+		    (tb->my == tb->cy && tb->mx < tmp_cx))
 		{
 			by1 = tb->my;
 			bx1 = tb->mx;
 			by2 = tb->cy;
-			bx2 = tb->cx;
+			bx2 = tmp_cx;
 		}
 		else
 		{
 			by2 = tb->my;
 			bx2 = tb->mx;
 			by1 = tb->cy;
-			bx1 = tb->cx;
+			bx1 = tmp_cx;
 		}
 	}
 
@@ -3789,16 +3919,16 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	case EC_REVERT:
 		/* Revert to original */
 #ifdef JP
-		if (!get_check("全ての変更を破棄して元の状態に戻します。よろしいですか？ "))
+		if (!get_check("全ての変更を破棄して元の状態に戻します。よろしいですか？ ")) break;
 #else
-			if (!get_check("Discard all changes and revert to original file. Are you sure? "))
+		if (!get_check("Discard all changes and revert to original file. Are you sure? ")) break;
 #endif
-				break;
 
 		free_text_lines(tb->lines_list);
 		tb->lines_list = read_pickpref_text_lines(&tb->filename_mode);
 		tb->dirty_flags |= DIRTY_ALL | DIRTY_MODE;
 		tb->cx = tb->cy = 0;
+		tb->mark = 0;
 		break;
 
 	case EC_HELP:
@@ -3992,6 +4122,9 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		/* Paste killed text */
 
 		chain_str_type *chain = tb->yank;
+
+		/* Nothing to do? */
+		if (!chain) break;
 
 		/* Correct cursor location */
 		if ((uint)tb->cx > strlen(tb->lines_list[tb->cy]))
@@ -4446,155 +4579,11 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		}				
 		break;
 
-	case EC_CL_AUTOPICK:
-	{
-		autopick_type an_entry, *entry = &an_entry;
-
-		if (!autopick_new_entry(entry, tb->lines_list[tb->cy]))
-		{
-			break;
-		}
-		string_free(tb->lines_list[tb->cy]);
-
-		if (entry->action & (DO_AUTODESTROY | DONT_AUTOPICK | DO_QUERY_AUTOPICK))
-			if (tb->cx > 0) tb->cx--;
-
-		entry->action &= ~DO_AUTODESTROY;
-		entry->action &= ~DONT_AUTOPICK;
-		entry->action &= ~DO_QUERY_AUTOPICK;
-		entry->action |= DO_AUTOPICK;
-
-		tb->lines_list[tb->cy] = autopick_line_from_entry_kill(entry);
-
-		/* Now dirty */
-		tb->dirty_line = tb->cy;
-		break;
-	}
-
-	case EC_CL_DESTROY:
-	{
-		autopick_type an_entry, *entry = &an_entry;
-
-		if (!autopick_new_entry(entry, tb->lines_list[tb->cy]))
-		{
-			break;
-		}
-		string_free(tb->lines_list[tb->cy]);
-
-		entry->action &= ~DONT_AUTOPICK;
-		entry->action &= ~DO_QUERY_AUTOPICK;
-		if (!(entry->action & DO_AUTODESTROY))
-		{
-			entry->action &= ~DO_AUTOPICK;
-			entry->action |= DO_AUTODESTROY;
-			tb->cx++;
-		}
-		else 
-		{
-			entry->action &= ~DO_AUTODESTROY;
-			entry->action |= DO_AUTOPICK;
-			if (tb->cx > 0) tb->cx--;
-		}
-
-		tb->lines_list[tb->cy] = autopick_line_from_entry_kill(entry);
-
-		/* Now dirty */
-		tb->dirty_line = tb->cy;
-
-		break;
-	}
-
-	case EC_CL_LEAVE:
-	{
-		autopick_type an_entry, *entry = &an_entry;
-
-		if (!autopick_new_entry(entry, tb->lines_list[tb->cy]))
-		{
-			break;
-		}
-		string_free(tb->lines_list[tb->cy]);
-
-		entry->action &= ~DO_AUTODESTROY;
-		entry->action &= ~DO_QUERY_AUTOPICK;
-		if (!(entry->action & DONT_AUTOPICK))
-		{
-			entry->action &= ~DO_AUTOPICK;
-			entry->action |= DONT_AUTOPICK;
-			tb->cx++;
-		}
-		else 
-		{
-			entry->action &= ~DONT_AUTOPICK;
-			entry->action |= DO_AUTOPICK;
-			if (tb->cx > 0) tb->cx--;
-		}
-
-		tb->lines_list[tb->cy] = autopick_line_from_entry_kill(entry);
-
-		/* Now dirty */
-		tb->dirty_line = tb->cy;
-		break;
-	}
-
-	case EC_CL_QUERY:
-	{
-		autopick_type an_entry, *entry = &an_entry;
-
-		if (!autopick_new_entry(entry, tb->lines_list[tb->cy]))
-		{
-			break;
-		}
-		string_free(tb->lines_list[tb->cy]);
-
-		entry->action &= ~DO_AUTODESTROY;
-		entry->action &= ~DONT_AUTOPICK;
-		if (!(entry->action & DO_QUERY_AUTOPICK))
-		{
-			entry->action &= ~DO_AUTOPICK;
-			entry->action |= DO_QUERY_AUTOPICK;
-			tb->cx++;
-		}
-		else 
-		{
-			entry->action &= ~DO_QUERY_AUTOPICK;
-			entry->action |= DO_AUTOPICK;
-			if (tb->cx > 0) tb->cx--;
-		}
-
-		tb->lines_list[tb->cy] = autopick_line_from_entry_kill(entry);
-
-		/* Now dirty */
-		tb->dirty_line = tb->cy;
-		break;
-	}
-
-	case EC_CL_NO_DISP:
-	{
-		/* Toggle display on the 'M'ap */
-
-		autopick_type an_entry, *entry = &an_entry;
-
-		if (!autopick_new_entry(entry, tb->lines_list[tb->cy]))
-			break;
-		string_free(tb->lines_list[tb->cy]);
-
-		if (entry->action & DO_DISPLAY)
-		{
-			entry->action &= ~DO_DISPLAY;
-			tb->cx++;
-		}
-		else
-		{
-			entry->action |= DO_DISPLAY;
-			if (tb->cx > 0) tb->cx--;
-		}
-
-		tb->lines_list[tb->cy] = autopick_line_from_entry_kill(entry);
-
-		/* Now dirty */
-		tb->dirty_line = tb->cy;
-		break;
-	}
+	case EC_CL_AUTOPICK: toggle_command_letter(tb, DO_AUTOPICK); break;
+	case EC_CL_DESTROY: toggle_command_letter(tb, DO_AUTODESTROY); break;
+	case EC_CL_LEAVE: toggle_command_letter(tb, DONT_AUTOPICK); break;
+	case EC_CL_QUERY: toggle_command_letter(tb, DO_QUERY_AUTOPICK); break;
+	case EC_CL_NO_DISP: toggle_command_letter(tb, DO_DISPLAY); break;
 
 	case EC_IK_UNAWARE: toggle_keyword(tb, FLG_UNAWARE); break;
 	case EC_IK_UNIDENTIFIED: toggle_keyword(tb, FLG_UNIDENTIFIED); break;
@@ -4790,6 +4779,7 @@ void do_cmd_edit_autopick(void)
 	while (!quit)
 	{
 		int com_id = 0;
+		size_t trig_len;
 
 		/* Draw_everythig */
 		draw_text_editor(tb);
@@ -4803,12 +4793,12 @@ void do_cmd_edit_autopick(void)
 		if (!tb->mark)
 		{
 			/* Display current position */
-			prt (format("(%d, %d)", tb->cx, tb->cy), 0, 60);
+			prt (format("(%d,%d)", tb->cx, tb->cy), 0, 60);
 		}
 		else
 		{
 			/* Display current position and mark position */
-			prt (format("(%d-%d, %d-%d)", tb->mx, tb->cx, tb->my, tb->cy), 0, 60);
+			prt (format("(%d,%d)-(%d,%d)", tb->mx, tb->my, tb->cx, tb->cy), 0, 60);
 		}
 
 		/* Place cursor */
@@ -4828,27 +4818,22 @@ void do_cmd_edit_autopick(void)
 		/* Get a command */
 		key = inkey();
 
-		/* Delete key */
-		if (key == 0x7F) key = KTRL('d');
+		/* Count length of macro trigger which induced this key */
+		trig_len = strlen(inkey_macro_trigger_string);
 
 		/* HACK -- ignore macro defined on ASCII keys */
-		if (strlen(inkey_macro_trigger_string) == 1)
+		if (trig_len == 1)
 		{
 			/* Get original key */
 			key = inkey_macro_trigger_string[0];
 		}
 
+		/* Delete key */
+		if (key == 0x7F) key = KTRL('d');
 
-		if (key == ESCAPE)
-		{
-			com_id = do_command_menu(0, 0);
-
-			/* Redraw all */
-			tb->dirty_flags |= DIRTY_SCREEN;
-		}
 
 		/* Cursor key macroes to direction command */
-		else if (strlen(inkey_macro_trigger_string) > 1)
+		if (strlen(inkey_macro_trigger_string) > 1)
 		{
 			switch (key)
 			{
@@ -4909,6 +4894,15 @@ void do_cmd_edit_autopick(void)
 		if (com_id)
 		{
 			/* Already done */
+		}
+
+		/* Open the menu */
+		else if (key == ESCAPE)
+		{
+			com_id = do_command_menu(0, 0);
+
+			/* Redraw all */
+			tb->dirty_flags |= DIRTY_SCREEN;
 		}
 
 		/* Insert a character */
