@@ -5036,6 +5036,7 @@ static void edit_history(void)
 		for (j = 0; history[i][j]; j++) /* loop */;
 
 		for (; j < 59; j++) history[i][j] = ' ';
+		history[i][59] = '\0';
 	}
         display_player(1);
 #ifdef JP
@@ -5084,7 +5085,7 @@ static void edit_history(void)
 			if (iskanji2(history[y], x)) x++;
 #endif
                         x++;
-                        if (x > 59) x = 0;
+                        if (x > 58) x = 0;
                 }
                 else if (c == '4')
                 {
@@ -5092,7 +5093,7 @@ static void edit_history(void)
 #ifdef JP
 			if ((x > 0) && (iskanji2(history[y], x-1))) x--;
 #endif
-                        if (x < 0) x = 59;
+                        if (x < 0) x = 58;
                 }
                 else if (c == '\r')
                 {
@@ -5118,7 +5119,7 @@ static void edit_history(void)
 				history[y][x] = ' ';
 			}
 #endif
-			if (x < 0) x = 59;
+			if (x < 0) x = 58;
 		}
 #ifdef JP
 		else if (iskanji(c) || isprint(c))
