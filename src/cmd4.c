@@ -7837,8 +7837,8 @@ static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, int d
 			if (direct_r_idx < 0) prt("Group", 4, 0);
 			prt("Name", 4, max + 3);
 			if (p_ptr->wizard || visual_only) prt("Idx", 4, 62);
-			prt("Sym  ", 4, 67);
-			if (!visual_only) prt(" Kills", 4, 72);
+			prt("Sym", 4, 68);
+			if (!visual_only) prt("Kills", 4, 73);
 #endif
 
 			for (i = 0; i < 78; i++)
