@@ -274,7 +274,7 @@ F:SLOW_DIGEST | REGEN | SUST_STR | SUST_DEX | IM_FIRE |
 F:INSTA_ART
 D:$The Ring of Fire, set with a ruby that glows like flame.  Narya is one 
 D:$of the three Rings of Power created by the Elves and hidden by them from 
-D:$Morgoth.
+D:$Sauron.
 D:炎のように輝くルビーがはめられた火の指輪で、
 D:エルフにより作られサウロンから隠された三つの力の指輪のうちの一つだ。
 D:中つ国ではキアダンとガンダルフが所有していた。
@@ -293,7 +293,7 @@ F:SUST_INT | SUST_WIS | IM_COLD |
 F:INSTA_ART
 D:$The Ring of Adamant, with a pure white stone as centerpiece.  Nenya is one 
 D:$of the three Rings of Power created by the Elves and hidden by them from 
-D:$Morgoth.
+D:$Sauron.
 D:冷気の凝縮した真っ白な宝石がはめられた指輪だ。
 D:エルフにより作られサウロンから隠された三つの力の指輪のうちの一つだ。
 D:中つ国ではガラドリエルが所有していた。
@@ -313,7 +313,7 @@ F:INSTA_ART
 D:$The Ring of Sapphire, with clear blue gems that shine like stars, 
 D:$glittering untouchable despite all that Morgoth ever wrought.  Vilya is 
 D:$one of the three Rings of Power created by the Elves and hidden by them 
-D:$from Morgoth.
+D:$from Sauron.
 D:星の様に輝く透き通ったサファイアの指輪だ。
 D:エルフにより作られサウロンから隠された三つの力の指輪のうちの一つだ。
 D:中つ国ではエルロンドが所有していた。
