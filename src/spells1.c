@@ -7969,16 +7969,14 @@ static bool do_disintegration(int by, int bx, int y, int x)
 	/* Disintegration balls explosions are stopped by perma-walls */
 	if (!in_disintegration_range(by, bx, y, x)) return FALSE;
 
-	/* Permanent walls and artifacts don't get effect */
-	/* But not protect monsters and other objects */
-	if (!cave_valid_bold(y, x)) return TRUE;
-
-	/* Destroy mirror/glyph */
-	remove_mirror(y, x);
+	/* Destroy mirror */
+	if (is_mirror_grid(&cave[y][x])) remove_mirror(y, x);
 
 	f_ptr = &f_info[cave[y][x].feat];
 
-	if (have_flag(f_ptr->flags, FF_HURT_DISI))
+	/* Permanent features don't get effect */
+	/* But not protect monsters and other objects */
+	if (have_flag(f_ptr->flags, FF_HURT_DISI) && !have_flag(f_ptr->flags, FF_PERMANENT))
 	{
 		cave_alter_feat(y, x, FF_HURT_DISI);
 
