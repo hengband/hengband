@@ -5427,9 +5427,16 @@ strcpy(tmp, "jhelp.hlp");
 		}
 
 		/* Allow backing up */
-		if (skey == '-' || skey == SKEY_PGUP)
+		if (skey == '-')
 		{
 			line = line + (reverse ? rows : -rows);
+			if (line < 0) line = 0;
+		}
+
+		/* One page up */
+		if (skey == SKEY_PGUP)
+		{
+			line = line - rows;
 			if (line < 0) line = 0;
 		}
 
@@ -5451,10 +5458,16 @@ strcpy(tmp, "jhelp.hlp");
 		if (skey == '2' || skey == SKEY_DOWN) line++;
 
 		/* Advance one page */
-		if (skey == ' ' || skey == SKEY_PGDOWN)
+		if (skey == ' ')
 		{
 			line = line + (reverse ? -rows : rows);
-			if (line < 0) line = ((size-1)/rows)*rows;
+			if (line < 0) line = 0;
+		}
+
+		/* One page down */
+		if (skey == SKEY_PGDOWN)
+		{
+			line = line + rows;
 		}
 
 		/* Recurse on numbers */
