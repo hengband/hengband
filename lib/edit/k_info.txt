@@ -300,19 +300,29 @@ G:,:U
 I:80:35:5000
 W:0:0:10:3
 A:0/1:5/1:10/1:20/1
+D:$This nutritious but fairly bland food is 
+D:$familiar to anyone contemplating long journeys.
+#D:未訳
 
 N:22:ビスケット
 E:& Hard Biscuit~
 G:,:U
 I:80:32:500
 W:0:0:2:1
+D:$Twice-cooked for good keeping qualities, this lump of bread is as hard as a 
+D:$rock and about as tasty.
+D:日持ちを良くする為に二度焼きした乾パンの一種だ。
+D:岩のように固く、味もだいたいその程度。
 
 #JZ#
-N:23:鹿肉
+#"鹿肉"は誤訳
+N:23:乾し肉
 E:& Strip~ of Venison
 G:,:u
 I:80:33:1500
 W:0:0:2:2
+D:$A strip of jerked beef that seems never to spoil.
+D:良く乾燥させた肉。決して腐る事が無さそうだ。
 
 N:24:スライムモルド
 E:& Slime Mold~
@@ -320,25 +330,37 @@ G:,:g
 I:80:36:3000
 W:1:0:5:2
 A:1/1
+D:$An utterly hideous fungal growth.  It is strangely appealing...
+D:ぞっとするような菌類の固まりだ。なぜか食欲を刺激する…。
 
+#waybread now fully satisfies the player, instead of increasing the food count.
 N:25:エルフの行糧
 E:& Piece~ of Elvish Waybread
 G:,:B
 I:80:37:7500
-W:5:0:3:10
+W:5:0:3:30
 A:5/1:10/1
+D:$Small golden-brown wafers wrapped in silven leaves.  Made with elvish art, 
+D:$it sustains life where nothing else can.
+D:銀色の葉に包まれた小さな山吹色の薄焼き菓子の束だ。エルフの技で作られ、
+D:その滋養は他に食べ物が何も無くとも数週間もの間生命を維持する程である。
 
 N:26:高級エール
 E:& Pint~ of Fine Ale
 G:,:y
 I:80:38:500
 W:0:0:5:1
+D:$Made from the barley of Eriador, and brewed to golden perfection.
+D:エリアドールの大麦を醸造し、金色になるまで熟成させたものだ。
 
 N:27:高級ワイン
 E:& Pint~ of Fine Wine
 G:,:r
 I:80:39:1000
 W:0:0:10:2
+D:$A heady wine, almost as good as that served at the Green Dragon at Bywater.
+D:ベイウォーターの緑竜邸で出るのと同じくらい質の良い、
+D:アルコール度の高いワインだ。
 
 ##### Extra digger #####
 
@@ -381,6 +403,9 @@ W:15:0:140:350
 A:15/1
 P:0:3d4:0:0:0
 F:SHOW_MODS
+D:$Also known as the hand-and-a-half blade.  A larger-than-normal straight-
+D:$sided sword with two cutting edges.
+D:片手半剣とも呼ばれる。通常のロングソードよりも長い両刃の直刀だ。
 
 N:32:シミター
 E:& Scimitar~
@@ -390,6 +415,8 @@ W:10:0:130:250
 A:10/1
 P:0:2d5:0:0:0
 F:SHOW_MODS
+D:$A single-edged slashing sword with a blade like a crescent.
+D:斬る用途に特化した三日月のような刀身を持つ片刃の剣だ。
 
 N:33:タルワール
 E:& Tulwar~
@@ -408,6 +435,8 @@ W:10:0:150:255
 A:10/1:15/1
 P:0:2d5:0:0:0
 F:SHOW_MODS | RIDING
+D:$A heavy, double-edged sword with a strong grip.
+D:重く広い刀身と頑丈な柄を持った両刃の直刀だ。
 
 N:35:ショート・ソード
 E:& Short Sword~
@@ -417,6 +446,8 @@ W:5:0:80:90
 A:5/1
 P:0:1d7:0:0:0
 F:SHOW_MODS
+D:$A short thrusting sword.
+D:主に突く用途に用いる短い剣だ。
 
 N:36:カオス・ブレード
 E:& Blade~ of Chaos
@@ -426,6 +457,10 @@ W:70:0:180:4000
 A:70/8
 P:0:6d5:0:0:0
 F:RES_CHAOS | SHOW_MODS
+D:$This inconstant weapon revels in disorder, hacking and slashing your foes 
+D:$with bloodthirsty glee.
+D:千変万化の姿を持つこの武器は混沌の力によって敵を切り刻み、
+D:殺戮にふける事に残忍な喜びを感じている。
 
 N:37:グレート・ソード
 E:& Two-Handed Sword~
@@ -435,6 +470,8 @@ W:30:0:200:775
 A:30/1:40/1
 P:0:3d6:0:0:0
 F:SHOW_MODS
+D:$A great, double-edged broadsword which few can wield in one hand.
+D:非常に大きな両刃の直刀で、これを片手も持てる者はほとんどいない。
 
 N:38:マン・ゴーシュ
 E:& Main Gauche~
@@ -444,6 +481,8 @@ W:3:0:30:25
 A:3/1
 P:0:1d5:0:0:0
 F:SHOW_MODS
+D:$A short thrusting blade with a large guard, primarily used in duels.
+D:拳を防御する大きな鍔を持つ短い剣。主に決闘で防御用の短剣として用いられる。
 
 N:39:カットラス
 E:& Cutlass~
@@ -453,6 +492,8 @@ W:5:0:110:85
 A:5/1
 P:0:1d7:0:0:0
 F:SHOW_MODS
+D:$A large, curved chopper with a basket hilt, well known to seamen.
+D:大きな曲った刀身と手をカバーする網状の柄を備えた剣だ。船員に良く用いられる。
 
 N:40:首切りソード
 E:& Executioner's Sword~
@@ -462,6 +503,9 @@ W:40:0:260:850
 A:40/1
 P:0:4d5:0:0:0
 F:SHOW_MODS
+D:$A giant, curved blade designed to cleave the head cleanly from the 
+D:$body.
+D:胴体から頭を綺麗に切り落す為に作られた、巨大な曲った刃を持つ剣だ。
 
 N:41:カタナ
 E:& Katana~
@@ -471,6 +515,9 @@ W:20:0:120:400
 A:20/1
 P:0:3d4:0:0:0
 F:SHOW_MODS
+D:$A slightly curved long-handled slashing sword with a single-edged 
+D:$blade and a chisel tip.
+D:長い柄と微妙に曲った刃を持つ切れ味に優れた片刃の剣だ。
 
 N:42:ロング・ソード
 E:& Long Sword~
@@ -480,6 +527,9 @@ W:10:0:130:300
 A:10/1:20/1
 P:0:2d5:0:0:0
 F:SHOW_MODS | RIDING
+D:$A long, straight, two-edged blade, with two hand guards projecting out from 
+D:$the hilt to form a perfect cross.
+D:十字の形に2本の柄が付いた長い両刃の直刀だ。
 
 N:43:ダガー
 E:& Dagger~
@@ -489,6 +539,8 @@ W:0:0:12:10
 A:0/1:5/1:10/1:20/1
 P:0:1d4:0:0:0
 F:SHOW_MODS
+D:$A two-edged knife with a sharp point.
+D:先端が鋭い両刃の短剣だ。
 
 N:44:レイピア
 E:& Rapier~
@@ -498,6 +550,8 @@ W:5:0:40:42
 A:5/1
 P:0:1d6:0:0:0
 F:SHOW_MODS
+D:$A long, thin thrusting blade, mainly used in duels.
+D:突きに用いる長く細い刀身を持つ剣。主に決闘に用いられる。
 
 N:45:サーベル
 E:& Sabre~
@@ -507,6 +561,9 @@ W:5:0:50:50
 A:5/1
 P:0:1d7:0:0:0
 F:SHOW_MODS | RIDING
+D:$A light, somewhat curved blade that can be used to thrust or slash; familiar 
+D:$to horseman and duelists alike.
+D:軽い少し曲った刃を持ち、切る事も突く事もできる。馬上及び決闘においてよく使われる。
 
 N:46:スモール・ソード
 E:& Small Sword~
@@ -516,6 +573,8 @@ W:5:0:75:48
 A:5/1
 P:0:1d6:0:0:0
 F:SHOW_MODS
+D:A smaller version of the longsword, perfectly sized for Hobbits.
+D:ロングソードを少し短かくしたような剣。ホビットにぴったりのサイズだ。
 
 N:47:折れた剣
 E:& Broken Sword~
@@ -525,6 +584,8 @@ W:0:0:30:2
 A:0/1
 P:0:1d2:-2:-4:0
 F:SHOW_MODS
+D:$Above the hilt, a foot of steel rises, ending in a jagged edge.
+D:柄の上でギザギザに折れている。
 
 ##### Hafted Weapons #####
 
@@ -536,6 +597,8 @@ W:20:0:150:200
 A:20/1
 P:0:2d4:0:0:0
 F:SHOW_MODS | RIDING
+D:$A weighty iron ball, suspended by a chain from a sturdy oaken handle.
+D:頑丈な木製のハンドルに、重い鉄のボールが鎖で繋っている。
 
 N:49:ムチ
 E:& Whip~
@@ -545,6 +608,9 @@ W:3:0:30:30
 A:3/1
 P:0:1d6:0:0:0
 F:SHOW_MODS
+D:$A heavy whip, this thick coil is thrown from the shoulder and can 
+D:$knock down a large man.
+D:重い鞭だ。きつく巻いたこの鞭を肩の上から振り下ろすと大の男でも打ち倒す事ができる。
 
 N:50:フレイル
 E:& Flail~
@@ -554,6 +620,9 @@ W:10:0:150:353
 A:10/1
 P:0:2d6:0:0:0
 F:SHOW_MODS | RIDING
+D:$Two heavy bars of wood connected by a short link of chain, capable of 
+D:$delivering crushing blows.
+D:２本の重い木製の棒を短かい鎖で繋げた物だ。対象を叩き潰す為に用いる。
 
 N:51:ヘヴィ・フレイル
 E:& Two-Handed Flail~
@@ -563,6 +632,9 @@ W:45:0:280:590
 A:45/1
 P:0:3d6:0:0:0
 F:SHOW_MODS
+D:$Two great bars of wood connected by a massive chain, needing two hands 
+D:$to properly wield.
+D:２本の非常に大きな木製の棒を重い鎖で継いである。うまく用いるためには両手が必要だ。
 
 N:52:モーニング・スター
 E:& Morning Star~
@@ -572,6 +644,8 @@ W:10:0:150:396
 A:10/1
 P:0:2d6:0:0:0
 F:SHOW_MODS
+D:$A war club with an spiked iron ball on the head.
+D:星型のトゲが突き出た鉄球が先端に付いた棍棒だ。
 
 N:53:メイス
 E:& Mace~
@@ -581,6 +655,8 @@ W:5:0:120:130
 A:5/1
 P:0:2d4:0:0:0
 F:SHOW_MODS
+D:$A war club with an iron head, usually flanged.
+D:鉄球、または鍔付きの多面体形の鉄塊が先端に付いた棍棒だ。
 
 N:54:クォータースタッフ
 E:& Quarterstaff~
@@ -590,6 +666,10 @@ W:10:0:150:200
 A:10/1
 P:0:1d9:0:0:0
 F:SHOW_MODS
+D:$Six feet of oak which can be wielded in both hands to give a drubbing or 
+D:$block one.
+D:2メートル程度の長さの木製の杖だ。
+D:両手で持って打ち付けたり攻撃を受け止める為に用いられる。
 
 N:55:ウォー・ハンマー
 E:& War Hammer~
@@ -599,6 +679,8 @@ W:5:0:120:225
 A:5/1
 P:0:3d3:0:0:0
 F:SHOW_MODS | RIDING
+D:$A mallet with a tapered head and a long handle.
+D:長いハンドルがあり、先の尖った槌が先端から直角に付き出た形をしている。
 
 N:56:鉛詰めメイス
 E:& Lead-Filled Mace~
@@ -608,6 +690,9 @@ W:15:0:180:502
 A:15/1
 P:0:3d4:0:0:0
 F:SHOW_MODS
+D:$A heavy war club topped with a mass of lead-filled steel, capable of 
+D:$landing crushing blows.
+D:重い棍棒の先に鉛を詰めた鋼鉄の重りを繋げてある。対象を叩き潰す為に用いる。
 
 N:57:粉砕のメイス
 E:& Mace~ of Disruption
@@ -617,6 +702,9 @@ W:80:0:400:4300
 A:80/8
 P:0:5d8:0:0:0
 F:SLAY_UNDEAD | SHOW_MODS
+D:$A giant's weapon, enchanted with shattering power that breaks bones, bodies, 
+D:$and spirit.
+D:巨人の武器であり、相手の骨を、体を、そして精神をも粉砕する魔法が掛けられている。
 
 N:58:ルツェルン・ハンマー
 E:& Lucerne Hammer~
@@ -637,6 +725,8 @@ W:15:0:120:408
 A:15/1
 P:0:2d6:0:0:0
 F:SHOW_MODS
+D:$A narrow axe head opposed by a crow's beak, mounted on an oaken shaft.
+D:木製の柄に、背が烏のクチバシを模した突起になった形の幅が狭い斧が付いている。
 
 N:60:グレイブ
 E:& Glaive~
@@ -646,6 +736,10 @@ W:20:0:190:363
 A:20/1
 P:0:2d6:0:0:0
 F:SHOW_MODS | RIDING
+D:$A reinforced wooden pole eight feet long, topped by a massive knife blade 
+D:$that can can be used to thrust or chop.
+D:2.5メートル程の補強された木製の棒の先端に大きなナイフの刃が真っ直に付いている。
+D:切り裂く事も付き刺す事もできる。
 
 N:61:ハルベルト
 E:& Halberd~
@@ -655,6 +749,10 @@ W:25:0:190:430
 A:25/1
 P:0:3d5:0:0:0
 F:SHOW_MODS
+D:$The most successful of the polearms, the halberd has a long haft mounted 
+D:$with a heavy axe blade and opposing spike, and topped by a thrusting spine.
+D:長い竿に重い斧の刃とその反対側にスパイクが付き、さらに竿の先端に付き刺す為の
+D:穂先が付いている。最も完成されたタイプの竿状武器である。
 
 N:62:オウル・パイク
 E:& Awl-Pike~
@@ -673,6 +771,8 @@ W:15:0:160:358
 A:15/1
 P:0:2d5:0:0:0
 F:SHOW_MODS
+D:$A long, heavy spear with an iron head and reinforced shaft.
+D:補強された柄に鉄の穂先が付いた、非常に長く重い槍だ。
 
 N:64:スピア
 E:& Spear~
@@ -682,6 +782,10 @@ W:5:0:50:36
 A:5/1
 P:0:1d6:0:0:0
 F:SHOW_MODS | RIDING
+D:$The basic polearm, with a double-edged knife mounted on a light shaft.  
+D:$This weapon can be thrown effectively.
+D:最も基本的な竿状武器だ。軽く長い竿の先に尖った両刃の穂先が付いていて、
+D:突き刺すのに適している。
 
 N:65:トライデント
 E:& Trident~
@@ -691,6 +795,8 @@ W:5:0:70:120
 A:5/1
 P:0:1d8:0:0:0
 F:SHOW_MODS | RIDING
+D:$A three-pronged spear, originally for catching fish.
+D:三又の槍で、元来は魚を捕るのに用いられていた。
 
 N:66:ランス
 E:& Lance~
@@ -700,6 +806,8 @@ W:10:0:300:230
 A:10/1
 P:0:2d8:0:0:0
 F:SHOW_MODS | RIDING
+D:大きく長い円錐形の穂先を持った槍だ。
+D:馬上で構えて突撃する為に作られている。
 
 N:67:グレート・アックス
 E:& Great Axe~
@@ -709,6 +817,11 @@ W:40:0:230:500
 A:40/1
 P:0:4d4:0:0:0
 F:SHOW_MODS
+D:$An enormous two-handed battle axe, carried by Dwarven champions, who 
+D:$compete to see who can cleave the most orc heads.
+D:巨大な両手持ち用の戦斧だ。オークの首を落した数を競うドワーフの戦士が
+D:愛用している。
+
 
 N:68:バトル・アックス
 E:& Battle Axe~
@@ -718,6 +831,8 @@ W:15:0:170:334
 A:15/1
 P:0:2d8:0:0:0
 F:SHOW_MODS
+D:$A double-bladed axe.  Very popular among Dwarves.
+D:幅広の両刃の斧だ。ドワーフによく用いられる。
 
 N:69:ロッホアーバー・アックス
 E:& Lochaber Axe~
@@ -736,6 +851,8 @@ W:15:0:130:304
 A:15/1
 P:0:2d6:0:0:0
 F:SHOW_MODS
+D:$A simple, single-bladed war axe capable of chopping though limbs or armour.
+D:単純な作りの片刃の戦斧で、対象の胴体や鎧を切断する威力がある。
 
 N:71:大鎌
 E:& Scythe~
@@ -745,6 +862,10 @@ W:45:0:250:800
 A:45/1
 P:0:5d3:0:0:0
 F:SHOW_MODS
+D:$The long crescent blade stands out from the handle of this polearm, and 
+D:$it is swung with two hands to harvest grain or blood.
+D:長い三日月型の刃が長い柄の先端に突けられている。
+D:両手に持って穀物、または生命を苅り取る為に用いられる…。
 
 N:72:切り裂きの大鎌
 E:& Scythe~ of Slicing
@@ -754,6 +875,9 @@ W:60:0:250:3500
 A:60/4
 P:0:8d4:0:0:0
 F:SHOW_MODS | RIDING
+D:$A reaper's weapon, the long blade almost hums in anticipation of the 
+D:$blood it will spill.
+D:死神の武器である。その長い刃は流血の期待に歓喜の声を上げているかのようだ。
 
 
 ##### Bows, Crossbows, Slings #####
@@ -765,6 +889,8 @@ I:19:12:0
 W:3:0:30:50
 A:3/1
 F:SHOW_MODS
+D:$The traditional hunter's weapon, this light bow is easily drawn.
+D:伝統的に狩人に用いられる武器だ。この軽い弓は簡単に引く事ができる。
 
 N:74:ロング・ボウ
 E:& Long Bow~
@@ -773,6 +899,9 @@ I:19:13:0
 W:30:0:40:400
 A:30/2:40/2
 F:SHOW_MODS
+D:$As tall as a man, the longbow can drive an arrow through the heaviest 
+D:$armour.
+D:人の身長程の長さの弓だ。厚い鉄製の鎧でも貫通する程の威力を持つ。
 
 N:75:ライト・クロスボウ
 E:& Light Crossbow~
@@ -781,6 +910,10 @@ I:19:23:0
 W:10:0:110:140
 A:10/1
 F:SHOW_MODS
+D:$A mechanical bow made of wood, it is cocked to augment the strength of 
+D:$its wielder.
+D:鋼鉄製の弦をあらかじめ引いておき、機械式の引き金を引くだけで矢を発射
+D:する事ができる。ショート・ボウやロング・ボウに比べて扱いが簡単な武器だ。
 
 N:76:ヘヴィ・クロスボウ
 E:& Heavy Crossbow~
@@ -789,6 +922,13 @@ I:19:24:0
 W:30:0:200:500
 A:30/2:40/2
 F:SHOW_MODS
+# Not all heavy crossbow is the arbalest with a crank!
+#D:$The arbalest is so powerful it has to be reinforced with metal and 
+#D:$requires a crank to be cocked.
+D:鋼鉄製の弦をあらかじめ引いておき、機械式の引き金を引くだけで矢を発射
+D:する事ができる。ショート・ボウやロング・ボウに比べて扱いが簡単な武器だ。
+D:ヘヴィ・クロスボウはライト・クロスボウに比べて威力は強いが、
+D:弦を引くのに長い時間がかかってしまう。
 
 N:77:スリング
 E:& Sling~
@@ -797,6 +937,10 @@ I:19:2:0
 W:1:0:5:5
 A:1/1
 F:SHOW_MODS
+D:$A loop of leather and cords able to hurl stones or shot with tremendous 
+D:$velocity.
+D:長い紐の中間にある革製の石受け部分に石を包み、これを振り回す勢いで
+D:石を飛ばす武器だ。原始的な構造だが威力はある。
 
 
 ##### Missiles #####
@@ -809,6 +953,8 @@ W:3:0:2:1
 A:3/1:15/1
 P:0:1d4:0:0:0
 F:SHOW_MODS
+D:$A standard clothyard arrow, straight and cleanly fletched.
+D:たくみに羽が付けられた真っ直な標準的な矢だ。
 
 N:79:追尾の矢
 E:& Seeker Arrow~
@@ -819,6 +965,10 @@ A:55/3
 P:0:6d4:0:0:0
 F:SHOW_MODS
 F:IGNORE_ACID | IGNORE_COLD | IGNORE_FIRE | IGNORE_ELEC
+D:$Carved from a rare wood, this arrow is inscribed with fell runes and 
+D:$fletched with eagle feathers.
+D:希少な種類の木材から切り出され、鷲の羽を付け、
+D:威力を高めるルーンを刻まれた矢だ。
 
 N:80:クロスボウの矢
 E:& Bolt~
@@ -828,6 +978,8 @@ W:3:0:3:2
 A:3/1:25/1
 P:0:1d5:0:0:0
 F:SHOW_MODS
+D:$A short, heavy arrow shot from a crossbow.
+D:発射時の強い負荷に耐えるように作られた短かく重いクロスボウ用の矢だ。
 
 N:81:追尾クロスボウの矢
 E:& Seeker Bolt~
@@ -838,6 +990,8 @@ A:65/4
 P:0:6d5:0:0:0
 F:SHOW_MODS
 F:IGNORE_ACID | IGNORE_COLD | IGNORE_FIRE | IGNORE_ELEC
+D:$A mighty quarrel, bound about with battle magics.
+D:威力を高める魔法が掛けられた強力なクロスボウ用の矢だ。
 
 N:82:丸い小石
 E:& Rounded Pebble~
@@ -856,6 +1010,8 @@ W:3:0:5:2
 A:3/1
 P:0:1d3:0:0:0
 F:SHOW_MODS
+#D:$A grapestone-shaped slug of lead, the right heft for hurling from a sling.
+#D:未訳
 
 
 ##### Shovels and Picks #####
@@ -868,6 +1024,8 @@ W:1:0:60:10
 A:5/16
 P:0:1d2:0:0:0
 F:SHOW_MODS | TUNNEL
+D:$A compact and sturdy spade.
+D:小型で頑丈なシャベルだ。
 
 N:85:ノームのシャベル
 E:& Gnomish Shovel~
@@ -877,6 +1035,8 @@ W:20:0:60:100
 A:20/4
 P:0:1d2:0:0:0
 F:SHOW_MODS | TUNNEL
+D:$A small spade forged of steel with gnomish craftmanship.
+D:ノームの職人によって作られた鋼鉄製のシャベルだ。
 
 N:86:ドワーフのシャベル
 E:& Dwarven Shovel~
@@ -886,6 +1046,10 @@ W:40:0:120:200
 A:40/1
 P:0:1d3:0:0:0
 F:SHOW_MODS | TUNNEL
+D:$A broad shovel, fit for the strong shoulders of a dwarf.  It bears runes 
+D:$of delving and no ordinary rock can resist it.
+D:ドワーフの強力な肩にちょうど良い幅広のシャベルだ。
+D:採掘力を高めるルーンを帯び、普通の岩ならばどんな物でも掘り進む事ができる。
 
 N:87:つるはし
 E:& Pick~
@@ -895,6 +1059,9 @@ W:5:0:150:50
 A:10/16
 P:0:1d3:0:0:0
 F:SHOW_MODS | TUNNEL
+D:$A heavy mining tool with a long, slightly curved head that tapers 
+D:$to chisel points on both ends.
+D:重い採掘用の道具で、微妙に曲った頭部の両端に切先が付いている。
 
 N:88:オークのつるはし
 E:& Orcish Pick~
@@ -904,6 +1071,9 @@ W:30:0:150:300
 A:30/4
 P:0:1d3:0:0:0
 F:SHOW_MODS | TUNNEL
+D:$A crude, ugly, but effective pickaxe.  Made in enormous quantities for 
+D:$the slave-mines of Durthang.
+D:粗雑で醜い作りだが、実用的なつるはしだ。
 
 N:89:ドワーフのつるはし
 E:& Dwarven Pick~
@@ -913,6 +1083,9 @@ W:50:0:200:600
 A:50/1
 P:0:1d4:0:0:0
 F:SHOW_MODS | TUNNEL
+D:$A short but sturdy pick, like those that delved deep Moria, with runes to 
+D:$break the sinews of mountains.
+D:モリアの深部の採掘に使われていたのと同様な、短く頑丈なつるはしだ。
 
 ##### Armor #####
 #JZ#
@@ -925,6 +1098,10 @@ A:30/4
 P:4:0d0:0:0:4
 F:IGNORE_ACID | IGNORE_COLD | IGNORE_FIRE | IGNORE_ELEC
 F:STEALTH | SEARCH
+D:$A mantle made of curious silken material by the Galadrim that wondrously 
+D:$takes on the hues and shapes of its surroundings.
+D:不思議な絹のような素材で作られた外套だ。
+D:その素材は周りの景色の色と形を映し出し、着用者を隠す効果がある。
 
 N:91:軟革ブーツ
 E:& Pair~ of Soft Leather Boots
@@ -933,6 +1110,9 @@ I:30:2:0
 W:3:0:20:7
 A:3/1
 P:2:1d1:0:0:0
+D:$These are calf-high boots of flexible leather, laced from heel to calf.
+D:ふくらはぎの高さまでの柔軟な革のブーツだ。
+D:踵からふくらはぎまで結び紐が付いている。
 
 N:92:硬革ブーツ
 E:& Pair~ of Hard Leather Boots
@@ -941,6 +1121,8 @@ I:30:3:0
 W:5:0:40:12
 A:5/1
 P:3:1d1:0:0:0
+D:$A set of sturdy leather boots that will last many weary miles.
+D:長い旅路でも良く保つ丈夫な革製のブーツだ。
 
 N:93:鉄鋲底の靴
 E:& Pair~ of Metal Shod Boots
@@ -949,6 +1131,9 @@ I:30:6:0
 W:20:0:80:50
 A:20/1
 P:6:1d1:0:0:0
+D:$A set of double-lined leather boots, with toes and heels reinforced with 
+D:$iron.
+D:二重の革製ブーツで、踵と爪先が鉄で補強されている。
 
 N:94:硬革帽子
 E:& Hard Leather Cap~
@@ -957,6 +1142,8 @@ I:32:2:0
 W:3:0:15:12
 A:3/1
 P:2:0d0:0:0:0
+D:$A padded skullcap of boiled leather.
+D:煮固めた革製の詰め物入りの帽子だ。
 
 N:95:金属帽子
 E:& Metal Cap~
@@ -965,6 +1152,8 @@ I:32:3:0
 W:10:0:20:30
 A:10/1
 P:3:1d1:0:0:0
+D:$A pot-helm of steel that protects the skull.
+D:頭部を保護する鋼鉄の帽子だ。
 
 N:96:鉄ヘルメット
 E:& Iron Helm~
@@ -973,6 +1162,8 @@ I:32:5:0
 W:20:0:75:75
 A:20/1
 P:5:1d3:0:0:0
+D:$A mighty helmet of heavy iron, completely enclosing the head.
+D:頭部を完全に覆う鉄製のヘルメットだ。
 
 N:97:鋼鉄ヘルメット
 E:& Steel Helm~
@@ -981,6 +1172,9 @@ I:32:6:0
 W:40:0:60:200
 A:40/1
 P:6:1d3:0:0:0
+D:$This great helm covers the head and shoulders with plates of steel and a 
+D:$curtain of mail.
+D:鋼鉄板と鎖かたびらを組み合わせて、頭部から肩までを完全に覆う防具だ。
 
 N:98:鉄冠
 E:& Iron Crown~
@@ -989,6 +1183,9 @@ I:33:10:0
 W:40:0:20:500
 A:40/1
 P:0:1d1:0:0:0
+D:$A plain band of iron, crowned with iron spikes.  It is a tyrant's 
+D:$symbol.
+D:鉄の環に鉄の突起で飾りが付けられた冠だ。君主の印である。
 
 N:99:金の冠
 E:& Golden Crown~
@@ -998,6 +1195,10 @@ W:45:0:30:1000
 A:45/1
 P:0:1d1:0:0:0
 F:IGNORE_ACID
+D:$An elegant golden circlet, with slender spines thrusting upward. 
+D:$It looks like it should be resting over the brow of a king.
+D:幾つもの細い突起が上向きに付いた優雅な金の頭飾り。
+D:王の額に相応しい物に見える。
 
 N:100:宝冠
 E:& Jewel Encrusted Crown~
@@ -1007,6 +1208,9 @@ W:50:0:40:2000
 A:50/1
 P:0:1d1:0:0:0
 F:IGNORE_ACID
+D:$An elaboratedly decorated crown of massive gold, studded with a rainbow 
+D:$of gems and jewels; worthy of an emperor.
+D:精巧に飾り付けられた重厚な金の冠に様々な宝石が虹色にちりばめられている。
 
 N:101:ローブ
 E:& Robe~
@@ -1015,6 +1219,8 @@ I:36:2:0
 W:1:0:20:4
 A:1/1:50/1
 P:2:0d0:0:0:0
+D:$A practical garment of thick wool or velvet, draping from neck to heels.
+D:首から踵までをおおう、ビロードまたは綿製の実用的な衣服だ。
 
 N:102:汚れたボロ服
 E:& Filthy Rag~
@@ -1023,6 +1229,10 @@ I:36:1:0
 W:0:0:20:1
 A:0/1
 P:1:0d0:0:0:-1
+D:$This tattered rag appears to once have been a robe, but has been patched 
+D:$and re-patched so many times that you can't be sure.
+D:このぼろきれは元々はローブだった物のようだが、
+D:あまりにも継ぎはぎだらけでよく判別できない。
 
 N:103:軟革よろい
 E:Soft Leather Armour~
@@ -1031,6 +1241,8 @@ I:36:4:0
 W:3:0:80:18
 A:3/1
 P:4:0d0:0:0:0
+D:$A cuirass of pliable leather with a thicker leather jack.
+D:しなやかな革の胴当てに薄い革ジャケットが付いた鎧だ。
 
 N:104:鋲付軟革よろい
 E:Soft Studded Leather~
@@ -1039,6 +1251,8 @@ I:36:5:0
 W:3:0:90:35
 A:3/1
 P:5:1d1:0:0:0
+D:$A cuirass of pliable leather studded with metal rivets.
+D:多数の金属製の鋲で補強されたしなやかな革の胴当てだ。
 
 N:105:硬革よろい
 E:Hard Leather Armour~
@@ -1047,6 +1261,8 @@ I:36:6:0
 W:5:0:100:150
 A:5/1
 P:6:1d1:-1:0:0
+D:$A boiled leather cuirass and shoulder plates.
+D:煮固めた革製の胴当てと肩当てが付いた鎧だ。
 
 N:106:鋲付硬革よろい
 E:Hard Studded Leather~
@@ -1055,6 +1271,9 @@ I:36:7:0
 W:10:0:110:200
 A:10/1
 P:7:1d2:-1:0:0
+D:$A strong leather breastplate and shoulder guards over a sleeved shirt 
+D:$of cured leather covered with iron studs.
+D:多数の金属製の鋲で補強した革製のシャツに煮固めた革製の胴当てと肩当てが付いた鎧だ。
 
 N:107:革製スケイル・メイル
 E:Leather Scale Mail~
@@ -1063,6 +1282,9 @@ I:36:11:0
 W:15:0:140:450
 A:15/1
 P:11:1d1:-1:0:0
+D:$A tunic and skirt sewn with thick, overlapping scales of hardened 
+D:$leather.
+D:革製のシャツに煮固めた革製の鱗のような形の部品を多数縫い付けてある鎧だ。
 
 N:108:金属製スケイル・メイル
 E:Metal Scale Mail~
@@ -1071,6 +1293,9 @@ I:37:3:0
 W:25:0:250:550
 A:25/1
 P:13:1d4:-2:0:0
+D:$A heavy shirt of overlapping steel scales backed by leather, with 
+D:$matching skirt and sleeves.
+D:革製の袖付きシャツに鋼鉄製の鱗のような形の部品を多数縫い付けてある鎧だ。
 
 N:109:鎖かたびら
 E:Chain Mail~
@@ -1079,6 +1304,10 @@ I:37:4:0
 W:25:0:220:750
 A:25/1
 P:14:1d4:-2:0:0
+D:$A sleeved hauberk of interlocking steel rings, well padded with leather.  
+D:$Chain mail takes skill to make, but offers good protection and relatively 
+D:$low weight.
+#D:未訳
 
 N:110:錆びた鎖かたびら
 E:Rusty Chain Mail~
@@ -1087,6 +1316,9 @@ I:37:1:0
 W:25:0:200:550
 A:25/1
 P:14:1d4:-5:0:-8
+D:$Each link of this suit is brittle with rust, and the corroded rings 
+D:$are stiff and weakened.
+#D:未訳
 
 N:111:重鎖かたびら
 E:Augmented Chain Mail~
@@ -1095,6 +1327,10 @@ I:37:6:0
 W:30:0:270:900
 A:30/1
 P:16:1d4:-2:0:0
+D:$A hauberk, leggings, and sleeves of interlocking steel rings, 
+D:$strategically reinforced at vital locations with a second layer 
+D:$of chain, all over a layer of heavy padding.
+#D:未訳
 
 N:112:強化鎖かたびら
 E:Bar Chain Mail~
@@ -1119,6 +1355,8 @@ I:37:12:0
 W:45:0:260:1200
 A:45/1
 P:22:1d6:-3:0:0
+D:$A steel corselet and vambraces over a skirt and leggings of chain.
+#D:未訳
 
 N:115:金属製ラメラー・アーマー
 E:Metal Lamellar Armour~
@@ -1135,6 +1373,9 @@ I:37:15:0
 W:45:0:380:1350
 A:45/1
 P:25:2d4:-3:0:0
+D:$A full suit of carefully fitted plates, with hinged joints backed 
+D:$by chain, and light padding underneath.
+#D:未訳
 
 N:117:強化プレート・アーマー
 E:Ribbed Plate Armour~
@@ -1152,6 +1393,9 @@ W:75:0:420:20000
 A:75/8
 P:40:2d4:-4:0:0
 F:IGNORE_ACID
+D:$Adamantite, hard as diamonds, forms this exquisite suit; nothing else 
+D:$in Middle Earth gives as much protection.
+#D:未訳
 
 N:119:ミスリル製プレート・メイル
 E:Mithril Plate Mail~
@@ -1161,6 +1405,9 @@ W:60:0:300:15000
 A:60/4
 P:35:2d4:-3:0:0
 F:IGNORE_ACID
+D:$A shimmering suit of true-silver, forged long ago by dwarven smiths of 
+D:$legend.  It gleams with purest white as you gaze upon it.
+#D:未訳
 
 N:120:ミスリル製鎖かたびら
 E:Mithril Chain Mail~
@@ -1170,6 +1417,9 @@ W:55:0:150:7000
 A:55/4
 P:28:1d4:-1:0:0
 F:IGNORE_ACID
+D:$Rare and wondrous is chain mail made of true-silver, for it offers more 
+D:$protection for the weight than any other armour.
+#D:未訳
 
 N:121:二重鎖かたびら
 E:Double Chain Mail~
@@ -1190,6 +1440,9 @@ W:70:0:100:10000
 A:70/8
 P:10:1d1:0:0:10
 F:IGNORE_ACID | REFLECT
+#D:$A shield of purest white, made of mithril, engraved with runes to keep 
+#D:$all hurt and harm from you.
+#D:未訳
 
 
 ### The Cloaks ###
@@ -1201,6 +1454,8 @@ I:35:1:0
 W:1:0:10:3
 A:1/1:20/1
 P:1:0d0:0:0:0
+D:$A traveller's sturdy outer garment.
+#D:未訳
 
 N:124:影のクローク
 E:& Shadow Cloak~
@@ -1210,6 +1465,8 @@ W:60:0:5:7500
 A:75/5
 P:6:0d0:0:0:4
 F:RES_DARK | RES_LITE
+D:$A midnight-hued cloak that wreathes the wearer in folds of shadow.
+#D:未訳
 
 
 ### The Gloves ###
@@ -1221,6 +1478,8 @@ I:31:1:0
 W:1:0:5:3
 A:1/1
 P:1:0d0:0:0:0
+D:$Leather hand protection, with an open palm for gripping weapons.
+#D:未訳
 
 N:126:ガントレット
 E:& Set~ of Gauntlets
@@ -1229,6 +1488,8 @@ I:31:2:0
 W:10:0:25:35
 A:10/1
 P:2:1d1:0:0:0
+D:$A set of gloves that completely covers the hand and wrist in steel plating.
+#D:未訳
 
 N:127:セスタス
 E:& Set~ of Cesti
@@ -1237,6 +1498,8 @@ I:31:5:0
 W:50:0:40:100
 A:50/1
 P:5:1d1:0:0:0
+D:$A massive set of hand sheathings, bound with steel and thrice-cured leather.
+#D:未訳
 
 
 ### The shields ###
@@ -1248,6 +1511,7 @@ I:34:2:0
 W:3:0:50:15
 A:3/1
 P:3:1d1:0:0:0
+D:$A circular shield of cured animal hide stretched over layered wooden strips.
 
 N:129:革製ラージ・シールド
 E:& Large Leather Shield~
@@ -1256,6 +1520,9 @@ I:34:4:0
 W:15:0:100:100
 A:15/1
 P:6:1d2:0:0:0
+D:$A large oval shield made of layered wooden strips with a thick leather 
+D:$covering.
+#D:未訳
 
 N:130:金属製スモール・シールド
 E:& Small Metal Shield~
@@ -1264,6 +1531,8 @@ I:34:3:0
 W:10:0:65:40
 A:10/1
 P:5:1d2:0:0:0
+D:$A round shield of wood reinforced with metal rims and central disk.
+#D:未訳
 
 N:131:金属製ラージ・シールド
 E:& Large Metal Shield~
@@ -1272,6 +1541,9 @@ I:34:5:0
 W:30:0:120:200
 A:30/1
 P:8:1d3:0:0:0
+D:$An oval shield of wood covered by leather and rimmed with metal.  A large 
+D:$iron shield boss offers excellent hand protection.
+#D:未訳
 
 
 ##### Rings #####
@@ -3929,6 +4201,8 @@ A:60/8
 P:30:2d4:-2:0:10
 F:RES_ACID |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+D:$A suit of utterly black scales, against which no metal or wood can rest.
+#D:未訳
 
 N:401:ブルードラゴン・スケイルメイル
 E:Blue Dragon Scale Mail~
@@ -3939,6 +4213,9 @@ A:40/8
 P:30:2d4:-2:0:10
 F:RES_ELEC |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+D:$A suit of scales as blue as sapphires, emitting eerie sparks and flashes as 
+D:$you move about in it.
+#D:未訳
 
 N:402:ホワイトドラゴン・スケイルメイル
 E:White Dragon Scale Mail~
@@ -3949,6 +4226,9 @@ A:50/8
 P:30:2d4:-2:0:10
 F:RES_COLD |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+D:$A suit of scales, coldly gleaming in frosty white.  A shiver runs down 
+D:$through your spine even as you look at it.
+#D:未訳
 
 N:403:レッドドラゴン・スケイルメイル
 E:Red Dragon Scale Mail~
@@ -3959,6 +4239,9 @@ A:80/8
 P:30:2d4:-2:0:10
 F:RES_FIRE |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+D:$A suit of scales, with all the reds of every fire ever lit.  The scar 
+D:$tissue from an old burn aches as you put this armour on.
+#D:未訳
 
 N:404:グリーンドラゴン・スケイルメイル
 E:Green Dragon Scale Mail~
@@ -3969,6 +4252,9 @@ A:70/8
 P:30:2d4:-2:0:10
 F:RES_POIS |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+D:$A suit of scales, glistening in sickly green, out from which falls the 
+D:$skeleton of a rat who touched it and died in agony.
+#D:未訳
 
 N:405:万色ドラゴン・スケイルメイル
 E:Multi-Hued Dragon Scale Mail~
@@ -3979,6 +4265,9 @@ A:100/16
 P:30:2d4:-2:0:10
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_POIS
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+D:$A suit of scales that throbs with angry energies; it takes all your energy 
+D:$to master the Elements fighting an endless war trapped inside.
+#D:未訳
 
 #JZ#
 N:406:ドラゴンモドキ・スケイルメイル
@@ -4000,6 +4289,9 @@ A:80/16
 P:30:2d4:-2:0:10
 F:RES_SOUND | RES_SHARDS |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+D:$A suit of scales in stern blue and silver.  You feel the slightest tremor 
+D:$as you touch it, like massed trumpets heard and cyclones felt from afar.
+#D:未訳
 
 N:408:ブロンズドラゴン・スケイルメイル
 E:Bronze Dragon Scale Mail~
@@ -4010,6 +4302,10 @@ A:55/8
 P:30:2d4:-2:0:10
 F:RES_CONF |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+D:$A suit of scales, gleaming in rich engraved bronze.  The more you look at 
+D:$the the maze of whorls and lines that close inspection reveal on its 
+D:$surface, the less sense you are able to make of them.
+#D:未訳
 
 N:409:ゴールドドラゴン・スケイルメイル
 E:Gold Dragon Scale Mail~
@@ -4020,6 +4316,10 @@ A:65/8
 P:30:2d4:-2:0:10
 F:RES_SOUND |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+D:$A suit of scales in mirror-like gold.  You hear nothing unusual as you 
+D:$wear this armour, yet your ears ache as though in the midst of a 
+D:$cacophony.
+#D:未訳
 
 N:410:カオスドラゴン・スケイルメイル
 E:Chaos Dragon Scale Mail~
@@ -4030,6 +4330,9 @@ A:75/16
 P:30:2d4:-2:0:10
 F:RES_CHAOS | RES_DISEN |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+D:$A suit of scales.  Every shape, in every color imaginable, riot and 
+D:$contend upon its surface as you stare in fascination.
+#D:未訳
 
 N:411:バランスドラゴン・スケイルメイル
 E:Balance Dragon Scale Mail~
@@ -4040,6 +4343,10 @@ A:90/16
 P:30:2d4:-2:0:10
 F:RES_CHAOS | RES_DISEN | RES_SOUND | RES_SHARDS |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+D:$A suit of scales.  Featureless grey to casual inspection, yet a closer 
+D:$look reveals patterns within patterns of iridescence that throb with 
+D:$leashed energies bound as though by chains of adamant.
+#D:未訳
 
 N:412:パワードラゴン・スケイルメイル
 E:Power Dragon Scale Mail~
@@ -4052,6 +4359,10 @@ F:RES_ACID | RES_FIRE | RES_COLD | RES_ELEC | RES_POIS |
 F:RES_NETHER | RES_NEXUS | RES_CHAOS | RES_LITE | RES_DARK |
 F:RES_SHARDS | RES_SOUND | RES_DISEN | RES_CONF |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+D:$A suit with scales of every color, surrounded in a nimbus of perfectly 
+D:$untramelled yet inextricably intermingled and utterly mastered powers 
+D:$elemental and ethereal.
+#D:未訳
 
 ## PDSM has been restored to (almost) its former glory in Zangband
 
@@ -4064,6 +4375,9 @@ W:60:0:50:10000
 A:60/5
 P:8:1d3:0:0:10
 F:IGNORE_ACID | IGNORE_FIRE | IGNORE_ELEC | IGNORE_COLD
+D:$A dragon-winged great helm, glowing in all the colors of the rainbow.  
+D:$It grants resistance to the elements.
+#D:未訳
 
 #JZ#
 N:414:ドラゴン・シールド
@@ -5541,6 +5855,9 @@ W:50:0:0:2500
 A:70/4
 P:0:0d0:0:0:10
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD 
+D:$This unearthly, completely transparent body mantle folds and drapes in 
+D:$iridescent patterns around you.  It weighs absolutely nothing.
+#D:未訳
 
 N:612:鏡
 E:& Mirror~

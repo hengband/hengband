@@ -598,8 +598,14 @@ msg_print("生者の食物はあなたにとってほとんど栄養にならない。");
 
 		set_food(p_ptr->food + ((o_ptr->pval) / 20));
 	}
+	else if (o_ptr->tval == TV_FOOD && o_ptr->sval == SV_FOOD_WAYBREAD)
+	{
+		/* Waybread is always fully satisfying. */
+		set_food(MAX(p_ptr->food, PY_FOOD_MAX - 1));
+	}
 	else
 	{
+		/* Food can feed the player */
 		(void)set_food(p_ptr->food + o_ptr->pval);
 	}
 
@@ -817,7 +823,17 @@ static void do_cmd_quaff_potion_aux(int item)
 			msg_print("The potion makes you vomit!");
 #endif
 
-			(void)set_food(PY_FOOD_STARVE - 1);
+			if (prace_is_(RACE_GOLEM) ||
+			    prace_is_(RACE_ZOMBIE) ||
+			    prace_is_(RACE_DEMON) ||
+			    prace_is_(RACE_ANDROID) ||
+			    prace_is_(RACE_SPECTRE) ||
+			    (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING))
+			{
+				/* Only living creatures get thirsty */
+				(void)set_food(PY_FOOD_STARVE - 1);
+			}
+
 			(void)set_poisoned(0);
 			(void)set_paralyzed(p_ptr->paralyzed + 4);
 			ident = TRUE;

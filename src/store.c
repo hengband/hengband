@@ -983,6 +983,7 @@ static void mass_produce(object_type *o_ptr)
 		{
 			if (cost <= 5L) size += damroll(3, 5);
 			if (cost <= 20L) size += damroll(3, 5);
+			if (cost <= 50L) size += damroll(2, 2);
 			break;
 		}
 

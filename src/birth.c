@@ -4011,6 +4011,9 @@ void player_outfit(void)
 
 		(void)inven_carry(q_ptr);
 	}
+
+	/* Hack -- make aware of the water */
+	k_info[lookup_kind(TV_POTION, SV_POTION_WATER)].aware = TRUE;
 }
 
 

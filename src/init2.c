@@ -884,8 +884,8 @@ static byte store_table[MAX_STORES][STORE_CHOICES][2] =
 		{ TV_LITE, SV_LITE_LANTERN },
 		{ TV_LITE, SV_LITE_LANTERN },
 
-		{ TV_FLASK, 0 },
-		{ TV_FLASK, 0 },
+		{ TV_FOOD, SV_FOOD_WAYBREAD },
+		{ TV_FOOD, SV_FOOD_WAYBREAD },
 		{ TV_CAPTURE, 0 },
 		{ TV_FIGURINE, 0 },
 
