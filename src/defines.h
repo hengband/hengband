@@ -4988,14 +4988,14 @@ extern int PlayerUID;
 #define DF1_NO_DOORS            0x00000020L
 #define DF1_WATER_RIVER         0x00000040L
 #define DF1_LAVA_RIVER          0x00000080L
-#define DF1_WATER_RIVERS        0x00000100L
-#define DF1_LAVA_RIVERS         0x00000200L
+#define DF1_XXX08               0x00000100L
+#define DF1_XXX09               0x00000200L
 #define DF1_CAVE                0x00000400L
 #define DF1_CAVERN              0x00000800L
-#define DF1_NO_UP               0x00001000L
-#define DF1_HOT                 0x00002000L
-#define DF1_COLD                0x00004000L
-#define DF1_NO_DOWN             0x00008000L
+#define DF1_XXX12               0x00001000L
+#define DF1_XXX13               0x00002000L
+#define DF1_XXX14               0x00004000L
+#define DF1_XXX15               0x00008000L
 #define DF1_FORGET              0x00010000L
 #define DF1_LAKE_WATER          0x00020000L
 #define DF1_LAKE_LAVA           0x00040000L
@@ -5004,11 +5004,14 @@ extern int PlayerUID;
 #define DF1_NO_VAULT            0x00200000L
 #define DF1_ARENA               0x00400000L
 #define DF1_DESTROY             0x00800000L
+#define DF1_XXX24               0x01000000L
 #define DF1_NO_CAVE             0x02000000L
 #define DF1_NO_MAGIC            0x04000000L
 #define DF1_NO_MELEE            0x08000000L
 #define DF1_CHAMELEON           0x10000000L
 #define DF1_DARKNESS            0x20000000L
+#define DF1_XXX30               0x40000000L
+#define DF1_XXX31               0x80000000L
 
 #define DF1_LAKE_MASK (DF1_LAKE_WATER | DF1_LAKE_LAVA | DF1_LAKE_RUBBLE | DF1_LAKE_TREE)
 

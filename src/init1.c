@@ -674,14 +674,14 @@ static cptr d_info_flags1[] =
 	"NO_DOORS",
 	"WATER_RIVER",
 	"LAVA_RIVER",
-	"WATER_RIVERS",
-	"LAVA_RIVERS",
+	"XXX",
+	"XXX",
 	"CAVE",
 	"CAVERN",
-	"NO_UP",
-	"HOT",
-	"COLD",
-	"NO_DOWN",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
 	"FORGET",
 	"LAKE_WATER",
 	"LAKE_LAVA",
@@ -690,14 +690,14 @@ static cptr d_info_flags1[] =
 	"NO_VAULT",
 	"ARENA",
 	"DESTROY",
-	"XXX1",
+	"XXX",
 	"NO_CAVE",
 	"NO_MAGIC",
 	"NO_MELEE",
 	"CHAMELEON",
 	"DARKNESS",
-	"XXX1",
-	"XXX1"
+	"XXX",
+	"XXX"
 };
 
 
