@@ -2473,7 +2473,7 @@ info[i++] = "それは二刀流での命中率を向上させる。";
 
 	}
 
-	if (o_ptr->name2 == EGO_RING_WIZARD)
+	if (have_flag(flgs, TR_EASY_SPELL))
 	{
 #ifdef JP
 info[i++] = "それは魔法の難易度を下げる。";

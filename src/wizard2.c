@@ -579,10 +579,10 @@ static void wiz_display_item(object_type *o_ptr)
 
 	prt("+------------FLAGS2------------+", 17, j);
 	prt("SUST....IMMUN.RESIST............", 18, j);
-	prt("      r aefctrpsaefcpfldbc sn   ", 19, j);
-	prt("siwdcci clioheatcliooeialoshtncd", 20, j);
-	prt("tnieohd ierlrfraierliatrnnnrhehi", 21, j);
-	prt("rtsxnae.dcedwlatdcedsrekdfddrxss", 22, j);
+	prt("      reaefctrpsaefcpfldbc sn   ", 19, j);
+	prt("siwdcciaclioheatcliooeialoshtncd", 20, j);
+	prt("tnieohdsierlrfraierliatrnnnrhehi", 21, j);
+	prt("rtsxnaeydcedwlatdcedsrekdfddrxss", 22, j);
 	prt_binary(flgs[1], 23, j);
 
 	prt("+------------FLAGS3------------+", 10, j+32);

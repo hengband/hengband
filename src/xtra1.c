@@ -3971,7 +3971,7 @@ void calc_bonuses(void)
 		if (o_ptr->name2 == EGO_2WEAPON) easy_2weapon = TRUE;
 		if (o_ptr->name2 == EGO_RING_RES_TIME) p_ptr->resist_time = TRUE;
 		if (o_ptr->name2 == EGO_RING_THROW) p_ptr->mighty_throw = TRUE;
-		if (o_ptr->name2 == EGO_RING_WIZARD) p_ptr->easy_spell = TRUE;
+		if (have_flag(flgs, TR_EASY_SPELL)) p_ptr->easy_spell = TRUE;
 		if (o_ptr->name2 == EGO_AMU_FOOL) p_ptr->heavy_spell = TRUE;
 		if (o_ptr->name2 == EGO_AMU_NAIVETY) down_saving = TRUE;
 

@@ -964,7 +964,7 @@ s32b flag_cost(object_type * o_ptr, int plusses)
 	if (have_flag(flgs, TR_SUST_CON)) total += 850;
 	if (have_flag(flgs, TR_SUST_CHR)) total += 250;
 	if (have_flag(flgs, TR_RIDING)) total += 0;
-	if (have_flag(flgs, TR_XXX2)) total += 0;
+	if (have_flag(flgs, TR_EASY_SPELL)) total += 1500;
 	if (have_flag(flgs, TR_THROW)) total += 5000;
 	if (have_flag(flgs, TR_FREE_ACT)) total += 4500;
 	if (have_flag(flgs, TR_HOLD_LIFE)) total += 8500;

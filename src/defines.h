@@ -2995,7 +2995,7 @@
 #define TR_SUST_CON            36
 #define TR_SUST_CHR            37
 #define TR_RIDING              38
-#define TR_XXX2                39     /* Later */
+#define TR_EASY_SPELL          39
 #define TR_IM_ACID             40
 #define TR_IM_ELEC             41
 #define TR_IM_FIRE             42

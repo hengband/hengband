@@ -1201,6 +1201,7 @@ E:and Wizardry
 X:27:10
 W:30:0:0:1500
 C:0:0:0:0
+F:EASY_SPELL
 
 N:180:µÊ∂ÀÃµ≈®∂‰≤œ∫«∂Ø§Œ
 E:of the Mightiest in the Galaxy
@@ -1438,7 +1439,7 @@ E:of High Rank
 X:29:15
 W:0:0:0:10000
 C:0:0:5:5
-F:RES_BLIND | RES_CONF | WARNING
+F:RES_BLIND | RES_CONF | WARNING | EASY_SPELL
 
 N:236:¥∂√Œ§Œ
 E:and Detection
