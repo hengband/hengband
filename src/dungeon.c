@@ -2859,23 +2859,32 @@ static void process_world_aux_curse(void)
 		{
 			char o_name[MAX_NLEN];
 			object_type *o_ptr;
-			int i;
+			int i, i_keep = 0, count = 0;
 
 			/* Scan the equipment with random teleport ability */
 			for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 			{
 				u32b flgs[TR_FLAG_SIZE];
 				o_ptr = &inventory[i];
-				
+
 				/* Skip non-objects */
 				if (!o_ptr->k_idx) continue;
-				
+
 				/* Extract the item flags */
 				object_flags(o_ptr, flgs);
-				
-				if (have_flag(flgs, TR_TELEPORT)) break;
+
+				if (have_flag(flgs, TR_TELEPORT))
+				{
+					/* {.} will stop random teleportation. */
+					if (!o_ptr->inscription || !my_strchr(quark_str(o_ptr->inscription), '.'))
+					{
+						count++;
+						if (one_in_(count)) i_keep = i;
+					}
+				}
 			}
 
+			o_ptr = &inventory[i_keep];
 			object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 #ifdef JP
