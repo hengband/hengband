@@ -3050,7 +3050,7 @@ cptr name = "何か奇妙な物";
 		if (c_ptr->m_idx)
 		{
 			monster_type *m_ptr = &m_list[c_ptr->m_idx];
-			monster_race *r_ptr = &r_info[m_ptr->r_idx];
+			monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
 
 			/* Visible */
 			if (m_ptr->ml)
@@ -3153,7 +3153,7 @@ attitude = " ";
 	char acount[10];
 	u32b tmp_h,tmp_l;
 	int bit,result;
-	u32b exp_mon= (r_ptr->mexp)*(r_ptr->level);
+	u32b exp_mon= (ap_r_ptr->mexp)*(ap_r_ptr->level);
 	u32b exp_mon_h= exp_mon / (p_ptr->max_plv+2);
 	u32b exp_mon_l= ((exp_mon % (p_ptr->max_plv+2))*0x10000/(p_ptr->max_plv+2))&0xFFFF;
 	
@@ -3163,7 +3163,7 @@ attitude = " ";
 	M_INT_SUB(exp_adv_h, exp_adv_l, p_ptr->exp, p_ptr->exp_frac);
 	if ((p_ptr->lev>=PY_MAX_LEVEL) || (p_ptr->prace == RACE_ANDROID))
 		sprintf(acount,"[**]");
-	else if (!r_ptr->r_tkills || (m_ptr->mflag2 & MFLAG_KAGE))
+	else if (!ap_r_ptr->r_tkills || (m_ptr->mflag2 & MFLAG_KAGE))
 		sprintf(acount,"[??]");
 	else if (M_INT_GREATER(exp_mon_h, exp_mon_l, exp_adv_h, exp_adv_l))
 		sprintf(acount,"[001]");
@@ -3239,15 +3239,15 @@ s1 = "それは";
 
 				/* Hack -- take account of gender */
 #ifdef JP
-if (r_ptr->flags1 & (RF1_FEMALE)) s1 = "彼女は";
+if (ap_r_ptr->flags1 & (RF1_FEMALE)) s1 = "彼女は";
 #else
-				if (r_ptr->flags1 & (RF1_FEMALE)) s1 = "She is ";
+				if (ap_r_ptr->flags1 & (RF1_FEMALE)) s1 = "She is ";
 #endif
 
 #ifdef JP
-else if (r_ptr->flags1 & (RF1_MALE)) s1 = "彼は";
+else if (ap_r_ptr->flags1 & (RF1_MALE)) s1 = "彼は";
 #else
-				else if (r_ptr->flags1 & (RF1_MALE)) s1 = "He is ";
+				else if (ap_r_ptr->flags1 & (RF1_MALE)) s1 = "He is ";
 #endif
 
 
@@ -4410,7 +4410,7 @@ if (!get_com("方向 (ESCで中断)? ", &ch, TRUE)) break;
 	else if (p_ptr->riding)
 	{
 		monster_type *m_ptr = &m_list[p_ptr->riding];
-		monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
+		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		if (m_ptr->confused)
 		{
