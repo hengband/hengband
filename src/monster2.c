@@ -2488,8 +2488,6 @@ void update_monsters(bool full)
 /*
  * Hack -- the index of the summoning monster
  */
-static int summon_specific_who_for_chameleons = 0;
-
 static bool monster_hook_chameleon_lord(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -2575,9 +2573,9 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 					if ((m_ptr->sub_align & SUB_ALIGN_GOOD) && (r_ptr->flags3 & RF3_EVIL)) continue;
 				}
 			}
-			else if (summon_specific_who_for_chameleons > 0)
+			else if (summon_specific_who > 0)
 			{
-				monster_type *sm_ptr = &m_list[summon_specific_who_for_chameleons];
+				monster_type *sm_ptr = &m_list[summon_specific_who];
 
 				if ((sm_ptr->sub_align & SUB_ALIGN_EVIL) && (r_ptr->flags3 & RF3_GOOD)) continue;
 				if ((sm_ptr->sub_align & SUB_ALIGN_GOOD) && (r_ptr->flags3 & RF3_EVIL)) continue;
@@ -2922,9 +2920,6 @@ msg_print("守りのルーンが壊れた！");
 
 	if (r_ptr->flags7 & RF7_CHAMELEON)
 	{
-		if (who > 0) summon_specific_who_for_chameleons = who;
-		else summon_specific_who_for_chameleons = 0;
-
 		choose_new_monster(c_ptr->m_idx, TRUE, 0);
 		r_ptr = &r_info[m_ptr->r_idx];
 		m_ptr->mflag2 |= MFLAG_CHAMELEON;
@@ -2933,8 +2928,6 @@ msg_print("守りのルーンが壊れた！");
 		/* Hack - Set sub_align to neutral when the Chameleon Lord is generated as "GUARDIAN" */
 		if ((r_ptr->flags1 & RF1_UNIQUE) && (who <= 0))
 			m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
-
-		summon_specific_who_for_chameleons = 0;
 	}
 	else if (is_kage)
 	{
