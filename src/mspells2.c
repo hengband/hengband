@@ -139,30 +139,23 @@ static bool breath_direct(int y1, int x1, int y2, int x2, int rad, bool disint_b
 /*
  * Get the actual center point of ball spells (originally from TOband)
  */
-static void get_project_point(int sy, int sx, int *ty, int *tx)
+static void get_project_point(int sy, int sx, int *ty, int *tx, int flg)
 {
-	int  nx, ny;
 	u16b path_g[128];
-	int  path_n, i;
+	int  path_n;
 
-	path_n = project_path(path_g, MAX_RANGE, sy, sx, *ty, *tx, 0L);
+	path_n = project_path(path_g, MAX_RANGE, sy, sx, *ty, *tx, flg);
 
-	/* "Explosion point" starts from start point */
-	*ty = sy;
-	*tx = sx;
-
-	/* Project along the path */
-	for (i = 0; i < path_n; i++)
+	if (path_n)
 	{
-		ny = GRID_Y(path_g[i]);
-		nx = GRID_X(path_g[i]);
-
-		/* Hack -- Balls explode before reaching walls */
-		if (!cave_floor_bold(ny, nx)) break;
-
-		/* Advance */
-		*ty = ny;
-		*tx = nx;
+		/* Use final point of projection */
+		*ty = GRID_Y(path_g[path_n - 1]);
+		*tx = GRID_X(path_g[path_n - 1]);
+	}
+	else
+	{
+		*ty = sy;
+		*tx = sx;
 	}
 }
 
@@ -369,7 +362,7 @@ bool monst_spell_monst(int m_idx)
 		/* Prevent collateral damage */
 		if (!(p_ptr->pet_extra_flags & PF_BALL_SPELL) && (m_idx != p_ptr->riding))
 		{
-			if ((f4 & RF4_BALL_MASK) ||
+			if ((f4 & (RF4_BALL_MASK & ~(RF4_ROCKET))) ||
 			    (f5 & RF5_BALL_MASK) ||
 			    (f6 & RF6_BALL_MASK))
 			{
@@ -377,14 +370,14 @@ bool monst_spell_monst(int m_idx)
 				int real_x = x;
 				int dist;
 
-				get_project_point(m_ptr->fy, m_ptr->fx, &real_y, &real_x);
+				get_project_point(m_ptr->fy, m_ptr->fx, &real_y, &real_x, 0L);
 				dist = distance(real_y, real_x, py, px);
 
 				if (los(real_y, real_x, py, px))
 				{
 					if (dist <= 2)
 					{
-						f4 &= ~(RF4_BALL_MASK);
+						f4 &= ~(RF4_BALL_MASK & ~(RF4_ROCKET));
 						f5 &= ~(RF5_BALL_MASK);
 						f6 &= ~(RF6_BALL_MASK);
 					}
@@ -395,6 +388,16 @@ bool monst_spell_monst(int m_idx)
 						f6 &= ~(RF6_BIG_BALL_MASK);
 					}
 				}
+			}
+
+			if (f4 & RF4_ROCKET)
+			{
+				int real_y = y;
+				int real_x = x;
+
+				get_project_point(m_ptr->fy, m_ptr->fx, &real_y, &real_x, PROJECT_STOP);
+				if (los(real_y, real_x, py, px) && (distance(real_y, real_x, py, px) <= 2))
+					f4 &= ~(RF4_ROCKET);
 			}
 
 			if (((f4 & RF4_BEAM_MASK) ||
