@@ -749,7 +749,7 @@ D:ここには大勢の大群がいる！
 
 #JZ#
 N:39:『グレーター・ヘル=ビースト』
-E:Greater hell-beast
+E:Greater Hell-Beast
 G:U:s
 I:115:15d100:10:100:99
 W:1:6:0:250:0:0
@@ -2576,7 +2576,7 @@ D:混沌に熱狂的に仕え、他の種族から恐れられている。
 
 #JZ#
 N:159:『手負いの熊』
-E:The wounded bear
+E:The Wounded Bear
 G:q:r
 I:110:10d10:10:35:10
 W:9:1:0:25:0:0
@@ -6429,7 +6429,7 @@ D:この小さな闇のドワーフは彼の兄アルベリヒに負けないくらい金に貪欲だ。
 #JZ#アルベリヒの息子であり、グンター王の異父弟にあたります。奸計に
 #JZ#よってジークフリードを殺害し、指環を奪った犯人です。 by 久留さん
 N:383:アルベリヒの息子『ハーゲン』
-E:Hagen, son of Alberich
+E:Hagen, Son of Alberich
 G:h:o
 I:110:82d10:20:80:10
 W:24:2:0:300:0:0
@@ -10150,7 +10150,7 @@ D:「デニス・ホイートリー黒魔術小説傑作選」国書刊行会ほか）
 
 #JZ#
 N:572:『グレーター地獄魔法おばけキノコ=クイルスルグ人間』
-E:The Greater hell magic mushroom were-quylthulg
+E:The Greater Hell Magic Mushroom Were-Quylthulg
 G:Q:s
 I:120:19d99:50:80:50
 W:36:3:0:2500:0:0
@@ -11395,7 +11395,7 @@ D:青白く、右半分は黒い。髪は長くて白い。
 #JZ#
 #JZ#モルガンスターン。明の明星号。ジュリアンが乗っている馬。 by 藤岡さん
 N:629:ジュリアンの乗馬『明の明星』
-E:Morgenstern, Julian's steed
+E:Morgenstern, Julian's Steed
 G:q:W
 I:130:30d100:20:100:50
 W:40:3:0:2000:0:0
@@ -12088,7 +12088,7 @@ D:『ラヴクラフト全集５』、創元推理文庫、pp.67)
 
 #JZ#
 N:660:ブランドの息子『リナルド』
-E:Rinaldo, son of Brand
+E:Rinaldo, Son of Brand
 G:p:w
 I:120:16d100:20:120:40
 W:41:3:0:7000:0:0
@@ -13802,7 +13802,7 @@ D:このモンスターの存在を嫌悪しているように感じる。
 #J0# 一番気に入りましたので、そうしてあります。
 #J0#
 N:728:ストーム・ワイアーム
-E:Great storm wyrm
+E:Great Storm Wyrm
 G:D:b
 I:120:30d100:30:150:80
 W:51:2:0:13000:0:0
@@ -14160,7 +14160,7 @@ D:見ただけでその邪悪さが伝わってくる。
 
 #J0#
 N:741:アイス・ワイアーム
-E:Great ice wyrm
+E:Great Ice Wyrm
 G:D:w
 I:120:30d100:30:170:80
 W:54:2:0:15000:0:0
@@ -14527,7 +14527,7 @@ D:だが、その羽と瞳を見ればそんな思いはどこかに吹き飛んでしまうだろう。
 
 #J0#
 N:756:ヘル・ワイアーム
-E:Great hell wyrm
+E:Great Hell Wyrm
 G:D:r
 I:120:54d100:40:170:40
 W:55:2:0:18000:0:0
@@ -18286,7 +18286,7 @@ D:$It was left here to be used against intruders.
 D:それは侵入者に対して使用するために置かれている。
 
 N:890:ヴェノム・ワイアーム
-E:Great venom wyrm
+E:Great Venom Wyrm
 G:D:g
 I:120:54d100:30:170:80
 W:55:2:0:16000:0:0
@@ -18795,7 +18795,7 @@ D:$of gills.
 D:水中での生活に適応したナーガだ。魚のような尾ヒレとエラを持っている。
 
 N:920:『デモゴルゴン』
-E:The demogorgon
+E:The Demogorgon
 G:U:u
 I:125:65d100:30:140:20
 W:75:2:0:37000:0:0
@@ -18940,7 +18940,7 @@ D:亀のような外見をしているが、火を吐き、凶暴な性格をしている。
 D:彼は常にキノコ王国を征服しようとたくらんでいる。
 
 N:929:巨大サイバーワイアーム天使悪魔リッチ
-E:Greater cyber wyrm angel daemon lich
+E:Greater Cyber Wyrm Angel Daemon Lich
 G:N:W
 I:150:99d99:50:200:1
 W:99:50:0:30000:0:0
@@ -19000,7 +19000,7 @@ D:「！？」「当然、史上最強のエスパーを選んだ！すなわち、超人ロック、君だよ。」
 D:（聖悠紀、超人ロック「赤いサーペント」）
 
 N:931:銀河皇帝『カル・ダームIII世』
-E:Caldarm the third
+E:Caldarm the Third
 G:p:D
 I:130:60d100:100:200:20
 W:79:5:0:32000:0:0
@@ -19070,7 +19070,7 @@ D:帝国には何百年か摂政なんかいないんだがな。」
 D:（聖悠紀、超人ロック「書を守る者」）
 
 N:934:『ルパート将軍』
-E:Rupart the general
+E:Rupart the General
 G:p:r
 I:130:35d100:100:170:0
 W:71:255:0:18000:0:0
@@ -19111,7 +19111,7 @@ D:両脇から角が出ている丈高めの黄金の冠をかぶる。体色は青。牙を持つ。
 D:女神イシターを封印したと伝えられる。
 
 N:936:北斗神拳の使い手『ケンシロウ』
-E:Kenshirou the Fist of The North Star
+E:Kenshirou the Fist of the North Star
 G:p:W
 I:123:60d100:50:170:10
 W:62:2:0:30000:0:0
@@ -19130,7 +19130,7 @@ D:一子相伝とされる北斗神拳の伝承者だ。力が全てを支配すると思われた
 D:時代にあって愛に生き、愛のために戦っている。
 
 N:937:サイバー『レムス』
-E:Lems the cyborg
+E:Lems the Cyborg
 G:g:W
 I:130:50d100:30:160:0
 W:61:3:0:26000:0:0
@@ -19323,7 +19323,7 @@ S:BR_COLD | DISPEL | BR_POIS | BA_COLD | BO_ICEE |
 S:CONF | SCARE | HOLD | S_DEMON
 
 N:947:盗賊『プアー』
-E:Poor, the thief
+E:Poor, the Thief
 G:p:b
 I:105:80d10:20:50:50
 W:25:3:0:500:0:0
@@ -19335,7 +19335,7 @@ F:EVIL | ONLY_ITEM | DROP_1D2 | DROP_60 | DROP_GOOD |
 F:NO_SLEEP | NO_CONF | BASH_DOOR
 
 N:948:盗賊『リッチ』
-E:Rich, the thief
+E:Rich, the Thief
 G:p:b
 I:130:50d10:20:80:50
 W:29:3:0:700:0:0
@@ -19350,7 +19350,7 @@ S:1_IN_2 |
 S:BLINK | TPORT | TRAPS | CONF | BLIND | SLOW | HOLD | FORGET
 
 N:949:勇者『イケタ』
-E:Iketa, the brave
+E:Iketa, the Brave
 G:p:B
 I:130:50d100:50:170:0
 W:70:2:0:30000:0:0
@@ -19559,7 +19559,7 @@ D:可愛らしい純心無垢なスライムモルドだ。
 D:触れて死ね！
 
 N:963:ビルダー帝国帝王『ボ帝ビル』
-E:Boty-Buildeng, the emperor
+E:Boty-Buildeng, the Emperor
 G:P:U
 I:120:12d100:25:130:40
 W:36:2:0:2500:0:0
@@ -19623,7 +19623,7 @@ S:BA_FIRE | HASTE | HOLD | CONF | BLIND
 D:断じてマリオの類似品ではない！(本人主張)。
 
 N:967:ガキ大将『ジャイアン』
-E:Jaian, the boss of the kids
+E:Jaian, the Boss of the Kids
 G:p:o
 I:110:100d10:16:100:20
 W:29:3:0:500:0:0
@@ -19742,7 +19742,7 @@ D:$with it's breath of fire.
 D:ロードスの古代竜の一匹で、その火炎のブレスで全てを焼き尽くす。
 
 N:973:暗黒の島マーモの皇帝『ベルド』
-E:Beld, ruler of Marmo
+E:Beld, Ruler of Marmo
 G:p:r
 I:125:77d30:10:160:50
 W:48:4:0:18500:0:0
@@ -21411,7 +21411,7 @@ D:日本の伝説では、たぬきは人を化かすと伝えられている。
 D:魔法の木の葉を頭に載せて人に化けるのだ。
 
 N:1068:混沌のサマ師『ディオニソス』
-E:Dionysus, The Munchkin of Chaos
+E:Dionysus, the Munchkin of Chaos
 G:G:g
 I:154:10d100:100:162:40
 W:55:7:0:10000:0:0
