@@ -1530,6 +1530,8 @@ errr check_load_init(void)
 #define ENTRY_SOCIAL 41
 #define ENTRY_ALIGN 42
 
+#define ENTRY_EXP_ANDR 43
+
 
 static struct
 {
@@ -1583,6 +1585,7 @@ static struct
 	{29,  5, 21, "体重"},
 	{29,  6, 21, "社会的地位"},
 	{29,  7, 21, "属性"},
+	{29, 14, 21, "強化度"},
 };
 #else
 = {
@@ -1629,6 +1632,7 @@ static struct
 	{29,  5, 21, "Weight"},
 	{29,  6, 21, "Social Class"},
 	{29,  7, 21, "Align"},
+	{29, 14, 21, "Constraction"},
 };
 #endif
 
@@ -1672,6 +1676,7 @@ static void display_player_middle(void)
 	int show_tohit, show_todam;
 	object_type *o_ptr;
 	int tmul = 0;
+        int e;
 
 	if(p_ptr->migite)
 	{
@@ -1858,22 +1863,25 @@ static void display_player_middle(void)
 	display_player_one_line(ENTRY_LEVEL, format("%d", p_ptr->lev), TERM_L_GREEN);
 
 	/* Dump experience */
-	if (p_ptr->prace == RACE_ANDROID)
-		display_player_one_line(ENTRY_CUR_EXP, "*****", TERM_L_GREEN);
-	else if (p_ptr->exp >= p_ptr->max_exp)
-		display_player_one_line(ENTRY_CUR_EXP, format("%ld", p_ptr->exp), TERM_L_GREEN);
+	if (p_ptr->prace == RACE_ANDROID) e = ENTRY_EXP_ANDR;
+        else e = ENTRY_CUR_EXP;
+
+	if (p_ptr->exp >= p_ptr->max_exp)
+		display_player_one_line(e, format("%ld", p_ptr->exp), TERM_L_GREEN);
 	else
-		display_player_one_line(ENTRY_CUR_EXP, format("%ld", p_ptr->exp), TERM_YELLOW);
+		display_player_one_line(e, format("%ld", p_ptr->exp), TERM_YELLOW);
 
 	/* Dump max experience */
 	if (p_ptr->prace == RACE_ANDROID)
-		display_player_one_line(ENTRY_MAX_EXP, "*****", TERM_L_GREEN);
+		/* Nothing */;
 	else
 		display_player_one_line(ENTRY_MAX_EXP, format("%ld", p_ptr->max_exp), TERM_L_GREEN);
 
 	/* Dump exp to advance */
-	if ((p_ptr->lev >= PY_MAX_LEVEL) || (p_ptr->prace == RACE_ANDROID))
+	if (p_ptr->lev >= PY_MAX_LEVEL)
 		display_player_one_line(ENTRY_EXP_TO_ADV, "*****", TERM_L_GREEN);
+        else if (p_ptr->prace == RACE_ANDROID)
+		display_player_one_line(ENTRY_EXP_TO_ADV, format("%ld", (s32b)(player_exp_a[p_ptr->lev - 1] * p_ptr->expfact / 100L)), TERM_L_GREEN);
 	else
 		display_player_one_line(ENTRY_EXP_TO_ADV, format("%ld", (s32b)(player_exp[p_ptr->lev - 1] * p_ptr->expfact / 100L)), TERM_L_GREEN);
 

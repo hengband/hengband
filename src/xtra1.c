@@ -750,9 +750,6 @@ static void prt_exp(void)
 {
 	char out_val[32];
 
-	if ((p_ptr->prace == RACE_ANDROID) && !cheat_xtra)
-		(void)strcpy(out_val, "*******");
-	else
 #ifdef JP
 (void)sprintf(out_val, "%7ld", (long)p_ptr->exp);
 #else
@@ -763,10 +760,12 @@ static void prt_exp(void)
 	if (p_ptr->exp >= p_ptr->max_exp)
 	{
 #ifdef JP
-		put_str("·Ð¸³ ", ROW_EXP, 0);
+                if (p_ptr->prace == RACE_ANDROID) put_str("¶¯²½ ", ROW_EXP, 0);
+		else put_str("·Ð¸³ ", ROW_EXP, 0);
 		c_put_str(TERM_L_GREEN, out_val, ROW_EXP, COL_EXP + 5);
 #else
-		put_str("EXP ", ROW_EXP, 0);
+                if (p_ptr->prace == RACE_ANDROID) put_str("Cst ", ROW_EXP, 0);
+		else put_str("EXP ", ROW_EXP, 0);
 		c_put_str(TERM_L_GREEN, out_val, ROW_EXP, COL_EXP + 4);
 #endif
 
