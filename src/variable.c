@@ -237,7 +237,8 @@ bool disturb_state;			/* Disturn whenever player state changes */
 bool disturb_minor;			/* Disturb whenever boring things happen */
 
 bool alert_hitpoint;		/* Alert user to critical hitpoints */
-bool disturb_trap_detect;       /* Disturb when leaving last trap detect area */
+bool disturb_trap_detect;       /* Disturb when leaving trap detected area */
+bool alert_trap_detect;         /* Alert when leaving trap detected area */
 bool last_words;		/* Get last words upon dying */
 bool over_exert;
 bool small_levels;		/* Allow unusually small dungeon levels */

@@ -1283,10 +1283,7 @@ struct player_type
 	s16b run_py;
 	s16b run_px;
 
-        /* Add some variables for disturb_trap_detect.  Not saved.  -BR- */
-        byte dtrap_x;           /* X location of last trap detection */
-        byte dtrap_y;           /* Y location of last trap detection */
-        byte dtrap_rad;         /* radius of last trap detection */
+	bool dtrap;
 };
 
 

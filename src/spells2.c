@@ -3323,10 +3323,15 @@ bool detect_traps(int range)
 	{
 		for (x = 1; x <= cur_wid - 1; x++)
 		{
-			if (distance(py, px, y, x) > range) continue;
+			int dist = distance(py, px, y, x);
+			if (dist > range) continue;
 
 			/* Access the grid */
 			c_ptr = &cave[y][x];
+
+			/* Mark as detected */
+			if (dist <= range - 1)
+				c_ptr->info |= (CAVE_DETECT);
 
 			/* Detect invisible traps */
 			if (c_ptr->info & CAVE_TRAP)
@@ -3350,12 +3355,9 @@ bool detect_traps(int range)
 		}
 	}
 
-	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] > MUSIC_DETECT)) detect = FALSE;
+	p_ptr->dtrap = TRUE;
 
-	/* Set region for disturbance */
-	p_ptr->dtrap_x=px;
-	p_ptr->dtrap_y=py;
-	p_ptr->dtrap_rad=range;
+	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] > MUSIC_DETECT)) detect = FALSE;
 
 	/* Describe */
 	if (detect)

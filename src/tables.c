@@ -6891,11 +6891,19 @@ option_type option_info[] =
 
 
 #ifdef JP
-	{ &disturb_trap_detect,         FALSE, 4, 0, 27,
-        "disturb_trap_detect",          "トラップ感知範囲外に出たときに行動を中止する" },
+	{ &disturb_trap_detect,         TRUE, 4, 0, 27,
+        "disturb_trap_detect",          "トラップ感知範囲外に出る直前に行動を中止する" },
 #else
-	{ &disturb_trap_detect,         FALSE, 4, 0, 27,
-	"disturb_trap_detect",          "Disturb when leaving last trap detect area"},
+	{ &disturb_trap_detect,         TRUE, 4, 0, 27,
+	"disturb_trap_detect",          "Disturb when leaving trap detected area"},
+#endif
+
+#ifdef JP
+	{ &alert_trap_detect,           FALSE, 4, 0, 25,
+        "alert_trap_detect",            "トラップ感知範囲外に出る直前に警告する" },
+#else
+	{ &alert_trap_detect,           FALSE, 4, 0, 25,
+	"alert_trap_detect",            "Alert when leaving trap detected area"},
 #endif
 
 

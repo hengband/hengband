@@ -2346,17 +2346,22 @@
 #define CAVE_VIEW       0x0020    /* view flag */
 #define CAVE_TEMP       0x0040    /* temp flag */
 #define CAVE_XTRA       0x0080    /* misc flag */
-
 #define CAVE_MNLT	0x0100	/* Illuminated by monster */
+
+#define CAVE_TRAP       0x8000
+
+/* Used only while cave generation */
 #define CAVE_FLOOR      0x0200
 #define CAVE_EXTRA      0x0400
 #define CAVE_INNER      0x0800
 #define CAVE_OUTER      0x1000
 #define CAVE_SOLID      0x2000
 #define CAVE_VAULT      0x4000
-#define CAVE_TRAP       0x8000
-
 #define CAVE_MASK (CAVE_FLOOR | CAVE_EXTRA | CAVE_INNER | CAVE_OUTER | CAVE_SOLID | CAVE_VAULT)
+
+/* Used only after cave generation */
+#define CAVE_DETECT     0x4000    /* trap detected area */
+
 
 /*
  * Bit flags for the "project()" function

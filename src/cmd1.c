@@ -4275,19 +4275,23 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 		}
 
 		/* Warn when leaving trap detected region */
-		if (disturb_trap_detect && p_ptr->dtrap_x && p_ptr->dtrap_y && p_ptr->dtrap_rad)
+		if ((disturb_trap_detect || alert_trap_detect)
+		    && p_ptr->dtrap && !(cave[py][px].info & CAVE_DETECT))
 		{
-			if (distance(py, px, p_ptr->dtrap_y, p_ptr->dtrap_x) >= p_ptr->dtrap_rad) 
+			/* No duplicate warning */
+			p_ptr->dtrap = FALSE;
+
+			if (alert_trap_detect)
 			{
-				p_ptr->dtrap_x=0;
-				p_ptr->dtrap_y=0;
-				p_ptr->dtrap_rad=0;
 #ifdef JP
 				msg_print("* 注意:この先はトラップの感知範囲外です！ *");
 #else
 				msg_print("*Leaving trap detect region!*");
 #endif
+			}
 
+			if (disturb_trap_detect)
+			{
 				disturb(0, 0);
 			}
 		}
@@ -4667,19 +4671,23 @@ static bool run_test(void)
 	max = (prev_dir & 0x01) + 1;
 
 	/* break run when leaving trap detected region */
-	if (disturb_trap_detect && p_ptr->dtrap_x && p_ptr->dtrap_y && p_ptr->dtrap_rad)
+	if ((disturb_trap_detect || alert_trap_detect)
+	    && p_ptr->dtrap && !(cave[py][px].info & CAVE_DETECT))
 	{
-		if (distance(py, px, p_ptr->dtrap_y, p_ptr->dtrap_x) >= p_ptr->dtrap_rad) 
+		/* No duplicate warning */
+		p_ptr->dtrap = FALSE;
+
+		if (alert_trap_detect)
 		{
-			p_ptr->dtrap_x=0;
-			p_ptr->dtrap_y=0;
-			p_ptr->dtrap_rad=0;
 #ifdef JP
 			msg_print("* 注意:この先はトラップの感知範囲外です！ *");
 #else
 			msg_print("*Leaving trap detect region!*");
 #endif
+		}
 
+		if (disturb_trap_detect)
+		{
 			/* Break Run */
 			return(TRUE);
 		}

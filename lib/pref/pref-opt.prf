@@ -85,7 +85,8 @@ Y:disturb_state
 Y:disturb_minor
 X:ring_bell
 Y:alert_hitpoint
-X:disturb_trap_detect
+Y:disturb_trap_detect
+X:alert_trap_detect
 
 ##### Efficiency #####
 

@@ -1591,10 +1591,8 @@ void generate_cave(void)
 	/* The dungeon is not ready */
 	character_dungeon = FALSE;
 
-	/* Reset trap detection region for disturbance */
-	p_ptr->dtrap_x=0;
-	p_ptr->dtrap_y=0;
-	p_ptr->dtrap_rad=0;
+	/* No longer in the trap detecteded region */
+	p_ptr->dtrap = FALSE;
 
 	/* Generate */
 	for (num = 0; TRUE; num++)
