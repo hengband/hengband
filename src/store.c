@@ -1247,6 +1247,15 @@ static int store_check_num(object_type *o_ptr)
 	/* The "home" acts like the player */
 	if ((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM))
 	{
+		bool old_stack_force_notes = stack_force_notes;
+		bool old_stack_force_costs = stack_force_costs;
+
+		if (cur_store_num != STORE_HOME)
+		{
+			stack_force_notes = FALSE;
+			stack_force_costs = FALSE;
+		}
+
 		/* Check all the items */
 		for (i = 0; i < st_ptr->stock_num; i++)
 		{
@@ -1254,7 +1263,22 @@ static int store_check_num(object_type *o_ptr)
 			j_ptr = &st_ptr->stock[i];
 
 			/* Can the new object be combined with the old one? */
-			if (object_similar(j_ptr, o_ptr)) return -1;
+			if (object_similar(j_ptr, o_ptr))
+			{
+				if (cur_store_num != STORE_HOME)
+				{
+					stack_force_notes = old_stack_force_notes;
+					stack_force_costs = old_stack_force_costs;
+				}
+
+				return -1;
+			}
+		}
+
+		if (cur_store_num != STORE_HOME)
+		{
+			stack_force_notes = old_stack_force_notes;
+			stack_force_costs = old_stack_force_costs;
 		}
 	}
 
@@ -1696,7 +1720,14 @@ static int home_carry(object_type *o_ptr)
 	s32b			   value;
 	int 	i;
 	object_type *j_ptr;
+	bool old_stack_force_notes = stack_force_notes;
+	bool old_stack_force_costs = stack_force_costs;
 
+	if (cur_store_num != STORE_HOME)
+	{
+		stack_force_notes = FALSE;
+		stack_force_costs = FALSE;
+	}
 
 	/* Check each existing item (try to combine) */
 	for (slot = 0; slot < st_ptr->stock_num; slot++)
@@ -1710,9 +1741,21 @@ static int home_carry(object_type *o_ptr)
 			/* Save the new number of items */
 			object_absorb(j_ptr, o_ptr);
 
+			if (cur_store_num != STORE_HOME)
+			{
+				stack_force_notes = old_stack_force_notes;
+				stack_force_costs = old_stack_force_costs;
+			}
+
 			/* All done */
 			return (slot);
 		}
+	}
+
+	if (cur_store_num != STORE_HOME)
+	{
+		stack_force_notes = old_stack_force_notes;
+		stack_force_costs = old_stack_force_costs;
 	}
 
 	/* No space? */
