@@ -1103,8 +1103,13 @@ void delayed_auto_destroy(void)
                 delayed_auto_destroy_aux(item);
 
 	/* Scan the pile of objects */
-        for (item = cave[py][px].o_idx; item; item = o_list[item].next_o_idx)
+        item = cave[py][px].o_idx;
+        while (item)
+        {
+                int next = o_list[item].next_o_idx;
                 delayed_auto_destroy_aux(-item);
+                item = next;
+        }
 }
 
 
