@@ -2924,22 +2924,6 @@ msg_print("バーテンはいくらかの食べ物とビールをくれた。");
 
 
 /*
- * Share gold for thieves
- */
-static void share_gold(void)
-{
-	int i = (p_ptr->lev * 2) * 10;
-#ifdef JP
-msg_format("＄%d を手に入れた。", i);
-#else
-	msg_format("You collect %d gold pieces", i);
-#endif
-
-	p_ptr->au += i;
-}
-
-
-/*
  * Display quest information
  */
 static void get_questinfo(int questnum)
@@ -4718,21 +4702,6 @@ msg_print("お金が足りません！");
 		if (do_res_stat(A_DEX)) paid = TRUE;
 		if (do_res_stat(A_CON)) paid = TRUE;
 		if (do_res_stat(A_CHR)) paid = TRUE;
-		break;
-	case BACT_GOLD: /* set timed reward flag */
-		if (!p_ptr->rewards[BACT_GOLD])
-		{
-			share_gold();
-			p_ptr->rewards[BACT_GOLD] = TRUE;
-		}
-		else
-		{
-#ifdef JP
-			msg_print("今日の分け前はすでに支払ったぞ！");
-#else
-			msg_print("You just had your daily allowance!");
-#endif
-		}
 		break;
 	case BACT_ENCHANT_ARROWS:
 		item_tester_hook = item_tester_hook_ammo;

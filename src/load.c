@@ -1706,19 +1706,13 @@ static void rd_extra(void)
 	rd_s16b(&p_ptr->oldpy);
 	if (z_older_than(10, 3, 13) && !dun_level && !p_ptr->inside_arena) {p_ptr->oldpy = 33;p_ptr->oldpx = 131;}
 
+	/* Was p_ptr->rewards[MAX_BACT] */
 	rd_s16b(&tmp16s);
-
-	if (tmp16s > MAX_BACT)
+	for (i = 0; i < tmp16s; i++)
 	{
-#ifdef JP
-note(format("¤ÎÃæ", tmp16s));
-#else
-		note(format("Too many (%d) building rewards!", tmp16s));
-#endif
-
+		s16b tmp16s2;
+		rd_s16b(&tmp16s2);
 	}
-
-	for (i = 0; i < tmp16s; i++) rd_s16b(&p_ptr->rewards[i]);
 
 	rd_s16b(&p_ptr->mhp);
 	rd_s16b(&p_ptr->chp);

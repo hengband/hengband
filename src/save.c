@@ -619,10 +619,8 @@ static void wr_extra(void)
 	wr_s16b(p_ptr->oldpx);
 	wr_s16b(p_ptr->oldpy);
 
-	/* Save builing rewards */
-	wr_s16b(MAX_BACT);
-
-	for (i = 0; i < MAX_BACT; i++) wr_s16b(p_ptr->rewards[i]);
+	/* Was number of p_ptr->rewards[] */
+	wr_s16b(0);
 
 	wr_s16b(p_ptr->mhp);
 	wr_s16b(p_ptr->chp);

@@ -989,8 +989,6 @@ struct player_type
 	s16b inside_quest;		/* Inside quest level */
 	bool inside_battle;		/* Is character inside tougijou? */
 
-	s16b rewards[MAX_BACT];	/* Status of rewards in town */
-
 	s32b wilderness_x;	/* Coordinates in the wilderness */
 	s32b wilderness_y;
 	bool wild_mode;

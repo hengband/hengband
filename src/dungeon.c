@@ -2196,27 +2196,6 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 		}
 	}
 
-	/* Set back the rewards once a day */
-	/* Only used for reward in thief's guild for now */
-	if (!(turn % (TURNS_PER_TICK * TOWN_DAWN)))
-	{
-		int n;
-
-		/* Reset the rewards */
-		for (n = 0; n < MAX_BACT; n++)
-		{
-			p_ptr->rewards[n] = FALSE;
-		}
-
-		/* Message */
-#ifdef JP
-if (cheat_xtra) msg_print("報酬をリセット");
-#else
-		if (cheat_xtra) msg_print("Rewards reset.");
-#endif
-
-	}
-
 
 	/*** Process the monsters ***/
 

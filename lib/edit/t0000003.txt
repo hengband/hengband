@@ -313,8 +313,6 @@ B:9:M:2:0:0:0:0:0:0:0:0:0
 
 B:$10:N:Thieves Guild:Paliro:Yeek
 B:10:N:盗賊のギルド:パリロ:イーク
-B:$10:A:0:get Share of stolen gold:0:0:s:7:2
-B:10:A:0:盗んだ金を山分けする:0:0:s:7:2
 B:$10:A:1:Rest for the night:0:50:r:17:0
 B:10:A:1:一泊する:0:50:r:17:0
 B:$10:A:2:Identify possessions:100:600:i:26:0

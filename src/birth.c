@@ -3338,12 +3338,6 @@ static void player_wipe(void)
 	p_ptr->mane_num = 0;
 	p_ptr->exit_bldg = TRUE; /* only used for arena now -KMW- */
 
-	/* Reset rewards */
-	for (i = 0; i < MAX_BACT; i++)
-	{
-		p_ptr->rewards[i] = 0;
-	}
-
 	/* Bounty */
 	p_ptr->today_mon = 0;
 
