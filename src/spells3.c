@@ -358,6 +358,9 @@ void teleport_player(int dis, bool passive)
 		}
 	}
 
+	/* No valid location! */
+	if (0 == total_candidates) return;
+
 	/* Fix the minimum distance */
 	for (cur_candidates = 0, min = dis; min >= 0; min--)
 	{
