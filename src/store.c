@@ -4343,28 +4343,36 @@ static void store_process_command(void)
 		/* Single line from a pref file */
 		case '"':
 		{
+			p_ptr->town_num = old_town_num;
 			do_cmd_pref();
+			p_ptr->town_num = inner_town_num;
 			break;
 		}
 
 		/* Interact with macros */
 		case '@':
 		{
+			p_ptr->town_num = old_town_num;
 			do_cmd_macros();
+			p_ptr->town_num = inner_town_num;
 			break;
 		}
 
 		/* Interact with visuals */
 		case '%':
 		{
+			p_ptr->town_num = old_town_num;
 			do_cmd_visuals();
+			p_ptr->town_num = inner_town_num;
 			break;
 		}
 
 		/* Interact with colors */
 		case '&':
 		{
+			p_ptr->town_num = old_town_num;
 			do_cmd_colors();
+			p_ptr->town_num = inner_town_num;
 			break;
 		}
 
