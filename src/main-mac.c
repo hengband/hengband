@@ -983,12 +983,13 @@ static void term_data_redraw(term_data *td)
  * Constants
  */
 
-#define kPictID					1001			/* Graf 'pict' resource */
+static int pictID = 1001;						/* 8x8 tiles; 16x16 tiles are 1002 */
 
-#define kGrafWidth				8				/* Graf Size (X) */
-#define kGrafHeight				8				/* Graf Size (Y) */
+static int grafWidth = 8;						/* Always equal to grafHeight */
+static int grafHeight = 8;						/* Either 8 or 16 */
 
-
+static bool arg_newstyle_graphics;
+static bool use_newstyle_graphics;
 
 /*
  * Forward Declare
@@ -1139,12 +1140,12 @@ static OSErr XDDSWCreateGWorldFromPict(
 	term_data *td )
 {
 	OSErr err;
-/*	GWorldPtr saveGWorld;
-	GDHandle saveGDevice;*/
+	GWorldPtr saveGWorld;
+	GDHandle saveGDevice;
 	GWorldPtr tempGWorld;
 	Rect pictRect;
-/*	short depth; */
-/*	GDHandle theGDH; */
+	short depth;
+	GDHandle theGDH;
 	
 	tempGWorld = NULL;
 	
@@ -1152,10 +1153,10 @@ static OSErr XDDSWCreateGWorldFromPict(
 	*pictGWorld = NULL;
 
 	/* Get depth */
-/*	depth = td->pixelDepth; */
+	depth = td->pixelDepth;
 
 	/* Get GDH */
-/*	theGDH = td->theGDH; */
+	theGDH = td->theGDH;
 
 	/* Obtain size rectangle */
 	pictRect.left = 0;
@@ -1176,31 +1177,31 @@ static OSErr XDDSWCreateGWorldFromPict(
 	*pictGWorld = tempGWorld;
 	
 	/* Save GWorld */
-/*	GetGWorld(&saveGWorld, &saveGDevice); */
+	GetGWorld(&saveGWorld, &saveGDevice);
 
 	/* Activate */
-/*	SetGWorld(tempGWorld, nil); */
+	SetGWorld(tempGWorld, nil);
 
-	/* Dump the pict into the GWorld */
-/*	(void)LockPixels(GetGWorldPixMap(tempGWorld)); */
-/*	EraseRect(&pictRect); */
-/*	DrawPicture(pictH, &pictRect); */
-/*	UnlockPixels(GetGWorldPixMap(tempGWorld)); */
+	/* Dump the pict into the GWorld
+	(void)LockPixels(GetGWorldPixMap(tempGWorld));
+	EraseRect(&pictRect);
+//	DrawPicture(pictH, &pictRect);
+	UnlockPixels(GetGWorldPixMap(tempGWorld));
 
 	/* Restore GWorld */
-/*	SetGWorld(saveGWorld, saveGDevice); */
-	
+	SetGWorld(saveGWorld, saveGDevice);
+
 	return (0);
 }
 
 
 static OSErr XDDSWUpDateGWorldFromPict( term_data *td )
 {
-/*	GWorldPtr saveGWorld; */
-/*	GDHandle saveGDevice; */
+	GWorldPtr saveGWorld;
+	GDHandle saveGDevice;
 	Rect pictRect;
-/*	short depth; */
-/*	GDHandle theGDH; */
+	short depth;
+	GDHandle theGDH;
 	
 	GWorldFlags	errflag;
 	
@@ -1209,10 +1210,10 @@ static OSErr XDDSWUpDateGWorldFromPict( term_data *td )
 	if( td->bufferPort == NULL )
 		return;
 	/* Get depth */
-/*	depth = td->pixelDepth; */
+	depth = td->pixelDepth;
 
 	/* Get GDH */
-/*	theGDH = td->theGDH; */
+	theGDH = td->theGDH;
 	
 	/* Obtain size rectangle */
 	pictRect.top = 0;
@@ -1222,7 +1223,7 @@ static OSErr XDDSWUpDateGWorldFromPict( term_data *td )
 	
 	XDDSWUnlockFrame(td);
 	
-	errflag = UpdateGWorld( &td->bufferPort, 0, &pictRect, 0, 0, 0);
+	errflag = UpdateGWorld( &td->bufferPort, depth, &pictRect, 0, 0, 0);
 	XDDSWLockFrame(td);
 	if( errflag & gwFlagErr ){
 		//SysBeep(0);
@@ -1263,7 +1264,7 @@ static errr globe_init(void)
 
 
 	/* Get the pict resource */
-	newPictH = GetPicture(kPictID);
+	newPictH = GetPicture(pictID);
 
 	/* Analyze result */
 	err = (newPictH ? 0 : -1);
@@ -1513,6 +1514,32 @@ static errr Term_xtra_mac_react(void)
 		use_sound = arg_sound;
 	}
 
+	
+	/* Handle transparency */
+	if (((td == &data[0]) || (td == &data[6])) && (use_newstyle_graphics != arg_newstyle_graphics))
+	{
+		globe_nuke();
+
+		if (globe_init() != 0)
+		{
+			plog("Cannot initialize graphics!");
+			arg_graphics = FALSE;
+			arg_newstyle_graphics = FALSE;
+		}
+
+		/* Apply request */
+		use_newstyle_graphics = arg_newstyle_graphics;
+
+		/* Apply and Verify */
+		term_data_check_size(td);
+
+		/* Resize the window */
+		term_data_resize(td);
+ 
+		/* Reset visuals */
+		reset_visuals();
+	}
+	
 	/* Handle graphics */
 	if ((td == &data[0]) && (use_graphics != arg_graphics))
 	{
@@ -1892,10 +1919,10 @@ static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp)
 			col = ((byte)c & 0x7F);
 			
 			/* Source rectangle */
-			r1.left = col * kGrafWidth;
-			r1.top = row * kGrafHeight;
-			r1.right = r1.left + kGrafWidth;
-			r1.bottom = r1.top + kGrafHeight;
+			r1.left = col * grafWidth;
+			r1.top = row * grafHeight;
+			r1.right = r1.left + grafWidth;
+			r1.bottom = r1.top + grafHeight;
 
 			/* Hardwire CopyBits */
 			BackColor(whiteColor);
@@ -2186,6 +2213,7 @@ static void save_prefs(void)
 
 	putshort(arg_sound);
 	putshort(arg_graphics);
+	putshort(arg_newstyle_graphics);
 	
 	/* SoundMode */
 	for( i = 0 ; i < 7 ; i++ )
@@ -2256,6 +2284,23 @@ static void load_prefs(void)
 
 	arg_sound = getshort();
 	arg_graphics = getshort();
+	arg_newstyle_graphics = getshort();
+	use_newstyle_graphics = arg_newstyle_graphics;
+	
+	if (use_newstyle_graphics == true)
+	{
+		ANGBAND_GRAF = "new";
+		arg_newstyle_graphics = true;
+		grafWidth = grafHeight = 16;
+		pictID = 1002;
+	}
+	else
+	{
+		ANGBAND_GRAF = "old";
+		arg_newstyle_graphics = false;
+		grafWidth = grafHeight = 8;
+		pictID = 1001;
+	}
 	
 	/* SoundMode */
 	for( i = 0 ; i < 7 ; i++ )
@@ -2269,7 +2314,10 @@ static void load_prefs(void)
 
 	/* Item "arg_graphics" */
 	CheckItem(m, 2, arg_graphics);
-
+	
+	/* Item "arg_newstyle_graphics"*/
+	CheckItem(m, 8, arg_newstyle_graphics);
+	
 	/* Windows */
 	for (i = 0; i < MAX_TERM_DATA; i++)
 	{
@@ -3197,6 +3245,7 @@ static void init_menubar(void)
 	AppendMenu(m, "\parg_wizard");
 	AppendMenu(m, "\p-");
 	AppendMenu(m, "\pサウンド設定...");
+	AppendMenu(m, "\p16X16グラフィック");
 	#else
 	AppendMenu(m, "\parg_sound");
 	AppendMenu(m, "\parg_graphics");
@@ -3204,7 +3253,8 @@ static void init_menubar(void)
 	AppendMenu(m, "\parg_fiddle");
 	AppendMenu(m, "\parg_wizard");
 	AppendMenu(m, "\p-");
-	AppendMenu(m, "\psnd_setting");
+	AppendMenu(m, "\pSound config");
+	AppendMenu(m, "\pAdam Bolt tile");
 	#endif
 
 	/* Make the "TileWidth" menu */
@@ -3488,6 +3538,10 @@ static void setup_menus(void)
 	/* Item "SoundSetting" */
 	EnableItem(m, 7);
 
+	/* Item NewStyle Graphics */
+	EnableItem(m, 8);
+	CheckItem(m, 8, use_newstyle_graphics);
+
 	/* Item "Hack" */
 	/* EnableItem(m, 9); */
 
@@ -3615,9 +3669,9 @@ static void menu(long mc)
 
 				dialog=GetNewDialog(128, 0, (WindowPtr)-1);
 
-			/*	r=dialog->portRect;
+				r=dialog->portRect;
 				center_rect(&r, &qd.screenBits.bounds);
-				MoveWindow(dialog, r.left, r.top, 1);*/
+				MoveWindow(dialog, r.left, r.top, 1);
 				ShowWindow(dialog);
 				ModalDialog(0, &item_hit);
 				DisposeDialog(dialog);		//DisposDialog(dialog);
@@ -3956,6 +4010,26 @@ static void menu(long mc)
 				case 7:
 				{
 					SoundConfigDLog();
+				}
+				case 8:
+				{
+					if (streq(ANGBAND_GRAF, "old"))
+					{
+						ANGBAND_GRAF = "new";
+						arg_newstyle_graphics = true;
+						grafWidth = grafHeight = 16;
+						pictID = 1002;
+					}
+					else
+					{
+						ANGBAND_GRAF = "old";
+						arg_newstyle_graphics = false;
+						grafWidth = grafHeight = 8;
+						pictID = 1001;
+					}
+
+					/* Hack -- Force redraw */
+					Term_key_push(KTRL('R'));
 				}
 
 			}
@@ -5098,11 +5172,11 @@ BackColor(blackColor);
 
 	/* Note the "system" */
 	ANGBAND_SYS = "mac";
-#if 0
+/* #if 0
 	ANGBAND_GRAF = "new";
 #else
 	ANGBAND_GRAF = "old";
-#endif
+#endif */
 
 	/* Initialize */
 	init_stuff();
