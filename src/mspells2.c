@@ -324,7 +324,8 @@ bool monst_spell_monst(int m_idx)
 	/* Remove unimplemented special moves */
 	if (f6 & RF6_SPECIAL)
 	{
-		if (r_ptr->d_char != 'B') f6 &= ~(RF6_SPECIAL);
+		if ((m_ptr->r_idx != MON_ROLENTO) && (r_ptr->d_char != 'B'))
+			f6 &= ~(RF6_SPECIAL);
 	}
 
 	if (in_no_magic_dungeon && !(r_ptr->flags2 & RF2_STUPID))
@@ -339,6 +340,8 @@ bool monst_spell_monst(int m_idx)
 		f4 &= ~(RF4_SUMMON_MASK);
 		f5 &= ~(RF5_SUMMON_MASK);
 		f6 &= ~(RF6_SUMMON_MASK | RF6_TELE_LEVEL);
+
+		if (m_ptr->r_idx == MON_ROLENTO) f6 &= ~(RF6_SPECIAL);
 	}
 
 	if (p_ptr->inside_battle && !one_in_(3))
@@ -452,7 +455,12 @@ bool monst_spell_monst(int m_idx)
 		/* Special moves restriction */
 		if (f6 & RF6_SPECIAL)
 		{
-			if (r_ptr->d_char == 'B')
+			if (m_ptr->r_idx == MON_ROLENTO)
+			{
+				if ((p_ptr->pet_extra_flags & (PF_ATTACK_SPELL | PF_SUMMON_SPELL)) != (PF_ATTACK_SPELL | PF_SUMMON_SPELL))
+					f6 &= ~(RF6_SPECIAL);
+			}
+			else if (r_ptr->d_char == 'B')
 			{
 				if ((p_ptr->pet_extra_flags & (PF_ATTACK_SPELL | PF_TELEPORT)) != (PF_ATTACK_SPELL | PF_TELEPORT))
 					f6 &= ~(RF6_SPECIAL);
@@ -493,6 +501,15 @@ bool monst_spell_monst(int m_idx)
 		{
 			/* Remove raise dead spell */
 			f6 &= ~(RF6_RAISE_DEAD);
+		}
+
+		/* Special moves restriction */
+		if (f6 & RF6_SPECIAL)
+		{
+			if ((m_ptr->r_idx == MON_ROLENTO) && !summon_possible(t_ptr->fy, t_ptr->fx))
+			{
+				f6 &= ~(RF6_SPECIAL);
+			}
 		}
 	}
 
@@ -3265,6 +3282,39 @@ bool monst_spell_monst(int m_idx)
 			/* Moved to process_monster(), like multiplication */
 			return FALSE;
 
+		case MON_ROLENTO:
+			if (known)
+			{
+				if (see_either)
+				{
+					disturb(1, 0);
+
+#ifdef JP
+					msg_format("%^sは手榴弾をばらまいた。", m_name);
+#else
+					msg_format("%^s throws some hand grenades.", m_name);
+#endif
+				}
+				else
+				{
+					mon_fight = TRUE;
+				}
+			}
+
+			{
+				int num = 1 + randint1(3);
+				for (k = 0; k < num; k++)
+				{
+					count += summon_named_creature(m_idx, y, x, MON_SHURYUUDAN, p_mode);
+				}
+			}
+
+			if (known && !see_t && count)
+			{
+				mon_fight = TRUE;
+			}
+			break;
+
 		default:
 			if (r_ptr->d_char == 'B')
 			{
@@ -3644,7 +3694,7 @@ bool monst_spell_monst(int m_idx)
 		animate_dead(m_idx, m_ptr->fy, m_ptr->fx);
 		break;
 
-	/* RF6_SUMMON_KIN */
+	/* RF6_S_KIN */
 	case 160+16:
 		if (known)
 		{
@@ -3652,17 +3702,7 @@ bool monst_spell_monst(int m_idx)
 			{
 				disturb(1, 0);
 
-				if (m_ptr->r_idx == MON_ROLENTO)
-				{
-#ifdef JP
-					msg_format("%^sは手榴弾をばらまいた。",
-						   m_name);
-#else
-					msg_format("%^s throws some hand grenades.",
-						   m_name);
-#endif
-				}
-				else if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
+				if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
 				{
 #ifdef JP
 					msg_format("%^sがダンジョンの主を召喚した。", m_name);
@@ -3688,64 +3728,82 @@ bool monst_spell_monst(int m_idx)
 			}
 		}
 
-		if(m_ptr->r_idx == MON_ROLENTO)
+		switch (m_ptr->r_idx)
 		{
-			int num = 1 + randint1(3);
-			for (k = 0; k < num; k++)
+		case MON_MENELDOR:
+		case MON_GWAIHIR:
+		case MON_THORONDOR:
 			{
-				count += summon_named_creature(m_idx, y, x, MON_SHURYUUDAN, p_mode);
+				int num = 4 + randint1(3);
+				for (k = 0; k < num; k++)
+				{
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_EAGLES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | p_mode));
+				}
 			}
-		}
-		else if(m_ptr->r_idx == MON_THORONDOR ||
-			m_ptr->r_idx == MON_GWAIHIR ||
-			m_ptr->r_idx == MON_MENELDOR)
-		{
-			int num = 4 + randint1(3);
-			for (k = 0; k < num; k++)
+			break;
+
+		case MON_BULLGATES:
 			{
-				count += summon_specific(m_idx, y, x, rlev, SUMMON_EAGLES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | p_mode));
+				int num = 2 + randint1(3);
+				for (k = 0; k < num; k++)
+				{
+					count += summon_named_creature(m_idx, y, x, MON_IE, p_mode);
+				}
 			}
-		}
-		else if(m_ptr->r_idx == MON_LOUSY)
-		{
-			int num = 2 + randint1(3);
-			for (k = 0; k < num; k++)
+			break;
+
+		case MON_SERPENT:
+		case MON_ZOMBI_SERPENT:
+			if (r_info[MON_JORMUNGAND].cur_num < r_info[MON_JORMUNGAND].max_num && one_in_(6))
 			{
-				count += summon_specific(m_idx, y, x, rlev, SUMMON_LOUSE, (PM_ALLOW_GROUP | p_mode));
+				if (known && see_t)
+				{
+#ifdef JP
+					msg_print("地面から水が吹き出した！");
+#else
+					msg_print("Water blew off from the ground!");
+#endif
+				}
+				project(t_idx, 8, y, x, 3, GF_WATER_FLOW, PROJECT_GRID | PROJECT_HIDE, -1);
 			}
-		}
-		else if(m_ptr->r_idx == MON_BULLGATES)
-		{
-			int num = 2 + randint1(3);
-			for (k = 0; k < num; k++)
+
 			{
-				count += summon_named_creature(m_idx, y, x, MON_IE, p_mode);
+				int num = 2 + randint1(3);
+				for (k = 0; k < num; k++)
+				{
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_GUARDIANS, (PM_ALLOW_GROUP | p_mode | PM_ALLOW_UNIQUE));
+				}
 			}
-		}
-		else if (m_ptr->r_idx == MON_CALDARM)
-		{
-			int num = randint1(3);
-			for (k = 0; k < num; k++)
+			break;
+
+		case MON_CALDARM:
 			{
-				count += summon_named_creature(m_idx, y, x, MON_LOCKE_CLONE, p_mode);
+				int num = randint1(3);
+				for (k = 0; k < num; k++)
+				{
+					count += summon_named_creature(m_idx, y, x, MON_LOCKE_CLONE, p_mode);
+				}
 			}
-		}
-		else if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
-		{
-			int num = 2 + randint1(3);
-			for (k = 0; k < num; k++)
+			break;
+
+		case MON_LOUSY:
 			{
-				count += summon_specific(m_idx, y, x, rlev, SUMMON_GUARDIANS, (PM_ALLOW_GROUP | p_mode | PM_ALLOW_UNIQUE));
+				int num = 2 + randint1(3);
+				for (k = 0; k < num; k++)
+				{
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_LOUSE, (PM_ALLOW_GROUP | p_mode));
+				}
 			}
-		}
-		else
-		{
+			break;
+
+		default:
 			summon_kin_type = r_ptr->d_char;
 
 			for (k = 0; k < 4; k++)
 			{
 				count += summon_specific(m_idx, y, x, rlev, SUMMON_KIN, (PM_ALLOW_GROUP | p_mode));
 			}
+			break;
 		}
 
 		if (known && !see_t && count)

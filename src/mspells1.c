@@ -1051,16 +1051,17 @@ static int choose_attack_spell(int m_idx, byte spells[], byte num)
 	if (special_num)
 	{
 		bool success = FALSE;
-		switch(m_ptr->r_idx)
+		switch (m_ptr->r_idx)
 		{
 			case MON_OHMU:
-				if (randint0(100) < 50) success = TRUE;
+			case MON_BANOR:
+			case MON_LUPART:
 				break;
 			case MON_BANORLUPART:
 				if (randint0(100) < 70) success = TRUE;
 				break;
-			case MON_BANOR:
-			case MON_LUPART:
+			case MON_ROLENTO:
+				if (randint0(100) < 40) success = TRUE;
 				break;
 			default:
 				if (randint0(100) < 50) success = TRUE;
@@ -1450,6 +1451,8 @@ bool make_attack_spell(int m_idx)
 		f4 &= ~(RF4_SUMMON_MASK);
 		f5 &= ~(RF5_SUMMON_MASK);
 		f6 &= ~(RF6_SUMMON_MASK | RF6_TELE_LEVEL);
+
+		if (m_ptr->r_idx == MON_ROLENTO) f6 &= ~(RF6_SPECIAL);
 	}
 
 	/* No spells left */
@@ -1486,6 +1489,15 @@ bool make_attack_spell(int m_idx)
 		{
 			/* Remove raise dead spell */
 			f6 &= ~(RF6_RAISE_DEAD);
+		}
+
+		/* Special moves restriction */
+		if (f6 & RF6_SPECIAL)
+		{
+			if ((m_ptr->r_idx == MON_ROLENTO) && !summon_possible(y, x))
+			{
+				f6 &= ~(RF6_SPECIAL);
+			}
 		}
 
 		/* No spells left */
@@ -3485,7 +3497,7 @@ msg_format("%^sがテレポートした。", m_name);
 			int k;
 
 			disturb(1, 0);
-			switch(m_ptr->r_idx)
+			switch (m_ptr->r_idx)
 			{
 			case MON_OHMU:
 				/* Moved to process_monster(), like multiplication */
@@ -3515,8 +3527,9 @@ msg_format("%^sがテレポートした。", m_name);
 
 					break;
 				}
-				case MON_BANOR:
-				case MON_LUPART:
+
+			case MON_BANOR:
+			case MON_LUPART:
 				{
 					int dummy_hp = 0;
 					int dummy_maxhp = 0;
@@ -3550,6 +3563,30 @@ msg_format("%^sがテレポートした。", m_name);
 
 					break;
 				}
+
+			case MON_ROLENTO:
+#ifdef JP
+				if (blind) msg_format("%^sが何か大量に投げた。", m_name);
+				else msg_format("%^sは手榴弾をばらまいた。", m_name);
+#else
+				if (blind) msg_format("%^s spreads something.", m_name);
+				else msg_format("%^s throws some hand grenades.", m_name);
+#endif
+
+				{
+					int num = 1 + randint1(3);
+
+					for (k = 0; k < num; k++)
+					{
+						count += summon_named_creature(m_idx, y, x, MON_SHURYUUDAN, mode);
+					}
+				}
+#ifdef JP
+				if (blind && count) msg_print("多くのものが間近にばらまかれる音がする。");
+#else
+				if (blind && count) msg_print("You hear many things are scattered nearby.");
+#endif
+				break;
 
 			default:
 				if (r_ptr->d_char == 'B')
@@ -3831,25 +3868,11 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 			break;
 		}
 
-		/* RF6_SUMMON_KIN */
+		/* RF6_S_KIN */
 		case 160+16:
 		{
 			disturb(1, 0);
-			if (m_ptr->r_idx == MON_ROLENTO)
-			{
-#ifdef JP
-				if (blind)
-					msg_format("%^sが何か大量に投げた。", m_name);
-				else 
-					msg_format("%^sは手榴弾をばらまいた。", m_name);
-#else
-				if (blind)
-					msg_format("%^s spreads something.", m_name);
-				else
-					msg_format("%^s throws some hand grenades.", m_name);
-#endif
-			}
-			else if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
+			if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
 			{
 #ifdef JP
 				if (blind)
@@ -3884,84 +3907,86 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 #endif
 			}
 
-			if(m_ptr->r_idx == MON_ROLENTO)
+			switch (m_ptr->r_idx)
 			{
-				int num = 1 + randint1(3);
+			case MON_MENELDOR:
+			case MON_GWAIHIR:
+			case MON_THORONDOR:
+				{
+					int num = 4 + randint1(3);
+					for (k = 0; k < num; k++)
+					{
+						count += summon_specific(m_idx, y, x, rlev, SUMMON_EAGLES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+					}
+				}
+				break;
 
-				for (k = 0; k < num; k++)
+			case MON_BULLGATES:
 				{
-					count += summon_named_creature(m_idx, y, x, MON_SHURYUUDAN, mode);
+					int num = 2 + randint1(3);
+					for (k = 0; k < num; k++)
+					{
+						count += summon_named_creature(m_idx, y, x, MON_IE, mode);
+					}
 				}
-			}
-			else if(m_ptr->r_idx == MON_THORONDOR ||
-				m_ptr->r_idx == MON_GWAIHIR ||
-				m_ptr->r_idx == MON_MENELDOR)
-			{
-				int num = 4 + randint1(3);
-				for (k = 0; k < num; k++)
-				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_EAGLES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
-				}
-			}
-			else if(m_ptr->r_idx == MON_LOUSY)
-			{
-				int num = 2 + randint1(3);
-				for (k = 0; k < num; k++)
-				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_LOUSE, PM_ALLOW_GROUP);
-				}
-			}
-			else if(m_ptr->r_idx == MON_BULLGATES)
-			{
-				int num = 2 + randint1(3);
-				for (k = 0; k < num; k++)
-				{
-					count += summon_named_creature(m_idx, y, x, MON_IE, mode);
-				}
-			}
-			else if (m_ptr->r_idx == MON_CALDARM)
-			{
-				int num = randint1(3);
-				for (k = 0; k < num; k++)
-				{
-					count += summon_named_creature(m_idx, y, x, MON_LOCKE_CLONE, mode);
-				}
-			}
-			else if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
-			{
-				int num = 2 + randint1(3);
+				break;
 
-				if (r_info[MON_JORMUNGAND].cur_num < r_info[MON_JORMUNGAND].max_num && one_in_(6))
+			case MON_SERPENT:
+			case MON_ZOMBI_SERPENT:
 				{
+					int num = 2 + randint1(3);
+
+					if (r_info[MON_JORMUNGAND].cur_num < r_info[MON_JORMUNGAND].max_num && one_in_(6))
+					{
 #ifdef JP
-					msg_print("地面から水が吹き出した！");
+						msg_print("地面から水が吹き出した！");
 #else
-					msg_print("Water blew off from the ground!");
+						msg_print("Water blew off from the ground!");
 #endif
-					fire_ball_hide(GF_WATER_FLOW, 0, 3, 8);
-				}
+						fire_ball_hide(GF_WATER_FLOW, 0, 3, 8);
+					}
 
-				for (k = 0; k < num; k++)
+					for (k = 0; k < num; k++)
+					{
+						count += summon_specific(m_idx, y, x, rlev, SUMMON_GUARDIANS, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+					}
+				}
+				break;
+
+			case MON_CALDARM:
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_GUARDIANS, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+					int num = randint1(3);
+					for (k = 0; k < num; k++)
+					{
+						count += summon_named_creature(m_idx, y, x, MON_LOCKE_CLONE, mode);
+					}
 				}
-			}
-			else
-			{
+				break;
 
+			case MON_LOUSY:
+				{
+					int num = 2 + randint1(3);
+					for (k = 0; k < num; k++)
+					{
+						count += summon_specific(m_idx, y, x, rlev, SUMMON_LOUSE, PM_ALLOW_GROUP);
+					}
+				}
+				break;
+
+			default:
 				summon_kin_type = r_ptr->d_char; /* Big hack */
 
 				for (k = 0; k < 4; k++)
 				{
 					count += summon_specific(m_idx, y, x, rlev, SUMMON_KIN, PM_ALLOW_GROUP);
 				}
+				break;
 			}
 #ifdef JP
-if (blind && count) msg_print("多くのものが間近に現れた音がする。");
+			if (blind && count) msg_print("多くのものが間近に現れた音がする。");
 #else
 			if (blind && count) msg_print("You hear many things appear nearby.");
 #endif
-
 
 			break;
 		}
