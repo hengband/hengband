@@ -990,7 +990,7 @@ C:0:0:0:0
 
 N:146:不朽の眼の
 E:of Immortal Eye
-X:30:0
+X:30:20
 W:0:36:0:4000
 C:0:0:0:0
 F:RES_BLIND | SEE_INVIS
