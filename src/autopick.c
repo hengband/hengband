@@ -191,7 +191,7 @@ cptr autopick_line_from_entry(autopick_type *entry)
 
 	*buf = '\0';
 	if (!(entry->action & DO_DISPLAY)) strcat(buf, "(");
-	if (entry->action & DO_QUERY_AUTOPICK) strcat(buf, "*");
+	if (entry->action & DO_QUERY_AUTOPICK) strcat(buf, ":");
 	if (entry->action & DO_AUTODESTROY) strcat(buf, "!");
 	if (entry->action & DONT_AUTOPICK) strcat(buf, "~");
 
@@ -349,7 +349,7 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
 			act |= DONT_AUTOPICK;
 			str++;
 		}
-		else if ((act & DO_AUTOPICK) && *str == '*')
+		else if ((act & DO_AUTOPICK) && *str == ':')
 		{
 			act &= ~DO_AUTOPICK;
 			act |= DO_QUERY_AUTOPICK;
@@ -3059,7 +3059,7 @@ void do_cmd_edit_autopick(void)
                                 if (lines_list[cy + 1]) cy++;
                                 cx = 0;
 				break;
-			case '*':
+			case ':':
 				if (!autopick_new_entry(entry, lines_list[cy]))
                                 {
                                         if (old_key != key) repeated_clearing = FALSE;
