@@ -4254,7 +4254,7 @@ errr make_character_dump(FILE *fff)
 	store_type  *st_ptr;
 	char		o_name[MAX_NLEN];
 	char		buf[1024];
-
+	int		total;
 
 #ifdef JP
 	fprintf(fff, "  [変愚蛮怒 %d.%d.%d キャラクタ情報]\n\n",
@@ -4391,6 +4391,153 @@ errr make_character_dump(FILE *fff)
 		}
 		if (pet) fprintf(fff, "\n");
 	}
+
+#ifdef JP
+	fprintf(fff, "\n  [クエスト情報]        \n");
+#else
+	fprintf(fff, "\n  [Quest information]        \n");
+#endif
+
+#ifdef JP
+	fprintf(fff, "\n《達成したクエスト》\n");
+#else
+	fprintf(fff, "\n< Completed Quest >\n");
+#endif
+	total = 0;
+	for (i = 1; i < max_quests; i++)
+	{
+		/* No info from "silent" quests */
+		if (quest[i].flags & QUEST_FLAG_SILENT) continue;
+
+		if (quest[i].status == QUEST_STATUS_FINISHED)
+		{
+			int old_quest;
+
+			total++;
+
+			if (i < MIN_RANDOM_QUEST)
+			{
+				/* Set the quest number temporary */
+				old_quest = p_ptr->inside_quest;
+				p_ptr->inside_quest = i;
+
+				/* Get the quest */
+				init_flags = INIT_ASSIGN;
+
+				process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+
+				/* Reset the old quest number */
+				p_ptr->inside_quest = old_quest;
+			}
+
+			if ((i >= MIN_RANDOM_QUEST) && quest[i].r_idx)
+			{
+				/* Print the quest info */
+
+                                if (quest[i].complev == 0)
+                                {
+                                        fprintf(fff, 
+#ifdef JP
+                                                "  %s (%d階) - 不戦勝\n",
+#else
+                                                "  %s (Dungeon level: %d) - (Cancelled)\n",
+#endif
+                                                r_name+r_info[quest[i].r_idx].name,
+                                                quest[i].level);
+                                }
+                                else
+                                {
+                                        fprintf(fff, 
+#ifdef JP
+                                                "  %s (%d階) - レベル%d\n",
+#else
+                                                "  %s (Dungeon level: %d) - level %d\n",
+#endif
+                                                r_name+r_info[quest[i].r_idx].name,
+                                                quest[i].level,
+                                                quest[i].complev);
+                                }
+			}
+			else
+			{
+				/* Print the quest info */
+#ifdef JP
+				fprintf(fff, "  %s (危険度:%d階相当) - レベル%d\n",
+#else
+				fprintf(fff, "  %s (Danger level: %d) - level %d\n",
+#endif
+
+					quest[i].name, quest[i].level, quest[i].complev);
+			}
+		}
+	}
+#ifdef JP
+	if (!total) fprintf(fff, "  なし\n");
+#else
+	if (!total) fprintf(fff, "  Nothing.\n");
+#endif
+
+#ifdef JP
+	fprintf(fff, "\n《失敗したクエスト》\n");
+#else
+	fprintf(fff, "\n< Failed Quest >\n");
+#endif
+	total = 0;
+	for (i = 1; i < max_quests; i++)
+	{
+		/* No info from "silent" quests */
+		if (quest[i].flags & QUEST_FLAG_SILENT) continue;
+
+		if ((quest[i].status == QUEST_STATUS_FAILED_DONE) || (quest[i].status == QUEST_STATUS_FAILED))
+		{
+			int old_quest;
+
+			total++;
+
+			if (i < MIN_RANDOM_QUEST)
+			{
+				/* Set the quest number temporary */
+				old_quest = p_ptr->inside_quest;
+				p_ptr->inside_quest = i;
+
+				/* Get the quest text */
+				init_flags = INIT_ASSIGN;
+
+				process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+
+				/* Reset the old quest number */
+				p_ptr->inside_quest = old_quest;
+			}
+
+			if ((i >= MIN_RANDOM_QUEST) && quest[i].r_idx)
+			{
+				/* Print the quest info */
+#ifdef JP
+				fprintf(fff, "  %s (%d階) - レベル%d\n",
+#else
+				fprintf(fff, "  %s (Dungeon level: %d) - level %d\n",
+#endif
+
+					r_name+r_info[quest[i].r_idx].name, quest[i].level, quest[i].complev);
+			}
+			else
+			{
+				/* Print the quest info */
+#ifdef JP
+				fprintf(fff, "  %s (危険度:%d階相当) - レベル%d\n",
+#else
+				fprintf(fff, "  %s (Danger level: %d) - level %d\n",
+#endif
+
+					quest[i].name, quest[i].level, quest[i].complev);
+			}
+		}
+	}
+#ifdef JP
+	if (!total) fprintf(fff, "  なし\n");
+#else
+	if (!total) fprintf(fff, "  Nothing.\n");
+#endif
 
 	if (p_ptr->is_dead && !p_ptr->total_winner)
 	{
