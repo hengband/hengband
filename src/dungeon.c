@@ -1717,8 +1717,10 @@ msg_print("日が沈んだ。");
 						/* Darken "boring" features */
 						if ((c_ptr->feat <= FEAT_INVIS) ||
 						    ((c_ptr->feat >= FEAT_DEEP_WATER) &&
-							(c_ptr->feat <= FEAT_TREES) &&
-						    (c_ptr->feat != FEAT_MUSEUM)))
+							(c_ptr->feat <= FEAT_MOUNTAIN) &&
+						     (c_ptr->feat != FEAT_MUSEUM)) ||
+						    (x == 0) || (x == cur_wid-1) ||
+						    (y == 0) || (y == cur_hgt-1))
 						{
 							/* Forget the grid */
 							c_ptr->info &= ~(CAVE_GLOW | CAVE_MARK);
