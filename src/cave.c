@@ -4924,6 +4924,9 @@ void disturb(int stop_search, int unused_flag)
 
 		/* Calculate torch radius */
 		p_ptr->update |= (PU_TORCH);
+
+		/* Update monster flow */
+		p_ptr->update |= (PU_FLOW);
 	}
 
 	/* Flush the input if requested */
