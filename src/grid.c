@@ -295,7 +295,7 @@ msg_print("警告！地下室のアイテムを配置できません！");
 			/* Place an item */
 			if (randint0(100) < 75)
 			{
-				place_object(j, k, AM_OKAY);
+				place_object(j, k, 0L);
 			}
 
 			/* Place gold */

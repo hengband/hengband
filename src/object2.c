@@ -4240,7 +4240,7 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 	if (mode & (AM_GREAT | AM_SPECIAL)) rolls = 4;
 
 	/* Hack -- Get no rolls if not allowed */
-	if (!(mode & AM_OKAY) || o_ptr->name1) rolls = 0;
+	if ((mode & AM_NO_FIXED_ART) || o_ptr->name1) rolls = 0;
 
 	/* Roll for artifacts if allowed */
 	for (i = 0; i < rolls; i++)
@@ -5232,7 +5232,7 @@ void acquirement(int y1, int x1, int num, bool great, bool known)
 {
 	object_type *i_ptr;
 	object_type object_type_body;
-	u32b mode = AM_OKAY | AM_GOOD | (great ? AM_GREAT : 0L);
+	u32b mode = AM_GOOD | (great ? AM_GREAT : 0L);
 
 	/* Acquirement */
 	while (num--)

@@ -3198,11 +3198,11 @@
 /*
  * Bit flags for apply_magic() (etc)
  */
-#define AM_OKAY    0x00000001 /* Allow roll for fixed artifacts */
-#define AM_GOOD    0x00000002 /* Generate good items */
-#define AM_GREAT   0x00000004 /* Generate great items */
-#define AM_SPECIAL 0x00000008 /* Generate artifacts (for debug mode only) */
-#define AM_CURSED  0x00000010 /* Generate cursed/worthless items */
+#define AM_NO_FIXED_ART 0x00000001 /* Don't allow roll for fixed artifacts */
+#define AM_GOOD         0x00000002 /* Generate good items */
+#define AM_GREAT        0x00000004 /* Generate great items */
+#define AM_SPECIAL      0x00000008 /* Generate artifacts (for debug mode only) */
+#define AM_CURSED       0x00000010 /* Generate cursed/worthless items */
 
 
 /*** Monster blow constants ***/

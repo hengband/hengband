@@ -917,42 +917,42 @@ static void wiz_reroll_item(object_type *o_ptr)
 			case 'w': case 'W':
 			{
 				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, dun_level, AM_GOOD | AM_GREAT | AM_CURSED);
+				apply_magic(q_ptr, dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED);
 				break;
 			}
 			/* Apply bad magic, but first clear object */
 			case 'c': case 'C':
 			{
 				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, dun_level, AM_GOOD | AM_CURSED);
+				apply_magic(q_ptr, dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED);
 				break;
 			}
 			/* Apply normal magic, but first clear object */
 			case 'n': case 'N':
 			{
 				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, dun_level, 0L);
+				apply_magic(q_ptr, dun_level, AM_NO_FIXED_ART);
 				break;
 			}
 			/* Apply good magic, but first clear object */
 			case 'g': case 'G':
 			{
 				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, dun_level, AM_GOOD);
+				apply_magic(q_ptr, dun_level, AM_NO_FIXED_ART | AM_GOOD);
 				break;
 			}
 			/* Apply great magic, but first clear object */
 			case 'e': case 'E':
 			{
 				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, dun_level, AM_GOOD | AM_GREAT);
+				apply_magic(q_ptr, dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT);
 				break;
 			}
 			/* Apply special magic, but first clear object */
 			case 's': case 'S':
 			{
 				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, dun_level, AM_OKAY | AM_GOOD | AM_GREAT | AM_SPECIAL);
+				apply_magic(q_ptr, dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
 
 				/* Failed to create artifact; make a random one */
 				if (!artifact_p(q_ptr) && !q_ptr->art_name) create_artifact(q_ptr, FALSE);
@@ -1031,17 +1031,17 @@ static void wiz_statistics(object_type *o_ptr)
 
 		if (ch == 'n' || ch == 'N')
 		{
-			mode = AM_OKAY;
+			mode = 0L;
 			quality = "normal";
 		}
 		else if (ch == 'g' || ch == 'G')
 		{
-			mode = AM_OKAY | AM_GOOD;
+			mode = AM_GOOD;
 			quality = "good";
 		}
 		else if (ch == 'e' || ch == 'E')
 		{
-			mode = AM_OKAY | AM_GOOD | AM_GREAT;
+			mode = AM_GOOD | AM_GREAT;
 			quality = "excellent";
 		}
 		else
@@ -1416,7 +1416,7 @@ static void wiz_create_item(void)
 	object_prep(q_ptr, k_idx);
 
 	/* Apply magic */
-	apply_magic(q_ptr, dun_level, 0L);
+	apply_magic(q_ptr, dun_level, AM_NO_FIXED_ART);
 
 	/* Drop the object from heaven */
 	(void)drop_near(q_ptr, -1, py, px);

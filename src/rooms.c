@@ -745,7 +745,7 @@ static void build_type3(int by0, int bx0)
 			}
 
 			/* Place a treasure in the vault */
-			place_object(yval, xval, AM_OKAY);
+			place_object(yval, xval, 0L);
 
 			/* Let's guard the treasure well */
 			vault_monsters(yval, xval, randint0(2) + 3);
@@ -961,7 +961,7 @@ static void build_type4(int by0, int bx0)
 			/* Object (80%) */
 			if (randint0(100) < 80)
 			{
-				place_object(yval, xval, AM_OKAY);
+				place_object(yval, xval, 0L);
 			}
 
 			/* Stairs (20%) */
@@ -1044,8 +1044,8 @@ static void build_type4(int by0, int bx0)
 				vault_monsters(yval, xval + 2, randint1(2));
 
 				/* Objects */
-				if (one_in_(3)) place_object(yval, xval - 2, AM_OKAY);
-				if (one_in_(3)) place_object(yval, xval + 2, AM_OKAY);
+				if (one_in_(3)) place_object(yval, xval - 2, 0L);
+				if (one_in_(3)) place_object(yval, xval + 2, 0L);
 			}
 
 			break;
@@ -2515,7 +2515,7 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
 			case '*':
 				if (randint0(100) < 75)
 				{
-					place_object(y, x, AM_OKAY);
+					place_object(y, x, 0L);
 				}
 				else
 				{
@@ -2571,7 +2571,7 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
 			case 'A':
 				/* Reward for Pattern walk */
 				object_level = base_level + 12;
-				place_object(y, x, AM_OKAY | AM_GOOD);
+				place_object(y, x, AM_GOOD);
 				object_level = base_level;
 				break;
 			}
@@ -2636,7 +2636,7 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
 					place_monster(y, x, PM_ALLOW_SLEEP);
 					monster_level = base_level;
 					object_level = base_level + 7;
-					place_object(y, x, AM_OKAY | AM_GOOD);
+					place_object(y, x, AM_GOOD);
 					object_level = base_level;
 					break;
 				}
@@ -2648,7 +2648,7 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
 					place_monster(y, x, PM_ALLOW_SLEEP);
 					monster_level = base_level;
 					object_level = base_level + 20;
-					place_object(y, x, AM_OKAY | AM_GOOD | AM_GREAT);
+					place_object(y, x, AM_GOOD | AM_GREAT);
 					object_level = base_level;
 					break;
 				}
@@ -2665,7 +2665,7 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
 					if (randint0(100) < 50)
 					{
 						object_level = base_level + 7;
-						place_object(y, x, AM_OKAY);
+						place_object(y, x, 0L);
 						object_level = base_level;
 					}
 					break;
@@ -3892,7 +3892,7 @@ static void fill_treasure(int x1, int x2, int y1, int y2, int difficulty)
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 					monster_level = base_level;
 					object_level = base_level + 20;
-					place_object(y, x, AM_OKAY | AM_GOOD);
+					place_object(y, x, AM_GOOD);
 					object_level = base_level;
 				}
 				else if (value < 5)
@@ -3902,7 +3902,7 @@ static void fill_treasure(int x1, int x2, int y1, int y2, int difficulty)
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 					monster_level = base_level;
 					object_level = base_level + 10;
-					place_object(y, x, AM_OKAY | AM_GOOD);
+					place_object(y, x, AM_GOOD);
 					object_level = base_level;
 				}
 				else if (value < 10)
@@ -3928,7 +3928,7 @@ static void fill_treasure(int x1, int x2, int y1, int y2, int difficulty)
 					/* Object or trap */
 					if (randint0(100) < 25)
 					{
-						place_object(y, x, AM_OKAY);
+						place_object(y, x, 0L);
 					}
 					else
 					{
@@ -3955,7 +3955,7 @@ static void fill_treasure(int x1, int x2, int y1, int y2, int difficulty)
 					if (randint0(100) < 50)
 					{
 						object_level = base_level + 7;
-						place_object(y, x, AM_OKAY);
+						place_object(y, x, 0L);
 						object_level = base_level;
 					}
 				}
@@ -3979,7 +3979,7 @@ static void fill_treasure(int x1, int x2, int y1, int y2, int difficulty)
 					}
 					else if (randint0(100) < 50)
 					{
-						place_object(y, x, AM_OKAY);
+						place_object(y, x, 0L);
 					}
 				}
 
@@ -5314,7 +5314,7 @@ static void build_type12(int by0, int bx0)
 		build_small_room(x0, y0);
 
 		/* Place a treasure in the vault */
-		place_object(y0, x0, AM_OKAY);
+		place_object(y0, x0, 0L);
 
 		/* Let's guard the treasure well */
 		vault_monsters(y0, x0, randint0(2) + 3);

@@ -1923,7 +1923,7 @@ static void store_create(void)
 		object_prep(q_ptr, i);
 
 		/* Apply some "low-level" magic (no artifacts) */
-		apply_magic(q_ptr, level, 0L);
+		apply_magic(q_ptr, level, AM_NO_FIXED_ART);
 
 		/* Require valid object */
 		if (!store_will_buy(q_ptr)) continue;

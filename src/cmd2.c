@@ -440,7 +440,7 @@ static void chest_death(bool scatter, int y, int x, s16b o_idx)
 	int number;
 
 	bool small;
-	u32b mode = AM_OKAY | AM_GOOD;
+	u32b mode = AM_GOOD;
 
 	object_type forge;
 	object_type *q_ptr;
@@ -1724,7 +1724,7 @@ static bool do_cmd_tunnel_aux(int y, int x)
 			if (randint0(100) < (15 - dun_level/2))
 			{
 				/* Create a simple object */
-				place_object(y, x, AM_OKAY);
+				place_object(y, x, 0L);
 
 				/* Observe new object */
 				if (player_can_see_bold(y, x))
