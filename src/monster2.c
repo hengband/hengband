@@ -3845,13 +3845,13 @@ bool alloc_monster(int dis, u32b mode)
 		x = randint0(cur_wid);
 
 		/* Require empty floor grid (was "naked") */
-		if (dun_level || (wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].terrain != TERRAIN_MOUNTAIN))
+		if (dun_level)
 		{
 			if (!cave_empty_bold2(y, x)) continue;
 		}
 		else
 		{
-			if (!cave_empty_bold2(y, x) && !cave_have_flag_bold(y, x, FF_MOUNTAIN)) continue;
+			if (!cave_empty_bold(y, x)) continue;
 		}
 
 		/* Accept far away grids */
