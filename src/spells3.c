@@ -866,8 +866,6 @@ msg_format("%sの帰還レベルを %d 階にセット。", d_name+d_info[select_dungeon].nam
  *
  * XXX XXX XXX This function is also called from the "melee" code
  *
- * The "mode" is currently unused.
- *
  * Return "TRUE" if the player notices anything
  */
 bool apply_disenchant(int mode)
@@ -876,11 +874,6 @@ bool apply_disenchant(int mode)
 	object_type     *o_ptr;
 	char            o_name[MAX_NLEN];
 	int to_h, to_d, to_a, pval;
-
-
-	/* Unused */
-	mode = mode;
-
 
 	/* Pick a random slot */
 	switch (randint1(8))
@@ -951,7 +944,8 @@ msg_format("%s(%c)は劣化を跳ね返した！",o_name, index_to_label(t) );
 	if ((o_ptr->to_a > 5) && (randint0(100) < 20)) o_ptr->to_a--;
 
 	/* Disenchant pval (occasionally) */
-	if ((o_ptr->pval > 1) && one_in_(13)) o_ptr->pval--;
+	/* Unless called from wild_magic() */
+	if ((o_ptr->pval > 1) && one_in_(13) && !(mode & 0x01)) o_ptr->pval--;
 
 	if ((to_h != o_ptr->to_h) || (to_d != o_ptr->to_d) ||
 	    (to_a != o_ptr->to_a) || (pval != o_ptr->pval))
