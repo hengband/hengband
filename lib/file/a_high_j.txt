@@ -1,4 +1,4 @@
-: 1:BIAS_ELEC
+N: 1:BIAS_ELEC
 9
 『雷竜の鱗』
 『雷獣の咆哮』
