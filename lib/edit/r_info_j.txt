@@ -18989,6 +18989,9 @@ S:TPORT | BLIND | BLINK | HEAL |
 S:CONF | BO_MANA | BRAIN_SMASH | PSY_SPEAR |
 S:BA_NETH | BA_DARK | BA_CHAO |
 S:S_MONSTERS | S_DEMON | S_KIN | SPECIAL
+D:「『摂政閣下』バーノール公とか言ってたな。『摂政』ねえ。
+D:帝国には何百年か摂政なんかいないんだがな。」
+D:（聖悠紀、超人ロック「書を守る者」）
 
 N:934:『ルパート将軍』
 E:Rupart the general
@@ -19007,6 +19010,9 @@ F:NO_SLEEP | RES_TELE | RES_NETH | RES_NEXU | POWERFUL | CAN_FLY |
 S:1_IN_3 | 
 S:BLIND | HEAL |
 S:TELE_TO | CONF | BO_MANA | BRAIN_SMASH | PSY_SPEAR | SPECIAL
+D:「『書を守る者』…か。おまえが。」「残念だったな。私は
+D:ルパート。またの名を…バーノール公という。」
+D:（聖悠紀、超人ロック「書を守る者」）
 
 N:935:『ドルアーガ』
 E:Druaga
@@ -19060,6 +19066,11 @@ F:UNIQUE | MALE | NONLIVING | NO_FEAR | FORCE_MAXHP | FORCE_SLEEP |
 F:KILL_BODY | IM_FIRE | IM_POIS |
 F:NO_STUN | REGENERATE | NO_CONF | NO_SLEEP | CAN_SWIM |
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR |
+D:サイバーは機械により身体を強化された人間であったが、
+D:精神のバランスを崩すという欠点があった。それは、
+D:脳だけからサイバーにされたレムスとて例外ではなかった。
+D:「あ…れはレ…ムスじゃないわ。怪…物よ」
+D:（聖悠紀、超人ロック「サイバー・ジェノサイド」）
 
 N:938:白騎士
 E:White knight
