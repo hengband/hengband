@@ -1,4 +1,55 @@
+2002-06-03  Takeshi Mogami  <mogami@cvs>
+
+	* configure.in 1.16, lib/file/news.txt 1.9, lib/file/news_j.txt 1.9:
+	バージョンを 1.1.0 RC2 にした。
+
+	* src/artifact.c 1.23, src/autopick.c 1.41, src/bldg.c 1.15, src/cmd5.c 1.32, src/cmd6.c 1.22, src/dungeon.c 1.49, src/externs.h 1.61, src/hissatsu.c 1.10, src/mind.c 1.10, src/racial.c 1.18, src/spells3.c 1.36, src/wizard2.c 1.22:
+	鑑定した瞬間の自動破壊に根本的なバグがあった。
+	鑑定手段(巻物や杖)を消費する前に自動破壊によってスロットの位置が変わって
+	別のアイテムを消費(数を減らしたり、pvalを減らしたりしていた。
+	スロットのoptimizeを遅らせる事によって解決。
+
+	* src/autopick.c 1.40:
+	エンバグして、自動拾いに登録したアイテムを簡易自動破壊で壊していたので再修正。
+
+	* src/autopick.c 1.39:
+	^G と ^O のコードがautopick.cの実装初期の古い形式のままだったので修正。
+	そこで使っていたstatic関数 insert_string()と delete_string() も削除。
+	特に insert_string() は配列溢れの危険があった。
+
+	* src/autopick.c 1.38:
+	画面下に説明文を表示するところで、あまりに多くのキーワードが付いていると
+	配列溢れを起す可能性があったので修正。
+
+	* src/autopick.c 1.37:
+	さっきの修正でstrncat()の使い方を間違っていたので書き直し。
+	その他、コード整理。コメント追加。
+
+	* src/autopick.c 1.36:
+	大量の文字列を^Kで消したときに配列外に'\0'を書き込んでいたのを修正。
+	^Y と ^H の動作をよりemacs likeに調整。
+
 2002-06-02  Takeshi Mogami  <mogami@cvs>
+
+	* src/save.c 1.17:
+	munchkin_deathオプションでセーブせずにデバッグモードで能力値上限を調べて、
+	新規キャラクター作成 → '='でmunchkin_deathをoff
+	→ 'S'で最初に戻る → 再度のquick startの質問に'y'、という手順で
+	先に調べた能力値上限でプレイ開始できてしまう抜け道があったので修正。
+
+	* src/autopick.c 1.35:
+	always_pickupがオンのとき、自動拾い/破壊の設定による破壊だけを無視して
+	簡易自動破壊オプションの破壊は適用するようにするはず(したつもり)だったのに、
+	適用されていなかったので修正。
+
+	* src/save.c 1.16:
+	デバッグモードやチートオプション等を使用後のセーブ時に
+	クイックスタートを使用不可にする。
+
+	* src/autopick.c 1.34:
+	最初から{%}等が刻んであるアイテムを*鑑定*したとき、その%を耐性刻みで展開する。
+
+	* Changelogs 1.46: 更新
 
 	* configure.in 1.15, lib/file/news.txt 1.8:
 	英語版用にバージョン修正。ついでに configure.in のバージョンも修正。
