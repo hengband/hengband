@@ -3361,15 +3361,14 @@ static void process_menus(WORD wCmd)
 				forget_view();
 				clear_mon_lite();
 
-				/* For writing the playrecord, not for saving the game */
-				do_cmd_save_and_exit();
-
 				/* Save the game */
 #ifdef ZANGBAND
-				do_cmd_save_game(FALSE);
+				/* do_cmd_save_game(FALSE); */
 #else /* ZANGBAND */
-				do_cmd_save_game();
+				/* do_cmd_save_game(); */
 #endif /* ZANGBAND */
+				Term_key_push(KTRL('X'));
+				break;
 			}
 			quit(NULL);
 			break;
@@ -4061,15 +4060,14 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 				forget_view();
 				clear_mon_lite();
 
-				/* For writing the playrecord, not for saving the game */
-				do_cmd_save_and_exit();
-
 				/* Save the game */
 #ifdef ZANGBAND
-				do_cmd_save_game(FALSE);
+				/* do_cmd_save_game(FALSE); */
 #else /* ZANGBAND */
-				do_cmd_save_game();
+				/* do_cmd_save_game(); */
 #endif /* ZANGBAND */
+				Term_key_push(KTRL('X'));
+				return 0;
 			}
 			quit(NULL);
 			return 0;
