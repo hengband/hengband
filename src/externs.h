@@ -526,6 +526,7 @@ extern bool new_mane;
 extern bool mon_fight;
 extern bool ambush_flag;
 extern bool generate_encounter;
+extern cptr screen_dump;
 extern byte dungeon_type;
 extern s16b *max_dlv;
 extern byte feat_wall_outer;
@@ -663,6 +664,7 @@ extern void do_cmd_knowledge(void);
 extern void plural_aux(char * Name);
 extern void do_cmd_checkquest(void);
 extern void do_cmd_time(void);
+extern cptr make_screen_dump(void);
 
 /* cmd5.c */
 extern cptr spell_categoly_name(int tval);

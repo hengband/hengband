@@ -4981,6 +4981,9 @@ msg_format("You are beaten by %s.", r_name+r_info[arena_monsters[p_ptr->arena_nu
 		}
 		else
 		{
+			/* Make screen dump */
+			screen_dump = make_screen_dump();
+
 			/* Note cause of death */
 			(void)strcpy(died_from, hit_from);
 

@@ -1194,6 +1194,8 @@ bool mon_fight;
 bool ambush_flag;
 bool generate_encounter;
 
+cptr screen_dump = NULL;
+
 /*
  * Which dungeon ?
  */

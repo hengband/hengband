@@ -297,6 +297,12 @@ errr report_score(void)
 
 	make_dump(score);
 
+	if (screen_dump)
+	{
+		buf_sprintf(score, "-----screen shot-----\n");
+		buf_sprintf(score, screen_dump);
+	}
+
 #ifdef WINDOWS
 	if (WSAStartup(wVersionRequested, &wsaData))
 	{
