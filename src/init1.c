@@ -1603,13 +1603,7 @@ errr init_k_info_txt(FILE *fp, char *buf)
 
 #ifdef JP
 			/* Hack -- Verify space */
-			if (k_head->name_size + strlen(s) + 8 > fake_name_size)
-			{
-				fake_name_size += 1000;
-
-				/* Reallocate the extra memory */
-				k_info = realloc(k_name, fake_name_size);
-			}
+			if (k_head->name_size + strlen(s) + 8 > fake_name_size) return (7);
 
 			/* Advance and Save the name index */
 			if (!k_ptr->name) k_ptr->name = ++k_head->name_size;
