@@ -72,7 +72,8 @@
 #      unaware           : Items with unknown effects match.
 #      worthless         : Items which you cannot sell match.
 #      dice boosted      : Weapons with boosted damage dice match.
-#      more than nn dice : Weapons with dice (dd * ds) better than nn match.
+#      more than N dice  : Weapons with dice (dd * ds) better than +N match.
+#      more bonus than N : Items which has more magical bonus than (+N) match.
 #      wanted            : Wanted monster's corpses or skeletons match.
 #      unique monster's  : Unique monster's corpses, skeletons or statues match.
 #      human             : Human corpses or skeletons match.
@@ -164,11 +165,13 @@
 #
 #      Strict syntax of each line is below.
 #      
+#      [! ~ (]
 #      [[all] [collecting] [unidentified] [identified] [*identified*] 
-#       [nameless] [unaware] [worthless] [dice boosted] [more than nn dice] 
+#       [artifact] [ego] [nameless] [unaware] [worthless] 
+#       [dice boosted] [more than N dice] [more bonus than N] 
 #       [wanted] [unique monster's] [human] [unreadable] 
 #       [first realm's] [second realm's] [first] [second] [third] [fourth] 
-#       [items | artifacts | weapons | armors | missiles | magical devices | 
+#       [items | weapons | armors | missiles | magical devices | 
 #        lights | junks | spellbooks | hafted weapons | shields | bows | 
 #        rings | amulets | suits | cloaks | helms | gloves | boots] :]
 #      [[^]part-of-item-name] [#auto-inscription-string]

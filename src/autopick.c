@@ -28,16 +28,18 @@
 #define FLG_BOOSTED	    10
 #define FLG_MORE_THAN	    11
 #define FLG_DICE	    12
-#define FLG_WANTED	    13
-#define FLG_UNIQUE	    14
-#define FLG_HUMAN	    15
-#define FLG_UNREADABLE	    16
-#define FLG_REALM1	    17
-#define FLG_REALM2	    18
-#define FLG_FIRST	    19
-#define FLG_SECOND	    20
-#define FLG_THIRD	    21
-#define FLG_FOURTH	    22
+#define FLG_MORE_BONUS	    13
+#define FLG_MORE_BONUS2	    14
+#define FLG_WANTED	    15
+#define FLG_UNIQUE	    16
+#define FLG_HUMAN	    17
+#define FLG_UNREADABLE	    18
+#define FLG_REALM1	    19
+#define FLG_REALM2	    20
+#define FLG_FIRST	    21
+#define FLG_SECOND	    22
+#define FLG_THIRD	    23
+#define FLG_FOURTH	    24
 
 #define FLG_ITEMS	    30
 #define FLG_WEAPONS	    31
@@ -73,6 +75,8 @@
 #define KEY_BOOSTED "ダイス目の違う"
 #define KEY_MORE_THAN  "ダイス目"
 #define KEY_DICE  "以上の"
+#define KEY_MORE_BONUS  "修正値が"
+#define KEY_MORE_BONUS2  "以上の"
 #define KEY_WANTED "賞金首の"
 #define KEY_UNIQUE "ユニーク・モンスターの"
 #define KEY_HUMAN "人間の"
@@ -115,8 +119,10 @@
 #define KEY_UNAWARE "unaware"
 #define KEY_WORTHLESS "worthless"
 #define KEY_BOOSTED "dice boosted"
-#define KEY_MORE_THAN  "more than "
-#define KEY_DICE  " dice "
+#define KEY_MORE_THAN  "more than"
+#define KEY_DICE  " dice"
+#define KEY_MORE_BONUS  "more bonus than"
+#define KEY_MORE_BONUS2  ""
 #define KEY_WANTED "wanted"
 #define KEY_UNIQUE "unique monster's"
 #define KEY_HUMAN "human"
@@ -199,8 +205,15 @@ cptr autopick_line_from_entry(autopick_type *entry)
 	if (IS_FLG(FLG_MORE_THAN))
 	{
 		ADD_KEY(KEY_MORE_THAN);
-		strcat(ptr, format("%2d", entry->dice));
+		strcat(ptr, format("%d", entry->dice));
 		ADD_KEY(KEY_DICE);
+	}
+
+	if (IS_FLG(FLG_MORE_BONUS))
+	{
+		ADD_KEY(KEY_MORE_BONUS);
+		strcat(ptr, format("%d", entry->bonus));
+		ADD_KEY(KEY_MORE_BONUS2);
 	}
 
 	if (IS_FLG(FLG_WANTED)) ADD_KEY(KEY_WANTED);
@@ -347,15 +360,53 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
 	if (MATCH_KEY(KEY_WORTHLESS)) ADD_FLG(FLG_WORTHLESS);
 	if (MATCH_KEY(KEY_BOOSTED)) ADD_FLG(FLG_BOOSTED);
 
-	/*** Weapons whic dd*ds is more than nn ***/
+	/*** Weapons whose dd*ds is more than nn ***/
 	if (MATCH_KEY(KEY_MORE_THAN))
 	{
-		if (isdigit(ptr[0]) && isdigit(ptr[1]))
+		int k = 0;
+		entry->dice = 0;
+
+		/* Drop leading spaces */
+		while (' ' == *ptr) ptr++;
+
+		/* Read number */
+		while (isdigit(*ptr))
 		{
-			entry->dice = (ptr[0] - '0') * 10 + (ptr[1] - '0');
-			ptr += 2;
+			entry->dice = 10 * entry->dice + (*ptr - '0');
+			ptr++;
+			k++;
+		}
+
+		if (k > 0 && k <= 2)
+		{
 			(void)MATCH_KEY(KEY_DICE);
 			ADD_FLG(FLG_MORE_THAN);
+		}
+		else
+			ptr = prev_ptr;
+	}
+
+	/*** Items whose magical bonus is more than n ***/
+	if (MATCH_KEY(KEY_MORE_BONUS))
+	{
+		int k = 0;
+		entry->bonus = 0;
+
+		/* Drop leading spaces */
+		while (' ' == *ptr) ptr++;
+
+		/* Read number */
+		while (isdigit(*ptr))
+		{
+			entry->bonus = 10 * entry->bonus + (*ptr - '0');
+			ptr++;
+			k++;
+		}
+
+		if (k > 0 && k <= 2)
+		{
+			(void)MATCH_KEY(KEY_MORE_BONUS2);
+			ADD_FLG(FLG_MORE_BONUS);
 		}
 		else
 			ptr = prev_ptr;
@@ -539,6 +590,26 @@ int is_autopick(object_type *o_ptr)
 		{
 			if (o_ptr->dd * o_ptr->ds < entry->dice)
 				continue;
+		}
+				
+		/*** Weapons whic dd*ds is more than nn ***/
+		if (IS_FLG(FLG_MORE_BONUS))
+		{
+			if (!object_known_p(o_ptr)) continue;
+
+			if (k_info[o_ptr->k_idx].pval ||
+			    (o_ptr->name2 && e_info[o_ptr->name2].max_pval))
+			{
+				if (o_ptr->pval < entry->bonus) continue;
+			}
+			else
+			{
+				if (o_ptr->to_h < entry->bonus &&
+				    o_ptr->to_d < entry->bonus &&
+				    o_ptr->to_a < entry->bonus &&
+				    o_ptr->pval < entry->bonus)
+					continue;
+			}
 		}
 				
 		/*** Wanted monster's corpse/skeletons ***/
@@ -1031,9 +1102,20 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		before_str[before_n++] = "ダメージダイスの最大値が";
 		body_str = "武器";
 			
-		sprintf(more_than_desc_str,"%2d", entry->dice);
+		sprintf(more_than_desc_str,"%d", entry->dice);
 		before_str[before_n++] = more_than_desc_str;
 		before_str[before_n++] = "以上の";
+	}
+
+	/*** Items whose magical bonus is more than nn ***/
+	if (IS_FLG(FLG_MORE_BONUS))
+	{
+		static char more_bonus_desc_str[] = "___";
+		before_str[before_n++] = "修正値が(+";
+			
+		sprintf(more_bonus_desc_str,"%d", entry->bonus);
+		before_str[before_n++] = more_bonus_desc_str;
+		before_str[before_n++] = ")以上の";
 	}
 
 	/*** Wanted monster's corpse/skeletons ***/
@@ -1256,7 +1338,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		whose_str[whose_n++] = "damage dice is bigger than normal";
 	}
 
-	/*** Weapons whic dd*ds is more than nn ***/
+	/*** Weapons whose dd*ds is more than nn ***/
 	if (IS_FLG(FLG_MORE_THAN))
 	{
 		static char more_than_desc_str[] =
@@ -1264,8 +1346,19 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		body_str = "weapons";
 			
 		sprintf(more_than_desc_str + sizeof(more_than_desc_str) - 3,
-			"%2d", entry->dice);
+			"%d", entry->dice);
 		whose_str[whose_n++] = more_than_desc_str;
+	}
+
+	/*** Items whose magical bonus is more than nn ***/
+	if (IS_FLG(FLG_MORE_BONUS))
+	{
+		static char more_bonus_desc_str[] =
+			"magical bonus is bigger than (+__)";
+			
+		sprintf(more_bonus_desc_str + sizeof(more_bonus_desc_str) - 4,
+			"%d)", entry->bonus);
+		whose_str[whose_n++] = more_bonus_desc_str;
 	}
 
 	/*** Wanted monster's corpse/skeletons ***/

@@ -1585,8 +1585,9 @@ struct dungeon_info_type {
 typedef struct {
 	cptr name;          /* Items which have 'name' as part of its name match */
 	cptr insc;          /* Items will be auto-inscribed as 'insc' */
-	byte action;        /* Auto-pickup or Destroy or Leave items */
 	u32b flag[2];       /* Misc. keyword to be matched */
+	byte action;        /* Auto-pickup or Destroy or Leave items */
 	byte dice;          /* Weapons which have more than 'dice' dice match */
+	byte bonus;         /* Items which have more than 'bonus' magical bonus match */
 } autopick_type;
 
