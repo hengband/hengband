@@ -1,4 +1,4 @@
-=== Attacking Monsters ===
+=== Attacking and Weapons===
  
 Attacking is simple in Hengband. If you move into a creature, you
 attack it. If you are wielding a weapon (including digging implements

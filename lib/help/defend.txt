@@ -1,4 +1,4 @@
-=== Defending Yourself ===
+=== Defending and Armor ===
  
 In Hengband, monsters may damage and otherwise harm you in a number of
 ways: in direct melee combat, by exploding next to you, by breathing

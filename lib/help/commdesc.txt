@@ -43,7 +43,7 @@ Equipment list (e)
 Drop an item (d)
      This drops an item from your inventory or equipment onto the
      dungeon floor. If the floor spot you are standing on already has
-     an object in it, Zangband will attempt to drop the item onto an
+     an object in it, Hengband will attempt to drop the item onto an
      adjacent space. Be warned that if the floor is full and you
      attempt to drop something, it may disappear and be destroyed.
      Doors and traps are considered objects for the purpose of
@@ -75,14 +75,16 @@ Take off equipment (t) or Take off equipment (T)
 ---  Movement Commands ---
 
 Walk (with pickup) (;)
+
      Moves one step in the given direction. The square you are moving
      into must not be blocked by walls or doors. You will pick up any
      items in the destination grid if the "always_pickup" option is
      set, or if the "query_pickup" option is set and you respond
-     correctly. This command can take a count and requires a direction.
-     You may also use the "original" direction keys (both keysets) or
-     the "roguelike" direction keys (roguelike keyset) to walk in a
-     direction.
+     correctly. This command can take a count and requires a
+     direction.  You may also use the "original" direction keys (both
+     keysets) or the "roguelike" direction keys (roguelike keyset) to
+     walk in a direction. If object auto-picker/destroyer is set up,
+     specified objects will be picked up or destroyed.
 
 Walk (flip pickup) (-)
      This is just like normal move, except that the "Pick things up"
@@ -90,37 +92,46 @@ Walk (flip pickup) (-)
      anything you encounter (the default), you will not pick things up
      when using this command. If you normally do not pick things up,
      you will when using this command. This command can take a count
-     and requires a direction.
+     and requires a direction.  If object auto-picker/destroyer is set
+     up, specified objects will be picked up or destroyed.
 
 Run (.) or Run (,)
-     This command will move in the given direction, following any bends
-     in the corridor, until you either have to make a "choice" between
-     two directions or you are disturbed. You can configure what will
-     disturb you by setting the disturbance options. Run requires a
-     direction. You may also use shift plus the "roguelike" direction
-     keys (roguelike keyset), or shift plus the "original" direction
-     keys on the keypad (both keysets, some machines) to run in a
-     direction.
+     This command will move in the given direction, following any
+     bends in the corridor, until you either have to make a "choice"
+     between two directions or you are disturbed. You can configure
+     what will disturb you by setting the disturbance options. Run
+     requires a direction. You may also use shift plus the "roguelike"
+     direction keys (roguelike keyset), or shift plus the "original"
+     direction keys on the keypad (both keysets, some machines) to run
+     in a direction. If object auto-picker/destroyer is set up,
+     specified objects will be picked up or destroyed.
+
 
 Go up staircase (<)
-     Climbs up an up staircase you are standing on. There is always at
-     least one staircase going up on every level except for the town
-     level (this doesn't mean it's easy to find). Going up a staircase
-     will take you to a new dungeon level unless you are at 50 feet
-     (dungeon level 1), in which case you will return to the town
-     level. Note that whenever you leave a level (not the town), you
-     will never find it again. This means that for all intents and
-     purposes, any objects on that level are destroyed. This includes
-     artifacts unless the "Create characters in preserve mode" option
-     was set when your character was created, in which case the
-     artifacts may show up again later.
+     Climbs up when you are standing on an up staircase. In the
+     wilderness, enter global map mode which grants you a view of all
+     the world unless there are some monsters in the nearby area.
+
+     There is always at least one staircase going up on every level
+     except for the town level (this doesn't mean it's easy to
+     find). Going up a staircase will take you to a new dungeon level
+     unless you are at 50 feet (dungeon level 1), in which case you
+     will return to the town level. Note that whenever you leave a
+     level (not the town), you will never find it again. This means
+     that for all intents and purposes, any objects on that level are
+     destroyed. This includes artifacts unless the "Create characters
+     in preserve mode" option was set when your character was created,
+     in which case the artifacts may show up again later.
 
 Go down staircase (>)
-     Descends a down staircase you are standing on. There are always
-     at least two staircases going down on each level, except for the
-     town which has only one, and "quest" levels, which have none until
-     the quest monster is killed. Going down a staircase will take you
-     to a new dungeon level. See "Go Up Staircase" for more info.
+     Descends when you are standing on a down staircase. In the
+     wilderness, return from global map mode to normal mode.
+
+     There are always at least two staircases going down on each
+     level, except for the town which has only one, and "quest"
+     levels, which have none until the quest monster is killed. Going
+     down a staircase will take you to a new dungeon level. See "Go Up
+     Staircase" for more info.
 
 
 ***** <Resting>
@@ -130,7 +141,8 @@ Stay still (with pickup) (,) or Stay still (with pickup) (.)
      Stays in the same square for one move. If you normally pick up
      objects you encounter, you will pick up whatever you are standing
      on. This command can take a count. You may also use the "5" key
-     (both keysets).
+     (both keysets).  If object auto-picker/destroyer is set up,
+     specified objects will be picked up or destroyed.
 
 Stay still (flip pickup) (g)
      Stays in the same square for one move. If you normally pick up
@@ -138,7 +150,8 @@ Stay still (flip pickup) (g)
      standing on. If you normally do not pick up objects, you will
      pick up what you are standing on. This command is normally only
      used when the "always_pickup" option is false. This command can
-     take a count.
+     take a count.  If object auto-picker/destroyer is set up,
+     specified objects will be picked up or destroyed.
 
 Rest (R)
      Resting is better for you than repeatedly staying still, and can
@@ -249,13 +262,13 @@ Alter (+)
 ***** <SpellPrayer>
 ---  Spell and Prayer Commands ---
 
-Browse a book (b) or Peruse a book (P)
-     Only mages, rogues, and rangers can read magic books, and only
-     priests and paladins can read prayer books. Warriors cannot read
-     any books. When this command is used, all of the spells or prayers
-     contained in the selected book are displayed, along with such
-     information as their level, the amount of mana required to cast
-     them, and whether or not you know the spell or prayer.
+Browse magic list (b) or Peruse magic list (P)
+     All characters which can cast spells can use this command. When
+     this command is used, all of the spells contained in the selected
+     magic are displayed, along with such information as their level,
+     the amount of mana required to cast them, and whether or not you
+     know the spell.  And when you select a spell from the list,
+     description text of selected spell will be displayed.
 
 Gain new spells or prayers (G)
      Use this command to actually learn new spells or prayers. When you
@@ -268,7 +281,7 @@ Gain new spells or prayers (G)
      prayer for you. There are nine books of each type, some normally
      found only in the dungeon.
 
-Cast a spell / Pray a prayer (m)
+Cast a spell (m)
      To cast a spell, you must have previously learned the spell and
      must have in your inventory a book from which the spell can be
      read. Each spell has a chance of failure which starts out fairly
@@ -326,11 +339,11 @@ Inscribe an object ({)
      displayed inside curly braces after the object description. The
      inscription is limited to the particular object (or pile) and is
      not automatically transferred to all similar objects. Under
-     certain circumstances, Zangband will display "fake" inscriptions
+     certain circumstances, Hengband will display "fake" inscriptions
      on certain objects ("cursed", "broken", "tried", "empty", "NN%
      off") when appropriate. These "fake" inscriptions are "covered up"
      by real inscriptions, but will re-appear if the real inscription
-     is removed. In addition, Zangband will occasionally place a "real"
+     is removed. In addition, Hengband will occasionally place a "real"
      inscription on an object for you, normally as the result of your
      character getting a "feeling" about the item. All characters will
      get "feelings" about weapons and armor after carrying them for a
@@ -469,6 +482,12 @@ Full screen map (M)
      position, or for identifying unexplored areas of the dungeon.
      This command takes no time.
 
+     If object auto-picker/destroyer is set up, specified objects can
+     be displayed in this command, when you press the M, N, K or D.
+     The M displays 'auto-pickup' items, while the N displays 'leave',
+     the K displays 'auto-destroy'. And the D is same as the M plus
+     the N. You can press any other key to quit this map command.
+
 Locate player on map (L) or Where is the player (W)
      This command lets you scroll your map around, looking at all
      sectors of the current dungeon level, until you press escape, at
@@ -529,25 +548,32 @@ Character Description (C)
     including your background, your inventory, and the contents of
     your house.
 
-Check Artifacts, Uniques and Objects (~ or |)
+Check various information (~)
     The command opens a menu from which you can select information
-    about seen Artifacts, Unique monsters, and identified objects.
+    about seen Artifacts, Unique monsters, identified objects, and
+    etc.
 
-Display known artifacts
-    This selection lists all of the artifacts that you've encountered.
-    Any artifact that appears in this list, which you cannot seem to
-    find, has been lost forever. The "preserve" mode will prevent
-    you from accidentally losing any artifacts, but will also prevent
-    you from ever getting a "special" level feeling. This command can
-    only be used on the town level, not inside the dungeon.     
+    Display known artifacts
+        This selection lists all of the artifacts that you've
+        encountered.  Any artifact that appears in this list, which
+        you cannot seem to find, has been lost forever. The "preserve"
+        mode will prevent you from accidentally losing any artifacts,
+        but will also prevent you from ever getting a "special" level
+        feeling. This command can only be used on the town level, not
+        inside the dungeon.
 
-Display known uniques
-     Brings up a list of known unique monsters, plus their current
-     status. Once killed, unique monsters never show up again.
+    Display known uniques
+         Brings up a list of known unique monsters, plus their current
+         status. Once killed, unique monsters never show up again.
 
-Display known objects
-     This list all 'flavored' objects (such as rings, scrolls, wands,
-     potions, etc.) which you have identified.
+    Display known objects
+         This list all 'flavored' objects (such as rings, scrolls,
+         wands, potions, etc.) which you have identified.
+
+
+Check play record (|)
+    This command opens a menu from which you can check/delete play
+    record of your current character.
 
 
 ***** <SaveExit>
@@ -560,12 +586,12 @@ Save and Quit (Ctrl-X)
      your savefile to play again with the same options and such.
 
 Save (Ctrl-S)
-     This command saves the game but doesn't exit Zangband. Use this
+     This command saves the game but doesn't exit Hengband. Use this
      frequently if you are paranoid about having the computer crash
      while you are playing.
 
 Quit (commit suicide) (Q)
-     Kills your character and exits Zangband. You will be prompted to
+     Kills your character and exits Hengband. You will be prompted to
      make sure you really want to do this, and then asked to verify
      that choice. Note that dead characters are dead forever.
 
@@ -581,11 +607,11 @@ together with a detailed description of this function.
 --- Help ---
 
 Help (?)
-     Brings up the Zangband on-line help system. Note that the help
+     Brings up the Hengband on-line help system. Note that the help
      files are just text files in a particular format, and that other
      help files may be available on the Net. In particular, there are
      a variety of spoiler files which do not come with the standard
-     distribution. Check the place you got Zangband from or ask on the
+     distribution. Check the place you got Hengband from or ask on the
      newsgroup rec.games.roguelike.angband about them. 
 
 Identify Symbol (/)
@@ -596,12 +622,14 @@ Identify Symbol (/)
      creature the symbol stands for, not give you specific information
      about a creature you can see. To get that, use the Look command.
 
-     There are three special symbols you can use with the Identify
+     There are four special symbols you can use with the Identify
      Symbol command to access specific parts of your monster memory.
      Typing Ctrl-A when asked for a symbol will recall details about
      all monsters, typing Ctrl-U will recall details about all unique
-     monsters, and typing Ctrl-N will recall details about all
-     non-unique monsters.
+     monsters, typing Ctrl-N will recall details about all non-unique
+     monsters, and typing Ctrl-M will let you enter a name and recall
+     details about monsters which have the specified name as part of
+     its name.
 
      If the character stands for a creature, you are asked if you want
      to recall details. If you answer yes, information about the
@@ -612,17 +640,22 @@ Identify Symbol (/)
      on. Pressing ESCAPE at any point will exit this command.
  
 Game Version (V)
-     This command will tell you what version of Zangband you are using.
+     This command will tell you what version of Hengband you are using.
      For more information, see the "version.txt" help file.
 
 
 ***** <Extra>
 --- Extra Commands ---
 
+Repeat previous command (n) ([)
+     This command repeat previously executed command with all its
+     arguments. Very useful to repeat casting, for example, magic
+     missile to same oppornent.
+
 Toggle Choice Window (^E) 
      Toggles the display in the choice window (if available) between
      your inventory and your equipment. This command only applies if
-     you are running Zangband under a windowing environment and the
+     you are running Hengband under a windowing environment and the
      choice window is available. This also redraws the choice window.
 
 Redraw Screen (^R)
@@ -646,10 +679,15 @@ Command your pets (p)
      and picking up items. Your pets will drop all picked up items when
      you disallow them to pick up anything.
 
+Output list of random artifacts (^V)
+     This command write file named "randifact.txt" to your user
+     directory with list of all random artifact you have.
+
 -- 
 Original   : Alexander Cutler and Andy Astrand
 Updated    : (2.7.6) by Russ Allbery (rra@cs.stanford.edu)
 Updated    : (2.7.9) by Ben Harrison (benh@phial.com)
 Updated    : Zangband 2.2.0 through 2.2.6c by Robert Ruehlmann
 Updated    : Zangband DevTeam
-Last update: January 13, 2000
+Updated    : many people
+
