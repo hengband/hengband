@@ -5675,215 +5675,124 @@ cptr inven_res_label =
  "                               AcElFiCoPoLiDkShSoNtNxCaDi BlFeCfFaSeHlEpSdRgLv";
 #endif
 
+
+#ifdef JP
+#define IM_FLAG_STR  "¡ö"
+#define HAS_FLAG_STR "¡Ü"
+#define NO_FLAG_STR  "¡¦"
+#else
+#define IM_FLAG_STR  "* "
+#define HAS_FLAG_STR "+ "
+#define NO_FLAG_STR  ". "
+#endif
+
+#define print_im_or_res_flag(IM, RES) \
+{ \
+	fputs(have_flag(flgs, (IM)) ? IM_FLAG_STR : \
+	      (have_flag(flgs, (RES)) ? HAS_FLAG_STR : NO_FLAG_STR), fff); \
+}
+
+#define print_flag(TR) \
+{ \
+	fputs(have_flag(flgs, (TR)) ? HAS_FLAG_STR : NO_FLAG_STR, fff); \
+}
+
+
 /* XTRA HACK RESLIST */
-static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr, 
-				       int *j, byte tval, char *where)
+static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr, int *j, byte tval, char *where)
 {
-  char o_name[MAX_NLEN];
-  u32b flgs[TR_FLAG_SIZE];
+	char o_name[MAX_NLEN];
+	u32b flgs[TR_FLAG_SIZE];
 
-  if (!o_ptr->k_idx)return;
-  if (o_ptr->tval != tval)return;
+	if (!o_ptr->k_idx) return;
+	if (o_ptr->tval != tval) return;
 
-       /* 
-	* HACK:Ring of Lordly protection and Dragon shield/helm
-	* have random resistances.
-	*/
-  if ( ((o_ptr->tval >= TV_BOW && o_ptr->tval<= TV_DRAG_ARMOR && o_ptr->name2)
-       || (o_ptr->tval == TV_RING && o_ptr->sval == SV_RING_LORDLY) 
-       || (o_ptr->tval == TV_SHIELD && o_ptr->sval == SV_DRAGON_SHIELD) 
-       || (o_ptr->tval == TV_HELM && o_ptr->sval == SV_DRAGON_HELM) 
-       || (o_ptr->tval == TV_GLOVES && o_ptr->sval == SV_SET_OF_DRAGON_GLOVES) 
-       || (o_ptr->tval == TV_BOOTS && o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE) 
-       || o_ptr->art_name || o_ptr->name1) && object_known_p(o_ptr))
-    {
-      int i = 0;
-      object_desc(o_name, o_ptr, TRUE, 0);
+	/* Identified items only */
+	if (!object_known_p(o_ptr)) return;
 
-      while ( o_name[i] && i < 26 ){
-#ifdef JP
-	if (iskanji(o_name[i])) i++;
-#endif
-	i++;
-      }
-      if(i<28) while(i<28){o_name[i]=' ';i++;}
-      o_name[i]=0;
-      
-      fprintf(fff,"%s %s", where, o_name);
-
-      if (!(o_ptr->ident & (IDENT_MENTAL))) 
+	/*
+	 * HACK:Ring of Lordly protection and Dragon equipment
+	 * have random resistances.
+	 */
+	if (((o_ptr->tval >= TV_BOW) && (o_ptr->tval<= TV_DRAG_ARMOR) && o_ptr->name2)
+	    || ((o_ptr->tval == TV_AMULET) && (o_ptr->sval == SV_AMULET_RESISTANCE))
+	    || ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_LORDLY))
+	    || ((o_ptr->tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD))
+	    || ((o_ptr->tval == TV_HELM) && (o_ptr->sval == SV_DRAGON_HELM))
+	    || ((o_ptr->tval == TV_GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES))
+	    || ((o_ptr->tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE))
+	    || o_ptr->art_name || o_ptr->name1)
 	{
+		int i = 0;
+		object_desc(o_name, o_ptr, TRUE, 0);
+
+		while (o_name[i] && (i < 26))
+		{
 #ifdef JP
-	  fprintf(fff, "-------ÉÔÌÀ--------------- -------ÉÔÌÀ---------\n");
-#else
-	  fprintf(fff, "-------unknown------------ -------unknown------\n");
+			if (iskanji(o_name[i])) i++;
 #endif
-	}
-      else {
-	object_flags_known(o_ptr, flgs);
-      
+			i++;
+		}
+
+		if (i < 28)
+		{
+			while (i < 28)
+			{
+				o_name[i] = ' '; i++;
+			}
+		}
+		o_name[i] = '\0';
+
+		fprintf(fff, "%s %s", where, o_name);
+
+		if (!(o_ptr->ident & (IDENT_MENTAL)))
+		{
 #ifdef JP
-	if (have_flag(flgs, TR_IM_ACID)) fprintf(fff,"¡ö");
-	else if (have_flag(flgs, TR_RES_ACID)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-
-	if (have_flag(flgs, TR_IM_ELEC)) fprintf(fff,"¡ö");
-	else if (have_flag(flgs, TR_RES_ELEC)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-
-	if (have_flag(flgs, TR_IM_FIRE)) fprintf(fff,"¡ö");
-	else if (have_flag(flgs, TR_RES_FIRE)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-
-	if (have_flag(flgs, TR_IM_COLD)) fprintf(fff,"¡ö");
-	else if (have_flag(flgs, TR_RES_COLD)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-	
-	if (have_flag(flgs, TR_RES_POIS)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-	
-	if (have_flag(flgs, TR_RES_LITE)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-	
-	if (have_flag(flgs, TR_RES_DARK)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-	
-	if (have_flag(flgs, TR_RES_SHARDS)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-	
-	if (have_flag(flgs, TR_RES_SOUND)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-	
-	if (have_flag(flgs, TR_RES_NETHER)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-	
-	if (have_flag(flgs, TR_RES_NEXUS)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-	
-	if (have_flag(flgs, TR_RES_CHAOS)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-	
-	if (have_flag(flgs, TR_RES_DISEN)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-	
-	fprintf(fff," ");
-	
-	if (have_flag(flgs, TR_RES_BLIND)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-	
-	if (have_flag(flgs, TR_RES_FEAR)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-	
-	if (have_flag(flgs, TR_RES_CONF)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-	
-	if (have_flag(flgs, TR_FREE_ACT)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-	
-	if (have_flag(flgs, TR_SEE_INVIS)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-	
-	if (have_flag(flgs, TR_HOLD_LIFE)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-
-	if (have_flag(flgs, TR_TELEPATHY)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-
-	if (have_flag(flgs, TR_SLOW_DIGEST)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-
-
-	if (have_flag(flgs, TR_REGEN)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
-
-	if (have_flag(flgs, TR_FEATHER)) fprintf(fff,"¡Ü");
-	else fprintf(fff,"¡¦");
+			fputs("-------ÉÔÌÀ--------------- -------ÉÔÌÀ---------\n", fff);
 #else
-	if (have_flag(flgs, TR_IM_ACID)) fprintf(fff,"* ");
-	else if (have_flag(flgs, TR_RES_ACID)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
+			fputs("-------unknown------------ -------unknown------\n", fff);
+#endif
+		}
+		else
+		{
+			object_flags_known(o_ptr, flgs);
 
-	if (have_flag(flgs, TR_IM_ELEC)) fprintf(fff,"* ");
-	else if (have_flag(flgs, TR_RES_ELEC)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
+			print_im_or_res_flag(TR_IM_ACID, TR_RES_ACID);
+			print_im_or_res_flag(TR_IM_ELEC, TR_RES_ELEC);
+			print_im_or_res_flag(TR_IM_FIRE, TR_RES_FIRE);
+			print_im_or_res_flag(TR_IM_COLD, TR_RES_COLD);
+			print_flag(TR_RES_POIS);
+			print_flag(TR_RES_LITE);
+			print_flag(TR_RES_DARK);
+			print_flag(TR_RES_SHARDS);
+			print_flag(TR_RES_SOUND);
+			print_flag(TR_RES_NETHER);
+			print_flag(TR_RES_NEXUS);
+			print_flag(TR_RES_CHAOS);
+			print_flag(TR_RES_DISEN);
 
-	if (have_flag(flgs, TR_IM_FIRE)) fprintf(fff,"* ");
-	else if (have_flag(flgs, TR_RES_FIRE)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
+			fputs(" ", fff);
 
-	if (have_flag(flgs, TR_IM_COLD)) fprintf(fff,"* ");
-	else if (have_flag(flgs, TR_RES_COLD)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
-	
-	if (have_flag(flgs, TR_RES_POIS)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
-	
-	if (have_flag(flgs, TR_RES_LITE)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
-	
-	if (have_flag(flgs, TR_RES_DARK)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
-	
-	if (have_flag(flgs, TR_RES_SHARDS)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
-	
-	if (have_flag(flgs, TR_RES_SOUND)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
-	
-	if (have_flag(flgs, TR_RES_NETHER)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
-	
-	if (have_flag(flgs, TR_RES_NEXUS)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
-	
-	if (have_flag(flgs, TR_RES_CHAOS)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
-	
-	if (have_flag(flgs, TR_RES_DISEN)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
-	
-	fprintf(fff," ");
-	
-	if (have_flag(flgs, TR_RES_BLIND)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
-	
-	if (have_flag(flgs, TR_RES_FEAR)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
-	
-	if (have_flag(flgs, TR_RES_CONF)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
-	
-	if (have_flag(flgs, TR_FREE_ACT)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
-	
-	if (have_flag(flgs, TR_SEE_INVIS)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
-	
-	if (have_flag(flgs, TR_HOLD_LIFE)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
+			print_flag(TR_RES_BLIND);
+			print_flag(TR_RES_FEAR);
+			print_flag(TR_RES_CONF);
+			print_flag(TR_FREE_ACT);
+			print_flag(TR_SEE_INVIS);
+			print_flag(TR_HOLD_LIFE);
+			print_flag(TR_TELEPATHY);
+			print_flag(TR_SLOW_DIGEST);
+			print_flag(TR_REGEN);
+			print_flag(TR_FEATHER);
 
-	if (have_flag(flgs, TR_TELEPATHY)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
-
-	if (have_flag(flgs, TR_SLOW_DIGEST)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
-
-
-	if (have_flag(flgs, TR_REGEN)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
-
-	if (have_flag(flgs, TR_FEATHER)) fprintf(fff,"+ ");
-	else fprintf(fff,". ");
-#endif	
-	fprintf(fff,"\n");
-      }
-      (*j)++;
-      if(*j==9)
-	{ 
-	  *j=0;
-	  fprintf(fff,"%s\n", inven_res_label);
+			fputc('\n', fff);
+		}
+		(*j)++;
+		if (*j == 9)
+		{
+			*j = 0;
+			fprintf(fff, "%s\n", inven_res_label);
+		}
 	}
-    }
 }
 
 /*
@@ -5891,23 +5800,22 @@ static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr,
  */
 static void do_cmd_knowledge_inven(void)
 {
-
 	FILE *fff;
 
 	char file_name[1024];
- 
+
 	store_type  *st_ptr;
-	object_type *o_ptr;
 
 	byte tval;
-	int i=0;
-	int j=0;
+	int i = 0;
+	int j = 0;
 
 	char  where[32];
 
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
-	if (!fff) {
+	if (!fff)
+	{
 #ifdef JP
 	    msg_format("°ì»þ¥Õ¥¡¥¤¥ë %s ¤òºîÀ®¤Ç¤­¤Þ¤»¤ó¤Ç¤·¤¿¡£", file_name);
 #else
@@ -5916,55 +5824,50 @@ static void do_cmd_knowledge_inven(void)
 	    msg_print(NULL);
 	    return;
 	}
-	fprintf(fff,"%s\n",inven_res_label);
+	fprintf(fff, "%s\n", inven_res_label);
 
-	for (tval=TV_BOW; tval <= TV_RING; tval++){
+	for (tval = TV_BOW; tval <= TV_RING; tval++)
+	{
+		if (j != 0)
+		{
+			for (; j < 9; j++) fputc('\n', fff);
+			j = 0;
+			fprintf(fff, "%s\n", inven_res_label);
+		}
 
-	  if (j!=0) {
-	      for (;j<9;j++) fprintf(fff, "\n");
-	      j=0;
-	      fprintf(fff,"%s\n",inven_res_label);              
-	  }
-	  
 #ifdef JP
-	  strcpy(where, "Áõ");
+		strcpy(where, "Áõ");
 #else
-	  strcpy(where, "E ");
+		strcpy(where, "E ");
 #endif
-	  for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
-	    {
-	      o_ptr = &inventory[i];
-	      do_cmd_knowledge_inven_aux(fff, o_ptr, &j, tval, where);
-	    }
-	  
+		for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
+		{
+			do_cmd_knowledge_inven_aux(fff, &inventory[i], &j, tval, where);
+		}
+
 #ifdef JP
-	  strcpy(where, "»ý");
+		strcpy(where, "»ý");
 #else
-	  strcpy(where, "I ");
+		strcpy(where, "I ");
 #endif
-	  for (i = 0; i < INVEN_PACK; i++)
-	    {
-	      o_ptr = &inventory[i];
-	      do_cmd_knowledge_inven_aux(fff, o_ptr, &j, tval, where);
-	    }
-	  
-	  
-	  /* Print all homes in the different towns */
-	  st_ptr = &town[1].store[STORE_HOME];
+		for (i = 0; i < INVEN_PACK; i++)
+		{
+			do_cmd_knowledge_inven_aux(fff, &inventory[i], &j, tval, where);
+		}
+
+		st_ptr = &town[1].store[STORE_HOME];
 #ifdef JP
-	  strcpy(where, "²È");
+		strcpy(where, "²È");
 #else
-	  strcpy(where, "H ");
+		strcpy(where, "H ");
 #endif
-	      
-	  /* Dump all available items */
-	  for (i = 0; i < st_ptr->stock_num; i++)
-	    {
-	      o_ptr = &st_ptr->stock[i];
-	      do_cmd_knowledge_inven_aux(fff, o_ptr, &j, tval, where);
-	    }
+
+		for (i = 0; i < st_ptr->stock_num; i++)
+		{
+			do_cmd_knowledge_inven_aux(fff, &st_ptr->stock[i], &j, tval, where);
+		}
 	}
-	  
+
 	/* Close the file */
 	my_fclose(fff);
 
