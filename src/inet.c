@@ -292,9 +292,12 @@ static int connect_server(int timeout, const char *host, int port)
 	}
 	sig_int_saved = signal(SIGINT, interrupt_report);
 	sig_alm_saved = signal(SIGALRM, interrupt_report);
-    
+
 	/* タイムアウトの時間を設定 */
 	setitimer(ITIMER_REAL, &val, NULL);
+#else
+	/* Unused in Windows */
+	(void)timeout;
 #endif
 
 	/* プロキシが設定されていればプロキシに繋ぐ */

@@ -1656,7 +1656,16 @@ static errr term_force_font(term_data *td, cptr path)
 	/* Forget the old font (if needed) */
 	if (td->font_id) DeleteObject(td->font_id);
 
-#ifndef JP
+#ifdef JP
+	/* Unused */
+	(void)path;
+
+	/* Create the font (using the 'base' of the font file name!) */
+	td->font_id = CreateFontIndirect(&(td->lf));
+	wid = td->lf.lfWidth;
+	hgt = td->lf.lfHeight;
+	if (!td->font_id) return (1);
+#else
 	/* Forget old font */
 	if (td->font_file)
 	{
@@ -1687,10 +1696,8 @@ static errr term_force_font(term_data *td, cptr path)
 		td->font_file = NULL;
 	}
 
-
 	/* No path given */
 	if (!path) return (1);
-
 
 	/* Local copy */
 	strcpy(buf, path);
@@ -1712,21 +1719,13 @@ static errr term_force_font(term_data *td, cptr path)
 
 	/* Remove the "suffix" */
 	base[strlen(base)-4] = '\0';
-#endif
 
 	/* Create the font (using the 'base' of the font file name!) */
-#ifdef JP
-	td->font_id = CreateFontIndirect(&(td->lf));
-	wid = td->lf.lfWidth;
-	hgt = td->lf.lfHeight;
-	if (!td->font_id) return (1);
-#else
 	td->font_id = CreateFont(hgt, wid, 0, 0, FW_DONTCARE, 0, 0, 0,
 				 ANSI_CHARSET, OUT_DEFAULT_PRECIS,
 				 CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
 				 FIXED_PITCH | FF_DONTCARE, base);
 #endif
-
 
 	/* Hack -- Unknown size */
 	if (!wid || !hgt)
@@ -1907,6 +1906,9 @@ static void Term_nuke_win(term *t)
  */
 static errr Term_user_win(int n)
 {
+	/* Unused */
+	(void)n;
+
 	/* Success */
 	return (0);
 }
@@ -5058,6 +5060,9 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 	WNDCLASS wc;
 	HDC hdc;
 	MSG msg;
+
+	/* Unused */
+	(void)nCmdShow;
 
 	/* Save globally */
 	hInstance = hInst;

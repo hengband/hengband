@@ -168,11 +168,9 @@ void flush_ringbuf(void)
 	while (1)
 	{
 		fd_set tmp_fdset;
-		struct timeval tmp_tv;
 		int result;
 
 		tmp_fdset = fdset;
-		tmp_tv = tv;
 
 		/* ソケットにデータを書き込めるかどうか調べる */
 		select(sd+1, (fd_set *)NULL, &tmp_fdset, (fd_set *)NULL, &tv);
