@@ -8,7 +8,7 @@ D:There may be Vampires around!
 
 S:0200 
 E:0359
-D:Only Zangband players are up now!
+D:Only Hengband players are up now!
 
 S:0400 
 E:0459

@@ -504,7 +504,7 @@ P:0:4d5:0:0:0
 F:SHOW_MODS
 D:$A giant, curved blade designed to cleave the head cleanly from the 
 D:$body.
-D:胴体から頭を綺麗に切り落す為に作られた、巨大な曲った刃を持つ剣だ。
+D:胴体から頭を綺麗に切り落とす為に作られた、巨大な曲った刃を持つ剣だ。
 
 N:41:カタナ
 E:& Katana~
@@ -818,7 +818,7 @@ P:0:4d4:0:0:0
 F:SHOW_MODS
 D:$An enormous two-handed battle axe, carried by Dwarven champions, who 
 D:$compete to see who can cleave the most orc heads.
-D:巨大な両手持ち用の戦斧だ。オークの首を落した数を競うドワーフの戦士が
+D:巨大な両手持ち用の戦斧だ。オークの首を落とした数を競うドワーフの戦士が
 D:愛用している。
 
 
@@ -2575,7 +2575,7 @@ I:75:35:100
 W:3:0:4:40
 A:3/1
 P:0:1d1:0:0:0
-D:$It heals you 6d8, cures blindness, confusion and berserk and reduces cuts 
+D:$It heals you 4d8, cures blindness, confusion and berserk and reduces cuts 
 D:$when you quaff it.
 D:それは飲むと体力が4d8回復し、盲目・混乱・狂戦士化を癒し、切り傷を和らげる。
 
@@ -5631,7 +5631,7 @@ D:それは振るとドアや岩石や壁を溶かす。
 
 #JZ#
 N:584:ドラゴン・グローブ
-E:& Set~ of Gloves of Dragon
+E:& Set~ of Dragon Gloves
 G:]:G
 I:31:3:0
 W:60:0:30:10000
@@ -6029,7 +6029,7 @@ W:85:0:50:7000
 A:85/4
 P:0:1d2:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
-D:$It produces a huge mana ball (damage of core: (300*d200)*2) centered on you 
+D:$It produces a huge mana ball (damage of core: (300+d200)*2) centered on you 
 D:$when you use it. If you are neither mage, high-mage, sorcerer, magiceater 
 D:$nor blue-mage, you take 50 damage.
 D:それは使うと中心部ダメージ(300+d200)*2の巨大な純粋な魔力の球を自分を

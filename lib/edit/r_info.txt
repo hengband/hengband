@@ -245,7 +245,7 @@ D:怒らせなければ全く無害だ。
 
 #JZ#
 #JZ#(コメント)訳は 紫月閑丸さん
-N:4:ズオアオトリ
+N:4:ズアオアトリ
 E:Chaffinch
 G:B:r
 I:110:1d1:30:1:10
@@ -254,7 +254,7 @@ B:BITE:HURT:1d3
 F:RAND_25 | CAN_FLY | WILD_ONLY | WILD_WOOD | WILD_GRASS
 F:ANIMAL | DROP_SKELETON
 D:$Utterly harmless, except when angry.
-D:怒らせなければ全く無害だ。
+D:頭青花鶏。怒らせなければ全く無害だ。
 
 #JZ#
 N:5:野うさぎ
@@ -749,7 +749,7 @@ D:ここには大勢の大群がいる！
 
 #JZ#
 N:39:『グレーター・ヘル=ビースト』
-E:Greater hell-beast
+E:Greater Hell-Beast
 G:U:s
 I:115:15d100:10:100:99
 W:1:6:0:250:0:0
@@ -1103,10 +1103,10 @@ B:CLAW:HURT:1d6
 B:CLAW:HURT:1d6
 F:BASH_DOOR | WILD_ALL | DROP_SKELETON | DROP_CORPSE
 F:ANIMAL
-D:$A larger than normal feline, hissing loudly.  Its velvet claws conceal a 
-D:$fistful of needles.
-D:通常のネコより体が大きくて大きな声で鳴く。そのビロードの美しい爪は鋭い
-D:針のようだ。
+D:$A larger than normal feline, hissing loudly.  Its velvet paws conceal a
+D:$ fistful of needles.
+D:通常のネコより体が大きくて大きな声で鳴く。
+D:その柔らかく美しい足には鋭い爪が隠されている。
 
 #J0#
 N:63:『スメアゴル』
@@ -1276,7 +1276,7 @@ I:120:10d8:2:1:99
 W:3:2:0:14:25:84
 B:TOUCH:EAT_LITE:1d6
 B:TOUCH:EAT_LITE:1d6
-F:NEVER_MOVE | CAN_SWIM |
+F:NEVER_MOVE | CAN_SWIM | HAS_DARK_1 |
 F:STUPID | EMPTY_MIND |
 F:IM_POIS |
 F:NO_CONF | NO_SLEEP | NO_FEAR
@@ -2576,7 +2576,7 @@ D:混沌に熱狂的に仕え、他の種族から恐れられている。
 
 #JZ#
 N:159:『手負いの熊』
-E:The wounded bear
+E:The Wounded Bear
 G:q:r
 I:110:10d10:10:35:10
 W:9:1:0:25:0:0
@@ -4500,7 +4500,7 @@ G:Z:o
 I:110:6d6:30:30:0
 W:15:1:0:50:0:0
 B:BITE:HURT:1d6
-F:FORCE_SLEEP | DROP_CORPSE
+F:FORCE_SLEEP |
 F:FRIENDS | SELF_LITE_1 | SELF_LITE_2 |
 F:BASH_DOOR | 
 F:ANIMAL | RES_LITE
@@ -4516,7 +4516,7 @@ G:Z:D
 I:110:6d6:30:30:0
 W:15:1:0:50:0:0
 B:BITE:HURT:1d6
-F:FORCE_SLEEP | DROP_CORPSE
+F:FORCE_SLEEP |
 F:FRIENDS |
 F:BASH_DOOR | HURT_LITE | 
 F:ANIMAL | RES_DARK
@@ -4675,7 +4675,7 @@ B:BITE:HURT:1d6
 B:BITE:HURT:1d6
 B:BITE:HURT:1d6
 F:ATTR_CLEAR | 
-F:FRIENDS | DROP_SKELETON | DROP_CORPSE
+F:FRIENDS |
 F:INVISIBLE | BASH_DOOR | 
 F:ANIMAL
 D:$A completely translucent hound.
@@ -4947,7 +4947,7 @@ G:*:w
 I:120:6d6:100:30:0
 W:17:1:0:50:0:0
 B:EXPLODE:COLD:8d8
-F:FORCE_SLEEP | CAN_FLY |
+F:FORCE_SLEEP | CAN_FLY | COLD_BLOOD |
 F:EMPTY_MIND | AURA_COLD | HURT_FIRE |
 F:IM_COLD | NO_FEAR | NO_CONF | NO_SLEEP | NONLIVING
 D:$The embodiment of cold.
@@ -5079,7 +5079,7 @@ B:BITE:FIRE:2d3
 F:FORCE_SLEEP | SELF_LITE_2 |
 F:FRIENDS | 
 F:BASH_DOOR | HURT_COLD |
-F:ANIMAL | IM_FIRE | DROP_SKELETON | DROP_CORPSE |
+F:ANIMAL | IM_FIRE |
 S:1_IN_10 | 
 S:BR_FIRE
 D:$Flames lick at its feet and its tongue is a blade of fire.  You can feel a 
@@ -5098,7 +5098,7 @@ B:CLAW:HURT:1d8
 B:BITE:COLD:1d6
 F:FORCE_SLEEP | 
 F:FRIENDS | HURT_FIRE |
-F:BASH_DOOR | DROP_SKELETON | DROP_CORPSE |
+F:BASH_DOOR |
 F:ANIMAL | IM_COLD
 S:1_IN_10 | 
 S:BR_COLD
@@ -5117,7 +5117,7 @@ B:BITE:HURT:2d3
 B:BITE:HURT:2d3
 B:BITE:ELEC:2d3
 F:FORCE_SLEEP | SELF_LITE_2 |
-F:FRIENDS | DROP_SKELETON | DROP_CORPSE |
+F:FRIENDS |
 F:BASH_DOOR | 
 F:ANIMAL | IM_ELEC
 S:1_IN_10 | 
@@ -5617,7 +5617,7 @@ B:BITE:HURT:1d8
 B:CLAW:HURT:3d3
 B:CLAW:HURT:3d3
 F:FORCE_SLEEP | 
-F:FRIENDS | DROP_SKELETON | DROP_CORPSE
+F:FRIENDS |
 F:BASH_DOOR | HURT_ROCK |
 F:ANIMAL | RES_SHAR
 S:1_IN_10 | 
@@ -5640,7 +5640,7 @@ B:CLAW:HURT:3d3
 B:CLAW:HURT:3d3
 F:FORCE_SLEEP | 
 F:FRIENDS | CAN_FLY |
-F:BASH_DOOR | DROP_SKELETON | DROP_CORPSE | EAT_POISONOUS |
+F:BASH_DOOR |
 F:ANIMAL | IM_POIS
 S:1_IN_10 | 
 S:BR_POIS
@@ -5678,7 +5678,7 @@ B:CLAW:HURT:3d3
 B:CLAW:HURT:3d3
 F:FORCE_SLEEP | 
 F:FRIENDS | 
-F:BASH_DOOR | CAN_SWIM | DROP_SKELETON | DROP_CORPSE | EAT_ACIDIC |
+F:BASH_DOOR | CAN_SWIM |
 F:ANIMAL | IM_ACID
 S:1_IN_10 | 
 S:BR_ACID
@@ -6414,7 +6414,7 @@ F:IM_FIRE | IM_COLD | NO_CONF | NO_SLEEP | RES_DISE | RES_TELE
 S:1_IN_8 | 
 S:HEAL | HASTE | BO_FIRE
 D:$This tiny night dwarf is as greedy for gold as his brother, Alberich.
-D:この小さな闇のドワーフは彼の兄アルベリッヒに負けないくらい金に貪欲だ。
+D:この小さな闇のドワーフは彼の兄アルベリヒに負けないくらい金に貪欲だ。
 
 #JZ#
 #JZ#アルベリヒの息子ハーゲン
@@ -6422,7 +6422,7 @@ D:この小さな闇のドワーフは彼の兄アルベリッヒに負けないくらい金に貪欲だ。
 #JZ#アルベリヒの息子であり、グンター王の異父弟にあたります。奸計に
 #JZ#よってジークフリードを殺害し、指環を奪った犯人です。 by 久留さん
 N:383:アルベリヒの息子『ハーゲン』
-E:Hagen, son of Alberich
+E:Hagen, Son of Alberich
 G:h:o
 I:110:82d10:20:80:10
 W:24:2:0:300:0:0
@@ -7119,7 +7119,7 @@ I:120:13d13:20:40:20
 W:27:2:0:130:0:0
 B:SLASH:EXP_20:2d13
 B:SLASH:EXP_20:2d13
-F:CHAR_MULTI | EVIL | IM_POIS | IM_COLD | 
+F:CHAR_MULTI | EVIL | IM_POIS | IM_COLD | RES_CHAO |
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
 F:COLD_BLOOD | BASH_DOOR | NONLIVING |
 F:NO_CONF | NO_SLEEP | NO_FEAR
@@ -7259,7 +7259,7 @@ B:CLAW:HURT:3d3
 F:FORCE_SLEEP | 
 F:FRIENDS | 
 F:BASH_DOOR | 
-F:ANIMAL | RES_SOUN | NO_CONF | NO_SLEEP | DROP_SKELETON | DROP_CORPSE
+F:ANIMAL | RES_SOUN | NO_CONF | NO_SLEEP |
 S:1_IN_5 | 
 S:BR_SOUN
 D:$A blurry canine form which seems to be moving as fast as the eye can 
@@ -7277,7 +7277,7 @@ B:BITE:HURT:2d8
 B:BITE:HURT:2d8
 B:CLAW:HURT:3d3
 B:CLAW:HURT:3d3
-F:FORCE_SLEEP | RES_NEXU | DROP_SKELETON | DROP_CORPSE | EAT_NEXUS |
+F:FORCE_SLEEP | RES_NEXU |
 F:FRIENDS | 
 F:BASH_DOOR | 
 F:ANIMAL | NO_CONF | NO_SLEEP
@@ -8480,7 +8480,7 @@ D:背鰭に沿って針のような刺状の突起があり、脚には水掻きがついていて、尾は平
 D:たくなっている。
 D:かつてドリームランドで一番高い文明の中心であったサルナスを、一晩で破壊し
 D:てしまったことがある。
-D:ボクルグの反応は非常に鈍く、爬虫類らしく遅いペースで行動する。
+D:ボクラグの反応は非常に鈍く、爬虫類らしく遅いペースで行動する。
 D:激しい怒りを、相手がとっくに死んでいるというのに、その子孫に向けてぶつけ
 D:ることもあるという。
 D:（ラヴクラフト「サルナスをみまった災厄」他）
@@ -8964,8 +8964,8 @@ B:BITE:HURT:4d4
 B:BITE:HURT:4d4
 F:FORCE_SLEEP | 
 F:FRIENDS | 
-F:BASH_DOOR | ATTR_MULTI | DROP_SKELETON | DROP_CORPSE
-F:ANIMAL | NO_CONF | NO_SLEEP | SELF_LITE_2 | EAT_POISONOUS | EAT_ACIDIC |
+F:BASH_DOOR | ATTR_MULTI |
+F:ANIMAL | NO_CONF | NO_SLEEP | SELF_LITE_2 |
 F:IM_ELEC | IM_POIS | IM_ACID | IM_FIRE | IM_COLD
 S:1_IN_5
 S:BR_ACID | BR_POIS | BR_COLD | BR_FIRE | BR_ELEC
@@ -9165,7 +9165,7 @@ B:HIT:EXP_20:13d1
 B:HIT:EXP_20:13d1
 F:FORCE_MAXHP | OPEN_DOOR | FRIENDS | DROP_60 | REGENERATE |
 F:ONLY_ITEM | NO_FEAR | NONLIVING |
-F:EVIL | IM_POIS | IM_COLD | IM_FIRE | DEMON 
+F:EVIL | IM_POIS | IM_COLD | IM_FIRE | RES_CHAO | DEMON
 D:$Slender, red-skinned demons twisting in nightmarish shapes. 
 D:$They are armed with hellblades, which will suck the life from 
 D:$your body.
@@ -9496,7 +9496,7 @@ B:BITE:HURT:2d12
 B:BITE:HURT:2d12
 B:BITE:HURT:2d12
 B:CLAW:HURT:3d3
-F:FORCE_SLEEP | FRIENDS | DROP_SKELETON | DROP_CORPSE
+F:FORCE_SLEEP | FRIENDS |
 F:BASH_DOOR | 
 F:ANIMAL | RES_GRAV | NO_CONF | NO_SLEEP | 
 S:1_IN_5 | 
@@ -9540,7 +9540,7 @@ B:BITE:HURT:2d12
 B:BITE:HURT:2d12
 B:BITE:HURT:2d12
 B:CLAW:HURT:3d3
-F:FORCE_SLEEP | FRIENDS | DROP_SKELETON | DROP_CORPSE
+F:FORCE_SLEEP | FRIENDS |
 F:BASH_DOOR | 
 F:ANIMAL | RES_INER | NO_CONF | NO_SLEEP
 S:1_IN_5 | 
@@ -9562,7 +9562,7 @@ B:BITE:HURT:2d12
 B:CLAW:HURT:3d3
 F:FORCE_SLEEP | 
 F:FRIENDS | 
-F:BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:BASH_DOOR |
 F:ANIMAL | RES_WALL | NO_CONF | NO_SLEEP
 S:1_IN_8 | 
 S:BR_WALL
@@ -10143,7 +10143,7 @@ D:「デニス・ホイートリー黒魔術小説傑作選」国書刊行会ほか）
 
 #JZ#
 N:572:『グレーター地獄魔法おばけキノコ=クイルスルグ人間』
-E:The Greater hell magic mushroom were-quylthulg
+E:The Greater Hell Magic Mushroom Were-Quylthulg
 G:Q:s
 I:120:19d99:50:80:50
 W:36:3:0:2500:0:0
@@ -10191,7 +10191,7 @@ D:$A Lord of Chaos famous for his skill at arms.
 D:混沌の貴族で、武術の達人として有名。正々堂々と戦うことを好む。
 
 #JZ#
-N:574:混沌の落し子
+N:574:混沌の落とし子
 E:Chaos spawn
 G:e:u
 I:110:26d26:20:50:20
@@ -10684,7 +10684,7 @@ B:HIT:HURT:6d6
 B:HIT:HURT:5d5
 B:HIT:HURT:5d5
 B:HIT:EXP_20
-F:FORCE_SLEEP | FORCE_MAXHP | SMART | RES_NETH | HUMAN |
+F:FORCE_SLEEP | FORCE_MAXHP | SMART | RES_NETH | MALE | HUMAN |
 F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | 
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
 F:EVIL | IM_COLD | HAS_LITE_1 |
@@ -11083,7 +11083,7 @@ B:HIT:HURT:5d5
 B:HIT:HURT:5d5
 B:HIT:HURT:5d5
 B:HIT:HURT:5d5
-F:UNIQUE | FEMALE | DROP_1D2 | DROP_2D2 | ONLY_ITEM | DROP_GOOD |
+F:UNIQUE | FEMALE | DROP_1D2 | DROP_2D2 | ONLY_ITEM | DROP_GOOD | HUMAN |
 F:FORCE_SLEEP | FORCE_MAXHP | RAND_25 | DROP_CORPSE |
 F:CAN_SPEAK | CAN_SWIM | WILD_OCEAN |
 F:KILL_ITEM | KILL_BODY | BASH_DOOR | POWERFUL |
@@ -11347,19 +11347,19 @@ F:CAN_SWIM | NO_CONF | NO_SLEEP |
 D:$Weird, jelly like creatures. No two look the same.
 D:気味の悪いゼリー状生物。同じようにみえるものは二つと無い。
 
-#JZ#
-N:627:『Fat Man』
-E:Fat Man
-G:{:D
-I:120:14d14:10:80:12
-W:40:255:0:200:0:0
-B:EXPLODE:SHATTER:200d2
-F:FORCE_SLEEP | FORCE_MAXHP | UNIQUE | REFLECTING |
-F:EMPTY_MIND | COLD_BLOOD | BASH_DOOR |
-F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS |
-F:NO_FEAR | NO_CONF | NO_SLEEP | NONLIVING | RES_TELE
-D:$A shining machine of death and destruction.
-D:輝く死と破壊の機械だ。
+N:627:地獄の鉄槌
+E:Hammer of hell
+G:\:v
+I:100:50d10:30:40:0
+#
+# 出現は1.7.x以降
+#
+W:24:255:0:1000:0:0
+B:CRUSH:SUPERHURT:30d1
+F:COLD_BLOOD | EVIL | NO_SLEEP | NO_CONF | NO_FEAR | NO_STUN | NONLIVING |
+F:IM_ACID | IM_COLD | IM_POIS | RES_NETH | RES_DARK | BASH_DOOR
+D:$A foul iron hammer forged with body and souls of victims on the infernal anvil.
+D:犠牲者の装備と魂を固めて、地獄の鉄床で鍛えてできた禍々しい鉄槌だ。
 
 #JZ#
 N:628:呪われし『マレキス』
@@ -11388,7 +11388,7 @@ D:青白く、右半分は黒い。髪は長くて白い。
 #JZ#
 #JZ#モルガンスターン。明の明星号。ジュリアンが乗っている馬。 by 藤岡さん
 N:629:ジュリアンの乗馬『明の明星』
-E:Morgenstern, Julian's steed
+E:Morgenstern, Julian's Steed
 G:q:W
 I:130:30d100:20:100:50
 W:40:3:0:2000:0:0
@@ -11626,7 +11626,7 @@ D:巨大な伝説の鳥であり、その鉄の爪はどんな堅いものでも引き裂き、その鳴き声は
 D:どんな入り組んだ通路でも通り抜けてダンジョン中に響き渡る。
 
 #J0#
-N:641:ミノタウルス
+N:641:ミノタウロス
 E:Minotaur
 G:H:U
 I:130:100d10:13:25:10
@@ -11953,7 +11953,7 @@ D:冷たくじめじめした洞窟の中に住む「異形の神々」の一柱。
 D:外見は泡立つ不定形の固まりで、何百もの偽足がそこから伸びている。
 D:ウボ＝サスラの偽足は絶え間なく形成されては振り回され、
 D:エサに触れるとそれを掴んで自分の中に取り込んでいる。
-D:また、ウボ＝サスラからは絶え間なく「落し子」が生産されつづけており、
+D:また、ウボ＝サスラからは絶え間なく「落とし子」が生産されつづけており、
 D:ウボ＝サスラ本体はそれをエサとして再び自分の中に吸収している。
 D:希に親の偽足から逃れたものは、
 D:魂の無い親の気まぐれの代行者となるが、洞窟から出ることはないようだ。
@@ -12081,7 +12081,7 @@ D:『ラヴクラフト全集５』、創元推理文庫、pp.67)
 
 #JZ#
 N:660:ブランドの息子『リナルド』
-E:Rinaldo, son of Brand
+E:Rinaldo, Son of Brand
 G:p:w
 I:120:16d100:20:120:40
 W:41:3:0:7000:0:0
@@ -12309,7 +12309,7 @@ F:ANIMAL | NO_CONF | NO_SLEEP | CAN_SWIM | RIDING
 S:1_IN_8
 S:BR_POIS | BR_DARK | BR_NETH
 D:$A large basilisk, whose shape resembles that of a great wyrm.
-D:大型のバジリスクで、ワイアームに似た姿をしている。
+D:大型のバシリスクで、ワイアームに似た姿をしている。
 
 #JZ#
 N:669:『カリブディス』
@@ -13712,7 +13712,7 @@ B:BITE:HURT:2d12
 B:BITE:HURT:2d12
 B:CLAW:HURT:3d3
 F:FORCE_SLEEP | SELF_DARK_1 |
-F:FRIENDS | RES_NETH | DROP_SKELETON | DROP_CORPSE
+F:FRIENDS | RES_NETH |
 F:OPEN_DOOR | BASH_DOOR | 
 F:ANIMAL | NO_CONF | NO_SLEEP
 S:1_IN_5 | 
@@ -13734,7 +13734,7 @@ B:BITE:HURT:2d12
 B:CLAW:HURT:3d3
 F:FORCE_SLEEP | 
 F:FRIENDS | 
-F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:OPEN_DOOR | BASH_DOOR |
 F:ANIMAL | RES_TIME | NO_CONF | NO_SLEEP
 S:1_IN_8 | 
 S:BR_TIME
@@ -13756,7 +13756,7 @@ B:BITE:HURT:2d12
 B:CLAW:HURT:3d3
 F:FORCE_SLEEP |
 F:FRIENDS | RES_PLAS | SELF_LITE_2 |
-F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:OPEN_DOOR | BASH_DOOR |
 F:ANIMAL | IM_ELEC | IM_FIRE | NO_CONF | NO_SLEEP
 S:1_IN_5 | 
 S:BR_PLAS
@@ -13795,7 +13795,7 @@ D:このモンスターの存在を嫌悪しているように感じる。
 #J0# 一番気に入りましたので、そうしてあります。
 #J0#
 N:728:ストーム・ワイアーム
-E:Great storm wyrm
+E:Great Storm Wyrm
 G:D:b
 I:120:30d100:30:150:80
 W:51:2:0:13000:0:0
@@ -13875,7 +13875,7 @@ B:HIT:HURT:10d5
 B:HIT:HURT:10d5
 B:HIT:HURT:10d5
 B:HIT:EXP_80
-F:FORCE_SLEEP | FORCE_MAXHP | SMART | IM_FIRE | IM_COLD | IM_POIS | HUMAN |
+F:FORCE_SLEEP | FORCE_MAXHP | SMART | IM_FIRE | IM_COLD | IM_POIS | MALE | HUMAN |
 F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | RES_NETH | RES_NEXU | RES_PLAS |
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | EVIL
 S:1_IN_5 |
@@ -14148,12 +14148,12 @@ S:BLIND | CONF | SCARE | CAUSE_4 | CAUSE_3 |
 S:BA_WATE | DARKNESS | BR_DARK | TELE_TO 
 D:$An enormously fearsome and powerful inhabitant of the depths. It 
 D:$resembles a gargantuan octopus and its evil is almost tangible.
-D:とてつもなく強く恐しい深海の生き物だ。巨大な蛸に似ていて、
+D:とてつもなく強く恐ろしい深海の生き物だ。巨大な蛸に似ていて、
 D:見ただけでその邪悪さが伝わってくる。
 
 #J0#
 N:741:アイス・ワイアーム
-E:Great ice wyrm
+E:Great Ice Wyrm
 G:D:w
 I:120:30d100:30:170:80
 W:54:2:0:15000:0:0
@@ -14373,7 +14373,7 @@ S:BO_MANA | BO_NETH | BA_NETH |
 S:S_UNDEAD
 D:$A bloodshot eyeball floating in the air, you'd be forgiven for assuming it 
 D:$harmless.
-D:それは宙に浮かぶ血走った目玉だ。無害だと思ってもかまわない。
+D:それは宙に浮かぶ血走った目玉だ。無害だと思ったのも無理はないが…。
 
 #J0#
 N:750:頭蓋のドルジ
@@ -14397,7 +14397,7 @@ S:S_UNDEAD
 D:$A glowing skull possessed by sorcerous power.  It need not move, but 
 D:$merely blast you with mighty magic.
 D:それは発光する頭蓋骨で、ソーサラーの力によって動かされている。
-D:あまり動かないが、まれに強力な魔法で攻撃してくる。
+D:動く必要がなく、強力な魔法で攻撃してくるのみである。
 
 #J0#
 N:751:カオス・ボルテックス
@@ -14520,7 +14520,7 @@ D:だが、その羽と瞳を見ればそんな思いはどこかに吹き飛んでしまうだろう。
 
 #J0#
 N:756:ヘル・ワイアーム
-E:Great hell wyrm
+E:Great Hell Wyrm
 G:D:r
 I:120:54d100:40:170:40
 W:55:2:0:18000:0:0
@@ -15109,7 +15109,7 @@ S:BLIND | CONF | SCARE | CAUSE_4 | CAUSE_3 | TELE_TO | TELE_AWAY |
 S:BA_WATE | DARKNESS | BR_DARK | BR_ACID | BR_POIS
 D:$An enormously fearsome and powerful inhabitant of the depths. It 
 D:$resembles a gargantuan octopus and its evil is almost tangible.
-D:とてつもなく強く恐しい深海の生き物だ。巨大な蛸に似ていて、
+D:とてつもなく強く恐ろしい深海の生き物だ。巨大な蛸に似ていて、
 D:見ただけでその邪悪さが伝わってくる。
 
 #JZ#
@@ -15197,7 +15197,7 @@ B:BITE:HURT:2d12
 B:BITE:HURT:2d12
 B:BITE:HURT:2d12
 B:CLAW:HURT:3d3
-F:ATTR_MULTI | ATTR_ANY | DROP_SKELETON | DROP_CORPSE
+F:ATTR_MULTI | ATTR_ANY |
 F:FORCE_SLEEP | 
 F:FRIENDS | 
 F:BASH_DOOR | 
@@ -15268,7 +15268,7 @@ B:BITE:FIRE:5d12
 B:BITE:FIRE:5d12
 B:CRUSH:HURT:6d15
 B:CRUSH:HURT:6d15
-F:FORCE_SLEEP | FORCE_MAXHP | AQUATIC | WILD_OCEAN |
+F:FORCE_SLEEP | FORCE_MAXHP | AQUATIC | WILD_OCEAN | EVIL |
 F:IM_FIRE | IM_ACID | IM_COLD | IM_POIS | RES_DARK |
 F:DRAGON | NO_CONF | NO_SLEEP | NO_FEAR | DROP_CORPSE | RIDING
 S:1_IN_9
@@ -15624,7 +15624,7 @@ D:$passion nor compassion. He was dressed completely in scaled white armor,
 D:$not silver or metallic-colored, but looking as if it had been enameled."
 D:ジュリアンは野性の森林を快適に思っている。彼の楽しみは狩りがいのある獲物、
 D:すなわちあなたをしとめることだ。
-D:「黒い髪を長く伸ばし、青い目には熱情も同乗も表れていない。白い小札鎧に身
+D:「黒い髪を長く伸ばし、青い目には熱情も同情も表れていない。白い小札鎧に身
 D:を包んでいる。銀とかその他の金属的な色ではなくて、まるでエナメルを塗っ
 D:たように見える。」
 D:（ロジャー・ゼラズニイ、岡部宏之訳「アンバーの九王子」早川書房、p.46）
@@ -16104,8 +16104,7 @@ B:CLAW:HURT:3d3
 F:ATTR_MULTI | ATTR_ANY |
 F:FORCE_SLEEP | CAN_FLY |
 F:FRIENDS |
-F:BASH_DOOR | AURA_FIRE | AURA_ELEC | AURA_COLD | DROP_CORPSE | 
-F:DROP_SKELETON | SELF_LITE_2 |
+F:BASH_DOOR | AURA_FIRE | AURA_ELEC | AURA_COLD | SELF_LITE_2 |
 F:ANIMAL | IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
 F:RES_LITE | RES_DARK | RES_SOUN | RES_CHAO | RES_NETH | RES_DISE |
 F:RES_WALL | RES_INER | RES_TIME | RES_GRAV | RES_PLAS | RES_NEXU | RES_SHAR |
@@ -16874,7 +16873,7 @@ D:がいると言われている。
 D:平均身長は１５〜２０メートルだが、
 D:体の各部位の大きさを自由に変える事が出来る。
 D:元々はルルイエに生息していたが、その沈没と共に大部分は封印されている。
-D:しかし、一部のクトゥルフの落し子は、ディープワンによって、
+D:しかし、一部のクトゥルフの落とし子は、ディープワンによって、
 D:深い海溝の底で養われている。
 D:「すべてがルルイエの巨大な石造りの館に横たわり、強壮なクトゥルー
 D:の呪文にまもられ、星たちと地球がふたたび正しい位置にもどる輝かし
@@ -17041,7 +17040,7 @@ D:死と腐敗と衰退を栄養にして生きている。
 D:我々の世界に召喚された場合、ガス状の形態で地球の核まで浸透し、
 D:そこから火柱となって地上に噴き出してくる。
 D:「噴出する病的な緑色の焔の柱... 深遠かつ人知を越えた地の底から
-D:火山の様にほとばしり、健全な焔が落すはずの影を作らず、
+D:火山の様にほとばしり、健全な焔が落とすはずの影を作らず、
 D:硝石をおぞましくも毒々しい緑青で包む。そのような激しい燃焼
 D:に反してそこに熱はなく、ただ死と腐敗の湿気があるのみだ。」
 D:（ラヴクラフト「祝祭」）
@@ -18238,7 +18237,7 @@ B:BITE:HURT:25d1
 B:CLAW:HURT:3d3
 F:FORCE_SLEEP |
 F:FRIENDS | SELF_LITE_1 |
-F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:OPEN_DOOR | BASH_DOOR |
 F:ANIMAL | NO_CONF | NO_SLEEP
 S:1_IN_8 |
 S:BR_MANA
@@ -18279,7 +18278,7 @@ D:$It was left here to be used against intruders.
 D:それは侵入者に対して使用するために置かれている。
 
 N:890:ヴェノム・ワイアーム
-E:Great venom wyrm
+E:Great Venom Wyrm
 G:D:g
 I:120:54d100:30:170:80
 W:55:2:0:16000:0:0
@@ -18404,7 +18403,7 @@ F:DROP_CORPSE | DROP_SKELETON | CAN_SWIM
 S:1_IN_5 |
 S:ROCKET
 D:$You watch in horror as he aims his massive weapon at you.
-D:彼はその恐しい重火器の狙いをあなたに向けている。
+D:彼はその恐ろしい重火器の狙いをあなたに向けている。
 
 N:897:破片ボルテックス
 E:Shard vortex
@@ -18431,7 +18430,7 @@ W:30:2:0:350:0:0
 B:TOUCH:ACID:8d8
 B:TOUCH:PARALYZE:3d3
 F:NEVER_MOVE | MULTIPLY | ONLY_GOLD | DROP_90 | ANIMAL | HURT_ROCK |
-F:NO_FEAR | NO_SLEEP | NO_CONF | NO_STUN | EMPTY_MIND
+F:NO_FEAR | NO_SLEEP | NO_CONF | NO_STUN | EMPTY_MIND | COLD_BLOOD |
 F:IM_COLD | IM_FIRE | IM_ELEC | IM_POIS
 D:$Just a normal wall, boring gray rock. But wait! It seems to be growing...
 D:ただの普通の壁だ。見なれた灰色の岩でできている。
@@ -18493,8 +18492,8 @@ I:100:15d25:15:120:10
 W:25:2:0:100:700:898
 B:TOUCH:FIRE:5d5
 B:TOUCH:PARALYZE:3d3
-F:NEVER_MOVE | MULTIPLY | ONLY_GOLD | DROP_60 | DROP_90 | EMPTY_MIND
-F:ANIMAL | HURT_ROCK | COLD_BLOOD | NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN |
+F:NEVER_MOVE | MULTIPLY | ONLY_GOLD | DROP_60 | DROP_90 | EMPTY_MIND |
+F:ANIMAL | HURT_ROCK | NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN |
 F:IM_ACID | IM_ELEC | IM_POIS | IM_FIRE
 D:$It's just a block of dark rock. But wait! It seems to be growing...
 D:普通の黒い岩の壁だ。しかしちょっと待てよ？だんだん大きくなってくるような…
@@ -18624,7 +18623,7 @@ D:$An ingenious gnomish invention -- a golem designed for underwater
 D:$usage.
 D:ノームの天才が作った発明品だ。深い水中で働くように設計されたゴーレムである。
 
-N:911:石英の壁
+N:911:石英の鉱脈
 E:Quartz vein
 G:%:w
 I:100:15d11:15:30:10
@@ -18788,7 +18787,7 @@ D:$of gills.
 D:水中での生活に適応したナーガだ。魚のような尾ヒレとエラを持っている。
 
 N:920:『デモゴルゴン』
-E:The demogorgon
+E:The Demogorgon
 G:U:u
 I:125:65d100:30:140:20
 W:75:2:0:37000:0:0
@@ -18841,7 +18840,7 @@ S:BR_ELEC | BO_ELEC
 D:かわいらしい外見をしているが、油断すると思わぬ衝撃を受けるだろう。
 
 N:923:雪女
-E:Yukionnna
+E:Yukionna
 G:p:w
 I:110:30d10:20:20:20
 W:27:2:0:300:0:0
@@ -18933,7 +18932,7 @@ D:亀のような外見をしているが、火を吐き、凶暴な性格をしている。
 D:彼は常にキノコ王国を征服しようとたくらんでいる。
 
 N:929:巨大サイバーワイアーム天使悪魔リッチ
-E:Greater cyber wyrm angel daemon lich
+E:Greater Cyber Wyrm Angel Daemon Lich
 G:N:W
 I:150:99d99:50:200:1
 W:99:50:0:30000:0:0
@@ -18980,7 +18979,7 @@ B:HIT:HURT:14d14
 B:HIT:HURT:14d14
 B:HIT:HURT:14d14
 F:DROP_CORPSE | FORCE_SLEEP | FORCE_MAXHP |
-F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | HUMAN |
+F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | MALE | HUMAN |
 F:REFLECTING | SMART | REGENERATE | OPEN_DOOR |
 F:IM_COLD | IM_FIRE | IM_ELEC | NO_CONF | NO_STUN |
 F:NO_SLEEP | RES_TELE | RES_NETH | CAN_FLY | POWERFUL |
@@ -18993,7 +18992,7 @@ D:「！？」「当然、史上最強のエスパーを選んだ！すなわち、超人ロック、君だよ。」
 D:（聖悠紀、超人ロック「赤いサーペント」）
 
 N:931:銀河皇帝『カル・ダームIII世』
-E:Caldarm the third
+E:Caldarm the Third
 G:p:D
 I:130:60d100:100:200:20
 W:79:5:0:32000:0:0
@@ -19063,7 +19062,7 @@ D:帝国には何百年か摂政なんかいないんだがな。」
 D:（聖悠紀、超人ロック「書を守る者」）
 
 N:934:『ルパート将軍』
-E:Rupart the general
+E:Rupart the General
 G:p:r
 I:130:35d100:100:170:0
 W:71:255:0:18000:0:0
@@ -19104,7 +19103,7 @@ D:両脇から角が出ている丈高めの黄金の冠をかぶる。体色は青。牙を持つ。
 D:女神イシターを封印したと伝えられる。
 
 N:936:北斗神拳の使い手『ケンシロウ』
-E:Kenshirou the Fist of The North Star
+E:Kenshirou the Fist of the North Star
 G:p:W
 I:123:60d100:50:170:10
 W:62:2:0:30000:0:0
@@ -19123,7 +19122,7 @@ D:一子相伝とされる北斗神拳の伝承者だ。力が全てを支配すると思われた
 D:時代にあって愛に生き、愛のために戦っている。
 
 N:937:サイバー『レムス』
-E:Lems the cyborg
+E:Lems the Cyborg
 G:g:W
 I:130:50d100:30:160:0
 W:61:3:0:26000:0:0
@@ -19316,19 +19315,19 @@ S:BR_COLD | DISPEL | BR_POIS | BA_COLD | BO_ICEE |
 S:CONF | SCARE | HOLD | S_DEMON
 
 N:947:盗賊『プアー』
-E:Poor, the thief
+E:Poor, the Thief
 G:p:b
 I:105:80d10:20:50:50
 W:25:3:0:500:0:0
 B:HIT:HURT:5d10
 B:HIT:HURT:5d10
 B:CRUSH:SUPERHURT:30d2
-F:UNIQUE | DROP_CORPSE | FORCE_MAXHP | CAN_SPEAK | HUMAN |
+F:UNIQUE | DROP_CORPSE | FORCE_MAXHP | CAN_SPEAK | HUMAN | MALE |
 F:EVIL | ONLY_ITEM | DROP_1D2 | DROP_60 | DROP_GOOD |
 F:NO_SLEEP | NO_CONF | BASH_DOOR
 
 N:948:盗賊『リッチ』
-E:Rich, the thief
+E:Rich, the Thief
 G:p:b
 I:130:50d10:20:80:50
 W:29:3:0:700:0:0
@@ -19336,14 +19335,14 @@ B:HIT:POISON:3d6
 B:HIT:POISON:3d6
 B:TOUCH:EAT_GOLD
 B:TOUCH:EAT_ITEM
-F:UNIQUE | DROP_CORPSE | FORCE_MAXHP | CAN_SPEAK | HUMAN |
+F:UNIQUE | DROP_CORPSE | FORCE_MAXHP | CAN_SPEAK | HUMAN | MALE |
 F:EVIL | ONLY_ITEM | DROP_2D2 | DROP_GOOD |
 F:NO_SLEEP | NO_CONF | OPEN_DOOR | MOVE_BODY |
 S:1_IN_2 |
 S:BLINK | TPORT | TRAPS | CONF | BLIND | SLOW | HOLD | FORGET
 
 N:949:勇者『イケタ』
-E:Iketa, the brave
+E:Iketa, the Brave
 G:p:B
 I:130:50d100:50:170:0
 W:70:2:0:30000:0:0
@@ -19403,7 +19402,7 @@ W:44:4:0:500:0:0
 B:EXPLODE:HURT:30d3
 F:FORCE_SLEEP |
 F:FRIENDS |
-F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE |
+F:OPEN_DOOR | BASH_DOOR |
 F:ANIMAL | NO_CONF | NO_SLEEP
 D:今にも爆発しそうな犬だ。
 
@@ -19433,6 +19432,12 @@ F:FORCE_SLEEP | DROP_1D2 | SMART | DROP_CORPSE | DROP_SKELETON |
 F:ORC | HURT_LITE | EVIL | RES_DARK
 S:1_IN_2 |
 S:SHOOT
+D:$In a rare display of ingenuity, the Orcs invented an incredibly
+D:$destructive weapon. Most Orcish artillerists are those who dared
+D:$criticize its effectiveness.
+D:めったに見せない発明の才によって、オークは信じられないほど破壊的な
+D:兵器を発明した。このオーク弩弓隊の兵士の大半は、その有効性に疑問を
+D:投げかけた者たちが務めている。
 
 # Description in English by Nick Keulmann
 N:955:やせこけた馬
@@ -19541,12 +19546,12 @@ F:RES_TELE | CAN_SWIM | WILD_SWAMP
 S:1_IN_10 |
 S:SHRIEK | MIND_BLAST
 D:$It`s a slime colony.
-D:$If you so much as DARE to touch it
+D:$If you so much as DARE to touch it.
 D:可愛らしい純心無垢なスライムモルドだ。
 D:触れて死ね！
 
 N:963:ビルダー帝国帝王『ボ帝ビル』
-E:Boty-Buildeng, the emperor
+E:Boty-Buildeng, the Emperor
 G:P:U
 I:120:12d100:25:130:40
 W:36:2:0:2500:0:0
@@ -19610,7 +19615,7 @@ S:BA_FIRE | HASTE | HOLD | CONF | BLIND
 D:断じてマリオの類似品ではない！(本人主張)。
 
 N:967:ガキ大将『ジャイアン』
-E:Jaian, the boss of the kids
+E:Jaian, the Boss of the Kids
 G:p:o
 I:110:100d10:16:100:20
 W:29:3:0:500:0:0
@@ -19729,7 +19734,7 @@ D:$with it's breath of fire.
 D:ロードスの古代竜の一匹で、その火炎のブレスで全てを焼き尽くす。
 
 N:973:暗黒の島マーモの皇帝『ベルド』
-E:Beld, ruler of Marmo
+E:Beld, Ruler of Marmo
 G:p:r
 I:125:77d30:10:160:50
 W:48:4:0:18500:0:0
@@ -20564,7 +20569,7 @@ S:HEAL | TRAPS
 # 強すぎる？
 #
 N:1022:サイヤ人『ナッパ』
-E:Nappa the Saiayan
+E:Nappa the Saiyan
 G:p:U
 I:125:25d100:30:125:15
 W:50:3:0:13500:0:0
@@ -20580,8 +20585,8 @@ S:1_IN_8 |
 S:TELE_TO | BO_MANA
 D:$He looks like brawny human being apparently. 
 D:$However, unlike man, it has the tail of a monkey. 
-D:$This tail proves he is a Saiayan. 
-D:$A Saiayan's fighting power is far superior to human's and will bring many destruction.
+D:$This tail proves he is a Saiyan. 
+D:$A Saiyan's fighting power is far superior to human's and will bring many destruction.
 D:逞しい人間のようだが、猿の尻尾が付いている。これこそがサイヤ人の証だ。
 D:その戦闘力は人間を凌駕し、多くの破壊を呼び起こすだろう。
 
@@ -20741,7 +20746,7 @@ F:MOVE_BODY | KILL_WALL | IM_FIRE | IM_ELEC | IM_POIS | IM_ACID | IM_COLD |
 F:RES_NETH | RES_WATE | RES_PLAS | RES_NEXU |
 F:RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV | NO_STUN | REGENERATE |
 F:NO_CONF | NO_SLEEP | CAN_FLY |
-F:EMPTY_MIND | COLD_BLOOD | BASH_DOOR | POWERFUL | RAND_25 |
+F:COLD_BLOOD | BASH_DOOR | POWERFUL | RAND_25 |
 F:GOOD | DROP_CORPSE | SELF_LITE_2
 D:$He was the braver of Atlantis. His body was converted by a Shinto priest, 
 D:$in order to fight against "Papa". His body is now made by Orihalcon.
@@ -20796,7 +20801,7 @@ N:1034:『迷宮のミノタウロス』
 E:The Minotaur of the Labyrinth
 G:H:U
 I:120:25d10:13:25:10
-W:40:255:0:600:0:0
+W:40:3:0:600:0:0
 B:BUTT:HURT:4d6
 B:BUTT:HURT:4d6
 B:BUTT:HURT:2d6
@@ -21131,7 +21136,7 @@ G:p:y
 I:110:6d8:20:10:5
 W:4:1:0:18:600:1055
 B:HIT:HURT:1d9
-F:DROP_60 | WILD_ALL | HUMAN |
+F:DROP_60 | WILD_ALL | HUMAN | MALE |
 F:OPEN_DOOR | DROP_SKELETON | DROP_CORPSE | 
 F:HAS_LITE_1 | NO_CONF | NO_SLEEP
 S:1_IN_12 |
@@ -21145,7 +21150,7 @@ G:p:y
 I:110:6d8:20:10:5
 W:8:1:0:18:600:1055
 B:HIT:HURT:1d6
-F:DROP_60 | WILD_ALL | FRIENDS | HUMAN |
+F:DROP_60 | WILD_ALL | FRIENDS | HUMAN | MALE |
 F:OPEN_DOOR | DROP_SKELETON | DROP_CORPSE | 
 F:HAS_LITE_1 | NO_CONF | NO_SLEEP
 S:1_IN_12 |
@@ -21398,7 +21403,7 @@ D:日本の伝説では、たぬきは人を化かすと伝えられている。
 D:魔法の木の葉を頭に載せて人に化けるのだ。
 
 N:1068:混沌のサマ師『ディオニソス』
-E:Dionysus, The Munchkin of Chaos
+E:Dionysus, the Munchkin of Chaos
 G:G:g
 I:154:10d100:100:162:40
 W:55:7:0:10000:0:0

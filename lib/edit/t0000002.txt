@@ -350,8 +350,6 @@ B:9:M:2:0:0:0:0:0:0:0:0:0
 
 B:$10:N:Thieves Guild:Lardbottom:Hobbit
 B:10:N:盗賊のギルド:ラードボトム:ホビット
-B:$10:A:0:Get share of stolen gold:0:0:s:7:2
-B:10:A:0:盗んだ金を山分けする:0:0:s:7:2
 B:$10:A:1:Rest for the night:0:100:r:17:0
 B:10:A:1:一泊する:0:100:r:17:0
 B:$10:A:2:Identify possessions:100:2000:i:26:0

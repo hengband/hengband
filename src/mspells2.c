@@ -20,7 +20,7 @@
  */
 static void monst_breath_monst(int m_idx, int y, int x, int typ, int dam_hp, int rad, bool breath, int monspell, bool learnable)
 {
-	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_MONSTER;
+	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -44,14 +44,14 @@ static void monst_breath_monst(int m_idx, int y, int x, int typ, int dam_hp, int
  */
 static void monst_bolt_monst(int m_idx, int y, int x, int typ, int dam_hp, int monspell, bool learnable)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_MONSTER | PROJECT_REFLECTABLE;
+	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 
 	(void)project(m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 
 static void monst_beam_monst(int m_idx, int y, int x, int typ, int dam_hp, int monspell, bool learnable)
 {
-	int flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU | PROJECT_MONSTER;
+	int flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU;
 
 	(void)project(m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
@@ -101,7 +101,11 @@ static bool breath_direct(int y1, int x1, int y2, int x2, int rad, bool disint_b
 {
 	/* Must be the same as projectable() */
 
-	int i, y, x;
+	int i;
+
+	/* Initial grid */
+	int y = y1;
+	int x = x1;
 
 	int grid_n = 0;
 	u16b grid_g[512];
@@ -116,44 +120,87 @@ static bool breath_direct(int y1, int x1, int y2, int x2, int rad, bool disint_b
 
 	/* Check the projection path */
 	grid_n = project_path(grid_g, MAX_RANGE, y1, x1, y2, x2, disint_ball ? PROJECT_DISI : 0);
-	breath_shape(grid_g, grid_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y2, x2, disint_ball, FALSE);
 
-	for (i = 0; i < grids; i++)
+	/* Project along the path */
+	for (i = 0; i < grid_n; ++i)
 	{
-		/* Extract the location */
-		y = gy[i];
-		x = gx[i];
+		int ny = GRID_Y(grid_g[i]);
+		int nx = GRID_X(grid_g[i]);
 
-		if (y == y2 && x == x2)
-			hit2 = TRUE;
-		if (player_bold(y, x))
-			hityou = TRUE;
+		if (disint_ball)
+		{
+			/* Hack -- Balls explode before reaching walls */
+			if (cave_stop_disintegration(ny, nx)) break;
+		}
+		else
+		{
+			/* Hack -- Balls explode before reaching walls */
+			if (!cave_floor_bold(ny, nx)) break;
+		}
+
+		/* Save the "blast epicenter" */
+		y = ny;
+		x = nx;
 	}
-	if (!hit2)
-		return FALSE;
-	if (friend && hityou)
-		return FALSE;
+
+	grid_n = i;
+
+	if (!grid_n)
+	{
+		if (disint_ball)
+		{
+			if (in_disintegration_range(y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
+			if (in_disintegration_range(y1, x1, py, px) && (distance(y1, x1, py, px) <= rad)) hityou = TRUE;
+		}
+		else
+		{
+			if (los(y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
+			if (los(y1, x1, py, px) && (distance(y1, x1, py, px) <= rad)) hityou = TRUE;
+		}
+	}
+	else
+	{
+		breath_shape(grid_g, grid_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y, x, disint_ball, FALSE);
+
+		for (i = 0; i < grids; i++)
+		{
+			/* Extract the location */
+			y = gy[i];
+			x = gx[i];
+
+			if ((y == y2) && (x == x2)) hit2 = TRUE;
+			if (player_bold(y, x)) hityou = TRUE;
+		}
+	}
+
+	if (!hit2) return FALSE;
+	if (friend && hityou) return FALSE;
+
 	return TRUE;
 }
 
 /*
- * Get the actual center point of ball spells (originally from TOband)
+ * Get the actual center point of ball spells (rad > 1) (originally from TOband)
  */
 static void get_project_point(int sy, int sx, int *ty, int *tx, int flg)
 {
 	u16b path_g[128];
-	int  path_n;
+	int  path_n, i;
 
 	path_n = project_path(path_g, MAX_RANGE, sy, sx, *ty, *tx, flg);
 
-	if (path_n)
+	*ty = sy;
+	*tx = sx;
+
+	/* Project along the path */
+	for (i = 0; i < path_n; i++)
 	{
-		/* Use final point of projection */
-		*ty = GRID_Y(path_g[path_n - 1]);
-		*tx = GRID_X(path_g[path_n - 1]);
-	}
-	else
-	{
+		sy = GRID_Y(path_g[i]);
+		sx = GRID_X(path_g[i]);
+
+		/* Hack -- Balls explode before reaching walls */
+		if (!cave_floor_bold(sy, sx)) break;
+
 		*ty = sy;
 		*tx = sx;
 	}
@@ -2124,7 +2171,7 @@ bool monst_spell_monst(int m_idx)
 		if (see_m)
 		{
 #ifdef JP
-			msg_format("%^sは%sをじっと睨んだ", m_name, t_name);
+			msg_format("%^sは%sをじっと睨んだ。", m_name, t_name);
 #else
 			msg_format("%^s gazes intently at %s.", m_name, t_name);
 #endif
@@ -2186,7 +2233,7 @@ bool monst_spell_monst(int m_idx)
 		if (see_m)
 		{
 #ifdef JP
-			msg_format("%^sは%sをじっと睨んだ", m_name, t_name);
+			msg_format("%^sは%sをじっと睨んだ。", m_name, t_name);
 #else
 			msg_format("%^s gazes intently at %s.", m_name, t_name);
 #endif
@@ -3205,45 +3252,7 @@ bool monst_spell_monst(int m_idx)
 #endif
 		}
 
-		teleport_away(m_idx, MAX_SIGHT * 2 + 5, FALSE);
-
-		if (los(py, px, m_ptr->fy, m_ptr->fx) && !world_monster && see_m)
-		{
-			for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
-			{
-				u32b flgs[TR_FLAG_SIZE];
-				object_type *o_ptr = &inventory[i];
-
-				if (cursed_p(o_ptr)) continue;
-
-				object_flags(o_ptr, flgs);
-
-				if((have_flag(flgs, TR_TELEPORT)) || (p_ptr->muta1 & MUT1_VTELEPORT) || (p_ptr->pclass == CLASS_IMITATOR))
-				{
-#ifdef JP
-					cptr msg = "ついていきますか？";
-#else
-					cptr msg = "Do you follow it? ";
-#endif
-
-					if(get_check_strict(msg, CHECK_OKAY_CANCEL))
-					{
-						if (one_in_(3))
-						{
-							teleport_player(200);
-#ifdef JP
-							msg_print("失敗！");
-#else
-							msg_print("Failed!");
-#endif
-						}
-						else teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE);
-						p_ptr->energy_need = ENERGY_NEED();
-					}
-					break;
-				}
-			}
-		}
+		teleport_away_followable(m_idx);
 		break;
 
 	/* RF6_WORLD */
@@ -3279,7 +3288,7 @@ bool monst_spell_monst(int m_idx)
 #endif
 					}
 					teleport_away(m_idx, 10, FALSE);
-					p_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
+					p_ptr->update |= (PU_MONSTERS);
 				}
 				else
 				{
@@ -3288,7 +3297,7 @@ bool monst_spell_monst(int m_idx)
 						if (see_either)
 						{
 #ifdef JP
-							msg_format("%^sが%sを掴んで空中から投げ落した。", m_name, t_name);
+							msg_format("%^sが%sを掴んで空中から投げ落とした。", m_name, t_name);
 #else
 							msg_format("%^s holds %s, and drops from the sky.", m_name, t_name);
 #endif
@@ -3325,7 +3334,7 @@ bool monst_spell_monst(int m_idx)
 						dam += damroll(6, 8);
 					}
 
-					if (p_ptr->riding)
+					if (p_ptr->riding == t_idx)
 					{
 						int get_damage = 0;
 
@@ -3479,7 +3488,7 @@ bool monst_spell_monst(int m_idx)
 
 		if (!resists_tele)
 		{
-			if (t_idx == p_ptr->riding) teleport_player(MAX_SIGHT * 2 + 5);
+			if (t_idx == p_ptr->riding) teleport_player_away(m_idx, MAX_SIGHT * 2 + 5);
 			else teleport_away(t_idx, MAX_SIGHT * 2 + 5, FALSE);
 		}
 
@@ -3579,7 +3588,7 @@ bool monst_spell_monst(int m_idx)
 			}
 		}
 
-		(void)project(m_idx, 3, y, x, 0, GF_DARK_WEAK, PROJECT_GRID | PROJECT_KILL | PROJECT_MONSTER, MS_DARKNESS);
+		(void)project(m_idx, 3, y, x, 0, GF_DARK_WEAK, PROJECT_GRID | PROJECT_KILL, MS_DARKNESS);
 
 		unlite_room(y, x);
 
@@ -4295,7 +4304,7 @@ bool monst_spell_monst(int m_idx)
 			p_ptr->mane_num++;
 			new_mane = TRUE;
 
-			p_ptr->redraw |= (PR_MANE);
+			p_ptr->redraw |= (PR_IMITATION);
 		}
 	}
 

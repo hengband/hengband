@@ -1036,6 +1036,7 @@ static void mass_produce(object_type *o_ptr)
 		case TV_DIGGING:
 		case TV_BOW:
 		{
+			if (o_ptr->art_name) break;
 			if (o_ptr->name2) break;
 			if (cost <= 10L) size += damroll(3, 5);
 			if (cost <= 100L) size += damroll(3, 5);
@@ -4078,7 +4079,7 @@ msg_format("%sを調べている...", o_name);
 
 
 	/* Describe it fully */
-	if (!screen_object(o_ptr, TRUE))
+	if (!screen_object(o_ptr, SCROBJ_FORCE_DETAIL))
 #ifdef JP
 msg_print("特に変わったところはないようだ。");
 #else
@@ -4284,7 +4285,16 @@ static void store_process_command(void)
 		/* Browse a book */
 		case 'b':
 		{
-			do_cmd_browse();
+			if ( (p_ptr->pclass == CLASS_MINDCRAFTER) ||
+			     (p_ptr->pclass == CLASS_BERSERKER) ||
+			     (p_ptr->pclass == CLASS_NINJA) ||
+			     (p_ptr->pclass == CLASS_MIRROR_MASTER) 
+			     ) do_cmd_mind_browse();
+			else if (p_ptr->pclass == CLASS_SMITH)
+				do_cmd_kaji(TRUE);
+			else if (p_ptr->pclass == CLASS_MAGIC_EATER)
+				do_cmd_magic_eater(TRUE);
+			else do_cmd_browse();
 			break;
 		}
 

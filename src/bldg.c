@@ -1672,7 +1672,7 @@ static bool vault_aux_battle(int r_idx)
 	monster_race *r_ptr = &r_info[r_idx];
 
 	/* Decline town monsters */
-/*	if (!monster_dungeon(r_idx)) return FALSE; */
+/*	if (!mon_hook_dungeon(r_idx)) return FALSE; */
 
 	/* Decline unique monsters */
 /*	if (r_ptr->flags1 & (RF1_UNIQUE)) return (FALSE); */
@@ -2813,17 +2813,24 @@ msg_print("すみません、でもうちで誰かに死なれちゃ困りますんで。");
 				}
 				else
 				{
-					int oldturn = turn;
+					s32b oldturn = turn;
 #ifdef JP
 					do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "宿屋に泊まった。");
 #else
 					do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "stay over night at the inn");
 #endif
 					turn = (turn / (TURNS_PER_TICK*TOWN_DAWN/2) + 1) * (TURNS_PER_TICK*TOWN_DAWN/2);
+
+					if (dungeon_turn < dungeon_turn_limit)
+					{
+						dungeon_turn += MIN(turn - oldturn, TURNS_PER_TICK*250);
+						if (dungeon_turn > dungeon_turn_limit) dungeon_turn = dungeon_turn_limit;
+					}
+
+					prevent_turn_overflow();
+
 					if (((oldturn + TURNS_PER_TICK * TOWN_DAWN / 4) % (TURNS_PER_TICK * TOWN_DAWN)) > TURNS_PER_TICK * TOWN_DAWN/4) do_cmd_write_nikki(NIKKI_HIGAWARI, 0, NULL);
 					p_ptr->chp = p_ptr->mhp;
-
-					dungeon_turn += MIN(turn - oldturn, TURNS_PER_TICK*250);
 
 					if (ironman_nightmare)
 					{
@@ -2923,22 +2930,6 @@ msg_print("部屋は夜だけ使用可能です。");
 	}
 
 	return (TRUE);
-}
-
-
-/*
- * Share gold for thieves
- */
-static void share_gold(void)
-{
-	int i = (p_ptr->lev * 2) * 10;
-#ifdef JP
-msg_format("＄%d を手に入れた。", i);
-#else
-	msg_format("You collect %d gold pieces", i);
-#endif
-
-	p_ptr->au += i;
 }
 
 
@@ -4714,21 +4705,6 @@ msg_print("お金が足りません！");
 		if (do_res_stat(A_CON)) paid = TRUE;
 		if (do_res_stat(A_CHR)) paid = TRUE;
 		break;
-	case BACT_GOLD: /* set timed reward flag */
-		if (!p_ptr->rewards[BACT_GOLD])
-		{
-			share_gold();
-			p_ptr->rewards[BACT_GOLD] = TRUE;
-		}
-		else
-		{
-#ifdef JP
-			msg_print("今日の分け前はすでに支払ったぞ！");
-#else
-			msg_print("You just had your daily allowance!");
-#endif
-		}
-		break;
 	case BACT_ENCHANT_ARROWS:
 		item_tester_hook = item_tester_hook_ammo;
 		enchant_item(bcost, 1, 1, 0);
@@ -4824,7 +4800,7 @@ msg_print("お金が足りません！");
 			p_ptr->word_recall = 1;
 			p_ptr->recall_dungeon = select_dungeon;
 			max_dlv[p_ptr->recall_dungeon] = ((amt > d_info[select_dungeon].maxdepth) ? d_info[select_dungeon].maxdepth : ((amt < d_info[select_dungeon].mindepth) ? d_info[select_dungeon].mindepth : amt));
-			if (record_maxdeapth)
+			if (record_maxdepth)
 #ifdef JP
 				do_cmd_write_nikki(NIKKI_TRUMP, select_dungeon, "トランプタワーで");
 #else
@@ -4842,7 +4818,10 @@ msg_print("お金が足りません！");
 		break;
 	}
 	case BACT_LOSE_MUTATION:
-		if (p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3)
+		if (p_ptr->muta1 || p_ptr->muta2 ||
+		    (p_ptr->muta3 & ~MUT3_GOOD_LUCK) ||
+		    (p_ptr->pseikaku != SEIKAKU_LUCKY &&
+		     (p_ptr->muta3 & MUT3_GOOD_LUCK)))
 		{
 			while(!lose_mutation(0));
 			paid = TRUE;

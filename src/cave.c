@@ -459,7 +459,7 @@ bool player_can_see_bold(int y, int x)
 	xx = (x < px) ? (x + 1) : (x > px) ? (x - 1) : x;
 
 	/* Check for "local" illumination */
-	if ((cave[yy][xx].info & CAVE_MNLT) || ((cave[yy][xx].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW))
+	if (cave[yy][xx].info & CAVE_GLOW)
 	{
 		/* Assume the wall is really illuminated */
 		return (TRUE);
@@ -763,7 +763,7 @@ static byte lighting_colours[16][2] =
 		/* Unsafe cave grid -- idea borrowed from Unangband */ \
 		if (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) \
 		{ \
-			feat = FEAT_UNDETECTD; \
+			feat = FEAT_UNDETECTED; \
 \
 			/* Access unsafe darkness */ \
 			f_ptr = &f_info[feat]; \
@@ -800,7 +800,7 @@ static byte lighting_colours[16][2] =
 			/* Use darkened colour */ \
 			a = !new_ascii_graphics ? TERM_L_DARK : lighting_colours[a][1]; \
 		} \
-		else if (use_graphics && feat_supports_lighting(feat)) \
+		else if (feat_supports_lighting(feat)) \
 		{ \
 			/* Use a dark tile */ \
 			c++; \
@@ -948,7 +948,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 
 	/* Is this grid "darkened" by monster? */
 	bool darkened_grid = ((c_ptr->info & (CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK)) == (CAVE_VIEW | CAVE_MNDK)) &&
-							!p_ptr->see_nocto && !p_ptr->blind;
+							!p_ptr->see_nocto && !p_ptr->blind && !p_ptr->wild_mode;
 
 	/* Floors (etc) */
 	if ((feat <= FEAT_INVIS) || (feat == FEAT_DIRT) || (feat == FEAT_GRASS))
@@ -981,7 +981,12 @@ void map_info(int y, int x, byte *ap, char *cp)
 				/* Handle "blind" */
 				if (p_ptr->blind)
 				{
-					if (use_graphics)
+					if (is_ascii_graphics(a))
+					{
+						/* Use "dark gray" */
+						a = TERM_L_DARK;
+					}
+					else
 					{
 						/*
 						 * feat_supports_lighting(feat)
@@ -990,11 +995,6 @@ void map_info(int y, int x, byte *ap, char *cp)
 
 						/* Use a dark tile */
 						c++;
-					}
-					else
-					{
-						/* Use "dark gray" */
-						a = TERM_L_DARK;
 					}
 				}
 
@@ -1004,7 +1004,12 @@ void map_info(int y, int x, byte *ap, char *cp)
 					/* Torch lite */
 					if (view_yellow_lite && !p_ptr->wild_mode)
 					{
-						if (use_graphics)
+						if (is_ascii_graphics(a))
+						{
+							/* Use "yellow" */
+							a = TERM_YELLOW;
+						}
+						else
 						{
 							/*
 							 * feat_supports_lighting(feat)
@@ -1014,18 +1019,18 @@ void map_info(int y, int x, byte *ap, char *cp)
 							/* Use a brightly lit tile */
 							c += 2;
 						}
-						else
-						{
-							/* Use "yellow" */
-							a = TERM_YELLOW;
-						}
 					}
 				}
 
 				/* Handle "dark" grids */
 				else if ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
 				{
-					if (use_graphics)
+					if (is_ascii_graphics(a))
+					{
+						/* Use "dark gray" */
+						a = TERM_L_DARK;
+					}
+					else
 					{
 						/*
 						 * feat_supports_lighting(feat)
@@ -1035,11 +1040,6 @@ void map_info(int y, int x, byte *ap, char *cp)
 						/* Use a dark tile */
 						c++;
 					}
-					else
-					{
-						/* Use "dark gray" */
-						a = TERM_L_DARK;
-					}
 				}
 
 				/* Handle "out-of-sight" grids */
@@ -1048,7 +1048,12 @@ void map_info(int y, int x, byte *ap, char *cp)
 					/* Special flag */
 					if (view_bright_lite && !p_ptr->wild_mode)
 					{
-						if (use_graphics)
+						if (is_ascii_graphics(a))
+						{
+							/* Use "gray" */
+							a = TERM_SLATE;
+						}
+						else
 						{
 							/*
 							 * feat_supports_lighting(feat)
@@ -1057,11 +1062,6 @@ void map_info(int y, int x, byte *ap, char *cp)
 
 							/* Use a dark tile */
 							c++;
-						}
-						else
-						{
-							/* Use "gray" */
-							a = TERM_SLATE;
 						}
 					}
 				}
@@ -1073,7 +1073,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 		{
 			/* Unsafe cave grid -- idea borrowed from Unangband */
 			if (view_unsafe_grids && (c_ptr->info & (CAVE_UNSAFE)))
-				feat = FEAT_UNDETECTD;
+				feat = FEAT_UNDETECTED;
 			else
 				feat = FEAT_NONE;
 
@@ -1119,7 +1119,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 						/* Use darkened colour */
 						a = lighting_colours[a][1];
 					}
-					else if (use_graphics && feat_supports_lighting(feat))
+					else if (feat_supports_lighting(feat))
 					{
 						/* Use a dark tile */
 						c++;
@@ -1130,15 +1130,14 @@ void map_info(int y, int x, byte *ap, char *cp)
 				else if (c_ptr->info & (CAVE_LITE | CAVE_MNLT))
 				{
 					/* Torch lite */
-					if (view_yellow_lite && !p_ptr->wild_mode && ((use_graphics && feat_supports_lighting(feat)) || is_ascii_graphics(a)))
+					if (view_yellow_lite && !p_ptr->wild_mode && (feat_supports_lighting(feat) || is_ascii_graphics(a)))
 					{
 						if (is_ascii_graphics(a))
 						{
 							/* Use lightened colour */
 							a = lighting_colours[a][0];
 						}
-						else if (use_graphics &&
-								feat_supports_lighting(feat))
+						else if (feat_supports_lighting(feat))
 						{
 							/* Use a brightly lit tile */
 							c += 2;
@@ -1147,7 +1146,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 				}
 
 				/* Handle "view_bright_lite" */
-				else if (view_bright_lite && !p_ptr->wild_mode && ((use_graphics && feat_supports_lighting(feat)) || is_ascii_graphics(a)))
+				else if (view_bright_lite && !p_ptr->wild_mode && (feat_supports_lighting(feat) || is_ascii_graphics(a)))
 				{
 					/* Not viewable */
 					if (!(c_ptr->info & CAVE_VIEW))
@@ -1157,7 +1156,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 							/* Use darkened colour */
 							a = lighting_colours[a][1];
 						}
-						else if (use_graphics && feat_supports_lighting(feat))
+						else if (feat_supports_lighting(feat))
 						{
 							/* Use a dark tile */
 							c++;
@@ -1171,6 +1170,11 @@ void map_info(int y, int x, byte *ap, char *cp)
 						{
 							/* Use darkened colour */
 							a = lighting_colours[a][1];
+						}
+						else if (feat_supports_lighting(feat))
+						{
+							/* Use a dark tile */
+							c++;
 						}
 					}
 				}
@@ -1184,15 +1188,15 @@ void map_info(int y, int x, byte *ap, char *cp)
 				/* Handle "blind" */
 				if (p_ptr->blind)
 				{
-					if (use_graphics)
-					{
-						/* Use a dark tile */
-						c++;
-					}
-					else
+					if (is_ascii_graphics(a))
 					{
 						/* Use "dark gray" */
 						a = TERM_L_DARK;
+					}
+					else
+					{
+						/* Use a dark tile */
+						c++;
 					}
 				}
 
@@ -1202,15 +1206,15 @@ void map_info(int y, int x, byte *ap, char *cp)
 					/* Torch lite */
 					if (view_yellow_lite && !p_ptr->wild_mode)
 					{
-						if (use_graphics)
-						{
-							/* Use a brightly lit tile */
-							c += 2;
-						}
-						else
+						if (is_ascii_graphics(a))
 						{
 							/* Use "yellow" */
 							a = TERM_YELLOW;
+						}
+						else
+						{
+							/* Use a brightly lit tile */
+							c += 2;
 						}
 					}
 				}
@@ -1221,29 +1225,30 @@ void map_info(int y, int x, byte *ap, char *cp)
 					/* Not viewable */
 					if (!(c_ptr->info & CAVE_VIEW))
 					{
-						if (use_graphics)
-						{
-							/* Use a dark tile */
-							c++;
-						}
-						else
+						if (is_ascii_graphics(a))
 						{
 							/* Use "gray" */
 							a = TERM_SLATE;
+						}
+						else
+						{
+							/* Use a dark tile */
+							c++;
 						}
 					}
 
 					/* Not glowing */
 					else if ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
 					{
-						if (use_graphics)
-						{
-							/* Use a lit tile */
-						}
-						else
+						if (is_ascii_graphics(a))
 						{
 							/* Use "gray" */
 							a = TERM_SLATE;
+						}
+						else
+						{
+							/* Use a dark tile */
+							c++;
 						}
 					}
 
@@ -1257,16 +1262,17 @@ void map_info(int y, int x, byte *ap, char *cp)
 						xx = (x < px) ? (x + 1) : (x > px) ? (x - 1) : x;
 
 						/* Check for "local" illumination */
-						if ((cave[yy][xx].info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
+						if (!(cave[yy][xx].info & CAVE_GLOW))
 						{
-							if (use_graphics)
-							{
-								/* Use a lit tile */
-							}
-							else
+							if (is_ascii_graphics(a))
 							{
 								/* Use "gray" */
 								a = TERM_SLATE;
+							}
+							else
+							{
+								/* Use a dark tile */
+								c++;
 							}
 						}
 					}
@@ -1282,7 +1288,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 			{
 				/* Unsafe cave grid -- idea borrowed from Unangband */
 				if (view_unsafe_grids && (c_ptr->info & (CAVE_UNSAFE)))
-					feat = FEAT_UNDETECTD;
+					feat = FEAT_UNDETECTED;
 				else
 					feat = FEAT_NONE;
 			}
@@ -1309,7 +1315,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 		switch (feat)
 		{
 		case FEAT_NONE:
-		case FEAT_UNDETECTD:
+		case FEAT_UNDETECTED:
 		case FEAT_DARK_PIT:
 			feat_priority = 1;
 			break;
@@ -1844,7 +1850,7 @@ void note_spot(int y, int x)
 			xx = (x < px) ? (x + 1) : (x > px) ? (x - 1) : x;
 
 			/* Check for "local" illumination */
-			if ((cave[yy][xx].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
+			if (cave[yy][xx].info & CAVE_GLOW)
 			{
 				/* Memorize */
 				c_ptr->info |= (CAVE_MARK);
@@ -1960,6 +1966,9 @@ void lite_spot(int y, int x)
 		{
 			/* Term_queue_chars は全角ASCII地形を正しくupdateする。 */
 			Term_queue_chars(panel_col_of(x), y-panel_row_prt, 2, a, &ascii_to_zenkaku[2*(c-' ')]);
+
+			/* Update sub-windows */
+			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 			return;
 		}
 #endif
@@ -2150,10 +2159,10 @@ void prt_path(int y, int x)
 			/* Hack -- Queue it */
 #ifdef USE_TRANSPARENCY
 			Term_queue_char(panel_col_of(nx), ny-panel_row_prt, a, c, ta, tc);
-			if (use_bigtile) Term_queue_char(panel_col_of(nx)+1, ny-panel_row_prt, a, c2, 0, 0);
+			if (use_bigtile) Term_queue_char(panel_col_of(nx)+1, ny-panel_row_prt, a2, c2, 0, 0);
 #else
 			Term_queue_char(panel_col_of(nx), ny-panel_row_prt, a, c);
-			if (use_bigtile) Term_queue_char(panel_col_of(nx)+1, ny-panel_row_prt, a, c2);
+			if (use_bigtile) Term_queue_char(panel_col_of(nx)+1, ny-panel_row_prt, a2, c2);
 #endif
 		}
 
@@ -3132,7 +3141,7 @@ void update_lite(void)
 				if (d > p) continue;
 
 				/* Viewable, nearby, grids get "torch lit" */
-				if (player_has_los_bold(y, x))
+				if (cave[y][x].info & CAVE_VIEW)
 				{
 					/* This grid is "torch lit" */
 					cave_lite_hack(y, x);
@@ -3717,7 +3726,7 @@ void forget_view(void)
 		/* Forget that the grid is viewable */
 		c_ptr->info &= ~(CAVE_VIEW);
 
-		if (!panel_contains(y, x)) continue;
+		/* if (!panel_contains(y, x)) continue; */
 
 		/* Update the screen */
 		/* lite_spot(y, x); Perhaps don't need? */
@@ -4793,31 +4802,27 @@ void wiz_lite(bool ninja)
 					/* Feature code (applying "mimic" field) */
 					feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
+					/* Perma-lite the grid */
+					if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS) && !ninja)
+					{
+						c_ptr->info |= (CAVE_GLOW);
+					}
+
 					/* Memorize normal features */
-					if (ninja)
+					if ((feat > FEAT_INVIS) && (feat != FEAT_DIRT) && (feat != FEAT_GRASS))
 					{
 						/* Memorize the grid */
 						c_ptr->info |= (CAVE_MARK);
 					}
-					else
+
+					/* Perma-lit grids (newly and previously) */
+					else if (c_ptr->info & CAVE_GLOW)
 					{
-						if ((feat > FEAT_INVIS))
+						/* Normally, memorize floors (see above) */
+						if (view_perma_grids && !view_torch_grids)
 						{
 							/* Memorize the grid */
 							c_ptr->info |= (CAVE_MARK);
-						}
-
-						/* Perma-lite the grid */
-						if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS))
-						{
-							c_ptr->info |= (CAVE_GLOW);
-
-							/* Normally, memorize floors (see above) */
-							if (view_perma_grids && !view_torch_grids)
-							{
-								/* Memorize the grid */
-								c_ptr->info |= (CAVE_MARK);
-							}
 						}
 					}
 				}
@@ -4833,6 +4838,11 @@ void wiz_lite(bool ninja)
 
 	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+
+	if (p_ptr->special_defense & NINJA_S_STEALTH)
+	{
+		if (cave[py][px].info & CAVE_GLOW) set_superstealth(FALSE);
+	}
 }
 
 
@@ -4913,6 +4923,23 @@ void cave_set_feat(int y, int x, int feat)
 {
 	cave_type *c_ptr = &cave[y][x];
 
+	if (!character_dungeon)
+	{
+		/* Clear mimic type */
+		c_ptr->mimic = 0;
+
+		/* Change the feature */
+		c_ptr->feat = feat;
+
+		return;
+	}
+
+	if (is_mirror_grid(c_ptr) && (d_info[dungeon_type].flags1 & DF1_DARKNESS))
+	{
+		c_ptr->info &= ~(CAVE_GLOW);
+		if (!view_torch_grids) c_ptr->info &= ~(CAVE_MARK);
+	}
+
 	/* Clear mimic type */
 	c_ptr->mimic = 0;
 
@@ -4926,15 +4953,21 @@ void cave_set_feat(int y, int x, int feat)
 	if ((feat == FEAT_DEEP_LAVA) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS))
 	{
 		int i, yy, xx;
+		cave_type *cc_ptr;
 
 		for (i = 0; i < 9; i++)
 		{
 			yy = y + ddy_ddd[i];
 			xx = x + ddx_ddd[i];
 			if (!in_bounds2(yy, xx)) continue;
-			cave[yy][xx].info |= CAVE_GLOW;
+			cc_ptr = &cave[yy][xx];
+			cc_ptr->info |= CAVE_GLOW;
+
 			if (player_has_los_bold(yy, xx))
 			{
+				/* Update the monster */
+				if (cc_ptr->m_idx) update_mon(cc_ptr->m_idx, FALSE);
+
 				/* Notice */
 				note_spot(yy, xx);
 
@@ -4942,7 +4975,15 @@ void cave_set_feat(int y, int x, int feat)
 				lite_spot(yy, xx);
 			}
 		}
+
+		if (p_ptr->special_defense & NINJA_S_STEALTH)
+		{
+			if (cave[py][px].info & CAVE_GLOW) set_superstealth(FALSE);
+		}
 	}
+
+	/* Update the monster */
+	if (c_ptr->m_idx) update_mon(c_ptr->m_idx, FALSE);
 
 	/* Notice */
 	note_spot(y, x);

@@ -16,9 +16,9 @@ Q:$10:T:The Wizards of Sorcery have discovered a magical Node of Sorcery
 Q:$10:T:in a damp area nearby. You must seek the Node and dispatch 
 Q:$10:T:its guardians so that the Tower of Sorcery can claim the 
 Q:$10:T:mystical energies of the Node.
-Q:10:T:仙術魔法の賢者たちが、近くの湿地に仙術エネルギーの特異点を見つけた。
-Q:10:T:我々仙術魔法の塔がその魔力の所有権を得られるように、
-Q:10:T:おまえはその特異点を見つけて守備隊を派遣するのだ。
+Q:10:T:仙術魔法の賢者たちが、近くの湿地に仙術エネルギーの特異点の存在を確認
+Q:10:T:した。我々仙術魔法の塔がその魔力の所有権を得られるように、おまえは
+Q:10:T:その特異点の場所を見つけてそこに巣食うモンスターを片づけてくるのだ。
 ?:1
 
 # Description for quest reward

@@ -1119,13 +1119,15 @@ byte adj_chr_chm[] =
  * Rogue         num = 5; mul = 3; div = MAX(40, weapon_weight);
  * Ranger        num = 5; mul = 4; div = MAX(70, weapon_weight);
  * Paladin       num = 5; mul = 4; div = MAX(70, weapon_weight);
- * Kaji          num = 5; mul = 5; div = MAX(150, weapon_weight);
+ * Weaponsmith   num = 5; mul = 5; div = MAX(150, weapon_weight);
  * Warrior-Mage  num = 5; mul = 3; div = MAX(70, weapon_weight);
  * Chaos Warrior num = 5; mul = 4; div = MAX(70, weapon_weight);
  * Monk          num = 5; mul = 3; div = MAX(60, weapon_weight);
  * Tourist       num = 4; mul = 3; div = MAX(100, weapon_weight);
  * Imitator      num = 5; mul = 4; div = MAX(70, weapon_weight);
  * Beastmaster   num = 5; mul = 3; div = MAX(70, weapon_weight);
+ * Cavalry(Ride) num = 5; mul = 4; div = MAX(70, weapon_weight);
+ * Cavalry(Walk) num = 5; mul = 3; div = MAX(100, weapon_weight);
  * Sorcerer      num = 1; mul = 1; div = MAX(1, weapon_weight);
  * Archer        num = 4; mul = 2; div = MAX(70, weapon_weight);
  * Magic eater   num = 4; mul = 2; div = MAX(70, weapon_weight);
@@ -4023,20 +4025,20 @@ s32b realm_choices1[MAX_CLASS] =
 	 CH_ARCANE | CH_ENCHANT | CH_DAEMON |
 	 CH_CRUSADE),                              /* High-Mage */
 	(CH_ARCANE),                            /* Tourist */
-	(CH_NONE),                              /* Imitation */
+	(CH_NONE),                              /* Imitator */
 	(CH_TRUMP),                             /* Beastmaster */
 	(CH_NONE),                              /* Sorcerer */
 	(CH_NONE),                              /* Archer */
 	(CH_NONE),                              /* Magic eater */
-	(CH_MUSIC),                             /* Harper */
+	(CH_MUSIC),                             /* Bard */
 	(CH_NONE),                              /* Red Mage */
 	(CH_HISSATSU),                          /* Samurai */
 	(CH_LIFE | CH_NATURE | CH_DEATH |
 	 CH_ENCHANT | CH_CRUSADE),                 /* ForceTrainer */
 	(CH_NONE),                              /* Blue Mage */
-	(CH_NONE),				/* Kihei */
+	(CH_NONE),				/* Cavalry */
 	(CH_NONE),				/* Berserker */
-	(CH_NONE),				/* Kaji */
+	(CH_NONE),				/* Weaponsmith */
 	(CH_NONE),				/* Mirror-master */
 	(CH_NONE),				/* Ninja */
 };
@@ -4066,19 +4068,19 @@ s32b realm_choices2[MAX_CLASS] =
 	(CH_NONE),                              /* Mindcrafter */
 	(CH_NONE),                              /* High-Mage */
 	(CH_NONE),                              /* Tourist */
-	(CH_NONE),                              /* Imitation */
+	(CH_NONE),                              /* Imitator */
 	(CH_NONE),                              /* Beastmanster */
 	(CH_NONE),                              /* Sorcerer */
 	(CH_NONE),                              /* Archer */
 	(CH_NONE),                              /* Magic eater */
-	(CH_NONE),                              /* Harper */
+	(CH_NONE),                              /* Bard */
 	(CH_NONE),                              /* Red Mage */
 	(CH_NONE),                              /* Samurai */
 	(CH_NONE),                              /* ForceTrainer */
 	(CH_NONE),                              /* Blue Mage */
-	(CH_NONE),				/* Kihei */
+	(CH_NONE),				/* Cavalry */
 	(CH_NONE),				/* Berserker */
-	(CH_NONE),				/* Kaji */
+	(CH_NONE),				/* Weaponsmith */
 	(CH_NONE),				/* Mirror-master */
 	(CH_NONE),				/* Ninja */
 };
@@ -5258,7 +5260,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"英雄",
 		"男爵",
 		"伯爵",
-		"領主",
+		"君主",
 	},
 
 	/* Mage */
@@ -5300,9 +5302,9 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"ペテン師",                     /*博徒、ペテン師、詐欺師 */
 		"ロウシーフ",
 		"ハイシーフ",
-		"マスターシーフ",
+		"マスター", /* "マスターシーフ", */
 		"アサシン",						/* 暗殺者 */
-		"ギルドマスター",
+		"頭領", /*"ギルドマスター",*/
 	},
 
 	/* Rangers */
@@ -5330,7 +5332,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"重騎士",
 		"聖騎士",
 		"上級聖騎士",
-		"聖騎士長",
+		"聖騎士団長",
 	},
 
 	/* Warrior-Mage */
@@ -5345,7 +5347,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"魔男爵",
 		/* "魔公爵", */
 		"戦闘魔術士",
-		"ウィザードロード",
+		"知識の守護者", /* "ウィザードロード", */
 	},
 
 	/* Chaos Warrior */
@@ -5387,7 +5389,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"サイキック",
 		"サイオニック",
 		"超能力者",
-		"マインドマスター",
+		"精神の支配者", /* "マインドマスター", */
 	},
 
 	/* High Mage; same as Mage */
@@ -5490,7 +5492,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"全てを知る者",
 	},
 
-	/* Harper */
+	/* Bard */
 	{
 		"見習い",	/*"Apprentice"*/
 		"作曲家",	/*"Songsmith"*/
@@ -5516,7 +5518,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"魔男爵",
 		/* "魔公爵", */
 		"戦闘魔術士",
-		"ウィザードロード",
+		"知識の守護者", /* "ウィザードロード", */
 	},
 
 	/* Samurai */
@@ -5562,7 +5564,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"大魔道師",
 	},
 
-	/* Kihei */
+	/* Cavalry */
 	{
 		"新参兵",
 		"兵士",
@@ -5590,7 +5592,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"怒りの化身",
 	},
 
-	/* Kaji */
+	/* Weaponsmith */
 	{
 		"銅を鍛えし者",
 		"鉄を鍛えし者",
@@ -5851,7 +5853,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"Soldier",
 		"Mercenary",
 		"Veteran",
-		"Swordsman",
+		"Bowman",
 		"Champion",
 		"Hero",
 		"Baron",
@@ -5873,7 +5875,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"Almighty",
 	},
 
-	/* Harper */
+	/* Bard */
 	{
 		"Apprentice",	/*"Apprentice"*/
 		"Songsmith",	/*"Songsmith"*/
@@ -5971,7 +5973,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		    "God of Rage",
 	},
 
-	/* Kaji */
+	/* Weaponsmith */
 	{
 		"Copper smith",
 		"Iron smith",
@@ -5988,14 +5990,14 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 	/* Mirror Master */
 	{
 		"Mirrorstarer",
-		"Mirrorpolisher",
+		"Mirrorcleaner",
 		"Mirrormaker",
 		"Mirrormagician",
-		"Guru of Mirror ",
+		"Mirror Guru",
 		"Mirror Mage",
 		"Mirror King",
-		"Mirror Emperror",
-		"Avatar of Mirror",
+		"Mirror Emperor",
+		"Mirror Avatar",
 		"Ruffnor King",
 	},
 
@@ -7462,11 +7464,11 @@ option_type option_info[] =
 #endif
 
 #ifdef JP
-	{ &record_maxdeapth,            TRUE, 10, 4, 16,
-	"record_maxdeapth",             "最深階を更新したときに記録する" },
+	{ &record_maxdepth,             TRUE, 10, 4, 16,
+	"record_maxdepth",              "最深階を更新したときに記録する" },
 #else
-	{ &record_maxdeapth,            TRUE, 10, 4, 16,
-	"record_maxdeapth",             "Record movements to deepest level" },
+	{ &record_maxdepth,             TRUE, 10, 4, 16,
+	"record_maxdepth" ,             "Record movements to deepest level" },
 #endif
 
 #ifdef JP

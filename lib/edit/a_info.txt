@@ -1579,7 +1579,7 @@ F:STR | CON | HIDE_TYPE | CHAOTIC | REGEN | SLOW_DIGEST |
 F:SLAY_EVIL | BRAND_ELEC | SLAY_DEMON | FREE_ACT | RES_ELEC |
 F:RES_LITE | LITE | SEE_INVIS | SHOW_MODS | ACTIVATE | SPEED |
 F:SUST_CON | SUST_STR | SUST_INT | SUST_WIS | RES_DARK |
-F:RES_DISEN | RES_FEAR | BLOWS | SPEED
+F:RES_DISEN | RES_FEAR | BLOWS
 D:夜の剣グレイスワンダーと対をなす昼の剣で、トランプの魔力が込められている。
 D:「それは黄金の素晴らしい打出し模様が施された、長い濃緑色の鞘だった。
 D:そこから突き出ている剣の柄は金メッキされているらしく、柄頭には
@@ -2298,7 +2298,7 @@ W:30:60:260:200000
 P:0:4d5:15:15:0
 F:BLOWS | VAMPIRIC | HOLD_LIFE | SLAY_UNDEAD | SLAY_EVIL | SLAY_HUMAN |
 F:REGEN | RES_FEAR | RES_BLIND | SLOW_DIGEST | SHOW_MODS
-D:数え切れないほどの首を落してきたこの血に飢えた刃は
+D:数え切れないほどの首を落としてきたこの血に飢えた刃は
 D:敵の血と魂を吸って手にする者の体を癒す。
 
 # The Long Bow 'Belthronding'

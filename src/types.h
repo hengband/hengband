@@ -990,6 +990,7 @@ struct player_type
 
 	s32b au;			/* Current Gold */
 
+	s32b max_max_exp;	/* Max max experience (only to calculate score) */
 	s32b max_exp;		/* Max experience */
 	s32b exp;			/* Cur experience */
 	u16b exp_frac;		/* Cur exp frac (times 2^16) */
@@ -1001,8 +1002,6 @@ struct player_type
 	bool inside_arena;		/* Is character inside arena? */
 	s16b inside_quest;		/* Inside quest level */
 	bool inside_battle;		/* Is character inside tougijou? */
-
-	s16b rewards[MAX_BACT];	/* Status of rewards in town */
 
 	s32b wilderness_x;	/* Coordinates in the wilderness */
 	s32b wilderness_y;

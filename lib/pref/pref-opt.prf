@@ -55,7 +55,6 @@ Y:change_numeral
 
 ##### Game-Play #####
 
-X:manual_haggle
 X:auto_scum
 Y:stack_force_notes
 X:stack_force_costs
@@ -106,6 +105,7 @@ X:hilite_player
 
 ##### Birth Options #####
 
+X:manual_haggle
 X:easy_band
 Y:smart_learn
 X:smart_cheat
@@ -127,6 +127,8 @@ Y:powerup_home
 ##### Easy Object Auto-Destroyer #####
 
 X:destroy_items
+X:destroy_feeling
+X:destroy_identify
 Y:leave_worth
 X:leave_equip
 Y:leave_chest
@@ -142,7 +144,7 @@ Y:record_rand_art
 Y:record_destroy_uniq
 Y:record_fix_quest
 Y:record_rand_quest
-Y:record_maxdeapth
+Y:record_maxdepth
 Y:record_stair
 Y:record_buy
 X:record_sell

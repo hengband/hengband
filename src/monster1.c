@@ -146,7 +146,8 @@ static void roff_aux(int r_idx, int mode)
 #endif
 	int             msex = 0;
 
-	int speed = (ironman_nightmare) ? r_ptr->speed + 5 : r_ptr->speed;
+	bool nightmare = ironman_nightmare && !(mode & 0x02);
+	int speed = nightmare ? r_ptr->speed + 5 : r_ptr->speed;
 
 	bool            breath = FALSE;
 	bool            magic = FALSE;
@@ -791,7 +792,7 @@ if (flags3 & RF3_ORC)      hook_c_roff(TERM_UMBER, "オーク");
 #ifdef JP
 if (flags2 & RF2_HUMAN) hook_c_roff(TERM_L_WHITE, "人間");
 #else
-		if (flags2 & RF2_HUMAN) hook_c_roff(TERM_L_WHITE, " Human");
+		if (flags2 & RF2_HUMAN) hook_c_roff(TERM_L_WHITE, " human");
 #endif
 
 #ifdef JP
@@ -863,75 +864,67 @@ else                            hooked_roff("モンスター");
 	if ((flags2 & RF2_AURA_FIRE) && (flags2 & RF2_AURA_ELEC) && (flags3 & RF3_AURA_COLD))
 	{
 #ifdef JP
-hook_c_roff(TERM_VIOLET, format("%^sは炎と氷とスパークに包まれている。", wd_he[msex]));
+		hook_c_roff(TERM_VIOLET, format("%^sは炎と氷とスパークに包まれている。", wd_he[msex]));
 #else
-		hook_c_roff(TERM_VIOLET, format("%^s is surrounded by flames and electricity.  ", wd_he[msex]));
+		hook_c_roff(TERM_VIOLET, format("%^s is surrounded by flames, ice and electricity.  ", wd_he[msex]));
 #endif
-
 	}
 	else if ((flags2 & RF2_AURA_FIRE) && (flags2 & RF2_AURA_ELEC))
 	{
 #ifdef JP
-hook_c_roff(TERM_L_RED, format("%^sは炎とスパークに包まれている。", wd_he[msex]));
+		hook_c_roff(TERM_L_RED, format("%^sは炎とスパークに包まれている。", wd_he[msex]));
 #else
 		hook_c_roff(TERM_L_RED, format("%^s is surrounded by flames and electricity.  ", wd_he[msex]));
 #endif
-
 	}
 	else if ((flags2 & RF2_AURA_FIRE) && (flags3 & RF3_AURA_COLD))
 	{
 #ifdef JP
-hook_c_roff(TERM_BLUE, format("%^sは炎と氷に包まれている。", wd_he[msex]));
+		hook_c_roff(TERM_BLUE, format("%^sは炎と氷に包まれている。", wd_he[msex]));
 #else
-		hook_c_roff(TERM_BLUE, format("%^s is surrounded by flames and electricity.  ", wd_he[msex]));
+		hook_c_roff(TERM_BLUE, format("%^s is surrounded by flames and ice.  ", wd_he[msex]));
 #endif
-
 	}
 	else if ((flags3 & RF3_AURA_COLD) && (flags2 & RF2_AURA_ELEC))
 	{
 #ifdef JP
-hook_c_roff(TERM_L_GREEN, format("%^sは氷とスパークに包まれている。", wd_he[msex]));
+		hook_c_roff(TERM_L_GREEN, format("%^sは氷とスパークに包まれている。", wd_he[msex]));
 #else
 		hook_c_roff(TERM_L_GREEN, format("%^s is surrounded by ice and electricity.  ", wd_he[msex]));
 #endif
-
 	}
 	else if (flags2 & RF2_AURA_FIRE)
 	{
 #ifdef JP
-hook_c_roff(TERM_RED, format("%^sは炎に包まれている。", wd_he[msex]));
+		hook_c_roff(TERM_RED, format("%^sは炎に包まれている。", wd_he[msex]));
 #else
 		hook_c_roff(TERM_RED, format("%^s is surrounded by flames.  ", wd_he[msex]));
 #endif
-
 	}
 	else if (flags3 & RF3_AURA_COLD)
 	{
 #ifdef JP
-hook_c_roff(TERM_BLUE, format("%^sは氷に包まれている。", wd_he[msex]));
+		hook_c_roff(TERM_BLUE, format("%^sは氷に包まれている。", wd_he[msex]));
 #else
 		hook_c_roff(TERM_BLUE, format("%^s is surrounded by ice.  ", wd_he[msex]));
 #endif
-
 	}
 	else if (flags2 & RF2_AURA_ELEC)
 	{
 #ifdef JP
-hook_c_roff(TERM_L_BLUE, format("%^sはスパークに包まれている。", wd_he[msex]));
+		hook_c_roff(TERM_L_BLUE, format("%^sはスパークに包まれている。", wd_he[msex]));
 #else
 		hook_c_roff(TERM_L_BLUE, format("%^s is surrounded by electricity.  ", wd_he[msex]));
 #endif
-
 	}
 
 	if (flags2 & RF2_REFLECTING)
 	{
 #ifdef JP
-hooked_roff(format("%^sは矢の呪文を跳ね返す。", wd_he[msex]));
+		hooked_roff(format("%^sは矢の呪文を跳ね返す。", wd_he[msex]));
 #else
 		hooked_roff(format("%^s reflects bolt spells.  ", wd_he[msex]));
 #endif
-
 	}
 
 	/* Describe escorts */
@@ -1731,15 +1724,15 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 			    wd_he[msex], r_ptr->ac));
 
 		/* Maximized hitpoints */
-		if (flags1 & RF1_FORCE_MAXHP)
+		if ((flags1 & RF1_FORCE_MAXHP) || (r_ptr->hside == 1))
 		{
+			u32b hp = r_ptr->hdice * (nightmare ? 2 : 1) * r_ptr->hside;
 #ifdef JP
 			hooked_roff(format(" %d の体力がある。",
 #else
 			hooked_roff(format(" and a life rating of %d.  ",
 #endif
-
-				    r_ptr->hdice * r_ptr->hside));
+				    (s16b)MIN(30000, hp)));
 		}
 
 		/* Variable hitpoints */
@@ -1750,8 +1743,7 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 #else
 			hooked_roff(format(" and a life rating of %dd%d.  ",
 #endif
-
-				    r_ptr->hdice, r_ptr->hside));
+				    r_ptr->hdice * (nightmare ? 2 : 1), r_ptr->hside));
 		}
 	}
 
@@ -1870,7 +1862,7 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 #ifdef JP
 		hooked_roff(format("%^sは光っている。", wd_he[msex]));
 #else
-		hooked_roff(format("%^s illuminate the dungeon.  ", wd_he[msex]));
+		hooked_roff(format("%^s is shining.  ", wd_he[msex]));
 #endif
 
 	}
@@ -3188,27 +3180,7 @@ void output_monster_spoiler(int r_idx, void (*roff_func)(byte attr, cptr str))
 }
 
 
-bool monster_quest(int r_idx)
-{
-	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Random quests are in the dungeon */
-	if (r_ptr->flags8 & RF8_WILD_ONLY) return FALSE;
-
-	/* No random quests for aquatic monsters */
-	if (r_ptr->flags7 & RF7_AQUATIC) return FALSE;
-
-	/* No random quests for multiplying monsters */
-	if (r_ptr->flags2 & RF2_MULTIPLY) return FALSE;
-
-	/* No quests to kill friendly monsters */
-	if (r_ptr->flags7 & RF7_FRIENDLY) return FALSE;
-
-	return TRUE;
-}
-
-
-bool monster_dungeon(int r_idx)
+bool mon_hook_dungeon(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -3224,7 +3196,7 @@ bool monster_dungeon(int r_idx)
 }
 
 
-bool monster_ocean(int r_idx)
+static bool mon_hook_ocean(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -3235,7 +3207,7 @@ bool monster_ocean(int r_idx)
 }
 
 
-bool monster_shore(int r_idx)
+static bool mon_hook_shore(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -3246,7 +3218,7 @@ bool monster_shore(int r_idx)
 }
 
 
-static bool monster_waste(int r_idx)
+static bool mon_hook_waste(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -3257,7 +3229,7 @@ static bool monster_waste(int r_idx)
 }
 
 
-bool monster_town(int r_idx)
+static bool mon_hook_town(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -3268,7 +3240,7 @@ bool monster_town(int r_idx)
 }
 
 
-bool monster_wood(int r_idx)
+static bool mon_hook_wood(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -3279,7 +3251,7 @@ bool monster_wood(int r_idx)
 }
 
 
-bool monster_volcano(int r_idx)
+static bool mon_hook_volcano(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -3290,7 +3262,7 @@ bool monster_volcano(int r_idx)
 }
 
 
-bool monster_mountain(int r_idx)
+static bool mon_hook_mountain(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -3301,7 +3273,7 @@ bool monster_mountain(int r_idx)
 }
 
 
-bool monster_grass(int r_idx)
+static bool mon_hook_grass(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -3312,11 +3284,11 @@ bool monster_grass(int r_idx)
 }
 
 
-bool monster_deep_water(int r_idx)
+static bool mon_hook_deep_water(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	if (!monster_dungeon(r_idx)) return FALSE;
+	if (!mon_hook_dungeon(r_idx)) return FALSE;
 
 	if (r_ptr->flags7 & RF7_AQUATIC)
 		return TRUE;
@@ -3325,11 +3297,11 @@ bool monster_deep_water(int r_idx)
 }
 
 
-bool monster_shallow_water(int r_idx)
+static bool mon_hook_shallow_water(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	if (!monster_dungeon(r_idx)) return FALSE;
+	if (!mon_hook_dungeon(r_idx)) return FALSE;
 
 	if (r_ptr->flags2 & RF2_AURA_FIRE)
 		return FALSE;
@@ -3338,15 +3310,27 @@ bool monster_shallow_water(int r_idx)
 }
 
 
-bool monster_lava(int r_idx)
+static bool mon_hook_lava(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	if (!monster_dungeon(r_idx)) return FALSE;
+	if (!mon_hook_dungeon(r_idx)) return FALSE;
 
 	if (((r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) ||
 	     (r_ptr->flags7 & RF7_CAN_FLY)) &&
 	    !(r_ptr->flags3 & RF3_AURA_COLD))
+		return TRUE;
+	else
+		return FALSE;
+}
+
+
+static bool mon_hook_floor(int r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	if (!(r_ptr->flags7 & RF7_AQUATIC) ||
+	    (r_ptr->flags7 & RF7_CAN_FLY))
 		return TRUE;
 	else
 		return FALSE;
@@ -3360,31 +3344,31 @@ monster_hook_type get_monster_hook(void)
 		switch (wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].terrain)
 		{
 		case TERRAIN_TOWN:
-			return (monster_hook_type)monster_town;
+			return (monster_hook_type)mon_hook_town;
 		case TERRAIN_DEEP_WATER:
-			return (monster_hook_type)monster_ocean;
+			return (monster_hook_type)mon_hook_ocean;
 		case TERRAIN_SHALLOW_WATER:
 		case TERRAIN_SWAMP:
-			return (monster_hook_type)monster_shore;
+			return (monster_hook_type)mon_hook_shore;
 		case TERRAIN_DIRT:
 		case TERRAIN_DESERT:
-			return (monster_hook_type)monster_waste;
+			return (monster_hook_type)mon_hook_waste;
 		case TERRAIN_GRASS:
-			return (monster_hook_type)monster_grass;
+			return (monster_hook_type)mon_hook_grass;
 		case TERRAIN_TREES:
-			return (monster_hook_type)monster_wood;
+			return (monster_hook_type)mon_hook_wood;
 		case TERRAIN_SHALLOW_LAVA:
 		case TERRAIN_DEEP_LAVA:
-			return (monster_hook_type)monster_volcano;
+			return (monster_hook_type)mon_hook_volcano;
 		case TERRAIN_MOUNTAIN:
-			return (monster_hook_type)monster_mountain;
+			return (monster_hook_type)mon_hook_mountain;
 		default:
-			return (monster_hook_type)monster_dungeon;
+			return (monster_hook_type)mon_hook_dungeon;
 		}
 	}
 	else
 	{
-		return (monster_hook_type)monster_dungeon;
+		return (monster_hook_type)mon_hook_dungeon;
 	}
 }
 
@@ -3395,14 +3379,14 @@ monster_hook_type get_monster_hook2(int y, int x)
 	switch (cave[y][x].feat)
 	{
 	case FEAT_SHAL_WATER:
-		return (monster_hook_type)monster_shallow_water;
+		return (monster_hook_type)mon_hook_shallow_water;
 	case FEAT_DEEP_WATER:
-		return (monster_hook_type)monster_deep_water;
+		return (monster_hook_type)mon_hook_deep_water;
 	case FEAT_DEEP_LAVA:
 	case FEAT_SHAL_LAVA:
-		return (monster_hook_type)monster_lava;
+		return (monster_hook_type)mon_hook_lava;
 	default:
-		return NULL;
+		return (monster_hook_type)mon_hook_floor;
 	}
 }
 

@@ -728,7 +728,7 @@ static hist_type bg[] =
 
 
 #ifdef JP
-	{"あなたは女王クラコンの何人かの子供のうちの一人です。"
+	{"あなたは女王クラッコンの何人かの子供のうちの一人です。"
 	, 100, 84, 85, 50 },
 
 	{"あなたは赤い肌と", 40, 85, 86, 50 },
@@ -1353,7 +1353,7 @@ static hist_type bg[] =
 	{"あなたは悪を滅ぼすためにこの地に送られてきました。", 100, 143, 144, 80},
 	{"この目的を成し遂げるまでは休むことは許されません。", 100, 144, 0, 80},
 #else
-	{"You are of the blessed host of heaven.", 100, 142, 143, 80},
+	{"You are of the blessed host of heaven.  ", 100, 142, 143, 80},
 	{"You have been sent to earth to eradicate the wicked, ", 100, 143, 144, 80},
 	{"and shall not rest until you have succeeded.", 100, 144, 0, 80},
 #endif
@@ -2341,7 +2341,7 @@ static bool get_player_realms(void)
 	p_ptr->realm2 = 255;
 	while (1)
 	{
-		char temp[80*8];
+		char temp[80*10];
 		cptr t;
 		count = 0;
 		p_ptr->realm1 = choose_realm(realm_choices1[p_ptr->pclass], &count);
@@ -2357,7 +2357,7 @@ static bool get_player_realms(void)
 
 		roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm1)-1], 74, temp, sizeof(temp));
 		t = temp;
-		for (i = 0; i< 6; i++)
+		for (i = 0; i < 10; i++)
 		{
 			if(t[0] == 0)
 				break; 
@@ -3322,12 +3322,6 @@ static void player_wipe(void)
 	p_ptr->mane_num = 0;
 	p_ptr->exit_bldg = TRUE; /* only used for arena now -KMW- */
 
-	/* Reset rewards */
-	for (i = 0; i < MAX_BACT; i++)
-	{
-		p_ptr->rewards[i] = 0;
-	}
-
 	/* Bounty */
 	p_ptr->today_mon = 0;
 
@@ -3357,6 +3351,29 @@ static void player_wipe(void)
 
 
 /*
+ *  Hook function for quest monsters
+ */
+static bool mon_hook_quest(int r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Random quests are in the dungeon */
+	if (r_ptr->flags8 & RF8_WILD_ONLY) return FALSE;
+
+	/* No random quests for aquatic monsters */
+	if (r_ptr->flags7 & RF7_AQUATIC) return FALSE;
+
+	/* No random quests for multiplying monsters */
+	if (r_ptr->flags2 & RF2_MULTIPLY) return FALSE;
+
+	/* No quests to kill friendly monsters */
+	if (r_ptr->flags7 & RF7_FRIENDLY) return FALSE;
+
+	return TRUE;
+}
+
+
+/*
  * Determine the random quest uniques
  */
 void determine_random_questor(quest_type *q_ptr)
@@ -3365,7 +3382,7 @@ void determine_random_questor(quest_type *q_ptr)
 	monster_race *r_ptr;
 
 	/* Prepare allocation table */
-	get_mon_num_prep(monster_quest, NULL);
+	get_mon_num_prep(mon_hook_quest, NULL);
 
 	while (1)
 	{
@@ -3407,7 +3424,6 @@ void determine_random_questor(quest_type *q_ptr)
 static void init_dungeon_quests(int number_of_quests)
 {
 	int i;
-	monster_race    *r_ptr;
 
 	/* Init the random quests */
 	init_flags = INIT_ASSIGN;
@@ -3416,13 +3432,6 @@ static void init_dungeon_quests(int number_of_quests)
 	process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 	p_ptr->inside_quest = 0;
-
-	/* Remove QUESTOR flag */
-	for (i = 1; i < max_r_idx; i++)
-	{
-		r_ptr = &r_info[i];
-		if (r_ptr->flags1 & RF1_QUESTOR) r_ptr->flags1 &= ~RF1_QUESTOR;
-	}
 
 	/* Generate quests */
 	for (i = MIN_RANDOM_QUEST + number_of_quests - 1; i >= MIN_RANDOM_QUEST; i--)
@@ -3468,13 +3477,16 @@ static void init_turn(void)
 	{
 		/* Undead start just after midnight */
 		turn = (TURNS_PER_TICK*3 * TOWN_DAWN) / 4 + 1;
+		turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 	}
 	else
 	{
 		turn = 1;
+		turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 	}
 
 	dungeon_turn = 1;
+	dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 }
 
 /*
@@ -3603,7 +3615,7 @@ static byte player_init[MAX_CLASS][3][2] =
 	},
 
 	{
-		/* Harper */
+		/* Bard */
 		{ TV_MUSIC_BOOK, 0 },
 		{ TV_SOFT_ARMOR, SV_SOFT_LEATHER_ARMOR},
 		{ TV_SWORD, SV_SHORT_SWORD },
@@ -3638,7 +3650,7 @@ static byte player_init[MAX_CLASS][3][2] =
 	},
 
 	{
-		/* Kihei */
+		/* Cavalry */
 		{ TV_BOW, SV_SHORT_BOW },
 		{ TV_SOFT_ARMOR, SV_LEATHER_SCALE_MAIL},
 		{ TV_POLEARM, SV_BROAD_SPEAR}
@@ -3652,7 +3664,7 @@ static byte player_init[MAX_CLASS][3][2] =
 	},
 
 	{
-		/* Kaji */
+		/* Weaponsmith */
 		{ TV_RING, SV_RING_RES_FEAR }, /* Warriors need it! */
 		{ TV_HARD_ARMOR, SV_CHAIN_MAIL },
 		{ TV_POLEARM, SV_BROAD_AXE }
@@ -5274,10 +5286,8 @@ static bool do_cmd_histpref(void)
 	{
 #ifdef JP
 		msg_print("生い立ち設定ファイルの読み込みに失敗しました。");
-		msg_print("histedit.prfが見つかりません。");
 #else
 		msg_print("Failed to load background history preference.");
-		msg_print("Can't find histpref.prf");
 #endif
 		msg_print(NULL);
 
@@ -5420,7 +5430,7 @@ static void edit_history(void)
 			if ((x > 0) && (iskanji2(p_ptr->history[y], x-1))) x--;
 #endif
 		}
-		else if (c == '\r')
+		else if (c == '\r' || c == '\n')
 		{
 			Term_erase(0, 11, 255);
 			Term_erase(0, 17, 255);

@@ -1,6 +1,6 @@
 
                   ***************************************
-                  **           ÊÑ¶òÈÚÅÜ  1.5.4         **
+                  **           ÊÑ¶òÈÚÅÜ  1.6.2         **
                   ***************************************
 
           Based on Moria:    Copyright (c) 1985 Robert Alan Koeneke
@@ -9,10 +9,10 @@
        Angband 2.7 - 2.9:    Ben Harrison (benh@phial.com)
             ÆüËÜ¸ìÈÇ 1.2:    ¤·¤È¤·¤ó, sayu, FIRST, TeO
 
-       Old ZAngband code:    (Mr) Topi Ylinen < f1toyl@uta.fi >
-       New ZAngband code:    Robert Ruehlmann < rr9@thangorodrim.net >
+       Old ZAngband code:    (Mr) Topi Ylinen < f1toyl¡÷uta.fi >
+       New ZAngband code:    Robert Ruehlmann < rr9¡÷thangorodrim.net >
     ZAngband 2.3.0 - ???:    The ZAngband DevTeam
-       ZAngband ÆüËÜ¸ìÈÇ:    ÈÄÁÒ½¼ÍÎ < m-itakura@geocities.co.jp >
+       ZAngband ÆüËÜ¸ìÈÇ:    ÈÄÁÒ½¼ÍÎ < itakura¡÷users.sourceforge.net >
 
 
           ÊÑ¶òÈÚÅÜ: Mr.hoge (echizen¡÷users.sourceforge.jp) ¡õ Â¿¤¯¤ÎÊı¡¹

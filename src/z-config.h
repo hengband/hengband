@@ -398,27 +398,6 @@
 
 #endif /* USE_SPECIAL */
 
-/*
- * OPTION: Hack -- Macintosh stuff
- */
-#ifdef MACINTOSH
-
-/* Do not handle signals */
-# undef HANDLE_SIGNALS
-
-#endif
-
-
-/*
- * OPTION: Hack -- Windows stuff
- */
-#ifdef WINDOWS
-
-/* Do not handle signals */
-# undef HANDLE_SIGNALS
-
-#endif
-
 
 /*
  * OPTION: Hack -- EMX stuff

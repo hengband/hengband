@@ -893,12 +893,13 @@ void kingly(void)
 {
 	int wid, hgt;
 	int cx, cy;
+	bool seppuku = streq(p_ptr->died_from, "Seppuku");
 
 	/* Hack -- retire in town */
 	dun_level = 0;
 
 	/* Fake death */
-	if (!streq(p_ptr->died_from, "Seppuku"))
+	if (!seppuku)
 #ifdef JP
 		/* 引退したときの識別文字 */
 		(void)strcpy(p_ptr->died_from, "ripe");
@@ -948,14 +949,18 @@ void kingly(void)
 	put_str(format("All Hail the Mighty %s!", sp_ptr->winner), cy + 5, cx - 13);
 #endif
 
+	/* If player did Seppuku, that is already written in playrecord */
+	if (!seppuku)
+	{
 #ifdef JP
-	do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "ダンジョンの探索から引退した。");
-	do_cmd_write_nikki(NIKKI_GAMESTART, 1, "-------- ゲームオーバー --------");
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "ダンジョンの探索から引退した。");
+		do_cmd_write_nikki(NIKKI_GAMESTART, 1, "-------- ゲームオーバー --------");
 #else
-	do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "retire exploring dungeons.");
-	do_cmd_write_nikki(NIKKI_GAMESTART, 1, "--------   Game  Over   --------");
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "retired exploring dungeons.");
+		do_cmd_write_nikki(NIKKI_GAMESTART, 1, "--------   Game  Over   --------");
 #endif
-	do_cmd_write_nikki(NIKKI_BUNSHOU, 1, "\n\n\n\n");
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 1, "\n\n\n\n");
+	}
 
 	/* Flush input */
 	flush();

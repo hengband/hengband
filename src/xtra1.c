@@ -161,14 +161,14 @@ void prt_time(void)
 	extract_day_hour_min(&day, &hour, &min);
 
 	/* Dump the info itself */
-	c_put_str(TERM_WHITE, format(
 #ifdef JP
-		"%2d日目",
+	if (day < 1000) c_put_str(TERM_WHITE, format("%2d日目", day), ROW_DAY, COL_DAY);
+	else c_put_str(TERM_WHITE, "***日目", ROW_DAY, COL_DAY);
 #else
-		"Day %-2d",
+	if (day < 1000) c_put_str(TERM_WHITE, format("Day%3d", day), ROW_DAY, COL_DAY);
+	else c_put_str(TERM_WHITE, "Day***", ROW_DAY, COL_DAY);
 #endif
-		day), ROW_DAY, COL_DAY);
-	
+
 	c_put_str(TERM_WHITE, format("%2d:%02d", hour, min), ROW_DAY, COL_DAY+7);
 }
 
@@ -390,7 +390,7 @@ static struct {
 #else
 = {
 	{TERM_YELLOW, "Ts", "Tsuyoshi"},
-	{TERM_VIOLET, "Hu", "Hullc"},
+	{TERM_VIOLET, "Ha", "Halluc"},
 	{TERM_L_DARK, "Bl", "Blind"},
 	{TERM_RED, "Pa", "Paralyzed"},
 	{TERM_VIOLET, "Cf", "Confused"},
@@ -1323,7 +1323,7 @@ static void prt_study(void)
 }
 
 
-static void prt_mane(void)
+static void prt_imitation(void)
 {
 	int wid, hgt, row_study, col_study;
 
@@ -1341,7 +1341,7 @@ static void prt_mane(void)
 #ifdef JP
 			c_put_str(attr, "まね", row_study, col_study);
 #else
-			c_put_str(attr, "Mane", row_study, col_study);
+			c_put_str(attr, "Imit", row_study, col_study);
 #endif
 		}
 		else
@@ -1651,7 +1651,7 @@ static void prt_frame_extra(void)
 	/* Study spells */
 	prt_study();
 
-	prt_mane();
+	prt_imitation();
 
 	prt_status();
 }
@@ -2901,6 +2901,13 @@ bool buki_motteruka(int i)
 	return ((inventory[i].k_idx && inventory[i].tval >= TV_DIGGING && inventory[i].tval <= TV_SWORD) ? TRUE : FALSE);
 }
 
+
+#ifdef JP
+#undef strchr
+#define strchr strchr_j
+#endif
+
+
 /*
  * Calculate the players current "state", taking into account
  * not only race/class intrinsics, but also objects being worn
@@ -2925,22 +2932,6 @@ void calc_bonuses(void)
 {
 	int             i, j, hold, neutral[2];
 	int             new_speed;
-	bool old_telepathy;
-	bool old_esp_animal;
-	bool old_esp_undead;
-	bool old_esp_demon;
-	bool old_esp_orc;
-	bool old_esp_troll;
-	bool old_esp_giant;
-	bool old_esp_dragon;
-	bool old_esp_human;
-	bool old_esp_evil;
-	bool old_esp_good;
-	bool old_esp_nonliving;
-	bool old_esp_unique;
-	int             old_see_inv;
-	int             old_dis_ac;
-	int             old_dis_to_a;
 	int             extra_blows[2];
 	int             extra_shots;
 	object_type     *o_ptr;
@@ -2956,27 +2947,26 @@ void calc_bonuses(void)
 	s16b this_o_idx, next_o_idx = 0;
 	player_race *tmp_rp_ptr;
 
-
 	/* Save the old vision stuff */
-	old_telepathy = p_ptr->telepathy;
-	old_esp_animal = p_ptr->esp_animal;
-	old_esp_undead = p_ptr->esp_undead;
-	old_esp_demon = p_ptr->esp_demon;
-	old_esp_orc = p_ptr->esp_orc;
-	old_esp_troll = p_ptr->esp_troll;
-	old_esp_giant = p_ptr->esp_giant;
-	old_esp_dragon = p_ptr->esp_dragon;
-	old_esp_human = p_ptr->esp_human;
-	old_esp_evil = p_ptr->esp_evil;
-	old_esp_good = p_ptr->esp_good;
-	old_esp_nonliving = p_ptr->esp_nonliving;
-	old_esp_unique = p_ptr->esp_unique;
-
-	old_see_inv = p_ptr->see_inv;
+	bool old_telepathy = p_ptr->telepathy;
+	bool old_esp_animal = p_ptr->esp_animal;
+	bool old_esp_undead = p_ptr->esp_undead;
+	bool old_esp_demon = p_ptr->esp_demon;
+	bool old_esp_orc = p_ptr->esp_orc;
+	bool old_esp_troll = p_ptr->esp_troll;
+	bool old_esp_giant = p_ptr->esp_giant;
+	bool old_esp_dragon = p_ptr->esp_dragon;
+	bool old_esp_human = p_ptr->esp_human;
+	bool old_esp_evil = p_ptr->esp_evil;
+	bool old_esp_good = p_ptr->esp_good;
+	bool old_esp_nonliving = p_ptr->esp_nonliving;
+	bool old_esp_unique = p_ptr->esp_unique;
+	bool old_see_inv = p_ptr->see_inv;
+	bool old_mighty_throw = p_ptr->mighty_throw;
 
 	/* Save the old armor class */
-	old_dis_ac = p_ptr->dis_ac;
-	old_dis_to_a = p_ptr->dis_to_a;
+	bool old_dis_ac = p_ptr->dis_ac;
+	bool old_dis_to_a = p_ptr->dis_to_a;
 
 
 	/* Clear extra blows/shots */
@@ -4082,13 +4072,19 @@ void calc_bonuses(void)
 			p_ptr->to_h[0] += bonus_to_h;
 			p_ptr->to_d[0] += bonus_to_d;
 
-			/* Apply the mental bonuses tp hit/damage, if known */
+			/* Apply the mental bonuses to hit/damage, if known */
 			if (object_known_p(o_ptr))
 			{
 				p_ptr->dis_to_h[0] += bonus_to_h;
 				p_ptr->dis_to_d[0] += bonus_to_d;
 			}
 		}
+	}
+
+	if (old_mighty_throw != p_ptr->mighty_throw)
+	{
+		/* Redraw average damege display of Shuriken */
+		p_ptr->window |= PW_INVEN;
 	}
 
 	if (p_ptr->cursed & TRC_TELEPORT) p_ptr->cursed &= ~(TRC_TELEPORT_SELF);
@@ -4741,7 +4737,7 @@ void calc_bonuses(void)
 				case CLASS_BLUE_MAGE:
 					num = 3; wgt = 100; mul = 2; break;
 
-				/* Priest, Mindcrafter */
+				/* Priest, Mindcrafter, Magic-Eater */
 				case CLASS_PRIEST:
 				case CLASS_MAGIC_EATER:
 				case CLASS_MINDCRAFTER:
@@ -4760,7 +4756,7 @@ void calc_bonuses(void)
 				case CLASS_SAMURAI:
 					num = 5; wgt = 70; mul = 4; break;
 
-				/* Kaji */
+				/* Weaponsmith */
 				case CLASS_SMITH:
 					num = 5; wgt = 150; mul = 5; break;
 
@@ -4789,6 +4785,7 @@ void calc_bonuses(void)
 				case CLASS_BEASTMASTER:
 					num = 5; wgt = 70; mul = 3; break;
 
+				/* Cavalry */
 				case CLASS_CAVALRY:
 					if ((p_ptr->riding) && (have_flag(flgs, TR_RIDING))) {num = 5; wgt = 70; mul = 4;}
 					else {num = 5; wgt = 100; mul = 3;}
@@ -4798,7 +4795,7 @@ void calc_bonuses(void)
 				case CLASS_SORCERER:
 					num = 1; wgt = 1; mul = 1; break;
 
-				/* Archer, Magic eater */
+				/* Archer, Bard */
 				case CLASS_ARCHER:
 				case CLASS_BARD:
 					num = 4; wgt = 70; mul = 2; break;
@@ -5805,7 +5802,7 @@ void redraw_stuff(void)
 		p_ptr->redraw &= ~(PR_EXTRA);
 		p_ptr->redraw &= ~(PR_CUT | PR_STUN);
 		p_ptr->redraw &= ~(PR_HUNGER);
-		p_ptr->redraw &= ~(PR_STATE | PR_SPEED | PR_STUDY | PR_MANE | PR_STATUS);
+		p_ptr->redraw &= ~(PR_STATE | PR_SPEED | PR_STUDY | PR_IMITATION | PR_STATUS);
 		prt_frame_extra();
 	}
 
@@ -5841,10 +5838,10 @@ void redraw_stuff(void)
 
 	if (p_ptr->pclass == CLASS_IMITATOR)
 	{
-		if (p_ptr->redraw & (PR_MANE))
+		if (p_ptr->redraw & (PR_IMITATION))
 		{
-			p_ptr->redraw &= ~(PR_MANE);
-			prt_mane();
+			p_ptr->redraw &= ~(PR_IMITATION);
+			prt_imitation();
 		}
 	}
 	else if (p_ptr->redraw & (PR_STUDY))

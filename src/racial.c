@@ -459,7 +459,7 @@ static bool choose_kamae(void)
 			screen_load();
 			return FALSE;
 		}
-		else if ((choice == 'a') || (choice == 'A') || (choice == ESCAPE))
+		else if ((choice == 'a') || (choice == 'A'))
 		{
 			if (p_ptr->action == ACTION_KAMAE)
 			{
@@ -597,7 +597,7 @@ static bool choose_kata(void)
 			screen_load();
 			return FALSE;
 		}
-		else if ((choice == 'a') || (choice == 'A') || (choice == ESCAPE))
+		else if ((choice == 'a') || (choice == 'A'))
 		{
 			if (p_ptr->action == ACTION_KATA)
 			{
@@ -1001,10 +1001,8 @@ static bool cmd_racial_power_aux(s32b command)
 
 			if (command == -3)
 			{
-				if (choose_kamae()) energy_use = 100;
-				else energy_use = 0;
+				if (!choose_kamae()) return FALSE;
 				p_ptr->update |= (PU_BONUS);
-				p_ptr->redraw |= (PR_ARMOR);
 			}
 			else if (command == -4)
 			{
@@ -1185,10 +1183,8 @@ static bool cmd_racial_power_aux(s32b command)
 #endif
 					return FALSE;
 				}
-				if (choose_kata()) energy_use = 100;
-				else energy_use = 0;
+				if (!choose_kata()) return FALSE;
 				p_ptr->update |= (PU_BONUS);
-				p_ptr->redraw |= (PR_ARMOR);
 			}
 			break;
 		}
@@ -1282,19 +1278,8 @@ static bool cmd_racial_power_aux(s32b command)
 		{
 			if (command == -3)
 			{
-				int x, y;
-				for (x = 0; x < cur_wid; x++)
-				{
-					for (y = 0; y < cur_hgt; y++)
-					{
-						if (is_mirror_grid(&cave[y][x]))
-						{
-							remove_mirror(y, x);
-							project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS,
-								(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
-						}
-					}
-				}
+				/* Explode all mirrors */
+				remove_all_mirrors(TRUE);
 			}
 			else if (command == -4)
 			{
@@ -1563,12 +1548,6 @@ static bool cmd_racial_power_aux(s32b command)
 
 		case RACE_HALF_GIANT:
 			if (!get_aim_dir(&dir)) return FALSE;
-#ifdef JP
-			msg_print("石の壁を叩きつけた。");
-#else
-			msg_print("You bash at a stone wall.");
-#endif
-
 			(void)wall_to_mud(dir);
 			break;
 

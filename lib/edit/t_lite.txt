@@ -232,21 +232,22 @@ F:b:129:3:0:0:0:0:0:18
 
 ############### Quest 18 - Water Cave ###############
 
-# Quest 15 assigned, entrance is quest entrance
+# Quest 18 assigned, entrance is quest entrance
 ?:[EQU $QUEST18 1]
 F:y:8:3:0:0:0:0:0:18
 F:b:129:3:0:0:0:0:0:18
 
-# Quest 15 completed
+# Quest 18 completed
 ?:[EQU $QUEST18 2]
 F:b:129:3:0:0:0:0:0:18
 
-# Quest 15 rewarding, reward is Ring of Lordly Protection, no new quest available
+# Quest 18 rewarding, reward is Ring of Poison Resistance,
+# continue with quest 27
 ?:[EQU $QUEST18 3]
 F:b:129:3:0:0:0:0:0:27
 F:!:1:3:0:143
 
-# Quest 15 finished, no new quest available
+# Quest 18 finished, continue with quest 27
 ?:[EQU $QUEST18 4]
 F:b:129:3:0:0:0:0:0:27
 
@@ -265,98 +266,104 @@ F:b:129:3:0:0:0:0:0:27
 
 # Quest 27 rewarding (default reward if not given one from below)
 # the Executioner's Sword 'Crisdurian'
-# continue with quest 33
 ?:[EQU $QUEST27 3]
 F:b:129:3:0:0:0:0:0:15
 F:!:1:3:0:0:0:80
 
+# Quest 27 rewarding (Weaponsmith gets Multi-Hued Dragon Scale Mail)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Weaponsmith] ]
-F:a:128:3
+F:a:128:3:0:0:0:0:0:15
 F:@:1:3:0:405
 
-# Quest 27 rewarding (Tourist gets Platinum Yendorian Express Card)
-# continue with quest 33
+# Quest 27 rewarding (Tourist gets The Platinum Yendorian Express Card)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Tourist] ]
 F:b:129:3:0:0:0:0:0:15
 F:!:1:3:0:0:0:141
 
-# Quest 27 rewarding (Ranger, Archer gets Long Bow of Bard)
-# continue with quest 33
+# Quest 27 rewarding (Ranger and Archer get The Long Bow of Bard)
 ?:[AND [EQU $QUEST27 3] [IOR [EQU $CLASS Ranger] [EQU $CLASS Archer] ] ]
 F:b:129:3:0:0:0:0:0:15
 F:!:1:3:0:0:0:125
 
-# Quest 27 rewarding (Warrior gets Glaive of Pain)
-# continue with quest 33
-?:[AND [EQU $QUEST27 3] [EQU $CLASS Warrior] ]
+# Quest 27 rewarding (Warrior and Berserker get The Glaive of Pain)
+?:[AND [EQU $QUEST27 3] [IOR [EQU $CLASS Warrior] [EQU $CLASS Berserker]]]
 F:b:129:3:0:0:0:0:0:15
 F:!:1:3:0:0:0:94
 
-# Quest 27 rewarding (BeastMaster gets Lance of Eorlingas)
-# continue with quest 33
+# Quest 27 rewarding (BeastMaster gets The Lance of Eorlingas)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS BeastMaster] ]
 F:b:129:3:0:0:0:0:0:15
 F:!:1:3:0:0:0:100
 
-# Quest 27 rewarding (Kihei gets GaeBolg)
-# continue with quest 33
+# Quest 27 rewarding (Cavalry gets GaeBolg)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Cavalry] ]
 F:b:129:3:0:0:0:0:0:15
 F:!:1:3:0:0:0:163
 
 # Quest 27 rewarding (Chaos-Warrior gets Zarcuthra)
-# continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Chaos-Warrior] ]
 F:b:129:3:0:0:0:0:0:15
 F:!:1:3:0:0:0:77
 
-# Quest 27 rewarding (Rogue gets Sling of Buckland)
-# continue with quest 33
+# Quest 27 rewarding (Rogue gets The Sling of Buckland)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Rogue] ]
 F:b:129:3:0:0:0:0:0:15
 F:!:1:3:0:0:0:134
 
 # Quest 27 rewarding (Monk gets The Leather Jacket of Shiva's Avatar)
-# continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Monk] ]
 F:b:129:3:0:0:0:0:0:15
 F:!:1:3:0:0:0:26
 
 # Quest 27 rewarding (Ninja gets The Amulet of the Pitch Dark Night)
-# continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Ninja] ]
-F:a:128:3
+F:a:128:3:0:0:0:0:0:15
 F:@:1:3:0:0:0:215
 
-# Quest 27 rewarding (Mage, High-Mage)
-# get Hard Leather Cap of Ben Franklin
-# continue with quest 33
+# Quest 27 rewarding (Mage, High-Mage, Sorcerer and Blue-Mage
+# get The Hard Leather Cap of Indra)
 ?:[AND [EQU $QUEST27 3] [IOR [IOR [EQU $CLASS Mage] [EQU $CLASS High-Mage] ] [IOR [EQU $CLASS Sorcerer] [EQU $CLASS Blue-Mage] ] ] ]
 F:b:129:3:0:0:0:0:0:15
 F:!:1:3:0:0:0:33
 
-# Quest 27 rewarding (Priest, Bard, ForceTrainer)
-# get Palantir of Westernesse
-# continue with quest 33
+# Quest 27 rewarding (Priest, Bard and ForceTrainer
+# get The Palantir of Westernesse)
 ?:[AND [EQU $QUEST27 3] [IOR [IOR [EQU $CLASS Priest] [EQU $CLASS Bard] ] [IOR [EQU $CLASS ForceTrainer] [EQU $CLASS Mindcrafter] ] ] ]
 F:b:129:3:0:0:0:0:0:15
 F:!:1:3:0:0:0:15
 
-# Quest 27 rewarding (Magiceater, Mirror-Master)
-# get Numenor
-# continue with quest 33
-?:[AND [EQU $QUEST27 3] [IOR [EQU $CLASS Magiceater] [EQU $CLASS Mirror-Master] ] ] ]
-F:a:128:3
+# Quest 27 rewarding (Mirror-Master gets The Jewel Encrusted Crown of Numenor)
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Mirror-Master] ]
+F:a:128:3:0:0:0:0:0:15
 F:@:1:3:0:0:0:132
 
-# Quest 27 rewarding (Samurai)
-# get Groo
-# continue with quest 33
+# Quest 27 rewarding (Samurai gets The Katana 'Aglarang')
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Samurai] ]
-F:b:129:3
+F:b:129:3:0:0:0:0:0:15
 F:!:1:3:0:0:0:81
 
-# Quest 27 finished, continue with quest 33
+# Quest 27 rewarding (Crusade Paladin gets the Amulet of Sacred Knights)
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Paladin] [EQU $REALM1 Crusade] ]
+F:b:129:3:0:0:0:0:NONE:15
+F:!:1:3:0:0:0:217
+
+# Quest 27 rewarding (Death Paladin gets the Collar Harness of the Hell)
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Paladin] [EQU $REALM1 Death] ]
+F:b:129:3:0:0:0:0:NONE:15
+F:!:1:3:0:0:0:218
+
+# Quest 27 rewarding (Warrior-Mage, Red-Mage and Magic-Eater
+# get The Charmed Pendant)
+?:[AND [EQU $QUEST27 3] [IOR [EQU $CLASS Warrior-Mage] [EQU $CLASS Red-Mage] [EQU $CLASS Magic-Eater]] ]
+F:b:129:3:0:0:0:0:NONE:15
+F:!:1:3:0:0:0:219
+
+# Quest 27 rewarding (Imitator gets the Pendant of Gogo)
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Imitator] ]
+F:b:129:3:0:0:0:0:NONE:15
+F:!:1:3:0:0:0:220
+
+# Quest 27 finished, continue with quest 15
 ?:[EQU $QUEST27 4]
 F:b:129:3:0:0:0:0:0:15
 
@@ -364,7 +371,7 @@ F:b:129:3:0:0:0:0:0:15
 ?:[EQU $QUEST27 5]
 F:b:129:3:0:0:0:0:0:27
 
-# Quest 27 failed but done, continue with quest 33
+# Quest 27 failed but done, continue with quest 15
 ?:[EQU $QUEST27 6]
 F:b:129:3:0:0:0:0:0:15
 
@@ -535,8 +542,8 @@ B:2:A:0:アイテム調査:2000:2000:a:1:0
 B:$2:A:0:Research item:1000:1000:a:1:0
 B:2:A:0:アイテム調査:1000:1000:a:1:0
 ?:1
-B:$2:A:1:Town history:0:0:h:2:0
-B:2:A:1:街の歴史:0:0:h:2:0
+B:$2:A:1:Town Overview:0:0:h:2:0
+B:2:A:1:街の概要:0:0:h:2:0
 
 B:$3:N:Casino:Materim:Human
 B:3:N:カジノ:マテリム:人間
@@ -597,8 +604,6 @@ B:7:M:2:0:0:0:0:0:0:0:0:0
 
 B:$8:N:Thieves Guild:Lardbottom:Hobbit
 B:8:N:盗賊のギルド:ラードボトム:ホビット
-B:$8:A:0:Get share of stolen gold:0:0:s:7:2
-B:8:A:0:盗んだ金を山分けする:0:0:s:7:2
 B:$8:A:1:Rest for the night:0:100:r:17:0
 B:8:A:1:一泊する:0:100:r:17:0
 B:$8:A:2:Identify possessions:100:2000:i:26:0
@@ -636,7 +641,7 @@ B:$11:M:0:2:0:0:0:0:0:0:0:0
 B:11:M:0:2:0:0:0:0:0:0:0:0
 
 B:$12:N:Trump Tower:Pelloi:Amberite
-B:12:N:トランプ魔術の塔:ペロイ:アンバーの王族
+B:12:N:トランプ魔術の塔:ペロイ:アンバライト
 B:$12:A:0:Recall to dungeon:100:200:r:33:0
 B:12:A:0:ダンジョンへ帰還:100:200:r:33:0
 B:$12:A:1:Teleport to dungeon-level:100000:1000000:t:34:0

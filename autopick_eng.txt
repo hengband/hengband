@@ -201,7 +201,6 @@
 #        %:filename
 #          Read a file named 'filename' as a new pick-pref file. The file 
 #          must be in the user directory.
-#          Caution: Avoid naming the parent file, or the game might freeze up.
 #    
 #      - usage of operators
 #        [EQU arg1 arg2 ...]

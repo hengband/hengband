@@ -576,7 +576,7 @@ E:alarm
 G:^:R
 
 N:92:開門スイッチ
-E:wall opeing trap
+E:wall opening trap
 G:^:w
 
 N:93:花

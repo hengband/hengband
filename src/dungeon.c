@@ -1754,7 +1754,11 @@ static void recharged_notice(object_type *o_ptr)
 	if (!o_ptr->inscription) return;
 
 	/* Find a '!' */
+#ifdef JP
+	s = strchr_j(quark_str(o_ptr->inscription), '!');
+#else
 	s = strchr(quark_str(o_ptr->inscription), '!');
+#endif
 
 	/* Process notification request. */
 	while (s)
@@ -1782,7 +1786,11 @@ static void recharged_notice(object_type *o_ptr)
 		}
 
 		/* Keep looking for '!'s */
+#ifdef JP
+		s = strchr_j(s + 1, '!');
+#else
 		s = strchr(s + 1, '!');
+#endif
 	}
 }
 
@@ -2161,28 +2169,12 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 
 			/* Window stuff */
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+
+			if (p_ptr->special_defense & NINJA_S_STEALTH)
+			{
+				if (cave[py][px].info & CAVE_GLOW) set_superstealth(FALSE);
+			}
 		}
-	}
-
-	/* Set back the rewards once a day */
-	/* Only used for reward in thief's guild for now */
-	if (!(turn % (TURNS_PER_TICK * TOWN_DAWN)))
-	{
-		int n;
-
-		/* Reset the rewards */
-		for (n = 0; n < MAX_BACT; n++)
-		{
-			p_ptr->rewards[n] = FALSE;
-		}
-
-		/* Message */
-#ifdef JP
-if (cheat_xtra) msg_print("報酬をリセット");
-#else
-		if (cheat_xtra) msg_print("Rewards reset.");
-#endif
-
 	}
 
 
@@ -2304,6 +2296,7 @@ take_hit(DAMAGE_NOESCAPE, damage, "浅い溶岩流", -1);
 		cptr message;
 		cptr hit_from;
 
+		if (prace_is_(RACE_ENT)) damage += damage / 3;
 		if (p_ptr->resist_fire) damage = damage / 3;
 		if (IS_OPPOSE_FIRE()) damage = damage / 3;
 
@@ -2520,7 +2513,7 @@ msg_print("遠くで鐘が四回鳴った。");
 				}
 			}
 
-			/* TY_CURSE activates at mignight! */
+			/* TY_CURSE activates at midnight! */
 			if (!hour && !min)
 			{
 				int count = 0;
@@ -3725,7 +3718,7 @@ take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->wt / 6), "転倒", -1);
 				if (!cursed_p(o_ptr))
 				{
 #ifdef JP
-msg_print("武器を落してしまった！");
+					msg_print("武器を落としてしまった！");
 #else
 					msg_print("You drop your weapon!");
 #endif
@@ -3748,7 +3741,7 @@ msg_print("武器を落してしまった！");
 		if ((p_ptr->cursed & TRC_TELEPORT_SELF) && one_in_(200))
 		{
 #ifdef JP
-if (get_check_strict("テレポートしますか？", CHECK_OKAY_CANCEL))
+			if (get_check_strict("テレポートしますか？", CHECK_OKAY_CANCEL))
 #else
 			if (get_check_strict("Teleport? ", CHECK_OKAY_CANCEL))
 #endif
@@ -3762,7 +3755,7 @@ if (get_check_strict("テレポートしますか？", CHECK_OKAY_CANCEL))
 		{
 			char noise[1024];
 #ifdef JP
-if (!get_rnd_line("chainswd_j.txt", 0, noise))
+			if (!get_rnd_line("chainswd_j.txt", 0, noise))
 #else
 			if (!get_rnd_line("chainswd.txt", 0, noise))
 #endif
@@ -3802,9 +3795,9 @@ if (!get_rnd_line("chainswd_j.txt", 0, noise))
 
 				o_ptr->curse_flags |= new_curse;
 #ifdef JP
-msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
+				msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
 #else
-				msg_format("There is a malignant black aura surrounding %s...", o_name);
+				msg_format("There is a malignant black aura surrounding your %s...", o_name);
 #endif
 
 				o_ptr->feeling = FEEL_NONE;
@@ -3829,9 +3822,9 @@ msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
 
 				o_ptr->curse_flags |= new_curse;
 #ifdef JP
-msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
+				msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
 #else
-				msg_format("There is a malignant black aura surrounding %s...", o_name);
+				msg_format("There is a malignant black aura surrounding your %s...", o_name);
 #endif
 
 				o_ptr->feeling = FEEL_NONE;
@@ -3849,9 +3842,9 @@ msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_ANIMAL), FALSE, 0);
 #ifdef JP
-msg_format("%sが動物を引き寄せた！", o_name);
+				msg_format("%sが動物を引き寄せた！", o_name);
 #else
-				msg_format("%s have attracted an animal!", o_name);
+				msg_format("Your %s have attracted an animal!", o_name);
 #endif
 
 				disturb(0, 0);
@@ -3866,9 +3859,9 @@ msg_format("%sが動物を引き寄せた！", o_name);
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DEMON), FALSE, 0);
 #ifdef JP
-msg_format("%sが悪魔を引き寄せた！", o_name);
+				msg_format("%sが悪魔を引き寄せた！", o_name);
 #else
-				msg_format("%s have attracted a demon!", o_name);
+				msg_format("Your %s have attracted a demon!", o_name);
 #endif
 
 				disturb(0, 0);
@@ -3884,9 +3877,9 @@ msg_format("%sが悪魔を引き寄せた！", o_name);
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DRAGON), FALSE, 0);
 #ifdef JP
-msg_format("%sがドラゴンを引き寄せた！", o_name);
+				msg_format("%sがドラゴンを引き寄せた！", o_name);
 #else
-				msg_format("%s have attracted an animal!", o_name);
+				msg_format("Your %s have attracted an animal!", o_name);
 #endif
 
 				disturb(0, 0);
@@ -3898,7 +3891,7 @@ msg_format("%sがドラゴンを引き寄せた！", o_name);
 			{
 				disturb(0, 0);
 #ifdef JP
-msg_print("とても暗い... とても恐い！");
+				msg_print("とても暗い... とても恐い！");
 #else
 				msg_print("It's so dark... so scary!");
 #endif
@@ -3921,22 +3914,22 @@ msg_print("とても暗い... とても恐い！");
 
 			object_desc(o_name, choose_cursed_obj_name(TRC_DRAIN_HP), FALSE, 0);
 #ifdef JP
-msg_format("%sはあなたの体力を吸収した！", o_name);
+			msg_format("%sはあなたの体力を吸収した！", o_name);
 #else
-			msg_format("%s drains HP from you!", o_name);
+			msg_format("Your %s drains HP from you!", o_name);
 #endif
 			take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev*2, 100), o_name, -1);
 		}
 		/* Handle mana draining */
-		if ((p_ptr->cursed & TRC_DRAIN_MANA) && one_in_(666))
+		if ((p_ptr->cursed & TRC_DRAIN_MANA) && p_ptr->csp && one_in_(666))
 		{
 			char o_name[MAX_NLEN];
 
 			object_desc(o_name, choose_cursed_obj_name(TRC_DRAIN_MANA), FALSE, 0);
 #ifdef JP
-msg_format("%sはあなたの魔力を吸収した！", o_name);
+			msg_format("%sはあなたの魔力を吸収した！", o_name);
 #else
-			msg_format("%s drains mana from you!", o_name);
+			msg_format("Your %s drains mana from you!", o_name);
 #endif
 			p_ptr->csp -= MIN(p_ptr->lev, 50);
 			if (p_ptr->csp < 0)
@@ -4036,15 +4029,18 @@ msg_format("%sはあなたの魔力を吸収した！", o_name);
 				recharged_notice(o_ptr);
 				j++;
 			}
+
+			/* One of the stack of rod is charged */
+			if (o_ptr->timeout % k_ptr->pval)
+			{
+				j++;
+			}
 		}
 	}
 
 	/* Notice changes */
 	if (j)
 	{
-		/* Combine pack */
-		p_ptr->notice |= (PN_COMBINE);
-
 		/* Window stuff */
 		p_ptr->window |= (PW_INVEN);
 		wild_regen = 20;
@@ -4111,7 +4107,7 @@ msg_print("上に引っ張りあげられる感じがする！");
 				msg_print("You feel yourself yanked upwards!");
 #endif
 
-				p_ptr->recall_dungeon = dungeon_type;
+				if (dungeon_type) p_ptr->recall_dungeon = dungeon_type;
 				if (record_stair)
 					do_cmd_write_nikki(NIKKI_RECALL, dun_level, NULL);
 
@@ -4255,7 +4251,7 @@ static bool enter_wizard_mode(void)
 	if (!p_ptr->noscore)
 	{
 		/* Wizard mode is not permitted */
-		if (!allow_debug_opts)
+		if (!allow_debug_opts || arg_wizard)
 		{
 #ifdef JP
 			msg_print("ウィザードモードは許可されていません。 ");
@@ -5409,6 +5405,55 @@ static bool monster_tsuri(int r_idx)
 }
 
 
+/* Hack -- Pack Overflow */
+static void pack_overflow(void)
+{
+	if (inventory[INVEN_PACK].k_idx)
+	{
+		int item = INVEN_PACK;
+		char o_name[MAX_NLEN];
+		object_type *o_ptr;
+
+		/* Access the slot to be dropped */
+		o_ptr = &inventory[item];
+
+		/* Disturbing */
+		disturb(0, 0);
+
+		/* Warning */
+#ifdef JP
+		msg_print("ザックからアイテムがあふれた！");
+#else
+		msg_print("Your pack overflows!");
+#endif
+
+		/* Describe */
+		object_desc(o_name, o_ptr, TRUE, 3);
+
+		/* Message */
+#ifdef JP
+		msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
+#else
+		msg_format("You drop %s (%c).", o_name, index_to_label(item));
+#endif
+
+		/* Drop it (carefully) near the player */
+		(void)drop_near(o_ptr, 0, py, px);
+
+		/* Modify, Describe, Optimize */
+		inven_item_increase(item, -255);
+		inven_item_describe(item);
+		inven_item_optimize(item);
+
+		/* Handle "p_ptr->notice" */
+		notice_stuff();
+
+		/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
+		handle_stuff();
+	}
+}
+
+
 /*
  * Process the player
  *
@@ -5567,6 +5612,7 @@ msg_print("中断しました。");
 	if (p_ptr->riding && !p_ptr->confused && !p_ptr->blind)
 	{
 		monster_type *m_ptr = &m_list[p_ptr->riding];
+		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		if (m_ptr->csleep)
 		{
@@ -5575,7 +5621,7 @@ msg_print("中断しました。");
 			/* Recover fully */
 			m_ptr->csleep = 0;
 
-			if (r_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+			if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 
 			/* Acquire the monster name */
 			monster_desc(m_name, m_ptr, 0);
@@ -5593,7 +5639,7 @@ msg_format("%^sを起こした。", m_name);
 			int d = 1;
 
 			/* Make a "saving throw" against stun */
-			if (randint0(r_info[m_ptr->r_idx].level) < p_ptr->skill_exp[GINOU_RIDING])
+			if (randint0(r_ptr->level) < p_ptr->skill_exp[GINOU_RIDING])
 			{
 				/* Recover fully */
 				d = m_ptr->stunned;
@@ -5633,7 +5679,7 @@ msg_format("%^sを朦朧状態から立ち直らせた。", m_name);
 			int d = 1;
 
 			/* Make a "saving throw" against stun */
-			if (randint0(r_info[m_ptr->r_idx].level) < p_ptr->skill_exp[GINOU_RIDING])
+			if (randint0(r_ptr->level) < p_ptr->skill_exp[GINOU_RIDING])
 			{
 				/* Recover fully */
 				d = m_ptr->confused;
@@ -5673,7 +5719,7 @@ msg_format("%^sを混乱状態から立ち直らせた。", m_name);
 			int d = 1;
 
 			/* Make a "saving throw" against stun */
-			if (randint0(r_info[m_ptr->r_idx].level) < p_ptr->skill_exp[GINOU_RIDING])
+			if (randint0(r_ptr->level) < p_ptr->skill_exp[GINOU_RIDING])
 			{
 				/* Recover fully */
 				d = m_ptr->monfear;
@@ -5795,53 +5841,7 @@ msg_format("%^sを恐怖から立ち直らせた。", m_name);
 
 
 		/* Hack -- Pack Overflow */
-		if (inventory[INVEN_PACK].k_idx)
-		{
-			int item = INVEN_PACK;
-
-			char o_name[MAX_NLEN];
-
-			object_type *o_ptr;
-
-			/* Access the slot to be dropped */
-			o_ptr = &inventory[item];
-
-			/* Disturbing */
-			disturb(0, 0);
-
-			/* Warning */
-#ifdef JP
-msg_print("ザックからアイテムがあふれた！");
-#else
-			msg_print("Your pack overflows!");
-#endif
-
-
-			/* Describe */
-			object_desc(o_name, o_ptr, TRUE, 3);
-
-			/* Message */
-#ifdef JP
-msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
-#else
-			msg_format("You drop %s (%c).", o_name, index_to_label(item));
-#endif
-
-
-			/* Drop it (carefully) near the player */
-			(void)drop_near(o_ptr, 0, py, px);
-
-			/* Modify, Describe, Optimize */
-			inven_item_increase(item, -255);
-			inven_item_describe(item);
-			inven_item_optimize(item);
-
-			/* Handle "p_ptr->notice" */
-			notice_stuff();
-
-			/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
-			handle_stuff();
-		}
+		pack_overflow();
 
 
 		/* Hack -- cancel "lurking browse mode" */
@@ -5939,6 +5939,10 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 			/* Process the command */
 			process_command();
 		}
+
+
+		/* Hack -- Pack Overflow */
+		pack_overflow();
 
 
 		/*** Clean up ***/
@@ -6069,7 +6073,7 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 					}
 				}
 				new_mane = FALSE;
-				p_ptr->redraw |= (PR_MANE);
+				p_ptr->redraw |= (PR_IMITATION);
 			}
 			if (p_ptr->action == ACTION_LEARN)
 			{
@@ -6185,7 +6189,7 @@ static void dungeon(bool load_game)
 	if ((max_dlv[dungeon_type] < dun_level) && !p_ptr->inside_quest)
 	{
 		max_dlv[dungeon_type] = dun_level;
-		if (record_maxdeapth) do_cmd_write_nikki(NIKKI_MAXDEAPTH, dun_level, NULL);
+		if (record_maxdepth) do_cmd_write_nikki(NIKKI_MAXDEAPTH, dun_level, NULL);
 	}
 
 	/* Validate the panel */
@@ -6288,6 +6292,8 @@ msg_print("試合開始！");
 #endif
 	}
 
+	if (!load_game && (p_ptr->special_defense & NINJA_S_STEALTH)) set_superstealth(FALSE);
+
 	/*** Process this dungeon level ***/
 
 	/* Reset the monster generation level */
@@ -6382,8 +6388,15 @@ msg_print("試合開始！");
 
 		/* Count game turns */
 		turn++;
-		if (!p_ptr->wild_mode || wild_regen) dungeon_turn++;
-		else if (p_ptr->wild_mode && !(turn % ((MAX_HGT + MAX_WID) / 2))) dungeon_turn++;
+
+		if (dungeon_turn < dungeon_turn_limit)
+		{
+			if (!p_ptr->wild_mode || wild_regen) dungeon_turn++;
+			else if (p_ptr->wild_mode && !(turn % ((MAX_HGT + MAX_WID) / 2))) dungeon_turn++;
+		}
+
+		prevent_turn_overflow();
+
 		if (wild_regen) wild_regen--;
 	}
 
@@ -6827,12 +6840,6 @@ quit("セーブファイルが壊れています");
 		counts_write(2,0);
 		p_ptr->count = 0;
 
-#ifdef JP
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "辺境の地に降り立った。");
-#else
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "You are standing in the Outpost.");
-#endif
-
 		load = FALSE;
 
 		determine_bounty_uniques();
@@ -6908,8 +6915,26 @@ prt("お待ち下さい...", 0, 0);
 	/* Hack -- Enter wizard mode */
 	if (arg_wizard)
 	{
-		if (enter_wizard_mode()) p_ptr->wizard = TRUE;
-		else if (p_ptr->is_dead) quit("Already dead.");
+		if (enter_wizard_mode())
+		{
+			p_ptr->wizard = TRUE;
+
+			if (p_ptr->is_dead || !py || !px)
+			{
+				/* Avoid crash */
+				p_ptr->inside_quest = 0;
+
+				/* Initialize the saved floors data */
+				init_saved_floors();
+
+				/* Avoid crash in update_view() */
+				py = px = 10;
+			}
+		}
+		else if (p_ptr->is_dead)
+		{
+			quit("Already dead.");
+		}
 	}
 
 	/* Initialize the town-buildings if necessary */
@@ -6937,6 +6962,19 @@ prt("お待ち下さい...", 0, 0);
 
 	/* Hack -- Character is no longer "icky" */
 	character_icky = FALSE;
+
+
+	if (new_game)
+	{
+		char buf[80];
+
+#ifdef JP
+		sprintf(buf, "%sに降り立った。", map_name());
+#else
+		sprintf(buf, "You are standing in the %s.", map_name());
+#endif
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, buf);
+	}
 
 
 	/* Start game */
@@ -7041,16 +7079,18 @@ prt("お待ち下さい...", 0, 0);
 				p_ptr->chp_frac = 0;
 				p_ptr->exit_bldg = TRUE;
 				reset_tim_flags();
+
+				/* prepare next floor */
+				leave_floor();
 			}
 			else
 			{
 				/* Mega-Hack -- Allow player to cheat death */
 #ifdef JP
-if ((p_ptr->wizard || cheat_live) && !get_check("死にますか? "))
+				if ((p_ptr->wizard || cheat_live) && !get_check("死にますか? "))
 #else
 				if ((p_ptr->wizard || cheat_live) && !get_check("Die? "))
 #endif
-
 				{
 					/* Mark social class, reset age, if needed */
 					if (p_ptr->sc) p_ptr->sc = p_ptr->age = 0;
@@ -7063,11 +7103,10 @@ if ((p_ptr->wizard || cheat_live) && !get_check("死にますか? "))
 
 					/* Message */
 #ifdef JP
-msg_print("ウィザードモードに念を送り、死を欺いた。");
+					msg_print("ウィザードモードに念を送り、死を欺いた。");
 #else
 					msg_print("You invoke wizard mode and cheat death.");
 #endif
-					wipe_m_list();
 
 					msg_print(NULL);
 
@@ -7090,25 +7129,12 @@ msg_print("ウィザードモードに念を送り、死を欺いた。");
 					p_ptr->csp = p_ptr->msp;
 					p_ptr->csp_frac = 0;
 
-					/* Hack -- Healing */
-					(void)set_blind(0);
-					(void)set_confused(0);
-					(void)set_poisoned(0);
-					(void)set_afraid(0);
-					(void)set_paralyzed(0);
-					(void)set_image(0);
-					(void)set_stun(0);
-					(void)set_cut(0);
-
-					/* Hack -- Prevent starvation */
-					(void)set_food(PY_FOOD_MAX - 1);
-
 					/* Hack -- cancel recall */
 					if (p_ptr->word_recall)
 					{
 						/* Message */
 #ifdef JP
-msg_print("張りつめた大気が流れ去った...");
+						msg_print("張りつめた大気が流れ去った...");
 #else
 						msg_print("A tension leaves the air around you...");
 #endif
@@ -7130,21 +7156,33 @@ msg_print("張りつめた大気が流れ去った...");
 
 					/* Note cause of death XXX XXX XXX */
 #ifdef JP
-(void)strcpy(p_ptr->died_from, "死の欺き");
+					(void)strcpy(p_ptr->died_from, "死の欺き");
 #else
 					(void)strcpy(p_ptr->died_from, "Cheating death");
 #endif
 
-
 					/* Do not die */
 					p_ptr->is_dead = FALSE;
+
+					/* Hack -- Healing */
+					(void)set_blind(0);
+					(void)set_confused(0);
+					(void)set_poisoned(0);
+					(void)set_afraid(0);
+					(void)set_paralyzed(0);
+					(void)set_image(0);
+					(void)set_stun(0);
+					(void)set_cut(0);
+
+					/* Hack -- Prevent starvation */
+					(void)set_food(PY_FOOD_MAX - 1);
 
 					dun_level = 0;
 					p_ptr->inside_arena = FALSE;
 					p_ptr->inside_battle = FALSE;
 					leaving_quest = 0;
 					p_ptr->inside_quest = 0;
-					p_ptr->recall_dungeon = dungeon_type;
+					if (dungeon_type) p_ptr->recall_dungeon = dungeon_type;
 					dungeon_type = 0;
 					if (lite_town || vanilla_town)
 					{
@@ -7178,6 +7216,10 @@ msg_print("張りつめた大気が流れ去った...");
 #else
 					do_cmd_write_nikki(NIKKI_BUNSHOU, 1, "                            but revived.");
 #endif
+
+					/* prepare next floor */
+					leave_floor();
+					wipe_m_list();
 				}
 			}
 		}
@@ -7207,5 +7249,47 @@ s32b turn_real(s32b hoge)
 		return hoge - (TURNS_PER_TICK * TOWN_DAWN * 3 / 4);
 	default:
 		return hoge;
+	}
+}
+
+/*
+ * ターンのオーバーフローに対する対処
+ * ターン及びターンを記録する変数をターンの限界の1日前まで巻き戻す.
+ */
+void prevent_turn_overflow(void)
+{
+	int rollback_days, i, j;
+	s32b rollback_turns;
+
+	if (turn < turn_limit) return;
+
+	rollback_days = 1 + (turn - turn_limit) / (TURNS_PER_TICK * TOWN_DAWN);
+	rollback_turns = TURNS_PER_TICK * TOWN_DAWN * rollback_days;
+
+	if (turn > rollback_turns) turn -= rollback_turns;
+	else turn = 1; /* Paranoia */
+	if (old_turn > rollback_turns) old_turn -= rollback_turns;
+	else old_turn = 1;
+	if (old_battle > rollback_turns) old_battle -= rollback_turns;
+	else old_battle = 1;
+
+	for (i = 1; i < max_towns; i++)
+	{
+		for (j = 0; j < MAX_STORES; j++)
+		{
+			store_type *st_ptr = &town[i].store[j];
+
+			if (st_ptr->last_visit > -10L * TURNS_PER_TICK * STORE_TICKS)
+			{
+				st_ptr->last_visit -= rollback_turns;
+				if (st_ptr->last_visit < -10L * TURNS_PER_TICK * STORE_TICKS) st_ptr->last_visit = -10L * TURNS_PER_TICK * STORE_TICKS;
+			}
+
+			if (st_ptr->store_open)
+			{
+				st_ptr->store_open -= rollback_turns;
+				if (st_ptr->store_open < 1) st_ptr->store_open = 1;
+			}
+		}
 	}
 }

@@ -3356,7 +3356,7 @@ R:1020:0x07:0x68
 # Nami, the Mate
 R:1021:0x03:0x70
 
-# Nappa the Saiayan
+# Nappa the Saiyan
 R:1022:0x0F:0x70
 
 # Hand grenade
@@ -4592,7 +4592,7 @@ K:581:0xCE:0x9F
 # & Feanorian lamp~
 K:582:0xD8:0x86
 
-# & Set~ of Gloves of Dragon
+# & Set~ of Dragon Gloves
 K:584:0x0D:0x5D
 
 # & Pair~ of Dragon Boots

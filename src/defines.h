@@ -45,17 +45,39 @@
  */
 #define VERSION_NAME "Hengband"
 
-/* Savefile version for Hengband 1.1.1 and later */
-#define H_VER_MAJOR 1
-#define H_VER_MINOR 5
-#define H_VER_PATCH 4
-#define H_VER_EXTRA 0
 
-/* Added for ZAngband */
+/*
+ * "Program Version Number" of the game
+ *
+ * FAKE_VER_MAJOR=1,2 were reserved for ZAngband version 1.x.x/2.x.x .
+ *
+ * Program Version of Hengband version is
+ *   "(FAKE_VER_MAJOR-10).(FAKE_VER_MINOR).(FAKE_VER_PATCH)".
+ */
 #define FAKE_VERSION   0
 #define FAKE_VER_MAJOR 11
-#define FAKE_VER_MINOR 5
-#define FAKE_VER_PATCH 4
+#define FAKE_VER_MINOR 6
+#define FAKE_VER_PATCH 2
+
+
+/*
+ * "Savefile Version Number" for Hengband 1.1.1 and later
+ *
+ * First three digits may be same as the Program Version.  But not
+ * always same.  It means that newer version may preserves lower
+ * compatibility with the older version.
+ *
+ * For example, newer Hengband 1.4.4 creates savefiles marked with
+ * Savefile Version 1.4.0.0 .  It means that Hengband 1.4.0 can load a
+ * savefile of Hengband 1.4.4 (lower compatibility!).
+ *
+ * Upper compatibility is always guaranteed.
+ */
+#define H_VER_MAJOR 1
+#define H_VER_MINOR 6
+#define H_VER_PATCH 0
+#define H_VER_EXTRA 0
+
 
 #define ANGBAND_2_8_1
 #define ZANGBAND
@@ -519,6 +541,7 @@
  */
 #define TOWN_DAWN         10000    /* Number of ticks from dawn to dawn XXX */
 #define TURNS_PER_TICK    10L      /* Number of energy-gain-turns per ticks */
+#define MAX_DAYS          20000    /* Maximum days */
 #define BREAK_GLYPH       550      /* Rune of protection resistance */
 #define BREAK_MINOR_GLYPH 299      /* For explosive runes */
 #define BTH_PLUS_ADJ       3       /* Adjust BTH per plus-to-hit */
@@ -1095,7 +1118,7 @@
 #define FEAT_MIRROR             0xc3
 
 /* unknown grid (not detected)  */
-#define FEAT_UNDETECTD          0xc4
+#define FEAT_UNDETECTED         0xc4
 
 /* special traps */
 #define FEAT_TRAP_ARMAGEDDON    0xc5
@@ -1739,7 +1762,7 @@
 #define TV_STAFF        55
 #define TV_WAND         65
 #define TV_ROD          66
-#define TV_PARCHEMENT   69
+#define TV_PARCHMENT    69
 #define TV_SCROLL       70
 #define TV_POTION       75
 #define TV_FLASK        77
@@ -2453,6 +2476,15 @@
  *   ITEM: Affect each object in the "blast area" in some way
  *   KILL: Affect each monster in the "blast area" in some way
  *   HIDE: Hack -- disable "visual" feedback from projection
+ *   DISI: Disintegrate non-permanent features
+ *   PLAYER: Main target is player (used for riding player)
+ *   AIMED: Target is only player or monster, so don't affect another.
+ *          Depend on PROJECT_PLAYER.
+ *          (used for minimum (rad == 0) balls on riding player)
+ *   REFLECTABLE: Refrectable spell attacks (used for "bolts")
+ *   NO_HANGEKI: Avoid counter attacks of monsters
+ *   PATH: Only used for printing project path
+ *   FAST: Hide "visual" of flying bolts until blast
  */
 #define PROJECT_JUMP        0x01
 #define PROJECT_BEAM        0x02
@@ -2464,11 +2496,18 @@
 #define PROJECT_HIDE        0x80
 #define PROJECT_DISI        0x100
 #define PROJECT_PLAYER      0x200
-#define PROJECT_MONSTER     0x400
+#define PROJECT_AIMED       0x400
 #define PROJECT_REFLECTABLE 0x800
 #define PROJECT_NO_HANGEKI  0x1000
 #define PROJECT_PATH        0x2000
 #define PROJECT_FAST        0x4000
+
+
+/*
+ * Special caster ID for project()
+ */
+#define PROJECT_WHO_UNCTRL_POWER -1
+
 
 /*
  * Bit flags for the "enchant()" function
@@ -2606,7 +2645,7 @@
 #define PR_STATE        0x00100000L     /* Display Extra (State) */
 #define PR_SPEED        0x00200000L     /* Display Extra (Speed) */
 #define PR_STUDY        0x00400000L     /* Display Extra (Study) */
-#define PR_MANE         0x00800000L     /* Display Extra (Mane) */
+#define PR_IMITATION    0x00800000L     /* Display Extra (Imitation) */
 #define PR_EXTRA        0x01000000L     /* Display Extra Info */
 #define PR_BASIC        0x02000000L     /* Display Basic Info */
 #define PR_MAP          0x04000000L     /* Display Map */
@@ -2648,6 +2687,7 @@
 #define PM_ALLOW_UNIQUE   0x00000040
 #define PM_IGNORE_TERRAIN 0x00000080
 #define PM_HASTE          0x00000100
+#define PM_MULTIPLY       0x00000400
 
 
 /* Bit flags for monster_desc() */
@@ -4455,7 +4495,7 @@ extern int PlayerUID;
 #define BACT_GREET_KING              4
 #define BACT_KING_LEGENDS            5
 #define BACT_QUEST                   6
-#define BACT_GOLD                    7
+#define BACT_XXX_UNUSED              7
 #define BACT_POSTER                  8
 #define BACT_ARENA_RULES             9
 #define BACT_ARENA                  10
@@ -5301,3 +5341,9 @@ extern int PlayerUID;
 
 #define SCREEN_BUF_SIZE 65536           /* max screen dump buffer size */
 
+
+/*
+ * Bit flags for screen_object()
+ */
+#define SCROBJ_FAKE_OBJECT  0x00000001
+#define SCROBJ_FORCE_DETAIL 0x00000002

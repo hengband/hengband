@@ -119,7 +119,9 @@ s16b monster_level;		/* Current monster creation level */
 s16b base_level;        /* Base dungeon level */
 
 s32b turn;				/* Current game turn */
+s32b turn_limit;		/* Limit of game turn */
 s32b dungeon_turn;			/* Game turn in dungeon */
+s32b dungeon_turn_limit;	/* Limit of game turn in dungeon */
 s32b old_turn;			/* Turn when level began (feelings) */
 s32b old_battle;
 
@@ -990,7 +992,7 @@ bool record_rand_art;
 bool record_destroy_uniq;
 bool record_fix_quest;
 bool record_rand_quest;
-bool record_maxdeapth;
+bool record_maxdepth;
 bool record_stair;
 bool record_buy;
 bool record_sell;
@@ -1123,7 +1125,7 @@ bool autochara;
 
 bool can_save = FALSE;        /* Game can be saved */
 
-bool world_monster;
+s16b world_monster;
 bool world_player;
 
 int cap_mon;

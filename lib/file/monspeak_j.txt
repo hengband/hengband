@@ -34,11 +34,11 @@ N:8:Farmer Maggot
 #tells you to get off his land.
 は「わしの土地から出ていけ」と言っている。
 #says, "Grip! Fang! Wolf! Come on, lads!"
-「かみつき！きば！おおかみ！みんな来い！」
+「くいつき！きば！おおかみ！みんな来い！」
 #says, "They won't harm you -- not unless I tell 'em to!"
 「あいつらは噛みついたりせんよ。わしが命令せんかぎりな！」
 #says, "Here, Grip! Fang! Heel!"
-「ここだ、かみつき！きば！来い！」
+「ここだ、くいつき！きば！来い！」
 exclaims, "Well, if that isn't queerer than ever?"
 #asks, "Were you coming to visit me?"
 「わしに会いにきたのかい？」
@@ -242,7 +242,7 @@ says, 'Give 'til it hurts!'
 #says, 'Don't force me to put an arrow in your skull...'
 「俺にお前の頭を射抜かせないでくれ...」
 #says, 'Kevin Costner has soiled my name!'
-「ケビン・コスナーは俺の名前を地に落した！」
+「ケビン・コスナーは俺の名前を地に落とした！」
 
 #N:169:Brodda, the Easterling
 #N:291:Ulfast, Son of Ulfang
@@ -1005,7 +1005,7 @@ N:*:Default lines
 #says: 'Your puny efforts make me laugh!'
 「お前の貧相な努力は片腹痛いわ！」
 #says: 'Drop dead, wimp!'
-「雑魚が！死骸を落すがいい！」
+「雑魚が！死骸を落とすがいい！」
 #says: 'You should have fled while you had the chance.'
 「チャンスがあるうちにさっさと逃げておけばいいものを」
 #screams: 'Die by my hand!'

@@ -125,7 +125,7 @@ N:*:Default
 #Buy a home in the dungeon, any depth you want! Contact: McDuck & Co.
 ダンジョンに家を買おう！どんな深さでも！McDuck 不動産にいますぐ連絡を！
 #They say that Alberich has forged an all-powerful Ring.
-アルベリックが全ての力の指輪を作ったらしい。
+アルベリヒが全ての力の指輪を作ったらしい。
 #A good item will not corrode.
 良いアイテムは腐食しない。
 #They say that Alberich lost the Tarnhelm after making himself invisible.
@@ -244,7 +244,7 @@ If you start seeing red monsters, you have probably gained infravision.
 #When all else fails, read the instructions.
 何もかも失敗したなら、説明書を読んでみるんだな。
 #I've seen Paavo Vaaranen drop a Power Dragon Scale Mail!
-縦山ノックがＰＤＳＭを落すのを見たぞ！
+縦山ノックがＰＤＳＭを落とすのを見たぞ！
 #They say that the dungeon has no bottom.
 ダンジョンには底がないらしい。
 #They say that the dungeon has a bottom.
@@ -307,7 +307,7 @@ Kharis' tomb is somewhere in the dungeon and you won't want to desecrate it!
 #Selling unidentified potions to shopkeepers might be safer than quaffing them.
 未鑑定の薬を店に売るのは、自分で飲むより安全だ。
 #Always look out for trapdoors on "special" feeling levels!
-「特別な」感じのする階では常に落し戸に気をつけろ！
+「特別な」感じのする階では常に落とし戸に気をつけろ！
 #There is a way to max out your stats with Potions of Charisma & Nexus.
 魅力の薬と因果混乱でステータスを全部最大にする方法がある。
 #Unique opponents will recover their health faster than other creatures.

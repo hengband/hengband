@@ -167,7 +167,9 @@ extern s16b object_level;
 extern s16b monster_level;
 extern s16b base_level;
 extern s32b turn;
+extern s32b turn_limit;
 extern s32b dungeon_turn;
+extern s32b dungeon_turn_limit;
 extern s32b old_turn;
 extern s32b old_battle;
 extern bool use_sound;
@@ -311,7 +313,7 @@ extern bool record_rand_art;
 extern bool record_destroy_uniq;
 extern bool record_fix_quest;
 extern bool record_rand_quest;
-extern bool record_maxdeapth;
+extern bool record_maxdepth;
 extern bool record_stair;
 extern bool record_buy;
 extern bool record_sell;
@@ -491,7 +493,7 @@ extern bool preserve_mode;
 extern bool autoroller;
 extern bool autochara;
 extern bool can_save;
-extern bool world_monster;
+extern s16b world_monster;
 extern bool world_player;
 extern int cap_mon;
 extern int cap_mspeed;
@@ -613,6 +615,7 @@ extern void search(void);
 extern void py_pickup_aux(int o_idx);
 extern void carry(int pickup);
 extern bool py_attack(int y, int x, int mode);
+extern bool pattern_seq(int c_y, int c_x, int n_y, int n_x);
 extern bool player_can_enter(byte feature);
 extern void move_player(int dir, int do_pickup, bool break_trap);
 extern void run_step(int dir);
@@ -725,6 +728,7 @@ extern bool psychometry(void);
 extern void leave_level(int level);
 extern void enter_level(int level);
 extern s32b turn_real(s32b hoge);
+extern void prevent_turn_overflow(void);
 
 
 /* files.c */
@@ -782,7 +786,8 @@ extern void stair_creation(void);
 
 /* generate.c */
 extern void place_closed_door(int y, int x);
-extern void place_quest_monsters(void);
+extern bool place_quest_monsters(void);
+extern void wipe_generate_cave_flags(void);
 extern void clear_cave(void);
 extern void generate_cave(void);
 
@@ -819,19 +824,8 @@ extern void screen_roff(int r_idx, int mode);
 extern void display_roff(int r_idx);
 extern void output_monster_spoiler(int r_idx, void (*roff_func)(byte attr, cptr str));
 extern void create_name(int type, char *name);
-/* monster1.c (was in monster3.c ??) */
-extern bool monster_quest(int r_idx);
-extern bool monster_dungeon(int r_idx);
-extern bool monster_ocean(int r_idx);
-extern bool monster_shore(int r_idx);
-extern bool monster_town(int r_idx);
-extern bool monster_wood(int r_idx);
-extern bool monster_volcano(int r_idx);
-extern bool monster_mountain(int r_idx);
-extern bool monster_grass(int r_idx);
-extern bool monster_deep_water(int r_idx);
-extern bool monster_shallow_water(int r_idx);
-extern bool monster_lava(int r_idx);
+extern bool mon_hook_dungeon(int r_idx);
+
 extern monster_hook_type get_monster_hook(void);
 extern monster_hook_type get_monster_hook2(int y, int x);
 extern void set_friendly(monster_type *m_ptr);
@@ -870,7 +864,7 @@ extern void update_monsters(bool full);
 extern bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode);
 extern bool place_monster(int y, int x, u32b mode);
 extern bool alloc_horde(int y, int x);
-extern bool alloc_guardian(void);
+extern bool alloc_guardian(bool def_val);
 extern bool alloc_monster(int dis, u32b mode);
 extern bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode);
 extern bool summon_named_creature (int who, int oy, int ox, int r_idx, u32b mode);
@@ -890,7 +884,7 @@ extern void object_flags(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE]);
 extern void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE]);
 extern void object_desc_store(char *buf, object_type *o_ptr, int pref, int mode);
 extern cptr item_activation(object_type *o_ptr);
-extern bool screen_object(object_type *o_ptr, bool real);
+extern bool screen_object(object_type *o_ptr, u32b mode);
 extern char index_to_label(int i);
 extern s16b label_to_inven(int c);
 extern s16b label_to_equip(int c);
@@ -1088,12 +1082,15 @@ extern bool eat_magic(int power);
 extern void discharge_minion(void);
 extern void kawarimi(bool success);
 extern bool rush_attack(bool *mdeath);
+extern void remove_all_mirrors(bool explode);
 
 /* spells3.c */
 extern bool teleport_away(int m_idx, int dis, bool dec_valour);
 extern void teleport_monster_to(int m_idx, int ty, int tx, int power);
 extern void teleport_player(int dis);
+extern void teleport_player_away(int m_idx, int dis);
 extern void teleport_player_to(int ny, int nx, bool no_tele);
+extern void teleport_away_followable(int m_idx);
 extern void teleport_level(int m_idx);
 extern bool recall_player(int turns);
 extern bool word_of_recall(void);
@@ -1130,6 +1127,8 @@ extern bool potion_smash_effect(int who, int y, int x, int k_idx);
 extern void display_spell_list(void);
 extern s16b experience_of_spell(int spell, int realm);
 extern int mod_need_mana(int need_mana, int spell, int realm);
+extern int mod_spell_chance_1(int chance);
+extern int mod_spell_chance_2(int chance);
 extern s16b spell_chance(int spell,int realm);
 extern bool spell_okay(int spell, bool learned, bool study_pray, int realm);
 extern void print_spells(int target_spell, byte *spells, int num, int y, int x, int realm);
@@ -1152,6 +1151,7 @@ extern bool curse_weapon(bool force, int slot);
 extern bool brand_bolts(void);
 extern bool polymorph_monster(int y, int x);
 extern bool dimension_door(void);
+extern bool mirror_tunnel(void);
 extern bool summon_kin_player(int level, int y, int x, u32b mode);
 
 /* store.c */
@@ -1201,6 +1201,7 @@ extern errr macro_add(cptr pat, cptr act);
 extern sint macro_find_exact(cptr pat);
 extern char inkey(void);
 extern cptr quark_str(s16b num);
+extern void quark_init(void);
 extern s16b quark_add(cptr str);
 extern s16b message_num(void);
 extern cptr message_str(int age);
@@ -1386,7 +1387,7 @@ extern void one_ability(object_type *o_ptr);
 extern bool create_artifact(object_type *o_ptr, bool a_scroll);
 extern bool activate_random_artifact(object_type * o_ptr);
 extern void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr);
-extern void create_named_art(int a_idx, int y, int x);
+extern bool create_named_art(int a_idx, int y, int x);
 
 /* scores.c */
 extern void display_scores_aux(int from, int to, int note, high_score *score);
@@ -1556,7 +1557,10 @@ extern void jverb2( const char *in , char *out);
 extern void jverb3( const char *in , char *out);
 extern void jverb( const char *in , char *out , int flag);
 extern char* strstr_j(cptr str1, cptr str2);
-extern void codeconv(char *str);
+extern char *strchr_j(const char *ptr, char ch);
+extern void sjis2euc(char *str);
+extern void euc2sjis(char *str);
+extern byte codeconv(char *str);
 extern bool iskanji2(cptr s, int x);
 #endif
 

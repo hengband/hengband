@@ -213,7 +213,7 @@ long text will cut down.
 Once you have generated a character and dead or quit game, you will be
 asked whether you want to use quick start or not at start up.  If you
 choose to use quick start, you get new character with exactly same
-race, class, stat, background and etc.. as your last chatacter.
+race, class, stat, background and etc. as your last character.
 
 
 ***** <PrimaryStats>
@@ -227,7 +227,7 @@ of 18, and even higher, into the "percentile" range, represented as
 "18/01" through "18/130".  True maximum of each base stat is randomly
 ranging from 18/70 to 18/130, and average of all your stat maximums
 are always 18/100.  These maximums are chosen randomly when your
-character is created or your character quaff a Potion of New Life.
+character is created or your character quaffs a Potion of New Life.
 Actually, every stat can be raised even above these maximum of base
 stat by modification from race, class, personality and magical
 equipment, up to a pure maximum of 18/220, which is represented as
@@ -375,7 +375,7 @@ Infra-vision
      distance.  This ability works equally well with or with out a
      light source.  The majority of Hengband's creatures are
      cold-blooded, and will not be detected unless lit up by a light
-     source.  Most non human races have innate infra-vision ability.
+     source.  Most non-human races have innate infra-vision ability.
      Humans can gain infra-vision only if it is magically enhanced.
 
 

@@ -521,10 +521,21 @@ static void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool b
 	/* Handle breath attacks */
 	if (breath) rad = 0 - rad;
 
-	if (typ == GF_ROCKET) flg |= PROJECT_STOP;
-	if (typ == GF_MIND_BLAST || typ == GF_BRAIN_SMASH ||
-	    typ == GF_CAUSE_1 || typ == GF_CAUSE_2 || typ == GF_CAUSE_3 ||
-	    typ == GF_CAUSE_4 || typ == GF_HAND_DOOM) flg |= PROJECT_HIDE;
+	switch (typ)
+	{
+	case GF_ROCKET:
+		flg |= PROJECT_STOP;
+		break;
+	case GF_MIND_BLAST:
+	case GF_BRAIN_SMASH:
+	case GF_CAUSE_1:
+	case GF_CAUSE_2:
+	case GF_CAUSE_3:
+	case GF_CAUSE_4:
+	case GF_HAND_DOOM:
+		flg |= (PROJECT_HIDE | PROJECT_AIMED);
+		break;
+	}
 
 	/* Target the player with a ball attack */
 	(void)project(m_idx, rad, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
@@ -864,7 +875,7 @@ static bool dispel_check(int m_idx)
 
 	if (r_ptr->flags4 & RF4_BR_FIRE)
 	{
-		if (!(prace_is_(RACE_DEMON) && p_ptr->lev > 44))
+		if (!((p_ptr->prace == RACE_DEMON) && p_ptr->lev > 44))
 		{
 			if (!p_ptr->immune_fire && (p_ptr->oppose_fire || music_singing(MUSIC_RESIST))) return (TRUE);
 			if (p_ptr->special_defense & DEFENSE_FIRE) return (TRUE);
@@ -3407,63 +3418,21 @@ msg_format("%^sが瞬時に消えた。", m_name);
 #endif
 
 			teleport_away(m_idx, 10, FALSE);
-			p_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
+			p_ptr->update |= (PU_MONSTERS);
 			break;
 		}
 
 		/* RF6_TPORT */
 		case 160+5:
 		{
-			int i, oldfy, oldfx;
-			u32b flgs[TR_FLAG_SIZE];
-			object_type *o_ptr;
-
-			oldfy = m_ptr->fy;
-			oldfx = m_ptr->fx;
-
 			disturb(1, 0);
 #ifdef JP
-msg_format("%^sがテレポートした。", m_name);
+			msg_format("%^sがテレポートした。", m_name);
 #else
 			msg_format("%^s teleports away.", m_name);
 #endif
 
-			teleport_away(m_idx, MAX_SIGHT * 2 + 5, FALSE);
-
-			if (los(py, px, oldfy, oldfx) && !world_monster)
-			{
-				for (i=INVEN_RARM;i<INVEN_TOTAL;i++)
-				{
-					o_ptr = &inventory[i];
-					if(!cursed_p(o_ptr))
-					{
-						object_flags(o_ptr, flgs);
-
-						if((have_flag(flgs, TR_TELEPORT)) || (p_ptr->muta1 & MUT1_VTELEPORT) || (p_ptr->pclass == CLASS_IMITATOR))
-						{
-#ifdef JP
-							if(get_check_strict("ついていきますか？", CHECK_OKAY_CANCEL))
-#else
-							if(get_check_strict("Do you follow it? ", CHECK_OKAY_CANCEL))
-#endif
-							{
-								if (one_in_(3))
-								{
-									teleport_player(200);
-#ifdef JP
-									msg_print("失敗！");
-#else
-									msg_print("Failed!");
-#endif
-								}
-								else teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE);
-								p_ptr->energy_need += ENERGY_NEED();
-							}
-							break;
-						}
-					}
-				}
-			}
+			teleport_away_followable(m_idx);
 			break;
 		}
 
@@ -3563,7 +3532,7 @@ msg_format("%^sがテレポートした。", m_name);
 						msg_format("%^s suddenly go out of your sight!", m_name);
 #endif
 						teleport_away(m_idx, 10, FALSE);
-						p_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
+						p_ptr->update |= (PU_MONSTERS);
 					}
 					else
 					{
@@ -3571,7 +3540,7 @@ msg_format("%^sがテレポートした。", m_name);
 						bool fear; /* dummy */
 
 #ifdef JP
-						msg_format("%^sがあなたを掴んで空中から投げ落した。", m_name);
+						msg_format("%^sがあなたを掴んで空中から投げ落とした。", m_name);
 #else
 						msg_format("%^s holds you, and drops from the sky.", m_name);
 #endif
@@ -3659,7 +3628,7 @@ msg_format("%^sにテレポートさせられた。", m_name);
 #endif
 
 			learn_spell(MS_TELE_AWAY);
-			teleport_player(100);
+			teleport_player_away(m_idx, 100);
 			break;
 		}
 
@@ -4533,7 +4502,7 @@ msg_print("多くの力強いものが間近に現れた音が聞こえる。");
 			p_ptr->mane_num++;
 			new_mane = TRUE;
 
-			p_ptr->redraw |= (PR_MANE);
+			p_ptr->redraw |= (PR_IMITATION);
 		}
 	}
 

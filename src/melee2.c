@@ -2013,7 +2013,7 @@ act = "%sにむかって歌った。";
 				if (!explode)
 				{
 					project(m_idx, 0, t_ptr->fy, t_ptr->fx,
-						(pt == GF_OLD_SLEEP ? r_ptr->level : damage), pt, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER, -1);
+						(pt == GF_OLD_SLEEP ? r_ptr->level : damage), pt, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
 				}
 
 				if (heal_effect)
@@ -2066,7 +2066,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 							project(t_idx, 0, m_ptr->fy, m_ptr->fx,
 								damroll (1 + ((tr_ptr->level) / 26),
 								1 + ((tr_ptr->level) / 17)),
-								GF_FIRE, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER, -1);
+								GF_FIRE, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
 						}
 						else
 						{
@@ -2093,7 +2093,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 							project(t_idx, 0, m_ptr->fy, m_ptr->fx,
 								damroll (1 + ((tr_ptr->level) / 26),
 								1 + ((tr_ptr->level) / 17)),
-								GF_COLD, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER, -1);
+								GF_COLD, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
 						}
 						else
 						{
@@ -2120,7 +2120,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 							project(t_idx, 0, m_ptr->fy, m_ptr->fx,
 								damroll (1 + ((tr_ptr->level) / 26),
 								1 + ((tr_ptr->level) / 17)),
-								GF_ELEC, PROJECT_KILL | PROJECT_STOP | PROJECT_MONSTER, -1);
+								GF_ELEC, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
 						}
 						else
 						{
@@ -3288,6 +3288,8 @@ msg_print("爆発のルーンは解除された。");
 				{
 					cave_set_feat(ny, nx, FEAT_GRASS);
 
+					/* Monster destroyed a tree */
+					did_kill_wall = TRUE;
 				}
 				if (!(r_ptr->flags7 & RF7_CAN_FLY) && !(r_ptr->flags8 & RF8_WILD_WOOD))
 				{
@@ -3308,7 +3310,8 @@ msg_print("爆発のルーンは解除された。");
 				/* Wake up the moved monster */
 				y_ptr->csleep = 0;
 
-				if (r_info[y_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+				if (r_info[y_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+					p_ptr->update |= (PU_MON_LITE);
 			}
 
 			/* Hack -- Update the new location */
@@ -3875,14 +3878,15 @@ bool process_the_world(int num, int who, bool vs_player)
 		msg_print(NULL);
 	}
 
-	world_monster = TRUE;
+	/* This monster cast spells */
+	world_monster = hack_m_idx;
 
 	if (vs_player) do_cmd_redraw();
 
 	while(num--)
 	{
 		if(!m_ptr->r_idx) break;
-		process_monster(hack_m_idx);
+		process_monster(world_monster);
 
 		reset_target(m_ptr);
 
@@ -3911,7 +3915,7 @@ bool process_the_world(int num, int who, bool vs_player)
 	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
-	world_monster = FALSE;
+	world_monster = 0;
 	if (vs_player || los(py, px, m_ptr->fy, m_ptr->fx))
 	{
 #ifdef JP

@@ -52,8 +52,8 @@ Warrior-Mage  | 2   | 2 | 2 | 2 | 2   | 2 | 1 | 2 | 2   | 2   |
 Chaos Warrior |     |   |   | 1 |     |   |   |   | 1   |     |
 Monk          | 1   |   | 1 |   | 1   |   |   | 1 |     |     | 
 High Mage     | 1   | 1 | 1 | 1 | 1   | 1 | 1 | 1 | 1   | 1   |
-              |     |   |   |   |     |   | 1 |   |     |     |  
-              |     |   |   |   |     | 1 |   |   |     |     |  
+Tourist       |     |   |   |   |     |   | 1 |   |     |     |  
+BeastMaster   |     |   |   |   |     | 1 |   |   |     |     |  
 ForceTrainer  | 1   |   | 1 |   | 1   |   |   | 1 |     | 1   |  
 Sorcerer      |  All realms
 Red Mage      |  All realms (Lower rank spellbooks only)
@@ -71,12 +71,12 @@ There are eleven class-specific magics (or techniques):
 - Kendo               (for Samurai)
 - The Force           (for ForceTrainer)
 - Blue-Magic          (for Blue Mage)
-- Rage                (for Berserker
+- Rage                (for Berserker)
 - Smithery            (for Weaponsmith)
 - Mirror-magic        (for Mirror Master)
 - Ninjutsu            (for Ninja)
 
-See raceclas.tx#TheClasses [a] for more details.
+See raceclas.txt#TheClasses [a] for more details.
 
 
 ***** <MagicRealms>

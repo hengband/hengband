@@ -1,6 +1,6 @@
 N: 1:BIAS_ELEC
 'Lightning Conductor'
-'Electorostatic Barrier'
+'Electrostatic Barrier'
 'Shocking!'
 'Static Charge'
 of Insulation
@@ -47,7 +47,7 @@ N: 5:BIAS_ACID
 'Rustproof'
 'Melting'
 'Acidic Rain'
-'halogen'
+'Halogen'
 'Iron Will'
 'Stainless'
 'Glacial Acetic Acid'
@@ -60,7 +60,7 @@ N:14:BIAS_NECROMANTIC
 'Infernal Contract'
 'Sacrifice to void'
 'Forgotten Fear'
-'Zombi Master'
+'Zombie Master'
 of Arcam
 of Deformity
 of Sabbath
@@ -89,7 +89,7 @@ N: 8:BIAS_WIS
 'Spiritual Focus'
 'Holy Strength'
 'Avatar of Hope'
-'Keeper of Minde'
+'Keeper of Mind'
 'Oracle's Attendant'
 'Peacehoper'
 'Seeker of Skybreak'
@@ -110,7 +110,7 @@ of the Pickpocket
 N:17:BIAS_MAGE
 N: 7:BIAS_INT
 'Deja-Vu'
-'Caffein'
+'Caffeine'
 'Oath of Mages'
 'Whispers of Muse'
 of Talisman
@@ -131,7 +131,7 @@ of Meng Huo
 
 N:10:BIAS_CON
 'Endurance'
-'Glowth Period'
+'Growth Period'
 'Trollism'
 'Big Useless Fellow'
 'Healthy One'
@@ -157,7 +157,7 @@ N:11:BIAS_CHR
 'Brunet Hair of Maiden'
 'Rose Bouquet'
 'Innocent Dress'
-'Mini=Skirt'
+'Miniskirt'
 of Companion
 of Super Model
 of Passion
@@ -166,14 +166,12 @@ N:*:Default
 'Sambo'
 'Blink'
 'Pizza'
-'Virgin Hair'
 'Curator'
 'Babel'
 'Grand Prix'
-'Generater'
+'Generator'
 'Bladereturner'
 'Iron Maiden'
-of Normally
 of Glass
 of Clay
 of Sand

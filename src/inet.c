@@ -223,7 +223,7 @@ int soc_write_str(int sd, char *buf)
 #endif
 
 #if !defined(WINDOWS) && !defined(MACINTOSH)
-static jmp_buf	env;
+static sigjmp_buf	env;
 static void (*sig_int_saved)(int);
 static void (*sig_alm_saved)(int);
 #endif

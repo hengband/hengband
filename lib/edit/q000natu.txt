@@ -16,9 +16,9 @@ Q:$12:T:The Wizards of Nature have discovered a magical Node of
 Q:$12:T:Nature in a nearby forest. You must seek the Node and 
 Q:$12:T:dispatch its guardians so that the Tower of Nature can 
 Q:$12:T:claim the mystical energies of the Node.
-Q:12:T:自然魔法の賢者たちが、近くの森に自然エネルギーの特異点を見つけた。
-Q:12:T:我々自然魔法の塔がその魔力の所有権を得られるように、
-Q:12:T:おまえはその特異点を見つけて守備隊を派遣するのだ。
+Q:12:T:自然魔法の賢者たちが、近くの森に自然エネルギーの特異点の存在を確認
+Q:12:T:した。我々自然魔法の塔がその魔力の所有権を得られるように、おまえは
+Q:12:T:その特異点の場所を見つけてそこに巣食うモンスターを片づけてくるのだ。
 ?:1
 
 # Description for quest reward
