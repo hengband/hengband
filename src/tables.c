@@ -6648,7 +6648,7 @@ option_type option_info[] =
         "manual_haggle",                "店で値切り交渉をする" },
 #else
 	{ &manual_haggle,               FALSE, 3, 1, 0,
-	"manual_haggle",                "Manualy haggle in stores" },
+	"manual_haggle",                "Manually haggle in stores" },
 #endif
 
 
@@ -7151,7 +7151,7 @@ option_type option_info[] =
         "autochara",                   "体格/地位にオートローラー使用" },
 #else
 	{ &autochara,                   FALSE, 6, 6, 16,
-	"autochara",                    "Autorole for weight, height and social status" },
+	"autochara",                    "Autoroll for weight, height and social status" },
 #endif
 
 
@@ -7327,7 +7327,7 @@ option_type option_info[] =
         "record_named_pet",             "名前つきペットの情報を記録する" },
 #else
         { &record_named_pet,            FALSE, 10, 4, 23,
-        "record_named_pet",             "Record infomations of named pets" },
+        "record_named_pet",             "Record informations of named pets" },
 #endif
 
 
