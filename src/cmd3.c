@@ -953,7 +953,7 @@ void do_cmd_destroy(void)
 				/* Cancel */
 				return;
 			}
-			if (i == 'a' || i == 'A')
+			if (i == 'A')
 			{
 				/* Add an auto-destroy preference line */
 				if (autopick_autoregister(o_ptr))
