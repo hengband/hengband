@@ -3760,6 +3760,10 @@ void player_outfit(void)
 	case RACE_ANDROID:
 		/* Flasks of oil */
 		object_prep(q_ptr, lookup_kind(TV_FLASK, SV_ANY));
+
+		/* Fuel with oil (move pval to xtra4) */
+		apply_magic(q_ptr, 1, FALSE, FALSE, FALSE, FALSE);
+
 		q_ptr->number = (byte)rand_range(7, 12);
 		object_aware(q_ptr);
 		object_known(q_ptr);
