@@ -5974,8 +5974,6 @@ static bool player_birth_aux(void)
 	/* Clear */
 	clear_from(10);
 
-	init_dungeon_quests(number_of_quests);
-
 	/* Reset turn; before auto-roll and after choosing race */
 	init_turn();
 
@@ -6344,6 +6342,8 @@ static bool player_birth_aux(void)
 
 	/* Start over */
 	if (c == 'S') return (FALSE);
+
+	init_dungeon_quests(number_of_quests);
 
 	/* Save character data for quick start */
 	save_prev_data(&previous_char);
