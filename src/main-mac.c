@@ -850,8 +850,27 @@ static void term_data_check_font(term_data *td)
 static void term_data_check_size(term_data *td)
 {
 	/* Minimal window size */
-	if (td->cols < 1) td->cols = 1;
-	if (td->rows < 1) td->rows = 1;
+	if (td == &data[0])
+	{
+		/* Enforce minimal size */
+		if (td->cols < 80) td->cols = 80;
+		if (td->rows < 24) td->rows = 24;
+	}
+
+	/* Allow small windows for the rest */
+	else
+	{
+#ifdef MAC_MPW
+		if ((td->cols < 60) || (td->rows < 18)) 
+		{
+		td->cols = 60;
+		td->rows = 18;
+		}
+#else
+		if (td->cols < 1) td->cols = 1;
+		if (td->rows < 1) td->rows = 1;
+#endif
+	}
 
 	/* Minimal tile size */
 	if (td->tile_wid < 4) td->tile_wid = 4;
@@ -3784,7 +3803,9 @@ static void menu(long mc)
 						msg_flag = FALSE;
 
 						/* Save the game */
-						do_cmd_save_game(FALSE);
+//						do_cmd_save_game(FALSE);
+						Term_key_push(KTRL('X'));
+						break;
 					}
 
 					/* Quit */
@@ -4613,9 +4634,9 @@ static bool CheckEvents(bool wait)
 
 					/* Fake rectangle */
 					r.left = 20 * td->tile_wid + td->size_ow1;
-					r.right = 80 * td->tile_wid + td->size_ow1 + td->size_ow2 + 1;
+					r.right = qd.screenBits.bounds.right;
 					r.top = 1 * td->tile_hgt + td->size_oh1;
-					r.bottom = 24 * td->tile_hgt + td->size_oh1 + td->size_oh2 + 1;
+					r.bottom = qd.screenBits.bounds.bottom;
 
 					/* Grow the rectangle */
 					newsize = GrowWindow(w, event.where, &r);
