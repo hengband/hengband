@@ -2146,7 +2146,7 @@ info[i++] = "あなたは食欲が少ない。";
 	if (p_ptr->telepathy)
 	{
 #ifdef JP
-info[i++] = "あなたは超能力を持っている。";
+info[i++] = "あなたはテレパシー能力を持っている。";
 #else
 		info[i++] = "You have ESP.";
 #endif
