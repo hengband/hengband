@@ -436,6 +436,12 @@ bool monst_spell_monst(int m_idx)
 	/* Remove unimplemented spells */
 	f6 &= ~(RF6_WORLD | RF6_TRAPS | RF6_FORGET);
 
+	if (f4 & RF4_BR_LITE)
+	{
+		if (!los(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
+			f4 &= ~(RF4_BR_LITE);
+	}
+
 	/* Remove unimplemented special moves */
 	if (f6 & RF6_SPECIAL)
 	{

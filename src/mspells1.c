@@ -1192,6 +1192,48 @@ bool spell_is_inate(u16b spell)
 }
 
 
+static bool adjacent_grid_check(monster_type *m_ptr, int *yp, int *xp,
+	int f_flag, bool (*path_check)(int, int, int, int))
+{
+	int i;
+	int tonari;
+	static int tonari_y[4][8] = {{-1, -1, -1,  0,  0,  1,  1,  1},
+			                     {-1, -1, -1,  0,  0,  1,  1,  1},
+			                     { 1,  1,  1,  0,  0, -1, -1, -1},
+			                     { 1,  1,  1,  0,  0, -1, -1, -1}};
+	static int tonari_x[4][8] = {{-1,  0,  1, -1,  1, -1,  0,  1},
+			                     { 1,  0, -1,  1, -1,  1,  0, -1},
+			                     {-1,  0,  1, -1,  1, -1,  0,  1},
+			                     { 1,  0, -1,  1, -1,  1,  0, -1}};
+
+	if (m_ptr->fy < py && m_ptr->fx < px) tonari = 0;
+	else if (m_ptr->fy < py) tonari = 1;
+	else if (m_ptr->fx < px) tonari = 2;
+	else tonari = 3;
+
+	for (i = 0; i < 8; i++)
+	{
+		int next_x = *xp + tonari_x[tonari][i];
+		int next_y = *yp + tonari_y[tonari][i];
+		cave_type *c_ptr;
+
+		/* Access the next grid */
+		c_ptr = &cave[next_y][next_x];
+
+		/* Skip this feature */
+		if (!cave_have_flag_grid(c_ptr, f_flag)) continue;
+
+		if (path_check(m_ptr->fy, m_ptr->fx, next_y, next_x))
+		{
+			*yp = next_y;
+			*xp = next_x;
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
 #define DO_SPELL_NONE    0
 #define DO_SPELL_BR_LITE 1
 #define DO_SPELL_BR_DISI 2
@@ -1273,6 +1315,10 @@ bool make_attack_spell(int m_idx)
 	int x = px;
 	int y = py;
 
+	/* Target location for lite breath */
+	int x_br_lite = 0;
+	int y_br_lite = 0;
+
 	/* Summon count */
 	int count = 0;
 
@@ -1323,6 +1369,33 @@ bool make_attack_spell(int m_idx)
 	/* Check range */
 	if ((m_ptr->cdis > MAX_RANGE) && !m_ptr->target_y) return (FALSE);
 
+	/* Check path for lite breath */
+	if (f4 & RF4_BR_LITE)
+	{
+		y_br_lite = y;
+		x_br_lite = x;
+
+		if (los(m_ptr->fy, m_ptr->fx, y_br_lite, x_br_lite))
+		{
+			feature_type *f_ptr = &f_info[cave[y_br_lite][x_br_lite].feat];
+
+			if (!have_flag(f_ptr->flags, FF_LOS))
+			{
+				if (have_flag(f_ptr->flags, FF_PROJECT) && one_in_(2)) f4 &= ~(RF4_BR_LITE);
+			}
+		}
+
+		/* Check path to next grid */
+		else if (!adjacent_grid_check(m_ptr, &y_br_lite, &x_br_lite, FF_LOS, los)) f4 &= ~(RF4_BR_LITE);
+
+		/* Don't breath lite to the wall if impossible */
+		if (!(f4 & RF4_BR_LITE))
+		{
+			y_br_lite = 0;
+			x_br_lite = 0;
+		}
+	}
+
 	/* Check path */
 	if (projectable(m_ptr->fy, m_ptr->fx, y, x))
 	{
@@ -1351,8 +1424,7 @@ bool make_attack_spell(int m_idx)
 			success = TRUE;
 		}
 		else if ((f4 & RF4_BR_LITE) && (m_ptr->cdis < MAX_RANGE/2) &&
-		    los(m_ptr->fy, m_ptr->fx, y, x) &&
-		    (one_in_(10) || (projectable(y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
+		    los(m_ptr->fy, m_ptr->fx, y, x) && one_in_(5))
 		{
 			do_spell = DO_SPELL_BR_LITE;
 			success = TRUE;
@@ -1361,53 +1433,14 @@ bool make_attack_spell(int m_idx)
 		{
 			int by = y, bx = x;
 			get_project_point(m_ptr->fy, m_ptr->fx, &by, &bx, 0L);
-			if ((distance(by, bx, y, x) <= 3) && los(by, bx, y, x) &&
-			    (one_in_(10) || (projectable(y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
+			if ((distance(by, bx, y, x) <= 3) && los(by, bx, y, x) && one_in_(5))
 			{
 				do_spell = DO_SPELL_BA_LITE;
 				success = TRUE;
 			}
 		}
 
-		if (!success)
-		{
-			int i;
-			int tonari;
-			int tonari_y[4][8] = {{-1,-1,-1,0,0,1,1,1},
-					      {-1,-1,-1,0,0,1,1,1},
-					      {1,1,1,0,0,-1,-1,-1},
-					      {1,1,1,0,0,-1,-1,-1}};
-			int tonari_x[4][8] = {{-1,0,1,-1,1,-1,0,1},
-					      {1,0,-1,1,-1,1,0,-1},
-					      {-1,0,1,-1,1,-1,0,1},
-					      {1,0,-1,1,-1,1,0,-1}};
-
-			if (m_ptr->fy < py && m_ptr->fx < px) tonari = 0;
-			else if (m_ptr->fy < py) tonari = 1;
-			else if (m_ptr->fx < px) tonari = 2;
-			else tonari = 3;
-
-			for (i = 0; i < 8; i++)
-			{
-				int next_x = x + tonari_x[tonari][i];
-				int next_y = y + tonari_y[tonari][i];
-				cave_type *c_ptr;
-
-				/* Access the next grid */
-				c_ptr = &cave[next_y][next_x];
-
-				/* Skip door, rubble, wall, tree, mountain, etc. */
-				if (!cave_have_flag_grid(c_ptr, FF_PROJECT)) continue;
-
-				if (projectable(m_ptr->fy, m_ptr->fx, next_y, next_x))
-				{
-					y = next_y;
-					x = next_x;
-					success = TRUE;
-					break;
-				}
-			}
-		}
+		if (!success) success = adjacent_grid_check(m_ptr, &y, &x, FF_PROJECT, projectable);
 
 		if (!success)
 		{
@@ -1419,6 +1452,18 @@ bool make_attack_spell(int m_idx)
 				f5 &= (RF5_INDIRECT_MASK);
 				f6 &= (RF6_INDIRECT_MASK);
 				success = TRUE;
+			}
+
+			if (y_br_lite && x_br_lite && (m_ptr->cdis < MAX_RANGE/2) && one_in_(5))
+			{
+				if (!success)
+				{
+					y = y_br_lite;
+					x = x_br_lite;
+					do_spell = DO_SPELL_BR_LITE;
+					success = TRUE;
+				}
+				else f4 |= (RF4_BR_LITE);
 			}
 		}
 
@@ -1902,7 +1947,7 @@ else msg_format("%^sが閃光のブレスを吐いた。", m_name);
 #endif
 
 			dam = ((m_ptr->hp / 6) > 400 ? 400 : (m_ptr->hp / 6));
-			breath(y, x, m_idx, GF_LITE, dam,0, TRUE, MS_BR_LITE, learnable);
+			breath(y_br_lite, x_br_lite, m_idx, GF_LITE, dam,0, TRUE, MS_BR_LITE, learnable);
 			update_smart_learn(m_idx, DRS_LITE);
 			break;
 		}
