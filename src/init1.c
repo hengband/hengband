@@ -2884,6 +2884,7 @@ static int i = 0;
 #define RANDOM_EGO          0x08
 #define RANDOM_ARTIFACT     0x10
 #define RANDOM_TRAP         0x20
+#define RANDOM_HIDDEN_DOOR  0x40
 
 
 typedef struct dungeon_grid dungeon_grid;
@@ -3036,6 +3037,15 @@ static errr parse_line_feature(char *buf)
 				if (zz[1][0] == '*')
 				{
 					letter[index].random |= RANDOM_FEATURE;
+					if (zz[1][1])
+					{
+						zz[1]++;
+						letter[index].feature = atoi(zz[1]);
+					}
+				}
+				else if (zz[1][0] == '+')
+				{
+					letter[index].random |= RANDOM_HIDDEN_DOOR;
 					if (zz[1][1])
 					{
 						zz[1]++;
@@ -3272,6 +3282,13 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 
 			/* Lay down a floor */
 			c_ptr->feat = letter[idx].feature;
+
+                        /* Create hidden door */
+                        if (random & RANDOM_HIDDEN_DOOR)
+                        {
+                                c_ptr->mimic = c_ptr->feat;
+                                c_ptr->feat = FEAT_DOOR_HEAD;
+                        }
 
 			/* Only the features */
 			if (init_flags & INIT_ONLY_FEATURES) continue;
