@@ -371,7 +371,7 @@ static void try_door(int y, int x)
 	if (!in_bounds(y, x)) return;
 
 	/* Ignore walls */
-	if (cave[y][x].feat != FEAT_FLOOR) return;
+	if (!cave_floor_bold(y, x)) return;
 
 	/* Ignore room grids */
 	if (cave[y][x].info & (CAVE_ROOM)) return;

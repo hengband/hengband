@@ -3614,7 +3614,7 @@ s2 = "¤ÎÆþ¸ý";
 #ifdef JP
 			sprintf(out_val, "%s%s%s%s[%s] %x %d %d %d %d (%d,%d)", s1, name, s2, s3, info, c_ptr->info, c_ptr->feat, c_ptr->dist, c_ptr->cost, c_ptr->when, x, y);
 #else
-			sprintf(out_val, "%s%s%s%s [%s] %x %d %d %d %d", s1, s2, s3, name, info, c_ptr->info, c_ptr->feat, c_ptr->dist, c_ptr->cost, c_ptr->when);
+			sprintf(out_val, "%s%s%s%s [%s] %x %d %d %d %d (%d,%d)", s1, s2, s3, name, info, c_ptr->info, c_ptr->feat, c_ptr->dist, c_ptr->cost, c_ptr->when, x, y);
 #endif
 			else
 #ifdef JP

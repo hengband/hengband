@@ -110,7 +110,11 @@ void place_random_stairs(int y, int x)
 void place_random_door(int y, int x)
 {
 	int tmp;
+        cave_type *c_ptr = &cave[y][x];
 
+        /* Initialize mimic info */
+        c_ptr->mimic = 0;
+        
 	if (d_info[dungeon_type].flags1 & DF1_NO_DOORS)
 	{
 		place_floor_bold(y, x);
@@ -137,8 +141,6 @@ void place_random_door(int y, int x)
 	/* Secret doors (200/1000) */
 	else if (tmp < 600)
 	{
-                cave_type *c_ptr = &cave[y][x];
-
 		/* Create secret door */
                 place_closed_door(y, x);
 
