@@ -2167,7 +2167,7 @@ msg_format("%sの力が制御できない氾流となって解放された！", p);
 	/* teleport from mirror costs small energy */
 	if( on_mirror && p_ptr->pclass == CLASS_MIRROR_MASTER )
 	{
-	  if( n==2 || n==4 || n==6 || n==15 )energy_use = 50;
+	  if( n==3 || n==5 || n==7 || n==16 )energy_use = 50;
 	}
 
 	if ((use_mind == MIND_BERSERKER) || (use_mind == MIND_NINJUTSU))
