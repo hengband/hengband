@@ -6439,12 +6439,12 @@ N:384:大鷲王『メネルドール』
 E:Meneldor the Swift
 G:B:u
 I:120:80d10:20:65:20
-W:24:5:0:360:0:0
+W:24:1:0:360:0:0
 B:CLAW:HURT:7d3
 B:CLAW:HURT:7d3
 B:BITE:HURT:3d7
 F:CAN_FLY | UNIQUE | FORCE_MAXHP | DROP_CORPSE
-F:WILD_ONLY | WILD_MOUNTAIN | WILD_VOLCANO | FRIENDLY
+F:WILD_ONLY | WILD_MOUNTAIN | WILD_VOLCANO | 
 F:ANIMAL | GOOD | RIDING
 D:$An agent of supernatural beings, this creature looks like a 
 D:$huge eagle.
@@ -6901,12 +6901,12 @@ N:410:風早彦『グワイヒア』
 E:Gwaihir the Windlord
 G:B:u
 I:120:85d10:20:65:20
-W:24:5:0:360:0:0
+W:24:1:0:360:0:0
 B:CLAW:HURT:15d2
 B:CLAW:HURT:15d2
 B:BITE:HURT:3d10
 F:CAN_FLY | UNIQUE | FORCE_MAXHP | DROP_CORPSE
-F:WILD_ONLY | WILD_MOUNTAIN | WILD_VOLCANO | FRIENDLY
+F:WILD_ONLY | WILD_MOUNTAIN | WILD_VOLCANO | 
 F:ANIMAL | GOOD | RIDING
 D:$An agent of supernatural beings, this creature looks like a 
 D:$huge eagle.
@@ -8037,12 +8037,12 @@ N:468:大鷲王『ソロンドール』
 E:Thorondor
 G:B:u
 I:120:85d12:20:65:20
-W:30:6:0:555:0:0
+W:55:1:0:555:0:0
 B:CLAW:HURT:16d2
 B:CLAW:HURT:16d2
 B:BITE:HURT:4d10
-F:CAN_FLY | UNIQUE | FORCE_MAXHP | DROP_CORPSE
-F:WILD_ONLY | WILD_MOUNTAIN | WILD_VOLCANO | FRIENDLY
+F:CAN_FLY | UNIQUE | ESCORT | ESCORTS | FORCE_MAXHP | DROP_CORPSE
+F:WILD_ONLY | WILD_MOUNTAIN | WILD_VOLCANO |
 F:ANIMAL | GOOD | RIDING
 D:$An agent of supernatural being, Thorondor is the lord of eagles.
 D:ソロンドールは超自然的な存在の使いで、大鷲たちの王だ。
