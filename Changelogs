@@ -1,4 +1,95 @@
+2002-04-09  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.3:
+	早速修正。^I をキャンセルした後で画面を再描画してなかった。
+
+	* src/dungeon.c 1.30, src/externs.h 1.38, src/files.c 1.45, src/main-mac.c 1.13, src/main-win.c 1.8, src/main-x11.c 1.14, src/makefile.bcc 1.3, src/makefile.dos 1.3, src/makefile.ibm 1.3, src/makefile.std 1.3, src/types.h 1.12, src/util.c 1.25, src/variable.c 1.17, src/z-term.c 1.6, lib/pref/Makefile.am 1.3, lib/pref/pickpref.prf 1.2, lib/pref/picktype.prf 1.2, src/Makefile.am 1.6, src/autopick.c 1.2, src/cave.c 1.31, src/cmd1.c 1.29, src/cmd4.c 1.33:
+	branch-mogami-autopickをマージ
+
+2002-04-09  _nothere  <_nothere@cvs>
+
+	* lib/edit/k_info_j.txt 1.17:
+	アーティファクト生成の巻物の説明で "並の" を "無銘の" とした.
+
+2002-04-09  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.1.2.16:
+	^I ^L でオブジェクトの名前(とタイプ)を取り込むとき、銘は自動刻みとして
+	とりこむようにした。
+
+2002-04-09  henkma  <henkma@cvs>
+
+	* src/main-gcu.c 1.5:
+	cursesで^Sが効くようにするパッチ, 無駄にcursesの中の方をいじっているように見
+	えるので変更してみた. 普通cursesでこのようなことをする時, 単に一回raw();を呼
+	んでおくだけにすると思う.
+
+2002-04-09  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.1.2.15:
+	ダイス目nn以上の、の英語版の説明文表示がバグってたので修正。
+
+	* src/autopick.c 1.1.2.14:
+	2、3、4冊目の魔法書のキーワードがバグってたので修正。
+
+	* lib/pref/Makefile.am 1.2.8.1, src/autopick.c 1.1.2.13:
+	サンプルファイルの読み込みに失敗したときに落ちるのを修正。
+	make dist でサンプルファイルを添付させるのを忘れていたのを修正。
+
+	* src/z-config.h 1.6:
+	makefile.stdを使ったとき、英語版で_JPが定義されていたのを修正。
+
+	* src/cmd4.c 1.32.4.4:
+	ワーニング出ないように修正。
+
+	* src/autopick.c 1.1.2.12:
+	未使用変数のワーニング出ないように修正。
+	コード整理。コマンド説明の再描画を必要なときだけに制限。
+
+2002-04-08  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.1.2.11:
+	大事な ^I コマンドが壊れてた。修正。
+
+	* src/autopick.c 1.1.2.10:
+	コマンド説明のミス修正。
+
+	* src/autopick.c 1.1.2.9:
+	英語版がコンパイルできなかったのを修正。
+	256行目以降で、変更を感知できず画面再描画がされなかったのを修正。
+	'b' '-' でのバックスクロールが半画面程度だったバグ修正。
+	コマンドさらに統合。
+	^Rで変更を破棄。
+
+	* src/autopick.c 1.1.2.8:
+	いろいろ修正。いくつかのコマンドをまとめられる物はまとめた。
+
+	* src/autopick.c 1.1.2.7:
+	スクロールが遅いので、1行スクロールでなくセンタリングするようにした。
+
+	* src/autopick.c 1.1.2.6:
+	大事な行をコメントアウトしたままだった。
+
+	* src/autopick.c 1.1.2.5: 高速化修正。
+
+	* src/angband.rc 1.4:
+	半角カナがなくなっているので、SJIS CRLF→EUC LF に変えておく。
+	コード変換でangband.rcだけ除外する手間がなくなる。
+
+	* src/main-cap.c 1.2, src/main-gcu.c 1.4:
+	gcu と cap で ^S が使えないのを修正するパッチ flowctrl.dif を適用。
+	clockworkから持ってきた Hallvard B. Furuseth さんのパッチ。
+
+	* src/autopick.c 1.1.2.4:
+	カット(^K)してペースト(^Y)できるようにした。
+	配列溢れバグ修正。
+
 2002-04-07  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.1.2.3:
+	^I コマンドで装備を選択するフラグを忘れていたのを修正。
+
+	* Changelogs 1.33: 更新
 
 	* lib/pref/pickpref.prf 1.1, lib/pref/picktype.prf 1.1:
 	New file.
