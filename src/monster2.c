@@ -411,6 +411,23 @@ void wipe_m_list(void)
 {
 	int i;
 
+	/* Hack -- if Banor or Lupart dies, stay another dead */
+	if (!r_info[MON_BANORLUPART].max_num)
+	{
+		if (r_info[MON_BANOR].max_num)
+		{
+			r_info[MON_BANOR].max_num = 0;
+			r_info[MON_BANOR].r_pkills++;
+			if (r_info[MON_BANOR].r_tkills < MAX_SHORT) r_info[MON_BANOR].r_tkills++;
+		}
+		if (r_info[MON_LUPART].max_num)
+		{
+			r_info[MON_LUPART].max_num = 0;
+			r_info[MON_LUPART].r_pkills++;
+			if (r_info[MON_LUPART].r_tkills < MAX_SHORT) r_info[MON_LUPART].r_tkills++;
+		}
+	}
+
 	/* Delete all the monsters */
 	for (i = m_max - 1; i >= 1; i--)
 	{
