@@ -234,6 +234,14 @@ struct monster_blow
 };
 
 
+typedef struct mbe_info_type mbe_info_type;
+
+struct mbe_info_type
+{
+	int power;        /* The attack "power" */
+	int explode_type; /* Explosion effect */
+};
+
 
 /*
  * Monster "race" information, including racial memories

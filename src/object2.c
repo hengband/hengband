@@ -6355,28 +6355,270 @@ object_type *choose_warning_item(void)
 	return (&inventory[choices[randint0(number)]]);
 }
 
-/* Examine the grid (xx,yy) and warn the player if there are any danger */
-bool process_frakir(int xx, int yy)
+/* Calculate spell damages */
+static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int *max)
 {
-	int mx,my;
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	int          rlev = r_ptr->level;
+	bool         ignore_wraith_form = FALSE;
+
+	if (limit) dam = (dam > limit) ? limit : dam;
+
+	/* Vulnerability, resistance and immunity */
+	switch (typ)
+	{
+	case GF_ELEC:
+		if (p_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
+		if (p_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
+		if (prace_is_(RACE_ANDROID)) dam += dam / 3;
+		if (p_ptr->resist_elec) dam = (dam + 2) / 3;
+		if (p_ptr->oppose_elec || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
+			dam = (dam + 2) / 3;
+		if (p_ptr->immune_elec) dam = 0;
+		break;
+
+	case GF_POIS:
+		if (p_ptr->resist_pois) dam = (dam + 2) / 3;
+		if (p_ptr->oppose_pois || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
+			dam = (dam + 2) / 3;
+		break;
+
+	case GF_ACID:
+		if (p_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
+		if (p_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
+		if (p_ptr->resist_acid) dam = (dam + 2) / 3;
+		if (p_ptr->oppose_acid || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
+			dam = (dam + 2) / 3;
+		if (p_ptr->immune_acid) dam = 0;
+		break;
+
+	case GF_COLD:
+	case GF_ICE:
+		if (p_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
+		if (p_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
+		if (p_ptr->resist_cold) dam = (dam + 2) / 3;
+		if (p_ptr->oppose_cold || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
+			dam = (dam + 2) / 3;
+		if (p_ptr->immune_cold) dam = 0;
+		break;
+
+	case GF_FIRE:
+		if (p_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
+		if (prace_is_(RACE_ENT)) dam += dam / 3;
+		if (p_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
+		if (p_ptr->resist_fire) dam = (dam + 2) / 3;
+		if (p_ptr->oppose_fire || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
+			dam = (dam + 2) / 3;
+		if (p_ptr->immune_fire) dam = 0;
+		break;
+
+	case GF_PSY_SPEAR:
+		ignore_wraith_form = TRUE;
+		break;
+
+	case GF_ARROW:
+		if (!p_ptr->blind &&
+		    ((inventory[INVEN_RARM].k_idx && (inventory[INVEN_RARM].name1 == ART_ZANTETSU)) ||
+		     (inventory[INVEN_LARM].k_idx && (inventory[INVEN_LARM].name1 == ART_ZANTETSU))))
+			dam = 0;
+		break;
+
+	case GF_LITE:
+		if (p_ptr->resist_lite) dam /= 2; /* Worst case of 4 / (d4 + 7) */
+		if (prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE)) dam *= 2;
+		else if (prace_is_(RACE_S_FAIRY)) dam = dam * 4 / 3;
+		ignore_wraith_form = TRUE;
+		break;
+
+	case GF_DARK:
+		if (p_ptr->resist_dark) dam /= 2; /* Worst case of 4 / (d4 + 7) */
+		if (prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE) || p_ptr->wraith_form) dam = 0;
+		break;
+
+	case GF_SHARDS:
+		if (p_ptr->resist_shard) dam = dam * 3 / 4; /* Worst case of 6 / (d4 + 7) */
+		break;
+
+	case GF_SOUND:
+		if (p_ptr->resist_sound) dam = dam * 5 / 8; /* Worst case of 5 / (d4 + 7) */
+		break;
+
+	case GF_CONFUSION:
+		if (p_ptr->resist_conf) dam = dam * 5 / 8; /* Worst case of 5 / (d4 + 7) */
+		break;
+
+	case GF_CHAOS:
+		if (p_ptr->resist_chaos) dam = dam * 3 / 4; /* Worst case of 6 / (d4 + 7) */
+		break;
+
+	case GF_NETHER:
+		if (p_ptr->resist_neth) dam = dam * 3 / 4; /* Worst case of 6 / (d4 + 7) */
+		if (prace_is_(RACE_SPECTRE)) dam = 0;
+		break;
+
+	case GF_DISENCHANT:
+		if (p_ptr->resist_disen) dam = dam * 3 / 4; /* Worst case of 6 / (d4 + 7) */
+		break;
+
+	case GF_NEXUS:
+		if (p_ptr->resist_nexus) dam = dam * 3 / 4; /* Worst case of 6 / (d4 + 7) */
+		break;
+
+	case GF_TIME:
+		if (p_ptr->resist_time) dam /= 2; /* Worst case of 4 / (d4 + 7) */
+		break;
+
+	case GF_GRAVITY:
+		if (p_ptr->ffall) dam = (dam * 2) / 3;
+		break;
+
+	case GF_ROCKET:
+		if (p_ptr->resist_shard) dam /= 2;
+		break;
+
+	case GF_NUKE:
+		if (p_ptr->resist_pois) dam = (2 * dam + 2) / 5;
+		if (p_ptr->oppose_pois || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
+			dam = (2 * dam + 2) / 5;
+		break;
+
+	case GF_DEATH_RAY:
+		if (p_ptr->mimic_form)
+		{
+			if (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING) dam = 0;
+		}
+		else
+		{
+			switch (p_ptr->prace)
+			{
+			case RACE_GOLEM:
+			case RACE_SKELETON:
+			case RACE_ZOMBIE:
+			case RACE_VAMPIRE:
+			case RACE_DEMON:
+			case RACE_SPECTRE:
+				dam = 0;
+				break;
+			}
+		}
+		break;
+
+	case GF_HOLY_FIRE:
+		if (p_ptr->align > 10) dam /= 2;
+		else if (p_ptr->align < -10) dam *= 2;
+		break;
+
+	case GF_HELL_FIRE:
+		if (p_ptr->align > 10) dam *= 2;
+		break;
+
+	case GF_MIND_BLAST:
+	case GF_BRAIN_SMASH:
+		if (100 + rlev / 2 <= MAX(5, p_ptr->skill_sav)) dam = 0;
+		break;
+
+	case GF_CAUSE_1:
+	case GF_CAUSE_2:
+	case GF_CAUSE_3:
+	case GF_HAND_DOOM:
+		if (100 + rlev / 2 <= p_ptr->skill_sav) dam = 0;
+		break;
+
+	case GF_CAUSE_4:
+		if ((100 + rlev / 2 <= p_ptr->skill_sav) && (m_ptr->r_idx != MON_KENSHIROU)) dam = 0;
+		break;
+	}
+
+	if (p_ptr->wraith_form && !ignore_wraith_form)
+	{
+		dam /= 2;
+		if (!dam) dam = 1;
+	}
+
+	if (dam > *max) *max = dam;
+}
+
+/* Calculate blow damages */
+static int blow_damcalc(monster_type *m_ptr, monster_blow *blow_ptr)
+{
+	int  dam = blow_ptr->d_dice * blow_ptr->d_side;
+	int  dummy_max = 0;
+
+	if (blow_ptr->method != RBM_EXPLODE)
+	{
+		int ac = p_ptr->ac + p_ptr->to_a;
+
+		switch (blow_ptr->effect)
+		{
+		case RBE_SUPERHURT:
+		{
+			int tmp_dam = dam - (dam * ((ac < 150) ? ac : 150) / 250);
+			dam = MAX(dam, tmp_dam * 2);
+			break;
+		}
+
+		case RBE_HURT:
+		case RBE_SHATTER:
+			dam -= (dam * ((ac < 150) ? ac : 150) / 250);
+			break;
+
+		case RBE_ACID:
+			spell_damcalc(m_ptr, GF_ACID, dam, 0, &dummy_max);
+			dam = dummy_max;
+			break;
+
+		case RBE_ELEC:
+			spell_damcalc(m_ptr, GF_ELEC, dam, 0, &dummy_max);
+			dam = dummy_max;
+			break;
+
+		case RBE_FIRE:
+			spell_damcalc(m_ptr, GF_FIRE, dam, 0, &dummy_max);
+			dam = dummy_max;
+			break;
+
+		case RBE_COLD:
+			spell_damcalc(m_ptr, GF_COLD, dam, 0, &dummy_max);
+			dam = dummy_max;
+			break;
+
+		case RBE_DR_MANA:
+			dam = 0;
+			break;
+		}
+	}
+	else
+	{
+		dam = (dam + 1) / 2;
+		spell_damcalc(m_ptr, mbe_info[blow_ptr->effect].explode_type, dam, 0, &dummy_max);
+		dam = dummy_max;
+	}
+
+	return dam;
+}
+
+/* Examine the grid (xx,yy) and warn the player if there are any danger */
+bool process_warning(int xx, int yy)
+{
+	int mx, my;
 	cave_type *c_ptr;
 	char o_name[MAX_NLEN];
 
-#define FRAKIR_AWARE_RANGE 12
+#define WARNING_AWARE_RANGE 12
 	int dam_max = 0;
 	static int old_damage = 0;
 
-	for (mx = xx-FRAKIR_AWARE_RANGE; mx < xx+FRAKIR_AWARE_RANGE+1; mx++)
+	for (mx = xx - WARNING_AWARE_RANGE; mx < xx + WARNING_AWARE_RANGE + 1; mx++)
 	{
-		for (my = yy-FRAKIR_AWARE_RANGE; my < yy+FRAKIR_AWARE_RANGE+1; my++)
+		for (my = yy - WARNING_AWARE_RANGE; my < yy + WARNING_AWARE_RANGE + 1; my++)
 		{
-			int dam_max0=0;
+			int dam_max0 = 0;
 			monster_type *m_ptr;
 			monster_race *r_ptr;
 			u32b f4, f5, f6;
 			int rlev;
 
-			if (!in_bounds(my,mx) || (distance(my,mx,yy,xx)>FRAKIR_AWARE_RANGE)) continue;
+			if (!in_bounds(my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE)) continue;
 
 			c_ptr = &cave[my][mx];
 
@@ -6395,147 +6637,66 @@ bool process_frakir(int xx, int yy)
 			if (is_pet(m_ptr)) continue;
 
 			/* Monster spells (only powerful ones)*/
-			if(projectable(my,mx,yy,xx))
+			if (projectable(my, mx, yy, xx))
 			{
-
-#define DAMCALC(f,val,max,im,vln,res,resx,resy,op,opx,opy,dmax) \
-	   if (f){ int dam = (val)>(max)? (max):(val); \
-	   if (im) dam=0; \
-	   if (vln) dam *= 2; \
-	   if (res) {dam = (dam * resx) / resy;} \
-	   if (op) {dam = (dam * opx) / opy;} \
-	   if (dam>dmax) dmax = dam; \
-	   }
-
-				DAMCALC(f4 & (RF4_BR_FIRE), m_ptr->hp / 3, 1600, 
-					p_ptr->immune_fire, p_ptr->muta3 & MUT3_VULN_ELEM,
-					p_ptr->resist_fire, 1, 3,
-					p_ptr->oppose_fire, 1, 3, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_COLD), m_ptr->hp / 3, 1600, 
-					p_ptr->immune_cold, p_ptr->muta3 & MUT3_VULN_ELEM,
-					p_ptr->resist_cold, 1, 3,
-					p_ptr->oppose_cold, 1, 3, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_ELEC), m_ptr->hp / 3, 1600, 
-					p_ptr->immune_elec, p_ptr->muta3 & MUT3_VULN_ELEM,
-					p_ptr->resist_elec, 1, 3,
-					p_ptr->oppose_elec, 1, 3, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_ACID), m_ptr->hp / 3, 1600, 
-					p_ptr->immune_acid, p_ptr->muta3 & MUT3_VULN_ELEM,
-					p_ptr->resist_acid, 1, 3,
-					p_ptr->oppose_acid, 1, 3, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_POIS), m_ptr->hp / 3, 800,
-					FALSE , FALSE,
-					p_ptr->resist_pois, 1, 3,
-					p_ptr->oppose_pois, 1, 3, dam_max0);
-
-
-				DAMCALC(f4 & (RF4_BR_NETH), m_ptr->hp / 6, 550, FALSE , FALSE,
-					p_ptr->resist_neth, 6, 9, FALSE, 1, 1, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_LITE), m_ptr->hp / 6, 400, FALSE , FALSE,
-					p_ptr->resist_lite, 4, 9, FALSE, 1, 1, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_DARK), m_ptr->hp / 6, 400, FALSE , FALSE,
-					p_ptr->resist_dark, 4, 9, FALSE, 1, 1, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_CONF), m_ptr->hp / 6, 450, FALSE , FALSE,
-					p_ptr->resist_conf, 5, 9, FALSE, 1, 1, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_SOUN), m_ptr->hp / 6, 450, FALSE , FALSE,
-					p_ptr->resist_sound, 5, 9, FALSE, 1, 1, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_CHAO), m_ptr->hp / 6, 600, FALSE , FALSE,
-					p_ptr->resist_chaos, 6, 9, FALSE, 1, 1, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_DISE), m_ptr->hp / 6, 500, FALSE , FALSE,
-					p_ptr->resist_disen, 6, 9, FALSE, 1, 1, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_NEXU), m_ptr->hp / 3, 250, FALSE , FALSE,
-					p_ptr->resist_nexus, 6, 9, FALSE, 1, 1, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_TIME), m_ptr->hp / 3, 150, FALSE , FALSE,
-					FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_INER), m_ptr->hp / 6, 200, FALSE , FALSE,
-					FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_GRAV), m_ptr->hp / 3, 200, FALSE , FALSE,
-					FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_SHAR), m_ptr->hp / 6, 500, FALSE , FALSE,
-					p_ptr->resist_shard, 6, 9, FALSE, 1, 1, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_PLAS), m_ptr->hp / 6, 150, FALSE , FALSE,
-					FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_WALL), m_ptr->hp / 6, 200, FALSE , FALSE,
-					FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_MANA), m_ptr->hp / 3, 250, FALSE , FALSE,
-					FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_NUKE), m_ptr->hp / 3, 800, FALSE , FALSE,
-					p_ptr->resist_pois, 2, 5, 
-					p_ptr->oppose_pois, 2, 5, dam_max0);
-
-				DAMCALC(f4 & (RF4_BR_DISI), m_ptr->hp / 3, 300, FALSE , FALSE,
-					FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-
-				DAMCALC(f4 & (RF4_ROCKET), m_ptr->hp / 4, 800, FALSE , FALSE,
-					p_ptr->resist_shard, 1, 2, FALSE, 1, 1, dam_max0);
-
-				DAMCALC(f5 & (RF5_BA_MANA), rlev*4 + 150, 9999, FALSE , FALSE,
-					FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-				DAMCALC(f5 & (RF5_BA_DARK), rlev*4 + 150, 9999, FALSE , FALSE,
-					p_ptr->resist_dark, 4, 9, FALSE, 1, 1, dam_max0);
-
-				DAMCALC(f5 & (RF5_BA_LITE), rlev*4 + 150, 9999, FALSE , FALSE,
-					p_ptr->resist_lite, 4, 9, FALSE, 1, 1, dam_max0);
-
-
-				DAMCALC(f6 & (RF6_HAND_DOOM), p_ptr->chp*6/10, 9999, FALSE , FALSE,
-					FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
+				if (f4 & RF4_ROCKET) spell_damcalc(m_ptr, GF_ROCKET, m_ptr->hp / 4, 800, &dam_max0);
+				if (f4 & RF4_BR_ACID) spell_damcalc(m_ptr, GF_ACID, m_ptr->hp / 3, 1600, &dam_max0);
+				if (f4 & RF4_BR_ELEC) spell_damcalc(m_ptr, GF_ELEC, m_ptr->hp / 3, 1600, &dam_max0);
+				if (f4 & RF4_BR_FIRE) spell_damcalc(m_ptr, GF_FIRE, m_ptr->hp / 3, 1600, &dam_max0);
+				if (f4 & RF4_BR_COLD) spell_damcalc(m_ptr, GF_COLD, m_ptr->hp / 3, 1600, &dam_max0);
+				if (f4 & RF4_BR_POIS) spell_damcalc(m_ptr, GF_POIS, m_ptr->hp / 3, 800, &dam_max0);
+				if (f4 & RF4_BR_NETH) spell_damcalc(m_ptr, GF_NETHER, m_ptr->hp / 6, 550, &dam_max0);
+				if (f4 & RF4_BR_LITE) spell_damcalc(m_ptr, GF_LITE, m_ptr->hp / 6, 400, &dam_max0);
+				if (f4 & RF4_BR_DARK) spell_damcalc(m_ptr, GF_DARK, m_ptr->hp / 6, 400, &dam_max0);
+				if (f4 & RF4_BR_CONF) spell_damcalc(m_ptr, GF_CONFUSION, m_ptr->hp / 6, 450, &dam_max0);
+				if (f4 & RF4_BR_SOUN) spell_damcalc(m_ptr, GF_SOUND, m_ptr->hp / 6, 450, &dam_max0);
+				if (f4 & RF4_BR_CHAO) spell_damcalc(m_ptr, GF_CHAOS, m_ptr->hp / 6, 600, &dam_max0);
+				if (f4 & RF4_BR_DISE) spell_damcalc(m_ptr, GF_DISENCHANT, m_ptr->hp / 6, 500, &dam_max0);
+				if (f4 & RF4_BR_NEXU) spell_damcalc(m_ptr, GF_NEXUS, m_ptr->hp / 3, 250, &dam_max0);
+				if (f4 & RF4_BR_TIME) spell_damcalc(m_ptr, GF_TIME, m_ptr->hp / 3, 150, &dam_max0);
+				if (f4 & RF4_BR_INER) spell_damcalc(m_ptr, GF_INERTIA, m_ptr->hp / 6, 200, &dam_max0);
+				if (f4 & RF4_BR_GRAV) spell_damcalc(m_ptr, GF_GRAVITY, m_ptr->hp / 3, 200, &dam_max0);
+				if (f4 & RF4_BR_SHAR) spell_damcalc(m_ptr, GF_SHARDS, m_ptr->hp / 6, 500, &dam_max0);
+				if (f4 & RF4_BR_PLAS) spell_damcalc(m_ptr, GF_PLASMA, m_ptr->hp / 6, 150, &dam_max0);
+				if (f4 & RF4_BR_WALL) spell_damcalc(m_ptr, GF_FORCE, m_ptr->hp / 6, 200, &dam_max0);
+				if (f4 & RF4_BR_MANA) spell_damcalc(m_ptr, GF_MANA, m_ptr->hp / 3, 250, &dam_max0);
+				if (f4 & RF4_BR_NUKE) spell_damcalc(m_ptr, GF_NUKE, m_ptr->hp / 3, 800, &dam_max0);
+				if (f4 & RF4_BR_DISI) spell_damcalc(m_ptr, GF_DISINTEGRATE, m_ptr->hp / 6, 150, &dam_max0);
+				if (f5 & RF5_BA_MANA) spell_damcalc(m_ptr, GF_MANA, rlev * 4 + 150, 0, &dam_max0);
+				if (f5 & RF5_BA_DARK) spell_damcalc(m_ptr, GF_DARK, rlev * 4 + 150, 0, &dam_max0);
+				if (f5 & RF5_BA_LITE) spell_damcalc(m_ptr, GF_LITE, rlev * 4 + 150, 0, &dam_max0);
+				if (f6 & RF6_HAND_DOOM) spell_damcalc(m_ptr, GF_HAND_DOOM, p_ptr->chp * 6 / 10, 0, &dam_max0);
+				if (f6 & RF6_PSY_SPEAR) spell_damcalc(m_ptr, GF_PSY_SPEAR, (r_ptr->flags2 & RF2_POWERFUL) ? (rlev * 2 + 150) : (rlev * 3 / 2 + 100), 0, &dam_max0);
 			}
 
 			/* Monster melee attacks */
-			if(mx <= xx+1 && mx >= xx-1 && my <=yy+1 && my >= yy-1)
+			if (mx <= xx + 1 && mx >= xx - 1 && my <= yy + 1 && my >= yy - 1)
 			{
 				int m;
-				int dam_melee=0;
+				int dam_melee = 0;
 				for (m = 0; m < 4; m++)
 				{
-					int d1, d2;
-
 					/* Skip non-attacks */
-					if (!r_ptr->blow[m].method) continue;
+					if (!r_ptr->blow[m].method || (r_ptr->blow[m].method == RBM_SHOOT)) continue;
 
 					/* Extract the attack info */
-					d1 = r_ptr->blow[m].d_dice;
-					d2 = r_ptr->blow[m].d_side;
-
-					dam_melee += d1*d2;
+					dam_melee += blow_damcalc(m_ptr, &r_ptr->blow[m]);
+					if (r_ptr->blow[m].method == RBM_EXPLODE) break;
 				}
-				if(dam_melee>dam_max0)dam_max0=dam_melee;
+				if (dam_melee > dam_max0) dam_max0 = dam_melee;
 			}
 
 			/* Contribution from this monster */
-			dam_max+=dam_max0;
+			dam_max += dam_max0;
 		}
 	}
 
 	/* Prevent excessive warning */
-	if(dam_max > old_damage)
+	if (dam_max > old_damage)
 	{
-		old_damage=dam_max * 3 / 2;
+		old_damage = dam_max * 3 / 2;
 
-		if (dam_max>(p_ptr->chp)/2)
+		if (dam_max > p_ptr->chp / 2)
 		{
 			object_type *o_ptr = choose_warning_item();
 
@@ -6545,15 +6706,15 @@ bool process_frakir(int xx, int yy)
 #else
 			msg_format("Your %s pulsates sharply!", o_name);
 #endif
-			disturb(0,0);
+			disturb(0, 0);
 #ifdef JP
-			return (get_check("本当にこのまま進むか？"));
+			return get_check("本当にこのまま進むか？");
 #else
-			return (get_check("Realy want to go ahead? "));
+			return get_check("Realy want to go ahead? ");
 #endif
 		}
 	}
-	else old_damage = old_damage/2;
+	else old_damage = old_damage / 2;
 
 	c_ptr = &cave[yy][xx];
 	if (((!easy_disarm && (is_trap(c_ptr->feat) || c_ptr->feat == FEAT_INVIS))
@@ -6567,14 +6728,15 @@ bool process_frakir(int xx, int yy)
 #else
 		msg_format("Your %s pulsates!", o_name);
 #endif
-		disturb(0,0);
+		disturb(0, 0);
 #ifdef JP
-		return (get_check("本当にこのまま進むか？"));
+		return get_check("本当にこのまま進むか？");
 #else
-		return (get_check("Realy want to go ahead? "));
+		return get_check("Realy want to go ahead? ");
 #endif
 	}
-	return(TRUE);
+
+	return TRUE;
 }
 
 

@@ -250,43 +250,7 @@ bool make_attack_normal(int m_idx)
 		if (m_ptr->ml) visible = TRUE;
 
 		/* Extract the attack "power" */
-		switch (effect)
-		{
-			case RBE_HURT:      power = 60; break;
-			case RBE_POISON:    power =  5; break;
-			case RBE_UN_BONUS:  power = 20; break;
-			case RBE_UN_POWER:  power = 15; break;
-			case RBE_EAT_GOLD:  power =  5; break;
-			case RBE_EAT_ITEM:  power =  5; break;
-			case RBE_EAT_FOOD:  power =  5; break;
-			case RBE_EAT_LITE:  power =  5; break;
-			case RBE_ACID:      power =  0; break;
-			case RBE_ELEC:      power = 10; break;
-			case RBE_FIRE:      power = 10; break;
-			case RBE_COLD:      power = 10; break;
-			case RBE_BLIND:     power =  2; break;
-			case RBE_CONFUSE:   power = 10; break;
-			case RBE_TERRIFY:   power = 10; break;
-			case RBE_PARALYZE:  power =  2; break;
-			case RBE_LOSE_STR:  power =  0; break;
-			case RBE_LOSE_DEX:  power =  0; break;
-			case RBE_LOSE_CON:  power =  0; break;
-			case RBE_LOSE_INT:  power =  0; break;
-			case RBE_LOSE_WIS:  power =  0; break;
-			case RBE_LOSE_CHR:  power =  0; break;
-			case RBE_LOSE_ALL:  power =  2; break;
-			case RBE_SHATTER:   power = 60; break;
-			case RBE_EXP_10:    power =  5; break;
-			case RBE_EXP_20:    power =  5; break;
-			case RBE_EXP_40:    power =  5; break;
-			case RBE_EXP_80:    power =  5; break;
-			case RBE_DISEASE:   power =  5; break;
-			case RBE_TIME:      power =  5; break;
-			case RBE_EXP_VAMP:  power =  5; break;
-			case RBE_DR_MANA:   power =  5; break;
-			case RBE_SUPERHURT: power = 60; break;
-		}
-
+		power = mbe_info[effect].power;
 
 		/* Total armor */
 		ac = p_ptr->ac + p_ptr->to_a;

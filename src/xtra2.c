@@ -694,47 +694,12 @@ void monster_death(int m_idx, bool drop_item)
 			int d_side = r_ptr->blow[i].d_side;
 			int damage = damroll(d_dice, d_side);
 
-			switch (r_ptr->blow[i].effect)
-			{
-				case RBE_HURT:      typ = GF_MISSILE; break;
-				case RBE_POISON:    typ = GF_POIS; break;
-				case RBE_UN_BONUS:  typ = GF_DISENCHANT; break;
-				case RBE_UN_POWER:  typ = GF_MISSILE; break; /* ToDo: Apply the correct effects */
-				case RBE_EAT_GOLD:  typ = GF_MISSILE; break;
-				case RBE_EAT_ITEM:  typ = GF_MISSILE; break;
-				case RBE_EAT_FOOD:  typ = GF_MISSILE; break;
-				case RBE_EAT_LITE:  typ = GF_MISSILE; break;
-				case RBE_ACID:      typ = GF_ACID; break;
-				case RBE_ELEC:      typ = GF_ELEC; break;
-				case RBE_FIRE:      typ = GF_FIRE; break;
-				case RBE_COLD:      typ = GF_COLD; break;
-				case RBE_BLIND:     typ = GF_MISSILE; break;
-				case RBE_CONFUSE:   typ = GF_CONFUSION; break;
-				case RBE_TERRIFY:   typ = GF_MISSILE; break;
-				case RBE_PARALYZE:  typ = GF_MISSILE; break;
-				case RBE_LOSE_STR:  typ = GF_MISSILE; break;
-				case RBE_LOSE_DEX:  typ = GF_MISSILE; break;
-				case RBE_LOSE_CON:  typ = GF_MISSILE; break;
-				case RBE_LOSE_INT:  typ = GF_MISSILE; break;
-				case RBE_LOSE_WIS:  typ = GF_MISSILE; break;
-				case RBE_LOSE_CHR:  typ = GF_MISSILE; break;
-				case RBE_LOSE_ALL:  typ = GF_MISSILE; break;
-				case RBE_SHATTER:   typ = GF_ROCKET; break;
-				case RBE_EXP_10:    typ = GF_MISSILE; break;
-				case RBE_EXP_20:    typ = GF_MISSILE; break;
-				case RBE_EXP_40:    typ = GF_MISSILE; break;
-				case RBE_EXP_80:    typ = GF_MISSILE; break;
-				case RBE_DISEASE:   typ = GF_POIS; break;
-				case RBE_TIME:      typ = GF_TIME; break;
-				case RBE_EXP_VAMP:  typ = GF_MISSILE; break;
-				case RBE_DR_MANA:   typ = GF_MANA; break;
-				case RBE_SUPERHURT: typ = GF_MISSILE; break;
-			}
 			if (m_ptr->r_idx == MON_ROLENTO)
 			{
 				typ = GF_FIRE;
-				damage = damroll(20,10);
+				damage = damroll(20, 10);
 			}
+			else typ = mbe_info[r_ptr->blow[i].effect].explode_type;
 
 			project(m_idx, 3, y, x, damage, typ, flg, -1);
 			break;

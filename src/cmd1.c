@@ -4066,7 +4066,7 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 
 		if (p_ptr->warning)
 		{
-			if(!process_frakir(x,y))
+			if(!process_warning(x, y))
 			{
 				energy_use = 25;
 				return;

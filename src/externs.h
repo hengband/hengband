@@ -111,6 +111,7 @@ extern byte conv_terrain2feat[MAX_WILDERNESS];
 extern cptr silly_attacks[MAX_SILLY_ATTACK];
 extern monster_power monster_powers[MAX_MONSPELLS];
 extern cptr ident_info[];
+extern mbe_info_type mbe_info[];
 
 /* variable.c */
 extern cptr copyright[5];
@@ -929,7 +930,7 @@ extern void combine_pack(void);
 extern void reorder_pack(void);
 extern void display_koff(int k_idx);
 extern object_type *choose_warning_item(void);
-extern bool process_frakir(int xx, int yy);
+extern bool process_warning(int xx, int yy);
 extern void do_cmd_kaji(bool only_browse);
 
 /* racial.c */
