@@ -385,14 +385,14 @@ static void do_cmd_wiz_change_aux(void)
 		for (i = 0;i < 64;i++)
 		{
 			weapon_exp[j][i] = tmp_s16b;
-			if (weapon_exp[j][i] > weapon_exp_settei[p_ptr->pclass][j][i][1]) weapon_exp[j][i] = weapon_exp_settei[p_ptr->pclass][j][i][1];
+			if (weapon_exp[j][i] > we_info[p_ptr->pclass].max[j][i]) weapon_exp[j][i] = we_info[p_ptr->pclass].max[j][i];
 		}
 	}
 
 	for (j = 0; j < 10; j++)
 	{
 		skill_exp[j] = tmp_s16b;
-		if (skill_exp[j] > skill_exp_settei[p_ptr->pclass][j][1]) skill_exp[j] = skill_exp_settei[p_ptr->pclass][j][1];
+		if (skill_exp[j] > se_info[p_ptr->pclass].max[j]) skill_exp[j] = se_info[p_ptr->pclass].max[j];
 	}
 
 	for (j = 0; j < 32; j++)

@@ -2729,15 +2729,14 @@ static void get_extra(void)
 
 	for (i = 0; i < 5; i++)
 		for (j = 0; j < 64; j++)
-			weapon_exp[i][j] = weapon_exp_settei[p_ptr->pclass][i][j][0];
+			weapon_exp[i][j] = we_info[p_ptr->pclass].start[i][j];
 	if(p_ptr->pseikaku == SEIKAKU_SEXY)
 	{
 		weapon_exp[TV_HAFTED-TV_BOW][SV_WHIP] = 4000;
-		weapon_exp_settei[p_ptr->pclass][TV_HAFTED-TV_BOW][SV_WHIP][1] = 8000;
 	}
 
 	for (i = 0; i < 10; i++)
-		skill_exp[i] = skill_exp_settei[p_ptr->pclass][i][0];
+		skill_exp[i] = se_info[p_ptr->pclass].start[i];
 
 	/* Reset rewards */
 	for (i = 0; i < MAX_BACT; i++)
@@ -4084,7 +4083,7 @@ static bool get_player_class(void)
 	{
 		/* Analyze */
 		cp_ptr = &class_info[n];
-		mp_ptr = &magic_info[n];
+		mp_ptr = &m_info[n];
 		str = cp_ptr->title;
 		if (n < 26)
 			sym[n] = I2A(n);
@@ -4138,7 +4137,7 @@ static bool get_player_class(void)
 			else
 			{
 				cp_ptr = &class_info[cs];
-				mp_ptr = &magic_info[cs];
+				mp_ptr = &m_info[cs];
 				str = cp_ptr->title;
 				if (!(rp_ptr->choice & (1L << cs)))
 #ifdef JP
@@ -4249,7 +4248,7 @@ static bool get_player_class(void)
 	/* Set class */
 	p_ptr->pclass = k;
 	cp_ptr = &class_info[p_ptr->pclass];
-	mp_ptr = &magic_info[p_ptr->pclass];
+	mp_ptr = &m_info[p_ptr->pclass];
 	str = cp_ptr->title;
 
 

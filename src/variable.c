@@ -761,6 +761,30 @@ char *v_name;
 char *v_text;
 
 /*
+ * The weapon_exp_table
+ */
+header *we_head;
+weapon_exp_table *we_info;
+char *we_name;
+char *we_text;
+
+/*
+ * The skill_exp_table
+ */
+header *se_head;
+skill_exp_table *se_info;
+char *se_name;
+char *se_text;
+
+/*
+ * The magic info
+ */
+header *m_head;
+player_magic *m_info;
+char *m_name;
+char *m_text;
+
+/*
  * The terrain feature arrays
  */
 header *f_head;

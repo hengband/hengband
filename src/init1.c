@@ -842,6 +842,398 @@ errr init_v_info_txt(FILE *fp, char *buf, bool start)
 
 
 /*
+ * Initialize the "we_info" array, by parsing an ascii "template" file
+ */
+errr init_we_info_txt(FILE *fp, char *buf)
+{
+	int i;
+	int tval = 5, sval = 0;
+
+	/* Current entry */
+	weapon_exp_table *we_ptr = NULL;
+
+	/* Just before the first record */
+	error_idx = -1;
+
+	/* Just before the first line */
+	error_line = -1;
+
+	/* Prepare the "fake" stuff */
+	we_head->name_size = 0;
+	we_head->text_size = 0;
+
+	/* Parse */
+	while (0 == my_fgets(fp, buf, 1024))
+	{
+		/* Advance the line number */
+		error_line++;
+
+		/* Skip comments and blank lines */
+		if (!buf[0] || (buf[0] == '#')) continue;
+
+		/* Verify correct "colon" format */
+		if (buf[1] != ':') return (1);
+
+
+		/* Hack -- Process 'V' for "Version" */
+		if (buf[0] == 'V')
+		{
+			/* ignore */
+			continue;
+		}
+
+
+		/* Process 'N' for "New/Number/Name" */
+		if (buf[0] == 'N')
+		{
+			/* Get the index */
+			i = atoi(buf+2);
+
+			/* Verify information */
+			if (i <= error_idx) return (4);
+
+			/* Verify information */
+			if (tval != 5 || sval != 0) return (4);
+
+			/* Verify information */
+			if (i >= we_head->info_num) return (2);
+
+			/* Save the index */
+			error_idx = i;
+
+			/* Point at the "info" */
+			we_ptr = &we_info[i];
+
+			tval = sval = 0;
+
+			/* Next... */
+			continue;
+		}
+
+		/* There better be a current we_ptr */
+		if (!we_ptr) return (3);
+
+		/* Process 'I' for "Infomation" */
+		if (buf[0] == 'I')
+		{
+			int start, max;
+			const s16b exp_conv_table[] = { 0, 4000, 6000, 7000, 8000 };
+
+			/* Scan for the values */
+			if (2 != sscanf(buf+2, "%d:%d",
+				&start, &max)) return (1);
+
+			if (start < 0 || start > 4 || max < 0 || max > 4) return (8);
+
+			/* Save the values */
+			we_ptr->start[tval][sval] = exp_conv_table[start];
+			we_ptr->max[tval][sval] = exp_conv_table[max];
+
+			if (++sval == 64)
+			{
+				tval ++;
+				sval = 0;
+			}
+
+			/* Next... */
+			continue;
+		}
+
+
+		/* Oops */
+		return (6);
+	}
+
+	/* Complete the "name" and "text" sizes */
+	++we_head->name_size;
+	++we_head->text_size;
+
+	/* Success */
+	return (0);
+}
+
+
+/*
+ * Initialize the "se_info" array, by parsing an ascii "template" file
+ */
+errr init_se_info_txt(FILE *fp, char *buf)
+{
+	int i;
+
+	/* Current entry */
+	skill_exp_table *se_ptr = NULL;
+
+	/* Just before the first record */
+	error_idx = -1;
+
+	/* Just before the first line */
+	error_line = -1;
+
+	/* Prepare the "fake" stuff */
+	se_head->name_size = 0;
+	se_head->text_size = 0;
+
+	/* Parse */
+	while (0 == my_fgets(fp, buf, 1024))
+	{
+		/* Advance the line number */
+		error_line++;
+
+		/* Skip comments and blank lines */
+		if (!buf[0] || (buf[0] == '#')) continue;
+
+		/* Verify correct "colon" format */
+		if (buf[1] != ':') return (1);
+
+
+		/* Hack -- Process 'V' for "Version" */
+		if (buf[0] == 'V')
+		{
+			/* ignore */
+			continue;
+		}
+
+
+		/* Process 'N' for "New/Number/Name" */
+		if (buf[0] == 'N')
+		{
+			/* Get the index */
+			i = atoi(buf+2);
+
+			/* Verify information */
+			if (i <= error_idx) return (4);
+
+			/* Verify information */
+			if (i >= se_head->info_num) return (2);
+
+			/* Save the index */
+			error_idx = i;
+
+			/* Point at the "info" */
+			se_ptr = &se_info[i];
+
+			/* Next... */
+			continue;
+		}
+
+		/* There better be a current se_ptr */
+		if (!se_ptr) return (3);
+
+		/* Process 'I' for "Infomation" */
+		if (buf[0] == 'I')
+		{
+			int num, start, max;
+
+			/* Scan for the values */
+			if (3 != sscanf(buf+2, "%d:%d:%d",
+				&num, &start, &max)) return (1);
+
+			if (start < 0 || start > 8000 || max < 0 || max > 8000) return (8);
+
+			/* Save the values */
+			se_ptr->start[num] = start;
+			se_ptr->max[num] = max;
+
+			/* Next... */
+			continue;
+		}
+
+
+		/* Oops */
+		return (6);
+	}
+
+	/* Complete the "name" and "text" sizes */
+	++se_head->name_size;
+	++se_head->text_size;
+
+	/* Success */
+	return (0);
+}
+
+
+
+/*
+ * Initialize the "m_info" array, by parsing an ascii "template" file
+ */
+errr init_m_info_txt(FILE *fp, char *buf)
+{
+	int i;
+
+	char *s;
+
+	/* Current entry */
+	player_magic *m_ptr = NULL;
+
+
+	/* Just before the first record */
+	error_idx = -1;
+
+	/* Just before the first line */
+	error_line = -1;
+
+
+	/* Prepare the "fake" stuff */
+	m_head->name_size = 0;
+	m_head->text_size = 0;
+
+	/* Parse */
+	while (0 == my_fgets(fp, buf, 1024))
+	{
+		/* Advance the line number */
+		error_line++;
+
+		/* Skip comments and blank lines */
+		if (!buf[0] || (buf[0] == '#')) continue;
+
+		/* Verify correct "colon" format */
+		if (buf[1] != ':') return (1);
+
+
+		/* Hack -- Process 'V' for "Version" */
+		if (buf[0] == 'V')
+		{
+			/* ignore */
+			continue;
+		}
+
+
+		/* Process 'N' for "New/Number/Name" */
+		if (buf[0] == 'N')
+		{
+			/* Get the index */
+			i = atoi(buf+2);
+
+			/* Verify information */
+			if (i <= error_idx) return (4);
+
+			/* Verify information */
+			if (i >= m_head->info_num) return (2);
+
+			/* Save the index */
+			error_idx = i;
+
+			/* Point at the "info" */
+			m_ptr = &m_info[i];
+
+			/* Next... */
+			continue;
+		}
+
+		/* There better be a current m_ptr */
+		if (!m_ptr) return (3);
+
+		/* Process 'I' for "Info" (one line only) */
+		if (buf[0] == 'I')
+		{
+			char *book, *stat;
+			int xtra, type, first, weight;
+
+			/* Find the colon before the name */
+			s = strchr(buf+2, ':');
+
+			/* Verify that colon */
+			if (!s) return (1);
+
+			/* Nuke the colon, advance to the name */
+			*s++ = '\0';
+
+			book = buf+2;
+
+			if (streq(book, "SORCERY")) m_ptr->spell_book = TV_SORCERY_BOOK;
+			else if (streq(book, "LIFE")) m_ptr->spell_book = TV_LIFE_BOOK;
+			else if (streq(book, "MUSIC")) m_ptr->spell_book = TV_MUSIC_BOOK;
+			else if (streq(book, "HISSATSU")) m_ptr->spell_book = TV_HISSATSU_BOOK;
+			else if (streq(book, "NONE")) m_ptr->spell_book = 0;
+			else return (5);
+
+			stat = s;
+
+			/* Find the colon before the name */
+			s = strchr(s, ':');
+
+			/* Verify that colon */
+			if (!s) return (1);
+
+			/* Nuke the colon, advance to the name */
+			*s++ = '\0';
+
+			if (streq(stat, "STR")) m_ptr->spell_stat = A_STR;
+			else if (streq(stat, "INT")) m_ptr->spell_stat = A_INT;
+			else if (streq(stat, "WIS")) m_ptr->spell_stat = A_WIS;
+			else if (streq(stat, "DEX")) m_ptr->spell_stat = A_DEX;
+			else if (streq(stat, "CON")) m_ptr->spell_stat = A_CON;
+			else if (streq(stat, "CHR")) m_ptr->spell_stat = A_CHR;
+			else return (5);
+
+
+			/* Scan for the values */
+			if (4 != sscanf(s, "%x:%d:%d:%d",
+				&xtra, &type, &first, &weight))	return (1);
+
+			m_ptr->spell_xtra = xtra;
+			m_ptr->spell_type = type;
+			m_ptr->spell_first = first;
+			m_ptr->spell_weight = weight;
+
+			/* Next... */
+			continue;
+		}
+
+
+		/* Process 'R' for "Realm" (one line only) */
+		if (buf[0] == 'R')
+		{
+			int realm, readable, j;
+
+			/* Scan for the values */
+			if (2 != sscanf(buf+2, "%d:%d",
+				&realm, &readable)) return (1);
+
+			if (!readable) continue;
+
+			for (j = 0; j < 32; j ++)
+			{
+				int level, mana, fail, exp;
+
+				/* Advance the line number */
+				error_line++;
+
+				if (0 != my_fgets(fp, buf, 1024)) return(1);
+
+				if (buf[0] != 'T') return (1);
+
+				/* Scan for the values */
+				if (4 != sscanf(buf+2, "%d:%d:%d:%d",
+					&level, &mana, &fail, &exp)) return (1);
+
+				m_ptr->info[realm][j].slevel = level;
+				m_ptr->info[realm][j].smana = mana;
+				m_ptr->info[realm][j].sfail = fail;
+				m_ptr->info[realm][j].sexp = exp;
+			}
+
+			/* Next... */
+			continue;
+		}
+
+
+		/* Oops */
+		return (6);
+	}
+
+
+	/* Complete the "name" and "text" sizes */
+	++m_head->name_size;
+	++m_head->text_size;
+
+
+	/* Success */
+	return (0);
+}
+
+
+/*
  * Initialize the "f_info" array, by parsing an ascii "template" file
  */
 errr init_f_info_txt(FILE *fp, char *buf)

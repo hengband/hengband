@@ -5135,7 +5135,7 @@ bool rakuba(int dam, bool force)
 			if (p_ptr->riding_ryoute) level += 20;
 			if ((dam/2 + r_ptr->level) > (skill_exp[GINOU_RIDING]/30+10))
 			{
-				if((skill_exp[GINOU_RIDING] < skill_exp_settei[p_ptr->pclass][GINOU_RIDING][1]) && skill_exp_settei[p_ptr->pclass][GINOU_RIDING][1] > 1000)
+				if((skill_exp[GINOU_RIDING] < se_info[p_ptr->pclass].max[GINOU_RIDING]) && se_info[p_ptr->pclass].max[GINOU_RIDING] > 1000)
 				{
 					if (r_ptr->level*100 > (skill_exp[GINOU_RIDING] + 1500))
 						skill_exp[GINOU_RIDING] += (1+(r_ptr->level - skill_exp[GINOU_RIDING]/100 - 15));

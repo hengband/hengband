@@ -1292,7 +1292,7 @@ static void rd_extra(void)
 	if (z_older_than(10, 4, 1))
 	{
 		if (p_ptr->pclass != CLASS_BEASTMASTER) skill_exp[GINOU_RIDING] /= 2;
-		skill_exp[GINOU_RIDING] = MIN(skill_exp[GINOU_RIDING], skill_exp_settei[p_ptr->pclass][GINOU_RIDING][1]);
+		skill_exp[GINOU_RIDING] = MIN(skill_exp[GINOU_RIDING], se_info[p_ptr->pclass].max[GINOU_RIDING]);
 	}
 	if (z_older_than(10, 3, 14))
 	{
@@ -2713,8 +2713,6 @@ note(format("ヒットポイント配列が大きすぎる(%u)！", tmp16u));
 		rd_s16b(&player_hp[i]);
 	}
 
-	if(p_ptr->pseikaku == SEIKAKU_SEXY)
-		weapon_exp_settei[p_ptr->pclass][TV_HAFTED-TV_BOW][SV_WHIP][1] = 8000;
 	/* Important -- Initialize the sex */
 	sp_ptr = &sex_info[p_ptr->psex];
 
@@ -2745,7 +2743,7 @@ note(format("ヒットポイント配列が大きすぎる(%u)！", tmp16u));
 	}
 
 	/* Important -- Initialize the magic */
-	mp_ptr = &magic_info[p_ptr->pclass];
+	mp_ptr = &m_info[p_ptr->pclass];
 
 
 	/* Read spell info */
