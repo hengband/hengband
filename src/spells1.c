@@ -8358,7 +8358,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 		}
 
 		/* Only do visuals if requested */
-		if (!blind && !(flg & (PROJECT_HIDE)))
+		if (!blind && !(flg & (PROJECT_HIDE)) && !(flg & PROJECT_FAST))
 		{
 			/* Only do visuals if the player can "see" the bolt */
 			if (panel_contains(y, x) && player_has_los_bold(y, x))

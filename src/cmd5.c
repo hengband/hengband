@@ -3959,7 +3959,7 @@ static bool cast_haja_spell(int spell) /* nanka */
 		break;
 	case 6:
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_blast(GF_LITE, dir, 3+((plev-1)/5), 3, 10, 1);
+		fire_blast(GF_LITE, dir, 3+((plev-1)/5), 3, 10, 3);
 		break;
 	case 7:
 		teleport_player(plev*3);

@@ -6266,48 +6266,29 @@ bool fire_blast(int typ, int dir, int dd, int ds, int num, int dev)
 	int ty, tx, y, x, dist;
 	int i;
 
-	int flg = PROJECT_THRU | PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
+	int flg = PROJECT_FAST | PROJECT_THRU | PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
 
 	/* Assume okay */
 	bool result = TRUE;
 
 	/* Use the given direction */
-	ly = ty = py + 20 * ddy[dir];
-	lx = tx = px + 20 * ddx[dir];
-	ld = 20;
+	if (dir != 5)
+	{
+		ly = ty = py + 20 * ddy[dir];
+		lx = tx = px + 20 * ddx[dir];
+	}
 
-	y = py;
-	x = px;
-
-	/* Hack -- Use an actual "target" */
-	if (dir == 5)
+	/* Use an actual "target" */
+	else if (dir == 5)
 	{
 		tx = target_col;
 		ty = target_row;
 
 		lx = 20 * (tx - px) + px;
 		ly = 20 * (ty - py) + py;
-		ld = distance(py, px, ly, lx);
 	}
 
-	if ((dir != 5) || !target_okay())
-	{
-		/* Find the REAL target :) */
-		for (dist = 0; dist <= MAX_RANGE; dist++)
-		{
-			/* Never pass through walls */
-			if (dist && !cave_floor_bold(y, x)) break;
-
-			/* Never pass through monsters */
-			if (dist && cave[y][x].m_idx) break;
-
-			/* Check for arrival at "final target" */
-			if ((x == tx) && (y == ty)) break;
-
-			/* Calculate the new location */
-			mmove2(&y, &x, py, px, ty, tx);
-		}
-	}
+	ld = distance(py, px, ly, lx);
 
 	/* Blast */
 	for (i = 0; i < num; i++)

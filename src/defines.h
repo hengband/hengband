@@ -2392,6 +2392,7 @@
 #define PROJECT_NO_REF     0x800
 #define PROJECT_NO_HANGEKI 0x1000
 #define PROJECT_PATH       0x2000
+#define PROJECT_FAST       0x4000
 
 /*
  * Bit flags for the "enchant()" function
