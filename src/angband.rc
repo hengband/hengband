@@ -40,6 +40,17 @@ ANGBAND MENU
 			MENUITEM "サブウィンドウ 7", 217
 		}
 
+		POPUP "前面に固定"
+		{
+			MENUITEM "サブウィンドウ 1", 221
+			MENUITEM "サブウィンドウ 2", 222
+			MENUITEM "サブウィンドウ 3", 223
+			MENUITEM "サブウィンドウ 4", 224
+			MENUITEM "サブウィンドウ 5", 225
+			MENUITEM "サブウィンドウ 6", 226
+			MENUITEM "サブウィンドウ 7", 227
+		}
+
 		MENUITEM SEPARATOR
 
 		/*  POPUP "Bizarre Display"

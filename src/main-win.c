@@ -123,6 +123,15 @@
 #define IDM_WINDOW_FONT_6		216
 #define IDM_WINDOW_FONT_7		217
 
+#define IDM_WINDOW_POS_0		220
+#define IDM_WINDOW_POS_1		221
+#define IDM_WINDOW_POS_2		222
+#define IDM_WINDOW_POS_3		223
+#define IDM_WINDOW_POS_4		224
+#define IDM_WINDOW_POS_5		225
+#define IDM_WINDOW_POS_6		226
+#define IDM_WINDOW_POS_7		227
+
 #define IDM_WINDOW_BIZ_0		230
 #define IDM_WINDOW_BIZ_1		231
 #define IDM_WINDOW_BIZ_2		232
@@ -398,6 +407,8 @@ struct _term_data
 #ifdef JP
 	LOGFONT lf;
 #endif
+
+	bool posfix;
 
 /* bg */
 #if 0
@@ -999,12 +1010,6 @@ static void term_getsize(term_data *td)
 	if (td->cols < 1) td->cols = 1;
 	if (td->rows < 1) td->rows = 1;
 
-#if 0
-	/* Paranoia */
-	if (td->cols > 80) td->cols = 80;
-	if (td->rows > 24) td->rows = 24;
-#endif
-
 	/* Window sizes */
 	wid = td->cols * td->tile_wid + td->size_ow1 + td->size_ow2;
 	hgt = td->rows * td->tile_hgt + td->size_oh1 + td->size_oh2;
@@ -1101,6 +1106,10 @@ static void save_prefs_aux(term_data *td, cptr sec_name)
 	/* Window position (y) */
 	wsprintf(buf, "%d", rc.top);
 	WritePrivateProfileString(sec_name, "PositionY", buf, ini_file);
+
+	/* Window Z position */
+	strcpy(buf, td->posfix ? "1" : "0");
+	WritePrivateProfileString(sec_name, "PositionFix", buf, ini_file);
 }
 
 
@@ -1197,6 +1206,9 @@ static void load_prefs_aux(term_data *td, cptr sec_name)
 	/* Window position */
 	td->pos_x = GetPrivateProfileInt(sec_name, "PositionX", td->pos_x, ini_file);
 	td->pos_y = GetPrivateProfileInt(sec_name, "PositionY", td->pos_y, ini_file);
+
+	/* Window Z position */
+	td->posfix = GetPrivateProfileInt(sec_name, "PositionFix", td->posfix, ini_file);
 }
 
 
@@ -1739,7 +1751,14 @@ static void term_change_font(term_data *td)
 
 }
 
-
+/*
+ * Allow the user to lock this window.
+ */
+static void term_window_pos(term_data *td, HWND hWnd)
+{
+	SetWindowPos(td->w, hWnd, 0, 0, 0, 0,
+			SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+}
 
 static void windows_map(void);
 
@@ -2781,6 +2800,7 @@ static void init_windows(void)
 	td->size_oh2 = 2;
 	td->pos_x = 7 * 30;
 	td->pos_y = 7 * 20;
+	td->posfix = FALSE;
 
 #ifdef JP
 	td->bizarre = TRUE;
@@ -2801,6 +2821,7 @@ static void init_windows(void)
 		td->size_oh2 = 1;
 		td->pos_x = (7 - i) * 30;
 		td->pos_y = (7 - i) * 20;
+		td->posfix = FALSE;
 #ifdef JP
 			td->bizarre = TRUE;
 #endif
@@ -2907,9 +2928,15 @@ static void init_windows(void)
 		{
 			/* Activate the window */
 			SetActiveWindow(td->w);
+		}
 
-			/* Bring window to top */
-			SetWindowPos(td->w, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+		if (data[i].posfix)
+		{
+			term_window_pos(&data[i], HWND_TOPMOST);
+		}
+		else
+		{
+			term_window_pos(&data[i], td->w);
 		}
 	}
 
@@ -3027,6 +3054,22 @@ static void setup_menus(void)
 		if (data[i].visible)
 		{
 			EnableMenuItem(hm, IDM_WINDOW_FONT_0 + i,
+			               MF_BYCOMMAND | MF_ENABLED);
+		}
+	}
+
+	/* Menu "Window::Window Position Fix" */
+	for (i = 0; i < MAX_TERM_DATA; i++)
+	{
+		EnableMenuItem(hm, IDM_WINDOW_POS_0 + i,
+		               MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+
+		CheckMenuItem(hm, IDM_WINDOW_POS_0 + i,
+		              (data[i].posfix ? MF_CHECKED : MF_UNCHECKED));
+
+		if (data[i].visible)
+		{
+			EnableMenuItem(hm, IDM_WINDOW_POS_0 + i,
 			               MF_BYCOMMAND | MF_ENABLED);
 		}
 	}
@@ -3447,6 +3490,7 @@ static void process_menus(WORD wCmd)
 			else
 			{
 				td->visible = FALSE;
+				td->posfix = FALSE;
 				ShowWindow(td->w, SW_HIDE);
 			}
 
@@ -3470,6 +3514,35 @@ static void process_menus(WORD wCmd)
 			td = &data[i];
 
 			term_change_font(td);
+
+			break;
+		}
+
+		/* Window Z Position */
+		case IDM_WINDOW_POS_1:
+		case IDM_WINDOW_POS_2:
+		case IDM_WINDOW_POS_3:
+		case IDM_WINDOW_POS_4:
+		case IDM_WINDOW_POS_5:
+		case IDM_WINDOW_POS_6:
+		case IDM_WINDOW_POS_7:
+		{
+			i = wCmd - IDM_WINDOW_POS_0;
+
+			if ((i < 0) || (i >= MAX_TERM_DATA)) break;
+
+			td = &data[i];
+
+			if (!td->posfix && td->visible)
+			{
+				td->posfix = TRUE;
+				term_window_pos(td, HWND_TOPMOST);
+			}
+			else
+			{
+				td->posfix = FALSE;
+				term_window_pos(td, data[0].w);
+			}
 
 			break;
 		}
@@ -4176,8 +4249,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 				/* Do something to sub-windows */
 				for (i = 1; i < MAX_TERM_DATA; i++)
 				{
-					SetWindowPos(data[i].w, hWnd, 0, 0, 0, 0,
-					             SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+					if (!data[i].posfix) term_window_pos(&data[i], hWnd);
 				}
 
 				/* Focus on main window */
@@ -4187,6 +4259,24 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 			}
 
 			break;
+		}
+
+		case WM_ACTIVATEAPP:
+		{
+			for (i = 1; i < MAX_TERM_DATA; i++)
+			{
+				if(data[i].visible)
+				{
+					if (wParam == TRUE)
+					{
+						ShowWindow(data[i].w, SW_SHOW);
+					}
+					else
+					{
+						ShowWindow(data[i].w, SW_HIDE);
+					}
+				}
+			}
 		}
 	}
 
@@ -4937,6 +5027,7 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 	  switch(lpCmdLine[1])
 	  {
 	  case 'p':
+	  case 'P':
 	    {
 	      if (!lpCmdLine[2]) break;
 	      chuukei_server = TRUE;
@@ -4950,6 +5041,7 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 	    }
 
 	  case 'c':
+	  case 'C':
 	    {
 	      if (!lpCmdLine[2]) break;
 	      chuukei_client = TRUE;
