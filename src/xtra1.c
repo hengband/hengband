@@ -2394,6 +2394,9 @@ static void calc_spells(void)
 
 		/* Redraw Study Status */
 		p_ptr->redraw |= (PR_STUDY);
+
+                /* Redraw object recall */
+                p_ptr->window |= (PW_OBJECT);
 	}
 }
 

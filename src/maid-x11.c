@@ -8,6 +8,8 @@
  * are included in all such copies.
  */
 
+#ifdef USE_X11
+
 #include <math.h>
 
 
@@ -126,14 +128,9 @@ static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
 
 /*
  * The Win32 "BITMAPFILEHEADER" type.
- *
- * Note the "bfAlign" field, which is a complete hack to ensure that the
- * "u32b" fields in the structure get aligned.  Thus, when reading this
- * header from the file, we must be careful to skip this field.
  */
 typedef struct BITMAPFILEHEADER
 {
-	u16b bfAlign;    /* HATE this */
 	u16b bfType;
 	u32b bfSize;
 	u16b bfReserved1;
@@ -169,6 +166,34 @@ typedef struct RGBQUAD
 } RGBQUAD;
 
 
+/*** Helper functions for system independent file loading. ***/
+
+static byte get_byte(FILE *fff)
+{
+	/* Get a character, and return it */
+	return (getc(fff) & 0xFF);
+}
+
+static void rd_byte(FILE *fff, byte *ip)
+{
+	*ip = get_byte(fff);
+}
+
+static void rd_u16b(FILE *fff, u16b *ip)
+{
+	(*ip) = get_byte(fff);
+	(*ip) |= ((u16b)(get_byte(fff)) << 8);
+}
+
+static void rd_u32b(FILE *fff, u32b *ip)
+{
+	(*ip) = get_byte(fff);
+	(*ip) |= ((u32b)(get_byte(fff)) << 8);
+	(*ip) |= ((u32b)(get_byte(fff)) << 16);
+	(*ip) |= ((u32b)(get_byte(fff)) << 24);
+}
+
+
 /*
  * Read a Win32 BMP file.
  *
@@ -187,8 +212,6 @@ static XImage *ReadBMP(Display *dpy, char *Name)
 
 	BITMAPFILEHEADER fileheader;
 	BITMAPINFOHEADER infoheader;
-
-	vptr fileheaderhack = (vptr)((char *)(&fileheader) + 2);
 
 	XImage *Res = NULL;
 
@@ -215,10 +238,24 @@ static XImage *ReadBMP(Display *dpy, char *Name)
 	}
 
 	/* Read the "BITMAPFILEHEADER" */
-	fread(fileheaderhack, sizeof(fileheader) - 2, 1, f);
+	rd_u16b(f, &(fileheader.bfType));
+	rd_u32b(f, &(fileheader.bfSize));
+	rd_u16b(f, &(fileheader.bfReserved1));
+	rd_u16b(f, &(fileheader.bfReserved2));
+	rd_u32b(f, &(fileheader.bfOffBits));
 
 	/* Read the "BITMAPINFOHEADER" */
-	fread(&infoheader, sizeof(infoheader), 1, f);
+	rd_u32b(f, &(infoheader.biSize));
+	rd_u32b(f, &(infoheader.biWidth));
+	rd_u32b(f, &(infoheader.biHeight));
+	rd_u16b(f, &(infoheader.biPlanes));
+	rd_u16b(f, &(infoheader.biBitCount));
+	rd_u32b(f, &(infoheader.biCompresion));
+	rd_u32b(f, &(infoheader.biSizeImage));
+	rd_u32b(f, &(infoheader.biXPelsPerMeter));
+	rd_u32b(f, &(infoheader.biYPelsPerMeter));
+	rd_u32b(f, &(infoheader.biClrUsed));
+	rd_u32b(f, &(infoheader.biClrImportand));
 
 	/* Verify the header */
 	if (feof(f) ||
@@ -238,7 +275,11 @@ static XImage *ReadBMP(Display *dpy, char *Name)
 	{
 		RGBQUAD clrg;
 
-		fread(&clrg, 4, 1, f);
+ 		/* Read an "RGBQUAD" */
+ 		rd_byte(f, &(clrg.b));
+ 		rd_byte(f, &(clrg.g));
+ 		rd_byte(f, &(clrg.r));
+ 		rd_byte(f, &(clrg.filler));
 		
 		/* Analyze the color */
 		clr_pixels[i] = create_pixel(dpy, clrg.r, clrg.g, clrg.b);
@@ -841,3 +882,4 @@ static XImage *ResizeImage(Display *dpy, XImage *Im,
 #endif /* USE_GRAPHICS */
 
 
+#endif /* USE_X11 */

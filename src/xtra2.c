@@ -2104,7 +2104,7 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 		 * Run (sometimes) if at 10% or less of max hit points,
 		 * or (usually) when hit for half its current hit points
 		 */
-		if (((percentage <= 10) && (randint0(10) < percentage)) ||
+                if ((randint1(10) >= percentage) ||
 		    ((dam >= m_ptr->hp) && (randint0(100) < 80)))
 		{
 			/* Hack -- note fear */

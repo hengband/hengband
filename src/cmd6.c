@@ -2656,6 +2656,7 @@ static void do_cmd_use_staff_aux(int item)
 
 		/* Combine / Reorder the pack (later) */
 		p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+                p_ptr->window |= (PW_INVEN);
 
 		return;
 	}
@@ -3192,6 +3193,7 @@ static void do_cmd_aim_wand_aux(int item)
 
 		/* Combine / Reorder the pack (later) */
 		p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+                p_ptr->window |= (PW_INVEN);
 
 		return;
 	}

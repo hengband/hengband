@@ -930,6 +930,9 @@ msg_format("その本には学ぶべき%sがない。", p);
 	/* Update Study */
 	p_ptr->update |= (PU_SPELLS);
 	update_stuff();
+
+        /* Redraw object recall */
+        p_ptr->window |= (PW_OBJECT);
 }
 
 
@@ -5046,6 +5049,9 @@ msg_print("An infernal sound echoed.");
 
 			/* Gain experience */
 			gain_exp(e * s_ptr->slevel);
+
+                        /* Redraw object recall */
+                        p_ptr->window |= (PW_OBJECT);
 
 			if (realm == REALM_LIFE)
 			{
