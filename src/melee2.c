@@ -3468,7 +3468,8 @@ msg_format("%^sが%sを破壊した。", m_name, o_name);
 	}
 
 	/* Notice changes in view */
-	if (do_move && ((r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) || ((r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) && !p_ptr->inside_battle)))
+	if (do_move && ((r_ptr->flags7 & (RF7_SELF_LD_MASK | RF7_HAS_DARK_1 | RF7_HAS_DARK_2))
+		|| ((r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) && !p_ptr->inside_battle)))
 	{
 		/* Update some things */
 		p_ptr->update |= (PU_MON_LITE);

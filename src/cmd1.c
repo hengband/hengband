@@ -2070,7 +2070,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 
 	/* Disturb the monster */
 	m_ptr->csleep = 0;
-	if (r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2))
+	if (r_ptr->flags7 & RF7_HAS_LD_MASK)
 		p_ptr->update |= (PU_MON_LITE);
 
 	/* Extract monster name (or "it") */

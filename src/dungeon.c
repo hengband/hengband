@@ -1287,7 +1287,7 @@ static void process_monsters_counters(void)
 							if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
 							if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 
-							if (r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2))
+							if (r_ptr->flags7 & RF7_HAS_LD_MASK)
 								p_ptr->update |= (PU_MON_LITE);
 
 							/* Hack -- Count the wakings */
@@ -2239,7 +2239,7 @@ if (cheat_xtra) msg_print("報酬をリセット");
 	{
 		if (!dun_level && !p_ptr->resist_lite && !IS_INVULN() && is_daytime())
 		{
-			if (cave[py][px].info & CAVE_GLOW)
+			if ((cave[py][px].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
 			{
 				/* Take damage */
 #ifdef JP
@@ -3382,7 +3382,7 @@ msg_print("影につつまれた。");
 			msg_print(NULL);
 
 			/* Absorb light from the current possition */
-			if (cave[py][px].info & CAVE_GLOW)
+			if ((cave[py][px].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
 			{
 				hp_player(10);
 			}

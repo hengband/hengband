@@ -2926,7 +2926,8 @@ static void calc_torch(void)
 	if (p_ptr->old_lite != p_ptr->cur_lite)
 	{
 		/* Update the lite */
-		p_ptr->update |= (PU_LITE);
+		/* Hack -- PU_MON_LITE for monsters' darkness */
+		p_ptr->update |= (PU_LITE | PU_MON_LITE);
 
 		/* Update the monsters */
 		p_ptr->update |= (PU_MONSTERS);

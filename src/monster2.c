@@ -3329,9 +3329,9 @@ msg_print("守りのルーンが壊れた！");
 	}
 
 
-	if (r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2))
+	if (r_ptr->flags7 & RF7_SELF_LD_MASK)
 		p_ptr->update |= (PU_MON_LITE);
-	else if ((r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) && !m_ptr->csleep)
+	else if ((r_ptr->flags7 & RF7_HAS_LD_MASK) && !m_ptr->csleep)
 		p_ptr->update |= (PU_MON_LITE);
 
 	/* Update the monster */

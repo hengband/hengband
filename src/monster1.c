@@ -1478,7 +1478,7 @@ if (flags6 & (RF6_TELE_LEVEL))      {vp[vn] = "テレポート・レベル";color[vn++] =
 
 	if (flags6 & (RF6_DARKNESS))
 	{
-		if ((p_ptr->pclass != CLASS_NINJA) || (r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)))
+		if ((p_ptr->pclass != CLASS_NINJA) || (r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) || (r_ptr->flags7 & RF7_DARK_MASK))
 		{
 #ifdef JP
 			vp[vn] =  "暗闇"; color[vn++] = TERM_L_DARK;
@@ -1757,57 +1757,63 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 	/* Collect special abilities. */
 	vn = 0;
 #ifdef JP
-if (flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) vp[vn++] = "ダンジョンを照らす";
+	if (flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) { vp[vn] = "ダンジョンを照らす";     color[vn++] = TERM_WHITE; }
 #else
-	if (flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) vp[vn++] = "illuminate the dungeon";
+	if (flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) { vp[vn] = "illuminate the dungeon"; color[vn++] = TERM_WHITE; }
 #endif
 
 #ifdef JP
-if (flags2 & RF2_OPEN_DOOR) vp[vn++] = "ドアを開ける";
+	if (flags7 & (RF7_HAS_DARK_1 | RF7_HAS_DARK_2)) { vp[vn] = "ダンジョンを暗くする";   color[vn++] = TERM_L_DARK; }
 #else
-	if (flags2 & RF2_OPEN_DOOR) vp[vn++] = "open doors";
+	if (flags7 & (RF7_HAS_DARK_1 | RF7_HAS_DARK_2)) { vp[vn] = "darken the dungeon";     color[vn++] = TERM_L_DARK; }
 #endif
 
 #ifdef JP
-if (flags2 & RF2_BASH_DOOR) vp[vn++] = "ドアを打ち破る";
+	if (flags2 & RF2_OPEN_DOOR) { vp[vn] = "ドアを開ける"; color[vn++] = TERM_WHITE; }
 #else
-	if (flags2 & RF2_BASH_DOOR) vp[vn++] = "bash down doors";
+	if (flags2 & RF2_OPEN_DOOR) { vp[vn] = "open doors"; color[vn++] = TERM_WHITE; }
 #endif
 
 #ifdef JP
-if (flags2 & RF2_PASS_WALL) vp[vn++] = "壁をすり抜ける";
+	if (flags2 & RF2_BASH_DOOR) { vp[vn] = "ドアを打ち破る"; color[vn++] = TERM_WHITE; }
 #else
-	if (flags2 & RF2_PASS_WALL) vp[vn++] = "pass through walls";
+	if (flags2 & RF2_BASH_DOOR) { vp[vn] = "bash down doors"; color[vn++] = TERM_WHITE; }
 #endif
 
 #ifdef JP
-if (flags2 & RF2_KILL_WALL) vp[vn++] = "壁を掘り進む";
+	if (flags2 & RF2_PASS_WALL) { vp[vn] = "壁をすり抜ける"; color[vn++] = TERM_WHITE; }
 #else
-	if (flags2 & RF2_KILL_WALL) vp[vn++] = "bore through walls";
+	if (flags2 & RF2_PASS_WALL) { vp[vn] = "pass through walls"; color[vn++] = TERM_WHITE; }
 #endif
 
 #ifdef JP
-if (flags2 & RF2_MOVE_BODY) vp[vn++] = "弱いモンスターを押しのける";
+	if (flags2 & RF2_KILL_WALL) { vp[vn] = "壁を掘り進む"; color[vn++] = TERM_WHITE; }
 #else
-	if (flags2 & RF2_MOVE_BODY) vp[vn++] = "push past weaker monsters";
+	if (flags2 & RF2_KILL_WALL) { vp[vn] = "bore through walls"; color[vn++] = TERM_WHITE; }
 #endif
 
 #ifdef JP
-if (flags2 & RF2_KILL_BODY) vp[vn++] = "弱いモンスターを倒す";
+	if (flags2 & RF2_MOVE_BODY) { vp[vn] = "弱いモンスターを押しのける"; color[vn++] = TERM_WHITE; }
 #else
-	if (flags2 & RF2_KILL_BODY) vp[vn++] = "destroy weaker monsters";
+	if (flags2 & RF2_MOVE_BODY) { vp[vn] = "push past weaker monsters"; color[vn++] = TERM_WHITE; }
 #endif
 
 #ifdef JP
-if (flags2 & RF2_TAKE_ITEM) vp[vn++] = "アイテムを拾う";
+	if (flags2 & RF2_KILL_BODY) { vp[vn] = "弱いモンスターを倒す"; color[vn++] = TERM_WHITE; }
 #else
-	if (flags2 & RF2_TAKE_ITEM) vp[vn++] = "pick up objects";
+	if (flags2 & RF2_KILL_BODY) { vp[vn] = "destroy weaker monsters"; color[vn++] = TERM_WHITE; }
 #endif
 
 #ifdef JP
-if (flags2 & RF2_KILL_ITEM) vp[vn++] = "アイテムを壊す";
+	if (flags2 & RF2_TAKE_ITEM) { vp[vn] = "アイテムを拾う"; color[vn++] = TERM_WHITE; }
 #else
-	if (flags2 & RF2_KILL_ITEM) vp[vn++] = "destroy objects";
+	if (flags2 & RF2_TAKE_ITEM) { vp[vn] = "pick up objects"; color[vn++] = TERM_WHITE; }
+#endif
+
+#ifdef JP
+	if (flags2 & RF2_KILL_ITEM) { vp[vn] = "アイテムを壊す"; color[vn++] = TERM_WHITE; }
+#else
+	if (flags2 & RF2_KILL_ITEM) { vp[vn] = "destroy objects"; color[vn++] = TERM_WHITE; }
 #endif
 
 
@@ -1827,19 +1833,20 @@ if (flags2 & RF2_KILL_ITEM) vp[vn++] = "アイテムを壊す";
 		{
 			/* Intro */
 #ifdef JP
-			if(n!=vn-1){
-			  jverb(vp[n],jverb_buf,JVERB_AND);
-			  hooked_roff(jverb_buf);
-			  hooked_roff("、");
+			if (n != vn - 1)
+			{
+				jverb(vp[n], jverb_buf, JVERB_AND);
+				hook_c_roff(color[n], jverb_buf);
+				hooked_roff("、");
 			}
-			else  hooked_roff(vp[n]);
+			else hook_c_roff(color[n], vp[n]);
 #else
 			if (n == 0) hooked_roff(" can ");
-			else if (n < vn-1) hooked_roff(", ");
+			else if (n < vn - 1) hooked_roff(", ");
 			else hooked_roff(" and ");
 
 			/* Dump */
-			hooked_roff(vp[n]);
+			hook_c_roff(color[n], vp[n]);
 #endif
 
 		}
@@ -1861,6 +1868,15 @@ if (flags2 & RF2_KILL_ITEM) vp[vn++] = "アイテムを壊す";
 		hooked_roff(format("%^sは光っている。", wd_he[msex]));
 #else
 		hooked_roff(format("%^s illuminate the dungeon.  ", wd_he[msex]));
+#endif
+
+	}
+	if (flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2))
+	{
+#ifdef JP
+		hook_c_roff(TERM_L_DARK, format("%^sは暗黒に包まれている。", wd_he[msex]));
+#else
+		hook_c_roff(TERM_L_DARK, format("%^s is surrounded by darkness.  ", wd_he[msex]));
 #endif
 
 	}

@@ -2374,9 +2374,8 @@
 #define CAVE_VIEW       0x0020    /* view flag */
 #define CAVE_TEMP       0x0040    /* temp flag */
 #define CAVE_XTRA       0x0080    /* misc flag */
-#define CAVE_MNLT	0x0100    /* Illuminated by monster */
-
-#define CAVE_XXX0       0x8000    /* Now unused */
+#define CAVE_MNLT       0x0100    /* Illuminated by monster */
+#define CAVE_MNDK       0x8000    /* Darken by monster */
 
 /* Used only while cave generation */
 #define CAVE_FLOOR      0x0200
@@ -2391,7 +2390,7 @@
 #define CAVE_XXXX1      0x0200
 #define CAVE_NOTE       0x0400    /* Flag for delayed visual update (needs note_spot()) */
 #define CAVE_REDRAW     0x0800    /* Flag for delayed visual update (needs lite_spot()) */
-#define CAVE_OBJECT     0x1000    /* mirror */
+#define CAVE_OBJECT     0x1000    /* Mirror, glyph, etc. */
 #define CAVE_UNSAFE     0x2000    /* Might have trap */
 #define CAVE_IN_DETECT  0x4000    /* trap detected area (inner circle only) */
 
@@ -3527,6 +3526,10 @@
 #define RF7_CHAMELEON           0x00002000  /* Chameleon can change */
 #define RF7_KILL_EXP            0x00004000  /* No exp until you kill it */
 #define RF7_TANUKI              0x00008000  /* Tanuki disguise */
+#define RF7_HAS_DARK_1          0x00010000  /* Monster carries darkness */
+#define RF7_SELF_DARK_1         0x00020000  /* Monster darkens itself */
+#define RF7_HAS_DARK_2          0x00040000  /* Monster carries darkness */
+#define RF7_SELF_DARK_2         0x00080000  /* Monster darkens itself */
 
 /*
  * Monster race flags
@@ -3747,6 +3750,21 @@
 
 #define RF6_NOMAGIC_MASK \
 	(RF6_BREATH_MASK | RF6_SPECIAL)
+
+/*
+ * Hack -- "torch" masks
+ */
+#define RF7_LITE_MASK \
+	(RF7_HAS_LITE_1 | RF7_SELF_LITE_1 | RF7_HAS_LITE_2 | RF7_SELF_LITE_2)
+
+#define RF7_DARK_MASK \
+	(RF7_HAS_DARK_1 | RF7_SELF_DARK_1 | RF7_HAS_DARK_2 | RF7_SELF_DARK_2)
+
+#define RF7_HAS_LD_MASK \
+	(RF7_HAS_LITE_1 | RF7_HAS_LITE_2 | RF7_HAS_DARK_1 | RF7_HAS_DARK_2)
+
+#define RF7_SELF_LD_MASK \
+	(RF7_SELF_LITE_1 | RF7_SELF_LITE_2 | RF7_SELF_DARK_1 | RF7_SELF_DARK_2)
 
 
 #define MR1_SINKA 0x01

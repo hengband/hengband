@@ -2148,7 +2148,7 @@ static errr rd_dungeon_old(void)
 			rd_u16b(&info);
 
 			/* Decline invalid flags */
-			info &= ~(CAVE_LITE | CAVE_VIEW | CAVE_MNLT);
+			info &= ~(CAVE_LITE | CAVE_VIEW | CAVE_MNLT | CAVE_MNDK);
 		}
 
 		/* Apply the RLE info */

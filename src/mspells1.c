@@ -1401,7 +1401,10 @@ bool make_attack_spell(int m_idx)
 	{
 		f5 &= ~(RF5_DRAIN_MANA);
 	}
-	if ((p_ptr->pclass == CLASS_NINJA) && (r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)))
+
+	if ((p_ptr->pclass == CLASS_NINJA) &&
+	    ((r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) ||
+	     (r_ptr->flags7 & RF7_DARK_MASK)))
 	{
 		f6 &= ~(RF6_DARKNESS);
 	}

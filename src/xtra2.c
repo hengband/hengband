@@ -660,7 +660,7 @@ void monster_death(int m_idx, bool drop_item)
 	if (world_monster) world_monster = FALSE;
 
 	/* Notice changes in view */
-	if (r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2 | RF7_SELF_LITE_1 | RF7_SELF_LITE_2))
+	if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
 	{
 		/* Update some things */
 		p_ptr->update |= (PU_MON_LITE);
