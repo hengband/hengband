@@ -3777,7 +3777,7 @@ msg_print("「卑しき者よ、我は汝の下僕にあらず！ お前の魂を頂くぞ！」");
 #ifdef JP
 msg_print("悪魔は現れなかった。");
 #else
-			msg_print("No Greater Demon arrive.");
+			msg_print("No demons arrive.");
 #endif
 		}
 		break;
