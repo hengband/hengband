@@ -1103,10 +1103,10 @@ B:CLAW:HURT:1d6
 B:CLAW:HURT:1d6
 F:BASH_DOOR | WILD_ALL | DROP_SKELETON | DROP_CORPSE
 F:ANIMAL
-D:$A larger than normal feline, hissing loudly.  Its velvet claws conceal a 
-D:$fistful of needles.
-D:通常のネコより体が大きくて大きな声で鳴く。そのビロードの美しい爪は鋭い
-D:針のようだ。
+D:$A larger than normal feline, hissing loudly.  Its velvet paws conceal a
+D:$ fistful of needles.
+D:通常のネコより体が大きくて大きな声で鳴く。
+D:その柔らかく美しい足には鋭い爪が隠されている。
 
 #J0#
 N:63:『スメアゴル』
