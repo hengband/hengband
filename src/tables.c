@@ -4990,7 +4990,7 @@ cptr spell_names[VALID_REALM][32] =
 		"Finrod's Resistance", /* 葭豳覲嶺 */
 		"Hobbit Melodies", /* 石申永玄及丟伕犯奴 */
 		"World Contortion", /* 狦氏分壑釵 */
-		"Dispeling chant", /* 轉辣及統 */
+		"Dispelling chant", /* 轉辣及統 */
 		"The Voice of Saruman", /* 扔伙穴件及棠蛻 */
 		"Song of the Tempest", /* 勀及祥縉 */
 		"Ambarkanta", /* 手丹域勾及壑釵 */
@@ -4999,7 +4999,7 @@ cptr spell_names[VALID_REALM][32] =
 		"Wrecking Pattern", /* г莽及瞳峓 */
 		"Stationary Shriek", /* 曩蹣及統 */
 		"Endurance", /* 潮曰及統 */
-		"The Helo's Poem", /* 敗芮及魁 */
+		"The Hero's Poem", /* 敗芮及魁 */
 		"Relief of Yavanna", /* "乩任央件瓜及踞仃" */
 		"Goddess' rebirth", /* "瘋戲及統" */
 		"Wizardry of Sauron", /* "扔它伕件及呺諸", */
