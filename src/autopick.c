@@ -2564,7 +2564,7 @@ void do_cmd_edit_autopick(void)
 
 		if (dirty_flags & DIRTY_SCREEN)
 		{
-			dirty_flags = DIRTY_ALL | DIRTY_COMMAND | DIRTY_MODE;
+			dirty_flags |= (DIRTY_ALL | DIRTY_COMMAND | DIRTY_MODE);
 
 			/* Clear screen */
 			Term_clear();
