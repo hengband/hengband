@@ -2475,7 +2475,7 @@ msg_format("%sは既に強化されています！",
 #else
 		msg_format("The %s %s already %s!",
 		    o_name, ((o_ptr->number > 1) ? "are" : "is"),
-		    ((o_ptr->number > 1) ? "kaji items" : "an kaji item"));
+		    ((o_ptr->number > 1) ? "customized items" : "a customized item"));
 #endif
 	}
 
