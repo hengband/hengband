@@ -1241,9 +1241,7 @@ static void process_monsters_counters(void)
 						if (m_ptr->cdis < 50) d = (100 / m_ptr->cdis);
 
 						/* Hack -- amount of "waking" is affected by speed of player */
-						d *= ((p_ptr->pspeed > 199) ? 49 :
-						      ((p_ptr->pspeed < 0) ? 1 : extract_energy[p_ptr->pspeed]));
-						d /= 10;
+						d = (d * SPEED_TO_ENERGY(p_ptr->pspeed)) / 10;
 						if (d < 0) d = 1;
 					}
 
@@ -2634,9 +2632,7 @@ take_hit(DAMAGE_NOESCAPE, i, "致命傷", -1);
 			if (!(turn % (TURNS_PER_TICK*5)))
 			{
 				/* Basic digestion rate based on speed */
-				i = /* extract_energy[p_ptr->pspeed] * 2;*/
-				((p_ptr->pspeed > 199) ? 49 : ((p_ptr->pspeed < 0) ?
-				1 : extract_energy[p_ptr->pspeed]));
+				i = SPEED_TO_ENERGY(p_ptr->pspeed);
 
 				/* Regeneration takes more food */
 				if (p_ptr->regenerate) i += 20;
@@ -5485,7 +5481,7 @@ msg_print("何か変わった気がする！");
 	/* Give the player some energy */
 	else if (!(load && p_ptr->energy_need <= 0))
 	{
-		p_ptr->energy_need -= (p_ptr->pspeed > 199 ? 49 : (p_ptr->pspeed < 0 ? 1 : extract_energy[p_ptr->pspeed]));
+		p_ptr->energy_need -= SPEED_TO_ENERGY(p_ptr->pspeed);
 	}
 
 	/* No turn yet */

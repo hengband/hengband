@@ -486,6 +486,14 @@
  */
 #define ENERGY_NEED() (randnor(100, 31))
 
+
+/*
+ * Extract energy from speed
+ */
+#define SPEED_TO_ENERGY(SPEED) \
+	(((SPEED) > 199) ? 49 : (((int)(SPEED) < 0) ? 1 : extract_energy[(SPEED)]))
+
+
 /*
  * Misc constants
  */

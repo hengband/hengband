@@ -853,6 +853,7 @@ extern bool summon_named_creature (int who, int oy, int ox, int r_idx, u32b mode
 extern bool multiply_monster(int m_idx, bool clone, u32b mode);
 extern void update_smart_learn(int m_idx, int what);
 extern void choose_new_monster(int m_idx, bool born, int r_idx);
+extern byte get_mspeed(monster_race *r_ptr);
 extern bool place_monster_one(int who, int y, int x, int r_idx, u32b mode);
 extern bool player_place(int y, int x);
 extern void monster_drop_carried_objects(monster_type *m_ptr);

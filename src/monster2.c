@@ -2779,7 +2779,7 @@ static bool monster_hook_chameleon(int r_idx)
 
 void choose_new_monster(int m_idx, bool born, int r_idx)
 {
-	int oldmaxhp, i;
+	int oldmaxhp;
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr;
 	char old_m_name[80];
@@ -2854,17 +2854,7 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 	}
 
 	/* Extract the monster base speed */
-	m_ptr->mspeed = r_ptr->speed;
-	/* Hack -- small racial variety */
-	/* Allow some small variation per monster */
-	if(one_in_(4)){
-		i = extract_energy[r_ptr->speed] / 3;
-		if (i) m_ptr->mspeed += rand_spread(0, i);
-	}
-	else{
-		i = extract_energy[r_ptr->speed] / 10;
-		if (i) m_ptr->mspeed += rand_spread(0, i);
-	}
+	m_ptr->mspeed = get_mspeed(r_ptr);
 
 	oldmaxhp = m_ptr->max_maxhp;
 	/* Assign maximal hitpoints */
@@ -2926,6 +2916,28 @@ static int initial_r_appearance(int r_idx)
 
 
 /*
+ * Get initial monster speed
+ */
+byte get_mspeed(monster_race *r_ptr)
+{
+	/* Extract the monster base speed */
+	int mspeed = r_ptr->speed;
+
+	/* Hack -- small racial variety */
+	if (!(r_ptr->flags1 & RF1_UNIQUE) && !p_ptr->inside_arena)
+	{
+		/* Allow some small variation per monster */
+		int i = SPEED_TO_ENERGY(r_ptr->speed) / (one_in_(4) ? 3 : 10);
+		if (i) mspeed += rand_spread(0, i);
+	}
+
+	if (mspeed > 199) mspeed = 199;
+
+	return (byte)mspeed;
+}
+
+
+/*
  * Attempt to place a monster of the given race at the given location.
  *
  * To give the player a sporting chance, any monster that appears in
@@ -2946,8 +2958,6 @@ static int initial_r_appearance(int r_idx)
  */
 bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 {
-	int			i;
-
 	cave_type		*c_ptr;
 
 	monster_type	*m_ptr;
@@ -3242,25 +3252,9 @@ msg_print("守りのルーンが壊れた！");
 
 
 	/* Extract the monster base speed */
-	m_ptr->mspeed = r_ptr->speed;
-
-	/* Hack -- small racial variety */
-	if (!(r_ptr->flags1 & RF1_UNIQUE) && !p_ptr->inside_arena)
-	{
-		/* Allow some small variation per monster */
-	  if(one_in_(4)){
-		i = extract_energy[r_ptr->speed] / 3;
-		if (i) m_ptr->mspeed += rand_spread(0, i);
-	  }
-	  else{
-		i = extract_energy[r_ptr->speed] / 10;
-		if (i) m_ptr->mspeed += rand_spread(0, i);
-	  }
-	}
+	m_ptr->mspeed = get_mspeed(r_ptr);
 
 	if (mode & PM_HASTE) m_ptr->fast = 100;
-
-	if (m_ptr->mspeed > 199) m_ptr->mspeed = 199;
 
 	/* Give a random starting energy */
 	if (!ironman_nightmare)

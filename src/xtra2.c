@@ -1524,8 +1524,8 @@ static void get_exp_from_mon(int dam, monster_type *m_ptr)
 		}
 		else
 		{
-			m_exp = (long)r_ptr->mexp * r_ptr->level * extract_energy[m_ptr->mspeed];
-			div = (p_ptr->max_plv+2) * extract_energy[r_ptr->speed];
+			m_exp = (long)r_ptr->mexp * r_ptr->level * SPEED_TO_ENERGY(m_ptr->mspeed);
+			div = (p_ptr->max_plv+2) * SPEED_TO_ENERGY(r_ptr->speed);
 		}
 		m_exp_h = m_exp/0x10000L;
 		m_exp_l = m_exp%0x10000L;

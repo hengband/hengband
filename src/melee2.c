@@ -3665,20 +3665,17 @@ void process_monsters(void)
 			speed = p_ptr->pspeed;
 		else
 		{
-			speed = MIN(199, m_ptr->mspeed);
+			speed = m_ptr->mspeed;
 
 			/* Monsters move quickly in Nightmare mode */
-			if (ironman_nightmare)
-			{
-				speed = MIN(199, m_ptr->mspeed + 5);
-			}
+			if (ironman_nightmare) speed += 5;
 
-			if (m_ptr->fast) speed = MIN(199, speed + 10);
-			if (m_ptr->slow) speed = MAX(0, speed - 10);
+			if (m_ptr->fast) speed += 10;
+			if (m_ptr->slow) speed -= 10;
 		}
 
 		/* Give this monster some energy */
-		m_ptr->energy_need -= extract_energy[speed];
+		m_ptr->energy_need -= SPEED_TO_ENERGY(speed);
 
 		/* Not enough energy to move */
 		if (m_ptr->energy_need > 0) continue;
@@ -3841,7 +3838,6 @@ void monster_gain_exp(int m_idx, int s_idx)
 		int old_hp = m_ptr->hp;
 		int old_maxhp = m_ptr->max_maxhp;
 		int old_r_idx = m_ptr->r_idx;
-		int i;
 		byte old_sub_align = m_ptr->sub_align;
 
 		monster_desc(m_name, m_ptr, 0);
@@ -3866,23 +3862,7 @@ void monster_gain_exp(int m_idx, int s_idx)
 		m_ptr->hp = old_hp * m_ptr->maxhp / old_maxhp;
 
 		/* Extract the monster base speed */
-		m_ptr->mspeed = r_ptr->speed;
-
-		/* Hack -- small racial variety */
-		if (!(r_ptr->flags1 & RF1_UNIQUE) && !p_ptr->inside_arena)
-		{
-			/* Allow some small variation per monster */
-		  if(one_in_(4)){
-			i = extract_energy[r_ptr->speed] / 3;
-			if (i) m_ptr->mspeed += rand_spread(0, i);
-		  }
-		  else{
-			i = extract_energy[r_ptr->speed] / 10;
-			if (i) m_ptr->mspeed += rand_spread(0, i);
-		  }
-		}
-
-		if (m_ptr->mspeed > 199) m_ptr->mspeed = 199;
+		m_ptr->mspeed = get_mspeed(r_ptr);
 
 		/* Sub-alignment of a monster */
 		if (!is_pet(m_ptr) && !(r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)))
