@@ -1,4 +1,85 @@
+2002-02-04  Takeshi Mogami  <mogami@akiru>
+
+	* src/dungeon.c, src/files.c, src/xtra1.c:
+	20匹以上の名前付きペットを持って死ぬと、「主なペット」に表示されず、
+	しかもプレイ記録の最後に「〜とはぐれた」の記録が出ていたので修正。
+	かなりコードを昨日以前のものに戻し、if (alive) に囲まれていたペット
+	のデータ保存のコードを if (alive && !death) で囲むようにして、
+	p_ptr->riding = -1;を削除した。
+	昨日以前のコードでは、死亡時にペットデータ保存のコードが実行されるが、
+	視界が通るかの判定が常に偽なので隣りにいるペットのみを「保存」していた。
+	「保存」したparty_monは捨てられ、「保存」されなかったペットについて
+	「〜とはぐれた」のプレイ記録がされていた。
+
+	* src/Makefile.am, src/main-mac-carbon.c:
+	英語版の107beta3から入れてたはずだった main-mac-carbon.c が無かった事に
+	いまごろ気づいたので、今追加。8x8タイル用の変更も加えた。
+
+2002-02-03  Takeshi Mogami  <mogami@akiru>
+
+	* lib/pref/graf-xxx.prf, src/externs.h, src/main-dos.c, src/main-win.c, src/main-x11.c, src/variable.c, src/cave.c:
+	鏡のタイルもlighting effectに対応。
+	use_lighting 変数(かつての、use_transparency)は完全に意味がなくなったので廃止。
+
+	* src/generate.c, src/variable.c, src/xtra1.c, src/dungeon.c, src/externs.h, src/files.c:
+	死亡/勝利 ダンプの主なペットの表示をちゃんとするように修正。
+	その仮定で riding_mon を廃止、party_mon[0] を乗馬モンスターの保存用に仕様した。
+
+2002-02-03  habu  <habu@akiru>
+
+	* src/wild.c:
+	ペットを連れている時は広域マップに出る時に確認を取るようにした。
+
+2002-02-03  Takeshi Mogami  <mogami@akiru>
+
+	* lib/pref/graf-xxx.prf, src/main-x11.c:
+	8x8タイルでlighting effect を実装。視界外を暗く、明かりの範囲を明るく表示する。
+
+	* src/xtra1.c:
+	死亡時のダンプで乗馬中の加速の表示が変だったのを修正。
+	ダンジョンからleaveしているので、乗馬中のモンスターがm_listに存在しなかった。
+
+2002-02-03  henkma  <henkma@akiru>
+
+	* src/spellstips.h:
+	英語のtipsの間違い修正. 歪んだ世界の説明が間違ってた.
+
+	* src/spellstips.h:
+	まだfor a while残ってたので直した. (無駄にログ増やしちゃってます, すんません.)
+
+	* src/spellstips.h:
+	歌の効果なのにfor a whileは変なので削除.
+
+	* src/spellstips.h: tipsのtypo修正.
+
+2002-02-03  Takeshi Mogami  <mogami@akiru>
+
+	* src/files.c: 乗馬中の英訳忘れを直した。
+
+2002-02-03  henkma  <henkma@akiru>
+
+	* src/mspells3.c:
+	blue mageのspellの英語メッセージに単数複数の間違いがあったのでまとめて修正.
+	「強敵」という表現もまずいと思うのだが, ここについては保留しておく.
+
+2002-02-03  habu  <habu@akiru>
+
+	* lib/edit/s_info_j.txt:
+	いいかげんな弓の熟練度は全ての職業でMAXになるようにした。
+	初期熟練度はロング・ボウに合わせた。
+
+2002-02-03  Takeshi Mogami  <mogami@akiru>
+
+	* src/init1.c, Changelogs:
+	初期化せずに変数が使われている可能性というwarningが出るので、出ないように書き直し。
+
+	* lib/help/joption.txt:
+	オプションの移動に追従して更新。easy_openに壁抜けの説明追加。
+
 2002-02-02  Takeshi Mogami  <mogami@akiru>
+
+	* src/tables.c:
+	easy_* use_command over_exert オプションの位置をキー入力オプションに変更。
 
 	* src/mspells1.c:
 	Ring-Ranger → the Ring-Ranger。
