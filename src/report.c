@@ -27,13 +27,13 @@
 #endif
 
 #ifdef JP
-//#define SCORE_PATH "http://www.kmc.gr.jp/~habu/local/hengscore/score.cgi"
+#define SCORE_PATH "http://www.kmc.gr.jp/~habu/local/hengscore/score.cgi"
 #else
 #define SCORE_PATH "http://www.kmc.gr.jp/~habu/local/hengscore-en/score.cgi"
 #endif
 
 /* for debug */
-#if 1
+#if 0
 #define SCORE_PATH "http://www.kmc.gr.jp/~habu/local/scoretest/score.cgi"
 #endif
 
