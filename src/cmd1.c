@@ -2009,7 +2009,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 
 
 
-	if (((p_ptr->pclass == CLASS_ROGUE) || (p_ptr->pclass == CLASS_NINJA)) && inventory[INVEN_RARM+hand].tval)
+	if (((p_ptr->pclass == CLASS_ROGUE) || (p_ptr->pclass == CLASS_NINJA)) && buki_motteruka(INVEN_RARM + hand) && !p_ptr->icky_wield[hand])
 	{
 		int tmp = p_ptr->lev*6+(p_ptr->skill_stl+10)*4;
 		if (p_ptr->monlite && (mode != HISSATSU_NYUSIN)) tmp /= 3;
@@ -2618,7 +2618,7 @@ msg_format("%sの急所を突き刺した！", m_name);
 				}
 				else k = 1;
 			}
-			else if ((p_ptr->pclass == CLASS_NINJA) && (!p_ptr->icky_wield[hand]) && ((p_ptr->cur_lite <= 0) || one_in_(7)))
+			else if ((p_ptr->pclass == CLASS_NINJA) && buki_motteruka(INVEN_RARM + hand) && !p_ptr->icky_wield[hand] && ((p_ptr->cur_lite <= 0) || one_in_(7)))
 			{
 				int maxhp = maxroll(r_ptr->hdice, r_ptr->hside);
 				if (one_in_(backstab ? 13 : (stab_fleeing || fuiuchi) ? 15 : 27))
