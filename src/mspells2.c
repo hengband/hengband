@@ -492,13 +492,13 @@ msg_format("%^sが%sに向かって叫んだ。", m_name, t_name);
 			case 96+1:
 			{
 				/* XXX XXX XXX */
-				break;
+				return FALSE
 			}
 
 			/* RF4_DISPEL */
 			case 96+2:
 			{
-				break;
+				return FALSE
 			}
 
 			/* RF4_XXX4X4 */
@@ -586,21 +586,21 @@ msg_format("%^sが%sに矢を放った。", m_name, t_name);
 			case 96+5:
 			{
 				/* XXX XXX XXX */
-				break;
+				return FALSE
 			}
 
 			/* RF4_XXX3 */
 			case 96+6:
 			{
 				/* XXX XXX XXX */
-				break;
+				return FALSE
 			}
 
 			/* RF4_XXX4 */
 			case 96+7:
 			{
 				/* XXX XXX XXX */
-				break;
+				return FALSE
 			}
 
 			/* RF4_BR_ACID */
@@ -1473,7 +1473,7 @@ msg_format("%^sが%sに魔力のブレスを吐いた。", m_name, t_name);
 				break;
 			}
 
-			/* RF4_XXX5X4 */
+			/* RF4_BA_NUKE */
 			case 96+28:
 			{
 				if (known)
@@ -1514,7 +1514,7 @@ msg_format("%^sが%sに放射能球を放った。", m_name, t_name);
 				break;
 			}
 
-			/* RF4_XXX6X4 */
+			/* RF4_RF4_BR_NUKE */
 			case 96+29:
 			{
 				if (known)
@@ -1556,7 +1556,7 @@ msg_format("%^sが%sに放射性廃棄物のブレスを吐いた。", m_name, t_name);
 				break;
 			}
 
-			/* RF4_XXX7X4 */
+			/* RF4_BA_CHAO */
 			case 96+30:
 			{
 				if (known)
@@ -1597,7 +1597,7 @@ msg_format("%^sが%sに純ログルスを放った。", m_name, t_name);
 				break;
 			}
 
-			/* RF4_XXX8X4 -> Breathe Disintegration */
+			/* RF4_BR_DISI */
 			case 96+31:
 			{
 				if (known)
@@ -3303,12 +3303,12 @@ msg_format("%^sがテレポートした。", m_name);
 			{
 #if 0
 				int who = 0;
-				if(m_ptr->r_idx = MON_DIO) who = 1;
-				else if(m_ptr->r_idx = MON_WONG) who = 3;
+				if(m_ptr->r_idx = MON_DIO) who == 1;
+				else if(m_ptr->r_idx = MON_WONG) who == 3;
 				dam = who;
 				if(!process_the_world(randint1(2)+2, who, los(py, px, m_ptr->fy, m_ptr->fx))) return (FALSE);
 #endif
-				break;
+				return FALSE
 			}
 
 			/* RF6_XXX4X6 */
@@ -3334,7 +3334,7 @@ msg_format("%^sがテレポートした。", m_name);
 			case 160+8:
 			{
 				/* Not implemented */
-				break;
+				return FALSE
 			}
 
 			/* RF6_TELE_AWAY */
@@ -3406,7 +3406,7 @@ msg_format("%^sは耐性を持っている！", t_name);
 			case 160+10:
 			{
 				/* Not implemented */
-				break;
+				return FALSE
 			}
 
 			/* RF6_PSY_SPEAR */
@@ -3505,13 +3505,25 @@ msg_format("%^sが何かをつぶやいた。", m_name);
 			case 160+14:
 			{
 				/* Not implemented */
-				break;
+				return FALSE
 			}
 
-			/* RF6_XXX6X6 */
+			/* RF6_RAISE_DEAD */
 			case 160+15:
 			{
-				return (FALSE);
+				disturb(1, 0);
+#ifdef JP
+				if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
+#else
+				if (blind) msg_format("%^s mumbles.", m_name);
+#endif
+
+#ifdef JP
+				else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
+#else
+				else msg_format("%^s casts a spell to revive corpses.", m_name);
+#endif
+				animate_dead(m_idx, m_ptr->fy, m_ptr->fx);
 				break;
 			}
 
