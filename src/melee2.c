@@ -2676,7 +2676,7 @@ msg_format("%^sはもう無敵でない。", m_name);
 			msg_format("%^s is no longer invulnerable.", m_name);
 #endif
 
-			m_ptr->energy -= 100;
+			m_ptr->energy_need += ENERGY_NEED();
 			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
 			if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 		}
@@ -3492,7 +3492,7 @@ msg_print("爆発のルーンは解除された。");
 				}
 				if (!(r_ptr->flags7 & RF7_CAN_FLY) && !(r_ptr->flags8 & RF8_WILD_WOOD))
 				{
-					m_ptr->energy -= 100;
+					m_ptr->energy_need += ENERGY_NEED();
 				}
 			}
 
@@ -3817,7 +3817,7 @@ msg_format("%^sは戦いを決意した！", m_name);
  */
 void process_monsters(void)
 {
-	int             i, e;
+	int             i;
 	int             fx, fy;
 
 	bool            test;
@@ -3973,18 +3973,14 @@ void process_monsters(void)
 			if (m_ptr->slow) speed = MAX(0, speed - 10);
 		}
 
-		e = extract_energy[speed];
-
 		/* Give this monster some energy */
-		if(randint0(60) < e)
-		m_ptr->energy += gain_energy();
-
+		m_ptr->energy_need -= extract_energy[speed];
 
 		/* Not enough energy to move */
-		if (m_ptr->energy < 100) continue;
+		if (m_ptr->energy_need > 0) continue;
 
 		/* Use up "some" energy */
-		m_ptr->energy -= 100;
+		m_ptr->energy_need += ENERGY_NEED();
 
 
 		/* Save global index */

@@ -1664,7 +1664,7 @@ msg_format("%^sがかん高い金切り声をあげた。", m_name);
 				/* Window stuff */
 				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
-				p_ptr->energy -= 100;
+				p_ptr->energy_need += ENERGY_NEED();
 			}
 			if (p_ptr->riding)
 			{
@@ -3612,7 +3612,7 @@ msg_format("%^sがテレポートした。", m_name);
 #endif
 								}
 								else teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE);
-								p_ptr->energy -= 100;
+								p_ptr->energy_need += ENERGY_NEED();
 							}
 							break;
 						}

@@ -5538,30 +5538,32 @@ bool dimension_door(void)
 
 	if (!tgt_pt(&x, &y)) return FALSE;
 
-	p_ptr->energy -= 60 - plev;
+	p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
 
 	if (!cave_empty_bold(y, x) || (cave[y][x].info & CAVE_ICKY) ||
 		(distance(y, x, py, px) > plev / 2 + 10) ||
 		(!randint0(plev / 10 + 10)))
 	{
-	  if( p_ptr->pclass != CLASS_MIRROR_MASTER ){
+		if( p_ptr->pclass != CLASS_MIRROR_MASTER ){
 #ifdef JP
-msg_print("精霊界から物質界に戻る時うまくいかなかった！");
+			msg_print("精霊界から物質界に戻る時うまくいかなかった！");
 #else
-		msg_print("You fail to exit the astral plane correctly!");
+			msg_print("You fail to exit the astral plane correctly!");
 #endif
-	  }
-	  else {
+		}
+		else
+		{
 #ifdef JP
-msg_print("鏡の世界をうまく通れなかった！");
+			msg_print("鏡の世界をうまく通れなかった！");
 #else
-		msg_print("You fail to exit the astral plane correctly!");
+			msg_print("You fail to exit the astral plane correctly!");
 #endif
-	  }
-		p_ptr->energy -= 60 - plev;
+		}
+		p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
 		teleport_player((plev+2)*2);
 	}
-	else teleport_player_to(y, x, TRUE);
+	else
+		teleport_player_to(y, x, TRUE);
 
 	return (TRUE);
 }

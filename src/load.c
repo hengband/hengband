@@ -540,9 +540,9 @@ static void rd_monster(monster_type *m_ptr)
 	if (z_older_than(10, 4, 2))
 	{
 		rd_byte(&tmp8u);
-		m_ptr->energy = (s16b)tmp8u;
+		m_ptr->energy_need = (s16b)tmp8u;
 	}
-	else rd_s16b(&m_ptr->energy);
+	else rd_s16b(&m_ptr->energy_need);
 	if (z_older_than(10,0,7))
 	{
 		m_ptr->fast = 0;
@@ -1372,7 +1372,7 @@ note(format("の中", tmp16s));
 	rd_s16b(&p_ptr->confused);
 	rd_s16b(&p_ptr->food);
 	strip_bytes(4); /* Old "food_digested" / "protection" */
-	rd_s16b(&p_ptr->energy);
+	rd_s16b(&p_ptr->energy_need);
 	rd_s16b(&p_ptr->fast);
 	rd_s16b(&p_ptr->slow);
 	rd_s16b(&p_ptr->afraid);
@@ -2556,7 +2556,7 @@ if (arg_fiddle) note("伝説のアイテムをロードしました");
 
 	/* Read the extra stuff */
 	rd_extra();
-	if (p_ptr->energy > 999) world_player = TRUE;
+	if (p_ptr->energy_need < -999) world_player = TRUE;
 #ifdef JP
 if (arg_fiddle) note("特別情報をロードしました");
 #else

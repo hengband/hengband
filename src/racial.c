@@ -1077,7 +1077,7 @@ msg_print("Oraoraoraoraoraoraoraoraoraoraoraoraoraoraoraoraora!!!!");
 							handle_stuff();
 							py_attack(y, x, 0);
 						}
-						p_ptr->energy -= 100;
+						p_ptr->energy_need += ENERGY_NEED();
 					}
 					else
 					{

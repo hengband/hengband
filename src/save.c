@@ -622,7 +622,7 @@ static void wr_monster(monster_type *m_ptr)
 	wr_s16b(m_ptr->max_maxhp);
 	wr_s16b(m_ptr->csleep);
 	wr_byte(m_ptr->mspeed);
-	wr_s16b(m_ptr->energy);
+	wr_s16b(m_ptr->energy_need);
 	wr_byte(m_ptr->fast);
 	wr_byte(m_ptr->slow);
 	wr_byte(m_ptr->stunned);
@@ -1011,7 +1011,7 @@ static void wr_extra(void)
 	wr_s16b(p_ptr->food);
 	wr_s16b(0);     /* old "food_digested" */
 	wr_s16b(0);     /* old "protection" */
-	wr_s16b(p_ptr->energy);
+	wr_s16b(p_ptr->energy_need);
 	wr_s16b(p_ptr->fast);
 	wr_s16b(p_ptr->slow);
 	wr_s16b(p_ptr->afraid);

@@ -1527,7 +1527,7 @@ msg_print("相打ちに終わりました。");
 			msg_print("They have kill each other at the same time.");
 #endif
 			msg_print(NULL);
-			p_ptr->energy = 100;
+			p_ptr->energy_need = 0;
 			battle_monsters();
 		}
 		else if ((number_mon-1) == 0)
@@ -1568,7 +1568,7 @@ msg_print("残念でした。");
 #endif
 			}
 			msg_print(NULL);
-			p_ptr->energy = 100;
+			p_ptr->energy_need = 0;
 			battle_monsters();
 		}
 		else if(turn - old_turn == 150*TURNS_PER_TICK)
@@ -1580,7 +1580,7 @@ msg_print("申し分けありませんが、この勝負は引き分けとさせていただきます。");
 #endif
 			p_ptr->au += kakekin;
 			msg_print(NULL);
-			p_ptr->energy = 100;
+			p_ptr->energy_need = 0;
 			battle_monsters();
 		}
 	}
@@ -4955,11 +4955,13 @@ msg_print("何か変わった気がする！");
 	}
 
 	/* Give the player some energy */
-	else if((randint0(60) < ((p_ptr->pspeed > 199) ? 49 : ((p_ptr->pspeed < 0) ? 1 : extract_energy[p_ptr->pspeed]))) && !(load && p_ptr->energy >= 100))
-		p_ptr->energy += gain_energy();
+	else if (!(load && p_ptr->energy_need <= 0))
+	{
+		p_ptr->energy_need -= (p_ptr->pspeed > 199 ? 49 : (p_ptr->pspeed < 0 ? 1 : extract_energy[p_ptr->pspeed]));
+	}
 
 	/* No turn yet */
-	if (p_ptr->energy < 100) return;
+	if (p_ptr->energy_need > 0) return;
 	if (!command_rep) prt_time();
 
 	/*** Check for interupts ***/
@@ -5271,7 +5273,7 @@ msg_format("%^sを恐怖から立ち直らせた。", m_name);
 	/*** Handle actual user input ***/
 
 	/* Repeat until out of energy */
-	while (p_ptr->energy >= 100)
+	while (p_ptr->energy_need <= 0)
 	{
 		p_ptr->window |= PW_PLAYER;
 		p_ptr->sutemi = FALSE;
@@ -5457,8 +5459,10 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 		if (energy_use)
 		{
 			/* Use some energy */
-			p_ptr->energy -= energy_use;
-
+			if (!world_player)
+				p_ptr->energy_need += (s16b)((s32b)energy_use * ENERGY_NEED() / 100L);
+			else
+				p_ptr->energy_need += energy_use * TURNS_PER_TICK / 10;
 
 			/* Hack -- constant hallucination */
 			if (p_ptr->image) p_ptr->redraw |= (PR_MAP);
@@ -5575,7 +5579,7 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 				p_ptr->redraw |= (PR_STATE);
 			}
 
-			if (world_player && (p_ptr->energy < 1000))
+			if (world_player && (p_ptr->energy_need > - 1000))
 			{
 				/* Redraw map */
 				p_ptr->redraw |= (PR_MAP);
@@ -5593,7 +5597,7 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 #endif
 				msg_print(NULL);
 				world_player = FALSE;
-				p_ptr->energy = 0;
+				p_ptr->energy_need = ENERGY_NEED();
 
 				handle_stuff();
 			}
@@ -5809,7 +5813,7 @@ static void dungeon(bool load_game)
 	{
 		if (load_game)
 		{
-			p_ptr->energy = 100;
+			p_ptr->energy_need = 0;
 			battle_monsters();
 		}
 		else
@@ -5860,7 +5864,10 @@ msg_print("試合開始！");
 
 	hack_mind = TRUE;
 
-	if (p_ptr->energy < 100 && !p_ptr->inside_battle && (dun_level || p_ptr->leaving_dungeon || p_ptr->inside_arena)) p_ptr->energy = 100;
+	if (p_ptr->energy_need > 0 && !p_ptr->inside_battle &&
+	    (dun_level || p_ptr->leaving_dungeon || p_ptr->inside_arena))
+		p_ptr->energy_need = 0;
+
 	/* Not leaving dungeon */
 	p_ptr->leaving_dungeon = FALSE;
 
@@ -6568,7 +6575,7 @@ if (init_v_info()) quit("建築物初期化不能");
 		m_ptr->maxhp = r_ptr->hdice*(r_ptr->hside+1)/2;
 		m_ptr->max_maxhp = m_ptr->maxhp;
 		m_ptr->hp = r_ptr->hdice*(r_ptr->hside+1)/2;
-		m_ptr->energy = -100;
+		m_ptr->energy_need = ENERGY_NEED() + ENERGY_NEED();
 	}
 
 	/* Process */

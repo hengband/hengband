@@ -2958,12 +2958,14 @@ msg_print("守りのルーンが壊れた！");
 	if (m_ptr->mspeed > 199) m_ptr->mspeed = 199;
 
 	/* Give a random starting energy */
-	m_ptr->energy = (byte)randint0(100);
-
-	/* Nightmare monsters are more prepared */
-	if (ironman_nightmare)
+	if (!ironman_nightmare)
 	{
-		m_ptr->energy *= 2;
+		m_ptr->energy_need = ENERGY_NEED() - (s16b)randint0(100);
+	}
+	else
+	{
+		/* Nightmare monsters are more prepared */
+		m_ptr->energy_need = ENERGY_NEED() - (s16b)randint0(100) * 2;
 	}
 
 	/* Force monster to wait for player, unless in Nightmare mode */

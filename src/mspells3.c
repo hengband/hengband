@@ -775,7 +775,7 @@ msg_format("%sはもう無敵ではない。", m_name);
 #else
 			msg_format("%^s is no longer invulnerable.", m_name);
 #endif
-			m_ptr->energy -= 100;
+			m_ptr->energy_need += ENERGY_NEED();
 		}
 		if (m_ptr->fast)
 		{
@@ -1396,7 +1396,8 @@ msg_print("無傷の球の呪文を唱えた。");
 #endif
 		msg_print(NULL);
 
-		p_ptr->energy += (randint1(200)+1200);
+		/* Hack */
+		p_ptr->energy_need -= 1000 + (100 + randint1(200)+200)*TURNS_PER_TICK/10;
 
 		/* Redraw map */
 		p_ptr->redraw |= (PR_MAP);

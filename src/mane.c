@@ -935,7 +935,8 @@ msg_print("Ìµ½ý¤Îµå¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 			msg_print("hek!");
 		msg_print(NULL);
 
-		p_ptr->energy += (randint1(200)+1200);
+		/* Hack */
+		p_ptr->energy_need -= 1000 + (100 + randint1(200)+200)*TURNS_PER_TICK/10;
 
 		/* Redraw map */
 		p_ptr->redraw |= (PR_MAP);

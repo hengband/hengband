@@ -201,7 +201,7 @@ void reset_tim_flags(void)
 	p_ptr->special_attack = 0L;
 	p_ptr->special_defense = 0L;
 
-	while(p_ptr->energy > 99) p_ptr->energy -= 100;
+	while(p_ptr->energy_need < 0) p_ptr->energy_need += ENERGY_NEED();
 	world_player = FALSE;
 
 	if (prace_is_(RACE_DEMON) && (p_ptr->lev > 44)) p_ptr->oppose_fire = 1;
@@ -1623,7 +1623,7 @@ msg_print("無敵ではなくなった。");
 			/* Window stuff */
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
-			p_ptr->energy -= 100;
+			p_ptr->energy_need += ENERGY_NEED();
 		}
 	}
 
@@ -3908,7 +3908,7 @@ msg_print("やっとお腹がきつくなくなった。");
 		{
 			p_ptr->wilderness_x = px;
 			p_ptr->wilderness_y = py;
-			p_ptr->energy = 100;
+			p_ptr->energy_need = 0;
 			change_wild_mode();
 		}
 
@@ -5191,7 +5191,7 @@ msg_print("*** 警告:低ヒット・ポイント！ ***");
 	{
 		p_ptr->wilderness_x = px;
 		p_ptr->wilderness_y = py;
-		p_ptr->energy = 100;
+		p_ptr->energy_need = 0;
 		change_wild_mode();
 	}
 	return TRUE;

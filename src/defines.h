@@ -487,17 +487,22 @@
 
 
 /*
+ * Random energy
+ */
+#define ENERGY_NEED() (randnor(100, 31) * 2)  
+
+/*
  * Misc constants
  */
-#define TOWN_DAWN               10000   /* Number of ticks from dawn to dawn XXX */
-#define TURNS_PER_TICK          20L     /* # of energy-gain-turns per ticks */
-#define BREAK_GLYPH             550             /* Rune of protection resistance */
-#define BREAK_MINOR_GLYPH       299             /* For explosive runes */
-#define BTH_PLUS_ADJ    3       /* Adjust BTH per plus-to-hit */
-#define MON_MULT_ADJ    8               /* High value slows multiplication */
-#define MON_SUMMON_ADJ  2               /* Adjust level of summoned creatures */
-#define MON_DRAIN_LIFE  2               /* Percent of player exp drained per hit */
-#define USE_DEVICE      3               /* x> Harder devices x< Easier devices     */
+#define TOWN_DAWN         10000    /* Number of ticks from dawn to dawn XXX */
+#define TURNS_PER_TICK    20L      /* Number of energy-gain-turns per ticks */
+#define BREAK_GLYPH       550      /* Rune of protection resistance */
+#define BREAK_MINOR_GLYPH 299      /* For explosive runes */
+#define BTH_PLUS_ADJ       3       /* Adjust BTH per plus-to-hit */
+#define MON_MULT_ADJ  	   8       /* High value slows multiplication */
+#define MON_SUMMON_ADJ	   2       /* Adjust level of summoned creatures */
+#define MON_DRAIN_LIFE	   2       /* Percent of player exp drained per hit */
+#define USE_DEVICE    	   3       /* x> Harder devices x< Easier devices     */
 
 
 /* "Biases" for random artifact gen */

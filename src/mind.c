@@ -322,9 +322,9 @@ void mindcraft_info(char *p, int use_mind, int power)
 	case 11: sprintf(p, " %s%dd6", s_dam, plev / 2);  break;
 	case 12: sprintf(p, " %sd%d+%d", s_dam, plev * 3, plev * 3); break;
 #ifdef JP
-	case 13: sprintf(p, " 行動:%d回", (p_ptr->csp + p_ptr->energy - 50)/100); break;
+	case 13: sprintf(p, " 行動:%d回", (p_ptr->csp + 100-p_ptr->energy_need - 50)/100); break;
 #else
-	case 13: sprintf(p, " %d acts.", (p_ptr->csp + p_ptr->energy - 50)/100); break;
+	case 13: sprintf(p, " %d acts.", (p_ptr->csp + 100-p_ptr->energy_need - 50)/100); break;
 #endif
 	}
       break;
@@ -981,7 +981,7 @@ msg_print("精神を捻じ曲げる波動を発生させた！");
 
 		/* This is always a radius-0 ball now */
 		if (fire_ball(GF_PSI_DRAIN, dir, b, 0))
-			p_ptr->energy -= randint1(150);
+			p_ptr->energy_need += randint1(150);
 		break;
 	case 12:
 		/* psycho-spear */
@@ -1008,7 +1008,8 @@ msg_print("精神を捻じ曲げる波動を発生させた！");
 #endif
 		msg_print(NULL);
 
-		p_ptr->energy += (p_ptr->csp + 950);
+		/* Hack */
+		p_ptr->energy_need -= 1000 + (100 + p_ptr->csp - 50)*TURNS_PER_TICK/10;
 
 		/* Redraw map */
 		p_ptr->redraw |= (PR_MAP);

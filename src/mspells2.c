@@ -3288,7 +3288,7 @@ msg_format("%^sがテレポートした。", m_name);
 #endif
 									}
 									else teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE);
-									p_ptr->energy -= 100;
+									p_ptr->energy_need = ENERGY_NEED();
 								}
 								break;
 							}

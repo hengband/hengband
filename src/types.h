@@ -569,20 +569,20 @@ typedef struct monster_type monster_type;
 
 struct monster_type
 {
-	s16b r_idx;			/* Monster race index */
-	s16b ap_r_idx;			/* Monster race appearance index */
+	s16b r_idx;		/* Monster race index */
+	s16b ap_r_idx;		/* Monster race appearance index */
 
-	byte fy;			/* Y location on map */
-	byte fx;			/* X location on map */
+	byte fy;		/* Y location on map */
+	byte fx;		/* X location on map */
 
-	s16b hp;			/* Current Hit points */
-	s16b maxhp;			/* Max Hit points */
-	s16b max_maxhp;			/* Max Max Hit points */
+	s16b hp;		/* Current Hit points */
+	s16b maxhp;		/* Max Hit points */
+	s16b max_maxhp;		/* Max Max Hit points */
 
 	s16b csleep;		/* Inactive counter */
 
-	byte mspeed;		/* Monster "speed" */
-	s16b energy;		/* Monster "energy" */
+	byte mspeed;	        /* Monster "speed" */
+	s16b energy_need;	/* Monster "energy" */
 
 	byte fast;		/* Monster is stunned */
 	byte slow;		/* Monster is stunned */
@@ -591,12 +591,12 @@ struct monster_type
 	byte monfear;		/* Monster is afraid */
 	byte invulner;          /* Monster is temporarily invulnerable */
 
-	byte cdis;			/* Current dis from player */
+	byte cdis;		/* Current dis from player */
 
-	byte mflag;			/* Extra monster flags */
-	byte mflag2;			/* Extra monster flags */
+	byte mflag;		/* Extra monster flags */
+	byte mflag2;		/* Extra monster flags */
 
-	bool ml;			/* Monster is "visible" */
+	bool ml;		/* Monster is "visible" */
 
 	s16b hold_o_idx;	/* Object being held (if any) */
 
@@ -1084,17 +1084,17 @@ struct player_type
 	s16b word_recall;	/* Word of recall counter */
 	byte recall_dungeon;
 
-	s16b energy;		/* Current energy */
+	s16b energy_need;	/* Energy needed for next move */
 
-	s16b food;			/* Current nutrition */
+	s16b food;		/* Current nutrition */
 
-	u32b total_weight;		/* Total weight being carried */
+	u32b total_weight;	/* Total weight being carried */
 
 	u32b special_attack;	/* Special attack capacity -LM- */
 	u32b special_defense;	/* Special block capacity -LM- */
 	byte action;		/* Currently action */
 
-	s16b health_who;		/* Health bar trackee */
+	s16b health_who;	/* Health bar trackee */
 
 	s16b monster_race_idx;	/* Monster race trackee */
 

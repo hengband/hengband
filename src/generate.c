@@ -1510,7 +1510,7 @@ static void place_pet(void)
 			m_ptr->smart = party_mon[i].smart;
 			m_ptr->csleep = 0;
 			m_ptr->nickname = party_mon[i].nickname;
-			m_ptr->energy = party_mon[i].energy;
+			m_ptr->energy_need = party_mon[i].energy_need;
 			m_ptr->exp = party_mon[i].exp;
 			set_pet(m_ptr);
 
