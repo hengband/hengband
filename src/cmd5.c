@@ -2353,7 +2353,7 @@ msg_print("あなたは蜘蛛のカードに集中する...");
 			{
 				if (!pet)
 #ifdef JP
-msg_print("召還された蜘蛛は怒っている！");
+msg_print("召喚された蜘蛛は怒っている！");
 #else
 					msg_print("The summoned spiders get angry!");
 #endif
@@ -2780,7 +2780,7 @@ msg_print("あなたはカミカゼのカードに集中する...");
 				{
 					if (!pet)
 #ifdef JP
-msg_print("召還されたモンスターは怒っている！");
+msg_print("召喚されたモンスターは怒っている！");
 #else
 						msg_print("The summoned creatures get angry!");
 #endif
@@ -2892,7 +2892,7 @@ msg_print("あなたはアンデッドのカードに集中する...");
 			{
 				if (!pet)
 #ifdef JP
-msg_print("召還されたアンデッドは怒っている！");
+msg_print("召喚されたアンデッドは怒っている！");
 #else
 					msg_print("The summoned undead creature gets angry!");
 #endif
@@ -2924,7 +2924,7 @@ msg_print("あなたは爬虫類のカードに集中する...");
 			{
 				if (!pet)
 #ifdef JP
-msg_print("召還された爬虫類は怒っている！");
+msg_print("召喚された爬虫類は怒っている！");
 #else
 					msg_print("The summoned reptile gets angry!");
 #endif
@@ -2972,7 +2972,7 @@ msg_print("あなたはモンスターのカードに集中する...");
 				{
 					if (!pet)
 #ifdef JP
-msg_print("召還されたモンスターは怒っている！");
+msg_print("召喚されたモンスターは怒っている！");
 #else
 						msg_print("The summoned creatures get angry!");
 #endif
@@ -3001,7 +3001,7 @@ msg_print("あなたはハウンドのカードに集中する...");
 			{
 				if (!pet)
 #ifdef JP
-msg_print("召還されたハウンドは怒っている！");
+msg_print("召喚されたハウンドは怒っている！");
 #else
 					msg_print("The summoned hounds get angry!");
 #endif
@@ -3058,7 +3058,7 @@ msg_print("あなたはサイバーデーモンのカードに集中する...");
 			{
 				if (!pet)
 #ifdef JP
-msg_print("召還されたサイバーデーモンは怒っている！");
+msg_print("召喚されたサイバーデーモンは怒っている！");
 #else
 					msg_print("The summoned Cyberdemon gets angry!");
 #endif
@@ -3117,7 +3117,7 @@ msg_print("あなたはドラゴンのカードに集中する...");
 			{
 				if (!pet)
 #ifdef JP
-msg_print("召還されたドラゴンは怒っている！");
+msg_print("召喚されたドラゴンは怒っている！");
 #else
 					msg_print("The summoned dragon gets angry!");
 #endif
@@ -3181,7 +3181,7 @@ msg_print("あなたはデーモンのカードに集中する...");
 			{
 				if (!pet)
 #ifdef JP
-msg_print("召還されたデーモンは怒っている！");
+msg_print("召喚されたデーモンは怒っている！");
 #else
 					msg_print("The summoned demon gets angry!");
 #endif
@@ -3215,7 +3215,7 @@ msg_print("あなたは強力なアンデッドのカードに集中する...");
 			{
 				if (!pet)
 #ifdef JP
-msg_print("召還された上級アンデッドは怒っている！");
+msg_print("召喚された上級アンデッドは怒っている！");
 #else
 					msg_print("The summoned greater undead creature gets angry!");
 #endif
@@ -3259,7 +3259,7 @@ msg_print("あなたは古代ドラゴンのカードに集中する...");
 			{
 				if (!pet)
 #ifdef JP
-msg_print("召還された古代ドラゴンは怒っている！");
+msg_print("召喚された古代ドラゴンは怒っている！");
 #else
 					msg_print("The summoned ancient dragon gets angry!");
 #endif
