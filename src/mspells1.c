@@ -3908,7 +3908,7 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 					msg_format("%^s throws some hand grenades.", m_name);
 #endif
 			}
-			else if (m_ptr->r_idx == MON_SERPENT)
+			else if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
 			{
 #ifdef JP
 				if (blind)
@@ -3975,7 +3975,7 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 					count += summon_named_creature(y, x, 930, FALSE, FALSE, is_friendly(m_ptr), is_pet(m_ptr));
 				}
 			}
-			else if (m_ptr->r_idx == MON_SERPENT)
+			else if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
 			{
 				int num = 2 + randint1(3);
 
