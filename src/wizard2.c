@@ -1637,14 +1637,12 @@ static void do_cmd_wiz_zap(void)
 		/* Paranoia -- Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
 
+		/* Skip the mount */
+		if (i == p_ptr->riding) continue;
+
 		/* Delete nearby monsters */
 		if (m_ptr->cdis <= MAX_SIGHT)
 		{
-			if (i == p_ptr->riding)
-			{
-				rakuba(-1, FALSE);
-				p_ptr->redraw |= (PR_EXTRA);
-			}
 			delete_monster_idx(i);
 		}
 	}
@@ -1666,11 +1664,8 @@ static void do_cmd_wiz_zap_all(void)
 		/* Paranoia -- Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
 
-		if (i == p_ptr->riding)
-		{
-			rakuba(-1, FALSE);
-			p_ptr->redraw |= (PR_EXTRA);
-		}
+		/* Skip the mount */
+		if (i == p_ptr->riding) continue;
 
 		/* Delete this monster */
 		delete_monster_idx(i);
