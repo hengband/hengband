@@ -88,7 +88,8 @@ static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 	if (smart_learn)
 	{
 		/* Hack -- Occasionally forget player status */
-		if (m_ptr->smart && (randint0(100) < 1)) m_ptr->smart = 0L;
+		/* Only save SM_FRIENDLY, SM_PET or SM_CLONED */
+		if (m_ptr->smart && (randint0(100) < 1)) m_ptr->smart &= (SM_FRIENDLY | SM_PET | SM_CLONED);
 
 		/* Use the memorized flags */
 		smart = m_ptr->smart;
