@@ -3275,7 +3275,7 @@ msg_print("上に引っ張りあげられる感じがする！");
 				msg_print("You feel yourself yanked upwards!");
 #endif
 
-				p_ptr->recall_dungeon = dungeon_type;
+				if (dungeon_type) p_ptr->recall_dungeon = dungeon_type;
 				if (record_stair)
 					do_cmd_write_nikki(NIKKI_RECALL, dun_level, NULL);
 
@@ -7078,7 +7078,7 @@ prt("お待ち下さい...", 0, 0);
 					p_ptr->inside_battle = FALSE;
 					leaving_quest = 0;
 					p_ptr->inside_quest = 0;
-					p_ptr->recall_dungeon = dungeon_type;
+					if (dungeon_type) p_ptr->recall_dungeon = dungeon_type;
 					dungeon_type = 0;
 					if (lite_town || vanilla_town)
 					{
