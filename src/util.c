@@ -368,7 +368,7 @@ FILE *my_fopen(cptr file, cptr mode)
 	{
 		/* setting file type/creator */
 		tempfff = fopen(buf, mode);
-		fsetfileinfo(file, _fcreator, _ftype);
+		fsetfileinfo(buf, _fcreator, _ftype);
 		fclose(tempfff);
 	}
 #endif
