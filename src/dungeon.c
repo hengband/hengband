@@ -74,16 +74,16 @@ static byte value_check_aux2(object_type *o_ptr)
 	if (broken_p(o_ptr)) return FEEL_BROKEN;
 
 	/* Artifacts -- except cursed/broken ones */
-	if (artifact_p(o_ptr) || o_ptr->art_name) return FEEL_GOOD;
+	if (artifact_p(o_ptr) || o_ptr->art_name) return FEEL_UNCURSED;
 
 	/* Ego-Items -- except cursed/broken ones */
-	if (ego_item_p(o_ptr)) return FEEL_GOOD;
+	if (ego_item_p(o_ptr)) return FEEL_UNCURSED;
 
 	/* Good armor bonus */
-	if (o_ptr->to_a > 0) return FEEL_GOOD;
+	if (o_ptr->to_a > 0) return FEEL_UNCURSED;
 
 	/* Good weapon bonuses */
-	if (o_ptr->to_h + o_ptr->to_d > 0) return FEEL_GOOD;
+	if (o_ptr->to_h + o_ptr->to_d > 0) return FEEL_UNCURSED;
 
 	/* No feeling */
 	return FEEL_NONE;
@@ -127,7 +127,10 @@ static void sense_inventory_aux(int slot, bool heavy)
 			}
 			case FEEL_CURSED:
 			{
-				feel = randint0(3) ? FEEL_GOOD : FEEL_AVERAGE;
+                                if (heavy)
+                                        feel = randint0(3) ? FEEL_GOOD : FEEL_AVERAGE;
+                                else
+                                        feel = FEEL_UNCURSED;
 				break;
 			}
 			case FEEL_AVERAGE:
@@ -137,7 +140,10 @@ static void sense_inventory_aux(int slot, bool heavy)
 			}
 			case FEEL_GOOD:
 			{
-				feel = randint0(3) ? FEEL_CURSED : FEEL_AVERAGE;
+                                if (heavy)
+                                        feel = randint0(3) ? FEEL_CURSED : FEEL_AVERAGE;
+                                else
+                                        feel = FEEL_CURSED;
 				break;
 			}
 			case FEEL_EXCELLENT:

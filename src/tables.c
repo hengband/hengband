@@ -7787,7 +7787,7 @@ cptr game_inscriptions[] =
 	"恐ろしい",      /* FEEL_TERRIBLE */
 	"無価値",        /* FEEL_WORTHLESS */
 	"呪われている",  /* FEEL_CURSED */
-	"呪いなし",      /* FEEL_UNCURSED */
+	"上質以上",      /* FEEL_UNCURSED */
 	"並",            /* FEEL_AVERAGE */
 	"上質",          /* FEEL_GOOD */
 	"高級品",        /* FEEL_EXCELLENT */
