@@ -4232,9 +4232,9 @@ msg_print("あなたはフラキアに敵を締め殺すよう命じた。");
 			case ART_GOURYU:
 			{
 #ifdef JP
-				msg_print("指輪は深いブルーに輝いた...");
+				msg_format("%sは深いブルーに輝いた...", o_ptr->name1 == ART_VILYA ? "指輪" : "ソード");
 #else
-				msg_print("The ring glows deep blue...");
+				msg_format("The %s glows deep blue...", o_ptr->name1 == ART_VILYA ? "ring" : "sword");
 #endif
 
 				if (!get_aim_dir(&dir)) return;
@@ -4303,7 +4303,7 @@ msg_print("あなたはフラキアに敵を締め殺すよう命じた。");
 
 				fire_ball(GF_MISSILE, dir, 300, 4);
 #ifdef JP
-				msg_print("アーマーが様々な色に輝いた...");
+				msg_print("鎧が様々な色に輝いた...");
 #else
 				msg_print("Your armor glows many colours...");
 #endif
@@ -4324,7 +4324,7 @@ msg_print("あなたはフラキアに敵を締め殺すよう命じた。");
 			case ART_SOULKEEPER:
 			{
 #ifdef JP
-				msg_print("アーマーが白く明るく輝いた...");
+				msg_print("鎧が白く明るく輝いた...");
 				msg_print("ひじょうに気分がよい...");
 #else
 				msg_print("Your armor glows a bright white...");
@@ -4359,7 +4359,7 @@ msg_print("天国の歌が聞こえる...");
 			case ART_JULIAN:
 			{
 #ifdef JP
-				msg_print("アーマーが深いブルーに輝いた...");
+				msg_print("鎧が深いブルーに輝いた...");
 #else
 				msg_print("Your armor glows deep blue...");
 #endif
@@ -4372,7 +4372,7 @@ msg_print("天国の歌が聞こえる...");
 			case ART_CASPANION:
 			{
 #ifdef JP
-				msg_print("アーマーが赤く明るく輝いた...");
+				msg_print("鎧が赤く明るく輝いた...");
 #else
 				msg_print("Your armor glows bright red...");
 #endif
@@ -4429,7 +4429,7 @@ msg_print("天国の歌が聞こえる...");
 #ifdef JP
 				msg_format("%sが様々な色に輝いた...", o_ptr->name1 == ART_COLLUIN ? "クローク" : "鎧");
 #else
-				msg_format("Your cloak glows many colours...");
+				msg_format("Your %s glows many colours...", o_ptr->name1 == ART_COLLUIN ? "cloak" : "armor");
 #endif
 
 				(void)set_oppose_acid(randint1(20) + 20, FALSE);
