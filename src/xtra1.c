@@ -5259,6 +5259,12 @@ void calc_bonuses(void)
 
 	if (down_saving) p_ptr->skill_sav /= 2;
 
+	/* Hack -- Each elemental immunity includes resistance */
+	if (p_ptr->immune_acid) p_ptr->resist_acid = TRUE;
+	if (p_ptr->immune_elec) p_ptr->resist_elec = TRUE;
+	if (p_ptr->immune_fire) p_ptr->resist_fire = TRUE;
+	if (p_ptr->immune_cold) p_ptr->resist_cold = TRUE;
+
 	/* Hack -- handle "xtra" mode */
 	if (character_xtra) return;
 
