@@ -179,9 +179,6 @@ bool make_attack_normal(int m_idx)
 	/* ...nor if friendly */
 	if (!is_hostile(m_ptr)) return FALSE;
 
-	/* Total armor */
-	ac = p_ptr->ac + p_ptr->to_a;
-
 	/* Extract the effective monster level */
 	rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
 
@@ -290,6 +287,9 @@ bool make_attack_normal(int m_idx)
 			case RBE_SUPERHURT: power = 60; break;
 		}
 
+
+		/* Total armor */
+		ac = p_ptr->ac + p_ptr->to_a;
 
 		/* Monster hits player */
 		if (!effect || check_hit(power, rlev, m_ptr->stunned))
@@ -746,7 +746,6 @@ bool make_attack_normal(int m_idx)
 
 				case RBE_SUPERHURT:
 				{
-					int ac = p_ptr->ac+p_ptr->to_a;
 					if ((randint1(rlev*2+300) > (ac+200)) || one_in_(13)) {
 						int tmp_damage = damage-(damage*((ac < 150) ? ac : 150)/250);
 #ifdef JP
@@ -806,7 +805,12 @@ bool make_attack_normal(int m_idx)
 					if (!p_ptr->resist_disen)
 					{
 						/* Apply disenchantment */
-						if (apply_disenchant(0)) obvious = TRUE;
+						if (apply_disenchant(0))
+						{
+							/* Hack -- Update AC */
+							update_stuff();
+							obvious = TRUE;
+						}
 					}
 
 					/* Take some damage */
@@ -1038,21 +1042,21 @@ bool make_attack_normal(int m_idx)
 
 						/* Make an object */
 						o_idx = o_pop();
-						
+
 						/* Success */
 						if (o_idx)
 						{
 							object_type *j_ptr;
-							
+
 							/* Get new object */
 							j_ptr = &o_list[o_idx];
-							
+
 							/* Copy object */
 							object_copy(j_ptr, o_ptr);
-							
+
 							/* Modify number */
 							j_ptr->number = 1;
-							
+
 							/* Hack -- If a rod or wand, allocate total
 							 * maximum timeouts or charges between those
 							 * stolen and those missed. -LM-
@@ -1063,16 +1067,16 @@ bool make_attack_normal(int m_idx)
 								j_ptr->pval = o_ptr->pval / o_ptr->number;
 								o_ptr->pval -= j_ptr->pval;
 							}
-							
+
 							/* Forget mark */
 							j_ptr->marked = 0;
-							
+
 							/* Memorize monster */
 							j_ptr->held_m_idx = m_idx;
-							
+
 							/* Build stack */
 							j_ptr->next_o_idx = m_ptr->hold_o_idx;
-							
+
 							/* Build stack */
 							m_ptr->hold_o_idx = o_idx;
 						}
@@ -1197,6 +1201,9 @@ bool make_attack_normal(int m_idx)
 
 					/* Special damage */
 					get_damage += acid_dam(damage, ddesc, -1);
+
+					/* Hack -- Update AC */
+					update_stuff();
 
 					/* Learn about the player */
 					update_smart_learn(m_idx, DRS_ACID);
