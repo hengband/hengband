@@ -3083,7 +3083,7 @@ static void process_world_aux_curse(void)
 			take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev*2, 100), o_name, -1);
 		}
 		/* Handle mana draining */
-		if ((p_ptr->cursed & TRC_DRAIN_MANA) && one_in_(666))
+		if ((p_ptr->cursed & TRC_DRAIN_MANA) && p_ptr->csp && one_in_(666))
 		{
 			char o_name[MAX_NLEN];
 
