@@ -71,6 +71,41 @@ T:Up:62
 
 
 #
+# Keypad -- Direction
+#
+
+A:0
+P:^_18\r
+
+A:1
+P:^_19\r
+
+A:2
+P:^_20\r
+
+A:3
+P:^_21\r
+
+A:4
+P:^_22\r
+
+A:5
+P:^_23\r
+
+A:6
+P:^_24\r
+
+A:7
+P:^_25\r
+
+A:8
+P:^_27\r
+
+A:9
+P:^_28\r
+
+
+#
 # Shift-Keypad -- Directed running
 #
 

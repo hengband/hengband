@@ -5136,19 +5136,6 @@ static bool CheckEvents(bool wait)
 				Term_keypress(ch);
 			}
 
-			/* Hack -- normal "keypad keys" -> special keypress */
-			else if (!mc && !ms && !mo && !mx && (ck < 96))
-			{
-				/* Hack -- "enter" is confused */
-				if (ck == 76) ch = '\n';
-
-				/* Send control-caret as a trigger */
-				Term_keypress(30);
-
-				/* Send the "ascii" keypress */
-				Term_keypress(ch);
-			}
-
 			/* Bizarre key -> encoded keypress */
 			else if (ck <= 127)
 			{
