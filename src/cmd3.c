@@ -2677,9 +2677,6 @@ void do_cmd_query_symbol(void)
 	u16b	why = 0;
 	u16b	*who;
 
-	/* Allocate the "who" array */
-	C_MAKE(who, max_r_idx, u16b);
-
 	/* Get a character, or abort */
 #ifdef JP
 	if (!get_com("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前): ", &sym, FALSE)) return;
@@ -2761,6 +2758,8 @@ void do_cmd_query_symbol(void)
 	/* Display the result */
 	prt(buf, 0, 0);
 
+	/* Allocate the "who" array */
+	C_MAKE(who, max_r_idx, u16b);
 
 	/* Collect matching monsters */
 	for (n = 0, i = 1; i < max_r_idx; i++)
@@ -2808,7 +2807,13 @@ void do_cmd_query_symbol(void)
 	}
 
 	/* Nothing to recall */
-	if (!n) return;
+	if (!n)
+	{
+		/* Free the "who" array */
+		C_KILL(who, max_r_idx, u16b);
+
+		return;
+	}
 
 
 	/* Prompt XXX XXX XXX */
@@ -2842,7 +2847,13 @@ void do_cmd_query_symbol(void)
 	}
 
 	/* Catch "escape" */
-	if (query != 'y') return;
+	if (query != 'y')
+	{
+		/* Free the "who" array */
+		C_KILL(who, max_r_idx, u16b);
+
+		return;
+	}
 
 	/* Sort if needed */
 	if (why == 4)
@@ -2944,6 +2955,9 @@ void do_cmd_query_symbol(void)
 		}
 	}
 
+	/* Free the "who" array */
+	C_KILL(who, max_r_idx, u16b);
+
 	/* Re-display the identity */
 	prt(buf, 0, 0);
 }
@@ -3002,9 +3016,6 @@ if (!get_com("モンスターの文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前):
 
 		return (FALSE);
 	}
-
-	/* Allocate the "who" array */
-	C_MAKE(who, max_r_idx, u16b);
 
 	/* Find that character info, and describe it */
 	for (i = 0; ident_info[i]; ++i)
@@ -3075,6 +3086,9 @@ sprintf(buf, "%c - %s", sym, "無効な文字");
 	/* Display the result */
 	prt(buf, 16, 10);
 
+
+	/* Allocate the "who" array */
+	C_MAKE(who, max_r_idx, u16b);
 
 	/* Collect matching monsters */
 	for (n = 0, i = 1; i < max_r_idx; i++)

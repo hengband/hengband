@@ -708,6 +708,9 @@ static int choose_dungeon(cptr note)
 		i = inkey();
 		if (i == ESCAPE)
 		{
+			/* Free the "dun" array */
+			C_KILL(dun, max_d_idx, s16b);
+
 			screen_load();
 			return 0;
 		}
@@ -719,6 +722,10 @@ static int choose_dungeon(cptr note)
 		else bell();
 	}
 	screen_load();
+
+	/* Free the "dun" array */
+	C_KILL(dun, max_d_idx, s16b);
+
 	return select_dungeon;
 }
 

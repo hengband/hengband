@@ -5433,14 +5433,9 @@ void do_cmd_knowledge_artifacts(void)
 
 	bool *okay;
 
-	/* Allocate the "who" array */
-	C_MAKE(who, max_r_idx, s16b);
-
-	/* Allocate the "okay" array */
-	C_MAKE(okay, max_a_idx, bool);
-
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
+
 	if (!fff) {
 #ifdef JP
 	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
@@ -5450,6 +5445,12 @@ void do_cmd_knowledge_artifacts(void)
 	    msg_print(NULL);
 	    return;
 	}
+
+	/* Allocate the "who" array */
+	C_MAKE(who, max_r_idx, s16b);
+
+	/* Allocate the "okay" array */
+	C_MAKE(okay, max_a_idx, bool);
 
 	/* Scan the artifacts */
 	for (k = 0; k < max_a_idx; k++)
@@ -5575,6 +5576,12 @@ strcpy(base_name, "未知の伝説のアイテム");
 
 	}
 
+	/* Free the "who" array */
+	C_KILL(who, max_r_idx, s16b);
+
+	/* Free the "okay" array */
+	C_KILL(okay, max_a_idx, bool);
+
 	/* Close the file */
 	my_fclose(fff);
 
@@ -5604,11 +5611,9 @@ static void do_cmd_knowledge_uniques(void)
 
 	char file_name[1024];
 
-	/* Allocate the "who" array */
-	C_MAKE(who, max_r_idx, s16b);
-
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
+
 	if (!fff) {
 #ifdef JP
 	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
@@ -5618,6 +5623,9 @@ static void do_cmd_knowledge_uniques(void)
 	    msg_print(NULL);
 	    return;
 	}
+
+	/* Allocate the "who" array */
+	C_MAKE(who, max_r_idx, s16b);
 
 	/* Scan the monsters */
 	for (i = 1; i < max_r_idx; i++)
@@ -5663,6 +5671,9 @@ static void do_cmd_knowledge_uniques(void)
 		}
 	}
 
+	/* Free the "who" array */
+	C_KILL(who, max_r_idx, s16b);
+
 	/* Close the file */
 	my_fclose(fff);
 
@@ -5692,11 +5703,9 @@ static void do_cmd_knowledge_uniques_dead(void)
 
 	char file_name[1024];
 
-	/* Allocate the "who" array */
-	C_MAKE(who, max_r_idx, s16b);
-
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
+
 	if (!fff) {
 #ifdef JP
 	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
@@ -5706,6 +5715,9 @@ static void do_cmd_knowledge_uniques_dead(void)
 	    msg_print(NULL);
 	    return;
 	}
+
+	/* Allocate the "who" array */
+	C_MAKE(who, max_r_idx, s16b);
 
 	/* Scan the monsters */
 	for (i = 1; i < max_r_idx; i++)
@@ -5750,6 +5762,9 @@ static void do_cmd_knowledge_uniques_dead(void)
 			}
 		}
 	}
+
+	/* Free the "who" array */
+	C_KILL(who, max_r_idx, s16b);
 
 	/* Close the file */
 	my_fclose(fff);
@@ -6236,11 +6251,9 @@ static void do_cmd_knowledge_kill_count(void)
 	s32b Total = 0;
 
 
-	/* Allocate the "who" array */
-	C_MAKE(who, max_r_idx, s16b);
-
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
+
 	if (!fff) {
 #ifdef JP
 	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
@@ -6250,6 +6263,9 @@ static void do_cmd_knowledge_kill_count(void)
 	    msg_print(NULL);
 	    return;
 	}
+
+	/* Allocate the "who" array */
+	C_MAKE(who, max_r_idx, s16b);
 
 	{
 		/* Monsters slain */
@@ -6384,6 +6400,9 @@ fprintf(fff, "     %3d 匹の %s\n", This, r_name + r_ptr->name);
 	        Total, (Total == 1 ? "" : "s"));
 #endif
 
+
+	/* Free the "who" array */
+	C_KILL(who, max_r_idx, s16b);
 
 	/* Close the file */
 	my_fclose(fff);

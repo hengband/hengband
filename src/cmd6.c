@@ -6114,6 +6114,9 @@ msg_print("あなたはエレメントのブレスを吐いた。");
 				pet_ctr = who[i];
 				teleport_to_player(pet_ctr, 100);
 			}
+
+			/* Free the "who" array */
+			C_KILL(who, max_m_idx, u16b);
 		}
 		o_ptr->timeout = 100+randint(100);
 		return;

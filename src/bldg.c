@@ -4253,6 +4253,9 @@ msg_print("今日の分け前はすでに支払ったぞ！");
 
 					if (i == ESCAPE)
 					{
+						/* Free the "dun" array */
+						C_KILL(dun, max_d_idx, s16b);
+
 						screen_load();
 						return;
 					}
@@ -4264,6 +4267,9 @@ msg_print("今日の分け前はすでに支払ったぞ！");
 					else bell();
 				}
 				screen_load();
+
+				/* Free the "dun" array */
+				C_KILL(dun, max_d_idx, s16b);
 
 				max_depth = d_info[select_dungeon].maxdepth;
 
