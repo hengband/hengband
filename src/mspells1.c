@@ -1623,6 +1623,8 @@ msg_format("%^sがかん高い金切り声をあげた。", m_name);
 			set_tim_ffall(0, TRUE);
 			set_tim_sh_touki(0, TRUE);
 			set_tim_sh_fire(0, TRUE);
+			set_tim_sh_holy(0, TRUE);
+			set_tim_eyeeye(0, TRUE);
 			set_magicdef(0, TRUE);
 			set_resist_magic(0, TRUE);
 			set_oppose_acid(0, TRUE);

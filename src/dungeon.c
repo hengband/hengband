@@ -2491,6 +2491,18 @@ msg_print("こんなに多くのペットを制御できない！");
 		(void)set_tim_sh_fire(p_ptr->tim_sh_fire - 1, TRUE);
 	}
 
+	/* Timed sh_holy */
+	if (p_ptr->tim_sh_holy)
+	{
+		(void)set_tim_sh_holy(p_ptr->tim_sh_fire - 1, TRUE);
+	}
+
+	/* Timed eyeeye */
+	if (p_ptr->tim_eyeeye)
+	{
+		(void)set_tim_eyeeye(p_ptr->tim_sh_fire - 1, TRUE);
+	}
+
 	/* Timed resist-magic */
 	if (p_ptr->resist_magic)
 	{

@@ -407,7 +407,7 @@ void get_virtues()
    {
     switch(p_ptr->realm1)
     {
-        case REALM_LIFE:
+        case REALM_LIFE: /* nanka */
          if (virtue_number(V_FAITH))
           p_ptr->vir_types[i++] = V_VITALITY;
          else p_ptr->vir_types[i++] = V_FAITH;
@@ -445,6 +445,11 @@ void get_virtues()
           p_ptr->vir_types[i++] = V_FAITH;
          else p_ptr->vir_types[i++] = V_JUSTICE;
         break;
+        case REALM_HAJA: /* nanka */
+         if (virtue_number(V_FAITH))
+          p_ptr->vir_types[i++] = V_VITALITY;
+         else p_ptr->vir_types[i++] = V_FAITH;
+        break;
      };
     }
 
@@ -454,7 +459,7 @@ void get_virtues()
    {
     switch(p_ptr->realm2)
     {
-        case REALM_LIFE:
+        case REALM_LIFE: /* nanka */
          if (virtue_number(V_FAITH))
           p_ptr->vir_types[i++] = V_VITALITY;
          else p_ptr->vir_types[i++] = V_FAITH;
@@ -491,6 +496,11 @@ void get_virtues()
          if (virtue_number(V_JUSTICE))
           p_ptr->vir_types[i++] = V_FAITH;
          else p_ptr->vir_types[i++] = V_JUSTICE;
+        break;
+        case REALM_HAJA: /* nanka */
+         if (virtue_number(V_FAITH))
+          p_ptr->vir_types[i++] = V_VITALITY;
+         else p_ptr->vir_types[i++] = V_FAITH;
         break;
      };
     }

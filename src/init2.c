@@ -1061,13 +1061,13 @@ static byte store_table[MAX_STORES][STORE_CHOICES][2] =
 
 		{ TV_LIFE_BOOK, 0 },
 		{ TV_LIFE_BOOK, 0 },
-		{ TV_LIFE_BOOK, 0 },
-		{ TV_LIFE_BOOK, 0 },
+		{ TV_LIFE_BOOK, 1 },
+		{ TV_LIFE_BOOK, 1 },
 
-		{ TV_LIFE_BOOK, 1 },
-		{ TV_LIFE_BOOK, 1 },
-		{ TV_LIFE_BOOK, 1 },
-		{ TV_LIFE_BOOK, 1 },
+		{ TV_HAJA_BOOK, 0 },
+		{ TV_HAJA_BOOK, 0 },
+		{ TV_HAJA_BOOK, 1 },
+		{ TV_HAJA_BOOK, 1 },
 
 		{ TV_HAFTED, SV_WHIP },
 		{ TV_HAFTED, SV_MACE },

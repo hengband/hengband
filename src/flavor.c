@@ -399,6 +399,7 @@ static bool object_easy_know(int i)
 		case TV_ARCANE_BOOK:
 		case TV_ENCHANT_BOOK:
 		case TV_DAEMON_BOOK:
+		case TV_HAJA_BOOK:
 		case TV_MUSIC_BOOK:
 		case TV_HISSATSU_BOOK:
 		{
@@ -908,6 +909,7 @@ extern char *object_desc_kosuu(char *t, object_type *o_ptr)
       case  TV_ARCANE_BOOK:
       case  TV_ENCHANT_BOOK:
       case  TV_DAEMON_BOOK:
+      case  TV_HAJA_BOOK:
       case  TV_MUSIC_BOOK:
       case  TV_HISSATSU_BOOK:
       {
@@ -1573,6 +1575,20 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 				basenm = "& Book~ of Daemon Magic #";
 			else
 				basenm = "& Daemon Spellbook~ #";
+#endif
+
+			break;
+		}
+		case TV_HAJA_BOOK:
+		{
+			modstr = basenm;
+#ifdef JP
+				basenm = "& ÇË¼Ù¤ÎËâË¡½ñ#";
+#else
+			if (mp_ptr->spell_book == TV_LIFE_BOOK)
+				basenm = "& Book~ of nanka Magic #";
+			else
+				basenm = "& nanka Spellbook~ #";
 #endif
 
 			break;

@@ -3986,7 +3986,7 @@ s16b spell_chance(int spell, int realm)
 	else if (p_ptr->dec_mana) chance-=2;
 
 	if ((realm+1 == REALM_NATURE) && ((p_ptr->align > 50) || (p_ptr->align < -50))) chance += penalty;
-	if ((realm+1 == REALM_LIFE) && (p_ptr->align < -20)) chance += penalty;
+	if (((realm+1 == REALM_LIFE) || (realm+1 == REALM_HAJA)) && (p_ptr->align < -20)) chance += penalty;
 	if (((realm+1 == REALM_DEATH) || (realm+1 == REALM_DAEMON)) && (p_ptr->align > 20)) chance += penalty;
 
 	/* Minimum failure rate */
@@ -4344,6 +4344,38 @@ static void spell_info(char *p, int spell, int realm)
 		}
 		break;
 		
+	case 9: /* Haja *//* nanka */
+		switch (spell)
+		{
+		case  1: sprintf(p, " %s2d10", s_heal); break;
+		case  2: sprintf(p, " %s12+d12", s_dur); break;
+		case  4: sprintf(p, " %s%d", s_dam, 10 + (plev / 2)); break;
+		case  6: sprintf(p, " %s4d10", s_heal); break;
+		case 10: sprintf(p, " %s8d10", s_heal); break;
+		case 11: sprintf(p, " %s24+d24", s_dur); break;
+		case 12: sprintf(p, " %s3d6+%d", s_dam, orb); break;
+		case 13: sprintf(p, " %sd25+%d", s_dur, 3 * plev); break;
+		case 14: sprintf(p, " %s300", s_heal); break;
+		case 16: sprintf(p, " %sd%d", s_dam, plev); break;
+		case 18: sprintf(p, " %sd%d", s_dam, 3 * plev); break;
+		case 20: sprintf(p, " %sd%d", s_dam, 4 * plev); break;
+#ifdef JP
+		case 22: sprintf(p, " Â»:d%d/²ó:1000", 4 * plev); break;
+#else
+		case 22: sprintf(p, " d %d/h 1000", 4 * plev); break;
+#endif
+		case 24: sprintf(p, " %s25+d25", s_dur); break;
+		case 25: sprintf(p, " %s48+d48", s_dur); break;
+		case 28: sprintf(p, " %s2000", s_heal); break;
+#ifdef JP
+		case 30: sprintf(p, " ²ó300/Â»%d+250", plev * 4); break;
+#else
+		case 30: sprintf(p, " h300/d%d+250", plev * 4); break;
+#endif
+		case 31: sprintf(p, " %s%d+d%d", s_dur,(plev/2), (plev/2)); break;
+		}
+		break;
+
 	case 15: /* Music */
 		switch (spell)
 		{
@@ -4713,6 +4745,7 @@ bool hates_fire(object_type *o_ptr)
 		case TV_ARCANE_BOOK:
 		case TV_ENCHANT_BOOK:
 		case TV_DAEMON_BOOK:
+		case TV_HAJA_BOOK:
 		case TV_MUSIC_BOOK:
 		case TV_HISSATSU_BOOK:
 		{

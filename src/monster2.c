@@ -844,6 +844,17 @@ static bool summon_specific_aux(int r_idx)
 			okay = (r_ptr->flags7 & RF7_GUARDIAN);
 			break;
 		}
+
+		case SUMMON_KNIGHTS:
+		{
+			okay = ((r_idx == MON_NOV_PALADIN) ||
+				(r_idx == MON_NOV_PALADIN_G) ||
+				(r_idx == MON_PALADIN) ||
+				(r_idx == MON_W_KNIGHT) ||
+				(r_idx == MON_ULTRA_PALADIN) ||
+				(r_idx == MON_KNI_TEMPLAR));
+			break;
+		}
 	}
 
 	/* Result */
@@ -2962,6 +2973,8 @@ msg_print("守りのルーンが壊れた！");
 		if (i) m_ptr->mspeed += rand_spread(0, i);
 	  }
 	}
+
+	if (summon_specific_type == SUMMON_KNIGHTS) m_ptr->fast = 100;
 
 	if (m_ptr->mspeed > 199) m_ptr->mspeed = 199;
 

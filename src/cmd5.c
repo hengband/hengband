@@ -361,13 +361,13 @@ static bool item_tester_learn_spell(object_type *o_ptr)
 
 	if (p_ptr->pclass == CLASS_PRIEST)
 	{
-		if (p_ptr->realm1 == REALM_LIFE)
+		if ((p_ptr->realm1 == REALM_LIFE) || (p_ptr->realm1 == REALM_HAJA))
 		{
 			choices &= ~(CH_DEATH | CH_DAEMON);
 		}
 		else if ((p_ptr->realm1 == REALM_DEATH) || (p_ptr->realm1 == REALM_DAEMON))
 		{
-			choices &= ~(CH_LIFE);
+			choices &= ~(CH_LIFE | CH_HAJA);
 		}
 	}
 
@@ -1824,7 +1824,7 @@ msg_print("ロケット発射！");
 		break;
 	case 23: /* Summon monster, demon */
 		{
-			bool pet = one_in_(3);
+			bool pet = !one_in_(3);
 			bool group = !(pet && (plev < 50));
 
 			if (summon_specific((pet ? -1 : 0), py, px, (plev * 3) / 2, SUMMON_DEMON, group, FALSE, pet, FALSE, (bool)(!pet)))
@@ -3922,6 +3922,235 @@ take_hit(DAMAGE_USELIFE, 20 + randint1(30), "血の呪い", -1);
 }
 
 
+static bool cast_haja_spell(int spell) /* nanka */
+{
+	int	dir;
+	int	beam;
+	int	plev = p_ptr->lev;
+
+	if (p_ptr->pclass == CLASS_MAGE) beam = plev;
+	else if (p_ptr->pclass == CLASS_HIGH_MAGE || p_ptr->pclass == CLASS_SORCERER) beam = plev + 10;
+	else beam = plev / 2;
+
+	switch (spell)
+	{
+	case 0:
+		if (!get_aim_dir(&dir)) return FALSE;
+
+		fire_bolt_or_beam(beam - 10, GF_ELEC, dir,
+			damroll(3 + ((plev - 1) / 5), 4));
+		break;
+	case 1:
+		(void)detect_monsters_evil(DETECT_RAD_DEFAULT);
+		break;
+	case 2: /* Bless */
+		(void)set_blessed(randint1(12) + 12, FALSE);
+		break;
+	case 3: /* Remove Fear */
+		(void)set_afraid(0);
+		break;
+	case 4:
+		if (!get_aim_dir(&dir)) return FALSE;
+
+		(void)fear_monster(dir, plev);
+		break;
+	case 5:
+		(void)sleep_monsters_touch();
+		break;
+	case 6:
+		if (!get_aim_dir(&dir)) return FALSE;
+		fire_blast(GF_LITE, dir, 3+((plev-1)/5), 3, 10, 1);
+		break;
+	case 7:
+		teleport_player(plev*3);
+		break;
+	case 8:
+		(void)set_cut(0);
+		(void)set_poisoned(0);
+		break;
+	case 9: /* Exorcism */
+		(void)dispel_undead(randint1(plev));
+		(void)dispel_demons(randint1(plev));
+		(void)turn_evil(plev);
+		break;
+	case 10: /* Holy Orb */
+		if (!get_aim_dir(&dir)) return FALSE;
+
+		fire_ball(GF_HOLY_FIRE, dir,
+		          (damroll(3, 6) + plev +
+		          (plev / ((p_ptr->pclass == CLASS_PRIEST ||
+		             p_ptr->pclass == CLASS_HIGH_MAGE ||
+			     p_ptr->pclass == CLASS_SORCERER) ? 2 : 4))),
+		          ((plev < 30) ? 2 : 3));
+
+		break;
+	case 11: /* Sense Unseen */
+		(void)set_tim_invis(randint1(24) + 24, FALSE);
+		break;
+	case 12: /* Protection from Evil */
+		(void)set_protevil(randint1(25) + 3 * p_ptr->lev, FALSE);
+		break;
+	case 13: /* Dispel Undead + Demons */
+		(void)dispel_undead(randint1(plev * 3));
+		(void)dispel_demons(randint1(plev * 3));
+		break;
+	case 14:
+		if (!get_aim_dir(&dir)) return FALSE;
+		(void)fire_ball(GF_ELEC, dir, plev*2+99, plev/5);
+		break;
+	case 15: /* Holy Word */
+		(void)dispel_evil(randint1(plev * 6));
+		(void)hp_player(150);
+		(void)set_afraid(0);
+		(void)set_poisoned(0);
+		(void)set_stun(0);
+		(void)set_cut(0);
+		break;
+	case 16:
+		if (!get_aim_dir(&dir)) return FALSE;
+
+		(void)destroy_door(dir);
+		break;
+	case 17: /* Remove Curse */
+		if (remove_curse())
+		{
+#ifdef JP
+			msg_print("誰かに見守られているような気がする。");
+#else
+			msg_print("You feel as if someone is watching over you.");
+#endif
+		}
+		break;
+	case 18:
+		set_tim_sh_holy(randint1(20)+20, FALSE);
+		break;
+	case 19:
+		(void)set_fast(randint1(20 + plev) + plev, FALSE);
+		break;
+	case 20: /* Dispel Evil */
+		(void)dispel_evil(randint1(plev * 4));
+		break;
+	case 21:
+		brand_weapon(13);
+		break;
+	case 22: /* Star Burst */
+		if (!get_aim_dir(&dir)) return FALSE;
+
+		fire_ball(GF_LITE, dir, 100+plev*2, 4);
+		break;
+	case 23: /* Summon monster, angel */
+		{
+			bool pet = !one_in_(3);
+			bool group = !(pet && (plev < 50));
+
+			if (summon_specific((pet ? -1 : 0), py, px, (plev * 3) / 2, SUMMON_ANGEL, group, FALSE, pet, FALSE, (bool)(!pet)))
+			{
+				if (pet)
+#ifdef JP
+msg_print("「ご用でございますか、ご主人様」");
+#else
+					msg_print("'What is thy bidding... Master?'");
+#endif
+
+				else
+#ifdef JP
+msg_print("「卑しき者よ、我は汝の下僕にあらず！ お前の魂を頂くぞ！」"); /* nanka */
+#else
+					msg_print("'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'");
+#endif
+
+			}
+			break;
+		}
+	case 24: /* Heroism */
+		(void)set_hero(randint1(25) + 25, FALSE);
+		(void)hp_player(10);
+		(void)set_afraid(0);
+		break;
+	case 25: /* Remove All Curse */
+		if (remove_all_curse())
+		{
+#ifdef JP
+			msg_print("誰かに見守られているような気がする。");
+#else
+			msg_print("You feel as if someone is watching over you.");
+#endif
+		}
+		break;
+	case 26: /* Banishment */
+		if (banish_evil(100))
+		{
+#ifdef JP
+msg_print("神の御力が邪悪を打ち払った！");
+#else
+			msg_print("The power of your god banishes evil!");
+#endif
+
+		}
+		break;
+	case 27: /* Word of Destruction */
+		destroy_area(py, px, 13+randint0(5), TRUE);
+		break;
+	case 28: /* Eye for an Eye */
+		set_tim_eyeeye(randint1(4)+4, FALSE);
+		break;
+	case 29:
+		if (!get_aim_dir(&dir)) return FALSE;
+
+		fire_ball(GF_DISINTEGRATE, dir, 100, 4);
+		fire_ball(GF_FORCE, dir, 150, 4);
+		fire_ball(GF_ELEC, dir, 200, 4);
+		break;
+	case 30: /* Divine Intervention */
+		project(0, 1, py, px, plev*11, GF_HOLY_FIRE, PROJECT_KILL, -1);
+		dispel_monsters(plev * 4);
+		slow_monsters();
+		stun_monsters(plev * 4);
+		confuse_monsters(plev * 4);
+		turn_monsters(plev * 4);
+		stasis_monsters(plev * 4);
+		(void)hp_player(150);
+		break;
+	case 31:
+	{
+		int i;
+		(void)crusade();
+		for (i = 0; i < 12; i++)
+		{
+			int attempt = 10;
+			int my, mx;
+
+			while (attempt--)
+			{
+				scatter(&my, &mx, py, px, 4, 0);
+
+				/* Require empty grids */
+				if (cave_empty_bold2(my, mx)) break;
+			}
+			if (attempt < 0) continue;
+			summon_specific(-1, my, mx, plev, SUMMON_KNIGHTS, TRUE, FALSE, TRUE, FALSE, FALSE);
+		}
+		(void)set_hero(randint1(25) + 25, FALSE);
+		(void)set_blessed(randint1(25) + 25, FALSE);
+		(void)set_fast(randint1(20 + plev) + plev, FALSE);
+		(void)set_afraid(0);
+		break;
+	}
+	default:
+#ifdef JP
+msg_format("あなたは不明な破邪の呪文 %d を唱えた。", spell);
+#else
+		msg_format("You cast an unknown nanka spell: %d.", spell);
+#endif
+
+		msg_print(NULL);
+	}
+
+	return TRUE;
+}
+
+
+
 void stop_singing(void)
 {
 	if (p_ptr->pclass != CLASS_BARD) return;
@@ -4572,7 +4801,7 @@ msg_format("%sをうまく唱えられなかった！", prayer);
 
 		sound(SOUND_FAIL);
 
-		if (realm == REALM_LIFE)
+		if (realm == REALM_LIFE) /* nanka */
 		{
 			if (randint1(100) < chance)
 				chg_virtue(V_FAITH, -1);
@@ -4591,6 +4820,11 @@ msg_format("%sをうまく唱えられなかった！", prayer);
 		{
 			if (randint1(100) < chance)
 				chg_virtue(V_JUSTICE, 1);
+		}
+		if (realm == REALM_HAJA) /* nanka */
+		{
+			if (randint1(100) < chance)
+				chg_virtue(V_FAITH, -1);
 		}
 		else if (randint1(100) < chance)
 		{
@@ -4682,6 +4916,9 @@ msg_print("An infernal sound echoed.");
 		case REALM_DAEMON: /* DAEMON */
 			cast = cast_daemon_spell(spell);
 			break;
+		case REALM_HAJA: /* HAJA */
+			cast = cast_haja_spell(spell);
+			break;
 		case REALM_MUSIC: /* MUSIC */
 			cast = cast_music_spell(spell);
 			break;
@@ -4719,7 +4956,7 @@ msg_print("An infernal sound echoed.");
 			/* Gain experience */
 			gain_exp(e * s_ptr->slevel);
 
-			if (realm == REALM_LIFE)
+			if (realm == REALM_LIFE) /* nanka */
 			{
 				chg_virtue(V_FAITH, 1);
 				chg_virtue(V_COMPASSION, 1);
@@ -4740,6 +4977,13 @@ msg_print("An infernal sound echoed.");
 				chg_virtue(V_HONOUR, -1);
 				chg_virtue(V_TEMPERANCE, -1);
 			}
+			else if (realm == REALM_HAJA) /* nanka */
+			{
+				chg_virtue(V_FAITH, 1);
+				chg_virtue(V_COMPASSION, 1);
+				chg_virtue(V_VITALITY, 1);
+				chg_virtue(V_HONOUR, 1);
+			}
 			else if (realm == REALM_NATURE)
 			{
 				chg_virtue(V_NATURE, 1);
@@ -4748,7 +4992,7 @@ msg_print("An infernal sound echoed.");
 			else
 				chg_virtue(V_KNOWLEDGE, 1);
 		}
-		if (realm == REALM_LIFE)
+		if (realm == REALM_LIFE) /* nanka */
 		{
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_FAITH, 1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_COMPASSION, 1);
@@ -4768,6 +5012,13 @@ msg_print("An infernal sound echoed.");
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_FAITH, -1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_HONOUR, -1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_TEMPERANCE, -1);
+		}
+		else if (realm == REALM_HAJA) /* nanka */
+		{
+			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_FAITH, 1);
+			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_COMPASSION, 1);
+			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_VITALITY, 1);
+			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_HONOUR, 1);
 		}
 		else if (realm == REALM_NATURE)
 		{
@@ -4817,7 +5068,7 @@ msg_print("精神を集中しすぎて気を失ってしまった！");
 		/* Hack -- Bypass free action */
 		(void)set_paralyzed(p_ptr->paralyzed + randint1(5 * oops + 1));
 
-		if (realm == REALM_LIFE)
+		if (realm == REALM_LIFE) /* nanka */
 			chg_virtue(V_FAITH, -10);
 		else if (realm == REALM_DEATH)
 			chg_virtue(V_UNLIFE, -10);
@@ -4825,6 +5076,8 @@ msg_print("精神を集中しすぎて気を失ってしまった！");
 			chg_virtue(V_JUSTICE, 10);
 		else if (realm == REALM_NATURE)
 			chg_virtue(V_NATURE, -10);
+		else if (realm == REALM_HAJA) /* nanka */
+			chg_virtue(V_FAITH, -10);
 		else
 			chg_virtue(V_KNOWLEDGE, -10);
 

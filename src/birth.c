@@ -1881,6 +1881,8 @@ static cptr realm_jouhou[VALID_REALM] =
 
 "悪魔の魔法は暗黒と同様非常に邪悪なカテゴリーです。様々な攻撃魔法に優れ、また悪魔のごとき知覚能力を得ることができます。高レベルの呪文は悪魔を自在に操り、自分自身の肉体をも悪魔化させることができます。",
 
+"破邪。", /* nanka */
+
 "歌集は、歌によって効果を発揮する魔法です。魔法と同様、使った時に効果のあるものと、歌い続けることによって持続して効果を発揮するものがあります。後者の場合は、MPの続く限り効果を発揮することができますが、同時に歌える歌は1つだけという制限もあります。",
 
 "武芸の書は、様々な戦闘の技について書かれています。この本は技を覚えるときに読む必要がありますが、一度覚えた技は使うのに本を持つ必要はありません。技を使うときには必ず武器を装備していなければいけません。"
@@ -1905,6 +1907,8 @@ static cptr realm_jouhou[VALID_REALM] =
 
 "Demon is a very evil realm, same as Death. It provides various attack spells and devilish detection spells. at higher levels, Demon magic provides ability to dominate demons, and to polymorph yourself into a demon.",
 
+"", /* nanka */
+
 "Music magic shows various effects as sing song. There is two type of song; the one which shows effects instantly and the other one shows effect continuously until SP runs out. But the latter type has a limit; only one song can be sing at the same time.",
 
 "The books of Kendo describes various combat technique. it need to read the books when one studys the techniques, but it doesn't need to take around the books to use the techniques after one momorizes it. It need a weapon wielded to use the techniques."
@@ -1923,6 +1927,7 @@ static char realm_subinfo[VALID_REALM][41] =
 "やや弱いながらも非常に便利です",
 "直接戦闘の補助に優れています",
 "攻撃と防御の両面に優れています",
+"破邪",/* nanka */
 "歌でも歌っていましょう",
 "素直に刀でも振っていましょう"
 #else
@@ -2025,6 +2030,11 @@ static byte choose_realm(s32b choices, int *count)
 		(*count)++;
 		auto_select = REALM_DAEMON;
 	}
+	if (choices & CH_HAJA)
+	{
+		(*count)++;
+		auto_select = REALM_HAJA;
+	}
 	if (choices & CH_MUSIC)
 	{
 		(*count)++;
@@ -2046,13 +2056,13 @@ static byte choose_realm(s32b choices, int *count)
 	{
 		if (p_ptr->pclass == CLASS_PRIEST)
 		{
-			if (p_ptr->realm1 == REALM_LIFE)
+			if ((p_ptr->realm1 == REALM_LIFE) || (p_ptr->realm1 == REALM_HAJA))
 			{
 				choices &= ~(CH_DEATH | CH_DAEMON);
 			}
 			else if ((p_ptr->realm1 == REALM_DEATH) || (p_ptr->realm1 == REALM_DAEMON))
 			{
-				choices &= ~(CH_LIFE);
+				choices &= ~(CH_LIFE | CH_HAJA);
 			}
 		}
 	}

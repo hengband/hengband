@@ -4420,6 +4420,7 @@ static bool kind_is_good(int k_idx)
 		case TV_TRUMP_BOOK:
 		case TV_ENCHANT_BOOK:
 		case TV_DAEMON_BOOK:
+		case TV_HAJA_BOOK:
 		case TV_MUSIC_BOOK:
 		case TV_HISSATSU_BOOK:
 		{

@@ -174,6 +174,8 @@ void reset_tim_flags(void)
 	p_ptr->tim_ffall = 0;
 	p_ptr->tim_sh_touki = 0;
 	p_ptr->tim_sh_fire = 0;
+	p_ptr->tim_sh_holy = 0;
+	p_ptr->tim_eyeeye = 0;
 	p_ptr->resist_magic = 0;
 	p_ptr->tsuyoshi = 0;
 	p_ptr->kabenuke = 0;
@@ -2275,6 +2277,146 @@ msg_print("炎のオーラが消えた。");
 	/* Result */
 	return (TRUE);
 }
+
+
+/*
+ * Set "p_ptr->tim_sh_holy", notice observable changes
+ */
+bool set_tim_sh_holy(int v, bool do_dec) /* nanka */
+{
+	bool notice = FALSE;
+
+	/* Hack -- Force good values */
+	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+
+	if (death) return FALSE;
+
+	/* Open */
+	if (v)
+	{
+		if (p_ptr->tim_sh_fire && !do_dec)
+		{
+			if (p_ptr->tim_sh_fire > v) return FALSE;
+		}
+		else if (!p_ptr->tim_sh_fire)
+		{
+#ifdef JP
+msg_print("体が炎のオーラで覆われた。");
+#else
+			msg_print("You have enveloped by fiery aura!");
+#endif
+
+			notice = TRUE;
+		}
+	}
+
+	/* Shut */
+	else
+	{
+		if (p_ptr->tim_sh_fire)
+		{
+#ifdef JP
+msg_print("炎のオーラが消えた。");
+#else
+			msg_print("Fiery aura disappeared.");
+#endif
+
+			notice = TRUE;
+		}
+	}
+
+	/* Use the value */
+	p_ptr->tim_sh_fire = v;
+
+	/* Redraw status bar */
+	p_ptr->redraw |= (PR_STATUS);
+
+	/* Nothing to notice */
+	if (!notice) return (FALSE);
+
+	/* Disturb */
+	if (disturb_state) disturb(0, 0);
+
+	/* Recalculate bonuses */
+	p_ptr->update |= (PU_BONUS);
+
+	/* Handle stuff */
+	handle_stuff();
+
+	/* Result */
+	return (TRUE);
+}
+
+
+
+/*
+ * Set "p_ptr->tim_eyeeye", notice observable changes
+ */
+bool set_tim_eyeeye(int v, bool do_dec) /* nanka */
+{
+	bool notice = FALSE;
+
+	/* Hack -- Force good values */
+	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+
+	if (death) return FALSE;
+
+	/* Open */
+	if (v)
+	{
+		if (p_ptr->tim_sh_fire && !do_dec)
+		{
+			if (p_ptr->tim_sh_fire > v) return FALSE;
+		}
+		else if (!p_ptr->tim_sh_fire)
+		{
+#ifdef JP
+msg_print("体が炎のオーラで覆われた。");
+#else
+			msg_print("You have enveloped by fiery aura!");
+#endif
+
+			notice = TRUE;
+		}
+	}
+
+	/* Shut */
+	else
+	{
+		if (p_ptr->tim_sh_fire)
+		{
+#ifdef JP
+msg_print("炎のオーラが消えた。");
+#else
+			msg_print("Fiery aura disappeared.");
+#endif
+
+			notice = TRUE;
+		}
+	}
+
+	/* Use the value */
+	p_ptr->tim_sh_fire = v;
+
+	/* Redraw status bar */
+	p_ptr->redraw |= (PR_STATUS);
+
+	/* Nothing to notice */
+	if (!notice) return (FALSE);
+
+	/* Disturb */
+	if (disturb_state) disturb(0, 0);
+
+	/* Recalculate bonuses */
+	p_ptr->update |= (PU_BONUS);
+
+	/* Handle stuff */
+	handle_stuff();
+
+	/* Result */
+	return (TRUE);
+}
+
 
 
 /*

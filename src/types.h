@@ -1068,6 +1068,8 @@ struct player_type
 	byte mimic_form;
 	s16b tim_mimic;
 	s16b tim_sh_fire;
+	s16b tim_sh_holy;
+	s16b tim_eyeeye;
 
         /* for mirror master */
 	s16b tim_reflect;       /* Timed -- Reflect */

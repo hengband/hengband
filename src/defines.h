@@ -664,6 +664,7 @@
 #define CH_ARCANE       0x40
 #define CH_ENCHANT      0x80
 #define CH_DAEMON       0x100
+#define CH_HAJA         0x200
 
 #define CH_MUSIC        0x10000
 #define CH_HISSATSU     0x20000
@@ -682,7 +683,8 @@
 #define REALM_ARCANE       7
 #define REALM_ENCHANT      8
 #define REALM_DAEMON       9
-#define MAX_MAGIC          9
+#define REALM_HAJA         10
+#define MAX_MAGIC          10
 #define MIN_TECHNIC        15
 #define REALM_MUSIC        16
 #define REALM_HISSATSU     17
@@ -1712,6 +1714,7 @@
 #define TV_ARCANE_BOOK  96
 #define TV_ENCHANT_BOOK 97
 #define TV_DAEMON_BOOK  98
+#define TV_HAJA_BOOK    99
 #define TV_MUSIC_BOOK   105
 #define TV_HISSATSU_BOOK 106
 #define TV_GOLD         127     /* Gold can only be picked up by players */
@@ -2658,6 +2661,7 @@
 #define SUMMON_MANES                60
 #define SUMMON_LOUSE                61
 #define SUMMON_GUARDIANS            62
+#define SUMMON_KNIGHTS              63
 
 
 /*
@@ -2761,8 +2765,9 @@
 #define GF_SUPER_RAY 111
 #define GF_STAR_HEAL 112
 #define GF_WATER_FLOW   113
+#define GF_CRUSADE     114
 
-#define MAX_GF				113
+#define MAX_GF				114
 
 /*
  * Some things which induce learning
@@ -4610,6 +4615,7 @@ extern int PlayerUID;
 #define MON_BANOR         933
 #define MON_LUPART        934
 #define MON_KENSHIROU     936
+#define MON_W_KNIGHT      938
 #define MON_PLANETAR      942
 #define MON_SOLAR         943
 #define MON_BIKETAL       945

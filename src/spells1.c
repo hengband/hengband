@@ -5675,6 +5675,56 @@ note_dies = "は光を受けてしぼんでしまった！";
 			break;
 		}
 
+		case GF_CRUSADE:
+		{
+			bool success = FALSE;
+			if (seen) obvious = TRUE;
+
+			if ((r_ptr->flags3 & (RF3_GOOD)) && !p_ptr->inside_arena)
+			{
+				if (r_ptr->flags3 & (RF3_NO_CONF)) dam -= 50;
+				if (dam < 1) dam = 1;
+
+				/* Attempt a saving throw */
+				if ((r_ptr->flags1 & (RF1_QUESTOR)) ||
+				    (r_ptr->flags1 & (RF1_UNIQUE)) ||
+				    (m_ptr->mflag2 & MFLAG_NOPET) ||
+				    (p_ptr->cursed & TRC_AGGRAVATE) ||
+					 ((r_ptr->level+10) > randint1(dam)))
+				{
+					/* Resist */
+					if (one_in_(4)) m_ptr->mflag2 |= MFLAG_NOPET;
+				}
+				else
+				{
+#ifdef JP
+note = "を支配した。";
+#else
+					note = " is tamed!";
+#endif
+
+					set_pet(m_ptr);
+					m_ptr->fast = MIN(200, m_ptr->fast + 100);
+
+					/* Learn about type */
+					if (seen) r_ptr->r_flags3 |= (RF3_GOOD);
+					success = TRUE;
+				}
+			}
+
+			if (!success)
+			{
+				if (!(r_ptr->flags3 & RF3_NO_FEAR))
+				{
+					do_fear = randint1(90)+10;
+				}
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
 		/* Default */
 		default:
 		{

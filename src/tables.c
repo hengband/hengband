@@ -3983,12 +3983,14 @@ s32b realm_choices1[] =
 	(CH_NONE),				/* Warrior */
 	(CH_LIFE | CH_SORCERY | CH_NATURE |
 	 CH_CHAOS | CH_DEATH | CH_TRUMP |
-	 CH_ARCANE | CH_ENCHANT | CH_DAEMON),   /* Mage */
-	(CH_LIFE | CH_DEATH | CH_DAEMON),       /* Priest */
+	 CH_ARCANE | CH_ENCHANT | CH_DAEMON |
+	 CH_HAJA),                              /* Mage */
+	(CH_LIFE | CH_DEATH | CH_DAEMON |
+	 CH_HAJA),                              /* Priest */
 	(CH_SORCERY | CH_DEATH | CH_TRUMP |
 	 CH_ARCANE | CH_ENCHANT),               /* Rogue */
 	(CH_NATURE),                            /* Ranger */
-	(CH_LIFE | CH_DEATH),                   /* Paladin */
+	(CH_HAJA | CH_DEATH),                   /* Paladin */
 	(CH_ARCANE),                            /* Warrior-Mage */
 	(CH_CHAOS | CH_DAEMON),                 /* Chaos-Warrior */
 	(CH_LIFE | CH_NATURE | CH_DEATH |
@@ -3996,7 +3998,8 @@ s32b realm_choices1[] =
 	(CH_NONE),                              /* Mindcrafter */
 	(CH_LIFE | CH_SORCERY | CH_NATURE |
 	 CH_CHAOS | CH_DEATH | CH_TRUMP |
-	 CH_ARCANE | CH_ENCHANT | CH_DAEMON),   /* High-Mage */
+	 CH_ARCANE | CH_ENCHANT | CH_DAEMON |
+	 CH_HAJA),                              /* High-Mage */
 	(CH_ARCANE),                            /* Tourist */
 	(CH_NONE),                              /* Imitation */
 	(CH_TRUMP),                             /* Beastmaster */
@@ -4021,17 +4024,20 @@ s32b realm_choices2[] =
 	(CH_NONE),                              /* Warrior */
 	(CH_LIFE | CH_SORCERY | CH_NATURE |
 	 CH_CHAOS | CH_DEATH | CH_TRUMP |
-	 CH_ARCANE | CH_ENCHANT | CH_DAEMON),   /* Mage */
+	 CH_ARCANE | CH_ENCHANT | CH_DAEMON |
+	 CH_HAJA),                              /* Mage */
 	(CH_LIFE | CH_SORCERY | CH_NATURE |
 	 CH_CHAOS | CH_DEATH | CH_TRUMP |
-	 CH_ARCANE | CH_ENCHANT | CH_DAEMON),   /* Priest */
+	 CH_ARCANE | CH_ENCHANT | CH_DAEMON |
+	 CH_HAJA),                              /* Priest */
 	(CH_NONE),                              /* Rogue */
 	(CH_SORCERY | CH_CHAOS | CH_DEATH |
 	 CH_TRUMP | CH_ARCANE | CH_DAEMON),     /* Ranger */
 	(CH_NONE),                              /* Paladin */
 	(CH_LIFE | CH_NATURE | CH_CHAOS |
 	 CH_DEATH | CH_TRUMP | CH_ARCANE |
-	 CH_SORCERY | CH_ENCHANT | CH_DAEMON),  /* Warrior-Mage */
+	 CH_SORCERY | CH_ENCHANT | CH_DAEMON |
+	 CH_HAJA),                              /* Warrior-Mage */
 	(CH_NONE),                              /* Chaos-Warrior */
 	(CH_NONE),                              /* Monk */
 	(CH_NONE),                              /* Mindcrafter */
@@ -4067,7 +4073,7 @@ cptr realm_names[] =
 	"»ÎΩ—",
 	"æ¢",
 	"∞≠À‚",
-	"…‘Ã¿",
+	"«ÀºŸ",
 	"…‘Ã¿",
 	"…‘Ã¿",
 	"…‘Ã¿",
@@ -4095,7 +4101,7 @@ cptr realm_names[]
 	"Arcane",
 	"Craft",
 	"Daemon",
-	"unknown",
+	"nanka",
 	"unknown",
 	"unknown",
 	"unknown",
@@ -4492,6 +4498,49 @@ cptr spell_names[VALID_REALM][32] =
 "√œπˆÕÚ",
 "∑Ï§Œºˆ§§",
 "À‚≤¶ —≤Ω",
+
+	},
+
+	/*** nanka Spells ***/
+
+	{
+		/* Common nanka Spellbooks */
+"≈≈∑‚",
+"ºŸ∞≠¬∏∫ﬂ¥∂√Œ",
+"ΩÀ °",
+"∂≤…›Ω¸µÓ",
+"•‚•Û•π•ø°º∂≤π≤",
+"¿ª∞Ë",
+"•π•ø°º•¿•π•»",
+"∆˛∏˝",
+
+"Ω˝§»∆«º£Œ≈",
+"∞≠À‚ ß§§",
+"¿ª§ §Î∏˜µÂ",
+"∆©Ã¿ªÎ«ß",
+"¬–ºŸ∞≠∑Î≥¶",
+"•¢•Û•«•√•…&∞≠À‚¬‡ª∂",
+"≈∑»≥",
+"¿ª§ §Î∏Ê∏¿Õ’",
+
+		/* Rare nanka Spellbooks */
+"≥´§´§Ï§ø∆ª",
+"≤Úºˆ",
+"¿ª§ §Î•™°º•È",
+"•π•‘°º•…",
+"ºŸ∞≠¬‡ª∂",
+"¿ª§ §Îøœ",
+"•π•ø°º•–°º•π•»",
+"≈∑ª»æ§¥≠",
+
+"ªŒµ§π‚Õ»",
+"*≤Úºˆ*",
+"ºŸ∞≠ƒ… ¸",
+"Ã‹§À§œÃ‹§Ú",
+"*«À≤ı*",
+"ø¿§Œ≈‹§Í",
+"ø¿∞“",
+"¿ª¿Ô",
 
 	},
 
@@ -4960,6 +5009,49 @@ cptr spell_names[VALID_REALM][32] =
 		"Nether Storm",
 		"Bloody Curse",
 		"Polymorph Demonlord",
+	},
+
+	/*** nanka Spells ***/
+
+	{
+		/* Common nanka Spellbooks */
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+
+		/* Rare nanka Spellbooks */
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+
 	},
 
 	/*** Music Spells ***/

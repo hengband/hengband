@@ -3759,6 +3759,7 @@ bool detect_objects_magic(int range)
 			(tv == TV_ARCANE_BOOK) ||
 			(tv == TV_ENCHANT_BOOK) ||
 			(tv == TV_DAEMON_BOOK) ||
+			(tv == TV_HAJA_BOOK) ||
 			(tv == TV_MUSIC_BOOK) ||
 			(tv == TV_HISSATSU_BOOK) ||
 		    ((o_ptr->to_a > 0) || (o_ptr->to_h + o_ptr->to_d > 0)))
@@ -4470,6 +4471,15 @@ bool dispel_living(int dam)
 bool dispel_demons(int dam)
 {
 	return (project_hack(GF_DISP_DEMON, dam));
+}
+
+
+/*
+ * Crusade
+ */
+bool crusade(void)
+{
+	return (project_hack(GF_CRUSADE, p_ptr->lev*4));
 }
 
 
@@ -6247,6 +6257,78 @@ bool fire_meteor(int who, int typ, int y, int x, int dam, int rad)
 
 	/* Analyze the "target" and the caster. */
 	return (project(who, rad, y, x, dam, typ, flg, -1));
+}
+
+
+bool fire_blast(int typ, int dir, int dd, int ds, int num, int dev)
+{
+	int ly, lx, ld;
+	int ty, tx, y, x, dist;
+	int i;
+
+	int flg = PROJECT_THRU | PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
+
+	/* Assume okay */
+	bool result = TRUE;
+
+	/* Use the given direction */
+	ly = ty = py + 20 * ddy[dir];
+	lx = tx = px + 20 * ddx[dir];
+	ld = 20;
+
+	y = py;
+	x = px;
+
+	/* Hack -- Use an actual "target" */
+	if (dir == 5)
+	{
+		tx = target_col;
+		ty = target_row;
+
+		lx = 20 * (tx - px) + px;
+		ly = 20 * (ty - py) + py;
+		ld = distance(py, px, ly, lx);
+	}
+
+	if ((dir != 5) || !target_okay())
+	{
+		/* Find the REAL target :) */
+		for (dist = 0; dist <= MAX_RANGE; dist++)
+		{
+			/* Never pass through walls */
+			if (dist && !cave_floor_bold(y, x)) break;
+
+			/* Never pass through monsters */
+			if (dist && cave[y][x].m_idx) break;
+
+			/* Check for arrival at "final target" */
+			if ((x == tx) && (y == ty)) break;
+
+			/* Calculate the new location */
+			mmove2(&y, &x, py, px, ty, tx);
+		}
+	}
+
+	/* Blast */
+	for (i = 0; i < num; i++)
+	{
+		while (1)
+		{
+			/* Get targets for some bolts */
+			y = rand_spread(ly, ld * dev / 20);
+			x = rand_spread(lx, ld * dev / 20);
+
+			if (distance(ly, lx, y, x) <= ld * dev / 20) break;
+		}
+
+		/* Analyze the "dir" and the "target". */
+		if (!project(-1, 0, y, x, damroll(dd, ds), typ, flg, -1))
+		{
+			result = FALSE;
+		}
+	}
+
+	return (result);
 }
 
 
