@@ -1,4 +1,31 @@
+2002-04-29  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/f_info_j.txt 1.5: museum → Museum
+
+	* src/init1.c 1.32, lib/help/Makefile.am 1.5, lib/help/birth.hlp 1.5, lib/help/birth.txt 1.8, lib/help/charattr.hlp 1.6, lib/help/charattr.txt 1.8, lib/help/dungeon.txt 1.8, lib/help/general.txt 1.8, lib/help/help.hlp 1.8, lib/help/jbirth.hlp 1.4, lib/help/jbirth.txt 1.7, lib/help/jcharattr.hlp 1.4, lib/help/jcharattr.txt 1.9, lib/help/jdungeon.txt 1.6, lib/help/jgeneral.txt 1.6, lib/help/jhelp.hlp 1.6, lib/help/jmagic.txt 1.6, lib/help/jraceclas.hlp 1.1, lib/help/jraceclas.txt 1.1, lib/help/magic.txt 1.8, lib/help/raceclas.hlp 1.1, lib/help/raceclas.txt 1.1, src/birth.c 1.29, src/externs.h 1.45, src/files.c 1.52:
+	- ヘルプファイルの大幅再編。種族、職業、性格、の説明をまとめて1ファイルにした。
+	- ヘルプ文章中でカラーが使える機能 ToME から移植。まず地形の説明に使ってみた。
+
+2002-04-29  _nothere  <_nothere@cvs>
+
+	* src/monster2.c 1.20.2.6: 細かい代入位置の修正.
+
+	* src/monster2.c 1.20.2.5:
+	単純な代入で良かった場所があったので修正.
+
 2002-04-28  Takeshi Mogami  <mogami@cvs>
+
+	* src/object1.c 1.28:
+	英語版で '4 or 6 for Inven' の表示を忘れていたので修正。
+
+	* lib/pref/pref-opt.prf 1.7:
+	pref-opt.prf中のhilite_playerの修正忘れ。
+
+	* Changelogs 1.39, lib/help/joption.txt 1.8, lib/help/option.txt 1.9, lib/pref/pref-opt.prf 1.6, src/cmd1.c 1.32, src/externs.h 1.44, src/files.c 1.51, src/tables.c 1.31, src/variable.c 1.21:
+	- find_cutとfind_examineの説明文(ゲーム中とヘルプ文章の両方)をわかりやすく。
+	- ついでにcmd1.cのコメント「The running algorithm」の間違い修正&わかりやすく。
+	- まだ残ってた否定形 skip_mutation → display_mutation
+	- hilite_playerのデフォルトをoffに。
 
 	* readme.txt 1.7, readme_eng.txt 1.7:
 	コマンドリストに自動拾いエディタ(_)を追加。
