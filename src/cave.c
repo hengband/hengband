@@ -2150,10 +2150,10 @@ void prt_path(int y, int x)
 			/* Hack -- Queue it */
 #ifdef USE_TRANSPARENCY
 			Term_queue_char(panel_col_of(nx), ny-panel_row_prt, a, c, ta, tc);
-			if (use_bigtile) Term_queue_char(panel_col_of(nx)+1, ny-panel_row_prt, a, c2, 0, 0);
+			if (use_bigtile) Term_queue_char(panel_col_of(nx)+1, ny-panel_row_prt, a2, c2, 0, 0);
 #else
 			Term_queue_char(panel_col_of(nx), ny-panel_row_prt, a, c);
-			if (use_bigtile) Term_queue_char(panel_col_of(nx)+1, ny-panel_row_prt, a, c2);
+			if (use_bigtile) Term_queue_char(panel_col_of(nx)+1, ny-panel_row_prt, a2, c2);
 #endif
 		}
 
