@@ -829,10 +829,18 @@ static void regenhp(int percent)
 	/* Save the old hitpoints */
 	old_chp = p_ptr->chp;
 
-	/* Extract the new hitpoints */
+	/*
+	 * Extract the new hitpoints
+	 *
+	 * 'percent' is the Regen factor in unit (1/2^16)
+	 */
 	new_chp = 0;
-	new_chp_frac = (p_ptr->mhp * percent + PY_REGEN_HPBASE) << 16;
+	new_chp_frac = (p_ptr->mhp * percent + PY_REGEN_HPBASE);
 
+	/* Convert the unit (1/2^16) to (1/2^32) */
+	s64b_LSHIFT(new_chp, new_chp_frac, 16);
+
+	/* Regenerating */
 	s64b_add(&(p_ptr->chp), &(p_ptr->chp_frac), new_chp, new_chp_frac);
 
 
@@ -870,7 +878,7 @@ static void regenmana(int percent)
 	 */
 	if (p_ptr->csp > p_ptr->msp)
 	{
-		/* PY_REGEN_NORMAL is Regen factor in unit (1/2^16) */
+		/* PY_REGEN_NORMAL is the Regen factor in unit (1/2^16) */
 		s32b decay = 0;
 		u32b decay_frac = (p_ptr->msp * 32 * PY_REGEN_NORMAL + PY_REGEN_MNBASE);
 
@@ -891,7 +899,7 @@ static void regenmana(int percent)
 	/* Regenerating mana (unless the player has excess mana) */
 	else if (percent > 0)
 	{
-		/* (percent/100) is Regen factor in unit (1/2^16) */
+		/* (percent/100) is the Regen factor in unit (1/2^16) */
 		s32b new_mana = 0;
 		u32b new_mana_frac = (p_ptr->msp * percent / 100 + PY_REGEN_MNBASE);
 
@@ -913,7 +921,7 @@ static void regenmana(int percent)
 	/* Reduce mana (even when the player has excess mana) */
 	if (percent < 0)
 	{
-		/* PY_REGEN_NORMAL is Regen factor in unit (1/2^16) */
+		/* PY_REGEN_NORMAL is the Regen factor in unit (1/2^16) */
 		s32b reduce_mana = 0;
 		u32b reduce_mana_frac = (p_ptr->msp * PY_REGEN_NORMAL + PY_REGEN_MNBASE);
 
@@ -5856,9 +5864,10 @@ msg_format("%^sを恐怖から立ち直らせた。", m_name);
 	if (p_ptr->action == ACTION_LEARN)
 	{
 		s32b cost = 0L;
-		u32b cost_frac = (p_ptr->msp + 30L);
+		u32b cost_frac = (p_ptr->msp + 30L) * 256L;
 
-		s64b_mul(&cost, &cost_frac, 0, (256 << 16));
+		/* Convert the unit (1/2^16) to (1/2^32) */
+		s64b_LSHIFT(cost, cost_frac, 16);
 
  
 		if (s64b_cmp(p_ptr->csp, p_ptr->csp_frac, cost, cost_frac) < 0)
