@@ -2,7 +2,7 @@
 
 参照したいオンライン・ヘルプの番号を押して下さい:
 
-    (0) モンスターへの攻撃               (jattack.txt)
+    (0) 攻撃と武器                       (jattack.txt)
     (1) 射撃用武器                       (jattack.txt#DistanceAttack)
     (2) 壁の中のモンスターへの攻撃       (jattack.txt#AttackWalls)
     (3) 直接攻撃用武器                   (jattack.txt#MeleeWeapons)

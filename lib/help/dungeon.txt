@@ -1,7 +1,7 @@
 === The Dungeon ===
 
 
-Although Zangband contains an extensive town level featuring multiple
+Although Hengband contains an extensive town level featuring multiple
 towns and a large wilderness area, the bulk of your adventuring will
 take place in the dungeon. Symbols appearing on your screen will
 represent the dungeon's walls, floor, objects, features, and creatures
@@ -106,7 +106,7 @@ town. It acts in two manners, depending upon your current location.
 If read within the dungeon, it will teleport you back to town. If read
 in town, it will teleport you back down to the deepest level of the
 dungeon which your character has previously been on. This makes the
-scroll very useful for getting back to the deeper levels of Zangband.
+scroll very useful for getting back to the deeper levels of Hengband.
 Once the scroll has been read it takes a while for the spell to act, so
 don't expect it to save you in a crisis. Reading a second scroll before
 the first has had a chance to take effect will cancel both scrolls.
@@ -114,12 +114,12 @@ the first has had a chance to take effect will cancel both scrolls.
 Since an accidental dive to a new depth (via a trapdoor, for example),
 may result in the Word of Recall dungeon depth being 'broken', so to
 speak (meaning that the next Word of Recall in town will take you back
-deeper than you would like to), there is a new feature in Zangband
+deeper than you would like to), there is a new feature in Hengband
 which allows you to read a scroll of Word of Recall on a different
 level and 'reset' the recall depth to that level (instead of the
 deepest level).
 
-A more complete description of Zangband objects is found elsewhere in
+A more complete description of Hengband objects is found elsewhere in
 the documetnation (see object.txt [2]).
 
 
@@ -201,57 +201,102 @@ it is forever useless and cannot be closed.
 For historical reasons, secret doors are never locked.
 
 
+***** <Feelings>
+=== Level Feelings ===
+
+Once you have been on a particular dungeon level for a while, you will
+receive a 'feeling' prompt representing what your intuition tells you
+about the quality of objects and the difficulty of the monsters found
+on that level. You may check this prompt again at any time after
+receiving it by pressing 'Ctrl-F'.
+
+The actual 'feeling' prompt is generated based on a number of factors.
+Things which increase the feeling level include the presence of vaults
+and certain other special rooms, out of depth objects and monsters and
+objects of a certain quality (for example, ego items, artifacts and
+other objects that are considered 'great' (see objects.txt)). A feeling
+is only indicative of the level at the time you entered it and has no
+impact on subsequent monsters generated or items dropped.
+
+In Hengband, the nastier the feeling prompt, the better the level. From
+worst to best, the prompts are as follows:
+
+     'What a boring place...'
+     'This level looks reasonably safe.'
+     'You don't like the look of this place.'
+     'You feel your luck is turning...'
+     'You feel nervous.'
+     'You have a bad feeling...'
+     'You have a very bad feeling...'
+     'This level looks very dangerous.'
+     'You nearly faint as horrible visions of death fill your mind!'
+
+If your personality is 'Lucky' or you have the mutation of 'white
+aura', the prompts will be changed as follows:
+
+     'What a boring place...'
+     'This level can't be all bad...'
+     'You like the look of this place...'
+     'You feel your luck is turning...'
+     'You feel strangely lucky...'
+     'You have a good feeling...'
+     'You have a very good feeling...'
+     'You have an excellent feeling...'
+     'You have a superb feeling about this level.'
+
+Hengband also uses two other feeling prompts to denote special things.
+If you have not yet been on a level long enough to qualify for a prompt
+and press 'Ctrl-F', you will be given the prompt:
+
+     'Looks like any other level.'
+
+If you are playing in non-preserve mode, you may also occasionally
+receive the following prompt:
+
+     'You feel there is something special about this level.'
+
+A special feeling means one of two things, there is either a special
+room or vault on the level or there is an artifact on the level. As you
+get deeper on the dungeon, special feelings become increasingly less
+common for special room and vaults and are only commonly given when an
+artifact has been generated. Note it is possible that there could be
+both a vault and an artifact or more than one artifact on a special
+level so you should never leave a special level without fully exploring
+it unless your character's continued survival is in question.
+
+
 ***** <RandomQuests>
 === Random Quests ===
 
-During character generation, you will be asked to input the number
-of random quests you wish to participate in. You may choose any
-number from 0 to 49. Random quests are always of the type 'Kill a
-random number of an out-of depth monster'. There is a limit to the
-number of levels a random quest monster may be out-of-depth but
-these quests can still be very dangerous. 
+During character generation, you will be asked to input the number of
+random quests you wish to participate in. You may choose any number
+from 0 to 10. Random quests are always of the type 'Kill an out-of
+depth unique monster'. There is a limit to the number of levels a
+random quest monster may be out-of-depth but these quests can still be
+very dangerous.
 
-Random quests always appear on even levels and are equally spaced
-throughout the dungeon (for example, a choice of 49 random quests
-results in one such quest on every even level until level 98 (level
-100 is the Serpent quest)). On entering a random quest level you
-will be told what the quest monster is and how many you have to
-kill (for example, 'This level is guarded by 10 young green
-dragons').
+Random quests appear on level 6, 12, 24, 38, 44, 50, 56, 62, 76 and
+88.  On entering a random quest level you will be told what the quest
+monster is (for example, 'Beware, this level is protected by The
+Borshin.').
 
 On random quest levels, no down staircases are generated until the
 last monster is killed which means that you cannot continue further
-into the dungeon until you have completed your quests. When you
-kill the last quest monster, the down staircase will be created and
-the monster will drop an item of 'excellent' quality or above. This
-is true even of monsters that do not normally drop items. Using the
-services of the Trump Tower (see the Town section) can teleport you
-past a particularly nasty quest but you must come back and finish
-it later if you want your character to be a winner.
+into the dungeon until you have completed your quests. When you kill
+the quest monster, the down staircase will be created and the monster
+will drop an item of 'excellent' quality or above. This is true even
+of monsters that do not normally drop items.
 
-Random quests can be either 'easy' or 'hard' and you must choose
-which type you want during character generation. This choice is
-irrevocable for the duration of the character's dungeon diving
-career. 'Easy' means that the game tracks how many quest monsters
-you have killed on each attempt at the quest and adds these to the
-total count. This allows you to kill one or more quest monsters,
-leave the level and return later to finish up. 'Hard' means that
-each time you enter the quest level the number of quest monsters
-remaining is reset. In other words, you have to kill all the quest
-monsters in one go.
-
-'Hard' quests can allow you to 'farm' the quest monsters by killing
-all but one, leaving the level and repeating. This allows you to
-collect and sell the dropped items and gain repeated experience for
-killing the monsters. This technique is frowned upon by many players
-and should be noted in any 'winner' post to the newsgroup.
+If the quest monster is too strong for you, simply run away using up
+staircase or recall. In such case, the quest will be treated as
+'failed' and you cannot challenge that quest never again.
 
 
 --
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Last update: January 13, 2000
+Updated    : someone
 
 ***** Begin Hyperlinks
 ***** [1] command.txt

@@ -1,11 +1,33 @@
 === The Town and Wilderness ===
 
 
-After you have created your character, you will begin your Zangband
-adventure in the town. Symbols appearing on your screen will represent
-the walls, floor, objects, features, and creatures lurking about. In
-order to direct your character through his adventure, you will enter
-single character commands (see command.txt [1]).
+After you have created your character, you will begin your Hengband
+adventure in the town called Outpost. Symbols appearing on your screen
+will represent the walls, floor, objects, features, and creatures
+lurking about. In order to direct your character through his
+adventure, you will enter single character commands (see command.txt
+[1]).
+
+We recommend that you go to the Yeek cave next to your starting
+position in the town of Outpost.  Although the King of Yeeks at the
+lowest level is a fierce enemy, the rest of the cave should be fairly
+safe.  Once you complete this dungeon, you will be strong enough to
+leave Outpost in search of greater adventures. Carry lots of food and
+fuel, for the journey can be a long one.
+
+--- The Global Map ( Press the '<' at first! ) ---
+  
+Since this world is very large, it is convenient to go into global map
+mode by pressing the '<' key, and then return to local map mode by '>'
+key when you are at the destination.  When in the wilderness, stay in
+safe grids such as roads or plains; seas and lava fields are best
+avoided for a while.
+
+Many towns and dungeons await you; good ones to explore early on
+include the orc caves and the Labyrinth.  To the northeast of the town
+of Morivant, near the center of the map, is the dread dungeon of
+Angband.  It is home to the Serpent of Chaos, whom you must kill in
+order to win the game.
 
 
 ***** <MapSymbols>
@@ -24,15 +46,15 @@ be found in the dungeon section (see dungeon.txt#MapSymbols [2]).
   Terrain                             Shops     
   -------                             -----
   # (Green)        A Tree             1   Entrance to General Store
-  # (Light Blue)   Shallow Water      2   Entrance to Armory
-  # (Dark Blue)    Deep Water         3   Entrance to Weapon Smith
-  # (Orange)       Shallow Lava       4   Entrance to Temple
-  # (Red)          Deep Lava          5   Entrance to Alchemy Shop
+  ~ (Light Blue)   Shallow Water      2   Entrance to Armory
+  ~ (Dark Blue)    Deep Water         3   Entrance to Weapon Smith
+  ~ (Orange)       Shallow Lava       4   Entrance to Temple
+  ~ (Red)          Deep Lava          5   Entrance to Alchemy Shop
   ^ (Brown)        Mountains          6   Entrance to Magic Shop
   . (White)        Floor / Road       7   Entrance to the Black Market
   . (Brown)        Dirt               8   Entrance to your Home
-  . (Green)        Grass              
-  > (White)        Dungeon Entrance
+  . (Green)        Grass              9   Entrance to Bookstore
+  > (White)        Dungeon Entrance   0   Entrance to the Museum
   > (Yellow)       Quest Entrance
   < (Yellow)       Quest Exit
 
@@ -50,17 +72,15 @@ passes and if you enter the town at night, the town will be dark.
 Fortunately, the various shops and the other special buildings are open
 on a 24-hour basis.
 
-Later versions of Zangband have introduced a dramatically extended town
-level to the game. In addition to the basic town and the standard nine
-shops, new buildings and multiple towns separated by a wilderness were
-added. Fixed quests (see below [3]) were also added to the game and
-could be begun by entering certain buildings in the town(s).
+The world of Hengband includes five towns separated by a wilderness
+and many dungons. Fixed quests (see below [3]) could be begun by
+entering certain buildings in the towns.
 
-While most people welcome these new additions, they are not for
-everyone and consequently, there are three possible town options in
-Zangband - the 'Standard' town(s), the 'Lite' town and the 'Vanilla'
-town. The default is the standard town and the lite town and the
-vanilla town options can be selected by pressing '=' during character
+While most people welcome these large world, they are not for everyone
+and consequently, there are three possible town options in Hengband -
+the 'Standard' town(s), the 'Lite' town and the 'Vanilla' town. The
+default is the standard town and the lite town and the vanilla town
+options can be selected by pressing '=' during character
 generation. (see option.txt#StartUp [4])
 
 Your choice of town is fixed for the duration of your character's
@@ -71,15 +91,22 @@ during the creation of your next character.
 ***** <StandardTown>
 --- The 'Standard' Town ---
 
-The 'standard' town consists of a 10x10 square world. Each square
-(actually a rectangle) is the size of a standard Zangband dungeon level
-and contains themed wilderness terrain (mountainous areas, oceans,
-plains, etc). There are several towns located in various parts of the
-world and each town is situated in its own wilderness square.
+The 'standard' town consists of a 97x62 square world. Each square
+(actually a rectangle) is the size of a standard Hengband dungeon
+level and contains themed wilderness terrain (mountainous areas,
+oceans, plains, etc). There are several towns located in various parts
+of the world and each town is situated in its own wilderness square.
 
 The wilderness is not uninhabited and can be dangerous indeed for the
 unwary. As a general rule, the further your character gets from
 civilization the more cautious he or she should be.
+
+Since this world is very large, it is convenient to go into global map
+mode by pressing the '<' key, and then return to local map mode by '>'
+key when you are at the destination. In the global map, however, you
+might suddenly get assult from monsters. In such situation, you cannot
+run away using the '<' key, you might go to the border of the screen
+to run away.
 
 Each of the towns contains the standard nine shops where you can
 purchase your supplies for your trips into the dungeon and sell the
@@ -97,10 +124,10 @@ buildings from which the various fixed quests begin.
 
 The 'Lite' town option creates a 1x1 wilderness square containing a
 single town. This town contains the nine standard shops, the special
-buildings and access to a limited wilderness. The fixed quests are also
-available. This option is intended to be used by players who want to
-take advantage of the special buildings and fixed quests but don't want
-the large 10x10 wilderness and by players who need a smaller wilderness
+buildings and access to a limited wilderness. The fixed quests are
+also available. This option is intended to be used by players who want
+to take advantage of the special buildings and fixed quests but don't
+want the large wilderness and by players who need a smaller wilderness
 for computer efficiency reasons.
 
 
@@ -264,8 +291,14 @@ Your Home ("8")
      carry on your travels, or will need at a later date.
 
 The Bookstore ("9")
-    The Bookstore deals in all sorts of magical books. You can purchase
-    and sell spellbooks for the spellcasters here.
+     The Bookstore deals in all sorts of magical books. You can
+     purchase and sell spellbooks for the spellcasters here.
+
+The Museum ("0")
+     This is a place where you can donate any item to display. Use it
+     when you find interesting but needless items and you want to
+     leave it in memory.
+
 
 ***** <Buildings>
 === Special Buildings ===
@@ -321,12 +354,14 @@ take other forms. If you failed, you will receive a damning review of
 your performance. Note that you may not request another quest from that
 person until you have collected your reward or reported your failure.
 
+Note: You can not use Genocide, Mass Genocide and *Destruction* in a
+quest.
 
 --
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Last update: January 13, 2000
+Updated    : some people
 
 
 ***** Begin Hyperlinks

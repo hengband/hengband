@@ -8,7 +8,8 @@ Please choose one of the following online help files:
     (3) Objects in the Dungeon                (dungeon.txt#Objects)
     (4) Mining                                (dungeon.txt#Mining)
     (5) Staircases, Doors, Passages & Rooms   (dungeon.txt#StairsDoorsEtc)
-    (6) Random Quests                         (dungeon.txt#RandomQuests)
+    (6) Level Feelings                        (dungeon.txt#Feelings)
+    (7) Random Quests                         (dungeon.txt#RandomQuests)
 
     (?) Help System Commands                  (helpinfo.txt)
 
@@ -19,4 +20,5 @@ Please choose one of the following online help files:
 ***** [3] dungeon.txt#Objects
 ***** [4] dungeon.txt#Mining
 ***** [5] dungeon.txt#StairsDoorsEtc
-***** [6] dungeon.txt#RandomQuests
+***** [6] dungeon.txt#Feelings
+***** [7] dungeon.txt#RandomQuests
