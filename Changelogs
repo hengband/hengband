@@ -1,3 +1,80 @@
+2002-02-01  Takeshi Mogami  <mogami@akiru>
+
+	* src/birth.c:
+	英語版のアンドロイドの生い立ちで同じ種類の行が2つ重なるバグ修正。
+
+	* lib/pref/xtra-xxx.prf:
+	長すぎて読み込みに時間がかかりそうなので、0を指定すると設定をしない事を
+	利用して、職業の設定と種族の設定に分けてスッキリさせた。
+
+	* src/birth.c, src/dungeon.c, src/externs.h, src/main-mac.c, src/object1.c, src/util.c:
+	MPW用の変更各種。
+
+	* readme_eng.txt: スコアサーバーの場所追加。
+
+2002-02-01  habu  <habu@akiru>
+
+	* src/mspells1.c, src/mspells2.c:
+	モンスターのテレポートについていくかどうかはget_check_strictを使ってyesと入力しなければならないようにした。
+
+	* src/cmd2.c:
+	乗馬中でも足元の罠や宝箱を解除したり開けたりできるように修正。
+
+2002-01-31  habu  <habu@akiru>
+
+	* src/externs.h, src/japanese.c, src/load.c:
+	rd_stringの中の文字コード変換部分でバッファオーバーの可能性があるので修正。また、そのコードをjapanese.cに移動してcodeconv()関数とした。
+
+2002-01-31  henkma  <henkma@akiru>
+
+	* src/artifact.c:
+	鏡使いのアーティファクトバイアスがレンジャーといっしょになっていたので変更.
+	3:1でBIAS_MAGE:BIAS_ROGUEにした.
+
+2002-01-30  Takeshi Mogami  <mogami@akiru>
+
+	* src/h-config.h, src/h-system.h:
+	Mac の MPW用の定義などを追加。 kuwaさんより。
+
+	* src/effects.c, src/externs.h, src/xtra2.c:
+	make_screen_dump()を使うコードを #ifdef WORLD_SCORE に入れた。
+
+2002-01-29  Takeshi Mogami  <mogami@akiru>
+
+	* src/cave.c:
+	墓地、火山、地獄が暗い穴の地形で埋めつくされて見えてしまったので、優先度を下げた。
+
+	* src/cave.c:
+	また別の方法。まわりに同じ地形が密集してないときに少し優先度を上げる方法
+	を試してみる。
+
+	* src/cave.c:
+	優先順位が同じ時は、xrat*yratの範囲の中から毎回違う位置の代表を選んで
+	それを採用するように修正。
+
+	* src/cave.c:
+	縮小マップ表示で、地形の優先度をswitch(feat)で細かく書いた。
+
+	* src/chuukei.c:
+	書ける文字数が MAX_HOSTNAME になっていたのを MAX_HOSTNAME - 1 に修正。
+
+	* src/chuukei.c, src/util.c:
+	strncpy()を使っていて、終端文字を考慮していないところを修正。
+
+2002-01-29  henkma  <henkma@akiru>
+
+	* src/util.c:
+	前回のstrncpyがらみの修正に対し、で英語の方の書き方を日本語の方にあわせた。
+	ついでに用意されたバッファをちゃんと全部使うように修正。
+
+	* src/util.c:
+	strncpyで終端文字'\0'を入れてくれることを仮定したコードがあったので修正。
+	このために、場合によってはバッファオーバーで落ちることがあった。
+
+2002-01-28  Takeshi Mogami  <mogami@akiru>
+
+	* Changelogs: 更新
+
 2002-01-28  habu  <habu@akiru>
 
 	* lib/edit/r_info_j.txt:
