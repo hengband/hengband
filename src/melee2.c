@@ -4068,7 +4068,7 @@ bool process_the_world(int num, int who, bool vs_player)
 
 	while(num--)
 	{
-		if(m_ptr->r_idx) return (TRUE);
+		if(!m_ptr->r_idx) break;
 		process_monster(hack_m_idx);
 
 		reset_target(m_ptr);
