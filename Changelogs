@@ -1,4 +1,255 @@
+2002-04-01  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/charattr.hlp 1.3, lib/help/charattr.txt 1.5, lib/help/jcharattr.hlp 1.2, lib/help/jcharattr.txt 1.7:
+	職業、種族、性格の能力、技能修正表を作成。
+	(変愚用にするの面倒でZAngのは消してあった)
+
+	* src/externs.h 1.36.4.1, src/cmd1.c 1.27.4.1, src/cmd4.c 1.32.4.1:
+	自動拾いコードをマクロを使って整理。
+	設定行を解析してその働きを説明する文を作る関数を実装した。後でゲーム中での
+	編集機能の画面中で表示する予定。今はテスト用に'~'コマンド内で表示している。
+
+	* src/tables.c 1.27:
+	Leonさんに指摘されたヘルプの修正に合わせて、オプションの説明修正。
+
+	* lib/help/magic.txt 1.7, lib/help/attack.txt 1.7, lib/help/birth.txt 1.6, lib/help/bldg.txt 1.4, lib/help/charattr.txt 1.4, lib/help/command.txt 1.6, lib/help/commdesc.txt 1.6, lib/help/defend.txt 1.5, lib/help/dungeon.txt 1.6, lib/help/general.txt 1.6, lib/help/helpinfo.txt 1.4, lib/help/jattack.txt 1.5, lib/help/jbirth.txt 1.5, lib/help/jcharattr.txt 1.6, lib/help/jcommand.txt 1.4, lib/help/jcommdesc.txt 1.4, lib/help/jdefend.txt 1.3, lib/help/jdungeon.txt 1.4, lib/help/jgeneral.txt 1.4, lib/help/jhelpinfo.txt 1.3, lib/help/jmagic.txt 1.5, lib/help/jmonster.txt 1.4, lib/help/jobjects.txt 1.4, lib/help/joption.txt 1.6, lib/help/jpref.txt 1.3, lib/help/jtown.txt 1.4, lib/help/monster.txt 1.3, lib/help/objects.txt 1.4, lib/help/option.txt 1.7, lib/help/pref.txt 1.6, lib/help/tang.txt 1.5, lib/help/town.txt 1.4, lib/help/version.txt 1.6:
+	修正。
+
+2002-04-01  _nothere  <_nothere@cvs>
+
+	* lib/edit/k_info_j.txt 1.15.2.2:
+	英訳を少し追加. 英語力に自信がないので校正が必要になる.
+
+2002-03-31  Takeshi Mogami  <mogami@cvs>
+
+	* src/rooms.c 1.11:
+	十字部屋等のvaultで、強い敵がいるはずのところがハウンド等のグループを
+	作る敵で埋まってしまって、やたら楽勝になるのを封じるため、
+	vaultの '9' と '8' の地形はグループフラグを偽にしてみた。グループを作る
+	のは大概は弱い敵なので、偽にするとトータルで強い敵の数が増える。
+
+2002-03-31  _nothere  <_nothere@cvs>
+
+	* lib/edit/k_info_j.txt 1.15.2.1, src/init1.c 1.29.2.1, src/object1.c 1.24.2.1:
+	キノコ・薬・巻物・ロッド・魔法棒・杖に効果説明を追加し, *鑑定*で表示できるようにした. 英語版テキストはまだ未完成. 一応枝にしておく.
+
+2002-03-31  henkma  <henkma@cvs>
+
+	* readme.txt 1.4, src/cmd3.c 1.15, src/xtra1.c 1.29:
+	警告無視の機能追加. '$'を刻んでおくとそのアイテムは警告能力を失なう.
+	なお, 銘刻みと銘消しのときに状態の再計算をしていないバグがあったので
+	ついでに修正しておいた.
+
+2002-03-30  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/defend.txt 1.4, lib/help/dungeon.txt 1.5, lib/help/jobjects.txt 1.3, lib/help/monster.txt 1.2, lib/help/objects.txt 1.3, lib/help/tang.txt 1.4, lib/help/town.txt 1.3:
+	修正と、全てのスペルチェック。
+
+	* lib/help/Makefile.am 1.4, lib/help/arena.txt 1.4, lib/help/attack.hlp 1.5, lib/help/defend.hlp 1.3, lib/help/dungeon.hlp 1.4, lib/help/dungeon.txt 1.4, lib/help/help.hlp 1.6, lib/help/jattack.hlp 1.3, lib/help/jdefend.hlp 1.2, lib/help/jmonster.txt 1.3, lib/help/jobjects.txt 1.2, lib/help/jtown.txt 1.3, lib/help/monster.hlp 1.1, lib/help/monster.txt 1.1, lib/help/objects.hlp 1.2, lib/help/objects.txt 1.2, lib/help/readme.txt 1.6, lib/help/spoiler.hlp 1.4, lib/help/town.txt 1.2:
+	英訳、取りあえず完成。
+	日本語版の修正も少し。
+
+	* src/spells2.c 1.17:
+	"あなたは超能力を持っている。"→"あなたはテレパシー能力を持っている。"
+
+2002-03-29  Takeshi Mogami  <mogami@cvs>
+
+	* src/effects.c 1.17, src/files.c 1.43, src/mspells1.c 1.18, src/mspells2.c 1.12, src/scores.c 1.6, src/util.c 1.24, src/wild.c 1.10, src/cmd4.c 1.32, src/cmd5.c 1.16, src/defines.h 1.31, src/dungeon.c 1.27:
+	死亡時のスコア送信するかの質問文が履歴に残ってしまっていてダンプの
+	行数が無駄になるので残らないようにget_checK_strict()のモードを
+	ちゃんと修正した。ついでにモード定数をマクロ定義。
+
+	* lib/edit/f_info_j.txt 1.4: 草むら # → :
+
+	* lib/edit/r_info_j.txt 1.29:
+	Wyrd sister → 運命の魔女。Lesser black reaver → 灰色の掠奪者。
+
+	* src/cave.c 1.28:
+	new_ascii_graphicsのコード整理。
+
+2002-03-29  henkma  <henkma@cvs>
+
+	* src/cmd6.c 1.19:
+	啓の徳上昇判定(の一部)の修正. 啓蒙薬で+2,*啓蒙*の薬で+1を, 逆にした.
+
+2002-03-28  Takeshi Mogami  <mogami@cvs>
+
+	* src/tables.c 1.26:
+	スペルチェックのとき直したのにcommit忘れてた。
+
+2002-03-28  henkma  <henkma@cvs>
+
+	* src/tables.c 1.25: typo修正.
+
+2002-03-28  Takeshi Mogami  <mogami@cvs>
+
+	* autopick_eng.txt 1.8, readme_eng.txt 1.5, lib/help/attack.txt 1.6, lib/help/birth.txt 1.5, lib/help/charattr.txt 1.3, lib/help/command.txt 1.5, lib/help/commdesc.txt 1.5, lib/help/general.txt 1.5, lib/help/magic.txt 1.5, lib/help/option.txt 1.6, lib/help/pref.txt 1.5, lib/help/version.txt 1.5:
+	スペルチェック
+
+2002-03-28  henkma  <henkma@cvs>
+
+	* src/mindtips.h 1.6: typo修正.
+
+	* src/tables.c 1.24: 吟遊詩人の歌の名前修正.
+
+2002-03-27  henkma  <henkma@cvs>
+
+	* src/tables.c 1.23, src/spellstips.h 1.15:
+	typo修正.
+
+	* src/spellstips.h 1.14: typo修正. shild→shield.
+
+2002-03-26  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/attack.txt 1.5, lib/help/command.hlp 1.4, lib/help/command.txt 1.4, lib/help/commdesc.hlp 1.4, lib/help/commdesc.txt 1.4, lib/help/defend.txt 1.3, lib/help/pref.hlp 1.4, lib/help/pref.txt 1.4:
+	英訳進行
+
+	* lib/help/jcommand.hlp 1.3, lib/help/jcommdesc.hlp 1.3, lib/help/jpref.txt 1.2:
+	修正
+
+	* lib/help/jbirth.hlp 1.2, lib/help/jbirth.txt 1.4:
+	修正。
+
+	* lib/help/birth.txt 1.4: 英訳進行
+
+	* lib/help/jdefend.txt 1.2: 修正
+
+	* lib/help/attack.hlp 1.4, lib/help/attack.txt 1.4, lib/help/defend.hlp 1.2, lib/help/defend.txt 1.2:
+	英訳進行
+
+	* lib/help/jattack.txt 1.4: 修正。
+
+2002-03-26  henkma  <henkma@cvs>
+
+	* src/spellstips.h 1.13:
+	typo修正. Vamparic→Vampiric.
+
+	* src/mindtips.h 1.5, src/spellstips.h 1.12:
+	typo修正, hiroism→heroism.
+
+2002-03-25  Takeshi Mogami  <mogami@cvs>
+
+	* src/wizard1.c 1.18:
+	モンスタースポイラーで、モンスターの番号出力が間違ってるバグ修正。
+
+	* lib/help/option.txt 1.5: 一部セーブし忘れた。
+
+	* lib/help/option.hlp 1.4, lib/help/option.txt 1.4:
+	英訳さらに進行。
+
+	* lib/help/joption.hlp 1.3, lib/help/joption.txt 1.5, lib/pref/pref-opt.prf 1.3, src/externs.h 1.36, src/tables.c 1.21, src/variable.c 1.16:
+	未使用のstack_allow_wandsを削除。
+
+2002-03-25  habu  <habu@cvs>
+
+	* src/cmd3.c 1.14, src/dungeon.c 1.26, src/load.c 1.20, src/main-x11.c 1.13, src/wizard1.c 1.17:
+	使用されていない変数の削除。
+
+2002-03-24  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/joption.txt 1.4:
+	英訳中に気付いたミス。修正。
+
+	* lib/help/charattr.hlp 1.2, lib/help/charattr.txt 1.2, lib/help/general.hlp 1.4, lib/help/general.txt 1.4, lib/help/magic.hlp 1.4, lib/help/magic.txt 1.4, lib/help/version.txt 1.4:
+	英語版ヘルプのできたとこのみ。
+
+	* src/cmd3.c 1.13, src/externs.h 1.35, src/monster1.c 1.13, src/wizard1.c 1.16:
+	モンスタースポイラーのコードを思い出のコードと共通化。
+	ついでにcheat_knowと町でのモンスター調査のコード整理。
+
+	* src/racial.c 1.10:
+	静水の英訳修正。  Clear Mind → Mirror Concentration
+
+2002-03-23  henkma  <henkma@cvs>
+
+	* src/racial.c 1.9: typo修正. asuume→assume
+
+2002-03-23  hoge  <hoge@cvs>
+
+	* src/cmd6.c 1.18, src/defines.h 1.30, src/files.c 1.42, src/hissatsu.c 1.6, src/init1.c 1.29, src/melee2.c 1.18, src/monster1.c 1.12, src/object1.c 1.24, src/object2.c 1.33, src/spells2.c 1.16, src/spells3.c 1.17, src/wizard1.c 1.15, lib/edit/a_info_j.txt 1.17, lib/edit/e_info_j.txt 1.16, lib/edit/r_info_j.txt 1.28, src/artifact.c 1.19, src/birth.c 1.22, src/bldg.c 1.11, src/cmd1.c 1.27, src/cmd2.c 1.19, src/cmd3.c 1.12, src/cmd5.c 1.15:
+	モンスターのHUMANフラグとアイテムのSLAY_HUMAN
+	村正とチェンソーはSLAY_HUMANつけたので強さを見直し
+
+2002-03-23  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/jcharattr.txt 1.5, lib/help/jgeneral.hlp 1.3, lib/help/jmagic.txt 1.4:
+	英訳中に見つけた日本語版のミスを修正。
+
+2002-03-23  henkma  <henkma@cvs>
+
+	* src/mindtips.h 1.4: mirror の tips typo修正.
+
+2002-03-23  Takeshi Mogami  <mogami@cvs>
+
+	* src/racial.c 1.8:
+	剣の舞いの訳がわかったので修正。
+
+2002-03-23  henkma  <henkma@cvs>
+
+	* src/mindtips.h 1.3: mirror の tips修正.
+
+2002-03-23  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/arena.txt 1.3, lib/help/attack.hlp 1.3, lib/help/attack.txt 1.3, lib/help/birth.hlp 1.3, lib/help/birth.txt 1.3, lib/help/bldg.txt 1.3, lib/help/charattr.hlp 1.1, lib/help/charattr.txt 1.1, lib/help/command.hlp 1.3, lib/help/command.txt 1.3, lib/help/commdesc.hlp 1.3, lib/help/commdesc.txt 1.3, lib/help/defend.hlp 1.1, lib/help/defend.txt 1.1, lib/help/dungeon.hlp 1.3, lib/help/dungeon.txt 1.3, lib/help/gambling.txt 1.3, lib/help/general.hlp 1.3, lib/help/general.txt 1.3, lib/help/help.hlp 1.5, lib/help/helpinfo.txt 1.3, lib/help/magic.hlp 1.3, lib/help/magic.txt 1.3, lib/help/objects.hlp 1.1, lib/help/objects.txt 1.1, lib/help/option.hlp 1.3, lib/help/option.txt 1.3, lib/help/pref.hlp 1.3, lib/help/pref.txt 1.3, lib/help/readme.txt 1.5, lib/help/spoiler.hlp 1.3, lib/help/tang.txt 1.3, lib/help/town.hlp 1.1, lib/help/town.txt 1.1, lib/help/version.txt 1.3:
+	Z240からコピー、削除したのと同名のものもあるし違うのもある。
+
+	* lib/help/arena.txt 1.2, lib/help/attack.hlp 1.2, lib/help/attack.txt 1.2, lib/help/birth.hlp 1.2, lib/help/birth.txt 1.2, lib/help/bldg.txt 1.2, lib/help/command.hlp 1.2, lib/help/command.txt 1.2, lib/help/commdesc.hlp 1.2, lib/help/commdesc.txt 1.2, lib/help/dungeon.hlp 1.2, lib/help/dungeon.txt 1.2, lib/help/gambling.txt 1.2, lib/help/general.hlp 1.2, lib/help/general.txt 1.2, lib/help/help.hlp 1.4, lib/help/helpinfo.txt 1.2, lib/help/magic.hlp 1.2, lib/help/magic.txt 1.2, lib/help/option.hlp 1.2, lib/help/option.txt 1.2, lib/help/pref.hlp 1.2, lib/help/pref.txt 1.2, lib/help/readme.txt 1.4, lib/help/spoiler.hlp 1.2, lib/help/tang.txt 1.2, lib/help/version.txt 1.2:
+	英語版ヘルプの作業開始。手始めに古いのを削除。Z24xのと入れ換えて作業する。
+
+2002-03-23  henkma  <henkma@cvs>
+
+	* src/spells2.c 1.15:
+	呪いに関して 「あなたは...」を適当な文句と差し替えた.
+	「弱い呪い」は, 他の表現と統一して, 単に「呪い」で良いと思うのだがどうか？
+	# 今のところ弱い呪い(英語はweak curse)としている.
+
+	* src/object1.c 1.23, src/spells2.c 1.14:
+	呪い関連"nanka"を翻訳.
+
+2002-03-23  Takeshi Mogami  <mogami@cvs>
+
+	* lib/file/w_low_j.txt 1.14:
+	すばやき棘、小さき棘削除。字体が違うだけで名前の意味が変ってないからまずい。
+
+2002-03-22  Takeshi Mogami  <mogami@cvs>
+
+	* src/files.c 1.41:
+	ダンプの死亡場所の表示に、死因も追加。
+
+	* src/effects.c 1.16:
+	麻痺や彫像状態で死んだとき、死因に"麻痺状態で"、"彫像状態で"を追加するように
+	してみた。
+
+	* src/cave.c 1.22.2.12, src/z-term.c 1.2.14.8:
+	修正2つ、こっちにもcommit。後で他のバリアント用のdiffを取るため。
+
+	* src/z-term.c 1.5:
+	Bigtile使用時にマップ画面の左端がその場所地形によっては正しくアップデート
+	されず、空白キャラになっていたのを修正。漢字の2文字目を判定するフラグ
+	KANJI2の判定にタイルのattrがひっかかっていた。
+
+	* src/cave.c 1.27:
+	lite_spot()で全角文字の地形を正しくアップデートしていなかったのを修正。
+	実際にバグが現われていたのは、SJISの環境でグラフィックモードOFFでBigtileを
+	使った場合だけだったが、他の場合でも潜在的に問題かもしれないので。
+
+2002-03-21  Takeshi Mogami  <mogami@cvs>
+
+	* src/dungeon.c 1.20.2.3, src/externs.h 1.30.2.5, src/generate.c 1.8.2.3, src/init1.c 1.23.2.3, src/object1.c 1.19.2.4, src/variable.c 1.12.2.3, src/wild.c 1.6.4.3, src/xtra2.c 1.21.2.7, src/z-term.c 1.2.14.7, src/cave.c 1.22.2.11, src/cmd4.c 1.27.2.3:
+	branch-mogami-bigtileに、幹での変更点もcommitしておく。
+
+	* src/z-term.c 1.4:
+	英語版でbigtileモードのとき、タイルの右半分だけ削除された後で正しく書き直し
+	がされていなかったので修正。
+
+2002-03-20  habu  <habu@cvs>
+
+	* src/hissatsu.c 1.5:
+	剣術家の眩惑がMPを消費していないバグを修正
+
 2002-03-20  Takeshi Mogami  <mogami@cvs>
+
+	* Changelogs 1.29: 更新
 
 	* src/load.c 1.19:
 	粗悪品のACや劣化したpvalがロードすると元に戻ってしまうバグを修正。
