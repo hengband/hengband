@@ -1,4 +1,148 @@
+2002-02-10  Takeshi Mogami  <mogami@akiru>
+
+	* src/main-mac.c:
+	kuwaさんの修正版 main-mac.c 。xddさんが #ifdef JP 付きで変更を加えていた
+	部分を、#ifdef JP をはずして英語版でも使えるようにした。
+
+2002-02-10  henkma  <henkma@akiru>
+
+	* lib/file/w_high.txt, lib/file/w_high_j.txt, lib/file/w_med.txt:
+	randartの名前の追加と整理. 主にw_high.txt(英語).
+
+2002-02-09  habu  <habu@akiru>
+
+	* lib/help/jattack.txt:
+	矢の平均ダメージ(#/#)に関する説明を追加。
+
+2002-02-09  henkma  <henkma@akiru>
+
+	* lib/file/a_cursed.txt, lib/file/a_cursed_j.txt, lib/file/a_low.txt, lib/file/a_low_j.txt, lib/file/a_med.txt:
+	a_low.txtとa_cursed.txt更新, 他のrandart nameも少し整理.
+
+	* lib/file/a_high.txt, lib/file/a_low.txt, lib/file/a_med.txt:
+	英語のrandart name 主にa_highとa_med. 残りはまた後でcommitします.
+
+2002-02-09  habu  <habu@akiru>
+
+	* src/externs.h, src/monster2.c:
+	ユニーク生成時の警告も指輪ではなくアイテム名を使って表示するようにした。
+
+	* src/object2.c:
+	警告するのは指輪とは限らなくなったので、警告フラグを持つ装備から一つをランダムに選ぶ関数choose_warning_item()を作り、そのアイテム名を使うようにした。
+	また、process_frakir()をコードを少し整理して読みやすくした。
+	なぜかロケットに関するDAMCALCが二回行われていたので一つ削除した。
+
+2002-02-08  habu  <habu@akiru>
+
+	* src/wizard1.c:
+	misc_flags3_desc(スポイラー生成に使われる？)にTR3_WARNINGの項を追加。
+
+	* src/object2.c:
+	flag_cost()でTR3_WARNINGの価値を2000に設定。
+
+	* src/cmd3.c:
+	英語版のほうにも警告の自動刻み追加。
+
+	* src/cmd3.c: 自動刻みに警告フラグを追加。
+
+	* src/z-config.h, lib/edit/a_info_j.txt, lib/edit/k_info_j.txt, src/cmd1.c, src/defines.h, src/externs.h, src/init1.c, src/object1.c, src/object2.c, src/xtra1.c:
+	先程の変更を改めて枝(branch-habu-warning)にcommit。
+
+	* src/z-config.h, lib/edit/a_info_j.txt, lib/edit/k_info_j.txt, src/cmd1.c, src/defines.h, src/externs.h, src/init1.c, src/object1.c, src/xtra1.c:
+	さきほどの変更は、誤って幹のほうにcommitしてしまったので、幹をcommit前の状態に戻した。
+
+	* lib/edit/k_info_j.txt, src/cmd1.c, src/defines.h, src/externs.h, src/init1.c, src/object1.c, src/xtra1.c, src/z-config.h, lib/edit/a_info_j.txt:
+	以下の変更はHogeさんの賛同が得られるかどうか分からないので枝として開発。
+	- ランダム能力におけるテレパシー能力追加は他の追加に比べて格差がありすぎると思うので止め、変わりに警告能力追加にしてみた。
+	- これに従い、TR3_WARNINGフラグを増設し、警告の指輪、フラキアもソースハックではなく?_info.txt内で定義するようにした。
+	- process_frakirは必ず使うので、USE_FRAKIRの定義は削除した。
+	- *鑑定*した時のメッセージに警告能力の記述を追加。英語版はまだ。
+
+	* src/spells3.c:
+	モンスターがテレポートした時反撃対象を解除するようにした。これによってテレポートアウェイで飛ばしたモンスターが次ターンにプレイヤーの周りに召喚する事を防げる。
+
+	* src/cmd2.c, src/externs.h, src/load.c, src/melee2.c, src/monster2.c, src/mspells1.c, src/mspells2.c, src/spells1.c:
+	モンスターの反撃対象を設定する関数set_targetと解除しる関数reset_targetを新設し、ソース内の当該コードをすべて関数で置き変えた。
+
+2002-02-08  henkma  <henkma@akiru>
+
+	* lib/file/a_high_j.txt:
+	typo修正。殺生与奪→生殺与奪
+
+2002-02-08  iks  <iks@akiru>
+
+	* lib/file/a_high_j.txt, lib/file/a_med_j.txt, lib/file/w_high_j.txt, lib/file/w_low_j.txt, lib/file/w_med_j.txt:
+	commitするときに手違いで1個のファイルしかしなかった残り。
+
+	* lib/file/a_low_j.txt:
+	本日最終のつもりの☆銘変更。henkmaさん提案のものも検討済み。
+
+2002-02-08  henkma  <henkma@akiru>
+
+	* lib/file/a_cursed_j.txt, lib/file/a_high_j.txt, lib/file/a_low_j.txt, lib/file/a_med_j.txt, lib/file/w_high_j.txt, lib/file/w_low_j.txt, lib/file/w_med_j.txt:
+	ランダムアーティファクトの名前を少し整理。名前案を大幅にコメントとして追加。
+	チェックなどお願いします > (主に)iksさん
+
+2002-02-08  iks  <iks@akiru>
+
+	* lib/file/a_high_j.txt, lib/file/a_low_j.txt, lib/file/a_med_j.txt, lib/file/w_high_j.txt, lib/file/w_low_j.txt, lib/file/w_med_j.txt:
+	神話系サイトなどを元に☆銘の大幅追加、修正、移動、調整。
+	指輪・シルマリルネタも多し。a_low_j.txtは難航中なのでつっこみ厳禁。
+
+2002-02-08  Takeshi Mogami  <mogami@akiru>
+
+	* src/birth.c:
+	クエストの数の設定でESCを押したとき、数を0ではなく10に設定するように修正。
+
+2002-02-07  Takeshi Mogami  <mogami@akiru>
+
+	* src/files.c, src/spells3.c:
+	魔力食い失敗メッセージ修正。ダンプ中の英文の修正。
+
+2002-02-07  habu  <habu@akiru>
+
+	* src/xtra1.c:
+	長すぎる種族名(今のところマインドフレアだけ)の時に表示がマップにはみ出ないようにした。
+
+	* src/xtra1.c: Minor Code Clean up.
+
+2002-02-07  Takeshi Mogami  <mogami@akiru>
+
+	* src/util.c:
+	問題点は最後の command_cmd = cmd; だけだとはっきりしたので、その部分のみを
+	command_cmd = (byte)cmd; に修正する事にした。cmdの型はcharに戻した。
+
 2002-02-06  Takeshi Mogami  <mogami@akiru>
+
+	* src/util.c:
+	コマンド文字を保持する変数は内部コマンドの253や、254を保持する必要があるので、
+	char cmd; から、 int cmd; に戻した。厳密には今までは unsigned char cmd; だったが、
+	潜在的なバグやワーニングの可能性を極力無くすためには int の方がいいと判断。
+
+2002-02-06  habu  <habu@akiru>
+
+	* src/util.c:
+	request_command()内のメニューによる入力を関数化してrequest_commandの外に出した。
+
+	* src/init1.c:
+	無駄にフラグを使っていた日本語対応strchrのコードを修正
+
+	* src/cave.c:
+	モンスターの匂い追跡で、unsinged charの0から255まで無駄なく使えるようにupdate_smell()内の数値を修正した。
+
+	* src/spells3.c:
+	ロッドからの魔力食いに失敗した時のメッセージをそれらしく変更。
+
+	* src/files.c:
+	クエスト実行中の時はダンプにクエストの名称を表示するようにした。また、階層の表示は必要ないのでしないようにした。
+
+2002-02-06  Takeshi Mogami  <mogami@akiru>
+
+	* lib/pref/graf-xxx.prf:
+	「未知の地形」を床と同じ扱いでlighting effect用のタイルを使っていたので
+	普通の暗いタイルに修正。
+
+	* Changelogs: 更新
 
 	* src/spells2.c:
 	ダンジョンの主召喚で出たユニークが*破壊*で消えるように、
