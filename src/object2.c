@@ -6093,93 +6093,101 @@ void combine_pack(void)
 	int             i, j, k;
 	object_type     *o_ptr;
 	object_type     *j_ptr;
-	bool            flag = FALSE;
+	bool            flag = FALSE, combined;
 
-
-	/* Combine the pack (backwards) */
-	for (i = INVEN_PACK; i > 0; i--)
+	do
 	{
-		/* Get the item */
-		o_ptr = &inventory[i];
+		combined = FALSE;
 
-		/* Skip empty items */
-		if (!o_ptr->k_idx) continue;
-
-		/* Scan the items above that item */
-		for (j = 0; j < i; j++)
+		/* Combine the pack (backwards) */
+		for (i = INVEN_PACK; i > 0; i--)
 		{
-			int max_num;
-
 			/* Get the item */
-			j_ptr = &inventory[j];
+			o_ptr = &inventory[i];
 
 			/* Skip empty items */
-			if (!j_ptr->k_idx) continue;
+			if (!o_ptr->k_idx) continue;
 
-			/*
-			 * Get maximum number of the stack if these
-			 * are similar, get zero otherwise.
-			 */
-			max_num = object_similar_part(j_ptr, o_ptr);
-
-			/* Can we (partialy) drop "o_ptr" onto "j_ptr"? */
-			if (max_num && j_ptr->number < max_num)
+			/* Scan the items above that item */
+			for (j = 0; j < i; j++)
 			{
-				if (o_ptr->number + j_ptr->number <= max_num)
+				int max_num;
+
+				/* Get the item */
+				j_ptr = &inventory[j];
+
+				/* Skip empty items */
+				if (!j_ptr->k_idx) continue;
+
+				/*
+				 * Get maximum number of the stack if these
+				 * are similar, get zero otherwise.
+				 */
+				max_num = object_similar_part(j_ptr, o_ptr);
+
+				/* Can we (partialy) drop "o_ptr" onto "j_ptr"? */
+				if (max_num && j_ptr->number < max_num)
 				{
-					/* Take note */
-					flag = TRUE;
-
-					/* Add together the item counts */
-					object_absorb(j_ptr, o_ptr);
-
-					/* One object is gone */
-					inven_cnt--;
-
-					/* Slide everything down */
-					for (k = i; k < INVEN_PACK; k++)
+					if (o_ptr->number + j_ptr->number <= max_num)
 					{
-						/* Structure copy */
-						inventory[k] = inventory[k+1];
+						/* Take note */
+						flag = TRUE;
+
+						/* Add together the item counts */
+						object_absorb(j_ptr, o_ptr);
+
+						/* One object is gone */
+						inven_cnt--;
+
+						/* Slide everything down */
+						for (k = i; k < INVEN_PACK; k++)
+						{
+							/* Structure copy */
+							inventory[k] = inventory[k+1];
+						}
+
+						/* Erase the "final" slot */
+						object_wipe(&inventory[k]);
 					}
-					
-					/* Erase the "final" slot */
-					object_wipe(&inventory[k]);
-				}
-				else
-				{
-					int old_num = o_ptr->number;
-					int remain = j_ptr->number + o_ptr->number - max_num;
+					else
+					{
+						int old_num = o_ptr->number;
+						int remain = j_ptr->number + o_ptr->number - max_num;
 #if 0
-					o_ptr->number -= remain;
+						o_ptr->number -= remain;
 #endif
-					/* Add together the item counts */
-					object_absorb(j_ptr, o_ptr);
+						/* Add together the item counts */
+						object_absorb(j_ptr, o_ptr);
 
-					o_ptr->number = remain;
+						o_ptr->number = remain;
 
-					/* Hack -- if rods are stacking, add the pvals (maximum timeouts) and current timeouts together. -LM- */
-					if (o_ptr->tval == TV_ROD)
-					{
-						o_ptr->pval =  o_ptr->pval * remain / old_num;
-						o_ptr->timeout = o_ptr->timeout * remain / old_num;
+						/* Hack -- if rods are stacking, add the pvals (maximum timeouts) and current timeouts together. -LM- */
+						if (o_ptr->tval == TV_ROD)
+						{
+							o_ptr->pval =  o_ptr->pval * remain / old_num;
+							o_ptr->timeout = o_ptr->timeout * remain / old_num;
+						}
+
+						/* Hack -- if wands are stacking, combine the charges. -LM- */
+						if (o_ptr->tval == TV_WAND)
+						{
+							o_ptr->pval = o_ptr->pval * remain / old_num;
+						}
 					}
 
-					/* Hack -- if wands are stacking, combine the charges. -LM- */
-					if (o_ptr->tval == TV_WAND)
-					{
-						o_ptr->pval = o_ptr->pval * remain / old_num;
-					}
+					/* Window stuff */
+					p_ptr->window |= (PW_INVEN);
+
+					/* Take note */
+					combined = TRUE;
+
+					/* Done */
+					break;
 				}
-
-				/* Window stuff */
-				p_ptr->window |= (PW_INVEN);
-				
-				/* Done */
-				break;
 			}
 		}
 	}
+	while (combined);
 
 	/* Message */
 #ifdef JP
