@@ -1790,7 +1790,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ , int flg)
 
 	/* Assume a default death */
 #ifdef JP
-cptr note_dies = "は死んだ。";
+	cptr note_dies = "は死んだ。";
 #else
 	cptr note_dies = " dies.";
 #endif
@@ -1798,6 +1798,7 @@ cptr note_dies = "は死んだ。";
 	int ty = m_ptr->fy;
 	int tx = m_ptr->fx;
 
+	int caster_lev = (who > 0) ? (r_info[who].level / 2) : p_ptr->lev;
 
 	/* Nobody here */
 	if (!c_ptr->m_idx) return (FALSE);
@@ -2699,7 +2700,7 @@ note = "の動きが遅くなった。";
 				}
 
 				/* 2. stun */
-				do_stun = damroll((p_ptr->lev / 10) + 3 , (dam)) + 1;
+				do_stun = damroll((caster_lev / 10) + 3 , (dam)) + 1;
 
 				/* Attempt a saving throw */
 				if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
@@ -3055,7 +3056,7 @@ note_dies = "の精神は崩壊し、肉体は抜け殻となった。";
 			}
 
 			/* 1. stun */
-			do_stun = damroll((p_ptr->lev / 10) + 3 , dam) + 1;
+			do_stun = damroll((caster_lev / 10) + 3 , dam) + 1;
 
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
@@ -3356,7 +3357,7 @@ note = "には完全な耐性がある。";
 			}
 			else if (((r_ptr->flags1 & RF1_UNIQUE) &&
 				 (randint1(888) != 666)) ||
-				 (((r_ptr->level + randint1(20)) > randint1(p_ptr->lev + randint1(10))) &&
+				 (((r_ptr->level + randint1(20)) > randint1(caster_lev + randint1(10))) &&
 				 randint1(100) != 66))
 			{
 #ifdef JP
@@ -4256,7 +4257,7 @@ note = "には効果がなかった！";
 				if (seen) r_ptr->r_flags3 |= (RF3_RES_ALL);
 				break;
 			}
-			do_stun = damroll((p_ptr->lev / 10) + 3 , (dam)) + 1;
+			do_stun = damroll((caster_lev / 10) + 3 , (dam)) + 1;
 
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
@@ -5027,7 +5028,7 @@ msg_format("%sをじっと睨んだ。",m_name);
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
 				 (r_ptr->flags3 & RF3_NO_CONF) ||
-				 (r_ptr->level > randint1((p_ptr->lev*2 - 10) < 1 ? 1 : (p_ptr->lev*2 - 10)) + 10))
+				 (r_ptr->level > randint1((caster_lev*2 - 10) < 1 ? 1 : (caster_lev*2 - 10)) + 10))
 			{
 				/* Memorize a flag */
 				if (r_ptr->flags3 & (RF3_NO_CONF))
@@ -5082,7 +5083,7 @@ msg_format("%sをじっと睨んだ。",m_name);
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
 				 (r_ptr->flags3 & RF3_NO_CONF) ||
-				 (r_ptr->level > randint1((p_ptr->lev*2 - 10) < 1 ? 1 : (p_ptr->lev*2 - 10)) + 10))
+				 (r_ptr->level > randint1((caster_lev*2 - 10) < 1 ? 1 : (caster_lev*2 - 10)) + 10))
 			{
 				/* Memorize a flag */
 				if (r_ptr->flags3 & (RF3_NO_CONF))
@@ -5139,7 +5140,7 @@ msg_format("%sを指差して呪いをかけた。",m_name);
 			}
 
 			/* Attempt a saving throw */
-			if (randint0(100 + p_ptr->lev) < (r_ptr->level + 35))
+			if (randint0(100 + caster_lev) < (r_ptr->level + 35))
 			{
 
 #ifdef JP
@@ -5176,7 +5177,7 @@ msg_format("%sを指差して恐ろしげに呪いをかけた。",m_name);
 			}
 
 			/* Attempt a saving throw */
-			if (randint0(100 + p_ptr->lev) < (r_ptr->level + 35))
+			if (randint0(100 + caster_lev) < (r_ptr->level + 35))
 			{
 
 #ifdef JP
@@ -5213,7 +5214,7 @@ msg_format("%sを指差し、恐しげに呪文を唱えた！",m_name);
 			}
 
 			/* Attempt a saving throw */
-			if (randint0(100 + p_ptr->lev) < (r_ptr->level + 35))
+			if (randint0(100 + caster_lev) < (r_ptr->level + 35))
 			{
 
 #ifdef JP
@@ -5250,7 +5251,7 @@ msg_format("%sの秘孔を突いて、「お前は既に死んでいる」と叫んだ。",m_name);
 			}
 
 			/* Attempt a saving throw */
-			if (randint0(100 + p_ptr->lev) < (r_ptr->level + 35))
+			if (randint0(100 + caster_lev) < (r_ptr->level + 35))
 			{
 
 #ifdef JP
@@ -5291,7 +5292,7 @@ note = "には効果がなかった！";
 			}
 			else
 			{
-				if ((p_ptr->lev + randint1(dam)) >
+				if ((caster_lev + randint1(dam)) >
 					(r_ptr->level + randint1(200)))
 					{
 						dam = ((40 + randint1(20)) * m_ptr->hp) / 100;
