@@ -5,14 +5,12 @@
     (0) モンスターへの攻撃               (jattack.txt)
     (1) 射撃用武器                       (jattack.txt#DistanceAttack)
     (2) 壁の中のモンスターへの攻撃       (jattack.txt#AttackWalls)
-    (3) 体当りと盾による体当り           (jattack.txt#Bashing)
-    (4) 直接攻撃用武器                   (jattack.txt#MeleeWeapons)
-    (5) 射撃用武器                       (jattack.txt#MissileLaunch)
-    (6) 名のある武器と伝説の武器         (jattack.txt#EgoArtifact)
-    (7) 戦闘補助の魔法                   (jattack.txt#MagicalAids)
-    (8) ダメージ計算                     (jattack.txt#DamageCalc)
-    (9) 修行僧の攻撃                     (jattack.txt#MonkAttacks)
-    (a) 基本的な戦略                     (jattack.txt#MeleeTactics)
+    (3) 直接攻撃用武器                   (jattack.txt#MeleeWeapons)
+    (4) 射撃用武器                       (jattack.txt#MissileLaunch)
+    (5) 名のある武器と伝説の武器         (jattack.txt#EgoArtifact)
+    (6) 戦闘補助の魔法                   (jattack.txt#MagicalAids)
+    (7) 修行僧の攻撃                     (jattack.txt#MonkAttacks)
+    (8) 基本的な戦略                     (jattack.txt#MeleeTactics)
 
     (?) ヘルプシステムの使用法           (jhelpinfo.txt)
  
@@ -20,11 +18,9 @@
 ***** [0] jattack.txt
 ***** [1] jattack.txt#DistanceAttack
 ***** [2] jattack.txt#AttackWalls
-***** [3] jattack.txt#Bashing
-***** [4] jattack.txt#MeleeWeapons
-***** [5] jattack.txt#MissileLaunch
-***** [6] jattack.txt#EgoArtifact
-***** [7] jattack.txt#MagicalAids
-***** [8] jattack.txt#DamageCalc
-***** [9] jattack.txt#MonkAttacks
-***** [a] jattack.txt#MeleeTactics
+***** [3] jattack.txt#MeleeWeapons
+***** [4] jattack.txt#MissileLaunch
+***** [5] jattack.txt#EgoArtifact
+***** [6] jattack.txt#MagicalAids
+***** [7] jattack.txt#MonkAttacks
+***** [8] jattack.txt#MeleeTactics
