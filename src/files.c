@@ -5774,7 +5774,7 @@ quit_fmt("'%s' という名前は不正なコントロールコードを含んでいます。", player_nam
 #endif
 
 
-#if defined(WINDOWS) || defined(MSDOS)
+#if defined(MSDOS)
 
 	/* Hack -- max length */
 	if (k > 8) k = 8;
