@@ -2327,7 +2327,7 @@ void verify_panel(void)
 		if (prow_min < 0) prow_min = 0;
 		else if (prow_min > max_prow_min) prow_min = max_prow_min;
 
-			/* Center horizontally */
+		/* Center horizontally */
 		pcol_min = x - wid / 2;
 		if (pcol_min < 0) pcol_min = 0;
 		else if (pcol_min > max_pcol_min) pcol_min = max_pcol_min;
@@ -2340,12 +2340,10 @@ void verify_panel(void)
 		/* Scroll screen when 2 grids from top/bottom edge */
 		if (y > panel_row_max - 2)
 		{
-			while (y > prow_min + hgt - 2)
+			while (y > prow_min + hgt-1 - 2)
 			{
 				prow_min += (hgt / 2);
 			}
-
-			if (prow_min > max_prow_min) prow_min = max_prow_min;
 		}
 
 		if (y < panel_row_min + 2)
@@ -2354,19 +2352,18 @@ void verify_panel(void)
 			{
 				prow_min -= (hgt / 2);
 			}
-
-			if (prow_min < 0) prow_min = 0;
 		}
+
+		if (prow_min > max_prow_min) prow_min = max_prow_min;
+		if (prow_min < 0) prow_min = 0;
 
 		/* Scroll screen when 4 grids from left/right edge */
 		if (x > panel_col_max - 4)
 		{
-			while (x > pcol_min + wid - 4)
+			while (x > pcol_min + wid-1 - 4)
 			{
 				pcol_min += (wid / 2);
 			}
-				
-			if (pcol_min > max_pcol_min) pcol_min = max_pcol_min;
 		}
 		
 		if (x < panel_col_min + 4)
@@ -2375,9 +2372,10 @@ void verify_panel(void)
 			{
 				pcol_min -= (wid / 2);
 			}
-
-			if (pcol_min < 0) pcol_min = 0;
 		}
+
+		if (pcol_min > max_pcol_min) pcol_min = max_pcol_min;
+		if (pcol_min < 0) pcol_min = 0;
 	}
 
 	/* Check for "no change" */
