@@ -4955,7 +4955,7 @@ static cptr monster_group_text[] =
 	"Yeti",
 	"Zephyr Hound",
 	"Mimic",
-	"Wall/Plant/Gus",
+	"Wall/Plant/Gas",
 	"Mushroom patch",
 	"Ball",
 #endif
