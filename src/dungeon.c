@@ -6992,7 +6992,13 @@ prt("お待ち下さい...", 0, 0);
 
 
 	/* Generate a dungeon level if needed */
-	if (!character_dungeon) change_floor();
+	if (!character_dungeon)
+	{
+		/* Clear all saved floors */
+		prepare_change_floor_mode(CFM_CLEAR_ALL);
+
+		change_floor();
+	}
 
 
 	/* Character is now "complete" */
