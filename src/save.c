@@ -766,9 +766,8 @@ static void wr_extra(void)
 	/* Current floor_id */
 	wr_s16b(p_ptr->floor_id);
 
-	/* Save temporary preserved pets */
-	wr_s16b(MAX_PARTY_MON);
-	for (i = 0; i < MAX_PARTY_MON; i++) wr_monster(&party_mon[i]);
+	/* Save temporary preserved pets (obsolated) */
+	wr_s16b(0);
 
 	wr_u32b(playtime);
 

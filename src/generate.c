@@ -1046,7 +1046,7 @@ static void build_arena(void)
 	j = xval;
 	cave[i][j].feat = FEAT_BLDG_HEAD + 2;
 	cave[i][j].info |= (CAVE_GLOW | CAVE_MARK);
-	player_place(i + 1, j);
+	player_place(i, j);
 }
 
 
@@ -1386,6 +1386,8 @@ void clear_cave(void)
 	C_WIPE(m_list, m_max, monster_type);
 	m_max = 1;
 	m_cnt = 0;
+
+	/* Pre-calc cur_num of pets in party_mon[] */
 	precalc_cur_num_of_pet();
 
 

@@ -1973,47 +1973,20 @@ note(format("の中", tmp16s));
 
 	if (h_older_than(1, 5, 0, 2))
 	{
-		C_WIPE(&party_mon[i], MAX_PARTY_MON, monster_type);
+		/* Nothing to do */
 	}
 	else
 	{
-		s16b max_num;
-		monster_type dummy_mon;
-		bool removed = FALSE;
-
+		/* Get number of party_mon array */
 		rd_s16b(&tmp16s);
-		max_num = MIN(MAX_PARTY_MON, tmp16s);
 
-		/* Load temporary preserved pets */
-		for (i = 0; i < max_num; i++)
+		/* Strip old temporary preserved pets */
+		for (i = 0; i < tmp16s; i++)
 		{
-			rd_monster(&party_mon[i]);
+			monster_type dummy_mon;
 
-			/* Count */
-			real_r_ptr(&party_mon[i])->cur_num++;
-		}
-
-		/* Remove excess pets */
-		for (i = max_num; i < tmp16s; i++)
-		{
 			rd_monster(&dummy_mon);
-
-			if (dummy_mon.r_idx)
-			{
-				if (record_named_pet && dummy_mon.nickname)
-				{
-					char m_name[80];
-					monster_desc(m_name, &dummy_mon, MD_INDEF_VISIBLE);
-					do_cmd_write_nikki(NIKKI_NAMED_PET, 5, m_name);
-				}
-				removed = TRUE;
-			}
 		}
-#ifdef JP
-		if (removed) note("一時保存ペットが多すぎるので一部削除します。");
-#else
-		if (removed) note("Temporary pets are too many, so some are removed.");
-#endif
 	}
 
 	if (z_older_than(10,1,2))
@@ -2880,12 +2853,12 @@ static errr rd_dungeon(void)
 	rd_byte(&dungeon_type);
 
 
-	/*** On the surface  ***/
-	if (!p_ptr->floor_id)
-	{
-		/* Number of array elements?? */
-		rd_byte(&num);
+	/* Number of the saved_floors array elements */
+	rd_byte(&num);
 
+	/*** On the surface  ***/
+	if (!num)
+	{
 		/* It should be 0 */
 		if (num) err = 181;
 
@@ -2896,8 +2869,6 @@ static errr rd_dungeon(void)
 	/*** In the dungeon ***/
 	else
 	{
-		/* Number of array elements */
-		rd_byte(&num);
 
 		/* Read the saved_floors array */
 		for (i = 0; i < num; i++)

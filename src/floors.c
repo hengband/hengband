@@ -340,13 +340,16 @@ static void build_dead_end(void)
  */
 static void preserve_pet(void)
 {
-	int num = 1, i;
+	int num, i;
+
+	for (num = 0; num < MAX_PARTY_MON; num++)
+	{
+		party_mon[num].r_idx = 0;
+	}
 
 	if (p_ptr->riding)
 	{
-		/* Paranoia - prevent loss of rided monster */
-		for (num = 0; (num < MAX_PARTY_MON) && party_mon[num].r_idx; num++) /* Count forward */ ;
-		if (num < MAX_PARTY_MON) COPY(&party_mon[num++], &m_list[p_ptr->riding], monster_type);
+		COPY(&party_mon[0], &m_list[p_ptr->riding], monster_type);
 
 		/* Delete from this floor */
 		delete_monster_idx(p_ptr->riding);
@@ -356,9 +359,9 @@ static void preserve_pet(void)
 	 * If player is in wild mode, no pets are preserved
 	 * except a monster whom player riding
 	 */
-	if (!p_ptr->wild_mode)
+	if (!p_ptr->wild_mode && !p_ptr->inside_arena && !p_ptr->inside_battle)
 	{
-		for (i = m_max - 1; (i >= 1 && num < MAX_PARTY_MON); i--)
+		for (i = m_max - 1, num = 1; (i >= 1 && num < MAX_PARTY_MON); i--)
 		{
 			monster_type *m_ptr = &m_list[i];
 
@@ -366,7 +369,7 @@ static void preserve_pet(void)
 			if (!is_pet(m_ptr)) continue;
 			if (i == p_ptr->riding) continue;
 
-			if (reinit_wilderness || p_ptr->inside_arena || p_ptr->inside_battle)
+			if (reinit_wilderness)
 			{
 				/* Don't lose sight of pets when getting a Quest */
 			}
@@ -391,8 +394,9 @@ static void preserve_pet(void)
 				if (m_ptr->confused || m_ptr->stunned || m_ptr->csleep) continue;
 			}
 
-			for (; (num < MAX_PARTY_MON) && party_mon[num].r_idx; num++) /* Count forward */ ;
-			if (num < MAX_PARTY_MON) COPY(&party_mon[num++], &m_list[i], monster_type);
+			COPY(&party_mon[num], &m_list[i], monster_type);
+
+			num++;
 
 			/* Delete from this floor */
 			delete_monster_idx(i);
@@ -414,6 +418,29 @@ static void preserve_pet(void)
 			monster_desc(m_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 			do_cmd_write_nikki(NIKKI_NAMED_PET, 4, m_name);
 		}
+	}
+}
+
+
+/*
+ * Pre-calculate the racial counters of preserved pets
+ * To prevent multiple generation of unique monster who is the minion of player
+ */
+void precalc_cur_num_of_pet(void)
+{
+	monster_type *m_ptr;
+	int i;
+	int max_num = p_ptr->wild_mode ? 1 : MAX_PARTY_MON;
+
+	for (i = 0; i < max_num; i++)
+	{
+		m_ptr = &party_mon[i];
+
+		/* Skip empty monsters */
+		if (!m_ptr->r_idx) continue;
+
+		/* Hack -- Increase the racial counter */
+		real_r_ptr(m_ptr)->cur_num++;
 	}
 }
 
@@ -445,9 +472,6 @@ static void place_pet(void)
 		else
 		{
 			int j, d;
-
-			/* Don't place in arena except rided one */
-			if (p_ptr->inside_arena || p_ptr->inside_battle) continue;
 
 			for (d = 1; d < 6; d++)
 			{
@@ -530,10 +554,10 @@ static void place_pet(void)
 			/* Pre-calculated in precalc_cur_num_of_pet(), but need to decrease */
 			if (r_ptr->cur_num) r_ptr->cur_num--;
 		}
-
-		/* For accuracy of precalc_cur_num_of_pet() */
-		WIPE(&party_mon[i], monster_type);
 	}
+
+	/* For accuracy of precalc_cur_num_of_pet() */               
+	C_WIPE(party_mon, MAX_PARTY_MON, monster_type);                            
 }
 
 
@@ -680,8 +704,23 @@ void leave_floor(void)
 	/* From somewhere of the surface to somewhere of the surface */
 	if (!dungeon_type)
 	{
-		/* No need to save current floor */
-		return;
+		if (change_floor_mode & CFM_SAVE_SURFACE)
+		{
+			/* Save surface floor to preserve pets (for Arena) */
+			if (!p_ptr->floor_id)
+			{
+				/* Get temporal floor_id */
+				p_ptr->floor_id = get_new_floor_id();
+
+				/* Record the dungeon level */
+				get_sf_ptr(p_ptr->floor_id)->dun_level = dun_level;
+			}
+		}
+		else
+		{
+			/* No need to save current floor */
+			return;
+		}
 	}
 
 	/* Search the quest monster index */
@@ -828,7 +867,8 @@ void leave_floor(void)
 		c_ptr = &cave[py][px];
 
 		/* Get back to old saved floor? */
-		if (dun_level && c_ptr->special && get_sf_ptr(c_ptr->special))
+		if ((dun_level || (change_floor_mode & CFM_SAVE_SURFACE))
+		    && c_ptr->special && get_sf_ptr(c_ptr->special))
 		{
 			/* Saved floor is exist.  Use it. */
 			new_floor_id = c_ptr->special;
@@ -984,7 +1024,7 @@ void change_floor(void)
 	ambush_flag = FALSE;
 
 	/* On the surface */
-	if (!dungeon_type)
+	if (!dungeon_type && !(change_floor_mode & CFM_SAVE_SURFACE))
 	{
 		/* Create cave */
 		generate_cave();
@@ -1019,8 +1059,12 @@ void change_floor(void)
 				{
 					cave_type *c_ptr = &cave[py][px];
 
-					/* Reset to floor */
-					place_floor_grid(c_ptr);
+					if (change_floor_mode & (CFM_DOWN | CFM_UP))
+					{
+						/* Reset to floor */
+						c_ptr->feat = floor_type[randint0(100)];
+					}
+					
 					c_ptr->special = 0;
 				}
 			}
@@ -1184,7 +1228,8 @@ void change_floor(void)
 			sf_ptr->dun_level = dun_level;
 
 			/* Creat connected stairs */
-			if (!(change_floor_mode & (CFM_NO_RETURN | CFM_CLEAR_ALL)) && dun_level)
+			if (!(change_floor_mode & (CFM_NO_RETURN | CFM_CLEAR_ALL))
+			    && (dun_level || (change_floor_mode & CFM_SAVE_SURFACE)))
 			{
 				bool ok = TRUE;
 
@@ -1210,6 +1255,13 @@ void change_floor(void)
 					else
 						c_ptr->feat = FEAT_LESS;
 				}
+
+				/* Enter to/leave the Arena */
+				else if (change_floor_mode & CFM_SAVE_SURFACE)
+				{
+					/* Nothing to do */
+				}
+
 				else
 				{
 					/* Hum??? */
@@ -1234,7 +1286,8 @@ void change_floor(void)
 		}
 
 		/* You see stairs blocked */
-		else if (change_floor_mode & CFM_NO_RETURN)
+		else if ((change_floor_mode & CFM_NO_RETURN) &&
+			 (change_floor_mode & (CFM_DOWN | CFM_UP)))
 		{
 			if (!p_ptr->blind)
 			{

@@ -6181,7 +6181,11 @@ static void dungeon(bool load_game)
 
 	/* Reset the "command" vars */
 	command_cmd = 0;
+
+#if 0 /* Don't reset here --- It's used for Arena */
 	command_new = 0;
+#endif
+
 	command_rep = 0;
 	command_arg = 0;
 	command_dir = 0;

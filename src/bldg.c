@@ -16,9 +16,6 @@
 /* hack as in leave_store in store.c */
 static bool leave_bldg = FALSE;
 
-/* remember building location */
-static int building_loc = 0;
-
 static bool is_owner(building_type *bldg)
 {
 	if (bldg->member_class[p_ptr->pclass] == BUILDING_OWNER)
@@ -286,9 +283,13 @@ msg_print("君のために最強の挑戦者を用意しておいた。");
 #endif
 					{
 						p_ptr->leftbldg = TRUE;
-						p_ptr->inside_arena = TRUE;
 						p_ptr->exit_bldg = FALSE;
 						reset_tim_flags();
+
+						/* Save the surface floor to preserve pets */
+						prepare_change_floor_mode(CFM_SAVE_SURFACE);
+
+						p_ptr->inside_arena = TRUE;
 						p_ptr->leaving = TRUE;
 						leave_bldg = TRUE;
 					}
@@ -325,9 +326,13 @@ msg_print("ペットに乗ったままではアリーナへ入れさせてもらえなかった。");
 			else
 			{
 				p_ptr->leftbldg = TRUE;
-				p_ptr->inside_arena = TRUE;
 				p_ptr->exit_bldg = FALSE;
 				reset_tim_flags();
+
+				/* Save the surface floor to preserve pets */
+				prepare_change_floor_mode(CFM_SAVE_SURFACE);
+
+				p_ptr->inside_arena = TRUE;
 				p_ptr->leaving = TRUE;
 				leave_bldg = TRUE;
 			}
@@ -2055,9 +2060,14 @@ msg_print("ＯＫ、１ゴールドでいこう。");
 			kakekin = wager;
 			p_ptr->au -= wager;
 			p_ptr->leftbldg = TRUE;
-			p_ptr->inside_battle = TRUE;
 			reset_tim_flags();
+
+			/* Save the surface floor to preserve pets */
+			prepare_change_floor_mode(CFM_SAVE_SURFACE);
+
+			p_ptr->inside_battle = TRUE;
 			p_ptr->leaving = TRUE;
+
 			leave_bldg = TRUE;
 			screen_load();
 
@@ -4938,7 +4948,6 @@ msg_print("ここには建物はない。");
 	}
 
 	which = (cave[py][px].feat - FEAT_BLDG_HEAD);
-	building_loc = which;
 
 	bldg = &building[which];
 
@@ -4966,13 +4975,29 @@ prt("ゲートは閉まっている。モンスターがあなたを待っている！",0,0);
 	}
 	else if ((which == 2) && p_ptr->inside_arena)
 	{
-		p_ptr->leaving = TRUE;
+		/* Restore the surface floor to preserve pets */
+		prepare_change_floor_mode(CFM_SAVE_SURFACE | CFM_NO_RETURN);
+
 		p_ptr->inside_arena = FALSE;
+		p_ptr->leaving = TRUE;
+
+		/* Re-enter the arena */
+		command_new = SPECIAL_KEY_BUILDING;
+
+		return;
 	}
 	else if (p_ptr->inside_battle)
 	{
+		/* Restore the surface floor to preserve pets */
+		prepare_change_floor_mode(CFM_SAVE_SURFACE | CFM_NO_RETURN);
+
 		p_ptr->leaving = TRUE;
 		p_ptr->inside_battle = FALSE;
+
+		/* Re-enter the monster arena */
+		command_new = SPECIAL_KEY_BUILDING;
+
+		return;
 	}
 	else
 	{
