@@ -3622,15 +3622,18 @@ static void process_world_aux_recharge(void)
 				recharged_notice(o_ptr);
 				changed = TRUE;
 			}
+
+			/* One of the stack of rod is charged */
+			else if (o_ptr->timeout % k_ptr->pval)
+			{
+				changed = TRUE;
+			}
 		}
 	}
 
 	/* Notice changes */
 	if (changed)
 	{
-		/* Combine pack */
-		p_ptr->notice |= (PN_COMBINE);
-
 		/* Window stuff */
 		p_ptr->window |= (PW_INVEN);
 		wild_regen = 20;
