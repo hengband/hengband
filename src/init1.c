@@ -4230,7 +4230,15 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
 	else
 	{
 		/* Accept all printables except spaces and brackets */
+#ifdef JP
+		while (iskanji(*s) || (isprint(*s) && !my_strchr(" []", *s)))
+		{
+			if (iskanji(*s)) s++;
+			s++;
+		}
+#else
 		while (isprint(*s) && !my_strchr(" []", *s)) ++s;
+#endif
 
 		/* Extract final and Terminate */
 		if ((f = *s) != '\0') *s++ = '\0';
