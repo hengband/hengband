@@ -3418,7 +3418,7 @@ info[i++] = "それは体力回復力を強化する。";
 #ifdef JP
 info[i++] = "それは危険に対して警告を発する。";
 #else
-		info[i++] = "XXX";
+		info[i++] = "It warns you of danger";
 #endif
 
 	}
