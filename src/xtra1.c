@@ -2895,16 +2895,16 @@ static void calc_torch(void)
 /*
  * Computes current weight limit.
  */
-static int weight_limit(void)
+u32b weight_limit(void)
 {
-	int i;
+	u32b i;
 
 	/* Weight limit based only on strength */
-	i = adj_str_wgt[p_ptr->stat_ind[A_STR]] * 100;
-	if (p_ptr->pclass == CLASS_BERSERKER) i = i*3/2;
+	i = (u32b)adj_str_wgt[p_ptr->stat_ind[A_STR]] * 50; /* Constant was 100 */
+	if (p_ptr->pclass == CLASS_BERSERKER) i = i * 3 / 2;
 
 	/* Return the result */
-	return (i);
+	return i;
 }
 
 
@@ -4575,10 +4575,12 @@ void calc_bonuses(void)
 	/* Extract the current weight (in tenth pounds) */
 	j = p_ptr->total_weight;
 
-	/* Extract the "weight limit" (in tenth pounds) */
-	i = weight_limit();
-
-	if (p_ptr->riding)
+	if (!p_ptr->riding)
+	{
+		/* Extract the "weight limit" (in tenth pounds) */
+		i = (int)weight_limit();
+	}
+	else
 	{
 		monster_type *riding_m_ptr = &m_list[p_ptr->riding];
 		monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
@@ -4604,11 +4606,12 @@ void calc_bonuses(void)
 
 		if (p_ptr->skill_exp[GINOU_RIDING] < RIDING_EXP_SKILLED) j += (p_ptr->wt * 3 * (RIDING_EXP_SKILLED - p_ptr->skill_exp[GINOU_RIDING])) / RIDING_EXP_SKILLED;
 
-		i = 3000 + riding_r_ptr->level * 50;
+		/* Extract the "weight limit" */
+		i = 1500 + riding_r_ptr->level * 25;
 	}
 
 	/* XXX XXX XXX Apply "encumbrance" from weight */
-	if (j > i/2) new_speed -= ((j - (i/2)) / (i / 10));
+	if (j > i) new_speed -= ((j - i) / (i / 5));
 
 	/* Searching slows the player down */
 	if (p_ptr->action == ACTION_SEARCH) new_speed -= 10;

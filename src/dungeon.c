@@ -2091,7 +2091,7 @@ sprintf(ouch, "%sを装備したダメージ", o_name);
 	if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP) &&
 	    !p_ptr->levitation && !p_ptr->can_swim)
 	{
-		if (p_ptr->total_weight > (((u32b)adj_str_wgt[p_ptr->stat_ind[A_STR]] * (p_ptr->pclass == CLASS_BERSERKER ? 150 : 100)) / 2))
+		if (p_ptr->total_weight > weight_limit())
 		{
 			/* Take damage */
 #ifdef JP

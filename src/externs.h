@@ -1293,6 +1293,7 @@ extern bool is_daytime(void);
 extern void extract_day_hour_min(int *day, int *hour, int *min);
 extern void prt_time(void);
 extern cptr map_name(void);
+extern u32b weight_limit(void);
 extern bool buki_motteruka(int i);
 extern void calc_bonuses(void);
 extern void notice_stuff(void);
