@@ -638,7 +638,6 @@ extern bool research_mon(void);
 extern void kamaenaoshi(int item);
 extern bool ang_sort_comp_hook(vptr u, vptr v, int a, int b);
 extern void ang_sort_swap_hook(vptr u, vptr v, int a, int b);
-extern s16b inscribe_flags(object_type *o_ptr, cptr out_val);
 
 /* cmd4.c */
 extern errr do_cmd_write_nikki(int type, int num, cptr note);

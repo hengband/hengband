@@ -1021,6 +1021,584 @@ static char *object_desc_int(char *t, sint v)
 
 
 /*
+ * Structs and tables for Auto Inscription for flags
+ */
+
+typedef struct flag_insc_table
+{
+#ifdef JP
+	cptr japanese;
+#endif
+	cptr english;
+	int flag;
+	u32b except_flag;
+} flag_insc_table;
+
+#ifdef JP
+static flag_insc_table flag_insc_plus[] =
+{
+	{ "¹¶", "At", TR_BLOWS, -1 },
+	{ "Â®", "Sp", TR_SPEED, -1 },
+	{ "ÏÓ", "St", TR_STR, -1 },
+	{ "ÃÎ", "In", TR_INT, -1 },
+	{ "¸­", "Wi", TR_WIS, -1 },
+	{ "´ï", "Dx", TR_DEX, -1 },
+	{ "ÂÑ", "Cn", TR_CON, -1 },
+	{ "Ì¥", "Ch", TR_CHR, -1 },
+	{ "±£", "Sl", TR_STEALTH, -1 },
+	{ "Ãµ", "Sr", TR_SEARCH, -1 },
+	{ "ÀÖ", "If", TR_INFRA, -1 },
+	{ "·¡", "Dg", TR_TUNNEL, -1 },
+	{ NULL, NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_immune[] =
+{
+	{ "»À", "Ac", TR_IM_ACID, -1 },
+	{ "ÅÅ", "El", TR_IM_ELEC, -1 },
+	{ "²Ð", "Fi", TR_IM_FIRE, -1 },
+	{ "Îä", "Co", TR_IM_COLD, -1 },
+	{ NULL, NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_resistance[] =
+{
+	{ "»À", "Ac", TR_RES_ACID, TR_IM_ACID },
+	{ "ÅÅ", "El", TR_RES_ELEC, TR_IM_ELEC },
+	{ "²Ð", "Fi", TR_RES_FIRE, TR_IM_FIRE },
+	{ "Îä", "Co", TR_RES_COLD, TR_IM_COLD },
+	{ "ÆÇ", "Po", TR_RES_POIS, -1 },
+	{ "Á®", "Li", TR_RES_LITE, -1 },
+	{ "°Å", "Dk", TR_RES_DARK, -1 },
+	{ "ÇË", "Sh", TR_RES_SHARDS, -1 },
+	{ "ÌÕ", "Bl", TR_RES_BLIND, -1 },
+	{ "Íð", "Cf", TR_RES_CONF, -1 },
+	{ "¹ì", "So", TR_RES_SOUND, -1 },
+	{ "¹ö", "Nt", TR_RES_NETHER, -1 },
+	{ "°ø", "Nx", TR_RES_NEXUS, -1 },
+	{ "ÆÙ", "Ca", TR_RES_CHAOS, -1 },
+	{ "Îô", "Di", TR_RES_DISEN, -1 },
+	{ "¶²", "Fe", TR_RES_FEAR, -1 },
+	{ NULL, NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_misc[] =
+{
+	{ "ËâÎÏ", "Ma", TR_DEC_MANA, -1 },
+	{ "Åê", "Th", TR_THROW, -1 },
+	{ "È¿", "Rf", TR_REFLECT, -1 },
+	{ "Ëã", "Fa", TR_FREE_ACT, -1 },
+	{ "»ë", "Si", TR_SEE_INVIS, -1 },
+	{ "·Ð", "Hl", TR_HOLD_LIFE, -1 },
+	{ "ÃÙ", "Sd", TR_SLOW_DIGEST, -1 },
+	{ "³è", "Rg", TR_REGEN, -1 },
+	{ "Éâ", "Lv", TR_FEATHER, -1 },
+	{ "ÌÀ", "Lu", TR_LITE, -1 },
+	{ "·Ù", "Wr", TR_WARNING, -1 },
+        { "ÇÜ", "Xm", TR_XTRA_MIGHT, -1 },
+	{ "¼Í", "Xs", TR_XTRA_SHOTS, -1 },
+	{ "ÅÜ", "Ag", TR_AGGRAVATE, -1 },
+	{ "½Ë", "Bs", TR_BLESSED, -1 },
+	{ "´÷", "Ty", TR_TY_CURSE, -1 },
+	{ NULL, NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_aura[] =
+{
+	{ "±ê", "F", TR_SH_FIRE, -1 },
+	{ "ÅÅ", "E", TR_SH_ELEC, -1 },
+	{ "Îä", "C", TR_SH_COLD, -1 },
+	{ "Ëâ", "M", TR_NO_MAGIC, -1 },
+	{ "½Ö", "T", TR_NO_TELE, -1 },
+	{ NULL, NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_brand[] =
+{
+	{ "»À", "A", TR_BRAND_ACID, -1 },
+	{ "ÅÅ", "E", TR_BRAND_ELEC, -1 },
+	{ "¾Æ", "F", TR_BRAND_FIRE, -1 },
+	{ "Åà", "Co", TR_BRAND_COLD, -1 },
+	{ "ÆÇ", "P", TR_BRAND_POIS, -1 },
+	{ "ÆÙ", "Ca", TR_CHAOTIC, -1 },
+	{ "µÛ", "V", TR_VAMPIRIC, -1 },
+	{ "¿Ì", "Q", TR_IMPACT, -1 },
+	{ "ÀÚ", "S", TR_VORPAL, -1 },
+	{ "Íý", "M", TR_FORCE_WEAPON, -1 },
+	{ NULL, NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_kill[] =
+{
+	{ "¼Ù", "*", TR_KILL_EVIL, -1 },
+	{ "¿Í", "p", TR_KILL_HUMAN, -1 },
+	{ "Î¶", "D", TR_KILL_DRAGON, -1 },
+	{ "¥ª", "o", TR_KILL_ORC, -1 },
+	{ "¥È", "T", TR_KILL_TROLL, -1 },
+	{ "µð", "P", TR_KILL_GIANT, -1 },
+	{ "¥Ç", "U", TR_KILL_DEMON, -1 },
+	{ "»à", "L", TR_KILL_UNDEAD, -1 },
+	{ "Æ°", "Z", TR_KILL_ANIMAL, -1 },
+	{ NULL, NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_slay[] =
+{
+	{ "¼Ù", "*", TR_SLAY_EVIL, TR_KILL_EVIL },
+	{ "¿Í", "p", TR_SLAY_HUMAN, TR_KILL_HUMAN },
+	{ "Îµ", "D", TR_SLAY_DRAGON, TR_KILL_DRAGON },
+	{ "¥ª", "o", TR_SLAY_ORC, TR_KILL_ORC },
+	{ "¥È", "T", TR_SLAY_TROLL, TR_KILL_TROLL },
+	{ "µð", "P", TR_SLAY_GIANT, TR_KILL_GIANT },
+	{ "¥Ç", "U", TR_SLAY_DEMON, TR_KILL_DEMON },
+	{ "»à", "L", TR_SLAY_UNDEAD, TR_KILL_UNDEAD },
+	{ "Æ°", "Z", TR_SLAY_ANIMAL, TR_KILL_ANIMAL },
+	{ NULL, NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_esp1[] =
+{
+	{ "´¶", "Tele", TR_TELEPATHY, -1 },
+	{ "¼Ù", "Evil", TR_ESP_EVIL, -1 },
+	{ "Á±", "Good", TR_ESP_GOOD, -1 },
+	{ "Ìµ", "Nolv", TR_ESP_NONLIVING, -1 },
+	{ "¸Ä", "Uniq", TR_ESP_UNIQUE, -1 },
+	{ NULL, NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_esp2[] =
+{
+	{ "¿Í", "p", TR_ESP_HUMAN, -1 },
+	{ "Îµ", "D", TR_ESP_DRAGON, -1 },
+	{ "¥ª", "o", TR_ESP_ORC, -1 },
+	{ "¥È", "T", TR_ESP_TROLL, -1 },
+	{ "µð", "P", TR_ESP_GIANT, -1 },
+	{ "¥Ç", "U", TR_ESP_DEMON, -1 },
+	{ "»à", "L", TR_ESP_UNDEAD, -1 },
+	{ "Æ°", "Z", TR_ESP_ANIMAL, -1 },
+	{ NULL, NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_sust[] =
+{
+	{ "ÏÓ", "St", TR_SUST_STR, -1 },
+	{ "ÃÎ", "In", TR_SUST_INT, -1 },
+	{ "¸­", "Wi", TR_SUST_WIS, -1 },
+	{ "´ï", "Dx", TR_SUST_DEX, -1 },
+	{ "ÂÑ", "Cn", TR_SUST_CON, -1 },
+	{ "Ì¥", "Ch", TR_SUST_CHR, -1 },
+	{ NULL, NULL, 0, -1 }
+};
+
+#else
+static flag_insc_table flag_insc_plus[] =
+{
+  	{ "At", TR_BLOWS, -1 },
+  	{ "Sp", TR_SPEED, -1 },
+  	{ "St", TR_STR, -1 },
+  	{ "In", TR_INT, -1 },
+  	{ "Wi", TR_WIS, -1 },
+  	{ "Dx", TR_DEX, -1 },
+  	{ "Cn", TR_CON, -1 },
+  	{ "Ch", TR_CHR, -1 },
+  	{ "Sl", TR_STEALTH, -1 },
+  	{ "Sr", TR_SEARCH, -1 },
+  	{ "If", TR_INFRA, -1 },
+  	{ "Dg", TR_TUNNEL, -1 },
+  	{ NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_immune[] =
+{
+  	{ "Ac", TR_IM_ACID, -1 },
+  	{ "El", TR_IM_ELEC, -1 },
+  	{ "Fi", TR_IM_FIRE, -1 },
+  	{ "Co", TR_IM_COLD, -1 },
+  	{ NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_resistance[] =
+{
+  	{ "Ac", TR_RES_ACID, TR_IM_ACID },
+  	{ "El", TR_RES_ELEC, TR_IM_ELEC },
+  	{ "Fi", TR_RES_FIRE, TR_IM_FIRE },
+  	{ "Co", TR_RES_COLD, TR_IM_COLD },
+  	{ "Po", TR_RES_POIS, -1 },
+  	{ "Li", TR_RES_LITE, -1 },
+  	{ "Dk", TR_RES_DARK, -1 },
+  	{ "Sh", TR_RES_SHARDS, -1 },
+  	{ "Bl", TR_RES_BLIND, -1 },
+  	{ "Cf", TR_RES_CONF, -1 },
+  	{ "So", TR_RES_SOUND, -1 },
+  	{ "Nt", TR_RES_NETHER, -1 },
+  	{ "Nx", TR_RES_NEXUS, -1 },
+  	{ "Ca", TR_RES_CHAOS, -1 },
+  	{ "Di", TR_RES_DISEN, -1 },
+  	{ "Fe", TR_RES_FEAR, -1 },
+  	{ NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_misc[] =
+{
+  	{ "Ma", TR_DEC_MANA, -1 },
+  	{ "Th", TR_THROW, -1 },
+  	{ "Rf", TR_REFLECT, -1 },
+  	{ "Fa", TR_FREE_ACT, -1 },
+  	{ "Si", TR_SEE_INVIS, -1 },
+  	{ "Hl", TR_HOLD_LIFE, -1 },
+  	{ "Sd", TR_SLOW_DIGEST, -1 },
+  	{ "Rg", TR_REGEN, -1 },
+  	{ "Lv", TR_FEATHER, -1 },
+  	{ "Lu", TR_LITE, -1 },
+	{ "Wr", TR_WARNING, -1 },
+	{ "Xm", TR_XTRA_MIGHT, -1 },
+  	{ "Xs", TR_XTRA_SHOTS, -1 },
+  	{ "Ag", TR_AGGRAVATE, -1 },
+  	{ "Bs", TR_BLESSED, -1 },
+  	{ "Ty", TR_TY_CURSE, -1 },
+  	{ NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_aura[] =
+{
+  	{ "F", TR_SH_FIRE, -1 },
+  	{ "E", TR_SH_ELEC, -1 },
+  	{ "C", TR_SH_COLD, -1 },
+  	{ "M", TR_NO_MAGIC, -1 },
+  	{ "T", TR_NO_TELE, -1 },
+  	{ NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_brand[] =
+{
+  	{ "A", TR_BRAND_ACID, -1 },
+  	{ "E", TR_BRAND_ELEC, -1 },
+  	{ "F", TR_BRAND_FIRE, -1 },
+  	{ "Co", TR_BRAND_COLD, -1 },
+  	{ "P", TR_BRAND_POIS, -1 },
+  	{ "Ca", TR_CHAOTIC, -1 },
+  	{ "V", TR_VAMPIRIC, -1 },
+  	{ "Q", TR_IMPACT, -1 },
+  	{ "S", TR_VORPAL, -1 },
+  	{ "M", TR_FORCE_WEAPON, -1 },
+  	{ NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_kill[] =
+{
+	{ "*", TR_KILL_EVIL, -1 },
+	{ "p", TR_KILL_HUMAN, -1 },
+	{ "D", TR_KILL_DRAGON, -1 },
+	{ "o", TR_KILL_ORC, -1 },
+	{ "T", TR_KILL_TROLL, -1 },
+	{ "P", TR_KILL_GIANT, -1 },
+	{ "U", TR_KILL_DEMON, -1 },
+	{ "L", TR_KILL_UNDEAD, -1 },
+	{ "Z", TR_KILL_ANIMAL, -1 },
+	{ NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_slay[] =
+{
+	{ "*", TR_SLAY_EVIL, TR_KILL_EVIL },
+	{ "p", TR_SLAY_HUMAN, TR_KILL_HUMAN },
+	{ "D", TR_SLAY_DRAGON, TR_KILL_DRAGON },
+	{ "o", TR_SLAY_ORC, TR_KILL_ORC },
+	{ "T", TR_SLAY_TROLL, TR_KILL_TROLL },
+	{ "P", TR_SLAY_GIANT, TR_KILL_GIANT },
+	{ "U", TR_SLAY_DEMON, TR_KILL_DEMON },
+	{ "L", TR_SLAY_UNDEAD, TR_KILL_UNDEAD },
+	{ "Z", TR_SLAY_ANIMAL, TR_KILL_ANIMAL },
+	{ NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_esp1[] =
+{
+	{ "Tele", TR_TELEPATHY, -1 },
+	{ "Evil", TR_ESP_EVIL, -1 },
+	{ "Good", TR_ESP_GOOD, -1 },
+	{ "Nolv", TR_ESP_NONLIVING, -1 },
+	{ "Uniq", TR_ESP_UNIQUE, -1 },
+	{ NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_esp2[] =
+{
+	{ "p", TR_ESP_HUMAN, -1 },
+	{ "D", TR_ESP_DRAGON, -1 },
+	{ "o", TR_ESP_ORC, -1 },
+	{ "T", TR_ESP_TROLL, -1 },
+	{ "P", TR_ESP_GIANT, -1 },
+	{ "U", TR_ESP_DEMON, -1 },
+	{ "L", TR_ESP_UNDEAD, -1 },
+	{ "Z", TR_ESP_ANIMAL, -1 },
+	{ NULL, 0, -1 }
+};
+
+static flag_insc_table flag_insc_sust[] =
+{
+  	{ "St", TR_SUST_STR, -1 },
+  	{ "In", TR_SUST_INT, -1 },
+  	{ "Wi", TR_SUST_WIS, -1 },
+  	{ "Dx", TR_SUST_DEX, -1 },
+  	{ "Cn", TR_SUST_CON, -1 },
+  	{ "Ch", TR_SUST_CHR, -1 },
+  	{ NULL, 0, -1 }
+};
+#endif
+
+/* Simple macro for get_inscription() */
+#define ADD_INSC(STR) (void)(ptr = object_desc_str(ptr, (STR)))
+
+/*
+ *  Helper function for get_inscription()
+ */
+static char *inscribe_flags_aux(flag_insc_table *fi_ptr, u32b flgs[TR_FLAG_SIZE], bool kanji, char *ptr)
+{
+	while (fi_ptr->english)
+	{
+		if (have_flag(flgs, fi_ptr->flag) &&
+		    (fi_ptr->except_flag == -1 || !have_flag(flgs, fi_ptr->except_flag)))
+#ifdef JP
+			ADD_INSC(kanji ? fi_ptr->japanese : fi_ptr->english);
+#else
+			ADD_INSC(fi_ptr->english);
+#endif
+		fi_ptr++;
+	}
+
+	return ptr;
+}
+
+
+/*
+ *  Special variation of have_flag for auto-inscription
+ */
+static bool have_flag_of(flag_insc_table *fi_ptr, u32b flgs[TR_FLAG_SIZE])
+{
+	while (fi_ptr->english)
+	{
+		if (have_flag(flgs, fi_ptr->flag) &&
+		   (fi_ptr->except_flag == -1 || !have_flag(flgs, fi_ptr->except_flag)))
+			return (TRUE);
+		fi_ptr++;
+	}
+
+	return (FALSE);
+}
+
+
+/*
+ *  Get object inscription with auto inscription of object flags.
+ */
+static void get_inscription(char *buff, object_type *o_ptr)
+{
+        cptr insc = quark_str(o_ptr->inscription);
+	char *ptr = buff;
+	char *prev_ptr = buff;
+
+	u32b flgs[TR_FLAG_SIZE];
+
+	/* Not fully identified */
+	if (!(o_ptr->ident & IDENT_MENTAL))
+        {
+                /* Copy until end of line or '#' */
+                while (*insc)
+                {
+                        if (*insc == '#') break;
+                        if (iskanji(*insc)) *buff++ = *insc++;
+                        *buff++ = *insc++;
+                }
+
+                *buff = '\0';
+                return;
+        }
+
+	/* Extract the flags */
+	object_flags(o_ptr, flgs);
+
+
+	*buff = '\0';
+	for (; *insc; insc++)
+	{
+                bool kanji;
+                bool all;
+
+                /* Ignore fake artifact inscription */
+                if (*insc == '#') break;
+
+                /* {%} will be automatically converted */
+		else if ('%' == *insc)
+		{
+			cptr start_percent = ptr;
+#ifdef JP
+			if ('%' == insc[1])
+			{
+				insc++;
+				kanji = FALSE;
+			}
+			else
+			{
+				kanji = TRUE;
+			}
+#endif
+			if ('a' == insc[1] && 'l' == insc[2] && 'l' == insc[3])
+			{
+				all = TRUE;
+				insc += 3;
+			}
+			else
+			{
+				all = FALSE;
+			}
+
+			/* check for too long inscription */
+			if (ptr >= buff + MAX_NLEN) continue;
+
+			/* Remove obvious flags */
+			if (!all)
+			{
+				object_kind *k_ptr = &k_info[o_ptr->k_idx];
+				int j;
+				
+				/* Base object */
+				for (j = 0; j < TR_FLAG_SIZE; j++)
+					flgs[j] &= ~k_ptr->flags[j];
+
+				if (o_ptr->name1)
+				{
+					artifact_type *a_ptr = &a_info[o_ptr->name1];
+					
+					for (j = 0; j < TR_FLAG_SIZE; j++)
+						flgs[j] &= ~a_ptr->flags[j];
+				}
+
+				if (o_ptr->name2)
+				{
+                                        bool teleport = have_flag(flgs, TR_TELEPORT);
+					ego_item_type *e_ptr = &e_info[o_ptr->name2];
+					
+					for (j = 0; j < TR_FLAG_SIZE; j++)
+						flgs[j] &= ~e_ptr->flags[j];
+
+                                        /* Always inscribe {.} for random teleport */
+                                        if (teleport) add_flag(flgs, TR_TELEPORT);
+				}
+			}
+
+
+			/* Plusses */
+			if (have_flag_of(flag_insc_plus, flgs))
+			{
+				if (kanji)
+					ADD_INSC("+");
+			}
+			ptr = inscribe_flags_aux(flag_insc_plus, flgs, kanji, ptr);
+
+			/* Immunity */
+			if (have_flag_of(flag_insc_immune, flgs))
+			{
+				if (!kanji && ptr != prev_ptr)
+				{
+					ADD_INSC(";");
+					prev_ptr = ptr;
+				}
+				ADD_INSC("*");
+			}
+			ptr = inscribe_flags_aux(flag_insc_immune, flgs, kanji, ptr);
+
+			/* Resistance */
+			if (have_flag_of(flag_insc_resistance, flgs))
+			{
+				if (kanji)
+					ADD_INSC("r");
+				else if (ptr != prev_ptr)
+				{
+					ADD_INSC(";");
+					prev_ptr = ptr;
+				}
+			}
+			ptr = inscribe_flags_aux(flag_insc_resistance, flgs, kanji, ptr);
+
+			/* Misc Ability */
+			if (have_flag_of(flag_insc_misc, flgs))
+			{
+				if (ptr != prev_ptr)
+				{
+					ADD_INSC(";");
+					prev_ptr = ptr;
+				}
+			}
+			ptr = inscribe_flags_aux(flag_insc_misc, flgs, kanji, ptr);
+
+			/* Aura */
+			if (have_flag_of(flag_insc_aura, flgs))
+			{
+				ADD_INSC("[");
+			}
+			ptr = inscribe_flags_aux(flag_insc_aura, flgs, kanji, ptr);
+
+			/* Brand Weapon */
+			if (have_flag_of(flag_insc_brand, flgs))
+				ADD_INSC("|");
+			ptr = inscribe_flags_aux(flag_insc_brand, flgs, kanji, ptr);
+
+			/* Kill Weapon */
+			if (have_flag_of(flag_insc_kill, flgs))
+				ADD_INSC("/X");
+			ptr = inscribe_flags_aux(flag_insc_kill, flgs, kanji, ptr);
+
+			/* Slay Weapon */
+			if (have_flag_of(flag_insc_slay, flgs))
+				ADD_INSC("/");
+			ptr = inscribe_flags_aux(flag_insc_slay, flgs, kanji, ptr);
+
+			/* Esp */
+                        if (kanji)
+                        {
+                                if (have_flag_of(flag_insc_esp1, flgs) ||
+                                    have_flag_of(flag_insc_esp2, flgs))
+                                        ADD_INSC("~");
+                                ptr = inscribe_flags_aux(flag_insc_esp1, flgs, kanji, ptr);
+                                ptr = inscribe_flags_aux(flag_insc_esp2, flgs, kanji, ptr);
+                        }
+                        else
+                        {
+                                if (have_flag_of(flag_insc_esp1, flgs))
+                                        ADD_INSC("~");
+                                ptr = inscribe_flags_aux(flag_insc_esp1, flgs, kanji, ptr);
+                                if (have_flag_of(flag_insc_esp2, flgs))
+                                        ADD_INSC("~");
+                                ptr = inscribe_flags_aux(flag_insc_esp2, flgs, kanji, ptr);
+                        }
+
+			/* Random Teleport */
+			if (have_flag(flgs, TR_TELEPORT))
+			{
+				ADD_INSC(".");
+			}
+
+			/* sustain */
+			if (have_flag_of(flag_insc_sust, flgs))
+			{
+				ADD_INSC("(");
+			}
+			ptr = inscribe_flags_aux(flag_insc_sust, flgs, kanji, ptr);
+
+			if (ptr == start_percent)
+				ADD_INSC(" ");
+		}
+		else
+		{
+			*ptr++ = *insc;
+		}
+	}
+        *ptr = '\0';
+}
+
+
+
+/*
  * Creates a description of the item "o_ptr", and stores it in "out_val".
  *
  * One can choose the "verbosity" of the description, including whether
@@ -2626,15 +3204,15 @@ strcpy(tmp_val2, "Ì¤È½ÌÀ");
 	/* Use the standard inscription if available */
 	if (o_ptr->inscription)
 	{
-		char *u = tmp_val2;
+                char buff[1024];
 
 		if (tmp_val2[0]) strcat(tmp_val2, ", ");
 
-		strcat(tmp_val2, quark_str(o_ptr->inscription));
+                /* Get inscription and convert {%} */
+                get_inscription(buff, o_ptr);
 
-		for (; *u && (*u != '#'); u++);
-
-		*u = '\0';
+                /* strcat with correct treating of kanji */
+                my_strcat(tmp_val2, buff, sizeof(tmp_val2));
 	}
 
 	/* Note the discount, if any */

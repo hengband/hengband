@@ -957,10 +957,8 @@ void auto_inscribe_item(int item, int idx)
 	if ((idx < 0 || !autopick_list[idx].insc) && !o_ptr->inscription)
 		return;
 
-	if (o_ptr->inscription)
-		o_ptr->inscription = inscribe_flags(o_ptr, quark_str(o_ptr->inscription));
-	else
-		o_ptr->inscription = inscribe_flags(o_ptr, autopick_list[idx].insc);
+	if (!o_ptr->inscription)
+		o_ptr->inscription = quark_add(autopick_list[idx].insc);
 
 	if (item > INVEN_PACK)
 	{

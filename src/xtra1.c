@@ -3927,8 +3927,24 @@ void calc_bonuses(void)
 		if (have_flag(flgs, TR_TELEPORT))
 		{
 			if (cursed_p(o_ptr)) p_ptr->cursed |= TRC_TELEPORT;
-			else if (!o_ptr->inscription || !(strchr(quark_str(o_ptr->inscription),'.')))
-				p_ptr->cursed |= TRC_TELEPORT_SELF;
+			else
+                        {
+                                cptr insc = quark_str(o_ptr->inscription);
+
+                                if (o_ptr->inscription &&
+                                    (strchr(insc, '.') || strchr(insc, '%')))
+                                {
+                                        /*
+                                         * {.} will stop random teleportation.
+                                         * {%} includes '.' after conversion.
+                                         */
+                                }
+                                else
+                                {
+                                        /* Controlled random teleportation */
+                                        p_ptr->cursed |= TRC_TELEPORT_SELF;
+                                }
+                        }
 		}
 
 		/* Immunity flags */
