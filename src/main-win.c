@@ -4178,11 +4178,13 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 			bool mc = FALSE;
 			bool ms = FALSE;
 			bool ma = FALSE;
+			bool keypad = FALSE;
 
 			/* Extract the modifiers */
 			if (GetKeyState(VK_CONTROL) & 0x8000) mc = TRUE;
 			if (GetKeyState(VK_SHIFT)   & 0x8000) ms = TRUE;
 			if (GetKeyState(VK_MENU)    & 0x8000) ma = TRUE;
+			if (lParam & 0x1000000L) keypad = TRUE;
 
 			/* Handle "special" keys */
 			if (special_key[(byte)(wParam)] || (ma && !ignore_key[(byte)(wParam)]) )
@@ -4200,6 +4202,9 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 
 				/* Introduce the scan code */
 				Term_keypress('x');
+
+				/* Special modifiers for keypad keys */
+				if (keypad) Term_keypress('K');
 
 				/* Encode the hexidecimal scan code */
 				Term_keypress(hexsym[i/16]);
