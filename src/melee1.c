@@ -1160,8 +1160,8 @@ bool make_attack_normal(int m_idx)
 					if ((o_ptr->xtra4 > 0) && (!artifact_p(o_ptr)))
 					{
 						/* Reduce fuel */
-						o_ptr->pval -= (250 + randint1(250));
-						if (o_ptr->pval < 1) o_ptr->pval = 1;
+						o_ptr->xtra4 -= (250 + randint1(250));
+						if (o_ptr->xtra4 < 1) o_ptr->xtra4 = 1;
 
 						/* Notice */
 						if (!p_ptr->blind)
