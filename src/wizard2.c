@@ -566,8 +566,8 @@ static void wiz_display_item(object_type *o_ptr)
 	prt(format("ident = %04x  xtra1 = %-4d  xtra2 = %-4d  timeout = %-d",
 	           o_ptr->ident, o_ptr->xtra1, o_ptr->xtra2, o_ptr->timeout), 8, j);
 
-	prt(format("xtra3 = %-4d  xtra4 = %-4d  xtra5 = %-4d",
-	           o_ptr->xtra3, o_ptr->xtra4, o_ptr->xtra5), 9, j);
+	prt(format("xtra3 = %-4d  xtra4 = %-4d  xtra5 = %-4d  cursed  = %-d",
+	           o_ptr->xtra3, o_ptr->xtra4, o_ptr->xtra5, o_ptr->curse_flags), 9, j);
 
 	prt("+------------FLAGS1------------+", 10, j);
 	prt("AFFECT........SLAY........BRAND.", 11, j);
