@@ -1366,7 +1366,7 @@ static bool level_gen(cptr *why)
 		panel_col_min = cur_wid;
 
 		if (cheat_room)
-		  msg_format("X:%d, Y:%d.", cur_hgt, cur_wid);
+		  msg_format("X:%d, Y:%d.", cur_wid, cur_hgt);
 	}
 	else
 	{
