@@ -1287,8 +1287,14 @@ extern bool summon_possible(int y1, int x1);
 extern bool monst_spell_monst(int m_idx);
 
 /* artifact.c */
+extern void one_sustain(object_type *o_ptr);
+extern void one_high_resistance(object_type *o_ptr);
+extern void one_loadly_high_resistance(object_type *o_ptr);
+extern void one_ele_resistance(object_type *o_ptr);
+extern void one_dragon_ele_resistance(object_type *o_ptr);
+extern void one_resistance(object_type *o_ptr);
+extern void one_ability(object_type *o_ptr);
 extern bool create_artifact(object_type *o_ptr, bool a_scroll);
-extern void random_resistance(object_type * q_ptr, bool is_scroll, int specific);
 extern bool activate_random_artifact(object_type * o_ptr);
 extern void random_artifact_resistance(object_type * o_ptr);
 extern void create_named_art(int a_idx, int y, int x);

@@ -5497,7 +5497,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 					o_ptr->art_flags1 |= (TR1_CHAOTIC << randint0(18));
 				dummy = randint1(2);
 				for (i = 0; i < dummy; i++)
-					random_resistance(o_ptr, FALSE, randint1(34) + 4);
+					one_resistance(o_ptr);
 				dummy = 2;
 				for (i = 0; i < dummy; i++)
 				{

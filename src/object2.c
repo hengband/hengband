@@ -2232,8 +2232,6 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 		todam2 = (todam2+1)/2;
 	}
 
-	artifact_bias = 0;
-
 	/* Good */
 	if (power > 0)
 	{
@@ -2332,26 +2330,28 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 				case EGO_HA:
 					if (one_in_(4) && (level > 40))
 						o_ptr->art_flags1 |= TR1_BLOWS;
+					one_sustain(o_ptr);
 					break;
 				case EGO_DF:
 					if (one_in_(3))
 						o_ptr->art_flags2 |= TR2_RES_POIS;
-					random_resistance(o_ptr, FALSE, randint1(22)+16);
+					one_high_resistance(o_ptr);
+					one_sustain(o_ptr);
 					break;
 				case EGO_SLAY_DRAGON:
-					random_resistance(o_ptr, FALSE, randint1(12) + 4);
+					one_ele_resistance(o_ptr);
 					break;
 				case EGO_KILL_DRAGON:
-					random_resistance(o_ptr, FALSE, randint1(12) + 4);
+					one_ele_resistance(o_ptr);
 					if (one_in_(3))
 						o_ptr->art_flags2 |= TR2_RES_POIS;
-					random_resistance(o_ptr, FALSE, randint1(14) + 4);
+					one_dragon_ele_resistance(o_ptr);
 				case EGO_WEST:
 					if (one_in_(3))
 						o_ptr->art_flags2 |= TR2_RES_FEAR;
 					break;
 				case EGO_CHAOTIC:
-					random_resistance(o_ptr, FALSE, (randint1(34) + 4));
+					one_resistance(o_ptr);
 					break;
 				case EGO_SLAYING_WEAPON:
 					if (one_in_(3)) /* double damage */
@@ -2381,9 +2381,11 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 					}
 					break;
 				case EGO_TRUMP:
-					random_resistance(o_ptr, FALSE, (randint1(22) + 16));
+					one_high_resistance(o_ptr);
 					if (one_in_(5))
 						o_ptr->art_flags1 |= TR1_SLAY_DEMON;
+					if (one_in_(7))
+						one_ability(o_ptr);
 					break;
 				case EGO_PATTERN:
 					if (one_in_(3))
@@ -2392,7 +2394,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 						o_ptr->art_flags1 |= TR1_DEX;
 					if (one_in_(5))
 						o_ptr->art_flags2 |= TR2_RES_FEAR;
-					random_resistance(o_ptr, FALSE, (randint1(22) + 16));
+					one_high_resistance(o_ptr);
 					break;
 				case EGO_SHARPNESS:
 					o_ptr->pval = m_bonus(5, level) + 1;
@@ -2402,6 +2404,9 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 						o_ptr->art_flags1 |= TR1_BLOWS;
 					else
 						o_ptr->pval = m_bonus(3, level);
+					break;
+				case EGO_BLESS_BLADE:
+					one_ability(o_ptr);
 					break;
 				}
 
@@ -2449,7 +2454,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 				switch (o_ptr->name2)
 				{
 				case EGO_EXTRA_MIGHT:
-					random_resistance(o_ptr, FALSE, rand_range(5, 38));
+					one_resistance(o_ptr);
 					break;
 				}
 			}
@@ -2501,12 +2506,10 @@ static void dragon_resist(object_type * o_ptr)
 {
 	do
 	{
-		artifact_bias = 0;
-
 		if (one_in_(4))
-			random_resistance(o_ptr, FALSE, (randint1(14) + 4));
+			one_dragon_ele_resistance(o_ptr);
 		else
-			random_resistance(o_ptr, FALSE, (randint1(22) + 16));
+			one_high_resistance(o_ptr);
 	}
 	while (one_in_(2));
 }
@@ -2523,8 +2526,6 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 	int toac1 = randint1(5) + m_bonus(5, level);
 
 	int toac2 = m_bonus(10, level);
-
-	artifact_bias = 0;
 
 	/* Good */
 	if (power > 0)
@@ -2594,7 +2595,10 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 						o_ptr->to_a = 0;
 					}
 					else
+					{
 						o_ptr->name2 = EGO_PERMANENCE;
+						one_high_resistance(o_ptr);
+					}
 					break;
 				}
 
@@ -2615,7 +2619,10 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					case EGO_RESISTANCE:
 						if (one_in_(4))
 							o_ptr->art_flags2 |= TR2_RES_POIS;
-						random_resistance(o_ptr, FALSE, (randint1(22) + 16));
+						one_high_resistance(o_ptr);
+						break;
+					case EGO_ELVENKIND:
+						one_high_resistance(o_ptr);
 						break;
 					case EGO_DWARVEN:
 						if (o_ptr->tval != TV_HARD_ARMOR)
@@ -2668,7 +2675,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 				switch (o_ptr->name2)
 				{
 				case EGO_ENDURANCE:
-					random_resistance(o_ptr, FALSE, (randint1(34) + 4));
+					if (!one_in_(3)) one_high_resistance(o_ptr);
 					if (one_in_(4)) o_ptr->art_flags2 |= TR2_RES_POIS;
 					break;
 				case EGO_REFLECTION:
@@ -2704,7 +2711,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 				switch (o_ptr->name2)
 				{
 				case EGO_POWER:
-					random_resistance(o_ptr, FALSE, (randint1(22) + 16));
+					one_high_resistance(o_ptr);
 					break;
 				}
 			}
@@ -2745,7 +2752,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 				case EGO_SLOW_DESCENT:
 					if (one_in_(2))
 					{
-						random_resistance(o_ptr, FALSE, (randint1(22) + 16));
+						one_high_resistance(o_ptr);
 					}
 					break;
 				}
@@ -2777,16 +2784,17 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					switch (o_ptr->name2)
 					{
 					case EGO_MAGI:
-						random_resistance(o_ptr, FALSE, (randint1(22) + 16));
+						one_high_resistance(o_ptr);
+						one_ability(o_ptr);
 						break;
 					case EGO_MIGHT:
-						random_resistance(o_ptr, FALSE, (randint1(22) + 16));
+						one_high_resistance(o_ptr);
 						break;
 					case EGO_TELEPATHY:
 					case EGO_REGENERATION:
 						break;
 					case EGO_LORDLINESS:
-						random_resistance(o_ptr, FALSE, (randint1(22) + 16));
+						one_high_resistance(o_ptr);
 						break;
 					case EGO_SEEING:
 						if (one_in_(3)) o_ptr->art_flags3 |= TR3_TELEPATHY;
@@ -2876,6 +2884,9 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 
 				switch (o_ptr->name2)
 				{
+				case EGO_AMAN:
+					one_high_resistance(o_ptr);
+					break;
 				case EGO_BAT:
 					o_ptr->to_d -= 6;
 					o_ptr->to_h -= 6;
@@ -2906,9 +2917,6 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
  */
 static void a_m_aux_3(object_type *o_ptr, int level, int power)
 {
-
-	artifact_bias = 0;
-
 	/* Apply magic (good or bad) according to type */
 	switch (o_ptr->tval)
 	{
@@ -3006,7 +3014,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				{
 					do
 					{
-						random_resistance(o_ptr, FALSE, randint1(20) + 18);
+						one_loadly_high_resistance(o_ptr);
 					}
 					while (one_in_(4));
 
@@ -3329,8 +3337,8 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 							break;
 						case SV_RING_LORDLY:
 							if (!one_in_(20)) break;
-							random_resistance(o_ptr, FALSE, randint1(20) + 18);
-							random_resistance(o_ptr, FALSE, randint1(20) + 18);
+							one_loadly_high_resistance(o_ptr);
+							one_loadly_high_resistance(o_ptr);
 							o_ptr->name2 = EGO_RING_TRUE;
 							break;
 						case SV_RING_SUSTAIN:
@@ -3467,7 +3475,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 
 				case SV_AMULET_RESISTANCE:
 				{
-					if (one_in_(3)) random_resistance(o_ptr, FALSE, (randint1(34) + 4));
+					if (one_in_(5)) one_high_resistance(o_ptr);
 					if (one_in_(5)) o_ptr->art_flags2 |= TR2_RES_POIS;
 				}
 				break;
@@ -4250,70 +4258,6 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 	else if (o_ptr->name2)
 	{
 		ego_item_type *e_ptr = &e_info[o_ptr->name2];
-
-		/* Hack -- extra powers */
-		switch (o_ptr->name2)
-		{
-			/* Weapon (Holy Avenger) */
-			case EGO_HA:
-			{
-				o_ptr->xtra1 = EGO_XTRA_SUSTAIN;
-				break;
-			}
-
-			/* Weapon (Defender) */
-			case EGO_DF:
-			{
-				o_ptr->xtra1 = EGO_XTRA_SUSTAIN;
-				break;
-			}
-
-			/* Weapon (Blessed) */
-			case EGO_BLESS_BLADE:
-			{
-				o_ptr->xtra1 = EGO_XTRA_ABILITY;
-				break;
-			}
-
-			/* Trump weapon */
-			case EGO_TRUMP:
-			{
-				if (one_in_(7)) o_ptr->xtra1 = EGO_XTRA_ABILITY;
-				break;
-			}
-
-			/* Robe of Permanance */
-			case EGO_PERMANENCE:
-			{
-				o_ptr->xtra1 = EGO_XTRA_POWER;
-				break;
-			}
-
-			/* Armor of Elvenkind */
-			case EGO_ELVENKIND:
-			{
-				o_ptr->xtra1 = EGO_XTRA_POWER;
-				break;
-			}
-
-			/* Crown of the Magi */
-			case EGO_MAGI:
-			{
-				o_ptr->xtra1 = EGO_XTRA_ABILITY;
-				break;
-			}
-
-			/* Cloak of Aman */
-			case EGO_AMAN:
-			{
-				o_ptr->xtra1 = EGO_XTRA_POWER;
-				break;
-			}
-		}
-
-		/* Randomize the "xtra" power */
-		if (o_ptr->xtra1 && !o_ptr->art_name)
-			o_ptr->xtra2 = randint1(256);
 
 		/* Hack -- acquire "broken" flag */
 		if (!e_ptr->cost) o_ptr->ident |= (IDENT_BROKEN);

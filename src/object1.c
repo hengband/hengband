@@ -138,68 +138,6 @@ void object_flags(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3)
 		(*f3) |= o_ptr->art_flags3;
 	}
 
-	/* Extra powers */
-	if (!(o_ptr->art_name))
-	{
-		switch (o_ptr->xtra1)
-		{
-			case EGO_XTRA_SUSTAIN:
-			{
-				/* Choose a sustain */
-				switch (o_ptr->xtra2 % 6)
-				{
-					case 0: (*f2) |= (TR2_SUST_STR); break;
-					case 1: (*f2) |= (TR2_SUST_INT); break;
-					case 2: (*f2) |= (TR2_SUST_WIS); break;
-					case 3: (*f2) |= (TR2_SUST_DEX); break;
-					case 4: (*f2) |= (TR2_SUST_CON); break;
-					case 5: (*f2) |= (TR2_SUST_CHR); break;
-				}
-
-				break;
-			}
-
-			case EGO_XTRA_POWER:
-			{
-				/* Choose a power */
-				switch (o_ptr->xtra2 % 11)
-				{
-					case  0: (*f2) |= (TR2_RES_BLIND);  break;
-					case  1: (*f2) |= (TR2_RES_CONF);   break;
-					case  2: (*f2) |= (TR2_RES_SOUND);  break;
-					case  3: (*f2) |= (TR2_RES_SHARDS); break;
-					case  4: (*f2) |= (TR2_RES_NETHER); break;
-					case  5: (*f2) |= (TR2_RES_NEXUS);  break;
-					case  6: (*f2) |= (TR2_RES_CHAOS);  break;
-					case  7: (*f2) |= (TR2_RES_DISEN);  break;
-					case  8: (*f2) |= (TR2_RES_POIS);   break;
-					case  9: (*f2) |= (TR2_RES_DARK);   break;
-					case 10: (*f2) |= (TR2_RES_LITE);   break;
-				}
-
-				break;
-			}
-
-			case EGO_XTRA_ABILITY:
-			{
-				/* Choose an ability */
-				switch (o_ptr->xtra2 % 8)
-				{
-					case 0: (*f3) |= (TR3_FEATHER);     break;
-					case 1: (*f3) |= (TR3_LITE);        break;
-					case 2: (*f3) |= (TR3_SEE_INVIS);   break;
-					case 3: (*f3) |= (TR3_WARNING);     break;
-					case 4: (*f3) |= (TR3_SLOW_DIGEST); break;
-					case 5: (*f3) |= (TR3_REGEN);       break;
-					case 6: (*f2) |= (TR2_FREE_ACT);    break;
-					case 7: (*f2) |= (TR2_HOLD_LIFE);   break;
-				}
-
-				break;
-			}
-		}
-	}
-
 	if ((o_ptr->tval > TV_CAPTURE) && o_ptr->xtra3)
 	{
 		if (o_ptr->xtra3 < 33)
@@ -335,68 +273,6 @@ void object_flags_known(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3)
 			(*f1) |= o_ptr->art_flags1;
 			(*f2) |= o_ptr->art_flags2;
 			(*f3) |= o_ptr->art_flags3;
-		}
-
-		if (!(o_ptr->art_name))
-		{
-			/* Extra powers */
-			switch (o_ptr->xtra1)
-			{
-				case EGO_XTRA_SUSTAIN:
-				{
-					/* Choose a sustain */
-					switch (o_ptr->xtra2 % 6)
-					{
-						case 0: (*f2) |= (TR2_SUST_STR); break;
-						case 1: (*f2) |= (TR2_SUST_INT); break;
-						case 2: (*f2) |= (TR2_SUST_WIS); break;
-						case 3: (*f2) |= (TR2_SUST_DEX); break;
-						case 4: (*f2) |= (TR2_SUST_CON); break;
-						case 5: (*f2) |= (TR2_SUST_CHR); break;
-					}
-
-					break;
-				}
-
-				case EGO_XTRA_POWER:
-				{
-					/* Choose a power */
-					switch (o_ptr->xtra2 % 11)
-					{
-						case  0: (*f2) |= (TR2_RES_BLIND);  break;
-						case  1: (*f2) |= (TR2_RES_CONF);   break;
-						case  2: (*f2) |= (TR2_RES_SOUND);  break;
-						case  3: (*f2) |= (TR2_RES_SHARDS); break;
-						case  4: (*f2) |= (TR2_RES_NETHER); break;
-						case  5: (*f2) |= (TR2_RES_NEXUS);  break;
-						case  6: (*f2) |= (TR2_RES_CHAOS);  break;
-						case  7: (*f2) |= (TR2_RES_DISEN);  break;
-						case  8: (*f2) |= (TR2_RES_POIS);   break;
-						case  9: (*f2) |= (TR2_RES_DARK);   break;
-						case 10: (*f2) |= (TR2_RES_LITE);   break;
-					}
-
-					break;
-				}
-
-				case EGO_XTRA_ABILITY:
-				{
-					/* Choose an ability */
-					switch (o_ptr->xtra2 % 8)
-					{
-						case 0: (*f3) |= (TR3_FEATHER);     break;
-						case 1: (*f3) |= (TR3_LITE);        break;
-						case 2: (*f3) |= (TR3_SEE_INVIS);   break;
-						case 3: (*f3) |= (TR3_WARNING);     break;
-						case 4: (*f3) |= (TR3_SLOW_DIGEST); break;
-						case 5: (*f3) |= (TR3_REGEN);       break;
-						case 6: (*f2) |= (TR2_FREE_ACT);    break;
-						case 7: (*f2) |= (TR2_HOLD_LIFE);   break;
-					}
-
-					break;
-				}
-			}
 		}
 	}
 

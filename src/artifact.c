@@ -25,6 +25,133 @@
 #define ACTIVATION_CHANCE 3
 
 
+/*
+ * Choose one random sustain
+ */
+void one_sustain(object_type *o_ptr)
+{
+	switch (randint0(6))
+	{
+		case 0: o_ptr->art_flags2 |= (TR2_SUST_STR); break;
+		case 1: o_ptr->art_flags2 |= (TR2_SUST_INT); break;
+		case 2: o_ptr->art_flags2 |= (TR2_SUST_WIS); break;
+		case 3: o_ptr->art_flags2 |= (TR2_SUST_DEX); break;
+		case 4: o_ptr->art_flags2 |= (TR2_SUST_CON); break;
+		case 5: o_ptr->art_flags2 |= (TR2_SUST_CHR); break;
+	}
+}
+
+
+/*
+ * Choose one random high resistance
+ */
+void one_high_resistance(object_type *o_ptr)
+{
+	switch (randint0(12))
+	{
+		case  0: o_ptr->art_flags2 |= (TR2_RES_POIS);   break;
+		case  1: o_ptr->art_flags2 |= (TR2_RES_LITE);   break;
+		case  2: o_ptr->art_flags2 |= (TR2_RES_DARK);   break;
+		case  3: o_ptr->art_flags2 |= (TR2_RES_SHARDS); break;
+		case  4: o_ptr->art_flags2 |= (TR2_RES_BLIND);  break;
+		case  5: o_ptr->art_flags2 |= (TR2_RES_CONF);   break;
+		case  6: o_ptr->art_flags2 |= (TR2_RES_SOUND);  break;
+		case  7: o_ptr->art_flags2 |= (TR2_RES_NETHER); break;
+		case  8: o_ptr->art_flags2 |= (TR2_RES_NEXUS);  break;
+		case  9: o_ptr->art_flags2 |= (TR2_RES_CHAOS);  break;
+		case 10: o_ptr->art_flags2 |= (TR2_RES_DISEN);  break;
+		case 11: o_ptr->art_flags2 |= (TR2_RES_FEAR);   break;
+	}
+}
+
+
+/*
+ * Choose one random high resistance ( except poison and disenchantment )
+ */
+void one_loadly_high_resistance(object_type *o_ptr)
+{
+	switch (randint0(10))
+	{
+		case 0: o_ptr->art_flags2 |= (TR2_RES_LITE);   break;
+		case 1: o_ptr->art_flags2 |= (TR2_RES_DARK);   break;
+		case 2: o_ptr->art_flags2 |= (TR2_RES_SHARDS); break;
+		case 3: o_ptr->art_flags2 |= (TR2_RES_BLIND);  break;
+		case 4: o_ptr->art_flags2 |= (TR2_RES_CONF);   break;
+		case 5: o_ptr->art_flags2 |= (TR2_RES_SOUND);  break;
+		case 6: o_ptr->art_flags2 |= (TR2_RES_NETHER); break;
+		case 7: o_ptr->art_flags2 |= (TR2_RES_NEXUS);  break;
+		case 8: o_ptr->art_flags2 |= (TR2_RES_CHAOS);  break;
+		case 9: o_ptr->art_flags2 |= (TR2_RES_FEAR);   break;
+	}
+}
+
+
+/*
+ * Choose one random element resistance
+ */
+void one_ele_resistance(object_type *o_ptr)
+{
+	switch (randint0(4))
+	{
+		case  0: o_ptr->art_flags2 |= (TR2_RES_ACID); break;
+		case  1: o_ptr->art_flags2 |= (TR2_RES_ELEC); break;
+		case  2: o_ptr->art_flags2 |= (TR2_RES_COLD); break;
+		case  3: o_ptr->art_flags2 |= (TR2_RES_FIRE); break;
+	}
+}
+
+
+/*
+ * Choose one random element or poison resistance
+ */
+void one_dragon_ele_resistance(object_type *o_ptr)
+{
+	if (one_in_(7))
+	{
+		o_ptr->art_flags2 |= (TR2_RES_POIS);
+	}
+	else
+	{
+		one_ele_resistance(o_ptr);
+	}
+}
+
+
+/*
+ * Choose one random resistance
+ */
+void one_resistance(object_type *o_ptr)
+{
+	if (one_in_(3))
+	{
+		one_ele_resistance(o_ptr);
+	}
+	else
+	{
+		one_high_resistance(o_ptr);
+	}
+}
+
+
+/*
+ * Choose one random ability
+ */
+void one_ability(object_type *o_ptr)
+{
+	switch (randint0(8))
+	{
+		case 0: o_ptr->art_flags3 |= (TR3_FEATHER);     break;
+		case 1: o_ptr->art_flags3 |= (TR3_LITE);        break;
+		case 2: o_ptr->art_flags3 |= (TR3_SEE_INVIS);   break;
+		case 3: o_ptr->art_flags3 |= (TR3_WARNING);     break;
+		case 4: o_ptr->art_flags3 |= (TR3_SLOW_DIGEST); break;
+		case 5: o_ptr->art_flags3 |= (TR3_REGEN);       break;
+		case 6: o_ptr->art_flags2 |= (TR2_FREE_ACT);    break;
+		case 7: o_ptr->art_flags2 |= (TR2_HOLD_LIFE);   break;
+	}
+}
+
+
 static void curse_artifact(object_type * o_ptr)
 {
 	if (o_ptr->pval > 0) o_ptr->pval = 0 - (o_ptr->pval + randint1(4));
@@ -260,151 +387,148 @@ static void random_plus(object_type * o_ptr, bool is_scroll)
 }
 
 
-void random_resistance(object_type * o_ptr, bool is_scroll, int specific)
+static void random_resistance(object_type * o_ptr, bool is_scroll)
 {
-	if (!specific) /* To avoid a number of possible bugs */
+	if (artifact_bias == BIAS_ACID)
 	{
-		if (artifact_bias == BIAS_ACID)
+		if (!(o_ptr->art_flags2 & TR2_RES_ACID))
 		{
-			if (!(o_ptr->art_flags2 & TR2_RES_ACID))
-			{
-				o_ptr->art_flags2 |= TR2_RES_ACID;
-				if (one_in_(2)) return;
-			}
-			if (one_in_(BIAS_LUCK) && !(o_ptr->art_flags2 & TR2_IM_ACID))
-			{
-				o_ptr->art_flags2 |= TR2_IM_ACID;
-				if (!one_in_(IM_LUCK)) o_ptr->art_flags2 &= ~(TR2_IM_ELEC | TR2_IM_COLD | TR2_IM_FIRE);
-				if (one_in_(2)) return;
-			}
+			o_ptr->art_flags2 |= TR2_RES_ACID;
+			if (one_in_(2)) return;
 		}
-		else if (artifact_bias == BIAS_ELEC)
+		if (one_in_(BIAS_LUCK) && !(o_ptr->art_flags2 & TR2_IM_ACID))
 		{
-			if (!(o_ptr->art_flags2 & TR2_RES_ELEC))
-			{
-				o_ptr->art_flags2 |= TR2_RES_ELEC;
-				if (one_in_(2)) return;
-			}
-			if ((o_ptr->tval >= TV_CLOAK) && (o_ptr->tval <= TV_HARD_ARMOR) &&
-			   !(o_ptr->art_flags3 & TR3_SH_ELEC))
-			{
-				o_ptr->art_flags3 |= TR3_SH_ELEC;
-				if (one_in_(2)) return;
-			}
-			if (one_in_(BIAS_LUCK) && !(o_ptr->art_flags2 & TR2_IM_ELEC))
-			{
-				o_ptr->art_flags2 |= TR2_IM_ELEC;
-				if (!one_in_(IM_LUCK)) o_ptr->art_flags2 &= ~(TR2_IM_ACID | TR2_IM_COLD | TR2_IM_FIRE);
-				if (one_in_(2)) return;
-			}
+			o_ptr->art_flags2 |= TR2_IM_ACID;
+			if (!one_in_(IM_LUCK)) o_ptr->art_flags2 &= ~(TR2_IM_ELEC | TR2_IM_COLD | TR2_IM_FIRE);
+			if (one_in_(2)) return;
 		}
-		else if (artifact_bias == BIAS_FIRE)
+	}
+	else if (artifact_bias == BIAS_ELEC)
+	{
+		if (!(o_ptr->art_flags2 & TR2_RES_ELEC))
 		{
-			if (!(o_ptr->art_flags2 & TR2_RES_FIRE))
-			{
-				o_ptr->art_flags2 |= TR2_RES_FIRE;
-				if (one_in_(2)) return;
-			}
-			if ((o_ptr->tval >= TV_CLOAK) &&
-			    (o_ptr->tval <= TV_HARD_ARMOR) &&
-			    !(o_ptr->art_flags3 & TR3_SH_FIRE))
-			{
-				o_ptr->art_flags3 |= TR3_SH_FIRE;
-				if (one_in_(2)) return;
-			}
-			if (one_in_(BIAS_LUCK) &&
-			    !(o_ptr->art_flags2 & TR2_IM_FIRE))
-			{
-				o_ptr->art_flags2 |= TR2_IM_FIRE;
-				if (!one_in_(IM_LUCK)) o_ptr->art_flags2 &= ~(TR2_IM_ELEC | TR2_IM_COLD | TR2_IM_ACID);
-				if (one_in_(2)) return;
-			}
+			o_ptr->art_flags2 |= TR2_RES_ELEC;
+			if (one_in_(2)) return;
 		}
-		else if (artifact_bias == BIAS_COLD)
+		if ((o_ptr->tval >= TV_CLOAK) && (o_ptr->tval <= TV_HARD_ARMOR) &&
+		    !(o_ptr->art_flags3 & TR3_SH_ELEC))
 		{
-			if (!(o_ptr->art_flags2 & TR2_RES_COLD))
-			{
-				o_ptr->art_flags2 |= TR2_RES_COLD;
-				if (one_in_(2)) return;
-			}
-			if ((o_ptr->tval >= TV_CLOAK) &&
-			    (o_ptr->tval <= TV_HARD_ARMOR) &&
-			    !(o_ptr->art_flags3 & TR3_SH_COLD))
-			{
-				o_ptr->art_flags3 |= TR3_SH_COLD;
-				if (one_in_(2)) return;
-			}
-			if (one_in_(BIAS_LUCK) && !(o_ptr->art_flags2 & TR2_IM_COLD))
-			{
-				o_ptr->art_flags2 |= TR2_IM_COLD;
-				if (!one_in_(IM_LUCK)) o_ptr->art_flags2 &= ~(TR2_IM_ELEC | TR2_IM_ACID | TR2_IM_FIRE);
-				if (one_in_(2)) return;
-			}
+			o_ptr->art_flags3 |= TR3_SH_ELEC;
+			if (one_in_(2)) return;
 		}
-		else if (artifact_bias == BIAS_POIS)
+		if (one_in_(BIAS_LUCK) && !(o_ptr->art_flags2 & TR2_IM_ELEC))
 		{
-			if (!(o_ptr->art_flags2 & TR2_RES_POIS))
-			{
-				o_ptr->art_flags2 |= TR2_RES_POIS;
-				if (one_in_(2)) return;
-			}
+			o_ptr->art_flags2 |= TR2_IM_ELEC;
+			if (!one_in_(IM_LUCK)) o_ptr->art_flags2 &= ~(TR2_IM_ACID | TR2_IM_COLD | TR2_IM_FIRE);
+			if (one_in_(2)) return;
 		}
-		else if (artifact_bias == BIAS_WARRIOR)
+	}
+	else if (artifact_bias == BIAS_FIRE)
+	{
+		if (!(o_ptr->art_flags2 & TR2_RES_FIRE))
 		{
-			if (!one_in_(3) && (!(o_ptr->art_flags2 & TR2_RES_FEAR)))
-			{
-				o_ptr->art_flags2 |= TR2_RES_FEAR;
-				if (one_in_(2)) return;
-			}
-			if (one_in_(3) && (!(o_ptr->art_flags3 & TR3_NO_MAGIC)))
-			{
-				o_ptr->art_flags3 |= TR3_NO_MAGIC;
-				if (one_in_(2)) return;
-			}
+			o_ptr->art_flags2 |= TR2_RES_FIRE;
+			if (one_in_(2)) return;
 		}
-		else if (artifact_bias == BIAS_NECROMANTIC)
+		if ((o_ptr->tval >= TV_CLOAK) &&
+		    (o_ptr->tval <= TV_HARD_ARMOR) &&
+		    !(o_ptr->art_flags3 & TR3_SH_FIRE))
 		{
-			if (!(o_ptr->art_flags2 & TR2_RES_NETHER))
-			{
-				o_ptr->art_flags2 |= TR2_RES_NETHER;
-				if (one_in_(2)) return;
-			}
-			if (!(o_ptr->art_flags2 & TR2_RES_POIS))
-			{
-				o_ptr->art_flags2 |= TR2_RES_POIS;
-				if (one_in_(2)) return;
-			}
-			if (!(o_ptr->art_flags2 & TR2_RES_DARK))
-			{
-				o_ptr->art_flags2 |= TR2_RES_DARK;
-				if (one_in_(2)) return;
-			}
+			o_ptr->art_flags3 |= TR3_SH_FIRE;
+			if (one_in_(2)) return;
 		}
-		else if (artifact_bias == BIAS_CHAOS)
+		if (one_in_(BIAS_LUCK) &&
+		    !(o_ptr->art_flags2 & TR2_IM_FIRE))
 		{
-			if (!(o_ptr->art_flags2 & TR2_RES_CHAOS))
-			{
-				o_ptr->art_flags2 |= TR2_RES_CHAOS;
-				if (one_in_(2)) return;
-			}
-			if (!(o_ptr->art_flags2 & TR2_RES_CONF))
-			{
-				o_ptr->art_flags2 |= TR2_RES_CONF;
-				if (one_in_(2)) return;
-			}
-			if (!(o_ptr->art_flags2 & TR2_RES_DISEN))
-			{
-				o_ptr->art_flags2 |= TR2_RES_DISEN;
-				if (one_in_(2)) return;
-			}
+			o_ptr->art_flags2 |= TR2_IM_FIRE;
+			if (!one_in_(IM_LUCK)) o_ptr->art_flags2 &= ~(TR2_IM_ELEC | TR2_IM_COLD | TR2_IM_ACID);
+			if (one_in_(2)) return;
+		}
+	}
+	else if (artifact_bias == BIAS_COLD)
+	{
+		if (!(o_ptr->art_flags2 & TR2_RES_COLD))
+		{
+			o_ptr->art_flags2 |= TR2_RES_COLD;
+			if (one_in_(2)) return;
+		}
+		if ((o_ptr->tval >= TV_CLOAK) &&
+		    (o_ptr->tval <= TV_HARD_ARMOR) &&
+		    !(o_ptr->art_flags3 & TR3_SH_COLD))
+		{
+			o_ptr->art_flags3 |= TR3_SH_COLD;
+			if (one_in_(2)) return;
+		}
+		if (one_in_(BIAS_LUCK) && !(o_ptr->art_flags2 & TR2_IM_COLD))
+		{
+			o_ptr->art_flags2 |= TR2_IM_COLD;
+			if (!one_in_(IM_LUCK)) o_ptr->art_flags2 &= ~(TR2_IM_ELEC | TR2_IM_ACID | TR2_IM_FIRE);
+			if (one_in_(2)) return;
+		}
+	}
+	else if (artifact_bias == BIAS_POIS)
+	{
+		if (!(o_ptr->art_flags2 & TR2_RES_POIS))
+		{
+			o_ptr->art_flags2 |= TR2_RES_POIS;
+			if (one_in_(2)) return;
+		}
+	}
+	else if (artifact_bias == BIAS_WARRIOR)
+	{
+		if (!one_in_(3) && (!(o_ptr->art_flags2 & TR2_RES_FEAR)))
+		{
+			o_ptr->art_flags2 |= TR2_RES_FEAR;
+			if (one_in_(2)) return;
+		}
+		if (one_in_(3) && (!(o_ptr->art_flags3 & TR3_NO_MAGIC)))
+		{
+			o_ptr->art_flags3 |= TR3_NO_MAGIC;
+			if (one_in_(2)) return;
+		}
+	}
+	else if (artifact_bias == BIAS_NECROMANTIC)
+	{
+		if (!(o_ptr->art_flags2 & TR2_RES_NETHER))
+		{
+			o_ptr->art_flags2 |= TR2_RES_NETHER;
+			if (one_in_(2)) return;
+		}
+		if (!(o_ptr->art_flags2 & TR2_RES_POIS))
+		{
+			o_ptr->art_flags2 |= TR2_RES_POIS;
+			if (one_in_(2)) return;
+		}
+		if (!(o_ptr->art_flags2 & TR2_RES_DARK))
+		{
+			o_ptr->art_flags2 |= TR2_RES_DARK;
+			if (one_in_(2)) return;
+		}
+	}
+	else if (artifact_bias == BIAS_CHAOS)
+	{
+		if (!(o_ptr->art_flags2 & TR2_RES_CHAOS))
+		{
+			o_ptr->art_flags2 |= TR2_RES_CHAOS;
+			if (one_in_(2)) return;
+		}
+		if (!(o_ptr->art_flags2 & TR2_RES_CONF))
+		{
+			o_ptr->art_flags2 |= TR2_RES_CONF;
+			if (one_in_(2)) return;
+		}
+		if (!(o_ptr->art_flags2 & TR2_RES_DISEN))
+		{
+			o_ptr->art_flags2 |= TR2_RES_DISEN;
+			if (one_in_(2)) return;
 		}
 	}
 
-	switch (specific ? specific : randint1(42))
+	switch (randint1(42))
 	{
 		case 1:
 			if (!one_in_(WEIRD_LUCK))
-				random_resistance(o_ptr, is_scroll, specific);
+				random_resistance(o_ptr, is_scroll);
 			else
 			{
 				o_ptr->art_flags2 |= TR2_IM_ACID;
@@ -414,7 +538,7 @@ void random_resistance(object_type * o_ptr, bool is_scroll, int specific)
 			break;
 		case 2:
 			if (!one_in_(WEIRD_LUCK))
-				random_resistance(o_ptr, is_scroll, specific);
+				random_resistance(o_ptr, is_scroll);
 			else
 			{
 				o_ptr->art_flags2 |= TR2_IM_ELEC;
@@ -424,7 +548,7 @@ void random_resistance(object_type * o_ptr, bool is_scroll, int specific)
 			break;
 		case 3:
 			if (!one_in_(WEIRD_LUCK))
-				random_resistance(o_ptr, is_scroll, specific);
+				random_resistance(o_ptr, is_scroll);
 			else
 			{
 				o_ptr->art_flags2 |= TR2_IM_COLD;
@@ -434,7 +558,7 @@ void random_resistance(object_type * o_ptr, bool is_scroll, int specific)
 			break;
 		case 4:
 			if (!one_in_(WEIRD_LUCK))
-				random_resistance(o_ptr, is_scroll, specific);
+				random_resistance(o_ptr, is_scroll);
 			else
 			{
 				o_ptr->art_flags2 |= TR2_IM_FIRE;
@@ -534,7 +658,7 @@ void random_resistance(object_type * o_ptr, bool is_scroll, int specific)
 			if (o_ptr->tval >= TV_CLOAK && o_ptr->tval <= TV_HARD_ARMOR)
 				o_ptr->art_flags3 |= TR3_SH_ELEC;
 			else
-				random_resistance(o_ptr, is_scroll, specific);
+				random_resistance(o_ptr, is_scroll);
 			if (!artifact_bias)
 				artifact_bias = BIAS_ELEC;
 			break;
@@ -542,7 +666,7 @@ void random_resistance(object_type * o_ptr, bool is_scroll, int specific)
 			if (o_ptr->tval >= TV_CLOAK && o_ptr->tval <= TV_HARD_ARMOR)
 				o_ptr->art_flags3 |= TR3_SH_FIRE;
 			else
-				random_resistance(o_ptr, is_scroll, specific);
+				random_resistance(o_ptr, is_scroll);
 			if (!artifact_bias)
 				artifact_bias = BIAS_FIRE;
 			break;
@@ -551,13 +675,13 @@ void random_resistance(object_type * o_ptr, bool is_scroll, int specific)
 			    o_ptr->tval == TV_HELM || o_ptr->tval == TV_HARD_ARMOR)
 				o_ptr->art_flags2 |= TR2_REFLECT;
 			else
-				random_resistance(o_ptr, is_scroll, specific);
+				random_resistance(o_ptr, is_scroll);
 			break;
 		case 42:
 			if (o_ptr->tval >= TV_CLOAK && o_ptr->tval <= TV_HARD_ARMOR)
 				o_ptr->art_flags3 |= TR3_SH_COLD;
 			else
-				random_resistance(o_ptr, is_scroll, specific);
+				random_resistance(o_ptr, is_scroll);
 			if (!artifact_bias)
 				artifact_bias = BIAS_COLD;
 			break;
@@ -1517,7 +1641,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 					}
 				}
 				else
-					random_resistance(o_ptr, a_scroll, FALSE);
+					random_resistance(o_ptr, a_scroll);
 				break;
 			case 5:
 				random_misc(o_ptr, a_scroll);
@@ -2811,7 +2935,7 @@ void random_artifact_resistance(object_type * o_ptr)
 			o_ptr->art_flags1 |= (TR1_CHAOTIC << randint0(18));
 		dummy = randint1(2);
 		for (i = 0; i < dummy; i++)
-			random_resistance(o_ptr, FALSE, randint1(34) + 4);
+			one_resistance(o_ptr);
 		dummy = 2;
 		for (i = 0; i < dummy; i++)
 		{
@@ -2888,17 +3012,12 @@ void random_artifact_resistance(object_type * o_ptr)
 
 	if (give_power)
 	{
-		o_ptr->xtra1 = EGO_XTRA_ABILITY;
-
-		/* Randomize the "xtra" power */
-		if (o_ptr->xtra1) o_ptr->xtra2 = randint1(256);
+		one_ability(o_ptr);
 	}
-
-	artifact_bias = 0;
 
 	if (give_resistance)
 	{
-		random_resistance(o_ptr, FALSE, randint1(22) + 16);
+		one_high_resistance(o_ptr);
 	}
 }
 

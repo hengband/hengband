@@ -4713,7 +4713,7 @@ msg_print("「汝の行いは貴き剣に値せり。」");
 			object_prep(q_ptr, lookup_kind(dummy, dummy2));
 			q_ptr->to_h = 3 + randint1(dun_level) % 10;
 			q_ptr->to_d = 3 + randint1(dun_level) % 10;
-			random_resistance(q_ptr, FALSE, randint1(34) + 4);
+			one_resistance(q_ptr);
 			q_ptr->name2 = EGO_CHAOTIC;
 
 			/* Drop it in the dungeon */
