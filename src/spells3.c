@@ -2143,9 +2143,6 @@ bool item_tester_hook_weapon_armour(object_type *o_ptr)
  */
 static bool item_tester_hook_nameless_weapon_armour(object_type *o_ptr)
 {
-	if (o_ptr->name1 || o_ptr->art_name || o_ptr->name2 || o_ptr->xtra3)
-		return FALSE;
-
 	switch (o_ptr->tval)
 	{
 		case TV_SWORD:
@@ -2165,12 +2162,14 @@ static bool item_tester_hook_nameless_weapon_armour(object_type *o_ptr)
 		case TV_HELM:
 		case TV_BOOTS:
 		case TV_GLOVES:
-		{
-			return (TRUE);
-		}
+			if (o_ptr->name1 || o_ptr->art_name || o_ptr->name2 || o_ptr->xtra3)
+			{
+				if (object_known_p(o_ptr)) return FALSE;
+			}
+			return TRUE;
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -2415,8 +2414,8 @@ bool artifact_scroll(void)
 
 	/* Get an item */
 #ifdef JP
-q = "どのアイテムを強化しますか? ";
-s = "強化できるアイテムがない。";
+	q = "どのアイテムを強化しますか? ";
+	s = "強化できるアイテムがない。";
 #else
 	q = "Enchant which item? ";
 	s = "You have nothing to enchant.";
@@ -2442,7 +2441,7 @@ s = "強化できるアイテムがない。";
 
 	/* Describe */
 #ifdef JP
-msg_format("%s は眩い光を発した！",o_name);
+	msg_format("%s は眩い光を発した！",o_name);
 #else
 	msg_format("%s %s radiate%s a blinding light!",
 		  ((item >= 0) ? "Your" : "The"), o_name,
@@ -2452,8 +2451,7 @@ msg_format("%s は眩い光を発した！",o_name);
 	if (o_ptr->name1 || o_ptr->art_name)
 	{
 #ifdef JP
-msg_format("%sは既に伝説のアイテムです！",
-    o_name  );
+		msg_format("%sは既に伝説のアイテムです！", o_name  );
 #else
 		msg_format("The %s %s already %s!",
 		    o_name, ((o_ptr->number > 1) ? "are" : "is"),
@@ -2466,8 +2464,7 @@ msg_format("%sは既に伝説のアイテムです！",
 	else if (o_ptr->name2)
 	{
 #ifdef JP
-msg_format("%sは既に名のあるアイテムです！",
-    o_name );
+		msg_format("%sは既に名のあるアイテムです！", o_name );
 #else
 		msg_format("The %s %s already %s!",
 		    o_name, ((o_ptr->number > 1) ? "are" : "is"),
@@ -2480,8 +2477,7 @@ msg_format("%sは既に名のあるアイテムです！",
 	else if (o_ptr->xtra3)
 	{
 #ifdef JP
-msg_format("%sは既に強化されています！",
-    o_name );
+		msg_format("%sは既に強化されています！", o_name );
 #else
 		msg_format("The %s %s already %s!",
 		    o_name, ((o_ptr->number > 1) ? "are" : "is"),
@@ -2494,8 +2490,8 @@ msg_format("%sは既に強化されています！",
 		if (o_ptr->number > 1)
 		{
 #ifdef JP
-msg_print("複数のアイテムに魔法をかけるだけのエネルギーはありません！");
-msg_format("%d 個の%sが壊れた！",(o_ptr->number)-1, o_name);
+			msg_print("複数のアイテムに魔法をかけるだけのエネルギーはありません！");
+			msg_format("%d 個の%sが壊れた！",(o_ptr->number)-1, o_name);
 #else
 			msg_print("Not enough enough energy to enchant more than one object!");
 			msg_format("%d of your %s %s destroyed!",(o_ptr->number)-1, o_name, (o_ptr->number>2?"were":"was"));
@@ -2521,7 +2517,7 @@ msg_format("%d 個の%sが壊れた！",(o_ptr->number)-1, o_name);
 
 		/* Message */
 #ifdef JP
-msg_print("強化に失敗した。");
+		msg_print("強化に失敗した。");
 #else
 		msg_print("The enchantment failed.");
 #endif
