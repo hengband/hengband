@@ -4474,6 +4474,8 @@ static bool CheckEvents(bool wait)
 				Term_keypress('0' + (ck - 64) % 10);
 
 				/* Hack -- Terminate the sequence */
+				/* MPW can generate 10 or 13 for keycode of '\r' */
+				/* -noMapCR option swaps '\r' and '\n' */
 				Term_keypress('\r');
 			}
 

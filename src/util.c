@@ -1104,7 +1104,7 @@ static void trigger_text_to_ascii(char **bufptr, cptr *strptr)
 		if (str)
 		{
 			*s++ = (char)31;
-			*s++ = (char)13;
+			*s++ = '\r';
 			*bufptr = s;
 			*strptr = str; /* where **strptr == ']' */
 		}
@@ -1136,7 +1136,7 @@ static void trigger_text_to_ascii(char **bufptr, cptr *strptr)
 			break;
 		}
 	}
-	*s++ = (char)13;
+	*s++ = '\r';
 
 	*bufptr = s;
 	*strptr = str; /* where **strptr == ']' */
@@ -1308,7 +1308,7 @@ bool trigger_ascii_to_text(char **bufptr, cptr *strptr)
 			}
 			break;
 		case '#':
-			for (j = 0; *str && *str != (char)13; j++)
+			for (j = 0; *str && *str != '\r'; j++)
 				key_code[j] = *str++;
 			key_code[j] = '\0';
 			break;
@@ -1317,7 +1317,7 @@ bool trigger_ascii_to_text(char **bufptr, cptr *strptr)
 			str++;
 		}
 	}
-	if (*str++ != (char)13) return FALSE;
+	if (*str++ != '\r') return FALSE;
 
 	for (i = 0; i < max_macrotrigger; i++)
 	{
