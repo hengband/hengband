@@ -1,4 +1,127 @@
+2002-06-28  Takeshi Mogami  <mogami@cvs>
+
+	* src/monster1.c 1.23:
+	WILD_ONLYが付いているモンスターで、WILD_MOUNTAINを持っていないモンスターでも
+	山で出てしまっていたので修正。
+
+2002-06-28  habu  <habu@cvs>
+
+	* lib/edit/v_info_j.txt 1.5:
+	パターンvaultでパターンが続いていなくて進めない部分があったので修正。
+
+2002-06-28  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd4.c 1.45, src/defines.h 1.64, src/dungeon.c 1.59:
+	ランダムクエスト中にパターンvaultでテレポートした時に落ちていたのを修正。
+
+2002-06-28  habu  <habu@cvs>
+
+	* src/chuukei.c 1.6:
+	init_chuukeiの宣言を()と省略せずに(void)とした。
+
+2002-06-28  Takeshi Mogami  <mogami@cvs>
+
+	* src/birth.c 1.48:
+	キャラクター作成で、'S'で再スタートしてクイックスタートしたとき、
+	mp_ptr の初期化を忘れていたのを修正。
+
+2002-06-27  henkma  <henkma@cvs>
+
+	* src/store.c 1.15:
+	我が家で(Page xx)から(Page x)に移るときに最後のコッカがゴミになって残ってたのを修正.
+
+2002-06-27  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd4.c 1.44, src/defines.h 1.63, src/externs.h 1.68, src/files.c 1.60, src/load.c 1.32, src/main-mac-carbon.c 1.2, src/save.c 1.19, src/scores.c 1.8, src/variable.c 1.27, src/wizard1.c 1.23:
+	- セーブファイル用の独立したバージョン番号を導入し、バージョン比較関数
+	  h_older_than() を導入した。数字を4つ全て指定して比較する。
+	- 最初のバージョンは 1.1.1.0 にした。今後(h_ver_minorが奇数=開発版、偶数=安定版)
+	  も最初の三桁は「開発版」のバージョンと同じ数字で固定するのが良いと思う。
+	- 昔のセーブファイルはバージョン 0.0.0.3 としてロードされる。
+	  (古すぎてもはや無意味だった"SAVEFILE_VERSION"の記憶位置を流用したため。)
+	- 古くて完全に無意味だったVやZの古いセーブファイルに対するコードを削除した。
+	- main-mac-carbon.cがいまだにVARSION_MAJOR等のVのバージョンを使っていた
+	  ので修正。最新版に置き変え。
+
+2002-06-26  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd5.c 1.41:
+	英語版未訳。'U'nnamedの説明文。
+
+	* src/cmd5.c 1.40:
+	MPが足りないときに「十分なマジックポイントがない」のメッセージの後、
+	flush_failure がオンでも入力をクリアしていなかった
+	(詠唱に失敗したときはちゃんとクリアする)ので、クリアするようにした。
+
+2002-06-25  Takeshi Mogami  <mogami@cvs>
+
+	* src/dungeon.c 1.58:
+	反魔法洞窟で The arena absorbes all .....と表示されていたので、
+	The dungeon absorbes に修正。
+
+	* src/monster2.c 1.36:
+	間違って、(mode | PM_IGNORE_TERRAIN)と書いていたので、(mode & PM_IGNORE_TERRAIN)に修正。
+
+	* src/monster1.c 1.22:
+	英語版のモンスターの思い出中の速度の表示にスペース不足。修正。
+
+2002-06-25  henkma  <henkma@cvs>
+
+	* src/cave.c 1.53, src/dungeon.c 1.57, src/spells1.c 1.27, src/spells2.c 1.39, src/spells3.c 1.45:
+	鏡を置くとその場所は光る. ただし暗闇の洞窟では鏡が消えるとその場所は光っていな
+	い状態に戻る.
+
+2002-06-24  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.51:
+	設定行の説明文に % や %all 等の説明追加。
+	^L のコマンド説明が初期化されていなかったのを修正。
+
+2002-06-23  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/d_info_j.txt 1.2, lib/edit/r_info_j.txt 1.40, src/monster1.c 1.21:
+	山に大鷲が出るように、モンスターフラグにWILD_MOUNTAINを含むダンジョンでは、
+	WILD_ONLYのモンスターも出るようにした。
+	ダンジョンの主をソロンドールに設定、ESCORTとESCORTSを付けて、実験用に
+	レベルだけ55に上げておいた。その他の大鷲ユニークもなるべく出るように
+	レアリティ1にした。実際に強さを変えるのは手を出していない。
+
+	* lib/file/rumors.txt 1.2:
+	typo: is a plenty of longswords -> are plenty of longswords
+
+	* src/object1.c 1.39:
+	typo: it will attempts -> it will attempt
+
+	* lib/edit/q00000ms_j.txt 1.3:
+	M$クエストで、ドアであるべき場所が道の地形だったのを修正。
+
+	* src/autopick.c 1.50: 自動拾いエディタ改良。
+	- コマンドモードで、'!'、'~'、'('キーが便利になった。
+	  続けて押すと複数の行を一度に切り換えられる。
+	- ^Kで空行を含む複数行をカットした後で、ペーストしたときちゃんと空行も
+	  含めて張り付けるようにした。
+
+	* src/cmd2.c 1.29, src/cmd4.c 1.43:
+	簡単愚より、画面写真のキャンセルを可能にした。
+	階段で地上に出るときはメッセージを変える。
+
 2002-06-22  Takeshi Mogami  <mogami@cvs>
+
+	* src/util.c 1.29:
+	キャラクタ作成中の「よろしいですか？ [y/n]」などがメッセージ履歴に残って
+	いたので、プレイ中の質問しか残さないように get_check_strict()を修正。
+
+	* lib/edit/a_info_j.txt 1.22.2.3, lib/edit/e_info_j.txt 1.21.2.3, lib/edit/k_info_j.txt 1.26.2.1, src/artifact.c 1.24.2.3, src/defines.h 1.59.2.4, src/flavor.c 1.17.2.2, src/init1.c 1.39.2.3, src/object2.c 1.41.2.4:
+	- ☆には強いESP(TELEPATHY, EVIL, NONLIVING)のうち1つか、または他の弱いESP 1d3が付く。
+	- 追加能力には2/10で弱いESPが1つ付く。
+	- 鋭敏は強いESPか弱いESP1d3個。テレパシー冠は両方。
+	- ★にKILL_ORCやらKILL_DEMONやらいくつか付加。
+	- TR_FULL_NAMEの実装。ベース名 Palantir → Crystal Ball 等
+
+	* src/dungeon.c 1.56:
+	パターンを使った階を指定したテレポートでmindepthを無視していたのを修正。
+
+	* Changelogs 1.50: 更新
 
 	* src/monster1.c 1.20, src/monster2.c 1.35, src/spells3.c 1.44:
 	クローン地獄での謎のモンスターのバグ修正。このバグは3つのバグの複合だった。
