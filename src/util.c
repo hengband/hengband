@@ -3883,6 +3883,150 @@ special_menu_naiyou special_menu_info[] =
 };
 #endif
 
+static char inkey_from_menu(void)
+{
+	char cmd;
+	int basey, basex;
+	int num = 0, max_num, old_num = 0;
+	int menu = 0;
+	bool kisuu;
+
+	if (py - panel_row_min > 10) basey = 2;
+	else basey = 13;
+	basex = 15;
+
+	/* Clear top line */
+	prt("", 0, 0);
+
+	screen_save();
+
+	while(1)
+	{
+		int i;
+		char sub_cmd;
+		cptr menu_name;
+		if (!menu) old_num = num;
+		put_str("+----------------------------------------------------+", basey, basex);
+		put_str("|                                                    |", basey+1, basex);
+		put_str("|                                                    |", basey+2, basex);
+		put_str("|                                                    |", basey+3, basex);
+		put_str("|                                                    |", basey+4, basex);
+		put_str("|                                                    |", basey+5, basex);
+		put_str("+----------------------------------------------------+", basey+6, basex);
+
+		for(i = 0; i < 10; i++)
+		{
+			int hoge;
+			if (!menu_info[menu][i].cmd) break;
+			menu_name = menu_info[menu][i].name;
+			for(hoge = 0; ; hoge++)
+			{
+				if (!special_menu_info[hoge].name[0]) break;
+				if ((menu != special_menu_info[hoge].window) || (i != special_menu_info[hoge].number)) continue;
+				switch(special_menu_info[hoge].jouken)
+				{
+				case MENU_CLASS:
+					if (p_ptr->pclass == special_menu_info[hoge].jouken_naiyou) menu_name = special_menu_info[hoge].name;
+					break;
+				case MENU_WILD:
+					if (!dun_level && !p_ptr->inside_arena && !p_ptr->inside_quest)
+					{
+						if ((byte)p_ptr->wild_mode == special_menu_info[hoge].jouken_naiyou) menu_name = special_menu_info[hoge].name;
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			put_str(menu_name, basey + 1 + i / 2, basex + 4 + (i % 2) * 24);
+		}
+		max_num = i;
+		kisuu = max_num % 2;
+#ifdef JP
+		put_str("กี",basey + 1 + num / 2, basex + 2 + (num % 2) * 24);
+#else
+		put_str("> ",basey + 1 + num / 2, basex + 2 + (num % 2) * 24);
+#endif
+
+		/* Place the cursor on the player */
+		move_cursor_relative(py, px);
+
+		/* Get a command */
+		sub_cmd = inkey();
+		if ((sub_cmd == ' ') || (sub_cmd == 'x') || (sub_cmd == 'X') || (sub_cmd == '\r'))
+		{
+			if (menu_info[menu][num].fin)
+			{
+				cmd = menu_info[menu][num].cmd;
+				use_menu = TRUE;
+				break;
+			}
+			else
+			{
+				menu = menu_info[menu][num].cmd;
+				num = 0;
+				basey += 2;
+				basex += 8;
+			}
+		}
+		else if ((sub_cmd == ESCAPE) || (sub_cmd == 'z') || (sub_cmd == 'Z') || (sub_cmd == '0'))
+		{
+			if (!menu)
+			{
+				cmd = ESCAPE;
+				break;
+			}
+			else
+			{
+				menu = 0;
+				num = old_num;
+				basey -= 2;
+				basex -= 8;
+				screen_load();
+				screen_save();
+			}
+		}
+		else if ((sub_cmd == '2') || (sub_cmd == 'j') || (sub_cmd == 'J'))
+		{
+			if (kisuu)
+			{
+				if (num % 2)
+					num = (num + 2) % (max_num - 1);
+				else
+					num = (num + 2) % (max_num + 1);
+			}
+			else num = (num + 2) % max_num;
+		}
+		else if ((sub_cmd == '8') || (sub_cmd == 'k') || (sub_cmd == 'K'))
+		{
+			if (kisuu)
+			{
+				if (num % 2)
+					num = (num + max_num - 3) % (max_num - 1);
+				else
+					num = (num + max_num - 1) % (max_num + 1);
+			}
+			else num = (num + max_num - 2) % max_num;
+		}
+		else if ((sub_cmd == '4') || (sub_cmd == '6') || (sub_cmd == 'h') || (sub_cmd == 'H') || (sub_cmd == 'l') || (sub_cmd == 'L'))
+		{
+			if ((num % 2) || (num == max_num - 1))
+			{
+				num--;
+			}
+			else if (num < max_num - 1)
+			{
+				num++;
+			}
+		}
+	}
+
+	screen_load();
+	if (!inkey_next) inkey_next = "";
+
+	return (cmd);
+}
+
 /*
  * Request a command from the user.
  *
@@ -3906,7 +4050,7 @@ void request_command(int shopping)
 {
 	int i;
 
-	unsigned char cmd;
+	char cmd;
 
 	int mode;
 
@@ -3959,8 +4103,6 @@ void request_command(int shopping)
 		/* Get a keypress in "command" mode */
 		else
 		{
-			char sub_cmd;
-
 			/* Hack -- no flush needed */
 			msg_flag = FALSE;
 			num_more = 0;
@@ -3969,148 +4111,11 @@ void request_command(int shopping)
 			inkey_flag = TRUE;
 
 			/* Get a command */
-			sub_cmd = inkey();
+			cmd = inkey();
 
-			if (!shopping && command_menu && ((sub_cmd == '\r') || (sub_cmd == '\n') || (sub_cmd == 'x') || (sub_cmd == 'X'))
-			    && !keymap_act[mode][(byte)(sub_cmd)])
-			{
-				int basey, basex;
-				int num = 0, max_num, old_num = 0;
-				int menu = 0;
-				bool kisuu;
-
-				if (py - panel_row_min > 10) basey = 2;
-				else basey = 13;
-				basex = 15;
-
-				/* Clear top line */
-				prt("", 0, 0);
-
-				screen_save();
-
-				while(1)
-				{
-					cptr menu_name;
-					if (!menu) old_num = num;
-					put_str("+----------------------------------------------------+", basey, basex);
-					put_str("|                                                    |", basey+1, basex);
-					put_str("|                                                    |", basey+2, basex);
-					put_str("|                                                    |", basey+3, basex);
-					put_str("|                                                    |", basey+4, basex);
-					put_str("|                                                    |", basey+5, basex);
-					put_str("+----------------------------------------------------+", basey+6, basex);
-
-					for(i = 0; i < 10; i++)
-					{
-						int hoge;
-						if (!menu_info[menu][i].cmd) break;
-						menu_name = menu_info[menu][i].name;
-						for(hoge = 0; ; hoge++)
-						{
-							if (!special_menu_info[hoge].name[0]) break;
-							if ((menu != special_menu_info[hoge].window) || (i != special_menu_info[hoge].number)) continue;
-							switch(special_menu_info[hoge].jouken)
-							{
-								case MENU_CLASS:
-								if (p_ptr->pclass == special_menu_info[hoge].jouken_naiyou) menu_name = special_menu_info[hoge].name;
-								break;
-								case MENU_WILD:
-								if (!dun_level && !p_ptr->inside_arena && !p_ptr->inside_quest)
-								{
-									if ((byte)p_ptr->wild_mode == special_menu_info[hoge].jouken_naiyou) menu_name = special_menu_info[hoge].name;
-								}
-								break;
-								default:
-								break;
-							}
-						}
-						put_str(menu_name, basey + 1 + i / 2, basex + 4 + (i % 2) * 24);
-					}
-					max_num = i;
-					kisuu = max_num % 2;
-#ifdef JP
-					put_str("กี",basey + 1 + num / 2, basex + 2 + (num % 2) * 24);
-#else
-					put_str("> ",basey + 1 + num / 2, basex + 2 + (num % 2) * 24);
-#endif
-
-					/* Place the cursor on the player */
-					move_cursor_relative(py, px);
-
-					/* Get a command */
-					sub_cmd = inkey();
-					if ((sub_cmd == ' ') || (sub_cmd == 'x') || (sub_cmd == 'X') || (sub_cmd == '\r'))
-					{
-						if (menu_info[menu][num].fin)
-						{
-							cmd = menu_info[menu][num].cmd;
-							use_menu = TRUE;
-							break;
-						}
-						else
-						{
-							menu = menu_info[menu][num].cmd;
-							num = 0;
-							basey += 2;
-							basex += 8;
-						}
-					}
-					else if ((sub_cmd == ESCAPE) || (sub_cmd == 'z') || (sub_cmd == 'Z') || (sub_cmd == '0'))
-					{
-						if (!menu)
-						{
-							cmd = ESCAPE;
-							break;
-						}
-						else
-						{
-							menu = 0;
-							num = old_num;
-							basey -= 2;
-							basex -= 8;
-							screen_load();
-							screen_save();
-						}
-					}
-					else if ((sub_cmd == '2') || (sub_cmd == 'j') || (sub_cmd == 'J'))
-					{
-						if (kisuu)
-						{
-							if (num % 2)
-								num = (num + 2) % (max_num - 1);
-							else
-								num = (num + 2) % (max_num + 1);
-						}
-						else num = (num + 2) % max_num;
-					}
-					else if ((sub_cmd == '8') || (sub_cmd == 'k') || (sub_cmd == 'K'))
-					{
-						if (kisuu)
-						{
-							if (num % 2)
-								num = (num + max_num - 3) % (max_num - 1);
-							else
-								num = (num + max_num - 1) % (max_num + 1);
-						}
-						else num = (num + max_num - 2) % max_num;
-					}
-					else if ((sub_cmd == '4') || (sub_cmd == '6') || (sub_cmd == 'h') || (sub_cmd == 'H') || (sub_cmd == 'l') || (sub_cmd == 'L'))
-					{
-						if ((num % 2) || (num == max_num - 1))
-						{
-							num--;
-						}
-						else if (num < max_num - 1)
-						{
-							num++;
-						}
-					}
-				}
-
-				screen_load();
-				if (!inkey_next) inkey_next = "";
-			}
-			else cmd = sub_cmd;
+			if (!shopping && command_menu && ((cmd == '\r') || (cmd == '\n') || (cmd == 'x') || (cmd == 'X'))
+			    && !keymap_act[mode][(byte)(cmd)])
+				cmd = inkey_from_menu();
 		}
 
 		/* Clear top line */
