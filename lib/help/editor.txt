@@ -1,0 +1,439 @@
+=== Auto-Picker/Destroyer Editor ===
+
+The "auto-picker/destroyer editor" is a special text editor to write
+preferences for auto-picker/destroyer.
+
+To open the editor, you can press the _ key in the game or choose
+"(P) Auto-picker/destroyer editor" in the options panel (=).
+
+Press ^Q to quit the editor.  All changes will be saved automatically.
+
+Press ESC to open a command menu.
++----------------------------+
+| a) Save & Quit          ^Q |
+| b) Revert all changes   ^Z |
+| c) Help                    |
+| d) Move cursor           > |
+| e) Edit                  > |
+| f) Search                > |
+| g) Insert...             > |
+| h) Command letter        > |
+| i) Identify states       > |
+| j) Keywords (noun)       > |
+| k) Keywords (adjective)  > |
++----------------------------+
+Press a-k to choose a command or open a sub-menu.  Also you can press
+^Q, ^Z, etc. to use commands without opening this menu.
+
+
+***** <Autopick>
+==== Object Auto-picker/Destroyer ====
+
+Hengband can automatically pick up or destroy specified objects when
+you write objects name in the file "pickpref.prf" or
+"pickpref-<<playername>>.prf" in the user directory, this will be
+~/.angband/Hengband/ for UNIX, or Hengband\lib\user\ for other
+operating systems.
+
+The game will read the file "pickpref-<<playername>>.prf" first and
+then read the file "pickpref.prf".  The first-read file takes
+priority.
+
+You may use the '$' command within the game to reread auto-picker
+files.
+
+Notes:
+Maximum number of active lines is 1009.
+A line with a header '#' is a comment.
+
+--- Editing the file ---
+
+Command letter:
+
+      Each line determines the actions taken when you step over a kind
+  of object.  Starting a line with '!' indicates that you wish to
+  destroy this kind of object.  Starting a line with '~' indicates
+  that you wish to leave this kind of object on the floor.  Starting a
+  line with ';' indicates that you wish to force the game to ask you
+  if you want to pick the item up or not.  Otherwise, your character
+  will automatically attempt to pick up the object.
+       There is an additional command letter '('.  It indicates that
+  you don't wish this item to be displayed in full map. see below.
+
+  Notes:
+  If you want to disable the effect of the '!' indicator temporally,
+  use 'always_pickup' option.
+
+
+Keywords:
+       After the command letter may come one or more keywords.  They are:
+
+  all               : All items match.
+  collecting        : Matches if you already have that same item.
+  unaware           : Items with unknown effects match.
+  unidentified      : Unidentified items match.
+  identified        : Identified items match.
+  *identified*      : *Identified* items match.
+  dice boosted      : Weapons with boosted damage dice match.
+  more than N dice  : Weapons with dice (dd * ds) better than +N match.
+  more bonus than N : Items which has more magical bonus than (+N) match.
+  worthless         : Items which you cannot sell match.
+  artifact          : Artifacts items match.
+  ego               : Ego items match.
+  nameless          : Non ego/non artifact items match.
+  wanted            : Wanted monster's corpses or skeletons match.
+  unique monster's  : Unique monster's corpses, skeletons or statues match.
+  human             : Human corpses or skeletons match.
+  unreadable        : Spellbooks other than those you can read match.
+  first realm's     : Your first magic realm's spellbooks match.
+  second realm's    : Your second magic realm's spellbooks match.
+  first             : First one of four spellbooks in each realm match.
+  second            : Second one of four spellbooks in each realm match.
+  third             : Third one of four spellbooks in each realm match.
+  fourth            : Fourth one of four spellbooks in each realm match.
+
+  items             : All items match. Use it with an adjective for 
+                      readability (i.e. "unaware items").
+  weapons           : All weapons including missile weapons match.
+  armors            : All armors match.
+  missiles          : Arrows, bolts, and shots match.
+  magical devices   : Wands, staffs, rods and scrolls match.
+  lights            : Light sources match.
+  junks             : Junk items like Shard of Pottery or etc. match.
+  spellbooks        : All books match.
+  favorite weapons  : Weapons suitable for your class (for Priest, Monk,
+                      BeastMaster, ForceTrainer, Cavalry, and Ninja)
+
+  You may also use keywords which match specified kinds of equipment:
+  weapons, armors, missiles, magical devices, lights, junks, spellbooks, 
+  hafted weapons, shields, bows, rings, amulets, suits, cloaks, helms, 
+  gloves, boots
+
+
+Character strings:
+       After the keywords, you may write a character string. Only items 
+  whose name contains this character string as part of their name match. 
+  Upper or lower case makes no difference.
+       You must insert a ':' between your special keywords and character 
+  string, if both exist in one line.
+
+Force start-of-line matching:
+  If the first character in a character string is '^', then the 
+  character string must match the beginning of a line.
+
+!Mace           // Destroy Maces and Lead-Filled Maces.
+!^Mace          // Destroy only Maces.
+
+
+Examples:
+
+!worthless items
+Meaning:  "destroy all items that are worthless"
+
+unaware potion
+Meaning:  "pick up all unaware potions"
+
+~unidentified lites
+Meaning:  "leave all unidentified light sources on the ground"
+
+unidentified more than 25 dice weapons
+Meaning:  "pick up all weapons with dice that total more than 25.  A 
+     weapon that is 2d13 qualifies, a weapon that is 5d5 does not."
+
+Acquirement
+Meaning:  "pick up anything that includes in its name the word 
+'Acquirement'"
+
+potion of Experience
+Meaning:  "pick up anything named 'potion of experience'"
+
+Lights:stone
+Meaning:  "Pick up light sources named stone"
+
+gloves:slaying
+Meaning:  "Pick up gauntlets of slaying. Not rings of slaying."
+
+
+Special Notes:
+
+  Lines will be evaluated in order, and first matched line will be 
+  applied. So you can write names of specific excellent items to pick 
+  up, followed by a general item name with '!' to destroy useless items.
+
+  ! Tips
+  !     In full map command ('M'), you can press M, N, K, or D to 
+  ! display locations of items for auto-pickup, leaving, auto-destroy 
+  ! or both auto-pickup and leaving.
+  !     Additional command letter '(' prevents this display.
+  !
+
+  If you begin the last string in a line with '#', this string will
+  be automatically inscribed on the item.
+
+
+  Strict syntax of each line is below.
+  
+  [! ~ ; (]
+  [[all] [collecting]
+   [unaware] [unidentified] [identified] [*identified*] 
+   [dice boosted] [more than N dice] [more bonus than N] 
+   [worthless] [artifact] [ego] [nameless] 
+   [wanted] [unique monster's] [human] [unreadable] 
+   [first realm's] [second realm's] [first] [second] [third] [fourth] 
+   [items | weapons | armors | missiles | magical devices | 
+    lights | junks | spellbooks | hafted weapons | shields | bows | 
+    rings | amulets | suits | cloaks | helms | gloves | boots] :]
+  [[^]part-of-item-name] [#auto-inscription-string]
+
+
+=======  How to use Conditional Expressions  ========
+
+  The lines of pickpref.prf can be disabled/enabled using 
+  conditional expressions. 
+  The syntax is the same as that of other preference files.
+
+  - usage of condition expressions
+    ?:expr
+      If result of expr is "0", all lines below are disabled.
+      If result of expr is "1", all lines below are enabled.
+      Caution:It cannot be nested.
+
+  - usage to include other file
+    %:filename
+      Read a file named 'filename' as a new pick-pref file. The file 
+      must be in the user directory.
+      Caution: Avoid naming the parent file, or the game might freeze up.
+
+  - usage of operators
+    [EQU arg1 arg2 ...]
+      If all args are same, returns "1", or else returns "0".
+    [IOR arg1 arg2 ...]
+    [AND arg1 arg2 ...]
+      IOR evaluates and returns all args' logical OR. IAND is logical AND.
+    [NOT arg]
+      Returns "0" if arg is "1", or else returns "1"
+    [LEQ arg1 arg2 ...]
+    [GEQ arg1 arg2 ...]
+      Compare args as string. LEQ returns "1" if (arg1 <= arg2 <= ...) ,
+      GEQ returns "1" if (arg1 >= arg2 >= ...) otherwise returns "0".
+
+  - Special variables
+    $RACE
+     Returns name of player race. One of below:
+      Human, Half-Elf, Elf, Hobbit, Gnome, Dwarf, Half-Orc,
+      Half-Troll, Amberite, High-Elf, Barbarian, Half-Ogre,
+      Half-Giant, Half-Titan, Cyclops, Yeek, Klackon, Kobold,
+      Nibelung, Dark-Elf, Draconian, Mindflayer, Imp, Golem,
+      Skeleton, Zombie, Vampire, Spectre, Sprite, Beastman, Ent,
+      Archon, Balrog, Dunadan, Shadow-Fairy, Kutar, Android,
+
+    $CLASS
+     Returns name of player class. One of below:
+      Warrior, Mage, Priest, Rogue, Ranger, Paladin,
+      Warrior-Mage, Chaos-Warrior, Monk, Mindcrafter, High-Mage,
+      Tourist, Imitator, BeastMaster, Sorcerer, Archer,
+      Magic-Eater, Bard, Red-Mage, Samurai, ForceTrainer,
+      Blue-Mage, Cavalry, Berserker, Weaponsmith, Mirror-Master,
+      Ninja
+
+    $PLAYER
+     Returns player name.
+    $REALM1
+     Returns player's first magic realm
+      none, Life, Sorcery, Nature, Chaos, Death, Trump Arcane,
+      Craft, Daemon, Crusade, Music, Kendo
+    $REALM2
+     Returns player's second magic realm
+    $LEVEL
+     Returns player level as two-character string.
+      Ex. "01","09","10","50" etc.
+
+###############################################################
+###############################################################
+---------------------------------------------------------------
+
+ There is an example 'pickpref.prf' file below.
+ You can copy this file to lib\user\ or ~/.angband/Hengband/.
+ (UNIX user must copy to ~/.angband/Hengband/. Others must copy 
+ to  lib\user\ .)
+
+---------------------------------------------------------------
+###############################################################
+###############################################################
+
+wanted corpse
+wanted Skeleton
+
+# Berserker cannot use magical devices; rods, wands, and scrolls.
+?:[EQU $CLASS Berserker]
+!magical devices
+?:1
+
+unaware items
+
+#Artifact lights
+unidentified lights:^Jewel#!!
+unidentified lights:^levitation stone#!!
+unidentified lights:^Palantir#!!
+unidentified lights:^stone#@A0
+unidentified lights:^star#!!
+unidentified lights:^Incandescent Light
+unidentified lights:^Phial#!!
+
+# auto inscribe resistances (see lib/help/objects.txt#Inscriptions)
+~*identified* artifacts#%all
+
+#
+# pick all items which can stack your inventory without inscription.
+#
+collecting rod
+collecting potion
+collecting scroll
+collecting missiles
+(collecting items
+
+#
+# good items
+#
+~rod of Perception#@z0!k!!
+~rod of speed#!k!!
+~rod of Healing#!k!!
+~rod of Enlightenment#k!!
+~rod of Detection#!k!!
+
+potion of Invulnerability#!k
+Acquirement#!k
+potion of Experience
+potion of Augmentation
+*Destruction*
+Genocide
+
+potion of strength
+potion of wisdom
+potion of dexterity
+potion of constitution
+potion of intelligence
+potion of Charisma
+
+potion of life#!k
+healing#!k
+
+#
+# Magic-Eaters pick up all magical device to absorb.
+# Skeletons is material of missiles for Archers.
+# Ninja needs lights of darkness.
+# Vampire needs darkness.
+# 
+?:[EQU $CLASS Magic-Eater]
+rod of 
+staff of 
+wand of 
+?:[EQU $CLASS Archer]
+skeleton of 
+?:[EQU $CLASS Ninja]
+~lights:darkness
+Iron Spike#@v0
+?:[EQU $RACE Vampire]
+(~scroll of darkness
+(~staff of darkness
+?:1
+
+# Destroy unless very early stage.
+?:[GEQ $LEVEL 10]
+(!amulet of Adornment
+(!potion of Apple Juice
+(!Empty Bottle
+(!potion of water
+?:1
+
+# These worthless potions have some use at very early stage.
+# Command letter '(' means, 'Don't display its location in full map command.'
+?:[LEQ $LEVEL 20]
+(~potion of booze
+(~potion of Slowness
+(~potion of Sleep
+?:1
+
+# complex example; destroy needless food items.
+?:[AND [GEQ $LEVEL 20] [IOR [EQU $REALM1 Life] [EQU $REALM2 Life] [EQU $REALM1 Nature] [EQU $REALM2 Nature] [EQU $REALM1 Craft] [EQU $REALM2 Craft]]]
+(!Satisfy Hunger
+(!food
+(!Slime Mold
+(!of Elvish Waybread
+?:1
+
+
+#
+# Destroy useless equipment at high level.
+#
+# Beware!!!!
+#    The line '!nameless armors' destroy all dragon armour!
+#    '~identified armors:dragon' will prevent this dangerous behavior.
+#
+
+?:[GEQ $LEVEL 40]
+~identified armors:dragon
+~nameless armors:Elven Cloak
+~nameless armors:Shadow Cloak
+~nameless weapons:Diamond Edge
+~nameless weapons:Mace of Disruption
+~nameless weapons:Shield of Deflection
+!nameless weapons
+!nameless armors
+
+?:[GEQ $LEVEL 20]
+!nameless weapons:) (+0,+0)
+!nameless armors:,+0]
+?:1
+
+# higher rank of your spellbooks
+first realm's fourth Book of Kendo#!k
+first realm's third Book of Kendo#!k
+first realm's fourth spellbooks#@md!k
+first realm's third spellbooks#@mc!k
+second realm's fourth spellbooks#@mh!k
+second realm's third spellbooks#@mg!k
+
+# unidentified equipment
+unidentified dice boosted weapons
+unidentified more than 25 dice weapons
+unidentified weapons
+unidentified armors
+~unidentified missiles
+
+# lower rank of your spellbooks
+collecting spellbooks
+~first realm's second spellbooks#@mb!k
+~first realm's first spellbooks#@ma!k
+~second realm's second spellbooks#@mf!k
+~second realm's first spellbooks#@me!k
+
+# other spellbooks
+
+?:[GEQ $LEVEL 30]
+(!unreadable first spellbooks
+(!unreadable second spellbooks
+(!unreadable third spellbooks:arcane
+(!unreadable fourth spellbooks:arcane
+?:1
+
+# pick up for experience
+?:[IOR [EQU $CLASS Warrior] [EQU $CLASS Berserker] [AND [EQU $CLASS Paladin] [EQU $REALM1 Life]]]
+(~unreadable third spellbooks:arcane
+(~unreadable fourth spellbooks:arcane
+unreadable fourth spellbooks
+unreadable third spellbooks
+?:1
+?:[AND [EQU $CLASS Paladin] [EQU $REALM1 Death]]
+unreadable fourth spellbooks:life
+unreadable third spellbooks:life
+?:1
+
+# pick up for money
+?:[LEQ $LEVEL 29]
+(~unreadable third spellbooks:arcane
+(~unreadable fourth spellbooks:arcane
+unreadable fourth spellbooks
+unreadable third spellbooks
+?:1
+
