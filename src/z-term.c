@@ -1684,59 +1684,54 @@ errr Term_fresh(void)
 		/* Cursor was visible */
 		if (!old->cu && old->cv)
 		{
+			int csize = 1;
 			int tx = old->cx;
 			int ty = old->cy;
 
 			byte *old_aa = old->a[ty];
 			char *old_cc = old->c[ty];
 
-			byte oa = old_aa[tx];
-			char oc = old_cc[tx];
-
 #ifdef USE_TRANSPARENCY
-
 			byte *old_taa = old->ta[ty];
 			char *old_tcc = old->tc[ty];
 
 			byte ota = old_taa[tx];
 			char otc = old_tcc[tx];
-
 #endif /* USE_TRANSPARENCY */
 
+#ifdef JP
+			if (tx + 1 < Term->wid && !(old_aa[tx] & 0x80)
+			    && iskanji(old_cc[tx]))
+				csize = 2;
+#endif
 			/* Hack -- use "Term_pict()" always */
 			if (Term->always_pict)
 			{
 #ifdef USE_TRANSPARENCY
-				(void)((*Term->pict_hook)(tx, ty, 1, &oa, &oc, &ota, &otc));
+				(void)((*Term->pict_hook)(tx, ty, csize, &old_aa[tx], &old_cc[tx], &ota, &otc));
 #else /* USE_TRANSPARENCY */
-				(void)((*Term->pict_hook)(tx, ty, 1, &oa, &oc));
+				(void)((*Term->pict_hook)(tx, ty, csize, &old_aa[tx], &old_cc[tx]));
 #endif /* USE_TRANSPARENCY */
 			}
 
 			/* Hack -- use "Term_pict()" sometimes */
-			else if (Term->higher_pict && (oa & 0x80) && (oc & 0x80))
+			else if (Term->higher_pict && (old_aa[tx] & 0x80) && (old_cc[tx] & 0x80))
 			{
 #ifdef USE_TRANSPARENCY
-				(void)((*Term->pict_hook)(tx, ty, 1, &oa, &oc, &ota, &otc));
+				(void)((*Term->pict_hook)(tx, ty, 1, &old_aa[tx], &old_cc[tx], &ota, &otc));
 #else /* USE_TRANSPARENCY */
-				(void)((*Term->pict_hook)(tx, ty, 1, &oa, &oc));
+				(void)((*Term->pict_hook)(tx, ty, 1, &old_aa[tx], &old_cc[tx]));
 #endif /* USE_TRANSPARENCY */
 			}
 
 			/* Hack -- restore the actual character */
-			else if (oa || Term->always_text)
+			else if (old_aa[tx] || Term->always_text)
 			{
 
 #ifdef CHUUKEI
-				send_text_to_chuukei_server(tx, ty, 1, oa, &oc);
+				send_text_to_chuukei_server(tx, ty, csize, (old_aa[tx] & 0xf), &old_cc[tx]);
 #endif
-#ifdef JP
-				if (tx + 1 < Term->wid && !(old_aa[tx] & 0x80) && (iskanji(old_cc[tx])))
-					/* Redraw a Kanji */
-					(void)((*Term->text_hook)(tx, ty, 2, oa, &old_cc[tx]));
-				else
-#endif
-					(void)((*Term->text_hook)(tx, ty, 1, oa, &oc));
+				(void)((*Term->text_hook)(tx, ty, csize, (old_aa[tx] & 0xf), &old_cc[tx]));
 			}
 
 			/* Hack -- erase the grid */

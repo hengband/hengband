@@ -1538,5 +1538,14 @@ struct dungeon_info_type {
 };
 
 
-
+/*
+ *  A structure type for entry of auto-picker/destroyer
+ */
+typedef struct {
+	cptr name;
+	cptr insc;
+	byte action;
+	u32b flag[2];
+	byte dice;
+} autopick_type;
 

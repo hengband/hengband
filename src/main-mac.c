@@ -1780,7 +1780,9 @@ static errr Term_curs_mac(int x, int y)
 	r.bottom = r.top + td->tile_hgt;
 
 #ifdef JP
-	if (use_bigtile && x + 1 < Term->wid && (Term->old->a[y][x+1] == 255 || (iskanji(Term->old->c[y][x]) && !(Term->old->a[y][x] & 0x80))))
+	if (x + 1 < Term->wid &&
+	    ((use_bigtile && Term->old->a[y][x+1] == 255)
+	     || (iskanji(Term->old->c[y][x]) && !(Term->old->a[y][x] & 0x80))))
 #else
 	if (use_bigtile && x + 1 < Term->wid && Term->old->a[y][x+1] == 255)
 #endif

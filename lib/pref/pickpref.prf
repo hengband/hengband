@@ -1,0 +1,52 @@
+#
+# Sample preference of the Object Auto-picker/Destroyer
+#
+
+wanted corpse
+wanted Skeleton
+
+unaware items
+collecting rod
+collecting potion
+collecting scroll
+collecting missiles
+(collecting items
+
+*Destruction*
+Genocide
+
+potion of strength
+potion of wisdom
+potion of dexterity
+potion of constitution
+potion of intelligence
+potion of Charisma
+
+potion of life#!k
+healing#!k
+
+?:[EQU $CLASS Archer]
+worthless skeleton
+?:[EQU $CLASS Ninja]
+(~lights:of Darkness
+Iron Spike#@v0
+A:\s\s\s\sv0*t
+P:\t
+?:1
+
+first realm's fourth spellbooks#@md!k
+first realm's third spellbooks#@mc!k
+second realm's fourth spellbooks#@mh!k
+second realm's third spellbooks#@mg!k
+
+unidentified dice boosted weapons
+unidentified more than 25 dice weapons
+~unidentified weapons
+~unidentified armors
+~unidentified missiles
+
+~first realm's second spellbooks#@mb!k
+~first realm's first spellbooks#@ma!k
+~second realm's second spellbooks#@mf!k
+~second realm's first spellbooks#@me!k
+

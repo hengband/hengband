@@ -1729,6 +1729,8 @@ static char inkey_aux(void)
 	/* Inside "macro trigger" */
 	if (parse_under) return (ch);
 
+	/* Parse special key only */
+	if (inkey_special && ch != 31) return (ch);
 
 	/* Save the first key, advance */
 	buf[p++] = ch;
@@ -1940,7 +1942,7 @@ char inkey(void)
 		ch = *inkey_next++;
 
 		/* Cancel the various "global parameters" */
-		inkey_base = inkey_xtra = inkey_flag = inkey_scan = FALSE;
+		inkey_base = inkey_xtra = inkey_flag = inkey_scan = inkey_special = FALSE;
 
 		/* Accept result */
 		return (ch);
@@ -1956,7 +1958,7 @@ char inkey(void)
 	if (inkey_hack && ((ch = (*inkey_hack)(inkey_xtra)) != 0))
 	{
 		/* Cancel the various "global parameters" */
-		inkey_base = inkey_xtra = inkey_flag = inkey_scan = FALSE;
+		inkey_base = inkey_xtra = inkey_flag = inkey_scan = inkey_special = FALSE;
 
 		/* Accept result */
 		return (ch);
@@ -2141,7 +2143,7 @@ char inkey(void)
 
 
 	/* Cancel the various "global parameters" */
-	inkey_base = inkey_xtra = inkey_flag = inkey_scan = FALSE;
+	inkey_base = inkey_xtra = inkey_flag = inkey_scan = inkey_special = FALSE;
 
 	/* Return the keypress */
 	return (ch);

@@ -1,6 +1,7 @@
 ## Makefile.am -- Process this file with automake to process Makefile.in
 
 angband_files = \
+	picktype.prf pickpref.prf \
 	colors.prf \
 	font-ami.prf font-dos.prf font-ibm.prf font-mac.prf \
 	font-mon.prf font-win.prf font-x11.prf font-xxx.prf \

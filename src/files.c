@@ -1040,10 +1040,12 @@ static cptr process_pref_file_expr(char **sp, char *fp)
  */
 static errr process_pickpref_file_line(char *buf)
 {
-	char *s, *s2;
+	autopick_type entry;
 	int i;
-	byte act = 0;
 
+	if (max_autopick == MAX_AUTOPICK)
+		return 1;
+	
 	/* Nuke illegal char */
 	for(i = 0; buf[i]; i++)
 	{
@@ -1059,71 +1061,15 @@ static errr process_pickpref_file_line(char *buf)
 	}
 	buf[i] = 0;
 	
-	s = buf;
+	if (!autopick_new_entry(&entry, buf)) return 0;
 
-	act = DO_AUTOPICK | DO_DISPLAY;
-	while (1)
-	{
-		if (*s == '!')
-		{
-			act &= ~DO_AUTOPICK;
-			act |= DO_AUTODESTROY;
-			s++;
-		}
-		else if (*s == '~')
-		{
-			act &= ~DO_AUTOPICK;
-			act |= DONT_AUTOPICK;
-			s++;
-		}
-		else if (*s == '(')
-		{
-			act &= ~DO_DISPLAY;
-			s++;
-		}
-		else
-			break;
-	}
-
-	/* don't mind upper or lower case */
-	s2 = NULL;
-	for (i = 0; s[i]; i++)
-	{
-#ifdef JP
-		if (iskanji(s[i]))
-		{
-			i++;
-			continue;
-		}
-#endif
-		if (isupper(s[i]))
-			s[i] = tolower(s[i]);
-
-		/* Auto-inscription? */
-		if (s[i] == '#')
-		{
-			s[i] = '\0';
-			s2 = s + i + 1;
-			break;
-		}
-	}
-	
-	/* Skip empty line */
-	if (*s == 0)
-		return 0;
-	if (max_autopick == MAX_AUTOPICK)
-		return 1;
-	
 	/* Already has the same entry? */ 
 	for(i = 0; i < max_autopick; i++)
-		if(!strcmp(s, autopick_name[i]))
-			return 0;
+		if(!strcmp(entry.name, autopick_list[i].name)
+		   && entry.flag[0] == autopick_list[i].flag[0]
+		   && entry.flag[1] == autopick_list[i].flag[1]) return 0;
 
-	autopick_name[max_autopick] = string_make(s);
-	autopick_action[max_autopick] = act;
-
-	autopick_insc[max_autopick] = string_make(s2);
-	max_autopick++;
+	autopick_list[max_autopick++] = entry;
 	return 0;
 }
 

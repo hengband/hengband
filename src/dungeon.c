@@ -4713,6 +4713,12 @@ msg_print("アリーナが魔法を吸収した！");
 			break;
 		}
 
+		case '_':
+		{
+			do_cmd_edit_autopick();
+			break;
+		}
+
 		/* Interact with macros */
 		case '@':
 		{

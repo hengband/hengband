@@ -35,10 +35,13 @@ char *macro_trigger_keycode[2][MAX_MACRO_TRIG];
 
 /* レベルアップの時に上昇量を表示するのに使う */
 int level_up = 0;
-int max_autopick=0;
-cptr autopick_name[MAX_AUTOPICK];
-cptr autopick_insc[MAX_AUTOPICK];
-byte autopick_action[MAX_AUTOPICK];
+
+/* 
+ *  List for auto-picker/destroyer entries
+ */
+int max_autopick = 0;
+autopick_type autopick_list[MAX_AUTOPICK];
+autopick_type autopick_entry_last_destroyed;
 
 /*
  * Executable version
@@ -153,6 +156,7 @@ bool inkey_base;		/* See the "inkey()" function */
 bool inkey_xtra;		/* See the "inkey()" function */
 bool inkey_scan;		/* See the "inkey()" function */
 bool inkey_flag;		/* See the "inkey()" function */
+bool inkey_special;		/* See the "inkey()" function */
 
 s16b coin_type;			/* Hack -- force coin type */
 

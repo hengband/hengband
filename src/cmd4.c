@@ -2426,10 +2426,8 @@ void do_cmd_pickpref(void)
 	if(!get_check("Reload auto-pick preference file? ")) return;
 #endif
 	/* いままで使っていたメモリ解放 */
-	for( i = 0; i < max_autopick; i++){
-		string_free(autopick_name[i]);
-		string_free(autopick_insc[i]);
-	}
+	for( i = 0; i < max_autopick; i++)
+		autopick_free_entry(&autopick_list[i]);
 	max_autopick = 0;
 
 	/* キャラ毎の設定ファイルの読み込み */
@@ -7429,8 +7427,8 @@ static void do_cmd_knowledge_autopick(void)
 
 	for (k = 0; k < max_autopick; k++)
 	{
-		char *tmp;
-		byte act = autopick_action[k];
+		cptr tmp;
+		byte act = autopick_list[k].action;
 		if (act & DONT_AUTOPICK)
 		{
 #ifdef JP
@@ -7461,9 +7459,9 @@ static void do_cmd_knowledge_autopick(void)
 		else
 			fprintf(fff, "%11s", format("(%s)", tmp));
 
-		fprintf(fff, " %s", autopick_name[k]);
-		if(autopick_insc[k] != NULL)
-			fprintf(fff, " {%s}", autopick_insc[k]);
+		tmp = autopick_line_from_entry(&autopick_list[k]);
+		fprintf(fff, " %s", tmp);
+		string_free(tmp);
 		fprintf(fff, "\n");
 	}
 	/* Close the file */
@@ -7478,7 +7476,6 @@ static void do_cmd_knowledge_autopick(void)
 	/* Remove the file */
 	fd_kill(file_name);
 }
-
 
 
 /*

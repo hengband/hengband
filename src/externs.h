@@ -23,10 +23,12 @@ extern char *macro_trigger_keycode[2][MAX_MACRO_TRIG];
 /* 日本語版機能追加で使う */
 extern int level_up;
 
+/* 
+ *  List for auto-picker/destroyer entries
+ */
 extern int max_autopick;
-extern cptr autopick_name[MAX_AUTOPICK];
-extern cptr autopick_insc[MAX_AUTOPICK];
-extern byte autopick_action[MAX_AUTOPICK];
+extern autopick_type autopick_list[MAX_AUTOPICK];
+extern autopick_type autopick_entry_last_destroyed;
 
 /* tables.c */
 extern s16b ddd[9];
@@ -176,6 +178,7 @@ extern bool inkey_base;
 extern bool inkey_xtra;
 extern bool inkey_scan;
 extern bool inkey_flag;
+extern bool inkey_special;
 extern s16b coin_type;
 extern bool opening_chest;
 extern bool shimmer_monsters;
@@ -533,6 +536,14 @@ extern bool now_damaged;
 extern s16b now_message;
 extern bool use_menu;
 
+/* autopick.c */
+extern cptr autopick_line_from_entry(autopick_type *entry);
+extern bool autopick_new_entry(autopick_type *entry, cptr str);
+extern bool autopick_free_entry(autopick_type *entry);
+extern int is_autopick(object_type *o_ptr);
+extern void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr);
+extern void do_cmd_edit_autopick();
+
 /* birth.c */
 extern void player_birth(void);
 extern void get_max_stats(void);
@@ -590,7 +601,6 @@ extern s16b critical_norm(int weight, int plus, int dam, s16b meichuu, int mode)
 extern s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode);
 extern void search(void);
 extern void py_pickup_aux(int o_idx);
-extern int is_autopick(object_type *o_ptr);
 extern void carry(int pickup);
 extern bool py_attack(int y, int x, int mode);
 extern bool player_can_enter(byte feature);

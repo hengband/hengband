@@ -1355,7 +1355,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 				if(match_autopick == -1)
 					continue;
 
-				act = autopick_action[match_autopick];
+				act = autopick_list[match_autopick].action;
 
 				if ((act & DO_DISPLAY) && (act & display_autopick))
 				{
@@ -2633,7 +2633,7 @@ void display_map(int *cy, int *cx)
 #else
 	  {
 		  char buf[13] = "\0";
-		  strncpy(buf,autopick_name[match_autopick],12);
+		  strncpy(buf,autopick_list[match_autopick].name,12);
 		  buf[12] = '\0';
 		  put_str(buf,y,0); 
 	  }
