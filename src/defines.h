@@ -1104,13 +1104,12 @@
 #define FEAT_DEEP_GRASS         0x5E
 #define FEAT_MUSEUM             0x5F
 
-/* Feature 0x5A - 0x5F unused */
-
 /* Terrain */
 #define FEAT_TREES              0x60
 #define FEAT_MOUNTAIN           0x61
+#define FEAT_MOUNTAIN_WALL      0x62
 
-/* Feature 0x62 - 0x7F unused */
+/* Feature 0x63 - 0x7F unused */
 
 /* Buildings */
 #define FEAT_BLDG_HEAD          0x80
