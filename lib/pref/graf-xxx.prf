@@ -1616,8 +1616,8 @@ R:439:0x81:0x9E
 # 5-headed hydra
 R:440:0x93:0x9B
 
-# Barney the Dinosaur
-R:441:0x9F:0x96
+# Gachapin
+#R:441:0x9F:0x96
 
 # Black knight
 R:442:0x9C:0x92
@@ -1808,8 +1808,8 @@ R:503:0x97:0x94
 # Ethereal drake
 R:504:0x97:0x95
 
-# Groo the Wanderer
-R:505:0xA1:0x81
+# Isikawa Goemon
+#R:505:0xA1:0x81
 
 # Fasolt the Giant
 R:506:0xBB:0x83
@@ -2902,6 +2902,599 @@ R:868:0xC4:0x9B
 # Boadile
 R:869:0xC4:0x9C
 
+# Ebony monk
+#R:870:
+
+# Metal Babble
+# (Vermicious Knid of pern)
+R:871:0xB1/0x90
+
+# The Yamata-no-Orochi
+#R:872:
+
+# Combat-Echizen "Because it's time"
+#R:873:
+
+# Spectral Wyrm
+#R:874:
+
+# Storm troll
+#R:875:
+
+# Unstable worm mass
+#R:876:
+
+# Bat of Gorgoroth
+#R:877:
+
+# Dio Brando
+#R:878:
+
+# Ohmu
+#R:879
+
+# Richard Wong, Master of Time
+#R:880::
+
+# Locke, the Superman
+#R:881:
+
+# Layzark, the Emperor
+#R:882:
+
+# Zombified Serpent of Chaos
+R:883:0x9F:0x8E
+
+# Noxious fume
+#R:884:
+
+# Shallow puddle
+#R:885:
+
+# Dark elven shade
+#R:886:
+
+# Mana hound
+R:887:0xC4:0x9E
+
+# Vore
+R:888:0xC4:0x9F
+
+# Bouncing mine
+R:889:0xB2/0x8D
+
+# Great venom wyrm
+#R:890:
+
+# Gorlim, Betrayer of Barahir
+R:891:0x9D/0x83
+
+# Djinni
+#R:892:
+
+# Efreeti
+#R:893:
+
+# Troll king
+#R:894:
+
+# Sky golem
+#R:895:
+
+# Bazooker
+#R:896:
+
+# Shard vortex
+#R:897:
+
+# Granite wall
+R:898:0x80:0x82
+
+# Fire troll
+#R:899:
+
+# Elf lord
+#R:900:
+
+# Samurai
+#R:901:
+
+# Magma intrusion
+R:902:0x80:0x83
+
+# Small kraken
+#R:903:
+
+# Chaos mushroom
+#R:904:
+
+# Cloud golem
+#R:905:
+
+# Lava golem
+#R:906:
+
+# Ogre warrior
+#R:907:
+
+# Pole axe of animated attack
+R:908:0x89:0x90
+
+# The Icky Queen
+#R:909:
+
+# Aquatic golem
+#R:910:
+
+# Quartz vein
+#R:911:
+
+# Floating orb
+#R:912:
+
+# Undead devilfish
+#R:913:
+
+# Bullroarer the Hobbit
+R:914:0x98/0x9D
+
+# Mystic
+R:915:0x9C/0x97
+
+# Master mystic
+R:916:0x9D/0x85
+
+# Grand master mystic
+R:917:0x9D/0x87
+
+# Devilfish
+#R:918:
+
+# Aquatic naga
+#R:919:
+
+# The demogorgon
+#R:920:
+
+# Internet Exploder
+#R:921:
+
+# Electric rat
+#R:922:
+
+# Yukionnna
+#R:923:
+
+# Cribo
+#R:924:
+
+# Monkey of Nikko
+#R:925:
+
+# Tsuchinoko
+#R:926:
+
+# Mario
+#R:927:
+
+# Kuppa
+#R:928:
+
+# Greater cyber wyrm angel deamon lich
+#R:929:
+
+# Clone of Locke the Superman
+#R:930:
+
+# Caldarm the third
+#R:931:
+
+# Banor=Rupart
+#R:932:
+
+# Banor the Prince Regent
+#R:933:
+
+# Rupart the general
+#R:934:
+
+# Druaga
+#R:935:
+
+# Kenshirou the Fist of The North Star
+#R:936:
+
+# Lems the cyborg
+#R:937:
+
+# White knight
+#R:938:
+
+# Hoarmurath of Dir
+R:939:0x95/0x92
+
+# Lesser Balrog
+#R:940:
+
+# Bone dragon
+#R:941:
+
+# Planetar
+R:942:0x8E/0x95
+
+# Solar
+R:943:0x8E/0x96
+
+# Deep puddle
+#R:944:
+
+# Biketal of Fire
+#R:945:
+
+# Jisisl of Ice
+#R:946:
+
+# Poor, the thief
+#R:947:
+
+# Rich, the thief
+#R:948:
+
+# Iketa, the brave
+#R:949:
+
+# Hammer bors
+#R:950:
+
+# Met
+#R:95
+
+# Kamikaze hound
+# (this tile is Etherreal hound of pern)
+R:952:0x96/0x8C
+
+# Broken death sword
+R:953:0x89:0x83
+
+# Orcish Artillery
+#R:954:
+
+# Scrawny horse
+#R:955:
+
+# Horse
+#R:956:
+
+# Unruly horse
+#R:957:
+
+# Red puyo
+#R:958:
+
+# Blue puyo
+#R:959:
+
+# Yellow puyo
+#R:960:
+
+# Green puyo
+#R:961:
+
+# Slime Mold
+R:962:0x8A:0x9F
+
+# Boty-Buildeng, the emperor
+#R:963:
+
+# Shadower
+#R:964:
+
+# Statue of Chest mimic mimic
+R:965:0xB4:0x81
+
+# Luigi
+#R:966:
+
+# Jaian, the boss of the kids
+#R:967:
+
+# Bramd the Ice Dragon
+#R:968:
+
+# Eibra the Water Dragon
+#R:969:
+
+# Narse the Black Dragon
+#R:970:
+
+# Mycen the Gold Dragon
+#R:971:
+
+# Shooting Star the Red Dragon
+#R:972:
+
+# Beld, ruler of Marmo
+#R:973:
+
+# Ashram, the Ebony Knight
+#R:974:
+
+# That @$^%& Black Bat
+#R:975:
+
+# Eol, the Dark Elven Smith
+R:976:0xB2/0x8A
+
+# Maeglin, Betrayer of Gondolin
+#R:977:
+
+# Ar-Pharazon the Golden
+#R:978:
+
+# Shuten-douji, the King Ogre of Ooe-Mountain
+#R:979:
+
+# Coatl
+#R:980:
+
+# Thunder bird
+#R:981:
+
+# Durahan
+#R:982:
+
+# Hibagon
+#R:983:
+
+# Nue
+#R:98
+
+# Unicorn
+#R:985:
+
+# Nekomata
+#R:986:
+
+# Nine-tailed fox
+#R:987:
+
+# Fenghuang
+#R:988:
+
+# Kirin
+#R:989:
+
+# Pegasus
+#R:990:
+
+# Sleipnir, the Odin's Steed
+#R:991:
+
+# Huan, the Hound of Valinor
+R:992:0xB2/0x83
+
+# Dao
+#R:99
+
+# Marid
+#R:994:
+
+# Wolf Chieftain
+#R:995:3:
+
+# Nar, the Dwarf
+R:996:0x99/0x84
+
+# Chiokovo
+#R:997:
+
+# Black Chiokovo
+#R:998:
+
+# Devu Chiokovo
+#R:999:
+
+# Bahamut, Celestial Dragon of Good
+#R:1000:
+
+# Suke-san, the Mitsukuni's Warder
+#R:1001:
+
+# Kaku-san, the Mitsukuni's Warder
+#R:1002:
+
+# The Ghost 'Q'
+#R:1003:
+
+# Pip, the Braver from Another World
+#R:1004:
+
+# Ansalom, the Dark Wizard
+#R:1005:
+
+# High-elven ranger
+R:1006:0x9C/0x81
+
+# Giant cockroach
+#R:1007:
+
+# Demonologist
+R:1008:0x9C/0x9D
+
+# Dwar, Dog Lord of Waw
+R:1009:0x95/0x8F
+
+# Golden Angel
+#R:1010:
+
+# Silver Angel
+#R:1011:
+
+# Jibaku ghost
+#R:1012:
+
+# Rolento
+#R:1013:
+
+# M. Bison
+#R:1014:
+
+# TaepoDong
+#R:1015:
+
+# Spider bomb
+#R:1016:
+
+# Bomb mosquito
+#R:1017:
+
+# Raou the Conqueror
+#R:1018:
+
+# Kokuo, Raou's Steed
+#R:1019:
+
+# Kutar
+#R:1020
+
+# Nami, the Mate
+#R:1021:
+
+# Nappa the Saiayan
+#R:1022:
+
+# Hand grenade
+#R:1023:
+
+# Grand master thief
+R:1024:0x9C/0x84
+
+# Charon, Boatman of the Styx
+R:1025:0xB1/0x9B
+
+# Old sorcerer
+R:1026:738:0xB1/0x9E
+
+# Red Helm, the King of Bear
+#R:1027:
+
+# Mad bear
+#R:1028:
+
+# Baby Satan
+#R:1029:
+
+# Meng Huo, the King of Southerings
+#R:1030:
+
+# Wahha-Man the Golden
+#R:1031:
+
+# Madame Debby
+#R:1032:
+
+# The Defiler
+#R:1033:
+
+# The Minotaur of the Labyrinth
+R:1034:0x91/0x95
+
+# Living armor
+R:1035:0xCD:0x82
+
+# Trap master
+#R:1036:
+
+# Knight templar
+R:1037:0xB1/0x9A
+
+# Paladin
+R:1038:0x8D/0x9C
+
+# Ranger
+R:1039:0x9C/0x83
+
+# Chameleon
+#R:1040:
+
+# Chameleon Lord
+#R:1041:
+
+# Narwhal
+#R:1042:
+
+# Petshop
+#R:1043:
+
+# White crocodile
+#R:1044:
+
+# Disintegrate vortex
+#R:1045:
+
+# Ulfang the Black
+R:1046:0x9C/0x8C
+
+# Topaz monk
+#R:1047:
+
+# Stone dragon
+#R:1048:
+
+# Steel dragon
+#R:1049:
+
+# Atlas, the Titan
+#R:1050:
+
+# Kronos, Lord of the Titans
+#R:1051:
+
+# Dimensional shambler
+#R:1052:
+
+# Novice mindcrafter
+R:1053:0xB0/0x84
+
+# Novice mindcrafter
+R:1054:0xB0/0x84
+
+# Mindcrafter
+R:1055:0xB0/0x85
+
+# Master mindcrafter
+R:1056:0xB0/0x86
+
+# Ogrillon
+R:1057:0xB0/0x8C
+
+# Elder vampire
+R:1058:0xA1/0x9F
+
+# Noborta Kesyta, the Yeek President
+#R:1059:
+
+# Mori Troll
+#R:1060:
+
+# Barney the Dinosaur
+R:1061:0x9F:0x96
+
+# Groo the Wanderer
+R:1062:0xA1:0x81
+
+# Lousy, the King of Louses
+#R:1063:
+
+# Great Wyrm of Space-Time
+#R:1064:
+
+# Octopus of Kshitigarbha
+#R:1065:
+
+# Great Bile Wyrm
+#R:1066:
+
 
 # Feature attr/char definitions
 
@@ -2928,6 +3521,27 @@ F:6:0x81:0x9C
 
 # down staircase
 F:7:0x81:0x9E
+
+# quest entrance
+F:8:0x82/0x8E
+
+# quest exit
+F:9:0x82/0x8B
+
+# quest down level
+F:10:0x82/0x8F
+
+# quest up level
+F:11:0x82/0x8C
+
+# town exit
+F:12:0x82/0x91
+
+# shaft down
+F:13:0x82/0x90
+
+# shaft up
+F:14:0x82/0x8D
 
 # trap door
 F:16:0xA2:0x97
@@ -3155,7 +3769,7 @@ F:89:0xCB:0x85
 F:90:0xA2:0x92
 
 #flower
-F:93:203/138
+F:93:0xD0/0x8D
 
 #brake
 F:94:207/136
@@ -3204,7 +3818,7 @@ F:158:0xD5:0x83
 F:159:0xD5:0x83
 
 #Town
-#F:192:
+F:192:0xD0/0x94
 
 #Entrance to dungeon
 F:193:0x81:0x9E
