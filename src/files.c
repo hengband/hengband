@@ -5157,7 +5157,7 @@ static void show_file_aux_line(cptr str, int cy, cptr shower)
 		/* Search for a shower string in the line */
 		if (shower)
 		{
-		        ptr = my_strstr(&lcstr[i], shower);
+			ptr = my_strstr(&lcstr[i], shower);
 			if (ptr) showercol = ptr - &lcstr[i];
 		}
 
@@ -5653,11 +5653,15 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 			strcpy(back_str, shower_str);
 			if (askfor(shower_str, 80))
 			{
-				/* Make it lowercase */
-				str_tolower(shower_str);
+				if (shower_str[0])
+				{
+					/* Make it lowercase */
+					str_tolower(shower_str);
 
-				/* Show it */
-				shower = shower_str;
+					/* Show it */
+					shower = shower_str;
+				}
+				else shower = NULL; /* Stop showing */
 			}
 			else strcpy(shower_str, back_str);
 			break;
@@ -5675,16 +5679,20 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 			strcpy(back_str, finder_str);
 			if (askfor(finder_str, 80))
 			{
-				/* Find it */
-				find = finder_str;
-				back = line;
-				line = line + 1;
+				if (finder_str[0])
+				{
+					/* Find it */
+					find = finder_str;
+					back = line;
+					line = line + 1;
 
-				/* Make finder lowercase */
-				str_tolower(finder_str);
+					/* Make finder lowercase */
+					str_tolower(finder_str);
 
-				/* Show it */
-				shower = finder_str;
+					/* Show it */
+					shower = finder_str;
+				}
+				else shower = NULL; /* Stop showing */
 			}
 			else strcpy(finder_str, back_str);
 			break;
