@@ -1394,7 +1394,7 @@ static void check_music(void)
         if(p_ptr->pclass != CLASS_BARD) return;
         if(!p_ptr->magic_num1[0] && !p_ptr->magic_num1[1]) return;
 
-        s_ptr = &technic_info[REALM_MUSIC - MIN_TECHNIC - 1][p_ptr->magic_num2[0]];
+        s_ptr = &technic_info[REALM_MUSIC - MIN_TECHNIC][p_ptr->magic_num2[0]];
 
 	shouhimana = (s_ptr->smana*(3800-p_ptr->spell_exp[p_ptr->magic_num2[0]])+2399);
 	if(p_ptr->dec_mana)

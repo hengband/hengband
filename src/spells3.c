@@ -3713,8 +3713,6 @@ void display_spell_list(void)
 {
 	int             i, j;
 	int             y, x;
-	int             use_realm1 = p_ptr->realm1 - 1;
-	int             use_realm2 = p_ptr->realm2 - 1;
 	int             m[9];
 	magic_type      *s_ptr;
 	char            name[80];
@@ -3814,7 +3812,7 @@ put_str("Lv   MP ¼ºÎ¨ ¸ú²Ì", y, x + 35);
 	/* Normal spellcaster with books */
 
 	/* Scan books */
-	for (j = 0; j < ((use_realm2 > -1) ? 2 : 1); j++)
+	for (j = 0; j < ((p_ptr->realm2 > REALM_NONE) ? 2 : 1); j++)
 	{
 		int n = 0;
 
@@ -3833,16 +3831,16 @@ put_str("Lv   MP ¼ºÎ¨ ¸ú²Ì", y, x + 35);
 			byte a = TERM_WHITE;
 
 			/* Access the spell */
-			if (!is_magic((j < 1) ? use_realm1 : use_realm2))
+			if (!is_magic((j < 1) ? p_ptr->realm1 : p_ptr->realm2))
 			{
-				s_ptr = &technic_info[(j < 1) ? use_realm1 : use_realm2 - MIN_TECHNIC][i % 32];
+				s_ptr = &technic_info[((j < 1) ? p_ptr->realm1 : p_ptr->realm2) - MIN_TECHNIC][i % 32];
 			}
 			else
 			{
-				s_ptr = &mp_ptr->info[(j < 1) ? use_realm1 : use_realm2][i % 32];
+				s_ptr = &mp_ptr->info[((j < 1) ? p_ptr->realm1 : p_ptr->realm2) - 1][i % 32];
 			}
 
-			strcpy(name, spell_names[technic2magic((j < 1) ? use_realm1+1 : use_realm2+1)-1][i % 32]);
+			strcpy(name, spell_names[technic2magic((j < 1) ? p_ptr->realm1 : p_ptr->realm2)-1][i % 32]);
 
 			/* Illegible */
 			if (s_ptr->slevel >= 99)
@@ -3906,12 +3904,12 @@ strcpy(name, "(È½ÆÉÉÔÇ½)");
 /*
  * Returns experience of a spell
  */
-s16b experience_of_spell(int spell, int realm)
+s16b experience_of_spell(int spell, int use_realm)
 {
 	if (p_ptr->pclass == CLASS_SORCERER) return 1600;
 	else if (p_ptr->pclass == CLASS_RED_MAGE) return 1200;
-	else if (realm+1 == p_ptr->realm1) return p_ptr->spell_exp[spell];
-	else if (realm+1 == p_ptr->realm2) return p_ptr->spell_exp[spell + 32];
+	else if (use_realm == p_ptr->realm1) return p_ptr->spell_exp[spell];
+	else if (use_realm == p_ptr->realm2) return p_ptr->spell_exp[spell + 32];
 	else return 0;
 }
 
@@ -3919,7 +3917,7 @@ s16b experience_of_spell(int spell, int realm)
 /*
  * Returns spell chance of failure for spell -RAK-
  */
-s16b spell_chance(int spell, int realm)
+s16b spell_chance(int spell, int use_realm)
 {
 	int             chance, minfail;
 	magic_type      *s_ptr;
@@ -3930,16 +3928,16 @@ s16b spell_chance(int spell, int realm)
 	/* Paranoia -- must be literate */
 	if (!mp_ptr->spell_book) return (100);
 
-	if (realm+1 == REALM_HISSATSU) return 0;
+	if (use_realm == REALM_HISSATSU) return 0;
 
 	/* Access the spell */
-	if (!is_magic(realm+1))
+	if (!is_magic(use_realm))
 	{
-		s_ptr = &technic_info[realm - MIN_TECHNIC][spell];
+		s_ptr = &technic_info[use_realm - MIN_TECHNIC][spell];
 	}
 	else
 	{
-		s_ptr = &mp_ptr->info[realm][spell];
+		s_ptr = &mp_ptr->info[use_realm - 1][spell];
 	}
 
 	/* Extract the base spell failure rate */
@@ -3955,7 +3953,7 @@ s16b spell_chance(int spell, int realm)
 		chance += (MAX(r_info[m_list[p_ptr->riding].r_idx].level-p_ptr->skill_exp[GINOU_RIDING]/100-10,0));
 
 	/* Extract mana consumption rate */
-	shouhimana = s_ptr->smana*(3800 - experience_of_spell(spell, realm)) + 2399;
+	shouhimana = s_ptr->smana*(3800 - experience_of_spell(spell, use_realm)) + 2399;
 
 	if(p_ptr->dec_mana) shouhimana *= 3;
 	else shouhimana *= 4;
@@ -3970,7 +3968,7 @@ s16b spell_chance(int spell, int realm)
 	}
 
 	chance += p_ptr->to_m_chance;
-	if (((realm + 1) != p_ptr->realm1) && ((p_ptr->pclass == CLASS_MAGE) || (p_ptr->pclass == CLASS_PRIEST))) chance += 5;
+	if ((use_realm != p_ptr->realm1) && ((p_ptr->pclass == CLASS_MAGE) || (p_ptr->pclass == CLASS_PRIEST))) chance += 5;
 
 	/* Extract the minimum failure rate */
 	minfail = adj_mag_fail[p_ptr->stat_ind[mp_ptr->spell_stat]];
@@ -3993,9 +3991,9 @@ s16b spell_chance(int spell, int realm)
 	else if (p_ptr->easy_spell) chance-=3;
 	else if (p_ptr->dec_mana) chance-=2;
 
-	if ((realm+1 == REALM_NATURE) && ((p_ptr->align > 50) || (p_ptr->align < -50))) chance += penalty;
-	if (((realm+1 == REALM_LIFE) || (realm+1 == REALM_CRUSADE)) && (p_ptr->align < -20)) chance += penalty;
-	if (((realm+1 == REALM_DEATH) || (realm+1 == REALM_DAEMON)) && (p_ptr->align > 20)) chance += penalty;
+	if ((use_realm == REALM_NATURE) && ((p_ptr->align > 50) || (p_ptr->align < -50))) chance += penalty;
+	if (((use_realm == REALM_LIFE) || (use_realm == REALM_CRUSADE)) && (p_ptr->align < -20)) chance += penalty;
+	if (((use_realm == REALM_DEATH) || (use_realm == REALM_DAEMON)) && (p_ptr->align > 20)) chance += penalty;
 
 	/* Minimum failure rate */
 	if (chance < minfail) chance = minfail;
@@ -4007,9 +4005,9 @@ s16b spell_chance(int spell, int realm)
 	/* Always a 5 percent chance of working */
 	if (chance > 95) chance = 95;
 
-	if ((realm+1 == p_ptr->realm1) || (realm+1 == p_ptr->realm2))
+	if ((use_realm == p_ptr->realm1) || (use_realm == p_ptr->realm2))
 	{
-		s16b exp = experience_of_spell(spell, realm);
+		s16b exp = experience_of_spell(spell, use_realm);
 		if(exp > 1399) chance--;
 		if(exp > 1599) chance--;
 	}
@@ -4029,25 +4027,25 @@ s16b spell_chance(int spell, int realm)
  * The spell must be legible, not forgotten, and also, to cast,
  * it must be known, and to study, it must not be known.
  */
-bool spell_okay(int spell, bool learned, bool study_pray, int realm)
+bool spell_okay(int spell, bool learned, bool study_pray, int use_realm)
 {
 	magic_type *s_ptr;
 
 	/* Access the spell */
-	if (!is_magic(realm+1))
+	if (!is_magic(use_realm))
 	{
-		s_ptr = &technic_info[realm - MIN_TECHNIC][spell];
+		s_ptr = &technic_info[use_realm - MIN_TECHNIC][spell];
 	}
 	else
 	{
-		s_ptr = &mp_ptr->info[realm][spell];
+		s_ptr = &mp_ptr->info[use_realm - 1][spell];
 	}
 
 	/* Spell is illegal */
 	if (s_ptr->slevel > p_ptr->lev) return (FALSE);
 
 	/* Spell is forgotten */
-	if ((realm == p_ptr->realm2 - 1) ?
+	if ((use_realm == p_ptr->realm2) ?
 	    (p_ptr->spell_forgotten2 & (1L << spell)) :
 	    (p_ptr->spell_forgotten1 & (1L << spell)))
 	{
@@ -4059,7 +4057,7 @@ bool spell_okay(int spell, bool learned, bool study_pray, int realm)
 	if (p_ptr->pclass == CLASS_RED_MAGE) return (TRUE);
 
 	/* Spell is learned */
-	if ((realm == p_ptr->realm2 - 1) ?
+	if ((use_realm == p_ptr->realm2) ?
 	    (p_ptr->spell_learned2 & (1L << spell)) :
 	    (p_ptr->spell_learned1 & (1L << spell)))
 	{
@@ -4081,7 +4079,7 @@ bool spell_okay(int spell, bool learned, bool study_pray, int realm)
  * The strings in this function were extracted from the code in the
  * functions "do_cmd_cast()" and "do_cmd_pray()" and may be dated.
  */
-static void spell_info(char *p, int spell, int realm)
+static void spell_info(char *p, int spell, int use_realm)
 {
 	int plev = p_ptr->lev;
 
@@ -4112,9 +4110,9 @@ static void spell_info(char *p, int spell, int realm)
 	strcpy(p, "");
 
 	/* Analyze the spell */
-	switch (realm)
+	switch (use_realm)
 	{
-	case 0: /* Life */
+	case REALM_LIFE: /* Life */
 		switch (spell)
 		{
 		case  0: sprintf(p, " %s2d10", s_heal); break;
@@ -4134,7 +4132,7 @@ static void spell_info(char *p, int spell, int realm)
 		}
 		break;
 		
-	case 1: /* Sorcery */
+	case REALM_SORCERY: /* Sorcery */
 		switch (spell)
 		{
 		case  1: sprintf(p, " %s10", s_range); break;
@@ -4155,7 +4153,7 @@ static void spell_info(char *p, int spell, int realm)
 		}
 		break;
 		
-	case 2: /* Nature */
+	case REALM_NATURE: /* Nature */
 		switch (spell)
 		{
 #ifdef JP
@@ -4185,7 +4183,7 @@ static void spell_info(char *p, int spell, int realm)
 		}
 		break;
 		
-	case 3: /* Chaos */
+	case REALM_CHAOS: /* Chaos */
 		switch (spell)
 		{
 		case  0: sprintf(p, " %s%dd4", s_dam, 3 + ((plev - 1) / 5)); break;
@@ -4217,7 +4215,7 @@ static void spell_info(char *p, int spell, int realm)
 		}
 		break;
 		
-	case 4: /* Death */
+	case REALM_DEATH: /* Death */
 		switch (spell)
 		{
 		case  1: sprintf(p, " %s%dd3", s_dam, (3 + ((plev - 1) / 5))); break;
@@ -4244,7 +4242,7 @@ static void spell_info(char *p, int spell, int realm)
 		}
 		break;
 		
-	case 5: /* Trump */
+	case REALM_TRUMP: /* Trump */
 		switch (spell)
 		{
 		case  0: sprintf(p, " %s10", s_range); break;
@@ -4267,7 +4265,7 @@ static void spell_info(char *p, int spell, int realm)
 		}
 		break;
 		
-	case 6: /* Arcane */
+	case REALM_ARCANE: /* Arcane */
 		switch (spell)
 		{
 		case  0: sprintf(p, " %s%dd3", s_dam, 3 + ((plev - 1) / 5)); break;
@@ -4288,7 +4286,7 @@ static void spell_info(char *p, int spell, int realm)
 		}
 		break;
 		
-	case 7: /* Craft */
+	case REALM_ENCHANT: /* Craft */
 		switch (spell)
 		{
 		case 0: sprintf(p, " %s100+d100", s_dur); break;
@@ -4313,7 +4311,7 @@ static void spell_info(char *p, int spell, int realm)
 		}
 		break;
 		
-	case 8: /* Daemon */
+	case REALM_DAEMON: /* Daemon */
 		switch (spell)
 		{
 		case  0: sprintf(p, " %s%dd4", s_dam, 3 + ((plev - 1) / 5)); break;
@@ -4341,7 +4339,7 @@ static void spell_info(char *p, int spell, int realm)
 		}
 		break;
 		
-	case 9: /* Crusade */
+	case REALM_CRUSADE: /* Crusade */
 		switch (spell)
 		{
 		case  0: sprintf(p, " %s%dd4", s_dam, 3 + ((plev - 1) / 5)); break;
@@ -4380,7 +4378,7 @@ static void spell_info(char *p, int spell, int realm)
 		}
 		break;
 
-	case 15: /* Music */
+	case REALM_MUSIC: /* Music */
 		switch (spell)
 		{
 		case 2 : sprintf(p, " %s%dd4", s_dam, 4 + ((plev - 1) / 5)); break;
@@ -4396,9 +4394,9 @@ static void spell_info(char *p, int spell, int realm)
 		break;
 	default:
 #ifdef JP
-		sprintf(p, "Ì¤ÃÎ¤Î¥¿¥¤¥×: %d", realm);
+		sprintf(p, "Ì¤ÃÎ¤Î¥¿¥¤¥×: %d", use_realm);
 #else
-		sprintf(p, "Unknown type: %d.", realm);
+		sprintf(p, "Unknown type: %d.", use_realm);
 #endif
 	}
 }
@@ -4407,7 +4405,7 @@ static void spell_info(char *p, int spell, int realm)
 /*
  * Print a list of spells (for browsing or casting or viewing)
  */
-void print_spells(int target_spell, byte *spells, int num, int y, int x, int realm)
+void print_spells(int target_spell, byte *spells, int num, int y, int x, int use_realm)
 {
 	int             i, spell, shougou, increment = 64;
 	magic_type      *s_ptr;
@@ -4421,7 +4419,7 @@ void print_spells(int target_spell, byte *spells, int num, int y, int x, int rea
 	bool max = FALSE;
 
 
-	if (((realm < 0) || (realm > MAX_REALM - 1)) && p_ptr->wizard)
+	if (((use_realm <= REALM_NONE) || (use_realm > MAX_REALM)) && p_ptr->wizard)
 #ifdef JP
 msg_print("·Ù¹ð¡ª print_spell ¤¬ÎÎ°è¤Ê¤·¤Ë¸Æ¤Ð¤ì¤¿");
 #else
@@ -4431,7 +4429,7 @@ msg_print("·Ù¹ð¡ª print_spell ¤¬ÎÎ°è¤Ê¤·¤Ë¸Æ¤Ð¤ì¤¿");
 
 	/* Title the list */
 	prt("", y, x);
-	if (realm+1 == REALM_HISSATSU)
+	if (use_realm == REALM_HISSATSU)
 #ifdef JP
 		strcpy(buf,"  Lv   MP");
 #else
@@ -4453,8 +4451,8 @@ put_str(buf, y, x + 29);
 #endif
 
 	if ((p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_RED_MAGE)) increment = 0;
-	else if ((realm + 1) == p_ptr->realm1) increment = 0;
-	else if ((realm + 1) == p_ptr->realm2) increment = 32;
+	else if (use_realm == p_ptr->realm1) increment = 0;
+	else if (use_realm == p_ptr->realm2) increment = 32;
 
 	/* Dump the spells */
 	for (i = 0; i < num; i++)
@@ -4463,20 +4461,20 @@ put_str(buf, y, x + 29);
 		spell = spells[i];
 
 		/* Access the spell */
-		if (!is_magic(realm+1))
+		if (!is_magic(use_realm))
 		{
-			s_ptr = &technic_info[realm - MIN_TECHNIC][spell];
+			s_ptr = &technic_info[use_realm - MIN_TECHNIC][spell];
 		}
 		else
 		{
-			s_ptr = &mp_ptr->info[realm][spell];
+			s_ptr = &mp_ptr->info[use_realm - 1][spell];
 		}
 
-		if (realm+1 == REALM_HISSATSU)
+		if (use_realm == REALM_HISSATSU)
 			shouhimana = s_ptr->smana;
 		else
 		{
-			s16b exp = experience_of_spell(spell, realm);
+			s16b exp = experience_of_spell(spell, use_realm);
 
 			/* Extract mana consumption rate */
 			shouhimana = s_ptr->smana*(3800 - exp) + 2399;
@@ -4533,7 +4531,7 @@ strcat(out_val, format("%-30s", "(È½ÆÉÉÔÇ½)"));
 		/* XXX XXX Could label spells above the players level */
 
 		/* Get extra info */
-		spell_info(info, spell, realm);
+		spell_info(info, spell, use_realm);
 
 		/* Use that info */
 		comment = info;
@@ -4565,7 +4563,7 @@ comment = " ËºµÑ";
 				line_attr = TERM_YELLOW;
 			}
 		}
-		else if ((realm+1 != p_ptr->realm1) && (realm+1 != p_ptr->realm2))
+		else if ((use_realm != p_ptr->realm1) && (use_realm != p_ptr->realm2))
 		{
 #ifdef JP
 comment = " Ì¤ÃÎ";
@@ -4575,7 +4573,7 @@ comment = " Ì¤ÃÎ";
 
 			line_attr = TERM_L_BLUE;
 		}
-		else if ((realm + 1 == p_ptr->realm1) ?
+		else if ((use_realm == p_ptr->realm1) ?
 		    ((p_ptr->spell_forgotten1 & (1L << spell))) :
 		    ((p_ptr->spell_forgotten2 & (1L << spell))))
 		{
@@ -4587,7 +4585,7 @@ comment = " ËºµÑ";
 
 			line_attr = TERM_YELLOW;
 		}
-		else if (!((realm + 1 == p_ptr->realm1) ?
+		else if (!((use_realm == p_ptr->realm1) ?
 		    (p_ptr->spell_learned1 & (1L << spell)) :
 		    (p_ptr->spell_learned2 & (1L << spell))))
 		{
@@ -4599,7 +4597,7 @@ comment = " Ì¤ÃÎ";
 
 			line_attr = TERM_L_BLUE;
 		}
-		else if (!((realm + 1 == p_ptr->realm1) ?
+		else if (!((use_realm == p_ptr->realm1) ?
 		    (p_ptr->spell_worked1 & (1L << spell)) :
 		    (p_ptr->spell_worked2 & (1L << spell))))
 		{
@@ -4613,18 +4611,18 @@ comment = " Ì¤·Ð¸³";
 		}
 
 		/* Dump the spell --(-- */
-		if (realm+1 == REALM_HISSATSU)
+		if (use_realm == REALM_HISSATSU)
 		{
 			strcat(out_val, format("%-25s %2d %4d",
-			    spell_names[technic2magic(realm+1)-1][spell], /* realm, spell */
+			    spell_names[technic2magic(use_realm)-1][spell], /* realm, spell */
 			    s_ptr->slevel, shouhimana));
 		}
 		else
 		{
 			strcat(out_val, format("%-25s%c%-4s %2d %4d %3d%%%s",
-			    spell_names[technic2magic(realm+1)-1][spell], /* realm, spell */
+			    spell_names[technic2magic(use_realm)-1][spell], /* realm, spell */
 			    (max ? '!' : ' '), ryakuji,
-			    s_ptr->slevel, shouhimana, spell_chance(spell, realm), comment));
+			    s_ptr->slevel, shouhimana, spell_chance(spell, use_realm), comment));
 		}
 		c_prt(line_attr, out_val, y + i + 1, x);
 	}

@@ -78,7 +78,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 	if (repeat_pull(sn))
 	{
 		/* Verify the spell */
-		if (spell_okay(*sn, learned, FALSE, use_realm - 1))
+		if (spell_okay(*sn, learned, FALSE, use_realm))
 		{
 			/* Success */
 			return (TRUE);
@@ -110,7 +110,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 	for (i = 0; i < num; i++)
 	{
 		/* Look for "okay" spells */
-		if (spell_okay(spells[i], learned, FALSE, use_realm - 1)) okay = TRUE;
+		if (spell_okay(spells[i], learned, FALSE, use_realm)) okay = TRUE;
 	}
 
 	/* No "okay" spells */
@@ -195,7 +195,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 			}
 			if (menu_line > num) menu_line -= num;
 			/* Display a list of spells */
-			print_spells(menu_line, spells, num, 1, 15, use_realm - 1);
+			print_spells(menu_line, spells, num, 1, 15, use_realm);
 			if (ask) continue;
 		}
 		else
@@ -213,7 +213,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 					screen_save();
 
 					/* Display a list of spells */
-					print_spells(menu_line, spells, num, 1, 15, use_realm - 1);
+					print_spells(menu_line, spells, num, 1, 15, use_realm);
 				}
 
 				/* Hide the list */
@@ -254,7 +254,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 		spell = spells[i];
 
 		/* Require "okay" spells */
-		if (!spell_okay(spell, learned, FALSE, use_realm - 1))
+		if (!spell_okay(spell, learned, FALSE, use_realm))
 		{
 			bell();
 #ifdef JP
@@ -274,7 +274,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 			/* Access the spell */
 			if (!is_magic(use_realm))
 			{
-				s_ptr = &technic_info[use_realm - MIN_TECHNIC - 1][spell];
+				s_ptr = &technic_info[use_realm - MIN_TECHNIC][spell];
 			}
 			else
 			{
@@ -288,7 +288,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 			else
 			{
 				/* Extract mana consumption rate */
-				shouhimana = s_ptr->smana*(3800 - experience_of_spell(spell, use_realm-1)) + 2399;
+				shouhimana = s_ptr->smana*(3800 - experience_of_spell(spell, use_realm)) + 2399;
 				if(p_ptr->dec_mana)
 					shouhimana *= 3;
 				else shouhimana *= 4;
@@ -302,11 +302,11 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
                         /* 英日切り替え機能に対応 */
                         (void) strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ",
                                 spell_names[technic2magic(use_realm)-1][spell % 32], shouhimana,
-				       spell_chance(spell, use_realm -1),jverb_buf);
+				       spell_chance(spell, use_realm),jverb_buf);
 #else
 			(void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ",
 				prompt, spell_names[technic2magic(use_realm)-1][spell % 32], shouhimana,
-				spell_chance(spell, use_realm - 1));
+				spell_chance(spell, use_realm));
 #endif
 
 
@@ -509,7 +509,7 @@ s = "読める本がない。";
 			if (spell == -1) break;
 
 			/* Display a list of spells */
-			print_spells(0, spells, num, 1, 15, use_realm - 1);
+			print_spells(0, spells, num, 1, 15, use_realm);
 
 			/* Notify that there's nothing to see, and wait. */
 			if (use_realm == REALM_HISSATSU)
@@ -542,7 +542,7 @@ s = "読める本がない。";
 		/* Access the spell */
 		if (!is_magic(use_realm))
 		{
-			s_ptr = &technic_info[use_realm - MIN_TECHNIC - 1][spell];
+			s_ptr = &technic_info[use_realm - MIN_TECHNIC][spell];
 		}
 		else
 		{
@@ -764,7 +764,7 @@ s = "読める本がない。";
 			{
 				/* Skip non "okay" prayers */
 				if (!spell_okay(spell, FALSE, TRUE,
-					(increment ? p_ptr->realm2 - 1 : p_ptr->realm1 - 1))) continue;
+					(increment ? p_ptr->realm2 : p_ptr->realm1))) continue;
 
 				/* Hack -- Prepare the randomizer */
 				k++;
@@ -4833,7 +4833,7 @@ s = "呪文書がない！";
 
 	if (!is_magic(use_realm))
 	{
-		s_ptr = &technic_info[use_realm - MIN_TECHNIC - 1][spell];
+		s_ptr = &technic_info[use_realm - MIN_TECHNIC][spell];
 	}
 	else
 	{
@@ -4841,7 +4841,7 @@ s = "呪文書がない！";
 	}
 
 	/* Extract mana consumption rate */
-	shouhimana = s_ptr->smana*(3800 - experience_of_spell(spell, realm-1)) + 2399;
+	shouhimana = s_ptr->smana*(3800 - experience_of_spell(spell, realm)) + 2399;
 	if(p_ptr->dec_mana)
 		shouhimana *= 3;
 	else shouhimana *= 4;
@@ -4875,7 +4875,7 @@ msg_format("その%sを%sのに十分なマジックポイントがない。",prayer,
 
 
 	/* Spell failure chance */
-	chance = spell_chance(spell, use_realm - 1);
+	chance = spell_chance(spell, use_realm);
 
 	/* Failed spell */
 	if (randint0(100) < chance)

@@ -2062,8 +2062,6 @@ static void calc_spells(void)
 	int                     num_boukyaku = 0;
 
 	magic_type		*s_ptr;
-	int use_realm1 = p_ptr->realm1 - 1;
-	int use_realm2 = p_ptr->realm2 - 1;
 	int which;
 	int bonus = 0;
 
@@ -2147,17 +2145,17 @@ static void calc_spells(void)
 
 
 		/* Get the spell */
-		if (!is_magic(((j < 32) ? use_realm1 : use_realm2)+1))
+		if (!is_magic((j < 32) ? p_ptr->realm1 : p_ptr->realm2))
 		{
 			if (j < 32)
-				s_ptr = &technic_info[use_realm1 - MIN_TECHNIC][j];
+				s_ptr = &technic_info[p_ptr->realm1 - MIN_TECHNIC][j];
 			else
-				s_ptr = &technic_info[use_realm2 - MIN_TECHNIC][j%32];
+				s_ptr = &technic_info[p_ptr->realm2 - MIN_TECHNIC][j%32];
 		}
 		else if (j < 32)
-			s_ptr = &mp_ptr->info[use_realm1][j];
+			s_ptr = &mp_ptr->info[p_ptr->realm1-1][j];
 		else
-			s_ptr = &mp_ptr->info[use_realm2][j%32];
+			s_ptr = &mp_ptr->info[p_ptr->realm2-1][j%32];
 
 		/* Skip spells we are allowed to know */
 		if (s_ptr->slevel <= p_ptr->lev) continue;
@@ -2171,33 +2169,33 @@ static void calc_spells(void)
 			if (j < 32)
 			{
 				p_ptr->spell_forgotten1 |= (1L << j);
-				which = use_realm1;
+				which = p_ptr->realm1;
 			}
 			else
 			{
 				p_ptr->spell_forgotten2 |= (1L << (j - 32));
-				which = use_realm2;
+				which = p_ptr->realm2;
 			}
 
 			/* No longer known */
 			if (j < 32)
 			{
 				p_ptr->spell_learned1 &= ~(1L << j);
-				which = use_realm1;
+				which = p_ptr->realm1;
 			}
 			else
 			{
 				p_ptr->spell_learned2 &= ~(1L << (j - 32));
-				which = use_realm2;
+				which = p_ptr->realm2;
 			}
 
 			/* Message */
 #ifdef JP
                         msg_format("%sの%sを忘れてしまった。",
-				   spell_names[technic2magic(which+1)-1][j%32], p );
+				   spell_names[technic2magic(which)-1][j%32], p );
 #else
 			msg_format("You have forgotten the %s of %s.", p,
-			spell_names[technic2magic(which+1)-1][j%32]);
+			spell_names[technic2magic(which)-1][j%32]);
 #endif
 
 
@@ -2231,33 +2229,33 @@ static void calc_spells(void)
 			if (j < 32)
 			{
 				p_ptr->spell_forgotten1 |= (1L << j);
-				which = use_realm1;
+				which = p_ptr->realm1;
 			}
 			else
 			{
 				p_ptr->spell_forgotten2 |= (1L << (j - 32));
-				which = use_realm2;
+				which = p_ptr->realm2;
 			}
 
 			/* No longer known */
 			if (j < 32)
 			{
 				p_ptr->spell_learned1 &= ~(1L << j);
-				which = use_realm1;
+				which = p_ptr->realm1;
 			}
 			else
 			{
 				p_ptr->spell_learned2 &= ~(1L << (j - 32));
-				which = use_realm2;
+				which = p_ptr->realm2;
 			}
 
 			/* Message */
 #ifdef JP
                         msg_format("%sの%sを忘れてしまった。",
-				   spell_names[technic2magic(which+1)-1][j%32], p );
+				   spell_names[technic2magic(which)-1][j%32], p );
 #else
 			msg_format("You have forgotten the %s of %s.", p,
-			           spell_names[technic2magic(which+1)-1][j%32]);
+			           spell_names[technic2magic(which)-1][j%32]);
 #endif
 
 
@@ -2283,17 +2281,17 @@ static void calc_spells(void)
 		if (j >= 99) break;
 
 		/* Access the spell */
-		if (!is_magic(((j < 32) ? use_realm1 : use_realm2)+1))
+		if (!is_magic((j < 32) ? p_ptr->realm1 : p_ptr->realm2))
 		{
 			if (j < 32)
-				s_ptr = &technic_info[use_realm1 - MIN_TECHNIC][j];
+				s_ptr = &technic_info[p_ptr->realm1 - MIN_TECHNIC][j];
 			else
-				s_ptr = &technic_info[use_realm2 - MIN_TECHNIC][j%32];
+				s_ptr = &technic_info[p_ptr->realm2 - MIN_TECHNIC][j%32];
 		}
 		else if (j<32)
-			s_ptr = &mp_ptr->info[use_realm1][j];
+			s_ptr = &mp_ptr->info[p_ptr->realm1-1][j];
 		else
-			s_ptr = &mp_ptr->info[use_realm2][j%32];
+			s_ptr = &mp_ptr->info[p_ptr->realm2-1][j%32];
 
 		/* Skip spells we cannot remember */
 		if (s_ptr->slevel > p_ptr->lev) continue;
@@ -2307,33 +2305,33 @@ static void calc_spells(void)
 			if (j < 32)
 			{
 				p_ptr->spell_forgotten1 &= ~(1L << j);
-				which = use_realm1;
+				which = p_ptr->realm1;
 			}
 			else
 			{
 				p_ptr->spell_forgotten2 &= ~(1L << (j - 32));
-				which = use_realm2;
+				which = p_ptr->realm2;
 			}
 
 			/* Known once more */
 			if (j < 32)
 			{
 				p_ptr->spell_learned1 |= (1L << j);
-				which = use_realm1;
+				which = p_ptr->realm1;
 			}
 			else
 			{
 				p_ptr->spell_learned2 |= (1L << (j - 32));
-				which = use_realm2;
+				which = p_ptr->realm2;
 			}
 
 			/* Message */
 #ifdef JP
                         msg_format("%sの%sを思い出した。",
-				   spell_names[technic2magic(which+1)-1][j%32], p );
+				   spell_names[technic2magic(which)-1][j%32], p );
 #else
 			msg_format("You have remembered the %s of %s.",
-			           p, spell_names[technic2magic(which+1)-1][j%32]);
+			           p, spell_names[technic2magic(which)-1][j%32]);
 #endif
 
 
@@ -2349,8 +2347,8 @@ static void calc_spells(void)
 		/* Count spells that can be learned */
 		for (j = 0; j < 32; j++)
 		{
-			if (!is_magic(use_realm1+1)) s_ptr = &technic_info[use_realm1-MIN_TECHNIC][j];
-			else s_ptr = &mp_ptr->info[use_realm1][j];
+			if (!is_magic(p_ptr->realm1)) s_ptr = &technic_info[p_ptr->realm1-MIN_TECHNIC][j];
+			else s_ptr = &mp_ptr->info[p_ptr->realm1-1][j];
 
 			/* Skip spells we cannot remember */
 			if (s_ptr->slevel > p_ptr->lev) continue;

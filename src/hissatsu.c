@@ -12,7 +12,7 @@
 
 #include "angband.h"
 
-#define TECHNIC_HISSATSU (REALM_HISSATSU - MIN_TECHNIC - 1)
+#define TECHNIC_HISSATSU (REALM_HISSATSU - MIN_TECHNIC)
 
 /*
  * Allow user to choose a mindcrafter power.

@@ -6066,7 +6066,7 @@ static void do_cmd_knowledge_spell_exp(void)
 		{
 			if (!is_magic(p_ptr->realm1))
 			{
-				s_ptr = &technic_info[p_ptr->realm1 - MIN_TECHNIC - 1][i];
+				s_ptr = &technic_info[p_ptr->realm1 - MIN_TECHNIC][i];
 			}
 			else
 			{
@@ -6099,7 +6099,7 @@ static void do_cmd_knowledge_spell_exp(void)
 		{
 			if (!is_magic(p_ptr->realm1))
 			{
-				s_ptr = &technic_info[p_ptr->realm2 - MIN_TECHNIC - 1][i];
+				s_ptr = &technic_info[p_ptr->realm2 - MIN_TECHNIC][i];
 			}
 			else
 			{
