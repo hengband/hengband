@@ -5318,7 +5318,7 @@ char *my_strstr(const char *haystack, const char *needle)
 
 
 /*
- * A copy of ANSI my_strchr()
+ * A copy of ANSI strchr()
  *
  * my_strchr() can handle Kanji strings correctly.
  */
