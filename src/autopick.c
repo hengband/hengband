@@ -31,16 +31,18 @@
 #define FLG_ARTIFACT	    12
 #define FLG_EGO		    13
 #define FLG_NAMELESS	    14
-#define FLG_WANTED	    15
-#define FLG_UNIQUE	    16
-#define FLG_HUMAN	    17
-#define FLG_UNREADABLE	    18
-#define FLG_REALM1	    19
-#define FLG_REALM2	    20
-#define FLG_FIRST	    21
-#define FLG_SECOND	    22
-#define FLG_THIRD	    23
-#define FLG_FOURTH	    24
+#define FLG_RARE	    15
+#define FLG_COMMON	    16
+#define FLG_WANTED	    17
+#define FLG_UNIQUE	    18
+#define FLG_HUMAN	    19
+#define FLG_UNREADABLE	    20
+#define FLG_REALM1	    21
+#define FLG_REALM2	    22
+#define FLG_FIRST	    23
+#define FLG_SECOND	    24
+#define FLG_THIRD	    25
+#define FLG_FOURTH	    26
 
 #define FLG_ITEMS	    30
 #define FLG_WEAPONS	    31
@@ -79,6 +81,7 @@
 #define KEY_COLLECTING "収集中の"
 #endif
 
+#define KEY_UNAWARE "未判明の"
 #define KEY_UNIDENTIFIED "未鑑定の"
 #define KEY_IDENTIFIED "鑑定済みの"
 #define KEY_STAR_IDENTIFIED "*鑑定*済みの"
@@ -91,7 +94,8 @@
 #define KEY_ARTIFACT "アーティファクト"
 #define KEY_EGO "エゴ"
 #define KEY_NAMELESS "無銘の"
-#define KEY_UNAWARE "未判明の"
+#define KEY_RARE "レアな"
+#define KEY_COMMON "ありふれた"
 #define KEY_WANTED "賞金首の"
 #define KEY_UNIQUE "ユニーク・モンスターの"
 #define KEY_HUMAN "人間の"
@@ -126,6 +130,7 @@
 
 #define KEY_ALL "all"
 #define KEY_COLLECTING "collecting"
+#define KEY_UNAWARE "unaware"
 #define KEY_UNIDENTIFIED "unidentified"
 #define KEY_IDENTIFIED "identified"
 #define KEY_STAR_IDENTIFIED "*identified*"
@@ -138,7 +143,8 @@
 #define KEY_ARTIFACT "artifact"
 #define KEY_EGO "ego"
 #define KEY_NAMELESS "nameless"
-#define KEY_UNAWARE "unaware"
+#define KEY_RARE "rare"
+#define KEY_COMMON "common"
 #define KEY_WANTED "wanted"
 #define KEY_UNIQUE "unique monster's"
 #define KEY_HUMAN "human"
@@ -288,6 +294,7 @@ static bool autopick_new_entry(autopick_type *entry, cptr str, bool allow_defaul
 
 		if (MATCH_KEY(KEY_ALL)) ADD_FLG(FLG_ALL);
 		if (MATCH_KEY(KEY_COLLECTING)) ADD_FLG(FLG_COLLECTING);
+		if (MATCH_KEY(KEY_UNAWARE)) ADD_FLG(FLG_UNAWARE);
 		if (MATCH_KEY(KEY_UNIDENTIFIED)) ADD_FLG(FLG_UNIDENTIFIED);
 		if (MATCH_KEY(KEY_IDENTIFIED)) ADD_FLG(FLG_IDENTIFIED);
 		if (MATCH_KEY(KEY_STAR_IDENTIFIED)) ADD_FLG(FLG_STAR_IDENTIFIED);
@@ -348,7 +355,8 @@ static bool autopick_new_entry(autopick_type *entry, cptr str, bool allow_defaul
 		if (MATCH_KEY(KEY_WORTHLESS)) ADD_FLG(FLG_WORTHLESS);
 		if (MATCH_KEY(KEY_EGO)) ADD_FLG(FLG_EGO);
 		if (MATCH_KEY(KEY_NAMELESS)) ADD_FLG(FLG_NAMELESS);
-		if (MATCH_KEY(KEY_UNAWARE)) ADD_FLG(FLG_UNAWARE);
+		if (MATCH_KEY(KEY_RARE)) ADD_FLG(FLG_RARE);
+		if (MATCH_KEY(KEY_COMMON)) ADD_FLG(FLG_COMMON);
 		if (MATCH_KEY(KEY_WANTED)) ADD_FLG(FLG_WANTED);
 		if (MATCH_KEY(KEY_UNIQUE)) ADD_FLG(FLG_UNIQUE);
 		if (MATCH_KEY(KEY_HUMAN)) ADD_FLG(FLG_HUMAN);
@@ -480,6 +488,71 @@ static bool is_favorite(object_type *o_ptr)
 
 
 /*
+ * Rare weapons/aromors
+ * including Blade of Chaos, Dragon armors, etc.
+ */
+static bool is_rare(object_type *o_ptr)
+{
+	switch(o_ptr->tval)
+	{
+	case TV_HAFTED:
+		if (o_ptr->sval == SV_MACE_OF_DISRUPTION ||
+		    o_ptr->sval == SV_WIZSTAFF) return TRUE;
+		break;
+
+	case TV_POLEARM:
+		if (o_ptr->sval == SV_SCYTHE_OF_SLICING ||
+		    o_ptr->sval == SV_DEATH_SCYTHE) return TRUE;
+		break;
+
+	case TV_SWORD:
+		if (o_ptr->sval == SV_BLADE_OF_CHAOS ||
+		    o_ptr->sval == SV_DIAMOND_EDGE ||
+		    o_ptr->sval == SV_DOKUBARI ||
+		    o_ptr->sval == SV_HAYABUSA) return TRUE;
+		break;
+
+	case TV_SHIELD:
+		if (o_ptr->sval == SV_DRAGON_SHIELD ||
+		    o_ptr->sval == SV_MIRROR_SHIELD) return TRUE;
+		break;
+
+	case TV_HELM:
+		if (o_ptr->sval == SV_DRAGON_HELM) return TRUE;
+		break;
+
+	case TV_BOOTS:
+		if (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE) return TRUE;
+		break;
+
+	case TV_CLOAK:
+		if (o_ptr->sval == SV_ELVEN_CLOAK ||
+		    o_ptr->sval == SV_ETHEREAL_CLOAK ||
+		    o_ptr->sval == SV_SHADOW_CLOAK) return TRUE;
+		break;
+
+	case TV_GLOVES:
+		if (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES) return TRUE;
+		break;
+
+	case TV_SOFT_ARMOR:
+		if (o_ptr->sval == SV_KUROSHOUZOKU ||
+		    o_ptr->sval == SV_ABUNAI_MIZUGI) return TRUE;
+		break;
+
+	case TV_DRAG_ARMOR:
+		return TRUE;
+
+	default:
+		break;
+	}
+
+	/* Any others are not "rare" objects. */
+	return FALSE;
+}
+
+
+/*
  * Convert string to lower case
  */
 static void str_tolower(char *str)
@@ -508,8 +581,10 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 	bool name = TRUE;
 
 #ifdef JP
+	/* エゴ銘が邪魔かもしれないので、デフォルトで「^」は付けない */
 	bool bol_mark = FALSE;
 #else
+	/* We can always use the ^ mark in English */
 	bool bol_mark = TRUE;
 #endif
 
@@ -593,10 +668,23 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 				 * Register the ego type only.
 				 */
 				ego_item_type *e_ptr = &e_info[o_ptr->name2];
+#ifdef JP
+				/* エゴ銘には「^」マークが使える */
+				sprintf(name_str, "^%s", e_name + e_ptr->name);
+#else
+				/* We ommit the basename and cannot use the ^ mark */
 				strcpy(name_str, e_name + e_ptr->name);
+#endif
 
 				/* Don't use the object description */
 				name = FALSE;
+
+				if (TV_WEAPON_BEGIN <= o_ptr->tval &&
+				    o_ptr->tval <= TV_ARMOR_END)
+				{
+					/* Restrict to 'common' equipments */
+					if (!is_rare(o_ptr)) ADD_FLG(FLG_COMMON);
+				}
 			}
 
 			ADD_FLG(FLG_EGO);
@@ -863,10 +951,10 @@ cptr autopick_line_from_entry(autopick_type *entry)
 
 	if (IS_FLG(FLG_ALL)) ADD_KEY(KEY_ALL);
 	if (IS_FLG(FLG_COLLECTING)) ADD_KEY(KEY_COLLECTING);
+	if (IS_FLG(FLG_UNAWARE)) ADD_KEY(KEY_UNAWARE);
 	if (IS_FLG(FLG_UNIDENTIFIED)) ADD_KEY(KEY_UNIDENTIFIED);
 	if (IS_FLG(FLG_IDENTIFIED)) ADD_KEY(KEY_IDENTIFIED);
 	if (IS_FLG(FLG_STAR_IDENTIFIED)) ADD_KEY(KEY_STAR_IDENTIFIED);
-	if (IS_FLG(FLG_UNAWARE)) ADD_KEY(KEY_UNAWARE);
 	if (IS_FLG(FLG_BOOSTED)) ADD_KEY(KEY_BOOSTED);
 
 	if (IS_FLG(FLG_MORE_DICE))
@@ -895,6 +983,8 @@ cptr autopick_line_from_entry(autopick_type *entry)
 	if (IS_FLG(FLG_HUMAN)) ADD_KEY(KEY_HUMAN);
 	if (IS_FLG(FLG_WORTHLESS)) ADD_KEY(KEY_WORTHLESS);
 	if (IS_FLG(FLG_NAMELESS)) ADD_KEY(KEY_NAMELESS);
+	if (IS_FLG(FLG_RARE)) ADD_KEY(KEY_RARE);
+	if (IS_FLG(FLG_COMMON)) ADD_KEY(KEY_COMMON);
 	if (IS_FLG(FLG_EGO)) ADD_KEY(KEY_EGO);
 
 	if (IS_FLG(FLG_ARTIFACT)) ADD_KEY(KEY_ARTIFACT);
@@ -985,6 +1075,10 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 {
 	int j;
 	cptr ptr = entry->name;
+
+	/*** Unaware items ***/
+	if (IS_FLG(FLG_UNAWARE) && object_aware_p(o_ptr))
+		return FALSE;
 
 	/*** Unidentified ***/
 	if (IS_FLG(FLG_UNIDENTIFIED)
@@ -1112,8 +1206,12 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 		}
 	}
 
-	/*** Unaware items ***/
-	if (IS_FLG(FLG_UNAWARE) && object_aware_p(o_ptr))
+	/*** Rere equpiments ***/
+	if (IS_FLG(FLG_RARE) && !is_rare(o_ptr))
+		return FALSE;
+
+	/*** Common equpiments ***/
+	if (IS_FLG(FLG_COMMON) && is_rare(o_ptr))
 		return FALSE;
 
 	/*** Wanted monster's corpse/skeletons ***/
@@ -2084,6 +2182,10 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	if (IS_FLG(FLG_COLLECTING))
 		before_str[before_n++] = "収集中で既に持っているスロットにまとめられる";
 	
+	/*** Unaware items ***/
+	if (IS_FLG(FLG_UNAWARE))
+		before_str[before_n++] = "未鑑定でその効果も判明していない";
+
 	/*** Unidentified ***/
 	if (IS_FLG(FLG_UNIDENTIFIED))
 		before_str[before_n++] = "未鑑定の";
@@ -2151,9 +2253,19 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		body_str = "装備";
 	}
 
-	/*** Unaware items ***/
-	if (IS_FLG(FLG_UNAWARE))
-		before_str[before_n++] = "未鑑定でその効果も判明していない";
+	/*** Rare equpiments ***/
+	if (IS_FLG(FLG_RARE))
+	{
+		before_str[before_n++] = "ドラゴン装備やカオス・ブレード等を含む珍しい";
+		body_str = "装備";
+	}
+
+	/*** Common equpiments ***/
+	if (IS_FLG(FLG_COMMON))
+	{
+		before_str[before_n++] = "ありふれた(ドラゴン装備やカオス・ブレード等の珍しい物ではない)";
+		body_str = "装備";
+	}
 
 	/*** Wanted monster's corpse/skeletons ***/
 	if (IS_FLG(FLG_WANTED))
@@ -2340,6 +2452,13 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	if (IS_FLG(FLG_COLLECTING))
 		which_str[which_n++] = "can be absorbed into an existing inventory slot";
 	
+	/*** Unaware items ***/
+	if (IS_FLG(FLG_UNAWARE))
+	{
+		before_str[before_n++] = "unidentified";
+		whose_str[whose_n++] = "basic abilities are not known";
+	}
+
 	/*** Unidentified ***/
 	if (IS_FLG(FLG_UNIDENTIFIED))
 		before_str[before_n++] = "unidentified";
@@ -2351,6 +2470,22 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	/*** *Identified* ***/
 	if (IS_FLG(FLG_STAR_IDENTIFIED))
 		before_str[before_n++] = "fully identified";
+
+	/*** Rare equpiments ***/
+	if (IS_FLG(FLG_RARE))
+	{
+		before_str[before_n++] = "very rare";
+		body_str = "equipments";
+		after_str[after_n++] = "such like Dragon armors, Blades of Chaos, etc.";
+	}
+
+	/*** Common equpiments ***/
+	if (IS_FLG(FLG_COMMON))
+	{
+		before_str[before_n++] = "relatively common";
+		body_str = "equipments";
+		after_str[after_n++] = "compared to very rare Dragon armors, Blades of Chaos, etc.";
+	}
 
 	/*** Worthless items ***/
 	if (IS_FLG(FLG_WORTHLESS))
@@ -2376,13 +2511,6 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	{
 		body_str = "equipment";
 		which_str[which_n++] = "is neither ego-item nor artifact";
-	}
-
-	/*** Unaware items ***/
-	if (IS_FLG(FLG_UNAWARE))
-	{
-		before_str[before_n++] = "unidentified";
-		whose_str[whose_n++] = "basic abilities are not known";
 	}
 
 	/*** Dice boosted (weapon of slaying) ***/
@@ -2823,6 +2951,14 @@ static void toggle_keyword(text_body_type *tb, int flg)
 		{
 			int i;
 			for (i = FLG_ARTIFACT; i <= FLG_NAMELESS; i++)
+				REM_FLG(i);
+		}
+		
+		/* You can use only one flag in rare/common */
+		else if (FLG_RARE <= flg && flg <= FLG_COMMON)
+		{
+			int i;
+			for (i = FLG_RARE; i <= FLG_COMMON; i++)
 				REM_FLG(i);
 		}
 		
@@ -3613,33 +3749,35 @@ static void search_for_string(text_body_type *tb, cptr search_str, bool forward)
 #define EC_OK_ARTIFACT	       47
 #define EC_OK_EGO	       48
 #define EC_OK_NAMELESS	       49
-#define EC_OK_WANTED	       50
-#define EC_OK_UNIQUE	       51
-#define EC_OK_HUMAN	       52
-#define EC_OK_UNREADABLE       53
-#define EC_OK_REALM1	       54
-#define EC_OK_REALM2	       55
-#define EC_OK_FIRST	       56
-#define EC_OK_SECOND	       57
-#define EC_OK_THIRD	       58
-#define EC_OK_FOURTH	       59
-#define EC_KK_WEAPONS	       60
-#define EC_KK_FAVORITE	       61
-#define EC_KK_ARMORS	       62
-#define EC_KK_MISSILES	       63
-#define EC_KK_DEVICES	       64
-#define EC_KK_LIGHTS	       65
-#define EC_KK_JUNKS	       66
-#define EC_KK_SPELLBOOKS       67
-#define EC_KK_SHIELDS	       68
-#define EC_KK_BOWS	       69
-#define EC_KK_RINGS	       70
-#define EC_KK_AMULETS	       71
-#define EC_KK_SUITS	       72
-#define EC_KK_CLOAKS	       73
-#define EC_KK_HELMS	       74
-#define EC_KK_GLOVES	       75
-#define EC_KK_BOOTS	       76
+#define EC_OK_RARE	       50       
+#define EC_OK_COMMON	       51
+#define EC_OK_WANTED	       52
+#define EC_OK_UNIQUE	       53
+#define EC_OK_HUMAN	       54
+#define EC_OK_UNREADABLE       55
+#define EC_OK_REALM1	       56
+#define EC_OK_REALM2	       57
+#define EC_OK_FIRST	       58
+#define EC_OK_SECOND	       59
+#define EC_OK_THIRD	       60
+#define EC_OK_FOURTH	       61
+#define EC_KK_WEAPONS	       62
+#define EC_KK_FAVORITE	       63
+#define EC_KK_ARMORS	       64
+#define EC_KK_MISSILES	       65
+#define EC_KK_DEVICES	       66
+#define EC_KK_LIGHTS	       67
+#define EC_KK_JUNKS	       68
+#define EC_KK_SPELLBOOKS       69
+#define EC_KK_SHIELDS	       70
+#define EC_KK_BOWS	       71
+#define EC_KK_RINGS	       72
+#define EC_KK_AMULETS	       73
+#define EC_KK_SUITS	       74
+#define EC_KK_CLOAKS	       75
+#define EC_KK_HELMS	       76
+#define EC_KK_GLOVES	       77
+#define EC_KK_BOOTS	       78
 
 
 /* Manu names */
@@ -3711,6 +3849,8 @@ static void search_for_string(text_body_type *tb, cptr search_str, bool forward)
 #define MN_ARTIFACT "アーティファクト (装備)" 
 #define MN_EGO "エゴ (装備)" 
 #define MN_NAMELESS "無銘の (装備)" 
+#define MN_RARE "レアな (装備)" 
+#define MN_COMMON "ありふれた (装備)" 
 #define MN_WANTED "賞金首の (死体)" 
 #define MN_UNIQUE "ユニーク・モンスターの (死体)" 
 #define MN_HUMAN "人間の (死体)" 
@@ -3784,6 +3924,8 @@ static void search_for_string(text_body_type *tb, cptr search_str, bool forward)
 #define MN_ARTIFACT "artifact (equipments)" 
 #define MN_EGO "ego (equipments)" 
 #define MN_NAMELESS "nameless (equipments)" 
+#define MN_RARE "rare (equipments)" 
+#define MN_COMMON "common (equipments)" 
 #define MN_WANTED "wanted (corpse)" 
 #define MN_UNIQUE "unique (corpse)" 
 #define MN_HUMAN "human (corpse)" 
@@ -3867,6 +4009,8 @@ command_menu_type menu_data[] =
 	{MN_ARTIFACT, 1, -1, EC_OK_ARTIFACT},
 	{MN_EGO, 1, -1, EC_OK_EGO},
 	{MN_NAMELESS, 1, -1, EC_OK_NAMELESS},
+	{MN_RARE, 1, -1, EC_OK_RARE},
+	{MN_COMMON, 1, -1, EC_OK_COMMON},
 	{MN_WANTED, 1, -1, EC_OK_WANTED},
 	{MN_UNIQUE, 1, -1, EC_OK_UNIQUE},
 	{MN_HUMAN, 1, -1, EC_OK_HUMAN},
@@ -5536,6 +5680,8 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	case EC_OK_ARTIFACT: toggle_keyword(tb, FLG_ARTIFACT); break;
 	case EC_OK_EGO: toggle_keyword(tb, FLG_EGO); break;
 	case EC_OK_NAMELESS: toggle_keyword(tb, FLG_NAMELESS); break;
+	case EC_OK_RARE: toggle_keyword(tb, FLG_RARE); break;
+	case EC_OK_COMMON: toggle_keyword(tb, FLG_COMMON); break;
 	case EC_OK_WANTED: toggle_keyword(tb, FLG_WANTED); break;
 	case EC_OK_UNIQUE: toggle_keyword(tb, FLG_UNIQUE); break;
 	case EC_OK_HUMAN: toggle_keyword(tb, FLG_HUMAN); break;
