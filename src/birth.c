@@ -1835,7 +1835,7 @@ static cptr class_jouhou[MAX_CLASS] =
 
 "A Ranger is a combination of a warrior and a mage who has developed a special affinity for the natural world around him. He is a good fighter and also good about a missile weapon such as a bow. A ranger has a good stealth, good perception, good searching, a good saving throw and is good with magical devices. Intelligence determines a Ranger's spell casting ability.",
 
-"A Paladin is a combination of a warrior and a priest. Paladins are very good fighters, but not very good at missile weapons. A paladin lacks much in the way of abilities. He is poor at stealth, perception, searching, and magical devices but has a decent saving throw due to his divine alliance. Wisdom determines a Paradin's success at praying to his deity.",
+"A Paladin is a combination of a warrior and a priest. Paladins are very good fighters, but not very good at missile weapons. A paladin lacks much in the way of abilities. He is poor at stealth, perception, searching, and magical devices but has a decent saving throw due to his divine alliance. Wisdom determines a Paladin's success at praying to his deity.",
 
 "A Warrior-Mage is precisely what the name suggests: a cross between the warrior and mage classes. While their brothers, the rangers, specialize in Nature magic and survival skills, true Warrior-Mages attempt to reach the best of both worlds. As warriors they are much superior to the usual Mage class. Intelligence determines a Warrior-Mage's spell casting ability.",
 
