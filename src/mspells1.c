@@ -1626,9 +1626,14 @@ msg_format("%^sがかん高い金切り声をあげた。", m_name);
 			}
 			if (p_ptr->riding)
 			{
-				m_list[p_ptr->riding].invulner = 0;
-				m_list[p_ptr->riding].fast = 0;
-				m_list[p_ptr->riding].slow = 0;
+				monster_type *riding_ptr = &m_list[p_ptr->riding];
+				if (riding_ptr->invulner)
+				{
+					riding_ptr->invulner = 0;
+					riding_ptr->energy_need += ENERGY_NEED();
+				}
+				riding_ptr->fast = 0;
+				riding_ptr->slow = 0;
 				p_ptr->update |= PU_BONUS;
 				if (p_ptr->health_who == p_ptr->riding) p_ptr->redraw |= PR_HEALTH;
 				p_ptr->redraw |= (PR_UHEALTH);

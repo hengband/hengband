@@ -2441,7 +2441,6 @@ msg_print("少しの間悲しい気分になった。");
 			/* Reset the counter */
 			if (m_idx == p_ptr->riding) riding_pinch = 0;
 		}
-			
 	}
 
 	/* Handle Invulnerability */
@@ -2450,23 +2449,26 @@ msg_print("少しの間悲しい気分になった。");
 		/* Reduce by one, note if expires */
 		m_ptr->invulner--;
 
-		if (!(m_ptr->invulner) && m_ptr->ml)
+		if (!m_ptr->invulner)
 		{
-			char m_name[80];
+			if (m_ptr->ml)
+			{
+				char m_name[80];
 
-			/* Acquire the monster name */
-			monster_desc(m_name, m_ptr, 0);
+				/* Acquire the monster name */
+				monster_desc(m_name, m_ptr, 0);
 
-			/* Dump a message */
+				/* Dump a message */
 #ifdef JP
-msg_format("%^sはもう無敵でない。", m_name);
+				msg_format("%^sはもう無敵でない。", m_name);
 #else
-			msg_format("%^s is no longer invulnerable.", m_name);
+				msg_format("%^s is no longer invulnerable.", m_name);
 #endif
 
+				if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
+				if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
+			}
 			m_ptr->energy_need += ENERGY_NEED();
-			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-			if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 		}
 	}
 
