@@ -998,6 +998,7 @@ msg_print("地面に落とされた。");
 		if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
 		{
 			int a_idx = 0;
+			artifact_type *a_ptr = NULL;
 
 			if (!drop_chosen_item) break;
 
@@ -1015,15 +1016,17 @@ msg_print("地面に落とされた。");
 					a_idx = ART_NAMAKE_ARMOR;
 					break;
 				}
-			}
-			while (a_info[a_idx].cur_num);
 
-			if (a_info[a_idx].cur_num == 0)
-			{
-				/* Create the artifact */
-				create_named_art(a_idx, y, x);
-				a_info[a_idx].cur_num = 1;
+				a_ptr = &a_info[a_idx];
 			}
+			while (a_ptr->cur_num);
+
+			/* Create the artifact */
+			create_named_art(a_idx, y, x);
+			a_ptr->cur_num = 1;
+
+			/* Hack -- Memorize location of artifact in saved floors */
+			if (character_dungeon) a_ptr->floor_id = p_ptr->floor_id;
 		}
 		break;
 
@@ -1386,11 +1389,16 @@ msg_print("地面に落とされた。");
 
 		if ((a_idx > 0) && ((randint0(100) < chance) || p_ptr->wizard))
 		{
-			if (a_info[a_idx].cur_num == 0)
+			artifact_type *a_ptr = &a_info[a_idx];
+
+			if (!a_ptr->cur_num)
 			{
 				/* Create the artifact */
 				create_named_art(a_idx, y, x);
-				a_info[a_idx].cur_num = 1;
+				a_ptr->cur_num = 1;
+
+				/* Hack -- Memorize location of artifact in saved floors */
+				if (character_dungeon) a_ptr->floor_id = p_ptr->floor_id;
 			}
 		}
 
@@ -1402,11 +1410,16 @@ msg_print("地面に落とされた。");
 			if (d_info[dungeon_type].final_artifact)
 			{
 				int a_idx = d_info[dungeon_type].final_artifact;
-				if (!a_info[a_idx].cur_num)
+				artifact_type *a_ptr = &a_info[a_idx];
+
+				if (!a_ptr->cur_num)
 				{
 					/* Create the artifact */
 					create_named_art(a_idx, y, x);
-					a_info[a_idx].cur_num = 1;
+					a_ptr->cur_num = 1;
+
+					/* Hack -- Memorize location of artifact in saved floors */
+					if (character_dungeon) a_ptr->floor_id = p_ptr->floor_id;
 
 					/* Prevent rewarding both artifact and "default" object */
 					if (!d_info[dungeon_type].final_object) k_idx = 0;
