@@ -2927,7 +2927,11 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					case EGO_INFRAVISION:
 						break;
 					case EGO_SEEING:
-						if (one_in_(7)) add_flag(o_ptr->art_flags, TR_TELEPATHY);
+						if (one_in_(7))
+						{
+							if (one_in_(2)) add_esp_strong(o_ptr);
+							else add_esp_weak(o_ptr);
+						}
 						break;
 					default:/* not existing helm (Magi, Might, etc...)*/
 						ok_flag = FALSE;
