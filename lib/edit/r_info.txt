@@ -7952,7 +7952,7 @@ D:$It has a form that legends are made of.  Its still-tender scales are a
 D:$deep green in hue.  Foul gas seeps through its scales.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
 D:まだ柔らかいそのうろこは深い緑色をしている。不潔なガスがそのうろこからしみ
-D:出ている
+D:出ている。
 
 #J0#
 N:462:ヤング・ブロンズ・ドラゴン
