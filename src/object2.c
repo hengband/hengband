@@ -6846,7 +6846,7 @@ static void drain_essence(void)
 	}
 	if (old_name2 == EGO_2WEAPON)
 	{
-		drain_value[ESSENCE_DEX] += 20;
+		drain_value[ESSENCE_DEX-1] += 20;
 	}
 	if ((o_ptr->tval >= TV_SHOT) && (o_ptr->tval <= TV_SWORD) && (o_ptr->tval != TV_BOW))
 	{

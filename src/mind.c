@@ -1078,6 +1078,7 @@ static bool cast_force_spell(int spell)
 		msg_print("You improved the Force.");
 #endif
 		p_ptr->magic_num1[0] += (70 + plev);
+		p_ptr->update |= (PU_BONUS);
 		if (randint1(p_ptr->magic_num1[0]) > (plev * 4 + 120))
 		{
 #ifdef JP
@@ -1251,6 +1252,7 @@ msg_print("¤Ê¤Ë¡©");
 
 	}
 	p_ptr->magic_num1[0] = 0;
+	p_ptr->update |= (PU_BONUS);
 
 	return TRUE;
 }

@@ -2665,6 +2665,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				int min_level = 1;
 				martial_arts *ma_ptr = &ma_blows[0], *old_ptr = &ma_blows[0];
 				int resist_stun = 0;
+				int weight = 8;
 
 				if (r_ptr->flags1 & RF1_UNIQUE) resist_stun += 88;
 				if (r_ptr->flags3 & RF3_NO_STUN) resist_stun += 66;
@@ -2762,7 +2763,14 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 					msg_format(ma_ptr->desc, m_name);
 				}
 
-				k = critical_norm(p_ptr->lev * randint1((p_ptr->special_defense & KAMAE_SUZAKU) ? 5 : 10), min_level, k, p_ptr->to_h[0], 0);
+				if (p_ptr->special_defense & KAMAE_SUZAKU) weight = 4;
+				if ((p_ptr->pclass == CLASS_FORCETRAINER) && (p_ptr->magic_num1[0]))
+				{
+					weight += (p_ptr->magic_num1[0]/30);
+					if (weight > 20) weight = 20;
+				}
+
+				k = critical_norm(p_ptr->lev * weight, min_level, k, p_ptr->to_h[0], 0);
 
 				if ((special_effect == MA_KNEE) && ((k + p_ptr->to_d[hand]) < m_ptr->hp))
 				{

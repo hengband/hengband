@@ -5051,6 +5051,7 @@ msg_format("%^sを恐怖から立ち直らせた。", m_name);
 			p_ptr->magic_num1[0] = 0;
 		}
 		else p_ptr->magic_num1[0] -= 40;
+		p_ptr->update |= (PU_BONUS);
 	}
 	if (p_ptr->action == ACTION_LEARN)
 	{

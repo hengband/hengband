@@ -3729,6 +3729,13 @@ void calc_bonuses(void)
 		p_ptr->to_a += 100;
 		p_ptr->dis_to_a += 100;
 	}
+	/* Temporary shield */
+	else if (p_ptr->tsubureru || p_ptr->shield || p_ptr->magicdef)
+	{
+		p_ptr->to_a += 50;
+		p_ptr->dis_to_a += 50;
+	}
+
 	if (p_ptr->tim_res_nether)
 	{
 		p_ptr->resist_neth = TRUE;
@@ -4386,12 +4393,6 @@ void calc_bonuses(void)
 		p_ptr->dis_to_h_b += 10;
 	}
 
-	/* Temporary shield */
-	if (p_ptr->tsubureru || p_ptr->shield || p_ptr->magicdef)
-	{
-		p_ptr->to_a += 50;
-		p_ptr->dis_to_a += 50;
-	}
 	if (p_ptr->magicdef)
 	{
 		p_ptr->resist_blind = TRUE;
@@ -5019,6 +5020,11 @@ void calc_bonuses(void)
 			if (blow_base > 31) p_ptr->num_blow[0]++;
 			if (blow_base > 44) p_ptr->num_blow[0]++;
 			if (blow_base > 58) p_ptr->num_blow[0]++;
+			if (p_ptr->magic_num1[0])
+			{
+				p_ptr->to_d[0] += (p_ptr->magic_num1[0]/5);
+				p_ptr->dis_to_d[0] += (p_ptr->magic_num1[0]/5);
+			}
 		}
 		else
 		{
