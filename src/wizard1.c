@@ -505,7 +505,9 @@ static grouper group_artifact[] =
 	{ TV_SWORD,             "≈·∑ı" },
 	{ TV_POLEARM,           "¡‰/…‡" },
 	{ TV_HAFTED,            "∆ﬂ¥Ô" },
+	{ TV_DIGGING,           "•∑•„•Ÿ•Î/§ƒ§Î§œ§∑" },
 	{ TV_BOW,               "»Ù§”∆ª∂Ò" },
+	{ TV_ARROW,             "Ã" },
 
 	{ TV_SOFT_ARMOR,        "≥ª" },
 	{ TV_HARD_ARMOR,        NULL },
@@ -513,6 +515,7 @@ static grouper group_artifact[] =
 
 	{ TV_CLOAK,             "•Ø•Ì°º•Ø" },
 	{ TV_SHIELD,            "Ω‚" },
+	{ TV_CARD,              NULL },
 	{ TV_HELM,              "≥ı/¥ß" },
 	{ TV_CROWN,             NULL },
 	{ TV_GLOVES,            "‰∆ºÍ" },
@@ -525,7 +528,9 @@ static grouper group_artifact[] =
 	{ TV_SWORD,             "Edged Weapons" },
 	{ TV_POLEARM,           "Polearms" },
 	{ TV_HAFTED,            "Hafted Weapons" },
+	{ TV_DIGGING,           "Shovels/Picks" },
 	{ TV_BOW,               "Bows" },
+	{ TV_ARROW,             "Ammo" },
 
 	{ TV_SOFT_ARMOR,        "Body Armor" },
 	{ TV_HARD_ARMOR,        NULL },
@@ -533,6 +538,7 @@ static grouper group_artifact[] =
 
 	{ TV_CLOAK,             "Cloaks" },
 	{ TV_SHIELD,            "Shields" },
+	{ TV_CARD,              NULL },
 	{ TV_HELM,              "Helms/Crowns" },
 	{ TV_CROWN,             NULL },
 	{ TV_GLOVES,            "Gloves" },
