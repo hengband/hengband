@@ -5459,7 +5459,7 @@ bool rakuba(int dam, bool force)
 			{
 				if ((p_ptr->skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING]) && s_info[p_ptr->pclass].s_max[GINOU_RIDING] > (RIDING_EXP_BEGINNER * 2))
 				{
-					if (r_ptr->level * 100 > (p_ptr->skill_exp[GINOU_RIDING] + (RIDING_EXP_SKILLED - RIDING_EXP_BEGINNER)))
+					if (r_ptr->level * 100 > (p_ptr->skill_exp[GINOU_RIDING] + 1500))
 						p_ptr->skill_exp[GINOU_RIDING] += (1 + (r_ptr->level - p_ptr->skill_exp[GINOU_RIDING] / 100 - 15));
 					else p_ptr->skill_exp[GINOU_RIDING]++;
 				}
