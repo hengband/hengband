@@ -4919,22 +4919,27 @@ void glow_deep_lava(void)
 {
 	int y, x, i, yy, xx;
 	cave_type *c_ptr;
+	byte feat;
 
 	/* Not in the darkness dungeon */
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) return;
 
-	for (y = 1; y < cur_hgt - 1; y++)
+	for (y = 0; y < cur_hgt; y++)
 	{
-		for (x = 1; x < cur_wid - 1; x++)
+		for (x = 0; x < cur_wid; x++)
 		{
 			c_ptr = &cave[y][x];
 
-			if (c_ptr->feat == FEAT_DEEP_LAVA)
+			/* Feature code (applying "mimic" field) */
+			feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+
+			if (feat == FEAT_DEEP_LAVA)
 			{
 				for (i = 0; i < 9; i++)
 				{
 					yy = y + ddy_ddd[i];
 					xx = x + ddx_ddd[i];
+					if (!in_bounds2(yy, xx)) continue;
 					cave[yy][xx].info |= CAVE_GLOW;
 					if (player_has_los_bold(yy, xx)) note_spot(yy, xx);
 				}
