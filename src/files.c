@@ -1878,7 +1878,11 @@ static void display_player_middle(void)
 			if (!p_ptr->riding)
 				sprintf(buf, "(%+d%+d)", i-tmp_speed, tmp_speed);
 			else
+#ifdef JP
 				sprintf(buf, "乗馬中 (%+d%+d)", i-tmp_speed, tmp_speed);
+#else
+				sprintf(buf, "Riding (%+d%+d)", i-tmp_speed, tmp_speed);
+#endif
 
 			if (tmp_speed > 0)
 				attr = TERM_YELLOW;
@@ -1890,7 +1894,11 @@ static void display_player_middle(void)
 			if (!p_ptr->riding)
 				sprintf(buf, "(%+d)", i);
 			else
+#ifdef JP
 				sprintf(buf, "乗馬中 (%+d)", i);
+#else
+				sprintf(buf, "Riding (%+d)", i);
+#endif
 		}
 	
 		display_player_one_line(ENTRY_SPEED, buf, attr);
