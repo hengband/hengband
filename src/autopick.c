@@ -12,6 +12,10 @@
 
 #include "angband.h"
 
+#define MAX_LINELEN 1024
+
+static object_type autopick_last_destroyed_object;
+
 /*
  * Macros for Keywords
  */
@@ -155,6 +159,8 @@
 #endif /* JP */
 
 #define MATCH_KEY(KEY) (!strncmp(ptr, KEY, sizeof(KEY)-1)\
+     ? (ptr += sizeof(KEY)-1, (' '==*ptr) ? ptr++ : 0, TRUE) : FALSE)
+#define MATCH_KEY2(KEY) (!strncmp(ptr, KEY, sizeof(KEY)-1)\
      ? (prev_ptr = ptr, ptr += sizeof(KEY)-1, (' '==*ptr) ? ptr++ : 0, TRUE) : FALSE)
 
 #ifdef JP
@@ -166,7 +172,6 @@
 
 #define ADD_FLG(FLG) (entry->flag[FLG / 32] |= (1L << (FLG % 32)))
 #define REM_FLG(FLG) (entry->flag[FLG / 32] &= ~(1L << (FLG % 32)))
-#define ADD_FLG_ADJ(FLG) (ADD_FLG(FLG), prev_flg = -1)
 #define ADD_FLG_NOUN(FLG) (ADD_FLG(FLG), prev_flg = FLG)
 #define IS_FLG(FLG) (entry->flag[FLG / 32] & (1L << (FLG % 32)))
 
@@ -180,7 +185,7 @@
  */
 cptr autopick_line_from_entry(autopick_type *entry)
 {
-	char buf[1024];
+	char buf[MAX_LINELEN];
 	char *ptr;
 	bool sepa_flag = TRUE;
 
@@ -196,6 +201,7 @@ cptr autopick_line_from_entry(autopick_type *entry)
 	if (IS_FLG(FLG_UNIDENTIFIED)) ADD_KEY(KEY_UNIDENTIFIED);
 	if (IS_FLG(FLG_IDENTIFIED)) ADD_KEY(KEY_IDENTIFIED);
 	if (IS_FLG(FLG_STAR_IDENTIFIED)) ADD_KEY(KEY_STAR_IDENTIFIED);
+	if (IS_FLG(FLG_UNAWARE)) ADD_KEY(KEY_UNAWARE);
 	if (IS_FLG(FLG_BOOSTED)) ADD_KEY(KEY_BOOSTED);
 
 	if (IS_FLG(FLG_MORE_THAN))
@@ -212,14 +218,6 @@ cptr autopick_line_from_entry(autopick_type *entry)
 		ADD_KEY(KEY_MORE_BONUS2);
 	}
 
-	if (IS_FLG(FLG_WORTHLESS)) ADD_KEY(KEY_WORTHLESS);
-	if (IS_FLG(FLG_ARTIFACT)) ADD_KEY(KEY_ARTIFACT);
-	if (IS_FLG(FLG_EGO)) ADD_KEY(KEY_EGO);
-	if (IS_FLG(FLG_NAMELESS)) ADD_KEY(KEY_NAMELESS);
-	if (IS_FLG(FLG_UNAWARE)) ADD_KEY(KEY_UNAWARE);
-	if (IS_FLG(FLG_WANTED)) ADD_KEY(KEY_WANTED);
-	if (IS_FLG(FLG_UNIQUE)) ADD_KEY(KEY_UNIQUE);
-	if (IS_FLG(FLG_HUMAN)) ADD_KEY(KEY_HUMAN);
 	if (IS_FLG(FLG_UNREADABLE)) ADD_KEY(KEY_UNREADABLE);
 	if (IS_FLG(FLG_REALM1)) ADD_KEY(KEY_REALM1);
 	if (IS_FLG(FLG_REALM2)) ADD_KEY(KEY_REALM2);
@@ -227,6 +225,13 @@ cptr autopick_line_from_entry(autopick_type *entry)
 	if (IS_FLG(FLG_SECOND)) ADD_KEY(KEY_SECOND);
 	if (IS_FLG(FLG_THIRD)) ADD_KEY(KEY_THIRD);
 	if (IS_FLG(FLG_FOURTH)) ADD_KEY(KEY_FOURTH);
+	if (IS_FLG(FLG_WANTED)) ADD_KEY(KEY_WANTED);
+	if (IS_FLG(FLG_UNIQUE)) ADD_KEY(KEY_UNIQUE);
+	if (IS_FLG(FLG_HUMAN)) ADD_KEY(KEY_HUMAN);
+	if (IS_FLG(FLG_WORTHLESS)) ADD_KEY(KEY_WORTHLESS);
+	if (IS_FLG(FLG_NAMELESS)) ADD_KEY(KEY_NAMELESS);
+	if (IS_FLG(FLG_ARTIFACT)) ADD_KEY(KEY_ARTIFACT);
+	if (IS_FLG(FLG_EGO)) ADD_KEY(KEY_EGO);
 
 	if (IS_FLG(FLG_ITEMS)) ADD_KEY2(KEY_ITEMS);
 	else if (IS_FLG(FLG_WEAPONS)) ADD_KEY2(KEY_WEAPONS);
@@ -249,11 +254,22 @@ cptr autopick_line_from_entry(autopick_type *entry)
 	else
 		sepa_flag = FALSE;
 
-	if (entry->name && *entry->name)
+	if (entry->name && entry->name[0])
 	{
-		if (sepa_flag)
-			strcat(buf, ":");
-		strcat(buf, entry->name);
+                int i, j = 0;
+
+		if (sepa_flag) strcat(buf, ":");
+
+                i = strlen(buf);
+                while (entry->name[j] && i < MAX_LINELEN - 2 - 1)
+                {
+#ifdef JP
+                        if (iskanji(entry->name[j]))
+                                buf[i++] = entry->name[j++];
+#endif
+                        buf[i++] = entry->name[j++];
+                }
+                buf[i] = '\0';
 	}
 	else
 	{
@@ -263,9 +279,23 @@ cptr autopick_line_from_entry(autopick_type *entry)
 
 	if (entry->insc)
 	{
+                int i, j = 0;
 		strcat(buf, "#");
-		strcat(buf, entry->insc);
+                i = strlen(buf);
+
+                while (entry->insc[j] && i < MAX_LINELEN - 2)
+                {
+#ifdef JP
+                        if (iskanji(entry->insc[j]))
+                                buf[i++] = entry->insc[j++];
+#endif
+                        buf[i++] = entry->insc[j++];
+                }
+                buf[i] = '\0';
 	}
+
+        /* Free memory for original entry */
+        autopick_free_entry(entry);
 
 	return string_make(buf);
 }
@@ -278,8 +308,8 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
 	cptr insc;
 	int i;
 	byte act = 0;
-	char buf[1024];
-	cptr prev_ptr, ptr;
+	char buf[MAX_LINELEN];
+	cptr prev_ptr, ptr, old_ptr;
 	int prev_flg;
 
 	if (str[1] == ':') switch (str[0])
@@ -346,102 +376,112 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
 	/* Skip empty line */
 	if (*buf == 0) return FALSE;
 
-	/* Found flags */
-	prev_ptr = ptr = buf;
+	ptr = buf;
+        old_ptr = NULL;
+
+        while (old_ptr != ptr)
+        {
+                /* Save current location */
+                old_ptr = ptr;
+
+                if (MATCH_KEY(KEY_ALL)) ADD_FLG(FLG_ALL);
+                if (MATCH_KEY(KEY_COLLECTING)) ADD_FLG(FLG_COLLECTING);
+                if (MATCH_KEY(KEY_UNIDENTIFIED)) ADD_FLG(FLG_UNIDENTIFIED);
+                if (MATCH_KEY(KEY_IDENTIFIED)) ADD_FLG(FLG_IDENTIFIED);
+                if (MATCH_KEY(KEY_STAR_IDENTIFIED)) ADD_FLG(FLG_STAR_IDENTIFIED);
+                if (MATCH_KEY(KEY_BOOSTED)) ADD_FLG(FLG_BOOSTED);
+
+                /*** Weapons whose dd*ds is more than nn ***/
+                if (MATCH_KEY2(KEY_MORE_THAN))
+                {
+                        int k = 0;
+                        entry->dice = 0;
+
+                        /* Drop leading spaces */
+                        while (' ' == *ptr) ptr++;
+
+                        /* Read number */
+                        while (isdigit(*ptr))
+                        {
+                                entry->dice = 10 * entry->dice + (*ptr - '0');
+                                ptr++;
+                                k++;
+                        }
+
+                        if (k > 0 && k <= 2)
+                        {
+                                (void)MATCH_KEY(KEY_DICE);
+                                ADD_FLG(FLG_MORE_THAN);
+                        }
+                        else
+                                ptr = prev_ptr;
+                }
+
+                /*** Items whose magical bonus is more than n ***/
+                if (MATCH_KEY2(KEY_MORE_BONUS))
+                {
+                        int k = 0;
+                        entry->bonus = 0;
+
+                        /* Drop leading spaces */
+                        while (' ' == *ptr) ptr++;
+
+                        /* Read number */
+                        while (isdigit(*ptr))
+                        {
+                                entry->bonus = 10 * entry->bonus + (*ptr - '0');
+                                ptr++;
+                                k++;
+                        }
+
+                        if (k > 0 && k <= 2)
+                        {
+                                (void)MATCH_KEY(KEY_MORE_BONUS2);
+                                ADD_FLG(FLG_MORE_BONUS);
+                        }
+                        else
+                                ptr = prev_ptr;
+                }
+
+                if (MATCH_KEY(KEY_WORTHLESS)) ADD_FLG(FLG_WORTHLESS);
+                if (MATCH_KEY(KEY_EGO)) ADD_FLG(FLG_EGO);
+                if (MATCH_KEY(KEY_NAMELESS)) ADD_FLG(FLG_NAMELESS);
+                if (MATCH_KEY(KEY_UNAWARE)) ADD_FLG(FLG_UNAWARE);
+                if (MATCH_KEY(KEY_WANTED)) ADD_FLG(FLG_WANTED);
+                if (MATCH_KEY(KEY_UNIQUE)) ADD_FLG(FLG_UNIQUE);
+                if (MATCH_KEY(KEY_HUMAN)) ADD_FLG(FLG_HUMAN);
+                if (MATCH_KEY(KEY_UNREADABLE)) ADD_FLG(FLG_UNREADABLE);
+                if (MATCH_KEY(KEY_REALM1)) ADD_FLG(FLG_REALM1);
+                if (MATCH_KEY(KEY_REALM2)) ADD_FLG(FLG_REALM2);
+                if (MATCH_KEY(KEY_FIRST)) ADD_FLG(FLG_FIRST);
+                if (MATCH_KEY(KEY_SECOND)) ADD_FLG(FLG_SECOND);
+                if (MATCH_KEY(KEY_THIRD)) ADD_FLG(FLG_THIRD);
+                if (MATCH_KEY(KEY_FOURTH)) ADD_FLG(FLG_FOURTH);
+        }
+
+	/* Not yet found any noun */
 	prev_flg = -1;
-	if (MATCH_KEY(KEY_ALL)) ADD_FLG_ADJ(FLG_ALL);
-	if (MATCH_KEY(KEY_COLLECTING)) ADD_FLG_ADJ(FLG_COLLECTING);
-	if (MATCH_KEY(KEY_UNIDENTIFIED)) ADD_FLG_ADJ(FLG_UNIDENTIFIED);
-	if (MATCH_KEY(KEY_IDENTIFIED)) ADD_FLG_ADJ(FLG_IDENTIFIED);
-	if (MATCH_KEY(KEY_STAR_IDENTIFIED)) ADD_FLG_ADJ(FLG_STAR_IDENTIFIED);
-	if (MATCH_KEY(KEY_BOOSTED)) ADD_FLG_ADJ(FLG_BOOSTED);
 
-	/*** Weapons whose dd*ds is more than nn ***/
-	if (MATCH_KEY(KEY_MORE_THAN))
-	{
-		int k = 0;
-		entry->dice = 0;
+	if (MATCH_KEY2(KEY_ARTIFACT)) ADD_FLG_NOUN(FLG_ARTIFACT);
 
-		/* Drop leading spaces */
-		while (' ' == *ptr) ptr++;
-
-		/* Read number */
-		while (isdigit(*ptr))
-		{
-			entry->dice = 10 * entry->dice + (*ptr - '0');
-			ptr++;
-			k++;
-		}
-
-		if (k > 0 && k <= 2)
-		{
-			(void)MATCH_KEY(KEY_DICE);
-			ADD_FLG_ADJ(FLG_MORE_THAN);
-		}
-		else
-			ptr = prev_ptr;
-	}
-
-	/*** Items whose magical bonus is more than n ***/
-	if (MATCH_KEY(KEY_MORE_BONUS))
-	{
-		int k = 0;
-		entry->bonus = 0;
-
-		/* Drop leading spaces */
-		while (' ' == *ptr) ptr++;
-
-		/* Read number */
-		while (isdigit(*ptr))
-		{
-			entry->bonus = 10 * entry->bonus + (*ptr - '0');
-			ptr++;
-			k++;
-		}
-
-		if (k > 0 && k <= 2)
-		{
-			(void)MATCH_KEY(KEY_MORE_BONUS2);
-			ADD_FLG_ADJ(FLG_MORE_BONUS);
-		}
-		else
-			ptr = prev_ptr;
-	}
-
-	if (MATCH_KEY(KEY_WORTHLESS)) ADD_FLG_ADJ(FLG_WORTHLESS);
-	if (MATCH_KEY(KEY_ARTIFACT)) ADD_FLG_NOUN(FLG_ARTIFACT);
-	if (MATCH_KEY(KEY_EGO)) ADD_FLG_ADJ(FLG_EGO);
-	if (MATCH_KEY(KEY_NAMELESS)) ADD_FLG_ADJ(FLG_NAMELESS);
-	if (MATCH_KEY(KEY_UNAWARE)) ADD_FLG_ADJ(FLG_UNAWARE);
-	if (MATCH_KEY(KEY_WANTED)) ADD_FLG_ADJ(FLG_WANTED);
-	if (MATCH_KEY(KEY_UNIQUE)) ADD_FLG_ADJ(FLG_UNIQUE);
-	if (MATCH_KEY(KEY_HUMAN)) ADD_FLG_ADJ(FLG_HUMAN);
-	if (MATCH_KEY(KEY_UNREADABLE)) ADD_FLG_ADJ(FLG_UNREADABLE);
-	if (MATCH_KEY(KEY_REALM1)) ADD_FLG_ADJ(FLG_REALM1);
-	if (MATCH_KEY(KEY_REALM2)) ADD_FLG_ADJ(FLG_REALM2);
-	if (MATCH_KEY(KEY_FIRST)) ADD_FLG_ADJ(FLG_FIRST);
-	if (MATCH_KEY(KEY_SECOND)) ADD_FLG_ADJ(FLG_SECOND);
-	if (MATCH_KEY(KEY_THIRD)) ADD_FLG_ADJ(FLG_THIRD);
-	if (MATCH_KEY(KEY_FOURTH)) ADD_FLG_ADJ(FLG_FOURTH);
-
-	if (MATCH_KEY(KEY_ITEMS)) ADD_FLG_NOUN(FLG_ITEMS);
-	else if (MATCH_KEY(KEY_WEAPONS)) ADD_FLG_NOUN(FLG_WEAPONS);
-	else if (MATCH_KEY(KEY_ARMORS)) ADD_FLG_NOUN(FLG_ARMORS);
-	else if (MATCH_KEY(KEY_MISSILES)) ADD_FLG_NOUN(FLG_MISSILES);
-	else if (MATCH_KEY(KEY_DEVICES)) ADD_FLG_NOUN(FLG_DEVICES);
-	else if (MATCH_KEY(KEY_LIGHTS)) ADD_FLG_NOUN(FLG_LIGHTS);
-	else if (MATCH_KEY(KEY_JUNKS)) ADD_FLG_NOUN(FLG_JUNKS);
-	else if (MATCH_KEY(KEY_SPELLBOOKS)) ADD_FLG_NOUN(FLG_SPELLBOOKS);
-	else if (MATCH_KEY(KEY_HAFTED)) ADD_FLG_NOUN(FLG_HAFTED);
-	else if (MATCH_KEY(KEY_SHIELDS)) ADD_FLG_NOUN(FLG_SHIELDS);
-	else if (MATCH_KEY(KEY_BOWS)) ADD_FLG_NOUN(FLG_BOWS);
-	else if (MATCH_KEY(KEY_RINGS)) ADD_FLG_NOUN(FLG_RINGS);
-	else if (MATCH_KEY(KEY_AMULETS)) ADD_FLG_NOUN(FLG_AMULETS);
-	else if (MATCH_KEY(KEY_SUITS)) ADD_FLG_NOUN(FLG_SUITS);
-	else if (MATCH_KEY(KEY_CLOAKS)) ADD_FLG_NOUN(FLG_CLOAKS);
-	else if (MATCH_KEY(KEY_HELMS)) ADD_FLG_NOUN(FLG_HELMS);
-	else if (MATCH_KEY(KEY_GLOVES)) ADD_FLG_NOUN(FLG_GLOVES);
-	else if (MATCH_KEY(KEY_BOOTS)) ADD_FLG_NOUN(FLG_BOOTS);
+	if (MATCH_KEY2(KEY_ITEMS)) ADD_FLG_NOUN(FLG_ITEMS);
+	else if (MATCH_KEY2(KEY_WEAPONS)) ADD_FLG_NOUN(FLG_WEAPONS);
+	else if (MATCH_KEY2(KEY_ARMORS)) ADD_FLG_NOUN(FLG_ARMORS);
+	else if (MATCH_KEY2(KEY_MISSILES)) ADD_FLG_NOUN(FLG_MISSILES);
+	else if (MATCH_KEY2(KEY_DEVICES)) ADD_FLG_NOUN(FLG_DEVICES);
+	else if (MATCH_KEY2(KEY_LIGHTS)) ADD_FLG_NOUN(FLG_LIGHTS);
+	else if (MATCH_KEY2(KEY_JUNKS)) ADD_FLG_NOUN(FLG_JUNKS);
+	else if (MATCH_KEY2(KEY_SPELLBOOKS)) ADD_FLG_NOUN(FLG_SPELLBOOKS);
+	else if (MATCH_KEY2(KEY_HAFTED)) ADD_FLG_NOUN(FLG_HAFTED);
+	else if (MATCH_KEY2(KEY_SHIELDS)) ADD_FLG_NOUN(FLG_SHIELDS);
+	else if (MATCH_KEY2(KEY_BOWS)) ADD_FLG_NOUN(FLG_BOWS);
+	else if (MATCH_KEY2(KEY_RINGS)) ADD_FLG_NOUN(FLG_RINGS);
+	else if (MATCH_KEY2(KEY_AMULETS)) ADD_FLG_NOUN(FLG_AMULETS);
+	else if (MATCH_KEY2(KEY_SUITS)) ADD_FLG_NOUN(FLG_SUITS);
+	else if (MATCH_KEY2(KEY_CLOAKS)) ADD_FLG_NOUN(FLG_CLOAKS);
+	else if (MATCH_KEY2(KEY_HELMS)) ADD_FLG_NOUN(FLG_HELMS);
+	else if (MATCH_KEY2(KEY_GLOVES)) ADD_FLG_NOUN(FLG_GLOVES);
+	else if (MATCH_KEY2(KEY_BOOTS)) ADD_FLG_NOUN(FLG_BOOTS);
 
 	/* Last 'keyword' must be at the correct location */
 	if (*ptr == ':')
@@ -480,6 +520,327 @@ void autopick_free_entry(autopick_type *entry)
 	string_free(entry->insc);
 }
 
+
+/*
+ * A function for Auto-picker/destroyer
+ * Examine whether the object matches to the entry
+ */
+static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_name)
+{
+        int j;
+        cptr ptr = entry->name;
+
+        /*** Unidentified ***/
+        if (IS_FLG(FLG_UNIDENTIFIED)
+            && (object_known_p(o_ptr) || (o_ptr->ident & IDENT_SENSE)))
+                return FALSE;
+
+        /*** Identified ***/
+        if (IS_FLG(FLG_IDENTIFIED) && !object_known_p(o_ptr))
+                return FALSE;
+
+        /*** *Identified* ***/
+        if (IS_FLG(FLG_STAR_IDENTIFIED) &&
+            (!object_known_p(o_ptr) || !(o_ptr->ident & IDENT_MENTAL)))
+                return FALSE;
+
+        /*** Dice boosted (weapon of slaying) ***/
+        if (IS_FLG(FLG_BOOSTED))
+        {
+                object_kind *k_ptr = &k_info[o_ptr->k_idx];
+			
+                switch( o_ptr->tval )
+                {
+                case TV_HAFTED:
+                case TV_POLEARM:
+                case TV_SWORD:
+                case TV_DIGGING:
+                        if ((o_ptr->dd != k_ptr->dd) || (o_ptr->ds != k_ptr->ds))
+                                break;
+                        else
+                                return FALSE;
+                default:
+                        return FALSE;
+                }
+        }
+
+        /*** Weapons whic dd*ds is more than nn ***/
+        if (IS_FLG(FLG_MORE_THAN))
+        {
+                if (o_ptr->dd * o_ptr->ds < entry->dice)
+                        return FALSE;
+        }
+				
+        /*** Weapons whic dd*ds is more than nn ***/
+        if (IS_FLG(FLG_MORE_BONUS))
+        {
+                if (!object_known_p(o_ptr)) return FALSE;
+
+                if (k_info[o_ptr->k_idx].pval ||
+                    (o_ptr->name2 && e_info[o_ptr->name2].max_pval))
+                {
+                        if (o_ptr->pval < entry->bonus) return FALSE;
+                }
+                else
+                {
+                        if (o_ptr->to_h < entry->bonus &&
+                            o_ptr->to_d < entry->bonus &&
+                            o_ptr->to_a < entry->bonus &&
+                            o_ptr->pval < entry->bonus)
+                                return FALSE;
+                }
+        }
+				
+        /*** Worthless items ***/
+        if (IS_FLG(FLG_WORTHLESS) && object_value(o_ptr) > 0)
+                return FALSE;
+
+        /*** Artifact object ***/
+        if (IS_FLG(FLG_ARTIFACT))
+        {
+                if (!object_known_p(o_ptr) || (!o_ptr->name1 && !o_ptr->art_name))
+                        return FALSE;
+        }
+
+        /*** Ego object ***/
+        if (IS_FLG(FLG_EGO))
+        {
+                if (!object_known_p(o_ptr) || !o_ptr->name2)
+                        return FALSE;
+        }
+
+        /*** Nameless ***/
+        if (IS_FLG(FLG_NAMELESS))
+        {
+                switch (o_ptr->tval)
+                {
+                case TV_WHISTLE:
+                case TV_SHOT: case TV_ARROW: case TV_BOLT: case TV_BOW:
+                case TV_DIGGING: case TV_HAFTED: case TV_POLEARM: case TV_SWORD: 
+                case TV_BOOTS: case TV_GLOVES: case TV_HELM: case TV_CROWN:
+                case TV_SHIELD: case TV_CLOAK:
+                case TV_SOFT_ARMOR: case TV_HARD_ARMOR: case TV_DRAG_ARMOR:
+                case TV_LITE: case TV_AMULET: case TV_RING: case TV_CARD:
+                        if ((!object_known_p(o_ptr) || o_ptr->inscription
+                             || o_ptr->name1 || o_ptr->name2 || o_ptr->art_name))
+                                return FALSE;
+                        break;
+                default:
+                        /* don't match */
+                        return FALSE;
+                }
+        }
+
+        /*** Unaware items ***/
+        if (IS_FLG(FLG_UNAWARE) && object_aware_p(o_ptr))
+                return FALSE;
+
+        /*** Wanted monster's corpse/skeletons ***/
+        if (IS_FLG(FLG_WANTED) &&
+            (o_ptr->tval != TV_CORPSE || !object_is_shoukinkubi(o_ptr)))
+                return FALSE;
+
+        /*** Unique monster's corpse/skeletons/statues ***/
+        if (IS_FLG(FLG_UNIQUE) &&
+            ((o_ptr->tval != TV_CORPSE && o_ptr->tval != TV_STATUE) ||
+             !(r_info[o_ptr->pval].flags1 & RF1_UNIQUE)))
+                return FALSE;
+
+        /*** Human corpse/skeletons (for Daemon magic) ***/
+        if (IS_FLG(FLG_HUMAN) &&
+            (o_ptr->tval != TV_CORPSE ||
+             !strchr("pht", r_info[o_ptr->pval].d_char)))
+                return FALSE;
+
+        /*** Unreadable spellbooks ***/
+        if (IS_FLG(FLG_UNREADABLE) &&
+            (o_ptr->tval < TV_LIFE_BOOK ||
+             check_book_realm(o_ptr->tval, o_ptr->sval)))
+                return FALSE;
+
+        /*** First realm spellbooks ***/
+        if (IS_FLG(FLG_REALM1) && 
+            (REALM1_BOOK != o_ptr->tval ||
+             p_ptr->pclass == CLASS_SORCERER ||
+             p_ptr->pclass == CLASS_RED_MAGE))
+                return FALSE;
+
+        /*** Second realm spellbooks ***/
+        if (IS_FLG(FLG_REALM2) &&
+            (REALM2_BOOK != o_ptr->tval ||
+             p_ptr->pclass == CLASS_SORCERER ||
+             p_ptr->pclass == CLASS_RED_MAGE))
+                return FALSE;
+
+        /*** First rank spellbooks ***/
+        if (IS_FLG(FLG_FIRST) &&
+            (o_ptr->tval < TV_LIFE_BOOK || 0 != o_ptr->sval))
+                return FALSE;
+
+        /*** Second rank spellbooks ***/
+        if (IS_FLG(FLG_SECOND) &&
+            (o_ptr->tval < TV_LIFE_BOOK || 1 != o_ptr->sval))
+                return FALSE;
+
+        /*** Third rank spellbooks ***/
+        if (IS_FLG(FLG_THIRD) && 
+            (o_ptr->tval < TV_LIFE_BOOK || 2 != o_ptr->sval))
+                return FALSE;
+
+        /*** Fourth rank spellbooks ***/
+        if (IS_FLG(FLG_FOURTH) &&
+            (o_ptr->tval < TV_LIFE_BOOK || 3 != o_ptr->sval))
+                return FALSE;
+
+        /*** Items ***/
+        if (IS_FLG(FLG_WEAPONS))
+        {
+                switch(o_ptr->tval)
+                {
+                case TV_BOW: case TV_HAFTED: case TV_POLEARM:
+                case TV_SWORD: case TV_DIGGING:
+                        break;
+                default: return FALSE;
+                }
+        }
+        else if (IS_FLG(FLG_ARMORS))
+        {
+                switch(o_ptr->tval)
+                {
+                case TV_BOOTS: case TV_GLOVES: case TV_CLOAK: case TV_CROWN:
+                case TV_HELM: case TV_SHIELD: case TV_SOFT_ARMOR:
+                case TV_HARD_ARMOR: case TV_DRAG_ARMOR:
+                        break;
+                default: return FALSE;
+                }
+        }
+        else if (IS_FLG(FLG_MISSILES))
+        {
+                switch(o_ptr->tval)
+                {
+                case TV_SHOT: case TV_BOLT: case TV_ARROW:
+                        break;
+                default: return FALSE;
+                }
+        }
+        else if (IS_FLG(FLG_DEVICES))
+        {
+                switch(o_ptr->tval)
+                {
+                case TV_SCROLL: case TV_STAFF: case TV_WAND: case TV_ROD:
+                        break;
+                default: return FALSE;
+                }
+        }
+        else if (IS_FLG(FLG_LIGHTS))
+        {
+                if (!(o_ptr->tval == TV_LITE))
+                        return FALSE;
+        }
+        else if (IS_FLG(FLG_JUNKS))
+        {
+                switch(o_ptr->tval)
+                {
+                case TV_SKELETON: case TV_BOTTLE:
+                case TV_JUNK: case TV_STATUE:
+                        break;
+                default: return FALSE;
+                }
+        }
+        else if (IS_FLG(FLG_SPELLBOOKS))
+        {
+                if (!(o_ptr->tval >= TV_LIFE_BOOK))
+                        return FALSE;
+        }
+        else if (IS_FLG(FLG_HAFTED))
+        {
+                if (!(o_ptr->tval == TV_HAFTED))
+                        return FALSE;
+        }
+        else if (IS_FLG(FLG_SHIELDS))
+        {
+                if (!(o_ptr->tval == TV_SHIELD))
+                        return FALSE;
+        }
+        else if (IS_FLG(FLG_BOWS))
+        {
+                if (!(o_ptr->tval == TV_BOW))
+                        return FALSE;
+        }
+        else if (IS_FLG(FLG_RINGS))
+        {
+                if (!(o_ptr->tval == TV_RING))
+                        return FALSE;
+        }
+        else if (IS_FLG(FLG_AMULETS))
+        {
+                if (!(o_ptr->tval == TV_AMULET))
+                        return FALSE;
+        }
+        else if (IS_FLG(FLG_SUITS))
+        {
+                if (!(o_ptr->tval == TV_DRAG_ARMOR ||
+                      o_ptr->tval == TV_HARD_ARMOR ||
+                      o_ptr->tval == TV_SOFT_ARMOR))
+                        return FALSE;
+        }
+        else if (IS_FLG(FLG_CLOAKS))
+        {
+                if (!(o_ptr->tval == TV_CLOAK))
+                        return FALSE;
+        }
+        else if (IS_FLG(FLG_HELMS))
+        {
+                if (!(o_ptr->tval == TV_CROWN || o_ptr->tval == TV_HELM))
+                        return FALSE;
+        }
+        else if (IS_FLG(FLG_GLOVES))
+        {
+                if (!(o_ptr->tval == TV_GLOVES))
+                        return FALSE;
+        }
+        else if (IS_FLG(FLG_BOOTS))
+        {
+                if (!(o_ptr->tval == TV_BOOTS))
+                        return FALSE;
+        }
+
+        /* Keyword don't match */
+        if (*ptr == '^')
+        {
+                ptr++;
+                if (strncmp(o_name, ptr, strlen(ptr))) return FALSE;
+        }
+        else
+        {
+#ifdef JP
+                if (!strstr_j(o_name, ptr)) return FALSE;
+#else
+                if (!strstr(o_name, ptr)) return FALSE;
+#endif
+        }
+
+        /* TRUE when it need not to be 'collecting' */
+        if (!IS_FLG(FLG_COLLECTING)) return TRUE;
+
+        /* Check if there is a same item */
+        for (j = 0; j < INVEN_PACK; j++)
+        {
+                /*
+                 * 'Collecting' means the item must be absorbed 
+                 * into an inventory slot.
+                 * But an item can not be absorbed into itself!
+                 */
+                if ((&inventory[j] != o_ptr) &&
+                    object_similar(&inventory[j], o_ptr))
+                        return TRUE;
+        }
+
+        /* Not collecting */
+        return FALSE;
+}
+
+
 /*
  * A function for Auto-picker/destroyer
  * Examine whether the object matches to the list of keywords or not.
@@ -508,321 +869,11 @@ int is_autopick(object_type *o_ptr)
 	for (i=0; i < max_autopick; i++)
 	{
 		autopick_type *entry = &autopick_list[i];
-		bool flag = FALSE;
-		cptr ptr = autopick_list[i].name;
 
-		/*** Unidentified ***/
-		if (IS_FLG(FLG_UNIDENTIFIED)
-		    && (object_known_p(o_ptr) || (o_ptr->ident & IDENT_SENSE)))
-			continue;
+                if (is_autopick_aux(o_ptr, entry, o_name)) return i;
+	}
 
-		/*** Identified ***/
-		if (IS_FLG(FLG_IDENTIFIED) && !object_known_p(o_ptr))
-			continue;
-
-		/*** *Identified* ***/
-		if (IS_FLG(FLG_STAR_IDENTIFIED) &&
-		    (!object_known_p(o_ptr) || !(o_ptr->ident & IDENT_MENTAL)))
-			continue;
-
-		/*** Dice boosted (weapon of slaying) ***/
-		if (IS_FLG(FLG_BOOSTED))
-		{
-			object_kind *k_ptr = &k_info[o_ptr->k_idx];
-			
-			switch( o_ptr->tval )
-			{
-			case TV_HAFTED:
-			case TV_POLEARM:
-			case TV_SWORD:
-			case TV_DIGGING:
-				if ((o_ptr->dd != k_ptr->dd) || (o_ptr->ds != k_ptr->ds))
-					break;
-				else
-					continue;
-			default:
-				continue;
-			}
-		}
-
-		/*** Weapons whic dd*ds is more than nn ***/
-		if (IS_FLG(FLG_MORE_THAN))
-		{
-			if (o_ptr->dd * o_ptr->ds < entry->dice)
-				continue;
-		}
-				
-		/*** Weapons whic dd*ds is more than nn ***/
-		if (IS_FLG(FLG_MORE_BONUS))
-		{
-			if (!object_known_p(o_ptr)) continue;
-
-			if (k_info[o_ptr->k_idx].pval ||
-			    (o_ptr->name2 && e_info[o_ptr->name2].max_pval))
-			{
-				if (o_ptr->pval < entry->bonus) continue;
-			}
-			else
-			{
-				if (o_ptr->to_h < entry->bonus &&
-				    o_ptr->to_d < entry->bonus &&
-				    o_ptr->to_a < entry->bonus &&
-				    o_ptr->pval < entry->bonus)
-					continue;
-			}
-		}
-				
-		/*** Worthless items ***/
-		if (IS_FLG(FLG_WORTHLESS) && object_value(o_ptr) > 0)
-			continue;
-
-		/*** Artifact object ***/
-		if (IS_FLG(FLG_ARTIFACT))
-		{
-			if (!object_known_p(o_ptr) || (!o_ptr->name1 && !o_ptr->art_name))
-				continue;
-		}
-
-		/*** Ego object ***/
-		if (IS_FLG(FLG_EGO))
-		{
-			if (!object_known_p(o_ptr) || !o_ptr->name2)
-				continue;
-		}
-
-		/*** Nameless ***/
-		if (IS_FLG(FLG_NAMELESS))
-		{
-			switch (o_ptr->tval)
-			{
-			case TV_WHISTLE:
-			case TV_SHOT: case TV_ARROW: case TV_BOLT: case TV_BOW:
-			case TV_DIGGING: case TV_HAFTED: case TV_POLEARM: case TV_SWORD: 
-			case TV_BOOTS: case TV_GLOVES: case TV_HELM: case TV_CROWN:
-			case TV_SHIELD: case TV_CLOAK:
-			case TV_SOFT_ARMOR: case TV_HARD_ARMOR: case TV_DRAG_ARMOR:
-			case TV_LITE: case TV_AMULET: case TV_RING: case TV_CARD:
-				if ((!object_known_p(o_ptr) || o_ptr->inscription
-				     || o_ptr->name1 || o_ptr->name2 || o_ptr->art_name))
-					continue;
-				break;
-			default:
-				/* don't match */
-				continue;
-			}
-		}
-
-		/*** Unaware items ***/
-		if (IS_FLG(FLG_UNAWARE) && object_aware_p(o_ptr))
-			continue;
-
-		/*** Wanted monster's corpse/skeletons ***/
-		if (IS_FLG(FLG_WANTED) &&
-		    (o_ptr->tval != TV_CORPSE || !object_is_shoukinkubi(o_ptr)))
-			continue;
-
-		/*** Unique monster's corpse/skeletons/statues ***/
-		if (IS_FLG(FLG_UNIQUE) &&
-		    ((o_ptr->tval != TV_CORPSE && o_ptr->tval != TV_STATUE) ||
-		    !(r_info[o_ptr->pval].flags1 & RF1_UNIQUE)))
-			continue;
-
-		/*** Human corpse/skeletons (for Daemon magic) ***/
-		if (IS_FLG(FLG_HUMAN) &&
-		    (o_ptr->tval != TV_CORPSE ||
-		    !strchr("pht", r_info[o_ptr->pval].d_char)))
-			continue;
-
-		/*** Unreadable spellbooks ***/
-		if (IS_FLG(FLG_UNREADABLE) &&
-		    (o_ptr->tval < TV_LIFE_BOOK ||
-		    check_book_realm(o_ptr->tval, o_ptr->sval)))
-			continue;
-
-		/*** First realm spellbooks ***/
-		if (IS_FLG(FLG_REALM1) && 
-		    (REALM1_BOOK != o_ptr->tval ||
-		    p_ptr->pclass == CLASS_SORCERER ||
-		    p_ptr->pclass == CLASS_RED_MAGE))
-			continue;
-
-		/*** Second realm spellbooks ***/
-		if (IS_FLG(FLG_REALM2) &&
-		    (REALM2_BOOK != o_ptr->tval ||
-		    p_ptr->pclass == CLASS_SORCERER ||
-		    p_ptr->pclass == CLASS_RED_MAGE))
-			continue;
-
-		/*** First rank spellbooks ***/
-		if (IS_FLG(FLG_FIRST) &&
-		    (o_ptr->tval < TV_LIFE_BOOK || 0 != o_ptr->sval))
-			continue;
-
-		/*** Second rank spellbooks ***/
-		if (IS_FLG(FLG_SECOND) &&
-		    (o_ptr->tval < TV_LIFE_BOOK || 1 != o_ptr->sval))
-			continue;
-
-		/*** Third rank spellbooks ***/
-		if (IS_FLG(FLG_THIRD) && 
-		    (o_ptr->tval < TV_LIFE_BOOK || 2 != o_ptr->sval))
-			continue;
-
-		/*** Fourth rank spellbooks ***/
-		if (IS_FLG(FLG_FOURTH) &&
-		    (o_ptr->tval < TV_LIFE_BOOK || 3 != o_ptr->sval))
-			continue;
-
-		/*** Items ***/
-		if (IS_FLG(FLG_WEAPONS))
-		{
-			switch(o_ptr->tval)
-			{
-			case TV_BOW: case TV_HAFTED: case TV_POLEARM:
-			case TV_SWORD: case TV_DIGGING:
-				break;
-			default: continue;
-			}
-		}
-		else if (IS_FLG(FLG_ARMORS))
-		{
-			switch(o_ptr->tval)
-			{
-			case TV_BOOTS: case TV_GLOVES: case TV_CLOAK: case TV_CROWN:
-			case TV_HELM: case TV_SHIELD: case TV_SOFT_ARMOR:
-			case TV_HARD_ARMOR: case TV_DRAG_ARMOR:
-				break;
-			default: continue;
-			}
-		}
-		else if (IS_FLG(FLG_MISSILES))
-		{
-			switch(o_ptr->tval)
-			{
-			case TV_SHOT: case TV_BOLT: case TV_ARROW:
-				break;
-			default: continue;
-			}
-		}
-		else if (IS_FLG(FLG_DEVICES))
-		{
-			switch(o_ptr->tval)
-			{
-			case TV_SCROLL: case TV_STAFF: case TV_WAND: case TV_ROD:
-				break;
-			default: continue;
-			}
-		}
-		else if (IS_FLG(FLG_LIGHTS))
-		{
-			if (!(o_ptr->tval == TV_LITE))
-				continue;
-		}
-		else if (IS_FLG(FLG_JUNKS))
-		{
-			switch(o_ptr->tval)
-			{
-			case TV_SKELETON: case TV_BOTTLE:
-			case TV_JUNK: case TV_STATUE:
-				break;
-			default: continue;
-			}
-		}
-		else if (IS_FLG(FLG_SPELLBOOKS))
-		{
-			if (!(o_ptr->tval >= TV_LIFE_BOOK))
-				continue;
-		}
-		else if (IS_FLG(FLG_HAFTED))
-		{
-			if (!(o_ptr->tval == TV_HAFTED))
-				continue;
-		}
-		else if (IS_FLG(FLG_SHIELDS))
-		{
-			if (!(o_ptr->tval == TV_SHIELD))
-				continue;
-		}
-		else if (IS_FLG(FLG_BOWS))
-		{
-			if (!(o_ptr->tval == TV_BOW))
-				continue;
-		}
-		else if (IS_FLG(FLG_RINGS))
-		{
-			if (!(o_ptr->tval == TV_RING))
-				continue;
-		}
-		else if (IS_FLG(FLG_AMULETS))
-		{
-			if (!(o_ptr->tval == TV_AMULET))
-				continue;
-		}
-		else if (IS_FLG(FLG_SUITS))
-		{
-			if (!(o_ptr->tval == TV_DRAG_ARMOR ||
-			      o_ptr->tval == TV_HARD_ARMOR ||
-			      o_ptr->tval == TV_SOFT_ARMOR))
-				continue;
-		}
-		else if (IS_FLG(FLG_CLOAKS))
-		{
-			if (!(o_ptr->tval == TV_CLOAK))
-				continue;
-		}
-		else if (IS_FLG(FLG_HELMS))
-		{
-			if (!(o_ptr->tval == TV_CROWN || o_ptr->tval == TV_HELM))
-				continue;
-		}
-		else if (IS_FLG(FLG_GLOVES))
-		{
-			if (!(o_ptr->tval == TV_GLOVES))
-				continue;
-		}
-		else if (IS_FLG(FLG_BOOTS))
-		{
-			if (!(o_ptr->tval == TV_BOOTS))
-				continue;
-		}
-
-
-		if (*ptr == '^')
-		{
-			ptr++;
-			if (!strncmp(o_name, ptr, strlen(ptr)))
-				flag = TRUE;
-		}
-		else
-#ifdef JP
-			if (strstr_j(o_name, ptr))
-#else
-			if (strstr(o_name, ptr))
-#endif
-		{
-			flag = TRUE;
-		}
-
-		if (flag)
-		{
-			int j;
-			if (!IS_FLG(FLG_COLLECTING))
-				return i;
-			/* Check if there is a same item */
-			for (j = 0; j < INVEN_PACK; j++)
-			{
-				/*
-				 * 'Collecting' means the item must be absorbed 
-				 * into an inventory slot.
-				 * But an item can not be absorbed into itself!
-				 */
-				if ((&inventory[j] != o_ptr) &&
-				    object_similar(&inventory[j], o_ptr))
-					return i;
-			}
-		}
-	}/* for */
-
+        /* No matching entry */
 	return -1;
 }
 
@@ -959,8 +1010,7 @@ bool auto_destroy_item(int item, int autopick_idx, bool wait_optimize)
 	}
 
 	/* Record name of destroyed item */
-	autopick_free_entry(&autopick_entry_last_destroyed);
-	autopick_entry_from_object(&autopick_entry_last_destroyed, o_ptr);
+        COPY(&autopick_last_destroyed_object, o_ptr, object_type);
 
 	/* Eliminate the item (from the pack) */
 	if (item >= 0)
@@ -1778,7 +1828,7 @@ static void toggle_string(cptr *lines_list, int flg, int y)
  */
 static bool insert_return_code(cptr *lines_list, int cx, int cy)
 {
-	char buf[1024];
+	char buf[MAX_LINELEN];
 	int i, j, k;
 
 	for (k = 0; lines_list[k]; k++)
@@ -1927,12 +1977,29 @@ void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 	return;
 }
 
+
+/*
+ * Choose an item and get auto-picker entry from it.
+ */
+static object_type *choose_object(cptr q, cptr s)
+{
+	int item;
+
+	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR | USE_EQUIP))) return NULL;
+
+	/* Get the item (in the pack) */
+	if (item >= 0) return &inventory[item];
+
+	/* Get the item (on the floor) */
+	else return &o_list[0 - item];
+}
+
+
 /*
  * Choose an item and get auto-picker entry from it.
  */
 static bool entry_from_choosed_object(autopick_type *entry)
 {
-	int item;
 	object_type *o_ptr;
 	cptr q, s;
 
@@ -1944,22 +2011,212 @@ static bool entry_from_choosed_object(autopick_type *entry)
 	q = "Entry which item? ";
 	s = "You have nothing to entry.";
 #endif
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR | USE_EQUIP))) return FALSE;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+        o_ptr = choose_object(q, s);
+	if (!o_ptr) return FALSE;
 
 	autopick_entry_from_object(entry, o_ptr);
 	return TRUE;
+}
+
+
+/*
+ * Choose an item or string for search
+ */
+static bool get_string_for_search(object_type **o_handle, cptr *search_strp)
+{
+        int pos = 0;
+	cptr q, s;
+        char buf[MAX_NLEN+20];
+
+#ifdef JP
+        int k_flag[MAX_NLEN+20];
+        char prompt[] = "検索(^I:持ち物 ^L:破壊された物):";
+#else
+        char prompt[] = "Search key(^I:inven ^L:destroyed):";
+#endif
+        int col = sizeof(prompt) - 1;
+
+        if (*o_handle) object_desc(buf, *o_handle, FALSE, 3);
+        else if (*search_strp) strcpy(buf, *search_strp);
+        else buf[0] = '\0';
+
+	/* Display prompt */
+	prt(prompt, 0, 0);
+
+	/* Display the default answer */
+        Term_erase(col, 0, 255);
+	Term_putstr(col, 0, -1, TERM_YELLOW, buf);
+
+	/* Process input */
+	while (1)
+	{
+                object_type *o_ptr;
+                int i;
+
+                /* Place cursor */
+		Term_gotoxy(col + pos, 0);
+
+		/* Do not process macros except special keys */
+		inkey_special = TRUE;
+
+		/* Get a key */
+		i = inkey();
+
+		/* Analyze the key */
+		switch (i)
+		{
+		case ESCAPE:
+			pos = 0;
+			return FALSE;
+
+		case '\n':
+		case '\r':
+                        if (!pos && *o_handle) return TRUE;
+                        string_free(*search_strp);
+                        *search_strp = string_make(buf);
+                        *o_handle = NULL;
+                        return TRUE;
+
+                case KTRL('i'):
+                        /* Get an item */
+#ifdef JP
+                        q = "どのアイテムを検索しますか? ";
+                        s = "アイテムを持っていない。";
+#else
+                        q = "Entry which item? ";
+                        s = "You have nothing to entry.";
+#endif
+                        o_ptr = choose_object(q, s);
+                        if (!o_ptr) return FALSE;
+
+                        *o_handle = o_ptr;
+                        string_free(*search_strp);
+                        *search_strp = NULL;
+                        return TRUE;
+
+                case KTRL('l'):
+                        if (!autopick_last_destroyed_object.k_idx) break;
+                        *o_handle = &autopick_last_destroyed_object;
+                        string_free(*search_strp);
+                        *search_strp = NULL;
+                        return TRUE;
+
+		case 0x7F:
+		case '\010':
+#ifdef JP
+                        if (pos > 0)
+                        {
+                                pos--;
+                                if (k_flag[pos]) pos--;
+                        }
+#else
+			if (pos > 0) pos--;
+#endif
+			break;
+
+		default:
+#ifdef JP
+                        if (iskanji(i))
+                        {
+                                int next;
+
+                                inkey_base = TRUE;
+                                next = inkey ();
+                                if (pos + 1 < MAX_NLEN)
+                                {
+                                        buf[pos++] = i;
+                                        buf[pos] = next;
+                                        k_flag[pos++] = 1;
+                                }
+                                else bell();
+                        }
+                        else if (pos < MAX_NLEN && isprint(i))
+                        {
+                                buf[pos] = i;
+                                k_flag[pos++] = 0;
+                        }
+                        else bell();
+#else
+			if (pos < MAX_NLEN && isprint(i)) buf[pos++] = i;
+			else bell();
+#endif
+			break;
+		}
+
+                /* Terminate */
+                buf[pos] = '\0';
+
+                /* Update the entry */
+                Term_erase(col, 0, 255);
+                Term_putstr(col, 0, -1, TERM_WHITE, buf);
+	}
+
+        /* Never reached */
+}
+
+
+/*
+ * Search next line matches for o_ptr
+ */
+static bool search_for_object(cptr *lines_list, object_type *o_ptr, int *cyp)
+{
+        int i;
+	autopick_type an_entry, *entry = &an_entry;
+	char o_name[MAX_NLEN];
+
+	object_desc(o_name, o_ptr, FALSE, 3);
+
+	/* Force to be lower case string */
+	for (i = 0; o_name[i]; i++)
+	{
+#ifdef JP
+		if (iskanji(o_name[i]))
+			i++;
+		else
+#endif
+		if (isupper(o_name[i]))
+			o_name[i] = tolower(o_name[i]);
+	}
+	
+        for (i = *cyp + 1; lines_list[i]; i++)
+        {
+                if (!autopick_new_entry(entry, lines_list[i])) continue;
+
+                if (is_autopick_aux(o_ptr, entry, o_name))
+                {
+                        *cyp = i;
+                        return TRUE;
+                }
+        }
+
+        return FALSE;
+}
+
+
+/*
+ * Search next line matches to the string
+ */
+static bool search_for_string(cptr *lines_list, cptr search_str, int *cxp, int *cyp)
+{
+        int i;
+
+        for (i = *cyp + 1; lines_list[i]; i++)
+        {
+                cptr pos;
+#ifdef JP
+                pos = strstr_j(lines_list[i], search_str);
+#else
+		pos = strstr(lines_list[i], search_str);
+#endif
+                if (pos)
+                {
+                        *cxp = (int)(pos - lines_list[i]);
+                        *cyp = i;
+                        return TRUE;
+                }
+        }
+
+        return FALSE;
 }
 
 
@@ -2151,8 +2408,7 @@ static cptr ctrl_command_desc[] =
 };
 
 
-#define MAX_YANK 1024
-#define MAX_LINELEN 1024
+#define MAX_YANK MAX_LINELEN
 #define DIRTY_ALL 0x01
 #define DIRTY_COMMAND 0x02
 #define DIRTY_MODE 0x04
@@ -2166,7 +2422,9 @@ void do_cmd_edit_autopick(void)
 	static int cx = 0, cy = 0;
 	static int upper = 0, left = 0;
 
-	cptr last_destroyed;
+        object_type *search_o_ptr = NULL;
+        cptr search_str = NULL;
+        cptr last_destroyed;
 	char last_destroyed_command[WID_DESC+3];
 	char yank_buf[MAX_YANK];
 	char classrace[80];
@@ -2192,7 +2450,8 @@ void do_cmd_edit_autopick(void)
 	init_autopicker();
 
 	/* Name of the Last Destroyed Item */
-	last_destroyed = autopick_line_from_entry(&autopick_entry_last_destroyed);
+	autopick_entry_from_object(entry, &autopick_last_destroyed_object);
+	last_destroyed = autopick_line_from_entry(entry);
 
 	/* Command Description of the Last Destroyed Item */
 	if (last_destroyed)
@@ -2668,6 +2927,21 @@ void do_cmd_edit_autopick(void)
 					dirty_flags |= DIRTY_MODE;
 				}				
 				break;
+                        case '/':
+				/* Become dirty because of item/equip menu */
+				dirty_flags |= DIRTY_SCREEN;
+
+                                if (!get_string_for_search(&search_o_ptr, &search_str))
+                                        break;
+                                if (search_o_ptr)
+                                {
+                                        if (search_for_object(lines_list, search_o_ptr, &cy)) cx = 0;
+                                }
+                                else if (search_str)
+                                {
+                                        search_for_string(lines_list, search_str, &cx, &cy);
+                                }
+                                break;
 			}
 		}
 
@@ -2756,7 +3030,7 @@ void do_cmd_edit_autopick(void)
 				break;
 			}
 			tmp = autopick_line_from_entry(entry);
-			autopick_free_entry(entry);
+
 			if (tmp)
 			{
 				insert_return_code(lines_list, 0, cy);
@@ -2861,6 +3135,7 @@ void do_cmd_edit_autopick(void)
 			}
 
 			lines_list[cy] = autopick_line_from_entry(entry);
+
 			/* Now dirty */
 			dirty_line = cy;
 

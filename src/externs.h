@@ -28,7 +28,6 @@ extern int level_up;
  */
 extern int max_autopick;
 extern autopick_type autopick_list[MAX_AUTOPICK];
-extern autopick_type autopick_entry_last_destroyed;
 
 /* tables.c */
 extern s16b ddd[9];

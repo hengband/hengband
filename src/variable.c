@@ -41,7 +41,6 @@ int level_up = 0;
  */
 int max_autopick = 0;
 autopick_type autopick_list[MAX_AUTOPICK];
-autopick_type autopick_entry_last_destroyed;
 
 /*
  * Executable version
