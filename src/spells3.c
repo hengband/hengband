@@ -4017,7 +4017,8 @@ s16b spell_chance(int spell, int use_realm)
 	/* Always a 5 percent chance of working */
 	if (chance > 95) chance = 95;
 
-	if ((use_realm == p_ptr->realm1) || (use_realm == p_ptr->realm2))
+	if ((use_realm == p_ptr->realm1) || (use_realm == p_ptr->realm2)
+	    || (p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_RED_MAGE))
 	{
 		s16b exp = experience_of_spell(spell, use_realm);
 		if(exp > 1399) chance--;
@@ -4500,9 +4501,9 @@ put_str(buf, y, x + 29);
 
 			max = FALSE;
 			if (!increment && (shougou == 4)) max = TRUE;
-			else if ((increment == 32) && (shougou == 3)) max = TRUE;
+			else if ((increment == 32) && (shougou >= 3)) max = TRUE;
 			else if (s_ptr->slevel >= 99) max = TRUE;
-			else if (p_ptr->pclass == CLASS_RED_MAGE) max = TRUE;
+			else if ((p_ptr->pclass == CLASS_RED_MAGE) && (shougou >= 2)) max = TRUE;
 
 			strncpy(ryakuji,shougou_moji[shougou],4);
 			ryakuji[3] = ']';
