@@ -3390,11 +3390,11 @@ F:SLAY_EVIL | SLAY_UNDEAD |
 F:RES_FIRE | RES_ELEC | RES_NETHER | HOLD_LIFE | 
 F:ACTIVATE
 D:$The weapon of one of the great dwarven priests, with powers 
-D:$to preserve body, soul and enchantments, and the bane of those 
+D:$to preserve body and soul, and the bane of those 
 D:$who seek life beyond death.
-D:The weapon of one of the great dwarven priests, with powers 
-D:to preserve body, soul and enchantments, and the bane of those 
-D:who seek life beyond death.
+D:もっとも偉大なドワーフの司祭のひとり、青き衣の『フンディン』の
+D:武器である。所有者の肉体と魂魄を
+D:護り抜き、死してなお生にすがりつこうとする者どもを打ち滅ぼす。
 
 N:215:宵闇の
 E:of The Pitch Dark Night
