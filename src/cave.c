@@ -4537,9 +4537,6 @@ void cave_set_feat(int y, int x, int feat)
 		/* Check for change to boring grid */
 		if (!have_flag(f_ptr->flags, FF_REMEMBER)) c_ptr->info &= ~(CAVE_MARK);
 
-		/* Check for change to out of sight grid */
-		else if (!player_can_see_bold(y, x)) c_ptr->info &= ~(CAVE_MARK);
-
 		/* Update the monster */
 		if (c_ptr->m_idx) update_mon(c_ptr->m_idx, FALSE);
 
