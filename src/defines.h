@@ -1739,7 +1739,7 @@
 #define TV_STAFF        55
 #define TV_WAND         65
 #define TV_ROD          66
-#define TV_PARCHEMENT   69
+#define TV_PARCHMENT    69
 #define TV_SCROLL       70
 #define TV_POTION       75
 #define TV_FLASK        77
