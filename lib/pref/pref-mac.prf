@@ -21,13 +21,13 @@ T:&#:CSOX:control-:shift-:option-:command-
 # T:<trigger name>:<keycode>:<keycode with shiftkey>
 # '\' in <trigger name> is escape character.
 
-T:KP_Period:1
-T:KP_Star:3
-T:KP_Plus:5
+T:KP_Decimal:1
+T:KP_Multiply:3
+T:KP_Add:5
 T:KP_Clear:7
-T:KP_Slash:11
+T:KP_Divide:11
 T:KP_Enter:12
-T:KP_Minus:14
+T:KP_Subtract:14
 T:KP_Equal:17
 T:KP_0:18
 T:KP_1:19
@@ -53,12 +53,12 @@ T:F12:47
 T:F15:49
 T:Help:50
 T:Home:51
-T:PgUp:52
-T:Del:53
+T:Page_Up:52
+T:Delete:53
 T:F4:54
 T:End:55
 T:F2:56
-T:PgDn:57
+T:Page_Down:57
 T:F1:58
 T:Left:59
 T:Right:60

@@ -32,15 +32,15 @@ T:Scroll_Lock:FF14
 T:Sys_Req:FF15
 T:Escape:FF1B
 T:Delete:FFFF
-T:Multi_key:FF20
+T:Multi_Key:FF20
 T:Codeinput:FF37
 T:SingleCandidate:FF3C
 T:MultipleCandidate:FF3D
 T:PreviousCandidate:FF3E
 T:Kanji:FF21
 T:Muhenkan:FF22
-T:Henkan_Mode:FF23
 T:Henkan:FF23
+T:Henkan_Mode:FF23
 T:Romaji:FF24
 T:Hiragana:FF25
 T:Katakana:FF26
@@ -53,7 +53,7 @@ T:Massyo:FF2C
 T:Kana_Lock:FF2D
 T:Kana_Shift:FF2E
 T:Eisu_Shift:FF2F
-T:Eisu_toggle:FF30
+T:Eisu_Toggle:FF30
 T:Kanji_Bangou:FF37
 T:Zen_Koho:FF3D
 T:Mae_Koho:FF3E
@@ -77,7 +77,7 @@ T:Find:FF68
 T:Cancel:FF69
 T:Help:FF6A
 T:Break:FF6B
-T:Mode_switch:FF7E
+T:Mode_Switch:FF7E
 T:Num_Lock:FF7F
 T:KP_Space:FF80
 T:KP_Tab:FF89
@@ -91,9 +91,7 @@ T:KP_Left:FF96
 T:KP_Up:FF97
 T:KP_Right:FF98
 T:KP_Down:FF99
-T:KP_Prior:FF9A
 T:KP_Page_Up:FF9A
-T:KP_Next:FF9B
 T:KP_Page_Down:FF9B
 T:KP_End:FF9C
 T:KP_Begin:FF9D
@@ -102,7 +100,7 @@ T:KP_Delete:FF9F
 T:KP_Equal:FFBD
 T:KP_Multiply:FFAA
 T:KP_Add:FFAB
-T:KP_Separator:FFAC
+T:KP_Comma:FFAC
 T:KP_Subtract:FFAD
 T:KP_Decimal:FFAE
 T:KP_Divide:FFAF
