@@ -318,7 +318,7 @@ static byte potion_col[MAX_COLORS] =
  */
 
 static cptr syllables[MAX_SYLLABLES]
-#ifndef JP
+#ifdef JP
 = {
 	"Å·", "ÃÏ", "Ìµ", "ÍÑ", "°ì", "Åá", "Î¾", "ÃÇ",
 	"°á", "Ë¥", "Æü", "Àé", "½©", "Ëþ", "¿È", "ÁÏ",
