@@ -3119,9 +3119,18 @@ msg_print("守りのルーンが壊れた！");
 	m_ptr->r_idx = r_idx;
 	m_ptr->ap_r_idx = initial_r_appearance(r_idx);
 
+	/* No flags */
+	m_ptr->mflag = 0;
+	m_ptr->mflag2 = 0;
+
 	/* Hack -- Appearance transfer */
 	if ((mode & PM_MULTIPLY) && (who > 0) && !is_original_ap(&m_list[who]))
+	{
 		m_ptr->ap_r_idx = m_list[who].ap_r_idx;
+
+		/* Hack -- Shadower spawns Shadower */
+		if (m_list[who].mflag2 & MFLAG2_KAGE) m_ptr->mflag2 |= MFLAG2_KAGE;
+	}
 
 	/* Sub-alignment of a monster */
 	if ((who > 0) && !(r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)))
@@ -3149,10 +3158,6 @@ msg_print("守りのルーンが壊れた！");
 	m_ptr->nickname = 0;
 
 	m_ptr->exp = 0;
-
-	/* No flags */
-	m_ptr->mflag = 0;
-	m_ptr->mflag2 = 0;
 
 
 	/* Your pet summons its pet. */
@@ -4066,9 +4071,6 @@ bool multiply_monster(int m_idx, bool clone, u32b mode)
 		return FALSE;
 
 	if (m_ptr->mflag2 & MFLAG2_NOPET) mode |= PM_NO_PET;
-
-	/* Hack -- Shadower spawns Shadower */
-	if (m_ptr->mflag2 & MFLAG2_KAGE) mode |= PM_KAGE;
 
 	/* Create a new monster (awake, no groups) */
 	if (!place_monster_aux(m_idx, y, x, m_ptr->r_idx, (mode | PM_NO_KAGE | PM_MULTIPLY)))
