@@ -1496,11 +1496,12 @@ void reduce_charges(object_type *o_ptr, int amt)
  *
  * Chests, and activatable items, never stack (for various reasons).
  */
-bool object_similar(object_type *o_ptr, object_type *j_ptr)
+
+/*
+ *  Determine if an item can partly absorb a second item.
+ */
+bool object_similar_part(object_type *o_ptr, object_type *j_ptr)
 {
-	int total = o_ptr->number + j_ptr->number;
-
-
 	/* Require identical object types */
 	if (o_ptr->k_idx != j_ptr->k_idx) return (0);
 
@@ -1696,6 +1697,20 @@ bool object_similar(object_type *o_ptr, object_type *j_ptr)
 	if (!stack_force_costs && (o_ptr->discount != j_ptr->discount)) return (0);
 
 
+	/* They match, so they must be similar */
+	return (TRUE);
+}
+
+/*
+ *  Determine if an item can absorb a second item.
+ */
+bool object_similar(object_type *o_ptr, object_type *j_ptr)
+{
+	int total = o_ptr->number + j_ptr->number;
+
+	if (!object_similar_part(o_ptr, j_ptr))
+		return FALSE;
+
 	/* Maximal "stacking" limit */
 	if (total >= MAX_STACK_SIZE) return (0);
 
@@ -1703,6 +1718,7 @@ bool object_similar(object_type *o_ptr, object_type *j_ptr)
 	/* They match, so they must be similar */
 	return (TRUE);
 }
+
 
 
 /*
@@ -5961,6 +5977,23 @@ void combine_pack(void)
 
 				/* Erase the "final" slot */
 				object_wipe(&inventory[k]);
+
+				/* Window stuff */
+				p_ptr->window |= (PW_INVEN);
+
+				/* Done */
+				break;
+			}
+			else if (object_similar_part(j_ptr, o_ptr))
+			{
+				int remain = j_ptr->number + o_ptr->number - 99;
+
+				o_ptr->number -= remain;
+
+				/* Add together the item counts */
+				object_absorb(j_ptr, o_ptr);
+
+				o_ptr->number = remain;
 
 				/* Window stuff */
 				p_ptr->window |= (PW_INVEN);
