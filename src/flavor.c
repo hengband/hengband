@@ -2229,6 +2229,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 	{
 		if (known && o_ptr->name1) basenm = a_name + a_info[o_ptr->name1].name;
 		else basenm = get_object_name(o_ptr);
+		append_name = FALSE;
 	}
 
 	/* Start dumping the result */

@@ -43,7 +43,6 @@ void do_cmd_go_up(void)
 		msg_print("You enter the up staircase.");
 #endif
 
-
 		leave_quest_check();
 
 		p_ptr->inside_quest = c_ptr->special;
@@ -66,117 +65,13 @@ void do_cmd_go_up(void)
 
 		p_ptr->oldpx = 0;
 		p_ptr->oldpy = 0;
+
+		/* End the command */
+		return;
 	}
-	/* Normal up stairs */
-	else if ((c_ptr->feat == FEAT_LESS) || (c_ptr->feat == FEAT_LESS_LESS))
-	{
-		if (!dun_level)
-		{
-			go_up = TRUE;
-		}
-		else
-		{
-			quest_type *q_ptr = &quest[p_ptr->inside_quest];
 
-			/* Confirm leaving from once only quest */
-			if (confirm_quest && p_ptr->inside_quest &&
-			    (q_ptr->type == QUEST_TYPE_RANDOM ||
-			     (q_ptr->flags & QUEST_FLAG_ONCE &&
-			      q_ptr->status != QUEST_STATUS_COMPLETED)))
-			{
-#ifdef JP
-				msg_print("この階を一度去ると二度と戻って来られません。");
-				if (get_check("本当にこの階を去りますか？")) go_up = TRUE;
-#else
-				msg_print("You can't come back here once you leave this floor.");
-				if (get_check("Really leave this floor? ")) go_up = TRUE;
-#endif
-			}
-			else
-			{
-				go_up = TRUE;
-			}
-		}
-
-		if (go_up)
-		{
-
-			/* Hack -- take a turn */
-			energy_use = 100;
-
-			if (autosave_l) do_cmd_save_game(TRUE);
-
-			if (p_ptr->inside_quest)
-			{
-				leave_quest_check();
-
-				if (quest[leaving_quest].type != QUEST_TYPE_RANDOM)
-				{
-					p_ptr->inside_quest = c_ptr->special;
-					dun_level = 0;
-				}
-				else
-				{
-					p_ptr->inside_quest = 0;
-				}
-			}
-
-			/* New depth */
-			if (c_ptr->feat == FEAT_LESS_LESS)
-			{
-				/* Create a way back */
-				prepare_change_floor_mode(CFM_UP | CFM_SHAFT);
-
-				up_num += 2;
-			}
-			else
-			{
-				/* Create a way back */
-				prepare_change_floor_mode(CFM_UP);
-
-				up_num += 1;
-			}
-#if 0
-			if (!c_ptr->special && dungeon_type && ((dun_level - up_num + 1) > d_info[dungeon_type].mindepth) && one_in_(13))
-			{
-				up_num++;
-#ifdef JP
-				if (c_ptr->feat == FEAT_LESS_LESS) msg_print("長い坑道を上った。");
-				else msg_print("長い階段を上った。");
-#else
-				msg_print("These were very long stairs.");
-#endif
-				msg_print(NULL);
-			}
-#endif /* 0 */
-
-			if (dun_level-up_num+1 == d_info[dungeon_type].mindepth) up_num = dun_level;
-#ifdef JP
-			if (record_stair) do_cmd_write_nikki(NIKKI_STAIR, 0-up_num, "階段を上った");
-#else
-			if (record_stair) do_cmd_write_nikki(NIKKI_STAIR, 0-up_num, "go up the stairs to");
-#endif
-
-			/* Success */
-#ifdef JP
-			if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
-				msg_print("なんだこの階段は！");
-			else if (0 == dun_level)
-				msg_print("地上に戻った。");
-			else
-				msg_print("階段を上って新たなる迷宮へと足を踏み入れた。");
-#else
-			if (0 == dun_level)
-				msg_print("You go back to the surface.");
-			else
-				msg_print("You enter a maze of up staircases.");
-#endif
-
-			/* Leaving */
-			p_ptr->leaving = TRUE;
-		}
-	}
-	else
+	/* Normal up stairs? */
+	if (c_ptr->feat != FEAT_LESS && c_ptr->feat != FEAT_LESS_LESS)
 	{
 #ifdef JP
 		msg_print("ここには上り階段が見当たらない。");
@@ -186,6 +81,105 @@ void do_cmd_go_up(void)
 
 		return;
 	}
+
+	if (!dun_level)
+	{
+		go_up = TRUE;
+	}
+	else
+	{
+		quest_type *q_ptr = &quest[p_ptr->inside_quest];
+
+		/* Confirm leaving from once only quest */
+		if (confirm_quest && p_ptr->inside_quest &&
+		    (q_ptr->type == QUEST_TYPE_RANDOM ||
+		     (q_ptr->flags & QUEST_FLAG_ONCE &&
+		      q_ptr->status != QUEST_STATUS_COMPLETED)))
+		{
+#ifdef JP
+			msg_print("この階を一度去ると二度と戻って来られません。");
+			if (get_check("本当にこの階を去りますか？")) go_up = TRUE;
+#else
+			msg_print("You can't come back here once you leave this floor.");
+			if (get_check("Really leave this floor? ")) go_up = TRUE;
+#endif
+		}
+		else
+		{
+			go_up = TRUE;
+		}
+	}
+
+	/* Cancel the command */
+	if (!go_up) return;
+
+	/* Hack -- take a turn */
+	energy_use = 100;
+
+	if (autosave_l) do_cmd_save_game(TRUE);
+
+	if (p_ptr->inside_quest)
+	{
+		leave_quest_check();
+
+		if (quest[leaving_quest].type != QUEST_TYPE_RANDOM)
+		{
+			p_ptr->inside_quest = c_ptr->special;
+			dun_level = 0;
+		}
+		else
+		{
+			p_ptr->inside_quest = 0;
+		}
+
+		up_num = 0;
+	}
+	else
+	{
+		/* New depth */
+		if (c_ptr->feat == FEAT_LESS_LESS)
+		{
+			/* Create a way back */
+			prepare_change_floor_mode(CFM_UP | CFM_SHAFT);
+
+			up_num = 2;
+		}
+		else
+		{
+			/* Create a way back */
+			prepare_change_floor_mode(CFM_UP);
+
+			up_num = 1;
+		}
+
+		/* Get out from current dungeon */
+		if (dun_level - up_num < d_info[dungeon_type].mindepth)
+			up_num = dun_level;
+	}
+
+#ifdef JP
+	if (record_stair) do_cmd_write_nikki(NIKKI_STAIR, 0-up_num, "階段を上った");
+#else
+	if (record_stair) do_cmd_write_nikki(NIKKI_STAIR, 0-up_num, "go up the stairs to");
+#endif
+
+	/* Success */
+#ifdef JP
+	if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
+		msg_print("なんだこの階段は！");
+	else if (up_num == dun_level)
+		msg_print("地上に戻った。");
+	else
+		msg_print("階段を上って新たなる迷宮へと足を踏み入れた。");
+#else
+	if (up_num == dun_level)
+		msg_print("You go back to the surface.");
+	else
+		msg_print("You enter a maze of up staircases.");
+#endif
+
+	/* Leaving */
+	p_ptr->leaving = TRUE;
 }
 
 

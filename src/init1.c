@@ -2699,17 +2699,17 @@ errr parse_d_info(char *buf, header *head)
 		/* Parse every entry */
 		for (s = buf + 2; *s; )
 		{
-				/* Find the end of this entry */
+			/* Find the end of this entry */
 			for (t = s; *t && (*t != ' ') && (*t != '|'); ++t) /* loop */;
 
-				/* Nuke and skip any dividers */
+			/* Nuke and skip any dividers */
 			if (*t)
 			{
 				*t++ = '\0';
 				while (*t == ' ' || *t == '|') t++;
 			}
 
-				/* XXX XXX XXX Hack -- Read Final Artifact */
+			/* XXX XXX XXX Hack -- Read Final Artifact */
 			if (1 == sscanf(s, "FINAL_ARTIFACT_%d", &artif))
 			{
 				/* Extract a "Final Artifact" */
@@ -2722,7 +2722,7 @@ errr parse_d_info(char *buf, header *head)
 				continue;
 			}
 
-				/* XXX XXX XXX Hack -- Read Final Object */
+			/* XXX XXX XXX Hack -- Read Final Object */
 			if (1 == sscanf(s, "FINAL_OBJECT_%d", &artif))
 			{
 				/* Extract a "Final Artifact" */
@@ -2735,7 +2735,7 @@ errr parse_d_info(char *buf, header *head)
 				continue;
 			}
 
-				/* XXX XXX XXX Hack -- Read Artifact Guardian */
+			/* XXX XXX XXX Hack -- Read Artifact Guardian */
 			if (1 == sscanf(s, "FINAL_GUARDIAN_%d", &monst))
 			{
 				/* Extract a "Artifact Guardian" */
@@ -2748,7 +2748,7 @@ errr parse_d_info(char *buf, header *head)
 				continue;
 			}
 
-				/* XXX XXX XXX Hack -- Read Special Percentage */
+			/* XXX XXX XXX Hack -- Read Special Percentage */
 			if (1 == sscanf(s, "MONSTER_DIV_%d", &monst))
 			{
 				/* Extract a "Special %" */
@@ -2761,10 +2761,10 @@ errr parse_d_info(char *buf, header *head)
 				continue;
 			}
 
-				/* Parse this entry */
+			/* Parse this entry */
 			if (0 != grab_one_dungeon_flag(d_ptr, s)) return (5);
 
-				/* Start the next entry */
+			/* Start the next entry */
 			s = t;
 		}
 	}
@@ -2772,29 +2772,27 @@ errr parse_d_info(char *buf, header *head)
 	/* Process 'M' for "Basic Flags" (multiple lines) */
 	else if (buf[0] == 'M')
 	{
-		byte r_char_number = 0, r_char;
-
 		/* Parse every entry */
 		for (s = buf + 2; *s; )
 		{
-				/* Find the end of this entry */
+			/* Find the end of this entry */
 			for (t = s; *t && (*t != ' ') && (*t != '|'); ++t) /* loop */;
 
-				/* Nuke and skip any dividers */
+			/* Nuke and skip any dividers */
 			if (*t)
 			{
 				*t++ = '\0';
 				while (*t == ' ' || *t == '|') t++;
 			}
 
-				/* XXX XXX XXX Hack -- Read monster symbols */
-			if (1 == sscanf(s, "R_CHAR_%c", &r_char))
+			/* Hack -- Read monster symbols */
+			if (!strncmp(s, "R_CHAR_", 7))
 			{
-				/* Limited to 5 races */
-				if(r_char_number >= 5) continue;
+				/* Skip "R_CHAR_" */
+				s += 7;
 
-				/* Extract a "frequency" */
-				d_ptr->r_char[r_char_number++] = r_char;
+				/* Read a string */
+				strncpy(d_ptr->r_char, s, sizeof(d_ptr->r_char));
 
 				/* Start at next entry */
 				s = t;
@@ -2803,10 +2801,10 @@ errr parse_d_info(char *buf, header *head)
 				continue;
 			}
 
-				/* Parse this entry */
+			/* Parse this entry */
 			if (0 != grab_one_basic_monster_flag(d_ptr, s)) return (5);
 
-				/* Start the next entry */
+			/* Start the next entry */
 			s = t;
 		}
 	}

@@ -171,6 +171,7 @@ void reset_tim_flags(void)
 	p_ptr->tim_regen = 0;       /* Timed -- Regeneration */
 	p_ptr->tim_stealth = 0;     /* Timed -- Stealth */
 	p_ptr->tim_esp = 0;
+	p_ptr->wraith_form = 0;     /* Timed -- Wraith Form */
 	p_ptr->tim_ffall = 0;
 	p_ptr->tim_sh_touki = 0;
 	p_ptr->tim_sh_fire = 0;
@@ -195,8 +196,8 @@ void reset_tim_flags(void)
 	p_ptr->oppose_cold = 0;     /* Timed -- oppose cold */
 	p_ptr->oppose_pois = 0;     /* Timed -- oppose poison */
 
-	p_ptr->word_recall = FALSE;
-	p_ptr->alter_reality = FALSE;
+	p_ptr->word_recall = 0;
+	p_ptr->alter_reality = 0;
 	p_ptr->sutemi = FALSE;
 	p_ptr->counter = FALSE;
 	p_ptr->ele_attack = 0;

@@ -7861,6 +7861,7 @@ static void desc_obj_fake(int k_idx)
 #else
 		msg_print("You see nothing special.");
 #endif
+		msg_print(NULL);
 	}
 }
 

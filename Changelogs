@@ -1,4 +1,110 @@
+2002-12-11  iks  <iks@cvs>
+
+	* src/dungeon.c 1.83:
+	モンスター闘技場では突然変異の効果と同様に呪いの効果等(ランダムテレポート含む)を起きなくした。
+
+2002-12-11  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/f_info.txt 1.2, lib/pref/graf-new.prf 1.8, lib/pref/graf-xxx.prf 1.12, src/cmd4.c 1.68, src/main-x11.c 1.21:
+	Unangbandから、既知の〜リストの中でモンスターやアイテムのシンボルを
+	エディットするモードを移植。
+
+2002-12-09  iks  <iks@cvs>
+
+	* src/bldg.c 1.27, src/dungeon.c 1.82, src/floors.c 1.3, src/generate.c 1.42, src/load.c 1.50, src/save.c 1.26, src/wild.c 1.20:
+	未使用変数による警告を除去。
+
+2002-12-08  Takeshi Mogami  <mogami@cvs>
+
+	* src/grid.c 1.9.2.1:
+	隠しドアが岩石で上書きされて、ドアがあるべき場所が壁のようになってしまうバグ修正。
+
+	* lib/help/jversion.txt 1.15, lib/help/version.txt 1.15:
+	version.txt に1.4.0と1.5.0の情報追加。
+
+2002-12-05  Takeshi Mogami  <mogami@cvs>
+
+	* src/load.c 1.46.2.1:
+	ロード時にカメレオンの cur_num を正しく更新していなかったバグ修正。
+	カメレオン洞窟最下層で、セーブ&ロードするとカメレオンの王が複数出てし
+	まっていた。
+
+	* src/dungeon.c 1.81, src/externs.h 1.90, src/floors.c 1.2, src/generate.c 1.41, src/load.c 1.49, src/monster2.c 1.46, src/object2.c 1.63, src/save.c 1.25, src/wild.c 1.19, src/xtra2.c 1.57:
+	・保存フロアのユニークとアーティファクトの扱いがアルゴリズム的に間違っ
+	  ていたので書き直し。古いフロアに何かユニークがいる段階で、他のフロア
+	  で出現したそのユニークをすぐに倒してしまうと、古いフロアのユニークが
+	  消えないようになってしまっていた。
+	・また、ダンジョンをロードしたときに、カメレオンのcur_numを正しく更新
+	  していなかったバグ修正。さらに、r_ptrを補正する多数の Hack を一つの
+	  関数 real_r_ptr()にまとめた。
+	・大量のアイテム、モンスターによってセーブデータが読めなくなるバグが、
+	  相変わらず残ってしまっていたので、それも直した。
+
+2002-11-30  Takeshi Mogami  <mogami@cvs>
+
+	* readme.txt 1.8.6.1, readme_eng.txt 1.8.6.1:
+	ヘルプコマンド'?'について言及。
+
+	* src/makefile.bcc 1.4.6.1, src/makefile.dos 1.3.8.1, src/makefile.ibm 1.3.8.1:
+	Python用のソースであった script.c を除き忘れていたので削除。
+
+	* src/makefile.dos 1.5, src/makefile.ibm 1.5:
+	makefile.dosとmakefile.ibmも一応更新。古いコメント削除。
+
+	* src/makefile.bcc 1.6:
+	Python用のソースであった script.c を除き忘れていたので削除。
+
+2002-11-29  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/jobjects.txt 1.8.2.1, lib/help/objects.txt 1.7.2.1:
+	魔法道具支配の自動刻みの説明追加
+
+	* src/flavor.c 1.27.2.1:
+	魔法道具支配のフラグの自動刻みが無かったので、{+道}{Md}に設定。
+
+	* src/effects.c 1.30.2.1: 青魔道師の学習状態は混乱すると自動解除。
+
+	* src/init2.c 1.19.2.2, src/store.c 1.20.2.1:
+	雑貨屋で水の薬を売るようにした。代りに松明を減らした。
+
+	* src/dungeon.c 1.78.2.1:
+	荒野で森の上を歩いたとき、energy_useが26400で、signed 16bit の最大値間近だった
+	ので、ランダムなENERGY_NEED()を掛けたときにオーバーフローして時止め状態に
+	なってしまう事があったバグ修正。
+
+2002-11-28  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd6.c 1.40.2.2:
+	序盤のエントが餓死しそうなので、薬の栄養評価を増した。
+	また水やジュース等は特に栄養価があるようにした。
+
+	* src/externs.h 1.87.2.1, src/init1.c 1.48.2.1, src/init2.c 1.19.2.1, src/variable.c 1.34.2.1, src/xtra2.c 1.54.2.1:
+	グローバルにm_nameという変数があり、ローカルのm_nameの宣言を忘れても
+	コンパイルエラーにならずにクラッシュするバグになっていたので修正。
+	グローバルのm_nameは無意味だったので削除。
+
+2002-11-27  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd6.c 1.40.2.1:
+	空の魔法棒/杖のチャージを食おうとして失敗したときに{空}と印が付かなかったので、付くように修正。
+
+	* src/racial.c 1.28: 狂戦士の帰還が使えなくなっていたバグ修正。
+
 2002-11-26  Takeshi Mogami  <mogami@cvs>
+
+	* src/load.c 1.48:
+	セーブデータのバージョンを比較するときに、1.3.2という数字を使っていたのを1.5.0に修正。
+
+	* src/floors.c 1.1:
+	フロア保存コードの中心となるファイル。commit 忘れてた。
+
+	* configure.in 1.22.2.1, lib/file/news.txt 1.16.2.1, lib/file/news_j.txt 1.15.2.1, src/defines.h 1.81.2.1:
+	バージョン1.4.0へ
+
+	* src/generate.c 1.40, src/generate.h 1.2, src/load.c 1.47, src/makefile.bcc 1.5, src/makefile.dos 1.4, src/makefile.ibm 1.4, src/makefile.std 1.4, src/racial.c 1.27, src/save.c 1.24, src/script.c 1.3, src/spells2.c 1.61, src/spells3.c 1.57, src/streams.c 1.7, src/tables.c 1.54, src/types.h 1.24, src/variable.c 1.35, src/wizard2.c 1.32, src/xtra1.c 1.56, src/xtra2.c 1.55, configure.in 1.23, lib/file/news.txt 1.17, lib/file/news_j.txt 1.16, lib/help/joption.txt 1.20, lib/help/option.txt 1.21, lib/pref/pref-opt.prf 1.14, src/Makefile.am 1.7, src/cave.c 1.67, src/cmd1.c 1.61, src/cmd2.c 1.37, src/cmd4.c 1.67, src/defines.h 1.82, src/dungeon.c 1.79, src/effects.c 1.31, src/event.h 1.3, src/externs.h 1.88, src/files.c 1.89:
+	フロア保存の仕様を実装。
+
+	* Changelogs 1.62: 1.4.xの枝作成前に更新。
 
 	* src/rooms.c 1.25:
 	rooms.c 1.21 で vault 作成時にCAVE_ROOMフラグを付けていたのを不用意に削除

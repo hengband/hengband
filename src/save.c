@@ -208,7 +208,6 @@ static void wr_monster(monster_type *m_ptr)
 
 	/* Monster race index of its appearance */
 	if (flags & SAVE_MON_AP_R_IDX) wr_s16b(m_ptr->ap_r_idx);
-	else m_ptr->ap_r_idx = m_ptr->r_idx;
 
 	if (flags & SAVE_MON_SUB_ALIGN) wr_byte(m_ptr->sub_align);
 	if (flags & SAVE_MON_CSLEEP) wr_s16b(m_ptr->csleep);

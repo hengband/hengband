@@ -5754,6 +5754,9 @@ msg_format("%sを起こした。", m_name);
 		}
 
 		p_ptr->riding = c_ptr->m_idx;
+
+		/* Hack -- remove tracked monster */
+		if (p_ptr->riding == p_ptr->health_who) health_track(0);
 	}
 
 	/* Save the old location */
