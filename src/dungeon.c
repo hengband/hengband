@@ -3918,8 +3918,8 @@ static bool enter_wizard_mode(void)
 
 		/* Mention effects */
 #ifdef JP
-msg_print("ウィザードモードはデバグと実験のためのモードです。 ");
-msg_print("一度ウィザードモードに入るとスコアは記録されません。");
+		msg_print("ウィザードモードはデバグと実験のためのモードです。 ");
+		msg_print("一度ウィザードモードに入るとスコアは記録されません。");
 #else
 		msg_print("Wizard mode is for debugging and experimenting.");
 		msg_print("The game will not be scored if you enter wizard mode.");
@@ -3929,15 +3929,19 @@ msg_print("一度ウィザードモードに入るとスコアは記録されません。");
 
 		/* Verify request */
 #ifdef JP
-if (!get_check("本当にウィザードモードに入りたいのですか? "))
+		if (!get_check("本当にウィザードモードに入りたいのですか? "))
 #else
 		if (!get_check("Are you sure you want to enter wizard mode? "))
 #endif
-
 		{
 			return (FALSE);
 		}
 
+#ifdef JP
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "ウィザードモードに突入してスコアを残せなくなった。");
+#else
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "give up recording score to enter wizard mode.");
+#endif
 		/* Mark savefile */
 		p_ptr->noscore |= 0x0002;
 	}
@@ -3970,8 +3974,8 @@ static bool enter_debug_mode(void)
 
 		/* Mention effects */
 #ifdef JP
-msg_print("デバグ・コマンドはデバグと実験のためのコマンドです。 ");
-msg_print("デバグ・コマンドを使うとスコアは記録されません。");
+		msg_print("デバグ・コマンドはデバグと実験のためのコマンドです。 ");
+		msg_print("デバグ・コマンドを使うとスコアは記録されません。");
 #else
 		msg_print("The debug commands are for debugging and experimenting.");
 		msg_print("The game will not be scored if you use debug commands.");
@@ -3981,11 +3985,10 @@ msg_print("デバグ・コマンドを使うとスコアは記録されません。");
 
 		/* Verify request */
 #ifdef JP
-if (!get_check("本当にデバグ・コマンドを使いますか? "))
+		if (!get_check("本当にデバグ・コマンドを使いますか? "))
 #else
 		if (!get_check("Are you sure you want to use debug commands? "))
 #endif
-
 		{
 			return (FALSE);
 		}
@@ -4023,8 +4026,8 @@ static bool enter_borg_mode(void)
 	{
 		/* Mention effects */
 #ifdef JP
-msg_print("ボーグ・コマンドはデバグと実験のためのコマンドです。 ");
-msg_print("ボーグ・コマンドを使うとスコアは記録されません。");
+		msg_print("ボーグ・コマンドはデバグと実験のためのコマンドです。 ");
+		msg_print("ボーグ・コマンドを使うとスコアは記録されません。");
 #else
 		msg_print("The borg commands are for debugging and experimenting.");
 		msg_print("The game will not be scored if you use borg commands.");
@@ -4034,15 +4037,19 @@ msg_print("ボーグ・コマンドを使うとスコアは記録されません。");
 
 		/* Verify request */
 #ifdef JP
-if (!get_check("本当にボーグ・コマンドを使いますか? "))
+		if (!get_check("本当にボーグ・コマンドを使いますか? "))
 #else
 		if (!get_check("Are you sure you want to use borg commands? "))
 #endif
-
 		{
 			return (FALSE);
 		}
 
+#ifdef JP
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "ボーグ・コマンドを使用してスコアを残せなくなった。");
+#else
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "give up recording score to use borg commands.");
+#endif
 		/* Mark savefile */
 		p_ptr->noscore |= 0x0010;
 	}
