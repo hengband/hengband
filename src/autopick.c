@@ -2876,7 +2876,7 @@ static void prepare_default_pickpref(void)
 		NULL
 #else
 		"You have activated the Auto-Picker Editor for the first time.",
-		"Since no user preference file for autopick is not yet created,",
+		"Since user pref file for autopick is not yet created,",
 		"the default setting is loaded from lib/pref/pickpref.prf .",
 		NULL
 #endif
