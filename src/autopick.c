@@ -3177,7 +3177,7 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 				int next_pos = i + 1;
 
 #ifdef JP
-				if (iskanji(buf[next_pos])) next_pos++;
+				if (iskanji(buf[i])) next_pos++;
 #endif
 
 				/* Is there the cursor at next position? */ 
