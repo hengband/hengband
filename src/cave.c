@@ -3194,7 +3194,7 @@ static s16b mon_fy, mon_fx;
 static void mon_lite_hack(int y, int x)
 {
 	cave_type *c_ptr;
-	int       midpoint;
+	int       midpoint, dpf, d;
 
 	/* Out of bounds */
 	if (!in_bounds2(y, x)) return;
@@ -3214,7 +3214,9 @@ static void mon_lite_hack(int y, int x)
 		/* Horizontal walls between player and a monster */
 		if (((y < py) && (y > mon_fy)) || ((y > py) && (y < mon_fy)))
 		{
-			midpoint = (px + mon_fx) >> 1;
+			dpf = py - mon_fy;
+			d = y - mon_fy;
+			midpoint = mon_fx + ((px - mon_fx) * ABS(d)) / ABS(dpf);
 
 			/* Only first wall viewed from mid-x is lit */
 			if (x < midpoint)
@@ -3230,7 +3232,9 @@ static void mon_lite_hack(int y, int x)
 		/* Vertical walls between player and a monster */
 		if (((x < px) && (x > mon_fx)) || ((x > px) && (x < mon_fx)))
 		{
-			midpoint = (py + mon_fy) >> 1;
+			dpf = px - mon_fx;
+			d = x - mon_fx;
+			midpoint = mon_fy + ((py - mon_fy) * ABS(d)) / ABS(dpf);
 
 			/* Only first wall viewed from mid-y is lit */
 			if (y < midpoint)
@@ -3273,7 +3277,7 @@ static void mon_lite_hack(int y, int x)
 static void mon_dark_hack(int y, int x)
 {
 	cave_type *c_ptr;
-	int       midpoint;
+	int       midpoint, dpf, d;
 
 	/* Out of bounds */
 	if (!in_bounds2(y, x)) return;
@@ -3293,9 +3297,11 @@ static void mon_dark_hack(int y, int x)
 		/* Horizontal walls between player and a monster */
 		if (((y < py) && (y > mon_fy)) || ((y > py) && (y < mon_fy)))
 		{
-			midpoint = (px + mon_fx) >> 1;
+			dpf = py - mon_fy;
+			d = y - mon_fy;
+			midpoint = mon_fx + ((px - mon_fx) * ABS(d)) / ABS(dpf);
 
-			/* Only first wall viewed from mid-x is darkened */
+			/* Only first wall viewed from mid-x is lit */
 			if (x < midpoint)
 			{
 				if (!cave_floor_bold(y, x + 1)) return;
@@ -3309,9 +3315,11 @@ static void mon_dark_hack(int y, int x)
 		/* Vertical walls between player and a monster */
 		if (((x < px) && (x > mon_fx)) || ((x > px) && (x < mon_fx)))
 		{
-			midpoint = (py + mon_fy) >> 1;
+			dpf = px - mon_fx;
+			d = x - mon_fx;
+			midpoint = mon_fy + ((py - mon_fy) * ABS(d)) / ABS(dpf);
 
-			/* Only first wall viewed from mid-y is darkened */
+			/* Only first wall viewed from mid-y is lit */
 			if (y < midpoint)
 			{
 				if (!cave_floor_bold(y + 1, x)) return;
