@@ -6434,7 +6434,7 @@ msg_print("試合開始！");
 #endif
 	}
 
-	if (p_ptr->special_defense & NINJA_S_STEALTH) set_superstealth(FALSE);
+	if (!load_game && (p_ptr->special_defense & NINJA_S_STEALTH)) set_superstealth(FALSE);
 
 	/*** Process this dungeon level ***/
 
