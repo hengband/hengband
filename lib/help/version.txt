@@ -1,5 +1,26 @@
 === History of Hengband ===
 
+Jul. 20th, 2003  hengband 1.5.3 (Development branch) released.
+
+- Improved Warning ability a bit.
+- Some English text were corrected. (thanks to an choco)
+
+- Various bug fixes:
+  Crash after every auto-save.
+  view_unsafe_grids allowed to see trails in the Maze.
+
+- All changes for 1.4.3 is also included in 1.5.3.
+
+
+Jul. 20th, 2003  hengband 1.4.3 (Stable branch) released.
+
+- Various bug fixes:
+  Experience gain for killing monsters was zero.
+  When using manual_haggle, selling items didn't work.
+  Mana point was not updated correctly after Clear Mind.
+  Repeat didn't work correctly for Forcetrainers when blinded.
+
+
 Jul. 10th, 2003  hengband 1.5.2 (Development branch) released.
 - Random artifacts get more 'Construction point' for Android.
 - Hunter's office gives items as prize now.
@@ -1106,4 +1127,4 @@ Angband Version 2.7   :  1/1/95  Ben Harrison
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.5.1
+Updated    : Hengband 1.5.3
