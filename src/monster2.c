@@ -4078,7 +4078,8 @@ bool multiply_monster(int m_idx, bool clone, u32b mode)
 	if (!place_monster_aux(m_idx, y, x, m_ptr->r_idx, (mode | PM_NO_KAGE)))
 		return FALSE;
 
-	if (clone)
+	/* Hack -- Transfer "clone" flag */
+	if (clone || (m_ptr->smart & SM_CLONED))
 	{
 		m_list[hack_m_idx_ii].smart |= SM_CLONED;
 		m_list[hack_m_idx_ii].mflag2 |= MFLAG2_NOPET;
