@@ -270,6 +270,9 @@ cptr make_screen_dump(void)
 		0,
 	};
 
+	if (use_graphics)
+		return NULL;
+
 	/* Alloc buffer */
 	screen_buf = buf_new();
 	if (screen_buf == NULL) return (NULL);
