@@ -6514,7 +6514,7 @@ bool fire_blast(int typ, int dir, int dd, int ds, int num, int dev)
 	}
 
 	/* Use an actual "target" */
-	else if (dir == 5)
+	else /* if (dir == 5) */
 	{
 		tx = target_col;
 		ty = target_row;
