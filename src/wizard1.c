@@ -1853,8 +1853,11 @@ static void spoil_out(cptr str)
 	/* Line buffer */
 	static char roff_buf[256];
 
+	/* Delay buffer */
+	static char roff_waiting_buf[256];
+
 #ifdef JP
-	char iskanji2=0;
+	bool iskanji_flag = FALSE;
 #endif
 	/* Current pointer into line roff_buf */
 	static char *roff_p = roff_buf;
@@ -1862,17 +1865,28 @@ static void spoil_out(cptr str)
 	/* Last space saved into roff_buf */
 	static char *roff_s = NULL;
 
+	/* Mega-Hack -- Delayed output */
+	static bool waiting_output = FALSE;
+
 	/* Special handling for "new sequence" */
 	if (!str)
 	{
+		if (waiting_output)
+		{
+			fputs(roff_waiting_buf, fff);
+			waiting_output = FALSE;
+		}
+
 		if (roff_p != roff_buf) roff_p--;
 		while (*roff_p == ' ' && roff_p != roff_buf) roff_p--;
+
 		if (roff_p == roff_buf) fprintf(fff, "\n");
 		else
 		{
 			*(roff_p + 1) = '\0';
 			fprintf(fff, "%s\n\n", roff_buf);
 		}
+
 		roff_p = roff_buf;
 		roff_s = NULL;
 		roff_buf[0] = '\0';
@@ -1884,26 +1898,61 @@ static void spoil_out(cptr str)
 	{
 #ifdef JP
 		char cbak;
-		int k_flag = iskanji((unsigned char)(*str));
+		bool k_flag = iskanji((unsigned char)(*str));
 #endif
 		char ch = *str;
-		int wrap = (ch == '\n');
+		bool wrap = (ch == '\n');
 
 #ifdef JP
-		if (!isprint(ch) && !k_flag && !iskanji2) ch = ' ';
-		if(k_flag && !iskanji2)iskanji2=1;else iskanji2=0;
+		if (!isprint(ch) && !k_flag && !iskanji_flag) ch = ' ';
+		iskanji_flag = k_flag && !iskanji_flag;
 #else
 		if (!isprint(ch)) ch = ' ';
 #endif
 
+		if (waiting_output)
+		{
+			fputs(roff_waiting_buf, fff);
+			if (!wrap) fputc('\n', fff);
+			waiting_output = FALSE;
+		}
+
+		if (!wrap)
+		{
 #ifdef JP
-		if ( roff_p >= roff_buf+( (k_flag) ? 74 : 75) ) wrap=1;
-		if ((ch == ' ') && (roff_p + 2 >= roff_buf + ((k_flag) ? 74 : 75))) wrap = 1;
+			if (roff_p >= roff_buf + (k_flag ? 74 : 75)) wrap = TRUE;
+			else if ((ch == ' ') && (roff_p >= roff_buf + (k_flag ? 72 : 73))) wrap = TRUE;
 #else
-		if (roff_p >= roff_buf + 75) wrap = 1;
-		if ((ch == ' ') && (roff_p + 2 >= roff_buf + 75)) wrap = 1;
+			if (roff_p >= roff_buf + 75) wrap = TRUE;
+			else if ((ch == ' ') && (roff_p >= roff_buf + 73)) wrap = TRUE;
 #endif
 
+			if (wrap)
+			{
+#ifdef JP
+				bool k_flag_local;
+				bool iskanji_flag_local = FALSE;
+				cptr tail = str + (k_flag ? 2 : 1);
+#else
+				cptr tail = str + 1;
+#endif
+
+				for (; *tail; tail++)
+				{
+					if (*tail == ' ') continue;
+
+#ifdef JP
+					k_flag_local = iskanji((unsigned char)(*tail));
+					if (isprint(*tail) || k_flag_local || iskanji_flag_local) break;
+					iskanji_flag_local = k_flag_local && !iskanji_flag_local;
+#else
+					if (isprint(*tail)) break;
+#endif
+				}
+
+				if (!*tail) waiting_output = TRUE;
+			}
+		}
 
 		/* Handle line-wrap */
 		if (wrap)
@@ -1911,21 +1960,22 @@ static void spoil_out(cptr str)
 			*roff_p = '\0';
 			r = roff_p;
 #ifdef JP
-				cbak=' ';
+			cbak = ' ';
 #endif
 			if (roff_s && (ch != ' '))
 			{
 #ifdef JP
-				cbak=*roff_s;
+				cbak = *roff_s;
 #endif
 				*roff_s = '\0';
 				r = roff_s + 1;
 			}
-			fprintf(fff, "%s\n", roff_buf);
+			if (!waiting_output) fprintf(fff, "%s\n", roff_buf);
+			else strcpy(roff_waiting_buf, roff_buf);
 			roff_s = NULL;
 			roff_p = roff_buf;
 #ifdef JP
-			if(cbak != ' ') *roff_p++ = cbak; 
+			if (cbak != ' ') *roff_p++ = cbak;
 #endif
 			while (*r) *roff_p++ = *r++;
 		}
@@ -1934,16 +1984,18 @@ static void spoil_out(cptr str)
 		if ((roff_p > roff_buf) || (ch != ' '))
 		{
 #ifdef JP
-		  if( !k_flag ){
-			if (ch == ' ' || ch == '(' ) roff_s = roff_p;
-		  }
-		  else{
-		    if( iskanji2 && 
-			strncmp(str, "。", 2) != 0 && 
-			strncmp(str, "、", 2) != 0 &&
-			strncmp(str, "ィ", 2) != 0 &&
-			strncmp(str, "ー", 2) != 0) roff_s = roff_p;
-		  }
+			if (!k_flag)
+			{
+				if ((ch == ' ') || (ch == '(')) roff_s = roff_p;
+			}
+			else
+			{
+				if (iskanji_flag &&
+				    strncmp(str, "。", 2) != 0 &&
+				    strncmp(str, "、", 2) != 0 &&
+				    strncmp(str, "ィ", 2) != 0 &&
+				    strncmp(str, "ー", 2) != 0) roff_s = roff_p;
+			}
 #else
 			if (ch == ' ') roff_s = roff_p;
 #endif
