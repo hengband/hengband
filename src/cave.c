@@ -2284,8 +2284,20 @@ static void display_shortened_item_name(object_type *o_ptr, int y)
 	char buf[MAX_NLEN];
 	char *c = buf;
 	int len = 0;
+	byte attr;
 
 	object_desc(buf, o_ptr, FALSE, 0);
+	attr = tval_to_attr[o_ptr->tval % 128];
+
+	if (p_ptr->image)
+	{
+		attr = TERM_WHITE;
+#ifdef JP
+		strcpy(buf, "²¿¤«´ñÌ¯¤ÊÊª");
+#else
+		strcpy(buf, "something strange");
+#endif
+	}
 
 	for (c = buf; *c; c++)
 	{
@@ -2337,7 +2349,7 @@ static void display_shortened_item_name(object_type *o_ptr, int y)
 		}
 	}
 	*c='\0';
-	Term_putstr(0, y, 12, tval_to_attr[o_ptr->tval % 128], buf);
+	Term_putstr(0, y, 12, attr, buf);
 }
 
 /*
