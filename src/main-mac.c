@@ -2206,10 +2206,10 @@ static void save_prefs(void)
 
 	/*** The current version ***/
 
-	putshort(VERSION_MAJOR);
-	putshort(VERSION_MINOR);
-	putshort(VERSION_PATCH);
-	putshort(VERSION_EXTRA);
+	putshort(FAKE_VERSION);
+	putshort(FAKE_VER_MAJOR);
+	putshort(FAKE_VER_MINOR);
+	putshort(FAKE_VER_PATCH);
 
 	putshort(arg_sound);
 	putshort(arg_graphics);
@@ -2253,7 +2253,7 @@ static void load_prefs(void)
 {
 	int i;
 
-	int old_major, old_minor, old_patch, old_extra;
+	int old_version, old_major, old_minor, old_patch;
 
 	term_data *td;
 	MenuHandle m;
@@ -2261,16 +2261,16 @@ static void load_prefs(void)
 	/*** Version information ***/
 
 	/* Preferences version */
+	old_version = getshort();
 	old_major = getshort();
 	old_minor = getshort();
 	old_patch = getshort();
-	old_extra = getshort();
 
 	/* Hack -- Verify or ignore */
-	if ((old_major != VERSION_MAJOR) ||
-	    (old_minor != VERSION_MINOR) ||
-	    (old_patch != VERSION_PATCH) ||
-	    (old_extra != VERSION_EXTRA))
+	if ((old_version != FAKE_VERSION) ||
+	    (old_major != FAKE_VER_MAJOR) ||
+	    (old_minor != FAKE_VER_MINOR) ||
+	    (old_patch != FAKE_VER_PATCH))
 	{
 		/* Message */
 		#ifdef JP
