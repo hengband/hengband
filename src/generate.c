@@ -959,7 +959,7 @@ if (cheat_room) msg_print("小さな地下室を却下します。");
 			}
 			else
 			{
-				bool group;
+				u32b mode = (PM_NO_KAGE | PM_NO_PET);
 
 				for (j = 0; j < (quest[i].max_num - quest[i].cur_num); j++)
 				{
@@ -979,13 +979,11 @@ if (cheat_room) msg_print("小さな地下室を却下します。");
 							else break;
 						}
 
-						if (r_ptr->flags1 & RF1_FRIENDS)
-							group = FALSE;
-						else
-							group = TRUE;
+						if (!(r_ptr->flags1 & RF1_FRIENDS))
+							mode |= PM_ALLOW_GROUP;
 
 						/* Try to place the monster */
-						if (place_monster_aux(0, y, x, quest[i].r_idx, FALSE, group, FALSE, FALSE, TRUE, TRUE))
+						if (place_monster_aux(0, y, x, quest[i].r_idx, mode))
 						{
 							/* Success */
 							break;
@@ -1070,7 +1068,7 @@ msg_format("モンスター数基本値を %d から %d に減らします", small_tester, i);
                         if (cave_empty_bold2(oy, ox) && monster_can_cross_terrain(cave[oy][ox].feat, &r_info[d_info[dungeon_type].final_guardian]))
 			{
 				/* Place the guardian */
-				if (place_monster_aux(0, oy, ox, d_info[dungeon_type].final_guardian, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE)) break;
+				if (place_monster_aux(0, oy, ox, d_info[dungeon_type].final_guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) break;
 			}
                         /* One less try */
                         try--;
@@ -1193,7 +1191,7 @@ static void arena_gen(void)
 	build_arena();
 
 	place_monster_aux(0, py + 5, px, arena_monsters[p_ptr->arena_number],
-	    FALSE, FALSE, FALSE, FALSE, TRUE, TRUE);
+	    (PM_NO_KAGE | PM_NO_PET));
 }
 
 
@@ -1292,7 +1290,7 @@ static void battle_gen(void)
 	for(i=0;i<4;i++)
 	{
 		place_monster_aux(0, py + 5 + (i/2)*4, px - 2 + (i%2)*4, battle_mon[i],
-				  FALSE, FALSE, FALSE, FALSE, TRUE, TRUE);
+				  (PM_NO_KAGE | PM_NO_PET));
 		set_friendly(&m_list[cave[py+5+(i/2)*4][px-2+(i%2)*4].m_idx]);
 	}
 	for(i = 1; i < m_max; i++)

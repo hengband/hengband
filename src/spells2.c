@@ -6859,7 +6859,7 @@ msg_print("エネルギーのうねりを感じた！");
 			(*count) += activate_hi_summon(py, px, FALSE);
 			if (!one_in_(6)) break;
 		case 7: case 8: case 9: case 18:
-			(*count) += summon_specific(0, py, px, dun_level, 0, TRUE, FALSE, FALSE, TRUE, TRUE);
+			(*count) += summon_specific(0, py, px, dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			if (!one_in_(6)) break;
 		case 10: case 11: case 12:
 #ifdef JP
@@ -6936,21 +6936,24 @@ int activate_hi_summon(int y, int x, bool can_pet)
 {
 	int i;
 	int count = 0;
-	bool pet = FALSE, friendly = FALSE, not_pet;
 	int summon_lev;
+	u32b mode = PM_ALLOW_GROUP;
+	bool pet = FALSE;
 
 	if (can_pet)
 	{
 		if (one_in_(4))
 		{
-			friendly = TRUE;
+			mode |= PM_FORCE_FRIENDLY;
 		}
 		else
 		{
+			mode |= PM_FORCE_PET;
 			pet = TRUE;
 		}
 	}
-	not_pet = (bool)(!pet);
+
+	if (!pet) mode |= PM_NO_PET;
 
 	summon_lev = (pet ? p_ptr->lev * 2 / 3 + randint1(p_ptr->lev / 2) : dun_level);
 
@@ -6959,48 +6962,51 @@ int activate_hi_summon(int y, int x, bool can_pet)
 		switch (randint1(25) + (dun_level / 20))
 		{
 			case 1: case 2:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_ANT, TRUE, friendly, pet, FALSE, not_pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_ANT, mode);
 				break;
 			case 3: case 4:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_SPIDER, TRUE, friendly, pet, FALSE, not_pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_SPIDER, mode);
 				break;
 			case 5: case 6:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HOUND, TRUE, friendly, pet, FALSE, not_pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HOUND, mode);
 				break;
 			case 7: case 8:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HYDRA, TRUE, friendly, pet, FALSE, not_pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HYDRA, mode);
 				break;
 			case 9: case 10:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_ANGEL, TRUE, friendly, pet, FALSE, not_pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_ANGEL, mode);
 				break;
 			case 11: case 12:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_UNDEAD, TRUE, friendly, pet, FALSE, not_pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_UNDEAD, mode);
 				break;
 			case 13: case 14:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_DRAGON, TRUE, friendly, pet, FALSE, not_pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_DRAGON, mode);
 				break;
 			case 15: case 16:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_DEMON, TRUE, friendly, pet, FALSE, not_pet);
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_DEMON, mode);
 				break;
 			case 17:
-				if (pet || friendly) break;
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_AMBERITES, TRUE, friendly, pet, TRUE, not_pet);
+				if (can_pet) break;
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_AMBERITES, (mode | PM_ALLOW_UNIQUE));
 				break;
 			case 18: case 19:
-				if (pet || friendly) break;
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_UNIQUE, TRUE, friendly, pet, TRUE, not_pet);
+				if (can_pet) break;
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_UNIQUE, (mode | PM_ALLOW_UNIQUE));
 				break;
 			case 20: case 21:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HI_UNDEAD, TRUE, friendly, pet, (bool)(!friendly && !pet), not_pet);
+				if (!can_pet) mode |= PM_ALLOW_UNIQUE;
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HI_UNDEAD, mode);
 				break;
 			case 22: case 23:
-				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HI_DRAGON, TRUE, friendly, pet, (bool)(!friendly && !pet), not_pet);
+				if (!can_pet) mode |= PM_ALLOW_UNIQUE;
+				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HI_DRAGON, mode);
 				break;
 			case 24:
-				count += summon_specific((pet ? -1 : 0), y, x, 100, SUMMON_CYBER, TRUE, friendly, pet, FALSE, not_pet);
+				count += summon_specific((pet ? -1 : 0), y, x, 100, SUMMON_CYBER, mode);
 				break;
 			default:
-				count += summon_specific((pet ? -1 : 0), y, x,pet ? summon_lev : (((summon_lev * 3) / 2) + 5), 0, TRUE, friendly, pet, (bool)(!friendly && !pet), not_pet);
+				if (!can_pet) mode |= PM_ALLOW_UNIQUE;
+				count += summon_specific((pet ? -1 : 0), y, x,pet ? summon_lev : (((summon_lev * 3) / 2) + 5), 0, mode);
 		}
 	}
 
@@ -7014,23 +7020,20 @@ int summon_cyber(int who, int y, int x)
 	int i;
 	int max_cyber = (easy_band ? 1 : (dun_level / 50) + randint1(2));
 	int count = 0;
-
-	bool friendly = FALSE;
-	bool pet = FALSE;
+	u32b mode = PM_ALLOW_GROUP;
 
 	/* Summoned by a monster */
 	if (who > 0)
 	{
 		monster_type *m_ptr = &m_list[who];
-		friendly = is_friendly(m_ptr);
-		pet = is_pet(m_ptr);
+		if (is_pet(m_ptr)) mode |= PM_FORCE_PET;
 	}
 
 	if (max_cyber > 4) max_cyber = 4;
 
 	for (i = 0; i < max_cyber; i++)
 	{
-		count += summon_specific(who, y, x, 100, SUMMON_CYBER, TRUE, friendly, pet, FALSE, FALSE);
+		count += summon_specific(who, y, x, 100, SUMMON_CYBER, mode);
 	}
 
 	return count;

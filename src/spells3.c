@@ -5505,7 +5505,6 @@ bool polymorph_monster(int y, int x)
 {
 	cave_type *c_ptr = &cave[y][x];
 	monster_type *m_ptr = &m_list[c_ptr->m_idx];
-	bool friendly, pet;
 	bool polymorphed = FALSE;
 	int new_r_idx;
 	int old_r_idx = m_ptr->r_idx;
@@ -5520,21 +5519,24 @@ bool polymorph_monster(int y, int x)
 	/* Memorize the monster before polymorphing */
 	back_m = *m_ptr;
 
-	/* Get the monsters attitude */
-	friendly = is_friendly(m_ptr);
-	pet = is_pet(m_ptr);
-
 	/* Pick a "new" monster race */
 	new_r_idx = poly_r_idx(old_r_idx);
 
 	/* Handle polymorph */
 	if (new_r_idx != old_r_idx)
 	{
+		u32b mode = 0L;
+
+		/* Get the monsters attitude */
+		if (is_friendly(m_ptr)) mode |= PM_FORCE_FRIENDLY;
+		if (is_pet(m_ptr)) mode |= PM_FORCE_PET;
+		if (m_ptr->mflag2 & MFLAG_NOPET) mode |= PM_NO_PET;
+
 		/* "Kill" the "old" monster */
 		delete_monster_idx(c_ptr->m_idx);
 
 		/* Create a new monster (no groups) */
-		if (place_monster_aux(0, y, x, new_r_idx, FALSE, FALSE, friendly, pet, FALSE, (bool)(m_ptr->mflag2 & MFLAG_NOPET)))
+		if (place_monster_aux(0, y, x, new_r_idx, mode))
 		{
 			/* Success */
 			polymorphed = TRUE;
@@ -5544,7 +5546,7 @@ bool polymorph_monster(int y, int x)
 			monster_terrain_sensitive = FALSE;
 
 			/* Placing the new monster failed */
-			place_monster_aux(0, y, x, old_r_idx, FALSE, FALSE, friendly, pet, TRUE, (bool)(m_ptr->mflag2 & MFLAG_NOPET));
+			place_monster_aux(0, y, x, old_r_idx, (mode | PM_NO_KAGE));
 			m_list[hack_m_idx_ii] = back_m;
 
 			monster_terrain_sensitive = TRUE;
@@ -5923,8 +5925,12 @@ msg_format("乱暴な魔法のために%sが壊れた！", o_name);
 }
 
 
-bool summon_kin_player(bool pet, int level, int y, int x, bool group)
+//bool summon_kin_player(bool pet, int level, int y, int x, bool group)
+bool summon_kin_player(int level, int y, int x, u32b mode)
 {
+	bool pet = (bool)(mode & PM_FORCE_PET);
+	if (!pet) mode |= PM_NO_PET;
+
 	switch (p_ptr->mimic_form)
 	{
 	case MIMIC_NONE:
@@ -6025,5 +6031,5 @@ bool summon_kin_player(bool pet, int level, int y, int x, bool group)
 		summon_kin_type = 'V';
 		break;
 	}	
-	return summon_specific((pet ? -1 : 0), y, x, level, SUMMON_KIN, group, FALSE, pet, FALSE, (bool)(!pet));
+	return summon_specific((pet ? -1 : 0), y, x, level, SUMMON_KIN, mode);
 }

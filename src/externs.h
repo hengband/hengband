@@ -831,16 +831,16 @@ extern void lore_do_probe(int m_idx);
 extern void lore_treasure(int m_idx, int num_item, int num_gold);
 extern void update_mon(int m_idx, bool full);
 extern void update_monsters(bool full);
-extern bool place_monster_aux(int who, int y, int x, int r_idx, bool slp, bool grp, bool friendly, bool pet, bool no_kage, bool no_pet);
-extern bool place_monster(int y, int x, bool slp, bool grp);
+extern bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode);
+extern bool place_monster(int y, int x, u32b mode);
 extern bool alloc_horde(int y, int x);
-extern bool alloc_monster(int dis, bool slp);
-extern bool summon_specific(int who, int y1, int x1, int lev, int type, bool group, bool friendly, bool pet, bool unique_okay, bool no_pet);
-extern bool summon_named_creature(int who, int oy, int ox, int r_idx, bool slp, bool group_ok, bool friendly, bool pet);
-extern bool multiply_monster(int m_idx, bool clone, bool friendly, bool pet);
+extern bool alloc_monster(int dis, u32b mode);
+extern bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode);
+extern bool summon_named_creature (int who, int oy, int ox, int r_idx, u32b mode);
+extern bool multiply_monster(int m_idx, bool clone, u32b mode);
 extern void update_smart_learn(int m_idx, int what);
 extern void choose_new_monster(int m_idx, bool born, int r_idx);
-extern bool place_monster_one(int who, int y, int x, int r_idx, bool slp, bool friendly, bool pet, bool no_pet);
+extern bool place_monster_one(int who, int y, int x, int r_idx, u32b mode);
 extern bool player_place(int y, int x);
 extern void monster_drop_carried_objects(monster_type *m_ptr);
 
@@ -1108,7 +1108,7 @@ extern bool curse_weapon(bool force, int slot);
 extern bool brand_bolts(void);
 extern bool polymorph_monster(int y, int x);
 extern bool dimension_door(void);
-extern bool summon_kin_player(bool pet, int level, int y, int x, bool group);
+extern bool summon_kin_player(int level, int y, int x, u32b mode);
 
 /* store.c */
 extern void do_cmd_store(void);

@@ -1016,7 +1016,7 @@ void wild_magic(int spell)
 	case 35:
 		while (counter++ < 8)
 		{
-			(void)summon_specific(0, py, px, (dun_level * 3) / 2, type, TRUE, FALSE, FALSE, FALSE, TRUE);
+			(void)summon_specific(0, py, px, (dun_level * 3) / 2, type, (PM_ALLOW_GROUP | PM_NO_PET));
 		}
 		break;
 	case 36:
@@ -1199,7 +1199,7 @@ msg_print("¿À¤Î¸æÎÏ¤¬¼Ù°­¤òÂÇ¤ÁÊ§¤Ã¤¿¡ª");
 		confuse_monsters(plev * 4);
 		turn_monsters(plev * 4);
 		stasis_monsters(plev * 4);
-		summon_specific(-1, py, px, plev, SUMMON_ANGEL, TRUE, TRUE, TRUE, FALSE, FALSE);
+		summon_specific(-1, py, px, plev, SUMMON_ANGEL, (PM_ALLOW_GROUP | PM_FORCE_PET));
 		(void)set_hero(randint1(25) + 25, FALSE);
 		(void)hp_player(300);
 		(void)set_fast(randint1(20 + plev) + plev, FALSE);
@@ -1478,7 +1478,7 @@ msg_print("ÂÀÍÛ¸÷Àþ¤¬¸½¤ì¤¿¡£");
 		slow_monsters();
 		break;
 	case 14: /* Summon Animals */
-		if (!(summon_specific(-1, py, px, plev, SUMMON_ANIMAL_RANGER, TRUE, TRUE, TRUE, FALSE, FALSE)))
+		if (!(summon_specific(-1, py, px, plev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET))))
 			no_trump = TRUE;
 		break;
 	case 15: /* Herbal Healing */
@@ -1824,10 +1824,14 @@ msg_print("¥í¥±¥Ã¥ÈÈ¯¼Í¡ª");
 		break;
 	case 23: /* Summon monster, demon */
 		{
+			u32b mode = 0L;
 			bool pet = !one_in_(3);
-			bool group = !(pet && (plev < 50));
 
-			if (summon_specific((pet ? -1 : 0), py, px, (plev * 3) / 2, SUMMON_DEMON, group, FALSE, pet, FALSE, (bool)(!pet)))
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= PM_NO_PET;
+			if (!(pet && (plev < 50))) mode |= PM_ALLOW_GROUP;
+
+			if (summon_specific((pet ? -1 : 0), py, px, (plev * 3) / 2, SUMMON_DEMON, mode))
 			{
 #ifdef JP
 msg_print("Î²²«¤Î°­½­¤¬½¼Ëþ¤·¤¿¡£");
@@ -2096,7 +2100,7 @@ msg_print("¤Ê¤ó¤Æ¤³¤Ã¤¿¡ª¤¢¤Ê¤¿¤Î¼þ¤ê¤ÎÃÏÌÌ¤«¤éµà¤Á¤¿¿Í±Æ¤¬Î©¤Á¾å¤¬¤Ã¤Æ¤­¤¿¡ª");
 				msg_print("Oh no! Mouldering forms rise from the earth around you!");
 #endif
 
-				(void)summon_specific(0, py, px, dun_level, SUMMON_UNDEAD, TRUE, FALSE, FALSE, TRUE, TRUE);
+				(void)summon_specific(0, py, px, dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 				chg_virtue(V_UNLIFE, 1);
 			}
 			else if (die < 14)
@@ -2259,21 +2263,19 @@ msg_print("±¢±µ¤ÊÀ¼¤¬¥¯¥¹¥¯¥¹¾Ð¤¦¡£¡Ö¤â¤¦¤¹¤°¤ª¤Þ¤¨¤Ï²æ¡¹¤ÎÃç´Ö¤Ë¤Ê¤ë¤À¤í¤¦¡£¼å¤
 		break;
 	case 25: /* Raise the Dead */
 		{
-			bool pet = one_in_(3);
-			bool group;
 			int type;
+			bool pet = one_in_(3);
+			u32b mode = 0L;
 
 			type = (plev > 47 ? SUMMON_HI_UNDEAD : SUMMON_UNDEAD);
-			if (pet)
-			{
-				group = (((plev > 24) && one_in_(3)) ? TRUE : FALSE);
-			}
-			else
-			{
-				group = TRUE;
-			}
 
-			if (summon_specific((pet ? -1 : 0), py, px, (plev * 3) / 2, type, group, FALSE, pet, (bool)(!pet), (bool)(!pet)))
+			if (!pet || (pet && (plev > 24) && one_in_(3)))
+				mode |= PM_ALLOW_GROUP;
+
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
+
+			if (summon_specific((pet ? -1 : 0), py, px, (plev * 3) / 2, type, mode))
 			{
 #ifdef JP
 msg_print("Îä¤¿¤¤É÷¤¬¤¢¤Ê¤¿¤Î¼þ¤ê¤Ë¿á¤­»Ï¤á¤¿¡£¤½¤ì¤ÏÉåÇÔ½­¤ò±¿¤ó¤Ç¤¤¤ë...");
@@ -2367,6 +2369,10 @@ static bool cast_trump_spell(int spell, bool success)
 		case 1: /* Trump Spiders */
 		{
 			bool pet = success; /* (randint1(5) > 2) */
+			u32b mode = PM_ALLOW_GROUP;
+
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= PM_NO_PET;
 
 #ifdef JP
 msg_print("¤¢¤Ê¤¿¤ÏÃØéá¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
@@ -2374,8 +2380,7 @@ msg_print("¤¢¤Ê¤¿¤ÏÃØéá¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
 			msg_print("You concentrate on the trump of an spider...");
 #endif
 
-
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_SPIDER, TRUE, FALSE, pet, FALSE, (bool)(!pet)))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_SPIDER, mode))
 			{
 				if (!pet)
 #ifdef JP
@@ -2383,7 +2388,6 @@ msg_print("¾¤´Ô¤µ¤ì¤¿ÃØéá¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
 #else
 					msg_print("The summoned spiders get angry!");
 #endif
-
 			}
 			else
 			{
@@ -2445,7 +2449,7 @@ msg_print("¤Ê¤ó¤Æ¤³¤Ã¤¿¡ª¡Ô°­Ëâ¡Õ¤À¡ª");
 					msg_print("Oh no! It's the Devil!");
 #endif
 
-					(void)summon_specific(0, py, px, dun_level, SUMMON_DEMON, TRUE, FALSE, FALSE, TRUE, TRUE);
+					(void)summon_specific(0, py, px, dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 				}
 				else if (die < 18)
 				{
@@ -2487,7 +2491,7 @@ msg_print("´ñÌ¯¤Ê¥â¥ó¥¹¥¿¡¼¤Î³¨¤À¡£");
 					msg_print("It's the picture of a strange monster.");
 #endif
 
-					if (!(summon_specific(0, py, px, (dun_level * 3) / 2, 32 + randint1(6), TRUE, FALSE, FALSE, TRUE, TRUE)))
+					if (!(summon_specific(0, py, px, (dun_level * 3) / 2, 32 + randint1(6), (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET))))
 						no_trump = TRUE;
 				}
 				else if (die < 33)
@@ -2588,7 +2592,7 @@ msg_print("Í§¹¥Åª¤Ê¥â¥ó¥¹¥¿¡¼¤Î³¨¤À¡£");
 					msg_print("It's the picture of a friendly monster.");
 #endif
 
-					if (!(summon_specific(-1, py, px, (dun_level * 3) / 2, SUMMON_BIZARRE1, FALSE, TRUE, TRUE, FALSE, FALSE)))
+					if (!(summon_specific(-1, py, px, (dun_level * 3) / 2, SUMMON_BIZARRE1, PM_FORCE_PET)))
 						no_trump = TRUE;
 				}
 				else if (die < 84)
@@ -2599,7 +2603,7 @@ msg_print("Í§¹¥Åª¤Ê¥â¥ó¥¹¥¿¡¼¤Î³¨¤À¡£");
 					msg_print("It's the picture of a friendly monster.");
 #endif
 
-					if (!(summon_specific(-1, py, px, (dun_level * 3) / 2, SUMMON_BIZARRE2, FALSE, TRUE, TRUE, FALSE, FALSE)))
+					if (!(summon_specific(-1, py, px, (dun_level * 3) / 2, SUMMON_BIZARRE2, PM_FORCE_PET)))
 						no_trump = TRUE;
 				}
 				else if (die < 86)
@@ -2610,7 +2614,7 @@ msg_print("Í§¹¥Åª¤Ê¥â¥ó¥¹¥¿¡¼¤Î³¨¤À¡£");
 					msg_print("It's the picture of a friendly monster.");
 #endif
 
-					if (!(summon_specific(-1, py, px, (dun_level * 3) / 2, SUMMON_BIZARRE4, FALSE, TRUE, TRUE, FALSE, FALSE)))
+					if (!(summon_specific(-1, py, px, (dun_level * 3) / 2, SUMMON_BIZARRE4, PM_FORCE_PET)))
 						no_trump = TRUE;
 				}
 				else if (die < 88)
@@ -2621,7 +2625,7 @@ msg_print("Í§¹¥Åª¤Ê¥â¥ó¥¹¥¿¡¼¤Î³¨¤À¡£");
 					msg_print("It's the picture of a friendly monster.");
 #endif
 
-					if (!(summon_specific(-1, py, px, (dun_level * 3) / 2, SUMMON_BIZARRE5, FALSE, TRUE, TRUE, FALSE, FALSE)))
+					if (!(summon_specific(-1, py, px, (dun_level * 3) / 2, SUMMON_BIZARRE5, PM_FORCE_PET)))
 						no_trump = TRUE;
 				}
 				else if (die < 96)
@@ -2731,7 +2735,10 @@ msg_print("¹¹¤Ë·Ð¸³¤òÀÑ¤ó¤À¤è¤¦¤Êµ¤¤¬¤¹¤ë¡£");
 		{
 			bool pet = success; /* was (randint1(5) > 2) */
 			int type = (pet ? SUMMON_ANIMAL_RANGER : SUMMON_ANIMAL);
-			bool group = (pet ? FALSE : TRUE);
+			u32b mode = 0L;
+
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= (PM_ALLOW_GROUP | PM_NO_PET);
 
 #ifdef JP
 msg_print("¤¢¤Ê¤¿¤ÏÆ°Êª¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
@@ -2740,7 +2747,7 @@ msg_print("¤¢¤Ê¤¿¤ÏÆ°Êª¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
 #endif
 
 
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, type, group, FALSE, pet, FALSE, (bool)(!pet)))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, type, mode))
 			{
 				if (!pet)
 #ifdef JP
@@ -2785,8 +2792,11 @@ msg_print("¤¢¤Ê¤¿¤Ï¥«¥ß¥«¥¼¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
 			for (dummy = 2 + randint0(plev / 7); dummy > 0; dummy--)
 			{
 				bool pet = success; /* was (randint1(10) > 3) */
-				bool group = (pet ? FALSE : TRUE);
+				u32b mode = 0L;
 				int type;
+
+				if (pet) mode |= PM_FORCE_PET;
+				else mode |= (PM_ALLOW_GROUP | PM_NO_PET);
 
 				if (p_ptr->pclass == CLASS_BEASTMASTER)
 				{
@@ -2797,7 +2807,7 @@ msg_print("¤¢¤Ê¤¿¤Ï¥«¥ß¥«¥¼¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
 					type = SUMMON_KAMIKAZE;
 				}
 
-				if (summon_specific((pet ? -1 : 0), y, x, summon_lev, type, group, FALSE, pet, FALSE, (bool)(!pet)))
+				if (summon_specific((pet ? -1 : 0), y, x, summon_lev, type, mode))
 				{
 					if (!pet)
 #ifdef JP
@@ -2814,7 +2824,7 @@ msg_print("¾¤´Ô¤µ¤ì¤¿¥â¥ó¥¹¥¿¡¼¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
 		case 10: /* Phantasmal Servant */
 			if (success)
 			{
-				if (summon_specific(-1, py, px, (summon_lev * 3) / 2, SUMMON_PHANTOM, FALSE, TRUE, TRUE, FALSE, FALSE))
+				if (summon_specific(-1, py, px, (summon_lev * 3) / 2, SUMMON_PHANTOM, PM_FORCE_PET))
 				{
 #ifdef JP
 msg_print("¸æÍÑ¤Ç¤´¤¶¤¤¤Þ¤¹¤«¡¢¸æ¼ç¿ÍÍÍ¡©");
@@ -2897,7 +2907,10 @@ msg_print("¼¡¸µ¤ÎÈâ¤¬³«¤¤¤¿¡£ÌÜÅªÃÏ¤òÁª¤ó¤Ç²¼¤µ¤¤¡£");
 		case 17: /* Trump Undead */
 		{
 			bool pet = success; /* (randint1(10) > 3) */
-			bool group = (pet ? FALSE : TRUE);
+			u32b mode = 0L;
+
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= (PM_ALLOW_GROUP | PM_NO_PET);
 
 #ifdef JP
 msg_print("¤¢¤Ê¤¿¤Ï¥¢¥ó¥Ç¥Ã¥É¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
@@ -2906,7 +2919,7 @@ msg_print("¤¢¤Ê¤¿¤Ï¥¢¥ó¥Ç¥Ã¥É¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
 #endif
 
 
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_UNDEAD, group, FALSE, pet, FALSE, (bool)(!pet)))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_UNDEAD, mode))
 			{
 				if (!pet)
 #ifdef JP
@@ -2926,7 +2939,10 @@ msg_print("¾¤´Ô¤µ¤ì¤¿¥¢¥ó¥Ç¥Ã¥É¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
 		case 18: /* Trump Reptiles */
 		{
 			bool pet = success; /* was (randint1(5) > 2) */
-			bool group = !pet;
+			u32b mode = 0L;
+
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= (PM_ALLOW_GROUP | PM_NO_PET);
 
 #ifdef JP
 msg_print("¤¢¤Ê¤¿¤Ïà¨ÃîÎà¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
@@ -2935,7 +2951,7 @@ msg_print("¤¢¤Ê¤¿¤Ïà¨ÃîÎà¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
 #endif
 
 
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HYDRA, group, FALSE, pet, FALSE, (bool)(!pet)))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HYDRA, mode))
 			{
 				if (!pet)
 #ifdef JP
@@ -2966,8 +2982,13 @@ msg_print("¤¢¤Ê¤¿¤Ï¥â¥ó¥¹¥¿¡¼¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
 			for (dummy = 0; dummy < 1 + ((plev - 15)/ 10); dummy++)
 			{
 				bool pet = success; /* was (randint1(10) > 3) */
-				bool group = (pet ? FALSE : TRUE);
 				int type;
+				u32b mode = 0L;
+
+				if (pet) mode |= PM_FORCE_PET;
+				else mode |= (PM_ALLOW_GROUP | PM_NO_PET);
+
+				if (unique_okay) mode |= PM_ALLOW_UNIQUE;
 
 				if (p_ptr->pclass == CLASS_BEASTMASTER)
 				{
@@ -2978,7 +2999,7 @@ msg_print("¤¢¤Ê¤¿¤Ï¥â¥ó¥¹¥¿¡¼¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
 					type = 0;
 				}
 
-				if (summon_specific((pet ? -1 : 0), py, px, summon_lev, type, group, FALSE, pet, unique_okay, (bool)(!pet)))
+				if (summon_specific((pet ? -1 : 0), py, px, summon_lev, type, mode))
 				{
 					if (!pet)
 #ifdef JP
@@ -2995,6 +3016,10 @@ msg_print("¾¤´Ô¤µ¤ì¤¿¥â¥ó¥¹¥¿¡¼¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
 		case 20: /* Trump Hounds */
 		{
 			bool pet = success; /* was (randint1(5) > 2) */
+			u32b mode = PM_ALLOW_GROUP;
+
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= PM_NO_PET;
 
 #ifdef JP
 msg_print("¤¢¤Ê¤¿¤Ï¥Ï¥¦¥ó¥É¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
@@ -3003,7 +3028,7 @@ msg_print("¤¢¤Ê¤¿¤Ï¥Ï¥¦¥ó¥É¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
 #endif
 
 
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HOUND, TRUE, FALSE, pet, FALSE, (bool)(!pet)))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HOUND, mode))
 			{
 				if (!pet)
 #ifdef JP
@@ -3048,6 +3073,10 @@ msg_print("¤¢¤Ê¤¿¤ÏÀ¸¤­¤Æ¤¤¤ë¥«¡¼¥É¤ËÊÑ¤ï¤Ã¤¿¡£");
 		case 23: /* Trump Cyberdemon */
 		{
 			bool pet = success; /* was (randint1(10) > 3) */
+			u32b mode = 0L;
+
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= PM_NO_PET;
 
 #ifdef JP
 msg_print("¤¢¤Ê¤¿¤Ï¥µ¥¤¥Ð¡¼¥Ç¡¼¥â¥ó¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
@@ -3056,7 +3085,7 @@ msg_print("¤¢¤Ê¤¿¤Ï¥µ¥¤¥Ð¡¼¥Ç¡¼¥â¥ó¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
 #endif
 
 
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_CYBER, FALSE, FALSE, pet, FALSE, (bool)(!pet)))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_CYBER, mode))
 			{
 				if (!pet)
 #ifdef JP
@@ -3103,7 +3132,10 @@ msg_print("¾¤´Ô¤µ¤ì¤¿¥µ¥¤¥Ð¡¼¥Ç¡¼¥â¥ó¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
 		case 27: /* Trump Dragon */
 		{
 			bool pet = success; /* was (randint1(10) > 3) */
-			bool group = (pet ? FALSE : TRUE);
+			u32b mode = 0L;
+
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= (PM_ALLOW_GROUP | PM_NO_PET);
 
 #ifdef JP
 msg_print("¤¢¤Ê¤¿¤Ï¥É¥é¥´¥ó¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
@@ -3112,7 +3144,7 @@ msg_print("¤¢¤Ê¤¿¤Ï¥É¥é¥´¥ó¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
 #endif
 
 
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_DRAGON, group, FALSE, pet, FALSE, (bool)(!pet)))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_DRAGON, mode))
 			{
 				if (!pet)
 #ifdef JP
@@ -3164,7 +3196,10 @@ msg_print("¾¤´Ô¤µ¤ì¤¿¥É¥é¥´¥ó¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
 		case 29: /* Trump Demon */
 		{
 			bool pet = success; /* was (randint1(10) > 3) */
-			bool group = (pet ? FALSE : TRUE);
+			u32b mode = 0L;
+
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= (PM_ALLOW_GROUP | PM_NO_PET);
 
 #ifdef JP
 msg_print("¤¢¤Ê¤¿¤Ï¥Ç¡¼¥â¥ó¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
@@ -3173,7 +3208,7 @@ msg_print("¤¢¤Ê¤¿¤Ï¥Ç¡¼¥â¥ó¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
 #endif
 
 
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_DEMON, group, FALSE, pet, FALSE, (bool)(!pet)))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_DEMON, mode))
 			{
 				if (!pet)
 #ifdef JP
@@ -3193,7 +3228,12 @@ msg_print("¾¤´Ô¤µ¤ì¤¿¥Ç¡¼¥â¥ó¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
 		case 30: /* Trump Greater Undead */
 		{
 			bool pet = success; /* was (randint1(10) > 3) */
-			bool group = (pet ? FALSE : TRUE);
+			u32b mode = 0L;
+
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= (PM_ALLOW_GROUP | PM_NO_PET);
+
+			if (unique_okay) mode |= PM_ALLOW_UNIQUE;
 
 #ifdef JP
 msg_print("¤¢¤Ê¤¿¤Ï¶¯ÎÏ¤Ê¥¢¥ó¥Ç¥Ã¥É¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
@@ -3202,7 +3242,7 @@ msg_print("¤¢¤Ê¤¿¤Ï¶¯ÎÏ¤Ê¥¢¥ó¥Ç¥Ã¥É¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
 #endif
 
 
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_UNDEAD, group, FALSE, pet, unique_okay, (bool)(!pet)))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_UNDEAD, mode))
 			{
 				if (!pet)
 #ifdef JP
@@ -3222,8 +3262,14 @@ msg_print("¾¤´Ô¤µ¤ì¤¿¾åµé¥¢¥ó¥Ç¥Ã¥É¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
 		case 31: /* Trump Ancient Dragon */
 		{
 			bool pet = success; /* was (randint1(10) > 3) */
-			bool group = (pet ? FALSE : TRUE);
 			int type;
+			u32b mode = 0L;
+
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= (PM_ALLOW_GROUP | PM_NO_PET);
+
+			if (unique_okay) mode |= PM_ALLOW_UNIQUE;
+
 			if (p_ptr->pclass == CLASS_BEASTMASTER)
 			{
 				type = SUMMON_HI_DRAGON_LIVING;
@@ -3240,7 +3286,7 @@ msg_print("¤¢¤Ê¤¿¤Ï¸ÅÂå¥É¥é¥´¥ó¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
 #endif
 
 
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, type, group, FALSE, pet, unique_okay, (bool)(!pet)))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, type, mode))
 			{
 				if (!pet)
 #ifdef JP
@@ -3392,7 +3438,7 @@ msg_print("¸÷Àþ¤¬Êü¤¿¤ì¤¿¡£");
 		(void)set_tim_invis(randint1(24) + 24, FALSE);
 		break;
 	case 25: /* Conjure Elemental */
-		if (!summon_specific(-1, py, px, plev, SUMMON_ELEMENTAL, TRUE, TRUE, TRUE, FALSE, FALSE))
+		if (!summon_specific(-1, py, px, plev, SUMMON_ELEMENTAL, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 			no_trump = TRUE;
 		break;
 	case 26: /* Teleport Level */
@@ -3544,7 +3590,7 @@ static bool cast_enchant_spell(int spell)
 		(void)pulish_shield();
 		break;
 	case 22: /* Create Golem */
-		if (summon_specific(-1, py, px, plev, SUMMON_GOLEM, FALSE, TRUE, TRUE, FALSE, FALSE))
+		if (summon_specific(-1, py, px, plev, SUMMON_GOLEM, PM_FORCE_PET))
 		{
 #ifdef JP
 msg_print("¥´¡¼¥ì¥à¤òºî¤Ã¤¿¡£");
@@ -3675,7 +3721,7 @@ static bool cast_daemon_spell(int spell)
 		    damroll(6 + ((plev - 5) / 4), 8));
 		break;
 	case 6: /* Summon monster, demon */
-		if (!summon_specific(-1, py, px, (plev * 3) / 2, SUMMON_MANES, TRUE, FALSE, TRUE, FALSE, FALSE))
+		if (!summon_specific(-1, py, px, (plev * 3) / 2, SUMMON_MANES, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 		{
 #ifdef JP
 msg_print("¸ÅÂå¤Î»àÎî¤Ï¸½¤ì¤Ê¤«¤Ã¤¿¡£");
@@ -3727,9 +3773,13 @@ msg_print("¸ÅÂå¤Î»àÎî¤Ï¸½¤ì¤Ê¤«¤Ã¤¿¡£");
 	case 15: /* Summon monster, demon */
 	{
 		bool pet = !one_in_(3);
-		bool group = !(pet && (plev < 50));
+		u32b mode = 0L;
 
-		if (summon_specific((pet ? -1 : 0), py, px, plev*2/3+randint1(plev/2), SUMMON_DEMON, group, FALSE, pet, FALSE, (bool)(!pet)))
+		if (pet) mode |= PM_FORCE_PET;
+		else mode |= PM_NO_PET;
+		if (!(pet && (plev < 50))) mode |= PM_ALLOW_GROUP;
+
+		if (summon_specific((pet ? -1 : 0), py, px, plev*2/3+randint1(plev/2), SUMMON_DEMON, mode))
 		{
 #ifdef JP
 msg_print("Î²²«¤Î°­½­¤¬½¼Ëþ¤·¤¿¡£");
@@ -3852,7 +3902,7 @@ else msg_print("<ÇËÌÇ¤Î¼ê>¤òÊü¤Ã¤¿¡ª");
 		}
 
 		summon_lev = p_ptr->lev * 2 / 3 + r_info[o_ptr->pval].level;
-		if (summon_specific(-1, py, px, summon_lev, SUMMON_HI_DEMON, TRUE, FALSE, TRUE, FALSE, FALSE))
+		if (summon_specific(-1, py, px, summon_lev, SUMMON_HI_DEMON, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 		{
 #ifdef JP
 msg_print("Î²²«¤Î°­½­¤¬½¼Ëþ¤·¤¿¡£");
@@ -4041,9 +4091,13 @@ static bool cast_haja_spell(int spell) /* nanka */
 	case 23: /* Summon monster, angel */
 		{
 			bool pet = !one_in_(3);
-			bool group = !(pet && (plev < 50));
+			u32b mode = 0L;
 
-			if (summon_specific((pet ? -1 : 0), py, px, (plev * 3) / 2, SUMMON_ANGEL, group, FALSE, pet, FALSE, (bool)(!pet)))
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= PM_NO_PET;
+			if (!(pet && (plev < 50))) mode |= PM_ALLOW_GROUP;
+
+			if (summon_specific((pet ? -1 : 0), py, px, (plev * 3) / 2, SUMMON_ANGEL, mode))
 			{
 				if (pet)
 #ifdef JP
@@ -4128,7 +4182,7 @@ msg_print("¿À¤Î¸æÎÏ¤¬¼Ù°­¤òÂÇ¤ÁÊ§¤Ã¤¿¡ª");
 				if (cave_empty_bold2(my, mx)) break;
 			}
 			if (attempt < 0) continue;
-			summon_specific(-1, my, mx, plev, SUMMON_KNIGHTS, TRUE, FALSE, TRUE, FALSE, FALSE);
+			summon_specific(-1, my, mx, plev, SUMMON_KNIGHTS, (PM_ALLOW_GROUP | PM_FORCE_PET));
 		}
 		(void)set_hero(randint1(25) + 25, FALSE);
 		(void)set_blessed(randint1(25) + 25, FALSE);

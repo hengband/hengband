@@ -2558,6 +2558,16 @@
 #define PW_BORG_1       0x00004000L     /* Display borg messages */
 #define PW_BORG_2       0x00008000L     /* Display borg status */
 
+/*
+ * Bit flags for the place_monster_???() (etc)
+ */
+#define PM_ALLOW_SLEEP    0x00000001
+#define PM_ALLOW_GROUP    0x00000002
+#define PM_FORCE_FRIENDLY 0x00000004
+#define PM_FORCE_PET      0x00000008
+#define PM_NO_KAGE        0x00000010
+#define PM_NO_PET         0x00000020
+#define PM_ALLOW_UNIQUE   0x00000040
 
 
 /*
@@ -3623,6 +3633,9 @@
 
 #define is_friendly(A) \
 	 (bool)(((A)->smart & SM_FRIENDLY) ? TRUE : FALSE)
+
+#define is_friendly_idx(IDX) \
+	 (bool)((IDX) > 0 && is_friendly(&m_list[(IDX)]))
 
 #define is_pet(A) \
 	 (bool)(((A)->smart & SM_PET) ? TRUE : FALSE)

@@ -2356,7 +2356,7 @@ bool activate_random_artifact(object_type * o_ptr)
 
 		case ACT_SUMMON_ANIMAL:
 		{
-			(void)summon_specific(-1, py, px, plev, SUMMON_ANIMAL_RANGER, TRUE, TRUE, TRUE, FALSE, FALSE);
+			(void)summon_specific(-1, py, px, plev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET));
 			o_ptr->timeout = 200 + randint1(300);
 			break;
 		}
@@ -2369,7 +2369,7 @@ bool activate_random_artifact(object_type * o_ptr)
 			msg_print("You summon a phantasmal servant.");
 #endif
 
-			(void)summon_specific(-1, py, px, dun_level, SUMMON_PHANTOM, TRUE, TRUE, TRUE, FALSE, FALSE);
+			(void)summon_specific(-1, py, px, dun_level, SUMMON_PHANTOM, (PM_ALLOW_GROUP | PM_FORCE_PET));
 			o_ptr->timeout = 200 + randint1(200);
 			break;
 		}
@@ -2377,9 +2377,13 @@ bool activate_random_artifact(object_type * o_ptr)
 		case ACT_SUMMON_ELEMENTAL:
 		{
 			bool pet = one_in_(3);
-			bool group = !(pet && (plev < 50));
+			u32b mode = 0L;
 
-			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), SUMMON_ELEMENTAL, group, FALSE, pet, FALSE, (bool)(!pet)))
+			if (!(pet && (plev < 50))) mode |= PM_ALLOW_GROUP;
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= PM_NO_PET;
+
+			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), SUMMON_ELEMENTAL, mode))
 			{
 #ifdef JP
 				msg_print("エレメンタルが現れた...");
@@ -2411,9 +2415,13 @@ bool activate_random_artifact(object_type * o_ptr)
 		case ACT_SUMMON_DEMON:
 		{
 			bool pet = one_in_(3);
-			bool group = !(pet && (plev < 50));
+			u32b mode = 0L;
 
-			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), SUMMON_DEMON, group, FALSE, pet, FALSE, (bool)(!pet)))
+			if (!(pet && (plev < 50))) mode |= PM_ALLOW_GROUP;
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= PM_NO_PET;
+
+			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), SUMMON_DEMON, mode))
 			{
 #ifdef JP
 				msg_print("硫黄の悪臭が充満した。");
@@ -2444,24 +2452,16 @@ bool activate_random_artifact(object_type * o_ptr)
 		case ACT_SUMMON_UNDEAD:
 		{
 			bool pet = one_in_(3);
-			bool group;
-			bool unique_okay;
 			int type;
+			u32b mode = 0L;
 
 			type = (plev > 47 ? SUMMON_HI_UNDEAD : SUMMON_UNDEAD);
-			if (pet)
-			{
-				group = (((plev > 24) && one_in_(3)) ? TRUE : FALSE);
-				unique_okay = FALSE;
-			}
-			else
-			{
-				group = TRUE;
-				unique_okay = TRUE;
-			}
 
-			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), type,
-					    group, FALSE, pet, unique_okay, (bool)(!pet)))
+			if (!pet || ((plev > 24) && one_in_(3))) mode |= PM_ALLOW_GROUP;
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
+
+			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), type, mode))
 			{
 #ifdef JP
 				msg_print("冷たい風があなたの周りに吹き始めた。それは腐敗臭を運んでいる...");

@@ -2886,10 +2886,13 @@ msg_print("ËâË¡¤Î¥¨¥Í¥ë¥®¡¼¤¬ÆÍÁ³¤¢¤Ê¤¿¤ÎÃæ¤ËÎ®¤ì¹ş¤ó¤Ç¤­¤¿¡ª¥¨¥Í¥ë¥®¡¼¤ò²òÊü¤·¤
 		    !p_ptr->anti_magic && (randint1(6666) == 666))
 		{
 			bool pet = one_in_(6);
-			bool not_pet = (bool)(!pet);
+			u32b mode = PM_ALLOW_GROUP;
+
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
 			if (summon_specific((pet ? -1 : 0), py, px,
-				    dun_level, SUMMON_DEMON, TRUE, FALSE, pet, not_pet, not_pet))
+				    dun_level, SUMMON_DEMON, mode))
 			{
 #ifdef JP
 msg_print("¤¢¤Ê¤¿¤Ï¥Ç¡¼¥â¥ó¤ò°ú¤­´ó¤»¤¿¡ª");
@@ -3018,10 +3021,12 @@ msg_print("¸÷¸»¤«¤é¥¨¥Í¥ë¥®¡¼¤òµÛ¼ı¤·¤¿¡ª");
 		   !p_ptr->anti_magic && one_in_(7000))
 		{
 			bool pet = one_in_(3);
-			bool not_pet = (bool)(!pet);
+			u32b mode = PM_ALLOW_GROUP;
 
-			if (summon_specific((pet ? -1 : 0), py, px, dun_level, SUMMON_ANIMAL,
-			    TRUE, FALSE, pet, not_pet, not_pet))
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
+
+			if (summon_specific((pet ? -1 : 0), py, px, dun_level, SUMMON_ANIMAL, mode))
 			{
 #ifdef JP
 msg_print("Æ°Êª¤ò°ú¤­´ó¤»¤¿¡ª");
@@ -3124,10 +3129,12 @@ msg_print("¼«Ê¬¤¬¿ê¼å¤·¤Æ¤¤¤¯¤Î¤¬Ê¬¤«¤ë¡ª");
 		   !p_ptr->anti_magic && one_in_(3000))
 		{
 			bool pet = one_in_(5);
-			bool not_pet = (bool)(!pet);
+			u32b mode = PM_ALLOW_GROUP;
 
-			if (summon_specific((pet ? -1 : 0), py, px, dun_level, SUMMON_DRAGON,
-			    TRUE, FALSE, pet, not_pet, not_pet))
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
+
+			if (summon_specific((pet ? -1 : 0), py, px, dun_level, SUMMON_DRAGON, mode))
 			{
 #ifdef JP
 msg_print("¥É¥é¥´¥ó¤ò°ú¤­´ó¤»¤¿¡ª");
@@ -3441,7 +3448,7 @@ msg_format("°­°Õ¤ËËş¤Á¤¿¹õ¤¤¥ª¡¼¥é¤¬%s¤ò¤È¤ê¤Ş¤¤¤¿...", o_name);
 		if ((p_ptr->cursed & TRC_CALL_ANIMAL) && one_in_(2500))
 		{
 			if (summon_specific(0, py, px, dun_level, SUMMON_ANIMAL,
-			    TRUE, FALSE, FALSE, TRUE, TRUE))
+			    (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				char o_name[MAX_NLEN];
 
@@ -3458,8 +3465,7 @@ msg_format("%s¤¬Æ°Êª¤ò°ú¤­´ó¤»¤¿¡ª", o_name);
 		/* Call demon */
 		if ((p_ptr->cursed & TRC_CALL_DEMON) && one_in_(1111))
 		{
-			if (summon_specific(0, py, px, dun_level, SUMMON_DEMON,
-			    TRUE, FALSE, FALSE, TRUE, TRUE))
+			if (summon_specific(0, py, px, dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				char o_name[MAX_NLEN];
 
@@ -3477,7 +3483,7 @@ msg_format("%s¤¬°­Ëâ¤ò°ú¤­´ó¤»¤¿¡ª", o_name);
 		if ((p_ptr->cursed & TRC_CALL_DRAGON) && one_in_(800))
 		{
 			if (summon_specific(0, py, px, dun_level, SUMMON_DRAGON,
-			    TRUE, FALSE, FALSE, TRUE, TRUE))
+			    (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				char o_name[MAX_NLEN];
 
@@ -5033,7 +5039,7 @@ msg_print("²¿¤«ÊÑ¤ï¤Ã¤¿µ¤¤¬¤¹¤ë¡ª");
 				int y, x;
 				y = py+ddy[tsuri_dir];
 				x = px+ddx[tsuri_dir];
-				if (place_monster_aux(0, y, x, r_idx, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE))
+				if (place_monster_aux(0, y, x, r_idx, PM_NO_KAGE))
 				{
 					char m_name[80];
 					monster_desc(m_name, &m_list[cave[y][x].m_idx], 0);
@@ -6596,7 +6602,7 @@ if (init_v_info()) quit("·úÃÛÊª½é´ü²½ÉÔÇ½");
 		int pet_r_idx = ((p_ptr->pclass == CLASS_CAVALRY) ? MON_HORSE : MON_YASE_HORSE);
 		monster_race *r_ptr = &r_info[pet_r_idx];
 		place_monster_aux(0, py, px - 1, pet_r_idx,
-				  FALSE, FALSE, TRUE, TRUE, TRUE, FALSE);
+				  (PM_FORCE_PET | PM_NO_KAGE));
 		m_ptr = &m_list[hack_m_idx_ii];
 		m_ptr->mspeed = r_ptr->speed;
 		m_ptr->maxhp = r_ptr->hdice*(r_ptr->hside+1)/2;

@@ -880,7 +880,10 @@ msg_print("地面に落とされた。");
 
 			if (attempts > 0)
 			{
-				if (summon_specific((pet ? -1 : 0), wy, wx, 100, SUMMON_DAWN, FALSE, is_friendly(m_ptr), pet, FALSE, FALSE))
+				u32b mode = 0L;
+				if (pet) mode |= PM_FORCE_PET;
+
+				if (summon_specific((pet ? -1 : m_idx), wy, wx, 100, SUMMON_DAWN, mode))
 				{
 					if (player_can_see_bold(wy, wx))
 #ifdef JP
@@ -904,8 +907,11 @@ msg_print("地面に落とされた。");
 		{
 			int wy = y, wx = x;
 			bool pet = is_pet(m_ptr);
+			u32b mode = 0L;
 
-			if (summon_specific((pet ? -1 : 0), wy, wx, 100, SUMMON_BLUE_HORROR, FALSE, is_friendly(m_ptr), pet, FALSE, FALSE))
+			if (pet) mode |= PM_FORCE_PET;
+
+			if (summon_specific((pet ? -1 : m_idx), wy, wx, 100, SUMMON_BLUE_HORROR, mode))
 			{
 				if (player_can_see_bold(wy, wx))
 					notice = TRUE;
@@ -2030,13 +2036,14 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 		{
 			int dummy_y = m_ptr->fy;
 			int dummy_x = m_ptr->fx;
-			bool friend = is_friendly(m_ptr);
-			bool pet = is_pet(m_ptr);
+			u32b mode = 0L;
+
+			if (is_pet(m_ptr)) mode |= PM_FORCE_PET;
 
 			/* Delete the monster */
 			delete_monster_idx(m_idx);
 
-			if (summon_named_creature(0, dummy_y, dummy_x, MON_BIKETAL, FALSE, FALSE, friend, pet))
+			if (summon_named_creature(0, dummy_y, dummy_x, MON_BIKETAL, mode))
 			{
 #ifdef JP
 				msg_print("「ハァッハッハッハ！！私がバイケタルだ！！」");
@@ -4958,7 +4965,7 @@ msg_print("「我が下僕たちよ、かの傲慢なる者を倒すべし！」");
 
 			for (dummy = 0; dummy < randint1(5) + 1; dummy++)
 			{
-				(void)summon_specific(0, py, px, dun_level, 0, TRUE, FALSE, FALSE, TRUE, TRUE);
+				(void)summon_specific(0, py, px, dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			}
 #ifdef JP
 			reward = "モンスターを召喚された。";
@@ -5419,7 +5426,7 @@ msg_format("%sは褒美として悪魔の使いをよこした！",chaos_patrons[p_ptr->chaos_pat
 			msg_format("%s rewards you with a demonic servant!",chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-			if (!summon_specific(-1, py, px, dun_level, SUMMON_DEMON, FALSE, TRUE, TRUE, FALSE, FALSE))
+			if (!summon_specific(-1, py, px, dun_level, SUMMON_DEMON, PM_FORCE_PET))
 #ifdef JP
 msg_print("何も現れなかった...");
 #else
@@ -5440,7 +5447,7 @@ msg_format("%sは褒美として使いをよこした！",chaos_patrons[p_ptr->chaos_patron]);
 			msg_format("%s rewards you with a servant!",chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-			if (!summon_specific(-1, py, px, dun_level, 0, FALSE, TRUE, TRUE, FALSE, FALSE))
+			if (!summon_specific(-1, py, px, dun_level, 0, PM_FORCE_PET))
 #ifdef JP
 msg_print("何も現れなかった...");
 #else
@@ -5461,7 +5468,7 @@ msg_format("%sは褒美としてアンデッドの使いをよこした。",chaos_patrons[p_ptr->cha
 			msg_format("%s rewards you with an undead servant!",chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-			if (!summon_specific(-1, py, px, dun_level, SUMMON_UNDEAD, FALSE, TRUE, TRUE, FALSE, FALSE))
+			if (!summon_specific(-1, py, px, dun_level, SUMMON_UNDEAD, PM_FORCE_PET))
 #ifdef JP
 msg_print("何も現れなかった...");
 #else

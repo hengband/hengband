@@ -1533,7 +1533,7 @@ static void do_cmd_wiz_summon(int num)
 
 	for (i = 0; i < num; i++)
 	{
-		(void)summon_specific(0, py, px, dun_level, 0, TRUE, FALSE, FALSE, TRUE, FALSE);
+		(void)summon_specific(0, py, px, dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 	}
 }
 
@@ -1543,7 +1543,7 @@ static void do_cmd_wiz_summon(int num)
  *
  * XXX XXX XXX This function is rather dangerous
  */
-static void do_cmd_wiz_named(int r_idx, bool slp)
+static void do_cmd_wiz_named(int r_idx)
 {
 	int i, x, y;
 
@@ -1565,7 +1565,7 @@ static void do_cmd_wiz_named(int r_idx, bool slp)
 		if (!cave_empty_bold(y, x)) continue;
 
 		/* Place it (allow groups) */
-		if (place_monster_aux(0, y, x, r_idx, slp, TRUE, FALSE, FALSE, FALSE, FALSE)) break;
+		if (place_monster_aux(0, y, x, r_idx, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP))) break;
 	}
 }
 
@@ -1575,9 +1575,9 @@ static void do_cmd_wiz_named(int r_idx, bool slp)
  *
  * XXX XXX XXX This function is rather dangerous
  */
-static void do_cmd_wiz_named_friendly(int r_idx, bool slp)
+static void do_cmd_wiz_named_friendly(int r_idx)
 {
-	(void) summon_named_creature(0, py, px, r_idx, slp, TRUE, TRUE, TRUE);
+	(void) summon_named_creature(0, py, px, r_idx, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET));
 }
 
 
@@ -1798,12 +1798,12 @@ void do_cmd_debug(void)
 
 		/* Summon _friendly_ named monster */
 		case 'N':
-			do_cmd_wiz_named_friendly(command_arg, TRUE);
+			do_cmd_wiz_named_friendly(command_arg);
 			break;
 
 		/* Summon Named Monster */
 		case 'n':
-			do_cmd_wiz_named(command_arg, TRUE);
+			do_cmd_wiz_named(command_arg);
 			break;
 
 		/* Object playing routines */

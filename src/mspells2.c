@@ -153,6 +153,7 @@ bool monst_spell_monst(int m_idx)
 	int dam = 0;
 	int start;
 	int plus = 1;
+	u32b p_mode = 0L, u_mode = 0L;
 	int s_num_6 = (easy_band ? 2 : 6);
 	int s_num_4 = (easy_band ? 1 : 4);
 
@@ -187,9 +188,11 @@ bool monst_spell_monst(int m_idx)
 	bool see_both;
 	bool known;
 
-	bool friendly = is_friendly(m_ptr);
 	bool pet = is_pet(m_ptr);
-	bool not_pet = (bool)(!pet);
+
+	/* Prepare flags for summoning */
+	if (pet) p_mode |= PM_FORCE_PET;
+	if (!pet) u_mode |= PM_ALLOW_UNIQUE;
 
 	/* Cannot cast spells when confused */
 	if (m_ptr->confused) return (FALSE);
@@ -3322,7 +3325,7 @@ msg_format("%^sがテレポートした。", m_name);
 					{
 						for (k = 0; k < 6; k++)
 						{
-							summon_specific(m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_BIZARRE1, TRUE, FALSE, FALSE, FALSE, FALSE);
+							summon_specific(m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_BIZARRE1, PM_ALLOW_GROUP);
 						}
 						return FALSE;
 					}
@@ -3577,7 +3580,7 @@ msg_format("%sが魔法で%sを召喚した。", m_name,
 					int num = 1 + randint1(3);
 					for (k = 0; k < num; k++)
 					{
-						count += summon_named_creature(m_idx, y, x, MON_SHURYUUDAN, FALSE, FALSE, is_friendly(m_ptr), pet);
+						count += summon_named_creature(m_idx, y, x, MON_SHURYUUDAN, p_mode);
 					}
 				}
 				else if(m_ptr->r_idx == MON_LOUSY)
@@ -3585,7 +3588,7 @@ msg_format("%sが魔法で%sを召喚した。", m_name,
 					int num = 2 + randint1(3);
 					for (k = 0; k < num; k++)
 					{
-						count += summon_specific(m_idx, y, x, rlev, SUMMON_LOUSE, TRUE, friendly, pet, FALSE, FALSE);
+						count += summon_specific(m_idx, y, x, rlev, SUMMON_LOUSE, (PM_ALLOW_GROUP | p_mode));
 					}
 				}
 				else if(m_ptr->r_idx == MON_BULLGATES)
@@ -3593,7 +3596,7 @@ msg_format("%sが魔法で%sを召喚した。", m_name,
 					int num = 2 + randint1(3);
 					for (k = 0; k < num; k++)
 					{
-						count += summon_named_creature(m_idx, y, x, 921, FALSE, FALSE, is_friendly(m_ptr), FALSE);
+						count += summon_named_creature(m_idx, y, x, 921, p_mode);
 					}
 				}
 				else if (m_ptr->r_idx == MON_CALDARM)
@@ -3601,7 +3604,7 @@ msg_format("%sが魔法で%sを召喚した。", m_name,
 					int num = randint1(3);
 					for (k = 0; k < num; k++)
 					{
-						count += summon_named_creature(m_idx, y, x, 930, FALSE, FALSE, is_friendly(m_ptr), FALSE);
+						count += summon_named_creature(m_idx, y, x, 930, p_mode);
 					}
 				}
 				else if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
@@ -3609,7 +3612,7 @@ msg_format("%sが魔法で%sを召喚した。", m_name,
 					int num = 2 + randint1(3);
 					for (k = 0; k < num; k++)
 					{
-						count += summon_specific(m_idx, y, x, rlev, SUMMON_GUARDIANS, TRUE, friendly, pet, TRUE, FALSE);
+						count += summon_specific(m_idx, y, x, rlev, SUMMON_GUARDIANS, (PM_ALLOW_GROUP | p_mode | PM_ALLOW_UNIQUE));
 					}
 				}
 				else
@@ -3618,7 +3621,7 @@ msg_format("%sが魔法で%sを召喚した。", m_name,
 
 					for (k = 0; k < 4; k++)
 					{
-						count += summon_specific(m_idx, y, x, rlev, SUMMON_KIN, TRUE, friendly, pet, FALSE, FALSE);
+						count += summon_specific(m_idx, y, x, rlev, SUMMON_KIN, (PM_ALLOW_GROUP | p_mode));
 					}
 				}
 
@@ -3652,9 +3655,9 @@ msg_format("%^sがサイバーデーモンを召喚した！", m_name);
 					}
 				}
 
-				if (friendly)
+				if (is_friendly(m_ptr))
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_CYBER, TRUE, TRUE, pet, FALSE, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_CYBER, (PM_ALLOW_GROUP | p_mode));
 				}
 				else
 				{
@@ -3691,7 +3694,7 @@ msg_format("%^sが魔法で仲間を召喚した！", m_name);
 					}
 				}
 
-				count += summon_specific(m_idx, y, x, rlev, 0, FALSE, friendly, pet, not_pet, FALSE);
+				count += summon_specific(m_idx, y, x, rlev, 0, (p_mode | u_mode));
 
 				if (known && !see_t && count)
 				{
@@ -3725,7 +3728,7 @@ msg_format("%^sが魔法でモンスターを召喚した！", m_name);
 
 				for (k = 0; k < s_num_6; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, 0, TRUE, friendly, pet, not_pet, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | p_mode | u_mode));
 				}
 
 				if (known && !see_t && count)
@@ -3760,7 +3763,7 @@ msg_format("%^sが魔法でアリを召喚した。", m_name);
 
 				for (k = 0; k < s_num_6; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_ANT, TRUE, friendly, pet, FALSE, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_ANT, (PM_ALLOW_GROUP | p_mode));
 				}
 
 				if (known && !see_t && count)
@@ -3795,7 +3798,7 @@ msg_format("%^sが魔法でクモを召喚した。", m_name);
 
 				for (k = 0; k < s_num_6; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_SPIDER, TRUE, friendly, pet, FALSE, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_SPIDER, (PM_ALLOW_GROUP | p_mode));
 				}
 
 				if (known && !see_t && count)
@@ -3830,7 +3833,7 @@ msg_format("%^sが魔法でハウンドを召喚した。", m_name);
 
 				for (k = 0; k < s_num_4; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_HOUND, TRUE, friendly, pet, FALSE, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_HOUND, (PM_ALLOW_GROUP | p_mode));
 				}
 
 				if (known && !see_t && count)
@@ -3865,7 +3868,7 @@ msg_format("%^sが魔法でヒドラを召喚した。", m_name);
 
 				for (k = 0; k < s_num_4; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_HYDRA, TRUE, friendly, pet, FALSE, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_HYDRA, (PM_ALLOW_GROUP | p_mode));
 				}
 
 				if (known && !see_t && count)
@@ -3906,7 +3909,7 @@ msg_format("%^sが魔法で天使を召喚した！", m_name);
 
 				for (k = 0; k < num; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_ANGEL, TRUE, friendly, pet, FALSE, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_ANGEL, (PM_ALLOW_GROUP | p_mode));
 				}
 
 				if (known && !see_t && count)
@@ -3941,7 +3944,7 @@ msg_format("%^sが魔法で混沌の宮廷からデーモンを召喚した！", m_name);
 
 				for (k = 0; k < 1; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_DEMON, TRUE, friendly, pet, FALSE, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_DEMON, (PM_ALLOW_GROUP | p_mode));
 				}
 
 				if (known && !see_t && count)
@@ -3976,7 +3979,7 @@ msg_format("%sが魔法でアンデッドを召喚した。", m_name);
 
 				for (k = 0; k < 1; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_UNDEAD, TRUE, friendly, pet, FALSE, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_UNDEAD, (PM_ALLOW_GROUP | p_mode));
 				}
 
 				if (known && !see_t && count)
@@ -4011,7 +4014,7 @@ msg_format("%^sが魔法でドラゴンを召喚した！", m_name);
 
 				for (k = 0; k < 1; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_DRAGON, TRUE, friendly, pet, FALSE, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_DRAGON, (PM_ALLOW_GROUP | p_mode));
 				}
 
 				if (known && !see_t && count)
@@ -4046,7 +4049,7 @@ msg_format("%sが魔法でアンデッドを召喚した。", m_name);
 
 				for (k = 0; k < s_num_6; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_UNDEAD, TRUE, friendly, pet, not_pet, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_UNDEAD, (PM_ALLOW_GROUP | p_mode | u_mode));
 				}
 
 				if (known && !see_t && count)
@@ -4081,7 +4084,7 @@ msg_format("%^sが魔法で古代ドラゴンを召喚した！", m_name);
 
 				for (k = 0; k < s_num_4; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_DRAGON, TRUE, friendly, pet, not_pet, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_DRAGON, (PM_ALLOW_GROUP | p_mode | u_mode));
 				}
 
 				if (known && !see_t && count)
@@ -4116,7 +4119,7 @@ msg_format("%^sがアンバーの王族を召喚した！", m_name);
 
 				for (k = 0; k < s_num_4; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_AMBERITES, TRUE, FALSE, FALSE, TRUE, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_AMBERITES, (PM_ALLOW_GROUP | p_mode | PM_ALLOW_UNIQUE));
 				}
 
 				if (known && !see_t && count)
@@ -4151,7 +4154,7 @@ msg_format("%^sが魔法で特別な強敵を召喚した！", m_name);
 
 				for (k = 0; k < s_num_4; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_UNIQUE, TRUE, FALSE, FALSE, TRUE, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_UNIQUE, (PM_ALLOW_GROUP | p_mode | PM_ALLOW_UNIQUE));
 				}
 
 				if (known && !see_t && count)

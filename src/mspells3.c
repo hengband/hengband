@@ -738,10 +738,20 @@ static bool cast_learned_spell(int spell, bool success)
 	int             damage = 0;
 	bool    unique_okay = FALSE;
 	bool   pet = success;
-	bool   not_pet = (bool)(!pet);
 	bool   no_trump = FALSE;
+	u32b p_mode, u_mode = 0L, g_mode;
 
-	if (!success || (randint1(50+plev) < plev/10)) unique_okay = TRUE;
+	if (pet)
+	{
+		p_mode = PM_FORCE_PET;
+	}
+	else
+	{
+		p_mode = PM_NO_PET;
+		g_mode = PM_ALLOW_GROUP;
+	}
+
+	if (!success || (randint1(50+plev) < plev/10)) u_mode = PM_ALLOW_UNIQUE;
 
 	/* spell code */
 	switch (spell)
@@ -1563,7 +1573,7 @@ msg_print("援軍を召喚した。");
 #endif
 		for (k = 0;k < 1; k++)
 		{
-			if (summon_kin_player(pet, summon_lev, py, px, FALSE))
+			if (summon_kin_player(summon_lev, py, px, (pet ? PM_FORCE_PET : 0L)))
 			{
 				if (!pet)
 #ifdef JP
@@ -1588,7 +1598,7 @@ msg_print("サイバーデーモンを召喚した！");
 			msg_print("You summon a Cyberdemon!");
 #endif
 		for (k = 0 ;k < 1 ; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_CYBER, FALSE, FALSE, pet, FALSE, not_pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_CYBER, p_mode))
 			{
 				if (!pet)
 #ifdef JP
@@ -1612,7 +1622,7 @@ msg_print("仲間を召喚した。");
 			msg_print("You summon help.");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, 0, FALSE, FALSE, pet, FALSE, not_pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, 0, p_mode))
 			{
 				if (!pet)
 #ifdef JP
@@ -1636,7 +1646,7 @@ msg_print("モンスターを召喚した！");
 			msg_print("You summon monsters!");
 #endif
 		for (k = 0;k < plev / 15 + 2; k++)
-			if(summon_specific((pet ? -1 : 0), py, px, summon_lev, 0, FALSE, FALSE, pet, unique_okay, not_pet))
+			if(summon_specific((pet ? -1 : 0), py, px, summon_lev, 0, (p_mode | u_mode)))
 			{
 				if (!pet)
 #ifdef JP
@@ -1660,7 +1670,7 @@ msg_print("アリを召喚した。");
 			msg_print("You summon ants.");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_ANT, TRUE, FALSE, pet, FALSE, not_pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_ANT, (PM_ALLOW_GROUP | p_mode)))
 			{
 				if (!pet)
 #ifdef JP
@@ -1684,7 +1694,7 @@ msg_print("蜘蛛を召喚した。");
 			msg_print("You summon spiders.");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_SPIDER, TRUE, FALSE, pet, FALSE, not_pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_SPIDER, (PM_ALLOW_GROUP | p_mode)))
 			{
 				if (!pet)
 #ifdef JP
@@ -1708,7 +1718,7 @@ msg_print("ハウンドを召喚した。");
 			msg_print("You summon hounds.");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HOUND, TRUE, FALSE, pet, FALSE, not_pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HOUND, (PM_ALLOW_GROUP | p_mode)))
 			{
 				if (!pet)
 #ifdef JP
@@ -1732,7 +1742,7 @@ msg_print("ヒドラを召喚した。");
 			msg_print("You summon a hydras.");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HYDRA, not_pet, FALSE, pet, FALSE, not_pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HYDRA, (g_mode | p_mode)))
 			{
 				if (!pet)
 #ifdef JP
@@ -1756,7 +1766,7 @@ msg_print("天使を召喚した！");
 			msg_print("You summon an angel!");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_ANGEL, not_pet, FALSE, pet, FALSE, not_pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_ANGEL, (g_mode | p_mode)))
 			{
 				if (!pet)
 #ifdef JP
@@ -1780,7 +1790,7 @@ msg_print("混沌の宮廷から悪魔を召喚した！");
 			msg_print("You summon a demon from the Courts of Chaos!");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_DEMON, not_pet, FALSE, pet, FALSE, not_pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_DEMON, (g_mode | p_mode)))
 			{
 				if (!pet)
 #ifdef JP
@@ -1804,7 +1814,7 @@ msg_print("アンデッドの強敵を召喚した！");
 			msg_print("You summon an undead adversary!");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_UNDEAD, not_pet, FALSE, pet, FALSE, not_pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_UNDEAD, (g_mode | p_mode)))
 			{
 				if (!pet)
 #ifdef JP
@@ -1828,7 +1838,7 @@ msg_print("ドラゴンを召喚した！");
 			msg_print("You summon a dragon!");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_DRAGON, not_pet, FALSE, pet, FALSE, not_pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_DRAGON, (g_mode | p_mode)))
 			{
 				if (!pet)
 #ifdef JP
@@ -1852,7 +1862,7 @@ msg_print("強力なアンデッドを召喚した！");
 			msg_print("You summon a greater undead!");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_UNDEAD, not_pet, FALSE, pet, unique_okay, not_pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_UNDEAD, (g_mode | p_mode | u_mode)))
 			{
 				if (!pet)
 #ifdef JP
@@ -1876,7 +1886,7 @@ msg_print("古代ドラゴンを召喚した！");
 			msg_print("You summon an ancient dragon!");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_DRAGON, not_pet, FALSE, pet, unique_okay, not_pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_DRAGON, (g_mode | p_mode | u_mode)))
 			{
 				if (!pet)
 #ifdef JP
@@ -1900,7 +1910,7 @@ msg_print("アンバーの王族を召喚した！");
 			msg_print("You summon a Lord of Amber!");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_AMBERITES, not_pet, FALSE, pet, unique_okay, not_pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_AMBERITES, (g_mode | p_mode | u_mode)))
 			{
 				if (!pet)
 #ifdef JP
@@ -1924,7 +1934,7 @@ msg_print("特別な強敵を召喚した！");
 			msg_print("You summon a special opponent!");
 #endif
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_UNIQUE, not_pet, FALSE, pet, TRUE, not_pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_UNIQUE, (g_mode | p_mode | PM_ALLOW_UNIQUE)))
 			{
 				count++;
 				if (!pet)
@@ -1935,7 +1945,7 @@ msg_print("Summoned special opponents are angry!");
 #endif
 			}
 		for (k = count;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_UNDEAD, not_pet, FALSE, pet, TRUE, not_pet))
+			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_UNDEAD, (g_mode | p_mode | PM_ALLOW_UNIQUE)))
 			{
 				count++;
 				if (!pet)

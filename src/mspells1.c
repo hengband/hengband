@@ -1238,6 +1238,7 @@ bool make_attack_spell(int m_idx)
 	bool            no_inate = FALSE;
 	bool            do_disi = FALSE;
 	int             dam = 0;
+	u32b mode = 0L;
 	int s_num_6 = (easy_band ? 2 : 6);
 	int s_num_4 = (easy_band ? 1 : 4);
 
@@ -1558,6 +1559,7 @@ msg_format("%^sは呪文を唱えようとしたが失敗した。", m_name);
 			return (TRUE);
 		}
 	}
+
 
 	/* Cast the spell. */
 	switch (thrown_spell)
@@ -3652,7 +3654,7 @@ msg_format("%^sがテレポートした。", m_name);
 				if (p_ptr->inside_arena || p_ptr->inside_battle) return FALSE;
 				for (k = 0; k < 6; k++)
 				{
-					count += summon_specific(m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_BIZARRE1, TRUE, FALSE, FALSE, FALSE, FALSE);
+					count += summon_specific(m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_BIZARRE1, PM_ALLOW_GROUP);
 				}
 				return FALSE;
 				
@@ -3665,10 +3667,10 @@ msg_format("%^sがテレポートした。", m_name);
 
 					if (p_ptr->inside_arena || p_ptr->inside_battle || !summon_possible(m_ptr->fy, m_ptr->fx)) return FALSE;
 					delete_monster_idx(cave[m_ptr->fy][m_ptr->fx].m_idx);
-					summon_named_creature(0, dummy_y, dummy_x, MON_BANOR, FALSE, FALSE, is_friendly(m_ptr), FALSE);
+					summon_named_creature(0, dummy_y, dummy_x, MON_BANOR, mode);
 					m_list[hack_m_idx_ii].hp = dummy_hp;
 					m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
-					summon_named_creature(0, dummy_y, dummy_x, MON_LUPART, FALSE, FALSE, is_friendly(m_ptr), FALSE);
+					summon_named_creature(0, dummy_y, dummy_x, MON_LUPART, mode);
 					m_list[hack_m_idx_ii].hp = dummy_hp;
 					m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
 
@@ -3703,7 +3705,7 @@ msg_format("%^sがテレポートした。", m_name);
 							delete_monster_idx(k);
 						}
 					}
-					summon_named_creature(0, dummy_y, dummy_x, MON_BANORLUPART, FALSE, FALSE, is_friendly(m_ptr), FALSE);
+					summon_named_creature(0, dummy_y, dummy_x, MON_BANORLUPART, mode);
 					m_list[hack_m_idx_ii].hp = dummy_hp;
 					m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
 
@@ -3984,9 +3986,10 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 			if(m_ptr->r_idx == MON_ROLENTO)
 			{
 				int num = 1 + randint1(3);
+
 				for (k = 0; k < num; k++)
 				{
-					count += summon_named_creature(m_idx, y, x, MON_SHURYUUDAN, FALSE, FALSE, is_friendly(m_ptr), is_pet(m_ptr));
+					count += summon_named_creature(m_idx, y, x, MON_SHURYUUDAN, mode);
 				}
 			}
 			else if(m_ptr->r_idx == MON_LOUSY)
@@ -3994,7 +3997,7 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 				int num = 2 + randint1(3);
 				for (k = 0; k < num; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_LOUSE, TRUE, FALSE, FALSE, FALSE, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_LOUSE, PM_ALLOW_GROUP);
 				}
 			}
 			else if(m_ptr->r_idx == MON_BULLGATES)
@@ -4002,7 +4005,7 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 				int num = 2 + randint1(3);
 				for (k = 0; k < num; k++)
 				{
-					count += summon_named_creature(m_idx, y, x, 921, FALSE, FALSE, is_friendly(m_ptr), is_pet(m_ptr));
+					count += summon_named_creature(m_idx, y, x, 921, mode);
 				}
 			}
 			else if (m_ptr->r_idx == MON_CALDARM)
@@ -4010,7 +4013,7 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 				int num = randint1(3);
 				for (k = 0; k < num; k++)
 				{
-					count += summon_named_creature(m_idx, y, x, 930, FALSE, FALSE, is_friendly(m_ptr), is_pet(m_ptr));
+					count += summon_named_creature(m_idx, y, x, 930, mode);
 				}
 			}
 			else if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
@@ -4029,7 +4032,7 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 
 				for (k = 0; k < num; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_GUARDIANS, TRUE, FALSE, FALSE, TRUE, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_GUARDIANS, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 				}
 			}
 			else
@@ -4039,7 +4042,7 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 
 				for (k = 0; k < 4; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_KIN, TRUE, FALSE, FALSE, FALSE, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_KIN, PM_ALLOW_GROUP);
 				}
 			}
 #ifdef JP
@@ -4096,7 +4099,7 @@ else msg_format("%^sが魔法で仲間を召喚した！", m_name);
 
 			for (k = 0; k < 1; k++)
 			{
-				count += summon_specific(m_idx, y, x, rlev, 0, TRUE, FALSE, FALSE, TRUE, FALSE);
+				count += summon_specific(m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 			}
 #ifdef JP
 if (blind && count) msg_print("何かが間近に現れた音がする。");
@@ -4125,7 +4128,7 @@ else msg_format("%^sが魔法でモンスターを召喚した！", m_name);
 
 			for (k = 0; k < s_num_6; k++)
 			{
-				count += summon_specific(m_idx, y, x, rlev, 0, TRUE, FALSE, FALSE, TRUE, FALSE);
+				count += summon_specific(m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 			}
 #ifdef JP
 if (blind && count) msg_print("多くのものが間近に現れた音がする。");
@@ -4154,7 +4157,7 @@ else msg_format("%^sが魔法でアリを召喚した。", m_name);
 
 			for (k = 0; k < s_num_6; k++)
 			{
-				count += summon_specific(m_idx, y, x, rlev, SUMMON_ANT, TRUE, FALSE, FALSE, FALSE, FALSE);
+				count += summon_specific(m_idx, y, x, rlev, SUMMON_ANT, PM_ALLOW_GROUP);
 			}
 #ifdef JP
 if (blind && count) msg_print("多くのものが間近に現れた音がする。");
@@ -4183,7 +4186,7 @@ else msg_format("%^sが魔法でクモを召喚した。", m_name);
 
 			for (k = 0; k < s_num_6; k++)
 			{
-				count += summon_specific(m_idx, y, x, rlev, SUMMON_SPIDER, TRUE, FALSE, FALSE, FALSE, FALSE);
+				count += summon_specific(m_idx, y, x, rlev, SUMMON_SPIDER, PM_ALLOW_GROUP);
 			}
 #ifdef JP
 if (blind && count) msg_print("多くのものが間近に現れた音がする。");
@@ -4212,7 +4215,7 @@ else msg_format("%^sが魔法でハウンドを召喚した。", m_name);
 
 			for (k = 0; k < s_num_4; k++)
 			{
-				count += summon_specific(m_idx, y, x, rlev, SUMMON_HOUND, TRUE, FALSE, FALSE, FALSE, FALSE);
+				count += summon_specific(m_idx, y, x, rlev, SUMMON_HOUND, PM_ALLOW_GROUP);
 			}
 #ifdef JP
 if (blind && count) msg_print("多くのものが間近に現れた音がする。");
@@ -4241,7 +4244,7 @@ else msg_format("%^sが魔法でヒドラを召喚した。", m_name);
 
 			for (k = 0; k < s_num_4; k++)
 			{
-				count += summon_specific(m_idx, y, x, rlev, SUMMON_HYDRA, TRUE, FALSE, FALSE, FALSE, FALSE);
+				count += summon_specific(m_idx, y, x, rlev, SUMMON_HYDRA, PM_ALLOW_GROUP);
 			}
 #ifdef JP
 if (blind && count) msg_print("多くのものが間近に現れた音がする。");
@@ -4277,7 +4280,7 @@ else msg_format("%^sが魔法で天使を召喚した！", m_name);
 
 			for (k = 0; k < num; k++)
 			{
-				count += summon_specific(m_idx, y, x, rlev, SUMMON_ANGEL, TRUE, FALSE, FALSE, FALSE, FALSE);
+				count += summon_specific(m_idx, y, x, rlev, SUMMON_ANGEL, PM_ALLOW_GROUP);
 			}
 
 			if (count < 2)
@@ -4318,7 +4321,7 @@ else msg_format("%^sは魔法で混沌の宮廷から悪魔を召喚した！", m_name);
 
 			for (k = 0; k < 1; k++)
 			{
-				count += summon_specific(m_idx, y, x, rlev, SUMMON_DEMON, TRUE, FALSE, FALSE, FALSE, FALSE);
+				count += summon_specific(m_idx, y, x, rlev, SUMMON_DEMON, PM_ALLOW_GROUP);
 			}
 #ifdef JP
 if (blind && count) msg_print("何かが間近に現れた音がする。");
@@ -4347,7 +4350,7 @@ else msg_format("%^sが魔法でアンデッドの強敵を召喚した！", m_name);
 
 			for (k = 0; k < 1; k++)
 			{
-				count += summon_specific(m_idx, y, x, rlev, SUMMON_UNDEAD, TRUE, FALSE, FALSE, FALSE, FALSE);
+				count += summon_specific(m_idx, y, x, rlev, SUMMON_UNDEAD, PM_ALLOW_GROUP);
 			}
 #ifdef JP
 if (blind && count) msg_print("何かが間近に現れた音がする。");
@@ -4376,7 +4379,7 @@ else msg_format("%^sが魔法でドラゴンを召喚した！", m_name);
 
 			for (k = 0; k < 1; k++)
 			{
-				count += summon_specific(m_idx, y, x, rlev, SUMMON_DRAGON, TRUE, FALSE, FALSE, FALSE, FALSE);
+				count += summon_specific(m_idx, y, x, rlev, SUMMON_DRAGON, PM_ALLOW_GROUP);
 			}
 #ifdef JP
 if (blind && count) msg_print("何かが間近に現れた音がする。");
@@ -4424,7 +4427,7 @@ else msg_format("%^sが魔法で幽鬼戦隊を召喚した！", m_name);
 					}
 					if (!cave_floor_bold(cy, cx)) continue;
 
-					if (summon_named_creature(m_idx, cy, cx, MON_NAZGUL, FALSE, FALSE, is_friendly(m_ptr), is_pet(m_ptr)))
+					if (summon_named_creature(m_idx, cy, cx, MON_NAZGUL, mode))
 					{
 						y = cy;
 						x = cx;
@@ -4467,7 +4470,7 @@ else msg_format("%^sが魔法で強力なアンデッドを召喚した！", m_name);
 
 				for (k = 0; k < s_num_6; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_UNDEAD, TRUE, FALSE, FALSE, TRUE, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 				}
 			}
 			if (blind && count)
@@ -4500,7 +4503,7 @@ else msg_format("%^sが魔法で古代ドラゴンを召喚した！", m_name);
 
 			for (k = 0; k < s_num_4; k++)
 			{
-				count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_DRAGON, TRUE, FALSE, FALSE, TRUE, FALSE);
+				count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_DRAGON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 			}
 			if (blind && count)
 			{
@@ -4534,7 +4537,7 @@ else msg_format("%^sがアンバーの王族を召喚した！", m_name);
 
 			for (k = 0; k < s_num_4; k++)
 			{
-				count += summon_specific(m_idx, y, x, rlev, SUMMON_AMBERITES, TRUE, FALSE, FALSE, TRUE, FALSE);
+				count += summon_specific(m_idx, y, x, rlev, SUMMON_AMBERITES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 			}
 			if (blind && count)
 			{
@@ -4566,20 +4569,20 @@ else msg_format("%^sが魔法で特別な強敵を召喚した！", m_name);
 
 			for (k = 0; k < s_num_4; k++)
 			{
-				count += summon_specific(m_idx, y, x, rlev, SUMMON_UNIQUE, TRUE, FALSE, FALSE, TRUE, FALSE);
+				count += summon_specific(m_idx, y, x, rlev, SUMMON_UNIQUE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 			}
 			if (r_ptr->flags3 & RF3_GOOD)
 			{
 				for (k = count; k < s_num_4; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_ANGEL, TRUE, FALSE, FALSE, TRUE, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_ANGEL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 				}
 			}
 			else
 			{
 				for (k = count; k < s_num_4; k++)
 				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_UNDEAD, TRUE, FALSE, FALSE, TRUE, FALSE);
+					count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 				}
 			}
 			if (blind && count)

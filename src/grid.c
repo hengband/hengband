@@ -382,7 +382,7 @@ void vault_monsters(int y1, int x1, int num)
 
 			/* Place the monster (allow groups) */
 			monster_level = base_level + 2;
-			(void)place_monster(y, x, TRUE, TRUE);
+			(void)place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 			monster_level = base_level;
 		}
 	}

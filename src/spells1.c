@@ -1558,8 +1558,11 @@ msg_print("カチッと音がした！");
 				if (o_ptr->tval == TV_CORPSE)
 				{
 					int i;
-					bool friendly = (!who || is_friendly(&m_list[who]));
-					bool pet = (!who || is_pet(&m_list[who]));
+					u32b mode = 0L;
+
+					if (!who || is_pet(&m_list[who]))
+						mode |= PM_FORCE_PET;
+
 					for (i = 0; i < o_ptr->number ; i++)
 					{
 						if (((o_ptr->sval == SV_CORPSE) && (randint1(100) > 80)) ||
@@ -1575,7 +1578,7 @@ note_kill = "灰になった。";
 							}
 							continue;
 						}
-						else if (summon_named_creature(who, y, x, o_ptr->pval, FALSE, FALSE, friendly, pet))
+						else if (summon_named_creature(who, y, x, o_ptr->pval, mode))
 						{
 #ifdef JP
 note_kill = "生き返った。";
@@ -3411,9 +3414,6 @@ note = "には効果がなかった。";
 		/* Clone monsters (Ignore "dam") */
 		case GF_OLD_CLONE:
 		{
-			bool friendly = FALSE;
-			bool pet = FALSE;
-
 			if (seen) obvious = TRUE;
 
 			if (is_pet(m_ptr) || (r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & (RF7_UNIQUE_7 | RF7_UNIQUE2)))
@@ -3430,7 +3430,7 @@ note = "には効果がなかった。";
 				m_ptr->hp = m_ptr->maxhp;
 
 				/* Attempt to clone. */
-				if (multiply_monster(c_ptr->m_idx, TRUE, friendly, pet))
+				if (multiply_monster(c_ptr->m_idx, TRUE, 0L))
 				{
 #ifdef JP
 note = "が分裂した！";
@@ -6157,17 +6157,13 @@ msg_print("エネルギーのうねりを感じた！");
 				if (!one_in_(6)) break;
 			case 19: case 20: case 21: case 22:
 			{
-				bool pet = FALSE, friendly = FALSE;
+				bool pet = !one_in_(3);
+				u32b mode = PM_ALLOW_GROUP;
 
-				if (one_in_(3))
-				{
-					friendly = TRUE;
-				}
-				else
-				{
-					pet = TRUE;
-				}
-				count += summon_specific((pet ? -1 : 0), py, px, (pet ? p_ptr->lev*2/3+randint1(p_ptr->lev/2) : dun_level), 0, TRUE, friendly, pet, FALSE, (bool)(!pet));
+				if (pet) mode |= PM_FORCE_PET;
+				else mode |= (PM_NO_PET | PM_FORCE_FRIENDLY);
+
+				count += summon_specific((pet ? -1 : 0), py, px, (pet ? p_ptr->lev*2/3+randint1(p_ptr->lev/2) : dun_level), 0, mode);
 				if (!one_in_(6)) break;
 			}
 			case 23: case 24: case 25:

@@ -292,8 +292,10 @@ static bool use_mane(int spell)
 {
 	int             dir;
 	int             plev = p_ptr->lev;
-	bool    unique_okay = FALSE;
-	if (randint1(50+plev) < plev/10) unique_okay = TRUE;
+	u32b mode = (PM_ALLOW_GROUP | PM_FORCE_PET);
+	u32b u_mode = 0L;
+
+	if (randint1(50+plev) < plev/10) u_mode = PM_ALLOW_UNIQUE;
 
 
 	/* spell code */
@@ -1076,7 +1078,7 @@ msg_print("援軍を召喚した。");
 #endif
 		for (k = 0;k < 4; k++)
 		{
-			(void)summon_kin_player(TRUE, plev, target_row, target_col, TRUE);
+			(void)summon_kin_player(plev, target_row, target_col, (PM_FORCE_PET | PM_ALLOW_GROUP));
 		}
 		break;
 	}
@@ -1092,7 +1094,7 @@ msg_print("サイバーデーモンを召喚した！");
 #endif
 		if (max_cyber > 4) max_cyber = 4;
 		for (k = 0;k < max_cyber; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_CYBER, TRUE, TRUE, TRUE, FALSE, FALSE);
+			summon_specific(-1, target_row, target_col, plev, SUMMON_CYBER, mode);
 		break;
 	}
 	case MS_S_MONSTER:
@@ -1105,7 +1107,7 @@ msg_print("仲間を召喚した。");
 			msg_print("You summons help.");
 #endif
 		for (k = 0;k < 1; k++)
-			summon_specific(-1, target_row, target_col, plev, 0, TRUE, TRUE, TRUE, unique_okay, FALSE);
+			summon_specific(-1, target_row, target_col, plev, 0, (mode | u_mode));
 		break;
 	}
 	case MS_S_MONSTERS:
@@ -1118,7 +1120,7 @@ msg_print("モンスターを召喚した！");
 			msg_print("You summons monsters!");
 #endif
 		for (k = 0;k < 6; k++)
-			summon_specific(-1, target_row, target_col, plev, 0, TRUE, TRUE, TRUE, unique_okay, FALSE);
+			summon_specific(-1, target_row, target_col, plev, 0, (mode | u_mode));
 		break;
 	}
 	case MS_S_ANT:
@@ -1131,7 +1133,7 @@ msg_print("アリを召喚した。");
 			msg_print("You summons ants.");
 #endif
 		for (k = 0;k < 6; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_ANT, TRUE, TRUE, TRUE, FALSE, FALSE);
+			summon_specific(-1, target_row, target_col, plev, SUMMON_ANT, mode);
 		break;
 	}
 	case MS_S_SPIDER:
@@ -1144,7 +1146,7 @@ msg_print("蜘蛛を召喚した。");
 			msg_print("You summons spiders.");
 #endif
 		for (k = 0;k < 6; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_SPIDER, TRUE, TRUE, TRUE, FALSE, FALSE);
+			summon_specific(-1, target_row, target_col, plev, SUMMON_SPIDER, mode);
 		break;
 	}
 	case MS_S_HOUND:
@@ -1157,7 +1159,7 @@ msg_print("ハウンドを召喚した。");
 			msg_print("You summons hounds.");
 #endif
 		for (k = 0;k < 4; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_HOUND, TRUE, TRUE, TRUE, FALSE, FALSE);
+			summon_specific(-1, target_row, target_col, plev, SUMMON_HOUND, mode);
 		break;
 	}
 	case MS_S_HYDRA:
@@ -1170,7 +1172,7 @@ msg_print("ヒドラを召喚した。");
 			msg_print("You summons hydras.");
 #endif
 		for (k = 0;k < 4; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_HYDRA, TRUE, TRUE, TRUE, FALSE, FALSE);
+			summon_specific(-1, target_row, target_col, plev, SUMMON_HYDRA, mode);
 		break;
 	}
 	case MS_S_ANGEL:
@@ -1183,7 +1185,7 @@ msg_print("天使を召喚した！");
 			msg_print("You summons angel!");
 #endif
 		for (k = 0;k < 1; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_ANGEL, TRUE, TRUE, TRUE, FALSE, FALSE);
+			summon_specific(-1, target_row, target_col, plev, SUMMON_ANGEL, mode);
 		break;
 	}
 	case MS_S_DEMON:
@@ -1196,7 +1198,7 @@ msg_print("混沌の宮廷から悪魔を召喚した！");
 			msg_print("You summons a demon from the Courts of Chaos!");
 #endif
 		for (k = 0;k < 1; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_DEMON, TRUE, TRUE, TRUE, unique_okay, FALSE);
+			summon_specific(-1, target_row, target_col, plev, SUMMON_DEMON, (mode | u_mode));
 		break;
 	}
 	case MS_S_UNDEAD:
@@ -1209,7 +1211,7 @@ msg_print("アンデッドの強敵を召喚した！");
 			msg_print("You summons an undead adversary!");
 #endif
 		for (k = 0;k < 1; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_UNDEAD, TRUE, TRUE, TRUE, unique_okay, FALSE);
+			summon_specific(-1, target_row, target_col, plev, SUMMON_UNDEAD, (mode | u_mode));
 		break;
 	}
 	case MS_S_DRAGON:
@@ -1222,7 +1224,7 @@ msg_print("ドラゴンを召喚した！");
 			msg_print("You summons dragon!");
 #endif
 		for (k = 0;k < 1; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_DRAGON, TRUE, TRUE, TRUE, unique_okay, FALSE);
+			summon_specific(-1, target_row, target_col, plev, SUMMON_DRAGON, (mode | u_mode));
 		break;
 	}
 	case MS_S_HI_UNDEAD:
@@ -1235,7 +1237,7 @@ msg_print("強力なアンデッドを召喚した！");
 			msg_print("You summons greater undead!");
 #endif
 		for (k = 0;k < 6; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_HI_UNDEAD, TRUE, TRUE, TRUE, unique_okay, FALSE);
+			summon_specific(-1, target_row, target_col, plev, SUMMON_HI_UNDEAD, (mode | u_mode));
 		break;
 	}
 	case MS_S_HI_DRAGON:
@@ -1248,7 +1250,7 @@ msg_print("古代ドラゴンを召喚した！");
 			msg_print("You summons ancient dragons!");
 #endif
 		for (k = 0;k < 4; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_HI_DRAGON, TRUE, TRUE, TRUE, unique_okay, FALSE);
+			summon_specific(-1, target_row, target_col, plev, SUMMON_HI_DRAGON, (mode | u_mode));
 		break;
 	}
 	case MS_S_AMBERITE:
@@ -1261,7 +1263,7 @@ msg_print("アンバーの王族を召喚した！");
 			msg_print("You summons Lords of Amber!");
 #endif
 		for (k = 0;k < 4; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_AMBERITES, TRUE, TRUE, TRUE, TRUE, FALSE);
+			summon_specific(-1, target_row, target_col, plev, SUMMON_AMBERITES, (mode | PM_ALLOW_UNIQUE));
 		break;
 	}
 	case MS_S_UNIQUE:
@@ -1274,9 +1276,9 @@ msg_print("特別な強敵を召喚した！");
 			msg_print("You summons special opponents!");
 #endif
 		for (k = 0;k < 4; k++)
-			if (summon_specific(-1, target_row, target_col, plev, SUMMON_UNIQUE, TRUE, TRUE, TRUE, TRUE, FALSE)) count++;
+			if (summon_specific(-1, target_row, target_col, plev, SUMMON_UNIQUE, (mode | PM_ALLOW_UNIQUE))) count++;
 		for (k = count;k < 4; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_HI_UNDEAD, TRUE, TRUE, TRUE, unique_okay, FALSE);
+			summon_specific(-1, target_row, target_col, plev, SUMMON_HI_UNDEAD, (mode | u_mode));
 		break;
 	}
 	default:

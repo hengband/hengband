@@ -3660,7 +3660,7 @@ msg_print("この花崗岩はとてもおいしい！");
 				int i;
 				for (i = 0; i < 8; i++)
 				{
-					summon_specific(-1, py, px, lvl, SUMMON_BIZARRE1, FALSE, TRUE, TRUE, FALSE, FALSE);
+					summon_specific(-1, py, px, lvl, SUMMON_BIZARRE1, PM_FORCE_PET);
 				}
 			}
 			break;

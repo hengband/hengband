@@ -1211,7 +1211,7 @@ msg_format("%sはもう減速されていない。", m_name);
 		bool success = FALSE;
 
 		for (i = 0; i < 1 + boost/100; i++)
-			if (summon_specific(-1, py, px, plev, SUMMON_PHANTOM, FALSE, TRUE, TRUE, FALSE, FALSE))
+			if (summon_specific(-1, py, px, plev, SUMMON_PHANTOM, PM_FORCE_PET))
 				success = TRUE;
 		if (success)
 		{

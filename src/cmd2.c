@@ -656,7 +656,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 			if (randint1(100)<dun_level)
 				activate_hi_summon(py, px, FALSE);
 			else
-				(void)summon_specific(0, y, x, mon_level, 0, TRUE, FALSE, FALSE, TRUE, TRUE);
+				(void)summon_specific(0, y, x, mon_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 		}
 	}
 
@@ -670,7 +670,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 #endif
 		for (i = 0; i < randint1(3) + 5; i++)
 		{
-			(void)summon_specific(0, y, x, mon_level, SUMMON_ELEMENTAL, TRUE, FALSE, FALSE, TRUE, TRUE);
+			(void)summon_specific(0, y, x, mon_level, SUMMON_ELEMENTAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 		}
 	}
 
@@ -688,7 +688,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 
 		for (i = 0; i < randint1(5) + o_ptr->pval / 5; i++)
 		{
-			(void)summon_specific(0, y, x, mon_level, SUMMON_BIRD, TRUE, FALSE, FALSE, TRUE, TRUE);
+			(void)summon_specific(0, y, x, mon_level, SUMMON_BIRD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 		}
 	}
 
@@ -707,7 +707,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 			for (i = 0; i < randint1(3) + 2; i++)
 			{
 				(void)fire_meteor(-1, GF_FIRE, y, x, 10, 5);
-				(void)summon_specific(0, y, x, mon_level, SUMMON_DEMON, TRUE, FALSE, FALSE, TRUE, TRUE);
+				(void)summon_specific(0, y, x, mon_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			}
 		}
 
@@ -722,7 +722,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 
 			for (i = 0; i < randint1(3) + 2; i++)
 			{
-				(void)summon_specific(0, y, x, mon_level, SUMMON_DRAGON, TRUE, FALSE, FALSE, TRUE, TRUE);
+				(void)summon_specific(0, y, x, mon_level, SUMMON_DRAGON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			}
 		}
 
@@ -737,7 +737,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 
 			for (i = 0; i < randint1(5) + 3; i++)
 			{
-				(void)summon_specific(0, y, x, mon_level, SUMMON_HYBRID, TRUE, FALSE, FALSE, TRUE, TRUE);
+				(void)summon_specific(0, y, x, mon_level, SUMMON_HYBRID, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			}
 		}
 
@@ -752,7 +752,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 
 			for (i = 0; i < randint1(3) + 2; i++)
 			{
-				(void)summon_specific(0, y, x, mon_level, SUMMON_VORTEX, TRUE, FALSE, FALSE, TRUE, TRUE);
+				(void)summon_specific(0, y, x, mon_level, SUMMON_VORTEX, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			}
 		}
 	}
@@ -4482,8 +4482,8 @@ note_dies = "は爆発して粉々になった。";
 	{
 		j = 100;
 
-		if (!(summon_named_creature(0, y, x, q_ptr->pval, FALSE, FALSE, FALSE,
-		      (bool)!(cursed_p(q_ptr)))))
+		if (!(summon_named_creature(0, y, x, q_ptr->pval,
+					    !(cursed_p(q_ptr)) ? PM_FORCE_PET : 0L)))
 #ifdef JP
 msg_print("人形は捻じ曲がり砕け散ってしまった！");
 #else

@@ -2833,7 +2833,7 @@ msg_format("%^sは勇気を取り戻した。", m_name);
 		if ((k < 4) && (!k || !randint0(k * MON_MULT_ADJ)))
 		{
 			/* Try to multiply */
-			if (multiply_monster(m_idx, FALSE, is_friendly(m_ptr), is_pet(m_ptr)))
+			if (multiply_monster(m_idx, FALSE, (is_pet(m_ptr) ? PM_FORCE_PET : 0)))
 			{
 				/* Take note if visible */
 				if (m_ptr->ml)

@@ -1208,7 +1208,7 @@ static void hit_trap(bool break_trap)
 			num = 2 + randint1(3);
 			for (i = 0; i < num; i++)
 			{
-				(void)summon_specific(0, y, x, dun_level, 0, TRUE, FALSE, FALSE, TRUE, TRUE);
+				(void)summon_specific(0, y, x, dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			}
 
 			if (dun_level > randint1(100)) /* No nasty effect for low levels */
