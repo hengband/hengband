@@ -253,116 +253,107 @@ void do_cmd_wield(void)
 
 	/* Check the slot */
 	slot = wield_slot(o_ptr);
-#if 1 /* EASY_RING -- TNB */
 
-	if ((o_ptr->tval == TV_RING) && inventory[INVEN_LEFT].k_idx &&
-		inventory[INVEN_RIGHT].k_idx)
+	switch (o_ptr->tval)
 	{
-		/* Restrict the choices */
-		item_tester_tval = TV_RING;
-		item_tester_no_ryoute = TRUE;
-
-		/* Choose a ring from the equipment only */
-#ifdef JP
-q = "どちらの指輪と取り替えますか?";
-#else
-		q = "Replace which ring? ";
-#endif
-
-#ifdef JP
-s = "おっと。";
-#else
-		s = "Oops.";
-#endif
-
-		if (!get_item(&slot, q, s, (USE_EQUIP)))
-			return;
-	}
-
-#endif /* EASY_RING -- TNB */
-
-	if (((o_ptr->tval == TV_SHIELD) || (o_ptr->tval == TV_CARD) || (o_ptr->tval == TV_CAPTURE)) &&
-		buki_motteruka(INVEN_RARM) && buki_motteruka(INVEN_LARM))
-	{
-		/* Restrict the choices */
-		item_tester_hook = item_tester_hook_melee_weapon;
-		item_tester_no_ryoute = TRUE;
-
-		/* Choose a weapon from the equipment only */
-#ifdef JP
-q = "どちらの武器と取り替えますか?";
-#else
-		q = "Replace which weapon? ";
-#endif
-
-#ifdef JP
-s = "おっと。";
-#else
-		s = "Oops.";
-#endif
-
-		if (!get_item(&slot, q, s, (USE_EQUIP)))
-			return;
-		if (slot == INVEN_RARM)
+	/* Shields and some misc. items */
+	case TV_CAPTURE:
+	case TV_SHIELD:
+	case TV_CARD:
+		if (buki_motteruka(INVEN_RARM) && buki_motteruka(INVEN_LARM))
 		{
-			object_type *or_ptr = &inventory[INVEN_RARM];
-			object_type *ol_ptr = &inventory[INVEN_LARM];
-			object_type *otmp_ptr;
-			object_type object_tmp;
-			char ol_name[MAX_NLEN];
+			/* Restrict the choices */
+			item_tester_hook = item_tester_hook_melee_weapon;
+			item_tester_no_ryoute = TRUE;
 
-			otmp_ptr = &object_tmp;
-
-			object_desc(ol_name, ol_ptr, FALSE, 0);
-
-			object_copy(otmp_ptr, ol_ptr);
-			object_copy(ol_ptr, or_ptr);
-			object_copy(or_ptr, otmp_ptr);
+			/* Choose a weapon from the equipment only */
 #ifdef JP
-			msg_format("%sを%sに構えなおした。", ol_name, left_hander ? "左手" : "右手");
+			q = "どちらの武器と取り替えますか?";
+			s = "おっと。";
 #else
-			msg_format("You wield %s at %s hand.", ol_name, left_hander ? "left" : "right");
+			q = "Replace which weapon? ";
+			s = "Oops.";
 #endif
 
-			slot = INVEN_LARM;
+			if (!get_item(&slot, q, s, (USE_EQUIP))) return;
+			if ((slot == INVEN_RARM) && !cursed_p(&inventory[INVEN_RARM]))
+			{
+				object_type *or_ptr = &inventory[INVEN_RARM];
+				object_type *ol_ptr = &inventory[INVEN_LARM];
+				object_type object_tmp;
+				object_type *otmp_ptr = &object_tmp;
+				char ol_name[MAX_NLEN];
+
+				object_desc(ol_name, ol_ptr, FALSE, 0);
+
+				object_copy(otmp_ptr, ol_ptr);
+				object_copy(ol_ptr, or_ptr);
+				object_copy(or_ptr, otmp_ptr);
+#ifdef JP
+				msg_format("%sを%sに構えなおした。", ol_name, left_hander ? "左手" : "右手");
+#else
+				msg_format("You wield %s at %s hand.", ol_name, left_hander ? "left" : "right");
+#endif
+
+				slot = INVEN_LARM;
+			}
 		}
-	}
+		break;
 
-	/* 二刀流にするかどうか */
-	if ((o_ptr->tval >= TV_DIGGING) && (o_ptr->tval <= TV_SWORD) && (slot == INVEN_LARM))
-	{
-#ifdef JP
-		if (!get_check("二刀流で戦いますか？"))
-#else
-		if (!get_check("Dual wielding? "))
-#endif
+	/* Melee weapons */
+	case TV_DIGGING:
+	case TV_HAFTED:
+	case TV_POLEARM:
+	case TV_SWORD:
+		/* Asking for dual wielding */
+		if (slot == INVEN_LARM)
 		{
-			slot = INVEN_RARM;
+#ifdef JP
+			if (!get_check("二刀流で戦いますか？")) slot = INVEN_RARM;
+#else
+			if (!get_check("Dual wielding? ")) slot = INVEN_RARM;
+#endif
 		}
-	}
 
-	if ((o_ptr->tval >= TV_DIGGING) && (o_ptr->tval <= TV_SWORD) &&
-	    inventory[INVEN_LARM].k_idx &&
-		inventory[INVEN_RARM].k_idx)
-	{
-		/* Restrict the choices */
-		item_tester_hook = item_tester_hook_mochikae;
+		/* Both arms are already used */
+		else if (inventory[INVEN_LARM].k_idx && inventory[INVEN_RARM].k_idx)
+		{
+			/* Restrict the choices */
+			item_tester_hook = item_tester_hook_mochikae;
 
-		/* Choose a ring from the equipment only */
+			/* Choose a hand */
 #ifdef JP
-q = "どちらの手に装備しますか?";
+			q = "どちらの手に装備しますか?";
+			s = "おっと。";
 #else
-		q = "Equip which hand? ";
+			q = "Equip which hand? ";
+			s = "Oops.";
 #endif
 
+			if (!get_item(&slot, q, s, (USE_EQUIP))) return;
+		}
+		break;
+
+	/* Rings */
+	case TV_RING:
+		if (inventory[INVEN_LEFT].k_idx && inventory[INVEN_RIGHT].k_idx)
+		{
+			/* Restrict the choices */
+			item_tester_tval = TV_RING;
+			item_tester_no_ryoute = TRUE;
+
+			/* Choose a ring from the equipment only */
 #ifdef JP
-s = "おっと。";
+			q = "どちらの指輪と取り替えますか?";
+			s = "おっと。";
 #else
-		s = "Oops.";
+			q = "Replace which ring? ";
+			s = "Oops.";
 #endif
 
-		if (!get_item(&slot, q, s, (USE_EQUIP)))
-			return;
+			if (!get_item(&slot, q, s, (USE_EQUIP))) return;
+		}
+		break;
 	}
 
 	/* Prevent wielding into a cursed slot */
@@ -379,7 +370,6 @@ s = "おっと。";
 		msg_format("The %s you are %s appears to be cursed.",
 			   o_name, describe_use(slot));
 #endif
-
 
 		/* Cancel the command */
 		return;
@@ -399,9 +389,7 @@ sprintf(dummy, "本当に%s{呪われている}を使いますか？", o_name);
 		sprintf(dummy, "Really use the %s {cursed}? ", o_name);
 #endif
 
-
-		if (!get_check(dummy))
-			return;
+		if (!get_check(dummy)) return;
 	}
 
 	if ((o_ptr->name1 == ART_STONEMASK) && object_known_p(o_ptr) && (p_ptr->prace != RACE_VAMPIRE) && (p_ptr->prace != RACE_ANDROID))
@@ -418,9 +406,7 @@ sprintf(dummy, "%sを装備すると吸血鬼になります。よろしいですか？", o_name);
 		sprintf(dummy, "Do you become a vampire?");
 #endif
 
-
-		if (!get_check(dummy))
-			return;
+		if (!get_check(dummy)) return;
 	}
 
 	/* Check if completed a quest */
