@@ -7529,6 +7529,9 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 			c_prt(attr, format("%d", r_idx), row + i, 60);
 		}
 
+		/* Erase chars before overwritten by the race letter */
+		Term_erase(69, row + i, 255);
+
 		/* Display symbol */
 		Term_queue_bigchar(70, row + i, r_ptr->x_attr, r_ptr->x_char, 0, 0);
 
