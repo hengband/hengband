@@ -8275,6 +8275,9 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 	/* Attacker's name (prepared before polymorph)*/
 	char who_name[80];
 
+	/* Initialize by null string */
+	who_name[0] = '\0';
+
 	rakubadam_p = 0;
 	rakubadam_m = 0;
 
