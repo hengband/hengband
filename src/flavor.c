@@ -1929,7 +1929,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 #else
 	if ((o_ptr->tval > TV_CAPTURE) && o_ptr->xtra3)
 	{
-		t = object_desc_str(t,format(" of %s the smith",player_name));
+		t = object_desc_str(t,format(" of %s the Smith",player_name));
 	}
 
 	/* Hack -- Append "Artifact" or "Special" names */
