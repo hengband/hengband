@@ -2159,6 +2159,8 @@ bool do_riding(bool force)
 #endif
 		}
 
+		if (p_ptr->action == ACTION_KAMAE) set_action(ACTION_NONE);
+
 		p_ptr->riding = c_ptr->m_idx;
 
 		/* Hack -- remove tracked monster */

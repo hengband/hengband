@@ -1009,6 +1009,15 @@ static bool cmd_racial_power_aux(s32b command)
 #endif
 				return FALSE;
 			}
+			if (p_ptr->riding)
+			{
+#ifdef JP
+				msg_print("乗馬中はできません。");
+#else
+				msg_print("You need to get off a pet.");
+#endif
+				return FALSE;
+			}
 
 			if (command == -3)
 			{

@@ -2029,7 +2029,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 	case CLASS_MONK:
 	case CLASS_FORCETRAINER:
 	case CLASS_BERSERKER:
-		if (empty_hands(TRUE) & EMPTY_HAND_RARM) monk_attack = TRUE;
+		if ((empty_hands(TRUE) & EMPTY_HAND_RARM) && !p_ptr->riding) monk_attack = TRUE;
 		break;
 	}
 
