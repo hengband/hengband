@@ -1039,6 +1039,13 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 				return FALSE;
 			}
 		}
+
+		/* Unidentified */
+		else
+		{
+			/* Not known to be nameless */
+			return FALSE;
+		}
 	}
 
 	/*** Unaware items ***/
