@@ -2043,24 +2043,6 @@ info[i++] = "あなたの手は毒に覆われている。";
 #endif
 
 	}
-	if (p_ptr->special_attack & ATTACK_CONFUSE)
-	{
-#ifdef JP
-info[i++] = "あなたの手は赤く輝いている。";
-#else
-		info[i++] = "Your hands are glowing dull red.";
-#endif
-
-	}
-	if (p_ptr->special_attack & ATTACK_CONFUSE)
-	{
-#ifdef JP
-info[i++] = "あなたの手は赤く輝いている。";
-#else
-		info[i++] = "Your hands are glowing dull red.";
-#endif
-
-	}
 	switch (p_ptr->action)
 	{
 		case ACTION_SEARCH:
