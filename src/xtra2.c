@@ -682,7 +682,7 @@ void monster_death(int m_idx, bool drop_item)
 
 	bool do_gold = (!(r_ptr->flags1 & RF1_ONLY_ITEM));
 	bool do_item = (!(r_ptr->flags1 & RF1_ONLY_GOLD));
-	bool cloned = FALSE;
+	bool cloned = (m_ptr->smart & SM_CLONED) ? TRUE : FALSE;
 	int force_coin = get_coin_type(m_ptr->r_idx);
 
 	object_type forge;
@@ -704,9 +704,6 @@ void monster_death(int m_idx, bool drop_item)
 	/* Get the location */
 	y = m_ptr->fy;
 	x = m_ptr->fx;
-
-	if (m_ptr->smart & SM_CLONED)
-		cloned = TRUE;
 
 	if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 	{
@@ -806,7 +803,7 @@ msg_print("地面に落とされた。");
 	if (one_in_(r_ptr->flags1 & RF1_UNIQUE ? 1 : 4) &&
 	    ((r_ptr->flags9 & RF9_DROP_CORPSE) ||
 	     (r_ptr->flags9 & RF9_DROP_SKELETON)) &&
-	    !(p_ptr->inside_arena || p_ptr->inside_battle || (m_ptr->smart & SM_CLONED) || ((m_ptr->r_idx == today_mon) && is_pet(m_ptr))))
+	    !(p_ptr->inside_arena || p_ptr->inside_battle || cloned || ((m_ptr->r_idx == today_mon) && is_pet(m_ptr))))
 	{
 		/* Assume skeleton */
 		bool corpse = FALSE;
@@ -1772,7 +1769,27 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 		if (!(m_ptr->smart & SM_CLONED))
 		{
 			/* When the player kills a Unique, it stays dead */
-			if (r_ptr->flags1 & RF1_UNIQUE) r_ptr->max_num = 0;
+			if (r_ptr->flags1 & RF1_UNIQUE)
+			{
+				r_ptr->max_num = 0;
+
+				/* Mega-Hack -- Banor & Lupart */
+				if ((m_ptr->r_idx == MON_BANOR) || (m_ptr->r_idx == MON_LUPART))
+				{
+					r_info[MON_BANORLUPART].max_num = 0;
+					r_info[MON_BANORLUPART].r_pkills++;
+					if (r_info[MON_BANORLUPART].r_tkills < MAX_SHORT) r_info[MON_BANORLUPART].r_tkills++;
+				}
+				else if (m_ptr->r_idx == MON_BANORLUPART)
+				{
+					r_info[MON_BANOR].max_num = 0;
+					r_info[MON_BANOR].r_pkills++;
+					if (r_info[MON_BANOR].r_tkills < MAX_SHORT) r_info[MON_BANOR].r_tkills++;
+					r_info[MON_LUPART].max_num = 0;
+					r_info[MON_LUPART].r_pkills++;
+					if (r_info[MON_LUPART].r_tkills < MAX_SHORT) r_info[MON_LUPART].r_tkills++;
+				}
+			}
 
 			/* When the player kills a Nazgul, it stays dead */
 			else if (r_ptr->flags7 & RF7_NAZGUL) r_ptr->max_num--;
@@ -1859,19 +1876,18 @@ msg_format("%^sは恐ろしい血の呪いをあなたにかけた！", m_name);
 				chg_virtue(V_VALOUR, 2);
 		}
 
-		if ((r_ptr->flags1 & RF1_UNIQUE) && ((r_ptr->flags3 & RF3_EVIL) ||
-			(r_ptr->flags3 & RF3_GOOD)))
-			
-			chg_virtue(V_HARMONY, 2);
-
-		if ((r_ptr->flags1 & RF1_UNIQUE) && (r_ptr->flags3 & RF3_GOOD))
+		if (r_ptr->flags1 & RF1_UNIQUE)
 		{
-			chg_virtue(V_UNLIFE, 2);
-			chg_virtue(V_VITALITY, -2);
-		}
+			if (r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)) chg_virtue(V_HARMONY, 2);
 
-		if ((r_ptr->flags1 & RF1_UNIQUE) && one_in_(3))
-			chg_virtue(V_INDIVIDUALISM, -1);
+			if (r_ptr->flags3 & RF3_GOOD)
+			{
+				chg_virtue(V_UNLIFE, 2);
+				chg_virtue(V_VITALITY, -2);
+			}
+
+			if (one_in_(3)) chg_virtue(V_INDIVIDUALISM, -1);
+		}
 
 		if (m_ptr->r_idx == MON_BEGGAR || m_ptr->r_idx == MON_LEPER)
 		{
@@ -1880,7 +1896,6 @@ msg_format("%^sは恐ろしい血の呪いをあなたにかけた！", m_name);
 
 		if ((r_ptr->flags3 & RF3_GOOD) &&
 			((r_ptr->level) / 10 + (3 * dun_level) >= randint1(100)))
-			
 			chg_virtue(V_UNLIFE, 1);
 
 		if (r_ptr->d_char == 'A')
@@ -1919,14 +1934,14 @@ msg_format("%^sは恐ろしい血の呪いをあなたにかけた！", m_name);
 		{
 			chg_virtue(V_VALOUR, -1);
 		}
-		
+
 		for (i = 0; i < 4; i++)
 		{
-			if(r_ptr->blow[i].d_dice != 0) innocent = FALSE; /* Murderer! */
-		
+			if (r_ptr->blow[i].d_dice != 0) innocent = FALSE; /* Murderer! */
+
 			if ((r_ptr->blow[i].effect == RBE_EAT_ITEM)
 				|| (r_ptr->blow[i].effect == RBE_EAT_GOLD))
-			
+
 				thief = TRUE; /* Thief! */
 		}
 
@@ -1939,7 +1954,6 @@ msg_format("%^sは恐ろしい血の呪いをあなたにかけた！", m_name);
 				chg_virtue(V_JUSTICE, 3);
 			else if (1+((r_ptr->level) / 10 + (2 * dun_level))
 				>= randint1(100))
-				
 				chg_virtue(V_JUSTICE, 1);
 		}
 		else if (innocent)
@@ -2030,7 +2044,7 @@ msg_format("%sを葬り去った。", m_name);
 #endif
 
 		}
-		if (r_ptr->flags1 & RF1_UNIQUE && !(m_ptr->smart & SM_CLONED))
+		if ((r_ptr->flags1 & RF1_UNIQUE) && !(m_ptr->smart & SM_CLONED))
 		{
 			for (i = 0; i < MAX_KUBI; i++)
 			{
@@ -2048,22 +2062,6 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 
 		/* Generate treasure */
 		monster_death(m_idx, TRUE);
-		if ((m_ptr->r_idx == MON_BANOR) || (m_ptr->r_idx == MON_LUPART))
-		{
-			r_info[MON_BANORLUPART].max_num = 0;
-			r_info[MON_BANORLUPART].r_pkills++;
-			if (r_info[MON_BANORLUPART].r_tkills < MAX_SHORT) r_info[MON_BANORLUPART].r_tkills++;
-		}
-
-		if (m_ptr->r_idx == MON_BANORLUPART)
-		{
-			r_info[MON_BANOR].max_num = 0;
-			r_info[MON_BANOR].r_pkills++;
-			if (r_info[MON_BANOR].r_tkills < MAX_SHORT) r_info[MON_BANOR].r_tkills++;
-			r_info[MON_LUPART].max_num = 0;
-			r_info[MON_LUPART].r_pkills++;
-			if (r_info[MON_LUPART].r_tkills < MAX_SHORT) r_info[MON_LUPART].r_tkills++;
-		}
 
 		/* Mega hack : replace IKETA to BIKETAL */
 		if ((m_ptr->r_idx == MON_IKETA) &&
