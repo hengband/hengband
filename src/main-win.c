@@ -2890,8 +2890,6 @@ static void init_windows(void)
 
 #ifdef JP
 		strncpy(td->lf.lfFaceName, td->font_want, LF_FACESIZE);
-		td->lf.lfHeight = td->tile_hgt;
-		td->lf.lfWidth  = td->tile_wid;
 		td->lf.lfCharSet = SHIFTJIS_CHARSET;
 		td->lf.lfPitchAndFamily = FIXED_PITCH | FF_DONTCARE;
 		/* Activate the chosen font */
