@@ -586,7 +586,7 @@ errr process_pref_file_command(char *buf)
 			    option_info[i].o_text &&
 			    streq(option_info[i].o_text, buf + 2))
 			{
-				if (alive && 6 == option_info[i].o_page)
+				if (alive && 6 == option_info[i].o_page && !wizard)
 				{
 #ifdef JP
 					msg_format("初期オプションは変更できません! '%s'", buf);	
@@ -626,7 +626,7 @@ errr process_pref_file_command(char *buf)
 			    option_info[i].o_text &&
 			    streq(option_info[i].o_text, buf + 2))
 			{
-				if (alive && 6 == option_info[i].o_page)
+				if (alive && 6 == option_info[i].o_page && !wizard)
 				{
 #ifdef JP
 					msg_format("初期オプションは変更できません! '%s'", buf);	
