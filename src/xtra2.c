@@ -944,9 +944,10 @@ msg_print("地面に落とされた。");
 		/* Reward for "lazy" player */
 		if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
 		{
-			int a_idx;
+			int a_idx = 0;
 
 			if (!drop_chosen_item) break;
+
 			do
 			{
 				switch (randint0(3))
