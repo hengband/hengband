@@ -2187,11 +2187,14 @@ errr Term_erase(int x, int y, int n)
          * 重なった文字の左部分を消去。
          */
         if (n > 0 && (scr_aa[x] & KANJI2))
+#else
+        if (n > 0 && (byte)scr_cc[x] == 255 && scr_aa[x] == 255)
+#endif
         {
                 x--;
                 n++;
         }
-#endif
+
 	/* Scan every column */
 	for (i = 0; i < n; i++, x++)
 	{
