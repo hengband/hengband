@@ -1,4 +1,50 @@
+2003-05-11  Takeshi Mogami  <mogami@cvs>
+
+	* CVSROOT/loginfo 1.2:
+	コミットメールをhengband-cvs@lists.sourceforge.jpへ設定。
+
+2003-05-11  nothere  <nothere@cvs>
+
+	* src/cmd4.c 1.85, src/flavor.c 1.34, src/melee1.c 1.29, src/spells1.c 1.53:
+	BCC++ 5.5.1で英語版をコンパイルする場合の警告の除去.
+
+	* lib/file/crime.txt 1.3: もう読まれていないcrime.txtを削除.
+
+2003-05-10  nothere  <nothere@cvs>
+
+	* src/cmd1.c 1.71, src/generate.c 1.48, src/main-win.c 1.24, src/makefile.bcc 1.8:
+	BCC++ 5.5.1のコンパイル警告設定を追加した上で, 除去可能な警告の除去.
+
+	* src/files.c 1.103, lib/file/a_cursed.txt 1.3, lib/file/a_cursed_j.txt 1.10, lib/file/a_high.txt 1.5, lib/file/a_high_j.txt 1.12, lib/file/a_low.txt 1.7, lib/file/a_low_j.txt 1.11, lib/file/a_med.txt 1.7, lib/file/a_med_j.txt 1.12, lib/file/aname_j.txt 1.2, lib/file/chainswd.txt 1.2, lib/file/chainswd_j.txt 1.2, lib/file/crime.txt 1.2, lib/file/death.txt 1.2, lib/file/death_j.txt 1.3, lib/file/elvish.txt 1.2, lib/file/elvish_j.txt 1.2, lib/file/error.txt 1.2, lib/file/error_j.txt 1.2, lib/file/mondeath.txt 1.3, lib/file/mondeath_j.txt 1.3, lib/file/monfear.txt 1.3, lib/file/monfear_j.txt 1.5, lib/file/monfrien.txt 1.2, lib/file/monfrien_j.txt 1.2, lib/file/monspeak.txt 1.3, lib/file/monspeak_j.txt 1.9, lib/file/rumors.txt 1.3, lib/file/rumors_j.txt 1.3, lib/file/seppuku.txt 1.2, lib/file/seppuku_j.txt 1.2, lib/file/silly.txt 1.2, lib/file/silly_j.txt 1.2, lib/file/w_cursed.txt 1.3, lib/file/w_cursed_j.txt 1.6, lib/file/w_high.txt 1.6, lib/file/w_high_j.txt 1.10, lib/file/w_low.txt 1.4, lib/file/w_low_j.txt 1.15, lib/file/w_med.txt 1.6, lib/file/w_med_j.txt 1.12:
+	get_rnd_line()の仕様を変更し, ランダマイズする各ブロックの先頭に行数
+	を書かなくても動作するように変更.
+	* ブロックの区切りは改行だけの行, もしくはファイル終端とする.
+	* 変更の副作用として, 次のような使い方ができるようになった.
+	  N:1:モンスター1
+	  台詞1
+	  N:2:モンスター2
+	  N:3:モンスター3
+	  台詞2
+	  台詞3
+	  と書いた場合には台詞2と3はモンスター1から3で共通になるが, 台詞1だけ
+	  はモンスター1だけが喋る.
+
+2003-05-10  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/k_info.txt 1.8: 一部訳修正。コメント追加。
+
+2003-05-09  nothere  <nothere@cvs>
+
+	* src/wizard2.c 1.37:
+	^A j でダンジョンだけ指定して階指定をキャンセルすると, 階はそのままでダンジョンだけが
+	変わったことになるバグを修正.
+
+	* src/tables.c 1.60:
+	mbe_info[]の配列要素が正しく{}で括られていなかったので修正.
+
 2003-05-09  Takeshi Mogami  <mogami@cvs>
+
+	* Changelogs 1.66: 更新
 
 	* src/spells2.c 1.67, src/defines.h 1.95, src/dungeon.c 1.98, src/generate.c 1.47, src/monster2.c 1.55:
 	MFLAG_SHOWとMFLAG_MARKを m_ptr->mflag2へ移動して、セーブファイルに保存
@@ -246,6 +292,11 @@
 	全ての現行*bandは Ben のコードベースを使っているのに ZAngが出来た時点
 	で Ben 自身がvanillaのソースのcopyrightに名前を入れてなかったという理
 	由だけで変愚でも名前が抜けているから、とそういう理由。
+
+2003-04-09  root  <root@cvs>
+
+	* CVSROOT/checkoutlist 1.1, CVSROOT/commitinfo 1.1, CVSROOT/config 1.1, CVSROOT/cvswrappers 1.1, CVSROOT/editinfo 1.1, CVSROOT/loginfo 1.1, CVSROOT/modules 1.1, CVSROOT/notify 1.1, CVSROOT/rcsinfo 1.1, CVSROOT/taginfo 1.1, CVSROOT/verifymsg 1.1:
+	initial checkin
 
 2003-04-03  iks  <iks@cvs>
 
