@@ -767,8 +767,9 @@ extern void monster_gain_exp(int m_idx, int s_idx);
 
 /* monster1.c */
 extern void roff_top(int r_idx);
-extern void screen_roff(int r_idx, int remember);
+extern void screen_roff(int r_idx, int mode);
 extern void display_roff(int r_idx);
+extern void output_monster_spoiler(int r_idx, void (*roff_func)(byte attr, cptr str));
 extern void create_name(int type, char *name);
 /* monster1.c (was in monster3.c ??) */
 extern bool monster_quest(int r_idx);
