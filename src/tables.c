@@ -6735,15 +6735,6 @@ option_type option_info[] =
 	/*** Game-Play ***/
 
 #ifdef JP
-	{ &manual_haggle,               FALSE, 3, 1, 0,
-        "manual_haggle",                "店で値切り交渉をする" },
-#else
-	{ &manual_haggle,               FALSE, 3, 1, 0,
-	"manual_haggle",                "Manually haggle in stores" },
-#endif
-
-
-#ifdef JP
 	{ &auto_scum,                   FALSE, 3, 1, 1,
         "auto_scum",                    "階の雰囲気自動選り好み" },
 #else
@@ -7100,6 +7091,15 @@ option_type option_info[] =
 
 
 	/*** Birth Options ***/
+
+#ifdef JP
+	{ &manual_haggle,               FALSE, 6, 1, 0,
+        "manual_haggle",                "店で値切り交渉をする" },
+#else
+	{ &manual_haggle,               FALSE, 6, 1, 0,
+	"manual_haggle",                "Manually haggle in stores" },
+#endif
+
 
 #ifdef JP
 	{ &easy_band,                   FALSE, 6, 6, 31,

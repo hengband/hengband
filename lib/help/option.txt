@@ -231,12 +231,6 @@ Always show list at first when select items    [always_show_list]
 ***** <GamePlay>
 === Option set 3 -- Game playing ===
 
-Manually haggle in stores    [manual_haggle]
-    Usually, auto-haggle is used in stores, resulting in a ten
-    percent sales tax on items which you would have otherwise been
-    forced to haggle for.  If this option is set, auto-haggle is
-    disabled.
-
 Auto-scum for good levels    [auto_scum]
     This is a hack but allows you to force the generation of "good"
     levels in the dungeon. This option may be extremely slow on some
@@ -711,6 +705,12 @@ creating a new character (press '=' while creating the character).
 There is no way to turn them off after the creation is finished!
 Indicators "(*)" after the name of options means that options effect
 estimation of your score.
+
+Manually haggle in stores    [manual_haggle]
+    Usually, auto-haggle is used in stores, resulting in a ten
+    percent sales tax on items which you would have otherwise been
+    forced to haggle for.  If this option is set, auto-haggle is
+    disabled.
 
 Easy Mode (*)    [easy_band]
     This option enables easy game mode for beginners. If this option is

@@ -2936,6 +2936,12 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 	/* No need to haggle */
 	if (noneed || !manual_haggle || (final_ask >= purse))
 	{
+		/* Apply Sales Tax (if needed) */
+		if (!manual_haggle && !noneed)
+		{
+			final_ask -= final_ask / 10;
+		}
+
 		/* No reason to haggle */
 		if (final_ask >= purse)
 		{
@@ -2976,9 +2982,6 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 #endif
 
 			msg_print(NULL);
-
-			/* Apply Sales Tax */
-			final_ask -= final_ask / 10;
 		}
 
 		/* Final price */
