@@ -499,7 +499,7 @@ The Anti-Summoning Corridor (∑Í∑ß¿ÔÀ°)
 Original   : (??) and Leon Marrick
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.0.11
+Updated    : Hengband 1.5.2
 
 
 ***** Begin Hyperlinks
