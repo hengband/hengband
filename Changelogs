@@ -1,4 +1,96 @@
+2002-05-06  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.16, src/cmd1.c 1.35, src/externs.h 1.49, src/spells3.c 1.23:
+	自動破壊と自動刻み機能を、床上や持ち物の鑑定の後にも適用するようにした。
+	並の武器を破壊する設定をしてあれば、鑑定した瞬間に破壊、
+	%刻みの設定をしてあれば*鑑定*した瞬間に耐性刻み、等ができる。
+
+2002-05-04  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/jobjects.txt 1.6, lib/help/objects.txt 1.6, lib/pref/pickpref.prf 1.5, src/cmd3.c 1.18:
+	- 人食いの武器の耐性自動刻みは"/p"にするべきなので修正。
+	- 耐性自動刻みのヘルプ文章修正。特に英語版は文章修正。
+	- "%"の働きは変愚に馴れ親しんだ日本人にしか意味ないので、
+	  英語版のサンプル設定では"%all"を使う事にした。
+
+	* lib/help/joption.txt 1.9, lib/help/option.txt 1.10:
+	ヘルプにdisturb_trap_detectとalert_trap_detectを追加。
+
+	* lib/pref/pref-opt.prf 1.8, src/defines.h 1.42, src/externs.h 1.48, src/generate.c 1.21, src/spells2.c 1.22, src/tables.c 1.32, src/types.h 1.18, src/variable.c 1.22, src/cmd1.c 1.34:
+	- CAVE_DETECTフラグを新設、トラップ感知範囲内にいる事を示す。(ただし、感知範囲
+	  の境界部分は感知してあってもCAVE_DETECTを付けない、一歩歩いたら外だから)
+	- alert_trap_detectオプションを新設。範囲外に出たときのメッセージの有無を設定。
+
+	* src/generate.c 1.20: static付け忘れ。
+
+	* src/cmd1.c 1.33, src/cmd2.c 1.23, src/defines.h 1.41, src/generate.c 1.19, src/hissatsu.c 1.8, src/melee2.c 1.22, src/monster2.c 1.22, src/spells1.c 1.16, src/spells2.c 1.21:
+	CAVE_FLOORやCAVE_MASKの無駄な操作を削除。ダンジョン生成中だけ使用するフラグ
+	は生成が終ったら全てクリアするようにした。今後は、CAVE_MASKに含まれるフラグは
+	ダンジョン生成の後なら別のフラグとして利用できる。
+
+	* src/maid-x11.c 1.2:
+	せっかくmaid-x11.cに入っている、ガンマ・コレクションのコードが設定値を
+	保存するべき変数がローカル変数にされていて機能が働いていなかったので静
+	的変数にして使えるように修正。環境変数 ANGBAND_X11_GAMMA に 1〜255の値
+	を入れるとタイルの色(コントラスト？)が変わる
+
+2002-05-03  Takeshi Mogami  <mogami@cvs>
+
+	* src/cave.c 1.41, src/main-win.c 1.14, src/z-term.c 1.14:
+	- 二倍幅ASCII表示で、漢字の2byte目のattr(色指定)を勝手に255に決め打ちして
+	  2byte目の識別に使っていたら、screen dumpでそれを素直に出力して文字化け
+	  していたので、修正。255にせず、0xf0を加えるだけにした。
+	- さらに、win版で二倍幅豆腐の内部コードに使っていた「Å」もそのまま出力
+	  されてしまいそうなので、代りに「■」を使う事にした。
+	  本当は出力時に「＃」に置き変えるのが一番いいが、なんかコードの都合上
+	  大がかりなハックになってしまうのでやめておく。
+
+	* src/autopick.c 1.15:
+	前回の変更でエンバグしてたので修正。
+
+2002-05-02  Takeshi Mogami  <mogami@cvs>
+
+	* autopick.txt 1.7, autopick_eng.txt 1.9, readme.txt 1.8, readme_eng.txt 1.8:
+	自動拾いエディタの説明追加。
+
+	* src/externs.h 1.47, src/object1.c 1.31, src/xtra2.c 1.29:
+	easy_floorで、
+	- lookコマンド使用中や移動中に床上の23個を越えるアイテム山の数を正しく表示。
+	- 'x'で表示する床上のアイテムリストもリターンキーでスクロールするようにした。
+
+	* src/hissatsu.c 1.7:
+	百人斬りで最初に35点、さらに斬り続けた回数x8減って、さらに終了後にまた
+	35点減っていたので、最後の35点は減らないようにした。
+
+2002-04-30  _nothere  <_nothere@cvs>
+
+	* lib/edit/k_info_j.txt 1.23, lib/file/news.txt 1.7, lib/file/news_j.txt 1.6, src/cmd2.c 1.22, src/cmd6.c 1.20, src/defines.h 1.40, src/dungeon.c 1.37, src/externs.h 1.46, src/generate.c 1.18, src/init1.c 1.33, src/load.c 1.25, src/monster1.c 1.14, src/monster2.c 1.21, src/mspells1.c 1.21, src/mspells2.c 1.16, src/rooms.c 1.13, src/save.c 1.12, src/spells1.c 1.15, src/spells2.c 1.20, src/spells3.c 1.22, src/spellstips.h 1.16, src/types.h 1.17, src/wizard2.c 1.15, src/xtra2.c 1.28:
+	branch-_nothere-subalignをマージ.
+
+2002-04-30  Takeshi Mogami  <mogami@cvs>
+
+	* src/object1.c 1.30:
+	コマンドメニュー中でアイテムを選択中に床上のアイテムを選択する際の不具合修正。
+	- easy_floorがオフでもメニュー使用中はget_item_floor()を使うようにした。
+	- 4 or 6 for floor 等の表示を英語版で忘れていたので追加。
+	- 日本語版でも一箇所だけ表示が間違っていたのを守勢。コード整理。
+
+	* src/object1.c 1.29:
+	easy_floorでアイテムを床から選択するときリターンキーでスクロールするようにした。
+	23個を越えるアイテムがあるときに使う。
+
+	* src/cave.c 1.40, src/defines.h 1.39, src/xtra1.c 1.35:
+	光源半径、☆指輪とドワーフの頸飾りを付ければ最大値が14だったので14に修正。
+
+	* lib/help/helpinfo.txt 1.5, lib/help/jbirth.hlp 1.5, lib/help/jhelpinfo.txt 1.4:
+	ヘルプの使い方の説明を更新。jk28で上下に移動、等。
+
+	* src/cave.c 1.39, src/defines.h 1.38, src/xtra1.c 1.34:
+	光源の半径の最大値を11に拡張。配列溢れがない事をdefine.hのコメントに記述。
+
 2002-04-29  Takeshi Mogami  <mogami@cvs>
+
+	* Changelogs 1.40: 更新
 
 	* lib/edit/f_info_j.txt 1.5: museum → Museum
 
