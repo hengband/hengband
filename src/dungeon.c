@@ -5060,7 +5060,7 @@ msg_print("何か変わった気がする！");
 #ifdef JP
 				msg_print("餌だけ食われてしまった！くっそ〜！");
 #else
-				msg_print("Damn! The fish took a bait away!");
+				msg_print("Damn!  The fish stole your bait!");
 #endif
 			}
 			disturb(0, 0);

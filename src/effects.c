@@ -99,7 +99,7 @@ void set_action(int typ)
 #ifdef JP
 			msg_print("注意深く歩き始めた。");
 #else
-			msg_print("You began to walk carefully.");
+			msg_print("You begin to walk carefully.");
 #endif
 			p_ptr->redraw |= (PR_SPEED);
 			break;
@@ -109,7 +109,7 @@ void set_action(int typ)
 #ifdef JP
 			msg_print("学習を始めた。");
 #else
-			msg_print("You began Learning");
+			msg_print("You begin Learning");
 #endif
 			break;
 		}
@@ -118,7 +118,7 @@ void set_action(int typ)
 #ifdef JP
 			msg_print("水面に糸を垂らした．．．");
 #else
-			msg_print("You began fishing...");
+			msg_print("You begin fishing...");
 #endif
 			break;
 		}
@@ -127,7 +127,7 @@ void set_action(int typ)
 #ifdef JP
 			msg_print("足が羽のように軽くなった。");
 #else
-			msg_print("You began to walk extremely fast.");
+			msg_print("You begin to walk extremely fast.");
 #endif
 			break;
 		}
@@ -250,7 +250,7 @@ bool set_mimic(int v, int p, bool do_dec)
 #ifdef JP
                         msg_print("自分の体が変わってゆくのを感じた。");
 #else
-                        msg_print("You feel that your body change.");
+                        msg_print("You feel that your body changes.");
 #endif
                         p_ptr->mimic_form=p;
 			notice = TRUE;
@@ -863,7 +863,7 @@ bool set_lightspeed(int v, bool do_dec)
 #ifdef JP
 msg_print("非常に素早く動けるようになった！");
 #else
-			msg_print("You feel yourself moving faster!");
+			msg_print("You feel yourself moving extremely faster!");
 #endif
 
 			notice = TRUE;
@@ -1067,7 +1067,7 @@ bool set_tsubureru(int v, bool do_dec)
 #ifdef JP
 msg_print("横に伸びた。");
 #else
-			msg_print("You have expand horizontally.");
+			msg_print("Your body expands horizontally.");
 #endif
 
 			notice = TRUE;
@@ -1082,7 +1082,7 @@ msg_print("横に伸びた。");
 #ifdef JP
 msg_print("もう横に伸びていない。");
 #else
-			msg_print("You are no longer expanded.");
+			msg_print("Your body returns to normal.");
 #endif
 
 			notice = TRUE;
@@ -1137,7 +1137,7 @@ bool set_magicdef(int v, bool do_dec)
 #ifdef JP
 			msg_print("魔法の防御力が増したような気がする。");
 #else
-			msg_print("You feel your magical vulnerability diminish.");
+			msg_print("You feel more resistant to magic.");
 #endif
 
 			notice = TRUE;
@@ -1152,7 +1152,7 @@ bool set_magicdef(int v, bool do_dec)
 #ifdef JP
 			msg_print("魔法の防御力が元に戻った。");
 #else
-			msg_print("Your magical defences fall to their normal values.");
+			msg_print("You feel less resistant to magic.");
 #endif
 
 			notice = TRUE;
@@ -1820,7 +1820,7 @@ bool set_tim_infra(int v, bool do_dec)
 #ifdef JP
 msg_print("目がランランと輝き始めた！");
 #else
-			msg_print("Your eyes began to tingle!");
+			msg_print("Your eyes begin to tingle!");
 #endif
 
 			notice = TRUE;
@@ -1892,7 +1892,7 @@ bool set_tim_regen(int v, bool do_dec)
 #ifdef JP
 msg_print("回復力が上がった！");
 #else
-			msg_print("You began to regenerate quicker!");
+			msg_print("You feel yourself regenerating quickly!");
 #endif
 
 			notice = TRUE;
@@ -1907,7 +1907,7 @@ msg_print("回復力が上がった！");
 #ifdef JP
 msg_print("素早く回復する感じがなくなった。");
 #else
-			msg_print("You no longer regenerate quicker.");
+			msg_print("You feel yourself regenerating slowly.");
 #endif
 
 			notice = TRUE;
@@ -1961,7 +1961,7 @@ bool set_tim_stealth(int v, bool do_dec)
 #ifdef JP
 msg_print("足音が小さくなった！");
 #else
-			msg_print("You began to walk silently!");
+			msg_print("You begin to walk silently!");
 #endif
 
 			notice = TRUE;
@@ -2099,7 +2099,7 @@ bool set_tim_ffall(int v, bool do_dec)
 #ifdef JP
 msg_print("体が宙に浮き始めた。");
 #else
-			msg_print("You began to fly!");
+			msg_print("You begin to fly!");
 #endif
 
 			notice = TRUE;
@@ -2114,7 +2114,7 @@ msg_print("体が宙に浮き始めた。");
 #ifdef JP
 msg_print("もう宙に浮かべなくなった。");
 #else
-			msg_print("You no longer flying.");
+			msg_print("You stop flying.");
 #endif
 
 			notice = TRUE;
@@ -2168,7 +2168,7 @@ bool set_tim_sh_touki(int v, bool do_dec)
 #ifdef JP
 msg_print("体が闘気のオーラで覆われた。");
 #else
-			msg_print("You have enveloped by energy aura!");
+			msg_print("You have enveloped by the aura of the Force!");
 #endif
 
 			notice = TRUE;
@@ -2183,7 +2183,7 @@ msg_print("体が闘気のオーラで覆われた。");
 #ifdef JP
 msg_print("闘気が消えた。");
 #else
-			msg_print("Aura of Force disappeared.");
+			msg_print("Aura of the Force disappeared.");
 #endif
 
 			notice = TRUE;
