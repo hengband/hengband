@@ -269,13 +269,18 @@ Weapon of Force
 
 Weapon of Slay Animal
     This weapon is especially effective against natural creatures and
-    will inflict damage with two times the normal dice against such
+    will inflict damage with 2.5 times the normal dice against such
     creatures.
 
 Weapon of Slay Evil
     This weapon is especially effective against evil creatures and
     will inflict damage with two times the normal dice against such
     creatures.
+
+Weapon of Slay Human
+    This weapon is especially effective against human type beings and
+    will inflict damage with 2.5 times the normal dice against such
+    beings.
 
 Weapon of Slay Undead
     This weapon is especially effective against undead creatures and
@@ -311,47 +316,61 @@ Weapon of Slay Dragon
 
 Weapon of *Slay* Animal
     This weapon is especially effective against natural creatures and
-    will inflict damage with two times the normal dice against such
-    creatures. It will also increase your intelligence and allow you
+    will inflict damage with four times the normal dice against such
+    creatures, and allows wielder to sense the presence of natutal
+    creatures.  It will also increase your intelligence and allow you
     to regenerate hit-points and mana faster.
 
 Weapon of *Slay* Evil
     This weapon is especially effective against evil creatures and
     will inflict damage with two times the normal dice against such
-    creatures. It will increase your wisdom and will also be a blessed
-    blade.
+    creatures, and allows wielder to sense the presence of evil
+    creatures.  It will increase your wisdom and will also be a
+    blessed blade.
+
+Weapon of *Slay* Human
+    This weapon is especially effective against human type beings and
+    will inflict damage with four times the normal dice against such
+    beings, and allows wielder to sense the presence of Humans.  It
+    will increase your dexterity.
 
 Weapon of *Slay* Undead
     This weapon is especially effective against undead creatures and
-    will inflict damage with three times the normal dice against such
-    creatures. It will increase your wisdom and will also provide
+    will inflict damage with five times the normal dice against such
+    creatures, and allows wielder to sense the presence of undead
+    creatures.  It will increase your wisdom and will also provide
     resistance to both nether and life-draining attacks. Finally, it
     will allow you to see invisible creatures.
 
 Weapon of *Slay* Demon
     This weapon is especially effective against demonic creatures and
-    will inflict damage with three times the normal dice against such
-    creatures. It will also increase your intelligence.
+    will inflict damage with five times the normal dice against such
+    creatures, and allows wielder to sense the presence of demonic
+    creatures.  It will also increase your intelligence.
 
 Weapon of *Slay* Orc
     This weapon is especially effective against orcs and will inflict
-    damage with three times the normal dice against such creatures. It
-    will also increase your dexterity.
+    damage with five times the normal dice against such creatures, and
+    allows wielder to sense the presence of orcs.  It will also
+    increase your dexterity.
 
 Weapon of *Slay* Troll
     This weapon is especially effective against trolls and will
-    inflict damage with three times the normal dice against such
-    creatures. It will also increase your strength.
+    inflict damage with five times the normal dice against such
+    creatures, and allows wielder to sense the presence of trolls.  It
+    will also increase your strength.
 
 Weapon of *Slay* Giant
     This weapon is especially effective against giant humanoids and
-    will inflict damage with three times the normal dice against such
-    creatures. It will also increase your strength.
+    will inflict damage with five times the normal dice against such
+    creatures, and allows wielder to sense the presence of giant
+    humanoids.  It will also increase your strength.
 
 Weapon of *Slay* Dragon
     This weapon is especially effective against dragons and will
     inflict damage with five times the normal dice against such
-    creatures. It will also increase your constitution.
+    creatures, and allows wielder to sense the presence of dragons.
+    It will also increase your constitution.
 
 
 --- Missile Launchers ---
