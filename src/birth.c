@@ -5373,10 +5373,10 @@ static void edit_history(void)
 	display_player(1);
 #ifdef JP
 	c_put_str(TERM_L_GREEN, "(キャラクターの生い立ち - 編集モード)", 11, 20);
-	put_str("[ 2/4/6/8で移動、Enterで終了、Ctrl-Fでファイル読み込み ]", 17, 10);
+	put_str("[ カーソルキーで移動、Enterで終了、Ctrl-Aでファイル読み込み ]", 17, 10);
 #else
 	c_put_str(TERM_L_GREEN, "(Character Background - Edit Mode)", 11, 20);
-	put_str("[ 2/4/6/8 for Move, Enter for End, Ctrl-F for Read pref ]", 17, 10);
+	put_str("[ Cursor key for Move, Enter for End, Ctrl-A for Read pref ]", 17, 10);
 #endif
 
 	while (TRUE)
@@ -5397,7 +5397,16 @@ static void edit_history(void)
 
 		c = inkey();
 
-		if (c == '8')
+		/* Cursor key macroes to direction command */
+		if (strlen(inkey_macro_trigger_string) > 1)
+		{
+			if (c == '8') c = KTRL('P');
+			else if (c == '2') c = KTRL('N');
+			else if (c == '6') c = KTRL('F');
+			else if (c == '4') c = KTRL('B');
+		}
+
+		if (c == KTRL('P'))
 		{
 			y--;
 			if (y < 0) y = 3;
@@ -5405,7 +5414,7 @@ static void edit_history(void)
 			if ((x > 0) && (iskanji2(p_ptr->history[y], x-1))) x--;
 #endif
 		}
-		else if (c == '2')
+		else if (c == KTRL('N'))
 		{
 			y++;
 			if (y > 3) y = 0;
@@ -5413,7 +5422,7 @@ static void edit_history(void)
 			if ((x > 0) && (iskanji2(p_ptr->history[y], x-1))) x--;
 #endif
 		}
-		else if (c == '6')
+		else if (c == KTRL('F'))
 		{
 #ifdef JP
 			if (iskanji2(p_ptr->history[y], x)) x++;
@@ -5425,7 +5434,7 @@ static void edit_history(void)
 				if (y < 3) y++;
 			}
 		}
-		else if (c == '4')
+		else if (c == KTRL('B'))
 		{
 			x--;
 			if (x < 0)
@@ -5469,7 +5478,7 @@ static void edit_history(void)
 			}
 			break;
 		}
-		else if (c == KTRL('F'))
+		else if (c == KTRL('A'))
 		{
 			if (do_cmd_histpref())
 			{
