@@ -877,7 +877,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 	c_ptr = &cave[y][x];
 
 	/* Feature code */
-	feat = c_ptr->feat;
+	feat = c_ptr->mimic ? c_ptr->mimic : c_ptr->feat;
 
 	/* Floors (etc) */
 	if ((feat <= FEAT_INVIS) || (feat == FEAT_DIRT) || (feat == FEAT_GRASS))
