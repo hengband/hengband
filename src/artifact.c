@@ -3099,7 +3099,7 @@ void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
 /*
  * Create the artifact of the specified number
  */
-void create_named_art(int a_idx, int y, int x)
+bool create_named_art(int a_idx, int y, int x)
 {
 	object_type forge;
 	object_type *q_ptr;
@@ -3111,13 +3111,13 @@ void create_named_art(int a_idx, int y, int x)
 	q_ptr = &forge;
 
 	/* Ignore "empty" artifacts */
-	if (!a_ptr->name) return;
+	if (!a_ptr->name) return FALSE;
 
 	/* Acquire the "kind" index */
 	i = lookup_kind(a_ptr->tval, a_ptr->sval);
 
 	/* Oops */
-	if (!i) return;
+	if (!i) return FALSE;
 
 	/* Create the artifact */
 	object_prep(q_ptr, i);
@@ -3145,6 +3145,12 @@ void create_named_art(int a_idx, int y, int x)
 
 	random_artifact_resistance(q_ptr, a_ptr);
 
+	/*
+	 * drop_near()内で普通の固定アーティファクトが重ならない性質に依存する.
+	 * 仮に2個以上存在可能かつ装備品以外の固定アーティファクトが作成されれば
+	 * この関数の返り値は信用できなくなる.
+	 */
+
 	/* Drop the artifact from heaven */
-	(void)drop_near(q_ptr, -1, y, x);
+	return drop_near(q_ptr, -1, y, x) ? TRUE : FALSE;
 }

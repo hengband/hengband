@@ -1454,7 +1454,7 @@ extern void one_ability(object_type *o_ptr);
 extern bool create_artifact(object_type *o_ptr, bool a_scroll);
 extern bool activate_random_artifact(object_type * o_ptr);
 extern void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr);
-extern void create_named_art(int a_idx, int y, int x);
+extern bool create_named_art(int a_idx, int y, int x);
 
 /* scores.c */
 extern void display_scores_aux(int from, int to, int note, high_score *score);
