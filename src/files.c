@@ -3962,7 +3962,7 @@ void display_player(int mode)
 
 
 	/* XXX XXX XXX */
-	if ((p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3) && skip_mutations)
+	if ((p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3) && display_mutations)
 		mode = (mode % 7);
 	else
 		mode = (mode % 6);

@@ -40,7 +40,7 @@ Y:show_choices
 X:plain_pickup
 X:player_symbols
 Y:equippy_chars
-X:skip_mutations
+X:display_mutations
 Y:plain_descriptions
 X:center_player
 Y:center_running

@@ -4441,11 +4441,11 @@ static int see_nothing(int dir, int y, int x)
  * stop at 1. Another run right and down will enter the corridor
  * and make the corner, stopping at the 2.
  *
- * #@x    1
+ * ##################
+ * o@x       1
  * ########### ######
- * 2        #
+ * #2          #
  * #############
- * #
  *
  * After any move, the function area_affect is called to
  * determine the new surroundings, and the direction of
@@ -4458,10 +4458,10 @@ static int see_nothing(int dir, int y, int x)
  * respectively) to which you were not previously adjacent,
  * marked as '!' in the diagrams below.
  *
- * ...!   ...
- * .o@!   .o.!
- * ...!   ..@!
- * !!!
+ *   ...!              ...
+ *   .o@!  (normal)    .o.!  (diagonal)
+ *   ...!  (east)      ..@!  (south east)
+ *                      !!!
  *
  * You STOP if any of the new squares are interesting in any way:
  * for example, if they contain visible monsters or treasure.
@@ -4488,20 +4488,21 @@ static int see_nothing(int dir, int y, int x)
  * We assign "option" to the straight-on grid, and "option2" to the
  * diagonal grid, and "check_dir" to the grid marked 's'.
  *
- * .s
+ * ##s
  * @x?
- * #?
+ * #.?
  *
- * If they are both seen to be closed, then it is seen that no
- * benefit is gained from moving straight. It is a known corner.
- * To cut the corner, go diagonally, otherwise go straight, but
- * pretend you stepped diagonally into that next location for a
- * full view next time. Conversely, if one of the ? squares is
- * not seen to be closed, then there is a potential choice. We check
- * to see whether it is a potential corner or an intersection/room entrance.
- * If the square two spaces straight ahead, and the space marked with 's'
- * are both blank, then it is a potential corner and enter if find_examine
- * is set, otherwise must stop because it is not a corner.
+ * If they are both seen to be closed, then it is seen that no benefit
+ * is gained from moving straight. It is a known corner.  To cut the
+ * corner, go diagonally, otherwise go straight, but pretend you
+ * stepped diagonally into that next location for a full view next
+ * time. Conversely, if one of the ? squares is not seen to be closed,
+ * then there is a potential choice. We check to see whether it is a
+ * potential corner or an intersection/room entrance.  If the square
+ * two spaces straight ahead, and the space marked with 's' are both
+ * unknown space, then it is a potential corner and enter if
+ * find_examine is set, otherwise must stop because it is not a
+ * corner.
  */
 
 
@@ -4756,7 +4757,12 @@ static bool run_test(void)
 				case FEAT_MAGMA_H:
 				case FEAT_QUARTZ_H:
 
+				/* Known treasure (almost uninteresting) */
+				case FEAT_MAGMA_K:
+				case FEAT_QUARTZ_K:
+
 				/* Walls */
+				case FEAT_RUBBLE:
 				case FEAT_WALL_EXTRA:
 				case FEAT_WALL_INNER:
 				case FEAT_WALL_OUTER:

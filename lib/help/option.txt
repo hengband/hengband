@@ -149,7 +149,7 @@ Display 'equippy' chars    [equippy_chars]
     equipment on the main screen.  The 'equippy' chars will use the
     standard symbols of the respective items.
 
-Display mutations in 'C'haracter Display    [skip_mutations]
+Display mutations in 'C'haracter Display    [display_mutations]
     Normally, if your character has gained mutations, they will be
     displayed in an extra 'h' mode window under the 'C'haracter
     Description command. Some players may wish to view mutations only

@@ -248,7 +248,7 @@ extern bool powerup_home;
 extern bool change_numeral;
 extern bool send_score;
 
-extern bool skip_mutations;     /* Skip mutations screen in 'C'haracter display */
+extern bool display_mutations;     /* Skip mutations screen in 'C'haracter display */
 extern bool plain_descriptions;
 extern bool stupid_monsters;
 extern bool confirm_destroy;

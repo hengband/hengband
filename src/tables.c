@@ -6536,11 +6536,11 @@ option_type option_info[] =
 
 
 #ifdef JP
-	{ &skip_mutations,              FALSE, 2, 5, 0,
-	"skip_mutations",               "'C'コマンドで突然変異を表示する" },
+	{ &display_mutations,              FALSE, 2, 5, 0,
+	"display_mutations",               "'C'コマンドで突然変異を表示する" },
 #else
-	{ &skip_mutations,              FALSE, 2, 5, 0,
-	"skip_mutations",               "Display mutations in 'C'haracter Display" },
+	{ &display_mutations,              FALSE, 2, 5, 0,
+	"display_mutations",               "Display mutations in 'C'haracter Display" },
 #endif
 
 
@@ -6802,7 +6802,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &find_cut,                    FALSE, 4, 0, 18,
-	"find_cut",                     "既知の曲り角は通過する" },
+	"find_cut",                     "曲り角を斜めに最短距離で通過する" },
 #else
 	{ &find_cut,                    FALSE, 4, 0, 18,
 	"find_cut",                     "Run past known corners" },
@@ -6811,7 +6811,7 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &find_examine,                TRUE,  4, 0, 19,
-	"find_examine",                 "曲り角かもしれない場合通過する" },
+	"find_examine",                 "通路が暗い時になるべく曲り角と仮定して通過する" },
 #else
 	{ &find_examine,                TRUE,  4, 0, 19,
 	"find_examine",                 "Run into potential corners" },
@@ -6983,10 +6983,10 @@ option_type option_info[] =
 
 
 #ifdef JP
-	{ &hilite_player,               TRUE,  5, 1, 27,
+	{ &hilite_player,               FALSE,  5, 1, 27,
 	"hilite_player",                "プレイヤーにカーソルを合わせる" },
 #else
-	{ &hilite_player,               TRUE,  5, 1, 27,
+	{ &hilite_player,               FALSE,  5, 1, 27,
 	"hilite_player",                "Hilite the player with the cursor" },
 #endif
 

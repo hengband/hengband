@@ -1,5 +1,34 @@
 2002-04-28  Takeshi Mogami  <mogami@cvs>
 
+	* readme.txt 1.7, readme_eng.txt 1.7:
+	コマンドリストに自動拾いエディタ(_)を追加。
+
+	* lib/help/joption.txt 1.7, lib/help/option.txt 1.8, lib/pref/pref-opt.prf 1.5, src/cmd3.c 1.17, src/dungeon.c 1.36, src/externs.h 1.43, src/flavor.c 1.12, src/tables.c 1.30, src/variable.c 1.20:
+	- オプション名confirm_wear の変数名が wear_confirm だったので、オプション名に合わせた。
+	- 否定形のオプション名をちゃんと修正
+	  avoid_abort → check_abort、old_way_of_kaz → change_numeral
+	- target_petはデフォルトでoffに修正。
+
+	* lib/pref/pref-opt.prf 1.4, src/tables.c 1.29:
+	pref-optのオプションのデフォルト設定の並びをちゃんと変愚に合せた。
+	pref-optで抜けていたオプションいくつかもちゃんと補完。
+	table.cのデフォルトと食いちがっていた設定は一致させて、一部table.cの方を変えた。
+
+2002-04-28  _nothere  <_nothere@cvs>
+
+	* src/spells3.c 1.21:
+	カオス属性で敵の変身が失敗し, 内部的に同じモンスターが配置され直す場合は, 前のモンスターの情報がそのまま保存されるように修正. また, 変身が行われた/失敗した場合コマンド繰り返しのターゲット指定が継続されるように変更.
+
+	* lib/edit/k_info_j.txt 1.22.2.1, src/spellstips.h 1.15.10.1:
+	調査アイテムや魔法の説明に属性表示ができる記述を追加.
+
+	* src/monster2.c 1.20.2.4:
+	属性のあるモンスターから召喚された護衛付き中立 (狼の族長など) の護衛が反対側の属性にならないようにした.
+
+2002-04-28  Takeshi Mogami  <mogami@cvs>
+
+	* Changelogs 1.38: 更新
+
 	* src/autopick.c 1.14:
 	コード整理、コメント追加。画面右のコマンド説明の再描画の最適化。
 
