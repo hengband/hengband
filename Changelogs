@@ -1,4 +1,80 @@
+2002-04-28  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.14:
+	コード整理、コメント追加。画面右のコマンド説明の再描画の最適化。
+
+2002-04-27  _nothere  <_nothere@cvs>
+
+	* src/monster2.c 1.20.2.3, src/spells3.c 1.20.2.2:
+	護衛を伴うモンスターの中立の護衛もそのモンスターと同じ属性になるように修正. また, polymorph_monster()中での属性保存コードは機能しない場合があるので削除した.
+
+2002-04-27  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.13:
+	下部の区切り線の位置に現在のモード名を表示するようにした。
+
+	* lib/edit/r_info_j.txt 1.35:
+	英語版の説明文で行末にスペースが抜けていたのを追加。
+
+	* src/autopick.c 1.12:
+	メーセージ中の無駄なスペース削除。
+
+2002-04-27  _nothere  <_nothere@cvs>
+
+	* src/monster1.c 1.13.10.2, src/monster2.c 1.20.2.2, src/mspells1.c 1.20.2.2, src/mspells2.c 1.15.2.2:
+	どちらかの属性の付いた中立は反対側を召喚しないように変更. また, sub_alignが一致したモンスター同士は戦わないように変更.
+
+2002-04-27  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd1.c 1.31, src/externs.h 1.42, src/generate.c 1.17, src/spells2.c 1.19, src/tables.c 1.28, src/types.h 1.16, src/variable.c 1.19:
+	トラップの感知範囲を出たときに警告するオプション disturb_trap_detect
+	を OAngband から移植。
+	問題点ひとつ：未判明のトラップ感知アイテムでも感知範囲を出たときの警告によってトラップ感知である事がわかってしまうのは論理的でないが、スマートな解決方がない。
+
+2002-04-27  _nothere  <_nothere@cvs>
+
+	* lib/file/news.txt 1.6.2.1, lib/file/news_j.txt 1.5.2.1, src/cmd2.c 1.21.2.1, src/cmd6.c 1.19.10.1, src/defines.h 1.37.2.1, src/dungeon.c 1.35.2.1, src/externs.h 1.41.2.1, src/generate.c 1.16.2.1, src/init1.c 1.31.2.1, src/load.c 1.24.2.1, src/monster1.c 1.13.10.1, src/monster2.c 1.20.2.1, src/mspells1.c 1.20.2.1, src/mspells2.c 1.15.2.1, src/rooms.c 1.12.2.1, src/save.c 1.11.2.1, src/spells1.c 1.14.2.1, src/spells2.c 1.18.2.1, src/spells3.c 1.20.2.1, src/types.h 1.15.2.1, src/wizard2.c 1.14.2.1, src/xtra2.c 1.27.2.1:
+	中立のモンスターが善良または邪悪なモンスターに呼ばれた場合に, 一時的にどちらかの属性として戦うように変更してみた. また, どちらかの属性に回った中立が召喚した中立もまたその一時属性を受け継ぐ. ただし一時属性にはスレイなどは通用しない. セーブデータが変わるのでバージョンを1.0.14に上げる. 実験的な枝としておく.
+
+2002-04-27  henkma  <henkma@cvs>
+
+	* src/racial.c 1.15:
+	良くみたら百裂拳の方もバグってたので修正.
+
+	* src/racial.c 1.14:
+	修行僧の構えの表示にバグがあったので直した.
+
+2002-04-27  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.11:
+	種族、職業の条件式挿入(^C)コマンドの$RACE と $CLASS が逆だったので修正。
+
+2002-04-26  Takeshi Mogami  <mogami@cvs>
+
+	* lib/pref/pickpref.prf 1.4, lib/pref/picktype.prf 1.4:
+	自動拾いエディタのサンプルに重要なコマンドのいくつかの説明を書き入れた。
+
+	* src/birth.c 1.28:
+	オートロール高速化。表示する時間間隔を空けて負担を減らした他、
+	randint0(3*4*5 * 3*4*5 * 3*4*5) を2回だけ使って能力値ダイスを振るようにした。
+
+	* src/racial.c 1.13:
+	変身中だけでなく「種族の」吸血鬼のレイシャルパワー生命力吸収は反攻撃で使用不可。
+
+	* src/cmd2.c 1.21:
+	鉄人上り階段無し(ironman_downward)モードのとき、ランダムに下りる回数が
+	1増えるのはあまりにも厳しすぎて挑戦不可能っぽいので、このモードの時は
+	必ず固定回数だけ下りるように修正。
+
 2002-04-25  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/r_info_j.txt 1.34, lib/edit/misc_j.txt 1.7:
+	ディオニソス追加。
+
+	* lib/edit/e_info_j.txt 1.19:
+	elec→Lightning 、 dark → Darkness 、他キャピタライズ修正。
+
+	* Changelogs 1.37: 更新
 
 	* src/wizard2.c 1.14:
 	ウィザードコマンド ^A o でオブジェクトのcursedの値を表示。
