@@ -431,8 +431,19 @@
 ?:1
 
 # 戦士と狂戦士は上級魔法書を手動で破壊すると経験値になるので、拾う。
-# 破邪パラディンも生命と破邪以外の魔法書を手動で破壊すると経験値になる。
-?:[IOR [EQU $CLASS Warrior Berserker] [AND [EQU $CLASS Paladin] [EQU $REALM1 Crusade]]]
+?:[EQU $CLASS Warrior Berserker]
+(~読めない4冊目の秘術の魔法書
+読めない4冊目の魔法書
+(~読めない3冊目の秘術の魔法書
+読めない3冊目の魔法書
+?:1
+
+# 破邪パラディンは生命と破邪以外の魔法書を手動で破壊すると経験値になる。
+# 経験値にならない生命の上級魔法書は高く売れるが高レベルでは放置する。
+?:[AND [EQU $CLASS Paladin] [EQU $REALM1 Crusade] [GEQ $LEVEL 30]]
+(~読めない4冊目の生命の魔法書
+(~読めない3冊目の生命の魔法書
+?:[AND [EQU $CLASS Paladin] [EQU $REALM1 Crusade]]
 (~読めない4冊目の秘術の魔法書
 読めない4冊目の魔法書
 (~読めない3冊目の秘術の魔法書
