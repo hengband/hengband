@@ -2443,85 +2443,6 @@ msg_print("少しの間悲しい気分になった。");
 		}
 	}
 
-	/* Handle Invulnerability */
-	if (m_ptr->invulner)
-	{
-		/* Reduce by one, note if expires */
-		m_ptr->invulner--;
-
-		if (!m_ptr->invulner)
-		{
-			if (m_ptr->ml)
-			{
-				char m_name[80];
-
-				/* Acquire the monster name */
-				monster_desc(m_name, m_ptr, 0);
-
-				/* Dump a message */
-#ifdef JP
-				msg_format("%^sはもう無敵でない。", m_name);
-#else
-				msg_format("%^s is no longer invulnerable.", m_name);
-#endif
-
-				if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-				if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
-			}
-			m_ptr->energy_need += ENERGY_NEED();
-		}
-	}
-
-	/* Handle fast */
-	if (m_ptr->fast)
-	{
-		/* Reduce by one, note if expires */
-		m_ptr->fast--;
-
-		if (!(m_ptr->fast) && m_ptr->ml)
-		{
-			char m_name[80];
-
-			/* Acquire the monster name */
-			monster_desc(m_name, m_ptr, 0);
-
-			/* Dump a message */
-#ifdef JP
-msg_format("%^sはもう加速されていない。", m_name);
-#else
-			msg_format("%^s is no longer fast.", m_name);
-#endif
-
-			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-			if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
-		}
-	}
-
-	/* Handle slow */
-	if (m_ptr->slow)
-	{
-		/* Reduce by one, note if expires */
-		m_ptr->slow--;
-
-		if (!(m_ptr->slow) && m_ptr->ml)
-		{
-			char m_name[80];
-
-			/* Acquire the monster name */
-			monster_desc(m_name, m_ptr, 0);
-
-			/* Dump a message */
-#ifdef JP
-msg_format("%^sはもう減速されていない。", m_name);
-#else
-			msg_format("%^s is no longer slow.", m_name);
-#endif
-
-			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-			if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
-		}
-	}
-
 	/* Handle "sleep" */
 	if (m_ptr->csleep)
 	{
@@ -2608,91 +2529,8 @@ msg_format("%^sが目を覚ました。", m_name);
 	/* Handle "stun" */
 	if (m_ptr->stunned)
 	{
-		int d = 1;
-
-		/* Make a "saving throw" against stun */
-		if (randint0(10000) <= r_ptr->level * r_ptr->level)
-		{
-			/* Recover fully */
-			d = m_ptr->stunned;
-		}
-
-		/* Hack -- Recover from stun */
-		if (m_ptr->stunned > d)
-		{
-			/* Recover somewhat */
-			m_ptr->stunned -= d;
-		}
-
-		/* Fully recover */
-		else
-		{
-			/* Recover fully */
-			m_ptr->stunned = 0;
-
-			/* Message if visible */
-			if (m_ptr->ml)
-			{
-				char m_name[80];
-
-				/* Acquire the monster name */
-				monster_desc(m_name, m_ptr, 0);
-
-				/* Dump a message */
-#ifdef JP
-msg_format("%^sは朦朧状態から立ち直った。", m_name);
-#else
-				msg_format("%^s is no longer stunned.", m_name);
-#endif
-
-				if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-				if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
-			}
-		}
-
-		/* Still stunned */
-		if (m_ptr->stunned && one_in_(2)) return;
-	}
-
-
-	/* Handle confusion */
-	if (m_ptr->confused)
-	{
-		/* Amount of "boldness" */
-		int d = randint1(r_ptr->level / 20 + 1);
-
-		/* Still confused */
-		if (m_ptr->confused > d)
-		{
-			/* Reduce the confusion */
-			m_ptr->confused -= d;
-		}
-
-		/* Recovered */
-		else
-		{
-			/* No longer confused */
-			m_ptr->confused = 0;
-
-			/* Message if visible */
-			if (m_ptr->ml)
-			{
-				char m_name[80];
-
-				/* Acquire the monster name */
-				monster_desc(m_name, m_ptr, 0);
-
-				/* Dump a message */
-#ifdef JP
-msg_format("%^sは混乱から立ち直った。", m_name);
-#else
-				msg_format("%^s is no longer confused.", m_name);
-#endif
-
-				if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-				if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
-			}
-		}
+		/* Sometimes skip move */
+		if (one_in_(2)) return;
 	}
 
 	if (p_ptr->riding == m_idx)
@@ -2727,47 +2565,6 @@ msg_format("%^sは突然敵にまわった！", m_name);
 #endif
 
 		set_hostile(m_ptr);
-	}
-
-	/* Handle "fear" */
-	if (m_ptr->monfear)
-	{
-		/* Amount of "boldness" */
-		int d = randint1(r_ptr->level / 20 + 1);
-
-		/* Still afraid */
-		if (m_ptr->monfear > d)
-		{
-			/* Reduce the fear */
-			m_ptr->monfear -= d;
-		}
-
-		/* Recover from fear, take note if seen */
-		else
-		{
-			/* No longer afraid */
-			m_ptr->monfear = 0;
-
-			/* Visual note */
-			if (m_ptr->ml)
-			{
-				char m_name[80];
-				char m_poss[80];
-
-				/* Acquire the monster name/poss */
-				monster_desc(m_name, m_ptr, 0);
-				monster_desc(m_poss, m_ptr, 0x22);
-
-				/* Dump a message */
-#ifdef JP
-msg_format("%^sは勇気を取り戻した。", m_name);
-#else
-				msg_format("%^s recovers %s courage.", m_name, m_poss);
-#endif
-
-				if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-			}
-		}
 	}
 
 	/* Get the origin */
