@@ -2931,6 +2931,8 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 							case RACE_HUMAN:
 							case RACE_AMBERITE:
 							case RACE_DUNADAN:
+							case RACE_BARBARIAN:
+							case RACE_BEASTMAN:
 								mult = 25;break;
 							case RACE_HALF_ORC:
 							case RACE_HALF_TROLL:
