@@ -485,19 +485,25 @@ msg_print("クエストを達成した！");
 	/* Where is the item now */
 	switch (slot)
 	{
-#ifdef JP
 	case INVEN_RARM:
 		if ((o_ptr->tval != TV_SHIELD) && (o_ptr->tval != TV_CAPTURE) && (o_ptr->tval != TV_CARD) && (empty_hands(FALSE) & EMPTY_HAND_LARM) && ((o_ptr->weight > 99) || (o_ptr->tval == TV_POLEARM)) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
+#ifdef JP
 			act = "を両手で構えた";
+#else
+			act = "You are wielding";
+#endif
 		else
+#ifdef JP
 			act = (left_hander ? "を左手に装備した" : "を右手に装備した");
+#else
+			act = "You are wielding";
+#endif
 		break;
 
 	case INVEN_LARM:
+#ifdef JP
 		act = (left_hander ? "を右手に装備した" : "を左手に装備した");
 #else
-	case INVEN_RARM:
-	case INVEN_LARM:
 		act = "You are wielding";
 #endif
 		break;
