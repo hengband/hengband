@@ -1,3 +1,228 @@
+2002-08-15  Takeshi Mogami  <mogami@cvs>
+
+	* src/spells2.c 1.47, src/cmd1.c 1.48, src/cmd6.c 1.31, src/defines.h 1.72, src/hissatsu.c 1.14, src/melee1.c 1.19, src/melee2.c 1.28, src/mind.c 1.13, src/monster2.c 1.40, src/mspells1.c 1.31, src/mspells2.c 1.24, src/racial.c 1.22, src/spells1.c 1.34:
+	project_p()にフラグを渡すようにしたため、反射しない魔法には全てPROJECT_NO_REFを
+	付けなければならなくなったが、わずらわしいので逆にして、反射する魔法全てに
+	PROJECT_REFLECTABLEを付けるという風に変更した。
+	生命力吸収、回復モンスター、スロウ、クローン等も今まで反射していたので、
+	PROJECT_REFLECTABLEを付けるべきだろうけれど、そもそも反射するべきものかどうか
+	迷ったので保留(今は反射しない状態)。
+
+	* lib/edit/r_info_j.txt 1.45.2.1:
+	オーガ戦士はオーガなのに巨人フラグがなかったので追加。
+
+2002-08-14  Takeshi Mogami  <mogami@cvs>
+
+	* src/effects.c 1.25.2.1:
+	狂戦士等で、能力値が最低の3のままで、ベース能力値だけが変化したときに
+	画面上の能力値表示が 知能: 3→知能x: 3 のようにちゃんと更新されるように修正。
+
+2002-08-14  habu  <habu@cvs>
+
+	* src/dungeon.c 1.61.2.3, src/xtra1.c 1.43.2.3, src/cave.c 1.53.2.1:
+	モンスターの光源バグ再修正。バグの原因確定。update_monsters(TRUE);で m_ptr->cdisを初期化するが、その初期化の前に update_mon_lite(); で使っていたのがバグの原因だった。また、モンスターの光源で壁やアイテムが照らされなかったバグも修正。
+
+2002-08-14  Takeshi Mogami  <mogami@cvs>
+
+	* src/dungeon.c 1.66, src/xtra1.c 1.48, src/cave.c 1.55:
+	モンスターの光源バグ再修正。バグの原因確定。update_monsters(TRUE);で
+	m_ptr->cdisを初期化するが、その初期化の前に update_mon_lite(); で使っていた
+	のがバグの原因だった。
+	また、モンスターの光源で壁やアイテムが照らされなかったバグも修正。
+
+2002-08-14  habu  <habu@cvs>
+
+	* src/externs.h 1.69.2.2, src/files.c 1.60.2.3, src/autopick.c 1.56.2.2:
+	「ダイス目nn以上の」の修正。nnが異なる複数の行を同じものと勘違いして最初の一行目以外の登録をキャンセルしてしまっていた。
+
+2002-08-14  Takeshi Mogami  <mogami@cvs>
+
+	* src/externs.h 1.75:
+	「ダイス目nn以上の」の修正。nnが異なる複数の行を同じものと勘違いして最初の
+	一行目以外の登録をキャンセルしてしまっていた。
+
+	* src/mspells1.c 1.30:
+	呪いがプレイヤーの反射で跳ね返っていたので、修正。project_p()にflgを渡すようにした。
+
+2002-08-14  habu  <habu@cvs>
+
+	* src/dungeon.c 1.61.2.2:
+	ダンジョンに入った最初のターンに、自分で光っているモンスターがちゃんと光らないバグ修正。update_stuff();を2回に分けて読んでいたのがまずかったらしい。
+
+2002-08-14  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.61, src/files.c 1.76:
+	「ダイス目nn以上の」の修正。nnが異なる複数の行を同じものと勘違いして最初の
+	一行目以外の登録をキャンセルしてしまっていた。
+
+	* src/dungeon.c 1.65:
+	ダンジョンに入った最初のターンに、自分で光っているモンスターがちゃんと光らない
+	バグ修正。update_stuff();を2回に分けて呼んでいたのがまずかったらしい。
+
+	* src/spells1.c 1.33:
+	呪いがプレイヤーの反射で跳ね返っていたので、修正。project_p()にflgを渡すようにした。
+
+2002-08-12  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.60:
+	自動拾いエディタの1行目の説明書きに、検索コマンドを追加。
+	検索文字列を指定する前に n や N を押したときにメッセージを出すようにした。
+
+	* src/cmd3.c 1.26:
+	自動刻みで、各種ESPを例えば{~邪巨}という風に刻むようにした。
+	英語版は{~Evil~P}でちょっと長い。
+
+	* src/generate.c 1.29:
+	vaultの中等で階段がトラップと同じ場所に配置されて、トラップを発見したときに
+	階段が消える事があったバグを修正。
+
+2002-08-10  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.59:
+	自動拾いエディタの使用中にはプレイ時間のカウントが進まないようにした。
+
+2002-08-07  Takeshi Mogami  <mogami@cvs>
+
+	* src/defines.h 1.65.2.3, src/mspells2.c 1.21.2.1:
+	ペットの嵐系のボール魔法が@にかするかどうかの判定が間違っていて、
+	一番外側でかすってしまっていたので修正した。その他のボール魔法で
+	半径2なのに半径3と誤認して射たない事があったのでそれも同時に修正。
+
+	* src/cmd6.c 1.30:
+	さっきのトラップ感知の修正、ロッドのときTRUEとFALSEが逆だったので、再修正。
+
+	* src/defines.h 1.71, src/mspells2.c 1.23:
+	ペットの嵐系のボール魔法が@にかするかどうかの判定が間違っていて、
+	一番外側でかすってしまっていたので修正した。その他のボール魔法で
+	半径2なのに半径3と誤認して射たない事があったのでそれも同時に修正。
+
+	* src/cmd5.c 1.43, src/cmd6.c 1.29, src/dungeon.c 1.64, src/externs.h 1.74, src/mind.c 1.12, src/racial.c 1.21, src/spells2.c 1.46:
+	トラップ感知のアイテムを使ったとき、未判明のアイテムを使ってまわりに
+	トラップが無かったときは感知済み範囲の表示に影響しないように修正。
+
+2002-07-29  Takeshi Mogami  <mogami@cvs>
+
+	* src/files.c 1.75:
+	ダンプに'C'の4ページ目を追加。3ページ目のテレパシーの欄は警告に変更。
+
+2002-07-28  henkma  <henkma@cvs>
+
+	* src/mspells1.c 1.29:
+	呪い系の魔法が飛んでいくアニメーションが見えてしまっていたので修正.
+
+	* src/mspells1.c 1.28, src/spells1.c 1.32:
+	モンスターの呪い系ダメージ魔法をprojectで扱うようにし, EyeEyeの効果が呪い系
+	に対しても発動するようにした. ソースを大きく変える変更なのでこれは開発版のみ.
+
+2002-07-28  habu  <habu@cvs>
+
+	* src/files.c 1.74: ダンプ中の余計な空白を削除。
+
+2002-07-27  Takeshi Mogami  <mogami@cvs>
+
+	* src/chuukei.c 1.8: ワーニング除去。
+
+	* src/defines.h 1.65.2.2:
+	TRC_P_FLAG_MASKにフラグが無かったせいで、チェンソーのランダムメッセージと
+	呪われていないランダムテレポートの発動が出来なくなっていたので修正。
+
+2002-07-26  henkma  <henkma@cvs>
+
+	* src/spells3.c 1.49:
+	EyeEyeのデバッグのとき, intを返す関数に"return;"が残ってしまっていたので修正.
+
+2002-07-26  Takeshi Mogami  <mogami@cvs>
+
+	* src/files.c 1.73:
+	ダンプのクエスト情報、達成レベルが同じときは危険度レベルでソート。
+
+2002-07-25  Takeshi Mogami  <mogami@cvs>
+
+	* src/object1.c 1.40.2.2:
+	'm'コマンドで魔法書を選ぶとき、{@ma}等を反映してリスト左端の記号が変わるように
+	してあるが、それがまだバグっていて実際は選択できるはずの魔法書の記号の欄が空白に
+	なってしまう事があったので修正。
+
+	* lib/help/attack.txt 1.9, lib/help/jattack.txt 1.7:
+	*スレイ*の解説修正。
+
+2002-07-25  henkma  <henkma@cvs>
+
+	* src/spells3.c 1.48, src/cmd1.c 1.47, src/externs.h 1.73, src/melee1.c 1.18, src/spells1.c 1.31:
+	四元素の攻撃に対し, EyeEyeがちゃんと作用していなかったので直した.
+	呪い系やオーラダメージに関しても作用していないが, これは意図的な
+	ものかもしれないので保留.
+
+2002-07-25  Takeshi Mogami  <mogami@cvs>
+
+	* autopick.txt 1.13.2.1, autopick_eng.txt 1.15.2.1, lib/help/commdesc.txt 1.7.6.1, lib/help/jcommdesc.txt 1.6.6.1, lib/pref/pickpref.prf 1.6.4.1, lib/pref/picktype.prf 1.5.4.1:
+	ドキュメント類を自動拾いエディタの検索機能に対応。
+
+2002-07-25  henkma  <henkma@cvs>
+
+	* src/spells3.c 1.46.2.1, src/cmd1.c 1.44.4.1, src/externs.h 1.69.2.1, src/melee1.c 1.17.2.1, src/spells1.c 1.29.2.1:
+	四元素の攻撃に対し, EyeEyeがちゃんと作用していなかったので直した. 呪い系や
+	オーラダメージに関しても作用していないが, これは意図的なものかもしれないの
+	で保留.
+
+2002-07-25  Takeshi Mogami  <mogami@cvs>
+
+	* autopick.txt 1.14, autopick_eng.txt 1.16, lib/help/commdesc.txt 1.8, lib/help/jcommdesc.txt 1.7, lib/pref/pickpref.prf 1.7, lib/pref/picktype.prf 1.6:
+	ドキュメント類を自動拾いエディタの検索機能に対応。
+
+2002-07-24  habu  <habu@cvs>
+
+	* src/files.c 1.72:
+	キャラクタダンプのクエスト情報表示を達成レベルによってソートして表示するようにした。
+
+2002-07-24  Takeshi Mogami  <mogami@cvs>
+
+	* src/externs.h 1.72, src/files.c 1.71, src/init1.c 1.43, src/init2.c 1.14:
+	ダンプの最後にlib/edit/のチェックサムを入れてみた。ソースをいじれない人への
+	抑止力を期待。'N'と'D'の行は無視するので、環境が違っても同じ数値になるはず。
+
+	* src/cmd4.c 1.51:
+	オプション設定'='で、チートオプションもhjklで変えられるようにした。
+	あと、hjklをハードコードにせずちゃんとkeymap設定にしたがうようにした。
+
+	* src/files.c 1.70:
+	'C'の4ページ目の文字が「龍 倍打」と「竜ESP」になっていたので龍に統一。
+
+	* src/files.c 1.69:
+	'C'の4ページ目の武器のフラグは2列だったが、匠の魔法剣のフラグを表示する為に
+	3列目に@の列を表示するようにした。
+
+	* src/flavor.c 1.20:
+	鍛冶師の武器の英語版でキャピタライズが変だったので修正。
+
+	* src/files.c 1.68: 'C'の新画面英語版も対応。
+
+2002-07-23  henkma  <henkma@cvs>
+
+	* src/mutation.c 1.6:
+	特定の変異を得やすい種族で, 変異の種類を指定して変異するとき,
+	指定したものではなく種族特有の変異をしてしまうことがあったので
+	直した.
+
+	* src/mutation.c 1.5.4.1:
+	特定の変異を得やすい種族で, 変異の種類を指定して変異するとき, 指定したもの
+	ではなく種族特有の変異をしてしまうことがあったので直した.
+
+2002-07-23  Takeshi Mogami  <mogami@cvs>
+
+	* src/init1.c 1.42:
+	配列の大きさをsizeofで書き直したときに一箇所、関数の引数としてポインタ buf が
+	与えられていたのをsizeof(buf)としてしまっていたので修正。
+
+	* src/cmd4.c 1.50, src/files.c 1.67:
+	'C'コマンドで各種ESPをテレパシーの欄に追加表示。
+	さらに4ページ目に各種スレイ、各種ESPとその他の3ページ目に表示されないフラグを全て表示。
+	古い4ページ目以降は廃止(関数はコメントアウト)。
+
+2002-07-21  Takeshi Mogami  <mogami@cvs>
+
+	* Changelogs 1.53: 更新
+
 2002-07-21  habu  <habu@cvs>
 
 	* src/files.c 1.66:
