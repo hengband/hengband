@@ -47,11 +47,10 @@ typedef struct {
 
 #define	BUFSIZE	(65536)
 
-#if defined(WINDOWS) || defined(SUNOS4) || defined(MACINTOSH) || defined(SGI)
+#ifndef HAVE_VASPRINTF
 #define vasprintf	Vasprintf
-#endif
 
-#ifdef SUNOS4
+#if defined(HAVE_VSNPRINTF)
 static int Vasprintf(char **buf, const char *fmt, va_list ap)
 {
 	int ret;
@@ -62,9 +61,7 @@ static int Vasprintf(char **buf, const char *fmt, va_list ap)
 
 	return ret;
 }
-#endif
-
-#if defined(WINDOWS) || defined(MACINTOSH) || defined(SGI)
+#else
 static int Vasprintf(char **buf, const char *fmt, va_list ap)
 {
 	int ret;
@@ -75,6 +72,8 @@ static int Vasprintf(char **buf, const char *fmt, va_list ap)
 	return ret;
 }
 #endif
+
+#endif /* ifndef HAVE_VASPRINTF */ 
 
 static BUF* buf_new(void)
 {
