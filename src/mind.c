@@ -524,15 +524,18 @@ void mindcraft_info(char *p, int use_mind, int power)
 
 #ifdef ALLOW_REPEAT /* TNB */
 
-      /* Get the spell, if available */
-      if (repeat_pull(sn))
+	/* Get the spell, if available */
+	if (repeat_pull(sn))
 	{
-	  /* Verify the spell */
-	  if (mind_ptr->info[*sn].min_lev <= plev)
-	    {
-	      /* Success */
-	      return (TRUE);
-	    }
+		/* Hack -- If requested INVEN_FORCE(1111), pull again */
+		if (*sn == INVEN_FORCE) repeat_pull(sn);
+
+		/* Verify the spell */
+		if (mind_ptr->info[*sn].min_lev <= plev)
+		{
+			/* Success */
+			return (TRUE);
+		}
 	}
 
 #endif /* ALLOW_REPEAT -- TNB */
