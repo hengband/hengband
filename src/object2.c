@@ -374,7 +374,7 @@ void compact_objects(int size)
 				x = m_ptr->fx;
 
 				/* Monsters protect their objects */
-				if (rand_int(100) < 90) continue;
+				if (randint0(100) < 90) continue;
 			}
 
 			/* Dungeon */
@@ -396,7 +396,7 @@ void compact_objects(int size)
 			    (cnt < 1000)) chance = 100;
 
 			/* Apply the saving throw */
-			if (rand_int(100) < chance) continue;
+			if (randint0(100) < chance) continue;
 
 			/* Delete the object */
 			delete_object_idx(i);
@@ -623,7 +623,7 @@ s16b get_obj_num(int level)
 		if (one_in_(GREAT_OBJ))
 		{
 			/* What a bizarre calculation */
-			level = 1 + (level * MAX_DEPTH / randint(MAX_DEPTH));
+			level = 1 + (level * MAX_DEPTH / randint1(MAX_DEPTH));
 		}
 	}
 
@@ -660,7 +660,7 @@ s16b get_obj_num(int level)
 
 
 	/* Pick an object */
-	value = rand_int(total);
+	value = randint0(total);
 
 	/* Find the object */
 	for (i = 0; i < alloc_kind_size; i++)
@@ -674,7 +674,7 @@ s16b get_obj_num(int level)
 
 
 	/* Power boost */
-	p = rand_int(100);
+	p = randint0(100);
 
 	/* Try for a "better" object once (50%) or twice (10%) */
 	if (p < 60)
@@ -683,7 +683,7 @@ s16b get_obj_num(int level)
 		j = i;
 
 		/* Pick a object */
-		value = rand_int(total);
+		value = randint0(total);
 
 		/* Find the object */
 		for (i = 0; i < alloc_kind_size; i++)
@@ -706,7 +706,7 @@ s16b get_obj_num(int level)
 		j = i;
 
 		/* Pick a object */
-		value = rand_int(total);
+		value = randint0(total);
 
 		/* Find the object */
 		for (i = 0; i < alloc_kind_size; i++)
@@ -1924,7 +1924,7 @@ s16b m_bonus(int max, int level)
 	extra = ((max * level) % MAX_DEPTH);
 
 	/* Hack -- simulate floating point computations */
-	if (rand_int(MAX_DEPTH) < extra) bonus++;
+	if (randint0(MAX_DEPTH) < extra) bonus++;
 
 
 	/* The "stand" is equal to one quarter of the max */
@@ -1934,7 +1934,7 @@ s16b m_bonus(int max, int level)
 	extra = (max % 4);
 
 	/* Hack -- simulate floating point computations */
-	if (rand_int(4) < extra) stand++;
+	if (randint0(4) < extra) stand++;
 
 
 	/* Choose an "interesting" value */
@@ -2176,7 +2176,7 @@ static byte get_random_ego(byte slot, bool good, int level)
 		}
 	}
 
-	value = randint(total);
+	value = randint1(total);
 
 	for (i = 1; i < max_e_idx; i++)
 	{
@@ -2204,8 +2204,8 @@ static byte get_random_ego(byte slot, bool good, int level)
  */
 static void a_m_aux_1(object_type *o_ptr, int level, int power)
 {
-	int tohit1 = randint(5) + m_bonus(5, level);
-	int todam1 = randint(5) + m_bonus(5, level);
+	int tohit1 = randint1(5) + m_bonus(5, level);
+	int todam1 = randint1(5) + m_bonus(5, level);
 
 	int tohit2 = m_bonus(10, level);
 	int todam2 = m_bonus(10, level);
@@ -2274,7 +2274,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 			else if (power < -1)
 			{
 				/* Hack -- Horrible digging bonus */
-				o_ptr->pval = 0 - (5 + randint(5));
+				o_ptr->pval = 0 - (5 + randint1(5));
 			}
 
 			/* Bad */
@@ -2320,22 +2320,22 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 				case EGO_DF:
 					if (one_in_(3))
 						o_ptr->art_flags2 |= TR2_RES_POIS;
-					random_resistance(o_ptr, FALSE, randint(22)+16);
+					random_resistance(o_ptr, FALSE, randint1(22)+16);
 					break;
 				case EGO_SLAY_DRAGON:
-					random_resistance(o_ptr, FALSE, randint(12) + 4);
+					random_resistance(o_ptr, FALSE, randint1(12) + 4);
 					break;
 				case EGO_KILL_DRAGON:
-					random_resistance(o_ptr, FALSE, randint(12) + 4);
+					random_resistance(o_ptr, FALSE, randint1(12) + 4);
 					if (one_in_(3))
 						o_ptr->art_flags2 |= TR2_RES_POIS;
-					random_resistance(o_ptr, FALSE, randint(14) + 4);
+					random_resistance(o_ptr, FALSE, randint1(14) + 4);
 				case EGO_WEST:
 					if (one_in_(3))
 						o_ptr->art_flags2 |= TR2_RES_FEAR;
 					break;
 				case EGO_CHAOTIC:
-					random_resistance(o_ptr, FALSE, (randint(34) + 4));
+					random_resistance(o_ptr, FALSE, (randint1(34) + 4));
 					break;
 				case EGO_SLAYING_WEAPON:
 					if (one_in_(3)) /* double damage */
@@ -2365,7 +2365,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 					}
 					break;
 				case EGO_TRUMP:
-					random_resistance(o_ptr, FALSE, (randint(22) + 16));
+					random_resistance(o_ptr, FALSE, (randint1(22) + 16));
 					if (one_in_(5))
 						o_ptr->art_flags1 |= TR1_SLAY_DEMON;
 					break;
@@ -2376,7 +2376,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 						o_ptr->art_flags1 |= TR1_DEX;
 					if (one_in_(5))
 						o_ptr->art_flags2 |= TR2_RES_FEAR;
-					random_resistance(o_ptr, FALSE, (randint(22) + 16));
+					random_resistance(o_ptr, FALSE, (randint1(22) + 16));
 					break;
 				case EGO_SHARPNESS:
 					o_ptr->pval = m_bonus(5, level) + 1;
@@ -2403,7 +2403,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 			else if (power < -1)
 			{
 				/* Roll for ego-item */
-				if (rand_int(MAX_DEPTH) < level)
+				if (randint0(MAX_DEPTH) < level)
 				{
 					o_ptr->name2 = get_random_ego(INVEN_RARM, FALSE, level);
 					switch (o_ptr->name2)
@@ -2469,7 +2469,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 			else if (power < -1)
 			{
 				/* Roll for ego-item */
-				if (rand_int(MAX_DEPTH) < level)
+				if (randint0(MAX_DEPTH) < level)
 				{
 					o_ptr->name2 = get_random_ego(INVEN_AMMO, FALSE, level);
 				}
@@ -2488,9 +2488,9 @@ static void dragon_resist(object_type * o_ptr)
 		artifact_bias = 0;
 
 		if (one_in_(4))
-			random_resistance(o_ptr, FALSE, (randint(14) + 4));
+			random_resistance(o_ptr, FALSE, (randint1(14) + 4));
 		else
-			random_resistance(o_ptr, FALSE, (randint(22) + 16));
+			random_resistance(o_ptr, FALSE, (randint1(22) + 16));
 	}
 	while (one_in_(2));
 }
@@ -2504,7 +2504,7 @@ static void dragon_resist(object_type * o_ptr)
  */
 static void a_m_aux_2(object_type *o_ptr, int level, int power)
 {
-	int toac1 = randint(5) + m_bonus(5, level);
+	int toac1 = randint1(5) + m_bonus(5, level);
 
 	int toac2 = m_bonus(10, level);
 
@@ -2567,7 +2567,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 				/* Hack -- Try for "Robes of the Magi" */
 				if ((o_ptr->tval == TV_SOFT_ARMOR) &&
 				    (o_ptr->sval == SV_ROBE) &&
-				    (rand_int(100) < 15))
+				    (randint0(100) < 15))
 				{
 					if (one_in_(5))
 					{
@@ -2599,7 +2599,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					case EGO_RESISTANCE:
 						if (one_in_(4))
 							o_ptr->art_flags2 |= TR2_RES_POIS;
-						random_resistance(o_ptr, FALSE, (randint(22) + 16));
+						random_resistance(o_ptr, FALSE, (randint1(22) + 16));
 						break;
 					case EGO_DWARVEN:
 						if (o_ptr->tval != TV_HARD_ARMOR)
@@ -2650,7 +2650,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 				switch (o_ptr->name2)
 				{
 				case EGO_ENDURANCE:
-					random_resistance(o_ptr, FALSE, (randint(34) + 4));
+					random_resistance(o_ptr, FALSE, (randint1(34) + 4));
 					if (one_in_(4)) o_ptr->art_flags2 |= TR2_RES_POIS;
 					break;
 				case EGO_REFLECTION:
@@ -2686,7 +2686,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 				switch (o_ptr->name2)
 				{
 				case EGO_POWER:
-					random_resistance(o_ptr, FALSE, (randint(22) + 16));
+					random_resistance(o_ptr, FALSE, (randint1(22) + 16));
 					break;
 				}
 			}
@@ -2727,7 +2727,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 				case EGO_SLOW_DESCENT:
 					if (one_in_(2))
 					{
-						random_resistance(o_ptr, FALSE, (randint(22) + 16));
+						random_resistance(o_ptr, FALSE, (randint1(22) + 16));
 					}
 					break;
 				}
@@ -2759,16 +2759,16 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					switch (o_ptr->name2)
 					{
 					case EGO_MAGI:
-						random_resistance(o_ptr, FALSE, (randint(22) + 16));
+						random_resistance(o_ptr, FALSE, (randint1(22) + 16));
 						break;
 					case EGO_MIGHT:
-						random_resistance(o_ptr, FALSE, (randint(22) + 16));
+						random_resistance(o_ptr, FALSE, (randint1(22) + 16));
 						break;
 					case EGO_TELEPATHY:
 					case EGO_REGENERATION:
 						break;
 					case EGO_LORDLINESS:
-						random_resistance(o_ptr, FALSE, (randint(22) + 16));
+						random_resistance(o_ptr, FALSE, (randint1(22) + 16));
 						break;
 					case EGO_SEEING:
 						if (one_in_(3)) o_ptr->art_flags3 |= TR3_TELEPATHY;
@@ -2847,7 +2847,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 		case TV_CLOAK:
 		{
 			if (o_ptr->sval == SV_ELVEN_CLOAK)
-				o_ptr->pval = randint(4); /* No cursed elven cloaks...? */
+				o_ptr->pval = randint1(4); /* No cursed elven cloaks...? */
 
 			/* Very good */
 			if (power > 1)
@@ -2958,10 +2958,10 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_SPEED:
 				{
 					/* Base speed (1 to 10) */
-					o_ptr->pval = randint(5) + m_bonus(5, level);
+					o_ptr->pval = randint1(5) + m_bonus(5, level);
 
 					/* Super-charge the ring */
-					while (rand_int(100) < 50) o_ptr->pval++;
+					while (randint0(100) < 50) o_ptr->pval++;
 
 					/* Cursed Ring */
 					if (power < 0)
@@ -2991,12 +2991,12 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				{
 					do
 					{
-						random_resistance(o_ptr, FALSE, randint(20) + 18);
+						random_resistance(o_ptr, FALSE, randint1(20) + 18);
 					}
 					while (one_in_(4));
 
 					/* Bonus to armor class */
-					o_ptr->to_a = 10 + randint(5) + m_bonus(10, level);
+					o_ptr->to_a = 10 + randint1(5) + m_bonus(10, level);
 					rating += 15;
 				}
 				break;
@@ -3030,7 +3030,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_ELEC:
 				{
 					/* Bonus to armor class */
-					o_ptr->to_a = 5 + randint(5) + m_bonus(10, level);
+					o_ptr->to_a = 5 + randint1(5) + m_bonus(10, level);
 					break;
 				}
 
@@ -3072,7 +3072,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_DAMAGE:
 				{
 					/* Bonus to damage */
-					o_ptr->to_d = 1 + randint(5) + m_bonus(16, level);
+					o_ptr->to_d = 1 + randint1(5) + m_bonus(16, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3094,7 +3094,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_ACCURACY:
 				{
 					/* Bonus to hit */
-					o_ptr->to_h = 1 + randint(5) + m_bonus(16, level);
+					o_ptr->to_h = 1 + randint1(5) + m_bonus(16, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3116,7 +3116,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_PROTECTION:
 				{
 					/* Bonus to armor class */
-					o_ptr->to_a = 5 + randint(8) + m_bonus(10, level);
+					o_ptr->to_a = 5 + randint1(8) + m_bonus(10, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3138,8 +3138,8 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_SLAYING:
 				{
 					/* Bonus to damage and to hit */
-					o_ptr->to_d = randint(5) + m_bonus(12, level);
-					o_ptr->to_h = randint(5) + m_bonus(12, level);
+					o_ptr->to_d = randint1(5) + m_bonus(12, level);
+					o_ptr->to_h = randint1(5) + m_bonus(12, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3202,7 +3202,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				{
 					int tmp = m_bonus(10, level);
 					object_kind *k_ptr = &k_info[o_ptr->k_idx];
-					switch(randint(28))
+					switch(randint1(28))
 					{
 					case 1: case 2:
 						o_ptr->name2 = EGO_RING_THROW;
@@ -3286,7 +3286,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 							else
 							{
 								o_ptr->name2 = EGO_RING_BERSERKER;
-								o_ptr->to_h -= 2+randint(4);
+								o_ptr->to_h -= 2+randint1(4);
 							}
 							break;
 						case SV_RING_PROTECTION:
@@ -3314,8 +3314,8 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 							break;
 						case SV_RING_LORDLY:
 							if (!one_in_(20)) break;
-							random_resistance(o_ptr, FALSE, randint(20) + 18);
-							random_resistance(o_ptr, FALSE, randint(20) + 18);
+							random_resistance(o_ptr, FALSE, randint1(20) + 18);
+							random_resistance(o_ptr, FALSE, randint1(20) + 18);
 							o_ptr->name2 = EGO_RING_TRUE;
 							break;
 						case SV_RING_SUSTAIN:
@@ -3360,7 +3360,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				while(!o_ptr->name2)
 				{
 					object_kind *k_ptr = &k_info[o_ptr->k_idx];
-					switch(randint(5))
+					switch(randint1(5))
 					{
 					case 1:
 						if (k_ptr->flags3 & TR3_DRAIN_EXP) break;
@@ -3452,7 +3452,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 
 				case SV_AMULET_RESISTANCE:
 				{
-					if (one_in_(3)) random_resistance(o_ptr, FALSE, (randint(34) + 4));
+					if (one_in_(3)) random_resistance(o_ptr, FALSE, (randint1(34) + 4));
 					if (one_in_(5)) o_ptr->art_flags2 |= TR2_RES_POIS;
 				}
 				break;
@@ -3460,7 +3460,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				/* Amulet of searching */
 				case SV_AMULET_SEARCHING:
 				{
-					o_ptr->pval = randint(2) + m_bonus(4, level);
+					o_ptr->pval = randint1(2) + m_bonus(4, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3481,8 +3481,8 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				/* Amulet of the Magi -- never cursed */
 				case SV_AMULET_THE_MAGI:
 				{
-					o_ptr->pval = randint(5) + m_bonus(5, level);
-					o_ptr->to_a = randint(5) + m_bonus(5, level);
+					o_ptr->pval = randint1(5) + m_bonus(5, level);
+					o_ptr->to_a = randint1(5) + m_bonus(5, level);
 
 					/* Boost the rating */
 					rating += 15;
@@ -3503,8 +3503,8 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					o_ptr->ident |= (IDENT_CURSED);
 
 					/* Penalize */
-					o_ptr->pval = 0 - (randint(5) + m_bonus(5, level));
-					o_ptr->to_a = 0 - (randint(5) + m_bonus(5, level));
+					o_ptr->pval = 0 - (randint1(5) + m_bonus(5, level));
+					o_ptr->to_a = 0 - (randint1(5) + m_bonus(5, level));
 					if (power > 0) power = 0 - power;
 
 					break;
@@ -3541,7 +3541,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				while(!o_ptr->name2)
 				{
 					object_kind *k_ptr = &k_info[o_ptr->k_idx];
-					switch(randint(21))
+					switch(randint1(21))
 					{
 					case 1: case 2:
 						if (k_ptr->flags3 & TR3_SLOW_DIGEST) break;
@@ -3651,7 +3651,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				while(!o_ptr->name2)
 				{
 					object_kind *k_ptr = &k_info[o_ptr->k_idx];
-					switch(randint(5))
+					switch(randint1(5))
 					{
 					case 1:
 						if (k_ptr->flags3 & TR3_DRAIN_EXP) break;
@@ -3743,14 +3743,14 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 			/* Hack -- Torches -- random fuel */
 			if (o_ptr->sval == SV_LITE_TORCH)
 			{
-				if (o_ptr->pval > 0) o_ptr->xtra4 = randint(o_ptr->pval);
+				if (o_ptr->pval > 0) o_ptr->xtra4 = randint1(o_ptr->pval);
 				o_ptr->pval = 0;
 			}
 
 			/* Hack -- Lanterns -- random fuel */
 			if (o_ptr->sval == SV_LITE_LANTERN)
 			{
-				if (o_ptr->pval > 0) o_ptr->xtra4 = randint(o_ptr->pval);
+				if (o_ptr->pval > 0) o_ptr->xtra4 = randint1(o_ptr->pval);
 				o_ptr->pval = 0;
 			}
 
@@ -3796,7 +3796,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 			/* The wand or staff gets a number of initial charges equal
 			 * to between 1/2 (+1) and the full object kind's pval. -LM-
 			 */
-			o_ptr->pval = k_ptr->pval / 2 + randint((k_ptr->pval + 1) / 2);
+			o_ptr->pval = k_ptr->pval / 2 + randint1((k_ptr->pval + 1) / 2);
 			break;
 		}
 
@@ -3825,7 +3825,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 			/* Pick a random non-unique monster race */
 			while (1)
 			{
-				i = randint(max_r_idx - 1);
+				i = randint1(max_r_idx - 1);
 
 				if (!item_monster_okay(i)) continue;
 				if (i == MON_TSUCHINOKO) continue;
@@ -3838,7 +3838,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 				if (!r_ptr->rarity) continue;
 
 				/* Prefer less out-of-depth monsters */
-				if (rand_int(check)) continue;
+				if (randint0(check)) continue;
 
 				break;
 			}
@@ -3900,7 +3900,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 				if (!(r_ptr->flags9 & match)) continue;
 
 				/* Prefer less out-of-depth monsters */
-				if (rand_int(check)) continue;
+				if (randint0(check)) continue;
 
 				break;
 			}
@@ -3932,7 +3932,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 			/* Pick a random monster race */
 			while (1)
 			{
-				i = randint(max_r_idx - 1);
+				i = randint1(max_r_idx - 1);
 
 				r_ptr = &r_info[i];
 
@@ -3967,13 +3967,13 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 			if (obj_level <= 0) break;
 
 			/* Hack -- pick a "difficulty" */
-			o_ptr->pval = randint(obj_level);
+			o_ptr->pval = randint1(obj_level);
 			if (o_ptr->sval == SV_CHEST_KANDUME) o_ptr->pval = 6;
 
 			o_ptr->xtra3 = dun_level + 5;
 
 			/* Never exceed "difficulty" of 55 to 59 */
-			if (o_ptr->pval > 55) o_ptr->pval = 55 + (byte)rand_int(5);
+			if (o_ptr->pval > 55) o_ptr->pval = 55 + (byte)randint0(5);
 
 			break;
 		}
@@ -4017,7 +4017,7 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 
 	int i, rolls, f1, f2, power;
 
-	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN) lev += rand_int(p_ptr->lev/2+10);
+	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN) lev += randint0(p_ptr->lev/2+10);
 
 	/* Maximum "level" for various things */
 	if (lev > MAX_DEPTH - 1) lev = MAX_DEPTH - 1;
@@ -4205,7 +4205,7 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 		case TV_RING:
 		case TV_AMULET:
 		{
-			if (!power && (rand_int(100) < 50)) power = -1;
+			if (!power && (randint0(100) < 50)) power = -1;
 			a_m_aux_3(o_ptr, lev, power);
 			break;
 		}
@@ -4301,7 +4301,7 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 
 		/* Randomize the "xtra" power */
 		if (o_ptr->xtra1 && !o_ptr->art_name)
-			o_ptr->xtra2 = randint(256);
+			o_ptr->xtra2 = randint1(256);
 
 		/* Hack -- acquire "broken" flag */
 		if (!e_ptr->cost) o_ptr->ident |= (IDENT_BROKEN);
@@ -4313,12 +4313,12 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 		if (cursed_p(o_ptr) || broken_p(o_ptr))
 		{
 			/* Hack -- obtain bonuses */
-			if (e_ptr->max_to_h) o_ptr->to_h -= randint(e_ptr->max_to_h);
-			if (e_ptr->max_to_d) o_ptr->to_d -= randint(e_ptr->max_to_d);
-			if (e_ptr->max_to_a) o_ptr->to_a -= randint(e_ptr->max_to_a);
+			if (e_ptr->max_to_h) o_ptr->to_h -= randint1(e_ptr->max_to_h);
+			if (e_ptr->max_to_d) o_ptr->to_d -= randint1(e_ptr->max_to_d);
+			if (e_ptr->max_to_a) o_ptr->to_a -= randint1(e_ptr->max_to_a);
 
 			/* Hack -- obtain pval */
-			if (e_ptr->max_pval) o_ptr->pval -= randint(e_ptr->max_pval);
+			if (e_ptr->max_pval) o_ptr->pval -= randint1(e_ptr->max_pval);
 		}
 
 		/* Hack -- apply extra bonuses if needed */
@@ -4328,20 +4328,20 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 			if (e_ptr->max_to_h)
 			{
 				if (e_ptr->max_to_h > 127)
-					o_ptr->to_h -= randint(256-e_ptr->max_to_h);
-				else o_ptr->to_h += randint(e_ptr->max_to_h);
+					o_ptr->to_h -= randint1(256-e_ptr->max_to_h);
+				else o_ptr->to_h += randint1(e_ptr->max_to_h);
 			}
 			if (e_ptr->max_to_d)
 			{
 				if (e_ptr->max_to_d > 127)
-					o_ptr->to_d -= randint(256-e_ptr->max_to_d);
-				else o_ptr->to_d += randint(e_ptr->max_to_d);
+					o_ptr->to_d -= randint1(256-e_ptr->max_to_d);
+				else o_ptr->to_d += randint1(e_ptr->max_to_d);
 			}
 			if (e_ptr->max_to_a)
 			{
 				if (e_ptr->max_to_a > 127)
-					o_ptr->to_a -= randint(256-e_ptr->max_to_a);
-				else o_ptr->to_a += randint(e_ptr->max_to_a);
+					o_ptr->to_a -= randint1(256-e_ptr->max_to_a);
+				else o_ptr->to_a += randint1(e_ptr->max_to_a);
 			}
 
 			/* Hack -- obtain pval */
@@ -4354,24 +4354,24 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 				}
 				else if (o_ptr->name2 == EGO_ATTACKS)
 				{
-					o_ptr->pval = randint(e_ptr->max_pval*lev/100+1);
+					o_ptr->pval = randint1(e_ptr->max_pval*lev/100+1);
 					if (o_ptr->pval > 3) o_ptr->pval = 3;
 					if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_HAYABUSA))
-						o_ptr->pval += randint(2);
+						o_ptr->pval += randint1(2);
 				}
 				else if (o_ptr->name2 == EGO_BAT)
 				{
-					o_ptr->pval = randint(e_ptr->max_pval);
-					if (o_ptr->sval == SV_ELVEN_CLOAK) o_ptr->pval += randint(2);
+					o_ptr->pval = randint1(e_ptr->max_pval);
+					if (o_ptr->sval == SV_ELVEN_CLOAK) o_ptr->pval += randint1(2);
 				}
 				else
 				{
-					o_ptr->pval += randint(e_ptr->max_pval);
+					o_ptr->pval += randint1(e_ptr->max_pval);
 				}
 			}
 			if ((o_ptr->name2 == EGO_SPEED) && (lev < 50))
 			{
-				o_ptr->pval = randint(o_ptr->pval);
+				o_ptr->pval = randint1(o_ptr->pval);
 			}
 			if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2) && (o_ptr->name2 != EGO_ATTACKS))
 				o_ptr->pval = 2;
@@ -4668,12 +4668,12 @@ bool make_gold(object_type *j_ptr)
 
 
 	/* Hack -- Pick a Treasure variety */
-	i = ((randint(object_level + 2) + 2) / 2) - 1;
+	i = ((randint1(object_level + 2) + 2) / 2) - 1;
 
 	/* Apply "extra" magic */
 	if (one_in_(GREAT_OBJ))
 	{
-		i += randint(object_level + 1);
+		i += randint1(object_level + 1);
 	}
 
 	/* Hack -- Creeping Coins only generate "themselves" */
@@ -4689,7 +4689,7 @@ bool make_gold(object_type *j_ptr)
 	base = k_info[OBJ_GOLD_LIST+i].cost;
 
 	/* Determine how much the treasure is "worth" */
-	j_ptr->pval = (base + (8L * randint(base)) + randint(8));
+	j_ptr->pval = (base + (8L * randint1(base)) + randint1(8));
 
 	/* Success */
 	return (TRUE);
@@ -4811,7 +4811,7 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 
 
 	/* Handle normal "breakage" */
-	if (!(j_ptr->art_name || artifact_p(j_ptr)) && (rand_int(100) < chance))
+	if (!(j_ptr->art_name || artifact_p(j_ptr)) && (randint0(100) < chance))
 	{
 		/* Message */
 #ifdef JP
@@ -4974,8 +4974,8 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 		/* Random locations */
 		else
 		{
-			ty = rand_int(cur_hgt);
-			tx = rand_int(cur_wid);
+			ty = randint0(cur_hgt);
+			tx = randint0(cur_wid);
 		}
 
 		/* Grid */
@@ -5193,7 +5193,7 @@ void pick_trap(int y, int x)
 	while (1)
 	{
 		/* Hack -- pick a trap */
-		feat = trap_num[rand_int(MAX_TRAPS)];
+		feat = trap_num[randint0(MAX_TRAPS)];
 
 		/* Accept non-trapdoors */
 		if (feat != FEAT_TRAP_TRAPDOOR) break;
@@ -6198,7 +6198,7 @@ object_type *choose_warning_item(void)
 	}
 
 	/* Choice one of them */
-	return (&inventory[choices[rand_int(number)]]);
+	return (&inventory[choices[randint0(number)]]);
 }
 
 /* Examine the grid (xx,yy) and warn the player if there are any danger */
@@ -7512,8 +7512,8 @@ static void add_essence(int mode)
 #endif
 				return;
 			}
-			get_to_h = ((val+1)/2+rand_int(val/2+1));
-			get_to_d = ((val+1)/2+rand_int(val/2+1));
+			get_to_h = ((val+1)/2+randint0(val/2+1));
+			get_to_d = ((val+1)/2+randint0(val/2+1));
 			o_ptr->xtra4 = (get_to_h<<8)+get_to_d;
 			o_ptr->to_h += get_to_h;
 			o_ptr->to_d += get_to_d;

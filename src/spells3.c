@@ -49,7 +49,7 @@ bool teleport_away(int m_idx, int dis, bool dec_valour)
 
 	if (dec_valour &&
 	    (((p_ptr->chp * 10) / p_ptr->mhp) > 5) &&
-		(4+randint(5) < ((p_ptr->chp * 10) / p_ptr->mhp)))
+		(4+randint1(5) < ((p_ptr->chp * 10) / p_ptr->mhp)))
 	{	
 		chg_virtue(V_VALOUR, -1);
 	}
@@ -155,7 +155,7 @@ void teleport_to_player(int m_idx, int power)
 	if (!m_ptr->r_idx) return;
 
 	/* "Skill" test */
-	if (randint(100) > power) return;
+	if (randint1(100) > power) return;
 
 	/* Initialize */
 	ny = m_ptr->fy;
@@ -614,7 +614,7 @@ msg_print("あなたは天井を突き破って宙へ浮いていく。");
 		p_ptr->inside_quest = 0;
 		p_ptr->leaving = TRUE;
 	}
-	else if (rand_int(100) < 50)
+	else if (randint0(100) < 50)
 	{
 #ifdef JP
 msg_print("あなたは天井を突き破って宙へ浮いていく。");
@@ -812,7 +812,7 @@ msg_print("張りつめた大気が流れ去った...");
 
 bool word_of_recall(void)
 {
-	return(recall_player(rand_int(21) + 15));
+	return(recall_player(randint0(21) + 15));
 }
 
 
@@ -898,7 +898,7 @@ bool apply_disenchant(int mode)
 
 
 	/* Pick a random slot */
-	switch (randint(8))
+	switch (randint1(8))
 	{
 		case 1: t = INVEN_RARM; break;
 		case 2: t = INVEN_LARM; break;
@@ -930,7 +930,7 @@ bool apply_disenchant(int mode)
 
 
 	/* Artifacts have 71% chance to resist */
-	if ((artifact_p(o_ptr) || o_ptr->art_name) && (rand_int(100) < 71))
+	if ((artifact_p(o_ptr) || o_ptr->art_name) && (randint0(100) < 71))
 	{
 		/* Message */
 #ifdef JP
@@ -949,15 +949,15 @@ msg_format("%s(%c)は劣化を跳ね返した！",o_name, index_to_label(t) );
 
 	/* Disenchant tohit */
 	if (o_ptr->to_h > 0) o_ptr->to_h--;
-	if ((o_ptr->to_h > 5) && (rand_int(100) < 20)) o_ptr->to_h--;
+	if ((o_ptr->to_h > 5) && (randint0(100) < 20)) o_ptr->to_h--;
 
 	/* Disenchant todam */
 	if (o_ptr->to_d > 0) o_ptr->to_d--;
-	if ((o_ptr->to_d > 5) && (rand_int(100) < 20)) o_ptr->to_d--;
+	if ((o_ptr->to_d > 5) && (randint0(100) < 20)) o_ptr->to_d--;
 
 	/* Disenchant toac */
 	if (o_ptr->to_a > 0) o_ptr->to_a--;
-	if ((o_ptr->to_a > 5) && (rand_int(100) < 20)) o_ptr->to_a--;
+	if ((o_ptr->to_a > 5) && (randint0(100) < 20)) o_ptr->to_a--;
 
 	/* Message */
 #ifdef JP
@@ -990,8 +990,8 @@ void mutate_player(void)
 	int max1, cur1, max2, cur2, ii, jj, i;
 
 	/* Pick a pair of stats */
-	ii = rand_int(6);
-	for (jj = ii; jj == ii; jj = rand_int(6)) /* loop */;
+	ii = randint0(6);
+	for (jj = ii; jj == ii; jj = randint0(6)) /* loop */;
 
 	max1 = p_ptr->stat_max[ii];
 	cur1 = p_ptr->stat_cur[ii];
@@ -1018,7 +1018,7 @@ void mutate_player(void)
  */
 void apply_nexus(monster_type *m_ptr)
 {
-	switch (randint(7))
+	switch (randint1(7))
 	{
 		case 1: case 2: case 3:
 		{
@@ -1034,7 +1034,7 @@ void apply_nexus(monster_type *m_ptr)
 
 		case 6:
 		{
-			if (rand_int(100) < p_ptr->skill_sav)
+			if (randint0(100) < p_ptr->skill_sav)
 			{
 #ifdef JP
 msg_print("しかし効力を跳ね返した！");
@@ -1052,7 +1052,7 @@ msg_print("しかし効力を跳ね返した！");
 
 		case 7:
 		{
-			if (rand_int(100) < p_ptr->skill_sav)
+			if (randint0(100) < p_ptr->skill_sav)
 			{
 #ifdef JP
 msg_print("しかし効力を跳ね返した！");
@@ -1343,7 +1343,7 @@ act = "は非常に不安定になったようだ。";
 #endif
 
 			o_ptr->name2 = EGO_TRUMP;
-			o_ptr->pval = randint(2);
+			o_ptr->pval = randint1(2);
 			break;
 		case 4:
 #ifdef JP
@@ -1399,7 +1399,7 @@ msg_format("あなたの%s%s", o_name, act);
 #endif
 
 
-		enchant(o_ptr, rand_int(3) + 4, ENCH_TOHIT | ENCH_TODAM);
+		enchant(o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
 
 		o_ptr->discount = 99;
 		chg_virtue(V_ENCHANT, 2);
@@ -1462,7 +1462,7 @@ msg_print("大きな爆発音があった！");
 #endif
 
 
-		if (destroy_area(py, px, 15 + p_ptr->lev + rand_int(11), TRUE))
+		if (destroy_area(py, px, 15 + p_ptr->lev + randint0(11), TRUE))
 #ifdef JP
 msg_print("ダンジョンが崩壊した...");
 #else
@@ -1478,9 +1478,9 @@ msg_print("ダンジョンは大きく揺れた。");
 
 
 #ifdef JP
-take_hit(DAMAGE_NOESCAPE, 100 + randint(150), "自殺的な虚無招来", -1);
+take_hit(DAMAGE_NOESCAPE, 100 + randint1(150), "自殺的な虚無招来", -1);
 #else
-		take_hit(DAMAGE_NOESCAPE, 100 + randint(150), "a suicidal Call the Void", -1);
+		take_hit(DAMAGE_NOESCAPE, 100 + randint1(150), "a suicidal Call the Void", -1);
 #endif
 
 	}
@@ -2037,7 +2037,7 @@ msg_print("効果がありません！");
 		/* Quest level */
 		cave_set_feat(py, px, FEAT_LESS);
 	}
-	else if (rand_int(100) < 50)
+	else if (randint0(100) < 50)
 	{
 		cave_set_feat(py, px, FEAT_MORE);
 	}
@@ -2213,7 +2213,7 @@ static void break_curse(object_type *o_ptr)
 	/* Extract the flags */
 	object_flags(o_ptr, &f1, &f2, &f3);
 
-	if (cursed_p(o_ptr) && !(f3 & TR3_PERMA_CURSE) && !(f3 & TR3_HEAVY_CURSE) && (rand_int(100) < 25))
+	if (cursed_p(o_ptr) && !(f3 & TR3_PERMA_CURSE) && !(f3 & TR3_HEAVY_CURSE) && (randint0(100) < 25))
 	{
 #ifdef JP
 msg_print("かけられていた呪いが打ち破られた！");
@@ -2271,7 +2271,7 @@ bool enchant(object_type *o_ptr, int n, int eflag)
 	for (i = 0; i < n; i++)
 	{
 		/* Hack -- Roll for pile resistance */
-		if (!force && rand_int(prob) >= 100) continue;
+		if (!force && randint0(prob) >= 100) continue;
 
 		/* Enchant to hit */
 		if (eflag & ENCH_TOHIT)
@@ -2280,7 +2280,7 @@ bool enchant(object_type *o_ptr, int n, int eflag)
 			else if (o_ptr->to_h > 15) chance = 1000;
 			else chance = enchant_table[o_ptr->to_h];
 
-			if (force || ((randint(1000) > chance) && (!a || (rand_int(100) < 50))))
+			if (force || ((randint1(1000) > chance) && (!a || (randint0(100) < 50))))
 			{
 				o_ptr->to_h++;
 				res = TRUE;
@@ -2298,7 +2298,7 @@ bool enchant(object_type *o_ptr, int n, int eflag)
 			else if (o_ptr->to_d > 15) chance = 1000;
 			else chance = enchant_table[o_ptr->to_d];
 
-			if (force || ((randint(1000) > chance) && (!a || (rand_int(100) < 50))))
+			if (force || ((randint1(1000) > chance) && (!a || (randint0(100) < 50))))
 			{
 				o_ptr->to_d++;
 				res = TRUE;
@@ -2316,7 +2316,7 @@ bool enchant(object_type *o_ptr, int n, int eflag)
 			else if (o_ptr->to_a > 15) chance = 1000;
 			else chance = enchant_table[o_ptr->to_a];
 
-			if (force || ((randint(1000) > chance) && (!a || (rand_int(100) < 50))))
+			if (force || ((randint1(1000) > chance) && (!a || (randint0(100) < 50))))
 			{
 				o_ptr->to_a++;
 				res = TRUE;
@@ -3051,13 +3051,13 @@ s = "魔力を充填すべきアイテムがない。";
 		else
 		{
 			/* Recharge based on the standard number of charges. */
-			recharge_amount = randint(1 + k_ptr->pval / 2);
+			recharge_amount = randint1(1 + k_ptr->pval / 2);
 
 			/* Multiple wands in a stack increase recharging somewhat. */
 			if ((o_ptr->tval == TV_WAND) && (o_ptr->number > 1))
 			{
 				recharge_amount +=
-					(randint(recharge_amount * (o_ptr->number - 1))) / 2;
+					(randint1(recharge_amount * (o_ptr->number - 1))) / 2;
 				if (recharge_amount < 1) recharge_amount = 1;
 				if (recharge_amount > 12) recharge_amount = 12;
 			}
@@ -3323,7 +3323,7 @@ s = "祝福できる武器がありません。";
 
 	if (o_ptr->ident & IDENT_CURSED)
 	{
-		if (((f3 & TR3_HEAVY_CURSE) && (randint(100) < 33)) ||
+		if (((f3 & TR3_HEAVY_CURSE) && (randint1(100) < 33)) ||
 		    (f3 & TR3_PERMA_CURSE))
 		{
 #ifdef JP
@@ -3417,7 +3417,7 @@ msg_print("その武器は祝福を嫌っている！");
 			dis_happened = TRUE;
 		}
 
-		if ((o_ptr->to_h > 5) && (rand_int(100) < 33)) o_ptr->to_h--;
+		if ((o_ptr->to_h > 5) && (randint0(100) < 33)) o_ptr->to_h--;
 
 		/* Disenchant todam */
 		if (o_ptr->to_d > 0)
@@ -3426,7 +3426,7 @@ msg_print("その武器は祝福を嫌っている！");
 			dis_happened = TRUE;
 		}
 
-		if ((o_ptr->to_d > 5) && (rand_int(100) < 33)) o_ptr->to_d--;
+		if ((o_ptr->to_d > 5) && (randint0(100) < 33)) o_ptr->to_d--;
 
 		/* Disenchant toac */
 		if (o_ptr->to_a > 0)
@@ -3435,7 +3435,7 @@ msg_print("その武器は祝福を嫌っている！");
 			dis_happened = TRUE;
 		}
 
-		if ((o_ptr->to_a > 5) && (rand_int(100) < 33)) o_ptr->to_a--;
+		if ((o_ptr->to_a > 5) && (randint0(100) < 33)) o_ptr->to_a--;
 
 		if (dis_happened)
 		{
@@ -3526,7 +3526,7 @@ msg_format("%sは輝いた！", o_name);
 		    ((o_ptr->number > 1) ? "" : "s"));
 #endif
 		o_ptr->name2 = EGO_REFLECTION;
-		enchant(o_ptr, rand_int(3) + 4, ENCH_TOAC);
+		enchant(o_ptr, randint0(3) + 4, ENCH_TOAC);
 
 		o_ptr->discount = 99;
 		chg_virtue(V_ENCHANT, 2);
@@ -4873,7 +4873,7 @@ int inven_damage(inven_func typ, int perc)
 			/* Count the casualties */
 			for (amt = j = 0; j < o_ptr->number; ++j)
 			{
-				if (rand_int(100) < perc) amt++;
+				if (randint0(100) < perc) amt++;
 			}
 
 			/* Some casualities */
@@ -4946,7 +4946,7 @@ static int minus_ac(void)
 
 
 	/* Pick a (possibly empty) inventory slot */
-	switch (randint(7))
+	switch (randint1(7))
 	{
 		case 1: o_ptr = &inventory[INVEN_RARM]; break;
 		case 2: o_ptr = &inventory[INVEN_LARM]; break;
@@ -5247,7 +5247,7 @@ bool curse_armor(void)
 	object_desc(o_name, o_ptr, FALSE, 3);
 
 	/* Attempt a saving throw for artifacts */
-	if ((o_ptr->art_name || artifact_p(o_ptr)) && (rand_int(100) < 50))
+	if ((o_ptr->art_name || artifact_p(o_ptr)) && (randint0(100) < 50))
 	{
 		/* Cool */
 #ifdef JP
@@ -5275,7 +5275,7 @@ msg_format("恐怖の暗黒オーラがあなたの%sを包み込んだ！", o_name);
 		/* Blast the armor */
 		o_ptr->name1 = 0;
 		o_ptr->name2 = EGO_BLASTED;
-		o_ptr->to_a = 0 - randint(5) - randint(5);
+		o_ptr->to_a = 0 - randint1(5) - randint1(5);
 		o_ptr->to_h = 0;
 		o_ptr->to_d = 0;
 		o_ptr->ac = 0;
@@ -5326,7 +5326,7 @@ bool curse_weapon(bool force, int slot)
 	object_desc(o_name, o_ptr, FALSE, 3);
 
 	/* Attempt a saving throw */
-	if ((artifact_p(o_ptr) || o_ptr->art_name) && (rand_int(100) < 50) && !force)
+	if ((artifact_p(o_ptr) || o_ptr->art_name) && (randint0(100) < 50) && !force)
 	{
 		/* Cool */
 #ifdef JP
@@ -5354,8 +5354,8 @@ if (!force) msg_format("恐怖の暗黒オーラがあなたの%sを包み込んだ！", o_name);
 		/* Shatter the weapon */
 		o_ptr->name1 = 0;
 		o_ptr->name2 = EGO_SHATTERED;
-		o_ptr->to_h = 0 - randint(5) - randint(5);
-		o_ptr->to_d = 0 - randint(5) - randint(5);
+		o_ptr->to_h = 0 - randint1(5) - randint1(5);
+		o_ptr->to_d = 0 - randint1(5) - randint1(5);
 		o_ptr->to_a = 0;
 		o_ptr->ac = 0;
 		o_ptr->dd = 0;
@@ -5409,7 +5409,7 @@ bool brand_bolts(void)
 		if (cursed_p(o_ptr) || broken_p(o_ptr)) continue;
 
 		/* Randomize */
-		if (rand_int(100) < 75) continue;
+		if (randint0(100) < 75) continue;
 
 		/* Message */
 #ifdef JP
@@ -5423,7 +5423,7 @@ msg_print("クロスボウの矢が炎のオーラに包まれた！");
 		o_ptr->name2 = EGO_FLAME;
 
 		/* Enchant */
-		enchant(o_ptr, rand_int(3) + 4, ENCH_TOHIT | ENCH_TODAM);
+		enchant(o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
 
 		/* Notice */
 		return (TRUE);
@@ -5462,8 +5462,8 @@ static s16b poly_r_idx(int r_idx)
 		return (r_idx);
 
 	/* Allowable range of "levels" for resulting monster */
-	lev1 = r_ptr->level - ((randint(20) / randint(9)) + 1);
-	lev2 = r_ptr->level + ((randint(20) / randint(9)) + 1);
+	lev1 = r_ptr->level - ((randint1(20) / randint1(9)) + 1);
+	lev2 = r_ptr->level + ((randint1(20) / randint1(9)) + 1);
 
 	/* Pick a (possibly new) non-unique race */
 	for (i = 0; i < 1000; i++)
@@ -5556,7 +5556,7 @@ bool dimension_door(void)
 
 	if (!cave_empty_bold(y, x) || (cave[y][x].info & CAVE_ICKY) ||
 		(distance(y, x, py, px) > plev / 2 + 10) ||
-		(!rand_int(plev / 10 + 10)))
+		(!randint0(plev / 10 + 10)))
 	{
 	  if( p_ptr->pclass != CLASS_MIRROR_MASTER ){
 #ifdef JP

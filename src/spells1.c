@@ -58,13 +58,13 @@ static void next_mirror( int* next_y , int* next_x )
 	}
 	if( mirror_num )
 	{
-		num=rand_int(mirror_num);
+		num=randint0(mirror_num);
 		*next_y=mirror_y[num];
 		*next_x=mirror_x[num];
 		return;
 	}
-	*next_y=rand_int(cur_hgt);
-	*next_x=rand_int(cur_wid);
+	*next_y=randint0(cur_hgt);
+	*next_x=randint0(cur_wid);
 	return;
 }
 		
@@ -73,7 +73,7 @@ static void next_mirror( int* next_y , int* next_x )
  */
 static byte mh_attr(int max)
 {
-	switch (randint(max))
+	switch (randint1(max))
 	{
 		case  1: return (TERM_RED);
 		case  2: return (TERM_GREEN);
@@ -177,7 +177,7 @@ static byte spell_color(int type)
 		if (!s) return (TERM_WHITE);
 
 		/* Pick a random color */
-		c = s[rand_int(strlen(s))];
+		c = s[randint0(strlen(s))];
 
 		/* Lookup this color */
 		a = strchr(color_char, c) - color_char;
@@ -730,7 +730,7 @@ msg_print("まばゆい閃光が走った！");
 				if (c_ptr->info & CAVE_TRAP) c_ptr->info &= ~(CAVE_TRAP);
 				else
 				{
-					c_ptr->feat = floor_type[rand_int(100)];
+					c_ptr->feat = floor_type[randint0(100)];
 					c_ptr->info &= ~(CAVE_MASK);
 					c_ptr->info |= CAVE_FLOOR;
 				}
@@ -801,7 +801,7 @@ msg_print("まばゆい閃光が走った！");
 				if (c_ptr->info & CAVE_TRAP) c_ptr->info &= ~(CAVE_TRAP);
 				else
 				{
-					c_ptr->feat = floor_type[rand_int(100)];
+					c_ptr->feat = floor_type[randint0(100)];
 					c_ptr->info &= ~(CAVE_MASK);
 					c_ptr->info |= CAVE_FLOOR;
 				}
@@ -868,7 +868,7 @@ msg_print("壁が溶けて泥になった！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Destroy the wall */
-				c_ptr->feat = floor_type[rand_int(100)];
+				c_ptr->feat = floor_type[randint0(100)];
 				c_ptr->info &= ~(CAVE_MASK);
 				c_ptr->info |= CAVE_FLOOR;
 			}
@@ -894,7 +894,7 @@ msg_print("何かを発見した！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Destroy the wall */
-				c_ptr->feat = floor_type[rand_int(100)];
+				c_ptr->feat = floor_type[randint0(100)];
 				c_ptr->info &= ~(CAVE_MASK);
 				c_ptr->info |= CAVE_FLOOR;
 
@@ -921,7 +921,7 @@ msg_print("鉱脈が溶けて泥になった！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Destroy the wall */
-				c_ptr->feat = floor_type[rand_int(100)];
+				c_ptr->feat = floor_type[randint0(100)];
 				c_ptr->info &= ~(CAVE_MASK);
 				c_ptr->info |= CAVE_FLOOR;
 			}
@@ -945,12 +945,12 @@ msg_print("岩石が溶けて泥になった！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Destroy the rubble */
-				c_ptr->feat = floor_type[rand_int(100)];
+				c_ptr->feat = floor_type[randint0(100)];
 				c_ptr->info &= ~(CAVE_MASK);
 				c_ptr->info |= CAVE_FLOOR;
 
 				/* Hack -- place an object */
-				if (rand_int(100) < 10)
+				if (randint0(100) < 10)
 				{
 					/* Found something */
 					if (player_can_see_bold(y, x))
@@ -988,7 +988,7 @@ msg_print("ドアが溶けて泥になった！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Destroy the feature */
-				c_ptr->feat = floor_type[rand_int(100)];
+				c_ptr->feat = floor_type[randint0(100)];
 				c_ptr->info &= ~(CAVE_MASK);
 				c_ptr->info |= CAVE_FLOOR;
 			}
@@ -1554,8 +1554,8 @@ msg_print("カチッと音がした！");
 					bool pet = (!who || is_pet(&m_list[who]));
 					for (i = 0; i < o_ptr->number ; i++)
 					{
-						if (((o_ptr->sval == SV_CORPSE) && (randint(100) > 80)) ||
-						    ((o_ptr->sval == SV_SKELETON) && (randint(100) > 60)))
+						if (((o_ptr->sval == SV_CORPSE) && (randint1(100) > 80)) ||
+						    ((o_ptr->sval == SV_SKELETON) && (randint1(100) > 60)))
 						{
 							if (!note_kill)
 							{
@@ -1692,15 +1692,15 @@ msg_format("%sは%s", o_name, note_kill);
  * and hurts evil less.  If can breath nether, then it resists it as well.
  *
  * Damage reductions use the following formulas:
- *   Note that "dam = dam * 6 / (randint(6) + 6);"
+ *   Note that "dam = dam * 6 / (randint1(6) + 6);"
  *     gives avg damage of .655, ranging from .858 to .500
- *   Note that "dam = dam * 5 / (randint(6) + 6);"
+ *   Note that "dam = dam * 5 / (randint1(6) + 6);"
  *     gives avg damage of .544, ranging from .714 to .417
- *   Note that "dam = dam * 4 / (randint(6) + 6);"
+ *   Note that "dam = dam * 4 / (randint1(6) + 6);"
  *     gives avg damage of .444, ranging from .556 to .333
- *   Note that "dam = dam * 3 / (randint(6) + 6);"
+ *   Note that "dam = dam * 3 / (randint1(6) + 6);"
  *     gives avg damage of .327, ranging from .427 to .250
- *   Note that "dam = dam * 2 / (randint(6) + 6);"
+ *   Note that "dam = dam * 2 / (randint1(6) + 6);"
  *     gives something simple.
  *
  * In this function, "result" messages are postponed until the end, where
@@ -2050,7 +2050,7 @@ note = "には耐性がある。";
 				note = " resists.";
 #endif
 
-				dam *= 3; dam /= randint(6) + 6;
+				dam *= 3; dam /= randint1(6) + 6;
 				if (seen) r_ptr->r_flags3 |= (RF3_IM_POIS);
 			}
 			else if (one_in_(3)) do_poly = TRUE;
@@ -2131,7 +2131,7 @@ note = "には耐性がある。";
 				note = " resists.";
 #endif
 
-				dam *= 3; dam /= randint(6) + 6;
+				dam *= 3; dam /= randint1(6) + 6;
 			}
 			break;
 		}
@@ -2177,7 +2177,7 @@ note = "には耐性がある。";
 				note = " resists.";
 #endif
 
-				dam *= 3; dam /= randint(6) + 6;
+				dam *= 3; dam /= randint1(6) + 6;
 				if (seen)
 					r_ptr->r_flags3 |= (RF3_RES_PLAS);
 			}
@@ -2218,7 +2218,7 @@ note = "には耐性がある。";
 				note = " resists.";
 #endif
 
-				dam *= 3; dam /= randint(6) + 6;
+				dam *= 3; dam /= randint1(6) + 6;
 
 				if (seen) r_ptr->r_flags3 |= (RF3_RES_NETH);
 			}
@@ -2269,7 +2269,7 @@ note = "には耐性がある。";
 				note = " resists.";
 #endif
 
-				dam *= 3; dam /= randint(6) + 6;
+				dam *= 3; dam /= randint1(6) + 6;
 				if (seen) r_ptr->r_flags3 |= (RF3_RES_WATE);
 			}
 			break;
@@ -2291,7 +2291,7 @@ note = "には耐性がある。";
 				break;
 			}
 			do_poly = TRUE;
-			do_conf = (5 + randint(11) + r) / (r + 1);
+			do_conf = (5 + randint1(11) + r) / (r + 1);
 			if ((r_ptr->flags4 & RF4_BR_CHAO) ||
 			    (m_ptr->r_idx == MON_STORMBRINGER) ||
 			    ((r_ptr->flags3 & RF3_DEMON) && one_in_(3)))
@@ -2302,7 +2302,7 @@ note = "には耐性がある。";
 				note = " resists.";
 #endif
 
-				dam *= 3; dam /= randint(6) + 6;
+				dam *= 3; dam /= randint1(6) + 6;
 				do_poly = FALSE;
 			}
 			break;
@@ -2331,7 +2331,7 @@ note = "には耐性がある。";
 				note = " resists.";
 #endif
 
-				dam *= 3; dam /= randint(6) + 6;
+				dam *= 3; dam /= randint1(6) + 6;
 			}
 			break;
 		}
@@ -2381,7 +2381,7 @@ note = "はいくらか耐性を示した。";
 				if (seen) r_ptr->r_flags3 |= (RF3_RES_ALL);
 				break;
 			}
-			do_stun = (10 + randint(15) + r) / (r + 1);
+			do_stun = (10 + randint1(15) + r) / (r + 1);
 			if (r_ptr->flags4 & RF4_BR_SOUN)
 			{
 #ifdef JP
@@ -2390,7 +2390,7 @@ note = "には耐性がある。";
 				note = " resists.";
 #endif
 
-				dam *= 2; dam /= randint(6) + 6;
+				dam *= 2; dam /= randint1(6) + 6;
 			}
 			break;
 		}
@@ -2410,7 +2410,7 @@ note = "には耐性がある。";
 				if (seen) r_ptr->r_flags3 |= (RF3_RES_ALL);
 				break;
 			}
-			do_conf = (10 + randint(15) + r) / (r + 1);
+			do_conf = (10 + randint1(15) + r) / (r + 1);
 			if (r_ptr->flags4 & RF4_BR_CONF)
 			{
 #ifdef JP
@@ -2419,7 +2419,7 @@ note = "には耐性がある。";
 				note = " resists.";
 #endif
 
-				dam *= 2; dam /= randint(6) + 6;
+				dam *= 2; dam /= randint1(6) + 6;
 			}
 			else if (r_ptr->flags3 & RF3_NO_CONF)
 			{
@@ -2457,7 +2457,7 @@ note = "には耐性がある。";
 				note = " resists.";
 #endif
 
-				dam *= 3; dam /= randint(6) + 6;
+				dam *= 3; dam /= randint1(6) + 6;
 				if (seen) r_ptr->r_flags3 |= (RF3_RES_DISE);
 			}
 			break;
@@ -2486,7 +2486,7 @@ note = "には耐性がある。";
 				note = " resists.";
 #endif
 
-				dam *= 3; dam /= randint(6) + 6;
+				dam *= 3; dam /= randint1(6) + 6;
 				if (seen) r_ptr->r_flags3 |= (RF3_RES_NEXU);
 			}
 			break;
@@ -2507,7 +2507,7 @@ note = "には耐性がある。";
 				if (seen) r_ptr->r_flags3 |= (RF3_RES_ALL);
 				break;
 			}
-			do_stun = (randint(15) + r) / (r + 1);
+			do_stun = (randint1(15) + r) / (r + 1);
 			if (r_ptr->flags4 & RF4_BR_WALL)
 			{
 #ifdef JP
@@ -2516,7 +2516,7 @@ note = "には耐性がある。";
 				note = " resists.";
 #endif
 
-				dam *= 3; dam /= randint(6) + 6;
+				dam *= 3; dam /= randint1(6) + 6;
 			}
 			break;
 		}
@@ -2544,13 +2544,13 @@ note = "には耐性がある。";
 				note = " resists.";
 #endif
 
-				dam *= 3; dam /= randint(6) + 6;
+				dam *= 3; dam /= randint1(6) + 6;
 			}
 			else
 			{
 				/* Powerful monsters can resist */
 				if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
-				    (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 				{
 					obvious = FALSE;
 				}
@@ -2596,7 +2596,7 @@ note = "には耐性がある。";
 				note = " resists.";
 #endif
 
-				dam *= 3; dam /= randint(6) + 6;
+				dam *= 3; dam /= randint1(6) + 6;
 			}
 			else do_time = (dam+1)/2;
 			break;
@@ -2633,7 +2633,7 @@ note = "には効果がなかった。";
 
 					resist_tele = TRUE;
 				}
-				else if (r_ptr->level > randint(100))
+				else if (r_ptr->level > randint1(100))
 				{
 					if (seen) r_ptr->r_flags3 |= RF3_RES_TELE;
 #ifdef JP
@@ -2658,7 +2658,7 @@ note = "には耐性がある。";
 				note = " resists.";
 #endif
 
-				dam *= 3; dam /= randint(6) + 6;
+				dam *= 3; dam /= randint1(6) + 6;
 				do_dist = 0;
 			}
 			else
@@ -2666,7 +2666,7 @@ note = "には耐性がある。";
 				/* 1. slowness */
 				/* Powerful monsters can resist */
 				if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
-				    (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 				{
 					obvious = FALSE;
 				}
@@ -2691,7 +2691,7 @@ note = "の動きが遅くなった。";
 
 				/* Attempt a saving throw */
 				if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
-				    (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 				{
 					/* Resist */
 					do_stun = 0;
@@ -2801,7 +2801,7 @@ note = "には完全な耐性がある！";
 			else if ((r_ptr->flags2 & RF2_STUPID) ||
 						(r_ptr->flags2 & RF2_WEIRD_MIND) ||
 						(r_ptr->flags3 & RF3_ANIMAL) ||
-						(r_ptr->level > randint(3 * dam)))
+						(r_ptr->level > randint1(3 * dam)))
 			{
 				dam /= 3;
 #ifdef JP
@@ -2830,7 +2830,7 @@ msg_format("%^sの堕落した精神は攻撃を跳ね返した！",
 #endif
 
 					/* Saving throw */
-					if (rand_int(100 + r_ptr->level/2) < p_ptr->skill_sav)
+					if (randint0(100 + r_ptr->level/2) < p_ptr->skill_sav)
 					{
 #ifdef JP
 msg_print("しかし効力を跳ね返した！");
@@ -2846,13 +2846,13 @@ msg_print("しかし効力を跳ね返した！");
 						take_hit(DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
 						if (one_in_(4))
 						{
-							switch (randint(4))
+							switch (randint1(4))
 							{
 								case 1:
-									set_confused(p_ptr->confused + 3 + randint(dam));
+									set_confused(p_ptr->confused + 3 + randint1(dam));
 									break;
 								case 2:
-									set_stun(p_ptr->stun + randint(dam));
+									set_stun(p_ptr->stun + randint1(dam));
 									break;
 								case 3:
 								{
@@ -2864,12 +2864,12 @@ note = "には効果がなかった。";
 #endif
 
 									else
-										set_afraid(p_ptr->afraid + 3 + randint(dam));
+										set_afraid(p_ptr->afraid + 3 + randint1(dam));
 									break;
 								}
 								default:
 									if (!p_ptr->free_act)
-										(void)set_paralyzed(p_ptr->paralyzed + randint(dam));
+										(void)set_paralyzed(p_ptr->paralyzed + randint1(dam));
 									break;
 							}
 						}
@@ -2880,16 +2880,16 @@ note = "には効果がなかった。";
 
 			if ((dam > 0) && one_in_(4))
 			{
-				switch (randint(4))
+				switch (randint1(4))
 				{
 					case 1:
-						do_conf = 3 + randint(dam);
+						do_conf = 3 + randint1(dam);
 						break;
 					case 2:
-						do_stun = 3 + randint(dam);
+						do_stun = 3 + randint1(dam);
 						break;
 					case 3:
-						do_fear = 3 + randint(dam);
+						do_fear = 3 + randint1(dam);
 						break;
 					default:
 #ifdef JP
@@ -2898,7 +2898,7 @@ note = "は眠り込んでしまった！";
 						note = " falls asleep!";
 #endif
 
-						do_sleep = 3 + randint(dam);
+						do_sleep = 3 + randint1(dam);
 						break;
 				}
 			}
@@ -2939,7 +2939,7 @@ note = "には完全な耐性がある！";
 			else if ((r_ptr->flags2 & RF2_STUPID) ||
 			         (r_ptr->flags2 & RF2_WEIRD_MIND) ||
 			         (r_ptr->flags3 & RF3_ANIMAL) ||
-						(r_ptr->level > randint(3 * dam)))
+						(r_ptr->level > randint1(3 * dam)))
 			{
 				dam /= 3;
 #ifdef JP
@@ -2968,7 +2968,7 @@ msg_format("%^sの堕落した精神は攻撃を跳ね返した！",
 #endif
 
 					/* Saving throw */
-					if (rand_int(100 + r_ptr->level/2) < p_ptr->skill_sav)
+					if (randint0(100 + r_ptr->level/2) < p_ptr->skill_sav)
 					{
 #ifdef JP
 msg_print("あなたは効力を跳ね返した！");
@@ -3046,7 +3046,7 @@ note_dies = "の精神は崩壊し、肉体は抜け殻となった。";
 
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
-			    (r_ptr->level > 5 + randint(dam)))
+			    (r_ptr->level > 5 + randint1(dam)))
 			{
 				/* Resist */
 				do_stun = 0;
@@ -3112,7 +3112,7 @@ note_dies = "の精神は崩壊し、肉体は抜け殻となった。";
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
 			    (r_ptr->flags1 & RF1_QUESTOR) ||
 			    (r_ptr->flags3 & RF3_NO_CONF) ||
-			    (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* Memorize a flag */
 				if (r_ptr->flags3 & RF3_NO_CONF)
@@ -3142,7 +3142,7 @@ msg_format("%^sの堕落した精神は攻撃を跳ね返した！",
 #endif
 
 					/* Saving throw */
-					if (rand_int(100 + r_ptr->level/2) < p_ptr->skill_sav)
+					if (randint0(100 + r_ptr->level/2) < p_ptr->skill_sav)
 					{
 #ifdef JP
 msg_print("しかし効力を跳ね返した！");
@@ -3154,7 +3154,7 @@ msg_print("しかし効力を跳ね返した！");
 					else
 					{
 						/* Confuse, stun, terrify */
-						switch (randint(4))
+						switch (randint1(4))
 						{
 							case 1:
 								set_stun(p_ptr->stun + dam / 2);
@@ -3191,7 +3191,7 @@ note = "には効果がなかった！";
 			}
 			else
 			{
-				if ((dam > 29) && (randint(100) < dam))
+				if ((dam > 29) && (randint1(100) < dam))
 				{
 #ifdef JP
 note = "があなたに隷属した。";
@@ -3203,7 +3203,7 @@ note = "があなたに隷属した。";
 				}
 				else
 				{
-					switch (randint(4))
+					switch (randint1(4))
 					{
 						case 1:
 							do_stun = dam / 2;
@@ -3239,7 +3239,7 @@ note = "があなたに隷属した。";
 				if (seen) r_ptr->r_flags3 |= (RF3_RES_ALL);
 				break;
 			}
-			do_stun = (randint(15) + 1) / (r + 1);
+			do_stun = (randint1(15) + 1) / (r + 1);
 			if (r_ptr->flags3 & RF3_IM_COLD)
 			{
 #ifdef JP
@@ -3331,9 +3331,9 @@ note = "には完全な耐性がある。";
 				dam = 0;
 			}
 			else if (((r_ptr->flags1 & RF1_UNIQUE) &&
-				 (randint(888) != 666)) ||
-				 (((r_ptr->level + randint(20)) > randint(p_ptr->lev + randint(10))) &&
-				 randint(100) != 66))
+				 (randint1(888) != 666)) ||
+				 (((r_ptr->level + randint1(20)) > randint1(p_ptr->lev + randint1(10))) &&
+				 randint1(100) != 66))
 			{
 #ifdef JP
 note = "には耐性がある！";
@@ -3370,7 +3370,7 @@ note = "には耐性がある！";
 			/* Powerful monsters can resist */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
 			    (r_ptr->flags1 & RF1_QUESTOR) ||
-			    (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 #ifdef JP
 note = "には効果がなかった。";
@@ -3579,7 +3579,7 @@ note = "の動きが速くなった。";
 			}
 			/* Powerful monsters can resist */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
-			    (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 #ifdef JP
 note = "には効果がなかった！";
@@ -3632,7 +3632,7 @@ note = "の動きが遅くなった。";
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
 			    (r_ptr->flags3 & RF3_NO_SLEEP) ||
-			    (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* Memorize a flag */
 				if (r_ptr->flags3 & RF3_NO_SLEEP)
@@ -3685,7 +3685,7 @@ note = "は眠り込んでしまった！";
 			}
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
-			    (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 #ifdef JP
 note = "には効果がなかった！";
@@ -3750,7 +3750,7 @@ note = "は動けなくなった！";
 			if ((r_ptr->flags1 & RF1_QUESTOR) ||
 			    (r_ptr->flags3 & RF3_NO_CONF) ||
 			    (m_ptr->mflag2 & MFLAG_NOPET) ||
-			    (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 5))
+			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 5))
 			{
 				/* Memorize a flag */
 				if (r_ptr->flags3 & RF3_NO_CONF)
@@ -3837,7 +3837,7 @@ note = "は突然友好的になったようだ！";
 			if ((r_ptr->flags1 & RF1_QUESTOR) ||
 			  (!(r_ptr->flags3 & RF3_UNDEAD)) ||
 			    (m_ptr->mflag2 & MFLAG_NOPET) ||
-				 (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				 (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* No obvious effect */
 #ifdef JP
@@ -3912,7 +3912,7 @@ note = "は既にあなたの奴隷だ！";
 			if ((r_ptr->flags1 & RF1_QUESTOR) ||
 			  (!(r_ptr->flags3 & RF3_DEMON)) ||
 			    (m_ptr->mflag2 & MFLAG_NOPET) ||
-				 (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				 (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* No obvious effect */
 #ifdef JP
@@ -3989,7 +3989,7 @@ note = "は既にあなたの奴隷だ！";
 			  (!(r_ptr->flags3 & (RF3_ANIMAL))) ||
 			    (m_ptr->mflag2 & MFLAG_NOPET) ||
 				 (r_ptr->flags3 & (RF3_NO_CONF)) ||
-				 (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				 (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* Memorize a flag */
 				if (r_ptr->flags3 & (RF3_NO_CONF))
@@ -4084,7 +4084,7 @@ msg_format("%sを見つめた。",m_name);
 			if ((r_ptr->flags1 & (RF1_QUESTOR)) ||
 			    (m_ptr->mflag2 & MFLAG_NOPET) ||
 			         (r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) ||
-				 ((r_ptr->level+10) > randint(dam)))
+				 ((r_ptr->level+10) > randint1(dam)))
 			{
 				/* Resist */
 				/* No obvious effect */
@@ -4148,7 +4148,7 @@ note = "を支配した。";
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
 			    (r_ptr->flags3 & (RF3_NO_CONF)) ||
-			    (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* Memorize a flag */
 				if (r_ptr->flags3 & (RF3_NO_CONF))
@@ -4193,7 +4193,7 @@ note = "には効果がなかった！";
 
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
-			    (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* Resist */
 				do_stun = 0;
@@ -4284,7 +4284,7 @@ note = "には耐性がある！";
 				note = " resists.";
 #endif
 
-				dam *= 2; dam /= (randint(6)+6);
+				dam *= 2; dam /= (randint1(6)+6);
 			}
 			else if (r_ptr->flags3 & (RF3_HURT_LITE))
 			{
@@ -4330,7 +4330,7 @@ note = "には耐性がある！";
 				note = " resists.";
 #endif
 
-				dam *= 2; dam /= (randint(6)+6);
+				dam *= 2; dam /= (randint1(6)+6);
 			}
 			break;
 		}
@@ -4396,7 +4396,7 @@ note = "には効果がなかった！";
 
 						resists_tele = TRUE;
 					}
-					else if (r_ptr->level > randint(100))
+					else if (r_ptr->level > randint1(100))
 					{
 						if (seen) r_ptr->r_flags3 |= RF3_RES_TELE;
 #ifdef JP
@@ -4451,7 +4451,7 @@ note = "には効果がなかった！";
 
 						resists_tele = TRUE;
 					}
-					else if (r_ptr->level > randint(100))
+					else if (r_ptr->level > randint1(100))
 					{
 						if (seen) r_ptr->r_flags3 |= RF3_RES_TELE;
 #ifdef JP
@@ -4502,7 +4502,7 @@ note = "には効果がなかった！";
 
 					resists_tele = TRUE;
 				}
-				else if (r_ptr->level > randint(100))
+				else if (r_ptr->level > randint1(100))
 				{
 					if (seen) r_ptr->r_flags3 |= RF3_RES_TELE;
 #ifdef JP
@@ -4551,7 +4551,7 @@ note = "には耐性がある！";
 				do_fear = damroll(3, (dam / 2)) + 1;
 
 				/* Attempt a saving throw */
-				if (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 10)
+				if (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10)
 				{
 					/* No obvious effect */
 #ifdef JP
@@ -4599,7 +4599,7 @@ note = "には効果がなかった！";
 				do_fear = damroll(3, (dam / 2)) + 1;
 
 				/* Attempt a saving throw */
-				if (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 10)
+				if (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10)
 				{
 					/* No obvious effect */
 #ifdef JP
@@ -4643,7 +4643,7 @@ note = "には効果がなかった！";
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
 			    (r_ptr->flags3 & (RF3_NO_FEAR)) ||
-			    (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* No obvious effect */
 #ifdef JP
@@ -4960,7 +4960,7 @@ msg_format("%sをじっと睨んだ。",m_name);
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
 				 (r_ptr->flags3 & RF3_NO_CONF) ||
-				 (r_ptr->level > randint((p_ptr->lev*2 - 10) < 1 ? 1 : (p_ptr->lev*2 - 10)) + 10))
+				 (r_ptr->level > randint1((p_ptr->lev*2 - 10) < 1 ? 1 : (p_ptr->lev*2 - 10)) + 10))
 			{
 				/* Memorize a flag */
 				if (r_ptr->flags3 & (RF3_NO_CONF))
@@ -4984,7 +4984,7 @@ note_dies = "の精神は崩壊し、肉体は抜け空となった。";
 				note_dies = " collapses, a mindless husk.";
 #endif
 
-				do_conf = rand_int(8) + 8;
+				do_conf = randint0(8) + 8;
 			}
 			break;
 		}
@@ -5015,7 +5015,7 @@ msg_format("%sをじっと睨んだ。",m_name);
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
 				 (r_ptr->flags3 & RF3_NO_CONF) ||
-				 (r_ptr->level > randint((p_ptr->lev*2 - 10) < 1 ? 1 : (p_ptr->lev*2 - 10)) + 10))
+				 (r_ptr->level > randint1((p_ptr->lev*2 - 10) < 1 ? 1 : (p_ptr->lev*2 - 10)) + 10))
 			{
 				/* Memorize a flag */
 				if (r_ptr->flags3 & (RF3_NO_CONF))
@@ -5039,8 +5039,8 @@ note_dies = "の精神は崩壊し、肉体は抜け空となった。";
 				note_dies = " collapses, a mindless husk.";
 #endif
 
-				do_conf = rand_int(8) + 8;
-				do_stun = rand_int(8) + 8;
+				do_conf = randint0(8) + 8;
+				do_stun = randint0(8) + 8;
 				m_ptr->slow = MIN(200, m_ptr->slow + 10);
 				if (c_ptr->m_idx == p_ptr->riding)
 					p_ptr->update |= (PU_BONUS);
@@ -5072,7 +5072,7 @@ msg_format("%sを指差して呪いをかけた。",m_name);
 			}
 
 			/* Attempt a saving throw */
-			if (rand_int(100 + p_ptr->lev) < (r_ptr->level + 35))
+			if (randint0(100 + p_ptr->lev) < (r_ptr->level + 35))
 			{
 
 #ifdef JP
@@ -5109,7 +5109,7 @@ msg_format("%sを指差して恐ろしげに呪いをかけた。",m_name);
 			}
 
 			/* Attempt a saving throw */
-			if (rand_int(100 + p_ptr->lev) < (r_ptr->level + 35))
+			if (randint0(100 + p_ptr->lev) < (r_ptr->level + 35))
 			{
 
 #ifdef JP
@@ -5146,7 +5146,7 @@ msg_format("%sを指差し、恐しげに呪文を唱えた！",m_name);
 			}
 
 			/* Attempt a saving throw */
-			if (rand_int(100 + p_ptr->lev) < (r_ptr->level + 35))
+			if (randint0(100 + p_ptr->lev) < (r_ptr->level + 35))
 			{
 
 #ifdef JP
@@ -5183,7 +5183,7 @@ msg_format("%sの秘孔を突いて、「お前は既に死んでいる」と叫んだ。",m_name);
 			}
 
 			/* Attempt a saving throw */
-			if (rand_int(100 + p_ptr->lev) < (r_ptr->level + 35))
+			if (randint0(100 + p_ptr->lev) < (r_ptr->level + 35))
 			{
 
 #ifdef JP
@@ -5224,10 +5224,10 @@ note = "には効果がなかった！";
 			}
 			else
 			{
-				if ((p_ptr->lev + randint(dam)) >
-					(r_ptr->level + randint(200)))
+				if ((p_ptr->lev + randint1(dam)) >
+					(r_ptr->level + randint1(200)))
 					{
-						dam = ((40 + randint(20)) * m_ptr->hp) / 100;
+						dam = ((40 + randint1(20)) * m_ptr->hp) / 100;
 
 						if (m_ptr->hp < dam) dam = m_ptr->hp - 1;
 					}
@@ -5275,7 +5275,7 @@ msg_format("もっと弱らせないと。");
 #endif
 				skipped = TRUE;
 			}
-			else if (m_ptr->hp < rand_int(nokori_hp))
+			else if (m_ptr->hp < randint0(nokori_hp))
 			{
 				if (m_ptr->mflag2 & MFLAG_CHAMELEON) choose_new_monster(c_ptr->m_idx, FALSE, MON_CHAMELEON);
 #ifdef JP
@@ -5427,7 +5427,7 @@ note = "には効果がなかった！";
 			{
 				/* Powerful monsters can resist */
 				if ((r_ptr->flags1 & RF1_UNIQUE) ||
-				    (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 				{
 #ifdef JP
 note = "には効果がなかった！";
@@ -5462,7 +5462,7 @@ note = "の動きが遅くなった。";
 
 				/* Attempt a saving throw */
 				if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
-				    (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 				{
 					/* Resist */
 					do_stun = 0;
@@ -5483,7 +5483,7 @@ note = "には効果がなかった！";
 				/* Attempt a saving throw */
 				if ((r_ptr->flags1 & RF1_UNIQUE) ||
 				    (r_ptr->flags3 & RF3_NO_SLEEP) ||
-				    (r_ptr->level > randint((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 				{
 					/* Memorize a flag */
 					if (r_ptr->flags3 & RF3_NO_SLEEP)
@@ -5552,7 +5552,7 @@ note = "には効果がなかった！";
 			}
 			else
 			{
-				if ((r_ptr->level > rand_int(dam)) || (m_ptr->mflag2 & MFLAG_NOGENO))
+				if ((r_ptr->level > randint0(dam)) || (m_ptr->mflag2 & MFLAG_NOGENO))
 				{
 					dam = 0;
 					angry = TRUE;
@@ -5567,9 +5567,9 @@ note = "には効果がなかった！";
 #endif
 
 #ifdef JP
-					take_hit(DAMAGE_GENO, randint((r_ptr->level+1)/2), "モンスター消滅の呪文を唱えた疲労", -1);
+					take_hit(DAMAGE_GENO, randint1((r_ptr->level+1)/2), "モンスター消滅の呪文を唱えた疲労", -1);
 #else
-					take_hit(DAMAGE_GENO, randint((r_ptr->level+1)/2), "the strain of casting Genocide One", -1);
+					take_hit(DAMAGE_GENO, randint1((r_ptr->level+1)/2), "the strain of casting Genocide One", -1);
 #endif
 					dam = 0;
 
@@ -5710,7 +5710,7 @@ note_dies = "は光を受けてしぼんでしまった！";
 	}
 
 	/* Mega-Hack -- Handle "polymorph" -- monsters get a saving throw */
-	else if (do_poly && (randint(90) > r_ptr->level))
+	else if (do_poly && (randint1(90) > r_ptr->level))
 	{
 		if (polymorph_monster(y, x))
 		{
@@ -6031,7 +6031,7 @@ msg_format("%^sは恐怖して逃げ出した！", m_name);
 		int count = 0;
 		do
 		{
-			switch (randint(28))
+			switch (randint1(28))
 			{
 			case 1: case 2:
 				if (!count)
@@ -6042,7 +6042,7 @@ msg_print("地面が揺れた...");
 					msg_print("The ground trembles...");
 #endif
 
-					earthquake(ty, tx, 4 + rand_int(4));
+					earthquake(ty, tx, 4 + randint0(4));
 					if (!one_in_(6)) break;
 				}
 			case 3: case 4: case 5: case 6:
@@ -6098,11 +6098,11 @@ msg_print("エネルギーのうねりを感じた！");
 				{
 					pet = TRUE;
 				}
-				count += summon_specific((pet ? -1 : 0), py, px, (pet ? p_ptr->lev*2/3+randint(p_ptr->lev/2) : dun_level), 0, TRUE, friendly, pet, FALSE, (bool)(!pet));
+				count += summon_specific((pet ? -1 : 0), py, px, (pet ? p_ptr->lev*2/3+randint1(p_ptr->lev/2) : dun_level), 0, TRUE, friendly, pet, FALSE, (bool)(!pet));
 				if (!one_in_(6)) break;
 			}
 			case 23: case 24: case 25:
-				if (p_ptr->hold_life && (rand_int(100) < 75)) break;
+				if (p_ptr->hold_life && (randint0(100) < 75)) break;
 #ifdef JP
 msg_print("生命力が体から吸い取られた気がする！");
 #else
@@ -6130,7 +6130,7 @@ msg_print("生命力が体から吸い取られた気がする！");
 				}
 				else
 				{
-					(void)do_dec_stat(rand_int(6));
+					(void)do_dec_stat(randint0(6));
 				}
 				break;
 			}
@@ -6262,7 +6262,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 	/* Player is not here */
 	if ((x != px) || (y != py)) return (FALSE);
 
-	if ((p_ptr->special_defense & NINJA_KAWARIMI) && dam && (rand_int(55) < (p_ptr->lev*3/5+20)) && who && (who != p_ptr->riding))
+	if ((p_ptr->special_defense & NINJA_KAWARIMI) && dam && (randint0(55) < (p_ptr->lev*3/5+20)) && who && (who != p_ptr->riding))
 	{
 		kawarimi(TRUE);
 		return FALSE;
@@ -6290,8 +6290,8 @@ else msg_print("攻撃が跳ね返った！");
 		/* Choose 'new' target */
 		do
 		{
-			t_y = m_list[who].fy - 1 + randint(3);
-			t_x = m_list[who].fx - 1 + randint(3);
+			t_y = m_list[who].fy - 1 + randint1(3);
+			t_x = m_list[who].fx - 1 + randint1(3);
 			max_attempts--;
 		}
 		while (max_attempts && in_bounds2u(t_y, t_x) &&
@@ -6408,7 +6408,7 @@ if (fuzzy) msg_print("毒で攻撃された！");
 
 			if (!(double_resist || p_ptr->resist_pois))
 			{
-				set_poisoned(p_ptr->poisoned + rand_int(dam) + 10);
+				set_poisoned(p_ptr->poisoned + randint0(dam) + 10);
 			}
 			break;
 		}
@@ -6428,7 +6428,7 @@ if (fuzzy) msg_print("放射能で攻撃された！");
 			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			if (!(double_resist || p_ptr->resist_pois))
 			{
-				set_poisoned(p_ptr->poisoned + rand_int(dam) + 10);
+				set_poisoned(p_ptr->poisoned + randint0(dam) + 10);
 
 				if (one_in_(5)) /* 6 */
 				{
@@ -6531,7 +6531,7 @@ if (fuzzy) msg_print("何かとても熱いものでで攻撃された！");
 
 			if (!p_ptr->resist_sound)
 			{
-				int k = (randint((dam > 40) ? 35 : (dam * 3 / 4 + 5)));
+				int k = (randint1((dam > 40) ? 35 : (dam * 3 / 4 + 5)));
 				(void)set_stun(p_ptr->stun + k);
 			}
 
@@ -6559,11 +6559,11 @@ if (fuzzy) msg_print("地獄の力で攻撃された！");
 			if (p_ptr->resist_neth)
 			{
 				if (!prace_is_(RACE_SPECTRE))
-					dam *= 6; dam /= (randint(4) + 7);
+					dam *= 6; dam /= (randint1(4) + 7);
 			}
 			else if (p_ptr->prace != RACE_ANDROID)
 			{
-				if (p_ptr->hold_life && (rand_int(100) < 75))
+				if (p_ptr->hold_life && (randint0(100) < 75))
 				{
 #ifdef JP
 msg_print("しかし自己の生命力を守りきった！");
@@ -6624,11 +6624,11 @@ if (fuzzy) msg_print("何か湿ったもので攻撃された！");
 
 			if (!p_ptr->resist_sound)
 			{
-				set_stun(p_ptr->stun + randint(40));
+				set_stun(p_ptr->stun + randint1(40));
 			}
 			if (!p_ptr->resist_conf)
 			{
-				set_confused(p_ptr->confused + randint(5) + 5);
+				set_confused(p_ptr->confused + randint1(5) + 5);
 			}
 
 			if (one_in_(5))
@@ -6651,15 +6651,15 @@ if (fuzzy) msg_print("無秩序の波動で攻撃された！");
 
 			if (p_ptr->resist_chaos)
 			{
-				dam *= 6; dam /= (randint(4) + 7);
+				dam *= 6; dam /= (randint1(4) + 7);
 			}
 			if (!p_ptr->resist_conf)
 			{
-				(void)set_confused(p_ptr->confused + rand_int(20) + 10);
+				(void)set_confused(p_ptr->confused + randint0(20) + 10);
 			}
 			if (!p_ptr->resist_chaos)
 			{
-				(void)set_image(p_ptr->image + randint(10));
+				(void)set_image(p_ptr->image + randint1(10));
 				if (one_in_(3))
 				{
 #ifdef JP
@@ -6676,7 +6676,7 @@ msg_print("あなたの身体はカオスの力で捻じ曲げられた！");
 				if (p_ptr->prace == RACE_ANDROID)
 				{
 				}
-				else if (p_ptr->hold_life && (rand_int(100) < 75))
+				else if (p_ptr->hold_life && (randint0(100) < 75))
 				{
 #ifdef JP
 msg_print("しかし自己の生命力を守りきった！");
@@ -6726,7 +6726,7 @@ if (fuzzy) msg_print("何か鋭いもので攻撃された！");
 
 			if (p_ptr->resist_shard)
 			{
-				dam *= 6; dam /= (randint(4) + 7);
+				dam *= 6; dam /= (randint1(4) + 7);
 			}
 			else
 			{
@@ -6753,11 +6753,11 @@ if (fuzzy) msg_print("轟音で攻撃された！");
 
 			if (p_ptr->resist_sound)
 			{
-				dam *= 5; dam /= (randint(4) + 7);
+				dam *= 5; dam /= (randint1(4) + 7);
 			}
 			else
 			{
-				int k = (randint((dam > 90) ? 35 : (dam / 3 + 5)));
+				int k = (randint1((dam > 90) ? 35 : (dam / 3 + 5)));
 				(void)set_stun(p_ptr->stun + k);
 			}
 
@@ -6781,11 +6781,11 @@ if (fuzzy) msg_print("何か混乱するもので攻撃された！");
 
 			if (p_ptr->resist_conf)
 			{
-				dam *= 5; dam /= (randint(4) + 7);
+				dam *= 5; dam /= (randint1(4) + 7);
 			}
 			if (!p_ptr->resist_conf)
 			{
-				(void)set_confused(p_ptr->confused + randint(20) + 10);
+				(void)set_confused(p_ptr->confused + randint1(20) + 10);
 			}
 			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
@@ -6802,7 +6802,7 @@ if (fuzzy) msg_print("何かさえないものでで攻撃された！");
 
 			if (p_ptr->resist_disen)
 			{
-				dam *= 6; dam /= (randint(4) + 7);
+				dam *= 6; dam /= (randint1(4) + 7);
 			}
 			else
 			{
@@ -6823,7 +6823,7 @@ if (fuzzy) msg_print("何か奇妙なもので攻撃された！");
 
 			if (p_ptr->resist_nexus)
 			{
-				dam *= 6; dam /= (randint(4) + 7);
+				dam *= 6; dam /= (randint1(4) + 7);
 			}
 			else
 			{
@@ -6844,7 +6844,7 @@ if (fuzzy) msg_print("運動エネルギーで攻撃された！");
 
 			if (!p_ptr->resist_sound)
 			{
-				(void)set_stun(p_ptr->stun + randint(20));
+				(void)set_stun(p_ptr->stun + randint1(20));
 			}
 			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
@@ -6862,7 +6862,7 @@ if (fuzzy) msg_print("爆発があった！");
 
 			if (!p_ptr->resist_sound)
 			{
-				(void)set_stun(p_ptr->stun + randint(20));
+				(void)set_stun(p_ptr->stun + randint1(20));
 			}
 			if (p_ptr->resist_shard)
 			{
@@ -6891,7 +6891,7 @@ if (fuzzy) msg_print("何か遅いもので攻撃された！");
 			if (fuzzy) msg_print("You are hit by something slow!");
 #endif
 
-			(void)set_slow(p_ptr->slow + rand_int(4) + 4, FALSE);
+			(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
 			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
@@ -6907,11 +6907,11 @@ if (fuzzy) msg_print("何かで攻撃された！");
 
 			if (p_ptr->resist_lite)
 			{
-				dam *= 4; dam /= (randint(4) + 7);
+				dam *= 4; dam /= (randint1(4) + 7);
 			}
 			else if (!blind && !p_ptr->resist_blind)
 			{
-				(void)set_blind(p_ptr->blind + randint(5) + 2);
+				(void)set_blind(p_ptr->blind + randint1(5) + 2);
 			}
 			if (prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE))
 			{
@@ -6964,13 +6964,13 @@ if (fuzzy) msg_print("何かで攻撃された！");
 
 			if (p_ptr->resist_dark)
 			{
-				dam *= 4; dam /= (randint(4) + 7);
+				dam *= 4; dam /= (randint1(4) + 7);
 
 				if (prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE) || p_ptr->wraith_form) dam = 0;
 			}
 			else if (!blind && !p_ptr->resist_blind)
 			{
-				(void)set_blind(p_ptr->blind + randint(5) + 2);
+				(void)set_blind(p_ptr->blind + randint1(5) + 2);
 			}
 			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
@@ -6988,7 +6988,7 @@ if (fuzzy) msg_print("過去からの衝撃に攻撃された！");
 			if (p_ptr->resist_time)
 			{
 				dam *= 4;
-				dam /= (randint(4) + 7);
+				dam /= (randint1(4) + 7);
 #ifdef JP
 msg_print("時間が通り過ぎていく気がする。");
 #else
@@ -6998,7 +6998,7 @@ msg_print("時間が通り過ぎていく気がする。");
 			}
 			else
 			{
-				switch (randint(10))
+				switch (randint1(10))
 				{
 					case 1: case 2: case 3: case 4: case 5:
 					{
@@ -7015,7 +7015,7 @@ msg_print("人生が逆戻りした気がする。");
 
 					case 6: case 7: case 8: case 9:
 					{
-						switch (randint(6))
+						switch (randint1(6))
 						{
 #ifdef JP
 case 1: k = A_STR; act = "強く"; break;
@@ -7085,10 +7085,10 @@ msg_print("周辺の重力がゆがんだ。");
 
 			teleport_player(5);
 			if (!p_ptr->ffall)
-				(void)set_slow(p_ptr->slow + rand_int(4) + 4, FALSE);
+				(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
 			if (!(p_ptr->resist_sound || p_ptr->ffall))
 			{
-				int k = (randint((dam > 90) ? 35 : (dam / 3 + 5)));
+				int k = (randint1((dam > 90) ? 35 : (dam / 3 + 5)));
 				(void)set_stun(p_ptr->stun + k);
 			}
 			if (p_ptr->ffall)
@@ -7139,7 +7139,7 @@ if (fuzzy) msg_print("何かで攻撃された！");
 			if (fuzzy) msg_print("You are hit by something!");
 #endif
 
-			(void)set_fast(p_ptr->fast + randint(5), FALSE);
+			(void)set_fast(p_ptr->fast + randint1(5), FALSE);
 			dam = 0;
 			break;
 		}
@@ -7152,7 +7152,7 @@ if (fuzzy) msg_print("何か遅いもので攻撃された！");
 			if (fuzzy) msg_print("You are hit by something slow!");
 #endif
 
-			(void)set_slow(p_ptr->slow + rand_int(4) + 4, FALSE);
+			(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
 			break;
 		}
 
@@ -7253,7 +7253,7 @@ if (fuzzy) msg_print("何か鋭く冷たいもので攻撃された！");
 			}
 			if (!p_ptr->resist_sound)
 			{
-				(void)set_stun(p_ptr->stun + randint(15));
+				(void)set_stun(p_ptr->stun + randint1(15));
 			}
 
 			if ((!(p_ptr->resist_cold || p_ptr->oppose_cold || music_singing(MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))) || one_in_(12))
@@ -7645,7 +7645,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 								cave_set_feat(y, x, FEAT_GRASS);
 							else
 							{
-								cave[y][x].feat = floor_type[rand_int(100)];
+								cave[y][x].feat = floor_type[randint0(100)];
 								cave[y][x].info &= ~(CAVE_MASK);
 								cave[y][x].info |= CAVE_FLOOR;
 							}
@@ -8426,7 +8426,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 									cave_set_feat(y, x, FEAT_GRASS);
 								else
 								{
-									cave[y][x].feat = floor_type[rand_int(100)];
+									cave[y][x].feat = floor_type[randint0(100)];
 									cave[y][x].info &= ~(CAVE_MASK);
 									cave[y][x].info |= CAVE_FLOOR;
 								}
@@ -8662,8 +8662,8 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 					/* Choose 'new' target */
 					do
 					{
-						t_y = y_saver - 1 + randint(3);
-						t_x = x_saver - 1 + randint(3);
+						t_y = y_saver - 1 + randint1(3);
+						t_x = x_saver - 1 + randint1(3);
 						max_attempts--;
 					}
 
@@ -8841,9 +8841,9 @@ bool binding_field( int dam )
 
 	if( mirror_num < 2 )return FALSE;
 
-	point_x[0] = rand_int( mirror_num );
+	point_x[0] = randint0( mirror_num );
 	do {
-	  point_x[1] = rand_int( mirror_num );
+	  point_x[1] = randint0( mirror_num );
 	}
 	while( point_x[0] == point_x[1] );
 

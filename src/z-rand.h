@@ -27,16 +27,16 @@
  * The integer X falls along a uniform distribution.
  * For example, if M is 100, you get "percentile dice"
  */
-#define rand_int(M) \
+#define randint0(M) \
 	((s32b)Rand_div(M))
 
 /*
  * Generates a random long integer X where A<=X<=B
  * The integer X falls along a uniform distribution.
- * Note: rand_range(0,N-1) == rand_int(N)
+ * Note: rand_range(0,N-1) == randint0(N)
  */
 #define rand_range(A,B) \
-	((A) + (rand_int(1+(B)-(A))))
+	((A) + (randint0(1+(B)-(A))))
 
 /*
  * Generate a random long integer X where A-D<=X<=A+D
@@ -44,32 +44,32 @@
  * Note: rand_spread(A,D) == rand_range(A-D,A+D)
  */
 #define rand_spread(A,D) \
-	((A) + (rand_int(1+(D)+(D))) - (D))
+	((A) + (randint0(1+(D)+(D))) - (D))
 
 
 /*
  * Generate a random long integer X where 1<=X<=M
  * Also, "correctly" handle the case of M<=1
  */
-#define randint(M) \
-	(rand_int(M) + 1)
+#define randint1(M) \
+	(randint0(M) + 1)
 
 
 /*
  * Evaluate to TRUE "P" percent of the time
  */
 #define magik(P) \
-	(rand_int(100) < (P))
+	(randint0(100) < (P))
 
 
 #define one_in_(X) \
-	(rand_int(X) == 0)
+	(randint0(X) == 0)
 
 /*
  * Evaluate to TRUE "S" percent of the time
  */
 #define saving_throw(S) \
-	(rand_int(100) < (S))
+	(randint0(100) < (S))
 
 
 /**** Available Variables ****/

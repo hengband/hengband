@@ -357,7 +357,7 @@ s = "魔力を取り込めるアイテムがない。";
 			if (p_ptr->magic_num2[o_ptr->sval + ext])
 			{
 				gain_num *= 256;
-				gain_num = (gain_num/3 + rand_int(gain_num/3)) / 256;
+				gain_num = (gain_num/3 + randint0(gain_num/3)) / 256;
 				if (gain_num < 1) gain_num = 1;
 			}
 			p_ptr->magic_num2[o_ptr->sval + ext] += gain_num;
@@ -776,17 +776,17 @@ if (!get_check("本当に今の衰弱した状態でこの能力を使いますか？"))
 		if (use_hp)
 		{
 #ifdef JP
-			take_hit(DAMAGE_USELIFE, (cost / 2) + randint(cost / 2),
+			take_hit(DAMAGE_USELIFE, (cost / 2) + randint1(cost / 2),
 				 "過度の集中", -1);
 #else
-			take_hit(DAMAGE_USELIFE, (cost / 2) + randint(cost / 2),
+			take_hit(DAMAGE_USELIFE, (cost / 2) + randint1(cost / 2),
 				 "concentrating too hard", -1);
 #endif
 
 		}
 		else
 		{
-			p_ptr->csp -= (cost / 2) + randint(cost / 2);
+			p_ptr->csp -= (cost / 2) + randint1(cost / 2);
 		}
 	}
 
@@ -798,8 +798,8 @@ if (!get_check("本当に今の衰弱した状態でこの能力を使いますか？"))
 	p_ptr->window |= (PW_PLAYER | PW_SPELL);
 
 	/* Success? */
-	if (randint(p_ptr->stat_cur[use_stat]) >=
-	    ((difficulty / 2) + randint(difficulty / 2)))
+	if (randint1(p_ptr->stat_cur[use_stat]) >=
+	    ((difficulty / 2) + randint1(difficulty / 2)))
 	{
 		return TRUE;
 	}
@@ -834,7 +834,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 				for (i = 0; i < 6; i++)
 				{
-					dir = rand_int(8);
+					dir = randint0(8);
 					y = py + ddy_ddd[dir];
 					x = px + ddx_ddd[dir];
 					c_ptr = &cave[y][x];
@@ -899,7 +899,7 @@ msg_print("攻撃が空をきった。");
 				if (cave[y][x].m_idx)
 				{
 					py_attack(y, x, 0);
-					if (rand_int(p_ptr->skill_dis) < 7)
+					if (randint0(p_ptr->skill_dis) < 7)
 #ifdef JP
 msg_print("うまく逃げられなかった。");
 #else
@@ -1316,7 +1316,7 @@ msg_print("武器を持たないといけません。");
 				rlev = r_ptr->level;
 				if (r_ptr->flags1 & RF1_UNIQUE) rlev = rlev * 3 / 2;
 				if (rlev > 60) rlev = 60+(rlev-60)/2;
-				if ((randint(skill_exp[GINOU_RIDING]/120+p_ptr->lev*2/3) > rlev) && one_in_(2) && !p_ptr->inside_arena && !p_ptr->inside_battle && !(r_ptr->flags7 & (RF7_GUARDIAN)) && !(r_ptr->flags1 & (RF1_QUESTOR)) && (rlev < p_ptr->lev*3/2+rand_int(p_ptr->lev/5)))
+				if ((randint1(skill_exp[GINOU_RIDING]/120+p_ptr->lev*2/3) > rlev) && one_in_(2) && !p_ptr->inside_arena && !p_ptr->inside_battle && !(r_ptr->flags7 & (RF7_GUARDIAN)) && !(r_ptr->flags1 & (RF1_QUESTOR)) && (rlev < p_ptr->lev*3/2+randint0(p_ptr->lev/5)))
 				{
 #ifdef JP
 					msg_format("%sを手なずけた。",m_name);
@@ -1489,7 +1489,7 @@ msg_print("あなたはニヤリとして牙をむいた...");
 				msg_print("You grin and bare your fangs...");
 #endif
 
-				dummy = plev + randint(plev) * MAX(1, plev / 10);   /* Dmg */
+				dummy = plev + randint1(plev) * MAX(1, plev / 10);   /* Dmg */
 				if (drain_life(dir, dummy))
 				{
 					if (p_ptr->food < PY_FOOD_FULL)
@@ -1605,7 +1605,7 @@ msg_print("うがぁぁ！");
 
 				(void)set_afraid(0);
 
-				(void)set_shero(10 + randint(plev), FALSE);
+				(void)set_shero(10 + randint1(plev), FALSE);
 				(void)hp_player(30);
 			}
 			break;
@@ -1680,7 +1680,7 @@ msg_print("うぉぉおお！");
 
 				(void)set_afraid(0);
 
-				(void)set_shero(10 + randint(plev), FALSE);
+				(void)set_shero(10 + randint1(plev), FALSE);
 				(void)hp_player(30);
 			}
 			break;
@@ -1825,7 +1825,7 @@ cptr Type_desc = ((Type == GF_COLD) ? "冷気" : "炎");
 #endif
 
 
-				if (randint(100) < plev)
+				if (randint1(100) < plev)
 				{
 					switch (p_ptr->pclass)
 					{
@@ -2084,7 +2084,7 @@ msg_print("ファイアーボルトを放った。");
 		case RACE_GOLEM:
 			if (racial_aux(20, 15, A_CON, 8))
 			{
-				(void)set_shield(randint(20) + 30, FALSE);
+				(void)set_shield(randint1(20) + 30, FALSE);
 			}
 			break;
 
@@ -2131,7 +2131,7 @@ msg_print("あなたはニヤリとして牙をむいた...");
 				msg_print("You grin and bare your fangs...");
 #endif
 
-				dummy = plev + randint(plev) * MAX(1, plev / 10);   /* Dmg */
+				dummy = plev + randint1(plev) * MAX(1, plev / 10);   /* Dmg */
 				if (drain_life(dir, dummy))
 				{
 					if (p_ptr->food < PY_FOOD_FULL)
@@ -2211,7 +2211,7 @@ msg_format("あなたは%sのブレスを吐いた。",((type == GF_NETHER) ? "地獄" : "火炎"
 		case RACE_KUTA:
 			if (racial_aux(20, 15, A_CHR, 8))
 			{
-				(void)set_tsubureru(randint(20) + 30, FALSE);
+				(void)set_tsubureru(randint1(20) + 30, FALSE);
 			}
 			break;
 

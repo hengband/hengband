@@ -200,12 +200,12 @@ bool monst_spell_monst(int m_idx)
 	/* Not allowed to cast spells */
 	if (!chance) return (FALSE);
 
-	if (rand_int(100) >= chance) return (FALSE);
+	if (randint0(100) >= chance) return (FALSE);
 
 	if (p_ptr->inside_battle)
 	{
-		start = randint(m_max-1)+m_max;
-		if(rand_int(2)) plus = -1;
+		start = randint1(m_max-1)+m_max;
+		if(randint0(2)) plus = -1;
 	}
 	else start = m_max + 1;
 
@@ -381,7 +381,7 @@ bool monst_spell_monst(int m_idx)
 		/* Hack -- allow "desperate" spells */
 		if ((r_ptr->flags2 & RF2_SMART) &&
 			(m_ptr->hp < m_ptr->maxhp / 10) &&
-			(rand_int(100) < 50))
+			(randint0(100) < 50))
 		{
 			/* Require intelligent spells */
 			f4 &= (RF4_INT_MASK);
@@ -433,7 +433,7 @@ bool monst_spell_monst(int m_idx)
 		monster_desc(ddesc, m_ptr, 0x88);
 
 		/* Choose a spell to cast */
-		thrown_spell = spell[rand_int(num)];
+		thrown_spell = spell[randint0(num)];
 
 		see_t = t_ptr->ml;
 		see_either = (see_m || see_t);
@@ -1772,7 +1772,7 @@ msg_format("%^sが%sに向かってアシッド・ボールの呪文を唱えた。", m_name, t_name);
 					}
 				}
 
-				dam = (randint(rlev * 3) + 15) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
+				dam = (randint1(rlev * 3) + 15) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
 				monst_breath_monst(m_idx, y, x, GF_ACID, dam, 2, FALSE, MS_BALL_ACID, learnable);
 
 				break;
@@ -1812,7 +1812,7 @@ msg_format("%^sが%sに向かってサンダー・ボールの呪文を唱えた。", m_name, t_name);
 					}
 				}
 
-				dam = (randint(rlev * 3 / 2) + 8) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
+				dam = (randint1(rlev * 3 / 2) + 8) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
 				monst_breath_monst(m_idx, y, x, GF_ELEC, dam, 2, FALSE, MS_BALL_ELEC, learnable);
 
 				break;
@@ -1869,7 +1869,7 @@ msg_format("%^sが%sに向かってファイア・ボールの呪文を唱えた。", m_name, t_name);
 					}
 				}
 
-				dam = (randint(rlev * 7 / 2) + 10) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
+				dam = (randint1(rlev * 7 / 2) + 10) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
 				monst_breath_monst(m_idx, y, x, GF_FIRE, dam, 2, FALSE, MS_BALL_FIRE, learnable);
 
 				break;
@@ -1909,7 +1909,7 @@ msg_format("%^sが%sに向かってアイス・ボールの呪文を唱えた。", m_name, t_name);
 					}
 				}
 
-				dam = (randint(rlev * 3 / 2) + 10) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
+				dam = (randint1(rlev * 3 / 2) + 10) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
 				monst_breath_monst(m_idx, y, x, GF_COLD, dam, 2, FALSE, MS_BALL_COLD, learnable);
 
 				break;
@@ -2035,7 +2035,7 @@ msg_format("%^sは渦巻に飲み込まれた。", t_name);
 					}
 				}
 
-				dam = ((r_ptr->flags2 & RF2_POWERFUL) ? randint(rlev * 3) : randint(rlev * 2)) + 50;
+				dam = ((r_ptr->flags2 & RF2_POWERFUL) ? randint1(rlev * 3) : randint1(rlev * 2)) + 50;
 				monst_breath_monst(m_idx, y, x, GF_WATER, dam, 4, FALSE, MS_BALL_WATER, learnable);
 
 				break;
@@ -2125,7 +2125,7 @@ msg_format("%^sが%sに対して暗黒の嵐の呪文を念じた。", m_name, t_name);
 			case 128+9:
 			{
 				/* Attack power */
-				int power = (randint(rlev) / 2) + 1;
+				int power = (randint1(rlev) / 2) + 1;
 
 				if (see_m)
 				{
@@ -2199,7 +2199,7 @@ msg_format("%^sは%sをじっと睨んだ", m_name, t_name);
 				if ((tr_ptr->flags1 & RF1_UNIQUE) ||
 					 (tr_ptr->flags3 & RF3_NO_CONF) ||
 					 (tr_ptr->flags3 & RF3_RES_ALL) ||
-					 (tr_ptr->level > randint((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10))
+					 (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10))
 				{
 					/* No obvious effect */
 					if (see_both)
@@ -2234,7 +2234,7 @@ msg_format("%^sは精神攻撃を食らった。", t_name);
 
 					}
 
-					t_ptr->confused += rand_int(4) + 4;
+					t_ptr->confused += randint0(4) + 4;
 
 #ifdef JP
 mon_take_hit_mon(FALSE, t_idx, dam, &fear, "の精神は崩壊し、肉体は抜け空となった。", m_idx);
@@ -2267,7 +2267,7 @@ msg_format("%^sは%sをじっと睨んだ", m_name, t_name);
 				if ((tr_ptr->flags1 & RF1_UNIQUE) ||
 					 (tr_ptr->flags3 & RF3_NO_CONF) ||
 					 (tr_ptr->flags3 & RF3_RES_ALL) ||
-					 (tr_ptr->level > randint((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10))
+					 (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10))
 				{
 					/* No obvious effect */
 					if (see_both)
@@ -2302,9 +2302,9 @@ msg_format("%^sは精神攻撃を食らった。", t_name);
 
 					}
 
-					t_ptr->confused += rand_int(4) + 4;
+					t_ptr->confused += randint0(4) + 4;
 					t_ptr->slow = MIN(200, t_ptr->slow + 10);
-					t_ptr->stunned += rand_int(4) + 4;
+					t_ptr->stunned += randint0(4) + 4;
 
 #ifdef JP
 mon_take_hit_mon(FALSE, t_idx, dam, &fear, "の精神は崩壊し、肉体は抜け空となった。", m_idx);
@@ -2340,7 +2340,7 @@ msg_format("%^sは%sを指さして呪いをかけた。", m_name, t_name);
 				}
 
 				dam = damroll(3, 8);
-				if ((rand_int(100 + rlev/2) < (tr_ptr->level + 35)) ||
+				if ((randint0(100 + rlev/2) < (tr_ptr->level + 35)) ||
 					 (tr_ptr->flags3 & RF3_RES_ALL))
 				{
 					/* Memorize a flag */
@@ -2391,7 +2391,7 @@ msg_format("%^sは%sを指さして恐ろしげに呪いをかけた。", m_name, t_name);
 				}
 
 				dam = damroll(8, 8);
-				if ((rand_int(100 + rlev/2) < (tr_ptr->level + 35)) ||
+				if ((randint0(100 + rlev/2) < (tr_ptr->level + 35)) ||
 					 (tr_ptr->flags3 & RF3_RES_ALL))
 				{
 					/* Memorize a flag */
@@ -2442,7 +2442,7 @@ msg_format("%^sは%sを指さし、恐ろしげに呪文を唱えた！", m_name, t_name);
 				}
 
 				dam = damroll(10, 15);
-				if ((rand_int(100 + rlev/2) < (tr_ptr->level + 35)) ||
+				if ((randint0(100 + rlev/2) < (tr_ptr->level + 35)) ||
 					 (tr_ptr->flags3 & RF3_RES_ALL))
 				{
 					/* Memorize a flag */
@@ -2493,7 +2493,7 @@ msg_format("%^sが%sの秘孔を突いて、「お前は既に死んでいる」と叫んだ。", m_name, 
 				}
 
 				dam = damroll(15, 15);
-				if (((rand_int(100 + rlev/2) < (tr_ptr->level + 35)) && (m_ptr->r_idx != MON_KENSHIROU)) ||
+				if (((randint0(100 + rlev/2) < (tr_ptr->level + 35)) && (m_ptr->r_idx != MON_KENSHIROU)) ||
 					 (tr_ptr->flags3 & RF3_RES_ALL))
 				{
 					/* Memorize a flag */
@@ -2745,7 +2745,7 @@ msg_format("%^sが%sに向かって魔力の矢の呪文を唱えた。", m_name, t_name);
 					}
 				}
 
-				dam = randint(rlev * 7 / 2) + 50;
+				dam = randint1(rlev * 7 / 2) + 50;
 				monst_bolt_monst(m_idx, y, x, GF_MANA,
 					dam, MS_BOLT_MANA, learnable);
 
@@ -2862,7 +2862,7 @@ if (see_t) msg_format("%^sは恐怖を感じない。", t_name);
 #endif
 
 				}
-				else if (tr_ptr->level > randint((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10)
+				else if (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10)
 				{
 #ifdef JP
 if (see_t) msg_format("%^sは恐怖を感じない。", t_name);
@@ -2875,7 +2875,7 @@ if (see_t) msg_format("%^sは恐怖を感じない。", t_name);
 				{
 					if (!t_ptr->monfear) fear = TRUE;
 
-					t_ptr->monfear += rand_int(4) + 4;
+					t_ptr->monfear += randint0(4) + 4;
 				}
 
 				wake_up = TRUE;
@@ -2914,7 +2914,7 @@ if (see_t) msg_format("%^sには効果がなかった。", t_name);
 #endif
 
 				}
-				else if (tr_ptr->level > randint((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10)
+				else if (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10)
 				{
 #ifdef JP
 if (see_t) msg_format("%^sには効果がなかった。", t_name);
@@ -2932,7 +2932,7 @@ if (see_t)   msg_format("%^sは目が見えなくなった！ ", t_name);
 #endif
 
 
-					t_ptr->confused += 12 + (byte)rand_int(4);
+					t_ptr->confused += 12 + (byte)randint0(4);
 				}
 
 				wake_up = TRUE;
@@ -2969,7 +2969,7 @@ if (see_t) msg_format("%^sは惑わされなかった。", t_name);
 #endif
 
 				}
-				else if (tr_ptr->level > randint((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10)
+				else if (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10)
 				{
 #ifdef JP
 if (see_t) msg_format("%^sは惑わされなかった。", t_name);
@@ -2987,7 +2987,7 @@ if (see_t) msg_format("%^sは混乱したようだ。", t_name);
 #endif
 
 
-					t_ptr->confused += 12 + (byte)rand_int(4);
+					t_ptr->confused += 12 + (byte)randint0(4);
 				}
 
 				wake_up = TRUE;
@@ -3025,7 +3025,7 @@ if (see_t) msg_format("%^sには効果がなかった。", t_name);
 #endif
 
 				}
-				else if (tr_ptr->level > randint((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10)
+				else if (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10)
 				{
 #ifdef JP
 if (see_t) msg_format("%^sには効果がなかった。", t_name);
@@ -3083,7 +3083,7 @@ if (see_t) msg_format("%^sには効果がなかった。", t_name);
 #endif
 
 				}
-				else if (tr_ptr->level > randint((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10)
+				else if (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10)
 				{
 #ifdef JP
 if (see_t) msg_format("%^sには効果がなかった。", t_name);
@@ -3101,7 +3101,7 @@ if (see_t) msg_format("%^sは麻痺した！", t_name);
 #endif
 
 
-					t_ptr->stunned += randint(4) + 4;
+					t_ptr->stunned += randint1(4) + 4;
 				}
 
 				wake_up = TRUE;
@@ -3181,11 +3181,11 @@ if (see_both) msg_format("には効果がなかった！", t_name);
 				}
 				else
 				{
-					if ((r_ptr->level + randint(20)) >
-						(tr_ptr->level + 10 + randint(20)))
+					if ((r_ptr->level + randint1(20)) >
+						(tr_ptr->level + 10 + randint1(20)))
 					{
 						t_ptr->hp = t_ptr->hp -
-						  (((s32b)((40 + randint(20)) * t_ptr->hp)) / 100);
+						  (((s32b)((40 + randint1(20)) * t_ptr->hp)) / 100);
 
 						if (t_ptr->hp < 1) t_ptr->hp = 1;
 					}
@@ -3313,7 +3313,7 @@ msg_format("%sは無傷の球の呪文を唱えた。", m_name);
 					}
 				}
 
-				if (!m_ptr->invulner) m_ptr->invulner = randint(4) + 4;
+				if (!m_ptr->invulner) m_ptr->invulner = randint1(4) + 4;
 
 				if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
 				if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
@@ -3405,7 +3405,7 @@ msg_format("%^sがテレポートした。", m_name);
 				if(m_ptr->r_idx = MON_DIO) who = 1;
 				else if(m_ptr->r_idx = MON_WONG) who = 3;
 				dam = who;
-				if(!process_the_world(randint(2)+2, who, los(py, px, m_ptr->fy, m_ptr->fx))) return (FALSE);
+				if(!process_the_world(randint1(2)+2, who, los(py, px, m_ptr->fy, m_ptr->fx))) return (FALSE);
 #endif
 				break;
 			}
@@ -3475,7 +3475,7 @@ msg_format("%^sには効果がなかった。", t_name);
 
 						resists_tele = TRUE;
 					}
-					else if (tr_ptr->level > randint(100))
+					else if (tr_ptr->level > randint1(100))
 					{
 						if (see_t)
 						{
@@ -3528,7 +3528,7 @@ msg_format("%^sが%sに向かって光の剣を放った。", m_name, t_name);
 					}
 				}
 
-				dam = (r_ptr->flags2 & RF2_POWERFUL) ? (randint(rlev * 2) + 180) : (randint(rlev * 3 / 2) + 120);
+				dam = (r_ptr->flags2 & RF2_POWERFUL) ? (randint1(rlev * 2) + 180) : (randint1(rlev * 3 / 2) + 120);
 				monst_beam_monst(m_idx, y, x, GF_PSY_SPEAR,
 					dam, MS_PSY_SPEAR, learnable);
 				break;
@@ -3661,7 +3661,7 @@ msg_format("%sが魔法で%sを召喚した。", m_name,
 
 				if(m_ptr->r_idx == MON_ROLENTO)
 				{
-					int num = 1 + randint(3);
+					int num = 1 + randint1(3);
 					for (k = 0; k < num; k++)
 					{
 						count += summon_named_creature(y, x, MON_SHURYUUDAN, FALSE, FALSE, is_friendly(m_ptr), pet);
@@ -3669,7 +3669,7 @@ msg_format("%sが魔法で%sを召喚した。", m_name,
 				}
 				else if(m_ptr->r_idx == MON_LOUSY)
 				{
-					int num = 2 + randint(3);
+					int num = 2 + randint1(3);
 					for (k = 0; k < num; k++)
 					{
 						count += summon_specific(m_idx, y, x, rlev, SUMMON_LOUSE, TRUE, friendly, pet, FALSE, FALSE);
@@ -3677,7 +3677,7 @@ msg_format("%sが魔法で%sを召喚した。", m_name,
 				}
 				else if(m_ptr->r_idx == MON_BULLGATES)
 				{
-					int num = 2 + randint(3);
+					int num = 2 + randint1(3);
 					for (k = 0; k < num; k++)
 					{
 						count += summon_named_creature(y, x, 921, FALSE, FALSE, is_friendly(m_ptr), FALSE);
@@ -3685,7 +3685,7 @@ msg_format("%sが魔法で%sを召喚した。", m_name,
 				}
 				else if (m_ptr->r_idx == MON_CALDARM)
 				{
-					int num = randint(3);
+					int num = randint1(3);
 					for (k = 0; k < num; k++)
 					{
 						count += summon_named_creature(y, x, 930, FALSE, FALSE, is_friendly(m_ptr), FALSE);
@@ -3693,7 +3693,7 @@ msg_format("%sが魔法で%sを召喚した。", m_name,
 				}
 				else if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
 				{
-					int num = 2 + randint(3);
+					int num = 2 + randint1(3);
 					for (k = 0; k < num; k++)
 					{
 						count += summon_specific(m_idx, y, x, rlev, SUMMON_GUARDIANS, TRUE, friendly, pet, TRUE, FALSE);

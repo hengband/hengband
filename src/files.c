@@ -7046,7 +7046,7 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 	if (numentries > 0)
 	{
 		/* Grab an appropriate line number */
-		line = rand_int(numentries);
+		line = randint0(numentries);
 
 		/* Get the random line */
 		for (counter = 0; counter <= line; counter++)

@@ -53,8 +53,8 @@ static bool get_enemy_dir(int m_idx, int *mm)
 	{
 		if (p_ptr->inside_battle)
 		{
-			start = randint(m_max-1)+m_max;
-			if(rand_int(2)) plus = -1;
+			start = randint1(m_max-1)+m_max;
+			if(randint0(2)) plus = -1;
 		}
 		else start = m_max + 1;
 
@@ -217,7 +217,7 @@ void mon_take_hit_mon(bool is_psy_spear, int m_idx, int dam, bool *fear, cptr no
 
 	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(1, 0);
 
-	if (m_ptr->invulner && rand_int(PENETRATE_INVULNERABILITY))
+	if (m_ptr->invulner && randint0(PENETRATE_INVULNERABILITY))
 	{
 		if (seen)
 		{
@@ -340,7 +340,7 @@ msg_format("%^sは殺された。", m_name);
 	/* Mega-Hack -- Pain cancels fear */
 	if (m_ptr->monfear && (dam > 0))
 	{
-		int tmp = randint(dam / 4);
+		int tmp = randint1(dam / 4);
 
 		/* Cure a little fear */
 		if (tmp < m_ptr->monfear)
@@ -372,14 +372,14 @@ msg_format("%^sは殺された。", m_name);
 		* Run (sometimes) if at 10% or less of max hit points,
 		* or (usually) when hit for half its current hit points
 		 */
-		if (((percentage <= 10) && (rand_int(10) < percentage)) ||
-			((dam >= m_ptr->hp) && (rand_int(100) < 80)))
+		if (((percentage <= 10) && (randint0(10) < percentage)) ||
+			((dam >= m_ptr->hp) && (randint0(100) < 80)))
 		{
 			/* Hack -- note fear */
 			(*fear) = TRUE;
 
 			/* XXX XXX XXX Hack -- Add some timed fear */
-			m_ptr->monfear += (randint(10) +
+			m_ptr->monfear += (randint1(10) +
 				(((dam >= m_ptr->hp) && (percentage > 7)) ?
 				20 : ((11 - percentage) * 5)));
 		}
@@ -1432,7 +1432,7 @@ static int check_hit2(int power, int level, int ac, int stun)
 	int i, k;
 
 	/* Percentile dice */
-	k = rand_int(100);
+	k = randint0(100);
 
 	if (stun && one_in_(2)) return FALSE;
 
@@ -1443,7 +1443,7 @@ static int check_hit2(int power, int level, int ac, int stun)
 	i = (power + (level * 3));
 
 	/* Power and Level compete against Armor */
-	if ((i > 0) && (randint(i) > ((ac * 3) / 4))) return (TRUE);
+	if ((i > 0) && (randint1(i) > ((ac * 3) / 4))) return (TRUE);
 
 	/* Assume miss */
 	return (FALSE);
@@ -1882,7 +1882,7 @@ act = "%sにむかって歌った。";
 			{
 				if (do_silly_attack)
 				{
-					act = silly_attacks[rand_int(MAX_SILLY_ATTACK)];
+					act = silly_attacks[randint0(MAX_SILLY_ATTACK)];
 				}
 				strfmt(temp, act, t_name);
 #ifdef JP
@@ -1916,7 +1916,7 @@ act = "%sにむかって歌った。";
 
 			case RBE_SUPERHURT:
 				{
-					if ((randint(rlev*2+250) > (ac+200)) || one_in_(13)) {
+					if ((randint1(rlev*2+250) > (ac+200)) || one_in_(13)) {
 						int tmp_damage = damage-(damage*((ac < 150) ? ac : 150)/250);
 						damage = MAX(damage, tmp_damage*2);
 						break;
@@ -2347,17 +2347,17 @@ static void process_monster(int m_idx)
 		if (p_ptr->aggravate) tmp /= 2;
 		if (r_ptr->level > (p_ptr->lev*p_ptr->lev/20+10)) tmp /= 3;
 		/* Low-level monsters will find it difficult to locate the player. */
-		if (rand_int(tmp) > (r_ptr->level+20)) aware = FALSE;
+		if (randint0(tmp) > (r_ptr->level+20)) aware = FALSE;
 	}
 
 	/* Quantum monsters are odd */
 	if (r_ptr->flags2 & (RF2_QUANTUM))
 	{
 		/* Sometimes skip move */
-		if (!rand_int(2)) return;
+		if (!randint0(2)) return;
 
 		/* Sometimes die */
-		if (!rand_int((m_idx % 100) + 10) && !(r_ptr->flags1 & RF1_QUESTOR))
+		if (!randint0((m_idx % 100) + 10) && !(r_ptr->flags1 & RF1_QUESTOR))
 		{
 			bool sad = FALSE;
 
@@ -2487,7 +2487,7 @@ msg_print("地面に落とされた。");
 		u32b notice = 0;
 
 		/* Hack -- handle non-aggravation */
-		if (!p_ptr->aggravate) notice = rand_int(1024);
+		if (!p_ptr->aggravate) notice = randint0(1024);
 
 		/* Nightmare monsters are more alert */
 		if (ironman_nightmare) notice /= 2;
@@ -2570,7 +2570,7 @@ msg_format("%^sが目を覚ました。", m_name);
 		int d = 1;
 
 		/* Make a "saving throw" against stun */
-		if (rand_int(10000) <= r_ptr->level * r_ptr->level)
+		if (randint0(10000) <= r_ptr->level * r_ptr->level)
 		{
 			/* Recover fully */
 			d = m_ptr->stunned;
@@ -2618,7 +2618,7 @@ msg_format("%^sは朦朧状態から立ち直った。", m_name);
 	if (m_ptr->confused)
 	{
 		/* Amount of "boldness" */
-		int d = randint(r_ptr->level / 20 + 1);
+		int d = randint1(r_ptr->level / 20 + 1);
 
 		/* Still confused */
 		if (m_ptr->confused > d)
@@ -2768,7 +2768,7 @@ msg_format("%^sは突然敵にまわった！", m_name);
 	if (m_ptr->monfear)
 	{
 		/* Amount of "boldness" */
-		int d = randint(r_ptr->level / 20 + 1);
+		int d = randint1(r_ptr->level / 20 + 1);
 
 		/* Still afraid */
 		if (m_ptr->monfear > d)
@@ -2828,7 +2828,7 @@ msg_format("%^sは勇気を取り戻した。", m_name);
 		}
 
 		/* Hack -- multiply slower in crowded areas */
-		if ((k < 4) && (!k || !rand_int(k * MON_MULT_ADJ)))
+		if ((k < 4) && (!k || !randint0(k * MON_MULT_ADJ)))
 		{
 			/* Try to multiply */
 			if (multiply_monster(m_idx, FALSE, is_friendly(m_ptr), is_pet(m_ptr)))
@@ -2952,7 +2952,7 @@ msg_format("%^s%s", m_name, monmessage);
 	/* 75% random movement */
 	else if ((r_ptr->flags1 & RF1_RAND_50) &&
 				(r_ptr->flags1 & RF1_RAND_25) &&
-	         (rand_int(100) < 75))
+	         (randint0(100) < 75))
 	{
 		/* Memorize flags */
 		if (m_ptr->ml) r_ptr->r_flags1 |= (RF1_RAND_50);
@@ -2964,7 +2964,7 @@ msg_format("%^s%s", m_name, monmessage);
 
 	/* 50% random movement */
 	else if ((r_ptr->flags1 & RF1_RAND_50) &&
-				(rand_int(100) < 50))
+				(randint0(100) < 50))
 	{
 		/* Memorize flags */
 		if (m_ptr->ml) r_ptr->r_flags1 |= (RF1_RAND_50);
@@ -2975,7 +2975,7 @@ msg_format("%^s%s", m_name, monmessage);
 
 	/* 25% random movement */
 	else if ((r_ptr->flags1 & RF1_RAND_25) &&
-				(rand_int(100) < 25))
+				(randint0(100) < 25))
 	{
 		/* Memorize flags */
 		if (m_ptr->ml) r_ptr->r_flags1 |= RF1_RAND_25;
@@ -3079,7 +3079,7 @@ msg_format("%^s%s", m_name, monmessage);
 		d = mm[i];
 
 		/* Hack -- allow "randomized" motion */
-		if (d == 5) d = ddd[rand_int(8)];
+		if (d == 5) d = ddd[randint0(8)];
 
 		/* Get the destination */
 		ny = oy + ddy[d];
@@ -3166,7 +3166,7 @@ msg_print("ギシギシいう音が聞こえる。");
 			c_ptr->info &= ~(CAVE_MARK);
 
 			/* Notice */
-			c_ptr->feat = floor_type[rand_int(100)];
+			c_ptr->feat = floor_type[randint0(100)];
 			c_ptr->info &= ~(CAVE_MASK);
 			c_ptr->info |= CAVE_FLOOR;
 
@@ -3211,7 +3211,7 @@ msg_print("ギシギシいう音が聞こえる。");
 					k = ((c_ptr->feat - FEAT_DOOR_HEAD) & 0x07);
 
 					/* Try to unlock it XXX XXX XXX */
-					if (rand_int(m_ptr->hp / 10) > k)
+					if (randint0(m_ptr->hp / 10) > k)
 					{
 						/* Unlock the door */
 						cave_set_feat(ny, nx, FEAT_DOOR_HEAD + 0x00);
@@ -3232,7 +3232,7 @@ msg_print("ギシギシいう音が聞こえる。");
 				k = ((c_ptr->feat - FEAT_DOOR_HEAD) & 0x07);
 
 				/* Attempt to Bash XXX XXX XXX */
-				if (rand_int(m_ptr->hp / 10) > k)
+				if (randint0(m_ptr->hp / 10) > k)
 				{
 					/* Message */
 #ifdef JP
@@ -3258,7 +3258,7 @@ msg_print("ドアを叩き開ける音がした！");
 			if (did_open_door || did_bash_door)
 			{
 				/* Break down the door */
-				if (did_bash_door && (rand_int(100) < 50))
+				if (did_bash_door && (randint0(100) < 50))
 				{
 					cave_set_feat(ny, nx, FEAT_BROKEN);
 				}
@@ -3282,7 +3282,7 @@ msg_print("ドアを叩き開ける音がした！");
 			do_move = FALSE;
 
 			/* Break the ward */
-			if (!is_pet(m_ptr) && (randint(BREAK_GLYPH) < r_ptr->level))
+			if (!is_pet(m_ptr) && (randint1(BREAK_GLYPH) < r_ptr->level))
 			{
 				/* Describe observable breakage */
 				if (c_ptr->info & CAVE_MARK)
@@ -3299,7 +3299,7 @@ msg_print("守りのルーンが壊れた！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Break the rune */
-				c_ptr->feat = floor_type[rand_int(100)];
+				c_ptr->feat = floor_type[randint0(100)];
 				c_ptr->info &= ~(CAVE_MASK);
 				c_ptr->info |= CAVE_FLOOR;
 
@@ -3320,7 +3320,7 @@ msg_print("守りのルーンが壊れた！");
 			if (!is_pet(m_ptr))
 			{
 				/* Break the ward */
-				if (randint(BREAK_MINOR_GLYPH) > r_ptr->level)
+				if (randint1(BREAK_MINOR_GLYPH) > r_ptr->level)
 				{
 					/* Describe observable breakage */
 					if (c_ptr->info & CAVE_MARK)
@@ -3347,7 +3347,7 @@ msg_print("爆発のルーンは解除された。");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Break the rune */
-				c_ptr->feat = floor_type[rand_int(100)];
+				c_ptr->feat = floor_type[randint0(100)];
 				c_ptr->info &= ~(CAVE_MASK);
 				c_ptr->info |= CAVE_FLOOR;
 				note_spot(ny, nx);
@@ -3970,7 +3970,7 @@ void process_monsters(void)
 		e = extract_energy[speed];
 
 		/* Give this monster some energy */
-		if(rand_int(60) < e)
+		if(randint0(60) < e)
 		m_ptr->energy += gain_energy();
 
 

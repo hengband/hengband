@@ -2372,7 +2372,7 @@ if (arg_fiddle) note("アイテムの記録をロードしました");
 	{
 		for (j = 0; j < max_wild_y; j++)
 		{
-			wilderness[j][i].seed = rand_int(0x10000000);
+			wilderness[j][i].seed = randint0(0x10000000);
 		}
 	}
 
@@ -2459,7 +2459,7 @@ note(format("クエストが多すぎる(%u)！", max_quests_load));
 							 * Random monster 5 - 10 levels out of depth
 							 * (depending on level)
 							 */
-							r_idx = get_mon_num(quest[i].level + 5 + randint(quest[i].level / 10));
+							r_idx = get_mon_num(quest[i].level + 5 + randint1(quest[i].level / 10));
 							r_ptr = &r_info[r_idx];
 
 							if(!(r_ptr->flags1 & RF1_UNIQUE)) continue;

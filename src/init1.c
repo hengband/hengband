@@ -3305,7 +3305,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				 * Random trap and random treasure defined
 				 * 25% chance for trap and 75% chance for object
 				 */
-				if (rand_int(100) < 75)
+				if (randint0(100) < 75)
 				{
 					place_object(*y, *x, FALSE, FALSE);
 				}
@@ -3321,9 +3321,9 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				object_level = base_level + object_index;
 
 				/* Create an out of deep object */
-				if (rand_int(100) < 75)
+				if (randint0(100) < 75)
 					place_object(*y, *x, FALSE, FALSE);
-				else if (rand_int(100) < 80)
+				else if (randint0(100) < 80)
 					place_object(*y, *x, TRUE, FALSE);
 				else
 					place_object(*y, *x, TRUE, TRUE);

@@ -90,7 +90,7 @@ void place_random_stairs(int y, int x)
 	if (down_stairs && up_stairs)
 	{
 		/* Choose a staircase randomly */
-		if (rand_int(100) < 50)
+		if (randint0(100) < 50)
 			up_stairs = FALSE;
 		else
 			down_stairs = FALSE;
@@ -118,7 +118,7 @@ void place_random_door(int y, int x)
 	}
 
 	/* Choose an object */
-	tmp = rand_int(1000);
+	tmp = randint0(1000);
 
 	/* Open doors (300/1000) */
 	if (tmp < 300)
@@ -160,7 +160,7 @@ void place_closed_door(int y, int x)
 	}
 
 	/* Choose an object */
-	tmp = rand_int(400);
+	tmp = randint0(400);
 
 	/* Closed doors (300/400) */
 	if (tmp < 300)
@@ -173,14 +173,14 @@ void place_closed_door(int y, int x)
 	else if (tmp < 399)
 	{
 		/* Create locked door */
-		cave_set_feat(y, x, FEAT_DOOR_HEAD + randint(7));
+		cave_set_feat(y, x, FEAT_DOOR_HEAD + randint1(7));
 	}
 
 	/* Stuck doors (1/400) */
 	else
 	{
 		/* Create jammed door */
-		cave_set_feat(y, x, FEAT_DOOR_HEAD + 0x08 + rand_int(8));
+		cave_set_feat(y, x, FEAT_DOOR_HEAD + 0x08 + randint0(8));
 	}
 }
 
@@ -276,7 +276,7 @@ msg_print("警告！地下室のアイテムを配置できません！");
 			if (!is_floor_grid(c_ptr) || c_ptr->o_idx) continue;
 
 			/* Place an item */
-			if (rand_int(100) < 75)
+			if (randint0(100) < 75)
 			{
 				place_object(j, k, FALSE, FALSE);
 			}
@@ -421,7 +421,7 @@ void correct_dir(int *rdir, int *cdir, int y1, int x1, int y2, int x2)
 	/* Never move diagonally */
 	if (*rdir && *cdir)
 	{
-		if (rand_int(100) < 50)
+		if (randint0(100) < 50)
 			*rdir = 0;
 		else
 			*cdir = 0;
@@ -436,7 +436,7 @@ void correct_dir(int *rdir, int *cdir, int y1, int x1, int y2, int x2)
 void rand_dir(int *rdir, int *cdir)
 {
 	/* Pick a random direction */
-	int i = rand_int(4);
+	int i = randint0(4);
 
 	/* Extract the dy/dx components */
 	*rdir = ddy_ddd[i];
@@ -542,13 +542,13 @@ void build_tunnel(int row1, int col1, int row2, int col2)
 		if (main_loop_count++ > 2000) break;
 
 		/* Allow bends in the tunnel */
-		if (rand_int(100) < dun_tun_chg)
+		if (randint0(100) < dun_tun_chg)
 		{
 			/* Acquire the correct direction */
 			correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
 
 			/* Random direction */
-			if (rand_int(100) < dun_tun_rnd)
+			if (randint0(100) < dun_tun_rnd)
 			{
 				rand_dir(&row_dir, &col_dir);
 			}
@@ -566,7 +566,7 @@ void build_tunnel(int row1, int col1, int row2, int col2)
 			correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
 
 			/* Random direction */
-			if (rand_int(100) < dun_tun_rnd)
+			if (randint0(100) < dun_tun_rnd)
 			{
 				rand_dir(&row_dir, &col_dir);
 			}
@@ -682,7 +682,7 @@ void build_tunnel(int row1, int col1, int row2, int col2)
 			}
 
 			/* Hack -- allow pre-emptive tunnel termination */
-			if (rand_int(100) >= dun_tun_con)
+			if (randint0(100) >= dun_tun_con)
 			{
 				/* Distance between row1 and start_row */
 				tmp_row = row1 - start_row;
@@ -791,8 +791,8 @@ static bool set_tunnel(int *x, int *y, bool affectwall)
 		dx = 0;
 		while ((i > 0) && is_solid_bold(*y + dy, *x + dx))
 		{
-			dy = rand_int(3) - 1;
-			dx = rand_int(3) - 1;
+			dy = randint0(3) - 1;
+			dx = randint0(3) - 1;
 
 			if (!in_bounds(*y + dy, *x + dx))
 			{
@@ -1014,10 +1014,10 @@ bool build_tunnel2(int x1, int y1, int x2, int y2, int type, int cutoff)
 		dy = (y2 - y1) / 2;
 
 		/* perturbation perpendicular to path */
-		changex = (rand_int(abs(dy) + 2) * 2 - abs(dy) - 1) / 2;
+		changex = (randint0(abs(dy) + 2) * 2 - abs(dy) - 1) / 2;
 
 		/* perturbation perpendicular to path */
-		changey = (rand_int(abs(dx) + 2) * 2 - abs(dx) - 1) / 2;
+		changey = (randint0(abs(dx) + 2) * 2 - abs(dx) - 1) / 2;
 
 		/* Work out "mid" ponit */
 		x3 = x1 + dx + changex;
@@ -1042,8 +1042,8 @@ bool build_tunnel2(int x1, int y1, int x2, int y2, int type, int cutoff)
 			dx = 0;
 			while ((i > 0) && is_solid_bold(y3 + dy, x3 + dx))
 			{
-				dy = rand_int(3) - 1;
-				dx = rand_int(3) - 1;
+				dy = randint0(3) - 1;
+				dx = randint0(3) - 1;
 				if (!in_bounds(y3 + dy, x3 + dx))
 				{
 					dx = 0;
@@ -1069,7 +1069,7 @@ bool build_tunnel2(int x1, int y1, int x2, int y2, int type, int cutoff)
 		{
 			if (build_tunnel2(x1, y1, x3, y3, type, cutoff))
 			{
-				if ((cave[y3][x3].info & CAVE_ROOM) || (randint(100) > 95))
+				if ((cave[y3][x3].info & CAVE_ROOM) || (randint1(100) > 95))
 				{
 					/* do second half only if works + if have hit a room */
 					retval = build_tunnel2(x3, y3, x2, y2, type, cutoff);

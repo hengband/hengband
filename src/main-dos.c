@@ -689,7 +689,7 @@ static errr Term_xtra_dos(int n, int v)
 					/* Get a *new* song at random */
 					while (1)
 					{
-						n = randint(song_number);
+						n = randint1(song_number);
 						if (n != current_song) break;
 					}
 					current_song = n;
@@ -2000,7 +2000,7 @@ static errr Term_xtra_dos_sound(int v)
 	if ((v < 0) || (v >= SOUND_MAX)) return (1);
 
 	/* Get a random sample from the available ones */
-	n = rand_int(sample_count[v]);
+	n = randint0(sample_count[v]);
 
 	/* Play the sound, catch errors */
 	if (samples[v][n])

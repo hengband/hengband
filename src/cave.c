@@ -534,26 +534,26 @@ static void image_monster(byte *ap, char *cp)
 		/* Normal graphics */
 		if (!(streq(ANGBAND_SYS, "ibm")))
 		{
-			(*cp) = r_info[randint(max_r_idx-1)].x_char;
-			(*ap) = r_info[randint(max_r_idx-1)].x_attr;
+			(*cp) = r_info[randint1(max_r_idx-1)].x_char;
+			(*ap) = r_info[randint1(max_r_idx-1)].x_attr;
 		}
 		else
 		/* IBM-pseudo graphics */
 		{
 			n = strlen(image_monster_hack_ibm);
-			(*cp) = (image_monster_hack_ibm[rand_int(n)]);
+			(*cp) = (image_monster_hack_ibm[randint0(n)]);
 
 			/* Random color */
-			(*ap) = randint(15);
+			(*ap) = randint1(15);
 		}
 	}
 	else
 	/* Text mode */
 	{
-		(*cp) = (image_monster_hack[rand_int(n)]);
+		(*cp) = (image_monster_hack[randint0(n)]);
 
 		/* Random color */
-		(*ap) = randint(15);
+		(*ap) = randint1(15);
 	}
 }
 
@@ -579,24 +579,24 @@ static void image_object(byte *ap, char *cp)
 	{
 		if (!(streq(ANGBAND_SYS, "ibm")))
 		{
-			(*cp) = k_info[randint(max_k_idx-1)].x_char;
-			(*ap) = k_info[randint(max_k_idx-1)].x_attr;
+			(*cp) = k_info[randint1(max_k_idx-1)].x_char;
+			(*ap) = k_info[randint1(max_k_idx-1)].x_attr;
 		}
 		else
 		{
 			n = strlen(image_object_hack_ibm);
-			(*cp) = (image_object_hack_ibm[rand_int(n)]);
+			(*cp) = (image_object_hack_ibm[randint0(n)]);
 
 			/* Random color */
-			(*ap) = randint(15);
+			(*ap) = randint1(15);
 		}
 	}
 	else
 	{
-		(*cp) = (image_object_hack[rand_int(n)]);
+		(*cp) = (image_object_hack[randint0(n)]);
 
 		/* Random color */
-		(*ap) = randint(15);
+		(*ap) = randint1(15);
 	}
 }
 
@@ -608,7 +608,7 @@ static void image_object(byte *ap, char *cp)
 static void image_random(byte *ap, char *cp)
 {
 	/* Normally, assume monsters */
-	if (rand_int(100) < 75)
+	if (randint0(100) < 75)
 	{
 		image_monster(ap, cp);
 	}
@@ -1364,7 +1364,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 	}
 
 	/* Hack -- rare random hallucination, except on outer dungeon walls */
-	if (p_ptr->image && (c_ptr->feat < FEAT_PERM_SOLID) && !rand_int(256))
+	if (p_ptr->image && (c_ptr->feat < FEAT_PERM_SOLID) && !randint0(256))
 	{
 		/* Hallucinate */
 		image_random(ap, cp);
@@ -1481,23 +1481,23 @@ void map_info(int y, int x, byte *ap, char *cp)
 					{
 						if (!(streq(ANGBAND_SYS, "ibm")))
 						{
-							(*cp) = r_info[randint(max_r_idx-1)].x_char;
-							(*ap) = r_info[randint(max_r_idx-1)].x_attr;
+							(*cp) = r_info[randint1(max_r_idx-1)].x_char;
+							(*ap) = r_info[randint1(max_r_idx-1)].x_attr;
 						}
 						else
 						{
 							int n =  strlen(image_monster_hack_ibm);
-							(*cp) = (image_monster_hack_ibm[rand_int(n)]);
+							(*cp) = (image_monster_hack_ibm[randint0(n)]);
 
 							/* Random color */
-							(*ap) = randint(15);
+							(*ap) = randint1(15);
 						}
 					}
 					else
 					{
 						(*cp) = (one_in_(25) ?
-							image_object_hack[rand_int(strlen(image_object_hack))] :
-							image_monster_hack[rand_int(strlen(image_monster_hack))]);
+							image_object_hack[randint0(strlen(image_object_hack))] :
+							image_monster_hack[randint0(strlen(image_monster_hack))]);
 					}
 				}
 				else
@@ -1505,8 +1505,8 @@ void map_info(int y, int x, byte *ap, char *cp)
 
 				/* Multi-hued attr */
 				if (r_ptr->flags2 & RF2_ATTR_ANY)
-					(*ap) = randint(15);
-				else switch (randint(7))
+					(*ap) = randint1(15);
+				else switch (randint1(7))
 				{
 					case 1:
 						(*ap) = TERM_RED;
@@ -1620,7 +1620,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 						case CLASS_CHAOS_WARRIOR:
 							do
 							{
-								a = randint(15);
+								a = randint1(15);
 							}
 							while (a == TERM_DARK);
 							break;

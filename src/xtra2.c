@@ -195,7 +195,7 @@ msg_format("レベル %d にようこそ。", p_ptr->lev);
 				screen_load();
 			}
 			else if(!(p_ptr->max_plv % 2))
-				do_inc_stat(rand_int(6));
+				do_inc_stat(randint0(6));
 		}
 
 		if (level_mutation)
@@ -931,7 +931,7 @@ msg_print("地面に落とされた。");
 	/* Bloodletters of Khorne may drop a blade of chaos */
 	else if (m_ptr->r_idx == MON_BLOODLETTER &&
 
-	         (randint(100) < 15) &&
+	         (randint1(100) < 15) &&
 	    !(p_ptr->inside_arena || p_ptr->inside_battle))
 	{
 		/* Get local object */
@@ -979,7 +979,7 @@ msg_print("地面に落とされた。");
 		q_ptr = &forge;
 
 		/* Prepare to make a Blade of Chaos */
-		object_prep(q_ptr, lookup_kind(TV_SWORD, randint(2)));
+		object_prep(q_ptr, lookup_kind(TV_SWORD, randint1(2)));
 
 		/* Drop it in the dungeon */
 		(void)drop_near(q_ptr, -1, y, x);
@@ -1323,7 +1323,7 @@ msg_print("地面に落とされた。");
 				chance = 5;
 			}
 
-			if ((a_idx > 0) && ((randint(99) < chance) || (wizard)))
+			if ((a_idx > 0) && ((randint1(99) < chance) || (wizard)))
 			{
 				if (a_info[a_idx].cur_num == 0)
 				{
@@ -1376,8 +1376,8 @@ msg_print("地面に落とされた。");
 	}
 
 	/* Determine how much we can drop */
-	if ((r_ptr->flags1 & RF1_DROP_60) && (rand_int(100) < 60)) number++;
-	if ((r_ptr->flags1 & RF1_DROP_90) && (rand_int(100) < 90)) number++;
+	if ((r_ptr->flags1 & RF1_DROP_60) && (randint0(100) < 60)) number++;
+	if ((r_ptr->flags1 & RF1_DROP_90) && (randint0(100) < 90)) number++;
 	if  (r_ptr->flags1 & RF1_DROP_1D2) number += damroll(1, 2);
 	if  (r_ptr->flags1 & RF1_DROP_2D2) number += damroll(2, 2);
 	if  (r_ptr->flags1 & RF1_DROP_3D2) number += damroll(3, 2);
@@ -1406,7 +1406,7 @@ msg_print("地面に落とされた。");
 		object_wipe(q_ptr);
 
 		/* Make Gold */
-		if (do_gold && (!do_item || (rand_int(100) < 50)))
+		if (do_gold && (!do_item || (randint0(100) < 50)))
 		{
 			/* Make some gold */
 			if (!make_gold(q_ptr)) continue;
@@ -1723,7 +1723,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 		/* Don't kill Amberites */
 		if ((r_ptr->flags3 & RF3_AMBERITE) && one_in_(2))
 		{
-			int curses = 1 + randint(3);
+			int curses = 1 + randint1(3);
 			bool stop_ty = FALSE;
 			int count = 0;
 
@@ -1772,7 +1772,7 @@ msg_format("%^sは恐ろしい血の呪いをあなたにかけた！", m_name);
 			}
 			else if (r_ptr->level > dun_level)
 			{
-				if (randint(10) <= (r_ptr->level - dun_level))
+				if (randint1(10) <= (r_ptr->level - dun_level))
 					chg_virtue(V_VALOUR, 1);
 			}
 			if (r_ptr->level > 60)
@@ -1803,7 +1803,7 @@ msg_format("%^sは恐ろしい血の呪いをあなたにかけた！", m_name);
 		}
 
 		if ((r_ptr->flags3 & RF3_GOOD) &&
-			((r_ptr->level) / 10 + (3 * dun_level) >= randint(100)))
+			((r_ptr->level) / 10 + (3 * dun_level) >= randint1(100)))
 			
 			chg_virtue(V_UNLIFE, 1);
 
@@ -1811,7 +1811,7 @@ msg_format("%^sは恐ろしい血の呪いをあなたにかけた！", m_name);
 		{
 			if (r_ptr->flags1 & RF1_UNIQUE)
 				chg_virtue(V_FAITH, -2);
-			else if ((r_ptr->level) / 10 + (3 * dun_level) >= randint(100))
+			else if ((r_ptr->level) / 10 + (3 * dun_level) >= randint1(100))
 			{
 				if (r_ptr->flags3 & RF3_GOOD) chg_virtue(V_FAITH, -1);
 				else chg_virtue(V_FAITH, 1);
@@ -1821,7 +1821,7 @@ msg_format("%^sは恐ろしい血の呪いをあなたにかけた！", m_name);
 		{
 			if (r_ptr->flags1 & RF1_UNIQUE)
 				chg_virtue(V_FAITH, 2);
-			else if ((r_ptr->level) / 10 + (3 * dun_level) >= randint(100))
+			else if ((r_ptr->level) / 10 + (3 * dun_level) >= randint1(100))
 				chg_virtue(V_FAITH, 1);
 		}
 
@@ -1834,7 +1834,7 @@ msg_format("%^sは恐ろしい血の呪いをあなたにかけた！", m_name);
 			{
 				chg_virtue(V_HONOUR, 10);
 			}
-			else if ((r_ptr->level) / 10 + (2 * dun_level) >= randint(100))
+			else if ((r_ptr->level) / 10 + (2 * dun_level) >= randint1(100))
 			{
 				chg_virtue(V_HONOUR, 1);
 			}
@@ -1862,7 +1862,7 @@ msg_format("%^sは恐ろしい血の呪いをあなたにかけた！", m_name);
 			if (r_ptr->flags1 & RF1_UNIQUE)
 				chg_virtue(V_JUSTICE, 3);
 			else if (1+((r_ptr->level) / 10 + (2 * dun_level))
-				>= randint(100))
+				>= randint1(100))
 				
 				chg_virtue(V_JUSTICE, 1);
 		}
@@ -2057,7 +2057,7 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 	/* Mega-Hack -- Pain cancels fear */
 	if (m_ptr->monfear && (dam > 0))
 	{
-		int tmp = randint(dam);
+		int tmp = randint1(dam);
 
 		/* Cure a little fear */
 		if (tmp < m_ptr->monfear)
@@ -2089,14 +2089,14 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 		 * Run (sometimes) if at 10% or less of max hit points,
 		 * or (usually) when hit for half its current hit points
 		 */
-		if (((percentage <= 10) && (rand_int(10) < percentage)) ||
-		    ((dam >= m_ptr->hp) && (rand_int(100) < 80)))
+		if (((percentage <= 10) && (randint0(10) < percentage)) ||
+		    ((dam >= m_ptr->hp) && (randint0(100) < 80)))
 		{
 			/* Hack -- note fear */
 			(*fear) = TRUE;
 
 			/* XXX XXX XXX Hack -- Add some timed fear */
-			m_ptr->monfear = (randint(10) +
+			m_ptr->monfear = (randint1(10) +
 			                  (((dam >= m_ptr->hp) && (percentage > 7)) ?
 			                   20 : ((11 - percentage) * 5)));
 		}
@@ -4121,7 +4121,7 @@ p = "方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ";
 	{
 		/* XXX XXX XXX */
 		/* Random direction */
-		dir = ddd[rand_int(8)];
+		dir = ddd[randint0(8)];
 	}
 
 	/* Notice confusion */
@@ -4221,10 +4221,10 @@ if (!get_com("方向 (ESCで中断)? ", &ch, TRUE)) break;
 	if (p_ptr->confused)
 	{
 		/* Standard confusion */
-		if (rand_int(100) < 75)
+		if (randint0(100) < 75)
 		{
 			/* Random direction */
-			dir = ddd[rand_int(8)];
+			dir = ddd[randint0(8)];
 		}
 	}
 	else if (p_ptr->riding)
@@ -4235,21 +4235,21 @@ if (!get_com("方向 (ESCで中断)? ", &ch, TRUE)) break;
 		if (m_ptr->confused)
 		{
 			/* Standard confusion */
-			if (rand_int(100) < 75)
+			if (randint0(100) < 75)
 			{
 				/* Random direction */
-				dir = ddd[rand_int(8)];
+				dir = ddd[randint0(8)];
 			}
 		}
-		else if ((r_ptr->flags1 & RF1_RAND_50) && (r_ptr->flags1 & RF1_RAND_25) && (rand_int(100) < 50))
+		else if ((r_ptr->flags1 & RF1_RAND_50) && (r_ptr->flags1 & RF1_RAND_25) && (randint0(100) < 50))
 		{
 			/* Random direction */
-			dir = ddd[rand_int(8)];
+			dir = ddd[randint0(8)];
 		}
-		else if ((r_ptr->flags1 & RF1_RAND_50) && (rand_int(100) < 25))
+		else if ((r_ptr->flags1 & RF1_RAND_50) && (randint0(100) < 25))
 		{
 			/* Random direction */
-			dir = ddd[rand_int(8)];
+			dir = ddd[randint0(8)];
 		}
 	}
 
@@ -4359,10 +4359,10 @@ if (!get_com("方向 (ESCで中断)? ", &ch, TRUE)) break;
 	if (p_ptr->confused)
 	{
 		/* Standard confusion */
-		if (rand_int(100) < 75)
+		if (randint0(100) < 75)
 		{
 			/* Random direction */
-			dir = ddd[rand_int(8)];
+			dir = ddd[randint0(8)];
 		}
 	}
 
@@ -4424,9 +4424,9 @@ void gain_level_reward(int chosen_reward)
 	else if (!(p_ptr->lev % 14)) nasty_chance = 12;
 
 	if (one_in_(nasty_chance))
-		type = randint(20); /* Allow the 'nasty' effects */
+		type = randint1(20); /* Allow the 'nasty' effects */
 	else
-		type = randint(15) + 5; /* Or disallow them */
+		type = randint1(15) + 5; /* Or disallow them */
 
 	if (type < 1) type = 1;
 	if (type > 20) type = 20;
@@ -4623,7 +4623,7 @@ msg_print("「汝の行いは貴き剣に値せり。」");
 			/* Get local object */
 			q_ptr = &forge;
 			dummy = TV_SWORD;
-			switch (randint(p_ptr->lev))
+			switch (randint1(p_ptr->lev))
 			{
 				case 0: case 1:
 					dummy2 = SV_DAGGER;
@@ -4711,9 +4711,9 @@ msg_print("「汝の行いは貴き剣に値せり。」");
 			}
 
 			object_prep(q_ptr, lookup_kind(dummy, dummy2));
-			q_ptr->to_h = 3 + randint(dun_level) % 10;
-			q_ptr->to_d = 3 + randint(dun_level) % 10;
-			random_resistance(q_ptr, FALSE, randint(34) + 4);
+			q_ptr->to_h = 3 + randint1(dun_level) % 10;
+			q_ptr->to_d = 3 + randint1(dun_level) % 10;
+			random_resistance(q_ptr, FALSE, randint1(34) + 4);
 			q_ptr->name2 = EGO_CHAOTIC;
 
 			/* Drop it in the dungeon */
@@ -4739,7 +4739,7 @@ msg_print("「汝の行いは貴き報いに値せり。」");
 			msg_print("'Thy deed hath earned thee a worthy reward.'");
 #endif
 
-			acquirement(py, px, randint(2) + 1, FALSE, FALSE);
+			acquirement(py, px, randint1(2) + 1, FALSE, FALSE);
 #ifdef JP
 			reward = "上質なアイテムを手に入れた。";
 #else
@@ -4761,7 +4761,7 @@ msg_print("「下僕よ、汝の献身への我が惜しみ無き報いを見るがよい。」");
 			msg_print("'Behold, mortal, how generously I reward thy loyalty.'");
 #endif
 
-			acquirement(py, px, randint(2) + 1, TRUE, FALSE);
+			acquirement(py, px, randint1(2) + 1, TRUE, FALSE);
 #ifdef JP
 			reward = "高級品のアイテムを手に入れた。";
 #else
@@ -4805,7 +4805,7 @@ msg_print("「我が下僕たちよ、かの傲慢なる者を倒すべし！」");
 			msg_print("'My pets, destroy the arrogant mortal!'");
 #endif
 
-			for (dummy = 0; dummy < randint(5) + 1; dummy++)
+			for (dummy = 0; dummy < randint1(5) + 1; dummy++)
 			{
 				(void)summon_specific(0, py, px, dun_level, 0, TRUE, FALSE, FALSE, TRUE, TRUE);
 			}
@@ -4877,7 +4877,7 @@ msg_print("「留まるのだ、下僕よ。余が汝の肉体を鍛えん。」");
 			if (one_in_(3) && !(chaos_stats[p_ptr->chaos_patron] < 0))
 				do_inc_stat(chaos_stats[p_ptr->chaos_patron]);
 			else
-				do_inc_stat(rand_int(6));
+				do_inc_stat(randint0(6));
 #ifdef JP
 			reward = "能力値が上がった。";
 #else
@@ -4902,7 +4902,7 @@ msg_print("「下僕よ、余は汝に飽みたり。」");
 			if (one_in_(3) && !(chaos_stats[p_ptr->chaos_patron] < 0))
 				do_dec_stat(chaos_stats[p_ptr->chaos_patron]);
 			else
-				(void)do_dec_stat(rand_int(6));
+				(void)do_dec_stat(randint0(6));
 #ifdef JP
 			reward = "能力値が下がった。";
 #else
@@ -4928,7 +4928,7 @@ msg_print("あなたは以前より弱くなった！");
 
 			for (dummy = 0; dummy < 6; dummy++)
 			{
-				(void)dec_stat(dummy, 10 + randint(15), TRUE);
+				(void)dec_stat(dummy, 10 + randint1(15), TRUE);
 			}
 #ifdef JP
 			reward = "全能力値が下がった。";
@@ -5095,7 +5095,7 @@ msg_print("「我を怒りしめた罪を償うべし。」");
 			msg_print("'Now thou shalt pay for annoying me.'");
 #endif
 
-			switch (randint(4))
+			switch (randint1(4))
 			{
 				case 1:
 					(void)activate_ty_curse(FALSE, &count);
@@ -5140,7 +5140,7 @@ msg_print("「我を怒りしめた罪を償うべし。」");
 				default:
 					for (dummy = 0; dummy < 6; dummy++)
 					{
-						(void)dec_stat(dummy, 10 + randint(15), TRUE);
+						(void)dec_stat(dummy, 10 + randint1(15), TRUE);
 					}
 #ifdef JP
 					reward = "全能力値が下がった。";
@@ -5167,7 +5167,7 @@ msg_print("「死ぬがよい、下僕よ！」");
 			take_hit(DAMAGE_LOSELIFE, p_ptr->lev * 4, wrath_reason, -1);
 			for (dummy = 0; dummy < 6; dummy++)
 			{
-				(void)dec_stat(dummy, 10 + randint(15), FALSE);
+				(void)dec_stat(dummy, 10 + randint1(15), FALSE);
 			}
 			activate_hi_summon(py, px, FALSE);
 			(void)activate_ty_curse(FALSE, &count);
@@ -5570,7 +5570,7 @@ p = "方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ";
 	{
 		/* XXX XXX XXX */
 		/* Random direction */
-		dir = ddd[rand_int(8)];
+		dir = ddd[randint0(8)];
 	}
 
 	/* Notice confusion */
@@ -5605,7 +5605,7 @@ s16b gain_energy(void)
 	s32b energy_result = 10;
 	s32b tmp;
 
-	tmp = rand_int(Go_no_JuuJou);
+	tmp = randint0(Go_no_JuuJou);
 
 	for (i = 0; i < 9; i ++){
 		energy_result += tmp % 5;

@@ -44,7 +44,7 @@ static void recursive_river(int x1, int y1, int x2, int y2, int feat1, int feat2
 		if (dy != 0)
 		{
 			/* perturbation perpendicular to path */
-			changex = randint(abs(dy)) * 2 - abs(dy);
+			changex = randint1(abs(dy)) * 2 - abs(dy);
 		}
 		else
 		{
@@ -54,7 +54,7 @@ static void recursive_river(int x1, int y1, int x2, int y2, int feat1, int feat2
 		if (dx != 0)
 		{
 			/* perturbation perpendicular to path */
-			changey = randint(abs(dx)) * 2 - abs(dx);
+			changey = randint1(abs(dx)) * 2 - abs(dx);
 		}
 		else
 		{
@@ -145,16 +145,16 @@ void add_river(int feat1, int feat2)
 
 
 	/* Hack -- Choose starting point */
-	y2 = randint(cur_hgt / 2 - 2) + cur_hgt / 2;
-	x2 = randint(cur_wid / 2 - 2) + cur_wid / 2;
+	y2 = randint1(cur_hgt / 2 - 2) + cur_hgt / 2;
+	x2 = randint1(cur_wid / 2 - 2) + cur_wid / 2;
 
 	/* Hack -- Choose ending point somewhere on boundary */
-	switch(randint(4))
+	switch(randint1(4))
 	{
 		case 1:
 		{
 			/* top boundary */
-			x1 = randint(cur_wid-2)+1;
+			x1 = randint1(cur_wid-2)+1;
 			y1 = 1;
 			break;
 		}
@@ -162,26 +162,26 @@ void add_river(int feat1, int feat2)
 		{
 			/* left boundary */
 			x1 = 1;
-			y1 = randint(cur_hgt-2)+1;
+			y1 = randint1(cur_hgt-2)+1;
 			break;
 		}
 		case 3:
 		{
 			/* right boundary */
 			x1 = cur_wid-1;
-			y1 = randint(cur_hgt-2)+1;
+			y1 = randint1(cur_hgt-2)+1;
 			break;
 		}
 		case 4:
 		{
 			/* bottom boundary */
-			x1 = randint(cur_wid-2)+1;
+			x1 = randint1(cur_wid-2)+1;
 			y1 = cur_hgt-1;
 			break;
 		}
 	}
 
-	wid = randint(DUN_WAT_RNG);
+	wid = randint1(DUN_WAT_RNG);
 	recursive_river(x1, y1, x2, y2, feat1, feat2, wid);
 
 	/* Hack - Save the location as a "room" */
@@ -216,7 +216,7 @@ void build_streamer(int feat, int chance)
 	x = rand_spread(cur_wid / 2, 15);
 
 	/* Choose a random compass direction */
-	dir = ddd[rand_int(8)];
+	dir = ddd[randint0(8)];
 
 	/* Place streamer into dungeon */
 	while (dummy < SAFE_MAX_ATTEMPTS)
@@ -315,9 +315,9 @@ void place_trees(int x, int y)
 				 * Clear previous contents, add feature
 				 * The border mainly gets trees, while the center gets rubble
 				 */
-				if ((distance(j, i, y, x) > 1) || (randint(100) < 25))
+				if ((distance(j, i, y, x) > 1) || (randint1(100) < 25))
 				{
-					if (randint(100) < 75)
+					if (randint1(100) < 75)
 						cave[j][i].feat = FEAT_TREES;
 				}
 				else
@@ -358,7 +358,7 @@ if (cheat_room) msg_print("ÇË²õ¤µ¤ì¤¿³¬");
 
 
 	/* Drop a few epi-centers (usually about two) */
-	for (n = 0; n < randint(5); n++)
+	for (n = 0; n < randint1(5); n++)
 	{
 		/* Pick an epi-center */
 		x1 = rand_range(5, cur_wid - 1 - 5);
@@ -391,7 +391,7 @@ if (cheat_room) msg_print("ÇË²õ¤µ¤ì¤¿³¬");
 					delete_object(y, x);
 
 					/* Wall (or floor) type */
-					t = rand_int(200);
+					t = randint0(200);
 
 					/* Granite */
 					if (t < 20)

@@ -4431,7 +4431,7 @@ while(!get_com("どの種類(文字)のモンスターを抹殺しますか: ", &typ, FALSE));
 
 		else if (i == p_ptr->riding) angry = TRUE;
 
-		else if (player_cast && (r_ptr->level > rand_int(power))) angry = TRUE;
+		else if (player_cast && (r_ptr->level > randint0(power))) angry = TRUE;
 
 		else if (player_cast && (m_ptr->mflag2 & MFLAG_NOGENO)) angry = TRUE;
 
@@ -4480,9 +4480,9 @@ msg_format("%^sが目を覚ました。", m_name);
 		{
 			/* Take damage */
 #ifdef JP
-take_hit(DAMAGE_GENO, randint(4), "抹殺の呪文を唱えた疲労", -1);
+take_hit(DAMAGE_GENO, randint1(4), "抹殺の呪文を唱えた疲労", -1);
 #else
-			take_hit(DAMAGE_GENO, randint(4), "the strain of casting Genocide", -1);
+			take_hit(DAMAGE_GENO, randint1(4), "the strain of casting Genocide", -1);
 #endif
 
 		}
@@ -4560,7 +4560,7 @@ bool mass_genocide(int power, int player_cast)
 
 		else if (i == p_ptr->riding) angry = TRUE;
 
-		else if (player_cast && (r_ptr->level > rand_int(power))) angry = TRUE;
+		else if (player_cast && (r_ptr->level > randint0(power))) angry = TRUE;
 
 		else if (player_cast && (m_ptr->mflag2 & MFLAG_NOGENO)) angry = TRUE;
 
@@ -4609,9 +4609,9 @@ msg_format("%^sが目を覚ました。", m_name);
 		{
 			/* Hack -- visual feedback */
 #ifdef JP
-take_hit(DAMAGE_GENO, randint(3), "周辺抹殺の呪文を唱えた疲労", -1);
+take_hit(DAMAGE_GENO, randint1(3), "周辺抹殺の呪文を唱えた疲労", -1);
 #else
-			take_hit(DAMAGE_GENO, randint(3), "the strain of casting Mass Genocide", -1);
+			take_hit(DAMAGE_GENO, randint1(3), "the strain of casting Mass Genocide", -1);
 #endif
 
 		}
@@ -4692,7 +4692,7 @@ bool mass_genocide_undead(int power, int player_cast)
 
 		else if (i == p_ptr->riding) angry = TRUE;
 
-		else if (player_cast && (r_ptr->level > rand_int(power))) angry = TRUE;
+		else if (player_cast && (r_ptr->level > randint0(power))) angry = TRUE;
 
 		else if (player_cast && (m_ptr->mflag2 & MFLAG_NOGENO)) angry = TRUE;
 
@@ -4741,9 +4741,9 @@ msg_format("%^sが目を覚ました。", m_name);
 		{
 			/* Hack -- visual feedback */
 #ifdef JP
-take_hit(DAMAGE_GENO, randint(3), "アンデッド消滅の呪文を唱えた疲労", -1);
+take_hit(DAMAGE_GENO, randint1(3), "アンデッド消滅の呪文を唱えた疲労", -1);
 #else
-			take_hit(DAMAGE_GENO, randint(3), "the strain of casting Mass Genocide", -1);
+			take_hit(DAMAGE_GENO, randint1(3), "the strain of casting Mass Genocide", -1);
 #endif
 
 		}
@@ -5021,7 +5021,7 @@ bool destroy_area(int y1, int x1, int r, int full)
 			if (!cave_perma_bold(y, x))
 			{
 				/* Wall (or floor) type */
-				t = rand_int(200);
+				t = randint0(200);
 
 				/* Granite */
 				if (t < 20)
@@ -5048,7 +5048,7 @@ bool destroy_area(int y1, int x1, int r, int full)
 				else
 				{
 					/* Create floor */
-					c_ptr->feat = floor_type[rand_int(100)];
+					c_ptr->feat = floor_type[randint0(100)];
 					c_ptr->info &= ~(CAVE_MASK);
 					c_ptr->info |= CAVE_FLOOR;
 				}
@@ -5072,7 +5072,7 @@ msg_print("燃えるような閃光が発生した！");
 		if (!p_ptr->resist_blind && !p_ptr->resist_lite)
 		{
 			/* Become blind */
-			(void)set_blind(p_ptr->blind + 10 + randint(10));
+			(void)set_blind(p_ptr->blind + 10 + randint1(10));
 		}
 	}
 
@@ -5172,7 +5172,7 @@ bool earthquake(int cy, int cx, int r)
 			if (!dx && !dy) continue;
 
 			/* Skip most grids */
-			if (rand_int(100) < 85) continue;
+			if (randint0(100) < 85) continue;
 
 			/* Damage this grid */
 			map[16+yy-cy][16+xx-cx] = TRUE;
@@ -5204,14 +5204,14 @@ bool earthquake(int cy, int cx, int r)
 			sn++;
 
 			/* Randomize choice */
-			if (rand_int(sn) > 0) continue;
+			if (randint0(sn) > 0) continue;
 
 			/* Save the safe location */
 			sy = y; sx = x;
 		}
 
 		/* Random message */
-		switch (randint(3))
+		switch (randint1(3))
 		{
 			case 1:
 			{
@@ -5262,7 +5262,7 @@ msg_print("あなたはひどい怪我を負った！");
 		else
 		{
 			/* Calculate results */
-			switch (randint(3))
+			switch (randint1(3))
 			{
 				case 1:
 				{
@@ -5284,7 +5284,7 @@ msg_print("岩石があなたに直撃した!");
 #endif
 
 					damage = damroll(10, 4);
-					(void)set_stun(p_ptr->stun + randint(50));
+					(void)set_stun(p_ptr->stun + randint1(50));
 					break;
 				}
 				case 3:
@@ -5296,7 +5296,7 @@ msg_print("あなたは床と壁との間に挟まれてしまった！");
 #endif
 
 					damage = damroll(10, 4);
-					(void)set_stun(p_ptr->stun + randint(50));
+					(void)set_stun(p_ptr->stun + randint1(50));
 					break;
 				}
 			}
@@ -5416,7 +5416,7 @@ if (damage) take_hit(DAMAGE_ATTACK, damage, "地震", -1);
 							sn++;
 
 							/* Randomize choice */
-							if (rand_int(sn) > 0) continue;
+							if (randint0(sn) > 0) continue;
 
 							/* Save the safe grid */
 							sy = y; sx = x;
@@ -5528,7 +5528,7 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 				delete_object(yy, xx);
 
 				/* Wall (or floor) type */
-				t = (floor ? rand_int(100) : 200);
+				t = (floor ? randint0(100) : 200);
 
 				/* Granite */
 				if (t < 20)
@@ -5555,7 +5555,7 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 				else
 				{
 					/* Create floor */
-					c_ptr->feat = floor_type[rand_int(100)];
+					c_ptr->feat = floor_type[randint0(100)];
 					c_ptr->info &= ~(CAVE_MASK);
 					c_ptr->info |= CAVE_FLOOR;
 				}
@@ -5696,7 +5696,7 @@ static void cave_temp_room_lite(void)
 			if (r_ptr->flags2 & (RF2_SMART)) chance = 100;
 
 			/* Sometimes monsters wake up */
-			if (m_ptr->csleep && (rand_int(100) < chance))
+			if (m_ptr->csleep && (randint0(100) < chance))
 			{
 				/* Wake up! */
 				m_ptr->csleep = 0;
@@ -6278,7 +6278,7 @@ bool fire_beam(int typ, int dir, int dam)
  */
 bool fire_bolt_or_beam(int prob, int typ, int dir, int dam)
 {
-	if (rand_int(100) < prob)
+	if (randint0(100) < prob)
 	{
 		return (fire_beam(typ, dir, dam));
 	}
@@ -6309,14 +6309,14 @@ bool drain_life(int dir, int dam)
 bool wall_to_mud(int dir)
 {
 	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-	return (project_hook(GF_KILL_WALL, dir, 20 + randint(30), flg));
+	return (project_hook(GF_KILL_WALL, dir, 20 + randint1(30), flg));
 }
 
 
 bool wizard_lock(int dir)
 {
 	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-	return (project_hook(GF_JAM_DOOR, dir, 20 + randint(30), flg));
+	return (project_hook(GF_JAM_DOOR, dir, 20 + randint1(30), flg));
 }
 
 
@@ -6511,7 +6511,7 @@ void call_chaos(void)
 		GF_HELL_FIRE, GF_DISINTEGRATE, GF_PSY_SPEAR
 	};
 
-	Chaos_type = hurt_types[rand_int(31)];
+	Chaos_type = hurt_types[randint0(31)];
 	if (one_in_(4)) line_chaos = TRUE;
 
 	if (one_in_(6))
@@ -6555,7 +6555,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 
 	do
 	{
-		switch (randint(34))
+		switch (randint1(34))
 		{
 		case 28: case 29:
 			if (!(*count))
@@ -6566,7 +6566,7 @@ msg_print("地面が揺れた...");
 				msg_print("The ground trembles...");
 #endif
 
-				earthquake(py, px, 5 + rand_int(10));
+				earthquake(py, px, 5 + randint0(10));
 				if (!one_in_(6)) break;
 			}
 		case 30: case 31:
@@ -6597,7 +6597,7 @@ msg_print("周囲の空間が歪んだ！");
 #endif
 
 				teleport_player(damroll(10, 10));
-				if (rand_int(13)) (*count) += activate_hi_summon(py, px, FALSE);
+				if (randint0(13)) (*count) += activate_hi_summon(py, px, FALSE);
 				if (!one_in_(6)) break;
 			}
 		case 34:
@@ -6608,7 +6608,7 @@ msg_print("エネルギーのうねりを感じた！");
 #endif
 
 			wall_breaker();
-			if (!rand_int(7))
+			if (!randint0(7))
 			{
 				project(0, 7, py, px, 50, GF_KILL_WALL, flg, -1);
 #ifdef JP
@@ -6637,7 +6637,7 @@ msg_print("生命力が体から吸い取られた気がする！");
 			lose_exp(p_ptr->exp / 16);
 			if (!one_in_(6)) break;
 		case 13: case 14: case 15: case 19: case 20:
-			if (stop_ty || (p_ptr->free_act && (randint(125) < p_ptr->skill_sav)) || (p_ptr->pclass == CLASS_BERSERKER))
+			if (stop_ty || (p_ptr->free_act && (randint1(125) < p_ptr->skill_sav)) || (p_ptr->pclass == CLASS_BERSERKER))
 			{
 				/* Do nothing */ ;
 			}
@@ -6650,14 +6650,14 @@ msg_print("彫像になった気分だ！");
 #endif
 
 				if (p_ptr->free_act)
-					set_paralyzed(p_ptr->paralyzed + randint(3));
+					set_paralyzed(p_ptr->paralyzed + randint1(3));
 				else
-					set_paralyzed(p_ptr->paralyzed + randint(13));
+					set_paralyzed(p_ptr->paralyzed + randint1(13));
 				stop_ty = TRUE;
 			}
 			if (!one_in_(6)) break;
 		case 21: case 22: case 23:
-			(void)do_dec_stat(rand_int(6));
+			(void)do_dec_stat(randint0(6));
 			if (!one_in_(6)) break;
 		case 24:
 #ifdef JP
@@ -6718,11 +6718,11 @@ int activate_hi_summon(int y, int x, bool can_pet)
 	}
 	not_pet = (bool)(!pet);
 
-	summon_lev = (pet ? p_ptr->lev * 2 / 3 + randint(p_ptr->lev / 2) : dun_level);
+	summon_lev = (pet ? p_ptr->lev * 2 / 3 + randint1(p_ptr->lev / 2) : dun_level);
 
-	for (i = 0; i < (randint(7) + (dun_level / 40)); i++)
+	for (i = 0; i < (randint1(7) + (dun_level / 40)); i++)
 	{
-		switch (randint(25) + (dun_level / 20))
+		switch (randint1(25) + (dun_level / 20))
 		{
 			case 1: case 2:
 				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_ANT, TRUE, friendly, pet, FALSE, not_pet);
@@ -6778,7 +6778,7 @@ int activate_hi_summon(int y, int x, bool can_pet)
 int summon_cyber(int who, int y, int x)
 {
 	int i;
-	int max_cyber = (easy_band ? 1 : (dun_level / 50) + randint(2));
+	int max_cyber = (easy_band ? 1 : (dun_level / 50) + randint1(2));
 	int count = 0;
 
 	bool friendly = FALSE;
@@ -6809,7 +6809,7 @@ void wall_breaker(void)
 	int y, x;
 	int attempts = 1000;
 
-	if (randint(80 + p_ptr->lev) < 70)
+	if (randint1(80 + p_ptr->lev) < 70)
 	{
 		while(attempts--)
 		{
@@ -6820,10 +6820,10 @@ void wall_breaker(void)
 			if ((y != py) || (x != px)) break;
 		}
 
-		project(0, 0, y, x, 20 + randint(30), GF_KILL_WALL,
+		project(0, 0, y, x, 20 + randint1(30), GF_KILL_WALL,
 				  (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
 	}
-	else if (randint(100) > 30)
+	else if (randint1(100) > 30)
 	{
 		earthquake(py, px, 1);
 	}
@@ -6840,7 +6840,7 @@ void wall_breaker(void)
 				if ((y != py) && (x != px)) break;
 			}
 
-			project(0, 0, y, x, 20 + randint(30), GF_KILL_WALL,
+			project(0, 0, y, x, 20 + randint1(30), GF_KILL_WALL,
 					  (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
 		}
 	}
@@ -6979,7 +6979,7 @@ void kawarimi(bool success)
 	int y, x;
 
 	if (p_ptr->confused || p_ptr->blind || p_ptr->paralyzed || p_ptr->image) return;
-	if (rand_int(200) < p_ptr->stun) return;
+	if (randint0(200) < p_ptr->stun) return;
 
 	if (!success && one_in_(3))
 	{
@@ -6996,7 +6996,7 @@ void kawarimi(bool success)
 	y = py;
 	x = px;
 
-	teleport_player(10+randint(90));
+	teleport_player(10+randint1(90));
 
 	object_wipe(q_ptr);
 

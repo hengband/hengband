@@ -733,7 +733,7 @@ static bool cast_learned_spell(int spell, bool success)
 {
 	int             dir;
 	int             plev = pseudo_plev();
-	int     summon_lev = p_ptr->lev * 2 / 3 + randint(p_ptr->lev/2);
+	int     summon_lev = p_ptr->lev * 2 / 3 + randint1(p_ptr->lev/2);
 	int             hp = p_ptr->chp;
 	int             damage = 0;
 	bool    unique_okay = FALSE;
@@ -741,7 +741,7 @@ static bool cast_learned_spell(int spell, bool success)
 	bool   not_pet = (bool)(!pet);
 	bool   no_trump = FALSE;
 
-	if (!success || (randint(50+plev) < plev/10)) unique_okay = TRUE;
+	if (!success || (randint1(50+plev) < plev/10)) unique_okay = TRUE;
 
 	/* spell code */
 	switch (spell)
@@ -1103,7 +1103,7 @@ else msg_print("アシッド・ボールの呪文を唱えた。");
 #else
 			else msg_print("You cast an acid ball.");
 #endif
-		damage = randint(plev * 6) + 15;
+		damage = randint1(plev * 6) + 15;
 		fire_ball(GF_ACID, dir, damage, 2);
 		break;
 	case MS_BALL_ELEC:
@@ -1113,7 +1113,7 @@ else msg_print("サンダー・ボールの呪文を唱えた。");
 #else
 			else msg_print("You cast a lightning ball.");
 #endif
-		damage = randint(plev * 3) + 8;
+		damage = randint1(plev * 3) + 8;
 		fire_ball(GF_ELEC, dir, damage, 2);
 		break;
 	case MS_BALL_FIRE:
@@ -1123,7 +1123,7 @@ else msg_print("ファイア・ボールの呪文を唱えた。");
 #else
 			else msg_print("You cast a fire ball.");
 #endif
-		damage = randint(plev * 7) + 10;
+		damage = randint1(plev * 7) + 10;
 		fire_ball(GF_FIRE, dir, damage, 2);
 		break;
 	case MS_BALL_COLD:
@@ -1133,7 +1133,7 @@ else msg_print("アイス・ボールの呪文を唱えた。");
 #else
 			else msg_print("You cast a frost ball.");
 #endif
-		damage = randint(plev * 3) + 10;
+		damage = randint1(plev * 3) + 10;
 		fire_ball(GF_COLD, dir, damage, 2);
 		break;
 	case MS_BALL_POIS:
@@ -1163,7 +1163,7 @@ else msg_print("流れるような身振りをした。");
 #else
 			else msg_print("You gesture fluidly.");
 #endif
-		damage = randint(plev * 4) + 50;
+		damage = randint1(plev * 4) + 50;
 		fire_ball(GF_WATER, dir, damage, 4);
 		break;
 	case MS_BALL_MANA:
@@ -1188,7 +1188,7 @@ else msg_print("暗黒の嵐の呪文を念じた。");
 		break;
 	case MS_DRAIN_MANA:
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball_hide(GF_DRAIN_MANA, dir, randint(plev)+plev, 0);
+		fire_ball_hide(GF_DRAIN_MANA, dir, randint1(plev)+plev, 0);
 		break;
 	case MS_MIND_BLAST:
 		if (!get_aim_dir(&dir)) return FALSE;
@@ -1298,7 +1298,7 @@ else msg_print("魔力の矢の呪文を唱えた。");
 #else
 			else msg_print("You cast a mana bolt.");
 #endif
-		damage = randint(plev * 7) + 50;
+		damage = randint1(plev * 7) + 50;
 		fire_bolt(GF_MANA, dir, damage);
 		break;
 	case MS_BOLT_PLASMA:
@@ -1362,7 +1362,7 @@ else msg_print("誘惑的な幻覚をつくり出した。");
 		sleep_monster(dir);
 		break;
 	case MS_SPEED:
-		(void)set_fast(randint(20 + plev) + plev, FALSE);
+		(void)set_fast(randint1(20 + plev) + plev, FALSE);
 		break;
 	case MS_HAND_DOOM:
 	{
@@ -1392,7 +1392,7 @@ msg_print("無傷の球の呪文を唱えた。");
 #else
 			msg_print("You cast a Globe of Invulnerability.");
 #endif
-		(void)set_invuln(randint(4) + 4, FALSE);
+		(void)set_invuln(randint1(4) + 4, FALSE);
 		break;
 	case MS_BLINK:
 		teleport_player(10);
@@ -1409,7 +1409,7 @@ msg_print("無傷の球の呪文を唱えた。");
 #endif
 		msg_print(NULL);
 
-		p_ptr->energy += (randint(200)+1200);
+		p_ptr->energy += (randint1(200)+1200);
 
 		/* Redraw map */
 		p_ptr->redraw |= (PR_MAP);
@@ -1449,7 +1449,7 @@ msg_format("%sには効果がなかった！", m_name);
 
 				break;
 			}
-			else if (r_ptr->level > randint(100))
+			else if (r_ptr->level > randint1(100))
 			{
 				r_ptr->r_flags3 |= RF3_RES_TELE;
 #ifdef JP
@@ -1493,7 +1493,7 @@ msg_format("%sの足を指さした。", m_name);
 			msg_format("You gesture at %s's feet.", m_name);
 #endif
 
-		if ((r_ptr->flags3 & RF3_RES_TELE) || (r_ptr->flags1 & RF1_QUESTOR) || (r_ptr->level + randint(50) > plev + randint(60)))
+		if ((r_ptr->flags3 & RF3_RES_TELE) || (r_ptr->flags1 & RF1_QUESTOR) || (r_ptr->level + randint1(50) > plev + randint1(60)))
 		{
 #ifdef JP
 msg_print("しかし効果がなかった！");
@@ -1530,7 +1530,7 @@ else msg_print("光の剣を放った。");
 #else
 			else msg_print("You throw a psycho-spear.");
 #endif
-		damage = randint(plev * 3) + 100;
+		damage = randint1(plev * 3) + 100;
 		(void)fire_beam(GF_PSY_SPEAR, dir, damage);
 		break;
 	case MS_DARKNESS:
@@ -2083,7 +2083,7 @@ if (!get_check("それでも挑戦しますか? ")) return FALSE;
 	chance = MAX(chance,0);
 
 	/* Failed spell */
-	if (rand_int(100) < chance)
+	if (randint0(100) < chance)
 	{
 		if (flush_failure) flush();
 #ifdef JP
@@ -2131,14 +2131,14 @@ msg_print("精神を集中しすぎて気を失ってしまった！");
 
 
 		/* Hack -- Bypass free action */
-		(void)set_paralyzed(p_ptr->paralyzed + randint(5 * oops + 1));
+		(void)set_paralyzed(p_ptr->paralyzed + randint1(5 * oops + 1));
 
 		chg_virtue(V_KNOWLEDGE, -10);
 
 		/* Damage CON (possibly permanently) */
-		if (rand_int(100) < 50)
+		if (randint0(100) < 50)
 		{
-			bool perm = (rand_int(100) < 25);
+			bool perm = (randint0(100) < 25);
 
 			/* Message */
 #ifdef JP
@@ -2149,7 +2149,7 @@ msg_print("体を悪くしてしまった！");
 
 
 			/* Reduce constitution */
-			(void)dec_stat(A_CON, 15 + randint(10), perm);
+			(void)dec_stat(A_CON, 15 + randint1(10), perm);
 		}
 	}
 
@@ -2169,7 +2169,7 @@ void learn_spell(int monspell)
 	if (p_ptr->action != ACTION_LEARN) return;
 	if (p_ptr->magic_num2[monspell]) return;
 	if (p_ptr->confused || p_ptr->blind || p_ptr->image || p_ptr->stun || p_ptr->paralyzed) return;
-	if (randint(p_ptr->lev + 70) > monster_powers[monspell].level + 40)
+	if (randint1(p_ptr->lev + 70) > monster_powers[monspell].level + 40)
 	{
 		p_ptr->magic_num2[monspell] = 1;
 #ifdef JP

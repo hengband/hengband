@@ -559,7 +559,7 @@ static void chest_death(bool scatter, int y, int x, s16b o_idx)
 		object_wipe(q_ptr);
 
 		/* Small chests often drop gold */
-		if (small && (rand_int(100) < 25))
+		if (small && (randint0(100) < 25))
 		{
 			/* Make some gold */
 			if (!make_gold(q_ptr)) continue;
@@ -579,8 +579,8 @@ static void chest_death(bool scatter, int y, int x, s16b o_idx)
 			for (i = 0; i < 200; i++)
 			{
 				/* Pick a totally random spot. */
-				y = rand_int(MAX_HGT);
-				x = rand_int(MAX_WID);
+				y = randint0(MAX_HGT);
+				x = randint0(MAX_WID);
 
 				/* Must be an empty floor. */
 				if (!cave_empty_bold(y, x)) continue;
@@ -669,7 +669,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 
 		if (!(p_ptr->resist_pois || p_ptr->oppose_pois))
 		{
-			(void)set_poisoned(p_ptr->poisoned + 10 + randint(20));
+			(void)set_poisoned(p_ptr->poisoned + 10 + randint1(20));
 		}
 	}
 
@@ -685,14 +685,14 @@ static void chest_trap(int y, int x, s16b o_idx)
 
 		if (!p_ptr->free_act)
 		{
-			(void)set_paralyzed(p_ptr->paralyzed + 10 + randint(20));
+			(void)set_paralyzed(p_ptr->paralyzed + 10 + randint1(20));
 		}
 	}
 
 	/* Summon monsters */
 	if (trap & (CHEST_SUMMON))
 	{
-		int num = 2 + randint(3);
+		int num = 2 + randint1(3);
 #ifdef JP
 		msg_print("突如吹き出した煙に包み込まれた！");
 #else
@@ -702,7 +702,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 
 		for (i = 0; i < num; i++)
 		{
-			if (randint(100)<dun_level)
+			if (randint1(100)<dun_level)
 				activate_hi_summon(py, px, FALSE);
 			else
 				(void)summon_specific(0, y, x, mon_level, 0, TRUE, FALSE, FALSE, TRUE, TRUE);
@@ -717,7 +717,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 #else
 		msg_print("Elemental beings appear to protect their treasures!");
 #endif
-		for (i = 0; i < randint(3) + 5; i++)
+		for (i = 0; i < randint1(3) + 5; i++)
 		{
 			(void)summon_specific(0, y, x, mon_level, SUMMON_ELEMENTAL, TRUE, FALSE, FALSE, TRUE, TRUE);
 		}
@@ -732,10 +732,10 @@ static void chest_trap(int y, int x, s16b o_idx)
 		msg_print("A storm of birds swirls around you!");
 #endif
 
-		for (i = 0; i < randint(3) + 3; i++)
+		for (i = 0; i < randint1(3) + 3; i++)
 			(void)fire_meteor(-1, GF_FORCE, y, x, o_ptr->pval / 5, 7);
 
-		for (i = 0; i < randint(5) + o_ptr->pval / 5; i++)
+		for (i = 0; i < randint1(5) + o_ptr->pval / 5; i++)
 		{
 			(void)summon_specific(0, y, x, mon_level, SUMMON_BIRD, TRUE, FALSE, FALSE, TRUE, TRUE);
 		}
@@ -753,7 +753,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 			msg_print("Demons materialize in clouds of fire and brimstone!");
 #endif
 
-			for (i = 0; i < randint(3) + 2; i++)
+			for (i = 0; i < randint1(3) + 2; i++)
 			{
 				(void)fire_meteor(-1, GF_FIRE, y, x, 10, 5);
 				(void)summon_specific(0, y, x, mon_level, SUMMON_DEMON, TRUE, FALSE, FALSE, TRUE, TRUE);
@@ -769,7 +769,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 			msg_print("Draconic forms loom out of the darkness!");
 #endif
 
-			for (i = 0; i < randint(3) + 2; i++)
+			for (i = 0; i < randint1(3) + 2; i++)
 			{
 				(void)summon_specific(0, y, x, mon_level, SUMMON_DRAGON, TRUE, FALSE, FALSE, TRUE, TRUE);
 			}
@@ -784,7 +784,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 			msg_print("Creatures strange and twisted assault you!");
 #endif
 
-			for (i = 0; i < randint(5) + 3; i++)
+			for (i = 0; i < randint1(5) + 3; i++)
 			{
 				(void)summon_specific(0, y, x, mon_level, SUMMON_HYBRID, TRUE, FALSE, FALSE, TRUE, TRUE);
 			}
@@ -799,7 +799,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 			msg_print("Vortices coalesce and wreak destruction!");
 #endif
 
-			for (i = 0; i < randint(3) + 2; i++)
+			for (i = 0; i < randint1(3) + 2; i++)
 			{
 				(void)summon_specific(0, y, x, mon_level, SUMMON_VORTEX, TRUE, FALSE, FALSE, TRUE, TRUE);
 			}
@@ -810,7 +810,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 	if ((trap & (CHEST_RUNES_OF_EVIL)) && o_ptr->k_idx)
 	{
 		/* Determine how many nasty tricks can be played. */
-		int nasty_tricks_count = 4 + rand_int(3);
+		int nasty_tricks_count = 4 + randint0(3);
 
 		/* Message. */
 #ifdef JP
@@ -823,7 +823,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 		for (; nasty_tricks_count > 0; nasty_tricks_count--)
 		{
 			/* ...but a high saving throw does help a little. */
-			if (randint(100+o_ptr->pval*2) > p_ptr->skill_sav)
+			if (randint1(100+o_ptr->pval*2) > p_ptr->skill_sav)
 			{
 #ifdef JP
 				if (one_in_(6)) take_hit(DAMAGE_NOESCAPE, damroll(5, 20), "破滅のトラップの宝箱", -1);
@@ -835,10 +835,10 @@ static void chest_trap(int y, int x, s16b o_idx)
 				{
 					if (!p_ptr->free_act) 
 						(void)set_paralyzed(p_ptr->paralyzed + 2 + 
-						rand_int(6));
+						randint0(6));
 					else 
 						(void)set_stun(p_ptr->stun + 10 + 
-						rand_int(100));
+						randint0(100));
 				}
 				else if (one_in_(3)) apply_disenchant(0);
 				else if (one_in_(2))
@@ -930,7 +930,7 @@ static bool do_cmd_open_chest(int y, int x, s16b o_idx)
 		if (j < 2) j = 2;
 
 		/* Success -- May still have traps */
-		if (rand_int(100) < j)
+		if (randint0(100) < j)
 		{
 #ifdef JP
 			msg_print("鍵をはずした。");
@@ -1149,7 +1149,7 @@ static bool do_cmd_open_aux(int y, int x, int dir)
 		if (j < 2) j = 2;
 
 		/* Success */
-		if (rand_int(100) < j)
+		if (randint0(100) < j)
 		{
 			/* Message */
 #ifdef JP
@@ -1609,7 +1609,7 @@ static bool do_cmd_tunnel_aux(int y, int x, int dir)
 	else if (c_ptr->feat == FEAT_TREES) /* -KMW- */
 	{
 		/* Chop Down */
-		if ((p_ptr->skill_dig > 10 + rand_int(400)) && twall(y, x, FEAT_GRASS))
+		if ((p_ptr->skill_dig > 10 + randint0(400)) && twall(y, x, FEAT_GRASS))
 		{
 #ifdef JP
 			msg_print("木を切り払った。");
@@ -1633,7 +1633,7 @@ static bool do_cmd_tunnel_aux(int y, int x, int dir)
 			more = TRUE;
 
 			/* Occasional Search XXX XXX */
-			if (rand_int(100) < 25) search();
+			if (randint0(100) < 25) search();
 		}
 	}
 
@@ -1643,7 +1643,7 @@ static bool do_cmd_tunnel_aux(int y, int x, int dir)
 	         (c_ptr->feat <= FEAT_WALL_SOLID))
 	{
 		/* Tunnel */
-		if ((p_ptr->skill_dig > 40 + rand_int(1600)) && twall(y, x, floor_type[rand_int(100)]))
+		if ((p_ptr->skill_dig > 40 + randint0(1600)) && twall(y, x, floor_type[randint0(100)]))
 		{
 #ifdef JP
 			msg_print("穴を掘り終えた。");
@@ -1686,17 +1686,17 @@ static bool do_cmd_tunnel_aux(int y, int x, int dir)
 		/* Quartz */
 		if (hard)
 		{
-			okay = (p_ptr->skill_dig > 20 + rand_int(800));
+			okay = (p_ptr->skill_dig > 20 + randint0(800));
 		}
 
 		/* Magma */
 		else
 		{
-			okay = (p_ptr->skill_dig > 10 + rand_int(400));
+			okay = (p_ptr->skill_dig > 10 + randint0(400));
 		}
 
 		/* Success */
-		if (okay && twall(y, x, floor_type[rand_int(100)]))
+		if (okay && twall(y, x, floor_type[randint0(100)]))
 		{
 			/* Found treasure */
 			if (gold)
@@ -1758,7 +1758,7 @@ static bool do_cmd_tunnel_aux(int y, int x, int dir)
 	else if (c_ptr->feat == FEAT_RUBBLE)
 	{
 		/* Remove the rubble */
-		if ((p_ptr->skill_dig > rand_int(200)) && twall(y, x, floor_type[rand_int(100)]))
+		if ((p_ptr->skill_dig > randint0(200)) && twall(y, x, floor_type[randint0(100)]))
 		{
 			/* Message */
 #ifdef JP
@@ -1768,7 +1768,7 @@ static bool do_cmd_tunnel_aux(int y, int x, int dir)
 #endif
 
 			/* Hack -- place an object */
-			if (rand_int(100) < (15 - dun_level/2))
+			if (randint0(100) < (15 - dun_level/2))
 			{
 				/* Create a simple object */
 				place_object(y, x, FALSE, FALSE);
@@ -1803,7 +1803,7 @@ static bool do_cmd_tunnel_aux(int y, int x, int dir)
 	else if (c_ptr->feat >= FEAT_SECRET)
 	{
 		/* Tunnel */
-		if ((p_ptr->skill_dig > 30 + rand_int(1200)) && twall(y, x, floor_type[rand_int(100)]))
+		if ((p_ptr->skill_dig > 30 + randint0(1200)) && twall(y, x, floor_type[randint0(100)]))
 		{
 #ifdef JP
 			msg_print("穴を掘り終えた。");
@@ -1826,7 +1826,7 @@ static bool do_cmd_tunnel_aux(int y, int x, int dir)
 			more = TRUE;
 
 			/* Occasional Search XXX XXX */
-			if (rand_int(100) < 25) search();
+			if (randint0(100) < 25) search();
 		}
 	}
 
@@ -1834,7 +1834,7 @@ static bool do_cmd_tunnel_aux(int y, int x, int dir)
 	else
 	{
 		/* Tunnel */
-		if ((p_ptr->skill_dig > 30 + rand_int(1200)) && twall(y, x, floor_type[randint(100)]))
+		if ((p_ptr->skill_dig > 30 + randint0(1200)) && twall(y, x, floor_type[randint1(100)]))
 		{
 #ifdef JP
 			msg_print("穴を掘り終えた。");
@@ -2044,7 +2044,7 @@ bool easy_open_door(int y, int x)
 		if (j < 2) j = 2;
 
 		/* Success */
-		if (rand_int(100) < j)
+		if (randint0(100) < j)
 		{
 			/* Message */
 #ifdef JP
@@ -2171,7 +2171,7 @@ static bool do_cmd_disarm_chest(int y, int x, s16b o_idx)
 	}
 
 	/* Success (get a lot of experience) */
-	else if (rand_int(100) < j)
+	else if (randint0(100) < j)
 	{
 #ifdef JP
 		msg_print("箱に仕掛けられていたトラップを解除した。");
@@ -2184,7 +2184,7 @@ static bool do_cmd_disarm_chest(int y, int x, s16b o_idx)
 	}
 
 	/* Failure -- Keep trying */
-	else if ((i > 5) && (randint(i) > 5))
+	else if ((i > 5) && (randint1(i) > 5))
 	{
 		/* We may keep trying */
 		more = TRUE;
@@ -2271,7 +2271,7 @@ static bool do_cmd_disarm_aux(int y, int x, int dir)
 	if (j < 2) j = 2;
 
 	/* Success */
-	if (rand_int(100) < j)
+	if (randint0(100) < j)
 	{
 		/* Message */
 #ifdef JP
@@ -2288,7 +2288,7 @@ static bool do_cmd_disarm_aux(int y, int x, int dir)
 		c_ptr->info &= ~(CAVE_MARK);
 
 		/* Remove the trap */
-		c_ptr->feat = floor_type[rand_int(100)];
+		c_ptr->feat = floor_type[randint0(100)];
 		c_ptr->info &= ~(CAVE_MASK);
 		c_ptr->info |= CAVE_FLOOR;
 		note_spot(y, x);
@@ -2308,7 +2308,7 @@ static bool do_cmd_disarm_aux(int y, int x, int dir)
 	}
 
 	/* Failure -- Keep trying */
-	else if ((i > 5) && (randint(i) > 5))
+	else if ((i > 5) && (randint1(i) > 5))
 	{
 		/* Failure */
 		if (flush_failure) flush();
@@ -2517,7 +2517,7 @@ static bool do_cmd_bash_aux(int y, int x, int dir)
 	if (temp < 1) temp = 1;
 
 	/* Hack -- attempt to bash down the door */
-	if (rand_int(100) < temp)
+	if (randint0(100) < temp)
 	{
 		/* Message */
 #ifdef JP
@@ -2528,7 +2528,7 @@ static bool do_cmd_bash_aux(int y, int x, int dir)
 
 
 		/* Break down the door */
-		if (rand_int(100) < 50)
+		if (randint0(100) < 50)
 		{
 			cave_set_feat(y, x, FEAT_BROKEN);
 		}
@@ -2551,7 +2551,7 @@ static bool do_cmd_bash_aux(int y, int x, int dir)
 	}
 
 	/* Saving throw against stun */
-	else if (rand_int(100) < adj_dex_safe[p_ptr->stat_ind[A_DEX]] +
+	else if (randint0(100) < adj_dex_safe[p_ptr->stat_ind[A_DEX]] +
 	         p_ptr->lev)
 	{
 		/* Message */
@@ -2578,7 +2578,7 @@ static bool do_cmd_bash_aux(int y, int x, int dir)
 
 
 		/* Hack -- Lose balance ala paralysis */
-		(void)set_paralyzed(p_ptr->paralyzed + 2 + rand_int(2));
+		(void)set_paralyzed(p_ptr->paralyzed + 2 + randint0(2));
 	}
 
 	/* Result */
@@ -2981,7 +2981,7 @@ void do_cmd_walk(int pickup)
 		int tmp = 120 + p_ptr->lev*10 - wilderness[py][px].level + 5;
 		if (tmp < 1) 
 			tmp = 1;
-		if (((wilderness[py][px].level + 5) > (p_ptr->lev / 2)) && rand_int(tmp) < (21-p_ptr->skill_stl))
+		if (((wilderness[py][px].level + 5) > (p_ptr->lev / 2)) && randint0(tmp) < (21-p_ptr->skill_stl))
 		{
 			/* Inform the player of his horrible fate :=) */
 #ifdef JP
@@ -2993,8 +2993,8 @@ void do_cmd_walk(int pickup)
 			/* Go into large wilderness view */
 			p_ptr->wilderness_x = px;
 			p_ptr->wilderness_y = py;
-			p_ptr->oldpy = randint(MAX_HGT-2);
-			p_ptr->oldpx = randint(MAX_WID-2);
+			p_ptr->oldpy = randint1(MAX_HGT-2);
+			p_ptr->oldpx = randint1(MAX_WID-2);
 			energy_use = 100;
 			change_wild_mode();
 
@@ -3074,7 +3074,7 @@ void do_cmd_stay(int pickup)
 
 
 	/* Spontaneous Searching */
-	if ((p_ptr->skill_fos >= 50) || (0 == rand_int(50 - p_ptr->skill_fos)))
+	if ((p_ptr->skill_fos >= 50) || (0 == randint0(50 - p_ptr->skill_fos)))
 	{
 		search();
 	}
@@ -4218,8 +4218,8 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 
 	if (shuriken)
 	{
-		ty = rand_int(101)-50+py;
-		tx = rand_int(101)-50+px;
+		ty = randint0(101)-50+py;
+		tx = randint0(101)-50+px;
 	}
 	else
 	{
@@ -4547,7 +4547,7 @@ msg_print("これはあまり良くない気がする。");
 	/* Potions smash open */
 	if (object_is_potion(q_ptr))
 	{
-		if (hit_body || hit_wall || (randint(100) < j))
+		if (hit_body || hit_wall || (randint1(100) < j))
 		{
 			/* Message */
 #ifdef JP
@@ -4587,12 +4587,12 @@ msg_print("これはあまり良くない気がする。");
 
 	if (return_when_thrown)
 	{
-		int back_chance = randint(30)+20+((int)(adj_dex_th[p_ptr->stat_ind[A_DEX]]) - 128);
+		int back_chance = randint1(30)+20+((int)(adj_dex_th[p_ptr->stat_ind[A_DEX]]) - 128);
 		char o2_name[MAX_NLEN];
 		bool super_boomerang = (((q_ptr->name1 == ART_MJOLLNIR) || (q_ptr->name1 == ART_AEGISFANG)) && boomerang);
 
 		j = -1;
-		if (boomerang) back_chance += 4+randint(5);
+		if (boomerang) back_chance += 4+randint1(5);
 		if (super_boomerang) back_chance += 100;
 		object_desc(o2_name, q_ptr, FALSE, 0);
 

@@ -33,14 +33,14 @@ void do_cmd_rerate(bool display)
 
 		for (i = 1; i < 4; i++)
 		{
-			j = randint(p_ptr->hitdie);
+			j = randint1(p_ptr->hitdie);
 			player_hp[0] += j;
 		}
 
 		/* Collect values */
 		for (i = 1; i < PY_MAX_LEVEL; i++)
 		{
-			player_hp[i] = randint(p_ptr->hitdie);
+			player_hp[i] = randint1(p_ptr->hitdie);
 			player_hp[i] += player_hp[i - 1];
 		}
 

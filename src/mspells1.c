@@ -56,7 +56,7 @@ static bool int_outof(monster_race *r_ptr, int prob)
 	if (!(r_ptr->flags2 & RF2_SMART)) prob = prob / 2;
 
 	/* Roll the dice */
-	return (rand_int(100) < prob);
+	return (randint0(100) < prob);
 }
 
 
@@ -88,7 +88,7 @@ static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 	if (smart_learn)
 	{
 		/* Hack -- Occasionally forget player status */
-		if (m_ptr->smart && (rand_int(100) < 1)) m_ptr->smart = 0L;
+		if (m_ptr->smart && (randint0(100) < 1)) m_ptr->smart = 0L;
 
 		/* Use the memorized flags */
 		smart = m_ptr->smart;
@@ -519,9 +519,9 @@ void curse_equipment(int chance, int heavy_chance)
 {
 	bool        changed = FALSE;
 	u32b        o1, o2, o3;
-	object_type *o_ptr = &inventory[INVEN_RARM + rand_int(12)];
+	object_type *o_ptr = &inventory[INVEN_RARM + randint0(12)];
 
-	if (randint(100) > chance) return;
+	if (randint1(100) > chance) return;
 
 	if (!o_ptr->k_idx) return;
 
@@ -529,7 +529,7 @@ void curse_equipment(int chance, int heavy_chance)
 
 
 	/* Extra, biased saving throw for blessed items */
-	if ((o3 & TR3_BLESSED) && (randint(888) > chance))
+	if ((o3 & TR3_BLESSED) && (randint1(888) > chance))
 	{
 		char o_name[MAX_NLEN];
 		object_desc(o_name, o_ptr, FALSE, 0);
@@ -544,7 +544,7 @@ msg_format("%sは呪いを跳ね返した！", o_name,
 		return;
 	}
 
-	if ((randint(100) <= heavy_chance) &&
+	if ((randint1(100) <= heavy_chance) &&
 		(o_ptr->name1 || o_ptr->name2 || o_ptr->art_name))
 	{
 		if (!(o3 & TR3_HEAVY_CURSE))
@@ -929,7 +929,7 @@ static int choose_attack_spell(int m_idx, byte spells[], byte num)
 	if (r_ptr->flags2 & (RF2_STUPID))
 	{
 		/* Pick at random */
-		return (spells[rand_int(num)]);
+		return (spells[randint0(num)]);
 	}
 
 	/* Categorize spells */
@@ -978,10 +978,10 @@ static int choose_attack_spell(int m_idx, byte spells[], byte num)
 	/*** Try to pick an appropriate spell type ***/
 
 	/* world */
-	if (world_num && (rand_int(100) < 15) && !world_monster)
+	if (world_num && (randint0(100) < 15) && !world_monster)
 	{
 		/* Choose haste spell */
-		return (world[rand_int(world_num)]);
+		return (world[randint0(world_num)]);
 	}
 
 	/* special */
@@ -996,21 +996,21 @@ static int choose_attack_spell(int m_idx, byte spells[], byte num)
 				break;
 			default: break;
 		}
-		if (success) return (special[rand_int(special_num)]);
+		if (success) return (special[randint0(special_num)]);
 	}
 
 	/* Still hurt badly, couldn't flee, attempt to heal */
 	if (m_ptr->hp < m_ptr->maxhp / 3 && one_in_(2))
 	{
 		/* Choose heal spell if possible */
-		if (heal_num) return (heal[rand_int(heal_num)]);
+		if (heal_num) return (heal[randint0(heal_num)]);
 	}
 
 	/* Hurt badly or afraid, attempt to flee */
 	if (((m_ptr->hp < m_ptr->maxhp / 3) || m_ptr->monfear) && one_in_(2))
 	{
 		/* Choose escape spell if possible */
-		if (escape_num) return (escape[rand_int(escape_num)]);
+		if (escape_num) return (escape[randint0(escape_num)]);
 	}
 
 	/* special */
@@ -1020,28 +1020,28 @@ static int choose_attack_spell(int m_idx, byte spells[], byte num)
 		switch(m_ptr->r_idx)
 		{
 			case MON_OHMU:
-				if (rand_int(100) < 50) success = TRUE;
+				if (randint0(100) < 50) success = TRUE;
 				break;
 			case MON_BANORLUPART:
-				if (rand_int(100) < 70) success = TRUE;
+				if (randint0(100) < 70) success = TRUE;
 				break;
 			default: break;
 		}
-		if (success) return (special[rand_int(special_num)]);
+		if (success) return (special[randint0(special_num)]);
 	}
 
 	/* Player is close and we have attack spells, blink away */
-	if ((distance(py, px, m_ptr->fy, m_ptr->fx) < 4) && (attack_num || (r_ptr->flags6 & RF6_TRAPS)) && (rand_int(100) < 75) && !world_monster)
+	if ((distance(py, px, m_ptr->fy, m_ptr->fx) < 4) && (attack_num || (r_ptr->flags6 & RF6_TRAPS)) && (randint0(100) < 75) && !world_monster)
 	{
 		/* Choose tactical spell */
-		if (tactic_num) return (tactic[rand_int(tactic_num)]);
+		if (tactic_num) return (tactic[randint0(tactic_num)]);
 	}
 
 	/* Summon if possible (sometimes) */
-	if (summon_num && (rand_int(100) < 40))
+	if (summon_num && (randint0(100) < 40))
 	{
 		/* Choose summon spell */
-		return (summon[rand_int(summon_num)]);
+		return (summon[randint0(summon_num)]);
 	}
 
 	/* dispel */
@@ -1050,70 +1050,70 @@ static int choose_attack_spell(int m_idx, byte spells[], byte num)
 		/* Choose dispel spell if possible */
 		if (dispel_check(m_idx))
 		{
-			return (dispel[rand_int(dispel_num)]);
+			return (dispel[randint0(dispel_num)]);
 		}
 	}
 
 	/* Raise-dead if possible (sometimes) */
-	if (raise_num && (rand_int(100) < 40) && raise_possible(m_ptr->fy, m_ptr->fx))
+	if (raise_num && (randint0(100) < 40) && raise_possible(m_ptr->fy, m_ptr->fx))
 	{
 		/* Choose raise-dead spell */
-		return (raise[rand_int(raise_num)]);
+		return (raise[randint0(raise_num)]);
 	}
 
 	/* Attack spell (most of the time) */
 	if (p_ptr->invuln)
 	{
-		if (psy_spe_num && (rand_int(100) < 50))
+		if (psy_spe_num && (randint0(100) < 50))
 		{
 			/* Choose attack spell */
-			return (psy_spe[rand_int(psy_spe_num)]);
+			return (psy_spe[randint0(psy_spe_num)]);
 		}
-		else if (attack_num && (rand_int(100) < 40))
+		else if (attack_num && (randint0(100) < 40))
 		{
 			/* Choose attack spell */
-			return (attack[rand_int(attack_num)]);
+			return (attack[randint0(attack_num)]);
 		}
 	}
-	else if (attack_num && (rand_int(100) < 85))
+	else if (attack_num && (randint0(100) < 85))
 	{
 		/* Choose attack spell */
-		return (attack[rand_int(attack_num)]);
+		return (attack[randint0(attack_num)]);
 	}
 
 	/* Try another tactical spell (sometimes) */
-	if (tactic_num && (rand_int(100) < 50) && !world_monster)
+	if (tactic_num && (randint0(100) < 50) && !world_monster)
 	{
 		/* Choose tactic spell */
-		return (tactic[rand_int(tactic_num)]);
+		return (tactic[randint0(tactic_num)]);
 	}
 
 	/* Cast globe of invulnerability if not already in effect */
-	if (invul_num && !(m_ptr->invulner) && (rand_int(100) < 50))
+	if (invul_num && !(m_ptr->invulner) && (randint0(100) < 50))
 	{
 		/* Choose Globe of Invulnerability */
-		return (invul[rand_int(invul_num)]);
+		return (invul[randint0(invul_num)]);
 	}
 
 	/* We're hurt (not badly), try to heal */
-	if ((m_ptr->hp < m_ptr->maxhp * 3 / 4) && (rand_int(100) < 25))
+	if ((m_ptr->hp < m_ptr->maxhp * 3 / 4) && (randint0(100) < 25))
 	{
 		/* Choose heal spell if possible */
-		if (heal_num) return (heal[rand_int(heal_num)]);
+		if (heal_num) return (heal[randint0(heal_num)]);
 	}
 
 	/* Haste self if we aren't already somewhat hasted (rarely) */
-	if (haste_num && (rand_int(100) < 20) && !(m_ptr->fast))
+	if (haste_num && (randint0(100) < 20) && !(m_ptr->fast))
 	{
 		/* Choose haste spell */
-		return (haste[rand_int(haste_num)]);
+		return (haste[randint0(haste_num)]);
 	}
 
 	/* Annoy player (most of the time) */
-	if (annoy_num && (rand_int(100) < 80))
+	if (annoy_num && (randint0(100) < 80))
 	{
 		/* Choose annoyance spell */
-		return (annoy[rand_int(annoy_num)]);
+		return (annoy[randint0(annoy_num)]);
 	}
 
 	/* Choose no spell */
@@ -1234,14 +1234,14 @@ bool make_attack_spell(int m_idx)
 	if (stupid_monsters)
 	{
 		/* Only do spells occasionally */
-		if (rand_int(100) >= chance) return (FALSE);
+		if (randint0(100) >= chance) return (FALSE);
 	}
 	else
 	{
-		if (rand_int(100) >=  chance) return (FALSE);
+		if (randint0(100) >=  chance) return (FALSE);
 
 		/* Sometimes forbid inate attacks (breaths) */
-		if (rand_int(100) >= (chance * 2)) no_inate = TRUE;
+		if (randint0(100) >= (chance * 2)) no_inate = TRUE;
 	}
 
 	/* XXX XXX XXX Handle "track_target" option (?) */
@@ -1372,7 +1372,7 @@ bool make_attack_spell(int m_idx)
 	/* Hack -- allow "desperate" spells */
 	if ((r_ptr->flags2 & (RF2_SMART)) &&
 		(m_ptr->hp < m_ptr->maxhp / 10) &&
-		(rand_int(100) < 50))
+		(randint0(100) < 50))
 	{
 		/* Require intelligent spells */
 		f4 &= (RF4_INT_MASK);
@@ -1467,7 +1467,7 @@ bool make_attack_spell(int m_idx)
 	if (stupid_monsters)
 	{
 		/* Choose a spell to cast */
-		thrown_spell = spell[rand_int(num)];
+		thrown_spell = spell[randint0(num)];
 	}
 	else
 	{
@@ -1492,7 +1492,7 @@ bool make_attack_spell(int m_idx)
 		if (r_ptr->flags2 & RF2_STUPID) failrate = 0;
 
 		/* Check for spell failure (inate attacks never fail) */
-		if ((thrown_spell >= 128) && ((m_ptr->stunned && one_in_(2)) || (rand_int(100) < failrate)))
+		if ((thrown_spell >= 128) && ((m_ptr->stunned && one_in_(2)) || (randint0(100) < failrate)))
 		{
 			disturb(1, 0);
 			/* Message */
@@ -2302,7 +2302,7 @@ else msg_format("%^sがアシッド・ボールの呪文を唱えた。", m_name);
 			else msg_format("%^s casts an acid ball.", m_name);
 #endif
 
-			dam = (randint(rlev * 3) + 15) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
+			dam = (randint1(rlev * 3) + 15) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
 			breath(y, x, m_idx, GF_ACID, dam, 2, FALSE, MS_BALL_ACID, learnable);
 			update_smart_learn(m_idx, DRS_ACID);
 			break;
@@ -2324,7 +2324,7 @@ else msg_format("%^sがサンダー・ボールの呪文を唱えた。", m_name);
 			else msg_format("%^s casts a lightning ball.", m_name);
 #endif
 
-			dam = (randint(rlev * 3 / 2) + 8) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
+			dam = (randint1(rlev * 3 / 2) + 8) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
 			breath(y, x, m_idx, GF_ELEC, dam, 2, FALSE, MS_BALL_ELEC, learnable);
 			update_smart_learn(m_idx, DRS_ELEC);
 			break;
@@ -2364,7 +2364,7 @@ else msg_format("%^sがファイア・ボールの呪文を唱えた。", m_name);
 #endif
 			}
 
-			dam = (randint(rlev * 7 / 2) + 10) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
+			dam = (randint1(rlev * 7 / 2) + 10) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
 			breath(y, x, m_idx, GF_FIRE, dam, 2, FALSE, MS_BALL_FIRE, learnable);
 			update_smart_learn(m_idx, DRS_FIRE);
 			break;
@@ -2386,7 +2386,7 @@ else msg_format("%^sがアイス・ボールの呪文を唱えた。", m_name);
 			else msg_format("%^s casts a frost ball.", m_name);
 #endif
 
-			dam = (randint(rlev * 3 / 2) + 10) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
+			dam = (randint1(rlev * 3 / 2) + 10) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
 			breath(y, x, m_idx, GF_COLD, dam, 2, FALSE, MS_BALL_COLD, learnable);
 			update_smart_learn(m_idx, DRS_COLD);
 			break;
@@ -2458,7 +2458,7 @@ msg_print("あなたは渦巻きに飲み込まれた。");
 			msg_print("You are engulfed in a whirlpool.");
 #endif
 
-			dam = ((r_ptr->flags2 & RF2_POWERFUL) ? randint(rlev * 3) : randint(rlev * 2)) + 50;
+			dam = ((r_ptr->flags2 & RF2_POWERFUL) ? randint1(rlev * 3) : randint1(rlev * 2)) + 50;
 			breath(y, x, m_idx, GF_WATER, dam, 4, FALSE, MS_BALL_WATER, learnable);
 			break;
 		}
@@ -2525,7 +2525,7 @@ msg_format("%^sに精神エネルギーを吸い取られてしまった！", m_name);
 
 
 				/* Attack power */
-				r1 = (randint(rlev) / 2) + 1;
+				r1 = (randint1(rlev) / 2) + 1;
 
 				/* Full drain */
 				if (r1 >= p_ptr->csp)
@@ -2603,7 +2603,7 @@ msg_format("%^sがあなたの瞳をじっとにらんでいる。", m_name);
 			}
 
 			dam = damroll(7, 7);
-			if (rand_int(100 + rlev/2) < (MAX(5, p_ptr->skill_sav)))
+			if (randint0(100 + rlev/2) < (MAX(5, p_ptr->skill_sav)))
 			{
 #ifdef JP
 msg_print("しかし効力を跳ね返した！");
@@ -2622,12 +2622,12 @@ msg_print("霊的エネルギーで精神が攻撃された。");
 
 				if (!p_ptr->resist_conf)
 				{
-					(void)set_confused(p_ptr->confused + rand_int(4) + 4);
+					(void)set_confused(p_ptr->confused + randint0(4) + 4);
 				}
 
 				if (!p_ptr->resist_chaos && one_in_(3))
 				{
-					(void)set_image(p_ptr->image + rand_int(250) + 150);
+					(void)set_image(p_ptr->image + randint0(250) + 150);
 				}
 
 				p_ptr->csp -= 50;
@@ -2669,7 +2669,7 @@ msg_format("%^sがあなたの瞳をじっと見ている。", m_name);
 			}
 
 			dam = damroll(12, 12);
-			if (rand_int(100 + rlev/2) < (MAX(5, p_ptr->skill_sav)))
+			if (randint0(100 + rlev/2) < (MAX(5, p_ptr->skill_sav)))
 			{
 #ifdef JP
 msg_print("しかし効力を跳ね返した！");
@@ -2697,26 +2697,26 @@ msg_print("霊的エネルギーで精神が攻撃された。");
 				take_hit(DAMAGE_ATTACK, dam, ddesc, MS_BRAIN_SMASH);
 				if (!p_ptr->resist_blind)
 				{
-					(void)set_blind(p_ptr->blind + 8 + rand_int(8));
+					(void)set_blind(p_ptr->blind + 8 + randint0(8));
 				}
 				if (!p_ptr->resist_conf)
 				{
-					(void)set_confused(p_ptr->confused + rand_int(4) + 4);
+					(void)set_confused(p_ptr->confused + randint0(4) + 4);
 				}
 				if (!p_ptr->free_act)
 				{
-					(void)set_paralyzed(p_ptr->paralyzed + rand_int(4) + 4);
+					(void)set_paralyzed(p_ptr->paralyzed + randint0(4) + 4);
 				}
-				(void)set_slow(p_ptr->slow + rand_int(4) + 4, FALSE);
+				(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
 
-				while (rand_int(100 + rlev/2) > (MAX(5, p_ptr->skill_sav)))
+				while (randint0(100 + rlev/2) > (MAX(5, p_ptr->skill_sav)))
 					(void)do_dec_stat(A_INT);
-				while (rand_int(100 + rlev/2) > (MAX(5, p_ptr->skill_sav)))
+				while (randint0(100 + rlev/2) > (MAX(5, p_ptr->skill_sav)))
 					(void)do_dec_stat(A_WIS);
 
 				if (!p_ptr->resist_chaos)
 				{
-					(void)set_image(p_ptr->image + rand_int(250) + 150);
+					(void)set_image(p_ptr->image + randint0(250) + 150);
 				}
 			}
 			break;
@@ -2741,7 +2741,7 @@ else msg_format("%^sがあなたを指さして呪った。", m_name);
 #endif
 
 			dam = damroll(3, 8);
-			if (rand_int(100 + rlev/2) < p_ptr->skill_sav)
+			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
 #ifdef JP
 msg_print("しかし効力を跳ね返した！");
@@ -2777,7 +2777,7 @@ else msg_format("%^sがあなたを指さして恐ろしげに呪った。", m_name);
 #endif
 
 			dam = damroll(8, 8);
-			if (rand_int(100 + rlev/2) < p_ptr->skill_sav)
+			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
 #ifdef JP
 msg_print("しかし効力を跳ね返した！");
@@ -2813,7 +2813,7 @@ else msg_format("%^sがあなたを指さして恐ろしげに呪文を唱えた！", m_name);
 #endif
 
 			dam = damroll(10, 15);
-			if (rand_int(100 + rlev/2) < p_ptr->skill_sav)
+			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
 #ifdef JP
 msg_print("しかし効力を跳ね返した！");
@@ -2849,7 +2849,7 @@ else msg_format("%^sがあなたの秘孔を突いて「お前は既に死んでいる」と叫んだ。", m
 #endif
 
 			dam = damroll(15, 15);
-			if ((rand_int(100 + rlev/2) < p_ptr->skill_sav) && !(m_ptr->r_idx == MON_KENSHIROU))
+			if ((randint0(100 + rlev/2) < p_ptr->skill_sav) && !(m_ptr->r_idx == MON_KENSHIROU))
 			{
 #ifdef JP
 msg_print("しかし秘孔を跳ね返した！");
@@ -3048,7 +3048,7 @@ else msg_format("%^sが魔力の矢の呪文を唱えた。", m_name);
 			else msg_format("%^s casts a mana bolt.", m_name);
 #endif
 
-			dam = randint(rlev * 7 / 2) + 50;
+			dam = randint1(rlev * 7 / 2) + 50;
 			bolt(m_idx, GF_MANA, dam, MS_BOLT_MANA, learnable);
 			update_smart_learn(m_idx, DRS_REFLECT);
 			break;
@@ -3151,7 +3151,7 @@ msg_print("しかし恐怖に侵されなかった。");
 #endif
 
 			}
-			else if (rand_int(100 + rlev/2) < p_ptr->skill_sav)
+			else if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
 #ifdef JP
 msg_print("しかし恐怖に侵されなかった。");
@@ -3162,7 +3162,7 @@ msg_print("しかし恐怖に侵されなかった。");
 			}
 			else
 			{
-				(void)set_afraid(p_ptr->afraid + rand_int(4) + 4);
+				(void)set_afraid(p_ptr->afraid + randint0(4) + 4);
 			}
 			learn_spell(MS_SCARE);
 			update_smart_learn(m_idx, DRS_FEAR);
@@ -3196,7 +3196,7 @@ msg_print("しかし効果がなかった！");
 #endif
 
 			}
-			else if (rand_int(100 + rlev/2) < p_ptr->skill_sav)
+			else if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
 #ifdef JP
 msg_print("しかし効力を跳ね返した！");
@@ -3207,7 +3207,7 @@ msg_print("しかし効力を跳ね返した！");
 			}
 			else
 			{
-				(void)set_blind(12 + rand_int(4));
+				(void)set_blind(12 + randint0(4));
 			}
 			learn_spell(MS_BLIND);
 			update_smart_learn(m_idx, DRS_BLIND);
@@ -3241,7 +3241,7 @@ msg_print("しかし幻覚にはだまされなかった。");
 #endif
 
 			}
-			else if (rand_int(100 + rlev/2) < p_ptr->skill_sav)
+			else if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
 #ifdef JP
 msg_print("しかし幻覚にはだまされなかった。");
@@ -3252,7 +3252,7 @@ msg_print("しかし幻覚にはだまされなかった。");
 			}
 			else
 			{
-				(void)set_confused(p_ptr->confused + rand_int(4) + 4);
+				(void)set_confused(p_ptr->confused + randint0(4) + 4);
 			}
 			learn_spell(MS_CONF);
 			update_smart_learn(m_idx, DRS_CONF);
@@ -3280,7 +3280,7 @@ msg_print("しかし効果がなかった！");
 #endif
 
 			}
-			else if (rand_int(100 + rlev/2) < p_ptr->skill_sav)
+			else if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
 #ifdef JP
 msg_print("しかし効力を跳ね返した！");
@@ -3291,7 +3291,7 @@ msg_print("しかし効力を跳ね返した！");
 			}
 			else
 			{
-				(void)set_slow(p_ptr->slow + rand_int(4) + 4, FALSE);
+				(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
 			}
 			learn_spell(MS_SLOW);
 			update_smart_learn(m_idx, DRS_FREE);
@@ -3325,7 +3325,7 @@ msg_print("しかし効果がなかった！");
 #endif
 
 			}
-			else if (rand_int(100 + rlev/2) < p_ptr->skill_sav)
+			else if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
 #ifdef JP
 msg_format("しかし効力を跳ね返した！");
@@ -3336,7 +3336,7 @@ msg_format("しかし効力を跳ね返した！");
 			}
 			else
 			{
-				(void)set_paralyzed(p_ptr->paralyzed + rand_int(4) + 4);
+				(void)set_paralyzed(p_ptr->paralyzed + randint0(4) + 4);
 			}
 			learn_spell(MS_SLEEP);
 			update_smart_learn(m_idx, DRS_FREE);
@@ -3391,7 +3391,7 @@ msg_format("%^sが破滅の手を放った！", m_name);
 			msg_format("%^s invokes the Hand of Doom!", m_name);
 #endif
 
-			if (rand_int(100 + rlev/2) < p_ptr->skill_sav)
+			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
 #ifdef JP
 msg_format("しかし効力を跳ね返した！");
@@ -3403,7 +3403,7 @@ msg_format("しかし効力を跳ね返した！");
 			}
 			else
 			{
-				int dummy = (((s32b) ((40 + randint(20)) * (p_ptr->chp))) / 100);
+				int dummy = (((s32b) ((40 + randint1(20)) * (p_ptr->chp))) / 100);
 #ifdef JP
 msg_print("あなたは命が薄まっていくように感じた！");
 #else
@@ -3544,7 +3544,7 @@ msg_format("%sは無傷の球の呪文を唱えた。", m_name);
 			}
 
 			if (!(m_ptr->invulner))
-				m_ptr->invulner = randint(4) + 4;
+				m_ptr->invulner = randint1(4) + 4;
 
 			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
 			if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
@@ -3630,7 +3630,7 @@ msg_format("%^sがテレポートした。", m_name);
 			if(m_ptr->r_idx == MON_DIO) who = 1;
 			else if(m_ptr->r_idx == MON_WONG) who = 3;
 			dam = who;
-			if (!process_the_world(randint(2)+2, who, TRUE)) return (FALSE);
+			if (!process_the_world(randint1(2)+2, who, TRUE)) return (FALSE);
 			break;
 		}
 
@@ -3777,7 +3777,7 @@ msg_print("しかし効果がなかった！");
 #endif
 
 			}
-			else if (rand_int(100 + rlev/2) < p_ptr->skill_sav)
+			else if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
 #ifdef JP
 msg_print("しかし効力を跳ね返した！");
@@ -3812,7 +3812,7 @@ else msg_format("%^sが光の剣を放った。", m_name);
 			else msg_format("%^s throw a Psycho-Spear.", m_name);
 #endif
 
-			dam = (r_ptr->flags2 & RF2_POWERFUL) ? (randint(rlev * 2) + 150) : (randint(rlev * 3 / 2) + 100);
+			dam = (r_ptr->flags2 & RF2_POWERFUL) ? (randint1(rlev * 2) + 150) : (randint1(rlev * 3 / 2) + 100);
 			beam(m_idx, GF_PSY_SPEAR, dam, MS_PSY_SPEAR, learnable);
 			break;
 		}
@@ -3881,7 +3881,7 @@ msg_format("%^sがあなたの記憶を消去しようとしている。", m_name);
 #endif
 
 
-			if (rand_int(100 + rlev/2) < p_ptr->skill_sav)
+			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
 #ifdef JP
 msg_print("しかし効力を跳ね返した！");
@@ -3977,7 +3977,7 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 
 			if(m_ptr->r_idx == MON_ROLENTO)
 			{
-				int num = 1 + randint(3);
+				int num = 1 + randint1(3);
 				for (k = 0; k < num; k++)
 				{
 					count += summon_named_creature(y, x, MON_SHURYUUDAN, FALSE, FALSE, is_friendly(m_ptr), is_pet(m_ptr));
@@ -3985,7 +3985,7 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 			}
 			else if(m_ptr->r_idx == MON_LOUSY)
 			{
-				int num = 2 + randint(3);
+				int num = 2 + randint1(3);
 				for (k = 0; k < num; k++)
 				{
 					count += summon_specific(m_idx, y, x, rlev, SUMMON_LOUSE, TRUE, FALSE, FALSE, FALSE, FALSE);
@@ -3993,7 +3993,7 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 			}
 			else if(m_ptr->r_idx == MON_BULLGATES)
 			{
-				int num = 2 + randint(3);
+				int num = 2 + randint1(3);
 				for (k = 0; k < num; k++)
 				{
 					count += summon_named_creature(y, x, 921, FALSE, FALSE, is_friendly(m_ptr), is_pet(m_ptr));
@@ -4001,7 +4001,7 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 			}
 			else if (m_ptr->r_idx == MON_CALDARM)
 			{
-				int num = randint(3);
+				int num = randint1(3);
 				for (k = 0; k < num; k++)
 				{
 					count += summon_named_creature(y, x, 930, FALSE, FALSE, is_friendly(m_ptr), is_pet(m_ptr));
@@ -4009,7 +4009,7 @@ else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 			}
 			else if (m_ptr->r_idx == MON_SERPENT)
 			{
-				int num = 2 + randint(3);
+				int num = 2 + randint1(3);
 
 				if (r_info[MON_JORMUNGAND].cur_num < r_info[MON_JORMUNGAND].max_num && one_in_(6))
 				{

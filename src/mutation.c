@@ -25,7 +25,7 @@ bool gain_random_mutation(int choose_mut)
 
 	while (attempts_left--)
 	{
-		switch (choose_mut ? choose_mut : (p_ptr->pclass == CLASS_BERSERKER ? 74+randint(119) : randint(193)))
+		switch (choose_mut ? choose_mut : (p_ptr->pclass == CLASS_BERSERKER ? 74+randint1(119) : randint1(193)))
 		{
 		case 1: case 2: case 3: case 4:
 			muta_class = &(p_ptr->muta1);
@@ -1023,7 +1023,7 @@ msg_print("普通になった気がする。");
 
 		if (p_ptr->prace == RACE_VAMPIRE &&
 		  !(p_ptr->muta1 & MUT1_HYPN_GAZE) &&
-		   (randint(10) < 7))
+		   (randint1(10) < 7))
 		{
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_HYPN_GAZE;
@@ -1037,7 +1037,7 @@ muta_desc = "眼が幻惑的になった...";
 
 		else if (p_ptr->prace == RACE_IMP &&
 			!(p_ptr->muta2 & MUT2_HORNS) &&
-			(randint(10) < 7))
+			(randint1(10) < 7))
 		{
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_HORNS;
@@ -1051,7 +1051,7 @@ muta_desc = "角が額から生えてきた！";
 
 		else if (p_ptr->prace == RACE_YEEK &&
 			!(p_ptr->muta1 & MUT1_SHRIEK) &&
-			(randint(10) < 7))
+			(randint1(10) < 7))
 		{
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_SHRIEK;
@@ -1065,7 +1065,7 @@ muta_desc = "声質がかなり強くなった。";
 
 		else if (p_ptr->prace == RACE_BEASTMAN &&
 			!(p_ptr->muta1 & MUT1_POLYMORPH) &&
-			(randint(10) < 2))
+			(randint1(10) < 2))
 		{
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_POLYMORPH;
@@ -1079,7 +1079,7 @@ muta_desc = "あなたの肉体は変化できるようになった、";
 
 		else if (p_ptr->prace == RACE_MIND_FLAYER &&
 			!(p_ptr->muta2 & MUT2_TENTACLES) &&
-			(randint(10) < 7))
+			(randint1(10) < 7))
 		{
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_TENTACLES;
@@ -1330,7 +1330,7 @@ bool lose_mutation(int choose_mut)
 
 	while (attempts_left--)
 	{
-		switch (choose_mut ? choose_mut : randint(193))
+		switch (choose_mut ? choose_mut : randint1(193))
 		{
 		case 1: case 2: case 3: case 4:
 			muta_class = &(p_ptr->muta1);
@@ -3628,7 +3628,7 @@ msg_print("この花崗岩はとてもおいしい！");
 		case MUT1_BERSERK:
 			if (racial_aux(8, 8, A_STR, 14))
 			{
-				(void)set_shero(randint(25) + 25, FALSE);
+				(void)set_shero(randint1(25) + 25, FALSE);
 				(void)hp_player(30);
 				(void)set_afraid(0);
 			}
@@ -3669,24 +3669,24 @@ msg_print("この花崗岩はとてもおいしい！");
 			if (racial_aux(10, 12, A_CON, 12))
 			{
 				int num = lvl / 10;
-				int dur = randint(20) + 20;
+				int dur = randint1(20) + 20;
 
-				if (rand_int(5) < num)
+				if (randint0(5) < num)
 				{
 					(void)set_oppose_acid(dur, FALSE);
 					num--;
 				}
-				if (rand_int(4) < num)
+				if (randint0(4) < num)
 				{
 					(void)set_oppose_elec(dur, FALSE);
 					num--;
 				}
-				if (rand_int(3) < num)
+				if (randint0(3) < num)
 				{
 					(void)set_oppose_fire(dur, FALSE);
 					num--;
 				}
-				if (rand_int(2) < num)
+				if (randint0(2) < num)
 				{
 					(void)set_oppose_cold(dur, FALSE);
 					num--;
@@ -3726,10 +3726,10 @@ msg_print("この花崗岩はとてもおいしい！");
 				/* Fake a population explosion. */
 #ifdef JP
 msg_print("突然頭が痛くなった！");
-take_hit(DAMAGE_LOSELIFE, randint(17) + 17, "禁欲を強いた疲労", -1);
+take_hit(DAMAGE_LOSELIFE, randint1(17) + 17, "禁欲を強いた疲労", -1);
 #else
 				msg_print("You suddenly have a headache!");
-				take_hit(DAMAGE_LOSELIFE, randint(17) + 17, "the strain of forcing abstinence", -1);
+				take_hit(DAMAGE_LOSELIFE, randint1(17) + 17, "the strain of forcing abstinence", -1);
 #endif
 
 				num_repro += MAX_REPRO;
@@ -3747,7 +3747,7 @@ take_hit(DAMAGE_LOSELIFE, randint(17) + 17, "禁欲を強いた疲労", -1);
 				if (cave[y][x].m_idx)
 				{
 					py_attack(y, x, 0);
-					if (rand_int(p_ptr->skill_dis) < 7)
+					if (randint0(p_ptr->skill_dis) < 7)
 #ifdef JP
 msg_print("うまく逃げられなかった。");
 #else
@@ -3823,7 +3823,7 @@ msg_print("邪悪な存在を感じとれません！");
 				    !(r_ptr->flags1 & RF1_QUESTOR) &&
 				    !(r_ptr->flags1 & RF1_UNIQUE) &&
 				    !p_ptr->inside_arena && !p_ptr->inside_quest &&
-					(r_ptr->level < randint(p_ptr->lev+50)) &&
+					(r_ptr->level < randint1(p_ptr->lev+50)) &&
 					!(m_ptr->mflag2 & MFLAG_NOGENO))
 				{
 					/* Delete the monster, rather than killing it. */

@@ -25,7 +25,7 @@ static void perturb_point_mid(int x1, int x2, int x3, int x4,
 	 * tmp is a random int +/- rough
 	 */
 	int tmp2 = rough*2 + 1;
-	int tmp = randint(tmp2) - (rough + 1);
+	int tmp = randint1(tmp2) - (rough + 1);
 
 	int avg = ((x1 + x2 + x3 + x4) / 4) + tmp;
 
@@ -50,7 +50,7 @@ static void perturb_point_end(int x1, int x2, int x3,
 	 * tmp is a random int +/- rough
 	 */
 	int tmp2 = rough * 2 + 1;
-	int tmp = rand_int(tmp2) - rough;
+	int tmp = randint0(tmp2) - rough;
 
 	int avg = ((x1 + x2 + x3) / 3) + tmp;
 
@@ -474,10 +474,10 @@ void generate_wilderness_area(int terrain, u32b seed, bool border, bool corner)
 	 * ToDo: calculate the medium height of the adjacent
 	 * terrains for every corner.
 	 */
-	cave[1][1].feat = (byte)rand_int(table_size);
-	cave[MAX_HGT-2][1].feat = (byte)rand_int(table_size);
-	cave[1][MAX_WID-2].feat = (byte)rand_int(table_size);
-	cave[MAX_HGT-2][MAX_WID-2].feat = (byte)rand_int(table_size);
+	cave[1][1].feat = (byte)randint0(table_size);
+	cave[MAX_HGT-2][1].feat = (byte)randint0(table_size);
+	cave[1][MAX_WID-2].feat = (byte)randint0(table_size);
+	cave[MAX_HGT-2][MAX_WID-2].feat = (byte)randint0(table_size);
 
 	if (!corner)
 	{
@@ -1098,7 +1098,7 @@ void seed_wilderness(void)
 	{
 		for (y = 0; y < max_wild_y; y++)
 		{
-			wilderness[y][x].seed = rand_int(0x10000000);
+			wilderness[y][x].seed = randint0(0x10000000);
 			wilderness[y][x].entrance = 0;
 		}
 	}

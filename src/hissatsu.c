@@ -673,7 +673,7 @@ static bool cast_hissatsu_spell(int spell)
 		cave[y][x].info &= ~(CAVE_MARK);
 
 		/* Destroy the feature */
-		cave[y][x].feat = floor_type[rand_int(100)];
+		cave[y][x].feat = floor_type[randint0(100)];
 		cave[y][x].info &= ~(CAVE_MASK);
 		cave[y][x].info |= CAVE_FLOOR;
 
@@ -886,7 +886,7 @@ static bool cast_hissatsu_spell(int spell)
 #else
 		msg_print("You roar out!");
 #endif
-		project_hack(GF_SOUND, randint(p_ptr->lev * 3));
+		project_hack(GF_SOUND, randint1(p_ptr->lev * 3));
 		aggravate_monsters(0);
 		break;
 	}
@@ -1163,9 +1163,9 @@ msg_print("その方向にはモンスターはいません。");
 			return FALSE;
 		}
 #ifdef JP
-		take_hit(DAMAGE_NOESCAPE, 100 + randint(100), "慶雲鬼忍剣を使った衝撃", -1);
+		take_hit(DAMAGE_NOESCAPE, 100 + randint1(100), "慶雲鬼忍剣を使った衝撃", -1);
 #else
-		take_hit(DAMAGE_NOESCAPE, 100 + randint(100), "reaction of your attack", -1); /*nanka*/
+		take_hit(DAMAGE_NOESCAPE, 100 + randint1(100), "reaction of your attack", -1); /*nanka*/
 #endif
 		break;
 	}

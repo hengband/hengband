@@ -40,35 +40,35 @@
 
 #define place_floor_bold(Y, X) \
 { \
-  set_cave_feat(Y,X,floor_type[rand_int(100)]); \
+  set_cave_feat(Y,X,floor_type[randint0(100)]); \
   cave[Y][X].info &= ~(CAVE_MASK); \
   add_cave_info(Y,X,CAVE_FLOOR); \
 }
 
 #define place_floor_grid(C) \
 { \
-  (C)->feat = floor_type[rand_int(100)]; \
+  (C)->feat = floor_type[randint0(100)]; \
   (C)->info &= ~(CAVE_MASK); \
   (C)->info |= CAVE_FLOOR; \
 }
 
 #define place_extra_bold(Y, X) \
 { \
-  set_cave_feat(Y,X,fill_type[rand_int(100)]); \
+  set_cave_feat(Y,X,fill_type[randint0(100)]); \
   cave[Y][X].info &= ~(CAVE_MASK); \
   add_cave_info(Y,X,CAVE_EXTRA); \
 }
 
 #define place_extra_grid(C) \
 { \
-  (C)->feat = fill_type[rand_int(100)]; \
+  (C)->feat = fill_type[randint0(100)]; \
   (C)->info &= ~(CAVE_MASK); \
   (C)->info |= CAVE_EXTRA; \
 }
 
 #define place_extra_noperm_bold(Y, X) \
 { \
-  set_cave_feat(Y,X,fill_type[rand_int(100)]); \
+  set_cave_feat(Y,X,fill_type[randint0(100)]); \
   if ((cave[Y][X].feat >= FEAT_PERM_EXTRA) && (cave[Y][X].feat <= FEAT_PERM_SOLID)) cave[Y][X].feat -= 0x04; \
   else if (cave[Y][X].feat == FEAT_MOUNTAIN) cave[Y][X].feat = feat_wall_inner; \
   cave[Y][X].info &= ~(CAVE_MASK); \

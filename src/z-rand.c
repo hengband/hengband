@@ -24,7 +24,7 @@
  * and is much less subject to low-bit-non-randomness problems.
  *
  * You can select your favorite flavor by proper definition of the
- * "rand_int()" macro in the "defines.h" file.
+ * "randint0()" macro in the "defines.h" file.
  *
  * Note that, in Angband 2.8.0, the "state" table will be saved in the
  * savefile, so a special "initialization" phase will be necessary.
@@ -298,7 +298,7 @@ s16b randnor(int mean, int stand)
 	if (stand < 1) return (mean);
 
 	/* Roll for probability */
-	tmp = (s16b)rand_int(32768);
+	tmp = (s16b)randint0(32768);
 
 	/* Binary Search */
 	while (low < high)
@@ -322,7 +322,7 @@ s16b randnor(int mean, int stand)
 	offset = (long)stand * (long)low / RANDNOR_STD;
 
 	/* One half should be negative */
-	if (rand_int(100) < 50) return (mean - offset);
+	if (randint0(100) < 50) return (mean - offset);
 
 	/* One half should be positive */
 	return (mean + offset);
@@ -336,7 +336,7 @@ s16b randnor(int mean, int stand)
 s16b damroll(int num, int sides)
 {
 	int i, sum = 0;
-	for (i = 0; i < num; i++) sum += randint(sides);
+	for (i = 0; i < num; i++) sum += randint1(sides);
 	return (sum);
 }
 

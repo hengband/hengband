@@ -774,10 +774,10 @@ static void do_cmd_disp_nikki(void)
 	path_build(buf, 1024, ANGBAND_DIR_USER, file_name);
 
 	if (p_ptr->pclass == CLASS_WARRIOR || p_ptr->pclass == CLASS_MONK || p_ptr->pclass == CLASS_SAMURAI || p_ptr->pclass == CLASS_BERSERKER)
-		strcpy(tmp,subtitle[rand_int(MAX_SUBTITLE-1)]);
+		strcpy(tmp,subtitle[randint0(MAX_SUBTITLE-1)]);
 	else if (p_ptr->pclass == CLASS_MAGE || p_ptr->pclass == CLASS_HIGH_MAGE || p_ptr->pclass == CLASS_SORCERER)
-		strcpy(tmp,subtitle[rand_int(MAX_SUBTITLE-1)+1]);
-	else strcpy(tmp,subtitle[rand_int(MAX_SUBTITLE-2)+1]);
+		strcpy(tmp,subtitle[randint0(MAX_SUBTITLE-1)+1]);
+	else strcpy(tmp,subtitle[randint0(MAX_SUBTITLE-2)+1]);
 
 #ifdef JP
 	sprintf(nikki_title, "「%s%s%sの伝説 -%s-」",
@@ -7549,7 +7549,7 @@ msg_format("%d 日目,時刻は%d:%02d %sです。",
 				  min, (hour < 12) ? "AM" : "PM");
 
 	/* Find the path */
-	if (!rand_int(10) || p_ptr->image)
+	if (!randint0(10) || p_ptr->image)
 		{
 #ifdef JP
 		path_build(buf, 1024, ANGBAND_DIR_FILE, "timefun_j.txt");
@@ -7615,7 +7615,7 @@ msg_format("%d 日目,時刻は%d:%02d %sです。",
 			num++;
 
 			/* Apply the randomizer */
-			if (!rand_int(num)) strcpy(desc, buf + 2);
+			if (!randint0(num)) strcpy(desc, buf + 2);
 
 			/* Next... */
 			continue;

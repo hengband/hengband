@@ -564,7 +564,7 @@ static void reset_deck(int deck[])
 
 	/* shuffle cards */
 	for (i = 0; i < 53; i++){
-		int tmp1 = rand_int(53 - i) + i;
+		int tmp1 = randint0(53 - i) + i;
 		int tmp2 = deck[i];
 		deck[i] = deck[tmp1];
 		deck[tmp1] = tmp2;
@@ -1364,9 +1364,9 @@ c_put_str(TERM_GREEN, "イン・ビトイーン",5,2);
 
 					odds = 4;
 					win = FALSE;
-					roll1 = randint(10);
-					roll2 = randint(10);
-					choice = randint(10);
+					roll1 = randint1(10);
+					roll2 = randint1(10);
+					choice = randint1(10);
 #ifdef JP
 sprintf(tmp_str, "黒ダイス: %d        黒ダイス: %d", roll1, roll2);
 #else
@@ -1394,8 +1394,8 @@ c_put_str(TERM_GREEN, "クラップス", 5, 2);
 
 					win = 3;
 					odds = 2;
-					roll1 = randint(6);
-					roll2 = randint(6);
+					roll1 = randint1(6);
+					roll2 = randint1(6);
 					roll3 = roll1 +  roll2;
 					choice = roll3;
 #ifdef JP
@@ -1420,8 +1420,8 @@ msg_print("なにかキーを押すともう一回振ります。");
 #endif
 
 							msg_print(NULL);
-							roll1 = randint(6);
-							roll2 = randint(6);
+							roll1 = randint1(6);
+							roll2 = randint1(6);
 							roll3 = roll1 +  roll2;
 
 #ifdef JP
@@ -1480,7 +1480,7 @@ msg_print("ＯＫ、9番にしとくぜ。");
 						choice = 9;
 					}
 					msg_print(NULL);
-					roll1 = rand_int(10);
+					roll1 = randint0(10);
 #ifdef JP
 sprintf(tmp_str, "ルーレットは回り、止まった。勝者は %d番だ。",
 #else
@@ -1510,7 +1510,7 @@ c_put_str(TERM_GREEN, "ダイス・スロット", 5, 2);
 #endif
 
 					win = FALSE;
-					roll1 = randint(21);
+					roll1 = randint1(21);
 					for (i=6;i>0;i--)
 					{
 						if ((roll1-i) < 1)
@@ -1520,7 +1520,7 @@ c_put_str(TERM_GREEN, "ダイス・スロット", 5, 2);
 						}
 						roll1 -= i;
 					}
-					roll2 = randint(21);
+					roll2 = randint1(21);
 					for (i=6;i>0;i--)
 					{
 						if ((roll2-i) < 1)
@@ -1530,7 +1530,7 @@ c_put_str(TERM_GREEN, "ダイス・スロット", 5, 2);
 						}
 						roll2 -= i;
 					}
-					choice = randint(21);
+					choice = randint1(21);
 					for (i=6;i>0;i--)
 					{
 						if ((choice-i) < 1)
@@ -1709,15 +1709,15 @@ void battle_monsters(void)
 	for (i = 0; i < max_d_idx; i++)
 		if (max_dl < max_dlv[i]) max_dl = max_dlv[i];
 
-	mon_level = randint(MIN(max_dl, 122))+5;
-	if (rand_int(100) < 60)
+	mon_level = randint1(MIN(max_dl, 122))+5;
+	if (randint0(100) < 60)
 	{
-		i = randint(MIN(max_dl, 122))+5;
+		i = randint1(MIN(max_dl, 122))+5;
 		mon_level = MAX(i, mon_level);
 	}
-	if (rand_int(100) < 30)
+	if (randint0(100) < 30)
 	{
-		i = randint(MIN(max_dl, 122))+5;
+		i = randint1(MIN(max_dl, 122))+5;
 		mon_level = MAX(i, mon_level);
 	}
 
@@ -1906,8 +1906,8 @@ void battle_monsters(void)
 		{
 			power[i] = total*60/power[i];
 			if (tekitou && ((power[i] < 160) || power[i] > 1500)) break;
-			if ((power[i] < 160) && rand_int(20)) break;
-			if (power[i] < 101) power[i] = 100 + randint(5);
+			if ((power[i] < 160) && randint0(20)) break;
+			if (power[i] < 101) power[i] = 100 + randint1(5);
 			mon_odds[i] = power[i];
 		}
 		if (i == 4) break;
@@ -2439,12 +2439,12 @@ msg_format("%s%sの顔を見てしまった！",
 		msg_format("You behold the %s visage of %s!",
 #endif
 
-					  funny_desc[rand_int(MAX_SAN_FUNNY)], m_name);
+					  funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
 
 		if (one_in_(3))
 		{
-			msg_print(funny_comments[rand_int(MAX_SAN_COMMENT)]);
-			p_ptr->image = p_ptr->image + randint(r_ptr->level);
+			msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
+			p_ptr->image = p_ptr->image + randint1(r_ptr->level);
 		}
 
 		/* Never mind; we can't see it clearly enough */
@@ -2458,7 +2458,7 @@ msg_format("%s%sの顔を見てしまった！",
 	msg_format("You behold the %s visage of %s!",
 #endif
 
-				  horror_desc[rand_int(MAX_SAN_HORROR)], desc);
+				  horror_desc[randint0(MAX_SAN_HORROR)], desc);
 
 	r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
 
@@ -2485,11 +2485,11 @@ msg_format("%s%sの顔を見てしまった！",
 	{
 		if (!p_ptr->resist_conf)
 		{
-			(void)set_confused(p_ptr->confused + rand_int(4) + 4);
+			(void)set_confused(p_ptr->confused + randint0(4) + 4);
 		}
 		if (!p_ptr->resist_chaos && one_in_(3))
 		{
-			(void)set_image(p_ptr->image + rand_int(250) + 150);
+			(void)set_image(p_ptr->image + randint0(250) + 150);
 		}
 		return;
 	}
@@ -2507,11 +2507,11 @@ msg_format("%s%sの顔を見てしまった！",
 	{
 		if (!p_ptr->resist_conf)
 		{
-			(void)set_confused(p_ptr->confused + rand_int(4) + 4);
+			(void)set_confused(p_ptr->confused + randint0(4) + 4);
 		}
 		if (!p_ptr->free_act)
 		{
-			(void)set_paralyzed(p_ptr->paralyzed + rand_int(4) + 4);
+			(void)set_paralyzed(p_ptr->paralyzed + randint0(4) + 4);
 		}
 		while (!saving_throw(p_ptr->skill_sav))
 		{
@@ -2523,7 +2523,7 @@ msg_format("%s%sの顔を見てしまった！",
 		}
 		if (!p_ptr->resist_chaos)
 		{
-			(void)set_image(p_ptr->image + rand_int(250) + 150);
+			(void)set_image(p_ptr->image + randint0(250) + 150);
 		}
 		return;
 	}
@@ -2555,7 +2555,7 @@ msg_print("あまりの恐怖に全てのことを忘れてしまった！");
 
 	while (!happened)
 	{
-		switch (randint(4))
+		switch (randint1(4))
 		{
 			case 1:
 			{
@@ -2968,24 +2968,24 @@ put_str("クエストを終わらせたら戻って来て下さい。", 12, 0);
 			if (q_ptr->r_idx == 0)
 			{
 				/* Random monster at least 5 - 10 levels out of deep */
-				q_ptr->r_idx = get_mon_num(q_ptr->level + 4 + randint(6));
+				q_ptr->r_idx = get_mon_num(q_ptr->level + 4 + randint1(6));
 			}
 
 			r_ptr = &r_info[q_ptr->r_idx];
 
 			while ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->rarity != 1))
 			{
-				q_ptr->r_idx = get_mon_num(q_ptr->level) + 4 + randint(6);
+				q_ptr->r_idx = get_mon_num(q_ptr->level) + 4 + randint1(6);
 				r_ptr = &r_info[q_ptr->r_idx];
 			}
 
 			if (q_ptr->max_num == 0)
 			{
 				/* Random monster number */
-				if (randint(10) > 7)
+				if (randint1(10) > 7)
 					q_ptr->max_num = 1;
 				else
-					q_ptr->max_num = randint(3) + 1;
+					q_ptr->max_num = randint1(3) + 1;
 			}
 
 			q_ptr->cur_num = 0;

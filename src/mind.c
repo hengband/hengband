@@ -885,7 +885,7 @@ if (!b) msg_print("安全な気がする。");
 		/* Mindblast */
 		if (!get_aim_dir(&dir)) return FALSE;
 
-		if (randint(100) < plev * 2)
+		if (randint1(100) < plev * 2)
 			fire_beam(GF_PSI, dir, damroll(3 + ((plev - 1) / 4), (3 + plev / 15)));
 		else
 			fire_ball(GF_PSI, dir, damroll(3 + ((plev - 1) / 4), (3 + plev / 15)), 0);
@@ -946,7 +946,7 @@ msg_print("精神を捻じ曲げる波動を発生させた！");
 			project(0, 2 + plev / 10, py, px,
 			(plev * 3), GF_PSI, PROJECT_KILL, -1);
 		else
-			(void)mindblast_monsters(randint(plev * ((plev - 5) / 10 + 1)));
+			(void)mindblast_monsters(randint1(plev * ((plev - 5) / 10 + 1)));
 		break;
 	case 9:
 		/* Adrenaline */
@@ -962,7 +962,7 @@ msg_print("精神を捻じ曲げる波動を発生させた！");
 			hp_player(plev);
 		}
 
-		b = 10 + randint((plev * 3) / 2);
+		b = 10 + randint1((plev * 3) / 2);
 		set_hero(b, FALSE);
 		/* Haste */
 		(void)set_fast(b, FALSE);
@@ -982,13 +982,13 @@ msg_print("精神を捻じ曲げる波動を発生させた！");
 
 		/* This is always a radius-0 ball now */
 		if (fire_ball(GF_PSI_DRAIN, dir, b, 0))
-			p_ptr->energy -= randint(150);
+			p_ptr->energy -= randint1(150);
 		break;
 	case 12:
 		/* psycho-spear */
 		if (!get_aim_dir(&dir)) return FALSE;
 
-		fire_beam(GF_PSY_SPEAR, dir, randint(plev*3)+plev*3);
+		fire_beam(GF_PSY_SPEAR, dir, randint1(plev*3)+plev*3);
 		break;
 	case 13:
 	{
@@ -1059,7 +1059,7 @@ static bool cast_force_spell(int spell)
 		(void)lite_area(damroll(2, (plev / 2)), (plev / 10) + 1);
 		break;
 	case 2:
-		set_tim_ffall(randint(30) + 30 + boost / 5, FALSE);
+		set_tim_ffall(randint1(30) + 30 + boost / 5, FALSE);
 		break;
 	case 3:
 		project_length = plev / 8 + 3;
@@ -1068,7 +1068,7 @@ static bool cast_force_spell(int spell)
 		fire_beam(GF_MISSILE, dir, damroll(5 + ((plev - 1) / 5) + boost / 10, 5));
 		break;
 	case 4:
-		set_resist_magic(randint(20) + 20 + boost / 5, FALSE);
+		set_resist_magic(randint1(20) + 20 + boost / 5, FALSE);
 		break;
 	case 5:
 #ifdef JP
@@ -1077,7 +1077,7 @@ static bool cast_force_spell(int spell)
 		msg_print("You improved the Force.");
 #endif
 		p_ptr->magic_num1[0] += (70 + plev);
-		if (randint(p_ptr->magic_num1[0]) > (plev * 4 + 120))
+		if (randint1(p_ptr->magic_num1[0]) > (plev * 4 + 120))
 		{
 #ifdef JP
 			msg_print("気が暴走した！");
@@ -1094,7 +1094,7 @@ static bool cast_force_spell(int spell)
 		else return TRUE;
 		break;
 	case 6:
-		set_tim_sh_touki(randint(plev / 2) + 15 + boost / 7, FALSE);
+		set_tim_sh_touki(randint1(plev / 2) + 15 + boost / 7, FALSE);
 		break;
 	case 7:
 	{
@@ -1117,7 +1117,7 @@ static bool cast_force_spell(int spell)
 
 			monster_desc(m_name, m_ptr, 0);
 
-			if (randint(r_info[m_ptr->r_idx].level * 3 / 2) > rand_int(dam / 2) + dam/2)
+			if (randint1(r_info[m_ptr->r_idx].level * 3 / 2) > randint0(dam / 2) + dam/2)
 			{
 #ifdef JP
 				msg_format("%sは飛ばされなかった。", m_name);
@@ -1239,7 +1239,7 @@ msg_print("御用でございますが、御主人様？");
 		fire_beam(GF_MANA, dir, damroll(10 + (plev / 2) + boost * 3 / 10, 15));
 		break;
 	case 13:
-		set_lightspeed(randint(16) + 16 + boost / 20, FALSE);
+		set_lightspeed(randint1(16) + 16 + boost / 20, FALSE);
 		break;
 	default:
 #ifdef JP
@@ -1329,7 +1329,7 @@ msg_format("There are too many mirrors to control!");
 	  break;
 	/* robe of dust */
 	case 6:
-	  set_dustrobe(20+randint(20),FALSE);
+	  set_dustrobe(20+randint1(20),FALSE);
 	  break;
 	/* banishing mirror */
 	case 7:
@@ -1363,7 +1363,7 @@ msg_format("There are too many mirrors to control!");
 	  break;
 	/* shield of water */
 	case 12:
-	  tmp = 20+randint(20);
+	  tmp = 20+randint1(20);
 	  set_shield(tmp, FALSE);
 	  if( plev > 31 )set_tim_reflect(tmp, FALSE);
 	  if( plev > 39 )set_resist_magic(tmp,FALSE);
@@ -1371,7 +1371,7 @@ msg_format("There are too many mirrors to control!");
 	/* super ray */
 	case 13:
 	  if (!get_aim_dir(&dir)) return FALSE;
-	  fire_beam(GF_SUPER_RAY,dir, 150+randint(2*plev));
+	  fire_beam(GF_SUPER_RAY,dir, 150+randint1(2*plev));
 	  break;
 	/* illusion light */
 	case 14:
@@ -1409,7 +1409,7 @@ msg_format("There are too many mirrors to control!");
 	  break;
 	/* multi-shadow */
 	case 18:
-	  set_multishadow(6+randint(6),FALSE);
+	  set_multishadow(6+randint1(6),FALSE);
 	  break;
 	/* binding field */
 	case 19:
@@ -1421,7 +1421,7 @@ msg_format("There are too many mirrors to control!");
 	  break;
 	/* mirror of Ruffnor */
 	case 20:
-	  (void)set_invuln(randint(4)+4,FALSE);
+	  (void)set_invuln(randint1(4)+4,FALSE);
 	  break;
 	default:
 #ifdef JP
@@ -1536,7 +1536,7 @@ static bool cast_berserk_spell(int spell)
 		break;
 	}
 	case 3:
-		earthquake(py, px, 8+rand_int(5));
+		earthquake(py, px, 8+randint0(5));
 		break;
 	case 4:
 	{
@@ -1641,7 +1641,7 @@ static bool cast_ninja_spell(int spell)
 		if (cave[y][x].m_idx)
 		{
 			py_attack(y, x, 0);
-			if (rand_int(p_ptr->skill_dis) < 7)
+			if (randint0(p_ptr->skill_dis) < 7)
 #ifdef JP
 msg_print("うまく逃げられなかった。");
 #else
@@ -1676,7 +1676,7 @@ msg_print("その方向にはモンスターはいません。");
 		return ident_spell(FALSE);
 		break;
 	case 8:
-		set_tim_ffall(randint(20) + 20, FALSE);
+		set_tim_ffall(randint1(20) + 20, FALSE);
 		break;
 	case 9:
 		fire_ball(GF_FIRE, 0, 50+plev, plev/10+2);
@@ -1805,7 +1805,7 @@ msg_print("その方向にはモンスターはいません。");
 		explosive_rune();
 		break;
 	case 16:
-		(void)set_kabenuke(randint(plev/2) + plev/2, FALSE);
+		(void)set_kabenuke(randint1(plev/2) + plev/2, FALSE);
 		set_oppose_acid(plev, FALSE);
 		break;
 	case 17:
@@ -1838,7 +1838,7 @@ msg_print("その方向にはモンスターはいません。");
 		break;
 	}
 	case 19:
-		set_multishadow(6+randint(6), FALSE);
+		set_multishadow(6+randint1(6), FALSE);
 		break;
 	default:
 #ifdef JP
@@ -2003,7 +2003,7 @@ if (!get_check("それでも挑戦しますか? ")) return;
 	if (chance > 95) chance = 95;
 
 	/* Failed spell */
-	if (rand_int(100) < chance)
+	if (randint0(100) < chance)
 	{
 		if (flush_failure) flush();
 #ifdef JP
@@ -2026,10 +2026,10 @@ msg_format("%sの集中に失敗した！",p);
 				p_ptr->magic_num1[0] = 0;
 			}
 
-			if (randint(100) < (chance / 2))
+			if (randint1(100) < (chance / 2))
 			{
 				/* Backfire */
-			  b = randint(100);
+			  b = randint1(100);
 
 			  if( use_mind == MIND_MINDCRAFTER ){
 				if (b < 5)
@@ -2050,7 +2050,7 @@ msg_print("奇妙な光景が目の前で踊っている...");
 					msg_print("Weird visions seem to dance before your eyes...");
 #endif
 
-					set_image(p_ptr->image + 5 + randint(10));
+					set_image(p_ptr->image + 5 + randint1(10));
 				}
 				else if (b < 45)
 				{
@@ -2060,11 +2060,11 @@ msg_print("あなたの頭は混乱した！");
 					msg_print("Your brain is addled!");
 #endif
 
-					set_confused(p_ptr->confused + randint(8));
+					set_confused(p_ptr->confused + randint1(8));
 				}
 				else if (b < 90)
 				{
-					set_stun(p_ptr->stun + randint(8));
+					set_stun(p_ptr->stun + randint1(8));
 				}
 				else
 				{
@@ -2103,7 +2103,7 @@ msg_print("まわりのものがキラキラ輝いている！");
 					msg_print("Your brain is addled!");
 #endif
 
-					set_image(p_ptr->image + 5 + randint(10));
+					set_image(p_ptr->image + 5 + randint1(10));
 				}
 				else
 				{
@@ -2216,12 +2216,12 @@ msg_format("%sを集中しすぎて気を失ってしまった！",p);
 
 
 		/* Hack -- Bypass free action */
-		(void)set_paralyzed(p_ptr->paralyzed + randint(5 * oops + 1));
+		(void)set_paralyzed(p_ptr->paralyzed + randint1(5 * oops + 1));
 
 		/* Damage WIS (possibly permanently) */
-		if (rand_int(100) < 50)
+		if (randint0(100) < 50)
 		{
-			bool perm = (rand_int(100) < 25);
+			bool perm = (randint0(100) < 25);
 
 			/* Message */
 #ifdef JP
@@ -2232,7 +2232,7 @@ msg_print("自分の精神を攻撃してしまった！");
 
 
 			/* Reduce constitution */
-			(void)dec_stat(A_WIS, 15 + randint(10), perm);
+			(void)dec_stat(A_WIS, 15 + randint1(10), perm);
 		}
 	}
 

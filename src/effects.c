@@ -3326,7 +3326,7 @@ msg_print("頭がクラクラして意識が遠のいてきた。");
 			break;
 		}
 
-		if (randint(1000) < v || one_in_(16))
+		if (randint1(1000) < v || one_in_(16))
 		{
 #ifdef JP
 msg_print("割れるような頭痛がする。");
@@ -3610,7 +3610,7 @@ msg_print("致命的な傷を負ってしまった。");
 		/* Notice */
 		notice = TRUE;
 
-		if (randint(1000) < v || one_in_(16))
+		if (randint1(1000) < v || one_in_(16))
 		{
 			if (!p_ptr->sustain_chr)
 			{
@@ -3957,7 +3957,7 @@ bool inc_stat(int stat)
 		/* Gain one (sometimes two) points */
 		if (value < 18)
 		{
-			gain = ((rand_int(100) < 75) ? 1 : 2);
+			gain = ((randint0(100) < 75) ? 1 : 2);
 			value += gain;
 		}
 
@@ -3971,7 +3971,7 @@ bool inc_stat(int stat)
 			if (gain < 1) gain = 1;
 
 			/* Apply the bonus */
-			value += randint(gain) + gain / 2;
+			value += randint1(gain) + gain / 2;
 
 			/* Maximal value */
 			if (value > (p_ptr->stat_max_max[stat]-1)) value = p_ptr->stat_max_max[stat]-1;
@@ -4053,7 +4053,7 @@ bool dec_stat(int stat, int amount, int permanent)
 			if (loss < 1) loss = 1;
 
 			/* Randomize the loss */
-			loss = ((randint(loss) + loss) * amount) / 100;
+			loss = ((randint1(loss) + loss) * amount) / 100;
 
 			/* Maximal loss */
 			if (loss < amount/2) loss = amount/2;
@@ -4095,7 +4095,7 @@ bool dec_stat(int stat, int amount, int permanent)
 			/* and one-half of the stat bonus times the percentage, with a */
 			/* minimum damage of half the percentage. -CWS */
 			loss = (((max-18) / 2 + 1) / 2 + 1);
-			loss = ((randint(loss) + loss) * amount) / 100;
+			loss = ((randint1(loss) + loss) * amount) / 100;
 			if (loss < amount/2) loss = amount/2;
 
 			/* Lose some points */
@@ -4323,7 +4323,7 @@ bool do_dec_stat(int stat)
 	}
 
 	/* Sustain */
-	if (sust && (!ironman_nightmare || rand_int(13)))
+	if (sust && (!ironman_nightmare || randint0(13)))
 	{
 		/* Message */
 #ifdef JP
@@ -4339,7 +4339,7 @@ msg_format("%sなった気がしたが、すぐに元に戻った。",
 	}
 
 	/* Attempt to reduce the stat */
-	if (dec_stat(stat, 10, (ironman_nightmare && !rand_int(13))))
+	if (dec_stat(stat, 10, (ironman_nightmare && !randint0(13))))
 	{
 		/* Message */
 #ifdef JP
@@ -4571,7 +4571,7 @@ msg_print("あなたは変化の訪れを感じた...");
 
 	chg_virtue(V_CHANCE, 1);
 
-	if ((power > rand_int(20)) && one_in_(3) && (p_ptr->prace != RACE_ANDROID))
+	if ((power > randint0(20)) && one_in_(3) && (p_ptr->prace != RACE_ANDROID))
 	{
 		char effect_msg[80] = "";
 		int new_race, expfact, goalexpfact, h_percent;
@@ -4579,7 +4579,7 @@ msg_print("あなたは変化の訪れを感じた...");
 		/* Some form of racial polymorph... */
 		power -= 10;
 
-		if ((power > rand_int(5)) && one_in_(4))
+		if ((power > randint0(5)) && one_in_(4))
 		{
 			/* sex change */
 			power -= 2;
@@ -4608,7 +4608,7 @@ sprintf(effect_msg, "男性の");
 			}
 		}
 
-		if ((power > rand_int(30)) && one_in_(5))
+		if ((power > randint0(30)) && one_in_(5))
 		{
 			int tmp = 0;
 
@@ -4619,14 +4619,14 @@ sprintf(effect_msg, "男性の");
 			{
 				if (one_in_(2))
 				{
-					(void)dec_stat(tmp, randint(6) + 6, one_in_(3));
+					(void)dec_stat(tmp, randint1(6) + 6, one_in_(3));
 					power -= 1;
 				}
 				tmp++;
 			}
 
 			/* Deformities are discriminated against! */
-			(void)dec_stat(A_CHR, randint(6), TRUE);
+			(void)dec_stat(A_CHR, randint1(6), TRUE);
 
 			if (effect_msg[0])
 			{
@@ -4651,7 +4651,7 @@ sprintf(effect_msg, "男性の");
 			}
 		}
 
-		while ((power > rand_int(20)) && one_in_(10))
+		while ((power > randint0(20)) && one_in_(10))
 		{
 			/* Polymorph into a less mutated form */
 			power -= 10;
@@ -4672,11 +4672,11 @@ msg_print("奇妙なくらい普通になった気がする。");
 		if (power < 0)
 			goalexpfact = 100;
 		else
-			goalexpfact = 100 + 3 * rand_int(power);
+			goalexpfact = 100 + 3 * randint0(power);
 
 		do
 		{
-			new_race = rand_int(MAX_RACES);
+			new_race = randint0(MAX_RACES);
 			expfact = race_info[new_race].r_exp;
 		}
 		while (((new_race == p_ptr->prace) && (expfact > goalexpfact)) || (new_race == RACE_ANDROID));
@@ -4755,7 +4755,7 @@ msg_print("奇妙なくらい普通になった気がする。");
 		lite_spot(py, px);
 	}
 
-	if ((power > rand_int(30)) && one_in_(6))
+	if ((power > randint0(30)) && one_in_(6))
 	{
 		int tmp = 0;
 
@@ -4770,24 +4770,24 @@ msg_format("%sの構成が変化した！", p_ptr->prace == RACE_ANDROID ? "機械" : "内臓
 
 		while (tmp < 6)
 		{
-			(void)dec_stat(tmp, randint(6) + 6, one_in_(3));
+			(void)dec_stat(tmp, randint1(6) + 6, one_in_(3));
 			tmp++;
 		}
 		if (one_in_(6))
 		{
 #ifdef JP
 msg_print("現在姿で生きていくのは困難なようだ！");
-take_hit(DAMAGE_LOSELIFE, damroll(randint(10), p_ptr->lev), "致命的な突然変異", -1);
+take_hit(DAMAGE_LOSELIFE, damroll(randint1(10), p_ptr->lev), "致命的な突然変異", -1);
 #else
 			msg_print("You find living difficult in your present form!");
-			take_hit(DAMAGE_LOSELIFE, damroll(randint(10), p_ptr->lev), "a lethal mutation", -1);
+			take_hit(DAMAGE_LOSELIFE, damroll(randint1(10), p_ptr->lev), "a lethal mutation", -1);
 #endif
 
 			power -= 10;
 		}
 	}
 
-	if ((power > rand_int(20)) && one_in_(4))
+	if ((power > randint0(20)) && one_in_(4))
 	{
 		power -= 10;
 
@@ -4795,13 +4795,13 @@ take_hit(DAMAGE_LOSELIFE, damroll(randint(10), p_ptr->lev), "致命的な突然変異", 
 		do_cmd_rerate(FALSE);
 	}
 
-	while ((power > rand_int(15)) && one_in_(3))
+	while ((power > randint0(15)) && one_in_(3))
 	{
 		power -= 7;
 		(void)gain_random_mutation(0);
 	}
 
-	if (power > rand_int(5))
+	if (power > randint0(5))
 	{
 		power -= 5;
 		do_poly_wounds();
@@ -5102,7 +5102,7 @@ get_rnd_line("death_j.txt", 0, death_message);
 
 				  /* 桜散る */
 				  for (i = 0; i < 40; i++) 
-				    Term_putstr(rand_int(w / 2) * 2, rand_int(h), 2, TERM_VIOLET, "υ");
+				    Term_putstr(randint0(w / 2) * 2, randint0(h), 2, TERM_VIOLET, "υ");
 
 				  str = death_message;
 				  if (strncmp(str, "「", 2) == 0) str += 2;
@@ -5558,15 +5558,15 @@ bool choose_ele_attack(void)
 	choice = inkey();
 
 	if ((choice == 'a') || (choice == 'A')) 
-		set_ele_attack(ATTACK_FIRE, p_ptr->lev/2 + randint(p_ptr->lev/2));
+		set_ele_attack(ATTACK_FIRE, p_ptr->lev/2 + randint1(p_ptr->lev/2));
 	else if (((choice == 'b') || (choice == 'B')) && (num >= 2))
-		set_ele_attack(ATTACK_COLD, p_ptr->lev/2 + randint(p_ptr->lev/2));
+		set_ele_attack(ATTACK_COLD, p_ptr->lev/2 + randint1(p_ptr->lev/2));
 	else if (((choice == 'c') || (choice == 'C')) && (num >= 3))
-		set_ele_attack(ATTACK_POIS, p_ptr->lev/2 + randint(p_ptr->lev/2));
+		set_ele_attack(ATTACK_POIS, p_ptr->lev/2 + randint1(p_ptr->lev/2));
 	else if (((choice == 'd') || (choice == 'D')) && (num >= 4))
-		set_ele_attack(ATTACK_ACID, p_ptr->lev/2 + randint(p_ptr->lev/2));
+		set_ele_attack(ATTACK_ACID, p_ptr->lev/2 + randint1(p_ptr->lev/2));
 	else if (((choice == 'e') || (choice == 'E')) && (num >= 5))
-		set_ele_attack(ATTACK_ELEC, p_ptr->lev/2 + randint(p_ptr->lev/2));
+		set_ele_attack(ATTACK_ELEC, p_ptr->lev/2 + randint1(p_ptr->lev/2));
 	else
 	{
 #ifdef JP
