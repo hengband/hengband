@@ -932,13 +932,13 @@ msg_print("地面に落とされた。");
 		{
 			if (!one_in_(7))
 			{
-				int wy = py, wx = px;
+				int wy = y, wx = x;
 				int attempts = 100;
 				bool pet = is_pet(m_ptr);
 
 				do
 				{
-					scatter(&wy, &wx, py, px, 20, 0);
+					scatter(&wy, &wx, y, x, 20, 0);
 				}
 				while (!(in_bounds(wy, wx) && cave_empty_bold2(wy, wx)) && --attempts);
 
