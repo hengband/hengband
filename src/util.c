@@ -684,9 +684,12 @@ int fd_make(cptr file, int mode)
 # if defined(MACINTOSH) && defined(MAC_MPW)
 
 	/* setting file type and creator -- AR */
-	errr_tmp = open(buf, O_CREAT | O_EXCL | O_WRONLY | O_BINARY, mode);
-	fsetfileinfo(file, _fcreator, _ftype);
-	return(errr_tmp);
+        {
+                errr errr_tmp;
+                errr_tmp = open(buf, O_CREAT | O_EXCL | O_WRONLY | O_BINARY, mode);
+                fsetfileinfo(file, _fcreator, _ftype);
+                return(errr_tmp);
+        }
 
 # else
 	/* Create the file, fail if exists, write-only, binary */
