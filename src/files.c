@@ -4119,14 +4119,7 @@ errr make_character_dump(FILE *fff)
 				pet = TRUE;
 			}
 			monster_desc(pet_name, m_ptr, 0x88);
-			fprintf(fff, "%s", pet_name);
-			if (p_ptr->riding == i)
-#ifdef JP
-				fprintf(fff, " æË«œ√Ê");
-#else
-				fprintf(fff, " (riding)");
-#endif
-			fprintf(fff, "\n");
+			fprintf(fff, "%s\n", pet_name);
 		}
 		if (pet) fprintf(fff, "\n");
 	}
