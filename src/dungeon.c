@@ -6267,7 +6267,6 @@ quit("セーブファイルが壊れています");
 	if (new_game)
 	{
 		wipe_o_list();
-		wipe_m_list();
 		player_outfit();
 	}
 

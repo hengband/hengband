@@ -3634,6 +3634,14 @@ msg_format("%^sが何かをつぶやいた。", m_name);
 								m_name);
 #endif
 						}
+						else if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
+						{
+#ifdef JP
+							msg_format("%^sがダンジョンの主を召喚した。", m_name);
+#else
+							msg_format("%^s magically summons guardians of dungeons.", m_name);
+#endif
+						}
 						else
 						{
 #ifdef JP
@@ -3682,6 +3690,14 @@ msg_format("%sが魔法で%sを召喚した。", m_name,
 					for (k = 0; k < num; k++)
 					{
 						count += summon_named_creature(y, x, 930, FALSE, FALSE, is_friendly(m_ptr), FALSE);
+					}
+				}
+				else if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
+				{
+					int num = 2 + randint(3);
+					for (k = 0; k < num; k++)
+					{
+						count += summon_specific(m_idx, y, x, rlev, SUMMON_GUARDIANS, TRUE, friendly, pet, TRUE, FALSE);
 					}
 				}
 				else

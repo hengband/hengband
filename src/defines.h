@@ -2629,6 +2629,7 @@
 #define SUMMON_KAMIKAZE_LIVING      59
 #define SUMMON_MANES                60
 #define SUMMON_LOUSE                61
+#define SUMMON_GUARDIANS            62
 
 
 /*
@@ -4502,6 +4503,7 @@ extern int PlayerUID;
 #define MON_DIO           878
 #define MON_OHMU          879
 #define MON_WONG          880
+#define MON_ZOMBI_SERPENT 883
 #define MON_D_ELF_SHADE   886
 #define MON_MANA_HOUND    887
 #define MON_VENOM_WYRM    890

@@ -174,7 +174,17 @@ void delete_monster_idx(int i)
 
 
 	/* Hack -- Reduce the racial counter */
-	r_ptr->cur_num--;
+	if (m_ptr->mflag2 & MFLAG_CHAMELEON)
+	{
+		if (r_ptr->flags1 & RF1_UNIQUE)
+			r_info[MON_CHAMELEON_K].cur_num--;
+		else
+			r_info[MON_CHAMELEON].cur_num--;
+	}
+	else
+	{
+		r_ptr->cur_num--;
+	}
 
 	/* Hack -- count the number of "reproducers" */
 	if (r_ptr->flags2 & (RF2_MULTIPLY)) num_repro--;
@@ -441,7 +451,15 @@ void wipe_m_list(void)
 		/* Mega-Hack -- preserve Unique's XXX XXX XXX */
 
 		/* Hack -- Reduce the racial counter */
-		r_ptr->cur_num--;
+		if (m_ptr->mflag2 & MFLAG_CHAMELEON)
+		{
+			if (r_ptr->flags1 & RF1_UNIQUE)
+				r_info[MON_CHAMELEON_K].cur_num = 0;
+			else
+				r_info[MON_CHAMELEON].cur_num = 0;
+		}
+		else
+			r_ptr->cur_num = 0;
 
 		/* Monster is gone */
 		cave[m_ptr->fy][m_ptr->fx].m_idx = 0;
@@ -554,7 +572,7 @@ static bool summon_unique_okay = FALSE;
 static bool summon_specific_aux(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-	bool okay = FALSE;
+	int okay = FALSE;
 
 	/* Check our requirements */
 	switch (summon_specific_type)
@@ -591,19 +609,19 @@ static bool summon_specific_aux(int r_idx)
 
 		case SUMMON_DEMON:
 		{
-			okay = (bool)(r_ptr->flags3 & RF3_DEMON);
+			okay = (r_ptr->flags3 & RF3_DEMON);
 			break;
 		}
 
 		case SUMMON_UNDEAD:
 		{
-			okay = (bool)(r_ptr->flags3 & RF3_UNDEAD);
+			okay = (r_ptr->flags3 & RF3_UNDEAD);
 			break;
 		}
 
 		case SUMMON_DRAGON:
 		{
-			okay = (bool)(r_ptr->flags3 & RF3_DRAGON);
+			okay = (r_ptr->flags3 & RF3_DRAGON);
 			break;
 		}
 
@@ -708,7 +726,7 @@ static bool summon_specific_aux(int r_idx)
 
 		case SUMMON_ANIMAL:
 		{
-			okay = (bool)(r_ptr->flags3 & (RF3_ANIMAL));
+			okay = (r_ptr->flags3 & (RF3_ANIMAL));
 			break;
 		}
 
@@ -803,10 +821,17 @@ static bool summon_specific_aux(int r_idx)
 			okay = (r_idx == MON_LOUSE);
 			break;
 		}
+
+		case SUMMON_GUARDIANS:
+		{
+			okay = (r_ptr->flags7 & RF7_GUARDIAN);
+			break;
+		}
 	}
 
 	/* Result */
-	return (okay);
+	/* Since okay is int, "return (okay);" is not correct. */
+	return (bool)(okay ? TRUE : FALSE);
 }
 
 
@@ -1073,29 +1098,43 @@ errr get_mon_num_prep(monster_hook_type monster_hook,
 	/* Scan the allocation table */
 	for (i = 0; i < alloc_race_size; i++)
 	{
+		monster_race	*r_ptr;
+		
 		/* Get the entry */
 		alloc_entry *entry = &alloc_race_table[i];
 
-		/* Accept monsters which pass the restriction, if any */
-		if ((!get_mon_num_hook || (*get_mon_num_hook)(entry->index)) &&
-			(!get_mon_num2_hook || (*get_mon_num2_hook)(entry->index)))
-		{
-			/* Accept this monster */
-			entry->prob2 = entry->prob1;
+		entry->prob2 = 0;
+		r_ptr = &r_info[entry->index];
 
-			if (dun_level && (!p_ptr->inside_quest || p_ptr->inside_quest < MIN_RANDOM_QUEST) && !restrict_monster_to_dungeon(entry->index) && !p_ptr->inside_battle)
-			{
-				int hoge = entry->prob2 * d_info[dungeon_type].special_div;
-				entry->prob2 = hoge / 64;
-				if (rand_int(64) < (hoge & 0x3f)) entry->prob2++;
-			}
+		/* Skip monsters which don't pass the restriction */
+		if ((get_mon_num_hook && !((*get_mon_num_hook)(entry->index))) ||
+		    (get_mon_num2_hook && !((*get_mon_num2_hook)(entry->index))))
+			continue;
+
+		if (!p_ptr->inside_battle && !chameleon_change &&
+		    summon_specific_type != SUMMON_GUARDIANS)
+		{
+			/* Hack -- don't create questors */
+			if (r_ptr->flags1 & RF1_QUESTOR)
+				continue;
+
+			if (r_ptr->flags7 & RF7_GUARDIAN)
+				continue;
+		
+			/* Depth Monsters never appear out of depth */
+			if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) &&
+			    (r_ptr->level > dun_level))
+				continue;
 		}
 
-		/* Do not use this monster */
-		else
+		/* Accept this monster */
+		entry->prob2 = entry->prob1;
+
+		if (dun_level && (!p_ptr->inside_quest || p_ptr->inside_quest < MIN_RANDOM_QUEST) && !restrict_monster_to_dungeon(entry->index) && !p_ptr->inside_battle)
 		{
-			/* Decline this monster */
-			entry->prob2 = 0;
+			int hoge = entry->prob2 * d_info[dungeon_type].special_div;
+			entry->prob2 = hoge / 64;
+			if (rand_int(64) < (hoge & 0x3f)) entry->prob2++;
 		}
 	}
 
@@ -1254,61 +1293,31 @@ s16b get_mon_num(int level)
 		if (!p_ptr->inside_battle && !chameleon_change)
 		{
 			/* Hack -- "unique" monsters must be "unique" */
-			if (((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flags7 & (RF7_UNIQUE_7))) &&
+			if (((r_ptr->flags1 & (RF1_UNIQUE)) ||
+			     (r_ptr->flags7 & (RF7_UNIQUE_7))) &&
 			    (r_ptr->cur_num >= r_ptr->max_num))
 			{
 				continue;
 			}
 
-			if (r_ptr->flags7 & (RF7_UNIQUE2))
+			if ((r_ptr->flags7 & (RF7_UNIQUE2)) &&
+			    (r_ptr->cur_num >= 1))
 			{
-				int j;
-				bool fail = FALSE;
-				for (j = m_max -1; j >=1; j--)
-				{
-					if(m_list[j].r_idx == r_idx)
-					{
-						fail = TRUE;
-						break;
-					}
-				}
-				if (fail) continue;
+				continue;
 			}
 
 			if (r_idx == MON_BANORLUPART)
 			{
-				int j;
-				bool fail = FALSE;
-				for (j = m_max -1; j >=1; j--)
-				{
-					if((m_list[j].r_idx == MON_BANOR) ||(m_list[j].r_idx == MON_LUPART))
-					{
-						fail = TRUE;
-						break;
-					}
-				}
-				if (fail) continue;
+				if (r_info[MON_BANOR].cur_num > 0) continue;
+				if (r_info[MON_LUPART].cur_num > 0) continue;
 			}
-
-			/* Hack -- don't create questors */
-			if (r_ptr->flags1 & RF1_QUESTOR)
-			{
+		}
+		else if (!p_ptr->inside_battle && chameleon_change
+			 && (r_ptr->flags1 & (RF1_UNIQUE)))
+		{
+			/* Hack -- Chameleon Lord must be "unique" */
+			if (r_info[MON_CHAMELEON_K].cur_num >= r_ptr->max_num)
 				continue;
-			}
-
-			if (r_ptr->flags7 & RF7_GUARDIAN)
-			{
-				continue;
-			}
-
-			/* Depth Monsters never appear out of depth */
-			if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (r_ptr->level > dun_level))
-			{
-				continue;
-			}
-
-			/* Some dungeon types restrict the possible monsters */
-/*			if(!restrict_monster_to_dungeon(r_ptr) && dun_level) continue; */
 		}
 
 		/* Accept */
@@ -2430,6 +2439,35 @@ void update_monsters(bool full)
 }
 
 
+static bool monster_hook_chameleon_lord(int r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	if (!(r_ptr->flags1 & (RF1_UNIQUE))) return FALSE;
+	if (r_ptr->flags7 & (RF7_FRIENDLY | RF7_CHAMELEON)) return FALSE;
+
+	if (ABS(r_ptr->level - r_info[MON_CHAMELEON_K].level) > 5) return FALSE;
+
+	if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
+		return FALSE;
+
+	return TRUE;
+}
+
+static bool monster_hook_chameleon(int r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	if (r_ptr->flags1 & (RF1_UNIQUE)) return FALSE;
+	if (r_ptr->flags2 & RF2_MULTIPLY) return FALSE;
+	if (r_ptr->flags7 & (RF7_FRIENDLY | RF7_CHAMELEON)) return FALSE;
+	
+	if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
+		return FALSE;
+
+	return (*(get_monster_hook()))(r_idx);
+}
+
 
 void choose_new_monster(int m_idx, bool born, int r_idx)
 {
@@ -2450,33 +2488,32 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 	if (!r_idx)
 	{
 		chameleon_change = TRUE;
-		get_mon_num_prep(get_monster_hook(), NULL);
+		if (old_unique)
+			get_mon_num_prep(monster_hook_chameleon_lord, NULL);
+		else
+			get_mon_num_prep(monster_hook_chameleon, NULL);
+
 		while (attempt--)
 		{
 			int level;
 
-			if (!dun_level) level = wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].level;
-			else level = dun_level;
+			if (old_unique)
+				level = r_info[MON_CHAMELEON_K].level;
+			else if (!dun_level)
+				level = wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].level;
+			else
+				level = dun_level;
+
 			if (d_info[dungeon_type].flags1 & DF1_CHAMELEON) level+= 2+randint(3);
 			r_idx = get_mon_num(level);
 			r_ptr = &r_info[r_idx];
-			if ((old_unique && !(r_ptr->flags1 & RF1_UNIQUE)) || (!old_unique && (r_ptr->flags1 & RF1_UNIQUE))) continue;
-			if (old_unique)
-			{
-				if (ABS(r_ptr->level - r_info[MON_CHAMELEON_K].level) > 5) continue;
-				if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE)) continue;
-			}
-			if ((r_ptr->flags2 & RF2_MULTIPLY) || (r_ptr->flags7 & (RF7_UNIQUE_7 | RF7_GUARDIAN | RF7_FRIENDLY | RF7_UNIQUE2 | RF7_CHAMELEON))) continue;
+
 			if (!monster_can_cross_terrain(cave[m_ptr->fy][m_ptr->fx].feat, r_ptr)) continue;
 			if (!born && !old_unique)
 			{
 				if ((r_info[old_r_idx].flags3 & RF3_GOOD) && !(r_ptr->flags3 & RF3_GOOD)) continue;
 				if ((r_info[old_r_idx].flags3 & RF3_EVIL) && !(r_ptr->flags3 & RF3_EVIL)) continue;
 				if (!(r_info[old_r_idx].flags3 & (RF3_GOOD | RF3_EVIL)) && (r_ptr->flags3 & (RF3_GOOD | RF3_EVIL))) continue;
-			}
-			if (born && !old_unique && summon_specific_type)
-			{
-				if (!summon_specific_aux(r_idx)) continue;
 			}
 			break;
 		}
@@ -2604,51 +2641,34 @@ bool place_monster_one(int y, int x, int r_idx, bool slp, bool friendly, bool pe
 
 	if (!p_ptr->inside_battle)
 	{
-	/* Hack -- "unique" monsters must be "unique" */
-	if (((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flags7 & (RF7_UNIQUE_7))) &&
-		 (r_ptr->cur_num >= r_ptr->max_num))
-	{
-		/* Cannot create */
-		return (FALSE);
-	}
-
-	if (r_ptr->flags7 & (RF7_UNIQUE2))
-	{
-		int j;
-		bool fail = FALSE;
-		for (j = m_max -1; j >=1; j--)
+		/* Hack -- "unique" monsters must be "unique" */
+		if (((r_ptr->flags1 & (RF1_UNIQUE)) ||
+		     (r_ptr->flags7 & (RF7_UNIQUE_7))) &&
+		    (r_ptr->cur_num >= r_ptr->max_num))
 		{
-			if(m_list[j].r_idx == r_idx)
-			{
-				fail = TRUE;
-				break;
-			}
+			/* Cannot create */
+			return (FALSE);
 		}
-		if (fail) return (FALSE);
-	}
-
-	if (r_idx == MON_BANORLUPART)
-	{
-		int j;
-		bool fail = FALSE;
-		for (j = m_max -1; j >=1; j--)
+		
+		if ((r_ptr->flags7 & (RF7_UNIQUE2)) &&
+		    (r_ptr->cur_num >= 1))
 		{
-			if((m_list[j].r_idx == MON_BANOR) ||(m_list[j].r_idx == MON_LUPART))
-			{
-				fail = TRUE;
-				break;
-			}
+			return (FALSE);
 		}
-		if (fail) return (FALSE);
-	}
 
-	/* Depth monsters may NOT be created out of depth, unless in Nightmare mode */
-	if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (dun_level < r_ptr->level) &&
-		 (!ironman_nightmare || (r_ptr->flags1 & (RF1_QUESTOR))))
-	{
-		/* Cannot create */
-		return (FALSE);
-	}
+		if (r_idx == MON_BANORLUPART)
+		{
+			if (r_info[MON_BANOR].cur_num > 0) return FALSE;
+			if (r_info[MON_LUPART].cur_num > 0) return FALSE;
+		}
+		
+		/* Depth monsters may NOT be created out of depth, unless in Nightmare mode */
+		if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (dun_level < r_ptr->level) &&
+		    (!ironman_nightmare || (r_ptr->flags1 & (RF1_QUESTOR))))
+		{
+			/* Cannot create */
+			return (FALSE);
+		}
 	}
 
 	if(quest_number(dun_level))
@@ -2905,7 +2925,10 @@ msg_print("守りのルーンが壊れた！");
 
 
 	/* Hack -- Count the monsters on the level */
-	r_ptr->cur_num++;
+	if (m_ptr->mflag2 & MFLAG_CHAMELEON)
+		r_info[r_idx].cur_num++;
+	else
+		r_ptr->cur_num++;
 
 
 	/* Hack -- Count the number of "reproducers" */
@@ -3206,6 +3229,18 @@ static bool place_monster_okay(int r_idx)
 	/* Paranoia -- Skip identical monsters */
 	if (place_monster_idx == r_idx) return (FALSE);
 
+	/* Skip different alignment */
+	if (((r_ptr->flags3 & RF3_EVIL) && (z_ptr->flags3 & RF3_GOOD)) ||
+	    ((r_ptr->flags3 & RF3_GOOD) && (r_ptr->flags3 & RF3_EVIL)))
+		return FALSE;
+
+	if (r_ptr->flags7 & RF7_FRIENDLY)
+	{
+		if (((p_ptr->align < 0) && (z_ptr->flags3 & RF3_GOOD)) ||
+		    ((p_ptr->align > 0) && (z_ptr->flags3 & RF3_EVIL)))
+			return FALSE;
+	}
+
 	/* Okay */
 	return (TRUE);
 }
@@ -3278,22 +3313,6 @@ bool place_monster_aux(int y, int x, int r_idx, bool slp, bool grp, bool friendl
 
 			/* Handle failure */
 			if (!z) break;
-
-			if (((r_ptr->flags3 & RF3_EVIL) && (r_info[z].flags3 & RF3_GOOD)) || ((r_ptr->flags3 & RF3_GOOD) && (r_info[z].flags3 & RF3_EVIL)))
-			{
-				i--;
-				continue;
-			}
-
-			if (r_ptr->flags7 & RF7_FRIENDLY)
-			{
-				if (((p_ptr->align < 0) && (r_info[z].flags3 & RF3_GOOD)) ||
-					 ((p_ptr->align > 0) && (r_info[z].flags3 & RF3_EVIL)))
-				{
-					i--;
-					continue;
-				}
-			}
 
 			/* Place a single escort */
 			(void)place_monster_one(ny, nx, z, slp, friendly, pet, no_pet);

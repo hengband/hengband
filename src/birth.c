@@ -5845,6 +5845,12 @@ void player_birth(void)
 
         playtime = 0;
 
+	/* 
+	 * Wipe monsters in old dungeon
+	 * This wipe destroys value of m_list[].cur_num .
+	 */
+	wipe_m_list();
+
 	/* Create a new character */
 	while (1)
 	{
