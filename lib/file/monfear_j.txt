@@ -544,6 +544,11 @@ N:1005:Antharom, Magic Master in the Castle of Darkness
 「わしの猟犬が！なんてことを！」
 「きさま、よくもわしの愛する猟犬を殺しおったな！」
 
+N:1018:Raou the Conqueror
+2
+「このラオウに膝をつかせるとは、、、」
+「なんと、このラオウの頭上に死兆星が！」
+
 N:1029:Baby satan
 13
 はテレポートした。
