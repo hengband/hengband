@@ -1943,6 +1943,35 @@ static cptr realm_jouhou[VALID_REALM] =
 #endif
 };
 
+static char realm_subinfo[VALID_REALM][41] =
+{
+#ifdef JP
+"感知と回復に優れ、攻撃もできます",
+"攻撃はできませんが非常に便利です",
+"感知と防御に優れています",
+"破壊的な攻撃に優れています",
+"生命のある敵への攻撃に優れています",
+"召喚とテレポートに優れています",
+"やや弱いながらも非常に便利です",
+"直接戦闘の補助に優れています",
+"攻撃と防御の両面に優れています",
+"歌でも歌っていましょう",
+"素直に刀でも振っていましょう"
+#else
+"Good at detection and healing.",
+"Very useful and protective.",
+"Good at detection and defence.",
+"Offensive and destructive.",
+"Terrible for living creatures.",
+"Good at summoning, teleportation.",
+"Very useful but poor a bit.",
+"Support to offence and defence.",
+"Good at both offence and defence.",
+"Hey guy, sing a song! :-)",
+"Swing your sword without thinking."
+#endif
+};
+
 
 /*
  * Current stats
@@ -1979,12 +2008,13 @@ static void birth_quit(void)
 static byte choose_realm(s32b choices, int *count)
 {
 	int picks[VALID_REALM] = {0};
-	int k, i;
+	int k, i, cs, os;
 	byte auto_select = REALM_NONE;
 	int n = 0;
 	char c;
+	char sym[VALID_REALM];
 	char p2 = ')';
-	char buf[80];
+	char buf[80], cur[80];
 
 	/* Count the choices */
 	if (choices & CH_LIFE)
@@ -2043,86 +2073,165 @@ static byte choose_realm(s32b choices, int *count)
 		auto_select = REALM_HISSATSU;
 	}
 
-	clear_from(14);
+	clear_from(10);
 
 	/* Auto-select the realm */
 	if ((*count) < 2) return auto_select;
 
-	if (p_ptr->pclass == CLASS_PRIEST)
+	/* Constraint to the 1st realm */
+	if (p_ptr->realm2 != 255)
 	{
-		if (p_ptr->realm1 == REALM_LIFE)
+		if (p_ptr->pclass == CLASS_PRIEST)
 		{
-			choices &= ~(CH_DEATH | CH_DAEMON);
-		}
-		else if ((p_ptr->realm1 == REALM_DEATH) || (p_ptr->realm1 == REALM_DAEMON))
-		{
-			choices &= ~(CH_LIFE);
+			if (p_ptr->realm1 == REALM_LIFE)
+			{
+				choices &= ~(CH_DEATH | CH_DAEMON);
+			}
+			else if ((p_ptr->realm1 == REALM_DEATH) || (p_ptr->realm1 == REALM_DAEMON))
+			{
+				choices &= ~(CH_LIFE);
+			}
 		}
 	}
 
 	/* Extra info */
 #ifdef JP
-	Term_putstr(5, 14, -1, TERM_WHITE,
-		    "魔法の領域の選択によりあなたが習得する呪文のタイプが決まります。");
+	put_str ("注意：魔法の領域の選択によりあなたが習得する呪文のタイプが決まります。", 23, 5);
 #else
-	Term_putstr(5, 14, -1, TERM_WHITE,
-		    "The realm of magic will determine which spells you can learn.");
+	put_str ("Note: The realm of magic will determine which spells you can learn.", 23, 5);
 #endif
 
-#ifdef JP
-	Term_putstr(5, 15, -1, TERM_WHITE,
-		    "生命と仙術は防御用の、カオスと暗黒は破壊的な呪文です。");
-#else
-        Term_putstr(5, 15, -1, TERM_WHITE,
-		    "Life and Sorcery are protective, Chaos and Death are destructive.");
-#endif
-
-#ifdef JP
-	Term_putstr(5, 16, -1, TERM_WHITE,
-		    "自然は攻撃と防御の両方の呪文を含みます。");
-#else
-	Term_putstr(5, 16, -1, TERM_WHITE,
-		    "Nature has both defensive and offensive spells.");
-#endif
-
+	cs = 0;
 	for (i = 0; i<16; i++)
 	{
-		if (choices & (1 << i) && p_ptr->realm1 != i+1)
+		/* Analize realms */
+		if (choices & (1 << i))
 		{
-			put_str(format("%c%c %s", I2A(n), p2, realm_names[i+1]),
-				19 + (n/5), 2 + 15 * (n%5));
+			if (p_ptr->realm1 == i+1)
+			{
+				if (p_ptr->realm2 == 255)
+					cs = n;
+				else
+					continue;
+			}
+			if (p_ptr->realm2 == i+1)
+				cs = n;
+			if (n < 26)
+				sym[n] = I2A(n);
+			else
+				sym[n] = ('A' + n - 26);
+			sprintf(buf, "%c%c %s", sym[n], p2, realm_names[i+1]);
+			put_str(buf, 12 + (n/5), 2 + 15 * (n%5));
 			picks[n++] = i+1;
 		}
 	}
-
-	/* Get a realm */
-	while (1)	{
 #ifdef JP
-sprintf(buf, "領域を選んで下さい(%c-%c) '*'でランダム、'='で初期オプション設定: ", I2A(0), I2A(n-1));
+	sprintf(cur, "%c%c %s", '*', p2, "ランダム");
 #else
-		sprintf(buf, "Choose a realm (%c-%c), * for random, or = for options: ", I2A(0), I2A(n-1));
+	sprintf(cur, "%c%c %s", '*', p2, "Random");
 #endif
 
-		put_str(buf, 18, 2);
-		c = inkey();
-		if (c == 'Q')
+	/* Get a realm */
+	k = -1;
+	os = n;
+	while (1)	{
+		/* Move Cursol */
+		if (cs != os)
 		{
-			birth_quit();
+			c_put_str(TERM_WHITE, cur, 12 + (os/5), 2 + 15 * (os%5));
+			put_str("                                   ", 3, 40);
+			put_str("                                   ", 4, 40);
+
+			if(cs == n)
+			{
+#ifdef JP
+				sprintf(cur, "%c%c %s", '*', p2, "ランダム");
+#else
+				sprintf(cur, "%c%c %s", '*', p2, "Random");
+#endif
+			}
+			else
+			{
+				sprintf(cur, "%c%c %s", sym[cs], p2, realm_names[picks[cs]]);
+				sprintf(buf, "%s", realm_names[picks[cs]]);
+#ifdef JP
+				c_put_str(TERM_L_BLUE, buf, 3, 40);
+				put_str("の特徴", 3, 40+strlen(buf));
+#else
+				c_put_str(TERM_L_BLUE, realm_names[picks[cs]], 3, 40);
+				put_str(": Characteristic", 3, 40+strlen(realm_names[picks[cs]]));
+#endif
+				put_str(realm_subinfo[picks[cs]-1], 4, 40);
+			}
+			c_put_str(TERM_YELLOW, cur, 12 + (cs/5), 2 + 15 * (cs%5));
+			os = cs;
 		}
+
+		if (k >= 0) break;
+
+#ifdef JP
+		sprintf(buf, "領域を選んで下さい(%c-%c) ('='初期オプション設定): ", sym[0], sym[n-1]);
+#else
+		sprintf(buf, "Choose a realm (%c-%c) ('=' for options): ", sym[0], sym[n-1]);
+#endif
+
+		put_str(buf, 10, 10);
+		c = inkey();
+		if (c == 'Q') birth_quit();
 		if (c == 'S') return 255;
+		if (c == ' ' || c == '\r')
+		{
+			if(cs == n)
+			{
+				k = rand_int(n);
+				break;
+			}
+			else
+			{
+				k = cs;
+				break;
+			}
+		}
 		if (c == '*')
 		{
 			k = rand_int(n);
 			break;
 		}
+		if (c == '8')
+		{
+			if (cs >= 5) cs -= 5;
+		}
+		if (c == '4')
+		{
+			if (cs > 0) cs--;
+		}
+		if (c == '6')
+		{
+			if (cs < n) cs++;
+		}
+		if (c == '2')
+		{
+			if ((cs + 5) <= n) cs += 5;
+		}
 		k = (islower(c) ? A2I(c) : -1);
-		if ((k >= 0) && (k < n)) break;
+		if ((k >= 0) && (k < n))
+		{
+			cs = k;
+			continue;
+		}
+		k = (isupper(c) ? (26 + c - 'A') : -1);
+		if ((k >= 26) && (k < n))
+		{
+			cs = k;
+			continue;
+		}
+		else k = -1;
 		if (c == '?') do_cmd_help();
 		else if (c == '=')
 		{
 			screen_save();
 #ifdef JP
-do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
+			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 #else
 			do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
 #endif
@@ -2132,9 +2241,8 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 		else bell();
 	}
 
-
 	/* Clean up */
-	clear_from(19);
+	clear_from(10);
 
 	return (picks[k]);
 }
@@ -2146,6 +2254,7 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 static bool get_player_realms(void)
 {
         int i, count;
+
 #ifdef USE_SCRIPT
 	int result = get_player_realms_callback();
 
@@ -2157,21 +2266,31 @@ static bool get_player_realms(void)
 		return TRUE;
 #endif /* USE_SCRIPT */
 
+	/* Clean up infomation of modifications */
+	put_str("                                   ", 3, 40);
+	put_str("                                   ", 4, 40);
+	put_str("                                   ", 5, 40);
+
 	/* Select the first realm */
+	p_ptr->realm1 = REALM_NONE;
+	p_ptr->realm2 = 255;
 	while (1)
 	{
 		char temp[80*8];
 		cptr t;
-
-                p_ptr->realm1 = REALM_NONE;
 		count = 0;
 		p_ptr->realm1 = choose_realm(realm_choices1[p_ptr->pclass], &count);
 
-                if (255 == p_ptr->realm1) return FALSE;
+		if (255 == p_ptr->realm1) return FALSE;
 		if (!p_ptr->realm1) break;
-		clear_from(17);
 
-		roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm1)-1], 78, temp);
+		/* Clean up*/
+		clear_from(10);
+		put_str("                                   ", 3, 40);
+		put_str("                                   ", 4, 40);
+		put_str("                                   ", 5, 40);
+
+		roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm1)-1], 74, temp);
 		t = temp;
 		for (i = 0; i< 6; i++)
 		{
@@ -2179,7 +2298,7 @@ static bool get_player_realms(void)
 				break; 
 			else
 			{
-				prt(t, 18+i, 1);
+				prt(t, 12+i, 3);
 				t += strlen(t) + 1;
 			}
 		}
@@ -2203,13 +2322,15 @@ else
 #endif
 	}
 
+	/* Select the second realm */
+	p_ptr->realm2 = REALM_NONE;
 	if (p_ptr->realm1)
 	{
 		/* Print the realm */
 #ifdef JP
-put_str("魔法        :", 6, 1);
+		put_str("魔法        :", 6, 1);
 #else
-put_str("Magic       :", 6, 1);
+		put_str("Magic       :", 6, 1);
 #endif
 
 		c_put_str(TERM_L_BLUE, realm_names[p_ptr->realm1], 6, 15);
@@ -2225,9 +2346,14 @@ put_str("Magic       :", 6, 1);
 
 			if (255 == p_ptr->realm2) return FALSE;
 			if (!p_ptr->realm2) break;
-			clear_from(17);
-			
-			roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm2)-1], 78, temp);
+
+			/* Clean up*/
+			clear_from(10);
+			put_str("                                   ", 3, 40);
+			put_str("                                   ", 4, 40);
+			put_str("                                   ", 5, 40);
+
+			roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm2)-1], 74, temp);
 			t = temp;
 			for (i = 0; i< 6; i++)
 			{
@@ -2235,7 +2361,7 @@ put_str("Magic       :", 6, 1);
 					break; 
 				else
 				{
-					prt(t, 18+i, 1);
+					prt(t, 12+i, 3);
 					t += strlen(t) + 1;
 				}
 			}
@@ -2260,7 +2386,7 @@ put_str("Magic       :", 6, 1);
 		if (p_ptr->realm2)
 		{
 			/* Print the realm */
-			c_put_str(TERM_L_BLUE, realm_names[p_ptr->realm2], 7, 15);
+			c_put_str(TERM_L_BLUE, format("%s, %s", realm_names[p_ptr->realm1], realm_names[p_ptr->realm2]), 6, 15);
 		}
 	}
 
@@ -2515,7 +2641,8 @@ static void get_stats(void)
 		p_ptr->stat_cur[i] = p_ptr->stat_max[i];
 
 		/* Efficiency -- Apply the racial/class bonuses */
-		stat_use[i] = modify_stat_value(p_ptr->stat_max[i], bonus);
+		/* stat_use[i] = modify_stat_value(p_ptr->stat_max[i], bonus); */
+		stat_use[i] = p_ptr->stat_max[i];
 	}
 }
 
@@ -2896,7 +3023,6 @@ static void get_history(void)
 	}
 
 
-
 	/* Verify social class */
 	if (social_class > 100) social_class = 100;
 	else if (social_class < 1) social_class = 1;
@@ -3002,7 +3128,7 @@ static void get_money(void)
  */
 static void birth_put_stats(void)
 {
-	int i, p;
+	int i, j, m, p;
 	int col;
 	byte attr;
 	char buf[80];
@@ -3014,8 +3140,14 @@ static void birth_put_stats(void)
 		/* Put the stats (and percents) */
 		for (i = 0; i < 6; i++)
 		{
+			/* Race/Class bonus */
+			j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
+
+			/* Obtain the current stat */
+			m = adjust_stat(stat_use[i], j, TRUE);
+
 			/* Put the stat */
-			cnv_stat(stat_use[i], buf);
+			cnv_stat(m, buf);
 			c_put_str(TERM_L_GREEN, buf, 3+i, col+24);
 
 			/* Put the percent */
@@ -3714,11 +3846,12 @@ void player_outfit(void)
  */
 static bool get_player_race(void)
 {
-	int     k, n;
+	int     k, n, cs, os;
 	cptr    str;
 	char    c;
+	char	sym[MAX_RACES];
 	char    p2 = ')';
-	char    buf[80];
+	char    buf[80], cur[80];
 
 
 #ifdef USE_SCRIPT
@@ -3733,11 +3866,11 @@ static bool get_player_race(void)
 #endif /* USE_SCRIPT */
 
 	/* Extra info */
-	Term_putstr(5, 14, -1, TERM_WHITE,
+	clear_from(10);
 #ifdef JP
-"《種族》によってキャラクターの先天的な資質やボーナスが変化します。");
+	put_str("注意：《種族》によってキャラクターの先天的な資質やボーナスが変化します。", 23, 5);
 #else
-		"Your 'race' determines various intrinsic factors and bonuses.");
+	put_str("Note: Your 'race' determines various intrinsic factors and bonuses.", 23 ,5);
 #endif
 
 	hack_mutation = FALSE;
@@ -3746,124 +3879,147 @@ static bool get_player_race(void)
 	for (n = 0; n < MAX_RACES; n++)
 	{
 		/* Analyze */
-		p_ptr->prace = n;
-		rp_ptr = &race_info[p_ptr->prace];
+		rp_ptr = &race_info[n];
 		str = rp_ptr->title;
 
 		/* Display */
-
-		if (n < RACE_SPECTRE)
-#ifdef JP
-sprintf(buf, "%c%c%s", I2A(n), p2, str);
-#else
-			sprintf(buf, "%c%c %s", I2A(n), p2, str);
-#endif
-
+		if (n < 26)
+			sym[n] = I2A(n);
 		else
+			sym[n] = ('A' + n - 26);
 #ifdef JP
-			sprintf(buf, "%d%c%s", (n - RACE_SPECTRE), p2, str); /* HACK */
+		sprintf(buf, "%c%c%s", sym[n], p2, str);
 #else
-			sprintf(buf, "%d%c %s", (n - RACE_SPECTRE), p2, str); /* HACK */
+		sprintf(buf, "%c%c %s", sym[n], p2, str);
 #endif
-
-		put_str(buf, 16 + (n/5), 1 + 16 * (n%5));
+		put_str(buf, 12 + (n/5), 1 + 16 * (n%5));
 
 	}
 
-	/* Choose */
-	while (1)
-	{
 #ifdef JP
-sprintf(buf, "種族を選んで下さい (%c-9) '*'でランダム, '='で初期オプション設定: ", I2A(0));
+	sprintf(cur, "%c%c%s", '*', p2, "ランダム");
 #else
-		sprintf(buf, "Choose a race (%c-9), * for random, or = for options: ", I2A(0));
+	sprintf(cur, "%c%c %s", '*', p2, "Random");
 #endif
 
-		put_str(buf, 15, 2);
-		c = inkey();
-		if (c == 'Q')
+	/* Choose */
+	k = -1;
+	cs = p_ptr->prace;
+	os = MAX_RACES;
+	while (1)
+	{
+		/* Move Cursol */
+		if (cs != os)
 		{
-			birth_quit();
+			c_put_str(TERM_WHITE, cur, 12 + (os/5), 1 + 16 * (os%5));
+			put_str("                                   ", 3, 40);
+			if(cs == MAX_RACES)
+			{
+#ifdef JP
+				sprintf(cur, "%c%c%s", '*', p2, "ランダム");
+#else
+				sprintf(cur, "%c%c %s", '*', p2, "Random");
+#endif
+				put_str("                                   ", 4, 40);
+				put_str("                                   ", 5, 40);
+			}
+			else
+			{
+				rp_ptr = &race_info[cs];
+				str = rp_ptr->title;
+#ifdef JP
+				sprintf(cur, "%c%c%s", sym[cs], p2, str);
+				c_put_str(TERM_L_BLUE, rp_ptr->title, 3, 40);
+				put_str("の種族修正", 3, 40+strlen(rp_ptr->title));
+				put_str("腕力 知能 賢さ 器用 耐久 魅力 経験 ", 4, 40);
+#else
+				sprintf(cur, "%c%c %s", sym[cs], p2, str);
+				c_put_str(TERM_L_BLUE, rp_ptr->title, 3, 40);
+				put_str(": Race modification", 3, 40+strlen(rp_ptr->title));
+				put_str("Str  Int  Wis  Dex  Con  Chr   EXP ", 4, 40);
+#endif
+				sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ",
+					rp_ptr->r_adj[0], rp_ptr->r_adj[1], rp_ptr->r_adj[2], rp_ptr->r_adj[3],
+					rp_ptr->r_adj[4], rp_ptr->r_adj[5], (rp_ptr->r_exp - 100));
+				c_put_str(TERM_L_BLUE, buf, 5, 40);
+			}
+			c_put_str(TERM_YELLOW, cur, 12 + (cs/5), 1 + 16 * (cs%5));
+			os = cs;
 		}
+
+		if (k >= 0) break;
+
+#ifdef JP
+		sprintf(buf, "種族を選んで下さい (%c-%c) ('='初期オプション設定): ", sym[0], sym[MAX_RACES-1]);
+#else
+		sprintf(buf, "Choose a race (%c-%c) ('=' for options): ", sym[0], sym[MAX_RACES-1]);
+#endif
+
+		put_str(buf, 10, 10);
+		c = inkey();
+		if (c == 'Q') birth_quit();
 		if (c == 'S') return (FALSE);
+		if (c == ' ' || c == '\r')
+		{
+			if(cs == MAX_RACES)
+			{
+				k = rand_int(MAX_RACES);
+				cs = k;
+				continue;
+			}
+			else
+			{
+				k = cs;
+				break;
+			}
+		}
 		if (c == '*')
 		{
 			k = rand_int(MAX_RACES);
-			break;
+			cs = k;
+			continue;
 		}
-		if (c == '{')
+		if (c == '8')
 		{
-			k = RACE_VAMPIRE;
-			break;
+			if (cs >= 5) cs -= 5;
 		}
-		else if (c == '0')
+		if (c == '4')
 		{
-			k = RACE_SPECTRE;
-			break;
+			if (cs > 0) cs--;
 		}
-		else if (c == '1')
+		if (c == '6')
 		{
-			k = RACE_SPRITE;
-			break;
+			if (cs < MAX_RACES) cs++;
 		}
-		else if (c == '2')
+		if (c == '2')
 		{
-			k = RACE_BEASTMAN;
-			break;
+			if ((cs + 5) <= MAX_RACES) cs += 5;
 		}
-		else if (c == '3')
+		k = (islower(c) ? A2I(c) : -1);
+		if ((k >= 0) && (k < MAX_RACES))
 		{
-			k = RACE_ENT;
-			break;
+			cs = k;
+			continue;
 		}
-		else if (c == '4')
+		k = (isupper(c) ? (26 + c - 'A') : -1);
+		if ((k >= 26) && (k < MAX_RACES))
 		{
-			k = RACE_ANGEL;
-			break;
+			cs = k;
+			continue;
 		}
-		else if (c == '5')
+		else k = -1;
+		if (c == '?') do_cmd_help();
+		else if (c == '=')
 		{
-			k = RACE_DEMON;
-			break;
-		}
-		else if (c == '6')
-		{
-			k = RACE_DUNADAN;
-			break;
-		}
-		else if (c == '7')
-		{
-			k = RACE_S_FAIRY;
-			break;
-		}
-		else if (c == '8')
-		{
-			k = RACE_KUTA;
-			break;
-		}
-		else if (c == '9')
-		{
-			k = RACE_ANDROID;
-			break;
-		}
-		else
-		{
-			k = (islower(c) ? A2I(c) : -1);
-			if ((k >= 0) && (k < n)) break;
-			if (c == '?') do_cmd_help();
-			else if (c == '=')
-			{
-				screen_save();
+			screen_save();
 #ifdef JP
-do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
+			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 #else
-				do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
+			do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
 #endif
-
-				screen_load();
-			}
-			else bell();
+			screen_load();
 		}
+		else bell();
 	}
 
 	/* Set race */
@@ -3889,10 +4045,11 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
  */
 static bool get_player_class(void)
 {
-        int     k, n;
+	int     k, n, cs, os;
 	char    c;
+	char	sym[MAX_CLASS_CHOICE];
 	char    p2 = ')';
-	char    buf[80];
+	char    buf[80], cur[80];
 	cptr    str;
 
 
@@ -3908,91 +4065,178 @@ static bool get_player_class(void)
 #endif /* USE_SCRIPT */
 
 	/* Extra info */
-	clear_from(13);
-	Term_putstr(5, 14, -1, TERM_WHITE,
+	clear_from(10);
 #ifdef JP
-"《職業》によってキャラクターの先天的な能力やボーナスが変化します。");
+	put_str("注意：《職業》によってキャラクターの先天的な能力やボーナスが変化します。", 23, 5);
 #else
-		"Your 'class' determines various intrinsic abilities and bonuses.");
+	put_str("Note: Your 'class' determines various intrinsic abilities and bonuses.", 23, 5);
 #endif
 
-	Term_putstr(5, 15, -1, TERM_WHITE,
 #ifdef JP
-    "()で囲まれた選択肢はこの種族には似合わない職業です。");
+	put_str("()で囲まれた選択肢はこの種族には似合わない職業です。", 11, 10);
 #else
-	    "Any entries in parentheses should only be used by advanced players.");
+	put_str("Any entries in parentheses should only be used by advanced players.", 11, 5);
 #endif
 
 
 	/* Dump classes */
 	for (n = 0; n < MAX_CLASS_CHOICE; n++)
 	{
-		cptr mod = "";
-		char select = I2A(n);
-
 		/* Analyze */
-		p_ptr->pclass = n;
-		cp_ptr = &class_info[p_ptr->pclass];
-		mp_ptr = &magic_info[p_ptr->pclass];
-
+		cp_ptr = &class_info[n];
+		mp_ptr = &magic_info[n];
 		str = cp_ptr->title;
+		if (n < 26)
+			sym[n] = I2A(n);
+		else
+			sym[n] = ('A' + n - 26);
 
-		if (n >= CLASS_NINJA)
-			select = '0'+n-CLASS_NINJA;
-
+		/* Display */
 		if (!(rp_ptr->choice & (1L << n)))
 #ifdef JP
-sprintf(buf, "%c%c(%s)%s", select, p2, str, mod);
+			sprintf(buf, "%c%c(%s)", sym[n], p2, str);
 #else
-			sprintf(buf, "%c%c (%s)%s", select, p2, str, mod);
+			sprintf(buf, "%c%c (%s)", sym[n], p2, str);
 #endif
-
 		else
-			/* Display */
 #ifdef JP
-sprintf(buf, "%c%c%s%s", select, p2, str, mod);
+			sprintf(buf, "%c%c%s", sym[n], p2, str);
 #else
-			sprintf(buf, "%c%c %s%s", select, p2, str, mod);
+			sprintf(buf, "%c%c %s", sym[n], p2, str);
 #endif
 
-
-		put_str(buf, 17 + (n/4), 2 + 19 * (n%4));
+		put_str(buf, 13+ (n/4), 2 + 19 * (n%4));
 	}
 
-	/* Get a class */
-	while (1)
-	{
 #ifdef JP
-sprintf(buf, "職業を選んで下さい (%c-%c) '*'でランダム、'='で初期オプション設定: ", I2A(0), '0'+n-CLASS_NINJA);
+	sprintf(cur, "%c%c%s", '*', p2, "ランダム");
 #else
-		sprintf(buf, "Choose a class (%c-%c), * for random, or = for options: ", I2A(0), '0'+n-CLASS_NINJA);
+	sprintf(cur, "%c%c %s", '*', p2, "Random");
 #endif
 
-		put_str(buf, 16, 2);
-		c = inkey();
-		if (c == 'Q')
+	/* Get a class */
+	k = -1;
+	cs = p_ptr->pclass;
+	os = MAX_CLASS_CHOICE;
+	while (1)
+	{
+		/* Move Cursol */
+		if (cs != os)
 		{
-			birth_quit();
+			c_put_str(TERM_WHITE, cur, 13 + (os/4), 2 + 19 * (os%4));
+			put_str("                                   ", 3, 40);
+			if(cs == MAX_CLASS_CHOICE)
+			{
+#ifdef JP
+				sprintf(cur, "%c%c%s", '*', p2, "ランダム");
+#else
+				sprintf(cur, "%c%c %s", '*', p2, "Random");
+#endif
+				put_str("                                   ", 4, 40);
+				put_str("                                   ", 5, 40);
+			}
+			else
+			{
+				cp_ptr = &class_info[cs];
+				mp_ptr = &magic_info[cs];
+				str = cp_ptr->title;
+				if (!(rp_ptr->choice & (1L << cs)))
+#ifdef JP
+					sprintf(cur, "%c%c(%s)", sym[cs], p2, str);
+#else
+					sprintf(cur, "%c%c (%s)", sym[cs], p2, str);
+#endif
+				else
+#ifdef JP
+					sprintf(cur, "%c%c%s", sym[cs], p2, str);
+#else
+					sprintf(cur, "%c%c %s", sym[cs], p2, str);
+#endif
+#ifdef JP
+					c_put_str(TERM_L_BLUE, cp_ptr->title, 3, 40);
+					put_str("の職業修正", 3, 40+strlen(cp_ptr->title));
+					put_str("腕力 知能 賢さ 器用 耐久 魅力 経験 ", 4, 40);
+#else
+					c_put_str(TERM_L_BLUE, cp_ptr->title, 3, 40);
+					put_str(": Class modification", 3, 40+strlen(cp_ptr->title));
+					put_str("Str  Int  Wis  Dex  Con  Chr   EXP ", 4, 40);
+#endif
+					sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ",
+						cp_ptr->c_adj[0], cp_ptr->c_adj[1], cp_ptr->c_adj[2], cp_ptr->c_adj[3],
+						cp_ptr->c_adj[4], cp_ptr->c_adj[5], cp_ptr->c_exp);
+					c_put_str(TERM_L_BLUE, buf, 5, 40);
+			}
+			c_put_str(TERM_YELLOW, cur, 13 + (cs/4), 2 + 19 * (cs%4));
+			os = cs;
 		}
+
+		if (k >= 0) break;
+
+#ifdef JP
+		sprintf(buf, "職業を選んで下さい (%c-%c) ('='初期オプション設定): ", sym[0], sym[MAX_CLASS_CHOICE-1]);
+#else
+		sprintf(buf, "Choose a class (%c-%c) ('=' for options): ",  sym[0], sym[MAX_CLASS_CHOICE-1]);
+#endif
+
+		put_str(buf, 10, 10);
+		c = inkey();
+		if (c == 'Q') birth_quit();
 		if (c == 'S') return (FALSE);
+		if (c == ' ' || c == '\r')
+		{
+			if(cs == MAX_CLASS_CHOICE)
+			{
+				k = rand_int(MAX_CLASS_CHOICE);
+				cs = k;
+				continue;
+			}
+			else
+			{
+				k = cs;
+				break;
+			}
+		}
 		if (c == '*')
 		{
-			k = rand_int(n);
-			break;
+			k = rand_int(MAX_CLASS_CHOICE);
+			cs = k;
+			continue;
 		}
-		if (c == '0')
+		if (c == '8')
 		{
-			k = CLASS_NINJA;
-			break;
+			if (cs >= 4) cs -= 4;
+		}
+		if (c == '4')
+		{
+			if (cs > 0) cs--;
+		}
+		if (c == '6')
+		{
+			if (cs < MAX_CLASS_CHOICE) cs++;
+		}
+		if (c == '2')
+		{
+			if ((cs + 4) <= MAX_CLASS_CHOICE) cs += 4;
 		}
 		k = (islower(c) ? A2I(c) : -1);
-		if ((k >= 0) && (k < n)) break;
+		if ((k >= 0) && (k < MAX_CLASS_CHOICE))
+		{
+			cs = k;
+			continue;
+		}
+		k = (isupper(c) ? (26 + c - 'A') : -1);
+		if ((k >= 26) && (k < MAX_CLASS_CHOICE))
+		{
+			cs = k;
+			continue;
+		}
+		else k = -1;
 		if (c == '?') do_cmd_help();
 		else if (c == '=')
 		{
 			screen_save();
 #ifdef JP
-do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
+			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 #else
 			do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
 #endif
@@ -4025,10 +4269,11 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
  */
 static bool get_player_seikaku(void)
 {
-	int     k, n;
+	int     k, n, os, cs;
 	char    c;
+	char	sym[MAX_SEIKAKU];
 	char    p2 = ')';
-	char    buf[80];
+	char    buf[80], cur[80];
 	char    tmp[64];
 	cptr    str;
 
@@ -4045,52 +4290,120 @@ static bool get_player_seikaku(void)
 #endif /* USE_SCRIPT */
 
 	/* Extra info */
-	clear_from(14);
+	clear_from(10);
 #ifdef JP
-	Term_putstr(5, 14, -1, TERM_WHITE,
-"《性格》によってキャラクターの能力やボーナスが変化します。        ");
+	put_str("注意：《性格》によってキャラクターの能力やボーナスが変化します。", 23, 5);
 #else
-	Term_putstr(5, 14, -1, TERM_WHITE,
-		"Your personality determines various intrinsic abilities and bonuses.");
+	put_str("Note: Your personality determines various intrinsic abilities and bonuses.", 23, 5);
 #endif
 
 	/* Dump seikakus */
 	for (n = 0; n < MAX_SEIKAKU; n++)
 	{
-		cptr mod = "";
-
 		if(seikaku_info[n].sex && (seikaku_info[n].sex != (p_ptr->psex+1))) continue;
 
 		/* Analyze */
-		p_ptr->pseikaku = n;
-		ap_ptr = &seikaku_info[p_ptr->pseikaku];
+		ap_ptr = &seikaku_info[n];
 		str = ap_ptr->title;
+		if (n < 26)
+			sym[n] = I2A(n);
+		else
+			sym[n] = ('A' + n - 26);
 
 		/* Display */
+		/* Display */
 #ifdef JP
-		sprintf(buf, "%c%c%s%s", I2A(n), p2, str, mod);
+		sprintf(buf, "%c%c%s", I2A(n), p2, str);
 #else
-		sprintf(buf, "%c%c %s%s", I2A(n), p2, str, mod);
+		sprintf(buf, "%c%c %s", I2A(n), p2, str);
 #endif
-		put_str(buf, 17 + (n/4), 2 + 18 * (n%4));
+		put_str(buf, 12 + (n/4), 2 + 18 * (n%4));
 	}
 
-	/* Get a seikaku */
-	while (1)
-	{
 #ifdef JP
-sprintf(buf, "性格を選んで下さい (%c-%c) '*'でランダム、'='で初期オプション設定: ", I2A(0), I2A(n-1));
+	sprintf(cur, "%c%c%s", '*', p2, "ランダム");
 #else
-		sprintf(buf, "Choose a personality (%c-%c), * for random, or = for options: ", I2A(0), I2A(n-1));
+	sprintf(cur, "%c%c %s", '*', p2, "Random");
 #endif
 
-		put_str(buf, 16, 2);
-		c = inkey();
-		if (c == 'Q')
+	/* Get a seikaku */
+	k = -1;
+	cs = p_ptr->pseikaku;
+	os = MAX_SEIKAKU;
+	while (1)
+	{
+		/* Move Cursol */
+		if (cs != os)
 		{
-			birth_quit();
+			c_put_str(TERM_WHITE, cur, 12 + (os/4), 2 + 18 * (os%4));
+			put_str("                                   ", 3, 40);
+			if(cs == MAX_SEIKAKU)
+			{
+#ifdef JP
+				sprintf(cur, "%c%c%s", '*', p2, "ランダム");
+#else
+				sprintf(cur, "%c%c %s", '*', p2, "Random");
+#endif
+				put_str("                                   ", 4, 40);
+				put_str("                                   ", 5, 40);
+			}
+			else
+			{
+				ap_ptr = &seikaku_info[cs];
+				str = ap_ptr->title;
+#ifdef JP
+					sprintf(cur, "%c%c%s", sym[cs], p2, str);
+#else
+					sprintf(cur, "%c%c %s", sym[cs], p2, str);
+#endif
+#ifdef JP
+					c_put_str(TERM_L_BLUE, ap_ptr->title, 3, 40);
+					put_str("の性格修正", 3, 40+strlen(ap_ptr->title));
+					put_str("腕力 知能 賢さ 器用 耐久 魅力      ", 4, 40);
+#else
+					c_put_str(TERM_L_BLUE, ap_ptr->title, 3, 40);
+					put_str(": Personality modification", 3, 40+strlen(ap_ptr->title));
+					put_str("Str  Int  Wis  Dex  Con  Chr       ", 4, 40);
+#endif
+					sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d       ",
+						ap_ptr->a_adj[0], ap_ptr->a_adj[1], ap_ptr->a_adj[2], ap_ptr->a_adj[3],
+						ap_ptr->a_adj[4], ap_ptr->a_adj[5]);
+					c_put_str(TERM_L_BLUE, buf, 5, 40);
+			}
+			c_put_str(TERM_YELLOW, cur, 12 + (cs/4), 2 + 18 * (cs%4));
+			os = cs;
 		}
+
+		if (k >= 0) break;
+
+#ifdef JP
+		sprintf(buf, "性格を選んで下さい (%c-%c) ('='初期オプション設定): ", sym[0], sym[MAX_SEIKAKU-1]);
+#else
+		sprintf(buf, "Choose a personality (%c-%c) ('=' for options): ", sym[0], sym[MAX_SEIKAKU-1]);
+#endif
+
+		put_str(buf, 10, 10);
+		c = inkey();
+		if (c == 'Q') birth_quit();
 		if (c == 'S') return (FALSE);
+		if (c == ' ' || c == '\r')
+		{
+			if(cs == MAX_SEIKAKU)
+			{
+				do
+				{
+					k = rand_int(MAX_SEIKAKU);
+				}
+				while(seikaku_info[k].sex && (seikaku_info[k].sex != (p_ptr->psex+1)));
+				cs = k;
+				continue;
+			}
+			else
+			{
+				k = cs;
+				break;
+			}
+		}
 		if (c == '*')
 		{
 			do
@@ -4098,18 +4411,78 @@ sprintf(buf, "性格を選んで下さい (%c-%c) '*'でランダム、'='で初期オプション設定:
 				k = rand_int(n);
 			}
 			while(seikaku_info[k].sex && (seikaku_info[k].sex != (p_ptr->psex+1)));
-			break;
+			cs = k;
+			continue;
+		}
+		if (c == '8')
+		{
+			if (cs >= 4) cs -= 4;
+			if (seikaku_info[cs].sex && (seikaku_info[cs].sex != (p_ptr->psex+1)))
+			{
+				if((cs - 4) > 0)
+					cs -= 4;
+				else
+					cs += 4;
+			}
+		}
+		if (c == '4')
+		{
+			if (cs > 0) cs--;
+			if (seikaku_info[cs].sex && (seikaku_info[cs].sex != (p_ptr->psex+1)))
+			{
+				if((cs - 1) > 0)
+					cs--;
+				else
+					cs++;
+			}
+		}
+		if (c == '6')
+		{
+			if (cs < MAX_SEIKAKU) cs++;
+			if (seikaku_info[cs].sex && (seikaku_info[cs].sex != (p_ptr->psex+1)))
+			{
+				if((cs + 1) <= MAX_SEIKAKU)
+					cs++;
+				else
+					cs--;
+			}
+		}
+		if (c == '2')
+		{
+			if ((cs + 4) <= MAX_SEIKAKU) cs += 4;
+			if (seikaku_info[cs].sex && (seikaku_info[cs].sex != (p_ptr->psex+1)))
+			{
+				if((cs + 4) <= MAX_SEIKAKU)
+					cs += 4;
+				else
+					cs -= 4;
+			}
 		}
 		k = (islower(c) ? A2I(c) : -1);
-		if ((k >= 0) && (k < n))
+		if ((k >= 0) && (k < MAX_SEIKAKU))
+		{
 			if((seikaku_info[k].sex == 0) || (seikaku_info[k].sex == (p_ptr->psex+1)))
-				break;
+			{
+				cs = k;
+				continue;
+			}
+		}
+		k = (isupper(c) ? (26 + c - 'A') : -1);
+		if ((k >= 26) && (k < MAX_SEIKAKU))
+		{
+			if((seikaku_info[k].sex == 0) || (seikaku_info[k].sex == (p_ptr->psex+1)))
+			{
+				cs = k;
+				continue;
+			}
+		}
+		else k = -1;
 		if (c == '?') do_cmd_help();
 		else if (c == '=')
 		{
 			screen_save();
 #ifdef JP
-do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
+			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 #else
 			do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
 #endif
@@ -4139,6 +4512,537 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 	return TRUE;
 }
 
+#ifdef ALLOW_AUTOROLLER
+static bool get_stat_limits(void)
+{
+	int i, j, m, cs, os;
+	int mval[6], cval[6];
+	char c;
+	char buf[80], cur[80];
+	char inp[80];
+
+	/* Clean up */
+	clear_from(10);
+
+	/* Extra infomation */
+#ifdef JP
+	put_str("最低限得たい能力値を設定して下さい。", 10, 10);
+	put_str("2/8で項目選択、4/6で値の増減、Enterで次へ", 11, 10);
+#else
+	put_str("Set minimum stats.", 10, 10);
+	put_str("2/8 for Select, 4/6 for Change value, Enter for Goto next", 11, 10);
+#endif
+	
+#ifdef JP
+	put_str("         基本値  種族 職業 性格     合計値  最大値", 13, 10);
+#else
+	put_str("           Base   Rac  Cla  Per      Total  Maximum", 13, 10);
+#endif
+
+	/* Output the maximum stats */
+	for (i = 0; i < 6; i++)
+	{
+		/* Reset the "success" counter */
+		stat_match[i] = 0;
+		cval[i] = 3;
+
+		/* Race/Class bonus */
+		j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
+
+		/* Obtain the "maximal" stat */
+		m = adjust_stat(17, j, TRUE);
+
+		/* Save the maximum */
+		mval[i] = m;
+
+		/* Above 18 */
+		if (m > 18)
+		{
+#ifdef JP
+			sprintf(cur, "18/%02d", (m - 18));
+#else
+			sprintf(cur, "18/%02d", (m - 18));
+#endif
+		}
+		
+		/* From 3 to 18 */
+		else
+		{
+#ifdef JP
+			sprintf(cur, "%2d", m);
+#else
+			sprintf(cur, "%2d", m);
+#endif
+		}
+
+		/* Obtain the current stat */
+		m = adjust_stat(cval[i], j, TRUE);
+
+		/* Above 18 */
+		if (m > 18)
+		{
+#ifdef JP
+			sprintf(inp, "18/%02d", (m - 18));
+#else
+			sprintf(inp, "18/%02d", (m - 18));
+#endif
+		}
+		
+		/* From 3 to 18 */
+		else
+		{
+#ifdef JP
+			sprintf(inp, "%2d", m);
+#else
+			sprintf(inp, "%2d", m);
+#endif
+		}
+
+		/* Prepare a prompt */
+		sprintf(buf, "%6s       %2d   %+3d  %+3d  %+3d  =  %6s  %6s",
+			stat_names[i], cval[i], rp_ptr->r_adj[i], cp_ptr->c_adj[i],
+			ap_ptr->a_adj[i], inp, cur);
+		
+		/* Dump the prompt */
+		put_str(buf, 14 + i, 10);
+	}
+	
+	/* Get a minimum stat */
+	cs = 0;
+	os = 6;
+	while (TRUE)
+	{
+		/* Move Cursol */
+		if (cs != os)
+		{
+			if(os == 6)
+			{
+#ifdef JP
+				c_put_str(TERM_WHITE, "決定する", 21, 35);
+#else
+				c_put_str(TERM_WHITE, "Accept", 21, 35);
+#endif
+			}
+			else if(os < 6)
+				c_put_str(TERM_WHITE, cur, 14 + os, 10);
+			
+			if(cs == 6)
+			{
+#ifdef JP
+				c_put_str(TERM_YELLOW, "決定する", 21, 35);
+#else
+				c_put_str(TERM_YELLOW, "Accept", 21, 35);
+#endif
+			}
+			else
+			{
+				/* Race/Class bonus */
+				j = rp_ptr->r_adj[cs] + cp_ptr->c_adj[cs] + ap_ptr->a_adj[cs];
+
+				/* Obtain the current stat */
+				m = adjust_stat(cval[cs], j, TRUE);
+				
+				/* Above 18 */
+				if (m > 18)
+				{
+#ifdef JP
+					sprintf(inp, "18/%02d", (m - 18));
+#else
+					sprintf(inp, "18/%02d", (m - 18));
+#endif
+				}
+				
+				/* From 3 to 18 */
+				else
+				{
+#ifdef JP
+					sprintf(inp, "%2d", m);
+#else
+					sprintf(inp, "%2d", m);
+#endif
+				}
+				
+				/* Prepare a prompt */
+				sprintf(cur, "%6s       %2d   %+3d  %+3d  %+3d  =  %6s",
+					stat_names[cs], cval[cs], rp_ptr->r_adj[cs],
+					cp_ptr->c_adj[cs], ap_ptr->a_adj[cs], inp);
+				c_put_str(TERM_YELLOW, cur, 14 + cs, 10);
+			}
+			os = cs;
+		}
+		
+		/* Prompt for the minimum stats */
+		c = inkey();
+		if (c == 'Q') birth_quit();
+		if (c == 'S') return (FALSE);
+		if (c == ESCAPE) break;
+		if (c == ' ' || c == '\r')
+		{
+			if(cs == 6) break;
+			else cs++;
+		}
+		if (c == '8' || c == 'k')
+		{
+			if (cs > 0) cs--;
+		}
+		if (c == '2' || c == 'j')
+		{
+			if (cs < 6) cs++;
+		}
+		if (c == '4' || c == 'h')
+		{
+			if (cs != 6)
+			{
+				if (cval[cs] == 3)
+				{
+					cval[cs] = 17;
+					os = 7;
+				}
+				else if (cval[cs] > 3)
+				{
+					cval[cs]--;
+					os = 7;
+				}
+				else return FALSE;
+			}
+		}
+		if (c == '6' || c == 'l')
+		{
+			if (cs != 6)
+			{
+				if (cval[cs] == 17)
+				{
+					cval[cs] = 3;
+					os = 7;
+				}
+				else if (cval[cs] < 17)
+				{
+					cval[cs]++;
+					os = 7;
+				}
+				else return FALSE;
+			}
+		}
+		if (c == 'm')
+		{
+			if(cs != 6 && cval[cs] < 17)
+			{
+				cval[cs] = 17;
+				os = 7;
+			}
+		}
+		if (c == 'n')
+		{
+			if(cs != 6 && cval[cs] > 3)
+			{
+				cval[cs] = 3;
+				os = 7;
+			}
+		}
+		if (c == '?') do_cmd_help();
+		else if (c == '=')
+		{
+			screen_save();
+#ifdef JP
+			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
+#else
+			do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
+#endif
+
+			screen_load();
+		}
+		else bell();
+	}
+	
+	for (i = 0; i < 6; i++)
+	{
+		/* Save the minimum stat */
+		stat_limit[i] = cval[i];
+	}
+
+	return TRUE;
+}
+#endif
+
+#ifdef ALLOW_AUTOROLLER
+static bool get_chara_limits(void)
+{
+	int i, j, m, cs, os;
+	int mval[6], cval[6];
+	int max_percent, min_percent;
+	char c;
+	char buf[80], cur[80];
+	char param[3][80] = {
+#ifdef JP
+		"身長(インチ)",
+		"体重(ポンド)",
+		"社会的地位"
+#else
+		"height",
+		"weight",
+		"social class"
+#endif
+	};
+
+	/* Clean up */
+	clear_from(10);
+	
+	/* Prompt for the minimum stats */
+#ifdef JP
+	put_str("2/4/6/8で項目選択、+/-で値の増減、Enterで次へ", 11, 10);
+	put_str("注意：身長と体重の最大値/最小値ぎりぎりの値は非常に出現確率が低くなります。", 23, 2);
+#else
+	put_str("2/4/6/8 for Select, +/- for Change value, Enter for Goto next", 11, 10);
+	put_str("Caution: Values near minimum or maximum is extremery rare.", 23, 5);
+#endif
+	
+	if (p_ptr->psex == SEX_MALE)
+	{
+		max_percent = (int)(rp_ptr->m_b_ht+rp_ptr->m_m_ht*4-1) * 100 / (int)(rp_ptr->m_b_ht);
+		min_percent = (int)(rp_ptr->m_b_ht-rp_ptr->m_m_ht*4+1) * 100 / (int)(rp_ptr->m_b_ht);
+	}
+	else
+	{
+		max_percent = (int)(rp_ptr->f_b_ht+rp_ptr->f_m_ht*4-1) * 100 / (int)(rp_ptr->f_b_ht);
+		min_percent = (int)(rp_ptr->f_b_ht-rp_ptr->f_m_ht*4+1) * 100 / (int)(rp_ptr->f_b_ht);
+	}
+	
+#ifdef JP
+	put_str("体格/地位の最小値/最大値を設定して下さい。", 10, 10);
+	put_str("  項    目                 最小値  最大値", 13,20);
+#else
+	put_str(" Parameter                    Mix     Man", 13,20);
+	put_str("Set minimum/maximum attribute.", 10, 10);
+#endif
+
+	/* Output the maximum stats */
+	for (i = 0; i < 6; i++)
+	{
+		/* Obtain the "maximal" stat */
+		switch (i)
+		{
+		case 0:	/* Minimum height */
+			if (p_ptr->psex == SEX_MALE) m = rp_ptr->m_b_ht-rp_ptr->m_m_ht*4+1;
+			else m = rp_ptr->f_b_ht-rp_ptr->f_m_ht*4+1;
+			break;
+		case 1:	/* Maximum height */
+			if (p_ptr->psex == SEX_MALE) m = rp_ptr->m_b_ht+rp_ptr->m_m_ht*4-1;
+			else m = rp_ptr->f_b_ht+rp_ptr->f_m_ht*4-1;
+			break;
+		case 2:	/* Minimum weight */
+			if (p_ptr->psex == SEX_MALE) m = (rp_ptr->m_b_wt * min_percent / 100) - (rp_ptr->m_m_wt * min_percent / 75) +1;
+			else m = (rp_ptr->f_b_wt * min_percent / 100) - (rp_ptr->f_m_wt * min_percent / 75) +1;
+			break;
+		case 3:	/* Maximum weight */
+			if (p_ptr->psex == SEX_MALE) m = (rp_ptr->m_b_wt * max_percent / 100) + (rp_ptr->m_m_wt * max_percent / 75) -1;
+			else m = (rp_ptr->f_b_wt * max_percent / 100) + (rp_ptr->f_m_wt * max_percent / 75) -1;
+			break;
+		case 4:	/* Minimum social class */
+			m = 1;
+			break;
+		case 5:	/* Maximum social class */
+			m = 100;
+			break;
+		default:
+			m = 1;
+			break;
+		}
+		
+		/* Save the maximum or minimum */
+		mval[i] = m;
+		cval[i] = m;
+	}
+
+	for (i = 0; i < 3; i++)
+	{
+		/* Prepare a prompt */
+		sprintf(buf, "%-12s (%3d - %3d)", param[i], mval[i*2], mval[i*2+1]);
+
+		/* Dump the prompt */
+		put_str(buf, 14 + i, 20);
+
+		for (j = 0; j < 2; j++)
+		{
+			sprintf(buf, "     %3d", cval[i*2+j]);
+			put_str(buf, 14 + i, 45 + 8 * j);
+		}
+	}
+	
+	/* Get a minimum stat */
+	cs = 0;
+	os = 6;
+	while (TRUE)
+	{
+		/* Move Cursol */
+		if (cs != os)
+		{
+			if(os == 6)
+			{
+#ifdef JP
+				c_put_str(TERM_WHITE, "決定する", 18, 35);
+#else
+				c_put_str(TERM_WHITE, "Accept", 18, 35);
+#endif
+			}
+			else if(os < 6)
+				c_put_str(TERM_WHITE, cur, 14 + os/2, 45 + 8 * (os%2));
+			
+			if(cs == 6)
+			{
+#ifdef JP
+				c_put_str(TERM_YELLOW, "決定する", 18, 35);
+#else
+				c_put_str(TERM_YELLOW, "Accept", 18, 35);
+#endif
+			}
+			else
+			{
+				/* Prepare a prompt */
+				sprintf(cur, "     %3d", cval[cs]);
+				c_put_str(TERM_YELLOW, cur, 14 + cs/2, 45 + 8 * (cs%2));
+			}
+			os = cs;
+		}
+		
+		/* Prompt for the minimum stats */
+		c = inkey();
+		if (c == 'Q') birth_quit();
+		if (c == 'S') return (FALSE);
+		if (c == ESCAPE) break;
+		if (c == ' ' || c == '\r')
+		{
+			if(cs == 6) break;
+			else cs++;
+		}
+		if (c == '8' || c == 'k')
+		{
+			if (cs-2 >= 0) cs -= 2;
+		}
+		if (c == '2' || c == 'j')
+		{
+			if (cs < 6) cs += 2;
+			if (cs > 6) cs = 6;
+		}
+		if (c == '4' || c == 'h')
+		{
+			if (cs > 0) cs--;
+		}
+		if (c == '6' || c == 'l')
+		{
+			if (cs < 6) cs++;
+		}
+		if (c == '-' || c == '<')
+		{
+			if (cs != 6)
+			{
+				if(cs%2)
+				{
+					if(cval[cs] > cval[cs-1])
+					{
+						cval[cs]--;
+						os = 127;
+					}
+				}
+				else
+				{
+					if(cval[cs] > mval[cs])
+					{
+						cval[cs]--;
+						os = 127;
+					}
+				}
+			}
+		}
+		if (c == '+' || c == '>')
+		{
+			if (cs != 6)
+			{
+				if(cs%2)
+				{
+					if(cval[cs] < mval[cs])
+					{
+						cval[cs]++;
+						os = 127;
+					}
+				}
+				else
+				{
+					if(cval[cs] < cval[cs+1])
+					{
+						cval[cs]++;
+						os = 127;
+					}
+				}
+			}
+		}
+		if (c == 'm')
+		{
+			if(cs != 6)
+			{
+				if(cs%2)
+				{
+					if(cval[cs] < mval[cs])
+					{
+						cval[cs] = mval[cs];
+						os = 127;
+					}
+				}
+				else
+				{
+					if(cval[cs] < cval[cs+1])
+					{
+						cval[cs] = cval[cs+1];
+						os = 127;
+					}
+				}
+			}
+		}
+		if (c == 'n')
+		{
+			if(cs != 6)
+			{
+				if(cs%2)
+				{
+					if(cval[cs] > cval[cs-1])
+					{
+						cval[cs] = cval[cs-1];
+						os = 255;
+					}
+				}
+				else
+				{
+					if(cval[cs] > mval[cs])
+					{
+						cval[cs] = mval[cs];
+						os = 255;
+					}
+				}
+			}
+		}
+		if (c == '?') do_cmd_help();
+		else if (c == '=')
+		{
+			screen_save();
+#ifdef JP
+			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
+#else
+			do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
+#endif
+
+			screen_load();
+		}
+		else bell();
+	}
+
+	/* Input the minimum stats */
+	for (i = 0; i < 6; i++)
+	{
+		/* Save the minimum stat */
+		chara_limit[i] = (cval[i] > 0) ? cval[i] : 0;
+	}
+	return TRUE;
+}
+#endif
 
 /*
  * Helper function for 'player_birth()'
@@ -4149,7 +5053,7 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
  */
 static bool player_birth_aux(void)
 {
-	int i, j, k, m, n, v;
+	int i, k, n, v, cs, os;
 
 	int mode = 0;
 
@@ -4168,7 +5072,7 @@ static bool player_birth_aux(void)
 	char b1 = '[';
 	char b2 = ']';
 
-	char buf[80];
+	char buf[80], cur[80];
 	char inp[80];
 
 #ifdef USE_SCRIPT
@@ -4183,25 +5087,25 @@ static bool player_birth_aux(void)
 
 	/* Title everything */
 #ifdef JP
-put_str("名前  :", 1,26);
+	put_str("名前  :", 1,26);
 #else
-		put_str("Name  :", 1,26);
+	put_str("Name  :", 1,26);
 #endif
 
 #ifdef JP
-put_str("性別        :", 3, 1);
+	put_str("性別        :", 3, 1);
 #else
 	put_str("Sex         :", 3, 1);
 #endif
 
 #ifdef JP
-put_str("種族        :", 4, 1);
+	put_str("種族        :", 4, 1);
 #else
 	put_str("Race        :", 4, 1);
 #endif
 
 #ifdef JP
-put_str("職業        :", 5, 1);
+	put_str("職業        :", 5, 1);
 #else
 	put_str("Class       :", 5, 1);
 #endif
@@ -4215,23 +5119,9 @@ put_str("職業        :", 5, 1);
 
 	/* Display some helpful information */
 #ifdef JP
-	Term_putstr(9,  9, -1, TERM_WHITE,
-		"以下の質問に答えて下さい。回答は表示されている選択肢の中から");
-	Term_putstr(9, 10, -1, TERM_WHITE,
-		"選んで下さい。回答選択時に 'Q' を押すとゲームを終了、'S' を ");
-	Term_putstr(9, 11, -1, TERM_WHITE,
-		"押すと初めからやり直し、'?' を押すとヘルプが表示されます。");
-	Term_putstr(9, 12, -1, TERM_WHITE,
-		"'Q' と 'S' は大文字で入力して下さい。                       ");
+	put_str("キャラクターを作成します。('S'やり直す, 'Q'終了, '?'ヘルプ)", 8, 10);
 #else
-	Term_putstr(5,  9, -1, TERM_WHITE,
-		"Please answer the following questions.  Most of the questions");
-	Term_putstr(5, 10, -1, TERM_WHITE,
-		"display a set of standard answers, and many will also accept");
-	Term_putstr(5, 11, -1, TERM_WHITE,
-		"some special responses, including 'Q' to quit, 'S' to restart,");
-	Term_putstr(5, 12, -1, TERM_WHITE,
-		"and '?' for help.  Note that 'Q' and 'S' must be capitalized.");
+	put_str("Make your charactor. ('S' Restart, 'Q' Quit, '?' Help)", 8, 10);
 #endif
 
 
@@ -4246,18 +5136,16 @@ put_str("職業        :", 5, 1);
 		return FALSE;
 
 	/* Clean up */
-	clear_from(15);
+	clear_from(10);
 #endif /* USE_SCRIPT */
 
 	/*** Player sex ***/
 
 	/* Extra info */
 #ifdef JP
-	Term_putstr(9, 14, -1, TERM_WHITE,
-		"《性別》の違いはゲーム上ほとんど影響を及ぼしません。");
+	put_str("注意：《性別》の違いはゲーム上ほとんど影響を及ぼしません。", 23, 5);
 #else
-	Term_putstr(5, 14, -1, TERM_WHITE,
-		"Your 'sex' does not have any significant gameplay effects.");
+	put_str("Note: Your 'sex' does not have any significant gameplay effects.", 23, 5);
 #endif
 
 
@@ -4265,50 +5153,100 @@ put_str("職業        :", 5, 1);
 	for (n = 0; n < MAX_SEXES; n++)
 	{
 		/* Analyze */
-		p_ptr->psex = n;
-		sp_ptr = &sex_info[p_ptr->psex];
+		sp_ptr = &sex_info[n];
 		str = sp_ptr->title;
 
 
 		/* Display */
 #ifdef JP
-sprintf(buf, "%c%c%s", I2A(n), p2, str);
+		sprintf(buf, "%c%c%s", I2A(n), p2, str);
 #else
 		sprintf(buf, "%c%c %s", I2A(n), p2, str);
 #endif
-
-		put_str(buf, 17 + (n/5), 2 + 15 * (n%5));
+		put_str(buf, 12 + (n/5), 2 + 15 * (n%5));
 	}
 
-	/* Choose */
-	while (1)
-	{
 #ifdef JP
-sprintf(buf, "性別を選んで下さい (%c-%c) '*'でランダム, '='で初期オプション設定: ", I2A(0), I2A(n-1));
+	sprintf(cur, "%c%c%s", '*', p2, "ランダム");
 #else
-		sprintf(buf, "Choose a sex (%c-%c), * for random, or = for options: ", I2A(0), I2A(n-1));
+	sprintf(cur, "%c%c %s", '*', p2, "Random");
 #endif
 
-		put_str(buf, 16, 2);
-		c = inkey();
-		if (c == 'Q')
+	/* Choose */
+	k = -1;
+	cs = 0;
+	os = MAX_SEXES;
+	while (1)
+	{
+		if (cs != os)
 		{
-			birth_quit();
+			put_str(cur, 12 + (os/5), 2 + 15 * (os%5));
+			if(cs == MAX_SEXES)
+#ifdef JP
+				sprintf(cur, "%c%c%s", '*', p2, "ランダム");
+#else
+				sprintf(cur, "%c%c %s", '*', p2, "Random");
+#endif
+			else
+			{
+				sp_ptr = &sex_info[cs];
+				str = sp_ptr->title;
+#ifdef JP
+				sprintf(cur, "%c%c%s", I2A(cs), p2, str);
+#else
+				sprintf(cur, "%c%c %s", I2A(cs), p2, str);
+#endif
+			}
+			c_put_str(TERM_YELLOW, cur, 12 + (cs/5), 2 + 15 * (cs%5));
+			os = cs;
 		}
+
+		if (k >= 0) break;
+
+#ifdef JP
+		sprintf(buf, "性別を選んで下さい (%c-%c) ('='初期オプション設定): ", I2A(0), I2A(n-1));
+#else
+		sprintf(buf, "Choose a sex (%c-%c) ('=' for options): ", I2A(0), I2A(n-1));
+#endif
+
+		put_str(buf, 10, 10);
+		c = inkey();
+		if (c == 'Q') birth_quit();
 		if (c == 'S') return (FALSE);
+		if (c == ' ' || c == '\r')
+		{
+			if(cs == MAX_SEXES)
+				k = rand_int(MAX_SEXES);
+			else
+				k = cs;
+			break;
+		}
 		if (c == '*')
 		{
 			k = rand_int(MAX_SEXES);
 			break;
 		}
+		if (c == '4')
+		{
+			if (cs > 0) cs--;
+		}
+		if (c == '6')
+		{
+			if (cs < MAX_SEXES) cs++;
+		}
 		k = (islower(c) ? A2I(c) : -1);
-		if ((k >= 0) && (k < n)) break;
+		if ((k >= 0) && (k < MAX_SEXES))
+		{
+			cs = k;
+			continue;
+		}
+		else k = -1;
 		if (c == '?') do_cmd_help();
 		else if (c == '=')
 		{
 			screen_save();
 #ifdef JP
-do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
+			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 #else
 			do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
 #endif
@@ -4328,19 +5266,20 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 	c_put_str(TERM_L_BLUE, str, 3, 15);
 
 	/* Clean up */
-	clear_from(15);
+	clear_from(10);
 
+	/* Choose the players race */
+	p_ptr->prace = 0;
 	while(1)
 	{
 		char temp[80*9];
 		cptr t;
 
-		/* Choose the players race */
 		if (!get_player_race()) return FALSE;
 
-		clear_from(14);
+		clear_from(10);
 
-		roff_to_buf(race_jouhou[p_ptr->prace], 78, temp);
+		roff_to_buf(race_jouhou[p_ptr->prace], 74, temp);
 		t = temp;
 
 		for (i = 0; i< 9; i++)
@@ -4349,7 +5288,7 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 				break; 
 			else
 			{
-				prt(t, 15+i, 1);
+				prt(t, 12+i, 3);
 				t += strlen(t) + 1;
 			}
 		}
@@ -4358,24 +5297,24 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 #else
 		if (get_check("Are you sure? ")) break;
 #endif
-		clear_from(15);
+		clear_from(10);
 		c_put_str(TERM_WHITE, "              ", 4, 15);
 	}
 
 	/* Clean up */
-	clear_from(15);
+	clear_from(10);
 
 	/* Choose the players class */
+	p_ptr->pclass = 0;
 	while(1)
 	{
 		char temp[80*9];
 		cptr t;
 
-		/* Choose the players race */
 		if (!get_player_class()) return FALSE;
 
-		clear_from(14);
-		roff_to_buf(class_jouhou[p_ptr->pclass], 78, temp);
+		clear_from(10);
+		roff_to_buf(class_jouhou[p_ptr->pclass], 74, temp);
 		t = temp;
 
 		for (i = 0; i< 9; i++)
@@ -4384,7 +5323,7 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 				break; 
 			else
 			{
-				prt(t, 15+i, 1);
+				prt(t, 12+i, 3);
 				t += strlen(t) + 1;
 			}
 		}
@@ -4401,15 +5340,15 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 	if (!get_player_realms()) return FALSE;
 
 	/* Choose the players seikaku */
+	p_ptr->pseikaku = 0;
 	while(1)
 	{
 		char temp[80*8];
 		cptr t;
 
-		/* Choose the players race */
 		if (!get_player_seikaku()) return FALSE;
 
-		clear_from(15);
+		clear_from(10);
 		roff_to_buf(seikaku_jouhou[p_ptr->pseikaku], 78, temp);
 		t = temp;
 
@@ -4419,7 +5358,7 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 				break; 
 			else
 			{
-				prt(t, 16+i, 1);
+				prt(t, 12+i, 3);
 				t += strlen(t) + 1;
 			}
 		}
@@ -4433,11 +5372,14 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 	}
 
 	/* Clean up */
-	clear_from(15);
+	clear_from(10);
+	put_str("                                   ", 3, 40);
+	put_str("                                   ", 4, 40);
+	put_str("                                   ", 5, 40);
 
 	screen_save();
 #ifdef JP
-do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
+	do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 #else
 	do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
 #endif
@@ -4457,219 +5399,12 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 	/* Initialize */
 	if (autoroller)
 	{
-		int mval[6];
-
-		/* Clean up */
-		clear_from(12);
-
-		/* Prompt for the minimum stats */
-#ifdef JP
-		put_str("能力値の最小値を入力して下さい: ", 14, 2);
-#else
-		put_str("Enter minimum attribute for: ", 14, 2);
-#endif
-
-
-		/* Output the maximum stats */
-		for (i = 0; i < 6; i++)
-		{
-			/* Reset the "success" counter */
-			stat_match[i] = 0;
-
-			/* Race/Class bonus */
-			j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
-
-			/* Obtain the "maximal" stat */
-			m = adjust_stat(17, j, TRUE);
-
-			/* Save the maximum */
-			mval[i] = m;
-
-			/* Extract a textual format */
-			/* cnv_stat(m, inp); */
-
-			/* Above 18 */
-			if (m > 18)
-			{
-#ifdef JP
-				sprintf(inp, "(最大値 18/%02d):", (m - 18));
-#else
-				sprintf(inp, "(Max of 18/%02d):", (m - 18));
-#endif
-
-			}
-
-			/* From 3 to 18 */
-			else
-			{
-#ifdef JP
-				sprintf(inp, "(最大値 %2d):", m);
-#else
-				sprintf(inp, "(Max of %2d):", m);
-#endif
-
-			}
-
-			/* Prepare a prompt */
-			sprintf(buf, "%-5s%-20s", stat_names[i], inp);
-
-			/* Dump the prompt */
-			put_str(buf, 16 + i, 5);
-		}
-
-		/* Input the minimum stats */
-		for (i = 0; i < 6; i++)
-		{
-			/* Get a minimum stat */
-			while (TRUE)
-			{
-				char *s;
-
-				/* Move the cursor */
-				put_str("", 16 + i, 30);
-
-				/* Default */
-				strcpy(inp, "");
-
-				/* Get a response (or escape) */
-				if (!askfor_aux(inp, 8)) inp[0] = '\0';
-
-				/* Hack -- add a fake slash */
-				strcat(inp, "/");
-
-				/* Hack -- look for the "slash" */
-				s = strchr(inp, '/');
-
-				/* Hack -- Nuke the slash */
-				*s++ = '\0';
-
-				/* Hack -- Extract an input */
-				v = atoi(inp) + atoi(s);
-
-				/* Break on valid input */
-				if (v <= mval[i]) break;
-			}
-
-			/* Save the minimum stat */
-			stat_limit[i] = (v > 0) ? v : 0;
-		}
+		if (!get_stat_limits()) return FALSE;
 	}
 
 	if (autochara)
 	{
-		int mval[6];
-		int max_percent, min_percent;
-
-		/* Clean up */
-		clear_from(10);
-
-		/* Prompt for the minimum stats */
-#ifdef JP
-		put_str("体格/地位の最小値/最大値を入力して下さい: ", 13, 2);
-#else
-		put_str("Enter minimum attribute for: ", 13, 2);
-#endif
-#ifdef JP
-		put_str("(注意 : 身長と体重の最大値/最小値ぎりぎりの値は非常に出現確率が低くなります。)", 14, 2);
-#else
-		put_str("Caution: Values near minimum or maximum is extremery rare.", 14, 2);
-#endif
-
-		if (p_ptr->psex == SEX_MALE)
-		{
-			max_percent = (int)(rp_ptr->m_b_ht+rp_ptr->m_m_ht*4-1) * 100 / (int)(rp_ptr->m_b_ht);
-			min_percent = (int)(rp_ptr->m_b_ht-rp_ptr->m_m_ht*4+1) * 100 / (int)(rp_ptr->m_b_ht);
-		}
-		else
-		{
-			max_percent = (int)(rp_ptr->f_b_ht+rp_ptr->f_m_ht*4-1) * 100 / (int)(rp_ptr->f_b_ht);
-			min_percent = (int)(rp_ptr->f_b_ht-rp_ptr->f_m_ht*4+1) * 100 / (int)(rp_ptr->f_b_ht);
-		}
-
-		/* Output the maximum stats */
-		for (i = 0; i < 6; i++)
-		{
-			/* Obtain the "maximal" stat */
-			switch (i)
-			{
-				case 0: if (p_ptr->psex == SEX_MALE) m = rp_ptr->m_b_ht-rp_ptr->m_m_ht*4+1; else m = rp_ptr->f_b_ht-rp_ptr->f_m_ht*4+1; break;
-				case 1: if (p_ptr->psex == SEX_MALE) m = rp_ptr->m_b_ht+rp_ptr->m_m_ht*4-1; else m = rp_ptr->f_b_ht+rp_ptr->f_m_ht*4-1; break;
-				case 2: if (p_ptr->psex == SEX_MALE) m = (rp_ptr->m_b_wt * min_percent / 100) - (rp_ptr->m_m_wt * min_percent / 75) +1; else m = (rp_ptr->f_b_wt * min_percent / 100) - (rp_ptr->f_m_wt * min_percent / 75) +1; break;
-				case 3: if (p_ptr->psex == SEX_MALE) m = (rp_ptr->m_b_wt * max_percent / 100) + (rp_ptr->m_m_wt * max_percent / 75) -1; else m = (rp_ptr->f_b_wt * max_percent / 100) + (rp_ptr->f_m_wt * max_percent / 75) -1; break;
-				case 4: m = 1;break;
-				case 5: m = 100;break;
-				default: m = 1;break;
-			}
-
-			/* Save the maximum */
-			mval[i] = m;
-
-			/* Extract a textual format */
-			/* cnv_stat(m, inp); */
-
-			if (i % 2)
-			{
-#ifdef JP
-				sprintf(inp, "最大値 (%3d 以下):", m);
-#else
-				sprintf(inp, "(Max of %3d):", m);
-#endif
-			}
-
-			else
-			{
-#ifdef JP
-				sprintf(inp, "最小値 (%3d 以上):", m);
-#else
-				sprintf(inp, "(Min of %3d):", m);
-#endif
-
-			}
-
-			/* Prepare a prompt */
-#ifdef JP
-			sprintf(buf, "%-13s%-20s", (i < 2 ? "身長(インチ)" : i < 4 ? "体重(ポンド)" : "地位"), inp);
-#else
-			sprintf(buf, "%-13s%-20s", (i < 2 ? "height" : i < 4 ? "wight" : "social class"), inp);
-#endif
-
-			/* Dump the prompt */
-			put_str(buf, 16 + i, 5);
-		}
-
-		/* Input the minimum stats */
-		for (i = 0; i < 6; i++)
-		{
-			/* Get a minimum stat */
-			while (TRUE)
-			{
-				/* Move the cursor */
-				put_str("", 16 + i, 37);
-
-				/* Default */
-				strcpy(inp, "");
-
-				/* Get a response (or escape) */
-				if (!askfor_aux(inp, 4)) strcpy(inp, format("%d",mval[i]));
-				if (inp[0] == '\0') strcpy(inp, format("%d",mval[i]));
-
-				/* Hack -- Extract an input */
-				v = atoi(inp);
-
-				/* Break on valid input */
-				if (i % 2)
-				{
-					if ((v <= mval[i]) && (v >= mval[i-1])) break;
-				}
-				else
-				{
-					if ((v >= mval[i]) && (v <= mval[i+1])) break;
-				}
-			}
-
-			/* Save the minimum stat */
-			chara_limit[i] = (v > 0) ? v : 0;
-		}
+		if (!get_chara_limits()) return FALSE;
 	}
 
 #endif /* ALLOW_AUTOROLLER */
@@ -4682,23 +5417,15 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 
 	/* Extra info */
 #ifdef JP
-	Term_putstr(5, 14, -1, TERM_WHITE,
-"必須のクエスト(オベロン及び混沌のサーペント)に加えて、追加のクエストの");
-	Term_putstr(5, 15, -1, TERM_WHITE,
-"数を設定することが出来ます。");
-	Term_putstr(5, 17, -1, TERM_WHITE,
-"追加クエストを行ないたくない場合は '0'を入力して下さい。");
-	Term_putstr(5, 18, -1, TERM_WHITE,
-"ランダムに決定するには'*'を入力して下さい。");
+	put_str("必須のクエスト(オベロン及び混沌のサーペント)に加えて、追加のクエストの", 10, 5);
+	put_str("数を設定することが出来ます。", 11, 5);
+	put_str("追加クエストを行ないたくない場合は '0'を入力して下さい。", 12, 5);
+	put_str("ランダムに決定するには'*'を入力して下さい。", 13, 5);
 #else
-	Term_putstr(5, 14, -1, TERM_WHITE,
-		    "You can enter the number of quests you'd like to perform in addition");
-	Term_putstr(5, 15, -1, TERM_WHITE,
-		    "to the two obligatory ones ( Oberon and the Serpent of Chaos )");
-	Term_putstr(5, 17, -1, TERM_WHITE,
-		    "In case you do not want any additional quests, just enter 0");
-	Term_putstr(5, 18, -1, TERM_WHITE,
-		    "If you want a random number of random quests, just enter *");
+	put_str("You can enter the number of quests you'd like to perform in addition", 10, 5);
+	put_str("to the two obligatory ones ( Oberon and the Serpent of Chaos )", 11, 5);
+	put_str("In case you do not want any additional quests, just enter 0", 12, 5);
+	put_str("If you want a random number of random quests, just enter *", 13, 5);
 #endif
 
 	/* Ask the number of additional quests */
@@ -4706,9 +5433,9 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 	{
 
 #ifdef JP
-put_str(format("追加クエストの数 (%u以下) ", MAX_RANDOM_QUEST - MIN_RANDOM_QUEST + 1), 20, 2);
+		put_str(format("追加クエストの数 (%u以下) ", MAX_RANDOM_QUEST - MIN_RANDOM_QUEST + 1), 15, 5);
 #else
-		put_str(format("Number of additional quests? (<%u) ", MAX_RANDOM_QUEST - MIN_RANDOM_QUEST + 2), 20, 2);
+		put_str(format("Number of additional quests? (<%u) ", MAX_RANDOM_QUEST - MIN_RANDOM_QUEST + 2), 15, 5);
 #endif
 
 
@@ -4716,13 +5443,19 @@ put_str(format("追加クエストの数 (%u以下) ", MAX_RANDOM_QUEST - MIN_RANDOM_QUEST
 		while (TRUE)
 		{
 			/* Move the cursor */
-			put_str("", 20, 37);
+			put_str("", 15, 40);
 
 			/* Default */
 			strcpy(inp, "10");
 
 			/* Get a response (or escape) */
 			if (!askfor_aux(inp, 2)) inp[0] = '\0';
+
+			/* Quit */
+			if (inp[0] == 'Q') birth_quit();
+
+			/* Start over */
+			if (inp[0] == 'S') return (FALSE);
 
 			/* Check for random number of quests */
 			if (inp[0] == '*')
@@ -4742,7 +5475,7 @@ put_str(format("追加クエストの数 (%u以下) ", MAX_RANDOM_QUEST - MIN_RANDOM_QUEST
 	}
 
 	/* Clear */
-	clear_from(15);
+	clear_from(10);
 
 	/* Init the random quests */
 	init_flags = INIT_ASSIGN;
@@ -4816,7 +5549,7 @@ put_str(format("追加クエストの数 (%u以下) ", MAX_RANDOM_QUEST - MIN_RANDOM_QUEST
 	p_ptr->inside_quest = 0;
 
 	/* Clear */
-	clear_from(14);
+	clear_from(10);
 
 	/* Reset turn; before auto-roll and after choosing race */
 	if ((p_ptr->prace == RACE_VAMPIRE) ||
@@ -4906,11 +5639,19 @@ put_str(format("追加クエストの数 (%u以下) ", MAX_RANDOM_QUEST - MIN_RANDOM_QUEST
 			/* Put the minimal stats */
 			for (i = 0; i < 6; i++)
 			{
+				int j, m;
+
 				/* Label stats */
 				put_str(stat_names[i], 3+i, col);
 
+				/* Race/Class bonus */
+				j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
+
+				/* Obtain the current stat */
+				m = adjust_stat(stat_limit[i], j, TRUE);
+
 				/* Put the stat */
-				cnv_stat(stat_limit[i], buf);
+				cnv_stat(m, buf);
 				c_put_str(TERM_L_BLUE, buf, 3+i, col+5);
 			}
 		}
@@ -5060,33 +5801,33 @@ put_str(format("追加クエストの数 (%u以下) ", MAX_RANDOM_QUEST - MIN_RANDOM_QUEST
 			Term_gotoxy(2, 23);
 			Term_addch(TERM_WHITE, b1);
 #ifdef JP
-Term_addstr(-1, TERM_WHITE, "'r'で次の数値");
+			Term_addstr(-1, TERM_WHITE, "'r' 次の数値");
 #else
-			Term_addstr(-1, TERM_WHITE, "'r' to reroll");
+			Term_addstr(-1, TERM_WHITE, "'r'eroll");
 #endif
 
 #ifdef JP
-if (prev) Term_addstr(-1, TERM_WHITE, ", 'p'で前の数値");
+			if (prev) Term_addstr(-1, TERM_WHITE, ", 'p' 前の数値");
 #else
-			if (prev) Term_addstr(-1, TERM_WHITE, ", 'p' for prev");
+			if (prev) Term_addstr(-1, TERM_WHITE, ", 'p'previous");
 #endif
 
 #ifdef JP
-if (mode) Term_addstr(-1, TERM_WHITE, ", 'h' でその他の情報");
+			if (mode) Term_addstr(-1, TERM_WHITE, ", 'h' その他の情報");
 #else
-			if (mode) Term_addstr(-1, TERM_WHITE, ", 'h' for Misc.");
+			if (mode) Term_addstr(-1, TERM_WHITE, ", 'h' Misc.");
 #endif
 
 #ifdef JP
-else Term_addstr(-1, TERM_WHITE, ", 'h' で生い立ちを表示");
+			else Term_addstr(-1, TERM_WHITE, ", 'h' 生い立ちを表示");
 #else
-			else Term_addstr(-1, TERM_WHITE, ", 'h' for History");
+			else Term_addstr(-1, TERM_WHITE, ", 'h'istory");
 #endif
 
 #ifdef JP
-Term_addstr(-1, TERM_WHITE, ", ESCでこの数値に決定");
+			Term_addstr(-1, TERM_WHITE, ", Enter この数値に決定");
 #else
-			Term_addstr(-1, TERM_WHITE, ", or ESC to accept");
+			Term_addstr(-1, TERM_WHITE, ", or Enter to accept");
 #endif
 
 			Term_addch(TERM_WHITE, b2);
@@ -5095,16 +5836,13 @@ Term_addstr(-1, TERM_WHITE, ", ESCでこの数値に決定");
 			c = inkey();
 
 			/* Quit */
-			if (c == 'Q')
-			{
-				birth_quit();
-			}
+			if (c == 'Q') birth_quit();
 
 			/* Start over */
 			if (c == 'S') return (FALSE);
 
 			/* Escape accepts the roll */
-			if (c == ESCAPE) break;
+			if (c == '\r' || c == ESCAPE) break;
 
 			/* Reroll this character */
 			if ((c == ' ') || (c == 'r')) break;
@@ -5133,7 +5871,7 @@ Term_addstr(-1, TERM_WHITE, ", ESCでこの数値に決定");
 			{
 				screen_save();
 #ifdef JP
-do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
+				do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 #else
 				do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
 #endif
@@ -5152,7 +5890,7 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 		}
 
 		/* Are we done? */
-		if (c == ESCAPE) break;
+		if (c == '\r' || c == ESCAPE) break;
 
 		/* Save this for the "previous" character */
 		save_prev_data();
@@ -5174,23 +5912,23 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 
 	get_virtues();
 
-        /* Set the recall dungeon accordingly */
-        if (vanilla_town)
-        {
+	/* Set the recall dungeon accordingly */
+	if (vanilla_town)
+	{
 		dungeon_type = 0;
 		p_ptr->recall_dungeon = DUNGEON_ANGBAND;
-        }
-        else
-        {
-                dungeon_type = 0;
+	}
+	else
+	{
+		dungeon_type = 0;
 		p_ptr->recall_dungeon = DUNGEON_GALGALS;
-        }
+	}
 
 	/* Prompt for it */
 #ifdef JP
-	prt("[ 'Q' で中断, 'S' で初めから, ESC でゲーム開始 ]", 23, 14);
+	prt("[ 'Q' 中断, 'S' 初めから, Enter ゲーム開始 ]", 23, 14);
 #else
-	prt("['Q' to suicide, 'S' to start over, or ESC to continue]", 23, 10);
+	prt("['Q'uit, 'S'tart over, or Enter to continue]", 23, 10);
 #endif
 
 
@@ -5198,10 +5936,7 @@ do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 	c = inkey();
 
 	/* Quit */
-	if (c == 'Q')
-	{
-		birth_quit();
-	}
+	if (c == 'Q') birth_quit();
 
 	/* Start over */
 	if (c == 'S') return (FALSE);
