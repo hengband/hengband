@@ -2119,8 +2119,15 @@ bool save_floor(saved_floor_type *sf_ptr, u32b mode)
 	/* New savefile */
 	sprintf(floor_savefile, "%s.F%02d", savefile, (int)sf_ptr->savefile_id);
 
+	/* Grab permissions */
+	safe_setuid_grab();
+
 	/* Remove it */
 	fd_kill(floor_savefile);
+
+	/* Drop permissions */
+	safe_setuid_drop();
+
 
 	/* Attempt to save the player */
 
@@ -2130,8 +2137,14 @@ bool save_floor(saved_floor_type *sf_ptr, u32b mode)
 	/* File type is "SAVE" */
 	FILE_TYPE(FILE_TYPE_SAVE);
 
+	/* Grab permissions */
+	safe_setuid_grab();
+
 	/* Create the savefile */
 	fd = fd_make(floor_savefile, 0644);
+
+	/* Drop permissions */
+	safe_setuid_drop();
 
 	/* File is okay */
 	if (fd >= 0)
@@ -2139,8 +2152,14 @@ bool save_floor(saved_floor_type *sf_ptr, u32b mode)
 		/* Close the "fd" */
 		(void)fd_close(fd);
 
+		/* Grab permissions */
+		safe_setuid_grab();
+
 		/* Open the savefile */
 		fff = my_fopen(floor_savefile, "wb");
+
+		/* Drop permissions */
+		safe_setuid_drop();
 
 		/* Successful open */
 		if (fff)
@@ -2153,7 +2172,16 @@ bool save_floor(saved_floor_type *sf_ptr, u32b mode)
 		}
 
 		/* Remove "broken" files */
-		if (!ok) (void)fd_kill(floor_savefile);
+		if (!ok)
+		{
+			/* Grab permissions */
+			safe_setuid_grab();
+
+			(void)fd_kill(floor_savefile);
+
+			/* Drop permissions */
+			safe_setuid_drop();
+		}
 	}
 
 	if (!(mode & SLF_SECOND))

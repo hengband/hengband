@@ -7333,8 +7333,14 @@ errr counts_write(int where, u32b count)
 		/* File type is "DATA" */
 		FILE_TYPE(FILE_TYPE_DATA);
 
+		/* Grab permissions */
+		safe_setuid_grab();
+
 		/* Create a new high score file */
 		fd = fd_make(buf, 0644);
+
+		/* Drop permissions */
+		safe_setuid_drop();
 	}
 
 	/* Grab permissions */
