@@ -235,7 +235,7 @@ put_str("name              Lv  SP      name              Lv  SP ", y, x + 5);
 
 					/* Dump the spell --(-- */
 					strcat(psi_desc, format(" %-18s%2d %3d",
-						do_spell(spell_id_from(REALM_HISSATSU, i), SPELL_NAME),
+						do_spell(REALM_HISSATSU, i, SPELL_NAME),
 						spell.slevel, spell.smana));
 					prt(psi_desc, y + (line%17) + (line >= 17), x+(line/17)*30);
 					prt("", y + (line%17) + (line >= 17) + 1, x+(line/17)*30);
@@ -293,9 +293,9 @@ put_str("name              Lv  SP      name              Lv  SP ", y, x + 5);
 
 			/* Prompt */
 #ifdef JP
-			(void) strnfmt(tmp_val, 78, "%sを使いますか？", do_spell(spell_id_from(REALM_HISSATSU, j), SPELL_NAME));
+			(void) strnfmt(tmp_val, 78, "%sを使いますか？", do_spell(REALM_HISSATSU, j, SPELL_NAME));
 #else
-			(void)strnfmt(tmp_val, 78, "Use %s? ", do_spell(spell_id_from(REALM_HISSATSU, j), SPELL_NAME));
+			(void)strnfmt(tmp_val, 78, "Use %s? ", do_spell(REALM_HISSATSU, j, SPELL_NAME));
 #endif
 
 
@@ -404,7 +404,7 @@ msg_print("ＭＰが足りません。");
 	sound(SOUND_ZAP);
 
 	/* Cast the spell */
-	if (!do_spell(spell_id_from(REALM_HISSATSU, n), SPELL_CAST)) return;
+	if (!do_spell(REALM_HISSATSU, n, SPELL_CAST)) return;
 
 	/* Take a turn */
 	energy_use = 100;
@@ -519,9 +519,9 @@ s = "読める書がない。";
 		p_ptr->spell_learned1 |= (1L << i);
 		p_ptr->spell_worked1 |= (1L << i);
 #ifdef JP
-		msg_format("%sの技を覚えた。", do_spell(spell_id_from(REALM_HISSATSU, i), SPELL_NAME));
+		msg_format("%sの技を覚えた。", do_spell(REALM_HISSATSU, i, SPELL_NAME));
 #else
-		msg_format("You have learned the special attack of %s.", do_spell(spell_id_from(REALM_HISSATSU, i), SPELL_NAME));
+		msg_format("You have learned the special attack of %s.", do_spell(REALM_HISSATSU, i, SPELL_NAME));
 #endif
 		for (j = 0; j < 64; j++)
 		{

@@ -757,7 +757,7 @@
 
 
 /*
- * Mode constant for do_spell() and do_singing()
+ * Mode constant for do_spell()
  */
 #define SPELL_NAME   0
 #define SPELL_DESC   1

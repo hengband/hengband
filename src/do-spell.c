@@ -827,7 +827,7 @@ static s16b technique_id_list[][32] =
 /*
  * Get unique spell id from realm and spell number (0-31) in the realm
  */
-int spell_id_from(int realm, int spell)
+static int spell_id_from(int realm, int spell)
 {
 	if (is_magic(realm))
 		return (int)spell_id_list[realm - 1][spell];
@@ -1958,691 +1958,6 @@ static bool cast_summon_greater_demon(void)
 
 
 /*
- * Do everything for each spell
- */
-cptr do_singing(int song, int mode)
-{
-	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
-	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
-	bool cont = (mode == SPELL_CONT) ? TRUE : FALSE;
-	bool stop = (mode == SPELL_STOP) ? TRUE : FALSE;
-
-#ifdef JP
-	static const char s_dam[] = "損傷:";
-#else
-	static const char s_dam[] = "dam ";
-#endif
-
-	int plev = p_ptr->lev;
-
-
-	switch (song)
-	{
-	case MUSIC_SLOW:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("ゆっくりとしたメロディを口ずさみ始めた．．．");
-#else
-			msg_print("You start humming a slow, steady melody...");
-#endif
-		}
-
-		{
-			int power = plev;
-
-			if (info) return info_power(power);
-
-			if (cont)
-			{
-				slow_monsters();
-			}
-		}
-		break;
-
-	case MUSIC_BLESS:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("厳かなメロディを奏で始めた．．．");
-#else
-			msg_print("The holy power of the Music of the Ainur enters you...");
-#endif
-		}
-
-		if (stop)
-		{
-			if (!p_ptr->blessed)
-			{
-#ifdef JP
-				msg_print("高潔な気分が消え失せた。");
-#else
-				msg_print("The prayer has expired.");
-#endif
-			}
-		}
-
-		break;
-
-	case MUSIC_STUN:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("眩惑させるメロディを奏で始めた．．．");
-#else
-			msg_print("You weave a pattern of sounds to bewilder and daze...");
-#endif
-		}
-
-		{
-			int dice = plev / 10;
-			int sides = 2;
-
-			if (info) return info_power_dice(dice, sides);
-
-			if (cont)
-			{
-				stun_monsters(damroll(dice, sides));
-			}
-		}
-		break;
-
-	case MUSIC_L_LIFE:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("歌を通して体に活気が戻ってきた．．．");
-#else
-			msg_print("Life flows through you as you sing a song of healing...");
-#endif
-		}
-
-		{
-			int dice = 2;
-			int sides = 6;
-
-			if (info) return info_heal(dice, sides, 0);
-
-			if (cont)
-			{
-				hp_player(damroll(dice, sides));
-			}
-		}
-		break;
-
-	case MUSIC_FEAR:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("おどろおどろしいメロディを奏で始めた．．．");
-#else
-			msg_print("You start weaving a fearful pattern...");
-#endif
-		}
-
-		{
-			int power = plev;
-
-			if (info) return info_power(power);
-
-			if (cont)
-			{
-				project_hack(GF_TURN_ALL, power);
-			}
-		}
-		break;
-
-	case MUSIC_HERO:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("激しい戦いの歌を歌った．．．");
-#else
-			msg_print("You start singing a song of intense fighting...");
-#endif
-
-			(void)hp_player(10);
-			(void)set_afraid(0);
-
-			/* Recalculate hitpoints */
-			p_ptr->update |= (PU_HP);
-		}
-
-		if (stop)
-		{
-			if (!p_ptr->hero)
-			{
-#ifdef JP
-				msg_print("ヒーローの気分が消え失せた。");
-#else
-				msg_print("The heroism wears off.");
-#endif
-				/* Recalculate hitpoints */
-				p_ptr->update |= (PU_HP);
-			}
-		}
-
-		break;
-
-	case MUSIC_DETECT:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("静かな音楽が感覚を研ぎ澄まさせた．．．");
-#else
-			msg_print("Your quiet music sharpens your sense of hearing...");
-#endif
-
-			/* Hack -- Initialize the turn count */
-			p_ptr->magic_num1[2] = 0;
-		}
-
-		{
-			int rad = DETECT_RAD_DEFAULT;
-
-			if (info) return info_radius(rad);
-
-			if (cont)
-			{
-				int count = p_ptr->magic_num1[2];
-
-				if (count >= 19) wiz_lite(FALSE);
-				if (count >= 11)
-				{
-					map_area(rad);
-					if (plev > 39 && count < 19)
-						p_ptr->magic_num1[2] = count + 1;
-				}
-				if (count >= 6)
-				{
-					/* There are too many hidden treasure.  So... */
-					/* detect_treasure(rad); */
-					detect_objects_gold(rad);
-					detect_objects_normal(rad);
-
-					if (plev > 24 && count < 11)
-						p_ptr->magic_num1[2] = count + 1;
-				}
-				if (count >= 3)
-				{
-					detect_monsters_invis(rad);
-					detect_monsters_normal(rad);
-
-					if (plev > 19 && count < 6)
-						p_ptr->magic_num1[2] = count + 1;
-				}
-				detect_traps(rad, TRUE);
-				detect_doors(rad);
-				detect_stairs(rad);
-
-				if (plev > 14 && count < 3)
-					p_ptr->magic_num1[2] = count + 1;
-			}
-		}
-		break;
-
-	case MUSIC_PSI:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("精神を捻じ曲げる歌を歌った．．．");
-#else
-			msg_print("You start singing a song of soul in pain...");
-#endif
-		}
-
-		{
-			int dice = 1;
-			int sides = plev * 3 / 2;
-
-			if (info) return info_damage(dice, sides, 0);
-
-			if (cont)
-			{
-				project_hack(GF_PSI, damroll(dice, sides));
-			}
-		}
-		break;
-
-	case MUSIC_ID:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("この世界の知識が流れ込んできた．．．");
-#else
-			msg_print("You recall the rich lore of the world...");
-#endif
-		}
-
-		{
-			int rad = 1;
-
-			if (info) return info_radius(rad);
-
-			/*
-			 * 歌の開始時にも効果発動：
-			 * MP不足で鑑定が発動される前に歌が中断してしまうのを防止。
-			 */
-			if (cont || cast)
-			{
-				project(0, rad, py, px, 0, GF_IDENTIFY, PROJECT_ITEM, -1);
-			}
-		}
-		break;
-
-	case MUSIC_STEALTH:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("あなたの姿が景色にとけこんでいった．．．");
-#else
-			msg_print("Your song carries you beyond the sight of mortal eyes...");
-#endif
-		}
-
-		if (stop)
-		{
-			if (!p_ptr->tim_stealth)
-			{
-#ifdef JP
-				msg_print("姿がはっきりと見えるようになった。");
-#else
-				msg_print("You are no longer hided.");
-#endif
-			}
-		}
-
-		break;
-
-	case MUSIC_CONF:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("辺り一面に幻影が現れた．．．");
-#else
-			msg_print("You weave a pattern of sounds to beguile and confuse...");
-#endif
-		}
-
-		{
-			int power = plev * 2;
-
-			if (info) return info_power(power);
-
-			if (cont)
-			{
-				confuse_monsters(power);
-			}
-		}
-		break;
-
-	case MUSIC_SOUND:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("轟音が響いた．．．");
-#else
-			msg_print("The fury of the Downfall of Numenor lashes out...");
-#endif
-		}
-
-		{
-			int dice = 10 + plev / 5;
-			int sides = 7;
-
-			if (info) return info_damage(dice, sides, 0);
-
-			if (cont)
-			{
-				project_hack(GF_SOUND, damroll(dice, sides));
-			}
-		}
-		break;
-
-	case MUSIC_CHARM:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("安らかなメロディを奏で始めた．．．");
-#else
-			msg_print("You weave a slow, soothing melody of imploration...");
-#endif
-		}
-
-		{
-			int dice = 10 + plev / 15;
-			int sides = 6;
-
-			if (info) return info_power_dice(dice, sides);
-
-			if (cont)
-			{
-				charm_monsters(damroll(dice, sides));
-			}
-		}
-		break;
-
-	case MUSIC_WALL:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("粉砕するメロディを奏で始めた．．．");
-#else
-			msg_print("You weave a violent pattern of sounds to break wall.");
-#endif
-		}
-
-		{
-			/*
-			 * 歌の開始時にも効果発動：
-			 * MP不足で効果が発動される前に歌が中断してしまうのを防止。
-			 */
-			if (cont || cast)
-			{
-				project(0, 0, py, px,
-					0, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM | PROJECT_HIDE, -1);
-			}
-		}
-		break;
-
-	case MUSIC_RESIST:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("元素の力に対する忍耐の歌を歌った。");
-#else
-			msg_print("You sing a song of perseverance against powers...");
-#endif
-		}
-
-		if (stop)
-		{
-			if (!p_ptr->oppose_acid)
-			{
-#ifdef JP
-				msg_print("酸への耐性が薄れた気がする。");
-#else
-				msg_print("You feel less resistant to acid.");
-#endif
-			}
-
-			if (!p_ptr->oppose_elec)
-			{
-#ifdef JP
-				msg_print("電撃への耐性が薄れた気がする。");
-#else
-				msg_print("You feel less resistant to elec.");
-#endif
-			}
-
-			if (!p_ptr->oppose_fire)
-			{
-#ifdef JP
-				msg_print("火への耐性が薄れた気がする。");
-#else
-				msg_print("You feel less resistant to fire.");
-#endif
-			}
-
-			if (!p_ptr->oppose_cold)
-			{
-#ifdef JP
-				msg_print("冷気への耐性が薄れた気がする。");
-#else
-				msg_print("You feel less resistant to cold.");
-#endif
-			}
-
-			if (!p_ptr->oppose_pois)
-			{
-#ifdef JP
-				msg_print("毒への耐性が薄れた気がする。");
-#else
-				msg_print("You feel less resistant to pois.");
-#endif
-			}
-		}
-
-		break;
-
-	case MUSIC_SPEED:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("軽快な歌を口ずさみ始めた．．．");
-#else
-			msg_print("You start singing joyful pop song...");
-#endif
-		}
-
-		if (stop)
-		{
-			if (!p_ptr->fast)
-			{
-#ifdef JP
-				msg_print("動きの素早さがなくなったようだ。");
-#else
-				msg_print("You feel yourself slow down.");
-#endif
-			}
-		}
-
-		break;
-
-	case MUSIC_DISPEL:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("耐えられない不協和音が敵を責め立てた．．．");
-#else
-			msg_print("You cry out in an ear-wracking voice...");
-#endif
-		}
-
-		{
-			int m_sides = plev * 3;
-			int e_sides = plev * 3;
-
-			if (info) return format("%s1d%d+1d%d", s_dam, m_sides, e_sides);
-
-			if (cont)
-			{
-				dispel_monsters(randint1(m_sides));
-				dispel_evil(randint1(e_sides));
-			}
-		}
-		break;
-
-	case MUSIC_SARUMAN:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("優しく、魅力的な歌を口ずさみ始めた．．．");
-#else
-			msg_print("You start humming a gentle and attractive song...");
-#endif
-		}
-
-		{
-			int power = plev;
-
-			if (info) return info_power(power);
-
-			if (cont)
-			{
-				slow_monsters();
-				sleep_monsters();
-			}
-		}
-		break;
-
-	case MUSIC_QUAKE:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("破壊的な歌が響きわたった．．．");
-#else
-			msg_print("You weave a pattern of sounds to contort and shatter...");
-#endif
-		}
-
-		{
-			int rad = 10;
-
-			if (info) return info_radius(rad);
-
-			if (cont)
-			{
-				earthquake(py, px, 10);
-			}
-		}
-		break;
-
-	case MUSIC_STASIS:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("ゆっくりとしたメロディを奏で始めた．．．");
-#else
-			msg_print("You weave a very slow pattern which is almost likely to stop...");
-#endif
-		}
-
-		{
-			int power = plev * 4;
-
-			if (info) return info_power(power);
-
-			if (cont)
-			{
-				stasis_monsters(power);
-			}
-		}
-		break;
-
-	case MUSIC_SHERO:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("英雄の歌を口ずさんだ．．．");
-#else
-			msg_print("You chant a powerful, heroic call to arms...");
-#endif
-			(void)hp_player(10);
-			(void)set_afraid(0);
-
-			/* Recalculate hitpoints */
-			p_ptr->update |= (PU_HP);
-		}
-
-		if (stop)
-		{
-			if (!p_ptr->hero)
-			{
-#ifdef JP
-				msg_print("ヒーローの気分が消え失せた。");
-#else
-				msg_print("The heroism wears off.");
-#endif
-				/* Recalculate hitpoints */
-				p_ptr->update |= (PU_HP);
-			}
-
-			if (!p_ptr->fast)
-			{
-#ifdef JP
-				msg_print("動きの素早さがなくなったようだ。");
-#else
-				msg_print("You feel yourself slow down.");
-#endif
-			}
-		}
-
-		{
-			int dice = 1;
-			int sides = plev * 3;
-
-			if (info) return info_damage(dice, sides, 0);
-
-			if (cont)
-			{
-				dispel_monsters(damroll(dice, sides));
-			}
-		}
-		break;
-
-	case MUSIC_H_LIFE:
-		if (cast)
-		{
-#ifdef JP
-			msg_print("歌を通して体に活気が戻ってきた．．．");
-#else
-			msg_print("Life flows through you as you sing the song...");
-#endif
-		}
-
-		{
-			int dice = 15;
-			int sides = 10;
-
-			if (info) return info_heal(dice, sides, 0);
-
-			if (cont)
-			{
-				hp_player(damroll(dice, sides));
-				set_stun(0);
-				set_cut(0);
-			}
-		}
-		break;
-
-	case MUSIC_INVULN:
-		if (cast)
-		{
-#ifdef JP
-				msg_print("フィンゴルフィンの冥王への挑戦を歌った．．．");
-#else
-				msg_print("You recall the valor of Fingolfin's challenge to the Dark Lord...");
-#endif
-
-				/* Redraw map */
-				p_ptr->redraw |= (PR_MAP);
-		
-				/* Update monsters */
-				p_ptr->update |= (PU_MONSTERS);
-		
-				/* Window stuff */
-				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-		}
-
-		if (stop)
-		{
-			if (!p_ptr->invuln)
-			{
-#ifdef JP
-				msg_print("無敵ではなくなった。");
-#else
-				msg_print("The invulnerability wears off.");
-#endif
-				/* Redraw map */
-				p_ptr->redraw |= (PR_MAP);
-
-				/* Update monsters */
-				p_ptr->update |= (PU_MONSTERS);
-
-				/* Window stuff */
-				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-			}
-		}
-
-		break;
-	}
-
-	return "";
-}
-
-
-/*
  * Start singing if the player is a Bard 
  */
 static void start_singing(int spell, int song)
@@ -2653,9 +1968,6 @@ static void start_singing(int spell, int song)
 	/* Remember the index of the spell which activated the song */
 	p_ptr->magic_num2[0] = spell;
 
-
-	/* Get message text of each song and etc. */
-	do_singing(song, SPELL_CAST);
 
 	/* Now the player is singing */
 	set_action(ACTION_SING);
@@ -2691,7 +2003,7 @@ void stop_singing(void)
 	if (p_ptr->action == ACTION_SING) set_action(ACTION_NONE);
 
 	/* Message text of each song or etc. */
-	do_singing(p_ptr->magic_num1[0], SPELL_STOP);
+	do_spell(REALM_MUSIC, p_ptr->magic_num2[0], SPELL_STOP);
 
 	p_ptr->magic_num1[0] = MUSIC_NONE;
 	p_ptr->magic_num2[0] = 0;
@@ -2707,13 +2019,15 @@ void stop_singing(void)
 /*
  * Do everything for each spell
  */
-cptr do_spell(int spell, int mode)
+cptr do_spell(int realm, int spell, int mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
 	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 	bool fail = (mode == SPELL_FAIL) ? TRUE : FALSE;
+	bool cont = (mode == SPELL_CONT) ? TRUE : FALSE;
+	bool stop = (mode == SPELL_STOP) ? TRUE : FALSE;
 
 #ifdef JP
 	static const char s_dam[] = "損傷:";
@@ -2728,8 +2042,9 @@ cptr do_spell(int spell, int mode)
 	int dir;
 	int plev = p_ptr->lev;
 
+	int spellid = spell_id_from(realm, spell);
 
-	switch (spell)
+	switch (spellid)
 	{
 	case LIFE_SPEL_CURE_LIGHT_WOUNDS:  
 #ifdef JP
@@ -10293,15 +9608,28 @@ cptr do_spell(int spell, int mode)
 		if (desc) return "Attempts to slow all monsters in sight.";
 #endif
     
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_SLOW;
+#ifdef JP
+			msg_print("ゆっくりとしたメロディを口ずさみ始めた．．．");
+#else
+			msg_print("You start humming a slow, steady melody...");
+#endif
+			start_singing(spell, MUSIC_SLOW);
+		}
 
-			if (info) return do_singing(song, SPELL_INFO);
+		{
+			int power = plev;
 
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
+			if (info) return info_power(power);
 
-			if (cast) start_singing(spell, song);
+			if (cont)
+			{
+				slow_monsters();
+			}
 		}
 		break;
 
@@ -10314,16 +9642,31 @@ cptr do_spell(int spell, int mode)
 		if (desc) return "Gives bonus to hit and AC for a few turns.";
 #endif
     
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_BLESS;
-
-			if (info) return do_singing(song, SPELL_INFO);
-
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
-
-			if (cast) start_singing(spell, song);
+#ifdef JP
+			msg_print("厳かなメロディを奏で始めた．．．");
+#else
+			msg_print("The holy power of the Music of the Ainur enters you...");
+#endif
+			start_singing(spell, MUSIC_BLESS);
 		}
+
+		if (stop)
+		{
+			if (!p_ptr->blessed)
+			{
+#ifdef JP
+				msg_print("高潔な気分が消え失せた。");
+#else
+				msg_print("The prayer has expired.");
+#endif
+			}
+		}
+
 		break;
 
 	case MUSI_SPEL_WRECKING_NOTE:
@@ -10335,14 +9678,14 @@ cptr do_spell(int spell, int mode)
 		if (desc) return "Fires a bolt of sound.";
 #endif
     
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
 		{
 			int dice = 4 + (plev - 1) / 5;
 			int sides = 4;
 
 			if (info) return info_damage(dice, sides, 0);
-
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
 
 			if (cast)
 			{
@@ -10362,16 +9705,31 @@ cptr do_spell(int spell, int mode)
 		if (desc) return "Attempts to stun all monsters in sight.";
 #endif
     
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_STUN;
-
-			if (info) return do_singing(song, SPELL_INFO);
-
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
-
-			if (cast) start_singing(spell, song);
+#ifdef JP
+			msg_print("眩惑させるメロディを奏で始めた．．．");
+#else
+			msg_print("You weave a pattern of sounds to bewilder and daze...");
+#endif
+			start_singing(spell, MUSIC_STUN);
 		}
+
+		{
+			int dice = plev / 10;
+			int sides = 2;
+
+			if (info) return info_power_dice(dice, sides);
+
+			if (cont)
+			{
+				stun_monsters(damroll(dice, sides));
+			}
+		}
+
 		break;
 
 	case MUSI_SPEL_FLOW_OF_LIFE:
@@ -10383,16 +9741,31 @@ cptr do_spell(int spell, int mode)
 		if (desc) return "Heals HP a little.";
 #endif
     
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_L_LIFE;
-
-			if (info) return do_singing(song, SPELL_INFO);
-
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
-
-			if (cast) start_singing(spell, song);
+#ifdef JP
+			msg_print("歌を通して体に活気が戻ってきた．．．");
+#else
+			msg_print("Life flows through you as you sing a song of healing...");
+#endif
+			start_singing(spell, MUSIC_L_LIFE);
 		}
+
+		{
+			int dice = 2;
+			int sides = 6;
+
+			if (info) return info_heal(dice, sides, 0);
+
+			if (cont)
+			{
+				hp_player(damroll(dice, sides));
+			}
+		}
+
 		break;
 
 	case MUSI_SPEL_SONG_OF_THE_SUN:
@@ -10404,15 +9777,15 @@ cptr do_spell(int spell, int mode)
 		if (desc) return "Lights up nearby area and the inside of a room permanently.";
 #endif
     
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
 		{
 			int dice = 2;
 			int sides = plev / 2;
 			int rad = plev / 10 + 1;
 
 			if (info) return info_damage(dice, sides, 0);
-
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
 
 			if (cast)
 			{
@@ -10436,16 +9809,30 @@ cptr do_spell(int spell, int mode)
 		if (desc) return "Attempts to scare all monsters in sight.";
 #endif
     
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_FEAR;
-
-			if (info) return do_singing(song, SPELL_INFO);
-
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
-
-			if (cast) start_singing(spell, song);
+#ifdef JP
+			msg_print("おどろおどろしいメロディを奏で始めた．．．");
+#else
+			msg_print("You start weaving a fearful pattern...");
+#endif
+			start_singing(spell, MUSIC_FEAR);			
 		}
+
+		{
+			int power = plev;
+
+			if (info) return info_power(power);
+
+			if (cont)
+			{
+				project_hack(GF_TURN_ALL, power);
+			}
+		}
+
 		break;
 
 	case MUSI_SPEL_HEROIC_BALLAD:
@@ -10456,17 +9843,41 @@ cptr do_spell(int spell, int mode)
 		if (name) return "Heroic Ballad";
 		if (desc) return "Removes fear, and gives bonus to hit and 10 more HP for a while.";
 #endif
-    
+
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_HERO;
+#ifdef JP
+			msg_print("激しい戦いの歌を歌った．．．");
+#else
+			msg_print("You start singing a song of intense fighting...");
+#endif
 
-			if (info) return do_singing(song, SPELL_INFO);
+			(void)hp_player(10);
+			(void)set_afraid(0);
 
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
+			/* Recalculate hitpoints */
+			p_ptr->update |= (PU_HP);
 
-			if (cast) start_singing(spell, song);
+			start_singing(spell, MUSIC_HERO);
 		}
+
+		if (stop)
+		{
+			if (!p_ptr->hero)
+			{
+#ifdef JP
+				msg_print("ヒーローの気分が消え失せた。");
+#else
+				msg_print("The heroism wears off.");
+#endif
+				/* Recalculate hitpoints */
+				p_ptr->update |= (PU_HP);
+			}
+		}
+
 		break;
 
 	case MUSI_SPEL_CLAIRAUDIENCE:
@@ -10478,16 +9889,66 @@ cptr do_spell(int spell, int mode)
 		if (desc) return "Detects traps, doors and stairs in your vicinity. And detects all monsters at level 15, treasures and items at level 20. Maps nearby area at level 25. Lights and know the whole level at level 40. These effects occurs by turns while this song continues.";
 #endif
     
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_DETECT;
+#ifdef JP
+			msg_print("静かな音楽が感覚を研ぎ澄まさせた．．．");
+#else
+			msg_print("Your quiet music sharpens your sense of hearing...");
+#endif
 
-			if (info) return do_singing(song, SPELL_INFO);
+			/* Hack -- Initialize the turn count */
+			p_ptr->magic_num1[2] = 0;
 
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
-
-			if (cast) start_singing(spell, song);
+			start_singing(spell, MUSIC_DETECT);
 		}
+
+		{
+			int rad = DETECT_RAD_DEFAULT;
+
+			if (info) return info_radius(rad);
+
+			if (cont)
+			{
+				int count = p_ptr->magic_num1[2];
+
+				if (count >= 19) wiz_lite(FALSE);
+				if (count >= 11)
+				{
+					map_area(rad);
+					if (plev > 39 && count < 19)
+						p_ptr->magic_num1[2] = count + 1;
+				}
+				if (count >= 6)
+				{
+					/* There are too many hidden treasure.  So... */
+					/* detect_treasure(rad); */
+					detect_objects_gold(rad);
+					detect_objects_normal(rad);
+
+					if (plev > 24 && count < 11)
+						p_ptr->magic_num1[2] = count + 1;
+				}
+				if (count >= 3)
+				{
+					detect_monsters_invis(rad);
+					detect_monsters_normal(rad);
+
+					if (plev > 19 && count < 6)
+						p_ptr->magic_num1[2] = count + 1;
+				}
+				detect_traps(rad, TRUE);
+				detect_doors(rad);
+				detect_stairs(rad);
+
+				if (plev > 14 && count < 3)
+					p_ptr->magic_num1[2] = count + 1;
+			}
+		}
+
 		break;
 
 	case MUSI_SPEL_SOUL_SHRIEK:
@@ -10498,17 +9959,32 @@ cptr do_spell(int spell, int mode)
 		if (name) return "Soul Shriek";
 		if (desc) return "Damages all monsters in sight with PSI damages.";
 #endif
-    
+
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_PSI;
-
-			if (info) return do_singing(song, SPELL_INFO);
-
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
-
-			if (cast) start_singing(spell, song);
+#ifdef JP
+			msg_print("精神を捻じ曲げる歌を歌った．．．");
+#else
+			msg_print("You start singing a song of soul in pain...");
+#endif
+			start_singing(spell, MUSIC_PSI);
 		}
+
+		{
+			int dice = 1;
+			int sides = plev * 3 / 2;
+
+			if (info) return info_damage(dice, sides, 0);
+
+			if (cont)
+			{
+				project_hack(GF_PSI, damroll(dice, sides));
+			}
+		}
+
 		break;
 
 	case MUSI_SPEL_SONG_OF_LORE:
@@ -10520,16 +9996,34 @@ cptr do_spell(int spell, int mode)
 		if (desc) return "Identifies all items which are in the adjacent squares.";
 #endif
     
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_ID;
-
-			if (info) return do_singing(song, SPELL_INFO);
-
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
-
-			if (cast) start_singing(spell, song);
+#ifdef JP
+			msg_print("この世界の知識が流れ込んできた．．．");
+#else
+			msg_print("You recall the rich lore of the world...");
+#endif
+			start_singing(spell, MUSIC_ID);
 		}
+
+		{
+			int rad = 1;
+
+			if (info) return info_radius(rad);
+
+			/*
+			 * 歌の開始時にも効果発動：
+			 * MP不足で鑑定が発動される前に歌が中断してしまうのを防止。
+			 */
+			if (cont || cast)
+			{
+				project(0, rad, py, px, 0, GF_IDENTIFY, PROJECT_ITEM, -1);
+			}
+		}
+
 		break;
 
 	case MUSI_SPEL_HIDING_TUNE:
@@ -10540,17 +10034,32 @@ cptr do_spell(int spell, int mode)
 		if (name) return "Hiding Tune";
 		if (desc) return "Gives improved stealth.";
 #endif
-    
+
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_STEALTH;
-
-			if (info) return do_singing(song, SPELL_INFO);
-
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
-
-			if (cast) start_singing(spell, song);
+#ifdef JP
+			msg_print("あなたの姿が景色にとけこんでいった．．．");
+#else
+			msg_print("Your song carries you beyond the sight of mortal eyes...");
+#endif
+			start_singing(spell, MUSIC_STEALTH);
 		}
+
+		if (stop)
+		{
+			if (!p_ptr->tim_stealth)
+			{
+#ifdef JP
+				msg_print("姿がはっきりと見えるようになった。");
+#else
+				msg_print("You are no longer hided.");
+#endif
+			}
+		}
+
 		break;
 
 	case MUSI_SPEL_ILLUSION_PATTERN:
@@ -10562,16 +10071,30 @@ cptr do_spell(int spell, int mode)
 		if (desc) return "Attempts to confuse all monsters in sight.";
 #endif
     
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_CONF;
-
-			if (info) return do_singing(song, SPELL_INFO);
-
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
-
-			if (cast) start_singing(spell, song);
+#ifdef JP
+			msg_print("辺り一面に幻影が現れた．．．");
+#else
+			msg_print("You weave a pattern of sounds to beguile and confuse...");
+#endif
+			start_singing(spell, MUSIC_CONF);
 		}
+
+		{
+			int power = plev * 2;
+
+			if (info) return info_power(power);
+
+			if (cont)
+			{
+				confuse_monsters(power);
+			}
+		}
+
 		break;
 
 	case MUSI_SPEL_DOOMCALL:
@@ -10583,16 +10106,31 @@ cptr do_spell(int spell, int mode)
 		if (desc) return "Damages all monsters in sight with booming sound.";
 #endif
     
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_SOUND;
-
-			if (info) return do_singing(song, SPELL_INFO);
-
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
-
-			if (cast) start_singing(spell, song);
+#ifdef JP
+			msg_print("轟音が響いた．．．");
+#else
+			msg_print("The fury of the Downfall of Numenor lashes out...");
+#endif
+			start_singing(spell, MUSIC_SOUND);
 		}
+
+		{
+			int dice = 10 + plev / 5;
+			int sides = 7;
+
+			if (info) return info_damage(dice, sides, 0);
+
+			if (cont)
+			{
+				project_hack(GF_SOUND, damroll(dice, sides));
+			}
+		}
+
 		break;
 
 	case MUSI_SPEL_FIRIELS_SONG:
@@ -10629,17 +10167,32 @@ cptr do_spell(int spell, int mode)
 		if (name) return "Fellowship Chant";
 		if (desc) return "Attempts to charm all monsters in sight.";
 #endif
-    
+
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_CHARM;
-
-			if (info) return do_singing(song, SPELL_INFO);
-
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
-
-			if (cast) start_singing(spell, song);
+#ifdef JP
+			msg_print("安らかなメロディを奏で始めた．．．");
+#else
+			msg_print("You weave a slow, soothing melody of imploration...");
+#endif
+			start_singing(spell, MUSIC_CHARM);
 		}
+
+		{
+			int dice = 10 + plev / 15;
+			int sides = 6;
+
+			if (info) return info_power_dice(dice, sides);
+
+			if (cont)
+			{
+				charm_monsters(damroll(dice, sides));
+			}
+		}
+
 		break;
 
 	case MUSI_SPEL_SOUND_OF_DISINTEGRATION:
@@ -10650,16 +10203,30 @@ cptr do_spell(int spell, int mode)
 		if (name) return "Sound of disintegration";
 		if (desc) return "Turns all rocks in the adjacent squares to mud.";
 #endif
-    
+
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_WALL;
+#ifdef JP
+			msg_print("粉砕するメロディを奏で始めた．．．");
+#else
+			msg_print("You weave a violent pattern of sounds to break wall.");
+#endif
+			start_singing(spell, MUSIC_WALL);
+		}
 
-			if (info) return do_singing(song, SPELL_INFO);
-
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
-
-			if (cast) start_singing(spell, song);
+		{
+			/*
+			 * 歌の開始時にも効果発動：
+			 * MP不足で効果が発動される前に歌が中断してしまうのを防止。
+			 */
+			if (cont || cast)
+			{
+				project(0, 0, py, px,
+					0, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM | PROJECT_HIDE, -1);
+			}
 		}
 		break;
 
@@ -10672,16 +10239,67 @@ cptr do_spell(int spell, int mode)
 		if (desc) return "Gives resistance to fire, cold, electricity, acid and poison. These resistances can be added to which from equipment for more powerful resistances.";
 #endif
     
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_RESIST;
-
-			if (info) return do_singing(song, SPELL_INFO);
-
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
-
-			if (cast) start_singing(spell, song);
+#ifdef JP
+			msg_print("元素の力に対する忍耐の歌を歌った。");
+#else
+			msg_print("You sing a song of perseverance against powers...");
+#endif
+			start_singing(spell, MUSIC_RESIST);
 		}
+
+		if (stop)
+		{
+			if (!p_ptr->oppose_acid)
+			{
+#ifdef JP
+				msg_print("酸への耐性が薄れた気がする。");
+#else
+				msg_print("You feel less resistant to acid.");
+#endif
+			}
+
+			if (!p_ptr->oppose_elec)
+			{
+#ifdef JP
+				msg_print("電撃への耐性が薄れた気がする。");
+#else
+				msg_print("You feel less resistant to elec.");
+#endif
+			}
+
+			if (!p_ptr->oppose_fire)
+			{
+#ifdef JP
+				msg_print("火への耐性が薄れた気がする。");
+#else
+				msg_print("You feel less resistant to fire.");
+#endif
+			}
+
+			if (!p_ptr->oppose_cold)
+			{
+#ifdef JP
+				msg_print("冷気への耐性が薄れた気がする。");
+#else
+				msg_print("You feel less resistant to cold.");
+#endif
+			}
+
+			if (!p_ptr->oppose_pois)
+			{
+#ifdef JP
+				msg_print("毒への耐性が薄れた気がする。");
+#else
+				msg_print("You feel less resistant to pois.");
+#endif
+			}
+		}
+
 		break;
 
 	case MUSI_SPEL_HOBBIT_MELODIES:
@@ -10692,17 +10310,32 @@ cptr do_spell(int spell, int mode)
 		if (name) return "Hobbit Melodies";
 		if (desc) return "Hastes you.";
 #endif
-    
+
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_SPEED;
-
-			if (info) return do_singing(song, SPELL_INFO);
-
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
-
-			if (cast) start_singing(spell, song);
+#ifdef JP
+			msg_print("軽快な歌を口ずさみ始めた．．．");
+#else
+			msg_print("You start singing joyful pop song...");
+#endif
+			start_singing(spell, MUSIC_SPEED);
 		}
+
+		if (stop)
+		{
+			if (!p_ptr->fast)
+			{
+#ifdef JP
+				msg_print("動きの素早さがなくなったようだ。");
+#else
+				msg_print("You feel yourself slow down.");
+#endif
+			}
+		}
+
 		break;
 
 	case MUSI_SPEL_WORLD_CONTORTION:
@@ -10745,15 +10378,30 @@ cptr do_spell(int spell, int mode)
 		if (desc) return "Damages all monsters in sight. Hurts evil monsters greatly.";
 #endif
     
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_DISPEL;
+#ifdef JP
+			msg_print("耐えられない不協和音が敵を責め立てた．．．");
+#else
+			msg_print("You cry out in an ear-wracking voice...");
+#endif
+			start_singing(spell, MUSIC_DISPEL);
+		}
 
-			if (info) return do_singing(song, SPELL_INFO);
+		{
+			int m_sides = plev * 3;
+			int e_sides = plev * 3;
 
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
+			if (info) return format("%s1d%d+1d%d", s_dam, m_sides, e_sides);
 
-			if (cast) start_singing(spell, song);
+			if (cont)
+			{
+				dispel_monsters(randint1(m_sides));
+				dispel_evil(randint1(e_sides));
+			}
 		}
 		break;
 
@@ -10766,16 +10414,31 @@ cptr do_spell(int spell, int mode)
 		if (desc) return "Attempts to slow and sleep all monsters in sight.";
 #endif
     
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_SARUMAN;
-
-			if (info) return do_singing(song, SPELL_INFO);
-
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
-
-			if (cast) start_singing(spell, song);
+#ifdef JP
+			msg_print("優しく、魅力的な歌を口ずさみ始めた．．．");
+#else
+			msg_print("You start humming a gentle and attractive song...");
+#endif
+			start_singing(spell, MUSIC_SARUMAN);
 		}
+
+		{
+			int power = plev;
+
+			if (info) return info_power(power);
+
+			if (cont)
+			{
+				slow_monsters();
+				sleep_monsters();
+			}
+		}
+
 		break;
 
 	case MUSI_SPEL_SONG_OF_THE_TEMPEST:
@@ -10844,18 +10507,33 @@ cptr do_spell(int spell, int mode)
 		if (name) return "Wrecking Pattern";
 		if (desc) return "Shakes dungeon structure, and results in random swapping of floors and walls.";
 #endif
-    
+
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_QUAKE;
-
-			if (info) return do_singing(song, SPELL_INFO);
-
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
-
-			if (cast) start_singing(spell, song);
+#ifdef JP
+			msg_print("破壊的な歌が響きわたった．．．");
+#else
+			msg_print("You weave a pattern of sounds to contort and shatter...");
+#endif
+			start_singing(spell, MUSIC_QUAKE);
 		}
+
+		{
+			int rad = 10;
+
+			if (info) return info_radius(rad);
+
+			if (cont)
+			{
+				earthquake(py, px, 10);
+			}
+		}
+
 		break;
+
 
 	case MUSI_SPEL_STATIONARY_SHRIEK:
 #ifdef JP
@@ -10866,16 +10544,30 @@ cptr do_spell(int spell, int mode)
 		if (desc) return "Attempts to freeze all monsters in sight.";
 #endif
     
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_STASIS;
-
-			if (info) return do_singing(song, SPELL_INFO);
-
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
-
-			if (cast) start_singing(spell, song);
+#ifdef JP
+			msg_print("ゆっくりとしたメロディを奏で始めた．．．");
+#else
+			msg_print("You weave a very slow pattern which is almost likely to stop...");
+#endif
+			start_singing(spell, MUSIC_STASIS);
 		}
+
+		{
+			int power = plev * 4;
+
+			if (info) return info_power(power);
+
+			if (cont)
+			{
+				stasis_monsters(power);
+			}
+		}
+
 		break;
 
 	case MUSI_SPEL_ENDURANCE:
@@ -10913,15 +10605,58 @@ cptr do_spell(int spell, int mode)
 		if (desc) return "Hastes you. Gives heroism. Damages all monsters in sight.";
 #endif
     
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_SHERO;
+#ifdef JP
+			msg_print("英雄の歌を口ずさんだ．．．");
+#else
+			msg_print("You chant a powerful, heroic call to arms...");
+#endif
+			(void)hp_player(10);
+			(void)set_afraid(0);
 
-			if (info) return do_singing(song, SPELL_INFO);
+			/* Recalculate hitpoints */
+			p_ptr->update |= (PU_HP);
 
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
+			start_singing(spell, MUSIC_SHERO);
+		}
 
-			if (cast) start_singing(spell, song);
+		if (stop)
+		{
+			if (!p_ptr->hero)
+			{
+#ifdef JP
+				msg_print("ヒーローの気分が消え失せた。");
+#else
+				msg_print("The heroism wears off.");
+#endif
+				/* Recalculate hitpoints */
+				p_ptr->update |= (PU_HP);
+			}
+
+			if (!p_ptr->fast)
+			{
+#ifdef JP
+				msg_print("動きの素早さがなくなったようだ。");
+#else
+				msg_print("You feel yourself slow down.");
+#endif
+			}
+		}
+
+		{
+			int dice = 1;
+			int sides = plev * 3;
+
+			if (info) return info_damage(dice, sides, 0);
+
+			if (cont)
+			{
+				dispel_monsters(damroll(dice, sides));
+			}
 		}
 		break;
 
@@ -10934,16 +10669,33 @@ cptr do_spell(int spell, int mode)
 		if (desc) return "Powerful healing song. Also heals cut and stun completely.";
 #endif
     
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_H_LIFE;
-
-			if (info) return do_singing(song, SPELL_INFO);
-
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
-
-			if (cast) start_singing(spell, song);
+#ifdef JP
+			msg_print("歌を通して体に活気が戻ってきた．．．");
+#else
+			msg_print("Life flows through you as you sing the song...");
+#endif
+			start_singing(spell, MUSIC_H_LIFE);
 		}
+
+		{
+			int dice = 15;
+			int sides = 10;
+
+			if (info) return info_heal(dice, sides, 0);
+
+			if (cont)
+			{
+				hp_player(damroll(dice, sides));
+				set_stun(0);
+				set_cut(0);
+			}
+		}
+
 		break;
 
 	case MUSI_SPEL_GODDESS_REBIRTH:
@@ -11014,16 +10766,49 @@ cptr do_spell(int spell, int mode)
 		if (desc) return "Generates barrier which completely protect you from almost all damages. Takes a few your turns when the barrier breaks.";
 #endif
     
+		/* Stop singing before start another */
+		if (cast || fail) stop_singing();
+
+		if (cast)
 		{
-			int song = MUSIC_INVULN;
+#ifdef JP
+				msg_print("フィンゴルフィンの冥王への挑戦を歌った．．．");
+#else
+				msg_print("You recall the valor of Fingolfin's challenge to the Dark Lord...");
+#endif
 
-			if (info) return do_singing(song, SPELL_INFO);
+				/* Redraw map */
+				p_ptr->redraw |= (PR_MAP);
+		
+				/* Update monsters */
+				p_ptr->update |= (PU_MONSTERS);
+		
+				/* Window stuff */
+				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
-			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
-
-			if (cast) start_singing(spell, song);
+				start_singing(spell, MUSIC_INVULN);
 		}
+
+		if (stop)
+		{
+			if (!p_ptr->invuln)
+			{
+#ifdef JP
+				msg_print("無敵ではなくなった。");
+#else
+				msg_print("The invulnerability wears off.");
+#endif
+				/* Redraw map */
+				p_ptr->redraw |= (PR_MAP);
+
+				/* Update monsters */
+				p_ptr->update |= (PU_MONSTERS);
+
+				/* Window stuff */
+				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+			}
+		}
+
 		break;
 
 	case TECH_SPEL_TOBI_IZUNA:

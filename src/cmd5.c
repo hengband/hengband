@@ -288,11 +288,11 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 			jverb1( prompt, jverb_buf );
 			/* 英日切り替え機能に対応 */
 			(void) strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ",
-				do_spell(spell_id_from(use_realm, spell), SPELL_NAME), need_mana,
+				do_spell(use_realm, spell, SPELL_NAME), need_mana,
 				       spell_chance(spell, use_realm),jverb_buf);
 #else
 			(void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ",
-				prompt, do_spell(spell_id_from(use_realm, spell), SPELL_NAME), need_mana,
+				prompt, do_spell(use_realm, spell, SPELL_NAME), need_mana,
 				spell_chance(spell, use_realm));
 #endif
 
@@ -596,7 +596,7 @@ void do_cmd_browse(void)
 		Term_erase(14, 12, 255);
 		Term_erase(14, 11, 255);
 
-		roff_to_buf(do_spell(spell_id_from(use_realm, spell), SPELL_DESC), 62, temp, sizeof(temp));
+		roff_to_buf(do_spell(use_realm, spell, SPELL_DESC), 62, temp, sizeof(temp));
 
 		for (j = 0, line = 11; temp[j]; j += 1 + strlen(&temp[j]))
 		{
@@ -860,7 +860,7 @@ msg_format("その本には学ぶべき%sがない。", p);
 		int max_exp = (spell < 32) ? SPELL_EXP_MASTER : SPELL_EXP_EXPERT;
 		int old_exp = p_ptr->spell_exp[spell];
 		int new_rank = EXP_LEVEL_UNSKILLED;
-		cptr name = do_spell(spell_id_from(increment ? p_ptr->realm2 : p_ptr->realm1, spell%32), SPELL_NAME);
+		cptr name = do_spell(increment ? p_ptr->realm2 : p_ptr->realm1, spell%32, SPELL_NAME);
 
 		if (old_exp >= max_exp)
 		{
@@ -924,16 +924,16 @@ msg_format("その本には学ぶべき%sがない。", p);
 		if (mp_ptr->spell_book == TV_MUSIC_BOOK)
 		{
 			msg_format("%sを学んだ。",
-				    do_spell(spell_id_from(increment ? p_ptr->realm2 : p_ptr->realm1, spell % 32), SPELL_NAME));
+				    do_spell(increment ? p_ptr->realm2 : p_ptr->realm1, spell % 32, SPELL_NAME));
 		}
 		else
 		{
 			msg_format("%sの%sを学んだ。",
-				    do_spell(spell_id_from(increment ? p_ptr->realm2 : p_ptr->realm1, spell % 32), SPELL_NAME) ,p);
+				    do_spell(increment ? p_ptr->realm2 : p_ptr->realm1, spell % 32, SPELL_NAME) ,p);
 		}
 #else
 		msg_format("You have learned the %s of %s.",
-			p, do_spell(spell_id_from(increment ? p_ptr->realm2 : p_ptr->realm1, spell % 32), SPELL_NAME));
+			p, do_spell(increment ? p_ptr->realm2 : p_ptr->realm1, spell % 32, SPELL_NAME));
 #endif
 	}
 
@@ -1316,7 +1316,7 @@ msg_format("%sをうまく唱えられなかった！", prayer);
 		}
 
 		/* Failure casting may activate some side effect */
-		do_spell(spell_id_from(realm, spell), SPELL_FAIL);
+		do_spell(realm, spell, SPELL_FAIL);
 
 
 		if ((o_ptr->tval == TV_CHAOS_BOOK) && (randint1(100) < spell))
@@ -1371,7 +1371,7 @@ msg_print("An infernal sound echoed.");
 	else
 	{
 		/* Canceled spells cost neither a turn nor mana */
-		if (!do_spell(spell_id_from(realm, spell), SPELL_CAST)) return;
+		if (!do_spell(realm, spell, SPELL_CAST)) return;
 
 		if (randint1(100) < chance)
 			chg_virtue(V_CHANCE,1);
