@@ -5716,7 +5716,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 		return;
 	}
 
-	else if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3))
+	if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3))
 	{
 		switch (o_ptr->xtra3-1)
 		{
@@ -5753,7 +5753,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 	}
 
 
-	else if (o_ptr->name2 == EGO_TRUMP)
+	if (o_ptr->name2 == EGO_TRUMP)
 	{
 		teleport_player(100);
 		o_ptr->timeout = 50 + randint1(50);
@@ -5766,7 +5766,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 	}
 
 
-	else if (o_ptr->name2 == EGO_LITE_ILLUMINATION)
+	if (o_ptr->name2 == EGO_LITE_ILLUMINATION)
 	{
 		if (!o_ptr->xtra4 && ((o_ptr->sval == SV_LITE_TORCH) || (o_ptr->sval == SV_LITE_LANTERN)))
 		{
@@ -5788,7 +5788,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 	}
 
 
-	else if (o_ptr->name2 == EGO_EARTHQUAKES)
+	if (o_ptr->name2 == EGO_EARTHQUAKES)
 	{
 		earthquake(py, px, 5);
 		o_ptr->timeout = 100 + randint1(100);
@@ -5801,7 +5801,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 	}
 
 
-	else if (o_ptr->name2 == EGO_JUMP)
+	if (o_ptr->name2 == EGO_JUMP)
 	{
 		teleport_player(10);
 		o_ptr->timeout = 10 + randint1(10);
@@ -5815,7 +5815,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 
 
 	/* Hack -- Dragon Scale Mail can be activated as well */
-	else if (o_ptr->tval == TV_DRAG_ARMOR)
+	if (o_ptr->tval == TV_DRAG_ARMOR)
 	{
 		/* Get a direction for breathing (or abort) */
 		if (!get_aim_dir(&dir)) return;
