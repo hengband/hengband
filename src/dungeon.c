@@ -4203,21 +4203,21 @@ msg_print("ウィザードモード突入。");
 		/*** Stairs and Doors and Chests and Traps ***/
 
 		/* Enter store */
-		case 253:
+		case SPECIAL_KEY_STORE:
 		{
 			if (!p_ptr->wild_mode) do_cmd_store();
 			break;
 		}
 
 		/* Enter building -KMW- */
-		case 254:
+		case SPECIAL_KEY_BUILDING:
 		{
 			if (!p_ptr->wild_mode) do_cmd_bldg();
 			break;
 		}
 
 		/* Enter quest level -KMW- */
-		case 255:
+		case SPECIAL_KEY_QUEST:
 		{
 			if (!p_ptr->wild_mode) do_cmd_quest();
 			break;
@@ -4837,7 +4837,7 @@ msg_print("アリーナが魔法を吸収した！");
 
 		/* Save and quit */
 		case KTRL('X'):
-		case 252:
+		case SPECIAL_KEY_QUIT:
 		{
 			do_cmd_save_and_exit();
 			break;

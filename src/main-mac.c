@@ -3929,8 +3929,10 @@ static void menu(long mc)
 						msg_flag = FALSE;
 
 						/* Save the game */
-//						do_cmd_save_game(FALSE);
-						Term_key_push(KTRL('X'));
+#if 0
+						do_cmd_save_game(FALSE);
+#endif
+						Term_key_push(SPECIAL_KEY_QUIT);
 						break;
 					}
 

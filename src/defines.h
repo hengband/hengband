@@ -474,6 +474,14 @@
 #define MAX_NLEN        160
 
 /*
+ * Special internal key
+ */
+#define SPECIAL_KEY_QUEST    255
+#define SPECIAL_KEY_BUILDING 254
+#define SPECIAL_KEY_STORE    253
+#define SPECIAL_KEY_QUIT     252
+
+/*
  * Store constants
  */
 #define STORE_INVEN_MAX 24              /* Max number of discrete objs in inven */

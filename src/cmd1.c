@@ -4007,7 +4007,7 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 
 			energy_use = 0;
 			/* Hack -- Enter store */
-			command_new = 253;
+			command_new = SPECIAL_KEY_STORE;
 		}
 
 		/* Handle "building doors" -KMW- */
@@ -4019,7 +4019,7 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 
 			energy_use = 0;
 			/* Hack -- Enter building */
-			command_new = 254;
+			command_new = SPECIAL_KEY_BUILDING;
 		}
 
 		/* Handle quest areas -KMW- */
@@ -4030,7 +4030,7 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 
 			energy_use = 0;
 			/* Hack -- Enter quest level */
-			command_new = 255;
+			command_new = SPECIAL_KEY_QUEST;
 		}
 
 		else if (cave[y][x].feat == FEAT_QUEST_EXIT)

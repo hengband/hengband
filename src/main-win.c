@@ -3360,7 +3360,7 @@ static void process_menus(WORD wCmd)
 #else /* ZANGBAND */
 				/* do_cmd_save_game(); */
 #endif /* ZANGBAND */
-				Term_key_push(252);
+				Term_key_push(SPECIAL_KEY_QUIT);
 				break;
 			}
 			quit(NULL);

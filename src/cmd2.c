@@ -3058,7 +3058,7 @@ void do_cmd_stay(int pickup)
 
 		energy_use = 0;
 		/* Hack -- enter store */
-		command_new = 253;
+		command_new = SPECIAL_KEY_STORE;
 	}
 
 	/* Hack -- enter a building if we are on one -KMW- */
@@ -3070,7 +3070,7 @@ void do_cmd_stay(int pickup)
 
 		energy_use = 0;
 		/* Hack -- enter building */
-		command_new = 254;
+		command_new = SPECIAL_KEY_BUILDING;
 	}
 
 	/* Exit a quest if reach the quest exit */
