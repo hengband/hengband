@@ -1,4 +1,30 @@
-=== History of Hengband from 1.0.7 to 1.3.1 ===
+=== History of Hengband ===
+
+  Dec. 24th, 2002  hengband 1.5.1 (Development branch) released.
+
+- Added visual editor in lists of known objects and etc... (Unangband)
+- Clairaudience spell of Bard doesn't detect walls with treasure.
+- Various bug fixes;
+  Monsters on saved floors awake, Error handling while save,
+  Monster data is broken while save and then crash,
+  Shaft takes you to wrong levels.
+- All changes for 1.4.1 is also included in 1.5.1.
+
+
+  Dec. 24th, 2002  hengband 1.4.1 (Stable branch) released.
+
+- Elvish waybread fully satisfies mortals.  (from OAngband)
+- General store sell Elvish waybread.
+- Salt water don't effect undead etc...
+- Description of weapons/armour from OAngband.
+- Added disturb when objects with inscription {!!} is recharged.
+- Improved display of tiles at knowledge command, etc., on Bigtile mode
+
+- Various bug fixes;
+ Vault with no entrance,  Crash at (a) of info command,
+ Arena while Wraithform,  Activation of smith's equip,
+ Foods while mimiccing,  Kind of monsters at the Mountain,
+ Broken name of the Staff,  Random teleport in monster arena.
 
 
   Dec. 9th, 2002  hengband 1.5.0 (Development branch) released.
@@ -1015,4 +1041,4 @@ Angband Version 2.7   :  1/1/95  Ben Harrison
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.3.0
+Updated    : Hengband 1.5.1
