@@ -386,9 +386,11 @@ bool summon_possible(int y1, int x1)
 }
 
 
-static bool raise_possible(int y, int x)
+bool raise_possible(monster_type *m_ptr)
 {
 	int xx, yy;
+	int y = m_ptr->fy;
+	int x = m_ptr->fx;
 	s16b this_o_idx, next_o_idx = 0;
 	cave_type *c_ptr;
 
@@ -411,7 +413,9 @@ static bool raise_possible(int y, int x)
 
 				/* Known to be worthless? */
 				if (o_ptr->tval == TV_CORPSE)
-					return TRUE;
+				{
+					if (!monster_has_hostile_align(m_ptr, 0, 0, &r_info[o_ptr->pval])) return TRUE;
+				}
 			}
 		}
 	}
@@ -1090,7 +1094,7 @@ static int choose_attack_spell(int m_idx, byte spells[], byte num)
 	}
 
 	/* Raise-dead if possible (sometimes) */
-	if (raise_num && (randint0(100) < 40) && raise_possible(m_ptr->fy, m_ptr->fx))
+	if (raise_num && (randint0(100) < 40))
 	{
 		/* Choose raise-dead spell */
 		return (raise[randint0(raise_num)]);
@@ -1475,6 +1479,13 @@ bool make_attack_spell(int m_idx)
 			f4 &= ~(RF4_SUMMON_MASK);
 			f5 &= ~(RF5_SUMMON_MASK);
 			f6 &= ~(RF6_SUMMON_MASK);
+		}
+
+		/* Check for a possible raise dead */
+		if ((f6 & RF6_RAISE_DEAD) && !raise_possible(m_ptr))
+		{
+			/* Remove raise dead spell */
+			f6 &= ~(RF6_RAISE_DEAD);
 		}
 
 		/* No spells left */

@@ -3607,6 +3607,22 @@ bool monster_can_enter(int y, int x, monster_race *r_ptr)
 }
 
 
+/*
+ * Check if this monster has "hostile" alignment (aux)
+ */
+static bool check_hostile_align(byte sub_align1, byte sub_align2)
+{
+	if (sub_align1 != sub_align2)
+	{
+		if (((sub_align1 & SUB_ALIGN_EVIL) && (sub_align2 & SUB_ALIGN_GOOD)) ||
+			((sub_align1 & SUB_ALIGN_GOOD) && (sub_align2 & SUB_ALIGN_EVIL)))
+			return TRUE;
+	}
+
+	/* Non-hostile alignment */
+	return FALSE;
+}
+
 
 /*
  * Check if two monsters are enemies
@@ -3629,15 +3645,9 @@ bool are_enemies(monster_type *m_ptr, monster_type *n_ptr)
 	}
 
 	/* Friendly vs. opposite aligned normal or pet */
-	if (m_ptr->sub_align != n_ptr->sub_align)
+	if (check_hostile_align(m_ptr->sub_align, n_ptr->sub_align))
 	{
-		if (((m_ptr->sub_align & SUB_ALIGN_EVIL) &&
-			  (n_ptr->sub_align & SUB_ALIGN_GOOD)) ||
-			 ((m_ptr->sub_align & SUB_ALIGN_GOOD) &&
-			  (n_ptr->sub_align & SUB_ALIGN_EVIL)))
-		{
-			if (!(m_ptr->mflag2 & MFLAG2_CHAMELEON) || !(n_ptr->mflag2 & MFLAG2_CHAMELEON)) return TRUE;
-		}
+		if (!(m_ptr->mflag2 & MFLAG2_CHAMELEON) || !(n_ptr->mflag2 & MFLAG2_CHAMELEON)) return TRUE;
 	}
 
 	/* Hostile vs. non-hostile */
@@ -3647,6 +3657,36 @@ bool are_enemies(monster_type *m_ptr, monster_type *n_ptr)
 	}
 
 	/* Default */
+	return FALSE;
+}
+
+
+/*
+ * Check if this monster race has "hostile" alignment
+ * If user is player, m_ptr == NULL.
+ */
+bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr)
+{
+	byte sub_align1 = SUB_ALIGN_NEUTRAL;
+	byte sub_align2 = SUB_ALIGN_NEUTRAL;
+
+	if (m_ptr) /* For a monster */
+	{
+		sub_align1 = m_ptr->sub_align;
+	}
+	else /* For player */
+	{
+		if (p_ptr->align >= pa_good) sub_align1 |= SUB_ALIGN_GOOD;
+		if (p_ptr->align <= pa_evil) sub_align1 |= SUB_ALIGN_EVIL;
+	}
+
+	/* Racial alignment flags */
+	if (r_ptr->flags3 & RF3_EVIL) sub_align2 |= SUB_ALIGN_EVIL;
+	if (r_ptr->flags3 & RF3_GOOD) sub_align2 |= SUB_ALIGN_GOOD;
+
+	if (check_hostile_align(sub_align1, sub_align2)) return TRUE;
+
+	/* Non-hostile alignment */
 	return FALSE;
 }
 

@@ -477,6 +477,13 @@ bool monst_spell_monst(int m_idx)
 			f5 &= ~(RF5_SUMMON_MASK);
 			f6 &= ~(RF6_SUMMON_MASK);
 		}
+
+		/* Check for a possible raise dead */
+		if ((f6 & RF6_RAISE_DEAD) && !raise_possible(m_ptr))
+		{
+			/* Remove raise dead spell */
+			f6 &= ~(RF6_RAISE_DEAD);
+		}
 	}
 
 	if (r_ptr->flags2 & RF2_SMART)

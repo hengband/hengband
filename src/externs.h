@@ -841,6 +841,7 @@ extern void anger_monster(monster_type *m_ptr);
 extern bool monster_can_cross_terrain(byte feat, monster_race *r_ptr);
 extern bool monster_can_enter(int y, int x, monster_race *r_ptr);
 extern bool are_enemies(monster_type *m_ptr1, monster_type *m_ptr2);
+extern bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr);
 extern bool monster_living(monster_race *r_ptr);
 extern bool no_questor_or_bounty_uniques(int r_idx);
 
@@ -1367,6 +1368,7 @@ extern int spell_exp_level(int spell_exp);
 /* mspells1.c */
 extern bool clean_shot(int y1, int x1, int y2, int x2, bool friend);
 extern bool summon_possible(int y1, int x1);
+extern bool raise_possible(monster_type *m_ptr);
 extern bool spell_is_inate(u16b spell);
 
 /* mspells2.c */

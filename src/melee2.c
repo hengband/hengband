@@ -2470,8 +2470,7 @@ msg_print("少しの間悲しい気分になった。");
 	/* Paranoia... no pet uniques outside wizard mode -- TY */
 	if (is_pet(m_ptr) &&
 	    ((((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_UNIQUE_7)) &&
-	      ((p_ptr->align > 9 && (r_ptr->flags3 & RF3_EVIL)) ||
-	      (p_ptr->align < -9 && (r_ptr->flags3 & RF3_GOOD))))
+	      monster_has_hostile_align(NULL, 10, -10, r_ptr))
 	     || (r_ptr->flagsr & RFR_RES_ALL)))
 	{
 		gets_angry = TRUE;

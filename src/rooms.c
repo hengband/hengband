@@ -1927,7 +1927,7 @@ static void build_type5(int by0, int bx0, bool pit)
 	int i;
 	nest_mon_info_type nest_mon_info[NUM_NEST_MON_TYPE];
 
-	int align = 0;
+	monster_type align;
 
 	cave_type *c_ptr;
 
@@ -2031,22 +2031,22 @@ static void build_type5(int by0, int bx0, bool pit)
 	/* Prepare allocation table */
 	get_mon_num_prep(n_ptr->hook_func, NULL);
 
+	align.sub_align = SUB_ALIGN_NEUTRAL;
+
 	/* Pick some monster types */
 	for (i = 0; i < NUM_NEST_MON_TYPE; i++)
 	{
 		int r_idx = 0, attempts = 100;
+		monster_race *r_ptr = NULL;
 
 		while (attempts--)
 		{
 			/* Get a (hard) monster type */
 			r_idx = get_mon_num(dun_level + 10);
+			r_ptr = &r_info[r_idx];
 
 			/* Decline incorrect alignment */
-			if (((align < 0) && (r_info[r_idx].flags3 & RF3_GOOD)) ||
-				 ((align > 0) && (r_info[r_idx].flags3 & RF3_EVIL)))
-			{
-				continue;
-			}
+			if (monster_has_hostile_align(&align, 0, 0, r_ptr)) continue;
 
 			/* Accept this monster */
 			break;
@@ -2056,8 +2056,8 @@ static void build_type5(int by0, int bx0, bool pit)
 		if (!r_idx || !attempts) return;
 
 		/* Note the alignment */
-		if (r_info[r_idx].flags3 & RF3_GOOD) align++;
-		else if (r_info[r_idx].flags3 & RF3_EVIL) align--;
+		if (r_ptr->flags3 & RF3_EVIL) align.sub_align |= SUB_ALIGN_EVIL;
+		if (r_ptr->flags3 & RF3_GOOD) align.sub_align |= SUB_ALIGN_GOOD;
 
 		nest_mon_info[i].r_idx = r_idx;
 		nest_mon_info[i].used = FALSE;
@@ -2164,7 +2164,7 @@ static void build_type6(int by0, int bx0, bool nest)
 
 	int what[16];
 
-	int align = 0;
+	monster_type align;
 
 	cave_type *c_ptr;
 
@@ -2265,22 +2265,22 @@ static void build_type6(int by0, int bx0, bool nest)
 	/* Prepare allocation table */
 	get_mon_num_prep(n_ptr->hook_func, NULL);
 
+	align.sub_align = SUB_ALIGN_NEUTRAL;
+
 	/* Pick some monster types */
 	for (i = 0; i < 16; i++)
 	{
 		int r_idx = 0, attempts = 100;
+		monster_race *r_ptr = NULL;
 
 		while (attempts--)
 		{
 			/* Get a (hard) monster type */
 			r_idx = get_mon_num(dun_level + 10);
+			r_ptr = &r_info[r_idx];
 
 			/* Decline incorrect alignment */
-			if (((align < 0) && (r_info[r_idx].flags3 & RF3_GOOD)) ||
-				 ((align > 0) && (r_info[r_idx].flags3 & RF3_EVIL)))
-			{
-				continue;
-			}
+			if (monster_has_hostile_align(&align, 0, 0, r_ptr)) continue;
 
 			/* Accept this monster */
 			break;
@@ -2290,8 +2290,8 @@ static void build_type6(int by0, int bx0, bool nest)
 		if (!r_idx || !attempts) return;
 
 		/* Note the alignment */
-		if (r_info[r_idx].flags3 & RF3_GOOD) align++;
-		else if (r_info[r_idx].flags3 & RF3_EVIL) align--;
+		if (r_ptr->flags3 & RF3_EVIL) align.sub_align |= SUB_ALIGN_EVIL;
+		if (r_ptr->flags3 & RF3_GOOD) align.sub_align |= SUB_ALIGN_GOOD;
 
 		what[i] = r_idx;
 	}
@@ -5423,7 +5423,7 @@ static void build_type13(int by0, int bx0)
 
 	int what[16];
 
-	int align = 0;
+	monster_type align;
 
 	cave_type *c_ptr;
 
@@ -5547,22 +5547,22 @@ static void build_type13(int by0, int bx0)
 	/* Prepare allocation table */
 	get_mon_num_prep(n_ptr->hook_func, vault_aux_trapped_pit);
 
+	align.sub_align = SUB_ALIGN_NEUTRAL;
+
 	/* Pick some monster types */
 	for (i = 0; i < 16; i++)
 	{
 		int r_idx = 0, attempts = 100;
+		monster_race *r_ptr = NULL;
 
 		while (attempts--)
 		{
 			/* Get a (hard) monster type */
 			r_idx = get_mon_num(dun_level + 0);
+			r_ptr = &r_info[r_idx];
 
 			/* Decline incorrect alignment */
-			if (((align < 0) && (r_info[r_idx].flags3 & RF3_GOOD)) ||
-				 ((align > 0) && (r_info[r_idx].flags3 & RF3_EVIL)))
-			{
-				continue;
-			}
+			if (monster_has_hostile_align(&align, 0, 0, r_ptr)) continue;
 
 			/* Accept this monster */
 			break;
@@ -5572,8 +5572,8 @@ static void build_type13(int by0, int bx0)
 		if (!r_idx || !attempts) return;
 
 		/* Note the alignment */
-		if (r_info[r_idx].flags3 & RF3_GOOD) align++;
-		else if (r_info[r_idx].flags3 & RF3_EVIL) align--;
+		if (r_ptr->flags3 & RF3_EVIL) align.sub_align |= SUB_ALIGN_EVIL;
+		if (r_ptr->flags3 & RF3_GOOD) align.sub_align |= SUB_ALIGN_GOOD;
 
 		what[i] = r_idx;
 	}

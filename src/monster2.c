@@ -2719,17 +2719,13 @@ static bool monster_hook_chameleon_lord(int r_idx)
 	/* Not born */
 	if (!(old_r_ptr->flags7 & RF7_CHAMELEON))
 	{
-		if ((m_ptr->sub_align & SUB_ALIGN_EVIL) && (r_ptr->flags3 & RF3_GOOD)) return FALSE;
-		if ((m_ptr->sub_align & SUB_ALIGN_GOOD) && (r_ptr->flags3 & RF3_EVIL)) return FALSE;
+		if (monster_has_hostile_align(m_ptr, 0, 0, r_ptr)) return FALSE;
 	}
 
 	/* Born now */
 	else if (summon_specific_who > 0)
 	{
-		monster_type *sm_ptr = &m_list[summon_specific_who];
-
-		if ((sm_ptr->sub_align & SUB_ALIGN_EVIL) && (r_ptr->flags3 & RF3_GOOD)) return FALSE;
-		if ((sm_ptr->sub_align & SUB_ALIGN_GOOD) && (r_ptr->flags3 & RF3_EVIL)) return FALSE;
+		if (monster_has_hostile_align(&m_list[summon_specific_who], 0, 0, r_ptr)) return FALSE;
 	}
 
 	return TRUE;
@@ -2761,10 +2757,7 @@ static bool monster_hook_chameleon(int r_idx)
 	/* Born now */
 	else if (summon_specific_who > 0)
 	{
-		monster_type *sm_ptr = &m_list[summon_specific_who];
-
-		if ((sm_ptr->sub_align & SUB_ALIGN_EVIL) && (r_ptr->flags3 & RF3_GOOD)) return FALSE;
-		if ((sm_ptr->sub_align & SUB_ALIGN_GOOD) && (r_ptr->flags3 & RF3_EVIL)) return FALSE;
+		if (monster_has_hostile_align(&m_list[summon_specific_who], 0, 0, r_ptr)) return FALSE;
 	}
 
 	return (*(get_monster_hook()))(r_idx);
@@ -3202,11 +3195,7 @@ msg_print("守りのルーンが壊れた！");
 	else if ((r_ptr->flags7 & RF7_FRIENDLY) ||
 		 (mode & PM_FORCE_FRIENDLY) || is_friendly_idx(who))
 	{
-		if (!(p_ptr->align >= 0 && (r_ptr->flags3 & RF3_EVIL)) &&
-		    !(p_ptr->align < 0 && (r_ptr->flags3 & RF3_GOOD)))
-		{
-			set_friendly(m_ptr);
-		}
+		if (!monster_has_hostile_align(NULL, 0, -1, r_ptr)) set_friendly(m_ptr);
 	}
 
 	/* Assume no sleeping */
@@ -3603,15 +3592,11 @@ static bool place_monster_okay(int r_idx)
 	if (place_monster_idx == r_idx) return (FALSE);
 
 	/* Skip different alignment */
-	if (((m_ptr->sub_align & SUB_ALIGN_EVIL) && (z_ptr->flags3 & RF3_GOOD)) ||
-	    ((m_ptr->sub_align & SUB_ALIGN_GOOD) && (z_ptr->flags3 & RF3_EVIL)))
-		return FALSE;
+	if (monster_has_hostile_align(m_ptr, 0, 0, z_ptr)) return FALSE;
 
 	if (r_ptr->flags7 & RF7_FRIENDLY)
 	{
-		if (((p_ptr->align < 0) && (z_ptr->flags3 & RF3_GOOD)) ||
-		    ((p_ptr->align > 0) && (z_ptr->flags3 & RF3_EVIL)))
-			return FALSE;
+		if (monster_has_hostile_align(NULL, 1, -1, z_ptr)) return FALSE;
 	}
 
 	if ((r_ptr->flags7 & RF7_CHAMELEON) && !(z_ptr->flags7 & RF7_CHAMELEON))
@@ -3939,31 +3924,18 @@ static bool summon_specific_okay(int r_idx)
 		/* Do not summon enemies */
 
 		/* Friendly vs. opposite aligned normal or pet */
-		if (((r_ptr->flags3 & RF3_EVIL) &&
-			  (m_ptr->sub_align & SUB_ALIGN_GOOD)) ||
-			 ((r_ptr->flags3 & RF3_GOOD) &&
-			  (m_ptr->sub_align & SUB_ALIGN_EVIL)))
-		{
-			return FALSE;
-		}
+		if (monster_has_hostile_align(m_ptr, 0, 0, r_ptr)) return FALSE;
 
 		/* Hostile vs. non-hostile */
-		if (is_hostile(m_ptr) != summon_specific_hostile)
-		{
-			return FALSE;
-		}
+		if (is_hostile(m_ptr) != summon_specific_hostile) return FALSE;
 	}
 	/* Use the player's alignment */
 	else if (summon_specific_who < 0)
 	{
 		/* Do not summon enemies of the pets */
-		if ((p_ptr->align < -9) && (r_ptr->flags3 & RF3_GOOD))
+		if (monster_has_hostile_align(NULL, 10, -10, r_ptr))
 		{
-			if (!one_in_((0-p_ptr->align)/2+1)) return FALSE;
-		}
-		else if ((p_ptr->align > 9) && (r_ptr->flags3 & RF3_EVIL))
-		{
-			if (!one_in_(p_ptr->align/2+1)) return FALSE;
+			if (!one_in_(ABS(p_ptr->align) / 2 + 1)) return FALSE;
 		}
 	}
 
@@ -3974,8 +3946,7 @@ static bool summon_specific_okay(int r_idx)
 
 	if ((summon_specific_who < 0) &&
 	    ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_UNIQUE_7)) &&
-	    (((p_ptr->align > 9) && (r_ptr->flags3 & RF3_EVIL)) ||
-	     ((p_ptr->align < -9) && (r_ptr->flags3 & RF3_GOOD))))
+	    monster_has_hostile_align(NULL, 10, -10, r_ptr))
 		return FALSE;
 
 	if ((r_ptr->flags7 & RF7_CHAMELEON) && (d_info[dungeon_type].flags1 & DF1_CHAMELEON)) return TRUE;
