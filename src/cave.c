@@ -4845,6 +4845,9 @@ void cave_set_feat(int y, int x, int feat)
         /* Clear mimic type */
         c_ptr->mimic = 0;
 
+        /* Remove flag for mirror/glyph */
+	c_ptr->info &= ~(CAVE_OBJECT);
+
 	/* Change the feature */
 	c_ptr->feat = feat;
 
