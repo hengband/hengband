@@ -2681,10 +2681,10 @@ static cptr do_nature_spell(int spell, int mode)
 	case 3:
 #ifdef JP
 		if (name) return "食糧生成";
-		if (desc) return "満腹になる。";
+		if (desc) return "食料を一つ作り出す。";
 #else
 		if (name) return "Produce Food";
-		if (desc) return "Satisfies hunger.";
+		if (desc) return "Produces a Ration of Food.";
 #endif
     
 		{
