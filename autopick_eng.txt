@@ -329,6 +329,11 @@ Iron Spike#@v0
 #
 # Destroy useless equipment at high level.
 #
+# Beware!!!!
+#    The line '!nameless armors' destroy all dragon armour!
+#    '~identified armors:dragon' will prevent this dangerous behavior.
+#
+
 ?:[GEQ $LEVEL 40]
 ~identified armors:dragon
 ~nameless armors:Elven Cloak
