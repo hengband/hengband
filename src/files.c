@@ -683,13 +683,15 @@ errr process_pref_file_command(char *buf)
 			}
 		}
 	}
-	/* set macro trigger names and a template */
+	/* Initialize macro trigger names and a template */
 	/* Process "T:<trigger>:<keycode>:<shift-keycode>" */
 	/* Process "T:<template>:<modifier chr>:<modifier name>:..." */
 	else if (buf[0] == 'T')
 	{
 		int len, tok;
 		tok = tokenize(buf+2, 2+MAX_MACRO_MOD, zz, 0);
+
+		/* Process "T:<template>:<modifier chr>:<modifier name>:..." */
 		if (tok >= 4)
 		{
 			int i;
@@ -697,37 +699,60 @@ errr process_pref_file_command(char *buf)
 
 			if (macro_template != NULL)
 			{
-				free(macro_template);
+				num = strlen(macro_modifier_chr);
+
+				/* Kill the template string */
+				string_free(macro_template);
 				macro_template = NULL;
+
+				/* Kill flag characters of modifier keys */
+				string_free(macro_modifier_chr);
+
+				/* Kill corresponding modifier names */
+				for (i = 0; i < num; i++)
+				{
+					string_free(macro_modifier_name[i]);
+				}
+
+				/* Kill trigger name strings */
 				for (i = 0; i < max_macrotrigger; i++)
-					free(macro_trigger_name[i]);
+				{
+					string_free(macro_trigger_name[i]);
+					string_free(macro_trigger_keycode[0][i]);
+					string_free(macro_trigger_keycode[1][i]);
+				}
+
 				max_macrotrigger = 0;
 			}
 			
 			if (*zz[0] == '\0') return 0; /* clear template */
+
+			/* Number of modifier flags */
 			num = strlen(zz[1]);
-			if (2 + num != tok) return 1; /* error */
 
-			len = strlen(zz[0])+1+num+1;
-			for (i = 0; i < num; i++)
-				len += strlen(zz[2+i])+1;
-			macro_template = malloc(len);
+			/* Limit the number */
+			num = MIN(MAX_MACRO_MOD, num);
 
-			strcpy(macro_template, zz[0]);
-			macro_modifier_chr =
-				macro_template + strlen(macro_template) + 1;
-			strcpy(macro_modifier_chr, zz[1]);
-			macro_modifier_name[0] =
-				macro_modifier_chr + strlen(macro_modifier_chr) + 1;
+			/* Stop if number of modifier is not correct */
+			if (2 + num != tok) return 1;
+
+			/* Get a template string */
+			macro_template = string_make(zz[0]);
+
+			/* Get flag characters of modifier keys */
+			macro_modifier_chr = string_make(zz[1]);
+
+			/* Get corresponding modifier names */
 			for (i = 0; i < num; i++)
 			{
-				strcpy(macro_modifier_name[i], zz[2+i]);
-				macro_modifier_name[i+1] = macro_modifier_name[i] + 
-					strlen(macro_modifier_name[i]) + 1;
+				macro_modifier_name[i] = string_make(zz[2+i]);
 			}
 		}
+
+		/* Process "T:<trigger>:<keycode>:<shift-keycode>" */
 		else if (tok >= 2)
 		{
+			char buf[1024];
 			int m;
 			char *t, *s;
 			if (max_macrotrigger >= MAX_MACRO_TRIG)
@@ -742,12 +767,8 @@ errr process_pref_file_command(char *buf)
 			m = max_macrotrigger;
 			max_macrotrigger++;
 
-			len = strlen(zz[0]) + 1 + strlen(zz[1]) + 1;
-			if (tok == 3)
-				len += strlen(zz[2]) + 1;
-			macro_trigger_name[m] = malloc(len);
-
-			t = macro_trigger_name[m];
+			/* Take into account the escape character  */
+			t = buf;
 			s = zz[0];
 			while (*s)
 			{
@@ -756,20 +777,17 @@ errr process_pref_file_command(char *buf)
 			}
 			*t = '\0';
 
-			macro_trigger_keycode[0][m] = macro_trigger_name[m] +
-				strlen(macro_trigger_name[m]) + 1;
-			strcpy(macro_trigger_keycode[0][m], zz[1]);
-			if (tok == 3)
-			{
-				macro_trigger_keycode[1][m] = macro_trigger_keycode[0][m] +
-					strlen(macro_trigger_keycode[0][m]) + 1;
-				strcpy(macro_trigger_keycode[1][m], zz[2]);
-			}
-			else
-			{
-				macro_trigger_keycode[1][m] = macro_trigger_keycode[0][m];
-			}
+			/* Get a trigger name */
+			macro_trigger_name[m] = string_make(buf);
+
+			/* Get the corresponding key code */
+			macro_trigger_keycode[0][m] = string_make(zz[1]);
+
+			/* Key code of a combination of it with the shift key */
+			macro_trigger_keycode[1][m] = string_make(zz[2]);
 		}
+
+		/* No error */
 		return 0;
 	}
 

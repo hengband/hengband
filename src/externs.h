@@ -13,11 +13,11 @@
  */
 
 extern int max_macrotrigger;
-extern char *macro_template;
-extern char *macro_modifier_chr;
-extern char *macro_modifier_name[MAX_MACRO_MOD];
-extern char *macro_trigger_name[MAX_MACRO_TRIG];
-extern char *macro_trigger_keycode[2][MAX_MACRO_TRIG];
+extern cptr macro_template;
+extern cptr macro_modifier_chr;
+extern cptr macro_modifier_name[MAX_MACRO_MOD];
+extern cptr macro_trigger_name[MAX_MACRO_TRIG];
+extern cptr macro_trigger_keycode[2][MAX_MACRO_TRIG];
 
 
 /* 日本語版機能追加で使う */
@@ -103,6 +103,7 @@ extern cptr shougou_moji[5];
 extern byte conv_terrain2feat[MAX_WILDERNESS];
 extern cptr silly_attacks[MAX_SILLY_ATTACK];
 extern monster_power monster_powers[MAX_MONSPELLS];
+extern cptr ident_info[];
 
 /* variable.c */
 extern cptr copyright[5];
@@ -631,7 +632,6 @@ extern void do_cmd_target(void);
 extern void do_cmd_look(void);
 extern void do_cmd_locate(void);
 extern void do_cmd_query_symbol(void);
-extern bool research_mon(void);
 extern void kamaenaoshi(int item);
 extern bool ang_sort_comp_hook(vptr u, vptr v, int a, int b);
 extern void ang_sort_swap_hook(vptr u, vptr v, int a, int b);
@@ -827,7 +827,7 @@ extern s16b m_pop(void);
 extern errr get_mon_num_prep(monster_hook_type monster_hook, monster_hook_type monster_hook2);
 extern s16b get_mon_num(int level);
 extern void monster_desc(char *desc, monster_type *m_ptr, int mode);
-extern void lore_do_probe(int m_idx);
+extern int lore_do_probe(int r_idx);
 extern void lore_treasure(int m_idx, int num_item, int num_gold);
 extern void sanity_blast(monster_type *m_ptr, bool necro);
 extern void update_mon(int m_idx, bool full);

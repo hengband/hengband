@@ -4147,6 +4147,299 @@ bool tele_town(void)
 
 
 /*
+ *  research_mon
+ *  -KMW-
+ */
+static bool research_mon(void)
+{
+	int i, n, r_idx;
+	char sym, query;
+	char buf[128];
+
+	bool notpicked;
+
+	bool recall = FALSE;
+
+	u16b why = 0;
+
+	u16b	*who;
+
+	/* XTRA HACK WHATSEARCH */
+	bool    all = FALSE;
+	bool    uniq = FALSE;
+	bool    norm = FALSE;
+	char temp[80] = "";
+
+	/* XTRA HACK REMEMBER_IDX */
+	static int old_sym = '\0';
+	static int old_i = 0;
+
+
+	/* Save the screen */
+	screen_save();
+
+	/* Get a character, or abort */
+#ifdef JP
+if (!get_com("モンスターの文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前):", &sym, FALSE)) 
+#else
+	if (!get_com("Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): ", &sym, FALSE))
+#endif
+
+	{
+		/* Restore */
+		screen_load();
+
+		return (FALSE);
+	}
+
+	/* Find that character info, and describe it */
+	for (i = 0; ident_info[i]; ++i)
+	{
+		if (sym == ident_info[i][0]) break;
+	}
+
+		/* XTRA HACK WHATSEARCH */
+	if (sym == KTRL('A'))
+	{
+		all = TRUE;
+#ifdef JP
+		strcpy(buf, "全モンスターのリスト");
+#else
+		strcpy(buf, "Full monster list.");
+#endif
+	}
+	else if (sym == KTRL('U'))
+	{
+		all = uniq = TRUE;
+#ifdef JP
+		strcpy(buf, "ユニーク・モンスターのリスト");
+#else
+		strcpy(buf, "Unique monster list.");
+#endif
+	}
+	else if (sym == KTRL('N'))
+	{
+		all = norm = TRUE;
+#ifdef JP
+		strcpy(buf, "ユニーク外モンスターのリスト");
+#else
+		strcpy(buf, "Non-unique monster list.");
+#endif
+	}
+	else if (sym == KTRL('M'))
+	{
+		all = TRUE;
+#ifdef JP
+		if (!get_string("名前(英語の場合小文字で可)",temp, 70))
+#else
+		if (!get_string("Enter name:",temp, 70))
+#endif
+		{
+			temp[0]=0;
+
+			/* Restore */
+			screen_load();
+
+			return FALSE;
+		}
+#ifdef JP
+		sprintf(buf, "名前:%sにマッチ",temp);
+#else
+		sprintf(buf, "Monsters with a name \"%s\"",temp);
+#endif
+	}
+	else if (ident_info[i])
+	{
+		sprintf(buf, "%c - %s.", sym, ident_info[i] + 2);
+	}
+	else
+	{
+#ifdef JP
+sprintf(buf, "%c - %s", sym, "無効な文字");
+#else
+		sprintf(buf, "%c - %s.", sym, "Unknown Symbol");
+#endif
+
+	}
+
+	/* Display the result */
+	prt(buf, 16, 10);
+
+
+	/* Allocate the "who" array */
+	C_MAKE(who, max_r_idx, u16b);
+
+	/* Collect matching monsters */
+	for (n = 0, i = 1; i < max_r_idx; i++)
+	{
+		monster_race *r_ptr = &r_info[i];
+
+		/* XTRA HACK WHATSEARCH */
+		/* Require non-unique monsters if needed */
+		if (norm && (r_ptr->flags1 & (RF1_UNIQUE))) continue;
+
+		/* Require unique monsters if needed */
+		if (uniq && !(r_ptr->flags1 & (RF1_UNIQUE))) continue;
+
+		/* 名前検索 */
+		if (temp[0]){
+		  int xx;
+		  char temp2[80];
+  
+		  for (xx=0; temp[xx] && xx<80; xx++){
+#ifdef JP
+		    if (iskanji( temp[xx])) { xx++; continue; }
+#endif
+		    if (isupper(temp[xx])) temp[xx]=tolower(temp[xx]);
+		  }
+  
+#ifdef JP
+		  strcpy(temp2, r_name+r_ptr->E_name);
+#else
+		  strcpy(temp2, r_name+r_ptr->name);
+#endif
+		  for (xx=0; temp2[xx] && xx<80; xx++)
+		    if (isupper(temp2[xx])) temp2[xx]=tolower(temp2[xx]);
+  
+#ifdef JP
+		  if (strstr(temp2, temp) || strstr_j(r_name + r_ptr->name, temp) )
+#else
+		  if (strstr(temp2, temp))
+#endif
+			  who[n++]=i;
+		}
+		else if (all || (r_ptr->d_char == sym)) who[n++] = i;
+	}
+
+	/* Nothing to recall */
+	if (!n)
+	{
+		/* Free the "who" array */
+		C_KILL(who, max_r_idx, u16b);
+
+		/* Restore */
+		screen_load();
+
+		return (FALSE);
+	}
+
+	/* Sort by level */
+	why = 2;
+	query = 'y';
+
+	/* Sort if needed */
+	if (why)
+	{
+		/* Select the sort method */
+		ang_sort_comp = ang_sort_comp_hook;
+		ang_sort_swap = ang_sort_swap_hook;
+
+		/* Sort the array */
+		ang_sort(who, &why, n);
+	}
+
+
+	/* Start at the end */
+	/* XTRA HACK REMEMBER_IDX */
+	if (old_sym == sym && old_i < n) i = old_i;
+	else i = n - 1;
+
+	notpicked = TRUE;
+
+	/* Scan the monster memory */
+	while (notpicked)
+	{
+		/* Extract a race */
+		r_idx = who[i];
+
+		/* Save this monster ID */
+		p_ptr->monster_race_idx = r_idx;
+
+		/* Hack -- Handle stuff */
+		handle_stuff();
+
+		/* Hack -- Begin the prompt */
+		roff_top(r_idx);
+
+		/* Hack -- Complete the prompt */
+#ifdef JP
+Term_addstr(-1, TERM_WHITE, " ['r'思い出, ' 'で続行, ESC]");
+#else
+		Term_addstr(-1, TERM_WHITE, " [(r)ecall, ESC, space to continue]");
+#endif
+
+
+		/* Interact */
+		while (1)
+		{
+			/* Recall */
+			if (recall)
+			{
+				/* Recall on screen */
+				monster_race *r_ptr = &r_info[r_idx];
+				int m;
+
+				/* Get maximal info about this monster */
+				lore_do_probe(r_idx);
+			
+				/* know every thing mode */
+				screen_roff(r_idx, 0x01);
+				notpicked = FALSE;
+
+				/* XTRA HACK REMEMBER_IDX */
+				old_sym = sym;
+				old_i = i;
+			}
+
+			/* Command */
+			query = inkey();
+
+			/* Normal commands */
+			if (query != 'r') break;
+
+			/* Toggle recall */
+			recall = !recall;
+		}
+
+		/* Stop scanning */
+		if (query == ESCAPE) break;
+
+		/* Move to "prev" monster */
+		if (query == '-')
+		{
+			if (++i == n)
+			{
+				i = 0;
+				if (!expand_list) break;
+			}
+		}
+
+		/* Move to "next" monster */
+		else
+		{
+			if (i-- == 0)
+			{
+				i = n - 1;
+				if (!expand_list) break;
+			}
+		}
+	}
+
+
+	/* Re-display the identity */
+	/* prt(buf, 5, 5);*/
+
+	/* Free the "who" array */
+	C_KILL(who, max_r_idx, u16b);
+
+	/* Restore */
+	screen_load();
+
+	return (!notpicked);
+}
+
+
+/*
  * Execute a building command
  */
 static void bldg_process_command(building_type *bldg, int i)

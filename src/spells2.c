@@ -5180,11 +5180,16 @@ bool probing(void)
 			char m_name[80];
 
 			/* Start the message */
+			if (!probe)
+			{
 #ifdef JP
-			if (!probe) {msg_print("調査中...");msg_print(NULL);}
+				msg_print("調査中...");
 #else
-			if (!probe) {msg_print("Probing...");msg_print(NULL);}
+				msg_print("Probing...");
 #endif
+			}
+
+			msg_print(NULL);
 
 			if (m_ptr->ap_r_idx != m_ptr->r_idx)
 			{
@@ -5256,13 +5261,32 @@ sprintf(buf, "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:", m_name, align, m_
 			p_ptr->window |= (PW_MESSAGE);
 			window_stuff();
 
-			/* Learn all of the non-spell, non-treasure flags */
-			lore_do_probe(i);
-
 			if (m_ptr->ml) move_cursor_relative(m_ptr->fy, m_ptr->fx);
 			inkey();
 
 			Term_erase(0, 0, 255);
+
+			/* Learn everything about this monster */
+			if (lore_do_probe(m_ptr->r_idx))
+			{
+#ifdef JP
+				/* Note that we learnt some new flags  -Mogami- */
+				msg_format("%sについてさらに詳しくなった気がする。", m_name);
+#else
+				char buf[80];
+
+				/* Get base name of monster */
+				strcpy(buf, (r_name + r_ptr->name));
+
+				/* Pluralize it */
+				plural_aux(buf);
+
+				/* Note that we learnt some new flags  -Mogami- */
+				msg_format("You now know more about %s.", buf);
+#endif
+				/* Clear -more- prompt */
+				msg_print(NULL);
+			}
 
 			/* Probe worked */
 			probe = TRUE;

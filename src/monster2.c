@@ -1831,24 +1831,104 @@ if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
 
 /*
  * Learn about a monster (by "probing" it)
+ *
+ * Return the number of new flags learnt.  -Mogami-
  */
-void lore_do_probe(int m_idx)
+int lore_do_probe(int r_idx)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_race *r_ptr = &r_info[r_idx];
+	int i, n = 0;
+	byte tmp_byte;
 
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	/* Maximal info about awareness */
+	if (r_ptr->r_wake != MAX_UCHAR) n++;
+	if (r_ptr->r_ignore != MAX_UCHAR) n++;
+	r_ptr->r_wake = r_ptr->r_ignore = MAX_UCHAR;
+				
+	/* Observe "maximal" attacks */
+	for (i = 0; i < 4; i++)
+	{
+		/* Examine "actual" blows */
+		if (r_ptr->blow[i].effect || r_ptr->blow[i].method)
+		{
+			/* Maximal observations */
+			if (r_ptr->r_blows[i] != MAX_UCHAR) n++;
+			r_ptr->r_blows[i] = MAX_UCHAR;
+		}
+	}
+				
+	/* Maximal drops */
+	tmp_byte = 
+		(((r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) +
+		 ((r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0) +
+		 ((r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0) +
+		 ((r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0) +
+		 ((r_ptr->flags1 & RF1_DROP_90)  ? 1 : 0) +
+		 ((r_ptr->flags1 & RF1_DROP_60)  ? 1 : 0));
 
-	/* Hack -- Memorize some flags */
+	/* Only "valid" drops */
+	if (!(r_ptr->flags1 & RF1_ONLY_GOLD))
+	{
+		if (r_ptr->r_drop_item != tmp_byte) n++;
+		r_ptr->r_drop_item = tmp_byte;
+	}
+	if (!(r_ptr->flags1 & RF1_ONLY_ITEM))
+	{
+		if (r_ptr->r_drop_gold != tmp_byte) n++;
+		r_ptr->r_drop_gold = tmp_byte;
+	}
+				
+	/* Observe many spells */
+	if (r_ptr->r_cast_spell != MAX_UCHAR) n++;
+	r_ptr->r_cast_spell = MAX_UCHAR;
+				
+	/* Count unknown flags */
+	for (i = 0; i < 32; i++)
+	{
+		if (!(r_ptr->r_flags1 & (1L << i)) &&
+		    (r_ptr->flags1 & (1L << i))) n++;
+		if (!(r_ptr->r_flags2 & (1L << i)) &&
+		    (r_ptr->flags2 & (1L << i))) n++;
+		if (!(r_ptr->r_flags3 & (1L << i)) &&
+		    (r_ptr->flags3 & (1L << i))) n++;
+		if (!(r_ptr->r_flags4 & (1L << i)) &&
+		    (r_ptr->flags4 & (1L << i))) n++;
+		if (!(r_ptr->r_flags5 & (1L << i)) &&
+		    (r_ptr->flags5 & (1L << i))) n++;
+		if (!(r_ptr->r_flags6 & (1L << i)) &&
+		    (r_ptr->flags6 & (1L << i))) n++;
+
+		/* r_flags7 is actually unused */
+#if 0
+		if (!(r_ptr->r_flags7 & (1L << i)) &&
+		    (r_ptr->flags7 & (1L << i))) n++;
+#endif
+	}
+
+	/* Know all the flags */
 	r_ptr->r_flags1 = r_ptr->flags1;
 	r_ptr->r_flags2 = r_ptr->flags2;
 	r_ptr->r_flags3 = r_ptr->flags3;
+	r_ptr->r_flags4 = r_ptr->flags4;
+	r_ptr->r_flags5 = r_ptr->flags5;
+	r_ptr->r_flags6 = r_ptr->flags6;
+
+	/* r_flags7 is actually unused */
+	/* r_ptr->r_flags7 = r_ptr->flags7; */
+
+	/* Know about evolution */
+	if (!(r_ptr->r_xtra1 & MR1_SINKA)) n++;
+	r_ptr->r_xtra1 |= MR1_SINKA;
 
 	/* Update monster recall window */
-	if (p_ptr->monster_race_idx == m_ptr->r_idx)
+	if (p_ptr->monster_race_idx == r_idx)
 	{
 		/* Window stuff */
 		p_ptr->window |= (PW_MONSTER);
 	}
+
+	/* Return the number of new flags learnt */
+	return n;
 }
 
 

@@ -179,7 +179,7 @@ static void roff_aux(int r_idx, int mode)
 	flags6 = (r_ptr->flags6 & r_ptr->r_flags6);
 	flags7 = (r_ptr->flags7 & r_ptr->flags7);
 
-	/* cheat_know or reserch_mon() */
+	/* cheat_know or research_mon() */
 	if (cheat_know || (mode & 0x01))
 		know_everything = TRUE;
 

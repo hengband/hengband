@@ -27,11 +27,11 @@ cptr copyright[5] =
 
 
 int max_macrotrigger = 0;
-char *macro_template = NULL;
-char *macro_modifier_chr;
-char *macro_modifier_name[MAX_MACRO_MOD];
-char *macro_trigger_name[MAX_MACRO_TRIG];
-char *macro_trigger_keycode[2][MAX_MACRO_TRIG];
+cptr macro_template = NULL;
+cptr macro_modifier_chr;
+cptr macro_modifier_name[MAX_MACRO_MOD];
+cptr macro_trigger_name[MAX_MACRO_TRIG];
+cptr macro_trigger_keycode[2][MAX_MACRO_TRIG];
 
 /* レベルアップの時に上昇量を表示するのに使う */
 int level_up = 0;

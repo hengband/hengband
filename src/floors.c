@@ -553,7 +553,7 @@ static void update_unique_artifact(s16b cur_floor_id)
  * When a monster is at a place where player will return,
  * Get out of the my way!
  */
-static void get_out_monster()
+static void get_out_monster(void)
 {
 	int tries = 0;
 	int dis = 1;
