@@ -3912,7 +3912,7 @@ put_str("Lv   MP ¼ºÎ¨ ¸ú²Ì", y, x + 35);
 				s_ptr = &mp_ptr->info[((j < 1) ? p_ptr->realm1 : p_ptr->realm2) - 1][i % 32];
 			}
 
-			strcpy(name, spell_names[technic2magic((j < 1) ? p_ptr->realm1 : p_ptr->realm2)-1][i % 32]);
+			strcpy(name, do_spell(spell_id_from((j < 1) ? p_ptr->realm1 : p_ptr->realm2, i % 32), SPELL_NAME));
 
 			/* Illegible */
 			if (s_ptr->slevel >= 99)
@@ -4198,338 +4198,6 @@ bool spell_okay(int spell, bool learned, bool study_pray, int use_realm)
 }
 
 
-
-/*
- * Extra information on a spell -DRS-
- *
- * We can use up to 14 characters of the buffer 'p'
- *
- * The strings in this function were extracted from the code in the
- * functions "do_cmd_cast()" and "do_cmd_pray()" and may be dated.
- */
-static void spell_info(char *p, int spell, int use_realm)
-{
-	int plev = p_ptr->lev;
-
-	/* See below */
-	int orb = plev + (plev / ((p_ptr->pclass == CLASS_PRIEST ||
-			    p_ptr->pclass == CLASS_HIGH_MAGE ||
-			    p_ptr->pclass == CLASS_SORCERER) ? 2 : 4));
-
-	int burst = plev + (plev / ((p_ptr->pclass == CLASS_MAGE ||
-				     p_ptr->pclass == CLASS_HIGH_MAGE ||
-				     p_ptr->pclass == CLASS_SORCERER) ? 2 : 4));
-#ifdef JP
-	cptr s_dam = "Â»½ý:";
-	cptr s_dur = "´ü´Ö:";
-	cptr s_range = "ÈÏ°Ï:";
-	cptr s_heal = "²óÉü:";
-	cptr s_random = "¥é¥ó¥À¥à";
-	cptr s_delay = "ÃÙ±ä:";
-#else
-	cptr s_dam = "dam ";
-	cptr s_dur = "dur ";
-	cptr s_range = "range ";
-	cptr s_heal = "heal ";
-	cptr s_random = "random";
-	cptr s_delay = "delay ";
-#endif
-	/* Default */
-	strcpy(p, "");
-
-	/* Analyze the spell */
-	switch (use_realm)
-	{
-	case REALM_LIFE: /* Life */
-		switch (spell)
-		{
-		case  0: sprintf(p, " %s2d10", s_heal); break;
-		case  1: sprintf(p, " %s12+d12", s_dur); break;
-		case  2: sprintf(p, " %s%dd4", s_dam, 3 + ((plev - 1) / 5)); break;
-		case  3: sprintf(p, " %s%d", s_dam, 10 + (plev / 2)); break;
-		case  5: sprintf(p, " %s4d10", s_heal); break;
-		case  9: sprintf(p, " %s%dd8", s_dam, 8 + ((plev - 1) / 5)); break;
-		case 10: sprintf(p, " %s8d10", s_heal); break;
-		case 11: sprintf(p, " %s20+d20", s_dur); break;
-		case 14: sprintf(p, " %s300", s_heal); break;
-		case 18: sprintf(p, " %sd%d", s_dam, 5 * plev); break;
-		case 20: sprintf(p, " %s%dd15", s_dam, 5 + ((plev - 1) / 3)); break;
-		case 21: sprintf(p, " %s15+d21", s_delay); break;
-		case 29: sprintf(p, " %s2000", s_heal); break;
-		case 31: sprintf(p, " %s%d+d%d", s_dur,(plev/2), (plev/2)); break;
-		}
-		break;
-		
-	case REALM_SORCERY: /* Sorcery */
-		switch (spell)
-		{
-		case  1: sprintf(p, " %s10", s_range); break;
-		case  3: sprintf(p, " %s%d", s_dam, 10 + (plev / 2)); break;
-		case  5: sprintf(p, " %s%d", s_range, plev * 5); break;
-		case 13: sprintf(p, " %s%d+d%d", s_dur, plev, plev + 20); break;
-		case 18: sprintf(p, " %s25+d30", s_dur); break;
-		case 22: sprintf(p, " %s15+d21", s_delay); break;
-		case 23: sprintf(p, " %s%d", s_range, plev / 2 + 10); break;
-		case 25: sprintf(p, " %s7d7+%d", s_dam, plev); break;
-#ifdef JP
-		case 26: sprintf(p, " ºÇÂç½ÅÎÌ:%d.%dkg", lbtokg1(plev * 15),lbtokg2(plev * 15)); break;
-#else
-		case 26: sprintf(p, " max wgt %d", plev * 15 / 10); break;
-#endif
-		case 27: sprintf(p, " %s25+d30", s_dur); break;
-		case 31: sprintf(p, " %s4+d4", s_dur); break;
-		}
-		break;
-		
-	case REALM_NATURE: /* Nature */
-		switch (spell)
-		{
-#ifdef JP
-		case  1: sprintf(p, " %s%dd4 ¼ÍÄø%d", s_dam, (3 + ((plev - 1) / 5)), plev/6+2); break;
-#else
-		case  1: sprintf(p, " %s%dd4 rng %d", s_dam, (3 + ((plev - 1) / 5)), plev/6+2); break;
-#endif
-		case  4: sprintf(p, " %s%d", s_dam, 10 + (plev / 2)); break;
-		case  6: sprintf(p, " %s20+d20", s_dur); break;
-		case  7: sprintf(p, " %s2d8", s_heal); break;
-		case  9: sprintf(p, " %s%dd8", s_dam, (3 + ((plev - 5) / 4))); break;
-		case 11: sprintf(p, " %s%dd8", s_dam, (5 + ((plev - 5) / 4))); break;
-		case 12: sprintf(p, " %s6d8", s_dam); break;
-		case 15: sprintf(p, " %s500", s_heal); break;
-		case 17: sprintf(p, " %s20+d30", s_dur); break;
-		case 18: sprintf(p, " %s20+d20", s_dur); break;
-#ifdef JP
-		case 24: sprintf(p, " È¾·Â:10"); break;
-#else
-		case 24: sprintf(p, " rad 10"); break;
-#endif
-		case 26: sprintf(p, " %s%d", s_dam, 70 + plev * 3 / 2); break;
-		case 27: sprintf(p, " %s%d", s_dam, 90 + plev * 3 / 2); break;
-		case 28: sprintf(p, " %s%d", s_dam, 100 + plev * 3 / 2); break;
-		case 29: sprintf(p, " %s75", s_dam); break;
-		case 31: sprintf(p, " %s%d+%d", s_dam, 4 * plev, 100 + plev); break;
-		}
-		break;
-		
-	case REALM_CHAOS: /* Chaos */
-		switch (spell)
-		{
-		case  0: sprintf(p, " %s%dd4", s_dam, 3 + ((plev - 1) / 5)); break;
-		case  2: sprintf(p, " %s%d", s_dam, 10 + (plev / 2)); break;
-		case  4: sprintf(p, " %s3d5+%d", s_dam, burst); break;
-		case  5: sprintf(p, " %s%dd8", s_dam, (6 + ((plev - 5) / 4))); break;
-		case  6: sprintf(p, " %s%dd8", s_dam, (8 + ((plev - 5) / 4))); break;
-		case  7: sprintf(p, " %s%d", s_range, plev * 5); break;
-		case  8: sprintf(p, " %s", s_random); break;
-		case  9: sprintf(p, " %s%dd8", s_dam, (10 + ((plev - 5) / 4))); break;
-		case 10: sprintf(p, " %s%d", s_dam, (60 + plev)/2); break;
-		case 11: sprintf(p, " %s%dd8", s_dam, (11 + ((plev - 5) / 4))); break;
-		case 12: sprintf(p, " %s%d", s_dam, 55 + plev); break;
-		case 15: sprintf(p, " %s%d", s_dam, 99 + plev*2); break;
-		case 17: sprintf(p, " %s%dd8", s_dam, (5 + (plev / 10))); break;
-		case 19: sprintf(p, " %s%d", s_dam, 70 + plev); break;
-		case 21: sprintf(p, " %s%d", s_dam, 120 + plev*2); break;
-		case 24: sprintf(p, " %s%dd8", s_dam, (9 + (plev / 10))); break;
-#ifdef JP
-		case 25: sprintf(p, " %s³Æ%d", s_dam, plev * 2); break;
-#else
-		case 25: sprintf(p, " dam %d each", plev * 2); break;
-#endif
-		case 26: sprintf(p, " %s%d", s_dam, 150 + plev*3/2); break;
-		case 27: sprintf(p, " %s150 / 250", s_dam); break;
-		case 29: sprintf(p, " %s%d", s_dam, 300 + (plev * 4)); break;
-		case 30: sprintf(p, " %s%ld", s_dam, p_ptr->chp); break;
-		case 31: sprintf(p, " %s3 * 175", s_dam); break;
-		}
-		break;
-		
-	case REALM_DEATH: /* Death */
-		switch (spell)
-		{
-		case  1: sprintf(p, " %s%dd3", s_dam, (3 + ((plev - 1) / 5))); break;
-		case  3: sprintf(p, " %s%d", s_dam, 10 + (plev / 2)); break;
-		case  5: sprintf(p, " %s20+d20", s_dur); break;
-		case  8: sprintf(p, " %s3d6+%d", s_dam, burst); break;
-		case  9: sprintf(p, " %s%dd8", s_dam, (8 + ((plev - 5) / 4))); break;
-		case 10: sprintf(p, " %s%d", s_dam, 30+plev); break;
-#ifdef JP
-		case 13: sprintf(p, " Â»:%d+d%d", plev * 2, plev * 2); break;
-#else
-		case 13: sprintf(p, " d %d+d%d", plev * 2, plev * 2); break;
-#endif
-		case 16: sprintf(p, " %s25+d25", s_dur); break;
-		case 17: sprintf(p, " %s", s_random); break;
-		case 18: sprintf(p, " %s%dd8", s_dam, (4 + ((plev - 5) / 4))); break;
-		case 19: sprintf(p, " %s25+d25", s_dur); break;
-		case 21: sprintf(p, " %s3*100", s_dam); break;
-		case 22: sprintf(p, " %sd%d", s_dam, plev * 3); break;
-		case 23: sprintf(p, " %s%d", s_dam, 100 + plev * 2); break;
-		case 27: sprintf(p, " %s%d+d%d", s_dur,10+plev/2, 10+plev/2); break;
-		case 30: sprintf(p, " %s666", s_dam); break;
-		case 31: sprintf(p, " %s%d+d%d", s_dur, (plev / 2), (plev / 2)); break;
-		}
-		break;
-		
-	case REALM_TRUMP: /* Trump */
-		switch (spell)
-		{
-		case  0: sprintf(p, " %s10", s_range); break;
-		case  2: sprintf(p, " %s", s_random); break;
-		case  4: sprintf(p, " %s%d", s_range, plev * 4); break;
-		case  5: sprintf(p, " %s25+d30", s_dur); break;
-#ifdef JP
-		case  8: sprintf(p, " ºÇÂç½ÅÎÌ:%d.%d", lbtokg1(plev * 15 / 10),lbtokg2(plev * 15 / 10)); break;
-#else
-		case  8: sprintf(p, " max wgt %d", plev * 15 / 10); break;
-#endif
-		case 13: sprintf(p, " %s%d", s_range, plev / 2 + 10); break;
-		case 14: sprintf(p, " %s15+d21", s_delay); break;
-		case 26: sprintf(p, " %s%d", s_heal, plev * 10 + 200); break;
-#ifdef JP
-		case 28: sprintf(p, " %s³Æ%d", s_dam, plev * 2); break;
-#else
-		case 28: sprintf(p, " %s%d each", s_dam, plev * 2); break;
-#endif
-		}
-		break;
-		
-	case REALM_ARCANE: /* Arcane */
-		switch (spell)
-		{
-		case  0: sprintf(p, " %s%dd3", s_dam, 3 + ((plev - 1) / 5)); break;
-		case  4: sprintf(p, " %s10", s_range); break;
-		case  5: sprintf(p, " %s2d%d", s_dam, plev / 2); break;
-		case  7: sprintf(p, " %s2d8", s_heal); break;
-		case 14:
-		case 15:
-		case 16:
-		case 17: sprintf(p, " %s20+d20", s_dur); break;
-		case 18: sprintf(p, " %s4d8", s_heal); break;
-		case 19: sprintf(p, " %s%d", s_range, plev * 5); break;
-		case 21: sprintf(p, " %s6d8", s_dam); break;
-		case 24: sprintf(p, " %s24+d24", s_dur); break;
-		case 28: sprintf(p, " %s%d", s_dam, 75 + plev); break;
-		case 30: sprintf(p, " %s15+d21", s_delay); break;
-		case 31: sprintf(p, " %s25+d30", s_dur); break;
-		}
-		break;
-		
-	case REALM_ENCHANT: /* Craft */
-		switch (spell)
-		{
-		case 0: sprintf(p, " %s100+d100", s_dur); break;
-		case 1: sprintf(p, " %s80+d80", s_dur); break;
-		case 3:
-		case 4:
-		case 6:
-		case 7:
-		case 10:
-		case 18: sprintf(p, " %s20+d20", s_dur); break;
-		case 5: sprintf(p, " %s25+d25", s_dur); break;
-		case 8: sprintf(p, " %s24+d24", s_dur); break;
-		case 11: sprintf(p, " %s25+d25", s_dur); break;
-		case 13: sprintf(p, " %s%d+d25", s_dur, plev * 3); break;
-		case 15: sprintf(p, " %s%d+d%d", s_dur, plev/2, plev/2); break;
-		case 16: sprintf(p, " %s25+d30", s_dur); break;
-		case 17: sprintf(p, " %s30+d20", s_dur); break;
-		case 19: sprintf(p, " %s%d+d%d", s_dur, plev, plev+20); break;
-		case 20: sprintf(p, " %s50+d50", s_dur); break;
-		case 23: sprintf(p, " %s20+d20", s_dur); break;
-		case 31: sprintf(p, " %s13+d13", s_dur); break;
-		}
-		break;
-		
-	case REALM_DAEMON: /* Daemon */
-		switch (spell)
-		{
-		case  0: sprintf(p, " %s%dd4", s_dam, 3 + ((plev - 1) / 5)); break;
-		case  2: sprintf(p, " %s12+d12", s_dur); break;
-		case  3: sprintf(p, " %s20+d20", s_dur); break;
-		case  5: sprintf(p, " %s%dd8", s_dam, (6 + ((plev - 5) / 4))); break;
-		case  7: sprintf(p, " %s3d6+%d", s_dam, burst); break;
-		case 10: sprintf(p, " %s20+d20", s_dur); break;
-		case 11: sprintf(p, " %s%dd8", s_dam, (11 + ((plev - 5) / 4))); break;
-		case 12: sprintf(p, " %s%d", s_dam, 55 + plev); break;
-		case 14: sprintf(p, " %s%d", s_dam, 100 + plev*3/2); break;
-		case 16: sprintf(p, " %s30+d25", s_dur); break;
-		case 17: sprintf(p, " %s20+d20", s_dur); break;
-		case 18: sprintf(p, " %s%d", s_dam, 55 + plev); break;
-		case 19: sprintf(p, " %s%d", s_dam, 80 + plev*3/2); break;
-		case 20: sprintf(p, " %s%d+d%d", s_dur,10+plev/2, 10+plev/2); break;
-		case 21: sprintf(p, " %sd%d+d%d", s_dam, 2 * plev, 2 * plev); break;
-		case 22: sprintf(p, " %s%d", s_dam, 100 + plev*2); break;
-		case 24: sprintf(p, " %s25+d25", s_dur); break;
-		case 25: sprintf(p, " %s20+d20", s_dur); break;
-		case 26: sprintf(p, " %s%d+%d", s_dam, 25+plev/2, 25+plev/2); break;
-		case 29: sprintf(p, " %s%d", s_dam, plev*15); break;
-		case 30: sprintf(p, " %s600", s_dam); break;
-		case 31: sprintf(p, " %s15+d15", s_dur); break;
-		}
-		break;
-		
-	case REALM_CRUSADE: /* Crusade */
-		switch (spell)
-		{
-		case  0: sprintf(p, " %s%dd4", s_dam, 3 + ((plev - 1) / 5)); break;
-		case  5: sprintf(p, " %s%d", s_range, 25+plev/2); break;
-#ifdef JP
-		case  6: sprintf(p, " %s³Æ%dd2", s_dam, 3+((plev-1)/9)); break;
-#else
-		case  6: sprintf(p, " %s%dd2 each", s_dam, 3+((plev-1)/9)); break;
-#endif
-		case  9: sprintf(p, " %s3d6+%d", s_dam, orb); break;
-		case 10: sprintf(p, " %sd%d", s_dam, plev); break;
-		case 12: sprintf(p, " %s24+d24", s_dur); break;
-		case 13: sprintf(p, " %sd25+%d", s_dur, 3 * plev); break;
-		case 14: sprintf(p, " %s%d", s_dam, plev*5); break;
-#ifdef JP
-		case 15: sprintf(p, " Â»:d%d/²ó:100", 6 * plev); break;
-#else
-		case 15: sprintf(p, " dam:d%d/h100", 6 * plev); break;
-#endif
-		case 18: sprintf(p, " %s18+d18", s_dur); break;
-		case 19: sprintf(p, " %sd%d", s_dam, 4 * plev); break;
-		case 20: sprintf(p, " %sd%d", s_dam, 4 * plev); break;
-		case 22: sprintf(p, " %s%d", s_dam, 2 * plev+100); break;
-		case 24: sprintf(p, " %s25+d25", s_dur); break;
-		case 28: sprintf(p, " %s10+d10", s_dur); break;
-#ifdef JP
-		case 29: sprintf(p, " %s³Æ%d", s_dam, plev*3+25); break;
-#else
-		case 29: sprintf(p, " %s%d each", s_dam, plev*3+25); break;
-#endif
-#ifdef JP
-		case 30: sprintf(p, " ²ó100/Â»%d+%d", plev * 4, plev*11/2); break;
-#else
-		case 30: sprintf(p, " h100/dm%d+%d", plev * 4, plev*11/2); break;
-#endif
-		}
-		break;
-
-	case REALM_MUSIC: /* Music */
-		switch (spell)
-		{
-		case 2 : sprintf(p, " %s%dd4", s_dam, 4 + ((plev - 1) / 5)); break;
-		case 4 : sprintf(p, " %s2d6", s_heal); break;
-		case 9 : sprintf(p, " %sd%d", s_dam, plev * 3 / 2); break;
-		case 13: sprintf(p, " %s%dd7", s_dam, 10 + (plev / 5)); break;
-		case 20: sprintf(p, " %sd%d+d%d", s_dam, plev * 3, plev * 3); break;
-		case 22: sprintf(p, " %s%dd10", s_dam, 15 + ((plev - 1) / 2)); break;
-		case 27: sprintf(p, " %sd%d", s_dam, plev * 3); break;
-		case 28: sprintf(p, " %s15d10", s_heal); break;
-		case 30: sprintf(p, " %s%dd10", s_dam, 50 + plev); break;
-		}
-		break;
-	default:
-#ifdef JP
-		sprintf(p, "Ì¤ÃÎ¤Î¥¿¥¤¥×: %d", use_realm);
-#else
-		sprintf(p, "Unknown type: %d.", use_realm);
-#endif
-	}
-}
-
-
 /*
  * Print a list of spells (for browsing or casting or viewing)
  */
@@ -4649,7 +4317,7 @@ strcat(out_val, format("%-30s", "(È½ÆÉÉÔÇ½)"));
 		/* XXX XXX Could label spells above the players level */
 
 		/* Get extra info */
-		spell_info(info, spell, use_realm);
+		strcpy(info, do_spell(spell_id_from(use_realm, spell), SPELL_INFO));
 
 		/* Use that info */
 		comment = info;
@@ -4663,9 +4331,9 @@ strcat(out_val, format("%-30s", "(È½ÆÉÉÔÇ½)"));
 			if (s_ptr->slevel > p_ptr->max_plv)
 			{
 #ifdef JP
-comment = " Ì¤ÃÎ";
+comment = "Ì¤ÃÎ";
 #else
-				comment = " unknown";
+				comment = "unknown";
 #endif
 
 				line_attr = TERM_L_BLUE;
@@ -4673,9 +4341,9 @@ comment = " Ì¤ÃÎ";
 			else if (s_ptr->slevel > p_ptr->lev)
 			{
 #ifdef JP
-comment = " ËºµÑ";
+comment = "ËºµÑ";
 #else
-				comment = " forgotten";
+				comment = "forgotten";
 #endif
 
 				line_attr = TERM_YELLOW;
@@ -4684,9 +4352,9 @@ comment = " ËºµÑ";
 		else if ((use_realm != p_ptr->realm1) && (use_realm != p_ptr->realm2))
 		{
 #ifdef JP
-comment = " Ì¤ÃÎ";
+comment = "Ì¤ÃÎ";
 #else
-			comment = " unknown";
+			comment = "unknown";
 #endif
 
 			line_attr = TERM_L_BLUE;
@@ -4696,9 +4364,9 @@ comment = " Ì¤ÃÎ";
 		    ((p_ptr->spell_forgotten2 & (1L << spell))))
 		{
 #ifdef JP
-comment = " ËºµÑ";
+comment = "ËºµÑ";
 #else
-			comment = " forgotten";
+			comment = "forgotten";
 #endif
 
 			line_attr = TERM_YELLOW;
@@ -4708,9 +4376,9 @@ comment = " ËºµÑ";
 		    (p_ptr->spell_learned2 & (1L << spell))))
 		{
 #ifdef JP
-comment = " Ì¤ÃÎ";
+comment = "Ì¤ÃÎ";
 #else
-			comment = " unknown";
+			comment = "unknown";
 #endif
 
 			line_attr = TERM_L_BLUE;
@@ -4720,9 +4388,9 @@ comment = " Ì¤ÃÎ";
 		    (p_ptr->spell_worked2 & (1L << spell))))
 		{
 #ifdef JP
-comment = " Ì¤·Ð¸³";
+comment = "Ì¤·Ð¸³";
 #else
-			comment = " untried";
+			comment = "untried";
 #endif
 
 			line_attr = TERM_L_GREEN;
@@ -4732,13 +4400,13 @@ comment = " Ì¤·Ð¸³";
 		if (use_realm == REALM_HISSATSU)
 		{
 			strcat(out_val, format("%-25s %2d %4d",
-			    spell_names[technic2magic(use_realm)-1][spell], /* realm, spell */
+			    do_spell(spell_id_from(use_realm, spell), SPELL_NAME), /* realm, spell */
 			    s_ptr->slevel, need_mana));
 		}
 		else
 		{
-			strcat(out_val, format("%-25s%c%-4s %2d %4d %3d%%%s",
-			    spell_names[technic2magic(use_realm)-1][spell], /* realm, spell */
+			strcat(out_val, format("%-25s%c%-4s %2d %4d %3d%% %s",
+			    do_spell(spell_id_from(use_realm, spell), SPELL_NAME), /* realm, spell */
 			    (max ? '!' : ' '), ryakuji,
 			    s_ptr->slevel, need_mana, spell_chance(spell, use_realm), comment));
 		}

@@ -2151,10 +2151,10 @@ static void calc_spells(void)
 			/* Message */
 #ifdef JP
 			msg_format("%sの%sを忘れてしまった。",
-				   spell_names[technic2magic(which)-1][j%32], p );
+				   do_spell(spell_id_from(which, j%32), SPELL_NAME), p );
 #else
 			msg_format("You have forgotten the %s of %s.", p,
-			spell_names[technic2magic(which)-1][j%32]);
+			do_spell(spell_id_from(which, j%32), SPELL_NAME));
 #endif
 
 
@@ -2211,10 +2211,10 @@ static void calc_spells(void)
 			/* Message */
 #ifdef JP
 			msg_format("%sの%sを忘れてしまった。",
-				   spell_names[technic2magic(which)-1][j%32], p );
+				   do_spell(spell_id_from(which, j%32), SPELL_NAME), p );
 #else
 			msg_format("You have forgotten the %s of %s.", p,
-				   spell_names[technic2magic(which)-1][j%32]);
+				   do_spell(spell_id_from(which, j%32), SPELL_NAME));
 #endif
 
 
@@ -2287,10 +2287,10 @@ static void calc_spells(void)
 			/* Message */
 #ifdef JP
 			msg_format("%sの%sを思い出した。",
-				   spell_names[technic2magic(which)-1][j%32], p );
+				   do_spell(spell_id_from(which, j%32), SPELL_NAME), p );
 #else
 			msg_format("You have remembered the %s of %s.",
-				   p, spell_names[technic2magic(which)-1][j%32]);
+				   p, do_spell(spell_id_from(which, j%32), SPELL_NAME));
 #endif
 
 

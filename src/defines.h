@@ -757,6 +757,18 @@
 
 
 /*
+ * Mode constant for do_spell() and do_singing()
+ */
+#define SPELL_NAME   0
+#define SPELL_DESC   1
+#define SPELL_INFO   2
+#define SPELL_CAST   3
+#define SPELL_FAIL   4
+#define SPELL_STOP   5
+#define SPELL_CONT   6
+
+
+/*
  * Maximum number of "normal" pack slots, and the index of the "overflow"
  * slot, which can hold an item, but only temporarily, since it causes the
  * pack to "overflow", dropping the "last" item onto the ground.  Since this

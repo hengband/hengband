@@ -740,7 +740,6 @@ extern void do_cmd_time(void);
 extern cptr spell_category_name(int tval);
 extern void do_cmd_browse(void);
 extern void do_cmd_study(void);
-extern void stop_singing(void);
 extern void do_cmd_cast(void);
 extern void do_cmd_pray(void);
 extern bool rakuba(int dam, bool force);
@@ -762,6 +761,12 @@ extern void do_cmd_rerate(bool display);
 extern void ring_of_power(int dir);
 extern void do_cmd_use(void);
 extern void do_cmd_magic_eater(bool only_browse);
+
+/* do-spell.c */
+extern int spell_id_from(int realm, int spell);
+extern cptr do_singing(int song, int mode);
+extern void stop_singing(void);
+extern cptr do_spell(int spell, int mode);
 
 /* dungeon.c */
 extern void leave_quest_check(void);

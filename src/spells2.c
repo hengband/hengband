@@ -3566,7 +3566,7 @@ bool detect_traps(int range, bool known)
 
 	if (known) p_ptr->dtrap = TRUE;
 
-	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] > MUSIC_DETECT)) detect = FALSE;
+	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 0) detect = FALSE;
 
 	/* Describe */
 	if (detect)
@@ -3590,7 +3590,7 @@ bool detect_doors(int range)
 {
 	bool detect = detect_feat_flag(range, FF_DOOR, TRUE);
 
-	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] > MUSIC_DETECT)) detect = FALSE;
+	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 0) detect = FALSE;
 
 	/* Describe */
 	if (detect)
@@ -3614,7 +3614,7 @@ bool detect_stairs(int range)
 {
 	bool detect = detect_feat_flag(range, FF_STAIRS, TRUE);
 
-	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] > MUSIC_DETECT)) detect = FALSE;
+	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 0) detect = FALSE;
 
 	/* Describe */
 	if (detect)
@@ -3638,7 +3638,7 @@ bool detect_treasure(int range)
 {
 	bool detect = detect_feat_flag(range, FF_HAS_GOLD, TRUE);
 
-	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] > MUSIC_DETECT+6)) detect = FALSE;
+	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 6) detect = FALSE;
 
 	/* Describe */
 	if (detect)
@@ -3699,7 +3699,7 @@ bool detect_objects_gold(int range)
 		}
 	}
 
-	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] > MUSIC_DETECT+6)) detect = FALSE;
+	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 6) detect = FALSE;
 
 	/* Describe */
 	if (detect)
@@ -3766,7 +3766,7 @@ bool detect_objects_normal(int range)
 		}
 	}
 
-	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] > MUSIC_DETECT+6)) detect = FALSE;
+	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 6) detect = FALSE;
 
 	/* Describe */
 	if (detect)
@@ -3923,7 +3923,7 @@ bool detect_monsters_normal(int range)
 		}
 	}
 
-	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] > MUSIC_DETECT+3)) flag = FALSE;
+	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 3) flag = FALSE;
 
 	/* Describe */
 	if (flag)
@@ -3992,7 +3992,7 @@ bool detect_monsters_invis(int range)
 		}
 	}
 
-	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] > MUSIC_DETECT+3)) flag = FALSE;
+	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 3) flag = FALSE;
 
 	/* Describe */
 	if (flag)
@@ -4271,7 +4271,7 @@ bool detect_monsters_string(int range, cptr Match)
 		}
 	}
 
-	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] > MUSIC_DETECT+3)) flag = FALSE;
+	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 3) flag = FALSE;
 
 	/* Describe */
 	if (flag)

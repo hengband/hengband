@@ -1664,102 +1664,6 @@ msg_format("%sは%sという感じがする...",
 }
 
 
-static void gere_music(s32b music)
-{
-	switch(music)
-	{
-		case MUSIC_SLOW:
-			slow_monsters();
-			break;
-		case MUSIC_STUN:
-			stun_monsters(damroll(p_ptr->lev/10,2));
-			break;
-		case MUSIC_L_LIFE:
-			hp_player(damroll(2,6));
-			break;
-		case MUSIC_FEAR:
-			project_hack(GF_TURN_ALL, p_ptr->lev);
-			break;
-		case MUSIC_PSI:
-			project_hack(GF_PSI, randint1(p_ptr->lev * 3 / 2));
-			break;
-		case MUSIC_ID:
-			project(0, 1, py, px, 0, GF_IDENTIFY, PROJECT_ITEM, -1);
-			break;
-		case MUSIC_CONF:
-			confuse_monsters(p_ptr->lev * 2);
-			break;
-		case MUSIC_SOUND:
-			project_hack(GF_SOUND, damroll(10 + p_ptr->lev/5,7));
-			break;
-		case MUSIC_CHARM:
-			charm_monsters(damroll(10 + p_ptr->lev/15,6));
-			break;
-		case MUSIC_WALL:
-			project(0, 0, py, px,
-				0, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM | PROJECT_HIDE, -1);
-			break;
-		case MUSIC_DISPEL:
-			dispel_monsters(randint1(p_ptr->lev * 3));
-			dispel_evil(randint1(p_ptr->lev * 3));
-			break;
-		case MUSIC_SARUMAN:
-			slow_monsters();
-			sleep_monsters();
-			break;
-		case MUSIC_QUAKE:
-			earthquake(py, px, 10);
-			break;
-		case MUSIC_STASIS:
-			stasis_monsters(p_ptr->lev * 4);
-			break;
-		case MUSIC_SHERO:
-			dispel_monsters(randint1(p_ptr->lev * 3));
-			break;
-		case MUSIC_H_LIFE:
-			hp_player(damroll(15,10));
-			set_stun(0);
-			set_cut(0);
-			break;
-		case MUSIC_DETECT+19:
-			wiz_lite(FALSE);
-		case MUSIC_DETECT+11:
-		case MUSIC_DETECT+12:
-		case MUSIC_DETECT+13:
-		case MUSIC_DETECT+14:
-		case MUSIC_DETECT+15:
-		case MUSIC_DETECT+16:
-		case MUSIC_DETECT+17:
-		case MUSIC_DETECT+18:
-			map_area(DETECT_RAD_MAP);
-			if ((p_ptr->lev > 39) && (music < MUSIC_DETECT+19)) p_ptr->magic_num1[0] = music+1;
-		case MUSIC_DETECT+6:
-		case MUSIC_DETECT+7:
-		case MUSIC_DETECT+8:
-		case MUSIC_DETECT+9:
-		case MUSIC_DETECT+10:
-			/* There are too many hidden treasure.  So... */
-			/* detect_treasure(DETECT_RAD_DEFAULT); */
-			detect_objects_gold(DETECT_RAD_DEFAULT);
-			detect_objects_normal(DETECT_RAD_DEFAULT);
-			if ((p_ptr->lev > 24) && (music < MUSIC_DETECT+11)) p_ptr->magic_num1[0] = music+1;
-		case MUSIC_DETECT+3:
-		case MUSIC_DETECT+4:
-		case MUSIC_DETECT+5:
-			detect_monsters_invis(DETECT_RAD_DEFAULT);
-			detect_monsters_normal(DETECT_RAD_DEFAULT);
-			if ((p_ptr->lev > 19) && (music < MUSIC_DETECT+6)) p_ptr->magic_num1[0] = music+1;
-		case MUSIC_DETECT:
-		case MUSIC_DETECT+1:
-		case MUSIC_DETECT+2:
-			detect_traps(DETECT_RAD_DEFAULT, TRUE);
-			detect_doors(DETECT_RAD_DEFAULT);
-			detect_stairs(DETECT_RAD_DEFAULT);
-			if ((p_ptr->lev > 14)  && (music  < MUSIC_DETECT+3)) p_ptr->magic_num1[0] = music+1;
-			break;
-	}
-}
-
 /*
  * If player has inscribed the object with "!!", let him know when it's
  * recharged. -LM-
@@ -1876,7 +1780,7 @@ static void check_music(void)
 	else if(p_ptr->spell_exp[spell] < SPELL_EXP_MASTER)
 	{ if (one_in_(5) && ((dun_level + 5) > p_ptr->lev) && (dun_level > s_ptr->slevel)) p_ptr->spell_exp[spell] += 1; }
 
-	gere_music(p_ptr->magic_num1[0]);
+	do_singing(p_ptr->magic_num1[0], SPELL_CONT);
 }
 
 
