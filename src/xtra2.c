@@ -2738,7 +2738,6 @@ static bool ang_sort_comp_importance(vptr u, vptr v, int a, int b)
 	monster_type *ma_ptr = &m_list[ca_ptr->m_idx];
 	monster_type *mb_ptr = &m_list[cb_ptr->m_idx];
 	monster_race *ap_ra_ptr, *ap_rb_ptr;
-	int la, lb;
 
 	/* The player grid */
 	if (y[a] == py && x[a] == px) return TRUE;
