@@ -7344,7 +7344,7 @@ void do_cmd_knowledge(void)
 		if (p == 0) {
 			prt("(1) Display known artifacts", 6, 5);
 			prt("(2) Display known objects", 7, 5);
-			prt("(3) Display known uniques", 8, 5);
+			prt("(3) Display remaining uniques", 8, 5);
 			prt("(4) Display dead uniques", 9, 5);
 			prt("(5) Display kill count", 10, 5);
 			prt("(6) Display wanted monsters", 11, 5);
