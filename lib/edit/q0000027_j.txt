@@ -163,11 +163,14 @@ F:b:1:12:0:423
 # Trumps of Doom on no Teleportation grid
 F:f:1:12:0:514
 
-# Enchantment
+# Note of Acting Master on no Teleportation grid
 F:y:1:12:0:606
 
-# Daemon
+# Demonthoughts on no Teleportation grid
 F:k:1:12:0:648
+
+# Exorcism and Dispelling on no Teleportation grid
+F:B:1:12:0:656
 
 # *HEALING* potion
 F:Y:1:8:0:419
@@ -206,7 +209,7 @@ D:XX    XqqqqX%%%%%X%  %%%%%L         L%%%XXXXX%%   %%%%%            %%%X
 D:XX    |,,,QXXXXXXX%%  %%%%%%d     d%%%%XXThTX%%%% s%%              %%%X
 D:XXz   XqqqqXpmfmiX%%%    sL         L%%X%T TXX%%%%%                 %YX
 D:XX%%  XXXXXXcenekX%%%%%%%%%%       %%%%%%%s%%XX t D              Z  % X
-D:XX%%%  %%%%Xmb,ymX%%%%%%%  D       D              D                 DhX
+D:XX%%%  %%%%XmbBymX%%%%%%%  D       D              D                 DhX
 D:XX%%  %%%%%X%%s%%X%%%%%%   D G   G D              D                 DhX
 D:XX%%%  %%%%%%    XX%%%     %%%DDD%%%%%%%s%%%%%% t D              Z  % X
 D:XX%%%%  %         %%N     %%%%   %%%%%%T T%%%%%%%%%                 %YX
