@@ -6287,7 +6287,7 @@ D:$It does nothing when you use it.
 D:それは使っても何も起こらない。
 F:FULL_NAME
 
-N:659:首飾
+N:659:首飾り
 E:& Amulet~
 G:":d
 I:40:25:0
