@@ -4223,7 +4223,7 @@ errr make_character_dump(FILE *fff)
 	display_player(1);
 
 	/* Dump part of the screen */
-	for (y = 11; y < 18; y++)
+	for (y = 10; y < 18; y++)
 	{
 		/* Dump each row */
 		for (x = 0; x < 79; x++)
@@ -4320,7 +4320,7 @@ errr make_character_dump(FILE *fff)
 #else
 		fprintf(fff, "\n  [Last messages]\n\n");
 #endif
-		for (i = MIN(message_num(), 15); i >= 0; i--)
+		for (i = MIN(message_num(), 30); i >= 0; i--)
 		{
 			fprintf(fff,"> %s\n",message_str((s16b)i));
 		}
