@@ -3330,8 +3330,16 @@ bool detect_traps(int range)
 			c_ptr = &cave[y][x];
 
 			/* Mark as detected */
-			if (dist <= range - 1)
+			if (dist <= range)
+			{
+				if (dist <= range - 1)
+					c_ptr->info |= (CAVE_IN_DETECT);
+
 				c_ptr->info |= (CAVE_DETECT);
+
+				/* Redraw */
+				lite_spot(y, x);
+			}
 
 			/* Detect invisible traps */
 			if (c_ptr->info & CAVE_TRAP)

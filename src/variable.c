@@ -269,6 +269,7 @@ bool expand_list;			/* Expand the power of the list commands */
 
 bool view_perma_grids;		/* Map remembers all perma-lit grids */
 bool view_torch_grids;		/* Map remembers all torch-lit grids */
+bool view_unsafe_grids;		/* Map marked by detect traps */
 
 bool dungeon_align;			/* Generate dungeons with aligned rooms */
 bool dungeon_stair;			/* Generate dungeons with connected stairs */

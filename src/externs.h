@@ -258,6 +258,7 @@ extern bool confirm_stairs;
 extern bool disturb_pets;
 extern bool view_perma_grids;
 extern bool view_torch_grids;
+extern bool view_unsafe_grids;
 extern bool track_follow;
 extern bool track_target;
 extern bool stack_allow_items;

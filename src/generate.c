@@ -1563,15 +1563,41 @@ static void wipe_generate_cave_flags(void)
 {
 	int x, y;
 
-	for (y = 0; y < MAX_HGT; y++)
+	for (y = 0; y < cur_hgt; y++)
 	{
-		for (x = 0; x < MAX_WID; x++)
+		for (x = 0; x < cur_wid; x++)
 		{
 			/* Wipe unused flags */
 			cave[y][x].info &= ~(CAVE_MASK);
 		}
 	}
 
+	if (!dun_level)
+	{
+		for (y = 0; y < cur_hgt; y++)
+		{
+			for (x = 0; x < cur_wid; x++)
+			{
+				/* There are no traps on the surface */
+				cave[y][x].info |= CAVE_DETECT;
+			}
+		}
+	}
+	else
+	{
+		/* There are no traps on map edge */
+		for (y = 0; y < cur_hgt; y++)
+		{
+			cave[y][0].info |= CAVE_DETECT;
+			cave[y][cur_wid-1].info |= CAVE_DETECT;
+		}
+		
+		for (x = 0; x < cur_wid; x++)
+		{
+			cave[0][x].info |= CAVE_DETECT;
+			cave[cur_hgt-1][x].info |= CAVE_DETECT;
+		}
+	}
 }
 
 /*

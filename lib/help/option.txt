@@ -297,6 +297,14 @@ Map remembers all torch-lit grids    [view_torch_grids]
     the "view_yellow_lite" option is set, in which case they are drawn
     in "yellow".
 
+Map marked by detect traps    [view_unsafe_grids]
+    Unknown grids that have not been traversed previously, or had a
+    detect trap spell cast on them are marked with a grey 'x'. This
+    allows you to determine where in the dungeon you have cast detect
+    traps, but does not ensure that grids not marked with a grey 'x'
+    are trap free. This option has no effect on surface grids, but
+    outdoor locations cannot be trapped.
+
 Generate dungeons with connected stairs    [dungeon_stair]
     Always generate a staircase back to the level you came from, if you
     used a staircase to get to the level. This is more "realistic", and

@@ -2488,7 +2488,7 @@ cptr look_mon_desc(int m_idx)
 #endif
 	}
 
-	/* Display monster's level --- idea bolowed from ToME */
+	/* Display monster's level --- idea borrowed from ToME */
 	if (r_ptr->r_tkills)
 	{
 #ifdef JP

@@ -6817,6 +6817,15 @@ option_type option_info[] =
 
 
 #ifdef JP
+	{ &view_unsafe_grids,            FALSE, 3, 1, 8,
+        "view_unsafe_grids",             "トラップ感知済みでない場所を表示する" },
+#else
+	{ &view_unsafe_grids,            FALSE, 3, 1, 8,
+	"view_unsafe_grids",             "Map marked by detect traps" },
+#endif
+
+
+#ifdef JP
 	{ &dungeon_stair,               TRUE,  3, 1, 9,
         "dungeon_stair",                "階段をつなげてダンジョンを生成する" },
 #else

@@ -64,6 +64,7 @@ Y:expand_look
 Y:expand_list
 Y:view_perma_grids
 X:view_torch_grids
+X:view_unsafe_grids
 Y:dungeon_stair
 Y:small_levels
 X:always_small_levels

@@ -991,6 +991,13 @@ void map_info(int y, int x, byte *ap, char *cp)
 			}
 		}
 
+		/* Hack -- Safe cave grid -- idea borrowed from Unangband */
+		else if (view_unsafe_grids && !(c_ptr->info & (CAVE_DETECT)))
+		{
+			a = TERM_L_DARK;
+			c = 'x';
+		}
+
 		/* Unknown */
 		else
 		{
@@ -1190,6 +1197,13 @@ void map_info(int y, int x, byte *ap, char *cp)
 					}
 				}
 			}
+		}
+
+		/* Hack -- Safe cave grid -- idea borrowed from Unangband */
+		else if (view_unsafe_grids && !(c_ptr->info & (CAVE_DETECT)))
+		{
+			a = TERM_L_DARK;
+			c = 'x';
 		}
 
                 /* "Simple Lighting" */
