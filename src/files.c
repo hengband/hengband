@@ -955,8 +955,15 @@ cptr process_pref_file_expr(cptr *sp, char *fp)
 		int i;
 
 		/* Accept all printables except spaces and brackets */
-		for (i = 0; isprint(*s) && !my_strchr(" []", *s); i++)
+#ifdef JP
+		for (i = 0; (iskanji(*s) || isprint(*s)) && !my_strchr(" []", *s); i++)
+		{
+			if (iskanji(*s)) b[i++] = *s++;
 			b[i] = *s++;
+		}
+#else
+		for (i = 0; isprint(*s) && !my_strchr(" []", *s); i++) b[i] = *s++;
+#endif
 
 		/* Terminate */
 		b[i] = '\0';
