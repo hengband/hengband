@@ -2367,7 +2367,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 		if (p_ptr->lev > 14)
 		{
 			add_flag(flgs, TR_REGEN);
-			if (p_ptr->pclass == CLASS_WARRIOR)
+			if ((p_ptr->pclass == CLASS_WARRIOR) || (p_ptr->pclass == CLASS_BERSERKER))
 			{
 				add_flag(flgs, TR_SLOW_DIGEST);
 				/*
