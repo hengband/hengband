@@ -2864,6 +2864,7 @@ void update_lite(void)
 
 	/*** Special case ***/
 
+#if 0
 	/* Hack -- Player has no lite */
 	if (p <= 0)
 	{
@@ -2873,7 +2874,7 @@ void update_lite(void)
 		/* Draw the player */
 		lite_spot(py, px);
 	}
-
+#endif
 
 	/*** Save the old "lite" grids for later ***/
 
