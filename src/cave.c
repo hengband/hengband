@@ -1404,130 +1404,84 @@ void map_info(int y, int x, byte *ap, char *cp)
 		/* Visible monster */
 		if (m_ptr->ml)
 		{
-			monster_race *r_ptr;
-			r_ptr = &r_info[m_ptr->ap_r_idx];
-
-			/* Desired attr */
-			a = r_ptr->x_attr;
-
-			/* Desired char */
-			c = r_ptr->x_char;
-
 			feat_priority = 30;
-
-			/* Mimics' colors vary */
-			if (strchr("\"!=", c) && !(r_ptr->flags1 & RF1_UNIQUE))
-			{
-				/* Use char */
-				(*cp) = c;
-
-				/* Use semi-random attr */
-				(*ap) = c_ptr->m_idx % 15 + 1;
-			}
-
-			/* Special attr/char codes */
-			else if ((a & 0x80) && (c & 0x80))
-			{
-				/* Use char */
-				(*cp) = c;
-
-				/* Use attr */
-				(*ap) = a;
-			}
-
-			/* Multi-hued monster */
-			else if (r_ptr->flags1 & (RF1_ATTR_MULTI))
-			{
-				/* Is it a shapechanger? */
-				if (r_ptr->flags2 & (RF2_SHAPECHANGER))
-				{
-					if (use_graphics)
-					{
-						(*cp) = r_info[randint1(max_r_idx-1)].x_char;
-						(*ap) = r_info[randint1(max_r_idx-1)].x_attr;
-					}
-					else
-					{
-						(*cp) = (one_in_(25) ?
-							image_object_hack[randint0(strlen(image_object_hack))] :
-							image_monster_hack[randint0(strlen(image_monster_hack))]);
-					}
-				}
-				else
-					(*cp) = c;
-
-				/* Multi-hued attr */
-				if (r_ptr->flags2 & RF2_ATTR_ANY)
-					(*ap) = randint1(15);
-				else switch (randint1(7))
-				{
-					case 1:
-						(*ap) = TERM_RED;
-						break;
-					case 2:
-						(*ap) = TERM_L_RED;
-						break;
-					case 3:
-						(*ap) = TERM_WHITE;
-						break;
-					case 4:
-						(*ap) = TERM_L_GREEN;
-						break;
-					case 5:
-						(*ap) = TERM_BLUE;
-						break;
-					case 6:
-						(*ap) = TERM_L_DARK;
-						break;
-					case 7:
-						(*ap) = TERM_GREEN;
-						break;
-				}
-			}
-
-			/* Normal monster (not "clear" in any way) */
-			else if (!(r_ptr->flags1 & (RF1_ATTR_CLEAR | RF1_CHAR_CLEAR)))
-			{
-				/* Use char */
-				(*cp) = c;
-
-				/* Use attr */
-				(*ap) = a;
-			}
-
-			/* Hack -- Bizarre grid under monster */
-			else if ((*ap & 0x80) || (*cp & 0x80))
-			{
-				/* Use char */
-				(*cp) = c;
-
-				/* Use attr */
-				(*ap) = a;
-			}
-
-			/* Normal */
-			else
-			{
-				/* Normal (non-clear char) monster */
-				if (!(r_ptr->flags1 & (RF1_CHAR_CLEAR)))
-				{
-					/* Normal char */
-					(*cp) = c;
-				}
-
-				/* Normal (non-clear attr) monster */
-				else if (!(r_ptr->flags1 & (RF1_ATTR_CLEAR)))
-				{
-					/* Normal attr */
-					(*ap) = a;
-				}
-			}
 
 			/* Hack -- hallucination */
 			if (p_ptr->image)
 			{
 				/* Hallucinatory monster */
 				image_monster(ap, cp);
+			}
+			else
+			{
+				monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
+
+				/* Monster attr/char */
+				a = r_ptr->x_attr;
+				c = r_ptr->x_char;
+
+				/* Normal (non-clear attr) monster or bizarre grid under monster */
+				if (!(r_ptr->flags1 & RF1_ATTR_CLEAR) || (*ap & 0x80))
+				{
+					/* Desired monster attr */
+					*ap = a;
+
+					/* Not special monster attr codes */
+					if (!(a & 0x80))
+					{
+						/* Multi-hued monster */
+						if (r_ptr->flags1 & RF1_ATTR_MULTI)
+						{
+							/* Multi-hued attr */
+							if (r_ptr->flags2 & RF2_ATTR_ANY) *ap = randint1(15);
+							else switch (randint1(7))
+							{
+							case 1: *ap = TERM_RED;     break;
+							case 2: *ap = TERM_L_RED;   break;
+							case 3: *ap = TERM_WHITE;   break;
+							case 4: *ap = TERM_L_GREEN; break;
+							case 5: *ap = TERM_BLUE;    break;
+							case 6: *ap = TERM_L_DARK;  break;
+							case 7: *ap = TERM_GREEN;   break;
+							}
+						}
+
+						/* Mimics' colors vary */
+						else if (((c == '\"') || (c == '!') || (c == '='))
+						    && !(r_ptr->flags1 & RF1_UNIQUE))
+						{
+							/* Use semi-random attr */
+							*ap = c_ptr->m_idx % 15 + 1;
+						}
+					}
+				}
+
+				/* Normal (non-clear char) monster or bizarre grid under monster */
+				if (!(r_ptr->flags1 & RF1_CHAR_CLEAR) || (*cp & 0x80))
+				{
+					/* Desired monster char */
+					*cp = c;
+
+					/* Not special monster char codes */
+					if (!(c & 0x80))
+					{
+						/* Is it a shapechanger? */
+						if (r_ptr->flags2 & RF2_SHAPECHANGER)
+						{
+							if (use_graphics)
+							{
+								*cp = r_info[randint1(max_r_idx - 1)].x_char;
+								*ap = r_info[randint1(max_r_idx - 1)].x_attr;
+							}
+							else
+							{
+								*cp = (one_in_(25) ?
+									image_object_hack[randint0(strlen(image_object_hack))] :
+									image_monster_hack[randint0(strlen(image_monster_hack))]);
+							}
+						}
+					}
+				}
 			}
 		}
 	}
