@@ -5701,11 +5701,11 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 					{
 						int m_idx = cave[yy][xx].m_idx;
 
-						/* Update the new location */
-						cave[sy][sx].m_idx = m_idx;
-
 						/* Update the old location */
 						cave[yy][xx].m_idx = 0;
+
+						/* Update the new location */
+						cave[sy][sx].m_idx = m_idx;
 
 						/* Move the monster */
 						m_ptr->fy = sy;

@@ -127,11 +127,11 @@ bool teleport_away(int m_idx, int dis, bool dec_valour, bool passive)
 	/* Sound */
 	sound(SOUND_TPOTHER);
 
-	/* Update the new location */
-	cave[ny][nx].m_idx = m_idx;
-
 	/* Update the old location */
 	cave[oy][ox].m_idx = 0;
+
+	/* Update the new location */
+	cave[ny][nx].m_idx = m_idx;
 
 	/* Move the monster */
 	m_ptr->fy = ny;
@@ -230,11 +230,11 @@ void teleport_monster_to(int m_idx, int ty, int tx, int power, bool passive)
 	/* Sound */
 	sound(SOUND_TPOTHER);
 
-	/* Update the new location */
-	cave[ny][nx].m_idx = m_idx;
-
 	/* Update the old location */
 	cave[oy][ox].m_idx = 0;
+
+	/* Update the new location */
+	cave[ny][nx].m_idx = m_idx;
 
 	/* Move the monster */
 	m_ptr->fy = ny;

@@ -707,11 +707,11 @@ static void get_out_monster(void)
 
 		m_ptr = &m_list[m_idx];
 
-		/* Update the new location */
-		cave[ny][nx].m_idx = m_idx;
-
 		/* Update the old location */
 		cave[oy][ox].m_idx = 0;
+
+		/* Update the new location */
+		cave[ny][nx].m_idx = m_idx;
 
 		/* Move the monster */
 		m_ptr->fy = ny;
