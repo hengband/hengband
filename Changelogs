@@ -1,4 +1,73 @@
+2002-05-23  iks  <iks@cvs>
+
+	* src/autopick.c 1.24, src/cmd4.c 1.38, src/dungeon.c 1.47, src/externs.h 1.58, src/files.c 1.54, src/init1.c 1.35, src/spells2.c 1.31, src/xtra1.c 1.39, src/z-term.c 1.16:
+	沢山ワーニング除去。
+
+2002-05-23  Takeshi Mogami  <mogami@cvs>
+
+	* src/cave.c 1.46, src/cmd4.c 1.37, src/japanese.c 1.6, src/monster1.c 1.15, src/monster2.c 1.27, src/object1.c 1.32, src/spells3.c 1.29, src/store.c 1.11, src/wizard2.c 1.19, src/z-term.c 1.15:
+	char に 255 を入れるなどのwarningを直した。
+
+2002-05-22  habu  <habu@cvs>
+
+	* lib/edit/k_info_j.txt 1.25:
+	重ランサー → ヘヴィ・ランス に変更。
+	ヘビィ・{フレイル,クロスボウ} を ヘヴィ に表記統一。
+
+2002-05-22  Takeshi Mogami  <mogami@cvs>
+
+	* src/makefile.bcc 1.4:
+	kasinaさんの報告でダンジョンで拾ったアイテム
+	{並の武器、殺戮の武器、指輪等様々} がなぜかpval=-1になって
+	売れないアイテムとして生成される事があった。
+	とりあえず最適化禁止オプション -Od を付けたところ症状は消えたので、
+	これをデフォルトにする。
+	bccの最適化のバグのせいなのか、それとも他のメモリ破壊バグかどうかはまだ不明。
+
+	* src/dungeon.c 1.46, src/report.c 1.18:
+	待機の質問文がメッセージ履歴に残っていたので修正。
+
+2002-05-21  Takeshi Mogami  <mogami@cvs>
+
+	* src/xtra1.c 1.38:
+	英語版の方は長い表示文字列が長すぎて、すぐに短い方に移行しそうなので
+	少し短かく修正。
+
+	* src/defines.h 1.50, src/xtra1.c 1.37:
+	一時的効果の表示をさらにグレードアップ。スペースに余裕があったら長い名前で
+	表示する。余裕が無くなったら漢字1文字に戻る。表示順は適当に並べ変えた。
+
+2002-05-20  Takeshi Mogami  <mogami@cvs>
+
+	* src/xtra1.c 1.36:
+	画面下の一時的な耐性や能力の表示をNetHackのように可変にした。
+	漢字1文字に限らずスペースがある限り何文字でも使える。
+
+	* src/cmd5.c 1.24:
+	最初に永久岩の上を選択できてしまう問題が残っていたので選択できないように修正。
+
+	* src/cmd5.c 1.23, src/defines.h 1.49:
+	神の怒りが永久岩の真上に落ちて、永久岩の向こうまで分解の範囲に入って
+	しまっていたので、永久岩の上には落ちないように修正。
+
+	* src/birth.c 1.31, src/cmd3.c 1.21, src/cmd5.c 1.22, src/defines.h 1.48, src/flavor.c 1.15, src/melee1.c 1.11, src/racial.c 1.17, src/spells1.c 1.21, src/spells2.c 1.30, src/tables.c 1.36, src/wizard1.c 1.20, src/wizard2.c 1.18:
+	- スターダストでproject(-1, ...)で落ちてたので修正。
+	- table.cの呪文名英語版書いた。
+	- 破邪の英語名とりあえずCrusade。
+	- 神の怒りのターゲットが永久岩の向こうに指定できたのを修正。
+	- クラスパワーの種類の判定がrealm==REALM_LIFEだったので、
+	  is_good_realm()という判定マクロを書いておきかえ。
+	- パラディンが魔法書を壊したときの判定もis_good_realm()を流用して修正。
+
+2002-05-20  hoge  <hoge@cvs>
+
+	* src/dungeon.c 1.45, src/effects.c 1.21, src/externs.h 1.57, src/load.c 1.26, src/melee1.c 1.10, src/racial.c 1.16, src/save.c 1.13, src/spells1.c 1.20, src/spells2.c 1.29, src/spells3.c 1.28, src/tables.c 1.35, lib/edit/m_info_j.txt 1.6, lib/edit/r_info_j.txt 1.37, src/cmd1.c 1.39, src/cmd5.c 1.21:
+	破邪がだいたいできた。
+	解説とかまだ。
+
 2002-05-19  Takeshi Mogami  <mogami@cvs>
+
+	* Changelogs 1.43: 更新
 
 	* lib/edit/f_info_j.txt 1.7:
 	FEAT_UNDETECTED の定義追加。
