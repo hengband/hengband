@@ -1886,15 +1886,28 @@ msg_print("生命力が体から吸い取られた気がする！");
 					}
 
 					/* Heal the attacker? */
-					if ((!(p_ptr->prace == RACE_ZOMBIE ||
-					      p_ptr->prace == RACE_VAMPIRE ||
-					      p_ptr->prace == RACE_SPECTRE ||
-					      p_ptr->prace == RACE_SKELETON ||
-					      p_ptr->prace == RACE_DEMON ||
-					      p_ptr->prace == RACE_GOLEM ||
-					      p_ptr->prace == RACE_ANDROID) ||
-					     !(mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING)) &&
-					    (damage > 5) && !(resist_drain))
+					if (p_ptr->mimic_form)
+					{
+						if (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING)
+							resist_drain = TRUE;
+					}
+					else
+					{
+						switch (p_ptr->prace)
+						{
+						case RACE_ZOMBIE:
+						case RACE_VAMPIRE:
+						case RACE_SPECTRE:
+						case RACE_SKELETON:
+						case RACE_DEMON:
+						case RACE_GOLEM:
+						case RACE_ANDROID:
+							resist_drain = TRUE;
+							break;
+						}
+					}
+
+					if ((damage > 5) && !resist_drain)
 					{
 						bool did_heal = FALSE;
 
