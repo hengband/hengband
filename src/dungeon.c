@@ -6957,10 +6957,13 @@ prt("お待ち下さい...", 0, 0);
 		{
 			p_ptr->wizard = TRUE;
 
-			if (p_ptr->is_dead)
+			if (p_ptr->is_dead || !py || !px)
 			{
 				/* Initialize the saved floors data */
 				init_saved_floors(TRUE);
+
+				/* Avoid crash */
+				p_ptr->inside_quest = 0;
 
 				/* Avoid crash in update_view() */
 				py = px = 10;
