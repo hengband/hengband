@@ -451,6 +451,13 @@ msg_print("あなたの飢えは新鮮な血によってのみ満たされる！");
 #else
 			msg_format("The %s has no charges left.", staff);
 #endif
+
+			o_ptr->ident |= (IDENT_EMPTY);
+
+			/* Combine / Reorder the pack (later) */
+			p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+			p_ptr->window |= (PW_INVEN);
+
 			return;
 		}
 
