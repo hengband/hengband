@@ -78,7 +78,7 @@ int recv(int s, char *buffer, size_t buflen, int flags)
 #endif
 
 /* ANSI Cによればstatic変数は0で初期化されるが一応初期化する */
-static errr init_chuukei()
+static errr init_chuukei(void)
 {
 	fresh_queue.next = fresh_queue.tail = 0;
 	ring.wptr = ring.rptr = ring.inlen = 0;
