@@ -4980,6 +4980,9 @@ prt("ゲートは閉まっている。モンスターがあなたを待っている！",0,0);
 		/* Re-enter the arena */
 		command_new = SPECIAL_KEY_BUILDING;
 
+		/* No energy needed to re-enter the arena */
+		energy_use = 0;
+
 		return;
 	}
 	else if (p_ptr->inside_battle)
@@ -4992,6 +4995,9 @@ prt("ゲートは閉まっている。モンスターがあなたを待っている！",0,0);
 
 		/* Re-enter the monster arena */
 		command_new = SPECIAL_KEY_BUILDING;
+
+		/* No energy needed to re-enter the arena */
+		energy_use = 0;
 
 		return;
 	}
