@@ -16,6 +16,7 @@ N: 2:BIAS_POIS
 'needle Bland'
 'Assassin'
 'Scorpion'
+'Poison Bland'
 of Venoms
 of Poison
 
@@ -25,6 +26,7 @@ N: 3:BIAS_FIRE
 'Fire Whip'
 'Fire Thorn'
 'Flame's Toungue'
+'Fire Bland'
 of Solar Wind
 of Flame
 of Zhuque
@@ -33,6 +35,8 @@ N: 4:BIAS_COLD
 4
 'Icicle'
 'Frost Trees'
+'Freezing Point'
+'Flost Bland'
 of Aurora
 of Alaska
 
