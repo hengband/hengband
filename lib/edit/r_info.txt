@@ -11362,7 +11362,7 @@ W:24:5:0:1000:0:0
 B:CRUSH:SUPERHURT:30d1
 F:COLD_BLOOD | EVIL | NO_SLEEP | NO_CONF | NO_FEAR | NO_STUN | NONLIVING |
 F:IM_ACID | IM_COLD | IM_POIS | RES_NETH | RES_DARK
-#D:$Untranslated
+D:$A foul iron hammer forged with body and souls of victims on the infernal anvil.
 D:犠牲者の装備と魂を固めて、地獄の鉄床で鍛えてできた禍々しい鉄槌だ。
 
 #JZ#
