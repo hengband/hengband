@@ -1119,13 +1119,15 @@ byte adj_chr_chm[] =
  * Rogue         num = 5; mul = 3; div = MAX(40, weapon_weight);
  * Ranger        num = 5; mul = 4; div = MAX(70, weapon_weight);
  * Paladin       num = 5; mul = 4; div = MAX(70, weapon_weight);
- * Kaji          num = 5; mul = 5; div = MAX(150, weapon_weight);
+ * Weaponsmith   num = 5; mul = 5; div = MAX(150, weapon_weight);
  * Warrior-Mage  num = 5; mul = 3; div = MAX(70, weapon_weight);
  * Chaos Warrior num = 5; mul = 4; div = MAX(70, weapon_weight);
  * Monk          num = 5; mul = 3; div = MAX(60, weapon_weight);
  * Tourist       num = 4; mul = 3; div = MAX(100, weapon_weight);
  * Imitator      num = 5; mul = 4; div = MAX(70, weapon_weight);
  * Beastmaster   num = 5; mul = 3; div = MAX(70, weapon_weight);
+ * Cavalry(Ride) num = 5; mul = 4; div = MAX(70, weapon_weight);
+ * Cavalry(Walk) num = 5; mul = 3; div = MAX(100, weapon_weight);
  * Sorcerer      num = 1; mul = 1; div = MAX(1, weapon_weight);
  * Archer        num = 4; mul = 2; div = MAX(70, weapon_weight);
  * Magic eater   num = 4; mul = 2; div = MAX(70, weapon_weight);
@@ -4034,9 +4036,9 @@ s32b realm_choices1[MAX_CLASS] =
 	(CH_LIFE | CH_NATURE | CH_DEATH |
 	 CH_ENCHANT | CH_CRUSADE),                 /* ForceTrainer */
 	(CH_NONE),                              /* Blue Mage */
-	(CH_NONE),				/* Kihei */
+	(CH_NONE),				/* Cavalry */
 	(CH_NONE),				/* Berserker */
-	(CH_NONE),				/* Kaji */
+	(CH_NONE),				/* Weaponsmith */
 	(CH_NONE),				/* Mirror-master */
 	(CH_NONE),				/* Ninja */
 };
@@ -4076,9 +4078,9 @@ s32b realm_choices2[MAX_CLASS] =
 	(CH_NONE),                              /* Samurai */
 	(CH_NONE),                              /* ForceTrainer */
 	(CH_NONE),                              /* Blue Mage */
-	(CH_NONE),				/* Kihei */
+	(CH_NONE),				/* Cavalry */
 	(CH_NONE),				/* Berserker */
-	(CH_NONE),				/* Kaji */
+	(CH_NONE),				/* Weaponsmith */
 	(CH_NONE),				/* Mirror-master */
 	(CH_NONE),				/* Ninja */
 };
@@ -4537,7 +4539,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"¬ÁÀ‚∆ªª’",
 	},
 
-	/* Kihei */
+	/* Cavalry */
 	{
 		"ø∑ª≤ º",
 		" ºªŒ",
@@ -4565,7 +4567,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"≈‹§Í§Œ≤Ωø»",
 	},
 
-	/* Kaji */
+	/* Weaponsmith */
 	{
 		"∆º§Ú√√§®§∑º‘",
 		"≈¥§Ú√√§®§∑º‘",
@@ -4946,7 +4948,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		    "God of Rage",
 	},
 
-	/* Kaji */
+	/* Weaponsmith */
 	{
 		"Copper smith",
 		"Iron smith",

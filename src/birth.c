@@ -3685,7 +3685,7 @@ static byte player_init[MAX_CLASS][3][2] =
 	},
 
 	{
-		/* Kihei */
+		/* Cavalry */
 		{ TV_BOW, SV_SHORT_BOW },
 		{ TV_SOFT_ARMOR, SV_LEATHER_SCALE_MAIL},
 		{ TV_POLEARM, SV_BROAD_SPEAR}
@@ -3699,7 +3699,7 @@ static byte player_init[MAX_CLASS][3][2] =
 	},
 
 	{
-		/* Kaji */
+		/* Weaponsmith */
 		{ TV_RING, SV_RING_RES_FEAR }, /* Warriors need it! */
 		{ TV_HARD_ARMOR, SV_CHAIN_MAIL },
 		{ TV_POLEARM, SV_BROAD_AXE }

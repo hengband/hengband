@@ -3535,7 +3535,7 @@ R:8:0
 R:9:0
 
 
-### Kihei ###
+### Cavalry ###
 N:22
 I:NONE:STR:0x00:0:99:0
 # Life
@@ -3603,7 +3603,7 @@ R:8:0
 R:9:0
 
 
-### Kaji ###
+### Weaponsmith ###
 N:24
 I:NONE:STR:0x00:0:99:0
 # Life

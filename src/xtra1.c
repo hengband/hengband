@@ -4800,7 +4800,7 @@ void calc_bonuses(void)
 				case CLASS_BLUE_MAGE:
 					num = 3; wgt = 100; mul = 2; break;
 
-				/* Priest, Mindcrafter */
+				/* Priest, Mindcrafter, Magic-Eater */
 				case CLASS_PRIEST:
 				case CLASS_MAGIC_EATER:
 				case CLASS_MINDCRAFTER:
@@ -4819,7 +4819,7 @@ void calc_bonuses(void)
 				case CLASS_SAMURAI:
 					num = 5; wgt = 70; mul = 4; break;
 
-				/* Kaji */
+				/* Weaponsmith */
 				case CLASS_SMITH:
 					num = 5; wgt = 150; mul = 5; break;
 
@@ -4848,6 +4848,7 @@ void calc_bonuses(void)
 				case CLASS_BEASTMASTER:
 					num = 5; wgt = 70; mul = 3; break;
 
+				/* Cavalry */
 				case CLASS_CAVALRY:
 					if ((p_ptr->riding) && (have_flag(flgs, TR_RIDING))) {num = 5; wgt = 70; mul = 4;}
 					else {num = 5; wgt = 100; mul = 3;}
@@ -4857,7 +4858,7 @@ void calc_bonuses(void)
 				case CLASS_SORCERER:
 					num = 1; wgt = 1; mul = 1; break;
 
-				/* Archer, Magic eater */
+				/* Archer, Bard */
 				case CLASS_ARCHER:
 				case CLASS_BARD:
 					num = 4; wgt = 70; mul = 2; break;
