@@ -5731,8 +5731,21 @@ note_dies = "は光を受けてしぼんでしまった！";
 				if (r_ptr->flags3 & (RF3_NO_CONF)) dam -= 50;
 				if (dam < 1) dam = 1;
 
+				/* No need to tame your pet */
+				if (is_pet(m_ptr))
+				{
+#ifdef JP
+					note = "の動きが速くなった。";
+#else
+					note = " starts moving faster.";
+#endif
+
+					m_ptr->fast = MIN(200, m_ptr->fast + 100);
+					success = TRUE;
+				}
+
 				/* Attempt a saving throw */
-				if ((r_ptr->flags1 & (RF1_QUESTOR)) ||
+				else if ((r_ptr->flags1 & (RF1_QUESTOR)) ||
 				    (r_ptr->flags1 & (RF1_UNIQUE)) ||
 				    (m_ptr->mflag2 & MFLAG_NOPET) ||
 				    (p_ptr->cursed & TRC_AGGRAVATE) ||
