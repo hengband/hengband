@@ -132,8 +132,8 @@ A. Hengband is mainly based on ZAngband 2.2.8 Japanese version.
    Hengband also includes codes from many other variants including
    ToME, OAngband, etc...  Mr.Hoge wrote the first original part of
    Hengband.  And currently, it is maintained by Hengband Development
-   Team(heng-ml @ kmc.gr.jp) including Mr.Hoge, Habu, Henkma, iks,
-   Kuwa, and Mogami.
+   Team including Mr.Hoge, Habu, Henkma, iks, Kuwa, Mogami, and
+   @nothere.
 
 
 Q. Where is Hengband?
