@@ -879,8 +879,15 @@ static bool add_text(u32b *offset, header *head, cptr buf)
 		 * fill up a space as a correct separator of two words.
 		 */
 		if (head->text_size > 0 &&
-		    *(head->text_ptr + head->text_size - 1) != ' ' &&
-		    buf[0] != ' ')
+#ifdef JP
+		    (*(head->text_ptr + head->text_size - 1) != ' ') &&
+		    ((head->text_size == 1) || !iskanji(*(head->text_ptr + head->text_size - 2))) && 
+		    (buf[0] != ' ') && !iskanji(buf[0])
+#else
+		    (*(head->text_ptr + head->text_size - 1) != ' ') &&
+		    (buf[0] != ' ')
+#endif
+		    )
 		{
 			/* Append a space */
 			*(head->text_ptr + head->text_size) = ' ';
