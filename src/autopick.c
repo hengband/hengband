@@ -1494,21 +1494,21 @@ static bool is_opt_confirm_destroy(object_type *o_ptr)
 	/* Known to be worthless? */
 	if (leave_worth)
 		if (object_value(o_ptr) > 0) return FALSE;
-	
+
 	if (leave_equip)
 		if (object_is_weapon_armour_ammo(o_ptr)) return FALSE;
-	
+
 	if (leave_chest)
 		if ((o_ptr->tval == TV_CHEST) && o_ptr->pval) return FALSE;
-	
+
 	if (leave_wanted)
 	{
 		if (object_is_shoukinkubi(o_ptr)) return FALSE;
 	}
-	
+
 	if (leave_corpse)
 		if (o_ptr->tval == TV_CORPSE) return FALSE;
-	
+
 	if (leave_junk)
 		if ((o_ptr->tval == TV_SKELETON) || (o_ptr->tval == TV_BOTTLE) || (o_ptr->tval == TV_JUNK) || (o_ptr->tval == TV_STATUE)) return FALSE;
 
@@ -1531,20 +1531,20 @@ static bool is_opt_confirm_destroy(object_type *o_ptr)
 		else if (p_ptr->pclass == CLASS_NINJA)
 		{
 			if (o_ptr->tval == TV_LITE &&
-			    o_ptr->name2 == EGO_LITE_DARKNESS)
+			    o_ptr->name2 == EGO_LITE_DARKNESS && object_is_known(o_ptr))
 				return FALSE;
 		}
 		else if (p_ptr->pclass == CLASS_BEASTMASTER ||
 			 p_ptr->pclass == CLASS_CAVALRY)
 		{
 			if (o_ptr->tval == TV_WAND &&
-			    o_ptr->sval == SV_WAND_HEAL_MONSTER)
+			    o_ptr->sval == SV_WAND_HEAL_MONSTER && object_is_aware(o_ptr))
 				return FALSE;
 		}
 	}
-	
+
 	if (o_ptr->tval == TV_GOLD) return FALSE;
-	
+
 	return TRUE;
 }
 
