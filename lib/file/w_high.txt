@@ -53,12 +53,11 @@ of Ice
 of Ymir
 
 N: 5:BIAS_ACID
-11
+10
 'Disintegrator'
 'Dissolver'
 'Acidic Drop'
 'Acid Blade'
-'Rust Monster'
 'Worm's Tongue'
 'Defiler'
 'Golembreaker'

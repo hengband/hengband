@@ -1,88 +1,142 @@
 N: 1:BIAS_ELEC
-8
-of Energy
-'lightning'
+13
+'Lightning'
 'Lightning Blade'
 'Thunder Fang'
+'Blue Thunder'
 'Lightning Heart'
 'Thunderstriker'
 'Purple Lightning'
+'Hurricane'
+'Typhoon'
+'Tempest'
+'Storm Seeker'
 of Electricity
+of Energy
 
 N: 2:BIAS_POIS
-7
+18
+'Hornet'
+'Hydrazone'
+'Mercapto'
+'Chloride'
+'Poison Needle of Wasp'
 'Snake Fang'
 'Stinger'
-'needle Bland'
+'Vipera's Fang'
+'Aflatoxin'
+'Needle Bland'
 'Assassin'
 'Scorpion'
 'Poison Bland'
+'Marsh Viper'
+'Poison Tornado'
+'Assassinstrike'
 of Venoms
 of Poison
 
 N: 3:BIAS_FIRE
-7
+13
 'Flame Saber'
 'Fire Whip'
 'Fire Thorn'
 'Flame's Toungue'
 'Fire Bland'
+'Prominence'
+'Fire Tornado'
+'Burning Hammer'
+'Roaring Flames'
+'Heliotropic Wind'
 of Solar Wind
 of Flame
 of Zhuque
 
 N: 4:BIAS_COLD
-4
+10
+'Silver Frost'
 'Icicle'
-'Frost Trees'
+'Ice Edge'
 'Freezing Point'
 'Flost Bland'
+'General of Winter'
+'Ice Climber'
 of Aurora
 of Alaska
+of Ezo
 
 N: 5:BIAS_ACID
-4
+8
 'Rust Monster'
 'Sulfuric Acid'
 'Melted-in Balm'
 'Acid Blade'
+'Rustbringer'
+'Acid Drop'
+'Nitrate'
+'Preoxy'
 
 N:12:BIAS_CHAOS
-5
+13
+'Cyclcraze'
+'Armageddon'
 'Lunatic'
 'Chaosbane'
-from X
+'Warped Edge'
+'Lawslayer'
+'Distorter'
+'Banquet of Azathoth'
+'Cosmic Horror'
+'Amanitaceae Aroma'
 of Changes
 of Dara
+of Hionhurn
 
 N:14:BIAS_NECROMANTIC
-6
+15
 'Reaper'
 'Hellwind'
+'Chief of Souls'
+'Edge of Miasma'
+'Death Sword'
+'Hell Blade'
+'Zombie Claw'
+'Pestilence'
+'Night Blade'
+'Dark Banisher'
+'Bloody Mary'
 of Helthing
-of Pestirence
-of Dark Strom
+of Darkness Strom
 of Genocide
+of Thuringwethil
 
 N:15:BIAS_LAW
 N:13:BIAS_PRIESTLY
 N: 8:BIAS_WIS
-11
+20
 'Lawgiver'
 'Sun Sword'
 'Deamonbane'
 'Gospel'
 'Advent'
+'Mundwine'
+'God Hand'
+'Ray Storm'
+'Crusader'
+'Demonbane'
+'Lightbringer'
+'Joyeuse'
+'Shiningcalibur'
+of Saladin
+of Holiness
 of Justice
 of the Priests
 of Awe
 of Mind
 of Soul
-'Mundwine'
+
 
 N:16:BIAS_ROGUE
-8
-of the Night
+10
 'Thiefbane'
 'Quylthulg Smasher'
 'Cat's Clow'
@@ -90,41 +144,48 @@ of the Night
 'Speed King'
 'Quicker'
 'Spriggan'
-
-N: 9:BIAS_DEX
-7
-'Orchast'
-'Cleaver'
-'Buttle Mastery'
-of the Master
-of Charismatic Cook
-'Limbslicer'
-'Bryionak'
+of the Night
+of Jack of Shadows
+of Koga
 
 N:17:BIAS_MAGE
 N: 7:BIAS_INT
-6
-of Grand Wizardry
+10
 'Magicbane'
 'Hucker'
 'Manabringer'
+'Mirror of Seeing'
+'Whip of Evil Eye'
+'Brainstorm'
+'Laplace's Devil'
+of Grand Wizardry
 of Concentration
-for Ritual
+of Ritual
 
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
 N:10:BIAS_CON
 10
 'Skullbasher'
-of Glod
-of Crushing
-of Death
-'Dragonbane'
-'Satan's Fist'
-'Skull Smasher'
-'Executioner'
 'Bonebreaker'
 'Skullbuster'
+'Skull Smasher'
+'Giant Strength'
+'Dragonbane'
+of Rage
+of Crushing
+of Tomoe
+of Erkenbrando
+
+N: 9:BIAS_DEX
+7
+'Orchast'
+'Cleaver'
+'Buttle Mastery'
+'Limbslicer'
+'Bryionak'
+of the Master
+of Charismatic Cook
 
 N:19:BIAS_RANGER
 9
