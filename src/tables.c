@@ -5031,7 +5031,7 @@ cptr spell_names[VALID_REALM][32] =
 		"Sense Unseen",
 		"Protection from Evil",
 		"Judgment Thunder",
-		"Warding True",
+		"Holy Word",
 
 		/* Rare Crusade Spellbooks */
 		"Unbarring Ways",
