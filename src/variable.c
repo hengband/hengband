@@ -96,10 +96,10 @@ s16b command_arg;		/* Gives argument of current command */
 s16b command_rep;		/* Gives repetition of current command */
 s16b command_dir;		/* Gives direction of current command */
 
-s16b command_see;		/* See "cmd1.c" */
-s16b command_wrk;		/* See "cmd1.c" */
+s16b command_see;		/* See "object1.c" */
+s16b command_wrk;		/* See "object1.c" */
 
-s16b command_gap = 50;	/* See "cmd1.c" */
+s16b command_gap = 999;         /* See "object1.c" */
 
 s16b command_new;		/* Command chaining from inven/equip view */
 
