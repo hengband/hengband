@@ -1441,11 +1441,13 @@ void map_info(int y, int x, byte *ap, char *cp)
 					*cp = c;
 
 					/* Mimics' colors vary */
-					if (((c == '\"') || (c == '!') || (c == '='))
-					    && !(r_ptr->flags1 & RF1_UNIQUE))
+					if ((c == '\"') || (c == '!') || (c == '='))
 					{
-						/* Use semi-random attr */
-						*ap = c_ptr->m_idx % 15 + 1;
+						if (!(r_ptr->flags1 & RF1_UNIQUE) && !use_graphics)
+						{
+							/* Use semi-random attr */
+							*ap = c_ptr->m_idx % 15 + 1;
+						}
 					}
 				}
 
