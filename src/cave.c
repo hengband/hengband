@@ -1960,6 +1960,9 @@ void lite_spot(int y, int x)
 		{
 			/* Term_queue_chars は全角ASCII地形を正しくupdateする。 */
 			Term_queue_chars(panel_col_of(x), y-panel_row_prt, 2, a, &ascii_to_zenkaku[2*(c-' ')]);
+
+			/* Update sub-windows */
+			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 			return;
 		}
 #endif
