@@ -31,7 +31,22 @@ static void monst_breath_monst(int m_idx, int y, int x, int typ, int dam_hp, int
 	/* Handle breath attacks */
 	if (breath) rad = 0 - rad;
 
-	if (typ == GF_ROCKET) flg |= PROJECT_STOP;
+	switch (typ)
+	{
+	case GF_ROCKET:
+		flg |= PROJECT_STOP;
+		break;
+	case GF_DRAIN_MANA:
+	case GF_MIND_BLAST:
+	case GF_BRAIN_SMASH:
+	case GF_CAUSE_1:
+	case GF_CAUSE_2:
+	case GF_CAUSE_3:
+	case GF_CAUSE_4:
+	case GF_HAND_DOOM:
+		flg |= (PROJECT_HIDE | PROJECT_AIMED);
+		break;
+	}
 
 	(void)project(m_idx, rad, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
@@ -205,7 +220,6 @@ bool monst_spell_monst(int m_idx)
 	bool learnable = (see_m && maneable && !world_monster);
 	bool see_t;
 	bool see_either;
-	bool see_both;
 	bool known;
 
 	bool pet = is_pet(m_ptr);
@@ -578,7 +592,6 @@ bool monst_spell_monst(int m_idx)
 
 	see_t = t_ptr->ml;
 	see_either = (see_m || see_t);
-	see_both = (see_m && see_t);
 
 	/* Can the player be aware of this attack? */
 	known = (m_ptr->cdis <= MAX_SIGHT) || (t_ptr->cdis <= MAX_SIGHT);
@@ -2091,48 +2104,8 @@ bool monst_spell_monst(int m_idx)
 
 		}
 
-		/* Heal the monster */
-		if (m_ptr->hp < m_ptr->maxhp)
-		{
-			if (!tr_ptr->flags4 && !tr_ptr->flags5 && !tr_ptr->flags6)
-			{
-				if (see_both)
-				{
-#ifdef JP
-					msg_format("%^sには効果がなかった。", t_name);
-#else
-					msg_format("%^s is unaffected!", t_name);
-#endif
-
-				}
-			}
-			else
-			{
-				/* Attack power */
-				int power = (randint1(rlev) / 2) + 1;
-
-				/* Heal */
-				m_ptr->hp += 6 * power;
-				if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
-
-				/* Redraw (later) if needed */
-				if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-				if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
-
-				/* Special message */
-				if (see_m)
-				{
-#ifdef JP
-					msg_format("%^sは気分が良さそうだ。", m_name);
-#else
-					msg_format("%^s appears healthier.", m_name);
-#endif
-
-				}
-			}
-		}
-
-		wake_up = TRUE;
+		dam = ((randint1(rlev) / 2) + 1);
+		monst_breath_monst(m_idx, y, x, GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA, learnable);
 
 		break;
 
@@ -2149,52 +2122,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(7, 7);
-		/* Attempt a saving throw */
-		if ((tr_ptr->flags1 & RF1_UNIQUE) ||
-		    (tr_ptr->flags3 & RF3_NO_CONF) ||
-		    (tr_ptr->flagsr & RFR_RES_ALL) ||
-		    (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10))
-		{
-			/* No obvious effect */
-			if (see_both)
-			{
-				if (is_original_ap(t_ptr))
-				{
-					/* Memorize a flag */
-					if (tr_ptr->flagsr & RFR_RES_ALL) tr_ptr->r_flagsr |= (RFR_RES_ALL);
-					if (tr_ptr->flags3 & RF3_NO_CONF) tr_ptr->r_flags3 |= (RF3_NO_CONF);
-				}
-
-#ifdef JP
-				msg_format("%^sには効果がなかった。", t_name);
-#else
-				msg_format("%^s is unaffected!", t_name);
-#endif
-
-			}
-		}
-		else
-		{
-			if (see_t)
-			{
-#ifdef JP
-				msg_format("%^sは精神攻撃を食らった。", t_name);
-#else
-				msg_format("%^s is blasted by psionic energy.", t_name);
-#endif
-
-			}
-
-			t_ptr->confused += randint0(4) + 4;
-
-#ifdef JP
-			mon_take_hit_mon(t_idx, dam, &fear, "の精神は崩壊し、肉体は抜け殻となった。", m_idx);
-#else
-			mon_take_hit_mon(t_idx, dam, &fear, " collapses, a mindless husk.", m_idx);
-#endif
-		}
-
-		wake_up = TRUE;
+		monst_breath_monst(m_idx, y, x, GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST, learnable);
 
 		break;
 
@@ -2211,54 +2139,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(12, 12);
-		/* Attempt a saving throw */
-		if ((tr_ptr->flags1 & RF1_UNIQUE) ||
-		    (tr_ptr->flags3 & RF3_NO_CONF) ||
-		    (tr_ptr->flagsr & RFR_RES_ALL) ||
-		    (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10))
-		{
-			/* No obvious effect */
-			if (see_both)
-			{
-				if (is_original_ap(t_ptr))
-				{
-					/* Memorize a flag */
-					if (tr_ptr->flagsr & RFR_RES_ALL) tr_ptr->r_flagsr |= (RFR_RES_ALL);
-					if (tr_ptr->flags3 & RF3_NO_CONF) tr_ptr->r_flags3 |= (RF3_NO_CONF);
-				}
-
-#ifdef JP
-				msg_format("%^sには効果がなかった。", t_name);
-#else
-				msg_format("%^s is unaffected!", t_name);
-#endif
-
-			}
-		}
-		else
-		{
-			if (see_t)
-			{
-#ifdef JP
-				msg_format("%^sは精神攻撃を食らった。", t_name);
-#else
-				msg_format("%^s is blasted by psionic energy.", t_name);
-#endif
-
-			}
-
-			t_ptr->confused += randint0(4) + 4;
-			t_ptr->slow = MIN(200, t_ptr->slow + 10);
-			t_ptr->stunned += randint0(4) + 4;
-
-#ifdef JP
-			mon_take_hit_mon(t_idx, dam, &fear, "の精神は崩壊し、肉体は抜け殻となった。", m_idx);
-#else
-			mon_take_hit_mon(t_idx, dam, &fear, " collapses, a mindless husk.", m_idx);
-#endif
-		}
-
-		wake_up = TRUE;
+		monst_breath_monst(m_idx, y, x, GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH, learnable);
 
 		break;
 
@@ -2282,27 +2163,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(3, 8);
-		if ((randint0(100 + rlev/2) < (tr_ptr->level + 35)) ||
-		    (tr_ptr->flagsr & RFR_RES_ALL))
-		{
-			/* Memorize a flag */
-			if (tr_ptr->flagsr & RFR_RES_ALL)
-			{
-				if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= (RFR_RES_ALL);
-			}
-#ifdef JP
-			if (see_both) msg_format("%^sは耐性を持っている！", t_name);
-#else
-			if (see_both) msg_format("%^s resists!", t_name);
-#endif
-
-		}
-		else
-		{
-			mon_take_hit_mon(t_idx, dam, &fear, NULL, m_idx);
-		}
-
-		wake_up = TRUE;
+		monst_breath_monst(m_idx, y, x, GF_CAUSE_1, dam, 0, FALSE, MS_CAUSE_1, learnable);
 
 		break;
 
@@ -2326,27 +2187,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(8, 8);
-		if ((randint0(100 + rlev/2) < (tr_ptr->level + 35)) ||
-		    (tr_ptr->flagsr & RFR_RES_ALL))
-		{
-			/* Memorize a flag */
-			if (tr_ptr->flagsr & RFR_RES_ALL)
-			{
-				if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= (RFR_RES_ALL);
-			}
-#ifdef JP
-			if (see_both) msg_format("%^sは耐性を持っている！", t_name);
-#else
-			if (see_both) msg_format("%^s resists!", t_name);
-#endif
-
-		}
-		else
-		{
-			mon_take_hit_mon(t_idx, dam, &fear, NULL, m_idx);
-		}
-
-		wake_up = TRUE;
+		monst_breath_monst(m_idx, y, x, GF_CAUSE_2, dam, 0, FALSE, MS_CAUSE_2, learnable);
 
 		break;
 
@@ -2370,27 +2211,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(10, 15);
-		if ((randint0(100 + rlev/2) < (tr_ptr->level + 35)) ||
-		    (tr_ptr->flagsr & RFR_RES_ALL))
-		{
-			/* Memorize a flag */
-			if (tr_ptr->flagsr & RFR_RES_ALL)
-			{
-				if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= (RFR_RES_ALL);
-			}
-#ifdef JP
-			if (see_both) msg_format("%^sは耐性を持っている！", t_name);
-#else
-			if (see_both) msg_format("%^s resists!", t_name);
-#endif
-
-		}
-		else
-		{
-			mon_take_hit_mon(t_idx, dam, &fear, NULL, m_idx);
-		}
-
-		wake_up = TRUE;
+		monst_breath_monst(m_idx, y, x, GF_CAUSE_3, dam, 0, FALSE, MS_CAUSE_3, learnable);
 
 		break;
 
@@ -2414,27 +2235,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(15, 15);
-		if (((randint0(100 + rlev/2) < (tr_ptr->level + 35)) && (m_ptr->r_idx != MON_KENSHIROU)) ||
-		    (tr_ptr->flagsr & RFR_RES_ALL))
-		{
-			/* Memorize a flag */
-			if (tr_ptr->flagsr & RFR_RES_ALL)
-			{
-				if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= (RFR_RES_ALL);
-			}
-#ifdef JP
-			if (see_both) msg_format("%^sは耐性を持っている！", t_name);
-#else
-			if (see_both) msg_format("%^s resists!", t_name);
-#endif
-
-		}
-		else
-		{
-			mon_take_hit_mon(t_idx, dam, &fear, NULL, m_idx);
-		}
-
-		wake_up = TRUE;
+		monst_breath_monst(m_idx, y, x, GF_CAUSE_4, dam, 0, FALSE, MS_CAUSE_4, learnable);
 
 		break;
 
@@ -3045,42 +2846,8 @@ bool monst_spell_monst(int m_idx)
 			}
 		}
 
-		if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
-		{
-			/* Memorize a flag */
-			if (tr_ptr->flagsr & RFR_RES_ALL)
-			{
-				if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= (RFR_RES_ALL);
-			}
-#ifdef JP
-			if (see_both) msg_format("には効果がなかった！", t_name);
-#else
-			if (see_both) msg_format("^%s is unaffected!", t_name);
-#endif
-
-		}
-		else
-		{
-			if ((r_ptr->level + randint1(20)) >
-			    (tr_ptr->level + 10 + randint1(20)))
-			{
-				t_ptr->hp = t_ptr->hp -
-					(((s32b)((40 + randint1(20)) * t_ptr->hp)) / 100);
-
-				if (t_ptr->hp < 1) t_ptr->hp = 1;
-			}
-			else
-			{
-#ifdef JP
-				if (see_both) msg_format("%^sは耐性を持っている！", t_name);
-#else
-				if (see_both) msg_format("%^s resists!", t_name);
-#endif
-
-			}
-		}
-
-		wake_up = TRUE;
+		dam = 20; /* Dummy power */
+		monst_breath_monst(m_idx, y, x, GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM, learnable);
 
 		break;
 

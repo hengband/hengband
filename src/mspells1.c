@@ -526,6 +526,7 @@ static void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool b
 	case GF_ROCKET:
 		flg |= PROJECT_STOP;
 		break;
+	case GF_DRAIN_MANA:
 	case GF_MIND_BLAST:
 	case GF_BRAIN_SMASH:
 	case GF_CAUSE_1:
@@ -2551,67 +2552,9 @@ else msg_format("%^sが暗黒の嵐の呪文を念じた。", m_name);
 		{
 			if (!direct) return (FALSE);
 			disturb(1, 0);
-			if (p_ptr->csp)
-			{
-				int r1;
 
-				/* Basic message */
-#ifdef JP
-msg_format("%^sに精神エネルギーを吸い取られてしまった！", m_name);
-#else
-				msg_format("%^s draws psychic energy from you!", m_name);
-#endif
-
-
-				/* Attack power */
-				r1 = (randint1(rlev) / 2) + 1;
-
-				/* Full drain */
-				if (r1 >= p_ptr->csp)
-				{
-					r1 = p_ptr->csp;
-					p_ptr->csp = 0;
-					p_ptr->csp_frac = 0;
-				}
-
-				/* Partial drain */
-				else
-				{
-					p_ptr->csp -= r1;
-				}
-
-				learn_spell(MS_DRAIN_MANA);
-
-				/* Redraw mana */
-				p_ptr->redraw |= (PR_MANA);
-
-				/* Window stuff */
-				p_ptr->window |= (PW_PLAYER);
-				p_ptr->window |= (PW_SPELL);
-
-				/* Heal the monster */
-				if (m_ptr->hp < m_ptr->maxhp)
-				{
-					/* Heal */
-					m_ptr->hp += (6 * r1);
-					if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
-
-					/* Redraw (later) if needed */
-					if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-					if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
-
-					/* Special message */
-					if (seen)
-					{
-#ifdef JP
-msg_format("%^sは気分が良さそうだ。", m_name);
-#else
-						msg_format("%^s appears healthier.", m_name);
-#endif
-
-					}
-				}
-			}
+			dam = (randint1(rlev) / 2) + 1;
+			breath(y, x, m_idx, GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA, learnable);
 			update_smart_learn(m_idx, DRS_MANA);
 			break;
 		}
@@ -3277,7 +3220,7 @@ msg_format("%^sの動きが速くなった。", m_name);
 			if (!direct) return (FALSE);
 			disturb(1, 0);
 #ifdef JP
-msg_format("%^sが破滅の手を放った！", m_name);
+msg_format("%^sが<破滅の手>を放った！", m_name);
 #else
 			msg_format("%^s invokes the Hand of Doom!", m_name);
 #endif

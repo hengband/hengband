@@ -2091,6 +2091,7 @@ msg_print("体を悪くしてしまった！");
 void learn_spell(int monspell)
 {
 	if (p_ptr->action != ACTION_LEARN) return;
+	if (monspell < 0) return; /* Paranoia */
 	if (p_ptr->magic_num2[monspell]) return;
 	if (p_ptr->confused || p_ptr->blind || p_ptr->image || p_ptr->stun || p_ptr->paralyzed) return;
 	if (randint1(p_ptr->lev + 70) > monster_powers[monspell].level + 40)

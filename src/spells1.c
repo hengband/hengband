@@ -1755,7 +1755,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ , int flg)
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	char killer [80];
+	char killer[80];
 
 	/* Is the monster "seen"? */
 	bool seen = m_ptr->ml;
@@ -1818,7 +1818,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ , int flg)
 	int ty = m_ptr->fy;
 	int tx = m_ptr->fx;
 
-	int caster_lev = (who > 0) ? (r_info[m_list[who].r_idx].level / 2) : p_ptr->lev;
+	int caster_lev = (who > 0) ? r_info[m_list[who].r_idx].level : p_ptr->lev * 2;
 
 	/* Nobody here */
 	if (!c_ptr->m_idx) return (FALSE);
@@ -2731,7 +2731,7 @@ note = "の動きが遅くなった。";
 				}
 
 				/* 2. stun */
-				do_stun = damroll((caster_lev / 10) + 3 , (dam)) + 1;
+				do_stun = damroll((caster_lev / 20) + 3 , (dam)) + 1;
 
 				/* Attempt a saving throw */
 				if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
@@ -3084,7 +3084,7 @@ note_dies = "は蒸発した！";
 			}
 
 			/* 1. stun */
-			do_stun = damroll((caster_lev / 10) + 3 , dam) + 1;
+			do_stun = damroll((caster_lev / 20) + 3 , dam) + 1;
 
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
@@ -3390,7 +3390,7 @@ note = "には完全な耐性がある。";
 			}
 			else if (((r_ptr->flags1 & RF1_UNIQUE) &&
 				 (randint1(888) != 666)) ||
-				 (((r_ptr->level + randint1(20)) > randint1(caster_lev + randint1(10))) &&
+				 (((r_ptr->level + randint1(20)) > randint1((caster_lev / 2) + randint1(10))) &&
 				 randint1(100) != 66))
 			{
 #ifdef JP
@@ -4294,7 +4294,7 @@ note = "には効果がなかった！";
 				if (seen && is_original_ap(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
-			do_stun = damroll((caster_lev / 10) + 3 , (dam)) + 1;
+			do_stun = damroll((caster_lev / 20) + 3 , (dam)) + 1;
 
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
@@ -5049,7 +5049,35 @@ note_dies = "はドロドロに溶けた！";
 
 			if ((r_ptr->flags4 & ~(RF4_NOMAGIC_MASK)) || (r_ptr->flags5 & ~(RF5_NOMAGIC_MASK)) || (r_ptr->flags6 & ~(RF6_NOMAGIC_MASK)))
 			{
-				if (!who)
+				if (who > 0)
+				{
+					monster_type *caster_ptr = &m_list[who];
+
+					/* Heal the monster */
+					if (caster_ptr->hp < caster_ptr->maxhp)
+					{
+						/* Heal */
+						caster_ptr->hp += 6 * dam;
+						if (caster_ptr->hp > caster_ptr->maxhp) caster_ptr->hp = caster_ptr->maxhp;
+
+						/* Redraw (later) if needed */
+						if (p_ptr->health_who == who) p_ptr->redraw |= (PR_HEALTH);
+						if (p_ptr->riding == who) p_ptr->redraw |= (PR_UHEALTH);
+
+						/* Special message */
+						if (caster_ptr->ml)
+						{
+							/* Get the monster name */
+							monster_desc(killer, caster_ptr, 0);
+#ifdef JP
+							msg_format("%^sは気分が良さそうだ。", killer);
+#else
+							msg_format("%^s appears healthier.", killer);
+#endif
+						}
+					}
+				}
+				else
 				{
 					/* Message */
 #ifdef JP
@@ -5099,7 +5127,7 @@ note_dies = "はドロドロに溶けた！";
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
 				 (r_ptr->flags3 & RF3_NO_CONF) ||
-				 (r_ptr->level > randint1((caster_lev*2 - 10) < 1 ? 1 : (caster_lev*2 - 10)) + 10))
+				 (r_ptr->level > randint1((caster_lev - 10) < 1 ? 1 : (caster_lev - 10)) + 10))
 			{
 				/* Memorize a flag */
 				if (r_ptr->flags3 & (RF3_NO_CONF))
@@ -5113,17 +5141,38 @@ note_dies = "はドロドロに溶けた！";
 #endif
 				dam = 0;
 			}
+			else if (r_ptr->flags2 & RF2_EMPTY_MIND)
+			{
+				if (seen && is_original_ap(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
+#ifdef JP
+				note = "には完全な耐性がある！";
+#else
+				note = " is immune!";
+#endif
+				dam = 0;
+			}
+			else if (r_ptr->flags2 & RF2_WEIRD_MIND)
+			{
+				if (seen && is_original_ap(m_ptr)) r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
+#ifdef JP
+				note = "には耐性がある。";
+#else
+				note = " resists.";
+#endif
+				dam /= 3;
+			}
 			else
 			{
 #ifdef JP
-				msg_format("%sは精神攻撃を食らった。", m_name);
+				note = "は精神攻撃を食らった。";
 				note_dies = "の精神は崩壊し、肉体は抜け殻となった。";
 #else
-				msg_format("%^s is blasted by psionic energy.", m_name);
+				note = " is blasted by psionic energy.";
 				note_dies = " collapses, a mindless husk.";
 #endif
 
-				do_conf = randint0(8) + 8;
+				if (who > 0) do_conf = randint0(4) + 4;
+				else do_conf = randint0(8) + 8;
 			}
 			break;
 		}
@@ -5154,7 +5203,7 @@ note_dies = "はドロドロに溶けた！";
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
 				 (r_ptr->flags3 & RF3_NO_CONF) ||
-				 (r_ptr->level > randint1((caster_lev*2 - 10) < 1 ? 1 : (caster_lev*2 - 10)) + 10))
+				 (r_ptr->level > randint1((caster_lev - 10) < 1 ? 1 : (caster_lev - 10)) + 10))
 			{
 				/* Memorize a flag */
 				if (r_ptr->flags3 & (RF3_NO_CONF))
@@ -5168,18 +5217,46 @@ note_dies = "はドロドロに溶けた！";
 #endif
 				dam = 0;
 			}
+			else if (r_ptr->flags2 & RF2_EMPTY_MIND)
+			{
+				if (seen && is_original_ap(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
+#ifdef JP
+				note = "には完全な耐性がある！";
+#else
+				note = " is immune!";
+#endif
+				dam = 0;
+			}
+			else if (r_ptr->flags2 & RF2_WEIRD_MIND)
+			{
+				if (seen && is_original_ap(m_ptr)) r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
+#ifdef JP
+				note = "には耐性がある。";
+#else
+				note = " resists.";
+#endif
+				dam /= 3;
+			}
 			else
 			{
 #ifdef JP
-				msg_format("%sは精神攻撃を食らった。", m_name);
+				note = "は精神攻撃を食らった。";
 				note_dies = "の精神は崩壊し、肉体は抜け殻となった。";
 #else
-				msg_format("%^s is blasted by psionic energy.", m_name);
+				note = " is blasted by psionic energy.";
 				note_dies = " collapses, a mindless husk.";
 #endif
 
-				do_conf = randint0(8) + 8;
-				do_stun = randint0(8) + 8;
+				if (who > 0)
+				{
+					do_conf = randint0(4) + 4;
+					do_stun = randint0(4) + 4;
+				}
+				else
+				{
+					do_conf = randint0(8) + 8;
+					do_stun = randint0(8) + 8;
+				}
 				m_ptr->slow = MIN(200, m_ptr->slow + 10);
 				if (c_ptr->m_idx == p_ptr->riding)
 					p_ptr->update |= (PU_BONUS);
@@ -5211,7 +5288,7 @@ note_dies = "はドロドロに溶けた！";
 			}
 
 			/* Attempt a saving throw */
-			if (randint0(100 + caster_lev) < (r_ptr->level + 35))
+			if (randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35))
 			{
 #ifdef JP
 				note = "には効果がなかった。";
@@ -5247,7 +5324,7 @@ note_dies = "はドロドロに溶けた！";
 			}
 
 			/* Attempt a saving throw */
-			if (randint0(100 + caster_lev) < (r_ptr->level + 35))
+			if (randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35))
 			{
 #ifdef JP
 				note = "には効果がなかった。";
@@ -5283,7 +5360,7 @@ note_dies = "はドロドロに溶けた！";
 			}
 
 			/* Attempt a saving throw */
-			if (randint0(100 + caster_lev) < (r_ptr->level + 35))
+			if (randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35))
 			{
 #ifdef JP
 				note = "には効果がなかった。";
@@ -5319,7 +5396,7 @@ note_dies = "はドロドロに溶けた！";
 			}
 
 			/* Attempt a saving throw */
-			if ((randint0(100 + caster_lev) < (r_ptr->level + 35)) && ((who <= 0) || (m_list[who].r_idx != MON_KENSHIROU)))
+			if ((randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35)) && ((who <= 0) || (m_list[who].r_idx != MON_KENSHIROU)))
 			{
 #ifdef JP
 				note = "には効果がなかった。";
@@ -5351,7 +5428,7 @@ note_dies = "はドロドロに溶けた！";
 			if (r_ptr->flags1 & RF1_UNIQUE)
 			{
 #ifdef JP
-note = "には効果がなかった！";
+				note = "には効果がなかった！";
 #else
 				note = "is unaffected!";
 #endif
@@ -5359,23 +5436,23 @@ note = "には効果がなかった！";
 			}
 			else
 			{
-				if ((caster_lev + randint1(dam)) >
-					(r_ptr->level + randint1(200)))
-					{
-						dam = ((40 + randint1(20)) * m_ptr->hp) / 100;
+				if ((who > 0) ? ((caster_lev + randint1(dam)) > (r_ptr->level + 10 + randint1(20))) :
+				   (((caster_lev / 2) + randint1(dam)) > (r_ptr->level + randint1(200))))
+				{
+					dam = ((40 + randint1(20)) * m_ptr->hp) / 100;
 
-						if (m_ptr->hp < dam) dam = m_ptr->hp - 1;
-					}
-					else
-					{
-#ifdef JP
-note = "は耐性を持っている！";
-#else
-						note = "resists!";
-#endif
-						dam = 0;
-					}
+					if (m_ptr->hp < dam) dam = m_ptr->hp - 1;
 				}
+				else
+				{
+#ifdef JP
+					note = "は耐性を持っている！";
+#else
+					note = "resists!";
+#endif
+					dam = 0;
+				}
+			}
 			break;
 		}
 
@@ -6070,8 +6147,13 @@ note = "には効果がなかった！";
 	}
 
 
+	if (typ == GF_DRAIN_MANA)
+	{
+		/* Drain mana does nothing */
+	}
+
 	/* If another monster did the damage, hurt the monster by hand */
-	if (who)
+	else if (who)
 	{
 		/* Redraw (later) if needed */
 		if (p_ptr->health_who == c_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
@@ -6157,8 +6239,9 @@ msg_print("不潔な病人は病気が治った！");
 
 		delete_monster_idx(c_ptr->m_idx);
 	}
+
 	/* If the player did it, give him experience, check fear */
-	else if (typ != GF_DRAIN_MANA)
+	else
 	{
 		bool fear = FALSE;
 
@@ -7444,22 +7527,89 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 			break;
 		}
 
+		/* Drain mana */
+		case GF_DRAIN_MANA:
+		{
+			if (p_ptr->csp)
+			{
+				/* Basic message */
+#ifdef JP
+				if (who > 0) msg_format("%^sに精神エネルギーを吸い取られてしまった！", m_name);
+				else msg_print("精神エネルギーを吸い取られてしまった！");
+#else
+				if (who > 0) msg_format("%^s draws psychic energy from you!", m_name);
+				else msg_print("Your psychic energy is drawn!");
+#endif
+
+				/* Full drain */
+				if (dam >= p_ptr->csp)
+				{
+					dam = p_ptr->csp;
+					p_ptr->csp = 0;
+					p_ptr->csp_frac = 0;
+				}
+
+				/* Partial drain */
+				else
+				{
+					p_ptr->csp -= dam;
+				}
+
+				learn_spell(monspell);
+
+				/* Redraw mana */
+				p_ptr->redraw |= (PR_MANA);
+
+				/* Window stuff */
+				p_ptr->window |= (PW_PLAYER);
+				p_ptr->window |= (PW_SPELL);
+
+				if (who > 0)
+				{
+					/* Heal the monster */
+					if (m_ptr->hp < m_ptr->maxhp)
+					{
+						/* Heal */
+						m_ptr->hp += (6 * dam);
+						if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
+
+						/* Redraw (later) if needed */
+						if (p_ptr->health_who == who) p_ptr->redraw |= (PR_HEALTH);
+						if (p_ptr->riding == who) p_ptr->redraw |= (PR_UHEALTH);
+
+						/* Special message */
+						if (m_ptr->ml)
+						{
+#ifdef JP
+							msg_format("%^sは気分が良さそうだ。", m_name);
+#else
+							msg_format("%^s appears healthier.", m_name);
+#endif
+						}
+					}
+				}
+			}
+
+			dam = 0;
+			break;
+		}
+
 		/* Mind blast */
 		case GF_MIND_BLAST:
 		{
 			if (randint0(100 + rlev/2) < (MAX(5, p_ptr->skill_sav)))
 			{
 #ifdef JP
-msg_print("しかし効力を跳ね返した！");
+				msg_print("しかし効力を跳ね返した！");
 #else
 				msg_print("You resist the effects!");
 #endif
-				learn_spell(MS_MIND_BLAST);
+				learn_spell(monspell);
 			}
 			else
 			{
 #ifdef JP
-msg_print("霊的エネルギーで精神が攻撃された。");
+				msg_print("霊的エネルギーで精神が攻撃された。");
 #else
 				msg_print("Your mind is blasted by psyonic energy.");
 #endif
@@ -7482,26 +7632,27 @@ msg_print("霊的エネルギーで精神が攻撃された。");
 				}
 				p_ptr->redraw |= PR_MANA;
 
-				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, MS_MIND_BLAST);
+				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			}
 			break;
 		}
+
 		/* Brain smash */
 		case GF_BRAIN_SMASH:
 		{
 			if (randint0(100 + rlev/2) < (MAX(5, p_ptr->skill_sav)))
 			{
 #ifdef JP
-msg_print("しかし効力を跳ね返した！");
+				msg_print("しかし効力を跳ね返した！");
 #else
 				msg_print("You resist the effects!");
 #endif
-				learn_spell(MS_BRAIN_SMASH);
+				learn_spell(monspell);
 			}
 			else
 			{
 #ifdef JP
-msg_print("霊的エネルギーで精神が攻撃された。");
+				msg_print("霊的エネルギーで精神が攻撃された。");
 #else
 				msg_print("Your mind is blasted by psionic energy.");
 #endif
@@ -7514,7 +7665,7 @@ msg_print("霊的エネルギーで精神が攻撃された。");
 				}
 				p_ptr->redraw |= PR_MANA;
 
-				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, MS_BRAIN_SMASH);
+				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 				if (!p_ptr->resist_blind)
 				{
 					(void)set_blind(p_ptr->blind + 8 + randint0(8));
@@ -7541,104 +7692,108 @@ msg_print("霊的エネルギーで精神が攻撃された。");
 			}
 			break;
 		}
+
 		/* cause 1 */
 		case GF_CAUSE_1:
 		{
 			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
 #ifdef JP
-msg_print("しかし効力を跳ね返した！");
+				msg_print("しかし効力を跳ね返した！");
 #else
 				msg_print("You resist the effects!");
 #endif
-				learn_spell(MS_CAUSE_1);
+				learn_spell(monspell);
 			}
 			else
 			{
 				curse_equipment(15, 0);
-				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, MS_CAUSE_1);
+				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			}
 			break;
 		}
+
 		/* cause 2 */
 		case GF_CAUSE_2:
 		{
 			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
 #ifdef JP
-msg_print("しかし効力を跳ね返した！");
+				msg_print("しかし効力を跳ね返した！");
 #else
 				msg_print("You resist the effects!");
 #endif
-				learn_spell(MS_CAUSE_2);
+				learn_spell(monspell);
 			}
 			else
 			{
 				curse_equipment(25, MIN(rlev/2-15, 5));
-				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, MS_CAUSE_2);
+				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			}
 			break;
 		}
+
 		/* cause 3 */
 		case GF_CAUSE_3:
 		{
 			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
 #ifdef JP
-msg_print("しかし効力を跳ね返した！");
+				msg_print("しかし効力を跳ね返した！");
 #else
 				msg_print("You resist the effects!");
 #endif
-				learn_spell(MS_CAUSE_3);
+				learn_spell(monspell);
 			}
 			else
 			{
 				curse_equipment(33, MIN(rlev/2-15, 15));
-				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, MS_CAUSE_3);
+				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			}
 			break;
 		}
+
 		/* cause 4 */
 		case GF_CAUSE_4:
 		{
 			if ((randint0(100 + rlev/2) < p_ptr->skill_sav) && !(m_ptr->r_idx == MON_KENSHIROU))
 			{
 #ifdef JP
-msg_print("しかし秘孔を跳ね返した！");
+				msg_print("しかし秘孔を跳ね返した！");
 #else
 				msg_print("You resist the effects!");
 #endif
-				learn_spell(MS_CAUSE_4);
+				learn_spell(monspell);
 			}
 			else
 			{
-				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, MS_CAUSE_4);
+				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 				(void)set_cut(p_ptr->cut + damroll(10, 10));
 			}
 			break;
 		}
+
 		/* Hand of Doom */
 		case GF_HAND_DOOM:
 		{
 			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
 #ifdef JP
-msg_format("しかし効力を跳ね返した！");
+				msg_format("しかし効力を跳ね返した！");
 #else
 				msg_format("You resist the effects!");
 #endif
-				learn_spell(MS_HAND_DOOM);
-
+				learn_spell(monspell);
 			}
 			else
 			{
 #ifdef JP
-msg_print("あなたは命が薄まっていくように感じた！");
+				msg_print("あなたは命が薄まっていくように感じた！");
 #else
 				msg_print("You feel your life fade away!");
 #endif
 
-				get_damage = take_hit(DAMAGE_ATTACK, dam, m_name, MS_HAND_DOOM);
+				get_damage = take_hit(DAMAGE_ATTACK, dam, m_name, monspell);
 				curse_equipment(40, 20);
 
 				if (p_ptr->chp < 1) p_ptr->chp = 1;
@@ -8285,9 +8440,6 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 	/* Default target of monsterspell is player */
 	monster_target_y=py;
 	monster_target_x=px;
-
-	/* Initialize with nul string */
-	who_name[0] = '\0';
 
 	/* Hack -- Jump to target */
 	if (flg & (PROJECT_JUMP))
