@@ -706,9 +706,9 @@ bool monst_spell_monst(int m_idx)
 		disturb(1, 0);
 		/* Message */
 #ifdef JP
-		msg_format("%^sは呪文を唱えようとしたが失敗した。", m_name);
+		if (see_m) msg_format("%^sは呪文を唱えようとしたが失敗した。", m_name);
 #else
-		msg_format("%^s tries to cast a spell, but fails.", m_name);
+		if (see_m) msg_format("%^s tries to cast a spell, but fails.", m_name);
 #endif
 
 		return (TRUE);
