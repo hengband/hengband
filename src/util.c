@@ -261,6 +261,11 @@ errr path_parse(char *buf, int max, cptr file)
 	/* Accept the filename */
 	(void)strnfmt(buf, max, "%s", file);
 
+#if defined(MAC_MPW) && defined(CARBON)
+     /* Fix it according to the current operating system */
+    convert_pathname(buf);
+#endif /* MAC_MPW && CARBON */
+
 	/* Success */
 	return (0);
 }
@@ -445,6 +450,17 @@ errr my_fgets(FILE *fff, char *buf, huge n)
 		/* Convert weirdness */
 		for (s = tmp; *s; s++)
 		{
+#if defined(MACINTOSH) || defined(MACH_O_CARBON)
+
+			/*
+			 * Be nice to the Macintosh, where a file can have Mac or Unix
+			 * end of line, especially since the introduction of OS X.
+			 * MPW tools were also very tolerant to the Unix EOL.
+			 */
+			if (*s == '\r') *s = '\n';
+
+#endif /* MACINTOSH || MACH_O_CARBON */
+
 			/* Handle newline */
 			if (*s == '\n')
 			{

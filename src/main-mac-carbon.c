@@ -156,6 +156,9 @@
 #include <Sound.h>
 #if TARGET_API_MAC_CARBON
 #include <Navigation.h>
+# ifdef MAC_MPW
+# include <CarbonStdCLib.h>
+# endif
 #endif
 
 #ifdef JP
@@ -227,11 +230,10 @@
 /*
  * Globals for MPW compilation
  */
-#ifdef MAC_MPW
+#if defined(MACH_O_CARBON) || defined(MAC_MPW)
        /* Globals needed */
-       QDGlobals qd;
-       u32b _ftype;
-       u32b _fcreator;
+       OSType _ftype;
+       OSType _fcreator;
 #endif
 
 
@@ -398,6 +400,10 @@ static term_data data[MAX_TERM_DATA];
  */
 static bool initialized = FALSE;
 
+/*
+ * Version of Mac OS - for version specific bug workarounds (; ;)
+ */
+static long mac_os_version;
 
 
 /*
@@ -513,7 +519,7 @@ static int ext_graf = 0;
 #if TARGET_API_MAC_CARBON
 static void refnum_to_name(char *buf, long refnum, short vrefnum, char *fname)
 {
-	DirInfo pb;
+	CInfoPBRec pb;
 	Str255 name;
 	int err;
 	int i, j;
@@ -538,7 +544,7 @@ static void refnum_to_name(char *buf, long refnum, short vrefnum, char *fname)
 
 	while (1)
 	{
-		pb.ioDrDirID=pb.ioDrParID;
+		pb.dirInfo.ioDrDirID=pb.dirInfo.ioDrParID;
 		err = FSMakeFSSpec( vref, dirID, "\p", &spec );
 		
 		if( err != noErr )
@@ -722,6 +728,122 @@ static void global_to_local( Rect *r )
 }
 
 
+#ifdef MAC_MPW
+
+/*
+ * Convert pathname to an appropriate format, because MPW's
+ * CarbonStdCLib chose to use system's native path format,
+ * making our lives harder to create binaries that run on
+ * OS 8/9 and OS X :( -- pelpel
+ */
+void convert_pathname(char* path)
+{
+	char buf[1024];
+
+	/* Nothing has to be done for CarbonLib on Classic */
+	if (mac_os_version >= 0x1000)
+	{
+		/* Convert to POSIX style */
+		ConvertHFSPathToUnixPath(path, buf);
+
+		/* Copy the result back */
+		strcpy(path, buf);
+	}
+
+	/* Done. */
+	return;
+}
+
+# ifdef CHECK_MODIFICATION_TIME
+
+/*
+ * Although there is no easy way to emulate fstat in the old interface,
+ * we still can do stat-like things, because Mac OS is an OS.
+ */
+static int get_modification_time(cptr path, u32b *mod_time)
+{
+	CInfoPBRec pb;
+	Str255 pathname;
+	int i;
+
+	/* Paranoia - make sure the pathname fits in Str255 */
+	i = strlen(path);
+	if (i > 255) return (-1);
+
+	/* Convert pathname to a Pascal string */
+	strncpy((char *)pathname + 1, path, 255);
+	pathname[0] = i;
+
+	/* Set up parameter block */
+	pb.hFileInfo.ioNamePtr = pathname;
+	pb.hFileInfo.ioFDirIndex = 0;
+	pb.hFileInfo.ioVRefNum = app_vol;
+	pb.hFileInfo.ioDirID = 0;
+
+	/* Get catalog information of the file */
+	if (PBGetCatInfoSync(&pb) != noErr) return (-1);
+
+	/* Set modification date and time */
+	*mod_time = pb.hFileInfo.ioFlMdDat;
+
+	/* Success */
+	return (0);
+}
+
+
+/*
+ * A (non-Mach-O) Mac OS version of check_modification_time, for those
+ * compilers without good enough POSIX-compatibility libraries XXX XXX
+ */
+errr check_modification_date(int fd, cptr template_file)
+{
+#pragma unused(fd)
+	u32b txt_stat, raw_stat;
+	char *p;
+	char fname[32];
+	char buf[1024];
+
+	/* Build the file name */
+	path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, template_file);
+
+	/* XXX XXX XXX */
+	convert_pathname(buf);
+
+	/* Obtain modification time */
+	if (get_modification_time(buf, &txt_stat)) return (-1);
+
+	/* XXX Build filename of the corresponding *.raw file */
+	strnfmt(fname, sizeof(fname), "%s", template_file);
+
+	/* Find last '.' */
+	p = strrchr(fname, '.');
+
+	/* Can't happen */
+	if (p == NULL) return (-1);
+
+	/* Substitute ".raw" for ".txt" */
+	strcpy(p, ".raw");
+
+	/* Build the file name of the raw file */
+	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, fname);
+
+	/* XXX XXX XXX */
+	convert_pathname(buf);
+
+	/* Obtain modification time */
+	if (get_modification_time(buf, &raw_stat)) return (-1);
+
+	/* Ensure the text file is not newer than the raw file */
+	if (txt_stat > raw_stat) return (-1);
+
+	/* Keep using the current .raw file */
+	return (0);
+}
+
+# endif /* CHECK_MODIFICATION_TIME */
+
+#endif /* MAC_MPW */
+
 /*
  * Center a rectangle inside another rectangle
  */
@@ -851,7 +973,7 @@ static OSErr ChooseFile( StringPtr filename, FSSpec selfld )
 			// there is only one selection here we get only the first AEDescList:
 			if (( err = AEGetNthPtr( &(reply.selection), 1, typeFSS, &keyWord, &typeCode, &finalFSSpec, sizeof( FSSpec ), &actualSize )) == noErr )
 			{
-				refnum_to_name( filename, finalFSSpec.parID, finalFSSpec.vRefNum, finalFSSpec.name );
+				refnum_to_name( (char *)filename, finalFSSpec.parID, finalFSSpec.vRefNum, (char *)finalFSSpec.name );
 				// 'finalFSSpec' is the chosen file¥Î
 			}
 			
@@ -2733,7 +2855,7 @@ static void init_windows(void)
 static void init_sound( void )
 {
 	int err, i;
-	DirInfo pb;
+	CInfoPBRec pb;
 	SignedByte		permission = fsRdPerm;
 	pascal short	ret;
 	
@@ -2741,45 +2863,45 @@ static void init_sound( void )
 	Str255 sound;
 
 	/* Descend into "lib" folder */
-	pb.ioCompletion = NULL;
-	pb.ioNamePtr = "\plib";
-	pb.ioVRefNum = app_vol;
-	pb.ioDrDirID = app_dir;
-	pb.ioFDirIndex = 0;
+	pb.dirInfo.ioCompletion = NULL;
+	pb.dirInfo.ioNamePtr = "\plib";
+	pb.dirInfo.ioVRefNum = app_vol;
+	pb.dirInfo.ioDrDirID = app_dir;
+	pb.dirInfo.ioFDirIndex = 0;
 
 	/* Check for errors */
 	err = PBGetCatInfo((CInfoPBPtr)&pb, FALSE);
 
 	/* Success */
-	if ((err == noErr) && (pb.ioFlAttrib & 0x10))
+	if ((err == noErr) && (pb.dirInfo.ioFlAttrib & 0x10))
 	{
 		/* Descend into "lib/save" folder */
-		pb.ioCompletion = NULL;
-		pb.ioNamePtr = "\pxtra";
-		pb.ioVRefNum = app_vol;
-		pb.ioDrDirID = pb.ioDrDirID;
-		pb.ioFDirIndex = 0;
+		pb.dirInfo.ioCompletion = NULL;
+		pb.dirInfo.ioNamePtr = "\pxtra";
+		pb.dirInfo.ioVRefNum = app_vol;
+		pb.dirInfo.ioDrDirID = pb.dirInfo.ioDrDirID;
+		pb.dirInfo.ioFDirIndex = 0;
 
 		/* Check for errors */
 		err = PBGetCatInfo((CInfoPBPtr)&pb, FALSE);
 			
 			/* Success */
-		if ((err == noErr) && (pb.ioFlAttrib & 0x10))
+		if ((err == noErr) && (pb.dirInfo.ioFlAttrib & 0x10))
 		{
 			/* Descend into "lib/save" folder */
-			pb.ioCompletion = NULL;
-			pb.ioNamePtr = "\psound";
-			pb.ioVRefNum = app_vol;
-			pb.ioDrDirID = pb.ioDrDirID;
-			pb.ioFDirIndex = 0;
+			pb.dirInfo.ioCompletion = NULL;
+			pb.dirInfo.ioNamePtr = "\psound";
+			pb.dirInfo.ioVRefNum = app_vol;
+			pb.dirInfo.ioDrDirID = pb.dirInfo.ioDrDirID;
+			pb.dirInfo.ioFDirIndex = 0;
 
 			/* Check for errors */
 			err = PBGetCatInfo((CInfoPBPtr)&pb, FALSE);
 
 			/* Success */
-			if ((err == noErr) && (pb.ioFlAttrib & 0x10))
+			if ((err == noErr) && (pb.dirInfo.ioFlAttrib & 0x10))
 			{
-				ret = HOpenResFile( app_vol , pb.ioDrDirID , "\psound.rsrc" , permission );
+				ret = HOpenResFile( app_vol , pb.dirInfo.ioDrDirID , "\psound.rsrc" , permission );
 				if( ret != -1 ){
 					ext_sound = 1;
 					
@@ -2809,7 +2931,7 @@ static void init_sound( void )
 static void init_graf( void )
 {
 	int err, i;
-	DirInfo pb;
+	CInfoPBRec pb;
 	SignedByte		permission = fsRdPerm;
 	pascal short	ret;
 	
@@ -2817,45 +2939,45 @@ static void init_graf( void )
 	Str255 graf;
 
 	/* Descend into "lib" folder */
-	pb.ioCompletion = NULL;
-	pb.ioNamePtr = "\plib";
-	pb.ioVRefNum = app_vol;
-	pb.ioDrDirID = app_dir;
-	pb.ioFDirIndex = 0;
+	pb.dirInfo.ioCompletion = NULL;
+	pb.dirInfo.ioNamePtr = "\plib";
+	pb.dirInfo.ioVRefNum = app_vol;
+	pb.dirInfo.ioDrDirID = app_dir;
+	pb.dirInfo.ioFDirIndex = 0;
 
 	/* Check for errors */
 	err = PBGetCatInfo((CInfoPBPtr)&pb, FALSE);
 
 	/* Success */
-	if ((err == noErr) && (pb.ioFlAttrib & 0x10))
+	if ((err == noErr) && (pb.dirInfo.ioFlAttrib & 0x10))
 	{
 		/* Descend into "lib/xtra" folder */
-		pb.ioCompletion = NULL;
-		pb.ioNamePtr = "\pxtra";
-		pb.ioVRefNum = app_vol;
-		pb.ioDrDirID = pb.ioDrDirID;
-		pb.ioFDirIndex = 0;
+		pb.dirInfo.ioCompletion = NULL;
+		pb.dirInfo.ioNamePtr = "\pxtra";
+		pb.dirInfo.ioVRefNum = app_vol;
+		pb.dirInfo.ioDrDirID = pb.dirInfo.ioDrDirID;
+		pb.dirInfo.ioFDirIndex = 0;
 
 		/* Check for errors */
 		err = PBGetCatInfo((CInfoPBPtr)&pb, FALSE);
 			
 		/* Success */
-		if ((err == noErr) && (pb.ioFlAttrib & 0x10))
+		if ((err == noErr) && (pb.dirInfo.ioFlAttrib & 0x10))
 		{
 			/* Descend into "lib/xtra/graf" folder */
-			pb.ioCompletion = NULL;
-			pb.ioNamePtr = "\pgraf";
-			pb.ioVRefNum = app_vol;
-			pb.ioDrDirID = pb.ioDrDirID;
-			pb.ioFDirIndex = 0;
+			pb.dirInfo.ioCompletion = NULL;
+			pb.dirInfo.ioNamePtr = "\pgraf";
+			pb.dirInfo.ioVRefNum = app_vol;
+			pb.dirInfo.ioDrDirID = pb.dirInfo.ioDrDirID;
+			pb.dirInfo.ioFDirIndex = 0;
 
 			/* Check for errors */
 			err = PBGetCatInfo((CInfoPBPtr)&pb, FALSE);
 
 			/* Success */
-			if ((err == noErr) && (pb.ioFlAttrib & 0x10))
+			if ((err == noErr) && (pb.dirInfo.ioFlAttrib & 0x10))
 			{
-				ret = HOpenResFile( app_vol , pb.ioDrDirID , "\pgraf.rsrc" , permission );
+				ret = HOpenResFile( app_vol , pb.dirInfo.ioDrDirID , "\pgraf.rsrc" , permission );
 				if (ret != -1)
 				{
 					ext_graf = 1;
@@ -2982,7 +3104,7 @@ void SoundConfigDLog(void)
 	for( i = 1 ; i < 7 ; i++ )
 		SetCheck( dialog, i+2 , soundmode[i] );
 	
-	ShowWindow(dialog);
+	/* ShowWindow(dialog); */ 
 	for( item_hit = 100 ; cancel < item_hit ; ){
 		ModalDialog(0, &item_hit);
 		
@@ -3186,7 +3308,7 @@ static void do_menu_file_open(bool all)
 	FSpLocationFromFullPath( strlen(path), path, &fsp );
 	
 	/* Get any file */
-	err = ChooseFile( savefile, fsp );
+	ChooseFile( (StringPtr)savefile, fsp );
 	
 	/* Allow cancel */
 	if (err != noErr) return;
@@ -4686,7 +4808,7 @@ static OSErr CheckRequiredAEParams(const AppleEvent *theAppleEvent)
  * Apple Event Handler -- Open Application
  */
 static pascal OSErr AEH_Start(const AppleEvent *theAppleEvent,
-			      const AppleEvent *reply, long handlerRefCon)
+			      AppleEvent *reply, long handlerRefCon)
 {
 #pragma unused(reply, handlerRefCon)
 
@@ -4698,7 +4820,7 @@ static pascal OSErr AEH_Start(const AppleEvent *theAppleEvent,
  * Apple Event Handler -- Quit Application
  */
 static pascal OSErr AEH_Quit(const AppleEvent *theAppleEvent,
-			     const AppleEvent *reply, long handlerRefCon)
+			     AppleEvent *reply, long handlerRefCon)
 {
 #pragma unused(reply, handlerRefCon)
 #if TARGET_API_MAC_CARBON
@@ -4741,7 +4863,7 @@ static pascal OSErr AEH_Quit(const AppleEvent *theAppleEvent,
  * Apple Event Handler -- Print Documents
  */
 static pascal OSErr AEH_Print(const AppleEvent *theAppleEvent,
-			      const AppleEvent *reply, long handlerRefCon)
+			      AppleEvent *reply, long handlerRefCon)
 {
 #pragma unused(theAppleEvent, reply, handlerRefCon)
 
@@ -4763,7 +4885,7 @@ static pascal OSErr AEH_Print(const AppleEvent *theAppleEvent,
  * snippet from Think Reference 2.0.  (The prior sentence could read
  * "shamelessly swiped & hacked")
  */
-static pascal OSErr AEH_Open(AppleEvent *theAppleEvent,
+static pascal OSErr AEH_Open(const AppleEvent *theAppleEvent,
 			     AppleEvent* reply, long handlerRefCon)
 {
 #pragma unused(reply, handlerRefCon)
@@ -5793,6 +5915,11 @@ void main(void)
 
 #endif /* ANGBAND_LITE_MAC */
 
+	/* 
+	 * Remember Mac OS version, in case we have to cope with version-specific
+	 * problems
+	 */
+	(void)Gestalt(gestaltSystemVersion, &mac_os_version);
 
 #ifdef USE_SFL_CODE
 	/* Obtain a "Universal Procedure Pointer" */
