@@ -1,3 +1,37 @@
+2002-01-21  Takeshi Mogami  <mogami@akiru>
+
+	* lib/file/a_high.txt, lib/file/a_low.txt, lib/file/a_med.txt, lib/file/w_high.txt, lib/file/w_low.txt, lib/file/w_med.txt:
+	英語の☆名を拡充。
+
+2002-01-21  habu  <habu@akiru>
+
+	* configure.in, src/h-config.h:
+	mkstemp()の有無の判定をconfigureでやるようにした。
+
+2002-01-21  Takeshi Mogami  <mogami@akiru>
+
+	* src/dungeon.c, src/externs.h, src/scores.c, src/util.c:
+	get_check_strict() を作った。modeの指定によってESCを受けつけないようにしたり、
+	'y'一文字ではなく"yes"と3文字入力しないといけないようにした。
+	死亡後、スコア登録を聞いてくるときに、ESCを受けつけないモードで使用。
+	ランダムテレポートの質問では"yes"を要求するモードで使用。
+	他にも使い道あると思うが、まだこの二箇所だけ。
+
+2002-01-21  habu  <habu@akiru>
+
+	* src/files.c:
+	sprintfのフォーマットが合っていなかったので修正。
+
+2002-01-21  Takeshi Mogami  <mogami@akiru>
+
+	* src/files.c, src/xtra2.c:
+	- 英語版の'C'画面調整。
+	- 日付表示を実装。
+
+	* Changelogs, src/files.c:
+	'C'の画面の空行の位置を変えてみた。
+	Changelogs更新
+
 2002-01-20  habu  <habu@akiru>
 
 	* src/defines.h, src/dungeon.c:
