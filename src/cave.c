@@ -3190,6 +3190,9 @@ void update_mon_lite(void)
 
 	s16b end_temp;
 
+	/* Non-Ninja player in the darkness */
+	bool in_darkness = (d_info[dungeon_type].flags1 & DF1_DARKNESS) && (p_ptr->see_nocto < MAX_SIGHT);
+
 	/* Clear all monster lit squares */
 	for (i = 0; i < mon_lite_n; i++)
 	{
@@ -3216,7 +3219,7 @@ void update_mon_lite(void)
 		if (!m_ptr->r_idx) continue;
 
 		/* Is it too far away? */
-		if (m_ptr->cdis > ((d_info[dungeon_type].flags1 & DF1_DARKNESS) ? MAX_SIGHT / 2 + 1 : MAX_SIGHT + 3)) continue;
+		if (m_ptr->cdis > (in_darkness ? MAX_SIGHT / 2 + 1 : MAX_SIGHT + 3)) continue;
 
 		/* Get lite radius */
 		rad = 0;

@@ -2367,6 +2367,9 @@ void update_mon(int m_idx, bool full)
 	/* Seen by vision */
 	bool easy = FALSE;
 
+	/* Non-Ninja player in the darkness */
+	bool in_darkness = (d_info[dungeon_type].flags1 & DF1_DARKNESS) && (p_ptr->see_nocto < MAX_SIGHT);
+
 	/* Do disturb? */
 	if (disturb_high)
 	{
@@ -2408,9 +2411,9 @@ void update_mon(int m_idx, bool full)
 
 
 	/* Nearby */
-	if (d <= ((d_info[dungeon_type].flags1 & DF1_DARKNESS) ? MAX_SIGHT / 2 : MAX_SIGHT))
+	if (d <= (in_darkness ? MAX_SIGHT / 2 : MAX_SIGHT))
 	{
-		if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS) || (d <= MAX_SIGHT / 4))
+		if (!in_darkness || (d <= MAX_SIGHT / 4))
 		{
 			if (p_ptr->special_defense & KATA_MUSOU)
 			{
