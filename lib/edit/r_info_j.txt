@@ -18402,14 +18402,12 @@ E:Samurai
 G:p:s
 I:110:40d10:12:60:10
 W:25:2:0:350:0:0
-B:HIT:HURT:4d6
-B:HIT:HURT:4d6
+B:SLASH:HURT:4d6
+B:SLASH:HURT:4d6
 F:MALE | ONLY_ITEM | DROP_90 | DROP_CORPSE | DROP_SKELETON | GOOD
 F:OPEN_DOOR | BASH_DOOR | NO_FEAR | HAS_LITE_1 |
 D:$A warrior clad in ornate but effective armour, holding katana so sharp it
 D:$can cut your throat and you won't notice till you nod.
-D:$サムライの刀は切れ味が良く、相手は自分が倒れるまで喉を切られたことに
-D:$気付かない。
 D:相手の心臓を射るようなするどい眼つき。剣をピクリとも動かさずに構え、
 D:鋭いかけ声とともに相手に飛びかかる。その剣が静かにサヤに収められるときに、
 D:相手はすでに息絶えている。
