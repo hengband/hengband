@@ -539,7 +539,7 @@ extern bool use_menu;
 /* autopick.c */
 extern cptr autopick_line_from_entry(autopick_type *entry);
 extern bool autopick_new_entry(autopick_type *entry, cptr str);
-extern bool autopick_free_entry(autopick_type *entry);
+extern void autopick_free_entry(autopick_type *entry);
 extern int is_autopick(object_type *o_ptr);
 extern void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr);
 extern void do_cmd_edit_autopick();

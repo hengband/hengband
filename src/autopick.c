@@ -413,7 +413,7 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
 /*
  * A function to delete entry
  */
-bool autopick_free_entry(autopick_type *entry)
+void autopick_free_entry(autopick_type *entry)
 {
 	string_free(entry->name);
 	string_free(entry->insc);
@@ -948,7 +948,16 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	else
 		strcat(buff, "拾う。");
 
-	if (!(act & DO_DISPLAY))
+	if (act & DO_DISPLAY)
+	{
+		if (act & DONT_AUTOPICK)
+			strcat(buff, "全体マップ('M')で'N'を押したときに表示する。");
+		else if (act & DO_AUTODESTROY)
+			strcat(buff, "全体マップ('M')で'K'を押したときに表示する。");
+		else
+			strcat(buff, "全体マップ('M')で'M'を押したときに表示する。");
+	}
+	else
 		strcat(buff, "全体マップには表示しない");
 
 #else /* JP */
@@ -1133,7 +1142,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 			whose_str[whose_n++] = "name is begining with \"";
 		}
 		else
-			which_str[which_n++] = "has \"";
+			which_str[which_n++] = "have \"";
 	}
 
 	if (act & DONT_AUTOPICK)
@@ -1197,7 +1206,17 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	}
 	strcat(buff, ".");
 
-	if (!(act & DO_DISPLAY))
+	if (act & DO_DISPLAY)
+	{
+		if (act & DONT_AUTOPICK)
+			strcat(buff, "And display it when you press 'N' in the full map('N').");
+		else if (act & DO_AUTODESTROY)
+			strcat(buff, "And display it when you press 'K' in the full map('N').");
+		else
+			strcat(buff, "And display it when you press 'M' in the full map('N').");
+	}
+		strcat(buff, " It will be displayed in the full map.");
+	else
 		strcat(buff, " Not displayed in the full map.");
 #endif /* JP */
 
@@ -1339,7 +1358,7 @@ static void free_text_lines(cptr *lines_list)
 		string_free(lines_list[lines]);
 
 	/* free list of pointers */
-	C_FREE(lines_list, MAX_LINES, cptr);
+	C_FREE(lines_list, MAX_LINES, cptr *);
 }
 
 
@@ -1655,13 +1674,14 @@ void do_cmd_edit_autopick()
 	char buf[1024];
 	cptr *lines_list;
 
-	int i, j, k, key, old_key, len;
+	int i, j, k, len;
 	cptr tmp;
 
 	int upper = 0, left = 0;
 	int old_upper = -1, old_left = -1;
 	int cx = 0, cy = 0;
 	int old_cy = -1;
+	int key = -1, old_key;
 
 	bool edit_mode = FALSE;
 	int dirty_line = -2;
@@ -1822,7 +1842,11 @@ void do_cmd_edit_autopick()
 			/* Display information */
 			if (lines_list[cy][0] == '#')
 			{
+#ifdef JP
+				prt("この行はコメントです。", hgt - 3 + 1, 0);
+#else
 				prt("This line is comment", hgt - 3 + 1, 0);
+#endif
 			}
 			else if (lines_list[cy][1] == ':')
 			{
@@ -2003,6 +2027,7 @@ void do_cmd_edit_autopick()
 				key = KTRL('g');
 				break;
 			case '#':
+			case '{':
 				key = KTRL('o');
 				break;
 			case 'h': case '4':
