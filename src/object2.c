@@ -1039,7 +1039,7 @@ s32b flag_cost(object_type * o_ptr, int plusses)
 		else if (type == ACT_BA_COLD_2) total += 1250;
 		else if (type == ACT_BA_ELEC_2) total += 1500;
 		else if (type == ACT_DRAIN_2) total += 750;
-		else if (type == ACT_VAMPIRE_1) total = 1000;
+		else if (type == ACT_VAMPIRE_1) total += 1000;
 		else if (type == ACT_BO_MISS_2) total += 1000;
 		else if (type == ACT_BA_FIRE_2) total += 1750;
 		else if (type == ACT_BA_COLD_3) total += 2500;
@@ -1056,6 +1056,7 @@ s32b flag_cost(object_type * o_ptr, int plusses)
 		else if (type == ACT_QUAKE) total += 600;
 		else if (type == ACT_TERROR) total += 2500;
 		else if (type == ACT_TELE_AWAY) total += 2000;
+		else if (type == ACT_BANISH_EVIL) total += 2000;
 		else if (type == ACT_GENOCIDE) total += 10000;
 		else if (type == ACT_MASS_GENO) total += 10000;
 		else if (type == ACT_CHARM_ANIMAL) total += 7500;
@@ -1070,6 +1071,7 @@ s32b flag_cost(object_type * o_ptr, int plusses)
 		else if (type == ACT_SUMMON_UNDEAD) total += 20000;
 		else if (type == ACT_CURE_LW) total += 500;
 		else if (type == ACT_CURE_MW) total += 750;
+		else if (type == ACT_CURE_POISON) total += 1000;
 		else if (type == ACT_REST_LIFE) total += 7500;
 		else if (type == ACT_REST_ALL) total += 15000;
 		else if (type == ACT_CURE_700) total += 10000;
