@@ -5230,7 +5230,7 @@ extern int PlayerUID;
 #define DF1_NO_VAULT            0x00200000L
 #define DF1_ARENA               0x00400000L
 #define DF1_DESTROY             0x00800000L
-#define DF1_XXX24               0x01000000L
+#define DF1_GLASS_ROOM          0x01000000L
 #define DF1_NO_CAVE             0x02000000L
 #define DF1_NO_MAGIC            0x04000000L
 #define DF1_NO_MELEE            0x08000000L

@@ -581,6 +581,7 @@ extern s16b feat_magma_vein;
 extern s16b feat_quartz_vein;
 extern s16b feat_granite;
 extern s16b feat_permanent;
+extern s16b feat_glass_floor;
 extern s16b feat_glass_wall;
 extern s16b feat_permanent_glass_wall;
 extern s16b feat_pattern_start;

@@ -1225,6 +1225,9 @@ s16b feat_quartz_vein;
 s16b feat_granite;
 s16b feat_permanent;
 
+/* Glass floor */
+s16b feat_glass_floor;
+
 /* Glass walls */
 s16b feat_glass_wall;
 s16b feat_permanent_glass_wall;

@@ -41,8 +41,9 @@
 #define ROOM_T_CRYPT         11	 /* Crypts (22x22) */
 #define ROOM_T_TRAP_PIT      12	 /* Trapped monster pit */
 #define ROOM_T_TRAP          13	 /* Piranha/Armageddon trap room */
+#define ROOM_T_GLASS         14	 /* Glass room */
 
-#define ROOM_T_MAX 14
+#define ROOM_T_MAX 15
 
 
 /*

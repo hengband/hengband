@@ -1703,6 +1703,9 @@ static errr init_feat_variables(void)
 	feat_granite = f_tag_to_index_in_init("GRANITE");
 	feat_permanent = f_tag_to_index_in_init("PERMANENT");
 
+	/* Glass floor */
+	feat_glass_floor = f_tag_to_index_in_init("GLASS_FLOOR");
+
 	/* Glass walls */
 	feat_glass_wall = f_tag_to_index_in_init("GLASS_WALL");
 	feat_permanent_glass_wall = f_tag_to_index_in_init("PERMANENT_GLASS_WALL");

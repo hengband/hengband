@@ -841,7 +841,7 @@ static cptr d_info_flags1[] =
 	"NO_VAULT",
 	"ARENA",
 	"DESTROY",
-	"XXX",
+	"GLASS_ROOM",
 	"NO_CAVE",
 	"NO_MAGIC",
 	"NO_MELEE",

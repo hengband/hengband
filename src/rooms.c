@@ -51,6 +51,7 @@ static room_info_type room_info_normal[ROOM_T_MAX] =
 	{{  1,  6, 12, 18, 24, 30, 36, 42, 48, 54, 60}, 10}, /*CRYPT    */
 	{{  0,  0,  1,  1,  1,  2,  3,  4,  5,  6,  8}, 20}, /*TRAP_PIT */
 	{{  0,  0,  1,  1,  1,  2,  3,  4,  5,  6,  8}, 20}, /*TRAP     */
+	{{  0,  0,  0,  0,  1,  1,  1,  2,  2,  2,  2}, 40}, /*GLASS    */
 };
 
 
@@ -63,6 +64,7 @@ static byte room_build_order[ROOM_T_MAX] = {
 	ROOM_T_PIT,
 	ROOM_T_NEST,
 	ROOM_T_TRAP,
+	ROOM_T_GLASS,
 	ROOM_T_INNER_FEAT,
 	ROOM_T_OVAL,
 	ROOM_T_CRYPT,
@@ -5585,7 +5587,7 @@ static bool vault_aux_trapped_pit(int r_idx)
 
 
 /*
- * Type 12 -- Trapped monster pits
+ * Type 13 -- Trapped monster pits
  *
  * A trapped monster pit is a "big" room with a straight corridor in
  * which wall opening traps are placed, and with two "inner" rooms
@@ -5967,6 +5969,291 @@ static bool build_type14(void)
 
 
 /*
+ * Helper function for "glass room"
+ */
+static bool vault_aux_lite(int r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return FALSE;
+
+	/* Require lite attack */
+	if (!(r_ptr->flags4 & RF4_BR_LITE) && !(r_ptr->flags5 & RF5_BA_LITE)) return FALSE;
+
+	/* No wall passing monsters */
+	if (r_ptr->flags2 & (RF2_PASS_WALL | RF2_KILL_WALL)) return FALSE;
+
+	/* No disintegrating monsters */
+	if (r_ptr->flags4 & RF4_BR_DISI) return FALSE;
+
+	return TRUE;
+}
+
+/*
+ * Helper function for "glass room"
+ */
+static bool vault_aux_shards(int r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return FALSE;
+
+	/* Require shards breath attack */
+	if (!(r_ptr->flags4 & RF4_BR_SHAR)) return FALSE;
+
+	return TRUE;
+}
+
+/*
+ * Hack -- determine if a template is potion
+ */
+static bool kind_is_potion(int k_idx)
+{
+	return k_info[k_idx].tval == TV_POTION;
+}
+
+/*
+ * Type 15 -- glass rooms
+ */
+static bool build_type15(void)
+{
+	int y, x, y2, x2, yval, xval;
+	int y1, x1, xsize, ysize;
+	bool light;
+
+	cave_type *c_ptr;
+
+	/* Pick a room size */
+	xsize = rand_range(9, 13);
+	ysize = rand_range(9, 13);
+
+	/* Find and reserve some space in the dungeon.  Get center of room. */
+	if (!find_space(&yval, &xval, ysize + 2, xsize + 2)) return FALSE;
+
+	/* Choose lite or dark */
+	light = ((dun_level <= randint1(25)) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS));
+
+	/* Get corner values */
+	y1 = yval - ysize / 2;
+	x1 = xval - xsize / 2;
+	y2 = yval + (ysize - 1) / 2;
+	x2 = xval + (xsize - 1) / 2;
+
+	/* Place a full floor under the room */
+	for (y = y1 - 1; y <= y2 + 1; y++)
+	{
+		for (x = x1 - 1; x <= x2 + 1; x++)
+		{
+			c_ptr = &cave[y][x];
+			place_floor_grid(c_ptr);
+			c_ptr->feat = feat_glass_floor;
+			c_ptr->info |= (CAVE_ROOM);
+			if (light) c_ptr->info |= (CAVE_GLOW);
+		}
+	}
+
+	/* Walls around the room */
+	for (y = y1 - 1; y <= y2 + 1; y++)
+	{
+		c_ptr = &cave[y][x1 - 1];
+		place_outer_grid(c_ptr);
+		c_ptr->feat = feat_glass_wall;
+		c_ptr = &cave[y][x2 + 1];
+		place_outer_grid(c_ptr);
+		c_ptr->feat = feat_glass_wall;
+	}
+	for (x = x1 - 1; x <= x2 + 1; x++)
+	{
+		c_ptr = &cave[y1 - 1][x];
+		place_outer_grid(c_ptr);
+		c_ptr->feat = feat_glass_wall;
+		c_ptr = &cave[y2 + 1][x];
+		place_outer_grid(c_ptr);
+		c_ptr->feat = feat_glass_wall;
+	}
+
+	switch (randint1(3))
+	{
+	case 1: /* 4 lite breathers + potion */
+		{
+			int dir1, dir2;
+
+			/* Prepare allocation table */
+			get_mon_num_prep(vault_aux_lite, NULL);
+
+			/* Place fixed lite berathers */
+			for (dir1 = 4; dir1 < 8; dir1++)
+			{
+				int r_idx = get_mon_num(dun_level);
+
+				y = yval + 2 * ddy_ddd[dir1];
+				x = xval + 2 * ddx_ddd[dir1];
+				if (r_idx) place_monster_aux(0, y, x, r_idx, PM_ALLOW_SLEEP);
+
+				/* Walls around the breather */
+				for (dir2 = 0; dir2 < 8; dir2++)
+				{
+					c_ptr = &cave[y + ddy_ddd[dir2]][x + ddx_ddd[dir2]];
+					place_inner_grid(c_ptr);
+					c_ptr->feat = feat_glass_wall;
+				}
+			}
+
+			/* Walls around the potion */
+			for (dir1 = 0; dir1 < 4; dir1++)
+			{
+				y = yval + 2 * ddy_ddd[dir1];
+				x = xval + 2 * ddx_ddd[dir1];
+				c_ptr = &cave[y][x];
+				place_inner_perm_grid(c_ptr);
+				c_ptr->feat = feat_permanent_glass_wall;
+			}
+
+			/* Glass door */
+			dir1 = randint0(4);
+			y = yval + 2 * ddy_ddd[dir1];
+			x = xval + 2 * ddx_ddd[dir1];
+			place_secret_door(y, x, DOOR_GLASS_DOOR);
+			c_ptr = &cave[y][x];
+			if (is_closed_door(c_ptr->feat)) c_ptr->mimic = feat_glass_wall;
+
+			/* Place a potion */
+			get_obj_num_hook = kind_is_potion;
+			place_object(yval, xval, AM_NO_FIXED_ART);
+		}
+		break;
+
+	case 2: /* 1 lite breather + random object */
+		{
+			int r_idx, dir1;
+
+			/* Pillars */
+			c_ptr = &cave[y1 + 1][x1 + 1];
+			place_inner_grid(c_ptr);
+			c_ptr->feat = feat_glass_wall;
+
+			c_ptr = &cave[y1 + 1][x2 - 1];
+			place_inner_grid(c_ptr);
+			c_ptr->feat = feat_glass_wall;
+
+			c_ptr = &cave[y2 - 1][x1 + 1];
+			place_inner_grid(c_ptr);
+			c_ptr->feat = feat_glass_wall;
+
+			c_ptr = &cave[y2 - 1][x2 - 1];
+			place_inner_grid(c_ptr);
+			c_ptr->feat = feat_glass_wall;
+
+			/* Prepare allocation table */
+			get_mon_num_prep(vault_aux_lite, NULL);
+
+			r_idx = get_mon_num(dun_level);
+			if (r_idx) place_monster_aux(0, yval, xval, r_idx, 0L);
+
+			/* Walls around the breather */
+			for (dir1 = 0; dir1 < 8; dir1++)
+			{
+				c_ptr = &cave[yval + ddy_ddd[dir1]][xval + ddx_ddd[dir1]];
+				place_inner_grid(c_ptr);
+				c_ptr->feat = feat_glass_wall;
+			}
+
+			/* Curtains around the breather */
+			for (y = yval - 1; y <= yval + 1; y++)
+			{
+				place_closed_door(y, xval - 2, DOOR_CURTAIN);
+				place_closed_door(y, xval + 2, DOOR_CURTAIN);
+			}
+			for (x = xval - 1; x <= xval + 1; x++)
+			{
+				place_closed_door(yval - 2, x, DOOR_CURTAIN);
+				place_closed_door(yval + 2, x, DOOR_CURTAIN);
+			}
+
+			/* Place an object */
+			place_object(yval, xval, AM_NO_FIXED_ART);
+		}
+		break;
+
+	case 3: /* 4 shards breathers + 2 potions */
+		{
+			int dir1;
+
+			/* Walls around the potion */
+			for (y = yval - 2; y <= yval + 2; y++)
+			{
+				c_ptr = &cave[y][xval - 3];
+				place_inner_grid(c_ptr);
+				c_ptr->feat = feat_glass_wall;
+				c_ptr = &cave[y][xval + 3];
+				place_inner_grid(c_ptr);
+				c_ptr->feat = feat_glass_wall;
+			}
+			for (x = xval - 2; x <= xval + 2; x++)
+			{
+				c_ptr = &cave[yval - 3][x];
+				place_inner_grid(c_ptr);
+				c_ptr->feat = feat_glass_wall;
+				c_ptr = &cave[yval + 3][x];
+				place_inner_grid(c_ptr);
+				c_ptr->feat = feat_glass_wall;
+			}
+			for (dir1 = 4; dir1 < 8; dir1++)
+			{
+				c_ptr = &cave[yval + 2 * ddy_ddd[dir1]][xval + 2 * ddx_ddd[dir1]];
+				place_inner_grid(c_ptr);
+				c_ptr->feat = feat_glass_wall;
+			}
+
+			/* Prepare allocation table */
+			get_mon_num_prep(vault_aux_shards, NULL);
+
+			/* Place shard berathers */
+			for (dir1 = 4; dir1 < 8; dir1++)
+			{
+				int r_idx = get_mon_num(dun_level);
+
+				y = yval + ddy_ddd[dir1];
+				x = xval + ddx_ddd[dir1];
+				if (r_idx) place_monster_aux(0, y, x, r_idx, 0L);
+			}
+
+			/* Place two potions */
+			if (one_in_(2))
+			{
+				get_obj_num_hook = kind_is_potion;
+				place_object(yval, xval - 1, AM_NO_FIXED_ART);
+				get_obj_num_hook = kind_is_potion;
+				place_object(yval, xval + 1, AM_NO_FIXED_ART);
+			}
+			else
+			{
+				get_obj_num_hook = kind_is_potion;
+				place_object(yval - 1, xval, AM_NO_FIXED_ART);
+				get_obj_num_hook = kind_is_potion;
+				place_object(yval + 1, xval, AM_NO_FIXED_ART);
+			}
+		}
+		break;
+	}
+
+	/* Message */
+	if (cheat_room)
+	{
+#ifdef JP
+		msg_print("ガラスの部屋");
+#else
+		msg_print("Glass room");
+#endif
+	}
+
+	return TRUE;
+}
+
+
+/*
  * Attempt to build a room of the given type at the given block
  *
  * Note that we restrict the number of "crowded" rooms to reduce
@@ -5992,6 +6279,7 @@ static bool room_build(int typ)
 	case ROOM_T_CRYPT:         return build_type12();
 	case ROOM_T_TRAP_PIT:      return build_type13();
 	case ROOM_T_TRAP:          return build_type14();
+	case ROOM_T_GLASS:         return build_type15();
 	}
 
 	/* Paranoia */
@@ -6085,6 +6373,12 @@ bool generate_rooms(void)
 		prob_list[ROOM_T_FRACAVE] = 0;
 	}
 
+	/* Forbidden glass rooms */
+	if (!(d_info[dungeon_type].flags1 & DF1_GLASS_ROOM))
+	{
+		prob_list[ROOM_T_GLASS] = 0;
+	}
+
 
 	/*
 	 * Initialize number of rooms,
@@ -6124,6 +6418,7 @@ bool generate_rooms(void)
 		case ROOM_T_PIT:
 		case ROOM_T_LESSER_VAULT:
 		case ROOM_T_TRAP_PIT:
+		case ROOM_T_GLASS:
 
 			/* Large room */
 			i -= 2;
