@@ -451,6 +451,13 @@ msg_print("あなたの飢えは新鮮な血によってのみ満たされる！");
 #else
 			msg_format("The %s has no charges left.", staff);
 #endif
+
+			o_ptr->ident |= (IDENT_EMPTY);
+
+			/* Combine / Reorder the pack (later) */
+			p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+			p_ptr->window |= (PW_INVEN);
+
 			return;
 		}
 
@@ -1469,7 +1476,7 @@ msg_print("液体の一部はあなたのアゴを素通りして落ちた！");
 #else
 				msg_print("You are moistened.");
 #endif
-				set_food(MIN(p_ptr->food + o_ptr->pval + 1000, PY_FOOD_MAX - 1));
+				set_food(MIN(p_ptr->food + o_ptr->pval + MAX(0, o_ptr->pval * 10) + 2000, PY_FOOD_MAX - 1));
 				break;
 			default:
 				(void)set_food(p_ptr->food + o_ptr->pval);

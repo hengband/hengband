@@ -501,14 +501,15 @@ Wi : affects wisdom                 Po : resistance to poison
 Dx : affects dexterity              Li : resistance to light
 Cn : affects constitution           Dk : resistance to darkness
 Ch : affects charisma               Sh : resistance to shards
-Sl : affects stealth                Bl : resistance to blindness
-Sr : affects searching ability      Cf : resistance to confusion
-If : affects infravision            So : resistance to sound
-Dg : affects tunneling ability      Nt : resistance to nether
-*Ac : immune to acid                Nx : resistance to nexus
-*El : immune to electricity         Ca : resistance to chaos
-*Fi : immune to fire                Di : resistance to disenchantment
-*Co : immune to cold                Fe : resistance to fear
+Md : affects magic devices          Bl : resistance to blindness     
+Sl : affects stealth                Cf : resistance to confusion     
+Sr : affects searching ability      So : resistance to sound         
+If : affects infravision            Nt : resistance to nether        
+Dg : affects tunneling ability      Nx : resistance to nexus         
+*Ac : immune to acid                Ca : resistance to chaos         
+*El : immune to electricity         Di : resistance to disenchantment
+*Fi : immune to fire                Fe : resistance to fear          
+*Co : immune to cold                
 
 Ma : decreases mana consumption     (F : fiery sheath
 Th : suitable for throwing          (E : electric sheath

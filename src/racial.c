@@ -2740,7 +2740,7 @@ strcpy(power_desc[num].name, "µ¢´Ô");
 		power_desc[num].level = 10;
 		power_desc[num].cost = 10;
 		power_desc[num].fail = 100 - racial_chance(10, A_DEX, 20);
-		power_desc[num++].number = -4;
+		power_desc[num++].number = -3;
 		break;
 	}
 	case CLASS_MIRROR_MASTER:

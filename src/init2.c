@@ -652,7 +652,7 @@ static errr init_f_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("f_info", &f_head,
-			 (void*)&f_info, (void*)&f_name, (void*)&f_text);
+			 (void*)&f_info, (void*)&f_name, NULL);
 }
 
 
@@ -799,7 +799,7 @@ static errr init_s_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("s_info", &s_head,
-			 (void*)&s_info, (void*)&s_name, (void*)&s_text);
+			 (void*)&s_info, NULL, NULL);
 }
 
 
@@ -819,7 +819,7 @@ static errr init_m_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("m_info", &m_head,
-			 (void*)&m_info, (void*)&m_name, (void*)&m_text);
+			 (void*)&m_info, NULL, NULL);
 }
 
 
@@ -879,16 +879,14 @@ static byte store_table[MAX_STORES][STORE_CHOICES][2] =
 		{ TV_FOOD, SV_FOOD_RATION },
 		{ TV_FOOD, SV_FOOD_RATION },
 
-		{ TV_LITE, SV_LITE_TORCH },
-		{ TV_LITE, SV_LITE_TORCH },
+		{ TV_POTION, SV_POTION_WATER },
+		{ TV_POTION, SV_POTION_WATER },
 		{ TV_LITE, SV_LITE_LANTERN },
 		{ TV_LITE, SV_LITE_LANTERN },
 
 		{ TV_FLASK, 0 },
 		{ TV_FLASK, 0 },
-
 		{ TV_CAPTURE, 0 },
-
 		{ TV_FIGURINE, 0 },
 
 		{ TV_SHOT, SV_AMMO_NORMAL },

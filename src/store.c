@@ -1308,6 +1308,9 @@ static bool store_will_buy(object_type *o_ptr)
 			/* Analyze the type */
 			switch (o_ptr->tval)
 			{
+				case TV_POTION:
+					if (o_ptr->sval != SV_POTION_WATER) return FALSE;
+
 				case TV_WHISTLE:
 				case TV_FOOD:
 				case TV_LITE:

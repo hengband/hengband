@@ -419,6 +419,18 @@ msg_print("あなたは混乱した！");
 			msg_print("You are confused!");
 #endif
 
+			if (p_ptr->action == ACTION_LEARN)
+			{
+#ifdef JP
+				msg_print("学習が続けられない！");
+#else
+				msg_print("You cannot continue Learning!");
+#endif
+				new_mane = FALSE;
+
+				p_ptr->redraw |= (PR_STATE);
+				p_ptr->action = ACTION_NONE;
+			}
 			if (p_ptr->action == ACTION_KAMAE)
 			{
 #ifdef JP

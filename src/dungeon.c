@@ -5556,10 +5556,16 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 		if (energy_use)
 		{
 			/* Use some energy */
-			if (!world_player)
-				p_ptr->energy_need += (s16b)((s32b)energy_use * ENERGY_NEED() / 100L);
-			else
+			if (world_player || energy_use > 400)
+			{
+				/* The Randomness is irrelevant */
 				p_ptr->energy_need += energy_use * TURNS_PER_TICK / 10;
+			}
+			else
+			{
+				/* There is some randomness of needed energy */
+				p_ptr->energy_need += (s16b)((s32b)energy_use * ENERGY_NEED() / 100L);
+			}
 
 			/* Hack -- constant hallucination */
 			if (p_ptr->image) p_ptr->redraw |= (PR_MAP);

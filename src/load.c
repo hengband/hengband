@@ -2250,8 +2250,16 @@ note(format("モンスター配置エラー (%d <> %d)", i, m_idx));
 		c_ptr->m_idx = m_idx;
 
 
-		/* Access race */
+		/* Access real race */
 		r_ptr = &r_info[m_ptr->r_idx];
+
+		if (m_ptr->mflag2 & MFLAG_CHAMELEON)
+		{
+			if (r_ptr->flags1 & RF1_UNIQUE)
+				r_ptr = &r_info[MON_CHAMELEON_K];
+			else
+				r_ptr = &r_info[MON_CHAMELEON];
+		}
 
 		/* Count XXX XXX XXX */
 		r_ptr->cur_num++;

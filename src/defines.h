@@ -39,15 +39,15 @@
 
 /* Savefile version for Hengband 1.1.1 and later */
 #define H_VER_MAJOR 1
-#define H_VER_MINOR 3
-#define H_VER_PATCH 2
+#define H_VER_MINOR 4
+#define H_VER_PATCH 0
 #define H_VER_EXTRA 0
 
 /* Added for ZAngband */
 #define FAKE_VERSION   0
 #define FAKE_VER_MAJOR 11
-#define FAKE_VER_MINOR 3
-#define FAKE_VER_PATCH 1
+#define FAKE_VER_MINOR 4
+#define FAKE_VER_PATCH 0
 
 #define ANGBAND_2_8_1
 #define ZANGBAND

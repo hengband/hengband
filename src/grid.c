@@ -196,6 +196,9 @@ void place_closed_door(int y, int x)
 		/* Create jammed door */
 		cave_set_feat(y, x, FEAT_DOOR_HEAD + 0x08 + randint0(8));
 	}
+
+	/* Now it is not floor */
+	cave[y][x].info &= ~(CAVE_MASK);
 }
 
 
