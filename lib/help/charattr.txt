@@ -1,4 +1,4 @@
-=== Race, Class and Personality (Character Attributes) ===
+=== Character Attributes ===
 
 During the process of Character Generation (see birth.txt [1]), you
 will select your character's four primary attributes - its sex, race,
@@ -915,6 +915,39 @@ Infra-vision
      magically enhanced.
 
 
+***** <Proficiency>
+=== Proficiency Levels of Skills ===
+
+In Hengband, characters possess different proficiency levels or
+experiences for each weapon type, spells, and a few other skills.  The
+starting proficiency levels and the maximum proficiency levels of a
+character are based upon class.  Each proficiency level may increase
+when you practice with it, and can be checked by the 'Check various
+information' command (~).
+
+For weapon proficiency, you need to hit monsters many times with a
+weapon of that type to practice.  And your to-hit bonus of the weapon
+will increases with the proficiency level of it. The rate of increase
+is dependent upon the level of the character and the level of the
+opponents.
+
+For spell proficiency, you need to cast the spell many times in a deep
+level of the dungeon to practice.  And the fail-rate and mana
+consumption rate of the spell decreases when the proficiency level
+increases.  The level of the dungeon you need is dependent upon the
+level of the character and the level of the spell.
+
+The effect of the proficiency level of the Dual Wielding and the
+Martial Arts is almost same as the weapon proficiency; These will
+effect upon your to-hit bonus of dual wielding combat or bare handed
+combat.
+
+For the proficiency level of the Riding, you need to attack in melee
+or shoot with missile weapon when riding.  And your speed increases up
+to the mount's speed when the proficiency level increases.  (see
+monster.txt#Pets [5])
+
+
 ***** <StatBonusTable>
 === Stat Bonus Tables ===
 
@@ -1139,3 +1172,4 @@ Updated    : Hengband 1.0.11
 ***** [2] charattr.txt#PrimaryStats
 ***** [3] defend.txt#Armor
 ***** [4] charattr.txt#PrimarySkills
+***** [5] monster.txt#Pets

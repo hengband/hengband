@@ -1,4 +1,4 @@
-Race, Class and Personality (Character Attributes)
+Character Attributes
 
 Please choose one of the following online help files:
 
@@ -8,8 +8,9 @@ Please choose one of the following online help files:
     (2) The Personality               (charattr.txt#ThePersonality)
     (4) Primary Statistics            (charattr.txt#PrimaryStats)
     (5) Primary Skills                (charattr.txt#PrimarySkills)
-    (6) Stat Bonus Tables             (charattr.txt#StatBonusTable)
-    (7) Ability Tables                (charattr.txt#SkillBonusTable)
+    (6) Proficiency Levels of Skills  (charattr.txt#Proficiency)
+    (7) Stat Bonus Tables             (charattr.txt#StatBonusTable)
+    (8) Ability Tables                (charattr.txt#SkillBonusTable)
 
     (?) Help System Commands          (helpinfo.txt)
 
@@ -20,5 +21,6 @@ Please choose one of the following online help files:
 ***** [3] charattr.txt#ThePersonality
 ***** [4] charattr.txt#PrimaryStats
 ***** [5] charattr.txt#PrimarySkills
-***** [6] charattr.txt#StatBonusTable
-***** [7] charattr.txt#SkillBonusTable
+***** [6] charattr.txt#Proficiency
+***** [7] charattr.txt#StatBonusTable
+***** [8] charattr.txt#SkillBonusTable
