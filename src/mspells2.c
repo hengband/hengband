@@ -3227,14 +3227,13 @@ bool monst_spell_monst(int m_idx)
 
 	/* RF6_SPECIAL */
 	case 160+7:
-		if (p_ptr->inside_arena || p_ptr->inside_battle) return FALSE;
-
-		switch(m_ptr->r_idx)
+		switch (m_ptr->r_idx)
 		{
 		case MON_OHMU:
+			if (p_ptr->inside_arena || p_ptr->inside_battle) return FALSE;
 			for (k = 0; k < 6; k++)
 			{
-				summon_specific(m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_BIZARRE1, PM_ALLOW_GROUP);
+				summon_specific(m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_BIZARRE1, (PM_ALLOW_GROUP | p_mode));
 			}
 			return FALSE;
 
