@@ -1295,7 +1295,7 @@ void do_cmd_open(void)
 		}
 
 		/* Monster in the way */
-		else if (c_ptr->m_idx)
+		else if (c_ptr->m_idx && p_ptr->riding != c_ptr->m_idx)
 		{
 			/* Take a turn */
 			energy_use = 100;
@@ -2435,7 +2435,7 @@ void do_cmd_disarm(void)
 		}
 
 		/* Monster in the way */
-		else if (c_ptr->m_idx)
+		else if (c_ptr->m_idx && p_ptr->riding != c_ptr->m_idx)
 		{
 			/* Message */
 #ifdef JP
