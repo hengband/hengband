@@ -4202,9 +4202,9 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 		return FALSE;
 	}
 
-	if (p_ptr->inside_arena)
+	if (p_ptr->inside_arena && !boomerang)
 	{
-		if (o_ptr->tval != 5)
+		if (o_ptr->tval != TV_SPIKE)
 		{
 #ifdef JP
 			msg_print("アリーナではアイテムを使えない！");
