@@ -423,7 +423,6 @@ void autopick_free_entry(autopick_type *entry)
  * A function for Auto-picker/destroyer
  * Examine whether the object matches to the list of keywords or not.
  */
-
 int is_autopick(object_type *o_ptr)
 {
 	int i;
@@ -1707,6 +1706,14 @@ void do_cmd_edit_autopick()
 	int key = -1, old_key;
 
 	bool edit_mode = FALSE;
+
+	/*
+	 * dirty_line
+	 * 0,1,2,... : this line is dirty
+	 * -1 : perfectly clean
+	 * -2 : need redraw whole screen
+	 * -3 : mode is changed
+	 */
 	int dirty_line = -2;
 
 	int wid, hgt, old_wid = -1, old_hgt = -1;
@@ -1743,6 +1750,7 @@ void do_cmd_edit_autopick()
 	/* Clear yank buffer */
 	yank_buf[0] = '\0';
 
+	/* Read or initialize whole text */
 	lines_list = read_pickpref_text_lines();
 
 	/* Reset cursor position if needed */
@@ -1758,9 +1766,6 @@ void do_cmd_edit_autopick()
 	/* Save the screen */
 	screen_save();
 
-	/* Clear screen */
-	Term_clear();
-
 	/* Process requests until done */
 	while (1)
 	{
@@ -1768,6 +1773,7 @@ void do_cmd_edit_autopick()
 		Term_get_size(&wid, &hgt);
 
 #ifdef JP
+		/* Don't let cursor at second byte of kanji */
 		for (i = 0; lines_list[cy][i]; i++)
 			if (iskanji(lines_list[cy][i]))
 			{
@@ -1780,6 +1786,7 @@ void do_cmd_edit_autopick()
 			}
 #endif
 
+		/* Scroll if necessary */
 		if (cy < upper || upper + hgt - 4 <= cy)
 			upper = cy - (hgt-4)/2;
 		if (upper < 0)
@@ -1789,10 +1796,23 @@ void do_cmd_edit_autopick()
 		if (left < 0)
 			left = 0;
 
-		if (old_upper != upper || old_left != left || 
-		    old_wid != wid || old_hgt != hgt)
+		/* Redraw whole window after resize */
+		if (old_wid != wid || old_hgt != hgt)
+		{
 			dirty_line = -2;
 
+			/* Clear screen */
+			Term_clear();
+
+			/* Display control command */
+			for (i = 0; ctrl_command_desc[i]; i++)
+				Term_putstr(wid - WID_DESC, i + 1, WID_DESC, TERM_WHITE, ctrl_command_desc[i]);
+		}
+		/* Redraw all text after scroll */
+		else if (old_upper != upper || old_left != left)
+			dirty_line = -2;
+
+		/* Redraw mode line unless perfectly clean */
 		if (dirty_line != -1)
 		{
 			int sepa_length = wid - WID_DESC;
@@ -1808,14 +1828,10 @@ void do_cmd_edit_autopick()
 			else
 				strncpy(buf + sepa_length - 21, " (COMMAND MODE) ", 16);
 
-			prt(buf, hgt - 3, 0);
-
-			/* Display control command */
-			for (i = 0; ctrl_command_desc[i]; i++)
-				prt(ctrl_command_desc[i], i + 1, wid - WID_DESC);
+			Term_putstr(0, hgt - 3, sepa_length, edit_mode ? TERM_YELLOW : TERM_WHITE, buf);
 		}
-
-		/* Dump up to 20 lines of messages */
+		
+		/* Dump up to 20, or hgt-4, lines of messages */
 		for (i = 0; i < hgt - 4; i++)
 		{
 			int leftcol = 0;
@@ -1859,7 +1875,7 @@ void do_cmd_edit_autopick()
 			Term_erase(0, i + 1, wid - WID_DESC);
 		}
 
-		/* Display header XXX XXX XXX */
+		/* Display header line */
 #ifdef JP
 		if (edit_mode)
 			prt("^Q ESC でコマンドモードへ移行、通常の文字はそのまま入力", 0, 0);
@@ -1878,8 +1894,8 @@ void do_cmd_edit_autopick()
 		if (old_cy != cy || dirty_line == -2 || dirty_line == cy)
 		{
 			/* Clear information line */
-			prt("", hgt - 3 + 1, 0);
-			prt("", hgt - 3 + 2, 0);
+			Term_erase(0, hgt - 3 + 1, wid);
+			Term_erase(0, hgt - 3 + 2, wid);
 
 			/* Display information */
 			if (lines_list[cy][0] == '#')
@@ -1924,6 +1940,8 @@ void do_cmd_edit_autopick()
 					break;
 				}
 			}
+
+			/* Get description of an autopicker preference line */
 			else if (autopick_new_entry(entry, lines_list[cy]))
 			{
 				char temp[80*4];
@@ -2109,9 +2127,11 @@ void do_cmd_edit_autopick()
 		switch(key)
 		{
 		case KTRL('a'):
+			/* Beginning of line */
 			cx = 0;
 			break;
 		case KTRL('b'):
+			/* Back */
 			if (0 < cx)
 			{
 				cx--;
@@ -2125,6 +2145,7 @@ void do_cmd_edit_autopick()
 			}
 			break;
 		case KTRL('c'):
+			/* Insert a conditinal expression line */
 			insert_return_code(lines_list, 0, cy);
 			lines_list[cy] = string_make(classrace);
 			cy++;
@@ -2136,9 +2157,11 @@ void do_cmd_edit_autopick()
 			dirty_line = -2;
 			break;
 		case KTRL('e'):
+			/* End of line */
 			cx = strlen(lines_list[cy]);
 			break;
 		case KTRL('f'):
+			/* Forward */
 #ifdef JP
 			if (iskanji(lines_list[cy][cx])) cx++;
 #endif
@@ -2156,6 +2179,7 @@ void do_cmd_edit_autopick()
 			}
 			break;
 		case KTRL('g'):
+			/* Toggle display in the 'M'ap */
 			if (lines_list[cy][0] != '(' && lines_list[cy][1] != '(')
 				insert_string(lines_list, "(", 0, cy);
 			else if (lines_list[cy][0] == '(')
@@ -2167,8 +2191,10 @@ void do_cmd_edit_autopick()
 			dirty_line = cy;
 			break;
 		case KTRL('i'):
+			/* Insert choosen item name */
 			if (!entry_from_object(entry))
 			{
+				/* Now dirty because of item/equip menu */
 				dirty_line = -2;
 				break;
 			}
@@ -2180,11 +2206,12 @@ void do_cmd_edit_autopick()
 				lines_list[cy] = tmp;
 				cx = 0;
 
-				/* Now dirty */
+				/* Now dirty because of item/equip menu */
 				dirty_line = -2;
 			}
 			break;
 		case KTRL('l'):
+			/* Insert a name of last destroyed item */
 			if (last_destroyed)
 			{
 				insert_return_code(lines_list, 0, cy);
@@ -2196,6 +2223,7 @@ void do_cmd_edit_autopick()
 			}
 			break;
 		case '\n': case '\r':
+			/* Split a line or insert end of line */
 			insert_return_code(lines_list, cx, cy);
 			cy++;
 			cx = 0;
@@ -2204,9 +2232,11 @@ void do_cmd_edit_autopick()
 			dirty_line = -2;
 			break;
 		case KTRL('n'):
+			/* Next line */
 			if (lines_list[cy + 1]) cy++;
 			break;
 		case KTRL('o'):
+			/* Prepare to write auto-inscription text */
 			for (i = 0; lines_list[cy][i]; i++)
 				if (lines_list[cy][i] == '#') break;
 			if (!lines_list[cy][i]) insert_string(lines_list, "#", i, cy);
@@ -2217,15 +2247,18 @@ void do_cmd_edit_autopick()
 			dirty_line = cy;
 			break;
 		case KTRL('p'):
+			/* Previous line */
 			if (cy > 0) cy--;
 			break;
 		case KTRL('q'):
+			/* Change mode */
 			edit_mode = !edit_mode;
 			
 			/* Mode line is now dirty */
 			dirty_line = -3;
 			break;
 		case KTRL('r'):
+			/* Revert to original */
 #ifdef JP
 			if (!get_check("全ての変更を破棄して元の状態に戻します。よろしいですか？ "))
 #else
@@ -2240,6 +2273,7 @@ void do_cmd_edit_autopick()
 			edit_mode = FALSE;
 			break;
 		case KTRL('s'):
+			/* Rotate action; pickup/destroy/leave */
 			if (!autopick_new_entry(entry, lines_list[cy]))
 				break;
 			string_free(lines_list[cy]);
@@ -2266,8 +2300,10 @@ void do_cmd_edit_autopick()
 
 			break;
 		case KTRL('t'):
+			/* Nothing */
 			break;
 		case KTRL('u'):
+			/* Rotate identify-state; identified/unidentified/... */
 			if (!autopick_new_entry(entry, lines_list[cy]))
 				break;
 			string_free(lines_list[cy]);
@@ -2314,21 +2350,25 @@ void do_cmd_edit_autopick()
 			dirty_line = cy;
 			break;
 		case KTRL('v'):
+			/* Scroll up */
 			while (cy < upper + hgt-4 && lines_list[cy + 1])
 				cy++;
 			upper = cy;
 			break;
 		case KTRL('w'):
+			/* Toggle 'worthless' */
 			toggle_string(lines_list, FLG_WORTHLESS, cy);
 			/* Now dirty */
 			dirty_line = cy;
 			break;
 		case KTRL('x'):
+			/* Toggle 'nameless' */
 			toggle_string(lines_list, FLG_NAMELESS, cy);
 			/* Now dirty */
 			dirty_line = cy;
 			break;
 		case KTRL('y'):
+			/* Paste killed text */
 			if (strlen(yank_buf))
 			{
 				cx = 0;
@@ -2344,12 +2384,14 @@ void do_cmd_edit_autopick()
 			}
 			break;
 		case KTRL('z'):
+			/* Toggle 'collecting' */
 			toggle_string(lines_list, FLG_COLLECTING, cy);
 			/* Now dirty */
 			dirty_line = cy;
 			break;
 
 		case KTRL('k'):
+			/* Kill rest of line */
 			if (lines_list[cy][0] != '\0' && cx < strlen(lines_list[cy]))
 			{
 				for (i = j = 0; lines_list[cy][i] && i < cx; i++)
