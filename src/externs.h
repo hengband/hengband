@@ -1543,7 +1543,7 @@ extern void jverb( const char *in , char *out , int flag);
 extern char* strstr_j(cptr str1, cptr str2);
 extern void sjis2euc(char *str);
 extern void euc2sjis(char *str);
-extern bool codeconv(char *str);
+extern byte codeconv(char *str);
 extern bool iskanji2(cptr s, int x);
 #endif
 

@@ -230,42 +230,94 @@ void euc2sjis(char *str)
 
 
 /*
- * strを環境に合った文字コードに変換する。
+ * strを環境に合った文字コードに変換し、変換前の文字コードを返す。
  * strの長さに制限はない。
+ *
+ * 0: Unknown
+ * 1: ASCII (Never known to be ASCII in this function.)
+ * 2: EUC
+ * 3: SJIS
  */
-bool codeconv(char *str)
+byte codeconv(char *str)
 {
+	byte code = 0;
 	int i;
-	int kanji = 0, iseuc = 1;
 
-	/* 漢字が存在し、その漢字コードがEUCかどうか調べる。*/
 	for (i = 0; str[i]; i++)
 	{
-		unsigned char c1 = str[i];
+		unsigned char c1;
+		unsigned char c2;
 
-		if (c1 & 0x80)  kanji = 1;
-		if ( c1>=0x80 && (c1 < 0xa1 || c1 > 0xfe)) iseuc = 0;
+		/* First byte */
+		c1 = str[i];
+
+		/* ASCII? */
+		if (!(c1 & 0x80)) continue;
+
+		/* Second byte */
+		i++;
+		c2 = str[i];
+
+		if (((0xa1 <= c1 && c1 <= 0xdf) || (0xfd <= c1 && c1 <= 0xfe)) &&
+		    (0xa1 <= c2 && c2 <= 0xfe))
+		{
+			/* Only EUC is allowed */
+			if (!code)
+			{
+				/* EUC */
+				code = 2;
+			}
+
+			/* Broken string? */
+			else if (code != 2)
+			{
+				/* No conversion */
+				return 0;
+			}
+		}
+
+		else if (((0x81 <= c1 && c1 <= 0x9f) &&
+			  ((0x40 <= c2 && c2 <= 0x7e) || (0x80 <= c2 && c2 <= 0xfc))) ||
+			 ((0xe0 <= c1 && c1 <= 0xfc) &&
+			  (0x40 <= c2 && c2 <= 0x7e)))
+		{
+			/* Only SJIS is allowed */
+			if (!code)
+			{
+				/* SJIS */
+				code = 3;
+			}
+
+			/* Broken string? */
+			else if (code != 3)
+			{
+				/* No conversion */
+				return 0;
+			}
+		}
 	}
 
-#ifdef EUC
-	if (kanji && !iseuc)	 /* SJIS -> EUC */
+
+	switch (code)
 	{
+#ifdef EUC
+	case 3:
+		/* SJIS -> EUC */
 		sjis2euc(str);
-
-		return TRUE;
-	}
+		break;
 #endif
 
 #ifdef SJIS
-	if (kanji && iseuc)	/* EUC -> SJIS */
-	{
+	case 2:
+		/* EUC -> SJIS */
 		euc2sjis(str);
 
-		return TRUE;
-	}
+		break;
 #endif
+	}
 
-	return FALSE;
+	/* Return kanji code */
+	return code;
 }
 
 /* 文字列sのxバイト目が漢字の1バイト目かどうか判定する */

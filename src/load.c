@@ -248,20 +248,15 @@ static void rd_string(char *str, int max)
 #endif
 
 	case 0:
-		/* Unknown kanji code */
-		if (codeconv(str))
-		{
-#ifdef EUC
-			/* This save file is written in SJIS */
-			kanji_code = 3;
-#endif
-#ifdef SJIS
-			/* This save file is written in EUC */
-			kanji_code = 2;
-#endif
-		}
-		break;
+	{
+		/* 不明の漢字コードからシステムの漢字コードに変換 */
+		byte code = codeconv(str);
 
+		/* 漢字コードが判明したら、それを記録 */
+		if (code) kanji_code = code;
+
+		break;
+	}
 	default:
 		/* No conversion needed */
 		break;
@@ -3695,23 +3690,6 @@ note("エンコードされたチェックサムがおかしい");
 
 #endif
 
-	/*
-	 * Use system depended kanji code for saved floors
-	 */
-#ifdef JP
-# ifdef EUC
-	/* EUC kanji code */
-	kanji_code = 2;
-# endif
-# ifdef SJIS
-	/* SJIS kanji code */
-	kanji_code = 3;
-# endif
-#else
-	/* ASCII */
-	kanji_code = 1;
-#endif
-
 	/* Success */
 	return (0);
 }
@@ -3824,9 +3802,30 @@ bool load_floor(saved_floor_type *sf_ptr, u32b mode)
 	byte old_h_ver_minor = 0;
 	byte old_h_ver_patch = 0;
 	byte old_h_ver_extra = 0;
-
+ 
 	bool ok = TRUE;
 	char floor_savefile[1024];
+
+	byte old_kanji_code = kanji_code;
+
+	/*
+	 * Temporal files are always written in system depended kanji
+	 * code.
+	 */
+#ifdef JP
+# ifdef EUC
+	/* EUC kanji code */
+	kanji_code = 2;
+# endif
+# ifdef SJIS
+	/* SJIS kanji code */
+	kanji_code = 3;
+# endif
+#else
+	/* ASCII */
+	kanji_code = 1;
+#endif
+
 
 	/* We have one file already opened */
 	if (mode & SLF_SECOND)
@@ -3892,6 +3891,9 @@ bool load_floor(saved_floor_type *sf_ptr, u32b mode)
 		h_ver_patch = old_h_ver_patch;
 		h_ver_extra = old_h_ver_extra;
 	}
+
+	/* Restore old knowledge */
+	kanji_code = old_kanji_code;
 
 	/* Result */
 	return ok;
