@@ -5034,7 +5034,7 @@ bool take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 			flush();
 
 #ifdef JP
-if (get_check("画面を保存しますか？"))
+if (get_check_strict("画面を保存しますか？", 4))
 #else
 			if (get_check("Dump the screen? "))
 #endif

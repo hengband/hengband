@@ -3322,8 +3322,8 @@ bool get_check(cptr prompt)
  *
  * mode & 0x01 : force user to answer "YES" or "N"
  * mode & 0x02 : don't allow ESCAPE key
+ * mode & 0x04 : no message_add
  */
-#define CHECK_STRICT 0
 bool get_check_strict(cptr prompt, int mode)
 {
 	int i;
@@ -3346,20 +3346,6 @@ bool get_check_strict(cptr prompt, int mode)
 	/* Hack -- Build a "useful" prompt */
 	if (mode & 1)
 	{
-#if CHECK_STRICT
-#ifdef JP
-		/* (79-8)バイトの指定, promptが長かった場合, 
-		   (79-9)文字の後終端文字が書き込まれる.     
-		   英語の方のstrncpyとは違うので注意.
-		   elseの方の分岐も同様. --henkma
-		*/
-		mb_strlcpy(buf, prompt, 80-8);
-#else
-		strncpy(buf, prompt, 79-8);
-		buf[79-8]='\0';
-#endif
-		strcat(buf, "[yes/no]");
-#else
 #ifdef JP
 		/* (79-8)バイトの指定, promptが長かった場合, 
 		   (79-9)文字の後終端文字が書き込まれる.     
@@ -3373,7 +3359,6 @@ bool get_check_strict(cptr prompt, int mode)
 #endif
 		strcat(buf, "[(O)k/(C)ancel]");
 
-#endif
 	}
 	else
 	{
@@ -3389,62 +3374,18 @@ bool get_check_strict(cptr prompt, int mode)
 	/* Prompt for it */
 	prt(buf, 0, 0);
 
+	if (!(mode & 4))
+	{
+		/* HACK : Add the line to message buffer */
+		message_add(buf);
+		p_ptr->window |= (PW_MESSAGE);
+		window_stuff();
+	}
+
 	/* Get an acceptable answer */
 	while (TRUE)
 	{
 		i = inkey();
-#if CHECK_STRICT /* ここから(ちょっと長いのでコメント) */
-		if (i == 'y' || i == 'Y')
-		{
-			if (!(mode & 1))
-				break;
-			else
-			{
-#ifdef JP
-				prt("y (YESと入力してください)", 0, strlen(buf));
-#else
-				prt("y (Please answer YES.)", 0, strlen(buf));
-#endif
-				i = inkey();
-				if (i == 'e' || i == 'E')
-				{
-#ifdef JP
-					prt("e (YESと入力してください)", 0, strlen(buf)+1);
-#else
-					prt("e (Please answer YES.)", 0, strlen(buf)+1);
-#endif
-					i = inkey();
-					if (i == 's' || i == 'S')
-					{
-						i = 'y';
-						break;
-					}
-					prt("", 0, strlen(buf)+1);
-				}
-				prt("", 0, strlen(buf));
-			}
-		}
-		if (!(mode & 2) && (i == ESCAPE)) break;
-		if (i == 'N' || i == 'n')
-		{
-			if (!(mode & 1))
-				break;
-			else
-			{
-#ifdef JP
-				prt("n (NOと入力してください)", 0, strlen(buf));
-#else
-				prt("n (Please answer NO.)", 0, strlen(buf));
-#endif
-				i = inkey();
-				if (i == 'o' || i == 'O')
-				{
-						break;
-				}
-				prt("", 0, strlen(buf));
-			}
-		}
-#else
 		if ( mode & 1 )
 		{
 			if ( i == 'o' || i == 'O' )
@@ -3469,7 +3410,6 @@ bool get_check_strict(cptr prompt, int mode)
 		{
 				break;
 		}
-#endif /* ここまで(ちょっと長いのでコメント) */
 		bell();
 	}
 
