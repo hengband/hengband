@@ -5917,26 +5917,24 @@ bool room_build(int typ)
 	switch (typ)
 	{
 	/* Build an appropriate room */
-	case ROOM_T_NORMAL:        build_type1(); break;
-	case ROOM_T_OVERLAP:       build_type2(); break;
-	case ROOM_T_CROSS:         build_type3(); break;
-	case ROOM_T_INNER_FEAT:    build_type4(); break;
-	case ROOM_T_NEST:          build_type5(); break;
-	case ROOM_T_PIT:           build_type6(); break;
-	case ROOM_T_LESSER_VAULT:  build_type7(); break;
-	case ROOM_T_GREATER_VAULT: build_type8(); break;
-	case ROOM_T_FRACAVE:       build_type9(); break;
-	case ROOM_T_RANDOM_VAULT:  build_type10(); break;
-	case ROOM_T_OVAL:          build_type11(); break;
-	case ROOM_T_CRYPT:         build_type12(); break;
-	case ROOM_T_TRAP_PIT:      build_type13(); break;
-	case ROOM_T_TRAP:          build_type14(); break;
-
-	/* Paranoia */
-	default: return FALSE;
+	case ROOM_T_NORMAL:        return build_type1();
+	case ROOM_T_OVERLAP:       return build_type2();
+	case ROOM_T_CROSS:         return build_type3();
+	case ROOM_T_INNER_FEAT:    return build_type4();
+	case ROOM_T_NEST:          return build_type5();
+	case ROOM_T_PIT:           return build_type6();
+	case ROOM_T_LESSER_VAULT:  return build_type7();
+	case ROOM_T_GREATER_VAULT: return build_type8();
+	case ROOM_T_FRACAVE:       return build_type9();
+	case ROOM_T_RANDOM_VAULT:  return build_type10();
+	case ROOM_T_OVAL:          return build_type11();
+	case ROOM_T_CRYPT:         return build_type12();
+	case ROOM_T_TRAP_PIT:      return build_type13();
+	case ROOM_T_TRAP:          return build_type14();
 	}
 
-	return TRUE;
+	/* Paranoia */
+	return FALSE;
 }
 
 
