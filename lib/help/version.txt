@@ -1,5 +1,11 @@
 === History of Hengband from 1.0.7 to 1.1.0 ===
 
+  Jun. 15th, 2002  hengband 1.1.0 released.
+
+- Changed behavior of light area.
+- Various bug fixes and tuning.
+
+
   Jun. 2nd, 2002  hengband 1.1.0 Release Candidate 1 released.
 
 - Splited Life realm into two and new spells added; New 'Life' realm
