@@ -3090,73 +3090,97 @@ msg_print("爆発のルーンは解除された。");
 				do_move = TRUE;
 			}
 		}
-		if (do_move && player_bold(ny, nx) && (d_info[dungeon_type].flags1 & DF1_NO_MELEE))
-		{
-			do_move = FALSE;
-		}
 
-		/* Some monsters never attack */
-		if (do_move && player_bold(ny, nx) && (r_ptr->flags1 & RF1_NEVER_BLOW))
-		{
-			/* Hack -- memorize lack of attacks */
-			if (m_ptr->ml && is_original_ap(m_ptr)) r_ptr->r_flags1 |= (RF1_NEVER_BLOW);
-
-			/* Do not move */
-			do_move = FALSE;
-		}
-
-		/* The player is in the way.  Attack him. */
+		/* The player is in the way */
 		if (do_move && player_bold(ny, nx))
 		{
-			if (!p_ptr->riding || one_in_(2))
+			/* Some monsters never attack */
+			if (r_ptr->flags1 & RF1_NEVER_BLOW)
 			{
-				/* Do the attack */
-				(void)make_attack_normal(m_idx);
+				/* Hack -- memorize lack of attacks */
+				if (m_ptr->ml && is_original_ap(m_ptr)) r_ptr->r_flags1 |= (RF1_NEVER_BLOW);
 
 				/* Do not move */
 				do_move = FALSE;
+			}
 
-				/* Took a turn */
-				do_turn = TRUE;
+			/* In anti-melee dungeon, stupid or confused monster takes useless turn */
+			if (do_move && (d_info[dungeon_type].flags1 & DF1_NO_MELEE))
+			{
+				if (!m_ptr->confused)
+				{
+					if (!(r_ptr->flags2 & RF2_STUPID)) do_move = FALSE;
+					else
+					{
+						if (m_ptr->ml && is_original_ap(m_ptr)) r_ptr->r_flags2 |= (RF2_STUPID);
+					}
+				}
+			}
+
+			/* The player is in the way.  Attack him. */
+			if (do_move)
+			{
+				if (!p_ptr->riding || one_in_(2))
+				{
+					/* Do the attack */
+					(void)make_attack_normal(m_idx);
+
+					/* Do not move */
+					do_move = FALSE;
+
+					/* Took a turn */
+					do_turn = TRUE;
+				}
+			}
+
+			if ((c_ptr->feat >= FEAT_PATTERN_START) &&
+				(c_ptr->feat <= FEAT_PATTERN_XTRA2) &&
+				!do_turn && !(r_ptr->flags7 & RF7_CAN_FLY))
+			{
+				do_move = FALSE;
 			}
 		}
-
-		if ((c_ptr->feat >= FEAT_PATTERN_START) &&
-			(c_ptr->feat <= FEAT_PATTERN_XTRA2) &&
-			!do_turn && !(r_ptr->flags7 & RF7_CAN_FLY))
-		{
-			do_move = FALSE;
-		}
-
 
 		/* A monster is in the way */
 		if (do_move && c_ptr->m_idx)
 		{
 			monster_race *z_ptr = &r_info[y_ptr->r_idx];
-			monster_type *m2_ptr = &m_list[c_ptr->m_idx];
 
 			/* Assume no movement */
 			do_move = FALSE;
 
 			/* Attack 'enemies' */
-			if (((r_ptr->flags2 & (RF2_KILL_BODY)) &&
-				  (r_ptr->mexp * r_ptr->level > z_ptr->mexp * z_ptr->level) &&
-				  (cave_floor_grid(c_ptr)) &&
-			     (c_ptr->m_idx != p_ptr->riding)) ||
-				 are_enemies(m_ptr, m2_ptr) || m_ptr->confused)
+			if (((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW) &&
+				 (r_ptr->mexp * r_ptr->level > z_ptr->mexp * z_ptr->level) &&
+				 cave_floor_grid(c_ptr) &&
+				 (c_ptr->m_idx != p_ptr->riding)) ||
+				are_enemies(m_ptr, y_ptr) || m_ptr->confused)
 			{
 				do_move = FALSE;
 
-				if (r_ptr->flags2 & RF2_KILL_BODY)
+				if (!(r_ptr->flags1 & RF1_NEVER_BLOW))
 				{
-					if (is_original_ap(m_ptr)) r_ptr->r_flags2 |= (RF2_KILL_BODY);
-				}
+					if (r_ptr->flags2 & RF2_KILL_BODY)
+					{
+						if (is_original_ap(m_ptr)) r_ptr->r_flags2 |= (RF2_KILL_BODY);
+					}
 
-				/* attack */
-				if ((m2_ptr->r_idx) && (m2_ptr->hp >= 0))
-				{
-					if (monst_attack_monst(m_idx, cave[ny][nx].m_idx))
-					return;
+					/* attack */
+					if (y_ptr->r_idx && (y_ptr->hp >= 0))
+					{
+						if (monst_attack_monst(m_idx, c_ptr->m_idx)) return;
+
+						/* In anti-melee dungeon, stupid or confused monster takes useless turn */
+						else if (d_info[dungeon_type].flags1 & DF1_NO_MELEE)
+						{
+							if (m_ptr->confused) return;
+							else if (r_ptr->flags2 & RF2_STUPID)
+							{
+								if (m_ptr->ml && is_original_ap(m_ptr)) r_ptr->r_flags2 |= (RF2_STUPID);
+								return;
+							}
+						}
+					}
 				}
 			}
 
@@ -3214,7 +3238,7 @@ msg_print("爆発のルーンは解除された。");
 			/* Hack -- Update the old location */
 			cave[oy][ox].m_idx = c_ptr->m_idx;
 
-			if (cave[ny][nx].feat == FEAT_TREES)
+			if (c_ptr->feat == FEAT_TREES)
 			{
 				if (r_ptr->flags2 & RF2_KILL_WALL)
 				{
