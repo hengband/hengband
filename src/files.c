@@ -1553,6 +1553,182 @@ static void prt_num2(cptr header, cptr tailer, int num, int row, int col, byte c
 	put_str(tailer, row, col + len + 3+6);
 }
 #endif
+
+#define ENTRY_BARE_HAND 0
+#define ENTRY_TWO_HANDS 1
+#define ENTRY_RIGHT_HAND1 2
+#define ENTRY_LEFT_HAND1 3
+#define ENTRY_LEFT_HAND2 4
+#define ENTRY_RIGHT_HAND2 5
+#define ENTRY_POSTURE 6
+#define ENTRY_SHOOT_HIT_DAM 7
+#define ENTRY_SHOOT_POWER 8
+#define ENTRY_TO_AC 9
+#define ENTRY_BASE_AC 10
+#define ENTRY_LEVEL 11
+#define ENTRY_CUR_EXP 12
+#define ENTRY_MAX_EXP 13
+#define ENTRY_EXP_TO_ADV 14
+#define ENTRY_GOLD 15
+#define ENTRY_TURN 16
+#define ENTRY_HP 17
+#define ENTRY_SP 18
+#define ENTRY_PLAY_TIME 19
+#define ENTRY_SKILL_FIGHT 20
+#define ENTRY_SKILL_SHOOT 21
+#define ENTRY_SKILL_SAVING 22
+#define ENTRY_SKILL_STEALTH 23
+#define ENTRY_SKILL_PERCEP 24
+#define ENTRY_SKILL_SEARCH 25
+#define ENTRY_SKILL_DISARM 26
+#define ENTRY_SKILL_DEVICE 27
+#define ENTRY_BLOWS 28
+#define ENTRY_SHOTS 29
+#define ENTRY_AVG_DMG 30
+#define ENTRY_INFRA 31
+
+#define ENTRY_NAME 32
+#define ENTRY_SEX 33
+#define ENTRY_RACE 34
+#define ENTRY_CLASS 35
+#define ENTRY_REALM 36
+#define ENTRY_PATRON 37
+#define ENTRY_AGE 38
+#define ENTRY_HEIGHT 39
+#define ENTRY_WEIGHT 40
+#define ENTRY_SOCIAL 41
+
+
+static struct
+{
+	int col;
+	int row;
+	int len;
+	char header[20];
+} disp_player_line[]
+#ifdef JP
+= {
+	{ 1,  9, 25, "打撃修正(格闘)"},
+	{ 1,  9, 25, "打撃修正(両手)"},
+	{ 1,  9, 25, "打撃修正(右手)"},
+	{ 1,  9, 25, "打撃修正(左手)"},
+	{ 1, 10, 25, "打撃修正(左手)"},
+	{ 1, 10, 25, "打撃修正(右手)"},
+	{ 1, 10, 25, ""},
+	{ 1, 11, 25, "射撃攻撃修正"},
+	{ 1, 12, 25, "射撃武器倍率"},
+	{ 1, 13, 25, "AC 修正"},
+	{ 1, 14, 25, "基本 AC"},
+	{28,  9, 20, "レベル"},
+	{28, 10, 20, "経験値"},
+	{28, 11, 20, "最大経験"},
+	{28, 12, 20, "次レベル"},
+	{28, 13, 20, "所持金"},
+	{28, 14, 20, "ターン数"},
+	{52, 10, 22, "ＨＰ"},
+	{52, 12, 22, "ＭＰ"},
+	{52, 14, 22, "プレイ時間"},
+	{ 1, 17, -1, "打撃攻撃能力 : "},
+	{ 1, 18, -1, "射撃攻撃能力 : "},
+	{ 1, 19, -1, "魔法防御能力 : "},
+	{ 1, 20, -1, "隠密行動能力 : "},
+	{28, 17, -1, "知覚能力     : "},
+	{28, 18, -1, "探索能力     : "},
+	{28, 19, -1, "解除能力     : "},
+	{28, 20, -1, "魔法道具使用 : "},
+	{55, 17, -1, "打撃回数    : "},
+	{55, 18, -1, "射撃回数    : "},
+	{55, 19, -1, "平均ダメージ: "},
+	{55, 20, -1, "赤外線視力  : "},
+	{26,  1, -1, "名前  : "},
+	{ 1,  3, -1, "性別     : "},
+	{ 1,  4, -1, "種族     : "},
+	{ 1,  5, -1, "職業     : "},
+	{ 1,  6, -1, "魔法     : "},
+	{ 1,  7, -1, "守護魔神 : "},
+	{30,  3, 22, "年齢"},
+	{30,  4, 22, "身長"},
+	{30,  5, 22, "体重"},
+	{30,  6, 22, "社会的地位"},
+};
+#else
+= {
+	{ 1,  9, 25, "Melee(bare h.)"},
+	{ 1,  9, 25, "Melee(2hands)"},
+	{ 1,  9, 25, "Melee(Right)"},
+	{ 1,  9, 25, "Melee(Left)"},
+	{ 1, 10, 25, "Melee(Left)"},
+	{ 1, 10, 25, "Melee(Right)"},
+	{ 1, 10, 25, "Posture"},
+	{ 1, 11, 25, "Shoot"},
+	{ 1, 12, 25, "Shoot Power"},
+	{ 1, 13, 25, "+ To AC"},
+	{ 1, 14, 25, "Base AC"},
+	{28,  9, 20, "Level"},
+	{28, 10, 20, "Experience"},
+	{28, 11, 20, "Max Exp"},
+	{28, 12, 20, "Exp to Adv"},
+	{28, 13, 20, "Gold"},
+	{28, 14, 20, "Total turn"},
+	{52, 10, 22, "Hit point"},
+	{52, 12, 22, "SP (Mana)"},
+	{52, 14, 22, "Play time"},
+	{ 1, 17, -1, "Fighting    : "},
+	{ 1, 18, -1, "Bows/Throw  : "},
+	{ 1, 19, -1, "Saving Throw: "},
+	{ 1, 20, -1, "Stealth     : "},
+	{28, 17, -1, "Perception  : "},
+	{28, 18, -1, "Searching   : "},
+	{28, 19, -1, "Disarming   : "},
+	{28, 20, -1, "Magic Device: "},
+	{55, 17, -1, "Blows/Round : "},
+	{55, 18, -1, "Shots/Round : "},
+	{55, 19, -1, "Wpn.dmg/Rnd : "},
+	{55, 20, -1, "Infra-Vision: "},
+	{26,  1, -1, "Name  : "},
+	{ 1,  3, -1, "Sex      : "},
+	{ 1,  4, -1, "Race     : "},
+	{ 1,  5, -1, "Class    : "},
+	{ 1,  6, -1, "Magic    : "},
+	{ 1,  7, -1, "Patron   : "},
+	{30,  3, 22, "Age"},
+	{30,  4, 22, "Height"},
+	{30,  5, 22, "Weight"},
+	{30,  6, 22, "Social Class"},
+};
+#endif
+
+static void display_player_one_line(int entry, cptr val, byte attr)
+{
+	char buf[40];
+
+	int row = disp_player_line[entry].row;
+	int col = disp_player_line[entry].col;
+	int len = disp_player_line[entry].len;
+	cptr head = disp_player_line[entry].header;
+
+	int head_len = strlen(head);
+
+	Term_putstr(col, row, -1, TERM_WHITE, head);
+
+	if (!val)
+		return;
+
+	if (len > 0)
+	{
+		int val_len = len - head_len;
+		sprintf(buf, "%*.*s", val_len, val_len, val);
+		Term_putstr(col + head_len, row, -1, attr, buf);
+	}
+	else
+	{
+		Term_putstr(col + head_len, row, -1, attr, val);
+	}
+
+	return;
+}
+
+
 /*
  * Prints the following information on the screen.
  *
@@ -1562,9 +1738,6 @@ static void prt_num2(cptr header, cptr tailer, int num, int row, int col, byte c
 static void display_player_middle(void)
 {
         char buf[160];
-#ifdef JP
-        byte statcolor;
-#endif
 	int show_tohit, show_todam;
 	object_type *o_ptr;
 	int tmul = 0;
@@ -1584,22 +1757,14 @@ static void display_player_middle(void)
 		sprintf(buf, "(%+d,%+d)", show_tohit, show_todam);
 
 		/* Dump the bonuses to hit/dam */
-#ifdef JP
 		if(!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
-			Term_putstr(1, 9, -1, TERM_WHITE, "打撃修正(格闘)");
+			display_player_one_line(ENTRY_BARE_HAND, buf, TERM_L_BLUE);
 		else if(p_ptr->ryoute)
-			Term_putstr(1, 9, -1, TERM_WHITE, "打撃修正(両手)");
+			display_player_one_line(ENTRY_TWO_HANDS, buf, TERM_L_BLUE);
+		else if (left_hander)
+			display_player_one_line(ENTRY_LEFT_HAND1, buf, TERM_L_BLUE);
 		else
-			Term_putstr(1, 9, -1, TERM_WHITE, (left_hander ? "打撃修正(左手)" : "打撃修正(右手)"));
-#else
-		if(!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
-			Term_putstr(1, 9, -1, TERM_WHITE, "Melee(bare h.)");
-		else if(p_ptr->ryoute)
-			Term_putstr(1, 9, -1, TERM_WHITE, "Melee(2hands)");
-		else
-			Term_putstr(1, 9, -1, TERM_WHITE, (left_hander ? "Melee(Left)" : "Melee(Right)"));
-#endif
-		Term_putstr(15, 9, -1, TERM_L_BLUE, format("%11s", buf));
+			display_player_one_line(ENTRY_RIGHT_HAND1, buf, TERM_L_BLUE);
 	}
 
 	if(p_ptr->hidarite)
@@ -1617,12 +1782,10 @@ static void display_player_middle(void)
 		sprintf(buf, "(%+d,%+d)", show_tohit, show_todam);
 
 		/* Dump the bonuses to hit/dam */
-#ifdef JP
-		Term_putstr(1, 10, -1, TERM_WHITE, (left_hander ? "打撃修正(右手)" : "打撃修正(左手)"));
-#else
-		Term_putstr(1, 10, -1, TERM_WHITE, "Melee(Left)");
-#endif
-		Term_putstr(15, 10, -1, TERM_L_BLUE, format("%11s", buf));
+		if (left_hander)
+			display_player_one_line(ENTRY_RIGHT_HAND2, buf, TERM_L_BLUE);
+		else
+			display_player_one_line(ENTRY_LEFT_HAND2, buf, TERM_L_BLUE);
 	}
 	else if ((p_ptr->pclass == CLASS_MONK) && (empty_hands(TRUE) > 1))
 	{
@@ -1633,17 +1796,18 @@ static void display_player_middle(void)
 			{
 				if ((p_ptr->special_defense >> i) & KAMAE_GENBU) break;
 			}
+			if (i < MAX_KAMAE)
 #ifdef JP
-			if (i < MAX_KAMAE) Term_putstr(16, 10, -1, TERM_YELLOW, format("%sの構え", kamae_shurui[i].desc));
+				display_player_one_line(ENTRY_POSTURE, format("%sの構え", kamae_shurui[i].desc), TERM_YELLOW);
 #else
-			if (i < MAX_KAMAE) Term_putstr(10, 10, -1, TERM_YELLOW, format("%11.11s form", kamae_shurui[i].desc));
+				display_player_one_line(ENTRY_POSTURE, format("%s form", kamae_shurui[i].desc), TERM_YELLOW);
 #endif
 		}
 		else
 #ifdef JP
-			Term_putstr(18, 10, -1, TERM_YELLOW, "構えなし");
+				display_player_one_line(ENTRY_POSTURE, "構えなし", TERM_YELLOW);
 #else
-			Term_putstr(16, 10, -1, TERM_YELLOW, "no posture");
+				display_player_one_line(ENTRY_POSTURE, "none", TERM_YELLOW);
 #endif
 	}
 
@@ -1661,14 +1825,7 @@ static void display_player_middle(void)
 	show_tohit += (weapon_exp[0][o_ptr->sval]-4000)/200;
 
 	/* Range attacks */
-	sprintf(buf, "(%+d,%+d)", show_tohit, show_todam);
-#ifdef JP
-	Term_putstr(1, 11, -1, TERM_WHITE, "射撃攻撃修正");
-#else
-	Term_putstr(1, 11, -1, TERM_WHITE, "Shoot");
-#endif
-	Term_putstr(15, 11, -1, TERM_L_BLUE, format("%11s", buf));
-
+	display_player_one_line(ENTRY_SHOOT_HIT_DAM, format("(%+d,%+d)", show_tohit, show_todam), TERM_L_BLUE);
 	
 	if (inventory[INVEN_BOW].k_idx)
 	{
@@ -1679,181 +1836,63 @@ static void display_player_middle(void)
 
 		tmul = tmul * (100 + (int)(adj_str_td[p_ptr->stat_ind[A_STR]]) - 128);
 	}
-	sprintf(buf, "x%d.%02d", tmul/100, tmul%100);
-#ifdef JP
-	Term_putstr(1, 12, -1, TERM_WHITE, "射撃武器倍率");
-#else
-	Term_putstr(1, 12, -1, TERM_WHITE, "Shoot Power");
-#endif
-	Term_putstr(15, 12, -1, TERM_L_BLUE, format("%11s", buf));
+
+	/* shoot power */
+	display_player_one_line(ENTRY_SHOOT_POWER, format("x%d.%02d", tmul/100, tmul%100), TERM_L_BLUE);
 
 	/* Dump the armor class bonus */
-#ifdef JP
-prt_num("AC 修正         ", p_ptr->dis_to_a, 13, 1, TERM_L_BLUE);
-#else
-	prt_num("+ To AC         ", p_ptr->dis_to_a, 13, 1, TERM_L_BLUE);
-#endif
-
+	display_player_one_line(ENTRY_TO_AC, format("%d", p_ptr->dis_to_a), TERM_L_BLUE);
 
 	/* Dump the total armor class */
-#ifdef JP
-prt_num("基本 AC         ", p_ptr->dis_ac, 14, 1, TERM_L_BLUE);
-#else
-	prt_num("Base AC         ", p_ptr->dis_ac, 14, 1, TERM_L_BLUE);
-#endif
+	display_player_one_line(ENTRY_BASE_AC, format("%d", p_ptr->dis_ac), TERM_L_BLUE);
+				
+	/* Dump character level */
+	display_player_one_line(ENTRY_LEVEL, format("%d", p_ptr->lev), TERM_L_GREEN);
 
-#ifdef JP
-prt_num("レベル     ", (int)p_ptr->lev, 9, 28, TERM_L_GREEN);
-#else
-	prt_num("Level      ", (int)p_ptr->lev, 9, 28, TERM_L_GREEN);
-#endif
-
+	/* Dump experience */
 	if (p_ptr->prace == RACE_ANDROID)
-	{
-#ifdef JP
-put_str("経験値     ", 10, 28);
-#else
-put_str("Experience ", 10, 28);
-#endif
-c_put_str(TERM_L_GREEN, "    *****", 10, 28+11);
-	}
+		display_player_one_line(ENTRY_CUR_EXP, "*****", TERM_L_GREEN);
 	else if (p_ptr->exp >= p_ptr->max_exp)
-	{
-#ifdef JP
-prt_lnum("経験値     ", p_ptr->exp, 10, 28, TERM_L_GREEN);
-#else
-		prt_lnum("Experience ", p_ptr->exp, 10, 28, TERM_L_GREEN);
-#endif
-
-	}
+		display_player_one_line(ENTRY_CUR_EXP, format("%ld", p_ptr->exp), TERM_L_GREEN);
 	else
-	{
-#ifdef JP
-prt_lnum("経験値     ", p_ptr->exp, 10, 28, TERM_YELLOW);
-#else
-		prt_lnum("Experience ", p_ptr->exp, 10, 28, TERM_YELLOW);
-#endif
+		display_player_one_line(ENTRY_CUR_EXP, format("%ld", p_ptr->exp), TERM_YELLOW);
 
-	}
-
+	/* Dump max experience */
 	if (p_ptr->prace == RACE_ANDROID)
-	{
-#ifdef JP
-put_str("最大経験   ", 11, 28);
-#else
-put_str("Max Exo    ", 11, 28);
-#endif
-c_put_str(TERM_L_GREEN, "    *****", 11, 28+11);
-	}
+		display_player_one_line(ENTRY_MAX_EXP, "*****", TERM_L_GREEN);
 	else
-#ifdef JP
-prt_lnum("最大経験   ", p_ptr->max_exp, 11, 28, TERM_L_GREEN);
-#else
-	prt_lnum("Max Exp    ", p_ptr->max_exp, 11, 28, TERM_L_GREEN);
-#endif
+		display_player_one_line(ENTRY_MAX_EXP, format("%ld", p_ptr->max_exp), TERM_L_GREEN);
 
-
+	/* Dump exp to advance */
 	if ((p_ptr->lev >= PY_MAX_LEVEL) || (p_ptr->prace == RACE_ANDROID))
-	{
-#ifdef JP
-put_str("次レベル   ", 12, 28);
-c_put_str(TERM_L_GREEN, "    *****", 12, 28+11);
-#else
-		put_str("Exp to Adv", 12, 28);
-		c_put_str(TERM_L_GREEN, "    *****", 12, 28+11);
-#endif
-
-	}
+		display_player_one_line(ENTRY_EXP_TO_ADV, "*****", TERM_L_GREEN);
 	else
-	{
-#ifdef JP
-prt_lnum("次レベル   ",
-#else
-		prt_lnum("Exp to Adv ",
-#endif
+		display_player_one_line(ENTRY_EXP_TO_ADV, format("%ld", (s32b)(player_exp[p_ptr->lev - 1] * p_ptr->expfact / 100L)), TERM_L_GREEN);
 
-		         (s32b)(player_exp[p_ptr->lev - 1] * p_ptr->expfact / 100L),
-		         12, 28, TERM_L_GREEN);
-	}
+	/* Dump gold */
+	display_player_one_line(ENTRY_GOLD, format("%ld", p_ptr->au), TERM_L_GREEN);
 
-#ifdef JP
-prt_lnum("所持金     ", p_ptr->au, 13, 28, TERM_L_GREEN);
-#else
-	prt_lnum("Gold       ", p_ptr->au, 13, 28, TERM_L_GREEN);
-#endif
+	/* Dump turn */
+	display_player_one_line(ENTRY_TURN, format("%ld", MAX(turn_real(turn),0)), TERM_L_GREEN);
 
-#ifdef JP
-prt_lnum("ターン数   ", MAX(turn_real(turn),0), 14, 28, TERM_L_GREEN  );
-#else
-prt_lnum("Total turn ", MAX(turn_real(turn),0), 14, 28, TERM_L_GREEN  );
-#endif
-
-#ifdef JP
-/*           54321 / 54321   */
-put_str("     ＨＰ /  最大    ", 9, 52);
+	/* Dump hit point */
 	if (p_ptr->chp >= p_ptr->mhp) 
-	  statcolor = TERM_L_GREEN;
+		display_player_one_line(ENTRY_HP, format("%d / %d", p_ptr->chp , p_ptr->mhp), TERM_L_GREEN);
+	else if (p_ptr->chp > (p_ptr->mhp * hitpoint_warn) / 10) 
+		display_player_one_line(ENTRY_HP, format("%d / %d", p_ptr->chp , p_ptr->mhp), TERM_YELLOW);
 	else
-	if (p_ptr->chp > (p_ptr->mhp * hitpoint_warn) / 10) 
-	  statcolor = TERM_YELLOW;
-	else
-	  statcolor=TERM_RED;
-prt_num_max( p_ptr->chp , p_ptr->mhp, 10, 56, statcolor , TERM_L_GREEN);
+		display_player_one_line(ENTRY_HP, format("%d / %d", p_ptr->chp , p_ptr->mhp), TERM_RED);
 
-#else
-	prt_num("Max Hit Points ", p_ptr->mhp, 9, 52, TERM_L_GREEN);
-
-	if (p_ptr->chp >= p_ptr->mhp)
-	{
-		prt_num("Cur Hit Points ", p_ptr->chp, 10, 52, TERM_L_GREEN);
-	}
-	else if (p_ptr->chp > (p_ptr->mhp * hitpoint_warn) / 10)
-	{
-		prt_num("Cur Hit Points ", p_ptr->chp, 10, 52, TERM_YELLOW);
-	}
-	else
-	{
-		prt_num("Cur Hit Points ", p_ptr->chp, 10, 52, TERM_RED);
-	}
-#endif
-
-
-#ifdef JP
-/*           54321 / 54321   */
-put_str("     ＭＰ /  最大    ", 11, 52);
+	/* Dump mana power */
 	if (p_ptr->csp >= p_ptr->msp) 
-	  statcolor = TERM_L_GREEN;
+		display_player_one_line(ENTRY_SP, format("%d / %d", p_ptr->csp , p_ptr->msp), TERM_L_GREEN);
+	else if (p_ptr->csp > (p_ptr->msp * hitpoint_warn) / 10) 
+		display_player_one_line(ENTRY_SP, format("%d / %d", p_ptr->csp , p_ptr->msp), TERM_YELLOW);
 	else
-	if (p_ptr->csp > (p_ptr->msp * hitpoint_warn) / 10) 
-	  statcolor = TERM_YELLOW;
-	else
-	  statcolor=TERM_RED;
-prt_num_max( p_ptr->csp , p_ptr->msp, 12, 56, statcolor , TERM_L_GREEN);
-#else
-	prt_num("Max SP (Mana)  ", p_ptr->msp, 11, 52, TERM_L_GREEN);
+		display_player_one_line(ENTRY_SP, format("%d / %d", p_ptr->csp , p_ptr->msp), TERM_RED);
 
-	if (p_ptr->csp >= p_ptr->msp)
-	{
-		prt_num("Cur SP (Mana)  ", p_ptr->csp, 12, 52, TERM_L_GREEN);
-	}
-	else if (p_ptr->csp > (p_ptr->msp * hitpoint_warn) / 10)
-	{
-		prt_num("Cur SP (Mana)  ", p_ptr->csp, 12, 52, TERM_YELLOW);
-	}
-	else
-	{
-		prt_num("Cur SP (Mana)  ", p_ptr->csp, 12, 52, TERM_RED);
-	}
-#endif
-
-	sprintf(buf, "%.2lu:%.2lu:%.2lu", playtime/(60*60), (playtime/60)%60, playtime%60);
-#ifdef JP
-	Term_putstr(52, 14, -1, TERM_WHITE, "プレイ時間");
-#else
-	Term_putstr(52, 14, -1, TERM_WHITE, "Playtime");
-#endif
-	Term_putstr(63, 14, -1, TERM_L_GREEN, format("%11s", buf));
-
+	/* Dump play time */
+	display_player_one_line(ENTRY_PLAY_TIME, format("%.2lu:%.2lu:%.2lu", playtime/(60*60), (playtime/60)%60, playtime%60), TERM_L_GREEN);
 }
 
 
@@ -2115,104 +2154,36 @@ static void display_player_various(void)
 	xfos = p_ptr->skill_fos;
 
 
-#ifdef JP
-put_str("打撃攻撃能力 :", 17, 1);
-#else
-	put_str("Fighting    :", 17, 1);
-#endif
-
 	desc = likert(xthn, 12);
-	c_put_str(likert_color, desc, 17, 15);
-
-#ifdef JP
-put_str("射撃攻撃能力 :", 18, 1);
-#else
-	put_str("Bows/Throw  :", 18, 1);
-#endif
+	display_player_one_line(ENTRY_SKILL_FIGHT, desc, likert_color);
 
 	desc = likert(xthb, 12);
-	c_put_str(likert_color, desc, 18, 15);
-
-#ifdef JP
-put_str("魔法防御能力 :", 19, 1);
-#else
-	put_str("Saving Throw:", 19, 1);
-#endif
+	display_player_one_line(ENTRY_SKILL_SHOOT, desc, likert_color);
 
 	desc = likert(xsav, 7);
-	c_put_str(likert_color, desc, 19, 15);
-
-#ifdef JP
-put_str("隠密行動能力 :", 20, 1);
-#else
-	put_str("Stealth     :", 20, 1);
-#endif
+	display_player_one_line(ENTRY_SKILL_SAVING, desc, likert_color);
 
 	desc = likert(xstl, 1);
-	c_put_str(likert_color, desc, 20, 15);
-
-
-#ifdef JP
-put_str("知覚能力     :", 17, 28);
-#else
-	put_str("Perception  :", 17, 28);
-#endif
+	display_player_one_line(ENTRY_SKILL_STEALTH, desc, likert_color);
 
 	desc = likert(xfos, 6);
-	c_put_str(likert_color, desc, 17, 42);
-
-#ifdef JP
-put_str("探索能力     :", 18, 28);
-#else
-	put_str("Searching   :", 18, 28);
-#endif
+	display_player_one_line(ENTRY_SKILL_PERCEP, desc, likert_color);
 
 	desc = likert(xsrh, 6);
-	c_put_str(likert_color, desc, 18, 42);
-
-#ifdef JP
-put_str("解除能力     :", 19, 28);
-#else
-	put_str("Disarming   :", 19, 28);
-#endif
+	display_player_one_line(ENTRY_SKILL_SEARCH, desc, likert_color);
 
 	desc = likert(xdis, 8);
-	c_put_str(likert_color, desc, 19, 42);
-
-#ifdef JP
-put_str("魔法道具使用 :", 20, 28);
-#else
-	put_str("Magic Device:", 20, 28);
-#endif
+	display_player_one_line(ENTRY_SKILL_DISARM, desc, likert_color);
 
 	desc = likert(xdev, 6);
-	c_put_str(likert_color, desc, 20, 42);
-
-
-#ifdef JP
-put_str("打撃回数    :", 17, 55);
-#else
-	put_str("Blows/Round:", 17, 55);
-#endif
+	display_player_one_line(ENTRY_SKILL_DEVICE, desc, likert_color);
 
 	if (!muta_att)
-		put_str(format("%d+%d", blows1, blows2), 17, 69);
+		display_player_one_line(ENTRY_BLOWS, format("%d+%d", blows1, blows2), TERM_WHITE);
 	else
-		put_str(format("%d+%d+%d", blows1, blows2, muta_att), 17, 69);
+		display_player_one_line(ENTRY_BLOWS, format("%d+%d+%d", blows1, blows2, muta_att), TERM_WHITE);
 
-#ifdef JP
-put_str("射撃回数    :", 18, 55);
-#else
-	put_str("Shots/Round:", 18, 55);
-#endif
-
-	put_str(format("%d.%02d", shots, shot_frac), 18, 69);
-
-#ifdef JP
-put_str("平均ダメージ:", 19, 55);	                     
-#else
-	put_str("Wpn.dmg/Rnd:", 19, 55);	/* From PsiAngband */
-#endif
+	display_player_one_line(ENTRY_SHOTS, format("%d.%02d", shots, shot_frac), TERM_WHITE);
 
 
 	if ((damage[0]+damage[1]) == 0)
@@ -2220,20 +2191,9 @@ put_str("平均ダメージ:", 19, 55);
 	else
 		desc = format("%d+%d", blows1 * damage[0] / 100, blows2 * damage[1] / 100);
 
-	put_str(desc, 19, 69);
+	display_player_one_line(ENTRY_AVG_DMG, desc, TERM_WHITE);
 
-#ifdef JP
-put_str("赤外線視力  :", 20, 55);
-#else
-	put_str("Infra-Vision:", 20, 55);
-#endif
-
-#ifdef JP
-put_str(format("%d feet", p_ptr->see_infra * 10), 20, 69);
-#else
-	put_str(format("%d feet", p_ptr->see_infra * 10), 20, 69);
-#endif
-
+	display_player_one_line(ENTRY_INFRA, format("%d feet", p_ptr->see_infra * 10), TERM_WHITE);
 }
 
 
@@ -3993,66 +3953,40 @@ void display_player(int mode)
 	{
 		/* Name, Sex, Race, Class */
 #ifdef JP
-put_str("名前  :", 1,26);
-put_str("性別        :", 3, 1);
-put_str("種族        :", 4, 1);
-put_str("職業        :", 5, 1);
+		sprintf(tmp, "%s%s%s", ap_ptr->title, ap_ptr->no == 1 ? "の":"", player_name);
 #else
-		put_str("Name  :", 1,26);
-		put_str("Sex         :", 3, 1);
-		put_str("Race        :", 4, 1);
-		put_str("Class       :", 5, 1);
+		sprintf(tmp, "%s %s", ap_ptr->title, player_name);
 #endif
 
-		if (p_ptr->realm1 || p_ptr->realm2)
-#ifdef JP
-put_str("魔法        :", 6, 1);
-#else
-			put_str("Magic       :", 6, 1);
-#endif
+		display_player_one_line(ENTRY_NAME, tmp, TERM_L_BLUE);
+		display_player_one_line(ENTRY_SEX, sp_ptr->title, TERM_L_BLUE);
+		display_player_one_line(ENTRY_RACE, (p_ptr->mimic_form ? mimic_info[p_ptr->mimic_form].title : rp_ptr->title), TERM_L_BLUE);
+		display_player_one_line(ENTRY_CLASS, cp_ptr->title, TERM_L_BLUE);
 
-		if (p_ptr->pclass == CLASS_CHAOS_WARRIOR)
-#ifdef JP
-put_str("守護魔神    :", 7, 1);
-#else
-			put_str("Patron      :", 7, 1);
-#endif
-
-		strcpy(tmp,ap_ptr->title);
-#ifdef JP
-	if(ap_ptr->no == 1)
-		strcat(tmp,"の");
-#else
-		strcat(tmp," ");
-#endif
-		strcat(tmp,player_name);
-
-		c_put_str(TERM_L_BLUE, tmp, 1, 34);
-		c_put_str(TERM_L_BLUE, sp_ptr->title, 3, 15);
-		c_put_str(TERM_L_BLUE, (p_ptr->mimic_form ? mimic_info[p_ptr->mimic_form].title : rp_ptr->title), 4, 15);
-		c_put_str(TERM_L_BLUE, cp_ptr->title, 5, 15);
 		if (p_ptr->realm1)
-			c_put_str(TERM_L_BLUE, realm_names[p_ptr->realm1], 6, 15);
-		if (p_ptr->pclass == CLASS_CHAOS_WARRIOR)
-			c_put_str(TERM_L_BLUE, chaos_patrons[p_ptr->chaos_patron], 7, 15);
+		{
+			if (p_ptr->realm2)
+				sprintf(tmp, "%s, %s", realm_names[p_ptr->realm1], realm_names[p_ptr->realm2]);
+			else
+				strcpy(tmp, realm_names[p_ptr->realm1]);
+			display_player_one_line(ENTRY_REALM, tmp, TERM_L_BLUE);
+		}
 
-		else if (p_ptr->realm2)
-			c_put_str(TERM_L_BLUE, realm_names[p_ptr->realm2], 7, 15);
+		if (p_ptr->pclass == CLASS_CHAOS_WARRIOR)
+			display_player_one_line(ENTRY_PATRON, chaos_patrons[p_ptr->chaos_patron], TERM_L_BLUE);
 
 		/* Age, Height, Weight, Social */
+		/* 身長はセンチメートルに、体重はキログラムに変更してあります */
 #ifdef JP
-        /* 身長はセンチメートルに、体重はキログラムに変更してあります */
-        /* 更に日本語版の追加として単位も表示します */
-        /* 中央のカラムは日本語を表示するには狭いので、左に4つ動かします。 */
-	       prt_num2("年齢         ", "才",(int)p_ptr->age, 3, 32-2, TERM_L_BLUE);
-	       prt_num2("身長         ","cm",(int)((p_ptr->ht*254)/100) , 4, 32-2, TERM_L_BLUE);
-	       prt_num2("体重         ", "kg",(int)((p_ptr->wt*4536)/10000) , 5, 32-2, TERM_L_BLUE);
-		prt_num("社会的地位   ", (int)p_ptr->sc , 6, 32-2, TERM_L_BLUE);
+		display_player_one_line(ENTRY_AGE, format("%d才" ,(int)p_ptr->age), TERM_L_BLUE);
+		display_player_one_line(ENTRY_HEIGHT, format("%dcm" ,(int)((p_ptr->ht*254)/100)), TERM_L_BLUE);
+		display_player_one_line(ENTRY_WEIGHT, format("%dkg" ,(int)((p_ptr->wt*4536)/10000)), TERM_L_BLUE);
+		display_player_one_line(ENTRY_SOCIAL, format("%d  " ,(int)p_ptr->sc), TERM_L_BLUE);
 #else
-		prt_num("Age          ", (int)p_ptr->age, 3, 32, TERM_L_BLUE);
-		prt_num("Height       ", (int)p_ptr->ht , 4, 32, TERM_L_BLUE);
-		prt_num("Weight       ", (int)p_ptr->wt , 5, 32, TERM_L_BLUE);
-		prt_num("Social Class ", (int)p_ptr->sc , 6, 32, TERM_L_BLUE);
+		display_player_one_line(ENTRY_AGE, format("%d" ,(int)p_ptr->age), TERM_L_BLUE);
+		display_player_one_line(ENTRY_HEIGHT, format("%d" ,(int)p_ptr->ht), TERM_L_BLUE);
+		display_player_one_line(ENTRY_WEIGHT, format("%d" ,(int)p_ptr->wt), TERM_L_BLUE);
+		display_player_one_line(ENTRY_SOCIAL, format("%d" ,(int)p_ptr->sc), TERM_L_BLUE);
 #endif
 
 
