@@ -1770,6 +1770,13 @@ static void bigtile_attr(char *cp, byte *ap, char *cp2, byte *ap2)
 	}
 
 #ifdef JP
+	if (*cp == 127)
+	{
+		*ap2 = *ap;
+		*cp2 = *cp;
+		return;
+	}
+
 	if (isprint(*cp))
 	{
 		*ap2 = *ap;
