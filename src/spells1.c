@@ -1500,7 +1500,7 @@ note_kill = "灰になった。";
 #ifdef JP
 note_kill = "生き返った。";
 #else
-					note_kill = " rivived.";
+					note_kill = " revived.";
 #endif
 						}
 						else if (!note_kill)
