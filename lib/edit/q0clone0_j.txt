@@ -44,46 +44,46 @@ Q:33:T:この仕事はあなたには難しかったようですね。
 
 # The Monsters
 # Fang, Farmer Maggot's dog (level:2, Speed:120, XP:30, #:6) *Monster food*
-F:c:1:8:55
+F:c:1:8:c55
 
 # Freesia (level:2, Speed:120, XP:33, #:6) *Monster food*
-F:f:1:8:57
+F:f:1:8:c57
 
 # It (level:24, Speed:110, XP:400, #:3)
-F:I:1:8:393
+F:I:1:8:c393
 
 # Barney the Dinosaur (level:29, Speed:120, XP:500, #:3) 
-F:R:1:8:441
+F:R:1:8:c441
 
 # The Ultimate Dungeon Cleaner (level:28, Speed:120, XP:555, #:6) 
-F:g:1:8:451
+F:g:1:8:c451
 
 # Bokrug (level:33, Speed:110 XP:1600, #:3)
-F:S:1:8:489
+F:S:1:8:c489
 
 # Grendel (level:27, Speed:120, XP:1500, #:5)                
-F:O:1:8:431
+F:O:1:8:c431
 
 # Tom the Stone Troll (level:33, Speed:110, XP:2000, #:5) 
-F:M:1:8:495
+F:M:1:8:c495
 
 # Fasolt the Giant (level:33, Speed:110, XP:2000, #:5) 
-F:P:1:8:506
+F:P:1:8:c506
 
 # Jurt the Living Trump (level:34, Speed:120, XP:1200, #:3)
-F:p:1:8:517
+F:p:1:8:c517
 
 # Little Boy (level:35, Speed:120, XP:200, #:4) 
-F:t:1:8:531
+F:t:1:8:c531
 
 # Rogrog the Black Troll (level:36, Speed:120, XP:5000, #:5)
-F:r:1:8:551
+F:r:1:8:c551
 
 # The Queen Ant (level:37, Speed:120, XP:1000, #:3)
-F:a:1:8:581
+F:a:1:8:c581
 
 # Father Dagon (level:38, Speed:120, XP:3250, #:3)
-F:u:1:8:595
+F:u:1:8:c595
 
 # Random monster 5 levels out of depth
 F:5:1:8:*5

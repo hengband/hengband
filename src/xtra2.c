@@ -813,8 +813,8 @@ msg_print("地面に落とされた。");
 	/* Drop a dead corpse? */
 	if ((randint(r_ptr->flags1 & RF1_UNIQUE ? 1 : 4) == 1) &&
 	    ((r_ptr->flags9 & RF9_DROP_CORPSE) ||
-        (r_ptr->flags9 & RF9_DROP_SKELETON)) &&
-	    !(p_ptr->inside_arena || p_ptr->inside_battle || ((m_ptr->r_idx == today_mon) && is_pet(m_ptr))))
+	     (r_ptr->flags9 & RF9_DROP_SKELETON)) &&
+	    !(p_ptr->inside_arena || p_ptr->inside_battle || (m_ptr->smart & SM_CLONED) || ((m_ptr->r_idx == today_mon) && is_pet(m_ptr))))
 	{
 		/* Assume skeleton */
 		bool corpse = FALSE;
@@ -845,7 +845,7 @@ msg_print("地面に落とされた。");
 		/* Get local object */
 		q_ptr = &forge;
 
-		/* Prepare to make a Blade of Chaos */
+		/* Prepare to make an object */
 		object_prep(q_ptr, lookup_kind(TV_CORPSE, (corpse ? SV_CORPSE : SV_SKELETON)));
 
 		apply_magic(q_ptr, object_level, FALSE, FALSE, FALSE, FALSE);
@@ -1383,8 +1383,11 @@ msg_print("地面に落とされた。");
 	if  (r_ptr->flags1 & RF1_DROP_3D2) number += damroll(3, 2);
 	if  (r_ptr->flags1 & RF1_DROP_4D2) number += damroll(4, 2);
 
-	if (cloned) number = 0; /* Clones drop no stuff */
-	if (is_pet(m_ptr) || p_ptr->inside_battle || p_ptr->inside_arena) number = 0; /* Pets drop no stuff */
+	if (cloned && !(r_ptr->flags1 & RF1_UNIQUE))
+		number = 0; /* Clones drop no stuff unless Cloning Pits */
+
+	if (is_pet(m_ptr) || p_ptr->inside_battle || p_ptr->inside_arena)
+		number = 0; /* Pets drop no stuff */
 	if (!drop_item && (r_ptr->d_char != '$')) number = 0;
 
 	/* Hack -- handle creeping coins */
@@ -1943,7 +1946,7 @@ msg_format("%sを葬り去った。", m_name);
 #endif
 
 		}
-		if (r_ptr->flags1 & RF1_UNIQUE)
+		if (r_ptr->flags1 & RF1_UNIQUE && !(m_ptr->smart & SM_CLONED))
 		{
 			for (i = 0; i < MAX_KUBI; i++)
 			{
@@ -1976,7 +1979,8 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 		}
 
 		/* When the player kills a Unique, it stays dead */
-		if (r_ptr->flags1 & RF1_UNIQUE) r_ptr->max_num = 0;
+		if (r_ptr->flags1 & RF1_UNIQUE && !(m_ptr->smart & SM_CLONED))
+			r_ptr->max_num = 0;
 
 		/* When the player kills a Nazgul, it stays dead */
 		if (r_ptr->flags7 & RF7_UNIQUE_7) r_ptr->max_num--;

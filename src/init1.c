@@ -2989,6 +2989,10 @@ static errr parse_line_feature(char *buf)
 						letter[index].monster = atoi(zz[3]);
 					}
 				}
+				else if (zz[3][0] == 'c')
+				{
+					letter[index].monster = - atoi(zz[3]+1);
+				}
 				else
 				{
 					letter[index].monster = atoi(zz[3]);
@@ -3257,6 +3261,17 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			}
 			else if (monster_index)
 			{
+				int old_cur_num, old_max_num;
+				bool clone = FALSE;
+
+				if (monster_index < 0)
+				{
+					monster_index = -monster_index;
+					clone = TRUE;
+					old_cur_num = r_info[monster_index].cur_num;
+					old_max_num = r_info[monster_index].max_num;
+				}
+
 				/* Make alive again */
 				if (r_info[monster_index].flags1 & RF1_UNIQUE)
 				{
@@ -3275,6 +3290,15 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 
 				/* Place it */
 				place_monster_aux(*y, *x, monster_index, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE);
+				if (clone)
+				{
+					/* clone */
+					m_list[hack_m_idx_ii].smart |= SM_CLONED;
+
+					/* Make alive again for real unique monster */
+					r_info[monster_index].cur_num = old_cur_num;
+					r_info[monster_index].max_num = old_max_num;
+				}
 			}
 
 			/* Object (and possible trap) */
