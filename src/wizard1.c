@@ -26,55 +26,63 @@ static FILE *fff = NULL;
 /*
  * Extract a textual representation of an attribute
  */
-static cptr attr_to_text(byte a)
+static cptr attr_to_text(monster_race *r_ptr)
 {
-	switch (a)
-	{
 #ifdef JP000
-case TERM_DARK:    return ("XXXい");
-case TERM_WHITE:   return ("白い");
-case TERM_SLATE:   return ("青灰色の");
-case TERM_ORANGE:  return ("オレンジの");
-case TERM_RED:     return ("赤い");
-case TERM_GREEN:   return ("緑の");
-case TERM_BLUE:    return ("青い");
-case TERM_UMBER:   return ("琥珀色の");
-case TERM_L_DARK:  return ("灰色の");
-case TERM_L_WHITE: return ("明青灰色の");
-case TERM_VIOLET:  return ("紫の");
-case TERM_YELLOW:  return ("黄色い");
-case TERM_L_RED:   return ("明い赤の");
-case TERM_L_GREEN: return ("明い緑の");
-case TERM_L_BLUE:  return ("明い青の");
-case TERM_L_UMBER: return ("明い琥珀色の");
+	if (r_ptr->flags1 & RF1_ATTR_CLEAR)    return "透明な";
+	if (r_ptr->flags1 & RF1_ATTR_MULTI)    return "万色の";
+	if (r_ptr->flags1 & RF1_ATTR_SEMIRAND) return "準ランダムな";
 #else
-		case TERM_DARK:    return ("xxx");
-		case TERM_WHITE:   return ("White");
-		case TERM_SLATE:   return ("Slate");
-		case TERM_ORANGE:  return ("Orange");
-		case TERM_RED:     return ("Red");
-		case TERM_GREEN:   return ("Green");
-		case TERM_BLUE:    return ("Blue");
-		case TERM_UMBER:   return ("Umber");
-		case TERM_L_DARK:  return ("L.Dark");
-		case TERM_L_WHITE: return ("L.Slate");
-		case TERM_VIOLET:  return ("Violet");
-		case TERM_YELLOW:  return ("Yellow");
-		case TERM_L_RED:   return ("L.Red");
-		case TERM_L_GREEN: return ("L.Green");
-		case TERM_L_BLUE:  return ("L.Blue");
-		case TERM_L_UMBER: return ("L.Umber");
+	if (r_ptr->flags1 & RF1_ATTR_CLEAR)    return "Clear";
+	if (r_ptr->flags1 & RF1_ATTR_MULTI)    return "Multi";
+	if (r_ptr->flags1 & RF1_ATTR_SEMIRAND) return "S.Rand";
 #endif
 
+	switch (r_ptr->d_attr)
+	{
+#ifdef JP000
+	case TERM_DARK:    return "XXXい";
+	case TERM_WHITE:   return "白い";
+	case TERM_SLATE:   return "青灰色の";
+	case TERM_ORANGE:  return "オレンジの";
+	case TERM_RED:     return "赤い";
+	case TERM_GREEN:   return "緑の";
+	case TERM_BLUE:    return "青い";
+	case TERM_UMBER:   return "琥珀色の";
+	case TERM_L_DARK:  return "灰色の";
+	case TERM_L_WHITE: return "明青灰色の";
+	case TERM_VIOLET:  return "紫の";
+	case TERM_YELLOW:  return "黄色い";
+	case TERM_L_RED:   return "明い赤の";
+	case TERM_L_GREEN: return "明い緑の";
+	case TERM_L_BLUE:  return "明い青の";
+	case TERM_L_UMBER: return "明い琥珀色の";
+#else
+	case TERM_DARK:    return "xxx";
+	case TERM_WHITE:   return "White";
+	case TERM_SLATE:   return "Slate";
+	case TERM_ORANGE:  return "Orange";
+	case TERM_RED:     return "Red";
+	case TERM_GREEN:   return "Green";
+	case TERM_BLUE:    return "Blue";
+	case TERM_UMBER:   return "Umber";
+	case TERM_L_DARK:  return "L.Dark";
+	case TERM_L_WHITE: return "L.Slate";
+	case TERM_VIOLET:  return "Violet";
+	case TERM_YELLOW:  return "Yellow";
+	case TERM_L_RED:   return "L.Red";
+	case TERM_L_GREEN: return "L.Green";
+	case TERM_L_BLUE:  return "L.Blue";
+	case TERM_L_UMBER: return "L.Umber";
+#endif
 	}
 
 	/* Oops */
 #ifdef JP000
-return ("変な");
+	return "変な";
 #else
-	return ("Icky");
+	return "Icky";
 #endif
-
 }
 
 
@@ -1806,7 +1814,7 @@ static void spoil_mon_desc(cptr fname)
 		sprintf(exp, "%ld", (long)(r_ptr->mexp));
 
 		/* Hack -- use visual instead */
-		sprintf(exp, "%s '%c'", attr_to_text(r_ptr->d_attr), r_ptr->d_char);
+		sprintf(exp, "%s '%c'", attr_to_text(r_ptr), r_ptr->d_char);
 
 		/* Dump the info */
 		fprintf(fff, "%-42.42s%4s%4s%4s%7s%5s  %11.11s\n",
@@ -2114,7 +2122,7 @@ static void spoil_mon_info(cptr fname)
 		spoil_out(buf);
 
 		/* Color */
-		spoil_out(attr_to_text(r_ptr->d_attr));
+		spoil_out(attr_to_text(r_ptr));
 
 		/* Symbol --(-- */
 		sprintf(buf, " '%c')\n", r_ptr->d_char);
