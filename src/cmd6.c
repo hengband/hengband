@@ -6178,7 +6178,7 @@ msg_print("あなたはエレメントのブレスを吐いた。");
 				break;
 			case EGO_RING_ACID_BOLT:
 				if (!get_aim_dir(&dir)) return;
-				fire_bolt(GF_FIRE, dir, damroll(5, 8));
+				fire_bolt(GF_ACID, dir, damroll(5, 8));
 				o_ptr->timeout = randint0(6) + 6;
 				break;
 			case EGO_RING_MANA_BOLT:
