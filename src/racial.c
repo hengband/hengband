@@ -2055,7 +2055,7 @@ static bool cmd_racial_power_aux(s32b command)
 #else
 				msg_print("You fire a rocket.");
 #endif
-				fire_ball(GF_ROCKET, dir, plev * 5, 2);
+				fire_rocket(GF_ROCKET, dir, plev * 5, 2);
 			}
 			break;
 
