@@ -55,6 +55,8 @@
 #define FLG_HELMS 37
 #define FLG_GLOVES 38
 #define FLG_BOOTS 39
+#define FLG_EGO 40
+#define FLG_ARTIFACT 41
 
 #ifdef JP
 
@@ -80,7 +82,7 @@
 #define KEY_THIRD "3冊目の"
 #define KEY_FOURTH "4冊目の"
 #define KEY_ITEMS "アイテム"
-#define KEY_ARTIFACTS "アーティファクト"
+#define KEY_ARTIFACTS "アーティファクトアイテム" /* 英語版との互換性の為残す */
 #define KEY_WEAPONS "武器"
 #define KEY_ARMORS "防具"
 #define KEY_MISSILES "矢"
@@ -98,6 +100,8 @@
 #define KEY_HELMS "兜"
 #define KEY_GLOVES "籠手"
 #define KEY_BOOTS "靴"
+#define KEY_EGO "エゴ"
+#define KEY_ARTIFACT "アーティファクト"
 
 #else 
 
@@ -141,6 +145,8 @@
 #define KEY_HELMS "helms"
 #define KEY_GLOVES "gloves"
 #define KEY_BOOTS "boots"
+#define KEY_EGO "ego"
+#define KEY_ARTIFACT "artifact"
 
 #endif /* JP */
 
@@ -185,6 +191,8 @@ cptr autopick_line_from_entry(autopick_type *entry)
 	if (IS_FLG(FLG_UNIDENTIFIED)) ADD_KEY(KEY_UNIDENTIFIED);
 	if (IS_FLG(FLG_IDENTIFIED)) ADD_KEY(KEY_IDENTIFIED);
 	if (IS_FLG(FLG_STAR_IDENTIFIED)) ADD_KEY(KEY_STAR_IDENTIFIED);
+	if (IS_FLG(FLG_ARTIFACT)) ADD_KEY(KEY_ARTIFACT);
+	if (IS_FLG(FLG_EGO)) ADD_KEY(KEY_EGO);
 	if (IS_FLG(FLG_NAMELESS)) ADD_KEY(KEY_NAMELESS);
 	if (IS_FLG(FLG_UNAWARE)) ADD_KEY(KEY_UNAWARE);
 	if (IS_FLG(FLG_WORTHLESS)) ADD_KEY(KEY_WORTHLESS);
@@ -335,6 +343,8 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
 	if (MATCH_KEY(KEY_UNIDENTIFIED)) ADD_FLG(FLG_UNIDENTIFIED);
 	if (MATCH_KEY(KEY_IDENTIFIED)) ADD_FLG(FLG_IDENTIFIED);
 	if (MATCH_KEY(KEY_STAR_IDENTIFIED)) ADD_FLG(FLG_STAR_IDENTIFIED);
+	if (MATCH_KEY(KEY_ARTIFACT)) ADD_FLG(FLG_ARTIFACT);
+	if (MATCH_KEY(KEY_EGO)) ADD_FLG(FLG_EGO);
 	if (MATCH_KEY(KEY_NAMELESS)) ADD_FLG(FLG_NAMELESS);
 	if (MATCH_KEY(KEY_UNAWARE)) ADD_FLG(FLG_UNAWARE);
 	if (MATCH_KEY(KEY_WORTHLESS)) ADD_FLG(FLG_WORTHLESS);
@@ -463,6 +473,20 @@ int is_autopick(object_type *o_ptr)
 		if (IS_FLG(FLG_STAR_IDENTIFIED) &&
 		    (!object_known_p(o_ptr) || !(o_ptr->ident & IDENT_MENTAL)))
 			continue;
+
+		/*** Artifact object ***/
+		if (IS_FLG(FLG_ARTIFACT))
+		{
+			if (!object_known_p(o_ptr) || (!o_ptr->name1 && !o_ptr->art_name))
+				continue;
+		}
+
+		/*** Ego object ***/
+		if (IS_FLG(FLG_EGO))
+		{
+			if (!object_known_p(o_ptr) || !o_ptr->name2)
+				continue;
+		}
 
 		/*** Nameless ***/
 		if (IS_FLG(FLG_NAMELESS))
@@ -971,6 +995,20 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	if (IS_FLG(FLG_STAR_IDENTIFIED))
 		before_str[before_n++] = "完全に鑑定済みの";
 
+	/*** Artifact ***/
+	if (IS_FLG(FLG_ARTIFACT))
+	{
+		before_str[before_n++] = "アーティファクトの";
+		body_str = "装備";
+	}
+
+	/*** Ego ***/
+	if (IS_FLG(FLG_EGO))
+	{
+		before_str[before_n++] = "エゴアイテムの";
+		body_str = "装備";
+	}
+
 	/*** Nameless ***/
 	if (IS_FLG(FLG_NAMELESS))
 	{
@@ -1186,6 +1224,18 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	/*** *Identified* ***/
 	if (IS_FLG(FLG_STAR_IDENTIFIED))
 		before_str[before_n++] = "fully identified";
+
+	/*** Artifacto ***/
+	if (IS_FLG(FLG_ARTIFACT))
+	{
+		before_str[before_n++] = "artifact";
+	}
+
+	/*** Ego ***/
+	if (IS_FLG(FLG_EGO))
+	{
+		before_str[before_n++] = "ego";
+	}
 
 	/*** Nameless ***/
 	if (IS_FLG(FLG_NAMELESS))
@@ -1876,7 +1926,7 @@ static cptr ctrl_command_desc[] =
         "------------------------------------",
 	"^U 未鑑定/未判明/鑑定/*鑑定*",
 	"^W \"無価値の\"",
-	"^X \"無銘の\"",
+	"^X 無銘/エゴ/アーティファクト",
 	"^Z \"収集中の\"",
 	NULL
 #else
@@ -1898,7 +1948,7 @@ static cptr ctrl_command_desc[] =
         "------------------------------------",
 	"^U Toggle 'identified' state",
 	"^W \"worthless\"",
-	"^X \"nameless\"",
+	"^X Toggle nameless/ego/artifact",
 	"^Z \"collecting\"",
 	NULL
 #endif
@@ -2598,11 +2648,42 @@ void do_cmd_edit_autopick(void)
 			dirty_line = cy;
 			break;
 		case KTRL('x'):
-			/* Toggle 'nameless' */
-			toggle_string(lines_list, FLG_NAMELESS, cy);
+			/* Rotate within nameless, ego, artifact */
+			if (!autopick_new_entry(entry, lines_list[cy]))
+				break;
+			string_free(lines_list[cy]);
+
+			if (IS_FLG(FLG_NAMELESS)) 
+			{
+				REM_FLG(FLG_NAMELESS);
+				ADD_FLG(FLG_EGO);
+				REM_FLG(FLG_ARTIFACT);
+			}
+			else if (IS_FLG(FLG_EGO)) 
+			{
+				REM_FLG(FLG_NAMELESS);
+				REM_FLG(FLG_EGO);
+				ADD_FLG(FLG_ARTIFACT);
+			}
+			else if (IS_FLG(FLG_ARTIFACT)) 
+			{
+				REM_FLG(FLG_NAMELESS);
+				REM_FLG(FLG_EGO);
+				REM_FLG(FLG_ARTIFACT);
+			}
+			else
+			{
+				ADD_FLG(FLG_NAMELESS);
+				REM_FLG(FLG_EGO);
+				REM_FLG(FLG_ARTIFACT);
+			}
+
+			lines_list[cy] = autopick_line_from_entry(entry);
+
 			/* Now dirty */
 			dirty_line = cy;
 			break;
+
 		case KTRL('y'):
 			/* Paste killed text */
 			if (strlen(yank_buf))

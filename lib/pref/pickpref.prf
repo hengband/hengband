@@ -22,8 +22,13 @@ collecting scroll
 collecting missiles
 (collecting items
 
-# Auto-inscribe resistances...
-~*identified* artifacts#%all
+# Auto-inscribe resistances ( {%all} has special meaning. )
+~*identified* artifact items#%all
+~*identified* ego items#%all
+
+# Simple version of Auto-inscribe ( {%} has special meaning. )
+#~*identified* artifact items#%
+#~*identified* ego items#%
 
 *Destruction*
 Genocide
