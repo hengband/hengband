@@ -2205,6 +2205,12 @@ void resize_map(void)
 	/* Redraw */
 	Term_redraw();
 
+	/*
+	 * Waiting command;
+	 * Place the cursor on the player
+	 */
+	if (can_save) move_cursor_relative(py, px);
+
 	/* Refresh */
 	Term_fresh();
 }
