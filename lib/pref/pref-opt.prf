@@ -39,6 +39,9 @@ Y:view_yellow_lite
 Y:view_bright_lite
 Y:view_granite_lite
 Y:view_special_lite
+Y:view_perma_grids
+X:view_torch_grids
+X:view_unsafe_grids
 X:view_reduce_view
 Y:fresh_before
 X:fresh_after
@@ -67,9 +70,6 @@ X:exp_need
 Y:stack_force_notes
 X:stack_force_costs
 Y:expand_list
-Y:view_perma_grids
-X:view_torch_grids
-X:view_unsafe_grids
 Y:small_levels
 X:always_small_levels
 Y:empty_levels

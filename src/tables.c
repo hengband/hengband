@@ -6655,6 +6655,30 @@ option_type option_info[] =
 #endif
 
 #ifdef JP
+	{ &view_perma_grids,            TRUE,  OPT_PAGE_MAPSCREEN, 1, 6,
+	"view_perma_grids",             "明るい場所はそのままにする" },
+#else
+	{ &view_perma_grids,            TRUE,  OPT_PAGE_MAPSCREEN, 1, 6,
+	"view_perma_grids",             "Map remembers all perma-lit grids" },
+#endif
+
+#ifdef JP
+	{ &view_torch_grids,            FALSE, OPT_PAGE_MAPSCREEN, 1, 7,
+	"view_torch_grids",             "明かりで照らした場所はそのままにする" },
+#else
+	{ &view_torch_grids,            FALSE, OPT_PAGE_MAPSCREEN, 1, 7,
+	"view_torch_grids",             "Map remembers all torch-lit grids" },
+#endif
+
+#ifdef JP
+	{ &view_unsafe_grids,           FALSE, OPT_PAGE_MAPSCREEN, 1, 8,
+	"view_unsafe_grids",            "トラップ感知済みでない場所を表示する" },
+#else
+	{ &view_unsafe_grids,           FALSE, OPT_PAGE_MAPSCREEN, 1, 8,
+	"view_unsafe_grids",            "Map marked by detect traps" },
+#endif
+
+#ifdef JP
 	{ &view_reduce_view,            FALSE, OPT_PAGE_MAPSCREEN, 1, 17,
 	"view_reduce_view",             "街では視野を狭くする" },
 #else
@@ -6834,30 +6858,6 @@ option_type option_info[] =
 #else
 	{ &expand_list,                 TRUE,  OPT_PAGE_GAMEPLAY, 1, 5,
 	"expand_list",                  "Expand the power of the list commands" },
-#endif
-
-#ifdef JP
-	{ &view_perma_grids,            TRUE,  OPT_PAGE_GAMEPLAY, 1, 6,
-	"view_perma_grids",             "明るい場所はそのままにする" },
-#else
-	{ &view_perma_grids,            TRUE,  OPT_PAGE_GAMEPLAY, 1, 6,
-	"view_perma_grids",             "Map remembers all perma-lit grids" },
-#endif
-
-#ifdef JP
-	{ &view_torch_grids,            FALSE, OPT_PAGE_GAMEPLAY, 1, 7,
-	"view_torch_grids",             "明かりで照らした場所はそのままにする" },
-#else
-	{ &view_torch_grids,            FALSE, OPT_PAGE_GAMEPLAY, 1, 7,
-	"view_torch_grids",             "Map remembers all torch-lit grids" },
-#endif
-
-#ifdef JP
-	{ &view_unsafe_grids,           FALSE, OPT_PAGE_GAMEPLAY, 1, 8,
-	"view_unsafe_grids",            "トラップ感知済みでない場所を表示する" },
-#else
-	{ &view_unsafe_grids,           FALSE, OPT_PAGE_GAMEPLAY, 1, 8,
-	"view_unsafe_grids",            "Map marked by detect traps" },
 #endif
 
 #ifdef JP

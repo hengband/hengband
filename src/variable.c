@@ -216,6 +216,9 @@ bool view_yellow_lite;	/* Use special colors for torch-lit grids */
 bool view_bright_lite;	/* Use special colors for 'viewable' grids */
 bool view_granite_lite;	/* Use special colors for wall grids (slow) */
 bool view_special_lite;	/* Use special colors for floor grids (slow) */
+bool view_perma_grids;	/* Map remembers all perma-lit grids */
+bool view_torch_grids;	/* Map remembers all torch-lit grids */
+bool view_unsafe_grids;	/* Map marked by detect traps */
 bool view_reduce_view;	/* Reduce view-radius in town */
 bool fresh_before;	/* Flush output while continuous command */
 bool fresh_after;	/* Flush output after monster's move */
@@ -246,9 +249,6 @@ bool exp_need;	/* Show the experience needed for next level */
 bool stack_force_notes;	/* Merge inscriptions when stacking */
 bool stack_force_costs;	/* Merge discounts when stacking */
 bool expand_list;	/* Expand the power of the list commands */
-bool view_perma_grids;	/* Map remembers all perma-lit grids */
-bool view_torch_grids;	/* Map remembers all torch-lit grids */
-bool view_unsafe_grids;	/* Map marked by detect traps */
 bool small_levels;	/* Allow unusually small dungeon levels */
 bool always_small_levels;	/* Always create unusually small dungeon levels */
 bool empty_levels;	/* Allow empty 'arena' levels */
