@@ -385,7 +385,7 @@ static cptr r_info_flags7[] =
 	"CAN_SWIM",
 	"CAN_FLY",
 	"FRIENDLY",
-	"UNIQUE_7",
+	"NAZGUL",
 	"UNIQUE2",
 	"RIDING",
 	"KAGE",
@@ -3367,7 +3367,8 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				}
 
 				/* Make alive again */
-				if (r_info[monster_index].flags7 & RF7_UNIQUE_7)
+				/* Hack -- Non-unique Nazguls are semi-unique */
+				else if (r_info[monster_index].flags7 & RF7_NAZGUL)
 				{
 					if (r_info[monster_index].cur_num == r_info[monster_index].max_num)
 					{

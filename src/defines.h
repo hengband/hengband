@@ -3534,7 +3534,7 @@
 #define RF7_CAN_SWIM            0x00000002  /* Monster can swim */
 #define RF7_CAN_FLY             0x00000004  /* Monster can fly */
 #define RF7_FRIENDLY            0x00000008  /* Monster is friendly */
-#define RF7_UNIQUE_7            0x00000010  /* Is a "Nazgul" unique */
+#define RF7_NAZGUL              0x00000010  /* Is a "Nazgul" unique */
 #define RF7_UNIQUE2             0x00000020  /* Fake unique */
 #define RF7_RIDING              0x00000040  /* Good for riding */
 #define RF7_KAGE                0x00000080  /* Is kage */
@@ -4995,6 +4995,9 @@ extern int PlayerUID;
 #define MON_LOUSY         1063
 #define MON_JIZOTAKO      1065
 #define MON_TANUKI        1067
+
+/* Maximum "Nazguls" number */
+#define MAX_NAZGUL_NUM 5
 
 #define MAX_AUTOPICK 1009
 #define DO_AUTOPICK       0x01

@@ -3228,7 +3228,9 @@ static void player_wipe(void)
 
 		/* Hack -- Reset the max counter */
 		if (r_ptr->flags1 & RF1_UNIQUE) r_ptr->max_num = 1;
-		if (r_ptr->flags7 & RF7_UNIQUE_7) r_ptr->max_num = 5;
+
+		/* Hack -- Non-unique Nazguls are semi-unique */
+		else if (r_ptr->flags7 & RF7_NAZGUL) r_ptr->max_num = MAX_NAZGUL_NUM;
 
 		/* Clear player kills */
 		r_ptr->r_pkills = 0;

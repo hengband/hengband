@@ -3115,8 +3115,11 @@ if (arg_fiddle) note("メッセージをロードしました");
 
 		/* Hack -- Reset the death counter */
 		r_ptr->max_num = 100;
+
 		if (r_ptr->flags1 & RF1_UNIQUE) r_ptr->max_num = 1;
-		if (r_ptr->flags7 & RF7_UNIQUE_7) r_ptr->max_num = 7;
+
+		/* Hack -- Non-unique Nazguls are semi-unique */
+		else if (r_ptr->flags7 & RF7_NAZGUL) r_ptr->max_num = MAX_NAZGUL_NUM;
 	}
 
 	/* Monster Memory */

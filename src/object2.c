@@ -3831,7 +3831,7 @@ static bool item_monster_okay(int r_idx)
 	if (r_ptr->flags1 & RF1_UNIQUE) return (FALSE);
 	if (r_ptr->flags7 & RF7_KAGE) return (FALSE);
 	if (r_ptr->flagsr & RFR_RES_ALL) return (FALSE);
-	if (r_ptr->flags7 & RF7_UNIQUE_7) return (FALSE);
+	if (r_ptr->flags7 & RF7_NAZGUL) return (FALSE);
 	if (r_ptr->flags1 & RF1_FORCE_DEPTH) return (FALSE);
 	if (r_ptr->flags7 & RF7_UNIQUE2) return (FALSE);
 

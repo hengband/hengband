@@ -6603,7 +6603,7 @@ void determine_today_mon(bool conv_old)
 		r_ptr = &r_info[today_mon];
 
 		if (r_ptr->flags1 & RF1_UNIQUE) continue;
-		if (r_ptr->flags7 & (RF7_UNIQUE_7 | RF7_UNIQUE2)) continue;
+		if (r_ptr->flags7 & (RF7_NAZGUL | RF7_UNIQUE2)) continue;
 		if (r_ptr->flags2 & RF2_MULTIPLY) continue;
 		if ((r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) != (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) continue;
 		if (r_ptr->level < MIN(max_dl / 2, 40)) continue;

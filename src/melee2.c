@@ -260,9 +260,8 @@ msg_format("%^sはダメージを受けない。", m_name);
 	/* It is dead now... or is it? */
 	if (m_ptr->hp < 0)
 	{
-		if (((r_ptr->flags1 & RF1_UNIQUE) ||
-			(r_ptr->flags7 & RF7_UNIQUE_7) ||
-			(r_ptr->flags1 & RF1_QUESTOR)) &&
+		if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) ||
+		    (r_ptr->flags7 & RF7_NAZGUL)) &&
 		    !p_ptr->inside_battle)
 		{
 			m_ptr->hp = 1;
@@ -2376,7 +2375,7 @@ msg_print("少しの間悲しい気分になった。");
 		mon_take_hit_mon(m_idx, 1, &fear, " explodes into tiny shreds.", m_idx);
 #endif
 
-	if ((is_pet(m_ptr) || is_friendly(m_ptr)) && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_UNIQUE_7)) && !p_ptr->inside_battle)
+	if ((is_pet(m_ptr) || is_friendly(m_ptr)) && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && !p_ptr->inside_battle)
 	{
 		static int riding_pinch = 0;
 
@@ -2515,7 +2514,7 @@ msg_print("少しの間悲しい気分になった。");
 
 	/* Paranoia... no pet uniques outside wizard mode -- TY */
 	if (is_pet(m_ptr) &&
-	    ((((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_UNIQUE_7)) &&
+	    ((((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) &&
 	      monster_has_hostile_align(NULL, 10, -10, r_ptr))
 	     || (r_ptr->flagsr & RFR_RES_ALL)))
 	{

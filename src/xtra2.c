@@ -1773,12 +1773,14 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 			if (r_ptr->r_sights < MAX_SHORT) r_ptr->r_sights++;
 		}
 
-		/* When the player kills a Unique, it stays dead */
-		if (r_ptr->flags1 & RF1_UNIQUE && !(m_ptr->smart & SM_CLONED))
-			r_ptr->max_num = 0;
+		if (!(m_ptr->smart & SM_CLONED))
+		{
+			/* When the player kills a Unique, it stays dead */
+			if (r_ptr->flags1 & RF1_UNIQUE) r_ptr->max_num = 0;
 
-		/* When the player kills a Nazgul, it stays dead */
-		if (r_ptr->flags7 & RF7_UNIQUE_7) r_ptr->max_num--;
+			/* When the player kills a Nazgul, it stays dead */
+			else if (r_ptr->flags7 & RF7_NAZGUL) r_ptr->max_num--;
+		}
 
 		/* Recall even invisible uniques or winners */
 		if (m_ptr->ml || (r_ptr->flags1 & RF1_UNIQUE))

@@ -1676,7 +1676,7 @@ static bool vault_aux_battle(int r_idx)
 
 	/* Decline unique monsters */
 /*	if (r_ptr->flags1 & (RF1_UNIQUE)) return (FALSE); */
-/*	if (r_ptr->flags7 & (RF7_UNIQUE_7)) return (FALSE); */
+/*	if (r_ptr->flags7 & (RF7_NAZGUL)) return (FALSE); */
 
 	if (r_ptr->flags1 & (RF1_NEVER_MOVE)) return (FALSE);
 	if (r_ptr->flags2 & (RF2_MULTIPLY)) return (FALSE);
