@@ -4204,6 +4204,12 @@ bool monst_spell_monst(int m_idx)
 	{
 		t_ptr->csleep = 0;
 		if (tr_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+		if (t_ptr->ml)
+		{
+			/* Redraw the health bar */
+			if (p_ptr->health_who == t_idx) p_ptr->redraw |= (PR_HEALTH);
+			if (p_ptr->riding == t_idx) p_ptr->redraw |= (PR_UHEALTH);
+		}
 	}
 
 	if (fear && see_t)

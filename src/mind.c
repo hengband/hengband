@@ -1699,6 +1699,7 @@ msg_print("その方向にはモンスターはいません。");
 		if (!target_set(TARGET_KILL)) return FALSE;
 		m_idx = cave[target_row][target_col].m_idx;
 		if (!m_idx) break;
+		if (m_idx == p_ptr->riding) break;
 		if (!player_has_los_bold(target_row, target_col)) break;
 		if (!projectable(py, px, target_row, target_col)) break;
 		m_ptr = &m_list[m_idx];
@@ -1749,6 +1750,15 @@ msg_print("その方向にはモンスターはいません。");
 
 		if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
 			p_ptr->update |= (PU_MON_LITE);
+
+		if (m_ptr->ml)
+		{
+			/* Auto-Recall if possible and visible */
+			monster_race_track(m_ptr->ap_r_idx);
+
+			/* Track a new monster */
+			health_track(m_idx);
+		}
 
 		break;
 	}

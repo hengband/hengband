@@ -4610,6 +4610,12 @@ void aggravate_monsters(int who)
 				/* Wake up */
 				m_ptr->csleep = 0;
 				if (r_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+				if (m_ptr->ml)
+				{
+					/* Redraw (later) if needed */
+					if (p_ptr->health_who == i) p_ptr->redraw |= (PR_HEALTH);
+					if (p_ptr->riding == i) p_ptr->redraw |= (PR_UHEALTH);
+				}
 				sleep = TRUE;
 			}
 			if (!is_pet(m_ptr)) m_ptr->mflag2 |= MFLAG2_NOPET;
@@ -4628,8 +4634,8 @@ void aggravate_monsters(int who)
 
 	/* Messages */
 #ifdef JP
-if (speed) msg_print("付近で何かが突如興奮したような感じを受けた！");
-else if (sleep) msg_print("何かが突如興奮したような騒々しい音が遠くに聞こえた！");
+	if (speed) msg_print("付近で何かが突如興奮したような感じを受けた！");
+	else if (sleep) msg_print("何かが突如興奮したような騒々しい音が遠くに聞こえた！");
 #else
 	if (speed) msg_print("You feel a sudden stirring nearby!");
 	else if (sleep) msg_print("You hear a sudden stirring in the distance!");
@@ -4713,6 +4719,12 @@ msg_format("%^sには効果がなかった。", m_name);
 			{
 				m_ptr->csleep = 0;
 				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+				if (m_ptr->ml)
+				{
+					/* Redraw (later) if needed */
+					if (p_ptr->health_who == i) p_ptr->redraw |= (PR_HEALTH);
+					if (p_ptr->riding == i) p_ptr->redraw |= (PR_UHEALTH);
+				}
 				if (see_m && !p_ptr->blind)
 				{
 #ifdef JP
@@ -4845,6 +4857,12 @@ msg_format("%^sには効果がなかった。", m_name);
 			{
 				m_ptr->csleep = 0;
 				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+				if (m_ptr->ml)
+				{
+					/* Redraw (later) if needed */
+					if (p_ptr->health_who == i) p_ptr->redraw |= (PR_HEALTH);
+					if (p_ptr->riding == i) p_ptr->redraw |= (PR_UHEALTH);
+				}
 				if (see_m && !p_ptr->blind)
 				{
 #ifdef JP
@@ -4980,6 +4998,12 @@ msg_format("%^sには効果がなかった。", m_name);
 			{
 				m_ptr->csleep = 0;
 				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+				if (m_ptr->ml)
+				{
+					/* Redraw (later) if needed */
+					if (p_ptr->health_who == i) p_ptr->redraw |= (PR_HEALTH);
+					if (p_ptr->riding == i) p_ptr->redraw |= (PR_UHEALTH);
+				}
 				if (see_m && !p_ptr->blind)
 				{
 #ifdef JP
@@ -6134,9 +6158,12 @@ msg_format("%^sが目を覚ました。", m_name);
 #endif
 				}
 
-				/* Redraw the health bar */
-				if (m_ptr->ml && (p_ptr->health_who == c_ptr->m_idx))
-					p_ptr->redraw |= (PR_HEALTH);
+				if (m_ptr->ml)
+				{
+					/* Redraw the health bar */
+					if (p_ptr->health_who == c_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
+					if (p_ptr->riding == c_ptr->m_idx) p_ptr->redraw |= (PR_UHEALTH);
+				}
 			}
 		}
 

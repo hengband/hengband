@@ -1502,7 +1502,10 @@ static bool vanish_dungeon(void)
 #else
 					msg_format("%^s wakes up.", m_name);
 #endif
+				}
 
+				if (m_ptr->ml)
+				{
 					/* Redraw the health bar */
 					if (p_ptr->health_who == c_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
 					if (p_ptr->riding == c_ptr->m_idx) p_ptr->redraw |= (PR_UHEALTH);

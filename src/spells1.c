@@ -3390,7 +3390,16 @@ note = "が分裂した！";
 #endif
 				m_ptr->maxhp = m_ptr->max_maxhp;
 			}
-			if (!dam) break;
+
+			if (!dam)
+			{
+				/* Redraw (later) if needed */
+				if (p_ptr->health_who == c_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
+				if (p_ptr->riding == c_ptr->m_idx) p_ptr->redraw |= (PR_UHEALTH);
+				break;
+			}
+
+			/* Fall through */
 		}
 		case GF_OLD_HEAL:
 		{
@@ -3468,11 +3477,10 @@ note = "が分裂した！";
 
 			/* Message */
 #ifdef JP
-note = "は体力を回復したようだ。";
+			note = "は体力を回復したようだ。";
 #else
 			note = " looks healthier.";
 #endif
-
 
 			/* No "real" damage */
 			dam = 0;

@@ -5722,11 +5722,10 @@ msg_print("中断しました。");
 			/* Acquire the monster name */
 			monster_desc(m_name, m_ptr, 0);
 #ifdef JP
-msg_format("%^sを起こした。", m_name);
+			msg_format("%^sを起こした。", m_name);
 #else
 			msg_format("You have waked %s up.", m_name);
 #endif
-			if (p_ptr->health_who == p_ptr->riding) p_ptr->redraw |= (PR_HEALTH);
 			p_ptr->redraw |= (PR_UHEALTH);
 		}
 
@@ -5761,12 +5760,10 @@ msg_format("%^sを起こした。", m_name);
 
 				/* Dump a message */
 #ifdef JP
-msg_format("%^sを朦朧状態から立ち直らせた。", m_name);
+				msg_format("%^sを朦朧状態から立ち直らせた。", m_name);
 #else
 				msg_format("%^s is no longer stunned.", m_name);
 #endif
-				if (p_ptr->health_who == p_ptr->riding) p_ptr->redraw |= (PR_HEALTH);
-				p_ptr->redraw |= (PR_UHEALTH);
 			}
 		}
 
@@ -5801,12 +5798,10 @@ msg_format("%^sを朦朧状態から立ち直らせた。", m_name);
 
 				/* Dump a message */
 #ifdef JP
-msg_format("%^sを混乱状態から立ち直らせた。", m_name);
+				msg_format("%^sを混乱状態から立ち直らせた。", m_name);
 #else
 				msg_format("%^s is no longer confused.", m_name);
 #endif
-				if (p_ptr->health_who == p_ptr->riding) p_ptr->redraw |= (PR_HEALTH);
-				p_ptr->redraw |= (PR_UHEALTH);
 			}
 		}
 
@@ -5841,11 +5836,10 @@ msg_format("%^sを混乱状態から立ち直らせた。", m_name);
 
 				/* Dump a message */
 #ifdef JP
-msg_format("%^sを恐怖から立ち直らせた。", m_name);
+				msg_format("%^sを恐怖から立ち直らせた。", m_name);
 #else
 				msg_format("%^s is no longer fear.", m_name);
 #endif
-				if (p_ptr->health_who == p_ptr->riding) p_ptr->redraw |= (PR_HEALTH);
 				p_ptr->redraw |= (PR_UHEALTH);
 			}
 		}

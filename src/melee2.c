@@ -1525,6 +1525,12 @@ static bool monst_attack_monst(int m_idx, int t_idx)
 			t_ptr->csleep = 0;
 
 			if (tr_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+			if (t_ptr->ml)
+			{
+				/* Redraw the health bar */
+				if (p_ptr->health_who == t_idx) p_ptr->redraw |= (PR_HEALTH);
+				if (p_ptr->riding == t_idx) p_ptr->redraw |= (PR_UHEALTH);
+			}
 
 			/* Describe the attack method */
 			switch (method)
@@ -2136,6 +2142,12 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					t_ptr->csleep = 0;
 
 					if (tr_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+					if (t_ptr->ml)
+					{
+						/* Redraw the health bar */
+						if (p_ptr->health_who == t_idx) p_ptr->redraw |= (PR_HEALTH);
+						if (p_ptr->riding == t_idx) p_ptr->redraw |= (PR_UHEALTH);
+					}
 
 					/* Visible monsters */
 					if (see_m)
@@ -3206,6 +3218,12 @@ msg_format("%^s%s", m_name, monmessage);
 
 				if (r_info[y_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
 					p_ptr->update |= (PU_MON_LITE);
+
+				if (y_ptr->ml)
+				{
+					/* Redraw the health bar */
+					if (p_ptr->health_who == c_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
+				}
 
 				/* XXX XXX XXX Message */
 			}

@@ -3071,11 +3071,14 @@ bool py_attack(int y, int x, int mode)
 	/* Extract monster name (or "it") */
 	monster_desc(m_name, m_ptr, 0);
 
-	/* Auto-Recall if possible and visible */
-	if (m_ptr->ml) monster_race_track(m_ptr->ap_r_idx);
+	if (m_ptr->ml)
+	{
+		/* Auto-Recall if possible and visible */
+		monster_race_track(m_ptr->ap_r_idx);
 
-	/* Track a new monster */
-	if (m_ptr->ml) health_track(c_ptr->m_idx);
+		/* Track a new monster */
+		health_track(c_ptr->m_idx);
+	}
 
 	if ((r_ptr->flags1 & RF1_FEMALE) &&
 	    !(p_ptr->stun || p_ptr->confused || p_ptr->image || !m_ptr->ml))
