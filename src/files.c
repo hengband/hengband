@@ -1918,9 +1918,9 @@ static void display_player_middle(void)
 
 		sprintf(buf, 
 #ifdef JP
-			"%2d日目  %d:%02d", 
+			"%2ld日目  %ld:%02ld", 
 #else
-			"Day %d  %d:%02d", 
+			"Day %ld  %ld:%02ld", 
 #endif
 			((p_ptr->prace == RACE_VAMPIRE) ||
 			 (p_ptr->prace == RACE_SKELETON) ||
