@@ -1124,11 +1124,12 @@ msg_print("地面に落とされた。");
 		}
 		else
 		{
-			byte a_idx = 0;
+			int a_idx = 0;
 			int chance = 0;
 
-			if (m_ptr->r_idx == MON_OBERON)
+			switch (m_ptr->r_idx)
 			{
+			case MON_OBERON:
 				if (one_in_(3))
 				{
 					a_idx = ART_THRAIN;
@@ -1139,63 +1140,65 @@ msg_print("地面に落とされた。");
 					a_idx = ART_GONDOR;
 					chance = 50;
 				}
-			}
-			else if ((m_ptr->r_idx == MON_UNICORN_ORD ||
-				 m_ptr->r_idx == MON_MORGOTH ||
-				 m_ptr->r_idx == MON_ONE_RING)
-				&& (p_ptr->pseikaku == SEIKAKU_NAMAKE))
-			{
-				do
-				{
-					switch (randint0(3))
-					{
-					case 0:
-						a_idx = ART_NAMAKE_HAMMER;
-						break;
-					case 1:
-						a_idx = ART_NAMAKE_BOW;
-						break;
-					case 2:
-						a_idx = ART_NAMAKE_ARMOR;
-						break;
-					}
-				}
-				while (a_info[a_idx].cur_num);
+				break;
 
-				chance = 100;
-			}
-			else if (m_ptr->r_idx == MON_GHB)
-			{
+			case MON_UNICORN_ORD:
+			case MON_MORGOTH:
+			case MON_ONE_RING:
+				if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
+				{
+					do
+					{
+						switch (randint0(3))
+						{
+						case 0:
+							a_idx = ART_NAMAKE_HAMMER;
+							break;
+						case 1:
+							a_idx = ART_NAMAKE_BOW;
+							break;
+						case 2:
+							a_idx = ART_NAMAKE_ARMOR;
+							break;
+						}
+					}
+					while (a_info[a_idx].cur_num);
+
+					chance = 100;
+				}
+				break;
+
+			case MON_GHB:
 				a_idx = ART_GHB;
 				chance = 100;
-			}
-			else if (m_ptr->r_idx == MON_STORMBRINGER)
-			{
+				break;
+
+			case MON_STORMBRINGER:
 				a_idx = ART_STORMBRINGER;
 				chance = 100;
-			}
-			else if (m_ptr->r_idx == MON_ECHIZEN)
-			{
+				break;
+
+			case MON_ECHIZEN:
 				a_idx = ART_CRIMSON;
 				chance = 50;
-			}
-			else if (m_ptr->r_idx == MON_GANDALF)
-			{
+				break;
+
+			case MON_GANDALF:
 				a_idx = ART_ICANUS;
 				chance = 20;
-			}
-			else if (m_ptr->r_idx == MON_OROCHI)
-			{
+				break;
+
+			case MON_OROCHI:
 				a_idx = ART_KUSANAGI;
 				chance = 25;
-			}
-			else if (m_ptr->r_idx == MON_DWORKIN)
-			{
+				break;
+
+			case MON_DWORKIN:
 				a_idx = ART_THRAIN;
 				chance = 20;
-			}
-			else if (m_ptr->r_idx == MON_SAURON)
-			{
+				break;
+
+			case MON_SAURON:
 				if (one_in_(10))
 				{
 					a_idx = ART_POWER;
@@ -1206,9 +1209,9 @@ msg_print("地面に落とされた。");
 					a_idx = ART_AHO;
 					chance = 100;
 				}
-			}
-			else if (m_ptr->r_idx == MON_BRAND)
-			{
+				break;
+
+			case MON_BRAND:
 				if (!one_in_(3))
 				{
 					a_idx = ART_BRAND;
@@ -1219,9 +1222,9 @@ msg_print("地面に落とされた。");
 					a_idx = ART_ANGUIREL;
 					chance = 33;
 				}
-			}
-			else if (m_ptr->r_idx == MON_CORWIN)
-			{
+				break;
+
+			case MON_CORWIN:
 				if (!one_in_(3))
 				{
 					a_idx = ART_GRAYSWANDIR;
@@ -1232,97 +1235,95 @@ msg_print("地面に落とされた。");
 					a_idx = ART_CORWIN;
 					chance = 33;
 				}
-			}
-			else if (m_ptr->r_idx == MON_SURTUR)
-			{
+				break;
+
+			case MON_SURTUR:
 				a_idx = ART_MORMEGIL;
 				chance = 66;
-			}
-			else if (m_ptr->r_idx == MON_SARUMAN)
-			{
+				break;
+
+			case MON_SARUMAN:
 				a_idx = ART_ELENDIL;
 				chance = 33;
-			}
-			else if (m_ptr->r_idx == MON_FIONA)
-			{
+				break;
+
+			case MON_FIONA:
 				a_idx = ART_BELANGIL;
 				chance = 50;
-			}
-			else if (m_ptr->r_idx == MON_JULIAN)
-			{
+				break;
+
+			case MON_JULIAN:
 				a_idx = ART_CELEBORN;
 				chance = 45;
-			}
-			else if (m_ptr->r_idx == MON_KLING)
-			{
+				break;
+
+			case MON_KLING:
 				a_idx = ART_OROME;
 				chance = 40;
-			}
-			else if (m_ptr->r_idx == MON_GOEMON)
-			{
+				break;
+
+			case MON_GOEMON:
 				a_idx = ART_ZANTETSU;
 				chance = 75;
-			}
-			else if (m_ptr->r_idx == MON_HAGEN)
-			{
+				break;
+
+			case MON_HAGEN:
 				a_idx = ART_NIMLOTH;
 				chance = 66;
-			}
-			else if (m_ptr->r_idx == MON_CAIN)
-			{
+				break;
+
+			case MON_CAIN:
 				a_idx = ART_ANGRIST;
 				chance = 50;
-			}
-			else if (m_ptr->r_idx == MON_BULLGATES)
-			{
+				break;
+
+			case MON_BULLGATES:
 				a_idx = ART_WINBLOWS;
 				chance = 66;
-			}
-			else if (m_ptr->r_idx == MON_LUNGORTHIN)
-			{
+				break;
+
+			case MON_LUNGORTHIN:
 				a_idx = ART_CALRIS;
 				chance = 50;
-			}
-			else if (m_ptr->r_idx == MON_JACK_SHADOWS)
-			{
+				break;
+
+			case MON_JACK_SHADOWS:
 				a_idx = ART_JACK;
 				chance = 15;
-			}
-			else if (m_ptr->r_idx == MON_DIO)
-			{
+				break;
+
+			case MON_DIO:
 				a_idx = ART_STONEMASK;
 				chance = 20;
-			}
-			else if (m_ptr->r_idx == MON_BELD)
-			{
+				break;
+
+			case MON_BELD:
 				a_idx = ART_SOULCRUSH;
 				chance = 10;
-			}
-			else if (m_ptr->r_idx == MON_PIP)
-			{
+				break;
+
+			case MON_PIP:
 				a_idx = ART_EXCALIBUR_J;
 				chance = 50;
-			}
+				break;
 
-			else if (m_ptr->r_idx == MON_SHUTEN)
-			{
+			case MON_SHUTEN:
 				a_idx = ART_SHUTEN_DOJI;
 				chance = 33;
-			}
+				break;
 
-			else if (m_ptr->r_idx == MON_GOTHMOG)
-			{
+			case MON_GOTHMOG:
 				a_idx = ART_GOTHMOG;
 				chance = 33;
-			}
+				break;
 
-			else if (m_ptr->r_idx == MON_FUNDIN)
-			{
+			case MON_FUNDIN:
 				a_idx = ART_FUNDIN;
 				chance = 5;
+				break;
 			}
 
-			if ((a_idx > 0) && ((randint1(99) < chance) || (wizard)))
+			if ((a_idx > 0) && ((randint0(100) < chance) || (wizard)))
 			{
 				if (a_info[a_idx].cur_num == 0)
 				{
