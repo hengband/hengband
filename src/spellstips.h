@@ -616,7 +616,7 @@ static char *spell_tips[VALID_REALM][32] =
 		"teleport short distance.",
 		"summons a spider.",
 		"causes random effects.",
-		"reset the 'deepest' level for recall spell.",
+		"resets the 'deepest' level for recall spell.",
 		"teleport long distance.",
 		"gives telepathy for a while.",
 		"attempts to teleport a monster away.",
