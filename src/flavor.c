@@ -1974,18 +1974,8 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 	/* Hack -- Append "Artifact" or "Special" names */
 	if (known)
 	{
-		if (o_ptr->inscription && strchr(quark_str(o_ptr->inscription), '#'))
-		{
-			/* Find the '#' */
-			cptr str = strchr(quark_str(o_ptr->inscription), '#');
-
-			/* Add the false name */
-			t = object_desc_chr(t, ' ');
-			t = object_desc_str(t, &str[1]);
-		}
-
 		/* Is it a new random artifact ? */
-		else if (o_ptr->art_name)
+		if (o_ptr->art_name)
 		{
 			t = object_desc_chr(t, ' ');
 
@@ -2002,12 +1992,25 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		}
 
 		/* Grab any ego-item name */
-		else if (o_ptr->name2)
+		else
 		{
-			ego_item_type *e_ptr = &e_info[o_ptr->name2];
+			if (o_ptr->name2)
+			{
+				ego_item_type *e_ptr = &e_info[o_ptr->name2];
 
-			t = object_desc_chr(t, ' ');
-			t = object_desc_str(t, (e_name + e_ptr->name));
+				t = object_desc_chr(t, ' ');
+				t = object_desc_str(t, (e_name + e_ptr->name));
+			}
+
+			if (o_ptr->inscription && strchr(quark_str(o_ptr->inscription), '#'))
+			{
+				/* Find the '#' */
+				cptr str = strchr(quark_str(o_ptr->inscription), '#');
+
+				/* Add the false name */
+				t = object_desc_chr(t, ' ');
+				t = object_desc_str(t, &str[1]);
+			}
 		}
 	}
 #endif
