@@ -5770,6 +5770,16 @@ bool choose_ele_attack(void)
 
 	char choice;
 
+	if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
+	{
+#ifdef JP
+		msg_format("武器を持たないと魔法剣は使えない。");
+#else
+		msg_format("You cannot use temporary branding with no weapon.");
+#endif
+		return FALSE;
+	}
+
 	/* Save screen */
 	screen_save();
 

@@ -5471,6 +5471,19 @@ void inven_item_increase(int item, int num)
 
 		/* Window stuff */
 		p_ptr->window |= (PW_INVEN | PW_EQUIP);
+
+		/* Hack -- Clear temporary elemental brands if player takes off weapons */
+		if (!o_ptr->number && p_ptr->ele_attack)
+		{
+			if ((item == INVEN_RARM) || (item == INVEN_LARM))
+			{
+				if (!buki_motteruka(INVEN_RARM + INVEN_LARM - item))
+				{
+					/* Clear all temporary elemental brands */
+					set_ele_attack(0, 0);
+				}
+			}
+		}
 	}
 }
 

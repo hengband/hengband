@@ -284,7 +284,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"現在の自分の状態を完全に知る。",
 		"邪悪なモンスターの攻撃を防ぐバリアを張る。",
 		"毒、朦朧状態、負傷を全快させ、幻覚を直す。",
-		"一定時間、武器に冷気、炎、電撃、酸、毒のいずれかの属性をつける。",
+		"一定時間、武器に冷気、炎、電撃、酸、毒のいずれかの属性をつける。武器を持たないと使えない。",
 
 		"一定時間、テレパシー能力を得る。",
 		"一定時間、ACを上昇させる。",
@@ -743,7 +743,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"Gives you useful info regarding your current resistances, the powers of your weapon and maximum limits of your stats.",
 		"Gives aura which protect you from evil monster's physical attack.",
 		"Heals poison, stun, cut and hallucination completely.",
-		"Makes current weapon some elemental branded.",
+		"Makes current weapon some elemental branded. You must wield weapons.",
 
 		"Gives telepathy for a while.",
 		"Gives bonus to AC for a while.",
