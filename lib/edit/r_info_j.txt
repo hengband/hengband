@@ -8162,8 +8162,8 @@ S:1_IN_8 |
 S:BR_POIS
 D:$A bull whose skin is made of steel plates. Watch out for its 
 D:$deadly breath!
-D:A bull whose skin is made of steel plates. Watch out for its 
-D:deadly breath!
+D:鋼板のようた堅い皮膚を持った牛のようなモンスターだ。
+D:危険なブレスに注意しろ!
 
 #JZ#
 #JZ#ガグ
@@ -14107,8 +14107,8 @@ S:BLIND | CONF | SCARE | CAUSE_4 | CAUSE_3 |
 S:BA_WATE | DARKNESS | BR_DARK | TELE_TO 
 D:$An enormously fearsome and powerful inhabitant of the depths. It 
 D:$resembles a gargantuan octopus and its evil is almost tangible.
-D:An enormously fearsome and powerful inhabitant of the depths. It 
-D:resembles a gargantuan octopus and its evil is almost tangible.
+D:とてつもなく強く恐しい深海の生き物だ。巨大な蛸に似ていて、
+D:見ただけでその邪悪さが伝わってくる。
 
 #J0#
 N:741:アイス・ワイアーム
@@ -15067,8 +15067,8 @@ S:BLIND | CONF | SCARE | CAUSE_4 | CAUSE_3 | TELE_TO | TELE_AWAY |
 S:BA_WATE | DARKNESS | BR_DARK | BR_ACID | BR_POIS
 D:$An enormously fearsome and powerful inhabitant of the depths. It 
 D:$resembles a gargantuan octopus and its evil is almost tangible.
-D:An enormously fearsome and powerful inhabitant of the depths. It 
-D:resembles a gargantuan octopus and its evil is almost tangible.
+D:とてつもなく強く恐しい深海の生き物だ。巨大な蛸に似ていて、
+D:見ただけでその邪悪さが伝わってくる。
 
 #JZ#
 N:776:アーチリッチ
@@ -15502,8 +15502,8 @@ S:TRAPS | CAUSE_4 | BA_POIS | S_DEMON
 S:S_MONSTERS | PSY_SPEAR
 D:$She is beautiful and deadly. "...I have always been very fond of Fiona. 
 D:$She is certainly the loveliest, most civilized of (all Amberites)."
-D:She is beautiful and deadly. "...I have always been very fond of Fiona. 
-D:She is certainly the loveliest, most civilized of (all Amberites)."
+D:彼女は美しく、また危険な存在でもある。「…フィオナの事はとても好きだ。
+D:彼女は間違いなく全てのアンバーの王族の中で一番愛らしく、気品がある。」
 
 #J0#
 N:792:ドリードロード『ツエラクス』
@@ -18243,9 +18243,9 @@ S:BR_POIS
 D:$A huge dragon of incredible destructive power.  Noxious vapours 
 D:$fill the room near it, leaving you gasping for breath.  Flee 
 D:$now while you still can!
-D:A huge dragon of incredible destructive power.  Noxious vapours 
-D:fill the room near it, leaving you gasping for breath.  Flee 
-D:now while you still can!
+D:信じられない程の破壊的な力を持った巨大なドラゴンだ。
+D:有毒な霧が近くの部屋に充満し、ほとんど息ができない。
+D:逃げられるうちに逃げろ!
 
 N:891:バラヒアを裏切りし『ゴルリム』
 E:Gorlim, Betrayer of Barahir
@@ -18268,7 +18268,7 @@ D:$became little more than a mindless creature of evil.
 D:かつて屈強さを誇ったこの戦士はモルゴスの力に完全に支配され、今では
 D:ほとんど意思を持たない邪悪の生物に成り下がってしまった。
 
-N:892:ジン
+N:892:ディジニ
 E:Djinni
 G:P:b
 I:130:70d10:30:90:10
@@ -18281,7 +18281,8 @@ F:CAN_FLY |
 S:1_IN_6 |
 S:BO_ELEC | MISSILE | BLINK | S_MONSTER | BA_ELEC
 D:$Supported by a whirlwind, the djinni turns to face you.
-D:Supported by a whirlwind, the djinni turns to face you.
+D:ディジニは風の属性を持つジンだ。
+D:まわりにつむじ風をまとったディジニがあなたを睨んでいる。
 
 N:893:イフリート
 E:Efreeti
@@ -18295,7 +18296,8 @@ F:EVIL | IM_FIRE | RES_PLAS | NO_FEAR | NO_CONF | NO_SLEEP |
 S:1_IN_6 |
 S:BO_FIRE | BO_PLAS | BA_FIRE
 D:$Wrapped in fire, this giant red figure turns to face you.
-D:Wrapped in fire, this giant red figure turns to face you.
+D:イフリートは火の属性を持つジンだ。
+D:炎につつまれた赤い巨人があなたを睨んでいる。
 
 N:894:トロルの王
 E:Troll king
@@ -18313,8 +18315,8 @@ S:1_IN_8 |
 S:BLINK
 D:$This troll is a king, which means it's still stupid, but has even more power.
 D:$It never comes alone, and can call out to other trolls.
-D:This troll is a king, which means it's still stupid, but has even more power.
-D:It never comes alone, and can call out to other trolls.
+D:このトロルはトロルの中の王だ。彼は依然としてトロルであり、頭は良くないが、
+D:その力はさらに強力だ。彼は一人でいる事はなく常に手下を連れている。
 
 N:895:スカイ・ゴーレム
 E:Sky golem
@@ -18331,8 +18333,8 @@ S:1_IN_5
 S:BR_LITE | BA_COLD | BR_COLD | BO_ICEE | BO_COLD | BR_TIME | SHOOT
 D:$Obsidian eyes stare at you as you bend before the shower of heavenly
 D:$powers and spells...
-D:Obsidian eyes stare at you as you bend before the shower of heavenly
-D:powers and spells...
+D:この世のものとは思えない程のパワーと呪文の嵐であなたを叩きつけている間、
+D:このゴーレムの黒曜石の目はじっとあなたを凝視している。
 
 N:896:バズーカ
 E:Bazooker
@@ -18348,7 +18350,7 @@ F:DROP_CORPSE | DROP_SKELETON | CAN_SWIM
 S:1_IN_5 |
 S:ROCKET
 D:$You watch in horror as he aims his massive weapon at you.
-D:You watch in horror as he aims his massive weapon at you.
+D:彼はその恐しい重火器の狙いをあなたに向けている。
 
 N:897:破片ボルテックス
 E:Shard vortex
@@ -18364,8 +18366,8 @@ S:1_IN_4 |
 S:BR_SHAR
 D:$A howling blast of razor-sharp mountain fragments, kept intact by perilous 
 D:$magics.
-D:A howling blast of razor-sharp mountain fragments, kept intact by perilous 
-D:magics.
+D:凄まじい音を立てて吹き付けるカミソリのように鋭い破片の塊だ。
+D:魔法によってその形を維持されている。
 
 N:898:花崗岩の壁
 E:Granite wall
@@ -18378,7 +18380,8 @@ F:NEVER_MOVE | MULTIPLY | ONLY_GOLD | DROP_90 | ANIMAL | HURT_ROCK |
 F:NO_FEAR | NO_SLEEP | NO_CONF | NO_STUN | EMPTY_MIND
 F:IM_COLD | IM_FIRE | IM_ELEC | IM_POIS
 D:$Just a normal wall, boring gray rock. But wait! It seems to be growing...
-D:Just a normal wall, boring gray rock. But wait! It seems to be growing...
+D:ただの普通の壁だ。見なれた灰色の岩でできている。
+D:いや、ちょっと待てよ？なんだかぼんやり輝いでいるような…。
 
 N:899:ファイア・トロル
 E:Fire troll
@@ -18394,9 +18397,8 @@ F:HURT_COLD | IM_FIRE | WILD_VOLCANO
 D:$Fire trolls are believed to have been created by an
 D:$evil wizard trying to make forest trolls immune to
 D:$fire.
-D:Fire trolls are believed to have been created by an
-D:evil wizard trying to make forest trolls immune to
-D:fire.
+D:ファイア・トロルは邪悪な魔道師によって炎の力と耐性を与えられた森トロル
+D:だと信じられている。
 
 N:900:エルフ・ロード
 E:Elf lord
@@ -18412,7 +18414,7 @@ F:NO_SLEEP | FRIENDLY | GOOD |
 S:1_IN_3 |
 S:HEAL | BLINK | TPORT | BA_FIRE | SHOOT | BA_COLD
 D:$A powerful elven leader who knows some magic as well.
-D:A powerful elven leader who knows some magic as well.
+D:強力な力を持つエルフの指導者だ。魔法も使う事ができる。
 
 N:901:サムライ
 E:Samurai
@@ -18441,7 +18443,7 @@ F:NEVER_MOVE | MULTIPLY | ONLY_GOLD | DROP_60 | DROP_90 | EMPTY_MIND
 F:ANIMAL | HURT_ROCK | COLD_BLOOD | NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN |
 F:IM_ACID | IM_ELEC | IM_POIS | IM_FIRE
 D:$It's just a block of dark rock. But wait! It seems to be growing...
-D:It's just a block of dark rock. But wait! It seems to be growing...
+D:普通の黒い岩の壁だ。しかしちょっと待てよ？なんだかぼんやり輝いている…
 
 N:903:クラーケンの子
 E:Small kraken
@@ -18455,7 +18457,7 @@ F:NO_SLEEP | NO_FEAR | DROP_CORPSE
 S:1_IN_4 |
 S:DARKNESS | BO_ACID | HOLD
 D:$A kraken with a tough, scaly hide.
-D:A kraken with a tough, scaly hide.
+D:うろこ状の皮膚を持った頑丈なクラーケンだ。
 
 N:904:混沌おばけキノコ
 E:Chaos mushroom
@@ -18472,9 +18474,8 @@ S:BR_NUKE | BR_POIS
 D:$It is a massive mushroom that seems to have a huge mouth. The air is thick
 D:$with miasma, and you notice to your horror that the fungus is sprouting
 D:$everywhere!
-D:It is a massive mushroom that seems to have a huge mouth. The air is thick
-D:with miasma, and you notice to your horror that the fungus is sprouting
-D:everywhere!
+D:巨大な口を持っているように見えるどっしりとしたキノコだ。
+D:このキノコはどこにでも生えてまわりの空気を濃い瘴気で汚染する。
 
 N:905:雲ゴーレム
 E:Cloud golem
@@ -18486,10 +18487,10 @@ B:HIT:ELEC:4d4
 F:EMPTY_MIND | BASH_DOOR |
 F:IM_ELEC | IM_COLD | CAN_FLY |
 F:NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING
-D:$Lighting crackes around this huge animated cloud entity, sending shivers
+D:$Lightning crackes around this huge animated cloud entity, sending shivers
 D:$down your spine.
-D:Lighting crackes around this huge animated cloud entity, sending shivers
-D:down your spine.
+D:魔法で操られた雲でできた体を持つ巨大なゴーレムだ。
+D:バリバリと雷光が閃き、あなたを震え上らせる。
 
 N:906:溶岩ゴーレム
 E:Lava golem
@@ -18504,8 +18505,8 @@ F:IM_FIRE | NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING | KILL_BODY
 F:KILL_ITEM
 D:$It burns everything in its path with the heat its magma-like body
 D:$produces.
-D:It burns everything in its path with the heat its magma-like body
-D:produces.
+D:それはマグマのような体から発する熱によって、まわりに近づくあらゆるもの
+D:を焼きつくしながら動いている。
 
 N:907:オーガ戦士
 E:Ogre warrior
@@ -18516,7 +18517,8 @@ B:HIT:SUPERHURT:4d8
 B:HIT:SUPERHURT:4d8
 F:RAND_25 | DROP_90 | OPEN_DOOR | BASH_DOOR | DROP_CORPSE | EVIL | MOVE_BODY
 F:WILD_WASTE
-D:It is a massive ogre in metal armour, a champion of its kind.
+D:$It is a massive ogre in metal armour, a champion of its kind.
+D:金属の鎧に身を包んだ力強いオーガであり、同族の中で最も強力だ。
 
 N:908:生きたポール・アックス
 E:Pole axe of animated attack
@@ -18533,9 +18535,8 @@ S:SCARE | BLIND | CONF | S_MONSTER
 D:$A powerful weapon from a time long past when heroes walked the earth, and
 D:$magical weapons of power unmatched were created. Blood drips from its
 D:$wicked blade.
-D:A powerful weapon from a time long past when heroes walked the earth, and
-D:magical weapons of power unmatched were created. Blood drips from its
-D:wicked blade.
+D:英雄達が地に存在し、比類なき力を持った魔法の武器が作られていた遠い過去の時代の
+D:強力な武器の一つだ。その刺の付いた刃からは血が滴っている。
 
 N:909:『女王ベトベト』
 E:The Icky Queen
@@ -18567,8 +18568,7 @@ F:IM_FIRE | IM_COLD | IM_POIS
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$An ingenious gnomish invention -- a golem designed for underwater
 D:$usage.
-D:An ingenious gnomish invention -- a golem designed for underwater
-D:usage.
+D:ノームの天才が作った発明品だ。深い水中で働くように設計されたゴーレムである。
 
 N:911:石英の壁
 E:Quartz vein
@@ -18581,7 +18581,7 @@ F:NEVER_MOVE | ONLY_GOLD | DROP_1D2 | DROP_90 | MULTIPLY | EMPTY_MIND
 F:ANIMAL | COLD_BLOOD | NO_FEAR | NO_SLEEP | NO_CONF | NO_STUN
 F:HURT_ROCK | IM_FIRE | IM_ACID | IM_POIS | IM_COLD
 D:$Look! A nice vein of rock to dig in for gold! Wait a minute...
-D:Look! A nice vein of rock to dig in for gold! Wait a minute...
+D:おお！この岩はなかなかいい金鉱石を含んでいる！おや、ちょっと待てよ？…
 
 N:912:宙に浮かぶ宝珠
 E:Floating orb
@@ -18594,8 +18594,7 @@ S:1_IN_1
 S:MISSILE
 D:$A metallic ball floating in the air, that turns to track you with evil
 D:$intent.
-D:A metallic ball floating in the air, that turns to track you with evil
-D:intent.
+D:空中に浮ぶ金属製の宝珠だ。邪悪な意思を持ち、常にあなたに攻撃の狙いを付けている。
 
 N:913:アンデッド・チョウチンアンコウ
 E:Undead devilfish
@@ -18607,7 +18606,7 @@ F:EVIL
 S:1_IN_8 |
 S:BR_NETH | BR_DISE | BR_TIME | BR_NEXU | BR_POIS
 D:$A devilfish brought back from the dead.
-D:A devilfish brought back from the dead.
+D:死から蘇えったチョウチンアンコウだ。
 
 #
 #(コメント)
@@ -18710,8 +18709,9 @@ W:12:4:0:60:0:0
 F:NEVER_BLOW | ATTR_MULTI | AQUATIC | NO_CONF | DROP_CORPSE
 S:1_IN_9 |
 S:BR_CHAO | BR_DARK | BR_LITE | BR_SOUN | BR_DISE | BR_TIME
-D:A disgusting fish, it has a large gaping mouth and a small lantern dangling
-D:from an outgrowth on its head.
+D:$A disgusting fish, it has a large gaping mouth and a small lantern dangling
+D:$from an outgrowth on its head.
+D:大きく開かれた口と頭部から生えた小さな提灯を持っているいまいましい魚。
 
 N:919:水棲ナーガ
 E:Aquatic naga
@@ -18729,8 +18729,7 @@ S:1_IN_7 |
 S:DARKNESS | CAUSE_4 | BO_ICEE
 D:$A naga adapted to underwater life. She has a fish-like tail and a pair
 D:$of gills.
-D:A naga adapted to underwater life. She has a fish-like tail and a pair
-D:of gills.
+D:水中での生活に適応したナーガだ。魚のような尾ヒレとエラを持っている。
 
 N:920:『デモゴルゴン』
 E:The demogorgon
@@ -19128,7 +19127,7 @@ F:NO_CONF | NO_SLEEP | DROP_SKELETON | RIDING
 S:1_IN_10
 S:BR_NETH
 D:$An undead dragon skeleton.
-D:An undead dragon skeleton.
+D:魔法によって蘇り不死の存在になったドラゴンの骸骨だ。
 
 N:942:プラネター
 E:Planetar
@@ -19659,8 +19658,8 @@ S:1_IN_7 |
 S:S_DRAGON
 D:$This bat has been the death of many adventurers, taking their only 
 D:$weapon and leaving them to face a dragon.
-D:This bat has been the death of many adventurers, taking their only 
-D:weapon and leaving them to face a dragon.
+D:冒険者の武器を奪い、さらにドラゴンをけしかける事で、
+D:このコウモリは多くの冒険者に死をもたらして来た。
 
 N:976:ダークエルフの鍛冶師『エオル』
 E:Eol, the Dark Elven Smith
@@ -19943,8 +19942,7 @@ F:EVIL | IM_ACID | RES_DISE | NO_FEAR | NO_CONF | NO_SLEEP |
 S:1_IN_6 |
 S:BO_ACID | BO_PLAS | BA_ACID
 D:$A Dao is a genie from the elemental plane of Earth.
-D:ジンやイフリートの同系種族であり、大地の元素界に住む
-D:屈強な魔神だ。
+D:ダオは大地の属性を持つジンだ。大地の元素界からやってきた。
 
 N:994:マリード
 E:Marid
@@ -19959,8 +19957,8 @@ S:1_IN_6 |
 S:BO_WATE | BA_WATE | BLINK | S_MONSTER
 D:$The marid are said to be born of the ocean, 
 D:$with currents as their muscles and pearls as their teeth.
-D:ジンやイフリートの同系種族であり、水の元素界に住む
-D:屈強な魔神だ。
+D:マリードは水の属性を持つジンだ。それは海で生れ、その筋肉は潮流から、
+D:その歯は真珠から作られたと言われている。
 
 N:995:狼の族長
 E:Wolf Chieftain
