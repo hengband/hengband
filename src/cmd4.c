@@ -7070,9 +7070,6 @@ static void do_cmd_knowledge_quests(void)
 
 	for (i = 1; i < max_quests; i++)
 	{
-		/* No info from "silent" quests */
-		if (quest[i].flags & QUEST_FLAG_SILENT) continue;
-
 		if (quest[i].status == QUEST_STATUS_TAKEN || quest[i].status == QUEST_STATUS_COMPLETED)
 		{
 			int old_quest;
@@ -7086,8 +7083,6 @@ static void do_cmd_knowledge_quests(void)
 
 			quest_text_line = 0;
 
-			total++;
-
 			/* Set the quest number temporary */
 			old_quest = p_ptr->inside_quest;
 			p_ptr->inside_quest = i;
@@ -7099,6 +7094,11 @@ static void do_cmd_knowledge_quests(void)
 
 			/* Reset the old quest number */
 			p_ptr->inside_quest = old_quest;
+
+                        /* No info from "silent" quests */
+                        if (quest[i].flags & QUEST_FLAG_SILENT) continue;
+
+			total++;
 
 			if (quest[i].type != QUEST_TYPE_RANDOM)
 			{
@@ -7249,17 +7249,12 @@ sprintf(rand_tmp_str,"%s (%d ≥¨) - %s§Ú≈›§π°£\n",
 	total = 0;
 	for (i = 1; i < max_quests; i++)
 	{
-		/* No info from "silent" quests */
-		if (quest[i].flags & QUEST_FLAG_SILENT) continue;
-
 		if (quest[i].status == QUEST_STATUS_FINISHED)
 		{
-			int old_quest;
-
-			total++;
-
 			if (i < MIN_RANDOM_QUEST)
 			{
+                                int old_quest;
+
 				/* Set the quest number temporary */
 				old_quest = p_ptr->inside_quest;
 				p_ptr->inside_quest = i;
@@ -7271,7 +7266,12 @@ sprintf(rand_tmp_str,"%s (%d ≥¨) - %s§Ú≈›§π°£\n",
 
 				/* Reset the old quest number */
 				p_ptr->inside_quest = old_quest;
+
+                                /* No info from "silent" quests */
+                                if (quest[i].flags & QUEST_FLAG_SILENT) continue;
 			}
+
+			total++;
 
 			if ((i >= MIN_RANDOM_QUEST) && quest[i].r_idx)
 			{
@@ -7330,17 +7330,12 @@ sprintf(rand_tmp_str,"%s (%d ≥¨) - %s§Ú≈›§π°£\n",
 	total = 0;
 	for (i = 1; i < max_quests; i++)
 	{
-		/* No info from "silent" quests */
-		if (quest[i].flags & QUEST_FLAG_SILENT) continue;
-
 		if ((quest[i].status == QUEST_STATUS_FAILED_DONE) || (quest[i].status == QUEST_STATUS_FAILED))
 		{
-			int old_quest;
-
-			total++;
-
 			if (i < MIN_RANDOM_QUEST)
 			{
+                                int old_quest;
+
 				/* Set the quest number temporary */
 				old_quest = p_ptr->inside_quest;
 				p_ptr->inside_quest = i;
@@ -7352,7 +7347,12 @@ sprintf(rand_tmp_str,"%s (%d ≥¨) - %s§Ú≈›§π°£\n",
 
 				/* Reset the old quest number */
 				p_ptr->inside_quest = old_quest;
+
+                                /* No info from "silent" quests */
+                                if (quest[i].flags & QUEST_FLAG_SILENT) continue;
 			}
+
+			total++;
 
 			if ((i >= MIN_RANDOM_QUEST) && quest[i].r_idx)
 			{

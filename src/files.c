@@ -4180,17 +4180,12 @@ errr make_character_dump(FILE *fff)
 	{
 		int num = quest_num[i];
 
-		/* No info from "silent" quests */
-		if (quest[num].flags & QUEST_FLAG_SILENT) continue;
-
 		if (quest[num].status == QUEST_STATUS_FINISHED)
 		{
-			int old_quest;
-
-			total++;
-
 			if (num < MIN_RANDOM_QUEST)
 			{
+                                int old_quest;
+                        
 				/* Set the quest number temporary */
 				old_quest = p_ptr->inside_quest;
 				p_ptr->inside_quest = num;
@@ -4202,7 +4197,12 @@ errr make_character_dump(FILE *fff)
 
 				/* Reset the old quest number */
 				p_ptr->inside_quest = old_quest;
+
+                                /* No info from "silent" quests */
+                                if (quest[num].flags & QUEST_FLAG_SILENT) continue;
 			}
+
+			total++;
 
 			if ((num >= MIN_RANDOM_QUEST) && quest[num].r_idx)
 			{
@@ -4261,17 +4261,12 @@ errr make_character_dump(FILE *fff)
 	{
 		int num = quest_num[i];
 
-		/* No info from "silent" quests */
-		if (quest[num].flags & QUEST_FLAG_SILENT) continue;
-
 		if ((quest[num].status == QUEST_STATUS_FAILED_DONE) || (quest[num].status == QUEST_STATUS_FAILED))
 		{
-			int old_quest;
-
-			total++;
-
 			if (num < MIN_RANDOM_QUEST)
 			{
+                                int old_quest;
+
 				/* Set the quest number temporary */
 				old_quest = p_ptr->inside_quest;
 				p_ptr->inside_quest = num;
@@ -4283,7 +4278,12 @@ errr make_character_dump(FILE *fff)
 
 				/* Reset the old quest number */
 				p_ptr->inside_quest = old_quest;
+
+                                /* No info from "silent" quests */
+                                if (quest[num].flags & QUEST_FLAG_SILENT) continue;
 			}
+
+			total++;
 
 			if ((num >= MIN_RANDOM_QUEST) && quest[num].r_idx)
 			{
