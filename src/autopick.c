@@ -5084,8 +5084,17 @@ static bool insert_keymap_line(text_body_type *tb)
 	/* Look up the keymap */
 	act = keymap_act[mode][(byte)(buf[0])];
 
-	/* Analyze the current action */
-	ascii_to_text(tmp, act);
+	if (act)
+	{
+		/* Analyze the current action */
+		ascii_to_text(tmp, act);
+	}
+	else
+	{
+		/* No keymap defined -- Use trigger key itself as a default */
+
+		/* Nothing to do (use tmp) */
+	}
 
 	/* Insert blank action preference line */
 	insert_return_code(tb);
