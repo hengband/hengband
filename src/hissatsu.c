@@ -984,7 +984,7 @@ static bool cast_hissatsu_spell(int spell)
 	case 27:
 	{
 		if (!tgt_pt(&x, &y)) return FALSE;
-		if (!cave_player_teleportable_bold(y, x, FALSE) ||
+		if (!cave_player_teleportable_bold(y, x, FALSE, FALSE) ||
 		    (distance(y, x, py, px) > MAX_SIGHT / 2) ||
 		    !projectable(py, px, y, x))
 		{

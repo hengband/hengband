@@ -254,7 +254,7 @@ void teleport_monster_to(int m_idx, int ty, int tx, int power, bool passive)
 }
 
 
-bool cave_player_teleportable_bold(int y, int x, bool passive)
+bool cave_player_teleportable_bold(int y, int x, bool passive, bool nonmagical)
 {
 	cave_type    *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
@@ -262,8 +262,8 @@ bool cave_player_teleportable_bold(int y, int x, bool passive)
 	/* Require "teleportable" space */
 	if (!have_flag(f_ptr->flags, FF_TELEPORTABLE)) return FALSE;
 
-	/* No teleporting into vaults and such */
-	if (c_ptr->info & CAVE_ICKY) return FALSE;
+	/* No magical teleporting into vaults and such */
+	if (!nonmagical && (c_ptr->info & CAVE_ICKY)) return FALSE;
 
 	if (c_ptr->m_idx && (c_ptr->m_idx != p_ptr->riding)) return FALSE;
 
@@ -362,7 +362,7 @@ msg_print("不思議な力がテレポートを防いだ！");
 			/* Ignore illegal locations */
 			if (!in_bounds(y, x)) continue;
 
-			if (!cave_player_teleportable_bold(y, x, passive)) continue;
+			if (!cave_player_teleportable_bold(y, x, passive, FALSE)) continue;
 
 			/* This grid looks good */
 			look = FALSE;
@@ -461,7 +461,7 @@ void teleport_player_to(int ny, int nx, bool no_tele, bool passive)
 		if (p_ptr->wizard && (!cave[y][x].m_idx || (cave[y][x].m_idx == p_ptr->riding))) break;
 
 		/* Accept teleportable floor grids */
-		if (cave_player_teleportable_bold(y, x, passive)) break;
+		if (cave_player_teleportable_bold(y, x, passive, !no_tele)) break;
 
 		/* Occasionally advance the distance */
 		if (++ctr > (4 * dis * dis + 4 * dis + 1))
@@ -5694,7 +5694,7 @@ static bool dimension_door_aux(int x, int y)
 
 	p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
 
-	if (!cave_player_teleportable_bold(y, x, FALSE) ||
+	if (!cave_player_teleportable_bold(y, x, FALSE, FALSE) ||
 	    (distance(y, x, py, px) > plev / 2 + 10) ||
 	    (!randint0(plev / 10 + 10)))
 	{
