@@ -2339,20 +2339,21 @@ sprintf(ouch, "%sを装備したダメージ", o_name);
 			{
 #ifdef JP
 				msg_print("熱で火傷した！");
-				take_hit(DAMAGE_NOESCAPE, damage, format("%sの上に浮遊したダメージ", f_name + f_ptr->name), -1);
+				take_hit(DAMAGE_NOESCAPE, damage, format("%sの上に浮遊したダメージ", f_name + f_info[get_feat_mimic(&cave[py][px])].name), -1);
 #else
 				msg_print("The heat burns you!");
-				take_hit(DAMAGE_NOESCAPE, damage, format("flying over %s", f_name + f_ptr->name), -1);
+				take_hit(DAMAGE_NOESCAPE, damage, format("flying over %s", f_name + f_info[get_feat_mimic(&cave[py][px])].name), -1);
 #endif
 			}
 			else
 			{
+				cptr name = f_name + f_info[get_feat_mimic(&cave[py][px])].name;
 #ifdef JP
-				msg_format("%sで火傷した！", f_name + f_ptr->name);
+				msg_format("%sで火傷した！", name);
 #else
-				msg_format("The %s burns you!", f_name + f_ptr->name);
+				msg_format("The %s burns you!", name);
 #endif
-				take_hit(DAMAGE_NOESCAPE, damage, f_name + f_ptr->name, -1);
+				take_hit(DAMAGE_NOESCAPE, damage, name, -1);
 			}
 
 			cave_no_regen = TRUE;

@@ -1085,9 +1085,9 @@ static bool do_cmd_open_aux(int y, int x)
 	{
 		/* Stuck */
 #ifdef JP
-		msg_print("ドアはがっちりと閉じられているようだ。");
+		msg_format("%sはがっちりと閉じられているようだ。", f_name + f_info[get_feat_mimic(c_ptr)].name);
 #else
-		msg_print("The door appears to be stuck.");
+		msg_format("The %s appears to be stuck.", f_name + f_info[get_feat_mimic(c_ptr)].name);
 #endif
 
 	}
@@ -1512,7 +1512,6 @@ static bool do_cmd_tunnel_test(int y, int x)
 static bool do_cmd_tunnel_aux(int y, int x)
 {
 	cave_type *c_ptr;
-	s16b mimic_feat;
 	feature_type *f_ptr, *mimic_f_ptr;
 	int power;
 	cptr name;
@@ -1530,8 +1529,7 @@ static bool do_cmd_tunnel_aux(int y, int x)
 	power = f_ptr->power;
 
 	/* Feature code (applying "mimic" field) */
-	mimic_feat = get_feat_mimic(c_ptr);
-	mimic_f_ptr = &f_info[mimic_feat];
+	mimic_f_ptr = &f_info[get_feat_mimic(c_ptr)];
 
 	name = f_name + mimic_f_ptr->name;
 
@@ -1541,7 +1539,7 @@ static bool do_cmd_tunnel_aux(int y, int x)
 	if (have_flag(f_ptr->flags, FF_PERMANENT))
 	{
 		/* Titanium */
-		if (!mimic_feat || have_flag(mimic_f_ptr->flags, FF_PERMANENT))
+		if (have_flag(mimic_f_ptr->flags, FF_PERMANENT))
 		{
 #ifdef JP
 			msg_print("この岩は硬すぎて掘れないようだ。");
@@ -1789,9 +1787,9 @@ bool easy_open_door(int y, int x)
 	{
 		/* Stuck */
 #ifdef JP
-		msg_print("ドアはがっちりと閉じられているようだ。");
+		msg_format("%sはがっちりと閉じられているようだ。", f_name + f_info[get_feat_mimic(c_ptr)].name);
 #else
-		msg_print("The door appears to be stuck.");
+		msg_format("The %s appears to be stuck.", f_name + f_info[get_feat_mimic(c_ptr)].name);
 #endif
 
 	}
@@ -2244,25 +2242,26 @@ static bool do_cmd_bash_aux(int y, int x, int dir)
 {
 	/* Get grid */
 	cave_type	*c_ptr = &cave[y][x];
-	feature_type *f_ptr = &f_info[c_ptr->feat];
 
 	/* Hack -- Bash power based on strength */
 	/* (Ranges from 3 to 20 to 100 to 200) */
 	int bash = adj_str_blow[p_ptr->stat_ind[A_STR]];
 
 	/* Extract door power */
-	int temp = f_ptr->power;
+	int temp = f_info[c_ptr->feat].power;
 
 	bool		more = FALSE;
+
+	cptr name = f_name + f_info[get_feat_mimic(c_ptr)].name;
 
 	/* Take a turn */
 	energy_use = 100;
 
 	/* Message */
 #ifdef JP
-	msg_print("ドアに体当たりをした！");
+	msg_format("%sに体当たりをした！", name);
 #else
-	msg_print("You smash into the door!");
+	msg_format("You smash into the %s!", name);
 #endif
 
 	/* Compare bash power to door power XXX XXX XXX */
@@ -2278,9 +2277,9 @@ static bool do_cmd_bash_aux(int y, int x, int dir)
 	{
 		/* Message */
 #ifdef JP
-		msg_format("%sを壊した！", f_name + f_ptr->name);
+		msg_format("%sを壊した！", name);
 #else
-		msg_format("The %s crashes open!", f_name + f_ptr->name);
+		msg_format("The %s crashes open!", name);
 #endif
 
 
@@ -2313,9 +2312,9 @@ static bool do_cmd_bash_aux(int y, int x, int dir)
 	{
 		/* Message */
 #ifdef JP
-		msg_print("このドアは頑丈だ。");
+		msg_format("この%sは頑丈だ。", name);
 #else
-		msg_print("The door holds firm.");
+		msg_format("The %s holds firm.", name);
 #endif
 
 
@@ -2666,9 +2665,9 @@ void do_cmd_spike(void)
 
 			/* Successful jamming */
 #ifdef JP
-			msg_print("ドアにくさびを打ち込んだ。");
+			msg_format("%sにくさびを打ち込んだ。", f_name + f_info[feat].name);
 #else
-			msg_print("You jam the door with a spike.");
+			msg_format("You jam the %s with a spike.", f_name + f_info[feat].name);
 #endif
 
 			cave_alter_feat(y, x, FF_SPIKE);

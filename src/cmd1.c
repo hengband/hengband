@@ -3677,7 +3677,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 			(have_flag(f_ptr->flags, FF_DEEP) || (riding_r_ptr->flags2 & RF2_AURA_FIRE)))
 		{
 #ifdef JP
-			msg_format("%sの上に行けない。", f_name + f_ptr->name);
+			msg_format("%sの上に行けない。", f_name + f_info[get_feat_mimic(c_ptr)].name);
 #else
 			msg_print("Can't swim.");
 #endif
@@ -3688,7 +3688,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		else if (!have_flag(f_ptr->flags, FF_WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC))
 		{
 #ifdef JP
-			msg_format("%sから上がれない。", f_name + f_info[cave[py][px].feat].name);
+			msg_format("%sから上がれない。", f_name + f_info[get_feat_mimic(&cave[py][px])].name);
 #else
 			msg_print("Can't land.");
 #endif
@@ -3699,7 +3699,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		else if (have_flag(f_ptr->flags, FF_LAVA) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
 		{
 #ifdef JP
-			msg_format("%sの上に行けない。", f_name + f_ptr->name);
+			msg_format("%sの上に行けない。", f_name + f_info[get_feat_mimic(c_ptr)].name);
 #else
 			msg_print("Too hot to go through.");
 #endif
@@ -3729,9 +3729,9 @@ void move_player(int dir, int do_pickup, bool break_trap)
 	else if (!have_flag(f_ptr->flags, FF_MOVE) && have_flag(f_ptr->flags, FF_CAN_FLY) && !p_ptr->ffall)
 	{
 #ifdef JP
-		msg_format("空を飛ばないと%sの上には行けない。", f_name + f_ptr->name);
+		msg_format("空を飛ばないと%sの上には行けない。", f_name + f_info[get_feat_mimic(c_ptr)].name);
 #else
-		msg_format("You need to fly to go through the %s.", f_name + f_ptr->name);
+		msg_format("You need to fly to go through the %s.", f_name + f_info[get_feat_mimic(c_ptr)].name);
 #endif
 
 		energy_use = 0;

@@ -5704,7 +5704,8 @@ bool do_riding(bool force)
 
 		if (!player_can_ride_aux(c_ptr, TRUE))
 		{
-			feature_type *f_ptr = &f_info[c_ptr->feat];
+			/* Feature code (applying "mimic" field) */
+			feature_type *f_ptr = &f_info[get_feat_mimic(c_ptr)];
 #ifdef JP
 			msg_format("そのモンスターは%sの%sにいる。", f_name + f_ptr->name,
 			           (!have_flag(f_ptr->flags, FF_MOVE) ||

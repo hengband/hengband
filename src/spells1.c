@@ -827,6 +827,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 			if (have_flag(f_ptr->flags, FF_SPIKE))
 			{
 				s16b old_mimic = c_ptr->mimic;
+				feature_type *mimic_f_ptr = &f_info[get_feat_mimic(c_ptr)];
 
 				cave_alter_feat(y, x, FF_SPIKE);
 
@@ -839,13 +840,13 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 				lite_spot(y, x);
 
 				/* Check line of sight */
-				if (known && !c_ptr->mimic)
+				if (known && have_flag(mimic_f_ptr->flags, FF_OPEN))
 				{
 					/* Message */
 #ifdef JP
-					msg_format("%sに何かがつっかえて開かなくなった。", f_name + f_ptr->name);
+					msg_format("%sに何かがつっかえて開かなくなった。", f_name + mimic_f_ptr->name);
 #else
-					msg_format("The %s seems stuck.", f_name + f_ptr->name);
+					msg_format("The %s seems stuck.", f_name + mimic_f_ptr->name);
 #endif
 
 					obvious = TRUE;
@@ -859,15 +860,13 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 		{
 			if (have_flag(f_ptr->flags, FF_HURT_ROCK))
 			{
-				cptr name = f_name + f_ptr->name;
-
 				/* Message */
 				if (known && (c_ptr->info & (CAVE_MARK)))
 				{
 #ifdef JP
-					msg_format("%sが溶けて泥になった！", name);
+					msg_format("%sが溶けて泥になった！", f_name + f_info[get_feat_mimic(c_ptr)].name);
 #else
-					msg_format("The %s turns into mud!", name);
+					msg_format("The %s turns into mud!", f_name + f_info[get_feat_mimic(c_ptr)].name);
 #endif
 
 					obvious = TRUE;
