@@ -1193,7 +1193,11 @@ void do_cmd_messages(int num_now)
 
 	char shower[80];
 	char finder[80];
+	int wid, hgt;
 
+
+	/* Get size */
+	Term_get_size(&wid, &hgt);
 
 	/* Wipe finder */
 	strcpy(finder, "");
@@ -1221,7 +1225,7 @@ void do_cmd_messages(int num_now)
 		Term_clear();
 
 		/* Dump up to 20 lines of messages */
-		for (j = 0; (j < 20) && (i + j < n); j++)
+		for (j = 0; (j < hgt - 4) && (i + j < n); j++)
 		{
 			cptr msg = message_str(i+j);
 
@@ -1229,7 +1233,7 @@ void do_cmd_messages(int num_now)
 			msg = (strlen(msg) >= q) ? (msg + q) : "";
 
 			/* Dump the messages, bottom to top */
-			Term_putstr(0, 21-j, -1, (bool)(i+j < num_now ? TERM_WHITE : TERM_SLATE), msg);
+			Term_putstr(0, hgt-j-3, -1, (bool)(i+j < num_now ? TERM_WHITE : TERM_SLATE), msg);
 
 			/* Hilite "shower" */
 			if (shower[0])
@@ -1263,9 +1267,9 @@ void do_cmd_messages(int num_now)
 
 		/* Display prompt (not very informative) */
 #ifdef JP
-		prt("[ 'p' で更に古いもの, 'n' で更に新しいもの, '/' で検索, ESC で中断 ]", 23, 0);
+		prt("[ 'p' で更に古いもの, 'n' で更に新しいもの, '/' で検索, ESC で中断 ]", hgt - 1, 0);
 #else
-		prt("[Press 'p' for older, 'n' for newer, ..., or ESCAPE]", 23, 0);
+		prt("[Press 'p' for older, 'n' for newer, ..., or ESCAPE]", hgt - 1, 0);
 #endif
 
 
@@ -1303,9 +1307,9 @@ void do_cmd_messages(int num_now)
 		{
 			/* Prompt */
 #ifdef JP
-			prt("強調: ", 23, 0);
+			prt("強調: ", hgt - 1, 0);
 #else
-			prt("Show: ", 23, 0);
+			prt("Show: ", hgt - 1, 0);
 #endif
 
 
@@ -1323,9 +1327,9 @@ void do_cmd_messages(int num_now)
 
 			/* Prompt */
 #ifdef JP
-			prt("検索: ", 23, 0);
+			prt("検索: ", hgt - 1, 0);
 #else
-			prt("Find: ", 23, 0);
+			prt("Find: ", hgt - 1, 0);
 #endif
 
 
