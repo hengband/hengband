@@ -5796,13 +5796,13 @@ cptr your_alignment(void)
 	else if (p_ptr->align > -151) return "中悪";
 	else return "大悪";
 #else
-	if (p_ptr->align > 150) return "lawful";
-	else if (p_ptr->align > 50) return "good";
-	else if (p_ptr->align > 10) return "neutral good";
-	else if (p_ptr->align > -11) return "neutral";
-	else if (p_ptr->align > -51) return "neutral evil";
-	else if (p_ptr->align > -151) return "evil";
-	else return "chaotic";
+	if (p_ptr->align > 150) return "Lawful";
+	else if (p_ptr->align > 50) return "Good";
+	else if (p_ptr->align > 10) return "Neutral Good";
+	else if (p_ptr->align > -11) return "Neutral";
+	else if (p_ptr->align > -51) return "Neutral Evil";
+	else if (p_ptr->align > -151) return "Evil";
+	else return "Chaotic";
 #endif
 }
 

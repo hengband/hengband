@@ -1570,7 +1570,7 @@ static void prt_num2(cptr header, cptr tailer, int num, int row, int col, byte c
 #define ENTRY_MAX_EXP 13
 #define ENTRY_EXP_TO_ADV 14
 #define ENTRY_GOLD 15
-#define ENTRY_TURN 16
+#define ENTRY_DAY 16
 #define ENTRY_HP 17
 #define ENTRY_SP 18
 #define ENTRY_PLAY_TIME 19
@@ -1625,7 +1625,7 @@ static struct
 	{29, 15, 21, "最大経験"},
 	{29, 16, 21, "次レベル"},
 	{29, 17, 21, "所持金"},
-	{29, 19, 21, "ターン数"},
+	{29, 19, 21, "日付"},
 	{29, 10, 21, "ＨＰ"},
 	{29, 11, 21, "ＭＰ"},
 	{29, 20, 21, "プレイ時間"},
@@ -1651,7 +1651,7 @@ static struct
 	{29,  4, 21, "身長"},
 	{29,  5, 21, "体重"},
 	{29,  6, 21, "社会的地位"},
-	{29,  8, 21, "属性"},
+	{29,  7, 21, "属性"},
 };
 #else
 = {
@@ -1662,8 +1662,8 @@ static struct
 	{ 1, 11, 25, "Left hand"},
 	{ 1, 11, 25, "Right hand"},
 	{ 1, 11, 25, "Posture"},
-	{ 1, 15, 25, "Shoot"},
-	{ 1, 16, 25, "Shoot Power"},
+	{ 1, 15, 25, "Shooting"},
+	{ 1, 16, 25, "Multiplier"},
 	{01, 20, 25, "Speed"},
 	{ 1, 19, 25, "AC"},
 	{29, 13, 21, "Level"},
@@ -1671,7 +1671,7 @@ static struct
 	{29, 15, 21, "Max Exp"},
 	{29, 16, 21, "Exp to Adv"},
 	{29, 17, 21, "Gold"},
-	{29, 19, 21, "Total turn"},
+	{29, 19, 21, "Time"},
 	{29, 10, 21, "Hit point"},
 	{29, 11, 21, "SP (Mana)"},
 	{29, 20, 21, "Play time"},
@@ -1685,7 +1685,7 @@ static struct
 	{54, 18, -1, "Magic Device: "},
 	{01, 12, 25, "Blows/Round"},
 	{01, 17, 25, "Shots/Round"},
-	{01, 13, 25, "Wpn.dmg/Rnd"},
+	{01, 13, 25, "AverageDmg/Rnd"},
 	{54, 20, -1, "Infra-Vision: "},
 	{26,  1, -1, "Name  : "},
 	{ 1,  3, -1, "Sex      : "},
@@ -1697,7 +1697,7 @@ static struct
 	{29,  4, 21, "Height"},
 	{29,  5, 21, "Weight"},
 	{29,  6, 21, "Social Class"},
-	{29,  8, 21, "Alignment"},
+	{29,  7, 21, "Align"},
 };
 #endif
 
@@ -1911,8 +1911,27 @@ static void display_player_middle(void)
 	/* Dump gold */
 	display_player_one_line(ENTRY_GOLD, format("%ld", p_ptr->au), TERM_L_GREEN);
 
-	/* Dump turn */
-	display_player_one_line(ENTRY_TURN, format("%ld", MAX(turn_real(turn),0)), TERM_L_GREEN);
+	/* Dump Day */
+	{
+		s32b len = 20L * TOWN_DAWN;
+		s32b tick = turn % len + len / 4;
+
+		sprintf(buf, 
+#ifdef JP
+			"%2d日目  %d:%02d", 
+#else
+			"Day %d  %d:%02d", 
+#endif
+			((p_ptr->prace == RACE_VAMPIRE) ||
+			 (p_ptr->prace == RACE_SKELETON) ||
+			 (p_ptr->prace == RACE_ZOMBIE) ||
+			 (p_ptr->prace == RACE_SPECTRE))
+			? (turn - (15L * TOWN_DAWN)) / len + 1
+			: (turn + (5L * TOWN_DAWN))/ len + 1,
+			(24 * tick / len) % 24,
+			(1440 * tick / len) % 60);
+	}
+	display_player_one_line(ENTRY_DAY, buf, TERM_L_GREEN);
 
 	/* Dump hit point */
 	if (p_ptr->chp >= p_ptr->mhp) 
