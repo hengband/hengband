@@ -1,3 +1,72 @@
+2002-01-27  Takeshi Mogami  <mogami@akiru>
+
+	* src/report.c:
+	タイルグラフィックモードでは、make_screen_dump()は何もしないで帰える
+	ように修正。
+
+2002-01-27  hoge  <hoge@akiru>
+
+	* src/monster2.c: バノルパパッチ。
+	このバージョンで1.0.9とする。
+
+2002-01-26  habu  <habu@akiru>
+
+	* src/cmd1.c, src/cmd2.c:
+	typo fix.
+
+	* src/report.c:
+	作ったダンプを再度buf_sprintfに食わせて"%%"などが変に解釈されてしまっていたバグを修正。
+
+2002-01-26  Takeshi Mogami  <mogami@akiru>
+
+	* lib/file/a_cursed_j.txt, lib/file/w_cursed_j.txt, lib/file/w_low_j.txt:
+	変なの削除。
+
+	* src/files.c:
+	'C'で、乗馬中の速度の表記にちゃんと対応。
+
+2002-01-26  hoge  <hoge@akiru>
+
+	* src/load.c, src/spells2.c, src/xtra1.c, src/xtra2.c, configure.in, lib/file/news.txt, lib/file/news_j.txt, lib/xtra/graf/Makefile.am, src/artifact.c, src/birth.c, src/cave.c, src/cmd1.c, src/cmd2.c, src/cmd6.c, src/dungeon.c, src/files.c:
+	バージョン番号あちこち変更
+	☆のxtra4使わず
+	クロスボウは飛距離短くて使いやすい
+	アーチャーはクロスボウ最大3回
+	@nothereさんのパッチ各種
+
+2002-01-26  Takeshi Mogami  <mogami@akiru>
+
+	* src/util.c:
+	知らないマクロトリガー名( \[hogehoge] とか ) に出会うと変なマクロトリガーを
+	登録してしまって、特定のキー入力の反応が1秒近く遅くなるバグを修正。
+
+2002-01-26  habu  <habu@akiru>
+
+	* src/cmd1.c, src/cmd2.c, src/xtra1.c:
+	武器熟練度関係のソースが汚ないので少し修正して見やすくした。
+
+2002-01-26  henkma  <henkma@akiru>
+
+	* src/xtra2.c:
+	周囲を調べるコマンドで、 岩石':'がひっかからないように変更。
+
+2002-01-26  iks  <iks@akiru>
+
+	* lib/file/w_low_j.txt:
+	登録数の数え間違いの修正。
+
+	* lib/file/a_cursed_j.txt, lib/file/a_high_j.txt, lib/file/a_low_j.txt, lib/file/a_med_j.txt, lib/file/w_cursed_j.txt, lib/file/w_high_j.txt, lib/file/w_low_j.txt, lib/file/w_med_j.txt:
+	ランダムアーティファクト名を追加/修正
+
+2002-01-26  habu  <habu@akiru>
+
+	* src/report.c:
+	直接'\0'を書く方法ではバッファをオーバーする可能性があるので、buf_appendを使うようにした。
+
+2002-01-26  Takeshi Mogami  <mogami@akiru>
+
+	* Changelogs: 更新
+
 2002-01-26  habu  <habu@akiru>
 
 	* src/report.c:
