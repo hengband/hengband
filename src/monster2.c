@@ -1236,10 +1236,10 @@ s16b get_mon_num(int level)
 
 	if (level > MAX_DEPTH - 1) level = MAX_DEPTH - 1;
 
-	if ((dungeon_turn > hoge*10000L) && !level)
+	if ((dungeon_turn > hoge*(TURNS_PER_TICK*500L)) && !level)
 	{
-		pls_kakuritu = MAX(2, NASTY_MON-((dungeon_turn/50000L-hoge/10)));
-		pls_level = MIN(8,3 + dungeon_turn/400000L-hoge/40);
+		pls_kakuritu = MAX(2, NASTY_MON-((dungeon_turn/(TURNS_PER_TICK*2500L)-hoge/10)));
+		pls_level = MIN(8,3 + dungeon_turn/(TURNS_PER_TICK*20000L)-hoge/40);
 	}
 	else
 	{
