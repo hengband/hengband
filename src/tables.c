@@ -7319,11 +7319,11 @@ option_type option_info[] =
 #endif
 
 #ifdef JP
-	{ &record_maxdeapth,            TRUE,  OPT_PAGE_PLAYRECORD, 4, 16,
-	"record_maxdeapth",             "最深階を更新したときに記録する" },
+	{ &record_maxdepth,             TRUE,  OPT_PAGE_PLAYRECORD, 4, 16,
+	"record_maxdepth",              "最深階を更新したときに記録する" },
 #else
-	{ &record_maxdeapth,            TRUE,  OPT_PAGE_PLAYRECORD, 4, 16,
-	"record_maxdeapth",             "Record movements to deepest level" },
+	{ &record_maxdepth,             TRUE,  OPT_PAGE_PLAYRECORD, 4, 16,
+	"record_maxdepth",              "Record movements to deepest level" },
 #endif
 
 #ifdef JP

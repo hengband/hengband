@@ -644,8 +644,8 @@ Record random quests    [record_rand_quest]
     If this option is set, result of every random quests will be
     written in the Play-record.
 
-***** <record_maxdeapth>
-Record movements to deepest level    [record_maxdeapth]
+***** <record_maxdepth>
+Record movements to deepest level    [record_maxdepth]
     If this option is set, deepest level will be written in the
     Play-record when you reached new deepest level.
 

@@ -325,7 +325,7 @@ bool record_rand_art;	/* Record random artifacts */
 bool record_destroy_uniq;	/* Record when destroy unique monster */
 bool record_fix_quest;	/* Record fixed quests */
 bool record_rand_quest;	/* Record random quests */
-bool record_maxdeapth;	/* Record movements to deepest level */
+bool record_maxdepth;	/* Record movements to deepest level */
 bool record_stair;	/* Record recall and stair movements */
 bool record_buy;	/* Record purchased items */
 bool record_sell;	/* Record sold items */
@@ -1034,7 +1034,7 @@ bool record_rand_art;
 bool record_destroy_uniq;
 bool record_fix_quest;
 bool record_rand_quest;
-bool record_maxdeapth;
+bool record_maxdepth;
 bool record_stair;
 bool record_buy;
 bool record_sell;

@@ -138,7 +138,7 @@ Y:record_rand_art
 Y:record_destroy_uniq
 Y:record_fix_quest
 Y:record_rand_quest
-Y:record_maxdeapth
+Y:record_maxdepth
 Y:record_stair
 Y:record_buy
 X:record_sell

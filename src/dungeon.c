@@ -6319,7 +6319,7 @@ static void dungeon(bool load_game)
 	if ((max_dlv[dungeon_type] < dun_level) && !p_ptr->inside_quest)
 	{
 		max_dlv[dungeon_type] = dun_level;
-		if (record_maxdeapth) do_cmd_write_nikki(NIKKI_MAXDEAPTH, dun_level, NULL);
+		if (record_maxdepth) do_cmd_write_nikki(NIKKI_MAXDEAPTH, dun_level, NULL);
 	}
 
 	/* Validate the panel */

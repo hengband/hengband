@@ -842,7 +842,7 @@ if (get_check("ここは最深到達階より浅い階です。この階に戻って来ますか？ "))
 #endif
 		{
 			max_dlv[dungeon_type] = dun_level;
-			if (record_maxdeapth)
+			if (record_maxdepth)
 #ifdef JP
 				do_cmd_write_nikki(NIKKI_TRUMP, dungeon_type, "帰還のときに");
 #else
@@ -945,7 +945,7 @@ sprintf(ppp, "何階にセットしますか (%d-%d):", d_info[select_dungeon].mindepth, m
 
 		max_dlv[select_dungeon] = dummy;
 
-		if (record_maxdeapth)
+		if (record_maxdepth)
 #ifdef JP
 			do_cmd_write_nikki(NIKKI_TRUMP, select_dungeon, "フロア・リセットで");
 #else
