@@ -3975,7 +3975,7 @@ static bool cast_crusade_spell(int spell)
 		break;
 	case 6:
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_blast(GF_LITE, dir, 3+((plev-1)/8), 3, 10, 3);
+		fire_blast(GF_LITE, dir, 3+((plev-1)/9), 3, 8, 3);
 		break;
 	case 7:
 		(void)set_cut(0);
@@ -3986,12 +3986,7 @@ static bool cast_crusade_spell(int spell)
 		if (!get_aim_dir(&dir)) return FALSE;
 		(void)fire_ball(GF_AWAY_EVIL, dir, MAX_SIGHT*5, 0);
 		break;
-	case 9: /* Exorcism */
-		(void)dispel_undead(randint1(plev));
-		(void)dispel_demons(randint1(plev));
-		(void)turn_evil(plev);
-		break;
-	case 10: /* Holy Orb */
+	case 9: /* Holy Orb */
 		if (!get_aim_dir(&dir)) return FALSE;
 
 		fire_ball(GF_HOLY_FIRE, dir,
@@ -4001,6 +3996,11 @@ static bool cast_crusade_spell(int spell)
 			     p_ptr->pclass == CLASS_SORCERER) ? 2 : 4))),
 		          ((plev < 30) ? 2 : 3));
 
+		break;
+	case 10: /* Exorcism */
+		(void)dispel_undead(randint1(plev));
+		(void)dispel_demons(randint1(plev));
+		(void)turn_evil(plev);
 		break;
 	case 11: /* Remove Curse */
 		if (remove_curse())
@@ -4193,7 +4193,7 @@ msg_print("神聖な力が邪悪を打ち払った！");
 				    !in_disintegration_range(ty, tx, y, x))
 					continue;
 
-				project(0, 2, y, x, plev * 4, GF_DISINTEGRATE, PROJECT_JUMP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
+				project(0, 2, y, x, plev * 3+25, GF_DISINTEGRATE, PROJECT_JUMP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
 			}
 		}
 		break;

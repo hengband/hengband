@@ -2371,7 +2371,7 @@ bool set_tim_eyeeye(int v, bool do_dec)
 		else if (!p_ptr->tim_eyeeye)
 		{
 #ifdef JP
-msg_print("nanka。");
+msg_print("法の守り手になった気がした！");
 #else
 			msg_print("nanka!");
 #endif
@@ -2386,7 +2386,7 @@ msg_print("nanka。");
 		if (p_ptr->tim_eyeeye)
 		{
 #ifdef JP
-msg_print("nanka。");
+msg_print("懲罰を執行することができなくなった。");
 #else
 			msg_print("nanka.");
 #endif

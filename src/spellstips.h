@@ -354,8 +354,8 @@ static cptr spell_tips[VALID_REALM][32] =
 		"傷、毒、朦朧から全快する。",
 
 		"邪悪なモンスター1体をテレポートさせる。抵抗されると無効。",
-		"視界内の全てのアンデッド及び悪魔にダメージを与え、邪悪なモンスターを恐怖させる。",
 		"聖なる力をもつ宝珠を放つ。邪悪なモンスターに対して大きなダメージを与えるが、善良なモンスターには効果がない。",
+		"視界内の全てのアンデッド及び悪魔にダメージを与え、邪悪なモンスターを恐怖させる。",
 		"アイテムにかかった弱い呪いを解除する。",
 		"一定時間、透明なものが見えるようになる。",
 		"邪悪なモンスターの攻撃を防ぐバリアを張る。",
@@ -813,8 +813,8 @@ static cptr spell_tips[VALID_REALM][32] =
 		"heals all cut, stun and poison status.",
 		
 		"attempts to teleport an evil monster away.",
-		"damages all undead and demons in sight, and scares all evil monsters in sight.",
 		"fires a ball with holy power. hurts evil monsters greatly, but don't effect good monsters.",
+		"damages all undead and demons in sight, and scares all evil monsters in sight.",
 		"removes normal curses from equipped items.",
 		"gives see invisible for a while.",
 		"gives aura which protect you from evil monster's physical attack.",
