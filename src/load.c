@@ -1832,7 +1832,7 @@ note(format("¤ÎÃæ", tmp16s));
 		p_ptr->multishadow = 0;
 		p_ptr->dustrobe = 0;
 
-		p_ptr->chaos_patron = get_chaos_patron();
+		p_ptr->chaos_patron = ((p_ptr->age + p_ptr->sc) % MAX_PATRON);
 		p_ptr->muta1 = 0;
 		p_ptr->muta2 = 0;
 		p_ptr->muta3 = 0;

@@ -4726,6 +4726,67 @@ take_hit(DAMAGE_LOSELIFE, change / 2, "変化した傷", -1);
 }
 
 
+/*
+ * Change player race
+ */
+void change_race(int new_race, cptr effect_msg)
+{
+	cptr title = race_info[new_race].title;
+
+#ifdef JP
+	msg_format("あなたは%s%sに変化した！", effect_msg, title);
+#else
+	msg_format("You turn into %s %s%s!", (!effect_msg[0] && is_a_vowel(title[0]) ? "an" : "a"), effect_msg, title);
+#endif
+
+	chg_virtue(V_CHANCE, 2);
+
+	if (p_ptr->prace < 32)
+	{
+		p_ptr->old_race1 |= 1L << p_ptr->prace;
+	}
+	else
+	{
+		p_ptr->old_race2 |= 1L << (p_ptr->prace-32);
+	}
+	p_ptr->prace = new_race;
+	rp_ptr = &race_info[p_ptr->prace];
+
+	/* Experience factor */
+	p_ptr->expfact = rp_ptr->r_exp + cp_ptr->c_exp;
+
+	/*
+	 * The speed bonus of Klackons and Sprites are disabled
+	 * and the experience penalty is decreased.
+	 */
+	if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_NINJA)) && ((p_ptr->prace == RACE_KLACKON) || (p_ptr->prace == RACE_SPRITE)))
+		p_ptr->expfact -= 15;
+
+	/* Get character's height and weight */
+	get_height_weight();
+
+	/* Hitdice */
+	if (p_ptr->pclass == CLASS_SORCERER)
+		p_ptr->hitdie = rp_ptr->r_mhp/2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
+	else
+		p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
+
+	do_cmd_rerate(FALSE);
+
+	/* The experience level may be modified */
+	check_experience();
+
+	p_ptr->redraw |= (PR_BASIC);
+
+	p_ptr->update |= (PU_BONUS);
+
+	handle_stuff();
+
+	/* Player's graphic tile may change */
+	lite_spot(py, px);
+}
+
+
 void do_poly_self(void)
 {
 	int power = p_ptr->lev;
@@ -4741,7 +4802,7 @@ msg_print("あなたは変化の訪れを感じた...");
 	if ((power > randint0(20)) && one_in_(3) && (p_ptr->prace != RACE_ANDROID))
 	{
 		char effect_msg[80] = "";
-		int new_race, expfact, goalexpfact, h_percent;
+		int new_race, expfact, goalexpfact;
 
 		/* Some form of racial polymorph... */
 		power -= 10;
@@ -4848,78 +4909,7 @@ msg_print("奇妙なくらい普通になった気がする。");
 		}
 		while (((new_race == p_ptr->prace) && (expfact > goalexpfact)) || (new_race == RACE_ANDROID));
 
-#ifdef JP
-		msg_format("あなたは%s%sに変化した！", effect_msg,
-				race_info[new_race].title);
-#else
-		if (effect_msg[0])
-		{
-			msg_format("You turn into a%s %s!",
-				((new_race == RACE_AMBERITE || new_race == RACE_ELF
-				|| new_race == RACE_IMP) ? "n" : ""),
-				race_info[new_race].title);
-		}
-		else
-		{
-			msg_format("You turn into a %s%s!", effect_msg,
-				race_info[new_race].title);
-		}
-#endif
-
-		chg_virtue(V_CHANCE, 2);
-
-		if (p_ptr->prace < 32)
-		{
-			p_ptr->old_race1 |= 1L << p_ptr->prace;
-		}
-		else
-		{
-			p_ptr->old_race2 |= 1L << (p_ptr->prace-32);
-		}
-		p_ptr->prace = new_race;
-		rp_ptr = &race_info[p_ptr->prace];
-
-		/* Experience factor */
-		p_ptr->expfact = rp_ptr->r_exp + cp_ptr->c_exp;
-
-		if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_NINJA)) && ((p_ptr->prace == RACE_KLACKON) || (p_ptr->prace == RACE_SPRITE)))
-			p_ptr->expfact -= 15;
-
-
-		/* Calculate the height/weight for males */
-		if (p_ptr->psex == SEX_MALE)
-		{
-			p_ptr->ht = randnor(rp_ptr->m_b_ht, rp_ptr->m_m_ht);
-			h_percent = (int)(p_ptr->ht) * 100 / (int)(rp_ptr->m_b_ht);
-			p_ptr->wt = randnor((int)(rp_ptr->m_b_wt) * h_percent /100
-					    , (int)(rp_ptr->m_m_wt) * h_percent / 300 );
-		}
-
-		/* Calculate the height/weight for females */
-		else if (p_ptr->psex == SEX_FEMALE)
-		{
-			p_ptr->ht = randnor(rp_ptr->f_b_ht, rp_ptr->f_m_ht);
-			h_percent = (int)(p_ptr->ht) * 100 / (int)(rp_ptr->f_b_ht);
-			p_ptr->wt = randnor((int)(rp_ptr->f_b_wt) * h_percent /100
-					    , (int)(rp_ptr->f_m_wt) * h_percent / 300 );
-		}
-
-		check_experience();
-
-		/* Hitdice */
-		if (p_ptr->pclass == CLASS_SORCERER)
-			p_ptr->hitdie = rp_ptr->r_mhp/2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
-		else
-			p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
-
-		do_cmd_rerate(FALSE);
-
-		p_ptr->redraw |= (PR_BASIC);
-
-		p_ptr->update |= (PU_BONUS);
-
-		handle_stuff();
-		lite_spot(py, px);
+		change_race(new_race, effect_msg);
 	}
 
 	if ((power > randint0(30)) && one_in_(6))

@@ -4595,12 +4595,6 @@ msg_print("あなたは混乱している。");
 }
 
 
-int get_chaos_patron(void)
-{
-	return ((p_ptr->age + p_ptr->sc) % MAX_PATRON);
-}
-
-
 void gain_level_reward(int chosen_reward)
 {
 	object_type *q_ptr;

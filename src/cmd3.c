@@ -557,63 +557,11 @@ msg_print("クエストを達成した！");
 		o_ptr->ident |= (IDENT_SENSE);
 	}
 
+	/* The Stone Mask make the player turn into a vampire! */
 	if ((o_ptr->name1 == ART_STONEMASK) && (p_ptr->prace != RACE_VAMPIRE) && (p_ptr->prace != RACE_ANDROID))
 	{
-		int h_percent;
-		if (p_ptr->prace < 32)
-		{
-			p_ptr->old_race1 |= 1L << p_ptr->prace;
-		}
-		else
-		{
-			p_ptr->old_race2 |= 1L << (p_ptr->prace-32);
-		}
-		p_ptr->prace = RACE_VAMPIRE;
-#ifdef JP
-		msg_format("あなたは吸血鬼に変化した！");
-#else
-		msg_format("You polymorphed into a vampire!");
-#endif
-
-		rp_ptr = &race_info[p_ptr->prace];
-
-		/* Experience factor */
-		p_ptr->expfact = rp_ptr->r_exp + cp_ptr->c_exp;
-
-		/* Calculate the height/weight for males */
-		if (p_ptr->psex == SEX_MALE)
-		{
-			p_ptr->ht = randnor(rp_ptr->m_b_ht, rp_ptr->m_m_ht);
-			h_percent = (int)(p_ptr->ht) * 100 / (int)(rp_ptr->m_b_ht);
-			p_ptr->wt = randnor((int)(rp_ptr->m_b_wt) * h_percent /100
-					    , (int)(rp_ptr->m_m_wt) * h_percent / 300 );
-		}
-
-		/* Calculate the height/weight for females */
-		else if (p_ptr->psex == SEX_FEMALE)
-		{
-			p_ptr->ht = randnor(rp_ptr->f_b_ht, rp_ptr->f_m_ht);
-			h_percent = (int)(p_ptr->ht) * 100 / (int)(rp_ptr->f_b_ht);
-			p_ptr->wt = randnor((int)(rp_ptr->f_b_wt) * h_percent /100
-					    , (int)(rp_ptr->f_m_wt) * h_percent / 300 );
-		}
-
-		check_experience();
-
-		/* Hitdice */
-		if (p_ptr->pclass == CLASS_SORCERER)
-			p_ptr->hitdie = rp_ptr->r_mhp/2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
-		else
-			p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
-
-		do_cmd_rerate(FALSE);
-
-		p_ptr->redraw |= (PR_BASIC);
-
-		p_ptr->update |= (PU_BONUS);
-
-		handle_stuff();
-		lite_spot(py, px);
+		/* Turn into a vampire */
+		change_race(RACE_VAMPIRE, "");
 	}
 
 	/* Recalculate bonuses */

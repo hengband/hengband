@@ -2030,7 +2030,12 @@ static char realm_subinfo[VALID_REALM][41] =
  */
 static s16b stat_limit[6];
 
-static s16b chara_limit[6];
+static struct {
+	s16b agemin, agemax;
+	s16b htmin, htmax;
+	s16b wtmin, wtmax;
+	s16b scmin, scmax;
+} chara_limit;
 
 /*
  * Autoroll matches
@@ -3032,35 +3037,45 @@ static void get_history(void)
 
 
 /*
+ * Get character's height and weight
+ */
+void get_height_weight(void)
+{
+	int h_percent; /* 身長が平均にくらべてどのくらい違うか. */
+
+	/* Calculate the height/weight for males */
+	if (p_ptr->psex == SEX_MALE)
+	{
+		p_ptr->ht = randnor(rp_ptr->m_b_ht, rp_ptr->m_m_ht);
+		h_percent = (int)(p_ptr->ht) * 100 / (int)(rp_ptr->m_b_ht);
+		p_ptr->wt = randnor((int)(rp_ptr->m_b_wt) * h_percent /100
+				    , (int)(rp_ptr->m_m_wt) * h_percent / 300 );
+	}
+  
+	/* Calculate the height/weight for females */
+	else if (p_ptr->psex == SEX_FEMALE)
+	{
+		p_ptr->ht = randnor(rp_ptr->f_b_ht, rp_ptr->f_m_ht);
+		h_percent = (int)(p_ptr->ht) * 100 / (int)(rp_ptr->f_b_ht);
+		p_ptr->wt = randnor((int)(rp_ptr->f_b_wt) * h_percent /100
+				    , (int)(rp_ptr->f_m_wt) * h_percent / 300 );
+	}
+}
+
+
+/*
  * Computes character's age, height, and weight
  * by henkma
  */
 static void get_ahw(void)
 {
-  int h_percent; /* 身長が平均にくらべてどのくらい違うか. */
+	/* Get character's age */
+	p_ptr->age = rp_ptr->b_age + randint1(rp_ptr->m_age);
 
-
-  /* Calculate the age */
-  p_ptr->age = rp_ptr->b_age + randint1(rp_ptr->m_age);
-  
-  /* Calculate the height/weight for males */
-  if (p_ptr->psex == SEX_MALE)
-	{
-	  p_ptr->ht = randnor(rp_ptr->m_b_ht, rp_ptr->m_m_ht);
-	  h_percent = (int)(p_ptr->ht) * 100 / (int)(rp_ptr->m_b_ht);
-	  p_ptr->wt = randnor((int)(rp_ptr->m_b_wt) * h_percent /100
-						  , (int)(rp_ptr->m_m_wt) * h_percent / 300 );
-	}
-  
-  /* Calculate the height/weight for females */
-  else if (p_ptr->psex == SEX_FEMALE)
-	{
-	  p_ptr->ht = randnor(rp_ptr->f_b_ht, rp_ptr->f_m_ht);
-	  h_percent = (int)(p_ptr->ht) * 100 / (int)(rp_ptr->f_b_ht);
-	  p_ptr->wt = randnor((int)(rp_ptr->f_b_wt) * h_percent /100
-						  , (int)(rp_ptr->f_m_wt) * h_percent / 300 );
-	}
+	/* Get character's height and weight */
+	get_height_weight();
 }
+
 
 /*
  * Get the player's starting money
@@ -4936,17 +4951,21 @@ static bool get_stat_limits(void)
 #ifdef ALLOW_AUTOROLLER
 static bool get_chara_limits(void)
 {
+#define MAXITEMS 8
+
 	int i, j, m, cs, os;
-	int mval[6], cval[6];
+	int mval[MAXITEMS], cval[MAXITEMS];
 	int max_percent, min_percent;
 	char c;
 	char buf[80], cur[80];
-	char param[3][80] = {
+	cptr itemname[] = {
 #ifdef JP
+		"年齢",
 		"身長(インチ)",
 		"体重(ポンド)",
 		"社会的地位"
 #else
+		"age",
 		"height",
 		"weight",
 		"social class"
@@ -4985,31 +5004,38 @@ static bool get_chara_limits(void)
 #endif
 
 	/* Output the maximum stats */
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < MAXITEMS; i++)
 	{
 		/* Obtain the "maximal" stat */
 		switch (i)
 		{
-		case 0:	/* Minimum height */
+		case 0:	/* Minimum age */
+			m = rp_ptr->b_age + 1;
+			break;
+		case 1:	/* Maximum age */
+			m = rp_ptr->b_age + rp_ptr->m_age;
+			break;
+
+		case 2:	/* Minimum height */
 			if (p_ptr->psex == SEX_MALE) m = rp_ptr->m_b_ht-rp_ptr->m_m_ht*4+1;
 			else m = rp_ptr->f_b_ht-rp_ptr->f_m_ht*4+1;
 			break;
-		case 1:	/* Maximum height */
+		case 3:	/* Maximum height */
 			if (p_ptr->psex == SEX_MALE) m = rp_ptr->m_b_ht+rp_ptr->m_m_ht*4-1;
 			else m = rp_ptr->f_b_ht+rp_ptr->f_m_ht*4-1;
 			break;
-		case 2:	/* Minimum weight */
+		case 4:	/* Minimum weight */
 			if (p_ptr->psex == SEX_MALE) m = (rp_ptr->m_b_wt * min_percent / 100) - (rp_ptr->m_m_wt * min_percent / 75) +1;
 			else m = (rp_ptr->f_b_wt * min_percent / 100) - (rp_ptr->f_m_wt * min_percent / 75) +1;
 			break;
-		case 3:	/* Maximum weight */
+		case 5:	/* Maximum weight */
 			if (p_ptr->psex == SEX_MALE) m = (rp_ptr->m_b_wt * max_percent / 100) + (rp_ptr->m_m_wt * max_percent / 75) -1;
 			else m = (rp_ptr->f_b_wt * max_percent / 100) + (rp_ptr->f_m_wt * max_percent / 75) -1;
 			break;
-		case 4:	/* Minimum social class */
+		case 6:	/* Minimum social class */
 			m = 1;
 			break;
-		case 5:	/* Maximum social class */
+		case 7:	/* Maximum social class */
 			m = 100;
 			break;
 		default:
@@ -5022,10 +5048,10 @@ static bool get_chara_limits(void)
 		cval[i] = m;
 	}
 
-	for (i = 0; i < 3; i++)
+	for (i = 0; i < 4; i++)
 	{
 		/* Prepare a prompt */
-		sprintf(buf, "%-12s (%3d - %3d)", param[i], mval[i*2], mval[i*2+1]);
+		sprintf(buf, "%-12s (%3d - %3d)", itemname[i], mval[i*2], mval[i*2+1]);
 
 		/* Dump the prompt */
 		put_str(buf, 14 + i, 20);
@@ -5039,30 +5065,29 @@ static bool get_chara_limits(void)
 	
 	/* Get a minimum stat */
 	cs = 0;
-	os = 6;
+	os = MAXITEMS;
 	while (TRUE)
 	{
 		/* Move Cursol */
 		if (cs != os)
 		{
-			if(os == 6)
-			{
 #ifdef JP
-				c_put_str(TERM_WHITE, "決定する", 18, 35);
+			const char accept[] = "決定する";
 #else
-				c_put_str(TERM_WHITE, "Accept", 18, 35);
+			const char accept[] = "Accept";
 #endif
+			if(os == MAXITEMS)
+			{
+				c_put_str(TERM_WHITE, accept, 19, 35);
 			}
-			else if(os < 6)
-				c_put_str(TERM_WHITE, cur, 14 + os/2, 45 + 8 * (os%2));
-			
-			if(cs == 6)
+			else
 			{
-#ifdef JP
-				c_put_str(TERM_YELLOW, "決定する", 18, 35);
-#else
-				c_put_str(TERM_YELLOW, "Accept", 18, 35);
-#endif
+				c_put_str(TERM_WHITE, cur, 14 + os/2, 45 + 8 * (os%2));
+			}
+			
+			if(cs == MAXITEMS)
+			{
+				c_put_str(TERM_YELLOW, accept, 19, 35);
 			}
 			else
 			{
@@ -5085,7 +5110,7 @@ static bool get_chara_limits(void)
 		case ' ':
 		case '\r':
 		case '\n':
-			if(cs == 6) break;
+			if(cs == MAXITEMS) break;
 			cs++;
 			c = '6';
 			break;
@@ -5095,8 +5120,8 @@ static bool get_chara_limits(void)
 			break;
 		case '2':
 		case 'j':
-			if (cs < 6) cs += 2;
-			if (cs > 6) cs = 6;
+			if (cs < MAXITEMS) cs += 2;
+			if (cs > MAXITEMS) cs = MAXITEMS;
 			break;
 		case '4':
 		case 'h':
@@ -5104,11 +5129,11 @@ static bool get_chara_limits(void)
 			break;
 		case '6':
 		case 'l':
-			if (cs < 6) cs++;
+			if (cs < MAXITEMS) cs++;
 			break;
 		case '-':
 		case '<':
-			if (cs != 6)
+			if (cs != MAXITEMS)
 			{
 				if(cs%2)
 				{
@@ -5130,7 +5155,7 @@ static bool get_chara_limits(void)
 			break;
 		case '+':
 		case '>':
-			if (cs != 6)
+			if (cs != MAXITEMS)
 			{
 				if(cs%2)
 				{
@@ -5151,7 +5176,7 @@ static bool get_chara_limits(void)
 			}
 			break;
 		case 'm':
-			if(cs != 6)
+			if(cs != MAXITEMS)
 			{
 				if(cs%2)
 				{
@@ -5172,7 +5197,7 @@ static bool get_chara_limits(void)
 			}
 			break;
 		case 'n':
-			if(cs != 6)
+			if(cs != MAXITEMS)
 			{
 				if(cs%2)
 				{
@@ -5213,47 +5238,35 @@ static bool get_chara_limits(void)
 			bell();
 			break;
 		}
-		if(c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == 6))break;
+		if(c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == MAXITEMS))break;
 	}
 
 	/* Input the minimum stats */
-	for (i = 0; i < 6; i++)
-	{
-		/* Save the minimum stat */
-		chara_limit[i] = (cval[i] > 0) ? cval[i] : 0;
-	}
+	chara_limit.agemin = cval[0];
+	chara_limit.agemax = cval[1];
+	chara_limit.htmin = cval[2];
+	chara_limit.htmax = cval[3];
+	chara_limit.wtmin = cval[4];
+	chara_limit.wtmax = cval[5];
+	chara_limit.scmin = cval[6];
+	chara_limit.scmax = cval[7];
+
 	return TRUE;
 }
 #endif
 
-static char histpref_buf[240];
+#define HISTPREF_LIMIT 1024
+static char *histpref_buf = NULL;
 
+/*
+ * Hook function for reading the histpref.prf file.
+ */
 void add_history_from_pref_line(cptr t)
 {
-	int  limit = (sizeof histpref_buf) - 1;
-	int  i;
+	/* Do nothing if the buffer is not ready */
+	if (!histpref_buf) return;
 
-	for (i = strlen(histpref_buf); *t && (i < limit); t++)
-	{
-#ifdef JP
-		if (iskanji(*t) || isprint(*t))
-#else
-		if (isprint(*t))
-#endif
-		{
-#ifdef JP
-			if (iskanji(*t))
-			{
-				if (i + 1 >= limit) break;
-				histpref_buf[i++] = *(t++);
-			}
-#endif
-			histpref_buf[i++] = *t;
-		}
-	}
-
-	/* Terminate */
-	histpref_buf[(i < limit) ? i : limit] = '\0';
+	my_strcat(histpref_buf, t, HISTPREF_LIMIT);
 }
 
 
@@ -5264,6 +5277,7 @@ static bool do_cmd_histpref(void)
 	int i, j, n;
 	char *s, *t;
 	char temp[64 * 4];
+	char histbuf[HISTPREF_LIMIT];
 
 #ifdef JP
 	if (!get_check("生い立ち設定ファイルをロードしますか? ")) return FALSE;
@@ -5271,8 +5285,9 @@ static bool do_cmd_histpref(void)
 	if (!get_check("Load background history preference file? ")) return FALSE;
 #endif
 
-	/* Init buffer */
-	histpref_buf[0] = '\0';
+	/* Prepare the buffer */
+	histbuf[0] = '\0';
+	histpref_buf = histbuf;
 
 #ifdef JP
 	sprintf(buf, "histedit-%s.prf", player_name);
@@ -5301,8 +5316,9 @@ static bool do_cmd_histpref(void)
 #endif
 		msg_print(NULL);
 
-		/* Terminate buffer */
-		histpref_buf[0] = '\0';
+		/* Kill the buffer */
+		histpref_buf = NULL;
+
 		return FALSE;
 	}
 
@@ -5330,7 +5346,7 @@ static bool do_cmd_histpref(void)
 		}
 	}
 
-	/* Turn 0 to space */
+	/* Fill the remaining spaces */
 	for (i = 0; i < 4; i++)
 	{
 		for (j = 0; p_ptr->history[i][j]; j++) /* loop */;
@@ -5339,8 +5355,8 @@ static bool do_cmd_histpref(void)
 		p_ptr->history[i][59] = '\0';
 	}
 
-	/* Terminate buffer */
-	histpref_buf[0] = '\0';
+	/* Kill the buffer */
+	histpref_buf = NULL;
 
 	return TRUE;
 }
@@ -6121,9 +6137,10 @@ static bool player_birth_aux(void)
 
 				if (autochara)
 				{
-					if ((p_ptr->ht < chara_limit[0]) || (p_ptr->ht > chara_limit[1])) accept = FALSE;
-					if ((p_ptr->wt < chara_limit[2]) || (p_ptr->wt > chara_limit[3])) accept = FALSE;
-					if ((p_ptr->sc < chara_limit[4]) || (p_ptr->sc > chara_limit[5])) accept = FALSE;
+					if ((p_ptr->age < chara_limit.agemin) || (p_ptr->age > chara_limit.agemax)) accept = FALSE;
+					if ((p_ptr->ht < chara_limit.htmin) || (p_ptr->ht > chara_limit.htmax)) accept = FALSE;
+					if ((p_ptr->wt < chara_limit.wtmin) || (p_ptr->wt > chara_limit.wtmax)) accept = FALSE;
+					if ((p_ptr->sc < chara_limit.scmin) || (p_ptr->sc > chara_limit.scmax)) accept = FALSE;
 				}
 				if (accept) break;
 			}
