@@ -58,7 +58,6 @@ void check_experience(void)
 	{
 		/* Lose a level */
 		p_ptr->lev--;
-		lite_spot(py, px);
 
 		/* Update some stuff */
 		p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
@@ -80,7 +79,6 @@ void check_experience(void)
 	{
 		/* Gain a level */
 		p_ptr->lev++;
-		lite_spot(py, px);
 
 		/* Save the highest level */
 		if (p_ptr->lev > p_ptr->max_plv)
