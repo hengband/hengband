@@ -3405,7 +3405,7 @@ msg_print("武器を落してしまった！");
 
 	/*** Process Inventory ***/
 
-	if ((p_ptr->cursed & TRC_P_FLAG_MASK) && !p_ptr->wild_mode)
+	if ((p_ptr->cursed & TRC_P_FLAG_MASK) && !p_ptr->inside_battle && !p_ptr->wild_mode)
 	{
 		/*
 		 * Hack: Uncursed teleporting items (e.g. Trump Weapons)
