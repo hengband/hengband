@@ -314,17 +314,29 @@ bool cave_player_teleportable_bold(int y, int x, bool passive, bool nonmagical)
 
 #define MAX_TELEPORT_DISTANCE 200
 
-void teleport_player(int dis, bool passive)
+bool teleport_player_aux(int dis, bool passive, bool nonmagical)
 {
 	int candidates_at[MAX_TELEPORT_DISTANCE + 1];
 	int total_candidates, cur_candidates;
 	int y = 0, x = 0, min, pick, i;
-	int yy, xx, oy, ox;
 
 	int left = MAX(1, px - dis);
 	int right = MIN(cur_wid - 2, px + dis);
 	int top = MAX(1, py - dis);
 	int bottom = MIN(cur_hgt - 2, py + dis);
+
+	if (p_ptr->wild_mode) return FALSE;
+
+	if (p_ptr->anti_tele && !nonmagical)
+	{
+#ifdef JP
+		msg_print("不思議な力がテレポートを防いだ！");
+#else
+		msg_print("A mysterious force prevents you from teleporting!");
+#endif
+
+		return FALSE;
+	}
 
 	/* Initialize counters */
 	total_candidates = 0;
@@ -342,7 +354,7 @@ void teleport_player(int dis, bool passive)
 			int d;
 
 			/* Skip illegal locations */
-			if (!cave_player_teleportable_bold(y, x, passive, FALSE)) continue;
+			if (!cave_player_teleportable_bold(y, x, passive, nonmagical)) continue;
 
 			/* Calculate distance */
 			d = distance(py, px, y, x);
@@ -351,15 +363,15 @@ void teleport_player(int dis, bool passive)
 			if (d > dis) continue;
 
 			/* Count the total number of candidates */
-			total_candidates++; 
+			total_candidates++;
 
 			/* Count the number of candidates in this circumference */
-			candidates_at[d]++; 
+			candidates_at[d]++;
 		}
 	}
 
 	/* No valid location! */
-	if (0 == total_candidates) return;
+	if (0 == total_candidates) return FALSE;
 
 	/* Fix the minimum distance */
 	for (cur_candidates = 0, min = dis; min >= 0; min--)
@@ -401,6 +413,8 @@ void teleport_player(int dis, bool passive)
 		if (!pick) break;
 	}
 
+	if (player_bold(y, x)) return FALSE;
+
 	/* Sound */
 	sound(SOUND_TELEPORT);
 
@@ -409,12 +423,21 @@ void teleport_player(int dis, bool passive)
 		msg_format("『こっちだぁ、%s』", player_name);
 #endif
 
-	/* Save the old location */
-	oy = py;
-	ox = px;
-
 	/* Move the player */
 	(void)move_player_effect(y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+
+	return TRUE;
+}
+
+void teleport_player(int dis, bool passive)
+{
+	int yy, xx;
+
+	/* Save the old location */
+	int oy = py;
+	int ox = px;
+
+	if (!teleport_player_aux(dis, passive, FALSE)) return;
 
 	/* Monsters with teleport ability may follow the player */
 	for (xx = -1; xx < 2; xx++)
@@ -424,7 +447,7 @@ void teleport_player(int dis, bool passive)
 			int tmp_m_idx = cave[oy+yy][ox+xx].m_idx;
 
 			/* A monster except your mount may follow */
-			if (tmp_m_idx && p_ptr->riding != tmp_m_idx)
+			if (tmp_m_idx && (p_ptr->riding != tmp_m_idx))
 			{
 				monster_type *m_ptr = &m_list[tmp_m_idx];
 				monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -436,7 +459,45 @@ void teleport_player(int dis, bool passive)
 				if ((r_ptr->flags6 & RF6_TPORT) &&
 				    !(r_ptr->flagsr & RFR_RES_TELE))
 				{
-					if (!MON_CSLEEP(m_ptr)) teleport_monster_to(tmp_m_idx, y, x, r_ptr->level, FALSE);
+					if (!MON_CSLEEP(m_ptr)) teleport_monster_to(tmp_m_idx, py, px, r_ptr->level, FALSE);
+				}
+			}
+		}
+	}
+}
+
+
+void teleport_player_away(int m_idx, int dis)
+{
+	int yy, xx;
+
+	/* Save the old location */
+	int oy = py;
+	int ox = px;
+
+	if (!teleport_player_aux(dis, TRUE, FALSE)) return;
+
+	/* Monsters with teleport ability may follow the player */
+	for (xx = -1; xx < 2; xx++)
+	{
+		for (yy = -1; yy < 2; yy++)
+		{
+			int tmp_m_idx = cave[oy+yy][ox+xx].m_idx;
+
+			/* A monster except your mount or caster may follow */
+			if (tmp_m_idx && (p_ptr->riding != tmp_m_idx) && (m_idx != tmp_m_idx))
+			{
+				monster_type *m_ptr = &m_list[tmp_m_idx];
+				monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+				/*
+				 * The latter limitation is to avoid
+				 * totally unkillable suckers...
+				 */
+				if ((r_ptr->flags6 & RF6_TPORT) &&
+				    !(r_ptr->flagsr & RFR_RES_TELE))
+				{
+					if (!MON_CSLEEP(m_ptr)) teleport_monster_to(tmp_m_idx, py, px, r_ptr->level, FALSE);
 				}
 			}
 		}

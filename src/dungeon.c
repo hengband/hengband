@@ -2294,7 +2294,7 @@ static void process_world_aux_mutation(void)
 				msg_print(NULL);
 				if (one_in_(3)) lose_all_info();
 				else wiz_dark();
-				teleport_player(100, TRUE);
+				(void)teleport_player_aux(100, TRUE, TRUE);
 				wiz_dark();
 #ifdef JP
 				msg_print("あなたは見知らぬ場所で目が醒めた...頭が痛い。");

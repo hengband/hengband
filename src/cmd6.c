@@ -884,11 +884,11 @@ static void do_cmd_quaff_potion_aux(int item)
 					ident = TRUE;
 					if (one_in_(3)) lose_all_info();
 					else wiz_dark();
-					teleport_player(100, TRUE);
+					(void)teleport_player_aux(100, TRUE, TRUE);
 					wiz_dark();
 #ifdef JP
-msg_print("知らない場所で目が醒めた。頭痛がする。");
-msg_print("何も思い出せない。どうやってここへ来たのかも分からない！");
+					msg_print("知らない場所で目が醒めた。頭痛がする。");
+					msg_print("何も思い出せない。どうやってここへ来たのかも分からない！");
 #else
 					msg_print("You wake up somewhere with a sore head...");
 					msg_print("You can't remember a thing, or how you got here!");

@@ -3342,7 +3342,7 @@ bool monst_spell_monst(int m_idx)
 
 		if (!resists_tele)
 		{
-			if (t_idx == p_ptr->riding) teleport_player(MAX_SIGHT * 2 + 5, TRUE);
+			if (t_idx == p_ptr->riding) teleport_player_away(m_idx, MAX_SIGHT * 2 + 5);
 			else teleport_away(t_idx, MAX_SIGHT * 2 + 5, FALSE, TRUE);
 		}
 

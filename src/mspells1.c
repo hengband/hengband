@@ -3636,7 +3636,7 @@ msg_format("%^sにテレポートさせられた。", m_name);
 #endif
 
 			learn_spell(MS_TELE_AWAY);
-			teleport_player(100, TRUE);
+			teleport_player_away(m_idx, 100);
 			break;
 		}
 
