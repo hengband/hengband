@@ -2779,13 +2779,13 @@ note_dies = "は蒸発した！";
 			/* PSI only works if the monster can see you! -- RG */
 			if (!(los(m_ptr->fy, m_ptr->fx, py, px)))
 			{
-				dam = 0;
 #ifdef JP
-note = "はあなたが見えないので影響されない！";
+				if (seen) msg_format("%sはあなたが見えないので影響されない！", m_name);
 #else
-				note = " can't see you, and isn't affected!";
+				if (seen) msg_format("%^s  can't see you, and isn't affected!", m_name);
 #endif
-
+				skipped = TRUE;
+				break;
 			}
 
 			if (r_ptr->flags3 & (RF3_RES_ALL))
