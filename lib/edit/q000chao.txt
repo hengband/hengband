@@ -16,9 +16,9 @@ Q:$11:T:The Wizards of Chaos have discovered a magical Node of
 Q:$11:T:Chaos in a nearby volcano. You must seek the Node and
 Q:$11:T:dispatch its guardians so that the Tower of Chaos can
 Q:$11:T:claim the mystical energies of the Node.
-Q:11:T:カオス魔法の賢者たちが、近くの火山にカオスエネルギーの特異点を見つけた。
-Q:11:T:我々カオス魔法の塔がその魔力の所有権を得られるように、
-Q:11:T:おまえはその特異点を見つけて守備隊を派遣するのだ。
+Q:11:T:カオス魔法の賢者たちが、近くの火山にカオスエネルギーの特異点の存在を確認
+Q:11:T:した。我々カオス魔法の塔がその魔力の所有権を得られるように、おまえは
+Q:11:T:その特異点の場所を見つけてそこに巣食うモンスターを片づけてくるのだ。
 ?:1
 
 # Description for quest reward
