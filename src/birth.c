@@ -1996,7 +1996,7 @@ static cptr realm_jouhou[VALID_REALM] =
 static char realm_subinfo[VALID_REALM][41] =
 {
 #ifdef JP
-"感知と回復に優れています",
+"感知と防御と回復に優れています",
 "攻撃はできませんが非常に便利です",
 "感知と防御に優れています",
 "破壊的な攻撃に優れています",
@@ -2006,21 +2006,21 @@ static char realm_subinfo[VALID_REALM][41] =
 "直接戦闘の補助に優れています",
 "攻撃と防御の両面に優れています",
 "邪悪な怪物に対する攻撃に優れています",
-"歌でも歌っていましょう",
-"素直に刀でも振っていましょう"
+"様々な魔法効果を持った歌を歌います",
+"打撃攻撃に特殊能力を付加します"
 #else
 "Good at detection and healing.",
-"Very useful and protective.",
+"Utility and protective spells.",
 "Good at detection and defence.",
 "Offensive and destructive.",
-"Terrible for living creatures.",
+"Ruins living creatures.",
 "Good at summoning, teleportation.",
 "Very useful but poor a bit.",
-"Support to offence and defence.",
+"Support for melee fighting.",
 "Good at both offence and defence.",
-"Terrible for evil creatures.",
-"Hey guy, sing a song! :-)",
-"Swing your sword without thinking."
+"Destroys evil creatures.",
+"Song with magical effects.",
+"Special attacks on melee."
 #endif
 };
 
