@@ -15,4 +15,5 @@ EXTRA_DIST = \
 	qdarkelf_j.txt qhaunted_j.txt r_info_j.txt t0000001_j.txt \
 	t0000002_j.txt t0000003_j.txt t0000004_j.txt t0000005_j.txt \
 	t0000006_j.txt t_basic_j.txt t_info_j.txt t_lite_j.txt \
-	t_pref_j.txt v_info_j.txt w_info_j.txt
+	t_pref_j.txt v_info_j.txt w_info_j.txt \
+	m_info_j.txt we_info_j.txt se_info_j.txt
