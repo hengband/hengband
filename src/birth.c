@@ -5059,9 +5059,9 @@ static void edit_history(void)
 	}
         display_player(1);
 #ifdef JP
-        c_put_str(TERM_L_GREEN, "(キャラクターの生い立ち - 編集モード)", 15, 20);
+        c_put_str(TERM_L_GREEN, "(キャラクターの生い立ち - 編集モード)", 11, 20);
 #else
-        c_put_str(TERM_L_GREEN, "(Character Background - Edit Mode)", 15, 20);
+        c_put_str(TERM_L_GREEN, "(Character Background - Edit Mode)", 11, 20);
 #endif
 
         while (TRUE)
