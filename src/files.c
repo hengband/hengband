@@ -4117,7 +4117,7 @@ static void dump_aux_pet(FILE *fff)
 #ifdef JP
 			fprintf(fff, "\n  [主なペット]\n\n");
 #else
-			fprintf(fff, "\n  [leading pets]\n\n");
+			fprintf(fff, "\n  [Leading Pets]\n\n");
 #endif
 			pet = TRUE;
 		}
@@ -4152,7 +4152,7 @@ static void dump_aux_class_special(FILE *fff)
 #ifdef JP
 		strcat(p[col], "\n  [学習済みの青魔法]\n");
 #else
-		strcat(p[col], "\n  [Learned blue magic]\n");
+		strcat(p[col], "\n  [Learned Blue Magic]\n");
 #endif
 
 
@@ -4166,7 +4166,7 @@ static void dump_aux_class_special(FILE *fff)
 #ifdef JP
 					strcat(p[col], "\n     [ボルト型]\n");
 #else
-					strcat(p[col], "\n     [Bolt  type]\n");
+					strcat(p[col], "\n     [Bolt  Type]\n");
 #endif
 					break;
 
@@ -4174,7 +4174,7 @@ static void dump_aux_class_special(FILE *fff)
 #ifdef JP
 					strcat(p[col], "\n     [ボール型]\n");
 #else
-					strcat(p[col], "\n     [Ball  type]\n");
+					strcat(p[col], "\n     [Ball  Type]\n");
 #endif
 					break;
 
@@ -4198,7 +4198,7 @@ static void dump_aux_class_special(FILE *fff)
 #ifdef JP
 					strcat(p[col], "\n     [ その他 ]\n");
 #else
-					strcat(p[col], "\n     [Other type]\n");
+					strcat(p[col], "\n     [Other Type]\n");
 #endif
 					break;
 			}
@@ -4283,7 +4283,7 @@ static void dump_aux_quest(FILE *fff)
 #ifdef JP
 	fprintf(fff, "\n\n  [クエスト情報]\n");
 #else
-	fprintf(fff, "\n\n  [Quest information]\n");
+	fprintf(fff, "\n\n  [Quest Information]\n");
 #endif
 
 	/* Allocate Memory */
@@ -4320,7 +4320,7 @@ static void dump_aux_last_message(FILE *fff)
 #ifdef JP
 			fprintf(fff, "\n  [死ぬ直前のメッセージ]\n\n");
 #else
-			fprintf(fff, "\n  [Last messages]\n\n");
+			fprintf(fff, "\n  [Last Messages]\n\n");
 #endif
 			for (i = MIN(message_num(), 30); i >= 0; i--)
 			{
@@ -4335,7 +4335,7 @@ static void dump_aux_last_message(FILE *fff)
 #ifdef JP
 			fprintf(fff, "\n  [*勝利*メッセージ]\n\n");
 #else
-			fprintf(fff, "\n  [*Winning* message]\n\n");
+			fprintf(fff, "\n  [*Winning* Message]\n\n");
 #endif
 			fprintf(fff,"  %s\n", p_ptr->last_message);
 		}
@@ -4385,7 +4385,7 @@ static void dump_aux_options(FILE *fff)
 #ifdef JP
 	fprintf(fff, "\n  [オプション設定]\n");
 #else
-	fprintf(fff, "\n  [Option settings]\n");
+	fprintf(fff, "\n  [Option Settings]\n");
 #endif
 
 
@@ -4591,7 +4591,7 @@ static void dump_aux_monsters(FILE *fff)
 #ifdef JP
 	fprintf(fff, "\n  [倒したモンスター]\n\n");
 #else
-	fprintf(fff, "\n  [Defeated monsters]\n\n");
+	fprintf(fff, "\n  [Defeated Monsters]\n\n");
 #endif
 
 	/* Allocate the "who" array */
