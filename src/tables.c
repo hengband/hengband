@@ -4969,7 +4969,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"Mirror Guru",
 		"Mirror Mage",
 		"Mirror King",
-		"Mirror Emperror",
+		"Mirror Emperor",
 		"Mirror Avatar",
 		"Ruffnor King",
 	},
