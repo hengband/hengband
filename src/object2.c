@@ -906,21 +906,21 @@ s32b flag_cost(object_type * o_ptr, int plusses)
 		}
 	}
 
-	if (have_flag(flgs, TR_STR)) total += (1500 * plusses);
-	if (have_flag(flgs, TR_INT)) total += (1500 * plusses);
-	if (have_flag(flgs, TR_WIS)) total += (1500 * plusses);
-	if (have_flag(flgs, TR_DEX)) total += (1500 * plusses);
-	if (have_flag(flgs, TR_CON)) total += (1500 * plusses);
-	if (have_flag(flgs, TR_CHR)) total += (750 * plusses);
-	if (have_flag(flgs, TR_MAGIC_MASTERY)) total += (600 * plusses);
-	if (have_flag(flgs, TR_STEALTH)) total += (250 * plusses);
-	if (have_flag(flgs, TR_SEARCH)) total += (100 * plusses);
-	if (have_flag(flgs, TR_INFRA)) total += (150 * plusses);
-	if (have_flag(flgs, TR_TUNNEL)) total += (175 * plusses);
+	if (have_flag(flgs, TR_STR)) total += (1700 * plusses);
+	if (have_flag(flgs, TR_INT)) total += (1700 * plusses);
+	if (have_flag(flgs, TR_WIS)) total += (1700 * plusses);
+	if (have_flag(flgs, TR_DEX)) total += (1700 * plusses);
+	if (have_flag(flgs, TR_CON)) total += (1700 * plusses);
+	if (have_flag(flgs, TR_CHR)) total += (950 * plusses);
+	if (have_flag(flgs, TR_MAGIC_MASTERY)) total += (700 * plusses);
+	if (have_flag(flgs, TR_STEALTH)) total += (350 * plusses);
+	if (have_flag(flgs, TR_SEARCH)) total += (200 * plusses);
+	if (have_flag(flgs, TR_INFRA)) total += (200 * plusses);
+	if (have_flag(flgs, TR_TUNNEL)) total += (225 * plusses);
 	if ((have_flag(flgs, TR_SPEED)) && (plusses > 0))
-		total += (10000 + (2500 * plusses));
+		total += (10000 + (12500 * plusses));
 	if ((have_flag(flgs, TR_BLOWS)) && (plusses > 0))
-		total += (10000 + (2500 * plusses));
+		total += (10000 + (7500 * plusses));
 	if (have_flag(flgs, TR_DEC_MANA)) total += 10000;
 
 	tmp_cost = 0;
@@ -1204,64 +1204,6 @@ s32b object_value_real(object_type *o_ptr)
 	}
 
 
-	/* Analyze pval bonus */
-	switch (o_ptr->tval)
-	{
-		case TV_SHOT:
-		case TV_ARROW:
-		case TV_BOLT:
-		case TV_BOW:
-		case TV_DIGGING:
-		case TV_HAFTED:
-		case TV_POLEARM:
-		case TV_SWORD:
-		case TV_BOOTS:
-		case TV_GLOVES:
-		case TV_HELM:
-		case TV_CROWN:
-		case TV_SHIELD:
-		case TV_CLOAK:
-		case TV_SOFT_ARMOR:
-		case TV_HARD_ARMOR:
-		case TV_DRAG_ARMOR:
-		case TV_LITE:
-		case TV_AMULET:
-		case TV_RING:
-		{
-			/* Hack -- Negative "pval" is always bad */
-			if (o_ptr->pval < 0) return (0L);
-
-			/* No pval */
-			if (!o_ptr->pval) break;
-
-			/* Give credit for stat bonuses */
-			if (have_flag(flgs, TR_STR)) value += (o_ptr->pval * 200L);
-			if (have_flag(flgs, TR_INT)) value += (o_ptr->pval * 200L);
-			if (have_flag(flgs, TR_WIS)) value += (o_ptr->pval * 200L);
-			if (have_flag(flgs, TR_DEX)) value += (o_ptr->pval * 200L);
-			if (have_flag(flgs, TR_CON)) value += (o_ptr->pval * 200L);
-			if (have_flag(flgs, TR_CHR)) value += (o_ptr->pval * 200L);
-
-			/* Give credit for stealth and searching */
-			if (have_flag(flgs, TR_MAGIC_MASTERY)) value += (o_ptr->pval * 100L);
-			if (have_flag(flgs, TR_STEALTH)) value += (o_ptr->pval * 100L);
-			if (have_flag(flgs, TR_SEARCH)) value += (o_ptr->pval * 100L);
-
-			/* Give credit for infra-vision and tunneling */
-			if (have_flag(flgs, TR_INFRA)) value += (o_ptr->pval * 50L);
-			if (have_flag(flgs, TR_TUNNEL)) value += (o_ptr->pval * 50L);
-
-			/* Give credit for extra attacks */
-			if (have_flag(flgs, TR_BLOWS)) value += (o_ptr->pval * 5000L);
-
-			/* Give credit for speed bonus */
-			if (have_flag(flgs, TR_SPEED)) value += (o_ptr->pval * 10000L);
-
-			break;
-		}
-	}
-
-
 	/* Analyze the item */
 	switch (o_ptr->tval)
 	{
@@ -1387,6 +1329,9 @@ s32b object_value_real(object_type *o_ptr)
 			break;
 		}
 	}
+
+	/* Worthless object */
+	if (value < 0) return 0L;
 
 	/* Return the value */
 	return (value);
