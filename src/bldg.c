@@ -4743,66 +4743,16 @@ msg_print("お金が足りません！");
 	case BACT_TELEPORT_LEVEL:
 	{
 		int select_dungeon;
-		int i, num = 0;
-		s16b *dun;
 		int max_depth;
 
-		/* Allocate the "dun" array */
-		C_MAKE(dun, max_d_idx, s16b);
-
-		screen_save();
 		clear_bldg(4, 20);
-
-		for(i = 1; i < max_d_idx; i++)
-		{
-			char buf[80];
-			bool seiha = FALSE;
-
-			if (!d_info[i].maxdepth) continue;
-			if (!max_dlv[i]) continue;
-			if (d_info[i].final_guardian)
-			{
-				if (!r_info[d_info[i].final_guardian].max_num) seiha = TRUE;
-			}
-			else if (max_dlv[i] == d_info[i].maxdepth) seiha = TRUE;
-
 #ifdef JP
-			sprintf(buf,"%c) %c%-12s : 最大 %d 階", 'a'+num, seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
+		select_dungeon = choose_dungeon("にテレポート", 4, 0);
 #else
-			sprintf(buf,"%c) %c%-12s : Max level %d", 'a'+num, seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
+		select_dungeon = choose_dungeon("teleport", 4, 0);
 #endif
-			put_str(buf, 4+num, 5);
-			dun[num] = i;
-			num++;
-		}
-#ifdef JP
-		prt("どのダンジョンにテレポートしますか:", 0, 0);
-#else
-		prt("Which dungeon do you teleport?: ", 0, 0);
-#endif
-		while(1)
-		{
-			i = inkey();
-
-			if (i == ESCAPE)
-			{
-				/* Free the "dun" array */
-				C_KILL(dun, max_d_idx, s16b);
-
-				screen_load();
-				return;
-			}
-			if (i >= 'a' && i <('a'+num))
-			{
-				select_dungeon = dun[i-'a'];
-				break;
-			}
-			else bell();
-		}
-		screen_load();
-
-		/* Free the "dun" array */
-		C_KILL(dun, max_d_idx, s16b);
+		show_building(bldg);
+		if (!select_dungeon) return;
 
 		max_depth = d_info[select_dungeon].maxdepth;
 

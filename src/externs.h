@@ -1077,6 +1077,7 @@ extern void teleport_monster_to(int m_idx, int ty, int tx, int power);
 extern void teleport_player(int dis);
 extern void teleport_player_to(int ny, int nx, bool no_tele);
 extern void teleport_level(int m_idx);
+extern int choose_dungeon(cptr note, int y, int x);
 extern bool recall_player(int turns);
 extern bool word_of_recall(void);
 extern bool reset_recall(void);

@@ -697,11 +697,27 @@ void teleport_level(int m_idx)
 
 
 
-static int choose_dungeon(cptr note)
+int choose_dungeon(cptr note, int y, int x)
 {
 	int select_dungeon;
 	int i, num = 0;
 	s16b *dun;
+
+	/* Hack -- No need to choose dungeon in some case */
+	if (lite_town || vanilla_town || ironman_downward)
+	{
+		if (max_dlv[DUNGEON_ANGBAND]) return DUNGEON_ANGBAND;
+		else
+		{
+#ifdef JP
+			msg_format("まだ%sに入ったことはない。", d_name + d_info[DUNGEON_ANGBAND].name);
+#else
+			msg_format("You haven't entered %s yet.", d_name + d_info[DUNGEON_ANGBAND].name);
+#endif
+			msg_print(NULL);
+			return 0;
+		}
+	}
 
 	/* Allocate the "dun" array */
 	C_MAKE(dun, max_d_idx, s16b);
@@ -725,9 +741,19 @@ static int choose_dungeon(cptr note)
 #else
 		sprintf(buf,"      %c) %c%-16s : Max level %d", 'a'+num, seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
 #endif
-		prt(buf, 2+num, 14);
+		prt(buf, y + num, x);
 		dun[num++] = i;
 	}
+
+	if (!num)
+	{
+#ifdef JP
+		prt("      選べるダンジョンがない。", y, x);
+#else
+		prt("      No dungeon is available.", y, x);
+#endif
+	}
+
 #ifdef JP
 	prt(format("どのダンジョン%sしますか:", note), 0, 0);
 #else
@@ -736,7 +762,7 @@ static int choose_dungeon(cptr note)
 	while(1)
 	{
 		i = inkey();
-		if (i == ESCAPE)
+		if ((i == ESCAPE) || !num)
 		{
 			/* Free the "dun" array */
 			C_KILL(dun, max_d_idx, s16b);
@@ -806,9 +832,9 @@ if (get_check("ここは最深到達階より浅い階です。この階に戻って来ますか？ "))
 		{
 			int select_dungeon;
 #ifdef JP
-			select_dungeon = choose_dungeon("に帰還");
+			select_dungeon = choose_dungeon("に帰還", 2, 14);
 #else
-			select_dungeon = choose_dungeon("recall");
+			select_dungeon = choose_dungeon("recall", 2, 14);
 #endif
 			if (!select_dungeon) return FALSE;
 			p_ptr->recall_dungeon = select_dungeon;
@@ -850,9 +876,9 @@ bool reset_recall(void)
 	char tmp_val[160];
 
 #ifdef JP
-	select_dungeon = choose_dungeon("をセット");
+	select_dungeon = choose_dungeon("をセット", 2, 14);
 #else
-	select_dungeon = choose_dungeon("reset");
+	select_dungeon = choose_dungeon("reset", 2, 14);
 #endif
 
 	/* Ironman option */
