@@ -393,15 +393,24 @@ Alert user to critical hitpoints    [alert_hitpoint]
     hitpoints reach the "critical point" chosen elsewhere, preventing
     stupid deaths.
 
+Disturb when leaving trap detected area    [disturb_trap_detect]
+    This option causes you to be disturbed when the player is running
+    out of the trap detected area.
+
+Alert when leaving trap detected area    [alert_trap_detect]
+    This option alert you displaying special message when the player
+    is running out of the trap detected area.
+
+
+***** <Efficiency>
+=== Option set 5 -- Efficiency ===
+
 Reduce lite-radius when running    [view_reduce_lite]
     Reduce the "radius" of the player's "lite" to that of a "torch"
     when the player is "running", which makes running more "efficient",
     but is extremely annoying.  Certain older versions of Angband used
     this behavior always, so "purists" should turn it on.
     
-***** <Efficiency>
-=== Option set 5 -- Efficiency ===
-
 Reduce view-radius in town    [view_reduce_view]
     Reduce the "radius" of the player's "view" by half when the player
     is in town.  This makes running faster in town, and also allows the
