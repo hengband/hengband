@@ -1534,9 +1534,9 @@ void map_info(int y, int x, byte *ap, char *cp)
 	/* Handle "player" */
 	if ((y == py) && (x == px))
 	{
-		monster_race *r_ptr = &r_info[0];
+#ifdef VARIABLE_PLAYER_GRAPH
 
-		feat_priority = 31;
+		monster_race *r_ptr = &r_info[0];
 
 		/* Get the "player" attr */
 		a = r_ptr->x_attr;
@@ -1544,14 +1544,19 @@ void map_info(int y, int x, byte *ap, char *cp)
 		/* Get the "player" char */
 		c = r_ptr->x_char;
 
-#ifdef VARIABLE_PLAYER_GRAPH
-
 		/* Save the info */
 		(*ap) = a;
 		(*cp) = c;
 
+#else
+
+		/* Hardcoded player symbol - white '@' */
+		(*ap) = TERM_WHITE;
+		(*cp) = '@';
+
 #endif /* VARIABLE_PLAYER_GRAPH */
 
+		feat_priority = 31;
 	}
 }
 
