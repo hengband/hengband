@@ -1,4 +1,135 @@
+2002-02-24  Takeshi Mogami  <mogami@akiru>
+
+	* src/main-mac.c:
+	バージョンが変わったときに古い初期設定ファイルを無視するようにした。
+	本当は初期設定ファイルの型式が変ったときだけ無視したいが、いい案がない。
+
+	* Changelogs, lib/file/monfrien.txt:
+	英文修正。
+
+	* lib/edit/r_info_j.txt:
+	英語のユニークモンスター名にはTheを自分で付けなくてはいけなかったので修正。
+
+	* lib/file/mondeath.txt, lib/file/monfear_j.txt, lib/file/monfrien.txt, lib/file/monfrien_j.txt, lib/file/monspeak_j.txt, lib/edit/r_info_j.txt:
+	案内人を少し修正、及び、英語対応。
+
+	* src/object2.c:
+	超マイナーバグ修正。矢のダメージ修正と命中修正のブーストの計算がたぶん意図と
+	違う、変なコードになっていたので修正。
+
+	* src/cmd5.c:
+	MPが足りないとき、魔法を使うかどうかの質問を get_check_strictにした。
+
+	* src/tables.c:
+	MPが足りなくても魔法を…のオプションをデフォルトでOFFにした。
+
+2002-02-24  habu  <habu@akiru>
+
+	* src/melee2.c:
+	モンスターの移動処理で常にFLASEになる場所があった。削除してしまうのはためらわれるのでコメントアウトしておいた。
+
+2002-02-24  Takeshi Mogami  <mogami@akiru>
+
+	* src/monster2.c, src/wild.c:
+	player_place()でプレイヤーを置く場所にモンスターがいたとき、
+	単純にdelete_monsterする代りにモンスターを1マスどかすように修正。
+
+2002-02-24  habu  <habu@akiru>
+
+	* src/init1.c, src/xtra2.c:
+	int型で良い変数をいくつか見つけたのでint型にしておいた。(なぜbyteやs16bになってるのか理解に苦しむ。)
+
+2002-02-24  Takeshi Mogami  <mogami@akiru>
+
+	* lib/file/monfrien_j.txt, lib/file/monspeak_j.txt, src/externs.h, src/init1.c, src/tables.c, src/variable.c, src/wild.c, Changelogs, lib/edit/misc_j.txt, lib/edit/r_info_j.txt, lib/edit/t0000001_j.txt, lib/file/mondeath_j.txt, lib/file/monfear_j.txt:
+	旅先案内人の実装。
+
+2002-02-24  habu  <habu@akiru>
+
+	* src/defines.h, src/object1.c, src/xtra2.c, src/artifact.c, src/cmd1.c, src/cmd6.c:
+	Vから名称が変更されたアーティファクトについて ART_* の定義をきちんと書き変えた。また、定義し忘れているアーティファクトを追加した。
+
+	* src/xtra2.c:
+	ユニークが落とす特定アーティファクトのチェックがなぜか randint1(99) < chance になっていたので、randint0(100) < chance にした。このほうが明かに自然。
+	また、if〜else ifの羅列をswitchで書き変えた。変数a_idxはbyte型である意味がないのでint型にした。
+
+2002-02-24  Takeshi Mogami  <mogami@akiru>
+
+	* lib/help/jtang.txt: 広域マップの説明追加。
+
+2002-02-24  habu  <habu@akiru>
+
+	* lib/help/jtang.txt:
+	3つ修正。*体力回復*の回復量、生命力復活の薬->経験値復活の薬、なんとかのソード XdY->(XdY)。
+
+	* lib/edit/k_info_j.txt, src/object2.c:
+	エルフのクロークと黒装束のpvalをk_info_jで指定するようにしていたが、鍛冶師がエッセンスを抽出した時おかしな事になるので、仕方なくソースハックに戻した。
+
+2002-02-23  Takeshi Mogami  <mogami@akiru>
+
+	* lib/help/jtang.txt:
+	初心者ガイドを変愚蛮怒対応にした。
+
+	* readme_eng.txt: make install の説明追加
+
+	* lib/edit/r_info_j.txt:
+	残っていた英文の説明を翻訳。
+
+	* lib/help/jattack.hlp, lib/help/jcharattr.txt, lib/help/jobjects.hlp:
+	タグの修正。
+
+2002-02-22  Takeshi Mogami  <mogami@akiru>
+
+	* src/object2.c:
+	同じ種類のアイテムの束が2つあるとき、上の束が既に99本になっている時でも
+	持ち物の整理のコードを実行してしまっていたのを修正。勝手な銘のコピー等
+	が起きて一見不可解に見える振るまいをしていた。ついでにコードの整理。
+
+	* src/main-x11.c:
+	main-gcu.c のサウンドコードを移植。
+
+	* src/main-gcu.c:
+	SOUND関連でバグっぽいコードを修正。
+
+2002-02-22  habu  <habu@akiru>
+
+	* src/bldg.c, src/cmd1.c, src/cmd2.c, src/dungeon.c, src/externs.h, src/spells3.c, src/wizard2.c:
+	ソースの至る所にちらばっていたクエストから出る時のコードをleave_quest_check()という関数にしてまとめた。
+
+	* src/artifact.c:
+	アーティファクト生成の時、鑑定してないアイテムに使った時にもアイテムのデータが表示されるように、identify_fully_auxを呼ぶ前にアイテムを*鑑定*された状態にするようにした。
+
+	* src/z-rand.c, src/z-rand.h:
+	Rand_mod()は使われてないし、乱数発生器としての性能も悪くて今後も使わないはずなので削除。
+
+	* src/object1.c, src/object2.c, src/xtra1.c, src/defines.h:
+	EGO_2HANDをEGO_2WEAPONに変更。2HANDは普通両手持ちの意味だろうから将来混乱を招かないように。
+
+	* lib/edit/k_info_j.txt, src/object2.c:
+	黒装束はpvalが+1から+4までランダムに出るようにした。その際、k_infoでpvalの最大値を指定するようにしたので、エルフのクロークもソースハックではなくk_infoでpvalを指定するようにした。
+
+	* src/z-form.c:
+	先に漢字があるかどうか判定してるので、先頭の文字を大文字に変換する時に漢字であるか判定する必要はないのでif文を削除。
+
+	* src/object1.c:
+	*鑑定*時に一番上の行にアイテム名を表示するようにした。
+	これによってアーティファクト生成の時にもACや殺戮修正値などが分かるようになる。
+
+	* src/xtra2.c:
+	なまけグッズの選択の際switchを使うように書き変え。こっちのほうが直感的なコードでしょう。
+
+	* lib/edit/r_info_j.txt:
+	フンディンにDROP_CHOSENを付け忘れているようなので付けた。
+
+	* lib/edit/k_info_j.txt:
+	鉄冠を45階から40階級に下げた。(金の冠と一緒というのはおかしいだろう)
+
+	* lib/edit/e_info_j.txt:
+	テレパシーの冠のレア度を下げた。
+
 2002-02-21  Takeshi Mogami  <mogami@akiru>
+
+	* Changelogs: 更新
 
 	* src/object2.c:
 	矢等のアイテムの束をなるべくうまく詰めて持つようにした。
