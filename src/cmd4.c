@@ -9181,6 +9181,7 @@ void do_cmd_knowledge(void)
 			prt("(7) 現在のペット                         の一覧", 12, 5);
 			prt("(8) 我が家のアイテム                     の一覧", 13, 5);
 			prt("(9) *鑑定*済み装備の耐性                 の一覧", 14, 5);
+			prt("(0) 地形の表示文字/タイル                の一覧", 15, 5);
 		} else {
 			prt("(a) 自分に関する情報                     の一覧", 6, 5);
 			prt("(b) 突然変異                             の一覧", 7, 5);
@@ -9203,6 +9204,7 @@ void do_cmd_knowledge(void)
 			prt("(7) Display current pets", 12, 5);
 			prt("(8) Display home inventory", 13, 5);
 			prt("(9) Display *identified* equip.", 14, 5);
+			prt("(0) Display terrain symbols.", 15, 5);
 		} else {
 			prt("(a) Display about yourself", 6, 5);
 			prt("(b) Display mutations", 7, 5);
@@ -9217,13 +9219,13 @@ void do_cmd_knowledge(void)
 #endif
 		/* Prompt */
 #ifdef JP
-		prt("-続く-", 16, 8);
+		prt("-続く-", 17, 8);
 		prt("ESC) 抜ける", 21, 1);
 		prt("SPACE) 次ページ", 21, 30);
 		/*prt("-) 前ページ", 21, 60);*/
 		prt("コマンド:", 20, 0);
 #else
-		prt("-more-", 16, 8);
+		prt("-more-", 17, 8);
 		prt("ESC) Exit menu", 21, 1);
 		prt("SPACE) Next page", 21, 30);
 		/*prt("-) Previous page", 21, 60);*/
