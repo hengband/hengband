@@ -373,7 +373,7 @@ static void compact_monsters_aux(int i1, int i2)
 
 	for (i = 0; i < MAX_MTIMED; i++)
 	{
-		int mproc_idx = get_mproc_idx(i2, i);
+		int mproc_idx = get_mproc_idx(i1, i);
 		if (mproc_idx >= 0) mproc_list[i][mproc_idx] = i2;
 	}
 }
