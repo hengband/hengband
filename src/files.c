@@ -4538,6 +4538,7 @@ errr make_character_dump(FILE *fff)
 #else
 	if (!total) fprintf(fff, "  Nothing.\n");
 #endif
+	fprintf(fff, "\n");
 
 	if (p_ptr->is_dead && !p_ptr->total_winner)
 	{
