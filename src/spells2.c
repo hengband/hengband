@@ -5418,9 +5418,47 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
 		}
 	}
 
-
 	if (!in_generate)
 	{
+		/* Process "re-glowing" */
+		for (y = (y1 - r); y <= (y1 + r); y++)
+		{
+			for (x = (x1 - r); x <= (x1 + r); x++)
+			{
+				/* Skip illegal grids */
+				if (!in_bounds(y, x)) continue;
+
+				/* Extract the distance */
+				k = distance(y1, x1, y, x);
+
+				/* Stay in the circle of death */
+				if (k > r) continue;
+
+				/* Access the grid */
+				c_ptr = &cave[y][x];
+
+				if (is_mirror_grid(c_ptr)) c_ptr->info |= CAVE_GLOW;
+				else if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS))
+				{
+					int i, yy, xx;
+					cave_type *cc_ptr;
+
+					for (i = 0; i < 9; i++)
+					{
+						yy = y + ddy_ddd[i];
+						xx = x + ddx_ddd[i];
+						if (!in_bounds2(yy, xx)) continue;
+						cc_ptr = &cave[yy][xx];
+						if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
+						{
+							c_ptr->info |= CAVE_GLOW;
+							break;
+						}
+					}
+				}
+			}
+		}
+
 		/* Hack -- Affect player */
 		if (flag)
 		{
@@ -5455,6 +5493,11 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
 
 		/* Window stuff */
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+
+		if (p_ptr->special_defense & NINJA_S_STEALTH)
+		{
+			if (cave[py][px].info & CAVE_GLOW) set_superstealth(FALSE);
+		}
 	}
 
 	/* Success */
@@ -5896,6 +5939,47 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 	}
 
 
+	/* Process "re-glowing" */
+	for (dy = -r; dy <= r; dy++)
+	{
+		for (dx = -r; dx <= r; dx++)
+		{
+			/* Extract the location */
+			yy = cy + dy;
+			xx = cx + dx;
+
+			/* Skip illegal grids */
+			if (!in_bounds(yy, xx)) continue;
+
+			/* Skip distant grids */
+			if (distance(cy, cx, yy, xx) > r) continue;
+
+			/* Access the grid */
+			c_ptr = &cave[yy][xx];
+
+			if (is_mirror_grid(c_ptr)) c_ptr->info |= CAVE_GLOW;
+			else if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS))
+			{
+				int ii, yyy, xxx;
+				cave_type *cc_ptr;
+
+				for (ii = 0; ii < 9; ii++)
+				{
+					yyy = yy + ddy_ddd[ii];
+					xxx = xx + ddx_ddd[ii];
+					if (!in_bounds2(yyy, xxx)) continue;
+					cc_ptr = &cave[yyy][xxx];
+					if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
+					{
+						c_ptr->info |= CAVE_GLOW;
+						break;
+					}
+				}
+			}
+		}
+	}
+
+
 	/* Mega-Hack -- Forget the view and lite */
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
 
@@ -5913,6 +5997,11 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 
 	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+
+	if (p_ptr->special_defense & NINJA_S_STEALTH)
+	{
+		if (cave[py][px].info & CAVE_GLOW) set_superstealth(FALSE);
+	}
 
 	/* Success */
 	return (TRUE);
