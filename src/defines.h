@@ -5330,19 +5330,15 @@ extern int PlayerUID;
 	 (((TARGET) <= 0) && (quest_number(dun_level) || (dun_level >= d_info[dungeon_type].maxdepth)) && \
 	  (dun_level >= 1) && ironman_downward))
 
-/*
- * World Score -- internet resource value
- */
-#define HTTP_PROXY ""                   /* Default proxy url */
-#define HTTP_PROXY_PORT 0               /* Default proxy port */
-#define HTTP_TIMEOUT    20              /* Timeout length (second) */
-#define SCORE_SERVER "www.kmc.gr.jp"    /* Default score server url */
-#define SCORE_PORT 80                   /* Default score server port */
 
+/*
+ * Max numbers of macro trigger names
+ */
 #define MAX_MACRO_MOD 12
 #define MAX_MACRO_TRIG 200
 
-#define SCREEN_BUF_SIZE 65536           /* max screen dump buffer size */
+/* Max size of screen dump buffer */
+#define SCREEN_BUF_SIZE 65536
 
 
 /*

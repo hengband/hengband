@@ -100,7 +100,7 @@ int soc_read(int sd, char *buf, size_t sz)
 #endif /* if 0 */
 
 /* プロキシサーバのアドレスををファイルから読んで設定する */
-static void set_proxy(void)
+void set_proxy(char *default_url, int default_port)
 {
 	char buf[1024];
 	size_t len;
@@ -119,9 +119,9 @@ static void set_proxy(void)
 
 	if (!fp)
 	{
-		/* ファイルが存在しない場合はdefine.h内のデフォルトを設定 */
-		proxy = (char *)HTTP_PROXY;
-		proxy_port = HTTP_PROXY_PORT;
+		/* ファイルが存在しない場合はデフォルトを設定 */
+		proxy = default_url;
+		proxy_port = default_port;
 		return;
 	}
 
@@ -176,7 +176,7 @@ static void set_proxy(void)
 	else
 	{
 		strcpy(proxy, s);
-		proxy_port = HTTP_PROXY_PORT;
+		proxy_port = default_port;
 	}
 
 	/* プロキシのアドレスをproxyにコピー */
@@ -256,9 +256,9 @@ static void interrupt_report(int sig)
 #endif
 
 
+/* サーバにコネクトする関数。 */
+int connect_server(int timeout, const char *host, int port)
 #ifndef MACINTOSH
-/* サーバにコネクトする関数。 Win, unix */
-static int connect_server(int timeout, const char *host, int port)
 {
 	int			sd;
 	struct sockaddr_in	to;
@@ -341,17 +341,9 @@ static int connect_server(int timeout, const char *host, int port)
 
 #ifndef WINDOWS
 	if ((sd = socket(PF_INET, SOCK_STREAM, 0)) < 0)
-	{
-#ifdef JP
-		errstr = "エラー: ソケットを生成できません";
-#else
-		errstr = "Error : cannot create socket.";
-#endif
-		restore_signal();
-		return -1;
-	}
 #else
 	if  ((sd = socket(PF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
+#endif
 	{
 #ifdef JP
 		errstr = "エラー: ソケットを生成できません";
@@ -361,7 +353,6 @@ static int connect_server(int timeout, const char *host, int port)
 		restore_signal();
 		return -1;
 	}
-#endif
 
 	if (connect(sd, (struct sockaddr *)&to, sizeof(to)) < 0)
 	{
@@ -386,8 +377,7 @@ static int connect_server(int timeout, const char *host, int port)
 
 #else /* !MACINTOSH */
 
-/* サーバにコネクトする関数。 Mac */
-static int connect_server(int timeout, const char *host, int port)
+        /* サーバにコネクトする関数。 Mac */
 {
 	OSStatus err;
 	InetHostInfo 	response;
@@ -484,13 +474,6 @@ static int connect_server(int timeout, const char *host, int port)
 }
 #endif
 
-int connect_scoreserver(void)
-{
-	/* プロキシを設定する */
-	set_proxy();
-
-	return connect_server(HTTP_TIMEOUT, SCORE_SERVER, SCORE_PORT);
-}
 
 int disconnect_server(int sd)
 {

@@ -1552,7 +1552,8 @@ extern cptr make_screen_dump(void);
 
 /* inet.c */
 extern int soc_write(int sd, char *buf, size_t sz);
-extern int connect_scoreserver(void);
+extern void set_proxy(char *default_url, int default_port);
+extern int connect_server(int timeout, const char *host, int port);
 extern int disconnect_server(int sd);
 extern cptr soc_err(void);
 

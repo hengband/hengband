@@ -26,6 +26,15 @@
 #include <signal.h>
 #endif
 
+/*
+ * internet resource value
+ */
+#define HTTP_PROXY ""                   /* Default proxy url */
+#define HTTP_PROXY_PORT 0               /* Default proxy port */
+#define HTTP_TIMEOUT    20              /* Timeout length (second) */
+#define SCORE_SERVER "www.kmc.gr.jp"    /* Default score server url */
+#define SCORE_PORT 80                   /* Default score server port */
+
 #ifdef JP
 #define SCORE_PATH "http://www.kmc.gr.jp/~habu/local/hengscore/score.cgi"
 #else
@@ -486,7 +495,13 @@ errr report_score(void)
 #endif
 		Term_fresh();
 		
-		sd = connect_scoreserver();
+		/* プロキシを設定する */
+		set_proxy(HTTP_PROXY, HTTP_PROXY_PORT);
+
+		/* Connect to the score server */
+		sd = connect_server(HTTP_TIMEOUT, SCORE_SERVER, SCORE_PORT);
+
+
 		if (!(sd < 0)) break;
 #ifdef JP
 		sprintf(buff, "スコア・サーバへの接続に失敗しました。(%s)", soc_err());
