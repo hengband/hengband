@@ -894,11 +894,11 @@ void map_info(int y, int x, byte *ap, char *cp)
 	if ((feat <= FEAT_INVIS) || (feat == FEAT_DIRT) || (feat == FEAT_GRASS))
 	{
 		/* Memorized (or visible) floor */
-		if   ((c_ptr->info & CAVE_MARK) ||
-		    (((c_ptr->info & CAVE_LITE) || (c_ptr->info & CAVE_MNLT) ||
-		     ((c_ptr->info & CAVE_GLOW) &&
-		      (c_ptr->info & CAVE_VIEW))) &&
-		     !p_ptr->blind))
+		if ((c_ptr->info & CAVE_MARK) ||
+		  (((c_ptr->info & (CAVE_LITE | CAVE_MNLT)) ||
+		   ((c_ptr->info & CAVE_VIEW) &&
+		   ((c_ptr->info & CAVE_GLOW) || (p_ptr->pclass == CLASS_NINJA)))) &&
+		   !p_ptr->blind))
 		{
 			/* Access floor */
 			f_ptr = &f_info[feat];
@@ -1692,8 +1692,8 @@ void note_spot(int y, int x)
 
 		if (p_ptr->pclass != CLASS_NINJA)
 		{
-		/* Require "perma-lite" of the grid */
-		if (!(c_ptr->info & (CAVE_GLOW | CAVE_MNLT))) return;
+			/* Require "perma-lite" of the grid */
+			if (!(c_ptr->info & (CAVE_GLOW | CAVE_MNLT))) return;
 		}
 	}
 
@@ -1714,15 +1714,12 @@ void note_spot(int y, int x)
 	/* Hack -- memorize grids */
 	if (!(c_ptr->info & (CAVE_MARK)))
 	{
-		if (p_ptr->pclass == CLASS_NINJA)
-		{
-			c_ptr->info |= (CAVE_MARK);
-		}
 		/* Handle floor grids first */
 		if ((feat <= FEAT_INVIS) || (feat == FEAT_DIRT) || (feat == FEAT_GRASS))
 		{
 			/* Option -- memorize all torch-lit floors */
-			if (view_torch_grids && (c_ptr->info & (CAVE_LITE | CAVE_MNLT)))
+			if (view_torch_grids &&
+			    ((c_ptr->info & (CAVE_LITE | CAVE_MNLT)) || (p_ptr->pclass == CLASS_NINJA)))
 			{
 				/* Memorize */
 				c_ptr->info |= (CAVE_MARK);
@@ -1745,6 +1742,13 @@ void note_spot(int y, int x)
 
 		/* Memorize torch-lit walls */
 		else if (c_ptr->info & (CAVE_LITE | CAVE_MNLT))
+		{
+			/* Memorize */
+			c_ptr->info |= (CAVE_MARK);
+		}
+
+		/* Mwemorize walls seen by noctovision of Ninja */
+		else if (p_ptr->pclass == CLASS_NINJA)
 		{
 			/* Memorize */
 			c_ptr->info |= (CAVE_MARK);
