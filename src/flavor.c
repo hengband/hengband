@@ -1092,8 +1092,6 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
-	monster_race *r_ptr = &r_info[o_ptr->pval];
-
 	/* Extract some flags */
 	object_flags(o_ptr, flgs);
 
@@ -1130,6 +1128,8 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 		case TV_CAPTURE:
 		{
+			monster_race *r_ptr = &r_info[o_ptr->pval];
+
 			if (known)
 			{
 				if (!o_ptr->pval)
@@ -1170,6 +1170,8 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		case TV_FIGURINE:
 		case TV_STATUE:
 		{
+			monster_race *r_ptr = &r_info[o_ptr->pval];
+
 #ifdef JP
 			modstr = r_name + r_ptr->name;
 #else
@@ -1194,6 +1196,8 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		/* Corpses */
 		case TV_CORPSE:
 		{
+			monster_race *r_ptr = &r_info[o_ptr->pval];
+
 			modstr = r_name + r_ptr->name;
 
 
@@ -1715,9 +1719,14 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		}
 
 		/* Unique corpses are unique */
-		else if ((o_ptr->tval == TV_CORPSE) && (r_ptr->flags1 & RF1_UNIQUE))
+		else if (o_ptr->tval == TV_CORPSE)
 		{
-			t = object_desc_str(t, "The ");
+			monster_race *r_ptr = &r_info[o_ptr->pval];
+
+			if (r_ptr->flags1 & RF1_UNIQUE)
+			{
+				t = object_desc_str(t, "The ");
+			}
 		}
 
 		/* A single one, with a vowel in the modifier */
