@@ -6453,10 +6453,10 @@ option_type option_info[] =
 
 
 #ifdef JP
-	{ &over_exert,                  TRUE,  1, 0, 29,
+	{ &over_exert,                  FALSE,  1, 0, 29,
 	"over_exert",                   "MPが足りなくても魔法に挑戦する" },
 #else
-	{ &over_exert,                  TRUE,  1, 0, 29,
+	{ &over_exert,                  FALSE,  1, 0, 29,
 	"over_exert",                   "Allow casting spells when short of mana" },
 #endif
 
