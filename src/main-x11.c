@@ -1606,7 +1606,6 @@ static errr Infofnt_text_std(int x, int y, cptr str, int len)
 	/* Get the length of the string */
 	if (len < 0) len = strlen(str);
 
-
 	/*** Decide where to place the string, vertically ***/
 
 	/* Ignore Vertical Justifications */
@@ -1659,6 +1658,9 @@ static errr Infofnt_text_std(int x, int y, cptr str, int len)
                                  Infokfnt->info, Infofnt->wid * 2);
 #else
 #ifdef USE_FONTSET
+		/* Delete rectangle first */
+		XClearArea(Metadpy->dpy, Infowin->win, x, y - Infofnt->asc, len * Infofnt->wid, Infofnt->hgt, FALSE);
+
 		XmbDrawImageString(Metadpy->dpy, Infowin->win, Infofnt->info,
 		                   Infoclr->gc, x, y, str, len);
 #else
