@@ -6103,10 +6103,18 @@ static void cave_temp_room_unlite(void)
 		{
 			for (j = 0; j < 9; j++)
 			{
-				if (have_flag(f_flags_bold(y + ddy_ddd[j], x + ddx_ddd[j]), FF_GLOW))
+				int by = y + ddy_ddd[j];
+				int bx = x + ddx_ddd[j];
+
+				if (in_bounds2(by, bx))
 				{
-					do_dark = FALSE;
-					break;
+					cave_type *cc_ptr = &cave[by][bx];
+
+					if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
+					{
+						do_dark = FALSE;
+						break;
+					}
 				}
 			}
 

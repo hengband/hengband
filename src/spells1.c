@@ -1075,10 +1075,15 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 					int by = y + ddy_ddd[j];
 					int bx = x + ddx_ddd[j];
 
-					if (in_bounds2(by, bx) && have_flag(f_flags_bold(by, bx), FF_GLOW))
+					if (in_bounds2(by, bx))
 					{
-						do_dark = FALSE;
-						break;
+						cave_type *cc_ptr = &cave[by][bx];
+
+						if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
+						{
+							do_dark = FALSE;
+							break;
+						}
 					}
 				}
 
