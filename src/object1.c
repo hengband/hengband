@@ -5443,6 +5443,12 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 	int max_inven = 0;
 	int max_equip = 0;
 
+#ifdef ALLOW_REPEAT
+
+	static s16b prev_k_idx = 0;
+
+#endif /* ALLOW_REPEAT */
+
 #ifdef ALLOW_EASY_FLOOR /* TNB */
 
 	if (easy_floor || use_menu) return get_item_floor(cp, pmt, str, mode);
@@ -5482,6 +5488,14 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 			/* Validate the item */
 			if (item_tester_okay(o_ptr))
 			{
+				bool allowed = !command_cmd || (prev_k_idx == o_ptr->k_idx);
+
+				if (!allowed)
+				{
+					allowed = get_item_allow(*cp);
+					if (allowed) prev_k_idx = o_ptr->k_idx;
+				}
+
 				/* Forget the item_tester_tval restriction */
 				item_tester_tval = 0;
 
@@ -5490,8 +5504,8 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 
 				command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 
-				/* Success */
-				return (TRUE);
+				/* Success or aborted */
+				return allowed;
 			}
 		}
 
@@ -5501,6 +5515,14 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 			/* Verify the item */
 			if (get_item_okay(*cp))
 			{
+				bool allowed = !command_cmd || (prev_k_idx == inventory[*cp].k_idx);
+
+				if (!allowed)
+				{
+					allowed = get_item_allow(*cp);
+					if (allowed) prev_k_idx = inventory[*cp].k_idx;
+				}
+
 				/* Forget the item_tester_tval restriction */
 				item_tester_tval = 0;
 
@@ -5509,8 +5531,8 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 
 				command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 
-				/* Success */
-				return (TRUE);
+				/* Success or aborted */
+				return allowed;
 			}
 		}
 	}
@@ -6248,6 +6270,13 @@ if (ver && !verify("本当に", k))
 	{
 #ifdef ALLOW_REPEAT
 		repeat_push(*cp);
+
+		if (command_cmd)
+		{
+			if (*cp == INVEN_FORCE) prev_k_idx = 0;
+			else if (*cp < 0) prev_k_idx = o_list[0 - (*cp)].k_idx;
+			else prev_k_idx = inventory[*cp].k_idx;
+		}
 #endif /* ALLOW_REPEAT */
 
 		command_cmd = 0; /* Hack -- command_cmd is no longer effective */
@@ -6485,6 +6514,8 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 
 #ifdef ALLOW_REPEAT
 
+	static s16b prev_k_idx = 0;
+
 	/* Get the item index */
 	if (repeat_pull(cp))
 	{
@@ -6511,6 +6542,14 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 			/* Validate the item */
 			if (item_tester_okay(o_ptr))
 			{
+				bool allowed = !command_cmd || (prev_k_idx == o_ptr->k_idx);
+
+				if (!allowed)
+				{
+					allowed = get_item_allow(*cp);
+					if (allowed) prev_k_idx = o_ptr->k_idx;
+				}
+
 				/* Forget the item_tester_tval restriction */
 				item_tester_tval = 0;
 
@@ -6519,8 +6558,8 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 
 				command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 
-				/* Success */
-				return (TRUE);
+				/* Success or aborted */
+				return allowed;
 			}
 		}
 
@@ -6530,6 +6569,14 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 			/* Verify the item */
 			if (get_item_okay(*cp))
 			{
+				bool allowed = !command_cmd || (prev_k_idx == inventory[*cp].k_idx);
+
+				if (!allowed)
+				{
+					allowed = get_item_allow(*cp);
+					if (allowed) prev_k_idx = inventory[*cp].k_idx;
+				}
+
 				/* Forget the item_tester_tval restriction */
 				item_tester_tval = 0;
 
@@ -6538,8 +6585,8 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 
 				command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 
-				/* Success */
-				return (TRUE);
+				/* Success or aborted */
+				return allowed;
 			}
 		}
 	}
@@ -7680,6 +7727,13 @@ if (ver && !verify("本当に", k))
 	{
 #ifdef ALLOW_REPEAT
 		repeat_push(*cp);
+
+		if (command_cmd)
+		{
+			if (*cp == INVEN_FORCE) prev_k_idx = 0;
+			else if (*cp < 0) prev_k_idx = o_list[0 - (*cp)].k_idx;
+			else prev_k_idx = inventory[*cp].k_idx;
+		}
 #endif /* ALLOW_REPEAT */
 
 		command_cmd = 0; /* Hack -- command_cmd is no longer effective */
