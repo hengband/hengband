@@ -2440,7 +2440,7 @@ static void SetupAppDir(void)
 
 
 
-#ifdef TARGET_API_MAC_CARBON
+#if TARGET_API_MAC_CARBON
 /*
  * Using Core Foundation's Preferences services -- pelpel
  *
@@ -2879,16 +2879,6 @@ static void load_prefs(void)
 	/* Special menu */
 	m = GetMenuHandle(134);
 
-#if TARGET_API_MAC_CARBON
-	/* Item "arg_sound" */
-	CheckMenuItem(m, 1, arg_sound);
-
-	/* Item "arg_graphics" */
-	CheckMenuItem(m, 2, arg_graphics);
-	
-	/* Item "arg_newstyle_graphics"*/
-	CheckMenuItem(m, 8, arg_newstyle_graphics);
-#else
 	/* Item "arg_sound" */
 	CheckItem(m, 1, arg_sound);
 
@@ -2897,7 +2887,9 @@ static void load_prefs(void)
 	
 	/* Item "arg_newstyle_graphics"*/
 	CheckItem(m, 8, arg_newstyle_graphics);
-#endif
+
+	/* Item "arg_bigtile"*/
+	CheckItem(m, 9, arg_bigtile);
 
 	/* Windows */
 	for (i = 0; i < MAX_TERM_DATA; i++)
@@ -3051,7 +3043,7 @@ static void init_windows(void)
 
 	/*** Load preferences ***/
 	
-#ifdef TARGET_API_MAC_CARBON
+#if TARGET_API_MAC_CARBON
 	cf_load_prefs();
 #else
 	/* Assume failure */
@@ -3122,7 +3114,7 @@ static void init_windows(void)
 		/* Close the file */
 		my_fclose(fff);
 	}
-#endif
+#endif /* TARGET_API_MAC_CARBON */
 
 
 	/*** Instantiate ***/
