@@ -466,6 +466,31 @@ void place_quest_monsters(void)
 
 
 /*
+ * Set boundary mimic and add "solid" perma-wall
+ */
+static void set_bound_perm_wall(cave_type *c_ptr)
+{
+	if (bound_walls_perm)
+	{
+		/* Clear boundary mimic */
+		c_ptr->mimic = 0;
+	}
+	else
+	{
+		/* Hack -- Decline boundary walls with known treasure  */
+		if ((c_ptr->feat == FEAT_MAGMA_K) || (c_ptr->feat == FEAT_QUARTZ_K))
+			c_ptr->feat -= (FEAT_MAGMA_K - FEAT_MAGMA);
+
+		/* Set boundary mimic */
+		c_ptr->mimic = f_info[c_ptr->feat].mimic;
+	}
+
+	/* Add "solid" perma-wall */
+	c_ptr->feat = FEAT_PERM_SOLID;
+}
+
+
+/*
  * Generate a new dungeon level
  *
  * Note that "dun_body" adds about 4000 bytes of memory to the stack.
@@ -991,33 +1016,15 @@ static bool cave_gen(void)
 	/* Special boundary walls -- Top and bottom */
 	for (x = 0; x < cur_wid; x++)
 	{
-		cave_type *c_ptr = &cave[0][x];
-
-		/* Set boundary mimic and add "solid" perma-wall */
-		c_ptr->mimic = bound_walls_perm ? 0 : f_info[c_ptr->feat].mimic;
-		c_ptr->feat = FEAT_PERM_SOLID;
-
-		c_ptr = &cave[cur_hgt - 1][x];
-
-		/* Set boundary mimic and add "solid" perma-wall */
-		c_ptr->mimic = bound_walls_perm ? 0 : f_info[c_ptr->feat].mimic;
-		c_ptr->feat = FEAT_PERM_SOLID;
+		set_bound_perm_wall(&cave[0][x]);
+		set_bound_perm_wall(&cave[cur_hgt - 1][x]);
 	}
 
 	/* Special boundary walls -- Left and right */
 	for (y = 1; y < (cur_hgt - 1); y++)
 	{
-		cave_type *c_ptr = &cave[y][0];
-
-		/* Set boundary mimic and add "solid" perma-wall */
-		c_ptr->mimic = bound_walls_perm ? 0 : f_info[c_ptr->feat].mimic;
-		c_ptr->feat = FEAT_PERM_SOLID;
-
-		c_ptr = &cave[y][cur_wid - 1];
-
-		/* Set boundary mimic and add "solid" perma-wall */
-		c_ptr->mimic = bound_walls_perm ? 0 : f_info[c_ptr->feat].mimic;
-		c_ptr->feat = FEAT_PERM_SOLID;
+		set_bound_perm_wall(&cave[y][0]);
+		set_bound_perm_wall(&cave[y][cur_wid - 1]);
 	}
 
 	/* Determine the character location */
