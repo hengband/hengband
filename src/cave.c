@@ -2074,7 +2074,7 @@ static void display_shortened_item_name(object_type *o_ptr, int y)
 	int len = 0;
 	byte attr;
 
-	object_desc(buf, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(buf, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
 	attr = tval_to_attr[o_ptr->tval % 128];
 
 	if (p_ptr->image)
