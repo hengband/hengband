@@ -4409,17 +4409,17 @@ void update_smell(void)
 	int y, x;
 
 	/* Create a table that controls the spread of scent */
-	int scent_adjust[5][5] = 
+	const int scent_adjust[5][5] = 
 	{
-		{ 250,  0,  0,  0, 250 },
-		{   0,  1,  1,  1,   0 },
-		{   0,  1,  2,  1,   0 },
-		{   0,  1,  1,  1,   0 },
-		{ 250,  0,  0,  0, 250 },
+		{ -1, 0, 0, 0,-1 },
+		{  0, 1, 1, 1, 0 },
+		{  0, 1, 2, 1, 0 },
+		{  0, 1, 1, 1, 0 },
+		{ -1, 0, 0, 0,-1 },
 	};
 
 	/* Loop the age and adjust scent values when necessary */
-	if (scent_when++ == 250)
+	if (++scent_when == 254)
 	{
 		/* Scan the entire dungeon */
 		for (y = 0; y < cur_hgt; y++)
@@ -4432,7 +4432,7 @@ void update_smell(void)
 		}
 
 		/* Restart */
-		scent_when = 127;
+		scent_when = 126;
 	}
 
 
@@ -4459,7 +4459,7 @@ void update_smell(void)
 			if (!player_has_los_bold(y, x)) continue;
 
 			/* Note grids that are too far away */
-			if (scent_adjust[i][j] == 250) continue;
+			if (scent_adjust[i][j] == -1) continue;
 
 			/* Mark the grid with new scent */
 			c_ptr->when = scent_when + scent_adjust[i][j];
