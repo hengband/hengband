@@ -3774,6 +3774,9 @@ msg_format("%^sは戦いを決意した！", m_name);
 			msg_format("%^s turns to fight!", m_name);
 #endif
 
+			/* Redraw (later) if needed */
+			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
+
 			chg_virtue(V_COMPASSION, -1);
 		}
 
