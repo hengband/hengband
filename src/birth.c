@@ -2238,7 +2238,7 @@ static byte choose_realm(s32b choices, int *count)
 
 			screen_load();
 		}
-		else bell();
+		else if (c !='2' && c !='4' && c !='6' && c !='8') bell();
 	}
 
 	/* Clean up */
@@ -4018,7 +4018,7 @@ static bool get_player_race(void)
 #endif
 			screen_load();
 		}
-		else bell();
+		else if (c !='2' && c !='4' && c !='6' && c !='8') bell();
 	}
 
 	/* Set race */
@@ -4242,7 +4242,7 @@ static bool get_player_class(void)
 
 			screen_load();
 		}
-		else bell();
+		else if (c !='2' && c !='4' && c !='6' && c !='8') bell();
 	}
 
 	/* Set class */
@@ -4488,7 +4488,7 @@ static bool get_player_seikaku(void)
 
 			screen_load();
 		}
-		else bell();
+		else if (c !='2' && c !='4' && c !='6' && c !='8') bell();
 	}
 
 	/* Set seikaku */
@@ -4730,14 +4730,14 @@ static bool get_stat_limits(void)
 			}
 			break;
 		case 'm':
-			if(cs != 6 && cval[cs] < 17)
+			if(cs != 6)
 			{
 				cval[cs] = 17;
 				os = 7;
 			}
 			break;
 		case 'n':
-			if(cs != 6 && cval[cs] > 3)
+			if(cs != 6)
 			{
 				cval[cs] = 3;
 				os = 7;
@@ -4820,7 +4820,7 @@ static bool get_chara_limits(void)
 	put_str("体格/地位の最小値/最大値を設定して下さい。", 10, 10);
 	put_str("  項    目                 最小値  最大値", 13,20);
 #else
-	put_str(" Parameter                    Mix     Man", 13,20);
+	put_str(" Parameter                    Min     Max", 13,20);
 	put_str("Set minimum/maximum attribute.", 10, 10);
 #endif
 
@@ -4915,33 +4915,39 @@ static bool get_chara_limits(void)
 		
 		/* Prompt for the minimum stats */
 		c = inkey();
-		if (c == 'Q') birth_quit();
-		if (c == 'S') return (FALSE);
-		if (c == ESCAPE) break;
-		if (c == ' ' || c == '\r')
-		{
+		switch (c){
+		case 'Q':
+			birth_quit();
+			break;
+		case 'S':
+			return (FALSE);
+		case ESCAPE:
+			break; /*後でもう一回breakせんと*/
+		case ' ':
+		case '\r':
 			if(cs == 6) break;
-			else cs++;
-		}
-		if (c == '8' || c == 'k')
-		{
+			cs++;
+			c = '6';
+			break;
+		case '8':
+		case 'k':
 			if (cs-2 >= 0) cs -= 2;
-		}
-		if (c == '2' || c == 'j')
-		{
+			break;
+		case '2':
+		case 'j':
 			if (cs < 6) cs += 2;
 			if (cs > 6) cs = 6;
-		}
-		if (c == '4' || c == 'h')
-		{
+			break;
+		case '4':
+		case 'h':
 			if (cs > 0) cs--;
-		}
-		if (c == '6' || c == 'l')
-		{
+			break;
+		case '6':
+		case 'l':
 			if (cs < 6) cs++;
-		}
-		if (c == '-' || c == '<')
-		{
+			break;
+		case '-':
+		case '<':
 			if (cs != 6)
 			{
 				if(cs%2)
@@ -4961,9 +4967,9 @@ static bool get_chara_limits(void)
 					}
 				}
 			}
-		}
-		if (c == '+' || c == '>')
-		{
+			break;
+		case '+':
+		case '>':
 			if (cs != 6)
 			{
 				if(cs%2)
@@ -4983,9 +4989,8 @@ static bool get_chara_limits(void)
 					}
 				}
 			}
-		}
-		if (c == 'm')
-		{
+			break;
+		case 'm':
 			if(cs != 6)
 			{
 				if(cs%2)
@@ -5005,9 +5010,8 @@ static bool get_chara_limits(void)
 					}
 				}
 			}
-		}
-		if (c == 'n')
-		{
+			break;
+		case 'n':
 			if(cs != 6)
 			{
 				if(cs%2)
@@ -5027,10 +5031,11 @@ static bool get_chara_limits(void)
 					}
 				}
 			}
-		}
-		if (c == '?') do_cmd_help();
-		else if (c == '=')
-		{
+			break;
+		case '?':
+			do_cmd_help();
+			break;
+		case '=':
 			screen_save();
 #ifdef JP
 			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
@@ -5039,8 +5044,12 @@ static bool get_chara_limits(void)
 #endif
 
 			screen_load();
+			break;
+		default:
+			bell();
+			break;
 		}
-		else bell();
+		if(c == ESCAPE || ((c == ' ' || c == '\r') && cs == 6))break;
 	}
 
 	/* Input the minimum stats */
@@ -5262,7 +5271,7 @@ static bool player_birth_aux(void)
 
 			screen_load();
 		}
-		else bell();
+		else if(c != '4' && c != '6')bell();
 	}
 
 	/* Set sex */
