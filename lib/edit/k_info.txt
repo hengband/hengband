@@ -294,47 +294,47 @@ D:それは食べると体力が4d8回復する。
 
 ##### Normal Food #####
 
-N:21:& 食料
+N:21:食料
 E:& Ration~ of Food
 G:,:U
 I:80:35:5000
 W:0:0:10:3
 A:0/1:5/1:10/1:20/1
 
-N:22:& ビスケット
+N:22:ビスケット
 E:& Hard Biscuit~
 G:,:U
 I:80:32:500
 W:0:0:2:1
 
 #JZ#
-N:23:& 鹿肉
+N:23:鹿肉
 E:& Strip~ of Venison
 G:,:u
 I:80:33:1500
 W:0:0:2:2
 
-N:24:& スライムモルド
+N:24:スライムモルド
 E:& Slime Mold~
 G:,:g
 I:80:36:3000
 W:1:0:5:2
 A:1/1
 
-N:25:& エルフの行糧
+N:25:エルフの行糧
 E:& Piece~ of Elvish Waybread
 G:,:B
 I:80:37:7500
 W:5:0:3:10
 A:5/1:10/1
 
-N:26:& 高級エール
+N:26:高級エール
 E:& Pint~ of Fine Ale
 G:,:y
 I:80:38:500
 W:0:0:5:1
 
-N:27:& 高級ワイン
+N:27:高級ワイン
 E:& Pint~ of Fine Wine
 G:,:r
 I:80:39:1000
@@ -343,7 +343,7 @@ W:0:0:10:2
 ##### Extra digger #####
 
 #JZ#
-N:28:& 戦闘用つるはし
+N:28:戦闘用つるはし
 E:& Mattock~
 G:\:D
 I:20:7:2
@@ -355,7 +355,7 @@ F:SHOW_MODS | TUNNEL
 ##### Edged Weapons #####
 
 #JZ#
-N:29:& 野太刀
+N:29:野太刀
 E:& No-dachi~
 G:|:W
 I:23:27:0
@@ -364,7 +364,7 @@ A:35/3
 P:0:5d4:0:0:0
 F:SHOW_MODS
 
-N:30:& 折れたダガー
+N:30:折れたダガー
 E:& Broken Dagger~
 G:|:D
 I:23:1:0
@@ -373,7 +373,7 @@ A:0/1
 P:0:1d1:-2:-4:0
 F:SHOW_MODS
 
-N:31:& バスタード・ソード
+N:31:バスタード・ソード
 E:& Bastard Sword~
 G:|:W
 I:23:21:0
@@ -382,7 +382,7 @@ A:15/1
 P:0:3d4:0:0:0
 F:SHOW_MODS
 
-N:32:& シミター
+N:32:シミター
 E:& Scimitar~
 G:|:W
 I:23:18:0
@@ -391,7 +391,7 @@ A:10/1
 P:0:2d5:0:0:0
 F:SHOW_MODS
 
-N:33:& タルワール
+N:33:タルワール
 E:& Tulwar~
 G:|:W
 I:23:15:0
@@ -400,7 +400,7 @@ A:5/1
 P:0:2d4:0:0:0
 F:SHOW_MODS | RIDING
 
-N:34:& ブロード・ソード
+N:34:ブロード・ソード
 E:& Broad Sword~
 G:|:W
 I:23:16:0
@@ -409,7 +409,7 @@ A:10/1:15/1
 P:0:2d5:0:0:0
 F:SHOW_MODS | RIDING
 
-N:35:& ショート・ソード
+N:35:ショート・ソード
 E:& Short Sword~
 G:|:W
 I:23:10:0
@@ -418,7 +418,7 @@ A:5/1
 P:0:1d7:0:0:0
 F:SHOW_MODS
 
-N:36:& カオス・ブレード
+N:36:カオス・ブレード
 E:& Blade~ of Chaos
 G:|:v
 I:23:30:0
@@ -427,7 +427,7 @@ A:70/8
 P:0:6d5:0:0:0
 F:RES_CHAOS | SHOW_MODS
 
-N:37:& グレート・ソード
+N:37:グレート・ソード
 E:& Two-Handed Sword~
 G:|:W
 I:23:25:0
@@ -436,7 +436,7 @@ A:30/1:40/1
 P:0:3d6:0:0:0
 F:SHOW_MODS
 
-N:38:& マン・ゴーシュ
+N:38:マン・ゴーシュ
 E:& Main Gauche~
 G:|:W
 I:23:5:0
@@ -445,7 +445,7 @@ A:3/1
 P:0:1d5:0:0:0
 F:SHOW_MODS
 
-N:39:& カットラス
+N:39:カットラス
 E:& Cutlass~
 G:|:W
 I:23:12:0
@@ -454,7 +454,7 @@ A:5/1
 P:0:1d7:0:0:0
 F:SHOW_MODS
 
-N:40:& 首切りソード
+N:40:首切りソード
 E:& Executioner's Sword~
 G:|:r
 I:23:28:0
@@ -463,7 +463,7 @@ A:40/1
 P:0:4d5:0:0:0
 F:SHOW_MODS
 
-N:41:& カタナ
+N:41:カタナ
 E:& Katana~
 G:|:W
 I:23:20:0
@@ -472,7 +472,7 @@ A:20/1
 P:0:3d4:0:0:0
 F:SHOW_MODS
 
-N:42:& ロング・ソード
+N:42:ロング・ソード
 E:& Long Sword~
 G:|:W
 I:23:17:0
@@ -481,7 +481,7 @@ A:10/1:20/1
 P:0:2d5:0:0:0
 F:SHOW_MODS | RIDING
 
-N:43:& ダガー
+N:43:ダガー
 E:& Dagger~
 G:|:W
 I:23:4:0
@@ -490,7 +490,7 @@ A:0/1:5/1:10/1:20/1
 P:0:1d4:0:0:0
 F:SHOW_MODS
 
-N:44:& レイピア
+N:44:レイピア
 E:& Rapier~
 G:|:W
 I:23:7:0
@@ -499,7 +499,7 @@ A:5/1
 P:0:1d6:0:0:0
 F:SHOW_MODS
 
-N:45:& サーベル
+N:45:サーベル
 E:& Sabre~
 G:|:W
 I:23:11:0
@@ -508,7 +508,7 @@ A:5/1
 P:0:1d7:0:0:0
 F:SHOW_MODS | RIDING
 
-N:46:& スモール・ソード
+N:46:スモール・ソード
 E:& Small Sword~
 G:|:W
 I:23:8:0
@@ -517,7 +517,7 @@ A:5/1
 P:0:1d6:0:0:0
 F:SHOW_MODS
 
-N:47:& 折れた剣
+N:47:折れた剣
 E:& Broken Sword~
 G:|:D
 I:23:2:0
@@ -528,7 +528,7 @@ F:SHOW_MODS
 
 ##### Hafted Weapons #####
 
-N:48:& 鎖つき鉄球
+N:48:鎖つき鉄球
 E:& Ball-and-Chain~
 G:\:D
 I:21:6:0
@@ -537,7 +537,7 @@ A:20/1
 P:0:2d4:0:0:0
 F:SHOW_MODS | RIDING
 
-N:49:& ムチ
+N:49:ムチ
 E:& Whip~
 G:\:D
 I:21:2:0
@@ -546,7 +546,7 @@ A:3/1
 P:0:1d6:0:0:0
 F:SHOW_MODS
 
-N:50:& フレイル
+N:50:フレイル
 E:& Flail~
 G:\:D
 I:21:13:0
@@ -555,7 +555,7 @@ A:10/1
 P:0:2d6:0:0:0
 F:SHOW_MODS | RIDING
 
-N:51:& ヘヴィ・フレイル
+N:51:ヘヴィ・フレイル
 E:& Two-Handed Flail~
 G:\:y
 I:21:18:0
@@ -564,7 +564,7 @@ A:45/1
 P:0:3d6:0:0:0
 F:SHOW_MODS
 
-N:52:& モーニング・スター
+N:52:モーニング・スター
 E:& Morning Star~
 G:\:D
 I:21:12:0
@@ -573,7 +573,7 @@ A:10/1
 P:0:2d6:0:0:0
 F:SHOW_MODS
 
-N:53:& メイス
+N:53:メイス
 E:& Mace~
 G:\:D
 I:21:5:0
@@ -582,7 +582,7 @@ A:5/1
 P:0:2d4:0:0:0
 F:SHOW_MODS
 
-N:54:& クォータースタッフ
+N:54:クォータースタッフ
 E:& Quarterstaff~
 G:\:U
 I:21:3:0
@@ -591,7 +591,7 @@ A:10/1
 P:0:1d9:0:0:0
 F:SHOW_MODS
 
-N:55:& ウォー・ハンマー
+N:55:ウォー・ハンマー
 E:& War Hammer~
 G:\:D
 I:21:8:0
@@ -600,7 +600,7 @@ A:5/1
 P:0:3d3:0:0:0
 F:SHOW_MODS | RIDING
 
-N:56:& 鉛詰めメイス
+N:56:鉛詰めメイス
 E:& Lead-Filled Mace~
 G:\:D
 I:21:15:0
@@ -609,7 +609,7 @@ A:15/1
 P:0:3d4:0:0:0
 F:SHOW_MODS
 
-N:57:& 粉砕のメイス
+N:57:粉砕のメイス
 E:& Mace~ of Disruption
 G:\:v
 I:21:20:0
@@ -618,7 +618,7 @@ A:80/8
 P:0:5d8:0:0:0
 F:SLAY_UNDEAD | SHOW_MODS
 
-N:58:& ルツェルン・ハンマー
+N:58:ルツェルン・ハンマー
 E:& Lucerne Hammer~
 G:/:B
 I:22:12:0
@@ -629,7 +629,7 @@ F:SHOW_MODS
 
 ##### Polearms #####
 
-N:59:& ビークド・アックス
+N:59:ビークド・アックス
 E:& Beaked Axe~
 G:/:s
 I:22:10:0
@@ -638,7 +638,7 @@ A:15/1
 P:0:2d6:0:0:0
 F:SHOW_MODS
 
-N:60:& グレイブ
+N:60:グレイブ
 E:& Glaive~
 G:/:s
 I:22:13:0
@@ -647,7 +647,7 @@ A:20/1
 P:0:2d6:0:0:0
 F:SHOW_MODS | RIDING
 
-N:61:& ハルベルト
+N:61:ハルベルト
 E:& Halberd~
 G:/:s
 I:22:15:0
@@ -656,7 +656,7 @@ A:25/1
 P:0:3d5:0:0:0
 F:SHOW_MODS
 
-N:62:& オウル・パイク
+N:62:オウル・パイク
 E:& Awl-Pike~
 G:/:s
 I:22:4:0
@@ -665,7 +665,7 @@ A:10/1
 P:0:1d8:0:0:0
 F:SHOW_MODS
 
-N:63:& パイク
+N:63:パイク
 E:& Pike~
 G:/:s
 I:22:8:0
@@ -674,7 +674,7 @@ A:15/1
 P:0:2d5:0:0:0
 F:SHOW_MODS
 
-N:64:& スピア
+N:64:スピア
 E:& Spear~
 G:/:s
 I:22:2:0
@@ -683,7 +683,7 @@ A:5/1
 P:0:1d6:0:0:0
 F:SHOW_MODS | RIDING
 
-N:65:& トライデント
+N:65:トライデント
 E:& Trident~
 G:/:y
 I:22:5:0
@@ -692,7 +692,7 @@ A:5/1
 P:0:1d8:0:0:0
 F:SHOW_MODS | RIDING
 
-N:66:& ランス
+N:66:ランス
 E:& Lance~
 G:/:s
 I:22:20:0
@@ -701,7 +701,7 @@ A:10/1
 P:0:2d8:0:0:0
 F:SHOW_MODS | RIDING
 
-N:67:& グレート・アックス
+N:67:グレート・アックス
 E:& Great Axe~
 G:/:s
 I:22:25:0
@@ -710,7 +710,7 @@ A:40/1
 P:0:4d4:0:0:0
 F:SHOW_MODS
 
-N:68:& バトル・アックス
+N:68:バトル・アックス
 E:& Battle Axe~
 G:/:s
 I:22:22:0
@@ -719,7 +719,7 @@ A:15/1
 P:0:2d8:0:0:0
 F:SHOW_MODS
 
-N:69:& ロッホアーバー・アックス
+N:69:ロッホアーバー・アックス
 E:& Lochaber Axe~
 G:/:D
 I:22:28:0
@@ -728,7 +728,7 @@ A:45/1
 P:0:3d8:0:0:0
 F:SHOW_MODS
 
-N:70:& ブロード・アックス
+N:70:ブロード・アックス
 E:& Broad Axe~
 G:/:s
 I:22:11:0
@@ -737,7 +737,7 @@ A:15/1
 P:0:2d6:0:0:0
 F:SHOW_MODS
 
-N:71:& 大鎌
+N:71:大鎌
 E:& Scythe~
 G:/:s
 I:22:17:0
@@ -746,7 +746,7 @@ A:45/1
 P:0:5d3:0:0:0
 F:SHOW_MODS
 
-N:72:& 切り裂きの大鎌
+N:72:切り裂きの大鎌
 E:& Scythe~ of Slicing
 G:/:r
 I:22:30:0
@@ -758,7 +758,7 @@ F:SHOW_MODS | RIDING
 
 ##### Bows, Crossbows, Slings #####
 
-N:73:& ショート・ボウ
+N:73:ショート・ボウ
 E:& Short Bow~
 G:}:U
 I:19:12:0
@@ -766,7 +766,7 @@ W:3:0:30:50
 A:3/1
 F:SHOW_MODS
 
-N:74:& ロング・ボウ
+N:74:ロング・ボウ
 E:& Long Bow~
 G:}:U
 I:19:13:0
@@ -774,7 +774,7 @@ W:30:0:40:400
 A:30/2:40/2
 F:SHOW_MODS
 
-N:75:& ライト・クロスボウ
+N:75:ライト・クロスボウ
 E:& Light Crossbow~
 G:}:s
 I:19:23:0
@@ -782,7 +782,7 @@ W:10:0:110:140
 A:10/1
 F:SHOW_MODS
 
-N:76:& ヘヴィ・クロスボウ
+N:76:ヘヴィ・クロスボウ
 E:& Heavy Crossbow~
 G:}:s
 I:19:24:0
@@ -790,7 +790,7 @@ W:30:0:200:500
 A:30/2:40/2
 F:SHOW_MODS
 
-N:77:& スリング
+N:77:スリング
 E:& Sling~
 G:}:u
 I:19:2:0
@@ -801,7 +801,7 @@ F:SHOW_MODS
 
 ##### Missiles #####
 
-N:78:& 矢
+N:78:矢
 E:& Arrow~
 G:{:U
 I:17:1:0
@@ -810,7 +810,7 @@ A:3/1:15/1
 P:0:1d4:0:0:0
 F:SHOW_MODS
 
-N:79:& 追尾の矢
+N:79:追尾の矢
 E:& Seeker Arrow~
 G:{:G
 I:17:2:0
@@ -820,7 +820,7 @@ P:0:6d4:0:0:0
 F:SHOW_MODS
 F:IGNORE_ACID | IGNORE_COLD | IGNORE_FIRE | IGNORE_ELEC
 
-N:80:& クロスボウの矢
+N:80:クロスボウの矢
 E:& Bolt~
 G:{:s
 I:18:1:0
@@ -829,7 +829,7 @@ A:3/1:25/1
 P:0:1d5:0:0:0
 F:SHOW_MODS
 
-N:81:& 追尾クロスボウの矢
+N:81:追尾クロスボウの矢
 E:& Seeker Bolt~
 G:{:B
 I:18:2:0
@@ -839,7 +839,7 @@ P:0:6d5:0:0:0
 F:SHOW_MODS
 F:IGNORE_ACID | IGNORE_COLD | IGNORE_FIRE | IGNORE_ELEC
 
-N:82:& 丸い小石
+N:82:丸い小石
 E:& Rounded Pebble~
 G:{:s
 I:16:0:0
@@ -848,7 +848,7 @@ A:0/1
 P:0:1d2:0:0:0
 F:SHOW_MODS
 
-N:83:& 鉄弾
+N:83:鉄弾
 E:& Iron Shot~
 G:{:s
 I:16:1:0
@@ -860,7 +860,7 @@ F:SHOW_MODS
 
 ##### Shovels and Picks #####
 
-N:84:& シャベル
+N:84:シャベル
 E:& Shovel~
 G:\:s
 I:20:1:1
@@ -869,7 +869,7 @@ A:5/16
 P:0:1d2:0:0:0
 F:SHOW_MODS | TUNNEL
 
-N:85:& ノームのシャベル
+N:85:ノームのシャベル
 E:& Gnomish Shovel~
 G:\:G
 I:20:2:2
@@ -878,7 +878,7 @@ A:20/4
 P:0:1d2:0:0:0
 F:SHOW_MODS | TUNNEL
 
-N:86:& ドワーフのシャベル
+N:86:ドワーフのシャベル
 E:& Dwarven Shovel~
 G:\:B
 I:20:3:3
@@ -887,7 +887,7 @@ A:40/1
 P:0:1d3:0:0:0
 F:SHOW_MODS | TUNNEL
 
-N:87:& つるはし
+N:87:つるはし
 E:& Pick~
 G:\:s
 I:20:4:1
@@ -896,7 +896,7 @@ A:10/16
 P:0:1d3:0:0:0
 F:SHOW_MODS | TUNNEL
 
-N:88:& オークのつるはし
+N:88:オークのつるはし
 E:& Orcish Pick~
 G:\:g
 I:20:5:2
@@ -905,7 +905,7 @@ A:30/4
 P:0:1d3:0:0:0
 F:SHOW_MODS | TUNNEL
 
-N:89:& ドワーフのつるはし
+N:89:ドワーフのつるはし
 E:& Dwarven Pick~
 G:\:b
 I:20:6:3
@@ -916,7 +916,7 @@ F:SHOW_MODS | TUNNEL
 
 ##### Armor #####
 #JZ#
-N:90:& エルフのクローク
+N:90:エルフのクローク
 E:& Elven Cloak~
 G:(:G
 I:35:2:1
@@ -926,7 +926,7 @@ P:4:0d0:0:0:4
 F:IGNORE_ACID | IGNORE_COLD | IGNORE_FIRE | IGNORE_ELEC
 F:STEALTH | SEARCH
 
-N:91:& 軟革ブーツ
+N:91:軟革ブーツ
 E:& Pair~ of Soft Leather Boots
 G:]:U
 I:30:2:0
@@ -934,7 +934,7 @@ W:3:0:20:7
 A:3/1
 P:2:1d1:0:0:0
 
-N:92:& 硬革ブーツ
+N:92:硬革ブーツ
 E:& Pair~ of Hard Leather Boots
 G:]:U
 I:30:3:0
@@ -942,7 +942,7 @@ W:5:0:40:12
 A:5/1
 P:3:1d1:0:0:0
 
-N:93:& 鉄鋲底の靴
+N:93:鉄鋲底の靴
 E:& Pair~ of Metal Shod Boots
 G:]:s
 I:30:6:0
@@ -950,7 +950,7 @@ W:20:0:80:50
 A:20/1
 P:6:1d1:0:0:0
 
-N:94:& 硬革帽子
+N:94:硬革帽子
 E:& Hard Leather Cap~
 G:]:u
 I:32:2:0
@@ -958,7 +958,7 @@ W:3:0:15:12
 A:3/1
 P:2:0d0:0:0:0
 
-N:95:& 金属帽子
+N:95:金属帽子
 E:& Metal Cap~
 G:]:s
 I:32:3:0
@@ -966,7 +966,7 @@ W:10:0:20:30
 A:10/1
 P:3:1d1:0:0:0
 
-N:96:& 鉄ヘルメット
+N:96:鉄ヘルメット
 E:& Iron Helm~
 G:]:s
 I:32:5:0
@@ -974,7 +974,7 @@ W:20:0:75:75
 A:20/1
 P:5:1d3:0:0:0
 
-N:97:& 鋼鉄ヘルメット
+N:97:鋼鉄ヘルメット
 E:& Steel Helm~
 G:]:W
 I:32:6:0
@@ -982,7 +982,7 @@ W:40:0:60:200
 A:40/1
 P:6:1d3:0:0:0
 
-N:98:& 鉄冠
+N:98:鉄冠
 E:& Iron Crown~
 G:]:s
 I:33:10:0
@@ -990,7 +990,7 @@ W:40:0:20:500
 A:40/1
 P:0:1d1:0:0:0
 
-N:99:& 金の冠
+N:99:金の冠
 E:& Golden Crown~
 G:]:y
 I:33:11:0
@@ -999,7 +999,7 @@ A:45/1
 P:0:1d1:0:0:0
 F:IGNORE_ACID
 
-N:100:& 宝冠
+N:100:宝冠
 E:& Jewel Encrusted Crown~
 G:]:v
 I:33:12:0
@@ -1008,7 +1008,7 @@ A:50/1
 P:0:1d1:0:0:0
 F:IGNORE_ACID
 
-N:101:& ローブ
+N:101:ローブ
 E:& Robe~
 G:(:b
 I:36:2:0
@@ -1016,7 +1016,7 @@ W:1:0:20:4
 A:1/1:50/1
 P:2:0d0:0:0:0
 
-N:102:& 汚れたボロ服
+N:102:汚れたボロ服
 E:& Filthy Rag~
 G:(:D
 I:36:1:0
@@ -1182,7 +1182,7 @@ P:16:1d4:-2:0:0
 
 # This shield does not belong here
 
-N:122:& ミラー・シールド
+N:122:ミラー・シールド
 E:& Mirror Shield~
 G:[:B
 I:34:10:0
@@ -1194,7 +1194,7 @@ F:IGNORE_ACID | REFLECT
 
 ### The Cloaks ###
 
-N:123:& クローク
+N:123:クローク
 E:& Cloak~
 G:(:g
 I:35:1:0
@@ -1202,7 +1202,7 @@ W:1:0:10:3
 A:1/1:20/1
 P:1:0d0:0:0:0
 
-N:124:& 影のクローク
+N:124:影のクローク
 E:& Shadow Cloak~
 G:(:D
 I:35:6:0
@@ -1214,7 +1214,7 @@ F:RES_DARK | RES_LITE
 
 ### The Gloves ###
 
-N:125:& 革グローブ
+N:125:革グローブ
 E:& Set~ of Leather Gloves
 G:]:U
 I:31:1:0
@@ -1222,7 +1222,7 @@ W:1:0:5:3
 A:1/1
 P:1:0d0:0:0:0
 
-N:126:& ガントレット
+N:126:ガントレット
 E:& Set~ of Gauntlets
 G:]:U
 I:31:2:0
@@ -1230,7 +1230,7 @@ W:10:0:25:35
 A:10/1
 P:2:1d1:0:0:0
 
-N:127:& セスタス
+N:127:セスタス
 E:& Set~ of Cesti
 G:]:W
 I:31:5:0
@@ -1241,7 +1241,7 @@ P:5:1d1:0:0:0
 
 ### The shields ###
 
-N:128:& 革製スモール・シールド
+N:128:革製スモール・シールド
 E:& Small Leather Shield~
 G:):U
 I:34:2:0
@@ -1249,7 +1249,7 @@ W:3:0:50:15
 A:3/1
 P:3:1d1:0:0:0
 
-N:129:& 革製ラージ・シールド
+N:129:革製ラージ・シールド
 E:& Large Leather Shield~
 G:):U
 I:34:4:0
@@ -1257,7 +1257,7 @@ W:15:0:100:100
 A:15/1
 P:6:1d2:0:0:0
 
-N:130:& 金属製スモール・シールド
+N:130:金属製スモール・シールド
 E:& Small Metal Shield~
 G:):s
 I:34:3:0
@@ -1265,7 +1265,7 @@ W:10:0:65:40
 A:10/1
 P:5:1d2:0:0:0
 
-N:131:& 金属製ラージ・シールド
+N:131:金属製ラージ・シールド
 E:& Large Metal Shield~
 G:):s
 I:34:5:0
@@ -1839,7 +1839,7 @@ D:それは読むと自分の周辺のトラップを感知する。
 ##### Extra ammunition #####
 
 #JZ#
-N:195:& 束矢
+N:195:束矢
 E:& Sheaf Arrow~
 G:{:o
 I:17:1:0
@@ -1849,7 +1849,7 @@ P:0:2d4:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:196:& ミスリルの弾
+N:196:ミスリルの弾
 E:& Mithril Shot~
 G:{:B
 I:16:2:0
@@ -2845,7 +2845,7 @@ D:それは使うと何が起こるかわからない。
 ##### Extra ammunition #####
 
 #JZ#
-N:293:& 細矢
+N:293:細矢
 E:& Flight Arrow~
 G:{:y
 I:17:1:0
@@ -3320,7 +3320,7 @@ F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
 ##### Chests #####
 
-N:338:& 小さな木の箱
+N:338:小さな木の箱
 E:& Small wooden chest~
 G:&:o
 I:7:1:0
@@ -3328,7 +3328,7 @@ W:5:0:250:20
 A:5/2
 P:0:2d3:0:0:0
 
-N:339:& 大きな木の箱
+N:339:大きな木の箱
 E:& Large wooden chest~
 G:&:U
 I:7:5:0
@@ -3336,7 +3336,7 @@ W:15:0:500:60
 A:15/2
 P:0:2d5:0:0:0
 
-N:340:& 小さな鉄の箱
+N:340:小さな鉄の箱
 E:& Small iron chest~
 G:&:D
 I:7:2:0
@@ -3344,7 +3344,7 @@ W:25:0:300:100
 A:25/2
 P:0:2d4:0:0:0
 
-N:341:& 大きな鉄の箱
+N:341:大きな鉄の箱
 E:& Large iron chest~
 G:&:s
 I:7:6:0
@@ -3352,7 +3352,7 @@ W:35:0:1000:150
 A:35/2
 P:0:2d6:0:0:0
 
-N:342:& 小さな鋼鉄の箱
+N:342:小さな鋼鉄の箱
 E:& Small steel chest~
 G:&:s
 I:7:3:0
@@ -3360,7 +3360,7 @@ W:45:0:500:200
 A:45/2
 P:0:2d4:0:0:0
 
-N:343:& 大きな鋼鉄の箱
+N:343:大きな鋼鉄の箱
 E:& Large steel chest~
 G:&:W
 I:7:7:0
@@ -3368,7 +3368,7 @@ W:55:0:1000:250
 A:55/2
 P:0:2d6:0:0:0
 
-N:344:& あばかれた箱
+N:344:あばかれた箱
 E:& Ruined chest~
 G:&:u
 I:7:0:0
@@ -3378,7 +3378,7 @@ A:75/2
 
 ##### Various Stuff #####
 
-N:345:& 鉄のくさび
+N:345:鉄のくさび
 E:& Iron Spike~
 G:~:W
 I:5:0:0
@@ -3386,7 +3386,7 @@ W:1:0:10:1
 A:1/1
 P:0:1d1:0:0:0
 
-N:346:& 松明
+N:346:松明
 E:& Wooden Torch~
 G:~:u
 I:39:0:4000
@@ -3394,7 +3394,7 @@ W:1:0:30:2
 A:1/1
 P:0:1d1:0:0:0
 
-N:347:& 真鍮のランタン
+N:347:真鍮のランタン
 E:& Brass Lantern~
 G:~:U
 I:39:1:7500
@@ -3403,7 +3403,7 @@ A:3/1
 P:0:1d1:0:0:0
 F:IGNORE_FIRE
 
-N:348:& 油つぼ
+N:348:油つぼ
 E:& Flask~ of oil
 G:!:y
 I:77:0:7500
@@ -3411,7 +3411,7 @@ W:1:0:10:3
 A:1/1
 P:0:2d6:0:0:0
 
-N:349:& 空のビン
+N:349:空のビン
 E:& Empty Bottle~
 G:!:w
 I:2:1:0
@@ -3823,7 +3823,7 @@ P:0:1d1:0:0:0
 
 ##### Junk #####
 
-N:389:& 陶器のかけら
+N:389:陶器のかけら
 E:& Shard~ of Pottery
 G:~:r
 I:3:3:0
@@ -3831,7 +3831,7 @@ W:0:0:5:0
 A:0/1
 P:0:1d1:0:0:0
 
-N:390:& 折れた棒
+N:390:折れた棒
 E:& Broken Stick~
 G:~:r
 I:3:6:0
@@ -3842,7 +3842,7 @@ P:0:1d1:0:0:0
 
 ##### Skeletons #####
 
-N:391:& 頭蓋骨の破片
+N:391:頭蓋骨の破片
 E:& Broken Skull~
 G:~:w
 I:1:1:0
@@ -3850,7 +3850,7 @@ W:0:0:1:0
 A:0/1
 P:0:1d1:0:0:0
 
-N:392:& 骨の破片
+N:392:骨の破片
 E:& Broken Bone~
 G:~:w
 I:1:2:0
@@ -3858,7 +3858,7 @@ W:0:0:2:0
 A:0/1
 P:0:1d1:0:0:0
 
-N:393:& 犬の骨
+N:393:犬の骨
 E:& Canine Skeleton~
 G:~:w
 I:1:4:0
@@ -3866,7 +3866,7 @@ W:1:0:10:0
 A:1/1
 P:0:1d1:0:0:0
 
-N:394:& ネズミの骨
+N:394:ネズミの骨
 E:& Rodent Skeleton~
 G:~:w
 I:1:3:0
@@ -3874,7 +3874,7 @@ W:1:0:10:0
 A:1/1
 P:0:1d1:0:0:0
 
-N:395:& 人間の骨
+N:395:人間の骨
 E:& Human Skeleton~
 G:~:w
 I:1:8:0
@@ -3882,7 +3882,7 @@ W:5:0:60:0
 A:5/1
 P:0:1d2:0:0:0
 
-N:396:& ドワーフの骨
+N:396:ドワーフの骨
 E:& Dwarf Skeleton~
 G:~:w
 I:1:7:0
@@ -3890,7 +3890,7 @@ W:5:0:50:0
 A:5/1
 P:0:1d2:0:0:0
 
-N:397:& エルフの骨
+N:397:エルフの骨
 E:& Elf Skeleton~
 G:~:w
 I:1:6:0
@@ -3898,7 +3898,7 @@ W:5:0:40:0
 A:5/1
 P:0:1d2:0:0:0
 
-N:398:& ノームの骨
+N:398:ノームの骨
 E:& Gnome Skeleton~
 G:~:w
 I:1:5:0
@@ -3909,7 +3909,7 @@ P:0:1d2:0:0:0
 ##### Additional weapon #####
 
 #JZ#
-N:399:& グレート・ハンマー
+N:399:グレート・ハンマー
 E:& Great Hammer~
 G:\:D
 I:21:19:0
@@ -4056,7 +4056,7 @@ F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 ## PDSM has been restored to (almost) its former glory in Zangband
 
 #JZ#
-N:413:& ドラゴン・ヘルム
+N:413:ドラゴン・ヘルム
 E:& Dragon Helm~
 G:]:G
 I:32:7:0
@@ -4066,7 +4066,7 @@ P:8:1d3:0:0:10
 F:IGNORE_ACID | IGNORE_FIRE | IGNORE_ELEC | IGNORE_COLD
 
 #JZ#
-N:414:& ドラゴン・シールド
+N:414:ドラゴン・シールド
 E:& Dragon Shield~
 G:[:G
 I:34:6:0
@@ -4461,7 +4461,7 @@ W:1:0:0:80
 # without being turned into artifacts.  This simplifies the
 # code for "killing the winner monster".
 
-N:498:& 冥界の大鉄杖
+N:498:冥界の大鉄杖
 E:& Mighty Hammer~
 G:\:D
 I:21:50:0
@@ -4469,7 +4469,7 @@ W:15:0:200:1000
 P:0:3d9:0:0:0
 F:SHOW_MODS | INSTA_ART | RIDING
 
-N:499:& 堂々たる鉄冠
+N:499:堂々たる鉄冠
 E:& Massive Iron Crown~
 G:]:D
 I:33:50:0
@@ -4506,7 +4506,7 @@ F:INSTA_ART
 
 # The Phial of Galadriel -- see artifact list
 
-N:500:& 玻璃瓶
+N:500:玻璃瓶
 E:& Phial~
 G:!:y
 I:39:4:0
@@ -4516,7 +4516,7 @@ F:INSTA_ART
 
 # The Star of Elendil -- see artifact list
 
-N:501:& 星
+N:501:星
 E:& Star~
 G:*:y
 I:39:5:0
@@ -4527,7 +4527,7 @@ F:INSTA_ART
 # The Arkenstone of Thrain -- replaced with Jewel of Judgement
 
 #JZ#
-N:502:& 宝石
+N:502:宝石
 E:& Jewel~
 G:*:R
 I:39:6:0
@@ -4538,7 +4538,7 @@ F:INSTA_ART
 
 # The Amulet of Carlammas -- see artifact list
 
-N:503:& アミュレット
+N:503:アミュレット
 E:& Amulet~
 G:":d
 I:40:10:0
@@ -4547,7 +4547,7 @@ F:INSTA_ART
 
 # The Amulet of Ingwe -- see artifact list
 
-N:504:& アミュレット
+N:504:アミュレット
 E:& Amulet~
 G:":d
 I:40:11:0
@@ -4556,7 +4556,7 @@ F:INSTA_ART
 
 # The Necklace of the Dwarves -- see artifact list
 
-N:505:& 頸飾り
+N:505:頸飾り
 E:& Necklace~
 G:":d
 I:40:12:0
@@ -4566,7 +4566,7 @@ F:INSTA_ART
 
 # The Ring of Barahir -- see artifact list
 
-N:506:& 指輪
+N:506:指輪
 E:& Ring~
 G:=:d
 I:45:32:0
@@ -4575,7 +4575,7 @@ F:INSTA_ART
 
 # The Ring of Tulkas -- see artifact list
 
-N:507:& 指輪
+N:507:指輪
 E:& Ring~
 G:=:d
 I:45:33:0
@@ -4584,7 +4584,7 @@ F:INSTA_ART
 
 # The Ring of Power (Narya) -- see artifact list
 
-N:508:& 力の指輪
+N:508:力の指輪
 E:& Ring~
 G:=:d
 I:45:34:0
@@ -4593,7 +4593,7 @@ F:INSTA_ART
 
 # The Ring of Power (Nenya) -- see artifact list
 
-N:509:& 力の指輪
+N:509:力の指輪
 E:& Ring~
 G:=:d
 I:45:35:0
@@ -4602,7 +4602,7 @@ F:INSTA_ART
 
 # The Ring of Power (Vilya) -- see artifact list
 
-N:510:& 力の指輪
+N:510:力の指輪
 E:& Ring~
 G:=:d
 I:45:36:0
@@ -4611,7 +4611,7 @@ F:INSTA_ART
 
 # The Ring of Power (The One Ring) -- see artifact list
 
-N:511:& 力の指輪
+N:511:力の指輪
 E:& Ring~
 G:=:y
 I:45:37:0
@@ -4746,7 +4746,7 @@ F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 ##### New arms #####
 
 #JZ#
-N:524:& ツヴァイハンダー
+N:524:ツヴァイハンダー
 E:& Zweihander~
 G:|:w
 I:23:29:0
@@ -4756,7 +4756,7 @@ P:0:4d6:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:525:& 短刀
+N:525:短刀
 E:& Tanto~
 G:|:W
 I:23:6:0
@@ -4766,8 +4766,8 @@ P:0:1d5:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:526:& スプリント・メイル
-E:& Splint Mail~
+N:526:スプリント・メイル
+E:Splint Mail~
 G:[:D
 I:37:10:0
 W:35:0:250:1300
@@ -4775,8 +4775,8 @@ A:35/1
 P:19:1d4:-2:0:0
 
 #JZ#
-N:527:& 当世具足
-E:& Do-maru~
+N:527:当世具足
+E:Do-maru~
 G:[:s
 I:37:11:0
 W:40:0:290:1250
@@ -4784,7 +4784,7 @@ A:40/2
 P:20:1d4:-2:0:0
 
 #JZ#
-N:528:& 三叉槍
+N:528:三叉槍
 E:& Trifurcate Spear~
 G:/:o
 I:22:26:0
@@ -4794,7 +4794,7 @@ P:0:2d9:0:0:0
 F:SHOW_MODS | RIDING
 
 #JZ#
-N:529:& 三節棍
+N:529:三節棍
 E:& Three Piece Rod~
 G:\:u
 I:21:11:0
@@ -4804,8 +4804,8 @@ P:0:3d3:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:530:& 大鎧
-E:& O-yoroi~
+N:530:大鎧
+E:O-yoroi~
 G:[:D
 I:37:16:0
 W:45:0:320:1300
@@ -4813,7 +4813,7 @@ A:45/2
 P:24:1d4:-2:0:0
 
 #JZ#
-N:531:& 毛皮のクローク
+N:531:毛皮のクローク
 E:& Fur Cloak~
 G:(:W
 I:35:3:0
@@ -4822,7 +4822,7 @@ A:20/2:30/2
 P:3:0d0:0:0:0
 
 #JZ#
-N:532:& ラジャタン
+N:532:ラジャタン
 E:& Lajatang~
 G:/:s
 I:22:14:0
@@ -4832,7 +4832,7 @@ P:0:2d7:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:533:& ハチェット
+N:533:ハチェット
 E:& Hatchet~
 G:/:s
 I:22:1:0
@@ -4844,8 +4844,8 @@ F:SHOW_MODS
 ##### New armor #####
 
 #JZ#
-N:535:& サイ皮よろい
-E:& Rhino Hide Armour~
+N:535:サイ皮よろい
+E:Rhino Hide Armour~
 G:(:s
 I:36:8:0
 W:15:0:110:400
@@ -4853,7 +4853,7 @@ A:15/1
 P:8:1d1:-1:0:0
 
 #JZ#
-N:536:& 皮ジャケット
+N:536:皮ジャケット
 E:& Leather Jacket~
 G:(:U
 I:36:12:0
@@ -4864,7 +4864,7 @@ P:12:1d2:-1:0:0
 ##### New weapons #####
 
 #JZ#
-N:537:& 鎌
+N:537:鎌
 E:& Sickle~
 G:/:s
 I:22:3:0
@@ -4874,7 +4874,7 @@ P:0:2d3:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:538:& 鉄棒
+N:538:鉄棒
 E:& Tetsubo~
 G:\:u
 I:21:16:0
@@ -4884,7 +4884,7 @@ P:0:2d7:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:539:& ヌンチャク
+N:539:ヌンチャク
 E:& Nunchaku~
 G:\:u
 I:21:4:0
@@ -4894,7 +4894,7 @@ P:0:2d3:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:540:& 六尺棒
+N:540:六尺棒
 E:& Bo Staff~
 G:\:U
 I:21:14:0
@@ -4904,7 +4904,7 @@ P:0:1d11:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:541:& 錫杖
+N:541:錫杖
 E:& Jo Staff~
 G:\:U
 I:21:7:0
@@ -4914,7 +4914,7 @@ P:0:1d7:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:542:& 棍棒
+N:542:棍棒
 E:& Club~
 G:\:u
 I:21:1:0
@@ -4924,7 +4924,7 @@ P:0:1d4:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:543:& ブロード・スピア
+N:543:ブロード・スピア
 E:& Broad Spear~
 G:/:w
 I:22:7:0
@@ -4934,7 +4934,7 @@ P:0:1d9:0:0:0
 F:SHOW_MODS | RIDING
 
 #JZ#
-N:544:& クォピス
+N:544:クォピス
 E:& Khopesh~
 G:|:W
 I:23:14:0
@@ -4944,7 +4944,7 @@ P:0:2d4:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:545:& フランベルジュ
+N:545:フランベルジュ
 E:& Flamberge~
 G:|:W
 I:23:26:0
@@ -4954,7 +4954,7 @@ P:0:3d7:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:546:& クレイモア
+N:546:クレイモア
 E:& Claymore~
 G:|:W
 I:23:23:0
@@ -4964,7 +4964,7 @@ P:0:2d8:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:547:& エスパドン
+N:547:エスパドン
 E:& Espadon~
 G:|:W
 I:23:24:0
@@ -4974,7 +4974,7 @@ P:0:2d9:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:548:& 青龍刀
+N:548:青龍刀
 E:& Falchion~
 G:|:W
 I:23:22:0
@@ -4984,7 +4984,7 @@ P:0:4d5:0:0:0
 F:SHOW_MODS | RIDING
 
 #JZ#
-N:549:& 脇差し
+N:549:脇差し
 E:& Wakizashi~
 G:|:W
 I:23:13:0
@@ -4994,7 +4994,7 @@ P:0:2d4:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:550:& 薙刀
+N:550:薙刀
 E:& Naginata~
 G:/:s
 I:22:9:0
@@ -5004,7 +5004,7 @@ P:0:2d6:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:551:& フォシャール
+N:551:フォシャール
 E:& Fauchard~
 G:/:s
 I:22:6:0
@@ -5014,7 +5014,7 @@ P:0:1d10:0:0:0
 F:SHOW_MODS | RIDING
 
 #JZ#
-N:552:& ギザルム
+N:552:ギザルム
 E:& Guisarme~
 G:/:s
 I:22:16:0
@@ -5024,7 +5024,7 @@ P:0:2d5:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:553:& ヘヴィ・ランス
+N:553:ヘヴィ・ランス
 E:& Heavy Lance~
 G:/:s
 I:22:29:0
@@ -5034,7 +5034,7 @@ P:0:4d8:0:0:0
 F:SHOW_MODS | RIDING
 
 #JZ#
-N:554:& バゼラード
+N:554:バゼラード
 E:& Basillard~
 G:|:w
 I:23:9:0
@@ -5044,7 +5044,7 @@ P:0:1d8:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:555:& 忍者刀
+N:555:忍者刀
 E:& Ninjato~
 G:|:s
 I:23:19:0
@@ -5054,8 +5054,8 @@ P:0:1d9:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:556:& リング・メイル
-E:& Ring Mail~
+N:556:リング・メイル
+E:Ring Mail~
 G:[:s
 I:37:2:0
 W:20:0:200:500
@@ -5063,8 +5063,8 @@ A:20/1
 P:12:1d4:-2:0:0
 
 #JZ#
-N:557:& 防護服
-E:& Cord Armour~
+N:557:防護服
+E:Cord Armour~
 G:(:y
 I:36:9:0
 W:5:0:80:200
@@ -5072,8 +5072,8 @@ A:7/1
 P:6:1d1:0:0:0
 
 #JZ#
-N:558:& 紙甲
-E:& Paper Armour~
+N:558:紙甲
+E:Paper Armour~
 G:(:w
 I:36:3:0
 W:5:0:30:50
@@ -5081,8 +5081,8 @@ A:7/2
 P:4:1d1:0:0:0
 
 #JZ#
-N:559:& 厚布よろい
-E:& Padded Armour~
+N:559:厚布よろい
+E:Padded Armour~
 G:(:y
 I:36:10:0
 W:2:0:60:50
@@ -5090,7 +5090,7 @@ A:5/1
 P:5:1d1:0:0:0
 
 #JZ#
-N:560:& 星兜
+N:560:星兜
 E:& Kabuto~
 G:]:D
 I:32:8:0
@@ -5099,8 +5099,8 @@ A:50/3
 P:7:1d2:0:0:0
 
 #JZ#
-N:561:& 皮石よろい
-E:& Stone and Hide Armour~
+N:561:皮石よろい
+E:Stone and Hide Armour~
 G:(:U
 I:36:15:0
 W:35:0:200:1000
@@ -5108,7 +5108,7 @@ A:35/7
 P:15:1d1:-1:0:0
 
 #JZ#
-N:562:& 陣笠
+N:562:陣笠
 E:& Jingasa~
 G:]:s
 I:32:4:0
@@ -5117,15 +5117,15 @@ A:16/2
 P:4:1d2:0:0:0
 
 #JZ#
-N:563:& 胴丸
-E:& Haramakido~
+N:563:胴丸
+E:Haramakido~
 G:[:D
 I:37:14:0
 W:32:0:280:920
 A:32/2
 P:17:1d4:-2:0:0
 
-N:564:& 白熱灯
+N:564:白熱灯
 E:& Incandescent Light~
 G:!:y
 I:39:3:0
@@ -5133,7 +5133,7 @@ W:20:10:5:20000
 P:0:1d1:0:0:0
 F:INSTA_ART
 
-N:565:& ダイヤモンド・エッジ
+N:565:ダイヤモンド・エッジ
 E:& Diamond Edge~
 G:|:w
 I:23:31:4
@@ -5153,7 +5153,7 @@ D:$As a bonus, if you have a stack of them, the extras are destroyed.
 D:それは読むとアイテム1個を並のアイテムに変える。複数のアイテムがまとまって
 D:いる場合は1個を残して壊れる。
 
-N:567:& #の人形
+N:567:#の人形
 E:& Magical Figurine~ of #
 G:`:b
 I:8:0:0
@@ -5161,7 +5161,7 @@ W:32:0:50:100
 A:15/6:30/3:65/1
 P:0:1d1:0:0:0
 
-N:568:& #の木の像
+N:568:#の木の像
 E:& Wooden Statue~ of #
 G:`:u
 I:9:0:0
@@ -5169,7 +5169,7 @@ W:5:0:200:75
 A:5/3
 P:0:1d1:0:0:0
 
-N:569:& #の粘土像
+N:569:#の粘土像
 E:& Clay Statue~ of #
 G:`:U
 I:9:1:0
@@ -5177,7 +5177,7 @@ W:10:0:500:50
 A:10/3
 P:0:1d1:0:0:0
 
-N:570:& #の石像
+N:570:#の石像
 E:& Stone Statue~ of #
 G:`:s
 I:9:2:0
@@ -5185,7 +5185,7 @@ W:15:0:500:100
 A:15/3
 P:0:1d1:0:0:0
 
-N:571:& #の鉄の像
+N:571:#の鉄の像
 E:& Iron Statue~ of #
 G:`:D
 I:9:3:0
@@ -5193,7 +5193,7 @@ W:20:0:500:200
 A:20/3
 P:0:1d1:0:0:0
 
-N:572:& #の銅像
+N:572:#の銅像
 E:& Copper Statue~ of #
 G:`:o
 I:9:4:0
@@ -5201,7 +5201,7 @@ W:25:0:500:500
 A:25/3
 P:0:1d1:0:0:0
 
-N:573:& #の銀の像
+N:573:#の銀の像
 E:& Silver Statue~ of #
 G:`:W
 I:9:5:0
@@ -5209,7 +5209,7 @@ W:30:0:500:1000
 A:30/3
 P:0:1d1:0:0:0
 
-N:574:& #の金の像
+N:574:#の金の像
 E:& Golden Statue~ of #
 G:`:y
 I:9:6:0
@@ -5217,7 +5217,7 @@ W:40:0:500:2500
 A:40/3
 P:0:1d1:0:0:0
 
-N:575:& #の象牙の像
+N:575:#の象牙の像
 E:& Ivory Statue~ of #
 G:`:w
 I:9:7:0
@@ -5225,7 +5225,7 @@ W:45:0:500:2000
 A:45/3
 P:0:1d1:0:0:0
 
-N:576:& #のミスリル像
+N:576:#のミスリル像
 E:& Mithril Statue~ of #
 G:`:B
 I:9:8:0
@@ -5233,7 +5233,7 @@ W:80:0:500:10000
 A:80/3
 P:0:1d1:0:0:0
 
-N:577:& #の装飾された像
+N:577:#の装飾された像
 E:& Ornate Statue~ of #
 G:`:v
 I:9:9:0
@@ -5241,7 +5241,7 @@ W:50:0:500:5000
 A:50/3
 P:0:1d1:0:0:0
 
-N:578:& の骨
+N:578:の骨
 E:& Skeleton~
 G:~:w
 I:10:0:0
@@ -5249,7 +5249,7 @@ W:1:0:20:0
 A:1/2
 P:0:1d1:0:0:0
 
-N:579:& の死体
+N:579:の死体
 E:& Corpse~
 G:~:v
 I:10:1:0
@@ -5257,7 +5257,7 @@ W:1:0:40:0
 A:1/2
 P:0:1d1:0:0:0
 
-N:580:& Ｔシャツ
+N:580:Ｔシャツ
 E:& T-shirt~
 G:~:w
 I:36:0:0
@@ -5265,7 +5265,7 @@ W:1:0:10:0
 A:1/255
 P:1:1d1:0:0:0
 
-N:581:& 魔術師の杖
+N:581:魔術師の杖
 E:& Wizardstaff~
 G:\:y
 I:21:21:0
@@ -5274,7 +5274,7 @@ A:25/4
 P:0:1d2:0:0:0
 F:SHOW_MODS | DEC_MANA
 
-N:582:& フェアノールのランプ
+N:582:フェアノールのランプ
 E:& Feanorian lamp~
 G:~:o
 I:39:2:0
@@ -5294,7 +5294,7 @@ D:$It turns a door, rock and wall square to mud when you zap it.
 D:それは振るとドアや岩石や壁を溶かす。
 
 #JZ#
-N:584:& ドラゴン・グローブ
+N:584:ドラゴン・グローブ
 E:& Set~ of Gloves of Dragon
 G:]:G
 I:31:3:0
@@ -5304,7 +5304,7 @@ P:4:1d3:0:0:10
 F:IGNORE_ACID | IGNORE_FIRE | IGNORE_ELEC | IGNORE_COLD
 
 #JZ#
-N:585:& ドラゴン皮の靴
+N:585:ドラゴン皮の靴
 E:& Pair~ of Dragon Boots
 G:]:G
 I:30:4:0
@@ -5313,7 +5313,7 @@ A:60/5
 P:5:1d3:0:0:10
 F:IGNORE_ACID | IGNORE_FIRE | IGNORE_ELEC | IGNORE_COLD
 
-N:586:& 腐れの指輪
+N:586:腐れの指輪
 E:& Ring~
 G:=:y
 I:45:50:0
@@ -5329,14 +5329,14 @@ A:60/4
 F:TELEPATHY
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:588:& 進化する銃
+N:588:進化する銃
 E:& Gun~
 G:}:r
 I:19:50:0
 W:15:0:100:1000
 F:SHOW_MODS | INSTA_ART
 
-N:589:& 石
+N:589:石
 E:& Crystal Ball~
 G:*:y
 I:39:8:0
@@ -5344,7 +5344,7 @@ W:60:0:10:60000
 P:0:1d1:0:0:0
 F:INSTA_ART
 
-N:590:& 石
+N:590:石
 E:& Stone~
 G:*:R
 I:39:7:0
@@ -5352,14 +5352,14 @@ W:15:0:5:60000
 P:0:1d1:0:0:0
 F:INSTA_ART
 
-N:591:& アミュレット
+N:591:アミュレット
 E:& Amulet~
 G:":b
 I:40:17:0
 W:30:0:3:25000
 F:INSTA_ART
 
-N:592:& 毒針
+N:592:毒針
 E:& Poison Needle~
 G:|:g
 I:23:32:0
@@ -5369,7 +5369,7 @@ P:0:1d1:0:0:0
 F:SHOW_MODS
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:593:& モンスター・ボール#
+N:593:モンスター・ボール#
 E:& Capture Ball#
 G:~:B
 I:11:0:0
@@ -5378,7 +5378,7 @@ A:15/4
 P:0:1d1:0:0:0
 F:ACTIVATE
 
-N:594:& 死の大鎌
+N:594:死の大鎌
 E:& Death Scythe~ 
 G:/:R
 I:22:50:0
@@ -5412,7 +5412,7 @@ W:50:0:2:20000
 A:50/2
 F:XTRA_SHOTS
 
-N:597:& エクスプレスカード
+N:597:エクスプレスカード
 E:& Card
 G:~:G
 I:50:0:0
@@ -5455,7 +5455,7 @@ A:30/2
 D:$It summons a monster as your pet when you read it.
 D:それは読むと1体のペットを召喚する。
 
-N:602:& 金の首飾り
+N:602:金の首飾り
 E:& Torque~
 G:":b
 I:40:18:0
@@ -5518,7 +5518,7 @@ D:$It raises corpses and skeletons nearby you from dead and makes them your
 D:$pet when you use it.
 D:それは使うと自分の周囲の死体や骨を生き返らせてペットにする。
 
-N:609:& 石
+N:609:石
 E:& Levitation Stone~
 G:*:B
 I:39:9:0
@@ -5526,14 +5526,14 @@ W:60:0:10:60000
 P:0:1d1:0:0:0
 F:INSTA_ART
 
-N:610:& 勾玉
+N:610:勾玉
 E:& Bead~
 G:":d
 I:40:19:0
 W:60:0:3:90000
 F:INSTA_ART
 
-N:611:& 天上のクローク
+N:611:天上のクローク
 E:& Ethereal Cloak~
 G:(:W
 I:35:5:0
@@ -5542,7 +5542,7 @@ A:70/4
 P:0:0d0:0:0:10
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD 
 
-N:612:& 鏡
+N:612:鏡
 E:& Mirror~
 G:*:b
 I:34:50:0
@@ -5550,7 +5550,7 @@ W:65:0:50:10000
 P:0:1d1:0:0:10
 F:IGNORE_ACID | REFLECT | INSTA_ART
 
-N:613:& 矢
+N:613:矢
 E:& Black Arrow~
 G:{:U
 I:17:10:0
@@ -5558,8 +5558,8 @@ W:35:0:2:1
 P:0:1d4:0:0:0
 F:INSTA_ART | SHOW_MODS
 
-N:614:& 危ない水着
-E:& Sexy Swimsuit
+N:614:危ない水着
+E:Sexy Swimsuit
 G:(:v
 I:36:50:0
 W:30:0:2:78000
@@ -5567,7 +5567,7 @@ A:30/64
 P:0:0d0:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | AGGRAVATE
 
-N:615:& 釣り竿
+N:615:釣り竿
 E:& Fishingpole~
 G:/:B
 I:22:40:0
@@ -5575,7 +5575,7 @@ W:10:0:30:30
 P:0:1d1:0:0:0
 F:INSTA_ART
 
-N:616:& 印籠
+N:616:印籠
 E:& Inro~
 G:":d
 I:40:20:0
@@ -5600,7 +5600,7 @@ W:10:0:2:200
 A:10/2
 F:WARNING
 
-N:619:& 鋼鉄のクロスボウの矢
+N:619:鋼鉄のクロスボウの矢
 E:& Steel Bolt~
 G:{:w
 I:18:1:0
@@ -5609,7 +5609,7 @@ A:25/4:50/2:60/2
 P:0:3d5:0:0:0
 F:SHOW_MODS
 
-N:620:& おもちゃのカンヅメ
+N:620:おもちゃのカンヅメ
 E:& Can~ of Toys
 G:&:y
 I:7:50:0
@@ -5617,22 +5617,22 @@ W:1:0:50:500000
 A:1/255
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:621:& 棒
+N:621:棒
 E:& Stick~
 G:\:y
 I:21:63:0
 W:1:0:333:1000000
 F:INSTA_ART
 
-N:622:& 弓
+N:622:弓
 E:& Yumi~
 G:}:y
 I:19:63:0
 W:1:0:50:1000000
 F:INSTA_ART
 
-N:623:& 服
-E:& Clothes~
+N:623:服
+E:Clothes~
 G:(:y
 I:36:63:0
 W:1:0:10:1000000
@@ -5662,7 +5662,7 @@ W:50:0:2:5000
 A:50/4
 F:STR | DEX | CON | HIDE_TYPE
 
-N:627:& ナイト・シールド
+N:627:ナイト・シールド
 E:& Knight's Shield~
 G:):W
 I:34:7:0
@@ -5739,7 +5739,7 @@ A:90/3
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:635:& 隼の剣
+N:635:隼の剣
 E:& Falcon Sword~
 G:|:y
 I:23:33:1
@@ -5812,7 +5812,7 @@ P:0:1d1:0:0:0
 D:$It aggravates monsters in your vicinity when you zap it.
 D:それは振ると自分の周辺のモンスターを怒らせる。
 
-N:643:& #の写真
+N:643:#の写真
 E:& Photograph~ of #
 G:~:s
 I:9:50:0
@@ -5828,7 +5828,7 @@ W:35:0:3:1000
 A:35/4
 F:MAGIC_MASTERY | HIDE_TYPE
 
-N:645:& ローブ
+N:645:ローブ
 E:& Robe~
 G:(:D
 I:36:60:0
@@ -5879,7 +5879,7 @@ A:30/2
 D:$It summons a monster corresponds to your race as your pet when you read it.
 D:それは読むと自分の種族に対応したモンスター1体をペットとして召喚する。
 
-N:651:& 魔法の笛
+N:651:魔法の笛
 E:& Magic Whistle~
 G:~:o
 I:4:1:0
@@ -5887,15 +5887,15 @@ W:15:0:3:1000
 A:15/2
 F:ACTIVATE
 
-N:652:& アミュレット
+N:652:アミュレット
 E:& Amulet~
 G:":d
 I:40:24:0
 W:50:0:3:25000
 F:INSTA_ART
 
-N:653:& 黒装束
-E:& Black Clothes
+N:653:黒装束
+E:Black Clothes
 G:(:D
 I:36:13:1
 W:15:0:80:5000
@@ -5937,7 +5937,7 @@ A:95/3
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:658:& 杖
+N:658:杖
 E:& # Staff~
 G:_:d
 I:55:32:20
