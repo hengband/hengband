@@ -165,20 +165,26 @@ of Ritual
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
 N:10:BIAS_CON
-10
+14
 'Skullbasher'
 'Bonebreaker'
 'Skullbuster'
 'Skull Smasher'
 'Giant Strength'
 'Dragonbane'
+'Crash of Rhinos'
+'Cycle of Life'
+'Bull Elephant'
+'Warrior's Honor'
 of Rage
 of Crushing
 of Tomoe
 of Erkenbrando
 
 N: 9:BIAS_DEX
-7
+10
+'Gilettar'
+'Elvagil'
 'Orchast'
 'Cleaver'
 'Buttle Mastery'
@@ -188,11 +194,16 @@ of the Master
 of Charismatic Cook
 
 N:19:BIAS_RANGER
-9
+14
+'Eaglesword'
+'Tigarbaton'
+'Lionfang'
+'Sharkcutter'
+'Bisonaxe'
 'Sunstrike'
 'Hellwind'
-of the Eagle Lord
 'Shooting Star'
+of the Eagle Lord
 of Entanglement
 of the Druid
 of the Valkyrie
@@ -202,25 +213,25 @@ of Marksmanship
 N:*:Default
 21
 'Weapon Alpha'
-of Slay Mold
 'Werebane'
 'Dragon Clow'
-of Joshua
 'Kraken'
 'Blue Steele'
 'Fury'
 'Howler'
 'Roarer'
-of Damocles
-of the Shogun
 'Red October'
 'Witchfire'
 'Lord of Flies'
 'Pandemonium'
 'Bloodrain'
+'Delta'
+'Cubragol'
+of Joshua
+of Slay Mold
+of Damocles
+of the Shogun
 of the Borg
 of Hatred
-'Delta'
 of Osric
 of Finndo
-'Cubragol'
