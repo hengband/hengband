@@ -506,7 +506,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"attempts to confuse a monster.",
 		"teleport long distance.",
 		"attempts to sleep a monster.",
-		"Recharges staffs, wands ot rods.",
+		"Recharges staffs, wands or rods.",
 
 		"maps nearby area.",
 		"identifies an item.",
@@ -532,14 +532,14 @@ static cptr spell_tips[VALID_REALM][32] =
 		"attempts to charm all monsters in sight.",
 		"turns an item into 1/3 of its value in gold.",
 		"teleports all monsters in sight away unless resisted.",
-		"generates barrier which completly protect you from almost all damages. takes a few your turns when the barrier breaks or duration time is exceeded.",
+		"generates barrier which completely protect you from almost all damages. takes a few your turns when the barrier breaks or duration time is exceeded.",
 	},
 
 	{
 		"detects all monsters in your vicinity unless invisible.",
 		"fires a short beam of lightning.",
 		"detects traps, doors, and stairs in your vicinity.",
-		"satisfis hunger.",
+		"satisfies hunger.",
 		"lights up nearby area and the inside of a room permanently.",
 		"attempts to charm an animal.",
 		"gives resistance to fire, cold and electricity for a while. These resistances can be added to which from equipment for more powerful resistances.",
@@ -552,7 +552,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"fires a beam of light which damages to light-sensitive monsters.",
 		"attempts to slow all monsters in sight.",
 		"summons an animal.",
-		"heals HP grealty. and heals cut, stun and poison completely.",
+		"heals HP greatly. and heals cut, stun and poison completely.",
 
 		"creates a stair which goes down or up.",
 		"gives bonus to AC for a while.",
@@ -564,14 +564,14 @@ static cptr spell_tips[VALID_REALM][32] =
 		"creates granite walls in all adjacent squares.",
 		"makes an equipment acid-proof.",
 
-		"shakes dungeon structure, and results in random swaping of floors and walls.",
+		"shakes dungeon structure, and results in random swapping of floors and walls.",
 		"attacks all adjacent monsters.",
 		"fires a huge ball of cold.",
 		"fires a huge electric ball.",
 		"fires a huge ball of water.",
-		"generates ball of light centerd on you. maps and lights whole dungeon level. knows all objects location.",
+		"generates ball of light centered on you. maps and lights whole dungeon level. knows all objects location.",
 		"makes current weapon fire or frost branded.",
-		"damages all monsters in sight. makes quake. generates disintegration ball centerd on you.",
+		"damages all monsters in sight. makes quake. generates disintegration ball centered on you.",
 	},
 
 	{
@@ -584,7 +584,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"fires a tiny ball of disintegration.",
 		"teleport long distance.",
 
-		"fires someting with random effects.",
+		"fires something with random effects.",
 		"fires a bolt or ball of chaos.",
 		"generates a ball of sound centered on you.",
 		"fires a beam of pure mana.",
@@ -595,7 +595,7 @@ static cptr spell_tips[VALID_REALM][32] =
 
 		"attempts to polymorph a monster.",
 		"fires lightning beams in all directions.",
-		"Recharges staffs, wands ot rods.",
+		"Recharges staffs, wands or rods.",
 		"fires a huge ball of disintegration.",
 		"recreates current dungeon level.",
 		"fires a magic rocket.",
@@ -604,17 +604,17 @@ static cptr spell_tips[VALID_REALM][32] =
 
 		"fires a beam of gravity.",
 		"makes meteor balls fall down to nearby random locations.",
-		"generate a huge ball of fire centerd on you.",
+		"generate a huge ball of fire centered on you.",
 		"generate random kind of balls or beams.",
 		"polymorphs yourself.",
 		"fires an extremely powerful huge ball of pure mana.",
 		"fires an extremely powerful ball of chaos.",
-		"fires rochets, mana balls and nuclear waste balls in all directions each unless you are not adjacent to any walls. Otherwise *destroys* huge area.",
+		"fires rockets, mana balls and nuclear waste balls in all directions each unless you are not adjacent to any walls. Otherwise *destroys* huge area.",
 	},
 
 	{
 		"detects all nonliving monsters in your vicinity.",
-		"fires a tiny ball of evil power which hurts good monsters grealty.",
+		"fires a tiny ball of evil power which hurts good monsters greatly.",
 		"detects all evil monsters in your vicinity.",
 		"fires a ball of poison.",
 		"attempts to sleep a monster.",
@@ -624,11 +624,11 @@ static cptr spell_tips[VALID_REALM][32] =
 
 		"fires a ball which damages living monsters.",
 		"fires a bolt or beam of nether.",
-		"generate a ball of poison centerd on you.",
+		"generate a ball of poison centered on you.",
 		"attempts to vanish a monster.",
 		"makes current weapon poison branded.",
 		"absorbs some HP from a monster and gives them to you. You will also gain nutritional sustenance from this.",
-		"resurrects nearby corpse and skeltons. and makes these your pets.",
+		"resurrects nearby corpse and skeletons. and makes these your pets.",
 		"eliminates an entire class of monster, exhausting you.  Powerful or unique monsters may resist.",
 
 		"gives bonus to hit and HP, immunity to fear for a while. but decreases AC.",
@@ -643,7 +643,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"fires a beam of death.",
 		"summons an undead monster.",
 		"identifies an item. or *identifies* an item at higher level.",
-		"mimic a vampire for a while. loses abilities of original race and gets abilitis as a vampire.",
+		"mimic a vampire for a while. loses abilities of original race and gets abilities as a vampire.",
 		"restore lost experience.",
 		"eliminates all nearby monsters, exhausting you.  Powerful or unique monsters may be able to resist.",
 		"fires a powerful ball of evil power. hurts good monsters greatly.",
@@ -714,7 +714,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"identifies an item.",
 		"turns one rock square to mud.",
 		"fires a beam of light which damages to light-sensitive monsters.",
-		"satisfis hunger.",
+		"satisfies hunger.",
 		"gives see invisible for a while.",
 
 		"summons an elemental.",
@@ -729,7 +729,7 @@ static cptr spell_tips[VALID_REALM][32] =
 	{
 		"gives infravision for a while.",
 		"gives regeneration ability for a while.",
-		"satisfis hunger.",
+		"satisfies hunger.",
 		"gives resistance to cold. This resistance can be added to which from equipment for more powerful resistance.",
 		"gives resistance to fire. This resistance can be added to which from equipment for more powerful resistance.",
 		"removes fear, and gives bonus to hit and 10 more HP for a while.",
@@ -742,7 +742,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"gives bonus to hit and HP, immunity to fear for a while. but decreases AC.",
 		"gives you useful info regarding your current resistances, the powers of your weapon and maximum limits of your stats.",
 		"gives aura which protect you from evil monster's physical attack.",
-		"heals poison, stun, cut and hullucination completely.",
+		"heals poison, stun, cut and hallucination completely.",
 		"makes current weapon some elemental branded.",
 
 		"gives telepathy for a while.",
@@ -785,21 +785,21 @@ static cptr spell_tips[VALID_REALM][32] =
 
 		"gives telepathy for a while.",
 		"removes fear. gives resistance to fire and cold, and aura of fire. These resistances can be added to which from equipment for more powerful resistances.",
-		"generates a ball of fire centerd on you which transforms floors to magma.",
+		"generates a ball of fire centered on you which transforms floors to magma.",
 		"fires a ball of plasma.",
-		"mimic a demon for a while. loses abilities of original race and gets abilitis as a demon.",
+		"mimic a demon for a while. loses abilities of original race and gets abilities as a demon.",
 		"damages all monsters in sight. hurts good monsters greatly.",
 		"fires a ball of nexus.",
 		"attempts to make a monster's HP almost half.",
 
 		"removes fear, and gives bonus to hit and 10 more HP for a while.",
 		"gives resistance to time for a while.",
-		"generate balls of chaos, confusion and charm centerd on you.",
+		"generate balls of chaos, confusion and charm centered on you.",
 		"makes all pets explode.",
 		"summons greater demon. it need to sacrifice a corpse of human ('p','h' or 't').",
 		"generate a huge ball of nether.",
 		"puts blood curse which damages and causes various effects on a monster. You also take damage.",
-		"mimic a demon lord for a while. loses abilities of original race and gets great abilitis as a demon lord. Even hard walls can't stop your walking.",
+		"mimic a demon lord for a while. loses abilities of original race and gets great abilities as a demon lord. Even hard walls can't stop your walking.",
 	},
 
 	{
@@ -834,7 +834,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"removes normal and heavy curse from equipped items.",
 		"teleports all evil monsters in sight away unless resisted.",
 		"destroy everything in nearby area.",
-		"gives special aura for a while. When you are attacked by a monster, the monster are injured wuth same amount of damage as you take.",
+		"gives special aura for a while. When you are attacked by a monster, the monster are injured with same amount of damage as you take.",
 		"drops many balls of disintegration near the target.",
 		"damages all adjacent monsters with holy power. Damages and attempt to slow, stun, confuse, scare and freeze all monsters in sight. And heals HP.",
 		"attempts to charm all good monsters in sight, and scare all non-charmed monsters, and summons great number of knights, and gives heroism, bless, speed and protection from evil.",
@@ -850,13 +850,13 @@ static cptr spell_tips[VALID_REALM][32] =
 		"attempts to scare all monsters in sight.",
 		"removes fear, and gives bonus to hit and 10 more HP for a while.",
 		
-		"detects traps, doors and stairs in your vicinity. and detects all monsters at level 15, treasures and items at level 20. maps nearby area at level 25. lights and know the whole level at level 40. These effects occures by turns while this song continues.",
+		"detects traps, doors and stairs in your vicinity. and detects all monsters at level 15, treasures and items at level 20. maps nearby area at level 25. lights and know the whole level at level 40. These effects occurs by turns while this song continues.",
 		"damages all monsters in sight with PSI damages.",
 		"identifies all items which are in the adjacent squares.",
 		"gives improved stealth.",
 		"attempts to confuse all monsters in sight.",
 		"damages all monsters in sight with booming sound.",
-		"resurrects nearby corpse and skeltons. and makes these your pets.",
+		"resurrects nearby corpse and skeletons. and makes these your pets.",
 		"attempts to charm all monsters in sight.",
 
 		"turns all rocks in the adjacent squares to mud.",
@@ -868,14 +868,14 @@ static cptr spell_tips[VALID_REALM][32] =
 		"fires a beam of sound.",
 		"recreates current dungeon level.",
 
-		"shakes dungeon structure, and results in random swaping of floors and walls.",
+		"shakes dungeon structure, and results in random swapping of floors and walls.",
 		"attempts to freeze all monsters in sight.",
 		"sets a glyph on the floor beneath you. Monsters cannot attack you if you are on a glyph, but can try to break glyph", 
 		"hastes you. gives heroism. damages all monsters in sight.",
-		"Powerful healing song. also heals cut and stun completly.",
+		"Powerful healing song. also heals cut and stun completely.",
 		"restores all stats and experience.",
 		"fires an extremely powerful tiny ball of sound.",
-		"generates barrier which completly protect you from almost all damages. takes a few your turns when the barrier breaks.",
+		"generates barrier which completely protect you from almost all damages. takes a few your turns when the barrier breaks.",
 	},
 
 	{
@@ -886,10 +886,10 @@ static cptr spell_tips[VALID_REALM][32] =
 		"detects all monsters except mindless in your vicinity.",
 		"attempts to stun a monster in the adjacent.",
 		"prepares to counterattack. when attack by a monster, strikes back using SP each time.",
-		"attacks monster with your weapons normaly, then move through counter side of the monster.",
+		"attacks monster with your weapons normally, then move through counter side of the monster.",
 
 		"attacks a monster with more damage unless it has resistance to poison.",
-		"attacks an evil unliving monster with greate damage. No effect to other  monsters.",
+		"attacks an evil unliving monster with great damage. No effect to other  monsters.",
 		"attacks an adjacent monster, and blow it away.",
 		"identifies a weapon or armor. or *identifies* these at level 45.",
 
@@ -902,12 +902,12 @@ static cptr spell_tips[VALID_REALM][32] =
 		"attacks a monster with more damage unless it has resistance to electricity.",
 		"steps close to a monster and attacks at a time.",
 		"attacks all adjacent monsters with power corresponding to your cut status. then increases your cut status. No effect to unliving monsters.",
-		"shakes dungeon structure, and results in random swaping of floors and walls.",
+		"shakes dungeon structure, and results in random swapping of floors and walls.",
 		"fires a beam of shock wave.",
 		"damages all monsters in sight with sound. aggravate nearby monsters.",
 		"attacks with powerful 3 strikes.",
 
-		"attacks with vamparic strikes which absorbs HP from a monster and gives them to you. No effect to unliving monsters.",
+		"attacks with vampiric strikes which absorbs HP from a monster and gives them to you. No effect to unliving monsters.",
 		"attempts to stun, confuse and sleep all waking monsters.",
 		"performs a series of rush attacks. The series continues while killing each monster in a time and SP remains.",
 		"runs toward given location while attacking all monsters on the path.",
