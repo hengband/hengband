@@ -783,8 +783,15 @@ errr process_pref_file_command(char *buf)
 			/* Get the corresponding key code */
 			macro_trigger_keycode[0][m] = string_make(zz[1]);
 
-			/* Key code of a combination of it with the shift key */
-			macro_trigger_keycode[1][m] = string_make(zz[2]);
+			if (tok == 3)
+			{
+				/* Key code of a combination of it with the shift key */
+				macro_trigger_keycode[1][m] = string_make(zz[2]);
+			}
+			else
+			{
+				macro_trigger_keycode[1][m] = string_make(zz[1]);
+			}
 		}
 
 		/* No error */
