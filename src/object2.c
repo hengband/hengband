@@ -359,7 +359,7 @@ void compact_objects(int size)
 			if (!o_ptr->k_idx) continue;
 
 			/* Hack -- High level objects start out "immune" */
-			if (get_object_level(o_ptr) > cur_lev) continue;
+			if (k_info[o_ptr->k_idx].level > cur_lev) continue;
 
 			/* Monster */
 			if (o_ptr->held_m_idx)
@@ -813,7 +813,7 @@ void object_tried(object_type *o_ptr)
 static s32b object_value_base(object_type *o_ptr)
 {
 	/* Aware item -- use template cost */
-	if (object_aware_p(o_ptr)) return (get_object_cost(o_ptr));
+	if (object_aware_p(o_ptr)) return (k_info[o_ptr->k_idx].cost);
 
 	/* Analyze the type */
 	switch (o_ptr->tval)
@@ -1156,10 +1156,10 @@ s32b object_value_real(object_type *o_ptr)
 
 
 	/* Hack -- "worthless" items */
-	if (!get_object_cost(o_ptr)) return (0L);
+	if (!k_info[o_ptr->k_idx].cost) return (0L);
 
 	/* Base cost */
-	value = get_object_cost(o_ptr);
+	value = k_info[o_ptr->k_idx].cost;
 
 	/* Extract some flags */
 	object_flags(o_ptr, flgs);
@@ -1951,7 +1951,7 @@ void object_prep(object_type *o_ptr, int k_idx)
 	o_ptr->ds = k_ptr->ds;
 
 	/* Hack -- worthless items are always "broken" */
-	if (get_object_cost(o_ptr) <= 0) o_ptr->ident |= (IDENT_BROKEN);
+	if (k_info[o_ptr->k_idx].cost <= 0) o_ptr->ident |= (IDENT_BROKEN);
 
 	/* Hack -- cursed items are always "cursed" */
 	if (k_ptr->gen_flags & (TRG_CURSED)) o_ptr->curse_flags |= (TRC_CURSED);
@@ -4103,7 +4103,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 
 		case TV_CHEST:
 		{
-			byte obj_level = get_object_level(o_ptr);
+			byte obj_level = k_info[o_ptr->k_idx].level;
 
 			/* Hack -- skip ruined chests */
 			if (obj_level <= 0) break;
@@ -4500,7 +4500,7 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 		object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
 		/* Hack -- acquire "broken" flag */
-		if (!get_object_cost(o_ptr)) o_ptr->ident |= (IDENT_BROKEN);
+		if (!k_info[o_ptr->k_idx].cost) o_ptr->ident |= (IDENT_BROKEN);
 
 		/* Hack -- acquire "cursed" flag */
 		if (k_ptr->gen_flags & (TRG_CURSED)) o_ptr->curse_flags |= (TRC_CURSED);
@@ -4669,7 +4669,7 @@ bool make_object(object_type *j_ptr, u32b mode)
 		}
 	}
 
-	obj_level = get_object_level(j_ptr);
+	obj_level = k_info[j_ptr->k_idx].level;
 	if (artifact_p(j_ptr)) obj_level = a_info[j_ptr->name1].level;
 
 	/* Notice "okay" out-of-depth objects */

@@ -1290,12 +1290,14 @@ extern int inkey_special(bool numpad_cursor);
 
 
 /* xtra1.c */
+extern void cnv_stat(int val, char *out_val);
+extern s16b modify_stat_value(int value, int amount);
 extern bool is_daytime(void);
 extern void extract_day_hour_min(int *day, int *hour, int *min);
 extern void prt_time(void);
 extern cptr map_name(void);
-extern void cnv_stat(int val, char *out_val);
-extern s16b modify_stat_value(int value, int amount);
+extern bool buki_motteruka(int i);
+extern void calc_bonuses(void);
 extern void notice_stuff(void);
 extern void update_stuff(void);
 extern void redraw_stuff(void);
@@ -1303,8 +1305,7 @@ extern void window_stuff(void);
 extern void handle_stuff(void);
 extern s16b empty_hands(bool is_monk);
 extern bool heavy_armor(void);
-extern void calc_bonuses(void);
-extern bool exp_need;
+
 
 /* effects.c */
 extern void set_action(int typ);
@@ -1558,19 +1559,8 @@ extern bool easy_floor;
 #endif /* ALLOW_EASY_FLOOR -- TNB */
 
 /* obj_kind.c */
-extern errr k_info_alloc(void);
-extern errr k_info_free(void);
-extern object_kind *k_info_add(object_kind *k_info_entry);
-extern int get_object_level(object_type *o_ptr);
-extern s32b get_object_cost(object_type *o_ptr);
-extern cptr get_object_name(object_type *o_ptr);
-extern bool get_object_aware(object_type *o_ptr);
-extern bool get_object_tried(object_type *o_ptr);
 extern bool object_is_potion(object_type *o_ptr);
 extern bool object_is_shoukinkubi(object_type *o_ptr);
-extern errr init_object_alloc(void);
-extern void k_info_reset(void);
-extern bool buki_motteruka(int i);
 
 /* wild.c */
 extern void set_floor_and_wall(byte type);

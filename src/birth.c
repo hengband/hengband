@@ -3176,6 +3176,24 @@ static void birth_put_stats(void)
 }
 
 
+static void k_info_reset(void)
+{
+	int i;
+
+	/* Reset the "objects" */
+	for (i = 1; i < max_k_idx; i++)
+	{
+		object_kind *k_ptr = &k_info[i];
+
+		/* Reset "tried" */
+		k_ptr->tried = FALSE;
+
+		/* Reset "aware" */
+		k_ptr->aware = FALSE;
+	}
+}
+
+
 /*
  * Clear all the global "character" data
  */

@@ -81,7 +81,7 @@ static void do_cmd_eat_food_aux(int item)
 	ident = FALSE;
 
 	/* Object level */
-	lev = get_object_level(o_ptr);
+	lev = k_info[o_ptr->k_idx].level;
 
 	if (o_ptr->tval == TV_FOOD)
 	{
@@ -776,7 +776,7 @@ static void do_cmd_quaff_potion_aux(int item)
 	ident = FALSE;
 
 	/* Object level */
-	lev = get_object_level(q_ptr);
+	lev = k_info[q_ptr->k_idx].level;
 
 	/* Analyze the potion */
 	if (q_ptr->tval == TV_POTION)
@@ -1624,7 +1624,7 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 	ident = FALSE;
 
 	/* Object level */
-	lev = get_object_level(o_ptr);
+	lev = k_info[o_ptr->k_idx].level;
 
 	/* Assume the scroll will get used up */
 	used_up = TRUE;
@@ -2721,7 +2721,7 @@ static void do_cmd_use_staff_aux(int item)
 	energy_use = 100;
 
 	/* Extract the item level */
-	lev = get_object_level(o_ptr);
+	lev = k_info[o_ptr->k_idx].level;
 	if (lev > 50) lev = 50 + (lev - 50)/2;
 
 	/* Base chance of success */
@@ -3255,7 +3255,7 @@ static void do_cmd_aim_wand_aux(int item)
 	energy_use = 100;
 
 	/* Get the level */
-	lev = get_object_level(o_ptr);
+	lev = k_info[o_ptr->k_idx].level;
 	if (lev > 50) lev = 50 + (lev - 50)/2;
 
 	/* Base chance of success */
@@ -3692,7 +3692,7 @@ static void do_cmd_zap_rod_aux(int item)
 	energy_use = 100;
 
 	/* Extract the item level */
-	lev = get_object_level(o_ptr);
+	lev = k_info[o_ptr->k_idx].level;
 
 	/* Base chance of success */
 	chance = p_ptr->skill_dev;
@@ -3994,7 +3994,7 @@ static void do_cmd_activate_aux(int item)
 	energy_use = 100;
 
 	/* Extract the item level */
-	lev = get_object_level(o_ptr);
+	lev = k_info[o_ptr->k_idx].level;
 
 	/* Hack -- use artifact level instead */
 	if (artifact_p(o_ptr)) lev = a_info[o_ptr->name1].level;

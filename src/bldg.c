@@ -3837,7 +3837,7 @@ msg_format("%s です。", tmp_str);
 	}
 
 	/* Extract the object "level" */
-	lev = get_object_level(o_ptr);
+	lev = k_info[o_ptr->k_idx].level;
 
 	/* Price for a rod */
 	if (o_ptr->tval == TV_ROD)
@@ -3863,7 +3863,7 @@ msg_format("それは再充填する必要はありません。");
 	else if (o_ptr->tval == TV_STAFF)
 	{
 		/* Price per charge ( = double the price paid by shopkeepers for the charge) */
-		price = (get_object_cost(o_ptr) / 10) * o_ptr->number;
+		price = (k_info[o_ptr->k_idx].cost / 10) * o_ptr->number;
 
 		/* Pay at least 10 gold per charge */
 		price = MAX(10, price);
@@ -3871,7 +3871,7 @@ msg_format("それは再充填する必要はありません。");
 	else
 	{
 		/* Price per charge ( = double the price paid by shopkeepers for the charge) */
-		price = (get_object_cost(o_ptr) / 10);
+		price = (k_info[o_ptr->k_idx].cost / 10);
 
 		/* Pay at least 10 gold per charge */
 		price = MAX(10, price);
@@ -4044,7 +4044,7 @@ static void building_recharge_all(void)
 		if (!object_known_p(o_ptr)) total_cost += 50;
 
 		/* Extract the object "level" */
-		lev = get_object_level(o_ptr);
+		lev = k_info[o_ptr->k_idx].level;
 
 		k_ptr = &k_info[o_ptr->k_idx];
 
@@ -4056,7 +4056,7 @@ static void building_recharge_all(void)
 
 		case TV_STAFF:
 			/* Price per charge ( = double the price paid by shopkeepers for the charge) */
-			price = (get_object_cost(o_ptr) / 10) * o_ptr->number;
+			price = (k_info[o_ptr->k_idx].cost / 10) * o_ptr->number;
 
 			/* Pay at least 10 gold per charge */
 			price = MAX(10, price);
@@ -4067,7 +4067,7 @@ static void building_recharge_all(void)
 
 		case TV_WAND:
 			/* Price per charge ( = double the price paid by shopkeepers for the charge) */
-			price = (get_object_cost(o_ptr) / 10);
+			price = (k_info[o_ptr->k_idx].cost / 10);
 
 			/* Pay at least 10 gold per charge */
 			price = MAX(10, price);

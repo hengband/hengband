@@ -1654,7 +1654,7 @@ static void get_inscription(char *buff, object_type *o_ptr)
 void object_desc(char *buf, object_type *o_ptr, u32b mode)
 {
 	/* Extract object kind name */
-	cptr            kindname = get_object_name(o_ptr);
+	cptr            kindname = k_name + k_info[o_ptr->k_idx].name;
 
 	/* Extract default "base" string */
 	cptr            basenm = kindname;

@@ -5421,7 +5421,7 @@ void calc_android_exp(void)
 		object_type forge;
 		object_type *q_ptr = &forge;
 		u32b value, exp;
-		int level = MAX(get_object_level(o_ptr) - 8, 1);
+		int level = MAX(k_info[o_ptr->k_idx].level - 8, 1);
 
 		if ((i == INVEN_RIGHT) || (i == INVEN_LEFT) || (i == INVEN_NECK) || (i == INVEN_LITE)) continue;
 		if (!o_ptr->k_idx) continue;

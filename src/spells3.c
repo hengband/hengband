@@ -3169,7 +3169,7 @@ s = "魔力を充填すべきアイテムがない。";
 	k_ptr = &k_info[o_ptr->k_idx];
 
 	/* Extract the object "level" */
-	lev = get_object_level(o_ptr);
+	lev = k_info[o_ptr->k_idx].level;
 
 
 	/* Recharge a rod */
@@ -5933,7 +5933,7 @@ s = "魔力を吸収できるアイテムがありません。";
 	}
 
 	k_ptr = &k_info[o_ptr->k_idx];
-	lev = get_object_level(o_ptr);
+	lev = k_info[o_ptr->k_idx].level;
 
 	if (o_ptr->tval == TV_ROD)
 	{

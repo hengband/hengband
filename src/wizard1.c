@@ -282,7 +282,7 @@ static void kind_info(char *buf, char *dam, char *wgt, int *lev, s32b *val, int 
 
 
 	/* Level */
-	(*lev) = get_object_level(q_ptr);
+	(*lev) = k_info[q_ptr->k_idx].level;
 
 	/* Value */
 	(*val) = object_value(q_ptr);

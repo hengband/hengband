@@ -551,7 +551,7 @@ static void wiz_display_item(object_type *o_ptr)
 	prt(buf, 2, j);
 
 	prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d",
-		   o_ptr->k_idx, get_object_level(o_ptr),
+		   o_ptr->k_idx, k_info[o_ptr->k_idx].level,
 		   o_ptr->tval, o_ptr->sval), 4, j);
 
 	prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d",
