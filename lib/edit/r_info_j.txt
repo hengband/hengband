@@ -19903,8 +19903,8 @@ F:NO_STUN | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_3 |
 S:SCARE | BRAIN_SMASH | DRAIN_MANA |
 S:BR_FIRE | BR_LITE | BR_SOUN | HEAL | S_ANGEL
-D:この聖なる鳥は、前は鴻、後は麟、顎は燕、嘴は鶏、頸は蛇、尾は魚、
-D:額は鸛、顋は鴛、背は亀甲、羽は五采を備え、龍の紋様を持つと言う。
+D:伝説の聖なる鳥だ。前は鴻、後は麟、顎は燕、嘴は鶏、頸は蛇、尾は魚、額は鸛、
+D:顋は鴛、背は亀甲、羽は五采を備え、龍の紋様を持つと言う。
 
 N:989:麒麟
 E:Kirin
