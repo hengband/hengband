@@ -157,7 +157,7 @@
 extern bool new_player_spot(void);
 
 extern void place_random_stairs(int y, int x);
-extern void place_random_door(int y, int x);
+extern void place_random_door(int y, int x, bool room);
 extern void place_closed_door(int y, int x);
 extern void place_floor(int x1, int x2, int y1, int y2, bool light);
 extern void place_room(int x1, int x2, int y1, int y2, bool light);

@@ -383,7 +383,7 @@ static void try_door(int y, int x)
 	if ((randint0(100) < dun_tun_jct) && possible_doorway(y, x) && !(d_info[dungeon_type].flags1 & DF1_NO_DOORS))
 	{
 		/* Place a door */
-		place_random_door(y, x);
+		place_random_door(y, x, FALSE);
 	}
 }
 
@@ -943,7 +943,7 @@ if (cheat_room) msg_print("小さな地下室を却下します。");
 			if ((randint0(100) < dun_tun_pen) && !(d_info[dungeon_type].flags1 & DF1_NO_DOORS))
 			{
 				/* Place a random door */
-				place_random_door(y, x);
+				place_random_door(y, x, TRUE);
 			}
 		}
 

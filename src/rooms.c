@@ -66,8 +66,8 @@ static void place_secret_door(int y, int x)
 		/* Create secret door */
 		place_closed_door(y, x);
 
-		/* Hide */
-		c_ptr->mimic = fill_type[randint0(100)];
+		/* Hide by inner wall because this is used in rooms only */
+		c_ptr->mimic = feat_wall_inner;
 
 		/* Floor type terrain cannot hide a door */
 		if (!(c_ptr->mimic & 0x20))
@@ -450,7 +450,7 @@ static void build_type1(int by0, int bx0)
 			place_solid_bold(y2 + 1, xval);
 		}
 
-		place_random_door(yval, xval);
+		place_random_door(yval, xval, TRUE);
 	}
 }
 

@@ -107,7 +107,7 @@ void place_random_stairs(int y, int x)
 /*
  * Place a random type of door at the given location
  */
-void place_random_door(int y, int x)
+void place_random_door(int y, int x, bool room)
 {
 	int tmp;
 	cave_type *c_ptr = &cave[y][x];
@@ -144,8 +144,8 @@ void place_random_door(int y, int x)
 		/* Create secret door */
 		place_closed_door(y, x);
 
-		/* Hide */
-		c_ptr->mimic = fill_type[randint0(100)];
+		/* Hide. If on the edge of room, use outer wall. */
+		c_ptr->mimic = room ? feat_wall_outer : fill_type[randint0(100)];
 
 		/* Floor type terrain cannot hide a door */
 		if (!(c_ptr->mimic & 0x20))
