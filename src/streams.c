@@ -95,7 +95,7 @@ static void recursive_river(int x1, int y1, int x2, int y2, int feat1, int feat2
 				{
 					for (tx = x - width - 1; tx <= x + width + 1; tx++)
 					{
-						if (!in_bounds(ty, tx)) continue;
+						if (!in_bounds2(ty, tx)) continue;
 
 						c_ptr = &cave[ty][tx];
 
@@ -236,7 +236,7 @@ void build_streamer(int feat, int chance)
 			{
 				ty = rand_spread(y, d);
 				tx = rand_spread(x, d);
-				if (!in_bounds(ty, tx)) continue;
+				if (!in_bounds2(ty, tx)) continue;
 				break;
 			}
 

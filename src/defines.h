@@ -4112,6 +4112,18 @@
 #define player_has_los_bold(Y,X) \
     (((cave[Y][X].info & (CAVE_VIEW)) != 0) || p_ptr->inside_battle)
 
+/*
+ * Determine if a "boundary" grid is "floor mimic"
+ */
+#define boundary_floor_bold(Y,X) \
+    ((cave[(Y)][(X)].feat == FEAT_PERM_SOLID) && \
+      cave[(Y)][(X)].mimic && \
+    !(cave[(Y)][(X)].mimic & 0x20))
+
+#define boundary_floor_grid(C) \
+    (((C)->feat == FEAT_PERM_SOLID) && \
+      (C)->mimic && \
+    !((C)->mimic & 0x20))
 
 #define update_playtime() \
 {\

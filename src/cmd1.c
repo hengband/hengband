@@ -3980,13 +3980,23 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 				lite_spot(y, x);
 			}
 
+			/* Boundary floor mimic */
+			else if (boundary_floor_grid(c_ptr))
+			{
+#ifdef JP
+				msg_print("それ以上先には進めないようだ。");
+#else
+				msg_print("You feel you cannot go any more.");
+#endif
+			}
+
 			/* Wall (or secret door) */
 			else
 			{
 #ifdef JP
-				msg_print("壁が行く手をはばんでいるようだ。");
+				msg_format("%sが行く手をはばんでいるようだ。", (feat == FEAT_TREES) ? "木" : "壁");
 #else
-				msg_print("You feel a wall blocking your way.");
+				msg_format("You feel a %s blocking your way.", (feat == FEAT_TREES) ? "tree" : "wall");
 #endif
 
 				c_ptr->info |= (CAVE_MARK);
@@ -4005,7 +4015,6 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 #else
 				msg_print("There is rubble blocking your way.");
 #endif
-
 
 				if (!(p_ptr->confused || p_ptr->stun || p_ptr->image))
 					energy_use = 0;
@@ -4031,6 +4040,18 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 				msg_print("There is a closed door blocking your way.");
 #endif
 
+				if (!(p_ptr->confused || p_ptr->stun || p_ptr->image))
+					energy_use = 0;
+			}
+
+			/* Boundary floor mimic */
+			else if (boundary_floor_grid(c_ptr))
+			{
+#ifdef JP
+				msg_print("それ以上先には進めない。");
+#else
+				msg_print("You cannot go any more.");
+#endif
 
 				if (!(p_ptr->confused || p_ptr->stun || p_ptr->image))
 					energy_use = 0;
@@ -4040,11 +4061,10 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 			else
 			{
 #ifdef JP
-				msg_print("壁が行く手をはばんでいる。");
+				msg_format("%sが行く手をはばんでいる。", (feat == FEAT_TREES) ? "木" : "壁");
 #else
-				msg_print("There is a wall blocking your way.");
+				msg_format("There is a %s blocking your way.", (feat == FEAT_TREES) ? "tree" : "wall");
 #endif
-
 
 				if (!(p_ptr->confused || p_ptr->stun || p_ptr->image))
 					energy_use = 0;
@@ -4052,7 +4072,7 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 		}
 
 		/* Sound */
-		sound(SOUND_HITWALL);
+		if (!boundary_floor_grid(c_ptr)) sound(SOUND_HITWALL);
 	}
 
 	/* Normal movement */

@@ -1545,17 +1545,6 @@ static bool do_cmd_tunnel_aux(int y, int x)
 
 	}
 
-	/* No tunnelling through mountains */
-	else if (feat == FEAT_MOUNTAIN)
-	{
-#ifdef JP
-		msg_print("そこは掘れない!");
-#else
-		msg_print("You can't tunnel through that!");
-#endif
-
-	}
-
 	/* Map border (mimiccing Permanent wall) */
 	else if ((c_ptr->feat >= FEAT_PERM_EXTRA &&
 		  c_ptr->feat <= FEAT_PERM_SOLID) ||

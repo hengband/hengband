@@ -1421,37 +1421,44 @@ msg_print("属性付加に失敗した。");
 void call_the_(void)
 {
 	int i;
+	int y, x;
+	bool do_call = TRUE;
 
-	if (cave_floor_bold(py - 1, px - 1) &&
-	    cave_floor_bold(py - 1, px    ) &&
-	    cave_floor_bold(py - 1, px + 1) &&
-	    cave_floor_bold(py    , px - 1) &&
-	    cave_floor_bold(py    , px + 1) &&
-	    cave_floor_bold(py + 1, px - 1) &&
-	    cave_floor_bold(py + 1, px    ) &&
-	    cave_floor_bold(py + 1, px + 1))
+	for (i = 0; i < 9; i++)
+	{
+		y = py + ddy_ddd[i];
+		x = px + ddx_ddd[i];
+
+		if (!cave_floor_bold(y, x) && !boundary_floor_bold(y, x))
+		{
+			do_call = FALSE;
+			break;
+		}
+	}
+
+	if (do_call)
 	{
 		for (i = 1; i < 10; i++)
 		{
-			if (i-5) fire_ball(GF_ROCKET, i, 175, 2);
+			if (i - 5) fire_ball(GF_ROCKET, i, 175, 2);
 		}
 
 		for (i = 1; i < 10; i++)
 		{
-			if (i-5) fire_ball(GF_MANA, i, 175, 3);
+			if (i - 5) fire_ball(GF_MANA, i, 175, 3);
 		}
 
 		for (i = 1; i < 10; i++)
 		{
-			if (i-5) fire_ball(GF_NUKE, i, 175, 4);
+			if (i - 5) fire_ball(GF_NUKE, i, 175, 4);
 		}
 	}
 	else
 	{
 #ifdef JP
-msg_format("あなたは%sを壁に近すぎる場所で唱えてしまった！",
-((mp_ptr->spell_book == TV_LIFE_BOOK) ? "祈り" : "呪文"));
-msg_print("大きな爆発音があった！");
+		msg_format("あなたは%sを壁に近すぎる場所で唱えてしまった！",
+			((mp_ptr->spell_book == TV_LIFE_BOOK) ? "祈り" : "呪文"));
+		msg_print("大きな爆発音があった！");
 #else
 		msg_format("You %s the %s too close to a wall!",
 			((mp_ptr->spell_book == TV_LIFE_BOOK) ? "recite" : "cast"),
@@ -1462,21 +1469,21 @@ msg_print("大きな爆発音があった！");
 
 		if (destroy_area(py, px, 15 + p_ptr->lev + randint0(11)))
 #ifdef JP
-msg_print("ダンジョンが崩壊した...");
+			msg_print("ダンジョンが崩壊した...");
 #else
 			msg_print("The dungeon collapses...");
 #endif
 
 		else
 #ifdef JP
-msg_print("ダンジョンは大きく揺れた。");
+			msg_print("ダンジョンは大きく揺れた。");
 #else
 			msg_print("The dungeon trembles.");
 #endif
 
 
 #ifdef JP
-take_hit(DAMAGE_NOESCAPE, 100 + randint1(150), "自殺的な虚無招来", -1);
+		take_hit(DAMAGE_NOESCAPE, 100 + randint1(150), "自殺的な虚無招来", -1);
 #else
 		take_hit(DAMAGE_NOESCAPE, 100 + randint1(150), "a suicidal Call the Void", -1);
 #endif

@@ -3464,7 +3464,7 @@ bool mutation_power_aux(u32b power)
 				y = py + ddy[dir];
 				x = px + ddx[dir];
 				c_ptr = &cave[y][x];
-				if (cave_floor_bold(y, x))
+				if (cave_floor_bold(y, x) || boundary_floor_grid(c_ptr))
 				{
 #ifdef JP
 					msg_print("何もない場所に噛みついた！");
@@ -3479,9 +3479,9 @@ bool mutation_power_aux(u32b power)
 					(c_ptr->feat == FEAT_MOUNTAIN))
 				{
 #ifdef JP
-					msg_print("いてっ！この壁はあなたの歯より硬い！");
+					msg_format("いてっ！この%sはあなたの歯より硬い！", (c_ptr->mimic == FEAT_TREES) ? "木" : "壁");
 #else
-					msg_print("Ouch!  This wall is harder than your teeth!");
+					msg_format("Ouch!  This %s is harder than your teeth!", (c_ptr->mimic == FEAT_TREES) ? "tree" : "wall");
 #endif
 
 					break;
