@@ -2565,16 +2565,16 @@ msg_print("強化に失敗した。");
 /*
  * Identify an object
  */
-void identify_item(object_type *o_ptr)
+bool identify_item(object_type *o_ptr)
 {
-	bool motoart = TRUE;
+	bool old_known = FALSE;
 	char o_name[MAX_NLEN];
 
 	/* Description */
 	object_desc(o_name, o_ptr, TRUE, 3);
 
-	if ((artifact_p(o_ptr) || o_ptr->art_name) && !(o_ptr->ident & IDENT_KNOWN))
-		motoart = FALSE;
+	if (o_ptr->ident & IDENT_KNOWN)
+		old_known = TRUE;
 
 	if (!(o_ptr->ident & (IDENT_MENTAL)))
 	{
@@ -2601,10 +2601,12 @@ void identify_item(object_type *o_ptr)
 	/* Description */
 	object_desc(o_name, o_ptr, TRUE, 0);
 
-	if(record_fix_art && !motoart && artifact_p(o_ptr))
+	if(record_fix_art && !old_known && artifact_p(o_ptr))
 		do_cmd_write_nikki(NIKKI_ART, 0, o_name);
-	if(record_rand_art && !motoart && o_ptr->art_name)
+	if(record_rand_art && !old_known && o_ptr->art_name)
 		do_cmd_write_nikki(NIKKI_ART, 0, o_name);
+
+	return old_known;
 }
 
 
@@ -2631,6 +2633,8 @@ bool ident_spell(bool only_equip)
 	object_type     *o_ptr;
 	char            o_name[MAX_NLEN];
 	cptr            q, s;
+	bool old_known;
+	int idx;
 
 	item_tester_no_ryoute = TRUE;
 
@@ -2675,7 +2679,7 @@ s = "鑑定するべきアイテムがない。";
 	}
 
 	/* Identify it */
-	identify_item(o_ptr);
+	old_known = identify_item(o_ptr);
 
 	/* Description */
 	object_desc(o_name, o_ptr, TRUE, 3);
@@ -2684,33 +2688,32 @@ s = "鑑定するべきアイテムがない。";
 	if (item >= INVEN_RARM)
 	{
 #ifdef JP
-msg_format("%^s: %s(%c)。",
+		msg_format("%^s: %s(%c)。", describe_use(item), o_name, index_to_label(item));
 #else
-		msg_format("%^s: %s (%c).",
+		msg_format("%^s: %s (%c).", describe_use(item), o_name, index_to_label(item));
 #endif
-
-			   describe_use(item), o_name, index_to_label(item));
 	}
 	else if (item >= 0)
 	{
 #ifdef JP
-msg_format("ザック中: %s(%c)。",
+		msg_format("ザック中: %s(%c)。", o_name, index_to_label(item));
 #else
-		msg_format("In your pack: %s (%c).",
+		msg_format("In your pack: %s (%c).", o_name, index_to_label(item));
 #endif
-
-			   o_name, index_to_label(item));
 	}
 	else
 	{
 #ifdef JP
-msg_format("床上: %s。",
+		msg_format("床上: %s。", o_name);
 #else
-		msg_format("On the ground: %s.",
+		msg_format("On the ground: %s.", o_name);
 #endif
-
-			   o_name);
 	}
+
+	/* Auto-inscription/destroy */
+	idx = is_autopick(o_ptr);
+	auto_inscribe_item(o_ptr, idx);
+	if (!old_known) auto_destroy_item(item, idx);
 
 	/* Something happened */
 	return (TRUE);
@@ -2806,6 +2809,8 @@ bool identify_fully(bool only_equip)
 	object_type     *o_ptr;
 	char            o_name[MAX_NLEN];
 	cptr            q, s;
+	bool old_known;
+	int idx;
 
 	item_tester_no_ryoute = TRUE;
 	if (only_equip)
@@ -2845,7 +2850,7 @@ s = "鑑定するべきアイテムがない。";
 	}
 
 	/* Identify it */
-	identify_item(o_ptr);
+	old_known = identify_item(o_ptr);
 
 	/* Mark the item as fully known */
 	o_ptr->ident |= (IDENT_MENTAL);
@@ -2860,36 +2865,37 @@ s = "鑑定するべきアイテムがない。";
 	if (item >= INVEN_RARM)
 	{
 #ifdef JP
-msg_format("%^s: %s(%c)。",
+		msg_format("%^s: %s(%c)。", describe_use(item), o_name, index_to_label(item));
 #else
-		msg_format("%^s: %s (%c).",
+		msg_format("%^s: %s (%c).", describe_use(item), o_name, index_to_label(item));
 #endif
 
-			   describe_use(item), o_name, index_to_label(item));
+
 	}
 	else if (item >= 0)
 	{
 #ifdef JP
-msg_format("ザック中: %s(%c)。",
+		msg_format("ザック中: %s(%c)。", o_name, index_to_label(item));
 #else
-		msg_format("In your pack: %s (%c).",
+		msg_format("In your pack: %s (%c).", o_name, index_to_label(item));
 #endif
-
-			   o_name, index_to_label(item));
 	}
 	else
 	{
 #ifdef JP
-msg_format("床上: %s。",
+		msg_format("床上: %s。", o_name);
 #else
-		msg_format("On the ground: %s.",
+		msg_format("On the ground: %s.", o_name);
 #endif
-
-			   o_name);
 	}
 
 	/* Describe it fully */
 	(void)identify_fully_aux(o_ptr);
+
+	/* Auto-inscription/destroy */
+	idx = is_autopick(o_ptr);
+	auto_inscribe_item(o_ptr, idx);
+	if (!old_known) auto_destroy_item(item, idx);
 
 	/* Success */
 	return (TRUE);

@@ -544,6 +544,9 @@ extern cptr autopick_line_from_entry(autopick_type *entry);
 extern bool autopick_new_entry(autopick_type *entry, cptr str);
 extern void autopick_free_entry(autopick_type *entry);
 extern int is_autopick(object_type *o_ptr);
+extern void auto_inscribe_item(object_type *o_ptr, int idx);
+extern bool auto_destroy_item(s16b item, int autopick_idx);
+extern void auto_pickup_items(cave_type *c_ptr);
 extern void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr);
 extern void do_cmd_edit_autopick();
 
@@ -1072,7 +1075,7 @@ extern bool enchant_spell(int num_hit, int num_dam, int num_ac);
 extern bool artifact_scroll(void);
 extern bool ident_spell(bool only_equip);
 extern bool mundane_spell(bool only_equip);
-extern void identify_item(object_type *o_ptr);
+extern bool identify_item(object_type *o_ptr);
 extern bool identify_fully(bool only_equip);
 extern bool recharge(int num);
 extern bool bless_weapon(void);

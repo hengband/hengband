@@ -733,6 +733,209 @@ int is_autopick(object_type *o_ptr)
 
 
 /*
+ * Automatically destroy items in this grid.
+ */
+static bool is_opt_confirm_destroy(object_type *o_ptr)
+{
+	if (!destroy_items) return FALSE;
+
+	/* Known to be worthless? */
+	if (leave_worth)
+		if (object_value(o_ptr) > 0) return FALSE;
+	
+	if (leave_equip)
+		if ((o_ptr->tval >= TV_SHOT) && (o_ptr->tval <= TV_DRAG_ARMOR)) return FALSE;
+	
+	if (leave_chest)
+		if ((o_ptr->tval == TV_CHEST) && o_ptr->pval) return FALSE;
+	
+	if (leave_wanted)
+	{
+		if (o_ptr->tval == TV_CORPSE
+		    && object_is_shoukinkubi(o_ptr)) return FALSE;
+	}
+	
+	if (leave_corpse)
+		if (o_ptr->tval == TV_CORPSE) return FALSE;
+	
+	if (leave_junk)
+		if ((o_ptr->tval == TV_SKELETON) || (o_ptr->tval == TV_BOTTLE) || (o_ptr->tval == TV_JUNK) || (o_ptr->tval == TV_STATUE)) return FALSE;
+	
+	if (o_ptr->tval == TV_GOLD) return FALSE;
+	
+	return TRUE;
+}
+
+
+/*
+ * Determines whether an item has '=g' in its inscription for easy-auto-picker
+ */
+static bool is_autopick2( object_type *o_ptr) {
+      cptr s;
+
+      /* No inscription */
+      if (!o_ptr->inscription) return (FALSE);
+
+      /* Find a '=' */
+      s = strchr(quark_str(o_ptr->inscription), '=');
+
+      /* Process inscription */
+      while (s)
+      {
+              /* Auto-pickup on "=g" */
+              if (s[1] == 'g') return (TRUE);
+
+              /* Find another '=' */
+              s = strchr(s + 1, '=');
+      }
+
+      /* Don't auto-pickup */
+      return (FALSE);
+}
+
+
+/*
+ *  Auto inscription
+ */
+void auto_inscribe_item(object_type *o_ptr, int idx)
+{
+	if (idx >= 0 && autopick_list[idx].insc && !o_ptr->inscription)
+		o_ptr->inscription = inscribe_flags(o_ptr, autopick_list[idx].insc);
+}
+
+
+/*
+ * Automatically destroy an item if it is to be destroyed
+ */
+bool auto_destroy_item(s16b item, int autopick_idx)
+{
+	char o_name[MAX_NLEN];
+	object_type *o_ptr;
+
+	/* Get the item (in the pack) */
+	if (item >= 0) o_ptr = &inventory[item];
+
+	/* Get the item (on the floor) */
+	else o_ptr = &o_list[0 - item];
+
+
+	if ((autopick_idx == -1 && is_opt_confirm_destroy(o_ptr)) ||
+	    (autopick_idx >= 0 && (autopick_list[autopick_idx].action & DO_AUTODESTROY)))
+	{
+		disturb(0,0);
+
+		/* Artifact? */
+		if (!can_player_destroy_object(o_ptr))
+		{
+			/* Describe the object (with {terrible/special}) */
+			object_desc(o_name, o_ptr, TRUE, 3);
+
+			/* Message */
+#ifdef JP
+			msg_format("%sは破壊不能だ。", o_name);
+#else
+			msg_format("You cannot auto-destroy %s.", o_name);
+#endif
+
+			/* Done */
+			return TRUE;
+		}
+
+		/* Record name of destroyed item */
+		autopick_free_entry(&autopick_entry_last_destroyed);
+		autopick_entry_from_object(&autopick_entry_last_destroyed, o_ptr);
+
+		/* Eliminate the item (from the pack) */
+		if (item >= 0)
+		{
+			inven_item_increase(item, -(o_ptr->number));
+			inven_item_optimize(item);
+		}
+
+		/* Eliminate the item (from the floor) */
+		else
+		{
+			delete_object_idx(0 - item);
+		}
+
+		/* Print a message */
+#ifdef JP
+		msg_format("%sを自動破壊します。", o_name);
+#else
+		msg_format("Auto-destroying %s.", o_name);
+#endif
+			
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+
+/*
+ * Automatically pickup/destroy items in this grid.
+ */
+void auto_pickup_items(cave_type *c_ptr)
+{
+	s16b this_o_idx, next_o_idx = 0;
+	s16b inscribe_flags(object_type *o_ptr, cptr out_val);
+	
+	/* Scan the pile of objects */
+	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	{
+		int idx;
+	
+		/* Acquire object */
+		object_type *o_ptr = &o_list[this_o_idx];
+		
+		/* Acquire next object */
+		next_o_idx = o_ptr->next_o_idx;
+
+		idx = is_autopick(o_ptr);
+
+		auto_inscribe_item(o_ptr, idx);
+
+		if (is_autopick2(o_ptr) ||
+		    (idx >= 0 && (autopick_list[idx].action & DO_AUTOPICK)))
+		{
+			disturb(0,0);
+
+			if (!inven_carry_okay(o_ptr))
+			{
+				char o_name[MAX_NLEN];
+
+				/* Describe the object */
+				object_desc(o_name, o_ptr, TRUE, 3);
+
+				/* Message */
+#ifdef JP
+				msg_format("ザックには%sを入れる隙間がない。", o_name);
+#else
+				msg_format("You have no room for %s.", o_name);
+#endif
+				continue;
+			}
+			py_pickup_aux(this_o_idx);
+
+			continue;
+		}
+		
+		/*
+		 * Do auto-destroy;
+		 * When always_pickup is 'yes', we disable
+		 * auto-destroyer from autopick function, and do only
+		 * easy-auto-destroyer.
+		 */
+		else
+		{
+			if (auto_destroy_item(this_o_idx, (!always_pickup ? idx : -2)))
+				continue;
+		}
+	}
+}
+
+
+/*
  * Describe which kind of object is Auto-picked/destroyed
  */
 static void describe_autopick(char *buff, autopick_type *entry)
