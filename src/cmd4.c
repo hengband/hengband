@@ -3428,6 +3428,9 @@ void do_cmd_visuals(void)
 
 	char buf[1024];
 
+	const char *empty_symbol = "<< ? >>";
+
+	if (use_bigtile) empty_symbol = "<< ?? >>";
 
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
@@ -3778,7 +3781,8 @@ void do_cmd_visuals(void)
 			while (1)
 			{
 				monster_race *r_ptr = &r_info[r];
-				char c;
+				byte a, a2;
+				char c, c2;
 				int t;
 
 				byte da = (r_ptr->d_attr);
@@ -3807,15 +3811,14 @@ void do_cmd_visuals(void)
 					    format("Default attr/char = %3u / %3u", da, dc));
 #endif
 
-				Term_putstr(40, 19, -1, TERM_WHITE, "<< ? >>");
-				Term_putch(43, 19, da, dc);
-				if (use_bigtile)
-				{
-					if (da & 0x80)
-						Term_putch(44, 19, 255, -1);
-					else
-						Term_putch(44, 19, 0, ' ');
-				}
+				Term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
+
+				a = da;
+				c = dc;
+				if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
+
+				Term_putch(43, 19, a, c);
+				if (use_bigtile) Term_putch(43 + 1, 19, a2, c2);
 
 				/* Label the Current values */
 #ifdef JP
@@ -3826,15 +3829,15 @@ void do_cmd_visuals(void)
 					    format("Current attr/char = %3u / %3u", ca, cc));
 #endif
 
-				Term_putstr(40, 20, -1, TERM_WHITE, "<< ? >>");
-				Term_putch(43, 20, ca, cc);
-				if (use_bigtile)
-				{
-					if (ca & 0x80)
-						Term_putch(44, 20, 255, -1);
-					else
-						Term_putch(44, 20, 0, ' ');
-				}
+				Term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
+
+				a = ca;
+				c = cc;
+				if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
+
+				Term_putch(43, 20, a, c);
+				if (use_bigtile) Term_putch(43 + 1, 20, a2, c2);
+
 
 				/* Prompt */
 #ifdef JP
@@ -3891,7 +3894,8 @@ void do_cmd_visuals(void)
 			while (1)
 			{
 				object_kind *k_ptr = &k_info[k];
-				char c;
+				byte a, a2;
+				char c, c2;
 				int t;
 
 				byte da = (byte)k_ptr->d_attr;
@@ -3920,15 +3924,14 @@ void do_cmd_visuals(void)
 					    format("Default attr/char = %3d / %3d", da, dc));
 #endif
 
-				Term_putstr(40, 19, -1, TERM_WHITE, "<< ? >>");
-				Term_putch(43, 19, da, dc);
-				if (use_bigtile)
-				{
-					if (da & 0x80)
-						Term_putch(44, 19, 255, -1);
-					else
-						Term_putch(44, 19, 0, ' ');
-				}
+				Term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
+				a = da;
+				c = dc;
+				if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
+
+				Term_putch(43, 19, a, c);
+				if (use_bigtile) Term_putch(43 + 1, 19, a2, c2);
+
 
 				/* Label the Current values */
 #ifdef JP
@@ -3939,15 +3942,14 @@ void do_cmd_visuals(void)
 					    format("Current attr/char = %3d / %3d", ca, cc));
 #endif
 
-				Term_putstr(40, 20, -1, TERM_WHITE, "<< ? >>");
-				Term_putch(43, 20, ca, cc);
-				if (use_bigtile)
-				{
-					if (ca & 0x80)
-						Term_putch(44, 20, 255, -1);
-					else
-						Term_putch(44, 20, 0, ' ');
-				}
+				Term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
+				a = ca;
+				c = cc;
+				if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
+
+				Term_putch(43, 20, a, c);
+				if (use_bigtile) Term_putch(43 + 1, 20, a2, c2);
+
 
 				/* Prompt */
 #ifdef JP
@@ -4004,7 +4006,8 @@ void do_cmd_visuals(void)
 			while (1)
 			{
 				feature_type *f_ptr = &f_info[f];
-				char c;
+				byte a, a2;
+				char c, c2;
 				int t;
 
 				byte da = (byte)f_ptr->d_attr;
@@ -4033,15 +4036,14 @@ void do_cmd_visuals(void)
 					    format("Default attr/char = %3d / %3d", da, dc));
 #endif
 
-				Term_putstr(40, 19, -1, TERM_WHITE, "<< ? >>");
-				Term_putch(43, 19, da, dc);
-				if (use_bigtile)
-				{
-					if (da & 0x80)
-						Term_putch(44, 19, 255, -1);
-					else
-						Term_putch(44, 19, 0, ' ');
-				}
+				Term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
+				a = da;
+				c = dc;
+				if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
+
+				Term_putch(43, 19, a, c);
+				if (use_bigtile) Term_putch(43 + 1, 19, a2, c2);
+
 
 				/* Label the Current values */
 #ifdef JP
@@ -4052,15 +4054,14 @@ void do_cmd_visuals(void)
 					    format("Current attr/char = %3d / %3d", ca, cc));
 #endif
 
-				Term_putstr(40, 20, -1, TERM_WHITE, "<< ? >>");
-				Term_putch(43, 20, ca, cc);
-				if (use_bigtile)
-				{
-					if (ca & 0x80)
-						Term_putch(44, 20, 255, -1);
-					else
-						Term_putch(44, 20, 0, ' ');
-				}
+				Term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
+				a = ca;
+				c = cc;
+				if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
+
+				Term_putch(43, 20, a, c);
+				if (use_bigtile) Term_putch(43 + 1, 20, a2, c2);
+
 
 				/* Prompt */
 #ifdef JP
@@ -7328,29 +7329,29 @@ static void display_visual_list(int col, int row, int height, int width, byte at
 		/* Display columns until done */
 		for (j = 0; j < width; j++)
 		{
-			byte a = attr_top + i;
-			byte c = char_left + j;
+			byte a, a2;
+			char c, c2;
 			int x = col + j;
 			int y = row + i;
 
 			/* Bigtile mode uses double width */
 			if (use_bigtile) x += j;
+
+			a = attr_top + i;
+			c = char_left + j;
+
 #ifdef JP
 			/* Don't display broken kanji */
 			if (!(a & 0x80) && (c & 0x80)) continue;
 #endif
 
-			/* Display the mark */
+			if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
+
+			/* Display symbol */
 			Term_putch(x, y, a, c);
 
-			/* Write dammy byte */
-			if (use_bigtile)
-			{
-				if ((a & 0x80) && (c & 0x80))
-					Term_putch(x + 1, y, 255, -1);
-				else
-					Term_putch(x + 1, y, 0, ' ');
-			}
+			/* Second byte */
+			if (use_bigtile) Term_putch(x + 1, y, a2, c2);
 		}
 	}
 }
@@ -7487,6 +7488,8 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 	for (i = 0; i < per_page && mon_idx[mon_top + i]; i++)
 	{
 		byte attr;
+		byte a, a2;
+		char c, c2;
 
 		/* Get the race index */
 		int r_idx = mon_idx[mon_top + i] ;
@@ -7511,17 +7514,15 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 			c_prt(attr, format("%d", r_idx), row + i, 60);
 		}
 
+		a = r_ptr->x_attr;
+		c = r_ptr->x_char;
+		if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
+
 		/* Display symbol */
-		Term_putch(70, row + i, r_ptr->x_attr, r_ptr->x_char);
+		Term_putch(70, row + i, a, c);
 
-		if (use_bigtile)
-		{
-			if (r_ptr->x_attr & 0x80)
-				Term_putch(70 + 1, row + i, 255, -1);
-			else
-				Term_putch(70 + 1, row + i, 0, ' ');
-		}
-
+		/* Second byte */
+		if (use_bigtile) Term_putch(70 + 1, row + i, a2, c2);
 
 		/* Display kills */
 		if (!(r_ptr->flags1 & RF1_UNIQUE)) put_str(format("%5d", r_ptr->r_pkills), row + i, 73);
@@ -7766,7 +7767,8 @@ static void display_object_list(int col, int row, int per_page, int object_idx[]
 	for (i = 0; i < per_page && object_idx[object_top + i]; i++)
 	{
 		char o_name[80];
-		byte a, c;
+		byte a, a2;
+		char c, c2;
 
 		/* Get the object index */
 		int k_idx = object_idx[object_top + i];
@@ -7803,19 +7805,16 @@ static void display_object_list(int col, int row, int per_page, int object_idx[]
 		if (!k_ptr->aware && !p_ptr->wizard)
 		{
 			c = ' ';
-			a = 0;
+			a = TERM_DARK;
 		}
+
+		if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
 
 		/* Display symbol */
 		Term_putch(76, row + i, a, c);
 
-		if (use_bigtile)
-		{
-			if (a & 0x80)
-				Term_putch(76 + 1, row + i, 255, -1);
-			else
-				Term_putch(76 + 1, row + i, 0, ' ');
-		}
+		/* Second byte */
+		if (use_bigtile) Term_putch(76 + 1, row + i, a2, c2);
 	}
 
 	/* Clear remaining lines */

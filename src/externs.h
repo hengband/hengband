@@ -547,6 +547,7 @@ extern void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp);
 #else /* USE_TRANSPARENCY */
 extern void map_info(int y, int x, byte *ap, char *cp);
 #endif /* USE_TRANSPARENCY */
+extern void bigtile_attr(char *cp, byte *ap, char *cp2, byte *ap2);
 extern void move_cursor_relative(int row, int col);
 extern void print_rel(char c, byte a, int y, int x);
 extern void note_spot(int y, int x);

@@ -1798,7 +1798,7 @@ static char ascii_to_zenkaku[2*128+1] =  "\
 /*
  * Prepare Bigtile or 2-bytes character attr/char pairs
  */
-static void bigtile_attr(char *cp, byte *ap, char *cp2, byte *ap2)
+void bigtile_attr(char *cp, byte *ap, char *cp2, byte *ap2)
 {
 	if (*ap & 0x80)
 	{
