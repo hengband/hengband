@@ -5958,7 +5958,7 @@ int scan_floor(int *items, int y, int x, int mode)
 
 		/* Accept this item */
 		/* XXX Hack -- Enforce limit */
-		if (num <= 23)
+		if (num < 23)
 			items[num] = this_o_idx;
 
 		num++;
@@ -7415,7 +7415,7 @@ void py_pickup_floor(int pickup)
 		}
 
 		/* Remember this object index */
-		if (floor_num <= 23)
+		if (floor_num < 23)
 			floor_list[floor_num] = this_o_idx;
 
 		/* Count non-gold objects */
