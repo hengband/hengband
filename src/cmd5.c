@@ -14,7 +14,7 @@
 
 #include "spellstips.h"
 
-cptr spell_categoly_name(int tval)
+cptr spell_category_name(int tval)
 {
 	switch (tval)
 	{
@@ -86,7 +86,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 
 #endif /* ALLOW_REPEAT -- TNB */
 
-	p = spell_categoly_name(mp_ptr->spell_book);
+	p = spell_category_name(mp_ptr->spell_book);
 
 	/* Extract spells */
 	for (spell = 0; spell < 32; spell++)
@@ -583,7 +583,7 @@ void do_cmd_study(void)
 	/* Spells of realm2 will have an increment of +32 */
 	int	spell = -1;
 
-	cptr p = spell_categoly_name(mp_ptr->spell_book);
+	cptr p = spell_category_name(mp_ptr->spell_book);
 
 	object_type *o_ptr;
 
@@ -637,8 +637,6 @@ msg_format("新しい%sを覚えることはできない！", p);
 	{
 		set_action(ACTION_NONE);
 	}
-
-	p = spell_categoly_name(mp_ptr->spell_book);
 
 #ifdef JP
 	if( p_ptr->new_spells < 10 ){
@@ -789,16 +787,16 @@ msg_format("その本には学ぶべき%sがない。", p);
 		if (old_exp >= max_exp)
 		{
 #ifdef JP
-			msg_format("その%sは完全に使いこなせるので学ぶ必要はない。", spell_categoly_name(mp_ptr->spell_book));
+			msg_format("その%sは完全に使いこなせるので学ぶ必要はない。", p);
 #else
-			msg_format("You don't need to study this %s anymore.", spell_categoly_name(mp_ptr->spell_book));
+			msg_format("You don't need to study this %s anymore.", p);
 #endif
 			return;
 		}
 #ifdef JP
-		if (!get_check(format("%sの%sをさらに学びます。よろしいですか？", name, spell_categoly_name(mp_ptr->spell_book))))
+		if (!get_check(format("%sの%sをさらに学びます。よろしいですか？", name, p)))
 #else
-		if (!get_check(format("You will study a %s of %s again. Are you sure? ", spell_categoly_name(mp_ptr->spell_book), name)))
+		if (!get_check(format("You will study a %s of %s again. Are you sure? ", p, name)))
 #endif
 		{
 			return;
@@ -4713,7 +4711,7 @@ msg_print("混乱していて唱えられない！");
 		return;
 	}
 
-	prayer = spell_categoly_name(mp_ptr->spell_book);
+	prayer = spell_category_name(mp_ptr->spell_book);
 
 	/* Restrict choices to spell books */
 	item_tester_tval = mp_ptr->spell_book;

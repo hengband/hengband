@@ -2082,7 +2082,7 @@ static void calc_spells(void)
 		return;
 	}
 
-	p = spell_categoly_name(mp_ptr->spell_book);
+	p = spell_category_name(mp_ptr->spell_book);
 
 	/* Determine the number of spells allowed */
 	levels = p_ptr->lev - mp_ptr->spell_first + 1;

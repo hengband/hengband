@@ -684,7 +684,7 @@ extern void do_cmd_checkquest(void);
 extern void do_cmd_time(void);
 
 /* cmd5.c */
-extern cptr spell_categoly_name(int tval);
+extern cptr spell_category_name(int tval);
 extern void do_cmd_browse(void);
 extern void do_cmd_study(void);
 extern void stop_singing(void);
