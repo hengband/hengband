@@ -4102,6 +4102,11 @@ void display_player(int mode)
 				{
 					if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST))
 					{
+						/* Get the quest text */
+						init_flags = INIT_ASSIGN;
+
+						process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+
 #ifdef JP
 						sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[p_ptr->inside_quest].name, died_from);
 #else
@@ -4130,6 +4135,11 @@ void display_player(int mode)
 				{
 					if (p_ptr->inside_quest && (p_ptr->inside_quest < MIN_RANDOM_QUEST))
 					{
+						/* Get the quest text */
+						init_flags = INIT_ASSIGN;
+
+						process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+
 #ifdef JP
 						sprintf(statmsg, "…あなたは現在、 クエスト「%s」を遂行中だ。", quest[p_ptr->inside_quest].name);
 #else
