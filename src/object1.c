@@ -4586,7 +4586,6 @@ void display_equip(void)
 }
 
 
-
 /*
  * Find the "first" inventory object with the given "tag".
  *
@@ -4597,16 +4596,32 @@ void display_equip(void)
  * Also, the tag "@xn" will work as well, where "n" is a any tag-char,
  * and "x" is the "current" command_cmd code.
  */
-static int get_tag(int *cp, char tag)
+static bool get_tag(int *cp, char tag, int mode)
 {
-	int i;
+	int i, start, end;
 	cptr s;
 
+	/* Extract index from mode */
+	switch (mode)
+	{
+	case USE_EQUIP:
+		start = INVEN_RARM;
+		end = INVEN_TOTAL - 1;
+		break;
+
+	case USE_INVEN:
+		start = 0;
+		end = INVEN_PACK - 1;
+		break;
+
+	default:
+		return FALSE;
+	}
 
 	/**** Find a tag in the form of {@x#} (allow alphabet tag) ***/
 
 	/* Check every inventory object */
-	for (i = 0; i < INVEN_PACK; ++i)
+	for (i = start; i <= end; i++)
 	{
 		object_type *o_ptr = &inventory[i];
 
@@ -4651,7 +4666,7 @@ static int get_tag(int *cp, char tag)
 	}
 
 	/* Check every object */
-	for (i = 0; i < INVEN_TOTAL; ++i)
+	for (i = start; i <= end; i++)
 	{
 		object_type *o_ptr = &inventory[i];
 
@@ -4690,6 +4705,156 @@ static int get_tag(int *cp, char tag)
 }
 
 
+/*
+ * Find the "first" floor object with the given "tag".
+ *
+ * A "tag" is a numeral "n" appearing as "@n" anywhere in the
+ * inscription of an object.  Alphabetical characters don't work as a
+ * tag in this form.
+ *
+ * Also, the tag "@xn" will work as well, where "n" is a any tag-char,
+ * and "x" is the "current" command_cmd code.
+ */
+static bool get_tag_floor(int *cp, char tag, int floor_list[], int floor_num)
+{
+	int i;
+	cptr s;
+
+	/**** Find a tag in the form of {@x#} (allow alphabet tag) ***/
+
+	/* Check every object in the grid */
+	for (i = 0; i < floor_num && i < 23; i++)
+	{
+		object_type *o_ptr = &o_list[floor_list[i]];
+
+		/* Skip empty inscriptions */
+		if (!o_ptr->inscription) continue;
+
+		/* Find a '@' */
+		s = strchr(quark_str(o_ptr->inscription), '@');
+
+		/* Process all tags */
+		while (s)
+		{
+			/* Check the special tags */
+			if ((s[1] == command_cmd) && (s[2] == tag))
+			{
+				/* Save the actual floor object ID */
+				*cp = i;
+
+				/* Success */
+				return (TRUE);
+			}
+
+			/* Find another '@' */
+			s = strchr(s + 1, '@');
+		}
+	}
+
+
+	/**** Find a tag in the form of {@#} (allows only numerals)  ***/
+
+	/* Don't allow {@#} with '#' being alphabet */
+	if (tag < '0' || '9' < tag)
+	{
+		/* No such tag */
+		return FALSE;
+	}
+
+	/* Check every object in the grid */
+	for (i = 0; i < floor_num && i < 23; i++)
+	{
+		object_type *o_ptr = &o_list[floor_list[i]];
+
+		/* Skip empty inscriptions */
+		if (!o_ptr->inscription) continue;
+
+		/* Find a '@' */
+		s = strchr(quark_str(o_ptr->inscription), '@');
+
+		/* Process all tags */
+		while (s)
+		{
+			/* Check the normal tags */
+			if (s[1] == tag)
+			{
+				/* Save the floor object ID */
+				*cp = i;
+
+				/* Success */
+				return (TRUE);
+			}
+
+			/* Find another '@' */
+			s = strchr(s + 1, '@');
+		}
+	}
+
+	/* No such tag */
+	return (FALSE);
+}
+
+
+/*
+ * Move around label characters with correspond tags
+ */
+static void prepare_label_string(char *label, int mode)
+{
+	cptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	int  offset = (mode == USE_EQUIP) ? INVEN_RARM : 0;
+	int  i;
+
+	/* Prepare normal labels */
+	strcpy(label, alphabet_chars);
+
+	/* Move each label */
+	for (i = 0; i < 52 + 10; i++)
+	{
+		int index;
+		char c = alphabet_chars[i];
+
+		/* Find a tag with this label */
+		if (get_tag(&index, c, mode))
+		{
+			/* Delete the overwritten label */
+			if (label[i] == c) label[i] = ' ';
+
+			/* Move the label to the place of corresponding tag */
+			label[index - offset] = c;
+		}
+	}
+}
+
+
+/*
+ * Move around label characters with correspond tags (floor version)
+ */
+static void prepare_label_string_floor(char *label, int floor_list[], int floor_num)
+{
+	cptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	int  i;
+
+	/* Prepare normal labels */
+	strcpy(label, alphabet_chars);
+
+	/* Move each label */
+	for (i = 0; i < 52 + 10; i++)
+	{
+		int index;
+		char c = alphabet_chars[i];
+
+		/* Find a tag with this label */
+		if (get_tag_floor(&index, c, floor_list, floor_num))
+		{
+			/* Delete the overwritten label */
+			if (label[i] == c) label[i] = ' ';
+
+			/* Move the label to the place of corresponding tag */
+			label[index] = c;
+		}
+	}
+}
+
 
 /*
  * Display the inventory.
@@ -4698,7 +4863,6 @@ static int get_tag(int *cp, char tag)
  */
 int show_inven(int target_item)
 {
-	cptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	int             i, j, k, l, z = 0;
 	int             col, cur_col, len;
 	object_type     *o_ptr;
@@ -4709,9 +4873,7 @@ int show_inven(int target_item)
 	char            out_desc[23][MAX_NLEN];
 	int             target_item_label = 0;
 	int             wid, hgt;
-	char inven_spellbook_label[52+1];
-
-	/* See cmd5.c */
+	char            inven_label[52 + 10 + 1];
 
 	/* Starting column */
 	col = command_gap;
@@ -4735,28 +4897,7 @@ int show_inven(int target_item)
 		z = i + 1;
 	}
 
-	/*** Move around label characters with correspond tags ***/
-
-	/* Prepare normal labels */
-	strcpy(inven_spellbook_label, alphabet_chars);
-
-	/* Move each label */
-	for (i = 0; i < 52; i++)
-	{
-		int index;
-		char c = alphabet_chars[i];
-
-		/* Find a tag with this label */
-		if (get_tag(&index, c))
-		{
-			/* Delete the over writen label */
-			if (inven_spellbook_label[i] == c)
-				inven_spellbook_label[i] = ' ';
-
-			/* Move the label to the place of correspond tag */
-			inven_spellbook_label[index] = c;
-		}
-	}
+	prepare_label_string(inven_label, USE_INVEN);
 
 	/* Display the inventory */
 	for (k = 0, i = 0; i < z; i++)
@@ -4831,7 +4972,8 @@ int show_inven(int target_item)
 		}
 		else if (i <= INVEN_PACK)
 		{
-			sprintf(tmp_val, "%c)", inven_spellbook_label[i]);
+			/* Prepare an index --(-- */
+			sprintf(tmp_val, "%c)", inven_label[i]);
 		}
 		else
 		{
@@ -4908,7 +5050,7 @@ int show_equip(int target_item)
 	char            out_desc[23][MAX_NLEN];
 	int             target_item_label = 0;
 	int             wid, hgt;
-
+	char            equip_label[52 + 10 + 1];
 
 	/* Starting column */
 	col = command_gap;
@@ -4988,6 +5130,7 @@ int show_equip(int target_item)
 	col = (len > wid - 4) ? 0 : (wid - len - 1);
 #endif
 
+	prepare_label_string(equip_label, USE_EQUIP);
 
 	/* Output each entry */
 	for (j = 0; j < k; j++)
@@ -5014,9 +5157,16 @@ int show_equip(int target_item)
 			}
 			else strcpy(tmp_val, "  ");
 		}
-		else
+		else if (i >= INVEN_RARM)
+		{
+			/* Prepare an index --(-- */
+			sprintf(tmp_val, "%c)", equip_label[i - INVEN_RARM]);
+		}
+		else /* Paranoia */
+		{
 			/* Prepare an index --(-- */
 			sprintf(tmp_val, "%c)", index_to_label(i));
+		}
 
 		/* Clear the line with the (possibly indented) index */
 		put_str(tmp_val, j+1, col);
@@ -5497,7 +5647,6 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 	{
 		/* Hack -- Start on equipment if requested */
 		if (command_see && command_wrk && equip)
-
 		{
 			command_wrk = TRUE;
 		}
@@ -5931,7 +6080,7 @@ if (other_query_flag && !verify("本当に", k)) continue;
 			case '7': case '8': case '9':
 			{
 				/* Look up the tag */
-				if (!get_tag(&k, which))
+				if (!get_tag(&k, which, command_wrk ? USE_EQUIP : USE_INVEN))
 				{
 					bell();
 					break;
@@ -6021,19 +6170,19 @@ if (other_query_flag && !verify("本当に", k)) continue;
 				bool not_found = FALSE;
 
 				/* Look up the alphabetical tag */
-				if (!get_tag(&k, which))
+				if (!get_tag(&k, which, command_wrk ? USE_EQUIP : USE_INVEN))
 				{
 					not_found = TRUE;
 				}
 
 				/* Hack -- Validate the item */
-				if ((k < INVEN_RARM) ? !inven : !equip)
+				else if ((k < INVEN_RARM) ? !inven : !equip)
 				{
 					not_found = TRUE;
 				}
 
 				/* Validate the item */
-				if (!get_item_okay(k))
+				else if (!get_item_okay(k))
 				{
 					not_found = TRUE;
 				}
@@ -6206,6 +6355,7 @@ int scan_floor(int *items, int y, int x, int mode)
 	return num;
 }
 
+
 /*
  * Display a list of the items on the floor at the given location.
  */
@@ -6227,6 +6377,7 @@ int show_floor(int target_item, int y, int x, int *min_width)
 
 	int floor_list[23], floor_num;
 	int wid, hgt;
+	char floor_label[52 + 10 + 1];
 
 	/* Get size */
 	Term_get_size(&wid, &hgt);
@@ -6238,7 +6389,7 @@ int show_floor(int target_item, int y, int x, int *min_width)
 	/* Scan for objects in the grid, using item_tester_okay() */
 	floor_num = scan_floor(floor_list, y, x, 0x01);
 
-	/* Display the inventory */
+	/* Display the floor objects */
 	for (k = 0, i = 0; i < floor_num && i < 23; i++)
 	{
 		o_ptr = &o_list[floor_list[i]];
@@ -6274,6 +6425,8 @@ int show_floor(int target_item, int y, int x, int *min_width)
 	/* Find the column to start in */
 	col = (len > wid - 4) ? 0 : (wid - len - 1);
 
+	prepare_label_string_floor(floor_label, floor_list, floor_num);
+
 	/* Output each entry */
 	for (j = 0; j < k; j++)
 	{
@@ -6300,8 +6453,10 @@ int show_floor(int target_item, int y, int x, int *min_width)
 			else strcpy(tmp_val, "   ");
 		}
 		else
+		{
 			/* Prepare an index --(-- */
-			sprintf(tmp_val, "%c)", index_to_label(j));
+			sprintf(tmp_val, "%c)", floor_label[j]);
+		}
 
 		/* Clear the line with the (possibly indented) index */
 		put_str(tmp_val, j + 1, col);
@@ -7277,25 +7432,42 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 			case '4': case '5': case '6':
 			case '7': case '8': case '9':
 			{
-				/* Look up the tag */
-				if (!get_tag(&k, which))
+				if (command_wrk != USE_FLOOR)
 				{
-					bell();
-					break;
-				}
+					/* Look up the tag */
+					if (!get_tag(&k, which, command_wrk))
+					{
+						bell();
+						break;
+					}
 
-				/* Hack -- Validate the item */
-				if ((k < INVEN_RARM) ? !inven : !equip)
-				{
-					bell();
-					break;
-				}
+					/* Hack -- Validate the item */
+					if ((k < INVEN_RARM) ? !inven : !equip)
+					{
+						bell();
+						break;
+					}
 
-				/* Validate the item */
-				if (!get_item_okay(k))
+					/* Validate the item */
+					if (!get_item_okay(k))
+					{
+						bell();
+						break;
+					}
+				}
+				else
 				{
-					bell();
-					break;
+					/* Look up the alphabetical tag */
+					if (get_tag_floor(&k, which, floor_list, floor_num))
+					{
+						/* Special index */
+						k = 0 - floor_list[k];
+					}
+					else
+					{
+						bell();
+						break;
+					}
 				}
 
 				/* Allow player to "refuse" certain actions */
@@ -7381,38 +7553,59 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 					done = TRUE;
 					break;
 				}
+
+				/* Fall through */
 			}
 
 			default:
 			{
 				int ver;
-				bool not_found = FALSE;
 
-				/* Look up the alphabetical tag */
-				if (!get_tag(&k, which))
+				if (command_wrk != USE_FLOOR)
 				{
-					not_found = TRUE;
+					bool not_found = FALSE;
+
+					/* Look up the alphabetical tag */
+					if (!get_tag(&k, which, command_wrk))
+					{
+						not_found = TRUE;
+					}
+
+					/* Hack -- Validate the item */
+					else if ((k < INVEN_RARM) ? !inven : !equip)
+					{
+						not_found = TRUE;
+					}
+
+					/* Validate the item */
+					else if (!get_item_okay(k))
+					{
+						not_found = TRUE;
+					}
+
+					if (!not_found)
+					{
+						/* Accept that choice */
+						(*cp) = k;
+						item = TRUE;
+						done = TRUE;
+						break;
+					}
 				}
-
-				/* Hack -- Validate the item */
-				if ((k < INVEN_RARM) ? !inven : !equip)
+				else
 				{
-					not_found = TRUE;
-				}
+					/* Look up the alphabetical tag */
+					if (get_tag_floor(&k, which, floor_list, floor_num))
+					{
+						/* Special index */
+						k = 0 - floor_list[k];
 
-				/* Validate the item */
-				if (!get_item_okay(k))
-				{
-					not_found = TRUE;
-				}
-
-				if (!not_found)
-				{
-					/* Accept that choice */
-					(*cp) = k;
-					item = TRUE;
-					done = TRUE;
-					break;
+						/* Accept that choice */
+						(*cp) = k;
+						item = TRUE;
+						done = TRUE;
+						break;
+					}
 				}
 
 				/* Extract "query" setting */
