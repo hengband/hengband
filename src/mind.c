@@ -889,11 +889,11 @@ if (!b) msg_print("安全な気がする。");
 		break;
 	case 2:
 		/* Minor displace */
-		teleport_player(10);
+		teleport_player(10, FALSE);
 		break;
 	case 3:
 		/* Major displace */
-		teleport_player(plev * 5);
+		teleport_player(plev * 5, FALSE);
 		break;
 	case 4:
 		/* Domination */
@@ -1325,7 +1325,7 @@ msg_format("There are too many mirrors to control!");
 	  break;
 	/* warped mirror */
 	case 3:
-	  teleport_player(10);
+	  teleport_player(10, FALSE);
 	  break;
 	/* mirror of light */
 	case 4:
@@ -1333,7 +1333,7 @@ msg_format("There are too many mirrors to control!");
 	  break;
 	/* mirror of wandering */
 	case 5:
-	  teleport_player(plev * 5);
+	  teleport_player(plev * 5, FALSE);
 	  break;
 	/* robe of dust */
 	case 6:
@@ -1584,7 +1584,7 @@ static bool cast_ninja_spell(int spell)
 		break;
 	case 2:
 	{
-		teleport_player(10);
+		teleport_player(10, FALSE);
 		if (cave[py][px].info & (CAVE_GLOW | CAVE_MNLT)) set_superstealth(FALSE);
 		else if (p_ptr->cur_lite <= 0) set_superstealth(TRUE);
 		break;
@@ -1606,7 +1606,7 @@ static bool cast_ninja_spell(int spell)
 	}
 	case 4:
 	{
-		teleport_player(p_ptr->lev*5);
+		teleport_player(p_ptr->lev * 5, FALSE);
 		if (cave[py][px].info & (CAVE_GLOW | CAVE_MNLT)) set_superstealth(FALSE);
 		else if (p_ptr->cur_lite <= 0) set_superstealth(TRUE);
 		break;
@@ -1627,7 +1627,7 @@ msg_print("うまく逃げられなかった。");
 #endif
 			else
 			{
-				teleport_player(30);
+				teleport_player(30, FALSE);
 				if (cave[py][px].info & (CAVE_GLOW | CAVE_MNLT)) set_superstealth(FALSE);
 				else if (p_ptr->cur_lite <= 0) set_superstealth(TRUE);
 			}
@@ -1657,7 +1657,7 @@ msg_print("その方向にはモンスターはいません。");
 		break;
 	case 9:
 		fire_ball(GF_FIRE, 0, 50+plev, plev/10+2);
-		teleport_player(30);
+		teleport_player(30, FALSE);
 		if (cave[py][px].info & (CAVE_GLOW | CAVE_MNLT)) set_superstealth(FALSE);
 		else if (p_ptr->cur_lite <= 0) set_superstealth(TRUE);
 		set_oppose_fire(plev, FALSE);
@@ -1786,7 +1786,7 @@ msg_print("その方向にはモンスターはいません。");
 		fire_ball(GF_POIS, 0, 75+plev*2/3, plev/5+2);
 		fire_ball(GF_OLD_DRAIN, 0, 75+plev*2/3, plev/5+2);
 		fire_ball(GF_CONFUSION, 0, 75+plev*2/3, plev/5+2);
-		teleport_player(30);
+		teleport_player(30, FALSE);
 		if (cave[py][px].info & (CAVE_GLOW | CAVE_MNLT)) set_superstealth(FALSE);
 		else if (p_ptr->cur_lite <= 0) set_superstealth(TRUE);
 		break;
@@ -2064,8 +2064,7 @@ msg_print("鏡の世界の干渉を受けた！");
 #else
 					msg_print("Weird visions seem to dance before your eyes...");
 #endif
-					teleport_player(10);
-					
+					teleport_player(10, TRUE);
 				}
 				else if (b < 96)
 				{

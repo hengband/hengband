@@ -251,7 +251,7 @@ void teleport_monster_to(int m_idx, int ty, int tx, int power)
 }
 
 
-bool cave_teleportable_bold(int y, int x)
+bool cave_teleportable_bold(int y, int x, bool passive)
 {
 	cave_type    *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
@@ -264,20 +264,28 @@ bool cave_teleportable_bold(int y, int x)
 
 	if (c_ptr->m_idx) return FALSE;
 
-	if (!player_can_enter(c_ptr->feat, 0)) return FALSE;
-
-	if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP))
+	if (!passive)
 	{
-		if (!p_ptr->ffall && !p_ptr->can_swim) return FALSE;
-	}
+		if (!player_can_enter(c_ptr->feat, 0)) return FALSE;
 
-	if (have_flag(f_ptr->flags, FF_LAVA) && !p_ptr->immune_fire && !IS_INVULN())
-	{
-		/* Always forbid deep lave */
-		if (have_flag(f_ptr->flags, FF_DEEP)) return FALSE;
+		if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP))
+		{
+			if (!p_ptr->ffall && !p_ptr->can_swim) return FALSE;
+		}
 
-		/* Forbid shallow lave when the player don't have levitation */
-		if (!p_ptr->ffall) return FALSE;
+		if (have_flag(f_ptr->flags, FF_LAVA) && !p_ptr->immune_fire && !IS_INVULN())
+		{
+			/* Always forbid deep lava */
+			if (have_flag(f_ptr->flags, FF_DEEP)) return FALSE;
+
+			/* Forbid shallow lava when the player don't have levitation */
+			if (!p_ptr->ffall) return FALSE;
+		}
+
+		if (have_flag(f_ptr->flags, FF_HIT_TRAP))
+		{
+			if (!is_known_trap(c_ptr) || !trap_can_be_ignored(c_ptr->feat)) return FALSE;
+		}
 	}
 
 	return TRUE;
@@ -297,7 +305,7 @@ bool cave_teleportable_bold(int y, int x)
  * we decrease the minimum acceptable distance to try to increase randomness.
  * -GJW
  */
-void teleport_player(int dis)
+void teleport_player(int dis, bool passive)
 {
 	int d, i, min, ox, oy;
 	int tries = 0;
@@ -351,7 +359,7 @@ msg_print("不思議な力がテレポートを防いだ！");
 			/* Ignore illegal locations */
 			if (!in_bounds(y, x)) continue;
 
-			if (!cave_teleportable_bold(y, x)) continue;
+			if (!cave_teleportable_bold(y, x, passive)) continue;
 
 			/* This grid looks good */
 			look = FALSE;
@@ -420,7 +428,7 @@ msg_print("不思議な力がテレポートを防いだ！");
  * This function is slightly obsessive about correctness.
  * This function allows teleporting into vaults (!)
  */
-void teleport_player_to(int ny, int nx, bool no_tele)
+void teleport_player_to(int ny, int nx, bool no_tele, bool passive)
 {
 	int y, x, dis = 0, ctr = 0;
 
@@ -450,7 +458,7 @@ void teleport_player_to(int ny, int nx, bool no_tele)
 		if (p_ptr->wizard) break;
 
 		/* Accept teleportable floor grids */
-		if (cave_teleportable_bold(y, x)) break;
+		if (cave_teleportable_bold(y, x, passive)) break;
 
 		/* Occasionally advance the distance */
 		if (++ctr > (4 * dis * dis + 4 * dis + 1))
@@ -1053,13 +1061,13 @@ void apply_nexus(monster_type *m_ptr)
 	{
 		case 1: case 2: case 3:
 		{
-			teleport_player(200);
+			teleport_player(200, TRUE);
 			break;
 		}
 
 		case 4: case 5:
 		{
-			teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE);
+			teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE, TRUE);
 			break;
 		}
 
@@ -5825,19 +5833,19 @@ static bool dimension_door_aux(int x, int y)
 
 	p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
 
-	if (!cave_teleportable_bold(y, x) ||
+	if (!cave_teleportable_bold(y, x, FALSE) ||
 	    (distance(y, x, py, px) > plev / 2 + 10) ||
 	    (!randint0(plev / 10 + 10)))
 	{
 		p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
-		teleport_player((plev+2)*2);
+		teleport_player((plev + 2) * 2, TRUE);
 
 		/* Failed */
 		return FALSE;
 	}
 	else
 	{
-		teleport_player_to(y, x, TRUE);
+		teleport_player_to(y, x, TRUE, FALSE);
 
 		/* Success */
 		return TRUE;

@@ -2992,7 +2992,7 @@ bool activate_random_artifact(object_type * o_ptr)
 			msg_print("It twists space around you...");
 #endif
 
-			teleport_player(100);
+			teleport_player(100, FALSE);
 			o_ptr->timeout = 45;
 			break;
 		}

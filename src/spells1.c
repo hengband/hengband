@@ -7192,7 +7192,7 @@ msg_print("周辺の重力がゆがんだ。");
 			msg_print("Gravity warps around you.");
 #endif
 
-			teleport_player(5);
+			teleport_player(5, TRUE);
 			if (!p_ptr->ffall)
 				(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
 			if (!(p_ptr->resist_sound || p_ptr->ffall))

@@ -984,7 +984,7 @@ static bool cast_hissatsu_spell(int spell)
 	case 27:
 	{
 		if (!tgt_pt(&x, &y)) return FALSE;
-		if (!cave_teleportable_bold(y, x) ||
+		if (!cave_teleportable_bold(y, x, FALSE) ||
 		    (distance(y, x, py, px) > MAX_SIGHT / 2) ||
 		    !projectable(py, px, y, x))
 		{
@@ -1006,7 +1006,7 @@ static bool cast_hissatsu_spell(int spell)
 			break;
 		}
 		project(0, 0, y, x, HISSATSU_ISSEN, GF_ATTACK, PROJECT_BEAM | PROJECT_KILL, -1);
-		teleport_player_to(y, x, TRUE);
+		teleport_player_to(y, x, TRUE, FALSE);
 		break;
 	}
 	case 28:

@@ -884,7 +884,7 @@ static void do_cmd_quaff_potion_aux(int item)
 					ident = TRUE;
 					if (one_in_(3)) lose_all_info();
 					else wiz_dark();
-					teleport_player(100);
+					teleport_player(100, TRUE);
 					wiz_dark();
 #ifdef JP
 msg_print("知らない場所で目が醒めた。頭痛がする。");
@@ -1719,14 +1719,14 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 
 		case SV_SCROLL_PHASE_DOOR:
 		{
-			teleport_player(10);
+			teleport_player(10, FALSE);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_SCROLL_TELEPORT:
 		{
-			teleport_player(100);
+			teleport_player(100, FALSE);
 			ident = TRUE;
 			break;
 		}
@@ -2370,7 +2370,7 @@ static int staff_effect(int sval, bool *use_charge, bool magic, bool known)
 
 		case SV_STAFF_TELEPORTATION:
 		{
-			teleport_player(100);
+			teleport_player(100, FALSE);
 			ident = TRUE;
 			break;
 		}
@@ -4597,7 +4597,7 @@ msg_print("天国の歌が聞こえる...");
 				msg_print("Your cloak twists space around you...");
 #endif
 
-				teleport_player(100);
+				teleport_player(100, FALSE);
 				o_ptr->timeout = 45;
 				break;
 			}
@@ -4816,10 +4816,10 @@ msg_print("天国の歌が聞こえる...");
 				switch (randint1(13))
 				{
 				case 1: case 2: case 3: case 4: case 5:
-					teleport_player(10);
+					teleport_player(10, FALSE);
 					break;
 				case 6: case 7: case 8: case 9: case 10:
-					teleport_player(222);
+					teleport_player(222, FALSE);
 					break;
 				case 11: case 12:
 					(void)stair_creation();
@@ -4844,7 +4844,7 @@ if (get_check("この階を去りますか？"))
 
 			case ART_KAMUI:
 			{
-				teleport_player(222);
+				teleport_player(222, FALSE);
 				o_ptr->timeout = 25;
 				break;
 			}
@@ -5857,7 +5857,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 
 	if (o_ptr->name2 == EGO_TRUMP)
 	{
-		teleport_player(100);
+		teleport_player(100, FALSE);
 		o_ptr->timeout = 50 + randint1(50);
 
 		/* Window stuff */
@@ -5905,7 +5905,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 
 	if (o_ptr->name2 == EGO_JUMP)
 	{
-		teleport_player(10);
+		teleport_player(10, FALSE);
 		o_ptr->timeout = 10 + randint1(10);
 
 		/* Window stuff */
@@ -6327,11 +6327,11 @@ msg_print("あなたはエレメントのブレスを吐いた。");
 				o_ptr->timeout = 200;
 				break;
 			case EGO_AMU_JUMP:
-				teleport_player(10);
+				teleport_player(10, FALSE);
 				o_ptr->timeout = randint0(10) + 10;
 				break;
 			case EGO_AMU_TELEPORT:
-				teleport_player(100);
+				teleport_player(100, FALSE);
 				o_ptr->timeout = randint0(50) + 50;
 				break;
 			case EGO_AMU_D_DOOR:

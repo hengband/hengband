@@ -1335,7 +1335,7 @@ static void hit_trap(bool break_trap)
 			msg_print("You hit a teleport trap!");
 #endif
 
-			teleport_player(100);
+			teleport_player(100, TRUE);
 			break;
 		}
 
@@ -3667,6 +3667,43 @@ bool move_player_effect(int oy, int ox, int ny, int nx, u32b mpe_mode)
 }
 
 
+bool trap_can_be_ignored(int feat)
+{
+	switch (feat)
+	{
+	case FEAT_TRAP_TRAPDOOR:
+	case FEAT_TRAP_PIT:
+	case FEAT_TRAP_SPIKED_PIT:
+	case FEAT_TRAP_POISON_PIT:
+		if (p_ptr->ffall) return TRUE;
+		break;
+	case FEAT_TRAP_TELEPORT:
+		if (p_ptr->anti_tele) return TRUE;
+		break;
+	case FEAT_TRAP_FIRE:
+		if (p_ptr->immune_fire) return TRUE;
+		break;
+	case FEAT_TRAP_ACID:
+		if (p_ptr->immune_acid) return TRUE;
+		break;
+	case FEAT_TRAP_BLIND:
+		if (p_ptr->resist_blind) return TRUE;
+		break;
+	case FEAT_TRAP_CONFUSE:
+		if (p_ptr->resist_conf) return TRUE;
+		break;
+	case FEAT_TRAP_POISON:
+		if (p_ptr->resist_pois) return TRUE;
+		break;
+	case FEAT_TRAP_SLEEP:
+		if (p_ptr->free_act) return TRUE;
+		break;
+	}
+
+	return FALSE;
+}
+
+
 /*
  * Determine if a "boundary" grid is "floor mimic"
  */
@@ -3992,39 +4029,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 	/* Disarm a visible trap */
 	else if ((do_pickup != easy_disarm) && have_flag(f_ptr->flags, FF_DISARM) && !c_ptr->mimic)
 	{
-		bool ignore = FALSE;
-		switch (c_ptr->feat)
-		{
-			case FEAT_TRAP_TRAPDOOR:
-			case FEAT_TRAP_PIT:
-			case FEAT_TRAP_SPIKED_PIT:
-			case FEAT_TRAP_POISON_PIT:
-				if (p_ptr->ffall) ignore = TRUE;
-				break;
-			case FEAT_TRAP_TELEPORT:
-				if (p_ptr->anti_tele) ignore = TRUE;
-				break;
-			case FEAT_TRAP_FIRE:
-				if (p_ptr->immune_fire) ignore = TRUE;
-				break;
-			case FEAT_TRAP_ACID:
-				if (p_ptr->immune_acid) ignore = TRUE;
-				break;
-			case FEAT_TRAP_BLIND:
-				if (p_ptr->resist_blind) ignore = TRUE;
-				break;
-			case FEAT_TRAP_CONFUSE:
-				if (p_ptr->resist_conf) ignore = TRUE;
-				break;
-			case FEAT_TRAP_POISON:
-				if (p_ptr->resist_pois) ignore = TRUE;
-				break;
-			case FEAT_TRAP_SLEEP:
-				if (p_ptr->free_act) ignore = TRUE;
-				break;
-		}
-
-		if (!ignore)
+		if (!trap_can_be_ignored(c_ptr->feat))
 		{
 			(void)do_cmd_disarm_aux(y, x, dir);
 			return;

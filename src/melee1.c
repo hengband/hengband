@@ -1974,8 +1974,9 @@ msg_format("%sは体力を回復したようだ。", m_name);
 							r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK);
 					}
 
-					if (is_mirror_grid(&cave[py][px])) {
-						teleport_player(10);
+					if (is_mirror_grid(&cave[py][px]))
+					{
+						teleport_player(10, FALSE);
 					}
 				}
 

@@ -22,9 +22,10 @@
 bool new_player_spot(void)
 {
 	int	y, x;
-	int max_attempts = 5000;
+	int max_attempts = 10000;
 
 	cave_type *c_ptr;
+	feature_type *f_ptr;
 
 	/* Place the player */
 	while (max_attempts--)
@@ -39,8 +40,20 @@ bool new_player_spot(void)
 		if (c_ptr->m_idx) continue;
 		if (dun_level)
 		{
-			if (!have_flag(f_flags_grid(c_ptr), FF_MOVE)) continue;
-			if (!have_flag(f_flags_grid(c_ptr), FF_TELEPORTABLE)) continue;
+			f_ptr = &f_info[c_ptr->feat];
+
+			if (max_attempts > 5000) /* Rule 1 */
+			{
+				if (!have_flag(f_ptr->flags, FF_FLOOR)) continue;
+			}
+			else /* Rule 2 */
+			{
+				if (!have_flag(f_ptr->flags, FF_MOVE)) continue;
+				if (have_flag(f_ptr->flags, FF_HIT_TRAP)) continue;
+			}
+
+			/* Refuse to start on anti-teleport grids in dungeon */
+			if (!have_flag(f_ptr->flags, FF_TELEPORTABLE)) continue;
 		}
 		if (!player_can_enter(c_ptr->feat, 0)) continue;
 		if (!in_bounds(y, x)) continue;

@@ -3439,28 +3439,28 @@ msg_format("%^sがテレポートした。", m_name);
 				for (i=INVEN_RARM;i<INVEN_TOTAL;i++)
 				{
 					o_ptr = &inventory[i];
-					if(!cursed_p(o_ptr))
+					if (!cursed_p(o_ptr))
 					{
 						object_flags(o_ptr, flgs);
 
-						if((have_flag(flgs, TR_TELEPORT)) || (p_ptr->muta1 & MUT1_VTELEPORT) || (p_ptr->pclass == CLASS_IMITATOR))
+						if ((have_flag(flgs, TR_TELEPORT)) || (p_ptr->muta1 & MUT1_VTELEPORT) || (p_ptr->pclass == CLASS_IMITATOR))
 						{
 #ifdef JP
-							if(get_check_strict("ついていきますか？", CHECK_OKAY_CANCEL))
+							if (get_check_strict("ついていきますか？", CHECK_OKAY_CANCEL))
 #else
-							if(get_check_strict("Do you follow it? ", CHECK_OKAY_CANCEL))
+							if (get_check_strict("Do you follow it? ", CHECK_OKAY_CANCEL))
 #endif
 							{
 								if (one_in_(3))
 								{
-									teleport_player(200);
+									teleport_player(200, TRUE);
 #ifdef JP
 									msg_print("失敗！");
 #else
 									msg_print("Failed!");
 #endif
 								}
-								else teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE);
+								else teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE, FALSE);
 								p_ptr->energy_need += ENERGY_NEED();
 							}
 							break;
@@ -3605,7 +3605,7 @@ msg_format("%^sがテレポートした。", m_name);
 						msg_format("%^s holds you, and drops from the sky.", m_name);
 #endif
 						dam = damroll(4, 8);
-						teleport_player_to(m_ptr->fy, m_ptr->fx, FALSE);
+						teleport_player_to(m_ptr->fy, m_ptr->fx, FALSE, TRUE);
 
 						sound(SOUND_FALL);
 
@@ -3669,7 +3669,7 @@ msg_format("%^sがあなたを引き戻した。", m_name);
 			msg_format("%^s commands you to return.", m_name);
 #endif
 
-			teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE);
+			teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE, TRUE);
 			learn_spell(MS_TELE_TO);
 			break;
 		}
@@ -3688,7 +3688,7 @@ msg_format("%^sにテレポートさせられた。", m_name);
 #endif
 
 			learn_spell(MS_TELE_AWAY);
-			teleport_player(100);
+			teleport_player(100, TRUE);
 			break;
 		}
 

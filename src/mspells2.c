@@ -3084,7 +3084,7 @@ bool monst_spell_monst(int m_idx)
 
 				object_flags(o_ptr, flgs);
 
-				if((have_flag(flgs, TR_TELEPORT)) || (p_ptr->muta1 & MUT1_VTELEPORT) || (p_ptr->pclass == CLASS_IMITATOR))
+				if ((have_flag(flgs, TR_TELEPORT)) || (p_ptr->muta1 & MUT1_VTELEPORT) || (p_ptr->pclass == CLASS_IMITATOR))
 				{
 #ifdef JP
 					cptr msg = "ついていきますか？";
@@ -3092,18 +3092,18 @@ bool monst_spell_monst(int m_idx)
 					cptr msg = "Do you follow it? ";
 #endif
 
-					if(get_check_strict(msg, CHECK_OKAY_CANCEL))
+					if (get_check_strict(msg, CHECK_OKAY_CANCEL))
 					{
 						if (one_in_(3))
 						{
-							teleport_player(200);
+							teleport_player(200, TRUE);
 #ifdef JP
 							msg_print("失敗！");
 #else
 							msg_print("Failed!");
 #endif
 						}
-						else teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE);
+						else teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE, FALSE);
 						p_ptr->energy_need = ENERGY_NEED();
 					}
 					break;
@@ -3201,7 +3201,7 @@ bool monst_spell_monst(int m_idx)
 
 					dam = damroll(4, 8);
 
-					if (t_idx == p_ptr->riding) teleport_player_to(m_ptr->fy, m_ptr->fx, FALSE);
+					if (t_idx == p_ptr->riding) teleport_player_to(m_ptr->fy, m_ptr->fx, FALSE, TRUE);
 					else teleport_monster_to(t_idx, m_ptr->fy, m_ptr->fx, 100);
 
 					sound(SOUND_FALL);
@@ -3316,7 +3316,7 @@ bool monst_spell_monst(int m_idx)
 
 		if (!resists_tele)
 		{
-			if (t_idx == p_ptr->riding) teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE);
+			if (t_idx == p_ptr->riding) teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE, TRUE);
 			else teleport_monster_to(t_idx, m_ptr->fy, m_ptr->fx, 100);
 		}
 
@@ -3378,7 +3378,7 @@ bool monst_spell_monst(int m_idx)
 
 		if (!resists_tele)
 		{
-			if (t_idx == p_ptr->riding) teleport_player(MAX_SIGHT * 2 + 5);
+			if (t_idx == p_ptr->riding) teleport_player(MAX_SIGHT * 2 + 5, TRUE);
 			else teleport_away(t_idx, MAX_SIGHT * 2 + 5, FALSE);
 		}
 

@@ -915,16 +915,16 @@ static void wild_magic(int spell)
 	case 1:
 	case 2:
 	case 3:
-		teleport_player(10);
+		teleport_player(10, TRUE);
 		break;
 	case 4:
 	case 5:
 	case 6:
-		teleport_player(100);
+		teleport_player(100, TRUE);
 		break;
 	case 7:
 	case 8:
-		teleport_player(200);
+		teleport_player(200, TRUE);
 		break;
 	case 9:
 	case 10:
@@ -1173,7 +1173,7 @@ static bool cast_sorcery_spell(int spell)
 		(void)detect_monsters_normal(DETECT_RAD_DEFAULT);
 		break;
 	case 1: /* Phase Door */
-		teleport_player(10);
+		teleport_player(10, FALSE);
 		break;
 	case 2: /* Detect Doors and Traps */
 		(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
@@ -1189,7 +1189,7 @@ static bool cast_sorcery_spell(int spell)
 		(void)confuse_monster(dir, (plev * 3) / 2);
 		break;
 	case 5: /* Teleport */
-		teleport_player(plev * 5);
+		teleport_player(plev * 5, FALSE);
 		break;
 	case 6: /* Sleep Monster */
 		if (!get_aim_dir(&dir)) return FALSE;
@@ -1603,7 +1603,7 @@ msg_print("あなたの手は光り始めた。");
 			damroll(8 + ((plev - 5) / 4), 8), 0);
 		break;
 	case 7: /* Teleport Self */
-		teleport_player(plev * 5);
+		teleport_player(plev * 5, FALSE);
 		break;
 	case 8: /* Wonder */
 		{
@@ -2295,7 +2295,7 @@ static bool cast_trump_spell(int spell, bool success)
 		case 0: /* Phase Door */
 			if (success)
 			{
-				teleport_player(10);
+				teleport_player(10, FALSE);
 			}
 			break;
 		case 1: /* Trump Spiders */
@@ -2454,7 +2454,7 @@ msg_print("テレポート・カードだ。");
 					msg_print("It's a teleport trump card.");
 #endif
 
-					teleport_player(10);
+					teleport_player(10, TRUE);
 				}
 				else if (die < 42)
 				{
@@ -2474,7 +2474,7 @@ msg_print("テレポート・カードだ。");
 					msg_print("It's a teleport trump card.");
 #endif
 
-					teleport_player(100);
+					teleport_player(100, TRUE);
 				}
 				else if (die < 52)
 				{
@@ -2484,7 +2484,7 @@ msg_print("テレポート・カードだ。");
 					msg_print("It's a teleport trump card.");
 #endif
 
-					teleport_player(200);
+					teleport_player(200, TRUE);
 				}
 				else if (die < 60)
 				{
@@ -2647,7 +2647,7 @@ msg_print("更に経験を積んだような気がする。");
 		case 4: /* Teleport Self */
 			if (success)
 			{
-				teleport_player(plev * 4);
+				teleport_player(plev * 4, FALSE);
 			}
 			break;
 		case 5: /* Trump Spying */
@@ -3290,7 +3290,7 @@ static bool cast_arcane_spell(int spell)
 		(void)detect_monsters_normal(DETECT_RAD_DEFAULT);
 		break;
 	case 4: /* Blink */
-		teleport_player(10);
+		teleport_player(10, FALSE);
 		break;
 	case 5: /* Light Area */
 		(void)lite_area(damroll(2, (plev / 2)), (plev / 10) + 1);
@@ -3342,7 +3342,7 @@ static bool cast_arcane_spell(int spell)
 		(void)set_cut((p_ptr->cut / 2) - 50);
 		break;
 	case 19: /* Teleport */
-		teleport_player(plev * 5);
+		teleport_player(plev * 5, FALSE);
 		break;
 	case 20: /* Identify */
 		return ident_spell(FALSE);
@@ -3925,7 +3925,7 @@ static bool cast_crusade_spell(int spell)
 		(void)sleep_monsters_touch();
 		break;
 	case 5:
-		teleport_player(25+plev/2);
+		teleport_player(25 + plev / 2, FALSE);
 		break;
 	case 6:
 		if (!get_aim_dir(&dir)) return FALSE;

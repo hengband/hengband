@@ -1351,10 +1351,10 @@ msg_print("Ìµ½ý¤Îµå¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 		(void)set_invuln(randint1(4) + 4, FALSE);
 		break;
 	case MS_BLINK:
-		teleport_player(10);
+		teleport_player(10, FALSE);
 		break;
 	case MS_TELEPORT:
-		teleport_player(plev * 5);
+		teleport_player(plev * 5, FALSE);
 		break;
 	case MS_WORLD:
 		world_player = TRUE;

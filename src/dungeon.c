@@ -641,7 +641,7 @@ static void pattern_teleport(void)
 #endif
 
 	{
-		teleport_player(200);
+		teleport_player(200, FALSE);
 		return;
 	}
 	else
@@ -2707,7 +2707,7 @@ static void process_world_aux_mutation(void)
 #endif
 
 			msg_print(NULL);
-			teleport_player(40);
+			teleport_player(40, TRUE);
 		}
 	}
 
@@ -2737,7 +2737,7 @@ static void process_world_aux_mutation(void)
 				msg_print(NULL);
 				if (one_in_(3)) lose_all_info();
 				else wiz_dark();
-				teleport_player(100);
+				teleport_player(100, TRUE);
 				wiz_dark();
 #ifdef JP
 				msg_print("あなたは見知らぬ場所で目が醒めた...頭が痛い。");
@@ -3328,7 +3328,7 @@ static void process_world_aux_curse(void)
 #endif
 			{
 				disturb(0, 0);
-				teleport_player(50);
+				teleport_player(50, FALSE);
 			}
 			else
 			{
@@ -3495,7 +3495,7 @@ static void process_world_aux_curse(void)
 			disturb(0, 0);
 
 			/* Teleport player */
-			teleport_player(40);
+			teleport_player(40, TRUE);
 		}
 		/* Handle HP draining */
 		if ((p_ptr->cursed & TRC_DRAIN_HP) && one_in_(666))

@@ -660,6 +660,7 @@ extern bool py_attack(int y, int x, int mode);
 extern bool pattern_seq(int c_y, int c_x, int n_y, int n_x);
 extern bool player_can_enter(s16b feature, u16b mode);
 extern bool move_player_effect(int oy, int ox, int ny, int nx, u32b mpe_mode);
+extern bool trap_can_be_ignored(int feat);
 extern void move_player(int dir, bool do_pickup, bool break_trap);
 extern void run_step(int dir);
 
@@ -1126,9 +1127,9 @@ extern void remove_all_mirrors(bool explode);
 /* spells3.c */
 extern bool teleport_away(int m_idx, int dis, bool dec_valour);
 extern void teleport_monster_to(int m_idx, int ty, int tx, int power);
-extern bool cave_teleportable_bold(int y, int x);
-extern void teleport_player(int dis);
-extern void teleport_player_to(int ny, int nx, bool no_tele);
+extern bool cave_teleportable_bold(int y, int x, bool passive);
+extern void teleport_player(int dis, bool passive);
+extern void teleport_player_to(int ny, int nx, bool no_tele, bool passive);
 extern void teleport_level(int m_idx);
 extern int choose_dungeon(cptr note, int y, int x);
 extern bool recall_player(int turns);

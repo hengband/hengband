@@ -7043,14 +7043,14 @@ msg_print("純粋な魔力の次元への扉が開いた！");
 			}
 		case 32: case 33:
 			if (!(*count))
-		{
+			{
 #ifdef JP
 msg_print("周囲の空間が歪んだ！");
 #else
 				msg_print("Space warps about you!");
 #endif
 
-				teleport_player(damroll(10, 10));
+				teleport_player(damroll(10, 10), TRUE);
 				if (randint0(13)) (*count) += activate_hi_summon(py, px, FALSE);
 				if (!one_in_(6)) break;
 			}
@@ -7453,7 +7453,7 @@ void kawarimi(bool success)
 	y = py;
 	x = px;
 
-	teleport_player(10+randint1(90));
+	teleport_player(10 + randint1(90), FALSE);
 
 	object_wipe(q_ptr);
 
@@ -7559,7 +7559,7 @@ bool rush_attack(bool *mdeath)
 		}
 
 		/* Move player before updating the monster */
-		if (!player_bold(ty, tx)) teleport_player_to(ty, tx, FALSE);
+		if (!player_bold(ty, tx)) teleport_player_to(ty, tx, FALSE, FALSE);
 
 		/* Update the monster */
 		update_mon(cave[ny][nx].m_idx, TRUE);
@@ -7595,7 +7595,7 @@ bool rush_attack(bool *mdeath)
 		break;
 	}
 
-	if (!player_bold(ty, tx)) teleport_player_to(ty, tx, FALSE);
+	if (!player_bold(ty, tx)) teleport_player_to(ty, tx, FALSE, FALSE);
 
 	if (mdeath) *mdeath = tmp_mdeath;
 	return TRUE;
