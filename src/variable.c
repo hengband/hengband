@@ -846,7 +846,7 @@ cptr ANGBAND_KEYBOARD = "0";
  * Hack -- The special Angband "Graphics Suffix"
  * This variable is used to choose an appropriate "graf-xxx" file
  */
-cptr ANGBAND_GRAF = "old";
+cptr ANGBAND_GRAF = "ascii";
 
 /*
  * Path name: The main "lib" directory
