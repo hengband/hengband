@@ -1178,7 +1178,7 @@ msg_print("地面に落とされた。");
 				/* Activate restriction */
 				get_obj_num_hook = kind_is_hafted;
 
-				/* Make a poleweapon */
+				/* Make a hafted weapon */
 				make_object(q_ptr, mo_mode);
 
 				/* Drop it in the dungeon */
