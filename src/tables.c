@@ -4233,7 +4233,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"英雄",
 		"男爵",
 		"伯爵",
-		"領主",
+		"君主",
 	},
 
 	/* Mage */
@@ -4275,9 +4275,9 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"ペテン師",                     /*博徒、ペテン師、詐欺師 */
 		"ロウシーフ",
 		"ハイシーフ",
-		"マスターシーフ",
+		"マスター", /* "マスターシーフ", */
 		"アサシン",						/* 暗殺者 */
-		"ギルドマスター",
+		"頭領", /*"ギルドマスター",*/
 	},
 
 	/* Rangers */
@@ -4305,7 +4305,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"重騎士",
 		"聖騎士",
 		"上級聖騎士",
-		"聖騎士長",
+		"聖騎士団長",
 	},
 
 	/* Warrior-Mage */
@@ -4320,7 +4320,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"魔男爵",
 		/* "魔公爵", */
 		"戦闘魔術士",
-		"ウィザードロード",
+		"知識の守護者", /* "ウィザードロード", */
 	},
 
 	/* Chaos Warrior */
@@ -4362,7 +4362,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"サイキック",
 		"サイオニック",
 		"超能力者",
-		"マインドマスター",
+		"精神の支配者", /* "マインドマスター", */
 	},
 
 	/* High Mage; same as Mage */
@@ -4491,7 +4491,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"魔男爵",
 		/* "魔公爵", */
 		"戦闘魔術士",
-		"ウィザードロード",
+		"知識の守護者", /* "ウィザードロード", */
 	},
 
 	/* Samurai */
