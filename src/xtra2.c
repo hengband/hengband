@@ -3483,7 +3483,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 	f_ptr = &f_info[feat];
 
 	/* Terrain feature if needed */
-	if (boring || (feat > FEAT_INVIS))
+	if (boring || have_flag(f_ptr->flags, FF_REMEMBER))
 	{
 		cptr name;
 
