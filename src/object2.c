@@ -5754,7 +5754,7 @@ bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr)
 	case TV_CAPTURE:
 		if (r_info[o_ptr->pval].level < r_info[j_ptr->pval].level) return TRUE;
 		if ((r_info[o_ptr->pval].level == r_info[j_ptr->pval].level) && (o_ptr->pval < j_ptr->pval)) return TRUE;
-		break;
+		return FALSE;
 
 	case TV_SHOT:
 	case TV_ARROW:
