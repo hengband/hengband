@@ -1114,7 +1114,7 @@ msg_print("地面に落とされた。");
 			object_prep(q_ptr, lookup_kind(TV_CROWN, SV_MORGOTH));
 
 			/* Mega-Hack -- Mark this item as "Morgoth" */
-			q_ptr->name1 = ART_MORGOTH;
+			q_ptr->name1 = ART_CHAOS;
 
 			/* Mega-Hack -- Actually create "Morgoth" */
 			apply_magic(q_ptr, -1, TRUE, TRUE, TRUE, FALSE);
@@ -1132,12 +1132,12 @@ msg_print("地面に落とされた。");
 			case MON_OBERON:
 				if (one_in_(3))
 				{
-					a_idx = ART_THRAIN;
+					a_idx = ART_JUDGE;
 					chance = 33;
 				}
 				else
 				{
-					a_idx = ART_GONDOR;
+					a_idx = ART_AMBER;
 					chance = 50;
 				}
 				break;
@@ -1194,7 +1194,7 @@ msg_print("地面に落とされた。");
 				break;
 
 			case MON_DWORKIN:
-				a_idx = ART_THRAIN;
+				a_idx = ART_JUDGE;
 				chance = 20;
 				break;
 
@@ -1219,7 +1219,7 @@ msg_print("地面に落とされた。");
 				}
 				else
 				{
-					a_idx = ART_ANGUIREL;
+					a_idx = ART_WEREWINDLE;
 					chance = 33;
 				}
 				break;
@@ -1238,7 +1238,7 @@ msg_print("地面に落とされた。");
 				break;
 
 			case MON_SURTUR:
-				a_idx = ART_MORMEGIL;
+				a_idx = ART_TWILIGHT;
 				chance = 66;
 				break;
 
@@ -1248,17 +1248,17 @@ msg_print("地面に落とされた。");
 				break;
 
 			case MON_FIONA:
-				a_idx = ART_BELANGIL;
+				a_idx = ART_FIONA;
 				chance = 50;
 				break;
 
 			case MON_JULIAN:
-				a_idx = ART_CELEBORN;
+				a_idx = ART_JULIAN;
 				chance = 45;
 				break;
 
 			case MON_KLING:
-				a_idx = ART_OROME;
+				a_idx = ART_DESTINY;
 				chance = 40;
 				break;
 
@@ -1268,12 +1268,12 @@ msg_print("地面に落とされた。");
 				break;
 
 			case MON_HAGEN:
-				a_idx = ART_NIMLOTH;
+				a_idx = ART_HAGEN;
 				chance = 66;
 				break;
 
 			case MON_CAIN:
-				a_idx = ART_ANGRIST;
+				a_idx = ART_CAINE;
 				chance = 50;
 				break;
 

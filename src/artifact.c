@@ -2891,7 +2891,7 @@ void random_artifact_resistance(object_type * o_ptr)
 
 	switch (o_ptr->name1)
 	{
-		case ART_CELEBORN:
+		case ART_JULIAN:
 		case ART_ARVEDUI:
 		case ART_CASPANION:
 		case ART_HITHLOMIR:
@@ -2920,7 +2920,7 @@ void random_artifact_resistance(object_type * o_ptr)
 		case ART_ANDURIL:
 		case ART_ZARCUTHRA:
 		case ART_GURTHANG:
-		case ART_HARADEKKET:
+		case ART_SOULSWORD:
 		case ART_BRAND:
 		case ART_DAWN:
 		case ART_BUCKLAND:
@@ -2936,7 +2936,7 @@ void random_artifact_resistance(object_type * o_ptr)
 		case ART_BERUTHIEL:
 		case ART_THINGOL:
 		case ART_ULMO:
-		case ART_OLORIN:
+		case ART_GANDALF:
 			{
 				/* Give a power */
 				give_power = TRUE;
@@ -2944,7 +2944,7 @@ void random_artifact_resistance(object_type * o_ptr)
 			break;
 		case ART_CRIMSON:
 		case ART_POWER:
-		case ART_GONDOR:
+		case ART_AMBER:
 		case ART_AULE:
 			{
 				/* Give both */

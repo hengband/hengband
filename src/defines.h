@@ -1082,7 +1082,7 @@
 /* Lites */
 #define ART_GALADRIEL            1
 #define ART_ELENDIL              2
-#define ART_THRAIN               3
+#define ART_JUDGE                3
 #define ART_EDISON               7
 #define ART_PALANTIR             15
 #define ART_STONE_LORE           17
@@ -1099,7 +1099,7 @@
 #define ART_NIGHT                215
 
 /* Rings */
-#define ART_BARAHIR              8
+#define ART_FRAKIR               8
 #define ART_TULKAS               9
 #define ART_NARYA               10
 #define ART_NENYA               11
@@ -1116,10 +1116,11 @@
 #define ART_SOULKEEPER          19
 #define ART_ISILDUR             20
 #define ART_ROHIRRIM            21
-#define ART_BELEGENNON          22
-#define ART_CELEBORN            23
+#define ART_LOHENGRIN           22
+#define ART_JULIAN              23
 #define ART_ARVEDUI             24
 #define ART_CASPANION           25
+#define ART_GILES               168
 #define ART_MORLOK              203
 #define ART_VETERAN             206
 
@@ -1142,10 +1143,11 @@
 #define ART_YENDOR              141
 #define ART_YATA                151
 #define ART_EARENDIL            186
-#define ART_HERCULES            197
+#define ART_PERSEUS             197
 
 /* Helms and Crowns */
-#define ART_MORGOTH             34
+#define ART_INDRA               33
+#define ART_CHAOS               34
 #define ART_BERUTHIEL           35
 #define ART_THRANDUIL           36
 #define ART_THENGEL             37
@@ -1153,7 +1155,7 @@
 #define ART_DOR                 39
 #define ART_HOLHENNETH          40
 #define ART_TERROR              41
-#define ART_GONDOR              42
+#define ART_AMBER               42
 #define ART_NUMENOR             132
 #define ART_STONEMASK           146
 
@@ -1175,15 +1177,16 @@
 #define ART_CORWIN              55
 #define ART_PAURAEGEN           56
 #define ART_PAURNEN             57
-#define ART_CAMLOST             58
+#define ART_THANOS              58
 #define ART_FINGOLFIN           59
 #define ART_PAURNIMMEN          185
 
 /* Boots */
 #define ART_FEANOR              60
-#define ART_DAL                 61
+#define ART_FLORA               61
 #define ART_THROR               62
 #define ART_SHIVA_BOOTS         63
+#define ART_GLASS               165
 #define ART_GETA                210
 
 /* Digging */
@@ -1191,34 +1194,35 @@
 
 /* Swords */
 #define ART_MAEDHROS            64
-#define ART_ANGRIST             65
+#define ART_CAINE               65
 #define ART_NARTHANC            66
 #define ART_NIMTHANC            67
 #define ART_DETHANC             68
 #define ART_RILIA               69
-#define ART_BELANGIL            70
+#define ART_FIONA               70
 #define ART_CALRIS              71
 #define ART_GRAYSWANDIR         72
 #define ART_GLAMDRING           73
-#define ART_AEGLIN              74
+#define ART_NOTHUNG             74
 #define ART_ORCRIST             75
 #define ART_GURTHANG            76
 #define ART_ZARCUTHRA           77
-#define ART_MORMEGIL            78
+#define ART_TWILIGHT            78
 #define ART_GONDRICAM           79
 #define ART_CRISDURIAN          80
-#define ART_GROO                81
+#define ART_AGLARANG            81
 #define ART_RINGIL              82
 #define ART_ANDURIL             83
-#define ART_ANGUIREL            84
+#define ART_WEREWINDLE          84
 #define ART_CHAINSWORD          85
 #define ART_FORASGIL            86
 #define ART_CARETH              87
 #define ART_STING               88
-#define ART_HARADEKKET          89
-#define ART_GILETTAR            90
+#define ART_SOULSWORD           89
+#define ART_MERLIN              90
 #define ART_DOOMCALLER          91
 #define ART_VORPAL_BLADE        92
+#define ART_SLAYER              123
 #define ART_KUSANAGI            128
 #define ART_HURIN               133
 #define ART_AZAGHAL             135
@@ -1231,6 +1235,8 @@
 #define ART_FALIS               155
 #define ART_HRUNTING            156
 #define ART_ANUBIS              158
+#define ART_GURENKI             160
+#define ART_TAILBITER           167
 #define ART_MUSASI_KATANA       171
 #define ART_MUSASI_WAKIZASI     172
 #define ART_QUICKTHORN          174
@@ -1241,10 +1247,12 @@
 #define ART_ARUNRUTH            184
 #define ART_HAKABUSA            189
 #define ART_STORMBRINGER        190
+#define ART_NARSIL              191
 #define ART_KANNU               193
 #define ART_GRIMTOOTH           196
 #define ART_KAMUI               198
 #define ART_GOURYU              207
+#define ART_EOWYN               216
 
 /* Polearms */
 #define ART_THEODEN             93
@@ -1252,14 +1260,14 @@
 #define ART_OSONDIR             95
 #define ART_TIL                 96
 #define ART_RUNESPEAR           97
-#define ART_OROME               98
-#define ART_NIMLOTH             99
+#define ART_DESTINY             98
+#define ART_HAGEN               99
 #define ART_EORLINGAS           100
 #define ART_DURIN               101
 #define ART_EONWE               102
 #define ART_BALLI               103
 #define ART_LOTHARANG           104
-#define ART_MUNDWINE            105
+#define ART_DWARVES_AXE         105
 #define ART_BARUKKHELED         106
 #define ART_WRATH               107
 #define ART_ULMO                108
@@ -1286,7 +1294,7 @@
 #define ART_AULE                117
 #define ART_NAR                 118
 #define ART_ERIRIL              119
-#define ART_OLORIN              120
+#define ART_GANDALF             120
 #define ART_DEATHWREAKER        121
 #define ART_TURMIL              122
 #define ART_MJOLLNIR            136
@@ -1303,7 +1311,7 @@
 #define ART_SHUTEN_DOJI         194
 #define ART_G_HAMMER            195
 #define ART_AEGISFANG           208
-#define ART_VIOLET              209
+#define ART_HERMIT              209
 #define ART_GOTHMOG             212
 #define ART_JIZO                213
 #define ART_FUNDIN              214

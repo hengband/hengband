@@ -1246,7 +1246,7 @@ return "悪臭雲(12) : 4+d4 ターン毎";
 #endif
 
 		}
-		case ART_BELANGIL:
+		case ART_FIONA:
 		{
 #ifdef JP
 return "アイス・ボール(48) : 5+d5 ターン毎";
@@ -1255,7 +1255,7 @@ return "アイス・ボール(48) : 5+d5 ターン毎";
 #endif
 
 		}
-		case ART_DAL:
+		case ART_FLORA:
 		{
 #ifdef JP
 return "恐怖除去/毒消し : 5 ターン毎";
@@ -1373,7 +1373,7 @@ return "鑑定 : 10 ターン毎";
 #endif
 
 		}
-		case ART_OLORIN:
+		case ART_GANDALF:
 		{
 #ifdef JP
 return "探索、全感知、全鑑定 : 1000 ターン毎";
@@ -1419,7 +1419,7 @@ return "ファイア！ : 15 ターン毎";
 
 		}
 		case ART_KUSANAGI:
-		case ART_ANGUIREL:
+		case ART_WEREWINDLE:
 		{
 #ifdef JP
 return "逃走 : 35 ターン毎";
@@ -1455,7 +1455,7 @@ return "アイス・ボール (100) : 200 ターン毎";
 #endif
 
 		}
-		case ART_OROME:
+		case ART_DESTINY:
 		{
 #ifdef JP
 return "岩石溶解 : 5 ターン毎";
@@ -1482,7 +1482,7 @@ return "体力回復(1000) : 888 ターン毎";
 #endif
 
 		}
-		case ART_BELEGENNON:
+		case ART_LOHENGRIN:
 		{
 #ifdef JP
 return ("回復 (777)、癒し、士気高揚 : 300 ターン毎");
@@ -1491,7 +1491,7 @@ return ("回復 (777)、癒し、士気高揚 : 300 ターン毎");
 #endif
 
 		}
-		case ART_CELEBORN:
+		case ART_JULIAN:
 		{
 #ifdef JP
 return "抹殺 : 500 ターン毎";
@@ -1627,7 +1627,7 @@ return "全感知 : 55+d55 ターン毎";
 #endif
 
 		}
-		case ART_GONDOR:
+		case ART_AMBER:
 		{
 #ifdef JP
 return "体力回復(500) : 500 ターン毎";
@@ -1672,7 +1672,7 @@ return "魔法の地図と光 : 50+d50 ターン毎";
 #endif
 
 		}
-		case ART_THRAIN:
+		case ART_JUDGE:
 		{
 #ifdef JP
 return "体力と引き替えに千里眼と帰還";
@@ -1701,7 +1701,7 @@ return "邪悪退散(x5) : 100+d100 ターン毎";
 
 		}
 		case ART_CARLAMMAS:
-		case ART_VIOLET:
+		case ART_HERMIT:
 		{
 #ifdef JP
 return "対邪悪結界 : 225+d225 ターン毎";
@@ -1710,7 +1710,7 @@ return "対邪悪結界 : 225+d225 ターン毎";
 #endif
 
 		}
-		case ART_BARAHIR:
+		case ART_FRAKIR:
 		{
 #ifdef JP
 return "窒息攻撃(100) : 100+d100 ターン毎";

@@ -344,7 +344,7 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode)
 
 				if (mult < 50) mult = 50;
 
-				if ((o_ptr->name1 == ART_AEGLIN) && (m_ptr->r_idx == MON_FAFNER))
+				if ((o_ptr->name1 == ART_NOTHUNG) && (m_ptr->r_idx == MON_FAFNER))
 					mult *= 3;
 			}
 

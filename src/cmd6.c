@@ -4096,7 +4096,7 @@ static void do_cmd_activate_aux(int item)
 				break;
 			}
 
-			case ART_THRAIN:
+			case ART_JUDGE:
 			{
 #ifdef JP
 msg_print("その宝石は赤く明るく光った！");
@@ -4173,7 +4173,7 @@ if (get_check("帰還の力を使いますか？"))
 				break;
 			}
 
-			case ART_BARAHIR:
+			case ART_FRAKIR:
 			{
 #ifdef JP
 msg_print("あなたはフラキアに敵を締め殺すよう命じた。");
@@ -4337,7 +4337,7 @@ msg_print("あなたはフラキアに敵を締め殺すよう命じた。");
 				break;
 			}
 
-			case ART_BELEGENNON:
+			case ART_LOHENGRIN:
 			{
 #ifdef JP
 msg_print("天国の歌が聞こえる...");
@@ -4356,7 +4356,7 @@ msg_print("天国の歌が聞こえる...");
 				break;
 			}
 
-			case ART_CELEBORN:
+			case ART_JULIAN:
 			{
 #ifdef JP
 				msg_print("アーマーが深いブルーに輝いた...");
@@ -4407,7 +4407,7 @@ msg_print("天国の歌が聞こえる...");
 				break;
 			}
 
-			case ART_GONDOR:
+			case ART_AMBER:
 			{
 #ifdef JP
 				msg_print("王冠が深いブルーに輝いた...");
@@ -4590,7 +4590,7 @@ msg_print("天国の歌が聞こえる...");
 				break;
 			}
 
-			case ART_DAL:
+			case ART_FLORA:
 			{
 #ifdef JP
 				msg_print("ブーツが深いブルーに輝いた...");
@@ -4674,7 +4674,7 @@ msg_print("天国の歌が聞こえる...");
 				break;
 			}
 
-			case ART_BELANGIL:
+			case ART_FIONA:
 			{
 #ifdef JP
 				msg_print("ダガーが冷気に覆われた...");
@@ -4689,7 +4689,7 @@ msg_print("天国の歌が聞こえる...");
 			}
 
 			case ART_KUSANAGI:
-			case ART_ANGUIREL:
+			case ART_WEREWINDLE:
 			{
 				switch (randint1(13))
 				{
@@ -4810,7 +4810,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 				break;
 			}
 
-			case ART_OROME:
+			case ART_DESTINY:
 			{
 #ifdef JP
 				msg_print("スピアが鼓動した...");
@@ -4971,7 +4971,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 				break;
 			}
 
-			case ART_OLORIN:
+			case ART_GANDALF:
 			{
 #ifdef JP
 				msg_print("杖が明るく輝いた...");
@@ -5533,7 +5533,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 				o_ptr->timeout = 40 + randint1(40);
 				break;
 			}
-			case ART_VIOLET:
+			case ART_HERMIT:
 			{
 #ifdef JP
 				msg_print("ムチから鋭い音が流れ出た...");
