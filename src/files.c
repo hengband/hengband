@@ -1502,64 +1502,6 @@ errr check_load_init(void)
 }
 
 
-/*
- * Print long number with header at given row, column
- * Use the color for the number, not the header
- */
-static void prt_lnum(cptr header, s32b num, int row, int col, byte color)
-{
-	int len = strlen(header);
-	char out_val[32];
-	put_str(header, row, col);
-	(void)sprintf(out_val, "%9ld", (long)num);
-	c_put_str(color, out_val, row, col + len);
-}
-
-
-/*
- * Print number with header at given row, column
- */
-static void prt_num(cptr header, int num, int row, int col, byte color)
-{
-	int len = strlen(header);
-	char out_val[32];
-	put_str(header, row, col);
-	put_str("   ", row, col + len);
-	(void)sprintf(out_val, "%6ld", (long)num);
-	c_put_str(color, out_val, row, col + len + 3);
-}
-
-
-#ifdef JP
-/*    日本語版拡張
- *         ＨＰ / 最大 のような表示
- *        xxxxx / yyyyy
- */
-static void prt_num_max( int num, int max , int row, int col, byte color1, byte color2 )
-{
-	char out_val[32];
-	(void)sprintf(out_val, "%5ld", (long)num);
-	c_put_str(color1, out_val, row, col );
-	put_str("/",row, col+6);
-	(void)sprintf(out_val, "%5ld", (long)max);
-	c_put_str(color2, out_val, row, col+8 );
-}
-
-/*    日本語版拡張
- *    xx 歳  とか xx kg などの表示用 cptr tailer に単位が入る。
- */
-static void prt_num2(cptr header, cptr tailer, int num, int row, int col, byte color)
-{
-	int len = strlen(header);
-	char out_val[32];
-	put_str(header, row, col);
-	put_str("   ", row, col + len);
-	(void)sprintf(out_val, "%6ld", (long)num);
-	c_put_str(color, out_val, row, col + len + 3);
-	put_str(tailer, row, col + len + 3+6);
-}
-#endif
-
 #define ENTRY_BARE_HAND 0
 #define ENTRY_TWO_HANDS 1
 #define ENTRY_RIGHT_HAND1 2
@@ -1740,9 +1682,6 @@ static void display_player_one_line(int entry, cptr val, byte attr)
 
 /*
  * Prints the following information on the screen.
- *
- * For this to look right, the following should be spaced the
- * same as in the prt_lnum code... -CFT
  */
 static void display_player_middle(void)
 {
