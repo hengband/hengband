@@ -5044,14 +5044,10 @@ msg_format("'%s'をオープンできません。", name);
 	/* Pre-Parse the file */
 	while (TRUE)
 	{
-		char *str;
+		char *str = buf;
 
 		/* Read a line or stop */
 		if (my_fgets(fff, buf, sizeof(buf))) break;
-
-		/* Get a color */
-		if (prefix(buf, "#####")) str = &buf[6];
-		else str = buf;
 
 		/* XXX Parse "menu" items */
 		if (prefix(str, "***** "))
@@ -5077,8 +5073,13 @@ msg_format("'%s'をオープンできません。", name);
 			/* Notice "tag" requests */
 			else if (str[6] == '<')
 			{
-				str[strlen(str) - 1] = '\0';
-				if (tag && streq(str + 7, tag)) line = next;
+				size_t len = strlen(str);
+
+				if (str[len - 1] == '>')
+				{
+					str[len - 1] = '\0';
+					if (tag && streq(str + 7, tag)) line = next;
+				}
 			}
 
 			/* Skip this */
@@ -5095,12 +5096,12 @@ msg_format("'%s'をオープンできません。", name);
 	/* start from bottom when reverse mode */
 	if (line == -1) line = ((size-1)/rows)*rows;
 
+	/* Clear screen */
+	Term_clear();
+
 	/* Display the file */
 	while (TRUE)
 	{
-		/* Clear screen */
-		Term_clear();
-
 		/* Restart when necessary */
 		if (line >= size - rows) line = size - rows;
 		if (line < 0) line = 0;
@@ -5138,7 +5139,7 @@ msg_format("'%s'をオープンできません。", name);
 		for (i = 0; i < rows; )
 		{
 			int print_x, x;
-			cptr str;
+			cptr str = buf;
 
 			/* Hack -- track the "first" line */
 			if (!i) line = next;
@@ -5150,15 +5151,18 @@ msg_format("'%s'をオープンできません。", name);
 			if (prefix(buf, "***** ")) continue;
 
 			/* Get a color */
-			if (prefix(buf, "#####"))
+			if (prefix(str, "#####"))
 			{
-				color = color_char_to_attr(buf[5]);
-				str = &buf[6];
+				str += 5;
+				if (*str)
+				{
+					color = color_char_to_attr(*str);
+					str++;
+				}
 			}
 			else
 			{
 				color = TERM_WHITE;
-				str = buf;
 			}
 
 			/* Count the "real" lines */
@@ -5191,25 +5195,35 @@ msg_format("'%s'をオープンできません。", name);
 				/* Color ? */
 				if (prefix(str + x, "[[[[["))
 				{
-					byte c = color_char_to_attr(str[x + 5]);
-					x += 6;
+					byte c;
+					x += 5;
 
-					/* Ok print the link name */
-					while (str[x] != ']')
+					/* Illigal end of line */
+					if (!str[x]) break;
+
+					/* Get color attr */
+					c = color_char_to_attr(str[x++]);
+
+					/* Ok print a colored text */
+					while (str[x] && str[x] != ']')
 					{
 						Term_putch(print_x, i + 2, c, str[x]);
 						x++;
 						print_x++;
 					}
+
+					if (str[x] == ']') x++;
 				}
 				else
 				{
 					Term_putch(print_x, i + 2, color, str[x]);
+					x++;
 					print_x++;
 				}
-
-				x++;
 			}
+
+			/* Clear rest of line */
+			Term_erase(print_x, i + 2, 255);
 
 			/* Hilite "shower" */
 			if (shower[0])
