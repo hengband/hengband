@@ -8,6 +8,8 @@
     (3) 性格                          (jcharattr.txt#ThePersonality)
     (4) 主要能力値                    (jcharattr.txt#PrimaryStats)
     (5) 主要技能                      (jcharattr.txt#PrimarySkills)
+    (6) 能力値修正表                  (jcharattr.txt#StatBonusTable)
+    (7) 技能修正表                    (jcharattr.txt#SkillBonusTable)
 
     (?) ヘルプシステムの使用法        (jhelpinfo.txt)
 
@@ -18,4 +20,6 @@
 ***** [3] jcharattr.txt#ThePersonality
 ***** [4] jcharattr.txt#PrimaryStats
 ***** [5] jcharattr.txt#PrimarySkills
+***** [6] jcharattr.txt#StatBonusTable
+***** [7] jcharattr.txt#SkillBonusTable
 
