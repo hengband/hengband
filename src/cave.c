@@ -1264,6 +1264,10 @@ void map_info(int y, int x, byte *ap, char *cp)
 		switch (feat)
 		{
 		case FEAT_NONE:
+		case FEAT_DARK_PIT:
+			feat_priority = 1;
+			break;
+
 		case FEAT_FLOOR:
 		case FEAT_INVIS:
 		case FEAT_TRAP_TRAPDOOR:
@@ -1303,13 +1307,12 @@ void map_info(int y, int x, byte *ap, char *cp)
 		case FEAT_SHAL_WATER:
 		case FEAT_DEEP_LAVA:
 		case FEAT_SHAL_LAVA:
-		case FEAT_DARK_PIT:
-			feat_priority = 1;
+			feat_priority = 2;
 			break;
 			
 		case FEAT_MAGMA_K:
 		case FEAT_QUARTZ_K:
-			feat_priority = 2;
+			feat_priority = 3;
 			break;
 			
 		case FEAT_MOUNTAIN:
