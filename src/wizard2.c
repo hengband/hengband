@@ -1691,7 +1691,7 @@ static void do_cmd_dump_options(void)
 	FILE_TYPE(FILE_TYPE_TEXT);
 
 	/* Open the file */
-	fff = my_fopen(buf, "w");
+	fff = my_fopen(buf, "a");
 
 	/* Oops */
 	if (!fff)
@@ -1717,7 +1717,8 @@ static void do_cmd_dump_options(void)
 		if (ot_ptr->o_var) exist[ot_ptr->o_set][ot_ptr->o_bit] = i + 1;
 	}
 
-	fputs("[Option bits usage]\n\n", fff);
+	fprintf(fff, "[Option bits usage on Hengband %d.%d.%d]\n\n",
+	        FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 
 	fputs("Set - Bit (Page) Option Name\n", fff);
 	fputs("------------------------------------------------\n", fff);
