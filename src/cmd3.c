@@ -920,7 +920,7 @@ static bool high_level_book(object_type *o_ptr)
 	    (o_ptr->tval == TV_CHAOS_BOOK) ||
 	    (o_ptr->tval == TV_DEATH_BOOK) ||
 	    (o_ptr->tval == TV_TRUMP_BOOK) ||
-	    (o_ptr->tval == TV_ENCHANT_BOOK) ||
+	    (o_ptr->tval == TV_CRAFT_BOOK) ||
 	    (o_ptr->tval == TV_DAEMON_BOOK) ||
 	    (o_ptr->tval == TV_CRUSADE_BOOK) ||
 	    (o_ptr->tval == TV_MUSIC_BOOK))

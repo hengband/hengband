@@ -1368,10 +1368,10 @@ static byte store_table[MAX_STORES][STORE_CHOICES][2] =
 		{ TV_ARCANE_BOOK, 2 },
 		{ TV_ARCANE_BOOK, 3 },
 
-		{ TV_ENCHANT_BOOK, 0 },
-		{ TV_ENCHANT_BOOK, 0 },
-		{ TV_ENCHANT_BOOK, 1 },
-		{ TV_ENCHANT_BOOK, 1 },
+		{ TV_CRAFT_BOOK, 0 },
+		{ TV_CRAFT_BOOK, 0 },
+		{ TV_CRAFT_BOOK, 1 },
+		{ TV_CRAFT_BOOK, 1 },
 
 		{ TV_DAEMON_BOOK, 0 },
 		{ TV_DAEMON_BOOK, 0 },

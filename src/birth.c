@@ -2124,7 +2124,7 @@ static byte choose_realm(s32b choices, int *count)
 	if (choices & CH_ENCHANT)
 	{
 		(*count)++;
-		auto_select = REALM_ENCHANT;
+		auto_select = REALM_CRAFT;
 	}
 	if (choices & CH_DAEMON)
 	{

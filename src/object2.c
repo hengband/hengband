@@ -4552,7 +4552,7 @@ static bool kind_is_good(int k_idx)
 		case TV_CHAOS_BOOK:
 		case TV_DEATH_BOOK:
 		case TV_TRUMP_BOOK:
-		case TV_ENCHANT_BOOK:
+		case TV_CRAFT_BOOK:
 		case TV_DAEMON_BOOK:
 		case TV_CRUSADE_BOOK:
 		case TV_MUSIC_BOOK:

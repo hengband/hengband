@@ -172,7 +172,7 @@ static s16b get_realm_virtues(byte realm)
 		return V_KNOWLEDGE;
 	case REALM_ARCANE:
 		return 0;
-	case REALM_ENCHANT:
+	case REALM_CRAFT:
 		if (virtue_number(V_ENCHANT)) return V_INDIVIDUALISM;
 		else return V_ENCHANT;
 	case REALM_DAEMON:

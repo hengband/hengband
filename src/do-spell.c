@@ -6665,7 +6665,7 @@ static cptr do_arcane_spell(int spell, int mode)
 }
 
 
-static cptr do_enchant_spell(int spell, int mode)
+static cptr do_craft_spell(int spell, int mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -11408,7 +11408,7 @@ cptr do_spell(int realm, int spell, int mode)
 	case REALM_DEATH:    return do_death_spell(spell, mode);
 	case REALM_TRUMP:    return do_trump_spell(spell, mode);
 	case REALM_ARCANE:   return do_arcane_spell(spell, mode);
-	case REALM_ENCHANT:  return do_enchant_spell(spell, mode);
+	case REALM_CRAFT:    return do_craft_spell(spell, mode);
 	case REALM_DAEMON:   return do_daemon_spell(spell, mode);
 	case REALM_CRUSADE:  return do_crusade_spell(spell, mode);
 	case REALM_MUSIC:    return do_music_spell(spell, mode);

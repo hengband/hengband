@@ -732,7 +732,7 @@
 #define REALM_DEATH        5
 #define REALM_TRUMP        6
 #define REALM_ARCANE       7
-#define REALM_ENCHANT      8
+#define REALM_CRAFT      8
 #define REALM_DAEMON       9
 #define REALM_CRUSADE      10
 #define MAX_MAGIC          10
@@ -1982,7 +1982,7 @@
 #define TV_DEATH_BOOK   94
 #define TV_TRUMP_BOOK   95
 #define TV_ARCANE_BOOK  96
-#define TV_ENCHANT_BOOK 97
+#define TV_CRAFT_BOOK 97
 #define TV_DAEMON_BOOK  98
 #define TV_CRUSADE_BOOK 99
 #define TV_MUSIC_BOOK   105

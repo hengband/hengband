@@ -5548,7 +5548,7 @@ msg_print("バランスがとれるようになった。");
 		if ((inventory[i].tval == TV_TRUMP_BOOK) && (inventory[i].sval == 1)) have_dd_t = TRUE;
 #endif
 		if ((inventory[i].tval == TV_NATURE_BOOK) && (inventory[i].sval == 2)) have_sw = TRUE;
-		if ((inventory[i].tval == TV_ENCHANT_BOOK) && (inventory[i].sval == 2)) have_kabe = TRUE;
+		if ((inventory[i].tval == TV_CRAFT_BOOK) && (inventory[i].sval == 2)) have_kabe = TRUE;
 	}
 	for (this_o_idx = cave[py][px].o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
@@ -5565,7 +5565,7 @@ msg_print("バランスがとれるようになった。");
 		if ((o_ptr->tval == TV_TRUMP_BOOK) && (o_ptr->sval == 1)) have_dd_t = TRUE;
 #endif
 		if ((o_ptr->tval == TV_NATURE_BOOK) && (o_ptr->sval == 2)) have_sw = TRUE;
-		if ((o_ptr->tval == TV_ENCHANT_BOOK) && (o_ptr->sval == 2)) have_kabe = TRUE;
+		if ((o_ptr->tval == TV_CRAFT_BOOK) && (o_ptr->sval == 2)) have_kabe = TRUE;
 	}
 
 	if (p_ptr->pass_wall && !p_ptr->kill_wall) p_ptr->no_flowed = TRUE;
@@ -5588,9 +5588,9 @@ msg_print("バランスがとれるようになった。");
 		if (p_ptr->lev >= s_ptr->slevel) p_ptr->no_flowed = TRUE;
 	}
 
-	if (have_kabe && ((p_ptr->realm1 == REALM_ENCHANT) || (p_ptr->realm2 == REALM_ENCHANT) || (p_ptr->pclass == CLASS_SORCERER)))
+	if (have_kabe && ((p_ptr->realm1 == REALM_CRAFT) || (p_ptr->realm2 == REALM_CRAFT) || (p_ptr->pclass == CLASS_SORCERER)))
 	{
-		magic_type *s_ptr = &mp_ptr->info[REALM_ENCHANT-1][SPELL_KABE];
+		magic_type *s_ptr = &mp_ptr->info[REALM_CRAFT-1][SPELL_KABE];
 		if (p_ptr->lev >= s_ptr->slevel) p_ptr->no_flowed = TRUE;
 	}
 }
