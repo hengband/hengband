@@ -1506,16 +1506,14 @@ void clear_cave(void)
 	int x, y, i;
 
 	/* Very simplified version of wipe_o_list() */
-	for (i = 0; i < o_max; i++)
-		o_list[i].k_idx = 0;
+	C_WIPE(o_list, o_max, object_type);
 	o_max = 1;
 	o_cnt = 0;
 
 	/* Very simplified version of wipe_m_list() */
-	for (i = 0; i < m_max; i++)
-		m_list[i].r_idx = 0;
 	for (i = 1; i < max_r_idx; i++)
 		r_info[i].cur_num = 0;
+	C_WIPE(m_list, m_max, monster_type);
 	m_max = 1;
 	m_cnt = 0;
 
