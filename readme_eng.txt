@@ -150,7 +150,8 @@ keyset, and by pushing 'x' in the Rogue-like keyset.
   [other]
   p  Command pets
   =  Set options
-  $  Reload auto-pick preference file
+  $  Reload auto-picker preference file
+  _  Edit auto-picker preference
   n/[  Repeat previous command
   @  Interact with macros
 
