@@ -1426,15 +1426,16 @@ static void recharged_notice(object_type *o_ptr)
 			object_desc(o_name, o_ptr, FALSE, 0);
 
 			/* Notify the player */
-			if (o_ptr->number > 1)
 #ifdef JP
-msg_format("%sは再充填された。", o_name);
-else msg_format("%sは再充填された。", o_name);
+			msg_format("%sは再充填された。", o_name);
 #else
+			if (o_ptr->number > 1)
 				msg_format("Your %s are recharged.", o_name);
-			else msg_format("Your %s is recharged.", o_name);
+			else
+				msg_format("Your %s is recharged.", o_name);
 #endif
 
+			disturb(1, 0);
 
 			/* Done. */
 			return;
