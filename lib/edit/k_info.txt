@@ -6032,7 +6032,7 @@ W:85:0:50:7000
 A:85/4
 P:0:1d2:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
-D:$It produces a huge mana ball (damage of core: (300*d200)*2) centered on you 
+D:$It produces a huge mana ball (damage of core: (300+d200)*2) centered on you 
 D:$when you use it. If you are neither mage, high-mage, sorcerer, magiceater 
 D:$nor blue-mage, you take 50 damage.
 D:それは使うと中心部ダメージ(300+d200)*2の巨大な純粋な魔力の球を自分を
