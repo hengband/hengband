@@ -1840,19 +1840,46 @@ static void display_player_middle(void)
 		if (p_ptr->action == ACTION_SEARCH) i += 10;
 
 		if (i > 0)
-			attr = TERM_L_GREEN;
+		{
+			if (!p_ptr->riding)
+				attr = TERM_L_GREEN;
+			else
+				attr = TERM_GREEN;
+		}
 		else if (i == 0)
-			attr = TERM_L_BLUE;
+		{
+			if (!p_ptr->riding)
+				attr = TERM_L_BLUE;
+			else
+				attr = TERM_GREEN;
+		}
 		else
-			attr = TERM_L_UMBER;
+		{
+			if (!p_ptr->riding)
+				attr = TERM_L_UMBER;
+			else
+				attr = TERM_RED;
+		}
 
-		if (is_fast) tmp_speed += 10;
-		if (p_ptr->slow) tmp_speed -= 10;
-		if (p_ptr->lightspeed) tmp_speed = 99;
+		if (!p_ptr->riding)
+		{
+			if (is_fast) tmp_speed += 10;
+			if (p_ptr->slow) tmp_speed -= 10;
+			if (p_ptr->lightspeed) tmp_speed = 99;
+		}
+		else
+		{
+			if (m_list[p_ptr->riding].fast) tmp_speed += 10;
+			if (m_list[p_ptr->riding].slow) tmp_speed -= 10;
+		}
 
 		if (tmp_speed)
 		{
-			sprintf(buf, "(%+d%+d)", i-tmp_speed, tmp_speed);
+			if (!p_ptr->riding)
+				sprintf(buf, "(%+d%+d)", i-tmp_speed, tmp_speed);
+			else
+				sprintf(buf, "乗馬中 (%+d%+d)", i-tmp_speed, tmp_speed);
+
 			if (tmp_speed > 0)
 				attr = TERM_YELLOW;
 			else
@@ -1860,7 +1887,10 @@ static void display_player_middle(void)
 		}
 		else
 		{
-			sprintf(buf, "(%+d)", i);
+			if (!p_ptr->riding)
+				sprintf(buf, "(%+d)", i);
+			else
+				sprintf(buf, "乗馬中 (%+d)", i);
 		}
 	
 		display_player_one_line(ENTRY_SPEED, buf, attr);
@@ -1899,9 +1929,9 @@ static void display_player_middle(void)
 
 		sprintf(buf, 
 #ifdef JP
-			"%2ld日目  %ld:%02ld", 
+			"%ld日目 %2ld:%02ld", 
 #else
-			"Day %ld  %ld:%02ld", 
+			"Day %ld %2ld:%02ld", 
 #endif
 			((p_ptr->prace == RACE_VAMPIRE) ||
 			 (p_ptr->prace == RACE_SKELETON) ||
