@@ -4009,7 +4009,7 @@
  * Is the monster seen by the player?
  */
 #define is_seen(A) \
-	((bool)((A)->ml && (!ignore_unview || \
+	((bool)((A)->ml && (!ignore_unview || p_ptr->inside_battle || \
 	 (player_can_see_bold((A)->fy, (A)->fx) && projectable(py, px, (A)->fy, (A)->fx)))))
 
 
