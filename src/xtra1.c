@@ -5464,6 +5464,7 @@ msg_print("バランスがとれるようになった。");
         }
 	while (j)
 	{
+		j--;
 		if (p_ptr->align > 0)
 		{
 			p_ptr->align -= (p_ptr->virtues[neutral[j]]/2);
@@ -5474,7 +5475,6 @@ msg_print("バランスがとれるようになった。");
 			p_ptr->align += (p_ptr->virtues[neutral[j]]/2);
 			if (p_ptr->align > 0) p_ptr->align = 0;
 		}
-		j--;
 	}
 	if ((inventory[INVEN_RARM].name1 == ART_IRON_BALL) || (inventory[INVEN_LARM].name1 == ART_IRON_BALL)) p_ptr->align -= 1000;
 	if (prace_is_(RACE_ANGEL)) p_ptr->align += 200;
