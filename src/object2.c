@@ -5955,48 +5955,46 @@ void combine_pack(void)
 			/* Skip empty items */
 			if (!j_ptr->k_idx) continue;
 
-			/* Can we drop "o_ptr" onto "j_ptr"? */
-			if (object_similar(j_ptr, o_ptr))
+			/* Can we (partialy) drop "o_ptr" onto "j_ptr"? */
+			if (object_similar_part(j_ptr, o_ptr)
+			    && j_ptr->number < MAX_STACK_SIZE-1)
 			{
-				/* Take note */
-				flag = TRUE;
-
-				/* Add together the item counts */
-				object_absorb(j_ptr, o_ptr);
-
-				/* One object is gone */
-				inven_cnt--;
-
-				/* Slide everything down */
-				for (k = i; k < INVEN_PACK; k++)
+				if (o_ptr->number + j_ptr->number < MAX_STACK_SIZE)
 				{
-					/* Structure copy */
-					inventory[k] = inventory[k+1];
+					/* Take note */
+					flag = TRUE;
+
+					/* Add together the item counts */
+					object_absorb(j_ptr, o_ptr);
+
+					/* One object is gone */
+					inven_cnt--;
+
+					/* Slide everything down */
+					for (k = i; k < INVEN_PACK; k++)
+					{
+						/* Structure copy */
+						inventory[k] = inventory[k+1];
+					}
+					
+					/* Erase the "final" slot */
+					object_wipe(&inventory[k]);
 				}
+				else
+				{
+					int remain = j_ptr->number + o_ptr->number - 99;
+					
+					o_ptr->number -= remain;
+					
+					/* Add together the item counts */
+					object_absorb(j_ptr, o_ptr);
 
-				/* Erase the "final" slot */
-				object_wipe(&inventory[k]);
-
+					o_ptr->number = remain;
+					
+				}
 				/* Window stuff */
 				p_ptr->window |= (PW_INVEN);
-
-				/* Done */
-				break;
-			}
-			else if (object_similar_part(j_ptr, o_ptr))
-			{
-				int remain = j_ptr->number + o_ptr->number - 99;
-
-				o_ptr->number -= remain;
-
-				/* Add together the item counts */
-				object_absorb(j_ptr, o_ptr);
-
-				o_ptr->number = remain;
-
-				/* Window stuff */
-				p_ptr->window |= (PW_INVEN);
-
+				
 				/* Done */
 				break;
 			}
