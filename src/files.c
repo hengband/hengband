@@ -777,12 +777,11 @@ errr process_pref_file_command(char *buf)
  * Output:
  *   result
  */
-static cptr process_pref_file_expr(char **sp, char *fp)
+cptr process_pref_file_expr(cptr *sp, char *fp)
 {
 	cptr v;
 
-	char *b;
-	char *s;
+	cptr s;
 
 	char b1 = '[';
 	char b2 = ']';
@@ -795,9 +794,6 @@ static cptr process_pref_file_expr(char **sp, char *fp)
 
 	/* Skip spaces */
 	while (isspace(*s)) s++;
-
-	/* Save start */
-	b = s;
 
 	/* Default */
 	v = "?o?o?";
@@ -914,17 +910,24 @@ static cptr process_pref_file_expr(char **sp, char *fp)
 		if (f != b2) v = "?x?x?";
 
 		/* Extract final and Terminate */
-		if ((f = *s) != '\0') *s++ = '\0';
+		if ((f = *s) != '\0') *s++;
 	}
 
 	/* Other */
 	else
 	{
+		char b[1024];
+		int i;
+
 		/* Accept all printables except spaces and brackets */
-		while (isprint(*s) && !strchr(" []", *s)) ++s;
+		for (i = 0; isprint(*s) && !strchr(" []", *s); i++)
+			b[i] = *s++;
+
+		/* Terminate */
+		b[i] = '\0';
 
 		/* Extract final and Terminate */
-		if ((f = *s) != '\0') *s++ = '\0';
+		if ((f = *s) != '\0') *s++;
 
 		/* Variable */
 		if (*b == '$')
@@ -1083,7 +1086,7 @@ static errr process_pref_file_aux(cptr name, int preftype)
 		{
 			char f;
 			cptr v;
-			char *s;
+			cptr s;
 
 			/* Start */
 			s = buf + 2;

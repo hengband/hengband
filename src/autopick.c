@@ -1392,9 +1392,13 @@ void auto_pickup_items(cave_type *c_ptr)
 /********  Auto-picker/destroyer editor  **********/
 
 #define MAX_YANK MAX_LINELEN
+#define MAX_LINES 3000
 
 #define MARK_MARK     0x01
 #define MARK_BY_SHIFT 0x02
+
+#define LSTAT_BYPASS      0x01
+#define LSTAT_EXPRESSION  0x02
 
 /* 
  * Struct for yank buffer
@@ -1426,6 +1430,7 @@ typedef struct {
 	bool yank_eol;
 
 	cptr *lines_list;
+	byte states[MAX_LINES];
 
 	byte dirty_flags;
 	int dirty_line;
@@ -1437,11 +1442,12 @@ typedef struct {
 /*
  * Dirty flag for text editor
  */
-#define DIRTY_ALL 0x01
-#define DIRTY_MODE 0x04
-#define DIRTY_SCREEN 0x08
-#define DIRTY_NOT_FOUND 0x10
-#define DIRTY_NO_SEARCH 0x20
+#define DIRTY_ALL        0x01
+#define DIRTY_MODE       0x04
+#define DIRTY_SCREEN     0x08
+#define DIRTY_NOT_FOUND  0x10
+#define DIRTY_NO_SEARCH  0x20
+#define DIRTY_EXPRESSION 0x40
 
 
 /*
@@ -2023,8 +2029,6 @@ static void describe_autopick(char *buff, autopick_type *entry)
 }
 
 
-#define MAX_LINES 3000
-
 /*
  * Read whole lines of a file to memory
  */
@@ -2412,36 +2416,60 @@ static void add_keyword(text_body_type *tb, int flg)
 
 
 /*
+ * Check if this line is expression or not.
+ * And update it if it is.
+ */
+static void check_expression_line(text_body_type *tb, int y)
+{
+	cptr s = tb->lines_list[y];
+
+	if ((s[0] == '?' && s[1] == ':') ||
+	    (tb->states[y] & LSTAT_BYPASS))
+	{
+		/* Expressions need re-evaluation */
+		tb->dirty_flags |= DIRTY_EXPRESSION;
+	}
+}
+
+
+/*
  * Insert return code and split the line
  */
-static bool insert_return_code(cptr *lines_list, int cx, int cy)
+static bool insert_return_code(text_body_type *tb)
 {
 	char buf[MAX_LINELEN];
 	int i, j, k;
 
-	for (k = 0; lines_list[k]; k++)
+	for (k = 0; tb->lines_list[k]; k++)
 		/* count number of lines */ ;
 
 	if (k >= MAX_LINES - 2) return FALSE;
 	k--;
 
 	/* Move down lines */
-	for (; cy < k; k--)
-		lines_list[k+1] = lines_list[k];
+	for (; tb->cy < k; k--)
+	{
+		tb->lines_list[k+1] = tb->lines_list[k];
+		tb->states[k+1] = tb->states[k];
+	}
 
 	/* Split current line */
-	for (i = j = 0; lines_list[cy][i] && i < cx; i++)
+	for (i = j = 0; tb->lines_list[tb->cy][i] && i < tb->cx; i++)
 	{
 #ifdef JP
-		if (iskanji(lines_list[cy][i]))
-			buf[j++] = lines_list[cy][i++];
+		if (iskanji(tb->lines_list[tb->cy][i]))
+			buf[j++] = tb->lines_list[tb->cy][i++];
 #endif
-		buf[j++] = lines_list[cy][i];
+		buf[j++] = tb->lines_list[tb->cy][i];
 	}
 	buf[j] = '\0';
-	lines_list[cy+1] = string_make(&lines_list[cy][i]);
-	string_free(lines_list[cy]);
-	lines_list[cy] = string_make(buf);
+	tb->lines_list[tb->cy+1] = string_make(&tb->lines_list[tb->cy][i]);
+	string_free(tb->lines_list[tb->cy]);
+	tb->lines_list[tb->cy] = string_make(buf);
+
+	/* Expressions need re-evaluation */
+	tb->dirty_flags |= DIRTY_EXPRESSION;
+
 	return TRUE;
 }
 
@@ -2796,7 +2824,7 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 /*
  * Search next line matches for o_ptr
  */
-static bool search_for_object(cptr *lines_list, object_type *o_ptr, int *cxp, int *cyp, bool forward)
+static bool search_for_object(text_body_type *tb, object_type *o_ptr, bool forward)
 {
 	int i;
 	autopick_type an_entry, *entry = &an_entry;
@@ -2816,25 +2844,28 @@ static bool search_for_object(cptr *lines_list, object_type *o_ptr, int *cxp, in
 			o_name[i] = tolower(o_name[i]);
 	}
 	
-	i = *cyp;
+	i = tb->cy;
 
 	while (1)
 	{
 		if (forward)
 		{
-			if (!lines_list[++i]) break;
+			if (!tb->lines_list[++i]) break;
 		}
 		else
 		{
 			if (--i < 0) break;
 		}
 
-		if (!autopick_new_entry(entry, lines_list[i], FALSE)) continue;
+		/* Ignore bypassed lines */
+		if (tb->states[i] & LSTAT_BYPASS) continue;
+
+		if (!autopick_new_entry(entry, tb->lines_list[i], FALSE)) continue;
 
 		if (is_autopick_aux(o_ptr, entry, o_name))
 		{
-			*cxp = 0;
-			*cyp = i;
+			tb->cx = 0;
+			tb->cy = i;
 			return TRUE;
 		}
 	}
@@ -2846,9 +2877,9 @@ static bool search_for_object(cptr *lines_list, object_type *o_ptr, int *cxp, in
 /*
  * Search next line matches to the string
  */
-static bool search_for_string(cptr *lines_list, cptr search_str, int *cxp, int *cyp, bool forward)
+static bool search_for_string(text_body_type *tb, cptr search_str, bool forward)
 {
-	int i = *cyp;
+	int i = tb->cy;
 
 	while (1)
 	{
@@ -2856,21 +2887,25 @@ static bool search_for_string(cptr *lines_list, cptr search_str, int *cxp, int *
 
 		if (forward)
 		{
-			if (!lines_list[++i]) break;
+			if (!tb->lines_list[++i]) break;
 		}
 		else
 		{
 			if (--i < 0) break;
 		}
+
+		/* Ignore bypassed lines */
+		if (tb->states[i] & LSTAT_BYPASS) continue;
+
 #ifdef JP
-		pos = strstr_j(lines_list[i], search_str);
+		pos = strstr_j(tb->lines_list[i], search_str);
 #else
-		pos = strstr(lines_list[i], search_str);
+		pos = strstr(tb->lines_list[i], search_str);
 #endif
 		if (pos)
 		{
-			*cxp = (int)(pos - lines_list[i]);
-			*cyp = i;
+			tb->cx = (int)(pos - tb->lines_list[i]);
+			tb->cy = i;
 			return TRUE;
 		}
 	}
@@ -3516,6 +3551,36 @@ static void draw_text_editor(text_body_type *tb)
 		Term_putstr(0, tb->hgt + 1, sepa_length, TERM_WHITE, buf);
 	}
 
+	if (tb->dirty_flags & DIRTY_EXPRESSION)
+	{
+		int y;
+		byte state = 0;
+
+		for (y = 0; tb->lines_list[y]; y++)
+		{
+			char f;
+			cptr v;
+			cptr s = tb->lines_list[y];
+
+			/* Update this line's state */
+			tb->states[y] = state;
+
+			if (*s++ != '?') continue;
+			if (*s++ != ':') continue;
+
+			/* Parse the expr */
+			v = process_pref_file_expr(&s, &f);
+
+			/* Set flag */
+			state = (streq(v, "0") ? LSTAT_BYPASS : 0);
+
+			/* Re-update this line's state */
+			tb->states[y] = state | LSTAT_EXPRESSION;
+		}
+
+		tb->dirty_flags |= DIRTY_ALL;
+	}
+
 	if (tb->mark)
 	{
 		int tmp_cx = tb->cx;
@@ -3549,6 +3614,7 @@ static void draw_text_editor(text_body_type *tb)
 		int j;
 		int leftcol = 0;
 		cptr msg;
+		byte color;
 		int y = tb->upper+i;
 
 		/* clean or dirty? */
@@ -3579,10 +3645,14 @@ static void draw_text_editor(text_body_type *tb)
 		/* Erase line */
 		Term_erase(0, i + 1, tb->wid);
 
+		/* Bypassed line will be displayed by darker color */
+		if (tb->states[y] & LSTAT_BYPASS) color = TERM_SLATE;
+		else color = TERM_WHITE;
+
 		if (!tb->mark)
 		{
 			/* Dump the messages, bottom to top */
-			Term_putstr(leftcol, i + 1, tb->wid - 1, TERM_WHITE, msg);
+			Term_putstr(leftcol, i + 1, tb->wid - 1, color, msg);
 		}
 
 		else
@@ -3597,9 +3667,9 @@ static void draw_text_editor(text_body_type *tb)
 			if (y == by2) sx1 = bx2;
 
 			Term_gotoxy(leftcol, i + 1);
-			if (x0 < sx0) Term_addstr(sx0 - x0, TERM_WHITE, msg);
+			if (x0 < sx0) Term_addstr(sx0 - x0, color, msg);
 			if (x0 < sx1) Term_addstr(sx1 - sx0, TERM_YELLOW, msg + (sx0 - x0));
-			Term_addstr(-1, TERM_WHITE, msg + (sx1 - x0));
+			Term_addstr(-1, color, msg + (sx1 - x0));
 		}
 	}
 
@@ -3648,37 +3718,83 @@ static void draw_text_editor(text_body_type *tb)
 		}
 		else if (tb->lines_list[tb->cy][1] == ':')
 		{
+			cptr str = NULL;
+
 			switch(tb->lines_list[tb->cy][0])
 			{
 			case '?':
 #ifdef JP
-				prt("この行は条件分岐式です。", tb->hgt +1 + 1, 0);
+				str = "この行は条件分岐式です。";
 #else
-				prt("This line is a Conditional Expression.", tb->hgt +1 + 1, 0);
+				str = "This line is a Conditional Expression.";
 #endif
+
 				break;
 			case 'A':
 #ifdef JP
-				prt("この行はマクロの実行内容を定義します。", tb->hgt +1 + 1, 0);
+				str = "この行はマクロの実行内容を定義します。";
 #else
-				prt("This line defines a Macro action.", tb->hgt +1 + 1, 0);
+				str = "This line defines a Macro action.";
 #endif
 				break;
 			case 'P':
 #ifdef JP
-				prt("この行はマクロのトリガー・キーを定義します。", tb->hgt +1 + 1, 0);
+				str = "この行はマクロのトリガー・キーを定義します。";
 #else
-				prt("This line defines a Macro trigger key.", tb->hgt +1 + 1, 0);
+				str = "This line defines a Macro trigger key.";
 #endif
 				break;
 			case 'C':
 #ifdef JP
-				prt("この行はキー配置を定義します。", tb->hgt +1 + 1, 0);
+				str = "この行はキー配置を定義します。";
 #else
-				prt("This line defines a Keymap.", tb->hgt +1 + 1, 0);
+				str = "This line defines a Keymap.";
 #endif
 				break;
 			}
+
+			/* Draw the first line */
+			if (str) prt(str, tb->hgt +1 + 1, 0);
+
+			str = NULL;
+
+			switch(tb->lines_list[tb->cy][0])
+			{
+			case '?':
+				if (tb->states[tb->cy] & LSTAT_BYPASS)
+				{
+#ifdef JP
+					str = "現在の式の値は「偽(=0)」です。";
+#else
+					str = "  The expression is 'False'(=0) currently.";
+#endif
+				}
+				else
+				{
+#ifdef JP
+					str = "現在の式の値は「真(=1)」です。";
+#else
+					str = "  The expression is 'True'(=1) currently.";
+#endif
+				}
+				break;
+
+			case 'A':
+			case 'P':
+			case 'C':
+				if (tb->states[tb->cy] & LSTAT_BYPASS)
+				{
+#ifdef JP
+					str = "この行は現在は無効な状態です。";
+#else
+					str = "  This line is bypassed currently.";
+#endif
+				}
+				break;
+			}
+
+			/* Draw the second line */
+			if (str) prt(str, tb->hgt +1 + 2, 0);
 		}
 
 		/* Get description of an autopicker preference line */
@@ -3689,6 +3805,15 @@ static void draw_text_editor(text_body_type *tb)
 			cptr t;
 
 			describe_autopick(buf, entry);
+
+			if (tb->states[tb->cy] & LSTAT_BYPASS)
+			{
+#ifdef JP
+				strcat(buf, "この行は現在は無効な状態です。");
+#else
+				strcat(buf, "  This line is bypassed currently.");
+#endif
+			}
 
 			roff_to_buf(buf, 81, temp, sizeof(temp));
 			t = temp;
@@ -3733,6 +3858,9 @@ static void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool wh
 			tb->lines_list[i] = tb->lines_list[i+1];
 		tb->lines_list[i] = NULL;
 
+		/* Expressions need re-evaluation */
+		tb->dirty_flags |= DIRTY_EXPRESSION;
+
 		return;
 	}
 
@@ -3749,13 +3877,16 @@ static void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool wh
 	/* Replace */
 	string_free(tb->lines_list[y]);
 	tb->lines_list[y] = string_make(buf);
+
+	/* Expressions may need re-evaluation */
+	check_expression_line(tb, y);
 }
 
 
 /*
  * Get a trigger key and insert ASCII string for the trigger
  */
-static bool insert_macro_line(cptr *lines_list, int cy)
+static bool insert_macro_line(text_body_type *tb)
 {
 	char tmp[1024];
 	char buf[1024];
@@ -3798,10 +3929,12 @@ static bool insert_macro_line(cptr *lines_list, int cy)
 	/* Null */
 	if(!tmp[0]) return FALSE;
 
+	tb->cx = 0;
+
 	/* Insert preference string */
-	insert_return_code(lines_list, 0, cy);
-	string_free(lines_list[cy]);
-	lines_list[cy] = string_make(format("P:%s", tmp));
+	insert_return_code(tb);
+	string_free(tb->lines_list[tb->cy]);
+	tb->lines_list[tb->cy] = string_make(format("P:%s", tmp));
 
 	/* Acquire action */
 	i = macro_find_exact(buf);
@@ -3818,9 +3951,9 @@ static bool insert_macro_line(cptr *lines_list, int cy)
 	}
 
 	/* Insert blank action preference line */
-	insert_return_code(lines_list, 0, cy);
-	string_free(lines_list[cy]);
-	lines_list[cy] = string_make(format("A:%s", tmp));
+	insert_return_code(tb);
+	string_free(tb->lines_list[tb->cy]);
+	tb->lines_list[tb->cy] = string_make(format("A:%s", tmp));
 
 	return TRUE;
 }
@@ -3829,7 +3962,7 @@ static bool insert_macro_line(cptr *lines_list, int cy)
 /*
  * Get a command key and insert ASCII string for the key
  */
-static bool insert_keymap_line(cptr *lines_list, int cy)
+static bool insert_keymap_line(text_body_type *tb)
 {
 	char tmp[1024];
 	char buf[2];
@@ -3864,18 +3997,20 @@ static bool insert_keymap_line(cptr *lines_list, int cy)
 	/* Null */
 	if(!tmp[0]) return FALSE;
 
+	tb->cx = 0;
+
 	/* Insert preference string */
-	insert_return_code(lines_list, 0, cy);
-	string_free(lines_list[cy]);
-	lines_list[cy] = string_make(format("C:%d:%s", mode, tmp));
+	insert_return_code(tb);
+	string_free(tb->lines_list[tb->cy]);
+	tb->lines_list[tb->cy] = string_make(format("C:%d:%s", mode, tmp));
 
 	/* Look up the keymap */
 	act = keymap_act[mode][(byte)(buf[0])];
 
 	/* Insert blank action preference line */
-	insert_return_code(lines_list, 0, cy);
-	string_free(lines_list[cy]);
-	lines_list[cy] = string_make(format("A:%s", act));
+	insert_return_code(tb);
+	string_free(tb->lines_list[tb->cy]);
+	tb->lines_list[tb->cy] = string_make(format("A:%s", act));
 
 	return TRUE;
 }
@@ -3901,7 +4036,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 		free_text_lines(tb->lines_list);
 		tb->lines_list = read_pickpref_text_lines(&tb->filename_mode);
-		tb->dirty_flags |= DIRTY_ALL | DIRTY_MODE;
+		tb->dirty_flags |= DIRTY_ALL | DIRTY_MODE | DIRTY_EXPRESSION;
 		tb->cx = tb->cy = 0;
 		tb->mark = 0;
 		break;
@@ -3930,7 +4065,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 			tb->dirty_flags |= DIRTY_ALL;
 		}
 
-		insert_return_code(tb->lines_list, tb->cx, tb->cy);
+		insert_return_code(tb);
 		tb->cy++;
 		tb->cx = 0;
 
@@ -4197,7 +4332,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 			{
 				/* There is an end of line between chain nodes */
 
-				insert_return_code(tb->lines_list, tb->cx, tb->cy);
+				insert_return_code(tb);
 
 				/* Replace this line with new one */
 				string_free(tb->lines_list[tb->cy]);
@@ -4233,6 +4368,10 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 		/* Now dirty */
 		tb->dirty_flags |= DIRTY_ALL;
+
+		/* Expressions need re-evaluation */
+		tb->dirty_flags |= DIRTY_EXPRESSION;
+
 		break;
 	}
 
@@ -4389,13 +4528,19 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 			string_free(tb->lines_list[tb->cy-1]);
 			string_free(tb->lines_list[tb->cy]);
 			tb->lines_list[tb->cy-1] = string_make(buf);
+
 			for (i = tb->cy; tb->lines_list[i+1]; i++)
 				tb->lines_list[i] = tb->lines_list[i+1];
+
 			tb->lines_list[i] = NULL;
 			tb->cy--;
 
 			/* Now dirty */
 			tb->dirty_flags |= DIRTY_ALL;
+
+			/* Expressions need re-evaluation */
+			tb->dirty_flags |= DIRTY_EXPRESSION;
+
 			break;
 		}
 
@@ -4421,6 +4566,10 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 		/* Now dirty */
 		tb->dirty_line = tb->cy;
+
+		/* Expressions may need re-evaluation */
+		check_expression_line(tb, tb->cy);
+
 		break;
 	}
 
@@ -4443,11 +4592,11 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	case EC_SEARCH_FORW:
 		if (tb->search_o_ptr)
 		{
-			if (!search_for_object(tb->lines_list, tb->search_o_ptr, &tb->cx, &tb->cy, TRUE)) tb->dirty_flags |= DIRTY_NOT_FOUND;
+			if (!search_for_object(tb, tb->search_o_ptr, TRUE)) tb->dirty_flags |= DIRTY_NOT_FOUND;
 		}
 		else if (tb->search_str)
 		{
-			if (!search_for_string(tb->lines_list, tb->search_str, &tb->cx, &tb->cy, TRUE)) tb->dirty_flags |= DIRTY_NOT_FOUND;
+			if (!search_for_string(tb, tb->search_str, TRUE)) tb->dirty_flags |= DIRTY_NOT_FOUND;
 		}
 		else
 		{
@@ -4458,11 +4607,11 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	case EC_SEARCH_BACK:
 		if (tb->search_o_ptr)
 		{
-			if (!search_for_object(tb->lines_list, tb->search_o_ptr, &tb->cx, &tb->cy, FALSE)) tb->dirty_flags |= DIRTY_NOT_FOUND;
+			if (!search_for_object(tb, tb->search_o_ptr, FALSE)) tb->dirty_flags |= DIRTY_NOT_FOUND;
 		}
 		else if (tb->search_str)
 		{
-			if (!search_for_string(tb->lines_list, tb->search_str, &tb->cx, &tb->cy, FALSE)) tb->dirty_flags |= DIRTY_NOT_FOUND;
+			if (!search_for_string(tb, tb->search_str, FALSE)) tb->dirty_flags |= DIRTY_NOT_FOUND;
 		}
 		else
 		{
@@ -4498,10 +4647,10 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 			break;
 		}
 
-		insert_return_code(tb->lines_list, 0, tb->cy);
+		tb->cx = 0;
+		insert_return_code(tb);
 		string_free(tb->lines_list[tb->cy]);
 		tb->lines_list[tb->cy] = autopick_line_from_entry_kill(entry);
-		tb->cx = 0;
 
 		/* Now dirty because of item/equip menu */
 		tb->dirty_flags |= DIRTY_SCREEN;
@@ -4513,10 +4662,10 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		/* Insert a name of last destroyed item */
 		if (tb->last_destroyed)
 		{
-			insert_return_code(tb->lines_list, 0, tb->cy);
+			tb->cx = 0;
+			insert_return_code(tb);
 			string_free(tb->lines_list[tb->cy]);
 			tb->lines_list[tb->cy] = string_make(tb->last_destroyed);
-			tb->cx = 0;
 
 			/* Now dirty */
 			tb->dirty_flags |= DIRTY_ALL;
@@ -4537,14 +4686,14 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 #endif
 			);
 
-		insert_return_code(tb->lines_list, 0, tb->cy);
+		tb->cx = 0;
+		insert_return_code(tb);
 		string_free(tb->lines_list[tb->cy]);
 		tb->lines_list[tb->cy] = string_make(classrace);
 		tb->cy++;
-		insert_return_code(tb->lines_list, 0, tb->cy);
+		insert_return_code(tb);
 		string_free(tb->lines_list[tb->cy]);
 		tb->lines_list[tb->cy] = string_make("?:1");
-		tb->cx = 0;
 
 		/* Now dirty */
 		tb->dirty_flags |= DIRTY_ALL;
@@ -4564,7 +4713,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 #else
 		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, "P:<Trigger key>: ");
 #endif
-		if (insert_macro_line(tb->lines_list, tb->cy))
+		if (insert_macro_line(tb))
 		{
 			/* Prepare to input action */
 			tb->cx = 2;
@@ -4590,7 +4739,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, format("C:%d:<Keypress>: ", (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
 #endif
 
-		if (insert_keymap_line(tb->lines_list, tb->cy))
+		if (insert_keymap_line(tb))
 		{
 			/* Prepare to input action */
 			tb->cx = 2;
@@ -4728,6 +4877,9 @@ static void insert_single_letter(text_body_type *tb, int key)
 
 	/* Now dirty */
 	tb->dirty_line = tb->cy;
+
+	/* Expressions may need re-evaluation */
+	check_expression_line(tb, tb->cy);
 }
 
 /*
@@ -4757,7 +4909,7 @@ void do_cmd_edit_autopick(void)
 	tb->search_o_ptr = NULL;
 	tb->search_str = NULL;
 	tb->last_destroyed = NULL;
-	tb->dirty_flags = DIRTY_ALL | DIRTY_MODE;
+	tb->dirty_flags = DIRTY_ALL | DIRTY_MODE | DIRTY_EXPRESSION;
 	tb->dirty_line = -1;
 	tb->filename_mode = PT_WITH_PNAME;
 
