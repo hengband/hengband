@@ -449,7 +449,7 @@ Special Notes:
     $REALM1
      Returns player's first magic realm
       none, Life, Sorcery, Nature, Chaos, Death, Trump Arcane,
-      Craft, Daemon, Music, Kendo
+      Craft, Daemon, Crusade, Music, Kendo
     $REALM2
      Returns player's second magic realm
     $LEVEL

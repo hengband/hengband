@@ -234,7 +234,7 @@
 #        $REALM1
 #          第１魔法領域を英語名で返す。
 #          none, Life, Sorcery, Nature, Chaos, Death, Trump Arcane,
-#          Craft, Daemon, Music, Kendo
+#          Craft, Daemon, Crusade, Music, Kendo
 #          のどれか。魔法書を使えない場合は none になる。
 #        $REALM2
 #          第２魔法領域を英語名で返す。第２領域を使えない場合は none になる。

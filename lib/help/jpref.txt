@@ -443,7 +443,7 @@ $PLAYER
 $REALM1
    魔法領域を英語名で返す。
    Life, Sorcery, Nature, Chaos, Death, Trump Arcane, Craft, Daemon,
-   Music, Kendo
+   Crusade, Music, Kendo
    のどれか
 
 $REALM2
