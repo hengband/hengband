@@ -6537,7 +6537,11 @@ prt("お待ち下さい...", 0, 0);
 
 
 	/* Hack -- Enter wizard mode */
-	if (arg_wizard && enter_wizard_mode()) p_ptr->wizard = TRUE;
+	if (arg_wizard)
+        {
+                if (enter_wizard_mode()) p_ptr->wizard = TRUE;
+                else if (p_ptr->is_dead) quit("Already dead.");
+        }
 
 	/* Initialize the town-buildings if necessary */
 	if (!dun_level && !p_ptr->inside_quest)
