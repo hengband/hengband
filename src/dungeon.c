@@ -1435,7 +1435,7 @@ static void recharged_notice(object_type *o_ptr)
 				msg_format("Your %s is recharged.", o_name);
 #endif
 
-			disturb(1, 0);
+			disturb(0, 0);
 
 			/* Done. */
 			return;
