@@ -494,7 +494,6 @@ void update_local_illumination(int y, int x)
 bool player_can_see_bold(int y, int x)
 {
 	cave_type *c_ptr;
-	s16b feat;
 
 	/* Blind players see nothing */
 	if (p_ptr->blind) return FALSE;
@@ -515,10 +514,8 @@ bool player_can_see_bold(int y, int x)
 	if ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) return FALSE;
 
 	/* Feature code (applying "mimic" field) */
-	feat = get_feat_mimic(c_ptr);
-
 	/* Floors are simple */
-	if (feat_supports_los(feat)) return TRUE;
+	if (feat_supports_los(get_feat_mimic(c_ptr))) return TRUE;
 
 	/* Check for "local" illumination */
 	return check_local_illumination(y, x);
@@ -757,7 +754,7 @@ byte lighting_colours[16][2] =
  */
 #define darkened_grid_hack() \
 { \
-	if (feat_supports_los(feat)) \
+	if (have_flag(f_ptr->flags, FF_LOS)) \
 	{ \
 		/* Unsafe cave grid -- idea borrowed from Unangband */ \
 		if (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) \
@@ -1093,7 +1090,7 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 					}
 
 					/* Not glowing correctly */
-					else if (!feat_supports_los(feat) && !check_local_illumination(y, x))
+					else if (!have_flag(f_ptr->flags, FF_LOS) && !check_local_illumination(y, x))
 					{
 						/* Use a darkened colour/tile */
 						a = f_ptr->x_attr[F_LIT_DARK];
@@ -1459,10 +1456,10 @@ void note_spot(int y, int x)
 	if (!(c_ptr->info & (CAVE_MARK)))
 	{
 		/* Feature code (applying "mimic" field) */
-		s16b feat = get_feat_mimic(c_ptr);
+		feature_type *f_ptr = &f_info[get_feat_mimic(c_ptr)];
 
 		/* Memorize some "boring" grids */
-		if (!have_flag(f_info[feat].flags, FF_REMEMBER))
+		if (!have_flag(f_ptr->flags, FF_REMEMBER))
 		{
 			/* Option -- memorize all torch-lit floors */
 			if (view_torch_grids &&
@@ -1481,7 +1478,7 @@ void note_spot(int y, int x)
 		}
 
 		/* Memorize normal grids */
-		else if (feat_supports_los(feat))
+		else if (have_flag(f_ptr->flags, FF_LOS))
 		{
 			/* Memorize */
 			c_ptr->info |= (CAVE_MARK);

@@ -935,7 +935,7 @@ void leave_floor(void)
 		f_ptr = &f_info[c_ptr->feat];
 
 		/* Get back to old saved floor? */
-		if (c_ptr->special && !feat_uses_special(c_ptr->feat) && get_sf_ptr(c_ptr->special))
+		if (c_ptr->special && !have_flag(f_ptr->flags, FF_SPECIAL) && get_sf_ptr(c_ptr->special))
 		{
 			/* Saved floor is exist.  Use it. */
 			new_floor_id = c_ptr->special;

@@ -1322,13 +1322,15 @@ bool make_attack_spell(int m_idx)
 	/* Check path */
 	if (projectable(m_ptr->fy, m_ptr->fx, y, x))
 	{
-		if (!have_flag(f_flags_bold(y, x), FF_PROJECT))
+		feature_type *f_ptr = &f_info[cave[y][x].feat];
+
+		if (!have_flag(f_ptr->flags, FF_PROJECT))
 		{
 			/* Breath disintegration to the wall if possible */
-			if ((f4 & RF4_BR_DISI) && have_flag(f_flags_bold(y, x), FF_HURT_DISI) && one_in_(2)) do_spell = DO_SPELL_BR_DISI;
+			if ((f4 & RF4_BR_DISI) && have_flag(f_ptr->flags, FF_HURT_DISI) && one_in_(2)) do_spell = DO_SPELL_BR_DISI;
 
 			/* Breath lite to the transparent wall if possible */
-			else if ((f4 & RF4_BR_LITE) && cave_los_bold(y, x) && one_in_(2)) do_spell = DO_SPELL_BR_LITE;
+			else if ((f4 & RF4_BR_LITE) && have_flag(f_ptr->flags, FF_LOS) && one_in_(2)) do_spell = DO_SPELL_BR_LITE;
 		}
 	}
 
