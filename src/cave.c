@@ -4612,7 +4612,7 @@ void cave_set_feat(int y, int x, int feat)
 	c_ptr->feat = feat;
 
 	/* Hack -- glow the deep lava */
-	if (feat == FEAT_DEEP_LAVA)
+	if ((feat == FEAT_DEEP_LAVA) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS))
 	{
 		int i, yy, xx;
 
@@ -4933,6 +4933,9 @@ void glow_deep_lava(void)
 {
 	int y, x, i, yy, xx;
 	cave_type *c_ptr;
+
+	/* Not in the darkness dungeon */
+	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) return;
 
 	for (y = 1; y < cur_hgt - 1; y++)
 	{
