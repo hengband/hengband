@@ -369,6 +369,12 @@ Allow empty 'arena' levels    [empty_levels]
     may have vaults, nests and pits in them like normal levels. Some
     arena levels are dark when they are created, but most are lit.
 
+***** <bound_walls_perm>
+Boundary walls become 'permanent wall'  [bound_walls_perm]
+    If this option is set, boundaries of dungeon floors will
+    explicitly look like permanent walls.  If unset, those will look
+    like normal walls, but still behave as permanent walls.
+
 ***** <last_words>
 Leave last words when your character dies    [last_words]
     Display a random line from the "death.txt" file when your

@@ -6909,7 +6909,7 @@ option_type option_info[] =
 	"bound_walls_perm",             "ダンジョンの外壁を永久岩にする" },
 #else
 	{ &bound_walls_perm,            FALSE,  3, 2, 1,
-	"bound_walls_perm",             "Boundary walls are created by permanent wall" },
+	"bound_walls_perm",             "Boundary walls become 'permanent wall'" },
 #endif
 
 
