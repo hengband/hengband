@@ -7233,11 +7233,10 @@ prt("お待ち下さい...", 0, 0);
 			{
 				/* Mega-Hack -- Allow player to cheat death */
 #ifdef JP
-if ((p_ptr->wizard || cheat_live) && !get_check("死にますか? "))
+				if ((p_ptr->wizard || cheat_live) && !get_check("死にますか? "))
 #else
 				if ((p_ptr->wizard || cheat_live) && !get_check("Die? "))
 #endif
-
 				{
 					/* Mark social class, reset age, if needed */
 					if (p_ptr->sc) p_ptr->sc = p_ptr->age = 0;
@@ -7250,12 +7249,10 @@ if ((p_ptr->wizard || cheat_live) && !get_check("死にますか? "))
 
 					/* Message */
 #ifdef JP
-msg_print("ウィザードモードに念を送り、死を欺いた。");
+					msg_print("ウィザードモードに念を送り、死を欺いた。");
 #else
 					msg_print("You invoke wizard mode and cheat death.");
 #endif
-					wipe_m_list();
-
 					msg_print(NULL);
 
 					/* Restore hit points */
@@ -7282,7 +7279,7 @@ msg_print("ウィザードモードに念を送り、死を欺いた。");
 					{
 						/* Message */
 #ifdef JP
-msg_print("張りつめた大気が流れ去った...");
+						msg_print("張りつめた大気が流れ去った...");
 #else
 						msg_print("A tension leaves the air around you...");
 #endif
@@ -7357,7 +7354,6 @@ msg_print("張りつめた大気が流れ去った...");
 
 					/* Leaving */
 					p_ptr->wild_mode = FALSE;
-
 					p_ptr->leaving = TRUE;
 
 #ifdef JP
@@ -7365,6 +7361,10 @@ msg_print("張りつめた大気が流れ去った...");
 #else
 					do_cmd_write_nikki(NIKKI_BUNSHOU, 1, "                            but revived.");
 #endif
+
+					/* Prepare next floor */
+					leave_floor();
+					wipe_m_list();
 				}
 			}
 		}
