@@ -4844,7 +4844,7 @@ errr file_character(cptr name, bool full)
 
 
 		/* Ask */
-		if (get_check(out_val)) fd = -1;
+		if (get_check_strict(out_val, CHECK_NO_HISTORY)) fd = -1;
 	}
 
 	/* Open the non-existing file */
@@ -4855,12 +4855,12 @@ errr file_character(cptr name, bool full)
 	{
 		/* Message */
 #ifdef JP
-msg_format("キャラクタ情報のファイルへの書き出しに失敗しました！");
+                prt("キャラクタ情報のファイルへの書き出しに失敗しました！", 0, 0);
 #else
-		msg_format("Character dump failed!");
+		prt("Character dump failed!", 0, 0);
 #endif
 
-		msg_print(NULL);
+                (void)inkey();
 
 		/* Error */
 		return (-1);
