@@ -2734,6 +2734,10 @@ t = object_desc_str(t, "(マルチ・トラップ)");
 	if (have_flag(flgs, TR_SHOW_MODS)) show_weapon = TRUE;
 
 	/* Display the item like a weapon */
+	if ((o_ptr->tval > TV_CAPTURE) && (o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
+		show_weapon = TRUE;
+
+	/* Display the item like a weapon */
 	if (o_ptr->to_h && o_ptr->to_d) show_weapon = TRUE;
 
 	/* Display the item like armour */

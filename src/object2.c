@@ -8071,9 +8071,9 @@ static void erase_essence(void)
 
 	object_desc(o_name, o_ptr, FALSE, 0);
 #ifdef JP
-	if (!get_check(format("よろしいですか？[%s]", o_name))) return;
+	if (!get_check(format("よろしいですか？ [%s]", o_name))) return;
 #else
-	if (!get_check(format("Are you sure?[%s]", o_name))) return;
+	if (!get_check(format("Are you sure? [%s]", o_name))) return;
 #endif
 
 	energy_use = 100;
@@ -8083,6 +8083,8 @@ static void erase_essence(void)
 		o_ptr->to_h -= (o_ptr->xtra4>>8);
 		o_ptr->to_d -= (o_ptr->xtra4 & 0x000f);
 		o_ptr->xtra4 = 0;
+		if (o_ptr->to_h < 0) o_ptr->to_h = 0;
+		if (o_ptr->to_d < 0) o_ptr->to_d = 0;
 	}
 	o_ptr->xtra3 = 0;
 	object_flags(o_ptr, flgs);
