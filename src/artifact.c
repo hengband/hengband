@@ -1662,6 +1662,8 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		}
 	}
 
+	if (((artifact_bias == BIAS_MAGE) || (artifact_bias == BIAS_INT)) && (o_ptr->tval == TV_GLOVES)) o_ptr->art_flags2 |= TR2_FREE_ACT;
+
 	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI))
 	{
 		o_ptr->to_h = 0;

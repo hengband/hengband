@@ -2767,7 +2767,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 				}
 
 				/* Roll for ego-item */
-				switch (randint(24))
+				switch ((o_ptr->tval == TV_HARD_ARMOR) ? randint(21) : randint(19))
 				{
 					case 1: case 2: case 3:
 					{
@@ -2775,32 +2775,25 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 						break;
 					}
 
-					case 5: case 6: case 7:
+					case 4: case 5: case 6:
 					{
 						o_ptr->name2 = EGO_RESIST_ELEC;
 						break;
 					}
 
-					case 9: case 10: case 11: case 12:
+					case 7: case 8: case 9: case 10:
 					{
 						o_ptr->name2 = EGO_RESIST_FIRE;
 						break;
 					}
 
-					case 13: case 14: case 15: case 16:
+					case 11: case 12: case 13: case 14:
 					{
 						o_ptr->name2 = EGO_RESIST_COLD;
 						break;
 					}
 
-					case 4: case 8:
-					{
-						o_ptr->name2 = EGO_DWARVEN;
-						if (randint(4) == 1) o_ptr->art_flags1 |= TR1_CON;
-						break;
-					}
-
-					case 17: case 18:
+					case 15: case 16:
 					{
 						o_ptr->name2 = EGO_RESISTANCE;
 						if (randint(4) == 1) o_ptr->art_flags2 |= TR2_RES_POIS;
@@ -2808,14 +2801,21 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 						break;
 					}
 
-					case 20: case 21:
+					case 17: case 18:
 					{
 						o_ptr->name2 = EGO_ELVENKIND;
 						break;
 					}
-					default:
+
+					case 19:
 					{
 						create_artifact(o_ptr, FALSE);
+					}
+					default:
+					{
+						o_ptr->name2 = EGO_DWARVEN;
+						if (randint(4) == 1) o_ptr->art_flags1 |= TR1_CON;
+						break;
 					}
 				}
 			}

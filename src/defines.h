@@ -498,7 +498,7 @@
  */
 #define TOWN_DAWN               10000   /* Number of turns from dawn to dawn XXX */
 #define BREAK_GLYPH             550             /* Rune of protection resistance */
-#define BREAK_MINOR_GLYPH       199             /* For explosive runes */
+#define BREAK_MINOR_GLYPH       299             /* For explosive runes */
 #define BTH_PLUS_ADJ    3       /* Adjust BTH per plus-to-hit */
 #define MON_MULT_ADJ    8               /* High value slows multiplication */
 #define MON_SUMMON_ADJ  2               /* Adjust level of summoned creatures */
@@ -1891,6 +1891,7 @@
 #define SV_PADDED_ARMOR                 10  /*  4 */
 #define SV_LEATHER_SCALE_MAIL           11
 #define SV_LEATHER_JACK                 12
+#define SV_KUROSHOUZOKU                 13
 #define SV_STONE_AND_HIDE_ARMOR         15  /* 15 */
 #define SV_ABUNAI_MIZUGI                50
 #define SV_YOIYAMI_ROBE                 60

@@ -2412,7 +2412,7 @@ D:あらゆる色彩の鱗に被われたアダマンタイトの鎧で、完璧にコントロールされた
 D:地、水、火、風および霊的な力が調和し
 D:渾然一体となり、輝く護光となってこの鎧を包んでいる。
 
-N:131:イカヌスの
+N:131:インカヌスの
 E:of Incanus
 I:36:2:3
 W:50:40:20:100000
@@ -2425,7 +2425,7 @@ D:$lands of the South. It is proof against elements, for neither the
 D:$heat of the South, nor the ice of the North, nor the acidy pits of Dol 
 D:$Guldur were able to hold back the defiant Maia in the pursuit of 
 D:$his mission 
-D:南方ではイカヌスの名で知られる大賢者ガンダルフのローブだ。様々なエレメント
+D:南方ではインカヌスの名で知られる大賢者ガンダルフのローブだ。様々なエレメント
 D:から身を護るこのローブのおかげで、南の熱暑、北の氷結、ドル・グルドゥアの
 D:酸の沼でさえも、かの挑戦的なマイアの任務を妨げる事はなかったのだ。
 
@@ -2975,7 +2975,7 @@ F:STR | DEX | SUST_STR | SUST_DEX | FREE_ACT | SEE_INVIS | VAMPIRIC |
 F:KILL_DRAGON | SLAY_ANIMAL | SLAY_EVIL | BRAND_ELEC | BRAND_ACID |
 F:SLAY_UNDEAD | SLAY_DEMON | SLAY_TROLL | SLAY_GIANT | SLAY_ORC |
 F:IM_FIRE | RES_SHARDS | RES_FEAR | TUNNEL | INFRA | SEARCH | REFLECT |
-F:LITE | TELEPATHY | REGEN |
+F:LITE | TELEPATHY | REGEN | BRAND_FIRE | BRAND_COLD | BRAND_POIS |
 F:HIDE_TYPE | SHOW_MODS | RIDING | QUESTITEM | INSTA_ART
 
 N:182:いいかげんな

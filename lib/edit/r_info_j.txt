@@ -19622,7 +19622,7 @@ S:1_IN_3 |
 S:HOLD | SCARE | DARKNESS | BLIND
 D:$A grim-faced dark elf, garbed in layer upon layer of gleaming black
 D:$armour.  As strong as he is magical, Eol is a worthy opponent.
-D:険しい顔つきのダークエルフで、黒玉のように輝く薄い金属の鎧を常の身につけている。
+D:険しい顔つきのダークエルフで、黒玉のように輝く薄い金属の鎧を常に身につけている。
 D:彼自身の手による強力な魔法の武具で身を固めており、強敵と呼ぶに相応しい相手だ。
 
 N:977:ゴンドリンを裏切りし『マイグリン』
@@ -19811,7 +19811,7 @@ F:RES_DISE | RES_NEXU | RES_NETH |
 F:NO_STUN | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_3 |
 S:SCARE | BRAIN_SMASH | DRAIN_MANA |
-S:BR_SHAR | BR_LITE | BR_SOUN | HEAL | S_ANGEL
+S:BR_FIRE | BR_LITE | BR_SOUN | HEAL | S_ANGEL
 
 N:989:麒麟
 E:Kirin

@@ -4108,14 +4108,14 @@ static void spell_info(char *p, int spell, int realm)
 		case 13: sprintf(p, " %s%d+d%d", s_dur, plev, plev + 20); break;
 		case 18: sprintf(p, " %s25+d30", s_dur); break;
 		case 22: sprintf(p, " %s15+d21", s_delay); break;
-		case 23: sprintf(p, " %s7d7+%d", s_dam, plev / 2); break;
+		case 23: sprintf(p, " %s%d", s_range, plev / 2 + 10); break;
+		case 25: sprintf(p, " %s7d7+%d", s_dam, plev); break;
 #ifdef JP
-		case 25: sprintf(p, " 最大重量:%d.%dkg", lbtokg1(plev * 15),lbtokg2(plev * 15)); break;
+		case 26: sprintf(p, " 最大重量:%d.%dkg", lbtokg1(plev * 15),lbtokg2(plev * 15)); break;
 #else
-		case 25: sprintf(p, " max wgt %d", plev * 15 / 10); break;
+		case 26: sprintf(p, " max wgt %d", plev * 15 / 10); break;
 #endif
-		case 26: sprintf(p, " %s25+d30", s_dur); break;
-		case 28: sprintf(p, " %s%d", s_range, plev / 2 + 10); break;
+		case 27: sprintf(p, " %s25+d30", s_dur); break;
 		case 31: sprintf(p, " %s4+d4", s_dur); break;
 		}
 		break;

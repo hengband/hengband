@@ -358,9 +358,11 @@ bool summon_possible(int y1, int x1)
 			/* Only check a circular area */
 			if (distance(y1, x1, y, x)>2) continue;
 
+#if 0
 			/* Hack: no summon on glyph of warding */
 			if (cave[y][x].feat == FEAT_GLYPH) continue;
 			if (cave[y][x].feat == FEAT_MINOR_GLYPH) continue;
+#endif
 
 			/* ...nor on the Pattern */
 			if ((cave[y][x].feat >= FEAT_PATTERN_START)

@@ -1327,18 +1327,26 @@ static bool cast_sorcery_spell(int spell)
 	case 22: /* Word of Recall */
 		if (!word_of_recall()) return FALSE;
 		break;
-	case 23: /* Explosive Rune */
-		explosive_rune();
-		break;
+	case 23: /* Dimension Door */
+#ifdef JP
+msg_print("次元の扉が開いた。目的地を選んで下さい。");
+#else
+		msg_print("You open a dimensional gate. Choose a destination.");
+#endif
+
+		return dimension_door();
 	case 24: /* Probing */
 		(void)probing();
 		break;
-	case 25: /* Telekinesis */
+	case 25: /* Explosive Rune */
+		explosive_rune();
+		break;
+	case 26: /* Telekinesis */
 		if (!get_aim_dir(&dir)) return FALSE;
 
 		fetch(dir, plev * 15, FALSE);
 		break;
-	case 26: /* Clairvoyance */
+	case 27: /* Clairvoyance */
 		chg_virtue(V_KNOWLEDGE, 1);
 		chg_virtue(V_ENLIGHTEN, 1);
 
@@ -1348,17 +1356,9 @@ static bool cast_sorcery_spell(int spell)
 			(void)set_tim_esp(randint(30) + 25, FALSE);
 		}
 		break;
-	case 27: /* Charm Monsters */
+	case 28: /* Charm Monsters */
 		charm_monsters(plev * 2);
 		break;
-	case 28: /* Dimension Door */
-#ifdef JP
-msg_print("次元の扉が開いた。目的地を選んで下さい。");
-#else
-		msg_print("You open a dimensional gate. Choose a destination.");
-#endif
-
-		return dimension_door();
 	case 29: /* Alchemy */
 		return alchemy();
 	case 30: /* Banish */

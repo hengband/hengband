@@ -1885,7 +1885,7 @@ msg_print("ダンジョンが揺れた...");
 
 		case SV_SCROLL_SPELL:
 		{
-			if ((p_ptr->pclass == CLASS_WARRIOR) || (p_ptr->pclass == CLASS_IMITATOR) || (p_ptr->pclass == CLASS_MINDCRAFTER) || (p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_ARCHER) || (p_ptr->pclass == CLASS_MAGIC_EATER) || (p_ptr->pclass == CLASS_RED_MAGE) || (p_ptr->pclass == CLASS_SAMURAI) || (p_ptr->pclass == CLASS_BLUE_MAGE) || (p_ptr->pclass == CLASS_CAVALRY) || (p_ptr->pclass == CLASS_BERSERKER) || (p_ptr->pclass == CLASS_SMITH) || (p_ptr->pclass == CLASS_MIRROR_MASTER)) break;
+			if ((p_ptr->pclass == CLASS_WARRIOR) || (p_ptr->pclass == CLASS_IMITATOR) || (p_ptr->pclass == CLASS_MINDCRAFTER) || (p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_ARCHER) || (p_ptr->pclass == CLASS_MAGIC_EATER) || (p_ptr->pclass == CLASS_RED_MAGE) || (p_ptr->pclass == CLASS_SAMURAI) || (p_ptr->pclass == CLASS_BLUE_MAGE) || (p_ptr->pclass == CLASS_CAVALRY) || (p_ptr->pclass == CLASS_BERSERKER) || (p_ptr->pclass == CLASS_SMITH) || (p_ptr->pclass == CLASS_MIRROR_MASTER) || (p_ptr->pclass == CLASS_NINJA)) break;
 			p_ptr->add_spells++;
 			p_ptr->update |= (PU_SPELLS);
 			ident = TRUE;
@@ -3385,8 +3385,7 @@ static int rod_effect(int sval, int dir, bool *use_charge, bool magic)
 
 		case SV_ROD_PESTICIDE:
 		{
-			fire_ball(GF_POIS, dir, 10, 3);
-			ident = TRUE;
+			if (dispel_monsters(4)) ident = TRUE;
 			break;
 		}
 
@@ -3566,7 +3565,7 @@ static void do_cmd_zap_rod_aux(int item)
 
 
 	/* Get a direction (unless KNOWN not to need it) */
-	if (((o_ptr->sval >= SV_ROD_MIN_DIRECTION) && (o_ptr->sval != SV_ROD_HAVOC) && (o_ptr->sval != SV_ROD_AGGRAVATE)) ||
+	if (((o_ptr->sval >= SV_ROD_MIN_DIRECTION) && (o_ptr->sval != SV_ROD_HAVOC) && (o_ptr->sval != SV_ROD_AGGRAVATE) && (o_ptr->sval != SV_ROD_PESTICIDE)) ||
 	     !object_aware_p(o_ptr))
 	{
 		/* Get a direction, allow cancel */
@@ -7021,7 +7020,7 @@ msg_print("呪文をうまく唱えられなかった！");
 	{
 		if (tval == TV_ROD)
 		{
-			if ((sval >= SV_ROD_MIN_DIRECTION) && (sval != SV_ROD_HAVOC))
+			if ((sval >= SV_ROD_MIN_DIRECTION) && (sval != SV_ROD_HAVOC) && (sval != SV_ROD_AGGRAVATE) && (sval != SV_ROD_PESTICIDE))
 				if (!get_aim_dir(&dir)) return;
 			rod_effect(sval, dir, &use_charge, TRUE);
 			if (!use_charge) return;
