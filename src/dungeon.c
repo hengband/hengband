@@ -921,7 +921,7 @@ static void regenmagic(int percent)
 	s32b        new_mana;
 	int i;
 
-	for (i = 0; i < 72; i++)
+	for (i = 0; i < EATER_EXT*2; i++)
 	{
 		if (!p_ptr->magic_num2[i]) continue;
 		if (p_ptr->magic_num1[i] == ((long)p_ptr->magic_num2[i] << 16)) continue;
@@ -935,11 +935,11 @@ static void regenmagic(int percent)
 		}
 		wild_regen = 20;
 	}
-	for (i = 72; i < 108; i++)
+	for (i = EATER_EXT*2; i < EATER_EXT*3; i++)
 	{
 		if (!p_ptr->magic_num1[i]) continue;
 		if (!p_ptr->magic_num2[i]) continue;
-		p_ptr->magic_num1[i] -= (long)(p_ptr->magic_num2[i] * (adj_mag_mana[A_INT] + 10)) * 0x1000;
+		p_ptr->magic_num1[i] -= (long)(p_ptr->magic_num2[i] * (adj_mag_mana[A_INT] + 10)) * EATER_ROD_CHARGE/16;
 		if (p_ptr->magic_num1[i] < 0) p_ptr->magic_num1[i] = 0;
 		wild_regen = 20;
 	}
@@ -6656,11 +6656,11 @@ msg_print("ウィザードモードに念を送り、死を欺いた。");
 
 					if (p_ptr->pclass == CLASS_MAGIC_EATER)
 					{
-						for (i = 0; i < 72; i++)
+						for (i = 0; i < EATER_EXT*2; i++)
 						{
-							p_ptr->magic_num1[i] = p_ptr->magic_num2[i]*0x10000;
+							p_ptr->magic_num1[i] = p_ptr->magic_num2[i]*EATER_CHARGE;
 						}
-						for (; i < 108; i++)
+						for (; i < EATER_EXT*3; i++)
 						{
 							p_ptr->magic_num1[i] = 0;
 						}

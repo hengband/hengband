@@ -2765,7 +2765,7 @@ msg_print("あなたは絶叫して目を覚ました。");
 							int i;
 							for (i = 0; i < 72; i++)
 							{
-								p_ptr->magic_num1[i] = p_ptr->magic_num2[i]*0x10000;
+								p_ptr->magic_num1[i] = p_ptr->magic_num2[i]*EATER_CHARGE;
 							}
 							for (; i < 108; i++)
 							{

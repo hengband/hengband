@@ -4317,6 +4317,10 @@ extern int PlayerUID;
 #define MAX_MANE 16
 #define MAX_MONSPELLS 96
 
+#define EATER_EXT 36
+#define EATER_CHARGE 0x10000L
+#define EATER_ROD_CHARGE 0x10L
+
 #define MAX_KUBI 20
 
 #define DETECT_RAD_DEFAULT 30
