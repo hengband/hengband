@@ -3938,8 +3938,7 @@ note_dies = "は爆発して粉々になった。";
 					}
 					if (!projectable(m_ptr->fy, m_ptr->fx, py, px))
 					{
-						m_ptr->target_y = py;
-						m_ptr->target_x = px;
+						set_target(m_ptr, py, px);
 					}
 				}
 			}

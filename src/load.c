@@ -620,15 +620,13 @@ static void rd_monster(monster_type *m_ptr)
 
 	if (z_older_than(10,0,10))
 	{
-		m_ptr->target_y = 0;
-		m_ptr->target_x = 0;
+		reset_target(m_ptr);
 	}
 	else if (z_older_than(10,0,11))
 	{
 		s16b tmp16s;
 		rd_s16b(&tmp16s);
-		m_ptr->target_y = 0;
-		m_ptr->target_x = 0;
+		reset_target(m_ptr);
 	}
 	else
 	{

@@ -391,8 +391,7 @@ msg_format("%^sは殺された。", m_name);
 	{
 		if (is_pet(&m_list[who]) && (m_ptr->target_y != py) && (m_ptr->target_x != px))
 		{
-			m_ptr->target_y = m_list[who].fy;
-			m_ptr->target_x = m_list[who].fx;
+			set_target(m_ptr, m_list[who].fy, m_list[who].fx);
 		}
 	}
 
@@ -3899,8 +3898,7 @@ void process_monsters(void)
 		/* Process the monster */
 		process_monster(i);
 
-		m_ptr->target_y = 0;
-		m_ptr->target_x = 0;
+		reset_target(m_ptr);
 
 		/* Give up flow_by_smell when it might useless */
 		if (p_ptr->no_flowed && one_in_(3))
@@ -3977,26 +3975,25 @@ bool process_the_world(int num, int who, bool vs_player)
 
 	while(num--)
 	{
-	  if(!m_list[hack_m_idx].r_idx) return (TRUE);
-	  process_monster(hack_m_idx);
+		if(!m_list[hack_m_idx].r_idx) return (TRUE);
+		process_monster(hack_m_idx);
 
-	  m_list[hack_m_idx].target_y = 0;
-	  m_list[hack_m_idx].target_x = 0;
+		reset_target(&m_list[hack_m_idx]);
 
-	  /* Notice stuff */
-	  if (p_ptr->notice) notice_stuff();
+		/* Notice stuff */
+		if (p_ptr->notice) notice_stuff();
 
-	  /* Update stuff */
-	  if (p_ptr->update) update_stuff();
+		/* Update stuff */
+		if (p_ptr->update) update_stuff();
 
-	  /* Redraw stuff */
-	  if (p_ptr->redraw) redraw_stuff();
+		/* Redraw stuff */
+		if (p_ptr->redraw) redraw_stuff();
 
-	  /* Redraw stuff */
-	  if (p_ptr->window) window_stuff();
+		/* Redraw stuff */
+		if (p_ptr->window) window_stuff();
 
-	  /* Delay */
-	  if (vs_player) Term_xtra(TERM_XTRA_DELAY, 500);
+		/* Delay */
+		if (vs_player) Term_xtra(TERM_XTRA_DELAY, 500);
 	}
 
 	/* Redraw map */

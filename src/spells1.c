@@ -6168,14 +6168,12 @@ msg_print("生命力が体から吸い取られた気がする！");
 		{
 			if (!projectable(m_ptr->fy, m_ptr->fx, py, px) && !(flg & PROJECT_NO_HANGEKI))
 			{
-				m_ptr->target_y = monster_target_y;
-				m_ptr->target_x = monster_target_x;
+				set_target(m_ptr, monster_target_y, monster_target_x);
 			}
 		}
 		else if (is_pet(&m_list[who]) && (m_ptr->target_y != py) && (m_ptr->target_x != px))
 		{
-			m_ptr->target_y = m_list[who].fy;
-			m_ptr->target_x = m_list[who].fx;
+			set_target(m_ptr, m_list[who].fy, m_list[who].fx);
 		}
 	}
 

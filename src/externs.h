@@ -768,6 +768,8 @@ extern void create_name(int type, char *name);
 extern cptr horror_desc[MAX_SAN_HORROR];
 extern cptr funny_desc[MAX_SAN_FUNNY];
 extern cptr funny_comments[MAX_SAN_COMMENT];
+extern void set_target(monster_type *m_ptr, int y, int x);
+extern void reset_target(monster_type *m_ptr);
 extern void sanity_blast(monster_type *m_ptr, bool necro);
 extern void delete_monster_idx(int i);
 extern void delete_monster(int y, int x);

@@ -153,6 +153,23 @@ cptr funny_comments[MAX_SAN_COMMENT] =
 
 
 /*
+ * Set the target of counter attack
+ */
+void set_target(monster_type *m_ptr, int y, int x)
+{
+	m_ptr->target_y = y;
+	m_ptr->target_x = x;
+}
+
+/*
+ * Reset the target of counter attack
+ */
+void reset_target(monster_type *m_ptr)
+{
+	set_target(m_ptr, 0, 0);
+}
+
+/*
  * Delete a monster by index.
  *
  * When a monster is deleted, all of its objects are deleted.
@@ -2801,8 +2818,7 @@ msg_print("守りのルーンが壊れた！");
 	/* Unknown distance */
 	m_ptr->cdis = 0;
 
-	m_ptr->target_y = 0;
-	m_ptr->target_x = 0;
+	reset_target(m_ptr);
 
 	m_ptr->nickname = 0;
 

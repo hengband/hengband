@@ -255,8 +255,7 @@ bool monst_spell_monst(int m_idx)
 			if (!success) continue;
 		}
 
-		m_ptr->target_y = 0;
-		m_ptr->target_x = 0;
+		reset_target(m_ptr);
 
 		/* OK -- we've got a target */
 		y = t_ptr->fy;

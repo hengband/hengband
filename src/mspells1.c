@@ -1216,8 +1216,7 @@ bool make_attack_spell(int m_idx)
 	/* Cannot cast spells when confused */
 	if (m_ptr->confused)
 	{
-		m_ptr->target_y = 0;
-		m_ptr->target_x = 0;
+		reset_target(m_ptr);
 		return (FALSE);
 	}
 
@@ -1343,8 +1342,7 @@ bool make_attack_spell(int m_idx)
 		}
 	}
 
-	m_ptr->target_y = 0;
-	m_ptr->target_x = 0;
+	reset_target(m_ptr);
 
 	/* Extract the monster level */
 	rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
