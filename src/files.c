@@ -4017,6 +4017,23 @@ void display_player(int mode)
 	}
 }
 
+static bool ang_sort_comp_quest_num(vptr u, vptr v, int a, int b)
+{
+	int *q_num = (int *)u;
+
+	return (quest[q_num[b]].complev >= quest[q_num[a]].complev);
+}
+
+static void ang_sort_swap_quest_num(vptr u, vptr v, int a, int b)
+{
+	int *q_num = (int *)u;
+	int tmp;
+
+	tmp = q_num[a];
+	q_num[a] = q_num[b];
+	q_num[b] = tmp;
+}
+
 errr make_character_dump(FILE *fff)
 {
 	int		i, x, y;
@@ -4027,6 +4044,8 @@ errr make_character_dump(FILE *fff)
 	char		o_name[MAX_NLEN];
 	char		buf[1024];
 	int		total;
+	int		*quest_num;
+	int		dummy;
 
 #ifdef JP
 	fprintf(fff, "  [変愚蛮怒 %d.%d.%d キャラクタ情報]\n\n",
@@ -4175,23 +4194,39 @@ errr make_character_dump(FILE *fff)
 #else
 	fprintf(fff, "\n< Completed Quest >\n");
 #endif
+
+	/* Allocate Memory */
+	C_MAKE(quest_num, max_quests, int);
+
+	/* Sort by compete level */
+	for (i = 1; i < max_quests; i++)
+	{
+		quest_num[i] = i;
+	}
+	ang_sort_comp = ang_sort_comp_quest_num;
+	ang_sort_swap = ang_sort_swap_quest_num;
+	ang_sort(quest_num, &dummy, max_quests);
+
+	/* Dump Quest Information */
 	total = 0;
 	for (i = 1; i < max_quests; i++)
 	{
-		/* No info from "silent" quests */
-		if (quest[i].flags & QUEST_FLAG_SILENT) continue;
+		int num = quest_num[i];
 
-		if (quest[i].status == QUEST_STATUS_FINISHED)
+		/* No info from "silent" quests */
+		if (quest[num].flags & QUEST_FLAG_SILENT) continue;
+
+		if (quest[num].status == QUEST_STATUS_FINISHED)
 		{
 			int old_quest;
 
 			total++;
 
-			if (i < MIN_RANDOM_QUEST)
+			if (num < MIN_RANDOM_QUEST)
 			{
 				/* Set the quest number temporary */
 				old_quest = p_ptr->inside_quest;
-				p_ptr->inside_quest = i;
+				p_ptr->inside_quest = num;
 
 				/* Get the quest */
 				init_flags = INIT_ASSIGN;
@@ -4202,11 +4237,11 @@ errr make_character_dump(FILE *fff)
 				p_ptr->inside_quest = old_quest;
 			}
 
-			if ((i >= MIN_RANDOM_QUEST) && quest[i].r_idx)
+			if ((num >= MIN_RANDOM_QUEST) && quest[num].r_idx)
 			{
 				/* Print the quest info */
 
-                                if (quest[i].complev == 0)
+                                if (quest[num].complev == 0)
                                 {
                                         fprintf(fff, 
 #ifdef JP
@@ -4214,8 +4249,8 @@ errr make_character_dump(FILE *fff)
 #else
                                                 "  %s (Dungeon level: %d) - (Cancelled)\n",
 #endif
-                                                r_name+r_info[quest[i].r_idx].name,
-                                                quest[i].level);
+                                                r_name+r_info[quest[num].r_idx].name,
+                                                quest[num].level);
                                 }
                                 else
                                 {
@@ -4225,9 +4260,9 @@ errr make_character_dump(FILE *fff)
 #else
                                                 "  %s (Dungeon level: %d) - level %d\n",
 #endif
-                                                r_name+r_info[quest[i].r_idx].name,
-                                                quest[i].level,
-                                                quest[i].complev);
+                                                r_name+r_info[quest[num].r_idx].name,
+                                                quest[num].level,
+                                                quest[num].complev);
                                 }
 			}
 			else
@@ -4239,7 +4274,7 @@ errr make_character_dump(FILE *fff)
 				fprintf(fff, "  %s (Danger level: %d) - level %d\n",
 #endif
 
-					quest[i].name, quest[i].level, quest[i].complev);
+					quest[num].name, quest[num].level, quest[num].complev);
 			}
 		}
 	}
@@ -4257,20 +4292,22 @@ errr make_character_dump(FILE *fff)
 	total = 0;
 	for (i = 1; i < max_quests; i++)
 	{
-		/* No info from "silent" quests */
-		if (quest[i].flags & QUEST_FLAG_SILENT) continue;
+		int num = quest_num[i];
 
-		if ((quest[i].status == QUEST_STATUS_FAILED_DONE) || (quest[i].status == QUEST_STATUS_FAILED))
+		/* No info from "silent" quests */
+		if (quest[num].flags & QUEST_FLAG_SILENT) continue;
+
+		if ((quest[num].status == QUEST_STATUS_FAILED_DONE) || (quest[num].status == QUEST_STATUS_FAILED))
 		{
 			int old_quest;
 
 			total++;
 
-			if (i < MIN_RANDOM_QUEST)
+			if (num < MIN_RANDOM_QUEST)
 			{
 				/* Set the quest number temporary */
 				old_quest = p_ptr->inside_quest;
-				p_ptr->inside_quest = i;
+				p_ptr->inside_quest = num;
 
 				/* Get the quest text */
 				init_flags = INIT_ASSIGN;
@@ -4281,7 +4318,7 @@ errr make_character_dump(FILE *fff)
 				p_ptr->inside_quest = old_quest;
 			}
 
-			if ((i >= MIN_RANDOM_QUEST) && quest[i].r_idx)
+			if ((num >= MIN_RANDOM_QUEST) && quest[num].r_idx)
 			{
 				/* Print the quest info */
 #ifdef JP
@@ -4290,7 +4327,7 @@ errr make_character_dump(FILE *fff)
 				fprintf(fff, "  %s (Dungeon level: %d) - level %d\n",
 #endif
 
-					r_name+r_info[quest[i].r_idx].name, quest[i].level, quest[i].complev);
+					r_name+r_info[quest[num].r_idx].name, quest[num].level, quest[num].complev);
 			}
 			else
 			{
@@ -4301,16 +4338,20 @@ errr make_character_dump(FILE *fff)
 				fprintf(fff, "  %s (Danger level: %d) - level %d\n",
 #endif
 
-					quest[i].name, quest[i].level, quest[i].complev);
+					quest[num].name, quest[num].level, quest[num].complev);
 			}
 		}
 	}
+
 #ifdef JP
 	if (!total) fprintf(fff, "  なし\n");
 #else
 	if (!total) fprintf(fff, "  Nothing.\n");
 #endif
 	fprintf(fff, "\n");
+
+	/* Free Memory */
+	C_KILL(quest_num, max_quests, int);
 
 	if (p_ptr->is_dead && !p_ptr->total_winner)
 	{
