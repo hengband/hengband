@@ -1404,9 +1404,9 @@ msg_print("無傷の球の呪文を唱えた。");
 		{
 			if ((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flagsr & RFR_RES_ALL))
 			{
-				r_ptr->r_flagsr |= RFR_RES_TELE;
+				if (is_original_ap(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 #ifdef JP
-msg_format("%sには効果がなかった！", m_name);
+				msg_format("%sには効果がなかった！", m_name);
 #else
 				msg_format("%s is unaffected!", m_name);
 #endif
@@ -1415,9 +1415,9 @@ msg_format("%sには効果がなかった！", m_name);
 			}
 			else if (r_ptr->level > randint1(100))
 			{
-				r_ptr->r_flagsr |= RFR_RES_TELE;
+				if (is_original_ap(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 #ifdef JP
-msg_format("%sには耐性がある！", m_name);
+				msg_format("%sには耐性がある！", m_name);
 #else
 				msg_format("%s resists!", m_name);
 #endif

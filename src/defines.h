@@ -3820,6 +3820,10 @@
 #define is_hostile(A) \
 	 (bool)((is_friendly(A) || is_pet(A)) ? FALSE : TRUE)
 
+/* Hack -- Determine monster race appearance index is same as race index */
+#define is_original_ap(A) \
+	 (bool)(((A)->ap_r_idx == (A)->r_idx) ? TRUE : FALSE)
+
 
 /*** Macro Definitions ***/
 

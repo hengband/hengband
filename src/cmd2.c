@@ -3250,7 +3250,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_SLAY_ANIMAL)) &&
 			    (r_ptr->flags3 & RF3_ANIMAL))
 			{
-				if (m_ptr->ml)
+				if (m_ptr->ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_ANIMAL;
 				}
@@ -3262,7 +3262,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_KILL_ANIMAL)) &&
 			    (r_ptr->flags3 & RF3_ANIMAL))
 			{
-				if (m_ptr->ml)
+				if (m_ptr->ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_ANIMAL;
 				}
@@ -3274,7 +3274,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_SLAY_EVIL)) &&
 			    (r_ptr->flags3 & RF3_EVIL))
 			{
-				if (m_ptr->ml)
+				if (m_ptr->ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_EVIL;
 				}
@@ -3286,7 +3286,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_KILL_EVIL)) &&
 			    (r_ptr->flags3 & RF3_EVIL))
 			{
-				if (m_ptr->ml)
+				if (m_ptr->ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_EVIL;
 				}
@@ -3298,7 +3298,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_SLAY_HUMAN)) &&
 			    (r_ptr->flags2 & RF2_HUMAN))
 			{
-				if (m_ptr->ml)
+				if (m_ptr->ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags2 |= RF2_HUMAN;
 				}
@@ -3310,7 +3310,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_KILL_HUMAN)) &&
 			    (r_ptr->flags2 & RF2_HUMAN))
 			{
-				if (m_ptr->ml)
+				if (m_ptr->ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags2 |= RF2_HUMAN;
 				}
@@ -3322,7 +3322,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_SLAY_UNDEAD)) &&
 			    (r_ptr->flags3 & RF3_UNDEAD))
 			{
-				if (m_ptr->ml)
+				if (m_ptr->ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_UNDEAD;
 				}
@@ -3334,7 +3334,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_KILL_UNDEAD)) &&
 			    (r_ptr->flags3 & RF3_UNDEAD))
 			{
-				if (m_ptr->ml)
+				if (m_ptr->ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_UNDEAD;
 				}
@@ -3346,7 +3346,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_SLAY_DEMON)) &&
 			    (r_ptr->flags3 & RF3_DEMON))
 			{
-				if (m_ptr->ml)
+				if (m_ptr->ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_DEMON;
 				}
@@ -3358,7 +3358,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_KILL_DEMON)) &&
 			    (r_ptr->flags3 & RF3_DEMON))
 			{
-				if (m_ptr->ml)
+				if (m_ptr->ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_DEMON;
 				}
@@ -3370,7 +3370,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_SLAY_ORC)) &&
 			    (r_ptr->flags3 & RF3_ORC))
 			{
-				if (m_ptr->ml)
+				if (m_ptr->ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_ORC;
 				}
@@ -3382,7 +3382,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_KILL_ORC)) &&
 			    (r_ptr->flags3 & RF3_ORC))
 			{
-				if (m_ptr->ml)
+				if (m_ptr->ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_ORC;
 				}
@@ -3394,7 +3394,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_SLAY_TROLL)) &&
 			    (r_ptr->flags3 & RF3_TROLL))
 			{
-				if (m_ptr->ml)
+				if (m_ptr->ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_TROLL;
 				}
@@ -3406,7 +3406,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_KILL_TROLL)) &&
 			    (r_ptr->flags3 & RF3_TROLL))
 			{
-				if (m_ptr->ml)
+				if (m_ptr->ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_TROLL;
 				}
@@ -3418,7 +3418,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_SLAY_GIANT)) &&
 			    (r_ptr->flags3 & RF3_GIANT))
 			{
-				if (m_ptr->ml)
+				if (m_ptr->ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_GIANT;
 				}
@@ -3430,7 +3430,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_KILL_GIANT)) &&
 			    (r_ptr->flags3 & RF3_GIANT))
 			{
-				if (m_ptr->ml)
+				if (m_ptr->ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_GIANT;
 				}
@@ -3442,7 +3442,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_SLAY_DRAGON)) &&
 			    (r_ptr->flags3 & RF3_DRAGON))
 			{
-				if (m_ptr->ml)
+				if (m_ptr->ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_DRAGON;
 				}
@@ -3454,7 +3454,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if ((have_flag(flgs, TR_KILL_DRAGON)) &&
 			    (r_ptr->flags3 & RF3_DRAGON))
 			{
-				if (m_ptr->ml)
+				if (m_ptr->ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_DRAGON;
 				}
@@ -3473,7 +3473,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 				/* Notice immunity */
 				if (r_ptr->flagsr & RFR_EFF_IM_ACID_MASK)
 				{
-					if (m_ptr->ml)
+					if (m_ptr->ml && is_original_ap(m_ptr))
 					{
 						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ACID_MASK);
 					}
@@ -3492,7 +3492,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 				/* Notice immunity */
 				if (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK)
 				{
-					if (m_ptr->ml)
+					if (m_ptr->ml && is_original_ap(m_ptr))
 					{
 						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
 					}
@@ -3511,7 +3511,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 				/* Notice immunity */
 				if (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)
 				{
-					if (m_ptr->ml)
+					if (m_ptr->ml && is_original_ap(m_ptr))
 					{
 						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
 					}
@@ -3523,7 +3523,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 					if (r_ptr->flags3 & RF3_HURT_FIRE)
 					{
 						if (mult < 25) mult = 25;
-						if (m_ptr->ml)
+						if (m_ptr->ml && is_original_ap(m_ptr))
 						{
 							r_ptr->r_flags3 |= RF3_HURT_FIRE;
 						}
@@ -3538,7 +3538,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 				/* Notice immunity */
 				if (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK)
 				{
-					if (m_ptr->ml)
+					if (m_ptr->ml && is_original_ap(m_ptr))
 					{
 						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
 					}
@@ -3549,7 +3549,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 					if (r_ptr->flags3 & RF3_HURT_COLD)
 					{
 						if (mult < 25) mult = 25;
-						if (m_ptr->ml)
+						if (m_ptr->ml && is_original_ap(m_ptr))
 						{
 							r_ptr->r_flags3 |= RF3_HURT_COLD;
 						}
@@ -3564,7 +3564,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 				/* Notice immunity */
 				if (r_ptr->flagsr & RFR_EFF_IM_POIS_MASK)
 				{
-					if (m_ptr->ml)
+					if (m_ptr->ml && is_original_ap(m_ptr))
 					{
 						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_POIS_MASK);
 					}

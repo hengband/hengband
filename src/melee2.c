@@ -2058,7 +2058,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 								msg_format("%^s is suddenly very hot!", m_name);
 #endif
 
-								if (see_t) tr_ptr->r_flags2 |= RF2_AURA_FIRE;
+								if (see_t && is_original_ap(t_ptr)) tr_ptr->r_flags2 |= RF2_AURA_FIRE;
 							}
 							project(t_idx, 0, m_ptr->fy, m_ptr->fx,
 								damroll (1 + ((tr_ptr->level) / 26),
@@ -2067,7 +2067,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 						}
 						else
 						{
-							if (see_m) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
+							if (see_m && is_original_ap(m_ptr)) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
 						}
 					}
 
@@ -2085,7 +2085,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 								msg_format("%^s is suddenly very cold!", m_name);
 #endif
 
-								if (see_t) tr_ptr->r_flags3 |= RF3_AURA_COLD;
+								if (see_t && is_original_ap(t_ptr)) tr_ptr->r_flags3 |= RF3_AURA_COLD;
 							}
 							project(t_idx, 0, m_ptr->fy, m_ptr->fx,
 								damroll (1 + ((tr_ptr->level) / 26),
@@ -2094,7 +2094,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 						}
 						else
 						{
-							if (see_m) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
+							if (see_m && is_original_ap(m_ptr)) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
 						}
 					}
 
@@ -2112,7 +2112,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 								msg_format("%^s gets zapped!", m_name);
 #endif
 
-								if (see_t) tr_ptr->r_flags2 |= RF2_AURA_ELEC;
+								if (see_t && is_original_ap(t_ptr)) tr_ptr->r_flags2 |= RF2_AURA_ELEC;
 							}
 							project(t_idx, 0, m_ptr->fy, m_ptr->fx,
 								damroll (1 + ((tr_ptr->level) / 26),
@@ -2121,7 +2121,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 						}
 						else
 						{
-							if (see_m) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
+							if (see_m && is_original_ap(m_ptr)) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
 						}
 					}
 				}
@@ -2521,7 +2521,7 @@ msg_format("%^sは突然敵にまわった！", m_name);
 			if (multiply_monster(m_idx, FALSE, (is_pet(m_ptr) ? PM_FORCE_PET : 0)))
 			{
 				/* Take note if visible */
-				if (m_ptr->ml && m_list[hack_m_idx_ii].ml)
+				if (m_ptr->ml && m_list[hack_m_idx_ii].ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags2 |= (RF2_MULTIPLY);
 				}
@@ -2554,7 +2554,7 @@ msg_format("%^sは突然敵にまわった！", m_name);
 						}
 					}
 
-					if (count && m_ptr->ml) r_ptr->r_flags6 |= (RF6_SPECIAL);
+					if (count && m_ptr->ml && is_original_ap(m_ptr)) r_ptr->r_flags6 |= (RF6_SPECIAL);
 				}
 			}
 		}
@@ -2695,13 +2695,11 @@ msg_format("%^s%s", m_name, monmessage);
 	}
 
 	/* 75% random movement */
-	else if ((r_ptr->flags1 & RF1_RAND_50) &&
-				(r_ptr->flags1 & RF1_RAND_25) &&
+	else if (((r_ptr->flags1 & (RF1_RAND_50 | RF1_RAND_25)) == (RF1_RAND_50 | RF1_RAND_25)) &&
 		 (randint0(100) < 75))
 	{
 		/* Memorize flags */
-		if (m_ptr->ml) r_ptr->r_flags1 |= (RF1_RAND_50);
-		if (m_ptr->ml) r_ptr->r_flags1 |= (RF1_RAND_25);
+		if (m_ptr->ml && is_original_ap(m_ptr)) r_ptr->r_flags1 |= (RF1_RAND_50 | RF1_RAND_25);
 
 		/* Try four "random" directions */
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
@@ -2712,7 +2710,7 @@ msg_format("%^s%s", m_name, monmessage);
 				(randint0(100) < 50))
 	{
 		/* Memorize flags */
-		if (m_ptr->ml) r_ptr->r_flags1 |= (RF1_RAND_50);
+		if (m_ptr->ml && is_original_ap(m_ptr)) r_ptr->r_flags1 |= (RF1_RAND_50);
 
 		/* Try four "random" directions */
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
@@ -2723,7 +2721,7 @@ msg_format("%^s%s", m_name, monmessage);
 				(randint0(100) < 25))
 	{
 		/* Memorize flags */
-		if (m_ptr->ml) r_ptr->r_flags1 |= RF1_RAND_25;
+		if (m_ptr->ml && is_original_ap(m_ptr)) r_ptr->r_flags1 |= RF1_RAND_25;
 
 		/* Try four "random" directions */
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
@@ -3101,7 +3099,7 @@ msg_print("爆発のルーンは解除された。");
 		if (do_move && player_bold(ny, nx) && (r_ptr->flags1 & RF1_NEVER_BLOW))
 		{
 			/* Hack -- memorize lack of attacks */
-			if (m_ptr->ml) r_ptr->r_flags1 |= (RF1_NEVER_BLOW);
+			if (m_ptr->ml && is_original_ap(m_ptr)) r_ptr->r_flags1 |= (RF1_NEVER_BLOW);
 
 			/* Do not move */
 			do_move = FALSE;
@@ -3149,7 +3147,10 @@ msg_print("爆発のルーンは解除された。");
 			{
 				do_move = FALSE;
 
-				if (r_ptr->flags2 & RF2_KILL_BODY) r_ptr->r_flags2 |= (RF2_KILL_BODY);
+				if (r_ptr->flags2 & RF2_KILL_BODY)
+				{
+					if (is_original_ap(m_ptr)) r_ptr->r_flags2 |= (RF2_KILL_BODY);
+				}
 
 				/* attack */
 				if ((m2_ptr->r_idx) && (m2_ptr->hp >= 0))
@@ -3191,7 +3192,7 @@ msg_print("爆発のルーンは解除された。");
 		if (do_move && (r_ptr->flags1 & RF1_NEVER_MOVE))
 		{
 			/* Hack -- memorize lack of attacks */
-			if (m_ptr->ml) r_ptr->r_flags1 |= (RF1_NEVER_MOVE);
+			if (m_ptr->ml && is_original_ap(m_ptr)) r_ptr->r_flags1 |= (RF1_NEVER_MOVE);
 
 			/* Do not move */
 			do_move = FALSE;
@@ -3476,7 +3477,7 @@ msg_format("%^sが%sを破壊した。", m_name, o_name);
 	}
 
 	/* Learn things from observable monster */
-	if (m_ptr->ml)
+	if (m_ptr->ml && is_original_ap(m_ptr))
 	{
 		/* Monster opened a door */
 		if (did_open_door) r_ptr->r_flags2 |= (RF2_OPEN_DOOR);

@@ -268,7 +268,7 @@ bool make_attack_normal(int m_idx)
 			    ((randint0(100) + p_ptr->lev) > 50))
 			{
 				/* Remember the Evil-ness */
-				if (m_ptr->ml)
+				if (m_ptr->ml && is_original_ap(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_EVIL;
 				}
@@ -1874,7 +1874,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					}
 					else
 					{
-						if (m_ptr->ml)
+						if (m_ptr->ml && is_original_ap(m_ptr))
 							r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
 					}
 				}
@@ -1906,7 +1906,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					}
 					else
 					{
-						if (m_ptr->ml)
+						if (m_ptr->ml && is_original_ap(m_ptr))
 							r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
 					}
 				}
@@ -1938,7 +1938,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					}
 					else
 					{
-						if (m_ptr->ml)
+						if (m_ptr->ml && is_original_ap(m_ptr))
 							r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
 					}
 				}
@@ -1970,7 +1970,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					}
 					else
 					{
-						if (m_ptr->ml)
+						if (m_ptr->ml && is_original_ap(m_ptr))
 							r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK);
 					}
 
@@ -2004,12 +2004,12 @@ msg_format("%sは体力を回復したようだ。", m_name);
 								blinked = FALSE;
 								alive = FALSE;
 							}
-							if (m_ptr->ml)
+							if (m_ptr->ml && is_original_ap(m_ptr))
 								r_ptr->r_flags3 |= RF3_EVIL;
 						}
 						else
 						{
-							if (m_ptr->ml)
+							if (m_ptr->ml && is_original_ap(m_ptr))
 								r_ptr->r_flagsr |= RFR_RES_ALL;
 						}
 					}
@@ -2042,7 +2042,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					}
 					else
 					{
-						if (m_ptr->ml)
+						if (m_ptr->ml && is_original_ap(m_ptr))
 							r_ptr->r_flagsr |= RFR_RES_ALL;
 					}
 				}

@@ -4514,7 +4514,7 @@ msg_print("多くの力強いものが間近に現れた音が聞こえる。");
 	}
 
 	/* Remember what the monster did to us */
-	if (seen)
+	if (seen && is_original_ap(m_ptr))
 	{
 		/* Inate spell */
 		if (thrown_spell < 32 * 4)
@@ -4542,7 +4542,7 @@ msg_print("多くの力強いものが間近に現れた音が聞こえる。");
 	/* Always take note of monsters that kill you */
 	if (p_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !p_ptr->inside_arena)
 	{
-		r_ptr->r_deaths++;
+		r_ptr->r_deaths++; /* Ignore appearance difference */
 	}
 
 	/* A spell was cast */

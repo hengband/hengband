@@ -2111,9 +2111,12 @@ bool monst_spell_monst(int m_idx)
 			/* No obvious effect */
 			if (see_both)
 			{
-				/* Memorize a flag */
-				if (tr_ptr->flagsr & RFR_RES_ALL) tr_ptr->r_flagsr |= (RFR_RES_ALL);
-				if (tr_ptr->flags3 & RF3_NO_CONF) tr_ptr->r_flags3 |= (RF3_NO_CONF);
+				if (is_original_ap(t_ptr))
+				{
+					/* Memorize a flag */
+					if (tr_ptr->flagsr & RFR_RES_ALL) tr_ptr->r_flagsr |= (RFR_RES_ALL);
+					if (tr_ptr->flags3 & RF3_NO_CONF) tr_ptr->r_flags3 |= (RF3_NO_CONF);
+				}
 
 #ifdef JP
 				msg_format("%^sには効果がなかった。", t_name);
@@ -2170,9 +2173,12 @@ bool monst_spell_monst(int m_idx)
 			/* No obvious effect */
 			if (see_both)
 			{
-				/* Memorize a flag */
-				if (tr_ptr->flagsr & RFR_RES_ALL) tr_ptr->r_flagsr |= (RFR_RES_ALL);
-				if (tr_ptr->flags3 & RF3_NO_CONF) tr_ptr->r_flags3 |= (RF3_NO_CONF);
+				if (is_original_ap(t_ptr))
+				{
+					/* Memorize a flag */
+					if (tr_ptr->flagsr & RFR_RES_ALL) tr_ptr->r_flagsr |= (RFR_RES_ALL);
+					if (tr_ptr->flags3 & RF3_NO_CONF) tr_ptr->r_flags3 |= (RF3_NO_CONF);
+				}
 
 #ifdef JP
 				msg_format("%^sには効果がなかった。", t_name);
@@ -2235,7 +2241,7 @@ bool monst_spell_monst(int m_idx)
 			/* Memorize a flag */
 			if (tr_ptr->flagsr & RFR_RES_ALL)
 			{
-				tr_ptr->r_flagsr |= (RFR_RES_ALL);
+				if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= (RFR_RES_ALL);
 			}
 #ifdef JP
 			if (see_both) msg_format("%^sは耐性を持っている！", t_name);
@@ -2279,7 +2285,7 @@ bool monst_spell_monst(int m_idx)
 			/* Memorize a flag */
 			if (tr_ptr->flagsr & RFR_RES_ALL)
 			{
-				tr_ptr->r_flagsr |= (RFR_RES_ALL);
+				if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= (RFR_RES_ALL);
 			}
 #ifdef JP
 			if (see_both) msg_format("%^sは耐性を持っている！", t_name);
@@ -2323,7 +2329,7 @@ bool monst_spell_monst(int m_idx)
 			/* Memorize a flag */
 			if (tr_ptr->flagsr & RFR_RES_ALL)
 			{
-				tr_ptr->r_flagsr |= (RFR_RES_ALL);
+				if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= (RFR_RES_ALL);
 			}
 #ifdef JP
 			if (see_both) msg_format("%^sは耐性を持っている！", t_name);
@@ -2367,7 +2373,7 @@ bool monst_spell_monst(int m_idx)
 			/* Memorize a flag */
 			if (tr_ptr->flagsr & RFR_RES_ALL)
 			{
-				tr_ptr->r_flagsr |= (RFR_RES_ALL);
+				if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= (RFR_RES_ALL);
 			}
 #ifdef JP
 			if (see_both) msg_format("%^sは耐性を持っている！", t_name);
@@ -2997,7 +3003,7 @@ bool monst_spell_monst(int m_idx)
 			/* Memorize a flag */
 			if (tr_ptr->flagsr & RFR_RES_ALL)
 			{
-				tr_ptr->r_flagsr |= (RFR_RES_ALL);
+				if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= (RFR_RES_ALL);
 			}
 #ifdef JP
 			if (see_both) msg_format("には効果がなかった！", t_name);
@@ -3293,7 +3299,7 @@ bool monst_spell_monst(int m_idx)
 				{
 					if (see_t)
 					{
-						tr_ptr->r_flagsr |= RFR_RES_TELE;
+						if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 #ifdef JP
 						msg_format("%^sには効果がなかった。", t_name);
 #else
@@ -3308,7 +3314,7 @@ bool monst_spell_monst(int m_idx)
 				{
 					if (see_t)
 					{
-						tr_ptr->r_flagsr |= RFR_RES_TELE;
+						if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 #ifdef JP
 						msg_format("%^sは耐性を持っている！", t_name);
 #else
@@ -4109,7 +4115,7 @@ bool monst_spell_monst(int m_idx)
 	}
 
 	/* Remember what the monster did, if we saw it */
-	if (see_m)
+	if (see_m && is_original_ap(m_ptr))
 	{
 		/* Inate spell */
 		if (thrown_spell < 32*4)
@@ -4136,7 +4142,7 @@ bool monst_spell_monst(int m_idx)
 	/* Always take note of monsters that kill you */
 	if (p_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !p_ptr->inside_arena)
 	{
-		r_ptr->r_deaths++;
+		r_ptr->r_deaths++; /* Ignore appearance difference */
 	}
 
 	/* A spell was cast */

@@ -4156,14 +4156,17 @@ bool detect_monsters_evil(int range)
 		/* Detect evil monsters */
 		if (r_ptr->flags3 & RF3_EVIL)
 		{
-			/* Take note that they are evil */
-			r_ptr->r_flags3 |= (RF3_EVIL);
-
-			/* Update monster recall window */
-			if (p_ptr->monster_race_idx == m_ptr->r_idx)
+			if (is_original_ap(m_ptr))
 			{
-				/* Window stuff */
-				p_ptr->window |= (PW_MONSTER);
+				/* Take note that they are evil */
+				r_ptr->r_flags3 |= (RF3_EVIL);
+
+				/* Update monster recall window */
+				if (p_ptr->monster_race_idx == m_ptr->r_idx)
+				{
+					/* Window stuff */
+					p_ptr->window |= (PW_MONSTER);
+				}
 			}
 
 			/* Repair visibility later */
@@ -4436,14 +4439,17 @@ cptr desc_monsters = "変なモンスター";
 		/* Detect evil monsters */
 		if (r_ptr->flags3 & (match_flag))
 		{
-			/* Take note that they are something */
-			r_ptr->r_flags3 |= (match_flag);
-
-			/* Update monster recall window */
-			if (p_ptr->monster_race_idx == m_ptr->r_idx)
+			if (is_original_ap(m_ptr))
 			{
-				/* Window stuff */
-				p_ptr->window |= (PW_MONSTER);
+				/* Take note that they are something */
+				r_ptr->r_flags3 |= (match_flag);
+
+				/* Update monster recall window */
+				if (p_ptr->monster_race_idx == m_ptr->r_idx)
+				{
+					/* Window stuff */
+					p_ptr->window |= (PW_MONSTER);
+				}
 			}
 
 			/* Repair visibility later */
@@ -6758,7 +6764,7 @@ msg_print("テレポートを邪魔された！");
 		msg_print("Your teleportation is blocked!");
 #endif
 
-		if (m_ptr->ml) r_ptr->r_flagsr |= RFR_RES_TELE;
+		if (m_ptr->ml && is_original_ap(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 
 		m_ptr->csleep = 0;
 		/* Failure */
