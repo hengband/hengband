@@ -231,24 +231,19 @@ msg_print("あなたは変わった気がする...");
  */
 static int get_coin_type(int r_idx)
 {
-	monster_race    *r_ptr = &r_info[r_idx];
-
-	/* Analyze "coin" monsters */
-	if (r_ptr->d_char == '$')
+	/* Analyze monsters */
+	switch (r_idx)
 	{
-		/* Look for textual clues */
-		switch (r_idx)
-		{
-		case MON_COPPER_COINS: return (2);
-		case MON_SILVER_COINS: return (5);
-		case MON_GOLD_COINS: return (10);
-		case MON_MITHRIL_COINS: return (16);
-		case MON_ADAMANT_COINS: return (17);
-		}
+	case MON_COPPER_COINS: return 2;
+	case MON_SILVER_COINS: return 5;
+	case MON_GOLD_COINS: return 10;
+	case MON_MITHRIL_COINS:
+	case MON_MITHRIL_GOLEM: return 16;
+	case MON_ADAMANT_COINS: return 17;
 	}
 
 	/* Assume nothing */
-	return (0);
+	return 0;
 }
 
 
