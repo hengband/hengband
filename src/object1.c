@@ -2357,6 +2357,8 @@ bool screen_object(object_type *o_ptr, bool real)
 	char o_name[MAX_NLEN];
 	int wid, hgt;
 
+	int trivial_info = 0;
+
 	/* Extract the flags */
 	object_flags(o_ptr, flgs);
 
@@ -2369,6 +2371,12 @@ bool screen_object(object_type *o_ptr, bool real)
 			    77 - 15, temp, sizeof(temp));
 		for (j = 0; temp[j]; j += 1 + strlen(&temp[j]))
 		{ info[i] = &temp[j]; i++;}
+	}
+
+	if (TV_EQUIP_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_EQUIP_END)
+	{
+		/* Descriptions of a basic equipment is just a flavor */
+		trivial_info = i;
 	}
 
 	/* Mega-Hack -- describe activation */
@@ -2626,12 +2634,15 @@ info[i++] = "それは乗馬中は非常に使いやすい。";
 			info[i++] = "It is made for use while riding.";
 #endif
 		else
+		{
 #ifdef JP
-info[i++] = "それは乗馬中でも使いやすい。";
+			info[i++] = "それは乗馬中でも使いやすい。";
 #else
 			info[i++] = "It is suitable for use while riding.";
 #endif
-
+			/* This information is not important enough */
+			trivial_info++;
+		}
 	}
 	if (have_flag(flgs, TR_STR))
 	{
@@ -3583,6 +3594,11 @@ info[i++] = "それは呪われている。";
 			info[i++] = "It is cursed.";
 #endif
 
+			/*
+			 * It's a trivial infomation since there is
+			 * fake inscription {cursed}
+			 */
+			trivial_info++;
 		}
 	}
 
@@ -3839,8 +3855,8 @@ info[i++] = "それはあなたの魔力を吸い取る。";
 		}
 	}
 
-	/* No special effects */
-	if (!i) return (FALSE);
+	/* No relevant informations */
+	if (i <= trivial_info) return (FALSE);
 
 	/* Save the screen */
 	screen_save();
