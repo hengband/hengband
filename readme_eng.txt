@@ -6,11 +6,11 @@
   tar -zxvf hengband-x.x.x.tar.gz
   cd hengband-x.x.x
   ./configure --disable-japanese
-  make
-  cp src/hengband .
+  make install
 
   Substitute the version number to x.x.x.
-  You must add --disable-japanese option for english version.
+  You need --disable-japanese option of the configure for english version.
+  If you are a super user, --with-setgid=games option works.
 
   then try
   ./hengband -- -n
@@ -44,9 +44,9 @@ in makefile.bcc, and un-comment the line 'ANGBAND_RC = ang_eng.rc'.
 
 --- MS-DOS
 
-Now, makefile.ibm and makefile.dos is included in source archive.
-Comment out options for japanese; 'JP_OPT = ...' in makefile.ibm or makefile.dos
-before MAKE with these.
+Use the makefile.ibm or the makefile.dos.
+Comment out options for japanese version; 'JP_OPT = ...' in makefile.ibm 
+or makefile.dos before MAKE with these.
 
 
 --- Macintosh
@@ -61,7 +61,8 @@ Unpack it, and click hengband to play.
      We recommend that you go to the Yeek cave next to your starting position 
 in the town of Outpost.  Although the King of Yeeks at the lowest level is a 
 fierce enemy, the rest of the cave should be fairly safe.  Once you complete 
-this dungeon, you will be strong enough to leave Outpost in search of greater adventures.  Carry lots of food and fuel, for the journey can be a long one.  
+this dungeon, you will be strong enough to leave Outpost in search of greater 
+adventures.  Carry lots of food and fuel, for the journey can be a long one.  
 Since this world is very large, it is convenient to go into global map mode by 
 pressing the '<' key, and then return to local map mode by '>' key when you are 
 at the destination.  When in the wilderness, stay in safe grids such as roads 
