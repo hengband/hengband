@@ -40,7 +40,7 @@
 /* Savefile version for Hengband 1.1.1 and later */
 #define H_VER_MAJOR 1
 #define H_VER_MINOR 3
-#define H_VER_PATCH 1
+#define H_VER_PATCH 2
 #define H_VER_EXTRA 0
 
 /* Added for ZAngband */
@@ -51,12 +51,6 @@
 
 #define ANGBAND_2_8_1
 #define ZANGBAND
-
-/*
- * This value is not currently used
- */
-#define VERSION_EXTRA   0
-
 
 /*
  * Number of grids in each block (vertically)
@@ -113,9 +107,6 @@
 /*
  * Quest constants
  */
-#define MAX_MON_QUEST       10
-#define MAX_ITEM_QUEST       5
-
 #define MIN_RANDOM_QUEST    40
 #define MAX_RANDOM_QUEST    49
 
@@ -139,11 +130,8 @@
 #define MAX_BLDG		32
 
 /*
- * Total number of stores (see "store.c", etc)
+ * Store types
  */
-#define MAX_STORES_PER_TOWN 12
-#define MAX_STORE_TYPES     10
-
 #define STORE_GENERAL   0
 #define STORE_ARMOURY   1
 #define STORE_WEAPON    2
@@ -426,9 +414,8 @@
  * OPTION: Maximum number of "quarks" (see "io.c")
  * Default: assume at most 512 different inscriptions are used
  */
-#define QUARK_MAX       2048
+#define QUARK_MAX       768
 /* Was 512... 256 quarks added for random artifacts */
-/* Was 768... increased greatly for auto inscription (by Mogami) */
 
 /*
  * OPTION: Maximum number of messages to remember (see "io.c")
@@ -528,22 +515,22 @@
 /*
  * Commands
  */
-#define PET_DISMISS					1
-#define PET_TARGET					2
-#define PET_STAY_CLOSE				3
-#define PET_FOLLOW_ME				4
-#define PET_SEEK_AND_DESTROY		5
-#define PET_ALLOW_SPACE				6
-#define PET_STAY_AWAY				7
-#define PET_OPEN_DOORS           8
-#define PET_TAKE_ITEMS				9
-#define PET_TELEPORT			       10
-#define PET_ATTACK_SPELL		       11
-#define PET_SUMMON_SPELL		       12
-#define PET_BALL_SPELL		               13
-#define PET_RIDING			       14
-#define PET_NAME			       15
-#define PET_RYOUTE			       16
+#define PET_DISMISS		1
+#define PET_TARGET		2
+#define PET_STAY_CLOSE		3
+#define PET_FOLLOW_ME		4
+#define PET_SEEK_AND_DESTROY	5
+#define PET_ALLOW_SPACE		6
+#define PET_STAY_AWAY		7
+#define PET_OPEN_DOORS          8
+#define PET_TAKE_ITEMS		9
+#define PET_TELEPORT		10
+#define PET_ATTACK_SPELL	11
+#define PET_SUMMON_SPELL	12
+#define PET_BALL_SPELL		13
+#define PET_RIDING		14
+#define PET_NAME		15
+#define PET_RYOUTE		16
 
 /*
  * Follow distances
@@ -628,21 +615,21 @@
 /*
  * Player "food" crucial values
  */
-#define PY_FOOD_MAX             15000   /* Food value (Bloated) */
+#define PY_FOOD_MAX     15000   /* Food value (Bloated) */
 #define PY_FOOD_FULL    10000   /* Food value (Normal) */
 #define PY_FOOD_ALERT   2000    /* Food value (Hungry) */
 #define PY_FOOD_WEAK    1000    /* Food value (Weak) */
-#define PY_FOOD_FAINT   500             /* Food value (Fainting) */
-#define PY_FOOD_STARVE  100             /* Food value (Starving) */
+#define PY_FOOD_FAINT   500     /* Food value (Fainting) */
+#define PY_FOOD_STARVE  100     /* Food value (Starving) */
 
 /*
  * Player regeneration constants
  */
-#define PY_REGEN_NORMAL         197             /* Regen factor*2^16 when full */
-#define PY_REGEN_WEAK           98              /* Regen factor*2^16 when weak */
-#define PY_REGEN_FAINT          33              /* Regen factor*2^16 when fainting */
+#define PY_REGEN_NORMAL         197     /* Regen factor*2^16 when full */
+#define PY_REGEN_WEAK           98      /* Regen factor*2^16 when weak */
+#define PY_REGEN_FAINT          33      /* Regen factor*2^16 when fainting */
 #define PY_REGEN_HPBASE         1442    /* Min amount hp regen*2^16 */
-#define PY_REGEN_MNBASE         524             /* Min amount mana regen*2^16 */
+#define PY_REGEN_MNBASE         524     /* Min amount mana regen*2^16 */
 
 /*
  * Possible realms that can be chosen;
@@ -838,18 +825,18 @@
 #define CLASS_MIRROR_MASTER     25
 #define CLASS_NINJA             26
 
-#define SEIKAKU_FUTUU	0
-#define SEIKAKU_CHIKARA	1
-#define SEIKAKU_KIREMONO	2
-#define SEIKAKU_SHIAWASE	3
-#define SEIKAKU_SUBASI	4
-#define SEIKAKU_INOCHI	5
-#define SEIKAKU_COMBAT	6
-#define SEIKAKU_NAMAKE	7
-#define SEIKAKU_SEXY	8
-#define SEIKAKU_LUCKY	9
-#define SEIKAKU_GAMAN	10
-#define SEIKAKU_MUNCHKIN   11
+#define SEIKAKU_FUTUU	 0
+#define SEIKAKU_CHIKARA	 1
+#define SEIKAKU_KIREMONO 2
+#define SEIKAKU_SHIAWASE 3
+#define SEIKAKU_SUBASI	 4
+#define SEIKAKU_INOCHI	 5
+#define SEIKAKU_COMBAT	 6
+#define SEIKAKU_NAMAKE	 7
+#define SEIKAKU_SEXY	 8
+#define SEIKAKU_LUCKY	 9
+#define SEIKAKU_GAMAN	 10
+#define SEIKAKU_MUNCHKIN 11
 
 /*** Screen Locations ***/
 
@@ -2589,9 +2576,9 @@
  * prevents the player from getting more than one at a time.
  */
 #define ATTACK_CONFUSE		0x00000001
-#define ATTACK_BLKBRTH		0x00000002
-#define ATTACK_FLEE		0x00000004
-#define ATTACK_SUPERSHOT	0x00000008
+#define ATTACK_XXX1		0x00000002
+#define ATTACK_XXX2		0x00000004
+#define ATTACK_XXX3	        0x00000008
 #define ATTACK_ACID		0x00000010
 #define ATTACK_ELEC		0x00000020
 #define ATTACK_FIRE		0x00000040
@@ -2829,13 +2816,6 @@
 
 
 /*
- * Hack -- first "normal" artifact in the artifact list.  All of
- * the artifacts with indexes from 1 to 15 are "special" (lights,
- * rings, amulets), and the ones from 16 to 127 are "normal".
- */
-#define ART_MIN_NORMAL          19
-
-/*
  * Game generated inscription indices. These are stored in the object,
  * and are used to index the string array from tables.c.
  */
@@ -2933,25 +2913,29 @@
 
 
 /*
- * As of 2.7.8, the "object flags" are valid for all objects, and as
- * of 2.7.9, these flags are not actually stored with the object.
+ * Object flags
  *
- * Note that "flags1" contains all flags dependant on "pval" (including
- * stat bonuses, but NOT stat sustainers), plus all "extra attack damage"
- * flags (SLAY_XXX and BRAND_XXX).
+ * Old variables for object flags such as flags1, flags2, and flags3
+ * are obsolated.  Now single array flgs[TR_FLAG_SIZE] contains all
+ * object flags.  And each flag is refered by single index number
+ * instead of a bit mask.
  *
- * Note that "flags2" contains all "resistances" (including "Stat Sustainers",
- * actual immunities, and resistances).  Note that "Hold Life" is really an
- * "immunity" to ExpLoss, and "Free Action" is "immunity to paralysis".
+ * Therefore it's very easy to add a lot of new flags; no one need to
+ * worry about in which variable a new flag should be put, nor to
+ * modify a huge number of files all over the source directory at once
+ * to add new flag variables such as flags4, flags5, etc...
  *
- * Note that "flags3" contains everything else -- including the three "CURSED"
- * flags, and the "BLESSED" flag, several "item display" parameters, some new
- * flags for powerful Bows, and flags which affect the player in a "general"
- * way (LITE, TELEPATHY, SEE_INVIS, SLOW_DIGEST, REGEN, FEATHER), including
- * all the "general" curses (TELEPORT, AGGRAVATE, EXP_DRAIN).  It also has
- * four new flags called "ITEM_IGNORE_XXX" which lets an item specify that
- * it can not be affected by various forms of destruction.  This is NOT as
- * powerful as actually granting resistance/immunity to the wearer.
+ * All management of flags is now treated using a set of macros
+ * instead of bit operations.
+ * Note: These macros are using division, modulo, and bit shift
+ * operations, and it seems that these operations are rather slower
+ * than original bit operation.  But since index numbers are almost
+ * always given as constant, such slow operations are performed in the
+ * compile time.  So there is no problem on the speed.
+ *
+ * Exceptions of new flag management is a set of flags to control
+ * object generation and the curse flags.  These are not yet rewritten
+ * in new index form; maybe these have no merit of rewriting.
  */
 
 #define have_flag(ARRAY, INDEX) !!((ARRAY)[(INDEX)/32] & (1L << ((INDEX)%32)))
