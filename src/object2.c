@@ -8342,7 +8342,7 @@ void do_cmd_kaji(bool only_browse)
 #ifdef JP
 			msg_print("うまく見えなくて作業できない！");
 #else
-			msg_print("You are hullcinating!");
+			msg_print("You are hallucinating!");
 #endif
 
 			return;
