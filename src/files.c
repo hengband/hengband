@@ -6256,11 +6256,14 @@ prt("ゲームをセーブしています... 失敗！", 0, 0);
 	(void)strcpy(p_ptr->died_from, "(alive and well)");
 #endif
 
-	/* Update some things */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE | PU_DISTANCE);
+	/* HACK -- don't get sanity blast on updating view */
+	hack_mind = FALSE;
 
 	/* Update stuff */
 	update_stuff();
+
+	/* HACK -- reset the hackish flag */
+	hack_mind = TRUE;
 }
 
 
