@@ -4901,34 +4901,26 @@ msg_format("%sをうまく唱えられなかった！", prayer);
 
 		sound(SOUND_FAIL);
 
-		if (realm == REALM_LIFE)
+		switch (realm)
 		{
-			if (randint1(100) < chance)
-				chg_virtue(V_VITALITY, -1);
-		}
-		else if (realm == REALM_DEATH)
-		{
-			if (randint1(100) < chance)
-				chg_virtue(V_UNLIFE, -1);
-		}
-		else if (realm == REALM_NATURE)
-		{
-			if (randint1(100) < chance)
-				chg_virtue(V_NATURE, -1);
-		}
-		else if (realm == REALM_DAEMON)
-		{
-			if (randint1(100) < chance)
-				chg_virtue(V_JUSTICE, 1);
-		}
-		if (realm == REALM_CRUSADE)
-		{
-			if (randint1(100) < chance)
-				chg_virtue(V_JUSTICE, -1);
-		}
-		else if (randint1(100) < chance)
-		{
-			chg_virtue(V_KNOWLEDGE, -1);
+		case REALM_LIFE:
+			if (randint1(100) < chance) chg_virtue(V_VITALITY, -1);
+			break;
+		case REALM_DEATH:
+			if (randint1(100) < chance) chg_virtue(V_UNLIFE, -1);
+			break;
+		case REALM_NATURE:
+			if (randint1(100) < chance) chg_virtue(V_NATURE, -1);
+			break;
+		case REALM_DAEMON:
+			if (randint1(100) < chance) chg_virtue(V_JUSTICE, 1);
+			break;
+		case REALM_CRUSADE:
+			if (randint1(100) < chance) chg_virtue(V_JUSTICE, -1);
+			break;
+		default:
+			if (randint1(100) < chance) chg_virtue(V_KNOWLEDGE, -1);
+			break;
 		}
 
 		if (realm == REALM_TRUMP)
@@ -5059,74 +5051,71 @@ msg_print("An infernal sound echoed.");
 			/* Redraw object recall */
 			p_ptr->window |= (PW_OBJECT);
 
-			if (realm == REALM_LIFE)
+			switch (realm)
 			{
+			case REALM_LIFE:
 				chg_virtue(V_TEMPERANCE, 1);
 				chg_virtue(V_COMPASSION, 1);
 				chg_virtue(V_VITALITY, 1);
 				chg_virtue(V_DILIGENCE, 1);
-			}
-			else if (realm == REALM_DEATH)
-			{
+				break;
+			case REALM_DEATH:
 				chg_virtue(V_UNLIFE, 1);
 				chg_virtue(V_JUSTICE, -1);
 				chg_virtue(V_FAITH, -1);
 				chg_virtue(V_VITALITY, -1);
-			}
-			else if (realm == REALM_DAEMON)
-			{
+				break;
+			case REALM_DAEMON:
 				chg_virtue(V_JUSTICE, -1);
 				chg_virtue(V_FAITH, -1);
 				chg_virtue(V_HONOUR, -1);
 				chg_virtue(V_TEMPERANCE, -1);
-			}
-			else if (realm == REALM_CRUSADE)
-			{
+				break;
+			case REALM_CRUSADE:
 				chg_virtue(V_FAITH, 1);
 				chg_virtue(V_JUSTICE, 1);
 				chg_virtue(V_SACRIFICE, 1);
 				chg_virtue(V_HONOUR, 1);
-			}
-			else if (realm == REALM_NATURE)
-			{
+				break;
+			case REALM_NATURE:
 				chg_virtue(V_NATURE, 1);
 				chg_virtue(V_HARMONY, 1);
-			}
-			else
+				break;
+			default:
 				chg_virtue(V_KNOWLEDGE, 1);
+				break;
+			}
 		}
-		if (realm == REALM_LIFE)
+		switch (realm)
 		{
+		case REALM_LIFE:
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_TEMPERANCE, 1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_COMPASSION, 1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_VITALITY, 1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_DILIGENCE, 1);
-		}
-		else if (realm == REALM_DEATH)
-		{
+			break;
+		case REALM_DEATH:
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_UNLIFE, 1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_JUSTICE, -1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_FAITH, -1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_VITALITY, -1);
-		}
-		else if (realm == REALM_DAEMON)
-		{
+			break;
+		case REALM_DAEMON:
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_JUSTICE, -1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_FAITH, -1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_HONOUR, -1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_TEMPERANCE, -1);
-		}
-		else if (realm == REALM_CRUSADE)
-		{
+			break;
+		case REALM_CRUSADE:
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_FAITH, 1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_JUSTICE, 1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_SACRIFICE, 1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_HONOUR, 1);
-		}
-		else if (realm == REALM_NATURE)
-		{
+			break;
+		case REALM_NATURE:
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_NATURE, 1);
 			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_HARMONY, 1);
+			break;
 		}
 		if (mp_ptr->spell_xtra & MAGIC_GAIN_EXP)
 		{
@@ -5184,18 +5173,27 @@ msg_print("精神を集中しすぎて気を失ってしまった！");
 		/* Hack -- Bypass free action */
 		(void)set_paralyzed(p_ptr->paralyzed + randint1(5 * oops + 1));
 
-		if (realm == REALM_LIFE)
+		switch (realm)
+		{
+		case REALM_LIFE:
 			chg_virtue(V_VITALITY, -10);
-		else if (realm == REALM_DEATH)
+			break;
+		case REALM_DEATH:
 			chg_virtue(V_UNLIFE, -10);
-		else if (realm == REALM_DAEMON)
+			break;
+		case REALM_DAEMON:
 			chg_virtue(V_JUSTICE, 10);
-		else if (realm == REALM_NATURE)
+			break;
+		case REALM_NATURE:
 			chg_virtue(V_NATURE, -10);
-		else if (realm == REALM_CRUSADE)
+			break;
+		case REALM_CRUSADE:
 			chg_virtue(V_JUSTICE, -10);
-		else
+			break;
+		default:
 			chg_virtue(V_KNOWLEDGE, -10);
+			break;
+		}
 
 		/* Damage CON (possibly permanently) */
 		if (randint0(100) < 50)
