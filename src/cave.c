@@ -4419,7 +4419,7 @@ void cave_set_feat(int y, int x, int feat)
 	cave_type *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[feat];
 
-	if (is_mirror_grid(c_ptr) && (d_info[dungeon_type].flags1 & DF1_DARKNESS))
+	if (character_dungeon && is_mirror_grid(c_ptr) && (d_info[dungeon_type].flags1 & DF1_DARKNESS))
 	{
 		c_ptr->info &= ~(CAVE_GLOW);
 		if (!view_torch_grids) c_ptr->info &= ~(CAVE_MARK);
