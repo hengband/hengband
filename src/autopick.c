@@ -2478,6 +2478,7 @@ static cptr ctrl_command_desc[] =
 #define DIRTY_MODE 0x04
 #define DIRTY_SCREEN 0x08
 #define DIRTY_NOT_FOUND 0x10
+#define DIRTY_NO_SEARCH 0x20
 
 /*
  * In-game editor of Object Auto-picker/Destoryer
@@ -2695,18 +2696,18 @@ void do_cmd_edit_autopick(void)
 		if (edit_mode)
 			prt("^Q ESC でコマンドモードへ移行、通常の文字はそのまま入力", 0, 0);
 		else
-			prt("q _ で終了、hjkl2468 で移動、^Q a i で入力モード", 0, 0);
+			prt("q _ で終了、hjkl2468 で移動、^Q a i で入力モード、/ n N で検索", 0, 0);
 #else	
 		if (edit_mode)
 			prt("Press ^Q ESC to command mode, any letters to insert", 0, 0);
 		else
-			prt("Press q _ to quit, hjkl2468 to move, ^Q a i to insert mode", 0, 0);
+			prt(format("Press q _ to quit, %s to move, ^Q a i to insert mode, /nN to find", rogue_like_commands ? "hjkl" : "2468"), 0, 0);
 #endif
 		/* Display current position */
 		prt (format("(%d,%d)", cx, cy), 0, 70);
 
 		/* Display information when updated */
-		if (old_cy != cy || (dirty_flags & (DIRTY_ALL | DIRTY_NOT_FOUND)) || dirty_line == cy)
+		if (old_cy != cy || (dirty_flags & (DIRTY_ALL | DIRTY_NOT_FOUND | DIRTY_NO_SEARCH)) || dirty_line == cy)
 		{
 			/* Clear information line */
 			Term_erase(0, hgt - 3 + 1, wid);
@@ -2719,6 +2720,14 @@ void do_cmd_edit_autopick(void)
 				prt(format("パターンが見つかりません: %s", search_str), hgt - 3 + 1, 0);
 #else
 				prt(format("Pattern not found: %s", search_str), hgt - 3 + 1, 0);
+#endif
+                        }
+                        else if (dirty_flags & DIRTY_NO_SEARCH)
+                        {
+#ifdef JP
+				prt("検索中のパターンがありません('/'で検索)。", hgt - 3 + 1, 0);
+#else
+				prt("No pattern to search. (Press '/' to search.)", hgt - 3 + 1, 0);
 #endif
                         }
 			else if (lines_list[cy][0] == '#')
@@ -3097,6 +3106,10 @@ void do_cmd_edit_autopick(void)
                                 {
                                         if (!search_for_string(lines_list, search_str, &cx, &cy, TRUE)) dirty_flags |= DIRTY_NOT_FOUND;
                                 }
+                                else
+                                {
+                                        dirty_flags |= DIRTY_NO_SEARCH;
+                                }
                                 break;
                         case 'N':
                                 if (search_o_ptr)
@@ -3106,6 +3119,10 @@ void do_cmd_edit_autopick(void)
                                 else if (search_str)
                                 {
                                         if (!search_for_string(lines_list, search_str, &cx, &cy, FALSE)) dirty_flags |= DIRTY_NOT_FOUND;
+                                }
+                                else
+                                {
+                                        dirty_flags |= DIRTY_NO_SEARCH;
                                 }
                                 break;
 			}
