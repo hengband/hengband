@@ -462,7 +462,7 @@ static cptr spell_tips[VALID_REALM][32] =
 {
 	{
 		"heals cut and HP a little.",
-		"gives bonus to hit and AC for few turns.",
+		"gives bonus to hit and AC for a few turns.",
 		"wounds a monster a little unless resisted.",
 		"lights up nearby area and the inside of a room permanently.",
 		"detects traps, doors, and stairs in your vicinity.",
@@ -767,7 +767,7 @@ static cptr spell_tips[VALID_REALM][32] =
 	{
 		"fires a weak bolt of magic.",
 		"detects all nonliving monsters in your vicinity.",
-		"gives bonus to hit and AC for few turns.",
+		"gives bonus to hit and AC for a few turns.",
 		"gives resistance to fire, cold and electricity for a while. These resistances can be added to which from equipment for more powerful resistances.",
 		"attempts to scare and stun a monster.",
 		"fires a bolt or beam of nether.",
@@ -842,7 +842,7 @@ static cptr spell_tips[VALID_REALM][32] =
 
 	{
 		"attempts to slow all monsters in sight.",
-		"gives bonus to hit and AC for few turns.",
+		"gives bonus to hit and AC for a few turns.",
 		"fires a bolt of sound.",
 		"attempts to stun all monsters in sight.",
 		"heals HP a little.",
