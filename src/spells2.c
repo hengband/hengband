@@ -6866,9 +6866,9 @@ bool project_hook(int typ, int dir, int dam, int flg)
 
 
 /*
- * Cast a bolt spell
- * Stop if we hit a monster, as a "bolt"
- * Affect monsters (not grids or objects)
+ * Cast a bolt spell.
+ * Stop if we hit a monster, as a "bolt".
+ * Affect monsters and grids (not objects).
  */
 bool fire_bolt(int typ, int dir, int dam)
 {
@@ -6878,9 +6878,9 @@ bool fire_bolt(int typ, int dir, int dam)
 
 
 /*
- * Cast a beam spell
- * Pass through monsters, as a "beam"
- * Affect monsters (not grids or objects)
+ * Cast a beam spell.
+ * Pass through monsters, as a "beam".
+ * Affect monsters, grids and objects.
  */
 bool fire_beam(int typ, int dir, int dam)
 {
