@@ -6678,23 +6678,6 @@ static cptr do_craft_spell(int spell, int mode)
 	{
 	case 0:
 #ifdef JP
-		if (name) return "装備無力化";
-		if (desc) return "武器・防具にかけられたあらゆる魔力を完全に解除する。";
-#else
-		if (name) return "Remove Enchantment";
-		if (desc) return "Removes all magics completely from any weapon or armor.";
-#endif
-    
-		{
-			if (cast)
-			{
-				if (!mundane_spell(TRUE)) return NULL;
-			}
-		}
-		break;
-
-	case 1:
-#ifdef JP
 		if (name) return "赤外線視力";
 		if (desc) return "一定時間、赤外線視力が増強される。";
 #else
@@ -6714,7 +6697,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 2:
+	case 1:
 #ifdef JP
 		if (name) return "回復力強化";
 		if (desc) return "一定時間、回復力が増強される。";
@@ -6735,7 +6718,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 3:
+	case 2:
 #ifdef JP
 		if (name) return "空腹充足";
 		if (desc) return "満腹になる。";
@@ -6752,7 +6735,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 4:
+	case 3:
 #ifdef JP
 		if (name) return "耐冷気";
 		if (desc) return "一定時間、冷気への耐性を得る。装備による耐性に累積する。";
@@ -6773,7 +6756,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 5:
+	case 4:
 #ifdef JP
 		if (name) return "耐火炎";
 		if (desc) return "一定時間、炎への耐性を得る。装備による耐性に累積する。";
@@ -6794,7 +6777,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 6:
+	case 5:
 #ifdef JP
 		if (name) return "士気高揚";
 		if (desc) return "一定時間、ヒーロー気分になる。";
@@ -6817,7 +6800,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 7:
+	case 6:
 #ifdef JP
 		if (name) return "耐電撃";
 		if (desc) return "一定時間、電撃への耐性を得る。装備による耐性に累積する。";
@@ -6838,7 +6821,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 8:
+	case 7:
 #ifdef JP
 		if (name) return "耐酸";
 		if (desc) return "一定時間、酸への耐性を得る。装備による耐性に累積する。";
@@ -6859,7 +6842,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 9:
+	case 8:
 #ifdef JP
 		if (name) return "透明視認";
 		if (desc) return "一定時間、透明なものが見えるようになる。";
@@ -6880,7 +6863,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 10:
+	case 9:
 #ifdef JP
 		if (name) return "解呪";
 		if (desc) return "アイテムにかかった弱い呪いを解除する。";
@@ -6904,7 +6887,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 11:
+	case 10:
 #ifdef JP
 		if (name) return "耐毒";
 		if (desc) return "一定時間、毒への耐性を得る。装備による耐性に累積する。";
@@ -6925,7 +6908,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 12:
+	case 11:
 #ifdef JP
 		if (name) return "狂戦士化";
 		if (desc) return "狂戦士化し、恐怖を除去する。";
@@ -6948,7 +6931,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 13:
+	case 12:
 #ifdef JP
 		if (name) return "自己分析";
 		if (desc) return "現在の自分の状態を完全に知る。";
@@ -6965,7 +6948,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 14:
+	case 13:
 #ifdef JP
 		if (name) return "対邪悪結界";
 		if (desc) return "邪悪なモンスターの攻撃を防ぐバリアを張る。";
@@ -6987,7 +6970,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 15:
+	case 14:
 #ifdef JP
 		if (name) return "癒し";
 		if (desc) return "毒、朦朧状態、負傷を全快させ、幻覚を直す。";
@@ -7007,7 +6990,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 16:
+	case 15:
 #ifdef JP
 		if (name) return "魔法剣";
 		if (desc) return "一定時間、武器に冷気、炎、電撃、酸、毒のいずれかの属性をつける。武器を持たないと使えない。";
@@ -7028,7 +7011,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 17:
+	case 16:
 #ifdef JP
 		if (name) return "テレパシー";
 		if (desc) return "一定時間、テレパシー能力を得る。";
@@ -7050,7 +7033,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 18:
+	case 17:
 #ifdef JP
 		if (name) return "肌石化";
 		if (desc) return "一定時間、ACを上昇させる。";
@@ -7072,7 +7055,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 19:
+	case 18:
 #ifdef JP
 		if (name) return "全耐性";
 		if (desc) return "一定時間、酸、電撃、炎、冷気、毒に対する耐性を得る。装備による耐性に累積する。";
@@ -7097,7 +7080,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 20:
+	case 19:
 #ifdef JP
 		if (name) return "スピード";
 		if (desc) return "一定時間、加速する。";
@@ -7119,7 +7102,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 21:
+	case 20:
 #ifdef JP
 		if (name) return "壁抜け";
 		if (desc) return "一定時間、半物質化し壁を通り抜けられるようになる。";
@@ -7140,7 +7123,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 22:
+	case 21:
 #ifdef JP
 		if (name) return "盾磨き";
 		if (desc) return "盾に反射の属性をつける。";
@@ -7157,7 +7140,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 23:
+	case 22:
 #ifdef JP
 		if (name) return "ゴーレム製造";
 		if (desc) return "1体のゴーレムを製造する。";
@@ -7189,7 +7172,7 @@ static cptr do_craft_spell(int spell, int mode)
 		}
 		break;
 
-	case 24:
+	case 23:
 #ifdef JP
 		if (name) return "魔法の鎧";
 		if (desc) return "一定時間、魔法防御力とACが上がり、混乱と盲目の耐性、反射能力、麻痺知らず、浮遊を得る。";
@@ -7209,6 +7192,24 @@ static cptr do_craft_spell(int spell, int mode)
 			}
 		}
 		break;
+
+	case 24:
+#ifdef JP
+		if (name) return "装備無力化";
+		if (desc) return "武器・防具にかけられたあらゆる魔力を完全に解除する。";
+#else
+		if (name) return "Remove Enchantment";
+		if (desc) return "Removes all magics completely from any weapon or armor.";
+#endif
+    
+		{
+			if (cast)
+			{
+				if (!mundane_spell(TRUE)) return NULL;
+			}
+		}
+		break;
+
 	case 25:
 #ifdef JP
 		if (name) return "呪い粉砕";
