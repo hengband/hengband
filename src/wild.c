@@ -815,7 +815,7 @@ void wilderness_gen(void)
 			else
 			{
 				/* Feature code (applying "mimic" field) */
-				byte feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+				byte feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 				if (!is_mirror_grid(c_ptr) && (feat != FEAT_QUEST_ENTER) && (feat != FEAT_ENTRANCE))
 				{

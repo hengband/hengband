@@ -67,7 +67,7 @@ static void place_secret_door(int y, int x)
 		place_closed_door(y, x);
 
 		/* Hide by inner wall because this is used in rooms only */
-		c_ptr->mimic = f_info[feat_wall_inner].mimic;
+		c_ptr->mimic = feat_wall_inner;
 
 		/* Floor type terrain cannot hide a door */
 		if (feat_floor(c_ptr->mimic))

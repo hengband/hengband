@@ -482,7 +482,7 @@ static void set_bound_perm_wall(cave_type *c_ptr)
 			c_ptr->feat -= (FEAT_MAGMA_K - FEAT_MAGMA);
 
 		/* Set boundary mimic */
-		c_ptr->mimic = f_info[c_ptr->feat].mimic;
+		c_ptr->mimic = c_ptr->feat;
 	}
 
 	/* Add "solid" perma-wall */

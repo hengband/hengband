@@ -949,8 +949,8 @@ static int count_dt(int *y, int *x, bool (*test)(int feat), bool under)
 		if (!(c_ptr->info & (CAVE_MARK))) continue;
 
 		/* Feature code (applying "mimic" field) */
-		feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
-		
+		feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
+
 		/* Not looking for this feature */
 		if (!((*test)(feat))) continue;
 
@@ -1221,8 +1221,8 @@ void do_cmd_open(void)
 		c_ptr = &cave[y][x];
 
 		/* Feature code (applying "mimic" field) */
-		feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
-		
+		feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
+
 		/* Check for chest */
 		o_idx = chest_check(y, x);
 
@@ -1384,8 +1384,8 @@ void do_cmd_close(void)
 		c_ptr = &cave[y][x];
 
 		/* Feature code (applying "mimic" field) */
-		feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
-		
+		feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
+
 		/* Require open/broken door */
 		if ((feat != FEAT_OPEN) && (feat != FEAT_BROKEN))
 		{
@@ -1528,7 +1528,7 @@ static bool do_cmd_tunnel_aux(int y, int x)
 	c_ptr = &cave[y][x];
 
 	/* Feature code (applying "mimic" field) */
-	feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+	feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 	/* Sound */
 	sound(SOUND_DIG);
@@ -1839,7 +1839,7 @@ void do_cmd_tunnel(void)
 		c_ptr = &cave[y][x];
 
 		/* Feature code (applying "mimic" field) */
-		feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+		feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 		/* No tunnelling through doors */
 		if (((feat >= FEAT_DOOR_HEAD) && (feat <= FEAT_DOOR_TAIL)) ||
@@ -2353,7 +2353,7 @@ void do_cmd_disarm(void)
 		c_ptr = &cave[y][x];
 
 		/* Feature code (applying "mimic" field) */
-		feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+		feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 		/* Check for chests */
 		o_idx = chest_check(y, x);
@@ -2576,7 +2576,7 @@ void do_cmd_bash(void)
 		c_ptr = &cave[y][x];
 
 		/* Feature code (applying "mimic" field) */
-		feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+		feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 		/* Nothing useful */
 		if (!((feat >= FEAT_DOOR_HEAD) &&
@@ -2672,7 +2672,7 @@ void do_cmd_alter(void)
 		c_ptr = &cave[y][x];
 
 		/* Feature code (applying "mimic" field) */
-		feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+		feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 		/* Take a turn */
 		energy_use = 100;
@@ -2801,7 +2801,7 @@ void do_cmd_spike(void)
 		c_ptr = &cave[y][x];
 
 		/* Feature code (applying "mimic" field) */
-		feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+		feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 		/* Require closed door */
 		if (!((feat >= FEAT_DOOR_HEAD) &&

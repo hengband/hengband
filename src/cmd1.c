@@ -3927,7 +3927,7 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 		oktomove = FALSE;
 
 		/* Feature code (applying "mimic" field) */
-		feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+		feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 		/* Disturb the player */
 		disturb(0, 0);
@@ -4364,7 +4364,7 @@ static int see_wall(int dir, int y, int x)
 	c_ptr = &cave[y][x];
 
 	/* Feature code (applying "mimic" field) */
-	feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+	feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 	/* Must be known to the player */
 	if (c_ptr->info & (CAVE_MARK))
@@ -4749,7 +4749,7 @@ static bool run_test(void)
 		c_ptr = &cave[row][col];
 
 		/* Feature code (applying "mimic" field) */
-		feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+		feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 		/* Visible monsters abort running */
 		if (c_ptr->m_idx)
@@ -4974,7 +4974,7 @@ static bool run_test(void)
 			c_ptr = &cave[row][col];
 
 			/* Feature code (applying "mimic" field) */
-			feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+			feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 			/* Unknown grid or non-wall XXX XXX XXX cave_floor_grid(c_ptr)) */
 			if (!(c_ptr->info & (CAVE_MARK)) ||
@@ -5015,7 +5015,7 @@ static bool run_test(void)
 			c_ptr = &cave[row][col];
 
 			/* Feature code (applying "mimic" field) */
-			feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+			feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 			/* Unknown grid or non-wall XXX XXX XXX cave_floor_grid(c_ptr)) */
 			if (!(c_ptr->info & (CAVE_MARK)) ||
@@ -5145,12 +5145,12 @@ void run_step(int dir)
 	{
 		cave_type   *c_ptr;
 		byte feat;
-	
+
 		/* Access grid */
 		c_ptr = &cave[py+ddy[dir]][px+ddx[dir]];
 
 		/* Feature code (applying "mimic" field) */
-		feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+		feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 		/* Hack -- do not start silly run */
 		if (see_wall(dir, py, px) &&
