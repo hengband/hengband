@@ -2179,7 +2179,7 @@ static byte choose_realm(s32b choices, int *count)
 		c = inkey();
 		if (c == 'Q') birth_quit();
 		if (c == 'S') return 255;
-		if (c == ' ' || c == '\r')
+		if (c == ' ' || c == '\r' || c == '\n')
 		{
 			if(cs == n)
 			{
@@ -3864,7 +3864,7 @@ static bool get_player_race(void)
 		c = inkey();
 		if (c == 'Q') birth_quit();
 		if (c == 'S') return (FALSE);
-		if (c == ' ' || c == '\r')
+		if (c == ' ' || c == '\r' || c == '\n')
 		{
 			if(cs == MAX_RACES)
 			{
@@ -4076,7 +4076,7 @@ static bool get_player_class(void)
 		c = inkey();
 		if (c == 'Q') birth_quit();
 		if (c == 'S') return (FALSE);
-		if (c == ' ' || c == '\r')
+		if (c == ' ' || c == '\r' || c == '\n')
 		{
 			if(cs == MAX_CLASS_CHOICE)
 			{
@@ -4269,7 +4269,7 @@ static bool get_player_seikaku(void)
 		c = inkey();
 		if (c == 'Q') birth_quit();
 		if (c == 'S') return (FALSE);
-		if (c == ' ' || c == '\r')
+		if (c == ' ' || c == '\r' || c == '\n')
 		{
 			if(cs == MAX_SEIKAKU)
 			{
@@ -4567,6 +4567,7 @@ static bool get_stat_limits(void)
 		        break;
 		case ' ':
 		case '\r':
+		case '\n':
 			if(cs == 6) break;
 			cs++;
 			c = '2';
@@ -4644,7 +4645,7 @@ static bool get_stat_limits(void)
 		        bell();
 			break;
 		}
-		if(c == ESCAPE || ((c == ' ' || c == '\r') && cs == 6))break;
+		if(c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == 6))break;
 	}
 	
 	for (i = 0; i < 6; i++)
@@ -4809,6 +4810,7 @@ static bool get_chara_limits(void)
 			break; /*後でもう一回breakせんと*/
 		case ' ':
 		case '\r':
+		case '\n':
 			if(cs == 6) break;
 			cs++;
 			c = '6';
@@ -4933,7 +4935,7 @@ static bool get_chara_limits(void)
 			bell();
 			break;
 		}
-		if(c == ESCAPE || ((c == ' ' || c == '\r') && cs == 6))break;
+		if(c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == 6))break;
 	}
 
 	/* Input the minimum stats */
@@ -5097,7 +5099,7 @@ static bool player_birth_aux(void)
 		c = inkey();
 		if (c == 'Q') birth_quit();
 		if (c == 'S') return (FALSE);
-		if (c == ' ' || c == '\r')
+		if (c == ' ' || c == '\r' || c == '\n')
 		{
 			if(cs == MAX_SEXES)
 				k = rand_int(MAX_SEXES);
@@ -5726,7 +5728,7 @@ static bool player_birth_aux(void)
 			if (c == 'S') return (FALSE);
 
 			/* Escape accepts the roll */
-			if (c == '\r' || c == ESCAPE) break;
+			if (c == '\r' || c == '\n' || c == ESCAPE) break;
 
 			/* Reroll this character */
 			if ((c == ' ') || (c == 'r')) break;
@@ -5774,7 +5776,7 @@ static bool player_birth_aux(void)
 		}
 
 		/* Are we done? */
-		if (c == '\r' || c == ESCAPE) break;
+		if (c == '\r' || c == '\n' || c == ESCAPE) break;
 
 		/* Save this for the "previous" character */
 		save_prev_data();

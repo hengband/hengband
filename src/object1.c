@@ -5672,8 +5672,8 @@ if (other_query_flag && !verify("ËÜÅö¤Ë", k)) continue;
 				break;
 			}
 
-			case '\n':
 #if 0
+			case '\n':
 			case '\r':
 #endif
 			{

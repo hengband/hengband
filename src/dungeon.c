@@ -3765,6 +3765,7 @@ static void process_command(void)
 
 		/* Ignore return */
 		case '\r':
+		case '\n':
 		{
 			break;
 		}

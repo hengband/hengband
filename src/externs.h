@@ -1365,6 +1365,12 @@ extern int usleep(huge usecs);
 /* extern void main(void); */
 #endif
 
+#if defined(MAC_MPW)
+/* Globals needed */
+extern  u32b _ftype;
+extern  u32b _fcreator;
+#endif
+
 #ifdef WINDOWS
 /* main-win.c */
 /* extern int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, ...); */

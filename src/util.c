@@ -363,8 +363,19 @@ FILE *my_fopen(cptr file, cptr mode)
 {
 	char buf[1024];
 
+#if defined(MACINTOSH) && defined(MAC_MPW)
+	FILE *tempfff;
+#endif
+
 	/* Hack -- Try to parse the path */
 	if (path_parse(buf, 1024, file)) return (NULL);
+
+#if defined(MACINTOSH) && defined(MAC_MPW)
+	/* setting file type/creator -- AR */
+	tempfff = fopen(buf, mode);
+	fsetfileinfo(file, _fcreator, _ftype);
+	fclose(tempfff);
+#endif
 
 	/* Attempt to fopen the file anyway */
 	return (fopen(buf, mode));
@@ -685,8 +696,17 @@ int fd_make(cptr file, int mode)
 
 #else /* BEN_HACK */
 
+# if defined(MACINTOSH) && defined(MAC_MPW)
+
+	/* setting file type and creator -- AR */
+	errr_tmp = open(buf, O_CREAT | O_EXCL | O_WRONLY | O_BINARY, mode);
+	fsetfileinfo(file, _fcreator, _ftype);
+	return(errr_tmp);
+
+# else
 	/* Create the file, fail if exists, write-only, binary */
 	return (open(buf, O_CREAT | O_EXCL | O_WRONLY | O_BINARY, mode));
+# endif
 
 #endif /* BEN_HACK */
 

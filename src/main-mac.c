@@ -212,6 +212,18 @@
 #endif
 
 
+/*
+ * Globals for MPW compilation
+ */
+#ifdef MAC_MPW
+       /* Globals needed */
+       QDGlobals qd;
+       u32b _ftype;
+       u32b _fcreator;
+#endif
+
+
+
 #if 0
 
 /*
@@ -2065,7 +2077,7 @@ static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp)
 		ForeColor(blackColor);
 		
 		//CopyBits( srcBitMap, destBitMap, &srcRect, &destRect, srcCopy, NULL );
-		CopyBits( (BitMapPtr *)(td->bufferPix) 
+		CopyBits( (BitMapPtr)(td->bufferPix) 
 			, &(td->w->portBits), &srcRect, &destRect, srcCopy, NULL );
 		
 		/* Restore colors */
@@ -2794,10 +2806,8 @@ static void save_pref_file(void)
 	/* Assume failure */
 	fff = NULL;
 
-#if defined(MACINTOSH) && !defined(applec)
 	/* Text file */
 	_ftype = 'TEXT';
-#endif
 
 
 #ifdef USE_SFL_CODE
@@ -2830,7 +2840,8 @@ static void save_pref_file(void)
 			strcat(foo, "Angband Preferences");
 #endif
 			/* Open the preference file */
-			fff = fopen(foo, "w");
+			/* my_fopen set file type and file creator for MPW */
+			fff = my_fopen(foo, "w");
 
 			/* Success */
 			oops = FALSE;
@@ -2850,13 +2861,14 @@ static void save_pref_file(void)
 		SetVol(0, env.sysVRefNum);
 
 		/* Open the preference file */
+		/* my_fopen set file type and file creator for MPW */
 #ifdef JP
-		fff = fopen(":Preferences:Hengband Preferences", "w");
-		if (!fff) fff = fopen(":Hengband Preferences", "w");
+		fff = my_fopen(":Preferences:Hengband Preferences", "w");
+		if (!fff) fff = my_fopen(":Hengband Preferences", "w");
 
 #else
-		fff = fopen(":Preferences:Angband Preferences", "w");
-		if (!fff) fff = fopen(":Angband Preferences", "w");
+		fff = my_fopen(":Preferences:Angband Preferences", "w");
+		if (!fff) fff = my_fopen(":Angband Preferences", "w");
 #endif
 		/* Restore */
 		HSetVol(0, savev, saved);
@@ -5121,15 +5133,11 @@ void main(void)
 	SetupAppDir();
 
 
-#if defined(MACINTOSH) && !defined(applec)
-
 	/* Mark ourself as the file creator */
 	_fcreator = 'Heng';
 
 	/* Default to saving a "text" file */
 	_ftype = 'TEXT';
-
-#endif
 
 
 #if defined(__MWERKS__)
