@@ -134,6 +134,8 @@ static bool do_cmd_archer(void)
 		}
 		else
 		{
+			s16b slot;
+
 			/* Get local object */
 			q_ptr = &forge;
 
@@ -145,7 +147,7 @@ static bool do_cmd_archer(void)
 			apply_magic(q_ptr, p_ptr->lev, AM_NO_FIXED_ART);
 			q_ptr->discount = 99;
 
-			(void)inven_carry(q_ptr);
+			slot = inven_carry(q_ptr);
 
 			object_desc(o_name, q_ptr, 0);
 #ifdef JP
@@ -153,6 +155,9 @@ static bool do_cmd_archer(void)
 #else
 			msg_print("You make some ammo.");
 #endif
+
+			/* Auto-inscription */
+			if (slot > 0) autopick_alter_item(slot, FALSE);
 
 			/* Destroy the wall */
 			cave_alter_feat(y, x, FF_HURT_ROCK);
@@ -164,8 +169,8 @@ static bool do_cmd_archer(void)
 	else if (ext == 2)
 	{
 		int item;
-
 		cptr q, s;
+		s16b slot;
 
 		item_tester_hook = item_tester_hook_convertible;
 
@@ -189,7 +194,7 @@ static bool do_cmd_archer(void)
 		else
 		{
 			q_ptr = &o_list[0 - item];
-		}       
+		}
 
 		/* Get local object */
 		q_ptr = &forge;
@@ -222,14 +227,18 @@ static bool do_cmd_archer(void)
 			floor_item_describe(0 - item);
 			floor_item_optimize(0 - item);
 		}
-		(void)inven_carry(q_ptr);
+
+		slot = inven_carry(q_ptr);
+
+		/* Auto-inscription */
+		if (slot > 0) autopick_alter_item(slot, FALSE);
 	}
 	/**********Create bolts*********/
 	else if (ext == 3)
 	{
 		int item;
-
 		cptr q, s;
+		s16b slot;
 
 		item_tester_hook = item_tester_hook_convertible;
 
@@ -287,7 +296,10 @@ static bool do_cmd_archer(void)
 			floor_item_optimize(0 - item);
 		}
 
-		(void)inven_carry(q_ptr);
+		slot = inven_carry(q_ptr);
+
+		/* Auto-inscription */
+		if (slot > 0) autopick_alter_item(slot, FALSE);
 	}
 	return TRUE;
 }
