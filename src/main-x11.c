@@ -1831,7 +1831,7 @@ static x11_selection_type s_ptr[1];
  */
 static void react_keypress(XKeyEvent *xev)
 {
-	int i, n, mc, ms, mo, mx;
+	int i, n, mc, ms, mo;
 
 	uint ks1;
 
@@ -1889,11 +1889,10 @@ static void react_keypress(XKeyEvent *xev)
 	mc = (ev->state & ControlMask) ? TRUE : FALSE;
 	ms = (ev->state & ShiftMask) ? TRUE : FALSE;
 	mo = (ev->state & Mod1Mask) ? TRUE : FALSE;
-	mx = (ev->state & Mod2Mask) ? TRUE : FALSE;
 
 
 	/* Normal keys with no modifiers */
-	if (n && !mo && !mx && !IsSpecialKey(ks))
+	if (n && !mo && !IsSpecialKey(ks))
 	{
 		/* Enqueue the normal key(s) */
 		for (i = 0; buf[i]; i++) Term_keypress(buf[i]);
@@ -1940,18 +1939,18 @@ static void react_keypress(XKeyEvent *xev)
 	/* Hack -- Use the KeySym */
 	if (ks)
 	{
-		sprintf(msg, "%c%s%s%s%s_%lX%c", 31,
+		sprintf(msg, "%c%s%s%s_%lX%c", 31,
 			mc ? "N" : "", ms ? "S" : "",
-			mo ? "O" : "", mx ? "M" : "",
+			mo ? "O" : "",
 			(unsigned long)(ks), 13);
 	}
 
 	/* Hack -- Use the Keycode */
 	else
 	{
-		sprintf(msg, "%c%s%s%s%sK_%X%c", 31,
+		sprintf(msg, "%c%s%s%sK_%X%c", 31,
 			mc ? "N" : "", ms ? "S" : "",
-			mo ? "O" : "", mx ? "M" : "",
+			mo ? "O" : "",
 			ev->keycode, 13);
 	}
 
