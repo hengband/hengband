@@ -5133,6 +5133,9 @@ cptr make_screen_dump(void)
 		strcat(screen_buf, buf);
 	}
 
+	/* Close the file */
+	my_fclose(fff);
+
 	/* Remove the file */
 	fd_kill(file_name);
 

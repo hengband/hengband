@@ -239,6 +239,9 @@ static errr make_dump(BUF* dumpbuf)
 		(void)buf_append(dumpbuf, buf, strlen(buf));
 	}
 
+	/* Close the file */
+	my_fclose(fff);
+
 	/* Remove the file */
 	fd_kill(file_name);
 
