@@ -2671,6 +2671,16 @@ static bool inn_comm(int cmd)
 	switch (cmd)
 	{
 		case BACT_FOOD: /* Buy food & drink */
+			if (p_ptr->food >= PY_FOOD_FULL)
+			{
+#ifdef JP
+				msg_print("今は満腹だ。");
+#else
+				msg_print("You are full now.");
+#endif
+				return FALSE;
+			}
+
 #ifdef JP
 msg_print("バーテンはいくらかの食べ物とビールをくれた。");
 #else
