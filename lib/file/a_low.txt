@@ -89,7 +89,7 @@ N: 8:BIAS_WIS
 'Spiritual Focus'
 'Holy Strength'
 'Avatar of Hope'
-'Keeper of Minde'
+'Keeper of Mind'
 'Oracle's Attendant'
 'Peacehoper'
 'Seeker of Skybreak'
