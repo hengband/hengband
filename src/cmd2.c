@@ -260,9 +260,13 @@ void do_cmd_go_down(void)
 	}
 	else
 	{
+		int target_dungeon = 0;
+
 		if (!dun_level)
 		{
-			if (ironman_downward && (c_ptr->special != DUNGEON_ANGBAND))
+			target_dungeon = (c_ptr->feat == FEAT_ENTRANCE) ? c_ptr->special : DUNGEON_ANGBAND;
+
+			if (ironman_downward && (target_dungeon != DUNGEON_ANGBAND))
 			{
 #ifdef JP
 				msg_print("ダンジョンの入口は塞がれている！");
@@ -271,13 +275,13 @@ void do_cmd_go_down(void)
 #endif
 				return;
 			}
-			if (!max_dlv[c_ptr->special])
+			if (!max_dlv[target_dungeon])
 			{
 #ifdef JP
-				msg_format("ここには%sの入り口(%d階相当)があります", d_name+d_info[c_ptr->special].name, d_info[c_ptr->special].mindepth);
+				msg_format("ここには%sの入り口(%d階相当)があります", d_name+d_info[target_dungeon].name, d_info[target_dungeon].mindepth);
 				if (!get_check("本当にこのダンジョンに入りますか？")) return;
 #else
-				msg_format("There is the entrance of %s (Danger level: %d)", d_name+d_info[c_ptr->special].name, d_info[c_ptr->special].mindepth);
+				msg_format("There is the entrance of %s (Danger level: %d)", d_name+d_info[target_dungeon].name, d_info[target_dungeon].mindepth);
 				if (!get_check("Do you really get in this dungeon? ")) return;
 #endif
 			}
@@ -285,7 +289,7 @@ void do_cmd_go_down(void)
 			/* Save old player position */
 			p_ptr->oldpx = px;
 			p_ptr->oldpy = py;
-			dungeon_type = (byte)c_ptr->special;
+			dungeon_type = (byte)target_dungeon;
 		}
 
 		/* Hack -- take a turn */
@@ -297,12 +301,11 @@ void do_cmd_go_down(void)
 		if (c_ptr->feat == FEAT_MORE_MORE) down_num += 2;
 		else down_num += 1;
 
-
 		if (!dun_level)
 		{
 			/* Enter the dungeon just now */
 			p_ptr->enter_dungeon = TRUE;
-			down_num = d_info[c_ptr->special].mindepth;
+			down_num = d_info[dungeon_type].mindepth;
 		}
 
 		if (record_stair)
@@ -327,7 +330,7 @@ void do_cmd_go_down(void)
 		else
 		{
 			/* Success */
-			if(c_ptr->feat == FEAT_ENTRANCE)
+			if (target_dungeon)
 			{
 #ifdef JP
 				msg_format("%sへ入った。", d_text + d_info[dungeon_type].text);
