@@ -3467,6 +3467,14 @@ msg_format("%^sは怒った！", m_name);
  */
 bool monster_can_cross_terrain(byte feat, monster_race *r_ptr)
 {
+	/* Pit */
+	if (feat == FEAT_DARK_PIT)
+	{
+		if (r_ptr->flags7 & RF7_CAN_FLY)
+			return TRUE;
+		else
+			return FALSE;
+	}
 	/* Deep water */
 	if (feat == FEAT_DEEP_WATER)
 	{
