@@ -113,8 +113,9 @@ Automatically disarm traps    [easy_disarm]
 ***** <easy_floor>
 Display floor stacks in a list    [easy_floor]
     Lets you select an item from a stack on the floor by browsing a
-    list, Also floor stack are described as "You see a stack of n
-    items.", when there is more than one item on a floor grid.
+    list.  Also the look command will describe floor stack as "You see
+    a stack of n items.", when there is more than one item on a floor
+    grid, and display a list of items when you press 'x' at that time.
 
 ***** <use_command>
 Allow unified use command    [use_command]

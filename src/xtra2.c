@@ -3074,7 +3074,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 	int floor_list[23], floor_num = 0;
 
 	/* Scan all objects in the grid */
-	if (easy_floor && (mode & TARGET_LOOK))
+	if (easy_floor)
 	{
 		floor_num = scan_floor(floor_list, y, x, 0x02);
 
@@ -3232,7 +3232,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 		if ((query != '\r') && (query != '\n') && (query != ' ') && (query != 'x')) return query;
 
 		/* Sometimes stop at "space" key */
-		if ((query == ' ' || query == 'x') && !(mode & (TARGET_LOOK))) return query;
+		if ((query == ' ') && !(mode & (TARGET_LOOK))) return query;
 
 		/* Change the intro */
 #ifdef JP
@@ -3296,7 +3296,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 			if ((query != '\r') && (query != '\n') && (query != ' ') && (query != 'x')) return query;
 
 			/* Sometimes stop at "space" key */
-			if ((query == ' ' || query == 'x') && !(mode & (TARGET_LOOK))) return query;
+			if ((query == ' ') && !(mode & (TARGET_LOOK))) return query;
 
 			/* Change the intro */
 #ifdef JP
@@ -3476,7 +3476,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 			query = inkey();
 
 			/* Always stop at "normal" keys */
-			if ((query != '\r') && (query != '\n') && (query != ' ')) return query;
+			if ((query != '\r') && (query != '\n') && (query != ' ') && (query != 'x')) return query;
 
 			/* Sometimes stop at "space" key */
 			if ((query == ' ') && !(mode & TARGET_LOOK)) return query;
