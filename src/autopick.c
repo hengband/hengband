@@ -5372,7 +5372,10 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	}
 
 	case EC_DELETE_CHAR:
+	{
 		/* DELETE == go forward + BACK SPACE */
+
+		int len;
 
 		/* Ignore selection */
 		if (tb->mark)
@@ -5388,8 +5391,25 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 #endif
 		tb->cx++;
 
+		/* Pass through the end of line to next line */
+		len = strlen(tb->lines_list[tb->cy]);
+		if (len < tb->cx)
+		{
+			if (tb->lines_list[tb->cy + 1])
+			{
+				tb->cy++;
+				tb->cx = 0;
+			}
+			else
+			{
+				tb->cx = len;
+				break;
+			}
+		}
+
 		do_editor_command(tb, EC_BACKSPACE);
 		break;
+	}
 
 	case EC_BACKSPACE:
 	{
