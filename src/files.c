@@ -5492,18 +5492,21 @@ strcpy(tmp, "jhelp.hlp");
 		}
 
 		/* Advance a single line */
-		if ((k == '\n') || (k == '\r') || (k == '2'))
+		if ((k == '\n') || (k == '\r'))
 		{
 			line = line + (reverse ? -1 : 1);
 			if (line < 0) line = 0;
 		}
 
-		/* Advance a single line back */
+
+		/* Move up / down */
 		if (k == '8')
 		{
-			line = line + (reverse ? 1 : -1);
+			line--;
 			if (line < 0) line = 0;
 		}
+
+		if (k == '2') line++;
 
 		/* Advance one page */
 		if (k == ' ')
