@@ -8996,7 +8996,9 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 				monster_type *m_ptr = &m_list[cave[y][x].m_idx];
 				monster_race *ref_ptr = &r_info[m_ptr->r_idx];
 
-				if ((ref_ptr->flags2 & RF2_REFLECTING) && (flg & PROJECT_REFLECTABLE) && (!who || dist_hack > 1) && !one_in_(10))
+				if ((flg & PROJECT_REFLECTABLE) && cave[y][x].m_idx && (ref_ptr->flags2 & RF2_REFLECTING) &&
+				    ((cave[y][x].m_idx != p_ptr->riding) || !(flg & PROJECT_PLAYER)) &&
+				    (!who || dist_hack > 1) && !one_in_(10))
 				{
 					byte t_y, t_x;
 					int max_attempts = 10;
@@ -9030,8 +9032,8 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 					if (is_original_ap_and_seen(m_ptr)) ref_ptr->r_flags2 |= RF2_REFLECTING;
 
 					/* Reflected bolts randomly target either one */
-					if (one_in_(2)) flg |= PROJECT_PLAYER;
-					else flg &= ~(PROJECT_PLAYER);
+					if (player_bold(y, x) || one_in_(2)) flg &= ~(PROJECT_PLAYER);
+					else flg |= PROJECT_PLAYER;
 
 					/* The bolt is reflected */
 					project(cave[y][x].m_idx, 0, t_y, t_x, dam, typ, flg, monspell);
