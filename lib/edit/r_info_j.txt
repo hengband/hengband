@@ -21329,3 +21329,22 @@ D:彼はこの世界で最も偉大ないかさま師だ。いかなる剣の達人も彼に深い傷を
 D:負わせる事は不可能であり、死角を付いて嵐のように射ち出される彼の聖な
 D:る矢は幾多の犠牲者を葬ってきた。
 
+# バオー来訪者より
+N:1069:魔人ウォーケン
+E:Walken
+G:p:o
+I:125:40d100:100:140:10
+W:55:7:0:15000:0:0
+B:HIT:SHATTER:12d12
+B:HIT:SHATTER:12d12
+B:HIT:SHATTER:12d12
+F:UNIQUE | MALE | CAN_SPEAK
+F:DROP_SKELETON | DROP_CORPSE
+F:FORCE_MAXHP | HUMAN | EVIL | GOOD | KILL_BODY |
+F:REFLECTING | IM_FIRE | IM_COLD | IM_ACID | NO_FEAR
+F:OPEN_DOOR | BASH_DOOR | REGENERATE |
+S:1_IN_4
+S:BR_DISI
+D:彼は今は滅びた一族、スクークム族の最後の生き残りだ。
+D:「ウォーケンは物質の分子を振動させることができる超能力者なのだ！」
+D:（荒木飛呂彦「バオー来訪者」）
