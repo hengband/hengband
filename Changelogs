@@ -1,6 +1,12 @@
 2002-01-27  Takeshi Mogami  <mogami@akiru>
 
 	* src/report.c:
+	make_screen_dump()で自動変数の配列の初期化を関数内でやっていたが、
+	一部の環境でエラーになると思うので、static の配列にした。
+
+	* Changelogs: 更新
+
+	* src/report.c:
 	タイルグラフィックモードでは、make_screen_dump()は何もしないで帰える
 	ように修正。
 
