@@ -5015,7 +5015,7 @@ cptr spell_names[VALID_REALM][32] =
 
 	{
 		/* Common Crusade Spellbooks */
-		"Zap",
+		"Punishment",
 		"Detect Evil",
 		"Remove Fear",
 		"Scare Monster",
