@@ -4041,7 +4041,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 	 */
 	else if (have_flag(f_ptr->flags, FF_TREE) && !p_can_kill_walls)
 	{
-		if ((p_ptr->pclass != CLASS_RANGER) && !p_ptr->levitation) energy_use *= 2;
+		if ((p_ptr->pclass != CLASS_RANGER) && !p_ptr->levitation && (!p_ptr->riding || !(riding_r_ptr->flags8 & RF8_WILD_WOOD))) energy_use *= 2;
 	}
 
 #ifdef ALLOW_EASY_DISARM /* TNB */
