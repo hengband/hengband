@@ -1077,7 +1077,7 @@ static void rd_lore(int r_idx)
 static void home_carry(store_type *st_ptr, object_type *o_ptr)
 {
 	int 				slot;
-	s32b			   value, j_value;
+	s32b			   value;
 	int 	i;
 	object_type *j_ptr;
 
@@ -1110,45 +1110,7 @@ static void home_carry(store_type *st_ptr, object_type *o_ptr)
 	/* Check existing slots to see if we must "slide" */
 	for (slot = 0; slot < st_ptr->stock_num; slot++)
 	{
-		/* Get that item */
-		j_ptr = &st_ptr->stock[slot];
-
-		/* Hack -- readable books always come first */
-		if ((o_ptr->tval == mp_ptr->spell_book) &&
-			(j_ptr->tval != mp_ptr->spell_book)) break;
-		if ((j_ptr->tval == mp_ptr->spell_book) &&
-			(o_ptr->tval != mp_ptr->spell_book)) continue;
-
-		/* Objects sort by decreasing type */
-		if (o_ptr->tval > j_ptr->tval) break;
-		if (o_ptr->tval < j_ptr->tval) continue;
-
-		/* Can happen in the home */
-		if (!object_is_aware(o_ptr)) continue;
-		if (!object_is_aware(j_ptr)) break;
-
-		/* Objects sort by increasing sval */
-		if (o_ptr->sval < j_ptr->sval) break;
-		if (o_ptr->sval > j_ptr->sval) continue;
-
-		/* Objects in the home can be unknown */
-		if (!object_is_known(o_ptr)) continue;
-		if (!object_is_known(j_ptr)) break;
-
-		/*
-		 * Hack:  otherwise identical rods sort by
-		 * increasing recharge time --dsb
-		 */
-		if (o_ptr->tval == TV_ROD)
-		{
-			if (o_ptr->pval < j_ptr->pval) break;
-			if (o_ptr->pval > j_ptr->pval) continue;
-		}
-
-		/* Objects sort by decreasing value */
-		j_value = object_value(j_ptr);
-		if (value > j_value) break;
-		if (value < j_value) continue;
+		if (object_sort_comp(o_ptr, value, &st_ptr->stock[slot])) break;
 	}
 
 	/* Slide the others up */
