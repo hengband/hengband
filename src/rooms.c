@@ -1192,7 +1192,7 @@ static bool vault_aux_jelly(int r_idx)
 	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
 
-	if (r_ptr->flags2 & (RF2_KILL_BODY)) return (FALSE);
+	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return (FALSE);
 
 	/* Also decline evil jellies (like death molds and shoggoths) */
 	if (r_ptr->flags3 & (RF3_EVIL)) return (FALSE);
@@ -1330,7 +1330,7 @@ static bool vault_aux_symbol_e(int r_idx)
 	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
 
-	if (r_ptr->flags2 & (RF2_KILL_BODY)) return (FALSE);
+	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return (FALSE);
 
 	if (r_ptr->flags3 & (RF3_GOOD)) return (FALSE);
 
@@ -1352,7 +1352,7 @@ static bool vault_aux_symbol_g(int r_idx)
 	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
 
-	if (r_ptr->flags2 & (RF2_KILL_BODY)) return (FALSE);
+	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return (FALSE);
 
 	if (r_ptr->flags3 & (RF3_EVIL)) return (FALSE);
 
@@ -1463,7 +1463,7 @@ static bool vault_aux_demon(int r_idx)
 	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
 
-	if (r_ptr->flags2 & (RF2_KILL_BODY)) return (FALSE);
+	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return (FALSE);
 
 	/* Require demon */
 	if (!(r_ptr->flags3 & RF3_DEMON)) return (FALSE);
@@ -1483,7 +1483,7 @@ static bool vault_aux_cthulhu(int r_idx)
 	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
 
-	if (r_ptr->flags2 & (RF2_KILL_BODY)) return (FALSE);
+	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return (FALSE);
 
 	/* Require eldritch horror */
 	if (!(r_ptr->flags2 & (RF2_ELDRITCH_HORROR))) return (FALSE);
