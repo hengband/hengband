@@ -3111,6 +3111,8 @@ errr init_x11(int argc, char *argv[])
 				/* Use graphics */
 				use_graphics = TRUE;
 
+				use_transparency = TRUE;
+			
 				pict_wid = pict_hgt = 8;
 
 				ANGBAND_GRAF = "old";

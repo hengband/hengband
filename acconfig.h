@@ -11,3 +11,4 @@
 #undef X_LOCALE
 #undef CHUUKEI
 #undef WORLD_SCORE
+#undef USE_TRANSPARENCY
