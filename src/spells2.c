@@ -1778,7 +1778,7 @@ info[i++] = "あなたは幻覚を見ている。";
 #ifdef JP
 info[i++] = "あなたは邪悪な怨念に包まれている。";
 #else
-		info[i++] = "You nanka.";
+		info[i++] = "You carry an ancient foul curse.";
 #endif
 
 	}
@@ -1796,7 +1796,7 @@ info[i++] = "あなたはモンスターを怒らせている。";
 #ifdef JP
 info[i++] = "あなたは経験値を吸われている。";
 #else
-		info[i++] = "You nanka.";
+		info[i++] = "You are drained.";
 #endif
 
 	}
@@ -1805,7 +1805,7 @@ info[i++] = "あなたは経験値を吸われている。";
 #ifdef JP
 info[i++] = "あなたの回復力は非常に遅い。";
 #else
-		info[i++] = "You nanka.";
+		info[i++] = "You regenerate slowly.";
 #endif
 
 	}
@@ -1814,7 +1814,7 @@ info[i++] = "あなたの回復力は非常に遅い。";
 #ifdef JP
 info[i++] = "あなたは..."; /* nanka */
 #else
-		info[i++] = "You nanka.";
+		info[i++] = "You are ...";
 #endif
 
 	}
@@ -1823,7 +1823,7 @@ info[i++] = "あなたは..."; /* nanka */
 #ifdef JP
 info[i++] = "あなたは..."; /* nanka */
 #else
-		info[i++] = "You nanka.";
+		info[i++] = "You are ...";
 #endif
 
 	}
@@ -1832,7 +1832,7 @@ info[i++] = "あなたは..."; /* nanka */
 #ifdef JP
 info[i++] = "あなたは動物に狙われている。";
 #else
-		info[i++] = "You nanka.";
+		info[i++] = "You attract animals.";
 #endif
 
 	}
@@ -1841,7 +1841,7 @@ info[i++] = "あなたは動物に狙われている。";
 #ifdef JP
 info[i++] = "あなたは悪魔に狙われている。";
 #else
-		info[i++] = "You nanka.";
+		info[i++] = "You attract demons.";
 #endif
 
 	}
@@ -1850,7 +1850,7 @@ info[i++] = "あなたは悪魔に狙われている。";
 #ifdef JP
 info[i++] = "あなたはドラゴンに狙われている。";
 #else
-		info[i++] = "You nanka.";
+		info[i++] = "You attract dragons.";
 #endif
 
 	}
@@ -1877,7 +1877,7 @@ info[i++] = "あなたの位置はひじょうに不安定だ。";
 #ifdef JP
 info[i++] = "あなたの武器は攻撃を外しやすい。";
 #else
-		info[i++] = "You nanka.";
+		info[i++] = "Your weapon causes you miss blows.";
 #endif
 
 	}
@@ -1886,7 +1886,7 @@ info[i++] = "あなたの武器は攻撃を外しやすい。";
 #ifdef JP
 info[i++] = "あなたは攻撃を受けやすい。";
 #else
-		info[i++] = "You nanka.";
+		info[i++] = "You are subject to be hit.";
 #endif
 
 	}
@@ -1895,7 +1895,7 @@ info[i++] = "あなたは攻撃を受けやすい。";
 #ifdef JP
 info[i++] = "あなたは魔法を失敗しやすい。";
 #else
-		info[i++] = "You nanka.";
+		info[i++] = "You are subject to fail spellcasting.";
 #endif
 
 	}
@@ -1904,7 +1904,7 @@ info[i++] = "あなたは魔法を失敗しやすい。";
 #ifdef JP
 info[i++] = "あなたはすぐお腹がへる。";
 #else
-		info[i++] = "You nanka.";
+		info[i++] = "You have a good appetite.";
 #endif
 
 	}
@@ -1913,7 +1913,7 @@ info[i++] = "あなたはすぐお腹がへる。";
 #ifdef JP
 info[i++] = "あなたは体力を吸われている。";
 #else
-		info[i++] = "You nanka.";
+		info[i++] = "You are drained.";
 #endif
 
 	}
@@ -1922,7 +1922,7 @@ info[i++] = "あなたは体力を吸われている。";
 #ifdef JP
 info[i++] = "あなたは魔力を吸われている。";
 #else
-		info[i++] = "You nanka.";
+		info[i++] = "You brain is drained.";
 #endif
 
 	}

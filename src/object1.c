@@ -3445,7 +3445,7 @@ info[i++] = "それは経験値を吸い取る。";
 #ifdef JP
 info[i++] = "それは回復力を弱める。";
 #else
-		info[i++] = "It nanka.";
+		info[i++] = "It slows your regenerative powers.";
 #endif
 
 	}
@@ -3454,7 +3454,7 @@ info[i++] = "それは回復力を弱める。";
 #ifdef JP
 info[i++] = "それは弱い呪いを増やす。";
 #else
-		info[i++] = "It nanka.";
+		info[i++] = "It adds weak curses.";
 #endif
 
 	}
@@ -3463,7 +3463,7 @@ info[i++] = "それは弱い呪いを増やす。";
 #ifdef JP
 info[i++] = "それは強力な呪いを増やす。";
 #else
-		info[i++] = "It nanka.";
+		info[i++] = "It adds heavy curses.";
 #endif
 
 	}
@@ -3472,7 +3472,7 @@ info[i++] = "それは強力な呪いを増やす。";
 #ifdef JP
 info[i++] = "それは動物を呼び寄せる。";
 #else
-		info[i++] = "It nanka.";
+		info[i++] = "It attracts animals.";
 #endif
 
 	}
@@ -3481,7 +3481,7 @@ info[i++] = "それは動物を呼び寄せる。";
 #ifdef JP
 info[i++] = "それは悪魔を呼び寄せる。";
 #else
-		info[i++] = "It nanka.";
+		info[i++] = "It attracts demons.";
 #endif
 
 	}
@@ -3490,7 +3490,7 @@ info[i++] = "それは悪魔を呼び寄せる。";
 #ifdef JP
 info[i++] = "それはドラゴンを呼び寄せる。";
 #else
-		info[i++] = "It nanka.";
+		info[i++] = "It attracts dragons.";
 #endif
 
 	}
@@ -3499,7 +3499,7 @@ info[i++] = "それはドラゴンを呼び寄せる。";
 #ifdef JP
 info[i++] = "それは恐怖感を引き起こす。";
 #else
-		info[i++] = "It nanka.";
+		info[i++] = "It makes you subject to cowardice.";
 #endif
 
 	}
@@ -3517,7 +3517,7 @@ info[i++] = "それはランダムなテレポートを引き起こす。";
 #ifdef JP
 info[i++] = "それは攻撃を外しやすい。";
 #else
-		info[i++] = "It nanka.";
+		info[i++] = "It causes you miss blows.";
 #endif
 
 	}
@@ -3526,7 +3526,7 @@ info[i++] = "それは攻撃を外しやすい。";
 #ifdef JP
 info[i++] = "それは攻撃を受けやすい。";
 #else
-		info[i++] = "It nanka.";
+		info[i++] = "It helps your enemys' blows.";
 #endif
 
 	}
@@ -3535,7 +3535,7 @@ info[i++] = "それは攻撃を受けやすい。";
 #ifdef JP
 info[i++] = "それは魔法を唱えにくくする。";
 #else
-		info[i++] = "It nanka.";
+		info[i++] = "It is unsuitable for spellcasting.";
 #endif
 
 	}
@@ -3544,7 +3544,7 @@ info[i++] = "それは魔法を唱えにくくする。";
 #ifdef JP
 info[i++] = "それはあなたの新陳代謝を速くする。";
 #else
-		info[i++] = "It nanka.";
+		info[i++] = "It speeds your metabolism.";
 #endif
 
 	}
@@ -3553,7 +3553,7 @@ info[i++] = "それはあなたの新陳代謝を速くする。";
 #ifdef JP
 info[i++] = "それはあなたの体力を吸い取る。";
 #else
-		info[i++] = "It nanka.";
+		info[i++] = "It drains you.";
 #endif
 
 	}
@@ -3562,7 +3562,7 @@ info[i++] = "それはあなたの体力を吸い取る。";
 #ifdef JP
 info[i++] = "それはあなたの魔力を吸い取る。";
 #else
-		info[i++] = "It nanka.";
+		info[i++] = "It drains your mana.";
 #endif
 
 	}
