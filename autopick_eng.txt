@@ -22,7 +22,7 @@
 #      ^B ^N ^P ^F    :  Move cursor (always)
 #      ^I  : Choose an item from inventry/equipment, then insert its name
 #      ^S  : Rotates action (pick up / destroy / leave on floor)
-#      ^U  : Rotates idendify state (identified / unidentified / ...)
+#      ^U  : Rotates identify state (identified / unidentified / ...)
 #      ^L  : Insert name of the last auto-destroyed item.
 #      '/' : Search string, or search an item specified by ^I or ^L.
 #      'n' : Search next
@@ -78,7 +78,7 @@
 #      more than N dice  : Weapons with dice (dd * ds) better than +N match.
 #      more bonus than N : Items which has more magical bonus than (+N) match.
 #      worthless         : Items which you cannot sell match.
-#      artifacts         : Artifacts items match.
+#      artifacts         : Artifact items match.
 #      ego               : Ego items match.
 #      nameless          : Non ego/non artifact items match.
 #      wanted            : Wanted monster's corpses or skeletons match.
@@ -208,7 +208,7 @@
 #          If all args are same, returns "1", or else returns "0".
 #        [IOR arg1 arg2 ...]
 #        [AND arg1 arg2 ...]
-#          IOR evaluates and returns all args' logical OR. IAND is logical AND.
+#          IOR evaluates and returns all args' logical OR. AND is logical AND.
 #        [NOT arg]
 #          Returns "0" if arg is "1", or else returns "1"
 #        [LEQ arg1 arg2 ...]
