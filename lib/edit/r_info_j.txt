@@ -18013,7 +18013,7 @@ S:SPECIAL
 D:怒りに狂った王蟲の群は障気をまき散らしながら突進してくる。
 
 N:880:時を統べる者『リチャード・ウォン』
-E:Wong, Master of Time
+E:Richard Wong, Master of Time
 G:p:w
 I:135:60d100:100:190:20
 W:81:3:0:45000:0:0
