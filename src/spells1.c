@@ -1064,35 +1064,46 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 		case GF_DARK_WEAK:
 		case GF_DARK:
 		{
-			if (!p_ptr->inside_battle)
+			bool do_dark = !p_ptr->inside_battle && !is_mirror_grid(c_ptr);
+			int j;
+
+			/* Turn off the light. */
+			if (do_dark)
 			{
-				/* Turn off the light. */
-				if (!is_mirror_grid(c_ptr))
+				for (j = 0; j < 9; j++)
 				{
-					c_ptr->info &= ~(CAVE_GLOW);
-
-					/* Hack -- Forget "boring" grids */
-					if (!have_flag(f_ptr->flags, FF_REMEMBER))
+					if (have_flag(f_flags_bold(y + ddy_ddd[j], x + ddx_ddd[j]), FF_GLOW))
 					{
-						/* Forget */
-						c_ptr->info &= ~(CAVE_MARK);
-
-						/* Notice */
-						note_spot(y, x);
+						do_dark = FALSE;
+						break;
 					}
+				}
 
-					/* Redraw */
-					lite_spot(y, x);
+				if (!do_dark) break;
 
-					update_local_illumination(y, x);
+				c_ptr->info &= ~(CAVE_GLOW);
+
+				/* Hack -- Forget "boring" grids */
+				if (!have_flag(f_ptr->flags, FF_REMEMBER))
+				{
+					/* Forget */
+					c_ptr->info &= ~(CAVE_MARK);
 
 					/* Notice */
-					if (player_can_see_bold(y, x)) obvious = TRUE;
-
-					/* Mega-Hack -- Update the monster in the affected grid */
-					/* This allows "spear of light" (etc) to work "correctly" */
-					if (c_ptr->m_idx) update_mon(c_ptr->m_idx, FALSE);
+					note_spot(y, x);
 				}
+
+				/* Redraw */
+				lite_spot(y, x);
+
+				update_local_illumination(y, x);
+
+				/* Notice */
+				if (player_can_see_bold(y, x)) obvious = TRUE;
+
+				/* Mega-Hack -- Update the monster in the affected grid */
+				/* This allows "spear of light" (etc) to work "correctly" */
+				if (c_ptr->m_idx) update_mon(c_ptr->m_idx, FALSE);
 			}
 
 			/* All done */

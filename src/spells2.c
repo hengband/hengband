@@ -6091,15 +6091,28 @@ static void cave_temp_room_unlite(void)
 	{
 		int y = temp_y[i];
 		int x = temp_x[i];
+		int j;
 
 		cave_type *c_ptr = &cave[y][x];
+		bool do_dark = !is_mirror_grid(c_ptr);
 
 		/* No longer in the array */
 		c_ptr->info &= ~(CAVE_TEMP);
 
 		/* Darken the grid */
-		if (!is_mirror_grid(c_ptr))
+		if (do_dark)
 		{
+			for (j = 0; j < 9; j++)
+			{
+				if (have_flag(f_flags_bold(y + ddy_ddd[j], x + ddx_ddd[j]), FF_GLOW))
+				{
+					do_dark = FALSE;
+					break;
+				}
+			}
+
+			if (!do_dark) continue;
+
 			c_ptr->info &= ~(CAVE_GLOW);
 
 			/* Hack -- Forget "boring" grids */

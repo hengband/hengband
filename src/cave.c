@@ -442,10 +442,10 @@ void update_local_illumination(int y, int x)
 	}
 	else /* Player's grid */
 	{
-		for (i = 0; i < 9; i++)
+		for (i = 0; i < 8; i++)
 		{
-			yy = y + ddy_ddd[i];
-			xx = x + ddx_ddd[i];
+			yy = y + ddy_cdd[i];
+			xx = x + ddx_cdd[i];
 			if (!player_has_los_bold(yy, xx)) continue;
 
 			/* Update the monster */
