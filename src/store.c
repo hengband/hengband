@@ -3352,6 +3352,8 @@ msg_format("%s(%c)を購入する。", o_name, I2A(item));
 			/* Player can afford it */
 			if (p_ptr->au >= price)
 			{
+				int idx;
+
 				/* Say "okay" */
 				say_comment_1();
 
@@ -3416,6 +3418,9 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 						   o_name, index_to_label(item_new));
 #endif
 
+				/* Auto-inscription */
+				idx = is_autopick(&inventory[item_new]);
+				auto_inscribe_item(item_new, idx);
 
 				/* Now, reduce the original stack's pval. */
 				if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
