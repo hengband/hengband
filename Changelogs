@@ -1,4 +1,448 @@
+2003-09-19  henkma  <henkma@cvs>
+
+	* lib/file/a_low.txt 1.8: fixed a typo.
+
+2003-09-19  nothere  <nothere@cvs>
+
+	* src/effects.c 1.46, src/object2.c 1.100, src/spellstips.h 1.31:
+	匠魔法 "武器属性付与" の詠唱にはどちらかの手に武器が必要とした. また,
+	武器を外すと効果が切れるようにした.
+
+2003-09-18  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.85: テキスト選択範囲の振舞い変更。
+
+	* src/autopick.c 1.84, src/externs.h 1.147:
+	空行が全てのアイテムにヒットしていた大バグ。
+
+	* src/cmd4.c 1.105, src/defines.h 1.147, src/files.c 1.130, src/monster2.c 1.86:
+	既に使用していない MD_ASSUME_OUTSIDE フラグ関連の処理を削除。
+
+	* lib/pref/pickpref.prf 1.8, lib/pref/picktype.prf 1.7:
+	新自動拾いエディタにはメニューにヘルプがあるので、デフォルト設定の中のコマンド説明は削除。
+
+	* lib/help/commdesc.txt 1.9, lib/help/editor.txt 1.1, lib/help/jcommdesc.txt 1.8, lib/help/jeditor.txt 1.1, lib/help/jpref.hlp 1.4, lib/help/jpref.txt 1.18, lib/help/pref.hlp 1.6, lib/help/pref.txt 1.21:
+	新自動拾いエディタに対応。英語版 editor.txt はまだ説明文章が不足だが、そのうち書く。
+
+	* src/autopick.c 1.83:
+	修正2つ。最下行をカットするとクラッシュ。行末より右にカーソルが(表示上で)位置する時にテキスト選択を始めると表示がバグる。
+
+	* src/autopick.c 1.82:
+	色々修正。カットとコピーはテキストを選択しないで使うとカーソルのある1行だけを対象にする。
+
+2003-09-18  nothere  <nothere@cvs>
+
+	* src/main-win.c 1.25, src/z-rand.c 1.6, src/z-rand.h 1.6:
+	koka氏のパッチを取り込み, Windowsでsound.cfgの設定が有効にならなかっ
+	たバグを修正.
+
+	* src/xtra1.c 1.84:
+	地上やクエストで "地上" の表示が灰色になっていたバグを修正. ついでに,
+	if文をswitch文で整理.
+
+	* src/cmd1.c 1.103:
+	1.101の変更のうち, "一撃必殺時のダメージが現HP+1より元々大きかった場
+	合はそのままのダメージを使う" 変更を破棄.
+
+	* src/cmd1.c 1.102:
+	壁を掘れるモンスターに乗馬した場合にドアを掘れずに埋まっていたバグを
+	修正. また, 魔王変化等でプレイヤーが壁を掘れる場合に開いたドアも壊し
+	ていたバグを修正.
+
+2003-09-18  Takeshi Mogami  <mogami@cvs>
+
+	* src/main-x11.c 1.26:
+	マウスでコピーする時、行の最後に余計なスペース文字の列があったら削除するようにした。
+
+	* src/dungeon.c 1.139:
+	ゲーム開始時に、change_floor()を呼ぶ前の prepare_change_floor_mode() が無かった為、ダンジョン内で階段を作る処理が行なわれてしまっていたバグを修正。
+
+2003-09-18  iks  <iks@cvs>
+
+	* src/xtra1.c 1.83: 階の雰囲気による階数表示の色分けをやや詳細化した。
+	色を指定する変数の型がintになっていたので、byteに修正。
+
+2003-09-18  nothere  <nothere@cvs>
+
+	* src/cmd1.c 1.101: 打撃に関する細かい修正.
+	* 形式上, 死の大鎌での自爆やマーシャルアーツのダイスにもプレイヤー自
+	  身のダイスボーナスを適用するようにした.
+	* 毒針や剣術 "急所突き", 忍者の一撃必殺ではダメージが現 HP + 1より元
+	  々大きかった場合はそのままのダメージを使うようにした.
+	* 英語版での★斬鉄剣でのメッセージについて, "Sign" -> "Sigh".
+	* 一部メッセージで#ifdefの使い方を変えて行を削った.
+	* 少しだけコード整理.
+	* 字下げの修正.
+
+2003-09-17  henkma  <henkma@cvs>
+
+	* src/main-x11.c 1.25:
+	英語版でコンパイル(正確にはリンク)通ってなかったのを修正.
+
+2003-09-17  nothere  <nothere@cvs>
+
+	* src/cmd2.c 1.61:
+	現在はありえないが, 地上に普通の下り階段や坑道があった場合は鉄獄の入り口
+	として扱うように変更.
+
+	* src/floors.c 1.26:
+	vanilla_townでスタート地点の階段が荒野への階段になったり, lite_townで
+	鉄獄への階段を降りられなくなり, 事実上ゲームが開始できないバグを修正.
+	ダンジョンの入り口で使っているc_ptr->specialを保存フロアIDとみなして
+	処理を行っていたことで起きていたので, c_ptr->specialを特別な意味で使
+	う地形を保存フロアの処理に使わないように修正.
+
+2003-09-16  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.81, src/cmd4.c 1.104:
+	自動拾いエディタ、未実装部分を直した。オプション画面で「P」を押しても自動拾いエディタに入れるようにした。後はヘルプ文章を書けば完了かと。
+
+	* src/dungeon.c 1.138, src/xtra1.c 1.82:
+	階数の表示色を雰囲気によって変える仕様をSAngから移植する楠瀬さんのパッチ。
+
+	* src/externs.h 1.146, src/util.c 1.44, src/variable.c 1.47, src/autopick.c 1.80:
+	自動拾いエディタを大幅に改良。viタイプだったのを完全にやめて、ESCキーでメニューが出るVZ editorタイプにした。全てのキーワードがメニューに出るので、説明を読まなくてもある程度使えるはず。
+
+	* src/main-x11.c 1.24:
+	マウスによるコピー&ペーストで漢字が使えなかったので、使えるようにした。
+	漢字はCOMPOUND_TEXTという形式にする必要があった。
+
+2003-09-16  nothere  <nothere@cvs>
+
+	* src/dungeon.c 1.137:
+	vanilla_town/lite_townでは "辺境の地" ではなく "街" から始まるので,
+	playrecordに "街に降り立った" と記録されるように修正.
+
+	* src/rooms.c 1.54:
+	cheat_room時に, ダンジョンに生成された部屋の数を表示するように変更.
+
+	* src/cmd1.c 1.100:
+	vanilla_town/lite_townでの街の外壁や世界の果てにぶつかった場合に何の
+	メッセージも出なかったので, メッセージが出るようにした. また, フロア
+	境界の山にぶつかった場合に "壁" と書かず "山" と書くようにした.
+
+	* src/cmd1.c 1.99, src/hissatsu.c 1.29, src/mutation.c 1.12, src/spells2.c 1.84, src/spells3.c 1.96:
+	乗馬中のプレイヤーがドアを開けたりするとプレイヤーのいるグリッドの
+	m_idxが0になって, モンスターがいないことになるバグを修正. また, 乗馬
+	のいるグリッドのm_idx処理を少し変更. p_ptr->ridingを直接使える場合は
+	使うようにした.
+
+	* src/rooms.c 1.53:
+	room_build()で呼ばれているbuild_type*()による各種部屋生成が失敗しても
+	room_build()は無条件でTRUEを返し生成成功であるかのように扱っていたの
+	で, build_type*()の成功/失敗を上位のroom_build()が返すように変更.
+
+	* src/rooms.c 1.52:
+	lesser vaultやgreater vaultの生成失敗時のreturn FALSEする位置を変更.
+	また, cheat_room時にはlesser vaultかgreater vaultかを区別して表示する
+	ようにした.
+
+	* src/rooms.c 1.51:
+	例えば, トラップpitのタイプとしてシンボル(善)(U)といったものが指定さ
+	れた場合, 善良または中立の非ユニークの'U'は存在しないため, モンスター
+	のいないトラップpitが生成されていた. この現象は普通のpit/nestでも起き
+	ていた. そこで, モンスターの種別決定を部屋作成の前に持ってくることに
+	より, 空のpit/nestが生成されないように修正. また, トラップpitが鉄獄で
+	しか生成されない条件のダンジョンIDは記号定数に直した.
+
+	* src/cmd4.c 1.103:
+	*鑑定*装備リスト表示部分のコードの整形と整理. 表示対象に耐性のアミュ
+	レットを追加.
+
+2003-09-15  nothere  <nothere@cvs>
+
+	* src/cave.c 1.124:
+	bigtileモード時にlite_spot()された部分が全体マップウィンドウ, 自分の
+	周囲ウィンドウに反映されなかったバグを修正.
+
+	* src/cmd1.c 1.98, src/dungeon.c 1.136, src/hissatsu.c 1.28, src/melee2.c 1.78, src/mind.c 1.29, src/monster2.c 1.85, src/mspells1.c 1.68, src/mspells2.c 1.64, src/spells1.c 1.86, src/spells3.c 1.95:
+	モンスターの光源の更新に関する変更と修正.
+	* モンスターをテレポートさせる, あるいはモンスターがテレポートすると
+	  モンスター光源が残るバグを修正.
+	* モンスターの座標が変わった際にモンスター光源アップデートが必要な部
+	  分の追加.
+	* モンスター単体が座標移動する, 起きる, あるいは消去される場合に, 光
+	  源持ちでない場合にもモンスター光源のアップデートが行われていた部分
+	  があったので, そういった場合には行わないようにした.
+	* 光源持ちでないモンスターが光源持ちモンスターを押しのけた場合にモン
+	  スター光源のアップデートが行われなかったバグを修正.
+	* 乗馬のIDからm_list[], r_info[]を引いていた部分の一部のポインタ化.
+
+	* lib/help/dungeon.txt 1.9:
+	"隠しドアに決して鍵が掛かっていない" 記述を削除.
+
+	* lib/help/jdungeon.txt 1.7:
+	ランダムに長い階段/坑道になる記述が残っていたので削除.
+
+	* src/dungeon.c 1.135, src/externs.h 1.145, src/flavor.c 1.40, src/init1.c 1.65, src/japanese.c 1.12, src/object1.c 1.74, src/util.c 1.43, src/xtra1.c 1.81:
+	SJIS環境で, 例として{八咫}と刻んだアイテムを鑑定の巻物や杖で鑑定しよ
+	うとすると選択肢の文字が指定していない文字に変わっていた. これはSJIS
+	では "八咫" の文字コードが0x94, 0xAA, 0x9A, 0x40であるため, この銘は
+	{(文字列)@'\0'} とみなされていた. 2回目以降のアイテム選択では
+	command_cmd = 0としたため, '@' の次である '\0' がマッチし, 文字列の次
+	にあるゴミを選択肢として使ってしまい, 場合によっては配列外アクセスも
+	起こす可能性があった. このバグに対処するため, init1.cにある_strchr()
+	をjapanese.cに移転し, strchr_j()と変更. アイテムの銘を始めとして日本
+	語文字列からstrchr()する場合に限りstrchr_j()を適切に#defineでかぶせて
+	使うようにした.
+
+2003-09-12  nothere  <nothere@cvs>
+
+	* lib/file/mondeath_j.txt 1.4:
+	死天使『アズリエル』, 告知者『ラファエル』の死亡時の台詞が一般モンス
+	ターと同じになっていたバグを修正.
+
+2003-09-10  Takeshi Mogami  <mogami@cvs>
+
+	* src/rooms.c 1.50:
+	- greater vault 等を他の部屋と同じ1部屋として最大部屋数を数えていたので、大きい部屋は部屋数相当数も大きくした。
+	- また、find_space() がランダムに「数打ちゃ当たる」法で部屋の配置する場所を探していて、信頼性が低かったので、しらみ潰しの方法で書き直した。
+	- random vault が greater vault と同じ確率だったが、これはおかしいので確率を半分位にした。
+
+	* autopick.txt 1.21, autopick_eng.txt 1.26, lib/help/jpref.txt 1.17, lib/help/pref.txt 1.20:
+	「*未鑑定*の〜」は抜けていたんじゃなくて、未実装なのだった。autopick.txtのコマンド説明部分で間違って書いてあっただけだった。ドキュメント再修正。
+
+	* autopick.txt 1.20, autopick_eng.txt 1.25, lib/help/jpref.txt 1.16, lib/help/pref.txt 1.19:
+	「*未鑑定*の〜」の説明が抜けていた。
+
+2003-09-09  Takeshi Mogami  <mogami@cvs>
+
+	* src/bldg.c 1.52:
+	闘技場で闘った後、保存フロアを復帰する為に一瞬外に出るが、その時1ターン消費してしまっていたので、消費しないように修正。
+
+	* src/externs.h 1.144, src/japanese.c 1.11, src/load.c 1.80:
+	漢字コード判別の使い方を間違っていたので訂正。さらに漢字コード判別処理自体も厳密化した。
+
+2003-09-08  nothere  <nothere@cvs>
+
+	* src/files.c 1.129: ダンプに関する変更.
+	* 各種オプションのON/OFF表示の桁を揃えた. また, 英語版では各オプ
+	  ションの行の単語は全て大文字で始まるように統一.
+	* 日本語版では "アリーナ: ON" となっている場所が英語版では "Arena
+	  Levels: ENABLED" となっているので, ENABLEDで統一した.
+	* 闘技場情報の前には改行を入れた. また, vanilla_townもしくはlite_town
+	  では闘技場情報は非表示にした.
+
+	* src/cmd4.c 1.102:
+	オプションで'D', 'H', 'M'を使うと "コマンド:" 行が2重に表示されるバグ
+	を修正. また, メニュー中での "低魔力色閾値" の表示位置修正.
+
+2003-09-07  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/jpref.txt 1.15, lib/help/pref.txt 1.18, src/autopick.c 1.79, autopick.txt 1.19, autopick_eng.txt 1.24:
+	自動破壊キーワード「得意武器」=「favorite weapons」実装。
+
+	* src/chuukei.c 1.10, src/externs.h 1.143, src/japanese.c 1.10, src/load.c 1.79, src/save.c 1.42:
+	セーブファイルに kanji_code をセーブして、それを元に変換するようにした。
+	古いバージョンのセーブファイルは unknownを意味する kanji_code == 0 になり、
+	これは以前と同様に自動判別する。
+
+	* src/externs.h 1.142, src/japanese.c 1.9, src/load.c 1.78, src/scores.c 1.17:
+	先の変更取り消し。セーブファイルに情報を埋め込む事にする。
+
+	* src/externs.h 1.141, src/japanese.c 1.8, src/load.c 1.77, src/scores.c 1.16:
+	文字コードの判定のミスを減らした。メッセージ履歴をロードした段階でEUCで無い事を判定できれば以降はSJISを仮定する。
+
+	* lib/help/joption.txt 1.27, lib/help/option.txt 1.26, lib/edit/k_info.txt 1.12, src/autopick.c 1.78:
+	「スピードモンスターの魔法棒」の価値を$1に変更。
+	「回復モンスターの魔法棒」は魔獣使いと騎兵では leave_special で簡易自動破壊を防止。
+
+	* src/birth.c 1.81, src/bldg.c 1.51, src/cmd1.c 1.97, src/cmd2.c 1.60, src/cmd6.c 1.63, src/defines.h 1.146, src/dungeon.c 1.134, src/effects.c 1.45, src/floors.c 1.25, src/load.c 1.76, src/save.c 1.41, src/types.h 1.37, src/wild.c 1.33, src/wizard2.c 1.46:
+	- floors.c のコード整理。フロア保存をするかどうかの判断をなるべく
+	floors.c の外でするようにした。
+	- Kangband時代の名残りの無駄な変数 p_ptr->leftbldg を削除。
+
+2003-09-06  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd5.c 1.77, src/defines.h 1.145, src/externs.h 1.140, src/floors.c 1.24, src/load.c 1.75, src/melee2.c 1.77, src/monster2.c 1.84, src/mspells2.c 1.63, src/save.c 1.40, src/spells1.c 1.85, src/types.h 1.36:
+	ペット(親)が召喚したペット(子)はプレイヤーの直接のペットでは無くした。
+	- (親)が消滅すると(子)も消える。
+	- (子)はモンスターボールに入らない。
+	- 階の移動時に(子)は付いて来ない。付いてくるようにしたいが実装が難しい。
+	- 階の移動時に(親)だけ連れて行くと(子)は消える。(親)も残せば(子)も残る。
+
+2003-09-05  Takeshi Mogami  <mogami@cvs>
+
+	* src/spells2.c 1.83: 調査を使って思い出情報が補完された時、
+	「あなたのワイバーン(乗馬中)についてさらに詳しくなったような気がする。」
+	などと表示されてしまっていたので、
+	「ワイバーンについてさらに詳しくなったような気がする。」
+	に修正。
+
+	* src/z-config.h 1.11: commit忘れ。
+
+	* src/monster1.c 1.44, src/monster2.c 1.83, src/mspells1.c 1.67, src/types.h 1.35, src/xtra1.c 1.80, src/z-config.h 1.10:
+	z-config.h内の無意味なオプション用マクロを削除。
+
+	* src/wizard1.c 1.35: formatが違った。%d -> %ld
+
+2003-09-05  nothere  <nothere@cvs>
+
+	* src/bldg.c 1.50:
+	宿屋に24時間いつでも泊まれるように変更. 朝や昼に泊まった場合は当日の
+	18:00に起きる.
+
+2003-09-05  Takeshi Mogami  <mogami@cvs>
+
+	* src/birth.c 1.80, src/bldg.c 1.49, src/defines.h 1.144, src/dungeon.c 1.133, src/externs.h 1.139, src/floors.c 1.23, src/generate.c 1.70, src/load.c 1.74, src/monster2.c 1.82, src/save.c 1.39:
+	闘技場でペットを保存するのにparty_mon[]を使うのをやめて、保存フロアにした。
+
+2003-09-05  nothere  <nothere@cvs>
+
+	* src/cmd3.c 1.42:
+	Mogami氏より#ifdef JPの使い方を変えないように指示があり, この部分の使
+	い方を戻した.
+
+	* src/monster1.c 1.43:
+	mon_hook_floor()内でmon_hook_dungeon()は不要だったので削除. これによ
+	り, 街が無人になるバグを修正.
+
+	* src/cmd3.c 1.41:
+	do_cmd_wield()の装備メッセージの分岐をswitch文に変更. kamaenaoshi()で
+	のif文の使い方の変更.
+
+	* src/cmd3.c 1.40, src/cmd5.c 1.76, src/defines.h 1.143, src/files.c 1.128, src/racial.c 1.43, src/xtra1.c 1.79, src/cmd1.c 1.96:
+	empty_hands()の戻り値の意味を記号定数化. 不等号を使っていた部分は論理
+	演算に置き換えた.
+
+	* src/object1.c 1.73:
+	describe_use()内でINVEN_RARM, INVEN_LARMに対して返す文字列の先頭だけ
+	スペースが残っていたので削除.
+
+	* src/cmd3.c 1.39:
+	do_cmd_wield()のtvalによる分岐をswitch文で書き直して整理. また, 二刀
+	流時に利き腕の武器が呪われている状況で盾を利き腕に装備しようとしても
+	その呪われた武器を利き腕の逆に持ち替えないように変更. なお, EASY_RING
+	だった部分の#if 1はわざわざ#if 0にするとは思えないので削除.
+
+2003-09-05  henkma  <henkma@cvs>
+
+	* src/files.c 1.124.2.1:
+	'C'コマンドでのMPの色が昔の仕様(HP警告を使う)のままだったので修正.
+
+	* src/defines.h 1.142, src/load.c 1.73:
+	バージョンの上げ方間違えてたので修正.
+
+2003-09-04  henkma  <henkma@cvs>
+
+	* src/defines.h 1.141, src/externs.h 1.138, src/files.c 1.127, src/load.c 1.72, src/save.c 1.38, src/variable.c 1.46, src/xtra1.c 1.78, src/cmd4.c 1.101:
+	HP警告と同様に, MP警告のオプションを導入.
+	ただし効果はMPの色の変わる閾値(黄色→赤)だけで, ビープや警告メッセージは無し.
+
+2003-09-04  nothere  <nothere@cvs>
+
+	* src/cmd1.c 1.95:
+	性格いかさまでアイテムを拾った際にdestroy_identifyが有効の場合は自動
+	破壊を使えるように変更. 通常の鑑定と同じ動作とした.
+
+	* src/bldg.c 1.48, src/cmd1.c 1.94, src/cmd3.c 1.38, src/spells1.c 1.84, src/spells3.c 1.94, src/store.c 1.35:
+	性格いかさまでアイテムを拾った/装備したとき, 歌 "知識の歌" を使って範
+	囲鑑定したとき, 店に複数アイテムの一部だけを売却したとき, 魔法アイテ
+	ム充填の前処理として鑑定したとき, そして全鑑定サービスといった状況で
+	はアイテムに自動銘刻みを用いるように変更. これらの状況では自動破壊は
+	行わない.
+
+	* src/bldg.c 1.47: 12:00-18:00の時間帯に宿屋に泊まれていたバグを修正.
+
+2003-09-03  nothere  <nothere@cvs>
+
+	* src/mspells1.c 1.66, src/mspells2.c 1.62, src/mspells3.c 1.32, src/spells1.c 1.83:
+	モンスターのセービングスロー系魔法に関する変更.
+	* モンスター対モンスターでの魔力吸収, 精神攻撃, 脳攻撃, 各種呪いを
+	  扱いの整理を兼ねてproject()で扱うように変更. なお, プレイヤーが
+	  使った場合とモンスターが使った場合で判定式や状態変化期間が異なる部
+	  分は可能な限りそのままにしている.
+	* プレイヤーに対する魔力吸収をproject()で扱うように変更.
+	* 精神攻撃, 脳攻撃をEMPTY_MINDには無効, WEIRD_MINDは耐性がありダメー
+	  ジ1/3とした.
+	* project_m()内の詠唱モンスターレベルが除算で細かく違っていたので, 扱
+	  いを少し変更. 最初は除算しないようにした.
+	* "破滅の手" -> "<破滅の手>".
+	* モンスター同士での魔力吸収の判定がおかしかったバグ修正.
+	* who_name[0]を2重に初期化していた部分の修正.
+	* monspell == -1の場合でも落ちないようにlearn_spell()内にパラノイア
+	  コード追加.
+	* project_p()内でのMS_*直接指定を変数monspellに修正.
+
+	* src/defines.h 1.140, src/melee2.c 1.76, src/mspells1.c 1.65, src/mspells2.c 1.61, src/spells1.c 1.82, src/spells2.c 1.82:
+	乗馬中のプレイヤーとモンスターに対する半径0のボールの挙動のバグ修正.
+	PROJECT_MONSTERは全く参照されていなかったので, 新しくPROJECT_AIMEDと
+	いうフラグを導入. このフラグと同時にPROJECT_PLAYERがあれば乗馬中の
+	モンスターには絶対に当たらず, このフラグだけの場合は乗馬中のプレイ
+	ヤーには当たらない. これらを用い, プレイヤーに対する呪い系魔法, モン
+	スター同士の打撃戦 (実装上は至近距離でのボール魔法の撃ち合い) の挙動
+	を修正. プレイヤーに対する呪い系魔法では乗馬は巻き添えにならず, 乗馬
+	に対する打撃ではプレイヤーが巻き添えにならないように修正. この過程で,
+	以下の修正を含む.
+	* 乗馬中のプレイヤーが呪い系攻撃を受けるとその直後にプレイヤー自身が
+	  乗馬を呪ったメッセージが出ていたバグを修正.
+	* 乗馬中のモンスターが劣化属性打撃を受けるとプレイヤーが劣化ボールの
+	  巻き添えになり, プレイヤーの装備まで劣化していたバグを修正.
+	* 座標に関する論理演算のミスと思われる部分の修正. "||" -> "&&".
+	* Typo fix.
+
+	* src/wizard1.c 1.34:
+	モンスタースポイラーの補助資料として, スポイラーファイル生成にモンス
+	ターの進化系統データの出力を追加.
+
+2003-09-02  nothere  <nothere@cvs>
+
+	* lib/edit/t_lite.txt 1.2: "アンバーの王族" -> "アンバライト".
+
+	* src/bldg.c 1.46, src/externs.h 1.137, src/spells3.c 1.93:
+	帰還に関する変更.
+	* トランプの塔での階層指定テレポート時のダンジョン選択メニュー表示部
+	  分を帰還とフロア・リセットで用いられるchoose_dungeon()に統合. この
+	  都合で, 階層指定テレポート時の表示レイアウトが少しだけ変わった.
+	* vanilla_town, lite_town, ironman_downward時は入れるダンジョンは鉄獄
+	  だけであるため, 複数ダンジョンが選べるような操作ではメニューを出さ
+	  ずに自動的に鉄獄だけが選ばれるように変更.
+	* 入ったダンジョンが1つもない場合はメニューの代わりにエラーメッセージ
+	  を出すように変更. エラーメッセージはどのキーを押しても消える.
+
+2003-09-02  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/birth.hlp 1.7, lib/help/birth.txt 1.12, lib/help/jbirth.hlp 1.7, lib/help/jbirth.txt 1.11, lib/help/joption.hlp 1.5, lib/help/joption.txt 1.26, lib/help/jtown.txt 1.7, lib/help/option.hlp 1.6, lib/help/option.txt 1.25, lib/help/town.txt 1.6, src/birth.c 1.79, src/files.c 1.126, src/variable.c 1.45:
+	改名 startup option -> birth option
+
+2003-09-02  nothere  <nothere@cvs>
+
+	* src/cmd4.c 1.100:
+	初期オプションを参照専用で見ている場合は変更キーの説明を出さないよう
+	にし, 'y' 'n' キーでは反応しないように変更. また, "Startup" ->
+	"Birth" と変更.
+
+	* src/cmd4.c 1.99:
+	'=' から初期オプションを参照専用で見られるようにした. ウィザードモー
+	ドかつデバッグコマンド許可の場合のみ操作を許可した.
+
+	* src/wild.c 1.32: Typo fix.
+
+	* src/dungeon.c 1.132:
+	モンスターを消滅させる変異が街で発動し店主が入れ替わるメッセージが出
+	たら, 店主が必ず入れ替わるように変更.
+
+	* src/cmd4.c 1.98, src/obj_kind.c 1.4, src/xtra2.c 1.101:
+	vanilla_townでは賞金首を換金できないため, 賞金首の概念が存在しないか
+	のように扱い, 賞金首一覧を表示せず, 自動拾いのキーワードにもヒットし
+	ないように変更.
+
+	* src/dungeon.c 1.131, src/store.c 1.34:
+	vanilla_town, lite_townでは店主が変わらないことによる不利益が大きいの
+	で, これらのモードに限りターン経過でごく稀に店主が交替するように変更.
+	Vanillaにならい, ダンジョンにいる間にしか店主交替は起きない. なお, 以
+	下の修正を含む.
+	* 店主交替時に, 店頭に並んだ固定アーティファクトが{売出中}になるバグ
+	  を修正.
+
+2003-09-01  nothere  <nothere@cvs>
+
+	* src/files.c 1.125:
+	隠密行動能力が0の場合は"悪い"と書かずに"最低"と書くように変更.
+
 2003-08-31  Takeshi Mogami  <mogami@cvs>
+
+	* Changelogs 1.73: 更新。
 
 	* src/birth.c 1.78, src/bldg.c 1.45, src/externs.h 1.136, src/monster1.c 1.42, src/monster2.c 1.81, src/rooms.c 1.49:
 	hook関数 monster_* を mon_hook_* と改名。これらはstatic関数にした。
