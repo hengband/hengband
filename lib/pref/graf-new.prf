@@ -546,10 +546,21 @@ F:85:0xB6/0x9D
 F:86:0xB6/0x9A
 
 # Dirt
-F:88:0xB6/0x94
+F:88:0xBB/0x9D
 
 # Grass
-F:89:0xB6/0x97
+F:89:0xBB/0x8E
+
+#N:90:compact rune
+
+# flower
+F:93:0xBE/0x86
+
+# brake
+F:94:0xBB/0x91
+
+# museun
+F:95:0x87/0xAD
 
 # Trees
 F:96:0x82/0x9A
@@ -557,6 +568,80 @@ F:96:0x82/0x9A
 # Mountain
 F:97:0x8D/0x98
 
+#N:128:Building:U
+
+#N:129:Building:U
+
+#N:130:Building:v
+
+#N:131:Building:v
+
+#N:132:Building:U
+
+#N:133:Building:U
+
+#N:134:Building:U
+
+#N:135:Building:o
+
+#N:136:Building:R
+
+#N:137:Building:G
+
+#N:138:Building:v
+
+#N:139:Building:u
+
+#N:140:Building:w
+
+#N:141:Building:B
+
+#N:142:Building:B
+
+#N:143:Building:B
+
+#N:144:Building:B
+
+#N:145:Building:B
+
+#N:146:Building:B
+
+#N:147:Building:B
+
+#N:148:Building:B
+
+#N:149:Building:B
+
+#N:150:Building:B
+
+#N:151:Building:B
+
+#N:152:Building:B
+
+#N:153:Building:B
+
+#N:154:Building:B
+
+#N:155:Building:B
+
+#N:156:Building:B
+
+#N:157:Building:B
+
+#N:158:Building:B
+
+#N:159:Building:B
+
+# Town
+F:192:0xB3/0xB5
+
+# Entrance to dungeon
+F:193:0x80/0x99
+
+# Swamp
+F:194:0xBB/0x9A
+
+# Mirror
 
 ##### Object attr/char definitions #####
 
@@ -2118,6 +2203,222 @@ K:562:0xB6/0x85
 # Haramakido
 K:563:0xB6/0x81
 
+# Incandescent Light~
+
+#N:566:Mundanity
+K:566:0x83/0x9C
+
+#N:567:Magical Figurine
+
+#N:568:Wooden Statue
+
+#N:569:Clay Statue
+
+#N:570:Stone Statue
+
+#N:571:Iron Statue
+
+#N:572:Copper Statue
+
+#N:573:Silver Statue
+
+#N:574:Golden Statue
+
+#N:575:Ivory Statue
+
+#N:576:Mithril Statue
+
+#N:577:Ornate Statue
+
+#N:578:Skeleton
+K:578:0x8E/0x96
+
+#N:579:Corpse
+K:579:0xA8/0xA1
+
+#N:580:T-shirt
+
+#N:581:Wizardstaff
+K:581:0xA8/0xA0
+
+#N:582:Feanorian lamp
+K:582:0xC5/0x96
+
+#N:583:Stone to Mud
+K:583:0x86/0x83
+
+#N:584:Gloves of Dragon
+
+#N:585:Dragon Boots
+
+#N:586:Ring~
+K:586:0x84/0x95
+
+#N:587:Telepathy
+K:587:0x87/0x80
+
+#N:588:Gun
+
+#N:589:Palantir
+K:589:0xC6/0x87
+
+#N:590:Stone
+
+#N:591:Amulet
+
+#N:592:Poison Needle
+
+#N:593:Capture Ball
+
+#N:594:Death Scythe
+
+#N:595:Neo Tsuyoshi Special
+K:595:0x85/0x85
+
+#N:596:Extra Shots
+K:596:0x87/0x80
+
+#N:597:Card
+
+#N:598:Sustaining
+K:598:0x87/0x80
+
+#N:599:Mana
+K:599:0x87/0x80
+
+#N:600:Spell
+K:600:0x83/0x9C
+
+#N:601:Summon Pet
+K:601:0x83/0x9C
+
+#N:602:Torque~
+
+#N:603:Tsuyoshi Special
+K:603:0x85/0x85
+
+#N:604[Handbook for Pupils]
+
+#N:605:[Grade Holder's Book]
+
+#N:606:[Note of Acting Master]
+
+#N:607:[Spiritual Enlightenment]
+
+#N:608:Animate Dead
+K:608:0x87/0x92
+
+#N:609:Levitation Stone~
+
+#N:610:Bead~
+
+#N:611:Ethereal Cloak~
+
+#N:612:Mirror~
+
+#N:613:Black Arrow~
+
+#N:614:Sexy Swimsuit
+
+#N:615:Fishingpole~
+
+#N:616:Inro~
+
+#N:617:Polymorph
+K:617:0x85/0x85
+
+#N:618:Warning
+K:618:0x87/0x80
+
+#N:619:Steel Bolt~
+K:619:0xB6/0xA2
+
+#N:620:Can~ of Toys
+
+#N:621:Stick~
+K:621:0xA6/0xB2
+
+#N:622:Yumi~
+K:622:0xB6/0xBA
+
+#N:623:Clothes~
+
+#N:624:Intelligence
+K:624:0x87/0x80
+
+#N:625:Wisdom
+K:625:0x87/0x80
+
+#N:626:Reinforce Muscle
+K:626:0x87/0x80
+
+#N:627:Knight's Shield~
+
+#N:628:Striking
+K:628:0x86/0x93
+
+#N:629:Mana Storm
+K:629:0x87/0x92
+
+#N:630:Reset Recall
+
+# [Apprentice Handbook]
+K:631:0xB8/0x87
+
+# [Minstrel's Music]
+K:632:0xB8/0x87
+
+# [Harps of Rivendell]
+K:633:0xB8/0x87
+
+# [Lays of Beleriand]
+K:634:0xB8/0x87
+
+#N:635:Falcon Sword
+
+# Adventurer's guide to Middle Earth
+K:636:0x73/0xBE
+
+#N:637:[Bugei Shofu]
+
+#N:638:[Yagyuu Bugeichou]
+
+#N:639:[Gorinnosho]
+
+#N:640:[Hokusin Ittouryuu Kaiden]
+
+#N:641:Annihilation
+K:641:0x86/0x93
+
+#N:642:Aggravate Monster
+K:642:0x86/0x83
+
+#N:643:Photograph~ of #
+
+#N:644:Magic Device Mastery
+K:644:0x87/0x80
+
+#N:645:Robe~
+
+#N:646:[Dark Incantations]
+
+#N:647:[Immortal Rituals]
+
+#N:648:[Demonthoughts]
+
+#N:649:[Hellfire Tome]
+
+#N:650:Summon Kin
+K:650:0x83/0x9C
+
+#N:651:Magic Whistle
+K:651:0xB8/0x88
+
+#N:652:Amulet
+
+#N:653:Black Clothes
+
+
 
 ##### Monster attr/char definitions #####
 
@@ -3398,6 +3699,7 @@ R:423:0x9D/0x84
 R:424:0xA3/0x8C
 
 #N:425:Flamer of Tzeentch
+R:425:0xA8/0xBF
 
 # Roper
 R:426:0xB9/0x9D
@@ -3445,7 +3747,6 @@ R:439:0xB1/0x94
 R:440:0xA2/0x96
 
 # Barney the Dinosaur
-R:441:0xB1/0x95
 
 # Black knight
 R:442:0xAB/0x88
@@ -3903,11 +4204,13 @@ R:592:0xA6/0x98
 R:593:0xA6/0x99
 
 #N:594:Sky whale
+R:594:0xAB/0xBB
 
 # Father Dagon
 R:595:0xB1/0x98
 
 #N:596:Mother Hydra
+R:596:0xA2/0x98
 
 # Death knight
 R:597:0xAB/0x94
@@ -3951,6 +4254,7 @@ R:609:0xB2/0x92
 #N:610:Scylla
 
 #N:611:Monastic lich
+R:611:0xA1/0x87
 
 # Nether wraith
 R:612:0xA4/0x85
@@ -3991,14 +4295,19 @@ R:623:0xA3/0x9C
 R:624:0x9E/0x8C
 
 #N:625:Weird fume
+R:625:0xA9/0xA6
 
 #N:626:Spawn of Ubbo-Sathla
+R:626:0xAB/0xBD
 
 #N:627:Fat Man
+R:627:0xA9/0xA5
 
 #N:628:Malekith the Accursed
+R:628:0xA7/0x95
 
 #N:629:Morgenstern, Julian's steed
+R:629:0xAB/0xBE
 
 # Spirit troll
 R:630:0xA3/0x98
@@ -4052,6 +4361,7 @@ R:645:0x9E/0x8F
 R:646:0x9E/0x90
 
 #N:647:Wyrd sister
+R:647:0xA7/0x9D
 
 # Clubber demon
 R:648:0xB2/0x95
@@ -4060,6 +4370,7 @@ R:648:0xB2/0x95
 R:649:0xA0/0x99
 
 #N:650:Giganto the Gargantuan
+R:650:0xAB/0xBF
 
 # Strygalldwir
 R:651:0xB2/0x96
@@ -4067,12 +4378,16 @@ R:651:0xB2/0x96
 #N:652:Fallen angel
 
 #N:653:Giant headless
+R:653:0xAC/0xA0
 
 #N:654:Judge Fire
+R:654:0xAB/0x93
 
 #N:655:Ubbo-Sathla, the Unbegotten Source
+R:655:0xAC/0xA1
 
 #N:656:Judge Mortis
+R:656:0xAC/0xA2
 
 # Dark elven sorceror
 R:657:0xA8/0x81
@@ -4108,14 +4423,17 @@ R:666:0xB2/0x9C
 R:667:0xA0/0x81
 
 #N:668:Greater basilisk
+R:668:0xAC/0xA3
 
 #N:669:Charybdis
+R:669:0xAC/0xA4
 
 #N:670:Jack of Shadows
 
 #N:671:Zephyr Lord
 
 #N:672:Juggernaut of Khorne
+R:672:0xAC/0xA5
 
 # Mumak
 R:673:0xAC/0x82
@@ -4139,17 +4457,22 @@ R:679:0x9F/0x8F
 #N:680:Death leprechaun
 
 #N:681:Chaugnar Faugn, Horror from the Hills
+R:681:0xAC/0xB4
 
 #N:682:Lloigor
+R:682:0xAC/0xB5
 
 #N:683:Utgard-Loke
+R:683:0xAC/0xB6
 
 #N:684:Quachil Uttaus, Treader of the Dust
+R:684:0xAC/0xB7
 
 # Shoggoth
 R:685:0xB2/0x98
 
 #N:686:Judge Death
+R:686:0xAC/0xB9
 
 # Ariel, Queen of Air
 R:687:0x9F/0x91
@@ -4175,6 +4498,7 @@ R:693:0xB2/0x9E
 #N:694:Lesser black reaver
 
 #N:695:Zoth-Ommog
+R:695:0xAE/0xB9
 
 # Nazgul
 R:696:0xB2/0x9F
@@ -4205,12 +4529,16 @@ R:703:0x9E/0x94
 R:705:0xB3/0x82
 
 #N:706:Yibb-Tstll the Patient One
+R:706:0xAC/0xBB
 
 #N:707:Ghatanothoa
+R:707:0xAC/0xBC
 
 #N:708:Ent
+R:708:0xAC/0xA6
 
 #N:709:Hru
+R:709:0xAC/0xBD
 
 #N:710:Itangast the Fire Drake
 
@@ -4228,6 +4556,7 @@ R:712:0xB3/0x83
 R:715:0xAD/0x9A
 
 #N:716:Behemoth
+R:716:0xAD/0xA0
 
 #N:717:Garm, Guardian of Hel
 
@@ -4264,11 +4593,13 @@ R:727:0xA1/0x9D
 R:728:0x9E/0x97
 
 #N:729:Ulik the Troll
+R:729:0xAD/0xA1
 
 # Baphomet the Minotaur Lord
 R:730:0xA0/0x90
 
 #N:731:Hell knight
+R:731:0xAD/0xA2
 
 # Bull Gates
 R:732:0xB3/0x87
@@ -4277,10 +4608,13 @@ R:732:0xB3/0x87
 R:733:0xB3/0x88
 
 #N:734:Eihort, the Thing in the Labyrinth
+R:734:0xAE/0xAA
 
 #N:735:The King in Yellow
+R:735:0xAE/0xAB
 
 #N:736:Great unclean one
+R:736:0xAE/0xAC
 
 # Lord of Chaos
 R:737:0xB3/0x89
@@ -4292,6 +4626,7 @@ R:738:0xA4/0x8B
 R:739:0xB3/0x8A
 
 #N:740:Lesser kraken
+R:740:0xAD/0xA3
 
 # Great ice wyrm
 R:741:0x9E/0x98
@@ -4305,10 +4640,13 @@ R:743:0x9D/0x98
 R:744:0xA4/0x8C
 
 #N:745:Lord of Change
+R:745:0xAC/0xA7
 
 #N:746:Keeper of Secrets
+R:746:0xAE/0xAD
 
 #N:747:Shudde M'ell
+R:747:0xAE/0xAE
 
 # Hand druj
 R:748:0xAC/0x8E
@@ -4326,6 +4664,7 @@ R:751:0xAC/0x9B
 R:752:0xAC/0x9C
 
 #N:753:Nidhogg the Hel-Drake
+R:753:0xAE/0xAF
 
 # The Lernean Hydra
 R:754:0xA2/0x9B
@@ -4340,6 +4679,7 @@ R:756:0x9E/0x99
 R:757:0xB3/0x8B
 
 #N:758:Bloodthirster
+R:758:0xAD/0xA4
 
 # Draconic quylthulg
 R:759:0xA1/0x9E
@@ -4348,8 +4688,10 @@ R:759:0xA1/0x9E
 R:760:0xB3/0x8C
 
 #N:761:Ahtu, Avatar of Nyarlathotep
+R:761:0xAE/0xB0
 
 #N:762:Fundin Bluecloak
+R:762:0xAE/0xB1
 
 # Dworkin Barimen
 R:763:0xB3/0x8D
@@ -4364,6 +4706,7 @@ R:765:0x9D/0x95
 R:766:0x9E/0x9A
 
 #N:767:Daoloth, the Render of the Veils
+R:767:0xAE/0xB2
 
 # Nightwalker
 R:768:0xA4/0x8D
@@ -4372,11 +4715,13 @@ R:768:0xA4/0x8D
 R:769:0x9D/0x96
 
 #N:770:Artsi the Champion of Chaos
+R:770:0xAE/0xB3
 
 # Saruman of Many Colours
 R:771:0xAB/0x9E
 
 #N:772:Gandalf the Grey
+R:772:0xB0/0xAB
 
 # Brand, Mad Visionary of Amber
 R:773:0xB3/0x8E
@@ -4385,6 +4730,7 @@ R:773:0xB3/0x8E
 R:774:0xA0/0x86
 
 #N:775:Greater kraken
+R:775:0xAD/0xA6
 
 #N:776:Archlich
 
@@ -4398,10 +4744,13 @@ R:778:0xB3/0x90
 R:779:0xA5/0x85
 
 #N:780:Vlad Dracula, Prince of Darkness
+R:780:0xAE/0xB5
 
 #N:781:Ultimate beholder
+R:781:0xAE/0xB6
 
 #N:782:Leviathan
+R:782:0xAD/0xA7
 
 # Great Wyrm of Chaos
 R:783:0x9E/0x9B
@@ -4416,8 +4765,10 @@ R:785:0x9E/0x9D
 R:786:0xB3/0x91
 
 #N:787:Hypnos, Lord of Sleep
+R:787:0xB3/0xAD
 
 #N:788:Glaaki
+R:788:0xA9/0xA8
 
 # Bleys, Master of Manipulation
 R:789:0xB3/0x92
@@ -4444,6 +4795,7 @@ R:795:0x9E/0x9E
 R:796:0xB3/0x97
 
 #N:797:Rhan-Tegoth
+R:797:0xAE/0xB9
 
 # Black reaver
 R:798:0xA1/0x85
@@ -4461,6 +4813,7 @@ R:801:0xA2/0x80
 R:802:0xA2/0x81
 
 #N:803:Null the Living Void
+R:803:0xAC/0xA8
 
 # Vecna, the Emperor Lich
 R:804:0xA1/0x86
@@ -4469,6 +4822,7 @@ R:804:0xA1/0x86
 R:805:0xA7/0x81
 
 #N:806:Tsathoggua, the Sleeper of N'kai
+R:806:0xAE/0xBA
 
 # Gerard, Strongman of Amber
 R:807:0xB3/0x99
@@ -4480,6 +4834,7 @@ R:808:0xA3/0x88
 R:809:0xB3/0x9A
 
 #N:810:Y'golonac
+R:810:0xAE/0xBB
 
 # Aether hound
 R:811:0xA5/0x86
@@ -4490,6 +4845,7 @@ R:811:0xA5/0x86
 R:813:0xB3/0x9B
 
 #N:814:Yig, Father of Serpents
+R:814:0xAE/0xBC
 
 # Unmaker
 R:815:0xB3/0x9C
@@ -4498,6 +4854,7 @@ R:815:0xB3/0x9C
 R:816:0xB3/0x9D
 
 #N:817:Hela, Queen of the Dead
+R:817:0xAE/0xBD
 
 # The Mouth of Sauron
 R:818:0xAB/0x9F
@@ -4515,6 +4872,7 @@ R:821:0xA2/0x82
 R:822:0xA2/0x83
 
 #N:823:Cthugha, the Living Flame
+R:823:0xAE/0xBF
 
 # Benedict, the Ideal Warrior
 R:824:0xB4/0x80
@@ -4523,8 +4881,10 @@ R:824:0xB4/0x80
 R:825:0xA4/0x8E
 
 #N:826:Cyaegha
+R:826:0xAF/0xA0
 
 #N:827:Pazuzu, Lord of Air
+R:827:0xAF/0xA1
 
 # Ithaqua the Windwalker
 R:828:0xb4/0x81
@@ -4542,15 +4902,19 @@ R:831:0xB4/0x82
 R:832:0xB4/0x83
 
 #N:833:Abhoth, Source of Uncleanness
+R:833:0xAF/0xA2
 
 #N:834:Ymir the Ice Giant
+R:834:0xAF/0xA3
 
 #N:835:Loki the Trickster
+R:835:0xAF/0xA4
 
 # Star-spawn of Cthulhu
 R:836:0xB4/0x84
 
 #N:837:Surtur the Giant Fire Demon
+R:837:0xAF/0xA5
 
 # The Tarrasque
 R:838:0xA2/0x9C
@@ -4562,10 +4926,13 @@ R:839:0xAD/0x97
 R:840:0x9E/0x85
 
 #N:841:Shuma-Gorath
+R:841:0xAF/0xA8
 
 #N:842:Tulzscha, the Green Flame
+R:842:0xAC/0xB2
 
 #N:843:Oremorj the Cyberdemon Lord
+R:843:0xAC/0xB1
 
 # Kaschei the Immortal
 R:844:0xB4/0x85
@@ -4574,6 +4941,7 @@ R:844:0xB4/0x85
 R:845:0xB4/0x86
 
 #N:846:Fenris Wolf
+R:846:0xAC/0xB0
 
 # Great wyrm of power
 R:847:0xB4/0x87
@@ -4596,8 +4964,10 @@ R:852:0xB4/0x8A
 R:853:0x9E/0x87
 
 #N:854:Jormungand the Midgard Serpent
+R:854:0xAC/0xAF
 
 #N:855:The Destroyer
+R:855:0xAC/0xAE
 
 # Gothmog, the High Captain of Balrogs
 R:856:0xAD/0x98
@@ -4609,6 +4979,7 @@ R:857:0xB4/0x8B
 R:858:0xAC/0x80
 
 #N:859:The Unicorn of Order
+R:859:0xAC/0xAD
 
 # Oberon, King of Amber
 R:860:0xB4/0x8C
@@ -4619,7 +4990,470 @@ R:861:0xA1/0x99
 # The Serpent of Chaos
 R:862:0xB4/0x8D
 
+#N:863:Quantum dot
+
+#N:864:a Plain Gold Ring
+R:864:0x84/0x8A
+
+#N:865:Lourph
+
+#N:866:Caaws
+
+#N:867:Culverin
+
+#N:868:Behinder
+
+#N:869:Boadile
+
+#N:870:Ebony monk
+
+#N:871:Metal Babble
+R:871:0x88/0xA9
+
+#N:872:The Yamata-no-Orochi
+
+#N:873:Combat-Echizen "Because it's time"
+
+#N:874:Spectral Wyrm
+
+#N:875:Storm troll
+
+#N:876:Unstable worm mass
+
+#N:877:Bat of Gorgoroth
+R:877:0xB5/0xB7
+
+#N:878:Dio Brando
+
+#N:879:Ohmu
+R:879:0x8A/0xA7
+
+#N:880:Richard Wong, Master of Time
+
+#N:881:Locke, the Superman
+
+#N:882:Layzark, the Emperor
+
+#N:884:Noxious fume
+
+#N:885:Shallow puddle
+R:885:0x83/0x83
+
+#N:886:Dark elven shade
+
+#N:887:Mana hound
+
+#N:888:Vore
+
+#N:889:Bouncing mine
+R:889:0xAD/0xA9
+
+#N:890:Great venom wyrm
+R:890:0xB5/0xA6
+
+#N:891:Gorlim, Betrayer of Barahir
+R:891:0xB0/0xB9
+
+#N:892:Djinni
+
+#N:893:Efreeti
+
+#N:894:Troll king
+
+#N:895:Sky golem
+
+#N:896:Bazooker
+
+#N:897:Shard vortex
+
+#N:898:Granite wall
+R:898:0x80/0x84
+
+#N:899:Fire troll
+
+#N:900:Elf lord
+
+#N:901:Samurai
+
+#N:902:Magma intrusion
+R:902:0x80/0x8D
+
+#N:903:Small kraken
+
+#N:904:Chaos mushroom
+
+#N:905:Cloud golem
+
+#N:906:Lava golem
+
+#N:907:Ogre warrior
+
+#N:908:Pole axe of animated attack
+
+#N:909:The Icky Queen
+R:909:0xAF/0xAA
+
+#N:910:Aquatic golem
+R:910:0xAF/0xAE
+
+#N:911:Quartz vein
+R:911:0x80/0x87
+
+#N:912:Floating orb
+
+#N:913:Undead devilfish
+R:913:0xB0/0xA3
+
+#N:914:Bullroarer the Hobbit
+R:914:0x97/0xBB
+
+#N:915:Mystic
+R:915:0x9B/0xBB
+
+#N:916:Master mystic
+R:916:0x9A/0xB4
+
+#N:917:Grand master mystic
+R:917:0x9B/0xBD
+
+#N:919:Aquatic naga
+
+#N:920:The demogorgon
+
+#N:921:Internet Exploder
+R:921:0x8A/0xA6
+
+#N:922:Electric rat
+R:922:0x8A/0xA5
+
+#N:923:Yukionnna
+
+#N:924:Cribo
+
+#N:925:Monkey of Nikko
+
+#N:926:Tsuchinoko
+
+#N:927:Mario
+
+#N:928:Kuppa
+
+#N:929:Greater cyber wyrm angel deamon lich
+
+#N:930:Clone of Locke the Superman
+
+#N:931:Caldarm the third
+
+#N:932:Banor=Rupart
+
+#N:933:Banor the Prince Regent
+
+#N:934:Rupart the general
+
+#N:935:Druaga
+
+#N:936:Kenshirou the Fist of The North Star
+
+#N:937:Lems the cyborg
+
+#N:938:White knight
+
+#N:939:Hoarmurath of Dir
+R:939:0xB0/0xB6
+
+#N:940:Lesser Balrog
+R:940:0x9D/0xB5
+
+#N:941:Bone dragon
+
+#N:942:Planetar
+R:942:0x9D/0x92
+
+#N:943:Solar
+R:943:0x9D/0x93
+
+#N:944:Deep puddle
+R:944:0x83/0x80
+
+#N:945:Biketal of Fire
+
+#N:946:Jisisl of Ice
+
+#N:947:Poor, the thief
+
+#N:948:Rich, the thief
+
+#N:949:Iketa, the brave
+R:949:0x8A/0xA8
+
+#N:950:Hammer bors
+
+#N:951:Met
+
+#N:952:Kamikaze hound
+
+#N:953:Broken death sword
+R:953:0xB3/0x80
+
+#N:954:Orcish Artillery
+
+#N:955:Scrawny horse
+
+#N:956:Horse
+
+#N:957:Unruly horse
+
+#N:958:Red puyo
+R:958:0x8A/0xA1
+
+#N:959:Blue puyo
+R:959:0x8A/0xA2
+
+#N:960:Yellow puyo
+R:960:0x8A/0xA4
+
+#N:961:Green puyo
+R:961:0x8A/0xA3
+
+#N:962:Slime Mold
+R:962:0x8E/0x85
+
+#N:963:Boty-Buildeng, the emperor
+
+#N:964:Shadower
+
+#N:965:Statue of Chest mimic mimic
+
+#N:966:Luigi
+
+#N:967:Jaian, the boss of the kids
+
+#N:968:Bramd the Ice Dragon
+
+#N:969:Eibra the Water Dragon
+
+#N:970:Narse the Black Dragon
+
+#N:971:Mycen the Gold Dragon
+
+#N:972:Shooting Star the Red Dragon
+
+#N:973:Beld, ruler of Marmo
+
+#N:974:Ashram, the Ebony Knight
+
+#N:975:That @$^%& Black Bat
+
+#N:976:Eol, the Dark Elven Smith
+R:976:0xA2/0xB9
+
+#N:977:Maeglin, Betrayer of Gondolin
+R:977:0x94/0xAE
+
+#N:978:Ar-Pharazon the Golden
+R:978:0xB0/0xBE
+
+#N:979:Shuten-douji, the King Ogre of Ooe-Mountain
+
+#N:980:Coatl
+
+#N:981:Thunder bird
+
+#N:982:Durahan
+
+#N:983:Hibagon
+
+#N:984:Nue
+
+#N:985:Unicorn
+R:985:0xAC/0xAD
+
+#N:986:Nekomata
+
+#N:987:Nine-tailed fox
+
+#N:988:Fenghuang
+
+#N:989:Kirin
+
+#N:990:Pegasus
+
+#N:991:Sleipnir, the Odin's Steed
+
+#N:992:Huan, the Hound of Valinor
+
+#N:993:Dao
+
+#N:994:Marid
+
+#N:995:Wolf Chieftain
+
+#N:996:Nar, the Dwarf
+
+#N:997:Chiokovo
+
+#N:998:Black Chiokovo
+
+#N:999:Devu Chiokovo
+
+#N:1000:Bahamut, Celestial Dragon of Good
+
+#N:1001:Suke-san, the Mitsukuni's Warder
+
+#N:1002:Kaku-san, the Mitsukuni's Warder
+
+#N:1003:The Ghost 'Q'
+R:1003:0x8A/0xA0
+
+#N:1004:Pip, the Braver from Another World
+
+#N:1005:Ansalom, the Dark Wizard
+
+#N:1006:High-elven ranger
+R:1006:0xAE/0xA7
+
+#N:1007:Giant cockroach
+
+#N:1008:Demonologist
+R:1008:0x98/0xA2
+
+#N:1009:Dwar, Dog Lord of Waw
+R:1009:0xB0/0xB5
+
+#N:1010:Golden Angel
+
+#N:1011:Silver Angel
+
+#N:1012:Jibaku ghost
+
+#N:1013:Rolento
+
+#N:1014:M. Bison
+
+#N:1015:TaepoDong
+
+#N:1016:Spider bomb
+
+#N:1017:Bomb mosquito
+
+#N:1018:Raou the Conqueror
+
+#N:1019:Kokuo, Raou's Steed
+
+#N:1020:Kutar
+
+#N:1021:Nami, the Mate
+
+#N:1022:Nappa the Saiayan
+
+#N:1023:Hand grenade
+
+#N:1024:Grand master thief
+
+#N:1025:Charon, Boatman of the Styx
+
+#N:1026:Old sorcerer
+R:1026:0x9C/0x8A
+
+#N:1027:Red Helm, the King of Bear
+
+#N:1028:Mad bear
+
+#N:1029:Baby Satan
+#R:1029:0x88/0xAB
+
+#N:1030:Meng Huo, the King of Southerings
+
+#N:1031:Wahha-Man the Golden
+
+#N:1032:Madame Debby
+
+#N:1033:The Defiler
+
+#N:1034:The Minotaur of the Labyrinth
+R:1034:0xB3/0xB4
+
+#N:1035:Living armor
+
+#N:1036:Trap master
+
+#N:1037:Knight templar
+R:1037:0xA3/0xA1
+
+#N:1038:Paladin
+R:1038:0x9B/0xB2
+
+#N:1039:Ranger
+R:1039:0x9A/0xB7
+
+#N:1040:Chameleon
+
+#N:1041:Chameleon Lord
+
+#N:1042:Narwhal
+
+#N:1043:Petshop
+
+#N:1044:White crocodile
+
+#N:1045:Disintegrate vortex
+
+#N:1046:Ulfang the Black
+R:1046:0x9A/0xB6
+
+#N:1047:Topaz monk
+
+#N:1048:Stone dragon
+
+#N:1049:Steel dragon
+
+#N:1050:Atlas, the Titan
+R:1050:0xB5/0xB0
+
+#N:1051:Kronos, Lord of the Titans
+R:1051:0xB5/0xB1
+
+#N:1052:Dimensional shambler
+R:1052:0xB2/0xBF
+
+#N:1053:Novice mindcrafter
+R:1053:0x9A/0xBA
+
+#N:1054:Novice mindcrafter
+R:1054:0x9A/0xBA
+
+#N:1055:Mindcrafter
+R:1055:0x9A/0xB3
+
+#N:1056:Master mindcrafter
+R:1056:0x9B/0xBF
+
+#N:1057:Ogrillon
+R:1057:0x99/0xB8
+
+#N:1058:Elder vampire
+R:1058:0x91/0xB9
+
+#N:1059:Noborta Kesyta, the Yeek President
+
+#N:1060:Mori Troll
+
+#N:1061:Barney the Dinosaur
+R:1061:0xB1/0x95
+
+#N:1062:Groo the Wanderer
+R:1062:0xB1/0x9E
+
+#N:1063:Lousy, the King of Louses
+
+#N:1064:Great Wyrm of Space-Time
+R:1064:0xB5/0xAA
+
+#N:1065:Octopus of Kshitigarbha
+
+#N:1066:Great Bile Wyrm
+R:1066:0xB5/0xA7
+
 
 # Load the special player pictures
 %:xtra-new.prf
-
