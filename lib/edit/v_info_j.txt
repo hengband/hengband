@@ -2559,7 +2559,7 @@ D:%.X^X*****XX^XX......XX..XXX....adc.........cb..X#X..cb.........bad....XXX..XX
 D:%.X.X****XX^XX......XX..XX**...cb...cdabcda..ad.....ad..abcdabc...cb...**XX..XX......XX^XX****X.X.%
 D:%.X^XXXXXX^XX.&..&..X&&XX***..ad..dab.....bc..cbap.cb..cd.....dab..ad..***XX&&X..&..&.XX^XXXXXX^X.%
 D:%.X.X^^^^^XX........X&&X****..b...c........da......d..ab........c...c..****X&&X........XX^^^^^X.X.%
-D:%.X^X#XXX^X...XXX...X&&XX***..cd..bad.......bcdaPB.abcd.......bad..bb..***XX&&X...XXX...X^XXX#X^X.%
+D:%.X^X#XXX^X...XXX...X&&XX***..cd..bad.......bcdaPB.abcd.......bad..ab..***XX&&X...XXX...X^XXX#X^X.%
 D:%.X.X888X^X..XX9XX..XX..XX**...ab...cbad...................badc...cd...**XX..XX..XX9XX..X^X888X.X.%
 D:%.X^X888X^X.XX@@@XX&&XX..XXX....cda....cbadcbadcbadcbadcbadc....dab....XXX..XX&&XX@@@XX.X^X888X^X.%
 D:%.X.X888#^X,,,,,,,,,@@XX...XXX....bcda...........@...........dabc....XXX...XX@@,,,,,,,,,X^#888X.X.%
