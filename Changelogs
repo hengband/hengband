@@ -1,3 +1,135 @@
+2002-12-23  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/jversion.txt 1.14.2.1, lib/help/version.txt 1.14.2.1:
+	version.txtを1.4.1と1.5.1用に更新。
+
+	* src/racial.c 1.26.2.2, src/spells3.c 1.56.2.1:
+	魔道具術師は「杖」を吸収できないようにする為のHackの副作用で「杖」に
+	通常の充填等が出来なかったのを出来るように修正。その代りに魔道具術師は
+	「杖」を吸収しようとすると警告メッセージを出すようにした。
+
+	* src/cmd4.c 1.74:
+	'v'isual modeでゴミを表示しないようにする条件式が間違っていたので修正。
+	(char型で0x7fと比較する式になっていた。)
+	また、「'v'でシンボル変更」の説明文は 'v'isual mode が使用不可能なとき
+	(flavorがあるアイテムの場合)は表示しないように修正。
+
+	* src/cave.c 1.69, src/cmd4.c 1.73:
+	地形の表示文字/タイル の表示で、bigtileのときに2倍幅ASCIIを使い忘れていた所修正。
+	また、'v'isual mode で 0x80以上のattrと0x80以下のcharとの組み合せ等の無意味な
+	組み合わせを選択できないように修正。
+
+	* src/cmd4.c 1.66.2.4:
+	情報メニューの (0)地形の文字/タイルの一覧 は、シンボルエディタ専用として1.5.x
+	だけで追加したものだったのに、間違えて14xにもタイトルだけ入れてしまっていたので削除。
+
+2002-12-23  iks  <iks@cvs>
+
+	* src/save.c 1.29:
+	セーブ時に地上では忘れた明かりの再計算をしないようになってたのを修正。
+
+2002-12-20  Takeshi Mogami  <mogami@cvs>
+
+	* configure.in 1.24, lib/file/news.txt 1.18, lib/file/news_j.txt 1.17, src/defines.h 1.83:
+	バージョン番号を1.5.1へ。
+
+	* lib/file/news.txt 1.16.2.2, lib/file/news_j.txt 1.15.2.2, src/defines.h 1.81.2.2, configure.in 1.22.2.2:
+	バージョン番号を1.4.1へ。
+
+	* src/cmd4.c 1.66.2.3:
+	情報メニューに(0)地形の文字/タイルの一覧 の項目タイトル追加。
+
+	* src/rooms.c 1.25.2.1:
+	greater vault の配置で、外壁の永久岩にぴったり沿ってしまって、
+	入口が塞がれる事があるのを修正。上下左右に1ブロック余裕を取るようにした。
+
+2002-12-19  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/k_info.txt 1.3.2.2, src/cmd6.c 1.40.2.6, src/init2.c 1.19.2.3, src/store.c 1.20.2.2, src/birth.c 1.57.2.2:
+	エルフの行糧と塩水の変更、アイテムの説明文をマージ
+
+	* lib/edit/k_info.txt 1.6:
+	英語版説明文で一箇所「D:$」の$を付け忘れていたので修正。
+
+	* lib/edit/k_info.txt 1.5, src/init2.c 1.22, src/store.c 1.22, src/birth.c 1.59, src/cmd6.c 1.46:
+	エルフの行糧は空腹充足と同等の滋養、雑貨屋で小数売る。
+	塩水はアンデッド等には無効。
+	OAngbandから武器、防具等のアイテムの説明文を貰った。翻訳はまだ途中。
+	未訳には"#D:未訳#というコメントが付いているので少しずつでもやりたい(やって欲しい)
+
+	* lib/help/faq.txt 1.2: FAQ更新。
+
+	* src/save.c 1.28:
+	clear_cave()でm_ptr->cdisやflow情報を消しているので、セーブ実行後に
+	updateを再実行するように修正。
+	wr_dungeon()のエラー処理がバグっていてsave_floor()等でエラーがあると、
+	Segmentation Faultを起していたので修正。
+	セーブコマンドによるセーブデータで、光源のフラグが地形に残ってしまって
+	いたのでforget_lite()等を入れて修正。
+
+2002-12-17  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd6.c 1.40.2.5:
+	バグ修正マージし忘れ追加。鍛冶師のエッセンスで通常のアイテムの発動ができなくなるバグ修正。
+
+	* src/dungeon.c 1.78.2.2, src/externs.h 1.87.2.3, src/files.c 1.88.2.1, src/mind.c 1.17.2.1, src/object1.c 1.55.2.1, src/object2.c 1.62.2.1, src/util.c 1.35.2.1, src/autopick.c 1.75.2.1, src/birth.c 1.57.2.1, src/bldg.c 1.26.2.1, src/cmd5.c 1.49.2.2, src/cmd6.c 1.40.2.4:
+	1.5.0の修正をマージ。roff_to_buf()のバッファ溢れ修正。{!!}に行動中止を追加。
+
+	* src/dungeon.c 1.85:
+	{!!}と刻んだアイテムの再充填時に、行動中止するように修正。
+
+	* src/floors.c 1.5:
+	階段を登り降りして保存されたフロアに戻ると全ての眠っているモンスターが
+	起きてしまっていたバグ修正。
+
+2002-12-16  Takeshi Mogami  <mogami@cvs>
+
+	* src/mind.c 1.18, src/object1.c 1.56, src/object2.c 1.64, src/util.c 1.36, src/autopick.c 1.76, src/birth.c 1.58, src/bldg.c 1.28, src/cmd5.c 1.51, src/cmd6.c 1.45, src/externs.h 1.92, src/files.c 1.90:
+	情報コマンドの(a)で、roff_to_buf()に渡すtemp[]のサイズが足りずに
+	クラッシュしていたバグ修正。さらにサイズを引数で渡すようにした。
+
+2002-12-13  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd6.c 1.44:
+	発動可能なアーティファクト以外のアイテムに発動が無い一般のタイプの鍛冶師の
+	エッセンスを付けると発動不可能になるバグ修正。
+
+	* src/generate.c 1.43:
+	clear_cave()の中でwipe_o_list()とwipe_m_list()を簡易化した初期化コード
+	を使っていたが、初期化が不十分で、モンスターのhold_o_idx等が残っていた
+	為、変なオブジェクト「(なし)」等が生成される事があったバグ修正。
+
+2002-12-11  Takeshi Mogami  <mogami@cvs>
+
+	* src/dungeon.c 1.84: 吟遊詩人の霊的感知で鉱脈を感知しないように修正。
+
+	* src/cave.c 1.66.2.1, src/cmd4.c 1.66.2.2, src/externs.h 1.87.2.2:
+	既知の〜リスト及び、'%'コマンドでタイルの無いシンボルをちゃんと
+	倍角JISで表示するように修正。簡単愚より(というか参考)。
+
+	* src/cave.c 1.68, src/cmd4.c 1.71, src/externs.h 1.91:
+	既知の〜リスト及び、'%'コマンドでタイルの無いシンボルをちゃんと
+	倍角JISで表示するように修正。簡単愚より。
+
+	* src/cmd4.c 1.70:
+	bigtile使用時の既知のアイテムリスト表示がまだ少しバグっていたので修正。
+
+	* src/effects.c 1.30.2.2, src/flavor.c 1.27.2.2, src/init1.c 1.48.2.2, lib/edit/d_info.txt 1.1.2.1, lib/edit/k_info.txt 1.3.2.1, lib/help/jgeneral.txt 1.6.6.1, readme.txt 1.8.6.2, src/cmd4.c 1.66.2.1, src/cmd5.c 1.49.2.1, src/cmd6.c 1.40.2.3:
+	TO開発チームからの報告を元にいろいろ修正。
+
+	* src/effects.c 1.33, src/flavor.c 1.29, src/floors.c 1.4, src/init1.c 1.50, src/save.c 1.27, Changelogs 1.63, lib/edit/d_info.txt 1.2, lib/edit/k_info.txt 1.4, lib/help/jgeneral.txt 1.7, readme.txt 1.10, src/cmd2.c 1.38, src/cmd4.c 1.69, src/cmd5.c 1.50, src/cmd6.c 1.43:
+	TO開発チームからの報告を元にいろいろ修正。
+	wr_monster()で間違ってap_r_idxを書き変えていたゴミ削除。
+	「地上に戻った」のメッセージをダンジョンから出たときにも出す。
+	仮に間違って1階に登り坑道が出ても-1階に行かないように。
+	特殊食糧の判定に変身中の場合を考慮。
+	アリーナに入ったとき幽体化が解除されなかったバグ修正。
+	アイテム知識でmsg_print(NULL)忘れ修正。
+	乗馬成功した瞬間に乗馬に以前設定されていたヘルスバー表示は不要なのでキャンセル。
+	英語版で食糧用「杖」の名前の表示のバグ修正。
+	d_infoで、R_CHAR_%cの形式は複数行に対応しておらず、山でバグっていたので修正。
+	その際 R_CHAR_%s のような形式1つだけを使うように変更。
+
 2002-12-11  iks  <iks@cvs>
 
 	* src/dungeon.c 1.83:
