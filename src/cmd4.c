@@ -2295,34 +2295,33 @@ void do_cmd_options(void)
 
 		/* Give some choices */
 #ifdef JP
-		prt("(1)     キー入力          オプション", 4, 5);
-		prt("(2)     画面出力          オプション", 5, 5);
-		prt("(3)   ゲームプレイ        オプション", 6, 5);
-		prt("(4)   行動中止関係        オプション", 7, 5);
-		prt("(5)      効率化           オプション", 8, 5);
-		prt("(6) 簡易アイテム自動破壊  オプション", 9, 5);
-		prt("(R)    プレイ記録         オプション", 10, 5);
+		prt("(1)     キー入力          オプション", 3, 5);
+		prt("(2)     画面出力          オプション", 4, 5);
+		prt("(3)   ゲームプレイ        オプション", 5, 5);
+		prt("(4)   行動中止関係        オプション", 6, 5);
+		prt("(5)      効率化           オプション", 7, 5);
+		prt("(6) 簡易アイテム自動破壊  オプション", 8, 5);
+		prt("(R)    プレイ記録         オプション", 9, 5);
 		/* Special choices */
-		prt("(D)  基本ウェイト量", 12, 5);
-		prt("(H) 低ヒットポイント警告", 13, 5);
+		prt("(D)  基本ウェイト量", 11, 5);
+		prt("(H) 低ヒットポイント警告", 12, 5);
+		prt("(M) 低魔力色閾値", 13, 5);
 		prt("(A)    自動セーブ         オプション", 14, 5);
 		/* Window flags */
 		prt("(W) ウインドウフラグ", 15, 5);
 #else
-		prt("(1) Input Options", 4, 5);
-		prt("(2) Output Options", 5, 5);
-		prt("(3) Game-Play Options", 6, 5);
-		prt("(4) Disturbance Options", 7, 5);
-		prt("(5) Efficiency Options", 8, 5);
-		prt("(6) Easy Auto-Destroyer Options", 9, 5);
-		prt("(R) Play-record Options", 10, 5);
-
+		prt("(1) Input Options", 3, 5);
+		prt("(2) Output Options", 4, 5);
+		prt("(3) Game-Play Options", 5, 5);
+		prt("(4) Disturbance Options", 6, 5);
+		prt("(5) Efficiency Options", 7, 5);
+		prt("(6) Easy Auto-Destroyer Options", 8, 5);
+		prt("(R) Play-record Options", 9, 5);
 		/* Special choices */
-		prt("(D) Base Delay Factor", 12, 5);
-		prt("(H) Hitpoint Warning", 13, 5);
+		prt("(D) Base Delay Factor", 11, 5);
+		prt("(H) Hitpoint Warning", 12, 5);
+		prt("(M) Mana Color Threshold", 13, 5);
 		prt("(A) Autosave Options", 14, 5);
-
-
 		/* Window flags */
 		prt("(W) Window Flags", 15, 5);
 #endif
@@ -2613,6 +2612,53 @@ void do_cmd_options(void)
 						Term_clear(); 
 					}
 					else if (isdigit(k)) hitpoint_warn = D2I(k);
+					else bell();
+				}
+
+				break;
+			}
+
+			/* Hack -- mana color factor */
+			case 'M':
+			case 'm':
+			{
+				/* Prompt */
+#ifdef JP
+				prt("コマンド: 低魔力色閾値", 18, 0);
+#else
+				prt("Command: Mana Color Threshold", 18, 0);
+#endif
+
+
+				/* Get a new value */
+				while (1)
+				{
+#ifdef JP
+					prt(format("現在の低魔力色閾値: %d0%%",
+						   mana_warn), 22, 0);
+#else
+					prt(format("Current mana color threshold: %d0%%",
+						   mana_warn), 22, 0);
+#endif
+
+#ifdef JP
+					prt("低魔力閾値 (0-9) ESCで決定: ", 20, 0);
+#else
+					prt("Mana color Threshold (0-9 or ESC to accept): ", 20, 0);
+#endif
+
+					k = inkey();
+					if (k == ESCAPE) break;
+					else if (k == '?')
+					{
+#ifdef JP
+						(void)show_file(TRUE, "joption.txt#Manapoint", NULL, 0, 0);
+#else
+						(void)show_file(TRUE, "option.txt#Manapoint", NULL, 0, 0);
+#endif
+						Term_clear(); 
+					}
+					else if (isdigit(k)) mana_warn = D2I(k);
 					else bell();
 				}
 

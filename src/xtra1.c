@@ -901,7 +901,7 @@ static void prt_sp(void)
 	{
 		color = TERM_L_GREEN;
 	}
-	else if (p_ptr->csp > p_ptr->msp / 5)
+	else if (p_ptr->csp > (p_ptr->msp * mana_warn) / 10)
 	{
 		color = TERM_YELLOW;
 	}

@@ -314,6 +314,7 @@ extern bool record_named_pet;
 extern char record_o_name[MAX_NLEN];
 extern s32b record_turn;
 extern byte hitpoint_warn;
+extern byte mana_warn;
 extern byte delay_factor;
 extern s16b autosave_freq;
 extern bool autosave_t;

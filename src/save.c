@@ -392,6 +392,8 @@ static void wr_options(void)
 	/* Write "hitpoint_warn" */
 	wr_byte(hitpoint_warn);
 
+	/* Write "mana_warn" */
+	wr_byte(mana_warn);
 
 	/*** Cheating options ***/
 

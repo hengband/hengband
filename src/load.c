@@ -1245,6 +1245,17 @@ static void rd_options(void)
 	rd_byte(&b);
 	hitpoint_warn = b;
 
+	/* Read "mana_warn" */
+	if(h_older_than(1,6,0,1))
+	{
+		mana_warn=2;
+	}
+	else 
+	{
+		rd_byte(&b);
+		mana_warn = b;
+	}
+
 
 	/*** Cheating options ***/
 

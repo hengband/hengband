@@ -1873,7 +1873,7 @@ static void display_player_middle(void)
 	/* Dump mana power */
 	if (p_ptr->csp >= p_ptr->msp) 
 		display_player_one_line(ENTRY_SP, format("%4d/%4d", p_ptr->csp , p_ptr->msp), TERM_L_GREEN);
-	else if (p_ptr->csp > (p_ptr->msp * hitpoint_warn) / 10) 
+	else if (p_ptr->csp > (p_ptr->msp * mana_warn) / 10) 
 		display_player_one_line(ENTRY_SP, format("%4d/%4d", p_ptr->csp , p_ptr->msp), TERM_YELLOW);
 	else
 		display_player_one_line(ENTRY_SP, format("%4d/%4d", p_ptr->csp , p_ptr->msp), TERM_RED);
