@@ -4017,7 +4017,7 @@ static char inkey_from_menu(void)
 
 		/* Get a command */
 		sub_cmd = inkey();
-		if ((sub_cmd == ' ') || (sub_cmd == 'x') || (sub_cmd == 'X') || (sub_cmd == '\r'))
+		if ((sub_cmd == ' ') || (sub_cmd == 'x') || (sub_cmd == 'X') || (sub_cmd == '\r') || (sub_cmd == '\n'))
 		{
 			if (menu_info[menu][num].fin)
 			{

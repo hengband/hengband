@@ -5501,6 +5501,7 @@ if (allow_floor) strcat(out_val, " '-'¾²¾å,");
 			case 'x':
 			case 'X':
 			case '\r':
+			case '\n':
 			{
 				/* Validate the item */
 				if (!get_item_okay(get_item_label))

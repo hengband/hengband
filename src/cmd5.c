@@ -186,6 +186,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 				case 'x':
 				case 'X':
 				case '\r':
+				case '\n':
 				{
 					i = menu_line - 1;
 					ask = FALSE;
@@ -5880,11 +5881,6 @@ strnfmt(out_val, 78, "(¥³¥Þ¥ó¥É %c-%c¡¢'*'=°ìÍ÷¡¢ESC=½ªÎ») ¥³¥Þ¥ó¥É¤òÁª¤ó¤Ç¤¯¤À¤
 
 			/* Redo asking */
 			continue;
-		}
-
-		if (choice == '\r' && num == 1)
-		{
-			choice = 'a';
 		}
 
 		if (isalpha(choice))

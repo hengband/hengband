@@ -7012,6 +7012,7 @@ static int choose_essence()
 				menu_line+= 4;
 				break;
 			case '\r':
+			case '\n':
 			case 'x':
 			case 'X':
 				mode = menu_line;
@@ -7175,6 +7176,7 @@ static void add_essence(int mode)
 				case 'x':
 				case 'X':
 				case '\r':
+				case '\n':
 				{
 					i = menu_line - 1;
 					ask = FALSE;
@@ -7843,6 +7845,7 @@ void do_cmd_kaji(bool only_browse)
 				menu_line+= 4;
 				break;
 			case '\r':
+			case '\n':
 			case 'x':
 			case 'X':
 				mode = menu_line;

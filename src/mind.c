@@ -610,6 +610,7 @@ void mindcraft_info(char *p, int use_mind, int power)
 				case 'x':
 				case 'X':
 				case '\r':
+				case '\n':
 				{
 					i = menu_line - 1;
 					ask = FALSE;

@@ -169,6 +169,7 @@ cptr            p = "É¬»¦·õ";
 				case 'x':
 				case 'X':
 				case '\r':
+				case '\n':
 				{
 					i = menu_line - 1;
 					ask = FALSE;
