@@ -990,24 +990,24 @@ msg_format("%sを引き戻した。", m_name);
 		r_ptr = &r_info[m_ptr->r_idx];
 		monster_desc(m_name, m_ptr, 0);
 #ifdef JP
-msg_format("%sの足を指さした。", m_name);
+			msg_format("%sの足を指さした。", m_name);
 #else
 			msg_format("You gesture at %s's feet.", m_name);
 #endif
 
-		if ((r_ptr->flags3 & RF3_RES_TELE) || (r_ptr->flags1 & RF1_QUESTOR) || (r_ptr->level + randint1(50) > plev + randint1(60)))
+		if ((r_ptr->flags3 & RF3_RES_NEXU) || (r_ptr->flags3 & RF3_RES_TELE) ||
+			(r_ptr->flags1 & RF1_QUESTOR) || (r_ptr->level + randint1(50) > plev + randint1(60)))
 		{
 #ifdef JP
-msg_print("しかし効果がなかった！");
+			msg_print("しかし効果がなかった！");
 #else
 			msg_format("%s are unaffected!", m_name);
 #endif
-
 		}
 		else if (one_in_(2))
 		{
 #ifdef JP
-msg_format("%sは床を突き破って沈んでいった。", m_name);
+			msg_format("%sは床を突き破って沈んでいった。", m_name);
 #else
 			msg_format("%s sink through the floor.", m_name);
 #endif
@@ -1016,7 +1016,7 @@ msg_format("%sは床を突き破って沈んでいった。", m_name);
 		else
 		{
 #ifdef JP
-msg_format("%sは天井を突き破って宙へ浮いていった。",m_name);
+			msg_format("%sは天井を突き破って宙へ浮いていった。",m_name);
 #else
 			msg_format("%s rise up through the ceiling.", m_name);
 #endif
