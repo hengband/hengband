@@ -603,7 +603,6 @@ extern bool los(int y1, int x1, int y2, int x2);
 extern void update_local_illumination(int y, int x);
 extern bool player_can_see_bold(int y, int x);
 extern bool cave_valid_bold(int y, int x);
-extern bool cave_valid_grid(cave_type *c_ptr);
 extern bool no_lite(void);
 extern void apply_default_feat_lighting(byte f_attr[F_LIT_MAX], byte f_char[F_LIT_MAX]);
 extern void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp);

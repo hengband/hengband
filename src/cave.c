@@ -626,41 +626,6 @@ bool cave_valid_bold(int y, int x)
 
 
 /*
- * Determine if a given location may be "destroyed"
- *
- * Used by destruction spells, and for placing stairs, etc.
- */
-bool cave_valid_grid(cave_type *c_ptr)
-{
-	s16b this_o_idx, next_o_idx = 0;
-
-
-	/* Forbid perma-grids */
-	if (cave_perma_grid(c_ptr)) return (FALSE);
-
-	/* Check objects */
-	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
-	{
-		object_type *o_ptr;
-
-		/* Acquire object */
-		o_ptr = &o_list[this_o_idx];
-
-		/* Acquire next object */
-		next_o_idx = o_ptr->next_o_idx;
-
-		/* Forbid artifact grids */
-		if (object_is_artifact(o_ptr)) return (FALSE);
-	}
-
-	/* Accept */
-	return (TRUE);
-}
-
-
-
-
-/*
  * Hack -- Legal monster codes
  */
 static char image_monster_hack[] = \
