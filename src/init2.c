@@ -4082,7 +4082,7 @@ static errr init_towns(void)
 			C_MAKE(st_ptr->stock, st_ptr->stock_size, object_type);
 
 			/* No table for the black market or home */
-			if ((j == STORE_BLACK) || (j == STORE_HOME)) continue;
+			if ((j == STORE_BLACK) || (j == STORE_HOME) || (j == STORE_MUSEUM)) continue;
 
 			/* Assume full table */
 			st_ptr->table_size = STORE_CHOICES;
