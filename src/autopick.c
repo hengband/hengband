@@ -2092,7 +2092,11 @@ void do_cmd_edit_autopick()
 			dirty_line = cy;
 			break;
 		case KTRL('i'):
-			if (!entry_from_object(entry)) break;
+			if (!entry_from_object(entry))
+			{
+				dirty_line = -2;
+				break;
+			}
 			tmp = autopick_line_from_entry(entry);
 			autopick_free_entry(entry);
 			if (tmp)
