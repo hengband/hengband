@@ -15,7 +15,7 @@
     (k) オプションA -- 自動セーブオプション (joption.txt#Autosave)
     (l) オプションW -- ウィンドウ フラグ    (joption.txt#Window)
     (m) オプションC -- 詐欺オプション       (joption.txt#Cheating)
-    (n) 初期オプション                      (joption.txt#StartUp)
+    (n) 初期オプション                      (joption.txt#Birth)
 
     (?) ヘルプシステムの使用法      (jhelpinfo.txt)
 
@@ -33,4 +33,4 @@
 ***** [k] joption.txt#Autosave
 ***** [l] joption.txt#Window
 ***** [m] joption.txt#Cheating
-***** [n] joption.txt#StartUp
+***** [n] joption.txt#Birth

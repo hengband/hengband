@@ -588,7 +588,7 @@ errr process_pref_file_command(char *buf)
 #ifdef JP
 					msg_format("初期オプションは変更できません! '%s'", buf);
 #else
-					msg_format("Startup options can not changed! '%s'", buf);
+					msg_format("Birth options can not changed! '%s'", buf);
 #endif
 					msg_print(NULL);
 					return 0;

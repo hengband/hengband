@@ -4,7 +4,7 @@ Please choose one of the following online help files:
 
     (a) Creating a Character              (birth.txt)
     (b) Character Attributes              (birth.txt#CharAttributes)
-    (c) Start-Up Options                  (birth.txt#StartupOptions)
+    (c) Start-Up Options                  (birth.txt#BirthOptions)
     (d) Random Quests                     (birth.txt#RandomQuests)
     (e) The Auto-Roller                   (birth.txt#AutoRoller)
     (f) Background Edit-Mode              (birth.txt#BackgroundEditor)
@@ -18,7 +18,7 @@ Please choose one of the following online help files:
 
 ***** [a] birth.txt
 ***** [b] birth.txt#CharAttributes
-***** [c] birth.txt#StartupOptions
+***** [c] birth.txt#BirthOptions
 ***** [d] birth.txt#RandomQuests
 ***** [e] birth.txt#AutoRoller
 ***** [f] birth.txt#BackgroundEditor

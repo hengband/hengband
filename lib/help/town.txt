@@ -81,7 +81,7 @@ and consequently, there are three possible town options in Hengband -
 the 'Standard' town(s), the 'Lite' town and the 'Vanilla' town. The
 default is the standard town and the lite town and the vanilla town
 options can be selected by pressing '=' during character
-generation. (see option.txt#StartUp [e])
+generation. (see option.txt#Birth [e])
 
 Your choice of town is fixed for the duration of your character's
 life and will be the new default for future characters created with
@@ -368,5 +368,5 @@ Updated    : Hengband 1.0.11
 ***** [b] command.txt
 ***** [c] dungeon.txt#MapSymbols
 ***** [d] town.txt#FixedQuests
-***** [e] option.txt#StartUp
+***** [e] option.txt#Birth
 ***** [f] town.txt#Bartering

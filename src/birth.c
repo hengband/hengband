@@ -2309,7 +2309,7 @@ static byte choose_realm(s32b choices, int *count)
 #ifdef JP
 			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 #else
-			do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
+			do_cmd_options_aux(6, "Birth option((*)s effect score)");
 #endif
 
 			screen_load();
@@ -4182,7 +4182,7 @@ static bool get_player_race(void)
 #ifdef JP
 			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 #else
-			do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
+			do_cmd_options_aux(6, "Birth Option((*)s effect score)");
 #endif
 			screen_load();
 		}
@@ -4397,7 +4397,7 @@ static bool get_player_class(void)
 #ifdef JP
 			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 #else
-			do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
+			do_cmd_options_aux(6, "Birth Option((*)s effect score)");
 #endif
 
 			screen_load();
@@ -4639,7 +4639,7 @@ static bool get_player_seikaku(void)
 #ifdef JP
 			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 #else
-			do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
+			do_cmd_options_aux(6, "Birth Option((*)s effect score)");
 #endif
 
 			screen_load();
@@ -4912,7 +4912,7 @@ static bool get_stat_limits(void)
 #ifdef JP
 			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 #else
-			do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
+			do_cmd_options_aux(6, "Birth Option((*)s effect score)");
 #endif
 
 			screen_load();
@@ -5205,7 +5205,7 @@ static bool get_chara_limits(void)
 #ifdef JP
 			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 #else
-			do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
+			do_cmd_options_aux(6, "Birth Option((*)s effect score)");
 #endif
 
 			screen_load();
@@ -5732,7 +5732,7 @@ static bool player_birth_aux(void)
 #ifdef JP
 			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 #else
-			do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
+			do_cmd_options_aux(6, "Birth Option((*)s effect score)");
 #endif
 
 			screen_load();
@@ -5865,7 +5865,7 @@ static bool player_birth_aux(void)
 #ifdef JP
 	do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 #else
-	do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
+	do_cmd_options_aux(6, "Birth Option((*)s effect score)");
 #endif
 
 	screen_load();
@@ -6279,7 +6279,7 @@ static bool player_birth_aux(void)
 #ifdef JP
 				do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
 #else
-				do_cmd_options_aux(6, "Startup Opts((*)s effect score)");
+				do_cmd_options_aux(6, "Birth Option((*)s effect score)");
 #endif
 
 				screen_load();

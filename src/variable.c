@@ -1094,7 +1094,7 @@ int highscore_fd = -1;
 int mutant_regenerate_mod = 100;
 
 /*
- * Startup options
+ * Birth options
  */
 bool easy_band;
 bool vanilla_town;            /* Use "vanilla" town without set quests */

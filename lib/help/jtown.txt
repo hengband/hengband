@@ -338,5 +338,5 @@ Updated    : Hengband 1.0.11
 ***** [b] jcommand.txt
 ***** [c] jdungeon.txt#MapSymbols
 ***** [d] jtown.txt#FixedQuests
-***** [e] joption.txt#StartUp
+***** [e] joption.txt#Birth
 ***** [f] jtown.txt#Bartering

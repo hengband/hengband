@@ -112,7 +112,7 @@
 [d]を参照）。
 
 
-***** <StartupOptions>
+***** <BirthOptions>
 === 初期オプション ===
 
 キャラクタ作成段階でいつでも '='キーを押すことにより初期オプションを変
@@ -379,7 +379,7 @@ Updated    : Hengband 1.5.2
 ***** [b] jmagic.hlp
 ***** [c] jbirth.txt#PrimaryStats
 ***** [d] jbirth.txt#PrimarySkills
-***** [e] joption.txt#StartUp
+***** [e] joption.txt#Birth
 ***** [f] jtown.txt#TownLevel
 ***** [g] jdungeon.txt#RandomQuests
 ***** [h] jraceclas.txt#StatBonusTable

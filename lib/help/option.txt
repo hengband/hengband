@@ -797,13 +797,13 @@ Ask for saving death    [cheat_save]
     character data or not when they die.
 
 
-***** <StartUp>
-=== Start up options ===
+***** <Birth>
+=== Birth options ===
 
 While cheating makes the game easier, the following options can make
 Hengband harder or easier. So if you think the game is too easy or too
 hard, or if you want to impress your friends, then switch on the
-following options. The startup-options can only be accessed while
+following options. The birth options can only be accessed while
 creating a new character (press '=' while creating the character).
 There is no way to turn them off after the creation is finished!
 Indicators "(*)" after the name of options means that options effect

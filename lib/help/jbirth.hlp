@@ -4,7 +4,7 @@
 
     (a) キャラクターの作成                (jbirth.txt)
     (b) キャラクタの個性(基本的な特性値)  (jbirth.txt#CharAttributes)
-    (c) 初期オプション                    (jbirth.txt#StartupOptions)
+    (c) 初期オプション                    (jbirth.txt#BirthOptions)
     (d) ランダムクエスト数決定            (jbirth.txt#RandomQuests)
     (e) オートローラー                    (jbirth.txt#AutoRoller)
     (f) 生い立ちエディタ                  (jbirth.txt#BackgroundEditor)
@@ -18,7 +18,7 @@
 
 ***** [a] jbirth.txt
 ***** [b] jbirth.txt#CharAttributes
-***** [c] jbirth.txt#StartupOptions
+***** [c] jbirth.txt#BirthOptions
 ***** [d] jbirth.txt#RandomQuests
 ***** [e] jbirth.txt#AutoRoller
 ***** [f] jbirth.txt#BackgroundEditor

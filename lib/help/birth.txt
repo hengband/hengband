@@ -125,19 +125,19 @@ class.  Abilities may be adjusted by high or low stats, and may
 increase with the level of the character (see below for details [d]).
 
 
-***** <StartupOptions>
-=== Start-up Options ===
+***** <BirthOptions>
+=== Birth Options ===
 
 During character generation you may press '=' at any time to access
-the start-up options.  A more detailed description of the various
-start-up options can be found in the section on the Options Page (see
-option.txt#StartUp [e]).  Some options have "(*)" mark that means
+the birth options.  A more detailed description of the various birth
+options can be found in the section on the Options Page (see
+option.txt#Birth [e]).  Some options have "(*)" mark that means
 these options effect to the difficulty of the game and effect to
 estimation of your score.
 
-Perhaps one of the most important features of the start-up options is
-the ability to decide what type of town level you want.  The various
-town options are discussed on the Town page (see dungeon.txt#TownLevel
+Perhaps one of the most important features of the birth options is the
+ability to decide what type of town level you want.  The various town
+options are discussed on the Town page (see dungeon.txt#TownLevel
 [f]).
 
 
@@ -422,7 +422,7 @@ Updated    : Hengband 1.5.2
 ***** [b] magic.hlp
 ***** [c] birth.txt#PrimaryStats
 ***** [d] birth.txt#PrimarySkills
-***** [e] option.txt#StartUp
+***** [e] option.txt#Birth
 ***** [f] town.txt#TownLevel
 ***** [g] dungeon.txt#RandomQuests
 ***** [h] raceclas.txt#StatBonusTable
