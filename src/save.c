@@ -1327,11 +1327,6 @@ static void wr_dungeon(void)
 	}
 
 
-	/* Compact the objects */
-	compact_objects(0);
-	/* Compact the monsters */
-	compact_monsters(0);
-
 	/*** Dump objects ***/
 
 	/* Total objects */
@@ -1377,6 +1372,11 @@ static bool wr_savefile_new(void)
 	byte            tmp8u;
 	u16b            tmp16u;
 
+
+	/* Compact the objects */
+	compact_objects(0);
+	/* Compact the monsters */
+	compact_monsters(0);
 
 	/* Guess at the current time */
 	now = time((time_t *)0);

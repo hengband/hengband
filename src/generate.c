@@ -1530,9 +1530,6 @@ static void place_pet(void)
 			m_ptr->exp = party_mon[i].exp;
 			set_pet(m_ptr);
 
-			/* Neccesary for a potential bug */
-			party_mon[i].r_idx = 0;
-			
 			if ((r_ptr->flags1 & RF1_FORCE_SLEEP) && !ironman_nightmare)
 			{
 				/* Monster is still being nice */
