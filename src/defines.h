@@ -3272,14 +3272,14 @@
 #define RF1_MALE                0x00000004  /* Male gender */
 #define RF1_FEMALE              0x00000008  /* Female gender */
 #define RF1_CHAR_CLEAR          0x00000010  /* Absorbs symbol */
-#define RF1_CHAR_MULTI          0x00000020  /* Changes symbol */
+#define RF1_SHAPECHANGER        0x00000020  /* TY: shapechanger */
 #define RF1_ATTR_CLEAR          0x00000040  /* Absorbs color */
 #define RF1_ATTR_MULTI          0x00000080  /* Changes color */
 #define RF1_FORCE_DEPTH         0x00000100  /* Start at "correct" depth */
 #define RF1_FORCE_MAXHP         0x00000200  /* Start with max hitpoints */
 #define RF1_FORCE_SLEEP         0x00000400  /* Start out sleeping */
 #define RF1_FORCE_EXTRA         0x00000800  /* Start out something */
-#define RF1_XXX1                0x00001000  /* XXX */
+#define RF1_ATTR_SEMIRAND       0x00001000  /* Color is determined semi-randomly */
 #define RF1_FRIENDS             0x00002000  /* Arrive with some friends */
 #define RF1_ESCORT              0x00004000  /* Arrive with an escort */
 #define RF1_ESCORTS             0x00008000  /* Arrive with some escorts */
@@ -3313,7 +3313,7 @@
 #define RF2_WEIRD_MIND      0x00000080  /* Monster avoids telepathy? */
 #define RF2_MULTIPLY        0x00000100  /* Monster reproduces */
 #define RF2_REGENERATE      0x00000200  /* Monster regenerates */
-#define RF2_SHAPECHANGER    0x00000400  /* TY: shapechanger */
+#define RF2_CHAR_MULTI      0x00000400  /* (Not implemented) */
 #define RF2_ATTR_ANY        0x00000800  /* TY: Attr_any */
 #define RF2_POWERFUL        0x00001000  /* Monster has strong breath */
 #define RF2_ELDRITCH_HORROR 0x00002000  /* Sanity-blasting horror    */
@@ -3327,12 +3327,12 @@
 #define RF2_KILL_BODY       0x00200000  /* Monster can kill monsters */
 #define RF2_TAKE_ITEM       0x00400000  /* Monster can pick up items */
 #define RF2_KILL_ITEM       0x00800000  /* Monster can crush items */
-#define RF2_BRAIN_1         0x01000000
-#define RF2_BRAIN_2         0x02000000
-#define RF2_BRAIN_3         0x04000000
-#define RF2_BRAIN_4         0x08000000
-#define RF2_BRAIN_5         0x10000000
-#define RF2_ATTR_SEMIRAND   0x20000000  /* Color is determined semi-randomly */
+#define RF2_XXX1            0x01000000
+#define RF2_XXX2            0x02000000
+#define RF2_XXX3            0x04000000
+#define RF2_XXX4            0x08000000
+#define RF2_XXX5            0x10000000
+#define RF2_XXX6            0x20000000
 #define RF2_HUMAN           0x40000000  /* Human */
 #define RF2_QUANTUM         0x80000000  /* Monster has quantum behavior */
 

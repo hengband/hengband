@@ -6012,7 +6012,7 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 					r_ptr = &r_info[m_ptr->ap_r_idx];
 
 					/* Skip non-multi-hued monsters */
-					if (!(r_ptr->flags1 & RF1_ATTR_MULTI) && !(r_ptr->flags2 & RF2_SHAPECHANGER))
+					if (!(r_ptr->flags1 & (RF1_ATTR_MULTI | RF1_SHAPECHANGER)))
 						continue;
 
 					/* Reset the flag */

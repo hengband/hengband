@@ -1434,18 +1434,12 @@ void map_info(int y, int x, byte *ap, char *cp)
 				c = r_ptr->x_char;
 
 				/* Normal monsters */
-				if (!(r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR | RF1_ATTR_MULTI))
-				    && !(r_ptr->flags2 & RF2_SHAPECHANGER))
+				if (!(r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_SHAPECHANGER | RF1_ATTR_CLEAR
+					                   | RF1_ATTR_MULTI | RF1_ATTR_SEMIRAND)))
 				{
 					/* Desired monster attr/char */
 					*ap = a;
 					*cp = c;
-
-					/* Use semi-random attr (usually mimics' colors vary) */
-					if ((r_ptr->flags2 & RF2_ATTR_SEMIRAND) && !use_graphics)
-					{
-						*ap = c_ptr->m_idx % 15 + 1;
-					}
 				}
 
 				/*
@@ -1480,16 +1474,15 @@ void map_info(int y, int x, byte *ap, char *cp)
 						case 7: *ap = TERM_GREEN;   break;
 						}
 					}
+					else if ((r_ptr->flags1 & RF1_ATTR_SEMIRAND) && !use_graphics)
+					{
+						/* Use semi-random attr (usually mimics' colors vary) */
+						*ap = c_ptr->m_idx % 15 + 1;
+					}
 					else
 					{
 						/* Normal case */
 						*ap = a;
-
-						/* Use semi-random attr (usually mimics' colors vary) */
-						if ((r_ptr->flags2 & RF2_ATTR_SEMIRAND) && !use_graphics)
-						{
-							*ap = c_ptr->m_idx % 15 + 1;
-						}
 					}
 
 					/***  Monster's char  ***/
@@ -1498,7 +1491,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 						/* Clear-char */
 						/* Do nothing */
 					}
-					else if (r_ptr->flags2 & RF2_SHAPECHANGER)
+					else if (r_ptr->flags1 & RF1_SHAPECHANGER)
 					{
 						if (use_graphics)
 						{
