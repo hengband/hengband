@@ -3836,6 +3836,9 @@ static void store_sell(void)
 			/* Modify quantity */
 			q_ptr->number = amt;
 
+			/* Make it look like known */
+			q_ptr->ident |= IDENT_STOREB;
+
 			/*
 			 * Hack -- If a rod or wand, let the shopkeeper know just
 			 * how many charges he really paid for. -LM-

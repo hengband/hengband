@@ -1688,6 +1688,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 	char            tmp_val[MAX_NLEN+160];
 	char            tmp_val2[MAX_NLEN+10];
+	char            insc_buf[1024];
 
 	u32b flgs[TR_FLAG_SIZE];
 
@@ -3184,12 +3185,15 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 #endif
 	}
 
+	/* Init inscription buffer */
+	insc_buf[0] = '\0';
+
+	/* Auto abbreviation inscribe */
 	if ((abbrev_extra || abbrev_all) && (o_ptr->ident & IDENT_MENTAL))
 	{
 		if (!o_ptr->inscription || !my_strchr(quark_str(o_ptr->inscription), '%'))
 		{
 			bool kanji, all;
-			char buf[1024];
 
 #ifdef JP
 			kanji = TRUE;
@@ -3198,14 +3202,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 #endif
 			all = abbrev_all;
 
-			get_ability_abbreviation(buf, o_ptr, kanji, all);
-
-			if (buf[0])
-			{
-				if (tmp_val2[0]) strcat(tmp_val2, ", ");
-
-				strcat(tmp_val2, buf);
-			}
+			get_ability_abbreviation(insc_buf, o_ptr, kanji, all);
 		}
 	}
 
@@ -3214,18 +3211,22 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 	{
 		char buff[1024];
 
-		if (tmp_val2[0]) strcat(tmp_val2, ", ");
+		if (insc_buf[0]) strcat(insc_buf, ", ");
 
 		/* Get inscription and convert {%} */
 		get_inscription(buff, o_ptr);
 
 		/* strcat with correct treating of kanji */
-		my_strcat(tmp_val2, buff, sizeof(tmp_val2));
+		my_strcat(insc_buf, buff, sizeof(insc_buf));
 	}
 
+
 	/* Note the discount, if any */
-	else if (o_ptr->discount && !(tmp_val2[0]))
+        if (o_ptr->discount &&
+	    (!insc_buf[0] || (o_ptr->ident & IDENT_STOREB)))
 	{
+		if (tmp_val2[0]) strcat(tmp_val2, ", ");
+
 		(void)object_desc_num(tmp_val2, o_ptr->discount);
 #ifdef JP
 		strcat(tmp_val2, "%°ú¤­");
@@ -3233,6 +3234,15 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		strcat(tmp_val2, "% off");
 #endif
 	}
+
+	/* Add insc_buf */
+	if (insc_buf[0])
+	{
+		if (tmp_val2[0]) strcat(tmp_val2, ", ");
+
+		strcat(tmp_val2, insc_buf);
+	}
+
 
 	/* Append the inscription, if any */
 	if (tmp_val2[0])
