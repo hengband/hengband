@@ -470,10 +470,10 @@ static void place_pet(void)
 			cave[cy][cx].m_idx = m_idx;
 
 			m_ptr->r_idx = party_mon[i].r_idx;
-			r_ptr = real_r_ptr(m_ptr);
 
 			/* Copy all member of the structure */
 			*m_ptr = party_mon[i];
+			r_ptr = real_r_ptr(m_ptr);
 
 			m_ptr->fy = cy;
 			m_ptr->fx = cx;
