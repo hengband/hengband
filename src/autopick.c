@@ -806,7 +806,7 @@ void auto_inscribe_item(int item, int idx)
 	{
 		o_ptr->inscription = inscribe_flags(o_ptr, autopick_list[idx].insc);
 
-		if (item >= INVEN_RARM)
+		if (item > INVEN_PACK)
 		{
 			/* Redraw inscription */
 			p_ptr->window |= (PW_EQUIP);
@@ -830,6 +830,9 @@ bool auto_destroy_item(int item, int autopick_idx)
 {
 	char o_name[MAX_NLEN];
 	object_type *o_ptr;
+
+	/* Don't destroy equipped items */
+	if (item > INVEN_PACK) return FALSE;
 
 	/* Get the item (in the pack) */
 	if (item >= 0) o_ptr = &inventory[item];
