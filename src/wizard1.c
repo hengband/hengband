@@ -2039,11 +2039,14 @@ static void spoil_mon_info(cptr fname)
 		flags1 = r_ptr->flags1;
 
 		/* Prefix */
+		/*
 		if (flags1 & (RF1_QUESTOR))
 		{
 			spoil_out("[Q] ");
 		}
-		else if (flags1 & (RF1_UNIQUE))
+		else
+		*/
+		if (flags1 & (RF1_UNIQUE))
 		{
 			spoil_out("[U] ");
 		}
