@@ -4165,11 +4165,11 @@ void do_cmd_visuals(void)
 #ifdef JP
 				Term_putstr(5, 17, -1, TERM_WHITE,
 					    format("アイテム = %d, 名前 = %-40.40s",
-						   k, (k_name + k_ptr->name)));
+						   k, k_name + (!k_ptr->flavor ? k_ptr->name : k_ptr->flavor_name)));
 #else
 				Term_putstr(5, 17, -1, TERM_WHITE,
 					    format("Object = %d, Name = %-40.40s",
-						   k, (k_name + k_ptr->name)));
+						   k, k_name + (!k_ptr->flavor ? k_ptr->name : k_ptr->flavor_name)));
 #endif
 
 				/* Label the Default values */
@@ -4228,7 +4228,7 @@ void do_cmd_visuals(void)
 								break;
 							}
 						}
-						while (!k_info[k].name || k_info[k].flavor);
+						while (!k_info[k].name);
 					}
 					break;
 				case 'a':
@@ -8077,7 +8077,7 @@ static void display_object_list(int col, int row, int per_page, int object_idx[]
 		byte cursor = ((k_ptr->aware || visual_only) ? TERM_L_BLUE : TERM_BLUE);
 
 
-		if (k_ptr->flavor)
+		if (!visual_only && k_ptr->flavor)
 		{
 			/* Appearance of this object is shuffled */
 			flavor_k_ptr = &k_info[k_ptr->flavor];
@@ -8092,7 +8092,7 @@ static void display_object_list(int col, int row, int per_page, int object_idx[]
 
 		attr = ((i + object_top == object_cur) ? cursor : attr);
 
-		if (!k_ptr->flavor || k_ptr->aware)
+		if (!k_ptr->flavor || (!visual_only && k_ptr->aware))
 		{
 			/* Tidy name */
 			strip_name(o_name, k_idx);
@@ -8236,7 +8236,7 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, int di
 		object_kind *k_ptr = &k_info[direct_k_idx];
 		object_kind *flavor_k_ptr;
 
-		if (k_ptr->flavor)
+		if (!visual_only && k_ptr->flavor)
 		{
 			/* Appearance of this object is shuffled */
 			flavor_k_ptr = &k_info[k_ptr->flavor];
@@ -8352,7 +8352,7 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, int di
 		/* Get the current object */
 		k_ptr = &k_info[object_idx[object_cur]];
 
-		if (k_ptr->flavor)
+		if (!visual_only && k_ptr->flavor)
 		{
 			/* Appearance of this object is shuffled */
 			flavor_k_ptr = &k_info[k_ptr->flavor];
