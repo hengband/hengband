@@ -1,4 +1,71 @@
+2002-05-13  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.20, src/externs.h 1.52, src/spells3.c 1.25:
+	- 持ち物の中のアイテムを鑑定して自動刻みや自動破壊にマッチさせようとした
+	  とき、「収集中の」に先にマッチしてしまって期待通りの動作をしない事があっ
+	  たので、「収集中の」の処理を少し変更、「対象のo_ptr以外で」それと同じ
+	  種類のアイテムを持っていたらマッチするようにした。
+
+	- サブウィンドウで持ち物や装備を表示しているとき、自動刻みの後でちゃん
+	  と表示を更新。さらに自動刻みで「$」や「.」を付けていた時に備えて、
+	  PU_BONUSのアップデートフラグも付加。
+
+2002-05-08  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd3.c 1.19, src/externs.h 1.51, src/object2.c 1.36, src/spells3.c 1.24, src/cmd1.c 1.36:
+	can_player_destroy_object()のextern宣言がなかったのを修正。ついでに
+	他の場所でこの関数と同じ処理をしているところをこの関数を使用するように修正。
+
+2002-05-07  _nothere  <_nothere@cvs>
+
+	* src/autopick.c 1.19:
+	自動破壊時にアイテム名が初期化されないまま使われてアイテム名の表示が狂うのを修正.
+
+2002-05-07  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/misc_j.txt 1.8, lib/edit/r_info_j.txt 1.36, lib/file/mondeath_j.txt 1.2, lib/file/monspeak_j.txt 1.5:
+	魔人ウォーケン追加。
+
+	* lib/pref/font-win.prf 1.3:
+	winの豆腐もTERM_L_UMBERに。
+
+	* lib/edit/f_info_j.txt 1.6, src/cave.c 1.42:
+	永久岩の色をTERM_L_UMBER(15番;U)にした。光源範囲の色TERM_YELLOWは普通の壁の
+	場合と区別が付かなくて困るので、TERM_L_UMBERは光源範囲で色が変わらないようにした。
+
+	* src/cmd4.c 1.35, src/dungeon.c 1.39:
+	自動拾いファイルはpicktype-<name>.prfとpicktype.prfの両方があるとき、
+	名前付きの方だけを読むようにした。
+	自動拾いエディタとの関係もコンシステントになる。
+
+	* src/mspells3.c 1.11:
+	青魔道師の魔法の失敗率表示の||と&&の間違い修正。
+
 2002-05-06  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.18:
+	inscribe_flags()の関数宣言がauto_pickup_items()の中にあったので削除。
+	こういう書き方するべきでないね。
+
+2002-05-06  _nothere  <_nothere@cvs>
+
+	* src/externs.h 1.50:
+	再宣言で型が一致しないエラーが出るので, inscribe_flags()のプロトタイプを含めた.
+
+2002-05-06  Takeshi Mogami  <mogami@cvs>
+
+	* src/flavor.c 1.13:
+	「{呪われている}」「{空}」「{未鑑定}」等の擬似銘を本当の銘で上書きしないで
+	「{呪われている, +腕r冷乱}」等のように表示するようにした。
+	ただし、「??%引き」の表示は例外として上書きする。
+
+	* src/autopick.c 1.17:
+	符号間違ってクラッシュしてたので修正。
+
+	* src/dungeon.c 1.38:
+	簡易鑑定の後でも自動破壊と自動刻みを適用。これで auto-squelch と同等。
+
+	* Changelogs 1.41: 更新
 
 	* src/autopick.c 1.16, src/cmd1.c 1.35, src/externs.h 1.49, src/spells3.c 1.23:
 	自動破壊と自動刻み機能を、床上や持ち物の鑑定の後にも適用するようにした。
