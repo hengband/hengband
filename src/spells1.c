@@ -8026,34 +8026,41 @@ static bool do_disintegration(int by, int bx, int y, int x)
 
 /*
  * breath shape
- */ 
+ */
 void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte *gm, int *pgm_rad, int rad, int y1, int x1, int y2, int x2, bool disint_ball, bool real_breath)
 {
-	int by, bx;
+	int by = y1;
+	int bx = x1;
 	int brad = 0;
+	int brev = rad * rad / dist;
 	int bdis = 0;
 	int cdis;
 	int path_n = 0;
-	int max_dis = distance(y1, x1, y2, x2) + rad;
-	
-	/* Start from origin */	
-	by = y1;
-	bx = x1;
-	
-	while (bdis <= max_dis)
+	int tdis = distance(y1, x1, y2, x2);
+	int mdis = tdis + rad;
+
+	while (bdis <= mdis)
 	{
-		if ((path_n < dist) && (distance(by, bx, y1, x1) < bdis))
+		int x, y;
+
+		if ((0 < dist) && (path_n < dist))
 		{
+			int ny = GRID_Y(path_g[path_n]);
+			int nx = GRID_X(path_g[path_n]);
+			int nd = distance(ny, nx, y1, x1);
+
 			/* Get next base point */
-			by = GRID_Y(path_g[path_n]);
-			bx = GRID_X(path_g[path_n]);
-			path_n++;
+			if (bdis >= nd)
+			{
+				by = ny;
+				bx = nx;
+				path_n++;
+			}
 		}
 
 		/* Travel from center outward */
 		for (cdis = 0; cdis <= brad; cdis++)
 		{
-			int y,x;
 			/* Scan the maximal blast area of radius "cdis" */
 			for (y = by - cdis; y <= by + cdis; y++)
 			{
@@ -8061,7 +8068,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 				{
 					/* Ignore "illegal" locations */
 					if (!in_bounds(y, x)) continue;
-					
+
 					/* Enforce a circular "ripple" */
 					if (distance(y1, x1, y, x) != bdis) continue;
 
@@ -8088,7 +8095,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 						/* The blast is stopped by walls */
 						if (!los(by, bx, y, x)) continue;
 					}
-					
+
 					/* Save this grid */
 					gy[*pgrids] = y;
 					gx[*pgrids] = x;
@@ -8096,17 +8103,17 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 				}
 			}
 		}
-		
+
 		/* Encode some more "radius" info */
 		gm[bdis + 1] = *pgrids;
 
+		/* Increase the size */
+		brad = rad * (path_n + brev) / (dist + brev);
+
 		/* Find the next ripple */
 		bdis++;
-		
-		/* Increase the size */
-		brad = (rad * bdis) / max_dis;
 	}
-	
+
 	/* Store the effect size */
 	*pgm_rad = bdis;
 }
