@@ -805,11 +805,11 @@ static bool cast_hissatsu_spell(int spell)
 			/* Hack -- attack monsters */
 			if (c_ptr->m_idx && (m_ptr->ml || cave_floor_bold(y, x)))
 			{
-				if (r_info[m_list[c_ptr->m_idx].r_idx].flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING))
+				if (!monster_living(&r_info[m_ptr->r_idx]))
 				{
 					char m_name[80];
 
-					monster_desc(m_name, &m_list[c_ptr->m_idx], 0);
+					monster_desc(m_name, m_ptr, 0);
 #ifdef JP
 					msg_format("%sには効果がない！", m_name);
 #else

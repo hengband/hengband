@@ -3335,14 +3335,11 @@ note = "があなたに隷属した。";
 			}
 			if (!monster_living(r_ptr))
 			{
-				if (r_ptr->flags3 & RF3_UNDEAD)
+				if (seen)
 				{
-					if (seen) r_ptr->r_flags3 |= (RF3_UNDEAD);
-				}
-
-				if (r_ptr->flags3 & (RF3_DEMON))
-				{
-					if (seen) r_ptr->r_flags3 |= (RF3_DEMON);
+					if (r_ptr->flags3 & RF3_DEMON) r_ptr->r_flags3 |= (RF3_DEMON);
+					if (r_ptr->flags3 & RF3_UNDEAD) r_ptr->r_flags3 |= (RF3_UNDEAD);
+					if (r_ptr->flags3 & RF3_NONLIVING) r_ptr->r_flags3 |= (RF3_NONLIVING);
 				}
 
 #ifdef JP
@@ -3375,11 +3372,13 @@ note = "には効果がなかった！";
 				if (seen) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
-			if (r_ptr->flags3 & (RF3_UNDEAD | RF3_NONLIVING))
+			if (!monster_living(r_ptr))
 			{
-				if (r_ptr->flags3 & RF3_UNDEAD)
+				if (seen)
 				{
-					if (seen) r_ptr->r_flags3 |= (RF3_UNDEAD);
+					if (r_ptr->flags3 & RF3_DEMON) r_ptr->r_flags3 |= (RF3_DEMON);
+					if (r_ptr->flags3 & RF3_UNDEAD) r_ptr->r_flags3 |= (RF3_UNDEAD);
+					if (r_ptr->flags3 & RF3_NONLIVING) r_ptr->r_flags3 |= (RF3_NONLIVING);
 				}
 
 #ifdef JP
@@ -4187,7 +4186,7 @@ msg_format("%sを見つめた。",m_name);
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & (RF1_QUESTOR)) ||
 			    (m_ptr->mflag2 & MFLAG2_NOPET) ||
-				 (r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) ||
+				 !monster_living(r_ptr) ||
 				 ((r_ptr->level+10) > randint1(dam)))
 			{
 				/* Resist */
@@ -5366,11 +5365,11 @@ msg_format("%sには効果がなかった。",m_name);
 			}
 
 			if (is_pet(m_ptr)) nokori_hp = m_ptr->maxhp*4L;
-			else if ((p_ptr->pclass == CLASS_BEASTMASTER) && (r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)))
+			else if ((p_ptr->pclass == CLASS_BEASTMASTER) && monster_living(r_ptr))
 				nokori_hp = m_ptr->maxhp * 3 / 10;
 			else
 				nokori_hp = m_ptr->maxhp * 3 / 20;
-			
+
 			if (m_ptr->hp >= nokori_hp)
 			{
 #ifdef JP

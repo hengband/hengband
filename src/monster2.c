@@ -798,14 +798,13 @@ static bool summon_specific_aux(int r_idx)
 
 		case SUMMON_HI_DRAGON_LIVING:
 		{
-			okay = ((r_ptr->d_char == 'D') &&
-			       !(r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)));
+			okay = ((r_ptr->d_char == 'D') && monster_living(r_ptr));
 			break;
 		}
 
 		case SUMMON_LIVING:
 		{
-			okay = (!(r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)));
+			okay = monster_living(r_ptr);
 			break;
 		}
 
@@ -859,7 +858,7 @@ static bool summon_specific_aux(int r_idx)
 
 			for (i = 0; i < 4; i++)
 				if (r_ptr->blow[i].method == RBM_EXPLODE) okay = TRUE;
-			okay = (okay && (!(r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING))));
+			okay = (okay && monster_living(r_ptr));
 			break;
 		}
 
@@ -2497,9 +2496,7 @@ void update_mon(int m_idx, bool full)
 
 			/* Magical sensing */
 			if ((p_ptr->esp_nonliving) && 
-			    (r_ptr->flags3 & (RF3_NONLIVING)) &&
-			    !(r_ptr->flags3 & (RF3_DEMON)) &&
-			    !(r_ptr->flags3 & (RF3_UNDEAD)))
+			    ((r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) == RF3_NONLIVING))
 			{
 				flag = TRUE;
 				r_ptr->r_flags3 |= (RF3_NONLIVING);

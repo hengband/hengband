@@ -605,7 +605,7 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 					if (mult < 25) mult = 25;
 				}
 			}
-			if ((mode == HISSATSU_ZANMA) && (r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) && (r_ptr->flags3 & RF3_EVIL))
+			if ((mode == HISSATSU_ZANMA) && !monster_living(r_ptr) && (r_ptr->flags3 & RF3_EVIL))
 			{
 				if (mult < 15) mult = 25;
 				else if (mult < 50) mult = MIN(50, mult+20);
@@ -624,7 +624,7 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 				if (mult == 10) mult = 40;
 				else if (mult < 60) mult = MIN(60, mult+30);
 			}
-			if ((mode == HISSATSU_SEKIRYUKA) && p_ptr->cut && !(r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)))
+			if ((mode == HISSATSU_SEKIRYUKA) && p_ptr->cut && monster_living(r_ptr))
 			{
 				int tmp = MIN(100, MAX(10, p_ptr->cut / 10));
 				if (mult < tmp) mult = tmp;
@@ -2530,13 +2530,13 @@ default:	msg_format("%sを細切れにした！", m_name);		break;
 			drain_result += p_ptr->to_d[hand];
 
 			if ((mode == HISSATSU_SUTEMI) || (mode == HISSATSU_3DAN)) k *= 2;
-			if ((mode == HISSATSU_SEKIRYUKA) && (r_ptr->flags3 & (RF3_UNDEAD | RF3_DEMON | RF3_NONLIVING))) k = 0;
+			if ((mode == HISSATSU_SEKIRYUKA) && !monster_living(r_ptr)) k = 0;
 			if ((mode == HISSATSU_SEKIRYUKA) && !p_ptr->cut) k /= 2;
 
 			/* No negative damage */
 			if (k < 0) k = 0;
 
-			if ((mode == HISSATSU_ZANMA) && !((r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) && (r_ptr->flags3 & RF3_EVIL)))
+			if ((mode == HISSATSU_ZANMA) && !(!monster_living(r_ptr) && (r_ptr->flags3 & RF3_EVIL)))
 			{
 				k = 0;
 			}
