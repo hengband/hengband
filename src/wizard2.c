@@ -1673,6 +1673,69 @@ static void do_cmd_wiz_zap_all(void)
 }
 
 
+/*
+ * Create desired feature
+ */
+static void do_cmd_wiz_create_feature(void)
+{
+	static int prev_feat = FEAT_NONE;
+	static int prev_mimic = FEAT_NONE;
+	cave_type  *c_ptr;
+	char       tmp_val[160];
+	int        tmp_feat, tmp_mimic;
+	int        y, x;
+
+	if (!tgt_pt(&x, &y)) return;
+
+	c_ptr = &cave[y][x];
+
+	/* Default */
+	sprintf(tmp_val, "%d", prev_feat);
+
+	/* Query */
+#ifdef JP
+	if (!get_string("地形: ", tmp_val, 3)) return;
+#else
+	if (!get_string("Feature: ", tmp_val, 3)) return;
+#endif
+
+	/* Extract */
+	tmp_feat = atoi(tmp_val);
+	if (tmp_feat < 0) tmp_feat = 0;
+	else if (tmp_feat >= max_f_idx) tmp_feat = max_f_idx - 1;
+
+	/* Default */
+	sprintf(tmp_val, "%d", prev_mimic);
+
+	/* Query */
+#ifdef JP
+	if (!get_string("地形 (mimic): ", tmp_val, 3)) return;
+#else
+	if (!get_string("Feature (mimic): ", tmp_val, 3)) return;
+#endif
+
+	/* Extract */
+	tmp_mimic = atoi(tmp_val);
+	if (tmp_mimic < 0) tmp_mimic = 0;
+	else if (tmp_mimic >= max_f_idx) tmp_mimic = max_f_idx - 1;
+
+	cave_set_feat(y, x, tmp_feat);
+	c_ptr->mimic = tmp_mimic;
+	if (tmp_mimic)
+	{
+		feature_type *f_ptr = &f_info[tmp_mimic];
+
+		if (have_flag(f_ptr->flags, FF_GLYPH) ||
+		    have_flag(f_ptr->flags, FF_MINOR_GLYPH) ||
+		    have_flag(f_ptr->flags, FF_MIRROR))
+			c_ptr->info |= (CAVE_OBJECT);
+	}
+
+	prev_feat = tmp_feat;
+	prev_mimic = tmp_mimic;
+}
+
+
 #define NUM_O_SET 8
 #define NUM_O_BIT 32
 
@@ -1868,6 +1931,11 @@ void do_cmd_debug(void)
 	/* View item info */
 	case 'f':
 		identify_fully(FALSE);
+		break;
+
+	/* Create desired feature */
+	case 'F':
+		do_cmd_wiz_create_feature();
 		break;
 
 	/* Good Objects */
