@@ -2313,6 +2313,7 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
 
 	for (n = 0, y = 0; y < Term->hgt; y++)
 	{
+#ifdef JP
 		int kanji = 0;
 
 		if (y < min.y) continue;
@@ -2343,6 +2344,24 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
 			buf[l] = c;
 			l++;
 		}
+#else
+		if (y < min.y) continue;
+		if (y > max.y) break;
+
+		for (l = 0, x = 0; x < Term->wid; x++)
+		{
+			if (x > max.x) break;
+
+			/* Find the character. */
+			Term_what(x, y, &a, &c);
+
+			if (x < min.x) continue;
+
+			/* Add it. */
+			buf[l] = c;
+			l++;
+		}
+#endif
 
 		/* Terminate all line unless it's single line. */
 		if (min.y != max.y)
