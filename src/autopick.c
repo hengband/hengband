@@ -2627,7 +2627,6 @@ void do_cmd_edit_autopick(void)
         int filename_mode = PT_WITH_PNAME;
 
 	int i, j, k, len;
-	cptr tmp;
 
 	int old_upper = -1, old_left = -1;
 	int old_cy = -1;
@@ -2958,8 +2957,6 @@ void do_cmd_edit_autopick(void)
 			/* Insert a character */
 			else if (!iscntrl(key&0xff))
 			{
-				int next;
-
 				/* Save preceding string */
 				for (i = j = 0; lines_list[cy][i] && i < cx; i++)
 					buf[j++] = lines_list[cy][i];
@@ -2968,6 +2965,8 @@ void do_cmd_edit_autopick(void)
 #ifdef JP
                                 if (iskanji(key))
 				{
+                                        int next;
+
                                         inkey_base = TRUE;
                                         next = inkey();
                                         if (j+2 < MAX_LINELEN)

@@ -1423,7 +1423,7 @@ static void get_inscription(char *buff, object_type *o_ptr)
 	*buff = '\0';
 	for (; *insc; insc++)
 	{
-                bool kanji;
+                bool kanji = FALSE;
                 bool all;
 
                 /* Ignore fake artifact inscription */

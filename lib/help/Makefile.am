@@ -12,6 +12,7 @@ angband_files = \
 	jcommand.txt jcommdesc.hlp jcommdesc.txt jdefend.hlp \
 	jdefend.txt jdungeon.hlp jdungeon.txt jgambling.txt \
 	jgeneral.hlp jgeneral.txt jhelp.hlp jhelpinfo.txt \
+	jlicense.txt \
 	jmagic.hlp jmagic.txt jmonster.hlp jmonster.txt \
 	jobjects.hlp jobjects.txt joption.hlp joption.txt \
 	jpref.hlp jpref.txt jspecial.hlp jtang.txt \
