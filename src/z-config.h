@@ -567,11 +567,6 @@
 /* Allow hordes of 'similar' monsters */
 # define MONSTER_HORDES
 
-/* Wizard mode testing options: */
-
-/* Testing upkeep */
-/* # define TRACK_FRIENDS */
-
 /*
  * OPTION: Repeat last command -- TNB
  */

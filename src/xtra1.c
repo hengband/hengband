@@ -129,8 +129,8 @@ bool is_daytime(void)
  */
 void extract_day_hour_min(int *day, int *hour, int *min)
 {
-	s32b len = TURNS_PER_TICK * TOWN_DAWN;
-	s32b tick = turn % len + len / 4;
+	const s32b A_DAY = TURNS_PER_TICK * TOWN_DAWN;
+	s32b turn_in_today = (turn + A_DAY / 4) % A_DAY;
 
 	switch (p_ptr->start_race)
 	{
@@ -138,14 +138,14 @@ void extract_day_hour_min(int *day, int *hour, int *min)
 	case RACE_SKELETON:
 	case RACE_ZOMBIE:
 	case RACE_SPECTRE:
-		*day = (turn - (TURNS_PER_TICK * TOWN_DAWN * 3 / 4)) / len + 1;
+		*day = (turn - A_DAY * 3 / 4) / A_DAY + 1;
 		break;
 	default:
-		*day = (turn + (TURNS_PER_TICK * TOWN_DAWN / 4)) / len + 1;
+		*day = (turn + A_DAY / 4) / A_DAY + 1;
 		break;
 	}
-	*hour = (24 * tick / len) % 24;
-	*min = (1440 * tick / len) % 60;
+	*hour = (24 * turn_in_today / A_DAY) % 24;
+	*min = (1440 * turn_in_today / A_DAY) % 60;
 }
 
 /*
