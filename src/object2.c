@@ -872,16 +872,18 @@ s32b flag_cost(object_type *o_ptr, int plusses)
 	s32b tmp_cost;
 	int count;
 	int i;
-	object_kind *k_ptr;
+	object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
 	object_flags(o_ptr, flgs);
 
-	/* Base item's value will be added later. */
-	k_ptr = &k_info[o_ptr->k_idx];
+	/*
+	 * Exclude fixed flags of the base item.
+	 * pval bonuses of base item will be treated later.
+	 */
 	for (i = 0; i < TR_FLAG_SIZE; i++)
 		flgs[i] &= ~(k_ptr->flags[i]);
 
-	/* Fixed artifact's value will be added later. */
+	/* Exclude fixed flags of the fixed artifact. */
 	if (o_ptr->name1)
 	{
 		artifact_type *a_ptr = &a_info[o_ptr->name1];
@@ -890,36 +892,34 @@ s32b flag_cost(object_type *o_ptr, int plusses)
 			flgs[i] &= ~(a_ptr->flags[i]);
 	}
 
-	/* Fixed ego item's value will be added later. */
+	/* Exclude fixed flags of the ego-item. */
 	else if (o_ptr->name2)
 	{
 		ego_item_type *e_ptr = &e_info[o_ptr->name2];
 
 		for (i = 0; i < TR_FLAG_SIZE; i++)
 			flgs[i] &= ~(e_ptr->flags[i]);
-
 	}
 
 
 	/*
 	 * Calucurate values of remaining flags
 	 */
-	if (have_flag(flgs, TR_STR)) total += (1700 * plusses);
-	if (have_flag(flgs, TR_INT)) total += (1700 * plusses);
-	if (have_flag(flgs, TR_WIS)) total += (1700 * plusses);
-	if (have_flag(flgs, TR_DEX)) total += (1700 * plusses);
-	if (have_flag(flgs, TR_CON)) total += (1700 * plusses);
-	if (have_flag(flgs, TR_CHR)) total += (950 * plusses);
-	if (have_flag(flgs, TR_MAGIC_MASTERY)) total += (700 * plusses);
-	if (have_flag(flgs, TR_STEALTH)) total += (350 * plusses);
-	if (have_flag(flgs, TR_SEARCH)) total += (200 * plusses);
-	if (have_flag(flgs, TR_INFRA)) total += (200 * plusses);
-	if (have_flag(flgs, TR_TUNNEL)) total += (225 * plusses);
+	if (have_flag(flgs, TR_STR)) total += (1500 * plusses);
+	if (have_flag(flgs, TR_INT)) total += (1500 * plusses);
+	if (have_flag(flgs, TR_WIS)) total += (1500 * plusses);
+	if (have_flag(flgs, TR_DEX)) total += (1500 * plusses);
+	if (have_flag(flgs, TR_CON)) total += (1500 * plusses);
+	if (have_flag(flgs, TR_CHR)) total += (750 * plusses);
+	if (have_flag(flgs, TR_MAGIC_MASTERY)) total += (600 * plusses);
+	if (have_flag(flgs, TR_STEALTH)) total += (250 * plusses);
+	if (have_flag(flgs, TR_SEARCH)) total += (100 * plusses);
+	if (have_flag(flgs, TR_INFRA)) total += (150 * plusses);
+	if (have_flag(flgs, TR_TUNNEL)) total += (175 * plusses);
 	if ((have_flag(flgs, TR_SPEED)) && (plusses > 0))
-		total += (10000 + (12500 * plusses));
+		total += (10000 + (2500 * plusses));
 	if ((have_flag(flgs, TR_BLOWS)) && (plusses > 0))
-		total += (10000 + (7500 * plusses));
-	if (have_flag(flgs, TR_DEC_MANA)) total += 10000;
+		total += (10000 + (2500 * plusses));
 
 	tmp_cost = 0;
 	count = 0;
@@ -1018,6 +1018,7 @@ s32b flag_cost(object_type *o_ptr, int plusses)
 	if (have_flag(flgs, TR_SLOW_DIGEST)) total += 750;
 	if (have_flag(flgs, TR_REGEN)) total += 2500;
 	if (have_flag(flgs, TR_WARNING)) total += 2000;
+	if (have_flag(flgs, TR_DEC_MANA)) total += 10000;
 	if (have_flag(flgs, TR_XTRA_MIGHT)) total += 2250;
 	if (have_flag(flgs, TR_XTRA_SHOTS)) total += 10000;
 	if (have_flag(flgs, TR_IGNORE_ACID)) total += 100;
@@ -1174,6 +1175,8 @@ s32b object_value_real(object_type *o_ptr)
 		/* Hack -- Use the artifact cost instead */
 		value = a_ptr->cost;
 		value += flag_cost(o_ptr, o_ptr->pval);
+
+		/* Don't add pval bonuses etc. */
 		return (value);
 	}
 
@@ -1199,6 +1202,61 @@ s32b object_value_real(object_type *o_ptr)
 			if (o_ptr->art_flags[i]) flag = TRUE;
 
 		if (flag) value += flag_cost(o_ptr, o_ptr->pval);
+	}
+
+	/* Analyze pval bonus for normal object */
+	switch (o_ptr->tval)
+	{
+	case TV_SHOT:
+	case TV_ARROW:
+	case TV_BOLT:
+	case TV_BOW:
+	case TV_DIGGING:
+	case TV_HAFTED:
+	case TV_POLEARM:
+	case TV_SWORD:
+	case TV_BOOTS:
+	case TV_GLOVES:
+	case TV_HELM:
+	case TV_CROWN:
+	case TV_SHIELD:
+	case TV_CLOAK:
+	case TV_SOFT_ARMOR:
+	case TV_HARD_ARMOR:
+	case TV_DRAG_ARMOR:
+	case TV_LITE:
+	case TV_AMULET:
+	case TV_RING:
+		/* No pval */
+		if (!o_ptr->pval) break;
+
+		/* Hack -- Negative "pval" is always bad */
+		if (o_ptr->pval < 0) return (0L);
+
+		/* Give credit for stat bonuses */
+		if (have_flag(flgs, TR_STR)) value += (o_ptr->pval * 200L);
+		if (have_flag(flgs, TR_INT)) value += (o_ptr->pval * 200L);
+		if (have_flag(flgs, TR_WIS)) value += (o_ptr->pval * 200L);
+		if (have_flag(flgs, TR_DEX)) value += (o_ptr->pval * 200L);
+		if (have_flag(flgs, TR_CON)) value += (o_ptr->pval * 200L);
+		if (have_flag(flgs, TR_CHR)) value += (o_ptr->pval * 200L);
+
+		/* Give credit for stealth and searching */
+		if (have_flag(flgs, TR_MAGIC_MASTERY)) value += (o_ptr->pval * 100);
+		if (have_flag(flgs, TR_STEALTH)) value += (o_ptr->pval * 100L);
+		if (have_flag(flgs, TR_SEARCH)) value += (o_ptr->pval * 100L);
+
+		/* Give credit for infra-vision and tunneling */
+		if (have_flag(flgs, TR_INFRA)) value += (o_ptr->pval * 50L);
+		if (have_flag(flgs, TR_TUNNEL)) value += (o_ptr->pval * 50L);
+
+		/* Give credit for extra attacks */
+		if (have_flag(flgs, TR_BLOWS)) value += (o_ptr->pval * 5000L);
+
+		/* Give credit for speed bonus */
+		if (have_flag(flgs, TR_SPEED)) value += (o_ptr->pval * 10000L);
+
+		break;
 	}
 
 
