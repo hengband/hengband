@@ -7220,7 +7220,7 @@ option_type option_info[] =
         "leave_junk",                   "がらくたは壊さない" },
 #else
         { &leave_junk,                  FALSE, 7, 7, 6,
-        "leave_junk",                   "Auto-destroyer leaves junks" },
+        "leave_junk",                   "Auto-destroyer leaves junk" },
 #endif
 
 
