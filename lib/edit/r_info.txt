@@ -18436,7 +18436,7 @@ W:30:2:0:350:0:0
 B:TOUCH:ACID:8d8
 B:TOUCH:PARALYZE:3d3
 F:NEVER_MOVE | MULTIPLY | ONLY_GOLD | DROP_90 | ANIMAL | HURT_ROCK |
-F:NO_FEAR | NO_SLEEP | NO_CONF | NO_STUN | EMPTY_MIND
+F:NO_FEAR | NO_SLEEP | NO_CONF | NO_STUN | EMPTY_MIND | COLD_BLOOD |
 F:IM_COLD | IM_FIRE | IM_ELEC | IM_POIS | RES_SHAR
 D:$Just a normal wall, boring gray rock. But wait! It seems to be growing...
 D:ただの普通の壁だ。見なれた灰色の岩でできている。
@@ -18498,8 +18498,8 @@ I:100:15d25:15:120:10
 W:25:2:0:100:700:898
 B:TOUCH:FIRE:5d5
 B:TOUCH:PARALYZE:3d3
-F:NEVER_MOVE | MULTIPLY | ONLY_GOLD | DROP_60 | DROP_90 | EMPTY_MIND
-F:ANIMAL | HURT_ROCK | COLD_BLOOD | NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN |
+F:NEVER_MOVE | MULTIPLY | ONLY_GOLD | DROP_60 | DROP_90 | EMPTY_MIND |
+F:ANIMAL | HURT_ROCK | NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN |
 F:IM_ACID | IM_ELEC | IM_POIS | IM_FIRE | RES_SHAR
 D:$It's just a block of dark rock. But wait! It seems to be growing...
 D:普通の黒い岩の壁だ。しかしちょっと待てよ？だんだん大きくなってくるような…
@@ -18629,7 +18629,7 @@ D:$An ingenious gnomish invention -- a golem designed for underwater
 D:$usage.
 D:ノームの天才が作った発明品だ。深い水中で働くように設計されたゴーレムである。
 
-N:911:石英の壁
+N:911:石英の鉱脈
 E:Quartz vein
 G:%:w
 I:100:15d11:15:30:10
