@@ -805,7 +805,6 @@ static bool is_autopick2( object_type *o_ptr) {
  */
 void auto_inscribe_item(s16b item, int idx)
 {
-	char o_name[MAX_NLEN];
 	object_type *o_ptr;
 
 	/* Get the item (in the pack) */
