@@ -552,22 +552,22 @@ static bool cave_gen(void)
 		{
 			for (x = 0; x < cur_wid; x++)
 			{
-				place_floor_grid(&cave[y][x]);
+				place_floor_bold(y, x);
 			}
 		}
 
 		/* Special boundary walls -- Top and bottom */
 		for (x = 0; x < cur_wid; x++)
 		{
-			place_extra_grid(&cave[0][x]);
-			place_extra_grid(&cave[cur_hgt - 1][x]);
+			place_floor_bold(0, x);
+			place_floor_bold(cur_hgt - 1, x);
 		}
 
 		/* Special boundary walls -- Left and right */
 		for (y = 1; y < (cur_hgt - 1); y++)
 		{
-			place_extra_grid(&cave[y][0]);
-			place_extra_grid(&cave[y][cur_wid - 1]);
+			place_floor_bold(y, 0);
+			place_floor_bold(y, cur_wid - 1);
 		}
 	}
 	else
@@ -577,7 +577,7 @@ static bool cave_gen(void)
 		{
 			for (x = 0; x < cur_wid; x++)
 			{
-				place_extra_grid(&cave[y][x]);
+				place_floor_bold(y, x);
 			}
 		}
 	}
