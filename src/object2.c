@@ -6261,6 +6261,8 @@ void display_koff(int k_idx)
 
 	object_type forge;
 	object_type *q_ptr;
+	int         sval;
+	int         use_realm;
 
 	char o_name[MAX_NLEN];
 
@@ -6287,21 +6289,27 @@ void display_koff(int k_idx)
 	/* Mention the object name */
 	Term_putstr(0, 0, -1, TERM_WHITE, o_name);
 
+	/* Access the item's sval */
+	sval = q_ptr->sval;
+	use_realm = tval2realm(q_ptr->tval);
+
 	/* Warriors are illiterate */
-	if (!(p_ptr->realm1 || p_ptr->realm2)) return;
+	if (p_ptr->realm1 || p_ptr->realm2)
+	{
+		if ((use_realm != p_ptr->realm1) && (use_realm != p_ptr->realm2)) return;
+	}
+	else
+	{
+		if ((p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_RED_MAGE)) return;
+		if (!is_magic(use_realm)) return;
+		if ((p_ptr->pclass == CLASS_RED_MAGE) && (use_realm != REALM_ARCANE) && (sval > 1)) return;
+	}
 
 	/* Display spells in readible books */
-	if ((q_ptr->tval == REALM1_BOOK) ||
-	    (q_ptr->tval == REALM2_BOOK))
 	{
-		int     sval;
 		int     spell = -1;
 		int     num = 0;
 		byte    spells[64];
-
-
-		/* Access the item's sval */
-		sval = q_ptr->sval;
 
 		/* Extract spells */
 		for (spell = 0; spell < 32; spell++)
@@ -6315,8 +6323,7 @@ void display_koff(int k_idx)
 		}
 
 		/* Print spells */
-		print_spells(0, spells, num, 2, 0,
-		    (q_ptr->tval == REALM1_BOOK ? p_ptr->realm1 : p_ptr->realm2));
+		print_spells(0, spells, num, 2, 0, use_realm);
 	}
 }
 
