@@ -5004,7 +5004,7 @@ static int collect_monsters(int grp_cur, s16b mon_idx[], byte mode)
 		monster_race *r_ptr = &r_info[i];
 
 		/* Is this a unique? */
-		bool unique = (r_ptr->flags1 & (RF1_UNIQUE)) ;
+		bool unique = (bool)(r_ptr->flags1 & (RF1_UNIQUE)) ;
 
 		/* Skip empty race */
 		if (!r_ptr->name) continue ;
@@ -7379,7 +7379,7 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 		monster_race *r_ptr = &r_info[r_idx];
 
 		/* Is this a unique? */
-		bool unique = (r_ptr->flags1 & (RF1_UNIQUE)) ;
+		bool unique = (bool)(r_ptr->flags1 & (RF1_UNIQUE)) ;
 
 		/* Choose a color */
 		attr = ((i + mon_top == mon_cur) ? TERM_L_BLUE : TERM_WHITE);
@@ -7802,7 +7802,8 @@ static void do_cmd_knowledge_objects(void)
 			case 'r':
 			{
 				/* Recall on screen */
-				desc_obj_fake(object_idx[object_cur]);
+				if (grp_cnt > 0)
+					desc_obj_fake(object_idx[object_cur]);
 
 				redraw = TRUE;
 				break;
