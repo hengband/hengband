@@ -358,17 +358,14 @@ void place_trees(int x, int y)
  */
 void destroy_level(void)
 {
-	int y1, x1, y, x, k, t, n;
-
-	cave_type *c_ptr;
+	int y1, x1, n;
 
 	/* Note destroyed levels */
 #ifdef JP
-if (cheat_room) msg_print("ÇË²õ¤µ¤ì¤¿³¬");
+	if (cheat_room) msg_print("ÇË²õ¤µ¤ì¤¿³¬");
 #else
 	if (cheat_room) msg_print("Destroyed Level");
 #endif
-
 
 	/* Drop a few epi-centers (usually about two) */
 	for (n = 0; n < randint1(5); n++)
@@ -377,73 +374,6 @@ if (cheat_room) msg_print("ÇË²õ¤µ¤ì¤¿³¬");
 		x1 = rand_range(5, cur_wid - 1 - 5);
 		y1 = rand_range(5, cur_hgt - 1 - 5);
 
-		/* Big area of affect */
-		for (y = (y1 - 15); y <= (y1 + 15); y++)
-		{
-			for (x = (x1 - 15); x <= (x1 + 15); x++)
-			{
-				/* Skip illegal grids */
-				if (!in_bounds(y, x)) continue;
-
-				/* Extract the distance */
-				k = distance(y1, x1, y, x);
-
-				/* Stay in the circle of death */
-				if (k >= 16) continue;
-
-				/* Delete the monster (if any) */
-				delete_monster(y, x);
-
-				/* Access the grid */
-				c_ptr = &cave[y][x];
-
-				/* Destroy valid grids */
-				if (cave_valid_grid(c_ptr))
-				{
-					/* Delete objects */
-					delete_object(y, x);
-
-					/* Wall (or floor) type */
-					t = randint0(200);
-
-					/* Granite */
-					if (t < 20)
-					{
-						/* Create granite wall */
-						place_extra_grid(c_ptr);
-					}
-
-					/* Quartz */
-					else if (t < 70)
-					{
-						/* Create quartz vein */
-						c_ptr->feat = FEAT_QUARTZ;
-					}
-
-					/* Magma */
-					else if (t < 100)
-					{
-						/* Create magma vein */
-						c_ptr->feat = FEAT_MAGMA;
-					}
-
-					/* Floor */
-					else
-					{
-						/* Create floor */
-						place_floor_grid(c_ptr);
-					}
-
-					/* Clear garbage of hidden trap or door */
-					c_ptr->mimic = 0;
-
-					/* No longer part of a room or vault */
-					c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
-
-					/* No longer illuminated or known */
-					c_ptr->info &= ~(CAVE_MARK | CAVE_GLOW);
-				}
-			}
-		}
+		(void)destroy_area(y1, x1, 15, TRUE);
 	}
 }

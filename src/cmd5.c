@@ -1680,7 +1680,7 @@ msg_print("あなたは力がみなぎるのを感じた！");
 			}
 			else if (die < 106)
 			{
-				destroy_area(py, px, 13+randint0(5));
+				(void)destroy_area(py, px, 13 + randint0(5), FALSE);
 			}
 			else if (die < 108)
 			{
@@ -1728,7 +1728,7 @@ msg_print("ドーン！部屋が揺れた！");
 		(void)fire_beam(GF_AWAY_ALL, dir, plev);
 		break;
 	case 14: /* Word of Destruction */
-		destroy_area(py, px, 13+randint0(5));
+		(void)destroy_area(py, px, 13 + randint0(5), FALSE);
 		break;
 	case 15: /* Invoke Logrus */
 		if (!get_aim_dir(&dir)) return FALSE;
@@ -2140,7 +2140,7 @@ msg_print("あなたの頭に大量の幽霊たちの騒々しい声が押し寄せてきた...");
 			}
 			else if (die < 106)
 			{
-				destroy_area(py, px, 13+randint0(5));
+				(void)destroy_area(py, px, 13 + randint0(5), FALSE);
 			}
 			else if (die < 108)
 			{
@@ -4073,7 +4073,7 @@ msg_print("神聖な力が邪悪を打ち払った！");
 		}
 		break;
 	case 27: /* Word of Destruction */
-		destroy_area(py, px, 13+randint0(5));
+		(void)destroy_area(py, px, 13 + randint0(5), FALSE);
 		break;
 	case 28: /* Eye for an Eye */
 		set_tim_eyeeye(randint1(10)+10, FALSE);

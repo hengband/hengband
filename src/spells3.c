@@ -1479,7 +1479,7 @@ void call_the_(void)
 #endif
 
 
-		if (destroy_area(py, px, 15 + p_ptr->lev + randint0(11)))
+		if (destroy_area(py, px, 15 + p_ptr->lev + randint0(11), FALSE))
 #ifdef JP
 			msg_print("ダンジョンが崩壊した...");
 #else

@@ -11,6 +11,7 @@
 /* Purpose: Spell code (part 2) */
 
 #include "angband.h"
+#include "grid.h"
 
 
 /*
@@ -5323,12 +5324,11 @@ msg_print("これで全部です。");
  * Later we may use one function for both "destruction" and
  * "earthquake" by using the "full" to select "destruction".
  */
-bool destroy_area(int y1, int x1, int r)
+bool destroy_area(int y1, int x1, int r, bool in_generate)
 {
 	int       y, x, k, t;
 	cave_type *c_ptr;
 	bool      flag = FALSE;
-
 
 	/* Prevent destruction of quest levels and town */
 	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !dun_level)
@@ -5341,9 +5341,6 @@ bool destroy_area(int y1, int x1, int r)
 	{
 		for (x = (x1 - r); x <= (x1 + r); x++)
 		{
-			monster_type *m_ptr;
-			monster_race *r_ptr;
-
 			/* Skip illegal grids */
 			if (!in_bounds(y, x)) continue;
 
@@ -5355,53 +5352,67 @@ bool destroy_area(int y1, int x1, int r)
 
 			/* Access the grid */
 			c_ptr = &cave[y][x];
-			m_ptr = &m_list[c_ptr->m_idx];
-			r_ptr = &r_info[m_ptr->r_idx];
 
 			/* Lose room and vault */
-			c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY | CAVE_UNSAFE | CAVE_OBJECT);
+			c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
 			/* Lose light and knowledge */
 			c_ptr->info &= ~(CAVE_MARK | CAVE_GLOW);
 
-			/* Hack -- Notice player affect */
-			if ((x == px) && (y == py))
+			if (!in_generate) /* Normal */
 			{
-				/* Hurt the player later */
-				flag = TRUE;
+				/* Lose unsafety and runes/mirrors */
+				c_ptr->info &= ~(CAVE_UNSAFE | CAVE_OBJECT);
 
-				/* Do not hurt this grid */
-				continue;
+				/* Hack -- Notice player affect */
+				if ((x == px) && (y == py))
+				{
+					/* Hurt the player later */
+					flag = TRUE;
+
+					/* Do not hurt this grid */
+					continue;
+				}
 			}
 
 			/* Hack -- Skip the epicenter */
 			if ((y == y1) && (x == x1)) continue;
 
-			if ((r_ptr->flags1 & RF1_QUESTOR))
+			if (c_ptr->m_idx)
 			{
-				/* Heal the monster */
-				m_list[c_ptr->m_idx].hp = m_list[c_ptr->m_idx].maxhp;
+				monster_type *m_ptr = &m_list[c_ptr->m_idx];
+				monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-				/* Try to teleport away quest monsters */
-				if (!teleport_away(c_ptr->m_idx, (r * 2) + 1, TRUE)) continue;
-			}
-			else
-			{
-				if (c_ptr->m_idx)
+				if (in_generate) /* In generation */
 				{
-					if (record_named_pet && is_pet(&m_list[c_ptr->m_idx]) && m_list[c_ptr->m_idx].nickname)
+					/* Delete the monster (if any) */
+					delete_monster(y, x);
+				}
+				else if (r_ptr->flags1 & RF1_QUESTOR)
+				{
+					/* Heal the monster */
+					m_ptr->hp = m_ptr->maxhp;
+
+					/* Try to teleport away quest monsters */
+					if (!teleport_away(c_ptr->m_idx, (r * 2) + 1, TRUE)) continue;
+				}
+				else
+				{
+					if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 					{
 						char m_name[80];
 
-						monster_desc(m_name, &m_list[c_ptr->m_idx], 0x08);
+						monster_desc(m_name, m_ptr, 0x08);
 						do_cmd_write_nikki(NIKKI_NAMED_PET, 6, m_name);
 					}
+
+					/* Delete the monster (if any) */
+					delete_monster(y, x);
 				}
-				/* Delete the monster (if any) */
-				delete_monster(y, x);
 			}
 
-			if (preserve_mode)
+			/* During generation, destroyed artifacts are "preserved" */
+			if (preserve_mode || in_generate)
 			{
 				s16b this_o_idx, next_o_idx = 0;
 
@@ -5417,88 +5428,133 @@ bool destroy_area(int y1, int x1, int r)
 					next_o_idx = o_ptr->next_o_idx;
 
 					/* Hack -- Preserve unknown artifacts */
-					if (artifact_p(o_ptr) && !object_known_p(o_ptr))
+					if (artifact_p(o_ptr) && (!object_known_p(o_ptr) || in_generate))
 					{
 						/* Mega-Hack -- Preserve the artifact */
 						a_info[o_ptr->name1].cur_num = 0;
+
+						if (in_generate && cheat_peek)
+						{
+							char o_name[MAX_NLEN];
+							object_desc_store(o_name, o_ptr, FALSE, 0);
+#ifdef JP
+							msg_format("伝説のアイテム (%s) は生成中に*破壊*された。", o_name);
+#else
+							msg_format("Artifact (%s) was *destroyed* during generation.", o_name);
+#endif
+						}
+					}
+					else if (in_generate && cheat_peek && o_ptr->art_name)
+					{
+#ifdef JP
+						msg_print("ランダム・アーティファクトの1つは生成中に*破壊*された。");
+#else
+						msg_print("One of the random artifacts was *destroyed* during generation.");
+#endif
 					}
 				}
 			}
+
+			/* Delete objects */
 			delete_object(y, x);
 
-			/* Destroy "valid" grids */
+			/* Destroy "non-permanent" grids */
 			if (!cave_perma_bold(y, x))
 			{
 				/* Wall (or floor) type */
 				t = randint0(200);
 
-				/* Granite */
-				if (t < 20)
+				if (!in_generate) /* Normal */
 				{
-					/* Create granite wall */
-					cave_set_feat(y, x, FEAT_WALL_EXTRA);
+					if (t < 20)
+					{
+						/* Create granite wall */
+						cave_set_feat(y, x, FEAT_WALL_EXTRA);
+					}
+					else if (t < 70)
+					{
+						/* Create quartz vein */
+						cave_set_feat(y, x, FEAT_QUARTZ);
+					}
+					else if (t < 100)
+					{
+						/* Create magma vein */
+						cave_set_feat(y, x, FEAT_MAGMA);
+					}
+					else
+					{
+						/* Create floor */
+						cave_set_feat(y, x, floor_type[randint0(100)]);
+					}
 				}
-
-				/* Quartz */
-				else if (t < 70)
+				else /* In generation */
 				{
-					/* Create quartz vein */
-					cave_set_feat(y, x, FEAT_QUARTZ);
-				}
+					if (t < 20)
+					{
+						/* Create granite wall */
+						place_extra_grid(c_ptr);
+					}
+					else if (t < 70)
+					{
+						/* Create quartz vein */
+						c_ptr->feat = FEAT_QUARTZ;
+					}
+					else if (t < 100)
+					{
+						/* Create magma vein */
+						c_ptr->feat = FEAT_MAGMA;
+					}
+					else
+					{
+						/* Create floor */
+						place_floor_grid(c_ptr);
+					}
 
-				/* Magma */
-				else if (t < 100)
-				{
-					/* Create magma vein */
-					cave_set_feat(y, x, FEAT_MAGMA);
-				}
-
-				/* Floor */
-				else
-				{
-					/* Create floor */
-					cave_set_feat(y, x, floor_type[randint0(100)]);
+					/* Clear garbage of hidden trap or door */
+					c_ptr->mimic = 0;
 				}
 			}
 		}
 	}
 
 
-	/* Hack -- Affect player */
-	if (flag)
+	if (!in_generate)
 	{
-		/* Message */
+		/* Hack -- Affect player */
+		if (flag)
+		{
+			/* Message */
 #ifdef JP
-msg_print("燃えるような閃光が発生した！");
+			msg_print("燃えるような閃光が発生した！");
 #else
-		msg_print("There is a searing blast of light!");
+			msg_print("There is a searing blast of light!");
 #endif
 
-
-		/* Blind the player */
-		if (!p_ptr->resist_blind && !p_ptr->resist_lite)
-		{
-			/* Become blind */
-			(void)set_blind(p_ptr->blind + 10 + randint1(10));
+			/* Blind the player */
+			if (!p_ptr->resist_blind && !p_ptr->resist_lite)
+			{
+				/* Become blind */
+				(void)set_blind(p_ptr->blind + 10 + randint1(10));
+			}
 		}
+
+		forget_flow();
+
+		/* Mega-Hack -- Forget the view and lite */
+		p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
+
+		/* Update stuff */
+		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
+
+		/* Update the monsters */
+		p_ptr->update |= (PU_MONSTERS);
+
+		/* Redraw map */
+		p_ptr->redraw |= (PR_MAP);
+
+		/* Window stuff */
+		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	}
-
-	forget_flow();
-
-	/* Mega-Hack -- Forget the view and lite */
-	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-
-	/* Update stuff */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
-
-	/* Update the monsters */
-	p_ptr->update |= (PU_MONSTERS);
-
-	/* Redraw map */
-	p_ptr->redraw |= (PR_MAP);
-
-	/* Window stuff */
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	/* Success */
 	return (TRUE);
