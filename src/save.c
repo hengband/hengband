@@ -1055,6 +1055,12 @@ static bool wr_dungeon(void)
 	/* Forget the view */
 	clear_mon_lite();
 
+	/* Update lite/view */
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
+
+	/* Update monsters */
+	p_ptr->update |= (PU_MONSTERS | PU_DISTANCE | PU_FLOW);
+
 
 	/*** Meta info ***/
 
@@ -1130,13 +1136,6 @@ static bool wr_dungeon(void)
 
 	/* Restore current floor */
 	if (!load_floor(cur_sf_ptr, (SLF_SECOND))) return FALSE;
-
-
-	/* Update lite/view */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
-
-	/* Update monsters */
-	p_ptr->update |= (PU_MONSTERS | PU_DISTANCE | PU_FLOW);
 
 	/* Success */
 	return TRUE;
