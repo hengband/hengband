@@ -3741,12 +3741,15 @@ msg_format("%^sがテレポートした。", m_name);
                                         }
                                         else
                                         {
+                                                int dam = damroll(4, 8);
 #ifdef JP
                                                 msg_format("%^sがあなたを掴んで空中から投げ落した。", m_name);
 #else
                                                 msg_format("%^s holds you, and drops from the sky.", m_name);
 #endif
                                                 teleport_player_to(m_ptr->fy, m_ptr->fx, FALSE);
+
+                                                sound(SOUND_FALL);
 
                                                 if (p_ptr->ffall)
                                                 {
@@ -3758,10 +3761,15 @@ msg_format("%^sがテレポートした。", m_name);
                                                 }
                                                 else
                                                 {
-                                                        int dam = damroll(2, 8);
-                                                        sound(SOUND_FALL);
-                                                        take_hit(DAMAGE_NOESCAPE, dam, m_name, -1);
+#ifdef JP
+                                                        msg_print("あなたは地面に叩きつけられた。");
+#else
+                                                        msg_print("You crashed into the ground.");
+#endif
+                                                        dam += damroll(6, 8);
                                                 }
+
+                                                take_hit(DAMAGE_NOESCAPE, dam, m_name, -1);
                                         }
                                         break;
                                 }
