@@ -161,7 +161,7 @@ static void do_cmd_summon_horde(void)
 	while (--attempts)
 	{
 		scatter(&wy, &wx, py, px, 3, 0);
-		if (cave_naked_bold(wy, wx)) break;
+		if (cave_empty_bold(wy, wx)) break;
 	}
 
 	(void)alloc_horde(wy, wx);

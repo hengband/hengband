@@ -4370,16 +4370,19 @@
 /*
  * Determine if a "legal" grid is an "naked" floor grid
  *
- * Line 1 -- forbid non-placers
+ * Line 1 -- forbid non-projectables
  * Line 2 -- forbid non-droppers
- * Line 3 -- forbid permanent
- * Line 4 -- forbid object terrains
- * Line 5 -- forbid normal objects
- * Line 6 -- forbid monsters
- * Line 7 -- forbid the player
+ * Line 3 -- forbid doors
+ * Line 4 -- forbid permanent
+ * Line 5 -- forbid object terrains
+ * Line 6 -- forbid normal objects
+ * Line 7 -- forbid monsters
+ * Line 8 -- forbid the player
  */
 #define cave_naked_bold(Y,X) \
-	(have_flag(f_flags_bold((Y), (X)), FF_DROP) && \
+	(have_flag(f_flags_bold((Y), (X)), FF_PROJECT) && \
+	 have_flag(f_flags_bold((Y), (X)), FF_DROP) && \
+	 !have_flag(f_flags_bold((Y), (X)), FF_DOOR) && \
 	 !have_flag(f_flags_bold((Y), (X)), FF_PERMANENT) && \
 	 !(cave[Y][X].info & CAVE_OBJECT) && \
 	 !(cave[Y][X].o_idx) && \
