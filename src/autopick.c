@@ -1985,6 +1985,117 @@ void init_autopicker(void)
 
 
 /*
+ * Get a trigger key and insert ASCII string for the trigger
+ */
+static bool insert_macro_line(cptr *lines_list, int cy)
+{
+	char tmp[1024];
+	char buf[1024];
+	int i, n = 0;
+
+	/* Flush */
+	flush();
+
+	/* Do not process macros */
+	inkey_base = TRUE;
+
+	/* First key */
+	i = inkey();
+
+	/* Read the pattern */
+	while (i)
+	{
+		/* Save the key */
+		buf[n++] = i;
+
+		/* Do not process macros */
+		inkey_base = TRUE;
+
+		/* Do not wait for keys */
+		inkey_scan = TRUE;
+
+		/* Attempt to read a key */
+		i = inkey();
+	}
+
+	/* Terminate */
+	buf[n] = '\0';
+
+	/* Flush */
+	flush();
+
+	/* Convert the trigger */
+	ascii_to_text(tmp, buf);
+
+	/* Null */
+	if(!tmp[0]) return FALSE;
+
+	/* Insert preference string */
+	insert_return_code(lines_list, 0, cy);
+	string_free(lines_list[cy]);
+	lines_list[cy] = string_make(format("P:%s", tmp));
+
+	/* Insert blank action preference line */
+	insert_return_code(lines_list, 0, cy);
+	string_free(lines_list[cy]);
+	lines_list[cy] = string_make("A:");
+
+	return TRUE;
+}
+
+
+/*
+ * Get a command key and insert ASCII string for the key
+ */
+static bool insert_keymap_line(cptr *lines_list, int cy)
+{
+	char tmp[1024];
+	char buf[2];
+	int mode;
+
+	/* Roguelike */
+	if (rogue_like_commands)
+	{
+		mode = KEYMAP_MODE_ROGUE;
+	}
+
+	/* Original */
+	else
+	{
+		mode = KEYMAP_MODE_ORIG;
+	}
+
+	/* Flush */
+	flush();
+
+	/* Get a key */
+	buf[0] = inkey();
+	buf[1] = '\0';
+
+	/* Flush */
+	flush();
+
+	/* Convert the trigger */
+	ascii_to_text(tmp, buf);
+
+	/* Null */
+	if(!tmp[0]) return FALSE;
+
+	/* Insert preference string */
+	insert_return_code(lines_list, 0, cy);
+	string_free(lines_list[cy]);
+	lines_list[cy] = string_make(format("C:%d:%s", mode, tmp));
+
+	/* Insert blank action preference line */
+	insert_return_code(lines_list, 0, cy);
+	string_free(lines_list[cy]);
+	lines_list[cy] = string_make("A:");
+
+	return TRUE;
+}
+
+
+/*
  * Description of control commands
  */
 
@@ -2501,6 +2612,61 @@ void do_cmd_edit_autopick(void)
 					cy--;
 				while (0 < upper && cy + 1 < upper + hgt - 4)
 					upper--;
+				break;
+
+			case 'g':
+				cy = 0;
+				break;
+
+			case 'G':
+				while (lines_list[cy + 1])
+					cy++;
+				break;
+
+			case 'm':
+				/* Erase line */
+				Term_erase(0, cy - upper + 1, wid - WID_DESC);
+
+				/* Prompt */
+#ifdef JP
+				Term_putstr(0, cy - upper + 1, wid - WID_DESC - 1, TERM_YELLOW, "P:<トリガーキー>: ");
+#else
+				Term_putstr(0, cy - upper + 1, wid - WID_DESC - 1, TERM_YELLOW, "P:<Trigger key>: ");
+#endif
+				if (insert_macro_line(lines_list, cy))
+				{
+					/* Prepare to input action */
+					cx = 2;
+					edit_mode = TRUE;
+
+					/* Now dirty */
+					dirty_flags |= DIRTY_ALL;
+					dirty_flags |= DIRTY_MODE;
+				}
+
+				break;
+
+			case 'c':
+				/* Erase line */
+				Term_erase(0, cy - upper + 1, wid - WID_DESC);
+
+				/* Prompt */
+#ifdef JP
+				Term_putstr(0, cy - upper + 1, wid - WID_DESC - 1, TERM_YELLOW, format("C:%d:<コマンドキー>: ", (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
+#else
+				Term_putstr(0, cy - upper + 1, wid - WID_DESC - 1, TERM_YELLOW, format("C:%d:<Keypress>: ", (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
+#endif
+
+				if (insert_keymap_line(lines_list, cy))
+				{
+					/* Prepare to input action */
+					cx = 2;
+					edit_mode = TRUE;
+
+					/* Now dirty */
+					dirty_flags |= DIRTY_ALL;
+					dirty_flags |= DIRTY_MODE;
+				}				
 				break;
 			}
 		}
