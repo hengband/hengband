@@ -3163,9 +3163,9 @@ msg_format("魔力が逆流した！%sは完全に魔力を失った。", o_name);
 				if (o_ptr->tval == TV_ROD)
 				{
 #ifdef JP
-msg_print("ロッドから魔力を吸い取ろうとして、魔力が発散してしまった！");
+msg_print("魔力を吸い取るのに失敗した。ロッドの魔力は全て発散してしまった。");
 #else
-					msg_print("You try to absorb magic power, but fizzle it!");
+					msg_print("You failed to absorb magic power. All magic power of your rod had gone!");
 #endif
 
 					if (o_ptr->timeout < 10000)

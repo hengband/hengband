@@ -4156,7 +4156,7 @@ void display_player(int mode)
 #ifdef JP
 						put_str(format("…あなたは クエスト「%s」で死んだ。", quest[p_ptr->inside_quest].name), 5 + 12, 10);
 #else
-						put_str(format("...You were dead at quest '%s'.", quest[p_ptr->inside_quest].name), 5 + 12, 10);
+						put_str(format("...You died in the quest '%s'.", quest[p_ptr->inside_quest].name), 5 + 12, 10);
 #endif
 					}
 					else
@@ -4164,7 +4164,7 @@ void display_player(int mode)
 #ifdef JP
 						put_str(format("…あなたは %s の %d 階で死んだ。", map_name(), dun_level), 5 + 12, 10);
 #else
-						put_str(format("...You were dead at level %d of %s.", dun_level, map_name()), 5 + 12, 10);
+						put_str(format("...You died on level %d of %s.", dun_level, map_name()), 5 + 12, 10);
 #endif
 					}
 				}
@@ -4172,7 +4172,7 @@ void display_player(int mode)
 #ifdef JP
 					put_str(format("…あなたは %s で死んだ。", map_name()), 5 + 12, 10);
 #else
-					put_str(format("...You were dead at %s.", map_name()), 5 + 12, 10);
+					put_str(format("...You died in %s.", map_name()), 5 + 12, 10);
 #endif
 			}
 			else
@@ -4192,7 +4192,7 @@ void display_player(int mode)
 #ifdef JP
 						put_str(format("…あなたは現在、 %s の %d 階で探索している。", map_name(), dun_level), 5 + 12, 10);
 #else
-						put_str(format("...Now, you are exploring at level %d of %s.", dun_level, map_name()), 5 + 12, 10);
+						put_str(format("...Now, you are exploring level %d of %s.", dun_level, map_name()), 5 + 12, 10);
 #endif
 					}
 				}
