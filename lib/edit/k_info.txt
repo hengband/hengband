@@ -5631,7 +5631,7 @@ D:それは振るとドアや岩石や壁を溶かす。
 
 #JZ#
 N:584:ドラゴン・グローブ
-E:& Set~ of Gloves of Dragon
+E:& Set~ of Dragon Gloves
 G:]:G
 I:31:3:0
 W:60:0:30:10000
