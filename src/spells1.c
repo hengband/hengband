@@ -7935,7 +7935,7 @@ static bool do_disintegration(int by, int bx, int y, int x)
 
 	/* Disintegration balls explosions are stopped by perma-walls */
 	if (!in_disintegration_range(by, bx, y, x)) return FALSE;
-
+						
 	/* Permanent walls and artifacts don't get effect */
 	/* But not protect monsters and other objects */
 	if (!cave_valid_bold(y, x)) return TRUE;
@@ -8011,6 +8011,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 
 					/* Enforce an arc */
 					if (distance(by, bx, y, x) != cdis) continue;
+
 
 					if (disint_ball)
 					{
@@ -9024,6 +9025,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 				}
 			}
 
+
 			/* Find the closest point in the blast */
 			if (breath)
 			{
@@ -9033,31 +9035,84 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			{
 				effective_dist = dist;
 			}
-
-			/* Target may be the riding player */
+			
+			
+			/* There is the riding player on this monster */
 			if (p_ptr->riding && (y == py) && (x == px))
 			{
-				/* A beam or bolt is well aimed */
-				if ((flg & (PROJECT_BEAM | PROJECT_REFLECTABLE)) && (y == y2) && (x == x2))
+				/* Aimed on the player */
+				if (flg & PROJECT_PLAYER)
 				{
-					/* Aimed on the player */
-					if (flg & PROJECT_PLAYER) continue;
-
-					/* Aimed on the mount */
-					/* The monster takes full damage */
+					if (flg & (PROJECT_BEAM | PROJECT_REFLECTABLE))
+					{
+						/*
+						 * A beam or bolt is well aimed
+						 * at the PLAYER!
+						 * So don't affects the mount.
+						 */
+						continue;
+					}
+					else
+					{
+						/*
+						 * The spell is not well aimed, 
+						 * So partly affect the mount too.
+						 */
+						effective_dist++;
+					}
 				}
 
-				/* Otherwise partly affect the mount */
+				/*
+				 * This grid is the original target.
+				 */
+				else if ((y == y2) || (x == x2))
+				{
+					/* Hit the mount with full damage */
+				}
+
+				/*
+				 * Otherwise this grid is not the
+				 * original target, it means that line
+				 * of fire is obstructed by this
+				 * monster.
+				 */
+				/*
+				 * A beam or bolt will hit either
+				 * player or mount.  Choose randomly.
+				 */
+				else if (flg & (PROJECT_BEAM | PROJECT_REFLECTABLE))
+				{
+					if (one_in_(2))
+					{
+						/* Hit the mount with full damage */
+					}
+					else
+					{
+						/* Hit the player later */
+						flg &= ~(PROJECT_MONSTER);
+						flg |= PROJECT_PLAYER;
+							
+						/* Don't affect the mount */
+						continue;
+					}
+				}
+
+				/*
+				 * The spell is not well aimed, so
+				 * partly affect both player and
+				 * mount.
+				 */
 				else
 				{
 					effective_dist++;
 				}
 			}
-
+			
 			/* Affect the monster in the grid */
 			if (project_m(who, effective_dist, y, x, dam, typ,flg)) notice = TRUE;
 		}
-
+		
+	
 		/* Player affected one monster (without "jumping") */
 		if (!who && (project_m_n == 1) && !jump)
 		{
@@ -9114,28 +9169,42 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			/* Target may be your horse */
 			if (p_ptr->riding)
 			{
-				/* A beam or bolt is well aimed */
-				if ((flg & (PROJECT_BEAM | PROJECT_REFLECTABLE)) && (y == y2) && (x == x2))
+				/* Aimed on the player */
+				if (flg & PROJECT_PLAYER)
 				{
-					/* Aimed on the mount */
-					if (flg & PROJECT_MONSTER) continue;
-
-					/* Aimed on the player */
-					/* The player takes full damage */
+					/* Hit the player with full damage */
 				}
 
-				/* Otherwise partly affect the player */
+				/*
+				 * Hack -- When this grid was not the
+				 * original target, a beam or bolt
+				 * would hit either player or mount,
+				 * and should be choosen randomly.
+				 *
+				 * But already choosen to hit the
+				 * mount at this point.
+				 */
+				else if (flg & (PROJECT_BEAM | PROJECT_REFLECTABLE))
+				{
+					/*
+					 * A beam or bolt is well aimed
+					 * at the mount!
+					 * So don't affects the player.
+					 */
+					continue;
+				}
 				else
 				{
+					/*
+					 * The spell is not well aimed, 
+					 * So partly affect the player too.
+					 */
 					effective_dist++;
 				}
 			}
 
 			/* Affect the player */
 			if (project_p(who, who_name, effective_dist, y, x, dam, typ, flg, monspell)) notice = TRUE;
-
-			/* Affect done */
-			break;
 		}
 	}
 
