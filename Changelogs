@@ -1,4 +1,70 @@
+2002-02-13  Takeshi Mogami  <mogami@akiru>
+
+	* src/cmd5.c:
+	ペットのターゲットを… のメニュー文字列の表示に 配列buf を使っていて、その後で
+	bufを別の用途にも使っているので、スペースキーでメニューのリスト表示を切り変える
+	とペットのターゲットを…の表示がバグるのを修正。
+
+2002-02-13  habu  <habu@akiru>
+
+	* acconfig.h, acinclude.m4, configure.in, lib/apex/Makefile.am, lib/bone/Makefile.am, lib/data/Makefile.am, lib/edit/Makefile.am, lib/file/Makefile.am, lib/help/Makefile.am, lib/info/Makefile.am, lib/pref/Makefile.am, lib/save/Makefile.am, lib/script/Makefile.am, lib/user/Makefile.am, lib/xtra/graf/Makefile.am, src/Makefile.am:
+	make installできるようにした。(angband-2.9.3を参考にした)
+	通常はsrc/hengbandをトップディレクトリに移すだけ。(今までと同様の使いかた)
+	--with-setgid=games というようなオプションを付けてconfiguireすると、gamesグループでシステムにインストールする事ができる。この場合、デフォルトでは実行バイナリは/usr/local/bin/hengband、各種libファイルは/usr/local/share/games/hengband/lib以下に置かれる。
+
+	* src/xtra1.c:
+	日本語の長すぎる種族名がはみ出さないように修正した時に、英語版のためのコードを残さなかったために英語版がコンパイルできなくなっていたので修正。
+
+2002-02-12  habu  <habu@akiru>
+
+	* src/melee2.c:
+	攻撃魔法を使えるモンスターは優先的に攻撃魔法を射てる位置に移動するようにした。いろいろなlosトリックがかなり防げると思う。
+	が、まだ十分なテストを行なったとは言えないので、おかしな動きがないかどうか注意してほしい。
+
+	* src/melee2.c: minor code cleanup.
+
+2002-02-11  henkma  <henkma@akiru>
+
+	* lib/file/a_high.txt, lib/file/a_high_j.txt, lib/file/a_low.txt, lib/file/w_cursed.txt, lib/file/w_low.txt, lib/file/w_low_j.txt:
+	randart nameの整理、これで今回の名前整理はほぼ終了。
+	日本語の方にもいくつか追加。
+
+2002-02-11  Takeshi Mogami  <mogami@akiru>
+
+	* src/object1.c: 危険を与える。の英文。
+
+2002-02-11  habu  <habu@akiru>
+
+	* src/object1.c, src/object2.c, src/wizard1.c, src/xtra1.c, src/z-config.h, lib/edit/a_info_j.txt, lib/edit/k_info_j.txt, src/cmd1.c, src/cmd3.c, src/defines.h, src/externs.h, src/init1.c, src/monster2.c:
+	branch-habu-warningをマージ。
+
 2002-02-10  Takeshi Mogami  <mogami@akiru>
+
+	* src/monster2.c:
+	ダンジョンの主を破壊した後で、ランダムなモンスター生成のタイミングで
+	手下と一緒に再生成されるようにした。
+
+2002-02-10  henkma  <henkma@akiru>
+
+	* lib/file/w_med.txt, lib/file/w_med_j.txt:
+	w_medの英語を更新、日本語の方もWARRIOR兼STR兼CONの名前が少なかったので追加してみた。
+
+2002-02-10  iks  <iks@akiru>
+
+	* lib/file/a_low_j.txt, lib/file/a_med_j.txt, lib/file/w_low_j.txt, lib/file/w_med_j.txt:
+	☆名さらに修正。henkmaさんにも感謝。
+
+2002-02-10  henkma  <henkma@akiru>
+
+	* lib/file/w_high.txt, lib/file/w_med.txt, lib/file/w_med_j.txt:
+	iksさんとの同期のために一時的にcommit、この状態はw_medを中途半端にいじってる状態。
+
+2002-02-10  Takeshi Mogami  <mogami@akiru>
+
+	* lib/edit/t0000001_j.txt, lib/edit/t_lite_j.txt:
+	鍛冶師の英語名が Kaji のままだったので Weaponsmith に修正。
+
+	* Changelogs: 更新
 
 	* src/main-mac.c:
 	kuwaさんの修正版 main-mac.c 。xddさんが #ifdef JP 付きで変更を加えていた
