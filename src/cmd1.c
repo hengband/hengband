@@ -2933,7 +2933,6 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 						{
 							case RACE_YEEK:
 							case RACE_KLACKON:
-								mult = 20;break;
 							case RACE_HUMAN:
 							case RACE_AMBERITE:
 							case RACE_DUNADAN:
@@ -2945,17 +2944,15 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 							case RACE_HALF_TITAN:
 							case RACE_CYCLOPS:
 							case RACE_IMP:
-							case RACE_GOLEM:
 							case RACE_SKELETON:
 							case RACE_ZOMBIE:
 							case RACE_VAMPIRE:
 							case RACE_SPECTRE:
 							case RACE_DEMON:
-								mult = 30;break;
 							case RACE_DRACONIAN:
-								mult = 50;break;
+								mult = 30;break;
 							default:
-								mult = 1;break;
+								mult = 10;break;
 						}
 						break;
 					case MIMIC_DEMON:
