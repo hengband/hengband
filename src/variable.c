@@ -165,7 +165,6 @@ bool repair_objects;	/* Hack -- optimize detect objects */
 s16b inven_nxt;			/* Hack -- unused */
 bool hack_mind;
 bool hack_mutation;
-int artifact_bias;
 
 s16b inven_cnt;			/* Number of items in inventory */
 s16b equip_cnt;			/* Number of items in equipment */

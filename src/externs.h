@@ -197,7 +197,6 @@ extern bool multi_rew;
 extern char summon_kin_type;
 extern bool hack_mind;
 extern bool hack_mutation;
-extern int artifact_bias;
 extern bool show_item_graph;
 extern bool rogue_like_commands;
 extern bool quick_messages;
