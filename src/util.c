@@ -3308,9 +3308,23 @@ bool get_check_strict(cptr prompt, int mode)
 
 	/* Hack -- Build a "useful" prompt */
 	if (mode & 1)
-		(void)strnfmt(buf, 75, "%.66s[yes/no] ", prompt);
+	{
+#ifdef JP
+		mb_strlcpy(buf, prompt, 78-8);
+#else
+		strncpy(buf, prompt, 78-8);
+#endif
+		strcat(buf, "[yes/no]");
+	}
 	else
-		(void)strnfmt(buf, 78, "%.70s[y/n] ", prompt);
+	{
+#ifdef JP
+		mb_strlcpy(buf, prompt, 78-5);
+#else
+		strncpy(buf, prompt, 78-5);
+#endif
+		strcat(buf, "[y/n]");
+	}
 
 	/* Prompt for it */
 	prt(buf, 0, 0);
