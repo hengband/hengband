@@ -3240,7 +3240,7 @@ static void process_world_aux_mutation(void)
 	if ((p_ptr->muta2 & MUT2_DISARM) && one_in_(10000))
 	{
 		int slot = 0;
-		object_type *o_ptr;
+		object_type *o_ptr = NULL;
 
 		disturb(0, 0);
 #ifdef JP
