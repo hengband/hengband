@@ -7127,7 +7127,7 @@ I:120:13d13:20:40:20
 W:27:2:0:130:0:0
 B:SLASH:EXP_20:2d13
 B:SLASH:EXP_20:2d13
-F:CHAR_MULTI | EVIL | IM_POIS | IM_COLD | 
+F:CHAR_MULTI | EVIL | IM_POIS | IM_COLD | RES_CHAO |
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
 F:COLD_BLOOD | BASH_DOOR | NONLIVING |
 F:NO_CONF | NO_SLEEP | NO_FEAR
@@ -9173,7 +9173,7 @@ B:HIT:EXP_20:13d1
 B:HIT:EXP_20:13d1
 F:FORCE_MAXHP | OPEN_DOOR | FRIENDS | DROP_60 | REGENERATE |
 F:ONLY_ITEM | NO_FEAR | NONLIVING |
-F:EVIL | IM_POIS | IM_COLD | IM_FIRE | DEMON 
+F:EVIL | IM_POIS | IM_COLD | IM_FIRE | RES_CHAO | DEMON
 D:$Slender, red-skinned demons twisting in nightmarish shapes. 
 D:$They are armed with hellblades, which will suck the life from 
 D:$your body.
@@ -11362,7 +11362,7 @@ I:100:50d10:30:40:0
 W:24:5:0:1000:0:0
 B:CRUSH:SUPERHURT:30d1
 F:COLD_BLOOD | EVIL | NO_SLEEP | NO_CONF | NO_FEAR | NO_STUN | NONLIVING |
-F:IM_ACID | IM_COLD | IM_POIS | RES_NETH | RES_DARK
+F:IM_ACID | IM_COLD | IM_POIS | RES_NETH | RES_DARK | BASH_DOOR
 D:$A foul iron hammer forged with body and souls of victims on the infernal anvil.
 D:犠牲者の装備と魂を固めて、地獄の鉄床で鍛えてできた禍々しい鉄槌だ。
 
