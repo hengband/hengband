@@ -3273,9 +3273,9 @@ msg_format("%^sがテレポートした。", m_name);
 							if((f3 & TR3_TELEPORT) || (p_ptr->muta1 & MUT1_VTELEPORT) || (p_ptr->pclass == CLASS_IMITATOR))
 							{
 #ifdef JP
-								if(get_check_strict("ついていきますか？", 1))
+								if(get_check_strict("ついていきますか？", CHECK_OKAY_CANCEL))
 #else
-								if(get_check_strict("Do you follow it? ", 1))
+								if(get_check_strict("Do you follow it? ", CHECK_OKAY_CANCEL))
 #endif
 								{
 									if (one_in_(3))

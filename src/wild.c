@@ -1160,9 +1160,9 @@ bool change_wild_mode(void)
 		if (have_pet)
 		{
 #ifdef JP
-			if(!get_check_strict("ペットを置いて広域マップに入りますか？", 1))
+			if(!get_check_strict("ペットを置いて広域マップに入りますか？", CHECK_OKAY_CANCEL))
 #else
-			if(!get_check_strict("Do you leave your pets behind? ", 1))
+			if(!get_check_strict("Do you leave your pets behind? ", CHECK_OKAY_CANCEL))
 #endif
 			{
 				energy_use = 0;

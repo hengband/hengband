@@ -5936,9 +5936,9 @@ void do_cmd_suicide(void)
 	{
 		/* Verify */
 #ifdef JP
-if (!get_check("引退しますか? ")) return;
+if (!get_check_strict("引退しますか? ", CHECK_NO_HISTORY)) return;
 #else
-		if (!get_check("Do you want to retire? ")) return;
+		if (!get_check_strict("Do you want to retire? ", CHECK_NO_HISTORY)) return;
 #endif
 
 	}
@@ -6834,9 +6834,9 @@ if (!save_player()) msg_print("セーブ失敗！");
 			if ((!send_world_score(do_send)))
 			{
 #ifdef JP
-				if (get_check("後でスコアを登録するために待機しますか？"))
+				if (get_check_strict("後でスコアを登録するために待機しますか？", (CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
 #else
-				if (get_check("Stand by for later score registration? "))
+				if (get_check_strict("Stand by for later score registration? ", (CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
 #endif
 				{
 					wait_report_score = TRUE;

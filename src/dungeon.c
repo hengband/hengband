@@ -3326,9 +3326,9 @@ msg_print("武器を落してしまった！");
 		if ((p_ptr->cursed & TRC_TELEPORT_SELF) && one_in_(100))
 		{
 #ifdef JP
-if (get_check_strict("テレポートしますか？", 1))
+if (get_check_strict("テレポートしますか？", CHECK_OKAY_CANCEL))
 #else
-			if (get_check("Teleport? "))
+			if (get_check_strict("Teleport? ", CHECK_OKAY_CANCEL))
 #endif
 			{
 				disturb(0, 0);

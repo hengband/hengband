@@ -2402,6 +2402,14 @@
 
 
 /*
+ * Bit flags for control of get_check_strict()
+ */
+#define CHECK_OKAY_CANCEL 0x01
+#define CHECK_NO_ESCAPE   0x02
+#define CHECK_NO_HISTORY  0x04
+
+
+/*
  * Some bit-flags for the "smart" field
  */
 #define SM_RES_ACID             0x00000001

@@ -3300,9 +3300,9 @@ bool get_check(cptr prompt)
 /*
  * Verify something with the user strictly
  *
- * mode & 0x01 : force user to answer "YES" or "N"
- * mode & 0x02 : don't allow ESCAPE key
- * mode & 0x04 : no message_add
+ * mode & CHECK_OKAY_CANCEL : force user to answer 'O'kay or 'C'ancel
+ * mode & CHECK_NO_ESCAPE   : don't allow ESCAPE key
+ * mode & CHECK_NO_HISTORY  : no message_add
  */
 bool get_check_strict(cptr prompt, int mode)
 {
@@ -3320,11 +3320,11 @@ bool get_check_strict(cptr prompt, int mode)
 	msg_print(NULL);
 
 	if (!rogue_like_commands)
-		mode &= ~1;
+		mode &= ~CHECK_OKAY_CANCEL;
 
 
 	/* Hack -- Build a "useful" prompt */
-	if (mode & 1)
+	if (mode & CHECK_OKAY_CANCEL)
 	{
 #ifdef JP
 		/* (79-8)バイトの指定, promptが長かった場合, 
@@ -3354,7 +3354,7 @@ bool get_check_strict(cptr prompt, int mode)
 	/* Prompt for it */
 	prt(buf, 0, 0);
 
-	if (!(mode & 4))
+	if (!(mode & CHECK_NO_HISTORY))
 	{
 		/* HACK : Add the line to message buffer */
 		message_add(buf);
@@ -3366,7 +3366,7 @@ bool get_check_strict(cptr prompt, int mode)
 	while (TRUE)
 	{
 		i = inkey();
-		if ( mode & 1 )
+		if (mode & CHECK_OKAY_CANCEL)
 		{
 			if ( i == 'o' || i == 'O' )
 			{
@@ -3378,8 +3378,8 @@ bool get_check_strict(cptr prompt, int mode)
 		{
 				break;
 		}
-		if (!(mode & 2) && (i == ESCAPE)) break;
-		if ( mode & 1 )
+		if (!(mode & CHECK_NO_ESCAPE) && (i == ESCAPE)) break;
+		if ( mode & CHECK_OKAY_CANCEL )
 		{
 			if ( i == 'c' || i == 'C' )
 			{

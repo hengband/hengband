@@ -5381,9 +5381,9 @@ void do_cmd_save_screen(void)
 	}
 
 #ifdef JP
-	if (get_check_strict("HTMLで出力しますか？", 4))
+	if (get_check_strict("HTMLで出力しますか？", CHECK_NO_HISTORY))
 #else
-	if (get_check_strict("Save screen dump as HTML? ", 4))
+	if (get_check_strict("Save screen dump as HTML? ", CHECK_NO_HISTORY))
 #endif
 	{
 		do_cmd_save_screen_html();
