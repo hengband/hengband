@@ -1541,7 +1541,7 @@ static hist_type bg[] =
 	{"You have come from the twenty-second century ", 100, 155, 156, 100},
 
 	{"as a project prototype. ", 10, 156, 157, 50},
-	{"to educate children. ", 30, 157, 157, 60},
+	{"to educate children. ", 30, 156, 157, 60},
 	{"to look after someone. ", 50, 156, 157, 70},
 	{"as a substitute for a dead child. ", 60, 156, 157, 10},
 	{"as a combat trooper. ", 90, 156, 157, 20},
