@@ -4324,7 +4324,7 @@ msg_format("「同じく%d号、ナズグル・ブラック！」", count);
 					}
 				}
 #ifdef JP
-msg_format("「%d匹そろって、リングレンジャー！」", count);
+msg_format("「%d人そろって、リングレンジャー！」", count);
 #else
 msg_format("They say 'The %d meets! We are the Ring-Ranger!'.", count);
 #endif
