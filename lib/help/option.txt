@@ -9,8 +9,8 @@ which is shown on the "options" screen, plus the internal name of the
 option in brackets, followed by a textual description of the option.
 
 Note that the internal name of the option can be used in user pref
-files to force the option to a given setting, see "command.txt" for
-more info.
+files to force the option to a given setting (see "command.txt" for
+more info).
 
 Various concepts are mentioned in the descriptions below, including
 "disturb", (cancel any running, resting, or repeated commands, which
@@ -96,7 +96,7 @@ Prompt before exiting a quest level    [confirm_quest]
 Allow targetting pets    [target_pet]
     Normally, the program doesn't automatically choose pets as target
     in the targeting mode of attack spells. If this option is set, the
-    program always choose every monsters in sight as target.
+    program always chooses every monster in sight as target.
 
 ***** <easy_open>
 Automatically open doors    [easy_open]
@@ -106,7 +106,7 @@ Automatically open doors    [easy_open]
 
 ***** <easy_disarm>
 Automatically disarm traps    [easy_disarm]
-    Makes it easy for your character disarm a trap: simply by walking into
+    Makes it easy for your character disarms a trap: simply by walking into
     it! Also the disarm command will automatically select one direction
     if only one known trap is near you.
 
@@ -362,7 +362,7 @@ Always create unusually small dungeon levels    [always_small_levels]
 ***** <empty_levels>
 Allow empty 'arena' levels    [empty_levels]
     Normal dungeon levels consist mostly of rock. If this option is in
-    use, levels which have empty floor instead of solid rock may  also 
+    use, levels which have empty floor instead of solid rock may also 
     be created (somewhat reminiscent of Nethack's "big-room" levels). 
     These levels can be extremely deadly, especially with breathing
     monsters (since there are few obstructions to shield). Arena levels
@@ -650,16 +650,16 @@ Record when destroy unique monster    [record_destroy_uniq]
 
 ***** <record_fix_quest>
 Record fixed quests    [record_fix_quest]
-    If this option is set, result of every fixed quests will be
+    If this option is set, result of every fixed quest will be
     written in the Play-record.
 
 ***** <record_rand_quest>
 Record random quests    [record_rand_quest]
-    If this option is set, result of every random quests will be
+    If this option is set, result of every random quest will be
     written in the Play-record.
 
-***** <record_maxdeapth>
-Record movements to deepest level    [record_maxdeapth]
+***** <record_maxdepth>
+Record movements to deepest level    [record_maxdepth]
     If this option is set, deepest level will be written in the
     Play-record when you reached new deepest level.
 
@@ -675,7 +675,7 @@ Record purchased items    [record_buy]
 
 ***** <record_sell>
 Record sold items    [record_sell]
-    If this option is set, names and numbers of every items you sold
+    If this option is set, names and numbers of every item you sold
     will be written in the Play-record.
 
 ***** <record_danger>
@@ -860,7 +860,7 @@ Manually haggle in stores    [manual_haggle]
 ***** <easy_band>
 Easy Mode (*)    [easy_band]
     This option enables easy game mode for beginners. If this option is
-    set, you takes only half damage from any enemy's attack compared
+    set, you take only half damage from any enemy's attack compared
     to normal mode, and monster's summoning spells become much
     weaker. But your score will be estimated to be negative number,
     and you cannot send score record to world score board.
@@ -921,7 +921,7 @@ Permanently enable the autoscummer    [ironman_autoscum]
 ***** <ironman_empty_levels>
 Always create empty 'arena' levels (*)    [ironman_empty_levels]
     If this option is enabled, then every level will be empty 'arena'
-    level . See the "Allow empty 'arena' levels" option above.
+    level. See the "Allow empty 'arena' levels" option above.
 
 ***** <ironman_rooms>
 Always generate very unusual rooms (*)    [ironman_rooms]
@@ -954,7 +954,7 @@ Preserve artifacts (*)    [preserve_mode]
 ***** <autoroller>
 Allow use of autoroller for stats (*)    [autoroller]
     If you choose to use the auto-roller, you can specify minimum
-    limit of each stats.  Once you have specified your desired
+    limit of each stat.  Once you have specified your desired
     statistics, the computer will then randomly roll successive
     start-up characters and compare them to your specified
     criteria. Each stat is rolled as a number from 8 to 17, with a

@@ -50,6 +50,7 @@ static void place_locked_door(int y, int x)
 	{
 		set_cave_feat(y, x, FEAT_DOOR_HEAD+randint1(7));
 		cave[y][x].info &= ~(CAVE_FLOOR);
+		delete_monster(y, x);
 	}
 }
 
@@ -77,6 +78,7 @@ static void place_secret_door(int y, int x)
 		}
 
 		c_ptr->info &= ~(CAVE_FLOOR);
+		delete_monster(y, x);
 	}
 }
 
@@ -1155,7 +1157,7 @@ static void build_type4(int by0, int bx0)
  * Line 3 -- forbid aquatic monsters
  */
 #define vault_monster_okay(I) \
-	(monster_dungeon(I) && \
+	(mon_hook_dungeon(I) && \
 	 !(r_info[I].flags1 & RF1_UNIQUE) && \
 	 !(r_info[I].flags7 & RF7_UNIQUE2) && \
 	 !(r_info[I].flagsr & RFR_RES_ALL) && \

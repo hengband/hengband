@@ -1605,6 +1605,11 @@ static void get_inscription(char *buff, object_type *o_ptr)
 }
 
 
+#ifdef JP
+#undef strchr
+#define strchr strchr_j
+#endif
+
 
 /*
  * Creates a description of the item "o_ptr", and stores it in "out_val".
@@ -2317,20 +2322,11 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		}
 
 		/* Hack -- The only one of its kind */
-		else if (known && (artifact_p(o_ptr) || o_ptr->art_name))
+		else if ((known && (artifact_p(o_ptr) || o_ptr->art_name)) ||
+		         ((o_ptr->tval == TV_CORPSE) &&
+		          (r_info[o_ptr->pval].flags1 & RF1_UNIQUE)))
 		{
 			t = object_desc_str(t, "The ");
-		}
-
-		/* Unique corpses are unique */
-		else if (o_ptr->tval == TV_CORPSE)
-		{
-			monster_race *r_ptr = &r_info[o_ptr->pval];
-
-			if (r_ptr->flags1 & RF1_UNIQUE)
-			{
-				t = object_desc_str(t, "The ");
-			}
 		}
 
 		/* A single one, with a vowel in the modifier */

@@ -15,17 +15,7 @@
 
 #ifdef JP
 #undef strchr
-static char *_strchr(const char *ptr, char ch)
-{
-	for ( ; *ptr != '\0'; ++ptr)
-	{
-		if (*ptr == ch)	return (char *)ptr;
-		if (iskanji(*ptr)) ++ptr;
-	}
-
-	return NULL;
-}
-#define strchr _strchr
+#define strchr strchr_j
 #endif
 /*
  * This file is used to initialize various variables and arrays for the
@@ -747,7 +737,7 @@ static cptr d_info_flags1[] =
  * Returns FALSE when there isn't enough space available to store
  * the text.
  */
-static bool add_text(u32b *offset, header *head, cptr buf)
+static bool add_text(u32b *offset, header *head, cptr buf, bool normal_text)
 {
 	/* Hack -- Verify space */
 	if (head->text_size + strlen(buf) + 8 > FAKE_TEXT_SIZE)
@@ -757,7 +747,34 @@ static bool add_text(u32b *offset, header *head, cptr buf)
 	if (*offset == 0)
 	{
 		/* Advance and save the text index */
-		*offset = ++head->text_size;	
+		*offset = ++head->text_size;
+	}
+
+	/* Additional text */
+	else if (normal_text)
+	{
+		/*
+		 * If neither the end of the last line nor
+		 * the beginning of current line is not a space,
+		 * fill up a space as a correct separator of two words.
+		 */
+		if (head->text_size > 0 &&
+#ifdef JP
+		    (*(head->text_ptr + head->text_size - 1) != ' ') &&
+		    ((head->text_size == 1) || !iskanji(*(head->text_ptr + head->text_size - 2))) && 
+		    (buf[0] != ' ') && !iskanji(buf[0])
+#else
+		    (*(head->text_ptr + head->text_size - 1) != ' ') &&
+		    (buf[0] != ' ')
+#endif
+		    )
+		{
+			/* Append a space */
+			*(head->text_ptr + head->text_size) = ' ';
+
+			/* Advance the index */
+			head->text_size++;
+		}
 	}
 
 	/* Append chars to the text */
@@ -956,7 +973,7 @@ errr parse_v_info(char *buf, header *head)
 		s = buf+2;
 
 		/* Store the text */
-		if (!add_text(&v_ptr->text, head, s)) return (7);
+		if (!add_text(&v_ptr->text, head, s, FALSE)) return (7);
 	}
 
 	/* Process 'X' for "Extra info" (one line only) */
@@ -1441,7 +1458,7 @@ errr parse_k_info(char *buf, header *head)
 #endif
 
 		/* Store the text */
-		if (!add_text(&k_ptr->text, head, s)) return (7);
+		if (!add_text(&k_ptr->text, head, s, TRUE)) return (7);
 	}
 
 	/* Process 'G' for "Graphics" (one line only) */
@@ -1715,7 +1732,7 @@ errr parse_a_info(char *buf, header *head)
 #endif
 
 		/* Store the text */
-		if (!add_text(&a_ptr->text, head, s)) return (7);
+		if (!add_text(&a_ptr->text, head, s, TRUE)) return (7);
 	}
 
 
@@ -1929,7 +1946,7 @@ errr parse_e_info(char *buf, header *head)
 		s = buf+2;
 
 		/* Store the text */
-		if (!add_text(&e_ptr->text, head, s)) return (7);
+		if (!add_text(&e_ptr->text, head, s, TRUE)) return (7);
 	}
 
 #endif
@@ -2243,7 +2260,7 @@ errr parse_r_info(char *buf, header *head)
 #endif
 
 		/* Store the text */
-		if (!add_text(&r_ptr->text, head, s)) return (7);
+		if (!add_text(&r_ptr->text, head, s, TRUE)) return (7);
 	}
 
 	/* Process 'G' for "Graphics" (one line only) */
@@ -2679,7 +2696,7 @@ errr parse_d_info(char *buf, header *head)
 #endif
 
 		/* Store the text */
-		if (!add_text(&d_ptr->text, head, s)) return (7);
+		if (!add_text(&d_ptr->text, head, s, TRUE)) return (7);
 	}
 
 	/* Process 'W' for "More Info" (one line only) */
@@ -3472,9 +3489,8 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				else
 				{
 					/* Create the artifact */
-					create_named_art(artifact_index, *y, *x);
-
-					a_info[artifact_index].cur_num = 1;
+					if (create_named_art(artifact_index, *y, *x))
+						a_info[artifact_index].cur_num = 1;
 				}
 			}
 

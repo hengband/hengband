@@ -123,12 +123,23 @@ static int buf_sprintf(BUF *buf, const char *fmt, ...)
 
 	if(!tmpbuf) return -1;
 
-#ifdef MAC_MPW
+#if ('\r' == 0x0a && '\n' == 0x0d)
 	{
-		/* '\n' is 0x0D and '\r' is 0x0A in MPW. Swap back these. */
+		/*
+		 * Originally '\r'= CR (= 0x0d) and '\n'= LF (= 0x0a)
+		 * But for MPW (Macintosh Programers Workbench), these
+		 * are reversed so that '\r'=LF and '\n'=CR unless the
+		 * -noMapCR option is not defined.
+		 *
+		 * We need to swap back these here since the score
+		 * dump text should be written using LF as the end of
+		 * line.
+		 */
 		char *ptr;
 		for (ptr = tmpbuf; *ptr; ptr++)
-			if ('\n' == *ptr) *ptr = '\r';
+		{
+			if (0x0d == *ptr) *ptr = 0x0a;
+		}
 	}
 #endif
 
@@ -291,6 +302,9 @@ cptr make_screen_dump(void)
 
 	if (old_use_graphics)
 	{
+		/* Clear -more- prompt first */
+		msg_print(NULL);
+
 		use_graphics = FALSE;
 		reset_visuals();
 

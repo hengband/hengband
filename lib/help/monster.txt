@@ -73,7 +73,7 @@ will probably get cleaned up.
 === Monster Memories ===
 
 Because there are so many monsters and because often different monsters
-share similar colors and symbols, it is very difficult to keep track of
+share similar colors and symbols; it is very difficult to keep track of
 the capabilities of various creatures. Luckily, Hengband automatically
 keeps track of your experiences with a particular creature.
  
@@ -86,14 +86,14 @@ that fact is noted.
 
 If you have killed enough of a particular creature, or suffered enough
 attacks, recalling the monster memory may also provide you with
-information not otherwise available, such as a armor class or hit dice.
+information not otherwise available, such as an armor class or hit dice.
 These are not explained, but may be useful to give the relative danger
 of each creature.
  
 Your monster memory may be accessed by pressing '/' and then entering
 the symbol you wish to research. Each monster with that symbol of which
 you have some knowledge will displayed in turn beginning with the
-deepest. Alternatively, you may enter targetting mode by pressing '*'
+deepest. Alternatively, you may enter targeting mode by pressing '*'
 and, with the cursor over the creature in question, press 'r' to
 recall details.
 
@@ -106,7 +106,7 @@ character.
 ***** <Uniques>
 === Unique Monsters ===
 
-The monsters in Hengband are unique in that each variety of monster
+The monsters in Hengband are unique in that each variety of monsters
 has its own set of physical and, where applicable, magical abilities.
 However, some monsters in Hengband are truly unique and this group
 of monsters are often referred to as "Uniques".
@@ -181,32 +181,33 @@ an attack of amnesia.
 ***** <Pets>
 === Pets and Riding ===
 
-In Hengband, pets are very useful. In other variants (such as Zangband), 
-your pets are often so eager to destroy your opponents that they may 
-forget all about you, and you get trampled under their feet as they 
-charge at your foe. In Hengband, however, pets will never attack you 
-by mistake; you can walk around in safety even as your pet Great Hell 
-Wyrm breaths. Pets will also never be irritated with you; their will is 
-perfectly dominated by you, and all pets are permanently your pets.
+In Hengband, pets are very useful.  In other variants (such as
+Zangband), your pets are often so eager to destroy your opponents that
+they may forget all about you, and you get trampled under their feet
+as they charge at your foe.  In Hengband, however, pets will never
+attack you by mistake; you can walk around in safety even as your pet
+Great Hell Wyrm breaths.  Pets will also never be irritated with you;
+their will is perfectly dominated by you, and all pets are permanently
+your pets.
 
-One might think that they can make the game much easier. It is of
-course highly satisfying to send your pet Great Hell Wyrm into a Troll 
+One might think that they can make the game much easier.  It is of
+course highly satisfying to send your pet Great Hell Wyrm into a Troll
 pit and wait outside listening for the howls of agony and terror, the
-sounds of guts splattering, bones crunching and so on. But one should
+sounds of guts splattering, bones crunching and so on.  But one should
 not expect to gain any experience and item drops for such a combat:
 you will only gain experience and items for creatures to whom you
 deliver the death blow yourself.
 
-Monsters which get killed by a pet don't drop items. This feature of
+Monsters which get killed by a pet don't drop items.  This feature of
 Hengband is unique and severe, and you might complain about it because
 this feature is not very realistic, but this is a well-thought-out
 result of weighing game balance with reality.
 
 Finally, it takes a lot of mental energy to maintain your control over
-charmed monsters. The first monster or the first few are 'free',
-but after that maintaining the control will start taxing your mana
-regain rate. The higher the sum of the levels of your pets the less
-mana you will be able to regain. Keep this in mind if you have a pet
+charmed monsters, and start taxing your mana regain rate.  The higher
+the sum of the levels of your pets the less mana you will be able to
+regain.  And after the upkeep became more then 100% mana, you begin to
+lose mana rather than regain.  Keep this in mind if you have a pet
 which can summon or otherwise produce more pets...
 
 

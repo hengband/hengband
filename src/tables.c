@@ -5258,7 +5258,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"英雄",
 		"男爵",
 		"伯爵",
-		"領主",
+		"君主",
 	},
 
 	/* Mage */
@@ -5300,9 +5300,9 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"ペテン師",                     /*博徒、ペテン師、詐欺師 */
 		"ロウシーフ",
 		"ハイシーフ",
-		"マスターシーフ",
+		"マスター", /* "マスターシーフ", */
 		"アサシン",						/* 暗殺者 */
-		"ギルドマスター",
+		"頭領", /*"ギルドマスター",*/
 	},
 
 	/* Rangers */
@@ -5330,7 +5330,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"重騎士",
 		"聖騎士",
 		"上級聖騎士",
-		"聖騎士長",
+		"聖騎士団長",
 	},
 
 	/* Warrior-Mage */
@@ -5345,7 +5345,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"魔男爵",
 		/* "魔公爵", */
 		"戦闘魔術士",
-		"ウィザードロード",
+		"知識の守護者", /* "ウィザードロード", */
 	},
 
 	/* Chaos Warrior */
@@ -5387,7 +5387,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"サイキック",
 		"サイオニック",
 		"超能力者",
-		"マインドマスター",
+		"精神の支配者", /* "マインドマスター", */
 	},
 
 	/* High Mage; same as Mage */
@@ -5516,7 +5516,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"魔男爵",
 		/* "魔公爵", */
 		"戦闘魔術士",
-		"ウィザードロード",
+		"知識の守護者", /* "ウィザードロード", */
 	},
 
 	/* Samurai */
@@ -5851,7 +5851,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"Soldier",
 		"Mercenary",
 		"Veteran",
-		"Swordsman",
+		"Bowman",
 		"Champion",
 		"Hero",
 		"Baron",
@@ -5988,14 +5988,14 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 	/* Mirror Master */
 	{
 		"Mirrorstarer",
-		"Mirrorpolisher",
+		"Mirrorcleaner",
 		"Mirrormaker",
 		"Mirrormagician",
-		"Guru of Mirror ",
+		"Mirror Guru",
 		"Mirror Mage",
 		"Mirror King",
-		"Mirror Emperror",
-		"Avatar of Mirror",
+		"Mirror Emperor",
+		"Mirror Avatar",
 		"Ruffnor King",
 	},
 
@@ -7462,11 +7462,11 @@ option_type option_info[] =
 #endif
 
 #ifdef JP
-	{ &record_maxdeapth,            TRUE, 10, 4, 16,
-	"record_maxdeapth",             "最深階を更新したときに記録する" },
+	{ &record_maxdepth,             TRUE, 10, 4, 16,
+	"record_maxdepth",              "最深階を更新したときに記録する" },
 #else
-	{ &record_maxdeapth,            TRUE, 10, 4, 16,
-	"record_maxdeapth",             "Record movements to deepest level" },
+	{ &record_maxdepth,             TRUE, 10, 4, 16,
+	"record_maxdepth" ,             "Record movements to deepest level" },
 #endif
 
 #ifdef JP

@@ -185,6 +185,9 @@ static bool alloc_stairs(int feat, int num, int walls)
 				if (i < more_num) c_ptr->feat = feat+0x07;
 				else c_ptr->feat = feat;
 
+				/* No longer a "FLOOR" */
+				c_ptr->info &= ~(CAVE_FLOOR);
+
 				/* All done */
 				flag = TRUE;
 			}
@@ -389,7 +392,7 @@ static void try_door(int y, int x)
 
 
 /* Place quest monsters */
-void place_quest_monsters(void)
+bool place_quest_monsters(void)
 {
 	int i;
 
@@ -442,11 +445,12 @@ void place_quest_monsters(void)
 
 					if (!cave_floor_grid(c_ptr) || c_ptr->o_idx || c_ptr->m_idx) continue;
 					if (distance(y, x, py, px) < 10) continue;
+					if (c_ptr->info & CAVE_ICKY) continue;
 					else break;
 				}
 
 				/* Failed to place */
-				if (!l) break;
+				if (!l) return FALSE;
 
 				/* Try to place the monster */
 				if (place_monster_aux(0, y, x, quest[i].r_idx, mode))
@@ -460,8 +464,13 @@ void place_quest_monsters(void)
 					continue;
 				}
 			}
+
+			/* Failed to place */
+			if (k == SAFE_MAX_ATTEMPTS) return FALSE;
 		}
 	}
+
+	return TRUE;
 }
 
 
@@ -1030,7 +1039,7 @@ static bool cave_gen(void)
 	/* Determine the character location */
 	if (!new_player_spot()) return FALSE;
 
-	place_quest_monsters();
+	if (!place_quest_monsters()) return FALSE;
 
 	/* Basic "amount" */
 	k = (dun_level / 3);
@@ -1091,7 +1100,7 @@ msg_format("モンスター数基本値を %d から %d に減らします", small_tester, i);
 	}
 
 	/* Put the Guardian */
-	(void)alloc_guardian();
+	if (!alloc_guardian(TRUE)) return FALSE;
 
 	if (empty_level && (!one_in_(DARK_EMPTY) || (randint1(100) > dun_level)) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS))
 	{
@@ -1403,7 +1412,7 @@ msg_print("小さなフロア");
 		panel_col_min = cur_wid;
 
 		if (cheat_room)
-		  msg_format("X:%d, Y:%d.", cur_hgt, cur_wid);
+		  msg_format("X:%d, Y:%d.", cur_wid, cur_hgt);
 	}
 	else
 	{
@@ -1457,7 +1466,7 @@ static byte extract_feeling(void)
 /*
  * Wipe all unnecessary flags after cave generation
  */
-static void wipe_generate_cave_flags(void)
+void wipe_generate_cave_flags(void)
 {
 	int x, y;
 

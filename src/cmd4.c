@@ -524,7 +524,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 #ifdef JP
 			fprintf(fff, " %2d:%02d %20s ランダムクエスト(%s)を達成した。\n", hour, min, note_level, name);
 #else
-			fprintf(fff, " %2d:%02d %20s completed randome quest '%s'\n", hour, min, note_level, name);
+			fprintf(fff, " %2d:%02d %20s completed random quest '%s'\n", hour, min, note_level, name);
 #endif
 			break;
 		}
@@ -2970,7 +2970,7 @@ void do_cmd_macros(void)
 
 		/* Describe that action */
 #ifdef JP
-		prt("(1) ユーザー設定ファイルのロード", 4, 5);
+		prt("マクロ行動が(もしあれば)下に表示されます:", 20, 0);
 #else
 		prt("Current action (if any) shown below:", 20, 0);
 #endif
@@ -3609,7 +3609,7 @@ void do_cmd_visuals(void)
 
 		/* Prompt */
 #ifdef JP
-		prt("コマンド:", 18, 0);
+		prt("コマンド:", 15, 0);
 #else
 		prt("Command: ", 15, 0);
 #endif
@@ -3634,7 +3634,7 @@ void do_cmd_visuals(void)
 
 			/* Prompt */
 #ifdef JP
-			prt("ファイル: ", 18, 0);
+			prt("ファイル: ", 17, 0);
 #else
 			prt("File: ", 17, 0);
 #endif
@@ -4967,7 +4967,7 @@ static cptr monster_group_text[] =
  * Symbols of monsters in each group. Note the "Uniques" group
  * is handled differently.
  */
-static cptr monster_group_char[] = 
+static cptr monster_group_char[] =
 {
 	(char *) -1L,
 	"a",
@@ -5021,8 +5021,8 @@ static cptr monster_group_char[] =
 	"X",
 	"Y",
 	"Z",
-	"$!?=&`.|/\\~[]()>",
-	"#",
+	"!$&()+./=>?[\\]`{|~",
+	"#%",
 	",",
 	"*",
 	NULL
@@ -5138,6 +5138,7 @@ static cptr object_group_text[] =
 	"ゴミ",
 	"空のビン",
 	"骨",
+	"死体",
 	"刀剣類",	/* "Swords" */
 	"鈍器",		/* "Blunt Weapons" */
 	"長柄武器",	/* "Polearms" */
@@ -5178,6 +5179,7 @@ static cptr object_group_text[] =
 	"Junks",
 	"Bottles",
 	"Skeletons",
+	"Corpses",
 	"Swords",
 	"Blunt Weapons",
 	"Polearms",
@@ -5227,6 +5229,7 @@ static byte object_group_tval[] =
 	TV_JUNK,
 	TV_BOTTLE,
 	TV_SKELETON,
+	TV_CORPSE,
 	TV_SWORD,
 	TV_HAFTED,
 	TV_POLEARM,
@@ -5396,79 +5399,6 @@ static int collect_artifacts(int grp_cur, int object_idx[])
 static char hack[17] = "dwsorgbuDWvyRGBU";
 
 
-static errr photo_fgets(FILE *fff, char *buf, huge n)
-{
-	huge i = 0;
-
-	char *s;
-
-	char tmp[1024];
-
-	/* Read a line */
-	if (fgets(tmp, 1024, fff))
-	{
-		/* Convert weirdness */
-		for (s = tmp; *s; s++)
-		{
-			/* Handle newline */
-			if (*s == '\n')
-			{
-				/* Terminate */
-				buf[i] = '\0';
-
-				/* Success */
-				return (0);
-			}
-
-			/* Handle tabs */
-			else if (*s == '\t')
-			{
-				/* Hack -- require room */
-				if (i + 8 >= n) break;
-
-				/* Append a space */
-				buf[i++] = ' ';
-
-				/* Append some more spaces */
-				while (!(i % 8)) buf[i++] = ' ';
-			}
-
-#ifdef JP
-			else if (iskanji(*s))
-			{
-				if (!s[1]) break;
-				buf[i++] = *s++;
-				buf[i++] = *s;
-			}
-# ifndef EUC
-	/* 半角かなに対応 */
-			else if ((((int)*s & 0xff) > 0xa1) && (((int)*s & 0xff ) < 0xdf))
-			{
-				buf[i++] = *s;
-				if (i >= n) break;
-			}
-# endif
-#endif
-			/* Handle printables */
-			else
-			{
-				/* Copy */
-				buf[i++] = *s;
-
-				/* Check length */
-				if (i >= n) break;
-			}
-		}
-	}
-
-	/* Nothing */
-	buf[0] = '\0';
-
-	/* Failure */
-	return (1);
-}
-
-
 /*
  * Hack -- load a screen dump from a file
  */
@@ -5515,32 +5445,46 @@ void do_cmd_load_screen(void)
 
 
 	/* Load the screen */
-	for (y = 0; okay && (y < hgt); y++)
+	for (y = 0; okay; y++)
 	{
-		/* Get a line of data */
-		if (photo_fgets(fff, buf, 1024)) okay = FALSE;
+		/* Get a line of data including control code */
+		if (!fgets(buf, 1024, fff)) okay = FALSE;
+
+		/* Get the blank line */
+		if (buf[0] == '\n' || buf[0] == '\0') break;
+
+		/* Ignore too large screen image */
+		if (y >= hgt) continue;
 
 		/* Show each row */
 		for (x = 0; x < wid - 1; x++)
 		{
+			/* End of line */
+			if (buf[x] == '\n' || buf[x] == '\0') break;
+
 			/* Put the attr/char */
 			Term_draw(x, y, TERM_WHITE, buf[x]);
 		}
 	}
 
-	/* Get the blank line */
-	if (my_fgets(fff, buf, sizeof(buf))) okay = FALSE;
-
-
 	/* Dump the screen */
-	for (y = 0; okay && (y < hgt); y++)
+	for (y = 0; okay; y++)
 	{
-		/* Get a line of data */
-		if (photo_fgets(fff, buf, 1024)) okay = FALSE;
+		/* Get a line of data including control code */
+		if (!fgets(buf, 1024, fff)) okay = FALSE;
+
+		/* Get the blank line */
+		if (buf[0] == '\n' || buf[0] == '\0') break;
+
+		/* Ignore too large screen image */
+		if (y >= hgt) continue;
 
 		/* Dump each row */
 		for (x = 0; x < wid - 1; x++)
 		{
+			/* End of line */
+			if (buf[x] == '\n' || buf[x] == '\0') break;
+
 			/* Get the attr/char */
 			(void)(Term_what(x, y, &a, &c));
 
@@ -5555,10 +5499,6 @@ void do_cmd_load_screen(void)
 			Term_draw(x, y, a, c);
 		}
 	}
-
-
-	/* Get the blank line */
-	if (my_fgets(fff, buf, sizeof(buf))) okay = FALSE;
 
 
 	/* Close it */
@@ -7031,7 +6971,7 @@ static void do_cmd_knowledge_pets(void)
 
 	fprintf(fff, "----------------------------------------------\n");
 #ifdef JP
-	fprintf(fff, "    合計: %d 匹のペット\n", t_friends);
+	fprintf(fff, "    合計: %d 体のペット\n", t_friends);
 	fprintf(fff, " 維持コスト: %d%% MP\n", show_upkeep);
 #else
 	fprintf(fff, "   Total: %d pet%s.\n",
@@ -7125,21 +7065,12 @@ static void do_cmd_knowledge_kill_count(void)
 #else
 			fprintf(fff,"You have defeated no enemies yet.\n\n");
 #endif
-
-		else if (Total == 1)
-#ifdef JP
-			fprintf(fff,"あなたは一匹の敵を倒している。\n\n");
-#else
-			fprintf(fff,"You have defeated one enemy.\n\n");
-#endif
-
 		else
 #ifdef JP
-			fprintf(fff,"あなたは %lu 匹の敵を倒している。\n\n", Total);
+			fprintf(fff,"あなたは%ld体の敵を倒している。\n\n", Total);
 #else
-			fprintf(fff,"You have defeated %lu enemies.\n\n", Total);
+			fprintf(fff,"You have defeated %ld %s.\n\n", Total, (Total == 1) ? "enemy" : "enemies");
 #endif
-
 	}
 
 	Total = 0;
@@ -7184,11 +7115,11 @@ static void do_cmd_knowledge_kill_count(void)
 			if (This > 0)
 			{
 #ifdef JP
-				/* p,tは人と数える by ita*/
-				if(strchr("pt",r_ptr->d_char))
+				/* p,tは人と数える by ita */
+				if (strchr("pt", r_ptr->d_char))
 					fprintf(fff, "     %3d 人の %s\n", This, r_name + r_ptr->name);
 				else
-					fprintf(fff, "     %3d 匹の %s\n", This, r_name + r_ptr->name);
+					fprintf(fff, "     %3d 体の %s\n", This, r_name + r_ptr->name);
 #else
 				if (This < 2)
 				{
@@ -7218,7 +7149,7 @@ static void do_cmd_knowledge_kill_count(void)
 
 	fprintf(fff,"----------------------------------------------\n");
 #ifdef JP
-	fprintf(fff,"    合計: %lu 匹を倒した。\n", Total);
+	fprintf(fff,"    合計: %lu 体を倒した。\n", Total);
 #else
 	fprintf(fff,"   Total: %lu creature%s killed.\n",
 		Total, (Total == 1 ? "" : "s"));
@@ -7526,7 +7457,7 @@ static bool visual_mode_command(char ch, bool *visual_list_ptr,
 
 	case 'P':
 	case 'p':
-		if (attr_idx)
+		if (attr_idx || (!(char_idx & 0x80) && char_idx)) /* Allow TERM_DARK text */
 		{
 			/* Set the char */
 			*cur_attr_ptr = attr_idx;
@@ -7621,12 +7552,15 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 		}
 		else if (p_ptr->wizard) 
 		{
-			c_prt(attr, format("%d", r_idx), row + i, 60);
+			c_prt(attr, format("%d", r_idx), row + i, 62);
 		}
 
 		a = r_ptr->x_attr;
 		c = r_ptr->x_char;
 		if (use_bigtile) bigtile_attr(&c, &a, &c2, &a2);
+
+		/* Erase chars before overwritten by the race letter */
+		Term_erase(69, row + i, 255);
 
 		/* Display symbol */
 		Term_putch(70, row + i, a, c);
@@ -7637,9 +7571,9 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 		/* Display kills */
 		if (!(r_ptr->flags1 & RF1_UNIQUE)) put_str(format("%5d", r_ptr->r_pkills), row + i, 73);
 #ifdef JP
-		else c_put_str((r_ptr->max_num == 0 ? TERM_L_DARK : TERM_WHITE), (r_ptr->max_num == 0 ? "死亡" : "生存"), row + i, 73);
+		else c_put_str((r_ptr->max_num == 0 ? TERM_L_DARK : TERM_WHITE), (r_ptr->max_num == 0 ? "死亡" : "生存"), row + i, 74);
 #else
-		else c_put_str((r_ptr->max_num == 0 ? TERM_L_DARK : TERM_WHITE), (r_ptr->max_num == 0 ? "dead" : "alive"), row + i, 73);
+		else c_put_str((r_ptr->max_num == 0 ? TERM_L_DARK : TERM_WHITE), (r_ptr->max_num == 0 ? " dead" : "alive"), row + i, 73);
 #endif
 	
 	}
@@ -7726,14 +7660,14 @@ static void do_cmd_knowledge_monsters(void)
 			prt("知識 - モンスター", 2, 0);
 			prt("グループ", 4, 0);
 			prt("名前", 4, max + 3);
-			if (p_ptr->wizard) prt("Idx", 4, 60);
+			if (p_ptr->wizard) prt("Idx", 4, 62);
 			prt("文字 殺害数", 4, 67);
 #else
 			prt("Knowledge - Monsters", 2, 0);
 			prt("Group", 4, 0);
 			prt("Name", 4, max + 3);
-			if (p_ptr->wizard) prt("Idx", 4, 60);
-			prt("Sym   Kills", 4, 67);
+			if (p_ptr->wizard) prt("Idx", 4, 62);
+			prt("Sym  Kills", 4, 68);
 #endif
 
 			for (i = 0; i < 78; i++)
@@ -7956,7 +7890,7 @@ static void desc_obj_fake(int k_idx)
 	/* Hack -- Handle stuff */
 	handle_stuff();
 
-	if (!screen_object(o_ptr, FALSE))
+	if (!screen_object(o_ptr, SCROBJ_FAKE_OBJECT | SCROBJ_FORCE_DETAIL))
 	{
 #ifdef JP
 		msg_print("特に変わったところはないようだ。");
@@ -8045,7 +7979,7 @@ static void do_cmd_knowledge_objects(void)
 			prt("グループ", 4, 0);
 			prt("名前", 4, max + 3);
 			if (p_ptr->wizard) prt("Idx", 4, 70);
-			prt("文字", 4, 75);
+			prt("文字", 4, 74);
 #else
 			prt("Knowledge - objects", 2, 0);
 			prt("Group", 4, 0);
@@ -8112,7 +8046,7 @@ static void do_cmd_knowledge_objects(void)
 
 		/* Prompt */
 #ifdef JP
-		prt(format("<方向>, 'r'で思い出を見る%s%s, ESC", k_ptr->flavor ? "" : visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更", (attr_idx||char_idx) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"), hgt - 1, 0);
+		prt(format("<方向>, 'r'で詳細を見る%s%s, ESC", k_ptr->flavor ? "" : visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更", (attr_idx||char_idx) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"), hgt - 1, 0);
 #else
 		prt(format("<dir>, 'r' to recall%s%s, ESC", k_ptr->flavor ? "" : visual_list ? ", ENTER to accept" : ", 'v' for visuals", (attr_idx||char_idx) ? ", 'c', 'p' to paste" : ", 'c' to copy"), hgt - 1, 0);
 #endif
@@ -8302,11 +8236,18 @@ static void do_cmd_knowledge_features(void)
 		if (redraw)
 		{
 			clear_from(0);
-		
+
+#ifdef JP
+			prt("表示 - 地形", 2, 0);
+			prt("グループ", 4, 0);
+			prt("名前", 4, max + 3);
+			prt("文字", 4, 66);
+#else
 			prt("Visuals - features", 2, 0);
 			prt("Group", 4, 0);
 			prt("Name", 4, max + 3);
 			prt("Sym", 4, 67);
+#endif
 
 			for (i = 0; i < 78; i++)
 			{

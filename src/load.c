@@ -73,7 +73,14 @@ static u32b	v_check = 0L;
  */
 static u32b	x_check = 0L;
 
-
+/*
+ * Hack -- Japanese Kanji code
+ * 0: Unknown
+ * 1: ASCII
+ * 2: EUC
+ * 3: SJIS
+ */
+static byte kanji_code = 0;
 
 /*
  * This function determines if the version of the savefile
@@ -220,8 +227,40 @@ static void rd_string(char *str, int max)
 
 	/* Terminate */
 	str[max-1] = '\0';
+
+
 #ifdef JP
-	codeconv(str);
+	/* Convert Kanji code */
+	switch (kanji_code)
+	{
+#ifdef SJIS
+	case 2:
+		/* EUC to SJIS */
+		euc2sjis(str);
+		break;
+#endif
+
+#ifdef EUC
+	case 3:
+		/* SJIS to EUC */
+		sjis2euc(str);
+		break;
+#endif
+
+	case 0:
+	{
+		/* 不明の漢字コードからシステムの漢字コードに変換 */
+		byte code = codeconv(str);
+
+		/* 漢字コードが判明したら、それを記録 */
+		if (code) kanji_code = code;
+
+		break;
+	}
+	default:
+		/* No conversion needed */
+		break;
+	}
 #endif
 }
 
@@ -1490,6 +1529,8 @@ static void rd_extra(void)
 	rd_s32b(&p_ptr->au);
 
 	rd_s32b(&p_ptr->max_exp);
+	if (h_older_than(1, 5, 4, 1)) p_ptr->max_max_exp = p_ptr->max_exp;
+	else rd_s32b(&p_ptr->max_max_exp);
 	rd_s32b(&p_ptr->exp);
 	rd_u16b(&p_ptr->exp_frac);
 
@@ -1642,19 +1683,13 @@ static void rd_extra(void)
 	rd_s16b(&p_ptr->oldpy);
 	if (z_older_than(10, 3, 13) && !dun_level && !p_ptr->inside_arena) {p_ptr->oldpy = 33;p_ptr->oldpx = 131;}
 
+	/* Was p_ptr->rewards[MAX_BACT] */
 	rd_s16b(&tmp16s);
-
-	if (tmp16s > MAX_BACT)
+	for (i = 0; i < tmp16s; i++)
 	{
-#ifdef JP
-note(format("の中", tmp16s));
-#else
-		note(format("Too many (%d) building rewards!", tmp16s));
-#endif
-
+		s16b tmp16s2;
+		rd_s16b(&tmp16s2);
 	}
-
-	for (i = 0; i < tmp16s; i++) rd_s16b(&p_ptr->rewards[i]);
 
 	rd_s16b(&p_ptr->mhp);
 	rd_s16b(&p_ptr->chp);
@@ -1960,7 +1995,7 @@ note(format("の中", tmp16s));
 
 	if (h_older_than(1, 5, 0, 2))
 	{
-		C_WIPE(&party_mon[i], MAX_PARTY_MON, monster_type);
+		C_WIPE(party_mon, MAX_PARTY_MON, monster_type);
 	}
 	else
 	{
@@ -3077,8 +3112,13 @@ static errr rd_savefile_new_aux(void)
 	rd_u32b(&tmp32u);
 
 	/* Later use (always zero) */
-	rd_u32b(&tmp32u);
+	rd_u16b(&tmp16u);
 
+	/* Later use (always zero) */
+	rd_byte(&tmp8u);
+
+	/* Kanji code */
+	rd_byte(&kanji_code);
 
 	/* Read RNG state */
 	rd_randomizer();
@@ -3800,9 +3840,30 @@ bool load_floor(saved_floor_type *sf_ptr, u32b mode)
 	byte old_h_ver_minor = 0;
 	byte old_h_ver_patch = 0;
 	byte old_h_ver_extra = 0;
-
+ 
 	bool ok = TRUE;
 	char floor_savefile[1024];
+
+	byte old_kanji_code = kanji_code;
+
+	/*
+	 * Temporal files are always written in system depended kanji
+	 * code.
+	 */
+#ifdef JP
+# ifdef EUC
+	/* EUC kanji code */
+	kanji_code = 2;
+# endif
+# ifdef SJIS
+	/* SJIS kanji code */
+	kanji_code = 3;
+# endif
+#else
+	/* ASCII */
+	kanji_code = 1;
+#endif
+
 
 	/* We have one file already opened */
 	if (mode & SLF_SECOND)
@@ -3868,6 +3929,9 @@ bool load_floor(saved_floor_type *sf_ptr, u32b mode)
 		h_ver_patch = old_h_ver_patch;
 		h_ver_extra = old_h_ver_extra;
 	}
+
+	/* Restore old knowledge */
+	kanji_code = old_kanji_code;
 
 	/* Result */
 	return ok;

@@ -265,7 +265,8 @@ void delete_monster_idx(int i)
 	lite_spot(y, x);
 
 	/* Update some things */
-	p_ptr->update |= (PU_MON_LITE);
+	if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+		p_ptr->update |= (PU_MON_LITE);
 }
 
 
@@ -1655,7 +1656,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 	else
 	{
 		/* Tanuki? */
-		if (is_pet(m_ptr) && m_ptr->ap_r_idx != m_ptr->r_idx)
+		if (is_pet(m_ptr) && !is_original_ap(m_ptr))
 		{
 #ifdef JP
 			char *t;
@@ -1697,14 +1698,23 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 				(void)sprintf(desc, "%s?", name);
 #endif
 			}
-			else if ((cave[m_ptr->fy][m_ptr->fx].m_idx == p_ptr->riding) || !p_ptr->inside_battle)
-				(void)strcpy(desc, name);
-			else
+
+			/* Inside monster arena, and it is not your mount */
+			else if (p_ptr->inside_battle &&
+				 !(p_ptr->riding && (&m_list[p_ptr->riding] == m_ptr)))
+			{
+				/* It is a fake unique monster */
 #ifdef JP
 				(void)sprintf(desc, "%sもどき", name);
 #else
 				(void)sprintf(desc, "fake %s", name);
 #endif
+			}
+
+			else
+			{
+				(void)strcpy(desc, name);
+			}
 		}
 
 		/* It could be an indefinite monster */
@@ -1753,7 +1763,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 			strcat(desc,buf);
 		}
 
-		if (player_bold(m_ptr->fy, m_ptr->fx))
+		if (p_ptr->riding && (&m_list[p_ptr->riding] == m_ptr))
 		{
 #ifdef JP
 			strcat(desc,"(乗馬中)");
@@ -1782,7 +1792,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 			}
 		}
 
-		if ((mode & MD_IGNORE_HALLU) && m_ptr->ap_r_idx != m_ptr->r_idx)
+		if ((mode & MD_IGNORE_HALLU) && !is_original_ap(m_ptr))
 		{
 			strcat(desc, format("(%s)", r_name + r_info[m_ptr->r_idx].name));
 		}
@@ -2596,8 +2606,8 @@ void update_mon(int m_idx, bool full)
 			/* Hack -- Count "fresh" sightings */
 			if ((m_ptr->ap_r_idx == MON_KAGE) && (r_info[MON_KAGE].r_sights < MAX_SHORT))
 				r_info[MON_KAGE].r_sights++;
-			else if (m_ptr->ap_r_idx == m_ptr->r_idx && 
-				 r_ptr->r_sights < MAX_SHORT) r_ptr->r_sights++;
+			else if (is_original_ap(m_ptr) && (r_ptr->r_sights < MAX_SHORT))
+				r_ptr->r_sights++;
 
 			/* Eldritch Horror */
 			if (r_ptr->flags2 & RF2_ELDRITCH_HORROR)
@@ -2773,6 +2783,7 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 	monster_race *r_ptr;
 	char old_m_name[80];
 	bool old_unique = FALSE;
+	int old_r_idx = m_ptr->r_idx;
 
 	if (r_info[m_ptr->r_idx].flags1 & RF1_UNIQUE)
 		old_unique = TRUE;
@@ -2813,6 +2824,11 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 	m_ptr->ap_r_idx = r_idx;
 	update_mon(m_idx, FALSE);
 	lite_spot(m_ptr->fy, m_ptr->fx);
+
+	if ((r_info[old_r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) ||
+	    (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)))
+		p_ptr->update |= (PU_MON_LITE);
+
 	if (born)
 	{
 		/* Sub-alignment of a chameleon */
@@ -2974,15 +2990,12 @@ bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 	/* Paranoia */
 	if (!r_ptr->name) return (FALSE);
 
-	/* Nor on the Pattern */
-	if ((cave[y][x].feat >= FEAT_PATTERN_START)
-	 && (cave[y][x].feat <= FEAT_PATTERN_XTRA2))
-		return (FALSE);
-
-	if (!(mode & PM_IGNORE_TERRAIN) &&
-	    !monster_can_cross_terrain(cave[y][x].feat, r_ptr))
+	if (!(mode & PM_IGNORE_TERRAIN))
 	{
-		return FALSE;
+		/* Nor on the Pattern */
+		if (pattern_tile(y, x)) return FALSE;
+
+		if (!monster_can_cross_terrain(cave[y][x].feat, r_ptr)) return FALSE;
 	}
 
 	if (!p_ptr->inside_battle)
@@ -3133,6 +3146,19 @@ msg_print("守りのルーンが壊れた！");
 	m_ptr->r_idx = r_idx;
 	m_ptr->ap_r_idx = initial_r_appearance(r_idx);
 
+	/* No flags */
+	m_ptr->mflag = 0;
+	m_ptr->mflag2 = 0;
+
+	/* Hack -- Appearance transfer */
+	if ((mode & PM_MULTIPLY) && (who > 0) && !is_original_ap(&m_list[who]))
+	{
+		m_ptr->ap_r_idx = m_list[who].ap_r_idx;
+
+		/* Hack -- Shadower spawns Shadower */
+		if (m_list[who].mflag2 & MFLAG2_KAGE) m_ptr->mflag2 |= MFLAG2_KAGE;
+	}
+
 	/* Sub-alignment of a monster */
 	if ((who > 0) && !(r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)))
 		m_ptr->sub_align = m_list[who].sub_align;
@@ -3161,10 +3187,6 @@ msg_print("守りのルーンが壊れた！");
 	m_ptr->nickname = 0;
 
 	m_ptr->exp = 0;
-
-	/* No flags */
-	m_ptr->mflag = 0;
-	m_ptr->mflag2 = 0;
 
 	if (r_ptr->flags7 & RF7_CHAMELEON)
 	{
@@ -3415,7 +3437,7 @@ msg_print("爆発のルーンは解除された。");
 
 #define MON_SCAT_MAXD 10
 
-static bool mon_scatter(int *yp, int *xp, int y, int x, int max_dist)
+static bool mon_scatter(int r_idx, int *yp, int *xp, int y, int x, int max_dist)
 {
 	int place_x[MON_SCAT_MAXD];
 	int place_y[MON_SCAT_MAXD];
@@ -3430,6 +3452,7 @@ static bool mon_scatter(int *yp, int *xp, int y, int x, int max_dist)
 		num[i] = 0;
 
 	for (nx = x - max_dist; nx <= x + max_dist; nx++)
+	{
 		for (ny = y - max_dist; ny <= y + max_dist; ny++)
 		{
 			/* Ignore annoying locations */
@@ -3438,15 +3461,22 @@ static bool mon_scatter(int *yp, int *xp, int y, int x, int max_dist)
 			/* Require "line of sight" */
 			if (!los(y, x, ny, nx)) continue;
 
-			/* Walls and Monsters block flow */
-			if (!cave_empty_bold2(ny, nx)) continue;
-			if (cave[ny][nx].m_idx) continue;
-			if (player_bold(ny, nx)) continue;
+			if (r_idx > 0)
+			{
+				monster_race *r_ptr = &r_info[r_idx];
 
-			/* ... nor on the Pattern */
-			if ((cave[ny][nx].feat >= FEAT_PATTERN_START) &&
-			    (cave[ny][nx].feat <= FEAT_PATTERN_XTRA2))
-				continue;
+				/* Require empty space (if not ghostly) */
+				if (!monster_can_enter(ny, nx, r_ptr))
+					continue;
+			}
+			else
+			{
+				/* Walls and Monsters block flow */
+				if (!cave_empty_bold2(ny, nx)) continue;
+				
+				/* ... nor on the Pattern */
+				if (pattern_tile(ny, nx)) continue;
+			}
 
 			i = distance(y, x, ny, nx);
 
@@ -3462,6 +3492,7 @@ static bool mon_scatter(int *yp, int *xp, int y, int x, int max_dist)
 				place_y[i] = ny;
 			}
 		}
+	}
 
 	i = 0;
 	while (i < MON_SCAT_MAXD && 0 == num[i])
@@ -3590,7 +3621,7 @@ static bool place_monster_okay(int r_idx)
 	monster_race *z_ptr = &r_info[r_idx];
 
 	/* Hack - Escorts have to have the same dungeon flag */
-	if (monster_dungeon(place_monster_idx) != monster_dungeon(r_idx)) return (FALSE);
+	if (mon_hook_dungeon(place_monster_idx) != mon_hook_dungeon(r_idx)) return (FALSE);
 
 	/* Require similar "race" */
 	if (z_ptr->d_char != r_ptr->d_char) return (FALSE);
@@ -3800,7 +3831,7 @@ bool alloc_horde(int y, int x)
 /*
  * Put the Guardian
  */
-bool alloc_guardian(void)
+bool alloc_guardian(bool def_val)
 {
 	int guardian = d_info[dungeon_type].final_guardian;
 
@@ -3827,9 +3858,11 @@ bool alloc_guardian(void)
 			/* One less try */
 			try--;
 		}
+
+		return FALSE;
 	}
 
-	return FALSE;
+	return def_val;
 }
 
 
@@ -3848,7 +3881,7 @@ bool alloc_monster(int dis, u32b mode)
 	int         attempts_left = 10000;
 
 	/* Put the Guardian */
-	if (alloc_guardian()) return TRUE;
+	if (alloc_guardian(FALSE)) return TRUE;
 
 	/* Find a legal, distant, unoccupied, space */
 	while (attempts_left--)
@@ -3927,7 +3960,7 @@ static bool summon_specific_okay(int r_idx)
 	monster_race *r_ptr = &r_info[r_idx];
 
 	/* Hack - Only summon dungeon monsters */
-	if (!monster_dungeon(r_idx)) return (FALSE);
+	if (!mon_hook_dungeon(r_idx)) return (FALSE);
 
 	/* Hack -- identify the summoning monster */
 	if (summon_specific_who > 0)
@@ -3998,7 +4031,7 @@ bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
 
 	if (p_ptr->inside_arena) return (FALSE);
 
-	if (!mon_scatter(&y, &x, y1, x1, 2)) return FALSE;
+	if (!mon_scatter(0, &y, &x, y1, x1, 2)) return FALSE;
 
 	/* Save the summoner */
 	summon_specific_who = who;
@@ -4051,7 +4084,7 @@ bool summon_named_creature (int who, int oy, int ox, int r_idx, u32b mode)
 
 	if (p_ptr->inside_arena) return FALSE;
 
-	if (!mon_scatter(&y, &x, oy, ox, 2)) return FALSE;
+	if (!mon_scatter(r_idx, &y, &x, oy, ox, 2)) return FALSE;
 
 	/* Place it (allow groups) */
 	return place_monster_aux(who, y, x, r_idx, (mode | PM_NO_KAGE));
@@ -4069,26 +4102,21 @@ bool multiply_monster(int m_idx, bool clone, u32b mode)
 
 	int y, x;
 
-	if (!mon_scatter(&y, &x, m_ptr->fy, m_ptr->fx, 1))
+	if (!mon_scatter(m_ptr->r_idx, &y, &x, m_ptr->fy, m_ptr->fx, 1))
 		return FALSE;
 
 	if (m_ptr->mflag2 & MFLAG2_NOPET) mode |= PM_NO_PET;
 
 	/* Create a new monster (awake, no groups) */
-	if (!place_monster_aux(m_idx, y, x, m_ptr->r_idx, (mode | PM_NO_KAGE)))
+	if (!place_monster_aux(m_idx, y, x, m_ptr->r_idx, (mode | PM_NO_KAGE | PM_MULTIPLY)))
 		return FALSE;
 
-	if (clone)
+	/* Hack -- Transfer "clone" flag */
+	if (clone || (m_ptr->smart & SM_CLONED))
 	{
 		m_list[hack_m_idx_ii].smart |= SM_CLONED;
 		m_list[hack_m_idx_ii].mflag2 |= MFLAG2_NOPET;
 	}
-
-	/* Hack -- Shadower spawns Shadower */
-	if (m_ptr->mflag2 & MFLAG2_KAGE) m_list[hack_m_idx_ii].mflag2 |= MFLAG2_KAGE;
-
-	/* Hack -- Appearance transfer */
-	if (!is_original_ap(m_ptr)) m_list[hack_m_idx_ii].ap_r_idx = m_ptr->ap_r_idx;
 
 	return TRUE;
 }

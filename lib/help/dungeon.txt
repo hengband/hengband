@@ -107,7 +107,7 @@ glow with their own never-ending light.
 === Objects In The Dungeon ===
 
 The dungeons are full of objects just waiting to be picked up and used.
-How did they get there? Well, the main source for useful items are all
+How did they get there? Well, the main sources for useful items are all
 the foolish adventurers that proceeded into the dungeon before you.
 They get killed, and the helpful creatures scatter the various treasure
 throughout the dungeon. Most cursed items are placed there by the
@@ -210,8 +210,6 @@ they pass through.
 
 Doors can be broken down by bashing them. Once a door is bashed open,
 it is forever useless and cannot be closed.
-
-For historical reasons, secret doors are never locked.
 
 
 ***** <Feelings>

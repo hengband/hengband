@@ -636,6 +636,9 @@ static bool cast_hissatsu_spell(int spell)
 				update_mon(m_idx, TRUE);
 				lite_spot(oy, ox);
 				lite_spot(ty, tx);
+
+				if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+					p_ptr->update |= (PU_MON_LITE);
 			}
 		}
 		break;
@@ -923,7 +926,12 @@ static bool cast_hissatsu_spell(int spell)
 			m_ptr = &m_list[m_idx];
 
 			/* Monster cannot move back? */
-			if (!monster_can_enter(ny, nx, &r_info[m_ptr->r_idx])) continue;
+			if (!monster_can_enter(ny, nx, &r_info[m_ptr->r_idx]))
+			{
+				/* -more- */
+				if (i < 2) msg_print(NULL);
+				continue;
+			}
 
 			cave[y][x].m_idx = 0;
 			cave[ny][nx].m_idx = m_idx;
@@ -1212,11 +1220,10 @@ prt("確認のため '@' を押して下さい。", 0, 0);
 		{
 #ifdef JP
 			msg_print("武士道とは、死ぬことと見つけたり。");
-			take_hit(DAMAGE_FORCE, 9999, "切腹", -1);
 #else
 			msg_print("Meaning of Bushi-do is found in the death.");
-			take_hit(DAMAGE_FORCE, 9999, "Seppuku", -1);
 #endif
+			take_hit(DAMAGE_FORCE, 9999, "Seppuku", -1);
 		}
 		break;
 	}

@@ -332,6 +332,8 @@ static void build_dead_end(void)
 
 	/* Give one square */
 	place_floor_bold(py, px);
+
+	wipe_generate_cave_flags();
 }
 
 
@@ -669,6 +671,11 @@ void leave_floor(void)
 
 	/* Preserve pets and prepare to take these to next floor */
 	preserve_pet();
+
+	/* Remove all mirrors without explosion */
+	remove_all_mirrors(FALSE);
+
+	if (p_ptr->special_defense & NINJA_S_STEALTH) set_superstealth(FALSE);
 
 	/* New floor is not yet prepared */
 	new_floor_id = 0;
@@ -1048,6 +1055,15 @@ void change_floor(void)
 			}
 		}
 
+		/* Break connection to killed floor */
+		else
+		{
+			if (change_floor_mode & CFM_UP)
+				sf_ptr->lower_floor_id = 0;
+			else if (change_floor_mode & CFM_DOWN)
+				sf_ptr->upper_floor_id = 0;
+		}
+
 		/* Maintain monsters and artifacts */
 		if (loaded)
 		{
@@ -1128,7 +1144,7 @@ void change_floor(void)
 				}
 			}
 
-			place_quest_monsters();
+			(void)place_quest_monsters();
 
 			/* Place some random monsters */
 			alloc_times = absence_ticks / alloc_chance;

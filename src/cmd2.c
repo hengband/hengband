@@ -118,22 +118,27 @@ void do_cmd_go_up(void)
 
 	if (autosave_l) do_cmd_save_game(TRUE);
 
-	if (p_ptr->inside_quest)
+	/* For a random quest */
+	if (p_ptr->inside_quest &&
+	    quest[p_ptr->inside_quest].type == QUEST_TYPE_RANDOM)
 	{
 		leave_quest_check();
 
-		if (quest[leaving_quest].type != QUEST_TYPE_RANDOM)
-		{
-			p_ptr->inside_quest = c_ptr->special;
-			dun_level = 0;
-		}
-		else
-		{
-			p_ptr->inside_quest = 0;
-		}
+		p_ptr->inside_quest = 0;
+	}
 
+	/* For a fixed quest */
+	if (p_ptr->inside_quest &&
+	    quest[p_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
+	{
+		leave_quest_check();
+
+		p_ptr->inside_quest = c_ptr->special;
+		dun_level = 0;
 		up_num = 0;
 	}
+
+	/* For normal dungeon and random quest */
 	else
 	{
 		/* New depth */
@@ -299,7 +304,7 @@ void do_cmd_go_down(void)
 		if (record_stair)
 		{
 #ifdef JP
-			if (fall_trap) do_cmd_write_nikki(NIKKI_STAIR, down_num, "落し戸に落ちた");
+			if (fall_trap) do_cmd_write_nikki(NIKKI_STAIR, down_num, "落とし戸に落ちた");
 			else do_cmd_write_nikki(NIKKI_STAIR, down_num, "階段を下りた");
 #else
 			if (fall_trap) do_cmd_write_nikki(NIKKI_STAIR, down_num, "fell through a trap door");
@@ -310,7 +315,7 @@ void do_cmd_go_down(void)
 		if (fall_trap)
 		{
 #ifdef JP
-			msg_print("わざと落し戸に落ちた。");
+			msg_print("わざと落とし戸に落ちた。");
 #else
 			msg_print("You deliberately jump through the trap door.");
 #endif
@@ -718,7 +723,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 		else
 		{
 #ifdef JP
-			msg_print("渦巻か合体し、破裂した！");
+			msg_print("渦巻が合体し、破裂した！");
 #else
 			msg_print("Vortices coalesce and wreak destruction!");
 #endif
@@ -738,7 +743,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 
 		/* Message. */
 #ifdef JP
-		msg_print("恐しい声が響いた:  「暗闇が汝をつつまん！」");
+		msg_print("恐ろしい声が響いた:  「暗闇が汝をつつまん！」");
 #else
 		msg_print("Hideous voices bid:  'Let the darkness have thee!'");
 #endif
@@ -1675,9 +1680,10 @@ static bool do_cmd_tunnel_aux(int y, int x)
 #else
 				msg_print("You have finished the tunnel.");
 #endif
-				chg_virtue(V_DILIGENCE, 1);
-				chg_virtue(V_NATURE, -1);
 			}
+
+			chg_virtue(V_DILIGENCE, 1);
+			chg_virtue(V_NATURE, -1);
 		}
 
 		/* Failure (quartz) */
@@ -4202,9 +4208,9 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 		return FALSE;
 	}
 
-	if (p_ptr->inside_arena)
+	if (p_ptr->inside_arena && !boomerang)
 	{
-		if (o_ptr->tval != 5)
+		if (o_ptr->tval != TV_SPIKE)
 		{
 #ifdef JP
 			msg_print("アリーナではアイテムを使えない！");

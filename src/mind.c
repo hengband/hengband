@@ -347,7 +347,7 @@ void mindcraft_info(char *p, int use_mind, int power)
 	  case 8:  sprintf(p, " %s10d6+%d", s_dam, plev * 3 / 2 + boost * 3 / 5); break;
 	  case 9:  break;
 #ifdef JP
-	  case 10: sprintf(p, " 最大%d匹", 1+boost/100); break;
+	  case 10: sprintf(p, " 最大%d体", 1+boost/100); break;
 #else
 	  case 10: sprintf(p, " max %d", 1+boost/100); break;
 #endif
@@ -1115,11 +1115,12 @@ static bool cast_force_spell(int spell)
 			int oy = y, ox = x;
 			int m_idx = cave[y][x].m_idx;
 			monster_type *m_ptr = &m_list[m_idx];
+			monster_race *r_ptr = &r_info[m_ptr->r_idx];
 			char m_name[80];
 
 			monster_desc(m_name, m_ptr, 0);
 
-			if (randint1(r_info[m_ptr->r_idx].level * 3 / 2) > randint0(dam / 2) + dam/2)
+			if (randint1(r_ptr->level * 3 / 2) > randint0(dam / 2) + dam/2)
 			{
 #ifdef JP
 				msg_format("%sは飛ばされなかった。", m_name);
@@ -1155,6 +1156,9 @@ static bool cast_force_spell(int spell)
 					update_mon(m_idx, TRUE);
 					lite_spot(oy, ox);
 					lite_spot(ty, tx);
+
+					if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+						p_ptr->update |= (PU_MON_LITE);
 				}
 			}
 		}
@@ -1406,7 +1410,8 @@ msg_format("There are too many mirrors to control!");
 #else
 	  msg_print("Go through the world of mirror...");
 #endif
-	  return dimension_door();
+	  return mirror_tunnel();
+
 	/* mirror of recall */
 	case 17:
 		return word_of_recall();
@@ -1780,7 +1785,8 @@ msg_print("その方向にはモンスターはいません。");
 		/* Redraw the new grid */
 		lite_spot(ty, tx);
 
-		p_ptr->update |= (PU_MON_LITE);
+		if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+			p_ptr->update |= (PU_MON_LITE);
 
 		break;
 	}
@@ -2071,7 +2077,7 @@ msg_format("%sの力が制御できない氾流となって解放された！", p);
 					msg_print("Your mind unleashes its power in an uncontrollable storm!");
 #endif
 
-					project(1, 2 + plev / 10, py, px, plev * 2,
+					project(PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, py, px, plev * 2,
 						GF_MANA, PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
 					p_ptr->csp = MAX(0, p_ptr->csp - plev * MAX(1, plev / 10));
 				}
@@ -2110,7 +2116,7 @@ msg_format("%sの力が制御できない氾流となって解放された！", p);
 					msg_print("Your mind unleashes its power in an uncontrollable storm!");
 #endif
 
-					project(1, 2 + plev / 10, py, px, plev * 2,
+					project(PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, py, px, plev * 2,
 						GF_MANA, PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
 					p_ptr->csp = MAX(0, p_ptr->csp - plev * MAX(1, plev / 10));
 				}

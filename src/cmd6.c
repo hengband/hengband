@@ -5282,7 +5282,11 @@ msg_print("あなたの槍は電気でスパークしている...");
 
 			case ART_BOROMIR:
 			{
+#ifdef JP
+				msg_print("あなたは力強い突風を吹き鳴らした。周囲の敵が震え上っている!");
+#else
 				msg_print("You wind a mighty blast; your enemies tremble!");
+#endif
 				(void)turn_monsters((3 * p_ptr->lev / 2) + 10);
 				o_ptr->timeout = randint0(40) + 40;
 				break;
@@ -5434,7 +5438,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 #ifdef JP
 				msg_print("ムチを伸ばした。");
 #else
-				msg_print("You stretched your wip.");
+				msg_print("You stretched your whip.");
 #endif
 
 				fetch(dir, 500, TRUE);
@@ -6836,7 +6840,7 @@ static int select_magic_eater(bool only_browse)
 			prt(format(" %s staff", (menu_line == 1) ? "> " : "  "), 2, 14);
 			prt(format(" %s wand", (menu_line == 2) ? "> " : "  "), 3, 14);
 			prt(format(" %s rod", (menu_line == 3) ? "> " : "  "), 4, 14);
-			prt("Which type of magic do you usu?", 0, 0);
+			prt("Which type of magic do you use?", 0, 0);
 #endif
 			choice = inkey();
 			switch(choice)

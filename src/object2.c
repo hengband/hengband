@@ -1452,7 +1452,10 @@ s32b object_value(object_type *o_ptr)
 bool can_player_destroy_object(object_type *o_ptr)
 {
 	/* Artifacts cannot be destroyed */
-	if (artifact_p(o_ptr) || o_ptr->art_name)
+	if (!artifact_p(o_ptr) && !o_ptr->art_name) return TRUE;
+
+	/* If object is unidentified, makes fake inscription */
+	if (!object_known_p(o_ptr))
 	{
 		byte feel = FEEL_SPECIAL;
 
@@ -1475,7 +1478,8 @@ bool can_player_destroy_object(object_type *o_ptr)
 		return FALSE;
 	}
 
-	return TRUE;
+	/* Identified artifact -- Nothing to do */
+	return FALSE;
 }
 
 
@@ -1678,6 +1682,7 @@ static int object_similar_part(object_type *o_ptr, object_type *j_ptr)
 		case TV_RING:
 		case TV_AMULET:
 		case TV_LITE:
+		case TV_WHISTLE:
 		{
 			/* Require full knowledge of both items */
 			if (!object_known_p(o_ptr) || !object_known_p(j_ptr)) return 0;
@@ -3979,6 +3984,9 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 				/* Ignore dead monsters */
 				if (!r_ptr->rarity) continue;
 
+				/* Ignore uncommon monsters */
+				if (r_ptr->rarity > 100) continue;
+
 				/* Prefer less out-of-depth monsters */
 				if (randint0(check)) continue;
 
@@ -5078,21 +5086,11 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 
 
 	/* Find a grid */
-	for (i = 0; !flag; i++)
+	for (i = 0; !flag && (i < 1000); i++)
 	{
 		/* Bounce around */
-		if (i < 1000)
-		{
-			ty = rand_spread(by, 1);
-			tx = rand_spread(bx, 1);
-		}
-
-		/* Random locations */
-		else
-		{
-			ty = randint0(cur_hgt);
-			tx = randint0(cur_wid);
-		}
+		ty = rand_spread(by, 1);
+		tx = rand_spread(bx, 1);
 
 		/* Grid */
 		c_ptr = &cave[ty][tx];
@@ -5113,6 +5111,93 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 
 		/* Okay */
 		flag = TRUE;
+	}
+
+
+	if (!flag)
+	{
+		int candidates = 0, pick;
+
+		for (ty = 1; ty < cur_hgt - 1; ty++)
+		{
+			for (tx = 1; tx < cur_wid - 1; tx++)
+			{
+				/* Grid */
+				c_ptr = &cave[ty][tx];
+
+				/* A valid space found */
+				if (((c_ptr->feat == FEAT_FLOOR) ||
+				     (c_ptr->feat == FEAT_SHAL_WATER) ||
+				     (c_ptr->feat == FEAT_GRASS) ||
+				     (c_ptr->feat == FEAT_DIRT) ||
+				     (c_ptr->feat == FEAT_SHAL_LAVA)) &&
+				    cave_clean_bold(ty, ty))
+					candidates++;
+			}
+		}
+
+		/* No valid place! */
+		if (!candidates)
+		{
+			/* Message */
+#ifdef JP
+			msg_format("%sは消えた。", o_name);
+#else
+			msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
+#endif
+
+			/* Debug */
+#ifdef JP
+			if (p_ptr->wizard) msg_print("(床スペースがない)");
+#else
+			if (p_ptr->wizard) msg_print("(no floor space)");
+#endif
+
+			/* Mega-Hack -- preserve artifacts */
+			if (preserve_mode)
+			{
+				/* Hack -- Preserve unknown artifacts */
+				if (artifact_p(j_ptr) && !object_known_p(j_ptr))
+				{
+					/* Mega-Hack -- Preserve the artifact */
+					a_info[j_ptr->name1].cur_num = 0;
+				}
+			}
+
+			/* Failure */
+			return 0;
+		}
+
+		/* Choose a random one */
+		pick = randint1(candidates);
+
+		for (ty = 1; ty < cur_hgt - 1; ty++)
+		{
+			for (tx = 1; tx < cur_wid - 1; tx++)
+			{
+				/* Grid */
+				c_ptr = &cave[ty][tx];
+
+				/* A valid space found */
+				if (((c_ptr->feat == FEAT_FLOOR) ||
+				     (c_ptr->feat == FEAT_SHAL_WATER) ||
+				     (c_ptr->feat == FEAT_GRASS) ||
+				     (c_ptr->feat == FEAT_DIRT) ||
+				     (c_ptr->feat == FEAT_SHAL_LAVA)) &&
+				    cave_clean_bold(ty, ty))
+				{
+					pick--;
+
+					/* Is this a picked one? */
+					if (!pick) break;
+				}
+			}
+
+			if (!pick) break;
+		}
+
+		by = ty;
+		bx = tx;
 	}
 
 
@@ -5911,7 +5996,8 @@ s16b inven_takeoff(int item, int amt)
 	object_desc(o_name, q_ptr, TRUE, 3);
 
 	/* Took off weapon */
-	if (item == INVEN_RARM)
+	if (((item == INVEN_RARM) || (item == INVEN_LARM)) &&
+	    (o_ptr->tval >= TV_DIGGING) && (o_ptr->tval <= TV_SWORD))
 	{
 #ifdef JP
 		act = "を装備からはずした";
@@ -7003,7 +7089,7 @@ static essence_type essence_info[] =
 	{TR_MAGIC_MASTERY, "magic mastery", 4, TR_MAGIC_MASTERY, 20},
 	{TR_STEALTH, "stealth", 4, TR_STEALTH, 40},
 	{TR_SEARCH, "serching", 4, TR_SEARCH, 15},
-	{TR_INFRA, "inflavision", 4, TR_INFRA, 15},
+	{TR_INFRA, "infravision", 4, TR_INFRA, 15},
 	{TR_TUNNEL, "digging", 4, TR_TUNNEL, 15},
 	{TR_SPEED, "speed", 4, TR_SPEED, 12},
 	{TR_BLOWS, "extra attack", 1, TR_BLOWS, 20},
@@ -7222,7 +7308,7 @@ static cptr essence_name[] =
 	"",
 	"stealth",
 	"serching",
-	"inflavision",
+	"infravision",
 	"digging",
 	"speed",
 	"extra atk",
@@ -8423,7 +8509,7 @@ void do_cmd_kaji(bool only_browse)
 #ifdef JP
 			msg_print("うまく見えなくて作業できない！");
 #else
-			msg_print("You are hullcinating!");
+			msg_print("You are hallucinating!");
 #endif
 
 			return;

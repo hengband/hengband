@@ -1036,6 +1036,7 @@ static void mass_produce(object_type *o_ptr)
 		case TV_DIGGING:
 		case TV_BOW:
 		{
+			if (o_ptr->art_name) break;
 			if (o_ptr->name2) break;
 			if (cost <= 10L) size += damroll(3, 5);
 			if (cost <= 100L) size += damroll(3, 5);
@@ -4078,7 +4079,7 @@ msg_format("%sを調べている...", o_name);
 
 
 	/* Describe it fully */
-	if (!screen_object(o_ptr, TRUE))
+	if (!screen_object(o_ptr, SCROBJ_FORCE_DETAIL))
 #ifdef JP
 msg_print("特に変わったところはないようだ。");
 #else

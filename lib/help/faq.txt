@@ -8,7 +8,7 @@ Q. I want to play as an Android, Balrog, Golem, Skeleton, Zombie,
    How do I avoid starvation?
 
 A. Scroll of Satisfy Hunger and Berserker's ability of Satisfy Hunger
-   are obsoleted.  And races which previously relyed on Satisfy Hunger
+   are obsoleted.  And races which previously relied on Satisfy Hunger
    have new sources of nutrition now; Android can quaff oil.  Balrogs
    can sacrifice human corpse using the 'E'at command.  Golems,
    Skeletons, Zombies, and Spectres can absorb mana from staves and
@@ -16,7 +16,7 @@ A. Scroll of Satisfy Hunger and Berserker's ability of Satisfy Hunger
    potions.
 
 
-Q. I got through the Yeek cave and I headed into the wilderness....and
+Q. I got through the Yeek cave and I headed into the wilderness... and
    I'm still there searching endlessly down one road after another
    looking for a town.  Where are other towns and dungeons?
 
@@ -30,12 +30,12 @@ Q. I'm playing as a berserker, and cannot read scrolls.  How do I
    remove curse?
 
 A. You can simply 't'ake off cursed equipments.  Since cursed
-   equipments are strongly sticking, you need to try 't'ake off
+   equipments are strongly sticking; you need to try 't'ake off
    command many times.
 
 
 Q. I know Berserkers cannot use scrolls, and rods.  How do I recall
-   from dungeon?  Maybe I need to travel completely on foot?!!
+   from dungeon?  Maybe I need to travel completely on foot!?
 
 A. Berserkers gain a class power 'Recall' at level 10.  Press the
    'U'(original keyset) or 'O'(Roguelike keyset) to use class power.
@@ -109,9 +109,9 @@ A. You cannot directly control your mount unless you use one hand to
 Q. Where is the score server?  And how do I register my character
    dumps?
 
-A. Here;'http://hengband.sourceforge.jp/en/score.html'.
+A. Here; 'http://hengband.sourceforge.jp/en/score.html'.
    When you die, Hengband will ask you as 'Do you send score to the
-   world score sever?'.  And if you answer 'y', Hengband will
+   world score server?'.  And if you answer 'y', Hengband will
    automatically register your character dump and screen shot.
 
 
@@ -130,10 +130,9 @@ A. Hengband is mainly based on ZAngband 2.2.8 Japanese version.
    addition to simple translation.
 
    Hengband also includes codes from many other variants including
-   ToME, OAngband, etc...  Mr.Hoge wrote the first original part of
+   ToME, OAngband, etc.  Mr.Hoge wrote the first original part of
    Hengband.  And currently, it is maintained by Hengband Development
-   Team including Mr.Hoge, Habu, Henkma, iks, Kuwa, Mogami, nsk, and
-   @nothere.
+   Team including Mr.Hoge, Habu, Henkma, iks, Kuwa, Mogami and nsk.
 
 
 Q. Where is Hengband?

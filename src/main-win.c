@@ -519,10 +519,12 @@ static DIBINIT infMask;
  */
 static bool can_use_sound = FALSE;
 
+#define SAMPLE_MAX 8
+
 /*
  * An array of sound file names
  */
-static cptr sound_file[SOUND_MAX];
+static cptr sound_file[SOUND_MAX][SAMPLE_MAX];
 
 #endif /* USE_SOUND */
 
@@ -723,7 +725,11 @@ static int init_bg(void)
 
 	hBG = LoadImage(NULL, bmfile,  IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 	if (!hBG) {
+#ifdef JP
 		plog_fmt("壁紙用ビットマップ '%s' を読み込めません。", bmfile);
+#else
+		plog_fmt("Can't load the bitmap file '%s'.", bmfile);
+#endif
 		use_bg = 0;
 		return 0;
 	}
@@ -1252,6 +1258,88 @@ static void load_prefs(void)
 	}
 }
 
+#ifdef USE_SOUND
+
+/*
+ * XXX XXX XXX - Taken from files.c.
+ *
+ * Extract "tokens" from a buffer
+ *
+ * This function uses "whitespace" as delimiters, and treats any amount of
+ * whitespace as a single delimiter.  We will never return any empty tokens.
+ * When given an empty buffer, or a buffer containing only "whitespace", we
+ * will return no tokens.  We will never extract more than "num" tokens.
+ *
+ * By running a token through the "text_to_ascii()" function, you can allow
+ * that token to include (encoded) whitespace, using "\s" to encode spaces.
+ *
+ * We save pointers to the tokens in "tokens", and return the number found.
+ */
+static s16b tokenize_whitespace(char *buf, s16b num, char **tokens)
+{
+	int k = 0;
+
+	char *s = buf;
+
+
+	/* Process */
+	while (k < num)
+	{
+		char *t;
+
+		/* Skip leading whitespace */
+		for ( ; *s && isspace(*s); ++s) /* loop */;
+
+		/* All done */
+		if (!*s) break;
+
+		/* Find next whitespace, if any */
+		for (t = s; *t && !isspace(*t); ++t) /* loop */;
+
+		/* Nuke and advance (if necessary) */
+		if (*t) *t++ = '\0';
+
+		/* Save the token */
+		tokens[k++] = s;
+
+		/* Advance */
+		s = t;
+	}
+
+	/* Count */
+	return (k);
+}
+
+static void load_sound_prefs(void)
+{
+	int i, j, num;
+	char tmp[1024];
+	char ini_path[1024];
+	char wav_path[1024];
+	char *zz[SAMPLE_MAX];
+
+	/* Access the sound.cfg */
+	path_build(ini_path, 1024, ANGBAND_DIR_XTRA_SOUND, "sound.cfg");
+
+	for (i = 0; i < SOUND_MAX; i++)
+	{
+		GetPrivateProfileString("Sound", angband_sound_name[i], "", tmp, 1024, ini_path);
+
+		num = tokenize_whitespace(tmp, SAMPLE_MAX, zz);
+
+		for (j = 0; j < num; j++)
+		{
+			/* Access the sound */
+			path_build(wav_path, 1024, ANGBAND_DIR_XTRA_SOUND, zz[j]);
+
+			/* Save the sound filename, if it exists */
+			if (check_file(wav_path))
+				sound_file[i][j] = string_make(zz[j]);
+		}
+	}
+}
+
+#endif /* USE_SOUND */
 
 /*
  * Create the new global palette based on the bitmap palette
@@ -1506,23 +1594,8 @@ static bool init_sound(void)
 	/* Initialize once */
 	if (!can_use_sound)
 	{
-		int i;
-
-		char wav[128];
-		char buf[1024];
-
-		/* Prepare the sounds */
-		for (i = 1; i < SOUND_MAX; i++)
-		{
-			/* Extract name of sound file */
-			sprintf(wav, "%s.wav", angband_sound_name[i]);
-
-			/* Access the sound */
-			path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_SOUND, wav);
-
-			/* Save the sound filename, if it exists */
-			if (check_file(buf)) sound_file[i] = string_make(buf);
-		}
+		/* Load the prefs */
+		load_sound_prefs();
 
 		/* Sound available */
 		can_use_sound = TRUE;
@@ -2081,6 +2154,11 @@ static errr Term_xtra_win_noise(void)
  */
 static errr Term_xtra_win_sound(int v)
 {
+#ifdef USE_SOUND
+	int i;
+	char buf[1024];
+#endif /* USE_SOUND */
+
 	/* Sound disabled */
 	if (!use_sound) return (1);
 
@@ -2089,18 +2167,28 @@ static errr Term_xtra_win_sound(int v)
 
 #ifdef USE_SOUND
 
-	/* Unknown sound */
-	if (!sound_file[v]) return (1);
+	/* Count the samples */
+	for (i = 0; i < SAMPLE_MAX; i++)
+	{
+		if (!sound_file[v][i])
+			break;
+	}
+
+	/* No sample */
+	if (i == 0) return (1);
+
+	/* Build the path */
+	path_build(buf, 1024, ANGBAND_DIR_XTRA_SOUND, sound_file[v][Rand_simple(i)]);
 
 #ifdef WIN32
 
 	/* Play the sound, catch errors */
-	return (PlaySound(sound_file[v], 0, SND_FILENAME | SND_ASYNC));
+	return (PlaySound(buf, 0, SND_FILENAME | SND_ASYNC));
 
 #else /* WIN32 */
 
 	/* Play the sound, catch errors */
-	return (sndPlaySound(sound_file[v], SND_ASYNC));
+	return (sndPlaySound(buf, SND_ASYNC));
 
 #endif /* WIN32 */
 
@@ -4176,6 +4264,42 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 			return 0;
 		}
 
+		case WM_QUERYENDSESSION:
+		{
+			if (game_in_progress && character_generated)
+			{
+				/* Hack -- Forget messages */
+				msg_flag = FALSE;
+
+				/* Mega-Hack -- Delay death */
+				if (p_ptr->chp < 0) p_ptr->is_dead = FALSE;
+
+#ifdef JP
+				do_cmd_write_nikki(NIKKI_GAMESTART, 0, "----ゲーム中断----");
+#else
+				do_cmd_write_nikki(NIKKI_GAMESTART, 0, "---- Save and Exit Game ----");
+#endif
+
+				/* Hardcode panic save */
+				p_ptr->panic_save = 1;
+
+				/* Forbid suspend */
+				signals_ignore_tstp();
+
+				/* Indicate panic save */
+#ifdef JP
+				(void)strcpy(p_ptr->died_from, "(緊急セーブ)");
+#else
+				(void)strcpy(p_ptr->died_from, "(panic save)");
+#endif
+
+				/* Panic save */
+				(void)save_player();
+			}
+			quit(NULL);
+			return 0;
+		}
+
 		case WM_QUIT:
 		{
 			quit(NULL);
@@ -5053,6 +5177,8 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 		}
 	}
 
+	/* Catch nasty signals */
+	signals_init();
 
 	/* Initialize */
 	init_angband();

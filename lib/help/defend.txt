@@ -173,7 +173,7 @@ of Resistance.
 
 of Elvenkind.
      This is the same as Resistance armor, only generally better
-     enchanted. It will also make you more stealthy.
+     enchanted. It will also make you stealthier.
 
 of Permanence (Robes Only)
      These robes provide resistance to fire, cold, acid, and
@@ -194,7 +194,7 @@ of Intelligence
      This item will both increase and sustain your intelligence.
 
 of Wisdom
-     This item and will both increase and sustain your wisdom.
+     This item will both increase and sustain your wisdom.
 
 of Beauty
      This item will both increase and sustain your charisma.
@@ -532,7 +532,7 @@ Healing is available in multiple forms including: Potions and Staves
 of Cure Light Wounds, Potions of Cure Serious Wounds, Potions of Cure
 Critical Wounds, Potions, Staves and Rods of Healing, Potions of
 *Healing* and Potions of Life, from weakest to strongest. Both the Life
-and Nature realms contains spells to heal the player.
+and Nature realms contain spells to heal the player.
 
 Cure Light Wounds
      restores 2d8 hitpoints and removes cuts, blindness and berserk.

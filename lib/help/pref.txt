@@ -90,7 +90,7 @@ Reload auto-picker/destroyer preference ($)
 
 Edit auto-picker/destroyer pref (_)
      Allow the user to edit the pickpref-<player's name>.prf in the
-     user directry.  Basic usage of the editor is almost same as vi,
+     user directory.  Basic usage of the editor is almost same as vi,
      and also have emacs like commands.  Most commands is always
      displayed on the first line and the right half of the screen.
 
@@ -100,9 +100,9 @@ Edit auto-picker/destroyer pref (_)
       'q'            :  Quit the editor (command mode only)
       'hjkl2468'     :  Move cursor (command mode only)
       ^B ^N ^P ^F    :  Move cursor (always)
-      ^I  : Choose an item from inventry/equipment, then insert its name
+      ^I  : Choose an item from inventory/equipment, then insert its name
       ^S  : Rotates action (pick up / destroy / leave on floor)
-      ^U  : Rotates idendify state (identified / unidentified / ...)
+      ^U  : Rotates identify state (identified / unidentified / ...)
 
 
 ***** <Macros>
@@ -413,7 +413,6 @@ Special Notes:
     %:filename
       Read a file named 'filename' as a new pick-pref file. The file 
       must be in the user directory.
-      Caution: Avoid naming the parent file, or the game might freeze up.
 
   - usage of operators
     [EQU arg1 arg2 ...]

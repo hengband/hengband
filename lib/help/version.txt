@@ -1,5 +1,56 @@
 === History of Hengband ===
 
+
+Jan. 9th, 2004  hengband 1.6.0 (New stable branch) released.
+ This is a bug-fix version of 1.5.4, and 
+ the first version of the new stable branch (1.6.x) .
+
+- Activation of the Wizardstaff of Gandalf was changed.
+- Activation of the Charmed Pendant was changed.
+- "share gold" in thievs guild was abolished.
+- Hunter's office make no difference between two races of the same name.
+- Mirrors will disappear when you move to other floor.
+
+- Various bug fixes:
+  "./configure --with-setgid=games" didn't work.
+  Strange behavior for inscriptions such as {@ud}.
+  Sanity blast each time you used save command.
+  Quest rewards in lite_town were older.
+  The game crashed at cure mutation service when you are a Lucky.
+  The rarely crashed when a unique vanished from a saved floor.
+  When a monster threw another monster, the player caused damage.
+  Many typo, screen update failures, wrong descriptions etc.
+
+- All changes for 1.4.5 are also included in 1.6.0 .
+
+
+Jan. 9th, 2004  hengband 1.4.5 (Old stable branch) released.
+ This is the final version of old stable branch (1.4.x),
+ and is the final version without the saved floor.
+
+- Avoid displaying unimportant descriptions when *identified* an object.
+- Enabled use of sound.cfg on Windows. (Thanks to KoKa)
+- Mimicing monsters '+','%','{' didn't appear in monster knowledge menu.
+
+- Various bug fixes:
+  Samurai couldn't use Boomerang tech in Arena.
+  A monster in Capture Ball sometimes disenchanted and changed.
+  Random teleport in Monster Arena cause infinite loop.
+  Charging Magic Whistles were stacked, and charge was reset.
+  Surplus {special} fake inscription on identified artifact.
+  Some items in the Race career list in character dump were missing.
+  Warrior of the Dawn couldn't reproduced in forests.
+  Cursed weapon in left hand was able to move to right hand.
+  Summon Pet sometimes failed.
+  Stop time was cancelled when any monster die.
+  Miscount of Silver Angels.
+  Renamed "A Set of Gloves of Dragon" to "A Set of Dragon Gloves".
+  Sometimes pets mistakenly breathed on the player.
+  Sometimes normal breath pierce walls.
+  The Minotaur of the Labyrinth should be summond by final boss.
+  Many typo, screen update failures, wrong descriptions etc.
+
+
 Aug. 12th, 2003  hengband 1.5.4 (Development branch) released.
 
 - New artifatct amulets.

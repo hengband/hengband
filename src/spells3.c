@@ -134,6 +134,9 @@ bool teleport_away(int m_idx, int dis, bool dec_valour)
 	/* Redraw the new grid */
 	lite_spot(ny, nx);
 
+	if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+		p_ptr->update |= (PU_MON_LITE);
+
 	return (TRUE);
 }
 
@@ -245,7 +248,8 @@ void teleport_monster_to(int m_idx, int ty, int tx, int power)
 	/* Redraw the new grid */
 	lite_spot(ny, nx);
 
-	p_ptr->update |= (PU_MON_LITE);
+	if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+		p_ptr->update |= (PU_MON_LITE);
 }
 
 
@@ -262,12 +266,10 @@ void teleport_monster_to(int m_idx, int ty, int tx, int power)
  * we decrease the minimum acceptable distance to try to increase randomness.
  * -GJW
  */
-void teleport_player(int dis)
+static bool teleport_player_aux(int dis)
 {
 	int d, i, min, ox, oy;
 	int tries = 0;
-
-	int xx, yy;
 
 	/* Initialize */
 	int y = py;
@@ -275,17 +277,17 @@ void teleport_player(int dis)
 
 	bool look = TRUE;
 
-	if (p_ptr->wild_mode) return;
+	if (p_ptr->wild_mode) return FALSE;
 
 	if (p_ptr->anti_tele)
 	{
 #ifdef JP
-msg_print("不思議な力がテレポートを防いだ！");
+		msg_print("不思議な力がテレポートを防いだ！");
 #else
 		msg_print("A mysterious force prevents you from teleporting!");
 #endif
 
-		return;
+		return FALSE;
 	}
 
 	if (dis > 200) dis = 200; /* To be on the safe side... */
@@ -337,8 +339,10 @@ msg_print("不思議な力がテレポートを防いだ！");
 		min = min / 2;
 
 		/* Stop after MAX_TRIES tries */
-		if (tries > MAX_TRIES) return;
+		if (tries > MAX_TRIES) return FALSE;
 	}
+
+	if (player_bold(y, x)) return FALSE;
 
 	/* Sound */
 	sound(SOUND_TELEPORT);
@@ -370,6 +374,39 @@ msg_print("不思議な力がテレポートを防いだ！");
 	/* Redraw the old spot */
 	lite_spot(oy, ox);
 
+	forget_flow();
+
+	/* Redraw the new spot */
+	lite_spot(py, px);
+
+	/* Check for new panel (redraw map) */
+	verify_panel();
+
+	/* Update stuff */
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
+
+	/* Update the monsters */
+	p_ptr->update |= (PU_DISTANCE);
+
+	/* Window stuff */
+	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+
+	/* Handle stuff XXX XXX XXX */
+	handle_stuff();
+
+	return TRUE;
+}
+
+void teleport_player(int dis)
+{
+	int yy, xx;
+
+	/* Save the old location */
+	int oy = py;
+	int ox = px;
+
+	if (!teleport_player_aux(dis)) return;
+
 	/* Monsters with teleport ability may follow the player */
 	for (xx = -1; xx < 2; xx++)
 	{
@@ -395,28 +432,45 @@ msg_print("不思議な力がテレポートを防いだ！");
 			}
 		}
 	}
-
-	forget_flow();
-
-	/* Redraw the new spot */
-	lite_spot(py, px);
-
-	/* Check for new panel (redraw map) */
-	verify_panel();
-
-	/* Update stuff */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
-
-	/* Update the monsters */
-	p_ptr->update |= (PU_DISTANCE);
-
-	/* Window stuff */
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
-	/* Handle stuff XXX XXX XXX */
-	handle_stuff();
 }
 
+
+void teleport_player_away(int m_idx, int dis)
+{
+	int yy, xx;
+
+	/* Save the old location */
+	int oy = py;
+	int ox = px;
+
+	if (!teleport_player_aux(dis)) return;
+
+	/* Monsters with teleport ability may follow the player */
+	for (xx = -1; xx < 2; xx++)
+	{
+		for (yy = -1; yy < 2; yy++)
+		{
+			int tmp_m_idx = cave[oy+yy][ox+xx].m_idx;
+
+			/* A monster except your mount or caster may follow */
+			if (tmp_m_idx && (p_ptr->riding != tmp_m_idx) && (m_idx != tmp_m_idx))
+			{
+				monster_type *m_ptr = &m_list[tmp_m_idx];
+				monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+				/*
+				 * The latter limitation is to avoid
+				 * totally unkillable suckers...
+				 */
+				if ((r_ptr->flags6 & RF6_TPORT) &&
+				    !(r_ptr->flagsr & RFR_RES_TELE))
+				{
+					if (!m_ptr->csleep) teleport_monster_to(tmp_m_idx, py, px, r_ptr->level);
+				}
+			}
+		}
+	}
+}
 
 
 /*
@@ -512,6 +566,66 @@ msg_print("不思議な力がテレポートを防いだ！");
 	handle_stuff();
 }
 
+
+void teleport_away_followable(int m_idx)
+{
+	monster_type *m_ptr = &m_list[m_idx];
+	int          oldfy = m_ptr->fy;
+	int          oldfx = m_ptr->fx;
+	bool         old_ml = m_ptr->ml;
+	int          old_cdis = m_ptr->cdis;
+
+	teleport_away(m_idx, MAX_SIGHT * 2 + 5, FALSE);
+
+	if (old_ml && (old_cdis <= MAX_SIGHT) && !world_monster && los(py, px, oldfy, oldfx))
+	{
+		bool follow = FALSE;
+
+		if ((p_ptr->muta1 & MUT1_VTELEPORT) || (p_ptr->pclass == CLASS_IMITATOR)) follow = TRUE;
+		else
+		{
+			u32b flgs[TR_FLAG_SIZE];
+			object_type *o_ptr;
+			int i;
+
+			for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
+			{
+				o_ptr = &inventory[i];
+				if (o_ptr->k_idx && !cursed_p(o_ptr))
+				{
+					object_flags(o_ptr, flgs);
+					if (have_flag(flgs, TR_TELEPORT))
+					{
+						follow = TRUE;
+						break;
+					}
+				}
+			}
+		}
+
+		if (follow)
+		{
+#ifdef JP
+			if (get_check_strict("ついていきますか？", CHECK_OKAY_CANCEL))
+#else
+			if (get_check_strict("Do you follow it? ", CHECK_OKAY_CANCEL))
+#endif
+			{
+				if (one_in_(3))
+				{
+					teleport_player(200);
+#ifdef JP
+					msg_print("失敗！");
+#else
+					msg_print("Failed!");
+#endif
+				}
+				else teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE);
+				p_ptr->energy_need += ENERGY_NEED();
+			}
+		}
+	}
+}
 
 
 /*
@@ -791,7 +905,7 @@ if (get_check("ここは最深到達階より浅い階です。この階に戻って来ますか？ "))
 #endif
 		{
 			max_dlv[dungeon_type] = dun_level;
-			if (record_maxdeapth)
+			if (record_maxdepth)
 #ifdef JP
 				do_cmd_write_nikki(NIKKI_TRUMP, dungeon_type, "帰還のときに");
 #else
@@ -894,7 +1008,7 @@ sprintf(ppp, "何階にセットしますか (%d-%d):", d_info[select_dungeon].mindepth, m
 
 		max_dlv[select_dungeon] = dummy;
 
-		if (record_maxdeapth)
+		if (record_maxdepth)
 #ifdef JP
 			do_cmd_write_nikki(NIKKI_TRUMP, select_dungeon, "フロア・リセットで");
 #else
@@ -949,6 +1063,9 @@ bool apply_disenchant(int mode)
 	/* No item, nothing happens */
 	if (!o_ptr->k_idx) return (FALSE);
 
+	/* Disenchant equipments only -- No disenchant on monster ball */
+	if (o_ptr->tval < TV_BOW || TV_CARD < o_ptr->tval)
+		return FALSE;
 
 	/* Nothing to disenchant */
 	if ((o_ptr->to_h <= 0) && (o_ptr->to_d <= 0) && (o_ptr->to_a <= 0) && (o_ptr->pval <= 1))
@@ -1279,6 +1396,9 @@ act = "は鋭さを増した！";
 
 				o_ptr->name2 = EGO_SHARPNESS;
 				o_ptr->pval = m_bonus(5, dun_level) + 1;
+
+				if ((o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2))
+					o_ptr->pval = 2;
 			}
 			else
 			{
@@ -1514,15 +1634,13 @@ static bool vanish_dungeon(void)
 			/* Lose room and vault */
 			c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-			/* Awake monster */
-			if (c_ptr->m_idx)
-			{
-				m_ptr = &m_list[c_ptr->m_idx];
+			m_ptr = &m_list[c_ptr->m_idx];
 
+			/* Awake monster */
+			if (c_ptr->m_idx && m_ptr->csleep)
+			{
 				/* Reset sleep counter */
 				m_ptr->csleep = 0;
-
-				if (r_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 
 				/* Notice the "waking up" */
 				if (m_ptr->ml)
@@ -3055,7 +3173,7 @@ s = "鑑定するべきアイテムがない。";
 	}
 
 	/* Describe it fully */
-	(void)screen_object(o_ptr, TRUE);
+	(void)screen_object(o_ptr, 0L);
 
 	/* Auto-inscription/destroy */
 	idx = is_autopick(o_ptr);
@@ -5808,12 +5926,9 @@ bool polymorph_monster(int y, int x)
 /*
  * Dimension Door
  */
-bool dimension_door(void)
+static bool dimension_door_aux(int x, int y)
 {
 	int	plev = p_ptr->lev;
-	int	x = 0, y = 0;
-
-	if (!tgt_pt(&x, &y)) return FALSE;
 
 	p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
 
@@ -5821,28 +5936,63 @@ bool dimension_door(void)
 		(distance(y, x, py, px) > plev / 2 + 10) ||
 		(!randint0(plev / 10 + 10)))
 	{
-		if( p_ptr->pclass != CLASS_MIRROR_MASTER ){
-#ifdef JP
-			msg_print("精霊界から物質界に戻る時うまくいかなかった！");
-#else
-			msg_print("You fail to exit the astral plane correctly!");
-#endif
-		}
-		else
-		{
-#ifdef JP
-			msg_print("鏡の世界をうまく通れなかった！");
-#else
-			msg_print("You fail to exit the astral plane correctly!");
-#endif
-		}
 		p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
 		teleport_player((plev+2)*2);
+
+		/* Failed */
+		return FALSE;
 	}
 	else
+	{
 		teleport_player_to(y, x, TRUE);
 
-	return (TRUE);
+		/* Success */
+		return TRUE;
+	}
+}
+
+
+/*
+ * Dimension Door
+ */
+bool dimension_door(void)
+{
+	int x = 0, y = 0;
+
+	/* Rerutn FALSE if cancelled */
+	if (!tgt_pt(&x, &y)) return FALSE;
+
+	if (dimension_door_aux(x, y)) return TRUE;
+
+#ifdef JP
+	msg_print("精霊界から物質界に戻る時うまくいかなかった！");
+#else
+	msg_print("You fail to exit the astral plane correctly!");
+#endif
+
+	return TRUE;
+}
+
+
+/*
+ * Mirror Master's Dimension Door
+ */
+bool mirror_tunnel(void)
+{
+	int x = 0, y = 0;
+
+	/* Rerutn FALSE if cancelled */
+	if (!tgt_pt(&x, &y)) return FALSE;
+
+	if (dimension_door_aux(x, y)) return TRUE;
+
+#ifdef JP
+	msg_print("鏡の世界をうまく通れなかった！");
+#else
+	msg_print("You fail to pass the mirror plane correctly!");
+#endif
+
+	return TRUE;
 }
 
 

@@ -28,18 +28,19 @@ void check_experience(void)
 
 	/* Hack -- lower limit */
 	if (p_ptr->exp < 0) p_ptr->exp = 0;
-
-	/* Hack -- lower limit */
 	if (p_ptr->max_exp < 0) p_ptr->max_exp = 0;
+	if (p_ptr->max_max_exp < 0) p_ptr->max_max_exp = 0;
 
 	/* Hack -- upper limit */
 	if (p_ptr->exp > PY_MAX_EXP) p_ptr->exp = PY_MAX_EXP;
-
-	/* Hack -- upper limit */
 	if (p_ptr->max_exp > PY_MAX_EXP) p_ptr->max_exp = PY_MAX_EXP;
+	if (p_ptr->max_max_exp > PY_MAX_EXP) p_ptr->max_max_exp = PY_MAX_EXP;
 
 	/* Hack -- maintain "max" experience */
 	if (p_ptr->exp > p_ptr->max_exp) p_ptr->max_exp = p_ptr->exp;
+
+	/* Hack -- maintain "max max" experience */
+	if (p_ptr->max_exp > p_ptr->max_max_exp) p_ptr->max_max_exp = p_ptr->max_exp;
 
 	/* Redraw experience */
 	p_ptr->redraw |= (PR_EXP);
@@ -103,6 +104,7 @@ void check_experience(void)
 msg_format("レベル %d にようこそ。", p_ptr->lev);
 #else
 		msg_format("Welcome to level %d.", p_ptr->lev);
+
 #endif
 
 		/* Update some stuff */
@@ -112,7 +114,7 @@ msg_format("レベル %d にようこそ。", p_ptr->lev);
 		p_ptr->redraw |= (PR_LEV | PR_TITLE);
 
 		/* Window stuff */
-		p_ptr->window |= (PW_PLAYER | PW_SPELL);
+		p_ptr->window |= (PW_PLAYER | PW_SPELL | PW_INVEN);
 
 		/* HPとMPの上昇量を表示 */
 		level_up = 1;
@@ -350,6 +352,24 @@ static bool kind_is_armor(int k_idx)
 
 	/* Analyze the item type */
 	if (k_ptr->tval == TV_HARD_ARMOR)
+	{
+		return (TRUE);
+	}
+
+	/* Assume not good */
+	return (FALSE);
+}
+
+
+/*
+ * Hack -- determine if a template is hafted weapon
+ */
+static bool kind_is_hafted(int k_idx)
+{
+	object_kind *k_ptr = &k_info[k_idx];
+
+	/* Analyze the item type */
+	if (k_ptr->tval == TV_HAFTED)
 	{
 		return (TRUE);
 	}
@@ -686,7 +706,7 @@ void monster_death(int m_idx, bool drop_item)
 
 	bool do_gold = (!(r_ptr->flags1 & RF1_ONLY_ITEM));
 	bool do_item = (!(r_ptr->flags1 & RF1_ONLY_GOLD));
-	bool cloned = FALSE;
+	bool cloned = (m_ptr->smart & SM_CLONED) ? TRUE : FALSE;
 	int force_coin = get_coin_type(m_ptr->r_idx);
 
 	object_type forge;
@@ -695,8 +715,8 @@ void monster_death(int m_idx, bool drop_item)
 	bool drop_chosen_item = drop_item && !cloned && !p_ptr->inside_arena
 		&& !p_ptr->inside_battle && !is_pet(m_ptr);
 
-
-	if (world_monster) world_monster = FALSE;
+	/* The caster is dead? */
+	if (world_monster && world_monster == m_idx) world_monster = 0;
 
 	/* Notice changes in view */
 	if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
@@ -708,9 +728,6 @@ void monster_death(int m_idx, bool drop_item)
 	/* Get the location */
 	y = m_ptr->fy;
 	x = m_ptr->fx;
-
-	if (m_ptr->smart & SM_CLONED)
-		cloned = TRUE;
 
 	if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 	{
@@ -808,9 +825,8 @@ msg_print("地面に落とされた。");
 
 	/* Drop a dead corpse? */
 	if (one_in_(r_ptr->flags1 & RF1_UNIQUE ? 1 : 4) &&
-	    ((r_ptr->flags9 & RF9_DROP_CORPSE) ||
-	     (r_ptr->flags9 & RF9_DROP_SKELETON)) &&
-	    !(p_ptr->inside_arena || p_ptr->inside_battle || (m_ptr->smart & SM_CLONED) || ((m_ptr->r_idx == today_mon) && is_pet(m_ptr))))
+	    (r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) &&
+	    !(p_ptr->inside_arena || p_ptr->inside_battle || cloned || ((m_ptr->r_idx == today_mon) && is_pet(m_ptr))))
 	{
 		/* Assume skeleton */
 		bool corpse = FALSE;
@@ -821,7 +837,7 @@ msg_print("地面に落とされた。");
 		 */
 		if (!(r_ptr->flags9 & RF9_DROP_SKELETON))
 			corpse = TRUE;
-		else if ((r_ptr->flags9 & RF9_DROP_CORPSE) && (r_ptr->flags1 && RF1_UNIQUE))
+		else if ((r_ptr->flags9 & RF9_DROP_CORPSE) && (r_ptr->flags1 & RF1_UNIQUE))
 			corpse = TRUE;
 
 		/* Else, a corpse is more likely unless we did a "lot" of damage */
@@ -942,13 +958,13 @@ msg_print("地面に落とされた。");
 		{
 			if (!one_in_(7))
 			{
-				int wy = py, wx = px;
+				int wy = y, wx = x;
 				int attempts = 100;
 				bool pet = is_pet(m_ptr);
 
 				do
 				{
-					scatter(&wy, &wx, py, px, 20, 0);
+					scatter(&wy, &wx, y, x, 20, 0);
 				}
 				while (!(in_bounds(wy, wx) && cave_empty_bold2(wy, wx)) && --attempts);
 
@@ -987,6 +1003,7 @@ msg_print("地面に落とされた。");
 		if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
 		{
 			int a_idx = 0;
+			artifact_type *a_ptr = NULL;
 
 			if (!drop_chosen_item) break;
 
@@ -1004,15 +1021,20 @@ msg_print("地面に落とされた。");
 					a_idx = ART_NAMAKE_ARMOR;
 					break;
 				}
-			}
-			while (a_info[a_idx].cur_num);
 
-			if (a_info[a_idx].cur_num == 0)
-			{
-				/* Create the artifact */
-				create_named_art(a_idx, y, x);
-				a_info[a_idx].cur_num = 1;
+				a_ptr = &a_info[a_idx];
 			}
+			while (a_ptr->cur_num);
+
+			/* Create the artifact */
+			if (create_named_art(a_idx, y, x))
+			{
+				a_ptr->cur_num = 1;
+
+				/* Hack -- Memorize location of artifact in saved floors */
+				if (character_dungeon) a_ptr->floor_id = p_ptr->floor_id;
+			}
+			else if (!preserve_mode) a_ptr->cur_num = 1;
 		}
 		break;
 
@@ -1156,6 +1178,29 @@ msg_print("地面に落とされた。");
 				get_obj_num_prep();
 
 				/* Make a hard armor */
+				make_object(q_ptr, mo_mode);
+
+				/* Drop it in the dungeon */
+				(void)drop_near(q_ptr, -1, y, x);
+			}
+			break;
+
+		case '\\':
+			if (dun_level > 4)
+			{
+				/* Get local object */
+				q_ptr = &forge;
+
+				/* Wipe the object */
+				object_wipe(q_ptr);
+
+				/* Activate restriction */
+				get_obj_num_hook = kind_is_hafted;
+
+				/* Prepare allocation table */
+				get_obj_num_prep();
+
+				/* Make a hafted weapon */
 				make_object(q_ptr, mo_mode);
 
 				/* Drop it in the dungeon */
@@ -1367,11 +1412,19 @@ msg_print("地面に落とされた。");
 
 		if ((a_idx > 0) && ((randint0(100) < chance) || p_ptr->wizard))
 		{
-			if (a_info[a_idx].cur_num == 0)
+			artifact_type *a_ptr = &a_info[a_idx];
+
+			if (!a_ptr->cur_num)
 			{
 				/* Create the artifact */
-				create_named_art(a_idx, y, x);
-				a_info[a_idx].cur_num = 1;
+				if (create_named_art(a_idx, y, x))
+				{
+					a_ptr->cur_num = 1;
+
+					/* Hack -- Memorize location of artifact in saved floors */
+					if (character_dungeon) a_ptr->floor_id = p_ptr->floor_id;
+				}
+				else if (!preserve_mode) a_ptr->cur_num = 1;
 			}
 		}
 
@@ -1383,11 +1436,19 @@ msg_print("地面に落とされた。");
 			if (d_info[dungeon_type].final_artifact)
 			{
 				int a_idx = d_info[dungeon_type].final_artifact;
-				if (!a_info[a_idx].cur_num)
+				artifact_type *a_ptr = &a_info[a_idx];
+
+				if (!a_ptr->cur_num)
 				{
 					/* Create the artifact */
-					create_named_art(a_idx, y, x);
-					a_info[a_idx].cur_num = 1;
+					if (create_named_art(a_idx, y, x))
+					{
+						a_ptr->cur_num = 1;
+
+						/* Hack -- Memorize location of artifact in saved floors */
+						if (character_dungeon) a_ptr->floor_id = p_ptr->floor_id;
+					}
+					else if (!preserve_mode) a_ptr->cur_num = 1;
 
 					/* Prevent rewarding both artifact and "default" object */
 					if (!d_info[dungeon_type].final_object) k_idx = 0;
@@ -2004,9 +2065,9 @@ msg_format("%sを殺した。", m_name);
 			/* Special note at death */
 			if (explode)
 #ifdef JP
-msg_format("%sは爆発して粉々になった。", m_name);
+				msg_format("%sは爆発して粉々になった。", m_name);
 #else
-				msg_format("%s explodes into tiny shreds.", m_name);
+				msg_format("%^s explodes into tiny shreds.", m_name);
 #endif
 			else
 			{
@@ -2274,12 +2335,6 @@ void redraw_window(void)
 {
 	/* Only if the dungeon exists */
 	if (!character_dungeon) return;
-	
-	/* Hack - Activate term zero for the redraw */
-	Term_activate(&term_screen[0]);
-	
-	/* Hack -- react to changes */
-	Term_xtra(TERM_XTRA_REACT, 0);
 
 	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
@@ -2292,9 +2347,6 @@ void redraw_window(void)
 
 	/* Redraw */
 	Term_redraw();
-
-	/* Refresh */
-	Term_fresh();
 }
 
 
@@ -3662,15 +3714,15 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 		/* Display a message */
 		if (p_ptr->wizard)
 #ifdef JP
-			sprintf(out_val, "%s%s%s%s[%s] %x %d %d %d %d (%d,%d)", s1, name, s2, s3, info, c_ptr->info, c_ptr->feat, c_ptr->dist, c_ptr->cost, c_ptr->when, x, y);
+			sprintf(out_val, "%s%s%s%s[%s] %x %d %d %d %d (%d,%d)", s1, name, s2, s3, info, c_ptr->info, c_ptr->feat, c_ptr->dist, c_ptr->cost, c_ptr->when, y, x);
 #else
-		sprintf(out_val, "%s%s%s%s [%s] %x %d %d %d %d (%d,%d)", s1, s2, s3, name, info, c_ptr->info, c_ptr->feat, c_ptr->dist, c_ptr->cost, c_ptr->when, x, y);
+			sprintf(out_val, "%s%s%s%s [%s] %x %d %d %d %d (%d,%d)", s1, s2, s3, name, info, c_ptr->info, c_ptr->feat, c_ptr->dist, c_ptr->cost, c_ptr->when, y, x);
 #endif
 		else
 #ifdef JP
 			sprintf(out_val, "%s%s%s%s[%s]", s1, name, s2, s3, info);
 #else
-		sprintf(out_val, "%s%s%s%s [%s]", s1, s2, s3, name, info);
+			sprintf(out_val, "%s%s%s%s [%s]", s1, s2, s3, name, info);
 #endif
 
 		prt(out_val, 0, 0);

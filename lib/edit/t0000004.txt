@@ -219,8 +219,6 @@ B:9:C:0:0:2:0:0:1:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0
 
 B:$10:N:Thieves Den:Molvrae:Dark Elf
 B:10:N:盗賊のアジト:モルブラエ:ダーク・エルフ
-B:$10:A:0:Get share of stolen gold:0:0:s:7:2
-B:10:A:0:盗んだ金を山分けする:0:0:s:7:2
 B:$10:A:1:Rest for the night:0:50:r:17:0
 B:10:A:1:一泊する:0:50:r:17:0
 B:$10:A:2:Identify possessions:175:800:i:26:0

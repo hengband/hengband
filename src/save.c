@@ -566,6 +566,7 @@ static void wr_extra(void)
 	wr_u32b(p_ptr->au);
 
 	wr_u32b(p_ptr->max_exp);
+	wr_u32b(p_ptr->max_max_exp);
 	wr_u32b(p_ptr->exp);
 	wr_u16b(p_ptr->exp_frac);
 	wr_s16b(p_ptr->lev);
@@ -612,10 +613,8 @@ static void wr_extra(void)
 	wr_s16b(p_ptr->oldpx);
 	wr_s16b(p_ptr->oldpy);
 
-	/* Save builing rewards */
-	wr_s16b(MAX_BACT);
-
-	for (i = 0; i < MAX_BACT; i++) wr_s16b(p_ptr->rewards[i]);
+	/* Was number of p_ptr->rewards[] */
+	wr_s16b(0);
 
 	wr_s16b(p_ptr->mhp);
 	wr_s16b(p_ptr->chp);
@@ -1236,8 +1235,22 @@ static bool wr_savefile_new(void)
 
 	/* Space */
 	wr_u32b(0L);
-	wr_u32b(0L);
+	wr_u16b(0);
+	wr_byte(0);
 
+#ifdef JP
+# ifdef EUC
+	/* EUC kanji code */
+	wr_byte(2);
+# endif
+# ifdef SJIS
+	/* SJIS kanji code */
+	wr_byte(3);
+# endif
+#else
+	/* ASCII */
+	wr_byte(1);
+#endif
 
 	/* Write the RNG state */
 	wr_randomizer();
@@ -2099,8 +2112,15 @@ bool save_floor(saved_floor_type *sf_ptr, u32b mode)
 	/* New savefile */
 	sprintf(floor_savefile, "%s.F%02d", savefile, (int)sf_ptr->savefile_id);
 
+	/* Grab permissions */
+	safe_setuid_grab();
+
 	/* Remove it */
 	fd_kill(floor_savefile);
+
+	/* Drop permissions */
+	safe_setuid_drop();
+
 
 	/* Attempt to save the player */
 
@@ -2110,8 +2130,14 @@ bool save_floor(saved_floor_type *sf_ptr, u32b mode)
 	/* File type is "SAVE" */
 	FILE_TYPE(FILE_TYPE_SAVE);
 
+	/* Grab permissions */
+	safe_setuid_grab();
+
 	/* Create the savefile */
 	fd = fd_make(floor_savefile, 0644);
+
+	/* Drop permissions */
+	safe_setuid_drop();
 
 	/* File is okay */
 	if (fd >= 0)
@@ -2119,8 +2145,14 @@ bool save_floor(saved_floor_type *sf_ptr, u32b mode)
 		/* Close the "fd" */
 		(void)fd_close(fd);
 
+		/* Grab permissions */
+		safe_setuid_grab();
+
 		/* Open the savefile */
 		fff = my_fopen(floor_savefile, "wb");
+
+		/* Drop permissions */
+		safe_setuid_drop();
 
 		/* Successful open */
 		if (fff)
@@ -2133,7 +2165,16 @@ bool save_floor(saved_floor_type *sf_ptr, u32b mode)
 		}
 
 		/* Remove "broken" files */
-		if (!ok) (void)fd_kill(floor_savefile);
+		if (!ok)
+		{
+			/* Grab permissions */
+			safe_setuid_grab();
+
+			(void)fd_kill(floor_savefile);
+
+			/* Drop permissions */
+			safe_setuid_drop();
+		}
 	}
 
 	if (!(mode & SLF_SECOND))

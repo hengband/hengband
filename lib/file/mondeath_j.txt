@@ -18,6 +18,8 @@ N:732:Bull Gates
 「Ｍ＄帝国は永遠に不滅だ！」
 
 N:764:Uriel, Angel of Fire
+N:765:Azriel, Angel of Death
+N:769:Raphael, the Messenger
 「主よ、この罪深き者に天罰をお与え下さい！」
 
 N:780:Vlad Dracula, Prince of Darkness

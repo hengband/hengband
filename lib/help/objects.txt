@@ -333,7 +333,7 @@ Of all the objects in Hengband that you might find, by far the most
 important group are artifacts.  Artifacts are unique items with
 additional properties such as increasing or sustaining one or more
 of your stats and granting resistances or abilities. Often an
-artifact cab be 'A'ctivated for a magical effect. These can be
+artifact can be 'A'ctivated for a magical effect. These can be
 Extremely useful - especially for classes that are weak in magic.
 
 There are two types of artifacts - fixed and random. The fixed
@@ -781,7 +781,7 @@ Rods ('-')
 Spellbooks ('?')
     There are four spell books for each of the magic realms and which
     are found either in the shops or at varying depths in the dungeons.
-    If you are are a spellcaster, you may 'b'rowse any book belonging
+    If you are a spellcaster, you may 'b'rowse any book which belonging
     to your chosen realm(s) to see what spells it contains. You may not
     browse books from realms other than those that your character has
     chosen. You may learn new spells with the 'g' command and cast them
