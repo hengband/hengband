@@ -5261,7 +5261,7 @@ get_rnd_line("death_j.txt", 0, death_message);
 				  if (strncmp(str, "¡Ö", 2) == 0) str += 2;
 
 				  str2 = strstr_j(str, "¡×");
-				  if (str2 != NULL) str2 = '\0';
+				  if (str2 != NULL) *str2 = '\0';
 
 				  i = 0;
 				  while (i < 9)
@@ -5280,7 +5280,17 @@ get_rnd_line("death_j.txt", 0, death_message);
 				    str = str2 + 1;
 				    if (*str == 0) break;
 				  }
+
+                                  /* Hide cursor */
+                                  Term_putstr(w-1, h-1, 1, TERM_WHITE, " ");
+
 				  flush();
+#ifdef WORLD_SCORE
+                                  /* Make screen dump */
+                                  screen_dump = make_screen_dump();
+#endif
+
+                                  /* Wait a key press */
 				  (void)inkey();
 #else
 					msg_print(death_message);
