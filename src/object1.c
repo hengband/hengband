@@ -2452,7 +2452,7 @@ info[i++] = "それを装備した者は吸血鬼になる。";
 #ifdef JP
 info[i++] = "それは相手を一撃で倒すことがある。";
 #else
-		info[i++] = "It will attempts to kill a monster instantly.";
+		info[i++] = "It will attempt to kill a monster instantly.";
 #endif
 
 	}
