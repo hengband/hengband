@@ -1291,16 +1291,18 @@ void do_cmd_message_one(void)
  */
 void do_cmd_messages(int num_now)
 {
-	int i, j, k, n;
-	uint q;
+	int i, n;
 
 	char shower[80];
 	char finder[80];
 	int wid, hgt;
-
+	int num_lines;
 
 	/* Get size */
 	Term_get_size(&wid, &hgt);
+
+	/* Number of message lines in a screen */
+	num_lines = hgt - 4;
 
 	/* Wipe finder */
 	strcpy(finder, "");
@@ -1315,28 +1317,25 @@ void do_cmd_messages(int num_now)
 	/* Start on first message */
 	i = 0;
 
-	/* Start at leftmost edge */
-	q = 0;
-
 	/* Save the screen */
 	screen_save();
+
+	/* Clear screen */
+	Term_clear();
 
 	/* Process requests until done */
 	while (1)
 	{
-		/* Clear screen */
-		Term_clear();
+		int j;
+		int skey;
 
 		/* Dump up to 20 lines of messages */
-		for (j = 0; (j < hgt - 4) && (i + j < n); j++)
+		for (j = 0; (j < num_lines) && (i + j < n); j++)
 		{
 			cptr msg = message_str(i+j);
 
-			/* Apply horizontal scroll */
-			msg = (strlen(msg) >= q) ? (msg + q) : "";
-
 			/* Dump the messages, bottom to top */
-			Term_putstr(0, hgt-j-3, -1, (bool)(i+j < num_now ? TERM_WHITE : TERM_SLATE), msg);
+			c_prt((i+j < num_now ? TERM_WHITE : TERM_SLATE), msg, num_lines + 1 - j, 0);
 
 			/* Hilite "shower" */
 			if (shower[0])
@@ -1349,7 +1348,7 @@ void do_cmd_messages(int num_now)
 					int len = strlen(shower);
 
 					/* Display the match */
-					Term_putstr(str-msg, hgt-j-3, len, TERM_YELLOW, shower);
+					Term_putstr(str-msg, num_lines + 1 - j, len, TERM_YELLOW, shower);
 
 					/* Advance */
 					str += len;
@@ -1357,14 +1356,20 @@ void do_cmd_messages(int num_now)
 			}
 		}
 
+		/* Erase remaining lines */
+		for (; j < num_lines; j++)
+		{
+			Term_erase(0, num_lines + 1 - j, 255);
+		}
+
 		/* Display header XXX XXX XXX */
 #ifdef JP
 		/* translation */
-		prt(format("以前のメッセージ %d-%d 全部で(%d) オフセット(%d)",
-			   i, i+j-1, n, q), 0, 0);
+		prt(format("以前のメッセージ %d-%d 全部で(%d)",
+			   i, i+j-1, n), 0, 0);
 #else
-		prt(format("Message Recall (%d-%d of %d), Offset %d",
-		    i, i+j-1, n, q), 0, 0);
+		prt(format("Message Recall (%d-%d of %d)",
+			   i, i+j-1, n), 0, 0);
 #endif
 
 
@@ -1377,36 +1382,16 @@ void do_cmd_messages(int num_now)
 
 
 		/* Get a command */
-		k = inkey();
+		skey = inkey_special();
 
 		/* Exit on Escape */
-		if (k == ESCAPE) break;
+		if (skey == ESCAPE) break;
 
 		/* Hack -- Save the old index */
 		j = i;
 
-		/* Horizontal scroll */
-		if (k == '4')
-		{
-			/* Scroll left */
-			q = (q >= 40) ? (q - 40) : 0;
-
-			/* Success */
-			continue;
-		}
-
-		/* Horizontal scroll */
-		if (k == '6')
-		{
-			/* Scroll right */
-			q = q + 40;
-
-			/* Success */
-			continue;
-		}
-
 		/* Hack -- handle show */
-		if (k == '=')
+		if (skey == '=')
 		{
 			/* Prompt */
 #ifdef JP
@@ -1424,7 +1409,7 @@ void do_cmd_messages(int num_now)
 		}
 
 		/* Hack -- handle find */
-		if (k == '/')
+		if (skey == '/' || skey == KTRL('s'))
 		{
 			int z;
 
@@ -1460,45 +1445,59 @@ void do_cmd_messages(int num_now)
 		}
 
 		/* Recall 1 older message */
-		if ((k == '8') || (k == '\n') || (k == '\r'))
+		if (skey == SKEY_TOP)
 		{
-			/* Go newer if legal */
-			if (i + 1 < n) i += 1;
+			/* Go to the oldest line */
+			i = n - num_lines;
+		}
+
+		/* Recall 1 newer message */
+		if (skey == SKEY_BOTTOM)
+		{
+			/* Go to the newest line */
+			i = 0;
+		}
+
+		/* Recall 1 older message */
+		if (skey == '8' || skey == SKEY_UP || skey == '\n' || skey == '\r')
+		{
+			/* Go older if legal */
+			i = MIN(i + 1, n - num_lines);
 		}
 
 		/* Recall 10 older messages */
-		if (k == '+')
+		if (skey == '+')
 		{
 			/* Go older if legal */
-			if (i + 10 < n) i += 10;
+			i = MIN(i + 10, n - num_lines);
 		}
 
 		/* Recall 20 older messages */
-		if ((k == 'p') || (k == KTRL('P')) || (k == ' '))
+		if (skey == 'p' || skey == KTRL('P') || skey == ' ' || skey == SKEY_PGUP)
 		{
 			/* Go older if legal */
-			if (i + 20 < n) i += 20;
+			i = MIN(i + num_lines, n - num_lines);
 		}
 
 		/* Recall 20 newer messages */
-		if ((k == 'n') || (k == KTRL('N')))
+		if (skey == 'n' || skey == KTRL('N') || skey == SKEY_PGDOWN)
 		{
 			/* Go newer (if able) */
-			i = (i >= 20) ? (i - 20) : 0;
+			i = MAX(0, i - num_lines);
 		}
 
 		/* Recall 10 newer messages */
-		if (k == '-')
+		if (skey == '-')
 		{
 			/* Go newer (if able) */
-			i = (i >= 20) ? (i - 20) : 0;
+			i = MAX(0, i - 10);
 		}
 
 		/* Recall 1 newer messages */
-		if (k == '2')
+		if (skey == '2' || skey == SKEY_DOWN)
 		{
 			/* Go newer (if able) */
-			i = (i >= 1) ? (i - 1) : 0;
+			i = MAX(0, i - 1);
 		}
 
 		/* Hack -- Error of some kind */
