@@ -38,8 +38,8 @@ V:2.8.1
 
 # 0x00 --> nothing
 
-N:0:何もない
-E:nothing
+N:0:未知の地形
+E:unknown grid
 G: :w
 
 
@@ -726,3 +726,9 @@ G:.:B
 N:195:鏡
 E:Mirror
 G:*:v
+
+# Used by view_unsafe_grids option
+
+N:196:未知の地形 (未感知)
+E:unknown grid (not detected)
+G:x:D
