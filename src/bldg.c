@@ -4708,16 +4708,20 @@ msg_print("お金が足りません！");
 		break;
 	}
 	case BACT_LOSE_MUTATION:
-		paid = lose_mutation(0);
-		/* ToDo: Better message text. */
-		if (!paid)
+		if (p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3)
+		{
+			while(!lose_mutation(0));
+			paid = TRUE;
+		}
+		else
+		{
 #ifdef JP
-			msg_print("奇妙なくらい普通になった気がする。");
+			msg_print("治すべき突然変異が無い。");
 #else
-		msg_print("You feel oddly normal.");
+			msg_print("You have no mutations.");
 #endif
-
-
+			msg_print(NULL);
+		}
 		break;
 	case BACT_BATTLE:
 		kakutoujou();
