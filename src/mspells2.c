@@ -137,6 +137,36 @@ static bool breath_direct(int y1, int x1, int y2, int x2, int rad, bool disint_b
 }
 
 /*
+ * Get the actual center point of ball spells (originally from TOband)
+ */
+static void get_project_point(int sy, int sx, int *ty, int *tx)
+{
+	int  nx, ny;
+	u16b path_g[128];
+	int  path_n, i;
+
+	path_n = project_path(path_g, MAX_RANGE, sy, sx, *ty, *tx, 0L);
+
+	/* "Explosion point" starts from start point */
+	*ty = sy;
+	*tx = sx;
+
+	/* Project along the path */
+	for (i = 0; i < path_n; i++)
+	{
+		ny = GRID_Y(path_g[i]);
+		nx = GRID_X(path_g[i]);
+
+		/* Hack -- Balls explode before reaching walls */
+		if (!cave_floor_bold(ny, nx)) break;
+
+		/* Advance */
+		*ty = ny;
+		*tx = nx;
+	}
+}
+
+/*
  * Monster tries to 'cast a spell' (or breath, etc)
  * at another monster.
  *
@@ -340,22 +370,30 @@ bool monst_spell_monst(int m_idx)
 	/* Prevent collateral damage */
 	if (!(p_ptr->pet_extra_flags & PF_BALL_SPELL) && pet && (m_idx != p_ptr->riding))
 	{
-		int dist = distance(py, px, y, x);
+		int real_y = y;
+		int real_x = x;
+		int dist;
 
 		/* Expected breath radius */
 		int rad = (r_ptr->flags2 & RF2_POWERFUL) ? 3 : 2;
 
-		if (dist <= 2)
+		get_project_point(m_ptr->fy, m_ptr->fx, &real_y, &real_x);
+		dist = distance(real_y, real_x, py, px);
+
+		if (los(real_y, real_x, py, px))
 		{
-			f4 &= ~(RF4_BALL_MASK);
-			f5 &= ~(RF5_BALL_MASK);
-			f6 &= ~(RF6_BALL_MASK);
-		}
-		else if(dist <= 4)
-		{
-			f4 &= ~(RF4_BIG_BALL_MASK);
-			f5 &= ~(RF5_BIG_BALL_MASK);
-			f6 &= ~(RF6_BIG_BALL_MASK);
+			if (dist <= 2)
+			{
+				f4 &= ~(RF4_BALL_MASK);
+				f5 &= ~(RF5_BALL_MASK);
+				f6 &= ~(RF6_BALL_MASK);
+			}
+			else if (dist <= 4)
+			{
+				f4 &= ~(RF4_BIG_BALL_MASK);
+				f5 &= ~(RF5_BIG_BALL_MASK);
+				f6 &= ~(RF6_BIG_BALL_MASK);
+			}
 		}
 
 		if (((f4 & RF4_BEAM_MASK) ||
