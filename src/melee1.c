@@ -1777,6 +1777,9 @@ msg_format("%sは体力を回復したようだ。", m_name);
 						p_ptr->redraw |= (PR_MANA);
 					}
 
+					/* Learn about the player */
+					update_smart_learn(m_idx, DRS_MANA);
+
 					break;
 				}
 			}
