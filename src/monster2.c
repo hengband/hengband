@@ -2857,16 +2857,6 @@ msg_print("守りのルーンが壊れた！");
 	m_ptr->r_idx = r_idx;
 	m_ptr->ap_r_idx = initial_r_appearance(r_idx);
 
-	/* Sub-alignment of a monster */
-	if ((who > 0) && !(r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)))
-		m_ptr->sub_align = m_list[who].sub_align;
-	else
-	{
-		m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
-		if (r_ptr->flags3 & RF3_EVIL) m_ptr->sub_align |= SUB_ALIGN_EVIL;
-		if (r_ptr->flags3 & RF3_GOOD) m_ptr->sub_align |= SUB_ALIGN_GOOD;
-	}
-
 	/* Place the monster at the location */
 	m_ptr->fy = y;
 	m_ptr->fx = x;
@@ -2901,6 +2891,16 @@ msg_print("守りのルーンが壊れた！");
 	{
 		m_ptr->ap_r_idx = MON_KAGE;
 		m_ptr->mflag2 |= MFLAG_KAGE;
+	}
+
+	/* Sub-alignment of a monster */
+	if ((who > 0) && !(r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)))
+		m_ptr->sub_align = m_list[who].sub_align;
+	else
+	{
+		m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
+		if (r_ptr->flags3 & RF3_EVIL) m_ptr->sub_align |= SUB_ALIGN_EVIL;
+		if (r_ptr->flags3 & RF3_GOOD) m_ptr->sub_align |= SUB_ALIGN_GOOD;
 	}
 
 	if (no_pet) m_ptr->mflag2 |= MFLAG_NOPET;
