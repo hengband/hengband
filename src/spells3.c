@@ -301,84 +301,101 @@ bool cave_player_teleportable_bold(int y, int x, bool passive, bool nonmagical)
  * If no such spaces are readily available, the distance may increase.
  * Try very hard to move the player at least a quarter that distance.
  *
- * When long-range teleport effects are considered, there is a nasty
- * tendency to "bounce" the player between two or three different spots
- * because these are the only spots that are "far enough" way to satisfy
- * the algorithm.  Therefore, if the teleport distance is more than 50,
- * we decrease the minimum acceptable distance to try to increase randomness.
- * -GJW
+ * There was a nasty tendency for a long time; which was causing the
+ * player to "bounce" between two or three different spots because
+ * these are the only spots that are "far enough" way to satisfy the
+ * algorithm.
+ *
+ * But this tendency is now removed; in the new algorithm, a list of
+ * candidates is selected first, which includes at least 50% of all
+ * floor grids within the distance, and any single grid in this list
+ * of candidates has equal possibility to be choosen as a destination.
  */
+
+#define MAX_TELEPORT_DISTANCE 200
+
 void teleport_player(int dis, bool passive)
 {
-	int d, i, min, ox, oy;
-	int tries = 0;
+	int candidates_at[MAX_TELEPORT_DISTANCE + 1];
+	int total_candidates, cur_candidates;
+	int y = 0, x = 0, min, pick, i;
+	int yy, xx, oy, ox;
 
-	int xx, yy;
+	int left = MAX(1, px - dis);
+	int right = MIN(cur_wid - 2, px + dis);
+	int top = MAX(1, py - dis);
+	int bottom = MIN(cur_hgt - 2, py + dis);
 
-	/* Initialize */
-	int y = py;
-	int x = px;
+	/* Initialize counters */
+	total_candidates = 0;
+	for (i = 0; i <= MAX_TELEPORT_DISTANCE; i++)
+		candidates_at[i] = 0;
 
-	bool look = TRUE;
+	/* Limit the distance */
+	if (dis > MAX_TELEPORT_DISTANCE) dis = MAX_TELEPORT_DISTANCE;
 
-	if (p_ptr->wild_mode) return;
-
-	if (p_ptr->anti_tele)
+	/* Search valid locations */
+	for (y = top; y <= bottom; y++)
 	{
-#ifdef JP
-msg_print("不思議な力がテレポートを防いだ！");
-#else
-		msg_print("A mysterious force prevents you from teleporting!");
-#endif
-
-		return;
-	}
-
-	if (dis > 200) dis = 200; /* To be on the safe side... */
-
-	/* Minimum distance */
-	min = dis / (dis > 50 ? 3 : 2);
-
-	/* Look until done */
-	while (look)
-	{
-		tries++;
-
-		/* Verify max distance */
-		if (dis > 200) dis = 200;
-
-		/* Try several locations */
-		for (i = 0; i < 500; i++)
+		for (x = left; x <= right; x++)
 		{
-			/* Pick a (possibly illegal) location */
-			while (1)
-			{
-				y = rand_spread(py, dis);
-				x = rand_spread(px, dis);
-				d = distance(py, px, y, x);
-				if ((d >= min) && (d <= dis)) break;
-			}
+			int d;
 
-			/* Ignore illegal locations */
-			if (!in_bounds(y, x)) continue;
-
+			/* Skip illegal locations */
 			if (!cave_player_teleportable_bold(y, x, passive, FALSE)) continue;
 
-			/* This grid looks good */
-			look = FALSE;
+			/* Calculate distance */
+			d = distance(py, px, y, x);
 
-			/* Stop looking */
-			break;
+			/* Skip too far locations */
+			if (d > dis) continue;
+
+			/* Count the total number of candidates */
+			total_candidates++; 
+
+			/* Count the number of candidates in this circumference */
+			candidates_at[d]++; 
+		}
+	}
+
+	/* Fix the minimum distance */
+	for (cur_candidates = 0, min = dis; min >= 0; min--)
+	{
+		cur_candidates += candidates_at[min];
+
+		/* 50% of all candidates will have an equal chance to be choosen. */
+		if (cur_candidates >= total_candidates / 2) break;
+	}
+
+	/* Pick up a single location randomly */
+	pick = randint1(cur_candidates);
+
+	/* Search again the choosen location */
+	for (y = top; y <= bottom; y++)
+	{
+		for (x = left; x <= right; x++)
+		{
+			int d;
+
+			/* Skip illegal locations */
+			if (!cave_player_teleportable_bold(y, x, passive, FALSE)) continue;
+
+			/* Calculate distance */
+			d = distance(py, px, y, x);
+
+			/* Skip too far locations */
+			if (d > dis) continue;
+
+			/* Skip too close locations */
+			if (d < min) continue;
+
+			/* This grid was picked up? */
+			pick--;
+			if (!pick) break;
 		}
 
-		/* Increase the maximum distance */
-		dis = dis * 2;
-
-		/* Decrease the minimum distance */
-		min = min / 2;
-
-		/* Stop after MAX_TRIES tries */
-		if (tries > MAX_TRIES) return;
+		/* Exit the loop */
+		if (!pick) break;
 	}
 
 	/* Sound */
@@ -422,7 +439,6 @@ msg_print("不思議な力がテレポートを防いだ！");
 		}
 	}
 }
-
 
 
 /*
