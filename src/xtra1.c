@@ -5461,12 +5461,12 @@ msg_print("バランスがとれるようになった。");
 	{
 		if (p_ptr->align > 0)
 		{
-			p_ptr->align -= (p_ptr->virtues[j]/2);
+			p_ptr->align -= (p_ptr->virtues[neutral[j]]/2);
 			if (p_ptr->align < 0) p_ptr->align = 0;
 		}
 		else if (p_ptr->align < 0)
 		{
-			p_ptr->align += (p_ptr->virtues[j]/2);
+			p_ptr->align += (p_ptr->virtues[neutral[j]]/2);
 			if (p_ptr->align > 0) p_ptr->align = 0;
 		}
 		j--;
