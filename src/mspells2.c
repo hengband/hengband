@@ -386,13 +386,13 @@ bool monst_spell_monst(int m_idx)
 			{
 				int real_y = y;
 				int real_x = x;
-				int dist;
 
 				get_project_point(m_ptr->fy, m_ptr->fx, &real_y, &real_x, 0L);
-				dist = distance(real_y, real_x, py, px);
 
 				if (los(real_y, real_x, py, px))
 				{
+					int dist = distance(real_y, real_x, py, px);
+
 					if (dist <= 2)
 					{
 						f4 &= ~(RF4_BALL_MASK & ~(RF4_ROCKET));
