@@ -1129,6 +1129,15 @@
 #define FEAT_TRAP_ARMAGEDDON    0xc5
 #define FEAT_TRAP_PIRANHA       0xc6
 
+/* Hack -- Special fake terrain for f_info */
+#define FEAT_DUNGEON_FLOOR      -1
+#define FEAT_DUNGEON_WALL       -2
+#define FEAT_DUNGEON_INNER      -3
+#define FEAT_DUNGEON_OUTER      -4
+#define FEAT_DUNGEON_SOLID      -5
+#define FEAT_DUNGEON_STREAM1    -6
+#define FEAT_DUNGEON_STREAM2    -7
+
 /*
  * Wilderness terrains
  */

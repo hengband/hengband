@@ -4464,6 +4464,30 @@ void cave_set_feat(int y, int x, int feat)
 }
 
 
+int conv_dungeon_feat(int newfeat)
+{
+	switch (newfeat)
+	{
+	case FEAT_DUNGEON_FLOOR:
+		return floor_type[randint0(100)];
+	case FEAT_DUNGEON_WALL:
+		return fill_type[randint0(100)];
+	case FEAT_DUNGEON_INNER:
+		return feat_wall_inner;
+	case FEAT_DUNGEON_OUTER:
+		return feat_wall_outer;
+	case FEAT_DUNGEON_SOLID:
+		return feat_wall_solid;
+	case FEAT_DUNGEON_STREAM1:
+		return d_info[dungeon_type].stream1;
+	case FEAT_DUNGEON_STREAM2:
+		return d_info[dungeon_type].stream2;
+	default:
+		return newfeat;
+	}
+}
+
+
 /*
  * Take a feature, determine what that feature becomes
  * through applying the given action.
@@ -4471,26 +4495,17 @@ void cave_set_feat(int y, int x, int feat)
 int feat_state(int feat, int action)
 {
 	feature_type *f_ptr = &f_info[feat];
-	int newfeat, i;
+	int i;
 
 	/* Get the new feature */
 	for (i = 0; i < MAX_FEAT_STATES; i++)
 	{
-		if (f_ptr->state[i].action == action)
-		{
-			newfeat = f_ptr->state[i].result;
-			return (newfeat == FEAT_FLOOR) ? floor_type[randint0(100)] : newfeat;
-		}
+		if (f_ptr->state[i].action == action) return conv_dungeon_feat(f_ptr->state[i].result);
 	}
 
 	if (have_flag(f_ptr->flags, FF_PERMANENT)) return feat;
 
-	if (feature_action_flags[action] & FAF_DESTROY)
-	{
-		newfeat = f_ptr->destroyed;
-		return (newfeat == FEAT_FLOOR) ? floor_type[randint0(100)] : newfeat;
-	}
-	else return feat;
+	return (feature_action_flags[action] & FAF_DESTROY) ? conv_dungeon_feat(f_ptr->destroyed) : feat;
 }
 
 /*

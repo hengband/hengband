@@ -619,13 +619,8 @@ static bool cave_gen(void)
 	/* Fill the arrays of floors and walls in the good proportions */
 	set_floor_and_wall(dungeon_type);
 
-
 	/* Prepare allocation table */
 	get_mon_num_prep(get_monster_hook(), NULL);
-
-	feat_wall_outer = d_info[dungeon_type].outer_wall;
-	feat_wall_inner = d_info[dungeon_type].inner_wall;
-	feat_wall_solid = d_info[dungeon_type].outer_wall;
 
 	/* Randomize the dungeon creation values */
 	dun_tun_rnd = rand_range(DUN_TUN_RND_MIN, DUN_TUN_RND_MAX);
