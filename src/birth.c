@@ -3650,7 +3650,7 @@ static byte player_init[MAX_CLASS][3][2] =
 	},
 
 	{
-		/* Harper */
+		/* Bard */
 		{ TV_MUSIC_BOOK, 0 },
 		{ TV_SOFT_ARMOR, SV_SOFT_LEATHER_ARMOR},
 		{ TV_SWORD, SV_SHORT_SWORD },

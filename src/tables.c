@@ -4028,7 +4028,7 @@ s32b realm_choices1[MAX_CLASS] =
 	(CH_NONE),                              /* Sorcerer */
 	(CH_NONE),                              /* Archer */
 	(CH_NONE),                              /* Magic eater */
-	(CH_MUSIC),                             /* Harper */
+	(CH_MUSIC),                             /* Bard */
 	(CH_NONE),                              /* Red Mage */
 	(CH_HISSATSU),                          /* Samurai */
 	(CH_LIFE | CH_NATURE | CH_DEATH |
@@ -4071,7 +4071,7 @@ s32b realm_choices2[MAX_CLASS] =
 	(CH_NONE),                              /* Sorcerer */
 	(CH_NONE),                              /* Archer */
 	(CH_NONE),                              /* Magic eater */
-	(CH_NONE),                              /* Harper */
+	(CH_NONE),                              /* Bard */
 	(CH_NONE),                              /* Red Mage */
 	(CH_NONE),                              /* Samurai */
 	(CH_NONE),                              /* ForceTrainer */
@@ -4465,7 +4465,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"全てを知る者",
 	},
 
-	/* Harper */
+	/* Bard */
 	{
 		"見習い",	/*"Apprentice"*/
 		"作曲家",	/*"Songsmith"*/
@@ -4848,7 +4848,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"Almighty",
 	},
 
-	/* Harper */
+	/* Bard */
 	{
 		"Apprentice",	/*"Apprentice"*/
 		"Songsmith",	/*"Songsmith"*/
