@@ -10,24 +10,41 @@
   
 
 ●UNIX
+
   ソースをダウンロードします。そして、
   tar -jxvf hengband-x.x.x.tar.bz2
   cd hengband-x.x.x
   ./configure
-  make
-  でコンパイルできます(x.x.x はバージョン番号)。
-  コンパイル後、
-  cp src/hengband .
-  とやってトップディレクトリにコピーし、後は
-  ./hengband -- -n
+  make install
+  でコンパイル及びトップディレクトリへのコピーができます(x.x.x はバージョン番号)。
+  
+  後は
+  ./hengband -- -n＜ウィンドウの数＞
   で遊べます。
 
-  それぞれのウィンドウについて、?番目のウィンドウ(?は0から7)は、
-  ANGBAND_X11_FONT_?でウィンドウのフォント、
+  また、スーパーユーザーとして setgid を付けてインストールしたい場合は、
+  ./configure --with-setgid=games
+  make
+  の後、rootとして
+  make install  
+  を実行すれば、/usr/local/ 以下にインストールされます。
+  インストール場所の変更等については ./configure --help を参照してください。
+
+
+  標準の表示フォントはメインウィンドウが
+  "-*-*-medium-r-normal--24-*-*-*-*-*-iso8859-1,-*-*-medium-r-normal--24-*-*-*-*-*-jisx0208.1983-0"
+  で、サブウィンドウが
+  "-*-*-medium-r-normal--16-*-*-*-*-*-iso8859-1,-*-*-medium-r-normal--16-*-*-*-*-*-jisx0208.1983-0"
+  ですが、環境変数 ANGBAND_X11_FONT_? や ANGBAND_X11_FONT で変更できます。
+  ANGBAND_X11_FONT_? は ?番目のウィンドウ(?は0から7)の設定になり、
+  ANGBAND_X11_FONT は前者によって設定されなかったその他のウィンドウの設定になります。
+
+  また、ウィンドウの表示位置やサイズを変える事もできます。
+  ?番目のウィンドウ(?は0から7)について、
   ANGBAND_X11_AT_X_?でウィンドウのX位置、
   ANGBAND_X11_AT_Y_?でウィンドウのY位置、
-  ANGBAND_X11_COLS_?でウィンドウのXサイズ、
-  ANGBAND_X11_ROWS_?でウィンドウのYサイズ
+  ANGBAND_X11_COLS_?でウィンドウのXサイズ(単位は半角の文字数)、
+  ANGBAND_X11_ROWS_?でウィンドウのYサイズ(単位は半角の文字数)
   を設定できます。
   ただし0番目のウィンドウはサイズ変更はできません。
 
