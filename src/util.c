@@ -5267,80 +5267,83 @@ int inkey_special(void)
 
 	/* No special key */
 	if (!trig_len) return (int)((unsigned char)key);
-	/*
-	 * Mega Hack -- ignore macro defined on ASCII keys
-	 *
-	 * When this function is used, all ASCII keys are used as
-	 * themselfs instead of macro triggers for command macro's.
-	 */
+
 	if (trig_len == 1)
 	{
-		/* Get original key */
-		key = inkey_macro_trigger_string[0];
+		char c = inkey_macro_trigger_string[0];
 
-#ifdef JP
-		if (!iskanji(key))
-#endif
+		/*
+		 * Hack -- Ignore macro defined on ASCII control
+		 * characters.
+		 *
+		 * In fact any ASCII characters should be used as
+		 * themselfs instead of macro triggers for command
+		 * macro.  But we cannot find out whether 'c' is given
+		 * as part of a macro action or no macro is defined on
+		 * the c key when inkey() returns 'c'.
+		 */
+		if (iscntrl((int)((unsigned char)c)))
 		{
 			/* Kill further macro expansion */
 			flush();
-		}
 
-		/* Return the originaly pressed key */
-		return (int)((unsigned char)key);
+			/* Return the originaly pressed key */
+			return (int)((unsigned char)c);
+		}
 	}
 
 	/* Convert the trigger */
 	ascii_to_text(buf, inkey_macro_trigger_string);
 
 	/* Check the prefix "\[" */
-	if (!prefix(str, "\\[")) return 0;
-
-	/* Skip "\[" */
-	str += 2;
-
-	/* Examine modifier keys */
-	while (TRUE)
+	if (prefix(str, "\\["))
 	{
-		for (i = 0; modifier_key_list[i].keyname; i++)
+		/* Skip "\[" */
+		str += 2;
+
+		/* Examine modifier keys */
+		while (TRUE)
 		{
-			if (prefix(str, modifier_key_list[i].keyname))
+			for (i = 0; modifier_key_list[i].keyname; i++)
 			{
-				/* Get modifier key flag */
-				str += strlen(modifier_key_list[i].keyname);
-				modifier |= modifier_key_list[i].keyflag;
+				if (prefix(str, modifier_key_list[i].keyname))
+				{
+					/* Get modifier key flag */
+					str += strlen(modifier_key_list[i].keyname);
+					modifier |= modifier_key_list[i].keyflag;
+				}
+			}
+
+			/* No more modifier key found */
+			if (!modifier_key_list[i].keyname) break;
+		}
+
+		/* Get a special key code */
+		for (i = 0; special_key_list[i].keyname; i++)
+		{
+			if (streq(str, special_key_list[i].keyname))
+			{
+				skey = special_key_list[i].keycode;
+				break;
 			}
 		}
 
-		/* No more modifier key found */
-		if (!modifier_key_list[i].keyname) break;
-	}
-
-	/* Get a special key code */
-	for (i = 0; special_key_list[i].keyname; i++)
-	{
-		if (streq(str, special_key_list[i].keyname))
+		/* A special key found */
+		if (skey)
 		{
-			skey = special_key_list[i].keycode;
-			break;
+			/* Kill further macro expansion */
+			flush();
+
+			/* Return special key code and modifier flags */
+			return (skey | modifier);
 		}
 	}
 
 	/* No special key found? */
-	if (!skey)
-	{
-		/* Don't bother with this trigger no more */
-		inkey_macro_trigger_string[0] = '\0';
 
-		/* Return normal keycode */
-		return (int)((unsigned char)key);
-	}
+	/* Don't bother with this trigger no more */
+	inkey_macro_trigger_string[0] = '\0';
 
-	/* A special key found */
-
-	/* Kill further macro expansion */
-	flush();
-
-	/* Return special key code and modifier flags */
-	return (skey | modifier);
+	/* Return normal keycode */
+	return (int)((unsigned char)key);
 }
