@@ -1614,12 +1614,6 @@ static void get_inscription(char *buff, object_type *o_ptr)
 }
 
 
-#ifdef JP
-#undef strchr
-#define strchr strchr_j
-#endif
-
-
 /*
  * Creates a description of the item "o_ptr", and stores it in "out_val".
  *
@@ -2551,7 +2545,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			if (*str)
 			{
 				/* Find the '#' */
-				cptr str = strchr(quark_str(o_ptr->inscription), '#');
+				cptr str = my_strchr(quark_str(o_ptr->inscription), '#');
 
 				/* Add the false name */
 				t = object_desc_str(t,"¡Ø");
@@ -2596,10 +2590,10 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 				t = object_desc_str(t, e_name + e_ptr->name);
 			}
 
-			if (o_ptr->inscription && strchr(quark_str(o_ptr->inscription), '#'))
+			if (o_ptr->inscription && my_strchr(quark_str(o_ptr->inscription), '#'))
 			{
 				/* Find the '#' */
-				cptr str = strchr(quark_str(o_ptr->inscription), '#');
+				cptr str = my_strchr(quark_str(o_ptr->inscription), '#');
 
 				/* Add the false name */
 				t = object_desc_chr(t, ' ');
@@ -3192,7 +3186,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 
 	if ((abbrev_extra || abbrev_all) && (o_ptr->ident & IDENT_MENTAL))
 	{
-		if (!o_ptr->inscription || !strchr(quark_str(o_ptr->inscription), '%'))
+		if (!o_ptr->inscription || !my_strchr(quark_str(o_ptr->inscription), '%'))
 		{
 			bool kanji, all;
 			char buf[1024];

@@ -1371,7 +1371,7 @@ static bool vault_aux_jelly(int r_idx)
 	if (r_ptr->flags3 & (RF3_EVIL)) return (FALSE);
 
 	/* Require icky thing, jelly, mold, or mushroom */
-	if (!strchr("ijm,", r_ptr->d_char)) return (FALSE);
+	if (!my_strchr("ijm,", r_ptr->d_char)) return (FALSE);
 
 	/* Okay */
 	return (TRUE);
@@ -1457,7 +1457,7 @@ static bool vault_aux_kennel(int r_idx)
 	if (!vault_monster_okay(r_idx)) return (FALSE);
 
 	/* Require a Zephyr Hound or a dog */
-	if (!strchr("CZ", r_ptr->d_char)) return (FALSE);
+	if (!my_strchr("CZ", r_ptr->d_char)) return (FALSE);
   
 	/* Okay */
 	return (TRUE);
@@ -1475,7 +1475,7 @@ static bool vault_aux_mimic(int r_idx)
 	if (!vault_monster_okay(r_idx)) return (FALSE);
   
 	/* Require mimic */
-	if (!strchr("!|$?=", r_ptr->d_char)) return (FALSE);
+	if (!my_strchr("!|$?=", r_ptr->d_char)) return (FALSE);
 
 	/* Okay */
 	return (TRUE);

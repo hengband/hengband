@@ -2045,9 +2045,9 @@ void do_cmd_query_symbol(void)
 		    if (isupper(temp2[xx])) temp2[xx]=tolower(temp2[xx]);
   
 #ifdef JP
-		  if (strstr(temp2, temp) || strstr_j(r_name + r_ptr->name, temp) )
+		  if (my_strstr(temp2, temp) || my_strstr(r_name + r_ptr->name, temp) )
 #else
-		  if (strstr(temp2, temp))
+		  if (my_strstr(temp2, temp))
 #endif
 			  who[n++]=i;
 		}

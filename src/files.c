@@ -624,7 +624,7 @@ errr process_pref_file_command(char *buf)
 	case 'Z':
 	{
 		/* Find the colon */
-		char *t = strchr(buf + 2, ':');
+		char *t = my_strchr(buf + 2, ':');
 
 		/* Oops */
 		if (!t) return 1;
@@ -923,7 +923,7 @@ cptr process_pref_file_expr(cptr *sp, char *fp)
 		int i;
 
 		/* Accept all printables except spaces and brackets */
-		for (i = 0; isprint(*s) && !strchr(" []", *s); i++)
+		for (i = 0; isprint(*s) && !my_strchr(" []", *s); i++)
 			b[i] = *s++;
 
 		/* Terminate */
@@ -5382,7 +5382,7 @@ msg_format("'%s'をオープンできません。", name);
 			}
 
 			/* Hack -- keep searching */
-			if (find && !i && !strstr(lc_buf, find)) continue;
+			if (find && !i && !my_strstr(lc_buf, find)) continue;
 
 			/* Hack -- stop searching */
 			find = NULL;
@@ -5431,7 +5431,7 @@ msg_format("'%s'をオープンできません。", name);
 				cptr s2 = lc_buf;
 
 				/* Display matches */
-				while ((s2 = strstr(s2, shower)) != NULL)
+				while ((s2 = my_strstr(s2, shower)) != NULL)
 				{
 					int len = strlen(shower);
 
@@ -5884,7 +5884,7 @@ quit_fmt("'%s' という名前は不正なコントロールコードを含んでいます。", player_nam
 		}
 #ifdef MSDOS
 		/* Convert space, dot, and underscore to underscore */
-		else if (strchr(". _", c)) player_base[k++] = '_';
+		else if (my_strchr(". _", c)) player_base[k++] = '_';
 #endif
 		else if (isprint(c)) player_base[k++] = c;
 	}
@@ -5919,7 +5919,7 @@ quit_fmt("'%s' という名前は不正なコントロールコードを含んでいます。", player_nam
 		while (1)
 		{
 			cptr t;
-			t = strstr(s, PATH_SEP);
+			t = my_strstr(s, PATH_SEP);
 			if (!t)
 				break;
 			s = t+1;

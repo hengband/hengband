@@ -3592,7 +3592,7 @@ static bool item_tester_offer(object_type *o_ptr)
 
 	if (o_ptr->sval != SV_CORPSE) return (FALSE);
 
-	if (strchr("pht", r_info[o_ptr->pval].d_char)) return (TRUE);
+	if (my_strchr("pht", r_info[o_ptr->pval].d_char)) return (TRUE);
 
 	/* Assume not okay */
 	return (FALSE);

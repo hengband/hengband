@@ -215,7 +215,7 @@ errr path_parse(char *buf, int max, cptr file)
 	u = file+1;
 
 	/* Look for non-user portion of the file */
-	s = strstr(u, PATH_SEP);
+	s = my_strstr(u, PATH_SEP);
 
 	/* Hack -- no long user names */
 	if (s && (s >= u + sizeof(user))) return (1);
@@ -364,7 +364,7 @@ FILE *my_fopen(cptr file, cptr mode)
 	if (path_parse(buf, 1024, file)) return (NULL);
 
 #if defined(MACINTOSH) && defined(MAC_MPW)
-	if (strchr(mode, 'w'))
+	if (my_strchr(mode, 'w'))
 	{
 		/* setting file type/creator */
 		tempfff = fopen(buf, mode);
@@ -1106,7 +1106,7 @@ static void trigger_text_to_ascii(char **bufptr, cptr *strptr)
 	/* Invalid trigger name? */
 	if (i == max_macrotrigger)
 	{
-		str = strchr(str, ']');
+		str = my_strchr(str, ']');
 		if (str)
 		{
 			*s++ = (char)31;
@@ -1308,7 +1308,7 @@ static bool trigger_ascii_to_text(char **bufptr, cptr *strptr)
 		switch(ch)
 		{
 		case '&':
-			while ((tmp = strchr(macro_modifier_chr, *str)))
+			while ((tmp = my_strchr(macro_modifier_chr, *str)))
 			{
 				j = (int)(tmp - macro_modifier_chr);
 				tmp = macro_modifier_name[j];
@@ -4437,7 +4437,7 @@ prt(format("回数: %d", command_arg), 0, 0);
 	if (always_repeat && (command_arg <= 0))
 	{
 		/* Hack -- auto repeat certain commands */
-		if (strchr("TBDoc+", command_cmd))
+		if (my_strchr("TBDoc+", command_cmd))
 		{
 			/* Repeat 99 times */
 			command_arg = 99;
@@ -4478,11 +4478,6 @@ prt(format("回数: %d", command_arg), 0, 0);
 		caretcmd = command_cmd;
 #endif
 
-#ifdef JP
-#undef strchr
-#define strchr strchr_j
-#endif
-
 	/* Hack -- Scan equipment */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
@@ -4500,7 +4495,7 @@ prt(format("回数: %d", command_arg), 0, 0);
 		s = quark_str(o_ptr->inscription);
 
 		/* Find a '^' */
-		s = strchr(s, '^');
+		s = my_strchr(s, '^');
 
 		/* Process preventions */
 		while (s)
@@ -4527,7 +4522,7 @@ prt(format("回数: %d", command_arg), 0, 0);
 			}
 
 			/* Find another '^' */
-			s = strchr(s + 1, '^');
+			s = my_strchr(s + 1, '^');
 		}
 	}
 
@@ -4579,7 +4574,7 @@ static bool insert_str(char *buf, cptr target, cptr insert)
 	int		   b_len, t_len, i_len;
 
 	/* Attempt to find the target (modify "buf") */
-	buf = strstr(buf, target);
+	buf = my_strstr(buf, target);
 
 	/* No target found */
 	if (!buf) return (FALSE);
@@ -5216,6 +5211,54 @@ size_t my_strcat(char *buf, const char *src, size_t bufsize)
 		/* Return without appending */
 		return (dlen + strlen(src));
 	}
+}
+
+
+/*
+ * A copy of ANSI strstr()
+ *
+ * my_strstr() can handle Kanji strings correctly.
+ */
+char *my_strstr(const char *haystack, const char *needle)
+{
+	int i;
+	int l1 = strlen(haystack);
+	int l2 = strlen(needle);
+
+	if (l1 >= l2)
+	{
+		for(i = 0; i <= l1 - l2; i++)
+		{
+			if(!strncmp(haystack + i, needle, l2))
+				return (char *)haystack + i;
+
+#ifdef JP
+			if (iskanji(*(haystack + i))) i++;
+#endif
+		}
+	}
+
+	return NULL;
+}
+
+
+/*
+ * A copy of ANSI my_strchr()
+ *
+ * my_strchr() can handle Kanji strings correctly.
+ */
+char *my_strchr(const char *ptr, char ch)
+{
+	for ( ; *ptr != '\0'; ptr++)
+	{
+		if (*ptr == ch) return (char *)ptr;
+
+#ifdef JP
+		if (iskanji(*ptr)) ptr++;
+#endif
+	}
+
+	return NULL;
 }
 
 

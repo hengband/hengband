@@ -124,35 +124,6 @@ void jverb( const char *in , char *out , int flag){
   }
 }
 
-char* strstr_j(const char* s, const char* t)
-{
-	int i, l1, l2;
-
-	l1 = strlen(s);
-	l2 = strlen(t);
-	if (l1 >= l2) {
-		for(i = 0; i <= l1 - l2; i++) {
-			if(!strncmp(s + i, t, l2))
-				return (char *)s + i;
-			if (iskanji(*(s + i)))
-				i++;
-		}
-	}
-	return NULL;
-}
-
-
-char *strchr_j(const char *ptr, char ch)
-{
-	for ( ; *ptr != '\0'; ++ptr)
-	{
-		if (*ptr == ch) return (char *)ptr;
-		if (iskanji(*ptr)) ++ptr;
-	}
-
-	return NULL;
-}
-
 
 /*
  * Convert SJIS string to EUC string

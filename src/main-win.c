@@ -849,7 +849,7 @@ static char *analyze_font(char *path, int *wp, int *hp)
 	}
 
 	/* Find first 'X' */
-	s = strchr(p, 'X');
+	s = my_strchr(p, 'X');
 
 	/* Extract font width */
 	wid = atoi(p);

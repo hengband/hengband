@@ -523,7 +523,7 @@ msg_print("あなたの飢えは新鮮な血によってのみ満たされる！");
 	else if ((prace_is_(RACE_DEMON) ||
 		 (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)) &&
 		 (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_CORPSE &&
-		  strchr("pht", r_info[o_ptr->pval].d_char)))
+		  my_strchr("pht", r_info[o_ptr->pval].d_char)))
 	{
 		/* Drain vitality of humanoids */
 		char o_name[MAX_NLEN];
@@ -657,7 +657,7 @@ static bool item_tester_hook_eatable(object_type *o_ptr)
 	{
 		if (o_ptr->tval == TV_CORPSE &&
 		    o_ptr->sval == SV_CORPSE &&
-		    strchr("pht", r_info[o_ptr->pval].d_char))
+		    my_strchr("pht", r_info[o_ptr->pval].d_char))
 			return TRUE;
 	}
 

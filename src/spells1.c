@@ -180,7 +180,7 @@ static byte spell_color(int type)
 		c = s[randint0(strlen(s))];
 
 		/* Lookup this color */
-		a = strchr(color_char, c) - color_char;
+		a = my_strchr(color_char, c) - color_char;
 
 		/* Invalid color (note check for < 0 removed, gave a silly
 		 * warning because bytes are always >= 0 -- RG) */

@@ -626,7 +626,7 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 		ADD_FLG(FLG_UNIQUE);
 	}
 
-	if (o_ptr->tval == TV_CORPSE && strchr("pht", r_info[o_ptr->pval].d_char))
+	if (o_ptr->tval == TV_CORPSE && my_strchr("pht", r_info[o_ptr->pval].d_char))
 	{
 		ADD_FLG(FLG_HUMAN);
 	}
@@ -1108,7 +1108,7 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 	/*** Human corpse/skeletons (for Daemon magic) ***/
 	if (IS_FLG(FLG_HUMAN) &&
 	    (o_ptr->tval != TV_CORPSE ||
-	     !strchr("pht", r_info[o_ptr->pval].d_char)))
+	     !my_strchr("pht", r_info[o_ptr->pval].d_char)))
 		return FALSE;
 
 	/*** Unreadable spellbooks ***/
@@ -1266,11 +1266,7 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 	}
 	else
 	{
-#ifdef JP
-		if (!strstr_j(o_name, ptr)) return FALSE;
-#else
-		if (!strstr(o_name, ptr)) return FALSE;
-#endif
+		if (!my_strstr(o_name, ptr)) return FALSE;
 	}
 
 	/* TRUE when it need not to be 'collecting' */
@@ -1378,7 +1374,7 @@ static bool is_opt_confirm_destroy(object_type *o_ptr)
 		{
 			if (o_ptr->tval == TV_CORPSE &&
 			    o_ptr->sval == SV_CORPSE &&
-			    strchr("pht", r_info[o_ptr->pval].d_char))
+			    my_strchr("pht", r_info[o_ptr->pval].d_char))
 				return FALSE;
 		}
 
@@ -2253,13 +2249,13 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	{
 		strncat(buff, format("に「%s」", insc), 80);
 
-		if (strstr(insc, "%%all"))
+		if (my_strstr(insc, "%%all"))
 			strcat(buff, "(%%allは全能力を表す英字の記号で置換)");
-		else if (strstr(insc, "%all"))
+		else if (my_strstr(insc, "%all"))
 			strcat(buff, "(%allは全能力を表す記号で置換)");
-		else if (strstr(insc, "%%"))
+		else if (my_strstr(insc, "%%"))
 			strcat(buff, "(%%は追加能力を表す英字の記号で置換)");
-		else if (strstr(insc, "%"))
+		else if (my_strstr(insc, "%"))
 			strcat(buff, "(%は追加能力を表す記号で置換)");
 
 		strcat(buff, "と刻んで");
@@ -2515,9 +2511,9 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	{
 		strncat(buff, format("and inscribe \"%s\"", insc), 80);
 
-		if (strstr(insc, "%all"))
+		if (my_strstr(insc, "%all"))
 			strcat(buff, ", replacing %all with code string representing all abilities,");
-		else if (strstr(insc, "%"))
+		else if (my_strstr(insc, "%"))
 			strcat(buff, ", replacing % with code string representing extra random abilities,");
 
 		strcat(buff, " on ");
@@ -3464,11 +3460,7 @@ static void search_for_string(text_body_type *tb, cptr search_str, bool forward)
 		}
 
 		/* Look for the string pattern */
-#ifdef JP
-		pos = strstr_j(tb->lines_list[i], search_str);
-#else
-		pos = strstr(tb->lines_list[i], search_str);
-#endif
+		pos = my_strstr(tb->lines_list[i], search_str);
 
 		/* Not found! */
 		if (!pos) continue;

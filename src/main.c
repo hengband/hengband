@@ -161,7 +161,7 @@ static void change_path(cptr info)
 	cptr s;
 
 	/* Find equal sign */
-	s = strchr(info, '=');
+	s = my_strchr(info, '=');
 
 	/* Verify equal sign */
 	if (!s) quit_fmt("Try '-d<what>=<path>' not '-d%s'", info);

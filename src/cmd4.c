@@ -1343,7 +1343,7 @@ void do_cmd_messages(int num_now)
 				cptr str = msg;
 
 				/* Display matches */
-				while ((str = strstr(str, shower)) != NULL)
+				while ((str = my_strstr(str, shower)) != NULL)
 				{
 					int len = strlen(shower);
 
@@ -1433,7 +1433,7 @@ void do_cmd_messages(int num_now)
 				cptr msg = message_str(z);
 
 				/* Search for it */
-				if (strstr(msg, finder))
+				if (my_strstr(msg, finder))
 				{
 					/* New location */
 					i = z;
@@ -5194,7 +5194,7 @@ static int collect_monsters(int grp_cur, s16b mon_idx[], byte mode)
 		else
 		{
 			/* Check for race in the group */
-			if (!strchr(group_char, r_ptr->d_char)) continue;
+			if (!my_strchr(group_char, r_ptr->d_char)) continue;
 		}
 
 		/* Add the race */
@@ -6799,25 +6799,25 @@ void plural_aux(char *Name)
 {
 	int NameLen = strlen(Name);
 
-	if (strstr(Name, "Disembodied hand"))
+	if (my_strstr(Name, "Disembodied hand"))
 	{
 		strcpy(Name, "Disembodied hands that strangled people");
 	}
-	else if (strstr(Name, "Colour out of space"))
+	else if (my_strstr(Name, "Colour out of space"))
 	{
 		strcpy(Name, "Colours out of space");
 	}
-	else if (strstr(Name, "stairway to hell"))
+	else if (my_strstr(Name, "stairway to hell"))
 	{
 		strcpy(Name, "stairways to hell");
 	}
-	else if (strstr(Name, "Dweller on the threshold"))
+	else if (my_strstr(Name, "Dweller on the threshold"))
 	{
 		strcpy(Name, "Dwellers on the threshold");
 	}
-	else if (strstr(Name, " of "))
+	else if (my_strstr(Name, " of "))
 	{
-		cptr aider = strstr(Name, " of ");
+		cptr aider = my_strstr(Name, " of ");
 		char dummy[80];
 		int i = 0;
 		cptr ctr = Name;
@@ -6841,7 +6841,7 @@ void plural_aux(char *Name)
 		strcpy(&(dummy[i+1]), aider);
 		strcpy(Name, dummy);
 	}
-	else if (strstr(Name, "coins"))
+	else if (my_strstr(Name, "coins"))
 	{
 		char dummy[80];
 		strcpy(dummy, "piles of ");
@@ -6849,7 +6849,7 @@ void plural_aux(char *Name)
 		strcpy(Name, dummy);
 		return;
 	}
-	else if (strstr(Name, "Manes"))
+	else if (my_strstr(Name, "Manes"))
 	{
 		return;
 	}
@@ -7117,14 +7117,14 @@ static void do_cmd_knowledge_kill_count(void)
 			{
 #ifdef JP
 				/* p,tは人と数える by ita*/
-				if(strchr("pt",r_ptr->d_char))
+				if(my_strchr("pt",r_ptr->d_char))
 					fprintf(fff, "     %3d 人の %s\n", This, r_name + r_ptr->name);
 				else
 					fprintf(fff, "     %3d 匹の %s\n", This, r_name + r_ptr->name);
 #else
 				if (This < 2)
 				{
-					if (strstr(r_name + r_ptr->name, "coins"))
+					if (my_strstr(r_name + r_ptr->name, "coins"))
 					{
 						fprintf(fff, "     1 pile of %s\n", (r_name + r_ptr->name));
 					}

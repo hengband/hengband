@@ -5278,13 +5278,13 @@ get_rnd_line("death_j.txt", 0, death_message);
 				  str = death_message;
 				  if (strncmp(str, "¡Ö", 2) == 0) str += 2;
 
-				  str2 = strstr_j(str, "¡×");
+				  str2 = my_strstr(str, "¡×");
 				  if (str2 != NULL) *str2 = '\0';
 
 				  i = 0;
 				  while (i < 9)
 				  {
-				    str2 = strstr_j(str, " ");
+				    str2 = my_strstr(str, " ");
 				    if (str2 == NULL) len = strlen(str);
 				    else len = str2 - str;
 

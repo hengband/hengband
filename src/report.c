@@ -170,7 +170,7 @@ static int buf_search(BUF *buf, const char *str)
 {
 	char *ret;
 
-	ret = strstr(buf->data, str);
+	ret = my_strstr(buf->data, str);
 
 	if (!ret) return -1;
 

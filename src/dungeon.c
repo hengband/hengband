@@ -1744,11 +1744,7 @@ static void recharged_notice(object_type *o_ptr)
 	if (!o_ptr->inscription) return;
 
 	/* Find a '!' */
-#ifdef JP
-	s = strchr_j(quark_str(o_ptr->inscription), '!');
-#else
-	s = strchr(quark_str(o_ptr->inscription), '!');
-#endif
+	s = my_strchr(quark_str(o_ptr->inscription), '!');
 
 	/* Process notification request. */
 	while (s)
@@ -1776,11 +1772,7 @@ static void recharged_notice(object_type *o_ptr)
 		}
 
 		/* Keep looking for '!'s */
-#ifdef JP
-		s = strchr_j(s + 1, '!');
-#else
-		s = strchr(s + 1, '!');
-#endif
+		s = my_strchr(s + 1, '!');
 	}
 }
 
@@ -5447,7 +5439,7 @@ static bool monster_tsuri(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	if ((r_ptr->flags7 & RF7_AQUATIC) && !(r_ptr->flags1 & RF1_UNIQUE) && strchr("Jjlw", r_ptr->d_char))
+	if ((r_ptr->flags7 & RF7_AQUATIC) && !(r_ptr->flags1 & RF1_UNIQUE) && my_strchr("Jjlw", r_ptr->d_char))
 		return TRUE;
 	else
 		return FALSE;

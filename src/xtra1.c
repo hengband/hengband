@@ -2901,12 +2901,6 @@ bool buki_motteruka(int i)
 }
 
 
-#ifdef JP
-#undef strchr
-#define strchr strchr_j
-#endif
-
-
 /*
  * Calculate the players current "state", taking into account
  * not only race/class intrinsics, but also objects being worn
@@ -3880,7 +3874,7 @@ void calc_bonuses(void)
 		if (have_flag(flgs, TR_FREE_ACT))    p_ptr->free_act = TRUE;
 		if (have_flag(flgs, TR_HOLD_LIFE))   p_ptr->hold_life = TRUE;
 		if (have_flag(flgs, TR_WARNING)){
-			if (!o_ptr->inscription || !(strchr(quark_str(o_ptr->inscription),'$')))
+			if (!o_ptr->inscription || !(my_strchr(quark_str(o_ptr->inscription),'$')))
 			  p_ptr->warning = TRUE;
 		}
 
@@ -3892,7 +3886,7 @@ void calc_bonuses(void)
 				cptr insc = quark_str(o_ptr->inscription);
 
 				if (o_ptr->inscription &&
-				    (strchr(insc, '.') || strchr(insc, '%')))
+				    (my_strchr(insc, '.') || my_strchr(insc, '%')))
 				{
 					/*
 					 * {.} will stop random teleportation.

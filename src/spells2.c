@@ -4363,7 +4363,7 @@ bool detect_monsters_string(int range, cptr Match)
 		if (distance(py, px, y, x) > range) continue;
 
 		/* Detect monsters with the same symbol */
-		if (strchr(Match, r_ptr->d_char))
+		if (my_strchr(Match, r_ptr->d_char))
 		{
 			/* Update monster recall window */
 			if (p_ptr->monster_race_idx == m_ptr->r_idx)

@@ -768,7 +768,7 @@ static bool summon_specific_aux(int r_idx)
 		case SUMMON_ANIMAL_RANGER:
 		{
 			okay = ((r_ptr->flags3 & (RF3_ANIMAL)) &&
-			       (strchr("abcflqrwBCHIJKMRS", r_ptr->d_char)) &&
+			       (my_strchr("abcflqrwBCHIJKMRS", r_ptr->d_char)) &&
 			       !(r_ptr->flags3 & (RF3_DRAGON)) &&
 			       !(r_ptr->flags3 & (RF3_EVIL)) &&
 			       !(r_ptr->flags3 & (RF3_UNDEAD)) &&
@@ -4107,7 +4107,7 @@ void message_pain(int m_idx, int dam)
 
 
 	/* Mushrooms, Eyes, Jellies, Molds, Vortices, Worms, Quylthulgs */
-	if (strchr(",ejmvwQ", r_ptr->d_char))
+	if (my_strchr(",ejmvwQ", r_ptr->d_char))
 	{
 #ifdef JP
 		if (percentage > 95)
@@ -4145,7 +4145,7 @@ void message_pain(int m_idx, int dam)
 
 
 	/* Fish */
-	else if (strchr("l", r_ptr->d_char))
+	else if (my_strchr("l", r_ptr->d_char))
 	{
 		if (percentage > 95)
 #ifdef JP
@@ -4193,7 +4193,7 @@ msg_format("%^sはぐにゃぐにゃと痙攣した。", m_name);
 
 
 	/* Golems, Walls, Doors, Stairs */
-	else if (strchr("g#+<>", r_ptr->d_char))
+	else if (my_strchr("g#+<>", r_ptr->d_char))
 	{
 		if (percentage > 95)
 #ifdef JP
@@ -4241,7 +4241,7 @@ msg_format("%^sはくしゃくしゃになった。", m_name);
 
 
 	/* Snakes, Hydrae, Reptiles, Mimics */
-	else if (strchr("JMR", r_ptr->d_char) || !isalpha(r_ptr->d_char))
+	else if (my_strchr("JMR", r_ptr->d_char) || !isalpha(r_ptr->d_char))
 	{
 		if (percentage > 95)
 #ifdef JP
@@ -4289,7 +4289,7 @@ msg_format("%^sはぐにゃぐにゃと痙攣した。", m_name);
 
 
 	/* Felines */
-	else if (strchr("f", r_ptr->d_char))
+	else if (my_strchr("f", r_ptr->d_char))
 	{
 		if (percentage > 95)
 #ifdef JP
@@ -4337,7 +4337,7 @@ msg_format("%sは哀れな鳴き声を出した。", m_name);
 
 
 	/* Ants, Centipedes, Flies, Insects, Beetles, Spiders */
-	else if (strchr("acFIKS", r_ptr->d_char))
+	else if (my_strchr("acFIKS", r_ptr->d_char))
 	{
 		if (percentage > 95)
 #ifdef JP
@@ -4391,7 +4391,7 @@ msg_format("%^sはピクピクひきつった。", m_name);
 
 
 	/* Birds */
-	else if (strchr("B", r_ptr->d_char))
+	else if (my_strchr("B", r_ptr->d_char))
 	{
 		if (percentage > 95)
 #ifdef JP
@@ -4446,7 +4446,7 @@ msg_format("%^sはキーキーと鳴き叫んだ。", m_name);
 
 
 	/* Dragons, Demons, High Undead */
-	else if (strchr("duDLUW", r_ptr->d_char))
+	else if (my_strchr("duDLUW", r_ptr->d_char))
 	{
 		if (percentage > 95)
 #ifdef JP
@@ -4501,7 +4501,7 @@ msg_format("%^sは弱々しくうなった。", m_name);
 
 
 	/* Skeletons */
-	else if (strchr("s", r_ptr->d_char))
+	else if (my_strchr("s", r_ptr->d_char))
 	{
 		if (percentage > 95)
 #ifdef JP
@@ -4556,7 +4556,7 @@ msg_format("%^sはガタガタ言った。", m_name);
 
 
 	/* Zombies */
-	else if (strchr("z", r_ptr->d_char))
+	else if (my_strchr("z", r_ptr->d_char))
 	{
 		if (percentage > 95)
 #ifdef JP
@@ -4611,7 +4611,7 @@ msg_format("%^sはよろめいた。", m_name);
 
 
 	/* Ghosts */
-	else if (strchr("G", r_ptr->d_char))
+	else if (my_strchr("G", r_ptr->d_char))
 
 	{
 		if (percentage > 95)
@@ -4667,7 +4667,7 @@ msg_format("%^sはかすかにうめいた。", m_name);
 
 
 	/* Dogs and Hounds */
-	else if (strchr("CZ", r_ptr->d_char))
+	else if (my_strchr("CZ", r_ptr->d_char))
 	{
 #ifdef JP
 		if (percentage > 95)
@@ -4704,7 +4704,7 @@ msg_format("%^sはかすかにうめいた。", m_name);
 	}
 
 	/* One type of monsters (ignore,squeal,shriek) */
-	else if (strchr("Xbilqrt", r_ptr->d_char))
+	else if (my_strchr("Xbilqrt", r_ptr->d_char))
 	{
 #ifdef JP
 		if (percentage > 95)

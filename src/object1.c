@@ -4605,12 +4605,6 @@ void display_equip(void)
 }
 
 
-#ifdef JP
-#undef strchr
-#define strchr strchr_j
-#endif
-
-
 /*
  * Find the "first" inventory object with the given "tag".
  *
@@ -4660,7 +4654,7 @@ static bool get_tag(int *cp, char tag, int mode)
 		if (!item_tester_okay(o_ptr)) continue;
 
 		/* Find a '@' */
-		s = strchr(quark_str(o_ptr->inscription), '@');
+		s = my_strchr(quark_str(o_ptr->inscription), '@');
 
 		/* Process all tags */
 		while (s)
@@ -4676,7 +4670,7 @@ static bool get_tag(int *cp, char tag, int mode)
 			}
 
 			/* Find another '@' */
-			s = strchr(s + 1, '@');
+			s = my_strchr(s + 1, '@');
 		}
 	}
 
@@ -4705,7 +4699,7 @@ static bool get_tag(int *cp, char tag, int mode)
 		if (!item_tester_okay(o_ptr)) continue;
 
 		/* Find a '@' */
-		s = strchr(quark_str(o_ptr->inscription), '@');
+		s = my_strchr(quark_str(o_ptr->inscription), '@');
 
 		/* Process all tags */
 		while (s)
@@ -4721,7 +4715,7 @@ static bool get_tag(int *cp, char tag, int mode)
 			}
 
 			/* Find another '@' */
-			s = strchr(s + 1, '@');
+			s = my_strchr(s + 1, '@');
 		}
 	}
 
@@ -4756,7 +4750,7 @@ static bool get_tag_floor(int *cp, char tag, int floor_list[], int floor_num)
 		if (!o_ptr->inscription) continue;
 
 		/* Find a '@' */
-		s = strchr(quark_str(o_ptr->inscription), '@');
+		s = my_strchr(quark_str(o_ptr->inscription), '@');
 
 		/* Process all tags */
 		while (s)
@@ -4772,7 +4766,7 @@ static bool get_tag_floor(int *cp, char tag, int floor_list[], int floor_num)
 			}
 
 			/* Find another '@' */
-			s = strchr(s + 1, '@');
+			s = my_strchr(s + 1, '@');
 		}
 	}
 
@@ -4795,7 +4789,7 @@ static bool get_tag_floor(int *cp, char tag, int floor_list[], int floor_num)
 		if (!o_ptr->inscription) continue;
 
 		/* Find a '@' */
-		s = strchr(quark_str(o_ptr->inscription), '@');
+		s = my_strchr(quark_str(o_ptr->inscription), '@');
 
 		/* Process all tags */
 		while (s)
@@ -4811,7 +4805,7 @@ static bool get_tag_floor(int *cp, char tag, int floor_list[], int floor_num)
 			}
 
 			/* Find another '@' */
-			s = strchr(s + 1, '@');
+			s = my_strchr(s + 1, '@');
 		}
 	}
 
@@ -5379,7 +5373,7 @@ static bool get_item_allow(int item)
 	if (!o_ptr->inscription) return (TRUE);
 
 	/* Find a '!' */
-	s = strchr(quark_str(o_ptr->inscription), '!');
+	s = my_strchr(quark_str(o_ptr->inscription), '!');
 
 	/* Process preventions */
 	while (s)
@@ -5397,7 +5391,7 @@ if (!verify("À‹≈ˆ§À", item)) return (FALSE);
 		}
 
 		/* Find another '!' */
-		s = strchr(s + 1, '!');
+		s = my_strchr(s + 1, '!');
 	}
 
 	/* Allow it */

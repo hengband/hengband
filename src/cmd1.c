@@ -2295,7 +2295,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				else if (ma_ptr->effect == MA_SLOW)
 				{
 					if (!((r_ptr->flags1 & RF1_NEVER_MOVE) ||
-					    strchr("~#{}.UjmeEv$,DdsbBFIJQSXclnw!=?", r_ptr->d_char)))
+					    my_strchr("~#{}.UjmeEv$,DdsbBFIJQSXclnw!=?", r_ptr->d_char)))
 					{
 #ifdef JP
 						msg_format("%sの足首に関節蹴りをくらわした！", m_name);

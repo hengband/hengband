@@ -3720,7 +3720,7 @@ static bool monster_hook_human(int r_idx)
 
 	if (r_ptr->flags1 & (RF1_UNIQUE)) return FALSE;
 
-	if (strchr("pht", r_ptr->d_char)) return TRUE;
+	if (my_strchr("pht", r_ptr->d_char)) return TRUE;
 
 	return FALSE;
 }

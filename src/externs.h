@@ -1227,6 +1227,8 @@ extern void build_gamma_table(int gamma);
 
 extern size_t my_strcpy(char *buf, const char *src, size_t bufsize);
 extern size_t my_strcat(char *buf, const char *src, size_t bufsize);
+extern char *my_strstr(const char *haystack, const char *needle);
+extern char *my_strchr(const char *ptr, char ch);
 extern int inkey_special(void);
 
 
@@ -1541,8 +1543,6 @@ extern void jverb1( const char *in , char *out);
 extern void jverb2( const char *in , char *out);
 extern void jverb3( const char *in , char *out);
 extern void jverb( const char *in , char *out , int flag);
-extern char* strstr_j(cptr str1, cptr str2);
-extern char *strchr_j(const char *ptr, char ch);
 extern void sjis2euc(char *str);
 extern void euc2sjis(char *str);
 extern byte codeconv(char *str);

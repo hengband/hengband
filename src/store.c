@@ -1421,7 +1421,7 @@ static bool store_will_buy(object_type *o_ptr)
 						if (r_ptr->flags3 & RF3_ANIMAL) break;
 
 						/* Accept mimics */
-						if (strchr("?!", r_ptr->d_char)) break;
+						if (my_strchr("?!", r_ptr->d_char)) break;
 					}
 				}
 				case TV_POLEARM:

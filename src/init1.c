@@ -13,10 +13,6 @@
 #include "angband.h"
 
 
-#ifdef JP
-#undef strchr
-#define strchr strchr_j
-#endif
 /*
  * This file is used to initialize various variables and arrays for the
  * Angband game.  Note the use of "fd_read()" and "fd_write()" to bypass
@@ -906,7 +902,7 @@ errr parse_v_info(char *buf, header *head)
 	if (buf[0] == 'N')
 	{
 		/* Find the colon before the name */
-		s = strchr(buf+2, ':');
+		s = my_strchr(buf+2, ':');
 
 		/* Verify that colon */
 		if (!s) return (1);
@@ -1100,7 +1096,7 @@ errr parse_m_info(char *buf, header *head)
 		int xtra, type, first, weight;
 
 		/* Find the colon before the name */
-		s = strchr(buf+2, ':');
+		s = my_strchr(buf+2, ':');
 
 		/* Verify that colon */
 		if (!s) return (1);
@@ -1120,7 +1116,7 @@ errr parse_m_info(char *buf, header *head)
 		stat = s;
 
 		/* Find the colon before the name */
-		s = strchr(s, ':');
+		s = my_strchr(s, ':');
 
 		/* Verify that colon */
 		if (!s) return (1);
@@ -1200,7 +1196,7 @@ errr parse_f_info(char *buf, header *head)
 	if (buf[0] == 'N')
 	{
 		/* Find the colon before the name */
-		s = strchr(buf+2, ':');
+		s = my_strchr(buf+2, ':');
 
 			/* Verify that colon */
 		if (!s) return (1);
@@ -1360,7 +1356,7 @@ errr parse_k_info(char *buf, header *head)
 	if (buf[0] == 'N')
 	{
 		/* Find the colon before the name */
-		s = strchr(buf+2, ':');
+		s = my_strchr(buf+2, ':');
 
 			/* Verify that colon */
 		if (!s) return (1);
@@ -1506,10 +1502,10 @@ errr parse_k_info(char *buf, header *head)
 			k_ptr->locale[i] = atoi(s+1);
 
 				/* Find the slash */
-			t = strchr(s+1, '/');
+			t = my_strchr(s+1, '/');
 
 				/* Find the next colon */
-			s = strchr(s+1, ':');
+			s = my_strchr(s+1, ':');
 
 				/* If the slash is "nearby", use it */
 			if (t && (!s || t < s))
@@ -1630,7 +1626,7 @@ errr parse_a_info(char *buf, header *head)
 	if (buf[0] == 'N')
 	{
 		/* Find the colon before the name */
-		s = strchr(buf+2, ':');
+		s = my_strchr(buf+2, ':');
 
 			/* Verify that colon */
 		if (!s) return (1);
@@ -1858,7 +1854,7 @@ errr parse_e_info(char *buf, header *head)
 	if (buf[0] == 'N')
 	{
 		/* Find the colon before the name */
-		s = strchr(buf+2, ':');
+		s = my_strchr(buf+2, ':');
 
 			/* Verify that colon */
 		if (!s) return (1);
@@ -2161,7 +2157,7 @@ errr parse_r_info(char *buf, header *head)
 	if (buf[0] == 'N')
 	{
 		/* Find the colon before the name */
-		s = strchr(buf+2, ':');
+		s = my_strchr(buf+2, ':');
 
 			/* Verify that colon */
 		if (!s) return (1);
@@ -2609,7 +2605,7 @@ errr parse_d_info(char *buf, header *head)
 	if (buf[0] == 'N')
 	{
 		/* Find the colon before the name */
-		s = strchr(buf+2, ':');
+		s = my_strchr(buf+2, ':');
 
 		/* Verify that colon */
 		if (!s) return (1);
@@ -3127,7 +3123,7 @@ static errr parse_line_building(char *buf)
 	index = atoi(s);
 
 	/* Find the colon after the building number */
-	s = strchr(s, ':');
+	s = my_strchr(s, ':');
 
 	/* Verify that colon */
 	if (!s) return (1);
@@ -3858,7 +3854,7 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
 	else
 	{
 		/* Accept all printables except spaces and brackets */
-		while (isprint(*s) && !strchr(" []", *s)) ++s;
+		while (isprint(*s) && !my_strchr(" []", *s)) ++s;
 
 		/* Extract final and Terminate */
 		if ((f = *s) != '\0') *s++ = '\0';
