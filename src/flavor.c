@@ -453,7 +453,8 @@ static bool object_flavor(int k_idx)
 
 		case TV_RING:
 		{
-			return (0x90 + ring_col[k_ptr->sval]);
+			if ((k_ptr->sval == SV_RING_POWER) || (k_ptr->sval == SV_RING_AHO)) return (0x90 + TERM_YELLOW);
+			else return (0x90 + ring_col[k_ptr->sval]);
 		}
 
 		case TV_STAFF:
