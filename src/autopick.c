@@ -1232,11 +1232,11 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 		}
 	}
 
-	/*** Rere equpiments ***/
+	/*** Rere equipments ***/
 	if (IS_FLG(FLG_RARE) && !object_is_rare(o_ptr))
 		return FALSE;
 
-	/*** Common equpiments ***/
+	/*** Common equipments ***/
 	if (IS_FLG(FLG_COMMON) && object_is_rare(o_ptr))
 		return FALSE;
 
@@ -2262,14 +2262,14 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		body_str = "装備";
 	}
 
-	/*** Rare equpiments ***/
+	/*** Rare equipments ***/
 	if (IS_FLG(FLG_RARE))
 	{
 		before_str[before_n++] = "ドラゴン装備やカオス・ブレード等を含む珍しい";
 		body_str = "装備";
 	}
 
-	/*** Common equpiments ***/
+	/*** Common equipments ***/
 	if (IS_FLG(FLG_COMMON))
 	{
 		before_str[before_n++] = "ありふれた(ドラゴン装備やカオス・ブレード等の珍しい物ではない)";
@@ -2482,7 +2482,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	if (IS_FLG(FLG_STAR_IDENTIFIED))
 		before_str[before_n++] = "fully identified";
 
-	/*** Rare equpiments ***/
+	/*** Rare equipments ***/
 	if (IS_FLG(FLG_RARE))
 	{
 		before_str[before_n++] = "very rare";
@@ -2490,7 +2490,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		after_str[after_n++] = "such like Dragon armors, Blades of Chaos, etc.";
 	}
 
-	/*** Common equpiments ***/
+	/*** Common equipments ***/
 	if (IS_FLG(FLG_COMMON))
 	{
 		before_str[before_n++] = "relatively common";
