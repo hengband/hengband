@@ -1,23 +1,23 @@
-=== Online Help Commands ===
+[[[[[G=== Online Help Commands ===
 
-q      : Leave the online help system.
-<, Esc : Return to the previous help file, or leave the online help.
-?      : Get help for the online help (this file).
+You can move cursor using [[[[[ythe arrow keys].        [[[[[BMovement commands]
+Press the indicated letter [a-z] to        [[[[[y   'q'    ](Leave the help system)
+activate a link.                           [[[[[y   ESC    ](Return to the prev file)
 
-Home/End              : Go to the top/bottom
--/Space, PgUp/PgDown  : Go back/Advance one page
-8/2, Up/Down          : Go up/down one line
+For example, press [[[[[ythe j key] when you see  [[[[[y   Home   ](Go to the top)
+"(see monster.txt#Pets [j])" etc.          [[[[[y  PageUp  ](Go up 1 page)
+Pressing [[[[[ythe ESC key] takes you back to     [[[[[y Up Arrow ](Go up 1 line)
+the previous location.                     [[[[[yDown Arrow](Go down 1 line)
+                                           [[[[[y PageDown ](Go down 1 page)
+                                           [[[[[y   End    ](Go to the bottom)
 
-#     : Jump to a specific line (defaults to line zero).
-%     : Jump to a specific file (defaults to "help.hlp").
-=     : Highlight lines containing a string.
-/,^S  : Search for a string (use '/' + Return to continue a search).
-          (Use '#' + '0' + Return + '/' + Return to restart a search.)
-|     : Save the current document to a file.
-[a-z] : Press the indicated letter to activate a link.
-
+                                           [[[[[y   '#'    ](Jump to a specific line)
+      [[[[[BOther commands]                       [[[[[y   '%'    ](Jump to a specific file)
+[[[[[y'/'] or [[[[[y'^S'] (Search for a string)                
+    [[[[[y'=']     (Highlight lines containing a string)
+    [[[[[y'|']     (Save current document to a file)
 
 --
-Original   : (??)
-Updated    : Zangband DevTeam
 Updated    : Hengband 1.7.0
+
+***** [j] monster.txt#Pets
