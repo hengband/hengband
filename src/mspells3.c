@@ -560,7 +560,7 @@ put_str("MP 失率 効果", y, x + 33);
 				/* Dump the spells */
 				for (i = 0; i < num; i++)
 				{
-					int shouhimana;
+					int need_mana;
 
 					prt("", y + i + 1, x);
 					if (!p_ptr->magic_num2[spellnum[i]]) continue;
@@ -584,16 +584,12 @@ put_str("MP 失率 効果", y, x + 33);
 					else if (p_ptr->easy_spell) chance-=3;
 					else if (p_ptr->dec_mana) chance-=2;
 
-					shouhimana = monster_powers[spellnum[i]].smana;
-					if (p_ptr->dec_mana)
-					{
-						shouhimana = (shouhimana + 1) * 3 / 4;
-					}
+					need_mana = mod_need_mana(monster_powers[spellnum[i]].smana, 0, REALM_NONE);
 
 					/* Not enough mana to cast */
-					if (shouhimana > p_ptr->csp)
+					if (need_mana > p_ptr->csp)
 					{
-						chance += 5 * (shouhimana - p_ptr->csp);
+						chance += 5 * (need_mana - p_ptr->csp);
 					}
 
 					/* Extract the minimum failure rate */
@@ -629,7 +625,7 @@ put_str("MP 失率 効果", y, x + 33);
 
 					/* Dump the spell --(-- */
 					strcat(psi_desc, format(" %-26s %3d %3d%%%s",
-						spell.name, shouhimana,
+						spell.name, need_mana,
 						chance, comment));
 					prt(psi_desc, y + i + 1, x);
 				}
@@ -1989,7 +1985,7 @@ bool do_cmd_cast_learned(void)
 	int             plev = p_ptr->lev;
 	monster_power   spell;
 	bool            cast;
-	int             shouhimana;
+	int             need_mana;
 
 
 	/* not if confused */
@@ -2009,15 +2005,10 @@ msg_print("混乱していて唱えられない！");
 
 	spell = monster_powers[n];
 
-	shouhimana = spell.smana;
-
-	if (p_ptr->dec_mana)
-	{
-		shouhimana = (shouhimana + 1) * 3 / 4;
-	}
+	need_mana = mod_need_mana(spell.smana, 0, REALM_NONE);
 
 	/* Verify "dangerous" spells */
-	if (shouhimana > p_ptr->csp)
+	if (need_mana > p_ptr->csp)
 	{
 		/* Warning */
 #ifdef JP
@@ -2056,9 +2047,9 @@ if (!get_check("それでも挑戦しますか? ")) return FALSE;
 	else if (p_ptr->dec_mana) chance-=2;
 
 	/* Not enough mana to cast */
-	if (shouhimana > p_ptr->csp)
+	if (need_mana > p_ptr->csp)
 	{
-		chance += 5 * (shouhimana - p_ptr->csp);
+		chance += 5 * (need_mana - p_ptr->csp);
 	}
 
 	/* Extract the minimum failure rate */
@@ -2105,14 +2096,14 @@ msg_print("魔法をうまく唱えられなかった。");
 	}
 
 	/* Sufficient mana */
-	if (shouhimana <= p_ptr->csp)
+	if (need_mana <= p_ptr->csp)
 	{
 		/* Use some mana */
-		p_ptr->csp -= shouhimana;
+		p_ptr->csp -= need_mana;
 	}
 	else
 	{
-		int oops = shouhimana;
+		int oops = need_mana;
 
 		/* No mana left */
 		p_ptr->csp = 0;

@@ -1450,38 +1450,35 @@ static void recharged_notice(object_type *o_ptr)
 static void check_music(void)
 {
 	magic_type *s_ptr;
-	u32b shouhimana;
+	int spell;
+	u32b need_mana;
 
 	/* Music singed by player */
 	if(p_ptr->pclass != CLASS_BARD) return;
 	if(!p_ptr->magic_num1[0] && !p_ptr->magic_num1[1]) return;
 
-	s_ptr = &technic_info[REALM_MUSIC - MIN_TECHNIC][p_ptr->magic_num2[0]];
+	spell = p_ptr->magic_num2[0];
+	s_ptr = &technic_info[REALM_MUSIC - MIN_TECHNIC][spell];
 
-	shouhimana = (s_ptr->smana*(3800-p_ptr->spell_exp[p_ptr->magic_num2[0]])+2399);
-	if(p_ptr->dec_mana)
-		shouhimana *= 3;
-	else shouhimana *= 4;
-	shouhimana /= 9600;
-	if(shouhimana < 1) shouhimana = 1;
-	shouhimana *= 0x8000;
-	if (((u16b)(p_ptr->csp) < (shouhimana / 0x10000)) || (p_ptr->anti_magic))
+	need_mana = mod_need_mana(s_ptr->smana, spell, REALM_MUSIC);
+	need_mana *= 0x8000;
+	if (((u16b)(p_ptr->csp) < (need_mana / 0x10000)) || (p_ptr->anti_magic))
 	{
 		stop_singing();
 		return;
 	}
 	else
 	{
-			p_ptr->csp -= (u16b) (shouhimana / 0x10000);
-			shouhimana = (shouhimana & 0xffff);
-			if (p_ptr->csp_frac < shouhimana)
+		p_ptr->csp -= (u16b) (need_mana / 0x10000);
+		need_mana = (need_mana & 0xffff);
+		if (p_ptr->csp_frac < need_mana)
 		{
 			p_ptr->csp--;
-			p_ptr->csp_frac += (u16b)(0x10000L - shouhimana);
+			p_ptr->csp_frac += (u16b)(0x10000L - need_mana);
 		}
 		else
 		{
-			p_ptr->csp_frac -= (u16b)shouhimana;
+			p_ptr->csp_frac -= (u16b)need_mana;
 		}
 
 		p_ptr->redraw |= PR_MANA;
@@ -1503,14 +1500,14 @@ static void check_music(void)
 			p_ptr->redraw |= (PR_STATUS);
 		}
 	}
-	if (p_ptr->spell_exp[p_ptr->magic_num2[0]] < 900)
-		p_ptr->spell_exp[p_ptr->magic_num2[0]]+=5;
-	else if(p_ptr->spell_exp[p_ptr->magic_num2[0]] < 1200)
-		{if (one_in_(2) && (dun_level > 4) && ((dun_level + 10) > p_ptr->lev)) p_ptr->spell_exp[p_ptr->magic_num2[0]]+=1;}
-	else if(p_ptr->spell_exp[p_ptr->magic_num2[0]] < 1400)
-		{if (one_in_(5) && ((dun_level + 5) > p_ptr->lev) && ((dun_level + 5) > s_ptr->slevel)) p_ptr->spell_exp[p_ptr->magic_num2[0]]+=1;}
-	else if(p_ptr->spell_exp[p_ptr->magic_num2[0]] < 1600)
-		{if (one_in_(5) && ((dun_level + 5) > p_ptr->lev) && (dun_level > s_ptr->slevel)) p_ptr->spell_exp[p_ptr->magic_num2[0]]+=1;}
+	if (p_ptr->spell_exp[spell] < 900)
+		p_ptr->spell_exp[spell]+=5;
+	else if(p_ptr->spell_exp[spell] < 1200)
+		{if (one_in_(2) && (dun_level > 4) && ((dun_level + 10) > p_ptr->lev)) p_ptr->spell_exp[spell]+=1;}
+	else if(p_ptr->spell_exp[spell] < 1400)
+		{if (one_in_(5) && ((dun_level + 5) > p_ptr->lev) && ((dun_level + 5) > s_ptr->slevel)) p_ptr->spell_exp[spell]+=1;}
+	else if(p_ptr->spell_exp[spell] < 1600)
+		{if (one_in_(5) && ((dun_level + 5) > p_ptr->lev) && (dun_level > s_ptr->slevel)) p_ptr->spell_exp[spell]+=1;}
 
 	gere_music(p_ptr->magic_num1[0]);
 }

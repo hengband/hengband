@@ -3906,13 +3906,40 @@ s16b experience_of_spell(int spell, int use_realm)
 
 
 /*
+ * Modify mana consumption rate using spell exp and p_ptr->dec_mana
+ */
+int mod_need_mana(int need_mana, int spell, int realm)
+{
+	/* Realm magic */
+	if ((realm > REALM_NONE) && (realm <= MAX_REALM))
+	{
+		need_mana = need_mana * (3800 - experience_of_spell(spell, realm)) + 2399;
+
+		if (p_ptr->dec_mana) need_mana *= 3;
+		else need_mana *= 4;
+
+		need_mana /= 9600;
+		if (need_mana < 1) need_mana = 1;
+	}
+
+	/* Non-realm magic */
+	else
+	{
+		if (p_ptr->dec_mana) need_mana = (need_mana + 1) * 3 / 4;
+	}
+
+	return need_mana;
+}
+
+
+/*
  * Returns spell chance of failure for spell -RAK-
  */
 s16b spell_chance(int spell, int use_realm)
 {
 	int             chance, minfail;
 	magic_type      *s_ptr;
-	int             shouhimana;
+	int             need_mana;
 	int penalty = (mp_ptr->spell_stat == A_WIS) ? 10 : 4;
 
 
@@ -3944,18 +3971,12 @@ s16b spell_chance(int spell, int use_realm)
 		chance += (MAX(r_info[m_list[p_ptr->riding].r_idx].level-p_ptr->skill_exp[GINOU_RIDING]/100-10,0));
 
 	/* Extract mana consumption rate */
-	shouhimana = s_ptr->smana*(3800 - experience_of_spell(spell, use_realm)) + 2399;
-
-	if(p_ptr->dec_mana) shouhimana *= 3;
-	else shouhimana *= 4;
-
-	shouhimana /= 9600;
-	if(shouhimana < 1) shouhimana = 1;
+	need_mana = mod_need_mana(s_ptr->smana, spell, use_realm);
 
 	/* Not enough mana to cast */
-	if (shouhimana > p_ptr->csp)
+	if (need_mana > p_ptr->csp)
 	{
-		chance += 5 * (shouhimana - p_ptr->csp);
+		chance += 5 * (need_mana - p_ptr->csp);
 	}
 
 	chance += p_ptr->to_m_chance;
@@ -4404,7 +4425,7 @@ void print_spells(int target_spell, byte *spells, int num, int y, int x, int use
 	char            info[80];
 	char            out_val[160];
 	byte            line_attr;
-	int             shouhimana;
+	int             need_mana;
 	char            ryakuji[5];
 	char            buf[256];
 	bool max = FALSE;
@@ -4462,19 +4483,13 @@ put_str(buf, y, x + 29);
 		}
 
 		if (use_realm == REALM_HISSATSU)
-			shouhimana = s_ptr->smana;
+			need_mana = s_ptr->smana;
 		else
 		{
 			s16b exp = experience_of_spell(spell, use_realm);
 
 			/* Extract mana consumption rate */
-			shouhimana = s_ptr->smana*(3800 - exp) + 2399;
-
-			if(p_ptr->dec_mana) shouhimana *= 3;
-			else shouhimana *= 4;
-
-			shouhimana /= 9600;
-			if(shouhimana < 1) shouhimana = 1;
+			need_mana = mod_need_mana(s_ptr->smana, spell, use_realm);
 
 			if ((increment == 64) || (s_ptr->slevel >= 99)) shougou = 0;
 			else if (exp < 900) shougou = 0;
@@ -4606,14 +4621,14 @@ comment = " Ì¤·Ð¸³";
 		{
 			strcat(out_val, format("%-25s %2d %4d",
 			    spell_names[technic2magic(use_realm)-1][spell], /* realm, spell */
-			    s_ptr->slevel, shouhimana));
+			    s_ptr->slevel, need_mana));
 		}
 		else
 		{
 			strcat(out_val, format("%-25s%c%-4s %2d %4d %3d%%%s",
 			    spell_names[technic2magic(use_realm)-1][spell], /* realm, spell */
 			    (max ? '!' : ' '), ryakuji,
-			    s_ptr->slevel, shouhimana, spell_chance(spell, use_realm), comment));
+			    s_ptr->slevel, need_mana, spell_chance(spell, use_realm), comment));
 		}
 		c_prt(line_attr, out_val, y + i + 1, x);
 	}

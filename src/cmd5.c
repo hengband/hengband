@@ -59,7 +59,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 	int         spell = -1;
 	int         num = 0;
 	int         ask = TRUE;
-	int         shouhimana;
+	int         need_mana;
 	byte        spells[64];
 	bool        flag, redraw, okay;
 	char        choice;
@@ -280,19 +280,14 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 				s_ptr = &mp_ptr->info[use_realm - 1][spell];
 			}
 
+			/* Extract mana consumption rate */
 			if (use_realm == REALM_HISSATSU)
 			{
-				shouhimana = s_ptr->smana;
+				need_mana = s_ptr->smana;
 			}
 			else
 			{
-				/* Extract mana consumption rate */
-				shouhimana = s_ptr->smana*(3800 - experience_of_spell(spell, use_realm)) + 2399;
-				if(p_ptr->dec_mana)
-					shouhimana *= 3;
-				else shouhimana *= 4;
-				shouhimana /= 9600;
-				if(shouhimana < 1) shouhimana = 1;
+				need_mana = mod_need_mana(s_ptr->smana, spell, use_realm);
 			}
 
 			/* Prompt */
@@ -300,11 +295,11 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 			jverb1( prompt, jverb_buf );
 			/* 英日切り替え機能に対応 */
 			(void) strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ",
-				spell_names[technic2magic(use_realm)-1][spell], shouhimana,
+				spell_names[technic2magic(use_realm)-1][spell], need_mana,
 				       spell_chance(spell, use_realm),jverb_buf);
 #else
 			(void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ",
-				prompt, spell_names[technic2magic(use_realm)-1][spell], shouhimana,
+				prompt, spell_names[technic2magic(use_realm)-1][spell], need_mana,
 				spell_chance(spell, use_realm));
 #endif
 
@@ -4709,7 +4704,7 @@ void do_cmd_cast(void)
 	int	chance;
 	int	increment = 0;
 	int	use_realm;
-	int	shouhimana;
+	int	need_mana;
 	bool cast;
 
 	cptr prayer;
@@ -4850,15 +4845,10 @@ s = "呪文書がない！";
 	}
 
 	/* Extract mana consumption rate */
-	shouhimana = s_ptr->smana*(3800 - experience_of_spell(spell, realm)) + 2399;
-	if(p_ptr->dec_mana)
-		shouhimana *= 3;
-	else shouhimana *= 4;
-	shouhimana /= 9600;
-	if(shouhimana < 1) shouhimana = 1;
+	need_mana = mod_need_mana(s_ptr->smana, spell, realm);
 
 	/* Verify "dangerous" spells */
-	if (shouhimana > p_ptr->csp)
+	if (need_mana > p_ptr->csp)
 	{
 		if (flush_failure) flush();
 
@@ -5089,32 +5079,32 @@ msg_print("An infernal sound echoed.");
 		switch (realm)
 		{
 		case REALM_LIFE:
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_TEMPERANCE, 1);
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_COMPASSION, 1);
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_VITALITY, 1);
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_DILIGENCE, 1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_TEMPERANCE, 1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_COMPASSION, 1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_VITALITY, 1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_DILIGENCE, 1);
 			break;
 		case REALM_DEATH:
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_UNLIFE, 1);
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_JUSTICE, -1);
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_FAITH, -1);
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_VITALITY, -1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_UNLIFE, 1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_JUSTICE, -1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_FAITH, -1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_VITALITY, -1);
 			break;
 		case REALM_DAEMON:
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_JUSTICE, -1);
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_FAITH, -1);
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_HONOUR, -1);
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_TEMPERANCE, -1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_JUSTICE, -1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_FAITH, -1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_HONOUR, -1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_TEMPERANCE, -1);
 			break;
 		case REALM_CRUSADE:
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_FAITH, 1);
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_JUSTICE, 1);
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_SACRIFICE, 1);
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_HONOUR, 1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_FAITH, 1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_JUSTICE, 1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_SACRIFICE, 1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_HONOUR, 1);
 			break;
 		case REALM_NATURE:
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_NATURE, 1);
-			if (randint1(100 + p_ptr->lev) < shouhimana) chg_virtue(V_HARMONY, 1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_NATURE, 1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_HARMONY, 1);
 			break;
 		}
 		if (mp_ptr->spell_xtra & MAGIC_GAIN_EXP)
@@ -5147,16 +5137,16 @@ msg_print("An infernal sound echoed.");
 	energy_use = 100;
 
 	/* Sufficient mana */
-	if (shouhimana <= p_ptr->csp)
+	if (need_mana <= p_ptr->csp)
 	{
 		/* Use some mana */
-		p_ptr->csp -= shouhimana;
+		p_ptr->csp -= need_mana;
 	}
 
 	/* Over-exert the player */
 	else
 	{
-		int oops = shouhimana;
+		int oops = need_mana;
 
 		/* No mana left */
 		p_ptr->csp = 0;

@@ -1101,6 +1101,7 @@ extern bool pulish_shield(void);
 extern bool potion_smash_effect(int who, int y, int x, int k_idx);
 extern void display_spell_list(void);
 extern s16b experience_of_spell(int spell, int realm);
+extern int mod_need_mana(int need_mana, int spell, int realm);
 extern s16b spell_chance(int spell,int realm);
 extern bool spell_okay(int spell, bool learned, bool study_pray, int realm);
 extern void print_spells(int target_spell, byte *spells, int num, int y, int x, int realm);
