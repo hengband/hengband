@@ -1141,8 +1141,6 @@ bool autoroller;
 bool autochara;
 
 
-bool use_lighting = FALSE;    /* Use lighting effects of tiles */
-
 bool can_save = FALSE;        /* Game can be saved */
 
 s16b spell_exp[64];           /* mahou keikenchi */

@@ -491,7 +491,6 @@ extern bool left_hander;
 extern bool preserve_mode;
 extern bool autoroller;
 extern bool autochara;
-extern bool use_lighting;
 extern bool can_save;
 extern s16b spell_exp[64];
 extern s16b weapon_exp[5][64];

@@ -1397,8 +1397,6 @@ static bool init_graphics(void)
 			name = "16X16.BMP";
 
 			ANGBAND_GRAF = "new";
-
-			use_lighting = TRUE;
 		}
 		else
 		{
@@ -1883,9 +1881,6 @@ static errr Term_xtra_win_react(void)
 	/* Handle "arg_graphics" */
 	if (use_graphics != arg_graphics)
 	{
-		/* Switch off transparency */
-		use_lighting = FALSE;
-
 		/* Initialize (if needed) */
 		if (arg_graphics && !init_graphics())
 		{

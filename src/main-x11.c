@@ -3094,8 +3094,6 @@ errr init_x11(int argc, char *argv[])
 			/* Use graphics */
 			use_graphics = TRUE;
 
-			use_lighting = TRUE;
-
 			pict_wid = pict_hgt = 16;
 
 			ANGBAND_GRAF = "new";
@@ -3110,8 +3108,6 @@ errr init_x11(int argc, char *argv[])
 			{
 				/* Use graphics */
 				use_graphics = TRUE;
-
-				use_lighting = TRUE;
 
 				pict_wid = pict_hgt = 8;
 

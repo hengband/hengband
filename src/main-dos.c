@@ -1813,10 +1813,6 @@ static bool init_graphics(void)
 			 */
 			ANGBAND_GRAF = get_config_string(section, "graf-mode", "old");
 
-			/* Use transparent blits */
-			if (streq(ANGBAND_GRAF, "new"))
-				use_lighting = TRUE;
-
 			/* Select the bitmap pallete */
 			set_palette_range(tiles_pallete, 0, COLOR_OFFSET - 1, 0);
 
