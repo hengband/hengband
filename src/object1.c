@@ -4600,7 +4600,8 @@ int show_inven(int target_item)
 
 			if (get_tag(&index, c))
 			{
-				inven_spellbook_label[i] = ' ';
+				if (inven_spellbook_label[i] == c)
+                                        inven_spellbook_label[i] = ' ';
 				inven_spellbook_label[index] = c;
 			}
 		}
