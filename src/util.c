@@ -1700,8 +1700,20 @@ static char inkey_aux(void)
 	/* Hack : キー入力待ちで止まっているので、流れた行の記憶は不要。 */
 	num_more = 0;
 
-	/* Wait for a keypress */
-	(void)(Term_inkey(&ch, TRUE, TRUE));
+	if (parse_macro)
+	{
+		/* Scan next keypress from macro action */
+		if (Term_inkey(&ch, FALSE, TRUE))
+		{
+			/* Over-flowed? Cancel macro action */
+			parse_macro = FALSE;
+		}
+	}
+	else
+	{
+		/* Wait for a keypress */
+		(void) (Term_inkey(&ch, TRUE, TRUE));
+	}
 
 
 	/* End "macro action" */
