@@ -1612,47 +1612,6 @@ static errr init_other(void)
 	C_MAKE(inventory, INVEN_TOTAL, object_type);
 
 
-	/*** Pre-allocate the basic "auto-inscriptions" ***/
-
-	/* The "basic" feelings */
-#ifdef JP
-	(void)quark_add("呪われている");
-	(void)quark_add("壊れている");
-	(void)quark_add("並");
-	(void)quark_add("上質");
-#else
-	(void)quark_add("cursed");
-	(void)quark_add("broken");
-	(void)quark_add("average");
-	(void)quark_add("good");
-#endif
-
-
-	/* The "extra" feelings */
-#ifdef JP
-	(void)quark_add("高級品");
-	(void)quark_add("無価値");
-	(void)quark_add("特別製");
-	(void)quark_add("恐ろしい");
-#else
-	(void)quark_add("excellent");
-	(void)quark_add("worthless");
-	(void)quark_add("special");
-	(void)quark_add("terrible");
-#endif
-
-
-	/* Some extra strings */
-#ifdef JP
-	(void)quark_add("呪いなし");
-	(void)quark_add("売出中");
-#else
-	(void)quark_add("uncursed");
-	(void)quark_add("on sale");
-#endif
-
-
-
 	/*** Prepare the options ***/
 
 	/* Scan the options */
