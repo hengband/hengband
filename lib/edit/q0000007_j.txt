@@ -1,0 +1,35 @@
+# CVS: Last edit by $Author$ on $Date$
+# q0000007.txt
+
+# Name
+Q:$7:N:The Tower 3
+Q:7:N:Εγ£³
+
+# Definition
+Q:$7:Q:6:0:0:0:30:0:0:0:3
+Q:7:Q:6:0:0:0:30:0:0:0:3
+
+# Floor with monster 11 levels out of deep as long as the quest is uncompleted
+F:@:1:8
+?:[EQU $QUEST7 1]
+F:@:1:8:*11
+?:1
+
+# Quest stairs down to quest 6
+F:>:10:8:0:0:0:0:0:6
+
+# Dungeon
+D:XXXXXXXXX
+D:X......@X
+D:X.@.....X
+D:X.......X
+D:X..@....X
+D:X.......X
+D:X.......X
+D:X@.....>X
+D:XXXXXXXXX
+
+# Starting position when coming from level 2 of the tower (quest 6)
+?:[EQU $LEAVING_QUEST 6]
+P:7:7
+

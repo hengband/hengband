@@ -1,0 +1,42 @@
+Zangband Command Descriptions.
+
+Please choose one of the following online help files:
+
+    (0) Command Descriptions            (commdesc.txt)
+    (1) Inventory Commands              (commdesc.txt#A)
+    (2) Movement Commands               (commdesc.txt#B)
+    (3) Resting Commands                (commdesc.txt#C)
+    (4) Searching Commands              (commdesc.txt#D)
+    (5) Alter Commands                  (commdesc.txt#E)
+    (6) Spell and Prayer Commands       (commdesc.txt#F)
+    (7) Object Manipulation Commands    (commdesc.txt#G)
+    (8) Magical Item Commands           (commdesc.txt#H)
+    (9) Throwing and Missile Weapons    (commdesc.txt#I)
+    (a) Looking Commands                (commdesc.txt#J)
+    (b) Message Commands                (commdesc.txt#K)
+    (c) Game Status Commands            (commdesc.txt#L)
+    (d) Saving and Exiting Commands     (commdesc.txt#M)
+    (e) User Preference Commands        (commdesc.txt#N)
+    (f) Help Commands                   (commdesc.txt#O)
+    (g) Extra Commands                  (commdesc.txt#P)
+
+    (?) Help System Commands            (helpinfo.txt)
+
+
+***** [0] commdesc.txt
+***** [1] commdesc.txt#A
+***** [2] commdesc.txt#B
+***** [3] commdesc.txt#C
+***** [4] commdesc.txt#D
+***** [5] commdesc.txt#E
+***** [6] commdesc.txt#F
+***** [7] commdesc.txt#G
+***** [8] commdesc.txt#H
+***** [9] commdesc.txt#I
+***** [a] commdesc.txt#J
+***** [b] commdesc.txt#K
+***** [c] commdesc.txt#L
+***** [d] commdesc.txt#M
+***** [e] commdesc.txt#N
+***** [f] commdesc.txt#O
+***** [g] commdesc.txt#P

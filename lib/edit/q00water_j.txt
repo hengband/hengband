@@ -1,0 +1,106 @@
+# CVS: Last edit by $Author$ on $Date$
+# q00water.txt
+
+# Created by Oscar Nelson
+
+# Number:Name
+Q:$18:N:Water Cave
+Q:18:N:湖の洞窟
+
+# type:num_mon:cur_num:max_num:level:r_index:k_idx
+Q:$18:Q:4:0:0:0:50:0:0:0:2
+Q:18:Q:4:0:0:0:50:0:0:0:2
+
+# Description for quest
+?:[LEQ $QUEST18 2]
+Q:$18:T:A tunnel opening has recently been exposed on
+Q:$18:T:the shore of our lake. Please investigate and
+Q:$18:T:discover what is inside. Be careful! The
+Q:$18:T:tunnel entrance does not appear to be very
+Q:$18:T:stable.
+Q:18:T:最近湖の近くに洞窟の入口が現れました。どうか中を調べて何があるか見て
+Q:18:T:きて下さい。ただし、洞窟の入口はあまり安定してないようなので
+Q:18:T:気をつけて下さい！
+?:1
+
+# Description for quest reward
+?:[EQU $QUEST18 3]
+Q:$18:T:We have closed the tunnel to prevent anybody from
+Q:$18:T:getting trapped in the cavern. Please accept the
+Q:$18:T:gift that awaits you outside as an reward for your
+Q:$18:T:help.
+Q:18:T:人々が洞窟に間違って入らないようにトンネルを閉鎖しておきました。
+Q:18:T:どうぞ外にある我々からの贈物を受けとって下さい。
+?:1
+
+# Shallow water with Portuguese man-o-war
+F:a:84:8:160
+
+# Shallow water with Ixitxachitl
+F:b:84:8:220
+
+# Shallow water with giant octopus
+F:c:84:8:266
+
+# Shallow water with hammerhead
+F:d:84:8:292
+
+# Shallow water with electric eel
+F:e:84:8:346
+
+# Deep water with Great white shark
+F:f:83:8:386
+
+# Deep water with Vampiric ixitxachitl
+F:g:83:8:406
+
+# Deep water with Giant squid
+F:h:83:8:482
+
+# Deep water with Lesser kraken
+F:i:83:8:740
+
+# Deep water with Greater kraken
+F:j:83:8:775
+
+# Steel Helm
+F:A:84:8:0:97
+
+# Metal Boots
+F:B:84:8:0:93
+
+# Cesti
+F:C:84:8:0:127
+
+# Blade of Chaos
+F:E:84:8:0:36
+
+# Quest exit
+F:<:9:8
+
+# Dungeon
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+D:XXXXXXXXVVVVXXXXAWWWXXXXXXXX
+D:XXXXXXVdVVbVXXXXWWWWWWXXXXXX
+D:XXXXXXVVXXVVXXXXWWXXWWXXXXXX
+D:XXXXXVVXXXVVXXXXWWXXXWWXXXXX
+D:XXXVVaVVVVVVVWWWWgWWfWWWWXXX
+D:XXVVVVVVVeVVVWWWhWWWWWWWWWXX
+D:XXVVXXVVXXVVXXXXWWXXWiXXWWXX
+D:XVVVVVVVVVVVXXXXWWWWWWWWWWWX
+D:XVVaVVVVVVVVXXXXWWWWWWWWWWEX
+D:XXXXXXVVXXXXXXXXXXXXW<XXXXXX
+D:XVVVVVVVVVVcXXXXWgWWWWWWWWCX
+D:XVVcVVVVVeVVXXXXWWWWWWWWWWWX
+D:XXVVXXVVXXVVXXXXWWXXWjXXWWXX
+D:XXVVVVVdVVVVVWWWhWfWWWWfWWXX
+D:XXXVdVVVVVVVVWWWWWWWWWWWWXXX
+D:XXXXXVVXXXbVXXXXWWXXXWWXXXXX
+D:XXXXXXVVXXVbXXXXWWXXWWXXXXXX
+D:XXXXXXXVVeVVXXXXWWWWWXXXXXXX
+D:XXXXXXXXVVVVXXXXBWfWXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+# Starting position
+P:10:6
+

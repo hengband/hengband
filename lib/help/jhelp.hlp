@@ -1,0 +1,32 @@
+        [ 変愚蛮怒・オンライン・ヘルプ・システムへようこそ ]
+  参照したいオンライン・ヘルプの番号を押して下さい:
+  (注意！この日本語ヘルプは JAngband のものなので、正確でないことがあります。
+   何か分からないことがあれば、変愚蛮怒の掲示板で聞いて下さい。)
+
+    (1) 全体的な情報          (jgeneral.txt)
+    (2) キャラクター作成      (jbirth  .txt)
+    (3) ダンジョンの探険      (jdungeon.txt)
+    (4) モンスターへの攻撃    (jattack .txt)
+    (5) ゲームをプレイする    (jplaying.txt)
+    (6) コマンドの詳細        (jcommand.hlp)
+    (7) オプションの一覧      (joption .hlp)
+    (8) バージョン履歴        (jversion.txt)
+  <日本語版追加>
+    (a) 日本語版の情報        (jang_gen.txt)
+    (b) アイテムの解説        (j_name  .txt)
+    (c) 日本語訳について      (japanese.txt)
+    (e) 英語版ヘルプ          (help.hlp)
+
+    (?) ヘルプシステムの使用法      (jhelpinfo.txt)
+***** [1] jgeneral.txt
+***** [2] jbirth.txt
+***** [3] jdungeon.txt
+***** [4] jattack.txt
+***** [5] jplaying.txt
+***** [6] jcommand.hlp
+***** [7] joption.hlp
+***** [8] jversion.txt
+***** [a] jang_gen.txt
+***** [b] j_name.txt
+***** [c] japanese.txt
+***** [e] help.hlp

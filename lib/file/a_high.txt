@@ -1,0 +1,167 @@
+N: 1:BIAS_ELEC
+6
+of Galactic Barrier
+of Resist *Lightning*
+of Thor
+of Zeus
+of Super Resistance
+of Immunity
+
+N: 2:BIAS_POIS
+8
+'Poison Barrier'
+'Great unclean one'
+'Tir-karakse'
+'Healing Bottle'
+'Soul Purification'
+of the Archpriest
+of Hyper Resistance
+of Asklepios
+
+N: 3:BIAS_FIRE
+7
+'Firewall'
+'Phoenix'
+of hellfire
+of Corona
+of Allah
+of Yama
+
+N: 4:BIAS_COLD
+6
+'Helka-Turma'
+'White Diamond'
+'Great Snowfield'
+of Ymir
+of Snow Field
+of Soul Freeze
+
+N: 5:BIAS_ACID
+8
+of Rebma
+'O-Parts'
+of Ultimate Defence
+of the Everlasting
+of Ultimax
+of Immunity
+of Eternity
+of Boldor
+
+N:14:BIAS_NECROMANTIC
+6
+'Bloodmail of Lucifer'
+of the Immortals
+of Hades
+of Sauron
+of Mephistopheles
+of the Demon Lord
+
+N:12:BIAS_CHAOS
+6
+'Unbalancer'
+'Prince of Chaos'
+'Void'
+of Collapsium
+of Nurgle
+of Slaanesh
+
+N:15:BIAS_LAW
+N:13:BIAS_PRIESTLY
+N: 8:BIAS_WIS
+7
+'Ever-Faithful'
+of the Gods
+of Divine Protection
+of Celestial Protection
+of the First Day
+of the Isles of the Blessed
+of the Holy Grail
+
+N: 9:BIAS_DEX
+N:16:BIAS_ROGUE
+7
+(*Stealth*)
+'Beelzebub's wing'
+of the Sprite
+of Lupin
+of Eric
+of Achilles
+of Super Speed
+
+N:17:BIAS_MAGE
+N: 7:BIAS_INT
+5
+of Merlin's Pattern
+'Mana Prism'
+'Tower of Power'
+of the Great Magi
+of *intelligence*
+
+N:18:BIAS_WARRIOR
+N: 6:BIAS_STR
+9
+'Battle Force'
+'Aegis'
+of the Force
+of Invincibility
+of Lions
+of Invulnerability
+of Samurai
+of Titans
+of *Power*
+
+N:19:BIAS_RANGER
+7
+'Faroth'
+'Er-Draug'
+'Lifegiver'
+of Gaia
+of Soil
+of Mind's Eye
+of the Red Beret
+
+N:10:BIAS_CON
+5
+'Heart of Ahriman'
+'Living Armour'
+'Life Matrix'
+of Immortality
+of Corwin's Pattern
+
+N:11:BIAS_CHR
+5
+'Day of the Dove'
+of Eternity
+of Heart's Desire
+of Cleopatra
+of Aphrodite
+
+N:*:Default
+26
+'Monolith'
+'Destiny Star'
+of Destiny
+'Lawmaster'
+of Diamond
+'Living Armour'
+'Living Wall'
+of Malachite
+'Citadel'
+'Genesis'
+of the Dungeon Master
+of the Dungeon Keeper
+'Intact'
+of Great Barrier
+'Battlemech'
+'Meganoid'
+'Imperium'
+of the Empire
+'Elite'
+of Infinity
+of the Makers
+of Thrain
+of Deirdre
+of Random
+of Celeborn
+'Eternal Bastion'
+

@@ -1,0 +1,153 @@
+N: 1:BIAS_ELEC
+6
+'Lightning Conductor'
+'Electorostatic Barrier'
+'Shocking!'
+of Insulation
+of 1.5 volts
+of the Thunderer
+
+N: 2:BIAS_POIS
+7
+'Drug Puncher'
+'Vaccination'
+'Oblate'
+of Resist *Poison*
+of Kobold
+of Tarantula
+of Talos
+
+N: 3:BIAS_FIRE
+7
+'Sunglasses'
+'Fan'
+'Fire Extinguisher'
+'Burning Student'
+of the Hawaiian Islands
+of Halloween
+of Insulator
+
+N: 4:BIAS_COLD
+8
+'Cool Mint'
+'Snow'
+'Snowlets'
+'Siberian Cold Air Mass'
+'Refrigerator'
+'Antarctic II'
+'Cool Boy'
+that Mam made
+
+N: 5:BIAS_ACID
+5
+(Rustproof)
+'Melting'
+'Acidic Rain'
+may resist acid
+of Teflon
+
+N:14:BIAS_NECROMANTIC
+5
+'Sacrifice to void'
+of Zombi
+of Deformity
+of Sabbath
+of Aleister Crowley
+
+N:12:BIAS_CHAOS
+5
+'Mosaic'
+'the Fourth Dimension'
+'Klein'
+'Tranqilizer'
+'Shuffle'
+
+N:13:BIAS_PRIESTLY
+N: 8:BIAS_WIS
+7
+'Preestablished Harmony'
+'Holiday'
+'Confession'
+'Soul Helper'
+with Amulet
+of the Buddhist Scriptures
+of Angel
+
+N:16:BIAS_ROGUE
+N: 9:BIAS_DEX
+8
+'Speed'
+of Escapee
+'Accelerator'
+of Hide-and-Seek
+of the Joker
+of Illusion
+of LSD
+of the Pickpocket
+
+N:17:BIAS_MAGE
+N: 7:BIAS_INT
+4
+'Fractal'
+'Deja-Vu'
+of Martin
+of Talisman
+
+N:18:BIAS_WARRIOR
+N: 6:BIAS_STR
+6
+'Tournament'
+'Turbo'
+of Resist Smasher
+of the Minotaur
+of the Sumo Warrior
+of Daddy
+
+N:10:BIAS_CON
+6
+'Endurance'
+'Glowth Period'
+'Trollism'
+'Big Tree'
+'Healthy One'
+of Pro Wrestler
+
+N:19:BIAS_RANGER
+5
+'Weeds'
+'Radar'
+'Planaria'
+of Stone
+of Squirrel
+
+N:11:BIAS_CHR
+4
+'Cutie Girls'
+of Companion
+of Super Model
+of Passion
+
+N:*:Default
+22
+of the Foo
+of the Bar
+'Sambo'
+'Blink'
+'Pizza'
+'Virgin Hair'
+of Normally
+of Glass
+of Clay
+of Sand
+of Modesty
+'Curator'
+'Babel'
+'Grand Prix'
+of Transylvania
+of Gurnemanz
+of Coral
+of Barahir
+'Generater'
+'Dal-i-Thalion'
+'Bladereturner'
+'Iron Virgin'

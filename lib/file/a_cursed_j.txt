@@ -1,0 +1,125 @@
+N:*:Default
+55
+『マグナムドライ』
+『アンパンチ』
+『カゼコンコン』
+『つくばの美味しい水』
+『アラベスク』
+『不確定性理論』
+『相対性理論』
+カンパリ入道の
+『歳末助け合い』
+『ひょうきん懺悔室』
+混沌の堂々たゐ
+せっかくだから
+『イッテヨシ』
+『ウツダシノウ』
+『ドキュン』
+『貞操帯』
+『隔靴掻痒』
+『諸行無常』
+『七転八倒』
+『十死零生』
+『色即是空』
+『百鬼夜行』
+『魑魅魍魎』
+不幸の
+恐怖の
+苦痛の
+激痛の
+『蛭』
+マクベスの
+マイクロスロスの
+貧乏神の
+『カムロスト』
+ガラスの
+石化の
+トリスタンの
+『フリーフォール』
+幻滅の
+衝撃の
+降伏の
+破滅の
+災難の
+窒息の
+混乱の
+呪いの
+偽りの
+臆病者の
+憎しみの
+悲しみの
+弱さの
+屈辱の
+愚か者の
+自殺の
+マゾヒストの
+カミカゼの
+服毒の
+
+
+
+#of Misery
+#of Horror
+#of Agony
+#of Severe Pain
+#'Leech'
+#of Macbeth
+#of Microsloth
+#of Troubleseeking
+#of the Kender
+#the Kenderの
+#'Camlost'
+#'Wooden Box'
+#『Wooden Box』
+#of Glass
+#of Freezing
+#Freezingの
+#of Petrifying
+#of Sinbad
+#Sinbadの
+#of Tristan
+#'Freefall'
+#of Disappointment
+#of Shocking
+#of Leper
+#Leperの
+#of Surrendering
+#of Doom
+#of Woe
+#of Suffocation
+#of Menstruation
+#生理の フェミニストにおこられるぞ
+#of Confusion
+#of the Fool
+#of Suicide
+#of the Masochist
+#of Kamikaze
+#of Wasted Years
+#Wasted Yearsの
+#of Cursing
+#of Damnation
+#Damnationの
+#of Crushing
+#Crushingの
+#of Mortality
+#Mortalityの
+#of Babality
+#Babalityの
+#of Falsehood
+#of Cowardice
+#of Hatred
+#of Sadness
+#of Weakness
+#of Humiliation
+#of Teleporno
+#Telepornoの
+#of Gorlim
+#Gorlimの
+#'Man-Trap'
+#『Man-Trap』
+#'Moonmaster'
+#『Moonmaster』
+#of Insecurity
+#Insecurityの
+#of Mooning
+#Mooningの

@@ -1,0 +1,22 @@
+
+                  ***************************************
+                  **          変愚蛮怒  1.0.8          **
+                  ***************************************
+
+          Based on Moria:    Copyright (c) 1985 Robert Alan Koeneke
+              and Umoria:    Copyright (c) 1989 James E. Wilson
+
+       Angband 2.7 - 2.9:    Ben Harrison (benh@phial.com)
+            日本語版 1.2:    しとしん, sayu, FIRST, TeO
+
+       Old ZAngband code:    (Mr) Topi Ylinen < f1toyl@uta.fi >
+       New ZAngband code:    Robert Ruehlmann < rr9@angband.org >
+    ZAngband 2.3.0 - ???:    The ZAngband DevTeam
+       ZAngband 日本語版:    板倉充洋 < m-itakura@geocities.co.jp >
+
+
+          変愚蛮怒: Mr.hoge (echizen＠s5.xrea.com) ＆ 多くの方々
+                     http://echizen.s5.xrea.com/heng/
+
+       変愚蛮怒 は UNIX/X11, Windows, Macintosh で動作しています。
+          バグ情報などは上記 URL にある掲示板へお願いします。

@@ -1,0 +1,149 @@
+N: 1:BIAS_ELEC
+8
+'lightning'
+'Stungun'
+'Thunder Fang'
+'Lightning Heart'
+'Thunderstriker'
+'Purple Lightning'
+of Electricity
+
+N: 2:BIAS_POIS
+7
+'Snake Fang'
+'Stinger'
+'needle Bland'
+'Assassin'
+'Scorpion'
+of Venoms
+of Poison
+
+N: 3:BIAS_FIRE
+7
+'Flame Saber'
+'Fire Whip'
+'Fire Thorn'
+'Flame's Toungue'
+of Solar Wind
+of Flame
+of Zhuque
+
+N: 4:BIAS_COLD
+4
+'Icicle'
+'Frost Trees'
+of Aurora
+of Alaska
+
+N: 5:BIAS_ACID
+4
+'Rust Monster'
+'Sulfuric Acid'
+'Melted-in Balm'
+'Acid Blade'
+
+N:12:BIAS_CHAOS
+5
+'Lunatic'
+'Chaosbane'
+from X
+of Changes
+of Dara
+
+N:14:BIAS_NECROMANTIC
+5
+of Helthing
+of Pestirence
+of Dark Strom
+of Genocide
+
+N:15:BIAS_LAW
+N:13:BIAS_PRIESTLY
+N: 8:BIAS_WIS
+10
+'Sun Sword'
+'Deamonbane'
+'Gospel'
+'Advent'
+of Justice
+of the Priests
+of Awe
+of Mind
+of Soul
+
+N:16:BIAS_ROGUE
+7
+'Thiefbane'
+'Quylthulg Smasher'
+'Cat's Clow'
+'Shinobi'
+'King of Speed'
+'Quicker'
+'Spriggan'
+
+N: 9:BIAS_DEX
+5
+'Cleaver'
+'Buttle Mastery'
+of the Master
+of Charismatic Cook
+{Special}
+
+N:17:BIAS_MAGE
+N: 7:BIAS_INT
+5
+'Magicbane'
+'Hucker'
+'Manabringer'
+of Concentration
+for Ritual
+
+N:18:BIAS_WARRIOR
+N: 6:BIAS_STR
+N:10:BIAS_CON
+8
+'Masanune'
+'Satan's Fist'
+'Weapon Alpha'
+'Skull Smasher'
+'Executioner'
+'Bonebreaker'
+'Skullbuster'
+of male of males
+
+N:19:BIAS_RANGER
+9
+'Lion Fang'
+'Shark Cutter'
+'Eagle Sword'
+'Bison Axe'
+'Tiger Baton'
+of the Druid
+of the Valkyrie
+of Centaurs
+of the Hunter
+
+N:*:Default
+22
+of Slay Mold
+'Werebane'
+'Dragon Clow'
+of Joshua
+'Kraken'
+'Blue Steele'
+'Fury'
+'Howler'
+'Roarer'
+of Damocles
+of the Shogun
+'Red October'
+'Witchfire'
+'Lord of Flies'
+'Pandemonium'
+'Bloodrain'
+of the Borg
+of Hatred
+'Delta'
+of Osric
+of Finndo
+'Cubragol'

@@ -1,0 +1,95 @@
+# CVS: Last edit by $Author$ on $Date$
+# File: t_pref.txt
+
+# Defines the preferences for the town features
+
+# Dungeon entrance
+F:>:193:3:0:0:0:0:0:2
+
+# Vanilla Dungeon entrance
+F:<:193:3:0:0:0:0:0:1
+
+# Mountain chain
+F:^:97:3
+
+# Floor
+F:.:1:3
+
+# Trees
+F:T:96:3
+
+# Deep water
+F:W:83:3
+
+# Shallow water
+F:V:84:3
+
+# Deep Lava
+F:L:85:3
+
+# Shallow Lava
+F:K:86:3
+
+# Chasm
+F:C:87:3
+
+# Dirt
+F:,:88:3
+
+# Rubble
+F:;:49:3
+
+# Grass
+F:-:89:3
+
+# Permanent wall
+F:#:63:3
+
+# General Store
+F:1:74:3
+
+# Armoury
+F:2:75:3
+
+# Weapons Smith
+F:3:76:3
+
+# Temple
+F:4:77:3
+
+# Alchemy Shop
+F:5:78:3
+
+# Magic Shop
+F:6:79:3
+
+# Black Market
+F:7:80:3
+
+# Home
+F:8:81:3
+
+# Bookstore
+F:9:82:3
+
+# Museum
+F:0:95:3
+
+# Buildings
+F:a:128:3
+F:b:129:3
+F:c:130:3
+F:d:131:3
+F:e:132:3
+F:f:133:3
+F:g:134:3
+F:h:135:3
+F:i:136:3
+F:j:137:3
+F:k:138:3
+F:l:139:3
+F:m:140:3
+F:n:141:3
+F:o:142:3
+F:p:143:3
+

@@ -1,0 +1,70 @@
+# CVS: Last edit by $Author$ on $Date$
+# q0000005.txt
+
+# Name
+Q:$5:N:The Tower
+Q:5:N:塔
+
+# Definition
+Q:$5:Q:4:0:0:0:30:0:0:0:2
+Q:5:Q:4:0:0:0:30:0:0:0:2
+
+# Description for quest
+?:[LEQ $QUEST5 2]
+Q:$5:T:The tower outside the town was once used for defence of the city.
+Q:$5:T:Now many monsters seem to be dwelling there.
+Q:$5:T:Please clear it and return to us!
+Q:5:T:街の外にある塔はかつて街の守備に使われていました。
+Q:5:T:今ではたくさんのモンスターが住み付いているようです。
+Q:5:T:どうかモンスターどもを一掃して塔を取り戻してください！
+?:1
+
+# Description for quest reward
+?:[EQU $QUEST5 3]
+Q:$5:T:Thank you for cleaning the tower of all these strange creatures.
+Q:$5:T:I've talked with Astinus, the local librarian. He will offer you
+Q:$5:T:a special discount price when identifying magical objects.
+Q:5:T:塔の怪物を一掃して下さって有難うございます。この街の司書のアスティヌス、
+Q:5:T:武器匠の水庵、モンスター仙人のロリエンに話を付けておいたので、
+Q:5:T:今後これらの店では格安でサービスを受けられるでしょう。
+?:1
+
+
+# Quest up to quest 6
+F:<:11:8:0:0:0:0:0:6
+
+# Quest down
+F:>:10:8
+
+# Monsters to keep the player busy ;-)
+F:1:1:8:*
+
+# If quests 6 and 7 are finished then you can complete quest 5
+?:[AND [EQU $QUEST6 4] [EQU $QUEST7 4] ]
+# Quest exit
+F:>:9:8
+# No monsters when you leave the tower
+F:1:1:8
+?:1
+
+
+# Dungeon
+D:XXXXXXXXXXX
+D:X>.1.....1X
+D:XXXXXXXXX.X
+D:X1.....1X.X
+D:X.XXXXX.X.X
+D:X.X<XXX.X.X
+D:X.X.....X.X
+D:X.XXXXXXX.X
+D:X1.......1X
+D:XXXXXXXXXXX
+
+# Starting position when coming from town
+?:[EQU $LEAVING_QUEST 0]
+P:1:1
+
+# Starting position when coming from level 2 of the tower (quest 6)
+?:[EQU $LEAVING_QUEST 6]
+P:5:3
+

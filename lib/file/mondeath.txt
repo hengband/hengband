@@ -1,0 +1,74 @@
+N:53:Grip, Farmer Maggot's dog
+N:54:Wolf, Farmer Maggot's dog
+N:55:Fang, Farmer Maggot's dog
+0
+
+N:63:Smeagol
+1
+says, 'We hates, hates, hatesss!'
+
+N:393:It
+1
+says, 'It's appalling.'
+
+N:573:Lord Borel
+1
+says, 'Oh, basely done! I had hoped for better of thee!'
+
+N:670:Jack of Shadows
+1
+says, 'I'll get even! Next time I see you, Death is yours!'
+
+N:732:Bull Gates
+1
+says, 'Empire Micro$oft is eternal!'
+
+N:764:Uriel, Angel of Fire
+N:765:Azriel, Angel of Death
+N:769:Raphael, the Messenger
+1
+says, 'My God, Please visit a punishment upon this unrighteous sinner!'
+
+N:780:Vlad Dracula, Prince of Darkness
+1
+says, 'Faugh, I'll be back...so long as human psyche has a blackness. Ho-ho.'
+
+N:873:Combat-Echizen, SEKKAKUDAKARA
+1
+says shiftlessly, 'Oh. No.'
+
+N:878:Dio Brando
+1
+shouts, 'This CAN'T be happening! I am Dying....!!!!!'
+
+N:880:Wong, Master of Time
+1
+shouts, 'This CAN'T be happening!'
+
+N:921:Internet Exploder
+1
+was deleted.
+
+N:931:Caldarm the third
+1
+says, 'I desire peace ... for all people... '
+
+N:936:Kenshirou of hokuto
+1
+shouts, 'JuliaAAAAAAA!!!'
+
+N:1004:Pip, the Braver from Another World
+1
+was killed by a cruel venturer. Go to 14.
+
+N:1018:Raou
+1
+points at himself and shouts, 'I finished my life with no regrets!'
+
+N:1063:lousy, the King of louses
+1
+says, 'Ah, Hengband is too difficult!'
+
+N:*:Default
+1
+shouts, 'AAAARRRGGGHHH!!!'

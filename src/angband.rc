@@ -1,0 +1,135 @@
+/* File: angband.rc */
+
+ANGBAND MENU
+{
+ POPUP "ﾌｧｲﾙ(&F)"
+ {
+  MENUITEM "新規(&N)", 100
+  MENUITEM "開く(&O)...", 101
+  MENUITEM SEPARATOR
+  MENUITEM "保存(&S)", 110
+  MENUITEM SEPARATOR
+  MENUITEM "スコア(&C)", 120
+  MENUITEM SEPARATOR  
+  MENUITEM "終了(&X)", 130
+ }
+
+ POPUP "ｳｨﾝﾄﾞｳ(&W)"
+ {
+  POPUP "表示(&V)"
+  {
+   MENUITEM "ﾒｲﾝｳｨﾝﾄﾞｳ",   200
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 1", 201
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 2", 202
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 3", 203
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 4", 204
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 5", 205
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 6", 206
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 7", 207
+  }
+
+  POPUP "ﾌｫﾝﾄ(&F)"
+  {
+   MENUITEM "ﾒｲﾝｳｨﾝﾄﾞｳ",   210
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 1", 211
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 2", 212
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 3", 213
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 4", 214
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 5", 215
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 6", 216
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 7", 217
+  }
+
+  MENUITEM SEPARATOR
+
+/*  POPUP "Bizarre Display"
+  {
+   MENUITEM "ﾒｲﾝｳｨﾝﾄﾞｳ",   230
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 1", 231
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 2", 232
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 3", 233
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 4", 234
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 5", 235
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 6", 236
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 7", 237
+  } */
+
+  POPUP "ﾀｲﾙの幅を広げる"
+  {
+   MENUITEM "ﾒｲﾝｳｨﾝﾄﾞｳ",   240
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 1", 241
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 2", 242
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 3", 243
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 4", 244
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 5", 245
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 6", 246
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 7", 247
+  }
+
+  POPUP "ﾀｲﾙの幅を縮める"
+  {
+   MENUITEM "ﾒｲﾝｳｨﾝﾄﾞｳ",   250
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 1", 251
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 2", 252
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 3", 253
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 4", 254
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 5", 255
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 6", 256
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 7", 257
+  }
+
+  POPUP "ﾀｲﾙの高さを広げる"
+  {
+   MENUITEM "ﾒｲﾝｳｨﾝﾄﾞｳ",   260
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 1", 261
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 2", 262
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 3", 263
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 4", 264
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 5", 265
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 6", 266
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 7", 267
+  }
+
+  POPUP "ﾀｲﾙの高さを縮める"
+  {
+   MENUITEM "ﾒｲﾝｳｨﾝﾄﾞｳ",   270
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 1", 271
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 2", 272
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 3", 273
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 4", 274
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 5", 275
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 6", 276
+   MENUITEM "ｻﾌﾞｳｨﾝﾄﾞｳ 7", 277
+  }
+ }
+
+ POPUP "ｵﾌﾟｼｮﾝ(&O)"
+ {
+  POPUP "ｸﾞﾗﾌｨｸｽ(&G)"
+  {
+   MENUITEM "&なし", 400
+   MENUITEM "&旧ﾀｲﾙ", 401
+   MENUITEM "&Adam Boltさんﾀｲﾙ", 402
+   }
+
+  MENUITEM "効果音(&S)", 410
+  MENUITEM "壁紙を使う(&B)", 440
+  MENUITEM "壁紙を選択(&O)...", 441
+  MENUITEM "画面をHTMLで保存(&H)...", 450
+/*  MENUITEM "地図(&M)", 430 */
+/*  MENUITEM SEPARATOR
+  MENUITEM "未使用", 410
+  MENUITEM "未使用", 411*/
+ }
+/*
+ POPUP "ﾍﾙﾌﾟ(&H)"
+ {
+  MENUITEM "一般(&G)", 901
+  MENUITEM "ｽﾎﾟｲﾗｰ(&S)", 902
+ }
+*/
+}
+
+ANGBAND ICON "angband.ico"
+
+ANGBAND BITMAP "wall.bmp"

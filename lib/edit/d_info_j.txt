@@ -1,0 +1,284 @@
+# File: d_info.txt
+
+# This file is used to initialize the "lib/raw/d_info.raw" file, which is
+# used to initialize the "dungeon type" information for the Angband game.
+
+# Do not modify this file unless you know exactly what you are doing,
+# unless you wish to risk possible system crashes and broken savefiles.
+
+# After modifying this file, delete the "lib/raw/d_info.raw" file.
+
+# The dungeon type indexes are defined in "defines.h", and must not be
+# changed.
+
+# N:<index>:<name>
+# D:<long name>
+# W:<min depth>:<min depth>:<min player level>:<flags mode>:<min alloc>:<max alloc chance>
+# L:<floor1>:<%1>:<floor2>:<%2>:<floor3>:<%3>
+# A:<wall1>:<%1>:<wall2>:<%2>:<wall3>:<%3>:<outer wall>:<inner wall>:<stream1>:<stream2>
+# F:<flags>
+# M:<monster flags>
+# S:<monster spells>
+
+# Note on the MONSTER_DIV_ dungeon flag
+# It defines the percentage of monsters affected by the restrictions
+# so MONSTER_PERCENT_70 will create 70% of restricted monsters and 30%
+# of absulutly random monsters.
+# by default MONSTER_PERCENT_ is 0%
+
+# Note for <flags mode> :
+# 0 = No restriction
+# 1 = AND
+# 2 = NAND
+# 3 = OR
+# 4 = NOR
+
+# Version stamp (required)
+
+V:2.8.1
+
+### Wilderness(purely cosmetic, never used) ###
+
+N:0:¹ÓÌî
+E:Wilderness
+D:¹ÓÌî
+D:$Wilderness
+P:0:0
+W:0:0:0:0:14:160:75:20:0x0000:0x0000
+L:1:100:1:0:1:0:50
+A:56:100:56:0:56:0:57:58:50:51
+F:MONSTER_DIV_64
+
+
+### The principal dungeons, they were created by spliting the vanilla dungeon ###
+
+N:1:Å´¹ö
+E:Angband
+D:$The entrance to the Dungeon of Angband
+D:Å´¹ö¤Ø¤ÎÆþ¤ê¸ý
+P:40:57
+W:1:127:30:0:14:160:75:20:0xffff:0xffff
+L:1:100:1:0:1:0:50
+A:56:100:56:0:56:0:57:58:50:51
+F:CAVERN | WATER_RIVER | LAVA_RIVER | ARENA | DESTROY
+F:LAKE_WATER | LAKE_LAVA | LAKE_RUBBLE | LAKE_TREE
+F:MONSTER_DIV_64
+
+N:2:¥¤¡¼¥¯¤ÎÆ¶·ê
+E:Yeek cave
+D:$the entrace to the cave leading to the Yeek's den
+D:¥¤¡¼¥¯¤Î½»¤ß¤«¤Ø¤ÈÂ³¤¯¾®¤µ¤ÊÆ¶·ê
+P:48:5
+W:1:13:1:0:14:240:75:20:0x0000:0x0000
+L:1:100:1:0:1:0:8
+A:56:100:56:0:56:0:57:58:50:51
+F:FINAL_GUARDIAN_237 | FINAL_OBJECT_426
+F:NO_VAULT | BEGINNER
+F:MONSTER_DIV_0
+
+N:3:¥ª¡¼¥¯¤ÎÆ¶·¢
+E:Orc cave
+D:$a dark tunnel leading to an Orc Cave
+D:¥ª¡¼¥¯¤ÎÆ¶·¢¤ØÂ³¤¯Çö°Å¤¤¥È¥ó¥Í¥ë
+P:45:30
+W:10:23:5:3:18:200:75:20:0x0031:0x006d
+L:88:70:89:30:1:0:14
+A:56:70:97:30:1:0:57:58:50:51
+F:FINAL_GUARDIAN_373 | FINAL_OBJECT_148 | CAVE | WATER_RIVER | CAVERN
+F:LAKE_TREE | DESTROY | BIG
+F:MONSTER_DIV_32
+M:ORC | R_CHAR_k | R_CHAR_o | R_CHAR_O | ANIMAL
+
+N:4:ÌÂµÜ
+E:Labyrinth
+D:$the frightening entrance to the Labyrinth
+D:¶²¤ë¤Ù¤­´ñÌ¯¤ÊÌÂµÜ
+P:57:31
+W:10:18:1:0:80:160:75:20:0x0000:0x0000
+L:1:100:1:0:1:0:100
+A:56:98:48:2:56:0:57:58:50:51
+F:MAZE | SMALLEST | FORGET
+F:MONSTER_DIV_64 | FINAL_GUARDIAN_1034 | FINAL_OBJECT_354
+
+N:5:Îµ¤Î½»¤ß¤«
+E:Dragon's lair
+D:$a big tunnel leading to a Dragon's Lair
+D:Îµ¤Î½»¤ß¤«¤ØÂ³¤¯Âç¤­¤¯¡¢Çö°Å¤¤¶²¤ë¤Ù¤­¥È¥ó¥Í¥ë
+P:28:74
+W:60:72:25:3:20:140:75:20:0x00a6:0x00c1
+L:88:100:1:0:1:0:0
+A:56:90:87:10:56:0:57:58:50:87
+F:BIG | LAVA_RIVER | CAVERN | DESTROY
+F:MONSTER_DIV_10
+F:CAVE | LAKE_LAVA | LAKE_TREE | LAKE_RUBBLE
+M:DRAGON | R_CHAR_d | R_CHAR_D
+
+# Vecna is there, guarding Soulsword
+N:6:ÊèÃÏ
+E:Graveyard
+D:$a hole to the Graveyard underground
+D:ÊèÃÏ¤ÎÃÏ²¼¤Ø¤Î·ê
+P:19:85
+W:40:70:18:3:14:160:75:20:0x0128:0x027b
+L:1:85:84:15:1:0:30
+A:56:75:87:25:56:0:57:58:84:83
+F:MONSTER_DIV_4 | FINAL_GUARDIAN_804 | FINAL_ARTIFACT_89
+F:WATER_RIVER | DESTROY | ARENA | LAKE_WATER | LAKE_RUBBLE | DESTROY
+M:UNDEAD | NONLIVING
+
+N:7:¿¹
+E:Forest
+D:$a path leading to a Forest
+D:¿¹¤ØÂ³¤¯Áð¤ÎÆ»
+P:53:63
+W:15:32:5:3:14:160:75:20:0x0001:0x0052
+L:89:85:93:5:84:10:15
+A:96:90:56:10:56:0:94:96:56:94
+F:NO_DOORS | WATER_RIVER | MONSTER_DIV_15
+F:FINAL_GUARDIAN_481 | FINAL_OBJECT_592
+M:ANIMAL | R_CHAR_S | R_CHAR_J | R_CHAR_Z | R_CHAR_# | WILD_WOOD
+
+N:8:²Ð»³
+E:Volcano
+D:$a hole to the center of the Volcano
+D:²Ð»³¤ÎÃæ¿´¤Ø¤Î·ê
+P:53:13
+W:50:60:18:3:14:160:80:30:0x01bf:0x02fd
+L:88:40:86:40:85:20:0
+A:56:90:87:10:56:0:57:58:87:51
+F:CAVE | MONSTER_DIV_0 | CAVERN | LAKE_LAVA | LAVA_RIVER | DESTROY
+F:FINAL_GUARDIAN_972 | FINAL_OBJECT_629
+M:IM_FIRE | CAN_FLY | WILD_VOLCANO
+
+N:9:ÃÏ¹ö
+E:Hell
+D:$the stairway to the Hell
+D:ÃÏ¹ö¤Ø¤Î³¬ÃÊ
+P:62:94
+W:666:696:50:1:14:160:90:77:0x0188:0x0280
+L:86:80:85:20:1:0:0
+A:85:80:87:20:87:0:57:85:0:0
+F:CAVERN | MONSTER_DIV_0 | LAKE_LAVA | LAVA_RIVER | WINNER
+F:BIG
+M:IM_FIRE | EVIL
+
+N:10:Å·³¦
+E:Heaven
+D:$the way to the heaven
+D:Å·³¦¤Ø¤ÈÄÌ¤¸¤ëÆ»
+P:2:94
+W:555:585:50:1:18:160:85:35:0x0040:0x0104
+L:1:100:1:0:1:0:1000
+A:60:100:56:0:56:0:60:58:0:0
+F:MONSTER_DIV_0 | WATER_RIVER | WINNER | BIG
+M:GOOD
+
+# Wrath
+N:11:¿åË×¤·¤¿°äÀ×
+E:Numenor
+D:$a submerged way to the lost land of Numenor
+D:¼º¤ï¤ì¤¿ÃÏ¥Ì¥á¥Î¡¼¥ë¤Ø¤Î¿åË×¤·¤¿Æ»
+P:27:30
+W:55:75:30:3:14:160:80:30:0x0000:0x0000
+L:1:80:84:20:1:0:100
+A:83:80:84:10:56:10:57:83:0:0
+F:MONSTER_DIV_0 | LAKE_WATER | WATER_RIVER | DESTROY
+F:FINAL_GUARDIAN_854 | FINAL_ARTIFACT_107
+M:CAN_SWIM | CAN_FLY | AQUATIC | WILD_OCEAN
+
+N:12:¾ë
+E:Castle
+D:$the entrance to the Castle
+D:¾ë
+P:34:88
+W:20:65:30:3:14:160:75:20:0x017f:0x033f
+L:1:100:1:0:1:0:100
+A:56:100:56:0:56:0:57:58:0:0
+F:MONSTER_DIV_16 | ARENA | NO_CAVE | FINAL_GUARDIAN_882
+M:DEMON | R_CHAR_p | R_CHAR_h | R_CHAR_H | R_CHAR_g
+
+# Cth and Razorback
+N:13:¥ë¥ë¥¤¥¨
+E:R'lyeh
+D:$a way to R'lyeh
+D:¥ë¥ë¥¤¥¨
+P:3:40
+W:80:96:45:3:14:160:75:20:0x01a8:0x023f
+L:1:50:84:30:83:20:100
+A:56:100:56:0:56:0:57:58:84:83
+F:MONSTER_DIV_16 | ARENA | WATER_RIVER | LAKE_WATER |
+F:FINAL_GUARDIAN_857 | FINAL_ARTIFACT_129
+M:DEMON | ELDRITCH_HORROR
+
+N:14:»³
+E:Mountain
+D:$a way leading to the mountain
+D:»³
+P:46:76
+W:25:50:20:3:14:160:75:20:0x00b7:0x00df
+L:89:100:89:0:89:0:0
+A:97:100:56:0:56:0:97:56:0:0
+F:MONSTER_DIV_16 | WATER_RIVER | CAVE | CAVERN | NO_DOORS | BIG
+M:TROLL | GIANT | CAN_FLY | ANIMAL | WILD_MOUNTAIN | R_CHAR_O | R_CHAR_Y
+M:R_CHAR_H
+
+N:15:¶â¹Û
+E:Mine
+D:$the entrance to the Mine
+D:¶â¹Û
+P:23:49
+W:75:80:50:3:18:80:80:25:0x0000:0x0010
+L:1:100:1:0:1:0:0
+A:56:60:54:20:55:20:57:58:50:51
+F:MONSTER_DIV_1 | WATER_RIVER | CAVE | CAVERN | SMALLEST
+F:LAVA_RIVER | DESTROY
+M:R_CHAR_$
+
+N:16:È¿ËâË¡¤ÎÆ¶·¢
+E:Anti-magic cave
+D:$the entrance to the cave filled with anti-magic cloud
+D:È¿ËâË¡¤ÎÆ¶·¢
+P:6:84
+W:40:50:30:0:14:160:75:20:0x01ff:0x01ed
+L:1:100:1:0:1:0:50
+A:56:100:56:0:56:0:57:58:50:51
+F:CAVERN | WATER_RIVER | LAVA_RIVER | ARENA | DESTROY
+F:LAKE_WATER | LAKE_LAVA | LAKE_RUBBLE | LAKE_TREE
+F:MONSTER_DIV_0 | NO_MAGIC
+
+N:17:È¿¹¶·â¤ÎÆ¶·¢
+E:Anti-melee cave
+D:$the entrance to the cave filled with restricting magical field
+D:È¿¹¶·â¤ÎÆ¶·¢
+P:45:47
+W:40:50:30:0:14:160:75:20:0x01ff:0x01ed
+L:1:100:1:0:1:0:50
+A:56:100:56:0:56:0:57:58:50:51
+F:CAVERN | WATER_RIVER | LAVA_RIVER | ARENA | DESTROY
+F:LAKE_WATER | LAKE_LAVA | LAKE_RUBBLE | LAKE_TREE
+F:MONSTER_DIV_0 | NO_MELEE
+
+N:18:¥«¥á¥ì¥ª¥óÆ¶
+E:Chameleon cave
+D:$the entrance to the chameleon's den
+D:¥«¥á¥ì¥ª¥ó¤À¤±¤¬À³Â©¤¹¤ëÆ¶·¢
+P:52:94
+W:30:45:30:3:30:160:75:20:0x0000:0x0000
+L:1:100:1:0:1:0:50
+A:56:100:56:0:56:0:57:58:50:51
+F:CAVERN | WATER_RIVER | LAVA_RIVER | ARENA | DESTROY
+F:LAKE_WATER | LAKE_LAVA | LAKE_RUBBLE | LAKE_TREE | CHAMELEON
+F:MONSTER_DIV_0 | FINAL_GUARDIAN_1041 | FINAL_OBJECT_617
+M:CHAMELEON
+
+N:19:°Å°Ç¤ÎÆ¶·¢
+E:Dark cave
+D:$the dark entrance to the cave filled with magical darkness
+D:°Å°Ç¤ÎÆ¶·¢
+P:12:57
+W:55:72:30:0:14:160:80:30:0xffff:0xffff
+L:1:100:1:0:1:0:50
+A:56:100:56:0:56:0:57:58:50:51
+F:CAVERN | WATER_RIVER | LAVA_RIVER | ARENA | DESTROY
+F:LAKE_WATER | LAKE_LAVA | LAKE_RUBBLE | LAKE_TREE
+F:MONSTER_DIV_64 | DARKNESS | FINAL_GUARDIAN_803

@@ -1,0 +1,725 @@
+# CVS: Last edit by $Author$ on $Date$
+# File: f_info.txt
+
+
+# This file is used to initialize the "lib/raw/f_info.raw" file, which is
+# used to initialize the "terrain feature" information for the Angband game.
+
+# Do not modify this file unless you know exactly what you are doing,
+# unless you wish to risk possible system crashes and broken savefiles.
+
+# After modifying this file, delete the "lib/raw/f_info.raw" file.
+
+# Note that the terrain feature are grouped into very regular groups,
+# such that each of the bits in the feature type conveys information.
+
+# Note that terrain feature zero contains the "darkness" picture.
+
+# === Understanding f_info.txt ===
+
+# N:serial number:terrain name
+# G:symbol:color
+
+# N' indicates the beginning of an entry. The serial number must
+# increase for each new item.
+
+# 'G' is for graphics - symbol and color. There are 16 colors, as
+# follows:
+
+# D - Black        w - White          s - Gray          o - Orange
+# r - Red          g - Green          b - Blue          u - Brown
+# d - Dark Gray    W - Light Gray     v - Violet        y - Yellow
+# R - Light Red    G - Light Green    B - Light Blue    U - Light Brown
+
+
+# Version stamp (required)
+
+V:2.8.1
+
+
+# 0x00 --> nothing
+
+N:0:何もない
+E:nothing
+G: :w
+
+
+# 0x01 --> open floor
+
+N:1:床
+E:open floor
+G:.:w
+
+# 0x02 --> invisible trap (drawn as open floor)
+
+N:2:隠れたトラップ
+E:invisible trap
+G:.:w
+M:1
+
+# 0x03 --> glyph of warding
+
+N:3:回避の彫像
+E:glyph of warding
+G:;:y
+
+# 0x04 --> open door
+
+N:4:開いたドア
+E:open door
+G:':U
+
+# 0x05 --> broken door
+
+N:5:壊れたドア
+E:broken door
+G:':u
+
+# 0x06 --> up stairs (perm)
+
+N:6:上り階段
+E:up staircase
+G:<:w
+
+# 0x07 --> down stairs (perm)
+
+N:7:下り階段
+E:down staircase
+G:>:w
+
+N:8:クエスト入口
+E:quest entrance
+G:>:y
+
+N:9:クエスト出口
+E:quest exit
+G:<:y
+
+N:10:クエスト下り階段
+E:quest down level
+G:>:r
+
+N:11:クエスト上がり階段
+E:quest up level
+G:<:r
+
+N:12:街の出口
+E:town exit
+G:>:g
+
+# 0x0C --> up stairs (perm)
+
+N:13:上り坑道
+E:shaft up
+G:<:U
+
+# 0x0D --> down stairs (perm)
+
+N:14:下り坑道
+E:shaft down
+G:>:U
+
+# 0x10 --> visible trap -- trap door
+
+N:16:トラップ・ドア
+E:trap door
+G:^:w
+
+# 0x11 --> visible trap -- open pit
+
+N:17:落とし穴
+E:pit
+G:^:s
+
+# 0x12 --> visible trap -- spiked pit
+
+N:18:落とし穴
+E:pit
+G:^:s
+
+# 0x13 --> visible trap -- poison pit
+
+N:19:落とし穴
+E:pit
+G:^:s
+
+# 0x14 --> visible trap -- rune -- summon
+
+N:20:邪悪なルーン
+E:evil rune
+G:^:G
+
+# 0x15 --> visible trap -- rune -- teleport
+
+N:21:奇妙なルーン
+E:strange rune
+G:^:o
+
+# 0x16 --> visible trap -- spot -- fire
+
+N:22:焦げた場所
+E:discolored spot
+G:^:u
+
+# 0x17 --> visible trap -- spot -- acid
+
+N:23:焦げた場所
+E:discolored spot
+G:^:u
+
+# 0x18 --> visible trap -- dart -- slow
+
+N:24:ダーツ・トラップ
+E:dart trap
+G:^:r
+
+# 0x19 --> visible trap -- dart -- lose str
+
+N:25:ダーツ・トラップ
+E:dart trap
+G:^:r
+
+# 0x1A --> visible trap -- dart -- lose dex
+
+N:26:ダーツ・トラップ
+E:dart trap
+G:^:r
+
+# 0x1B --> visible trap -- dart -- lose con
+
+N:27:ダーツ・トラップ
+E:dart trap
+G:^:r
+
+# 0x1C --> visible trap -- gas -- blind
+
+N:28:ガス・トラップ
+E:gas trap
+G:^:g
+
+# 0x1D --> visible trap -- gas -- confuse
+
+N:29:ガス・トラップ
+E:gas trap
+G:^:g
+
+# 0x1E --> visible trap -- gas -- poison
+
+N:30:ガス・トラップ
+E:gas trap
+G:^:g
+
+# 0x1F --> visible trap -- gas -- sleep
+
+N:31:ガス・トラップ
+E:gas trap
+G:^:g
+
+# 0x2x --> locked door (power 0)
+
+N:32:ドア
+E:door
+G:+:U
+M:32
+
+# 0x2x --> locked door (power 1)
+
+N:33:鍵のかかったドア
+E:locked door
+G:+:U
+M:32
+
+# 0x2x --> locked door (power 2)
+
+N:34:鍵のかかったドア
+E:locked door
+G:+:U
+M:32
+
+# 0x2x --> locked door (power 3)
+
+N:35:鍵のかかったドア
+E:locked door
+G:+:U
+M:32
+
+# 0x2x --> locked door (power 4)
+
+N:36:鍵のかかったドア
+E:locked door
+G:+:U
+M:32
+
+# 0x2x --> locked door (power 5)
+
+N:37:鍵のかかったドア
+E:locked door
+G:+:U
+M:32
+
+# 0x2x --> locked door (power 6)
+
+N:38:鍵のかかったドア
+E:locked door
+G:+:U
+M:32
+
+# 0x2x --> locked door (power 7)
+
+N:39:鍵のかかったドア
+E:locked door
+G:+:U
+M:32
+
+# 0x2x --> jammed door (power 0)
+
+N:40:くさびが打たれたドア
+E:jammed door
+G:+:U
+M:32
+
+# 0x2x --> jammed door (power 1)
+
+N:41:くさびが打たれたドア
+E:jammed door
+G:+:U
+M:32
+
+# 0x2x --> jammed door (power 2)
+
+N:42:くさびが打たれたドア
+E:jammed door
+G:+:U
+M:32
+
+# 0x2x --> jammed door (power 3)
+
+N:43:くさびが打たれたドア
+E:jammed door
+G:+:U
+M:32
+
+# 0x2x --> jammed door (power 4)
+
+N:44:くさびが打たれたドア
+E:jammed door
+G:+:U
+M:32
+
+# 0x2x --> jammed door (power 5)
+
+N:45:くさびが打たれたドア
+E:jammed door
+G:+:U
+M:32
+
+# 0x2x --> jammed door (power 6)
+
+N:46:くさびが打たれたドア
+E:jammed door
+G:+:U
+M:32
+
+# 0x2x --> jammed door (power 7)
+
+N:47:くさびが打たれたドア
+E:jammed door
+G:+:U
+M:32
+
+# 0x30 --> secret door
+
+N:48:隠しドア
+E:secret door
+G:#:w
+M:56
+
+# 0x31 --> rubble
+
+N:49:岩石
+E:pile of rubble
+G:::w
+
+# 0x32 --> magma vein
+
+N:50:溶岩の鉱脈
+E:magma vein
+G:%:s
+
+# 0x33 --> quartz vein
+
+N:51:石英の鉱脈
+E:quartz vein
+G:%:w
+
+# 0x34 --> magma vein + treasure
+
+N:52:溶岩の鉱脈
+E:magma vein
+G:%:s
+M:50
+
+# 0x35 --> quartz vein + treasure
+
+N:53:石英の鉱脈
+E:quartz vein
+G:%:w
+M:51
+
+# 0x36 --> magma vein + known treasure
+
+N:54:財宝を含有した溶岩の鉱脈
+E:magma vein with treasure
+G:*:o
+
+# 0x37 --> quartz vein + known treasure
+
+N:55:財宝を含有した石英の鉱脈
+E:quartz vein with treasure
+G:*:o
+
+# 0x38 --> granite wall -- basic
+
+N:56:花崗岩の壁
+E:granite wall
+G:#:w
+
+# 0x39 --> granite wall -- inner
+
+N:57:花崗岩の壁
+E:granite wall
+G:#:w
+M:56
+
+# 0x3A --> granite wall -- outer
+
+N:58:花崗岩の壁
+E:granite wall
+G:#:w
+M:56
+
+# 0x3B --> granite wall -- solid
+
+N:59:花崗岩の壁
+E:granite wall
+G:#:w
+M:56
+
+# 0x3C --> permanent wall -- basic (perm)
+
+N:60:永久岩の壁
+E:permanent wall
+G:#:w
+
+# 0x3D --> permanent wall -- inner (perm)
+
+N:61:永久岩の壁
+E:permanent wall
+G:#:w
+M:60
+
+# 0x3E --> permanent wall -- outer (perm)
+
+N:62:永久岩の壁
+E:permanent wall
+G:#:w
+M:60
+
+# 0x3F --> permanent wall -- solid (perm)
+
+N:63:永久岩の壁
+E:permanent wall
+G:#:w
+M:60
+
+N:64:爆発ルーン
+E:explosive rune
+G:;:R
+
+N:65:パターン出発点
+E:Pattern startpoint
+G:*:w
+
+N:66:パターンの一部
+E:section of the Pattern
+G:*:B
+
+N:67:パターンの一部
+E:section of the Pattern
+G:*:b
+
+N:68:パターンの一部
+E:section of the Pattern
+G:*:B
+
+N:69:パターンの一部
+E:section of the Pattern
+G:*:b
+
+N:70:パターンの一部
+E:section of the Pattern
+G:*:W
+
+N:71:パターンの一部(discharged)
+E:section of the Pattern (discharged)
+G:*:W
+
+N:72:パターン出口
+E:Pattern exit
+G:*:w
+
+N:73:壊れたパターンの一部
+E:corrupted section of the Pattern
+G:*:D
+
+# 0x4A --> shop -- general store (perm)
+
+N:74:雑貨屋
+E:General Store
+G:1:U
+
+# 0x4B --> shop -- armoury (perm)
+
+N:75:防具屋
+E:Armoury
+G:2:s
+
+# 0x4C --> shop -- weapon shop (perm)
+
+N:76:武器専門店
+E:Weapon Smiths
+G:3:w
+
+# 0x4D --> shop -- temple (perm)
+
+N:77:寺院
+E:Temple
+G:4:g
+
+# 0x4E --> shop -- alchemist (perm)
+
+N:78:錬金術の店
+E:Alchemy Shop
+G:5:b
+
+# 0x4F --> shop -- magic shop (perm)
+
+N:79:魔法の店
+E:Magic Shop
+G:6:r
+
+# 0x50 --> shop -- black market (perm)
+
+N:80:ブラック・マーケット
+E:Black Market
+G:7:D
+
+# 0x51 --> shop -- home (perm)
+
+N:81:我が家
+E:Home
+G:8:y
+
+# 0x52 --> shop -- bookstore (perm)
+
+N:82:書店
+E:Bookstore
+G:9:o
+
+# 0x53 --> terrain -- deep water
+
+N:83:深い水
+E:pool of deep water
+G:~:b
+
+N:84:浅い水の流れ
+E:stream of shallow water
+G:~:B
+
+N:85:深い溶岩溜り
+E:pool of deep lava
+G:~:r
+
+N:86:浅い溶岩の流れ
+E:stream of shallow lava
+G:~:U
+
+N:87:暗い穴
+E:dark pit
+G:#:D
+
+N:88:砂地
+E:dirt
+G:.:u
+
+N:89:草地
+E:patch of grass
+G:.:g
+
+N:90:コンパクトルーン
+E:compact rune
+G:^:D
+
+N:93:花
+E:flower
+G:::G
+
+N:94:草むら
+E:kusamura
+G:#:g
+
+N:95:博物館
+E:museum
+G:0:v
+
+N:96:木
+E:tree
+G:#:G
+
+N:97:山脈
+E:mountain chain
+G:^:o
+
+N:128:建物
+E:Building
+G:+:U
+
+N:129:建物
+E:Building
+G:+:U
+
+N:130:建物
+E:Building
+G:+:v
+
+N:131:建物
+E:Building
+G:+:U
+
+N:132:建物
+E:Building
+G:+:U
+
+N:133:建物
+E:Building
+G:+:U
+
+N:134:建物
+E:Building
+G:+:U
+
+N:135:建物
+E:Building
+G:+:o
+
+N:136:建物
+E:Building
+G:+:R
+
+N:137:建物
+E:Building
+G:+:G
+
+N:138:建物
+E:Building
+G:+:v
+
+N:139:建物
+E:Building
+G:+:u
+
+N:140:建物
+E:Building
+G:+:w
+
+N:141:建物
+E:Building
+G:+:B
+
+N:142:建物
+E:Building
+G:+:B
+
+N:143:建物
+E:Building
+G:+:B
+
+N:144:建物
+E:Building
+G:+:B
+
+N:145:建物
+E:Building
+G:+:B
+
+N:146:建物
+E:Building
+G:+:B
+
+N:147:建物
+E:Building
+G:+:B
+
+N:148:建物
+E:Building
+G:+:B
+
+N:149:建物
+E:Building
+G:+:B
+
+N:150:建物
+E:Building
+G:+:B
+
+N:151:建物
+E:Building
+G:+:B
+
+N:152:建物
+E:Building
+G:+:B
+
+N:153:建物
+E:Building
+G:+:B
+
+N:154:建物
+E:Building
+G:+:B
+
+N:155:建物
+E:Building
+G:+:B
+
+N:156:建物
+E:Building
+G:+:B
+
+N:157:建物
+E:Building
+G:+:B
+
+N:158:建物
+E:Building
+G:+:B
+
+N:159:建物
+E:Building
+G:+:B
+
+N:192:街
+E:Town
+G:*:W
+
+N:193:ダンジョンへの入口
+E:Entrance to dungeon
+G:>:v
+
+N:194:沼地
+E:Swamp
+G:.:B
+
+N:195:鏡
+E:Mirror
+G:*:v

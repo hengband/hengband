@@ -1,0 +1,22 @@
+Zangband コマンド解説
+
+ 参照したいオンライン・ヘルプを選んで下さい:
+
+    (0) Zangband コマンド概説       (jcommand.txt)
+    (1) オリジナルキー配置          (jcommand.txt#A)
+    (2) ローグ風キー配置            (jcommand.txt#B)
+    (3) 特殊なキー                  (jcommand.txt#C)
+    (4) 回数指定                    (jcommand.txt#D)
+    (5) アイテムの選択              (jcommand.txt#E)
+    (6) コマンド詳説                (jcommdesc.hlp)
+
+    (?) ヘルプシステムの使用法      (jhelpinfo.txt)
+
+
+***** [0] jcommand.txt
+***** [1] jcommand.txt#A
+***** [2] jcommand.txt#B
+***** [3] jcommand.txt#C
+***** [4] jcommand.txt#D
+***** [5] jcommand.txt#E
+***** [6] jcommdesc.hlp

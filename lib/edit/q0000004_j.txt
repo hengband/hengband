@@ -1,0 +1,142 @@
+# CVS: Last edit by $Author$ on $Date$
+# q0000004.txt
+
+# Name
+Q:$4:N:The Vault
+Q:4:N:宝物庫
+
+# Definition
+Q:$4:Q:3:0:0:0:30:0:88:0:6
+Q:4:Q:3:0:0:0:30:0:88:0:6
+
+# Description for quest
+?:[LEQ $QUEST4 2]
+Q:$4:T:The vault was used outside the town as a minor fortress and
+Q:$4:T:stored many valuable items.  It has since been overrun.  Please
+Q:$4:T:find the short sword known as Sting and return it to us!
+Q:$4:T:The moment you find the sword, your quest will be complete.
+Q:$4:T:While the sword could be in any of the chambers, only look
+Q:$4:T:through one at a time. The monsters here are strong and there are
+Q:$4:T:traps to be concerned with as well.
+Q:4:T:街の外の蔵は小規模な要塞として使われていて、多くの貴重な品物が
+Q:4:T:蓄えられていました。しかし今ではモンスターどもに占拠されてしまっています。
+Q:4:T:どうか蔵から『つらぬき丸』と呼ばれる短剣を見つけ出し、我々の元に持ち帰っ
+Q:4:T:て下さい！剣を拾った時点でクエスト達成となるでしょう。『つらぬき丸』はど
+Q:4:T:の部屋にあるか分からないので、部屋を一つずつ見てまわって下さい。ここのモ
+Q:4:T:ンスターは手強く、また罠もしかけられています。くれぐれも注意して下さい。
+?:1
+
+# Description for quest rewarding
+?:[EQU $QUEST4 3]
+Q:$4:T:Please keep the sword, it will aid you in your future quests.
+Q:4:T:その剣はお持ち下さい。これからの冒険の助けになるでしょう。
+?:1
+
+# Description for quest failed
+?:[EQU $QUEST4 5]
+Q:$4:T:You didn't find the sword?  Well, the monsters have probably
+Q:$4:T:carried it away.  Too bad, Sting would have been quiet helpful
+Q:$4:T:in driving the evil out of our town.
+Q:4:T:あの剣を見つけられなかったのですか？おそらく、モンスターどもが持っていって
+Q:4:T:しまったんでしょうな。とても残念です。『つらぬき丸』はこの街から悪を一掃する
+Q:4:T:のにとても役に立ったでしょうに。
+?:1
+
+?:[EQU $RANDOM4 0]
+# Floor with "Sting"
+F:a:1:8:0:0:0:88
+
+# Floor with "Small sword"
+F:b:1:8:0:46
+
+# Floor with "Small sword"
+F:c:1:8:0:46
+
+# Floor with "Small sword"
+F:d:1:8:0:46
+
+?:[EQU $RANDOM4 1]
+# Floor with "Small sword"
+F:a:1:8:0:46
+
+# Floor with "Sting"
+F:b:1:8:0:0:0:88
+
+# Floor with "Small sword"
+F:c:1:8:0:46
+
+# Floor with "Small sword"
+F:d:1:8:0:46
+
+?:[EQU $RANDOM4 2]
+# Floor with "Small sword"
+F:a:1:8:0:46
+
+# Floor with "Small sword"
+F:b:1:8:0:46
+
+# Floor with "Sting"
+F:c:1:8:0:0:0:88
+
+# Floor with "Small sword"
+F:d:1:8:0:46
+
+?:[EQU $RANDOM4 3]
+# Floor with "Small sword"
+F:a:1:8:0:46
+
+# Floor with "Small sword"
+F:b:1:8:0:46
+
+# Floor with "Small sword"
+F:c:1:8:0:46
+
+# Floor with "Sting"
+F:d:1:8:0:0:0:88
+
+?:1
+
+# Random monster 7 levels out of depth and on no Teleportation grid
+F:5:1:12:*8
+
+# Dungeon
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXX..9a*.....XXXXXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX...5............XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX........*.......XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX..........*.*.....XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX................5.XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX...5....%.%.%.....XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX...........*......XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX............5...XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX....5..5........XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXX.........5XXXXXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXXXXXXDDXXXXXXXXXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXXXXXX..XXXXXXXXXXXXXXXXXXXXXXXXX
+D:XXXXX.....*....XXXXXXXXXX..XXXXXXXXXX..........XXXXX
+D:XX....5..*...*....XXXXXXX..XXXXXXX5..............*XX
+D:XX............5..5XXXXXXX..XXXXXXX.....%..........XX
+D:X......5...%.......XXXXX....XXXXX..5....%..5.....*9X
+D:X*........%........D.....<......D........%........dX
+D:Xb...5.....%..5....D............D...5.....%.......*X
+D:X9..........%......XXXXX....XXXXX........%.........X
+D:XX......5........5XXXXXXX..XXXXXXX....5...........XX
+D:XX................XXXXXXX..XXXXXXX........5.......XX
+D:XXXXX..........XXXXXXXXXX..XXXXXXXXXX..........XXXXX
+D:XXXXXXXXXXXXXXXXXXXXXXXXX..XXXXXXXXXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXXXXXXDDXXXXXXXXXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXX..........XXXXXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX................XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX..5.............XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX...........5..5...XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX........5.........XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX.....5............XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX..................XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX.5..............XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX................XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXX.....*c9..XXXXXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+# Starting position
+P:16:25
+

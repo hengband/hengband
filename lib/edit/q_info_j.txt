@@ -1,0 +1,141 @@
+# CVS: Last edit by $Author$ on $Date$
+# File: q_info_j.txt
+
+# Includes all the quest files
+
+# Quest feature preferences
+%:q_pref_j.txt
+
+# Thieves Hideout
+?:[EQU $QUEST_NUMBER 1]
+%:q0000001_j.txt
+
+# Sever
+?:[EQU $QUEST_NUMBER 2]
+%:q0000002_j.txt
+
+# Druid Shop
+?:[EQU $QUEST_NUMBER 3]
+%:q0000003_j.txt
+
+# Vault
+?:[EQU $QUEST_NUMBER 4]
+%:q0000004_j.txt
+
+# Tower
+?:[EQU $QUEST_NUMBER 5]
+%:q0000005_j.txt
+
+# Tower part 2
+?:[EQU $QUEST_NUMBER 6]
+%:q0000006_j.txt
+
+# Tower part 3
+?:[EQU $QUEST_NUMBER 7]
+%:q0000007_j.txt
+
+# Oberon
+?:[EQU $QUEST_NUMBER 8]
+%:q_oberon_j.txt
+
+# Serpent of Chaos
+?:[EQU $QUEST_NUMBER 9]
+%:q_serpen_j.txt
+
+# Node of Sorcery
+?:[EQU $QUEST_NUMBER 10]
+%:q000sorc_j.txt
+
+# Node of Chaos
+?:[EQU $QUEST_NUMBER 11]
+%:q000chao_j.txt
+
+# Node of Nature
+?:[EQU $QUEST_NUMBER 12]
+%:q000natu_j.txt
+
+# Quest #13 is still unfinished
+
+# Warg problem
+?:[EQU $QUEST_NUMBER 14]
+%:q_warg_j.txt
+
+# Eric's Stronghold
+?:[EQU $QUEST_NUMBER 15]
+%:q000eric_j.txt
+
+# Assault on Montsalvat
+?:[EQU $QUEST_NUMBER 16]
+%:q000dekn_j.txt
+
+# The City beneath the Sea
+#?:[EQU $QUEST_NUMBER 17]
+#%:q000lyeh_j.txt
+
+# Water Cave
+?:[EQU $QUEST_NUMBER 18]
+%:q00water_j.txt
+
+# Doom Quest 1
+?:[EQU $QUEST_NUMBER 19]
+%:q0000019_j.txt
+
+# Vapor Quest
+?:[EQU $QUEST_NUMBER 20]
+%:q0000020_j.txt
+
+# Doom Quest 2
+?:[EQU $QUEST_NUMBER 21]
+%:q0000021_j.txt
+
+# Orc Camp
+?:[EQU $QUEST_NUMBER 22]
+%:q0000022_j.txt
+
+# Spawning Pits
+?:[EQU $QUEST_NUMBER 23]
+%:q0000023_j.txt
+
+# The Rise and Fall of Micro$oft
+?:[EQU $QUEST_NUMBER 24]
+%:q00000ms_j.txt
+
+# Haunted House
+?:[EQU $QUEST_NUMBER 25]
+%:qhaunted_j.txt
+
+# Killing Fields
+?:[EQU $QUEST_NUMBER 26]
+%:q0fields_j.txt
+
+# The Old Castle
+?:[EQU $QUEST_NUMBER 27]
+%:q0000027_j.txt
+
+# Royal Crypt
+?:[EQU $QUEST_NUMBER 28]
+%:q0000028_j.txt
+
+# Thieves Quest 1
+?:[EQU $QUEST_NUMBER 29]
+%:q0thief1_j.txt
+
+# Thieves Quest 2
+?:[EQU $QUEST_NUMBER 30]
+%:q0thief2_j.txt
+
+# Old Man Willow Quest
+?:[EQU $QUEST_NUMBER 31]
+%:q0willow_j.txt
+
+# Dark Elven Lords Quest
+?:[EQU $QUEST_NUMBER 32]
+%:qdarkelf_j.txt
+
+# The Cloning Pits
+?:[EQU $QUEST_NUMBER 33]
+%:q0clone0_j.txt
+
+# Random quests (always adressed with number 40)
+?:[EQU $QUEST_NUMBER 40]
+%:q_random_j.txt

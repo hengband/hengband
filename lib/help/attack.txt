@@ -1,0 +1,774 @@
+=== Zangband Combat ===
+ 
+Attacking is simple in Zangband. If you move into a creature, you
+attack him. You can attack from a distance by firing a missile or by
+magical means such as aiming a wand. Creatures attack in the same way.
+If they move into you, they attack you. Some creatures can also cast
+spells from a distance, and others can use various breath weapons such
+as fire on you from a distance.
+
+Creatures in walls can not be attacked by wands and other magic attacks
+normally stopped by walls. You can attack a creature in a wall normally
+by trying to move into the wall space containing the creature. However,
+if the creature is invisible (such as a ghost), you must tunnel into
+the wall containing the creature. If you just try to move into the
+wall, you will bump your head and look quite silly.
+
+If you are wielding a weapon, the damage for the weapon is used when
+you hit a creature. Otherwise you get a single punch which does minimal
+damage.
+
+You may wield both a primary weapon for melee combat, and a bow or
+other missile launcher for launching missiles at the same time (along
+with a light, an amulet, two rings, a helmet, boots, gloves, a shield,
+a cloak, and body armor). Be sure not to try and kill a dragon with a
+shovel, it makes you look silly and probably won't work...
+ 
+Firing a missile while wielding the appropriate launcher is the only
+way to get the "full" power out of the missile. You may of course throw
+an arrow at a monster without shooting it, but you will find the
+effects may not be what you had hoped.
+
+Hits and misses are determined by ability to hit versus armor class. A
+hit is a strike that does some damage; a miss may in fact reach a
+target, but fails to do any  damage. Higher armor classes make it
+harder to do damage, and so lead to more misses; they also reduce the
+damage from a strike that actually occurs.
+ 
+
+***** <A>
+=== Monster Memories ===
+
+There are hundreds of different creatures in Zangband, many of which
+have the same letter symbol and color on the screen. The exact species
+of a creature can be discovered by looking at it. It is also very
+difficult to keep track of the capabilities of various creatures.
+Luckily, Zangband automatically keeps track of your experiences with a
+particular creature.
+ 
+This feature is called the monster memory. You monster memory recalls
+the particular attacks of each creature (whether or not technically a
+monster) which you have suffered, as well as recalling if you have
+observed them to multiply or move erratically, or drop treasure, etc.
+Otherwise you would simply have to take notes, which is an unnecessary
+bother.
+
+If you have killed enough of a particular creature, or suffered enough
+attacks, recalling the monster memory may also provide you with
+information not otherwise available, such as a armor class or hit dice.
+These are not explained, but may be useful to give the relative danger
+of each creature. This memory can be passed on to a new character even
+after you die by means of a reduced save file.
+ 
+
+***** <B>
+=== Your Weapon ===
+
+Carrying a weapon in your backpack does you no good. You must wield a
+weapon before it can be used in a fight. A secondary weapon can be kept
+by keeping it in the backpack, and switching it with the primary weapon
+when needed.
+
+Weapons have two main magical characteristics, their enchanted ability
+to hit and their enchanted ability to do damage, expressed as
+`(+#,+#)'. A normal weapon would be `(+0,+0)'. Many weapons in Zangband
+have bonuses to hit and/or do damage. Some weapons are cursed, and have
+penalties that hurt the player. Cursed weapons cannot be unwielded
+until the curse is lifted. Identifying a weapon will inform you of the
+magical bonuses and penalties and whether or not it is cursed.
+
+Zangband assumes that your youth in the rough environment near the
+dungeons has taught you the relative merits of different weapons, and
+displays as part of their description the damage dice which define
+their capabilities. Any damage enchantment is added to the dice roll
+for that weapon. The dice used for a given weapon is displayed as
+"#d#". The first number indicates how many dice to roll, and the second
+indicates how many sides they have. A "2d6" weapon will give damage
+from 2 to 12, plus any damage bonus. The weight of a weapon is also a
+consideration. Heavy weapons may hit harder, but they are also harder
+to use. Depending on your strength, dexterity, character class, and
+weapon weight, you may get several attacks per turn.
+
+Missile booster weapons, such as bows, have their characteristics added
+to those of the missile used, if the proper weapon/missile combination
+is used, and the launcher multiplier is applied to the total damage,
+making missile weapons very powerful given the proper missiles,
+especially if they are enchanted.
+
+Although you receive any magical bonuses an unidentified weapon may
+possess when you wield it, those bonuses will not be added in to the
+displayed values of to-hit and to-dam on your character sheet. You must
+identify the weapon before the displayed values reflect the real values
+used.
+
+
+***** <C>
+=== Ego Weapons ===
+
+In addition to the ordinary weapons your character may find in the
+dungeon, some of them may be endowed with additional powers. These
+weapons fall into two types: (1) artifacts - which are dealt with
+separately and can be identified by their name; and (2) Ego Weapons
+which are addressed below. Unlike artifacts which are unique and may
+only be found once in each game, it is not unusual to find several Ego
+Weapons of the same type during the course of a character's adventures.
+
+Note: Zangband has extended the original Angband's concept of adding
+random abilities to the various Ego types considerably. These can be
+either guaranteed or have only a varying chance of being granted. (See
+'Randabil.spo' for details of the the random powers of Ego Weapons).
+ 
+
+(Defender)
+    A magical weapon that actually helps the wielder defend himself,
+    by increasing his/her armour class, and providing resistance
+    against damage from fire, cold, acid and lightning attacks. It also
+    grants levitation, increases your stealth, let you see invisible
+    creatures and protects from paralyzation and some slowing attacks.
+    It also helps you regenerate hit-points and mana faster.
+
+(Holy Avenger)
+    A Holy Avenger is one of the more powerful of weapons. It will
+    increase your wisdom and your armour class and prevent you from
+    becoming afraid. This weapon will do extra damage when used against
+    evil, demonic and undead creatures, and will also give you the
+    ability to see invisible creatures. These weapons are also blessed
+    and so can be wielded by priests with no penalty.
+
+Weapon of Westernesse
+    A Weapon of Westernesse is one of the more powerful weapons. It
+    slays orcs, trolls and giants while increasing your strength,
+    dexterity, and constitution. It also allows you to see invisible
+    creatures and protects from paralyzation and some slowing attacks.
+
+(Trump Weapon)
+    A Trump Weapon is especially deadly against evil creatures and will
+    increase your ability to discover hidden dungeon features. It will
+    help you regenerate hit-points and mana faster and at the same time
+    wll reduce your rate of food consumption. It provides resistance
+    to nexus and protects from paralyzation and some slowing attacks.
+    In addition it may cause you to teleport randomly and can be
+    activated for teleport once every 50+1d50 turns.
+
+(Pattern Weapon)
+    A Pattern Weapon has been embedded with a fragment of the Pattern.
+    It will increase your strength and constitution and also has a
+    chance of increasing your dexterity. It is especially effective
+    when used against evil, undead and demonic creatures. It will allow
+    you to see invisible creatures and protects from paralyzation and
+    some slowing attacks.
+
+(Blessed Blade)
+    A blessed blade will increase your wisdom and can be wielded by
+    priests with no penalty.
+
+Weapon of Extra Attacks
+    Thses weapons will grant the user additional attacks per round.
+
+Weapon of Sharpness (edged weapon only)
+    These are known to occasionally score vorpal hits (see below) and
+    will also increase your ability to tunnel through the dungeon
+    walls.
+
+Weapon of Earthquakes (hafted weapon only)
+    These weapons may cause an earthquake when they strike an opponent
+    which potentially may cause other monsters in the area to take
+    damage from falling rocks and wil destry a small portion of the
+    surrounding dungeon. They also increase your ability to tunnel
+    through the dungeon walls.
+
+Weapon of Slaying
+    These weapons have a chance of being granted unusually high damage
+    dice.
+
+Implement of Digging
+    These digging implements increase your ability to tunnel through
+    the dungeon walls, and have the acid brand (see below).
+
+--- The Elemental and Other Brands ---
+
+(Chaotic)
+    These bizarre, feared weapons have been manufactured in the Courts
+    of Chaos, and are very unpredictable in combat often producing
+    chaotic effects when they strike your opponent. Effects include
+    *destruction*, teleport away and vampiric drain amoung others. A
+    Chaotic weapon grants resistance to chaos attacks and cannot be
+    damaged by acid, fire and electricity.
+
+(Vampiric)
+    These foul weapons have been created by Death magic. They lust for
+    blood, and if such a weapon scores a hit, it greedily sucks life
+    from the hapless victim, transferring the life energy to its
+    master and healing them in the process.
+
+Weapon of Melting
+    A magical weapon of acid that will inflict three times the normal
+    damage when used against a creature that is not resistant to acid.
+    It also provides resistance against acid attacks.
+
+Weapon of Shocking
+    A magical weapon of lightning that will inflict three times the
+    normal damage when used against a creature that is not resistant to
+    electricity. It also provides resistance against lightning attacks.
+
+Weapon of Freezing
+    A magical weapon of ice that will inflict three times the normal
+    damage when used against a creature that is not resistant to cold.
+    It also provides resistance against cold attacks.
+
+Weapon of Burning
+    A magical weapon of fire that will inflict three times the normal
+    damage when used against a creature that is not resistant to fire.
+    It also provides resistance against fire attacks.
+
+Weapon of Poisoning
+    A magical weapon, coated with poison, that will inflict three times
+    the normal damage to creatures not resistant to poison. It also
+    provides resistance against toxic and poisonous attacks.
+
+--- Weapons of Slay {Monster-Type} ---
+
+Weapon of Slay Animal
+    This weapon is especially effective against natural creatures and
+    will do three times the normal damage against such creatures.
+
+Weapon of Slay Evil
+    This weapon is especially effective against evil creatures and will
+    do two times the normal damage against such creatures.
+
+Weapon of Slay Undead
+    This weapon is especially effective against undead creatures and
+    will do three times the normal damage against such creatures. It 
+    will also provide resistance to life draining attacks.
+
+Weapon of Slay Demon
+    This weapon is especially effective against demonic creatures and
+    will do three times the normal damage against such creatures.
+
+Weapon of Slay Orc
+    This weapon is especially effective against orcs and will do
+    three times the normal damage against such creatures.
+
+Weapon of Slay Troll
+    This weapon is especially effective against trolls and will do
+    three times the normal damage against such creatures.
+
+Weapon of Slay Giant
+    This weapon is especially effective against giant humanoids and
+    will do three times the normal damage against such creatures.
+
+Weapon of Slay Dragon
+    This weapon is especially effective against dragons and will do
+    three times the normal damage against such creatures.
+
+--- Weapons of *Slay* {Monster-Type} ---
+
+Weapon of *Slay* Animal
+    This weapon is especially effective against natural creatures and
+    will do three times the normal damage against such creatures. It
+    will also increase your intelligence and allow you to regenerate
+    hit-points and mana faster.
+
+Weapon of *Slay* Evil
+    This weapon is especially effective against evil creatures and will
+    do two times the normal damage against such creatures. It will
+    increase your wisdom and will also be a blessed blade.
+
+Weapon of *Slay* Undead
+    This weapon is especially effective against undead creatures and
+    will do three times the normal damage against such creatures. It 
+    will increase your wisdom and will also provide resistance to both
+    nether and life-draining attacks. Finally, it will allow you to see
+    invisible creatures.
+
+Weapon of *Slay* Demon
+    This weapon is especially effective against demonic creatures and
+    will do three times the normal damage against such creatures. It
+    will also increase your intelligence.
+
+Weapon of *Slay* Orc
+    This weapon is especially effective against orcs and will do three
+    times the normal damage against such creatures. It will also
+    increase your dexterity.
+
+Weapon of *Slay* Troll
+    This weapon is especially effective against trolls and will do
+    three times the normal damage against such creatures. It will also
+    increase your strength.
+
+Weapon of *Slay* Giant
+    This weapon is especially effective against giant humanoids and
+    will do three times the normal damage against such creatures. It
+    will also increase your strength.
+
+Weapon of *Slay* Dragon
+    This weapon is especially effective against dragons and will do
+    five times the normal damage against such creatures. It will also
+    increase your constitution.
+
+--- Missile Launchers ---
+
+Launcher of Accuracy
+    These missile launchers have an unusually high bonus to hit.
+
+Launcher of Velocity
+    These missile launchers have an unusually high bonus to dam.
+
+Launcher of Extra Might
+    These missile launchers have an unusually high damage multiplier.
+
+Launcher of Extra Shots
+    These missile launchers grant additional shots per round.
+
+--- Ammunition ---
+
+Ammunition of Hurt Animal
+    This ammunition is especialy effective against natural creatures
+    and will do three times the normal damage against such creatures.
+
+Ammunition of Hurt Evil
+    This ammunition is especialy effective against evil creatures and
+    will do two times the normal damage against such creatures.
+
+Ammunition of Hurt Dragon
+    This ammunition is especialy effective against dragons and will do
+    three times the normal damage against such creatures.
+
+Ammunition of Shocking
+    This ammunition will inflict three times the normal damage when
+    used against a creature that is not resistant to electricity.
+
+Ammunition of Flame
+    This ammunition will inflict three times the normal damage when
+    used against a creature that is not resistant to fire.
+
+Ammunition of Frost
+    This ammunition will inflict three times the normal damage when
+    used against a creature that is not resistant to cold.
+
+Ammunition of Slaying
+    This ammunition will have unusually large damage dice.
+
+Ammunition of Wounding
+    This ammunition will have unusually bonuses +to-hit and +to-dam.
+
+--- Other Items ---
+
+Apart from these there are some very rare and well made blades in
+the dungeon. These include Blades of Chaos (which grant resistance
+to chaos), Maces of Disruption (which are especially effective
+against undead creatures) and Scythes of Slicing (which may score
+vorpal hits). 
+
+Note on Vorpal Weapons: A weapon with the vorpal flag will
+have a 1-in-6 chance of doing additional damage each time it
+strikes. If it passes the roll it has a chance of doing it again.
+This continues until a roll is failed. The calculations are nasty
+but the net effect is a 22% increase in damage (from the base
+damage of the weapon only and not on the slays, +to-dam, etc.)
+
+
+***** <D>
+=== Body and Shield Bashes ===
+
+Weight is the primary factor in being able to bash something, but
+strength plays a role too. After bashing, a character may be off
+balance for several rounds depending upon his dexterity.
+
+Doors can be broken down by bashing them. Once a door is bashed open,
+it is forever useless and cannot be closed.
+
+Finally, a creature may be bashed. If a shield is currently being worn,
+the bash is a shield bash and will do more damage. In either case, a
+bash may throw an opponent off balance for a number of rounds, allowing
+a player to get in a free hit or more. If the player is thrown off
+balance, his opponent may get free hits on him. This is a risky attack.
+It is also a hack.  :-)
+
+
+***** <E>
+=== Your Armor Class ===
+
+Your armor class (or AC) is a number that describes the amount and the
+quality of armor being worn. Armor class will generally run from about
+0 to 150, but could become negative or greater than 150 with rarer
+armor or by magical means.
+ 
+The larger your armor class, the more protective it is. A negative
+armor class would actually help get you hit. Armor protects you in
+three manners. One, it makes you harder to be hit for damage. A hit for
+no damage is the same as a miss. Two, good armor will absorb some of
+the damage that your character would have taken from normal attacks.
+Three, acid damage is reduced by wearing body armor (but the armor will
+be damaged instead). It is obvious that a high armor class is a must
+for surviving the deeper levels of Zangband.
+
+Each piece of armor has a base armor value, which, like the damage from
+weapons, is assumed known by the player, and a magic bonus, which will
+not be displayed unless the armor has been identified or was bought in
+a store.
+
+Armor class values are always displayed between a set of brackets
+as '[#]' or '[#,+#]'. The first value is the armor class of the
+item.  The second number is the magical bonus of the item which is
+only displayed if known, and will always have a sign preceding the
+value.
+
+Note: A few rings, amulets, and weapons also have the '[+#]'
+notation, indicating that they provide an armor bonus. Many
+pieces of heavy body armor will also have a '(-#)' before the
+'[#,+#]', which indicates that the weight of the armor decreases
+your chances of hitting monsters. This can range from nonexistent
+for very light armor to (-8) for the very heaviest armor!
+
+
+***** <F>
+=== Ego Armor ===
+
+In addition to the ordinary armor items your character may find in
+the dungeon, some of them may be endowed with additional powers.
+These armors are fall into two types: (1) artifacts - which are
+dealt with separately and can be identified by their name; and (2)
+Ego Armors which are addressed below. Unlike artifacts which are
+unique and may only be found once in each game, it is not unusual
+to find several Ego Armors of the same type during the course of
+a character's adventures. Each Ego type may only be found on
+certain types of armor - for example, you can find a Shield of
+Elvenkind but not Boots of Elvenkind.
+
+Note: Zangband has extended the original Angband's concept of adding
+random abilities to the various Ego types considerably. These can be
+either guaranteed or have only a varying chance of being granted. (See
+'Randabil.spo' for details of the the random powers of Ego Armor).
+
+--- Armor/Shields ---
+
+of Resist Acid.
+     A character using such an object will take only one third normal
+     damage from any acid thrown upon him.  In addition, armor so
+     enchanted will resist the acid's effects and not be damaged by it.
+
+of Resist Lightning.
+     A character using a resist lightning object will take only one
+     third damage from electrical attacks.
+
+of Resist Fire.
+     A character using a resist fire object will take only one third
+     damage from heat and fire.
+
+of Resist Cold.
+     A character using a resist cold object will take only one third
+     damage from frost and cold.
+
+of Resistance.
+     A character wearing armor with this ability will have resistance
+     to Acid, Cold, Fire, and Lightning as explained in each part
+     above.
+
+of Elvenkind.
+     This is the same as Resistance armour, only generally better
+     enchanted. It will also make you more stealthy.
+
+of Permanence (Robes Only)
+     These robes provide resistance to fire, cold, acid, and
+     electricity and cannot be damaged by acid. They also resist life
+     draining attacks and sustain all your primary stats. 
+
+of Reflection (Shields Only)
+     These shields reflect missiles and bolt spells preventing damage
+     to the player character and often damaging the originating
+     monster. The reflection is not 100% effective but nearly so. 
+
+--- Caps/Helms/Crowns ---
+
+of Intelligence
+     This item will both increase and sustain your intelligence.
+
+of Wisdom
+     This item and will both increase and sustain your wisdom.
+
+of Beauty
+     This item will both increase and sustain your charisma.
+
+of the Magi
+     This item will both increase and sustain your intelligence, and
+     grants resistance against fire, frost, acid, and lightning.
+
+of Might
+     This item will both increase and sustain your strength, dexterity,
+     and constituion and will also make you immune to any foe's attempt
+     to slow or paralyze you.
+
+of Lordliness
+     This item will both increase and sustain your wisdom and charisma.
+
+of Seeing
+     This item will grant the ability to see invisible creatures, and
+     will also increase your ability to locate traps and secret doors.
+     In addition it will also prevent you from being blinded.
+
+of Infravision
+     This item will increase the range of you infravision and grants
+     infravision if you are a race which does not get it intrinsically.
+
+of Light
+     This item provides a permanent light source.
+
+of Telepathy
+     This item grants its wielder telepathy.
+
+of Regeneration
+     This item will help you regenerate hit points and mana more
+     quickly than normal, allowing you to fight longer before needing
+     to rest. You will use food faster than normal while wearing this
+     crown because of the regenerative effects.
+
+--- Cloaks ---
+
+of Protection
+     These cloaks cannot be harmed by acid, fire, cold or lightning
+     attacks but do not grant resistance to these elements.
+
+of Stealth
+     These cloaks will make your character more stealthy.
+
+of Aman
+     These cloaks cannot be harmed by acid, fire, cold or lightning
+     attacks but do not grant resistance to these elements. They also
+     make your character more stealthy.
+
+of Immolation
+     These cloaks cannot be harmed by acid or fire attacks. They also
+     grant resistance to fire and give out a fiery aura.
+
+of Electricity
+     These cloaks cannot be harmed by acid or electricity attacks. They
+     also grant resistance to electricity and give out an electric
+     aura.
+
+--- Gloves/Gauntlets/Sets of Cesti ---
+
+of Free Action
+     This item will make you immune to any foe's attempt to slow or
+     paralyze you. A mage-type spellcaster who wields them will not
+     have their mana penalized.
+
+of Slaying
+     In addition to its armor bonus, this item will grant a bonus to
+     your +to-hit and +to-dam.
+
+of Agility
+     This item will increase your dexterity. A mage-type spellcaster
+     who wields them will not have their mana penalized.
+
+of Power
+     This item will increase your strength and will also grant a bonus
+     to your +to-hit and +to-dam.
+
+--- Boots ---
+
+of Levitation
+     These boots will grant you levitation.
+
+of Stealth
+     These boots will make your character more stealthy.
+
+of Free Action
+     This item will make you immune to any foe's attempt to slow or
+     paralyze you.
+
+of Speed
+     These boots will make your character more speedy.
+
+--- Special Items ---
+     
+Dragon Scale Mails.
+     These extremely rare pieces of armour come in many different
+     colors, each protecting you against the relevent dragons.
+     Naturally they are all resistant to acid damage. They also
+     occasionally allow you to breathe as a dragon would!
+
+Dragon Shields and Helms
+     These shields and helms have a chance of granting one or more 
+     random resistances.
+
+Other items
+     Apart from these there are some very rare, and well made armours
+     in the dungeon with not necessarily any special abilities. These
+     include Adamantite Plate Mail, Mithril Plate Mail, Mithril Chain
+     Mail, Shields of Deflection, and Shadow Cloaks. The first four
+     cannot be damaged by acid because of the quality metals they
+     contain. Shadow Cloaks grant resistance to both light and darkness
+     attacks.
+
+
+***** <G>
+=== Artifacts ===
+
+Of all the objects in Zangband that you might find, by far the most
+important group are artifacts.  Artifacts are unique items with
+additional properties such as increasing or sustaining one or more
+of your stats and granting resistances or abilities. Often an
+artifact cab be 'A'ctivated for a magical effect. These can be
+Extremely useful - especialy for classes that are weak in magic.
+
+There are two types of artifacts - fixed and random. The fixed
+artifacts each have entries in the lib/edit/a_info.txt file
+and consequently have a chance of appearing in each game you play.
+On the other hand, random artifacts are created by the game and
+have both random names and random properites. Once created, there
+is only a vanishingly small chance you will ever see one exactly
+the same again.
+
+
+--- (Non-) Preserve Mode ---
+
+One important thing to note when considering artifacts is your
+initial choice of (non-)preserve mode. in non-preserve mode, once a
+fixed artifact is generated (either on the dungeon floor or in a
+monster drop), it will never be generated again during that game.
+This means that if you miss the artifact by leaving the level before
+you pick it up it is gone forever. On the other hand, in preserve mode
+this behaviour is only exhibited once you have identified the artifact.
+It is therefor safer to leave a level before it is comletely explored
+as any fixed artifact can be regenerated in subsequent levels.
+
+
+--- Special feelings ---
+
+If you have stayed on the previous level long enough, on entering a
+new level you will receive a 'feeling' which reflects the quality
+of the monsters and objects on the level. Feelings are discussed in
+more detail in the Town and Dungeon section. One possible feeling
+is 'You have a special feeling about this level'. This message is
+only given when playing in non-preserve mode and is an indicator
+that you have either a monster pit, vault or artifact on the level.
+Artifacts always cause special feelings but pits and vaults are
+increasingly less likely to do so as you get deeper in the dungeon.
+At very deep levels, special feelings are almost always artifacts.
+
+Note: In non-preserve mode, you can still find artifacts on
+levels that did not give a special feeling but these will always
+be the result of a monster dropping them.
+
+
+--- The '~' Command ---
+
+By pressing '~' and choosing the option for artifacts, you can see
+what fixed (but not random) artifacts you have found so far. In
+non-preserve mode, this option will also show which fixed (but not
+random) artifacts you have missed. However, in this case, it will
+show nothing about fixed artifacts on the curent dungeon level but
+not yet found and as a result is often best used on the town level.
+
+
+--- Random Abilities of Fixed Artifacts ---
+
+Some of the fixed artifacts are given random abilities such as
+sustains, resistances or other powers.  (See 'randabil.spo' for details
+of the random abilities of the fixed artifacts).
+
+
+***** <H>
+=== Monk Attacks ===
+
+The Monk character is designed to be a barehanded fighter rather
+than using a wepaon like the other Zangband classes. As a Monk's
+level increases the number of attacks they get per round increases
+and new, increasingly powerful attacks become available. Higher
+level attacks have a chance to stun the Monk's opponent.
+
+While the type of attack that a Monk uses for each blow is chosen
+at random from the list of available attacks, at higher levels
+there is a bias towards the attacks which do greater damage.  This
+is  because at these levels, the game will roll several times for
+each blow with the highest attack type chosen.
+
+
+--- Monks Attack Types ---
+
+Attack Name   Min.lvl   Damage   Stun    Notes
+-----------------------------------------------------------------------
+Punch            1       1d4       -
+Kick             2       1d6       -
+Strike           3       1d7       -
+Knee             5       2d3       *     Likely to stun male opponents
+Elbow            7       1d8       -
+Butt             9       2d5       -
+Ankle Kick      11       3d4       -     May slow down the opponent
+Uppercut        13       4d4       6
+Double-kick     16       5d4       8
+Cat's Claw      20       5d5       -
+Jump Kick       25       5d6      10
+Eagle's Claw    29       6d6       -
+Circle Kick     33       6d8      10
+Iron Fist       37       8d8      10
+Flying Kick     41       8d10     12
+Dragon Fist     45      10d10     16
+Crushing Blow   48      10d12     18
+
+
+***** <I>
+=== Basic Tactics ===
+
+
+Pillardancing
+-------------
+Requires that you be at least twice as fast as the monster you are
+fighting. Find a single block of wall, freestanding, and lure your
+enemy to it. When both you and your eneny are standing next to the
+pillar, hit him, and then move so that you are opposite the pillar
+from him. He will use his turn to move so that he's standing next
+to you. Hit him again, and then move again. Repeat until he's dead.
+
+Note: Some monsters move eratically, and cannot be relied upon
+to move in the method expected. Also, some monsters (mostly
+Ghosts) Can move through walls, and a small number of monsters
+can chew through walls.
+
+
+Shoot'n Scoot
+-------------
+Requires a large room, Phase Door, and some type of missile weapon.
+Stand at one end of the room, your enemy at the other. Fire your
+missile weapon at him until he gets close, and then Phase Door.
+Fire again, until he gets close, and repeat. By the time you run
+out of ammunition, he should be dead or weak enough for you to
+finish him HTH (Hand to Hand).
+
+
+Hack'n Back
+-----------
+Requires that you be at least twice as fast as your opponent. Stand
+next to your enemy, hit him, and back up. He should use his turn to
+move towards you instead of using a missile weapon or a spell. Hit
+him again, back up again, repeat. This is a little more dangerous
+than Pillardancing, because the monster gets a chance to breathe or
+cast a spell, but it's easier to set up.
+
+
+Wail'n Bail
+-----------
+Requires Teleport items. Fight the monster until you're almost
+dead, teleport out, find him, and resume fighting. This is
+dangerous, because you could teleport right next to some nasty that
+will kill you. Also, it is not generally useful for killing unique
+monsters, as they regenerate damage very quickly, and by the time
+you find them again, they will have healed what you did to them.
+
+
+The Anti-Summoning Corridor
+---------------------------
+Requires a little time to set up. This can be done just about
+anywhere. Dig a twisting corridor into the rock, and station
+yourself at one end of it. When your opponent arrives, he won't be
+able to summon any monsters next to you. This is a very important
+technique for fighting many higher-end monsters which very quickly
+bring in a horde of other monsters.
+
+
+--
+Original   : (??)
+Updated    : (??)
+Updated    : Zangband DevTeam
+Last update: December 3, 1999

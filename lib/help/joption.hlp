@@ -1,0 +1,34 @@
+Zangband オプション
+
+ 参照したいオンライン・ヘルプを選んで下さい:
+
+    (0) Zangband オプション一覧          (joption.txt)
+    (1) オプション１ -- インターフェース (joption.txt#A)
+    (2) オプション２ -- 行動中止         (joption.txt#B)
+    (3) オプション３ -- ゲームプレイ     (joption.txt#C)
+    (4) オプション４ -- 効率化           (joption.txt#D)
+    (5) ZAngband 固有オプション          (joption.txt#E)
+    (6) アイテム結合オプション           (joption.txt#F)
+    (7) 基本ウェイト量                   (joption.txt#G)
+    (8) 低ヒットポイント警告             (joption.txt#H)
+    (9) 自動セーブオプション             (joption.txt#I)
+    (a) ウィンドウ フラグ                (joption.txt#J)
+    (b) 詐欺オプション                   (joption.txt#K)
+    (c) 初期オプション                   (joption.txt#L)
+
+    (?) ヘルプシステムの使用法      (jhelpinfo.txt)
+
+
+***** [0] joption.txt
+***** [1] joption.txt#A
+***** [2] joption.txt#B
+***** [3] joption.txt#C
+***** [4] joption.txt#D
+***** [5] joption.txt#E
+***** [6] joption.txt#F
+***** [7] joption.txt#G
+***** [8] joption.txt#H
+***** [9] joption.txt#I
+***** [a] joption.txt#J
+***** [b] joption.txt#K
+***** [c] joption.txt#L

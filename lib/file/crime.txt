@@ -1,0 +1,45 @@
+N:53:Grip, Farmer Maggot's dog
+N:54:Wolf, Farmer Maggot's dog
+N:55:Fang, Farmer Maggot's dog
+0
+
+N:*:Default
+38
+murder.
+arson.
+rape.
+assault and battery.
+theft.
+extortion.
+rape, assault and battery.
+embezzlement.
+embezzlement and theft.
+theft and murder.
+kidnapping.
+stealing.
+fraud.
+fraud and embezzlement.
+counterfeiting.
+smuggling.
+horse theft.
+shoplifting.
+treason.
+pillaging.
+rape and pillage.
+cruelty to animals.
+dealing drugs.
+murder for hire.
+luring souls to destruction.
+smashing holy relics.
+glorying in chaos.
+convenanting with Morgoth.
+desecration of holy places.
+conspiring to topple bastions.
+abuse of self-appointed privilege.
+leaguing with the underworld.
+spawning minions of darkness.
+the desolation of kingdoms.
+lese-majesty.
+obstructing justice.
+conspiring to obstruct justice.
+assault with a deadly weapon.

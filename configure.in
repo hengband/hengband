@@ -1,0 +1,77 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(src/main.c)
+
+AM_CONFIG_HEADER(src/autoconf.h)
+
+AC_LANG_C
+
+dnl Checks for programs.
+AC_PROG_CC
+
+AM_INIT_AUTOMAKE(hengband, 1.0.8)
+
+AC_ARG_ENABLE(japanese,
+[  --disable-japanese      disable japanese [**NOT WORK**]],use_japanese=no ,[AC_DEFINE(JP) AC_DEFINE(EUC)])
+
+AC_ARG_ENABLE(xim,
+[  --disable-xim           disable xim support], use_xim=no, use_xim=yes)
+AC_ARG_ENABLE(fontset,
+[  --disable-fontset       disable fontset support], use_fontset=no, use_fontset=yes)
+AC_ARG_ENABLE(worldscore,
+[  --disable-worldscore    disable worldscore support], ,AC_DEFINE(WORLD_SCORE))
+AC_ARG_ENABLE(chuukei,
+[  --enable-chuukei        enable internet chuukei support], AC_DEFINE(CHUUKEI))
+
+dnl Checks for libraries.
+dnl Replace `main' with a function in -lncurses:
+AC_CHECK_LIB(ncurses, initscr, [AC_DEFINE(USE_GCU) AC_DEFINE(USE_NCURSES) LIBS="$LIBS -lncurses"])
+if test "$ac_cv_lib_ncurses_initscr" != yes; then
+  AC_CHECK_LIB(curses, initscr, [AC_DEFINE(USE_GCU) LIBS="$LIBS -lcurses"])
+  if test "$ac_cv_lib_curses_initscr" != yes; then
+    AC_CHECK_LIB(termcap, tgetent, [AC_DEFINE(USE_CAP) LIBS="$LIBS -ltermcap"])
+  fi
+fi
+
+dnl Checks for header files.
+AC_PATH_XTRA
+if test "$have_x" = yes; then
+  LIBS="$LIBS -lX11"
+  AC_DEFINE(USE_X11)
+  CFLAGS="$X_CFLAGS $CFLAGS"
+  LDFLAGS="$X_LIBS $LDFLAGS"
+  if test "$use_japanese" != no; then
+    if test "$use_fontset" = yes; then
+      AC_DEFINE(USE_FONTSET)
+    fi
+    if test "$use_xim" = yes; then
+      AC_DEFINE(USE_XIM)
+    fi
+    if test "$use_fontset" = yes || "$use_xim" = yes; then
+      AC_DEFINE(USE_LOCALE)
+      AC_DEFINE(DEFAULT_LOCALE, "ja_JP.eucJP", Default Japanese Locale)
+      AC_CHECK_LIB(X11, _Xsetlocale, AC_DEFINE(X_LOCALE))
+    else
+      AC_DEFINE(_JP)
+    fi
+  fi
+fi
+
+AC_HEADER_STDC
+AC_CHECK_HEADERS(fcntl.h strings.h sys/file.h sys/ioctl.h sys/time.h termio.h unistd.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+AC_STRUCT_TM
+
+dnl Checks for library functions.
+AC_PROG_GCC_TRADITIONAL
+AC_FUNC_MEMCMP
+AC_TYPE_SIGNAL
+AC_FUNC_STRFTIME
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS(gethostname mkdir select socket strdup strstr strtol)
+
+AC_OUTPUT(Makefile src/Makefile lib/Makefile lib/apex/Makefile lib/bone/Makefile lib/data/Makefile lib/edit/Makefile lib/file/Makefile lib/help/Makefile lib/info/Makefile lib/pref/Makefile lib/save/Makefile lib/script/Makefile lib/user/Makefile lib/xtra/Makefile lib/xtra/font/Makefile lib/xtra/graf/Makefile lib/xtra/music/Makefile lib/xtra/sound/Makefile)

@@ -1,0 +1,23 @@
+
+                  ***************************************
+                  **   Hengband 1.0.8 English version  **
+                  ***************************************
+
+          Based on Moria:    Copyright (c) 1985 Robert Alan Koeneke
+              and Umoria:    Copyright (c) 1989 James E. Wilson
+
+       Angband 2.7 - 2.9:    Ben Harrison (benh@phial.com)
+    Japanese version 1.2:    Sitoshin, sayu, FIRST, TeO
+
+       Old ZAngband code:    (Mr) Topi Ylinen < f1toyl@uta.fi >
+       New ZAngband code:    Robert Ruehlmann < rr9@angband.org >
+    ZAngband 2.3.0 - ???:    The ZAngband DevTeam
+       ZAngband Jap ver.:    Mitsuhiro Itakera < m-itakura@geocities.co.jp >
+
+
+          Hengband: Mr.hoge (echizen @ s5.xrea.com) & Meny others
+                     http://echizen.s5.xrea.com/heng/
+
+           Hengband is running on UNIX/X11, Windows, Macintosh.
+   Please report bugs at BBS "http://echizen.s5.xrea.com/heng/eng-hengband/".
+

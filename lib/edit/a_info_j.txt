@@ -1,0 +1,3406 @@
+# File: a_info.txt
+#JZ# Zangband 日本語訳: 板倉
+#JZ# 「#J0#」で始まるコメントは日本語板 Angband のしとしんさんによる
+#JZ# もので、「#JZ#」で始まるコメントは日本語版 Zangband で新たに
+#JZ# 加わった項目です。日本語アングバンド同様、私（板倉）以外の方の
+#JZ# コメントにはその方の名前を記載しています。
+#JZ#
+#JZ# ＃＃＃ 以下は日本語版 Angband にあるコメントです ＃＃＃
+#J0# 日本語訳と日本語版製作 : しとしん
+#J0#
+#J0# 日本語版ではオリジナルと比較して設定項目が一つ増えています。
+#J0#
+#J0#
+#J0# 翻訳に際してなるべく資料を確認するようにしました。
+#J0# p.--  とあるのは「トールキン指輪物語辞典」でのページ数、
+#J0# wp. --とあるのは「新訳指輪物語追補編」でのページ数をあらわします。
+#J0# Ko -- とあるのは小林健一さんに教えてもらったものです。
+#J0# ??? --とあるのは調べがつかなかったものです。
+#J0#
+#J0# 伝説のアイテムの翻訳に関しては 都々目さとし さんに大変お世話になりました。
+#J0#
+#J0# 所々にあるコメントは 小林 さんと 都々目さとし さんのものです。かっこ内に発
+#J0# 言者を記載しました。
+#J0#
+#J0#「コメント」で検索できます。
+#J0#
+#J0# (ゲーム中での画面出力)
+#J0#
+#J0# 『』で囲まれた名前はアイテム名の後につきます。
+#J0#      ex) スモール・ソード『つらぬき丸』
+#J0#                         ~~~~~~~~~~~~~~
+#J0# それ以外はアイテム名の前につきます。
+#J0#      ex) スラインのアーケン石
+#J0#          ~~~~~~~~~~
+
+# This file is used to initialize the "lib/raw/a_info.raw" file, which
+# is used to initialize the "artifact" information for the Angband game.
+
+# Do not modify this file unless you know exactly what you are doing,
+# unless you wish to risk possible system crashes and broken savefiles.
+
+# After modifying this file, delete the "lib/raw/a_info.raw" file.
+
+# The artifact indexes are defined in "defines.h", and must not be
+# changed.
+
+# Artifacts 1-15 are "special", 16-63 are "armor", and 64-127 are
+# "weapons".
+
+# Hack -- "Grond" and "Morgoth" MUST have a rarity of one, or they might
+# not be dropped when Morgoth is killed.  Note that they, like the
+# "special"
+# artifacts, are never created "accidentally".
+
+# === Understanding a_info.txt ===
+
+# N: serial number : item name
+# I: tval : sval : pval
+# W: depth : rarity : weight : cost
+# P: base armor class : base damage : plus to-hit : plus to-dam : plus
+# to-ac
+# F: flag | flag |etc
+
+# 'N' indicates the beginning of an entry. The serial number must
+# increase for each new item and artifact activations depend on the
+# serial number.
+
+# 'I' is for basic information. The tval is for the type of item, the
+# sval identifies the subtype and the pval indicates the amount of
+# effect the item has, if applicable.
+
+# 'W' is for extra information. Depth is the depth the object is
+# normally found at, rarity determines how common the object is,
+# weight is in tenth-pounds and cost is the item's value.
+
+# 'P' is for power information. The items base armor class, its base
+# damage and pluses to-hit, to-dam and to-ac.
+
+# 'F' is for flags. These are fairly self-explanatory. As many F:
+# lines may be used as are needed to specify all the flags and flags
+# are separated by the '|' symbol.
+
+# Version stamp (required)
+
+V:2.8.1
+
+
+# The Phial of Galadriel
+
+N:1:ガラドリエルの
+E:of Galadriel
+I:39:4:1
+W:30:1:10:10000
+P:0:1d1:0:0:0
+F:ACTIVATE | SEARCH | INSTA_ART
+D:$A small crystal phial, with the light of Earendil's Star contained inside.  
+D:$Its light is imperishable, and near it darkness cannot endure.
+D:小さな水晶の瓶で、ガラドリエルの泉に映った
+D:エアレンディルの星(シルマリル)の光が閉じ込めてある。
+D:その不滅の光はあらゆる暗闇を追い払う。
+
+# The Star of Elendil
+
+#J0# (コメント)
+#J0#
+#J0# (都々目)
+#J0#＊a_info.txtを読ませて頂きましたが、『少しでも親しみがわくように日本語化や
+#J0#「王」などをいれたりとしてみました。』との事でしたが、それならこうすべきだ
+#J0#と思います(エレンディルは丈高きエレンディルと呼ばれた)。皆に付いている『王』
+#J0#と云う肩書きよりは親しみがわくと思います(笑)。
+#J0#
+N:2:丈高きエレンディルの
+E:of Elendil
+I:39:5:1
+W:50:25:5:32500
+P:0:1d1:0:0:0
+F:ACTIVATE | SEE_INVIS | HOLD_LIFE | INSTA_ART | SPEED
+D:$The shining Star of the West, a famed heirloom of Elendil's house.
+D:輝く『西方国の星』で、エレンディルの家系に伝わる家宝だ。
+D:銀の鎖に白い宝石がついている。
+
+# The Arkenstone of Thrain -> JoJ
+# Was +2 WIS/DEX
+
+#JZ# アンバーシリーズに出てくる重要アイテム
+N:3:審判の
+E:of Judgement
+I:39:6:3
+W:70:90:5:150000
+P:0:1d1:0:0:0
+F:ACTIVATE | SEE_INVIS | HOLD_LIFE | RES_CONF | RES_CHAOS |
+F:INSTA_ART | SPEED | WIS | INT
+D:金の鎖に取り付けられた、この宇宙の創世に深い関わりを持つ真紅の宝石。
+D:（R.ゼラズニイ、真世界アンバーシリーズ 3〜10巻）
+
+# The Amulet of Carlammas
+
+#J0# (コメント)
+#J0#
+#J0#(小林)
+#J0# > > >The Amulet of Carlammas         カルランマス→カルラマス
+#J0# > > >'Belegennon'                    ベレゲンノン→ベレゲノン
+#J0# > > >'Holhenneth'                    ホルヘンネス→ホルヘネス
+#J0# > > >'Cammithrim'                    カンミスリム→カミスリム
+#J0# > > >'Paurnimmen'                    パウルニンメン→パウアニメン
+#J0# > 
+#J0# > あとで，考え直してみたんだけど，-mm- や -nn- って，シンダリン語で
+#J0# > 重音になったか，単音になったか，ちょっと今自信がないです．ひょっと
+#J0# > したら「カルランマス」の方が原音に近いかも知れません．調べておきま
+#J0# > す．サウロンの別名"Annatar"は「アナタール」と読んだはずですが…．
+#J0# > ちなみに上の５つは物語中では見たことないです．
+#J0#
+#J0# 調べてきました．重なってる子音はシンダリン語では重音になるようです．
+#J0# 「カルランマス」
+#J0# 「ベレゲンノン」
+#J0# 「ホルヘンネス」
+#J0# 「カンミスリム」
+#J0# 「パウアニンメン」
+#J0# でよいようでした．記憶していた資料が間違っていたようです．
+#J0# 失礼しました．
+#J0# # ってことはシルマリルリオンの翻訳者が間違えたのかなあ？
+#J0#
+N:4:カルランマスの
+E:of Carlammas
+I:40:10:2
+W:50:30:3:60000
+F:CON | HIDE_TYPE | ACTIVATE | RES_FIRE | INSTA_ART
+D:$A fiery circle of bronze, with mighty spells to ward off evil.
+D:ブロンズの燃えるような首飾りで、邪悪な者をかわして退散させる
+D:強力な呪文が込められている。
+
+
+# The Amulet of Ingwe
+
+#J0# (コメント)
+#J0#
+#J0# p.308
+#J0# (都々目)
+#J0#＊シルマリルの物語に従う。エレンディルと同じ理由です。
+#J0#
+N:5:上級王イングウェの
+E:of Ingwe
+I:40:11:3
+W:65:50:3:90000
+F:WIS | CHR | INFRA | HIDE_TYPE |
+F:SEE_INVIS | FREE_ACT | ACTIVATE |
+F:RES_ACID | RES_COLD | RES_ELEC |
+F:INSTA_ART
+D:$The ancient heirloom of Ingwe, high lord of the Vanyar, against whom nothing 
+D:$of evil could stand. 
+D:ヴァラールの島に渡り中つ国に戻ることのなかった
+D:ヴァンヤール族の上級王イングウェの家系伝来の家宝。
+D:イングウェに対抗できる邪悪なものはいなかった。
+
+
+# The Necklace of the Dwarves
+
+N:6:ドワーフの
+E:of the Dwarves
+I:40:12:3
+W:70:70:3:75000
+F:STR | CON | INFRA | HIDE_TYPE |
+F:SEE_INVIS | FREE_ACT | REGEN | LITE | INSTA_ART
+D:$The Nauglamir; a carencet of gold set with a multitude of shining gems of 
+D:$Valinor, accenting a radiant Silmaril.  The sturdy spirits of Dwarvish 
+D:$craftsmen who labored long in mountain smithies lie within it still, and 
+D:$as gossamer it rests upon the bearer.
+D:燦然と輝くシルマリルと、それを引き立たせる
+D:たくさんのヴァリノールの宝石で飾られた金の首飾りだ。
+D:山の中の鍛冶場で長い間鎚を打ってきた
+D:頑強なドワーフの職人魂がしっかりと宿っており、
+D:蜘蛛の糸のように身に付ける者にフィットする。
+
+
+# The Incandescent Light of Yeduson
+# Thomas Alva Yeduson the "Wizard of Menlo Park"
+# patented 1,093 inventions.
+# inventor of the incandescent lightbulb
+# Default reward for The Dark Elven Lords Quest
+
+N:7:ヱヅソンの
+E:of Yeduson
+I:39:3:3
+W:40:20:5:20000
+P:0:1d1:0:0:0
+F:INSTA_ART | INFRA | SH_FIRE | SH_ELEC
+D:$The Incandescent Light of Yeduson 
+D:$Thomas Alva Yeduson the "Wizard of Menlo Park" 
+D:$patented 1,093 inventions.  
+D:$Inventor of the incandescent lightbulb.
+D:「非常に進んだ科学は魔術と見分けがつかない。」
+
+# The Ring of Barahir -> Frakir
+
+#JZ#
+N:8:《フラキア》という
+E:'Frakir'
+I:45:32:1
+W:50:40:2:75000
+F:STR | INT | WIS | DEX | CON | CHR | STEALTH | HIDE_TYPE |
+F:RES_POIS | ACTIVATE | SEE_INVIS | SEARCH | INSTA_ART
+D:混沌の王子マーリンがログルスから生み出した意思を持った腕輪だ。
+D:普段は目に見えないが脈動して危険を知らせてくれる。装備するものが
+D:命ずると形を変えて敵の首を締めることができる。
+D:（R.ゼラズニイ、真世界アンバーシリーズ 6〜10巻）
+
+# The Ring of Tulkas
+
+#J0# (コメント)
+#J0#
+#J0# p.343
+#J0# (都々目)
+#J0#＊シルマリルの物語より。エアレンディルの項と同じ理由です。
+#J0#
+N:9:勇猛なるトゥルカスの
+E:of Tulkas
+I:45:33:4
+W:70:90:2:175000
+F:STR | DEX | CON | HIDE_TYPE | ACTIVATE | SPEED | INSTA_ART
+D:$The treasure of Tulkas, most fleet and wrathful of the Valar.
+D:ヴァラールの中でも最も素早くかつ勇猛なトゥルカスの宝だ。
+
+
+# The Ring of Power (Narya)
+
+N:10:《ナルヤ》という
+E:of Power (Narya)
+I:45:34:1
+W:70:100:2:100000
+P:0:1d1:10:10:0
+F:STR | INT | WIS | DEX | CON | CHR | SPEED | HIDE_TYPE |
+F:ACTIVATE | FREE_ACT | SEE_INVIS |
+F:SLOW_DIGEST | REGEN | SUST_STR | SUST_DEX | IM_FIRE |
+F:INSTA_ART
+D:$The Ring of Fire, set with a ruby that glows like flame.  Narya is one 
+D:$of the three Rings of Power created by the Elves and hidden by them from 
+D:$Morgoth.
+D:炎のように輝くルビーがはめられた火の指輪で、
+D:エルフにより作られサウロンから隠された三つの力の指輪のうちの一つだ。
+D:中つ国ではキアダンとガンダルフが所有していた。
+
+# The Ring of Power (Nenya)
+
+N:11:《ネンヤ》という
+E:of Power (Nenya)
+I:45:35:2
+W:80:140:2:200000
+P:0:1d1:11:11:0
+F:STR | INT | WIS | DEX | CON | CHR | SPEED | HIDE_TYPE |
+F:ACTIVATE | HOLD_LIFE | FREE_ACT | SEE_INVIS |
+F:FEATHER | REGEN | SHOW_MODS |
+F:SUST_INT | SUST_WIS | IM_COLD |
+F:INSTA_ART
+D:$The Ring of Adamant, with a pure white stone as centerpiece.  Nenya is one 
+D:$of the three Rings of Power created by the Elves and hidden by them from 
+D:$Morgoth.
+D:冷気の凝縮した真っ白な宝石がはめられた指輪だ。
+D:エルフにより作られサウロンから隠された三つの力の指輪のうちの一つだ。
+D:中つ国ではガラドリエルが所有していた。
+
+# The Ring of Power (Vilya)
+
+N:12:《ヴィルヤ》という
+E:of Power (Vilya)
+I:45:36:3
+W:90:170:2:300000
+P:0:1d1:12:12:0
+F:STR | INT | WIS | DEX | CON | CHR | SPEED | HIDE_TYPE |
+F:ACTIVATE | HOLD_LIFE | FREE_ACT | SEE_INVIS |
+F:FEATHER | SLOW_DIGEST | REGEN |
+F:SUST_INT | SUST_WIS | SUST_STR | SUST_DEX | IM_ELEC |
+F:INSTA_ART
+D:$The Ring of Sapphire, with clear blue gems that shine like stars, 
+D:$glittering untouchable despite all that Morgoth ever wrought.  Vilya is 
+D:$one of the three Rings of Power created by the Elves and hidden by them 
+D:$from Morgoth.
+D:星の様に輝く透き通ったサファイアの指輪だ。
+D:エルフにより作られサウロンから隠された三つの力の指輪のうちの一つだ。
+D:中つ国ではエルロンドが所有していた。
+
+# The Ring of Power (The One Ring)
+
+N:13:《一つの指輪》という
+E:of Power (The One Ring)
+I:45:37:5
+W:100:255:2:5000000
+P:0:1d1:15:15:0
+F:STR | INT | WIS | DEX | CON | CHR | SPEED | HIDE_TYPE |
+F:ACTIVATE | CURSED | HEAVY_CURSE | PERMA_CURSE |
+F:AGGRAVATE | DRAIN_EXP | SEE_INVIS | REGEN | TY_CURSE |
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_ACID |
+F:SUST_STR | SUST_DEX | SUST_CON |
+F:SUST_INT | SUST_WIS | SUST_CHR |
+F:INSTA_ART
+D:$"One Ring to rule them all, One Ring to find them, One Ring to bring 
+D:$them all and in the darkness bind them."  Made of massive gold, and 
+D:$set with runes in the foul speech of Mordor, Isildur's Bane possesses 
+D:$powers so great that it inevitably twists and masters any earthly being 
+D:$who wears it.
+D:「一つの指輪は全てを統べ、一つの指輪はすべてを見つけ、
+D:一つの指輪はすべてを捕えてくらやみのなかにつなぎとめる。」
+D:重厚な金の指輪で、モルドールの忌まわしい言葉でルーン文字が
+D:刻んである。このイシルドゥアの禍の力はあまりにも強大なので、
+D:普通の者はそれを身に付けるだけで歪められ支配されてしまう。
+
+N:14:《アホヤ》という
+E:of Cower (Darnya)
+I:45:50:-5
+W:100:100:2:0
+P:0:1d1:-15:-15:0
+F:STR | INT | WIS | DEX | CON | CHR | SPEED | HIDE_TYPE |
+F:ACTIVATE | CURSED | HEAVY_CURSE | PERMA_CURSE |
+F:AGGRAVATE | DRAIN_EXP | TY_CURSE |
+F:INSTA_ART
+D:$Adorned, showy gilding, 
+D:$set with runes in the strange speech of Heheh, with power so great that it 
+D:$inevitably twists and masters any earthly being who wears it.
+D:安っぽい金メッキの指輪で、へけけな言葉でルーン文字が
+D:刻んである。このわけわからん禍の力はあまりにも強大なので、
+D:普通の者はそれを身に付けるだけで歪められ支配されてしまう。
+
+
+N:15:パランティアの
+E:of Westernesse
+I:39:8:3
+W:60:50:10:60000
+P:0:1d1:0:0:0
+F:WIS | CHR | ACTIVATE | TELEPATHY | INSTA_ART
+D:$A shining white ball of unbreakable crystal, the ancient palantiri, 
+D:$or 'far-watchers', were used by kings of Numenor and later by the Exiles 
+D:$for rapid communication between distant lands. 
+D:この白く輝く不滅の水晶球は、古くはヌメノールの歴代の王に、
+D:後にはエレンディルをはじめとする流浪の民によって、離れた土地の間の
+D:高速通信に用いられた「遠望」の石だ。
+
+
+N:16:『クリムゾン』
+E:'Crimson'
+I:19:50:4
+W:60:150:100:100000
+P:0:0d0:20:20:0
+F:SPEED | STEALTH | RES_NETHER |
+F:ACTIVATE | SHOW_MODS | INSTA_ART
+D:「―そこは街全体が魔物の住処と化していた。そのとき思わず
+D:使った銃−クリムゾンが越前を助け、そして、たたかうごとに、
+D:クリムゾンはより強力な武器へと進化していった。―」(デスク
+D:リムゾン，エコールソフトウェア)
+
+
+N:17:知識の
+E:of Lore
+I:39:7:0
+W:15:12:15:20000
+P:0:1d1:0:0:0
+F:ACTIVATE | INSTA_ART
+D:$A great emerald that fills your mind with images of knowledge and dreadful 
+D:$understanding as you stare into its depths.
+D:この大きなエメラルドの中の緑の深淵をのぞき込む時、
+D:あなたの精神は知識の心象と恐るべき理解によって満たされる。
+
+N:18:ファラミアの
+E:of Faramir
+I:40:17:3
+W:30:60:2:20000
+P:0:0d0:12:0:0
+F:STEALTH | SHOW_MODS | HIDE_TYPE |
+F:RES_CONF | SUST_DEX | ACTIVATE |
+F:INSTA_ART
+D:$A slim neckpiece of True-silver, with quiet spells of Ithilien to aid and 
+D:$protect the wearer.
+D:「まことの銀」で作られた首飾りで、身に付ける者を助けて守るイシリエン
+D:の静かな魔法が秘められている。
+
+# The Adamantite Plate Mail 'Soulkeeper'
+
+#J0# 日本語化, Ko
+#J0#N:19:『魂保持者』
+#J0#N:19:『守護魂』
+N:19:『魂の守り手』
+E:'Soulkeeper'
+I:37:30:2
+W:75:9:420:200000
+P:40:2d4:-4:0:20
+F:CON | HOLD_LIFE | SUST_CON |
+F:RES_ACID | RES_COLD | RES_DARK | RES_NETHER | RES_NEXUS | RES_CHAOS |
+F:ACTIVATE
+D:$A suit of imperishable adamant, with conquerable strength to endure evil 
+D:$and disruptive magics, that protects the life force of its wearer like 
+D:$nothing else can.
+D:永遠不滅のアダマンタイトで作られた鎧で、あらゆる
+D:邪悪な力や破壊的な魔法を跳ね返す霊力を秘め、
+D:着用者の生命力を守ることにかけては何物にも優る。
+
+
+# The Full Plate Armour of Isildur
+
+#J0# wp.273
+N:20:イシルドゥアの
+E:of Isildur
+I:37:15:2
+W:30:3:300:50000
+P:25:2d4:0:0:25
+F:CON | RES_ACID | RES_ELEC | RES_FIRE | RES_COLD |
+F:RES_SOUND | RES_CONF | RES_NEXUS
+D:$A gleaming steel suit covering the wearer from neck to foot, with runes of 
+D:$warding and stability deeply engraved into its surface.
+D:装備する者の首から足までをカバーする輝く鋼鉄の鎧で、
+D:邪悪なものを退け頑強さを増す
+D:ルーン文字が表面に深く刻まれている。
+D:かつてサウロンから指輪を奪うのに成功したエレンディルの息子イシルドゥア
+D:が身に付けていた。
+
+# The Metal Brigandine Armour of the Rohirrim
+
+#J0# (コメント)
+#J0#
+#J0# wp.245, p.237
+#J0#
+#J0# (しとしんのコメント)
+#J0# > で、固有名詞関係なのですが、例えば
+#J0# > of the Rohirrim                 ロヒアリム→ロヒリム
+#J0# > ですが、これは以前他の方からも「ロヒリム」だ、と指摘されたの
+#J0# > ですが、新版指輪物語追補編 p.245 では「ロヒアリム」となって
+#J0# > います。で、それを伝えたら、どうも翻訳者によって色々と
+#J0# > 違うことが判明しました。すごいのになると５、６種類くらい
+#J0# > 読み方があったり(^_^;。どうするべきか自分でも判断がつきま
+#J0# > せんでしたので、一応新版指輪物語追補編の読み方にしておき
+#J0# > ました。具体的には「ルシアン」とか「オロリン」とかが
+#J0# > そうだと思います。
+#J0#
+#J0# (小林さんのコメント)
+#J0# 私は新版は読んでないもので(^_^)．
+#J0#
+#J0# 実際の「ロヒリム」「ルシエン」「オローリン」と「ロヒアリム」「ルシ
+#J0# アン」「オロリン」の違いは，日本語で書くと大きいけど，音としては微
+#J0# 妙で，英国人が聞いても聞き様で変わって来ると思います．
+#J0#
+N:21:ロヒアリムの
+E:of the Rohirrim
+I:37:9:2
+W:30:3:200:30000
+P:19:1d4:0:0:15
+F:STR | DEX | HIDE_TYPE |
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_CONF | RES_SOUND
+D:$Small metal plates cover an inner layer of sturdy canvas, and both bear 
+D:$scenes of hunting and war.  You feel the spirit of Eorl the Young, matchless 
+D:$in combat, around you as you put his armour on.
+D:小さな鉄板が麻布の下地を被う二重の鎧で、双方に狩りと戦の光景が描かれている。
+D:この鎧を身に付けると、闘いで負け知らずだったローハン初代の王、
+D:青年王エオルの魂を感じることができる。
+
+
+# The Mithril Chain Mail 'Belegennon' -> of Lohengrin
+
+#JZ# ワーグナー
+N:22:騎士ローエングリンの
+E:of Lohengrin
+I:37:20:4
+W:40:9:150:135000
+P:28:1d4:-1:0:20
+F:STEALTH | WIS | INT | SEE_INVIS |
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_POIS |
+F:HOLD_LIFE | RES_NETHER | RES_DARK | RES_FEAR |
+F:ACTIVATE
+D:聖杯守護の騎士パルジファルの息子、ローエングリンの輝く鎧だ。
+D:身に付ける者はあらゆる邪悪なものを退け聖杯の加護を得る。
+D:(ワーグナー、「パルジファル」)
+
+# The Mithril Plate Mail of Celeborn -> Julian
+
+#JZ#
+N:23:アーデンの森の主ジュリアンの
+E:of Julian
+I:37:3:4
+W:40:15:250:120000
+P:15:2d4:-2:0:40
+F:STR | CHR | HIDE_TYPE |
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_DARK |
+F:RES_DISEN | ACTIVATE
+D:真世界アンバーのアーデンの森を守るジュリアンの銀の鎧だ。
+
+
+# The Chain Mail of Arvedui
+
+#J0# (コメント)
+#J0#
+#J0#(都々目)
+#J0#＊基本的に名には肩書きを付けているようですし、アルヴェドゥイはアルノールの
+#J0#最後の王(新版追補編p15,p21)なので。
+#J0#
+N:24:アルヴェドゥイ王の
+E:of Arvedui
+I:37:4:2
+W:20:3:220:32000
+P:14:1d4:-2:0:15
+F:STR | CHR | HIDE_TYPE |
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_SHARDS | RES_NEXUS
+D:イシルドゥアの末裔であり、アングマール魔国と戦った
+D:北方王朝アルセダイン国の最後の王アルヴェドゥイが身に付けていた鎖帷子だ。
+D:これを装備する者はかの王の如き力強さを感じる。
+D:$A hauberk, leggings, and sleeves of interlocking steel rings, well padded 
+D:$with leather. You feel strong and tall as Arvedui, last king of Arnor, 
+D:$as you put it on.
+#D:体にフィットするよう皮の詰め物をした、鉄の輪を編んだ
+#D:鎖帷子と具足と肩当からなる。
+#D:これを装備する者はアルノールの最後の王アルヴェドゥイのような
+#D:力強さを感じる
+
+
+# The Augmented Chain Mail of Caspanion
+
+#J0# ???
+N:25:カスパニオンの
+E:of Caspanion
+I:37:6:3
+W:25:9:270:40000
+P:16:1d4:-2:0:20
+F:INT | WIS | CON | HIDE_TYPE |
+F:RES_ACID | RES_POIS | RES_CONF | ACTIVATE
+D:$A hauberk, leggings, and sleeves of interlocking steel rings, strategically 
+D:$reinforced at vital locations with a second layer of chain.  Magics to 
+D:$enhance body and mind lie within, and no door can bar the wearer's path.
+D:重要な部分が二重になった、手と足もカバーする鎖帷子だ。
+D:精神と肉体を強化する魔法がかかっており、いかなる障害も
+D:着用者の道を妨げることは出来ない。
+
+
+# The Leather Jacket 'of Shiva's Avatar'
+# A reward for 'The Old Castle' quest
+
+N:26:シヴァの化身の
+E:of Shiva's Avatar
+I:36:12:1
+W:30:50:120:100000
+P:12:1d2:3:4:20
+F:BLOWS | RES_SHARDS | HOLD_LIFE | SLOW_DIGEST |
+F:SUST_STR | SUST_DEX | SUST_CON | SUST_INT | SUST_WIS | SUST_CHR |
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD
+D:ヒンズー教の最高神は創造の神ブラフマン、維持の神ヴィシュヌ、
+D:そして破壊神シヴァだ。これはその中でも最も強力なシヴァの力が宿った
+D:鎧だ。
+
+# The Soft Leather Armour 'Hithlomir'
+
+#J0# ???, Ko
+N:27:『ヒスロミア』
+E:'Hithlomir'
+I:36:4:4
+W:20:3:80:45000
+P:4:0d0:0:0:20
+F:STEALTH | RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_DARK
+D:$Familar with the secret ways hidden in darkness, this leather cuirass is 
+D:$truly more than it appears.
+D:「霧の宝石」を意味する名を持つ、この革の胴鎧は、
+D:暗闇に隠れる秘密の手段に、その見かけよりも遥かに適している。
+
+# The Leather Scale Mail 'Thalkettoth'
+
+#J0# ???
+N:28:『サルケットス』
+E:'Thalkettoth'
+I:36:11:3
+W:20:3:60:25000
+P:11:1d1:-1:0:25
+F:DEX | HIDE_TYPE | RES_ACID | RES_SHARDS
+D:$An amazingly light tunic and skirt sewn with thick, overlapping scales of 
+D:$hardened leather whose wearer moves with agility and assurance.
+D:An amazingly light tunic and skirt sewn with thick, overlapping scales of 
+D:hardened leather whose wearer moves with agility and assurance.
+
+
+#  Artifact 29 is unused
+
+
+# The Small Metal Shield of Thorin
+
+N:30:トーリン王の
+E:of Thorin
+I:34:3:4
+W:40:12:65:120000
+P:5:1d2:0:0:21
+F:STR | CON | HIDE_TYPE | FREE_ACT | IM_ACID | RES_SOUND | RES_CHAOS
+D:$Invoking the strength and endurance of Thorin, King under the Mountain, 
+D:$this little metal shield is proof against the Element of Earth.
+D:山の下の王トーリン・オーケンシールドの強さと頑丈さを受け継いだ
+D:この小さな金属の盾は、地のエレメントに対する完全な防御を可能にする。
+
+
+# The Large Leather Shield of Celegorm
+
+#J0# (コメント)
+#J0#
+#J0#(都々目)
+#J0#＊シルマリルの物語より
+#J0#
+N:31:金髪のケレゴルムの
+E:of Celegorm
+I:34:4:0
+W:30:3:60:30000
+P:6:1d2:0:0:20
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_LITE | RES_DARK
+D:$This shield emblazoned with a multitude of creatures not seen for ages 
+D:$once protected Celegorm, lord of Himlad; around it lies a mystic balance  
+D:$that contains the conflicts of the elements.
+D:いまでは見られなくなった数々の伝説の生き物の
+D:装飾が施されたこの盾は、かつてヒムラドの王ケレゴルムを
+D:守っていた。地水火風のエレメントのせめぎ合いを内包し、
+D:それらの神秘的なバランスを保っている。
+
+
+# The Large Metal Shield of Anarion
+
+#J0# (コメント)
+#J0#
+#J0#(都々目)
+#J0#＊イシルドゥアに『王』を付けないならアナリオンにも付けるべきではないでしょ
+#J0#う(アナリオンはイシルドゥアの弟)。イシルドゥアとアナリオンは二人でゴンドー
+#J0#ル(オルギリアス)を統治していたし、王と云う肩書きは全然出てきていないので。
+#J0#
+N:32:アナリオンの
+E:of Anarion
+I:34:5:0
+W:40:9:120:160000
+P:8:1d3:0:0:18
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | SUST_STR | SUST_INT |
+F:SUST_WIS | SUST_DEX | SUST_CON | SUST_CHR
+D:$The great metal-bound shield of Anarion, son of Elendil, who Sauron found 
+D:$himself powerless to wither or diminish.
+D:かつてサウロンと勇敢に戦った
+D:エレンディルの息子アナリオンの金属の盾だ。
+
+
+# A reward for 'The Old Castle' quest
+
+#JZ#ベンジャミン フランクリン、やだよぅそんなの。
+#JZ#ゼラズニイの「光の王」から以下のように変更。雷の槍ヴァジュラを
+#JZ#持っている。
+N:33:インドラの
+E:of Indra
+I:32:2:5
+W:30:50:15:100000
+P:2:0d0:0:0:18
+F:INT | WIS | CHR | SUST_INT | SUST_WIS | SUST_CHR | RES_BLIND | IM_ELEC
+D:雷神インドラの兜だ。
+
+# The Massive Iron Crown of Morgoth
+
+#JZ#
+N:34:混沌の
+E:of Chaos
+I:33:50:125
+W:100:1:20:10000000
+P:0:1d1:0:0:0
+F:STR | INT | WIS | DEX | CON | CHR | INFRA | HIDE_TYPE |
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_POIS |
+F:RES_LITE | RES_DARK | RES_CONF | RES_NEXUS |
+F:LITE | SEE_INVIS | TELEPATHY |
+F:CURSED | HEAVY_CURSE | PERMA_CURSE | NO_TELE | INSTA_ART | QUESTITEM
+D:宇宙の創世以前から存在していた混沌の宮廷において王位を象徴する
+D:王冠だ。
+
+# The Iron Crown of Beruthiel
+
+#J0# (コメント)
+#J0#
+#J0#(都々目)
+#J0#＊旅の仲間下巻(私は文庫版しか持っていないのでページ数は省きます)、モリア坑
+#J0#道内でアラゴルンの台詞に『ベルシエル王妃』と云う言葉が出てきます。スポイラ
+#J0#でも王妃(女王？)となっておりますので。
+#J0#
+N:35:ベルシエル王妃の
+E:of Beruthiel
+I:33:10:-25
+W:40:12:20:0
+P:0:1d1:0:0:25
+F:STR | DEX | CON | HIDE_TYPE | DEC_MANA
+F:FREE_ACT | SEE_INVIS | TELEPATHY | CURSED
+D:$The midnight-hued steel circlet of the sorceress-queen Beruthiel, which 
+D:$grants extraordinary powers of sight and awareness at a terrible physical 
+D:$cost.
+D:魔法使いの女王ベルシエル王妃の、真夜中の色をしたサークレットだ。
+D:恐ろしく大きな肉体的代償と引き替えに卓越した眼力と知覚を授ける。
+
+
+# The Hard Leather Cap of Thranduil
+
+#J0# wp.261
+N:36:スランドゥイル王の
+E:of Thranduil
+I:32:2:2
+W:20:2:15:50000
+P:2:0d0:0:0:10
+F:INT | WIS | HIDE_TYPE | RES_BLIND | TELEPATHY
+D:$The hunting cap of King Thranduil, to whose ears come all the secrets of 
+D:$his forest domain.
+D:レゴラスの父であり、領土の森のあらゆる事を知るスランドウィル王
+D:のハンティング帽だ。
+
+
+# The Metal Cap of Thengel
+
+#J0# wp.261
+N:37:センゲル王の
+E:of Thengel
+I:32:3:3
+W:10:2:20:22000
+P:3:1d1:0:0:12
+F:WIS | CHR | HIDE_TYPE
+D:$A ridged helmet made of steel, and embossed with scenes of valor in fine-
+D:$engraved silver.  It grants the wearer nobility, clearness of thought and 
+D:$understanding.
+D:黄金館の王セオデンの父センゲルが身に付けていた
+D:中央の尖った鉄兜で、武勇を示す絵が素晴らしい銀細工によって
+D:浮き彫りにされている。この兜は身に付ける者に高貴さと知見とを授ける。
+
+
+# The Steel Helm of Hammerhand
+
+#J0# (コメント)
+#J0#
+#J0# KOHKO-P さんに教わりました。
+#J0#
+N:38:槌手王の
+E:of Hammerhand
+I:32:6:3
+W:20:2:60:45000
+P:6:1d3:0:0:20
+F:STR | DEX | CON | HIDE_TYPE | RES_ACID | RES_NEXUS
+D:$A great helm as steady as the heroes of the Westdike. Mighty were the 
+D:$blows of Helm, the Hammerhand!
+D:王家を侮辱した者を素手の決闘で
+D:殴り殺し、鎚手王と呼ばれたローハン第九代国王の頑強なグレートヘルムだ。
+
+
+# The _DRAGON_ Helm of Dor-Lomin
+
+#J0# (コメント)
+#J0#
+#J0# (都々目)
+#J0#＊シルマリルの物語では全て『ドル＝ローミン』と表記されています。更に、原作
+#J0#中では大体このように『竜の兜』と書かれていたので、「少しでも親しみがわくよ
+#J0#うに」日本語化されるのならこうすべきだと思います。
+#J0#
+N:39:ドル=ローミンの
+E:of Dor-Lomin
+I:32:7:4
+W:70:12:75:300000
+P:8:1d3:0:0:20
+F:STR | DEX | CON | HIDE_TYPE |
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_LITE | RES_BLIND |
+F:LITE | SEE_INVIS | TELEPATHY | ACTIVATE
+D:$The legendary dragon helm of Turin Turambar, a object of dread to the 
+D:$servants of Morgoth.
+D:トゥーリン・トゥランバールの伝説の竜兜で、モルゴスの手下ども
+D:にとっては恐怖の対象である。
+
+
+# The Iron Helm 'Holhenneth'
+
+#J0# ???
+N:40:『ホルヘンネス』
+E:'Holhenneth'
+I:32:5:2
+W:20:5:75:100000
+P:5:1d3:0:0:10
+F:INT | WIS | SEARCH | HIDE_TYPE | RES_BLIND | SEE_INVIS | ACTIVATE
+D:$A famous helm of forged iron granting extraordinary powers of mind and 
+D:$awareness. 
+D:並外れた精神力と知覚とを授ける、鍛鉄製の名高い兜だ。
+D:その名はシンダール語で「密かなる目の兜」を意味する。
+
+
+# The Iron Helm of Gorlim -> Terror Mask (for warriors only...)
+
+#JZ#
+N:41:『恐怖の仮面』
+E:'Terror Mask'
+I:32:5:-1
+W:50:3:75:200000
+P:5:1d3:18:18:10
+F:INT | WIS | SEARCH | HIDE_TYPE | SHOW_MODS |
+F:SEE_INVIS | NO_MAGIC | ACTIVATE |
+F:RES_DISEN | RES_FEAR | FREE_ACT | RES_ACID | RES_COLD | RES_POIS |
+F:TELEPORT
+
+
+# The Golden Crown of Gondor -> Amber
+
+#JZ#
+N:42:真世界アンバーの
+E:of Amber
+I:33:11:3
+W:40:40:30:125000
+P:0:1d1:0:0:15
+F:STR | WIS | CON | HIDE_TYPE | SPEED |
+F:RES_COLD | RES_FIRE | RES_LITE | RES_BLIND | RES_ELEC | RES_CONF |
+F:RES_CHAOS | LITE | SEE_INVIS | REGEN | ACTIVATE
+D:アンバーの王位の象徴である、多数の宝石で飾られた金の王冠だ。
+D:これをめぐって骨肉の争いが王子たちの間で繰り広げられた。
+
+
+# The Cloak of Houdini
+# Escape Artist and Spiritualist
+# A reward for 'The Old Castle' quest
+
+#JZ#引田天攻のような人らしい。やだよう。
+#JZ#ゼラズニイの「影のジャック」から
+N:43:影のジャックの
+E:of Jack of Shadow
+I:35:1:7
+W:30:20:10:100000
+P:1:0d0:0:0:19
+F:STEALTH | SEARCH | FREE_ACT | SEE_INVIS | HOLD_LIFE | TELEPATHY
+D:自転が止まった地球で夜の世界を支配する王の一人、
+D:泥棒の王である不死身の『影のジャック』のクロークだ。
+D:（R.ゼラズニイ「影のジャック」）
+
+# The Cloak 'Colluin'
+
+#J0# ???
+N:44:『コルイン』
+E:'Colluin'
+I:35:1:0
+W:5:45:10:80000
+P:1:0d0:0:0:15
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_POIS | ACTIVATE
+D:$A cape worn by a hero from Valinor, a land utterly beyond the strife 
+D:$of Elements.
+D:A cape worn by a hero from Valinor, a land utterly beyond the strife 
+D:of Elements.
+
+
+# The Cloak 'Holcolleth'
+
+#J0# ???
+N:45:『ホルコレス』
+E:'Holcolleth'
+I:35:2:2
+W:20:15:10:43000
+P:4:0d0:0:0:4
+F:INT | WIS | STEALTH | HIDE_TYPE | RES_ACID | SEARCH | ACTIVATE
+D:$This elven-grey mantle possesses great powers of tranquility and of 
+D:$concealment, and grants the wearer the knowledge and understanding of 
+D:$the Sindar.
+D:This elven-grey mantle possesses great powers of tranquility and of 
+D:concealment, and grants the wearer the knowledge and understanding of 
+D:the Sindar.
+
+
+# The Cloak of Thingol
+
+#J0# (コメント)
+#J0#
+#J0# wp.262 p.334
+#J0#(都々目)
+#J0#＊シルマリルの物語より
+#J0#
+N:46:灰色マント王シンゴルの
+E:of Thingol
+I:35:1:3
+W:10:90:10:45000
+P:1:0d0:0:0:18
+F:DEX | CHR | HIDE_TYPE |
+F:FREE_ACT | RES_ACID | RES_FIRE | RES_COLD | ACTIVATE
+D:$A sable-hued cloak, with glowing elven-runes to restore magic showing calm 
+D:$and clear as moonlight on still water.
+D:半透明で真珠のような灰色のクロークで、魔力を秘めた輝くエルフのルーン文字が
+D:水面に映った月のごとく、静かにそしてはっきりと浮かび上がっている。
+
+
+# The Cloak of Thorongil
+
+#J0# (コメント)
+#J0#
+#J0# wp.260
+#J0#(都々目)
+#J0#＊指輪物語追補編より
+#J0#
+N:47:大将ソロンギルの
+E:of Thorongil
+I:35:1:0
+W:5:20:10:13000
+P:1:0d0:0:0:10
+F:FREE_ACT | RES_ACID | SEE_INVIS
+D:$A cloak of shimmering green and brown that grants sight beyond sight and 
+D:$shakes off holding magics, worn by Aragorn son of Arathorn in his youth 
+D:$as he adventured under the name of Thorongil.
+D:この緑と茶色の輝くクロークはかつて
+D:ゴンドールの頭であり、海に陸に武勇を馳せていた
+D:鋭い目の若きアラゴルンが
+D:身に付けていたものだ。
+
+
+# The Cloak 'Colannon'
+
+#J0# ???
+N:48:『コラノン』
+E:'Colannon'
+I:35:1:3
+W:3:10:10:15000
+P:1:0d0:0:0:15
+F:STEALTH | RES_ACID | ACTIVATE
+D:$A crystal-blue cape of fine silk worn by a silent messenger of 
+D:$the forces of Law. Somehow, its wearer is always able to escape 
+D:$trouble.
+D:秩序の勢力の静かなる使者が着ていた、紺碧の絹のマントだ。
+
+# The Shadow Cloak of Luthien
+
+#J0# p.369, wp.246
+N:49:ルシアン王女の
+E:of Luthien
+I:35:6:2
+W:40:40:5:80000
+P:6:0d0:0:0:20
+F:INT | WIS | CHR | HIDE_TYPE | SPEED | STEALTH |
+F:RES_ACID | RES_FIRE | RES_COLD | ACTIVATE |
+F:RES_DARK | RES_LITE
+D:$The opaque midnight folds, inset with a multitude of tiny diamonds, of 
+D:$this cloak swirl around you and you feel a hint, a fragment of the 
+D:$knowledge and power to restore that lay in Luthien, the most beautiful 
+D:$being that ever knew death.
+D:自ら永遠の寿命を手放し、
+D:死を逃れえぬ者達の内では最も美しい者となったルシアン王女のクロークは、
+D:たなびく漆黒の闇を無数の小さなダイアモンドが飾っている。
+D:身に付ける者は王女の知識と力が自らの内に蘇ってくるのを感じる。
+
+# The Shadow Cloak of Tuor
+
+#J0# p.342
+N:50:トゥオルの
+E:of Tuor
+I:35:6:4
+W:40:40:5:50000
+P:6:0d0:0:0:12
+F:STEALTH | FREE_ACT | IM_ACID | SEE_INVIS
+D:$From the ruin of Gondolin did Tuor escape, through secret ways and travail, 
+D:$shielded by his cloak from a multitude of hostile eyes.
+D:海統べるウルモより授かりし王者の衣に身を包み、
+D:トゥオルはゴンドーリンの廃墟より
+D:幾千の敵の目をかいくぐり秘されたる路にて
+D:逃げおおせたり。
+
+# Artifact 51 is unused
+
+
+# The Set of Leather Gloves 'Cambeleg'
+
+#J0# ???
+N:52:『カンベレグ』
+E:'Cambeleg'
+I:31:1:2
+W:10:6:5:36000
+P:1:0d0:8:8:15
+F:STR | CON | HIDE_TYPE | FREE_ACT | SHOW_MODS
+D:$A hero's handgear that lends great prowess in battle.
+D:「剛き掌」を意味する名を持つ、この英雄の手甲は、
+D:戦いにおける偉大なる武勇をもたらす。
+
+# The Set of Leather Gloves 'Cammithrim'
+
+#J0# ???, Ko
+N:53:『カンミスリム』
+E:'Cammithrim'
+I:31:1:0
+W:10:3:5:30000
+P:1:0d0:0:0:10
+F:FREE_ACT | RES_LITE | SUST_CON | LITE | ACTIVATE
+D:$These gloves glow so brightly as to light the way for their owner and cast 
+D:$magical bolts with great frequency.
+D:These gloves glow so brightly as to light the way for their owner and cast 
+D:magical bolts with great frequency.
+
+
+# The Set of Gauntlets 'Paurhach'
+
+#J0# ???, Ko
+N:54:『パウアハッハ』
+E:'Paurhach'
+I:31:2:0
+W:10:20:25:15000
+P:2:1d1:0:0:15
+F:RES_FIRE | ACTIVATE
+D:$A firey set of gauntlets that can even shoot fire from the user's 
+D:$hands. 
+D:シンダール語で「跳ねる炎の拳」の名を持つこの篭手は炎に
+D:包まれており、身に付ける者は火の球を撃ち出すことも出来る。
+
+
+# The Set of Gauntlets 'Paurnimmen' -> of Corwin
+
+#JZ#
+N:55:アヴァロンの主コーウィンの
+E:of Corwin
+I:31:2:4
+W:10:40:25:43000
+P:2:1d1:0:0:15
+F:SUST_CON | CON | REGEN | RES_COLD
+D:並外れた強靭さを持つアンバーの王子コーウィンのガントレットだ。
+
+# The Set of Gauntlets 'Pauraegen'
+
+#J0# ???, Ko
+N:56:『パウラエゲン』
+E:'Pauraegen'
+I:31:2:0
+W:10:20:25:11000
+P:2:1d1:0:0:15
+F:RES_ELEC | ACTIVATE
+D:$A set of handgear with sparks surrounding it, able to fire 
+D:$bolts of electricity.
+D:シンダール語で「鋭き拳」を意味する名を持つこの籠手は常に
+D:火花を散らしていて、電撃の矢を放つことができる。
+
+# The Set of Gauntlets 'Paurnen'
+
+#J0# ???, Ko
+N:57:『パウアネン』
+E:'Paurnen'
+I:31:2:0
+W:10:20:25:12000
+P:2:1d1:0:0:15
+F:RES_ACID | ACTIVATE
+D:$A set of handgear so corrosive that it may fire bolts of acid.
+D:シンダール語で「水の拳」を意味する名を持つこの籠手は常に
+D:酸でてかっていて、酸の矢を放つことができる。
+
+# The Set of Gauntlets 'Camlost' -> of Thanos
+
+#JZ# ??? カプコン マーヴェルスーパーヒーローズに出てる奴？
+N:58:サノスの
+E:of Thanos
+I:31:2:2
+W:10:20:25:0
+P:2:1d1:-11:-12:0
+F:STR | DEX | HIDE_TYPE | RES_DISEN | RES_NEXUS | IM_FIRE |
+F:HOLD_LIFE | RES_NETHER | RES_CONF | RES_CHAOS | RES_POIS | IM_COLD |
+F:AGGRAVATE | CURSED | SHOW_MODS | HEAVY_CURSE | TY_CURSE | TELEPORT
+
+
+# The Set of Cesti of Fingolfin
+
+#J0# (コメント)
+#J0#
+#J0# p.354
+#J0#(都々目)
+#J0#＊シルマリルの物語より。
+#J0#
+N:59:上級王フィンゴルフィンの
+E:of Fingolfin
+I:31:5:4
+W:40:15:40:110000
+P:5:1d1:10:10:20
+F:DEX | HIDE_TYPE |
+F:FREE_ACT | RES_ACID | ACTIVATE | SHOW_MODS
+D:$The hand-sheathing of Fingolfin, warrior-king of Elves and Men, who gave 
+D:$Morgoth seven mighty wounds and pain that will last forever.
+D:フェアノール亡き後中つ国のノルドールを率いて冥王と戦った
+D:上級王フィンゴルフィンの篭手だ。彼はただ一人でモルゴスに
+D:戦いを挑み、その体に永遠に痛み続ける八つの傷を刻みつけた。
+
+# The Pair of Hard Leather Boots of Feanor
+
+#J0# (コメント)
+#J0#
+#J0# p.356
+#J0#(都々目)
+#J0# フェアノール王子の → フェアノール王の
+#J0#＊『王子』と言うなら『王』と言うほうが適当でしょう。流謫のノルドールの指揮
+#J0#を取ったのですから。
+#J0#
+N:60:フェアノール王の
+E:of Feanor
+I:30:3:15
+W:40:120:40:300000
+P:3:1d1:0:0:20
+F:SPEED |
+F:RES_NEXUS | ACTIVATE
+D:$This wondrous pair of leather boots once sped Feanor, creator of the 
+D:$Simarils and the mightiest of the Eldar, along the Grinding Ice and to 
+D:$Middle Earth at last. 
+D:この素晴らしい皮靴は、シルマリルの生みの親であり、かつて最強のエルダール
+D:であったフェアノールの韋駄天の靴で、モルゴスに
+D:隷属させられた中つ国を奪い返す彼の英雄的挑戦の助けとなった。
+
+
+# The Pair of Soft Leather Boots 'Dal-i-thalion' -> of Flora
+
+#JZ#
+N:61:アンバーの王女フローラの
+E:of Flora
+I:30:2:5
+W:10:25:20:70000
+P:2:1d1:0:0:15
+F:DEX | HIDE_TYPE | CHR | SUST_CHR | ACTIVATE | FREE_ACT |
+F:RES_NETHER | RES_CHAOS | SUST_CON
+D:フローラはほとんどの時間アンバーの宮殿を離れていて、
+D:影の世界で新しいボーイフレンドを見つけては楽しんでいる。
+D:彼女のブーツには身に付けた者を魅力的に見せる魔法がかかっている。
+
+# The Pair of Metal Shod Boots of Thror
+
+#J0# (コメント)
+#J0#
+#J0# wp.261
+#J0#(都々目)
+#J0# スロール王子の → スロール王の
+#J0#＊スロールはドゥリン家を継承しています。ですからこれも『王』とするべきでしょ
+#J0#う。
+#J0#
+N:62:スロール王の
+E:of Thror
+I:30:6:3
+W:30:25:80:85000
+P:6:1d1:0:0:20
+F:STR | CON | HIDE_TYPE | SPEED
+D:$Sturdy footwear of leather and steel as enduring as the long-suffering 
+D:$Dwarven King-in-exile who wore them.  Of dwarven make, the wearer of 
+D:$these boots will be completely at home in the mountains.
+D:スマウグの襲来により流浪の身となったダイン一世の世継ぎ、
+D:ドワーフ王スロールの鉄と皮で出来た靴で、
+D:持ち主の頑強さを受け継いでいる。
+
+
+# The Pair of Soft Leather Boots of Shiva's Avatar
+# Default reward for The Cloning Pits
+
+N:63:シヴァの化身の
+E:of Shiva's Avatar
+I:30:2:4
+W:30:20:20:100000
+P:4:1d1:5:5:16
+F:SPEED | DEX | SUST_DEX | RES_NEXUS | FREE_ACT | FEATHER
+
+
+# The Main Gauche of Maedhros
+
+#J0# (コメント)
+#J0#
+#J0#
+#J0# (都々目)
+#J0#＊シルマリルの物語より。
+#J0#
+N:64:丈高きマエズロスの
+E:of Maedhros
+I:23:5:3
+W:15:30:30:62500
+P:0:2d5:12:15:0
+F:INT | DEX | HIDE_TYPE | SPEED |
+F:SLAY_TROLL | SLAY_GIANT | FREE_ACT | SEE_INVIS | SHOW_MODS
+D:$A short thrusting blade with a large guard worn by Maedhros the Tall, 
+D:$eldest son of Feanor, and wielded with his left hand after the loss of 
+D:$his right hand in the pits of Thangorodrim.
+D:先が尖った短剣で、フェアノールの長子である丈高きマエズロス
+D:が使っていたものだ。彼はサンゴロドリムから救出された際に右手を
+D:失ったが、後に左手で以前より巧みに剣を操ったという。
+
+# The Dagger 'Angrist' -> of Caine
+
+#JZ#
+N:65:陰謀家ケインの
+E:of Caine
+I:23:4:4
+W:20:80:12:125000
+P:0:2d4:10:15:5
+F:DEX | HIDE_TYPE | STEALTH | SEARCH |
+F:SLAY_EVIL | SLAY_TROLL | SLAY_ORC | BRAND_POIS |
+F:FREE_ACT | RES_DARK | SUST_DEX | SEE_INVIS | SHOW_MODS | THROW
+D:アンバーの艦隊を指揮するケインのダガーだ。
+
+# The Dagger 'Narthanc'
+
+#J0# ???
+N:66:『ナルサンク』
+E:'Narthanc'
+I:23:4:0
+W:4:10:12:12000
+P:0:1d4:4:6:0
+F:BRAND_FIRE | RES_FIRE | ACTIVATE | SHOW_MODS | LITE | THROW
+D:$A fiery dagger finely balanced for deadly throws.
+D:「焔の牙」を意味する名を持つこの燃え盛る短剣は、
+D:その刃から焔の矢を迸らせる力をもつ。
+
+# The Dagger 'Nimthanc'
+
+#J0# ???
+N:67:『ニムサンク』
+E:'Nimthanc'
+I:23:4:0
+W:3:10:12:11000
+P:0:1d4:4:6:0
+F:BRAND_COLD | RES_COLD | ACTIVATE | SHOW_MODS | THROW
+D:$A frosty dagger finely balanced for deadly throws.
+D:「白き牙」を意味する名を持つこの短剣は必殺の冷気をもって
+D:敵を凍てつかせ、刃からは氷の矢を迸らせる力をもつ。
+
+
+# The Dagger 'Dethanc'
+
+#J0# ???
+N:68:『デサンク』
+E:'Dethanc'
+I:23:4:0
+W:5:10:12:13000
+P:0:1d4:4:6:0
+F:BRAND_ELEC | RES_ELEC | ACTIVATE | SHOW_MODS | THROW
+D:$A dagger covered in sparks and finely balanced for deadly throws.
+D:「黒の牙」を意味する名を持つ、この短剣は雷光に覆われ、
+D:その刃から雷の矢を迸らせる力をもつ。
+
+# The Dagger of Rilia
+
+#J0# ???
+N:69:リリアの
+E:of Rilia
+I:23:4:0
+W:5:40:12:35000
+P:0:2d4:4:3:0
+F:SLAY_ORC | RES_POIS | RES_DISEN | ACTIVATE | SHOW_MODS | BRAND_POIS | THROW
+D:$A large stiletto dagger that glistens with odorless poison, to which the 
+D:$wearer seems oddly immune.
+D:シンダール語で「地獄の輝き」を意味する名を持つ
+D:大型のダガーで、毒で輝いているが
+D:装備するものは何故か毒の影響を受けない。
+
+
+# The Dagger 'Belangil' -> of Fiona
+
+#JZ#
+N:70:女魔術師フィオナの
+E:of Fiona
+I:23:4:2
+W:10:40:12:50000
+P:0:2d4:6:9:0
+F:DEX | HIDE_TYPE | SPEED | BLOWS | BRAND_COLD | RES_COLD |
+F:SEE_INVIS | SLOW_DIGEST | REGEN |
+F:ACTIVATE | SHOW_MODS | BRAND_POIS | THROW
+D:小悪魔的魅力をふりまくフィオナは、見かけによらず
+D:策略と魔法に長けている。
+
+# The Bastard Sword 'Calris'
+
+#J0# ???
+N:71:『カルリス』
+E:'Calris'
+I:23:21:5
+W:30:15:140:100000
+P:0:5d4:-20:20:0
+F:CON | HIDE_TYPE |
+F:KILL_DRAGON | SLAY_EVIL | SLAY_DEMON | SLAY_TROLL | RES_DISEN |
+F:AGGRAVATE | CURSED | HEAVY_CURSE | SHOW_MODS
+D:$This sword has runes of power incused on its ornate hint, and a single 
+D:$blood channel that gleams coldly blue as you grasp this mighty weapon of 
+D:$peril.
+D:装飾された柄に力のルーン文字が刻まれ、刀身の血通しは
+D:冷たい青色に輝いている。白炎のバルログ『ルンゴルシン』の
+D:剣であり、ドラゴンを容易く葬るほどの剣だ。
+
+
+# The Broad Sword 'Arunruth' -> 'Grayswandir'
+
+#JZ# アンバーシリーズ前半で主人公コーウィンの持っている銀のサーベル
+#JZ# 月の光で鍛えられた。
+N:72:『グレイスワンダー』
+E:'Grayswandir'
+I:23:11:4
+W:20:45:50:125000
+P:0:2d7:20:12:0
+F:STR | DEX | CON | SUST_CON | SUST_STR |
+F:REGEN | FREE_ACT | SEE_INVIS |
+F:RES_CHAOS | RES_NETHER | HOLD_LIFE | RES_FEAR |
+F:RES_COLD | BRAND_COLD |
+F:SLAY_DEMON | SLAY_EVIL | SLAY_DRAGON | SLAY_UNDEAD |
+F:SLOW_DIGEST | SHOW_MODS | HIDE_TYPE | BLESSED | RIDING
+D:アンバーの王子コーウィンが使っていた、月の光により
+D:鍛えられた銀のサーベル。持ち主と同じく黒と銀のコントラスト
+D:を見せる。
+D:「グレイスワンダーには<パターン>の一部が複製されてると
+D:思ってたんだけど。」「それは多分、逆だな。」
+D:（ロジャー・ゼラズニイ、アンバー１０「混沌の王子」）
+
+
+# The Broad Sword 'Glamdring'
+
+#J0# (コメント)
+#J0#
+#J0#
+#J0# (都々目)
+#J0#『なぐり丸』 → 『グラムドリング』
+#J0#＊『なぐり丸』はオークたちが読んでいた名で、決して正式な名ではありません。
+#J0#ホビットの冒険でも指輪物語でもずっと『グラムドリング』と表記されているので、
+#J0#こうすべきです。
+#J0#
+#J0#N:73:『なぐり丸』
+N:73:『グラムドリング』
+E:'Glamdring'
+I:23:16:1
+W:20:20:150:40000
+P:0:2d5:10:15:0
+F:SEARCH |
+F:SLAY_EVIL | BRAND_FIRE | SLAY_ORC | RES_FIRE | RES_LITE | LITE |
+F:SLOW_DIGEST | SHOW_MODS | RIDING
+D:$This fiery, shining blade earned its sobriquet "Foe-Hammer" from dying orcs 
+D:$who dared to come near hidden Gondolin.
+D:この燃えるように輝く剣は『オルクリスト』と対を成し、
+D:隠れ王国ゴンドーリンに敢えて侵入し殺されたオークたちから
+D:「なぐり丸」という仇名を授かった。トロルの巣でビルボたちにより
+D:発見され、それ以降ガンダルフの物となる。
+
+
+# The Broad Sword 'Aeglin' -> 'Nothung'
+
+#JZ# ワーグナー:ジーグフリードが龍ファフナーを倒す剣
+N:74:『ノートゥング』
+E:'Nothung'
+I:23:16:4
+W:20:90:150:95000
+P:0:2d5:12:16:0
+F:SEARCH | BRAND_ELEC | SLAY_ORC | KILL_DRAGON | RES_FEAR |
+F:RES_ELEC | LITE | RES_FIRE | RES_POIS |
+F:SLOW_DIGEST | SHOW_MODS | RIDING
+D:「ノートゥングさ、その名は。ヴォータンがとねりこの幹
+D:に突き立てた剣だ。それを引き抜くことのでき
+D:た者だけが、わがものとしうるわけだ。」
+D:(リヒャルト・ワーグナー、高橋康也・高橋迪訳「ジーグフリード」,新書館)
+D:「見よ、これがジーグフリードの剣の切れ味だ！」そういって彼は
+D:ミーメの鍛冶場の金床を真っ二つに叩き切った。その剣で彼は
+D:龍ファフナーを屠ったのだった。
+
+# The Broad Sword 'Orcrist'
+
+#J0# (コメント)
+#J0#
+#J0# wp.218
+#J0# 日本語
+#J0#
+#J0# >(しとしんのコメント)
+#J0# > あとは「かみつき丸」とかもそうですが、とにかく指輪関係の知識がないと
+#J0# > アーティファクト関係はカタカナの羅列で親しみがひじょうにわきにくい
+#J0# > という欠点があります。それで翻訳は japanese.doc で書いたように
+#J0# > 誰でも分かり易いというポリシーでしたので、少しでも親しみがわくよう
+#J0# > に日本語化や「王」などをいれたりとしてみました。でもどうも指輪
+#J0# > ファンには不評のようで(^_^;。どちらにも好評というのはむずかしいですね(^_^;
+#J0#
+#J0# (小林さんのコメント)
+#J0# 「かみつき丸」の弱点は「カッコ良くない」ことなんですね．(;_;)
+#J0# # オーク語じゃしょうがないか．
+#J0# でも「つらぬき丸」はStingより「つらぬき丸」の方がいいでしょうね．
+#J0# 悩んで下され．(^_^)
+#J0#
+#J0# (都々目)
+#J0#『かみつき丸』 → 『オルクリスト』
+#J0#＊これもグラムドリングと同じ理由です。オークごときの不粋な呼び名を当てはめ
+#J0#るなど飛んでもない！　a_info.txtは読ませて頂きましたが、これだけは譲れませ
+#J0#ん(笑)。
+#J0#
+#J0#N:75:『かみつき丸』
+N:75:『オルクリスト』
+E:'Orcrist'
+I:23:16:3
+W:20:20:150:40000
+P:0:2d5:10:15:0
+F:STEALTH | SLAY_EVIL | BRAND_COLD | SLAY_ORC | RES_COLD | LITE |
+F:SLOW_DIGEST | SHOW_MODS | RIDING
+D:$This coldly gleaming blade is called simply "Biter", by orcs who came to 
+D:$know its power all too well.
+D:この冷たく輝く剣は『グラムドリング』と対を成し、オークたちからは
+D:「かみつき丸」と呼ばれて非常に恐れられている。トロルの巣でビルボたちにより
+D:発見され、それ以降ドワーフの王トーリン・オーケンシールドの物となる。
+
+
+# The Two-Handed Sword 'Gurthang'
+
+#J0# (コメント)
+#J0#
+#J0#
+#J0# (都々目)
+#J0#＊シルマリルの物語ではこのように表記されています。
+#J0#
+N:76:『グアサング』
+E:'Gurthang'
+I:23:25:2
+W:30:30:200:100000
+P:0:3d6:13:17:0
+F:STR | HIDE_TYPE |
+F:KILL_DRAGON | SLAY_TROLL | FREE_ACT | SLOW_DIGEST | REGEN | SHOW_MODS
+D:$A giant sword once wielded by mighty Turin, and a great dragonbane which 
+D:$bathed in Glaurung's blood:  but beware, it will drink the blood of those 
+D:$who wield it eventually.
+D:偉大なる英雄トゥーリンの黒き大剣で、比類なき屠龍の剣だ。
+D:かつて龍の祖グラウルングの血に浴したこの刃に、いかなるワイアームが
+D:耐えることができよう。
+
+
+# The Two-Handed Sword 'Zarcuthra'
+
+#J0# ???
+N:77:『ザルクスラ』
+E:'Zarcuthra'
+I:23:25:4
+W:30:180:250:205000
+P:0:4d6:19:21:0
+F:STR | CHR | INFRA | HIDE_TYPE | VORPAL |
+F:KILL_DRAGON | SLAY_ANIMAL | SLAY_EVIL | BRAND_FIRE | LITE |
+F:SLAY_UNDEAD | SLAY_DEMON | SLAY_TROLL | SLAY_GIANT | SLAY_ORC |
+F:RES_FIRE | RES_CONF | RES_CHAOS | FREE_ACT | SEE_INVIS | AGGRAVATE |
+F:SHOW_MODS
+D:$Dark and deadly runes stand stark against the naked steel of this awesome 
+D:$weapon, and you feel a stunning power of slaying and rending as you 
+D:$slowly approach.
+D:恐怖の黒いルーン文字が鋼の刃身にくっきりと浮かび上がっている
+D:恐るべき剣。敵に近付くにつれ激しい殺戮のエネルギーを発する。
+
+
+# The Two-Handed Sword 'Mormegil' -> Twilight
+
+#JZ# 炎の巨人スルトが世界に火を放った燃える剣
+N:78:『神々の黄昏』
+E:'Twilight'
+I:23:25:10
+W:30:15:250:0
+P:0:4d6:-40:-60:-50
+F:SPEED | IM_FIRE | RES_FIRE | BRAND_FIRE | RES_DISEN | RES_FEAR |
+F:AGGRAVATE | CURSED | HEAVY_CURSE | SHOW_MODS | TY_CURSE | LITE
+D:北欧神話において炎の巨人スルトが世界に火を放った燃える剣だ。
+
+# The Cutlass 'Gondricam'
+
+#J0# ???
+N:79:『ゴンドリカム』
+E:'Gondricam'
+I:23:12:3
+W:20:8:110:28000
+P:0:1d7:10:11:0
+F:DEX | STEALTH | HIDE_TYPE |
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | FEATHER |
+F:SEE_INVIS | REGEN | SHOW_MODS
+D:$Famed sea-defender of Lebennin.  A short, slightly curved chopping blade 
+D:$with a perfect edge shining cleanly in the sun, an object of hate to the 
+D:$men of Umbar who met it in combat.
+D:名高きレベニンの海の守護者だ。陽光に輝く完璧な刃は、ウンバール
+D:の海賊達の憎悪の的であった。
+
+
+# The Executioner's Sword 'Crisdurian'
+
+#J0# ???
+N:80:『クリスドゥリアン』
+E:'Crisdurian'
+I:23:28:0
+W:40:15:260:111000
+P:0:4d5:18:19:0
+F:SLAY_DRAGON | SLAY_EVIL | SLAY_UNDEAD | SLAY_TROLL | SLAY_GIANT |
+F:SLAY_ORC | SEE_INVIS | SHOW_MODS | VORPAL | BRAND_POIS
+D:$A giant's weapon, with a long blade tall and straight thrusting out from a 
+D:$massive double-pronged hint.  On its blade are written doomspells against 
+D:$both the living and undead.
+D:A giant's weapon, with a long blade tall and straight thrusting out from a 
+D:massive double-pronged hint.  On its blade are written doomspells against 
+D:both the living and undead.
+
+
+# The Katana 'Aglarang'
+
+N:81:『アグララング』
+E:'Aglarang'
+I:23:20:2
+W:50:25:50:150000
+P:0:8d4:0:0:0
+F:DEX | HIDE_TYPE | BLOWS | VORPAL |
+F:SUST_DEX | SHOW_MODS | SPEED
+D:$An utterly perfect, cleanly chiseled sword, with a edge that effortlessly
+D:$ slices rock and bone and spells to render the wearer lithe and nimble.　It
+D:$ is combat incarnate.
+D:シンダール語で「誉の鋼」を意味する美しい完全無欠の刀だ。
+D:の刃は岩や骨を苦もなく切り裂き、
+D:手にする者にしなやかで敏捷な動作を授ける魔法が込められている。
+D:それはまさに戦いの化身だ。
+
+
+# The Long Sword 'Ringil'
+
+#J0# ???
+N:82:『リンギル』
+E:'Ringil'
+I:23:17:10
+W:20:120:130:300000
+P:0:4d5:22:25:0
+F:SPEED | REGEN | ACTIVATE | SHOW_MODS | RIDING |
+F:SLAY_EVIL | BRAND_COLD | SLAY_UNDEAD | SLAY_DEMON | SLAY_TROLL |
+F:FREE_ACT | RES_COLD | RES_LITE | LITE | SEE_INVIS | SLOW_DIGEST | 
+D:$The weapon of Fingolfin, High King of the Noldor; it shines like a column 
+D:$of ice lit by light unquenchable.  Morgoth came but unwillingly to meet it 
+D:$of old; his lame foot will remind him of its might should be meet it again.
+D:ノルドールの上級王フィンゴルフィンの武器。氷の柱の如く輝いている。
+D:かつてモルゴスは期せずしてこの剣に対峙し深い傷を
+D:刻み込まれた。彼はこの剣の力を再び思い知ることになるだろう。
+
+
+# The Long Sword 'Anduril'
+
+#J0# wp.219
+#J0# 日本語
+#J0#N:83:『西の焔』
+#J0#N:83:『ナルシル』
+N:83:『アンドゥリル』
+E:'Anduril'
+I:23:17:4
+W:20:40:130:80000
+P:0:2d5:10:15:5
+F:STR | HIDE_TYPE | RIDING |
+F:SLAY_EVIL | BRAND_FIRE | SLAY_TROLL | SLAY_ORC | FREE_ACT |
+F:RES_FIRE | SUST_DEX | SEE_INVIS | ACTIVATE | SHOW_MODS | LITE
+D:$The famed "Flame of the West", the sword that was broken and is forged 
+D:$again.  It glows with the essence of fire, its wearer is mighty in combat, 
+D:$and no creature of Sauron can withstand it.  It will never be stained or 
+D:$broken even in defeat.
+D:名高き「西方の焔」であり、
+D:折れたる剣としても知られるこの剣は、エレンディルが倒れるのと
+D:供に折れたが、一つの指輪が発見された後
+D:鍛え直されアラゴルンのものとなった。
+D:焔の気により輝くこの剣は振るう者を強くし、サウロンのいかなる
+D:手下もその刃に耐えることはできない。
+
+# The Long Sword 'Anguirel' -> Werewindle
+
+#JZ# アンバー後半である人が使うらしい
+N:84:『ワーウィンドル』
+E:'Werewindle'
+I:23:17:2
+W:20:40:130:120000
+P:0:2d5:8:12:0
+F:STR | CON | HIDE_TYPE | CHAOTIC | REGEN | SLOW_DIGEST |
+F:SLAY_EVIL | BRAND_ELEC | SLAY_DEMON | FREE_ACT | RES_ELEC |
+F:RES_LITE | LITE | SEE_INVIS | SHOW_MODS | ACTIVATE | SPEED |
+F:SUST_CON | SUST_STR | SUST_INT | SUST_WIS | RES_DARK |
+F:RES_DISEN | RES_FEAR | BLOWS | SPEED
+D:夜の剣グレイスワンダーと対をなす昼の剣で、トランプの魔力が込められている。
+D:「それは黄金の素晴らしい打出し模様が施された、長い濃緑色の鞘だった。
+D:そこから突き出ている剣の柄は金メッキされているらしく、柄頭には
+D:素晴らしいエメラルドが取り付けられていた。僕は剣を手に取り半ばまで抜いてみた。
+D:…刀身には輝く模様が描かれていた。その模様は---そうだ、 <パターン>の一部だ。
+D:グレイスワンダーの模様は<パターン>の起点付近の一部分だったが、これは終点の部分だ。」
+D:（R.ゼラズニイ、真世界アンバー９「影の騎士」）
+
+# The Long Sword 'Elvagil'-> 'Chainsword'
+
+#JZ# ジェイソンですね
+N:85:『チェンソー』
+E:'Chainsword'
+I:23:16:2
+W:50:50:130:66666
+P:0:11d5:-30:7:0
+F:DEX | CHR | STEALTH | HIDE_TYPE | SPEED | AGGRAVATE | BLOWS | VORPAL |
+F:SLAY_TROLL | SLAY_ORC | SEE_INVIS | SHOW_MODS
+D:持った者を殺戮マシーンに変える呪われた剣だ。あなたにはこの剣の
+D:血に飢えた叫びが聞こえるだろう。
+
+# The Rapier 'Forasgil'
+
+#J0# ???
+N:86:『フォラスギル』
+E:'Forasgil'
+I:23:7:0
+W:15:8:40:15000
+P:0:1d6:12:19:0
+F:SLAY_ANIMAL | BRAND_COLD | RES_COLD | RES_LITE | LITE | SHOW_MODS
+D:$A slender, tapered blade whose wielder strikes icy blows with deadly 
+D:$accuracy.
+D:A slender, tapered blade whose wielder strikes icy blows with deadly 
+D:accuracy.
+
+
+# The Sabre 'Careth Asdriag'
+
+#J0# ???
+N:87:『カレス・アスドリアグ』
+E:'Careth Asdriag'
+I:23:11:1
+W:15:8:50:25000
+P:0:1d7:6:8:0
+F:BLOWS | SLAY_DRAGON | SLAY_ANIMAL | SLAY_TROLL | SLAY_GIANT |
+F:SLAY_ORC | SHOW_MODS | RIDING
+D:$An heirloom of the Lords of Rhun far to the east, and a name of 
+D:$dismay to creatures natural and unnatural.
+D:遥か東の国リュンの豪胆な王の一族に伝わる家宝で、
+D:その名はあらゆる生き物にとって絶望を意味する。
+
+# The Small Sword 'Sting'
+
+#J0# 日本語
+N:88:『つらぬき丸』
+E:'Sting'
+I:23:8:2
+W:20:15:75:100000
+P:0:1d6:7:8:0
+F:STR | DEX | CON | BLOWS | SLAY_EVIL | SLAY_UNDEAD | SLAY_ORC |
+F:FREE_ACT | RES_LITE | LITE | SEE_INVIS | SHOW_MODS | QUESTITEM
+D:$"I will give you a name, and I shall call you Sting."  The perfect size 
+D:$for Bilbo, and stamped forever by the courage he found in Mirkwood, this 
+D:$sturdy little blade grants the wearer combat prowess and survival 
+D:$abilities they did not know they had.
+D:「おまえに名まえをつけてやろう！よし，つらぬき丸とよぼう。」
+D:ビルボにとって丁度良い大きさだったこの短剣には、
+D:彼が闇の森で勝ちとった勇気が永遠に刻み込まれている。
+D:この丈夫で小さな剣は使用者の
+D:内なる勇気と試練を切りぬける力を呼び覚ます。
+
+# The Scimitar 'Haradekket' -> Soulsword
+
+#JZ# ???
+N:89:『ソウルソード』
+E:'Soulsword'
+I:23:18:2
+W:20:20:130:111111
+P:0:2d5:9:11:0
+F:INT | WIS | BLOWS | SEE_INVIS | BLESSED |
+F:SLAY_ANIMAL | SLAY_EVIL | SLAY_UNDEAD | SLAY_DRAGON | SLAY_DEMON |
+F:RES_CHAOS | RES_DISEN | RES_NEXUS | RES_NETHER | HOLD_LIFE |
+F:SHOW_MODS
+
+
+# The Short Sword Gilettar -> of Merlin
+
+#JZ#アンバーシリーズ後半の主人公。
+N:90:混沌の王子マーリンの
+E:of Merlin
+I:23:10:2
+W:20:8:80:35000
+P:0:1d7:3:7:0
+F:BLOWS |
+F:SLAY_ANIMAL | SLOW_DIGEST | REGEN | SHOW_MODS | SEE_INVIS | RES_DISEN
+D:地球暮らしの長いマーリンは現代っ子らしく重く長い剣を持ち歩くのが嫌いで、
+D:必要な時カオスの力で剣を異世界から取り寄せる。この剣もそうした物の
+D:一つだ。（R.ゼラズニイ、真世界アンバーシリーズ 6-10 巻）
+
+# The Blade of Chaos 'Doomcaller'
+# Was (-5) CON | HIDE_TYPE, +0 armor
+
+#J0# 日本語化, Ko
+#J0#N:91:『悪運招致者』
+N:91:『災いを招く者』
+E:'Doomcaller'
+I:23:30:0
+W:70:25:180:250000
+P:0:6d5:18:28:-50
+F:KILL_DRAGON | SLAY_ANIMAL | SLAY_EVIL | BRAND_COLD | SLAY_TROLL |
+F:SLAY_ORC | FREE_ACT | RES_ACID | RES_ELEC | RES_FIRE | RES_COLD |
+F:RES_CONF | RES_CHAOS | SEE_INVIS | TELEPATHY | AGGRAVATE | SHOW_MODS |
+F:CHAOTIC | VORPAL | BRAND_FIRE | BRAND_POIS | LITE
+D:$This weapon of wrath, cursed with a violent anger, dives hungrily 
+D:$into the flesh of its enemies. It gathers shadows of death into its 
+D:$owner as they inflict wounds that will never heal.
+D:血に飢えた戦闘狂により鍛えられたこの怒りの剣は
+D:敵の肉体に貪欲に食い込む。
+
+
+# The Long Sword 'Vorpal Blade'
+
+#JZ#ジャバーウォッキーの日本語訳では『けしにぐの剣』/『まきれもなぎな剣』
+#JZ#しかしそれじゃ分からないので英語のままに
+N:92:『ヴォーパルブレード』
+E:'Vorpal Blade'
+I:23:17:2
+W:50:240:150:250000
+P:0:5d5:32:32:0
+F:VORPAL | SLAY_EVIL | HIDE_TYPE |
+F:FREE_ACT | LITE | SEE_INVIS | SLOW_DIGEST | REGEN | SPEED | STR | DEX
+D:$"One, two! One, two!  And through, and through, the vorpal blade 
+D:$went snicker-snack!"
+D:「まきれもなぎな剣の切れ味まぎれなし！」
+D:（L.キャロル、柳瀬尚紀訳 ジャバウォッキー）
+
+# The Beaked Axe of Theoden
+
+#J0# (コメント)
+#J0#
+#J0# wp.261
+#J0#(都々目)
+#J0#＊追補編より。
+#J0#
+N:93:更正せるセオデン王の
+E:of Theoden
+I:22:10:3
+W:20:30:120:40000
+P:0:2d6:8:10:0
+F:WIS | CON | HIDE_TYPE | BLESSED |
+F:SLAY_DRAGON | TELEPATHY | SLOW_DIGEST | ACTIVATE | SHOW_MODS
+D:$The narrow axe head of this weapon, finely balanced by a crow's beak, 
+D:$would pierce even the armour of Smaug, and its wielder becomes aware of 
+D:$the minds of their enemies.
+D:戦いを決意した黄金館の王セオデンが手にとったこの鋭い斧は、
+D:スマウグの硬い鱗でさえ貫き通し
+D:敵の精神を無防備に晒け出させる。
+
+
+# The Glaive of Pain
+
+#J0# 日本語化, Ko
+N:94:苦痛の
+E:of Pain
+I:22:13:0
+W:30:25:190:50000
+P:0:9d6:0:30:0
+F:SHOW_MODS | RIDING
+D:$The massive chopper that crowns this glaive glows blood-red and black; 
+D:$fell spells of annihilation swirl and dance as you swing death's myrmidon 
+D:$down.
+D:このグレイブに付けられた巨大な切り裂き刃は血の赤と黒色の輝きを放つ。
+D:この死の用心棒を振り降ろす時、内に宿る禍々しい破壊の魔力が渦巻いて踊る。
+
+# The Halberd 'Osondir'
+
+#J0# ???
+N:95:『オソンディル』
+E:'Osondir'
+I:22:15:3
+W:20:8:190:22000
+P:0:3d5:6:9:0
+F:CHR | HIDE_TYPE |
+F:BRAND_FIRE | SLAY_UNDEAD | SLAY_GIANT | RES_FIRE | RES_SOUND |
+F:FEATHER | SEE_INVIS | SHOW_MODS | LITE
+D:$Lordly and tall did Osondir stand against the wrath of giants, and 
+D:$clear-eyed in barrows fell, wielding a halberd glowing ruby red.
+D:Lordly and tall did Osondir stand against the wrath of giants, and 
+D:clear-eyed in barrows fell, wielding a halberd glowing ruby red.
+
+
+# The Pike 'Til-i-arc'
+
+#J0# ???
+N:96:『ティリ=イ=アルク』
+E:'Til-i-arc'
+I:22:8:2
+W:20:15:160:32000
+P:0:2d5:10:12:10
+F:INT | HIDE_TYPE |
+F:BRAND_COLD | BRAND_FIRE | SLAY_DEMON | SLAY_TROLL | SLAY_GIANT |
+F:RES_FIRE | RES_COLD | SUST_INT | SLOW_DIGEST | SHOW_MODS | LITE
+D:$Within this long thrusting spear lie the spirits of frost giants and fire 
+D:$demons, who war forever, trapped by magely spells.  
+D:この両手持ちの長槍の中には
+D:氷の巨人と炎の悪魔の二つの魂が魔法により
+D:封印されていて永遠に争っている。
+
+# The Spear 'Aeglos' -> Runespear (of Odin)
+
+#JZ#オーディンの槍。ちゃんと名前があります。
+N:97:『グングニル』
+E:'Runespear'
+I:22:7:4
+W:15:50:100:180000
+P:0:3d9:15:25:5
+F:INT | WIS | HIDE_TYPE | BRAND_FIRE | BRAND_ELEC |
+F:SLAY_TROLL | SLAY_ORC | SLAY_GIANT |
+F:FREE_ACT | RES_FIRE | RES_ELEC | RES_LITE |
+F:SLOW_DIGEST | ACTIVATE | BLESSED | SHOW_MODS | LITE | RIDING
+D:主神オーディンが世界樹の枝から作り上げた槍で、魔力を込めた
+D:ルーン文字が刻まれている。（北欧神話）
+
+# The Spear of Orome -> Destiny
+
+#JZ#直接のもとねたはワーグナーのオペラ「パルジファル」
+#JZ#そのモチーフとなったのはアーサー王伝説。
+#JZ#ケルト神話の光の槍と、キリストを刺したロンギヌスの槍が
+#JZ#同一視されて「聖槍」となった。またキリストの血を受けた杯が
+#JZ#聖杯(Holy Grail)。この「運命の槍」を手にした者は世界を
+#JZ#支配するといわれ、ヒトラーが必死で探したのは有名な話。
+#JZ#ここではエヴァンなんとかで有名になった名前を使った。
+N:98:『ロンギヌス』
+E:of Destiny
+I:22:7:4
+W:15:40:100:80000
+P:0:2d9:15:15:0
+F:INT | WIS | INFRA | HIDE_TYPE | SEARCH | BRAND_FIRE |
+F:SLAY_GIANT | SLAY_EVIL | SLAY_DEMON | SLAY_UNDEAD | SLAY_DRAGON |
+F:RES_FIRE | RES_LITE | HOLD_LIFE | RES_FEAR | LITE | FEATHER |
+F:LITE | SEE_INVIS | ACTIVATE | BLESSED | SHOW_MODS | RIDING
+D:聖剣伝説において聖槍として知られているこの槍を持つ者は
+D:世界を支配すると言われている。（ワーグナー、「パルジファル」他）
+
+# The Spear 'Nimloth' -> Hagen
+
+#JZ# ワーグナー
+N:99:ハーゲンの
+E:of Hagen
+I:22:2:3
+W:15:12:50:30000
+P:0:1d6:11:13:0
+F:STEALTH | RES_DARK | INFRA | SPEED | RIDING |
+F:BRAND_COLD | SLAY_UNDEAD | RES_COLD | SEE_INVIS | SHOW_MODS | THROW
+D:ハーゲンが進み出た。　
+D:「わたしの槍をどうぞ。この穂先が誓いの証人となりましょう。」
+D:ジーグフリードとハーゲンを囲んで家来たちは輪を作った。
+D:ハーゲンが槍をかまえると、ジーグフリードはその穂先に右手の指を二本
+D:のせて、「輝く槍よ！聖なる武器よ！とこしえの誓いに力を貸したまえ！
+D:きらめく切っ先にかけて誓う。もしぼくが真実を偽るなら、もしぼくが死に
+D:値するなら、槍よ、おまえがこの心臓に一撃を与えてくれ。…」
+D:(リヒャルト・ワーグナー、高橋康也・高橋迪訳「神々の黄昏」,新書館)
+
+# The Lance of Eorlingas
+
+N:100:エオル家の
+E:of Eorlingas
+I:22:20:3
+W:20:33:360:100000
+P:0:3d8:3:21:0
+F:STR | DEX | CHR | HIDE_TYPE | FREE_ACT |
+F:SLAY_TROLL | SLAY_ORC | SEE_INVIS | SHOW_MODS | RIDING
+D:$"Forth Eorlingas!". To the field of Cormallen came Eorl the Young 
+D:$to save beleaguered Gondor, and from his lance fled massive trolls 
+D:$and dire wolves.
+D:「進め、エオルの子らよ！」包囲されたゴンドールを救うため、
+D:青年王エオルはコルマレンの荒野へと到来し、彼のランスは獰猛なるトロル
+D:と魔狼たちを敗走させた。
+
+# The Great Axe of Durin
+
+#J0# p.342 wp.258
+N:101:不死ドゥリンの
+E:of Durin
+I:22:25:3
+W:30:90:230:150000
+P:0:4d4:10:20:15
+F:CON | HIDE_TYPE |
+F:KILL_DRAGON | SLAY_DEMON | SLAY_TROLL | SLAY_ORC | FREE_ACT |
+F:RES_ACID | RES_FIRE | RES_LITE | RES_DARK | RES_CHAOS | SHOW_MODS
+D:$The twin massive axe heads of this ancient demon's dread gleam with 
+D:$mithril inlay, which tell sagas of endurance, invoking the powers of 
+D:$Khazad-dum to protect the wearer and slay all evils found underground.
+D:太古の悪魔達が恐れたこの大振りな両刃の斧頭はミスリルの細工
+D:により輝いている。その永き忍耐の歴史を物語る輝きは
+D:カザド=ドゥムの力を呼び覚まし、持つ者を護り地下に潜む邪悪な
+D:者共を打ち倒す。
+
+
+# The Great Axe of Eonwe
+
+#J0# p.312, Ko
+N:102:旗手エオンウェの
+E:of Eonwe
+I:22:25:2
+W:30:120:230:200000
+P:0:4d4:15:18:8
+F:STR | INT | WIS | DEX | CON | CHR | HIDE_TYPE |
+F:SLAY_EVIL | BRAND_COLD | SLAY_UNDEAD |
+F:SLAY_ORC | FREE_ACT | IM_COLD | SEE_INVIS | ACTIVATE |
+F:BLESSED | SHOW_MODS
+D:$The axe of Eonwe, leader of the Hosts of the West before the gates of 
+D:$Thangorodrim, strikes with icy wrath at the undead, disperses hosts of 
+D:$evil at a word, and grants Maia-like powers of body and mind.
+D:西方の地から中つ国に渡り、サンゴロドリムの門に集結した軍勢
+D:を率いるマイア、旗手エオンウェの斧だ。この武器は氷の如き
+D:気勢でアンデッドを
+D:打ち倒し、ただ一言の言葉で邪悪な軍勢を追い散らすことが出来る。
+D:そして心身両面に於いて持つ者にマイアの如き力を授ける。
+
+# The Battle Axe of Balli Stonehand
+
+#J0# ???
+N:103:石の手バリの
+E:of Balli Stonehand
+I:22:22:3
+W:30:15:170:90000
+P:0:3d8:8:11:5
+F:STR | CON | STEALTH | HIDE_TYPE |
+F:SLAY_DEMON | SLAY_TROLL | SLAY_ORC | FREE_ACT |
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_BLIND | FEATHER |
+F:SEE_INVIS | REGEN | SHOW_MODS
+D:$The twin blades of this weapon were forged in Belegost, and powerful forces 
+D:$to resist and endure lie ready for he who shall wield it once more.
+D:古のベレゴストの伝説のドワーフ鍛冶、石の手バリが鍛えた両刃の斧だ。
+D:その強力な霊力は今も全く衰えておらず、再び手にする者に頑強さと
+D:様々な攻撃への防御を与えてくれるだろう。
+
+# The Battle Axe 'Lotharang'
+
+#J0# ???
+N:104:『ロサラング』
+E:'Lotharang'
+I:22:22:1
+W:30:15:170:21000
+P:0:2d8:4:3:0
+F:STR | DEX | HIDE_TYPE |
+F:SLAY_TROLL | SLAY_ORC | ACTIVATE | SHOW_MODS
+D:$A superbly crafted double-bladed axe that slays the creatures of earth and 
+D:$allows rapid recovery from their blows.
+D:アルノールの野伏の頭領ケルサインが使っていた、
+D:素晴らしい作りの両刃の戦斧。
+
+# The Lochaber Axe 'Mundwine' -> of the Dwarves
+
+N:105:ドワーフの
+E:of the Dwarves
+I:22:28:10
+W:30:8:250:80000
+P:0:3d8:12:17:0
+F:SLAY_EVIL | TUNNEL | INFRA | SEARCH | SLAY_GIANT |
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_FEAR |
+F:SHOW_MODS
+D:$A massive axe with twin razor-sharp heads, so large that it usually 
+D:$requires two hands to wield, intricately engraved in gold with spells 
+D:$to ward off the elements and smite evil.
+D:A massive axe with twin razor-sharp heads, so large that it usually 
+D:requires two hands to wield, intricately engraved in gold with spells 
+D:to ward off the elements and smite evil.
+
+
+# The Broad Axe 'Barukkheled'
+
+#J0# (コメント)
+#J0#
+#J0#
+#J0#(小林)
+#J0# > >'Barukkheled'                   バルックヘレド→バルクケレド
+#J0# こちらはクズドゥル語か暗黒語ですね．ひょっとしたら，「バルッケレド」
+#J0# かも知れない．こちらも今度調べておきます．
+#J0# ちなみにこれも物語中では見たことないです．"Kheled"というのはクズドゥ
+#J0# ル語で「湖」らしい．"Bar-"は「赤」だったかな…自信ないや．
+#J0#
+#J0# これも，Baruk + Kheled だとしたら，クズドゥル語で「バルクヘレド」
+#J0# でしょうね．
+#J0#
+#J0# 間違い．
+#J0# Khuzdul語でのKhの発音は「ク」に近い音なので，
+#J0# 「バルクケレド」または「バルケレド」だと思います．
+#J0# でも「バルッケレド」の可能性は捨て切れません．
+#J0#
+N:106:『バルクケレド』
+E:'Barukkheled'
+I:22:11:3
+W:20:8:130:50000
+P:0:2d6:13:19:0
+F:CON | HIDE_TYPE |
+F:SLAY_EVIL | SLAY_TROLL | SLAY_GIANT | SLAY_ORC |
+F:SEE_INVIS | SHOW_MODS
+D:$A royal heirloom of the southern coast, strong in combat against evil 
+D:$creatures of the earth.
+D:ドワーフの言葉で「鏡の斧」を意味するこの斧は、
+D:南方のドワーフの王家に伝わる家宝だ。地に潜む邪悪な
+D:生き物に強力な威力を発揮する。
+
+
+# The Trident of Wrath
+
+#J0# 日本語, Ko
+N:107:憤怒の
+E:of Wrath
+I:22:26:2
+W:35:12:300:90000
+P:0:3d9:16:18:0
+F:STR | DEX | HIDE_TYPE | CHAOTIC |
+F:SLAY_EVIL | SLAY_UNDEAD | RES_LITE | RES_DARK | SEE_INVIS |
+F:BLESSED | SHOW_MODS | RIDING
+D:$A massive triple-pronged spear, so great it normally requires two hands to 
+D:$wield, evoking the spirit of Osse who with it pierced legions of 
+D:$evil and undead.
+D:三本の切先がある大振りな槍で、かつてこの槍を手に邪悪な者共や
+D:冥界の者共の軍勢を刺し貫いたオスセの霊力を宿している。
+
+
+# The Trident of Ulmo
+
+#J0# (コメント)
+#J0#
+#J0# p.309
+#J0#(都々目)
+#J0#海王ウルモの → 水の王ウルモの
+#J0#＊シルマリルの物語より。オロメはあらゆる水の流れの支配者です。海だけではあ
+#J0#りません。原作中もこのように表記されています。
+#J0#
+N:108:水の王ウルモの
+E:of Ulmo
+I:22:5:4
+W:30:90:70:120000
+P:0:4d8:15:19:0
+F:DEX | HIDE_TYPE |
+F:SLAY_DRAGON | SLAY_ANIMAL | FREE_ACT | HOLD_LIFE | IM_ACID |
+F:RES_NETHER | SEE_INVIS | SLOW_DIGEST | REGEN | ACTIVATE |
+F:BLESSED | SHOW_MODS | RIDING
+D:$The awesome weapon of the Vala Ulmo, Lord of Waters. Mightest of all the 
+D:$powers of good save Manwe himself, Ulmo laughs in scorn at the dread powers 
+D:$of the undead, and is utterly in command of the element of water.
+D:水の王であるヴァラ、ウルモの恐ろしい武器。マンウェ自身を除けば
+D:善き勢力の内で最強であるウルモは、アンデドッドの恐るべき力さえ
+D:嘲笑い、酸のエレメントの究極的支配力を持つ。
+
+
+# The Scythe 'Avavir'
+
+#J0# ???
+N:109:『アヴァビア』
+E:'Avavir'
+I:22:17:3
+W:40:8:250:18000
+P:0:5d3:8:8:10
+F:DEX | CHR | HIDE_TYPE |
+F:BRAND_COLD | BRAND_FIRE | FREE_ACT | RES_FIRE | RES_COLD |
+F:RES_LITE | LITE | SEE_INVIS | ACTIVATE | SHOW_MODS
+D:$With elemental powers whose struggles turn this weapon red and purest 
+D:$white, this shining reaper bears within it a power of going forth and 
+D:$returning.
+D:内に秘めた激しいエレメントの力で白熱している大鎌で、ダンジョンを
+D:行き来する能力を持っている。
+
+
+# The Long Sword of the Dawn
+
+#JZ# M.ムアコックのエターナル・チャンピオンシリーズが出典
+#JZ# 訳は G.P.S. さん
+N:110:『暁の剣』
+E:of the Dawn
+I:23:17:3
+W:40:120:130:250000
+P:0:3d5:20:20:0
+F:ACTIVATE | LITE | BRAND_FIRE | FREE_ACT | RES_FIRE | INFRA | RIDING |
+F:SLAY_EVIL | SLAY_DRAGON | SLAY_UNDEAD | SLAY_DEMON | VORPAL |
+F:CHR | SUST_CHR | RES_FEAR | RES_LITE | RES_BLIND | REGEN | SHOW_MODS
+D:$Forged in the farthest East by a race of mighty spellcasters, this 
+D:$shiny pale sword gleams with the rays of rising sun as you invoke 
+D:$its power of commanding legions of powerful immortal warriors...
+D:ホークムーンの持つ黒の剣、『暁の剣』は薔薇色の光を放ち、
+D:異世界より『暁の軍団』を召集する力がある。
+
+
+# The Mighty Hammer 'Grond'
+# Was 30 pounds (?), -10 to speed
+# The weight (100 pounds) of Grond yields about -4 to speed
+# Note that it takes 18/200 strength to wield Grond correctly
+
+#J0# Note that it takes 18/200 strength to wield Grond correctly
+N:111:『グロンド』
+E:'Grond'
+I:21:50:0
+W:100:1:1000:500000
+P:0:9d9:5:25:10
+F:KILL_DRAGON | SLAY_ANIMAL | SLAY_EVIL | IMPACT | SLAY_UNDEAD | NO_MAGIC |
+F:SLAY_DEMON | SLAY_TROLL | SLAY_ORC | RES_ACID | RES_ELEC | RES_FIRE |
+F:RES_COLD | SEE_INVIS | TELEPATHY | AGGRAVATE | SHOW_MODS | INSTA_ART |
+F:RIDING | QUESTITEM
+D:$The mighty Hammer of the Underworld, blackened by doomspells of shattering, 
+D:$whose wielder holds the lives of all Morgoth's servants in his hand.
+D:あらゆる物を粉砕する暗黒魔法により黒く輝く
+D:冥界の大鉄杖で、これを手にする者はモルゴスの全ての手下の命もまた
+D:手中に収める。
+
+
+# The Flail 'Totila'
+
+N:112:『トティラ』
+E:'Totila'
+I:21:13:2
+W:20:8:150:55000
+P:0:3d6:6:8:0
+F:STEALTH |
+F:SLAY_EVIL | BRAND_FIRE | RES_FIRE | RES_CONF | ACTIVATE |
+F:SHOW_MODS | LITE | RIDING
+D:$A flail whose head befuddles those who stare as you whirl it around, and 
+D:$becomes a fiery comet as you bring it down. 
+D:このフレイルは先端を振り回すことで見るものを惑わせる。そして
+D:振り降ろせば炎の流星となって敵を打つ。
+
+
+# The Two-Handed Flail 'Thunderfist'
+
+#J0# 日本語化
+N:113:『稲妻の拳』
+E:'Thunderfist'
+I:21:18:4
+W:45:38:300:160000
+P:0:3d6:5:18:0
+F:STR | HIDE_TYPE |
+F:SLAY_ANIMAL | BRAND_FIRE | BRAND_ELEC | SLAY_TROLL | SLAY_ORC |
+F:RES_ELEC | RES_FIRE | RES_DARK | SHOW_MODS | LITE
+D:$The long-lost weapon of Kzurin, Dwarven champion of ancient Belegost, 
+D:$with runes of strength in its handle, and flames and sparks that roar and 
+D:$crackle around its massive head.
+D:古のベレゴストで名を馳せたドワーフの英雄、クズーリンの武器で
+D:長く失われていたものだ。柄に力のルーン文字が刻まれ、重厚な先端部には
+D:炎と火花が轟々と音を立て渦巻いている。
+
+
+# The Morning Star 'Bloodspike'
+
+#J0# 日本語化
+N:114:『血流の刺』
+E:'Bloodspike'
+I:21:12:4
+W:20:30:150:30000
+P:0:2d6:8:22:0
+F:STR | HIDE_TYPE |
+F:SLAY_ANIMAL | SLAY_TROLL | SLAY_ORC | RES_NEXUS | SEE_INVIS |
+F:SHOW_MODS
+D:$You feel strong and firm of foot as you whip the chain-suspended spiked orb 
+D:$around - and bathe it in the blood of your foes.
+D:You feel strong and firm of foot as you whip the chain-suspended spiked orb 
+D:around - and bathe it in the blood of your foes.
+
+
+# The Morning Star 'Firestar'
+
+#J0# 日本語化
+N:115:『焔の星』
+E:'Firestar'
+I:21:12:0
+W:20:15:150:35000
+P:0:2d6:5:7:2
+F:BRAND_FIRE | RES_FIRE | ACTIVATE | SHOW_MODS | LITE
+D:$A famed battle-lord of old with a ruddy head, colored as embers are that
+D:$ can yet rise up in wrath.
+D:大きなルビーの球が鎖の先に付けられた、古の名高き戦鎚だ。
+D:その真紅の輝きは敵に振り下ろされれば、永き時を経た今でも
+D:燠火の如く再び怒りに燃え上がる。
+
+
+# The Mace 'Taratol'
+
+N:116:『タラトル』
+E:'Taratol'
+I:21:5:0
+W:20:15:200:50000
+P:0:3d4:12:12:0
+F:KILL_DRAGON | BRAND_ELEC | IM_ELEC | ACTIVATE | SHOW_MODS
+D:$A great ridged mace that calls around you a nimbus of living lightning; 
+D:$you remain utterly untouched even as fat sparks arc around your 
+D:$fingers and eyebrows. 
+D:持つ者を激しい電光で包む大きな角鎚だ。
+D:強烈なスパークが指や眉の間で火花を散らせるが
+D:手にしている者は全く影響を受けない。
+
+
+# The War Hammer of Aule
+
+#J0# p.304, Ko
+N:117:鍛冶の司アウレの
+E:of Aule
+I:21:8:4
+W:40:75:120:250000
+P:0:9d3:19:21:5
+F:WIS | HIDE_TYPE |
+F:KILL_DRAGON | SLAY_EVIL | BRAND_ELEC | SLAY_UNDEAD | SLAY_DEMON |
+F:FREE_ACT | RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_NEXUS |
+F:SEE_INVIS | SHOW_MODS
+D:$The wondrous hammer of Aule, creator of the wise Dwarven lords of old.  
+D:$It bears magics of demolishing that no serpent or demon can withstand, and 
+D:$invokes the strength of mountains to ward off the tumult of the elements.
+D:自らの知恵を授けるため、イルヴァタールの意に背いて密かに七人の
+D:ドワーフの父祖を誕生させたヴァラ、鍛冶の司アウレの素晴らしいハンマー
+D:だ。その魔力はあらゆる龍や悪魔を粉砕し、地水火風のエレメントの
+D:攻撃を退ける山々の力を喚起する。
+
+
+# The Quarterstaff 'Nar-i-vagil'
+
+#J0# ???
+N:118:『ナル=イ=バギル』
+E:'Nar-i-vagil'
+I:21:3:3
+W:20:18:150:70000
+P:0:1d9:10:20:0
+F:INT | HIDE_TYPE |
+F:SLAY_ANIMAL | BRAND_FIRE | RES_FIRE | SHOW_MODS | LITE
+D:$Named for a fiery star and set with gems of great worth binding mystic 
+D:$virtues of protection and thought.
+D:Named for a fiery star and set with gems of great worth binding mystic 
+D:virtues of protection and thought.
+
+
+# The Quarterstaff 'Eriril'
+
+#J0# ???
+N:119:『エリリル』
+E:'Eriril'
+I:21:3:4
+W:20:18:150:20000
+P:0:1d9:3:5:0
+F:INT | WIS | HIDE_TYPE |
+F:SLAY_EVIL | RES_LITE | LITE | SEE_INVIS | ACTIVATE | SHOW_MODS
+D:$The radiant golden staff of an Istari of legend, this wizard's companion 
+D:$grants keen sight and the knowledge of many hidden things.
+D:「秀でし輝き」を意味する名を持つ、伝説のイスタリの黄金に輝くスタッフだ。
+D:この魔法使の友は、多くの隠された物事に対する、鋭い視点と鮮明な知識を
+D:もたらす。
+
+# The Quarterstaff of Olorin -> Gandalf
+
+#JZ#
+N:120:賢者ガンダルフの
+E:of Gandalf
+I:21:21:4
+W:30:50:40:140000
+P:0:3d2:10:13:0
+F:INT | WIS | CHR | HIDE_TYPE | SEARCH | BRAND_FIRE | FORCE_WEPON |
+F:SLAY_EVIL | SLAY_TROLL | SLAY_ORC | LITE | DEC_MANA |
+F:HOLD_LIFE | RES_FIRE | RES_NETHER | SEE_INVIS | ACTIVATE | SHOW_MODS
+D:$The staff of the great wizard Gandalf.  
+D:$It is tall and sturdy, with rough-hewn runes that invoke the element of 
+D:$Earth, and which strikes down all creatures who live in the shadow of 
+D:$mountains.
+D:ガンダルフがかつて使っていた長く丈夫な杖。節くれ立った表面には
+D:地のエレメントの力を呼び起こす荒削りなルーン文字が刻まれ、
+D:影に生きる者はその打撃に耐えることは出来ない。
+
+
+# The Mace of Disruption 'Deathwreaker'
+
+#J0# 日本語化
+N:121:『死の復讐者』
+E:'Deathwreaker'
+I:21:20:6
+W:80:38:400:444444
+P:0:7d8:18:18:0
+F:STR | TUNNEL | HIDE_TYPE | NO_TELE |
+F:SLAY_DRAGON | SLAY_ANIMAL | SLAY_EVIL | SLAY_UNDEAD | BRAND_FIRE |
+F:IM_FIRE | RES_DARK | RES_CONF | RES_CHAOS | RES_DISEN | AGGRAVATE | 
+F:LITE | SHOW_MODS | BRAND_POIS | VAMPIRIC | RIDING
+D:$A weapon so massive it seems beyond the strength of mortals, yet you feel 
+D:$the might of giants within you as you heft it.  As you grip the handle 
+D:$of ebony and steel, coronas of fire blaze and mighty spells to preserve 
+D:$magic activate around you.  You wield the Fear of Dragons and the Despair 
+D:$of the Undead!
+D:定命の者の力を遥かに越えた重さを持つ武器だが、
+D:手にすれば巨人の力が湧き上がってくるのが感じられる。
+D:黒檀と鉄で作られたその柄を掴む時、焔が燃え立って秘められた
+D:魔法が息を吹き返し体を包み込む。その手に握られているのは
+D:「龍どもの畏怖」であり「亡者共の絶望」なのだ！
+
+# The Lucerne Hammer 'Turmil'
+
+#J0# ???
+N:122:『トゥルミル』
+E:'Turmil'
+I:22:12:4
+W:20:15:120:30000
+P:0:2d5:10:6:8
+F:WIS | INFRA | HIDE_TYPE | BLESSED |
+F:BRAND_COLD | SLAY_ORC | RES_COLD | RES_LITE | LITE | REGEN |
+F:ACTIVATE | SHOW_MODS
+D:$Wielded by the High Priest of Meneltarma, this great mace gleams coldly as 
+D:$though moonlit, and it can strike as mighty a blow spiritually as 
+D:$physically.
+D:メネルタルマの高僧が使っていた大鎚で、月の光のように冷たく輝いている。
+D:その打撃は敵の肉体だけでなく精神をも打ち砕くことができる。
+
+
+# The Executioner's Sword 'Slayer'
+
+N:123:『スレイヤー』
+E:'Slayer'
+I:23:28:2
+W:30:60:260:200000
+P:0:4d5:15:15:0
+F:BLOWS | VAMPIRIC | HOLD_LIFE | SLAY_UNDEAD | SLAY_EVIL |
+F:REGEN | RES_FEAR | RES_BLIND | SLOW_DIGEST | SHOW_MODS
+D:数え切れないほどの首を落してきたこの血に飢えた刃は
+D:敵の血と魂を吸って手にする者の体を癒す。
+
+# The Long Bow 'Belthronding'
+
+#J0# ???
+N:124:『ベルスロンディング』
+E:'Belthronding'
+I:19:13:3
+W:40:20:40:60000
+P:0:0d0:20:22:0
+F:DEX | STEALTH | HIDE_TYPE | RES_DISEN | XTRA_SHOTS | SHOW_MODS
+D:$The great bow of Beleg Cuthalion, made of black yew and strung with elven 
+D:$hair that faintly shimmers a pale clear gold.
+D:偉大なるベレグ・クーサリオンの黒いちいの弓で、
+D:淡い金色の輝きを微かに放つエルフの髪を弦に張ってある。
+
+
+# The Long Bow of Bard
+
+#J0# p.350
+N:125:射手バルド王の
+E:of Bard
+I:19:13:3
+W:30:20:40:20000
+P:0:0d0:17:19:0
+F:DEX | HIDE_TYPE | FREE_ACT | XTRA_MIGHT | SHOW_MODS
+D:$The great yew bow of grim-faced Bard, who shot the mightiest arrow that 
+D:$songs record.
+D:後に王となる湖の街の陰気面バルドが竜を射抜いた伝説のいちいの弓だ。
+D:彼が龍を射抜いた矢は歌に唄われ語り継がれている。
+
+
+# The Light Crossbow 'Cubragol' -> of Brand
+
+#JZ#バルドの孫で谷の国の三代目の王。指輪戦争で戦死する。
+#JZ#かと思ったけどアンバーの王子でしょうね。
+N:126:狂気の夢想家ブランドの
+E:of Brand
+I:19:23:10
+W:50:25:110:100000
+P:0:0d0:10:14:0
+F:SPEED | RES_FIRE | XTRA_MIGHT | ACTIVATE | SHOW_MODS
+D:トランプの魔力を自分の物にし、新たな宇宙を創造しようとした
+D:アンバーの王子ブランドが使っていたクロスボウだ。
+D:その魔力により装備するものは非常に素早く行動できる。
+
+
+N:127:ヒムリングの
+E:of Himring
+I:36:6:0
+W:25:6:100:35000
+P:6:0d0:0:0:15
+F:RES_CHAOS | RES_NETHER | RES_POIS | SH_COLD | ACTIVATE
+D:$Contained within this studded cuirass of pliable leather is the memory of 
+D:$unvanquished Himring, defiant fortress surrounded by the legions of Morgoth.
+D:柔軟な革で作られたこの胴鎧には、モルゴスの軍勢に包囲されても
+D:勇敢に闘い抜いた不落の要塞ヒムリングの記憶が刻み込まれている。
+
+N:128:『草薙之剣』
+E:'Kusanagi-no-tsurugi'
+I:23:20:3
+W:50:20:120:123456
+P:0:4d4:15:15:0
+F:STEALTH | DEX | RES_NETHER | RES_DISEN | RES_FEAR |
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | ACTIVATE |
+F:SLAY_EVIL | SLAY_ANIMAL | SLAY_DEMON | SLAY_DRAGON |
+F:SEE_INVIS | REGEN | BLESSED | LITE | SHOW_MODS
+D:三種の神器の一つ。出雲の国で素戔嗚尊(すさのおのみこと)により
+D:見出され、後に日本武尊(やまとたけるのみこと)の剣となる。
+D:使う者を様々な危機から守る霊力が備わっている。
+
+# The Multi-Hued Dragon Scale Mail 'Razorback'
+# Was (-2) INT | WIS | STEALTH | HIDE_TYPE, (-3) to hit, 30 pounds (?)
+
+#J0# 日本語化
+#J0# (コメント)
+#J0#
+#J0#(都々目)
+#J0#＊Razorbackには1.ながすくじら 2.野生の豚 3.とがった背 と云う意味があるそう
+#J0#です。とがった背〜ステゴサウルスと云うことで、こういう風にしてみました(笑)。
+#J0#
+N:129:『剣竜の鎧』
+E:'Razorback'
+I:38:6:0
+W:90:9:500:400000
+P:30:2d4:-4:0:25
+F:RES_FIRE | RES_COLD | RES_POIS | RES_LITE | RES_DARK | RES_ACID |
+F:LITE | SEE_INVIS | AGGRAVATE | FREE_ACT | IM_ELEC |
+F:ACTIVATE
+D:$A massive suit of heavy dragon scales deeply saturated with many colors.  
+D:$It throbs with angry energies, and you feel the raw elemental might of 
+D:$untamed Lightning as you put it on.
+D:様々な色彩が凝縮した重厚なドラゴンの鱗で作られた鎧だ。
+D:怒りのエネルギーを脈打ち、着るものは
+D:荒々しい稲光のエネルギーを直に感じる。
+
+
+# The Power Dragon Scale Mail 'Bladeturner'
+# Was (-3) DEX | HIDE_TYPE, (-4) to hit, 50 pounds (?)
+
+#J0# 日本語化
+N:130:『刀返し』
+E:'Bladeturner'
+I:38:30:0
+W:95:3:600:500000
+P:50:2d4:-8:0:35
+F:HOLD_LIFE | REGEN |
+F:RES_ACID | RES_FIRE | RES_COLD | RES_ELEC | RES_POIS | FEATHER |
+F:RES_NETHER | RES_NEXUS | RES_CHAOS | RES_LITE | RES_DARK |
+F:RES_SHARDS | RES_SOUND | RES_DISEN | RES_BLIND | RES_CONF |
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD |
+F:ACTIVATE
+D:$A suit of adamant, set with scales of every color, surrounded in a nimbus 
+D:$of perfectly untramelled yet inextricably intermingled and utterly mastered 
+D:$powers elemental and ethereal.
+D:あらゆる色彩の鱗に被われたアダマンタイトの鎧で、完璧にコントロールされた
+D:地、水、火、風および霊的な力が調和し
+D:渾然一体となり、輝く護光となってこの鎧を包んでいる。
+
+N:131:イカヌスの
+E:of Icanus
+I:36:2:3
+W:50:40:20:100000
+P:2:0d0:0:0:20
+F:INT | WIS | SEARCH | HIDE_TYPE | FEATHER | ACTIVATE 
+F:SUST_INT | SUST_WIS | FREE_ACT | SEE_INVIS | DEC_MANA |
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD
+D:$The robe of the great wizard Gandalf, also known as Icanus in the 
+D:$lands of the South. It is proof against elements, for neither the 
+D:$heat of the South, nor the ice of the North, nor the acidy pits of Dol 
+D:$Guldur were able to hold back the defiant Maia in the pursuit of 
+D:$his mission 
+D:南方ではイカヌスの名で知られる大賢者ガンダルフのローブだ。様々なエレメント
+D:から身を護るこのローブのおかげで、南の熱暑、北の氷結、ドル・グルドゥアの
+D:酸の沼でさえも、かの挑戦的なマイアの任務を妨げる事はなかったのだ。
+
+N:132:ヌメノールの
+E:of Numenor
+I:33:12:3
+W:60:15:40:50000
+P:0:1d1:0:0:15
+F:INT | DEX | CHR | HIDE_TYPE |
+F:RES_SHARDS | RES_SOUND | RES_LITE |
+F:LITE |
+D:$A crown of massive gold, set with wondrous jewels of thought and warding,
+D:$ worn by the kings of ancient Numenor.
+D:古のヌメノールの王達が用いていた重厚な黄金の王冠で、
+D:知恵を授け敵を退ける素晴らしい宝石が取りつけられている。
+
+N:133:フーリン王の
+E:of Hurin
+I:22:10:3
+W:30:30:180:120000
+P:0:2d6:10:12:2
+F:CON | BLOWS | HIDE_TYPE | BRAND_ACID | SHOW_MODS
+F:SLAY_TROLL | SLAY_DEMON | ACTIVATE
+D:$"Hurin [...] wielded the axe two-handed, and it is sung that the axe
+D:$ smoked in the black blood of the troll-guard of Gothmog, until it withered,
+D:$ and each time that he slew Hurin cried 'Aure entuluva! Day shall come
+D:$ again!'. Seventy times he uttered that cry, but they took him at last
+D:$ alive, by the command of Morgoth..."
+D:「最後にただ一人フーリンが残った。かれは盾を捨て、両手に
+D:鉞を掴んで振り回した。鉞はゴズモグを護衛するトロルたちの
+D:黒い血を流す度に血煙を上げ、フーリンは一人斬る毎に「アウ
+D:レ　エントゥルヴァ！　昼再び来らん！」と叫んだと歌に歌わ
+D:れている。七十度彼はこの叫びを上げた。しかし遂にかれはモ
+D:ルゴスの命令により生きながら捕らえられた。」
+D:(J.R.R.トールキン、田中明子訳、シルマリルの物語)
+
+N:134:バック郷の
+E:of Buckland
+I:19:2:3
+W:40:35:20:50000
+P:0:2d1:19:15:0
+F:SPEED | XTRA_MIGHT |
+F:RES_FEAR | RES_BLIND | RES_CONF | SHOW_MODS
+D:$A sling granting extraordinary clarity of mind amidst darkness and 
+D:$confusion, and which hurls shot with deadly speed.
+D:このスリングは暗闇と混乱のただ中に於いてさえ驚くほど明晰な思考を可能にし、
+D:弾を恐ろしく強力に撃つことができる。
+
+N:135:ドワーフ王アザガルの
+E:of Azaghal
+I:23:5:0
+W:15:30:30:40000
+P:0:2d5:12:14:0
+F:KILL_DRAGON | IM_FIRE
+D:$At the Nirnaeth the Dwarves stayed the onslaught of Glaurung, and 
+D:$Azaghal their lord drove this short blade into the drake's belly before 
+D:$he was trampled underfoot. The black blood of the Father of Dragons 
+D:$now serves as a rememberance for all dragons that come near it. 
+D:かつて、ニアナイスにおいてドワーフ達がグラウルングの猛攻撃を
+D:食い止める際、アザガル王は邪竜に踏み潰される刹那、この短い刃を
+D:竜の腹部に突き刺した。この刃に残る竜の祖の黒き血は近づく全ての
+D:ドラゴンにかつての恐怖を思い起こさせるのである。
+
+N:136:『ミュルニール』
+E:'Mjollnir'
+I:21:8:4
+W:30:30:150:100000
+P:0:5d3:3:15:0
+F:BRAND_ELEC | IM_ELEC | STR | DEX | THROW | SLAY_GIANT
+D:$The famous throwing hammer of the Norse god Thor, it crackles with 
+D:$lightning as you swing it at your opponents. 
+D:この有名な投げハンマーは北欧の神トールのもので、敵に対して振るえば、
+D:稲妻とともに雷鳴が響きわたる。
+
+N:137:『ゴルン・ノヴァ』
+E:'Goln Nova'
+I:23:16:2
+W:30:50:150:100000
+P:0:2d5:15:15:0
+F:STR | DEX | HIDE_TYPE | FORCE_WEPON |
+F:SHOW_MODS | RIDING | SLAY_DEMON
+D:かつて魔導都市サイラーグを破壊つくした魔獣、ザナッファー。
+D:それを滅ぼしたといわれるのが、この伝説の武器である。
+D:持つ者の、意思の力を刃と成して、魔族すらも両断する。
+D:(神坂一、スレイヤーズ5「白銀の魔獣」)
+
+N:138:上級王ギル=ガラドの
+E:of Gil-Galad
+I:34:10:4
+W:70:4:100:65000
+P:10:1d2:0:0:20
+F:LITE | CHR | RES_ELEC | RES_ACID | HIDE_TYPE | REFLECT |
+F:SUST_WIS | SUST_CHR | ACTIVATE
+D:$The legendary shield of Gil-Galad, who fought his way to the gates of
+D:$ the Dark Tower, and with whom came light even to Gorgoroth.
+D:ノルドールの最後の上級王、ギル=ガラドの伝説の盾だ。彼はバラド=ドゥアの門まで
+D:敵を討ち破って進み、ゴルゴロスの地にさえ光をもたらした。
+D:「天が広野の無数の星は、
+D:その銀の盾に、映りたり。」
+
+N:139:『ウィンブロウズ』
+E:'Winblows'
+I:21:13:-4
+W:30:20:500:0
+P:0:8d6:0:30:0
+F:STEALTH | INT | WIS | AGGRAVATE | CURSED | HEAVY_CURSE |
+F:SHOW_MODS | CHAOTIC | IMPACT | SPEED
+D:マイクロンフトによって作られたもので、重くて破壊力がある。
+D:使用する者に災いをもたらす。
+
+N:140:『シルバーチャリオッツ』
+E:'Silver Chariot'
+I:23:7:2
+W:30:15:75:100000
+P:0:2d6:17:12:0
+F:DEX | BLOWS | SLAY_EVIL | SLAY_UNDEAD | SLAY_ORC | SLAY_DEMON |
+F:FREE_ACT | SEE_INVIS | SHOW_MODS | RES_DARK | RES_DISEN | SPEED
+
+N:141:プラチナイェンダー印
+E:'The Platinum Yendorian Express Card'
+I:50:0:3
+W:127:1:2:1000000
+P:0:1d1:15:15:25
+F:STR | INT | WIS | DEX | CON | CHR | SPEED | STEALTH | HIDE_TYPE |
+F:ACTIVATE | HOLD_LIFE | FREE_ACT | SEE_INVIS | TELEPATHY |
+F:FEATHER | SLOW_DIGEST | REGEN | SEARCH | LITE |
+F:INSTA_ART | QUESTITEM
+
+N:142:『ウォーパルブレード』
+E:'Worpal Blade'
+I:23:17:2
+W:50:5:150:100
+P:0:5d5:32:32:0
+F:TY_CURSE | AGGRAVATE | DRAIN_EXP | INFRA | NO_TELE | NO_MAGIC | HIDE_TYPE
+D:$It is a look-alike for the strongest sword!
+D:最強の剣とそっくりだ。
+
+N:143:ボロミアの
+E:of Boromir
+I:40:18:2
+W:30:60:2:25000
+P:0:0d0:0:8:0
+F:SHOW_MODS | HIDE_TYPE | 
+F:SUST_STR | RES_FEAR | ACTIVATE | 
+F:INSTA_ART
+D:$A massive golden torque, made of innumerable strands of gold and steel 
+D:$intermingled, with great golden hounds set at either end.
+D:黄金と黒鋼の無数のより糸で編み上げられた重厚な金の首飾りで、
+D:大きな金の猟犬の装飾が両端に取り付けられている。
+
+N:144:『村正』
+E:'Muramasa'
+I:23:20:3
+W:60:200:200:1000000
+P:0:10d5:0:0:-20
+F:HIDE_TYPE | BLOWS | VORPAL | VAMPIRIC |
+F:SHOW_MODS | SPEED | ACTIVATE | RES_DISEN | NO_TELE |
+F:DRAIN_EXP | AGGRAVATE | RES_DARK | RES_NETHER | TY_CURSE |
+D:「魔物に遭うては魔物を斬り、神に遭うては神を斬る。」
+D:伝説の刀匠村正が全身全霊を込めて鍛えたこの妖刀は
+D:数え切れない人間の血を啜ってきた。その刃は
+D:血に飢え、常に獲物を求めている。
+
+N:145:『龍争虎鬪』
+E:of Xiaolong
+I:21:4:3
+W:45:14:30:100000
+P:0:4d3:20:10:10
+F:STEALTH | SUST_STR | SUST_DEX | SUST_CON |
+F:SPEED | RES_FIRE | BRAND_FIRE |
+F:SLAY_ANIMAL | SLAY_DRAGON | RES_FEAR | FREE_ACT |
+F:REGEN | SHOW_MODS | HIDE_TYPE
+D:伝説の格闘家の霊力が宿った強力なヌンチャクだ。
+D:拳法を操る者が手にすれば自らの体の一部のように
+D:操ることができ、素手の時と同じくらい素早い攻撃が
+D:可能だ。
+
+N:146:『石仮面』
+E:'Stone Mask'
+I:32:5:3
+W:60:66:75:0
+P:5:1d3:8:8:-10
+F:STR | CON | INFRA | HIDE_TYPE | SHOW_MODS |
+F:RES_CONF | RES_NETHER | RES_COLD | RES_POIS | RES_DARK | RES_FEAR |
+F:SEE_INVIS | ACTIVATE | DRAIN_EXP |
+F:SH_COLD | HOLD_LIFE | FEATHER | REGEN
+D:装備した者を吸血鬼に変えてしまうというディオの石仮面だ。
+
+N:147:飛行
+E:of Laputa
+I:39:9:2
+W:60:60:10:60000
+P:0:1d1:0:0:0
+F:INT | CHR | SPEED | ACTIVATE | FEATHER | HOLD_LIFE | INSTA_ART
+
+N:148:『与一の弓』
+E:of Yoichi
+I:19:13:4
+W:35:30:40:30000
+P:0:0d0:40:13:0
+F:DEX | HIDE_TYPE | SEE_INVIS | XTRA_MIGHT | SHOW_MODS
+D:「与一鏑を取つて番ひ、能つ引いてひやうと放つ。小兵といふ条、
+D:十二束三伏、弓はつよし、鏑は浦響くほどに長鳴して、過たず扇の
+D:要ぎは一寸ばかり置いて、ひいふつとぞ射切つたる。」(平家物語)。
+D:那須与一の弓は狙いを外す事はない。
+
+N:149:八尺
+E:'Yasaka-no-Magatama'
+I:40:19:3
+W:65:50:3:90000
+F:INT | CHR | SEARCH | HIDE_TYPE |
+F:SEE_INVIS | FREE_ACT | ACTIVATE |
+F:RES_FIRE | RES_COLD | RES_ELEC |
+F:INSTA_ART
+
+N:150:『斬鉄剣』
+E:'Zantetsuken'
+I:23:20:2
+W:30:25:120:80000
+P:0:10d4:17:21:0
+F:STR | DEX | VORPAL | TUNNEL | SHOW_MODS
+
+N:151:八咫
+E:'Yata-no-Kagami'
+I:34:50:3
+W:65:65:50:150000
+P:0:1d1:0:0:18
+F:INSTA_ART | ACTIVATE | SEE_INVIS | REFLECT | LITE | INFRA |
+F:INT | WIS | TELEPATHY | HOLD_LIFE | HIDE_TYPE
+
+N:152:武蔵坊弁慶の
+E:of Benkei
+I:22:9:4
+W:40:20:400:98765
+P:0:3d6:5:23:5
+F:STR | CON | SLAY_EVIL | SLAY_UNDEAD | SLAY_ORC | SLAY_TROLL | RES_FEAR |
+F:FREE_ACT | REGEN | SHOW_MODS
+D:後に義経に仕えた怪僧・武蔵坊弁慶は、この大薙刀を得物に武力を振るい、
+D:五条大橋の上で999本の刀を狩った。
+
+N:153:射手バルド王の黒い
+E:of Bard
+I:17:10:0
+W:35:35:2:5000
+P:0:8d4:30:19:0
+F:KILL_DRAGON | INSTA_ART | SHOW_MODS
+D:$Dealiest of arrows, imbued with elemental strength, this shaft is 
+D:$feared especially by the wyrmkin.
+D:後に王となる湖の街の陰気面バルドが龍を射抜いた伝説の黒い矢だ。
+D:彼が龍を射抜いたこの矢は歌に唄われ語り継がれている。
+
+# The Blade of Chaos 'Soulcrusher'
+
+N:154:『ソウルクラッシュ』
+E:'Soulcrusher'
+I:23:30:4
+W:70:25:180:250000
+P:0:6d5:20:15:0
+F:SLAY_DEMON | STR | CON | SLAY_UNDEAD | BRAND_FIRE |  
+F:SUST_STR | FREE_ACT | RES_ACID | RES_DISEN | RES_FIRE | RES_COLD | 
+F:RES_CHAOS | SEE_INVIS | TELEPATHY | AGGRAVATE | DRAIN_EXP | SHOW_MODS |
+F:CHAOTIC | CURSED | HEAVY_CURSE | LITE
+
+# The Long Sword Of Falis
+
+N:155:至高神ファリスの
+E:of Falis
+I:23:17:5
+W:70:25:130:80000
+P:0:2d5:20:15:0
+F:SLAY_DEMON | STR | SLAY_EVIL | SLAY_UNDEAD | BRAND_FIRE | SLAY_TROLL | 
+F:SLAY_ORC | FREE_ACT | RES_FIRE | RES_ACID | RES_COLD | RES_ELEC | 
+F:SUST_STR | SEE_INVIS | SHOW_MODS | LITE | BLESSED
+
+N:156:『フランテング』
+E:'Hrunting'
+I:23:25:4
+W:30:90:250:100000
+P:0:4d6:13:21:0
+F:STR | HIDE_TYPE |
+F:VORPAL | SLAY_DRAGON | SLAY_GIANT |
+F:FREE_ACT | LITE | FEATHER | SHOW_MODS
+D:剛力無双のデンマークの英雄王ベーオウルフが巨人族から奪い、
+D:最後の戦いではこの剣によって竜を退治した。
+
+N:157:『如意金葹棒重一万三千五百斤』
+E:'Nyoi-bou'
+I:21:16:5
+W:80:70:500:300000
+P:0:7d7:5:25:10
+F:STR | SLAY_EVIL | SEE_INVIS | RIDING
+
+N:158:アヌビス神の
+E:of Anubis
+I:23:20:4
+W:30:90:120:200000
+P:0:3d4:28:22:-30
+F:DEX | CHAOTIC | CURSED | HEAVY_CURSE | TUNNEL | AGGRAVATE | BLOWS |
+F:RES_CONF | RES_CHAOS | RES_FEAR | RES_DISEN | NO_TELE
+
+N:159:太公望の
+E:of Taikobo
+I:22:40:0
+W:10:150:30:10000
+P:0:1d1:0:0:0
+F:ACTIVATE | INSTA_ART
+D:太公望はこの釣り竿を用いて釣りを楽しむのが日課であったが、
+D:結局は彼自身が周の文王に釣られてしまったのであった。
+
+#The Long Sword 'Gurenki'
+N:160:『紅蓮姫』
+E:'Gurenki'
+I:23:17:2
+W:60:150:130:100000
+P:0:4d5:-10:25:0
+F:VORPAL | VAMPIRIC | SLAY_EVIL | SLAY_DEMON | AGGRAVATE | LITE | CON 
+D:彼女は史上最強の破妖刀だ。
+D:朱金に輝く刀身で魔性の心臓をつらぬき、その命を食べつくす。
+
+N:161:『蜻蛉切』
+E:'Tonbo giri'
+I:22:7:3
+W:35:70:350:250000
+P:0:4d9:6:23:10
+F:STR | DEX | HIDE_TYPE | SEARCH | FREE_ACT |
+F:SLAY_TROLL | SLAY_GIANT | SLAY_ANIMAL | SLAY_ORC | RES_FIRE | RES_COLD |
+F:RES_ELEC | RES_ACID | RES_FEAR | SHOW_MODS | RIDING
+D:徳川四天王の１人本多忠勝の愛用の槍だ。
+D:その切れ味は穂先に止まった蜻蛉が切れて落ちるほどである。
+
+N:162:ジョーンズ博士の
+E:of Dr. Jones
+I:21:2:1
+W:8:5:30:18000
+P:0:1d6:16:13:0
+F:INT | WIS | FEATHER | SHOW_MODS | ACTIVATE | SEE_INVIS
+
+# The Spear 'GaeBolg'
+N:163:『ガエボルグ』
+E:'GaeBolg'
+I:22:2:4
+W:45:90:80:150000
+P:0:3d6:16:18:0
+F:STR | DEX | HIDE_TYPE |
+F:BRAND_ELEC | SLAY_EVIL | SLAY_GIANT |
+F:RES_ELEC | RES_LITE | RES_DARK |
+F:LITE | SEE_INVIS | RES_BLIND | SHOW_MODS | RIDING
+D:ケルトの英雄クーフーリンの、海竜の骨から削られた長槍だ。
+D:つねに目映く発せられるその閃光は敵の目をくらまし、
+D:逆に所有者の視力を守る。
+
+# The Trident of Arryu-Chien-Kun
+N:164:顕聖二郎真君の
+E:of Arryu-Chien-Kun
+I:22:5:2
+W:30:45:70:120000
+P:0:2d8:12:16:0
+F:WIS | DEX | HIDE_TYPE | 
+F:SLAY_DRAGON | SLAY_DEMON | SLAY_ANIMAL | FREE_ACT | HOLD_LIFE |
+F:RES_COLD | RES_NEXUS |
+F:SEE_INVIS | SLOW_DIGEST | REGEN | ACTIVATE | 
+F:BLESSED | SHOW_MODS | RIDING
+D:仙名を清源妙道真君、神仙族きっての武神である二郎真君の三尖刀だ。
+D:彼は悪竜や魔神、自然の妖魔を多数討伐した。
+
+N:165:ガラスの
+E:of Glass
+I:30:2:-3
+W:40:40:20:40000
+P:0:1d1:0:0:0
+F:DEX | HIDE_TYPE | SUST_CHR | STEALTH | SPEED |
+F:RES_LITE | RES_DARK | RES_NEXUS |
+F:RES_NETHER | RES_CHAOS | LITE
+
+N:166:水戸黄門の
+E:of Mito Koumon
+I:40:20:2
+W:30:80:3:100000
+F:INT | WIS | CHR | SEARCH | INFRA | SEE_INVIS | ACTIVATE |
+F:HIDE_TYPE | INSTA_ART
+D:毎週月曜日の20:45に絶大な力を発揮するらしい。
+
+N:167:『噛尾刀』
+E:'Tailbiter'
+I:23:16:1
+W:20:20:150:35000
+P:0:2d5:18:9:0
+F:CON | SEARCH | BLOWS |
+F:SLAY_EVIL | KILL_DRAGON | 
+F:SHOW_MODS
+D:「…その名も有名なカウディモルダクス剣、つまり物語の本など
+D:でおなじみの、あの俗にいわゆる噛尾刀であるぞ。…竜が５マイ
+D:ル以内に近付くと、さやの中にはおさまっていないのじゃ。これ
+D:が勇者の手ににぎられれば、いかなる竜もたちうちはできんとい
+D:う剣じゃぞ。」
+D:(J.R.R.トールキン、吉田新一訳、農夫ジャイルズの冒険)
+
+N:168:農夫ジャイルズの
+E:of Giles
+I:37:2:-2
+W:20:20:200:30000
+P:12:1d4:-2:0:18
+F:STEALTH | 
+F:RES_FIRE | RES_CHAOS | RES_NEXUS | RES_COLD
+F:HIDE_TYPE
+D:「むかし南の国からりっぱな本物の鎖かたびらを買えなかった
+D:者は、革のシャツに鉄の輪を縫い付けて、それでがまんしたと
+D:いうことを聞いたことがある。ひとつその手でやってみること
+D:にするか！」
+D:(J.R.R.トールキン、吉田新一訳、農夫ジャイルズの冒険)
+
+N:169:『拍子木』
+E:'Hyousi-gi'
+I:21:4:3
+W:25:5:15:808
+P:0:1d2:-3:-7:6
+F:SEARCH | ACTIVATE | SHOW_MODS | HIDE_TYPE
+D:角柱二本の互いの端が、細い縄で結ばれている。
+D:武器としては見るからに貧相だが、 防火をその任とする衛士たちが使った、
+D:由緒正しい武器だといわれている。
+
+N:170:『纏』
+E:'Matoi'
+I:21:7:3
+W:40:5:100:808
+P:0:1d7:-5:10:3
+F:STR | CHR | RES_FIRE | ACTIVATE | 
+D:消火作業にあたって、士気を鼓舞すべく振りたてられた杖だ。
+D:杖の先に隊のマーク入りの円盤があり、その下側から
+D:長い帯状の飾りが幾本ものびている。
+D:この杖は隊の象徴であり、最も勇気あるものが扱うとされた。
+
+N:171:二天一流開祖宮本武蔵の
+E:of Musashi
+I:23:20:3
+W:50:12:120:60000
+P:0:3d4:28:17:0
+F:DEX | HIDE_TYPE | SUST_DEX | SHOW_MODS
+
+N:172:二天一流開祖宮本武蔵の
+E:of Musashi
+I:23:13:3
+W:50:10:90:60000
+P:0:2d4:28:17:0
+F:DEX | HIDE_TYPE | SUST_DEX | SHOW_MODS
+
+N:173:『神罰の鉄球』
+E:'Iron ball'
+I:21:6:-6
+W:45:40:666:66666
+P:0:25d4:-30:0:20
+F:SPEED | STEALTH | WIS | IMPACT | SHOW_MODS | HIDE_TYPE |
+F:CURSED | HEAVY_CURSE
+D:不信心者の足にくくりつけられ、その動きを阻害する。
+D:重いが武器としても使えない事はない。
+
+#英語名は適当です。エルリックサーガ８「薔薇の復讐」より。
+N:174:『すばやき刺』
+E:'Quickthorn'
+I:23:7:3
+W:30:15:55:75000
+P:0:1d7:27:9:0
+F:DEX | BLOWS | SLAY_DEMON | RIDING
+F:FREE_ACT | SEE_INVIS | SHOW_MODS | RES_CHAOS | RES_DISEN |
+D:復讐のため、三姉妹を探して時間流を旅する＜薔薇＞と呼ばれる女性の剣だ。
+D:恐るべき速度と狙いをはずさぬ正確さを秘めている。
+D:『小さき刺』と対を成している。
+
+#英語名は適当です。エルリックサーガ８「薔薇の復讐」より。
+N:175:『小さき刺』
+E:'Tinythorn'
+I:23:5:3
+W:20:6:30:22500
+P:0:1d5:18:6:0
+F:INT | CHR | REGEN | SLAY_EVIL |
+F:RES_NEXUS | FREE_ACT | SEE_INVIS | SHOW_MODS |
+D:復讐のため、三姉妹を探して時間流を旅する＜薔薇＞と呼ばれる女性の剣だ。
+D:『すばやき刺』と対を成している。
+
+#N:*:『カレイドウルフ』
+#N:*:『カラドヴォルヒ』
+#N:*:『キャリバーン』
+N:176:『エクスカリバー』
+E:'Excalibur'
+I:23:17:3
+W:50:180:130:300000
+P:0:5d5:21:19:5
+F:WIS | CHR | SUST_WIS | SUST_CHR | 
+F:VORPAL | TUNNEL | RIDING |
+F:SLAY_EVIL | SLAY_UNDEAD | SLAY_DEMON |
+F:RES_SHARDS | RES_FEAR | BLESSED | HOLD_LIFE | 
+F:SEE_INVIS | SHOW_MODS
+D:「妖精郷にて鍛えられし我はいや高き刃なりて、相応しき王の佩刀とならん」
+D:（トマス・マロリー、アーサー王の死）
+
+N:177:『エクスカリパー』
+E:'Excalipur'
+I:23:17:-3
+W:50:30:130:0
+P:0:5d5:-50:-50:-5
+F:WIS | CHR | 
+F:TY_CURSE | AGGRAVATE | DRAIN_EXP | SHOW_MODS | THROW
+D:「なんだこれは！最強の剣じゃないのか！？」
+D:（FINAL FANTASY V）
+
+N:178:怪力サムソンの
+E:of Samson
+I:21:1:3
+W:10:20:50:40000
+P:0:2d4:8:10:0
+F:STR | CON | RES_FEAR | SEE_INVIS | SLAY_EVIL | SLAY_UNDEAD
+D:怪力サムソンがペルシア人兵士の包囲を撃ち破ったときに使っていた
+D:棍棒。骨でできているために軽く、その聖なる力は邪悪なモンスター
+D:を打ち払う。
+
+N:179:『エクスカリバー・ジュニア』
+E:'Excalibur Jr.'
+I:23:8:2
+W:35:15:80:60000
+P:0:2d6:3:5:0
+F:BLOWS
+F:SLAY_UNDEAD | SLAY_DRAGON | SLAY_ANIMAL |
+F:RES_FIRE | RES_FEAR | BLESSED | 
+F:SLOW_DIGEST | SHOW_MODS
+D:かの宝剣エクスカリバーに似た作りの、少し小型の剣だ。
+D:自分のことを「E.J.」と呼び、ごくたまに話もする。
+D:蜘蛛と対峙すると、恐れのあまりプリンのようにぷるぷると震える。
+
+N:180:ハラドの
+E:of Harad
+I:19:24:-2
+W:60:120:200:35000
+P:0:4d1:18:18:-44
+F:WIS | STEALTH | XTRA_SHOTS | XTRA_MIGHT | AGGRAVATE | RES_LITE | RES_DARK | 
+F:HIDE_TYPE | SHOW_MODS | TY_CURSE
+D:$A great brazen arbalest with arms of gleaming steel shooting quarrels with 
+D:$speed and power for those brave enough to risk betrayal.
+D:A great brazen arbalest with arms of gleaming steel shooting quarrels with 
+D:speed and power for those brave enough to risk betrayal.
+
+N:181:適当な
+E:of halfheart
+I:21:63:7
+W:127:1:50:1000000
+P:0:1d77:22:22:10
+F:STR | DEX | SUST_STR | SUST_DEX | FREE_ACT | SEE_INVIS | VAMPIRIC |
+F:KILL_DRAGON | SLAY_ANIMAL | SLAY_EVIL | BRAND_ELEC | BRAND_ACID |
+F:SLAY_UNDEAD | SLAY_DEMON | SLAY_TROLL | SLAY_GIANT | SLAY_ORC |
+F:IM_FIRE | RES_SHARDS | RES_FEAR | TUNNEL | INFRA | SEARCH | REFLECT |
+F:LITE | TELEPATHY | REGEN |
+F:HIDE_TYPE | SHOW_MODS | RIDING | QUESTITEM | INSTA_ART
+
+N:182:いいかげんな
+E:of irresponsiblity
+I:19:63:7
+W:127:1:50:1000000
+P:0:1d1:22:22:10
+F:SPEED | INT | WIS | SUST_INT | SUST_WIS | XTRA_SHOTS | XTRA_MIGHT |
+F:DEC_MANA |
+F:RES_DARK | RES_LITE | RES_DISEN | RES_BLIND | IM_COLD | SLOW_DIGEST |
+F:HIDE_TYPE | SHOW_MODS | QUESTITEM | INSTA_ART
+
+N:183:やる気のない
+E:of idler
+I:36:63:7
+W:127:1:10:1000000
+P:0:1d1:10:10:77
+F:STEALTH | CON | CHR | SUST_CON | SUST_CHR | IM_ELEC | RES_ACID |
+F:RES_CONF | RES_SOUND | RES_NETHER | RES_NEXUS | RES_CHAOS |
+F:SH_FIRE | SH_ELEC | SH_COLD | RES_POIS | HOLD_LIFE | FEATHER |
+F:HIDE_TYPE | SHOW_MODS | QUESTITEM | INSTA_ART
+
+# The Broad Sword 'Arunruth'
+
+# (コメント)
+#
+#
+# (小林)
+# これは，文字どおりだと「アルンルース」なんだけど，シルマリルリオン
+# に出てくる剣は本当は'Aranruth'．シンゴル王と代々のヌメノールの王の
+# 剣です．たぶん元のソースが綴りを間違えちゃったんだよね．
+#
+N:184:『アランルース』
+E:'Arunruth'
+I:23:16:4
+W:20:45:150:50000
+P:0:3d5:20:12:0
+F:DEX | HIDE_TYPE | 
+F:SLAY_DEMON | SLAY_ORC | FREE_ACT | RES_COLD | FEATHER | 
+F:SLOW_DIGEST | ACTIVATE | SHOW_MODS
+D:$The beautiful sword of Thingol, justly named "King's Ire".  It glistens
+D:$ icy enough to freeze the hearts of demons, and you feel supple and
+D:$ lightfooted as you clasp its hilt of gold and silver inlay.
+D:いみじくも「王の怒り」と名付けられた、灰色マント王シンゴルの美しい剣だ。
+D:その刃は氷の如く輝き、悪魔の心臓をも凍てつかせる。金銀の細工が施された
+D:その柄を手にすれば、しなやかな身のこなしと軽やかな足取を感じられるだろう。
+
+# The Set of Gauntlets 'Paurnimmen'
+
+# ???, Ko
+N:185:『パウアニンメン』
+E:'Paurnimmen'
+I:31:2:0
+W:10:20:25:13000
+P:2:1d1:0:0:15
+F:RES_COLD | ACTIVATE
+D:$A set of handgear so icy as to be able to fire frost bolts.
+D:シンダール語で「白き拳」を意味する名を持つこの籠手は常に
+D:冷たく輝き、氷の矢を放つことができる。
+
+N:186:航海者エアレンディルの
+E:of Earendil
+I:34:7:0
+W:50:6:160:90000
+P:10:1d6:0:0:20
+F:LITE | RES_BLIND | RES_DARK | RES_NETHER | RES_ELEC | RES_FIRE | ACTIVATE
+D:$A shining shield, once borne by the great mariner Earendil, "scored with 
+D:$runes to keep all wounds and harm from him".
+D:かつて偉大なる船乗りエアレンディルが身に付けていた輝く盾だ。
+#D:あらゆる害なすものを退けるルーン文字が刻まれている。
+D:「輝く盾にはあらゆる危害や傷害をさけるルーン文字を刻み込んだ。」
+D:(J.R.R.トールキン、瀬田貞二・田中明子訳 新版指輪物語) 
+
+# The Spear 'Aeglos'
+
+# (コメント)
+#
+# wp.220
+#
+#(都々目)
+#『つらら』というスピア → 『アイグロス』というスピア
+#＊指輪物語ではこう表記されています。
+#　『親しみを出すために』日本語でと言われましたが、そうするとエルフ語全部を
+#日本語に訳さなくてはなりません。一部だけエルフ語から日本語に訳するのは不自
+#然です。また、指輪物語についてのトールキンの話しに『英語とエルフ語の対比を』
+#出そうとしたと言うことですから、英語は日本語に訳し、エルフ語はエルフ語とし
+#て残しておくべきです。指輪物語の日本語版でも基本的にこの考え方によって訳さ
+#れていますし。それに『つらら』は格好悪いし折れそうだ(笑)。
+#
+N:187:『アイグロス』
+E:'Aeglos'
+I:22:2:4
+W:15:45:80:140000
+P:0:3d6:15:25:10
+F:WIS | HIDE_TYPE | THROW | RIDING |
+F:BRAND_COLD | SLAY_TROLL | SLAY_ORC | FREE_ACT | RES_COLD | 
+F:SLOW_DIGEST | ACTIVATE | BLESSED | SHOW_MODS
+D:$The mighty spear of Gil-galad, famed as "Snow-point" in the songs of Elves, 
+D:$against which all the foul corruptions of Sauron dashed in vain.
+D:上級王ギル=ガラドの強力な槍で、「雪の切先」として名高い。
+D:「その剣は長く、その槍は鋭く、輝く兜は、遠くより望みえたり。」
+D:とエルフの歌に歌われるこの槍には、
+D:サウロンのいかなる忌まわしい下僕どもも
+D:太刀打ちできなかった。
+
+N:188:ボリショイの
+E:of Bolshoi
+I:21:2:4
+W:15:8:30:22500
+P:0:2d6:6:9:0
+F:DEX | CHR | HIDE_TYPE | RIDING |
+F:SLAY_ANIMAL | BRAND_FIRE | ACTIVATE
+D:某国サーカス団で使用された由緒正しい猛獣使いの証だ。
+D:このムチの音はどんな猛獣でも震え上がらせることができる。
+
+N:189:破壊の
+E:of Destruction
+I:23:33:3
+W:70:8:30:100000
+P:0:3d6:-25:25:0
+F:STR | DEX | BLOWS | CHAOTIC | CURSED | HEAVY_CURSE | TY_CURSE | AGGRAVATE
+F:BRAND_FIRE | BRAND_COLD | BRAND_ELEC | BRAND_ACID | BRAND_POIS
+D:強力な破壊力をほこる「はかいのつるぎ」と素早く攻撃を繰りだす
+D:「はやぶさのけん」を合わせた武器だ。この剣を使えば破壊神シドーを倒すことなど
+D:赤子の手を捻るようなものだ。
+
+N:190:『ストームブリンガー』
+E:'Stormbringer'
+I:23:30:2
+W:45:1:180:100000
+P:0:6d6:16:16:0
+F:VAMPIRIC | STR | CON | FREE_ACT | HOLD_LIFE | RES_NETHER | RES_CONF |
+F:RES_CHAOS | CURSED | HEAVY_CURSE | DRAIN_EXP | AGGRAVATE | QUESTITEM
+D:一万年の長きにわたり、栄華を誇りしメルニボネの光の帝国の末期、大いなる
+D:異変天地にありて、人と神々の運命は〈宿命〉のかなてこの上に鍛へられ、
+D:恐ろしき戦さあり、もろもろの勲し行なはれたり。このときあまたの勇者
+D:輩出せり。なれど衆に優れたるはメルニボネ最後の王エルリック、ルーンの
+D:刻まれし黒き剣のになひ手なりき。
+
+N:191:『ナルシル』
+E:'Narsil'
+I:23:2:1
+W:20:4:130:20000
+P:0:2d2:6:10:0
+F:STR | BLOWS | HIDE_TYPE | 
+F:SLAY_ORC | SLAY_TROLL | RES_FIRE
+D:$A blade of Elendil that was broken by his fall as the battled Sauron upon
+D:$ the steps of Barad-Dur.
+D:「金はすべて光るとは限らぬ、
+D:放浪する者すべてが、まよう者ではない
+D:年ふるも、強きは枯れぬ、
+D:深き根に、霜は届かぬ。
+D:灰の中から火はよみがえり、
+D:影から光りがさしいずるだろう。
+D:折れた刃は、新たに研がれ、
+D:無冠の者が、また王となろう。」
+
+N:192:『GHB を倒したけどこんな嫌なＴシャツしか手に入らなかったよ！』
+E:'I killed the GHB and all I got was this lousy t-shirt!'
+I:36:0:0
+W:0:0:10:1
+P:1:1d1:0:0:0
+F:QUESTITEM
+
+N:193:美髯公関羽の
+E:of Guan Yu
+I:23:22:3
+W:60:60:320:200000
+P:0:4d5:20:20:5
+F:STR | DEX | CON | SLAY_EVIL |
+F:VORPAL | SHOW_MODS
+D:豊かな髯を蓄えた義人・関羽はこの青龍刀で多くの豪傑を地に
+D:叩き伏せて来た。
+
+N:194:酒呑童子の
+E:of Shuten-douji
+I:21:16:6
+W:40:40:350:100000
+P:0:4d7:0:20:10
+F:STR | RES_FEAR
+
+N:195:『ゴールデンハンマー』
+E:'Golden Hammer'
+I:21:19:0
+W:45:5:50:300000
+P:0:2d6:0:0:0
+D:このハンマーを用いると盗まれたアイテムが取り戻せるらしい。
+
+N:196:『グリムトゥース』
+E:'Grimtooth'
+I:23:4:1
+W:7:15:12:25000
+P:0:1d4:5:5:0
+F:DEX | BLOWS | BRAND_POIS | SHOW_MODS | THROW
+
+N:197:ペルセウスの
+E:of Perseus
+I:34:3:2
+W:30:10:65:45000
+P:5:1d2:0:0:15
+F:STR | RES_ACID | RES_COLD | RES_FEAR |
+F:REFLECT | SUST_STR | 
+D:蛇の髪を持つメドゥーサの石化の睨みも、この反射の盾の前には
+D:効果がなかった。
+
+N:198:抜け忍カムイの
+E:of Kamui the Escapee
+I:23:19:4
+W:20:8:100:60000
+P:0:2d9:15:2:0
+F:DEX | STEALTH | SEARCH | RES_FIRE | BRAND_POIS |
+F:ACTIVATE | SEE_INVIS | SHOW_MODS
+
+N:199:『ブラッディ・ムーン』
+E:'Bloody Moon'
+I:22:30:2
+W:70:12:250:180000
+P:0:8d4:8:8:8
+F:ACTIVATE | SHOW_MODS
+
+N:200:ダ
+E:'Dasai'
+I:36:8:-10
+W:20:3:110:0
+P:8:1d1:-1:0:64
+F:AGGRAVATE | SUST_CHR | CHR
+
+N:201:『青龍の霊息』
+E:'Elemental of Ching-Rong'
+I:38:2:0
+W:80:9:300:200000
+P:30:2d4:-3:0:30
+F:RES_ACID | RES_FIRE | RES_COLD | RES_ELEC |
+F:RES_DARK | RES_CONF | RES_POIS |
+F:FREE_ACT | SEE_INVIS | ACTIVATE
+D:玄武，白虎，朱雀とともに四獣と呼ばれる青龍の鱗鎧を
+D:身に纏えば，神の如き守護の力が得られる。
+
+N:202:『天の沼矛』
+E:'Ama-no-NumaHoko'
+I:22:4:4
+W:50:40:240:150000
+P:0:2d8:16:20:0
+F:WIS | CHR | SUST_WIS | SUST_CHR | HIDE_TYPE |
+F:SLAY_EVIL | SLAY_DEMON | SLAY_UNDEAD |
+F:RES_ACID | RES_COLD | RES_BLIND | RES_CHAOS |
+F:LITE | ACTIVATE | BLESSED | SEE_INVIS | SHOW_MODS
+D:「是に天つ神、諸の命以ちて、伊邪那岐命、伊邪那美命、
+D:二柱の神に、『是の多陀用弊流国を修め理り固め成せ。』
+D:と詔りて、天の沼矛を賜ひて、言依さし賜ひき。故、二柱
+D:の神、天の浮橋に立たして、その沼矛を指し下ろして画き
+D:たまへば、塩許々袁々呂々迩画き鳴して引き上げたまふ時、
+D:其の矛の末より垂り落つる塩、累なり積もりて島と成りき。
+D:是れ淤能碁呂島なり。」(古事記)。 
+
+# モーロックの高僧の錆びた鎖かたびら
+N:203:モーロックの高僧の
+E:of The High Preist of Morlok
+I:37:1:-2
+W:90:8:200:100000
+P:14:1d4:-5:0:-40
+F:INT | WIS | CHR | HIDE_TYPE | RES_LITE | RES_DARK |
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD |
+F:RES_POIS | RES_CONF | RES_CHAOS | RES_NETHER |
+F:RES_NEXUS | AGGRAVATE | CURSED | HEAVY_CURSE | TY_CURSE
+D:この赤々と錆びた今にも崩れ去りそうな鎖かたびらには，
+D:かつて愚かにも守護する魔除けを奪われ朽ち果てた，
+D:太古の高僧の怨念がこもっている。
+
+# 綱鎧『化粧回し』
+N:204:『化粧回し』
+E:'Sumo wrestler's loincloth'
+I:36:9:4
+W:20:10:60:50000
+P:4:0d0:0:0:0
+F:STR | CON | SUST_STR | SUST_CON |
+F:RES_FEAR | FREE_ACT | ACTIVATE
+D:遥か東の国のスモー戦士が身につける正装だ。
+D:その豪華な宝飾は力強さを感じさせる。
+
+N:205:北極の聖獣ムックの
+E:of Mook
+I:35:3:0
+W:20:20:30:50000
+P:3:0d0:0:0:20
+F:RES_COLD | RES_ACID | RES_CHAOS | FEATHER | ACTIVATE
+D:ガチャピンと対をなす赤い獣の毛皮のクロークだ。
+
+# 金属製ラメラー・アーマー『バテレン鎧』
+# 「夢幻の如く」という漫画で，織田信長が西洋鎧を着ます。
+# REFLECTは，矢でも鉄砲でも持って来い！ってことで(笑)。
+N:206:『バテレン鎧』
+E:of The Padre
+I:37:13:2
+W:45:5:340:80000
+P:23:1d6:5:5:17
+F:CHR | REFLECT |
+F:RES_FIRE | RES_CHAOS | LITE
+D:織田信長の愛用した光り輝く西洋の鎧だ。
+
+# グレート・ソード『真魔剛竜剣』 (from ダイの大冒険)
+# ダイの親父，竜騎将バランの剣。
+# 発動でサンダーボール(ギガ・ブレイクのつもり)
+# ダイの大冒険中で最強といわれる剣なので，強くないと意味ない。
+# でも，強すぎてもゲーム的に意味ない。
+N:207:『真魔剛竜剣』
+E:'Dragonic Sword'
+I:23:25:3
+W:50:160:200:180000
+P:0:4d6:17:23:0
+F:STR | SLAY_EVIL | SLAY_DEMON | BRAND_ELEC |
+F:RES_ELEC | RES_FIRE | RES_NETHER |
+F:LITE | SEE_INVIS | SHOW_MODS | ACTIVATE
+D:天地魔界のバランスを保つ使命を持つ竜の騎士に代々伝わる
+D:オリハルコンの剣で，竜騎将バランが所有している。
+
+N:208:『イージス・ファング』
+E:'Aegis Fang'
+I:21:8:2
+W:30:40:100:100000
+P:0:3d3:11:22:0
+F:STR | DEX | CHR | TUNNEL | BLESSED |
+F:SLAY_EVIL | SLAY_DRAGON | SLAY_ORC | SLAY_GIANT | SLAY_DEMON |
+F:RES_COLD | SEE_INVIS | RES_FEAR | REGEN
+D:バトルハンマー氏族のドワーフの長にして、伝説の都ミスリル・ホールの王、
+D:ブルーノー・バトルハンマーの生涯最高傑作だ。
+D:「なるほどね」ドリッズドは、ハンマーをブルーノーに返した。
+D:「古いハンマーか。あの子にはちょうどいいかもな。ミスリルや、アダマン
+D:タイトや、ダイアモンドをわざわざ使ってあるくらいだものな」
+D:（富士見書房「アイスウインド・サーガ１魔石の復活」 R・A・サルヴァトーレ著、
+D:風見潤訳）
+
+N:209:『隠者の紫』
+E:'hermit's perple'
+I:21:2:2
+W:40:40:30:40000
+P:0:1d6:10:5:0
+F:INT | WIS | FORCE_WEPON |
+F:SEE_INVIS | TELEPATHY
+D:半幽体化した不思議な茨の鞭だ。所有者の精神力を攻撃力に変換し、
+D:波紋の力で身を守ることができる。
+D:身につけると遠い場所の出来事がわかる。
+
+N:210:『炎の鉄ゲタ』
+E:'Tetsu-geta of Flame'
+I:30:6:-1
+W:20:15:150:40000
+P:6:1d1:-5:10:20
+F:INT | WIS | CHR | STEALTH | SPEED | RES_FIRE |
+F:SUST_STR | SUST_CON | SH_FIRE | REGEN | RES_FEAR
+D:古来より伝わる、男を磨くための靴だ。
+D:ふだん身に付けていれば、外したときに自分のからだが羽根のように
+D:軽く感じられるだろう。
+
+N:211:ナインの
+E:of Nain
+I:20:7:6
+W:60:5:250:80000
+P:0:3d8:12:18:0
+F:TUNNEL | INFRA | SEARCH | STR | 
+F:SLAY_ORC | SLAY_TROLL | SLAY_GIANT | SLAY_DRAGON | 
+F:BRAND_ACID | RES_ACID | RES_DARK | RES_DISEN | 
+F:ACTIVATE | 
+D:$Wielded by Nain of the Iron Hills at the Battle of Azanulbizar, this great 
+D:$mattock brought victory to the Dwarves over Azog's Orcs - though Nain 
+D:$himself fell at the last, even with victory already assured.
+D:アザヌルビザールの戦いにおいて、スロール王の
+D:仇を討つためアゾグに決闘を挑んだナインが
+D:使っていたつるはしだ。
+D:「するとその時、くろがね連山の一族がやって来て、
+D:遂に戦局を一変させたのである。戦場に遅れて新たに到着した
+D:グロールの息子ナインの率いる、鎖かたびらに身を固めた戦士たちは
+D:『アゾグ！アゾグ！』と呼ばわり、前に立ちはだかる者があれば
+D:つるはしで当たるをさいわい斬り倒しながら、オークたちの間を
+D:モリアの入口に向かって突進していった。」
+
+N:212:バルログの長ゴスモグの
+E:of Gothmog
+I:21:2:-2
+W:60:35:90:66666
+P:0:3d6:13:15:0
+F:INT | WIS | DEX | STEALTH | HIDE_TYPE | 
+F:HEAVY_CURSE | CURSED | AGGRAVATE | 
+F:BRAND_FIRE | IM_FIRE | RES_ELEC | RES_DARK | LITE
+F:SLAY_ANIMAL | SLAY_ORC | SLAY_TROLL | SLAY_GIANT | 
+F:ACTIVATE | SHOW_MODS
+D:$With this unbearably bright whip of flame, the Balrog Gothmog has become
+D:$ known for never having lost in combat.
+D:この正視するもかなわぬ眩い炎のムチをひとたび手に取れば、
+D:バルログの長ゴズモグは戦において負け知らずであった。
+
+N:213:天性寺聖地蔵尊の六環
+E:of The Bonze Octopus
+I:21:7:2
+W:35:40:70:125000
+P:0:1d7:8:8:8
+F:STR | WIS | BLOWS | TUNNEL | ACTIVATE | RES_ACID | RES_ELEC
+F:REGEN | FREE_ACT | BRAND_ELEC | BLESSED
+D:その昔、蛸を引き連れて岸和田の地を守るために戦かったという
+D:蛸法師こと地蔵大菩薩の化身が使っていた六環の錫杖だ。
+D:「…その時。一人の法師がどこからともなく現れて、何万という敵に飛びかかり、
+D:手に持った錫杖をぶんぶんと振り廻して敵兵を薙ぎ倒す、その勢いの凄まじいこと。
+D:天が稲光し、地が揺れ動くようやったそうな。」
+
+N:214:青き衣のフンディンの
+E:of Fundin Bluecloak
+I:21:6:4
+W:65:100:130:180000
+P:0:4d4:13:17:10
+F:STR | WIS | SPEED | LITE | HIDE_TYPE | 
+F:SLAY_EVIL | SLAY_UNDEAD | 
+F:RES_FIRE | RES_ELEC | RES_NETHER | HOLD_LIFE | 
+F:ACTIVATE
+D:$The weapon of one of the great dwarven priests, with powers 
+D:$to preserve body, soul and enchantments, and the bane of those 
+D:$who seek life beyond death.
+D:The weapon of one of the great dwarven priests, with powers 
+D:to preserve body, soul and enchantments, and the bane of those 
+D:who seek life beyond death.
+
+N:215:宵闇の
+E:of The Pitch Dark Night
+I:40:24:4
+W:50:150:2:50000
+P:0:0d0:0:0:5
+F:STEALTH | SEARCH | HIDE_TYPE | SEE_INVIS |
+F:RES_DARK | ACTIVATE | LITE |
+F:INSTA_ART

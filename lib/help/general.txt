@@ -1,0 +1,132 @@
+=== General Information ===
+
+The game of Zangband is a single player dungeon simulation. A player
+may choose from a number of races and classes when creating a
+character, and then "run" that character over a period of days, weeks,
+even months, attempting to win the game by defeating the Great Serpent
+of Chaos, who lurks somewhere in the depths of the dungeon.
+
+The player will begin his adventure on the town level where he may
+acquire supplies, weapons, armor, and magical devices by bartering with
+various shop owners. After preparing for his adventure, the player can
+descend into the dungeon where fantastic adventures await his coming!
+ 
+You will probably want to browse through the "help files", especially
+the sections on available commands, before beginning any serious
+adventuring...
+
+
+***** <A>
+=== The Zangband DevTeam ===
+
+Zangband is currently maintained by a small development team which
+includes both Zangband's original creator, Topi Ylinen, and Robert
+Ruehlmann who maintained and developed the game from versions 2.01d
+through to 2.2.6c. Robert coordinates the efforts of the DevTeam and
+is the designated project leader.
+
+Since its inception, Zangband has developed a reputation for being more
+difficult than other Angband variants and its maintainers are known for
+their devious and contrary natures. The DevTeam neither confirms nor
+denies its intention to live up to this perception.
+
+
+***** <B>
+=== Zangband on the Web ===
+
+
+--- Thangorodrim ---
+
+Robert Ruehlmann maintains the official Zangband website - Thangorodrim
+(http://thangorodrim.angband.org/). It includes information on where
+to download the Zangband source code and current executables for most
+popular operating systems as well as information on current development
+issues such as future plans, bug lists, etc. Thangorodrim is also an
+excellent site for information on Angband itself and other variants of
+Angband. There are also links to many other Angband and Zangband
+related sites.
+
+
+--- Daily Snapshots ---
+
+This website (http://matrix.crosswinds.net/~dailyzangband/) contains
+downloads of the current source code the DevTeam is working on. It is
+updated daily at approximately 04:00 GMT. The source is untested and it
+may not compile. Also available are logs showing what has been changed
+in the last 24 hours and in the last month.
+
+
+--- FTP Sites ---
+
+Zangband sources and executables are uploaded regularly to the official
+Angband ftp site (ftp://export.andrew.cmu.edu/angband/). Links to the
+files are available at Thangorodrim but you may also wish to visit the
+site directly. Various mirror sites exist, the most popular of which is
+(ftp://ftp.sunset.se/pub/games/Angband/).
+
+
+--- The Zangband Development Mailing List ---
+
+The Zangband mailing list is for discussion on Zangband development
+issues and is hosted at ONEList's website (http://onelist.com/). The
+mailing list probably represents the quickest method of getting the
+DevTeam's attention and is an ideal forum for posting your ideas and
+bug reports. 
+
+You can send your ideas and bug reports to the mailing list by mailing
+to 'zangband@onelist.com'. If you wish to join the mailing list, send
+an e-mail to 'zangband-subscribe@onelist.com'.
+
+
+--- The Zangband Knowledge Base ---
+
+Maintained by John I'anson-Holton, the Zangband Knowledge Base 
+(http://home4.pacific.net.sg/~jianson/) is, or will be, the repository
+of the official Zangband documentation on the web. Once completed,
+downloads of the documents in various formats will be made available
+here.
+
+
+--- ZangbandTk ---
+
+ZangbandTk is a graphical Windows port of Zangband which adds several
+new features and a very nice interface to Zangband. If you use Windows,
+you may want to take a look at the AngbandTk homepage which can be
+found at (http://persweb.direct.ca/dbaker/angbandtk.html/). ZangbandTk
+is more properly termed a variant of Zangband but, other than the
+graphical interface, the differences are fairly minor. ZangbandTk is
+typically only updated for official releases of Zangband and not for
+the development releases. ZangbandTk is maintained by Tim Baker.
+
+
+--- The Newsgroup (rec.games.roguelike.angband) ---
+
+The newsgroup is a forum for the discussion of all things relating to
+Angband and its variants (including Zangband) and is a good place to
+ask various questions about both game play and game design. Be sure to
+include '[Z]' in your subject heading so people know your question is
+about Zangband.
+
+
+--- #Angband IRC Chat ---
+
+Join the #Angband IRC channel located at 'http://www.othernet.org/'.
+Most of the DevTeam are regulars and sometimes we're even talking about
+Zangband!!
+
+
+***** <C>
+=== Version Numbering System ===
+
+Zangband uses a version numbering system similar to that of Linux. Odd
+minor version numbers (for example 2.3.2) denote a development version.
+Even minor version numbers (for example 2.2.7 ) denote a stable
+release. The development versions are released for beta-testing and are
+likely to contain bugs of varying significance.
+
+
+--
+Original   : (??)
+Updated    : (??)
+Updated    : Zangband DevTeam
+Last update: December 3, 1999

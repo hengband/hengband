@@ -1,0 +1,41 @@
+# CVS: Last edit by $Author$ on $Date$
+# File: q_pref.txt
+
+# Preferences for quest features
+
+# F:letter:feature:cave_info:monster:object:ego:artifact:trap:special
+
+# Permanent wall
+F:X:61:8
+
+# Floor with random object
+F:T:1:8:0:*
+
+# Floor
+F:.:1:8
+
+# Door
+F:D:32:8
+
+# up staircase
+F:<:6:8
+
+# Deep water
+F:W:83:8
+
+# Shallow water
+F:V:84:8
+
+# Granite wall
+F:%:58:8
+
+# Floor with monster (9 levels out of deep) and object (7 levels out of deep)
+F:9:1:8:*9:*7
+
+# Floor with monster (11 levels out of deep)
+F:@:1:8:*11
+
+# Random trap or object
+# (25% chance for trap, 75% chance for object hardcoded)
+F:*:1:8:0:*:0:0:*
+

@@ -1,0 +1,158 @@
+N: 1:BIAS_ELEC
+7
+'Grid Bug'
+'Spark'
+'Electric Eel'
+'Electronics'
+'Shockbringer'
+of Shockness
+'Surprising Thunder Mountain'
+
+N: 2:BIAS_POIS
+6
+'Dioxin'
+'Poisonous Maggot'
+'Insect's Poison'
+'Wormwood'
+of mold
+of Depleted Uranium
+
+N: 3:BIAS_FIRE
+10
+'Eat One'
+'Cracker'
+of the Down
+'Red Hot Chili Pepper'
+'Tabasco'
+'Molotov cocktail'
+'Fire Ant'
+'Fireman'
+'Hot Brood'
+'Fervent Soul'
+
+N: 4:BIAS_COLD
+4
+'Freeze!'
+'Freezing Blade'
+'Icy Clow'
+of Liquid Helium
+
+N: 5:BIAS_ACID
+5
+'Melt Down'
+'Acidic detergent'
+'Termite'
+'Blade of Pepsi'
+'Acid Rain'
+
+N:12:BIAS_CHAOS
+3
+'Schrodinger'
+'Mandelbrot'
+of Change
+
+N:14:BIAS_NECROMANTIC
+7
+'Blood'
+'Satan's Claw'
+'Rotten Child'
+that strangled people
+of Misery
+of Boodoo
+'Necrophiliac'
+
+N:15:BIAS_LAW
+N:13:BIAS_PRIESTLY
+N: 8:BIAS_WIS
+6
+'Indulgence'
+'Angel's Love Song'
+'Monastery'
+'Pure Mischief'
+of bless
+of Holy Smoke
+
+N: 9:BIAS_DEX
+3
+'Whirlwind'
+'Cat's Clow'
+'Sands of Time'
+
+N:16:BIAS_ROGUE
+6
+'Raid'
+'Elusiveness'
+'The Seven Tools'
+of Trickery
+of Jack
+of Tachyon
+
+N:17:BIAS_MAGE
+N: 7:BIAS_INT
+4
+'Instant Mage Maker'
+'Power of Hand'
+of Novice Mage
+of Jongnamk, Son of Jongil
+of Tips
+
+N:18:BIAS_WARRIOR
+N: 6:BIAS_STR
+N:10:BIAS_CON
+6
+'The Body Power'
+'Muscle Bland'
+'BodyBuilder-bane'
+'Abslicer'
+'Peace Maker'
+of Slay Munchkin
+
+N:19:BIAS_RANGER
+5
+'Catapult'
+'Laser Scorp'
+with Radar
+of *Slay Bear*
+of sight seeing
+
+N:11:BIAS_CHR
+5
+(friendly)
+'Laughcaller'
+of Sadists
+'S&M'
+of Cuties
+
+N:*:Default
+31
+'I killed many many monsters and all I got was this trival artifact!'
+'Ogresmacher'
+'Elfrist'
+'Grayswandie'
+'Plutonium'
+'X-Winblow'
+of Severe Pain
+of Horror
+of Agony
+'Wormbiter'
+'Mumakbane'
+'Shrieker'
+'Rotten Egg'
+'Phaser'
+'Black Hawk'
+'Invader'
+'Photon Torpedo'
+'Crackdown'
+'Budokan'
+'Breakout'
+'Kryptonite'
+'Virus'
+'Patriot'
+'Weekend Warrior'
+'Bungee'
+'Pig's Eye'
+'Peashooter'
+'Bugslayer'
+'Gilettar'
+'Angrist'
+'Belangil'

@@ -1,0 +1,13 @@
+#undef USE_GCU
+#undef USE_CAP
+#undef USE_NCURSES
+#undef USE_X11
+#undef JP
+#undef EUC
+#undef USE_LOCALE
+#undef USE_XIM
+#undef USE_FONTSET
+#undef _JP
+#undef X_LOCALE
+#undef CHUUKEI
+#undef WORLD_SCORE

@@ -1,0 +1,37 @@
+# CVS: Last edit by $Author$ on $Date$
+# File: t_info_j.txt
+
+# Includes the town definitions
+
+# Preferences for the town features
+%:t_pref_j.txt
+
+# Town 1
+?:[AND [EQU $TOWN 1] [EQU $WILDERNESS LITE] ]
+%:t_lite_j.txt
+?:[AND [EQU $TOWN 1] [EQU $WILDERNESS NORMAL] ]
+%:t0000001_j.txt
+?:[AND [EQU $TOWN 1] [EQU $WILDERNESS NONE] ]
+%:t_basic_j.txt
+?:1
+
+# Town 2
+?:[EQU $TOWN 2]
+%:t0000002_j.txt
+
+# Town 3
+?:[EQU $TOWN 3]
+%:t0000003_j.txt
+
+# Town 4
+?:[EQU $TOWN 4]
+%:t0000004_j.txt
+
+# Town 5
+?:[EQU $TOWN 5]
+%:t0000005_j.txt
+
+# Town 6
+?:[EQU $TOWN 6]
+%:t0000006_j.txt
+

@@ -1,0 +1,30 @@
+# CVS: Last edit by $Author$ on $Date$
+# File: font-mon.prf
+
+#
+# This file is used by Angband when using monochrome mode
+#
+
+
+
+### Terrain Features ###
+
+
+# pool of deep water
+F:83:6:37
+
+# stream of shallow water
+F:84:14:37
+
+# pool of deep lava
+F:85:4:37
+
+# stream of shallow lava
+F:86:12:37
+
+# dark pit
+F:87:8:37
+
+# tree
+F:96:5:37
+

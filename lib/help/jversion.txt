@@ -1,0 +1,444 @@
+=== バージョン情報 ===
+
+(*訳注)以下で出てくる Home Page などの情報はあくまで英語版のオリジナル Angband
+       を対象にしたものです。
+
+このファイルは Angband 2.8.3 のために最後に改訂されました。
+
+アングバンドに関する最新の情報を得るためには、ニュースグループ("rec.games.
+roguelike.angband")を購読し、Official Angband Home Page("http://www.phial.com
+/angband/")にアクセスするべきです。
+
+Angband 2.8.3 は信じがたいほど複雑な歴史を持ち、多くの人々の多くの仕事の結晶
+であります。彼らは自分の時間と労力をこのフリーなソフトに提供し、この最も素晴
+らしいフリーウェアのゲームの一つが、多くの場所で生き残るという喜びによっての
+み賞賛されるのです。
+
+バージョン履歴は、もし存在するのなら、10 年以上の長さと、5 人以上の異なった
+主な開発者に及んでいます。その様な履歴は残っていませんので、我々は単純な方法、
+例えばログを見るとか、ソースの diff ファイルを調べるとか、人から聞くとかいう
+方法に頼らなければなりません。このファイルでは、履歴のいくらかをまとめたもの
+を掲載しています。
+
+このファイルの終わりにある著作権情報は必ず読んで下さい。
+
+=== バージョンの履歴の摘要 ===
+
+初め Robert Alan Koeneke によって "VMS Moria" ができました(1985)。
+
+その次に James E. Wilson によって "Umoria"(Unix Moria) ができました(1989)。
+
+アングバンドの直系の祖先である "moria" の歴史についての詳細は様々なところで
+見つけることができますし、このファイルにも作者の Robert Alan Koeneke からの
+メッセージが掲載されています。"moria" は様々なシステム上に移植されていますし、
+独自のニュースグループを持ち、独自のファンもいることに注意して下さい。
+
+1990 年に、Alex Cutler と Andy Astrand が Warwick 大学の生徒たちの協力を得て
+UMoria 5.2.1 をベースに Angband 1.0 を作りました。彼らはゲームの背景となるトー
+ルキンの世界を維持し充実させつつ、ゲームを拡張していきました。オリジナルから
+の変更点としては、モンスターやアイテムの増加、ユニーク・モンスターや伝説のア
+イテム(artifact)、始動コマンド、アイテムの感じ、階の雰囲気、特別な部屋、の追
+加などがありました。
+
+年月を経て Sean Marsh, Geoff Hill, Charles Teague などの人達がソースの改良を
+行い "Angband 2.4.frog_knows" と呼ばれるバージョンがリリースされました。これ
+は UNIX システム上でしか動かないものでしたが、様々な人が様々なシステムに移植
+を行っていました。移植されたうちで最も意義深いものは、古い DOS マシン用の
+"PC Angband 1.4" で、それにはカラーの搭載と、他にも様々な改良が施されていまし
+た。それらのうちいくつかはオフィシャルなソースにも反映されました。
+
+その次に Charles Swiger(cs4w+@andrew.cmu.edu) が混乱を整理しようと試み、いく
+つかのバージョンを経て、1993 年 11 月のある日の Angband 2.5.1(多少の違いはあ
+る)から始めて、1994 年末の Angband 2.6.2 までを主導しました。カラー使用のサ
+ポートを追加した Macintosh 版を作成した Keith Randall を含め何人かの人々が、
+(主に Unix/NeXT が中心だった) Angband 2.6.1 を他のプラットフォームに移植しま
+した。この時期の変更のいくつかは、"net"(*訳注:Nethackのことか)、PC Angband
+1.4 や UMoria 5.5、FAngband のような様々な Angband の「亜種」からヒントを得
+ていました。
+
+Angband 2.6.1 は Unix/NeXT マシンを主な対象としており、それは画面操作とキー操
+作のすべてに関してローレベルの "curses" コマンドの使用を必要としていました。
+どのバージョンも新たなシステムへの移植に際しては根本的なソース修正が必要であ
+り、"curses" エミュレータのように機能する画面操作のソース作成が通常必要でし
+た。そのようにして移植された中には Keith Randall による "Macintosh Angband 
+2.6.1" があり、それはカラーのサポートが追加され、Angband 2.7.0 の最初のリリー
+スの基礎を形成しています。
+
+1994 年の後半、私(Ben Harrison)は Angband のソースと戯れていましたが、それは
+"rogue" ゲームにおける古い "rogue-o-matic" プログラムのような、 Angband の自
+動プレイの一種を作れるかどうか主に検討していたからです。Macintosh バージョン
+のコンパイルの困難さとソースの複雑さがそれを不可能としていましたので、そこで
+私は自分自身の使用のために様々な方法でソースの整頓を始めました。
+
+1994 年の末に Charles Swiger が就職をしたために Angband のサポートができなく
+なったことをアナウンスしました。これは Angband newsgroup に代表される Angband
+社会に少なからぬ狼狽を与え、様々な人々が Angband のサポートを継続するために
+「委員会」を発足させようとしました。委員会は混乱以外の何ものも与えませんでし
+たので(例えば COBOL を考えようとか)、1995 年の初日に私が自分のソースを発表し
+てそれを "Angband 2.7.0" と呼び、基本的に新たな Angband の管理者となると言っ
+たときには、ほとんど反対はありませんでした。もしくは、少なくとも私はそう感じ
+ました。
+
+Angband 2.7.0 は(バグだらけでしたが)ソースをひじょうにきれいに書き直しました
+ので、その他のことと相まって、Macintosh と UNIX に始まる多くのプラットフォー
+ムへの移植が容易になりました。そして多くの時間をバグ出しに費やして、X11 や様々
+な IBM 機版を含めた Angband 2.7.2 になりました。Angband 2.7.4 は ftp サイト
+"ftp.cis.ksu.edu" に公開され、すぐに好評を博しました。おそらく OS2 や Windows
+Amiga や Linux への移植がその好評に寄与したのでしょう。Angband 2.7.5 と 2.7.6
+はマクロやユーザー設定ファイルのような重要な機能が追加され、ソースの整理も引
+き続き行われました。Angband 2.7.8 は、安心して友人に配布できるような、もう一
+つの「安定した」バージョンを供給すべく設計されました。これにはオンライン・ヘ
+ルプ用の新しいヘルプ・ファイルとスポイラー・ファイルに加えて、様々な細かな変
+更やいくらかの新しい特徴が追加されました。
+
+Angband 2.7.8 が発表された後に、私はそれぞれのバージョンでのすべての変更点
+(少し漏れたのもありますが)を記録しておくために web site を立ち上げ、Official
+Mirror Server をサポートするための新たな開発者 ftp server の使用ができるよう
+になりました。この web site は現在 Officail Angband Home Page(http://www.
+phial.com)に恒久的に置かれています。不幸にも、続く 6 つのバージョンは
+Angband 2.7.9v1 から Angband 2.7.9v6 とナンバーされていますが、実際はどれも
+大幅なバージョンアップです。Angband 2.8.0 と Angband 2.8.1 は普通のバージョ
+ンナンバーを付けようとして発表されました。Angband 2.8.2 と Angband 2.8.3 は
+少々のランダムな特徴を付け、ソースを少し整理し、グラフィックをサポートし、い
+くつかの新しいシステムをサポートしました。
+
+Official Angband Home Page("http://www.phial.com/angband/")では Angband の最
+新情報だけでなく、バージョン間の変更点の一覧や、次なるバージョンで計画されて
+いる変更点や、Angband に関連した様々な email アドレスや web site の一覧などを
+提供しています。
+
+
+=== Angband 2.6.1 から 2.7.9 までの主な変更点 ===
+
+2.6.1 から 2.7.8 にかけて、どこが変更されたか、そしていつ変更されたかを特定す
+るのは大変困難なことです。どのバージョンも以前のバージョンからのひじょうに多
+くの変更点があり、diff ファイルがソース自体より多くなってしまうほどのものなの
+です。様々なプラットフォーム用の新しい "main-xxx.c" の作成と、ソース中に注記
+されているその他の少々の例外を除いて、ほとんどの変更点は私自身がソースを書き
+ました。その変更には自発的なものもありますが、ほとんどは Angband プレーヤーの
+提案や意見の結果として行われたものです。
+
+もっとも重要な修正は、他の修正作業すべてをずっと簡単かつ安全にするための、大
+量の「コードレベルの整理」でした。コードをほとんど一から書き直すことがたびた
+びでしたので、多くの場合、例えば "diff -r" をもってしてもコードが認識できな
+いほど、この修正は大幅なものでした。
+
+次に重要な修正は、Angband をわずか 50 行程度のコード追加で新しいマシンに実装
+できるようにする、汎用 "z-term.c" パッケージの構築でした。Angband 2.7.9 はこ
+うして多くのマシン、Macintosh, PowerMac, Unix/X11, Unix/Curses(*訳注:Curses 
+とは端末に依存しないプログラム作成を支援する高機能なルーチンライブラリの名前
+で、つまり、それを利用して実装されたということ), Amiga, Windows, OS2-386, 
+DOS-386 上、さらには DOS-286 上でさえも修正なしで実行できています。
+
+Angband 2.6.1 から 2.7.9 までの変更点全てをリストアップするのは困難です。それ
+らの多くは大量のコードレベルの整理通過のさいに作られたものだからです。変更の
+大半はユーザーからは分かりませんが、シンプルさと能率の良さや、コードサイズの
+縮小をもたらし、また、他の多くの改造の可能性を裏書きしてくれました。例えば、
+bolt, beam, ball などを取り扱う "project()" コードや、視線の計算を単純化する
+"update_view()" コード、あるいはダンジョンの新規の階を構築する "generate()" 
+コードなどです。"process_monsters()" や "update_monsters()" 関数、新たな
+"objdes()", "lite_spot()" ルーチンを含めて、多くの変更が効率の向上に向けられ
+ました。汎用 "Term" パッケージは効果的な画面更新、カラーの使用を可能にします。
+
+しかし、ともかくも、一切手間暇かけず、ただ思い付くままに順不列に並べてみます。
+どうにかして私は、このファイルを更新することから忌避してきました。本当は今の
+うちにでも手をつけなければならないのですが。最新の変更やバグ修正などは 
+Official Angband Home Page で確認することができます。
+
+    color
+    macros
+    keymaps
+    user pref files
+    generic feature array, with template file
+    generic object array, with template file
+    generic artifact array, with template file
+    generic ego-item array, with template file
+    generic monster array, with template fils
+    generic vault array, with template file
+    binary image files for the template files
+    special stat effect tables
+    a special table of spells
+    a special table of options
+    inventory tagging
+    inventory restrictions
+    using objects off the floor
+    various new runtime options
+    the new "destroy" command
+    the new "examine" command
+    the new "note" command
+    the new "dump screen" command
+    the new "load screen" command
+    the new "un-inscribe" command
+    the new "change visuals" command
+    the new "change colors" command
+    the new "change macros" command
+    the new "save game" command
+    the new "fire" vs "throw" commands
+    rearranged equipment slots
+    a standard bow slot
+    an extra inventory slot
+    an underlying keyset
+    refueling torches
+    better monster memory
+    nicer targetting mode
+    object stacking
+    the recall window
+    the choice window
+    the mirror window
+    new high score code
+    special lighting effects
+    intelligent monsters
+    new monster flags
+    text formatting code
+    much cleaner store code
+    generic spell projections
+    scrolls of *identify*
+    maximize mode
+    preserve mode
+    new inscription code
+    new message recall code
+    new spell and prayer code
+    massive cleanup of effects code
+    new object allocation routines
+    powerful (but simple) on line help
+    robust savefile cheat preventers
+    new official cheating options
+    new blindness code
+    new hallucination code
+    optimized object description code
+    new keypress input routines
+    actual object discounts
+    fractional (assymptotic) speed
+    postponing updates/redraws
+    run-time price determination
+    better wizard commands
+    the automatic player
+    launchers of extra shots
+    elemental ignore flags
+    new ego-item types
+    new player ghost creation
+    no more sliding objects
+    no more sliding monsters
+    new object flags
+    new chest trap code
+    regularized the artifact code
+    regularized the ego-item code
+    new monster abilities
+    new monster spell attacks
+    some new store owners
+    run-time skill computation
+    player kills vs anscestor kills
+    better room illumination code
+    better group monster code
+    table access through pointers
+    more redefinable constants
+    slightly new screen layout
+    extreme code cleaning
+    extreme optimizations
+
+
+=== 元著作者よりの手紙 ===
+
+From: koeneke@ionet.net (Robert Alan Koeneke)
+Newsgroups: rec.games.roguelike.angband,rec.games.roguelike.moria
+Subject: Early history of Moria
+Date: Wed, 21 Feb 1996 04:20:51 GMT
+
+私はモリア(Moria)の起源やそのローグ(Rogue)との関係を尋ねるメールを頂きまし
+た。ここでモリアの始まりについてのテキストを投稿したいと思います。
+
+まず第一に自己紹介ですが、私が正真正銘の、初めにモリアを作った Robert Koeneke
+です。私は人をハマらせるようなゲームを作ったことに対する苦情のメールをたくさ
+ん頂きました。私がインターネットに接続できたのはつい最近のことです。そう、最
+近の世間の風潮にあおられて、やっとインターネットに関心を持ち始めたような会社
+に私は勤めているのです。そこで私はニュースグループにモリアの名を見つけて本当
+に驚きました。またアングバンドを見つけて更に驚きました。というのも、私は今ま
+でアングバンドの存在を知らなかったのです。アングバンドを作っている方と連絡を
+とったこともあるはずなのでしょうが...。私は長年多くの方に、無償配布をする限
+り、追加や改良の許可を与えてきました。私は常に、ゲームを売るのではなく、無償
+配布することを提案してきました。
+
+ところで...
+
+1980 年か 81 年頃に、私はオクラホマ大学のエンジニアリング・コースに入りまし
+た。エンジニアリング研究所では初期の UNIX の元で PDP 1170 が稼働していました。
+私は昔からコンピューターの扱いが得意でしたので、自然にシステム管理者と親しく
+なりました。ある晩、彼らは私を誘って、いくつかのゲームをさせてくれました。そ
+のゲームとは初期のスタートレック・ゲームと巨大洞窟アドベンチャー(後に単に「ア
+ドベンチャー」と呼ばれる)でした。そしてその晩遅く、「ローグ」と呼ばれる新し
+いダンジョン・ゲームをやらせてもらいました。
+
+そうです、私は初めにローグの洗礼をうけたのであって、モリアが私の頭にひらめい
+たのはその後のことなのです。実際、皆さんがモリアとその派生のゲームをやるため
+に費やした何百万もの時間は、すべてローグが存在したことにその原因があるといっ
+てもいいくらいです。
+
+ローグにハマったすぐ後、私は学生コンピューター・アシスタントとして、今までと
+違った部門での仕事につきました。私の仕事場のコンピューターは VMS の走る初期
+の VAX 11/780 でしたが、当時はそのコンピューター用のゲームなどはまったくあり
+ませんでした。エンジニアリング研究所の管理者は、コンピューターの唯一の目的は
+仕事だと考えているような、まったくとんでもない人でした。想像して下さい、そう、
+ゲームができないのです、ローグができないのです！
+
+これは全く耐え難いことでした！そこで私は自分自身でローグを作ることを決意し、
+これがモリア・ベータ 1.0 となったのです。私の VMS システムでは FORTRAN IV と
+PASCAL V1.? と BASIC を使用することができました。ゲームのほとんどは文字列操
+作が必要でしたので、私は VMS BASIC でモリアを作り始めました。このモリアは私の
+記憶にある限りでは、見た目はローグにそっくりなものでした。この後、私はそれを
+どのように改良し、どのような違いを出すかのアイデアを考えることにし、一年くら
+いはそのモリアに手を触れませんでした。
+
+1983 年頃に、モリアを現在のような形態に生まれ変わらせる原因となった二つのこと
+が起きました。私は婚約し、そしてあれの唯一の特効薬はそれを忘れるまで働くこと
+だけでした。また私は PASCAL のオペレーティング・システム・クラスに参加するこ
+とになったのです。
+
+ですから、私は新しいバージョンの VMS PASCAL を研究し、新しい機能があることを
+発見しました。可変長文字列！わぉ...
+
+その夏、私は VMS PASCAL でモリア 1.0 を完成させました。その夏だけで、私はデー
+タ構造や最適化や簡潔なプログラミング方法を学び、学生生活の中で最も充実した時
+となりました。私はすぐにモリアにハマった人達にひっぱりだこになることになりま
+したが、それらの人達はすべてオクラホマ大学の学生でした。
+
+私は親友の Jimmey Todd に、ゲームのためのより優れたキャラクター生成システム
+を作成してくれるように頼み、その結果として技能や生い立ちといったシステムが生
+まれたのです。Jimmey は同様にゲーム中の多くの機能の改善を手伝ってくれて、そ
+の努力が、モリア 2.0 に結実することになりました。
+
+続く二年の間、私はゲームのプレイヤーの意見をたくさん聞き、それに基づいてゲー
+ムの問題点を修正し、ゲームを拡張し、プレイヤーに挑戦し続けました。誰かが何と
+かしてゲームをクリアーしてしまうと、私はすぐにその原因を突き止め、ゲームを更
+に難しくしました。一度は「これは絶対にクリア不可能だ」と誓ったこともありまし
+たが、なんと一週間後には私の友人がクリアーしてしまいました！彼のキャラクター
+「イギー」は、ゲームに「邪悪なるイギー」として登場することになり、不滅のもの
+となりました。もちろん、彼がゲームをクリアーするのに使ったトリックを、二度と
+使えないようにすぐにつぶしたのは言うまでもありません。
+
+1985 年頃に私はソースを他の大学に送り始めました。オクラホマ大学とテキサス大
+学のフットボールの対抗戦の直前に、私はテキサス大学にソースのコピーを送るよう
+に頼まれました...。私は拒めませんでした...。私はソースを改造して町の乞食を
+「オクラホマ大学フットボールファン」とし、それらを最高速度で移動するようにし、
+最高速度で増殖するようにしました。出会って起こしてしまうと、それはあっと言う
+間に何百にも増殖して床を埋め尽くし、プレイヤーを押しつぶしてしまうようになっ
+ていました...。私はすぐに苦情を受け取り、その「改良点」を無効にする方法を教
+えました！
+
+1986 年から 87 年の間に、私の手がけた最終公式バージョンであるモリア 4.7 がリ
+リースされました。私がオクラホマ大学を卒業してアメリカン・エアラインに就職し
+た時には(ご想像の通り現在もそこで働いています)、私はモリア 5.0 を製作していま
+した。モリア 5.0 は完全にソースを書き直し、多くの良質な改善を含み、水、小川、
+湖、池やそこに生息する水棲モンスターなどが追加されていました。また通常は光源
+として松明のように使われるが、魔法のオーラ(火の防御やモンスターを怒らせる)も
+発散する「ミステリアス・オーブ」といったアイテムも追加されていました。また新
+しい武器や財宝もありました。私は大学を去るにあたってそれを大学の学生アシスタ
+ントに残しましたが、きっとそれはすぐに忘れ去られて消え失せてしまったのだと思
+います。私の知る限り、そのソースはなくなってしまったようです。
+
+私はゲームをいじってみたいという人達に許可を与えました。ソースを C に変換して
+も良いかを尋ねてきた人達もいましたが、著作権表示さえきちんと守り、それを無償
+で配布し、売らないのなら良いと答えました。尋ねてきた人達のうち C への書き替え
+に成功した人もいると思います。
+
+私は今まで、モリアを遊んでいる人達からの冒険談や、システム管理者からの私が生
+まれた日を呪う手紙など、何千もの手紙を世界中から頂きました。鉄のカーテン(それ
+があったとき)の向こうからの、VAX 上のゲームについての手紙も頂きました(貿易法
+により、それはそこにあってはいけないものの様な気がしますが)。私は今まで受け
+取ったすべての手紙の発信元を地図上にピンでとめていましたが、その作業は諦めざ
+るを得ないものとなりました！
+
+私の作ったものがいまだに生き続けているということを知って、私はとても幸せです。
+私は新しいモリアやアングバンドをダウンロードして遊んでみようと思います。多分、
+私を驚かせるような何かが追加されているのでしょうね。それは楽しいことになるの
+でしょう。私はいままでモリアをやって驚いたことがなかったのですから。
+
+Robert Alan Koeneke
+koeneke@ionet.net
+
+
+=== 過去のバージョンについての履歴 ===
+
+
+                          VMS Moria Version 4.8
+Version 0.1  : 83/03/25
+Version 1.0  : 84/05/01
+Version 2.0  : 84/07/10
+Version 3.0  : 84/11/20
+Version 4.0  : 85/01/20
+
+モジュール :
+     V1.0  ダンジョン 生成        - RAK
+           キャラクター 生成      - RAK & JWT
+           Moria モジュール       - RAK
+           その他                 - RAK & JWT
+     V2.0  町の階 & その他        - RAK
+     V3.0  内部ヘルプ & その他    - RAK
+     V4.0  ソース発表バージョン   - RAK
+
+Robert Alan Koeneke               Jimmey Wayne Todd Jr.
+Oklahoma 大学/学生                Oklahoma 大学/学生
+
+
+
+
+
+                        Umoria Version 5.2 (以前は UNIX Moria)
+Version 4.83 :  87/5/14
+Version 4.85 : 87/10/26
+Version 4.87 :  88/5/27
+Version 5.0  :  89/11/2
+Version 5.2  :   90/5/9
+
+James E. Wilson, U.C. Berkeley 校
+                 wilson@ernie.Berkeley.EDU
+                 ...!ucbvax!ucbernie!wilson
+
+他の寄稿者たち:
+D. G. Kneller         - MSDOS 版 Moria を作成
+Christopher J. Stuart - recall、option、inventory、running コードを書いた
+Curtis McCauley       - Macintosh 版 Moria を作成
+Stephen A. Jacobs     - Atari ST 版 Moria を作成
+William Setzer        - object 命名コードを書いた
+David J. Grabiner     - たくさんのバグレポートと一貫したチェック
+Dan Bernstein         - UNIX hangup signal や多くのバグをフィックス
+及びその他大勢の人たち...
+
+
+
+
+Copyright (c) 1989 James E. Wilson, Robert A. Keoneke
+  このソフトウェアは教育や研究のためならば、そして利益を目的としないのならば
+  複写および配布してよい。ただし、この著作権と文章は記載しておくこと。
+  This software may be copied and distributed for educational, research, and
+  not for profit purposes provided that this copyright and statement are
+  included in all such copies.
+
+Umoria Version 5.2, patch level 1
+
+Angband Version 2.0   Alex Cutler, Andy Astrand, Sean Marsh, Geoff Hill, 
+                      Charles Teague.
+
+Angband Version 2.4   : 05/09/93
+
+Angband Version 2.5   : 12/05/93 Charles Swiger
+
+Angband Version 2.6   : 09/04/94 Charles Swiger
+
+Angband Version 2.7   : 01/01/95  Ben Harrison
+
+Angband Version 2.8   : 01/01/97  Ben Harrison
+
+
+Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
+このソフトウェアは教育や研究のためならば、そして利益を目的としないのならば
+複写および配布してよい。ただし、この著作権と文章は記載しておくこと。
+This software may be copied and distributed for educational, research,
+and not for profit purposes provided that this copyright and statement
+are included in all such copies.  Other copyrights may also apply.
+
+
+-- 2.7.9v3 翻訳: 怒涛の暇人(ＳＵＳ、KUNI、傀儡、音丸、ＦＩＲＳＴ各氏に感謝!)
+-- 2.7.9v6 改訂: しとしん
+-- 2.8.0   改訂: しとしん
+-- 2.8.3   改訂: しとしん
+
