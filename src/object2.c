@@ -2933,6 +2933,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					case EGO_WISDOM:
 					case EGO_BEAUTY:
 					case EGO_LITE:
+					case EGO_DARK:
 					case EGO_INFRAVISION:
 						break;
 					case EGO_SEEING:
