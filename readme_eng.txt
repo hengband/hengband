@@ -9,7 +9,7 @@
   make install
 
   Substitute the version number to x.x.x.
-  You need --disable-japanese option of the configure for english version.
+  You need --disable-japanese option of the configure for English version.
   If you are a super user, --with-setgid=games option works.
 
   then try
@@ -141,7 +141,7 @@ keyset, and by pushing 'x' in the Rogue-like keyset.
   i  Inventory list
   l/x  Look around
   M  Full dungeon map
-  ~  Display various infomation
+  ~  Display various information
 
   [other]
   p  Command pets

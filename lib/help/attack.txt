@@ -54,7 +54,7 @@ creature. If the creature is invisible and you do not have the ability
 to see invisible creatures, you must tunnel into the wall space
 containing the creature.
 
-Bolt spells does full damage to such creaure in a wall, but ball
+Bolt spells does full damage to such creature in a wall, but ball
 spells will be stopped and blow up just in front of a wall and does
 only half damages. Inversely, when you have ghost like form, and are
 in a wall, you will take only half damage from ball spells and
@@ -151,12 +151,6 @@ deadly against certain types of creature. Take note that if your weapon
 has two attributes that make it deadly to your opponent (for example
 you are fighting a demon and your weapon slays both evil and demons
 (demons are evil)), only the most effective slay will apply.
-
-Hengband has extended the original Angband's concept of adding random
-abilities to the various Ego types considerably. These can be either
-guaranteed or have only a varying chance of being granted. (See
-'Randabil.spo' for details of the random powers of Ego Weapons).
-
 
 (Defender)
     A magical weapon that actually helps the wielder defend himself,

@@ -42,7 +42,7 @@ actual race, class, and name of the current character.
 
 Next, the preference files for object auto-picker/destroyer will be
 loaded.  "pickpref.prf" is for every characters, and
-"pickpref-<<pleyer's name>>.prf" is for specific player.
+"pickpref-<<player's name>>.prf" is for specific player.
 
 Several commands allow you to both load existing user pref files,
 create new user pref files, append information to existing user pref
@@ -51,7 +51,7 @@ intuitive way than the user pref commands allow. The commands include
 "Interact with macros" (@), "Interact with visuals" (%), and "Interact
 with colors" (&), described below.
 
-In Hengband, all preferece which will be generated in-game are not
+In Hengband, all preference which will be generated in-game are not
 simply appended to old files but replaces old lines. You don't need to
 delete old lines with text editor.
 
@@ -85,7 +85,7 @@ Interact with colors (&)
  
 Reload auto-picker/destroyer preference ($)
      This command will reload "pickpref.prf" and
-     "pickpref-<<playername>>.prf" for object auro-picker/destroyer
+     "pickpref-<<playername>>.prf" for object auto-picker/destroyer
      after you edit these files with your text editor.
 
 ***** <Macros>
@@ -109,7 +109,7 @@ caret, and "^X" for the code for any "control" key "ctrl-X".
 In Hengband, name of special keys as macro-trigger is displayed using
 its real name, for example the Control-key plus the F1-key is
 displayed as "\[control-F2]", and the Alt-key plus the G is displayed
-as "\[Alt-G]". In other variant these special keys will be, currentry,
+as "\[Alt-G]". In other variant these special keys will be, currently,
 displayed using its key-code.
 
 Note that the "action" of a macro will not be checked against other
@@ -213,12 +213,12 @@ P:\[F1]
 
 When you press the F1 repeatedly, your character cast spell "c" of
 spellbook "b", and rest to restore mana, and repeat.  "X:avoid_abort"
-is needed because the Rest command will usually be stoped by any key
+is needed because the Rest command will usually be stopped by any key
 input.
 
 An explanation of 'avoid_abort' option is found the section on
 Efficiency Options (see option.txt#Efficiency [1])
-***** [1] joption.txt#Efficiency
+***** [1] option.txt#Efficiency
 
 
 ***** <Autopick>
@@ -227,7 +227,7 @@ Efficiency Options (see option.txt#Efficiency [1])
 Hengband can automatically pick up or destroy specified objects when
 you write objects name in the file "pickpref.prf" or
 "pickpref-<<playername>>.prf" in the user directory, this will be
-~/.angband/Hengband/ for UNIX, or hengband\lib\user\ for other
+~/.angband/Hengband/ for UNIX, or Hengband\lib\user\ for other
 operating systems.
 
 The game will read the file "pickpref-<<playername>>.prf" first and
@@ -460,7 +460,7 @@ unaware items
 
 #Artifact lights
 unidentified lights:^Jewel#!!
-unidentified lights:^levitatioin stone#!!
+unidentified lights:^levitation stone#!!
 unidentified lights:^Palantir#!!
 unidentified lights:^stone#@A0
 unidentified lights:^star#!!
@@ -471,7 +471,7 @@ unidentified lights:^Phial#!!
 ~*identified* artifacts#%
 
 #
-# pick all items which can stack your inventry without inscription.
+# pick all items which can stack your inventory without inscription.
 #
 collecting rod
 collecting potion

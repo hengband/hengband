@@ -240,7 +240,7 @@ unaware items
 
 #Artifact lights
 unidentified lights:^Jewel#!!
-unidentified lights:^levitatioin stone#!!
+unidentified lights:^levitation stone#!!
 unidentified lights:^Palantir#!!
 unidentified lights:^stone#@A0
 unidentified lights:^star#!!
@@ -251,7 +251,7 @@ unidentified lights:^Phial#!!
 ~*identified* artifacts#%
 
 #
-# pick all items which can stack your inventry without inscription.
+# pick all items which can stack your inventory without inscription.
 #
 collecting rod
 collecting potion

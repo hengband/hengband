@@ -9,7 +9,7 @@
 		  - The Serpent of Chaos summons guardians of each dungeons.
 		  - Random artifact names list was expanded.
 		  - Iron Spikes has (dmg per shot/dmg per turn) display.
-		  - Automaticaly tidy up bandles of ammo to 99 ammo and the rest.
+		  - Automatically tidy up bundles of ammo to 99 ammo and the rest.
 		  - Interact with visual command takes ^N ^A ^C.
 		  - Support 16x16 tile. Selected by extra option -- -a on X11.
 		  - 8x8 tile supports lighting effects.
@@ -25,7 +25,7 @@
 
   Jan.27th, 2002  hengband 1.0.9 released.
                   - New character making screen
-		  - New character infomation 'C' screen
+		  - New character information 'C' screen
 		  - Range and accuracy of crossbow are changed.
 		  - Rod of Pesticide was changed.
 		  - The score server now holds colored screenshots at dying and winning.
@@ -37,7 +37,7 @@
 		    (sadly English version of online help is not yet available)
 		  - Rune of explosion no longer has anti-summoning effects.
 		  - Rune of protection no longer has perfect
-		    anti-summonig effects. Sea of runes are no longer
+		    anti-summoning effects. Sea of runes are no longer
 		    perfect. But this change has a good side effect:
 		    monsters can waste its time to try summoning.
 		  - Identify spell now shows only unidentified items in the list.
@@ -51,7 +51,7 @@
 
   Dec.31th, 2001  hengband 108fix1 version 3 released.
                   - Auto macro dump and other auto dump is now 
-		    more usefull. Old dump lines will be deleted 
+		    more useful. Old dump lines will be deleted 
 		    before appending new dump.
 		  - A minor typo and a minor bug fixed.
  
@@ -80,7 +80,7 @@
 		  - Ninja had been a bit weakened. 
 		  - can study known spells using 'G' command for more proficiency.
 		  - Some minor bugs was fixed.
-		  - Yet another japanese massage was taranslated.
+		  - Yet another japanese massage was translated.
   Dec.17th, 2001  hengband 1.0.7fix2 english beta4 released.
 		  Yet another remained japanese messages are now translated.
 		  Changed some option info texts and names again.
@@ -113,7 +113,7 @@
   be lost. There is a limit in the total of studying spells.
 
 - New classes:
-   Tourist : thay can poorly cast arcane spells. difficult to survive.
+   Tourist : they can poorly cast arcane spells. difficult to survive.
    Imitator : imitate spells or abilities which monsters have just used.
    BeastMaster : dominate or summon monsters and ride on these.
    Sorcerer : cast spells of all magic realms. But physically hopeless.
@@ -140,12 +140,12 @@
    Other magic realms also exist for new classes' exclusive use.
    Existing realms are modified.
 - Class powers: class specific powers, like the racial one.
-- Pernangband-like large wilderness map and many differnt dungeons, 
+- Pernangband-like large wilderness map and many different dungeons, 
   including Maze, Volcano, R'lyeh, Anti-magic cave, Anti-melee cave, 
   Chameleon cave, Dark cave, Hell, Heaven, etc.
 
 - The amount of energy which player and monsters take in each turn are 
-  randomized, which makes piller-dancing impossible, and produces 
+  randomized, which makes pillar-dancing impossible, and produces 
   danger of possible sudden death.
 - Monsters can breath or cast spells to a place adjacent to player.
 - A monster which was attacked in the last turn can move and cast spells 
@@ -163,7 +163,7 @@
 - Even artifacts will be removed by *destruction*.
 
 - Player can name his pets, and can take pets over to any place.
-- Pet monsters will not turn agaist player when attacked by player.
+- Pet monsters will not turn against player when attacked by player.
 - Monsters killed by player's pets don't drop items.
 - Player and monsters cannot summon monsters of opposite alignment.
 - New items:
@@ -189,8 +189,8 @@
 - New casino game Monster Arena : You bets to one of four monsters. 
     They battle each other and you win when your monster wins.
 - Auto picker: write item names on a file named 'pickpref.prf', then 
-  these items will be automaticaly picked up or destroyed and even 
-  automaticaly inscribed.
+  these items will be automatically picked up or destroyed and even 
+  automatically inscribed.
 
 
 

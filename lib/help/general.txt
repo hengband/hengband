@@ -122,7 +122,7 @@ of Japanese score board which includes over 5000 records already!
 (http://6904.teacup.com/combatechizen/bbs)
 
 If you read and write Japanese, you can ask question and get various
-infomation from this BBS (Bulletin Board System).
+information from this BBS (Bulletin Board System).
 
 --- FTP Sites ---
 (ftp://clockwork.dementia.org/angband/Variant/Hengband/)
@@ -152,5 +152,5 @@ Updated    : Many others
 ***** [2] commdesc.txt
 ***** [3] charattr.txt
 ***** [4] attack.txt#MonsterMemory
-***** [5] jtown.txt
+***** [5] town.txt
 

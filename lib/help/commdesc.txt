@@ -650,7 +650,7 @@ Game Version (V)
 Repeat previous command (n) ([)
      This command repeat previously executed command with all its
      arguments. Very useful to repeat casting, for example, magic
-     missile to same oppornent.
+     missile to same opponent.
 
 Toggle Choice Window (^E) 
      Toggles the display in the choice window (if available) between

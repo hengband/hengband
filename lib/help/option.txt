@@ -164,14 +164,14 @@ Plain object descriptions    [plain_descriptions]
     set this option.
 
 Center map while walking (*slow*)    [center_player]
-     The map always centres on the player with this option on. With it off, it
+     The map always centers on the player with this option on. With it off, it
      is divided into 25 sections, with coordinates (0,0) to (4,4), and will 
      show one section at a time.
 
 Centering even while running    [center_running]
-     Normally, the map does not centre on the player if the player
+     Normally, the map does not center on the player if the player
      moves with the "run" command, only when the running finishes.  If
-     this option is set, the map always centre on the player.
+     this option is set, the map always center on the player.
 
 Use special colors for torch-lit grids    [view_yellow_lite]
     This option causes special colors to be used for "torch-lit" grids
@@ -231,7 +231,7 @@ Always show list at first when select items    [always_show_list]
 ***** <GamePlay>
 === Option set 3 -- Game playing ===
 
-Manualy haggle in stores    [manual_haggle]
+Manually haggle in stores    [manual_haggle]
     Usually, auto-haggle is used in stores and it resulting in a ten
     percent sales tax on items which you would have otherwise been
     forced to haggle for.  If this option is set, auto-haggle is
@@ -282,7 +282,7 @@ Map remembers all perma-lit grids    [view_perma_grids]
     of sight, but this is better accomplished by the "view_bright_lite"
     option.  Note that any non-floor grids which is seen by the player
     are always memorized, and "object" which is seen by the player is
-    memorized independantly from the memorization of the grid itself.
+    memorized independently from the memorization of the grid itself.
 
 Map remembers all torch-lit grids    [view_torch_grids]
     Memorize all (torch-lit) floor grids which are seen by the player.
@@ -317,7 +317,7 @@ Always create unusually small dungeon levels    [always_small_levels]
 Allow empty 'arena' levels    [empty_levels]
     Normal dungeon levels consist mostly of rock. If this option is in
     use, levels which have empty floor instead of solid rock may  also 
-    be created (somewhat remniscent of Nethack's "big-room" levels). 
+    be created (somewhat reminiscent of Nethack's "big-room" levels). 
     These levels can be extremely deadly, especially with breathing
     monsters (since there are few obstructions to shield). Arena levels
     may have vaults, nests and pits in them like normal levels. Some
@@ -552,7 +552,7 @@ Record first identified items    [record_ident]
     If this option is set, names of every objects which identified
     first time will be written in the Play-record.
 
-Record infomations of named pets    [record_named_pet]
+Record informations of named pets    [record_named_pet]
     If this option is set, every action with your pets which are given
     their own name will be written in the Play-record.
 
@@ -633,7 +633,7 @@ Display overhead view
 
 Display monster recall
     Display a description of the most monster which has been most recently
-    attacked, targetted, or examined in some way.
+    attacked, targeted, or examined in some way.
 
 Display object recall
     Display a description of the most recently selected object.  Currently
@@ -687,7 +687,7 @@ Allow player to avoid death    [cheat_live]
 === Start up options ===
 
 While cheating makes the game easier, the following options can make
-Hengband harder or easyer. So if you think the game is too easy or too
+Hengband harder or easier. So if you think the game is too easy or too
 hard, or if you want to impress your friends, then switch on the
 following options. The startup-options can only be accessed while
 creating a new character (press '=' while creating the character).
@@ -696,7 +696,7 @@ Indicators "(*)" after the name of options means that options effect
 estimation of your score.
 
 Easy Mode (*)    [easy_band]
-    This option enables easy game mode for beginers. If this option is
+    This option enables easy game mode for beginners. If this option is
     set, you takes only half damage from any enemy's attack compared
     to normal mode, and monster's summoning spells become much
     weaker. But your score will be estimated to be negative number,
@@ -758,7 +758,7 @@ Always create empty 'arena' levels (*)    [ironman_empty_levels]
     level . See the "Allow empty 'arena' levels" option above.
 
 Create terrain 'streamers' in the dungeon (*)    [terrain_streams]
-    If this option is enabled, rivers, lava flows, or frests will be
+    If this option is enabled, rivers, lava flows, or forests will be
     generated in dungeon.
 
 (Cheating) Ask for death saves (*)    [munchkin_death]
@@ -771,7 +771,7 @@ Always generate very unusual rooms (*)    [ironman_rooms]
 
 Nightmare mode(it isn't even remotely fair!)(*)    [ironman_nightmare]
     If this option is enabled, all monsters become unusually
-    powerfull, and fast. And there will be various unbelievable
+    powerful, and fast. And there will be various unbelievable
     happening in various situations. Further more, at 12:00 of every
     night, you will have a real nightmare.
 
@@ -805,7 +805,7 @@ Allow use of autoroller for stats (*)    [autoroller]
     for the next match or, if this is not your first match, 'p' to
     return to the previous character which met your criteria.
 
-Autorole for weight, height and social status    [autochara]
+Autoroll for weight, height and social status    [autochara]
     If this option is enabled, you can specify weight, height and
     social status for auto-roller.
 

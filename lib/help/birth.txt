@@ -1,6 +1,6 @@
 === Creating a Character ===
 
-Hengband is a roleplaying game, in which you, the player, control a
+Hengband is a role playing game, in which you, the player, control a
 character in the world of Hengband. Perhaps the most important thing
 you control is the birth of your character, in which you choose or
 allow to be chosen various attributes that will affect the future life
@@ -196,7 +196,7 @@ above.
 ***** <LifeRating>
 === Life Ratings ===
 
-In Hnegband, Life Rating is not displayed at character making, but
+In Hengband, Life Rating is not displayed at character making, but
 displayed later by magical means such as Self Knowledge.  Life Rating
 is an indication of how many hitpoints your character will have at
 character level 50 before taking into consideration any bonus from

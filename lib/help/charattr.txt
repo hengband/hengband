@@ -10,7 +10,7 @@ weight, social class, and background history
 Your choices as to sex, race, class, realm, personality are
 irrevocable and will remain fixed for the entire life of that
 character. There are a few exception to this; The Chaos spell
-'Polymorh Self' (and the mutation of the same name) may cause your
+'Polymorph Self' (and the mutation of the same name) may cause your
 race to change as one of its possible effects. And some classes which
 can use two realm of magic at once such as Mage can change second
 magic realm comparatively freely.
@@ -45,7 +45,7 @@ will attain a new experience level (up to a maximum of 50). When this
 happens, your hitpoints, mana (if any), certain skills such as melee
 fighting and bows and throws will all increase. Some races and classes
 will also gain new powers and abilities when crossing certain
-experience threshholds.
+experience thresholds.
 
 Deep down inside, the real objective of the game is to increase your
 experience, and certain other characteristics, and also to collect
@@ -464,9 +464,9 @@ Warrior
 Mage
     A Mage is a spell caster that must live by his wits as he cannot
     hope to simply hack his way through the dungeon like a warrior. In
-    addition to his spellbooks, a mage should carry a range of magical
+    addition to his spellbooks, a Mage should carry a range of magical
     devices to help him in his endeavors which he can master far more
-    easily than anyone else. A mage's prime statistic is Intelligence
+    easily than anyone else. A Mage's prime statistic is Intelligence
     as this determines his spell casting ability.
 
 Priest
@@ -503,7 +503,7 @@ Paladin
     very good fighters, but not very good at missile weapons. A
     paladin lacks much in the way of abilities. He is poor at stealth,
     perception, searching, and magical devices but has a decent saving
-    throw due to his divine alliance. Wisdom determines a Paradin's
+    throw due to his divine alliance. Wisdom determines a Paladin's
     success at praying to his deity.
 
 Warrior-Mage
@@ -729,7 +729,7 @@ Fearless
 Combat
     "Combat" gives you comparatively high melee and shooting
     abilities, and average constitution. Other skills such as stealth,
-    magic defence, and magical devices are weakened. All "Combat"
+    magic defense, and magical devices are weakened. All "Combat"
     people have great respect for the legendary "Combat Echizen".\
     (See "Death Crimson" / Ecole Software Corp.)", "A "Lazy" person
     has no good stats and can do no action well.
@@ -755,7 +755,7 @@ munchkin
 
 
 ***** <PrimaryStats>
-=== Primary Statistcs ===
+=== Primary Statistics ===
 
 Each character has six primary "stats", strength, intelligence,
 wisdom, dexterity, constitution, and charisma, which modify the
@@ -763,8 +763,8 @@ abilities of the character in a variety of ways. Every stat has a
 numerical value, ranging from a minimum of 3, up to a normal maximum
 of 18, and even higher, into the "percentile" range, represented as
 "18/01" through "18/130". True maximum of each base stat is randomly
-ranging from 18/70 to 18/130, and avarage of all your stat maximums
-are always 18/100. These maxiums are choosen randomly when your
+ranging from 18/70 to 18/130, and average of all your stat maximums
+are always 18/100. These maximums are chosen randomly when your
 character is created or your character quaff a Potion of New Life.
 Actually, every stat can be raised even above 18/100 by modification
 from race, class, personality and magical equipment, up to a pure
@@ -806,7 +806,7 @@ Wisdom
      paladins and monks) to use prayers. WIS will affect the number of
      spells these classes may learn each level, the number of spell
      points they receive and their spell fail rates. In addition, WIS
-     is also used to determine a mindcrafter's ability to use his or
+     is also used to determine a Mindcrafter's ability to use his or
      her mental powers. These classes cannot learn spells if their
      wisdom is 7 or lower. Wise character's will have better chances of
      resisting magical spells cast upon them by monsters.
@@ -832,7 +832,7 @@ Charisma
      prices from store owners, whereas a character with a very low
      charisma may be robbed blind. A high charisma will also mean more
      starting money for the character. Charisma is also used when
-     calculating the success of a mindcrafter at dominating a monster.
+     calculating the success of a Mindcrafter at dominating a monster.
  
 
 ***** <PrimarySkills>

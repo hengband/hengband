@@ -12,7 +12,7 @@ each class can study and cast spells from spellbooks using one stat;
 intelligence, wisdom or charisma. For spellcasting, you must always
 carry spellbooks which include spells which you want to cast.  You can
 choose either one or two realms depend on class. In Hengband, you can
-change second realm in the middile of game. (Simply study('G') from a
+change second realm in the middle of game. (Simply study('G') from a
 spellbook of new magic realm.)
 
 There are eleven classes which use class specific magic(or technique);
@@ -38,7 +38,7 @@ and choose a spell from the list to get a description of each spell.
 Warrior
      Warriors cast no spells. They hate magic. In fact, they even gain
      experience for destroying high level spellbooks.  They have a
-     class power 'Sword Dancing' which attacks in mellee to six random
+     class power 'Sword Dancing' which attacks in melee to six random
      directions at once.
 
 Mage
@@ -101,7 +101,7 @@ Paladin
      spellbooks: 'pagan' means Life spellbooks for a Death Paladin and
      all other spellbooks than Life for a Life Paladin.  Each of them
      have a class power 'Holy Lance' or 'Hell Lance'.  Wisdom
-     determines a Paradin's success at praying to his deity.
+     determines a Paladin's success at praying to his deity.
 
 Warrior-Mage
      Warrior-mages begin the game with Arcane magic, and they can
@@ -124,8 +124,8 @@ Monk
      The different sects of monks are devoted to different areas of
      magic. They select a realm from Life, Nature, Craft and Death.
      They will eventually learn all prayers in the discipline of their
-     choice.  They have two class powers 'Asuume a Posture' and
-     'Double Attack'. They can choose diferent forms of posture in
+     choice.  They have two class powers 'Assume a Posture' and
+     'Double Attack'. They can choose different forms of posture in
      different situations. And use powerful successive combination of
      attacks for finish blow.  Wisdom determines a Monk's spell
      casting ability.
@@ -204,7 +204,7 @@ Magic-Eater
     Magic-Eaters can absorb the energy of wands, staffs, and rods, and
     can then use these magics as if they were carrying all of these
     absorbed devices. Mana and changes of absorbed devices are
-    regenerated naturaly by a Magic-Eaters power, and speed of
+    regenerated naturally by a Magic-Eaters power, and speed of
     regeneration is influenced by their intelligence.  They have a
     class power 'Absorb Magic' which is used to absorb magic devices.
     A Magic-Eater's prime statistic is intelligence.
@@ -220,7 +220,7 @@ Bard
     Singing'.  Charisma determines their singing ability.
 
 Red-Mage
-    Red Mages are similar to Warrior-Mage; they are decent figher and
+    Red Mages are similar to Warrior-Mage; they are decent fighter and
     spellcaster.  Red-Mages can use almost all spells from lower rank
     spellbooks of all realms, first and second spellbooks of all
     realms and third and fourth Arcane spellbooks, without having to
@@ -238,12 +238,12 @@ Samurai
     it around; the books is needed only when they study new combat
     techniques. Samurai need a weapon wielded to use techniques of
     Kendo, and most techniques will add powerful special properties to
-    their blows; such as flaming, poisoning, vamparic, etc... There is
+    their blows; such as flaming, poisoning, vampiric, etc... There is
     special treatment about their spellpoints; usual maximum of SP
     doesn't depend on their level, but depend solely on wisdom, and
     they can use the class power 'Concentration' to temporarily
     increase SP beyond its usual maximum value.  They have one more
-    class power 'Assume a Posture'; They can choose diferent forms of
+    class power 'Assume a Posture'; They can choose different forms of
     posture in different situations.  Wisdom determines a Samurai's
     ability to use the special combat techniques available to him.
 
@@ -251,15 +251,15 @@ ForceTrainer
     ForceTrainer use both spellbook magic and their special spiritual
     force called the Force. They can select a realm from Life, Nature,
     Craft and Death like Monks. To use ordinary spellbook magic, you
-    can use the cast a spell command("m") normaly.  And to use The
+    can use the cast a spell command("m") normally.  And to use The
     Force, you can select it just as if it is spellbook 'w'; which
     means you need to press 'm' and then 'w' to select the Force.  The
     most important spell of the Force is the 'Improve Force'; each
     time a ForceTrainer activate it, their Force power become more
     powerful, and their attack power in bare-handed melee fighting is
-    increased temporaly. And then the improved Force can be released
+    increased temporary. And then the improved Force can be released
     at one stroke when a ForceTrainer activates some other Force
-    spell, typicaly an attack spell. They prefer fighting with neither
+    spell, typically an attack spell. They prefer fighting with neither
     weapon nor armor, and wielding weapons or wearing heavy armor
     disturbs use of the Force.  They have a class power 'Clear Mind'
     which allows them to rapidly regenerate their mana.  Wisdom is a
@@ -269,14 +269,14 @@ Blue-Mage
     A Blue-Mage can learn and cast spells/techniques of monsters as
     their own spell, this magic system is called Blue magic. Unlike
     Imitators, Blue-Mages remember their spells permanently, but they
-    must learn spells from monsters by acrivating their class power
+    must learn spells from monsters by activating their class power
     'Learning', and they can learn only attack spells and summoning
     spells; they cannot learn healing, speed or etc., because these
     spells don't hit Blue-Mages.  Intelligence determines their spell
     casting ability.
 
 Cavalry
-    Cavalrys don't use magic like Warrior.  Since they are very good
+    Cavalries don't use magic like Warrior.  Since they are very good
     at riding, they have a class power 'Rodeo' which allows them to
     forcibly saddle and tame wild monsters.
 
@@ -294,7 +294,7 @@ Weaponsmith
     A Weaponsmith can improve weapons and armors for him or
     herself. They can extract the essences of special effects from
     weapons or armors which have various special abilities, and can
-    add these essences to another weapon or armor. Normaly, each
+    add these essences to another weapon or armor. Normally, each
     equipment can be improved only once, but they can remove
     previously added essence from improved equipment to improve it
     with another essence. To-hit, to-damage bonus and AC can be
