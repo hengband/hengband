@@ -89,10 +89,10 @@ Reload auto-picker/destroyer preference ($)
      after you edit these files with your text editor.
 
 Edit auto-picker/destroyer pref (_)
-     Allow the user to edit the pickpref-<player's name>.prf in the
-     user directry.  The ESC key will open the menu in this editor.
-     You can see and use all edit commands from the command menu.
-     Press control+Q to quit the editor.
+     Allow the user to edit the pickpref.prf in the user directry.
+     The ESC key will open the menu in this editor.  You can see and
+     use all edit commands from the command menu.  Press ^Q or ^W to
+     quit the editor.
 
 
 ***** <Macros>

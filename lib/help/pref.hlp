@@ -9,8 +9,6 @@ Please choose one of the following online help files:
     (e) Visuals                          (pref.txt#Visuals)
     (f) Colors                           (pref.txt#Colors)
     (g) Options                          (pref.txt#Options)
-    (h) Auto-Picker/Destroyer Editor     (editor.txt)
-    (i) Object Auto-Picker/Destroyer     (editor.txt#Autopick)
 
     (?) Help System Commands             (helpinfo.txt)
 
@@ -22,5 +20,3 @@ Please choose one of the following online help files:
 ***** [e] pref.txt#Visuals
 ***** [f] pref.txt#Colors
 ***** [g] pref.txt#Options
-***** [h] editor.txt
-***** [i] editor.txt#Autopick
