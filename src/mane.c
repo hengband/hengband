@@ -957,17 +957,44 @@ msg_print("無傷の球の呪文を唱えた。");
 	case MS_TELE_TO:
 	{
 		monster_type *m_ptr;
+		monster_race *r_ptr;
 		char m_name[80];
 
 		if (!target_set(TARGET_KILL)) return FALSE;
 		if (!cave[target_row][target_col].m_idx) break;
-		if (!los(py, px, target_row, target_col)) break;
+		if (!player_has_los_bold(target_row, target_col)) break;
 		m_ptr = &m_list[cave[target_row][target_col].m_idx];
+		r_ptr = &r_info[m_ptr->r_idx];
 		monster_desc(m_name, m_ptr, 0);
+		if (r_ptr->flagsr & RFR_RES_TELE)
+		{
+			if ((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flagsr & RFR_RES_ALL))
+			{
+				if (is_original_ap(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+#ifdef JP
+				msg_format("%sには効果がなかった！", m_name);
+#else
+				msg_format("%s is unaffected!", m_name);
+#endif
+
+				break;
+			}
+			else if (r_ptr->level > randint1(100))
+			{
+				if (is_original_ap(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+#ifdef JP
+				msg_format("%sには耐性がある！", m_name);
+#else
+				msg_format("%s resists!", m_name);
+#endif
+
+				break;
+			}
+		}
 #ifdef JP
 msg_format("%sを引き戻した。", m_name);
 #else
-			msg_format("You command %s to return.", m_name);
+		msg_format("You command %s to return.", m_name);
 #endif
 
 		teleport_to_player(cave[target_row][target_col].m_idx, 100);
