@@ -795,12 +795,13 @@ void Term_queue_chars(int x, int y, int n, byte a, cptr s)
 	/*
 	 * 全角文字の左半分で表示を終了する場合、
 	 * 重なった文字の右部分を消去。
+	 * (条件追加：タイルの1文字目でない事を確かめるように。)
 	 */
 	{
 
 		int w, h;
 		Term_get_size(&w, &h);
-		if (x != w && (scr_aa[x] & KANJI2))
+		if (x != w && !(scr_aa[x] & 0x80) && (scr_aa[x] & KANJI2))
 		{
 			scr_cc[x] = ' ';
                         scr_aa[x] &= KANJIC;
