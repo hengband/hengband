@@ -2407,7 +2407,7 @@ static int get_stock(int *com_val, cptr pmt, int i, int j)
 		int k;
 
 		/* Escape */
-		if (!get_com(out_val, &command, TRUE)) break;
+		if (!get_com(out_val, &command, FALSE)) break;
 
 		/* Convert */
 		k = (islower(command) ? A2I(command) : -1);
