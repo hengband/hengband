@@ -1060,11 +1060,11 @@
 #define FEAT_QUARTZ_K           0x37
 
 /* Walls */
-#define FEAT_WALL_EXTRA         0x38
+#define FEAT_WALL               0x38
 #define FEAT_WALL_INNER         0x39
 #define FEAT_WALL_OUTER         0x3A
 #define FEAT_WALL_SOLID         0x3B
-#define FEAT_PERM_EXTRA         0x3C
+#define FEAT_PERM               0x3C
 #define FEAT_PERM_INNER         0x3D
 #define FEAT_PERM_OUTER         0x3E
 #define FEAT_PERM_SOLID         0x3F
@@ -1183,9 +1183,9 @@
 #define FF_FLOOR         25
 #define FF_WALL          26
 #define FF_PERMANENT     27
-#define FF_INNER         28
-#define FF_OUTER         29
-#define FF_SOLID         30
+/* #define FF_XXX00         28 */
+/* #define FF_XXX01         29 */
+/* #define FF_XXX02         30 */
 #define FF_HIT_TRAP      31
 
 /* #define FF_BRIDGE        32 */

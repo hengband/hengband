@@ -320,7 +320,7 @@ static void build_dead_end(void)
 		for (x = 0; x < MAX_WID; x++)
 		{
 			/* Create "solid" perma-wall */
-			cave[y][x].feat = FEAT_PERM_SOLID;
+			place_solid_perm_bold(y, x);
 		}
 	}
 

@@ -65,6 +65,20 @@
 	(C)->info |= CAVE_EXTRA; \
 }
 
+#define place_extra_perm_bold(Y, X) \
+{ \
+	set_cave_feat(Y,X,FEAT_PERM); \
+	cave[Y][X].info &= ~(CAVE_MASK); \
+	add_cave_info(Y,X,CAVE_EXTRA); \
+}
+
+#define place_extra_perm_grid(C) \
+{ \
+	(C)->feat = FEAT_PERM; \
+	(C)->info &= ~(CAVE_MASK); \
+	(C)->info |= CAVE_EXTRA; \
+}
+
 #define place_extra_noperm_bold(Y, X) \
 { \
 	feature_type *_f_ptr; \
@@ -90,6 +104,20 @@
 	(C)->info |= CAVE_INNER; \
 }
 
+#define place_inner_perm_bold(Y, X) \
+{ \
+	set_cave_feat(Y,X,FEAT_PERM); \
+	cave[Y][X].info &= ~(CAVE_MASK); \
+	add_cave_info(Y,X,CAVE_INNER); \
+}
+
+#define place_inner_perm_grid(C) \
+{ \
+	(C)->feat = FEAT_PERM; \
+	(C)->info &= ~(CAVE_MASK); \
+	(C)->info |= CAVE_INNER; \
+}
+
 #define place_outer_bold(Y, X) \
 { \
 	set_cave_feat(Y,X,feat_wall_outer); \
@@ -100,6 +128,20 @@
 #define place_outer_grid(C) \
 { \
 	(C)->feat = feat_wall_outer; \
+	(C)->info &= ~(CAVE_MASK); \
+	(C)->info |= CAVE_OUTER; \
+}
+
+#define place_outer_perm_bold(Y, X) \
+{ \
+	set_cave_feat(Y,X,FEAT_PERM); \
+	cave[Y][X].info &= ~(CAVE_MASK); \
+	add_cave_info(Y,X,CAVE_OUTER); \
+}
+
+#define place_outer_perm_grid(C) \
+{ \
+	(C)->feat = FEAT_PERM; \
 	(C)->info &= ~(CAVE_MASK); \
 	(C)->info |= CAVE_OUTER; \
 }
@@ -134,6 +176,20 @@
 #define place_solid_grid(C) \
 { \
 	(C)->feat = feat_wall_solid; \
+	(C)->info &= ~(CAVE_MASK); \
+	(C)->info |= CAVE_SOLID; \
+}
+
+#define place_solid_perm_bold(Y, X) \
+{ \
+	set_cave_feat(Y,X,FEAT_PERM); \
+	cave[Y][X].info &= ~(CAVE_MASK); \
+	add_cave_info(Y,X,CAVE_SOLID); \
+}
+
+#define place_solid_perm_grid(C) \
+{ \
+	(C)->feat = FEAT_PERM; \
 	(C)->info &= ~(CAVE_MASK); \
 	(C)->info |= CAVE_SOLID; \
 }

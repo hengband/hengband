@@ -155,29 +155,29 @@ static int terrain_table[MAX_WILDERNESS][18] =
 {
 	/* TERRAIN_EDGE */
 	{
-			FEAT_PERM_SOLID,
-			FEAT_PERM_SOLID,
-			FEAT_PERM_SOLID,
+			FEAT_PERM,
+			FEAT_PERM,
+			FEAT_PERM,
 
-			FEAT_PERM_SOLID,
-			FEAT_PERM_SOLID,
-			FEAT_PERM_SOLID,
+			FEAT_PERM,
+			FEAT_PERM,
+			FEAT_PERM,
 
-			FEAT_PERM_SOLID,
-			FEAT_PERM_SOLID,
-			FEAT_PERM_SOLID,
+			FEAT_PERM,
+			FEAT_PERM,
+			FEAT_PERM,
 
-			FEAT_PERM_SOLID,
-			FEAT_PERM_SOLID,
-			FEAT_PERM_SOLID,
+			FEAT_PERM,
+			FEAT_PERM,
+			FEAT_PERM,
 
-			FEAT_PERM_SOLID,
-			FEAT_PERM_SOLID,
-			FEAT_PERM_SOLID,
+			FEAT_PERM,
+			FEAT_PERM,
+			FEAT_PERM,
 
-			FEAT_PERM_SOLID,
-			FEAT_PERM_SOLID,
-			FEAT_PERM_SOLID,
+			FEAT_PERM,
+			FEAT_PERM,
+			FEAT_PERM,
 	},
 	/* TERRAIN_TOWN */
 	{
@@ -486,7 +486,7 @@ static void generate_wilderness_area(int terrain, u32b seed, bool border, bool c
 		{
 			for (x1 = 0; x1 < MAX_WID; x1++)
 			{
-				cave[y1][x1].feat = FEAT_PERM_SOLID;
+				cave[y1][x1].feat = FEAT_PERM;
 			}
 		}
 
@@ -760,28 +760,28 @@ void wilderness_gen(void)
 	/* Special boundary walls -- North */
 	for (i = 0; i < MAX_WID; i++)
 	{
-		cave[0][i].feat = FEAT_PERM_SOLID;
+		cave[0][i].feat = FEAT_PERM;
 		cave[0][i].mimic = border.north[i];
 	}
 
 	/* Special boundary walls -- South */
 	for (i = 0; i < MAX_WID; i++)
 	{
-		cave[MAX_HGT - 1][i].feat = FEAT_PERM_SOLID;
+		cave[MAX_HGT - 1][i].feat = FEAT_PERM;
 		cave[MAX_HGT - 1][i].mimic = border.south[i];
 	}
 
 	/* Special boundary walls -- West */
 	for (i = 0; i < MAX_HGT; i++)
 	{
-		cave[i][0].feat = FEAT_PERM_SOLID;
+		cave[i][0].feat = FEAT_PERM;
 		cave[i][0].mimic = border.west[i];
 	}
 
 	/* Special boundary walls -- East */
 	for (i = 0; i < MAX_HGT; i++)
 	{
-		cave[i][MAX_WID - 1].feat = FEAT_PERM_SOLID;
+		cave[i][MAX_WID - 1].feat = FEAT_PERM;
 		cave[i][MAX_WID - 1].mimic = border.east[i];
 	}
 
@@ -933,7 +933,7 @@ void wilderness_gen_small()
 	for (i = 0; i < MAX_WID; i++)
 	for (j = 0; j < MAX_HGT; j++)
 	{
-		cave[j][i].feat = FEAT_PERM_SOLID;
+		cave[j][i].feat = FEAT_PERM;
 	}
 
 	/* Init the wilderness */

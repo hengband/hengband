@@ -522,15 +522,11 @@ void set_floor(int x, int y)
  * corners of rooms off, as well as "silly" door placement, and
  * "excessively wide" room entrances.
  *
- * Useful "feat" values:
- *   FEAT_WALL_EXTRA -- granite walls
- *   FEAT_WALL_INNER -- inner room walls
- *   FEAT_WALL_OUTER -- outer room walls
- *   FEAT_WALL_SOLID -- solid room walls
- *   FEAT_PERM_EXTRA -- shop walls (perma)
- *   FEAT_PERM_INNER -- inner room walls (perma)
- *   FEAT_PERM_OUTER -- outer room walls (perma)
- *   FEAT_PERM_SOLID -- dungeon border (perma)
+ * Kind of walls:
+ *   extra -- walls
+ *   inner -- inner room walls
+ *   outer -- outer room walls
+ *   solid -- solid room walls
  */
 void build_tunnel(int row1, int col1, int row2, int col2)
 {
@@ -600,14 +596,11 @@ void build_tunnel(int row1, int col1, int row2, int col2)
 
 		if (have_flag(f_ptr->flags, FF_WALL) && have_flag(f_ptr->flags, FF_PERMANENT))
 		{
-			/* Avoid the edge of the dungeon */
-			if (have_flag(f_ptr->flags, FF_SOLID)) continue;
-
 			/* Avoid the edge of vaults */
-			if (have_flag(f_ptr->flags, FF_OUTER)) continue;
+			if (is_inner_grid(c_ptr)) continue;
 		}
 
-		/* Avoid "solid" granite walls */
+		/* Avoid "solid" walls */
 		if (is_solid_grid(c_ptr)) continue;
 
 		/* Pierce "outer" walls of rooms */
@@ -621,14 +614,7 @@ void build_tunnel(int row1, int col1, int row2, int col2)
 
 			ff_ptr = &f_info[cave[y][x].feat];
 
-			/* Hack -- Avoid outer/solid permanent walls */
-			if (have_flag(ff_ptr->flags, FF_WALL) && have_flag(ff_ptr->flags, FF_PERMANENT))
-			{
-				if (have_flag(ff_ptr->flags, FF_SOLID)) continue;
-				if (have_flag(ff_ptr->flags, FF_OUTER)) continue;
-			}
-
-			/* Hack -- Avoid outer/solid granite walls */
+			/* Hack -- Avoid outer/solid walls */
 			if (is_outer_bold(y, x)) continue;
 			if (is_solid_bold(y, x)) continue;
 
@@ -756,9 +742,7 @@ static bool set_tunnel(int *x, int *y, bool affectwall)
 		 * Ignore permanent walls - sometimes cannot tunnel around them anyway
 		 * so don't try - it just complicates things unnecessarily.
 		 */
-
-		if (have_flag(f_ptr->flags, FF_OUTER)) return TRUE;
-		if (have_flag(f_ptr->flags, FF_INNER)) return TRUE;
+		return TRUE;
 	}
 
 	if (is_inner_grid(c_ptr))

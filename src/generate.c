@@ -495,7 +495,7 @@ static void set_bound_perm_wall(cave_type *c_ptr)
 	}
 
 	/* Add "solid" perma-wall */
-	c_ptr->feat = FEAT_PERM_SOLID;
+	place_solid_perm_grid(c_ptr);
 }
 
 
@@ -1028,35 +1028,35 @@ static void build_arena(void)
 	for (i = y_height; i <= y_height + 5; i++)
 		for (j = x_left; j <= x_right; j++)
 		{
-			cave[i][j].feat = FEAT_PERM_EXTRA;
+			place_extra_perm_bold(i, j);
 			cave[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (i = y_depth; i >= y_depth - 5; i--)
 		for (j = x_left; j <= x_right; j++)
 		{
-			cave[i][j].feat = FEAT_PERM_EXTRA;
+			place_extra_perm_bold(i, j);
 			cave[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (j = x_left; j <= x_left + 17; j++)
 		for (i = y_height; i <= y_depth; i++)
 		{
-			cave[i][j].feat = FEAT_PERM_EXTRA;
+			place_extra_perm_bold(i, j);
 			cave[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (j = x_right; j >= x_right - 17; j--)
 		for (i = y_height; i <= y_depth; i++)
 		{
-			cave[i][j].feat = FEAT_PERM_EXTRA;
+			place_extra_perm_bold(i, j);
 			cave[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 
-	cave[y_height+6][x_left+18].feat = FEAT_PERM_EXTRA;
+	place_extra_perm_bold(y_height+6, x_left+18);
 	cave[y_height+6][x_left+18].info |= (CAVE_GLOW | CAVE_MARK);
-	cave[y_depth-6][x_left+18].feat = FEAT_PERM_EXTRA;
+	place_extra_perm_bold(y_height-6, x_left+18);
 	cave[y_depth-6][x_left+18].info |= (CAVE_GLOW | CAVE_MARK);
-	cave[y_height+6][x_right-18].feat = FEAT_PERM_EXTRA;
+	place_extra_perm_bold(y_height+6, x_left-18);
 	cave[y_height+6][x_right-18].info |= (CAVE_GLOW | CAVE_MARK);
-	cave[y_depth-6][x_right-18].feat = FEAT_PERM_EXTRA;
+	place_extra_perm_bold(y_height-6, x_left-18);
 	cave[y_depth-6][x_right-18].info |= (CAVE_GLOW | CAVE_MARK);
 
 	i = y_height + 5;
@@ -1086,7 +1086,7 @@ static void arena_gen(void)
 		for (x = 0; x < MAX_WID; x++)
 		{
 			/* Create "solid" perma-wall */
-			cave[y][x].feat = FEAT_PERM_SOLID;
+			place_solid_perm_bold(y, x);
 
 			/* Illuminate and memorize the walls */
 			cave[y][x].info |= (CAVE_GLOW | CAVE_MARK);
@@ -1129,35 +1129,35 @@ static void build_battle(void)
 	for (i = y_height; i <= y_height + 5; i++)
 		for (j = x_left; j <= x_right; j++)
 		{
-			cave[i][j].feat = FEAT_PERM_EXTRA;
+			place_extra_perm_bold(i, j);
 			cave[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (i = y_depth; i >= y_depth - 3; i--)
 		for (j = x_left; j <= x_right; j++)
 		{
-			cave[i][j].feat = FEAT_PERM_EXTRA;
+			place_extra_perm_bold(i, j);
 			cave[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (j = x_left; j <= x_left + 17; j++)
 		for (i = y_height; i <= y_depth; i++)
 		{
-			cave[i][j].feat = FEAT_PERM_EXTRA;
+			place_extra_perm_bold(i, j);
 			cave[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (j = x_right; j >= x_right - 17; j--)
 		for (i = y_height; i <= y_depth; i++)
 		{
-			cave[i][j].feat = FEAT_PERM_EXTRA;
+			place_extra_perm_bold(i, j);
 			cave[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 
-	cave[y_height+6][x_left+18].feat = FEAT_PERM_EXTRA;
+	place_extra_perm_bold(y_height+6, x_left+18);
 	cave[y_height+6][x_left+18].info |= (CAVE_GLOW | CAVE_MARK);
-	cave[y_depth-4][x_left+18].feat = FEAT_PERM_EXTRA;
+	place_extra_perm_bold(y_height-4, x_left+18);
 	cave[y_depth-4][x_left+18].info |= (CAVE_GLOW | CAVE_MARK);
-	cave[y_height+6][x_right-18].feat = FEAT_PERM_EXTRA;
+	place_extra_perm_bold(y_height+6, x_left-18);
 	cave[y_height+6][x_right-18].info |= (CAVE_GLOW | CAVE_MARK);
-	cave[y_depth-4][x_right-18].feat = FEAT_PERM_EXTRA;
+	place_extra_perm_bold(y_height-4, x_left-18);
 	cave[y_depth-4][x_right-18].info |= (CAVE_GLOW | CAVE_MARK);
 
 	i = y_height + 4;
@@ -1183,7 +1183,7 @@ static void battle_gen(void)
 		for (x = 0; x < MAX_WID; x++)
 		{
 			/* Create "solid" perma-wall */
-			cave[y][x].feat = FEAT_PERM_SOLID;
+			place_solid_perm_bold(y, x);
 
 			/* Illuminate and memorize the walls */
 			cave[y][x].info |= (CAVE_GLOW | CAVE_MARK);
@@ -1236,7 +1236,7 @@ static void quest_gen(void)
 	{
 		for (x = 0; x < cur_wid; x++)
 		{
-			cave[y][x].feat = FEAT_PERM_SOLID;
+			place_solid_perm_bold(y, x);
 		}
 	}
 

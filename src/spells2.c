@@ -5365,7 +5365,7 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
 					if (t < 20)
 					{
 						/* Create granite wall */
-						cave_set_feat(y, x, FEAT_WALL_EXTRA);
+						cave_set_feat(y, x, FEAT_WALL);
 					}
 					else if (t < 70)
 					{
@@ -5892,7 +5892,7 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 				if (t < 20)
 				{
 					/* Create granite wall */
-					cave_set_feat(yy, xx, FEAT_WALL_EXTRA);
+					cave_set_feat(yy, xx, FEAT_WALL);
 				}
 
 				/* Quartz */

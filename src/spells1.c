@@ -964,8 +964,8 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 			/* Not on the player */
 			if (player_bold(y, x)) break;
 
-			/* Place a trap */
-			cave_set_feat(y, x, FEAT_WALL_EXTRA);
+			/* Place a wall */
+			cave_set_feat(y, x, FEAT_WALL);
 
 			/* Update some things */
 			p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);

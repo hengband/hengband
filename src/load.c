@@ -2455,7 +2455,7 @@ static errr rd_dungeon_old(void)
 			else if (c_ptr->feat == FEAT_SECRET)
 			{
 				place_closed_door(y, x);
-				c_ptr->mimic = FEAT_WALL_EXTRA;
+				c_ptr->mimic = FEAT_WALL;
 			}
 		}
 	}

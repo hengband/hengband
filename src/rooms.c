@@ -2661,9 +2661,7 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
 
 				/* Permanent wall (inner) */
 			case 'X':
-				c_ptr->feat = FEAT_PERM_INNER;
-				c_ptr->info &= ~(CAVE_MASK);
-				c_ptr->info |= CAVE_INNER;
+				place_inner_perm_grid(c_ptr);
 				break;
 
 				/* Treasure/trap */
@@ -3130,7 +3128,7 @@ static void store_height(int x, int y, int val)
 * The tricky part is making sure the created cave is connected.  This
 * is done by 'filling' from the inside and only keeping the 'filled'
 * floor.  Walls bounding the 'filled' floor are also kept.  Everything
-* else is converted to the normal granite FEAT_WALL_EXTRA.
+* else is converted to the normal _extra_.
  */
 
 
@@ -3675,7 +3673,7 @@ static bool generate_fracave(int y0, int x0, int xsize, int ysize, int cutoff, b
 	 * XXX XXX XXX There is a slight problem when tunnels pierce the caves:
 	 * Extra doors appear inside the system.  (Its not very noticeable though.)
 	 * This can be removed by "filling" from the outside in.  This allows a separation
-	 * from FEAT_WALL_OUTER with FEAT_WALL_INNER.  (Internal walls are  F.W.OUTER instead.)
+	 * from _outer_ with _inner_.  (Internal walls are  _outer_ instead.)
 	 * The extra effort for what seems to be only a minor thing (even non-existant if you
 	 * think of the caves not as normal rooms, but as holes in the dungeon), doesn't seem
 	 * worth it.
@@ -4714,9 +4712,7 @@ static void build_mini_c_vault(int x0, int y0, int xsize, int ysize)
 			c_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
 
 			/* Permanent walls */
-			c_ptr->feat = FEAT_PERM_INNER;
-			c_ptr->info &= ~(CAVE_MASK);
-			c_ptr->info |= CAVE_INNER;
+			place_inner_perm_grid(c_ptr);
 		}
 	}
 
@@ -5023,8 +5019,7 @@ static void build_castle_vault(int x0, int y0, int xsize, int ysize)
  * Note: no range checking is done so must be inside dungeon
  * This routine also stomps on doors
  */
-static void add_outer_wall(int x, int y, int light,
-									int x1, int y1, int x2, int y2)
+static void add_outer_wall(int x, int y, int light, int x1, int y1, int x2, int y2)
 {
 	cave_type *c_ptr;
 	feature_type *f_ptr;
@@ -5064,7 +5059,7 @@ static void add_outer_wall(int x, int y, int light,
 		place_outer_bold(y, x);
 		if (light) c_ptr->info |= CAVE_GLOW;
 	}
-	else if (have_flag(f_ptr->flags, FF_WALL) && have_flag(f_ptr->flags, FF_PERMANENT) && have_flag(f_ptr->flags, FF_OUTER))
+	else if (have_flag(f_ptr->flags, FF_WALL) && have_flag(f_ptr->flags, FF_PERMANENT))
 	{
 		/* Set bounding walls */
 		if (light) c_ptr->info |= CAVE_GLOW;

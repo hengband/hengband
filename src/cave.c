@@ -1084,11 +1084,7 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 	/* Hack -- rare random hallucination, except on outer dungeon walls */
 	if (p_ptr->image)
 	{
-		/* Access real feature */
-		feature_type *rf_ptr = &f_info[c_ptr->feat];
-
-		if (!(have_flag(rf_ptr->flags, FF_SOLID) && have_flag(rf_ptr->flags, FF_PERMANENT)) &&
-			one_in_(256))
+		if (one_in_(256))
 		{
 			/* Hallucinate */
 			image_random(ap, cp);

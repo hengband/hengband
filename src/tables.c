@@ -7755,7 +7755,7 @@ cptr exp_level_str[5]=
 
 s16b conv_terrain2feat[MAX_WILDERNESS] =
 {
-  FEAT_PERM_EXTRA,
+  FEAT_PERM,
   FEAT_TOWN,
   FEAT_DEEP_WATER,
   FEAT_SHAL_WATER,
