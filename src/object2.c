@@ -4039,7 +4039,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 			if (cheat_peek)
 			{
 #ifdef JP
-				msg_format("%s及韶蟲,蕉今 +%d",
+				msg_format("%s及韶蟲, 蕉今 +%d",
 #else
 				msg_format("Corpse of %s, depth +%d",
 #endif
@@ -4076,7 +4076,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 			if (cheat_peek)
 			{
 #ifdef JP
-				msg_format("%s及颶,", r_name + r_ptr->name);
+				msg_format("%s及颶", r_name + r_ptr->name);
 #else
 				msg_format("Statue of %s", r_name + r_ptr->name);
 #endif
