@@ -1457,7 +1457,7 @@ static bool cmd_racial_power_aux(s32b command)
 				q_ptr = &forge;
 
 				/* Create the food ration */
-				object_prep(q_ptr, 21);
+				object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
 
 				/* Drop the object from heaven */
 				(void)drop_near(q_ptr, -1, py, px);

@@ -782,7 +782,7 @@ msg_print("勝利！チャンピオンへの道を進んでいる。");
 			/* Get local object */
 			q_ptr = &forge;
 
-			/* Prepare to make a Blade of Chaos */
+			/* Prepare to make a prize */
 			object_prep(q_ptr, lookup_kind(k_info[arena_shouhin[p_ptr->arena_number]].tval, k_info[arena_shouhin[p_ptr->arena_number]].sval));
 
 			apply_magic(q_ptr, object_level, FALSE, FALSE, FALSE, FALSE);
@@ -969,7 +969,7 @@ msg_print("地面に落とされた。");
 		/* Prepare allocation table */
 		get_obj_num_prep();
 
-		/* Make a great object */
+		/* Make a book */
 		make_object(q_ptr, FALSE, FALSE);
 
 		/* Drop it in the dungeon */
@@ -982,7 +982,7 @@ msg_print("地面に落とされた。");
 		/* Get local object */
 		q_ptr = &forge;
 
-		/* Prepare to make a Blade of Chaos */
+		/* Prepare to make a broken sword */
 		object_prep(q_ptr, lookup_kind(TV_SWORD, randint1(2)));
 
 		/* Drop it in the dungeon */
@@ -1004,7 +1004,7 @@ msg_print("地面に落とされた。");
 		/* Prepare allocation table */
 		get_obj_num_prep();
 
-		/* Make a great object */
+		/* Make a sword */
 		make_object(q_ptr, FALSE, FALSE);
 
 		/* Drop it in the dungeon */
@@ -1026,7 +1026,7 @@ msg_print("地面に落とされた。");
 		/* Prepare allocation table */
 		get_obj_num_prep();
 
-		/* Make a great object */
+		/* Make a cloak */
 		make_object(q_ptr, FALSE, FALSE);
 
 		/* Drop it in the dungeon */
@@ -1048,7 +1048,7 @@ msg_print("地面に落とされた。");
 		/* Prepare allocation table */
 		get_obj_num_prep();
 
-		/* Make a great object */
+		/* Make a poleweapon */
 		make_object(q_ptr, FALSE, FALSE);
 
 		/* Drop it in the dungeon */
@@ -1070,7 +1070,7 @@ msg_print("地面に落とされた。");
 		/* Prepare allocation table */
 		get_obj_num_prep();
 
-		/* Make a great object */
+		/* Make a hard armor */
 		make_object(q_ptr, FALSE, FALSE);
 
 		/* Drop it in the dungeon */
@@ -1082,8 +1082,8 @@ msg_print("地面に落とされた。");
 		/* Get local object */
 		q_ptr = &forge;
 
-		/* Prepare to make a Blade of Chaos */
-		object_prep(q_ptr, lookup_kind(TV_CHEST, 50));
+		/* Prepare to make a Can of Toys */
+		object_prep(q_ptr, lookup_kind(TV_CHEST, SV_CHEST_KANDUME));
 
 		apply_magic(q_ptr, object_level, FALSE, FALSE, FALSE, FALSE);
 
@@ -1094,7 +1094,6 @@ msg_print("地面に落とされた。");
 	else
 	{
 		if (m_ptr->r_idx == MON_SERPENT)
-
 		{
 			/* Get local object */
 			q_ptr = &forge;
@@ -1341,7 +1340,7 @@ msg_print("地面に落とされた。");
 	}
 	if ((r_ptr->flags7 & RF7_GUARDIAN) && !p_ptr->inside_battle && (d_info[dungeon_type].final_guardian == m_ptr->r_idx))
 	{
-		int k_idx = 198; /* Acquirement */;
+		int k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT); /* Acquirement */;
 
 		if (d_info[dungeon_type].final_object)
 			k_idx = d_info[dungeon_type].final_object;
