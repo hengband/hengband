@@ -1462,9 +1462,11 @@ extern char* strstr_j(cptr str1, cptr str2);
 extern size_t mb_strlcpy(char *dst, const char *src, size_t size);
 #endif
 
+#ifdef WORLD_SCORE
 /* report.c */
 extern errr report_score(void);
 extern cptr make_screen_dump(void);
+#endif
 
 /* inet.c */
 extern int soc_write(int sd, char *buf, size_t sz);

@@ -1752,11 +1752,13 @@ msg_format("%^sは恐ろしい血の呪いをあなたにかけた！", m_name);
 
 				msg_format("%^s %s", m_name, line_got);
 
+#ifdef WORLD_SCORE
 			if (m_ptr->r_idx == MON_SERPENT)
 			{
 				/* Make screen dump */
 				screen_dump = make_screen_dump();
 			}
+#endif
 		}
 
 		if (!(d_info[dungeon_type].flags1 & DF1_BEGINNER))
