@@ -5291,6 +5291,20 @@ static bool do_cmd_histpref(void)
 
 		return FALSE;
 	}
+	else if (!histpref_buf[0])
+	{
+#ifdef JP
+		msg_print("有効な生い立ち設定はこのファイルにありません。");
+#else
+		msg_print("There does not exist valid background history preference.");
+#endif
+		msg_print(NULL);
+
+		/* Kill the buffer */
+		histpref_buf = NULL;
+
+		return FALSE;
+	}
 
 	/* Clear the previous history strings */
 	for (i = 0; i < 4; i++) p_ptr->history[i][0] = '\0';
