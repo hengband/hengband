@@ -1975,6 +1975,7 @@ void do_cmd_query_symbol(void)
 	bool	all = FALSE;
 	bool	uniq = FALSE;
 	bool	norm = FALSE;
+	bool	ride = FALSE;
 	char    temp[80] = "";
 
 	bool	recall = FALSE;
@@ -1984,11 +1985,10 @@ void do_cmd_query_symbol(void)
 
 	/* Get a character, or abort */
 #ifdef JP
-	if (!get_com("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前): ", &sym, FALSE)) return;
+	if (!get_com("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^R乗馬,^M名前): ", &sym, FALSE)) return;
 #else
 	if (!get_com("Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): ", &sym, FALSE)) return;
 #endif
-
 
 	/* Find that character info, and describe it */
 	for (i = 0; ident_info[i]; ++i)
@@ -2005,7 +2005,6 @@ void do_cmd_query_symbol(void)
 #else
 		strcpy(buf, "Full monster list.");
 #endif
-
 	}
 	else if (sym == KTRL('U'))
 	{
@@ -2015,7 +2014,6 @@ void do_cmd_query_symbol(void)
 #else
 		strcpy(buf, "Unique monster list.");
 #endif
-
 	}
 	else if (sym == KTRL('N'))
 	{
@@ -2025,7 +2023,15 @@ void do_cmd_query_symbol(void)
 #else
 		strcpy(buf, "Non-unique monster list.");
 #endif
-
+	}
+	else if (sym == KTRL('R'))
+	{
+		all = ride = TRUE;
+#ifdef JP
+		strcpy(buf, "乗馬可能モンスターのリスト");
+#else
+		strcpy(buf, "Ridable monster list.");
+#endif
 	}
 	/* XTRA HACK WHATSEARCH */
 	else if (sym == KTRL('M'))
@@ -2057,7 +2063,6 @@ void do_cmd_query_symbol(void)
 #else
 		sprintf(buf, "%c - %s.", sym, "Unknown Symbol");
 #endif
-
 	}
 
 	/* Display the result */
@@ -2080,12 +2085,17 @@ void do_cmd_query_symbol(void)
 		/* Require unique monsters if needed */
 		if (uniq && !(r_ptr->flags1 & (RF1_UNIQUE))) continue;
 
+		/* Require ridable monsters if needed */
+		if (ride && !(r_ptr->flags7 & (RF7_RIDING))) continue;
+
 		/* XTRA HACK WHATSEARCH */
-		if (temp[0]){
+		if (temp[0])
+		{
 		  int xx;
 		  char temp2[80];
   
-		  for (xx=0; temp[xx] && xx<80; xx++){
+		  for (xx=0; temp[xx] && xx<80; xx++)
+		  {
 #ifdef JP
 		    if (iskanji( temp[xx])) { xx++; continue; }
 #endif
@@ -2106,9 +2116,10 @@ void do_cmd_query_symbol(void)
 		  if (strstr(temp2, temp))
 #endif
 			  who[n++]=i;
-		}else
+		}
+
 		/* Collect "appropriate" monsters */
-		if (all || (r_ptr->d_char == sym)) who[n++] = i;
+		else if (all || (r_ptr->d_char == sym)) who[n++] = i;
 	}
 
 	/* Nothing to recall */
