@@ -861,8 +861,18 @@ static errr Term_xtra_gcu_event(int v)
  */
 static errr Term_xtra_gcu_sound(int v)
 {
-
    char buf[1024];
+   char *argv[4];
+
+   /* Sound disabled */
+   if (!use_sound) return (1);
+
+   /* Illegal sound */
+   if ((v < 0) || (v >= SOUND_MAX)) return (1);
+
+   /* Unknown sound */
+   if (!sound_file[v]) return (1);
+
    sprintf(buf,"./gcusound.sh %s\n", sound_file[v]);
    system(buf);
    
@@ -896,11 +906,10 @@ static errr Term_xtra_gcu_sound(int v)
       exit(0);
    }
 #endif
-
-#endif
    return (0);
 
 }
+#endif
 
 /*
  * React to changes
