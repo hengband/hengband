@@ -3520,7 +3520,15 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 				/* Otherwise, take the damage */
 				else
 				{
-					if (mult < 17) mult = 17;
+					if (r_ptr->flags3 & RF3_HURT_FIRE)
+					{
+						if (mult < 25) mult = 25;
+						if (m_ptr->ml)
+						{
+							r_ptr->r_flags3 |= RF3_HURT_FIRE;
+						}
+					}
+					else if (mult < 17) mult = 17;
 				}
 			}
 
@@ -3538,7 +3546,15 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 				/* Otherwise, take the damage */
 				else
 				{
-					if (mult < 17) mult = 17;
+					if (r_ptr->flags3 & RF3_HURT_COLD)
+					{
+						if (mult < 25) mult = 25;
+						if (m_ptr->ml)
+						{
+							r_ptr->r_flags3 |= RF3_HURT_COLD;
+						}
+					}
+					else if (mult < 17) mult = 17;
 				}
 			}
 
