@@ -1736,52 +1736,6 @@ static void free_text_lines(cptr *lines_list)
 
 
 /*
- * Insert string
- */
-static void insert_string(cptr *lines_list, cptr str, int x, int y)
-{
-	char buf[1024];
-	int i, j;
-
-	for (i = j = 0; lines_list[y][i] && i < x; i++)
-		buf[j++] = lines_list[y][i];
-
-	while (*str) buf[j++] = *str++;
-
-	for (; lines_list[y][i]; i++)
-		buf[j++] = lines_list[y][i];
-	buf[j] = '\0';
-	string_free(lines_list[y]);
-	lines_list[y] = string_make(buf);
-}
-
-/*
- * Delete n letters
- */
-static void delete_string(cptr *lines_list, int n, int x, int y)
-{
-	int i, j;
-	char buf[1024];
-
-	for (i = j = 0; lines_list[y][i] && i < x; i++)
-	{
-#ifdef JP
-		if (iskanji(lines_list[y][i]))
-			buf[j++] = lines_list[y][i++];
-#endif
-		buf[j++] = lines_list[y][i];
-	}
-	i += n;
-
-	for (; lines_list[y][i]; i++)
-		buf[j++] = lines_list[y][i];
-	buf[j] = '\0';
-	string_free(lines_list[y]);
-	lines_list[y] = string_make(buf);
-}
-
-
-/*
  * Delete or insert string
  */
 static void toggle_string(cptr *lines_list, int flg, int y)
@@ -2587,13 +2541,23 @@ void do_cmd_edit_autopick(void)
 			}
 			break;
 		case KTRL('g'):
-			/* Toggle display in the 'M'ap */
-			if (lines_list[cy][0] != '(' && lines_list[cy][1] != '(')
-				insert_string(lines_list, "(", 0, cy);
-			else if (lines_list[cy][0] == '(')
-				delete_string(lines_list, 1, 0, cy);
-			else if (lines_list[cy][1] == '(')
-				delete_string(lines_list, 1, 1, cy);
+			/* Toggle display on the 'M'ap */
+			if (!autopick_new_entry(entry, lines_list[cy]))
+				break;
+			string_free(lines_list[cy]);
+
+			if (entry->action & DO_DISPLAY)
+			{
+				entry->action &= ~DO_DISPLAY;
+				cx++;
+			}
+			else
+			{
+				entry->action |= DO_DISPLAY;
+				if (cx > 0) cx--;
+			}
+
+			lines_list[cy] = autopick_line_from_entry(entry);
 
 			/* Now dirty */
 			dirty_line = cy;
@@ -2645,10 +2609,18 @@ void do_cmd_edit_autopick(void)
 			break;
 		case KTRL('o'):
 			/* Prepare to write auto-inscription text */
-			for (i = 0; lines_list[cy][i]; i++)
-				if (lines_list[cy][i] == '#') break;
-			if (!lines_list[cy][i]) insert_string(lines_list, "#", i, cy);
-			cx = i + 1;
+			if (!autopick_new_entry(entry, lines_list[cy]))
+				break;
+			string_free(lines_list[cy]);
+
+			if (!entry->insc) entry->insc = string_make("");
+
+			lines_list[cy] = autopick_line_from_entry(entry);
+
+			/* Move to collumn for auto inscription */
+			for (cx = 0; lines_list[cy][cx]; cx++)
+				if (lines_list[cy][cx] == '#') break;
+			cx++;
 			edit_mode = TRUE;
 
 			/* Now dirty */
