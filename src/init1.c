@@ -4027,18 +4027,6 @@ errr process_dungeon_file(cptr name, int ymin, int xmin, int ymax, int xmax)
 		/* Apply conditionals */
 		if (bypass) continue;
 
-
-		/* Process "%:<file>" */
-		if (buf[0] == '%')
-		{
-			/* Process that file if allowed */
-			(void)process_dungeon_file(buf + 2, ymin, xmin, ymax, xmax);
-
-			/* Continue */
-			continue;
-		}
-
-
 		/* Process the line */
 		err = process_dungeon_file_aux(buf, ymin, xmin, ymax, xmax, &y, &x);
 
