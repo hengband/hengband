@@ -6325,7 +6325,6 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	int          rlev = r_ptr->level;
 	bool         ignore_wraith_form = FALSE;
-	bool         complete_immune = FALSE;
 
 	if (limit) dam = (dam > limit) ? limit : dam;
 
@@ -6336,7 +6335,7 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 		if (p_ptr->immune_elec)
 		{
 			dam = 0;
-			complete_immune = TRUE;
+			ignore_wraith_form = TRUE;
 		}
 		else
 		{
@@ -6358,7 +6357,7 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 		if (p_ptr->immune_acid)
 		{
 			dam = 0;
-			complete_immune = TRUE;
+			ignore_wraith_form = TRUE;
 		}
 		else
 		{
@@ -6374,7 +6373,7 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 		if (p_ptr->immune_cold)
 		{
 			dam = 0;
-			complete_immune = TRUE;
+			ignore_wraith_form = TRUE;
 		}
 		else
 		{
@@ -6389,7 +6388,7 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 		if (p_ptr->immune_fire)
 		{
 			dam = 0;
-			complete_immune = TRUE;
+			ignore_wraith_form = TRUE;
 		}
 		else
 		{
@@ -6411,7 +6410,7 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 		     (inventory[INVEN_LARM].k_idx && (inventory[INVEN_LARM].name1 == ART_ZANTETSU))))
 		{
 			dam = 0;
-			complete_immune = TRUE;
+			ignore_wraith_form = TRUE;
 		}
 		break;
 
@@ -6419,14 +6418,19 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 		if (p_ptr->resist_lite) dam /= 2; /* Worst case of 4 / (d4 + 7) */
 		if (prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE)) dam *= 2;
 		else if (prace_is_(RACE_S_FAIRY)) dam = dam * 4 / 3;
-		ignore_wraith_form = TRUE;
+
+		/*
+		 * Cannot use "ignore_wraith_form" strictly (for "random one damage")
+		 * "dam *= 2;" for later "dam /= 2"
+		 */
+		if (p_ptr->wraith_form) dam *= 2;
 		break;
 
 	case GF_DARK:
 		if (prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE) || p_ptr->wraith_form)
 		{
 			dam = 0;
-			complete_immune = TRUE;
+			ignore_wraith_form = TRUE;
 		}
 		else if (p_ptr->resist_dark) dam /= 2; /* Worst case of 4 / (d4 + 7) */
 		break;
@@ -6451,7 +6455,7 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 		if (prace_is_(RACE_SPECTRE))
 		{
 			dam = 0;
-			complete_immune = TRUE;
+			ignore_wraith_form = TRUE;
 		}
 		else if (p_ptr->resist_neth) dam = dam * 3 / 4; /* Worst case of 6 / (d4 + 7) */
 		break;
@@ -6487,7 +6491,7 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 			if (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING)
 			{
 				dam = 0;
-				complete_immune = TRUE;
+				ignore_wraith_form = TRUE;
 			}
 		}
 		else
@@ -6501,7 +6505,7 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 			case RACE_DEMON:
 			case RACE_SPECTRE:
 				dam = 0;
-				complete_immune = TRUE;
+				ignore_wraith_form = TRUE;
 				break;
 			}
 		}
@@ -6521,7 +6525,7 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 		if (100 + rlev / 2 <= MAX(5, p_ptr->skill_sav))
 		{
 			dam = 0;
-			complete_immune = TRUE;
+			ignore_wraith_form = TRUE;
 		}
 		break;
 
@@ -6532,7 +6536,7 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 		if (100 + rlev / 2 <= p_ptr->skill_sav)
 		{
 			dam = 0;
-			complete_immune = TRUE;
+			ignore_wraith_form = TRUE;
 		}
 		break;
 
@@ -6540,7 +6544,7 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 		if ((100 + rlev / 2 <= p_ptr->skill_sav) && (m_ptr->r_idx != MON_KENSHIROU))
 		{
 			dam = 0;
-			complete_immune = TRUE;
+			ignore_wraith_form = TRUE;
 		}
 		break;
 	}
@@ -6548,7 +6552,7 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 	if (p_ptr->wraith_form && !ignore_wraith_form)
 	{
 		dam /= 2;
-		if (!dam && !complete_immune) dam = 1;
+		if (!dam) dam = 1;
 	}
 
 	if (dam > *max) *max = dam;
