@@ -2429,13 +2429,13 @@ void verify_panel(void)
 cptr look_mon_desc(int m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
 	bool         living;
 	int          perc;
 	cptr desc = NULL;
 
 	/* Determine if the monster is "living" */
-	living = monster_living(r_ptr);
+	living = monster_living(ap_r_ptr);
 
 	/* Calculate a health "percentage" */
 	perc = 100L * m_ptr->hp / m_ptr->maxhp;
@@ -2492,12 +2492,12 @@ cptr look_mon_desc(int m_idx)
 	}
 
 	/* Display monster's level --- idea borrowed from ToME */
-	if (r_ptr->r_tkills)
+	if (ap_r_ptr->r_tkills && !(m_ptr->mflag2 & MFLAG_KAGE))
 	{
 #ifdef JP
-		return format("レベル%d, %s", r_ptr->level, desc);
+		return format("レベル%d, %s", ap_r_ptr->level, desc);
 #else
-		return format("Level %d, %s", r_ptr->level, desc);
+		return format("Level %d, %s", ap_r_ptr->level, desc);
 #endif
 	}
 	else 
