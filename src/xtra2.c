@@ -3488,7 +3488,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 		cptr name;
 
 		/* Hack -- special handling for building doors */
-		if (have_flag(f_ptr->flags, FF_BLDG))
+		if (have_flag(f_ptr->flags, FF_BLDG) && !p_ptr->inside_arena)
 		{
 			name = building[f_ptr->power].name;
 		}
@@ -3533,7 +3533,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 
 		/* Hack -- special introduction for store & building doors -KMW- */
 		if (have_flag(f_ptr->flags, FF_STORE) ||
-		    have_flag(f_ptr->flags, FF_BLDG) ||
+		    (have_flag(f_ptr->flags, FF_BLDG) && !p_ptr->inside_arena) ||
 		    have_flag(f_ptr->flags, FF_ENTRANCE))
 		{
 #ifdef JP

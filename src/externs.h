@@ -837,6 +837,7 @@ extern void generate_cave(void);
 
 /* init1.c */
 extern byte color_char_to_attr(char c);
+extern s16b f_tag_to_index(cptr str);
 extern errr process_dungeon_file(cptr name, int ymin, int xmin, int ymax, int xmax);
 
 /* init2.c */

@@ -4918,35 +4918,36 @@ void do_cmd_bldg(void)
 	if ((which == 2) && (p_ptr->arena_number < 0))
 	{
 #ifdef JP
-msg_print("「敗者に用はない。」");
+		msg_print("「敗者に用はない。」");
 #else
 		msg_print("'There's no place here for a LOSER like you!'");
 #endif
 		return;
 	}
-	else if ((which == 2) && p_ptr->inside_arena && !p_ptr->exit_bldg)
-	{
-#ifdef JP
-prt("ゲートは閉まっている。モンスターがあなたを待っている！",0,0);
-#else
-		prt("The gates are closed.  The monster awaits!", 0, 0);
-#endif
-
-		return;
-	}
 	else if ((which == 2) && p_ptr->inside_arena)
 	{
-		/* Don't save the arena as saved floor */
-		prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_NO_RETURN);
+		if (!p_ptr->exit_bldg)
+		{
+#ifdef JP
+			prt("ゲートは閉まっている。モンスターがあなたを待っている！", 0, 0);
+#else
+			prt("The gates are closed.  The monster awaits!", 0, 0);
+#endif
+		}
+		else
+		{
+			/* Don't save the arena as saved floor */
+			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_NO_RETURN);
 
-		p_ptr->inside_arena = FALSE;
-		p_ptr->leaving = TRUE;
+			p_ptr->inside_arena = FALSE;
+			p_ptr->leaving = TRUE;
 
-		/* Re-enter the arena */
-		command_new = SPECIAL_KEY_BUILDING;
+			/* Re-enter the arena */
+			command_new = SPECIAL_KEY_BUILDING;
 
-		/* No energy needed to re-enter the arena */
-		energy_use = 0;
+			/* No energy needed to re-enter the arena */
+			energy_use = 0;
+		}
 
 		return;
 	}

@@ -1077,7 +1077,7 @@ static void build_arena(void)
 
 	i = y_height + 5;
 	j = xval;
-	cave[i][j].feat = FEAT_BLDG_HEAD + 2;
+	cave[i][j].feat = f_tag_to_index("ARENA_GATE");
 	cave[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 	player_place(i, j);
 }

@@ -1069,27 +1069,24 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 			/* Turn off the light. */
 			if (do_dark)
 			{
-				if (!p_ptr->inside_arena)
+				for (j = 0; j < 9; j++)
 				{
-					for (j = 0; j < 9; j++)
+					int by = y + ddy_ddd[j];
+					int bx = x + ddx_ddd[j];
+
+					if (in_bounds2(by, bx))
 					{
-						int by = y + ddy_ddd[j];
-						int bx = x + ddx_ddd[j];
+						cave_type *cc_ptr = &cave[by][bx];
 
-						if (in_bounds2(by, bx))
+						if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
 						{
-							cave_type *cc_ptr = &cave[by][bx];
-
-							if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
-							{
-								do_dark = FALSE;
-								break;
-							}
+							do_dark = FALSE;
+							break;
 						}
 					}
-
-					if (!do_dark) break;
 				}
+
+				if (!do_dark) break;
 
 				c_ptr->info &= ~(CAVE_GLOW);
 
