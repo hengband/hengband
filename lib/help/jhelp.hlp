@@ -2,7 +2,7 @@
   参照したいヘルプの記号を押して下さい:
 
  (a)全体的な情報        (jgeneral.hlp)  (o)追加情報    (jspecial.hlp)
- (b)キャラクターの作成  (jbirth  .hlp)  (p)初心者ガイド(jtang   .txt)   
+ (b)キャラクターの作成  (jbirth  .hlp)  [[[[[y(p)初心者ガイド(jtang   .txt)]   
  (c)種族、職業、性格    (jraceclas.hlp) (r)英語版ヘルプ(help    .hlp)
  (d)街と荒野            (jtown   .hlp)
  (e)ダンジョンの探険    (jdungeon.hlp)
@@ -16,8 +16,7 @@
  (m)ユーザー設定ファイル(jpref   .hlp)
  (n)自動拾い/破壊       (jeditor .txt)
 
-
- (?)ヘルプシステムの使用法      (jhelpinfo.txt)
+[[[[[y (?)ヘルプシステムの使用法      (jhelpinfo.txt)
 ***** [a] jgeneral.hlp
 ***** [b] jbirth.hlp
 ***** [c] jraceclas.hlp
