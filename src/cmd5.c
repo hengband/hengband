@@ -5453,18 +5453,29 @@ bool rakuba(int dam, bool force)
 	{
 		if (!force)
 		{
-			int level = r_ptr->level;
-			if (p_ptr->riding_ryoute) level += 20;
-			if ((dam / 2 + r_ptr->level) > (p_ptr->skill_exp[GINOU_RIDING] / 30 + 10))
+			int cur = p_ptr->skill_exp[GINOU_RIDING];
+			int max = s_info[p_ptr->pclass].s_max[GINOU_RIDING];
+			int ridinglevel = r_ptr->level;
+
+			/* 落馬のしやすさ */
+			int rakubalevel = r_ptr->level;
+			if (p_ptr->riding_ryoute) rakubalevel += 20;
+
+			if ((cur < max) && (max > 1000) &&
+			    (dam / 2 + ridinglevel) > (cur / 30 + 10))
 			{
-				if ((p_ptr->skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING]) && s_info[p_ptr->pclass].s_max[GINOU_RIDING] > (RIDING_EXP_BEGINNER * 2))
-				{
-					if (r_ptr->level * 100 > (p_ptr->skill_exp[GINOU_RIDING] + 1500))
-						p_ptr->skill_exp[GINOU_RIDING] += (1 + (r_ptr->level - p_ptr->skill_exp[GINOU_RIDING] / 100 - 15));
-					else p_ptr->skill_exp[GINOU_RIDING]++;
-				}
+				int inc = 0;
+				
+				if (ridinglevel > (cur / 100 + 15))
+					inc += 1 + (ridinglevel - cur / 100 - 15);
+				else
+					inc += 1;
+				
+				p_ptr->skill_exp[GINOU_RIDING] = MIN(max, cur + inc);
 			}
-			if (randint0(dam / 2 + level * 2) < (p_ptr->skill_exp[GINOU_RIDING] / 30 + 10))
+
+			/* レベルの低い乗馬からは落馬しにくい */
+			if (randint0(dam / 2 + rakubalevel * 2) < cur / 30 + 10))
 			{
 				if ((((p_ptr->pclass == CLASS_BEASTMASTER) || (p_ptr->pclass == CLASS_CAVALRY)) && !p_ptr->riding_ryoute) || !one_in_(p_ptr->lev*(p_ptr->riding_ryoute ? 2 : 3) + 30))
 				{
@@ -5472,6 +5483,7 @@ bool rakuba(int dam, bool force)
 				}
 			}
 		}
+
 		/* Check around the player */
 		for (i = 0; i < 8; i++)
 		{

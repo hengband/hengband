@@ -3281,7 +3281,7 @@ bool py_attack(int y, int x, int mode)
 					inc += 1;
 			}
 
-			p_ptr->skill_exp[GINOU_RIDING] = MAX(max, cur + inc);
+			p_ptr->skill_exp[GINOU_RIDING] = MIN(max, cur + inc);
 
 			p_ptr->update |= (PU_BONUS);
 		}
