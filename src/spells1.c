@@ -686,7 +686,6 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 		case GF_FORCE:
 		case GF_HOLY_FIRE:
 		case GF_HELL_FIRE:
-		case GF_DISINTEGRATE:
 		case GF_PSI:
 		case GF_PSI_DRAIN:
 		case GF_TELEKINESIS:
@@ -1106,6 +1105,23 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 #endif
 				remove_mirror(y, x);
 				project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
+			}
+			break;
+		}
+
+		case GF_DISINTEGRATE:
+		{
+			/* Destroy mirror */
+			if (is_mirror_grid(c_ptr)) remove_mirror(y, x);
+
+			/* Permanent features don't get effect */
+			/* But not protect monsters and other objects */
+			if (have_flag(f_ptr->flags, FF_HURT_DISI) && !have_flag(f_ptr->flags, FF_PERMANENT))
+			{
+				cave_alter_feat(y, x, FF_HURT_DISI);
+
+				/* Update some things -- similar to GF_KILL_WALL */
+				p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
 			}
 			break;
 		}
@@ -7959,39 +7975,9 @@ bool in_disintegration_range(int y1, int x1, int y2, int x2)
 
 
 /*
- *  Do disintegration effect on the terrain
- *  before we decide the region of the effect.
- */
-static bool do_disintegration(int by, int bx, int y, int x)
-{
-	feature_type *f_ptr;
-
-	/* Disintegration balls explosions are stopped by perma-walls */
-	if (!in_disintegration_range(by, bx, y, x)) return FALSE;
-
-	/* Destroy mirror */
-	if (is_mirror_grid(&cave[y][x])) remove_mirror(y, x);
-
-	f_ptr = &f_info[cave[y][x].feat];
-
-	/* Permanent features don't get effect */
-	/* But not protect monsters and other objects */
-	if (have_flag(f_ptr->flags, FF_HURT_DISI) && !have_flag(f_ptr->flags, FF_PERMANENT))
-	{
-		cave_alter_feat(y, x, FF_HURT_DISI);
-
-		/* Update some things -- similar to GF_KILL_WALL */
-		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
-	}
-
-	return TRUE;
-}
-
-
-/*
  * breath shape
  */
-void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte *gm, int *pgm_rad, int rad, int y1, int x1, int y2, int x2, bool disint_ball, bool real_breath)
+void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte *gm, int *pgm_rad, int rad, int y1, int x1, int y2, int x2, bool disint_ball)
 {
 	int by = y1;
 	int bx = x1;
@@ -8043,16 +8029,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 					if (disint_ball)
 					{
 						/* Disintegration are stopped only by perma-walls */
-						if (real_breath)
-						{
-							/* Destroy terrains */
-							if (!do_disintegration(by, bx, y, x)) continue;
-						}
-						else
-						{
-							/* No actual disintegration */
-							if (!in_disintegration_range(by, bx, y, x)) continue;
-						}
+						if (!in_disintegration_range(by, bx, y, x)) continue;
 					}
 					else
 					{
@@ -8367,9 +8344,10 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 		grids++;
 	}
 
-	if (breath && typ == GF_DISINTEGRATE)
+	if (typ == GF_DISINTEGRATE)
 	{
-		flg |= (PROJECT_DISI);
+		flg |= (PROJECT_GRID);
+		if (breath || (flg & PROJECT_BEAM)) flg |= (PROJECT_DISI);
 	}
 
 	/* Calculate the projection path */
@@ -8773,7 +8751,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 		{
 			flg &= ~(PROJECT_HIDE);
 
-			breath_shape(path_g, dist, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, (bool)(typ == GF_DISINTEGRATE), TRUE);
+			breath_shape(path_g, dist, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, (bool)(typ == GF_DISINTEGRATE));
 		}
 		else
 		{
@@ -8794,7 +8772,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 						if (typ == GF_DISINTEGRATE)
 						{
 							/* Disintegration are stopped only by perma-walls */
-							if (!do_disintegration(by, bx, y, x)) continue;
+							if (!in_disintegration_range(by, bx, y, x)) continue;
 						}
 						else
 						{
@@ -8929,6 +8907,8 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 		}
 	}
 
+	/* Update stuff if needed */
+	if (p_ptr->update) update_stuff();
 
 	/* Check objects */
 	if (flg & (PROJECT_ITEM))

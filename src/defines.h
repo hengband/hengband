@@ -4425,7 +4425,8 @@
  */
 #define cave_stop_disintegration(Y,X) \
 	(!have_flag(f_flags_bold((Y), (X)), FF_PROJECT) && \
-	 have_flag(f_flags_bold((Y), (X)), FF_PERMANENT))
+	 (!have_flag(f_flags_bold((Y), (X)), FF_HURT_DISI) || \
+	  have_flag(f_flags_bold((Y), (X)), FF_PERMANENT)))
 
 
 /*
