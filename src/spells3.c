@@ -140,14 +140,15 @@ bool teleport_away(int m_idx, int dis, bool dec_valour)
 
 
 /*
- * Teleport monster next to the player
+ * Teleport monster next to a grid near the given location
  */
-void teleport_to_player(int m_idx, int power)
+void teleport_monster_to(int m_idx, int ty, int tx, int power)
 {
 	int ny, nx, oy, ox, d, i, min;
 	int attempts = 500;
 	int dis = 2;
 	bool look = TRUE;
+	cave_type    *c_ptr;
 	monster_type *m_ptr = &m_list[m_idx];
 
 
@@ -180,9 +181,9 @@ void teleport_to_player(int m_idx, int power)
 			/* Pick a (possibly illegal) location */
 			while (1)
 			{
-				ny = rand_spread(py, dis);
-				nx = rand_spread(px, dis);
-				d = distance(py, px, ny, nx);
+				ny = rand_spread(ty, dis);
+				nx = rand_spread(tx, dis);
+				d = distance(ty, tx, ny, nx);
 				if ((d >= min) && (d <= dis)) break;
 			}
 
@@ -192,16 +193,18 @@ void teleport_to_player(int m_idx, int power)
 			/* Require "empty" floor space */
 			if (!cave_empty_bold(ny, nx)) continue;
 
+			c_ptr = &cave[ny][nx];
+
 			/* Hack -- no teleport onto glyph of warding */
-			if (is_glyph_grid(&cave[ny][nx])) continue;
-			if (is_explosive_rune_grid(&cave[ny][nx])) continue;
+			if (is_glyph_grid(c_ptr)) continue;
+			if (is_explosive_rune_grid(c_ptr)) continue;
 
 			/* ...nor onto the Pattern */
-			if ((cave[ny][nx].feat >= FEAT_PATTERN_START) &&
-			    (cave[ny][nx].feat <= FEAT_PATTERN_XTRA2)) continue;
+			if ((c_ptr->feat >= FEAT_PATTERN_START) &&
+			    (c_ptr->feat <= FEAT_PATTERN_XTRA2)) continue;
 
 			/* No teleporting into vaults and such */
-			/* if (cave[ny][nx].info & (CAVE_ICKY)) continue; */
+			/* if (c_ptr->info & (CAVE_ICKY)) continue; */
 
 			/* This grid looks good */
 			look = FALSE;
@@ -223,7 +226,7 @@ void teleport_to_player(int m_idx, int power)
 	sound(SOUND_TPOTHER);
 
 	/* Update the new location */
-	cave[ny][nx].m_idx = m_idx;
+	c_ptr->m_idx = m_idx;
 
 	/* Update the old location */
 	cave[oy][ox].m_idx = 0;
@@ -386,7 +389,7 @@ msg_print("不思議な力がテレポートを防いだ！");
 				if ((r_ptr->flags6 & RF6_TPORT) &&
 				    !(r_ptr->flagsr & RFR_RES_TELE))
 				{
-					if (!m_ptr->csleep) teleport_to_player(tmp_m_idx, r_ptr->level);
+					if (!m_ptr->csleep) teleport_monster_to(tmp_m_idx, py, px, r_ptr->level);
 				}
 			}
 		}

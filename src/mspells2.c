@@ -213,6 +213,8 @@ bool monst_spell_monst(int m_idx)
 	bool in_no_magic_dungeon = (d_info[dungeon_type].flags1 & DF1_NO_MAGIC) && dun_level
 		&& (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest));
 
+	bool resists_tele = FALSE;
+
 	/* Prepare flags for summoning */
 	if (pet) p_mode |= PM_FORCE_PET;
 	if (!pet) u_mode |= PM_ALLOW_UNIQUE;
@@ -3254,8 +3256,47 @@ bool monst_spell_monst(int m_idx)
 				}
 				else
 				{
-					/* Not implemented */
-					return FALSE;
+					if (known)
+					{
+						if (see_either)
+						{
+#ifdef JP
+							msg_format("%^sが%sを掴んで空中から投げ落した。", m_name, t_name);
+#else
+							msg_format("%^s holds %s, and drops from the sky.", m_name, t_name);
+#endif
+
+						}
+						else
+						{
+							mon_fight = TRUE;
+						}
+					}
+
+					dam = damroll(4, 8);
+
+					if (t_idx == p_ptr->riding) teleport_player_to(m_ptr->fy, m_ptr->fx, FALSE);
+					else teleport_monster_to(t_idx, m_ptr->fy, m_ptr->fx, 100);
+
+					if (tr_ptr->flags7 & RF7_CAN_FLY)
+					{
+#ifdef JP
+						if (see_t) msg_format("%^sは静かに着地した。", t_name);
+#else
+						if (see_t) msg_format("%^s floats gently down to the ground.", t_name);
+#endif
+					}
+					else
+					{
+#ifdef JP
+						if (see_t) msg_format("%^sは地面に叩きつけられた。", t_name);
+#else
+						if (see_t) msg_format("%^s crashed into the ground.", t_name);
+#endif
+						dam += damroll(6, 8);
+					}
+
+					mon_take_hit_mon(t_idx, dam, &fear, NULL, m_idx);
 				}
 				break;
 			}
@@ -3269,8 +3310,65 @@ bool monst_spell_monst(int m_idx)
 
 	/* RF6_TELE_TO */
 	case 160+8:
-		/* Not implemented */
-		return FALSE;
+		if (known)
+		{
+			if (see_either)
+			{
+#ifdef JP
+				msg_format("%^sが%sを引き戻した。", m_name, t_name);
+#else
+				msg_format("%^s commands %s to return.", m_name, t_name);
+#endif
+
+			}
+			else
+			{
+				mon_fight = TRUE;
+			}
+		}
+
+		if (tr_ptr->flagsr & RFR_RES_TELE)
+		{
+			if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
+			{
+				if (see_t)
+				{
+					if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+#ifdef JP
+					msg_format("%^sには効果がなかった。", t_name);
+#else
+					msg_format("%^s is unaffected!", t_name);
+#endif
+
+				}
+
+				resists_tele = TRUE;
+			}
+			else if (tr_ptr->level > randint1(100))
+			{
+				if (see_t)
+				{
+					if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+#ifdef JP
+					msg_format("%^sは耐性を持っている！", t_name);
+#else
+					msg_format("%^s resists!", t_name);
+#endif
+
+				}
+
+				resists_tele = TRUE;
+			}
+		}
+
+		if (!resists_tele)
+		{
+			if (t_idx == p_ptr->riding) teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE);
+			else teleport_monster_to(t_idx, m_ptr->fy, m_ptr->fx, 100);
+		}
+
+		wake_up = TRUE;
+		break;
 
 	/* RF6_TELE_AWAY */
 	case 160+9:
@@ -3291,51 +3389,47 @@ bool monst_spell_monst(int m_idx)
 			}
 		}
 
+		if (tr_ptr->flagsr & RFR_RES_TELE)
 		{
-			bool resists_tele = FALSE;
-
-			if (tr_ptr->flagsr & RFR_RES_TELE)
+			if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
 			{
-				if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
+				if (see_t)
 				{
-					if (see_t)
-					{
-						if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+					if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 #ifdef JP
-						msg_format("%^sには効果がなかった。", t_name);
+					msg_format("%^sには効果がなかった。", t_name);
 #else
-						msg_format("%^s is unaffected!", t_name);
+					msg_format("%^s is unaffected!", t_name);
 #endif
 
-					}
-
-					resists_tele = TRUE;
 				}
-				else if (tr_ptr->level > randint1(100))
+
+				resists_tele = TRUE;
+			}
+			else if (tr_ptr->level > randint1(100))
+			{
+				if (see_t)
 				{
-					if (see_t)
-					{
-						if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+					if (is_original_ap(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 #ifdef JP
-						msg_format("%^sは耐性を持っている！", t_name);
+					msg_format("%^sは耐性を持っている！", t_name);
 #else
-						msg_format("%^s resists!", t_name);
+					msg_format("%^s resists!", t_name);
 #endif
 
-					}
-
-					resists_tele = TRUE;
 				}
-			}
 
-			if (!resists_tele)
-			{
-				if (t_idx == p_ptr->riding) teleport_player(MAX_SIGHT * 2 + 5);
-				else teleport_away(t_idx, MAX_SIGHT * 2 + 5, FALSE);
+				resists_tele = TRUE;
 			}
-
-			wake_up = TRUE;
 		}
+
+		if (!resists_tele)
+		{
+			if (t_idx == p_ptr->riding) teleport_player(MAX_SIGHT * 2 + 5);
+			else teleport_away(t_idx, MAX_SIGHT * 2 + 5, FALSE);
+		}
+
+		wake_up = TRUE;
 		break;
 
 	/* RF6_TELE_LEVEL */

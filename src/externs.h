@@ -1090,7 +1090,7 @@ extern bool rush_attack(bool *mdeath);
 
 /* spells3.c */
 extern bool teleport_away(int m_idx, int dis, bool dec_valour);
-extern void teleport_to_player(int m_idx, int power);
+extern void teleport_monster_to(int m_idx, int ty, int tx, int power);
 extern void teleport_player(int dis);
 extern void teleport_player_to(int ny, int nx, bool no_tele);
 extern void teleport_level(int m_idx);

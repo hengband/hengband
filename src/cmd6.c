@@ -6323,7 +6323,7 @@ msg_print("あなたはエレメントのブレスを吐いた。");
 			for (i = 0; i < max_pet; i++)
 			{
 				pet_ctr = who[i];
-				teleport_to_player(pet_ctr, 100);
+				teleport_monster_to(pet_ctr, py, px, 100);
 			}
 
 			/* Free the "who" array */
