@@ -2678,8 +2678,6 @@ static errr term_data_init(term_data *td, int i)
 {
 	term *t = &td->t;
 
-	bool fixed = FALSE;
-
 	cptr name = angband_term_name[i];
 
 	cptr font;

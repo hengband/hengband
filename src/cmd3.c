@@ -2928,10 +2928,6 @@ bool research_mon(void)
 	char sym, query;
 	char buf[128];
 
-	s16b oldkills;
-	byte oldwake;
-	bool oldcheat;
-
 	bool notpicked;
 
 	bool recall = FALSE;

@@ -1484,7 +1484,6 @@ static void process_world(void)
 	int upkeep_factor = 0;
 	cave_type *c_ptr;
 	object_type *o_ptr;
-	u32b f1 = 0 , f2 = 0 , f3 = 0;
 	int temp;
 	object_kind *k_ptr;
 	const int dec_count = (easy_band ? 2 : 1);

@@ -1915,19 +1915,13 @@ void roff_func(byte attr, cptr str)
 static void spoil_mon_info(cptr fname)
 {
 	char buf[1024];
-	int msex, vn, i, j, k, l, n=0;
-	bool breath, magic, sin;
-	cptr p, q;
-	cptr vp[64];
+	int msex, i, l, n=0;
+	bool breath, magic;
 	u32b flags1, flags2, flags3, flags4, flags5, flags6, flags7;
 
 	u16b why = 2;
 	s16b *who;
 
-
-#ifdef JP
-        char            jverb_buf[64];
-#endif
 	/* Build the filename */
 	path_build(buf, 1024, ANGBAND_DIR_USER, fname);
 
