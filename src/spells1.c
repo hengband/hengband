@@ -1035,13 +1035,13 @@ msg_print("ドアが溶けて泥になった！");
 		case GF_MAKE_TRAP:
 		{
 			/* Require a "naked" floor grid */
-			if ((cave[y][x].feat != FEAT_FLOOR) &&
-			    (cave[y][x].feat != FEAT_GRASS) &&
-			    (cave[y][x].feat != FEAT_DIRT) &&
-				 (cave[y][x].o_idx == 0) &&
-				 (cave[y][x].m_idx == 0))
+			if (((cave[y][x].feat != FEAT_FLOOR) &&
+			     (cave[y][x].feat != FEAT_GRASS) &&
+			     (cave[y][x].feat != FEAT_DIRT) &&
+			     (cave[y][x].o_idx == 0) &&
+			     (cave[y][x].m_idx == 0))
+			    || (cave[y][x].info & CAVE_IN_MIRROR) )
 				 break;
-
 			/* Place a trap */
 			place_trap(y, x);
 
