@@ -2302,6 +2302,7 @@ msg_print("こんなに多くのペットを制御できない！");
 #else
 			msg_print("Such much pets cannot be controled at once!");
 #endif
+			msg_print(NULL);
 			do_cmd_pet_dismiss();
 
 			upkeep_factor = calculate_upkeep();
