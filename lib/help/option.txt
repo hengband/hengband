@@ -601,7 +601,7 @@ Timed autosave    [autosave_t]
 
 
 ***** <Window>
-=== Window Flags ===
+=== Option W - Window Flags ===
 
 Selects what kind of information is displayed in which window.
 Some platforms support "sub-windows", which are windows which can be used to
@@ -657,7 +657,7 @@ Display borg status
 
 
 ***** <Cheating>
-=== Cheating Options ===
+=== Option C - Cheating Options ===
 
 Using the cheating options marks your character as "Cheater" and
 you won't get into the high-score list.  Turning off the cheating
