@@ -5436,13 +5436,18 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 
 #endif /* ALLOW_EASY_FLOOR -- TNB */
 
+	/* Extract args */
+	if (mode & USE_EQUIP) equip = TRUE;
+	if (mode & USE_INVEN) inven = TRUE;
+	if (mode & USE_FLOOR) floor = TRUE;
+
 #ifdef ALLOW_REPEAT
 
 	/* Get the item index */
 	if (repeat_pull(cp))
 	{
 		/* the_force */
-		if (*cp == INVEN_FORCE)
+		if (select_the_force && (*cp == INVEN_FORCE))
 		{
 			item_tester_tval = 0;
 			item_tester_hook = NULL;
@@ -5451,7 +5456,7 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 		}
 
 		/* Floor item? */
-		else if (*cp < 0)
+		else if (floor && (*cp < 0))
 		{
 			object_type *o_ptr;
 
@@ -5477,28 +5482,27 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 			}
 		}
 
-		/* Verify the item */
-		else if (get_item_okay(*cp))
+		else if ((inven && (*cp >= 0) && (*cp < INVEN_PACK)) ||
+		         (equip && (*cp >= INVEN_RARM) && (*cp < INVEN_TOTAL)))
 		{
-			/* Forget the item_tester_tval restriction */
-			item_tester_tval = 0;
+			/* Verify the item */
+			if (get_item_okay(*cp))
+			{
+				/* Forget the item_tester_tval restriction */
+				item_tester_tval = 0;
 
-			/* Forget the item_tester_hook restriction */
-			item_tester_hook = NULL;
+				/* Forget the item_tester_hook restriction */
+				item_tester_hook = NULL;
 
-			command_cmd = 0; /* Hack -- command_cmd is no longer effective */
+				command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 
-			/* Success */
-			return (TRUE);
+				/* Success */
+				return (TRUE);
+			}
 		}
 	}
 
 #endif /* ALLOW_REPEAT */
-
-	/* Extract args */
-	if (mode & (USE_EQUIP)) equip = TRUE;
-	if (mode & (USE_INVEN)) inven = TRUE;
-	if (mode & (USE_FLOOR)) floor = TRUE;
 
 
 	/* Paranoia XXX XXX XXX */
@@ -6437,9 +6441,10 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 
 	bool oops = FALSE;
 
-	bool equip = FALSE;
-	bool inven = FALSE;
-	bool floor = FALSE;
+	/* Extract args */
+	bool equip = (mode & USE_EQUIP) ? TRUE : FALSE;
+	bool inven = (mode & USE_INVEN) ? TRUE : FALSE;
+	bool floor = (mode & USE_FLOOR) ? TRUE : FALSE;
 
 	bool allow_equip = FALSE;
 	bool allow_inven = FALSE;
@@ -6465,7 +6470,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 	if (repeat_pull(cp))
 	{
 		/* the_force */
-		if (*cp == INVEN_FORCE)
+		if (select_the_force && (*cp == INVEN_FORCE))
 		{
 			item_tester_tval = 0;
 			item_tester_hook = NULL;
@@ -6474,7 +6479,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 		}
 
 		/* Floor item? */
-		else if (*cp < 0)
+		else if (floor && (*cp < 0))
 		{
 			object_type *o_ptr;
 
@@ -6500,28 +6505,27 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 			}
 		}
 
-		/* Verify the item */
-		else if (get_item_okay(*cp))
+		else if ((inven && (*cp >= 0) && (*cp < INVEN_PACK)) ||
+		         (equip && (*cp >= INVEN_RARM) && (*cp < INVEN_TOTAL)))
 		{
-			/* Forget the item_tester_tval restriction */
-			item_tester_tval = 0;
+			/* Verify the item */
+			if (get_item_okay(*cp))
+			{
+				/* Forget the item_tester_tval restriction */
+				item_tester_tval = 0;
 
-			/* Forget the item_tester_hook restriction */
-			item_tester_hook = NULL;
+				/* Forget the item_tester_hook restriction */
+				item_tester_hook = NULL;
 
-			command_cmd = 0; /* Hack -- command_cmd is no longer effective */
+				command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 
-			/* Success */
-			return (TRUE);
+				/* Success */
+				return (TRUE);
+			}
 		}
 	}
 
 #endif /* ALLOW_REPEAT */
-
-	/* Extract args */
-	if (mode & (USE_EQUIP)) equip = TRUE;
-	if (mode & (USE_INVEN)) inven = TRUE;
-	if (mode & (USE_FLOOR)) floor = TRUE;
 
 
 	/* Paranoia XXX XXX XXX */
