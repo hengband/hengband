@@ -199,7 +199,7 @@ o_name, index_to_label(slot),game_inscriptions[feel]);
 	idx = is_autopick(o_ptr);
 	auto_inscribe_item(slot, idx);
         if (destroy_feeling)
-                auto_destroy_item(slot, idx, FALSE);
+                auto_destroy_item(slot, idx);
 
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
@@ -1287,7 +1287,7 @@ msg_format("%sは%sという感じがする...",
 	idx = is_autopick(o_ptr);
 	auto_inscribe_item(item, idx);
 	if (okay && destroy_feeling)
-                auto_destroy_item(item, idx, FALSE);
+                auto_destroy_item(item, idx);
 
 	/* Something happened */
 	return (TRUE);
@@ -5438,7 +5438,7 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 			/* Place the cursor on the player */
 			move_cursor_relative(py, px);
 
-			command_cmd = 254;
+			command_cmd = SPECIAL_KEY_BUILDING;
 
 			/* Process the command */
 			process_command();
@@ -5930,7 +5930,7 @@ msg_print("試合開始！");
 	/* Main loop */
 	while (TRUE)
 	{
-		int i, correct_inven_cnt = 0;
+		int i;
 
 		/* Hack -- Compact the monster list occasionally */
 		if ((m_cnt + 32 > max_m_idx) && !p_ptr->inside_battle) compact_monsters(64);
@@ -5951,17 +5951,6 @@ msg_print("試合開始！");
 
 		/* Notice stuff */
 		if (p_ptr->notice) notice_stuff();
-
-		/* Similar slot? */
-		for (i = 0; i < INVEN_PACK; i++)
-		{
-			object_type *j_ptr = &inventory[i];
-
-			/* Skip non-objects */
-			if (!j_ptr->k_idx) continue;
-
-			correct_inven_cnt++;
-		}
 
 		/* Update stuff */
 		if (p_ptr->update) update_stuff();

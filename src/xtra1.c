@@ -5534,6 +5534,13 @@ void notice_stuff(void)
 	if (!p_ptr->notice) return;
 
 
+	/* Actually do auto-destroy */
+	if (p_ptr->notice & (PN_AUTODESTROY))
+	{
+		p_ptr->notice &= ~(PN_AUTODESTROY);
+		delayed_auto_destroy();
+	}
+
 	/* Combine the pack */
 	if (p_ptr->notice & (PN_COMBINE))
 	{

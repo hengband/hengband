@@ -981,10 +981,9 @@ void auto_inscribe_item(int item, int idx)
 /*
  * Automatically destroy an item if it is to be destroyed
  */
-bool auto_destroy_item(int item, int autopick_idx, bool wait_optimize)
+bool auto_destroy_item(int item, int autopick_idx)
 {
 	bool destroy = FALSE;
-	char o_name[MAX_NLEN];
 	object_type *o_ptr;
 
 	/* Don't destroy equipped items */
@@ -1019,12 +1018,14 @@ bool auto_destroy_item(int item, int autopick_idx, bool wait_optimize)
 
 	disturb(0,0);
 
-	/* Describe the object (with {terrible/special}) */
-	object_desc(o_name, o_ptr, TRUE, 3);
-
 	/* Artifact? */
 	if (!can_player_destroy_object(o_ptr))
 	{
+                char o_name[MAX_NLEN];
+
+                /* Describe the object (with {terrible/special}) */
+                object_desc(o_name, o_ptr, TRUE, 3);
+
 		/* Message */
 #ifdef JP
 		msg_format("%sは破壊不能だ。", o_name);
@@ -1039,45 +1040,71 @@ bool auto_destroy_item(int item, int autopick_idx, bool wait_optimize)
 	/* Record name of destroyed item */
         COPY(&autopick_last_destroyed_object, o_ptr, object_type);
 
-	/* Eliminate the item (from the pack) */
-	if (item >= 0)
-	{
-		inven_item_increase(item, -(o_ptr->number));
+        /* Destroy Later */
+        o_ptr->marked |= OM_AUTODESTROY;
+        p_ptr->notice |= PN_AUTODESTROY;
 
-		/*
-		 * always optimize equipment.
-		 * optimize inventry only when wait_optimize is FALSE.
-		 */
-		if (!wait_optimize || item > INVEN_PACK)
-			inven_item_optimize(item);
-	}
-
-	/* Eliminate the item (from the floor) */
-	else
-	{
-		delete_object_idx(0 - item);
-	}
-
-	/* Print a message */
-#ifdef JP
-	msg_format("%sを自動破壊します。", o_name);
-#else
-	msg_format("Auto-destroying %s.", o_name);
-#endif
-			
 	return TRUE;
 }
 
 
 /*
- * Optimize all inventry items after consumption of staves or scrolls.
+ *  Auto-destroy marked item
  */
-void optimize_inventry_auto_destroy(void)
+static void delayed_auto_destroy_aux(int item)
 {
-	int i;
+        object_type *o_ptr;
 
-	for (i = 0; i <= INVEN_PACK; i++)
-		inven_item_optimize(i);
+	/* Get the item (in the pack) */
+	if (item >= 0) o_ptr = &inventory[item];
+
+	/* Get the item (on the floor) */
+	else o_ptr = &o_list[0 - item];
+
+        if (o_ptr->k_idx && o_ptr->marked & OM_AUTODESTROY)
+        {
+                char o_name[MAX_NLEN];
+
+                /* Describe the object (with {terrible/special}) */
+                object_desc(o_name, o_ptr, TRUE, 3);
+
+                /* Eliminate the item (from the pack) */
+                if (item >= 0)
+                {
+                        inven_item_increase(item, -(o_ptr->number));
+                        inven_item_optimize(item);
+                }
+
+                /* Eliminate the item (from the floor) */
+                else
+                {
+                        delete_object_idx(0 - item);
+                }
+
+                /* Print a message */
+#ifdef JP
+                msg_format("%sを自動破壊します。", o_name);
+#else
+                msg_format("Auto-destroying %s.", o_name);
+#endif
+        }
+}
+
+
+/*
+ *  Auto-destroy marked item in inventry and on floor
+ */
+void delayed_auto_destroy(void)
+{
+	int item;
+
+	/* Scan inventry */
+	for (item = 0; item <= INVEN_TOTAL; item++)
+                delayed_auto_destroy_aux(item);
+
+	/* Scan the pile of objects */
+        for (item = cave[py][px].o_idx; item; item = o_list[item].next_o_idx)
+                delayed_auto_destroy_aux(-item);
 }
 
 
@@ -1168,7 +1195,7 @@ void auto_pickup_items(cave_type *c_ptr)
 		 */
 		else
 		{
-			if (auto_destroy_item((-this_o_idx), idx, FALSE))
+			if (auto_destroy_item((-this_o_idx), idx))
 				continue;
 		}
 	}

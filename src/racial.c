@@ -1138,7 +1138,7 @@ msg_print("少し頭がハッキリした。");
 			{
 				if (racial_aux(25, 20, A_INT, 20))
 				{
-					if (!identify_fully(FALSE, FALSE)) return FALSE;
+					if (!identify_fully(FALSE)) return FALSE;
 				}
 			}
 			break;
@@ -1362,11 +1362,11 @@ msg_print("武器を持たないといけません。");
 			{
 				if (p_ptr->lev > 29)
 				{
-					if (!identify_fully(TRUE, FALSE)) return FALSE;
+					if (!identify_fully(TRUE)) return FALSE;
 				}
 				else
 				{
-					if (!ident_spell(TRUE, FALSE)) return FALSE;
+					if (!ident_spell(TRUE)) return FALSE;
 				}
 			}
 			break;

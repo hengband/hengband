@@ -2478,6 +2478,7 @@
  */
 #define PN_COMBINE      0x00000001L     /* Combine the pack */
 #define PN_REORDER      0x00000002L     /* Reorder the pack */
+#define PN_AUTODESTROY  0x00000004L     /* Auto-destroy marked item */
 /* xxx (many) */
 
 
@@ -2901,10 +2902,10 @@
  * OM_NOMSG --- temporary flag to suppress messages which were
  *              already printed in auto_pickup_items().
  */
-#define OM_FOUND        0x01
-#define OM_NOMSG        0x02
-#define OM_NO_QUERY     0x04
-
+#define OM_FOUND        0x01    /* original boolean flag */
+#define OM_NOMSG        0x02    /* temporary flag to suppress messages */
+#define OM_NO_QUERY     0x04    /* Query for auto-pick was already answered as 'No' */
+#define OM_AUTODESTROY  0x08    /* Destroy later to avoid illegal inventry shift */
 
 
 /*

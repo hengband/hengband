@@ -1750,7 +1750,7 @@ void do_cmd_debug(void)
 
 		/* View item info */
 		case 'f':
-		identify_fully(FALSE, FALSE);
+		identify_fully(FALSE);
 		break;
 
 		/* Good Objects */
@@ -1770,7 +1770,7 @@ void do_cmd_debug(void)
 
 		/* Identify */
 		case 'i':
-		(void)ident_spell(FALSE, FALSE);
+		(void)ident_spell(FALSE);
 		break;
 
 		/* Go up or down in the dungeon */
