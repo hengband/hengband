@@ -4274,6 +4274,9 @@ sprintf(buf, "%c - %s", sym, "無効な文字");
 	{
 		monster_race *r_ptr = &r_info[i];
 
+		/* Empty monster */
+		if (!r_ptr->name) continue;
+
 		/* XTRA HACK WHATSEARCH */
 		/* Require non-unique monsters if needed */
 		if (norm && (r_ptr->flags1 & (RF1_UNIQUE))) continue;
@@ -4282,31 +4285,37 @@ sprintf(buf, "%c - %s", sym, "無効な文字");
 		if (uniq && !(r_ptr->flags1 & (RF1_UNIQUE))) continue;
 
 		/* 名前検索 */
-		if (temp[0]){
-		  int xx;
-		  char temp2[80];
-  
-		  for (xx=0; temp[xx] && xx<80; xx++){
+		if (temp[0])
+		{
+			int xx;
+			char temp2[80];
+
+			for (xx = 0; temp[xx] && xx < 80; xx++)
+			{
 #ifdef JP
-		    if (iskanji( temp[xx])) { xx++; continue; }
+				if (iskanji(temp[xx]))
+				{
+					xx++;
+					continue;
+				}
 #endif
-		    if (isupper(temp[xx])) temp[xx]=tolower(temp[xx]);
-		  }
+				if (isupper(temp[xx])) temp[xx] = tolower(temp[xx]);
+			}
   
 #ifdef JP
-		  strcpy(temp2, r_name+r_ptr->E_name);
+			strcpy(temp2, r_name + r_ptr->E_name);
 #else
-		  strcpy(temp2, r_name+r_ptr->name);
+			strcpy(temp2, r_name + r_ptr->name);
 #endif
-		  for (xx=0; temp2[xx] && xx<80; xx++)
-		    if (isupper(temp2[xx])) temp2[xx]=tolower(temp2[xx]);
-  
+			for (xx = 0; temp2[xx] && xx < 80; xx++)
+				if (isupper(temp2[xx])) temp2[xx] = tolower(temp2[xx]);
+
 #ifdef JP
-		  if (strstr(temp2, temp) || strstr_j(r_name + r_ptr->name, temp) )
+			if (strstr(temp2, temp) || strstr_j(r_name + r_ptr->name, temp))
 #else
-		  if (strstr(temp2, temp))
+			if (strstr(temp2, temp))
 #endif
-			  who[n++]=i;
+				who[n++] = i;
 		}
 		else if (all || (r_ptr->d_char == sym)) who[n++] = i;
 	}
@@ -4352,12 +4361,6 @@ sprintf(buf, "%c - %s", sym, "無効な文字");
 		/* Extract a race */
 		r_idx = who[i];
 
-		/* Save this monster ID */
-		p_ptr->monster_race_idx = r_idx;
-
-		/* Hack -- Handle stuff */
-		handle_stuff();
-
 		/* Hack -- Begin the prompt */
 		roff_top(r_idx);
 
@@ -4379,7 +4382,13 @@ Term_addstr(-1, TERM_WHITE, " ['r'思い出, ' 'で続行, ESC]");
 
 				/* Get maximal info about this monster */
 				lore_do_probe(r_idx);
-			
+
+				/* Save this monster ID */
+				monster_race_track(r_idx);
+
+				/* Hack -- Handle stuff */
+				handle_stuff();
+
 				/* know every thing mode */
 				screen_roff(r_idx, 0x01);
 				notpicked = FALSE;
