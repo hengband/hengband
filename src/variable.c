@@ -171,6 +171,7 @@ s32b total_friend_levels = 0;
 s32b friend_align = 0;
 
 int leaving_quest = 0;
+bool reinit_wilderness = FALSE;
 
 
 /*

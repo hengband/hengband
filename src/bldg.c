@@ -19,8 +19,6 @@ static bool leave_bldg = FALSE;
 /* remember building location */
 static int building_loc = 0;
 
-static bool reinit_wilderness = FALSE;
-
 static bool is_owner(building_type *bldg)
 {
 	if (bldg->member_class[p_ptr->pclass] == BUILDING_OWNER)

@@ -187,6 +187,7 @@ extern int total_friends;
 extern s32b total_friend_levels;
 extern s32b friend_align;
 extern int leaving_quest;
+extern bool reinit_wilderness;
 extern bool multi_rew;
 extern char summon_kin_type;
 extern bool hack_mind;
