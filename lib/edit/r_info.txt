@@ -7526,7 +7526,7 @@ F:EAT_INSANITY | RES_CHAO
 S:1_IN_3
 S:SHRIEK | CONF | S_HYDRA | SLOW | BLIND | DRAIN_MANA
 S:BA_POIS | BR_CHAO | FORGET | DARKNESS | BR_NUKE
-D:$The lovable purple reptile is making a guest appearance here.
+D:$The lovable green reptile is making a guest appearance here.
 D:あのカワイイ緑の恐竜ちゃんがゲスト出演です。
 
 #J0#
