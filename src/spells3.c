@@ -5488,10 +5488,16 @@ bool polymorph_monster(int y, int x)
 	bool polymorphed = FALSE;
 	int new_r_idx;
 	int old_r_idx = m_ptr->r_idx;
+	bool targeted = (target_who == c_ptr->m_idx) ? TRUE : FALSE;
+	bool health_tracked = (p_ptr->health_who == c_ptr->m_idx) ? TRUE : FALSE;
+	monster_type back_m;
 
 	if (p_ptr->inside_arena || p_ptr->inside_battle) return (FALSE);
 
 	if ((p_ptr->riding == c_ptr->m_idx) || (m_ptr->mflag2 & MFLAG_KAGE)) return (FALSE);
+
+	/* Memorize the monster before polymorphing */
+	back_m = *m_ptr;
 
 	/* Get the monsters attitude */
 	friendly = is_friendly(m_ptr);
@@ -5518,9 +5524,13 @@ bool polymorph_monster(int y, int x)
 
 			/* Placing the new monster failed */
 			place_monster_aux(y, x, old_r_idx, FALSE, FALSE, friendly, pet, TRUE, (bool)(m_ptr->mflag2 & MFLAG_NOPET));
+			m_list[hack_m_idx_ii] = back_m;
 
 			monster_terrain_sensitive = TRUE;
 		}
+
+		if (targeted) target_who = hack_m_idx_ii;
+		if (health_tracked) health_track(hack_m_idx_ii);
 	}
 
 	return polymorphed;
