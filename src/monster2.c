@@ -4044,6 +4044,9 @@ bool multiply_monster(int m_idx, bool clone, u32b mode)
 
 	if (m_ptr->mflag2 & MFLAG2_NOPET) mode |= PM_NO_PET;
 
+	/* Hack -- Shadower spawns Shadower */
+	if (m_ptr->mflag2 & MFLAG2_KAGE) mode |= PM_KAGE;
+
 	/* Create a new monster (awake, no groups) */
 	if (!place_monster_aux(m_idx, y, x, m_ptr->r_idx, (mode | PM_NO_KAGE)))
 		return FALSE;
@@ -4054,9 +4057,6 @@ bool multiply_monster(int m_idx, bool clone, u32b mode)
 		m_list[hack_m_idx_ii].smart |= SM_CLONED;
 		m_list[hack_m_idx_ii].mflag2 |= MFLAG2_NOPET;
 	}
-
-	/* Hack -- Shadower spawns Shadower */
-	if (m_ptr->mflag2 & MFLAG2_KAGE) m_list[hack_m_idx_ii].mflag2 |= MFLAG2_KAGE;
 
 	/* Hack -- Appearance transfer */
 	if (!is_original_ap(m_ptr)) m_list[hack_m_idx_ii].ap_r_idx = m_ptr->ap_r_idx;
