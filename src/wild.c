@@ -152,13 +152,13 @@ static void plasma_recursive(int x1, int y1, int x2, int y2,
 /*
  * The default table in terrain level generation.
  */
-static int terrain_table[MAX_WILDERNESS][MAX_FEAT_IN_TERRAIN];
+static s16b terrain_table[MAX_WILDERNESS][MAX_FEAT_IN_TERRAIN];
 
 
 static void generate_wilderness_area(int terrain, u32b seed, bool border, bool corner)
 {
 	int x1, y1;
-	int table_size = sizeof(terrain_table[0]) / sizeof(int);
+	int table_size = sizeof(terrain_table[0]) / sizeof(s16b);
 	int roughness = 1; /* The roughness of the level. */
 
 	/* Unused */
@@ -910,7 +910,7 @@ static void init_terrain_table(int terrain, s16b feat_global, cptr fmt, ...)
 		{
 			int lim;
 
-			feat = va_arg(vp, s16b);
+			feat = (s16b)va_arg(vp, int);
 			num = va_arg(vp, int);
 			lim = cur + num;
 

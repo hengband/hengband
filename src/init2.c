@@ -1589,7 +1589,7 @@ static errr init_quests(void)
 }
 
 
-static feat_tag_is_not_found = FALSE;
+static bool feat_tag_is_not_found = FALSE;
 
 
 s16b f_tag_to_index_in_init(cptr str)

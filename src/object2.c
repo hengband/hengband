@@ -4851,7 +4851,7 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 	int bs, bn;
 	int by, bx;
 	int dy, dx;
-	int ty, tx;
+	int ty, tx = 0;
 
 	s16b o_idx = 0;
 
