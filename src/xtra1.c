@@ -3164,6 +3164,9 @@ void calc_bonuses(void)
 	/* Base infravision (purely racial) */
 	p_ptr->see_infra = tmp_rp_ptr->infra;
 
+	/* Base noctovision (If player is neither Ninja nor Vampire, always 0) */
+	p_ptr->see_nocto = 0;
+
 	/* Base skill -- disarming */
 	p_ptr->skill_dis = tmp_rp_ptr->r_dis + cp_ptr->c_dis + ap_ptr->a_dis;
 
@@ -3273,7 +3276,7 @@ void calc_bonuses(void)
 			if (p_ptr->lev > 39) p_ptr->reflect = TRUE;
 			break;
 		case CLASS_NINJA:
-			/* Unencumbered Monks become faster every 10 levels */
+			/* Unencumbered Ninjas become faster every 10 levels */
 			if (heavy_armor())
 			{
 				new_speed -= (p_ptr->lev) / 10;
@@ -3307,6 +3310,7 @@ void calc_bonuses(void)
 				p_ptr->oppose_pois = 1;
 				p_ptr->redraw |= PR_STATUS;
 			}
+			if (p_ptr->see_nocto < MAX_SIGHT) p_ptr->see_nocto = MAX_SIGHT;
 			break;
 	}
 
@@ -3360,7 +3364,7 @@ void calc_bonuses(void)
 			new_speed += 3;
 			p_ptr->to_a += 10;
 			p_ptr->dis_to_a += 10;
-			if (p_ptr->pclass != CLASS_NINJA) p_ptr->lite = TRUE;
+			if (p_ptr->see_nocto < 1) p_ptr->see_nocto = 1;
 			break;
 		}
 	}
@@ -3495,7 +3499,7 @@ void calc_bonuses(void)
 			p_ptr->resist_neth = TRUE;
 			p_ptr->resist_cold = TRUE;
 			p_ptr->resist_pois = TRUE;
-			if (p_ptr->pclass != CLASS_NINJA) p_ptr->lite = TRUE;
+			if (p_ptr->see_nocto < 1) p_ptr->see_nocto = 1;
 			break;
 		case RACE_SPECTRE:
 			p_ptr->ffall = TRUE;
@@ -3647,7 +3651,7 @@ void calc_bonuses(void)
 		p_ptr->resist_blind = TRUE;
 		p_ptr->resist_conf  = TRUE;
 		p_ptr->hold_life = TRUE;
-		if (p_ptr->pclass != CLASS_NINJA) p_ptr->lite = TRUE;
+		if (!p_ptr->see_nocto) p_ptr->lite = TRUE;
 
 		if ((p_ptr->prace != RACE_KLACKON) && (p_ptr->prace != RACE_SPRITE))
 			/* Munchkin become faster */

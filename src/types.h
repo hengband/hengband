@@ -1322,6 +1322,7 @@ struct player_type
 	s16b ac;			/* Base ac */
 
 	s16b see_infra;		/* Infravision range */
+	s16b see_nocto;		/* Noctovision range */
 
 	s16b skill_dis;		/* Skill: Disarming */
 	s16b skill_dev;		/* Skill: Magic Devices */

@@ -445,7 +445,15 @@ bool player_can_see_bold(int y, int x)
 	/* Require line of sight to the grid */
 	if (!player_has_los_bold(y, x)) return (FALSE);
 
-	if (p_ptr->pclass == CLASS_NINJA) return TRUE;
+	/* Ninja or Vampire without lite */
+	if (p_ptr->see_nocto > p_ptr->cur_lite)
+	{
+		if (p_ptr->see_nocto == MAX_SIGHT) return TRUE;
+		else
+		{
+			if ((y >= (py - 1)) && (y <= (py + 1)) && (x >= (px - 1)) && (x <= (px + 1))) return TRUE;
+		}
+	}
 
 	/* Require "perma-lite" of the grid */
 	if (!(c_ptr->info & (CAVE_GLOW | CAVE_MNLT))) return (FALSE);
@@ -884,6 +892,8 @@ void map_info(int y, int x, byte *ap, char *cp)
 	byte a;
 	byte c;
 
+	bool can_see_dark_grid;
+
 	/* Get the cave */
 	c_ptr = &cave[y][x];
 
@@ -893,11 +903,25 @@ void map_info(int y, int x, byte *ap, char *cp)
 	/* Floors (etc) */
 	if ((feat <= FEAT_INVIS) || (feat == FEAT_DIRT) || (feat == FEAT_GRASS))
 	{
+		/* Normal */
+		if (p_ptr->see_nocto <= p_ptr->cur_lite) can_see_dark_grid = FALSE;
+
+		/* Ninja or Vampire without lite */
+		else
+		{
+			if (p_ptr->see_nocto == MAX_SIGHT) can_see_dark_grid = TRUE;
+			else
+			{
+				if ((y < (py - 1)) || (y > (py + 1)) || (x < (px - 1)) || (x > (px + 1))) can_see_dark_grid = FALSE;
+				else can_see_dark_grid = TRUE;
+			}
+		}
+
 		/* Memorized (or visible) floor */
 		if ((c_ptr->info & CAVE_MARK) ||
 		  (((c_ptr->info & (CAVE_LITE | CAVE_MNLT)) ||
 		   ((c_ptr->info & CAVE_VIEW) &&
-		   ((c_ptr->info & CAVE_GLOW) || (p_ptr->pclass == CLASS_NINJA)))) &&
+		   ((c_ptr->info & CAVE_GLOW) || can_see_dark_grid))) &&
 		   !p_ptr->blind))
 		{
 			/* Access floor */
@@ -1690,10 +1714,17 @@ void note_spot(int y, int x)
 		/* Require line of sight to the grid */
 		if (!(c_ptr->info & (CAVE_VIEW))) return;
 
-		if (p_ptr->pclass != CLASS_NINJA)
+		/* Require "perma-lite" of the grid */
+		if (!(c_ptr->info & (CAVE_GLOW | CAVE_MNLT)))
 		{
-			/* Require "perma-lite" of the grid */
-			if (!(c_ptr->info & (CAVE_GLOW | CAVE_MNLT))) return;
+			/* Neither Ninja nor Vampire without lite */
+			if (p_ptr->see_nocto <= p_ptr->cur_lite) return;
+
+			/* Hack -- Vampires' noctovision is limited to adjacent grids */
+			else if (p_ptr->see_nocto == 1)
+			{
+				if ((y < (py - 1)) || (y > (py + 1)) || (x < (px - 1)) || (x > (px + 1))) return;
+			}
 		}
 	}
 
@@ -1719,7 +1750,7 @@ void note_spot(int y, int x)
 		{
 			/* Option -- memorize all torch-lit floors */
 			if (view_torch_grids &&
-			    ((c_ptr->info & (CAVE_LITE | CAVE_MNLT)) || (p_ptr->pclass == CLASS_NINJA)))
+			    ((c_ptr->info & (CAVE_LITE | CAVE_MNLT)) || p_ptr->see_nocto))
 			{
 				/* Memorize */
 				c_ptr->info |= (CAVE_MARK);
@@ -1747,8 +1778,8 @@ void note_spot(int y, int x)
 			c_ptr->info |= (CAVE_MARK);
 		}
 
-		/* Mwemorize walls seen by noctovision of Ninja */
-		else if (p_ptr->pclass == CLASS_NINJA)
+		/* Mwemorize walls seen by noctovision of Ninja or Vampire */
+		else if (p_ptr->see_nocto)
 		{
 			/* Memorize */
 			c_ptr->info |= (CAVE_MARK);
@@ -4153,6 +4184,25 @@ void update_view(void)
 
 	/* None left */
 	temp_n = 0;
+
+
+	/*** Step 6 -- Vampires hack if without lite ***/
+
+	if ((p_ptr->see_nocto == 1) && !p_ptr->cur_lite && !p_ptr->blind)
+	{
+		/* Hack -- Vampires' noctovision is limited to adjacent grids */
+		for (n = 0; n < 9; n++)
+		{
+			y = py + ddy_ddd[n];
+			x = px + ddx_ddd[n];
+
+			/* Access the grid */
+			c_ptr = &cave[y][x];
+
+			/* Add it to later visual update */
+			cave_note_and_redraw_later(c_ptr, y, x);
+		}
+	}
 
 	/* Mega-Hack -- Visual update later */
 	p_ptr->update |= (PU_DELAY_VIS);
