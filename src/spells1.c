@@ -5045,7 +5045,7 @@ note = "には効果がなかった。";
 			{
 #ifdef JP
 msg_format("%sは精神攻撃を食らった。",m_name);
-note_dies = "の精神は崩壊し、肉体は抜け空となった。";
+note_dies = "の精神は崩壊し、肉体は抜け殻となった。";
 #else
 				msg_format("%^s is blasted by psionic energy.", m_name);
 				note_dies = " collapses, a mindless husk.";
@@ -5100,7 +5100,7 @@ note = "には効果がなかった。";
 			{
 #ifdef JP
 msg_format("%sは精神攻撃を食らった。",m_name);
-note_dies = "の精神は崩壊し、肉体は抜け空となった。";
+note_dies = "の精神は崩壊し、肉体は抜け殻となった。";
 #else
 				msg_format("%^s is blasted by psionic energy.", m_name);
 				note_dies = " collapses, a mindless husk.";

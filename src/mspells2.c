@@ -2133,7 +2133,7 @@ bool monst_spell_monst(int m_idx)
 			t_ptr->confused += randint0(4) + 4;
 
 #ifdef JP
-			mon_take_hit_mon(t_idx, dam, &fear, "の精神は崩壊し、肉体は抜け空となった。", m_idx);
+			mon_take_hit_mon(t_idx, dam, &fear, "の精神は崩壊し、肉体は抜け殻となった。", m_idx);
 #else
 			mon_take_hit_mon(t_idx, dam, &fear, " collapses, a mindless husk.", m_idx);
 #endif
@@ -2201,7 +2201,7 @@ bool monst_spell_monst(int m_idx)
 			t_ptr->stunned += randint0(4) + 4;
 
 #ifdef JP
-			mon_take_hit_mon(t_idx, dam, &fear, "の精神は崩壊し、肉体は抜け空となった。", m_idx);
+			mon_take_hit_mon(t_idx, dam, &fear, "の精神は崩壊し、肉体は抜け殻となった。", m_idx);
 #else
 			mon_take_hit_mon(t_idx, dam, &fear, " collapses, a mindless husk.", m_idx);
 #endif
