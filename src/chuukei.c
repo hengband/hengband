@@ -265,6 +265,7 @@ static int read_chuukei_prf(cptr prf_name)
 		if (!strncmp(buf, "server:", 7))
 		{
 			strncpy(server_name, buf + 7, MAX_HOSTNAME);
+			server_name[MAX_HOSTNAME] = '\0';
 		}
 
 		/* ポート番号 */
