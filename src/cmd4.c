@@ -7179,13 +7179,30 @@ sprintf(rand_tmp_str,"%s (%d ≥¨) - %s§Ú≈›§π°£\n",
 			if ((i >= MIN_RANDOM_QUEST) && quest[i].r_idx)
 			{
 				/* Print the quest info */
-#ifdef JP
-				sprintf(tmp_str, "%s (%d≥¨) - •Ï•Ÿ•Î%d\n",
-#else
-				sprintf(tmp_str, "%s (Dungeon level: %d) - level %d\n",
-#endif
 
-					r_name+r_info[quest[i].r_idx].name, quest[i].level, quest[i].complev);
+                                if (quest[i].complev == 0)
+                                {
+                                        sprintf(tmp_str, 
+#ifdef JP
+                                                "%s (%d≥¨) - …‘¿Ôæ°\n",
+#else
+                                                "%s (Dungeon level: %d) - (Cancelled)\n",
+#endif
+                                                r_name+r_info[quest[i].r_idx].name,
+                                                quest[i].level);
+                                }
+                                else
+                                {
+                                        sprintf(tmp_str, 
+#ifdef JP
+                                                "%s (%d≥¨) - •Ï•Ÿ•Î%d\n",
+#else
+                                                "%s (Dungeon level: %d) - level %d\n",
+#endif
+                                                r_name+r_info[quest[i].r_idx].name,
+                                                quest[i].level,
+                                                quest[i].complev);
+                                }
 			}
 			else
 			{

@@ -4629,12 +4629,27 @@ void quest_discovery(int q_idx)
 	if (q_num == 1)
 	{
 		/* Unique */
-#ifdef JP
-msg_format("注意せよ！この階は%sによって守られている！", name);
-#else
-		msg_format("Beware, this level is protected by %s!", name);
-#endif
 
+                /* Hack -- "unique" monsters must be "unique" */
+                if ((r_ptr->flags1 & RF1_UNIQUE) &&
+                    (r_ptr->cur_num >= r_ptr->max_num))
+                {
+#ifdef JP
+                        msg_print("この階は以前は誰かによって守られていたようだ…。");
+#else
+                        msg_print("It seems that this level was protected by someone before...");
+#endif
+                        /* The unique is already dead */
+                        quest[q_idx].status = QUEST_STATUS_FINISHED;
+                }
+                else
+                {
+#ifdef JP
+                        msg_format("注意せよ！この階は%sによって守られている！", name);
+#else
+                        msg_format("Beware, this level is protected by %s!", name);
+#endif
+                }
 	}
 	else
 	{

@@ -137,8 +137,18 @@ static bool alloc_stairs(int feat, int num, int walls)
 	}
 	else if (feat == FEAT_MORE)
 	{
+                int q_idx = quest_number(dun_level);
+
 		/* No downstairs on quest levels */
-		if ((dun_level > 1) && quest_number(dun_level)) return TRUE;
+		if (dun_level > 1 && q_idx)
+                {
+			monster_race *r_ptr = &r_info[quest[q_idx].r_idx];
+
+			/* The unique monster is still alive? */
+			if ((r_ptr->flags1 & RF1_UNIQUE) &&
+                            (0 < r_ptr->max_num))
+                                return TRUE;
+                }
 
 		/* No downstairs at the bottom */
 		if (dun_level >= d_info[dungeon_type].maxdepth) return TRUE;
@@ -958,7 +968,6 @@ if (cheat_room) msg_print("小さな地下室を却下します。");
 			    (r_ptr->cur_num >= r_ptr->max_num))
 			{
 				/* The unique is already dead */
-				quest[i].status = QUEST_STATUS_FINISHED;
 			}
 			else
 			{
