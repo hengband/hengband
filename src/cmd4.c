@@ -5125,7 +5125,7 @@ static void do_cmd_knowledge_inven(void)
 #ifdef JP
 	  strcpy(where, "²È");
 #else
-	  strcpy(where, "H ");/*nanka*/
+	  strcpy(where, "H ");
 #endif
 	      
 	  /* Dump all available items */

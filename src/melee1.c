@@ -2168,10 +2168,10 @@ msg_format("%sは体力を回復したようだ。", m_name);
 						if (mon_take_hit(m_idx, dam, &fear,
 						    "は倒れた。"))
 #else
-						msg_format("%^s nanka!", m_name);
+						msg_format("%^s is injured by holy power!", m_name);
 
 						if (mon_take_hit(m_idx, dam, &fear,
-						    " nanka."))
+						    " is destroyed."))
 #endif
 
 						{
@@ -2195,10 +2195,10 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					if (mon_take_hit(m_idx, dam, &fear,
 					    "は倒れた。"))
 #else
-					msg_format("%^s nanka", m_name);
+					msg_format("%^s is injured by the Force", m_name);
 
 					if (mon_take_hit(m_idx, dam, &fear,
-					    " nanka."))
+					    " is destroyed."))
 #endif
 
 					{

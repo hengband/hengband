@@ -4079,7 +4079,7 @@ msg_print("「ご用でございますか、ご主人様」");
 #ifdef JP
 msg_print("「我は汝の下僕にあらず！ 悪行者よ、悔い改めよ！」");
 #else
-					msg_print("'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'"); /* nanka */
+					msg_print("Mortal! Repent of thy impiousness.");
 #endif
 
 			}
@@ -4106,7 +4106,7 @@ msg_print("「我は汝の下僕にあらず！ 悪行者よ、悔い改めよ！」");
 #ifdef JP
 msg_print("神聖な力が邪悪を打ち払った！");
 #else
-			msg_print("The power of your god banishes evil!"); /* nanka */
+			msg_print("The holy power banishes evil!");
 #endif
 
 		}
@@ -4237,7 +4237,7 @@ msg_print("神聖な力が邪悪を打ち払った！");
 #ifdef JP
 msg_format("あなたは不明な破邪の呪文 %d を唱えた。", spell);
 #else
-		msg_format("You cast an unknown nanka spell: %d.", spell);
+		msg_format("You cast an unknown crusade spell: %d.", spell);
 #endif
 
 		msg_print(NULL);

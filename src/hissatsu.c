@@ -1169,7 +1169,7 @@ msg_print("その方向にはモンスターはいません。");
 #ifdef JP
 		take_hit(DAMAGE_NOESCAPE, 100 + randint1(100), "慶雲鬼忍剣を使った衝撃", -1);
 #else
-		take_hit(DAMAGE_NOESCAPE, 100 + randint1(100), "reaction of your attack", -1); /*nanka*/
+		take_hit(DAMAGE_NOESCAPE, 100 + randint1(100), "exhaustion on using Keiun-Kininken", -1);
 #endif
 		break;
 	}
