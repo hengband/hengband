@@ -300,6 +300,8 @@ bool monst_spell_monst(int m_idx)
 	bool in_no_magic_dungeon = (d_info[dungeon_type].flags1 & DF1_NO_MAGIC) && dun_level
 		&& (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest));
 
+	bool can_use_lite_area = FALSE;
+
 	bool can_remember;
 
 	bool resists_tele = FALSE;
@@ -407,13 +409,29 @@ bool monst_spell_monst(int m_idx)
 
 	/* Remove unimplemented spells */
 	f4 &= ~(RF4_DISPEL);
-	f6 &= ~(RF6_WORLD | RF6_FORGET);
+	f6 &= ~(RF6_WORLD | RF6_TRAPS | RF6_FORGET);
 
 	/* Remove unimplemented special moves */
 	if (f6 & RF6_SPECIAL)
 	{
 		if ((m_ptr->r_idx != MON_ROLENTO) && (r_ptr->d_char != 'B'))
 			f6 &= ~(RF6_SPECIAL);
+	}
+
+	if (f6 & RF6_DARKNESS)
+	{
+		bool vs_ninja = (p_ptr->pclass == CLASS_NINJA) && !is_hostile(t_ptr);
+
+		if (vs_ninja &&
+		    !(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) &&
+		    !(r_ptr->flags7 & RF7_DARK_MASK))
+			can_use_lite_area = TRUE;
+
+		if (!(r_ptr->flags2 & RF2_STUPID))
+		{
+			if (d_info[dungeon_type].flags1 & DF1_DARKNESS) f6 &= ~(RF6_DARKNESS);
+			else if (vs_ninja && !can_use_lite_area) f6 &= ~(RF6_DARKNESS);
+		}
 	}
 
 	if (in_no_magic_dungeon && !(r_ptr->flags2 & RF2_STUPID))
@@ -3457,20 +3475,22 @@ bool monst_spell_monst(int m_idx)
 			if (see_m)
 			{
 #ifdef JP
-				msg_format("%^sが暗闇の中で手を振った。", m_name);
+				if (can_use_lite_area) msg_format("%^sが辺りを明るく照らした。", m_name);
+				else msg_format("%^sが暗闇の中で手を振った。", m_name);
 #else
-				msg_format("%^s gestures in shadow.", m_name);
+				if (can_use_lite_area) msg_format("%^s cast a spell to light up.", m_name);
+				else msg_format("%^s gestures in shadow.", m_name);
 #endif
-
 
 				if (see_t)
 				{
 #ifdef JP
-					msg_format("%^sは暗闇に包まれた。", t_name);
+					if (can_use_lite_area) msg_format("%^sは白い光に包まれた。", t_name);
+					else msg_format("%^sは暗闇に包まれた。", t_name);
 #else
-					msg_format("%^s is surrounded by darkness.", t_name);
+					if (can_use_lite_area) msg_format("%^s is surrounded by a white light.", t_name);
+					else msg_format("%^s is surrounded by darkness.", t_name);
 #endif
-
 				}
 			}
 			else
@@ -3479,9 +3499,16 @@ bool monst_spell_monst(int m_idx)
 			}
 		}
 
-		(void)project(m_idx, 3, y, x, 0, GF_DARK_WEAK, PROJECT_GRID | PROJECT_KILL, MS_DARKNESS);
-
-		unlite_room(y, x);
+		if (can_use_lite_area)
+		{
+			(void)project(m_idx, 3, y, x, 0, GF_LITE_WEAK, PROJECT_GRID | PROJECT_KILL, -1);
+			lite_room(y, x);
+		}
+		else
+		{
+			(void)project(m_idx, 3, y, x, 0, GF_DARK_WEAK, PROJECT_GRID | PROJECT_KILL, MS_DARKNESS);
+			unlite_room(y, x);
+		}
 
 		break;
 
@@ -3509,8 +3536,12 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		trap_creation(y, x);
-#endif
+
 		break;
+#else
+		/* Not implemented */
+		return FALSE;
+#endif
 
 	/* RF6_FORGET */
 	case 160+14:

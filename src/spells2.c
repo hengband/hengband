@@ -5437,6 +5437,11 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
 				/* Become blind */
 				(void)set_blind(p_ptr->blind + 10 + randint1(10));
 			}
+
+			if ((p_ptr->pclass == CLASS_NINJA) && (p_ptr->cur_lite <= 0))
+			{
+				if (!(cave[py][px].info & CAVE_GLOW)) set_superstealth(TRUE);
+			}
 		}
 
 		forget_flow();
@@ -5681,6 +5686,10 @@ if (damage) take_hit(DAMAGE_ATTACK, damage, "地震", -1);
 
 	}
 
+	if ((p_ptr->pclass == CLASS_NINJA) && (p_ptr->cur_lite <= 0))
+	{
+		if (!(cave[py][px].info & CAVE_GLOW)) set_superstealth(TRUE);
+	}
 
 	/* Examine the quaked region */
 	for (dy = -r; dy <= r; dy++)
@@ -6335,6 +6344,11 @@ void lite_room(int y1, int x1)
 
 	/* Now, lite them all up at once */
 	cave_temp_room_lite();
+
+	if (p_ptr->special_defense & NINJA_S_STEALTH)
+	{
+		if (cave[py][px].info & CAVE_GLOW) set_superstealth(FALSE);
+	}
 }
 
 
@@ -6371,6 +6385,11 @@ void unlite_room(int y1, int x1)
 
 	/* Now, darken them all at once */
 	cave_temp_room_unlite();
+
+	if ((p_ptr->pclass == CLASS_NINJA) && (p_ptr->cur_lite <= 0))
+	{
+		if (!(cave[py][px].info & CAVE_GLOW)) set_superstealth(TRUE);
+	}
 }
 
 
@@ -6409,11 +6428,6 @@ msg_print("白い光が辺りを覆った。");
 
 	/* Lite up the room */
 	lite_room(py, px);
-
-	if (p_ptr->special_defense & NINJA_S_STEALTH)
-	{
-		set_superstealth(FALSE);
-	}
 
 	/* Assume seen */
 	return (TRUE);

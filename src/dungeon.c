@@ -4134,6 +4134,12 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 
 			/* Window stuff */
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+
+			if (p_ptr->pclass == CLASS_NINJA)
+			{
+				if (cave[py][px].info & CAVE_GLOW) set_superstealth(FALSE);
+				else if (p_ptr->cur_lite <= 0) set_superstealth(TRUE);
+			}
 		}
 	}
 
@@ -6427,6 +6433,12 @@ msg_print("試合開始！");
 					   r_name+r_info[d_info[dungeon_type].final_guardian].name, 
 					   d_name+d_info[dungeon_type].name);
 #endif
+	}
+
+	if (p_ptr->pclass == CLASS_NINJA)
+	{
+		if (cave[py][px].info & CAVE_GLOW) set_superstealth(FALSE);
+		else if (p_ptr->cur_lite <= 0) set_superstealth(TRUE);
 	}
 
 	/*** Process this dungeon level ***/

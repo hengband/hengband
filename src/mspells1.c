@@ -1291,6 +1291,8 @@ bool make_attack_spell(int m_idx)
 	bool in_no_magic_dungeon = (d_info[dungeon_type].flags1 & DF1_NO_MAGIC) && dun_level
 		&& (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest));
 
+	bool can_use_lite_area = FALSE;
+
 	bool can_remember;
 
 	/* Cannot cast spells when confused */
@@ -1442,11 +1444,18 @@ bool make_attack_spell(int m_idx)
 		f5 &= ~(RF5_DRAIN_MANA);
 	}
 
-	if ((p_ptr->pclass == CLASS_NINJA) &&
-	    ((r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) ||
-	     (r_ptr->flags7 & RF7_DARK_MASK)))
+	if (f6 & RF6_DARKNESS)
 	{
-		f6 &= ~(RF6_DARKNESS);
+		if ((p_ptr->pclass == CLASS_NINJA) &&
+		    !(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) &&
+		    !(r_ptr->flags7 & RF7_DARK_MASK))
+			can_use_lite_area = TRUE;
+
+		if (!(r_ptr->flags2 & RF2_STUPID))
+		{
+			if (d_info[dungeon_type].flags1 & DF1_DARKNESS) f6 &= ~(RF6_DARKNESS);
+			else if ((p_ptr->pclass == CLASS_NINJA) && !can_use_lite_area) f6 &= ~(RF6_DARKNESS);
+		}
 	}
 
 	if (in_no_magic_dungeon && !(r_ptr->flags2 & RF2_STUPID))
@@ -3768,25 +3777,25 @@ else msg_format("%^sが光の剣を放った。", m_name);
 			if (!direct) return (FALSE);
 			disturb(1, 0);
 #ifdef JP
-if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
+			if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
 #else
 			if (blind) msg_format("%^s mumbles.", m_name);
 #endif
 
 #ifdef JP
-else if (p_ptr->pclass == CLASS_NINJA) msg_format("%^sが辺りを明るく照らした。", m_name);
-else msg_format("%^sが暗闇の中で手を振った。", m_name);
+			else if (can_use_lite_area) msg_format("%^sが辺りを明るく照らした。", m_name);
+			else msg_format("%^sが暗闇の中で手を振った。", m_name);
 #else
-			else if (p_ptr->pclass == CLASS_NINJA)
-				msg_format("%^s cast a spell to light up.", m_name);
+			else if (can_use_lite_area) msg_format("%^s cast a spell to light up.", m_name);
 			else msg_format("%^s gestures in shadow.", m_name);
 #endif
 
-			learn_spell(MS_DARKNESS);
-			if (p_ptr->pclass == CLASS_NINJA)
-				(void)lite_area(0, 3);
+			if (can_use_lite_area) (void)lite_area(0, 3);
 			else
+			{
+				learn_spell(MS_DARKNESS);
 				(void)unlite_area(0, 3);
+			}
 			break;
 		}
 

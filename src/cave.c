@@ -4434,6 +4434,11 @@ void wiz_lite(bool ninja)
 
 	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+
+	if (p_ptr->special_defense & NINJA_S_STEALTH)
+	{
+		if (cave[py][px].info & CAVE_GLOW) set_superstealth(FALSE);
+	}
 }
 
 
@@ -4576,6 +4581,11 @@ void cave_set_feat(int y, int x, int feat)
 
 				update_local_illumination(yy, xx);
 			}
+		}
+
+		if (p_ptr->special_defense & NINJA_S_STEALTH)
+		{
+			if (character_dungeon && (cave[py][px].info & CAVE_GLOW)) set_superstealth(FALSE);
 		}
 	}
 }

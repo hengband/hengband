@@ -1585,8 +1585,6 @@ static bool cast_ninja_spell(int spell)
 	case 2:
 	{
 		teleport_player(10, FALSE);
-		if (cave[py][px].info & (CAVE_GLOW | CAVE_MNLT)) set_superstealth(FALSE);
-		else if (p_ptr->cur_lite <= 0) set_superstealth(TRUE);
 		break;
 	}
 	case 3:
@@ -1607,8 +1605,6 @@ static bool cast_ninja_spell(int spell)
 	case 4:
 	{
 		teleport_player(p_ptr->lev * 5, FALSE);
-		if (cave[py][px].info & (CAVE_GLOW | CAVE_MNLT)) set_superstealth(FALSE);
-		else if (p_ptr->cur_lite <= 0) set_superstealth(TRUE);
 		break;
 	}
 	case 5:
@@ -1628,8 +1624,6 @@ msg_print("うまく逃げられなかった。");
 			else
 			{
 				teleport_player(30, FALSE);
-				if (cave[py][px].info & (CAVE_GLOW | CAVE_MNLT)) set_superstealth(FALSE);
-				else if (p_ptr->cur_lite <= 0) set_superstealth(TRUE);
 			}
 		}
 		else
@@ -1658,8 +1652,6 @@ msg_print("その方向にはモンスターはいません。");
 	case 9:
 		fire_ball(GF_FIRE, 0, 50+plev, plev/10+2);
 		teleport_player(30, FALSE);
-		if (cave[py][px].info & (CAVE_GLOW | CAVE_MNLT)) set_superstealth(FALSE);
-		else if (p_ptr->cur_lite <= 0) set_superstealth(TRUE);
 		set_oppose_fire(plev, FALSE);
 		break;
 	case 10:
@@ -1787,8 +1779,6 @@ msg_print("その方向にはモンスターはいません。");
 		fire_ball(GF_OLD_DRAIN, 0, 75+plev*2/3, plev/5+2);
 		fire_ball(GF_CONFUSION, 0, 75+plev*2/3, plev/5+2);
 		teleport_player(30, FALSE);
-		if (cave[py][px].info & (CAVE_GLOW | CAVE_MNLT)) set_superstealth(FALSE);
-		else if (p_ptr->cur_lite <= 0) set_superstealth(TRUE);
 		break;
 	case 18:
 	{
