@@ -1016,7 +1016,7 @@ extern bool item_tester_hook_recharge(object_type *o_ptr);
 extern bool project_hook(int typ, int dir, int dam, int flg);
 extern bool project_hack(int typ, int dam);
 extern bool eat_magic(int power);
-extern void discharge_minion(bool force);
+extern void discharge_minion(void);
 extern void kawarimi(bool success);
 
 /* spells3.c */

@@ -3823,7 +3823,7 @@ else msg_print("<破滅の手>を放った！");
 		fire_ball(GF_CHARM, 0, 20+plev, 3+plev/20);
 		break;
 	case 27: /* True Discharge Minion */
-		discharge_minion(TRUE);
+		discharge_minion();
 		break;
 	case 28: /* Summon Greater Demon */
 	{

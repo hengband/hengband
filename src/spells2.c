@@ -5584,7 +5584,7 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 }
 
 
-void discharge_minion(bool force)
+void discharge_minion(void)
 {
 	int i;
 	bool okay = TRUE;
@@ -5613,20 +5613,18 @@ void discharge_minion(bool force)
 		if (!m_ptr->r_idx || !is_pet(m_ptr)) continue;
 		r_ptr = &r_info[m_ptr->r_idx];
 
-		if (!force)
+		/* Uniques resist discharging */
+		if (r_ptr->flags1 & RF1_UNIQUE)
 		{
-			if (r_ptr->level/2+randint(r_ptr->level/2) > p_ptr->lev/2+randint(p_ptr->lev/2))
-			{
-				char m_name[80];
-				monster_desc(m_name, m_ptr, 0x00);
+			char m_name[80];
+			monster_desc(m_name, m_ptr, 0x00);
 #ifdef JP
-				msg_format("%sは爆破されるのを嫌がり、勝手に自分の世界へと帰った。", m_name);
+			msg_format("%sは爆破されるのを嫌がり、勝手に自分の世界へと帰った。", m_name);
 #else
-				msg_format("%^s resists to be blasted, and run away.", m_name);
+			msg_format("%^s resists to be blasted, and run away.", m_name);
 #endif
-				delete_monster_idx(i);
-				continue;
-			}
+			delete_monster_idx(i);
+			continue;
 		}
 		dam = m_ptr->hp / 2;
 		if (dam > 100) dam = (dam-100)/2 + 100;
