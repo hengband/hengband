@@ -5455,6 +5455,9 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 		/* Handle "leaving" */
 		if (p_ptr->leaving) break;
 	}
+
+	/* Update scent trail */
+	update_smell();
 }
 
 

@@ -524,9 +524,11 @@ static int mon_will_run(int m_idx)
  */
 static bool get_moves_aux(int m_idx, int *yp, int *xp)
 {
-	int i, y, x, y1, x1, when = 0, cost = 999;
+	int i, y, x, y1, x1, best;
 
 	cave_type *c_ptr;
+	bool use_sound = FALSE;
+	bool use_scent = FALSE;
 
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -543,27 +545,38 @@ static bool get_moves_aux(int m_idx, int *yp, int *xp)
 	y1 = m_ptr->fy;
 	x1 = m_ptr->fx;
 
+	/* Hack -- Player can see us, run towards him */
+	if (player_has_los_bold(y1, x1)) return (FALSE);
+
 	/* Monster grid */
 	c_ptr = &cave[y1][x1];
 
-	/* The player is not currently near the monster grid */
-	if (c_ptr->when < cave[py][px].when)
+	/* If we can hear noises, advance towards them */
+	if (c_ptr->cost)
 	{
-		/* The player has never been near the monster grid */
-		if (!c_ptr->when) return (FALSE);
+		use_sound = TRUE;
+		best = 999;
 	}
 
-	if (c_ptr->dist > MONSTER_FLOW_DEPTH) return (FALSE);
-	if ((c_ptr->dist > r_ptr->aaf) && !m_ptr->target_y) return (FALSE);
+	/* Otherwise, try to follow a scent trail */
+	else if (c_ptr->when)
+	{
+		/* Too old smell */
+		if (cave[py][px].when - c_ptr->when > 127) return (FALSE);
 
-	/* Hack -- Player can see us, run towards him */
-	if (player_has_los_bold(y1, x1)) return (FALSE);
+		use_scent = TRUE;
+		best = 0;
+	}
+
+	/* Otherwise, advance blindly */
+	else
+	{
+		return (FALSE);
+	}
 
 	/* Check nearby grids, diagonals first */
 	for (i = 7; i >= 0; i--)
 	{
-		int value;
-
 		/* Get the location */
 		y = y1 + ddy_ddd[i];
 		x = x1 + ddx_ddd[i];
@@ -573,22 +586,29 @@ static bool get_moves_aux(int m_idx, int *yp, int *xp)
 
 		c_ptr = &cave[y][x];
 
-		/* Ignore illegal locations */
-		if (!c_ptr->when) continue;
+		/* We're following a scent trail */
+		if (use_scent)
+		{
+			int when = c_ptr->when;
 
-		/* Ignore ancient locations */
-		if (c_ptr->when < when) continue;
+			/* Accept younger scent */
+			if (best > when) continue;
+			best = when;
+		}
 
-		if (r_ptr->flags2 & (RF2_BASH_DOOR | RF2_OPEN_DOOR))
-			value = c_ptr->dist;
-		else value = c_ptr->cost;
+		/* We're using sound */
+		else
+		{
+			int cost;
 
-		/* Ignore distant locations */
-		if (value > cost) continue;
+			if (r_ptr->flags2 & (RF2_BASH_DOOR | RF2_OPEN_DOOR))
+				cost = c_ptr->dist;
+			else cost = c_ptr->cost;
 
-		/* Save the cost and time */
-		when = c_ptr->when;
-		cost = value;
+			/* Accept louder sounds */
+			if ((cost == 0) || (best < cost)) continue;
+			best = cost;
+		}
 
 		/* Hack -- Save the "twiddled" location */
 		(*yp) = py + 16 * ddy_ddd[i];
@@ -596,7 +616,7 @@ static bool get_moves_aux(int m_idx, int *yp, int *xp)
 	}
 
 	/* No legal move (?) */
-	if (!when) return (FALSE);
+	if (best == 999 || best == 0) return (FALSE);
 
 	/* Success */
 	return (TRUE);
@@ -613,11 +633,10 @@ static bool get_moves_aux(int m_idx, int *yp, int *xp)
 static bool get_fear_moves_aux(int m_idx, int *yp, int *xp)
 {
 	int y, x, y1, x1, fy, fx, gy = 0, gx = 0;
-	int when = 0, score = -1;
+	int dist = 0, score = -1;
 	int i;
 
 	monster_type *m_ptr = &m_list[m_idx];
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Monster flowing disabled */
 	if (stupid_monsters) return (FALSE);
@@ -629,17 +648,6 @@ static bool get_fear_moves_aux(int m_idx, int *yp, int *xp)
 	/* Desired destination */
 	y1 = fy - (*yp);
 	x1 = fx - (*xp);
-
-	/* The player is not currently near the monster grid */
-	if (cave[fy][fx].when < cave[py][px].when)
-	{
-		/* No reason to attempt flowing */
-		return (FALSE);
-	}
-
-	/* Monster is too far away to use flow information */
-	if (cave[fy][fx].dist > MONSTER_FLOW_DEPTH) return (FALSE);
-	if ((cave[fy][fx].dist > r_ptr->aaf) && !m_ptr->target_y) return (FALSE);
 
 	/* Check nearby grids, diagonals first */
 	for (i = 7; i >= 0; i--)
@@ -653,11 +661,7 @@ static bool get_fear_moves_aux(int m_idx, int *yp, int *xp)
 		/* Ignore locations off of edge */
 		if (!in_bounds2(y, x)) continue;
 
-		/* Ignore illegal locations */
-		if (cave[y][x].when == 0) continue;
-
-		/* Ignore ancient locations */
-		if (cave[y][x].when < when) continue;
+		if (cave[y][x].dist < dist) continue;
 
 		/* Calculate distance of this grid from our destination */
 		dis = distance(y, x, y1, x1);
@@ -672,7 +676,7 @@ static bool get_fear_moves_aux(int m_idx, int *yp, int *xp)
 		if (s < score) continue;
 
 		/* Save the score and time */
-		when = cave[y][x].when;
+		dist = cave[y][x].dist;
 		score = s;
 
 		/* Save the location */
@@ -681,7 +685,7 @@ static bool get_fear_moves_aux(int m_idx, int *yp, int *xp)
 	}
 
 	/* No legal move (?) */
-	if (!when) return (FALSE);
+	if (score == -1) return (FALSE);
 
 	/* Find deltas */
 	(*yp) = fy - gy;

@@ -572,6 +572,7 @@ extern void update_mon_lite(void);
 extern void clear_mon_lite(void);
 extern void forget_flow(void);
 extern void update_flow(void);
+extern void update_smell(void);
 extern void map_area(int range);
 extern void wiz_lite(bool wizard, bool ninja);
 extern void wiz_dark(void);

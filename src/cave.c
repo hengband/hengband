@@ -4223,54 +4223,6 @@ void forget_flow(void)
 
 
 /*
- * Hack -- Allow us to treat the "seen" array as a queue
- */
-static int flow_head = 0;
-static int flow_tail = 0;
-
-
-/*
- * Take note of a reachable grid.  Assume grid is legal.
- */
-static void update_flow_aux(int y, int x, int m, int n)
-{
-	cave_type *c_ptr;
-
-	int old_head = flow_head;
-
-
-	/* Get the grid */
-	c_ptr = &cave[y][x];
-
-	/* Ignore "pre-stamped" entries */
-	if (c_ptr->when == flow_n && (c_ptr->dist <= n) && (c_ptr->cost <= m)) return;
-
-	/* Ignore "walls" and "rubble" */
-	if ((c_ptr->feat > FEAT_SECRET) && (c_ptr->feat != FEAT_TREES) && !cave_floor_grid(c_ptr)) return;
-
-	/* Save the flow cost */
-	if (c_ptr->when != flow_n || c_ptr->cost > m) c_ptr->cost = m;
-	if (c_ptr->when != flow_n || c_ptr->dist > n) c_ptr->dist = n;
-
-	/* Save the time-stamp */
-	c_ptr->when = flow_n;
-
-	/* Hack -- limit flow depth */
-	if (n == MONSTER_FLOW_DEPTH) return;
-
-	/* Enqueue that entry */
-	temp_y[flow_head] = y;
-	temp_x[flow_head] = x;
-
-	/* Advance the queue */
-	if (++flow_head == TEMP_MAX) flow_head = 0;
-
-	/* Hack -- notice overflow by forgetting new entry */
-	if (flow_head == flow_tail) flow_head = old_head;
-}
-
-
-/*
  * Hack - speed up the update_flow algorithm by only doing
  * it everytime the player moves out of LOS of the last
  * "way-point".
@@ -4296,6 +4248,8 @@ static u16b flow_y = 0;
 void update_flow(void)
 {
 	int x, y, d;
+	int flow_head = 1;
+	int flow_tail = 0;
 
 	/* Hack -- disabled */
 	if (stupid_monsters) return;
@@ -4303,23 +4257,126 @@ void update_flow(void)
 	/* Paranoia -- make sure the array is empty */
 	if (temp_n) return;
 
-#if 0
 	/* The last way-point is on the map */
 	if (running && in_bounds(flow_y, flow_x))
 	{
 		/* The way point is in sight - do not update.  (Speedup) */
 		if (cave[flow_y][flow_x].info & CAVE_VIEW) return;
 	}
-#endif
+
+	/* Erase all of the current flow information */
+	for (y = 0; y < cur_hgt; y++)
+	{
+		for (x = 0; x < cur_wid; x++)
+		{
+			cave[y][x].cost = 0;
+			cave[y][x].dist = 0;
+		}
+	}
 
 	/* Save player position */
 	flow_y = py;
 	flow_x = px;
 
-	/* Cycle the old entries (once per 128 updates) */
-	if (flow_n == 255)
+	/* Add the player's grid to the queue */
+	temp_y[0] = py;
+	temp_x[0] = px;
+
+	/* Now process the queue */
+	while (flow_head != flow_tail)
 	{
-		/* Rotate the time-stamps */
+		int ty, tx;
+
+		/* Extract the next entry */
+		ty = temp_y[flow_tail];
+		tx = temp_x[flow_tail];
+
+		/* Forget that entry */
+		if (++flow_tail == TEMP_MAX) flow_tail = 0;
+
+		/* Add the "children" */
+		for (d = 0; d < 8; d++)
+		{
+			int old_head = flow_head;
+			int m = cave[ty][tx].cost + 1;
+			int n = cave[ty][tx].dist + 1;
+			cave_type *c_ptr;
+
+			/* Child location */
+			y = ty + ddy_ddd[d];
+			x = tx + ddx_ddd[d];
+
+			/* Ignore player's grid */
+			if (x == px && y == py) continue;
+
+			c_ptr = &cave[y][x];
+				       
+			if ((c_ptr->feat >= FEAT_DOOR_HEAD) && (c_ptr->feat <= FEAT_SECRET)) m += 3;
+
+			/* Ignore "pre-stamped" entries */
+			if (c_ptr->dist != 0 && c_ptr->dist <= n && c_ptr->cost <= m) continue;
+
+			/* Ignore "walls" and "rubble" */
+			if ((c_ptr->feat > FEAT_SECRET) && (c_ptr->feat != FEAT_TREES) && !cave_floor_grid(c_ptr)) continue;
+
+			/* Save the flow cost */
+			if (c_ptr->cost == 0 || c_ptr->cost > m) c_ptr->cost = m;
+			if (c_ptr->dist == 0 || c_ptr->dist > n) c_ptr->dist = n;
+
+			/* Hack -- limit flow depth */
+			if (n == MONSTER_FLOW_DEPTH) continue;
+
+			/* Enqueue that entry */
+			temp_y[flow_head] = y;
+			temp_x[flow_head] = x;
+
+			/* Advance the queue */
+			if (++flow_head == TEMP_MAX) flow_head = 0;
+
+			/* Hack -- notice overflow by forgetting new entry */
+			if (flow_head == flow_tail) flow_head = old_head;
+		}
+	}
+}
+
+
+static int scent_when = 0;
+
+/*
+ * Characters leave scent trails for perceptive monsters to track.
+ *
+ * Smell is rather more limited than sound.  Many creatures cannot use 
+ * it at all, it doesn't extend very far outwards from the character's 
+ * current position, and monsters can use it to home in the character, 
+ * but not to run away from him.
+ *
+ * Smell is valued according to age.  When a character takes his turn, 
+ * scent is aged by one, and new scent of the current age is laid down.  
+ * Speedy characters leave more scent, true, but it also ages faster, 
+ * which makes it harder to hunt them down.
+ *
+ * Whenever the age count loops, most of the scent trail is erased and 
+ * the age of the remainder is recalculated.
+ */
+void update_smell(void)
+{
+	int i, j;
+	int y, x;
+
+	/* Create a table that controls the spread of scent */
+	int scent_adjust[5][5] = 
+	{
+		{ 250,  0,  0,  0, 250 },
+		{   0,  1,  1,  1,   0 },
+		{   0,  1,  2,  1,   0 },
+		{   0,  1,  1,  1,   0 },
+		{ 250,  0,  0,  0, 250 },
+	};
+
+	/* Loop the age and adjust scent values when necessary */
+	if (scent_when++ == 250)
+	{
+		/* Scan the entire dungeon */
 		for (y = 0; y < cur_hgt; y++)
 		{
 			for (x = 0; x < cur_wid; x++)
@@ -4330,46 +4387,40 @@ void update_flow(void)
 		}
 
 		/* Restart */
-		flow_n = 127;
+		scent_when = 127;
 	}
 
-	/* Start a new flow (never use "zero") */
-	flow_n++;
 
-
-	/* Reset the "queue" */
-	flow_head = flow_tail = 0;
-
-	/* Add the player's grid to the queue */
-	update_flow_aux(py, px, 0, 0);
-
-	/* Now process the queue */
-	while (flow_head != flow_tail)
+	/* Lay down new scent */
+	for (i = 0; i < 5; i++)
 	{
-		/* Extract the next entry */
-		y = temp_y[flow_tail];
-		x = temp_x[flow_tail];
-
-		/* Forget that entry */
-		if (++flow_tail == TEMP_MAX) flow_tail = 0;
-
-		/* Add the "children" */
-		for (d = 0; d < 8; d++)
+		for (j = 0; j < 5; j++)
 		{
-			int tmp = cave[y][x].cost+1;
-			int yy = y+ddy_ddd[d];
-			int xx = x+ddx_ddd[d];
+			cave_type *c_ptr;
 
-			if ((cave[yy][xx].feat >= FEAT_DOOR_HEAD) && (cave[yy][xx].feat <= FEAT_SECRET)) tmp += 3;
-			/* Add that child if "legal" */
-			update_flow_aux(yy, xx, tmp, cave[y][x].dist+1);
+			/* Translate table to map grids */
+			y = i + py - 2;
+			x = j + px - 2;
+
+			/* Check Bounds */
+			if (!in_bounds(y, x)) continue;
+
+			c_ptr = &cave[y][x];
+
+			/* Walls, water, and lava cannot hold scent. */
+			if ((c_ptr->feat > FEAT_SECRET) && (c_ptr->feat != FEAT_TREES) && !cave_floor_grid(c_ptr)) continue;
+
+			/* Grid must not be blocked by walls from the character */
+			if (!player_has_los_bold(y, x)) continue;
+
+			/* Note grids that are too far away */
+			if (scent_adjust[i][j] == 250) continue;
+
+			/* Mark the grid with new scent */
+			c_ptr->when = scent_when + scent_adjust[i][j];
 		}
 	}
-
-	/* Forget the flow info */
-	flow_head = flow_tail = 0;
 }
-
 
 
 /*
