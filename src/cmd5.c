@@ -5468,7 +5468,11 @@ void do_cmd_pet_dismiss(void)
 		   (Dismissed == 1 ? "" : "s"));
 #endif
 	if (Dismissed == 0 && all_pets)
+#ifdef JP
 		msg_print("'U'nnamed は、乗馬以外の名前のないペットだけを全て解放します。");
+#else
+		msg_print("'U'nnamed means all your pets except named pets and your mount.");
+#endif
 
 	p_ptr->update |= (PU_MON_LITE);
 }
