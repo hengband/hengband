@@ -232,6 +232,9 @@
  */
 #if defined(MACH_O_CARBON) || defined(MAC_MPW)
        /* Globals needed */
+#if !TARGET_API_MAC_CARBON
+       QDGlobals qd;
+#endif
        OSType _ftype;
        OSType _fcreator;
 #endif
