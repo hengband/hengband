@@ -3596,11 +3596,11 @@ msg_format("%^s%s", m_name, monmessage);
 			msg_format("%^s turns to fight!", m_name);
 #endif
 
+			chg_virtue(V_COMPASSION, -1);
+
 			/* Redraw (later) if needed */
 			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
 		}
-
-		chg_virtue(V_COMPASSION, -1);
 
 		/* XXX XXX XXX Actually do something now (?) */
 	}
