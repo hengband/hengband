@@ -433,7 +433,7 @@ errr process_pref_file_command(char *buf)
 			n2 = strtol(zz[2], NULL, 0);
 			if (i >= max_r_idx) return 1;
 			r_ptr = &r_info[i];
-			if (n1 || (!(n2 & 0x80) && n2)) r_ptr->x_attr = n1; /* Allow ATTR_DARK text */
+			if (n1 || (!(n2 & 0x80) && n2)) r_ptr->x_attr = n1; /* Allow TERM_DARK text */
 			if (n2) r_ptr->x_char = n2;
 			return 0;
 		}
@@ -449,7 +449,7 @@ errr process_pref_file_command(char *buf)
 			n2 = strtol(zz[2], NULL, 0);
 			if (i >= max_k_idx) return 1;
 			k_ptr = &k_info[i];
-			if (n1 || (!(n2 & 0x80) && n2)) k_ptr->x_attr = n1; /* Allow ATTR_DARK text */
+			if (n1 || (!(n2 & 0x80) && n2)) k_ptr->x_attr = n1; /* Allow TERM_DARK text */
 			if (n2) k_ptr->x_char = n2;
 			return 0;
 		}
@@ -473,7 +473,7 @@ errr process_pref_file_command(char *buf)
 
 			n1 = strtol(zz[1], NULL, 0);
 			n2 = strtol(zz[2], NULL, 0);
-			if (n1 || (!(n2 & 0x80) && n2)) f_ptr->x_attr[F_LIT_STANDARD] = n1; /* Allow ATTR_DARK text */
+			if (n1 || (!(n2 & 0x80) && n2)) f_ptr->x_attr[F_LIT_STANDARD] = n1; /* Allow TERM_DARK text */
 			if (n2) f_ptr->x_char[F_LIT_STANDARD] = n2;
 
 			/* Mega-hack -- feat supports lighting */
@@ -501,7 +501,7 @@ errr process_pref_file_command(char *buf)
 				{
 					n1 = strtol(zz[j * 2 + 1], NULL, 0);
 					n2 = strtol(zz[j * 2 + 2], NULL, 0);
-					if (n1 || (!(n2 & 0x80) && n2)) f_ptr->x_attr[j] = n1; /* Allow ATTR_DARK text */
+					if (n1 || (!(n2 & 0x80) && n2)) f_ptr->x_attr[j] = n1; /* Allow TERM_DARK text */
 					if (n2) f_ptr->x_char[j] = n2;
 				}
 				break;

@@ -7605,7 +7605,7 @@ static bool visual_mode_command(char ch, bool *visual_list_ptr,
 
 	case 'P':
 	case 'p':
-		if (attr_idx || (!(char_idx & 0x80) && char_idx)) /* Allow ATTR_DARK text */
+		if (attr_idx || (!(char_idx & 0x80) && char_idx)) /* Allow TERM_DARK text */
 		{
 			/* Set the char */
 			*cur_attr_ptr = attr_idx;
@@ -8778,7 +8778,7 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, int d
 			case 'p':
 				if (!visual_list)
 				{
-					/* Allow ATTR_DARK text */
+					/* Allow TERM_DARK text */
 					for (i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++)
 					{
 						if (attr_idx_feat[i] || (!(char_idx_feat[i] & 0x80) && char_idx_feat[i])) f_ptr->x_attr[i] = attr_idx_feat[i];
