@@ -781,12 +781,12 @@ msg_print("カチッと音がした！");
 			/* Remove "unsafe" flag if player is not blind */
 			if (!p_ptr->blind && player_has_los_bold(y, x))
 			{
-				obvious = (c_ptr->info & CAVE_UNSAFE) ? TRUE : FALSE;
-
 				c_ptr->info &= ~(CAVE_UNSAFE);
 
 				/* Redraw */
 				lite_spot(y, x);
+
+				obvious = TRUE;
 			}
 
 			break;
@@ -836,12 +836,12 @@ msg_print("まばゆい閃光が走った！");
 			/* Remove "unsafe" flag if player is not blind */
 			if (!p_ptr->blind && player_has_los_bold(y, x))
 			{
-				obvious = (c_ptr->info & CAVE_UNSAFE) ? TRUE : FALSE;
-
 				c_ptr->info &= ~(CAVE_UNSAFE);
 
 				/* Redraw */
 				lite_spot(y, x);
+
+				obvious = TRUE;
 			}
 
 			break;
