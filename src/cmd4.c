@@ -1425,7 +1425,7 @@ void do_cmd_messages(int num_now)
 /*
  * Number of cheating options
  */
-#define CHEAT_MAX 6
+#define CHEAT_MAX 7
 
 /*
  * Cheating options
@@ -1477,6 +1477,14 @@ static option_type cheat_info[CHEAT_MAX] =
 	"cheat_live",		"死を回避することを可能にする"
 #else
 	"cheat_live",		"Allow player to avoid death"
+#endif
+        },
+
+	{ &cheat_save,		FALSE,	255,	0x40, 0x00,
+#ifdef JP
+	"cheat_save",		"死んだ時セーブするか確認する"
+#else
+	"cheat_save",		"Ask for saving death"
 #endif
         }
 };
@@ -2204,8 +2212,6 @@ void do_cmd_options(void)
 		prt("(A)    自動セーブ         オプション", 14, 5);
 		/* Window flags */
 		prt("(W) ウインドウフラグ", 15, 5);
-		/* Cheating */
-		prt("(C)       詐欺            オプション", 16, 5);
 #else
 		prt("(1) Input Options", 4, 5);
 		prt("(2) Output Options", 5, 5);
@@ -2223,10 +2229,17 @@ void do_cmd_options(void)
 
 		/* Window flags */
 		prt("(W) Window Flags", 15, 5);
-
-		/* Cheating */
-		prt("(C) Cheating Options", 16, 5);
 #endif
+
+                if (p_ptr->noscore || allow_debug_opts)
+                {
+                        /* Cheating */
+#ifdef JP
+                        prt("(C)       詐欺            オプション", 16, 5);
+#else
+                        prt("(C) Cheating Options", 16, 5);
+#endif
+                }
 
 
 		/* Prompt */
@@ -2339,6 +2352,13 @@ void do_cmd_options(void)
 			/* Cheating Options */
 			case 'C':
 			{
+                                if (!p_ptr->noscore && !allow_debug_opts)
+                                {
+                                        /* Cheat options are not permitted */
+                                        bell();
+                                        break;
+                                }
+
 				/* Spawn */
 #ifdef JP
 				do_cmd_options_cheat("詐欺師は決して勝利できない！");

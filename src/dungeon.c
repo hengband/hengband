@@ -3861,6 +3861,17 @@ static bool enter_wizard_mode(void)
 	/* Ask first time */
 	if (!p_ptr->noscore)
 	{
+                /* Wizard mode is not permitted */
+                if (!allow_debug_opts)
+                {
+#ifdef JP
+                        msg_print("ウィザードモードは許可されていません。 ");
+#else
+                        msg_print("Wizard mode is not permitted.");
+#endif
+                        return FALSE;
+                }
+
 		/* Mention effects */
 #ifdef JP
 msg_print("ウィザードモードはデバグと実験のためのモードです。 ");
@@ -3902,6 +3913,17 @@ static bool enter_debug_mode(void)
 	/* Ask first time */
 	if (!p_ptr->noscore)
 	{
+                /* Debug mode is not permitted */
+                if (!allow_debug_opts)
+                {
+#ifdef JP
+                        msg_print("デバッグコマンドは許可されていません。 ");
+#else
+                        msg_print("Use of debug command is not permitted.");
+#endif
+                        return FALSE;
+                }
+
 		/* Mention effects */
 #ifdef JP
 msg_print("デバグ・コマンドはデバグと実験のためのコマンドです。 ");

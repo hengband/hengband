@@ -294,6 +294,7 @@ bool always_show_list;
 bool powerup_home;
 bool change_numeral;
 bool send_score;
+bool allow_debug_opts;   /* Allow use of debug/cheat options */
 
 /* Cheating options */
 
@@ -303,6 +304,7 @@ bool cheat_room;		/* Peek into dungeon creation */
 bool cheat_xtra;		/* Peek into something else */
 bool cheat_know;		/* Know complete monster info */
 bool cheat_live;		/* Allow player to avoid death */
+bool cheat_save;		/* Ask for saving death */
 
 
 /* Special options */
@@ -1092,7 +1094,6 @@ bool ironman_autoscum;        /* Permanently enable the autoscummer */
 bool lite_town;               /* Use "lite" town without wilderness */
 bool ironman_empty_levels;    /* Always create empty 'arena' levels */
 bool terrain_streams;         /* Create terrain 'streamers' in the dungeon */
-bool munchkin_death;          /* Ask for saving death */
 bool ironman_rooms;           /* Always generate very unusual rooms */
 bool ironman_nightmare;			/* Play the game in Nightmare mode */
 bool left_hander;

@@ -5104,7 +5104,7 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 		bool android = (p_ptr->prace == RACE_ANDROID ? TRUE : FALSE);
 
 #ifdef JP       /* 死んだ時に強制終了して死を回避できなくしてみた by Habu */
-		if (!munchkin_death)
+		if (!cheat_save)
 			if(!save_player()) msg_print("セーブ失敗！");
 #endif
 

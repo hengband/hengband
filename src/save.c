@@ -362,6 +362,7 @@ static void wr_options(void)
 	if (cheat_xtra) c |= 0x0800;
 	if (cheat_know) c |= 0x1000;
 	if (cheat_live) c |= 0x2000;
+	if (cheat_save) c |= 0x4000;
 
 	wr_u16b(c);
 
@@ -471,7 +472,7 @@ static void save_quick_start(void)
 	wr_byte(previous_char.quests);
 
 	/* No quick start after using debug mode or cheat options */
-	if (p_ptr->noscore || munchkin_death) previous_char.quick_ok = FALSE;
+	if (p_ptr->noscore) previous_char.quick_ok = FALSE;
 
 	wr_byte((byte)previous_char.quick_ok);
 }

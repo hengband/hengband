@@ -3307,6 +3307,7 @@ static void player_wipe(void)
 	cheat_xtra = FALSE;
 	cheat_know = FALSE;
 	cheat_live = FALSE;
+	cheat_save = FALSE;
 
 	/* Assume no winning game */
 	p_ptr->total_winner = FALSE;
@@ -5419,88 +5420,6 @@ static bool player_birth_aux(void)
 #endif
 
 
-	/*** Quick Start ***/
-
-	if (previous_char.quick_ok)
-	{
-		bool do_quick_start = FALSE;
-
-		/* Extra info */
-#ifdef JP
-	put_str("クイック・スタートを使うと以前と全く同じキャラクターで始められます。", 11, 5);
-#else
-	put_str("Do you want to use the quick start function(same character as your last one).", 11, 2);
-#endif
-
-		/* Choose */
-		while (1)
-		{
-#ifdef JP
-			put_str("クイック・スタートを使いますか？[y/n]", 14, 10);
-#else
-			put_str("Use quick start? [y/n]", 14, 10);
-#endif
-			c = inkey();
-			if (c == 'Q') quit(NULL);
-			else if (c == 'S') return (FALSE);
-                        else if (c == '?')
-                        {
-#ifdef JP                 
-                                show_help("jbirth.txt#QuickStart");
-#else
-                                show_help("birth.txt#QuickStart");
-#endif
-                        }
-			else if ((c == 'y') || (c == 'Y'))
-			{
-				do_quick_start = TRUE;
-				break;
-			}
-			else
-			{
-				do_quick_start = FALSE;
-				break;
-			}
-		}
-
-		if (do_quick_start)
-		{
-			load_prev_data(FALSE);
-			init_dungeon_quests(previous_char.quests);
-			init_turn();
-
-			sp_ptr = &sex_info[p_ptr->psex];
-			rp_ptr = &race_info[p_ptr->prace];
-			cp_ptr = &class_info[p_ptr->pclass];
-                        mp_ptr = &m_info[p_ptr->pclass];
-			ap_ptr = &seikaku_info[p_ptr->pseikaku];
-
-			/* Calc hitdie, but don't roll */
-			get_extra(FALSE);
-
-			/* Calculate the bonuses and hitpoints */
-			p_ptr->update |= (PU_BONUS | PU_HP);
-
-			/* Update stuff */
-			update_stuff();
-
-			/* Fully healed */
-			p_ptr->chp = p_ptr->mhp;
-
-			/* Fully rested */
-			p_ptr->csp = p_ptr->msp;
-
-			/* Process the player name */
-			process_player_name(FALSE);
-
-			return TRUE;
-		}
-
-		/* Clean up */
-		clear_from(10);
-	}
-
-
 	/*** Player sex ***/
 
 	/* Extra info */
@@ -6233,6 +6152,91 @@ static bool player_birth_aux(void)
 
 
 /*
+ * Ask whether the player use Quick Start or not.
+ */
+static bool ask_quick_start(void)
+{
+        /* Doesn't have previous data */
+	if (!previous_char.quick_ok) return FALSE;
+
+
+	/* Clear screen */
+	Term_clear();
+
+        /* Extra info */
+#ifdef JP
+        put_str("クイック・スタートを使うと以前と全く同じキャラクターで始められます。", 11, 5);
+#else
+        put_str("Do you want to use the quick start function(same character as your last one).", 11, 2);
+#endif
+
+        /* Choose */
+        while (1)
+        {
+                char c;
+
+#ifdef JP
+                put_str("クイック・スタートを使いますか？[y/n]", 14, 10);
+#else
+                put_str("Use quick start? [y/n]", 14, 10);
+#endif
+                c = inkey();
+
+                if (c == 'Q') quit(NULL);
+                else if (c == 'S') return (FALSE);
+                else if (c == '?')
+                {
+#ifdef JP                 
+                        show_help("jbirth.txt#QuickStart");
+#else
+                        show_help("birth.txt#QuickStart");
+#endif
+                }
+                else if ((c == 'y') || (c == 'Y'))
+                {
+                        /* Yes */
+                        break;
+                }
+                else
+                {
+                        /* No */
+                        return FALSE;
+                }
+        }
+
+        load_prev_data(FALSE);
+        init_dungeon_quests(previous_char.quests);
+        init_turn();
+
+        sp_ptr = &sex_info[p_ptr->psex];
+        rp_ptr = &race_info[p_ptr->prace];
+        cp_ptr = &class_info[p_ptr->pclass];
+        mp_ptr = &m_info[p_ptr->pclass];
+        ap_ptr = &seikaku_info[p_ptr->pseikaku];
+
+        /* Calc hitdie, but don't roll */
+        get_extra(FALSE);
+
+        /* Calculate the bonuses and hitpoints */
+        p_ptr->update |= (PU_BONUS | PU_HP);
+
+        /* Update stuff */
+        update_stuff();
+
+        /* Fully healed */
+        p_ptr->chp = p_ptr->mhp;
+
+        /* Fully rested */
+        p_ptr->csp = p_ptr->msp;
+
+        /* Process the player name */
+        process_player_name(FALSE);
+
+        return TRUE;
+}
+
+
+/*
  * Create a new character.
  *
  * Note that we may be called with "junk" leftover in the various
@@ -6251,15 +6255,24 @@ void player_birth(void)
 	 */
 	wipe_m_list();
 
-	/* Create a new character */
-	while (1)
-	{
-		/* Wipe the player */
-		player_wipe();
+        /* Wipe the player */
+        player_wipe();
 
-		/* Roll up a new character */
-		if (player_birth_aux()) break;
-	}
+	/* Create a new character */
+
+        /* Quick start? */
+        if (!ask_quick_start())
+        {
+                /* No, normal start */
+                while (1)
+                {
+                        /* Roll up a new character */
+                        if (player_birth_aux()) break;
+
+                        /* Wipe the player */
+                        player_wipe();
+                }
+        }
 
 	/* Note player birth in the message recall */
 	message_add(" ");

@@ -6873,6 +6873,17 @@ option_type option_info[] =
 #endif
 
 
+#ifdef JP
+	{ &allow_debug_opts,            FALSE, 3, 6, 11,
+	"allow_debug_opts",             "デバッグ/詐欺オプションを許可する" },
+#else
+	{ &allow_debug_opts,            FALSE, 3, 6, 11,
+	"allow_debug_opts",             "Allow use of debug/cheat options" },
+#endif
+
+
+
+
 	/*** Disturbance ***/
 
 #ifdef JP
@@ -7209,15 +7220,6 @@ option_type option_info[] =
 #else
        { &terrain_streams,              TRUE,  6, 6, 9,
        "terrain_streams",               "Create terrain 'streamers' in the dungeon (*)" },
-#endif
-
-
-#ifdef JP
-       { &munchkin_death,               FALSE, 6, 6, 11,
-       "munchkin_death",                "（いんちき）死んだ時セーブするか確認する(*)" },
-#else
-	{ &munchkin_death,              FALSE, 6, 6, 11,
-	"munchkin_death",               "(Cheating) Ask for death saves (*)" },
 #endif
 
 

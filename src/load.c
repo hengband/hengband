@@ -965,6 +965,7 @@ static void rd_options(void)
 	cheat_xtra = (c & 0x0800) ? TRUE : FALSE;
 	cheat_know = (c & 0x1000) ? TRUE : FALSE;
 	cheat_live = (c & 0x2000) ? TRUE : FALSE;
+	cheat_save = (c & 0x4000) ? TRUE : FALSE;
 
 	rd_byte((byte *)&autosave_l);
 	rd_byte((byte *)&autosave_t);
@@ -2356,18 +2357,6 @@ if (arg_fiddle) note("オプションをロードしました");
 #else
 	if (arg_fiddle) note("Loaded Option Flags");
 #endif
-
-	/*
-	 * Munchkin players are marked
-	 *
-	 * XXX - should be replaced with a better method,
-	 * after the new scorefile-handling is implemented.
-	 */
-	if (munchkin_death)
-	{
-		/* Mark savefile */
-		p_ptr->noscore |= 0x0001;
-	}
 
 	/* Then the "messages" */
 	rd_messages();

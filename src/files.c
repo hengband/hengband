@@ -4561,13 +4561,6 @@ fprintf(fff, "\n 敵は愚かな行動を取ります。");
 #endif
 
 
-	if (munchkin_death)
-#ifdef JP
-fprintf(fff, "\n あなたは死を回避するインチキな力を持っています。");
-#else
-		fprintf(fff, "\n You possess munchkinish power over death.");
-#endif
-
 	fprintf(fff,"\n");
 
 	/* Monsters slain */
@@ -6702,9 +6695,9 @@ void close_game(void)
 
 		/* Save memories */
 #ifdef JP
-		if (!munchkin_death || get_check("死んだデータをセーブしますか？ "))
+		if (!cheat_save || get_check("死んだデータをセーブしますか？ "))
 #else
-		if (!munchkin_death || get_check("Save death? "))
+		if (!cheat_save || get_check("Save death? "))
 #endif
 		{
 

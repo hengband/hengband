@@ -238,6 +238,7 @@ extern bool always_show_list;
 extern bool powerup_home;
 extern bool change_numeral;
 extern bool send_score;
+extern bool allow_debug_opts;   /* Allow use of debug/cheat options */
 
 extern bool display_mutations;     /* Skip mutations screen in 'C'haracter display */
 extern bool plain_descriptions;
@@ -272,6 +273,7 @@ extern bool cheat_room;
 extern bool cheat_xtra;
 extern bool cheat_know;
 extern bool cheat_live;
+extern bool cheat_save;
 extern bool last_words;              /* Zangband options */
 extern bool over_exert;
 extern bool small_levels;
@@ -470,7 +472,6 @@ extern bool ironman_autoscum;
 extern bool lite_town;
 extern bool ironman_empty_levels;
 extern bool terrain_streams;
-extern bool munchkin_death;
 extern bool ironman_rooms;
 extern bool ironman_nightmare;
 extern bool left_hander;
