@@ -1508,7 +1508,7 @@ static bool vanish_dungeon(void)
 			{
 				/* Reset sleep counter */
 				m_ptr->csleep = 0;
-				if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+				mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 
 				/* Notice the "waking up" */
 				if (is_seen(m_ptr))
@@ -5366,9 +5366,18 @@ bool polymorph_monster(int y, int x)
 			/* Placing the new monster failed */
 			if (place_monster_aux(0, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN)))
 			{
+				int cmi;
+
 				m_list[hack_m_idx_ii] = back_m;
-				if (need_mproc(&back_m)) mproc_add(hack_m_idx_ii);
-				else m_list[hack_m_idx_ii].mproc_idx = 0;
+
+				for (cmi = 0; cmi < MAX_MPROC; cmi++) m_list[hack_m_idx_ii].mproc_idx[cmi] = 0;
+				if (back_m.csleep) mproc_add(hack_m_idx_ii, MPROC_CSLEEP);
+				if (back_m.fast) mproc_add(hack_m_idx_ii, MPROC_FAST);
+				if (back_m.slow) mproc_add(hack_m_idx_ii, MPROC_SLOW);
+				if (back_m.stunned) mproc_add(hack_m_idx_ii, MPROC_STUNNED);
+				if (back_m.confused) mproc_add(hack_m_idx_ii, MPROC_CONFUSED);
+				if (back_m.monfear) mproc_add(hack_m_idx_ii, MPROC_MONFEAR);
+				if (back_m.invulner) mproc_add(hack_m_idx_ii, MPROC_INVULNER);
 			}
 		}
 

@@ -2608,7 +2608,7 @@ note(format("モンスターの配列が大きすぎる(%d)！", limit));
 	/* Read the monsters */
 	for (i = 1; i < limit; i++)
 	{
-		int m_idx;
+		int m_idx, cmi;
 		monster_type *m_ptr;
 
 		/* Get a new record */
@@ -2632,8 +2632,14 @@ note(format("モンスター配置エラー (%d <> %d)", i, m_idx));
 
 		/* Read the monster */
 		rd_monster(m_ptr);
-		if (need_mproc(m_ptr)) mproc_add(m_idx);
-		else m_ptr->mproc_idx = 0;
+		for (cmi = 0; cmi < MAX_MPROC; cmi++) m_ptr->mproc_idx[cmi] = 0;
+		if (m_ptr->csleep) mproc_add(m_idx, MPROC_CSLEEP);
+		if (m_ptr->fast) mproc_add(m_idx, MPROC_FAST);
+		if (m_ptr->slow) mproc_add(m_idx, MPROC_SLOW);
+		if (m_ptr->stunned) mproc_add(m_idx, MPROC_STUNNED);
+		if (m_ptr->confused) mproc_add(m_idx, MPROC_CONFUSED);
+		if (m_ptr->monfear) mproc_add(m_idx, MPROC_MONFEAR);
+		if (m_ptr->invulner) mproc_add(m_idx, MPROC_INVULNER);
 
 
 		/* Access grid */
@@ -2890,7 +2896,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	for (i = 1; i < limit; i++)
 	{
 		cave_type *c_ptr;
-		int m_idx;
+		int m_idx, cmi;
 		monster_type *m_ptr;
 
 		/* Get a new record */
@@ -2905,8 +2911,14 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 		/* Read the monster */
 		rd_monster(m_ptr);
-		if (need_mproc(m_ptr)) mproc_add(m_idx);
-		else m_ptr->mproc_idx = 0;
+		for (cmi = 0; cmi < MAX_MPROC; cmi++) m_ptr->mproc_idx[cmi] = 0;
+		if (m_ptr->csleep) mproc_add(m_idx, MPROC_CSLEEP);
+		if (m_ptr->fast) mproc_add(m_idx, MPROC_FAST);
+		if (m_ptr->slow) mproc_add(m_idx, MPROC_SLOW);
+		if (m_ptr->stunned) mproc_add(m_idx, MPROC_STUNNED);
+		if (m_ptr->confused) mproc_add(m_idx, MPROC_CONFUSED);
+		if (m_ptr->monfear) mproc_add(m_idx, MPROC_MONFEAR);
+		if (m_ptr->invulner) mproc_add(m_idx, MPROC_INVULNER);
 
 
 		/* Access grid */

@@ -5486,6 +5486,12 @@ extern int PlayerUID;
 #define MPE_DONT_SWAP_MON 0x00000080
 
 
-#define need_mproc(M) \
-	((M)->invulner || (M)->fast || (M)->slow || (M)->csleep || \
-	 (M)->stunned || (M)->confused || (M)->monfear)
+#define MPROC_CSLEEP   0
+#define MPROC_FAST     1
+#define MPROC_SLOW     2
+#define MPROC_STUNNED  3
+#define MPROC_CONFUSED 4
+#define MPROC_MONFEAR  5
+#define MPROC_INVULNER 6
+
+#define MAX_MPROC      7

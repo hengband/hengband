@@ -190,17 +190,17 @@ monster_race *real_r_ptr(monster_type *m_ptr)
 }
 
 
-void mproc_add(int m_idx)
+void mproc_add(int m_idx, int mproc_type)
 {
-	m_list[m_idx].mproc_idx = mproc_max;
-	mproc_list[mproc_max++] = m_idx;
+	m_list[m_idx].mproc_idx[mproc_type] = mproc_max[mproc_type];
+	mproc_list[mproc_type][mproc_max[mproc_type]++] = m_idx;
 }
 
 
-void mproc_remove(int mproc_idx)
+void mproc_remove(int m_idx, int mproc_idx, int mproc_type)
 {
-	m_list[mproc_list[mproc_idx]].mproc_idx = 0;
-	mproc_list[mproc_idx] = mproc_list[--mproc_max];
+	m_list[m_idx].mproc_idx[mproc_type] = 0;
+	mproc_list[mproc_type][mproc_idx] = mproc_list[mproc_type][--mproc_max[mproc_type]];
 }
 
 
@@ -211,7 +211,7 @@ void mproc_remove(int mproc_idx)
  */
 void delete_monster_idx(int i)
 {
-	int x, y;
+	int x, y, cmi;
 
 	monster_type *m_ptr = &m_list[i];
 
@@ -231,7 +231,8 @@ void delete_monster_idx(int i)
 	/* Hack -- count the number of "reproducers" */
 	if (r_ptr->flags2 & (RF2_MULTIPLY)) num_repro--;
 
-	if (m_ptr->mproc_idx) mproc_remove(m_ptr->mproc_idx);
+	for (cmi = 0; cmi < MAX_MPROC; cmi++)
+		if (m_ptr->mproc_idx[cmi]) mproc_remove(i, m_ptr->mproc_idx[cmi], cmi);
 
 
 	/* Hack -- remove target monster */
@@ -379,7 +380,13 @@ static void compact_monsters_aux(int i1, int i2)
 	/* Wipe the hole */
 	(void)WIPE(&m_list[i1], monster_type);
 
-	if (m_list[i2].mproc_idx) mproc_list[m_list[i2].mproc_idx] = i2;
+	/* New monster */
+	m_ptr = &m_list[i2];
+
+	for (i = 0; i < MAX_MPROC; i++)
+	{
+		if (m_ptr->mproc_idx[i]) mproc_list[i][m_ptr->mproc_idx[i]] = i2;
+	}
 }
 
 
@@ -532,8 +539,8 @@ void wipe_m_list(void)
 	/* Reset "m_cnt" */
 	m_cnt = 0;
 
-	/* Reset "mproc_max" */
-	mproc_max = 1;
+	/* Reset "mproc_max[]" */
+	for (i = 0; i < MAX_MPROC; i++) mproc_max[i] = 1;
 
 	/* Hack -- reset "reproducer" count */
 	num_repro = 0;
@@ -2961,6 +2968,8 @@ static bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 
 	cptr		name = (r_name + r_ptr->name);
 
+	int cmi;
+
 	/* DO NOT PLACE A MONSTER IN THE SMALL SCALE WILDERNESS !!! */
 	if (p_ptr->wild_mode) return FALSE;
 
@@ -3139,6 +3148,8 @@ msg_print("守りのルーンが壊れた！");
 	m_ptr->confused = 0;
 	m_ptr->monfear = 0;
 
+	for (cmi = 0; cmi < MAX_MPROC; cmi++) m_ptr->mproc_idx[cmi] = 0;
+
 	/* Unknown distance */
 	m_ptr->cdis = 0;
 
@@ -3205,6 +3216,7 @@ msg_print("守りのルーンが壊れた！");
 	{
 		int val = r_ptr->sleep;
 		m_ptr->csleep = ((val * 2) + randint1(val * 10));
+		mproc_add(c_ptr->m_idx, MPROC_CSLEEP);
 	}
 
 	/* Assign maximal hitpoints */
@@ -3236,7 +3248,11 @@ msg_print("守りのルーンが壊れた！");
 	/* Extract the monster base speed */
 	m_ptr->mspeed = get_mspeed(r_ptr);
 
-	if (mode & PM_HASTE) m_ptr->fast = 100;
+	if (mode & PM_HASTE)
+	{
+		m_ptr->fast = 100;
+		mproc_add(c_ptr->m_idx, MPROC_FAST);
+	}
 
 	/* Give a random starting energy */
 	if (!ironman_nightmare)
@@ -3289,9 +3305,6 @@ msg_print("守りのルーンが壊れた！");
 
 	/* Hack -- Count the number of "reproducers" */
 	if (r_ptr->flags2 & RF2_MULTIPLY) num_repro++;
-
-	if (need_mproc(m_ptr)) mproc_add(c_ptr->m_idx);
-	else m_ptr->mproc_idx = 0;
 
 	/* Hack -- Notice new multi-hued monsters */
 	{

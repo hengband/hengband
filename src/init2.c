@@ -1606,7 +1606,11 @@ static errr init_other(void)
 	C_MAKE(m_list, max_m_idx, monster_type);
 
 	/* Allocate and Wipe the monster process list */
-	C_MAKE(mproc_list, max_m_idx, s16b);
+	for (i = 0; i < MAX_MPROC; i++)
+	{
+		C_MAKE(mproc_list[i], max_m_idx, s16b);
+		mproc_max[i] = 1;
+	}
 
 	/* Allocate and Wipe the max dungeon level */
 	C_MAKE(max_dlv, max_d_idx, s16b);

@@ -616,7 +616,7 @@ struct monster_type
 
 	s16b parent_m_idx;
 
-	s16b mproc_idx;
+	s16b mproc_idx[MAX_MPROC];
 };
 
 

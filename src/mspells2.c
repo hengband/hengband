@@ -2670,13 +2670,15 @@ bool monst_spell_monst(int m_idx)
 		}
 		else
 		{
+			int tmp = t_ptr->monfear + randint0(4) + 4;
+
 			if (!t_ptr->monfear)
 			{
-				if (!t_ptr->mproc_idx) mproc_add(t_idx);
 				fear = TRUE;
+				mproc_add(t_idx, MPROC_MONFEAR);
 			}
 
-			t_ptr->monfear += randint0(4) + 4;
+			t_ptr->monfear = (tmp < 200) ? tmp : 200;
 		}
 
 		wake_up = TRUE;
@@ -2724,15 +2726,16 @@ bool monst_spell_monst(int m_idx)
 		}
 		else
 		{
+			int tmp = t_ptr->confused + 12 + randint0(4);
+
 #ifdef JP
 			if (see_t) msg_format("%^sは目が見えなくなった！ ", t_name);
 #else
 			if (see_t) msg_format("%^s is blinded!", t_name);
 #endif
 
-
-			if (!t_ptr->mproc_idx) mproc_add(t_idx);
-			t_ptr->confused += 12 + (byte)randint0(4);
+			t_ptr->confused = (tmp < 200) ? tmp : 200;
+			if (!t_ptr->mproc_idx[MPROC_CONFUSED]) mproc_add(t_idx, MPROC_CONFUSED);
 		}
 
 		wake_up = TRUE;
@@ -2778,15 +2781,16 @@ bool monst_spell_monst(int m_idx)
 		}
 		else
 		{
+			int tmp = t_ptr->confused + 12 + randint0(4);
+
 #ifdef JP
 			if (see_t) msg_format("%^sは混乱したようだ。", t_name);
 #else
 			if (see_t) msg_format("%^s seems confused.", t_name);
 #endif
 
-
-			if (!t_ptr->mproc_idx) mproc_add(t_idx);
-			t_ptr->confused += 12 + (byte)randint0(4);
+			t_ptr->confused = (tmp < 200) ? tmp : 200;
+			if (!t_ptr->mproc_idx[MPROC_CONFUSED]) mproc_add(t_idx, MPROC_CONFUSED);
 		}
 
 		wake_up = TRUE;
@@ -2840,7 +2844,7 @@ bool monst_spell_monst(int m_idx)
 #else
 				if (see_t) msg_format("%^s starts moving slower.", t_name);
 #endif
-				if (!t_ptr->mproc_idx) mproc_add(t_idx);
+				mproc_add(t_idx, MPROC_SLOW);
 			}
 
 			t_ptr->slow = MIN(200, t_ptr->slow + 50);
@@ -2891,15 +2895,16 @@ bool monst_spell_monst(int m_idx)
 		}
 		else
 		{
+			int tmp = t_ptr->stunned + randint1(4) + 4;
+
 #ifdef JP
 			if (see_t) msg_format("%^sは麻痺した！", t_name);
 #else
 			if (see_t) msg_format("%^s is paralyzed!", t_name);
 #endif
 
-
-			if (!t_ptr->mproc_idx) mproc_add(t_idx);
-			t_ptr->stunned += randint1(4) + 4;
+			t_ptr->stunned = (tmp < 200) ? tmp : 200;
+			if (!t_ptr->mproc_idx[MPROC_STUNNED]) mproc_add(t_idx, MPROC_STUNNED);
 		}
 
 		wake_up = TRUE;
@@ -2934,7 +2939,7 @@ bool monst_spell_monst(int m_idx)
 #else
 			if (see_m) msg_format("%^s starts moving faster.", m_name);
 #endif
-			if (!m_ptr->mproc_idx) mproc_add(m_idx);
+			mproc_add(m_idx, MPROC_FAST);
 		}
 		m_ptr->fast = MIN(200, m_ptr->fast + 100);
 		if (p_ptr->riding == m_idx) p_ptr->update |= PU_BONUS;
@@ -3037,7 +3042,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			/* Cancel fear */
 			m_ptr->monfear = 0;
-			if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+			mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_MONFEAR], MPROC_MONFEAR);
 
 			/* Message */
 #ifdef JP
@@ -3072,8 +3077,8 @@ bool monst_spell_monst(int m_idx)
 
 		if (!m_ptr->invulner)
 		{
-			if (!m_ptr->mproc_idx) mproc_add(m_idx);
 			m_ptr->invulner = randint1(4) + 4;
+			mproc_add(m_idx, MPROC_INVULNER);
 		}
 
 		if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
@@ -4216,7 +4221,7 @@ bool monst_spell_monst(int m_idx)
 	if (wake_up && t_ptr->csleep)
 	{
 		t_ptr->csleep = 0;
-		if (!need_mproc(t_ptr)) mproc_remove(t_ptr->mproc_idx);
+		mproc_remove(t_idx, t_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 		if (tr_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 		if (t_ptr->ml)
 		{

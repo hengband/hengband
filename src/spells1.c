@@ -1695,7 +1695,6 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ , int flg)
 	int do_time = 0;
 
 	bool heal_leper = FALSE;
-	bool need_mproc_remove = FALSE;
 
 	/* Hold the monster name */
 	char m_name[80];
@@ -2502,7 +2501,7 @@ note = "には耐性がある。";
 #else
 						note = " starts moving slower.";
 #endif
-						if (!m_ptr->mproc_idx) mproc_add(c_ptr->m_idx);
+						mproc_add(c_ptr->m_idx, MPROC_SLOW);
 					}
 					m_ptr->slow = MIN(200, m_ptr->slow + 50);
 					if (c_ptr->m_idx == p_ptr->riding)
@@ -2618,11 +2617,11 @@ note = "には耐性がある！";
 					if (!m_ptr->slow)
 					{
 #ifdef JP
-note = "の動きが遅くなった。";
+						note = "の動きが遅くなった。";
 #else
 						note = " starts moving slower.";
 #endif
-						if (!m_ptr->mproc_idx) mproc_add(c_ptr->m_idx);
+						mproc_add(c_ptr->m_idx, MPROC_SLOW);
 					}
 					m_ptr->slow = MIN(200, m_ptr->slow + 50);
 					if (c_ptr->m_idx == p_ptr->riding)
@@ -3386,8 +3385,7 @@ note = "が分裂した！";
 			{
 				/* Wake up */
 				m_ptr->csleep = 0;
-				need_mproc_remove = TRUE;
-
+				mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 			}
 
@@ -3403,8 +3401,6 @@ note = "が分裂した！";
 
 			if (!dam)
 			{
-				if (need_mproc_remove && !need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
-
 				/* Redraw (later) if needed */
 				if (p_ptr->health_who == c_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
 				if (p_ptr->riding == c_ptr->m_idx) p_ptr->redraw |= (PR_UHEALTH);
@@ -3421,8 +3417,7 @@ note = "が分裂した！";
 			{
 				/* Wake up */
 				m_ptr->csleep = 0;
-				need_mproc_remove = TRUE;
-
+				mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 			}
 			if (m_ptr->stunned)
@@ -3433,7 +3428,7 @@ note = "が分裂した！";
 				if (seen_msg) msg_format("%^s is no longer stunned.", m_name);
 #endif
 				m_ptr->stunned = 0;
-				need_mproc_remove = TRUE;
+				mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_STUNNED], MPROC_STUNNED);
 			}
 			if (m_ptr->confused)
 			{
@@ -3443,7 +3438,7 @@ note = "が分裂した！";
 				if (seen_msg) msg_format("%^s is no longer confused.", m_name);
 #endif
 				m_ptr->confused = 0;
-				need_mproc_remove = TRUE;
+				mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CONFUSED], MPROC_CONFUSED);
 			}
 			if (m_ptr->monfear)
 			{
@@ -3453,7 +3448,7 @@ note = "が分裂した！";
 				if (seen_msg) msg_format("%^s recovers %s courage.", m_name, m_poss);
 #endif
 				m_ptr->monfear = 0;
-				need_mproc_remove = TRUE;
+				mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_MONFEAR], MPROC_MONFEAR);
 			}
 
 			/* Heal */
@@ -3489,8 +3484,6 @@ note = "が分裂した！";
 				if (!who) chg_virtue(V_COMPASSION, 5);
 			}
 
-			if (need_mproc_remove && !need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
-
 			/* Redraw (later) if needed */
 			if (p_ptr->health_who == c_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
 			if (p_ptr->riding == c_ptr->m_idx) p_ptr->redraw |= (PR_UHEALTH);
@@ -3517,11 +3510,11 @@ note = "が分裂した！";
 			if (!m_ptr->fast)
 			{
 #ifdef JP
-note = "の動きが速くなった。";
+				note = "の動きが速くなった。";
 #else
 				note = " starts moving faster.";
 #endif
-				if (!m_ptr->mproc_idx) mproc_add(c_ptr->m_idx);
+				mproc_add(c_ptr->m_idx, MPROC_FAST);
 			}
 			m_ptr->fast = MIN(200, m_ptr->fast + 100);
 
@@ -3577,11 +3570,11 @@ note = "には効果がなかった！";
 				if (!m_ptr->slow)
 				{
 #ifdef JP
-note = "の動きが遅くなった。";
+					note = "の動きが遅くなった。";
 #else
 					note = " starts moving slower.";
 #endif
-					if (!m_ptr->mproc_idx) mproc_add(c_ptr->m_idx);
+					mproc_add(c_ptr->m_idx, MPROC_SLOW);
 				}
 				m_ptr->slow = MIN(200, m_ptr->slow + 50);
 
@@ -5144,8 +5137,8 @@ note_dies = "はドロドロに溶けた！";
 					do_conf = randint0(8) + 8;
 					do_stun = randint0(8) + 8;
 				}
-				if (!m_ptr->mproc_idx) mproc_add(c_ptr->m_idx);
 				m_ptr->slow = MIN(200, m_ptr->slow + 10);
+				if (!m_ptr->mproc_idx[MPROC_SLOW]) mproc_add(c_ptr->m_idx, MPROC_SLOW);
 				if (c_ptr->m_idx == p_ptr->riding)
 					p_ptr->update |= (PU_BONUS);
 			}
@@ -5492,11 +5485,11 @@ note = "には効果がなかった！";
 					if (!m_ptr->slow)
 					{
 #ifdef JP
-note = "の動きが遅くなった。";
+						note = "の動きが遅くなった。";
 #else
 						note = " starts moving slower.";
 #endif
-						if (!m_ptr->mproc_idx) mproc_add(c_ptr->m_idx);
+						mproc_add(c_ptr->m_idx, MPROC_SLOW);
 					}
 					m_ptr->slow = MIN(200, m_ptr->slow + 50);
 
@@ -5689,8 +5682,8 @@ note = "には効果がなかった！";
 					note = " starts moving faster.";
 #endif
 
-					if (!m_ptr->mproc_idx) mproc_add(c_ptr->m_idx);
 					m_ptr->fast = MIN(200, m_ptr->fast + 100);
+					if (!m_ptr->mproc_idx[MPROC_FAST]) mproc_add(c_ptr->m_idx, MPROC_FAST);
 
 					if (c_ptr->m_idx == p_ptr->riding) p_ptr->update |= (PU_BONUS);
 					success = TRUE;
@@ -5715,8 +5708,8 @@ note = "を支配した。";
 #endif
 
 					set_pet(m_ptr);
-					if (!m_ptr->mproc_idx) mproc_add(c_ptr->m_idx);
 					m_ptr->fast = MIN(200, m_ptr->fast + 100);
+					if (!m_ptr->mproc_idx[MPROC_FAST]) mproc_add(c_ptr->m_idx, MPROC_FAST);
 
 					/* Learn about type */
 					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
@@ -5822,8 +5815,6 @@ note = "には効果がなかった。";
 	}
 	else
 	{
-		bool need_mproc_add = FALSE;
-
 		/* Sound and Impact resisters never stun */
 		if (do_stun &&
 		    !(r_ptr->flagsr & (RFR_RES_SOUN | RFR_RES_WALL)) &&
@@ -5852,7 +5843,7 @@ note = "には効果がなかった。";
 #endif
 
 				tmp = do_stun;
-				need_mproc_add = TRUE;
+				mproc_add(c_ptr->m_idx, MPROC_STUNNED);
 			}
 
 			/* Apply stun */
@@ -5892,7 +5883,7 @@ note = "には効果がなかった。";
 #endif
 
 				tmp = do_conf;
-				need_mproc_add = TRUE;
+				mproc_add(c_ptr->m_idx, MPROC_CONFUSED);
 			}
 
 			/* Apply confusion */
@@ -5925,12 +5916,6 @@ note = "には効果がなかった。";
 		/* Mega-Hack -- Handle "polymorph" -- monsters get a saving throw */
 		if (do_poly && (randint1(90) > r_ptr->level))
 		{
-			if (need_mproc_add)
-			{
-				if (!m_ptr->mproc_idx) mproc_add(c_ptr->m_idx);
-				need_mproc_add = FALSE;
-			}
-
 			if (polymorph_monster(y, x))
 			{
 				/* Obvious */
@@ -5995,16 +5980,13 @@ note = "には効果がなかった。";
 			/* Increase fear */
 			tmp = m_ptr->monfear + do_fear;
 
-			if (!m_ptr->monfear) need_mproc_add = TRUE;
-
 			/* Set fear */
 			m_ptr->monfear = (tmp < 200) ? tmp : 200;
+			if (!m_ptr->mproc_idx[MPROC_MONFEAR]) mproc_add(c_ptr->m_idx, MPROC_MONFEAR);
 
 			/* Get angry */
 			get_angry = TRUE;
 		}
-
-		if (need_mproc_add && !m_ptr->mproc_idx) mproc_add(c_ptr->m_idx);
 	}
 
 	if (typ == GF_DRAIN_MANA)
@@ -6023,7 +6005,7 @@ note = "には効果がなかった。";
 		{
 			/* Wake the monster up */
 			m_ptr->csleep = 0;
-			if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+			mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 			if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 		}
 
@@ -6090,8 +6072,8 @@ msg_print("少し悲しい気分がした。");
 			/* Hack -- handle sleep */
 			if (do_sleep)
 			{
-				if (!m_ptr->mproc_idx) mproc_add(c_ptr->m_idx);
 				m_ptr->csleep = do_sleep;
+				if (!m_ptr->mproc_idx[MPROC_CSLEEP]) mproc_add(c_ptr->m_idx, MPROC_CSLEEP);
 			}
 		}
 	}
@@ -6160,8 +6142,8 @@ msg_print("少し悲しい気分がした。");
 			/* Hack -- handle sleep */
 			if (do_sleep)
 			{
-				if (!m_ptr->mproc_idx) mproc_add(c_ptr->m_idx);
 				m_ptr->csleep = do_sleep;
+				if (!m_ptr->mproc_idx[MPROC_CSLEEP]) mproc_add(c_ptr->m_idx, MPROC_CSLEEP);
 			}
 		}
 	}

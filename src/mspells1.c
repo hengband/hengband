@@ -1753,28 +1753,26 @@ msg_format("%^sがかん高い金切り声をあげた。", m_name);
 			if (p_ptr->riding)
 			{
 				monster_type *riding_ptr = &m_list[p_ptr->riding];
-				bool need_mproc_remove = FALSE;
 
 				if (riding_ptr->invulner)
 				{
 					riding_ptr->invulner = 0;
-					need_mproc_remove = TRUE;
+					mproc_remove(p_ptr->riding, riding_ptr->mproc_idx[MPROC_INVULNER], MPROC_INVULNER);
 					riding_ptr->energy_need += ENERGY_NEED();
 				}
 				if (riding_ptr->fast)
 				{
 					riding_ptr->fast = 0;
-					need_mproc_remove = TRUE;
+					mproc_remove(p_ptr->riding, riding_ptr->mproc_idx[MPROC_FAST], MPROC_FAST);
 				}
 				if (riding_ptr->slow)
 				{
 					riding_ptr->slow = 0;
-					need_mproc_remove = TRUE;
+					mproc_remove(p_ptr->riding, riding_ptr->mproc_idx[MPROC_SLOW], MPROC_SLOW);
 				}
 				p_ptr->update |= PU_BONUS;
 				if (p_ptr->health_who == p_ptr->riding) p_ptr->redraw |= PR_HEALTH;
 				p_ptr->redraw |= (PR_UHEALTH);
-				if (need_mproc_remove && !need_mproc(riding_ptr)) mproc_remove(riding_ptr->mproc_idx);
 			}
 
 #ifdef JP
@@ -3268,7 +3266,7 @@ msg_format("%^sの動きが速くなった。", m_name);
 #else
 				msg_format("%^s starts moving faster.", m_name);
 #endif
-				if (!m_ptr->mproc_idx) mproc_add(m_idx);
+				mproc_add(m_idx, MPROC_FAST);
 			}
 			m_ptr->fast = MIN(200, m_ptr->fast + 100);
 			if (p_ptr->riding == m_idx) p_ptr->update |= PU_BONUS;
@@ -3378,7 +3376,7 @@ msg_format("%^sは体力を回復したようだ。", m_name);
 			{
 				/* Cancel fear */
 				m_ptr->monfear = 0;
-				if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+				mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_MONFEAR], MPROC_MONFEAR);
 
 				/* Message */
 #ifdef JP
@@ -3418,8 +3416,8 @@ msg_format("%sは無傷の球の呪文を唱えた。", m_name);
 
 			if (!m_ptr->invulner)
 			{
-				if (!m_ptr->mproc_idx) mproc_add(m_idx);
 				m_ptr->invulner = randint1(4) + 4;
+				mproc_add(m_idx, MPROC_INVULNER);
 			}
 
 			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);

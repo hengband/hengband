@@ -4609,7 +4609,7 @@ void aggravate_monsters(int who)
 			{
 				/* Wake up */
 				m_ptr->csleep = 0;
-				if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+				mproc_remove(i, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 				if (r_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 				if (m_ptr->ml)
 				{
@@ -4627,8 +4627,8 @@ void aggravate_monsters(int who)
 		{
 			if (!is_pet(m_ptr))
 			{
-				if (!m_ptr->mproc_idx) mproc_add(i);
 				m_ptr->fast = MIN(200, m_ptr->fast + 100);
+				if (!m_ptr->mproc_idx[MPROC_FAST]) mproc_add(i, MPROC_FAST);
 				speed = TRUE;
 			}
 		}
@@ -4689,7 +4689,7 @@ bool genocide_aux(int m_idx, int power, bool player_cast, int dam_side, cptr spe
 		if (m_ptr->csleep)
 		{
 			m_ptr->csleep = 0;
-			if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+			mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 			if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 			if (m_ptr->ml)
 			{
@@ -5669,7 +5669,7 @@ msg_format("%^sは苦痛で泣きわめいた！", m_name);
 					if (m_ptr->csleep)
 					{
 						m_ptr->csleep = 0;
-						if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+						mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 					}
 
 					/* Apply damage directly */
@@ -5973,7 +5973,7 @@ static void cave_temp_room_lite(void)
 			{
 				/* Wake up! */
 				m_ptr->csleep = 0;
-				if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+				mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 
 				/* Notice the "waking up" */
@@ -6626,7 +6626,7 @@ msg_print("失敗した。");
 		if (m_ptr->csleep)
 		{
 			m_ptr->csleep = 0;
-			if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+			mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 			if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 		}
 

@@ -541,6 +541,7 @@ static void place_pet(void)
 		{
 			monster_type *m_ptr = &m_list[m_idx];
 			monster_race *r_ptr;
+			int cmi;
 
 			cave[cy][cx].m_idx = m_idx;
 
@@ -554,6 +555,7 @@ static void place_pet(void)
 			m_ptr->fx = cx;
 			m_ptr->ml = TRUE;
 			m_ptr->csleep = 0;
+			for (cmi = 0; cmi < MAX_MPROC; cmi++) m_ptr->mproc_idx[cmi] = 0;
 
 			/* Paranoia */
 			m_ptr->hold_o_idx = 0;
@@ -578,8 +580,12 @@ static void place_pet(void)
 			/* Hack -- Count the number of "reproducers" */
 			if (r_ptr->flags2 & RF2_MULTIPLY) num_repro++;
 
-			if (need_mproc(m_ptr)) mproc_add(m_idx);
-			else m_ptr->mproc_idx = 0;
+			if (m_ptr->fast) mproc_add(m_idx, MPROC_FAST);
+			if (m_ptr->slow) mproc_add(m_idx, MPROC_SLOW);
+			if (m_ptr->stunned) mproc_add(m_idx, MPROC_STUNNED);
+			if (m_ptr->confused) mproc_add(m_idx, MPROC_CONFUSED);
+			if (m_ptr->monfear) mproc_add(m_idx, MPROC_MONFEAR);
+			if (m_ptr->invulner) mproc_add(m_idx, MPROC_INVULNER);
 
 			/* Hack -- Notice new multi-hued monsters */
 			{
@@ -1209,25 +1215,47 @@ void change_floor(void)
 					/* Restore HP */
 					m_ptr->hp = m_ptr->maxhp = m_ptr->max_maxhp;
 
-					/* Remove fear */
-					m_ptr->monfear = 0;
+					if (m_ptr->monfear)
+					{
+						/* Remove fear */
+						m_ptr->monfear = 0;
+						mproc_remove(i, m_ptr->mproc_idx[MPROC_MONFEAR], MPROC_MONFEAR);
+					}
 
-					/* Remove invulnerability */
-					m_ptr->invulner = 0;
+					if (m_ptr->invulner)
+					{
+						/* Remove invulnerability */
+						m_ptr->invulner = 0;
+						mproc_remove(i, m_ptr->mproc_idx[MPROC_INVULNER], MPROC_INVULNER);
+					}
 
-					/* Remove fast status */
-					m_ptr->fast = 0;
+					if (m_ptr->fast)
+					{
+						/* Remove fast status */
+						m_ptr->fast = 0;
+						mproc_remove(i, m_ptr->mproc_idx[MPROC_FAST], MPROC_FAST);
+					}
 
-					/* Remove slow status */
-					m_ptr->slow = 0;
+					if (m_ptr->slow)
+					{
+						/* Remove slow status */
+						m_ptr->slow = 0;
+						mproc_remove(i, m_ptr->mproc_idx[MPROC_SLOW], MPROC_SLOW);
+					}
 
-					/* Remove stun */
-					m_ptr->stunned = 0;
+					if (m_ptr->stunned)
+					{
+						/* Remove stun */
+						m_ptr->stunned = 0;
+						mproc_remove(i, m_ptr->mproc_idx[MPROC_STUNNED], MPROC_STUNNED);
+					}
 
-					/* Remove confusion */
-					m_ptr->confused = 0;
-
-					if (!m_ptr->csleep) mproc_remove(m_ptr->mproc_idx);
+					if (m_ptr->confused)
+					{
+						/* Remove confusion */
+						m_ptr->confused = 0;
+						mproc_remove(i, m_ptr->mproc_idx[MPROC_CONFUSED], MPROC_CONFUSED);
+					}
 				}
 
 				/* Extract real monster race */

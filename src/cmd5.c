@@ -2152,7 +2152,7 @@ bool do_riding(bool force)
 			char m_name[80];
 			monster_desc(m_name, m_ptr, 0);
 			m_ptr->csleep = 0;
-			if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+			mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 #ifdef JP
 			msg_format("%sを起こした。", m_name);
 #else

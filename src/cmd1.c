@@ -2075,7 +2075,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 	{
 		/* Disturb the monster */
 		m_ptr->csleep = 0;
-		if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+		mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 	}
 
@@ -2359,10 +2359,10 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 #else
 							msg_format("%^s is stunned.", m_name);
 #endif
-							if (!m_ptr->mproc_idx) mproc_add(c_ptr->m_idx);
+							mproc_add(c_ptr->m_idx, MPROC_STUNNED);
 						}
 
-						m_ptr->stunned += stun_effect;
+						m_ptr->stunned = MIN(stun_effect + m_ptr->stunned, 200);
 					}
 				}
 			}
@@ -2541,7 +2541,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 #else
 						msg_format("%s is dazed.", m_name);
 #endif
-						if (!m_ptr->mproc_idx) mproc_add(c_ptr->m_idx);
+						mproc_add(c_ptr->m_idx, MPROC_STUNNED);
 					}
 
 					/* Apply stun */
@@ -2779,14 +2779,16 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				}
 				else
 				{
+					int tmp = m_ptr->confused + 10 + randint0(p_ptr->lev) / 5;
+
 #ifdef JP
 					msg_format("%^sは混乱したようだ。", m_name);
 #else
 					msg_format("%^s appears confused.", m_name);
 #endif
 
-					if (!m_ptr->mproc_idx) mproc_add(c_ptr->m_idx);
-					m_ptr->confused += 10 + randint0(p_ptr->lev) / 5;
+					m_ptr->confused = (tmp < 200) ? tmp : 200;
+					if (!m_ptr->mproc_idx[MPROC_CONFUSED]) mproc_add(c_ptr->m_idx, MPROC_CONFUSED);
 				}
 			}
 
@@ -3185,7 +3187,7 @@ bool py_attack(int y, int x, int mode)
 		{
 			/* Disturb the monster */
 			m_ptr->csleep = 0;
-			if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+			mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 			if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 		}
 
@@ -3898,7 +3900,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 			{
 				/* Disturb the monster */
 				m_ptr->csleep = 0;
-				if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+				mproc_remove(c_ptr->m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 			}
 

@@ -213,7 +213,7 @@ void mon_take_hit_mon(int m_idx, int dam, bool *fear, cptr note, int who)
 	{
 		/* Wake it up */
 		m_ptr->csleep = 0;
-		if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+		mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 	}
 
@@ -355,7 +355,7 @@ msg_format("%^sは殺された。", m_name);
 		{
 			/* Cure fear */
 			m_ptr->monfear = 0;
-			if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+			mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_MONFEAR], MPROC_MONFEAR);
 
 			/* No more fear */
 			(*fear) = FALSE;
@@ -380,12 +380,12 @@ msg_format("%^sは殺された。", m_name);
 			/* Hack -- note fear */
 			(*fear) = TRUE;
 
-			if (!m_ptr->mproc_idx) mproc_add(m_idx);
-
 			/* XXX XXX XXX Hack -- Add some timed fear */
 			m_ptr->monfear += (randint1(10) +
 				(((dam >= m_ptr->hp) && (percentage > 7)) ?
 				20 : ((11 - percentage) * 5)));
+
+			mproc_add(m_idx, MPROC_MONFEAR);
 		}
 	}
 
@@ -1531,7 +1531,7 @@ static bool monst_attack_monst(int m_idx, int t_idx)
 			{
 				/* Wake it up */
 				t_ptr->csleep = 0;
-				if (!need_mproc(t_ptr)) mproc_remove(t_ptr->mproc_idx);
+				mproc_remove(t_idx, t_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 				if (tr_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 			}
 
@@ -2152,7 +2152,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					{
 						/* Wake it up */
 						t_ptr->csleep = 0;
-						if (!need_mproc(t_ptr)) mproc_remove(t_ptr->mproc_idx);
+						mproc_remove(t_idx, t_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 						if (tr_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 
 						if (t_ptr->ml)
@@ -2204,7 +2204,7 @@ msg_format("%sは%^sの攻撃をかわした。", t_name,m_name);
 		if (m_ptr->invulner)
 		{
 			m_ptr->invulner = 0;
-			if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+			mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_INVULNER], MPROC_INVULNER);
 		}
 
 #ifdef JP
@@ -2504,7 +2504,7 @@ static void process_monster(int m_idx)
 
 		/* Reset sleep counter */
 		m_ptr->csleep = 0;
-		if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+		mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 
 		/* Notice the "waking up" */
@@ -3238,7 +3238,7 @@ msg_format("%^s%s", m_name, monmessage);
 				{
 					/* Wake up the moved monster */
 					y_ptr->csleep = 0;
-					if (!need_mproc(y_ptr)) mproc_remove(y_ptr->mproc_idx);
+					mproc_remove(c_ptr->m_idx, y_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 					if (z_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) p_ptr->update |= (PU_MON_LITE);
 
 					if (y_ptr->ml)
@@ -3579,7 +3579,7 @@ msg_format("%^s%s", m_name, monmessage);
 	{
 		/* No longer afraid */
 		m_ptr->monfear = 0;
-		if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+		mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_MONFEAR], MPROC_MONFEAR);
 
 		/* Message if seen */
 		if (see_m)
@@ -3591,16 +3591,16 @@ msg_format("%^s%s", m_name, monmessage);
 
 			/* Dump a message */
 #ifdef JP
-msg_format("%^sは戦いを決意した！", m_name);
+			msg_format("%^sは戦いを決意した！", m_name);
 #else
 			msg_format("%^s turns to fight!", m_name);
 #endif
 
 			/* Redraw (later) if needed */
 			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-
-			chg_virtue(V_COMPASSION, -1);
 		}
+
+		chg_virtue(V_COMPASSION, -1);
 
 		/* XXX XXX XXX Actually do something now (?) */
 	}

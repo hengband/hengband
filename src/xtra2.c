@@ -1718,7 +1718,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 	{
 		/* Wake it up */
 		m_ptr->csleep = 0;
-		if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+		mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_CSLEEP], MPROC_CSLEEP);
 		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 	}
 
@@ -2109,7 +2109,7 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 		{
 			/* Cure fear */
 			m_ptr->monfear = 0;
-			if (!need_mproc(m_ptr)) mproc_remove(m_ptr->mproc_idx);
+			mproc_remove(m_idx, m_ptr->mproc_idx[MPROC_MONFEAR], MPROC_MONFEAR);
 
 			/* No more fear */
 			(*fear) = FALSE;
@@ -2134,12 +2134,12 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 			/* Hack -- note fear */
 			(*fear) = TRUE;
 
-			if (!m_ptr->mproc_idx) mproc_add(m_idx);
-
 			/* XXX XXX XXX Hack -- Add some timed fear */
 			m_ptr->monfear = (randint1(10) +
 					  (((dam >= m_ptr->hp) && (percentage > 7)) ?
 					   20 : ((11 - percentage) * 5)));
+
+			mproc_add(m_idx, MPROC_MONFEAR);
 		}
 	}
 
