@@ -3301,8 +3301,18 @@ bool get_string(cptr prompt, char *buf, int len)
  */
 bool get_check(cptr prompt)
 {
-	int i;
+	return get_check_strict(prompt, 0);
+}
 
+/*
+ * Verify something with the user strictly
+ *
+ * mode & 0x01 : force user to answer "YES" or "N"
+ * mode & 0x02 : don't allow ESCAPE key
+ */
+bool get_check_strict(cptr prompt, int mode)
+{
+	int i;
 	char buf[80];
 
 	if (auto_more)
@@ -3315,8 +3325,14 @@ bool get_check(cptr prompt)
 	/* Paranoia XXX XXX XXX */
 	msg_print(NULL);
 
+	if (!rogue_like_commands)
+		mode &= ~1;
+
 	/* Hack -- Build a "useful" prompt */
-	(void)strnfmt(buf, 78, "%.70s[y/n] ", prompt);
+	if (mode & 1)
+		(void)strnfmt(buf, 75, "%.66s[yes/no] ", prompt);
+	else
+		(void)strnfmt(buf, 78, "%.70s[y/n] ", prompt);
 
 	/* Prompt for it */
 	prt(buf, 0, 0);
@@ -3325,9 +3341,39 @@ bool get_check(cptr prompt)
 	while (TRUE)
 	{
 		i = inkey();
-/*		if (quick_messages) break; */
-		if (i == ESCAPE) break;
-		if (strchr("YyNn", i)) break;
+
+		if (i == 'y' || i == 'Y')
+		{
+			if (!(mode & 1))
+				break;
+			else
+			{
+#ifdef JP
+				prt("y (YESと入力してください)", 0, strlen(buf));
+#else
+				prt("y (Please answer YES.)", 0, strlen(buf));
+#endif
+				i = inkey();
+				if (i == 'e' || i == 'E')
+				{
+#ifdef JP
+					prt("e (YESと入力してください)", 0, strlen(buf)+1);
+#else
+					prt("e (Please answer YES.)", 0, strlen(buf)+1);
+#endif
+					i = inkey();
+					if (i == 's' || i == 'S')
+					{
+						i = 'y';
+						break;
+					}
+					prt("", 0, strlen(buf)+1);
+				}
+				prt("", 0, strlen(buf));
+			}
+		}
+		if (!(mode & 2) && (i == ESCAPE)) break;
+		if (strchr("Nn", i)) break;
 		bell();
 	}
 

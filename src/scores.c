@@ -427,7 +427,7 @@ bool send_world_score(bool do_send)
 #endif
 		}
 #ifdef JP
-		else if(get_check("スコアをスコア・サーバに登録しますか? "))
+		else if(get_check_strict("スコアをスコア・サーバに登録しますか? ", 2))
 #else
 		else if(get_check("Do you send score to the world score sever? "))
 #endif

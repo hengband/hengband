@@ -3378,7 +3378,7 @@ if (!get_rnd_line("chainswd_j.txt", 0, noise))
 						/* msg_print("Teleport aborted.") */ ;
 					}
 #ifdef JP
-else if (get_check("テレポートしますか？"))
+else if (get_check_strict("テレポートしますか？", 1))
 #else
 					else if (get_check("Teleport? "))
 #endif
