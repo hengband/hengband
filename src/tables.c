@@ -4515,8 +4515,8 @@ cptr spell_names[VALID_REALM][32] =
 "¿ÈÂÎ¾ô²½",
 
 "¼Ù°­Èô¤Ð¤·",
-"°­ËâÊ§¤¤",
 "À»¤Ê¤ë¸÷µå",
+"°­ËâÊ§¤¤",
 "²ò¼ö",
 "Æ©ÌÀ»ëÇ§",
 "ÂÐ¼Ù°­·ë³¦",
@@ -4641,7 +4641,7 @@ cptr spell_names[VALID_REALM][32] =
 		/* Common Life Spellbooks */
 		"Cure Light Wounds",
 		"Bless",
-		"Light Wounds",
+		"Cause Light Wounds",
 		"Call Light",
 		"Detect Doors & Traps",
 		"Cure Medium Wounds",
@@ -4649,7 +4649,7 @@ cptr spell_names[VALID_REALM][32] =
 		"Satisfy Hunger",
 
 		"Remove Curse",
-		"Medium Wounds",
+		"Cause Medium Wounds",
 		"Cure Critical Wounds",
 		"Resist Heat and Cold",
 		"Sense Surroundings",
@@ -4662,12 +4662,12 @@ cptr spell_names[VALID_REALM][32] =
 		"Perception",
 		"Dispel Undead",
 		"Day of the Dove",
-		"Critical Wounds",
+		"Cause Critical Wounds",
 		"Word of Recall",
 		"Alter Reality",
 		"Warding True",
 
-		"Mass Impotence",
+		"Sterilization",
 		"Detection",
 		"Annihilate Undead",
 		"Clairvoyance",
@@ -5025,8 +5025,8 @@ cptr spell_names[VALID_REALM][32] =
 		"Purify",
 
 		"Scatter Evil",
-		"Exorcism",
 		"Holy Orb",
+		"Exorcism",
 		"Remove Curse",
 		"Sense Unseen",
 		"Protection from Evil",

@@ -3975,7 +3975,7 @@ static bool cast_crusade_spell(int spell)
 		break;
 	case 6:
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_blast(GF_LITE, dir, 3+((plev-1)/9), 3, 8, 3);
+		fire_blast(GF_LITE, dir, 3+((plev-1)/9), 2, 10, 3);
 		break;
 	case 7:
 		(void)set_cut(0);

@@ -4338,9 +4338,9 @@ static void spell_info(char *p, int spell, int realm)
 		case  0: sprintf(p, " %s%dd4", s_dam, 3 + ((plev - 1) / 5)); break;
 		case  5: sprintf(p, " %s%d", s_range, plev*3); break;
 #ifdef JP
-		case  6: sprintf(p, " %s³Æ%dd3", s_dam, 3+((plev-1)/9)); break;
+		case  6: sprintf(p, " %s³Æ%dd2", s_dam, 3+((plev-1)/9)); break;
 #else
-		case  6: sprintf(p, " %s%dd3 each", s_dam, 3+((plev-1)/9)); break;
+		case  6: sprintf(p, " %s%dd2 each", s_dam, 3+((plev-1)/9)); break;
 #endif
 		case  9: sprintf(p, " %s3d6+%d", s_dam, orb); break;
 		case 10: sprintf(p, " %sd%d", s_dam, plev); break;
