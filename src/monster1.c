@@ -1474,11 +1474,25 @@ if (flags6 & (RF6_TELE_LEVEL))      {vp[vn] = "₯Ζ₯μ₯έ‘Ό₯Θ‘¦₯μ₯Ω₯λ";color[vn++] =
 	if (flags6 & (RF6_TELE_LEVEL))      {vp[vn] = "teleport level";color[vn++] = TERM_ORANGE;}
 #endif
 
+	if (flags6 & (RF6_DARKNESS))
+	{
+		if ((p_ptr->pclass != CLASS_NINJA) || (r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)))
+		{
 #ifdef JP
-if (flags6 & (RF6_DARKNESS))        {if ((p_ptr->pclass != CLASS_NINJA) || (flags3 & (RF3_UNDEAD | RF3_HURT_LITE))) {vp[vn] =  "°Ε°Η";color[vn++] = TERM_L_DARK;} else { vp[vn] = "Α®Έχ";color[vn++] = TERM_YELLOW;}}
+			vp[vn] =  "°Ε°Η"; color[vn++] = TERM_L_DARK;
 #else
-if (flags6 & (RF6_DARKNESS))        {vp[vn] = ((p_ptr->pclass != CLASS_NINJA) || (flags3 & (RF3_UNDEAD | RF3_HURT_LITE))) ? "create darkness" : "create light";color[vn++] = TERM_L_DARK;}
+			vp[vn] = "create darkness"; color[vn++] = TERM_L_DARK;
 #endif
+		}
+		else
+		{
+#ifdef JP
+			vp[vn] = "Α®Έχ"; color[vn++] = TERM_YELLOW;
+#else
+			vp[vn] = "create light"; color[vn++] = TERM_YELLOW;
+#endif
+		}
+	}
 
 #ifdef JP
 if (flags6 & (RF6_TRAPS))           {vp[vn] = "₯Θ₯ι₯Γ₯Χ";color[vn++] = TERM_BLUE;}
