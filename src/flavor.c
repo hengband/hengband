@@ -39,8 +39,9 @@
  * Rings (adjectives and colors)
  */
 
-static cptr ring_adj[MAX_ROCKS] =
-{
+static cptr ring_adj[MAX_ROCKS]
+#ifndef JP
+= {
 	"Alexandrite", "Amethyst", "Aquamarine", "Azurite", "Beryl",
 	"Bloodstone", "Calcite", "Carnelian", "Corundum", "Diamond",
 	"Emerald", "Fluorite", "Garnet", "Granite", "Jade",
@@ -56,10 +57,8 @@ static cptr ring_adj[MAX_ROCKS] =
 	"Rusty","Transparent", "Steel", "Tanzanite",
 	"Nephrite",
 };
-
-#ifdef JP
-static cptr J_ring_adj[MAX_ROCKS] =
-{
+#else
+= {
     "金緑石の","アメジストの","アクアマリンの","めのうの","緑柱石の",
     "血玉随の","方解石の","赤めのうの","綱玉の","ダイアモンドの",
     "エメラルドの","ホタル石の","ガーネットの","御影石の","ひすいの",
@@ -76,6 +75,7 @@ static cptr J_ring_adj[MAX_ROCKS] =
     "軟玉の",
 };
 #endif
+
 static byte ring_col[MAX_ROCKS] =
 {
 	TERM_GREEN, TERM_VIOLET, TERM_L_BLUE, TERM_L_BLUE, TERM_L_GREEN,
@@ -98,8 +98,9 @@ static byte ring_col[MAX_ROCKS] =
 /*
  * Amulets (adjectives and colors)
  */
-static cptr amulet_adj[MAX_AMULETS] =
-{
+static cptr amulet_adj[MAX_AMULETS]
+#ifndef JP
+= {
 	"Amber", "Driftwood", "Coral", "Agate", "Ivory",
 	"Obsidian", "Bone", "Brass", "Bronze", "Pewter",
 	"Tortoise Shell", "Golden", "Azure", "Crystal", "Silver",
@@ -107,10 +108,8 @@ static cptr amulet_adj[MAX_AMULETS] =
 	"Curved", "Dragon's claw", "Rosary", "Jade", "Mithril",
 	"Ruby"
 };
-
-#ifdef JP
-static cptr J_amulet_adj[MAX_AMULETS] =
-{
+#else
+= {
     "琥珀の","流木の","サンゴの","めのうの","象牙の",
     "黒曜石の","骨の","真鍮の","青銅の","しろめの",
     "べっ甲の","金の","瑠璃の","水晶の","銀の",
@@ -119,6 +118,7 @@ static cptr J_amulet_adj[MAX_AMULETS] =
     "ルビーの"
 };
 #endif
+
 static byte amulet_col[MAX_AMULETS] =
 {
 	TERM_YELLOW, TERM_L_UMBER, TERM_WHITE, TERM_L_WHITE, TERM_WHITE,
@@ -133,8 +133,9 @@ static byte amulet_col[MAX_AMULETS] =
 /*
  * Staffs (adjectives and colors)
  */
-static cptr staff_adj[MAX_WOODS] =
-{
+static cptr staff_adj[MAX_WOODS]
+#ifndef JP
+= {
 	"Aspen", "Balsa", "Banyan", "Birch", "Cedar",
 	"Cottonwood", "Cypress", "Dogwood", "Elm", "Eucalyptus",
 	"Hemlock", "Hickory", "Ironwood", "Locust", "Mahogany",
@@ -143,10 +144,8 @@ static cptr staff_adj[MAX_WOODS] =
 	"Mistletoe", "Hawthorn", "Bamboo", "Silver", "Runed",
 	"Golden", "Ashen", "Ivory","Gnarled"/*,"Willow"*/
 };
-
-#ifdef JP
-static cptr J_staff_adj[MAX_WOODS] =
-{
+#else
+= {
     "ポプラの","バルサの","バンヤンの","カバの","西洋スギの",
     "檜の","イトスギの","ミズキの","ニレの","ユーカリの",
     "ツガの","ブナの","黒檀の","アカシアの","マホガニーの",
@@ -156,6 +155,7 @@ static cptr J_staff_adj[MAX_WOODS] =
     "金の","トネリコの", "象牙の", "月桂樹の"
 };
 #endif
+
 static byte staff_col[MAX_WOODS] =
 {
 	TERM_L_UMBER, TERM_L_UMBER, TERM_L_UMBER, TERM_L_UMBER, TERM_L_UMBER,
@@ -171,8 +171,9 @@ static byte staff_col[MAX_WOODS] =
 /*
  * Wands (adjectives and colors)
  */
-static cptr wand_adj[MAX_METALS] =
-{
+static cptr wand_adj[MAX_METALS]
+#ifndef JP
+= {
 	"Aluminum", "Cast Iron", "Chromium", "Copper", "Gold",
 	"Iron", "Magnesium", "Molybdenum", "Nickel", "Rusty",
 	"Silver", "Steel", "Tin", "Titanium", "Tungsten",
@@ -182,10 +183,8 @@ static cptr wand_adj[MAX_METALS] =
 	"Platinum", "Lead","Lead-Plated", "Ivory" , "Adamantite",
 	"Uridium", "Long", "Short", "Hexagonal", "Carbonized"
 };
-
-#ifdef JP
-static cptr J_wand_adj[MAX_METALS] =
-{
+#else
+= {
     "アルミの","鋳鉄の","クロムの","銅の","金の",
     "鉄の","マグネシウムの","モリブデンの","ニッケルの","錆びた",
     "銀の","鋼鉄の","ブリキの","チタンの","タングステンの",
@@ -196,6 +195,7 @@ static cptr J_wand_adj[MAX_METALS] =
     "イリヂウムの","長い","短い","六角形の", "炭素の"
 };
 #endif
+
 static byte wand_col[MAX_METALS] =
 {
 	TERM_L_BLUE, TERM_L_DARK, TERM_WHITE, TERM_L_UMBER, TERM_YELLOW,
@@ -216,9 +216,6 @@ static byte wand_col[MAX_METALS] =
 
 static cptr rod_adj[MAX_METALS];
 
-#ifdef JP
-static cptr J_rod_adj[MAX_METALS];
-#endif
 static byte rod_col[MAX_METALS];
 
 
@@ -226,23 +223,23 @@ static byte rod_col[MAX_METALS];
  * Mushrooms (adjectives and colors)
  */
 
-static cptr food_adj[MAX_SHROOM] =
-{
+static cptr food_adj[MAX_SHROOM]
+#ifndef JP
+= {
 	"Blue", "Black", "Black Spotted", "Brown", "Dark Blue",
 	"Dark Green", "Dark Red", "Yellow", "Furry", "Green",
 	"Grey", "Light Blue", "Light Green", "Violet", "Red",
 	"Slimy", "Tan", "White", "White Spotted", "Wrinkled",
 };
-
-#ifdef JP
-static cptr J_food_adj[MAX_SHROOM] =
-{
+#else
+= {
     "青い","黒い","黒斑の","茶色の","群青の",
     "深緑の","紅色の","黄色い","苔むした","緑の",
     "グレーの","空色の","黄緑の","スミレ色の","赤い",
     "ねばねばした","黄褐色の","白い","白斑の","しわしわの",
 };
 #endif
+
 static byte food_col[MAX_SHROOM] =
 {
 	TERM_BLUE, TERM_L_DARK, TERM_L_DARK, TERM_UMBER, TERM_BLUE,
@@ -258,8 +255,9 @@ static byte food_col[MAX_SHROOM] =
  * (water, apple juice, slime mold juice, something)
  */
 
-static cptr potion_adj[MAX_COLORS] =
-{
+static cptr potion_adj[MAX_COLORS]
+#ifndef JP
+= {
 	"Clear", "Light Brown", "Icky Green", "xxx",
 	"Azure", "Blue", "Blue Speckled", "Black", "Brown", "Brown Speckled",
 	"Bubbling", "Chartreuse", "Cloudy", "Copper Speckled", "Crimson", "Cyan",
@@ -275,10 +273,8 @@ static cptr potion_adj[MAX_COLORS] =
 	"Manly", "Stinking", "Oily Black", "Ichor", "Ivory White", "Sky Blue",
 	"Gray", "Silver", "Bronze", "Flashing",
 };
-
-#ifdef JP
-static cptr J_potion_adj[MAX_COLORS] =
-{
+#else
+= {
     "透明な","薄茶色の","よどんだ緑の","漆黒の",
     "紺碧の","青い","青斑の","黒い","茶色の","茶斑の",
     "泡だった","薄黄緑色の","濁った","銅斑の","紅色の","シアン色の",
@@ -296,6 +292,7 @@ static cptr J_potion_adj[MAX_COLORS] =
     "キラキラ光る"
 };
 #endif
+
 static byte potion_col[MAX_COLORS] =
 {
 	TERM_WHITE, TERM_L_UMBER, TERM_GREEN, 0,
@@ -320,9 +317,9 @@ static byte potion_col[MAX_COLORS] =
  * Syllables for scrolls (must be 1-4 letters each)
  */
 
-#ifdef JP
-static cptr J_syllables[MAX_SYLLABLES] =
-{
+static cptr syllables[MAX_SYLLABLES]
+#ifndef JP
+= {
 	"天", "地", "無", "用", "一", "刀", "両", "断",
 	"衣", "縫", "日", "千", "秋", "満", "身", "創",
 	"痍", "七", "転", "八", "倒", "臥", "薪",
@@ -346,8 +343,7 @@ static cptr J_syllables[MAX_SYLLABLES] =
 	"落", "陰", "陽"
 };
 #else
-static cptr syllables[MAX_SYLLABLES] =
-{
+= {
 	"a", "ab", "ag", "aks", "ala", "an", "ankh", "app",
 	"arg", "arze", "ash", "aus", "ban", "bar", "bat", "bek",
 	"bie", "bin", "bit", "bjor", "blu", "bot", "bu",
@@ -453,8 +449,7 @@ static bool object_flavor(int k_idx)
 
 		case TV_RING:
 		{
-			if ((k_ptr->sval == SV_RING_POWER) || (k_ptr->sval == SV_RING_AHO)) return (0x90 + TERM_YELLOW);
-			else return (0x90 + ring_col[k_ptr->sval]);
+			return (0x90 + ring_col[k_ptr->sval]);
 		}
 
 		case TV_STAFF:
@@ -592,9 +587,6 @@ void flavor_init(void)
 	for (i = 0; i < MAX_METALS; i++)
 	{
 		rod_adj[i] = wand_adj[i];
-#ifdef JP
-                J_rod_adj[i] = J_wand_adj[i];
-#endif
 		rod_col[i] = wand_col[i];
 	}
 
@@ -606,14 +598,25 @@ void flavor_init(void)
 		temp_adj = ring_adj[i];
 		ring_adj[i] = ring_adj[j];
 		ring_adj[j] = temp_adj;
-#ifdef JP
-                temp_adj = J_ring_adj[i];
-                J_ring_adj[i] = J_ring_adj[j];
-                J_ring_adj[j] = temp_adj;
-#endif
+
 		temp_col = ring_col[i];
 		ring_col[i] = ring_col[j];
 		ring_col[j] = temp_col;
+	}
+
+	/* Hack -- The One Ring */
+#ifdef JP
+	ring_adj[SV_RING_POWER] = "金無垢の";
+	ring_adj[SV_RING_AHO] = "金有垢の";
+#else
+	ring_adj[SV_RING_POWER] = "Plain Gold";
+	ring_adj[SV_RING_AHO] = "Plain Goldarn";
+#endif
+
+	if (!use_graphics)
+	{
+		ring_col[SV_RING_POWER] = TERM_YELLOW;
+		ring_col[SV_RING_AHO] = TERM_YELLOW;
 	}
 
 	/* Amulets have "amulet colors" */
@@ -623,11 +626,7 @@ void flavor_init(void)
 		temp_adj = amulet_adj[i];
 		amulet_adj[i] = amulet_adj[j];
 		amulet_adj[j] = temp_adj;
-#ifdef JP
-                temp_adj = J_amulet_adj[i];
-                J_amulet_adj[i] = J_amulet_adj[j];
-                J_amulet_adj[j] = temp_adj;
-#endif
+
 		temp_col = amulet_col[i];
 		amulet_col[i] = amulet_col[j];
 		amulet_col[j] = temp_col;
@@ -640,11 +639,7 @@ void flavor_init(void)
 		temp_adj = staff_adj[i];
 		staff_adj[i] = staff_adj[j];
 		staff_adj[j] = temp_adj;
-#ifdef JP
-                temp_adj = J_staff_adj[i];
-                J_staff_adj[i] = J_staff_adj[j];
-                J_staff_adj[j] = temp_adj;
-#endif
+
 		temp_col = staff_col[i];
 		staff_col[i] = staff_col[j];
 		staff_col[j] = temp_col;
@@ -657,11 +652,7 @@ void flavor_init(void)
 		temp_adj = wand_adj[i];
 		wand_adj[i] = wand_adj[j];
 		wand_adj[j] = temp_adj;
-#ifdef JP
-                temp_adj = J_wand_adj[i];
-                J_wand_adj[i] = J_wand_adj[j];
-                J_wand_adj[j] = temp_adj;
-#endif
+
 		temp_col = wand_col[i];
 		wand_col[i] = wand_col[j];
 		wand_col[j] = temp_col;
@@ -674,11 +665,7 @@ void flavor_init(void)
 		temp_adj = rod_adj[i];
 		rod_adj[i] = rod_adj[j];
 		rod_adj[j] = temp_adj;
-#ifdef JP
-                temp_adj = J_rod_adj[i];
-                J_rod_adj[i] = J_rod_adj[j];
-                J_rod_adj[j] = temp_adj;
-#endif
+
 		temp_col = rod_col[i];
 		rod_col[i] = rod_col[j];
 		rod_col[j] = temp_col;
@@ -691,11 +678,7 @@ void flavor_init(void)
 		temp_adj = food_adj[i];
 		food_adj[i] = food_adj[j];
 		food_adj[j] = temp_adj;
-#ifdef JP
-                temp_adj = J_food_adj[i];
-                J_food_adj[i] = J_food_adj[j];
-                J_food_adj[j] = temp_adj;
-#endif
+
 		temp_col = food_col[i];
 		food_col[i] = food_col[j];
 		food_col[j] = temp_col;
@@ -708,11 +691,7 @@ void flavor_init(void)
 		temp_adj = potion_adj[i];
 		potion_adj[i] = potion_adj[j];
 		potion_adj[j] = temp_adj;
-#ifdef JP
-                temp_adj = J_potion_adj[i];
-                J_potion_adj[i] = J_potion_adj[j];
-                J_potion_adj[j] = temp_adj;
-#endif
+
 		temp_col = potion_col[i];
 		potion_col[i] = potion_col[j];
 		potion_col[j] = temp_col;
@@ -748,11 +727,7 @@ void flavor_init(void)
 				for (q = 0; q < s; q++)
 				{
 					/* Add the syllable */
-#ifdef JP
-					strcat(tmp, J_syllables[rand_int(MAX_SYLLABLES)]);
-#else
 					strcat(tmp, syllables[rand_int(MAX_SYLLABLES)]);
-#endif
 				}
 
 				/* Stop before getting too long */
@@ -1284,11 +1259,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			if ((k_ptr->flags3 & TR3_INSTA_ART) && aware) break;
 
 			/* Color the object */
-#ifdef JP
-			modstr = J_amulet_adj[indexx];
-#else
 			modstr = amulet_adj[indexx];
-#endif
 
 			if (aware) append_name = TRUE;
 
@@ -1315,11 +1286,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			if ((k_ptr->flags3 & TR3_INSTA_ART) && aware) break;
 
 			/* Color the object */
-#ifdef JP
-			modstr = J_ring_adj[indexx];
-#else
 			modstr = ring_adj[indexx];
-#endif
 
 			if (aware) append_name = TRUE;
 
@@ -1334,15 +1301,6 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 				basenm = aware ? "& # Ring~" : "& # Ring~";
 #endif
 
-
-			/* Hack -- The One Ring */
-#ifdef JP
-			if (!aware && (o_ptr->sval == SV_RING_POWER)) modstr = "金無垢の";
-			if (!aware && (o_ptr->sval == SV_RING_AHO)) modstr = "金有垢の";
-#else
-			if (!aware && (o_ptr->sval == SV_RING_POWER)) modstr = "Plain Gold";
-			if (!aware && (o_ptr->sval == SV_RING_AHO)) modstr = "Plain Goldarn";
-#endif
 			if (!k_ptr->to_h && !k_ptr->to_d && (o_ptr->to_h || o_ptr->to_d)) show_weapon = TRUE;
 
 			break;
@@ -1356,11 +1314,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		case TV_STAFF:
 		{
 			/* Color the object */
-#ifdef JP
-			modstr = J_staff_adj[indexx];
-#else
 			modstr = staff_adj[indexx];
-#endif
 
 			if (aware) append_name = TRUE;
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
@@ -1380,11 +1334,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		case TV_WAND:
 		{
 			/* Color the object */
-#ifdef JP
-			modstr = J_wand_adj[indexx];
-#else
 			modstr = wand_adj[indexx];
-#endif
 
 			if (aware) append_name = TRUE;
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
@@ -1404,11 +1354,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		case TV_ROD:
 		{
 			/* Color the object */
-#ifdef JP
-			modstr = J_rod_adj[indexx];
-#else
 			modstr = rod_adj[indexx];
-#endif
 
 			if (aware) append_name = TRUE;
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
@@ -1447,11 +1393,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		case TV_POTION:
 		{
 			/* Color the object */
-#ifdef JP
-			modstr = J_potion_adj[indexx];
-#else
 			modstr = potion_adj[indexx];
-#endif
 
 			if (aware) append_name = TRUE;
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
@@ -1474,11 +1416,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 			if (o_ptr->sval >= SV_FOOD_MIN_FOOD) break;
 
 			/* Color the object */
-#ifdef JP
-			modstr = J_food_adj[indexx];
-#else
 			modstr = food_adj[indexx];
-#endif
 
 			if (aware) append_name = TRUE;
 			if (((plain_descriptions) && (aware)) || o_ptr->ident & IDENT_STOREB)
