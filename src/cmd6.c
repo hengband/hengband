@@ -1265,7 +1265,7 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 
 			chg_virtue(V_KNOWLEDGE, 1);
 			chg_virtue(V_ENLIGHTEN, 1);
-			wiz_lite(FALSE, FALSE);
+			wiz_lite(FALSE);
 			ident = TRUE;
 			break;
 
@@ -1279,7 +1279,7 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			chg_virtue(V_KNOWLEDGE, 1);
 			chg_virtue(V_ENLIGHTEN, 2);
 			msg_print(NULL);
-			wiz_lite(TRUE, FALSE);
+			wiz_lite(FALSE);
 			(void)do_inc_stat(A_INT);
 			(void)do_inc_stat(A_WIS);
 			(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
@@ -1945,7 +1945,7 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 
 		case SV_SCROLL_STAR_DESTRUCTION:
 		{
-			if (destroy_area(py, px, 13+randint0(5), TRUE))
+			if (destroy_area(py, px, 13+randint0(5)))
 				ident = TRUE;
 			else
 #ifdef JP
@@ -2618,7 +2618,7 @@ msg_print("ダンジョンが揺れた。");
 
 		case SV_STAFF_DESTRUCTION:
 		{
-			if (destroy_area(py, px, 13+randint0(5), TRUE))
+			if (destroy_area(py, px, 13+randint0(5)))
 				ident = TRUE;
 
 			break;
@@ -3398,6 +3398,9 @@ static int rod_effect(int sval, int dir, bool *use_charge, bool magic)
 {
 	int ident = FALSE;
 
+	/* Unused */
+	(void)magic;
+
 	/* Analyze the rod */
 	switch (sval)
 	{
@@ -3940,6 +3943,9 @@ static bool ang_sort_comp_pet(vptr u, vptr v, int a, int b)
 	monster_race *r_ptr1 = &r_info[m_ptr1->r_idx];
 	monster_race *r_ptr2 = &r_info[m_ptr2->r_idx];
 
+	/* Unused */
+	(void)v;
+
 	if (m_ptr1->nickname && !m_ptr2->nickname) return TRUE;
 	if (m_ptr2->nickname && !m_ptr1->nickname) return FALSE;
 
@@ -4222,7 +4228,7 @@ msg_print("その宝石は赤く明るく光った！");
 
 				chg_virtue(V_KNOWLEDGE, 1);
 				chg_virtue(V_ENLIGHTEN, 1);
-				wiz_lite(FALSE, FALSE);
+				wiz_lite(FALSE);
 #ifdef JP
 msg_print("その宝石はあなたの体力を奪った...");
 take_hit(DAMAGE_LOSELIFE, damroll(3,8), "審判の宝石", -1);

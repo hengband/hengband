@@ -688,7 +688,7 @@ errr process_pref_file_command(char *buf)
 	/* Process "T:<template>:<modifier chr>:<modifier name>:..." */
 	else if (buf[0] == 'T')
 	{
-		int len, tok;
+		int tok;
 		tok = tokenize(buf+2, 2+MAX_MACRO_MOD, zz, 0);
 
 		/* Process "T:<template>:<modifier chr>:<modifier name>:..." */
@@ -3978,6 +3978,9 @@ static bool ang_sort_comp_quest_num(vptr u, vptr v, int a, int b)
 	quest_type *qa = &quest[q_num[a]];
 	quest_type *qb = &quest[q_num[b]];
 
+	/* Unused */
+	(void)v;
+
 	if (qa->complev < qb->complev) return TRUE;
 	if (qa->complev > qb->complev) return FALSE;
 	if (qa->level <= qb->level) return TRUE;
@@ -3988,6 +3991,9 @@ static void ang_sort_swap_quest_num(vptr u, vptr v, int a, int b)
 {
 	int *q_num = (int *)u;
 	int tmp;
+
+	/* Unused */
+	(void)v;
 
 	tmp = q_num[a];
 	q_num[a] = q_num[b];
@@ -4819,7 +4825,7 @@ fprintf(fff, "  [ キャラクタの持ち物 ]\n\n");
  * XXX XXX XXX Allow the "full" flag to dump additional info,
  * and trigger its usage from various places in the code.
  */
-errr file_character(cptr name, bool full)
+errr file_character(cptr name)
 {
 	int		fd = -1;
 	FILE		*fff = NULL;
@@ -6454,7 +6460,7 @@ put_str("ファイルネーム: ", 23, 0);
 		screen_save();
 
 		/* Dump a character file */
-		(void)file_character(out_val, TRUE);
+		(void)file_character(out_val);
 
 		/* Load screen */
 		screen_load();

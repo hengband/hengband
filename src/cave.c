@@ -4686,7 +4686,7 @@ void map_area(int range)
  * since this would prevent the use of "view_torch_grids" as a method to
  * keep track of what grids have been observed directly.
  */
-void wiz_lite(bool wizard, bool ninja)
+void wiz_lite(bool ninja)
 {
 	int i, y, x;
 	byte feat;
@@ -4701,12 +4701,6 @@ void wiz_lite(bool wizard, bool ninja)
 
 		/* Skip held objects */
 		if (o_ptr->held_m_idx) continue;
-
-#if 0
-		/* Skip objects in vaults, if not a wizard. -LM- */
-		if ((wizard == FALSE) && 
-			(cave[o_ptr->iy][o_ptr->ix].info & (CAVE_ICKY))) continue;
-#endif
 
 		/* Memorize */
 		o_ptr->marked |= OM_FOUND;

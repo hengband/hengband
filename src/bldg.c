@@ -4375,9 +4375,7 @@ Term_addstr(-1, TERM_WHITE, " ['r'思い出, ' 'で続行, ESC]");
 			/* Recall */
 			if (recall)
 			{
-				/* Recall on screen */
-				monster_race *r_ptr = &r_info[r_idx];
-				int m;
+				/*** Recall on screen ***/
 
 				/* Get maximal info about this monster */
 				lore_do_probe(r_idx);
@@ -4506,7 +4504,7 @@ msg_print("お金が足りません！");
 	case BACT_KING_LEGENDS:
 	case BACT_ARENA_LEGENDS:
 	case BACT_LEGENDS:
-		show_highclass(building_loc);
+		show_highclass();
 		break;
 	case BACT_POSTER:
 	case BACT_ARENA_RULES:

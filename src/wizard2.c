@@ -1552,36 +1552,6 @@ static void do_cmd_wiz_summon(int num)
 
 
 /*
- * hook function to sort monsters by level
- */
-static bool ang_sort_comp_cave_temp(vptr u, vptr v, int a, int b)
-{
-	cave_template_type *who = (cave_template_type *)(u);
-
-	int o1 = who[a].occurrence;
-	int o2 = who[b].occurrence;
-
-	return o2 <= o1;
-}
-
-
-/*
- * Sorting hook -- Swap function
- */
-static void ang_sort_swap_cave_temp(vptr u, vptr v, int a, int b)
-{
-	cave_template_type *who = (cave_template_type *)(u);
-
-	cave_template_type holder;
-
-	/* Swap */
-	holder = who[a];
-	who[a] = who[b];
-	who[b] = holder;
-}
-
-
-/*
  * Summon a creature of the specified type
  *
  * XXX XXX XXX This function is rather dangerous
@@ -1892,7 +1862,7 @@ void do_cmd_debug(void)
 					cave[y][x].info |= (CAVE_GLOW | CAVE_MARK);
 				}
 			}
-			wiz_lite(TRUE, FALSE);
+			wiz_lite(FALSE);
 			break;
 		}
 
@@ -1915,7 +1885,7 @@ void do_cmd_debug(void)
 
 		/* Wizard Light the Level */
 		case 'w':
-		wiz_lite(TRUE, (bool)(p_ptr->pclass == CLASS_NINJA));
+		wiz_lite((bool)(p_ptr->pclass == CLASS_NINJA));
 		break;
 
 		/* Increase Experience */

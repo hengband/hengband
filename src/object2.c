@@ -2231,7 +2231,7 @@ static bool make_artifact(object_type *o_ptr)
 /*
  *  Choose random ego type
  */
-static byte get_random_ego(byte slot, bool good, int level)
+static byte get_random_ego(byte slot, bool good)
 {
 	int i, value;
 	ego_item_type *e_ptr;
@@ -2243,7 +2243,6 @@ static byte get_random_ego(byte slot, bool good, int level)
 		e_ptr = &e_info[i];
 		
 		if (e_ptr->slot == slot
-		    /* && level >= e_ptr->level */
 		    && ((good && e_ptr->rating) || (!good && !e_ptr->rating)) )
 		{
 			if (e_ptr->rarity)
@@ -2258,7 +2257,6 @@ static byte get_random_ego(byte slot, bool good, int level)
 		e_ptr = &e_info[i];
 		
 		if (e_ptr->slot == slot
-		    /* && level >= e_ptr->level */
 		    && ((good && e_ptr->rating) || (!good && !e_ptr->rating)) )
 		{
 			if (e_ptr->rarity)
@@ -2376,7 +2374,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 				while (1)
 				{
 					/* Roll for an ego-item */
-					o_ptr->name2 = get_random_ego(INVEN_RARM, TRUE, level);
+					o_ptr->name2 = get_random_ego(INVEN_RARM, TRUE);
 					if (o_ptr->name2 == EGO_SHARPNESS && o_ptr->tval != TV_SWORD)
 						continue;
 					if (o_ptr->name2 == EGO_EARTHQUAKES && o_ptr->tval != TV_HAFTED)
@@ -2476,7 +2474,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 				/* Roll for ego-item */
 				if (randint0(MAX_DEPTH) < level)
 				{
-					o_ptr->name2 = get_random_ego(INVEN_RARM, FALSE, level);
+					o_ptr->name2 = get_random_ego(INVEN_RARM, FALSE);
 					switch (o_ptr->name2)
 					{
 					case EGO_MORGUL:
@@ -2499,7 +2497,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 					create_artifact(o_ptr, FALSE);
 					break;
 				}
-				o_ptr->name2 = get_random_ego(INVEN_BOW, TRUE, level);
+				o_ptr->name2 = get_random_ego(INVEN_BOW, TRUE);
 			}
 
 			break;
@@ -2513,7 +2511,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 			/* Very good */
 			if (power > 1)
 			{
-				o_ptr->name2 = get_random_ego(INVEN_AMMO, TRUE, level);
+				o_ptr->name2 = get_random_ego(INVEN_AMMO, TRUE);
 
 				switch (o_ptr->name2)
 				{
@@ -2535,7 +2533,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 				/* Roll for ego-item */
 				if (randint0(MAX_DEPTH) < level)
 				{
-					o_ptr->name2 = get_random_ego(INVEN_AMMO, FALSE, level);
+					o_ptr->name2 = get_random_ego(INVEN_AMMO, FALSE);
 				}
 			}
 
@@ -2694,7 +2692,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 				{
 					bool okay_flag = TRUE;
 
-					o_ptr->name2 = get_random_ego(INVEN_BODY, TRUE, level);
+					o_ptr->name2 = get_random_ego(INVEN_BODY, TRUE);
 
 					switch (o_ptr->name2)
 					{
@@ -2750,7 +2748,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					create_artifact(o_ptr, FALSE);
 					break;
 				}
-				o_ptr->name2 = get_random_ego(INVEN_LARM, TRUE, level);
+				o_ptr->name2 = get_random_ego(INVEN_LARM, TRUE);
 				
 				switch (o_ptr->name2)
 				{
@@ -2786,13 +2784,13 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					create_artifact(o_ptr, FALSE);
 					break;
 				}
-				o_ptr->name2 = get_random_ego(INVEN_HANDS, TRUE, level);
+				o_ptr->name2 = get_random_ego(INVEN_HANDS, TRUE);
 			}
 			
 			/* Very cursed */
 			else if (power < -1)
 			{
-				o_ptr->name2 = get_random_ego(INVEN_HANDS, FALSE, level);
+				o_ptr->name2 = get_random_ego(INVEN_HANDS, FALSE);
 			}
 
 			break;
@@ -2818,7 +2816,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					create_artifact(o_ptr, FALSE);
 					break;
 				}
-				o_ptr->name2 = get_random_ego(INVEN_FEET, TRUE, level);
+				o_ptr->name2 = get_random_ego(INVEN_FEET, TRUE);
 
 				switch (o_ptr->name2)
 				{
@@ -2833,7 +2831,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 			/* Very cursed */
 			else if (power < -1)
 			{
-				o_ptr->name2 = get_random_ego(INVEN_FEET, FALSE, level);
+				o_ptr->name2 = get_random_ego(INVEN_FEET, FALSE);
 			}
 
 			break;
@@ -2852,7 +2850,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 				while (1)
 				{
 					bool ok_flag = TRUE;
-					o_ptr->name2 = get_random_ego(INVEN_HEAD, TRUE, level);
+					o_ptr->name2 = get_random_ego(INVEN_HEAD, TRUE);
 
 					switch (o_ptr->name2)
 					{
@@ -2884,7 +2882,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 			/* Very cursed */
 			else if (power < -1)
 			{
-				o_ptr->name2 = get_random_ego(INVEN_HEAD, FALSE, level);
+				o_ptr->name2 = get_random_ego(INVEN_HEAD, FALSE);
 			}
 
 			break;
@@ -2914,7 +2912,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 				while (1)
 				{
 					bool ok_flag = TRUE;
-					o_ptr->name2 = get_random_ego(INVEN_HEAD, TRUE, level);
+					o_ptr->name2 = get_random_ego(INVEN_HEAD, TRUE);
 
 					switch (o_ptr->name2)
 					{
@@ -2942,7 +2940,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 			/* Very cursed */
 			else if (power < -1)
 			{
-				o_ptr->name2 = get_random_ego(INVEN_HEAD, FALSE, level);
+				o_ptr->name2 = get_random_ego(INVEN_HEAD, FALSE);
 			}
 			break;
 		}
@@ -2957,7 +2955,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					create_artifact(o_ptr, FALSE);
 					break;
 				}
-				o_ptr->name2 = get_random_ego(INVEN_OUTER, TRUE, level);
+				o_ptr->name2 = get_random_ego(INVEN_OUTER, TRUE);
 
 				switch (o_ptr->name2)
 				{
@@ -2972,7 +2970,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 			/* Very cursed */
 			else if (power < -1)
 			{
-				o_ptr->name2 = get_random_ego(INVEN_OUTER, FALSE, level);
+				o_ptr->name2 = get_random_ego(INVEN_OUTER, FALSE);
 			}
 
 			break;
@@ -3857,7 +3855,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 					{
 						bool okay_flag = TRUE;
 
-						o_ptr->name2 = get_random_ego(INVEN_LITE, TRUE, level);
+						o_ptr->name2 = get_random_ego(INVEN_LITE, TRUE);
 
 						switch (o_ptr->name2)
 						{
@@ -3872,7 +3870,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 			}
 			else if (power == -2)
 			{
-				o_ptr->name2 = get_random_ego(INVEN_LITE, FALSE, level);
+				o_ptr->name2 = get_random_ego(INVEN_LITE, FALSE);
 
 				switch (o_ptr->name2)
 				{

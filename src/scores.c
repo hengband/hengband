@@ -669,7 +669,7 @@ strcpy(the_score.day, "º£Æü");
  * show_highclass - selectively list highscores based on class
  * -KMW-
  */
-void show_highclass(int building)
+void show_highclass(void)
 {
 
 	register int i = 0, j, m = 0;

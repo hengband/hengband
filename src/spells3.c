@@ -1460,7 +1460,7 @@ msg_print("大きな爆発音があった！");
 #endif
 
 
-		if (destroy_area(py, px, 15 + p_ptr->lev + randint0(11), TRUE))
+		if (destroy_area(py, px, 15 + p_ptr->lev + randint0(11)))
 #ifdef JP
 msg_print("ダンジョンが崩壊した...");
 #else
@@ -2069,20 +2069,6 @@ bool item_tester_hook_armour(object_type *o_ptr)
 		case TV_HELM:
 		case TV_BOOTS:
 		case TV_GLOVES:
-		{
-			return (TRUE);
-		}
-	}
-
-	return (FALSE);
-}
-
-
-static bool item_tester_hook_corpse(object_type *o_ptr)
-{
-	switch (o_ptr->tval)
-	{
-		case TV_CORPSE:
 		{
 			return (TRUE);
 		}

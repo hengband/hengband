@@ -5324,7 +5324,7 @@ msg_print("これで全部です。");
  * Later we may use one function for both "destruction" and
  * "earthquake" by using the "full" to select "destruction".
  */
-bool destroy_area(int y1, int x1, int r, int full)
+bool destroy_area(int y1, int x1, int r)
 {
 	int       y, x, k, t;
 	cave_type *c_ptr;

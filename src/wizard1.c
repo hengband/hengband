@@ -1924,6 +1924,9 @@ static void spoil_out(cptr str)
  */
 static void roff_func(byte attr, cptr str)
 {
+	/* Unused */
+	(void)attr;
+
 	spoil_out(str);
 }
 

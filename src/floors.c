@@ -114,9 +114,6 @@ void clear_saved_floor_files(void)
 {
 	char floor_savefile[1024];
 	int i;
-	int fd = -1;
-	int mode = 0644;
-	bool force = FALSE;
 
 #ifdef SET_UID
 # ifdef SECURE
@@ -1240,7 +1237,7 @@ void change_floor(void)
 
 	/* Hack -- Munchkin characters always get whole map */
 	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN)
-		wiz_lite(TRUE, (bool)(p_ptr->pclass == CLASS_NINJA));
+		wiz_lite((bool)(p_ptr->pclass == CLASS_NINJA));
 
 	/* Remember when this level was "created" */
 	old_turn = turn;
@@ -1331,7 +1328,6 @@ void stair_creation(void)
 			for (x = 0; x < cur_wid; x++)
 			{
 				cave_type *c_ptr = &cave[y][x];
-				bool ok = FALSE;
 
 				if (!c_ptr->special) continue;
 				if (c_ptr->special != dest_floor_id) continue;

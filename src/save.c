@@ -773,6 +773,9 @@ static bool ang_sort_comp_cave_temp(vptr u, vptr v, int a, int b)
 	u16b o1 = who[a].occurrence;
 	u16b o2 = who[b].occurrence;
 
+	/* Unused */
+	(void)v;
+
 	return o2 <= o1;
 }
 
@@ -785,6 +788,9 @@ static void ang_sort_swap_cave_temp(vptr u, vptr v, int a, int b)
 	cave_template_type *who = (cave_template_type *)(u);
 
 	cave_template_type holder;
+
+	/* Unused */
+	(void)v;
 
 	/* Swap */
 	holder = who[a];

@@ -476,12 +476,8 @@ void wipe_m_list(void)
 	{
 		monster_type *m_ptr = &m_list[i];
 
-		monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
 		/* Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
-
-		/* Mega-Hack -- preserve Unique's XXX XXX XXX */
 
 		/* Hack -- Reduce the racial counter */
 		real_r_ptr(m_ptr)->cur_num = 0;
@@ -2787,7 +2783,6 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr;
 	char old_m_name[80];
-	int old_r_idx = m_ptr->r_idx;
 	bool old_unique = FALSE;
 
 	if (r_info[m_ptr->r_idx].flags1 & RF1_UNIQUE)

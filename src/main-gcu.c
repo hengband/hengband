@@ -1177,6 +1177,9 @@ static errr term_data_init(term_data *td, int rows, int cols, int y, int x)
 
 static void hook_quit(cptr str)
 {
+	/* Unused */
+	(void)str;
+
        /* Exit curses */
        endwin();
 }
@@ -1196,6 +1199,11 @@ errr init_gcu(int argc, char *argv[])
 
    int num_term = 4, next_win = 0;
    char path[1024];
+
+   /* Unused */
+   (void)argc;
+   (void)argv;
+
 
 #ifdef USE_SOUND
 

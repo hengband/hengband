@@ -736,7 +736,6 @@ static bool cast_learned_spell(int spell, bool success)
 	int     summon_lev = p_ptr->lev * 2 / 3 + randint1(p_ptr->lev/2);
 	int             hp = p_ptr->chp;
 	int             damage = 0;
-	bool    unique_okay = FALSE;
 	bool   pet = success;
 	bool   no_trump = FALSE;
 	u32b p_mode, u_mode = 0L, g_mode;

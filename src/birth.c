@@ -2576,11 +2576,8 @@ static void load_prev_data(bool swap)
 
 /*
  * Returns adjusted stat -JK-  Algorithm by -JWT-
- *
- * auto_roll is boolean and states maximum changes should be used rather
- * than random ones to allow specification of higher values to wait for
  */
-static int adjust_stat(int value, int amount, int auto_roll)
+static int adjust_stat(int value, int amount)
 {
 	int i;
 
@@ -3163,7 +3160,7 @@ static void birth_put_stats(void)
 			j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
 
 			/* Obtain the current stat */
-			m = adjust_stat(p_ptr->stat_max[i], j, TRUE);
+			m = adjust_stat(p_ptr->stat_max[i], j);
 
 			/* Put the stat */
 			cnv_stat(m, buf);
@@ -4708,7 +4705,7 @@ static bool get_stat_limits(void)
 		j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
 
 		/* Obtain the "maximal" stat */
-		m = adjust_stat(17, j, TRUE);
+		m = adjust_stat(17, j);
 
 		/* Save the maximum */
 		mval[i] = m;
@@ -4734,7 +4731,7 @@ static bool get_stat_limits(void)
 		}
 
 		/* Obtain the current stat */
-		m = adjust_stat(cval[i], j, TRUE);
+		m = adjust_stat(cval[i], j);
 
 		/* Above 18 */
 		if (m > 18)
@@ -4798,7 +4795,7 @@ static bool get_stat_limits(void)
 				j = rp_ptr->r_adj[cs] + cp_ptr->c_adj[cs] + ap_ptr->a_adj[cs];
 
 				/* Obtain the current stat */
-				m = adjust_stat(cval[cs], j, TRUE);
+				m = adjust_stat(cval[cs], j);
 				
 				/* Above 18 */
 				if (m > 18)
@@ -5916,7 +5913,7 @@ static bool player_birth_aux(void)
 				j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
 
 				/* Obtain the current stat */
-				m = adjust_stat(stat_limit[i], j, TRUE);
+				m = adjust_stat(stat_limit[i], j);
 
 				/* Put the stat */
 				cnv_stat(m, buf);

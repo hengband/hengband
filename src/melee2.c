@@ -190,7 +190,7 @@ static bool get_enemy_dir(int m_idx, int *mm)
  * Hack, based on mon_take_hit... perhaps all monster attacks on
  * other monsters should use this?
  */
-void mon_take_hit_mon(bool is_psy_spear, int m_idx, int dam, bool *fear, cptr note, int who)
+void mon_take_hit_mon(int m_idx, int dam, bool *fear, cptr note, int who)
 {
 	monster_type	*m_ptr = &m_list[m_idx];
 
@@ -2217,9 +2217,9 @@ msg_format("%sは%^sの攻撃をかわした。", t_name,m_name);
 		if (m_ptr->invulner) m_ptr->invulner = 0;
 
 #ifdef JP
-mon_take_hit_mon(FALSE, m_idx, m_ptr->hp + 1, &fear, "は爆発して粉々になった。", m_idx);
+mon_take_hit_mon(m_idx, m_ptr->hp + 1, &fear, "は爆発して粉々になった。", m_idx);
 #else
-		mon_take_hit_mon(FALSE, m_idx, m_ptr->hp + 1, &fear, " explodes into tiny shreds.", m_idx);
+		mon_take_hit_mon(m_idx, m_ptr->hp + 1, &fear, " explodes into tiny shreds.", m_idx);
 #endif
 
 
@@ -2397,9 +2397,9 @@ msg_print("少しの間悲しい気分になった。");
 
 	if (m_ptr->r_idx == MON_SHURYUUDAN)
 #ifdef JP
-		mon_take_hit_mon(FALSE, m_idx, 1, &fear, "は爆発して粉々になった。", m_idx);
+		mon_take_hit_mon(m_idx, 1, &fear, "は爆発して粉々になった。", m_idx);
 #else
-		mon_take_hit_mon(FALSE, m_idx, 1, &fear, " explodes into tiny shreds.", m_idx);
+		mon_take_hit_mon(m_idx, 1, &fear, " explodes into tiny shreds.", m_idx);
 #endif
 
 	if ((is_pet(m_ptr) || is_friendly(m_ptr)) && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_UNIQUE_7)) && !p_ptr->inside_battle)

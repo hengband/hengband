@@ -2654,6 +2654,10 @@ IMInstantiateCallback(Display *display, XPointer unused1, XPointer unused2)
 	XIMStyles *xim_styles = NULL;
 	int i;
 
+	/* Unused */
+	(void)unused1;
+	(void)unused2;
+
 	xim = XOpenIM(display, NULL, NULL, NULL);
 	if(!xim){
 		printf("can't open IM\n");
@@ -2702,7 +2706,11 @@ static void IMDestroyCallback(XIM xim, XPointer client_data, XPointer call_data)
 {
 	int i;
 
-    if (call_data == NULL){
+	/* Unused */
+	(void)xim;
+	(void)client_data;
+
+	if (call_data == NULL){
 		XRegisterIMInstantiateCallback(Metadpy->dpy, NULL, NULL, NULL, IMInstantiateCallback, NULL);
 	}
 

@@ -1831,7 +1831,6 @@ bool ang_sort_comp_hook(vptr u, vptr v, int a, int b)
 
 	int z1, z2;
 
-
 	/* Sort by player kills */
 	if (*why >= 4)
 	{
@@ -1900,6 +1899,9 @@ void ang_sort_swap_hook(vptr u, vptr v, int a, int b)
 	u16b *who = (u16b*)(u);
 
 	u16b holder;
+
+	/* Unused */
+	(void)v;
 
 	/* Swap */
 	holder = who[a];

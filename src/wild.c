@@ -475,6 +475,9 @@ static void generate_wilderness_area(int terrain, u32b seed, bool border, bool c
 	int table_size = sizeof(terrain_table[0]) / sizeof(int);
 	int roughness = 1; /* The roughness of the level. */
 
+	/* Unused */
+	(void)border;
+
 	/* The outer wall is easy */
 	if (terrain == TERRAIN_EDGE)
 	{
@@ -980,6 +983,9 @@ errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, in
 	int i, num;
 	char *zz[33];
 
+	/* Unused */
+	(void)ymin;
+	(void)ymax;
 
 	/* Paranoia */
 	if (!(buf[0] == 'W')) return (PARSE_ERROR_GENERIC);

@@ -199,7 +199,7 @@ errr path_parse(char *buf, int max, cptr file)
 	/* File needs no parsing */
 	if (file[0] != '~')
 	{
-		strcpy(buf, file);
+		(void)strnfmt(buf, max, "%s", file);
 		return (0);
 	}
 
@@ -232,10 +232,8 @@ errr path_parse(char *buf, int max, cptr file)
 	if (!pw) return (1);
 
 	/* Make use of the info */
-	(void)strcpy(buf, pw->pw_dir);
-
-	/* Append the rest of the filename, if any */
-	if (s) (void)strcat(buf, s);
+	if (s) strnfmt(buf, max, "%s%s", pw->pw_dir, s);
+	else strnfmt(buf, max, "%s", pw->pw_dir);
 
 	/* Success */
 	return (0);

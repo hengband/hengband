@@ -1146,7 +1146,7 @@ static bool cast_life_spell(int spell)
 		(void)mass_genocide_undead(plev+50,TRUE);
 		break;
 	case 27: /* Clairvoyance */
-		wiz_lite(FALSE, FALSE);
+		wiz_lite(FALSE);
 		break;
 	case 28: /* Restoration */
 		(void)do_res_stat(A_STR);
@@ -1306,7 +1306,7 @@ msg_print("次元の扉が開いた。目的地を選んで下さい。");
 		chg_virtue(V_KNOWLEDGE, 1);
 		chg_virtue(V_ENLIGHTEN, 1);
 
-		wiz_lite(FALSE, FALSE);
+		wiz_lite(FALSE);
 		if (!(p_ptr->telepathy))
 		{
 			(void)set_tim_esp(randint1(30) + 25, FALSE);
@@ -1528,7 +1528,7 @@ msg_print("太陽光線が現れた。");
 		fire_ball(GF_LITE, 0, 150, 8);
 		chg_virtue(V_KNOWLEDGE, 1);
 		chg_virtue(V_ENLIGHTEN, 1);
-		wiz_lite(FALSE, FALSE);
+		wiz_lite(FALSE);
 		if ((prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE)) && !p_ptr->resist_lite)
 		{
 #ifdef JP
@@ -1707,7 +1707,7 @@ msg_print("あなたは力がみなぎるのを感じた！");
 			}
 			else if (die < 106)
 			{
-				destroy_area(py, px, 13+randint0(5), TRUE);
+				destroy_area(py, px, 13+randint0(5));
 			}
 			else if (die < 108)
 			{
@@ -1756,7 +1756,7 @@ msg_print("ドーン！部屋が揺れた！");
 		(void)fire_beam(GF_AWAY_ALL, dir, plev);
 		break;
 	case 14: /* Word of Destruction */
-		destroy_area(py, px, 13+randint0(5), TRUE);
+		destroy_area(py, px, 13+randint0(5));
 		break;
 	case 15: /* Invoke Logrus */
 		if (!get_aim_dir(&dir)) return FALSE;
@@ -2168,7 +2168,7 @@ msg_print("あなたの頭に大量の幽霊たちの騒々しい声が押し寄せてきた...");
 			}
 			else if (die < 106)
 			{
-				destroy_area(py, px, 13+randint0(5), TRUE);
+				destroy_area(py, px, 13+randint0(5));
 			}
 			else if (die < 108)
 			{
@@ -2655,7 +2655,7 @@ msg_print("《太陽》だ。");
 
 					chg_virtue(V_KNOWLEDGE, 1);
 					chg_virtue(V_ENLIGHTEN, 1);
-					wiz_lite(FALSE, FALSE);
+					wiz_lite(FALSE);
 				}
 				else
 				{
@@ -3449,7 +3449,7 @@ msg_print("光線が放たれた。");
 	case 31: /* Clairvoyance */
 		chg_virtue(V_KNOWLEDGE, 1);
 		chg_virtue(V_ENLIGHTEN, 1);
-		wiz_lite(FALSE, FALSE);
+		wiz_lite(FALSE);
 		if (!p_ptr->telepathy)
 		{
 			(void)set_tim_esp(randint1(30) + 25, FALSE);
@@ -4120,7 +4120,7 @@ msg_print("神聖な力が邪悪を打ち払った！");
 		}
 		break;
 	case 27: /* Word of Destruction */
-		destroy_area(py, px, 13+randint0(5), TRUE);
+		destroy_area(py, px, 13+randint0(5));
 		break;
 	case 28: /* Eye for an Eye */
 		set_tim_eyeeye(randint1(10)+10, FALSE);
@@ -5243,6 +5243,9 @@ static bool ang_sort_comp_pet_dismiss(vptr u, vptr v, int a, int b)
 	monster_type *m_ptr2 = &m_list[w2];
 	monster_race *r_ptr1 = &r_info[m_ptr1->r_idx];
 	monster_race *r_ptr2 = &r_info[m_ptr2->r_idx];
+
+	/* Unused */
+	(void)v;
 
 	if (w1 == p_ptr->riding) return TRUE;
 	if (w2 == p_ptr->riding) return FALSE;

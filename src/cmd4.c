@@ -1103,7 +1103,7 @@ void do_cmd_change_name(void)
 			{
 				if (tmp[0] && (tmp[0] != ' '))
 				{
-					file_character(tmp, TRUE);
+					file_character(tmp);
 				}
 			}
 		}
@@ -4941,6 +4941,9 @@ static bool ang_sort_comp_monster_level(vptr u, vptr v, int a, int b)
 	monster_race *r_ptr1 = &r_info[w1];
 	monster_race *r_ptr2 = &r_info[w2];
 
+	/* Unused */
+	(void)v;
+
 	if (r_ptr2->level > r_ptr1->level) return TRUE;
 	if (r_ptr1->level > r_ptr2->level) return FALSE;
 
@@ -5217,6 +5220,9 @@ static cptr feature_group_text[] =
 static int collect_features(int grp_cur, int *feat_idx)
 {
 	int i, feat_cnt = 0;
+
+	/* Unused;  There is a single group. */
+	(void)grp_cur;
 
 	/* Check every feature */
 	for (i = 1; i < max_f_idx; i++)
@@ -6193,7 +6199,6 @@ static bool ang_sort_art_comp(vptr u, vptr v, int a, int b)
 
 	int z1, z2;
 
-
 	/* Sort by total kills */
 	if (*why >= 3)
 	{
@@ -6249,6 +6254,9 @@ static void ang_sort_art_swap(vptr u, vptr v, int a, int b)
 	u16b *who = (u16b*)(u);
 
 	u16b holder;
+
+	/* Unused */
+	(void)v;
 
 	/* Swap */
 	holder = who[a];

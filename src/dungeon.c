@@ -1362,7 +1362,7 @@ static void gere_music(s32b music)
 			set_cut(0);
 			break;
 		case MUSIC_DETECT+19:
-			wiz_lite(FALSE, FALSE);
+			wiz_lite(FALSE);
 		case MUSIC_DETECT+11:
 		case MUSIC_DETECT+12:
 		case MUSIC_DETECT+13:
