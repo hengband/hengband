@@ -6842,7 +6842,7 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 {
 	FILE    *fp;
 	char    buf[1024];
-	int     line, counter, test, numentries;
+	int     line, counter, test, numentries = 0;
 	int     line_num = 0;
 
 
@@ -6912,9 +6912,8 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 			my_fclose(fp);
 			return (-1);
 		}
-
 	}
-	
+
 	/* Get the number of entries */
 	while (TRUE)
 	{
@@ -6927,9 +6926,24 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 			/* Look for the number of entries */
 			if (isdigit(buf[0]))
 			{
+				int i;
+				bool digit = TRUE;
+
+				for (i = 1; buf[i] && (buf[i] != '\n') && (buf[i] != '\r'); i++)
+				{
+					if (!isdigit(buf[i]))
+					{
+						digit = FALSE;
+						break;
+					}
+				}
+
 				/* Get the number of entries */
-				numentries = atoi(buf);
-				break;
+				if (digit)
+				{
+					numentries = atoi(buf);
+					break;
+				}
 			}
 		}
 		else
