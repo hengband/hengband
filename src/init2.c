@@ -1687,6 +1687,14 @@ static errr init_other(void)
 		}
 	}
 
+	/*
+         *  Set the "default" window flags
+	 *  Window 1 : Display messages
+	 *  Window 2 : Display inven/equip
+	 */
+        window_flag[1] = 1L << 6;
+        window_flag[2] = 1L << 0;
+
 
 	/*** Pre-allocate space for the "format()" buffer ***/
 

@@ -2938,7 +2938,7 @@ errr init_x11(int argc, char *argv[])
 
 	cptr dpy_name = "";
 
-	int num_term = MAX_TERM_DATA;
+	int num_term = 3;
 
 #ifdef USE_GRAPHICS
 
