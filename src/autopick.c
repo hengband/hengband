@@ -5407,20 +5407,9 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 			tb->dirty_flags |= DIRTY_ALL;
 		}
 
+		/* Move to correct collumn */
 		len = strlen(tb->lines_list[tb->cy]);
-		if (len < tb->cx)
-		{
-			if (tb->lines_list[tb->cy + 1])
-			{
-				tb->cy++;
-				tb->cx = 0;
-			}
-			else
-			{
-				tb->cx = len;
-				break;
-			}
-		}
+		if (len < tb->cx) tb->cx = len;
 
 		if (tb->cx == 0)
 		{
