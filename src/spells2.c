@@ -5656,9 +5656,9 @@ bool earthquake_aux(int cy, int cx, int r, int m_idx)
 
 					/* Scream in pain */
 #ifdef JP
-					msg_format("%^sは苦痛で泣きわめいた！", m_name);
+					if (!ignore_unview || is_seen(m_ptr)) msg_format("%^sは苦痛で泣きわめいた！", m_name);
 #else
-					msg_format("%^s wails out in pain!", m_name);
+					if (!ignore_unview || is_seen(m_ptr)) msg_format("%^s wails out in pain!", m_name);
 #endif
 
 					/* Take damage from the quake */
@@ -5675,9 +5675,9 @@ bool earthquake_aux(int cy, int cx, int r, int m_idx)
 					{
 						/* Message */
 #ifdef JP
-						msg_format("%^sは岩石に埋もれてしまった！", m_name);
+						if (!ignore_unview || is_seen(m_ptr)) msg_format("%^sは岩石に埋もれてしまった！", m_name);
 #else
-						msg_format("%^s is embedded in the rock!", m_name);
+						if (!ignore_unview || is_seen(m_ptr)) msg_format("%^s is embedded in the rock!", m_name);
 #endif
 
 						if (c_ptr->m_idx)
