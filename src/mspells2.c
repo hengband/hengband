@@ -179,7 +179,9 @@ static bool breath_direct(int y1, int x1, int y2, int x2, int rad, int typ, bool
 		x = nx;
 	}
 
-	if ((y1 == y) && (x1 == x))
+	grid_n = i;
+
+	if (!grid_n)
 	{
 		if (flg & PROJECT_DISI)
 		{
@@ -199,7 +201,7 @@ static bool breath_direct(int y1, int x1, int y2, int x2, int rad, int typ, bool
 	}
 	else
 	{
-		breath_shape(grid_g, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y, x, typ);
+		breath_shape(grid_g, grid_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y, x, typ);
 
 		for (i = 0; i < grids; i++)
 		{
