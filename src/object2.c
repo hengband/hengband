@@ -4988,7 +4988,7 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 			c_ptr = &cave[ty][tx];
 
 			/* Require floor space */
-			if (!cave_drop_bold(y, x)) continue;
+			if (!cave_drop_bold(ty, tx)) continue;
 
 			/* No objects */
 			k = 0;
