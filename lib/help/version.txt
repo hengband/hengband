@@ -1,5 +1,69 @@
 === History of Hengband ===
 
+Jul. 10th, 2003  hengband 1.5.2 (Development branch) released.
+- Random artifacts get more 'Construction point' for Android.
+- Hunter's office gives items as prize now.
+- Probing gives all monster recall infomations.
+- Crowns of telepathy get many low ESPs when high one is 'nonliving'.
+- Warning ability is more accurate now.
+- Some monsters have 'dark light' now.
+- The Armageddon trap is less dangerous now.
+- Duration check of temporal effects on monsters is changed of timing.
+- And stealth of the player will get effected by their speed.
+- STUPID monsters try to cast spells in anti-magic cave.
+- Score penalty for Amberite Berserkers no longer applied.
+- Shapechanger will really change shape on tile graphics mode.
+- "Colour out of space" is same letter as terrain type under foot. 
+- Parmanent walls at boundaries mimics normal terrains in dungeon.
+- Enhanced view_unsafe_grids option; 'x' will be cleared when walked over.
+- 'Cure mutation' service will always succeed.
+- Special inscription like {@ma} can be used in all commands now.
+- [Y/n] check on character generation accept all keys except N and ESC.
+- You can set Character history using template file at birth now.
+- Character dump now displays Blue-magics.
+- Character dump now displays full details of lost fight on Arena.
+- Tidyed up Quest list display.
+- Added 'Dark elven pit'
+
+- Various bug fixes:
+  Strange behaviors after using save command (^S).
+  '@' displayed at wrong position when trap door activated.
+  Duplicate unique monster while player is dominating one as their pet.
+  Inconsistent message about the effect of the jewel.
+  Incomplete update for sub-windows.  etc...
+
+- All changes for 1.4.2 is also included in 1.5.2.
+
+
+Jul. 10th, 2003  hengband 1.4.2 (Stable branch) released.
+
+- Cancelling of Racial/Class power no longer takes energy.
+- The algorism for breath shape is changed.
+
+- Various bug fixes:
+  Samurai was not able to 'Assume a Posture' when they have pets.
+  Buggy behavior of Teleportaion while mounting on a Lord of Change.
+  Inven/Equip sub-window displayed gerbages when resized.
+  Wrong monster name in playrecord file at the Arena.
+
+  Sorcerer and Red-Mage didn't get cost bonuses from Proficiency.
+  'Rush Attack' was able to pass over the Pattern.
+  Collected display update for "Fingolfin's Challenge" song.
+  Overflaw of item's value in store.
+  Songs were not really stopped while global map.
+  Date/time went wrong when player race is changed.
+  'Rodeo' sometimes failed to fail and behaved as succeed.
+  Collected font on WinNT/2000/XP.
+  Pets sometimes involved the player in their spell by mistake.
+  Wrong value of ego ring of resist time.
+  Salt Water didn't have effect on living.
+  Two rare bugs on decision for Quest completion.
+  Charge overflaw for stack of rods.
+  Clones of unique monster sometimes changed to real unique.
+  Bug on adding essence on a equippment with negative pval.
+  Collected update for monster light.  etc...
+
+
   Dec. 24th, 2002  hengband 1.5.1 (Development branch) released.
 
 - Added visual editor in lists of known objects and etc... (Unangband)
