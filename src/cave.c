@@ -560,12 +560,6 @@ static cptr image_monster_hack = \
 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 /*
- * Hack -- Legal monster codes for IBM pseudo-graphics
- */
-static cptr image_monster_hack_ibm = \
-"aaa";
-
-/*
  * Mega-Hack -- Hallucinatory monster
  */
 static void image_monster(byte *ap, char *cp)
@@ -575,21 +569,8 @@ static void image_monster(byte *ap, char *cp)
 	/* Random symbol from set above */
 	if (use_graphics)
 	{
-		/* Normal graphics */
-		if (!(streq(ANGBAND_SYS, "ibm")))
-		{
-			(*cp) = r_info[randint1(max_r_idx-1)].x_char;
-			(*ap) = r_info[randint1(max_r_idx-1)].x_attr;
-		}
-		else
-		/* IBM-pseudo graphics */
-		{
-			n = strlen(image_monster_hack_ibm);
-			(*cp) = (image_monster_hack_ibm[randint0(n)]);
-
-			/* Random color */
-			(*ap) = randint1(15);
-		}
+		(*cp) = r_info[randint1(max_r_idx-1)].x_char;
+		(*ap) = r_info[randint1(max_r_idx-1)].x_attr;
 	}
 	else
 	/* Text mode */
@@ -609,9 +590,6 @@ static void image_monster(byte *ap, char *cp)
 static cptr image_object_hack = \
 "?/|\\\"!$()_-=[]{},~";
 
-static cptr image_object_hack_ibm = \
-"aaa";
-
 /*
  * Mega-Hack -- Hallucinatory object
  */
@@ -621,19 +599,8 @@ static void image_object(byte *ap, char *cp)
 
 	if (use_graphics)
 	{
-		if (!(streq(ANGBAND_SYS, "ibm")))
-		{
-			(*cp) = k_info[randint1(max_k_idx-1)].x_char;
-			(*ap) = k_info[randint1(max_k_idx-1)].x_attr;
-		}
-		else
-		{
-			n = strlen(image_object_hack_ibm);
-			(*cp) = (image_object_hack_ibm[randint0(n)]);
-
-			/* Random color */
-			(*ap) = randint1(15);
-		}
+		(*cp) = k_info[randint1(max_k_idx-1)].x_char;
+		(*ap) = k_info[randint1(max_k_idx-1)].x_attr;
 	}
 	else
 	{
@@ -1476,19 +1443,8 @@ void map_info(int y, int x, byte *ap, char *cp)
 				{
 					if (use_graphics)
 					{
-						if (!(streq(ANGBAND_SYS, "ibm")))
-						{
-							(*cp) = r_info[randint1(max_r_idx-1)].x_char;
-							(*ap) = r_info[randint1(max_r_idx-1)].x_attr;
-						}
-						else
-						{
-							int n =  strlen(image_monster_hack_ibm);
-							(*cp) = (image_monster_hack_ibm[randint0(n)]);
-
-							/* Random color */
-							(*ap) = randint1(15);
-						}
+						(*cp) = r_info[randint1(max_r_idx-1)].x_char;
+						(*ap) = r_info[randint1(max_r_idx-1)].x_attr;
 					}
 					else
 					{
@@ -1591,194 +1547,6 @@ void map_info(int y, int x, byte *ap, char *cp)
 
 #ifdef VARIABLE_PLAYER_GRAPH
 
-		if (!streq(ANGBAND_GRAF, "new"))
-		{
-			if (streq(ANGBAND_SYS,"ibm"))
-			{
-				if (use_graphics && player_symbols)
-				{
-					if (p_ptr->psex == SEX_FEMALE) c = (char)242;
-					switch (p_ptr->pclass)
-					{
-						case CLASS_PALADIN:
-							if (p_ptr->lev < 20)
-								a = TERM_L_WHITE;
-							else
-								a = TERM_WHITE;
-							c = 253;
-							break;
-						case CLASS_WARRIOR_MAGE:
-						case CLASS_RED_MAGE:
-							if (p_ptr->lev < 20)
-								a = TERM_L_RED;
-							else
-								a = TERM_VIOLET;
-							break;
-						case CLASS_CHAOS_WARRIOR:
-							do
-							{
-								a = randint1(15);
-							}
-							while (a == TERM_DARK);
-							break;
-						case CLASS_MAGE:
-						case CLASS_HIGH_MAGE:
-						case CLASS_SORCERER:
-						case CLASS_MAGIC_EATER:
-						case CLASS_BLUE_MAGE:
-							if (p_ptr->lev < 20)
-								a = TERM_L_RED;
-							else
-								a = TERM_RED;
-							c = 248;
-							break;
-						case CLASS_PRIEST:
-						case CLASS_BARD:
-							if (p_ptr->lev < 20)
-								a = TERM_L_BLUE;
-							else
-								a = TERM_BLUE;
-							c = 248;
-							break;
-						case CLASS_RANGER:
-						case CLASS_ARCHER:
-							if (p_ptr->lev < 20)
-								a = TERM_L_GREEN;
-							else
-								a = TERM_GREEN;
-							break;
-						case CLASS_ROGUE:
-						case CLASS_NINJA:
-							if (p_ptr->lev < 20)
-								a = TERM_SLATE;
-							else
-								a = TERM_L_DARK;
-							break;
-						case CLASS_WARRIOR:
-						case CLASS_SMITH:
-						case CLASS_BERSERKER:
-						case CLASS_SAMURAI:
-							if (p_ptr->lev < 20)
-								a = TERM_L_UMBER;
-							else
-								a = TERM_UMBER;
-							break;
-						case CLASS_MONK:
-						case CLASS_MINDCRAFTER:
-						case CLASS_FORCETRAINER:
-						case CLASS_MIRROR_MASTER:
-							if (p_ptr->lev < 20)
-								a = TERM_L_UMBER;
-							else
-								a = TERM_UMBER;
-							c = 248;
-							break;
-						default: /* Unknown */
-							a = TERM_WHITE;
-					}
-
-					switch (p_ptr->prace)
-					{
-						case RACE_GNOME:
-						case RACE_HOBBIT:
-							c = 144;
-							break;
-						case RACE_DWARF:
-							c = 236;
-							break;
-						case RACE_HALF_ORC:
-							c = 243;
-							break;
-						case RACE_HALF_TROLL:
-							c = 184;
-							break;
-						case RACE_ELF:
-						case RACE_ENT:
-						case RACE_HALF_ELF:
-						case RACE_HIGH_ELF:
-						case RACE_KUTA:
-							c = 223;
-							break;
-						case RACE_HALF_OGRE:
-							c = 168;
-							break;
-						case RACE_HALF_GIANT:
-						case RACE_HALF_TITAN:
-						case RACE_CYCLOPS:
-							c = 145;
-							break;
-						case RACE_YEEK:
-							c = 209;
-							break;
-						case RACE_KLACKON:
-							c = 229;
-							break;
-						case RACE_KOBOLD:
-							c = 204;
-							break;
-						case RACE_NIBELUNG:
-							c = 144;
-							break;
-						case RACE_DARK_ELF:
-							c = 223;
-							break;
-						case RACE_DRACONIAN:
-							if (p_ptr->lev < 20)
-								c = 240;
-							else if (p_ptr->lev < 40)
-								c = 22;
-							else
-								c = 137;
-							break;
-						case RACE_MIND_FLAYER:
-							c = 236;
-							break;
-						case RACE_IMP:
-							c = 142;
-							break;
-						case RACE_GOLEM:
-						case RACE_ANDROID:
-							c = 6;
-							break;
-						case RACE_SKELETON:
-							if (p_ptr->pclass == CLASS_MAGE ||
-								p_ptr->pclass == CLASS_PRIEST ||
-								p_ptr->pclass == CLASS_HIGH_MAGE ||
-								p_ptr->pclass == CLASS_SORCERER ||
-								p_ptr->pclass == CLASS_MONK ||
-								p_ptr->pclass == CLASS_FORCETRAINER ||
-								p_ptr->pclass == CLASS_BLUE_MAGE ||
-								p_ptr->pclass == CLASS_MIRROR_MASTER ||
-								p_ptr->pclass == CLASS_MINDCRAFTER)
-								c = 159;
-							else
-								c = 181;
-							break;
-						case RACE_ZOMBIE:
-							c = 221;
-							break;
-						case RACE_VAMPIRE:
-							c = 217;
-							break;
-						case RACE_SPECTRE:
-							c = 241;
-							break;
-						case RACE_SPRITE:
-						case RACE_S_FAIRY:
-							c = 244;
-							break;
-						case RACE_BEASTMAN:
-							c = 154;
-							break;
-						case RACE_ANGEL:
-						case RACE_DEMON:
-							c = 144;
-							break;
-					}
-				}
-			}
-		}
-
 		/* Save the info */
 		(*ap) = a;
 		(*cp) = c;
@@ -1867,7 +1635,7 @@ void print_rel(char c, byte a, int y, int x)
 	if (panel_contains(y, x))
 	{
 		/* Hack -- fake monochrome */
-		if (!use_graphics || streq(ANGBAND_SYS, "ibm"))
+		if (!use_graphics)
 		{
 			if (world_monster) a = TERM_DARK;
 			else if (IS_INVULN() || world_player) a = TERM_WHITE;
@@ -2054,7 +1822,7 @@ void display_dungeon(void)
 #endif /* USE_TRANSPARENCY */
 
 				/* Hack -- fake monochrome */
-				if (!use_graphics || streq(ANGBAND_SYS, "ibm"))
+				if (!use_graphics)
 				{
 					if (world_monster) a = TERM_DARK;
 					else if (IS_INVULN() || world_player) a = TERM_WHITE;
@@ -2121,7 +1889,7 @@ void lite_spot(int y, int x)
 #endif /* USE_TRANSPARENCY */
 
 		/* Hack -- fake monochrome */
-		if (!use_graphics || streq(ANGBAND_SYS, "ibm"))
+		if (!use_graphics)
 		{
 			if (world_monster) a = TERM_DARK;
 			else if (IS_INVULN() || world_player) a = TERM_WHITE;
@@ -2171,8 +1939,6 @@ void prt_map(void)
 	s16b xmin, xmax, ymin, ymax;
 
 	int wid, hgt;
-
-	bool    fake_monochrome = (!use_graphics || streq(ANGBAND_SYS, "ibm"));
 
 	/* Get size */
 	Term_get_size(&wid, &hgt);
@@ -2228,7 +1994,7 @@ void prt_map(void)
 #endif
 
 			/* Hack -- fake monochrome */
-			if (fake_monochrome)
+			if (!use_graphics)
 			{
 				if (world_monster) a = TERM_DARK;
 				else if (IS_INVULN() || world_player) a = TERM_WHITE;
@@ -2266,7 +2032,6 @@ void prt_path(int y, int x)
 	int path_n;
 	u16b path_g[512];
 	int default_color = TERM_SLATE;
-	bool    fake_monochrome = (!use_graphics || streq(ANGBAND_SYS, "ibm"));
 
 	if (!display_path) return;
 	if (-1 == project_length)
@@ -2313,7 +2078,7 @@ void prt_path(int y, int x)
 					a = TERM_WHITE;
 			}
 
-			if (fake_monochrome)
+			if (!use_graphics)
 			{
 				if (world_monster) a = TERM_DARK;
 				else if (IS_INVULN() || world_player) a = TERM_WHITE;
@@ -2463,8 +2228,6 @@ void display_map(int *cy, int *cx)
 	/* Save lighting effects */
 	bool old_view_special_lite = view_special_lite;
 	bool old_view_granite_lite = view_granite_lite;
-
-	bool fake_monochrome = (!use_graphics || streq(ANGBAND_SYS, "ibm"));
 
 	int hgt, wid, yrat, xrat;
 
@@ -2645,7 +2408,7 @@ void display_map(int *cy, int *cx)
 			tc = mc[y][x];
 
 			/* Hack -- fake monochrome */
-			if (fake_monochrome)
+			if (!use_graphics)
 			{
 				if (world_monster) ta = TERM_DARK;
 				else if (IS_INVULN() || world_player) ta = TERM_WHITE;
