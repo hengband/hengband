@@ -18381,7 +18381,7 @@ F:NO_FEAR | NO_SLEEP | NO_CONF | NO_STUN | EMPTY_MIND
 F:IM_COLD | IM_FIRE | IM_ELEC | IM_POIS
 D:$Just a normal wall, boring gray rock. But wait! It seems to be growing...
 D:ただの普通の壁だ。見なれた灰色の岩でできている。
-D:いや、ちょっと待てよ？なんだかぼんやり輝いでいるような…。
+D:いや、ちょっと待てよ？だんだん大きくなってくるような…。
 
 N:899:ファイア・トロル
 E:Fire troll
@@ -18443,7 +18443,7 @@ F:NEVER_MOVE | MULTIPLY | ONLY_GOLD | DROP_60 | DROP_90 | EMPTY_MIND
 F:ANIMAL | HURT_ROCK | COLD_BLOOD | NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN |
 F:IM_ACID | IM_ELEC | IM_POIS | IM_FIRE
 D:$It's just a block of dark rock. But wait! It seems to be growing...
-D:普通の黒い岩の壁だ。しかしちょっと待てよ？なんだかぼんやり輝いている…
+D:普通の黒い岩の壁だ。しかしちょっと待てよ？だんだん大きくなってくるような…
 
 N:903:クラーケンの子
 E:Small kraken
