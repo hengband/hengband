@@ -3296,6 +3296,7 @@ static void player_wipe(void)
 static void init_dungeon_quests(int number_of_quests)
 {
 	int i;
+	monster_race    *r_ptr;
 
 	/* Init the random quests */
 	init_flags = INIT_ASSIGN;
@@ -3308,11 +3309,17 @@ static void init_dungeon_quests(int number_of_quests)
 	/* Prepare allocation table */
 	get_mon_num_prep(monster_quest, NULL);
 
+	/* Remove QUESTOR flag */
+	for (i = 1; i < max_r_idx; i++)
+	{
+		r_ptr = &r_info[i];
+		if (r_ptr->flags1 & RF1_QUESTOR) r_ptr->flags1 &= ~RF1_QUESTOR;
+	}
+
 	/* Generate quests */
 	for (i = MIN_RANDOM_QUEST + number_of_quests - 1; i >= MIN_RANDOM_QUEST; i--)
 	{
 		quest_type      *q_ptr = &quest[i];
-		monster_race    *r_ptr;
 		monster_race    *quest_r_ptr;
 		int             r_idx;
 
