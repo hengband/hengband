@@ -2928,8 +2928,8 @@ static bool search_for_string(cptr *lines_list, cptr search_str, int *cxp, int *
 #define MN_BOTTOM "最下行へ移動" 
 
 #define MN_EDIT "編集" 
-#define MN_CUT "選択範囲をカット" 
-#define MN_COPY "選択範囲をコピー" 
+#define MN_CUT "カット" 
+#define MN_COPY "コピー" 
 #define MN_PASTE "ペースト" 
 #define MN_BLOCK "選択範囲の指定" 
 #define MN_KILL_LINE "行の残りを削除" 
@@ -3464,8 +3464,11 @@ static void draw_text_editor(text_body_type *tb)
 
 	if (tb->mark)
 	{
+		int tmp_cx = tb->cx;
+		int len = strlen(tb->lines_list[tb->cy]);
+
 		/* Correct cursor location */
-		int tmp_cx = MIN(tb->cx, (int)strlen(tb->lines_list[tb->cy]));
+		if (tb->cx > len) tmp_cx = len;
 
 		tb->dirty_flags |= DIRTY_ALL;
 
@@ -3665,7 +3668,7 @@ static void kill_line_segment(text_body_type *tb, int y, int x0, int x1)
 	if (x0 == x1) return;
 
 	/* Kill whole line? */
-	if (x0 == 0 && s[x1] == '\0')
+	if (x0 == 0 && s[x1] == '\0' && tb->lines_list[y+1])
 	{
 		int i;
 
@@ -3703,9 +3706,10 @@ static bool kill_text_in_selection(text_body_type *tb)
 	int by1, bx1, by2, bx2;
 	int y;
 
+	int len = strlen(tb->lines_list[tb->cy]);
+
 	/* Correct cursor location */
-	if ((uint)tb->cx > strlen(tb->lines_list[tb->cy]))
-		tb->cx = (int)strlen(tb->lines_list[tb->cy]);
+	if (tb->cx > len) tb->cx = len;
 
 	if (tb->my < tb->cy ||
 	    (tb->my == tb->cy && tb->mx < tb->cx))
@@ -4030,28 +4034,28 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	{	
 		int by1, bx1, by2, bx2;
 		int y;
+		int len = strlen(tb->lines_list[tb->cy]);
+
+		/* Correct cursor location */
+		if (tb->cx > len) tb->cx = len;
 
 		/* Use single line? */
 		if (!tb->mark)
 		{
 			tb->my = tb->cy;
 			tb->mx = 0;
-			if (!tb->lines_list[tb->cy])
-			{
-				/* Select bottom line */
-				tb->cx = strlen(tb->lines_list[tb->cy]);
-			}
-			else
+			if (tb->lines_list[tb->cy + 1])
 			{
 				/* Select a single line */
 				tb->cx = 0;
 				tb->cy++;
 			}
+			else
+			{
+				/* Select bottom line */
+				tb->cx = len;
+			}
 		}
-
-		/* Correct cursor location */
-		if ((uint)tb->cx > strlen(tb->lines_list[tb->cy]))
-			tb->cx = (int)strlen(tb->lines_list[tb->cy]);
 
 		if (tb->my < tb->cy ||
 		    (tb->my == tb->cy && tb->mx < tb->cx))
@@ -4106,13 +4110,13 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		/* Paste killed text */
 
 		chain_str_type *chain = tb->yank;
+		int len = strlen(tb->lines_list[tb->cy]);
 
 		/* Nothing to do? */
 		if (!chain) break;
 
 		/* Correct cursor location */
-		if ((uint)tb->cx > strlen(tb->lines_list[tb->cy]))
-			tb->cx = (int)strlen(tb->lines_list[tb->cy]);
+		if (tb->cx > len) tb->cx = len;
 
 		/*
 		 * If there is a selection, kill text, and
@@ -4219,9 +4223,14 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 			}
 			else
 			{
+				int len = strlen(tb->lines_list[tb->cy]);
+
 				/* Mark the point 1 */
 				tb->my = tb->cy;
 				tb->mx = tb->cx;
+
+				/* Correct cursor location */
+				if (tb->cx > len) tb->mx = len;
 			}
 		}
 		break;
@@ -4870,9 +4879,14 @@ void do_cmd_edit_autopick(void)
 					/* Start selection */
 					if (!tb->mark)
 					{
+						int len = strlen(tb->lines_list[tb->cy]);
+
 						tb->mark = MARK_MARK | MARK_BY_SHIFT;
 						tb->my = tb->cy;
 						tb->mx = tb->cx;
+
+						/* Correct cursor location */
+						if (tb->cx > len) tb->mx = len;
 						
 						/* Need to redraw text */
 						if (com_id == EC_UP || com_id == EC_DOWN)
