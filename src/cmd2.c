@@ -1321,8 +1321,11 @@ static bool do_cmd_close_aux(int y, int x)
 	/* Open door */
 	if (have_flag(f_info[old_feat].flags, FF_CLOSE))
 	{
+		s16b closed_feat = feat_state(old_feat, FF_CLOSE);
+
 		/* Hack -- object in the way */
-		if ((c_ptr->o_idx || (c_ptr->info & CAVE_OBJECT)) && (feat_state(old_feat, FF_CLOSE) != old_feat))
+		if ((c_ptr->o_idx || (c_ptr->info & CAVE_OBJECT)) &&
+		    (closed_feat != old_feat) && !have_flag(f_info[closed_feat].flags, FF_DROP))
 		{
 			/* Message */
 #ifdef JP
