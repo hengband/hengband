@@ -1,4 +1,19 @@
+2002-01-19  Takeshi Mogami  <mogami@akiru>
+
+	* src/rooms.c:
+	r_info で Monk -> monk に修正したのでそれに合わせて教会のコードを修正。
+
+	* src/mspells3.c, src/tables.c:
+	青魔術師の魔法の英語名を修正。
+
+	* src/birth.c:
+	性格の選択で説明文の幅が広すぎるので修正。
+
 2002-01-18  Takeshi Mogami  <mogami@akiru>
+
+	* Changelogs: ChangeLogsを
+	rcs2log | sed s###g > Changelogs
+	のように入れる事にしましょう。
 
 	* src/object2.c:
 	エゴアイテムの生成時にレベルによって出現を制限するコードが

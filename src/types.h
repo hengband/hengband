@@ -63,9 +63,6 @@ typedef struct feature_type feature_type;
 struct feature_type
 {
 	u32b name;			/* Name (offset) */
-#ifdef JP
-    u32b E_name;        /* ±Ñ¸ìÌ¾ (offset) */
-#endif
 	u32b text;			/* Text (offset) */
 
 	byte mimic;			/* Feature to mimic */
@@ -94,9 +91,6 @@ typedef struct object_kind object_kind;
 struct object_kind
 {
 	u32b name;			/* Name (offset) */
-#ifdef JP
-        u32b E_name;                    /* ±Ñ¸ìÌ¾ (offset) */
-#endif
 	u32b text;			/* Text (offset) */
 
 	byte tval;			/* Object type */
@@ -160,9 +154,6 @@ typedef struct artifact_type artifact_type;
 struct artifact_type
 {
 	u32b name;			/* Name (offset) */
-#ifdef JP
-        u32b E_name;            /* ±Ñ¸ìÌ¾ (offset) */
-#endif
 	u32b text;			/* Text (offset) */
 
 	byte tval;			/* Artifact type */
@@ -203,9 +194,6 @@ typedef struct ego_item_type ego_item_type;
 struct ego_item_type
 {
 	u32b name;			/* Name (offset) */
-#ifdef JP
-        u32b E_name;                    /* Name (offset) */
-#endif
 	u32b text;			/* Text (offset) */
 
 	byte slot;			/* Standard slot value */
@@ -1333,9 +1321,6 @@ struct mind_type
 	int     mana_cost;
 	int     fail;
 	cptr    name;
-#ifdef JP
-        cptr    E_name;
-#endif
 };
 
 typedef struct mind_power mind_power;
@@ -1356,9 +1341,6 @@ struct monster_power
 	int     manefail;
 	int     use_stat;
 	cptr    name;
-#ifdef JP
-        cptr    E_name;
-#endif
 };
 
 

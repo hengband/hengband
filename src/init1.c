@@ -1114,20 +1114,7 @@ errr parse_f_info(char *buf, header *head)
 	/* 'E' から始まる行は英語名としている */
 	else if (buf[0] == 'E')
 	{
-		/* Acquire the Text */
-		s = buf+2;
-
-			/* Hack -- Verify space */
-		if (head->name_size + strlen(s) + 8 > fake_name_size) return (7);
-
-		/* Advance and Save the name index */
-		if (!f_ptr->E_name) f_ptr->E_name = ++head->name_size;
-
-		/* Append chars to the name */
-		strcpy(head->name_ptr + head->name_size, s);
-
-		/* Advance the index */
-		head->name_size += strlen(s);
+		/* nothing to do */
 	}
 #else
 	else if (buf[0] == 'E')
@@ -1337,20 +1324,7 @@ errr parse_k_info(char *buf, header *head)
 	/* 'E' から始まる行は英語名としている */
 	else if (buf[0] == 'E')
 	{
-		/* Acquire the Text */
-		s = buf+2;
-
-			/* Hack -- Verify space */
-		if (head->name_size + strlen(s) + 8 > fake_name_size) return (7);
-
-		/* Advance and Save the name index */
-		if (!k_ptr->E_name) k_ptr->E_name = ++head->name_size;
-
-		/* Append chars to the name */
-		strcpy(head->name_ptr + head->name_size, s);
-
-		/* Advance the index */
-		head->name_size += strlen(s);
+		/* nothing to do */
 	}
 #else
 	else if (buf[0] == 'E')
@@ -1656,20 +1630,7 @@ errr parse_a_info(char *buf, header *head)
 	/* 'E' から始まる行は英語名としている */
 	else if (buf[0] == 'E')
 	{
-		/* Acquire the Text */
-		s = buf+2;
-
-			/* Hack -- Verify space */
-		if (head->name_size + strlen(s) + 8 > fake_name_size) return (7);
-
-		/* Advance and Save the name index */
-		if (!a_ptr->E_name) a_ptr->name = ++head->name_size;
-
-		/* Append chars to the name */
-		strcpy(head->name_ptr + head->name_size, s);
-
-		/* Advance the index */
-		head->name_size += strlen(s);
+		/* nothing to do */
 	}
 #else
 	else if (buf[0] == 'E')
@@ -1928,20 +1889,7 @@ errr parse_e_info(char *buf, header *head)
 	/* 'E' から始まる行は英語名 */
 	else if (buf[0] == 'E')
 	{
-		/* Acquire the Text */
-		s = buf+2;
-
-			/* Hack -- Verify space */
-		if (head->name_size + strlen(s) + 8 > fake_name_size) return (7);
-
-		/* Advance and Save the name index */
-		if (!e_ptr->E_name) e_ptr->E_name = ++head->name_size;
-
-		/* Append chars to the name */
-		strcpy(head->name_ptr+ head->name_size, s);
-
-		/* Advance the index */
-		head->name_size += strlen(s);
+		/* nothing to do */
 	}
 #else
 	else if (buf[0] == 'E')
