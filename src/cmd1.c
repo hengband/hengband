@@ -3472,72 +3472,63 @@ static bool pattern_seq(int c_y, int c_x, int n_y, int n_x)
 
 bool player_can_enter(byte feature)
 {
-	bool pass_wall;
-
-	/* Player can not walk through "walls" unless in Shadow Form */
-	if (p_ptr->wraith_form || p_ptr->pass_wall || p_ptr->kabenuke)
-		pass_wall = TRUE;
-	else
-		pass_wall = FALSE;
-
 	switch (feature)
 	{
-		case FEAT_DEEP_WATER:
-		case FEAT_SHAL_LAVA:
-		case FEAT_DEEP_LAVA:
-			return (TRUE);
+	case FEAT_DOOR_HEAD: /* Nasty hack -- Doors */
+	case FEAT_DOOR_HEAD + 0x01:
+	case FEAT_DOOR_HEAD + 0x02:
+	case FEAT_DOOR_HEAD + 0x03:
+	case FEAT_DOOR_HEAD + 0x04:
+	case FEAT_DOOR_HEAD + 0x05:
+	case FEAT_DOOR_HEAD + 0x06:
+	case FEAT_DOOR_HEAD + 0x07:
+	case FEAT_DOOR_HEAD + 0x08:
+	case FEAT_DOOR_HEAD + 0x09:
+	case FEAT_DOOR_HEAD + 0x0a:
+	case FEAT_DOOR_HEAD + 0x0b:
+	case FEAT_DOOR_HEAD + 0x0c:
+	case FEAT_DOOR_HEAD + 0x0d:
+	case FEAT_DOOR_HEAD + 0x0e:
+	case FEAT_DOOR_TAIL: /* Equals FEAT_DOOR_HEAD + 0x0f */
+	case FEAT_SECRET:
+	case FEAT_RUBBLE:
+	case FEAT_MAGMA:
+	case FEAT_QUARTZ:
+	case FEAT_MAGMA_H:
+	case FEAT_QUARTZ_H:
+	case FEAT_MAGMA_K:
+	case FEAT_QUARTZ_K:
+	case FEAT_WALL_EXTRA:
+	case FEAT_WALL_INNER:
+	case FEAT_WALL_OUTER:
+	case FEAT_WALL_SOLID:
+		/* Player can not walk through "walls" unless in Shadow Form */
+		return p_ptr->wraith_form || p_ptr->pass_wall || p_ptr->kabenuke;
 
-		case FEAT_DARK_PIT:
-		{
-			if (p_ptr->ffall)
-				return (TRUE);
-			else
-				return (FALSE);
-		}
+	case FEAT_PERM_EXTRA:
+	case FEAT_PERM_INNER:
+	case FEAT_PERM_OUTER:
+	case FEAT_PERM_SOLID:
+	case FEAT_PATTERN_START:
+	case FEAT_PATTERN_1:
+	case FEAT_PATTERN_2:
+	case FEAT_PATTERN_3:
+	case FEAT_PATTERN_4:
+	case FEAT_PATTERN_END:
+	case FEAT_PATTERN_OLD:
+	case FEAT_PATTERN_XTRA1:
+	case FEAT_PATTERN_XTRA2:
+		return FALSE;
 
-		case FEAT_TREES:
-		{
-			return (TRUE);
-		}
+	case FEAT_DARK_PIT:
+		return p_ptr->ffall;
 
-		case FEAT_RUBBLE:
-		case FEAT_MAGMA:
-		case FEAT_QUARTZ:
-		case FEAT_MAGMA_H:
-		case FEAT_QUARTZ_H:
-		case FEAT_MAGMA_K:
-		case FEAT_QUARTZ_K:
-		case FEAT_WALL_EXTRA:
-		case FEAT_WALL_INNER:
-		case FEAT_WALL_OUTER:
-		case FEAT_WALL_SOLID:
-		{
-			return (pass_wall);
-		}
-
-		case FEAT_MOUNTAIN:
-		{
-			return (!dun_level && p_ptr->ffall);
-		}
-		case FEAT_PERM_EXTRA:
-		case FEAT_PERM_INNER:
-		case FEAT_PERM_OUTER:
-		case FEAT_PERM_SOLID:
-		case FEAT_PATTERN_START:
-		case FEAT_PATTERN_1:
-		case FEAT_PATTERN_2:
-		case FEAT_PATTERN_3:
-		case FEAT_PATTERN_4:
-		case FEAT_PATTERN_END:
-		case FEAT_PATTERN_OLD:
-		case FEAT_PATTERN_XTRA1:
-		case FEAT_PATTERN_XTRA2:
-		{
-			return (FALSE);
-		}
+	case FEAT_MOUNTAIN:
+		return !dun_level && p_ptr->ffall;
 	}
 
-	return (TRUE);
+	/* Assume okay */
+	return TRUE;
 }
 
 
