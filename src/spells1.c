@@ -3470,6 +3470,8 @@ note = "が分裂した！";
 			/* Wake up */
 			m_ptr->csleep = 0;
 
+			if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+
 			if (m_ptr->maxhp < m_ptr->max_maxhp)
 			{
 #ifdef JP
@@ -3487,6 +3489,8 @@ msg_format("%^sの強さが戻った。", m_name);
 
 			/* Wake up */
 			m_ptr->csleep = 0;
+
+			if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 
 			if (m_ptr->stunned)
 			{
@@ -6054,6 +6058,8 @@ note = "には効果がなかった！";
 
 		/* Wake the monster up */
 		m_ptr->csleep = 0;
+
+		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 
 		/* Hurt the monster */
 		m_ptr->hp -= dam;

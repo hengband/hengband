@@ -213,6 +213,8 @@ void mon_take_hit_mon(int m_idx, int dam, bool *fear, cptr note, int who)
 	/* Wake it up */
 	m_ptr->csleep = 0;
 
+	if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+
 	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(1, 0);
 
 	if (m_ptr->invulner && randint0(PENETRATE_INVULNERABILITY))
@@ -1535,6 +1537,8 @@ static bool monst_attack_monst(int m_idx, int t_idx)
 			/* Wake it up */
 			t_ptr->csleep = 0;
 
+			if (tr_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+
 			/* Describe the attack method */
 			switch (method)
 			{
@@ -2149,6 +2153,8 @@ msg_format("%sは体力を回復したようだ。", m_name);
 				{
 					/* Wake it up */
 					t_ptr->csleep = 0;
+
+					if (tr_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 
 					/* Visible monsters */
 					if (see_m)
@@ -3264,7 +3270,9 @@ msg_print("爆発のルーンは解除された。");
 				update_mon(c_ptr->m_idx, TRUE);
 
 				/* Wake up the moved monster */
-				m_list[c_ptr->m_idx].csleep = 0;
+				y_ptr->csleep = 0;
+
+				if (r_info[y_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 			}
 
 			/* Hack -- Update the new location */

@@ -1522,6 +1522,8 @@ static bool vanish_dungeon(void)
 				/* Reset sleep counter */
 				m_ptr->csleep = 0;
 
+				if (r_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+
 				/* Notice the "waking up" */
 				if (m_ptr->ml)
 				{

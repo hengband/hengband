@@ -4264,6 +4264,7 @@ bool monst_spell_monst(int m_idx)
 	if (wake_up)
 	{
 		t_ptr->csleep = 0;
+		if (tr_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 	}
 
 	if (fear && see_t)

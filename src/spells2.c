@@ -4724,6 +4724,7 @@ void aggravate_monsters(int who)
 			{
 				/* Wake up */
 				m_ptr->csleep = 0;
+				if (r_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 				sleep = TRUE;
 			}
 			if (!is_pet(m_ptr)) m_ptr->mflag2 |= MFLAG2_NOPET;
@@ -4824,6 +4825,7 @@ msg_format("%^sには効果がなかった。", m_name);
 			if (m_ptr->csleep)
 			{
 				m_ptr->csleep = 0;
+				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 				if (m_ptr->ml && !p_ptr->blind)
 				{
 #ifdef JP
@@ -4953,6 +4955,7 @@ msg_format("%^sには効果がなかった。", m_name);
 			if (m_ptr->csleep)
 			{
 				m_ptr->csleep = 0;
+				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 				if (m_ptr->ml && !p_ptr->blind)
 				{
 #ifdef JP
@@ -5085,6 +5088,7 @@ msg_format("%^sには効果がなかった。", m_name);
 			if (m_ptr->csleep)
 			{
 				m_ptr->csleep = 0;
+				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
 				if (m_ptr->ml && !p_ptr->blind)
 				{
 #ifdef JP
@@ -6171,6 +6175,8 @@ static void cave_temp_room_lite(void)
 				/* Wake up! */
 				m_ptr->csleep = 0;
 
+				if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+
 				/* Notice the "waking up" */
 				if (m_ptr->ml)
 				{
@@ -6767,6 +6773,8 @@ msg_print("テレポートを邪魔された！");
 		if (m_ptr->ml && is_original_ap(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 
 		m_ptr->csleep = 0;
+		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+
 		/* Failure */
 		return FALSE;
 	}

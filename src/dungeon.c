@@ -5584,6 +5584,8 @@ msg_print("中断しました。");
 			/* Recover fully */
 			m_ptr->csleep = 0;
 
+			if (r_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+
 			/* Acquire the monster name */
 			monster_desc(m_name, m_ptr, 0);
 #ifdef JP
