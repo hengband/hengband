@@ -4010,7 +4010,7 @@ s32b realm_choices1[] =
 	(CH_NONE),                              /* Red Mage */
 	(CH_HISSATSU),                          /* Samurai */
 	(CH_LIFE | CH_NATURE | CH_DEATH |
-	 CH_ENCHANT),                           /* ForceTrainer */
+	 CH_ENCHANT | CH_HAJA),                 /* ForceTrainer */
 	(CH_NONE),                              /* Blue Mage */
 	(CH_NONE),				/* Kihei */
 	(CH_NONE),				/* Berserker */
@@ -4511,33 +4511,33 @@ cptr spell_names[VALID_REALM][32] =
 "恐怖除去",
 "モンスター恐慌",
 "聖域",
-"スターダスト",
 "入口",
+"スターダスト",
 
-"傷と毒治療",
+"身体浄化",
+"邪悪飛ばし",
 "悪魔払い",
 "聖なる光球",
 "透明視認",
 "対邪悪結界",
-"アンデッド&悪魔退散",
-"天罰",
+"裁きの雷",
 "聖なる御言葉",
 
 		/* Rare nanka Spellbooks */
 "開かれた道",
 "解呪",
 "聖なるオーラ",
-"スピード",
+"アンデッド&悪魔退散",
 "邪悪退散",
 "聖なる刃",
 "スターバースト",
 "天使召喚",
 
 "士気高揚",
-"*解呪*",
+"呪い退散",
 "邪悪追放",
+"ハルマゲドン",
 "目には目を",
-"*破壊*",
 "神の怒り",
 "神威",
 "聖戦",

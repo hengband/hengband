@@ -170,6 +170,7 @@ bool make_attack_normal(int m_idx)
         bool resist_drain = FALSE;
 	bool do_silly_attack = (one_in_(2) && p_ptr->image);
 	int syouryaku = 0;
+	int get_damage = 0;
 
 	/* Not allowed to attack */
 	if (r_ptr->flags1 & (RF1_NEVER_BLOW)) return (FALSE);
@@ -758,7 +759,7 @@ bool make_attack_normal(int m_idx)
 						tmp_damage = MAX(damage, tmp_damage*2);
 
 						/* Take damage */
-						take_hit(DAMAGE_ATTACK, tmp_damage, ddesc, -1);
+						get_damage += take_hit(DAMAGE_ATTACK, tmp_damage, ddesc, -1);
 						break;
 					}
 				}
@@ -771,7 +772,7 @@ bool make_attack_normal(int m_idx)
 					damage -= (damage * ((ac < 150) ? ac : 150) / 250);
 
 					/* Take damage */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					break;
 				}
@@ -790,7 +791,7 @@ bool make_attack_normal(int m_idx)
 					}
 
 					/* Take some damage */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					/* Learn about the player */
 					update_smart_learn(m_idx, DRS_POIS);
@@ -810,7 +811,7 @@ bool make_attack_normal(int m_idx)
 					}
 
 					/* Take some damage */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					/* Learn about the player */
 					update_smart_learn(m_idx, DRS_DISEN);
@@ -821,7 +822,7 @@ bool make_attack_normal(int m_idx)
 				case RBE_UN_POWER:
 				{
 					/* Take some damage */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -888,7 +889,7 @@ bool make_attack_normal(int m_idx)
 				case RBE_EAT_GOLD:
 				{
 					/* Take some damage */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					/* Confused monsters cannot steal successfully. -LM-*/
 					if (m_ptr->confused) break;
@@ -972,7 +973,7 @@ bool make_attack_normal(int m_idx)
 				case RBE_EAT_ITEM:
 				{
 					/* Take some damage */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					/* Confused monsters cannot steal successfully. -LM-*/
 					if (m_ptr->confused) break;
@@ -1097,7 +1098,7 @@ bool make_attack_normal(int m_idx)
 				case RBE_EAT_FOOD:
 				{
 					/* Take some damage */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -1151,7 +1152,7 @@ bool make_attack_normal(int m_idx)
 					o_ptr = &inventory[INVEN_LITE];
 
 					/* Take some damage */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -1276,7 +1277,7 @@ bool make_attack_normal(int m_idx)
 				case RBE_BLIND:
 				{
 					/* Take damage */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -1304,7 +1305,7 @@ bool make_attack_normal(int m_idx)
 				{
 					if (explode) break;
 					/* Take damage */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -1326,7 +1327,7 @@ bool make_attack_normal(int m_idx)
 				case RBE_TERRIFY:
 				{
 					/* Take damage */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -1368,7 +1369,7 @@ bool make_attack_normal(int m_idx)
 				case RBE_PARALYZE:
 				{
 					/* Take damage */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -1413,7 +1414,7 @@ bool make_attack_normal(int m_idx)
 				case RBE_LOSE_STR:
 				{
 					/* Damage (physical) */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -1426,7 +1427,7 @@ bool make_attack_normal(int m_idx)
 				case RBE_LOSE_INT:
 				{
 					/* Damage (physical) */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -1439,7 +1440,7 @@ bool make_attack_normal(int m_idx)
 				case RBE_LOSE_WIS:
 				{
 					/* Damage (physical) */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -1452,7 +1453,7 @@ bool make_attack_normal(int m_idx)
 				case RBE_LOSE_DEX:
 				{
 					/* Damage (physical) */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -1465,7 +1466,7 @@ bool make_attack_normal(int m_idx)
 				case RBE_LOSE_CON:
 				{
 					/* Damage (physical) */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -1478,7 +1479,7 @@ bool make_attack_normal(int m_idx)
 				case RBE_LOSE_CHR:
 				{
 					/* Damage (physical) */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -1491,7 +1492,7 @@ bool make_attack_normal(int m_idx)
 				case RBE_LOSE_ALL:
 				{
 					/* Damage (physical) */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -1515,7 +1516,7 @@ bool make_attack_normal(int m_idx)
 					damage -= (damage * ((ac < 150) ? ac : 150) / 250);
 
 					/* Take damage */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					/* Radius 8 earthquake centered at the monster */
 					if (damage > 23 || explode)
@@ -1532,7 +1533,7 @@ bool make_attack_normal(int m_idx)
 					obvious = TRUE;
 
 					/* Take damage */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -1581,7 +1582,7 @@ bool make_attack_normal(int m_idx)
 					obvious = TRUE;
 
 					/* Take damage */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -1630,7 +1631,7 @@ bool make_attack_normal(int m_idx)
 					obvious = TRUE;
 
 					/* Take damage */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -1679,7 +1680,7 @@ bool make_attack_normal(int m_idx)
 					obvious = TRUE;
 
 					/* Take damage */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -1725,7 +1726,7 @@ bool make_attack_normal(int m_idx)
 				case RBE_DISEASE:
 				{
 					/* Take some damage */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -1824,7 +1825,7 @@ bool make_attack_normal(int m_idx)
 							}
 						}
 					}
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					break;
 				}
@@ -1834,7 +1835,7 @@ bool make_attack_normal(int m_idx)
 					obvious = TRUE;
 
 					/* Take damage */
-					take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (death) break;
 
@@ -2144,6 +2145,34 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					}
 				}
 
+				if (p_ptr->tim_sh_holy && alive && !death)
+				{
+					if (r_ptr->flags3 & RF3_EVIL)
+					{
+						int dam = damroll(2, 6);
+
+						/* Modify the damage */
+						dam = mon_damage_mod(m_ptr, dam, FALSE);
+
+#ifdef JP
+						msg_format("%^sは聖なるオーラで傷ついた！", m_name);
+						if (mon_take_hit(m_idx, dam, &fear,
+						    "は倒れた。"))
+#else
+						msg_format("%^s nanka!", m_name);
+
+						if (mon_take_hit(m_idx, dam, &fear,
+						    " nanka."))
+#endif
+
+						{
+							blinked = FALSE;
+							alive = FALSE;
+						}
+						if (m_ptr->ml)
+							r_ptr->r_flags3 |= RF3_EVIL;
+					}
+				}
 
 				if (p_ptr->tim_sh_touki && alive && !death)
 				{
@@ -2157,10 +2186,10 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					if (mon_take_hit(m_idx, dam, &fear,
 					    "は倒れた。"))
 #else
-					msg_format("%^s is suddenly very hot!", m_name);
+					msg_format("%^s nanka", m_name);
 
 					if (mon_take_hit(m_idx, dam, &fear,
-					    " turns into a pile of ash."))
+					    " nanka."))
 #endif
 
 					{
@@ -2168,7 +2197,6 @@ msg_format("%sは体力を回復したようだ。", m_name);
 						alive = FALSE;
 					}
 				}
-				touched = FALSE;
 			}
 		}
 
@@ -2250,6 +2278,13 @@ msg_format("%^sから落ちてしまった！", m_name);
 		}
 	}
 
+	if (p_ptr->tim_eyeeye && get_damage > 0 && !death)
+	{
+		msg_format("攻撃が%s自身を傷つけた！", m_name);
+		project(0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL | PROJECT_NO_REF, -1);
+		set_tim_eyeeye(p_ptr->tim_eyeeye-5, TRUE);
+	}
+
 
 	if ((p_ptr->counter || (p_ptr->special_defense & KATA_MUSOU)) && alive && !death && m_ptr->ml && (p_ptr->csp > 7))
 	{
@@ -2267,7 +2302,7 @@ msg_format("%^sから落ちてしまった！", m_name);
 	}
 
 	/* Blink away */
-	if (blinked)
+	if (blinked && alive && !death)
 	{
 #ifdef JP
 		msg_print("泥棒は笑って逃げた！");
@@ -2285,7 +2320,7 @@ msg_format("%^sから落ちてしまった！", m_name);
 		r_ptr->r_deaths++;
 	}
 
-	if (m_ptr->ml && fear)
+	if (m_ptr->ml && fear && alive && !death)
 	{
 		sound(SOUND_FLEE);
 #ifdef JP

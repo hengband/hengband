@@ -934,7 +934,7 @@ extern void remove_loc(void);
 
 /* spells1.c */
 extern bool in_disintegration_range(int y1, int x1, int y2, int x2);
-extern bool take_hit(int damage_type, int damage, cptr kb_str, int monspell);
+extern int take_hit(int damage_type, int damage, cptr kb_str, int monspell);
 extern u16b bolt_pict(int y, int x, int ny, int nx, int typ);
 extern sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg);
 extern int dist_to_line(int y, int x, int y1, int x1, int y2, int x2);

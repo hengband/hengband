@@ -2800,7 +2800,11 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 						{
 							case RACE_YEEK:
 							case RACE_KLACKON:
-							mult = 2;break;
+								mult = 20;break;
+							case RACE_HUMAN:
+							case RACE_AMBERITE:
+							case RACE_DUNADAN:
+								mult = 25;break;
 							case RACE_HALF_ORC:
 							case RACE_HALF_TROLL:
 							case RACE_HALF_OGRE:
@@ -2814,9 +2818,9 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 							case RACE_VAMPIRE:
 							case RACE_SPECTRE:
 							case RACE_DEMON:
-								mult = 3;break;
+								mult = 30;break;
 							case RACE_DRACONIAN:
-								mult = 5;break;
+								mult = 50;break;
 							default:
 								mult = 1;break;
 						}
@@ -2824,31 +2828,32 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 					case MIMIC_DEMON:
 					case MIMIC_DEMON_LORD:
 					case MIMIC_VAMPIRE:
-						mult = 3;break;
+						mult = 30;break;
 					default:
-						mult = 1;break;
+						mult = 10;break;
 					}
 
-					if (p_ptr->align < 0 && mult < 2)
-						mult = 2;
-					if (!(p_ptr->resist_acid || p_ptr->oppose_acid) && (mult < 3))
-						mult = mult * 5 / 2;
-					if (!(p_ptr->resist_elec || p_ptr->oppose_elec) && (mult < 3))
-						mult = mult * 5 / 2;
-					if (!(p_ptr->resist_fire || p_ptr->oppose_fire) && (mult < 3))
-						mult = mult * 5 / 2;
-					if (!(p_ptr->resist_cold || p_ptr->oppose_cold) && (mult < 3))
-						mult = mult * 5 / 2;
-					if (!(p_ptr->resist_pois || p_ptr->oppose_pois) && (mult < 3))
-						mult = mult * 5 / 2;
+					if (p_ptr->align < 0 && mult < 20)
+						mult = 20;
+					if (!(p_ptr->resist_acid || p_ptr->oppose_acid) && (mult < 25))
+						mult = 25;
+					if (!(p_ptr->resist_elec || p_ptr->oppose_elec) && (mult < 25))
+						mult = 25;
+					if (!(p_ptr->resist_fire || p_ptr->oppose_fire) && (mult < 25))
+						mult = 25;
+					if (!(p_ptr->resist_cold || p_ptr->oppose_cold) && (mult < 25))
+						mult = 25;
+					if (!(p_ptr->resist_pois || p_ptr->oppose_pois) && (mult < 25))
+						mult = 25;
 
 					if ((p_ptr->pclass != CLASS_SAMURAI) && (f1 & TR1_FORCE_WEAPON) && (p_ptr->csp > (p_ptr->msp / 30)))
 					{
 						p_ptr->csp -= (1+(p_ptr->msp / 30));
 						p_ptr->redraw |= (PR_MANA);
-						mult = mult * 7 / 2;
+						mult = mult * 35;
 					}
 					k *= mult;
+					k /= 10;
 				}
 
 				k = critical_norm(o_ptr->weight, o_ptr->to_h, k, p_ptr->to_h[hand], mode);

@@ -5718,6 +5718,10 @@ note = "を支配した。";
 				{
 					do_fear = randint1(90)+10;
 				}
+				else if (seen)
+				{
+					r_ptr->r_flags3 |= (RF3_NO_FEAR);
+				}
 			}
 
 			/* No "real" damage */
@@ -6065,7 +6069,7 @@ msg_format("%s%s", m_name, note);
 
 
 			/* Hack -- Pain message */
-			else if (known)
+			else if (known && (dam || !do_fear))
 			{
 				message_pain(c_ptr->m_idx, dam);
 			}
@@ -6323,6 +6327,8 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 	/* Hack -- messages */
 	cptr act = NULL;
 
+	int get_damage = 0;
+
 
 	/* Player is not here */
 	if ((x != px) || (y != py)) return (FALSE);
@@ -6469,7 +6475,7 @@ if (fuzzy) msg_print("毒で攻撃された！");
 				do_dec_stat(A_CON);
 			}
 
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 
 			if (!(double_resist || p_ptr->resist_pois))
 			{
@@ -6490,7 +6496,7 @@ if (fuzzy) msg_print("放射能で攻撃された！");
 
 			if (p_ptr->resist_pois) dam = (2 * dam + 2) / 5;
 			if (double_resist) dam = (2 * dam + 2) / 5;
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			if (!(double_resist || p_ptr->resist_pois))
 			{
 				set_poisoned(p_ptr->poisoned + randint0(dam) + 10);
@@ -6526,7 +6532,7 @@ if (fuzzy) msg_print("何かで攻撃された！");
 			if (fuzzy) msg_print("You are hit by something!");
 #endif
 
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -6543,7 +6549,7 @@ if (fuzzy) msg_print("何かで攻撃された！");
 				dam /= 2;
 			else if (p_ptr->align < -10)
 				dam *= 2;
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -6557,7 +6563,7 @@ if (fuzzy) msg_print("何かで攻撃された！");
 
 			if (p_ptr->align > 10)
 				dam *= 2;
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -6579,7 +6585,7 @@ if (fuzzy) msg_print("何か鋭いもので攻撃された！");
 #endif
 				break;
 			}
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -6592,7 +6598,7 @@ if (fuzzy) msg_print("何かとても熱いものでで攻撃された！");
 			if (fuzzy) msg_print("You are hit by something *HOT*!");
 #endif
 
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 
 			if (!p_ptr->resist_sound)
 			{
@@ -6672,7 +6678,7 @@ msg_print("気分がよくなった。");
 			}
 			else
 			{
-				take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			}
 
 			break;
@@ -6701,7 +6707,7 @@ if (fuzzy) msg_print("何か湿ったもので攻撃された！");
 				inven_damage(set_cold_destroy, 3);
 			}
 
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -6776,7 +6782,7 @@ msg_print("生命力が体から吸い取られた気がする！");
 				inven_damage(set_elec_destroy, 2);
 				inven_damage(set_fire_destroy, 2);
 			}
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -6803,7 +6809,7 @@ if (fuzzy) msg_print("何か鋭いもので攻撃された！");
 				inven_damage(set_cold_destroy, 2);
 			}
 
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -6831,7 +6837,7 @@ if (fuzzy) msg_print("轟音で攻撃された！");
 				inven_damage(set_cold_destroy, 2);
 			}
 
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -6852,7 +6858,7 @@ if (fuzzy) msg_print("何か混乱するもので攻撃された！");
 			{
 				(void)set_confused(p_ptr->confused + randint1(20) + 10);
 			}
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -6873,7 +6879,7 @@ if (fuzzy) msg_print("何かさえないものでで攻撃された！");
 			{
 				(void)apply_disenchant(0);
 			}
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -6894,7 +6900,7 @@ if (fuzzy) msg_print("何か奇妙なもので攻撃された！");
 			{
 				apply_nexus(m_ptr);
 			}
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -6911,7 +6917,7 @@ if (fuzzy) msg_print("運動エネルギーで攻撃された！");
 			{
 				(void)set_stun(p_ptr->stun + randint1(20));
 			}
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -6943,7 +6949,7 @@ if (fuzzy) msg_print("爆発があった！");
 				inven_damage(set_cold_destroy, 3);
 			}
 
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -6957,7 +6963,7 @@ if (fuzzy) msg_print("何か遅いもので攻撃された！");
 #endif
 
 			(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -6993,7 +6999,7 @@ msg_print("光で肉体が焦がされた！");
 				dam = dam * 4 / 3;
 			}
 			if (p_ptr->wraith_form) dam *= 2;
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 
 			if (p_ptr->wraith_form)
 			{
@@ -7037,7 +7043,7 @@ if (fuzzy) msg_print("何かで攻撃された！");
 			{
 				(void)set_blind(p_ptr->blind + randint1(5) + 2);
 			}
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -7133,7 +7139,7 @@ msg_print("あなたは以前ほど力強くなくなってしまった...。");
 				}
 			}
 
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -7166,7 +7172,7 @@ msg_print("周辺の重力がゆがんだ。");
 				inven_damage(set_cold_destroy, 2);
 			}
 
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -7179,7 +7185,7 @@ if (fuzzy) msg_print("純粋なエネルギーで攻撃された！");
 			if (fuzzy) msg_print("You are hit by pure energy!");
 #endif
 
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -7266,7 +7272,7 @@ if (fuzzy) msg_print("魔法のオーラで攻撃された！");
 			if (fuzzy) msg_print("You are hit by an aura of magic!");
 #endif
 
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -7279,7 +7285,7 @@ if (fuzzy) msg_print("エネルギーの塊で攻撃された！");
 			if (fuzzy) msg_print("You are hit by an energy!");
 #endif
 
-			take_hit(DAMAGE_FORCE, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_FORCE, dam, killer, monspell);
 			break;
 		}
 
@@ -7292,7 +7298,7 @@ if (fuzzy) msg_print("何かが空からあなたの頭上に落ちてきた！");
 			if (fuzzy) msg_print("Something falls from the sky on you!");
 #endif
 
-			take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			if (!p_ptr->resist_shard || one_in_(13))
 			{
 				if (!p_ptr->immune_fire) inven_damage(set_fire_destroy, 2);
@@ -7342,7 +7348,7 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 			if (p_ptr->mimic_form)
 			{
 				if (!(mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING))
-					take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+					get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			}
 			else
 			{
@@ -7363,7 +7369,7 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 				/* Hurt a lot */
 				default:
 				{
-					take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+					get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 					break;
 				}
 			}
@@ -7381,6 +7387,13 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 
 			break;
 		}
+	}
+
+	if (p_ptr->tim_eyeeye && get_damage > 0 && !death)
+	{
+		msg_format("攻撃が%s自身を傷つけた！", who_name);
+		project(0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL | PROJECT_NO_REF, -1);
+		set_tim_eyeeye(p_ptr->tim_eyeeye-5, TRUE);
 	}
 
 	if (p_ptr->riding && dam > 0)

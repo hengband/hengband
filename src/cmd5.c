@@ -3972,7 +3972,7 @@ take_hit(DAMAGE_USELIFE, 20 + randint1(30), "血の呪い", -1);
 }
 
 
-static bool cast_haja_spell(int spell) /* nanka */
+static bool cast_haja_spell(int spell)
 {
 	int	dir;
 	int	beam;
@@ -4008,22 +4008,27 @@ static bool cast_haja_spell(int spell) /* nanka */
 		(void)sleep_monsters_touch();
 		break;
 	case 6:
-		if (!get_aim_dir(&dir)) return FALSE;
-		fire_blast(GF_LITE, dir, 3+((plev-1)/5), 3, 10, 3);
+		teleport_player(plev*3);
 		break;
 	case 7:
-		teleport_player(plev*3);
+		if (!get_aim_dir(&dir)) return FALSE;
+		fire_blast(GF_LITE, dir, 3+((plev-1)/8), 3, 10, 3);
 		break;
 	case 8:
 		(void)set_cut(0);
 		(void)set_poisoned(0);
+		(void)set_stun(0);
 		break;
-	case 9: /* Exorcism */
+	case 9:
+		if (!get_aim_dir(&dir)) return FALSE;
+		(void)fire_ball(GF_AWAY_EVIL, dir, MAX_SIGHT*5, 0);
+		break;
+	case 10: /* Exorcism */
 		(void)dispel_undead(randint1(plev));
 		(void)dispel_demons(randint1(plev));
 		(void)turn_evil(plev);
 		break;
-	case 10: /* Holy Orb */
+	case 11: /* Holy Orb */
 		if (!get_aim_dir(&dir)) return FALSE;
 
 		fire_ball(GF_HOLY_FIRE, dir,
@@ -4034,23 +4039,19 @@ static bool cast_haja_spell(int spell) /* nanka */
 		          ((plev < 30) ? 2 : 3));
 
 		break;
-	case 11: /* Sense Unseen */
+	case 12: /* Sense Unseen */
 		(void)set_tim_invis(randint1(24) + 24, FALSE);
 		break;
-	case 12: /* Protection from Evil */
+	case 13: /* Protection from Evil */
 		(void)set_protevil(randint1(25) + 3 * p_ptr->lev, FALSE);
-		break;
-	case 13: /* Dispel Undead + Demons */
-		(void)dispel_undead(randint1(plev * 3));
-		(void)dispel_demons(randint1(plev * 3));
 		break;
 	case 14:
 		if (!get_aim_dir(&dir)) return FALSE;
-		(void)fire_ball(GF_ELEC, dir, plev*2+99, plev/5);
+		(void)fire_bolt(GF_ELEC, dir, plev*5);
 		break;
 	case 15: /* Holy Word */
 		(void)dispel_evil(randint1(plev * 6));
-		(void)hp_player(150);
+		(void)hp_player(100);
 		(void)set_afraid(0);
 		(void)set_poisoned(0);
 		(void)set_stun(0);
@@ -4074,8 +4075,9 @@ static bool cast_haja_spell(int spell) /* nanka */
 	case 18:
 		set_tim_sh_holy(randint1(20)+20, FALSE);
 		break;
-	case 19:
-		(void)set_fast(randint1(20 + plev) + plev, FALSE);
+	case 19: /* Dispel Undead + Demons */
+		(void)dispel_undead(randint1(plev * 4));
+		(void)dispel_demons(randint1(plev * 4));
 		break;
 	case 20: /* Dispel Evil */
 		(void)dispel_evil(randint1(plev * 4));
@@ -4108,9 +4110,9 @@ msg_print("「ご用でございますか、ご主人様」");
 
 				else
 #ifdef JP
-msg_print("「卑しき者よ、我は汝の下僕にあらず！ お前の魂を頂くぞ！」"); /* nanka */
+msg_print("「我は汝の下僕にあらず！ 悪行者よ、悔い改めよ！」");
 #else
-					msg_print("'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'");
+					msg_print("'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'"); /* nanka */
 #endif
 
 			}
@@ -4146,14 +4148,59 @@ msg_print("神の御力が邪悪を打ち払った！");
 		destroy_area(py, px, 13+randint0(5), TRUE);
 		break;
 	case 28: /* Eye for an Eye */
-		set_tim_eyeeye(randint1(4)+4, FALSE);
+		set_tim_eyeeye(randint1(10)+10, FALSE);
 		break;
 	case 29:
-		if (!get_aim_dir(&dir)) return FALSE;
+		{
+			int x, y, tx, ty;
+			int dir, i;
+			int b = 10 + randint1(10);
+			if (!get_aim_dir(&dir)) return FALSE;
+			tx = px;
+			ty = py;
 
-		fire_ball(GF_DISINTEGRATE, dir, 100, 4);
-		fire_ball(GF_FORCE, dir, 150, 4);
-		fire_ball(GF_ELEC, dir, 200, 4);
+			/* Hack -- Use an actual "target" */
+			if ((dir == 5) && target_okay())
+			{
+				tx = target_col;
+				ty = target_row;
+			}
+			else
+			{
+				while(1)
+				{
+					tx += ddx[dir];
+					ty += ddy[dir];
+					if (!cave_floor_bold(ty,tx) || !player_has_los_bold(ty, tx) || cave[ty][tx].m_idx) break;
+				}
+			}
+
+			for (i = 0; i < b; i++)
+			{
+				int count = 20, d = 0;
+
+				while (count--)
+				{
+					int dx, dy;
+
+					x = tx - 8 + randint0(17);
+					y = ty - 8 + randint0(17);
+
+					if (!in_bounds(y,x) || !in_disintegration_range(ty, tx, y, x)) continue;
+
+					dx = (tx > x) ? (tx - x) : (x - tx);
+					dy = (ty > y) ? (ty - y) : (y - ty);
+
+					/* Approximate distance */
+					d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
+					if (d < 5) break;
+				}
+
+				if (count < 0) continue;
+
+				project(0, 2, y, x, plev * 4, GF_DISINTEGRATE, PROJECT_JUMP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
+			}
+		}
 		break;
 	case 30: /* Divine Intervention */
 		project(0, 1, py, px, plev*11, GF_HOLY_FIRE, PROJECT_KILL, -1);
@@ -4163,7 +4210,7 @@ msg_print("神の御力が邪悪を打ち払った！");
 		confuse_monsters(plev * 4);
 		turn_monsters(plev * 4);
 		stasis_monsters(plev * 4);
-		(void)hp_player(150);
+		(void)hp_player(100);
 		break;
 	case 31:
 	{
@@ -4187,6 +4234,7 @@ msg_print("神の御力が邪悪を打ち払った！");
 		(void)set_hero(randint1(25) + 25, FALSE);
 		(void)set_blessed(randint1(25) + 25, FALSE);
 		(void)set_fast(randint1(20 + plev) + plev, FALSE);
+		(void)set_protevil(randint1(25) + 25, FALSE);
 		(void)set_afraid(0);
 		break;
 	}

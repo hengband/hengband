@@ -960,14 +960,15 @@ msg_print("Å¨¤òÄ´ºº¤·¤¿...");
 			{
 				if (racial_aux(25, 0, A_INT, 10))
 				{
-					if (take_hit(DAMAGE_USELIFE, p_ptr->lev, 
+					int gain_sp;
+					if ((gain_sp = take_hit(DAMAGE_USELIFE, p_ptr->lev, 
 #ifdef JP
-"£È£Ğ¤«¤é£Í£Ğ¤Ø¤ÎÌµËÅ¤ÊÊÑ´¹", -1))
+"£È£Ğ¤«¤é£Í£Ğ¤Ø¤ÎÌµËÅ¤ÊÊÑ´¹", -1)))
 #else
-"thoughtless convertion from HP to SP", -1))
+"thoughtless convertion from HP to SP", -1)))
 #endif
 					{
-						p_ptr->csp += p_ptr->lev / 5;
+						p_ptr->csp += gain_sp / 5;
 						if (p_ptr->csp > p_ptr->msp)
 						{
 							p_ptr->csp = p_ptr->msp;

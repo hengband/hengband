@@ -841,7 +841,7 @@ info[i++] = "あなたは鏡を割ることができる。(0 MP)";
 #endif
 			break;
 		case CLASS_NINJA:
-			if (plev > 7)
+			if (plev > 19)
 			{
 #ifdef JP
 info[i++] = "あなたは素早く移動することができる。";
@@ -2194,6 +2194,24 @@ info[i++] = "あなたは電気に包まれている。";
 info[i++] = "あなたは冷気のオーラに包まれている。";
 #else
 		info[i++] = "You are surrounded with a coldly aura.";
+#endif
+
+	}
+	if (p_ptr->tim_sh_holy)
+	{
+#ifdef JP
+info[i++] = "あなたは聖なるオーラに包まれている。";
+#else
+		info[i++] = "You are surrounded with a holy aura.";
+#endif
+
+	}
+	if (p_ptr->tim_sh_touki)
+	{
+#ifdef JP
+info[i++] = "あなたは闘気のオーラに包まれている。";
+#else
+		info[i++] = "You are surrounded with a energy aura.";
 #endif
 
 	}
