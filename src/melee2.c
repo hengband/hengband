@@ -3789,14 +3789,15 @@ static void mproc_add(int m_idx, int mproc_type)
 
 void mproc_remove(int m_idx, int mproc_type)
 {
+	s16b *mproc_idx = &(m_list[m_idx].mproc_idx[mproc_type]);
+
 	if (mproc_max[mproc_type] > 1)
 	{
-		int mproc_idx = m_list[m_idx].mproc_idx[mproc_type];
-		mproc_list[mproc_type][mproc_idx] = mproc_list[mproc_type][--mproc_max[mproc_type]];
-		m_list[mproc_list[mproc_type][mproc_idx]].mproc_idx[mproc_type] = mproc_idx;
+		mproc_list[mproc_type][*mproc_idx] = mproc_list[mproc_type][--mproc_max[mproc_type]];
+		m_list[mproc_list[mproc_type][*mproc_idx]].mproc_idx[mproc_type] = *mproc_idx;
 	}
 
-	m_list[m_idx].mproc_idx[mproc_type] = 0;
+	*mproc_idx = 0;
 }
 
 
