@@ -2515,6 +2515,7 @@ bool identify_fully_aux(object_type *o_ptr)
 
 	cptr            info[128];
 	u32b flag;
+	char o_name[MAX_NLEN];
 
 	/* Extract the flags */
 	object_flags(o_ptr, &f1, &f2, &f3);
@@ -3629,6 +3630,10 @@ info[i++] = "それは冷気では傷つかない。";
 
 	/* Save the screen */
 	screen_save();
+
+	/* Display Item name */
+	object_desc(o_name, o_ptr, TRUE, 3);
+	prt(format("%s", o_name), 0, 0);
 
 	/* Erase the screen */
 	for (k = 1; k < 24; k++) prt("", k, 13);
