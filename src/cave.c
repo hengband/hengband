@@ -695,7 +695,7 @@ static void image_random(byte *ap, char *cp)
  * The layout of the array is [x][0] = light and [x][1] = dark.
  */
 
-byte lighting_colours[16][2] =
+static byte lighting_colours[16][2] =
 {
 	/* TERM_DARK */
 	{TERM_L_DARK, TERM_DARK},
@@ -758,8 +758,8 @@ void apply_default_feat_lighting(byte f_attr[F_LIT_MAX], byte f_char[F_LIT_MAX])
 
 	if (is_ascii_graphics(s_attr)) /* For ASCII */
 	{
-		f_attr[F_LIT_LITE] = lighting_colours[s_attr][0];
-		f_attr[F_LIT_DARK] = lighting_colours[s_attr][1];
+		f_attr[F_LIT_LITE] = lighting_colours[s_attr & 0x0f][0];
+		f_attr[F_LIT_DARK] = lighting_colours[s_attr & 0x0f][1];
 		for (i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) f_char[i] = s_char;
 	}
 	else /* For tile graphics */
