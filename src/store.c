@@ -2075,13 +2075,7 @@ static void display_entry(int pos)
 			a |= 0x40;
 #endif
 
-		Term_draw(cur_col, i + 6, a, c);
-		if (use_bigtile)
-		{
-			cur_col++;
-			if (a & 0x80)
-				Term_draw(cur_col, i + 6, 255, -1);
-		}
+		Term_queue_bigchar(cur_col, i + 6, a, c, 0, 0);
 		cur_col += 2;
 	}
 

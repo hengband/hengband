@@ -2329,7 +2329,8 @@ void display_map(int *cy, int *cx)
 	/* Display each map line in order */
 	for (y = 0; y < hgt + 2; ++y)
 	{
-		int cx = COL_MAP;
+		/* Start a new line */
+		Term_gotoxy(COL_MAP, y);
 
 		/* Display the line */
 		for (x = 0; x < wid + 2; ++x)
@@ -2346,10 +2347,7 @@ void display_map(int *cy, int *cx)
 			}
 
 			/* Add the character */
-			Term_queue_bigchar(cx, y, ta, tc, 0, 0);
-
-			if (use_bigtile) cx += 2;
-			else cx++;
+			Term_add_bigch(ta, tc);
 		}
 	}
 

@@ -5015,13 +5015,9 @@ int show_inven(int target_item)
 			if (a & 0x80) a |= 0x40;
 #endif
 
-			Term_draw(cur_col, j + 1, a, c);
-			if (use_bigtile)
-			{
-				cur_col++;
-				if (a & 0x80)
-					Term_draw(cur_col, j + 1, 255, -1);
-			}
+			Term_queue_bigchar(cur_col, j + 1, a, c, 0, 0);
+			if (use_bigtile) cur_col++;
+
 			cur_col += 2;
 		}
 
@@ -5202,13 +5198,9 @@ int show_equip(int target_item)
 			if (a & 0x80) a |= 0x40;
 #endif
 
-			Term_draw(cur_col, j + 1, a, c);
-			if (use_bigtile)
-			{
-				cur_col++;
-				if (a & 0x80)
-					Term_draw(cur_col, j + 1, 255, -1);
-			}
+			Term_queue_bigchar(cur_col, j + 1, a, c, 0, 0);
+			if (use_bigtile) cur_col++;
+
 			cur_col += 2;
 		}
 

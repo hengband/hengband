@@ -3050,14 +3050,12 @@ void roff_top(int r_idx)
 
 	/* Append the "standard" attr/char info */
 	Term_addstr(-1, TERM_WHITE, " ('");
-	Term_addch(a1, c1);
-	if (use_bigtile && (a1 & 0x80)) Term_addch(255, -1);
+	Term_add_bigch(a1, c1);
 	Term_addstr(-1, TERM_WHITE, "')");
 
 	/* Append the "optional" attr/char info */
 	Term_addstr(-1, TERM_WHITE, "/('");
-	Term_addch(a2, c2);
-	if (use_bigtile && (a2 & 0x80)) Term_addch(255, -1);
+	Term_add_bigch(a2, c2);
 	Term_addstr(-1, TERM_WHITE, "'):");
 
 	/* Wizards get extra info */
