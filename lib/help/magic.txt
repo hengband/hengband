@@ -1,0 +1,671 @@
+=== Zangband Magic System ===
+
+In the official releases of Angband there are only two types magic
+spells: Magic spells and priestly prayers. If the character is a mage,
+ranger or a rogue (s)he can learn magic spells; if (s)he is a priest or
+a paladin, (s)he can learn prayers. All mages can learn the same spells
+and all priests can learn the same spells.
+
+Zangband uses a more complex "realms of magic" system inspired by the
+commercial fantasy strategy game Master of Magic (Microprose), which in
+turn has supposedly borrowed it from the card game Magic the Gathering
+(by Wizards of the Coast). The magic system, as implemented in
+Zangband, consists of seven realms: Life, Arcane, Sorcery, Nature,
+Trump, Chaos and Death.
+
+While any given realm of magic typically includes spells of a certain
+type or theme, each realm should have enough high-level spells to
+remain effective throughout the later stages of the game. The main
+difference lies in how they support your playing strategy. For example,
+some offer attacking spells which let you directly hurt your enemy,
+while others offer spells for protection, healing and gathering
+information.
+
+In general, Life is defensive although it offers some good attacking
+spells against evil monsters, Arcane offers utility spells with limited
+offensive capability, Sorcery offers utility spells and some defensive
+capability, Nature specializes in the elements and offers both
+defensive and offensive spells, Trump specializes in teleportation and
+summoning spells and Chaos and Death are offensive.
+
+In Zangband, spellcasting classes can select either one or two realms
+from those available. Note that certain realms may be prohibited for
+some classes. Since a character can have (at most) two realms of magic,
+and the old spells have been split between the existing realms, on the
+first glance it may seem that this system makes spell-users less
+powerful. However, the opposite holds true. While a given realm of
+magic typically includes spells of a certain type, new ultra powerful
+rare high-level spells have been added to many realms.
+
+Any spell realm should have enough high-level spells even for the later
+stages of the game. The main difference lies in how they support your
+playing strategy: some offer "weapon" spells which let you directly
+hurt your enemy, while others offer spells for protection, healing and
+gathering information.
+
+In standard Angband, there were 9 spellbooks for all spellcasters. In
+Zangband, there are 4 spellbooks per realm. Two of them can be bought
+in the town stores and the remaining two must be found in the dungeon
+(although they may occasionally appear in the Black Market). The
+exception to this rule is the Arcane realm since all Arcane spellbooks
+can be found in the magic shop or book store. Just as one might expect,
+Arcane magic lacks the really powerful high level spells.
+
+A character with two realms of magic will thus need to carry a maximum
+of 8 spellbooks while a character with only one realm of magic will
+only need to carry a maximum of 4 spellbooks. All realms have 32
+spells, and each book contains 8 spells.
+
+
+***** <ClassSpellAbil>
+=== Class Spell Ability ===
+
+Warriors
+     Warriors cast no spells. They hate magic. In fact, they even gain
+     experience for destroying high level spellbooks.
+
+Mages
+     Mages have the least restrictions in choosing and learning spells.
+     They can freely choose any two realms when a character is created:
+     in the current version, all seven realms are available to them,
+     although their natural inclination makes Life magic fairly hard
+     for them. Otherwise, a mage tends to learn and cast all the spells
+     in his / her realms better than any other character. The ability
+     to select both realms of magic (which no other character class can
+     do) allows the best support for experimenting and combining
+     different realms, and, thus, for different playing strategies as
+     well.
+
+Priests
+     There are two types of priests in Zangband: the 'ordinary' priests
+     who, select Life magic as their primary realm, and the 'dark'
+     priests, who select Death magic instead of Life magic. No priest
+     can have both realms (unless (s)he was created in Zangband 2.0.0
+     or 2.0.1). Priests can also select a secondary realm from the
+     other five realms, and should be able to learn all spells in it as
+     well, even if not as efficiently as mages. However, when learning
+     spells, priests cannot voluntarily decide which spells to study:
+     they are rewarded with new prayers by their patron deities, with
+     no money-back satisfaction guarantee. It should also be noted that
+     since the natural inclination of a priest is towards Life magic,
+     priests who select Life magic will be able to learn their prayers
+     faster and better than their evil colleagues with Death magic.
+
+Rogues
+     There are several subtypes of Rogues in Zangband: the exact 'type'
+     is determined by the realm of magic chosen by the Rogue. The
+     common Thief, agent of the underworld, will probably be content
+     with Arcane magic and its wide applicability. The Burglar, on the
+     other hand, is more interested in the Sorcery spells, which allow
+     him or her to do the job fast and efficiently. The Assassins'
+     partiality for Death magic is well known, and they are feared for
+     it. Finally, there is the Card Shark, who will opt for Trump
+     magic, and shuffles the decks with amazing proficiency. All Rogues
+     have certain limitations on which spells they can learn, and they
+     are not too fast to learn new spells.
+
+Rangers
+     All rangers are trained in Nature magic, and all Nature spells are
+     available to them. They even learn these spells almost as fast as
+     mages. They can also select a secondary realm (from Sorcery,
+     Arcane, Trump, Nature, Chaos and Death), but they are slow
+     learners in them, and may find themselves unable to learn some of
+     the highest level spells.
+
+Paladins
+     Paladins are trained in Life magic (only), and they despise the
+     other realms of magic (which they regard as the Devil's work).
+     Like priests, they cannot select which prayers to learn but are
+     rewarded with new prayers by their deities. They can learn all
+     Life spells, but not as fast as priests. Death Knights study Death
+     magic instead of Life magic, but in other respects they are
+     similar to normal paladins. Death Knights can learn all Death
+     spells. The endless enmity between these two subtypes is most
+     evident in their attitudes to other realms of magic: an 'ordinary'
+     detests the other realms of magic (than Life) so strongly that he
+     or she will even gain experience for destroying their high-level
+     spellbooks. A Death Knight, on the other hand, is very tolerant of
+     the other realms -- to annoy Paladins, perhaps, if for no other
+     reason. A Death Knight will, however, be very offended by the
+     sight of Life spellbook, and will do anything to destroy it; and
+     this will even give him or her experience, if the Life spellbook
+     in question is a high-level one.
+
+Warrior-Mages
+     Warrior-mages begin the game with Arcane magic, and they can
+     freely select another realm of magic. Although they do not gain
+     new spells as fast as regular mages, they will eventually learn
+     every spell in both realms, thus making a very competitive choice
+     for players who appreciate Arcane magic.
+
+Chaos Warriors
+     Chaos Warriors are, as one might expect, trained in Chaos magic.
+     They are not interested in any other form of magic. They can learn
+     every Chaos spell.
+
+Monks
+     The different sects of monks are devoted to different areas of
+     magic. The typical monk is interested in the harmony of the
+     nature, and studies Nature magic. An idealist monk would select
+     Life magic, and try work to benefit his neighbor. But there also
+     are dark monks, who specialize in Death magic. A monk can thus
+     select any one of these three Realms. They will eventually learn
+     all prayers in the discipline of their choice.
+
+Mindcrafter
+     Although the powers of a Mindcrafter may seem like magic, this is
+     not -- strictly speaking -- the case. They are mental powers,
+     independent of the ordinary sources of magic. Consequently,
+     Mindcrafters are not interested in 'magic' and learn no spells.
+
+High Mage
+     High mages are mages who specialize in one particular field of
+     magic and learn it very well -- much better than the ordinary
+     mage. For the price of giving up a second realm of magic, they
+     gain substantial benefits in the mana costs, minimum levels, and
+     failure rates in the spells of the realm of their specialty.
+  
+
+***** <MagicRealms>
+=== The Realms of Magic ===
+
+Life
+     Life is magic is 'good' magic; it relies mostly on healing and
+     protective spells. It does have a few attack spells as well, but
+     these are mostly used for harming and banishing foul minions of
+     evil. It is rumored that there is a secret high level prayer which
+     will make the priest (or paladin) completely impervious to all
+     forms of hostile action.
+
+Sorcery
+     Sorcery is a `meta` realm, including enchantment and general
+     spells. It provides superb protection spells (such as Teleport
+     spells for fleeing and even Globe of Invulnerability), spells to
+     enhance your odds in combat (Slow Monster, Haste Self, Confuse
+     Monster) and, most importantly, a vast selection of spells for
+     gathering information: in addition to the usual detection and
+     identify spells, one of the standard spellbooks has a spell called
+     Identify True, which gives you full knowledge of a given object!
+     In the rare books, there are spells with which you can enchant
+     your items or turn unwanted items to gold. However, Sorcery has
+     one weakness: it has no spells to deal direct damage to your
+     enemies.
+
+Arcane
+     Even more than Sorcery, Arcane magic is a general purpose realm of
+     magic. It attempts to encompass all 'useful' spells from all 
+     realms, and almost succeeds, with the probable exception of
+     *Identify*. This is the downside of Arcane magic: while Arcane 
+     does have all the necessary 'tool' spells for a dungeon delver, it
+     has no ultra-powerful high level spells. As a consequence, all
+     Arcane spellbooks can be bought in town. It should also be noted
+     that the 'specialized' realms (i.e. other than Arcane) usually
+     offer the same spell at a lower level and cost. Arcane magic is
+     therefore perhaps not recommendable as one's only realm of magic,
+     but it should be a very nice addition to fill up the gaps in the
+     selection of tools spells in another realm.
+
+Trump
+     Trump magic seems an independent source of power, although its
+     supposed association with Chaos magic has been mentioned in
+     several places. Although it lacks the unpredictable chaotic
+     side-effects of Chaos magic, it has a few spells whose exact
+     effects seem more or less random. One such spell is Shuffle: the
+     Trump spellbooks actually consist of decks of trumps, and the
+     Shuffle spell allows the caster to shuffle the deck and pick one
+     card at random. The effect depends on the card picked, and is not
+     always pleasant. In the Amber universe, the Trump gateways are
+     also a major method of transportation: Trump magic has, indeed, an
+     admirable selection of teleportation spells. Since the Trump
+     gateways can also be used to summon other creatures, Trump magic
+     has an equally impressive selection of summoning spells. However,
+     not all monsters appreciate being drawn to another place by Trump
+     user. The only summoned creatures whose loyalty is guaranteed are
+     the Phantasmal Servants, who lack a will of their own (but can
+     develop one, if you treat them badly).
+
+Nature
+     Early levels may be rather difficult for a spellcaster relying on
+     Nature magic, as the early spells offer only limited protection,
+     detection and curing capabilities. However, at higher levels there
+     are very useful offensive spells available, especially should the
+     spellcaster be lucky enough to find an extremely rare spellbook
+     called "Nature's Wrath". Nature also has a spell of Herbal
+     Healing, which is the only powerful healing spell outside the
+     realm of Life magic.
+
+Chaos
+     There are few types of magic more unpredictable and difficult to
+     control than Chaos magic. Chaos is the very element of unmaking,
+     and the Chaos spells are the most terrible weapons of destruction
+     imaginable. From Magic Missile and Acid Bolt to the medium level
+     Fire Ball and Doom Bolt, and finally to the awesome spells of
+     Invoke Logrus, Mana Storm and Call the Void, Chaos offers an
+     unsurpassable arsenal of attack spells. The caster can also call
+     on the primal forces of Chaos to induce mutations in his/her
+     opponents and even him/herself, but otherwise, Chaos has no
+     protective spells. Beware, though, Chaos spells are known to
+     backfire easily and product undesired effects. This is especially
+     true in the version 2.1.0 of Zangband and later, where the forces
+     of Chaos can easily twist the hapless individual foolish enough to
+     invoke them, turning them horrendous spawns of Chaos.
+
+Death
+     There is no fouler nor more evil category of spells than the
+     necromantic spells of Death Magic. These spells are relatively
+     hard to learn, but at higher levels the spells give the caster
+     power over living and the (un)dead. Poison, vampirism, death
+     spells and even hellfire can be directed by the caster, but the
+     most powerful spells need his / her own blood as the focus, often
+     hurting the caster in the process of casting. Should a Death
+     wizard find the legendary tome Necronomicon, he can expect to gain
+     very great powers indeed, but at a cost: few that have studied the
+     accursed tome have retained their sanity.
+
+
+***** <CastingSpells>
+=== On Casting Spells ... ===
+
+Players who select spellcasting characters may notice a few unusual
+phenomena during the course of the game. Here's a few helps and
+hints on what may be happening.
+
+--- Armor and Spell Casting ---
+
+All spellcasting classes are penalized for wielding armor above a
+certain total combined weight. The threshold varies between 30lbs
+for a mage and 40lbs for a paladin. Typically, the more reliant on
+spells/prayers your class is deemed to be, the lower your weight
+allowance. If you exceed your weight limit, your mana will drop.
+This penalty is fairly stiff for low level characters but can
+generally be ignored by high level ones.
+
+--- Mage-Types and Gloves ---
+
+Spellcasters who use INT as the stat determining their spellcasting
+ability will be penalized heavily for wielding armor on their
+hands. The exception to this is that wielding gloves, gauntlets or
+cesti which boost DEX or which grant Free Action will result in no
+penalty. The rationale behind this is that the hands are needed to
+perform intricate gestures that accompany the casting of the spell
+and anything encumbering the hands would interfere with this. The
+priest-type classes (priest, paladin and monk) do not have the same
+restrictions as they are viewed as invoking the power of their
+deity directly through prayer.
+
+--- Casting Spells With Insufficient Mana ---
+
+Occasionally, you may try (either by accident or in desperation) to
+cast a spell when you have insufficient mana to do so. In these
+circumstances you will be told by the game that you do not have
+enough mana to cast the spell and then asked if you want to anyway.
+Casting the spell under these conditions has a drastically reduced
+chance of success and may also result in your constitution being
+damaged. It may also cause you to faint from the effort which will
+effectively paralyze you for several turns (even with free action).
+The CON drain and the paralyzation may happen regardless of whether
+the casting was successful or not.
+
+--- Spell Durations ---
+
+Some spells such as Haste-Self or Resistance grant an effect which
+wears off after a certain period of time. With very few exceptions,
+multiple castings of such spells are not cumulative in terms of the
+duration of the spell. In other words, casting a spell which has a
+duration of 20 turns three times will not result in a duration of
+60 turns. Typically, the subsequent castings will add only a small
+amount to the total duration.
+
+
+***** <SpellTypes>
+=== Spell Types ===
+
+--- Bolts and Beams ---
+
+A bolt spell is aimed in a direction or at a target but will hit
+the first monster or obstruction in its targeted direction. This
+may or may not be the intended target. Occasionally, you may note
+that your bolt spell hits multiple targets along the line of fire.
+This is because some bolt spells are granted a chance of 'beaming'
+which may be either fixed or level-dependent. A beam will hit every
+target within range along a 'straight' line in the direction in
+which it was aimed.
+
+--- Balls ---
+
+There are two things to remember about ball spells. Firstly, unlike
+bolt spells, they can be aimed at a specific target which allows
+you to target a specific monster as opposed to the first one in the
+direction you are aiming. Secondly, they have a radius (which
+varies from spell to spell). A radius value of one or more will
+result in the spell affecting monsters (and possibly objects, etc)
+around the target in addition to the target itself.
+
+--- Line-of-Sight ---
+
+Line-of-sight spells affect all monsters that that are currently
+in sight of your character. This includes monsters that may not
+currently be visible due to darkness but would be if it was light.
+
+--- Area ---
+
+Area spells affect an area around the player. The size of the area
+can vary considerably. For example, Light Area lights a single room
+while Detect Traps affects a map panel and Genocide the entire
+level.
+
+***** <Pets>
+=== Summoned/Charmed Creatures ===
+
+A friendly creature can be a mixed blessing. At first sight, one
+might think that they can make the game much easier. It is of
+course highly satisfying to send your pet Hell Wyrm into a Troll
+pit and wait outside listening for the howls of agony and terror,
+the sounds of guts splattering, bones crunching and so on. But one
+should not expect to gain any experience for such a combat: you
+will only gain experience for creatures to whom you deliver the
+death blow yourself. New experiences require hazards, nobody gains
+experience by sitting home watching the TV.
+
+Secondly, friendly monsters are often so eager to destroy your
+opponents they may forget all about you, and you get trampled under
+their feet as they charge at your foe. They are not as smart as the
+regular monsters, since they have given up their free will to serve
+you. So don't stand next to that Snaga when your pet Cyberdemon
+brandishes its rocket launcher! Pets are also rather easily
+irritable.
+
+Once you do something which causes the slightest discomfort to
+them, they will revert to their normal behavior and consider you
+their main target. This is something to think about before lighting
+up a room if you have pet orcs. Needless to say, nobody wants to be
+your friend if you are aggravating them.
+
+Finally, it takes a lot of mental energy to maintain the control
+over the charmed monsters. The first monster or the first few are
+'free', but after that maintaining the control will start taxing
+your mana regain rate. The higher the sum of the levels of your
+pets the less mana you will be able to regain. Keep this in mind if
+you have a pet which can summon or otherwise produce more pets...
+
+
+***** <Hints>
+=== Hints and Tips ===
+
+If you miss the `old` magic user, try picking Sorcery and Chaos magic
+to get the most commonly used mage spells early on (Magic Missile,
+Detect Monsters + Traps + etc, Identify).
+
+It is generally a good idea to pick one defensive realm and one 
+offensive realm. For example try using life or sorcery with chaos or
+death magic. Nature is somewhat neutral: it has both offensive and
+defensive spells, but is not very generous with either, not at least
+early in the game. Nature should work best with characters who can use
+other means to survive until they get the more powerful high level
+spells. 
+
+If you pick the realms always in the same order (e.g. nature as your
+first realm and chaos as your second realm, not the other way around)
+you will be less confused when trying to pick the correct spellbook to
+use in the game. If you still get confused trying to select the correct
+spellbook, try using macros (either the 'full' macros or inscriptions).
+
+
+***** <SpellLists>
+=== Spell Lists ===
+
+
+LIFE: Standard Spellbooks
+
+Book of Common Prayer
+     1. Detect Evil
+     2. Cure Light Wounds
+     3. Bless
+     4. Remove Fear
+     5. Call Light
+     6. Detect Traps and Secret Doors
+     7. Cure Medium Wounds
+     8. Satisfy Hunger
+
+High Mass
+     1. Remove Curse
+     2. Cure Poison
+     3. Cure Critical Wounds
+     4. Sense Unseen
+     5. Holy Orb
+     6. Protection from Evil
+     7. Healing
+     8. Glyph of Warding
+
+
+LIFE: Rare Spellbooks
+
+Book of the Unicorn
+     This book has powerful prayers to ward off, banish and destroy the
+     forces of evil.
+
+Blessings of the Grail
+     This book has the most powerful prayers of protection and healing,
+     as well as prayers of holy visions.
+
+
+SORCERY: Standard Spellbooks
+
+Beginner's Handbook
+     1. Detect Monsters
+     2. Phase Door
+     3. Detect Doors and Traps
+     4. Light Area
+     5. Confuse Monster
+     6. Teleport
+     7. Sleep Monster
+     8. Recharging
+
+Master Sorcerer's Handbook
+     1. Magic Mapping
+     2. Identify
+     3. Slow Monster
+     4. Mass Sleep
+     5. Teleport Away
+     6. Haste Self
+     7. Detection True
+     8. Identify True
+
+
+SORCERY: Rare Spellbooks
+
+Pattern Sorcery
+     More powerful spells of detection, information and transportation.
+
+Grimoire of Power
+     More powerful enchantments against monsters, spells to enchant
+     items, and the Globe of Invulnerability.
+
+
+ARCANE: All Spellbooks
+
+Cantrips for Beginners
+     1. Zap
+     2. Wizard Lock
+     3. Detect Invisibility
+     4. Detect Monsters
+     5. Blink
+     6. Light Area
+     7. Trap & Door Destruction
+     8. Cure Light Wounds
+
+Minor Arcana
+     1. Detect Doors & Traps
+     2. Phlogiston
+     3. Detect Treasure
+     4. Detect Enchantment
+     5. Detect Objects
+     6. Cure Poison
+     7. Resist Cold
+     8. Resist Fire
+
+Major Arcana
+     1. Resist Lightning
+     2. Resist Acid
+     3. Cure Medium Wounds
+     4. Teleport
+     5. Stone to Mud
+     6. Ray of Light
+     7. Satisfy Hunger
+     8. See Invisible
+
+Manual of Mastery
+     1. Recharging
+     2. Teleport Level
+     3. Identify
+     4. Teleport Away
+     5. Elemental Ball
+     6. Detection
+     7. Word of Recall
+     8. Clairvoyance
+
+
+
+TRUMP: Standard Spellbooks
+
+Conjurings & Tricks
+     1. Phase Door
+     2. Mind Blast
+     3. Shuffle
+     4. Reset Recall
+     5. Teleport
+     6. Dimension Door
+     7. Trump Spying
+     8. Teleport Away
+
+Deck of Many Things
+     1. Trump Reach
+     2. Trump Animal
+     3. Phantasmal Servant
+     4. Trump Monster
+     5. Conjure Elemental
+     6. Teleport Level
+     7. Word of Recall
+     8. Banish
+
+
+TRUMP: Rare Spellbooks
+
+Trumps of Doom
+     This tome tells you the secrets of the Living Trump treatment, as
+     well how to deal the Joker card and how to deal death. It also has
+     rather powerful summoning Trumps which may yet prove your own
+     Doom...
+
+Five Aces
+     A superb collection of the most classic summoning Trumps ever
+     crafted.
+
+
+NATURE: Standard Spellbooks
+
+Call of the Wild
+     1. Detect Creatures
+     2. First Aid
+     3. Detect Doors and Traps
+     4. Foraging
+     5. Daylight
+     6. Animal Taming
+     7. Resist Environment
+     8. Cure Wounds & Poison
+
+Nature Mastery
+     1. Stone to Mud
+     2. Lightning Bolt
+     3. Nature Awareness
+     4. Frost Bolt
+     5. Ray of Sunlight
+     6. Entangle
+     7. Summon Animal
+     8. Herbal Healing
+
+
+NATURE: Rare Spellbooks
+
+Nature's Gifts
+     Nature's Gifts for protection against the forces of nature and
+     hostiles.
+
+Nature's Wrath
+     Nature's destructive force harnessed for your use against your
+     enemies.
+
+
+CHAOS: Standard Spellbooks
+
+Sign of Chaos
+     1. Magic Missile
+     2. Trap / Door Destruction
+     3. Flash of Light
+     4. Touch of Confusion
+     5. Mana Burst
+     6. Fire Bolt
+     7. Fist of Force
+     8. Teleport Self
+
+Chaos Mastery
+     1. Wonder
+     2. Chaos Bolt
+     3. Sonic Boom
+     4. Doom Bolt
+     5. Fire Ball
+     6. Teleport Other
+     7. Word of Destruction
+     8. Invoke Logrus
+
+
+CHAOS: Rare Spellbooks
+
+Chaos Channels
+     Unusual spells that allow you to call on the forces of chaos to
+     induce changes in your possessions, in your enemies and in
+     yourself.
+
+Armageddon Tome
+     The rarest of all spellbooks, filled with the most devastating
+     spells.
+
+
+DEATH: Standard Spellbooks
+
+Black Prayers
+     1. Detect Unlife
+     2. Malediction
+     3. Detect Evil
+     4. Stinking Cloud
+     5. Black Sleep
+     6. Resist Poison
+     7. Horrify
+     8. Enslave Undead
+
+Black Mass
+     1. Orb of Entropy
+     2. Nether Bolt
+     3. Terror
+     4. Vampiric Drain
+     5. Poison Branding
+     6. Dispel Good
+     7. Genocide
+     8. Restore Life
+
+
+DEATH: Rare Spellbooks
+
+Black Channels
+     Spells that turn you into a bloodthirsty killing machine, and
+     which enable you to call upon the nether forces of darkness to
+     wreak havoc upon your foes.
+
+Necronomicon
+     The legendary tome of unholy visions, death and destruction.
+
+--
+Original   : (??)
+Updated    : (??)
+Updated    : Zangband DevTeam
+Last update: January 13, 2000

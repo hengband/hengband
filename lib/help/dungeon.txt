@@ -1,0 +1,258 @@
+=== The Dungeon ===
+
+
+Although Zangband contains an extensive town level featuring multiple
+towns and a large wilderness area, the bulk of your adventuring will
+take place in the dungeon. Symbols appearing on your screen will
+represent the dungeon's walls, floor, objects, features, and creatures
+lurking about. In order to direct your character through his adventure,
+you will enter single character commands (see command.txt [1]).
+
+
+***** <MapSymbols>
+=== Symbols On Your Map ===
+
+Symbols on your map can be broken down into three categories: Features
+of the dungeon such as walls, floor, doors, and traps; Objects which
+can be picked up such as treasure, weapons, magical devices, etc; and
+creatures which may or may not move about the dungeon, but are mostly
+harmful to your character's well being.
+
+Some symbols are used to represent more than one type of entity, and
+some symbols are used to represent entities in more than one category.
+The "@" symbol (by default) is used to represent the character.
+
+It will not be necessary to remember all of the symbols and their
+meanings. The "slash" command ("/") will identify any character
+appearing on your map
+
+Note that you can use a "user pref file" to change any of these symbols
+to something you are more comfortable with.
+   
+ 
+--- Features that do not block line of sight ---
+ 
+  .   A floor space                   # (Green)        A Tree
+  .   A trap (hidden)                 # (Light Blue)   Shallow Water
+  ^   A trap (known)                  # (Dark Blue)    Deep Water
+  ;   A glyph of warding              # (Orange)       Shallow Lava
+  '   An open door                    # (Red)          Deep Lava
+  '   A broken door
+  <   A staircase up
+  >   A staircase down
+
+
+--- Features that block line of sight ---
+
+  #   A secret door                   #   A wall
+  +   A closed door                   %   A mineral vein
+  +   A locked door                   *   Treasure in wall / Pattern
+  +   A jammed door                   :   A pile of rubble
+
+
+***** <WithinDungeon>
+=== Within The Dungeon ===
+
+Once your character is adequately supplied with food, light, armor, and
+weapons, he is ready to enter the dungeon. Move on top of the '>'
+symbol and use the "Down" command (">").
+
+Your character will enter a maze of interconnecting staircases and
+finally arrive somewhere on the first level of the dungeon. Each level
+of the dungeon is fifty feet high (thus dungeon level "Lev 1" is often
+called "50 ft"), and is divided into (large) rectangular regions
+(several times larger than the screen) by titanium walls. Once you
+leave a level by a staircase, you will never again find your way back
+to that region of that level, but there are an infinite number of other
+regions at that same "depth" that you can explore later. So be careful
+that you have found all the treasure before you leave a level, or you
+may never find it again! The monsters, of course, can use the stairs,
+and you may eventually encounter them again.
+
+In the dungeon, there are many things to find, but your character must
+survive many horrible and challenging encounters to find the treasure
+lying about and take it safely back to the town to sell.
+
+There are two sources for light once inside the dungeon. Permanent
+light which has been magically placed within rooms, and a light source
+carried by the player. If neither is present, the character will be
+unable to see. This will affect searching, picking locks, disarming
+traps, reading scrolls, casting spells, browsing books, etc. So be very
+careful not to run out of light!
+
+A character must wield a torch or lamp in order to supply his own
+light. A torch or lamp burns fuel as it is used, and once it is out of
+fuel, it stops supplying light. You will be warned as the light
+approaches this point. You may use the "Fuel" command ("F") to refuel
+your lantern (with flasks of oil) or your torch (with other torches),
+so it is a good idea to carry extra torches or flasks of oil, as
+appropriate. There are rumors of objects of exceptional power which
+glow with their own never-ending light.
+
+
+***** <Objects>
+=== Objects In The Dungeon ===
+
+The dungeons are full of objects just waiting to be picked up and used.
+How did they get there? Well, the main source for useful items are all
+the foolish adventurers that proceeded into the dungeon before you.
+They get killed, and the helpful creatures scatter the various treasure
+throughout the dungeon. Most cursed items are placed there by the
+joyful evil sorcerers, who enjoy a good joke when it gets you killed.
+
+One item in particular will be discussed here. The scroll of "Word of
+Recall" can be found within the dungeon, or bought at the temple in
+town. It acts in two manners, depending upon your current location.
+If read within the dungeon, it will teleport you back to town. If read
+in town, it will teleport you back down to the deepest level of the
+dungeon which your character has previously been on. This makes the
+scroll very useful for getting back to the deeper levels of Zangband.
+Once the scroll has been read it takes a while for the spell to act, so
+don't expect it to save you in a crisis. Reading a second scroll before
+the first has had a chance to take effect will cancel both scrolls.
+
+Since an accidental dive to a new depth (via a trapdoor, for example),
+may result in the Word of Recall dungeon depth being 'broken', so to
+speak (meaning that the next Word of Recall in town will take you back
+deeper than you would like to), there is a new feature in Zangband
+which allows you to read a scroll of Word of Recall on a different
+level and 'reset' the recall depth to that level (instead of the
+deepest level).
+
+A more complete description of Zangband objects is found elsewhere in
+the documetnation (see object.txt [2]).
+
+
+***** <Mining>
+=== Mining ===
+
+Much of the treasure within the dungeon can be found only by mining it
+out of the walls. Many rich strikes exist within each level, but must
+be found and mined. Quartz veins are the richest, yielding the most
+metals and gems, but magma veins will have some hordes hidden within.
+
+Mining is rather difficult without a pick or shovel. Picks and shovels
+have an additional magical ability expressed as '(+#)'. The higher the
+number, the better the magical digging ability of the tool. A pick or
+shovel also has plusses to hit and damage, and can be used as a weapon,
+because, in fact, it is one.
+
+When a vein of quartz or magma is located, the character may wield his
+pick or shovel and begin digging out a section. When that section is
+removed, he can locate another section of the vein and begin the
+process again. Since granite rock is much harder to dig through, it is
+much faster to follow the vein exactly and dig around the granite.
+There is an option for highlighting magma and quartz. At a certain
+point, it becomes more cumbersome to dig out treasure than to simply
+kill monsters and discover items in the dungeon to sell. However, early
+on mineral veins can be a wonderful source of easy treasure.
+
+If the character has a scroll, staff, or spell of treasure location, he
+can immediately locate all strikes of treasure within a vein shown on
+the screen. This makes mining much easier and more profitable.
+
+Note that a character with high strength and/or a heavy weapon does not
+need a shovel/pick to dig, but even the strongest character will
+benefit from a pick if trying to dig through a granite wall.
+
+It is sometimes possible to get a character trapped within the dungeon
+by using various magical spells and items. So it can be a good idea to
+always carry some kind of digging tool, even when you are not planning
+on tunneling for treasure.
+
+There are rumors of certain incredibly profitable rooms buried deep in
+the dungeon and completely surrounded by titanium and granite walls,
+requiring a digging implement or magical means to enter. The same
+rumors imply that these rooms are guarded by incredibly powerful
+monsters, so beware!
+
+
+***** <StairsDoorsEtc>
+=== Staircases, Secret Doors, Passages, and Rooms ===
+
+Staircases are the manner in which you get deeper or climb out of the
+dungeon. The symbols for the up and down staircases are the same as the
+commands to use them. A "<" represents an up staircase and a ">"
+represents a down staircase. You must move your character over the
+staircase before you can use it.
+
+Each level has at least one up staircase and at least two down
+staircases. There are no exceptions to this rule. You may have trouble
+finding some well hidden secret doors, or you may have to dig through
+obstructions to get to them, but you can always find the stairs if you
+look hard enough. Stairs, like titanium walls, and the doors into
+shops, cannot be destroyed by any means.
+
+Many secret doors are used within the dungeon to confuse and demoralize
+adventurers foolish enough to enter. But with some luck, and lots of
+concentration, you can find these secret doors. Secret doors will
+sometimes hide rooms or corridors, or even entire sections of that
+level of the dungeon. Sometimes they simply hide small empty closets or
+even dead ends. Secret doors always look like granite walls, just like
+traps always look like normal floors.
+
+Creatures in the dungeon will generally know and use these secret
+doors, and can often be counted on to leave them open behind them when
+they pass through.
+
+Doors can be broken down by bashing them. Once a door is bashed open,
+it is forever useless and cannot be closed.
+
+For historical reasons, secret doors are never locked.
+
+
+***** <RandomQuests>
+=== Random Quests ===
+
+During character generation, you will be asked to input the number
+of random quests you wish to participate in. You may choose any
+number from 0 to 49. Random quests are always of the type 'Kill a
+random number of an out-of depth monster'. There is a limit to the
+number of levels a random quest monster may be out-of-depth but
+these quests can still be very dangerous. 
+
+Random quests always appear on even levels and are equally spaced
+throughout the dungeon (for example, a choice of 49 random quests
+results in one such quest on every even level until level 98 (level
+100 is the Serpent quest)). On entering a random quest level you
+will be told what the quest monster is and how many you have to
+kill (for example, 'This level is guarded by 10 young green
+dragons').
+
+On random quest levels, no down staircases are generated until the
+last monster is killed which means that you cannot continue further
+into the dungeon until you have completed your quests. When you
+kill the last quest monster, the down staircase will be created and
+the monster will drop an item of 'excellent' quality or above. This
+is true even of monsters that do not normally drop items. Using the
+services of the Trump Tower (see the Town section) can teleport you
+past a particularly nasty quest but you must come back and finish
+it later if you want your character to be a winner.
+
+Random quests can be either 'easy' or 'hard' and you must choose
+which type you want during character generation. This choice is
+irrevocable for the duration of the character's dungeon diving
+career. 'Easy' means that the game tracks how many quest monsters
+you have killed on each attempt at the quest and adds these to the
+total count. This allows you to kill one or more quest monsters,
+leave the level and return later to finish up. 'Hard' means that
+each time you enter the quest level the number of quest monsters
+remaining is reset. In other words, you have to kill all the quest
+monsters in one go.
+
+'Hard' quests can allow you to 'farm' the quest monsters by killing
+all but one, leaving the level and repeating. This allows you to
+collect and sell the dropped items and gain repeated experience for
+killing the monsters. This technique is frowned upon by many players
+and should be noted in any 'winner' post to the newsgroup.
+
+
+--
+Original   : (??)
+Updated    : (??)
+Updated    : Zangband DevTeam
+Last update: January 13, 2000
+
+***** Begin Hyperlinks
+***** [1] command.txt
+***** [2] object.txt

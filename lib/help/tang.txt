@@ -1,0 +1,621 @@
+=== The Zangband Newbie Guide ===
+
+
+Note: This guide has been adapted from The Angband Newbie Guide by
+Chris Weisiger and has undergone certain revisions to conform more
+closely to Zangband.
+
+ 
+=== Basic Training ===
+ 
+When you load the game, select "Start a new character." Go through the
+step-by-step instructions for picking a gender, race, and class. For
+your first time, we recommend choosing a Golem Warrior. Avoid the
+spellcaster types; they're much more difficult to play. If you want
+basic information about races and classes, go to the on-line help
+(type "?") and read "Character Attributes". You should probably read
+most of the help files here; the commands list is especially important
+to someone new to Zangband.
+
+After naming your character, you'll start in the town. The various
+numbers represent stores, where you can buy new equipment and sell
+stuff you've found in the dungeon. The little ">" is a staircase, the
+entrance to the dungeon. If you want to know what a specific symbol
+stands for, type "/", and then the symbol. For instance, if you're
+wondering what all the t's are, type "/t", and the game will tell you
+that these are townspeople. You can also "l"ook at an item, feature, or
+monster. While looking, pressing space or enter will cycle through the
+different "interesting" things in view. There is also a full map
+function: type "M". It will bring up a map of the entire area (just a
+single screen in the case of the town, but useful later on in the
+dungeon). Finally, if you type "L", you can scroll the (full-zoom) map
+around the dungeon. In general, you can use "M" to find areas that look
+interesting and "L" to look at them in detail.
+
+Take a look around the town, but avoid the Mean-Looking Mercenaries and
+Battle-Scarred Veterans; they can kill you fairly easily. A note on
+shop #7; it's the black market, where very powerful items are sold for
+an absolutely ridiculous price. Any good item can show up in this store
+(barring standard artifacts), so look here for those items that don't
+show up in other stores.
+
+
+Be sure to visit shops #1 and #2, the General Store and Armory,
+respectively. At the General Store, buy a cloak and a Brass Lantern,
+and a flask of oil or two. Sell your torches. At the Armory, buy some
+of the light armor. Suggested: Hard Leather Boots, a Leather Cap,
+Leather Gloves. If a Small Leather Shield is on sale and you can afford
+it, buy it.
+
+This should have cleaned out your money. However, if it hasn't, it is
+strongly recommended that you go to the Alchemist's shop (#5) and
+purchase a scroll of Phase Door. If you get surrounded by monsters,
+read it, and you'll be teleported a short distance away.
+
+Of course, it's possible that these items will not be available in the
+stores. The stores will "refresh" themselves every 1000 turns, getting
+rid of old items and buying new ones. If you ever find that there's
+something you need which the stores don't currently have, you can wait
+a while for the stores to refresh.
+
+Zangband's not actually all that difficult to learn to play. You should
+get the hang of it fairly quickly.
+ 
+From here on we'll be giving detailed dungeon survival information.
+Some of it is intuitive, and some of it you aren't likely to find out
+without a lot of deaths first. If you want to experience the painful
+learning process in all it's glory, don't read further. If, however,
+you're sick and tired of dying, read ahead.
+ 
+=== On weapons and multiple blows ===
+
+Most characters will start the game being able to get two blows per
+round with their weapon when attacking.  Whether or not you get more
+blows than this later in the game will be determined by your class, 
+your weapon weight, your Strength, and your Dexterity. Check your
+Character display (type "C"). Somewhere on this page, there is a number
+that is your number of blows/round.
+
+Multiple blows become very important later in the dungeon since the
+more times you hit, the more damage your weapon does (obviously).
+
+ 
+=== On important magical items ===
+
+You might think that you can get by without magical items. If so,
+you're bound for an interesting, but short, stay in the dungeon. It'll
+probably be one-way, too.
+
+--- Teleportation Items ---
+
+The most important items have be those of teleportation. There are many
+basic types:
+
+Phase Door
+     teleports you up to 10 squares away. Useful for the Shoot 'n Scoot
+     maneuver; more on this later.
+
+Teleport
+     teleports you across the dungeon, sometimes landing you in more
+     trouble than you started in. Better than certain death, though.
+
+Teleport Away
+     teleports a monster (or several monsters) away from you. Safer
+     than Teleport, but you might not be able to get them all in one
+     strike.
+
+Teleport Level
+     moves you up or down one level. If the level you're on is full of
+     dangerous monsters and you need to teleport, this could be your
+     ticket to safety.
+
+*Destruction*
+     this powerful spell removes everything except artifacts from the
+     area around you, blasting the surroundings and causing rock to
+     fall from the ceiling. If you're ever in deep trouble, this is the
+     safest way to escape.
+
+--- Healing Items ---
+
+The second most important items are those of healing. Healing, in this
+case, covers Cure Light/Serious/Critical Wounds, Healing, *Healing*,
+and Life Potions, from weakest to strongest.
+
+Cure Light/Serious/Critical Wounds
+     these generally restore a small amount of hitpoints and may also
+     remove temporary bad effects like confusion, blindness, poison and
+     cuts. The amount of hitpoints healed and the number of other bad
+     effects cured increases from Light to Serious to Critical.
+
+Healing
+     restores 200 hitpoints and removes all temporary bad effects with
+     the exception of fear and cures all wounds.
+
+*Healing*
+     restores 1000 hitpoints and removes all temporary bad effects and
+     cures all wounds
+
+Potions of Life
+     restores 5000 hitpoints (about 5 times more than you'll ever
+     have), restores all drained stats and experience, and removes all
+     bad effects except hunger. These are very rare; save them in your
+     home for a dangerous fight.
+
+--- Items for Identifying Objects ---
+
+There are various methods of Identify which you *need*. Identify comes
+in the form of scrolls, Staffs of Perception, Rods of Perception, the
+spell Identify, and the prayer Perception. These will tell you any
+magical properties of the item, like magical bonuses to hit and to
+damage, and magical bonuses to stats. It also tells you if the item is
+cursed. It tells you what a wand/rod/staff/potion/scroll/mushroom/etc.
+does, and this is very important. There are nasty potions deep in the
+dungeon that you *do not* want to drink! Sometimes, the descriptions of
+the items are a little obscure; things like Staves of Holiness and
+Power, Mushrooms of Unhealth, and others. You may have to experiment a
+bit to determine their powers. 
+
+There is also an advanced form of Identify, called *Identify*. This is
+available primarily as a Scroll of *Identify* but certain magic realms
+contain a similar spell although it may be called something different.
+In addition, some towns may provide a shop offering *identify* as a
+service. Identifying an item by one of these means tells you every
+single property of the item, like whether or not it lets you see
+invisible monsters, sustains stats, gives you regeneration, and so on.
+You should only use *identify* on artifacts and certain powerful
+ego-items some of which may have random abilities which can only be
+discovered by this method. 
+
+--- Items for Lighting the Dungeon ---
+
+Notes on lighting: You can't do much without light. You won't be able
+to see most monsters, cast spells or read scrolls, or, in general, see
+the dungeon. You should carry a light source of which torches and brass
+lanterns are the most common and this will light up the area which is
+immediately around you. There are items which will light up the
+dungeon, but only parts of it. Any item/spell of Light or Illumination
+will light up the room you are standing it (or part of the corridor). A
+potion of Enlightenment/the prayer Clairvoyance will light up the
+entire level.
+
+--- Word of Recall ---
+
+Finally, the most useful magical item in general is a Scroll of
+Word-of-Recall (often abbreviated WoR). When you are in the town and
+read it, you are teleported to the lowest level you have been to in the
+dungeon. When read in the dungeon, you are teleported to the town. The
+activation takes place about 50 turns after reading the scroll, so it's
+not a perfect escape method.
+
+=== On Resistances ====
+
+There are many different kinds of attacks in ZAngband, generally
+falling under physical, magical, and breath attacks. They can all cause
+specialized kinds of damage, which can kill a character if he/she does
+not have resistance to that attack. The majority of attack types have a
+corresponding resistance. These resistances include: acid, electricity,
+fire, and cold (often collectively referred to as "low" or "elemental"
+resists) and poison, light, dark, shards, confusion, sound, nether,
+nexus, chaos, disenchantment, blindness and fear (often collectively
+referred to as "high" resists). Two other abilities - free action, and
+hold life, can be considered as resists in some sense since they
+provide resistance to paralyzing/slowing attacks and to experience
+draining attacks respectively.
+
+Resistances can be provided by certain items and also may be part of
+your racial characteristics. There are certain types of items that
+provide all four elemental resistances. These include Defender weapons,
+Robes of Permanence, armors/shields of Resistance, armor of Elvenkind,
+and Helms/Crowns of the Magi. Many artifacts also provide some or all
+of the basic resistances, and also perhaps one or two "high"
+resistances.
+
+Resistances generally chop off a significant amount of damage, ranging
+from 1/5 to 2/3. Also, it is possible to doubly resist the basic four
+resistances and poison. When you doubly resist these, damage is chopped
+to 1/9. Double resistance is NOT having two permanent sources of the
+same resist! Double resistance is having both a permanent source and a
+temporary source. Multiple permanent sources do nothing for you.
+Resistances are vital to survival in the dungeon. For instance, the
+most powerful of fire dragons, the Great Hell Wyrm, can breath fire
+(big surprise). Unresisted, the damage caused is 1600 HPs worth; more
+than enough to kill the mightiest of warriors (if he's lucky, a warrior
+might top out at about 1200 HPs at level 50). However, if you have fire
+resistance, this is chopped to 1/3-533 damage. If you doubly resist the
+breath, the damage is a paltry 178 HP.
+ 
+=== On Important Depths ===
+
+There are certain depths in the dungeon beyond which it is important to
+have a certain resist or attribute. The depths given here are
+guidelines, and should not be taken literally. However, if you decide
+to go past the depth without the attribute, be very careful and don't
+complain if you get the dreaded "It breathes -more- You are dead"
+message.
+
+1000': Free Action, See Invisible
+1250': Basic four Resistances
+1900': Maxxed Stats, Confusion Resistance, Blindness Resistance
+2000': Poison Resistance
+2500': Hold Life
+2700': Chaos Resistance, Nether Resistance
+3000': Permanent and Temporary Speed of +20 or greater
+4000': Permanent + Temporary Speed of +30 or greater
+4950': As much as you can get. Sustains, Speed, every resistance, 
+ 
+Notes: If you have high infravision, you can probably hold off on See
+Invisible for a few levels. Not very many, however; Ghosts start
+showing up soon, and they're cold-blooded.
+
+Without Free Action you are very dead. Some monsters have a melee
+paralyzation attack, which can keep you immobile until death. Also,
+monsters start getting the paralyze spell about here. Nothing is more
+aggravating than watching a puny monster slowly kill your character as
+you watch, helpless.
+
+Confusion and Blindness resistance are vital. If you have these, you
+can rely on scrolls of Teleportation to get you out of any situation.
+Before this, you need Staves of Teleportation which can be activated
+when blinded or confused, although with a decent failure rate. Scrolls
+are fail-safe.
+
+Poison Resistance is necessary because two monsters, Ancient Multi-Hued
+Dragons, and Drolems, start showing up at about depth. Both of these
+monsters breath poison for huge amounts of damage (700 and 800 points,
+respectively).
+
+Hold Life is very nice, but not important. If you can't get it, carry
+lots of Potions of Restore Life Levels.
+
+Chaos Resistance is *vital* since it not only does significant damage
+but can also have nasty side effects like causing hallucinations or
+mutating your character.
+
+Nether Resistance is also very important since there are a fairly large
+number of monsters with attacks of this type and because it can do
+significant damage.
+ 
+=== On Secret Doors ===
+
+Throughout the dungeon, many doors are hidden from view. To find them,
+use the (S)earch command, which toggles on and off the Searching mode.
+However, it is often difficult enough just knowing where to search.
+Usually, situations like this will have secret doors (walls containing
+secret doors are marked by *s):
+ 
+#*###  ###'###  ####*#    ###*###
+*@...  ..'@'..  ..@'.*    ..'@...
+#*###  ###*###  ####'#    #######
+ 
+In general, if you see a door by itself in a corridor, there are
+usually others nearby. If you find a corner in a corridor with two
+doors, look for more. Intersections often have some secret doors.
+Finally, secret doors will never be in a situation where you have to
+move diagonally to open them. The dead-end situation (the first one)
+usually does have a secret door, but not always. If you search for a
+while and don't find anything, just give up and move on. Sometimes a
+dead end will occur near the end of a map, where there is no room to
+have a continuing corridor, and so no secret door is generated.
+ 
+=== On the Maximize/Preserve modes ===
+
+These are selected on or off at character creation, and cannot be
+changed after that.
+
+Maximize mode: with Maximize mode off, your statistics max out at
+18/100, without outside magical effects, like a Ring of Strength. When
+Maximize mode is on, where your stats max out at is determined by your
+race and class. For instance, any Mage has -5 to Strength. A Human
+Mage's strength (Humans have no racial stat differences), therefore,
+could max out at 18/50, instead of 18/100. However, Mages also have +3
+to Intelligence. A Human Mage's Intelligence would max out at 18/130.
+When Maximize mode is off, it is possible to achieve higher starting
+stats for characters; a Gnomish Mage might be able to start with 18/80
+Intelligence. However, since your stats can't reach as high levels,
+the end game is harder than with Maximize mode on.
+
+Preserve mode: with Preserve mode off, if a level is created with an
+artifact on it, and you don't get that artifact, it is gone forever.
+When Preserve mode is on, you always can find the artifact again unless
+you have already identified it and then leave it behind. However, in
+preserve mode you lose the "special" level feeling (more below). 
+ 
+=== On Level Feelings ===
+
+When you enter a level, you receive a feeling giving you a vague idea
+how good the level is. In general, the more scary the feeling sounds,
+the better the items on the level, and the more difficult the monsters.
+Each unusual item or monster bumps up the rating of the level a bit. An
+item or monster is considered unusual if it is out of depth [normally
+occurs at a lower depth; for instance, a Longsword has a base level of
+20, and would be considered unusual anywhere above that level (although
+not below it)]. Items can be out of depth without necessarily being
+anything special; a normal, non-magical katana could provoke a high
+level feeling at low depths, because it is so unusual. Also, pits
+(large rooms filled with a single type of monster) and vaults (dense,
+dangerous rooms with many out of depth monsters and items) can cause
+high level feelings. There is also a Special feeling, available only to
+players with Preserve mode off, which tells the player that there is an
+artifact on the level (most of the time. Sometimes, especially in the
+earlier levels, a monster pit or a vault will often trigger a special
+feeling). Also, if you have not spent enough time on the previous level
+before entering the new one, you get the feeling "Looks like any other
+level" which gives you no information whatsoever.
+ 
+=== On weapons and armor ===
+
+Your equipment will always carry around little numbers that tell you
+how effective it is. Armors take this form:
+ 
+A Foobar (+x, +y) [a, +b] (+c)
+ 
+Weapons take this form:
+ 
+A Foobaz XdY (+x, +y) [a, +b] (+c)
+ 
+When unidentified, armors will show just this:
+ 
+[a]
+ 
+Weapons will show this:
+ 
+XdY
+ 
+(+x, +y). This is the item's magical bonuses to your skill and your
+deadliness respectively. These are added to whatever other bonuses you
+have when you attack. Some armors have similar bonuses to your skill
+and deadliness, but they are mostly artifacts, the exceptions being
+Gloves/Gauntlets/Cesti of Slaying and Power. Many body armors have a
+small negative number before the base armor bonus (see below); this is
+a penalty to your skill (the armor is so heavy that you have trouble
+moving around in it). However, this penalty is small enough for all but
+the youngest of characters to ignore. 
+
+Rings of Combat or Skill have a single (+y) or (+x). When worn, they
+affect your deadliness and skill in melee battle respectively.
+
+[a, +b]. This is the item's base armor class and magical bonus to
+armor. The higher, the better. While theoretically, a weapon could
+provide a base armor bonus, none of them do, and only a few weapons
+have a magical bonus to armor.
+
+Rings of Protection have a single [+b], which increases your AC. They
+are also practically worthless; the valuable ring slot is almost
+certainly better off being used for something else.
+
+(+c). This is the item's magical bonus to other statistics: Strength,
+Intelligence, Wisdom, Constitution, Dexterity, Charisma, Speed,
+Stealth, Searching, Infravision, Attacks, and Tunneling. Not on every
+item, it is generally a good reason to choose the item. [Note that it
+does not affect every stat in this list! Most items that have a +c only
+affect one or two of these stats. Some items affect more (A Weapon of
+Westernesse affects Strength, Dexterity, and Constitution)].
+ 
+As a side note for the above: Zangband follows the parenthesis for any
+item. If you see a number in brackets, like this: [b], it is a bonus to
+AC. If it is in parenthesis, like this: (+x), it is either a bonus to a
+stat or to hit/damage (and which should normally be obvious by the name
+of the item). For instance, a Holy Avenger (a powerful ego-item), looks
+like this:
+ 
+A Mace (Holy Avenger) (2d4) (+7, +5) [+4] (+1)
+ 
+Thus, it rolls 2 four-sided dice when attacking, has +7 bonus to your
+skill and +5 bonus to your deadliness, increases your AC by 4, and
+increases a stat (In this case Wisdom) by 1.
+ 
+XdY. This is the weapon's base damage. When you successfully hit a
+monster, X number of Y-sided dice are rolled. This number represents
+the amount of damage you do to the monster before magical bonuses, 
+slays, brands, criticals, etc are applied. A Longsword, for example,
+rolls 2 five-sided dice (2d5) when you hit a monster.
+
+Ammunition, as well as having the normal weapon information, also 
+shows how much damage they will do per shot and per round.  This
+information will only be displayed if you have the proper shooting
+weapon.  (Your melee weapon's average damage is displayed on the info-
+screen.)  The format of this is:
+
+An arrow (3d5) (+0, +0) (26/26)
+
+The first number is the average damage per shot, and the second is
+average damage per round.  The two numbers can differ because the
+shooting weapons have differing energy requirements per shot (unlike
+melee weapons.)
+
+=== On Slays ===
+
+Many weapons you find in the dungeon are considered to be particularly
+deadly against a type of creature. These qualities are collectively
+known as slays. They double, triple, or multiply by five *the damage
+done by the damage dice*. They DO NOT affect bonuses to damage. Thus,
+while slays may play an important part in the early game (especially if
+you find a weapon of Slay Orc), in the later part of the game, where
+magical bonuses to damage all but take over combat, slays play a very
+minor role. The rundown on slays:
+
+     Slay (or *Slay*) Evil: x1.7 damage dice against evil monsters
+     Slay (or *Slay*) Animal, Undead, Demon, Giant, Dragon: x2 damage
+       dice against the relevant monster type
+
+The brands ("of Melting", "of Burning", "of Freezing", "of Shocking",
+and "of Poisoning") all do x2 damage dice to those monsters not
+resistant to the relevant element. There is also a "(Vampiric)" brand
+which will suck life from your foes and heal you at the same time and
+a "(Chaotic)" brand which can cause some unexpected results when using
+it!
+
+ 
+=== On the Monster Memory ===
+
+In many other games, you are required to take notes on monster's
+weaknesses, strengths, spells, et cetera. Zangband takes care of this
+for you, with the handy Monster Memory. Every time you find out
+something new about a monster, like that it can breathe fire, this is
+added to your knowledge of the monster. To look over this knowledge,
+type /, then the symbol of the monster. You may have to scroll through
+other monster memories to get to the one you're looking for. [Note: you
+can set a window to display the monster memory at the preferences
+screen (see below). This window will then automatically update as you
+fight monsters].
+
+In the unpleasant event of your character's death, you can create a new
+character using your old character's file (instead of simply creating a
+new character, open the dead character's savefile, and the Creating a
+Character section will come up). This new character will have all of
+the old one's monster memories, and some special text for the monster
+that killed him.
+
+ 
+=== On the Colors of Monsters ===
+
+You can often determine some information about a monster based solely
+on it's color. This would be the color it is described as, like "a
+White Dragon," not the color of it's image on the screen (you can't
+rely on a white "p" to be a cold based monster! It will probably be a
+paladin or some such). In general, White monsters are cold-based, Red
+are fire-based, Blue are electrical, Black is acidic, and Yellow/Green
+are poisonous. A Multi-Hued monster is all of these. Crimson monsters
+can cause weakness.
+ 
+ 
+=== On the Preferences ===
+
+The preferences screen is reached by typing "=". It contains many
+different preferences that make Zangband more enjoyable. There are a few
+that I would recommend. Turn both stacking options ON. This maximizes
+your treasure collection. Turn the Low Hitpoint Warning ON, and place
+the warning percent at about 50%. You'll see the effects of this
+whenever you start to die:). The Delay Factor determines how long it
+takes for special effects to "move;" that is: balls exploding, bolts
+moving, missile weapons flying, et cetera. This is machine dependant;
+I usually set mine at about 3 or 4. The Window Flags screen allows you
+to set various windows (assuming your platform supports them) to show
+certain things. Using this, you can set some windows to always show
+monster memory, your character's inventory and/or equipment, a dungeon
+map, and others.
+ 
+=== On the Autoscummer ===
+
+Available in the Preferences screen, the autoscummer keeps generating
+levels until it comes across one that is interesting, meaning that it
+has a decent level feeling. At shallow depths, it doesn't do much,
+because it's very hard to generate out of depth monsters and items.
+Some people consider it cheating, but keep in mind that, along with
+better items, the autoscummer brings nastier monsters, and the monsters
+generally outweigh the items. The autoscummer becomes more effective
+at lower depths.
+ 
+=== On Death ===
+
+Death in Zangband is permanent. Saving in Zangband is meant only to let
+you pick up where you left off; if you die, your savefile is marked.
+The next time you try to use the savefile, you will get the new
+character dialogue. Ancestors of dead characters will retain their
+monster memory and preferences. Many people here have characters like
+"Yuppy XIV"; people die very often in Zangband.
+
+Some people make backup savefiles; if their character dies, they simply
+load the older character, and pick up where they left off. They lose
+what happened after making the backup, but they're alive. However, this
+is considered cheating of the highest degree. The only really legal
+reason to use savefile abuse ("savefile scumming") is if your computer
+crashed or some other external problem killed your character.
+
+There is an option in the Cheating menu in the preferences which
+allows you to cheat death. However, like all the other cheating
+options, it invalidates your high-score and makes it impossible to
+truly win the game. It also sets your Social Status to zero, so
+everyone knows what a scumbag you are.
+
+ 
+=== On ZAngband Time ===
+
+If there is one feature of Zangband that tends to confuse people
+(especially veterans of other roguelikes), it's how the speed system in
+Zangband works. Most other roguelikes have a simple incremental system,
+where +1 to speed means you move twice as fast as normal-speed
+monsters, +2 is three times as fast (or twice as fast as fast
+monsters), and so on. Zangband has a decimalized version. +10 is the
+old +1 to speed, and +20 is the old +2. This allows for characters to
+be "half again as fast" as a monster, with the in-game effect that the
+character occasionally gets a free turn.
+
+However, problems start to arise when one's speed gets much higher than
+about +28. After this, each point of extra speed contributes slightly
+less than a full point of speed (i.e. the points are worth less). There
+is little point in trying for speed higher than +35 or so.
+
+It might help to understand this if an explanation of Zangband time were
+given. In Zangband, every game turn, the player and monsters gain a
+certain amount of "energy". At normal speed, you gain 10 points of
+energy every game turn. Once you have 100 energy points, you get to
+take an action. Most actions cost 100 energy units (the major exception
+being shooting an arrow or bolt with a bow of Extra Shots. This divides
+the energy cost by two or, if it's a bow of Extra Shots +2, by three,
+thus allowing you to shoot several times before a monster gets an
+action).
+
+However, each extra speed point that you have gains you an extra energy
+point each game turn. Thus, if you have +10 to speed, you gain 20
+energy points per game turn, twice as fast as normal. Normal monsters
+only get 10 energy points per game turn (same as the player), so you
+move twice as fast as they do.
+
+The slowing of gains from speed that occurs at about +28 or so to speed
+is then translated to each point of speed not giving a complete point
+of energy each game turn. It's the same effect, subjectively.
+
+
+=== Advanced techniques for killing monsters ===
+
+Pillardancing.
+     Requires that you be at least twice as fast as the monster you are
+     fighting. Find a single block of wall, freestanding, and lure your
+     enemy to it. When both you and your enemy are standing next to the
+     pillar, hit him, and then move so that you are opposite the pillar
+     from him. He will use his turn to move so that he's standing next
+     to you. Hit him again, and then move again. Repeat until he's
+     dead. Note that some monsters move erratically, and cannot be
+     relied upon to move in the method expected. Also, some monsters
+     (mostly Ghosts) can move through walls, and a small number of
+     monsters can chew through walls.
+ 
+Shoot'n Scoot.
+     Requires a large room, Phase Door, and some type of missile
+     weapon. Stand at one end of the room, your enemy at the other.
+     Fire your missile weapon at him until he gets close, and then
+     Phase Door. Fire again, until he gets close, and repeat. By the
+     time you run out of ammunition, he should be dead or weak enough
+     for you to finish him HTH (Hand to Hand).
+ 
+Hack'n Back.
+     Requires that you be at least twice as fast as your opponent.
+     Stand next to your enemy, hit him, and back up. He should use his
+     turn to move towards you instead of using a missile weapon or a
+     spell. Hit him again, back up again, repeat. This is a little more
+     dangerous than Pillardancing, because the monster gets a chance to
+     breathe or cast a spell, but it's easier to set up.
+ 
+Wail'n Bail.
+     Requires Teleport items. Fight the monster until you're almost
+     dead, teleport out, find him, and resume fighting. This is
+     dangerous, because you could teleport right next to some nasty
+     that will kill you. Also, it is not generally useful for killing
+     unique monsters, as they regenerate damage very quickly, and by
+     the time you find them again, they will have healed what you did
+     to them.
+ 
+The Anti-Summoning Corridor.
+     Required a little time to set up. This can be done just about
+     anywhere. Dig a twisting corridor into the rock, and station
+     yourself at one end of it. When your opponent arrives, he won't be
+     able to summon any monsters next to you. This is a very important
+     technique for fighting many higher-end monsters which very quickly
+     bring in a horde of other monsters.
+ 
+
+--
+Original   : Chris Weisiger (TANG version 1.6.2)
+Updated    : Zangband DevTeam
+Last Update: January 13, 2000

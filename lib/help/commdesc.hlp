@@ -1,0 +1,42 @@
+Zangband Command Descriptions.
+
+Please choose one of the following online help files:
+
+    (0) Command Descriptions            (commdesc.txt)
+    (1) Inventory Commands              (commdesc.txt#Inventory)
+    (2) Movement Commands               (commdesc.txt#Movement)
+    (3) Resting Commands                (commdesc.txt#Resting)
+    (4) Searching Commands              (commdesc.txt#Searching)
+    (5) Alter Commands                  (commdesc.txt#Alter)
+    (6) Spell and Prayer Commands       (commdesc.txt#SpellPrayer)
+    (7) Object Manipulation Commands    (commdesc.txt#ObjectManip)
+    (8) Magical Item Commands           (commdesc.txt#MagicalObject)
+    (9) Throwing and Missile Weapons    (commdesc.txt#ThrowFire)
+    (a) Looking Commands                (commdesc.txt#Looking)
+    (b) Message Commands                (commdesc.txt#Message)
+    (c) Game Status Commands            (commdesc.txt#GameStatus)
+    (d) Saving and Exiting Commands     (commdesc.txt#SaveExit)
+    (e) User Preference Commands        (commdesc.txt#UserPref)
+    (f) Help Commands                   (commdesc.txt#Help)
+    (g) Extra Commands                  (commdesc.txt#Extra)
+
+    (?) Help System Commands            (helpinfo.txt)
+
+
+***** [0] commdesc.txt
+***** [1] commdesc.txt#Inventory
+***** [2] commdesc.txt#Movement
+***** [3] commdesc.txt#Resting
+***** [4] commdesc.txt#Searching
+***** [5] commdesc.txt#Alter
+***** [6] commdesc.txt#SpellPrayer
+***** [7] commdesc.txt#ObjectManip
+***** [8] commdesc.txt#MagicalObject
+***** [9] commdesc.txt#ThrowFire
+***** [a] commdesc.txt#Looking
+***** [b] commdesc.txt#Message
+***** [c] commdesc.txt#GameStatus
+***** [d] commdesc.txt#SaveExit
+***** [e] commdesc.txt#UserPref
+***** [f] commdesc.txt#Help
+***** [g] commdesc.txt#Extra

@@ -1,0 +1,597 @@
+=== Zangband History and Information ===
+
+Versions 1.0 - 2.1.0c
+---------------------
+
+The seeds of Zangband lie in an obsolete and long ago vanished PC
+variant (somewhat misleadingly) dubbed Angband--. The variant was
+written by a hopeless Angband addict (previously Moria veteran and
+winner) who got bored with the standard monsters and wanted to
+introduce some new monsters. Angband-- was based on the PC Angband 1.31
+sources, and it was set in Roger Zelazny's 'Amber' universe.
+
+Later this individual got a better computer and learned to code, and 
+produced the PC Zangband, and most Angband-- monsters survived into
+PC Zangband 1.0. PC Zangband 1.0 was the first PC Angband to introduce
+(simple, font-based) graphics, which were also used in the graphical
+PC Angband 1.40. 
+
+Yet this individual was still not cured of his addiction... his almost
+as strong addiction to the Civilization style fantasy strategy game 
+'Master of Magic' inspired him to write a new magic system. The current
+version of Zangband (2.*) incorporates this magic system, as well as
+the best features from Angband-- and PC Zangband 1.0. It is based on
+the Angband 2.8.1 sources (by Ben Harrison), and is therefore portable
+to other systems (unlike the earlier versions which were for dos-pc's
+only).
+
+Incidentally, this person (me, Topi Ylinen) also thought that the 
+standard Angband monsters were too easy, which led him to introduce
+such monsters as Death swords, Cyberdemons and Great wyrms of power...
+
+Versions 2.1.0d - present
+-------------------------
+
+ZAngband 2.1.0c was Topi's last version, he has got a job and and
+doesn't have enough time anymore to continue work on ZAngband.
+He asked for a new maintainer and I was the one to take over the task.
+May I introduce myself, my name is Robert Ruehlmann, I'm the creator
+of the graphical Angband versions for DOS and webmaster of
+"Thangorodrim - The Angband Page" ("http://thangorodrim.angband.org").
+
+Special thanks
+--------------
+
+The newer versions of Zangband might not have come into existence
+without the significant help from these excellent Angband programmers.
+
+Topi would like to thank:
+
+        Ben Harrison, for obvious reasons.
+
+        Greg Wooledge, who pointed out a bug in the dos compiler,
+        which was preventing Topi's progress with the first 2.* version
+        of Zangband and for various patches.
+
+        Julian Lighton, who must have sent Topi more ideas, patches,
+        and bug reports, than all the others toghether.
+
+        Robert Ruehlmann, whose nice new main-dos.c enables SVGA
+        graphics and even windows in ms-dos.
+
+        Paul Sexton, who is responsible for about 50% of the new code
+        in 2.1.0.
+
+Robert would also like to thank:
+
+        Heino Vander Sanden, who created the quest-code and
+        Dean Anderson, whose patch showed me the quickest way to
+        implement the quests.
+
+        Adam Bolt, who created the new ZAngband tiles.
+
+        Scott Bigham, for the S-Lang patch.
+
+        Jeff Duprey for the new mutations.	
+
+        John Duffin and Leigh Silas Hanrihan for the new items.
+
+        Marten Woxberg for many new ideas.
+
+        Ken Wigle for allowing me to include his town and quest code.
+
+        Tim Baker for many patches and bugfixes and for ZAngbandTk.
+
+        Chris Weisiger for many new vault layouts.
+
+        Juergen Neitzel for countless new rumors.
+
+        Topi Ylinen, Mark Howson, Adam Horowitz, Oscar Nelson and
+        all the other regular members of the #angband chat channel
+        for giving me lots of new ideas and being good friends.
+
+        Benny S. Hofmann, Aram Harrow, Greg Harvey, Keldon Jones,
+        Graham Murray, Remco Gerlich, Tim Baker, Oscar Nelson,
+        Adam Horowitz, David A. Henry, "Strikes", Chris Hadgis,
+        David Howdon, Jenni Henzel, Stephen Lee, Gwidon S. Naskrent,
+        Eric Wright, Bob Martin, Jeff Coleburn, Ethan Sicotte,
+        Brandon Walker, Kelly Trinh, Brian Graham, James W. Sager III,
+        John Holton, Larry Bassel, Markus Linnala, Musus Umbra,
+        Mike Hommel, Christopher Stranczek, Werner Baer, Andreas Koch,
+        Jon Boehnker, Jason Willoughby, David Paoletti and many others
+        for bugreports, patches, bugfixes, and ideas.
+
+
+=== Brief Version History (of standard Angband) ===
+
+First came "VMS Moria", by Robert Alan Koeneke (1985).
+
+Then came "Umoria" (Unix Moria), by James E. Wilson (1989).
+
+In 1990, Alex Cutler and Andy Astrand, with the help of other students
+at the University of Warwick, created Angband 1.0, based on the
+existing code for Umoria 5.2.1. They wanted to expand the game, keeping
+or even strengthening the grounding in Tolkien lore, while adding more
+monsters and items, including unique monsters and artifact items, plus
+activation, pseudo-sensing, level feelings, and special dungeon rooms.
+
+Over time, Sean Marsh, Geoff Hill, Charles Teague, and others, worked
+on the source, releasing a copy known as "Angband 2.4.frog_knows" at
+some point, which ran only on Unix systems, but which was ported by
+various people to various other systems.
+
+Then Charles Swiger (cs4w+@andrew.cmu.edu) attempted to clean up the
+mess, resulting in several versions, starting sometime around November,
+1993, with Angband 2.5.1 (more or less) and leading up to Angband 2.6.2
+in late 1994. Several people ported (the primarily Unix/NeXT centered)
+Angband 2.6.1 to other platforms, including Keith Randall, who made a
+Macintosh port that added support for color usage. Some of the changes
+during this period were based on suggestions from the "net", PC Angband
+1.40, UMoria 5.5, and some of the Angband "variations", such as
+FAngband.
+
+Finally, I (Ben Harrison) took over in late 1994 when Charles Swiger
+left. Initially my intention was simply to clean up what had become,
+after ten years, a rather unholy mess, but the deeper I delved into the
+code, the more it became apparent that drastic changes were needed, so,
+starting with MacAngband 2.6.1, I began a more or less total rewrite,
+resulting, eventually, in Angband 2.7.0, released around January first,
+1995.
+
+Angband 2.7.0 was a very clean (but very buggy) rewrite that, among
+other things, allowed extremely simple porting to multiple platforms,
+starting with Unix and Macintosh, and by the time most of the bugs were
+cleaned up, in Angband 2.7.2, including X11, and various IBM machines.
+Angband 2.7.4 was released to the "ftp.cis.ksu.edu" site, and quickly
+gained acceptance, perhaps helped by the OS2 and Windows and Amiga and
+Linux ports. Angband 2.7.5 and 2.7.6 added important capabilities such
+as macros and user pref files, and continued to clean up the source.
+Angband 2.7.8 was designed to supply another "stable" version that we
+can all give to our friends, with new "help files" and "spoiler files"
+for the "online help", plus a variety of minor tweaks and some new
+features. Angband 2.7.9 optimized a few things, and tweaked a few other
+things, and cleaned up a few other things, and introduced a few minor
+semantic changes.
+
+It is very hard to pin down, along the way from 2.6.2 to 2.7.0, and
+thence to 2.7.8, exactly what was added exactly when. Most of these
+steps involved so many changes as to make "diff files" not very useful,
+since often the diff files were as long as the code itself. Most of the
+changes, with the notable exception of the creation of the new
+"main-xxx.c" files for the various new platforms, and a few other
+exceptions generally noted in the source, were written by myself,
+either spontaneously, or, more commonly, as the result of a suggestion
+or comment by an Angband player. So if you have any problems with
+anything that you do not recognize from older versions, you can blame
+them on me. And if you like the new features and such, you can send me
+a brief little "thank you" email (to benh@phial.com) or something...
+
+The Official Angband Home Page ("http://www.phial.com/")
+was created along with Angband 2.7.9 to serve as an up to date
+description of any bugs found in various versions, and to list all of
+the people whose email addresses I kept having to look up.
+
+
+=== Some of the changes from Angband 2.6.1 to Angband 2.7.9 ===
+
+The most important modification was a massive "code level cleanup" that
+made all of my other modifications much simpler and safer. This cleanup
+was so massive that in many places the code is no longer recognizable,
+for example, via "diff -r", often because it was rewritten from
+scratch.
+
+The second most important modification was the design of a generic
+"term.c" package, which allows Angband to be ported to a new machine
+with as few as 50 lines of code. Angband 2.7.9 thus runs without
+modification on many machines, including Macintosh, PowerMac, Unix/X11,
+Unix/Curses, Amiga, Windows, OS2-386, DOS-386, and even DOS-286.
+
+It would be difficult to list all of the changes between Angband 2.6.1
+and Angband 2.7.9, because many of them were made in passing during the
+massive code level cleanup. Many of the changes are invisible to the
+user, but still provide increased simplicity and efficiency, and
+decreased code size, or make other more visable changes possible. For
+example, the new "project()" code that handles all bolts, beams, and
+balls, the new "update_view()" code that simplifies line of sight
+computation, or the new "generate()" code that builds new levels in the
+dungeon. Many changes have been made to increase efficiency, including
+the new "process_monsters()" and "update_monsters()" functions, and
+the new "objdes()" and "lite_spot()" routines. The generic "Term"
+package yielded efficient screen updates, and enabled the efficient use
+of "color".
+
+But anyway, here are a few things that come to mind, in no particular
+order, and with very little time or effort. Somehow I managed to put
+off updating this file to the very end, and it will just have to do for
+now. The recent changes (and bug fixes) can be found at the Official
+Angband Home Page.
+
+     color
+     macros
+     keymaps
+     user pref files
+     generic feature array, with template file
+     generic object array, with template file
+     generic artifact array, with template file
+     generic ego-item array, with template file
+     generic monster array, with template fils
+     generic vault array, with template file
+     binary image files for the template files
+     special stat effect tables
+     a special table of spells
+     a special table of options
+     inventory tagging
+     inventory restrictions
+     using objects off the floor
+     various new runtime options
+     the new "destroy" command
+     the new "examine" command
+     the new "note" command
+     the new "dump screen" command
+     the new "load screen" command
+     the new "un-inscribe" command
+     the new "change visuals" command
+     the new "change colors" command
+     the new "change macros" command
+     the new "save game" command
+     the new "fire" vs "throw" commands
+     rearranged equipment slots
+     a standard bow slot
+     an extra inventory slot
+     an underlying keyset
+     refueling torches
+     better monster memory
+     nicer targeting mode
+     object stacking
+     the recall window
+     the choice window
+     the mirror window
+     new high score code
+     special lighting effects
+     intelligent monsters
+     new monster flags
+     text formatting code
+     much cleaner store code
+     generic spell projections
+     scrolls of *identify*
+     maximize mode
+     preserve mode
+     new inscription code
+     new message recall code
+     new spell and prayer code
+     massive cleanup of effects code
+     new object allocation routines
+     powerful (but simple) on line help
+     robust savefile cheat preventers
+     new official cheating options
+     new blindness code
+     new hallucination code
+     optimized object description code
+     new keypress input routines
+     actual object discounts
+     fractional (asymptotic) speed
+     postponing updates/redraws
+     run-time price determination
+     better wizard commands
+     the automatic player
+     launchers of extra shots
+     elemental ignore flags
+     new ego-item types
+     new player ghost creation
+     no more sliding objects
+     no more sliding monsters
+     new object flags
+     new chest trap code
+     regularized the artifact code
+     regularized the ego-item code
+     new monster abilities
+     new monster spell attacks
+     some new store owners
+     run-time skill computation
+     player kills vs ancestor kills
+     better room illumination code
+     better group monster code
+     table access through pointers
+     more redefinable constants
+     slightly new screen layout
+     extreme code cleaning
+     extreme optimizations
+
+
+=== A Note from the Maintainer (of standard Angband) ===
+
+Welcome to Angband 2.7.9v6.
+
+My name is Ben Harrison, and I have been the maintainer of Angband
+since November, 1994, when the previous maintainer, Charles Swiger
+(who developed Angband 2.5.1 through 2.6.2), got a real job. Starting
+with Angband 2.7.0, and continuing through the current version (2.7.9),
+I have been responsible for a number of major improvements to the basic
+Angband game, some of them obvious to the casual user and others hidden
+below the surface, but no less significant. The most significant
+improvement has been a total rewrite of large portions of the code,
+which, after ten years of modifications by various people, had begun to
+resemble a rotting death mold. Also significant was the design of a
+generic "term.c" package, which has allowed Angband to be easily ported
+to Macintosh, Amiga, X11, Windows, and basically every system in
+existance (including a beta-version for DOS-286).
+
+In addition, I have added lots of new commands, features, and
+functionalities, most of which appear to have been accepted by most
+people as a good idea (TM).
+
+It is extremely easy to port Angband 2.7.9 to a new system. If you
+cannot find a version that will compile on your machine, you can
+usually make one by writing a single file of about one hundred lines of
+C code.
+
+Angband 2.7.8 was intended to be a nice, clean, stable version, so we
+can all give copies to our friends. Unfortunately, it contained a few
+minor bugs. The *enchant* armor/weapon scrolls were "swapped". The game
+starts to look funny if too many objects accumulate on the floor. The
+"Q" command (commit suicide) does not work. You may not be able to load
+older savefiles. Some special dungeon levels may take a long time to
+generate. Good drops can include cursed rings of speed. But you can see
+that none of these are "fatal", so Angband 2.7.8 remains for now the
+most "official" version.
+
+Angband 2.7.9v1 through Angband 2.7.9v6 are intended as "transition"
+versions leading up to the release of Angband 2.8.0. Angband 2.8.0 will
+include many extensive changes from Angband 2.7.8, see the web page for
+more information.
+
+Most of these changes have been completed, and include things like
+cleaning up some internal code issues, optimizing the code (again),
+extending the functionality of some existing commands (such as target
+and look, which now handle directional motion), tweaking various
+aspects of the program, most notably in the introduction of new
+symbols and colors for various monsters, and in the use of a more
+regular set of RGB values for the various color codes, etc. Again, see
+the web page for a complete list.
+
+Angband 2.8.0 will introduce a version independent savefile format,
+along with a new terrain feature concept, and the ability to allow
+multiple objects in the same cave grid. It may or may not separate the
+"unique" monsters from the "normal" monsters, perhaps introducing some
+new "normal" monsters, such as "skeleton lord" or "giant boar" or
+"master mage".
+
+You can email compliments, complaints, bug reports, and presents to
+me ("benh@voicenet.com"), and you can post interesting experiences,
+general questions, compilation questions and code suggestions to the
+newsgroup ("rec.games.roguelike.angband").
+
+You can obtain the latest source and pre-compiled executables from
+various places, try "ftp://ftp.cis.ksu.edu/pub/Games/Angband/Angband-2.7.x"
+and the developer site at "ftp://export.andrew.cmu.edu/angband". You
+will need to enter the appropriate sub-directory, such as "Source" or
+"Macintosh".
+
+You should visit "http://www.voicenet.com/~benh/Angband/" (the
+Official Angband Home Page) and "http://www.paranoia.com/~jth/angband.html"
+(the Unofficial Angband Home Page), for more up to date information.
+
+You may freely distribute the game, and its source, though you are
+bound not only by the existing copyright notice from 1984, but also
+whatever restrictions may be present on various other pieces of the
+code, including the fact that any source written by me is technically
+automatically placed under copyright and may thus not be used for
+commercial purposes.
+
+The basic help files supplied with this game are more or less up to
+date, but when in doubt, the source (or the newsgroup) is the place to
+turn for advice. Or attempt to figure it out by experimentation, this
+is sometimes the most fun. In particular, see "commands.txt" for
+information on the available commands, some of which have been recently
+added or changed, and "options.txt", which describe how to customize
+several aspects of the game to suit your preferences.
+
+The documentation is very easy to modify and update, so you may want to
+check in to the ftp site occasionally to see if there are any new help
+files (or spoiler files) for you to acquire. Note that the spoiler
+files are not distributed with the source since they are so huge, but
+you can obtain them from various places as with the source and
+executables. New spoiler files may be placed in the "lib/help" or
+"lib/info" directories, to allow access via the "online help" system.
+
+Remember to tell all your friends about how much you like Angband...
+
+Happy adventuring!
+
++++ Ben +++
+
+
+=== A Posting from the Original Author ===
+
+From: koeneke@ionet.net (Robert Alan Koeneke)
+Newsgroups: rec.games.roguelike.angband,rec.games.roguelike.moria
+Subject: Early history of Moria
+Date: Wed, 21 Feb 1996 04:20:51 GMT
+
+I had some email show up asking about the origin of Moria, and its
+relation to Rogue.  So I thought I would just post some text on the
+early days of Moria.
+
+First of all, yes, I really am the Robert Koeneke who wrote the first
+Moria.  I had a lot of mail accusing me of pulling their leg and
+such.  I just recently connected to Internet (yes, I work for a
+company in the dark ages where Internet is concerned) and 
+was real surprised to find Moria in the news groups...  Angband was an
+even bigger surprise, since I have never seen it.  I probably spoke to
+its originator though...  I have given permission to lots of people
+through the years to enhance, modify, or whatever as long as they
+freely distributed the results.  I have always been a proponent of
+sharing games, not selling them.
+
+Anyway...
+
+Around 1980 or 81 I was enrolled in engineering courses at the
+University of Oklahoma.  The engineering lab ran on a PDP 1170 under
+an early version of UNIX.  I was always good at computers, so it was
+natural for me to get to know the system administrators.  They invited
+me one night to stay and play some games, an early startrek game, The
+Colossal Cave Adventure (later just 'Adventure'), and late one night,
+a new dungeon game called 'Rogue'.
+
+So yes, I was exposed to Rogue before Moria was even a gleam in my
+eye.  In fact, Rogue was directly responsible for millions of hours of
+play time wasted on Moria and its descendents...
+
+Soon after playing Rogue (and man, was I HOOKED), I got a job in a
+different department as a student assistant in computers.  I worked on
+one of the early VAX 11/780's running VMS, and no games were available
+for it at that time.  The engineering lab got a real geek of an
+administrator who thought the only purpose of a computer was WORK!
+Imagine...  Soooo, no more games, and no more rogue!
+
+This was intolerable!  So I decided to write my own rogue game, Moria
+Beta 1.0.  I had three languages available on my VMS system.  Fortran
+IV, PASCAL V1.?, and BASIC.  Since most of the game was string
+manipulation, I wrote the first attempt at Moria in VMS BASIC, and it
+looked a LOT like Rogue, at least what I could remember of it.  Then I
+began getting ideas of how to improve it, how it should work
+differently, and I pretty much didn't touch it for about a year.
+
+Around 1983, two things happened that caused Moria to be born in its
+recognizable form.  I was engaged to be married, and the only cure for
+THAT is to work so hard you can't think about it; and I was enrolled
+for fall to take an operating systems class in PASCAL.
+
+So, I investigated the new version of VMS PASCAL and found out it had
+a new feature.  Variable length strings!  Wow...
+
+That summer I finished Moria 1.0 in VMS PASCAL.  I learned more about
+data structures, optimization, and just plain programming that summer
+then in all of my years in school.  I soon drew a crowd of devoted
+Moria players...  All at OU.
+
+I asked Jimmey Todd, a good friend of mine, to write a better
+character generator for the game, and so the skills and history were
+born.  Jimmey helped out on many of the functions in the game as well.
+This would have been about Moria 2.0
+
+In the following two years, I listened a lot to my players and kept
+making enhancements to the game to fix problems, to challenge them,
+and to keep them going.  If anyone managed to win, I immediately found
+out how, and 'enhanced' the game to make it harder.  I once vowed it
+was 'unbeatable', and a week later a friend of mine beat it!  His
+character, 'Iggy', was placed into the game as 'The Evil Iggy', and
+immortalized...  And of course, I went in and plugged up the trick he
+used to win...
+
+Around 1985 I started sending out source to other universities.  Just
+before a OU / Texas football clash, I was asked to send a copy to the
+University of Texas...  I couldn't resist...  I modified it so that
+the begger on the town level was 'An OU football fan' and they moved
+at maximum rate.  They also multiplied at maximum rate...  So the
+first step you took and woke one up, it crossed the floor increasing
+to hundreds of them and pounded you into oblivion...  I soon received
+a call and provided instructions on how to 'de-enhance' the game!
+
+Around 1986 - 87 I released Moria 4.7, my last official release.  I
+was working on a Moria 5.0 when I left OU to go to work for American
+Airlines (and yes, I still work there).  Moria 5.0 was a complete
+rewrite, and contained many neat enhancements, features, you name it.
+It had water, streams, lakes, pools, with water monsters.  It had
+'mysterious orbs' which could be carried like torches for light but
+also gave off magical aura's (like protection from fire, or aggravate
+monster...).  It had new weapons and treasures...  I left it with the
+student assistants at OU to be finished, but I guess it soon died on
+the vine.  As far as I know, that source was lost...
+
+I gave permission to anyone who asked to work on the game.  Several
+people asked if they could convert it to 'C', and I said fine as long
+as a complete credit history was maintained, and that it could NEVER
+be sold, only given.  So I guess one or more of them succeeded in
+their efforts to rewrite it in 'C'.
+
+I have since received thousands of letters from all over the world
+from players telling about their exploits, and from administrators
+cursing the day I was born...  I received mail from behind the iron
+curtain (while it was still standing) talking about the game on VAX's
+(which supposedly couldn't be there due to export laws).  I used to
+have a map with pins for every letter I received, but I gave up on
+that!
+
+I am very happy to learn my creation keeps on going...  I plan to
+download it and Angband and play them...  Maybe something has been
+added that will surprise me!  That would be nice...  I never got to
+play Moria and be surprised...
+
+Robert Alan Koeneke
+koeneke@ionet.net
+
+
+=== Previous Versions (outdated) ===
+
+
+                          VMS Moria Version 4.8
+Version 0.1  : 03/25/83
+Version 1.0  : 05/01/84
+Version 2.0  : 07/10/84
+Version 3.0  : 11/20/84
+Version 4.0  : 01/20/85
+
+Modules :
+     V1.0  Dungeon Generator      - RAK
+           Character Generator    - RAK & JWT
+           Moria Module           - RAK
+           Miscellaneous          - RAK & JWT
+     V2.0  Town Level & Misc      - RAK
+     V3.0  Internal Help & Misc   - RAK
+     V4.0  Source Release Version - RAK
+
+Robert Alan Koeneke               Jimmey Wayne Todd Jr.
+Student/University of Oklahoma    Student/University of Oklahoma
+
+
+
+
+
+                        Umoria Version 5.2 (formerly UNIX Moria)
+Version 4.83 :  5/14/87
+Version 4.85 : 10/26/87
+Version 4.87 :  5/27/88
+Version 5.0  :  11/2/89
+Version 5.2  :   5/9/90
+
+James E. Wilson, U.C. Berkeley
+                 wilson@ernie.Berkeley.EDU
+                 ...!ucbvax!ucbernie!wilson
+
+Other contributors:
+D. G. Kneller         - MSDOS Moria port
+Christopher J. Stuart - recall, options, inventory, and running code
+Curtis McCauley       - Macintosh Moria port
+Stephen A. Jacobs     - Atari ST Moria port
+William Setzer        - object naming code
+David J. Grabiner     - numerous bug reports, and consistency checking
+Dan Bernstein         - UNIX hangup signal fix, many bug fixes
+and many others...
+
+
+
+
+Copyright (c) 1989 James E. Wilson, Robert A. Keoneke
+  This software may be copied and distributed for educational,
+  research, and not for profit purposes provided that this copyright
+  and statement are included in all such copies.
+
+Umoria Version 5.2, patch level 1
+
+Angband Version 2.0  Alex Cutler, Andy Astrand, Sean Marsh, Geoff Hill, 
+                     Charles Teague.
+
+Angband Version 2.4   :  5/09/93
+
+Angband Version 2.5   : 12/05/93 Charles Swiger.
+
+Angband Version 2.6   :  9/04/94
+
+Angband Version 2.7   :  1/1/95  Ben Harrison
+
+--
+Original   : (??)
+Updated    : (??)
+Updated    : Zangband DevTeam
+Last update: December 12, 1999

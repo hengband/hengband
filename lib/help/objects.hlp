@@ -1,0 +1,40 @@
+Zangband Objects.
+
+Please choose one of the following online help files:
+
+    (0) Zangband Objects               (objects.txt)
+    (1) Object Symbols                 (objects.txt#ObjectSymbols)
+    (2) Equipment and Inventory        (objects.txt#EquipInvent)
+    (3) Object Stacking                (objects.txt#Stacking)
+    (4) Objects Generation             (objects.txt#Generation)
+    (5) Object Compaction              (objects.txt#Compaction)
+    (6) Cursed Objects                 (objects.txt#CursedObjects)
+    (7) The Ancient and Foul Curse     (objects.txt#AncientCurse)
+    (8) Object Flavors                 (objects.txt#ObjectFlavors)
+    (9) Pseudo-ID                      (objects.txt#PseudoID)
+    (a) Identifying Objects            (objects.txt#Identifying)
+    (b) Ego Objects                    (objects.txt#EgoObjects)
+    (c) Artifacts                      (objects.txt#Artifacts)
+    (d) Random Abilities of Objects    (objects.txt#RandomAbilities)
+    (e) Object Inscriptions            (objects.txt#Inscriptions)
+    (f) Object Types                   (objects.txt#ObjectTypes)
+
+    (?) Help System Commands           (helpinfo.txt)
+
+
+***** [0] objects.txt
+***** [1] objects.txt#ObjectSymbols
+***** [2] objects.txt#EquipInvent
+***** [3] objects.txt#Stacking
+***** [4] objects.txt#Generation
+***** [5] objects.txt#Compaction
+***** [6] objects.txt#CursedObjects
+***** [7] objects.txt#AncientCurse
+***** [8] objects.txt#ObjectFlavors
+***** [9] objects.txt#PseudoID
+***** [a] objects.txt#Identifying
+***** [b] objects.txt#EgoObjects
+***** [c] objects.txt#Artifacts
+***** [d] objects.txt#RandomAbilities
+***** [e] objects.txt#Inscriptions
+***** [f] objects.txt#ObjectTypes

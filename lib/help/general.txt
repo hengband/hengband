@@ -1,0 +1,199 @@
+=== General Information ===
+
+This document gives a brief introduction to Zangband. You will probably
+want to browse through all the "help files", especially the sections on
+available commands (see command.txt [1] and commdesc.txt [2]), before
+beginning any serious adventuring...
+
+
+***** <Overview>
+=== An Overview ===
+
+The game of Zangband is a single player dungeon simulation. A player
+may choose from a number of races, classes and magic realms when
+creating a character (see charattr.txt [3]), and then "run" that
+character over a period of days, weeks, even months. Deep down inside,
+the real objective of the game is to increase your experience, and
+certain other characteristics, and also to collect useful items, to
+give you a decent chance against the great Serpent of Chaos, who lurks
+somewhere in the depths of the dungeon.
+
+The player will begin his adventure on the town level where he may
+acquire supplies, weapons, armor, and magical devices by bartering with
+various shop owners. After preparing for his adventure, the player can
+descend into the dungeon where fantastic adventures await his coming!
+
+
+***** <Winning>
+--- Winning The Game ---
+
+Once your character has killed Oberon, who lives on level 99 (4950') in
+the dungeon, a magical staircase will appear that will finally allow
+you to reach level 100. The Serpent of Chaos lurks on this level of his
+dungeon, and you will not be able to go below his level until you have
+killed him. Try to avoid wandering around on level 100 unless you are
+ready for him, since it has a habit of coming at you across the
+dungeon, to slay you for your impudence.
+
+The Serpent of Chaos cannot be killed by some of the easier methods
+used on normal creatures. The Serpent of Chaos, like all other "Unique"
+monsters, will simply teleport away to another region of the level if
+you attempt to use a spell such as destruction is upon it. The Serpent
+of Chaos, like some other monsters, cannot be polymorphed, slept,
+charmed, or genocided. Magical spells like Mana Storm and Orb of
+Draining are effective against it, as are some of the more powerful
+weapons, but it is difficult to kill and if allowed to escape for a
+time it will heal itself rapidly.
+
+If you should actually survive the attempt of killing the Serpent of
+Chaos, you will receive the status of WINNER. You may continue to
+explore, and may even save the game and play more later, but since you
+have defeated the toughest creature alive, there is really not much
+point. Unless you wish to listen to the rumors of a powerful ring
+buried somewhere in the dungeon...
+
+When you are ready to retire, simply "commit suicide" ("^K") to have
+your character entered into the high score list as a winner. Note that
+until you retire, you can still be killed, so you may want to retire
+before wandering into a hoard of Cyberdemons...
+
+
+***** <UponDeath>
+--- Upon Death and Dying ---
+
+If your character falls below 0 hit points, he has died and cannot be
+restored. A tombstone showing information about your character will be
+displayed. You are also permitted to get a record of your character,
+and all your equipment (identified) either on the screen or in a file.
+
+Whether your character is killed or you retire victorious, it will
+leave behind a reduced save file, which contains only the monster
+memory (see attack.txt#MonsterMemory [4]) and your option choices. It
+may be restored, in which case the new character is generated exactly
+as if the file was not there, but the new player will find his monster
+memory containing all the experience of past incarnations.
+
+
+ 
+***** <DevTeam>
+=== The Zangband DevTeam ===
+
+Zangband is currently maintained by a small development team which
+includes both Zangband's original creator, Topi Ylinen, and Robert
+Ruehlmann who maintained and developed the game from versions 2.01d
+through to 2.2.6c. Robert coordinates the efforts of the DevTeam and
+is the designated project leader.
+
+Since its inception, Zangband has developed a reputation for being more
+difficult than other Angband variants and its maintainers are known for
+their devious and contrary natures. The DevTeam neither confirms nor
+denies its intention to live up to this perception.
+
+
+***** <Web>
+=== Zangband on the Web ===
+
+
+--- Thangorodrim ---
+
+Robert Ruehlmann maintains the official Zangband website - Thangorodrim
+(http://thangorodrim.angband.org/). It includes information on where
+to download the Zangband source code and current executables for most
+popular operating systems as well as information on current development
+issues such as future plans, bug lists, etc. Thangorodrim is also an
+excellent site for information on Angband itself and other variants of
+Angband. There are also links to many other Angband and Zangband
+related sites.
+
+
+--- Daily Snapshots ---
+
+This website (http://matrix.crosswinds.net/~dailyzangband/) contains
+downloads of the current source code the DevTeam is working on. It is
+updated daily at approximately 04:00 GMT. The source is untested and it
+may not compile. Also available are logs showing what has been changed
+in the last 24 hours and in the last month.
+
+
+--- FTP Sites ---
+
+Zangband sources and executables are uploaded regularly to the official
+Angband ftp site (ftp://export.andrew.cmu.edu/angband/). Links to the
+files are available at Thangorodrim but you may also wish to visit the
+site directly. Various mirror sites exist, the most popular of which is
+(ftp://ftp.sunset.se/pub/games/Angband/).
+
+
+--- The Zangband Development Mailing List ---
+
+The Zangband mailing list is for discussion on Zangband development
+issues and is hosted at ONEList's website (http://onelist.com/). The
+mailing list probably represents the quickest method of getting the
+DevTeam's attention and is an ideal forum for posting your ideas and
+bug reports. 
+
+You can send your ideas and bug reports to the mailing list by mailing
+to 'zangband@onelist.com'. If you wish to join the mailing list, send
+an e-mail to 'zangband-subscribe@onelist.com'.
+
+
+--- The Zangband Knowledge Base ---
+
+Maintained by John I'anson-Holton, the Zangband Knowledge Base 
+(http://home4.pacific.net.sg/~jianson/) is, or will be, the repository
+of the official Zangband documentation on the web. Once completed,
+downloads of the documents in various formats will be made available
+here.
+
+
+--- ZangbandTk ---
+
+ZangbandTk is a graphical Windows port of Zangband which adds several
+new features and a very nice interface to Zangband. If you use Windows,
+you may want to take a look at the AngbandTk homepage which can be
+found at (http://persweb.direct.ca/dbaker/angbandtk.html/). ZangbandTk
+is more properly termed a variant of Zangband but, other than the
+graphical interface, the differences are fairly minor. ZangbandTk is
+typically only updated for official releases of Zangband and not for
+the development releases. ZangbandTk is maintained by Tim Baker.
+
+
+--- The Newsgroup (rec.games.roguelike.angband) ---
+
+The newsgroup is a forum for the discussion of all things relating to
+Angband and its variants (including Zangband) and is a good place to
+ask various questions about both game play and game design. Be sure to
+include '[Z]' in your subject heading so people know your question is
+about Zangband.
+
+
+--- #Angband IRC Chat ---
+
+Join the #Angband IRC channel located at 'http://www.othernet.org/'.
+Most of the DevTeam are regulars and sometimes we're even talking about
+Zangband!!
+
+
+***** <VersionNumber>
+=== Version Numbering System ===
+
+Zangband uses a version numbering system similar to that of Linux. Odd
+minor version numbers (for example 2.3.2) denote a development version.
+Even minor version numbers (for example 2.2.7 ) denote a stable
+release. The development versions are released for beta-testing and are
+likely to contain bugs of varying significance.
+
+
+--
+Original   : (??)
+Updated    : (??)
+Updated    : Zangband DevTeam
+Last update: January 13, 2000
+
+
+***** Begin Hyperlinks
+***** [1] command.txt
+***** [2] commdesc.txt
+***** [3] charattr.txt
+***** [4] attack.txt#MonsterMemory
+

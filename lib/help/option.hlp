@@ -1,0 +1,34 @@
+Zangband Options.
+
+Please choose one of the following online help files:
+
+    (0) Zangband Options                (option.txt)
+    (1) Option Set 1 - User Interface   (option.txt#UserInterface)
+    (2) Option Set 2 - Disturbance      (option.txt#Disturbance)
+    (3) Option Set 3 - Game Play        (option.txt#GamePlay)
+    (4) Option Set 4 - Efficiency       (option.txt#Efficiency)
+    (5) Zangband Options                (option.txt#Zangband)
+    (6) Stacking Options                (option.txt#Stacking)
+    (7) Base Delay Factor               (option.txt#BaseDelay)
+    (8) Hitpoint Warning                (option.txt#Hitpoint)
+    (9) Autosave Options                (option.txt#Autosave)
+    (a) Window Flags                    (option.txt#Window)
+    (b) Cheating Options                (option.txt#Cheating)
+    (c) Start-Up Options                (option.txt#StartUp)
+
+    (?) Help System Commands            (helpinfo.txt)
+
+
+***** [0] option.txt
+***** [1] option.txt#UserInterface
+***** [2] option.txt#Disturbance
+***** [3] option.txt#GamePlay
+***** [4] option.txt#Efficiency
+***** [5] option.txt#Zangband
+***** [6] option.txt#Stacking
+***** [7] option.txt#BaseDelay
+***** [8] option.txt#HitPoint
+***** [9] option.txt#Autosave
+***** [a] option.txt#Window
+***** [b] option.txt#Cheating
+***** [c] option.txt#StartUp

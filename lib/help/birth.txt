@@ -1,0 +1,307 @@
+=== Creating a Character ===
+
+Zangband is a roleplaying game, in which you, the player, control a
+character in the world of Zangband. Perhaps the most important thing
+you control is the birth of your character, in which you choose or
+allow to be chosen various attributes that will affect the future life
+of your character.
+
+Character creation, or birth, is controlled through a variety of
+choices as to constraints on the type of character you wish to play,
+followed by a series of random calculations to generate ("roll up") a
+random character matching the appropriate constraints.
+
+Once your character has been generated, you will be given the choice to
+generate a new character obeying the same constraints, and once you
+have generated more than one character, you can switch back and forth
+between the two most recent characters, until you are presented with a
+character that you feel comfortable with.
+
+You may start the entire process over at any time by pressing 'S' at
+any prompt (with the exception of the autoroller (see below [1]) prompt
+and the prompt for the number of random quests (see below [2])).
+
+
+***** <StartUp>
+=== Start-up Options ===
+
+During character generation you may press '=' at any time to access
+the start-up options. A more detailed description of the various
+start-up options can be found in the section on the Options Page
+(see option.txt#StartUp [3]). Perhaps one of the most important
+features of the start-up options is the ability to decide what type of
+town level you want. The various town options are discussed on the Town
+page (see dungeon.txt#TownLevel [4]).
+
+
+***** <CharAttributes>
+=== Character Attributes ===
+
+Once you begin character generation you will be asked to choose
+your character's three primary attributes - its sex, race and
+class. If you have selected a spellcasting class, you will also be
+prompted for your choice of magic realm(s).
+
+Your character's sex has a minimal effect on game play - females start
+with slightly more gold, males are generally heavier and so can bash
+more effectively. Race, class and magic realms have a far more
+significant effect and are discussed at some length in the Race (see
+charattr.txt#TheRaces [5]), Class (see charattr.txt#TheClasses [6])
+and Magic Realms (see magic.txt#MagicRealms [7]) sections.
+
+--- Secondary Attributes ---
+
+Each character has a few secondary attributes, height, weight, social
+class, and background history, which are randomly determined, but which
+are affected by the sex and race of the character. In general, these
+attributes are only used to provide "flavor" to the character, to
+assist in the roll playing, but they do have a few minor effects on the
+game. For example, background history affects social class, which
+affects the amount of money the character will start with. And weight
+affects carrying capacity and bashing ability.
+
+***** <RaceClassComb> 
+=== Race/Class Combinations ===
+
+Once a race has been chosen, you will need to pick a class. Some 
+race/class combinations are not recommended and so certain classes are
+shown inside brackets. This may be because the combination is not
+conceptually sound or because the chosen race has stat penalties in
+areas where that class needs bonuses.
+
+However, any race/class combination can be chosen and experienced
+players may often choose unusual combinations for the challenge that
+they represent. It is recommended that inexperienced players choose
+warriors as spellcasting requires a player more familiar with dungeon
+survival techniques.
+
+The following table shows which classes are recommended for the various
+races.
+
+ 
+            Warrior Mage  Priest Rogue  Ranger Paladin Warrior Chaos
+                                                        -Mage Warrior
+Human         Yes    Yes   Yes    Yes    Yes     Yes     Yes    Yes
+Half-Elf      Yes    Yes   Yes    Yes    Yes     Yes     Yes    Yes
+Elf           Yes    Yes   Yes    Yes    Yes     No      Yes    No
+Hobbit        Yes    Yes   No     Yes    No      No      No     No
+Gnome         Yes    Yes   Yes    Yes    No      No      No     No
+Dwarf         Yes    No    Yes    No     No      No      No     No
+Half-Orc      Yes    No    Yes    Yes    No      No      No     Yes
+Half-Troll    Yes    No    Yes    No     No      No      No     No
+Amberite      Yes    Yes   Yes    Yes    Yes     Yes     Yes    Yes
+High-Elf      Yes    Yes   Yes    Yes    Yes     No      Yes    No
+Barbarian     Yes    No    Yes    Yes    Yes     No      No     Yes
+Half-Ogre     Yes    Yes   Yes    No     No      No      No     No
+Half-Giant    Yes    No    No     No     Yes     No      No     No
+Half-Titan    Yes    Yes   Yes    No     No      Yes     No     No
+Cyclops       Yes    No    Yes    No     No      No      No     No
+Yeek          Yes    Yes   Yes    Yes    No      No      No     No
+Klackon       Yes    No    No     No     Yes     No      No     No
+Kobold        Yes    No    No     Yes    No      No      No     No
+Nibelung      Yes    Yes   Yes    Yes    No      No      No     No
+Dark Elf      Yes    Yes   Yes    Yes    Yes     No      Yes    Yes
+Draconian     Yes    Yes   Yes    No     No      No      Yes    No
+Mind Flayer   No     Yes   Yes    No     No      No      Yes    No
+Imp           Yes    Yes   No     Yes    No      No      Yes    Yes
+Golem         Yes    No    No     No     No      No      No     No
+Skeleton      Yes    Yes   Yes    Yes    No      No      No     No
+Zombie        Yes    No    No     No     No      No      No     No
+Vampire       Yes    Yes   Yes    Yes    Yes     Yes     Yes    Yes
+Spectre       No     Yes   Yes    Yes    No      No      Yes    No
+Sprite        No     Yes   Yes    Yes    Yes     No      Yes    No
+Beastman      Yes    Yes   Yes    Yes    No      No      Yes    Yes
+
+
+                   Mind-  High
+             Monk crafter Mage
+Human         Yes   Yes    Yes
+Half-Elf      Yes   Yes    Yes
+Elf           Yes   Yes    Yes
+Hobbit        No    No     Yes
+Gnome         No    Yes    Yes
+Dwarf         No    No     No
+Half-Orc      Yes   No     No
+Half-Troll    No    No     No
+Amberite      Yes   Yes    Yes
+High-Elf      Yes   Yes    Yes
+Barbarian     No    No     No
+Half-Ogre     No    No     Yes
+Half-Giant    No    No     No
+Half-Titan    Yes   Yes    Yes
+Cyclops       No    No     No
+Yeek          No    Yes    Yes
+Klackon       No    No     No
+Kobold        No    No     No
+Nibelung      No    No     Yes
+Dark Elf      Yes   Yes    Yes
+Draconian     Yes   Yes    Yes
+Mind Flayer   Yes   Yes    Yes
+Imp           Yes   Yes    Yes
+Golem         No    No     No
+Skeleton      Yes   Yes    Yes
+Zombie        No    No     No
+Vampire       Yes   Yes    Yes
+Spectre       Yes   Yes    Yes
+Sprite        No    Yes    Yes
+Beastman      Yes   Yes    Yes
+
+***** <ChoosingMagic>
+=== Choosing Your Magic Realm(s) ===
+
+If you have selected a spellcasting class, you will next be prompted
+for your choice of magic realm(s). The magic system, as implemented in
+Zangband, consists of seven realms: Life, Arcane, Sorcery, Nature,
+Trump, Chaos and Death. In general, Life is primarily defensive but
+also offers spells to attack evil creatures, Arcane offers utility
+spells and some limited offensive capability, Sorcery offers utility
+and defensive spells, Nature offers both defensive and offensive
+spells, Trump specializes in teleportation and summoning spells and
+Chaos and Death are offensive. A more complete description of the magic
+realms and spellcasting in general can be found in the section on the
+Magic Realms (see magic.txt#MagicRealms [7]).
+
+Where possible, it is generally a good idea to pick one defensive realm
+and one offensive realm. If you pick the realms always in the same
+order (e.g. nature as your first realm and chaos as your second realm,
+not the other way around) you will be less confused when trying to
+pick the correct spellbook to use in the game.
+
+***** <Restrictions>
+--- Class/Realm Restrictions ---
+
+In Zangband, spellcasting classes can select either one or two realms
+from those available. Some classes which can learn two realms may learn
+their first realm 'better' than their second.
+
+Note that certain realms may be prohibited for some classes. In the
+table below, '1st' indicates that the realm may only be the first
+choice, '2nd' indicates that the realm may only be the second choice
+and '1st/2nd' indicates that it can be either. Classes that only have
+'1st' options do not get a second realm. Classes with only one '1st'
+option must choose this option as their first realm.
+
+Class          Life    Arcane  Sorcery Nature  Trump   Chaos   Death
+----------------------------------------------------------------------
+Mage           1st/2nd 1st/2nd 1st/2nd 1st/2nd 1st/2nd 1st/2nd 1st/2nd
+Priest         1st     2nd     2nd     2nd     2nd     2nd     1st
+Rogue                  1st     1st             1st             1st
+Ranger                 2nd     2nd     1st     2nd     2nd     2nd
+Paladin        1st                                             1st
+Warrior-Mage   2nd     1st     2nd     2nd     2nd     2nd     2nd
+Chaos Warrior                                          1st
+Monk           1st                     1st                     1st
+High Mage      1st     1st     1st     1st     1st     1st     1st
+
+
+***** <RandomQuests>
+=== RandomQuests ===
+
+Once you have chosen your race, class and (if applicable) your magic
+realm(s), you will be asked how many random quests you wish to be
+assigned. You may choose any number between 0 and 49. A more detailed
+discussion of random quests can be found in the Dungeon section (see
+dungeon.txt#RandomQuests [8]).
+
+
+***** <AutoRoller>
+=== The Auto-Roller ===
+
+The auto-roller is a quick means of generating start-up characters
+based on a set of user-selected criteria. If you choose to use the
+auto-roller, you will be presented with a column giving the maximum
+possible statistics (see charattr.txt#PrimaryStats [9]) for your choice
+of race, class and maximize mode (see option.txt#StartUp [3]). You will
+then be prompted to enter your desired statistics which should not
+exceed the maximum statistics displayed on the screen.
+
+Once you have entered your desired statistics, the computer will then
+randomly roll successive start-up characters and compare them to your
+specified criteria. Each stat is rolled as a number from 8 to 17, with
+a normal distribution, and is then immediately modified based upon the
+race and class which you have chosen. The exact quantum of this
+modification can be found in the Character Attributes section (see
+charattr.txt#StatBonusTable [a]).
+
+Once a character that matches or exceeds your expectations has been
+rolled, the computer will display the character for you to look at and
+also display the character's life-rating (see below [b]). If you accept
+the rolled character (by pressing 'Esc'), you will be asked for its
+name (see below [c]). If not, you may press 'r' to resume rolling and
+searching for the next match or, if this is not your first match, 'p'
+to return to the previous character which met your criteria.
+
+Note: The statistics are not independent of each other and trying to
+maximize each one using the auto-roller will not work. A good idea is
+to specify statistics close to maximum that are critical for your class
+(for example, high wisdom for priests, intelligence for mages and
+strength and dexterity for warriors). You should set minimum acceptable
+levels for the remaining statistics rather than looking for high rolls.
+
+If you select not to use the auto-roller, the computer will roll one
+random character at a time and then display it for you to either accept
+or reject. The 'r', 'p' and 'Esc' keys will work as outlined above.
+
+
+***** <LifeRating>
+=== Life Ratings ===
+
+During the course of 'rolling' your character you will be told its life
+rating. This is an indication of how many hitpoints your character will
+have at character level 50 before taking into consideration any bonus
+from having a high constitution. The life rating will be displayed in
+the form of x/100 where 'x' is typically a number varying between 80
+and 120.
+
+Your life rating is only a guarantee of your character's hitpoints at
+level 50. This might be achieved by small increases in the early stages
+and much larger increases in the later game or the other way around.
+Generally, however, the increases tend to be fairly even.
+
+
+***** <CharName>
+=== Naming Your Character ===
+
+Once you have accepted a character you will be asked to provide a name
+for the character. In general, the actual choice of a name is not
+important, but do keep in mind that it may have some effect on the game
+itself. For example, on some machines, the character name determines
+the filename that will be used to save the character to disk. On
+others, the character name specifies special "pref" files. And the
+character name is used on the high score list.
+
+
+***** <StartInventory>
+=== Starting Inventory ===
+
+Once you have named your character, you will be prompted to press 'Esc'
+and, having done so, you will be brought to the town screen from where
+you will begin your adventuring. You should note that each character
+starts in the town with a small number of items in their inventory.
+Which items you are given will depend upon your chosen race and class
+and the number of such items depends on chance. For example, all
+classes receive either food rations or scrolls of satisfy hunger but
+the number of rations or scrolls received is random. Typically, you
+will receive a weapon, a piece of armor, some food, some torches and
+a magical item although there is some variance from this.
+
+
+--
+Original   : (??)
+Updated    : (??)
+Updated    : Zangband DevTeam
+Last update: January 13, 2000
+
+***** Begin Hyperlinks
+***** [1] birth.txt#AutoRoller
+***** [2] birth.txt#RandomQuests
+***** [3] option.txt#StartUp
+***** [4] dungeon.txt#TownLevel
+***** [5] charattr.txt#TheRaces
+***** [6] charattr.txt#TheClasses
+***** [7] magic.txt#MagicRealms
+***** [8] dungeon.txt#RandomQuests
+***** [9] charattr.txt#PrimaryStats
+***** [a] charattr.txt#StatBonusTable
+***** [b] birth.txt#LifeRating
+***** [c] birth.txt#CharName

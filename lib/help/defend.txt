@@ -1,0 +1,578 @@
+=== Defending Yourself ===
+ 
+In Zangband, monsters may damage and otherwise harm you in a number of
+ways: in direct melee combat, by exploding next to you, by breathing
+on you and by casting spells. Some monsters referred to as "summoners"
+may not directly harm you but may summon other monsters to do their
+dirty work for them.
+
+Creatures will attack you in the same manner in which you attack them.
+If they move into you, they attack you. Virtually all monsters can
+lower your hit points by means of a melee attack, and if you lose too
+many, you die. Fortunately, this is also the attack most easily guarded
+against (by wielding armor). Each monster has a maximum of four melee
+attacks which may be of varying type, power and effect.
+
+In addition to pure damage, there can be a number of side-effects from
+a monster hitting you. For example, an especially powerful attack may
+stun you wound you. Stunning is cumulative and, if not addressed, may
+eventually result in you becoming knocked out which allows your
+opponent to continue attacking while you lie helpless. Wounds will
+cause you to lose hit points each round until you either die or your
+wound heals. You will slowly recover from any wound except a Mortal
+Wound with time and all wounds can be healed magically.
+
+In addition to cuts and stunning, some monsters melee attacks may have
+other consequences. These include causing you to become blind, scared,
+confused, poisoned or paralyzed. There are many others less common
+effects. Full details of monsters melee ability may be found in the
+section on Monsters (see monster.txt).
+
+Many monsters also have an array of magical spells which they may use
+against you and others can use various breath attacks on you from a
+distance. For example, a red dragon might breathe fire at you. You can
+defend yourself from the side-effects of melee attacks, monster spells
+and breath attacks by searching for armor that is resistant to that
+form of attack.
+
+As you move down deeper into the dungeon in search of better items,
+you will need to steadily improve your defenses against pure damage,
+wounds, stunning, bolts, balls, and breaths of various kinds,
+reductions of exp and stats, theft, and a variety of miscellaneous
+magical attacks.
+
+***** <Armor>
+=== Armor Class ===
+
+Your armor class (or AC) is a number that describes the amount and the
+quality of armor being worn. Armor class will generally run from about
+0 to 150, but could become negative or greater than 150 with rarer
+armor or by magical means. Note the spell casters receive a penalty
+to their maximum mana for wielding armor that is too heavy. In addition,
+monks lose much of their bare handed fighting skill if their armor
+becomes too heavy.
+ 
+The larger your armor class, the more protective it is. A negative
+armor class would actually help get you hit. Armor protects you in
+three manners. One, it makes you harder to be hit for damage. A hit for
+no damage is the same as a miss. Two, good armor will absorb some of
+the damage that your character would have taken from normal attacks.
+Three, acid damage is reduced by wearing body armor (but the armor will
+be damaged instead). It is obvious that a high armor class is a must
+for surviving the deeper levels of Zangband. Note, however, that armor
+class by itself will not protect you from the side effects of monster
+melee attacks mentioned above.
+
+Each piece of armor has a base armor value, which, like the damage from
+weapons, is assumed known by the player, and a magic bonus, which will
+not be displayed unless the armor has been identified or was bought in
+a store.
+
+Armor class values are always displayed between a set of brackets as
+'[#]' or '[#,+#]'. The first value is the armor class of the item. The
+second number is the magical bonus of the item which is only displayed
+if known, and will always have a sign preceding the value.
+
+Note: A few rings, amulets, and weapons also have the '[+#]' notation,
+indicating that they provide an armor bonus. Many pieces of heavy body
+armor will also have a '(-#)' before the '[#,+#]', which indicates that
+the weight of the armor decreases your chances of hitting monsters.
+This can range from nonexistent for very light armor to (-8) for the
+very heaviest armor!
+
+
+***** <ResistingMagic>
+=== Resisting Magical Attacks ===
+
+Against some magical attacks (such as cause wounds, cause blindness or
+cause fear) the player will first get a saving throw (see the Skills
+page). However, against attacks such as bolts and ball spells this does
+not apply. Also, there is no saving throw against monster breaths. For
+these types of attacks, your only recourse it to find items or other
+means which grant you 'resistance' to that type of attack.
+
+In Zangband there are many forms of resistance which may be obtained
+either as bonuses from your equipment, as the result of casting a
+magical spell, activating certain artifacts or as the result of a
+mutation. Unfortunately, not all attacks available to monsters can be
+resisted and most can only be partially resisted.
+
+Each resistance has one or more corresponding monster attack which it
+'resists'. By this we mean that it reduces the amount of damage that
+your character will take as a result of an attack of that kind. For
+example, fire resistance will reduce the damage to your character
+resulting from fire attacks such as a fire bolt or being breathed upon
+by a red dragon. Note that appropriate resistances will also negate or
+reduce some side-effects of monster melee attacks.
+
+There are two categories of resistances: (1) the low (or elemental)
+resistances - acid, fire, cold and electricity; and (2) the high
+resistances - poison, confusion, light, dark, blindness, sound, fear,
+shards, nexus, chaos, nether, gravity, disenchantment and time. In
+general, the low resistances are more commonly available, they can be
+double-resisted and the corresponding attacks have a higher maximum
+damage potential. 
+
+A common misconception amongst new players is that having multiple
+sources of a particular resistance will increase your character's
+resistance to attacks of that form. This is not true. You will get the
+same benefit from wielding a single Amulet of Resist Acid as wielding a
+Shield of Resist Acid, an {Armor-type} of Resist Acid and an artifact
+weapon which grants acid resistance all at the same time.
+
+As stated above, however, it is possible to get double resistance for
+the low resists (and also poison). This is because these resistances
+are also available on a temporary basis by casting certain spells or by
+quaffing a Potion of Resistance. Some items may also activate for
+temporary resistance and it may also be gained from one of the many
+possible mutations. This temporary effect is cumulative with the
+permanent effect and will increase your protection against these kinds
+of attacks.
+
+
+***** <EgoArtifact>
+=== Ego Armor and Artifacts ===
+
+In addition to the ordinary armor items your character may find in
+the dungeon, some of them may be endowed with additional powers.
+These armors are fall into two types(1) artifacts; and (2) ego armors.
+Unlike artifacts which are unique and may only be found once in each
+game, it is not unusual to find several ego armors of the same type
+during the course of a character's adventures.
+
+In general, artifacts and ego armors may boost one or more of your
+primary statistics, may confer certain abilities upon your character
+and may grant resistance to certain forms of attack. Each Ego type may
+only be found on certain types of armor - for example, you can find a
+Shield of Elvenkind but not Boots of Elvenkind.
+
+Note: Zangband has extended the original Angband's concept of adding
+random abilities to the various Ego types considerably. These can be
+either guaranteed or have only a varying chance of being granted. (See
+'Randabil.spo' for details of the random powers of Ego Armor).
+
+
+--- Armor/Shields ---
+
+of Resist Acid.
+     A character using such an object will take only one third normal
+     damage from any acid thrown upon him.  In addition, armor so
+     enchanted will resist the acid's effects and not be damaged by it.
+
+of Resist Lightning.
+     A character using a resist lightning object will take only one
+     third damage from electrical attacks.
+
+of Resist Fire.
+     A character using a resist fire object will take only one third
+     damage from heat and fire.
+
+of Resist Cold.
+     A character using a resist cold object will take only one third
+     damage from frost and cold.
+
+of Resistance.
+     A character wearing armor with this ability will have resistance
+     to Acid, Cold, Fire, and Lightning as explained in each part
+     above.
+
+of Elvenkind.
+     This is the same as Resistance armor, only generally better
+     enchanted. It will also make you more stealthy.
+
+of Permanence (Robes Only)
+     These robes provide resistance to fire, cold, acid, and
+     electricity and cannot be damaged by acid. They also resist life
+     draining attacks and sustain all your primary statistics. 
+
+of Reflection (Shields Only)
+     These shields reflect missiles and bolt spells preventing damage
+     to the player character and often damaging the originating
+     monster. The reflection is not 100% effective but nearly so. 
+
+--- Caps/Helms/Crowns ---
+
+of Intelligence
+     This item will both increase and sustain your intelligence.
+
+of Wisdom
+     This item and will both increase and sustain your wisdom.
+
+of Beauty
+     This item will both increase and sustain your charisma.
+
+of the Magi
+     This item will both increase and sustain your intelligence, and
+     grants resistance against fire, frost, acid, and lightning.
+
+of Might
+     This item will both increase and sustain your strength, dexterity,
+     and constitution and will also make you immune to any foe's attempt
+     to slow or paralyze you.
+
+of Lordliness
+     This item will both increase and sustain your wisdom and charisma.
+
+of Seeing
+     This item will grant the ability to see invisible creatures, and
+     will also increase your ability to locate traps and secret doors.
+     In addition it will also prevent you from being blinded.
+
+of Infravision
+     This item will increase the range of you infravision and grants
+     infravision if you are a race which does not get it intrinsically.
+
+of Light
+     This item provides a permanent light source.
+
+of Telepathy
+     This item grants its wielder telepathy.
+
+of Regeneration
+     This item will help you regenerate hit points and mana more
+     quickly than normal, allowing you to fight longer before needing
+     to rest. You will use food faster than normal while wearing this
+     crown because of the regenerative effects.
+
+--- Cloaks ---
+
+of Protection
+     These cloaks cannot be harmed by acid, fire, cold or lightning
+     attacks but do not grant resistance to these elements.
+
+of Stealth
+     These cloaks will make your character more stealthy.
+
+of Aman
+     These cloaks cannot be harmed by acid, fire, cold or lightning
+     attacks but do not grant resistance to these elements. They also
+     make your character more stealthy.
+
+of Immolation
+     These cloaks cannot be harmed by acid or fire attacks. They also
+     grant resistance to fire and give out a fiery aura.
+
+of Electricity
+     These cloaks cannot be harmed by acid or electricity attacks. They
+     also grant resistance to electricity and give out an electric
+     aura.
+
+--- Gloves/Gauntlets/Sets of Cesti ---
+
+of Free Action
+     This item will make you immune to any foe's attempt to slow or
+     paralyze you. A mage-type spellcaster who wields them will not
+     have their mana penalized.
+
+of Slaying
+     In addition to its armor bonus, this item will grant a bonus to
+     your +to-hit and +to-dam.
+
+of Agility
+     This item will increase your dexterity. A mage-type spellcaster
+     who wields them will not have their mana penalized.
+
+of Power
+     This item will increase your strength and will also grant a bonus
+     to your +to-hit and +to-dam.
+
+--- Boots ---
+
+of Levitation
+     These boots will grant you levitation.
+
+of Stealth
+     These boots will make your character more stealthy.
+
+of Free Action
+     This item will make you immune to any foe's attempt to slow or
+     paralyze you.
+
+of Speed
+     These boots will make your character more speedy.
+
+--- Special Items ---
+     
+Dragon Scale Mails.
+     These extremely rare pieces of armor come in many different
+     colors, each protecting you against the relevant dragons.
+     Naturally they are all resistant to acid damage. They also
+     occasionally allow you to breathe as a dragon would!
+
+Dragon Shields and Helms
+     These shields and helms have a chance of granting one or more 
+     random resistances.
+
+Other items
+     Apart from these there are some very rare, and well made armors
+     in the dungeon with not necessarily any special abilities. These
+     include Adamantite Plate Mail, Mithril Plate Mail, Mithril Chain
+     Mail, Shields of Deflection, and Shadow Cloaks. The first four
+     cannot be damaged by acid because of the quality metals they
+     contain. Shadow Cloaks grant resistance to both light and darkness
+     attacks.
+
+
+***** <Resistances>
+=== The Resistances ===
+
+This section describes the various attack-types available to monsters
+and how they may be resisted.
+
+Acid
+    Acid resistance will cut damage from acid attacks by two-thirds.
+    Temporary resistance will cut further damage by another two-thirds.
+    This means that a character with both permanent and temporary
+    resistance will only take one-ninth of the original damage. Acid
+    resistance will also protect your wielded equipment from being
+    corroded by acid but will not protect items in your inventory from
+    being destroyed by acid if they are susceptible to such attacks.
+
+Fire
+    Fire resistance will cut damage from fire attacks by two-thirds.
+    Temporary resistance will cut further damage by another two-thirds.
+    This means that a character with both permanent and temporary
+    resistance will only take one-ninth of the original damage. Fire
+    resistance will not protect items in your inventory from being
+    destroyed by fire if they are susceptible to such attacks.
+
+Cold
+    Cold resistance will cut damage from cold attacks by two-thirds.
+    Temporary resistance will cut further damage by another two-thirds.
+    This means that a character with both permanent and temporary
+    resistance will only take one-ninth of the original damage. Cold
+    resistance will not protect items in your inventory from being
+    destroyed by fire if they are susceptible to such attacks.
+
+Electricity
+    Electricity resistance will cut damage from fire attacks by
+    two-thirds. Temporary resistance will cut further damage by another
+    two-thirds. This means that a character with both permanent and
+    temporary resistance will only take one-ninth of the original
+    damage. Electricity resistance will not protect items in your
+    inventory from being destroyed by fire if they are susceptible to
+    such attacks.
+
+Poison
+    Poison resistance will cut damage from poison attacks by
+    two-thirds. Temporary resistance will cut further damage by another
+    two-thirds. This means that a character with both permanent and
+    temporary resistance will only take one-ninth of the original
+    damage. Poison resistance will also protect you from becoming
+    'poisoned' but characters will not be healed of their 'poisoned'
+    status if they become resistant to poison after already being
+    poisoned. This must be cured by other means.
+
+Confusion
+    Confusion resistance will reduce the damage taken from confusion
+    attacks and breaths. It will also prevent your character from
+    becoming 'Confused' (if you are confused you will be unable to read
+    scrolls, cast spells or prayers and will have a dramatically
+    reduced ability to use magical devices). In particular, water
+    attacks may confuse as a side-effect - this is prevented if you
+    have confusion resistance
+
+Light
+    Light breaths damage the player and cause blindness as a
+    side-effect. Light resistance reduces the damage and also
+    prevents blindness caused from light attacks (but not from other
+    attacks.
+
+Dark
+    Dark breaths damage the player and cause blindness as a
+    side-effect.  Dark resistance reduces the damage and also
+    prevents blindness caused from dark attacks (but not from other
+    attacks. In addition, some high-level monsters can cast Darkness
+    Storms, these are a particularly dangerous form of attack but are
+    resisted if you gave Dark resistance.
+
+Blindness
+    Resist blindness will protect you from spells which blind and from
+    being "hit to blind" (a few monsters can do this) as well as from
+    the blindness (but not the damage) caused by light and darkness
+    breaths.
+
+Sound
+    Sound resistance reduces damage from sound attacks and also the
+    stunning side effects of sound and some other attacks. (Sound,
+    plasma, water, force, gravity and shards attacks may all stun the
+    player as may ice-bolt attacks). Sound resistance does not protect
+    against stunning from melee attacks.
+
+Fear
+    Fear resistance gives immunity to attacks which make your character
+    'Afraid' (being afraid prevents your character from participating
+    in melee combat but does not otherwise affect you).
+
+Shards
+    Shards resistance will reduce the damage taken from shards attacks
+    (this includes a Cyberdemon's Rocket Launchers). It also prevents
+    the cuts that come from these attacks (and also ice-bolts). Some
+    shards attacks may also stun the player, this is prevented if you
+    have sound resistance and not by shard resistance.
+
+Nexus
+    Nexus attacks are one of the most annoying attacks in Zangband but
+    will rarely kill you directly. A Nexus attack will damage the player
+    and may teleport the player, teleport-level the player or swap two
+    of your primary statistics around. Nexus resistance will reduce the
+    damage taken from such attacks and prevent the side-effects but
+    will not prevent you from being teleported by non-nexus attacks (for
+    this you will need an item granting anti-teleportation).
+
+Chaos
+    Chaos attacks are one of the most dangerous attack types in
+    Zangband. They have a relatively high maximum damage, and may also
+    confuse the player, cause hallucination, reduce your character's
+    experience and cause you to mutate. Chaos resistance will the
+    damage taken from such attacks and negate all side-effects.
+
+Nether
+    Another dangerous attack type. Nether attacks are common deeper in
+    the dungeon, have a high maximum damage and will also cause your
+    character's experience to be drained. Nether resistance will reduce
+    the damage taken and the experience loss. It will not reduce the
+    experience loss from non-nether attacks (for this you need
+    hold-life).
+
+Gravity
+    Gravity attacks damage the player and also cause you (and monsters
+    they hit) to be teleported a short distance. A side-effect of this
+    is that since the effect is calculated on each spot in turn, it is
+    possible to be blinked into a spot which hasn't been calculated yet
+    but is in line to be affected by the breath - the net result is to
+    be hit twice, blinked twice and damaged twice by the same breath.
+    Gravity attacks may also stun your character. Levitation provides
+    resistance to the damaging effect of gravity, resist teleportation
+    prevents the blinking around and resistance to sound prevents you
+    from becoming stunned.
+
+Disenchantment
+    Disenchantment attacks damage the player and may result in the
+    to-hit, to-dam and to-AC bonuses on your wielded equipment being
+    reduced. Disenchantment resistance will reduce the damage you take
+    and will prevent the disenchantment of your equipment.
+
+***** <Unresistable>
+--- Unresistable Attacks ---
+
+There is no resistance to the following types of attacks although some
+of their side-effects may be resisted.
+
+Toxic Waste
+    Resist poison will resist the damage from Toxic Waste attacks but
+    you may still suffer some side effects unless you also have chaos
+    resistance.
+
+Time
+    Time attacks damage the player, drain experience and may reduce one
+    or more of your primary statistics.
+
+Plasma
+    Plasma can damage you, stun you and burn your equipment. Fire
+    immunity (not resistance) prevents burning of equipment, sound
+    resistance prevents the stunning but there is no resistance to the
+    damage.
+
+Inertia
+    Inertia will damage you and slow you down by -10 speed. There is no
+    resistance to damage or effects.
+
+Mana and Disintegration
+    There is no resistance to the mana and disintegration attacks.
+
+***** <Immunities>
+--- Immunities ---
+
+It is also possible that you may find items which grant immunity
+to one or (very occasionally) more of the low resistances ie. Acid,
+Fire, Cold and Electricity.  In this case, when wielded, you will
+take no damage from attacks of the relevant kind and, in addition,
+your equipment and inventory are safe from being damaged or
+destroyed by the attack.
+
+In addition free action, fear and blindness resistance may be
+thought of as immunities since having they protect totally from the
+respective form of attack.
+
+***** <Miscellaneous>
+--- Miscellaneous ---
+
+The following are not properly resistances but may be sensibly included
+on this page.
+
+Free Action
+    Free action is immunity to paralysis: this is foolproof except in
+    the special case of the Ancient and Foul Curse which requires a
+    successful saving throw as well as free action to avoid should it
+    attempt to paralyze you. Spells, potions of paralysis and being
+    hit-to-paralyze are completely protected against.
+
+Hold-life
+    Hold Life is protection from experience draining. It is 90%
+    foolproof: 10% of draining attacks will still drain you, but by
+    less than would otherwise have been the case.
+
+
+***** <Recovering>
+=== Recovering from Attacks ===
+
+You cannot combat with the creatures in Zangband and expect to come out
+unscathed every time. When a monster inflicts damage on you, you will
+need to take steps to recover from the damage as soon as possible.
+
+--- Healing Items ---
+
+Healing is available in multiple forms including: Potions and Staves
+of Cure Light Wounds, Potions of Cure Serious Wounds, Potions of Cure
+Critical Wounds, Potions, Staves and Rods of Healing, Potions of
+*Healing* and Potions of Life, from weakest to strongest. Both the Life
+and Nature realms contains spells to heal the player.
+
+Cure Light/Serious/Critical Wounds
+     these generally restore a small amount of hitpoints and may also
+     remove temporary bad effects like confusion, blindness, poison and
+     cuts. The amount of hitpoints healed and the number of other bad
+     effects cured increases from Light to Serious to Critical.
+
+Healing
+     restores 300 hitpoints and removes all temporary bad effects with
+     the exception of fear and cures all wounds.
+
+*Healing*
+     restores 1000 hitpoints and removes all temporary bad effects and
+     cures all wounds
+
+Potions of Life
+     restores 5000 hitpoints (about 5 times more than you'll ever
+     have), restores all drained stats and experience, and removes all
+     bad effects except hunger. These are very rare; save them in your
+     home for a dangerous fight.
+
+--- Restoring Items ---
+
+From time to time your primary statistics and/or experience may be
+drained. Statistics can be restored by quaffing a Potion of Restore
+{name of stat} or a Potion of {Name of stat} or by eating a Mushroom of
+Restoring. Some towns may provide this service for a fee. Experience
+may be restored by quaffing a Potion of Restore Life Levels or using a
+Rod of Restoration. You may also regain it in the normal course of your
+adventuring or by quaffing a Potion of Experience. The Life realm has
+a spell called Restoration which restores any drained experience.
+
+--- Other ---
+
+There are also other items in the dungeon which may help you to recover
+from various things that monsters may do to you. For example, some
+mushrooms may help you recover from confusion, a Potion of Heroism
+will prevent you from becoming afraid, a Potion of Slow Poison will
+reduce the effects of becoming poisoned, etc. Most objects' names give
+a clear idea of the benefits and dangers of using them and so an
+exhaustive list is not provided in this document.
+
+
+--
+Original   : (??), Leon Marrick and Chris Weisiger
+Updated    : (??)
+Updated    : Zangband DevTeam
+Last update: January 13, 2000
