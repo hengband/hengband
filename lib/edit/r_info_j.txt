@@ -6692,7 +6692,7 @@ I:110:80d12:12:80:10
 W:25:3:0:600:0:0
 B:HIT:HURT:1d12
 B:HIT:HURT:3d6
-F:FORCE_SLEEP | HUMAN |
+F:FORCE_SLEEP |
 F:EMPTY_MIND | COLD_BLOOD | BASH_DOOR | 
 F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
 F:HURT_ROCK | NONLIVING |
@@ -6700,7 +6700,7 @@ F:NO_CONF | NO_SLEEP | NO_FEAR
 S:1_IN_4 | 
 S:SLOW | CONF | BO_ACID
 D:$A stumpy figure carved from stone, with glittering eyes.
-D:きらきらと輝く目をした、岩のようにずんぐりとした人間だ。
+D:きらきらと輝く目をした、人型の石像だ。
 
 #JZ#
 N:399:劣化ビースト
