@@ -248,8 +248,6 @@ static bool alloc_stairs(int feat, int num, int walls)
 				checked = TRUE;
 			}
 		}
-
-		if (!flag) return FALSE;
 	}
 	return TRUE;
 }
