@@ -10,24 +10,6 @@
 
 static int num_more = 0;
 
-#ifndef HAS_MEMSET
-
-/*
- * For those systems that don't have "memset()"
- *
- * Set the value of each of 'n' bytes starting at 's' to 'c', return 's'
- * If 'n' is negative, you will erase a whole lot of memory.
- */
-char *memset(char *s, int c, huge n)
-{
-	char *t;
-	for (t = s; len--; ) *t++ = c;
-	return (s);
-}
-
-#endif
-
-
 #if 0
 #ifndef HAS_STRICMP
 
@@ -57,7 +39,7 @@ int stricmp(cptr a, cptr b)
 
 #ifdef SET_UID
 
-# ifndef HAS_USLEEP
+# ifndef HAVE_USLEEP
 
 /*
  * For those systems that don't have "usleep()" but need it.
@@ -120,7 +102,6 @@ extern struct passwd *getpwnam();
  */
 void user_name(char *buf, int id)
 {
-#ifdef SET_UID
 	struct passwd *pw;
 
 	/* Look up the user name */
@@ -140,7 +121,6 @@ void user_name(char *buf, int id)
 
 		return;
 	}
-#endif /* SET_UID */
 
 	/* Oops.  Hack -- default to "PLAYER" */
 	strcpy(buf, "PLAYER");
