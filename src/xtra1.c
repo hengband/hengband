@@ -3264,7 +3264,7 @@ void calc_bonuses(void)
 
 	/* Your horse or riding monster */
 	if (death)
-		riding_m_ptr = &riding_mon;
+		riding_m_ptr = &party_mon[0];
 	else
 		riding_m_ptr = &m_list[p_ptr->riding];
 

@@ -1457,108 +1457,34 @@ static byte extract_feeling(void)
 
 static void place_pet(void)
 {
-	int i;
+	int i, max_num;
 
-	if (p_ptr->riding)
+	if (p_ptr->wild_mode)
+		max_num = 1;
+	else
+		max_num = 21;
+
+	for (i = 0; i < max_num; i++)
 	{
-		p_ptr->riding = m_pop();
-		if (p_ptr->riding)
+		int cy, cx, m_idx;
+
+		if (!(party_mon[i].r_idx)) continue;
+
+
+		if (i == 0)
 		{
-			monster_type *m_ptr = &m_list[p_ptr->riding];
-			monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-			cave[py][px].m_idx = p_ptr->riding;
-			m_ptr->r_idx = riding_mon.r_idx;
-			m_ptr->fy = py;
-			m_ptr->fx = px;
-			m_ptr->cdis = riding_mon.cdis;
-			m_ptr->mflag = riding_mon.mflag;
-			m_ptr->mflag2 = riding_mon.mflag2;
-			m_ptr->ml = TRUE;
-			m_ptr->hp = riding_mon.hp;
-			m_ptr->maxhp = riding_mon.maxhp;
-			m_ptr->max_maxhp = riding_mon.max_maxhp;
-			m_ptr->mspeed = riding_mon.mspeed;
-			m_ptr->fast = riding_mon.fast;
-			m_ptr->slow = riding_mon.slow;
-			m_ptr->stunned = riding_mon.stunned;
-			m_ptr->confused = riding_mon.confused;
-			m_ptr->monfear = riding_mon.monfear;
-			m_ptr->invulner = riding_mon.invulner;
-			m_ptr->smart = riding_mon.smart;
-			m_ptr->csleep = 0;
-			m_ptr->nickname = riding_mon.nickname;
-			m_ptr->energy = riding_mon.energy;
-			m_ptr->exp = riding_mon.exp;
-			set_pet(m_ptr);
-
-			if ((r_ptr->flags1 & RF1_FORCE_SLEEP) && !ironman_nightmare)
+			m_idx = m_pop();
+			p_ptr->riding = m_idx;
+			if (m_idx)
 			{
-				/* Monster is still being nice */
-				m_ptr->mflag |= (MFLAG_NICE);
-
-				/* Must repair monsters */
-				repair_monsters = TRUE;
+				cy = py;
+				cx = px;
 			}
-
-			/* Update the monster */
-			update_mon(p_ptr->riding, TRUE);
-
-			r_ptr->cur_num++;
-
-			/* Hack -- Count the number of "reproducers" */
-			if (r_ptr->flags2 & RF2_MULTIPLY) num_repro++;
-
-			/* Hack -- Notice new multi-hued monsters */
-			if (r_ptr->flags1 & RF1_ATTR_MULTI) shimmer_monsters = TRUE;
 		}
 		else
 		{
-			char m_name[80];
+			int j, d;
 
-			monster_desc(m_name, &riding_mon, 0);
-#ifdef JP
-msg_format("%sとはぐれてしまった。", m_name);
-#else
-			msg_format("You have lost sight of %s.", m_name);
-#endif
-			if (record_named_pet && riding_mon.nickname)
-			{
-				monster_desc(m_name, &riding_mon, 0x08);
-				do_cmd_write_nikki(NIKKI_NAMED_PET, 5, m_name);
-			}
-			p_ptr->riding = 0;
-		}
-	}
-
-	if (p_ptr->wild_mode)
-	{
-		for (i = 0; i < 20; i++)
-		{
-			if (party_mon[i].r_idx)
-			{
-				char m_name[80];
-
-				monster_desc(m_name, &party_mon[i], 0);
-#ifdef JP
-msg_format("%sとはぐれてしまった。", m_name);
-#else
-				msg_format("You have lost sight of %s.", m_name);
-#endif
-				if (record_named_pet && party_mon[i].nickname)
-				{
-					monster_desc(m_name, &party_mon[i], 0x08);
-					do_cmd_write_nikki(NIKKI_NAMED_PET, 5, m_name);
-				}
-			}
-		}
-		return;
-	}
-	for (i = 0; i < 20; i++)
-	{
-		if (party_mon[i].r_idx)
-		{
-			int cy, cx, m_idx, j, d;
 			for(d = 1; d < 6; d++)
 			{
 				for(j = 1000; j > 0; j--)
@@ -1569,90 +1495,76 @@ msg_format("%sとはぐれてしまった。", m_name);
 				if (j) break;
 			}
 			if (d == 6 || p_ptr->inside_arena || p_ptr->inside_battle)
-			{
-				char m_name[80];
-
-				monster_desc(m_name, &party_mon[i], 0);
-#ifdef JP
-msg_format("%sとはぐれてしまった。", m_name);
-#else
-				msg_format("You have lost sight of %s.", m_name);
-#endif
-				if (record_named_pet && party_mon[i].nickname)
-				{
-					monster_desc(m_name, &party_mon[i], 0x08);
-					do_cmd_write_nikki(NIKKI_NAMED_PET, 5, m_name);
-				}
-				continue;
-			}
-			m_idx = m_pop();
-
-			if (m_idx)
-			{
-				monster_type *m_ptr = &m_list[m_idx];
-				monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-				cave[cy][cx].m_idx = m_idx;
-				m_ptr->r_idx = party_mon[i].r_idx;
-				m_ptr->fy = cy;
-				m_ptr->fx = cx;
-				m_ptr->cdis = party_mon[i].cdis;
-				m_ptr->mflag = party_mon[i].mflag;
-				m_ptr->mflag2 = party_mon[i].mflag2;
-				m_ptr->ml = TRUE;
-				m_ptr->hp = party_mon[i].hp;
-				m_ptr->maxhp = party_mon[i].maxhp;
-				m_ptr->max_maxhp = party_mon[i].max_maxhp;
-				m_ptr->mspeed = party_mon[i].mspeed;
-				m_ptr->fast = party_mon[i].fast;
-				m_ptr->slow = party_mon[i].slow;
-				m_ptr->stunned = party_mon[i].stunned;
-				m_ptr->confused = party_mon[i].confused;
-				m_ptr->monfear = party_mon[i].monfear;
-				m_ptr->invulner = party_mon[i].invulner;
-				m_ptr->smart = party_mon[i].smart;
-				m_ptr->csleep = 0;
-				m_ptr->nickname = party_mon[i].nickname;
-				m_ptr->energy = party_mon[i].energy;
-				m_ptr->exp = party_mon[i].exp;
-				set_pet(m_ptr);
-
-				if ((r_ptr->flags1 & RF1_FORCE_SLEEP) && !ironman_nightmare)
-				{
-					/* Monster is still being nice */
-					m_ptr->mflag |= (MFLAG_NICE);
-
-					/* Must repair monsters */
-					repair_monsters = TRUE;
-				}
-
-				/* Update the monster */
-				update_mon(m_idx, TRUE);
-				lite_spot(cy, cx);
-
-				r_ptr->cur_num++;
-
-				/* Hack -- Count the number of "reproducers" */
-				if (r_ptr->flags2 & RF2_MULTIPLY) num_repro++;
-
-				/* Hack -- Notice new multi-hued monsters */
-				if (r_ptr->flags1 & RF1_ATTR_MULTI) shimmer_monsters = TRUE;
-			}
+				m_idx = 0;
 			else
+				m_idx = m_pop();
+		}
+		
+		if (m_idx)
+		{
+			monster_type *m_ptr = &m_list[m_idx];
+			monster_race *r_ptr = &r_info[m_ptr->r_idx];
+			
+			cave[cy][cx].m_idx = m_idx;
+			m_ptr->r_idx = party_mon[i].r_idx;
+			m_ptr->fy = cy;
+			m_ptr->fx = cx;
+			m_ptr->cdis = party_mon[i].cdis;
+			m_ptr->mflag = party_mon[i].mflag;
+			m_ptr->mflag2 = party_mon[i].mflag2;
+			m_ptr->ml = TRUE;
+			m_ptr->hp = party_mon[i].hp;
+			m_ptr->maxhp = party_mon[i].maxhp;
+			m_ptr->max_maxhp = party_mon[i].max_maxhp;
+			m_ptr->mspeed = party_mon[i].mspeed;
+			m_ptr->fast = party_mon[i].fast;
+			m_ptr->slow = party_mon[i].slow;
+			m_ptr->stunned = party_mon[i].stunned;
+			m_ptr->confused = party_mon[i].confused;
+			m_ptr->monfear = party_mon[i].monfear;
+			m_ptr->invulner = party_mon[i].invulner;
+			m_ptr->smart = party_mon[i].smart;
+			m_ptr->csleep = 0;
+			m_ptr->nickname = party_mon[i].nickname;
+			m_ptr->energy = party_mon[i].energy;
+			m_ptr->exp = party_mon[i].exp;
+			set_pet(m_ptr);
+			
+			if ((r_ptr->flags1 & RF1_FORCE_SLEEP) && !ironman_nightmare)
 			{
-				char m_name[80];
-
-				monster_desc(m_name, &party_mon[i], 0);
+				/* Monster is still being nice */
+				m_ptr->mflag |= (MFLAG_NICE);
+				
+				/* Must repair monsters */
+				repair_monsters = TRUE;
+			}
+			
+			/* Update the monster */
+			update_mon(m_idx, TRUE);
+			lite_spot(cy, cx);
+			
+			r_ptr->cur_num++;
+			
+			/* Hack -- Count the number of "reproducers" */
+			if (r_ptr->flags2 & RF2_MULTIPLY) num_repro++;
+			
+			/* Hack -- Notice new multi-hued monsters */
+			if (r_ptr->flags1 & RF1_ATTR_MULTI) shimmer_monsters = TRUE;
+		}
+		else
+		{
+			char m_name[80];
+			
+			monster_desc(m_name, &party_mon[i], 0);
 #ifdef JP
-msg_format("%sとはぐれてしまった。", m_name);
+			msg_format("%sとはぐれてしまった。", m_name);
 #else
-				msg_format("You have lost sight of %s.", m_name);
+			msg_format("You have lost sight of %s.", m_name);
 #endif
-				if (record_named_pet && party_mon[i].nickname)
-				{
-					monster_desc(m_name, &party_mon[i], 0x08);
-					do_cmd_write_nikki(NIKKI_NAMED_PET, 5, m_name);
-				}
+			if (record_named_pet && party_mon[i].nickname)
+			{
+				monster_desc(m_name, &party_mon[i], 0x08);
+				do_cmd_write_nikki(NIKKI_NAMED_PET, 5, m_name);
 			}
 		}
 	}

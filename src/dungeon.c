@@ -5809,35 +5809,44 @@ msg_print("試合開始！");
 		r_info[quest[quest_num].r_idx].flags1 &= ~RF1_QUESTOR;
 	}
 
-	if (alive) {
-		if (p_ptr->riding)
-		{
-			COPY(&riding_mon, &m_list[p_ptr->riding], monster_type);
-		}
-		else
-		{
-			riding_mon.r_idx = 0;
-		}
-		for(num = 0; num < 20; num++)
+	if (alive)
+	{
+		for(num = 0; num < 21; num++)
 		{
 			party_mon[num].r_idx = 0;
 		}
-		for(i = m_max - 1, num = 0; (i >= 1 && num < 20); i--)
+
+		if (p_ptr->riding)
+		{
+			COPY(&party_mon[0], &m_list[p_ptr->riding], monster_type);
+		}
+
+		for(i = m_max - 1, num = 1; (i >= 1 && num < 21); i--)
 		{
 			monster_type *m_ptr = &m_list[i];
 			
 			if (!m_ptr->r_idx) continue;
 			if (!is_pet(m_ptr)) continue;
 			if (i == p_ptr->riding) continue;
-			if (m_ptr->nickname && (player_has_los_bold(m_ptr->fy, m_ptr->fx) || los(m_ptr->fy, m_ptr->fx, py, px)))
+
+			/* 死んだときには主なペットの表示用に、距離制限を撤廃する。 */
+			if (death)
 			{
-				if (distance(py, px, m_ptr->fy, m_ptr->fx) > 3) continue;
+				if (!m_ptr->nickname) continue;
 			}
 			else
 			{
-				if (distance(py, px, m_ptr->fy, m_ptr->fx) > 1) continue;
+				if (m_ptr->nickname && (player_has_los_bold(m_ptr->fy, m_ptr->fx) || los(m_ptr->fy, m_ptr->fx, py, px)))
+				{
+					if (distance(py, px, m_ptr->fy, m_ptr->fx) > 3) continue;
+				}
+				else
+				{
+					if (distance(py, px, m_ptr->fy, m_ptr->fx) > 1) continue;
+				}
+				if (m_ptr->confused || m_ptr->stunned || m_ptr->csleep) continue;
 			}
-			if (m_ptr->confused || m_ptr->stunned || m_ptr->csleep) continue;
+
 			COPY(&party_mon[num], &m_list[i], monster_type);
 			delete_monster_idx(i);
 			num++;
