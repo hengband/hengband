@@ -3572,7 +3572,7 @@ msg_print("爆発のルーンは解除された。");
 				if ((r_ptr->flags2 & (RF2_TAKE_ITEM | RF2_KILL_ITEM)) &&
 					 (!is_pet(m_ptr) || (p_ptr->pet_extra_flags & PF_PICKUP_ITEMS)))
 				{
-					u32b f1, f2, f3;
+					u32b flgs[TR_FLAG_SIZE];
 
 					u32b flg2 = 0L;
 					u32b flg3 = 0L;
@@ -3581,7 +3581,7 @@ msg_print("爆発のルーンは解除された。");
 					char o_name[MAX_NLEN];
 
 					/* Extract some flags */
-					object_flags(o_ptr, &f1, &f2, &f3);
+					object_flags(o_ptr, flgs);
 
 					/* Acquire the object name */
 					object_desc(o_name, o_ptr, TRUE, 3);
@@ -3590,16 +3590,24 @@ msg_print("爆発のルーンは解除された。");
 					monster_desc(m_name, m_ptr, 0x04);
 
 					/* React to objects that hurt the monster */
-					if (f1 & TR1_KILL_DRAGON) flg3 |= (RF3_DRAGON);
-					if (f1 & TR1_SLAY_DRAGON) flg3 |= (RF3_DRAGON);
-					if (f1 & TR1_SLAY_TROLL)  flg3 |= (RF3_TROLL);
-					if (f1 & TR1_SLAY_GIANT)  flg3 |= (RF3_GIANT);
-					if (f1 & TR1_SLAY_ORC)    flg3 |= (RF3_ORC);
-					if (f1 & TR1_SLAY_DEMON)  flg3 |= (RF3_DEMON);
-					if (f1 & TR1_SLAY_UNDEAD) flg3 |= (RF3_UNDEAD);
-					if (f1 & TR1_SLAY_ANIMAL) flg3 |= (RF3_ANIMAL);
-					if (f1 & TR1_SLAY_EVIL)   flg3 |= (RF3_EVIL);
-					if (f3 & TR3_SLAY_HUMAN)  flg2 |= (RF2_HUMAN);
+					if (have_flag(flgs, TR_KILL_DRAGON)) flg3 |= (RF3_DRAGON);
+					if (have_flag(flgs, TR_SLAY_DRAGON)) flg3 |= (RF3_DRAGON);
+					if (have_flag(flgs, TR_SLAY_TROLL))  flg3 |= (RF3_TROLL);
+					if (have_flag(flgs, TR_KILL_TROLL))  flg3 |= (RF3_TROLL);
+					if (have_flag(flgs, TR_KILL_GIANT))  flg3 |= (RF3_GIANT);
+					if (have_flag(flgs, TR_SLAY_GIANT))  flg3 |= (RF3_GIANT);
+					if (have_flag(flgs, TR_SLAY_ORC))    flg3 |= (RF3_ORC);
+					if (have_flag(flgs, TR_KILL_ORC))    flg3 |= (RF3_ORC);
+					if (have_flag(flgs, TR_SLAY_DEMON))  flg3 |= (RF3_DEMON);
+					if (have_flag(flgs, TR_KILL_DEMON))  flg3 |= (RF3_DEMON);
+					if (have_flag(flgs, TR_SLAY_UNDEAD)) flg3 |= (RF3_UNDEAD);
+					if (have_flag(flgs, TR_KILL_UNDEAD)) flg3 |= (RF3_UNDEAD);
+					if (have_flag(flgs, TR_SLAY_ANIMAL)) flg3 |= (RF3_ANIMAL);
+					if (have_flag(flgs, TR_KILL_ANIMAL)) flg3 |= (RF3_ANIMAL);
+					if (have_flag(flgs, TR_SLAY_EVIL))   flg3 |= (RF3_EVIL);
+					if (have_flag(flgs, TR_KILL_EVIL))   flg3 |= (RF3_EVIL);
+					if (have_flag(flgs, TR_SLAY_HUMAN))  flg2 |= (RF2_HUMAN);
+					if (have_flag(flgs, TR_KILL_HUMAN))  flg2 |= (RF2_HUMAN);
 
 					/* The object cannot be picked up by the monster */
 					if (artifact_p(o_ptr) || (r_ptr->flags3 & flg3) || (r_ptr->flags2 & flg2) ||

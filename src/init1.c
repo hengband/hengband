@@ -491,7 +491,7 @@ static cptr r_info_flags9[] =
 /*
  * Object flags
  */
-static cptr k_info_flags1[] =
+static cptr k_info_flags[] =
 {
 	"STR",
 	"INT",
@@ -524,14 +524,8 @@ static cptr k_info_flags1[] =
 	"BRAND_ACID",
 	"BRAND_ELEC",
 	"BRAND_FIRE",
-	"BRAND_COLD"
-};
+	"BRAND_COLD",
 
-/*
- * Object flags
- */
-static cptr k_info_flags2[] =
-{
 	"SUST_STR",
 	"SUST_INT",
 	"SUST_WIS",
@@ -563,14 +557,8 @@ static cptr k_info_flags2[] =
 	"RES_NETHER",
 	"RES_NEXUS",
 	"RES_CHAOS",
-	"RES_DISEN"
-};
+	"RES_DISEN",
 
-/*
- * Object flags
- */
-static cptr k_info_flags3[] =
-{
 	"SH_FIRE",
 	"SH_ELEC",
 	"SLAY_HUMAN",
@@ -600,9 +588,31 @@ static cptr k_info_flags3[] =
 	"TELEPORT",
 	"AGGRAVATE",
 	"BLESSED",
-	"XXX1",
-	"XXX2",
 	"XXX3",
+	"XXX4",
+	"XXX5",
+
+	"KILL_ANIMAL",
+	"KILL_EVIL",
+	"KILL_UNDEAD",
+	"KILL_DEMON",
+	"KILL_ORC",
+	"KILL_TROLL",
+	"KILL_GIANT",
+	"KILL_HUMAN",
+	"ESP_ANIMAL",
+	"ESP_UNDEAD",
+	"ESP_DEMON",
+	"ESP_ORC",
+	"ESP_TROLL",
+	"ESP_GIANT",
+	"ESP_DRAGON",
+	"ESP_HUMAN",
+	"ESP_EVIL",
+	"ESP_GOOD",
+	"ESP_NONLIVING",
+	"ESP_UNIQUE",
+	"FULL_NAME",
 };
 
 
@@ -1259,32 +1269,12 @@ static errr grab_one_kind_flag(object_kind *k_ptr, cptr what)
 {
 	int i;
 
-	/* Check flags1 */
-	for (i = 0; i < 32; i++)
+	/* Check flags */
+	for (i = 0; i < TR_FLAG_MAX; i++)
 	{
-		if (streq(what, k_info_flags1[i]))
+		if (streq(what, k_info_flags[i]))
 		{
-			k_ptr->flags1 |= (1L << i);
-			return (0);
-		}
-	}
-
-	/* Check flags2 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, k_info_flags2[i]))
-		{
-			k_ptr->flags2 |= (1L << i);
-			return (0);
-		}
-	}
-
-	/* Check flags3 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, k_info_flags3[i]))
-		{
-			k_ptr->flags3 |= (1L << i);
+			add_flag(k_ptr->flags, i);
 			return (0);
 		}
 	}
@@ -1547,32 +1537,12 @@ static errr grab_one_artifact_flag(artifact_type *a_ptr, cptr what)
 {
 	int i;
 
-	/* Check flags1 */
-	for (i = 0; i < 32; i++)
+	/* Check flags */
+	for (i = 0; i < TR_FLAG_MAX; i++)
 	{
-		if (streq(what, k_info_flags1[i]))
+		if (streq(what, k_info_flags[i]))
 		{
-			a_ptr->flags1 |= (1L << i);
-			return (0);
-		}
-	}
-
-	/* Check flags2 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, k_info_flags2[i]))
-		{
-			a_ptr->flags2 |= (1L << i);
-			return (0);
-		}
-	}
-
-	/* Check flags3 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, k_info_flags3[i]))
-		{
-			a_ptr->flags3 |= (1L << i);
+			add_flag(a_ptr->flags, i);
 			return (0);
 		}
 	}
@@ -1646,10 +1616,10 @@ errr parse_a_info(char *buf, header *head)
 		a_ptr = &a_info[i];
 
 		/* Ignore everything */
-		a_ptr->flags3 |= (TR3_IGNORE_ACID);
-		a_ptr->flags3 |= (TR3_IGNORE_ELEC);
-		a_ptr->flags3 |= (TR3_IGNORE_FIRE);
-		a_ptr->flags3 |= (TR3_IGNORE_COLD);
+		add_flag(a_ptr->flags, TR_IGNORE_ACID);
+		add_flag(a_ptr->flags, TR_IGNORE_ELEC);
+		add_flag(a_ptr->flags, TR_IGNORE_FIRE);
+		add_flag(a_ptr->flags, TR_IGNORE_COLD);
 #ifdef JP
 		/* Store the name */
 		if (!add_name(&a_ptr->name, head, s)) return (7);
@@ -1788,32 +1758,12 @@ static bool grab_one_ego_item_flag(ego_item_type *e_ptr, cptr what)
 {
 	int i;
 
-	/* Check flags1 */
-	for (i = 0; i < 32; i++)
+	/* Check flags */
+	for (i = 0; i < TR_FLAG_MAX; i++)
 	{
-		if (streq(what, k_info_flags1[i]))
+		if (streq(what, k_info_flags[i]))
 		{
-			e_ptr->flags1 |= (1L << i);
-			return (0);
-		}
-	}
-
-	/* Check flags2 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, k_info_flags2[i]))
-		{
-			e_ptr->flags2 |= (1L << i);
-			return (0);
-		}
-	}
-
-	/* Check flags3 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, k_info_flags3[i]))
-		{
-			e_ptr->flags3 |= (1L << i);
+			add_flag(e_ptr->flags, i);
 			return (0);
 		}
 	}

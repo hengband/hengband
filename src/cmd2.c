@@ -3250,10 +3250,10 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	u32b f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 
 	/* Extract the flags */
-	object_flags(o_ptr, &f1, &f2, &f3);
+	object_flags(o_ptr, flgs);
 
 	/* Some "weapons" and "ammo" do extra damage */
 	switch (o_ptr->tval)
@@ -3263,7 +3263,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 		case TV_BOLT:
 		{
 			/* Slay Animal */
-			if ((f1 & TR1_SLAY_ANIMAL) &&
+			if ((have_flag(flgs, TR_SLAY_ANIMAL)) &&
 			    (r_ptr->flags3 & RF3_ANIMAL))
 			{
 				if (m_ptr->ml)
@@ -3275,7 +3275,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			}
 
 			/* Slay Evil */
-			if ((f1 & TR1_SLAY_EVIL) &&
+			if ((have_flag(flgs, TR_SLAY_EVIL)) &&
 			    (r_ptr->flags3 & RF3_EVIL))
 			{
 				if (m_ptr->ml)
@@ -3287,7 +3287,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			}
 
 			/* Slay Human */
-			if ((f3 & TR3_SLAY_HUMAN) &&
+			if ((have_flag(flgs, TR_SLAY_HUMAN)) &&
 			    (r_ptr->flags2 & RF2_HUMAN))
 			{
 				if (m_ptr->ml)
@@ -3299,7 +3299,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			}
 
 			/* Slay Undead */
-			if ((f1 & TR1_SLAY_UNDEAD) &&
+			if ((have_flag(flgs, TR_SLAY_UNDEAD)) &&
 			    (r_ptr->flags3 & RF3_UNDEAD))
 			{
 				if (m_ptr->ml)
@@ -3311,7 +3311,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			}
 
 			/* Slay Demon */
-			if ((f1 & TR1_SLAY_DEMON) &&
+			if ((have_flag(flgs, TR_SLAY_DEMON)) &&
 			    (r_ptr->flags3 & RF3_DEMON))
 			{
 				if (m_ptr->ml)
@@ -3323,7 +3323,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			}
 
 			/* Slay Orc */
-			if ((f1 & TR1_SLAY_ORC) &&
+			if ((have_flag(flgs, TR_SLAY_ORC)) &&
 			    (r_ptr->flags3 & RF3_ORC))
 			{
 				if (m_ptr->ml)
@@ -3335,7 +3335,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			}
 
 			/* Slay Troll */
-			if ((f1 & TR1_SLAY_TROLL) &&
+			if ((have_flag(flgs, TR_SLAY_TROLL)) &&
 			    (r_ptr->flags3 & RF3_TROLL))
 			{
 				if (m_ptr->ml)
@@ -3347,7 +3347,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			}
 
 			/* Slay Giant */
-			if ((f1 & TR1_SLAY_GIANT) &&
+			if ((have_flag(flgs, TR_SLAY_GIANT)) &&
 			    (r_ptr->flags3 & RF3_GIANT))
 			{
 				if (m_ptr->ml)
@@ -3359,7 +3359,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			}
 
 			/* Slay Dragon  */
-			if ((f1 & TR1_SLAY_DRAGON) &&
+			if ((have_flag(flgs, TR_SLAY_DRAGON)) &&
 			    (r_ptr->flags3 & RF3_DRAGON))
 			{
 				if (m_ptr->ml)
@@ -3371,7 +3371,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			}
 
 			/* Execute Dragon */
-			if ((f1 & TR1_KILL_DRAGON) &&
+			if ((have_flag(flgs, TR_KILL_DRAGON)) &&
 			    (r_ptr->flags3 & RF3_DRAGON))
 			{
 				if (m_ptr->ml)
@@ -3388,7 +3388,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			}
 
 			/* Brand (Acid) */
-			if ((f1 & TR1_BRAND_ACID) || (p_ptr->special_attack & (ATTACK_ACID)))
+			if ((have_flag(flgs, TR_BRAND_ACID)) || (p_ptr->special_attack & (ATTACK_ACID)))
 			{
 				/* Notice immunity */
 				if (r_ptr->flags3 & RF3_IM_ACID)
@@ -3407,7 +3407,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			}
 
 			/* Brand (Elec) */
-			if ((f1 & TR1_BRAND_ELEC) || (p_ptr->special_attack & (ATTACK_ELEC)))
+			if ((have_flag(flgs, TR_BRAND_ELEC)) || (p_ptr->special_attack & (ATTACK_ELEC)))
 			{
 				/* Notice immunity */
 				if (r_ptr->flags3 & RF3_IM_ELEC)
@@ -3426,7 +3426,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			}
 
 			/* Brand (Fire) */
-			if ((f1 & TR1_BRAND_FIRE) || (p_ptr->special_attack & (ATTACK_FIRE)))
+			if ((have_flag(flgs, TR_BRAND_FIRE)) || (p_ptr->special_attack & (ATTACK_FIRE)))
 			{
 				/* Notice immunity */
 				if (r_ptr->flags3 & RF3_IM_FIRE)
@@ -3445,7 +3445,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			}
 
 			/* Brand (Cold) */
-			if ((f1 & TR1_BRAND_COLD) || (p_ptr->special_attack & (ATTACK_COLD)))
+			if ((have_flag(flgs, TR_BRAND_COLD)) || (p_ptr->special_attack & (ATTACK_COLD)))
 			{
 				/* Notice immunity */
 				if (r_ptr->flags3 & RF3_IM_COLD)
@@ -3463,7 +3463,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			}
 
 			/* Brand (Poison) */
-			if ((f1 & TR1_BRAND_POIS) || (p_ptr->special_attack & (ATTACK_POIS)))
+			if ((have_flag(flgs, TR_BRAND_POIS)) || (p_ptr->special_attack & (ATTACK_POIS)))
 			{
 				/* Notice immunity */
 				if (r_ptr->flags3 & RF3_IM_POIS)
@@ -3481,7 +3481,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 				}
 			}
 
-			if ((f1 & TR1_FORCE_WEAPON) && (p_ptr->csp > (p_ptr->msp / 30)))
+			if ((have_flag(flgs, TR_FORCE_WEAPON)) && (p_ptr->csp > (p_ptr->msp / 30)))
 			{
 				p_ptr->csp -= (1+(p_ptr->msp / 30));
 				p_ptr->redraw |= (PR_MANA);
@@ -4056,7 +4056,7 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 
 	int msec = delay_factor * delay_factor * delay_factor;
 
-	u32b f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 	cptr q, s;
 	bool come_back = FALSE;
 	bool do_drop = TRUE;
@@ -4161,7 +4161,7 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 	object_copy(q_ptr, o_ptr);
 
 	/* Extract the thrown object's flags. */
-	object_flags(q_ptr, &f1, &f2, &f3);
+	object_flags(q_ptr, flgs);
 
 	/* Distribute the charges of rods/wands between the stacks */
 	distribute_charges(o_ptr, q_ptr, 1);
@@ -4180,7 +4180,7 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 
 	/* Enforce a minimum "weight" of one pound */
 	div = ((q_ptr->weight > 10) ? q_ptr->weight : 10);
-	if ((f2 & (TR2_THROW)) || boomerang) div /= 2;
+	if ((have_flag(flgs, TR_THROW)) || boomerang) div /= 2;
 
 	/* Hack -- Distance -- Reward strength, penalize weight */
 	tdis = (adj_str_blow[p_ptr->stat_ind[A_STR]] + 20) * mul / div;
@@ -4254,11 +4254,11 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 	/* Hack -- Handle stuff */
 	handle_stuff();
 
-	if ((p_ptr->pclass == CLASS_NINJA) && ((q_ptr->tval == TV_SPIKE) || ((f2 & TR2_THROW) && (q_ptr->tval == TV_SWORD)))) shuriken = TRUE;
+	if ((p_ptr->pclass == CLASS_NINJA) && ((q_ptr->tval == TV_SPIKE) || ((have_flag(flgs, TR_THROW)) && (q_ptr->tval == TV_SWORD)))) shuriken = TRUE;
 	else shuriken = FALSE;
 
 	/* Chance of hitting */
-	if (f2 & (TR2_THROW)) chance = ((p_ptr->skill_tht) +
+	if (have_flag(flgs, TR_THROW)) chance = ((p_ptr->skill_tht) +
 		((p_ptr->to_h_b + q_ptr->to_h) * BTH_PLUS_ADJ));
 	else chance = (p_ptr->skill_tht + (p_ptr->to_h_b * BTH_PLUS_ADJ));
 
@@ -4417,7 +4417,7 @@ note_dies = "は爆発して粉々になった。";
 					tdam *= (mult+p_ptr->num_blow[item - INVEN_RARM]);
 					tdam += p_ptr->to_d_m;
 				}
-				else if (f2 & (TR2_THROW))
+				else if (have_flag(flgs, TR_THROW))
 				{
 					tdam *= (3+mult);
 					tdam += p_ptr->to_d_m;

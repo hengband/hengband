@@ -331,7 +331,8 @@ F:AGGRAVATE | DRAIN_EXP | SEE_INVIS | REGEN | TY_CURSE |
 F:IM_FIRE | IM_COLD | IM_ELEC | IM_ACID |
 F:SUST_STR | SUST_DEX | SUST_CON |
 F:SUST_INT | SUST_WIS | SUST_CHR |
-F:INSTA_ART | XTRA_POWER | XTRA_H_RES
+F:INSTA_ART | XTRA_POWER | XTRA_H_RES |
+F:ESP_DEMON | ESP_UNDEAD
 D:$"One Ring to rule them all, One Ring to find them, One Ring to bring 
 D:$them all and in the darkness bind them."  Made of massive gold, and 
 D:$set with runes in the foul speech of Mordor, Isildur's Bane possesses 
@@ -360,12 +361,12 @@ D:刻んである。このわけわからん禍の力はあまりにも強大なので、
 D:普通の者はそれを身に付けるだけで歪められ支配されてしまう。
 
 
-N:15:パランティアの
-E:of Westernesse
+N:15:パランティアの石
+E:Palantir~ of Westernesse
 I:39:8:3
 W:60:50:10:60000
 P:0:1d1:0:0:0
-F:WIS | CHR | ACTIVATE | TELEPATHY | INSTA_ART
+F:WIS | CHR | ACTIVATE | TELEPATHY | INSTA_ART | FULL_NAME
 D:$A shining white ball of unbreakable crystal, the ancient palantiri, 
 D:$or 'far-watchers', were used by kings of Numenor and later by the Exiles 
 D:$for rapid communication between distant lands. 
@@ -516,7 +517,7 @@ W:40:15:250:120000
 P:15:2d4:-2:0:40
 F:STR | CHR | HIDE_TYPE |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_DARK |
-F:RES_DISEN | XTRA_H_RES | ACTIVATE
+F:RES_DISEN | XTRA_H_RES | ACTIVATE | ESP_ANIMAL
 D:真世界アンバーのアーデンの森を守るジュリアンの銀の鎧だ。
 
 
@@ -1189,7 +1190,8 @@ I:23:5:3
 W:15:30:30:62500
 P:0:2d5:12:15:0
 F:INT | DEX | HIDE_TYPE | SPEED | XTRA_RES_OR_POWER |
-F:SLAY_TROLL | SLAY_GIANT | FREE_ACT | SEE_INVIS | SHOW_MODS
+F:SLAY_TROLL | SLAY_GIANT | FREE_ACT | SEE_INVIS | SHOW_MODS |
+F:ESP_ORC | ESP_TROLL | ESP_GIANT
 D:$A short thrusting blade with a large guard worn by Maedhros the Tall, 
 D:$eldest son of Feanor, and wielded with his left hand after the loss of 
 D:$his right hand in the pits of Thangorodrim.
@@ -1340,8 +1342,9 @@ I:23:16:1
 W:20:20:150:40000
 P:0:2d5:10:15:0
 F:SEARCH |
-F:SLAY_EVIL | BRAND_FIRE | SLAY_ORC | RES_FIRE | RES_LITE | LITE |
-F:SLOW_DIGEST | SHOW_MODS | RIDING | XTRA_RES_OR_POWER
+F:SLAY_EVIL | BRAND_FIRE | KILL_ORC | RES_FIRE | RES_LITE | LITE |
+F:SLOW_DIGEST | SHOW_MODS | RIDING | XTRA_RES_OR_POWER |
+F:ESP_ORC | ESP_TROLL | ESP_GIANT
 D:$This fiery, shining blade earned its sobriquet "Foe-Hammer" from dying orcs 
 D:$who dared to come near hidden Gondolin.
 D:この燃えるように輝く剣は『オルクリスト』と対を成し、
@@ -1402,8 +1405,9 @@ E:'Orcrist'
 I:23:16:3
 W:20:20:150:40000
 P:0:2d5:10:15:0
-F:STEALTH | SLAY_EVIL | BRAND_COLD | SLAY_ORC | RES_COLD | LITE |
-F:SLOW_DIGEST | SHOW_MODS | RIDING | XTRA_RES_OR_POWER
+F:STEALTH | SLAY_EVIL | BRAND_COLD | KILL_ORC | RES_COLD | LITE |
+F:SLOW_DIGEST | SHOW_MODS | RIDING | XTRA_RES_OR_POWER |
+F:ESP_ORC | ESP_TROLL | ESP_GIANT
 D:$This coldly gleaming blade is called simply "Biter", by orcs who came to 
 D:$know its power all too well.
 D:この冷たく輝く剣は『グラムドリング』と対を成し、オークたちからは
@@ -1531,7 +1535,8 @@ W:20:120:130:300000
 P:0:4d5:22:25:0
 F:SPEED | REGEN | ACTIVATE | SHOW_MODS | RIDING |
 F:SLAY_EVIL | BRAND_COLD | SLAY_UNDEAD | SLAY_DEMON | SLAY_TROLL |
-F:FREE_ACT | RES_COLD | RES_LITE | LITE | SEE_INVIS | SLOW_DIGEST | 
+F:FREE_ACT | RES_COLD | RES_LITE | LITE | SEE_INVIS | SLOW_DIGEST |
+F:ESP_ORC | ESP_TROLL | ESP_GIANT
 D:$The weapon of Fingolfin, High King of the Noldor; it shines like a column 
 D:$of ice lit by light unquenchable.  Morgoth came but unwillingly to meet it 
 D:$of old; his lame foot will remind him of its might should be meet it again.
@@ -1595,7 +1600,8 @@ I:23:16:-2
 W:50:50:130:66666
 P:0:11d5:-30:7:0
 F:DEX | CHR | STEALTH | HIDE_TYPE | SPEED | AGGRAVATE | VORPAL |
-F:SLAY_HUMAN | SLAY_TROLL | SLAY_ORC | SEE_INVIS | SHOW_MODS
+F:SLAY_HUMAN | SLAY_TROLL | SLAY_ORC | SEE_INVIS | SHOW_MODS |
+F:ESP_ORC | ESP_TROLL | ESP_HUMAN
 D:持った者を殺戮マシーンに変える呪われた剣だ。あなたにはこの剣の
 D:血に飢えた叫びが聞こえるだろう。
 
@@ -1638,7 +1644,8 @@ I:23:8:2
 W:20:15:75:100000
 P:0:1d6:7:8:0
 F:STR | DEX | CON | BLOWS | SLAY_EVIL | SLAY_UNDEAD | SLAY_ORC |
-F:FREE_ACT | RES_LITE | LITE | SEE_INVIS | SHOW_MODS | XTRA_H_RES | QUESTITEM
+F:FREE_ACT | RES_LITE | LITE | SEE_INVIS | SHOW_MODS | XTRA_H_RES | QUESTITEM |
+F:ESP_ORC | ESP_TROLL | ESP_GIANT
 D:$"I will give you a name, and I shall call you Sting."  The perfect size 
 D:$for Bilbo, and stamped forever by the courage he found in Mirkwood, this 
 D:$sturdy little blade grants the wearer combat prowess and survival 
@@ -2483,7 +2490,7 @@ E:of Azaghal
 I:23:5:0
 W:15:30:30:40000
 P:0:2d5:12:14:0
-F:KILL_DRAGON | IM_FIRE | XTRA_RES_OR_POWER
+F:KILL_DRAGON | ESP_DRAGON | IM_FIRE | XTRA_RES_OR_POWER
 D:$At the Nirnaeth the Dwarves stayed the onslaught of Glaurung, and 
 D:$Azaghal their lord drove this short blade into the drake's belly before 
 D:$he was trampled underfoot. The black blood of the Father of Dragons 
@@ -2549,15 +2556,15 @@ P:0:2d6:17:12:0
 F:DEX | BLOWS | SLAY_EVIL | SLAY_UNDEAD | SLAY_ORC | SLAY_DEMON |
 F:FREE_ACT | SEE_INVIS | SHOW_MODS | RES_DARK | RES_DISEN | SPEED
 
-N:141:プラチナイェンダー印
-E:'The Platinum Yendorian Express Card'
+N:141:プラチナイェンダー印エクスプレスカード
+E:& Platinum Yendorian Express Card~
 I:50:0:3
 W:127:1:2:1000000
 P:0:1d1:15:15:25
 F:STR | INT | WIS | DEX | CON | CHR | SPEED | STEALTH | HIDE_TYPE |
 F:ACTIVATE | HOLD_LIFE | FREE_ACT | SEE_INVIS | TELEPATHY |
 F:FEATHER | SLOW_DIGEST | REGEN | SEARCH | LITE | WARNING |
-F:INSTA_ART | QUESTITEM
+F:INSTA_ART | QUESTITEM | FULL_NAME
 
 N:142:『ウォーパルブレード』
 E:'Worpal Blade'
@@ -2696,7 +2703,7 @@ F:SUST_STR | FREE_ACT | RES_ACID | RES_DISEN | RES_FIRE | RES_COLD |
 F:RES_CHAOS | SEE_INVIS | TELEPATHY | AGGRAVATE | DRAIN_EXP | SHOW_MODS |
 F:CHAOTIC | CURSED | HEAVY_CURSE | LITE
 
-# The Long Sword Of Falis
+# The Long Sword of Falis
 
 N:155:至高神ファリスの
 E:of Falis
@@ -2715,7 +2722,7 @@ I:23:25:4
 W:30:90:250:100000
 P:0:4d6:13:21:0
 F:STR | HIDE_TYPE |
-F:VORPAL | SLAY_DRAGON | SLAY_GIANT |
+F:VORPAL | SLAY_DRAGON | KILL_GIANT |
 F:FREE_ACT | LITE | FEATHER | SHOW_MODS
 D:剛力無双のデンマークの英雄王ベーオウルフが巨人族から奪い、
 D:最後の戦いではこの剣によって竜を退治した。
@@ -2750,7 +2757,8 @@ E:'Gurenki'
 I:23:17:2
 W:60:150:130:100000
 P:0:4d5:-10:25:0
-F:VORPAL | VAMPIRIC | SLAY_EVIL | SLAY_DEMON | AGGRAVATE | LITE | CON 
+F:VORPAL | VAMPIRIC | SLAY_EVIL | KILL_DEMON | ESP_DEMON |
+F:AGGRAVATE | LITE | CON 
 D:彼女は史上最強の破妖刀だ。
 D:朱金に輝く刀身で魔性の心臓をつらぬき、その命を食べつくす。
 
@@ -2796,18 +2804,18 @@ F:WIS | DEX | HIDE_TYPE |
 F:SLAY_DRAGON | SLAY_DEMON | SLAY_ANIMAL | FREE_ACT | HOLD_LIFE |
 F:RES_COLD | RES_NEXUS |
 F:SEE_INVIS | SLOW_DIGEST | REGEN | ACTIVATE | 
-F:BLESSED | SHOW_MODS | RIDING
+F:BLESSED | SHOW_MODS | RIDING | ESP_ANIMAL
 D:仙名を清源妙道真君、神仙族きっての武神である二郎真君の三尖刀だ。
 D:彼は悪竜や魔神、自然の妖魔を多数討伐した。
 
-N:165:ガラスの
-E:of Glass
+N:165:ガラスの靴
+E:Pair~ of Glass Slippers
 I:30:2:-3
 W:40:40:20:40000
 P:0:1d1:0:0:0
 F:DEX | HIDE_TYPE | SUST_CHR | STEALTH | SPEED |
 F:RES_LITE | RES_DARK | RES_NEXUS |
-F:RES_NETHER | RES_CHAOS | LITE
+F:RES_NETHER | RES_CHAOS | LITE | FULL_NAME
 
 N:166:水戸黄門の
 E:of Mito Koumon
@@ -2823,7 +2831,7 @@ I:23:16:1
 W:20:20:150:35000
 P:0:2d5:18:9:0
 F:CON | SEARCH | BLOWS |
-F:SLAY_EVIL | KILL_DRAGON | 
+F:SLAY_EVIL | KILL_DRAGON | ESP_DRAGON |
 F:SHOW_MODS
 D:「…その名も有名なカウディモルダクス剣、つまり物語の本など
 D:でおなじみの、あの俗にいわゆる噛尾刀であるぞ。…竜が５マイ
@@ -3029,13 +3037,14 @@ D:どう見てもやる気のない感じの服だ。
 # 剣です．たぶん元のソースが綴りを間違えちゃったんだよね．
 #
 N:184:『アランルース』
-E:'Arunruth'
+E:'Aranruth'
 I:23:16:4
 W:20:45:150:50000
 P:0:3d5:20:12:0
 F:DEX | HIDE_TYPE | 
 F:SLAY_DEMON | SLAY_ORC | FREE_ACT | RES_COLD | FEATHER | 
-F:SLOW_DIGEST | ACTIVATE | SHOW_MODS
+F:SLOW_DIGEST | ACTIVATE | SHOW_MODS |
+F:ESP_ORC | ESP_TROLL | ESP_GIANT | ESP_DEMON
 D:$The beautiful sword of Thingol, justly named "King's Ire".  It glistens
 D:$ icy enough to freeze the hearts of demons, and you feel supple and
 D:$ lightfooted as you clasp its hilt of gold and silver inlay.
@@ -3061,7 +3070,8 @@ E:of Earendil
 I:34:7:0
 W:50:6:160:90000
 P:10:1d6:0:0:20
-F:LITE | RES_BLIND | RES_DARK | RES_NETHER | RES_ELEC | RES_FIRE | ACTIVATE
+F:LITE | RES_BLIND | RES_DARK | RES_NETHER | RES_ELEC | RES_FIRE |
+F:ACTIVATE | ESP_GOOD
 D:$A shining shield, once borne by the great mariner Earendil, "scored with 
 D:$runes to keep all wounds and harm from him".
 D:かつて偉大なる船乗りエアレンディルが身に付けていた輝く盾だ。
@@ -3107,7 +3117,7 @@ I:21:2:4
 W:15:8:30:22500
 P:0:2d6:6:9:0
 F:DEX | CHR | HIDE_TYPE | RIDING |
-F:SLAY_ANIMAL | BRAND_FIRE | ACTIVATE
+F:KILL_ANIMAL | ESP_ANIMAL | BRAND_FIRE | ACTIVATE
 D:某国サーカス団で使用された由緒正しい猛獣使いの証だ。
 D:このムチの音はどんな猛獣でも震え上がらせることができる。
 
@@ -3209,7 +3219,7 @@ I:23:19:4
 W:20:8:100:60000
 P:0:2d9:15:2:0
 F:DEX | STEALTH | SEARCH | RES_FIRE | BRAND_POIS |
-F:ACTIVATE | SEE_INVIS | SHOW_MODS
+F:ACTIVATE | SEE_INVIS | SHOW_MODS | WARNING
 
 N:199:『ブラッディ・ムーン』
 E:'Bloody Moon'
@@ -3438,7 +3448,7 @@ I:23:21:4
 W:30:50:140:120000
 P:0:4d4:12:16:0
 F:STR | CHR | STEALTH | SPEED | 
-F:SLAY_EVIL | SLAY_UNDEAD | SLAY_GIANT | SLAY_ANIMAL | 
+F:SLAY_EVIL | KILL_UNDEAD | SLAY_GIANT | SLAY_ANIMAL | 
 F:RES_NETHER | RES_FEAR | RES_DARK | RES_COLD
 D:「盾持つ乙女」ことローハン王国のエオウィン姫が、
 D:ベレンノールの野において魔王に振るった剣だ。

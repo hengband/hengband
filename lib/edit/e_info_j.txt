@@ -273,7 +273,7 @@ N:33:テレパシーの
 E:of Telepathy
 X:33:20
 W:0:18:0:15000
-F:TELEPATHY
+#F:TELEPATHY
 
 N:34:急速回復の
 E:of Regeneration
@@ -538,7 +538,7 @@ E:(Blessed)
 X:24:20
 W:0:36:0:5000
 C:0:0:0:3
-F:WIS | 
+F:WIS | ESP_GOOD |
 F:BLESSED | XTRA_POWER
 
 # 67 (unused)
@@ -550,6 +550,7 @@ W:0:36:0:15000
 C:5:5:0:2
 F:STR | DEX | CON | 
 F:SLAY_ORC | SLAY_TROLL | SLAY_GIANT | 
+F:ESP_ORC | ESP_TROLL | ESP_GIANT | 
 F:FREE_ACT | SEE_INVIS
 
 N:69:追加攻撃の
@@ -685,56 +686,56 @@ E:of *Slay* Animal
 X:24:20
 W:0:90:0:6000
 C:0:0:0:2
-F:INT | SLAY_ANIMAL | REGEN
+F:INT | KILL_ANIMAL | REGEN | ESP_ANIMAL
 
 N:89:*滅邪*の
 E:of *Slay* Evil
 X:24:20
 W:0:90:0:5000
 C:0:0:0:2
-F:WIS | SLAY_EVIL | BLESSED | RES_FEAR
+F:WIS | SLAY_EVIL | BLESSED | RES_FEAR | ESP_EVIL
 
 N:90:*アンデッドスレイヤー*の
 E:of *Slay* Undead
 X:24:24
 W:0:90:0:8000
 C:0:0:0:2
-F:WIS | SLAY_UNDEAD | SEE_INVIS | RES_NETHER
+F:WIS | KILL_UNDEAD | SEE_INVIS | RES_NETHER | ESP_UNDEAD
 
 N:91:*デーモンスレイヤー*の
 E:of *Slay* Demon
 X:24:16
 W:0:90:0:4000
 C:0:0:0:2
-F:INT | SLAY_DEMON
+F:INT | KILL_DEMON | ESP_DEMON
 
 N:92:*オークスレイヤー*の
 E:of *Slay* Orc
 X:24:14
 W:0:60:0:4000
 C:0:0:0:2
-F:DEX | SLAY_ORC
+F:DEX | KILL_ORC | ESP_ORC
 
 N:93:*トロルスレイヤー*の
 E:of *Slay* Troll
 X:24:14
 W:0:60:0:4000
 C:0:0:0:2
-F:STR | SLAY_TROLL
+F:STR | KILL_TROLL | ESP_TROLL
 
 N:94:*ジャイアントスレイヤー*の
 E:of *Slay* Giant
 X:24:16
 W:0:60:0:4000
 C:0:0:0:2
-F:STR | SLAY_GIANT
+F:STR | KILL_GIANT | ESP_GIANT
 
 N:95:*ドラゴンスレイヤー*の
 E:of *Slay* Dragon
 X:24:24
 W:0:90:0:6000
 C:0:0:0:1
-F:CON | SLAY_DRAGON | KILL_DRAGON | XTRA_E_RES | XTRA_D_RES
+F:CON | SLAY_DRAGON | KILL_DRAGON | XTRA_E_RES | XTRA_D_RES | ESP_DRAGON
 
 #JZ#
 N:96:(吸血)
@@ -791,7 +792,8 @@ E:of Morgul
 X:24:0
 W:0:36:0:0
 C:20:20:10:0
-F:SEE_INVIS | AGGRAVATE | HEAVY_CURSE | CURSED
+F:SEE_INVIS | AGGRAVATE | HEAVY_CURSE | CURSED | 
+F:SLAY_UNDEAD | BRAND_POIS | ESP_UNDEAD
 F:RANDOM_CURSE2
 
 N:103:*人喰い*の
@@ -799,7 +801,7 @@ E:of *Slay* Human
 X:24:16
 W:0:60:0:4000
 C:0:0:0:2
-F:DEX | SLAY_HUMAN
+F:DEX | KILL_HUMAN | ESP_HUMAN
 
 
 ### Missile Launchers ###

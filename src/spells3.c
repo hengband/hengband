@@ -3266,7 +3266,7 @@ bool bless_weapon(void)
 {
 	int             item;
 	object_type     *o_ptr;
-	u32b            f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 	char            o_name[MAX_NLEN];
 	cptr            q, s;
 
@@ -3303,7 +3303,7 @@ s = "祝福できる武器がありません。";
 	object_desc(o_name, o_ptr, FALSE, 0);
 
 	/* Extract the flags */
-	object_flags(o_ptr, &f1, &f2, &f3);
+	object_flags(o_ptr, flgs);
 
 	if (cursed_p(o_ptr))
 	{
@@ -3354,7 +3354,7 @@ msg_format("%s から邪悪なオーラが消えた。",
 	 * artifact weapon they find. Ego weapons and normal weapons
 	 * can be blessed automatically.
 	 */
-	if (f3 & TR3_BLESSED)
+	if (have_flag(flgs, TR_BLESSED))
 	{
 #ifdef JP
 msg_format("%s は既に祝福されている。",
@@ -3380,7 +3380,7 @@ msg_format("%sは輝いた！",
 		    ((o_ptr->number > 1) ? "" : "s"));
 #endif
 
-		o_ptr->art_flags3 |= TR3_BLESSED;
+		add_flag(o_ptr->art_flags, TR_BLESSED);
 		o_ptr->discount = 99;
 	}
 	else
@@ -3460,7 +3460,7 @@ bool pulish_shield(void)
 {
 	int             item;
 	object_type     *o_ptr;
-	u32b            f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 	char            o_name[MAX_NLEN];
 	cptr            q, s;
 
@@ -3497,7 +3497,7 @@ s = "磨く盾がありません。";
 	object_desc(o_name, o_ptr, FALSE, 0);
 
 	/* Extract the flags */
-	object_flags(o_ptr, &f1, &f2, &f3);
+	object_flags(o_ptr, flgs);
 
 	if (o_ptr->k_idx && !artifact_p(o_ptr) && !ego_item_p(o_ptr) &&
 	    !o_ptr->art_name && !cursed_p(o_ptr) && (o_ptr->sval != SV_SHIELD_OF_DEFLECTION))
@@ -4825,10 +4825,10 @@ bool hates_cold(object_type *o_ptr)
  */
 int set_acid_destroy(object_type *o_ptr)
 {
-	u32b f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 	if (!hates_acid(o_ptr)) return (FALSE);
-	object_flags(o_ptr, &f1, &f2, &f3);
-	if (f3 & TR3_IGNORE_ACID) return (FALSE);
+	object_flags(o_ptr, flgs);
+	if (have_flag(flgs, TR_IGNORE_ACID)) return (FALSE);
 	return (TRUE);
 }
 
@@ -4838,10 +4838,10 @@ int set_acid_destroy(object_type *o_ptr)
  */
 int set_elec_destroy(object_type *o_ptr)
 {
-	u32b f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 	if (!hates_elec(o_ptr)) return (FALSE);
-	object_flags(o_ptr, &f1, &f2, &f3);
-	if (f3 & TR3_IGNORE_ELEC) return (FALSE);
+	object_flags(o_ptr, flgs);
+	if (have_flag(flgs, TR_IGNORE_ELEC)) return (FALSE);
 	return (TRUE);
 }
 
@@ -4851,10 +4851,10 @@ int set_elec_destroy(object_type *o_ptr)
  */
 int set_fire_destroy(object_type *o_ptr)
 {
-	u32b f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 	if (!hates_fire(o_ptr)) return (FALSE);
-	object_flags(o_ptr, &f1, &f2, &f3);
-	if (f3 & TR3_IGNORE_FIRE) return (FALSE);
+	object_flags(o_ptr, flgs);
+	if (have_flag(flgs, TR_IGNORE_FIRE)) return (FALSE);
 	return (TRUE);
 }
 
@@ -4864,10 +4864,10 @@ int set_fire_destroy(object_type *o_ptr)
  */
 int set_cold_destroy(object_type *o_ptr)
 {
-	u32b f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 	if (!hates_cold(o_ptr)) return (FALSE);
-	object_flags(o_ptr, &f1, &f2, &f3);
-	if (f3 & TR3_IGNORE_COLD) return (FALSE);
+	object_flags(o_ptr, flgs);
+	if (have_flag(flgs, TR_IGNORE_COLD)) return (FALSE);
 	return (TRUE);
 }
 
@@ -4978,7 +4978,7 @@ o_name, index_to_label(i),
 static int minus_ac(void)
 {
 	object_type *o_ptr = NULL;
-	u32b        f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 	char        o_name[MAX_NLEN];
 
 
@@ -5007,10 +5007,10 @@ static int minus_ac(void)
 	object_desc(o_name, o_ptr, FALSE, 0);
 
 	/* Extract the flags */
-	object_flags(o_ptr, &f1, &f2, &f3);
+	object_flags(o_ptr, flgs);
 
 	/* Object resists */
-	if (f3 & TR3_IGNORE_ACID)
+	if (have_flag(flgs, TR_IGNORE_ACID))
 	{
 #ifdef JP
 msg_format("しかし%sには効果がなかった！", o_name);
@@ -5233,7 +5233,7 @@ s = "錆止めできるものがありません。";
 	/* Description */
 	object_desc(o_name, o_ptr, FALSE, 0);
 
-	o_ptr->art_flags3 |= TR3_IGNORE_ACID;
+	add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
 
 	if ((o_ptr->to_a < 0) && !cursed_p(o_ptr))
 	{
@@ -5268,6 +5268,7 @@ msg_format("%sは腐食しなくなった。", o_name);
  */
 bool curse_armor(void)
 {
+	int i;
 	object_type *o_ptr;
 
 	char o_name[MAX_NLEN];
@@ -5318,9 +5319,9 @@ msg_format("恐怖の暗黒オーラがあなたの%sを包み込んだ！", o_name);
 		o_ptr->ac = 0;
 		o_ptr->dd = 0;
 		o_ptr->ds = 0;
-		o_ptr->art_flags1 = 0;
-		o_ptr->art_flags2 = 0;
-		o_ptr->art_flags3 = 0;
+
+		for (i = 0; i < TR_FLAG_SIZE; i++)
+			o_ptr->art_flags[i] = 0;
 
 		/* Curse it */
 		o_ptr->curse_flags = TRC_CURSED;
@@ -5347,6 +5348,8 @@ msg_format("恐怖の暗黒オーラがあなたの%sを包み込んだ！", o_name);
  */
 bool curse_weapon(bool force, int slot)
 {
+	int i;
+
 	object_type *o_ptr;
 
 	char o_name[MAX_NLEN];
@@ -5397,9 +5400,9 @@ if (!force) msg_format("恐怖の暗黒オーラがあなたの%sを包み込んだ！", o_name);
 		o_ptr->ac = 0;
 		o_ptr->dd = 0;
 		o_ptr->ds = 0;
-		o_ptr->art_flags1 = 0;
-		o_ptr->art_flags2 = 0;
-		o_ptr->art_flags3 = 0;
+
+		for (i = 0; i < TR_FLAG_SIZE; i++)
+			o_ptr->art_flags[i] = 0;
 
 
 		/* Curse it */

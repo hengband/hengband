@@ -869,19 +869,19 @@ static s32b object_value_base(object_type *o_ptr)
 s32b flag_cost(object_type * o_ptr, int plusses)
 {
 	s32b total = 0;
-	u32b f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 	s32b tmp_cost;
 	int count;
+	int i;
 
-	object_flags(o_ptr, &f1, &f2, &f3);
+	object_flags(o_ptr, flgs);
 
 	if (o_ptr->name1)
 	{
 		artifact_type *a_ptr = &a_info[o_ptr->name1];
 
-		f1 &= ~(a_ptr->flags1);
-		f2 &= ~(a_ptr->flags2);
-		f3 &= ~(a_ptr->flags3);
+		for (i = 0; i < TR_FLAG_SIZE; i++)
+			flgs[i] &= ~(a_ptr->flags[i]);
 	}
 	else
 	{
@@ -889,16 +889,15 @@ s32b flag_cost(object_type * o_ptr, int plusses)
 		{
 			ego_item_type *e_ptr = &e_info[o_ptr->name2];
 
-			f1 &= ~(e_ptr->flags1);
-			f2 &= ~(e_ptr->flags2);
-			f3 &= ~(e_ptr->flags3);
+			for (i = 0; i < TR_FLAG_SIZE; i++)
+				flgs[i] &= ~(e_ptr->flags[i]);
+
 			if ((o_ptr->tval == TV_RING) || (o_ptr->tval == TV_AMULET))
 			{
 				object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
-				f1 &= ~(k_ptr->flags1);
-				f2 &= ~(k_ptr->flags2);
-				f3 &= ~(k_ptr->flags3);
+				for (i = 0; i < TR_FLAG_SIZE; i++)
+					flgs[i] &= ~(k_ptr->flags[i]);
 			}
 		}
 		else if (o_ptr->art_name)
@@ -907,123 +906,143 @@ s32b flag_cost(object_type * o_ptr, int plusses)
 		}
 	}
 
-	if (f1 & TR1_STR) total += (1500 * plusses);
-	if (f1 & TR1_INT) total += (1500 * plusses);
-	if (f1 & TR1_WIS) total += (1500 * plusses);
-	if (f1 & TR1_DEX) total += (1500 * plusses);
-	if (f1 & TR1_CON) total += (1500 * plusses);
-	if (f1 & TR1_CHR) total += (750 * plusses);
-	if (f1 & TR1_MAGIC_MASTERY) total += (600 * plusses);
-	if (f1 & TR1_STEALTH) total += (250 * plusses);
-	if (f1 & TR1_SEARCH) total += (100 * plusses);
-	if (f1 & TR1_INFRA) total += (150 * plusses);
-	if (f1 & TR1_TUNNEL) total += (175 * plusses);
-	if ((f1 & TR1_SPEED) && (plusses > 0))
+	if (have_flag(flgs, TR_STR)) total += (1500 * plusses);
+	if (have_flag(flgs, TR_INT)) total += (1500 * plusses);
+	if (have_flag(flgs, TR_WIS)) total += (1500 * plusses);
+	if (have_flag(flgs, TR_DEX)) total += (1500 * plusses);
+	if (have_flag(flgs, TR_CON)) total += (1500 * plusses);
+	if (have_flag(flgs, TR_CHR)) total += (750 * plusses);
+	if (have_flag(flgs, TR_MAGIC_MASTERY)) total += (600 * plusses);
+	if (have_flag(flgs, TR_STEALTH)) total += (250 * plusses);
+	if (have_flag(flgs, TR_SEARCH)) total += (100 * plusses);
+	if (have_flag(flgs, TR_INFRA)) total += (150 * plusses);
+	if (have_flag(flgs, TR_TUNNEL)) total += (175 * plusses);
+	if ((have_flag(flgs, TR_SPEED)) && (plusses > 0))
 		total += (10000 + (2500 * plusses));
-	if ((f1 & TR1_BLOWS) && (plusses > 0))
+	if ((have_flag(flgs, TR_BLOWS)) && (plusses > 0))
 		total += (10000 + (2500 * plusses));
-	if (f3 & TR3_DEC_MANA) total += 10000;
+	if (have_flag(flgs, TR_DEC_MANA)) total += 10000;
 
 	tmp_cost = 0;
 	count = 0;
-	if (f1 & TR1_CHAOTIC) {total += 5000;count++;}
-	if (f1 & TR1_VAMPIRIC) {total += 6500;count++;}
-	if (f1 & TR1_FORCE_WEAPON) {tmp_cost += 2500;count++;}
-	if (f1 & TR1_SLAY_ANIMAL) {tmp_cost += 1800;count++;}
-	if (f1 & TR1_SLAY_EVIL) {tmp_cost += 2300;count++;}
-	if (f3 & TR3_SLAY_HUMAN) {tmp_cost += 1800;count++;}
-	if (f1 & TR1_SLAY_UNDEAD) {tmp_cost += 1800;count++;}
-	if (f1 & TR1_SLAY_DEMON) {tmp_cost += 1800;count++;}
-	if (f1 & TR1_SLAY_ORC) {tmp_cost += 1500;count++;}
-	if (f1 & TR1_SLAY_TROLL) {tmp_cost += 1800;count++;}
-	if (f1 & TR1_SLAY_GIANT) {tmp_cost += 1800;count++;}
-	if (f1 & TR1_KILL_DRAGON) {tmp_cost += 2800;count++;}
-	else if (f1 & TR1_SLAY_DRAGON) {tmp_cost += 1800;count++;}
+	if (have_flag(flgs, TR_CHAOTIC)) {total += 5000;count++;}
+	if (have_flag(flgs, TR_VAMPIRIC)) {total += 6500;count++;}
+	if (have_flag(flgs, TR_FORCE_WEAPON)) {tmp_cost += 2500;count++;}
+	if (have_flag(flgs, TR_KILL_ANIMAL)) {tmp_cost += 2800;count++;}
+	else if (have_flag(flgs, TR_SLAY_ANIMAL)) {tmp_cost += 1800;count++;}
+	if (have_flag(flgs, TR_KILL_EVIL)) {tmp_cost += 3300;count++;}
+	else if (have_flag(flgs, TR_SLAY_EVIL)) {tmp_cost += 2300;count++;}
+	if (have_flag(flgs, TR_KILL_HUMAN)) {tmp_cost += 2800;count++;}
+	else if (have_flag(flgs, TR_SLAY_HUMAN)) {tmp_cost += 1800;count++;}
+	if (have_flag(flgs, TR_KILL_UNDEAD)) {tmp_cost += 2800;count++;}
+	else if (have_flag(flgs, TR_SLAY_UNDEAD)) {tmp_cost += 1800;count++;}
+	if (have_flag(flgs, TR_KILL_DEMON)) {tmp_cost += 2800;count++;}
+	else if (have_flag(flgs, TR_SLAY_DEMON)) {tmp_cost += 1800;count++;}
+	if (have_flag(flgs, TR_KILL_ORC)) {tmp_cost += 2500;count++;}
+	else if (have_flag(flgs, TR_SLAY_ORC)) {tmp_cost += 1500;count++;}
+	if (have_flag(flgs, TR_KILL_TROLL)) {tmp_cost += 2800;count++;}
+	else if (have_flag(flgs, TR_SLAY_TROLL)) {tmp_cost += 1800;count++;}
+	if (have_flag(flgs, TR_KILL_GIANT)) {tmp_cost += 2800;count++;}
+	else if (have_flag(flgs, TR_SLAY_GIANT)) {tmp_cost += 1800;count++;}
+	if (have_flag(flgs, TR_KILL_DRAGON)) {tmp_cost += 2800;count++;}
+	else if (have_flag(flgs, TR_SLAY_DRAGON)) {tmp_cost += 1800;count++;}
 
-	if (f1 & TR1_VORPAL) {tmp_cost += 2500;count++;}
-	if (f1 & TR1_IMPACT) {tmp_cost += 2500;count++;}
-	if (f1 & TR1_BRAND_POIS) {tmp_cost += 3800;count++;}
-	if (f1 & TR1_BRAND_ACID) {tmp_cost += 3800;count++;}
-	if (f1 & TR1_BRAND_ELEC) {tmp_cost += 3800;count++;}
-	if (f1 & TR1_BRAND_FIRE) {tmp_cost += 2500;count++;}
-	if (f1 & TR1_BRAND_COLD) {tmp_cost += 2500;count++;}
+	if (have_flag(flgs, TR_VORPAL)) {tmp_cost += 2500;count++;}
+	if (have_flag(flgs, TR_IMPACT)) {tmp_cost += 2500;count++;}
+	if (have_flag(flgs, TR_BRAND_POIS)) {tmp_cost += 3800;count++;}
+	if (have_flag(flgs, TR_BRAND_ACID)) {tmp_cost += 3800;count++;}
+	if (have_flag(flgs, TR_BRAND_ELEC)) {tmp_cost += 3800;count++;}
+	if (have_flag(flgs, TR_BRAND_FIRE)) {tmp_cost += 2500;count++;}
+	if (have_flag(flgs, TR_BRAND_COLD)) {tmp_cost += 2500;count++;}
 	total += (tmp_cost * count);
 
-	if (f2 & TR2_SUST_STR) total += 850;
-	if (f2 & TR2_SUST_INT) total += 850;
-	if (f2 & TR2_SUST_WIS) total += 850;
-	if (f2 & TR2_SUST_DEX) total += 850;
-	if (f2 & TR2_SUST_CON) total += 850;
-	if (f2 & TR2_SUST_CHR) total += 250;
-	if (f2 & TR2_RIDING) total += 0;
-	if (f2 & TR2_XXX2) total += 0;
-	if (f2 & TR2_THROW) total += 5000;
-	if (f2 & TR2_FREE_ACT) total += 4500;
-	if (f2 & TR2_HOLD_LIFE) total += 8500;
+	if (have_flag(flgs, TR_SUST_STR)) total += 850;
+	if (have_flag(flgs, TR_SUST_INT)) total += 850;
+	if (have_flag(flgs, TR_SUST_WIS)) total += 850;
+	if (have_flag(flgs, TR_SUST_DEX)) total += 850;
+	if (have_flag(flgs, TR_SUST_CON)) total += 850;
+	if (have_flag(flgs, TR_SUST_CHR)) total += 250;
+	if (have_flag(flgs, TR_RIDING)) total += 0;
+	if (have_flag(flgs, TR_XXX2)) total += 0;
+	if (have_flag(flgs, TR_THROW)) total += 5000;
+	if (have_flag(flgs, TR_FREE_ACT)) total += 4500;
+	if (have_flag(flgs, TR_HOLD_LIFE)) total += 8500;
 
 	tmp_cost = 0;
 	count = 0;
-	if (f2 & TR2_IM_ACID) {tmp_cost += 15000;count += 2;}
-	if (f2 & TR2_IM_ELEC) {tmp_cost += 15000;count += 2;}
-	if (f2 & TR2_IM_FIRE) {tmp_cost += 15000;count += 2;}
-	if (f2 & TR2_IM_COLD) {tmp_cost += 15000;count += 2;}
-	if (f2 & TR2_REFLECT) {tmp_cost += 5000;count += 2;}
-	if (f2 & TR2_RES_ACID) {tmp_cost += 500;count++;}
-	if (f2 & TR2_RES_ELEC) {tmp_cost += 500;count++;}
-	if (f2 & TR2_RES_FIRE) {tmp_cost += 500;count++;}
-	if (f2 & TR2_RES_COLD) {tmp_cost += 500;count++;}
-	if (f2 & TR2_RES_POIS) {tmp_cost += 1000;count += 2;}
-	if (f2 & TR2_RES_FEAR) {tmp_cost += 1000;count += 2;}
-	if (f2 & TR2_RES_LITE) {tmp_cost += 800;count += 2;}
-	if (f2 & TR2_RES_DARK) {tmp_cost += 800;count += 2;}
-	if (f2 & TR2_RES_BLIND) {tmp_cost += 900;count += 2;}
-	if (f2 & TR2_RES_CONF) {tmp_cost += 900;count += 2;}
-	if (f2 & TR2_RES_SOUND) {tmp_cost += 900;count += 2;}
-	if (f2 & TR2_RES_SHARDS) {tmp_cost += 900;count += 2;}
-	if (f2 & TR2_RES_NETHER) {tmp_cost += 900;count += 2;}
-	if (f2 & TR2_RES_NEXUS) {tmp_cost += 900;count += 2;}
-	if (f2 & TR2_RES_CHAOS) {tmp_cost += 1000;count += 2;}
-	if (f2 & TR2_RES_DISEN) {tmp_cost += 2000;count += 2;}
+	if (have_flag(flgs, TR_IM_ACID)) {tmp_cost += 15000;count += 2;}
+	if (have_flag(flgs, TR_IM_ELEC)) {tmp_cost += 15000;count += 2;}
+	if (have_flag(flgs, TR_IM_FIRE)) {tmp_cost += 15000;count += 2;}
+	if (have_flag(flgs, TR_IM_COLD)) {tmp_cost += 15000;count += 2;}
+	if (have_flag(flgs, TR_REFLECT)) {tmp_cost += 5000;count += 2;}
+	if (have_flag(flgs, TR_RES_ACID)) {tmp_cost += 500;count++;}
+	if (have_flag(flgs, TR_RES_ELEC)) {tmp_cost += 500;count++;}
+	if (have_flag(flgs, TR_RES_FIRE)) {tmp_cost += 500;count++;}
+	if (have_flag(flgs, TR_RES_COLD)) {tmp_cost += 500;count++;}
+	if (have_flag(flgs, TR_RES_POIS)) {tmp_cost += 1000;count += 2;}
+	if (have_flag(flgs, TR_RES_FEAR)) {tmp_cost += 1000;count += 2;}
+	if (have_flag(flgs, TR_RES_LITE)) {tmp_cost += 800;count += 2;}
+	if (have_flag(flgs, TR_RES_DARK)) {tmp_cost += 800;count += 2;}
+	if (have_flag(flgs, TR_RES_BLIND)) {tmp_cost += 900;count += 2;}
+	if (have_flag(flgs, TR_RES_CONF)) {tmp_cost += 900;count += 2;}
+	if (have_flag(flgs, TR_RES_SOUND)) {tmp_cost += 900;count += 2;}
+	if (have_flag(flgs, TR_RES_SHARDS)) {tmp_cost += 900;count += 2;}
+	if (have_flag(flgs, TR_RES_NETHER)) {tmp_cost += 900;count += 2;}
+	if (have_flag(flgs, TR_RES_NEXUS)) {tmp_cost += 900;count += 2;}
+	if (have_flag(flgs, TR_RES_CHAOS)) {tmp_cost += 1000;count += 2;}
+	if (have_flag(flgs, TR_RES_DISEN)) {tmp_cost += 2000;count += 2;}
 	total += (tmp_cost * count);
 
-	if (f3 & TR3_SH_FIRE) total += 5000;
-	if (f3 & TR3_SH_ELEC) total += 5000;
-	if (f3 & TR3_SH_COLD) total += 5000;
-	if (f3 & TR3_NO_TELE) total -= 10000;
-	if (f3 & TR3_NO_MAGIC) total += 2500;
-	if (f3 & TR3_TY_CURSE) total -= 15000;
-	if (f3 & TR3_HIDE_TYPE) total += 0;
-	if (f3 & TR3_SHOW_MODS) total += 0;
-	if (f3 & TR3_FEATHER) total += 1250;
-	if (f3 & TR3_LITE) total += 1250;
-	if (f3 & TR3_SEE_INVIS) total += 2000;
-	if (f3 & TR3_TELEPATHY) total += 20000;
-	if (f3 & TR3_SLOW_DIGEST) total += 750;
-	if (f3 & TR3_REGEN) total += 2500;
-	if (f3 & TR3_WARNING) total += 2000;
-	if (f3 & TR3_XTRA_MIGHT) total += 2250;
-	if (f3 & TR3_XTRA_SHOTS) total += 10000;
-	if (f3 & TR3_IGNORE_ACID) total += 100;
-	if (f3 & TR3_IGNORE_ELEC) total += 100;
-	if (f3 & TR3_IGNORE_FIRE) total += 100;
-	if (f3 & TR3_IGNORE_COLD) total += 100;
-	if (f3 & TR3_ACTIVATE) total += 100;
-	if (f3 & TR3_DRAIN_EXP) total -= 12500;
-	if (f3 & TR3_TELEPORT)
+	if (have_flag(flgs, TR_SH_FIRE)) total += 5000;
+	if (have_flag(flgs, TR_SH_ELEC)) total += 5000;
+	if (have_flag(flgs, TR_SH_COLD)) total += 5000;
+	if (have_flag(flgs, TR_NO_TELE)) total -= 10000;
+	if (have_flag(flgs, TR_NO_MAGIC)) total += 2500;
+	if (have_flag(flgs, TR_TY_CURSE)) total -= 15000;
+	if (have_flag(flgs, TR_HIDE_TYPE)) total += 0;
+	if (have_flag(flgs, TR_SHOW_MODS)) total += 0;
+	if (have_flag(flgs, TR_FEATHER)) total += 1250;
+	if (have_flag(flgs, TR_LITE)) total += 1250;
+	if (have_flag(flgs, TR_SEE_INVIS)) total += 2000;
+	if (have_flag(flgs, TR_TELEPATHY)) total += 20000;
+	if (have_flag(flgs, TR_ESP_ANIMAL)) total += 3000;
+	if (have_flag(flgs, TR_ESP_UNDEAD)) total += 3000;
+	if (have_flag(flgs, TR_ESP_DEMON)) total += 3000;
+	if (have_flag(flgs, TR_ESP_ORC)) total += 3000;
+	if (have_flag(flgs, TR_ESP_TROLL)) total += 3000;
+	if (have_flag(flgs, TR_ESP_GIANT)) total += 3000;
+	if (have_flag(flgs, TR_ESP_DRAGON)) total += 3000;
+	if (have_flag(flgs, TR_ESP_HUMAN)) total += 3000;
+	if (have_flag(flgs, TR_ESP_EVIL)) total += 10000;
+	if (have_flag(flgs, TR_ESP_GOOD)) total += 6000;
+	if (have_flag(flgs, TR_ESP_NONLIVING)) total += 6000;
+	if (have_flag(flgs, TR_ESP_UNIQUE)) total += 10000;
+	if (have_flag(flgs, TR_SLOW_DIGEST)) total += 750;
+	if (have_flag(flgs, TR_REGEN)) total += 2500;
+	if (have_flag(flgs, TR_WARNING)) total += 2000;
+	if (have_flag(flgs, TR_XTRA_MIGHT)) total += 2250;
+	if (have_flag(flgs, TR_XTRA_SHOTS)) total += 10000;
+	if (have_flag(flgs, TR_IGNORE_ACID)) total += 100;
+	if (have_flag(flgs, TR_IGNORE_ELEC)) total += 100;
+	if (have_flag(flgs, TR_IGNORE_FIRE)) total += 100;
+	if (have_flag(flgs, TR_IGNORE_COLD)) total += 100;
+	if (have_flag(flgs, TR_ACTIVATE)) total += 100;
+	if (have_flag(flgs, TR_DRAIN_EXP)) total -= 12500;
+	if (have_flag(flgs, TR_TELEPORT))
 	{
 		if (cursed_p(o_ptr))
 			total -= 7500;
 		else
 			total += 250;
 	}
-	if (f3 & TR3_AGGRAVATE) total -= 10000;
-	if (f3 & TR3_BLESSED) total += 750;
+	if (have_flag(flgs, TR_AGGRAVATE)) total -= 10000;
+	if (have_flag(flgs, TR_BLESSED)) total += 750;
 	if (o_ptr->curse_flags & TRC_CURSED) total -= 5000;
 	if (o_ptr->curse_flags & TRC_HEAVY_CURSE) total -= 12500;
 	if (o_ptr->curse_flags & TRC_PERMA_CURSE) total -= 15000;
 
 	/* Also, give some extra for activatable powers... */
-	if (o_ptr->art_name && (o_ptr->art_flags3 & TR3_ACTIVATE))
+	if (o_ptr->art_name && (have_flag(o_ptr->art_flags, TR_ACTIVATE)))
 	{
 		int type = o_ptr->xtra2;
 
@@ -1132,7 +1151,7 @@ s32b object_value_real(object_type *o_ptr)
 {
 	s32b value;
 
-	u32b f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
@@ -1144,7 +1163,7 @@ s32b object_value_real(object_type *o_ptr)
 	value = get_object_cost(o_ptr);
 
 	/* Extract some flags */
-	object_flags(o_ptr, &f1, &f2, &f3);
+	object_flags(o_ptr, flgs);
 
 	/* Artifact */
 	if (o_ptr->name1)
@@ -1173,7 +1192,7 @@ s32b object_value_real(object_type *o_ptr)
 		value += flag_cost(o_ptr, o_ptr->pval);
 	}
 
-	else if (o_ptr->art_flags1 || o_ptr->art_flags2 || o_ptr->art_flags3)
+	else if (o_ptr->art_flags[0] || o_ptr->art_flags[1] || o_ptr->art_flags[2])
 	{
 		value += flag_cost(o_ptr, o_ptr->pval);
 	}
@@ -1210,27 +1229,27 @@ s32b object_value_real(object_type *o_ptr)
 			if (!o_ptr->pval) break;
 
 			/* Give credit for stat bonuses */
-			if (f1 & (TR1_STR)) value += (o_ptr->pval * 200L);
-			if (f1 & (TR1_INT)) value += (o_ptr->pval * 200L);
-			if (f1 & (TR1_WIS)) value += (o_ptr->pval * 200L);
-			if (f1 & (TR1_DEX)) value += (o_ptr->pval * 200L);
-			if (f1 & (TR1_CON)) value += (o_ptr->pval * 200L);
-			if (f1 & (TR1_CHR)) value += (o_ptr->pval * 200L);
+			if (have_flag(flgs, TR_STR)) value += (o_ptr->pval * 200L);
+			if (have_flag(flgs, TR_INT)) value += (o_ptr->pval * 200L);
+			if (have_flag(flgs, TR_WIS)) value += (o_ptr->pval * 200L);
+			if (have_flag(flgs, TR_DEX)) value += (o_ptr->pval * 200L);
+			if (have_flag(flgs, TR_CON)) value += (o_ptr->pval * 200L);
+			if (have_flag(flgs, TR_CHR)) value += (o_ptr->pval * 200L);
 
 			/* Give credit for stealth and searching */
-			if (f1 & (TR1_MAGIC_MASTERY)) value += (o_ptr->pval * 100L);
-			if (f1 & (TR1_STEALTH)) value += (o_ptr->pval * 100L);
-			if (f1 & (TR1_SEARCH)) value += (o_ptr->pval * 100L);
+			if (have_flag(flgs, TR_MAGIC_MASTERY)) value += (o_ptr->pval * 100L);
+			if (have_flag(flgs, TR_STEALTH)) value += (o_ptr->pval * 100L);
+			if (have_flag(flgs, TR_SEARCH)) value += (o_ptr->pval * 100L);
 
 			/* Give credit for infra-vision and tunneling */
-			if (f1 & (TR1_INFRA)) value += (o_ptr->pval * 50L);
-			if (f1 & (TR1_TUNNEL)) value += (o_ptr->pval * 50L);
+			if (have_flag(flgs, TR_INFRA)) value += (o_ptr->pval * 50L);
+			if (have_flag(flgs, TR_TUNNEL)) value += (o_ptr->pval * 50L);
 
 			/* Give credit for extra attacks */
-			if (f1 & (TR1_BLOWS)) value += (o_ptr->pval * 5000L);
+			if (have_flag(flgs, TR_BLOWS)) value += (o_ptr->pval * 5000L);
 
 			/* Give credit for speed bonus */
-			if (f1 & (TR1_SPEED)) value += (o_ptr->pval * 10000L);
+			if (have_flag(flgs, TR_SPEED)) value += (o_ptr->pval * 10000L);
 
 			break;
 		}
@@ -1532,6 +1551,8 @@ void reduce_charges(object_type *o_ptr, int amt)
  */
 static bool object_similar_part(object_type *o_ptr, object_type *j_ptr)
 {
+	int i;
+
 	/* Require identical object types */
 	if (o_ptr->k_idx != j_ptr->k_idx) return (0);
 
@@ -1703,10 +1724,8 @@ static bool object_similar_part(object_type *o_ptr, object_type *j_ptr)
 
 
 	/* Hack -- Identical art_flags! */
-	if ((o_ptr->art_flags1 != j_ptr->art_flags1) ||
-	    (o_ptr->art_flags2 != j_ptr->art_flags2) ||
-	    (o_ptr->art_flags3 != j_ptr->art_flags3))
-		return (0);
+	for (i = 0; i < TR_FLAG_SIZE; i++)
+		if (o_ptr->art_flags[i] != j_ptr->art_flags[i]) return (0);
 
 	/* Hack -- Require identical "cursed" status */
 	if (o_ptr->curse_flags != j_ptr->curse_flags) return (0);
@@ -2364,21 +2383,21 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 				{
 				case EGO_HA:
 					if (one_in_(4) && (level > 40))
-						o_ptr->art_flags1 |= TR1_BLOWS;
+						add_flag(o_ptr->art_flags, TR_BLOWS);
 					break;
 				case EGO_DF:
 					if (one_in_(3))
-						o_ptr->art_flags2 |= TR2_RES_POIS;
+						add_flag(o_ptr->art_flags, TR_RES_POIS);
 					if (one_in_(3))
-						o_ptr->art_flags3 |= TR3_WARNING;
+						add_flag(o_ptr->art_flags, TR_WARNING);
 					break;
 				case EGO_KILL_DRAGON:
 					if (one_in_(3))
-						o_ptr->art_flags2 |= TR2_RES_POIS;
+						add_flag(o_ptr->art_flags, TR_RES_POIS);
 					break;
 				case EGO_WEST:
 					if (one_in_(3))
-						o_ptr->art_flags2 |= TR2_RES_FEAR;
+						add_flag(o_ptr->art_flags, TR_RES_FEAR);
 					break;
 				case EGO_SLAYING_WEAPON:
 					if (one_in_(3)) /* double damage */
@@ -2400,39 +2419,39 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 					
 					if (one_in_(5))
 					{
-						o_ptr->art_flags1 |= TR1_BRAND_POIS;
+						add_flag(o_ptr->art_flags, TR_BRAND_POIS);
 					}
 					if (o_ptr->tval == TV_SWORD && one_in_(3))
 					{
-						o_ptr->art_flags1 |= TR1_VORPAL;
+						add_flag(o_ptr->art_flags, TR_VORPAL);
 					}
 					break;
 				case EGO_TRUMP:
 					if (one_in_(5))
-						o_ptr->art_flags1 |= TR1_SLAY_DEMON;
+						add_flag(o_ptr->art_flags, TR_SLAY_DEMON);
 					if (one_in_(7))
 						one_ability(o_ptr);
 					break;
 				case EGO_PATTERN:
 					if (one_in_(3))
-						o_ptr->art_flags2 |= TR2_HOLD_LIFE;
+						add_flag(o_ptr->art_flags, TR_HOLD_LIFE);
 					if (one_in_(3))
-						o_ptr->art_flags1 |= TR1_DEX;
+						add_flag(o_ptr->art_flags, TR_DEX);
 					if (one_in_(5))
-						o_ptr->art_flags2 |= TR2_RES_FEAR;
+						add_flag(o_ptr->art_flags, TR_RES_FEAR);
 					break;
 				case EGO_SHARPNESS:
 					o_ptr->pval = m_bonus(5, level) + 1;
 					break;
 				case EGO_EARTHQUAKES:
 					if (one_in_(3) && (level > 60))
-						o_ptr->art_flags1 |= TR1_BLOWS;
+						add_flag(o_ptr->art_flags, TR_BLOWS);
 					else
 						o_ptr->pval = m_bonus(3, level);
 					break;
 				case EGO_VAMPIRIC:
 					if (one_in_(5))
-						o_ptr->art_flags3 |= TR3_SLAY_HUMAN;
+						add_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
 					break;
 				}
 
@@ -2456,7 +2475,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 					switch (o_ptr->name2)
 					{
 					case EGO_MORGUL:
-						if (one_in_(6)) o_ptr->art_flags3 |= TR3_TY_CURSE;
+						if (one_in_(6)) add_flag(o_ptr->art_flags, TR_TY_CURSE);
 					}
 				}
 			}
@@ -2531,6 +2550,46 @@ static void dragon_resist(object_type * o_ptr)
 			one_high_resistance(o_ptr);
 	}
 	while (one_in_(2));
+}
+
+
+static void add_esp_strong(object_type *o_ptr)
+{
+        switch (randint1(3))
+        {
+        case 1: add_flag(o_ptr->art_flags, TR_ESP_EVIL); break;
+        case 2: add_flag(o_ptr->art_flags, TR_ESP_NONLIVING); break;
+        case 3: add_flag(o_ptr->art_flags, TR_TELEPATHY); break;
+        }
+}
+
+
+static void add_esp_weak(object_type *o_ptr)
+{
+        int idx[3];
+        int n = randint1(3);
+
+        idx[0] = randint1(9);
+
+        idx[1] = randint1(8);
+        if (idx[1] >= idx[0]) idx[1]++;
+
+        idx[2] = randint1(7);
+        if (idx[2] >= idx[0]) idx[2]++;
+        if (idx[2] >= idx[1]) idx[2]++;
+
+        while (n--) switch (idx[n])
+        {
+        case 1: add_flag(o_ptr->art_flags, TR_ESP_ANIMAL); break;
+        case 2: add_flag(o_ptr->art_flags, TR_ESP_UNDEAD); break;
+        case 3: add_flag(o_ptr->art_flags, TR_ESP_DEMON); break;
+        case 4: add_flag(o_ptr->art_flags, TR_ESP_ORC); break;
+        case 5: add_flag(o_ptr->art_flags, TR_ESP_TROLL); break;
+        case 6: add_flag(o_ptr->art_flags, TR_ESP_GIANT); break;
+        case 7: add_flag(o_ptr->art_flags, TR_ESP_DRAGON);   break;
+        case 8: add_flag(o_ptr->art_flags, TR_ESP_HUMAN); break;
+        case 9: add_flag(o_ptr->art_flags, TR_ESP_GOOD); break;
+        }
 }
 
 
@@ -2636,7 +2695,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					{
 					case EGO_RESISTANCE:
 						if (one_in_(4))
-							o_ptr->art_flags2 |= TR2_RES_POIS;
+							add_flag(o_ptr->art_flags, TR_RES_POIS);
 						break;
 					case EGO_ELVENKIND:
 						break;
@@ -2651,7 +2710,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 							o_ptr->weight = (2 * k_info[o_ptr->k_idx].weight / 3);
 							o_ptr->ac = k_info[o_ptr->k_idx].ac + 5;
 							if (one_in_(4))
-								o_ptr->art_flags1 |= TR1_CON;
+								add_flag(o_ptr->art_flags, TR_CON);
 							break;
 						}
 					}
@@ -2692,7 +2751,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 				{
 				case EGO_ENDURANCE:
 					if (!one_in_(3)) one_high_resistance(o_ptr);
-					if (one_in_(4)) o_ptr->art_flags2 |= TR2_RES_POIS;
+					if (one_in_(4)) add_flag(o_ptr->art_flags, TR_RES_POIS);
 					break;
 				case EGO_REFLECTION:
 					if (o_ptr->sval == SV_SHIELD_OF_DEFLECTION)
@@ -2792,14 +2851,21 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 
 					switch (o_ptr->name2)
 					{
+					case EGO_TELEPATHY:
+                                                add_esp_strong(o_ptr);
+                                                add_esp_weak(o_ptr);
+                                                break;
 					case EGO_MAGI:
 					case EGO_MIGHT:
-					case EGO_TELEPATHY:
 					case EGO_REGENERATION:
 					case EGO_LORDLINESS:
 						break;
 					case EGO_SEEING:
-						if (one_in_(3)) o_ptr->art_flags3 |= TR3_TELEPATHY;
+						if (one_in_(3))
+                                                {
+                                                        if (one_in_(2)) add_esp_strong(o_ptr);
+                                                        else add_esp_weak(o_ptr);
+                                                }
 						break;
 					default:/* not existing crown (wisdom,lite, etc...) */
 						ok_flag = FALSE;
@@ -2854,7 +2920,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					case EGO_INFRAVISION:
 						break;
 					case EGO_SEEING:
-						if (one_in_(7)) o_ptr->art_flags3 |= TR3_TELEPATHY;
+						if (one_in_(7)) add_flag(o_ptr->art_flags, TR_TELEPATHY);
 						break;
 					default:/* not existing helm (Magi, Might, etc...)*/
 						ok_flag = FALSE;
@@ -3230,15 +3296,15 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						o_ptr->name2 = EGO_RING_THROW;
 						break;
 					case 3: case 4:
-						if (k_ptr->flags3 & TR3_REGEN) break;
+						if (have_flag(k_ptr->flags, TR_REGEN)) break;
 						o_ptr->name2 = EGO_RING_REGEN;
 						break;
 					case 5: case 6:
-						if (k_ptr->flags3 & TR3_LITE) break;
+						if (have_flag(k_ptr->flags, TR_LITE)) break;
 						o_ptr->name2 = EGO_RING_LITE;
 						break;
 					case 7: case 8:
-						if (k_ptr->flags2 & TR3_TELEPORT) break;
+						if (have_flag(k_ptr->flags, TR_TELEPORT)) break;
 						o_ptr->name2 = EGO_RING_TELEPORT;
 						break;
 					case 9: case 10:
@@ -3254,42 +3320,42 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						o_ptr->name2 = EGO_RING_SLAY;
 						break;
 					case 14:
-						if ((k_ptr->flags1 & TR1_STR) || o_ptr->to_h || o_ptr->to_d) break;
+						if ((have_flag(k_ptr->flags, TR_STR)) || o_ptr->to_h || o_ptr->to_d) break;
 						o_ptr->name2 = EGO_RING_WIZARD;
 						break;
 					case 15:
-						if (k_ptr->flags3 & TR3_ACTIVATE) break;
+						if (have_flag(k_ptr->flags, TR_ACTIVATE)) break;
 						o_ptr->name2 = EGO_RING_HERO;
 						break;
 					case 16:
-						if (k_ptr->flags3 & TR3_ACTIVATE) break;
+						if (have_flag(k_ptr->flags, TR_ACTIVATE)) break;
 						if (tmp > 8) o_ptr->name2 = EGO_RING_MANA_BALL;
 						else if (tmp > 4) o_ptr->name2 = EGO_RING_MANA_BOLT;
 						else o_ptr->name2 = EGO_RING_MAGIC_MIS;
 						break;
 					case 17:
-						if (k_ptr->flags3 & TR3_ACTIVATE) break;
-						if (!(k_ptr->flags2 & TR2_RES_FIRE) && (k_ptr->flags2 & (TR2_RES_COLD | TR2_RES_ELEC | TR2_RES_ACID))) break;
+						if (have_flag(k_ptr->flags, TR_ACTIVATE)) break;
+						if (!(have_flag(k_ptr->flags, TR_RES_FIRE)) && (have_flag(k_ptr->flags, TR_RES_COLD) || have_flag(k_ptr->flags, TR_RES_ELEC) || have_flag(k_ptr->flags, TR_RES_ACID))) break;
 						if (tmp > 7) o_ptr->name2 = EGO_RING_DRAGON_F;
 						else if (tmp > 3) o_ptr->name2 = EGO_RING_FIRE_BALL;
 						else o_ptr->name2 = EGO_RING_FIRE_BOLT;
 						break;
 					case 18:
-						if (k_ptr->flags3 & TR3_ACTIVATE) break;
-						if (!(k_ptr->flags2 & TR2_RES_COLD) && (k_ptr->flags2 & (TR2_RES_FIRE | TR2_RES_ELEC | TR2_RES_ACID))) break;
+						if (have_flag(k_ptr->flags, TR_ACTIVATE)) break;
+						if (!(have_flag(k_ptr->flags, TR_RES_COLD)) && (have_flag(k_ptr->flags, TR_RES_FIRE) || have_flag(k_ptr->flags, TR_RES_ELEC) || have_flag(k_ptr->flags, TR_RES_ACID))) break;
 						if (tmp > 7) o_ptr->name2 = EGO_RING_DRAGON_C;
 						else if (tmp > 3) o_ptr->name2 = EGO_RING_COLD_BALL;
 						else o_ptr->name2 = EGO_RING_COLD_BOLT;
 						break;
 					case 19:
-						if (k_ptr->flags3 & TR3_ACTIVATE) break;
-						if (!(k_ptr->flags2 & TR2_RES_ELEC) && (k_ptr->flags2 & (TR2_RES_COLD | TR2_RES_FIRE | TR2_RES_ACID))) break;
+						if (have_flag(k_ptr->flags, TR_ACTIVATE)) break;
+						if (!(have_flag(k_ptr->flags, TR_RES_ELEC)) && (have_flag(k_ptr->flags, TR_RES_COLD) || have_flag(k_ptr->flags, TR_RES_FIRE) || have_flag(k_ptr->flags, TR_RES_ACID))) break;
 						if (tmp > 4) o_ptr->name2 = EGO_RING_ELEC_BALL;
 						else o_ptr->name2 = EGO_RING_ELEC_BOLT;
 						break;
 					case 20:
-						if (k_ptr->flags3 & TR3_ACTIVATE) break;
-						if (!(k_ptr->flags2 & TR2_RES_ACID) && (k_ptr->flags2 & (TR2_RES_COLD | TR2_RES_ELEC | TR2_RES_FIRE))) break;
+						if (have_flag(k_ptr->flags, TR_ACTIVATE)) break;
+						if (!(have_flag(k_ptr->flags, TR_RES_ACID)) && (have_flag(k_ptr->flags, TR_RES_COLD) || have_flag(k_ptr->flags, TR_RES_ELEC) || have_flag(k_ptr->flags, TR_RES_FIRE))) break;
 						if (tmp > 4) o_ptr->name2 = EGO_RING_ACID_BALL;
 						else o_ptr->name2 = EGO_RING_ACID_BOLT;
 						break;
@@ -3371,26 +3437,26 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				if (o_ptr->to_d > 0) o_ptr->to_d = 0-o_ptr->to_d;
 				if (o_ptr->to_a > 0) o_ptr->to_a = 0-o_ptr->to_a;
 				if (o_ptr->pval > 0) o_ptr->pval = 0-o_ptr->pval;
-				o_ptr->art_flags1 = 0;
-				o_ptr->art_flags2 = 0;
+				o_ptr->art_flags[0] = 0;
+				o_ptr->art_flags[1] = 0;
 				while(!o_ptr->name2)
 				{
 					object_kind *k_ptr = &k_info[o_ptr->k_idx];
 					switch(randint1(5))
 					{
 					case 1:
-						if (k_ptr->flags3 & TR3_DRAIN_EXP) break;
+						if (have_flag(k_ptr->flags, TR_DRAIN_EXP)) break;
 						o_ptr->name2 = EGO_RING_DRAIN_EXP;
 						break;
 					case 2:
 						o_ptr->name2 = EGO_RING_NO_MELEE;
 						break;
 					case 3:
-						if (k_ptr->flags3 & TR3_AGGRAVATE) break;
+						if (have_flag(k_ptr->flags, TR_AGGRAVATE)) break;
 						o_ptr->name2 = EGO_RING_AGGRAVATE;
 						break;
 					case 4:
-						if (k_ptr->flags3 & TR3_TY_CURSE) break;
+						if (have_flag(k_ptr->flags, TR_TY_CURSE)) break;
 						o_ptr->name2 = EGO_RING_TY_CURSE;
 						break;
 					case 5:
@@ -3469,7 +3535,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_AMULET_RESISTANCE:
 				{
 					if (one_in_(5)) one_high_resistance(o_ptr);
-					if (one_in_(5)) o_ptr->art_flags2 |= TR2_RES_POIS;
+					if (one_in_(5)) add_flag(o_ptr->art_flags, TR_RES_POIS);
 				}
 				break;
 
@@ -3560,7 +3626,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					switch(randint1(21))
 					{
 					case 1: case 2:
-						if (k_ptr->flags3 & TR3_SLOW_DIGEST) break;
+						if (have_flag(k_ptr->flags, TR_SLOW_DIGEST)) break;
 						o_ptr->name2 = EGO_AMU_SLOW_D;
 						break;
 					case 3: case 4:
@@ -3568,43 +3634,43 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						o_ptr->name2 = EGO_AMU_INFRA;
 						break;
 					case 5: case 6:
-						if (k_ptr->flags3 & TR3_SEE_INVIS) break;
+						if (have_flag(k_ptr->flags, TR_SEE_INVIS)) break;
 						o_ptr->name2 = EGO_AMU_SEE_INVIS;
 						break;
 					case 7: case 8:
-						if (k_ptr->flags2 & TR2_HOLD_LIFE) break;
+						if (have_flag(k_ptr->flags, TR_HOLD_LIFE)) break;
 						o_ptr->name2 = EGO_AMU_HOLD_LIFE;
 						break;
 					case 9:
-						if (k_ptr->flags3 & TR3_FEATHER) break;
+						if (have_flag(k_ptr->flags, TR_FEATHER)) break;
 						o_ptr->name2 = EGO_AMU_LEVITATION;
 						break;
 					case 10: case 11: case 21:
 						o_ptr->name2 = EGO_AMU_AC;
 						break;
 					case 12:
-						if (k_ptr->flags2 & TR2_RES_FIRE) break;
+						if (have_flag(k_ptr->flags, TR_RES_FIRE)) break;
 						if (m_bonus(10, level) > 8)
 							o_ptr->name2 = EGO_AMU_RES_FIRE_;
 						else
 							o_ptr->name2 = EGO_AMU_RES_FIRE;
 						break;
 					case 13:
-						if (k_ptr->flags2 & TR2_RES_COLD) break;
+						if (have_flag(k_ptr->flags, TR_RES_COLD)) break;
 						if (m_bonus(10, level) > 8)
 							o_ptr->name2 = EGO_AMU_RES_COLD_;
 						else
 							o_ptr->name2 = EGO_AMU_RES_COLD;
 						break;
 					case 14:
-						if (k_ptr->flags2 & TR2_RES_ELEC) break;
+						if (have_flag(k_ptr->flags, TR_RES_ELEC)) break;
 						if (m_bonus(10, level) > 8)
 							o_ptr->name2 = EGO_AMU_RES_ELEC_;
 						else
 							o_ptr->name2 = EGO_AMU_RES_ELEC;
 						break;
 					case 15:
-						if (k_ptr->flags2 & TR2_RES_ACID) break;
+						if (have_flag(k_ptr->flags, TR_RES_ACID)) break;
 						if (m_bonus(10, level) > 8)
 							o_ptr->name2 = EGO_AMU_RES_ACID_;
 						else
@@ -3656,26 +3722,26 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				if (o_ptr->to_d > 0) o_ptr->to_d = 0-o_ptr->to_d;
 				if (o_ptr->to_a > 0) o_ptr->to_a = 0-o_ptr->to_a;
 				if (o_ptr->pval > 0) o_ptr->pval = 0-o_ptr->pval;
-				o_ptr->art_flags1 = 0;
-				o_ptr->art_flags2 = 0;
+				o_ptr->art_flags[0] = 0;
+				o_ptr->art_flags[1] = 0;
 				while(!o_ptr->name2)
 				{
 					object_kind *k_ptr = &k_info[o_ptr->k_idx];
 					switch(randint1(5))
 					{
 					case 1:
-						if (k_ptr->flags3 & TR3_DRAIN_EXP) break;
+						if (have_flag(k_ptr->flags, TR_DRAIN_EXP)) break;
 						o_ptr->name2 = EGO_AMU_DRAIN_EXP;
 						break;
 					case 2:
 						o_ptr->name2 = EGO_AMU_FOOL;
 						break;
 					case 3:
-						if (k_ptr->flags3 & TR3_AGGRAVATE) break;
+						if (have_flag(k_ptr->flags, TR_AGGRAVATE)) break;
 						o_ptr->name2 = EGO_AMU_AGGRAVATE;
 						break;
 					case 4:
-						if (k_ptr->flags3 & TR3_TY_CURSE) break;
+						if (have_flag(k_ptr->flags, TR_TY_CURSE)) break;
 						o_ptr->name2 = EGO_AMU_TY_CURSE;
 						break;
 					case 5:
@@ -4241,7 +4307,12 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 	    (p_ptr->pseikaku == SEIKAKU_SEXY))
 	{
 		o_ptr->pval = 3;
-		o_ptr->art_flags1 |= (TR1_STR | TR1_INT | TR1_WIS | TR1_DEX | TR1_CON | TR1_CHR);
+		add_flag(o_ptr->art_flags, TR_STR);
+		add_flag(o_ptr->art_flags, TR_INT);
+		add_flag(o_ptr->art_flags, TR_WIS);
+		add_flag(o_ptr->art_flags, TR_DEX);
+		add_flag(o_ptr->art_flags, TR_CON);
+		add_flag(o_ptr->art_flags, TR_CHR);
 	}
 
 	if (o_ptr->art_name) rating += 30;
@@ -4308,7 +4379,7 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 			/* Hack -- obtain pval */
 			if (e_ptr->max_pval)
 			{
-				if ((o_ptr->name2 == EGO_HA) && (o_ptr->art_flags1 & TR1_BLOWS))
+				if ((o_ptr->name2 == EGO_HA) && (have_flag(o_ptr->art_flags, TR_BLOWS)))
 				{
 					o_ptr->pval++;
 					if ((lev > 60) && one_in_(3) && ((o_ptr->dd*(o_ptr->ds+1)) < 15)) o_ptr->pval++;
@@ -6168,11 +6239,11 @@ object_type *choose_warning_item(void)
 	/* Search Inventry */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		u32b f1, f2, f3;
+		u32b flgs[TR_FLAG_SIZE];
 		object_type *o_ptr = &inventory[i];
 
-		object_flags(o_ptr, &f1, &f2, &f3);
-		if (f3 & (TR3_WARNING))
+		object_flags(o_ptr, flgs);
+		if (have_flag(flgs, TR_WARNING))
 		{
 			choices[number] = i;
 			number++;
@@ -6699,7 +6770,7 @@ static void drain_essence(void)
 	int dec = 4;
 	bool observe = FALSE;
 	int old_ds, old_dd, old_to_h, old_to_d, old_ac, old_to_a, old_pval, old_name2;
-	u32b old_f1, old_f2, old_f3, new_f1, new_f2, new_f3;
+	u32b old_flgs[TR_FLAG_SIZE], new_flgs[TR_FLAG_SIZE];
 	object_type *o_ptr;
 	cptr            q, s;
 	byte iy, ix, marked, number;
@@ -6746,8 +6817,8 @@ static void drain_essence(void)
 
 	energy_use = 100;
 
-	object_flags(o_ptr, &old_f1, &old_f2, &old_f3);
-	if (old_f1 & TR1_KILL_DRAGON) old_f1 |= TR1_SLAY_DRAGON;
+	object_flags(o_ptr, old_flgs);
+	if (have_flag(old_flgs, TR_KILL_DRAGON)) add_flag(old_flgs, TR_SLAY_DRAGON);
 
 	old_to_a = o_ptr->to_a;
 	old_ac = o_ptr->ac;
@@ -6758,10 +6829,10 @@ static void drain_essence(void)
 	old_pval = o_ptr->pval;
 	old_name2 = o_ptr->name2;
 	if (o_ptr->curse_flags & (TRC_CURSED | TRC_HEAVY_CURSE | TRC_PERMA_CURSE)) dec--;
-	if (old_f3 & (TR3_AGGRAVATE)) dec--;
-	if (old_f3 & (TR3_NO_TELE)) dec--;
-	if (old_f3 & (TR3_DRAIN_EXP)) dec--;
-	if (old_f3 & (TR3_TY_CURSE)) dec--;
+	if (have_flag(old_flgs, TR_AGGRAVATE)) dec--;
+	if (have_flag(old_flgs, TR_NO_TELE)) dec--;
+	if (have_flag(old_flgs, TR_DRAIN_EXP)) dec--;
+	if (have_flag(old_flgs, TR_TY_CURSE)) dec--;
 
 	iy = o_ptr->iy;
 	ix = o_ptr->ix;
@@ -6782,60 +6853,48 @@ static void drain_essence(void)
 	object_aware(o_ptr);
 	object_known(o_ptr);
 
-	object_flags(o_ptr, &new_f1, &new_f2, &new_f3);
+	object_flags(o_ptr, new_flgs);
 
 	for (i = 0; i < 96; i++)
 	{
-		if (i < 32)
-		{
-			int pval = 0;
+		int pval = 0;
 
-			if (((1 << i) & TR1_PVAL_MASK) && old_pval) pval = ((new_f1 >> i) & 0x00000001) ? old_pval-o_ptr->pval : old_pval;
-			if ((!((new_f1 >> i) & 0x00000001) || pval) && ((old_f1 >> i) & 0x00000001) && essence_info[i].link)
-			{
-				drain_value[essence_info[i].link-1] += (10 * (pval ? pval : 1));
-			}
-		}
-		else if (i < 64)
+		if (is_pval_flag(i) && old_pval) pval = (have_flag(new_flgs, i)) ? old_pval-o_ptr->pval : old_pval;
+
+		if ((!(have_flag(new_flgs, i)) || pval) && (have_flag(old_flgs, i)) && essence_info[i].link)
 		{
-			if (!((new_f2 >> (i-32)) & 0x00000001) && ((old_f2 >> (i-32)) & 0x00000001) && essence_info[i].link)
+			if (pval)
+			{
+				drain_value[essence_info[i].link-1] += 10 * pval;
+			}
+			else if (essence_info[i].link != -1)
 			{
 				drain_value[essence_info[i].link-1] += 10;
 			}
-		}
-		else
-		{
-			if (!((new_f3 >> (i-64)) & 0x00000001) && ((old_f3 >> (i-64)) & 0x00000001) && essence_info[i].link)
+			else if (i == ESSENCE__SH__FIRE-1)
 			{
-				if (essence_info[i].link == -1)
-				{
-					if (i == ESSENCE__SH__FIRE-1)
-					{
-						drain_value[ESSENCE_B_FIRE-1] += 10;
-						drain_value[ESSENCE_RES_FIRE-1] += 10;
-					}
-					else if (i == ESSENCE__SH__ELEC-1)
-					{
-						drain_value[ESSENCE_B_ELEC-1] += 10;
-						drain_value[ESSENCE_RES_ELEC-1] += 10;
-					}
-					else if (i == ESSENCE__SH__COLD-1)
-					{
-						drain_value[ESSENCE_B_COLD-1] += 10;
-						drain_value[ESSENCE_RES_COLD-1] += 10;
-					}
-				}
-				else drain_value[essence_info[i].link-1] += 10;
+				drain_value[ESSENCE_B_FIRE-1] += 10;
+				drain_value[ESSENCE_RES_FIRE-1] += 10;
+			}
+			else if (i == ESSENCE__SH__ELEC-1)
+			{
+				drain_value[ESSENCE_B_ELEC-1] += 10;
+				drain_value[ESSENCE_RES_ELEC-1] += 10;
+			}
+			else if (i == ESSENCE__SH__COLD-1)
+			{
+				drain_value[ESSENCE_B_COLD-1] += 10;
+				drain_value[ESSENCE_RES_COLD-1] += 10;
 			}
 		}
 	}
 
-	if ((old_f1 & TR1_FORCE_WEAPON) && !(new_f1 & TR1_FORCE_WEAPON))
+	if ((have_flag(old_flgs, TR_FORCE_WEAPON)) && !(have_flag(new_flgs, TR_FORCE_WEAPON)))
 	{
 		drain_value[ESSENCE_INT-1] += 5;
 		drain_value[ESSENCE_WIS-1] += 5;
 	}
-	if ((old_f1 & TR1_VORPAL) && !(new_f1 & TR1_VORPAL))
+	if ((have_flag(old_flgs, TR_VORPAL)) && !(have_flag(new_flgs, TR_VORPAL)))
 	{
 		drain_value[ESSENCE_B_POIS-1] += 5;
 		drain_value[ESSENCE_B_ACID-1] += 5;
@@ -6843,15 +6902,15 @@ static void drain_essence(void)
 		drain_value[ESSENCE_B_FIRE-1] += 5;
 		drain_value[ESSENCE_B_COLD-1] += 5;
 	}
-	if ((old_f3 & TR3_DEC_MANA) && !(new_f3 & TR3_DEC_MANA))
+	if ((have_flag(old_flgs, TR_DEC_MANA)) && !(have_flag(new_flgs, TR_DEC_MANA)))
 	{
 		drain_value[ESSENCE_INT-1] += 10;
 	}
-	if ((old_f3 & TR3_XTRA_MIGHT) && !(new_f3 & TR3_XTRA_MIGHT))
+	if ((have_flag(old_flgs, TR_XTRA_MIGHT)) && !(have_flag(new_flgs, TR_XTRA_MIGHT)))
 	{
 		drain_value[ESSENCE_STR-1] += 10;
 	}
-	if ((old_f3 & TR3_XTRA_SHOTS) && !(new_f3 & TR3_XTRA_SHOTS))
+	if ((have_flag(old_flgs, TR_XTRA_SHOTS)) && !(have_flag(new_flgs, TR_XTRA_SHOTS)))
 	{
 		drain_value[ESSENCE_DEX-1] += 10;
 	}
@@ -7406,7 +7465,7 @@ static void add_essence(int mode)
 #endif
 			return;
 		}
-		if ((num[i] < 32) && (TR1_PVAL_MASK & (0x1L << num[i])))
+		if ((num[i] < 32) && is_pval_flag(num[i]))
 		{
 			if (num[i] == ESSENCE_BLOWS-1)
 			{
@@ -7599,7 +7658,12 @@ static void add_essence(int mode)
 			return;
 		}
 		if (num[i] == ESSENCE_SUSTAIN-1)
-			o_ptr->art_flags3 |= (TR3_IGNORE_ACID | TR3_IGNORE_ELEC | TR3_IGNORE_FIRE | TR3_IGNORE_COLD);
+		{
+			add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
+			add_flag(o_ptr->art_flags, TR_IGNORE_ELEC);
+			add_flag(o_ptr->art_flags, TR_IGNORE_FIRE);
+			add_flag(o_ptr->art_flags, TR_IGNORE_COLD);
+		}
 		else o_ptr->xtra3 = num[i]+1;
 	}
 
@@ -7655,7 +7719,7 @@ static void erase_essence(void)
 	cptr q, s;
 	object_type *o_ptr;
 	char o_name[MAX_NLEN];
-	u32b f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 
 	item_tester_hook = item_tester_hook_kaji;
 
@@ -7698,8 +7762,8 @@ static void erase_essence(void)
 		o_ptr->xtra4 = 0;
 	}
 	o_ptr->xtra3 = 0;
-	object_flags(o_ptr, &f1, &f2, &f3);
-	if (!(f1 & TR1_PVAL_MASK)) o_ptr->pval = 0;
+	object_flags(o_ptr, flgs);
+	if (!(have_pval_flags(flgs))) o_ptr->pval = 0;
 #ifdef JP
 	msg_print("エッセンスを取り去った。");
 #else

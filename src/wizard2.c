@@ -533,11 +533,11 @@ static void do_cmd_wiz_change(void)
 static void wiz_display_item(object_type *o_ptr)
 {
 	int i, j = 13;
-	u32b f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 	char buf[256];
 
 	/* Extract the flags */
-	object_flags(o_ptr, &f1, &f2, &f3);
+	object_flags(o_ptr, flgs);
 
 	/* Clear the screen */
 	for (i = 1; i <= 23; i++) prt("", i, j - 2);
@@ -575,7 +575,7 @@ static void wiz_display_item(object_type *o_ptr)
 	prt("siwdccsossidsahanvudotgddhuoclio", 13, j);
 	prt("tnieohtctrnipttmiinmrrnrrraiierl", 14, j);
 	prt("rtsxnarelcfgdkcpmldncltggpksdced", 15, j);
-	prt_binary(f1, 16, j);
+	prt_binary(flgs[0], 16, j);
 
 	prt("+------------FLAGS2------------+", 17, j);
 	prt("SUST....IMMUN.RESIST............", 18, j);
@@ -583,7 +583,7 @@ static void wiz_display_item(object_type *o_ptr)
 	prt("siwdcci clioheatcliooeialoshtncd", 20, j);
 	prt("tnieohd ierlrfraierliatrnnnrhehi", 21, j);
 	prt("rtsxnae.dcedwlatdcedsrekdfddrxss", 22, j);
-	prt_binary(f2, 23, j);
+	prt_binary(flgs[1], 23, j);
 
 	prt("+------------FLAGS3------------+", 10, j+32);
 	prt("fe cnn t      stdrmsiiii d ab   ", 11, j+32);
@@ -591,7 +591,15 @@ static void wiz_display_item(object_type *o_ptr)
 	prt("uu utmacaih eielgggonnnnaaere   ", 13, j+32);
 	prt("rr reanurdo vtieeehtrrrrcilas   ", 14, j+32);
 	prt("aa algarnew ienpsntsaefctnevs   ", 15, j+32);
-	prt_binary(f3, 16, j+32);
+	prt_binary(flgs[2], 16, j+32);
+
+	prt("+------------FLAGS4------------+", 17, j+32);
+	prt("KILL....ESP.........            ", 18, j+32);
+	prt("aeud tghaud tgdhegnu            ", 19, j+32);
+	prt("nvneoriunneoriruvoon            ", 20, j+32);
+	prt("iidmroamidmroagmionq            ", 21, j+32);
+	prt("mlenclnmmenclnnnldlu            ", 22, j+32);
+	prt_binary(flgs[3], 23, j+32);
 }
 
 

@@ -113,9 +113,10 @@ static void wr_item(object_type *o_ptr)
 
 	wr_byte(o_ptr->marked);
 
-	wr_u32b(o_ptr->art_flags1);
-	wr_u32b(o_ptr->art_flags2);
-	wr_u32b(o_ptr->art_flags3);
+	wr_u32b(o_ptr->art_flags[0]);
+	wr_u32b(o_ptr->art_flags[1]);
+	wr_u32b(o_ptr->art_flags[2]);
+	wr_u32b(o_ptr->art_flags[3]);
 
 	wr_u32b(o_ptr->curse_flags);
 

@@ -1085,7 +1085,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 	char            tmp_val[MAX_NLEN+160];
 	char            tmp_val2[MAX_NLEN+10];
 
-	u32b            f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 
 	object_type	*bow_ptr;
 
@@ -1095,7 +1095,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 	monster_race *r_ptr = &r_info[o_ptr->pval];
 
 	/* Extract some flags */
-	object_flags(o_ptr, &f1, &f2, &f3);
+	object_flags(o_ptr, flgs);
 
 	/* See if the object is "aware" */
 	if (object_aware_p(o_ptr) || (o_ptr->ident & IDENT_MENTAL)) aware = TRUE;
@@ -1638,6 +1638,12 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 		}
 	}
 
+	/* Use full name from k_info or a_info */
+	if (aware && have_flag(flgs, TR_FULL_NAME))
+	{
+		if (known && o_ptr->name1) basenm = a_name + a_info[o_ptr->name1].name;
+		else basenm = get_object_name(o_ptr);
+	}
 
 	/* Start dumping the result */
 	t = tmp_val;
@@ -1927,7 +1933,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 	}
 
 	/* Hack -- Append "Artifact" or "Special" names */
-	if (known)
+	if (known && !have_flag(flgs, TR_FULL_NAME))
 	{
 		/* Is it a new random artifact ? */
 		if (o_ptr->art_name)
@@ -2133,7 +2139,7 @@ t = object_desc_str(t, "(¥Þ¥ë¥Á¡¦¥È¥é¥Ã¥×)");
 
 
 	/* Display the item like a weapon */
-	if (f3 & (TR3_SHOW_MODS)) show_weapon = TRUE;
+	if (have_flag(flgs, TR_SHOW_MODS)) show_weapon = TRUE;
 
 	/* Display the item like a weapon */
 	if (o_ptr->to_h && o_ptr->to_d) show_weapon = TRUE;
@@ -2173,7 +2179,7 @@ t = object_desc_str(t, "(¥Þ¥ë¥Á¡¦¥È¥é¥Ã¥×)");
 		power = (o_ptr->sval % 10);
 
 		/* Apply the "Extra Might" flag */
-		if (f3 & (TR3_XTRA_MIGHT)) power++;
+		if (have_flag(flgs, TR_XTRA_MIGHT)) power++;
 
 		/* Append a special "damage" string */
 		t = object_desc_chr(t, ' ');
@@ -2427,7 +2433,7 @@ t = object_desc_str(t, "(½¼Å¶Ãæ)");
 	}
 
 	/* Dump "pval" flags for wearable items */
-	if (known && (f1 & (TR1_PVAL_MASK)))
+	if (known && (have_pval_flags(flgs)))
 	{
 		/* Start the display */
 		t = object_desc_chr(t, ' ');
@@ -2437,13 +2443,13 @@ t = object_desc_str(t, "(½¼Å¶Ãæ)");
 		t = object_desc_int(t, o_ptr->pval);
 
 		/* Do not display the "pval" flags */
-		if (f3 & (TR3_HIDE_TYPE))
+		if (have_flag(flgs, TR_HIDE_TYPE))
 		{
 			/* Nothing */
 		}
 
 		/* Speed */
-		else if (f1 & (TR1_SPEED))
+		else if (have_flag(flgs, TR_SPEED))
 		{
 			/* Dump " to speed" */
 #ifdef JP
@@ -2455,7 +2461,7 @@ t = object_desc_str(t, "²ÃÂ®");
 		}
 
 		/* Attack speed */
-		else if (f1 & (TR1_BLOWS))
+		else if (have_flag(flgs, TR_BLOWS))
 		{
 			/* Add " attack" */
 #ifdef JP
@@ -2470,7 +2476,7 @@ t = object_desc_str(t, "¹¶·â");
 		}
 
 		/* Stealth */
-		else if (f1 & (TR1_STEALTH))
+		else if (have_flag(flgs, TR_STEALTH))
 		{
 			/* Dump " to stealth" */
 #ifdef JP
@@ -2482,7 +2488,7 @@ t = object_desc_str(t, "±£Ì©");
 		}
 
 		/* Search */
-		else if (f1 & (TR1_SEARCH))
+		else if (have_flag(flgs, TR_SEARCH))
 		{
 			/* Dump " to searching" */
 #ifdef JP
@@ -2494,7 +2500,7 @@ t = object_desc_str(t, "Ãµº÷");
 		}
 
 		/* Infravision */
-		else if (f1 & (TR1_INFRA))
+		else if (have_flag(flgs, TR_INFRA))
 		{
 			/* Dump " to infravision" */
 #ifdef JP
@@ -2506,7 +2512,7 @@ t = object_desc_str(t, "ÀÖ³°Àþ»ëÎÏ");
 		}
 
 		/* Tunneling */
-		else if (f1 & (TR1_TUNNEL))
+		else if (have_flag(flgs, TR_TUNNEL))
 		{
 			/* Nothing */
 		}

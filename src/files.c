@@ -2064,7 +2064,7 @@ static void display_player_various(void)
 	int			xdis, xdev, xsav, xstl;
 	cptr		desc;
 	int         muta_att = 0;
-	u32b        f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 	int		shots, shot_frac;
 
 	object_type		*o_ptr;
@@ -2139,20 +2139,20 @@ static void display_player_various(void)
 			o_ptr = &inventory[INVEN_RARM+i];
 			if (object_known_p(o_ptr)) damage[i] += o_ptr->to_d*100;
 			basedam = (o_ptr->dd * (o_ptr->ds + 1))*50;
-			object_flags(o_ptr, &f1, &f2, &f3);
+			object_flags(o_ptr, flgs);
 			if ((o_ptr->ident & IDENT_MENTAL) && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)))
 			{
 				/* vorpal blade */
 				basedam *= 5;
 				basedam /= 3;
 			}
-			else if (object_known_p(o_ptr) && (f1 & TR1_VORPAL))
+			else if (object_known_p(o_ptr) && (have_flag(flgs, TR_VORPAL)))
 			{
 				/* vorpal flag only */
 				basedam *= 11;
 				basedam /= 9;
 			}
-			if (object_known_p(o_ptr) && (p_ptr->pclass != CLASS_SAMURAI) && (f1 & TR1_FORCE_WEAPON) && (p_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
+			if (object_known_p(o_ptr) && (p_ptr->pclass != CLASS_SAMURAI) && (have_flag(flgs, TR_FORCE_WEAPON)) && (p_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
 				basedam = basedam * 7 / 2;
 			if (p_ptr->riding && (o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE)))
 				basedam = basedam*(o_ptr->dd+2)/o_ptr->dd;
@@ -2221,78 +2221,81 @@ static void display_player_various(void)
 /*
  * Obtain the "flags" for the player as if he was an item
  */
-static void player_flags(u32b *f1, u32b *f2, u32b *f3)
+static void player_flags(u32b flgs[TR_FLAG_SIZE])
 {
+	int i;
+
 	/* Clear */
-	(*f1) = (*f2) = (*f3) = 0L;
+	for (i = 0; i < TR_FLAG_SIZE; i++)
+		flgs[i] = 0L;
 
 	/* Classes */
 	switch (p_ptr->pclass)
 	{
 	case CLASS_WARRIOR:
 		if (p_ptr->lev > 44)
-			(*f3) |= (TR3_REGEN);
+			add_flag(flgs, TR_REGEN);
 	case CLASS_SAMURAI:
 		if (p_ptr->lev > 29)
-			(*f2) |= (TR2_RES_FEAR);
+			add_flag(flgs, TR_RES_FEAR);
 		break;
 	case CLASS_PALADIN:
 		if (p_ptr->lev > 39)
-			(*f2) |= (TR2_RES_FEAR);
+			add_flag(flgs, TR_RES_FEAR);
 		break;
 	case CLASS_CHAOS_WARRIOR:
 		if (p_ptr->lev > 29)
-			(*f2) |= (TR2_RES_CHAOS);
+			add_flag(flgs, TR_RES_CHAOS);
 		if (p_ptr->lev > 39)
-			(*f2) |= (TR2_RES_FEAR);
+			add_flag(flgs, TR_RES_FEAR);
 		break;
 	case CLASS_MONK:
 	case CLASS_FORCETRAINER:
 		if ((p_ptr->lev > 9) && !heavy_armor())
-			(*f1) |= TR1_SPEED;
+			add_flag(flgs, TR_SPEED);
 		if ((p_ptr->lev>24) && !heavy_armor())
-			(*f2) |= (TR2_FREE_ACT);
+			add_flag(flgs, TR_FREE_ACT);
 		break;
 	case CLASS_NINJA:
 		if (heavy_armor())
-			(*f1) |= TR1_SPEED;
+			add_flag(flgs, TR_SPEED);
 		else
 		{
 			if (!inventory[INVEN_LARM].tval || p_ptr->hidarite)
-				(*f1) |= TR1_SPEED;
+				add_flag(flgs, TR_SPEED);
 			if (p_ptr->lev>24)
-				(*f2) |= (TR2_FREE_ACT);
+				add_flag(flgs, TR_FREE_ACT);
 		}
-		(*f3) |= TR3_SLOW_DIGEST;
-		(*f2) |= TR2_RES_FEAR;
-		if (p_ptr->lev > 19) (*f2) |= TR2_RES_POIS;
-		if (p_ptr->lev > 24) (*f2) |= TR2_SUST_DEX;
-		if (p_ptr->lev > 29) (*f3) |= TR3_SEE_INVIS;
+		add_flag(flgs, TR_SLOW_DIGEST);
+		add_flag(flgs, TR_RES_FEAR);
+		if (p_ptr->lev > 19) add_flag(flgs, TR_RES_POIS);
+		if (p_ptr->lev > 24) add_flag(flgs, TR_SUST_DEX);
+		if (p_ptr->lev > 29) add_flag(flgs, TR_SEE_INVIS);
 		break;
 	case CLASS_MINDCRAFTER:
 		if (p_ptr->lev > 9)
-			(*f2) |= (TR2_RES_FEAR);
+			add_flag(flgs, TR_RES_FEAR);
 		if (p_ptr->lev > 19)
-			(*f2) |= (TR2_SUST_WIS);
+			add_flag(flgs, TR_SUST_WIS);
 		if (p_ptr->lev > 29)
-			(*f2) |= (TR2_RES_CONF);
+			add_flag(flgs, TR_RES_CONF);
 		if (p_ptr->lev > 39)
-			(*f3) |= (TR3_TELEPATHY);
+			add_flag(flgs, TR_TELEPATHY);
 		break;
 	case CLASS_BARD:
-		(*f2) |= (TR2_RES_SOUND);
+		add_flag(flgs, TR_RES_SOUND);
 		break;
 	case CLASS_BERSERKER:
-		(*f2) |= (TR2_SUST_STR);
-		(*f2) |= (TR2_SUST_DEX);
-		(*f2) |= (TR2_SUST_CON);
-		(*f3) |= (TR3_REGEN);
-		(*f2) |= (TR2_FREE_ACT);
-		(*f1) |= (TR1_SPEED);
-		if (p_ptr->lev > 39) (*f2) |= (TR2_REFLECT);
+		add_flag(flgs, TR_SUST_STR);
+		add_flag(flgs, TR_SUST_DEX);
+		add_flag(flgs, TR_SUST_CON);
+		add_flag(flgs, TR_REGEN);
+		add_flag(flgs, TR_FREE_ACT);
+		add_flag(flgs, TR_SPEED);
+		if (p_ptr->lev > 39) add_flag(flgs, TR_REFLECT);
 		break;
 	case CLASS_MIRROR_MASTER:
-		if(p_ptr->lev > 39)(*f2) |= (TR2_REFLECT);
+		if(p_ptr->lev > 39)add_flag(flgs, TR_REFLECT);
 		break;
 	default:
 		break; /* Do nothing */
@@ -2304,42 +2307,42 @@ static void player_flags(u32b *f1, u32b *f2, u32b *f3)
 		switch(p_ptr->mimic_form)
 		{
 		case MIMIC_DEMON:
-			(*f2) |= (TR2_HOLD_LIFE);
-			(*f2) |= (TR2_RES_CHAOS);
-			(*f2) |= (TR2_RES_NETHER);
-			(*f2) |= (TR2_RES_FIRE);
-			(*f3) |= (TR3_SEE_INVIS);
-			(*f1) |= (TR1_SPEED);
+			add_flag(flgs, TR_HOLD_LIFE);
+			add_flag(flgs, TR_RES_CHAOS);
+			add_flag(flgs, TR_RES_NETHER);
+			add_flag(flgs, TR_RES_FIRE);
+			add_flag(flgs, TR_SEE_INVIS);
+			add_flag(flgs, TR_SPEED);
 			break;
 		case MIMIC_DEMON_LORD:
-			(*f2) |= (TR2_HOLD_LIFE);
-			(*f2) |= (TR2_RES_CHAOS);
-			(*f2) |= (TR2_RES_NETHER);
-			(*f2) |= (TR2_RES_FIRE);
-			(*f2) |= (TR2_RES_COLD);
-			(*f2) |= (TR2_RES_ELEC);
-			(*f2) |= (TR2_RES_ACID);
-			(*f2) |= (TR2_RES_POIS);
-			(*f2) |= (TR2_RES_CONF);
-			(*f2) |= (TR2_RES_DISEN);
-			(*f2) |= (TR2_RES_NEXUS);
-			(*f2) |= (TR2_RES_FEAR);
-			(*f2) |= (TR2_IM_FIRE);
-			(*f3) |= (TR3_SH_FIRE);
-			(*f3) |= (TR3_SEE_INVIS);
-			(*f3) |= (TR3_TELEPATHY);
-			(*f3) |= (TR3_FEATHER);
-			(*f1) |= (TR1_SPEED);
+			add_flag(flgs, TR_HOLD_LIFE);
+			add_flag(flgs, TR_RES_CHAOS);
+			add_flag(flgs, TR_RES_NETHER);
+			add_flag(flgs, TR_RES_FIRE);
+			add_flag(flgs, TR_RES_COLD);
+			add_flag(flgs, TR_RES_ELEC);
+			add_flag(flgs, TR_RES_ACID);
+			add_flag(flgs, TR_RES_POIS);
+			add_flag(flgs, TR_RES_CONF);
+			add_flag(flgs, TR_RES_DISEN);
+			add_flag(flgs, TR_RES_NEXUS);
+			add_flag(flgs, TR_RES_FEAR);
+			add_flag(flgs, TR_IM_FIRE);
+			add_flag(flgs, TR_SH_FIRE);
+			add_flag(flgs, TR_SEE_INVIS);
+			add_flag(flgs, TR_TELEPATHY);
+			add_flag(flgs, TR_FEATHER);
+			add_flag(flgs, TR_SPEED);
 			break;
 		case MIMIC_VAMPIRE:
-			(*f2) |= (TR2_HOLD_LIFE);
-			(*f2) |= (TR2_RES_DARK);
-			(*f2) |= (TR2_RES_NETHER);
-			if (p_ptr->pclass != CLASS_NINJA) (*f3) |= (TR3_LITE);
-			(*f2) |= (TR2_RES_POIS);
-			(*f2) |= (TR2_RES_COLD);
-			(*f3) |= (TR3_SEE_INVIS);
-			(*f1) |= (TR1_SPEED);
+			add_flag(flgs, TR_HOLD_LIFE);
+			add_flag(flgs, TR_RES_DARK);
+			add_flag(flgs, TR_RES_NETHER);
+			if (p_ptr->pclass != CLASS_NINJA) add_flag(flgs, TR_LITE);
+			add_flag(flgs, TR_RES_POIS);
+			add_flag(flgs, TR_RES_COLD);
+			add_flag(flgs, TR_SEE_INVIS);
+			add_flag(flgs, TR_SPEED);
 			break;
 		}
 	}
@@ -2348,28 +2351,28 @@ static void player_flags(u32b *f1, u32b *f2, u32b *f3)
 	switch (p_ptr->prace)
 	{
 	case RACE_ELF:
-		(*f2) |= (TR2_RES_LITE);
+		add_flag(flgs, TR_RES_LITE);
 		break;
 	case RACE_HOBBIT:
-		(*f2) |= (TR2_SUST_DEX);
+		add_flag(flgs, TR_SUST_DEX);
 		break;
 	case RACE_GNOME:
-		(*f2) |= (TR2_FREE_ACT);
+		add_flag(flgs, TR_FREE_ACT);
 		break;
 	case RACE_DWARF:
-		(*f2) |= (TR2_RES_BLIND);
+		add_flag(flgs, TR_RES_BLIND);
 		break;
 	case RACE_HALF_ORC:
-		(*f2) |= (TR2_RES_DARK);
+		add_flag(flgs, TR_RES_DARK);
 		break;
 	case RACE_HALF_TROLL:
-		(*f2) |= (TR2_SUST_STR);
+		add_flag(flgs, TR_SUST_STR);
 		if (p_ptr->lev > 14)
 		{
-			(*f3) |= (TR3_REGEN);
+			add_flag(flgs, TR_REGEN);
 			if (p_ptr->pclass == CLASS_WARRIOR)
 			{
-				(*f3) |= (TR3_SLOW_DIGEST);
+				add_flag(flgs, TR_SLOW_DIGEST);
 				/*
 				 * Let's not make Regeneration a disadvantage
 				 * for the poor warriors who can never learn
@@ -2381,160 +2384,160 @@ static void player_flags(u32b *f1, u32b *f2, u32b *f3)
 		}
 		break;
 	case RACE_AMBERITE:
-		(*f2) |= (TR2_SUST_CON);
-		(*f3) |= (TR3_REGEN); /* Amberites heal fast */
+		add_flag(flgs, TR_SUST_CON);
+		add_flag(flgs, TR_REGEN); /* Amberites heal fast */
 		break;
 	case RACE_HIGH_ELF:
-		(*f2) |= (TR2_RES_LITE);
-		(*f3) |= (TR3_SEE_INVIS);
+		add_flag(flgs, TR_RES_LITE);
+		add_flag(flgs, TR_SEE_INVIS);
 		break;
 	case RACE_BARBARIAN:
-		(*f2) |= (TR2_RES_FEAR);
+		add_flag(flgs, TR_RES_FEAR);
 		break;
 	case RACE_HALF_OGRE:
-		(*f2) |= (TR2_SUST_STR);
-		(*f2) |= (TR2_RES_DARK);
+		add_flag(flgs, TR_SUST_STR);
+		add_flag(flgs, TR_RES_DARK);
 		break;
 	case RACE_HALF_GIANT:
-		(*f2) |= (TR2_RES_SHARDS);
-		(*f2) |= (TR2_SUST_STR);
+		add_flag(flgs, TR_RES_SHARDS);
+		add_flag(flgs, TR_SUST_STR);
 		break;
 	case RACE_HALF_TITAN:
-		(*f2) |= (TR2_RES_CHAOS);
+		add_flag(flgs, TR_RES_CHAOS);
 		break;
 	case RACE_CYCLOPS:
-		(*f2) |= (TR2_RES_SOUND);
+		add_flag(flgs, TR_RES_SOUND);
 		break;
 	case RACE_YEEK:
-		(*f2) |= (TR2_RES_ACID);
+		add_flag(flgs, TR_RES_ACID);
 		if (p_ptr->lev > 19)
-			(*f2) |= (TR2_IM_ACID);
+			add_flag(flgs, TR_IM_ACID);
 		break;
 	case RACE_KLACKON:
-		(*f2) |= (TR2_RES_CONF);
-		(*f2) |= (TR2_RES_ACID);
+		add_flag(flgs, TR_RES_CONF);
+		add_flag(flgs, TR_RES_ACID);
 		if (p_ptr->lev > 9)
-			(*f1) |= TR1_SPEED;
+			add_flag(flgs, TR_SPEED);
 		break;
 	case RACE_KOBOLD:
-		(*f2) |= (TR2_RES_POIS);
+		add_flag(flgs, TR_RES_POIS);
 		break;
 	case RACE_NIBELUNG:
-		(*f2) |= (TR2_RES_DISEN);
-		(*f2) |= (TR2_RES_DARK);
+		add_flag(flgs, TR_RES_DISEN);
+		add_flag(flgs, TR_RES_DARK);
 		break;
 	case RACE_DARK_ELF:
-		(*f2) |= (TR2_RES_DARK);
+		add_flag(flgs, TR_RES_DARK);
 		if (p_ptr->lev > 19)
-			(*f3) |= (TR3_SEE_INVIS);
+			add_flag(flgs, TR_SEE_INVIS);
 		break;
 	case RACE_DRACONIAN:
-		(*f3) |= TR3_FEATHER;
+		add_flag(flgs, TR_FEATHER);
 		if (p_ptr->lev > 4)
-			(*f2) |= (TR2_RES_FIRE);
+			add_flag(flgs, TR_RES_FIRE);
 		if (p_ptr->lev > 9)
-			(*f2) |= (TR2_RES_COLD);
+			add_flag(flgs, TR_RES_COLD);
 		if (p_ptr->lev > 14)
-			(*f2) |= (TR2_RES_ACID);
+			add_flag(flgs, TR_RES_ACID);
 		if (p_ptr->lev > 19)
-			(*f2) |= (TR2_RES_ELEC);
+			add_flag(flgs, TR_RES_ELEC);
 		if (p_ptr->lev > 34)
-			(*f2) |= (TR2_RES_POIS);
+			add_flag(flgs, TR_RES_POIS);
 		break;
 	case RACE_MIND_FLAYER:
-		(*f2) |= (TR2_SUST_INT);
-		(*f2) |= (TR2_SUST_WIS);
+		add_flag(flgs, TR_SUST_INT);
+		add_flag(flgs, TR_SUST_WIS);
 		if (p_ptr->lev > 14)
-			(*f3) |= (TR3_SEE_INVIS);
+			add_flag(flgs, TR_SEE_INVIS);
 		if (p_ptr->lev > 29)
-			(*f3) |= (TR3_TELEPATHY);
+			add_flag(flgs, TR_TELEPATHY);
 		break;
 	case RACE_IMP:
-		(*f2) |= (TR2_RES_FIRE);
+		add_flag(flgs, TR_RES_FIRE);
 		if (p_ptr->lev > 9)
-			(*f3) |= (TR3_SEE_INVIS);
+			add_flag(flgs, TR_SEE_INVIS);
 		break;
 	case RACE_GOLEM:
-		(*f3) |= (TR3_SEE_INVIS);
-		(*f2) |= (TR2_FREE_ACT);
-		(*f2) |= (TR2_RES_POIS);
-		(*f3) |= (TR3_SLOW_DIGEST);
+		add_flag(flgs, TR_SEE_INVIS);
+		add_flag(flgs, TR_FREE_ACT);
+		add_flag(flgs, TR_RES_POIS);
+		add_flag(flgs, TR_SLOW_DIGEST);
 		if (p_ptr->lev > 34)
-			(*f2) |= (TR2_HOLD_LIFE);
+			add_flag(flgs, TR_HOLD_LIFE);
 		break;
 	case RACE_SKELETON:
-		(*f3) |= (TR3_SEE_INVIS);
-		(*f2) |= (TR2_RES_SHARDS);
-		(*f2) |= (TR2_HOLD_LIFE);
-		(*f2) |= (TR2_RES_POIS);
+		add_flag(flgs, TR_SEE_INVIS);
+		add_flag(flgs, TR_RES_SHARDS);
+		add_flag(flgs, TR_HOLD_LIFE);
+		add_flag(flgs, TR_RES_POIS);
 		if (p_ptr->lev > 9)
-			(*f2) |= (TR2_RES_COLD);
+			add_flag(flgs, TR_RES_COLD);
 		break;
 	case RACE_ZOMBIE:
-		(*f3) |= (TR3_SEE_INVIS);
-		(*f2) |= (TR2_HOLD_LIFE);
-		(*f2) |= (TR2_RES_NETHER);
-		(*f2) |= (TR2_RES_POIS);
-		(*f3) |= (TR3_SLOW_DIGEST);
+		add_flag(flgs, TR_SEE_INVIS);
+		add_flag(flgs, TR_HOLD_LIFE);
+		add_flag(flgs, TR_RES_NETHER);
+		add_flag(flgs, TR_RES_POIS);
+		add_flag(flgs, TR_SLOW_DIGEST);
 		if (p_ptr->lev > 4)
-			(*f2) |= (TR2_RES_COLD);
+			add_flag(flgs, TR_RES_COLD);
 		break;
 	case RACE_VAMPIRE:
-		(*f2) |= (TR2_HOLD_LIFE);
-		(*f2) |= (TR2_RES_DARK);
-		(*f2) |= (TR2_RES_NETHER);
-		if (p_ptr->pclass != CLASS_NINJA) (*f3) |= (TR3_LITE);
-		(*f2) |= (TR2_RES_POIS);
-		(*f2) |= (TR2_RES_COLD);
+		add_flag(flgs, TR_HOLD_LIFE);
+		add_flag(flgs, TR_RES_DARK);
+		add_flag(flgs, TR_RES_NETHER);
+		if (p_ptr->pclass != CLASS_NINJA) add_flag(flgs, TR_LITE);
+		add_flag(flgs, TR_RES_POIS);
+		add_flag(flgs, TR_RES_COLD);
 		break;
 	case RACE_SPECTRE:
-		(*f3) |= (TR3_FEATHER);
-		(*f2) |= (TR2_FREE_ACT);
-		(*f2) |= (TR2_RES_COLD);
-		(*f3) |= (TR3_SEE_INVIS);
-		(*f2) |= (TR2_HOLD_LIFE);
-		(*f2) |= (TR2_RES_NETHER);
-		(*f2) |= (TR2_RES_POIS);
-		(*f3) |= (TR3_SLOW_DIGEST);
+		add_flag(flgs, TR_FEATHER);
+		add_flag(flgs, TR_FREE_ACT);
+		add_flag(flgs, TR_RES_COLD);
+		add_flag(flgs, TR_SEE_INVIS);
+		add_flag(flgs, TR_HOLD_LIFE);
+		add_flag(flgs, TR_RES_NETHER);
+		add_flag(flgs, TR_RES_POIS);
+		add_flag(flgs, TR_SLOW_DIGEST);
 		/* XXX pass_wall */
 		if (p_ptr->lev > 34)
-			(*f3) |= TR3_TELEPATHY;
+			add_flag(flgs, TR_TELEPATHY);
 		break;
 	case RACE_SPRITE:
-		(*f2) |= (TR2_RES_LITE);
-		(*f3) |= (TR3_FEATHER);
+		add_flag(flgs, TR_RES_LITE);
+		add_flag(flgs, TR_FEATHER);
 		if (p_ptr->lev > 9)
-			(*f1) |= (TR1_SPEED);
+			add_flag(flgs, TR_SPEED);
 		break;
 	case RACE_BEASTMAN:
-		(*f2) |= (TR2_RES_SOUND);
-		(*f2) |= (TR2_RES_CONF);
+		add_flag(flgs, TR_RES_SOUND);
+		add_flag(flgs, TR_RES_CONF);
 		break;
 	case RACE_ANGEL:
-		(*f3) |= (TR3_FEATHER);
-		(*f3) |= (TR3_SEE_INVIS);
+		add_flag(flgs, TR_FEATHER);
+		add_flag(flgs, TR_SEE_INVIS);
 		break;
 	case RACE_DEMON:
-		(*f2) |= (TR2_RES_FIRE);
-		(*f2) |= (TR2_RES_NETHER);
-		(*f2) |= (TR2_HOLD_LIFE);
+		add_flag(flgs, TR_RES_FIRE);
+		add_flag(flgs, TR_RES_NETHER);
+		add_flag(flgs, TR_HOLD_LIFE);
 		if (p_ptr->lev > 9)
-			(*f3) |= (TR3_SEE_INVIS);
+			add_flag(flgs, TR_SEE_INVIS);
 		break;
 	case RACE_DUNADAN:
-		(*f2) |= (TR2_SUST_CON);
+		add_flag(flgs, TR_SUST_CON);
 		break;
 	case RACE_S_FAIRY:
-		(*f3) |= (TR3_FEATHER);
+		add_flag(flgs, TR_FEATHER);
 		break;
 	case RACE_KUTA:
-		(*f2) |= (TR2_RES_CONF);
+		add_flag(flgs, TR_RES_CONF);
 		break;
 	case RACE_ANDROID:
-		(*f2) |= (TR2_FREE_ACT);
-		(*f2) |= (TR2_RES_POIS);
-		(*f3) |= (TR3_SLOW_DIGEST);
-		(*f2) |= (TR2_HOLD_LIFE);
+		add_flag(flgs, TR_FREE_ACT);
+		add_flag(flgs, TR_RES_POIS);
+		add_flag(flgs, TR_SLOW_DIGEST);
+		add_flag(flgs, TR_HOLD_LIFE);
 		break;
 	default:
 		; /* Do nothing */
@@ -2546,236 +2549,239 @@ static void player_flags(u32b *f1, u32b *f2, u32b *f3)
 	{
 		if (p_ptr->muta3 & MUT3_FLESH_ROT)
 		{
-			(*f3) &= ~(TR3_REGEN);
+			remove_flag(flgs, TR_REGEN);
 		}
 
 		if ((p_ptr->muta3 & MUT3_XTRA_FAT) ||
 			(p_ptr->muta3 & MUT3_XTRA_LEGS) ||
 			(p_ptr->muta3 & MUT3_SHORT_LEG))
 		{
-			(*f1) |= TR1_SPEED;
+			add_flag(flgs, TR_SPEED);
 		}
 
 		if (p_ptr->muta3  & MUT3_ELEC_TOUC)
 		{
-			(*f3) |= TR3_SH_ELEC;
+			add_flag(flgs, TR_SH_ELEC);
 		}
 
 		if (p_ptr->muta3 & MUT3_FIRE_BODY)
 		{
-			(*f3) |= TR3_SH_FIRE;
-			(*f3) |= TR3_LITE;
+			add_flag(flgs, TR_SH_FIRE);
+			add_flag(flgs, TR_LITE);
 		}
 
 		if (p_ptr->muta3 & MUT3_WINGS)
 		{
-			(*f3) |= TR3_FEATHER;
+			add_flag(flgs, TR_FEATHER);
 		}
 
 		if (p_ptr->muta3 & MUT3_FEARLESS)
 		{
-			(*f2) |= (TR2_RES_FEAR);
+			add_flag(flgs, TR_RES_FEAR);
 		}
 
 		if (p_ptr->muta3 & MUT3_REGEN)
 		{
-			(*f3) |= TR3_REGEN;
+			add_flag(flgs, TR_REGEN);
 		}
 
 		if (p_ptr->muta3 & MUT3_ESP)
 		{
-			(*f3) |= TR3_TELEPATHY;
+			add_flag(flgs, TR_TELEPATHY);
 		}
 
 		if (p_ptr->muta3 & MUT3_MOTION)
 		{
-			(*f2) |= TR2_FREE_ACT;
+			add_flag(flgs, TR_FREE_ACT);
 		}
 	}
 
 	if (p_ptr->pseikaku == SEIKAKU_SEXY)
-		(*f3) |= TR3_AGGRAVATE;
+		add_flag(flgs, TR_AGGRAVATE);
 	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN)
 	{
-		(*f2) |= (TR2_RES_BLIND);
-		(*f2) |= (TR2_RES_CONF);
-		(*f2) |= (TR2_HOLD_LIFE);
-		(*f3) |= (TR3_LITE);
+		add_flag(flgs, TR_RES_BLIND);
+		add_flag(flgs, TR_RES_CONF);
+		add_flag(flgs, TR_HOLD_LIFE);
+		add_flag(flgs, TR_LITE);
 		if (p_ptr->lev > 9)
-			(*f1) |= (TR1_SPEED);
+			add_flag(flgs, TR_SPEED);
 	}
 	if (p_ptr->special_defense & KATA_FUUJIN)
-		(*f2) |= TR2_REFLECT;
+		add_flag(flgs, TR_REFLECT);
 	if (p_ptr->special_defense & KAMAE_GENBU)
-		(*f2) |= TR2_REFLECT;
+		add_flag(flgs, TR_REFLECT);
 	if (p_ptr->special_defense & KAMAE_SUZAKU)
-		(*f3) |= TR3_FEATHER;
+		add_flag(flgs, TR_FEATHER);
 	if (p_ptr->special_defense & KAMAE_SEIRYU)
 	{
-		(*f2) |= (TR2_RES_FIRE);
-		(*f2) |= (TR2_RES_COLD);
-		(*f2) |= (TR2_RES_ACID);
-		(*f2) |= (TR2_RES_ELEC);
-		(*f2) |= (TR2_RES_POIS);
-		(*f3) |= (TR3_FEATHER);
-		(*f3) |= (TR3_SH_FIRE);
-		(*f3) |= (TR3_SH_ELEC);
-		(*f3) |= (TR3_SH_COLD);
+		add_flag(flgs, TR_RES_FIRE);
+		add_flag(flgs, TR_RES_COLD);
+		add_flag(flgs, TR_RES_ACID);
+		add_flag(flgs, TR_RES_ELEC);
+		add_flag(flgs, TR_RES_POIS);
+		add_flag(flgs, TR_FEATHER);
+		add_flag(flgs, TR_SH_FIRE);
+		add_flag(flgs, TR_SH_ELEC);
+		add_flag(flgs, TR_SH_COLD);
 	}
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
-		(*f2) |= TR2_RES_FEAR;
-		(*f2) |= TR2_RES_LITE;
-		(*f2) |= TR2_RES_DARK;
-		(*f2) |= TR2_RES_BLIND;
-		(*f2) |= TR2_RES_CONF;
-		(*f2) |= TR2_RES_SOUND;
-		(*f2) |= TR2_RES_SHARDS;
-		(*f2) |= TR2_RES_NETHER;
-		(*f2) |= TR2_RES_NEXUS;
-		(*f2) |= TR2_RES_CHAOS;
-		(*f2) |= TR2_RES_DISEN;
-		(*f2) |= TR2_REFLECT;
-		(*f2) |= TR2_HOLD_LIFE;
-		(*f2) |= TR2_FREE_ACT;
-		(*f3) |= TR3_SH_FIRE;
-		(*f3) |= TR3_SH_ELEC;
-		(*f3) |= TR3_SH_COLD;
-		(*f3) |= TR3_FEATHER;
-		(*f3) |= TR3_LITE;
-		(*f3) |= TR3_SEE_INVIS;
-		(*f3) |= TR3_TELEPATHY;
-		(*f3) |= TR3_SLOW_DIGEST;
-		(*f3) |= TR3_REGEN;
-		(*f2) |= (TR2_SUST_STR);
-		(*f2) |= (TR2_SUST_INT);
-		(*f2) |= (TR2_SUST_WIS);
-		(*f2) |= (TR2_SUST_DEX);
-		(*f2) |= (TR2_SUST_CON);
-		(*f2) |= (TR2_SUST_CHR);
+		add_flag(flgs, TR_RES_FEAR);
+		add_flag(flgs, TR_RES_LITE);
+		add_flag(flgs, TR_RES_DARK);
+		add_flag(flgs, TR_RES_BLIND);
+		add_flag(flgs, TR_RES_CONF);
+		add_flag(flgs, TR_RES_SOUND);
+		add_flag(flgs, TR_RES_SHARDS);
+		add_flag(flgs, TR_RES_NETHER);
+		add_flag(flgs, TR_RES_NEXUS);
+		add_flag(flgs, TR_RES_CHAOS);
+		add_flag(flgs, TR_RES_DISEN);
+		add_flag(flgs, TR_REFLECT);
+		add_flag(flgs, TR_HOLD_LIFE);
+		add_flag(flgs, TR_FREE_ACT);
+		add_flag(flgs, TR_SH_FIRE);
+		add_flag(flgs, TR_SH_ELEC);
+		add_flag(flgs, TR_SH_COLD);
+		add_flag(flgs, TR_FEATHER);
+		add_flag(flgs, TR_LITE);
+		add_flag(flgs, TR_SEE_INVIS);
+		add_flag(flgs, TR_TELEPATHY);
+		add_flag(flgs, TR_SLOW_DIGEST);
+		add_flag(flgs, TR_REGEN);
+		add_flag(flgs, TR_SUST_STR);
+		add_flag(flgs, TR_SUST_INT);
+		add_flag(flgs, TR_SUST_WIS);
+		add_flag(flgs, TR_SUST_DEX);
+		add_flag(flgs, TR_SUST_CON);
+		add_flag(flgs, TR_SUST_CHR);
 	}
 }
 
 
-static void tim_player_flags(u32b *f1, u32b *f2, u32b *f3, bool im_and_res)
+static void tim_player_flags(u32b flgs[TR_FLAG_SIZE], bool im_and_res)
 {
+	int i;
+
 	/* Clear */
-	(*f1) = (*f2) = (*f3) = 0L;
+	for (i = 0; i < TR_FLAG_SIZE; i++)
+		flgs[i] = 0L;
 
 	if (p_ptr->hero || p_ptr->shero || music_singing(MUSIC_HERO) || music_singing(MUSIC_SHERO))
-		(*f2) |= TR2_RES_FEAR;
+		add_flag(flgs, TR_RES_FEAR);
 	if (p_ptr->tim_invis)
-		(*f3) |= TR3_SEE_INVIS;
+		add_flag(flgs, TR_SEE_INVIS);
 	if (p_ptr->tim_regen)
-		(*f3) |= TR3_REGEN;
+		add_flag(flgs, TR_REGEN);
 	if (p_ptr->tim_esp || music_singing(MUSIC_MIND))
-		(*f3) |= TR3_TELEPATHY;
+		add_flag(flgs, TR_TELEPATHY);
 	if (p_ptr->fast || p_ptr->slow || music_singing(MUSIC_SPEED) || music_singing(MUSIC_SHERO))
-		(*f1) |= TR1_SPEED;
+		add_flag(flgs, TR_SPEED);
 	if  ((p_ptr->special_defense & KATA_MUSOU) || music_singing(MUSIC_RESIST))
 	{
-		(*f2) |= (TR2_RES_FIRE);
-		(*f2) |= (TR2_RES_COLD);
-		(*f2) |= (TR2_RES_ACID);
-		(*f2) |= (TR2_RES_ELEC);
-		(*f2) |= (TR2_RES_POIS);
+		add_flag(flgs, TR_RES_FIRE);
+		add_flag(flgs, TR_RES_COLD);
+		add_flag(flgs, TR_RES_ACID);
+		add_flag(flgs, TR_RES_ELEC);
+		add_flag(flgs, TR_RES_POIS);
 	}
 	if (im_and_res)
 	{
 		if (p_ptr->oppose_acid && !(p_ptr->special_defense & DEFENSE_ACID) && !((prace_is_(RACE_YEEK)) && (p_ptr->lev > 19)))
-			(*f2) |= TR2_RES_ACID;
+			add_flag(flgs, TR_RES_ACID);
 		if (p_ptr->oppose_elec && !(p_ptr->special_defense & DEFENSE_ELEC))
-			(*f2) |= TR2_RES_ELEC;
+			add_flag(flgs, TR_RES_ELEC);
 		if (p_ptr->oppose_fire && !(p_ptr->special_defense & DEFENSE_FIRE))
-			(*f2) |= TR2_RES_FIRE;
+			add_flag(flgs, TR_RES_FIRE);
 		if (p_ptr->oppose_cold && !(p_ptr->special_defense & DEFENSE_COLD))
-			(*f2) |= TR2_RES_COLD;
+			add_flag(flgs, TR_RES_COLD);
 	}
 	else
 	{
 		if (p_ptr->oppose_acid)
-			(*f2) |= TR2_RES_ACID;
+			add_flag(flgs, TR_RES_ACID);
 		if (p_ptr->oppose_elec)
-			(*f2) |= TR2_RES_ELEC;
+			add_flag(flgs, TR_RES_ELEC);
 		if (p_ptr->oppose_fire)
-			(*f2) |= TR2_RES_FIRE;
+			add_flag(flgs, TR_RES_FIRE);
 		if (p_ptr->oppose_cold)
-			(*f2) |= TR2_RES_COLD;
+			add_flag(flgs, TR_RES_COLD);
 	}
 	if (p_ptr->oppose_pois)
-		(*f2) |= TR2_RES_POIS;
+		add_flag(flgs, TR_RES_POIS);
 	if (p_ptr->special_attack & ATTACK_ACID)
-		(*f1) |= TR1_BRAND_ACID;
+		add_flag(flgs, TR_BRAND_ACID);
 	if (p_ptr->special_attack & ATTACK_ELEC)
-		(*f1) |= TR1_BRAND_ELEC;
+		add_flag(flgs, TR_BRAND_ELEC);
 	if (p_ptr->special_attack & ATTACK_FIRE)
-		(*f1) |= TR1_BRAND_FIRE;
+		add_flag(flgs, TR_BRAND_FIRE);
 	if (p_ptr->special_attack & ATTACK_COLD)
-		(*f1) |= TR1_BRAND_COLD;
+		add_flag(flgs, TR_BRAND_COLD);
 	if (p_ptr->special_attack & ATTACK_POIS)
-		(*f1) |= TR1_BRAND_POIS;
+		add_flag(flgs, TR_BRAND_POIS);
 	if (p_ptr->special_defense & DEFENSE_ACID)
-		(*f2) |= TR2_IM_ACID;
+		add_flag(flgs, TR_IM_ACID);
 	if (p_ptr->special_defense & DEFENSE_ELEC)
-		(*f2) |= TR2_IM_ELEC;
+		add_flag(flgs, TR_IM_ELEC);
 	if (p_ptr->special_defense & DEFENSE_FIRE)
-		(*f2) |= TR2_IM_FIRE;
+		add_flag(flgs, TR_IM_FIRE);
 	if (p_ptr->special_defense & DEFENSE_COLD)
-		(*f2) |= TR2_IM_COLD;
+		add_flag(flgs, TR_IM_COLD);
 	if (p_ptr->wraith_form)
-		(*f2) |= TR2_REFLECT;
+		add_flag(flgs, TR_REFLECT);
 	/* by henkma */
 	if (p_ptr->tim_reflect){
-		(*f2) |= TR2_REFLECT;
+		add_flag(flgs, TR_REFLECT);
 	}
 
 	if (p_ptr->magicdef)
 	{
-		(*f2) |= TR2_RES_BLIND;
-		(*f2) |= TR2_RES_CONF;
-		(*f2) |= TR2_REFLECT;
-		(*f2) |= TR2_FREE_ACT;
-		(*f3) |= TR3_FEATHER;
+		add_flag(flgs, TR_RES_BLIND);
+		add_flag(flgs, TR_RES_CONF);
+		add_flag(flgs, TR_REFLECT);
+		add_flag(flgs, TR_FREE_ACT);
+		add_flag(flgs, TR_FEATHER);
 	}
 	if (p_ptr->tim_res_nether)
 	{
-		(*f2) |= TR2_RES_NETHER;
+		add_flag(flgs, TR_RES_NETHER);
 	}
 	if (p_ptr->tim_sh_fire)
 	{
-		(*f3) |= TR3_SH_FIRE;
+		add_flag(flgs, TR_SH_FIRE);
 	}
 	if (p_ptr->ult_res)
 	{
-		(*f2) |= TR2_RES_FEAR;
-		(*f2) |= TR2_RES_LITE;
-		(*f2) |= TR2_RES_DARK;
-		(*f2) |= TR2_RES_BLIND;
-		(*f2) |= TR2_RES_CONF;
-		(*f2) |= TR2_RES_SOUND;
-		(*f2) |= TR2_RES_SHARDS;
-		(*f2) |= TR2_RES_NETHER;
-		(*f2) |= TR2_RES_NEXUS;
-		(*f2) |= TR2_RES_CHAOS;
-		(*f2) |= TR2_RES_DISEN;
-		(*f2) |= TR2_REFLECT;
-		(*f2) |= TR2_HOLD_LIFE;
-		(*f2) |= TR2_FREE_ACT;
-		(*f3) |= TR3_SH_FIRE;
-		(*f3) |= TR3_SH_ELEC;
-		(*f3) |= TR3_SH_COLD;
-		(*f3) |= TR3_FEATHER;
-		(*f3) |= TR3_LITE;
-		(*f3) |= TR3_SEE_INVIS;
-		(*f3) |= TR3_TELEPATHY;
-		(*f3) |= TR3_SLOW_DIGEST;
-		(*f3) |= TR3_REGEN;
-		(*f2) |= (TR2_SUST_STR);
-		(*f2) |= (TR2_SUST_INT);
-		(*f2) |= (TR2_SUST_WIS);
-		(*f2) |= (TR2_SUST_DEX);
-		(*f2) |= (TR2_SUST_CON);
-		(*f2) |= (TR2_SUST_CHR);
+		add_flag(flgs, TR_RES_FEAR);
+		add_flag(flgs, TR_RES_LITE);
+		add_flag(flgs, TR_RES_DARK);
+		add_flag(flgs, TR_RES_BLIND);
+		add_flag(flgs, TR_RES_CONF);
+		add_flag(flgs, TR_RES_SOUND);
+		add_flag(flgs, TR_RES_SHARDS);
+		add_flag(flgs, TR_RES_NETHER);
+		add_flag(flgs, TR_RES_NEXUS);
+		add_flag(flgs, TR_RES_CHAOS);
+		add_flag(flgs, TR_RES_DISEN);
+		add_flag(flgs, TR_REFLECT);
+		add_flag(flgs, TR_HOLD_LIFE);
+		add_flag(flgs, TR_FREE_ACT);
+		add_flag(flgs, TR_SH_FIRE);
+		add_flag(flgs, TR_SH_ELEC);
+		add_flag(flgs, TR_SH_COLD);
+		add_flag(flgs, TR_FEATHER);
+		add_flag(flgs, TR_LITE);
+		add_flag(flgs, TR_SEE_INVIS);
+		add_flag(flgs, TR_TELEPATHY);
+		add_flag(flgs, TR_SLOW_DIGEST);
+		add_flag(flgs, TR_REGEN);
+		add_flag(flgs, TR_SUST_STR);
+		add_flag(flgs, TR_SUST_INT);
+		add_flag(flgs, TR_SUST_WIS);
+		add_flag(flgs, TR_SUST_DEX);
+		add_flag(flgs, TR_SUST_CON);
+		add_flag(flgs, TR_SUST_CHR);
 	}
 }
 
@@ -2824,17 +2830,18 @@ void print_equippy(void)
  *
  */
 
-static void known_obj_immunity(u32b *f1, u32b *f2, u32b *f3)
+static void known_obj_immunity(u32b flgs[TR_FLAG_SIZE])
 {
 	int i;
 
 	/* Clear */
-	(*f1) = (*f2) = (*f3) = 0L;
+	for (i = 0; i < TR_FLAG_SIZE; i++)
+		flgs[i] = 0L;
 
 	/* Check equipment */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		u32b    o_f1, o_f2, o_f3;
+		u32b o_flgs[TR_FLAG_SIZE];
 
 		object_type *o_ptr;
 
@@ -2844,80 +2851,90 @@ static void known_obj_immunity(u32b *f1, u32b *f2, u32b *f3)
 		if (!o_ptr->k_idx) continue;
 
 		/* Known flags */
-		object_flags_known(o_ptr, &o_f1, &o_f2, &o_f3);
+		object_flags_known(o_ptr, o_flgs);
 
-		if (o_f2 & TR2_IM_ACID) (*f2) |= TR2_RES_ACID;
-		if (o_f2 & TR2_IM_ELEC) (*f2) |= TR2_RES_ELEC;
-		if (o_f2 & TR2_IM_FIRE) (*f2) |= TR2_RES_FIRE;
-		if (o_f2 & TR2_IM_COLD) (*f2) |= TR2_RES_COLD;
+		if (have_flag(flgs, TR_IM_ACID)) add_flag(flgs, TR_RES_ACID);
+		if (have_flag(flgs, TR_IM_ELEC)) add_flag(flgs, TR_RES_ELEC);
+		if (have_flag(flgs, TR_IM_FIRE)) add_flag(flgs, TR_RES_FIRE);
+		if (have_flag(flgs, TR_IM_COLD)) add_flag(flgs, TR_RES_COLD);
 	}
 }
 
-static void player_immunity(u32b *f1, u32b *f2, u32b *f3)
+static void player_immunity(u32b flgs[TR_FLAG_SIZE])
 {
+	int i;
+
 	/* Clear */
-	(*f1) = (*f2) = (*f3) = 0L;
+	for (i = 0; i < TR_FLAG_SIZE; i++)
+		flgs[i] = 0L;
 
 	if (prace_is_(RACE_SPECTRE))
-		(*f2) |= TR2_RES_NETHER;
+		add_flag(flgs, TR_RES_NETHER);
 	if (p_ptr->mimic_form == MIMIC_VAMPIRE || prace_is_(RACE_VAMPIRE))
-		(*f2) |= TR2_RES_DARK;
+		add_flag(flgs, TR_RES_DARK);
 	if (p_ptr->mimic_form == MIMIC_DEMON_LORD)
-		(*f2) |= TR2_RES_FIRE;
+		add_flag(flgs, TR_RES_FIRE);
 	else if (prace_is_(RACE_YEEK) && p_ptr->lev > 19)
-		(*f2) |= TR2_RES_ACID;
+		add_flag(flgs, TR_RES_ACID);
 }
 
-static void tim_player_immunity(u32b *f1, u32b *f2, u32b *f3)
+static void tim_player_immunity(u32b flgs[TR_FLAG_SIZE])
 {
+	int i;
+
 	/* Clear */
-	(*f1) = (*f2) = (*f3) = 0L;
+	for (i = 0; i < TR_FLAG_SIZE; i++)
+		flgs[i] = 0L;
 
 	if (p_ptr->special_defense & DEFENSE_ACID)
-		(*f2) |= TR2_RES_ACID;
+		add_flag(flgs, TR_RES_ACID);
 	if (p_ptr->special_defense & DEFENSE_ELEC)
-		(*f2) |= TR2_RES_ELEC;
+		add_flag(flgs, TR_RES_ELEC);
 	if (p_ptr->special_defense & DEFENSE_FIRE)
-		(*f2) |= TR2_RES_FIRE;
+		add_flag(flgs, TR_RES_FIRE);
 	if (p_ptr->special_defense & DEFENSE_COLD)
-		(*f2) |= TR2_RES_COLD;
+		add_flag(flgs, TR_RES_COLD);
 	if (p_ptr->wraith_form)
-		(*f2) |= TR2_RES_DARK;
+		add_flag(flgs, TR_RES_DARK);
 }
 
-static void player_vuln_flags(u32b *f1, u32b *f2, u32b *f3)
+static void player_vuln_flags(u32b flgs[TR_FLAG_SIZE])
 {
+	int i;
+
 	/* Clear */
-	(*f1) = (*f2) = (*f3) = 0L;
+	for (i = 0; i < TR_FLAG_SIZE; i++)
+		flgs[i] = 0L;
 
 	if ((p_ptr->muta3 & MUT3_VULN_ELEM) || (p_ptr->special_defense & KATA_KOUKIJIN))
 	{
-		(*f2) |= TR2_RES_ACID;
-		(*f2) |= TR2_RES_ELEC;
-		(*f2) |= TR2_RES_FIRE;
-		(*f2) |= TR2_RES_COLD;
+		add_flag(flgs, TR_RES_ACID);
+		add_flag(flgs, TR_RES_ELEC);
+		add_flag(flgs, TR_RES_FIRE);
+		add_flag(flgs, TR_RES_COLD);
 	}
 	if (prace_is_(RACE_ANDROID))
-		(*f2) |= TR2_RES_ELEC;
+		add_flag(flgs, TR_RES_ELEC);
 	if (prace_is_(RACE_ENT))
-		(*f2) |= TR2_RES_FIRE;
+		add_flag(flgs, TR_RES_FIRE);
 	if (prace_is_(RACE_VAMPIRE) || prace_is_(RACE_S_FAIRY) ||
 	    (p_ptr->mimic_form == MIMIC_VAMPIRE))
-		(*f2) |= TR2_RES_LITE;
+		add_flag(flgs, TR_RES_LITE);
 }
 
 /*
  * Helper function, see below
  */
 static void display_player_flag_aux(int row, int col, cptr header,
-				    int n, u32b flag1, u32b flag2,
-				    u32b im_f[], u32b vul_f)
+				    int flag1, int flag2,
+				    u32b im_f[3][TR_FLAG_SIZE], 
+				    u32b vul_f[TR_FLAG_SIZE])
 {
 	int     i;
-	u32b    f[4];
+	u32b    flgs[TR_FLAG_SIZE], cflgs;
 	bool    vuln = FALSE;
 
-	if ((vul_f & flag1) && !((im_f[0] | im_f[1] | im_f[2]) & flag1))
+	if (have_flag(vul_f, flag1) && !(have_flag(im_f[0], flag1) || have_flag(im_f[1], flag1) || have_flag(im_f[2], flag1)))
 		vuln = TRUE;
 
 	/* Header */
@@ -2930,46 +2947,47 @@ static void display_player_flag_aux(int row, int col, cptr header,
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
 		object_type *o_ptr;
-		f[0] = f[1] = f[2] = f[3] = 0L;
 
 		/* Object */
 		o_ptr = &inventory[i];
 
 		/* Known flags */
-		object_flags_known(o_ptr, &f[0], &f[1], &f[2]);
-		f[3] = o_ptr->curse_flags;
+		object_flags_known(o_ptr, flgs);
+		cflgs = o_ptr->curse_flags;
 
 		/* Default */
 		c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
 
 		/* Check flags */
-		if (f[n - 1] & flag1) c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE), "+", row, col);
-		if (f[n - 1] & flag2) c_put_str(TERM_WHITE, "*", row, col);
+		if (((flag1 != -1) && have_flag(flgs, flag1)) ||
+		    ((flag1 == -1) && (cflgs & (TRC_CURSED | TRC_HEAVY_CURSE))))
+			c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE), "+", row, col);
+		if (((flag2 != -1) && have_flag(flgs, flag2)) ||
+		    ((flag2 == -1) && (cflgs & TRC_PERMA_CURSE)))
+			c_put_str(TERM_WHITE, "*", row, col);
 
 		/* Advance */
 		col++;
 	}
 
 	/* Player flags */
-	player_flags(&f[0], &f[1], &f[2]);
-	f[3] = 0L;
+	player_flags(flgs);
 
 	/* Default */
 	c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
 
 	/* Check flags */
-	if (f[n-1] & flag1) c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE), "+", row, col);
+	if (have_flag(flgs, flag1)) c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE), "+", row, col);
 
 	/* Timed player flags */
-	tim_player_flags(&f[0], &f[1], &f[2], TRUE);
-	f[3] = 0L;
+	tim_player_flags(flgs, TRUE);
 
 	/* Check flags */
-	if (f[n-1] & flag1) c_put_str((byte)(vuln ? TERM_ORANGE : TERM_YELLOW), "#", row, col);
+	if (have_flag(flgs, flag1)) c_put_str((byte)(vuln ? TERM_ORANGE : TERM_YELLOW), "#", row, col);
 
 	/* Immunity */
-	if (im_f[2] & flag1) c_put_str(TERM_YELLOW, "*", row, col);
-	if (im_f[1] & flag1) c_put_str(TERM_WHITE, "*", row, col);
+	if (have_flag(im_f[2], flag1)) c_put_str(TERM_YELLOW, "*", row, col);
+	if (have_flag(im_f[1], flag1)) c_put_str(TERM_WHITE, "*", row, col);
 
 	/* Vulnerability */
 	if (vuln) c_put_str(TERM_RED, "v", row, col + 1);
@@ -2984,13 +3002,13 @@ static void display_player_flag_info(void)
 	int row;
 	int col;
 
-	u32b im_f[3][3], vul_f[3];
+	u32b im_f[3][TR_FLAG_SIZE], vul_f[TR_FLAG_SIZE];
 
-	known_obj_immunity(&im_f[0][0], &im_f[1][0], &im_f[2][0]);
-	player_immunity(&im_f[0][1], &im_f[1][1], &im_f[2][1]);
-	tim_player_immunity(&im_f[0][2], &im_f[1][2], &im_f[2][2]);
+	known_obj_immunity(im_f[0]);
+	player_immunity(im_f[1]);
+	tim_player_immunity(im_f[2]);
 
-	player_vuln_flags(&vul_f[0], &vul_f[1], &vul_f[2]);
+	player_vuln_flags(vul_f);
 
 	/*** Set 1 ***/
 
@@ -3001,27 +3019,27 @@ static void display_player_flag_info(void)
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row-1, col+8);
 
 #ifdef JP
-display_player_flag_aux(row+0, col, "ÂÑ»À  :", 2, TR2_RES_ACID, TR2_IM_ACID, im_f[1], vul_f[1]);
-display_player_flag_aux(row+1, col, "ÂÑÅÅ·â:", 2, TR2_RES_ELEC, TR2_IM_ELEC, im_f[1], vul_f[1]);
-display_player_flag_aux(row+2, col, "ÂÑ²Ð±ê:", 2, TR2_RES_FIRE, TR2_IM_FIRE, im_f[1], vul_f[1]);
-display_player_flag_aux(row+3, col, "ÂÑÎäµ¤:", 2, TR2_RES_COLD, TR2_IM_COLD, im_f[1], vul_f[1]);
-display_player_flag_aux(row+4, col, "ÂÑÆÇ  :", 2, TR2_RES_POIS, 0, im_f[1], vul_f[1]);
-display_player_flag_aux(row+5, col, "ÂÑÁ®¸÷:", 2, TR2_RES_LITE, 0, im_f[1], vul_f[1]);
-display_player_flag_aux(row+6, col, "ÂÑ°Å¹õ:", 2, TR2_RES_DARK, 0, im_f[1], vul_f[1]);
-display_player_flag_aux(row+7, col, "ÂÑÇËÊÒ:", 2, TR2_RES_SHARDS, 0, im_f[1], vul_f[1]);
-display_player_flag_aux(row+8, col, "ÂÑÌÕÌÜ:", 2, TR2_RES_BLIND, 0, im_f[1], vul_f[1]);
-display_player_flag_aux(row+9, col, "ÂÑº®Íð:", 2, TR2_RES_CONF, 0, im_f[1], vul_f[1]);
+display_player_flag_aux(row+0, col, "ÂÑ»À  :", TR_RES_ACID, TR_IM_ACID, im_f, vul_f);
+display_player_flag_aux(row+1, col, "ÂÑÅÅ·â:", TR_RES_ELEC, TR_IM_ELEC, im_f, vul_f);
+display_player_flag_aux(row+2, col, "ÂÑ²Ð±ê:", TR_RES_FIRE, TR_IM_FIRE, im_f, vul_f);
+display_player_flag_aux(row+3, col, "ÂÑÎäµ¤:", TR_RES_COLD, TR_IM_COLD, im_f, vul_f);
+display_player_flag_aux(row+4, col, "ÂÑÆÇ  :", TR_RES_POIS, 0, im_f, vul_f);
+display_player_flag_aux(row+5, col, "ÂÑÁ®¸÷:", TR_RES_LITE, 0, im_f, vul_f);
+display_player_flag_aux(row+6, col, "ÂÑ°Å¹õ:", TR_RES_DARK, 0, im_f, vul_f);
+display_player_flag_aux(row+7, col, "ÂÑÇËÊÒ:", TR_RES_SHARDS, 0, im_f, vul_f);
+display_player_flag_aux(row+8, col, "ÂÑÌÕÌÜ:", TR_RES_BLIND, 0, im_f, vul_f);
+display_player_flag_aux(row+9, col, "ÂÑº®Íð:", TR_RES_CONF, 0, im_f, vul_f);
 #else
-	display_player_flag_aux(row+0, col, "Acid  :", 2, TR2_RES_ACID, TR2_IM_ACID, im_f[1], vul_f[1]);
-	display_player_flag_aux(row+1, col, "Elec  :", 2, TR2_RES_ELEC, TR2_IM_ELEC, im_f[1], vul_f[1]);
-	display_player_flag_aux(row+2, col, "Fire  :", 2, TR2_RES_FIRE, TR2_IM_FIRE, im_f[1], vul_f[1]);
-	display_player_flag_aux(row+3, col, "Cold  :", 2, TR2_RES_COLD, TR2_IM_COLD, im_f[1], vul_f[1]);
-	display_player_flag_aux(row+4, col, "Poison:", 2, TR2_RES_POIS, 0, im_f[1], vul_f[1]);
-	display_player_flag_aux(row+5, col, "Light :", 2, TR2_RES_LITE, 0, im_f[1], vul_f[1]);
-	display_player_flag_aux(row+6, col, "Dark  :", 2, TR2_RES_DARK, 0, im_f[1], vul_f[1]);
-	display_player_flag_aux(row+7, col, "Shard :", 2, TR2_RES_SHARDS, 0, im_f[1], vul_f[1]);
-	display_player_flag_aux(row+8, col, "Blind :", 2, TR2_RES_BLIND, 0, im_f[1], vul_f[1]);
-	display_player_flag_aux(row+9, col, "Conf  :", 2, TR2_RES_CONF, 0, im_f[1], vul_f[1]);
+	display_player_flag_aux(row+0, col, "Acid  :", TR_RES_ACID, TR_IM_ACID, im_f, vul_f);
+	display_player_flag_aux(row+1, col, "Elec  :", TR_RES_ELEC, TR_IM_ELEC, im_f, vul_f);
+	display_player_flag_aux(row+2, col, "Fire  :", TR_RES_FIRE, TR_IM_FIRE, im_f, vul_f);
+	display_player_flag_aux(row+3, col, "Cold  :", TR_RES_COLD, TR_IM_COLD, im_f, vul_f);
+	display_player_flag_aux(row+4, col, "Poison:", TR_RES_POIS, 0, im_f, vul_f);
+	display_player_flag_aux(row+5, col, "Light :", TR_RES_LITE, 0, im_f, vul_f);
+	display_player_flag_aux(row+6, col, "Dark  :", TR_RES_DARK, 0, im_f, vul_f);
+	display_player_flag_aux(row+7, col, "Shard :", TR_RES_SHARDS, 0, im_f, vul_f);
+	display_player_flag_aux(row+8, col, "Blind :", TR_RES_BLIND, 0, im_f, vul_f);
+	display_player_flag_aux(row+9, col, "Conf  :", TR_RES_CONF, 0, im_f, vul_f);
 #endif
 
 
@@ -3035,27 +3053,27 @@ display_player_flag_aux(row+9, col, "ÂÑº®Íð:", 2, TR2_RES_CONF, 0, im_f[1], vul_
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row-1, col+8);
 
 #ifdef JP
-display_player_flag_aux(row+0, col, "ÂÑ¹ì²»:", 2, TR2_RES_SOUND, 0, im_f[1], vul_f[1]);
-display_player_flag_aux(row+1, col, "ÂÑÃÏ¹ö:", 2, TR2_RES_NETHER, 0, im_f[1], vul_f[1]);
-display_player_flag_aux(row+2, col, "ÂÑ°øº®:", 2, TR2_RES_NEXUS, 0, im_f[1], vul_f[1]);
-display_player_flag_aux(row+3, col, "ÂÑ¥«¥ª:", 2, TR2_RES_CHAOS, 0, im_f[1], vul_f[1]);
-display_player_flag_aux(row+4, col, "ÂÑÎô²½:", 2, TR2_RES_DISEN, 0, im_f[1], vul_f[1]);
-display_player_flag_aux(row+5, col, "ÂÑ¶²ÉÝ:", 2, TR2_RES_FEAR, 0, im_f[1], vul_f[1]);
-display_player_flag_aux(row+6, col, "È¿¼Í  :", 2, TR2_REFLECT, 0, im_f[1], vul_f[1]);
-display_player_flag_aux(row+7, col, "²Ð±ê¥ª:", 3, TR3_SH_FIRE, 0, im_f[2], vul_f[2]);
-display_player_flag_aux(row+8, col, "ÅÅµ¤¥ª:", 3, TR3_SH_ELEC, 0, im_f[2], vul_f[2]);
-display_player_flag_aux(row+9, col, "Îäµ¤¥ª:", 3, TR3_SH_COLD, 0, im_f[2], vul_f[2]);
+display_player_flag_aux(row+0, col, "ÂÑ¹ì²»:", TR_RES_SOUND, 0, im_f, vul_f);
+display_player_flag_aux(row+1, col, "ÂÑÃÏ¹ö:", TR_RES_NETHER, 0, im_f, vul_f);
+display_player_flag_aux(row+2, col, "ÂÑ°øº®:", TR_RES_NEXUS, 0, im_f, vul_f);
+display_player_flag_aux(row+3, col, "ÂÑ¥«¥ª:", TR_RES_CHAOS, 0, im_f, vul_f);
+display_player_flag_aux(row+4, col, "ÂÑÎô²½:", TR_RES_DISEN, 0, im_f, vul_f);
+display_player_flag_aux(row+5, col, "ÂÑ¶²ÉÝ:", TR_RES_FEAR, 0, im_f, vul_f);
+display_player_flag_aux(row+6, col, "È¿¼Í  :", TR_REFLECT, 0, im_f, vul_f);
+display_player_flag_aux(row+7, col, "²Ð±ê¥ª:", TR_SH_FIRE, 0, im_f, vul_f);
+display_player_flag_aux(row+8, col, "ÅÅµ¤¥ª:", TR_SH_ELEC, 0, im_f, vul_f);
+display_player_flag_aux(row+9, col, "Îäµ¤¥ª:", TR_SH_COLD, 0, im_f, vul_f);
 #else
-	display_player_flag_aux(row+0, col, "Sound :", 2, TR2_RES_SOUND, 0, im_f[1], vul_f[1]);
-	display_player_flag_aux(row+1, col, "Nether:", 2, TR2_RES_NETHER, 0, im_f[1], vul_f[1]);
-	display_player_flag_aux(row+2, col, "Nexus :", 2, TR2_RES_NEXUS, 0, im_f[1], vul_f[1]);
-	display_player_flag_aux(row+3, col, "Chaos :", 2, TR2_RES_CHAOS, 0, im_f[1], vul_f[1]);
-	display_player_flag_aux(row+4, col, "Disnch:", 2, TR2_RES_DISEN, 0, im_f[1], vul_f[1]);
-	display_player_flag_aux(row+5, col, "Fear  :", 2, TR2_RES_FEAR, 0, im_f[1], vul_f[1]);
-	display_player_flag_aux(row+6, col, "Reflct:", 2, TR2_REFLECT, 0, im_f[1], vul_f[1]);
-	display_player_flag_aux(row+7, col, "AuFire:", 3, TR3_SH_FIRE, 0, im_f[2], vul_f[2]);
-	display_player_flag_aux(row+8, col, "AuElec:", 3, TR3_SH_ELEC, 0, im_f[2], vul_f[2]);
-	display_player_flag_aux(row+9, col, "AuCold:", 3, TR3_SH_COLD, 0, im_f[2], vul_f[2]);
+	display_player_flag_aux(row+0, col, "Sound :", TR_RES_SOUND, 0, im_f, vul_f);
+	display_player_flag_aux(row+1, col, "Nether:", TR_RES_NETHER, 0, im_f, vul_f);
+	display_player_flag_aux(row+2, col, "Nexus :", TR_RES_NEXUS, 0, im_f, vul_f);
+	display_player_flag_aux(row+3, col, "Chaos :", TR_RES_CHAOS, 0, im_f, vul_f);
+	display_player_flag_aux(row+4, col, "Disnch:", TR_RES_DISEN, 0, im_f, vul_f);
+	display_player_flag_aux(row+5, col, "Fear  :", TR_RES_FEAR, 0, im_f, vul_f);
+	display_player_flag_aux(row+6, col, "Reflct:", TR_REFLECT, 0, im_f, vul_f);
+	display_player_flag_aux(row+7, col, "AuFire:", TR_SH_FIRE, 0, im_f, vul_f);
+	display_player_flag_aux(row+8, col, "AuElec:", TR_SH_ELEC, 0, im_f, vul_f);
+	display_player_flag_aux(row+9, col, "AuCold:", TR_SH_COLD, 0, im_f, vul_f);
 #endif
 
 
@@ -3069,27 +3087,27 @@ display_player_flag_aux(row+9, col, "Îäµ¤¥ª:", 3, TR3_SH_COLD, 0, im_f[2], vul_f
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row-1, col+12);
 
 #ifdef JP
-display_player_flag_aux(row+0, col, "²ÃÂ®      :", 1, TR1_SPEED, 0, im_f[0], vul_f[0]);
-display_player_flag_aux(row+1, col, "ÂÑËãáã    :", 2, TR2_FREE_ACT, 0, im_f[1], vul_f[1]);
-display_player_flag_aux(row+2, col, "Æ©ÌÀÂÎ»ëÇ§:", 3, TR3_SEE_INVIS, 0, im_f[2], vul_f[2]);
-display_player_flag_aux(row+3, col, "·Ð¸³ÃÍÊÝ»ý:", 2, TR2_HOLD_LIFE, 0, im_f[2], vul_f[1]);
-display_player_flag_aux(row+4, col, "¥Æ¥ì¥Ñ¥·¡¼:", 3, TR3_TELEPATHY, 0, im_f[2], vul_f[2]);
-display_player_flag_aux(row+5, col, "ÃÙ¾Ã²½    :", 3, TR3_SLOW_DIGEST, 0, im_f[2], vul_f[2]);
-display_player_flag_aux(row+6, col, "µÞ²óÉü    :", 3, TR3_REGEN, 0, im_f[2], vul_f[2]);
-display_player_flag_aux(row+7, col, "ÉâÍ·      :", 3, TR3_FEATHER, 0, im_f[2], vul_f[2]);
-display_player_flag_aux(row+8, col, "±Ê±ó¸÷¸»  :", 3, TR3_LITE, 0, im_f[2], vul_f[2]);
-display_player_flag_aux(row+9, col, "¼ö¤¤      :", 4, (TRC_CURSED | TRC_HEAVY_CURSE), TRC_PERMA_CURSE, im_f[2], vul_f[2]);
+display_player_flag_aux(row+0, col, "²ÃÂ®      :", TR_SPEED, 0, im_f, vul_f);
+display_player_flag_aux(row+1, col, "ÂÑËãáã    :", TR_FREE_ACT, 0, im_f, vul_f);
+display_player_flag_aux(row+2, col, "Æ©ÌÀÂÎ»ëÇ§:", TR_SEE_INVIS, 0, im_f, vul_f);
+display_player_flag_aux(row+3, col, "·Ð¸³ÃÍÊÝ»ý:", TR_HOLD_LIFE, 0, im_f, vul_f);
+display_player_flag_aux(row+4, col, "¥Æ¥ì¥Ñ¥·¡¼:", TR_TELEPATHY, 0, im_f, vul_f);
+display_player_flag_aux(row+5, col, "ÃÙ¾Ã²½    :", TR_SLOW_DIGEST, 0, im_f, vul_f);
+display_player_flag_aux(row+6, col, "µÞ²óÉü    :", TR_REGEN, 0, im_f, vul_f);
+display_player_flag_aux(row+7, col, "ÉâÍ·      :", TR_FEATHER, 0, im_f, vul_f);
+display_player_flag_aux(row+8, col, "±Ê±ó¸÷¸»  :", TR_LITE, 0, im_f, vul_f);
+display_player_flag_aux(row+9, col, "¼ö¤¤      :", -1, -1, im_f, vul_f);
 #else
-	display_player_flag_aux(row+0, col, "Speed     :", 1, TR1_SPEED, 0, im_f[0], vul_f[0]);
-	display_player_flag_aux(row+1, col, "FreeAction:", 2, TR2_FREE_ACT, 0, im_f[1], vul_f[1]);
-	display_player_flag_aux(row+2, col, "SeeInvisi.:", 3, TR3_SEE_INVIS, 0, im_f[2], vul_f[2]);
-	display_player_flag_aux(row+3, col, "Hold Life :", 2, TR2_HOLD_LIFE, 0, im_f[1], vul_f[1]);
-	display_player_flag_aux(row+4, col, "Telepathy :", 3, TR3_TELEPATHY, 0, im_f[2], vul_f[2]);
-	display_player_flag_aux(row+5, col, "SlowDigest:", 3, TR3_SLOW_DIGEST, 0, im_f[2], vul_f[2]);
-	display_player_flag_aux(row+6, col, "Regene.   :", 3, TR3_REGEN, 0, im_f[2], vul_f[2]);
-	display_player_flag_aux(row+7, col, "Levitation:", 3, TR3_FEATHER, 0, im_f[2], vul_f[2]);
-	display_player_flag_aux(row+8, col, "Perm Lite :", 3, TR3_LITE, 0, im_f[2], vul_f[2]);
-	display_player_flag_aux(row+9, col, "Cursed    :", 4, (TRC_CURSED | TRC_HEAVY_CURSE), TRC_PERMA_CURSE, im_f[2], vul_f[2]);
+	display_player_flag_aux(row+0, col, "Speed     :", TR_SPEED, 0, im_f, vul_f);
+	display_player_flag_aux(row+1, col, "FreeAction:", TR_FREE_ACT, 0, im_f, vul_f);
+	display_player_flag_aux(row+2, col, "SeeInvisi.:", TR_SEE_INVIS, 0, im_f, vul_f);
+	display_player_flag_aux(row+3, col, "Hold Life :", TR_HOLD_LIFE, 0, im_f, vul_f);
+	display_player_flag_aux(row+4, col, "Telepathy :", TR_TELEPATHY, 0, im_f, vul_f);
+	display_player_flag_aux(row+5, col, "SlowDigest:", TR_SLOW_DIGEST, 0, im_f, vul_f);
+	display_player_flag_aux(row+6, col, "Regene.   :", TR_REGEN, 0, im_f, vul_f);
+	display_player_flag_aux(row+7, col, "Levitation:", TR_FEATHER, 0, im_f, vul_f);
+	display_player_flag_aux(row+8, col, "Perm Lite :", TR_LITE, 0, im_f, vul_f);
+	display_player_flag_aux(row+9, col, "Cursed    :", -1, -1, im_f, vul_f);
 #endif
 
 }
@@ -3169,7 +3187,7 @@ static void display_player_stat_info(void)
 	int row, col;
 
 	object_type *o_ptr;
-	u32b f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 	s16b k_idx;
 
 	byte a;
@@ -3308,7 +3326,7 @@ c_put_str(TERM_L_GREEN, "Ç½ÎÏ½¤Àµ", row - 1, col);
 		k_idx = o_ptr->k_idx;
 
 		/* Acquire "known" flags */
-		object_flags_known(o_ptr, &f1, &f2, &f3);
+		object_flags_known(o_ptr, flgs);
 
 		/* Initialize color based of sign of pval. */
 		for (stat = 0; stat < 6; stat++)
@@ -3318,7 +3336,7 @@ c_put_str(TERM_L_GREEN, "Ç½ÎÏ½¤Àµ", row - 1, col);
 			c = '.';
 
 			/* Boost */
-			if (f1 & 1 << stat)
+			if (have_flag(flgs, stat))
 			{
 				/* Default */
 				c = '*';
@@ -3333,7 +3351,7 @@ c_put_str(TERM_L_GREEN, "Ç½ÎÏ½¤Àµ", row - 1, col);
 					if (o_ptr->pval < 10) c = '0' + o_ptr->pval;
 				}
 
-				if (f2 & 1 << stat)
+				if (have_flag(flgs, stat + TR_SUST_STR))
 				{
 					/* Dark green for sustained stats */
 					a = TERM_GREEN;
@@ -3351,7 +3369,7 @@ c_put_str(TERM_L_GREEN, "Ç½ÎÏ½¤Àµ", row - 1, col);
 			}
 
 			/* Sustain */
-			else if (f2 & 1 << stat)
+			else if (have_flag(flgs, stat + TR_SUST_STR))
 			{
 				/* Dark green "s" */
 				a = TERM_GREEN;
@@ -3367,7 +3385,7 @@ c_put_str(TERM_L_GREEN, "Ç½ÎÏ½¤Àµ", row - 1, col);
 	}
 
 	/* Player flags */
-	player_flags(&f1, &f2, &f3);
+	player_flags(flgs);
 
 	/* Check stats */
 	for (stat = 0; stat < 6; stat++)
@@ -3446,7 +3464,7 @@ c_put_str(TERM_L_GREEN, "Ç½ÎÏ½¤Àµ", row - 1, col);
 
 
 		/* Sustain */
-		if (f2 & 1<<stat)
+		if (have_flag(flgs, stat + TR_SUST_STR))
 		{
 			/* Dark green "s" */
 			a = TERM_GREEN;
@@ -3712,7 +3730,7 @@ static void display_player_ben(void)
 
 	object_type *o_ptr;
 
-	u32b f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 
 	u16b b[6];
 	u16b color[6];
@@ -3729,52 +3747,52 @@ static void display_player_ben(void)
 		o_ptr = &inventory[i];
 
 		/* Known object flags */
-		object_flags_known(o_ptr, &f1, &f2, &f3);
+		object_flags_known(o_ptr, flgs);
 
 
-		if ((prace_is_(RACE_S_FAIRY)) && (f3 & TR3_AGGRAVATE))
+		if ((prace_is_(RACE_S_FAIRY)) && (have_flag(flgs, TR_AGGRAVATE)))
 		{
-			f3 &= ~(TR3_AGGRAVATE);
-			f1 |= TR1_STEALTH;
+			remove_flag(flgs, TR_AGGRAVATE);
+			add_flag(flgs, TR_STEALTH);
 		}
 
 		/* Incorporate */
-		b[0] |= (f1 & 0xFFFF);
-		b[1] |= (f1 >> 16);
-		b[2] |= (f2 & 0xFFFF);
-		b[3] |= (f2 >> 16);
-		b[4] |= (f3 & 0xFFFF);
-		b[5] |= (f3 >> 16);
+		b[0] |= (flgs[0] & 0xFFFF);
+		b[1] |= (flgs[0] >> 16);
+		b[2] |= (flgs[1] & 0xFFFF);
+		b[3] |= (flgs[1] >> 16);
+		b[4] |= (flgs[2] & 0xFFFF);
+		b[5] |= (flgs[2] >> 16);
 	}
 
 
 	/* Player flags */
-	player_flags(&f1, &f2, &f3);
+	player_flags(flgs);
 
 	/* Incorporate */
-	b[0] |= (f1 & 0xFFFF);
-	b[1] |= (f1 >> 16);
-	b[2] |= (f2 & 0xFFFF);
-	b[3] |= (f2 >> 16);
-	b[4] |= (f3 & 0xFFFF);
-	b[5] |= (f3 >> 16);
+	b[0] |= (flgs[0] & 0xFFFF);
+	b[1] |= (flgs[0] >> 16);
+	b[2] |= (flgs[1] & 0xFFFF);
+	b[3] |= (flgs[1] >> 16);
+	b[4] |= (flgs[2] & 0xFFFF);
+	b[5] |= (flgs[2] >> 16);
 
 	/* Player flags */
-	tim_player_flags(&f1, &f2, &f3, FALSE);
+	tim_player_flags(flgs, FALSE);
 
 	/* Incorporate */
-	b[0] |= (f1 & 0xFFFF);
-	b[1] |= (f1 >> 16);
-	b[2] |= (f2 & 0xFFFF);
-	b[3] |= (f2 >> 16);
-	b[4] |= (f3 & 0xFFFF);
-	b[5] |= (f3 >> 16);
-	color[0] = (u16b)(f1 & 0xFFFF);
-	color[1] = (u16b)(f1 >> 16);
-	color[2] = (u16b)(f2 & 0xFFFF);
-	color[3] = (u16b)(f2 >> 16);
-	color[4] = (u16b)(f3 & 0xFFFF);
-	color[5] = (u16b)(f3 >> 16);
+	b[0] |= (flgs[0] & 0xFFFF);
+	b[1] |= (flgs[0] >> 16);
+	b[2] |= (flgs[1] & 0xFFFF);
+	b[3] |= (flgs[1] >> 16);
+	b[4] |= (flgs[2] & 0xFFFF);
+	b[5] |= (flgs[2] >> 16);
+	color[0] = (u16b)(flgs[0] & 0xFFFF);
+	color[1] = (u16b)(flgs[0] >> 16);
+	color[2] = (u16b)(flgs[1] & 0xFFFF);
+	color[3] = (u16b)(flgs[1] >> 16);
+	color[4] = (u16b)(flgs[2] & 0xFFFF);
+	color[5] = (u16b)(flgs[2] >> 16);
 
 	/* Scan cols */
 	for (x = 0; x < 6; x++)
@@ -3827,7 +3845,7 @@ static void display_player_ben_one(int mode)
 
 	object_type *o_ptr;
 
-	u32b f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 
 	u16b b[13][6];
 	u16b color[6];
@@ -3842,21 +3860,21 @@ static void display_player_ben_one(int mode)
 		/* Object */
 		o_ptr = &inventory[i];
 
-		object_flags_known(o_ptr, &f1, &f2, &f3);
+		object_flags_known(o_ptr, flgs);
 
-		if ((prace_is_(RACE_S_FAIRY)) && (f3 & TR3_AGGRAVATE))
+		if ((prace_is_(RACE_S_FAIRY)) && (have_flag(flgs, TR_AGGRAVATE)))
 		{
-			f3 &= ~(TR3_AGGRAVATE);
-			f1 |= TR1_STEALTH;
+			remove_flag(flgs, TR_AGGRAVATE);
+			add_flag(flgs, TR_STEALTH);
 		}
 
 		/* Incorporate */
-		b[n][0] = (u16b)(f1 & 0xFFFF);
-		b[n][1] = (u16b)(f1 >> 16);
-		b[n][2] = (u16b)(f2 & 0xFFFF);
-		b[n][3] = (u16b)(f2 >> 16);
-		b[n][4] = (u16b)(f3 & 0xFFFF);
-		b[n][5] = (u16b)(f3 >> 16);
+		b[n][0] = (u16b)(flgs[0] & 0xFFFF);
+		b[n][1] = (u16b)(flgs[0] >> 16);
+		b[n][2] = (u16b)(flgs[1] & 0xFFFF);
+		b[n][3] = (u16b)(flgs[1] >> 16);
+		b[n][4] = (u16b)(flgs[2] & 0xFFFF);
+		b[n][5] = (u16b)(flgs[2] >> 16);
 	}
 
 
@@ -3864,32 +3882,32 @@ static void display_player_ben_one(int mode)
 	n = 12;
 
 	/* Player flags */
-	player_flags(&f1, &f2, &f3);
+	player_flags(flgs);
 
 	/* Incorporate */
-	b[n][0] = (u16b)(f1 & 0xFFFF);
-	b[n][1] = (u16b)(f1 >> 16);
-	b[n][2] = (u16b)(f2 & 0xFFFF);
-	b[n][3] = (u16b)(f2 >> 16);
-	b[n][4] = (u16b)(f3 & 0xFFFF);
-	b[n][5] = (u16b)(f3 >> 16);
+	b[n][0] = (u16b)(flgs[0] & 0xFFFF);
+	b[n][1] = (u16b)(flgs[0] >> 16);
+	b[n][2] = (u16b)(flgs[1] & 0xFFFF);
+	b[n][3] = (u16b)(flgs[1] >> 16);
+	b[n][4] = (u16b)(flgs[2] & 0xFFFF);
+	b[n][5] = (u16b)(flgs[2] >> 16);
 
 	/* Player flags */
-	tim_player_flags(&f1, &f2, &f3, FALSE);
+	tim_player_flags(flgs, FALSE);
 
 	/* Incorporate */
-	b[n][0] |= (f1 & 0xFFFF);
-	b[n][1] |= (f1 >> 16);
-	b[n][2] |= (f2 & 0xFFFF);
-	b[n][3] |= (f2 >> 16);
-	b[n][4] |= (f3 & 0xFFFF);
-	b[n][5] |= (f3 >> 16);
-	color[0] = (u16b)(f1 & 0xFFFF);
-	color[1] = (u16b)(f1 >> 16);
-	color[2] = (u16b)(f2 & 0xFFFF);
-	color[3] = (u16b)(f2 >> 16);
-	color[4] = (u16b)(f3 & 0xFFFF);
-	color[5] = (u16b)(f3 >> 16);
+	b[n][0] |= (flgs[0] & 0xFFFF);
+	b[n][1] |= (flgs[0] >> 16);
+	b[n][2] |= (flgs[1] & 0xFFFF);
+	b[n][3] |= (flgs[1] >> 16);
+	b[n][4] |= (flgs[2] & 0xFFFF);
+	b[n][5] |= (flgs[3] >> 16);
+	color[0] = (u16b)(flgs[0] & 0xFFFF);
+	color[1] = (u16b)(flgs[0] >> 16);
+	color[2] = (u16b)(flgs[1] & 0xFFFF);
+	color[3] = (u16b)(flgs[1] >> 16);
+	color[4] = (u16b)(flgs[2] & 0xFFFF);
+	color[5] = (u16b)(flgs[2] >> 16);
 
 
 	/* Scan cols */

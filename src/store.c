@@ -1138,6 +1138,8 @@ msg_print("ランダムアーティファクトは値引きなし。");
  */
 static bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
 {
+	int i;
+
 	/* Hack -- Identical items cannot be stacked */
 	if (o_ptr == j_ptr) return (0);
 
@@ -1162,10 +1164,8 @@ static bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
 	if (o_ptr->art_name || j_ptr->art_name) return (0);
 
 	/* Hack -- Identical art_flags! */
-	if ((o_ptr->art_flags1 != j_ptr->art_flags1) ||
-		(o_ptr->art_flags2 != j_ptr->art_flags2) ||
-		(o_ptr->art_flags3 != j_ptr->art_flags3))
-			return (0);
+	for (i = 0; i < TR_FLAG_SIZE; i++)
+		if (o_ptr->art_flags[i] != j_ptr->art_flags[i]) return (0);
 
 	/* Hack -- Never stack "powerful" items */
 	if (o_ptr->xtra1 || j_ptr->xtra1) return (0);
@@ -1281,9 +1281,9 @@ static int store_check_num(object_type *o_ptr)
 
 static bool is_blessed(object_type *o_ptr)
 {
-	u32b f1, f2, f3;
-	object_flags(o_ptr, &f1, &f2, &f3);
-	if (f3 & TR3_BLESSED) return (TRUE);
+	u32b flgs[TR_FLAG_SIZE];
+	object_flags(o_ptr, flgs);
+	if (have_flag(flgs, TR_BLESSED)) return (TRUE);
 	else return (FALSE);
 }
 

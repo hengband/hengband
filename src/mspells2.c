@@ -3244,7 +3244,7 @@ msg_format("%^sが瞬時に消えた。", m_name);
 			case 160+5:
 			{
 				int i, oldfy, oldfx;
-				u32b f1 = 0 , f2 = 0 , f3 = 0;
+				u32b flgs[TR_FLAG_SIZE];
 				object_type *o_ptr;
 
 				oldfy = m_ptr->fy;
@@ -3269,9 +3269,9 @@ msg_format("%^sがテレポートした。", m_name);
 						o_ptr = &inventory[i];
 						if(!cursed_p(o_ptr))
 						{
-							object_flags(o_ptr, &f1, &f2, &f3);
+							object_flags(o_ptr, flgs);
 
-							if((f3 & TR3_TELEPORT) || (p_ptr->muta1 & MUT1_VTELEPORT) || (p_ptr->pclass == CLASS_IMITATOR))
+							if((have_flag(flgs, TR_TELEPORT)) || (p_ptr->muta1 & MUT1_VTELEPORT) || (p_ptr->pclass == CLASS_IMITATOR))
 							{
 #ifdef JP
 								if(get_check_strict("ついていきますか？", CHECK_OKAY_CANCEL))

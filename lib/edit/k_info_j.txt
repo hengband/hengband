@@ -5338,7 +5338,7 @@ W:15:0:100:1000
 F:SHOW_MODS | INSTA_ART
 
 N:589:& Ра
-E:& Palantir~
+E:& Crystal Ball~
 G:*:y
 I:39:8:0
 W:60:0:10:60000

@@ -295,10 +295,12 @@ static void rd_item(object_type *o_ptr)
 
 	rd_byte(&o_ptr->marked);
 
-	/* Old flags */
-	rd_u32b(&o_ptr->art_flags1);
-	rd_u32b(&o_ptr->art_flags2);
-	rd_u32b(&o_ptr->art_flags3);
+	/* Object flags */
+	rd_u32b(&o_ptr->art_flags[0]);
+	rd_u32b(&o_ptr->art_flags[1]);
+	rd_u32b(&o_ptr->art_flags[2]);
+	if (h_older_than(1, 3, 0, 0)) o_ptr->art_flags[3] = 0L;
+        else rd_u32b(&o_ptr->art_flags[3]);
 
 	if (z_older_than(11, 0, 11))
 	{
@@ -306,8 +308,8 @@ static void rd_item(object_type *o_ptr)
 		if (o_ptr->ident & 0x40)
 		{
 			o_ptr->curse_flags |= TRC_CURSED;
-			if (o_ptr->art_flags3 & 0x40000000L) o_ptr->curse_flags |= TRC_HEAVY_CURSE;
-			if (o_ptr->art_flags3 & 0x80000000L) o_ptr->curse_flags |= TRC_PERMA_CURSE;
+			if (o_ptr->art_flags[2] & 0x40000000L) o_ptr->curse_flags |= TRC_HEAVY_CURSE;
+			if (o_ptr->art_flags[2] & 0x80000000L) o_ptr->curse_flags |= TRC_PERMA_CURSE;
 			if (o_ptr->name1)
 			{
 				artifact_type *a_ptr = &a_info[o_ptr->name1];
@@ -321,7 +323,7 @@ static void rd_item(object_type *o_ptr)
 				if (e_ptr->gen_flags & (TRG_PERMA_CURSE)) o_ptr->curse_flags |= TRC_PERMA_CURSE;
 			}
 		}
-		o_ptr->art_flags3 &= (0x1FFFFFFFL);
+		o_ptr->art_flags[2] &= (0x1FFFFFFFL);
 	}
 	else
 	{
@@ -341,12 +343,12 @@ static void rd_item(object_type *o_ptr)
 		{
 			switch (o_ptr->xtra2 % 6)
 			{
-			case 0: o_ptr->art_flags2 |= (TR2_SUST_STR); break;
-			case 1: o_ptr->art_flags2 |= (TR2_SUST_INT); break;
-			case 2: o_ptr->art_flags2 |= (TR2_SUST_WIS); break;
-			case 3: o_ptr->art_flags2 |= (TR2_SUST_DEX); break;
-			case 4: o_ptr->art_flags2 |= (TR2_SUST_CON); break;
-			case 5: o_ptr->art_flags2 |= (TR2_SUST_CHR); break;
+			case 0: add_flag(o_ptr->art_flags, TR_SUST_STR); break;
+			case 1: add_flag(o_ptr->art_flags, TR_SUST_INT); break;
+			case 2: add_flag(o_ptr->art_flags, TR_SUST_WIS); break;
+			case 3: add_flag(o_ptr->art_flags, TR_SUST_DEX); break;
+			case 4: add_flag(o_ptr->art_flags, TR_SUST_CON); break;
+			case 5: add_flag(o_ptr->art_flags, TR_SUST_CHR); break;
 			}
 			o_ptr->xtra2 = 0;
 		}
@@ -354,17 +356,17 @@ static void rd_item(object_type *o_ptr)
 		{
 			switch (o_ptr->xtra2 % 11)
 			{
-			case  0: o_ptr->art_flags2 |= (TR2_RES_BLIND);  break;
-			case  1: o_ptr->art_flags2 |= (TR2_RES_CONF);   break;
-			case  2: o_ptr->art_flags2 |= (TR2_RES_SOUND);  break;
-			case  3: o_ptr->art_flags2 |= (TR2_RES_SHARDS); break;
-			case  4: o_ptr->art_flags2 |= (TR2_RES_NETHER); break;
-			case  5: o_ptr->art_flags2 |= (TR2_RES_NEXUS);  break;
-			case  6: o_ptr->art_flags2 |= (TR2_RES_CHAOS);  break;
-			case  7: o_ptr->art_flags2 |= (TR2_RES_DISEN);  break;
-			case  8: o_ptr->art_flags2 |= (TR2_RES_POIS);   break;
-			case  9: o_ptr->art_flags2 |= (TR2_RES_DARK);   break;
-			case 10: o_ptr->art_flags2 |= (TR2_RES_LITE);   break;
+			case  0: add_flag(o_ptr->art_flags, TR_RES_BLIND);  break;
+			case  1: add_flag(o_ptr->art_flags, TR_RES_CONF);   break;
+			case  2: add_flag(o_ptr->art_flags, TR_RES_SOUND);  break;
+			case  3: add_flag(o_ptr->art_flags, TR_RES_SHARDS); break;
+			case  4: add_flag(o_ptr->art_flags, TR_RES_NETHER); break;
+			case  5: add_flag(o_ptr->art_flags, TR_RES_NEXUS);  break;
+			case  6: add_flag(o_ptr->art_flags, TR_RES_CHAOS);  break;
+			case  7: add_flag(o_ptr->art_flags, TR_RES_DISEN);  break;
+			case  8: add_flag(o_ptr->art_flags, TR_RES_POIS);   break;
+			case  9: add_flag(o_ptr->art_flags, TR_RES_DARK);   break;
+			case 10: add_flag(o_ptr->art_flags, TR_RES_LITE);   break;
 			}
 			o_ptr->xtra2 = 0;
 		}		
@@ -372,14 +374,14 @@ static void rd_item(object_type *o_ptr)
 		{
 			switch (o_ptr->xtra2 % 8)
 			{
-			case 0: o_ptr->art_flags3 |= (TR3_FEATHER);     break;
-			case 1: o_ptr->art_flags3 |= (TR3_LITE);        break;
-			case 2: o_ptr->art_flags3 |= (TR3_SEE_INVIS);   break;
-			case 3: o_ptr->art_flags3 |= (TR3_WARNING);     break;
-			case 4: o_ptr->art_flags3 |= (TR3_SLOW_DIGEST); break;
-			case 5: o_ptr->art_flags3 |= (TR3_REGEN);       break;
-			case 6: o_ptr->art_flags2 |= (TR2_FREE_ACT);    break;
-			case 7: o_ptr->art_flags2 |= (TR2_HOLD_LIFE);   break;
+			case 0: add_flag(o_ptr->art_flags, TR_FEATHER);     break;
+			case 1: add_flag(o_ptr->art_flags, TR_LITE);        break;
+			case 2: add_flag(o_ptr->art_flags, TR_SEE_INVIS);   break;
+			case 3: add_flag(o_ptr->art_flags, TR_WARNING);     break;
+			case 4: add_flag(o_ptr->art_flags, TR_SLOW_DIGEST); break;
+			case 5: add_flag(o_ptr->art_flags, TR_REGEN);       break;
+			case 6: add_flag(o_ptr->art_flags, TR_FREE_ACT);    break;
+			case 7: add_flag(o_ptr->art_flags, TR_HOLD_LIFE);   break;
 			}
 			o_ptr->xtra2 = 0;
 		}
@@ -448,10 +450,10 @@ static void rd_item(object_type *o_ptr)
 
 	if (z_older_than(10, 4, 9))
 	{
-		if (o_ptr->art_flags1 & TR1_MAGIC_MASTERY)
+		if (have_flag(o_ptr->art_flags, TR_MAGIC_MASTERY))
 		{
-			o_ptr->art_flags1 &= ~(TR1_MAGIC_MASTERY);
-			o_ptr->art_flags3 |= (TR3_DEC_MANA);
+			remove_flag(o_ptr->art_flags, TR_MAGIC_MASTERY);
+			add_flag(o_ptr->art_flags, TR_DEC_MANA);
 		}
 	}
 

@@ -34,7 +34,7 @@ void self_knowledge(void)
 	char v_string [8] [128];
 	char s_string [6] [128];
 
-	u32b f1 = 0L, f2 = 0L, f3 = 0L;
+	u32b flgs[TR_FLAG_SIZE];
 
 	object_type *o_ptr;
 
@@ -46,6 +46,9 @@ void self_knowledge(void)
 	int plev = p_ptr->lev;
 
 	int percent;
+
+	for (j = 0; j < TR_FLAG_SIZE; j++)
+		flgs[j] = 0L;
 
 	p_ptr->knowledge |= (KNOW_STAT | KNOW_HPRATE);
 
@@ -71,7 +74,7 @@ sprintf(Dummy, "現在の体力ランク : %d/100", percent);
 	/* Acquire item flags from equipment */
 	for (k = INVEN_RARM; k < INVEN_TOTAL; k++)
 	{
-		u32b t1, t2, t3;
+		u32b tflgs[TR_FLAG_SIZE];
 
 		o_ptr = &inventory[k];
 
@@ -79,12 +82,11 @@ sprintf(Dummy, "現在の体力ランク : %d/100", percent);
 		if (!o_ptr->k_idx) continue;
 
 		/* Extract the flags */
-		object_flags(o_ptr, &t1, &t2, &t3);
+		object_flags(o_ptr, tflgs);
 
 		/* Extract flags */
-		f1 |= t1;
-		f2 |= t2;
-		f3 |= t3;
+		for (j = 0; j < TR_FLAG_SIZE; j++)
+			flgs[j] |= tflgs[j];
 	}
 
 #ifdef JP
@@ -2134,6 +2136,105 @@ info[i++] = "あなたはテレパシー能力を持っている。";
 #endif
 
 	}
+	if (p_ptr->esp_animal)
+	{
+#ifdef JP
+info[i++] = "あなたは自然界の生物の存在を感じる能力を持っている。";
+#else
+		info[i++] = "You sense natural creatures.";
+#endif
+
+	}
+	if (p_ptr->esp_undead)
+	{
+#ifdef JP
+info[i++] = "あなたはアンデッドの存在を感じる能力を持っている。";
+#else
+		info[i++] = "You sense undead.";
+#endif
+
+	}
+	if (p_ptr->esp_demon)
+	{
+#ifdef JP
+info[i++] = "あなたは悪魔の存在を感じる能力を持っている。";
+#else
+		info[i++] = "You sense demons.";
+#endif
+
+	}
+	if (p_ptr->esp_troll)
+	{
+#ifdef JP
+info[i++] = "あなたはトロルの存在を感じる能力を持っている。";
+#else
+		info[i++] = "You sense trolls.";
+#endif
+
+	}
+	if (p_ptr->esp_giant)
+	{
+#ifdef JP
+info[i++] = "あなたは巨人の存在を感じる能力を持っている。";
+#else
+		info[i++] = "You sense giants.";
+#endif
+
+	}
+	if (p_ptr->esp_dragon)
+	{
+#ifdef JP
+info[i++] = "あなたはドラゴンの存在を感じる能力を持っている。";
+#else
+		info[i++] = "You sense dragons.";
+#endif
+
+	}
+	if (p_ptr->esp_human)
+	{
+#ifdef JP
+info[i++] = "あなたは人間の存在を感じる能力を持っている。";
+#else
+		info[i++] = "You sense humans.";
+#endif
+
+	}
+	if (p_ptr->esp_evil)
+	{
+#ifdef JP
+info[i++] = "あなたは邪悪な生き物の存在を感じる能力を持っている。";
+#else
+		info[i++] = "You sense evil creatures.";
+#endif
+
+	}
+	if (p_ptr->esp_good)
+	{
+#ifdef JP
+info[i++] = "あなたは善良な生き物の存在を感じる能力を持っている。";
+#else
+		info[i++] = "You sense good creatures.";
+#endif
+
+	}
+	if (p_ptr->esp_nonliving)
+	{
+#ifdef JP
+info[i++] = "あなたは活動する無生物体の存在を感じる能力を持っている。";
+#else
+		info[i++] = "You sense non-living creatures.";
+#endif
+
+	}
+	if (p_ptr->esp_unique)
+	{
+#ifdef JP
+info[i++] = "あなたは特別な強敵の存在を感じる能力を持っている。";
+#else
+		info[i++] = "You sense unique monsters.";
+#endif
+
+	}
 	if (p_ptr->hold_life)
 	{
 #ifdef JP
@@ -2615,7 +2716,7 @@ info[i++] = "あなたの魅力は維持されている。";
 
 	}
 
-	if (f1 & (TR1_STR))
+	if (have_flag(flgs, TR_STR))
 	{
 #ifdef JP
 info[i++] = "あなたの腕力は装備によって影響を受けている。";
@@ -2624,7 +2725,7 @@ info[i++] = "あなたの腕力は装備によって影響を受けている。";
 #endif
 
 	}
-	if (f1 & (TR1_INT))
+	if (have_flag(flgs, TR_INT))
 	{
 #ifdef JP
 info[i++] = "あなたの知能は装備によって影響を受けている。";
@@ -2633,7 +2734,7 @@ info[i++] = "あなたの知能は装備によって影響を受けている。";
 #endif
 
 	}
-	if (f1 & (TR1_WIS))
+	if (have_flag(flgs, TR_WIS))
 	{
 #ifdef JP
 info[i++] = "あなたの賢さは装備によって影響を受けている。";
@@ -2642,7 +2743,7 @@ info[i++] = "あなたの賢さは装備によって影響を受けている。";
 #endif
 
 	}
-	if (f1 & (TR1_DEX))
+	if (have_flag(flgs, TR_DEX))
 	{
 #ifdef JP
 info[i++] = "あなたの器用さは装備によって影響を受けている。";
@@ -2651,7 +2752,7 @@ info[i++] = "あなたの器用さは装備によって影響を受けている。";
 #endif
 
 	}
-	if (f1 & (TR1_CON))
+	if (have_flag(flgs, TR_CON))
 	{
 #ifdef JP
 info[i++] = "あなたの耐久力は装備によって影響を受けている。";
@@ -2660,7 +2761,7 @@ info[i++] = "あなたの耐久力は装備によって影響を受けている。";
 #endif
 
 	}
-	if (f1 & (TR1_CHR))
+	if (have_flag(flgs, TR_CHR))
 	{
 #ifdef JP
 info[i++] = "あなたの魅力は装備によって影響を受けている。";
@@ -2670,7 +2771,7 @@ info[i++] = "あなたの魅力は装備によって影響を受けている。";
 
 	}
 
-	if (f1 & (TR1_STEALTH))
+	if (have_flag(flgs, TR_STEALTH))
 	{
 #ifdef JP
 info[i++] = "あなたの隠密行動能力は装備によって影響を受けている。";
@@ -2679,7 +2780,7 @@ info[i++] = "あなたの隠密行動能力は装備によって影響を受けている。";
 #endif
 
 	}
-	if (f1 & (TR1_SEARCH))
+	if (have_flag(flgs, TR_SEARCH))
 	{
 #ifdef JP
 info[i++] = "あなたの探索能力は装備によって影響を受けている。";
@@ -2688,7 +2789,7 @@ info[i++] = "あなたの探索能力は装備によって影響を受けている。";
 #endif
 
 	}
-	if (f1 & (TR1_INFRA))
+	if (have_flag(flgs, TR_INFRA))
 	{
 #ifdef JP
 info[i++] = "あなたの赤外線視力は装備によって影響を受けている。";
@@ -2697,7 +2798,7 @@ info[i++] = "あなたの赤外線視力は装備によって影響を受けている。";
 #endif
 
 	}
-	if (f1 & (TR1_TUNNEL))
+	if (have_flag(flgs, TR_TUNNEL))
 	{
 #ifdef JP
 info[i++] = "あなたの採掘能力は装備によって影響を受けている。";
@@ -2706,7 +2807,7 @@ info[i++] = "あなたの採掘能力は装備によって影響を受けている。";
 #endif
 
 	}
-	if (f1 & (TR1_SPEED))
+	if (have_flag(flgs, TR_SPEED))
 	{
 #ifdef JP
 info[i++] = "あなたのスピードは装備によって影響を受けている。";
@@ -2715,7 +2816,7 @@ info[i++] = "あなたのスピードは装備によって影響を受けている。";
 #endif
 
 	}
-	if (f1 & (TR1_BLOWS))
+	if (have_flag(flgs, TR_BLOWS))
 	{
 #ifdef JP
 info[i++] = "あなたの攻撃速度は装備によって影響を受けている。";
@@ -2733,7 +2834,7 @@ info[i++] = "あなたの攻撃速度は装備によって影響を受けている。";
 	if (o_ptr->k_idx)
 	{
 		/* Indicate Blessing */
-		if (f3 & (TR3_BLESSED))
+		if (have_flag(flgs, TR_BLESSED))
 		{
 #ifdef JP
 info[i++] = "あなたの武器は神の祝福を受けている。";
@@ -2743,7 +2844,7 @@ info[i++] = "あなたの武器は神の祝福を受けている。";
 
 		}
 
-		if (f1 & (TR1_CHAOTIC))
+		if (have_flag(flgs, TR_CHAOTIC))
 		{
 #ifdef JP
 info[i++] = "あなたの武器はログルスの徴の属性をもつ。";
@@ -2754,7 +2855,7 @@ info[i++] = "あなたの武器はログルスの徴の属性をもつ。";
 		}
 
 		/* Hack */
-		if (f1 & (TR1_IMPACT))
+		if (have_flag(flgs, TR_IMPACT))
 		{
 #ifdef JP
 info[i++] = "あなたの武器は打撃で地震を発生することができる。";
@@ -2764,7 +2865,7 @@ info[i++] = "あなたの武器は打撃で地震を発生することができる。";
 
 		}
 
-		if (f1 & (TR1_VORPAL))
+		if (have_flag(flgs, TR_VORPAL))
 		{
 #ifdef JP
 info[i++] = "あなたの武器は非常に鋭い。";
@@ -2774,7 +2875,7 @@ info[i++] = "あなたの武器は非常に鋭い。";
 
 		}
 
-		if (f1 & (TR1_VAMPIRIC))
+		if (have_flag(flgs, TR_VAMPIRIC))
 		{
 #ifdef JP
 info[i++] = "あなたの武器は敵から生命力を吸収する。";
@@ -2785,7 +2886,7 @@ info[i++] = "あなたの武器は敵から生命力を吸収する。";
 		}
 
 		/* Special "Attack Bonuses" */
-		if (f1 & (TR1_BRAND_ACID))
+		if (have_flag(flgs, TR_BRAND_ACID))
 		{
 #ifdef JP
 info[i++] = "あなたの武器は敵を溶かす。";
@@ -2794,7 +2895,7 @@ info[i++] = "あなたの武器は敵を溶かす。";
 #endif
 
 		}
-		if (f1 & (TR1_BRAND_ELEC))
+		if (have_flag(flgs, TR_BRAND_ELEC))
 		{
 #ifdef JP
 info[i++] = "あなたの武器は敵を感電させる。";
@@ -2803,7 +2904,7 @@ info[i++] = "あなたの武器は敵を感電させる。";
 #endif
 
 		}
-		if (f1 & (TR1_BRAND_FIRE))
+		if (have_flag(flgs, TR_BRAND_FIRE))
 		{
 #ifdef JP
 info[i++] = "あなたの武器は敵を燃やす。";
@@ -2812,7 +2913,7 @@ info[i++] = "あなたの武器は敵を燃やす。";
 #endif
 
 		}
-		if (f1 & (TR1_BRAND_COLD))
+		if (have_flag(flgs, TR_BRAND_COLD))
 		{
 #ifdef JP
 info[i++] = "あなたの武器は敵を凍らせる。";
@@ -2821,7 +2922,7 @@ info[i++] = "あなたの武器は敵を凍らせる。";
 #endif
 
 		}
-		if (f1 & (TR1_BRAND_POIS))
+		if (have_flag(flgs, TR_BRAND_POIS))
 		{
 #ifdef JP
 info[i++] = "あなたの武器は敵を毒で侵す。";
@@ -2832,7 +2933,16 @@ info[i++] = "あなたの武器は敵を毒で侵す。";
 		}
 
 		/* Special "slay" flags */
-		if (f1 & (TR1_SLAY_ANIMAL))
+		if (have_flag(flgs, TR_KILL_ANIMAL))
+		{
+#ifdef JP
+info[i++] = "あなたの武器は動物の天敵である。";
+#else
+			info[i++] = "Your weapon is a great bane of animals.";
+#endif
+
+		}
+		else if (have_flag(flgs, TR_SLAY_ANIMAL))
 		{
 #ifdef JP
 info[i++] = "あなたの武器は動物に対して強い力を発揮する。";
@@ -2841,7 +2951,16 @@ info[i++] = "あなたの武器は動物に対して強い力を発揮する。";
 #endif
 
 		}
-		if (f1 & (TR1_SLAY_EVIL))
+		if (have_flag(flgs, TR_KILL_EVIL))
+		{
+#ifdef JP
+info[i++] = "あなたの武器は邪悪なる存在の天敵である。";
+#else
+			info[i++] = "Your weapon is a great bane of evil.";
+#endif
+
+		}
+		else if (have_flag(flgs, TR_SLAY_EVIL))
 		{
 #ifdef JP
 info[i++] = "あなたの武器は邪悪なる存在に対して強い力を発揮する。";
@@ -2850,7 +2969,16 @@ info[i++] = "あなたの武器は邪悪なる存在に対して強い力を発揮する。";
 #endif
 
 		}
-		if (f3 & (TR3_SLAY_HUMAN))
+		if (have_flag(flgs, TR_KILL_HUMAN))
+		{
+#ifdef JP
+info[i++] = "あなたの武器は人間の天敵である。";
+#else
+			info[i++] = "Your weapon is a great bane of humans.";
+#endif
+
+		}
+		else if (have_flag(flgs, TR_SLAY_HUMAN))
 		{
 #ifdef JP
 info[i++] = "あなたの武器は人間に対して特に強い力を発揮する。";
@@ -2859,7 +2987,16 @@ info[i++] = "あなたの武器は人間に対して特に強い力を発揮する。";
 #endif
 
 		}
-		if (f1 & (TR1_SLAY_UNDEAD))
+		if (have_flag(flgs, TR_KILL_UNDEAD))
+		{
+#ifdef JP
+info[i++] = "あなたの武器はアンデッドの天敵である。";
+#else
+			info[i++] = "Your weapon is a great bane of undead.";
+#endif
+
+		}
+		else if (have_flag(flgs, TR_SLAY_UNDEAD))
 		{
 #ifdef JP
 info[i++] = "あなたの武器はアンデッドに対して神聖なる力を発揮する。";
@@ -2868,7 +3005,16 @@ info[i++] = "あなたの武器はアンデッドに対して神聖なる力を発揮する。";
 #endif
 
 		}
-		if (f1 & (TR1_SLAY_DEMON))
+		if (have_flag(flgs, TR_KILL_DEMON))
+		{
+#ifdef JP
+info[i++] = "あなたの武器はデーモンの天敵である。";
+#else
+			info[i++] = "Your weapon is a great bane of demons.";
+#endif
+
+		}
+		else if (have_flag(flgs, TR_SLAY_DEMON))
 		{
 #ifdef JP
 info[i++] = "あなたの武器はデーモンに対して神聖なる力を発揮する。";
@@ -2877,7 +3023,16 @@ info[i++] = "あなたの武器はデーモンに対して神聖なる力を発揮する。";
 #endif
 
 		}
-		if (f1 & (TR1_SLAY_ORC))
+		if (have_flag(flgs, TR_KILL_ORC))
+		{
+#ifdef JP
+info[i++] = "あなたの武器はオークの天敵である。";
+#else
+			info[i++] = "Your weapon is a great bane of orcs.";
+#endif
+
+		}
+		else if (have_flag(flgs, TR_SLAY_ORC))
 		{
 #ifdef JP
 info[i++] = "あなたの武器はオークに対して特に強い力を発揮する。";
@@ -2886,7 +3041,16 @@ info[i++] = "あなたの武器はオークに対して特に強い力を発揮する。";
 #endif
 
 		}
-		if (f1 & (TR1_SLAY_TROLL))
+		if (have_flag(flgs, TR_KILL_TROLL))
+		{
+#ifdef JP
+info[i++] = "あなたの武器はトロルの天敵である。";
+#else
+			info[i++] = "Your weapon is a great bane of trolls.";
+#endif
+
+		}
+		else if (have_flag(flgs, TR_SLAY_TROLL))
 		{
 #ifdef JP
 info[i++] = "あなたの武器はトロルに対して特に強い力を発揮する。";
@@ -2895,7 +3059,16 @@ info[i++] = "あなたの武器はトロルに対して特に強い力を発揮する。";
 #endif
 
 		}
-		if (f1 & (TR1_SLAY_GIANT))
+		if (have_flag(flgs, TR_KILL_GIANT))
+		{
+#ifdef JP
+info[i++] = "あなたの武器はジャイアントの天敵である。";
+#else
+			info[i++] = "Your weapon is a great bane of giants.";
+#endif
+
+		}
+		else if (have_flag(flgs, TR_SLAY_GIANT))
 		{
 #ifdef JP
 info[i++] = "あなたの武器はジャイアントに対して特に強い力を発揮する。";
@@ -2905,7 +3078,7 @@ info[i++] = "あなたの武器はジャイアントに対して特に強い力を発揮する。";
 
 		}
 		/* Special "kill" flags */
-		if (f1 & (TR1_KILL_DRAGON))
+		if (have_flag(flgs, TR_KILL_DRAGON))
 		{
 #ifdef JP
 info[i++] = "あなたの武器はドラゴンの天敵である。";
@@ -2914,7 +3087,7 @@ info[i++] = "あなたの武器はドラゴンの天敵である。";
 #endif
 
 		}
-		else if (f1 & (TR1_SLAY_DRAGON))
+		else if (have_flag(flgs, TR_SLAY_DRAGON))
 		{
 #ifdef JP
 info[i++] = "あなたの武器はドラゴンに対して特に強い力を発揮する。";
@@ -2924,7 +3097,7 @@ info[i++] = "あなたの武器はドラゴンに対して特に強い力を発揮する。";
 
 		}
 
-		if (f1 & (TR1_FORCE_WEAPON))
+		if (have_flag(flgs, TR_FORCE_WEAPON))
 		{
 #ifdef JP
 info[i++] = "あなたの武器はMPを使って攻撃する。";
@@ -2933,7 +3106,7 @@ info[i++] = "あなたの武器はMPを使って攻撃する。";
 #endif
 
 		}
-		if (f2 & (TR2_THROW))
+		if (have_flag(flgs, TR_THROW))
 		{
 #ifdef JP
 info[i++] = "あなたの武器は投げやすい。";

@@ -4867,7 +4867,7 @@ static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr,
 				       int *j, byte tval, char *where)
 {
   char o_name[MAX_NLEN];
-  u32b    f[3];
+  u32b flgs[TR_FLAG_SIZE];
 
   if (!o_ptr->k_idx)return;
   if (o_ptr->tval != tval)return;
@@ -4907,159 +4907,159 @@ static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr,
 #endif
 	}
       else {
-	object_flags_known(o_ptr, &f[0], &f[1], &f[2]);
+	object_flags_known(o_ptr, flgs);
       
 #ifdef JP
-	if (f[1] & TR2_IM_ACID) fprintf(fff,"¡ö");
-	else if (f[1] & TR2_RES_ACID) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_IM_ACID)) fprintf(fff,"¡ö");
+	else if (have_flag(flgs, TR_RES_ACID)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 
-	if (f[1] & TR2_IM_ELEC) fprintf(fff,"¡ö");
-	else if (f[1] & TR2_RES_ELEC) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_IM_ELEC)) fprintf(fff,"¡ö");
+	else if (have_flag(flgs, TR_RES_ELEC)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 
-	if (f[1] & TR2_IM_FIRE) fprintf(fff,"¡ö");
-	else if (f[1] & TR2_RES_FIRE) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_IM_FIRE)) fprintf(fff,"¡ö");
+	else if (have_flag(flgs, TR_RES_FIRE)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 
-	if (f[1] & TR2_IM_COLD) fprintf(fff,"¡ö");
-	else if (f[1] & TR2_RES_COLD) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_IM_COLD)) fprintf(fff,"¡ö");
+	else if (have_flag(flgs, TR_RES_COLD)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 	
-	if (f[1] & TR2_RES_POIS) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_RES_POIS)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 	
-	if (f[1] & TR2_RES_LITE) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_RES_LITE)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 	
-	if (f[1] & TR2_RES_DARK) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_RES_DARK)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 	
-	if (f[1] & TR2_RES_SHARDS) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_RES_SHARDS)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 	
-	if (f[1] & TR2_RES_SOUND) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_RES_SOUND)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 	
-	if (f[1] & TR2_RES_NETHER) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_RES_NETHER)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 	
-	if (f[1] & TR2_RES_NEXUS) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_RES_NEXUS)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 	
-	if (f[1] & TR2_RES_CHAOS) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_RES_CHAOS)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 	
-	if (f[1] & TR2_RES_DISEN) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_RES_DISEN)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 	
 	fprintf(fff," ");
 	
-	if (f[1] & TR2_RES_BLIND) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_RES_BLIND)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 	
-	if (f[1] & TR2_RES_FEAR) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_RES_FEAR)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 	
-	if (f[1] & TR2_RES_CONF) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_RES_CONF)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 	
-	if (f[1] & TR2_FREE_ACT) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_FREE_ACT)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 	
-	if (f[2] & TR3_SEE_INVIS) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_SEE_INVIS)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 	
-	if (f[1] & TR2_HOLD_LIFE) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_HOLD_LIFE)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 
-	if (f[2] & TR3_TELEPATHY) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_TELEPATHY)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 
-	if (f[2] & TR3_SLOW_DIGEST) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_SLOW_DIGEST)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 
 
-	if (f[2] & TR3_REGEN) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_REGEN)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 
-	if (f[2] & TR3_FEATHER) fprintf(fff,"¡Ü");
+	if (have_flag(flgs, TR_FEATHER)) fprintf(fff,"¡Ü");
 	else fprintf(fff,"¡¦");
 #else
-	if (f[1] & TR2_IM_ACID) fprintf(fff,"* ");
-	else if (f[1] & TR2_RES_ACID) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_IM_ACID)) fprintf(fff,"* ");
+	else if (have_flag(flgs, TR_RES_ACID)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 
-	if (f[1] & TR2_IM_ELEC) fprintf(fff,"* ");
-	else if (f[1] & TR2_RES_ELEC) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_IM_ELEC)) fprintf(fff,"* ");
+	else if (have_flag(flgs, TR_RES_ELEC)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 
-	if (f[1] & TR2_IM_FIRE) fprintf(fff,"* ");
-	else if (f[1] & TR2_RES_FIRE) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_IM_FIRE)) fprintf(fff,"* ");
+	else if (have_flag(flgs, TR_RES_FIRE)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 
-	if (f[1] & TR2_IM_COLD) fprintf(fff,"* ");
-	else if (f[1] & TR2_RES_COLD) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_IM_COLD)) fprintf(fff,"* ");
+	else if (have_flag(flgs, TR_RES_COLD)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 	
-	if (f[1] & TR2_RES_POIS) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_RES_POIS)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 	
-	if (f[1] & TR2_RES_LITE) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_RES_LITE)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 	
-	if (f[1] & TR2_RES_DARK) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_RES_DARK)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 	
-	if (f[1] & TR2_RES_SHARDS) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_RES_SHARDS)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 	
-	if (f[1] & TR2_RES_SOUND) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_RES_SOUND)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 	
-	if (f[1] & TR2_RES_NETHER) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_RES_NETHER)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 	
-	if (f[1] & TR2_RES_NEXUS) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_RES_NEXUS)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 	
-	if (f[1] & TR2_RES_CHAOS) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_RES_CHAOS)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 	
-	if (f[1] & TR2_RES_DISEN) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_RES_DISEN)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 	
 	fprintf(fff," ");
 	
-	if (f[1] & TR2_RES_BLIND) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_RES_BLIND)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 	
-	if (f[1] & TR2_RES_FEAR) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_RES_FEAR)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 	
-	if (f[1] & TR2_RES_CONF) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_RES_CONF)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 	
-	if (f[1] & TR2_FREE_ACT) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_FREE_ACT)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 	
-	if (f[2] & TR3_SEE_INVIS) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_SEE_INVIS)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 	
-	if (f[1] & TR2_HOLD_LIFE) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_HOLD_LIFE)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 
-	if (f[2] & TR3_TELEPATHY) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_TELEPATHY)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 
-	if (f[2] & TR3_SLOW_DIGEST) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_SLOW_DIGEST)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 
 
-	if (f[2] & TR3_REGEN) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_REGEN)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 
-	if (f[2] & TR3_FEATHER) fprintf(fff,"+ ");
+	if (have_flag(flgs, TR_FEATHER)) fprintf(fff,"+ ");
 	else fprintf(fff,". ");
 #endif	
 	fprintf(fff,"\n");

@@ -3712,16 +3712,16 @@ void do_cmd_zap_rod(void)
  */
 static bool item_tester_hook_activate(object_type *o_ptr)
 {
-	u32b f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 
 	/* Not known */
 	if (!object_known_p(o_ptr)) return (FALSE);
 
 	/* Extract the flags */
-	object_flags(o_ptr, &f1, &f2, &f3);
+	object_flags(o_ptr, flgs);
 
 	/* Check activation flag */
-	if (f3 & (TR3_ACTIVATE)) return (TRUE);
+	if (have_flag(flgs, TR_ACTIVATE)) return (TRUE);
 
 	if ((o_ptr->tval > TV_CAPTURE) && o_ptr->xtra3)
 	{
@@ -5496,14 +5496,15 @@ msg_print("あなたの槍は電気でスパークしている...");
 #else
 				msg_print("Your scythe glows brightly!");
 #endif
-				o_ptr->art_flags1 = a_info[ART_BLOOD].flags1;
-				o_ptr->art_flags2 = a_info[ART_BLOOD].flags2;
+				for (i = 0; i < TR_FLAG_SIZE; i++)
+					o_ptr->art_flags[i] = a_info[ART_BLOOD].flags[i];
+
 				dummy = randint1(2)+randint1(2);
 				for (i = 0; i < dummy; i++)
 				{
 					int flag = randint0(19);
-					if (flag == 18) o_ptr->art_flags3 |= TR3_SLAY_HUMAN;
-					else o_ptr->art_flags1 |= (TR1_CHAOTIC << flag);
+					if (flag == 18) add_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
+					else add_flag(o_ptr->art_flags, TR_CHAOTIC + flag);
 				}
 				dummy = randint1(2);
 				for (i = 0; i < dummy; i++)
@@ -5512,8 +5513,8 @@ msg_print("あなたの槍は電気でスパークしている...");
 				for (i = 0; i < dummy; i++)
 				{
 					int tmp = randint0(11);
-					if (tmp < 6) o_ptr->art_flags1 |= (TR1_STR << tmp);
-					else o_ptr->art_flags1 |= (TR1_STEALTH << (tmp - 6));
+					if (tmp < 6) add_flag(o_ptr->art_flags, TR_STR + tmp);
+					else add_flag(o_ptr->art_flags, TR_STEALTH + tmp - 6);
 				}
 				o_ptr->timeout = 3333;
 				if (p_ptr->prace == RACE_ANDROID) calc_android_exp();
@@ -6403,7 +6404,7 @@ void do_cmd_activate(void)
  */
 static bool item_tester_hook_use(object_type *o_ptr)
 {
-	u32b f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 
 	/* Ammo */
 	if (o_ptr->tval == p_ptr->tval_ammo)
@@ -6436,10 +6437,10 @@ static bool item_tester_hook_use(object_type *o_ptr)
 				if (&inventory[i] == o_ptr)
 				{
 					/* Extract the flags */
-					object_flags(o_ptr, &f1, &f2, &f3);
+					object_flags(o_ptr, flgs);
 
 					/* Check activation flag */
-					if (f3 & TR3_ACTIVATE) return (TRUE);
+					if (have_flag(flgs, TR_ACTIVATE)) return (TRUE);
 				}
 			}
 		}

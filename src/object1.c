@@ -99,23 +99,22 @@ void reset_visuals(void)
 /*
  * Obtain the "flags" for an item
  */
-void object_flags(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3)
+void object_flags(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 {
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
+	int i;
 
 	/* Base object */
-	(*f1) = k_ptr->flags1;
-	(*f2) = k_ptr->flags2;
-	(*f3) = k_ptr->flags3;
+	for (i = 0; i < TR_FLAG_SIZE; i++)
+		flgs[i] = k_ptr->flags[i];
 
 	/* Artifact */
 	if (o_ptr->name1)
 	{
 		artifact_type *a_ptr = &a_info[o_ptr->name1];
 
-		(*f1) = a_ptr->flags1;
-		(*f2) = a_ptr->flags2;
-		(*f3) = a_ptr->flags3;
+		for (i = 0; i < TR_FLAG_SIZE; i++)
+			flgs[i] = a_ptr->flags[i];
 	}
 
 	/* Ego-item */
@@ -123,81 +122,71 @@ void object_flags(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3)
 	{
 		ego_item_type *e_ptr = &e_info[o_ptr->name2];
 
-		(*f1) |= e_ptr->flags1;
-		(*f2) |= e_ptr->flags2;
-		(*f3) |= e_ptr->flags3;
+		for (i = 0; i < TR_FLAG_SIZE; i++)
+			flgs[i] |= e_ptr->flags[i];
 
 		if ((o_ptr->name2 == EGO_LITE_AURA_FIRE) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN))
 		{
-			(*f3) &= ~(TR3_SH_FIRE);
+			remove_flag(flgs, TR_SH_FIRE);
 		}
 		else if ((o_ptr->name2 == EGO_LITE_INFRA) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN))
 		{
-			(*f1) &= ~(TR1_INFRA);
+			remove_flag(flgs, TR_INFRA);
 		}
 		else if ((o_ptr->name2 == EGO_LITE_EYE) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN))
 		{
-			(*f2) &= ~(TR2_RES_BLIND);
-			(*f3) &= ~(TR3_SEE_INVIS);
+			remove_flag(flgs, TR_RES_BLIND);
+			remove_flag(flgs, TR_SEE_INVIS);
 		}
 	}
 
 	/* Random artifact ! */
-	if (o_ptr->art_flags1 || o_ptr->art_flags2 || o_ptr->art_flags3)
-	{
-		(*f1) |= o_ptr->art_flags1;
-		(*f2) |= o_ptr->art_flags2;
-		(*f3) |= o_ptr->art_flags3;
-	}
+	for (i = 0; i < TR_FLAG_SIZE; i++)
+		flgs[i] |= o_ptr->art_flags[i];
 
 	if ((o_ptr->tval > TV_CAPTURE) && o_ptr->xtra3)
 	{
-		if (o_ptr->xtra3 < 33)
+		if (o_ptr->xtra3 <= 96)
 		{
-			(*f1) |= (0x00000001 << (o_ptr->xtra3-1));
-		}
-		else if (o_ptr->xtra3 < 65)
-		{
-			(*f2) |= (0x00000001 << (o_ptr->xtra3-33));
-		}
-		else if (o_ptr->xtra3 < 97)
-		{
-			(*f3) |= (0x00000001 << (o_ptr->xtra3-65));
+			add_flag(flgs, o_ptr->xtra3 - 1);
 		}
 		else if (o_ptr->xtra3 == ESSENCE_TMP_RES_ACID)
 		{
-			(*f2) |= TR2_RES_ACID;
+			add_flag(flgs, TR_RES_ACID);
 		}
 		else if (o_ptr->xtra3 == ESSENCE_TMP_RES_ELEC)
 		{
-			(*f2) |= TR2_RES_ELEC;
+			add_flag(flgs, TR_RES_ELEC);
 		}
 		else if (o_ptr->xtra3 == ESSENCE_TMP_RES_FIRE)
 		{
-			(*f2) |= TR2_RES_FIRE;
+			add_flag(flgs, TR_RES_FIRE);
 		}
 		else if (o_ptr->xtra3 == ESSENCE_TMP_RES_COLD)
 		{
-			(*f2) |= TR2_RES_COLD;
+			add_flag(flgs, TR_RES_COLD);
 		}
 		else if (o_ptr->xtra3 == ESSENCE_SH_FIRE)
 		{
-			(*f2) |= TR2_RES_FIRE;
-			(*f3) |= TR3_SH_FIRE;
+			add_flag(flgs, TR_RES_FIRE);
+			add_flag(flgs, TR_SH_FIRE);
 		}
 		else if (o_ptr->xtra3 == ESSENCE_SH_ELEC)
 		{
-			(*f2) |= TR2_RES_ELEC;
-			(*f3) |= TR3_SH_ELEC;
+			add_flag(flgs, TR_RES_ELEC);
+			add_flag(flgs, TR_SH_ELEC);
 		}
 		else if (o_ptr->xtra3 == ESSENCE_SH_COLD)
 		{
-			(*f2) |= TR2_RES_COLD;
-			(*f3) |= TR3_SH_COLD;
+			add_flag(flgs, TR_RES_COLD);
+			add_flag(flgs, TR_SH_COLD);
 		}
 		else if (o_ptr->xtra3 == ESSENCE_RESISTANCE)
 		{
-			(*f2) |= (TR2_RES_ACID | TR2_RES_ELEC | TR2_RES_FIRE | TR2_RES_COLD);;
+			add_flag(flgs, TR_RES_ACID);
+			add_flag(flgs, TR_RES_ELEC);
+			add_flag(flgs, TR_RES_FIRE);
+			add_flag(flgs, TR_RES_COLD);
 		}
 	}
 }
@@ -207,21 +196,22 @@ void object_flags(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3)
 /*
  * Obtain the "flags" for an item which are known to the player
  */
-void object_flags_known(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3)
+void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 {
 	bool spoil = FALSE;
+	int i;
 
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
 	/* Clear */
-	(*f1) = (*f2) = (*f3) = 0L;
+	for (i = 0; i < TR_FLAG_SIZE; i++)
+		flgs[i] = 0;
 
 	if (!object_aware_p(o_ptr)) return;
 
 	/* Base object */
-	(*f1) = k_ptr->flags1;
-	(*f2) = k_ptr->flags2;
-	(*f3) = k_ptr->flags3;
+	for (i = 0; i < TR_FLAG_SIZE; i++)
+		flgs[i] = k_ptr->flags[i];
 
 	/* Must be identified */
 	if (!object_known_p(o_ptr)) return;
@@ -231,22 +221,21 @@ void object_flags_known(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3)
 	{
 		ego_item_type *e_ptr = &e_info[o_ptr->name2];
 
-		(*f1) |= e_ptr->flags1;
-		(*f2) |= e_ptr->flags2;
-		(*f3) |= e_ptr->flags3;
+		for (i = 0; i < TR_FLAG_SIZE; i++)
+			flgs[i] |= e_ptr->flags[i];
 
 		if ((o_ptr->name2 == EGO_LITE_AURA_FIRE) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN))
 		{
-			(*f3) &= ~(TR3_SH_FIRE);
+			remove_flag(flgs, TR_SH_FIRE);
 		}
 		else if ((o_ptr->name2 == EGO_LITE_INFRA) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN))
 		{
-			(*f1) &= ~(TR1_INFRA);
+			remove_flag(flgs, TR_INFRA);
 		}
 		else if ((o_ptr->name2 == EGO_LITE_EYE) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN))
 		{
-			(*f2) &= ~(TR2_RES_BLIND);
-			(*f3) &= ~(TR3_SEE_INVIS);
+			remove_flag(flgs, TR_RES_BLIND);
+			remove_flag(flgs, TR_SEE_INVIS);
 		}
 	}
 
@@ -269,68 +258,58 @@ void object_flags_known(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3)
 		{
 			artifact_type *a_ptr = &a_info[o_ptr->name1];
 
-			(*f1) = a_ptr->flags1;
-			(*f2) = a_ptr->flags2;
-			(*f3) = a_ptr->flags3;
+			for (i = 0; i < TR_FLAG_SIZE; i++)
+				flgs[i] = a_ptr->flags[i];
 		}
 
 		/* Random artifact ! */
-		if (o_ptr->art_flags1 || o_ptr->art_flags2 || o_ptr->art_flags3)
-		{
-			(*f1) |= o_ptr->art_flags1;
-			(*f2) |= o_ptr->art_flags2;
-			(*f3) |= o_ptr->art_flags3;
-		}
+		for (i = 0; i < TR_FLAG_SIZE; i++)
+			flgs[i] |= o_ptr->art_flags[i];
 	}
 
 	if ((o_ptr->tval > TV_CAPTURE) && o_ptr->xtra3)
 	{
-		if (o_ptr->xtra3 < 33)
+		if (o_ptr->xtra3 <= 96)
 		{
-			(*f1) |= (0x00000001 << (o_ptr->xtra3-1));
-		}
-		else if (o_ptr->xtra3 < 65)
-		{
-			(*f2) |= (0x00000001 << (o_ptr->xtra3-33));
-		}
-		else if (o_ptr->xtra3 < 97)
-		{
-			(*f3) |= (0x00000001 << (o_ptr->xtra3-65));
+			add_flag(flgs, o_ptr->xtra3 - 1);
 		}
 		else if (o_ptr->xtra3 == ESSENCE_TMP_RES_ACID)
 		{
-			(*f2) |= TR2_RES_ACID;
+			add_flag(flgs, TR_RES_ACID);
 		}
 		else if (o_ptr->xtra3 == ESSENCE_TMP_RES_ELEC)
 		{
-			(*f2) |= TR2_RES_ELEC;
+			add_flag(flgs, TR_RES_ELEC);
 		}
 		else if (o_ptr->xtra3 == ESSENCE_TMP_RES_FIRE)
 		{
-			(*f2) |= TR2_RES_FIRE;
+			add_flag(flgs, TR_RES_FIRE);
 		}
 		else if (o_ptr->xtra3 == ESSENCE_TMP_RES_COLD)
 		{
-			(*f2) |= TR2_RES_COLD;
+			add_flag(flgs, TR_RES_COLD);
 		}
 		else if (o_ptr->xtra3 == ESSENCE_SH_FIRE)
 		{
-			(*f2) |= TR2_RES_FIRE;
-			(*f3) |= TR3_SH_FIRE;
+			add_flag(flgs, TR_RES_FIRE);
+			add_flag(flgs, TR_SH_FIRE);
 		}
 		else if (o_ptr->xtra3 == ESSENCE_SH_ELEC)
 		{
-			(*f2) |= TR2_RES_ELEC;
-			(*f3) |= TR3_SH_ELEC;
+			add_flag(flgs, TR_RES_ELEC);
+			add_flag(flgs, TR_SH_ELEC);
 		}
 		else if (o_ptr->xtra3 == ESSENCE_SH_COLD)
 		{
-			(*f2) |= TR2_RES_COLD;
-			(*f3) |= TR3_SH_COLD;
+			add_flag(flgs, TR_RES_COLD);
+			add_flag(flgs, TR_SH_COLD);
 		}
 		else if (o_ptr->xtra3 == ESSENCE_RESISTANCE)
 		{
-			(*f2) |= (TR2_RES_ACID | TR2_RES_ELEC | TR2_RES_FIRE | TR2_RES_COLD);;
+			add_flag(flgs, TR_RES_ACID);
+			add_flag(flgs, TR_RES_ELEC);
+			add_flag(flgs, TR_RES_FIRE);
+			add_flag(flgs, TR_RES_COLD);
 		}
 	}
 }
@@ -376,16 +355,16 @@ void object_desc_store(char *buf, object_type *o_ptr, int pref, int mode)
  */
 cptr item_activation(object_type *o_ptr)
 {
-	u32b f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 
 	/* Extract the flags */
-	object_flags(o_ptr, &f1, &f2, &f3);
+	object_flags(o_ptr, flgs);
 
 	/* Require activation ability */
 #ifdef JP
-if (!(f3 & (TR3_ACTIVATE))) return ("なし");
+if (!(have_flag(flgs, TR_ACTIVATE))) return ("なし");
 #else
-	if (!(f3 & (TR3_ACTIVATE))) return ("nothing");
+	if (!(have_flag(flgs, TR_ACTIVATE))) return ("nothing");
 #endif
 
 
@@ -2386,15 +2365,14 @@ bool identify_fully_aux(object_type *o_ptr)
 {
 	int                     i = 0, j, k;
 
-	u32b f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 
 	cptr            info[128];
-	u32b flag;
 	char o_name[MAX_NLEN];
 	int wid, hgt;
 
 	/* Extract the flags */
-	object_flags(o_ptr, &f1, &f2, &f3);
+	object_flags(o_ptr, flgs);
 
 	/* Extract the description */
 	{
@@ -2408,7 +2386,7 @@ bool identify_fully_aux(object_type *o_ptr)
 	}
 
 	/* Mega-Hack -- describe activation */
-	if (f3 & (TR3_ACTIVATE))
+	if (have_flag(flgs, TR_ACTIVATE))
 	{
 #ifdef JP
 info[i++] = "始動したときの効果...";
@@ -2635,7 +2613,7 @@ info[i++] = "それは長いターン明かりを授ける。";
 
 	/* And then describe it fully */
 
-	if (f2 & (TR2_RIDING))
+	if (have_flag(flgs, TR_RIDING))
 	{
 		if ((o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE)))
 #ifdef JP
@@ -2651,7 +2629,7 @@ info[i++] = "それは乗馬中でも使いやすい。";
 #endif
 
 	}
-	if (f1 & (TR1_STR))
+	if (have_flag(flgs, TR_STR))
 	{
 #ifdef JP
 info[i++] = "それは腕力に影響を及ぼす";
@@ -2660,7 +2638,7 @@ info[i++] = "それは腕力に影響を及ぼす";
 #endif
 
 	}
-	if (f1 & (TR1_INT))
+	if (have_flag(flgs, TR_INT))
 	{
 #ifdef JP
 info[i++] = "それは知能に影響を及ぼす";
@@ -2669,7 +2647,7 @@ info[i++] = "それは知能に影響を及ぼす";
 #endif
 
 	}
-	if (f1 & (TR1_WIS))
+	if (have_flag(flgs, TR_WIS))
 	{
 #ifdef JP
 info[i++] = "それは賢さに影響を及ぼす";
@@ -2678,7 +2656,7 @@ info[i++] = "それは賢さに影響を及ぼす";
 #endif
 
 	}
-	if (f1 & (TR1_DEX))
+	if (have_flag(flgs, TR_DEX))
 	{
 #ifdef JP
 info[i++] = "それは器用さに影響を及ぼす";
@@ -2687,7 +2665,7 @@ info[i++] = "それは器用さに影響を及ぼす";
 #endif
 
 	}
-	if (f1 & (TR1_CON))
+	if (have_flag(flgs, TR_CON))
 	{
 #ifdef JP
 info[i++] = "それは耐久力に影響を及ぼす";
@@ -2696,7 +2674,7 @@ info[i++] = "それは耐久力に影響を及ぼす";
 #endif
 
 	}
-	if (f1 & (TR1_CHR))
+	if (have_flag(flgs, TR_CHR))
 	{
 #ifdef JP
 info[i++] = "それは魅力に影響を及ぼす";
@@ -2706,7 +2684,7 @@ info[i++] = "それは魅力に影響を及ぼす";
 
 	}
 
-	if (f1 & (TR1_MAGIC_MASTERY))
+	if (have_flag(flgs, TR_MAGIC_MASTERY))
 	{
 #ifdef JP
 info[i++] = "それは魔法道具使用能力に影響を及ぼす";
@@ -2715,7 +2693,7 @@ info[i++] = "それは魔法道具使用能力に影響を及ぼす";
 #endif
 
 	}
-	if (f1 & (TR1_STEALTH))
+	if (have_flag(flgs, TR_STEALTH))
 	{
 #ifdef JP
 info[i++] = "それは隠密行動能力に影響を及ぼす";
@@ -2724,7 +2702,7 @@ info[i++] = "それは隠密行動能力に影響を及ぼす";
 #endif
 
 	}
-	if (f1 & (TR1_SEARCH))
+	if (have_flag(flgs, TR_SEARCH))
 	{
 #ifdef JP
 info[i++] = "それは探索能力に影響を及ぼす";
@@ -2733,7 +2711,7 @@ info[i++] = "それは探索能力に影響を及ぼす";
 #endif
 
 	}
-	if (f1 & (TR1_INFRA))
+	if (have_flag(flgs, TR_INFRA))
 	{
 #ifdef JP
 info[i++] = "それは赤外線視力に影響を及ぼす";
@@ -2742,7 +2720,7 @@ info[i++] = "それは赤外線視力に影響を及ぼす";
 #endif
 
 	}
-	if (f1 & (TR1_TUNNEL))
+	if (have_flag(flgs, TR_TUNNEL))
 	{
 #ifdef JP
 info[i++] = "それは採掘能力に影響を及ぼす";
@@ -2751,7 +2729,7 @@ info[i++] = "それは採掘能力に影響を及ぼす";
 #endif
 
 	}
-	if (f1 & (TR1_SPEED))
+	if (have_flag(flgs, TR_SPEED))
 	{
 #ifdef JP
 info[i++] = "それはスピードに影響を及ぼす";
@@ -2760,7 +2738,7 @@ info[i++] = "それはスピードに影響を及ぼす";
 #endif
 
 	}
-	if (f1 & (TR1_BLOWS))
+	if (have_flag(flgs, TR_BLOWS))
 	{
 #ifdef JP
 info[i++] = "それは打撃回数に影響を及ぼす";
@@ -2770,7 +2748,7 @@ info[i++] = "それは打撃回数に影響を及ぼす";
 
 	}
 
-	if (f1 & (TR1_BRAND_ACID))
+	if (have_flag(flgs, TR_BRAND_ACID))
 	{
 #ifdef JP
 info[i++] = "それは酸によって大きなダメージを与える";
@@ -2779,7 +2757,7 @@ info[i++] = "それは酸によって大きなダメージを与える";
 #endif
 
 	}
-	if (f1 & (TR1_BRAND_ELEC))
+	if (have_flag(flgs, TR_BRAND_ELEC))
 	{
 #ifdef JP
 info[i++] = "それは電撃によって大きなダメージを与える";
@@ -2788,7 +2766,7 @@ info[i++] = "それは電撃によって大きなダメージを与える";
 #endif
 
 	}
-	if (f1 & (TR1_BRAND_FIRE))
+	if (have_flag(flgs, TR_BRAND_FIRE))
 	{
 #ifdef JP
 info[i++] = "それは火炎によって大きなダメージを与える";
@@ -2797,7 +2775,7 @@ info[i++] = "それは火炎によって大きなダメージを与える";
 #endif
 
 	}
-	if (f1 & (TR1_BRAND_COLD))
+	if (have_flag(flgs, TR_BRAND_COLD))
 	{
 #ifdef JP
 info[i++] = "それは冷気によって大きなダメージを与える";
@@ -2807,7 +2785,7 @@ info[i++] = "それは冷気によって大きなダメージを与える";
 
 	}
 
-	if (f1 & (TR1_BRAND_POIS))
+	if (have_flag(flgs, TR_BRAND_POIS))
 	{
 #ifdef JP
 info[i++] = "それは敵を毒する。";
@@ -2817,7 +2795,7 @@ info[i++] = "それは敵を毒する。";
 
 	}
 
-	if (f1 & (TR1_CHAOTIC))
+	if (have_flag(flgs, TR_CHAOTIC))
 	{
 #ifdef JP
 info[i++] = "それはカオス的な効果を及ぼす。";
@@ -2827,7 +2805,7 @@ info[i++] = "それはカオス的な効果を及ぼす。";
 
 	}
 
-	if (f1 & (TR1_VAMPIRIC))
+	if (have_flag(flgs, TR_VAMPIRIC))
 	{
 #ifdef JP
 info[i++] = "それは敵からヒットポイントを吸収する。";
@@ -2837,7 +2815,7 @@ info[i++] = "それは敵からヒットポイントを吸収する。";
 
 	}
 
-	if (f1 & (TR1_IMPACT))
+	if (have_flag(flgs, TR_IMPACT))
 	{
 #ifdef JP
 info[i++] = "それは地震を起こすことができる。";
@@ -2847,7 +2825,7 @@ info[i++] = "それは地震を起こすことができる。";
 
 	}
 
-	if (f1 & (TR1_VORPAL))
+	if (have_flag(flgs, TR_VORPAL))
 	{
 #ifdef JP
 info[i++] = "それは非常に切れ味が鋭く敵を切断することができる。";
@@ -2857,7 +2835,7 @@ info[i++] = "それは非常に切れ味が鋭く敵を切断することができる。";
 
 	}
 
-	if (f1 & (TR1_KILL_DRAGON))
+	if (have_flag(flgs, TR_KILL_DRAGON))
 	{
 #ifdef JP
 info[i++] = "それはドラゴンにとっての天敵である。";
@@ -2866,7 +2844,7 @@ info[i++] = "それはドラゴンにとっての天敵である。";
 #endif
 
 	}
-	else if (f1 & (TR1_SLAY_DRAGON))
+	else if (have_flag(flgs, TR_SLAY_DRAGON))
 	{
 #ifdef JP
 info[i++] = "それはドラゴンに対して特に恐るべき力を発揮する。";
@@ -2875,7 +2853,17 @@ info[i++] = "それはドラゴンに対して特に恐るべき力を発揮する。";
 #endif
 
 	}
-	if (f1 & (TR1_SLAY_ORC))
+
+	if (have_flag(flgs, TR_KILL_ORC))
+	{
+#ifdef JP
+info[i++] = "それはオークにとっての天敵である。";
+#else
+		info[i++] = "It is a great bane of orcs.";
+#endif
+
+	}
+	if (have_flag(flgs, TR_SLAY_ORC))
 	{
 #ifdef JP
 info[i++] = "それはオークに対して特に恐るべき力を発揮する。";
@@ -2884,7 +2872,17 @@ info[i++] = "それはオークに対して特に恐るべき力を発揮する。";
 #endif
 
 	}
-	if (f1 & (TR1_SLAY_TROLL))
+
+	if (have_flag(flgs, TR_KILL_TROLL))
+	{
+#ifdef JP
+info[i++] = "それはトロルにとっての天敵である。";
+#else
+		info[i++] = "It is a great bane of trolls.";
+#endif
+
+	}
+	if (have_flag(flgs, TR_SLAY_TROLL))
 	{
 #ifdef JP
 info[i++] = "それはトロルに対して特に恐るべき力を発揮する。";
@@ -2893,15 +2891,17 @@ info[i++] = "それはトロルに対して特に恐るべき力を発揮する。";
 #endif
 
 	}
-	if (f1 & (TR1_SLAY_GIANT))
+
+	if (have_flag(flgs, TR_KILL_GIANT))
 	{
-		if (o_ptr->name1 == ART_HRUNTING)
 #ifdef JP
 info[i++] = "それは巨人にとっての天敵である。";
 #else
 		info[i++] = "It is a great bane of giants.";
 #endif
-		else
+	}
+	else if (have_flag(flgs, TR_SLAY_GIANT))
+	{
 #ifdef JP
 info[i++] = "それはジャイアントに対して特に恐るべき力を発揮する。";
 #else
@@ -2909,7 +2909,17 @@ info[i++] = "それはジャイアントに対して特に恐るべき力を発揮する。";
 #endif
 
 	}
-	if (f1 & (TR1_SLAY_DEMON))
+
+	if (have_flag(flgs, TR_KILL_DEMON))
+	{
+#ifdef JP
+info[i++] = "それはデーモンにとっての天敵である。";
+#else
+		info[i++] = "It is a great bane of demons.";
+#endif
+
+	}
+	if (have_flag(flgs, TR_SLAY_DEMON))
 	{
 #ifdef JP
 info[i++] = "それはデーモンに対して聖なる力を発揮する。";
@@ -2918,7 +2928,17 @@ info[i++] = "それはデーモンに対して聖なる力を発揮する。";
 #endif
 
 	}
-	if (f1 & (TR1_SLAY_UNDEAD))
+
+	if (have_flag(flgs, TR_KILL_UNDEAD))
+	{
+#ifdef JP
+info[i++] = "それはアンデッドにとっての天敵である。";
+#else
+		info[i++] = "It is a great bane of undead.";
+#endif
+
+	}
+	if (have_flag(flgs, TR_SLAY_UNDEAD))
 	{
 #ifdef JP
 info[i++] = "それはアンデッドに対して聖なる力を発揮する。";
@@ -2927,7 +2947,17 @@ info[i++] = "それはアンデッドに対して聖なる力を発揮する。";
 #endif
 
 	}
-	if (f1 & (TR1_SLAY_EVIL))
+
+	if (have_flag(flgs, TR_KILL_EVIL))
+	{
+#ifdef JP
+info[i++] = "それは邪悪なる存在にとっての天敵である。";
+#else
+		info[i++] = "It is a great bane of evil monsters.";
+#endif
+
+	}
+	if (have_flag(flgs, TR_SLAY_EVIL))
 	{
 #ifdef JP
 info[i++] = "それは邪悪なる存在に対して聖なる力で攻撃する。";
@@ -2936,7 +2966,17 @@ info[i++] = "それは邪悪なる存在に対して聖なる力で攻撃する。";
 #endif
 
 	}
-	if (f1 & (TR1_SLAY_ANIMAL))
+
+	if (have_flag(flgs, TR_KILL_ANIMAL))
+	{
+#ifdef JP
+info[i++] = "それは自然界の動物にとっての天敵である。";
+#else
+		info[i++] = "It is a great bane of natural creatures.";
+#endif
+
+	}
+	if (have_flag(flgs, TR_SLAY_ANIMAL))
 	{
 #ifdef JP
 info[i++] = "それは自然界の動物に対して特に恐るべき力を発揮する。";
@@ -2945,7 +2985,17 @@ info[i++] = "それは自然界の動物に対して特に恐るべき力を発揮する。";
 #endif
 
 	}
-	if (f3 & (TR3_SLAY_HUMAN))
+
+	if (have_flag(flgs, TR_KILL_HUMAN))
+	{
+#ifdef JP
+info[i++] = "それは人間にとっての天敵である。";
+#else
+		info[i++] = "It is a great bane of humans.";
+#endif
+
+	}
+	if (have_flag(flgs, TR_SLAY_HUMAN))
 	{
 #ifdef JP
 info[i++] = "それは人間に対して特に恐るべき力を発揮する。";
@@ -2955,7 +3005,7 @@ info[i++] = "それは人間に対して特に恐るべき力を発揮する。";
 
 	}
 
-	if (f1 & (TR1_FORCE_WEAPON))
+	if (have_flag(flgs, TR_FORCE_WEAPON))
 	{
 #ifdef JP
 info[i++] = "それは使用者の魔力を使って攻撃する。";
@@ -2964,7 +3014,7 @@ info[i++] = "それは使用者の魔力を使って攻撃する。";
 #endif
 
 	}
-	if (f3 & (TR3_DEC_MANA))
+	if (have_flag(flgs, TR_DEC_MANA))
 	{
 #ifdef JP
 info[i++] = "それは魔力の消費を押さえる。";
@@ -2973,7 +3023,7 @@ info[i++] = "それは魔力の消費を押さえる。";
 #endif
 
 	}
-	if (f2 & (TR2_SUST_STR))
+	if (have_flag(flgs, TR_SUST_STR))
 	{
 #ifdef JP
 info[i++] = "それはあなたの腕力を維持する。";
@@ -2982,7 +3032,7 @@ info[i++] = "それはあなたの腕力を維持する。";
 #endif
 
 	}
-	if (f2 & (TR2_SUST_INT))
+	if (have_flag(flgs, TR_SUST_INT))
 	{
 #ifdef JP
 info[i++] = "それはあなたの知能を維持する。";
@@ -2991,7 +3041,7 @@ info[i++] = "それはあなたの知能を維持する。";
 #endif
 
 	}
-	if (f2 & (TR2_SUST_WIS))
+	if (have_flag(flgs, TR_SUST_WIS))
 	{
 #ifdef JP
 info[i++] = "それはあなたの賢さを維持する。";
@@ -3000,7 +3050,7 @@ info[i++] = "それはあなたの賢さを維持する。";
 #endif
 
 	}
-	if (f2 & (TR2_SUST_DEX))
+	if (have_flag(flgs, TR_SUST_DEX))
 	{
 #ifdef JP
 info[i++] = "それはあなたの器用さを維持する。";
@@ -3009,7 +3059,7 @@ info[i++] = "それはあなたの器用さを維持する。";
 #endif
 
 	}
-	if (f2 & (TR2_SUST_CON))
+	if (have_flag(flgs, TR_SUST_CON))
 	{
 #ifdef JP
 info[i++] = "それはあなたの耐久力を維持する。";
@@ -3018,7 +3068,7 @@ info[i++] = "それはあなたの耐久力を維持する。";
 #endif
 
 	}
-	if (f2 & (TR2_SUST_CHR))
+	if (have_flag(flgs, TR_SUST_CHR))
 	{
 #ifdef JP
 info[i++] = "それはあなたの魅力を維持する。";
@@ -3028,7 +3078,7 @@ info[i++] = "それはあなたの魅力を維持する。";
 
 	}
 
-	if (f2 & (TR2_IM_ACID))
+	if (have_flag(flgs, TR_IM_ACID))
 	{
 #ifdef JP
 info[i++] = "それは酸に対する完全な免疫を授ける。";
@@ -3037,7 +3087,7 @@ info[i++] = "それは酸に対する完全な免疫を授ける。";
 #endif
 
 	}
-	if (f2 & (TR2_IM_ELEC))
+	if (have_flag(flgs, TR_IM_ELEC))
 	{
 #ifdef JP
 info[i++] = "それは電撃に対する完全な免疫を授ける。";
@@ -3046,7 +3096,7 @@ info[i++] = "それは電撃に対する完全な免疫を授ける。";
 #endif
 
 	}
-	if (f2 & (TR2_IM_FIRE))
+	if (have_flag(flgs, TR_IM_FIRE))
 	{
 #ifdef JP
 info[i++] = "それは火に対する完全な免疫を授ける。";
@@ -3055,7 +3105,7 @@ info[i++] = "それは火に対する完全な免疫を授ける。";
 #endif
 
 	}
-	if (f2 & (TR2_IM_COLD))
+	if (have_flag(flgs, TR_IM_COLD))
 	{
 #ifdef JP
 info[i++] = "それは寒さに対する完全な免疫を授ける。";
@@ -3065,7 +3115,7 @@ info[i++] = "それは寒さに対する完全な免疫を授ける。";
 
 	}
 
-	if (f2 & (TR2_THROW))
+	if (have_flag(flgs, TR_THROW))
 	{
 #ifdef JP
 info[i++] = "それは敵に投げて大きなダメージを与えることができる。";
@@ -3074,7 +3124,7 @@ info[i++] = "それは敵に投げて大きなダメージを与えることができる。";
 #endif
 	}
 
-	if (f2 & (TR2_FREE_ACT))
+	if (have_flag(flgs, TR_FREE_ACT))
 	{
 #ifdef JP
 info[i++] = "それは麻痺に対する完全な免疫を授ける。";
@@ -3083,7 +3133,7 @@ info[i++] = "それは麻痺に対する完全な免疫を授ける。";
 #endif
 
 	}
-	if (f2 & (TR2_HOLD_LIFE))
+	if (have_flag(flgs, TR_HOLD_LIFE))
 	{
 #ifdef JP
 info[i++] = "それは生命力吸収に対する耐性を授ける。";
@@ -3092,7 +3142,7 @@ info[i++] = "それは生命力吸収に対する耐性を授ける。";
 #endif
 
 	}
-	if (f2 & (TR2_RES_FEAR))
+	if (have_flag(flgs, TR_RES_FEAR))
 	{
 #ifdef JP
 info[i++] = "それは恐怖への完全な耐性を授ける。";
@@ -3101,7 +3151,7 @@ info[i++] = "それは恐怖への完全な耐性を授ける。";
 #endif
 
 	}
-	if (f2 & (TR2_RES_ACID))
+	if (have_flag(flgs, TR_RES_ACID))
 	{
 #ifdef JP
 info[i++] = "それは酸への耐性を授ける。";
@@ -3110,7 +3160,7 @@ info[i++] = "それは酸への耐性を授ける。";
 #endif
 
 	}
-	if (f2 & (TR2_RES_ELEC))
+	if (have_flag(flgs, TR_RES_ELEC))
 	{
 #ifdef JP
 info[i++] = "それは電撃への耐性を授ける。";
@@ -3119,7 +3169,7 @@ info[i++] = "それは電撃への耐性を授ける。";
 #endif
 
 	}
-	if (f2 & (TR2_RES_FIRE))
+	if (have_flag(flgs, TR_RES_FIRE))
 	{
 #ifdef JP
 info[i++] = "それは火への耐性を授ける。";
@@ -3128,7 +3178,7 @@ info[i++] = "それは火への耐性を授ける。";
 #endif
 
 	}
-	if (f2 & (TR2_RES_COLD))
+	if (have_flag(flgs, TR_RES_COLD))
 	{
 #ifdef JP
 info[i++] = "それは寒さへの耐性を授ける。";
@@ -3137,7 +3187,7 @@ info[i++] = "それは寒さへの耐性を授ける。";
 #endif
 
 	}
-	if (f2 & (TR2_RES_POIS))
+	if (have_flag(flgs, TR_RES_POIS))
 	{
 #ifdef JP
 info[i++] = "それは毒への耐性を授ける。";
@@ -3147,7 +3197,7 @@ info[i++] = "それは毒への耐性を授ける。";
 
 	}
 
-	if (f2 & (TR2_RES_LITE))
+	if (have_flag(flgs, TR_RES_LITE))
 	{
 #ifdef JP
 info[i++] = "それは閃光への耐性を授ける。";
@@ -3156,7 +3206,7 @@ info[i++] = "それは閃光への耐性を授ける。";
 #endif
 
 	}
-	if (f2 & (TR2_RES_DARK))
+	if (have_flag(flgs, TR_RES_DARK))
 	{
 #ifdef JP
 info[i++] = "それは暗黒への耐性を授ける。";
@@ -3166,7 +3216,7 @@ info[i++] = "それは暗黒への耐性を授ける。";
 
 	}
 
-	if (f2 & (TR2_RES_BLIND))
+	if (have_flag(flgs, TR_RES_BLIND))
 	{
 #ifdef JP
 info[i++] = "それは盲目への耐性を授ける。";
@@ -3175,7 +3225,7 @@ info[i++] = "それは盲目への耐性を授ける。";
 #endif
 
 	}
-	if (f2 & (TR2_RES_CONF))
+	if (have_flag(flgs, TR_RES_CONF))
 	{
 #ifdef JP
 info[i++] = "それは混乱への耐性を授ける。";
@@ -3184,7 +3234,7 @@ info[i++] = "それは混乱への耐性を授ける。";
 #endif
 
 	}
-	if (f2 & (TR2_RES_SOUND))
+	if (have_flag(flgs, TR_RES_SOUND))
 	{
 #ifdef JP
 info[i++] = "それは轟音への耐性を授ける。";
@@ -3193,7 +3243,7 @@ info[i++] = "それは轟音への耐性を授ける。";
 #endif
 
 	}
-	if (f2 & (TR2_RES_SHARDS))
+	if (have_flag(flgs, TR_RES_SHARDS))
 	{
 #ifdef JP
 info[i++] = "それは破片への耐性を授ける。";
@@ -3203,7 +3253,7 @@ info[i++] = "それは破片への耐性を授ける。";
 
 	}
 
-	if (f2 & (TR2_RES_NETHER))
+	if (have_flag(flgs, TR_RES_NETHER))
 	{
 #ifdef JP
 info[i++] = "それは地獄への耐性を授ける。";
@@ -3212,7 +3262,7 @@ info[i++] = "それは地獄への耐性を授ける。";
 #endif
 
 	}
-	if (f2 & (TR2_RES_NEXUS))
+	if (have_flag(flgs, TR_RES_NEXUS))
 	{
 #ifdef JP
 info[i++] = "それは因果混乱への耐性を授ける。";
@@ -3221,7 +3271,7 @@ info[i++] = "それは因果混乱への耐性を授ける。";
 #endif
 
 	}
-	if (f2 & (TR2_RES_CHAOS))
+	if (have_flag(flgs, TR_RES_CHAOS))
 	{
 #ifdef JP
 info[i++] = "それはカオスへの耐性を授ける。";
@@ -3230,7 +3280,7 @@ info[i++] = "それはカオスへの耐性を授ける。";
 #endif
 
 	}
-	if (f2 & (TR2_RES_DISEN))
+	if (have_flag(flgs, TR_RES_DISEN))
 	{
 #ifdef JP
 info[i++] = "それは劣化への耐性を授ける。";
@@ -3240,7 +3290,7 @@ info[i++] = "それは劣化への耐性を授ける。";
 
 	}
 
-	if (f3 & (TR3_FEATHER))
+	if (have_flag(flgs, TR_FEATHER))
 	{
 #ifdef JP
 info[i++] = "それは宙に浮くことを可能にする。";
@@ -3249,7 +3299,7 @@ info[i++] = "それは宙に浮くことを可能にする。";
 #endif
 
 	}
-	if (f3 & (TR3_LITE))
+	if (have_flag(flgs, TR_LITE))
 	{
 		if ((o_ptr->name2 == EGO_DARK) || (o_ptr->name1 == ART_NIGHT))
 #ifdef JP
@@ -3265,7 +3315,7 @@ info[i++] = "それは永遠の明かりを授ける。";
 #endif
 
 	}
-	if (f3 & (TR3_SEE_INVIS))
+	if (have_flag(flgs, TR_SEE_INVIS))
 	{
 #ifdef JP
 info[i++] = "それは透明なモンスターを見ることを可能にする。";
@@ -3274,7 +3324,7 @@ info[i++] = "それは透明なモンスターを見ることを可能にする。";
 #endif
 
 	}
-	if (f3 & (TR3_TELEPATHY))
+	if (have_flag(flgs, TR_TELEPATHY))
 	{
 #ifdef JP
 info[i++] = "それはテレパシー能力を授ける。";
@@ -3283,7 +3333,115 @@ info[i++] = "それはテレパシー能力を授ける。";
 #endif
 
 	}
-	if (f3 & (TR3_SLOW_DIGEST))
+	if (have_flag(flgs, TR_ESP_ANIMAL))
+	{
+#ifdef JP
+info[i++] = "それは自然界の生物の存在を感じとる。";
+#else
+		info[i++] = "It senses natural creatures.";
+#endif
+
+	}
+	if (have_flag(flgs, TR_ESP_UNDEAD))
+	{
+#ifdef JP
+info[i++] = "それはアンデッドの存在を感じとる。";
+#else
+		info[i++] = "It senses undead.";
+#endif
+
+	}
+	if (have_flag(flgs, TR_ESP_DEMON))
+	{
+#ifdef JP
+info[i++] = "それは悪魔の存在を感じとる。";
+#else
+		info[i++] = "It senses demons.";
+#endif
+
+	}
+	if (have_flag(flgs, TR_ESP_ORC))
+	{
+#ifdef JP
+info[i++] = "それはオークの存在を感じとる。";
+#else
+		info[i++] = "It senses orcs.";
+#endif
+
+	}
+	if (have_flag(flgs, TR_ESP_TROLL))
+	{
+#ifdef JP
+info[i++] = "それはトロルの存在を感じとる。";
+#else
+		info[i++] = "It senses trolls.";
+#endif
+
+	}
+	if (have_flag(flgs, TR_ESP_GIANT))
+	{
+#ifdef JP
+info[i++] = "それは巨人の存在を感じとる。";
+#else
+		info[i++] = "It senses giants.";
+#endif
+
+	}
+	if (have_flag(flgs, TR_ESP_DRAGON))
+	{
+#ifdef JP
+info[i++] = "それはドラゴンの存在を感じとる。";
+#else
+		info[i++] = "It senses dragons.";
+#endif
+
+	}
+	if (have_flag(flgs, TR_ESP_HUMAN))
+	{
+#ifdef JP
+info[i++] = "それは人間の存在を感じとる。";
+#else
+		info[i++] = "It senses humans.";
+#endif
+
+	}
+	if (have_flag(flgs, TR_ESP_EVIL))
+	{
+#ifdef JP
+info[i++] = "それは邪悪な生き物の存在を感じとる。";
+#else
+		info[i++] = "It senses evil creatures.";
+#endif
+
+	}
+	if (have_flag(flgs, TR_ESP_GOOD))
+	{
+#ifdef JP
+info[i++] = "それは善良な生き物の存在を感じとる。";
+#else
+		info[i++] = "It senses good creatures.";
+#endif
+
+	}
+	if (have_flag(flgs, TR_ESP_NONLIVING))
+	{
+#ifdef JP
+info[i++] = "それは活動する無生物体の存在を感じとる。";
+#else
+		info[i++] = "It senses non-living creatures.";
+#endif
+
+	}
+	if (have_flag(flgs, TR_ESP_UNIQUE))
+	{
+#ifdef JP
+info[i++] = "それは特別な強敵の存在を感じとる。";
+#else
+		info[i++] = "It senses unique monsters.";
+#endif
+
+	}
+	if (have_flag(flgs, TR_SLOW_DIGEST))
 	{
 #ifdef JP
 info[i++] = "それはあなたの新陳代謝を遅くする。";
@@ -3292,7 +3450,7 @@ info[i++] = "それはあなたの新陳代謝を遅くする。";
 #endif
 
 	}
-	if (f3 & (TR3_REGEN))
+	if (have_flag(flgs, TR_REGEN))
 	{
 #ifdef JP
 info[i++] = "それは体力回復力を強化する。";
@@ -3301,7 +3459,7 @@ info[i++] = "それは体力回復力を強化する。";
 #endif
 
 	}
-	if (f3 & (TR3_WARNING))
+	if (have_flag(flgs, TR_WARNING))
 	{
 #ifdef JP
 info[i++] = "それは危険に対して警告を発する。";
@@ -3310,7 +3468,7 @@ info[i++] = "それは危険に対して警告を発する。";
 #endif
 
 	}
-	if (f2 & (TR2_REFLECT))
+	if (have_flag(flgs, TR_REFLECT))
 	{
 #ifdef JP
 info[i++] = "それは矢やボルトを反射する。";
@@ -3319,7 +3477,7 @@ info[i++] = "それは矢やボルトを反射する。";
 #endif
 
 	}
-	if (f3 & (TR3_SH_FIRE))
+	if (have_flag(flgs, TR_SH_FIRE))
 	{
 #ifdef JP
 info[i++] = "それは炎のバリアを張る。";
@@ -3328,7 +3486,7 @@ info[i++] = "それは炎のバリアを張る。";
 #endif
 
 	}
-	if (f3 & (TR3_SH_ELEC))
+	if (have_flag(flgs, TR_SH_ELEC))
 	{
 #ifdef JP
 info[i++] = "それは電気のバリアを張る。";
@@ -3337,7 +3495,7 @@ info[i++] = "それは電気のバリアを張る。";
 #endif
 
 	}
-	if (f3 & (TR3_SH_COLD))
+	if (have_flag(flgs, TR_SH_COLD))
 	{
 #ifdef JP
 info[i++] = "それは冷気のバリアを張る。";
@@ -3346,7 +3504,7 @@ info[i++] = "それは冷気のバリアを張る。";
 #endif
 
 	}
-	if (f3 & (TR3_NO_MAGIC))
+	if (have_flag(flgs, TR_NO_MAGIC))
 	{
 #ifdef JP
 info[i++] = "それは反魔法バリアを張る。";
@@ -3355,7 +3513,7 @@ info[i++] = "それは反魔法バリアを張る。";
 #endif
 
 	}
-	if (f3 & (TR3_NO_TELE))
+	if (have_flag(flgs, TR_NO_TELE))
 	{
 #ifdef JP
 info[i++] = "それはテレポートを邪魔する。";
@@ -3364,7 +3522,7 @@ info[i++] = "それはテレポートを邪魔する。";
 #endif
 
 	}
-	if (f3 & (TR3_XTRA_MIGHT))
+	if (have_flag(flgs, TR_XTRA_MIGHT))
 	{
 #ifdef JP
 info[i++] = "それは矢／ボルト／弾をより強力に発射することができる。";
@@ -3373,7 +3531,7 @@ info[i++] = "それは矢／ボルト／弾をより強力に発射することができる。";
 #endif
 
 	}
-	if (f3 & (TR3_XTRA_SHOTS))
+	if (have_flag(flgs, TR_XTRA_SHOTS))
 	{
 #ifdef JP
 info[i++] = "それは矢／ボルト／弾を非常に早く発射することができる。";
@@ -3383,7 +3541,7 @@ info[i++] = "それは矢／ボルト／弾を非常に早く発射することができる。";
 
 	}
 
-	if (f3 & TR3_BLESSED)
+	if (have_flag(flgs, TR_BLESSED))
 	{
 #ifdef JP
 info[i++] = "それは神に祝福されている。";
@@ -3424,7 +3582,7 @@ info[i++] = "それは呪われている。";
 		}
 	}
 
-	if ((f3 & TR3_TY_CURSE) || (o_ptr->curse_flags & TRC_TY_CURSE))
+	if ((have_flag(flgs, TR_TY_CURSE)) || (o_ptr->curse_flags & TRC_TY_CURSE))
 	{
 #ifdef JP
 info[i++] = "それは太古の禍々しい怨念が宿っている。";
@@ -3433,7 +3591,7 @@ info[i++] = "それは太古の禍々しい怨念が宿っている。";
 #endif
 
 	}
-	if ((f3 & TR3_AGGRAVATE) || (o_ptr->curse_flags & TRC_AGGRAVATE))
+	if ((have_flag(flgs, TR_AGGRAVATE)) || (o_ptr->curse_flags & TRC_AGGRAVATE))
 	{
 #ifdef JP
 info[i++] = "それは付近のモンスターを怒らせる。";
@@ -3442,7 +3600,7 @@ info[i++] = "それは付近のモンスターを怒らせる。";
 #endif
 
 	}
-	if ((f3 & (TR3_DRAIN_EXP)) || (o_ptr->curse_flags & TRC_DRAIN_EXP))
+	if ((have_flag(flgs, TR_DRAIN_EXP)) || (o_ptr->curse_flags & TRC_DRAIN_EXP))
 	{
 #ifdef JP
 info[i++] = "それは経験値を吸い取る。";
@@ -3514,7 +3672,7 @@ info[i++] = "それは恐怖感を引き起こす。";
 #endif
 
 	}
-	if ((f3 & (TR3_TELEPORT)) || (o_ptr->curse_flags & TRC_TELEPORT))
+	if ((have_flag(flgs, TR_TELEPORT)) || (o_ptr->curse_flags & TRC_TELEPORT))
 	{
 #ifdef JP
 info[i++] = "それはランダムなテレポートを引き起こす。";
@@ -3579,8 +3737,10 @@ info[i++] = "それはあなたの魔力を吸い取る。";
 	}
 
 	/* XTRA HACK ARTDESC */
-	flag = TR3_IGNORE_ACID | TR3_IGNORE_ELEC | TR3_IGNORE_FIRE | TR3_IGNORE_COLD ;
-	if ((f3 & flag) == flag)
+	if (have_flag(flgs, TR_IGNORE_ACID) &&
+	    have_flag(flgs, TR_IGNORE_ELEC) &&
+	    have_flag(flgs, TR_IGNORE_FIRE) &&
+	    have_flag(flgs, TR_IGNORE_COLD))
 	{
 #ifdef JP
 	  info[i++] = "それは酸・電撃・火炎・冷気では傷つかない。";
@@ -3588,7 +3748,7 @@ info[i++] = "それはあなたの魔力を吸い取る。";
 	  info[i++] = "It cannot be harmed by the elements.";
 #endif
 	} else {
-	if (f3 & (TR3_IGNORE_ACID))
+	if (have_flag(flgs, TR_IGNORE_ACID))
 	{
 #ifdef JP
 info[i++] = "それは酸では傷つかない。";
@@ -3597,7 +3757,7 @@ info[i++] = "それは酸では傷つかない。";
 #endif
 
 	}
-	if (f3 & (TR3_IGNORE_ELEC))
+	if (have_flag(flgs, TR_IGNORE_ELEC))
 	{
 #ifdef JP
 info[i++] = "それは電撃では傷つかない。";
@@ -3606,7 +3766,7 @@ info[i++] = "それは電撃では傷つかない。";
 #endif
 
 	}
-	if (f3 & (TR3_IGNORE_FIRE))
+	if (have_flag(flgs, TR_IGNORE_FIRE))
 	{
 #ifdef JP
 info[i++] = "それは火炎では傷つかない。";
@@ -3615,7 +3775,7 @@ info[i++] = "それは火炎では傷つかない。";
 #endif
 
 	}
-	if (f3 & (TR3_IGNORE_COLD))
+	if (have_flag(flgs, TR_IGNORE_COLD))
 	{
 #ifdef JP
 info[i++] = "それは冷気では傷つかない。";

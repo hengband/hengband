@@ -2308,6 +2308,105 @@ void update_mon(int m_idx, bool full)
 					if (r_ptr->flags2 & (RF2_STUPID)) r_ptr->r_flags2 |= (RF2_STUPID);
 				}
 			}
+
+			/* Magical sensing */
+			if ((p_ptr->esp_animal) && (r_ptr->flags3 & (RF3_ANIMAL)))
+			{
+				flag = TRUE;
+				r_ptr->r_flags3 |= (RF3_ANIMAL);
+
+			}
+
+			/* Magical sensing */
+			if ((p_ptr->esp_undead) && (r_ptr->flags3 & (RF3_UNDEAD)))
+			{
+				flag = TRUE;
+				r_ptr->r_flags3 |= (RF3_UNDEAD);
+
+			}
+
+			/* Magical sensing */
+			if ((p_ptr->esp_demon) && (r_ptr->flags3 & (RF3_DEMON)))
+			{
+				flag = TRUE;
+				r_ptr->r_flags3 |= (RF3_DEMON);
+
+			}
+
+			/* Magical sensing */
+			if ((p_ptr->esp_orc) && (r_ptr->flags3 & (RF3_ORC)))
+			{
+				flag = TRUE;
+				r_ptr->r_flags3 |= (RF3_ORC);
+
+			}
+
+			/* Magical sensing */
+			if ((p_ptr->esp_troll) && (r_ptr->flags3 & (RF3_TROLL)))
+			{
+				flag = TRUE;
+				r_ptr->r_flags3 |= (RF3_TROLL);
+
+			}
+
+			/* Magical sensing */
+			if ((p_ptr->esp_giant) && (r_ptr->flags3 & (RF3_GIANT)))
+			{
+				flag = TRUE;
+				r_ptr->r_flags3 |= (RF3_GIANT);
+
+			}
+
+			/* Magical sensing */
+			if ((p_ptr->esp_dragon) && (r_ptr->flags3 & (RF3_DRAGON)))
+			{
+				flag = TRUE;
+				r_ptr->r_flags3 |= (RF3_DRAGON);
+
+			}
+
+			/* Magical sensing */
+			if ((p_ptr->esp_human) && (r_ptr->flags2 & (RF2_HUMAN)))
+			{
+				flag = TRUE;
+				r_ptr->r_flags2 |= (RF2_HUMAN);
+
+			}
+
+			/* Magical sensing */
+			if ((p_ptr->esp_evil) && (r_ptr->flags3 & (RF3_EVIL)))
+			{
+				flag = TRUE;
+				r_ptr->r_flags3 |= (RF3_EVIL);
+
+			}
+
+			/* Magical sensing */
+			if ((p_ptr->esp_good) && (r_ptr->flags3 & (RF3_GOOD)))
+			{
+				flag = TRUE;
+				r_ptr->r_flags3 |= (RF3_GOOD);
+
+			}
+
+			/* Magical sensing */
+			if ((p_ptr->esp_nonliving) && 
+			    (r_ptr->flags3 & (RF3_NONLIVING)) &&
+			    !(r_ptr->flags3 & (RF3_DEMON)) &&
+			    !(r_ptr->flags3 & (RF3_UNDEAD)))
+			{
+				flag = TRUE;
+				r_ptr->r_flags3 |= (RF3_NONLIVING);
+
+			}
+
+			/* Magical sensing */
+			if ((p_ptr->esp_unique) && (r_ptr->flags1 & (RF1_UNIQUE)))
+			{
+				flag = TRUE;
+				r_ptr->r_flags1 |= (RF1_UNIQUE);
+
+			}
 		}
 
 		/* Normal line of sight, and not blind */

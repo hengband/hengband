@@ -1267,7 +1267,7 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 	bool obvious = FALSE;
 	bool known = player_has_los_bold(y, x);
 
-	u32b f1, f2, f3;
+	u32b flgs[TR_FLAG_SIZE];
 
 	char o_name[MAX_NLEN];
 
@@ -1301,7 +1301,7 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Extract the flags */
-		object_flags(o_ptr, &f1, &f2, &f3);
+		object_flags(o_ptr, flgs);
 
 		/* Get the "plural"-ness */
 		if (o_ptr->number > 1) plural = TRUE;
@@ -1324,7 +1324,7 @@ note_kill = "融けてしまった！";
 					note_kill = (plural ? " melt!" : " melts!");
 #endif
 
-					if (f3 & (TR3_IGNORE_ACID)) ignore = TRUE;
+					if (have_flag(flgs, TR_IGNORE_ACID)) ignore = TRUE;
 				}
 				break;
 			}
@@ -1341,7 +1341,7 @@ note_kill = "壊れてしまった！";
 					note_kill = (plural ? " are destroyed!" : " is destroyed!");
 #endif
 
-					if (f3 & (TR3_IGNORE_ELEC)) ignore = TRUE;
+					if (have_flag(flgs, TR_IGNORE_ELEC)) ignore = TRUE;
 				}
 				break;
 			}
@@ -1358,7 +1358,7 @@ note_kill = "燃えてしまった！";
 					note_kill = (plural ? " burn up!" : " burns up!");
 #endif
 
-					if (f3 & (TR3_IGNORE_FIRE)) ignore = TRUE;
+					if (have_flag(flgs, TR_IGNORE_FIRE)) ignore = TRUE;
 				}
 				break;
 			}
@@ -1375,7 +1375,7 @@ note_kill = "砕け散ってしまった！";
 #endif
 
 					do_kill = TRUE;
-					if (f3 & (TR3_IGNORE_COLD)) ignore = TRUE;
+					if (have_flag(flgs, TR_IGNORE_COLD)) ignore = TRUE;
 				}
 				break;
 			}
@@ -1392,7 +1392,7 @@ note_kill = "燃えてしまった！";
 					note_kill = (plural ? " burn up!" : " burns up!");
 #endif
 
-					if (f3 & (TR3_IGNORE_FIRE)) ignore = TRUE;
+					if (have_flag(flgs, TR_IGNORE_FIRE)) ignore = TRUE;
 				}
 				if (hates_elec(o_ptr))
 				{
@@ -1404,7 +1404,7 @@ note_kill = "壊れてしまった！";
 					note_kill = (plural ? " are destroyed!" : " is destroyed!");
 #endif
 
-					if (f3 & (TR3_IGNORE_ELEC)) ignore = TRUE;
+					if (have_flag(flgs, TR_IGNORE_ELEC)) ignore = TRUE;
 				}
 				break;
 			}
@@ -1421,7 +1421,7 @@ note_kill = "燃えてしまった！";
 					note_kill = (plural ? " burn up!" : " burns up!");
 #endif
 
-					if (f3 & (TR3_IGNORE_FIRE)) ignore = TRUE;
+					if (have_flag(flgs, TR_IGNORE_FIRE)) ignore = TRUE;
 				}
 				if (hates_cold(o_ptr))
 				{
@@ -1433,7 +1433,7 @@ note_kill = "砕け散ってしまった！";
 					note_kill = (plural ? " shatter!" : " shatters!");
 #endif
 
-					if (f3 & (TR3_IGNORE_COLD)) ignore = TRUE;
+					if (have_flag(flgs, TR_IGNORE_COLD)) ignore = TRUE;
 				}
 				break;
 			}
@@ -1493,7 +1493,7 @@ note_kill = "壊れてしまった！";
 				note_kill = (plural ? " are destroyed!" : " is destroyed!");
 #endif
 
-				if (f2 & (TR2_RES_CHAOS)) ignore = TRUE;
+				if (have_flag(flgs, TR_RES_CHAOS)) ignore = TRUE;
 				else if ((o_ptr->tval == TV_SCROLL) && (o_ptr->sval == SV_SCROLL_CHAOS)) ignore = TRUE;
 				break;
 			}

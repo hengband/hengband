@@ -104,9 +104,7 @@ struct object_kind
 
 	s32b cost;			/* Object "base cost" */
 
-	u32b flags1;		/* Flags, set 1 */
-	u32b flags2;		/* Flags, set 2 */
-	u32b flags3;		/* Flags, set 3 */
+	u32b flags[TR_FLAG_SIZE];	/* Flags */
 
 	u32b gen_flags;		/* flags for generate */
 
@@ -169,9 +167,7 @@ struct artifact_type
 
 	s32b cost;			/* Artifact "cost" */
 
-	u32b flags1;		/* Artifact Flags, set 1 */
-	u32b flags2;		/* Artifact Flags, set 2 */
-	u32b flags3;		/* Artifact Flags, set 3 */
+	u32b flags[TR_FLAG_SIZE];       /* Artifact Flags */
 
 	u32b gen_flags;		/* flags for generate */
 
@@ -208,9 +204,7 @@ struct ego_item_type
 
 	s32b cost;			/* Ego-item "cost" */
 
-	u32b flags1;		/* Ego-Item Flags, set 1 */
-	u32b flags2;		/* Ego-Item Flags, set 2 */
-	u32b flags3;		/* Ego-Item Flags, set 3 */
+	u32b flags[TR_FLAG_SIZE];	/* Ego-Item Flags */
 
 	u32b gen_flags;		/* flags for generate */
 };
@@ -522,9 +516,7 @@ struct object_type
 
 	byte feeling;          /* Game generated inscription number (eg, pseudo-id) */
 
-	u32b art_flags1;        /* Flags, set 1  Alas, these were necessary */
-	u32b art_flags2;        /* Flags, set 2  for the random artifacts of*/
-	u32b art_flags3;        /* Flags, set 3  Zangband */
+	u32b art_flags[TR_FLAG_SIZE];        /* Extra Flags for ego and artifacts */
 
 	u32b curse_flags;        /* Flags for curse */
 
@@ -1264,7 +1256,21 @@ struct player_type
 	bool see_inv;		/* Can see invisible */
 	bool regenerate;	/* Regenerate hit pts */
 	bool hold_life;		/* Resist life draining */
+
 	bool telepathy;		/* Telepathy */
+	bool esp_animal;
+	bool esp_undead;
+	bool esp_demon;
+	bool esp_orc;
+	bool esp_troll;
+	bool esp_giant;
+	bool esp_dragon;
+	bool esp_human;
+	bool esp_evil;
+	bool esp_good;
+	bool esp_nonliving;
+	bool esp_unique;
+
 	bool slow_digest;	/* Slower digestion */
 	bool bless_blade;	/* Blessed blade */
 	bool xtra_might;	/* Extra might bow */
