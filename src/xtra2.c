@@ -654,6 +654,9 @@ void monster_death(int m_idx, bool drop_item)
 	object_type forge;
 	object_type *q_ptr;
 
+	bool drop_chosen_item = drop_item && !cloned && !p_ptr->inside_arena
+		&& !p_ptr->inside_battle && !is_pet(m_ptr);
+
 
 	if (world_monster) world_monster = FALSE;
 
@@ -682,20 +685,13 @@ void monster_death(int m_idx, bool drop_item)
 	/* Let monsters explode! */
 	for (i = 0; i < 4; i++)
 	{
-		if ((r_ptr->blow[i].method == RBM_EXPLODE) || (m_ptr->r_idx == MON_ROLENTO))
+		if (r_ptr->blow[i].method == RBM_EXPLODE)
 		{
 			int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-			int typ = GF_MISSILE;
+			int typ = mbe_info[r_ptr->blow[i].effect].explode_type;
 			int d_dice = r_ptr->blow[i].d_dice;
 			int d_side = r_ptr->blow[i].d_side;
 			int damage = damroll(d_dice, d_side);
-
-			if (m_ptr->r_idx == MON_ROLENTO)
-			{
-				typ = GF_FIRE;
-				damage = damroll(20, 10);
-			}
-			else typ = mbe_info[r_ptr->blow[i].effect].explode_type;
 
 			project(m_idx, 3, y, x, damage, typ, flg, -1);
 			break;
@@ -818,527 +814,562 @@ msg_print("地面に落とされた。");
 	/* Drop objects being carried */
 	monster_drop_carried_objects(m_ptr);
 
-	/*
-	 * Mega^3-hack: killing a 'Warrior of the Dawn' is likely to
-	 * spawn another in the fallen one's place!
-	 */
-	if (m_ptr->r_idx == MON_DAWN &&
-	    !(p_ptr->inside_arena || p_ptr->inside_battle))
+	switch (m_ptr->r_idx)
 	{
-		if (!one_in_(7))
+	case MON_PINK_HORROR:
+		/* Pink horrors are replaced with 2 Blue horrors */
+		if (!(p_ptr->inside_arena || p_ptr->inside_battle))
 		{
-			int wy = py, wx = px;
-			int attempts = 100;
-			bool pet = is_pet(m_ptr);
+			bool notice = FALSE;
 
-			do
+			for (i = 0; i < 2; i++)
 			{
-				scatter(&wy, &wx, py, px, 20, 0);
-			}
-			while (!(in_bounds(wy, wx) && cave_floor_bold(wy, wx)) && --attempts);
-
-			if (attempts > 0)
-			{
+				int wy = y, wx = x;
+				bool pet = is_pet(m_ptr);
 				u32b mode = 0L;
+
 				if (pet) mode |= PM_FORCE_PET;
 
-				if (summon_specific((pet ? -1 : m_idx), wy, wx, 100, SUMMON_DAWN, mode))
+				if (summon_specific((pet ? -1 : m_idx), wy, wx, 100, SUMMON_BLUE_HORROR, mode))
 				{
 					if (player_can_see_bold(wy, wx))
-#ifdef JP
-						msg_print("新たな戦士が現れた！");
-#else
-						msg_print("A new warrior steps forth!");
-#endif
-
+						notice = TRUE;
 				}
 			}
-		}
-	}
 
-	/* Pink horrors are replaced with 2 Blue horrors */
-	else if (m_ptr->r_idx == MON_PINK_HORROR &&
-		 !(p_ptr->inside_arena || p_ptr->inside_battle))
-	{
-		bool notice = FALSE;
-
-		for (i = 0; i < 2; i++)
-		{
-			int wy = y, wx = x;
-			bool pet = is_pet(m_ptr);
-			u32b mode = 0L;
-
-			if (pet) mode |= PM_FORCE_PET;
-
-			if (summon_specific((pet ? -1 : m_idx), wy, wx, 100, SUMMON_BLUE_HORROR, mode))
-			{
-				if (player_can_see_bold(wy, wx))
-					notice = TRUE;
-			}
-		}
-
-		if (notice)
+			if (notice)
 #ifdef JP
-			msg_print("ピンク・ホラーは分裂した！");
+				msg_print("ピンク・ホラーは分裂した！");
 #else
-			msg_print("The Pink horror divides!");
+				msg_print("The Pink horror divides!");
 #endif
+		}
+		break;
 
-	}
-	/* One more ultra-hack: An Unmaker goes out with a big bang! */
-	else if (m_ptr->r_idx == MON_UNMAKER)
-
-	{
-		int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-		(void)project(m_idx, 6, y, x, 100, GF_CHAOS, flg, -1);
-	}
-
-	/* Bloodletters of Khorne may drop a blade of chaos */
-	else if (m_ptr->r_idx == MON_BLOODLETTER &&
-
-		 (randint1(100) < 15) &&
-	    !(p_ptr->inside_arena || p_ptr->inside_battle))
-	{
-		/* Get local object */
-		q_ptr = &forge;
-
-		/* Prepare to make a Blade of Chaos */
-		object_prep(q_ptr, lookup_kind(TV_SWORD, SV_BLADE_OF_CHAOS));
-
-		apply_magic(q_ptr, object_level, FALSE, FALSE, FALSE, FALSE);
-
-		/* Drop it in the dungeon */
-		(void)drop_near(q_ptr, -1, y, x);
-	}
-
-	else if (m_ptr->r_idx == MON_RAAL &&
-	    (dun_level > 9) &&
-	    !(p_ptr->inside_arena || p_ptr->inside_battle))
-	{
-		/* Get local object */
-		q_ptr = &forge;
-
-		/* Wipe the object */
-		object_wipe(q_ptr);
-
-		/* Activate restriction */
-		if ((dun_level > 49) && one_in_(5))
-			get_obj_num_hook = kind_is_good_book;
-		else
-			get_obj_num_hook = kind_is_book;
-
-		/* Prepare allocation table */
-		get_obj_num_prep();
-
-		/* Make a book */
-		make_object(q_ptr, FALSE, FALSE);
-
-		/* Drop it in the dungeon */
-		(void)drop_near(q_ptr, -1, y, x);
-	}
-
-	else if (m_ptr->r_idx == MON_B_DEATH_SWORD &&
-	    !(p_ptr->inside_arena || p_ptr->inside_battle))
-	{
-		/* Get local object */
-		q_ptr = &forge;
-
-		/* Prepare to make a broken sword */
-		object_prep(q_ptr, lookup_kind(TV_SWORD, randint1(2)));
-
-		/* Drop it in the dungeon */
-		(void)drop_near(q_ptr, -1, y, x);
-	}
-
-	else if ((r_ptr->d_char == '|') && !(m_ptr->r_idx == MON_STORMBRINGER) &&
-	    !(p_ptr->inside_arena || p_ptr->inside_battle))
-	{
-		/* Get local object */
-		q_ptr = &forge;
-
-		/* Wipe the object */
-		object_wipe(q_ptr);
-
-		/* Activate restriction */
-		get_obj_num_hook = kind_is_sword;
-
-		/* Prepare allocation table */
-		get_obj_num_prep();
-
-		/* Make a sword */
-		make_object(q_ptr, FALSE, FALSE);
-
-		/* Drop it in the dungeon */
-		(void)drop_near(q_ptr, -1, y, x);
-	}
-
-	else if ((r_ptr->d_char == '(') && (dun_level > 0) &&
-	    !(p_ptr->inside_arena || p_ptr->inside_battle))
-	{
-		/* Get local object */
-		q_ptr = &forge;
-
-		/* Wipe the object */
-		object_wipe(q_ptr);
-
-		/* Activate restriction */
-		get_obj_num_hook = kind_is_cloak;
-
-		/* Prepare allocation table */
-		get_obj_num_prep();
-
-		/* Make a cloak */
-		make_object(q_ptr, FALSE, FALSE);
-
-		/* Drop it in the dungeon */
-		(void)drop_near(q_ptr, -1, y, x);
-	}
-
-	else if ((r_ptr->d_char == '/') && (dun_level > 4) &&
-	    !(p_ptr->inside_arena || p_ptr->inside_battle))
-	{
-		/* Get local object */
-		q_ptr = &forge;
-
-		/* Wipe the object */
-		object_wipe(q_ptr);
-
-		/* Activate restriction */
-		get_obj_num_hook = kind_is_polearm;
-
-		/* Prepare allocation table */
-		get_obj_num_prep();
-
-		/* Make a poleweapon */
-		make_object(q_ptr, FALSE, FALSE);
-
-		/* Drop it in the dungeon */
-		(void)drop_near(q_ptr, -1, y, x);
-	}
-
-	else if ((r_ptr->d_char == '[') && (dun_level > 19) &&
-	    !(p_ptr->inside_arena || p_ptr->inside_battle))
-	{
-		/* Get local object */
-		q_ptr = &forge;
-
-		/* Wipe the object */
-		object_wipe(q_ptr);
-
-		/* Activate restriction */
-		get_obj_num_hook = kind_is_armor;
-
-		/* Prepare allocation table */
-		get_obj_num_prep();
-
-		/* Make a hard armor */
-		make_object(q_ptr, FALSE, FALSE);
-
-		/* Drop it in the dungeon */
-		(void)drop_near(q_ptr, -1, y, x);
-	}
-
-	else if ((m_ptr->r_idx == MON_A_GOLD || (m_ptr->r_idx == MON_A_SILVER && !((r_ptr->r_pkills+1)%5))) && !(p_ptr->inside_arena || p_ptr->inside_battle))
-	{
-		/* Get local object */
-		q_ptr = &forge;
-
-		/* Prepare to make a Can of Toys */
-		object_prep(q_ptr, lookup_kind(TV_CHEST, SV_CHEST_KANDUME));
-
-		apply_magic(q_ptr, object_level, FALSE, FALSE, FALSE, FALSE);
-
-		/* Drop it in the dungeon */
-		(void)drop_near(q_ptr, -1, y, x);
-	}
-
-	/* Mega-Hack -- drop "winner" treasures */
-	else if (!cloned)
-	{
-		if (m_ptr->r_idx == MON_SERPENT)
+	case MON_BLOODLETTER:
+		/* Bloodletters of Khorne may drop a blade of chaos */
+		if (drop_chosen_item && (randint1(100) < 15))
 		{
 			/* Get local object */
 			q_ptr = &forge;
 
-			/* Mega-Hack -- Prepare to make "Grond" */
-			object_prep(q_ptr, lookup_kind(TV_HAFTED, SV_GROND));
+			/* Prepare to make a Blade of Chaos */
+			object_prep(q_ptr, lookup_kind(TV_SWORD, SV_BLADE_OF_CHAOS));
 
-			/* Mega-Hack -- Mark this item as "Grond" */
-			q_ptr->name1 = ART_GROND;
-
-			/* Mega-Hack -- Actually create "Grond" */
-			apply_magic(q_ptr, -1, TRUE, TRUE, TRUE, FALSE);
-
-			/* Drop it in the dungeon */
-			(void)drop_near(q_ptr, -1, y, x);
-
-			/* Get local object */
-			q_ptr = &forge;
-
-			/* Mega-Hack -- Prepare to make "Chaos" */
-			object_prep(q_ptr, lookup_kind(TV_CROWN, SV_CHAOS));
-
-			/* Mega-Hack -- Mark this item as "Chaos" */
-			q_ptr->name1 = ART_CHAOS;
-
-			/* Mega-Hack -- Actually create "Chaos" */
-			apply_magic(q_ptr, -1, TRUE, TRUE, TRUE, FALSE);
+			apply_magic(q_ptr, object_level, FALSE, FALSE, FALSE, FALSE);
 
 			/* Drop it in the dungeon */
 			(void)drop_near(q_ptr, -1, y, x);
 		}
-		else
+		break;
+
+	case MON_RAAL:
+		if (drop_chosen_item && (dun_level > 9))
 		{
-			int a_idx = 0;
-			int chance = 0;
+			/* Get local object */
+			q_ptr = &forge;
 
-			switch (m_ptr->r_idx)
+			/* Wipe the object */
+			object_wipe(q_ptr);
+
+			/* Activate restriction */
+			if ((dun_level > 49) && one_in_(5))
+				get_obj_num_hook = kind_is_good_book;
+			else
+				get_obj_num_hook = kind_is_book;
+
+			/* Prepare allocation table */
+			get_obj_num_prep();
+
+			/* Make a book */
+			make_object(q_ptr, FALSE, FALSE);
+
+			/* Drop it in the dungeon */
+			(void)drop_near(q_ptr, -1, y, x);
+		}
+		break;
+
+	case MON_DAWN:
+		/*
+		 * Mega^3-hack: killing a 'Warrior of the Dawn' is likely to
+		 * spawn another in the fallen one's place!
+		 */
+		if (!p_ptr->inside_arena && !p_ptr->inside_battle)
+		{
+			if (!one_in_(7))
 			{
-			case MON_OBERON:
-				if (one_in_(3))
-				{
-					a_idx = ART_JUDGE;
-					chance = 33;
-				}
-				else
-				{
-					a_idx = ART_AMBER;
-					chance = 50;
-				}
-				break;
+				int wy = py, wx = px;
+				int attempts = 100;
+				bool pet = is_pet(m_ptr);
 
-			case MON_UNICORN_ORD:
-			case MON_MORGOTH:
-			case MON_ONE_RING:
-				if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
+				do
 				{
-					do
+					scatter(&wy, &wx, py, px, 20, 0);
+				}
+				while (!(in_bounds(wy, wx) && cave_floor_bold(wy, wx)) && --attempts);
+
+				if (attempts > 0)
+				{
+					u32b mode = 0L;
+					if (pet) mode |= PM_FORCE_PET;
+
+					if (summon_specific((pet ? -1 : m_idx), wy, wx, 100, SUMMON_DAWN, mode))
 					{
-						switch (randint0(3))
-						{
-						case 0:
-							a_idx = ART_NAMAKE_HAMMER;
-							break;
-						case 1:
-							a_idx = ART_NAMAKE_BOW;
-							break;
-						case 2:
-							a_idx = ART_NAMAKE_ARMOR;
-							break;
-						}
+						if (player_can_see_bold(wy, wx))
+#ifdef JP
+							msg_print("新たな戦士が現れた！");
+#else
+							msg_print("A new warrior steps forth!");
+#endif
+
 					}
-					while (a_info[a_idx].cur_num);
-
-					chance = 100;
 				}
-				break;
-
-			case MON_GHB:
-				a_idx = ART_GHB;
-				chance = 100;
-				break;
-
-			case MON_STORMBRINGER:
-				a_idx = ART_STORMBRINGER;
-				chance = 100;
-				break;
-
-			case MON_ECHIZEN:
-				a_idx = ART_CRIMSON;
-				chance = 50;
-				break;
-
-			case MON_GANDALF:
-				a_idx = ART_ICANUS;
-				chance = 20;
-				break;
-
-			case MON_OROCHI:
-				a_idx = ART_KUSANAGI;
-				chance = 25;
-				break;
-
-			case MON_DWORKIN:
-				a_idx = ART_JUDGE;
-				chance = 20;
-				break;
-
-			case MON_SAURON:
-				if (one_in_(10))
-				{
-					a_idx = ART_POWER;
-					chance = 100;
-				}
-				else
-				{
-					a_idx = ART_AHO;
-					chance = 100;
-				}
-				break;
-
-			case MON_BRAND:
-				if (!one_in_(3))
-				{
-					a_idx = ART_BRAND;
-					chance = 25;
-				}
-				else
-				{
-					a_idx = ART_WEREWINDLE;
-					chance = 33;
-				}
-				break;
-
-			case MON_CORWIN:
-				if (!one_in_(3))
-				{
-					a_idx = ART_GRAYSWANDIR;
-					chance = 33;
-				}
-				else
-				{
-					a_idx = ART_CORWIN;
-					chance = 33;
-				}
-				break;
-
-			case MON_SURTUR:
-				a_idx = ART_TWILIGHT;
-				chance = 66;
-				break;
-
-			case MON_SARUMAN:
-				a_idx = ART_ELENDIL;
-				chance = 33;
-				break;
-
-			case MON_FIONA:
-				a_idx = ART_FIONA;
-				chance = 50;
-				break;
-
-			case MON_JULIAN:
-				a_idx = ART_JULIAN;
-				chance = 45;
-				break;
-
-			case MON_KLING:
-				a_idx = ART_DESTINY;
-				chance = 40;
-				break;
-
-			case MON_GOEMON:
-				a_idx = ART_ZANTETSU;
-				chance = 75;
-				break;
-
-			case MON_HAGEN:
-				a_idx = ART_HAGEN;
-				chance = 66;
-				break;
-
-			case MON_CAINE:
-				a_idx = ART_CAINE;
-				chance = 50;
-				break;
-
-			case MON_BULLGATES:
-				a_idx = ART_WINBLOWS;
-				chance = 66;
-				break;
-
-			case MON_LUNGORTHIN:
-				a_idx = ART_CALRIS;
-				chance = 50;
-				break;
-
-			case MON_JACK_SHADOWS:
-				a_idx = ART_JACK;
-				chance = 15;
-				break;
-
-			case MON_DIO:
-				a_idx = ART_STONEMASK;
-				chance = 20;
-				break;
-
-			case MON_BELD:
-				a_idx = ART_SOULCRUSH;
-				chance = 10;
-				break;
-
-			case MON_PIP:
-				a_idx = ART_EXCALIBUR_J;
-				chance = 50;
-				break;
-
-			case MON_SHUTEN:
-				a_idx = ART_SHUTEN_DOJI;
-				chance = 33;
-				break;
-
-			case MON_GOTHMOG:
-				a_idx = ART_GOTHMOG;
-				chance = 33;
-				break;
-
-			case MON_FUNDIN:
-				a_idx = ART_FUNDIN;
-				chance = 5;
-				break;
 			}
+		}
+		break;
 
-			if ((a_idx > 0) && ((randint0(100) < chance) || (p_ptr->wizard)))
+	case MON_UNMAKER:
+		/* One more ultra-hack: An Unmaker goes out with a big bang! */
+		{
+			int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+			(void)project(m_idx, 6, y, x, 100, GF_CHAOS, flg, -1);
+		}
+		break;
+
+	case MON_UNICORN_ORD:
+	case MON_MORGOTH:
+	case MON_ONE_RING:
+		/* Reward for "lazy" player */
+		if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
+		{
+			int a_idx;
+
+			if (!drop_chosen_item) break;
+			do
 			{
+				switch (randint0(3))
+				{
+				case 0:
+					a_idx = ART_NAMAKE_HAMMER;
+					break;
+				case 1:
+					a_idx = ART_NAMAKE_BOW;
+					break;
+				case 2:
+					a_idx = ART_NAMAKE_ARMOR;
+					break;
+				}
+			}
+			while (a_info[a_idx].cur_num);
+
+			if (a_info[a_idx].cur_num == 0)
+			{
+				/* Create the artifact */
+				create_named_art(a_idx, y, x);
+				a_info[a_idx].cur_num = 1;
+			}
+		}
+		break;
+
+	case MON_SERPENT:
+		if (!drop_chosen_item) break;
+
+		/* Get local object */
+		q_ptr = &forge;
+
+		/* Mega-Hack -- Prepare to make "Grond" */
+		object_prep(q_ptr, lookup_kind(TV_HAFTED, SV_GROND));
+
+		/* Mega-Hack -- Mark this item as "Grond" */
+		q_ptr->name1 = ART_GROND;
+
+		/* Mega-Hack -- Actually create "Grond" */
+		apply_magic(q_ptr, -1, TRUE, TRUE, TRUE, FALSE);
+
+		/* Drop it in the dungeon */
+		(void)drop_near(q_ptr, -1, y, x);
+
+		/* Get local object */
+		q_ptr = &forge;
+
+		/* Mega-Hack -- Prepare to make "Chaos" */
+		object_prep(q_ptr, lookup_kind(TV_CROWN, SV_CHAOS));
+
+		/* Mega-Hack -- Mark this item as "Chaos" */
+		q_ptr->name1 = ART_CHAOS;
+
+		/* Mega-Hack -- Actually create "Chaos" */
+		apply_magic(q_ptr, -1, TRUE, TRUE, TRUE, FALSE);
+
+		/* Drop it in the dungeon */
+		(void)drop_near(q_ptr, -1, y, x);
+		break;
+
+	case MON_B_DEATH_SWORD:
+		if (drop_chosen_item)
+		{
+			/* Get local object */
+			q_ptr = &forge;
+
+			/* Prepare to make a broken sword */
+			object_prep(q_ptr, lookup_kind(TV_SWORD, randint1(2)));
+
+			/* Drop it in the dungeon */
+			(void)drop_near(q_ptr, -1, y, x);
+		}
+		break;
+
+	case MON_A_GOLD:
+	case MON_A_SILVER:
+		if (drop_chosen_item && ((m_ptr->r_idx == MON_A_GOLD) ||
+		     ((m_ptr->r_idx == MON_A_SILVER) && !((r_ptr->r_pkills + 1) % 5))))
+		{
+			/* Get local object */
+			q_ptr = &forge;
+
+			/* Prepare to make a Can of Toys */
+			object_prep(q_ptr, lookup_kind(TV_CHEST, SV_CHEST_KANDUME));
+
+			apply_magic(q_ptr, object_level, FALSE, FALSE, FALSE, FALSE);
+
+			/* Drop it in the dungeon */
+			(void)drop_near(q_ptr, -1, y, x);
+		}
+		break;
+
+	case MON_ROLENTO:
+		{
+			int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+			(void)project(m_idx, 3, y, x, damroll(20, 10), GF_FIRE, flg, -1);
+			break;
+		}
+		break;
+
+	default:
+		if (!drop_chosen_item) break;
+
+		switch (r_ptr->d_char)
+		{
+		case '(':
+			if (dun_level > 0)
+			{
+				/* Get local object */
+				q_ptr = &forge;
+
+				/* Wipe the object */
+				object_wipe(q_ptr);
+
+				/* Activate restriction */
+				get_obj_num_hook = kind_is_cloak;
+
+				/* Prepare allocation table */
+				get_obj_num_prep();
+
+				/* Make a cloak */
+				make_object(q_ptr, FALSE, FALSE);
+
+				/* Drop it in the dungeon */
+				(void)drop_near(q_ptr, -1, y, x);
+			}
+			break;
+
+		case '/':
+			if (dun_level > 4)
+			{
+				/* Get local object */
+				q_ptr = &forge;
+
+				/* Wipe the object */
+				object_wipe(q_ptr);
+
+				/* Activate restriction */
+				get_obj_num_hook = kind_is_polearm;
+
+				/* Prepare allocation table */
+				get_obj_num_prep();
+
+				/* Make a poleweapon */
+				make_object(q_ptr, FALSE, FALSE);
+
+				/* Drop it in the dungeon */
+				(void)drop_near(q_ptr, -1, y, x);
+			}
+			break;
+
+		case '[':
+			if (dun_level > 19)
+			{
+				/* Get local object */
+				q_ptr = &forge;
+
+				/* Wipe the object */
+				object_wipe(q_ptr);
+
+				/* Activate restriction */
+				get_obj_num_hook = kind_is_armor;
+
+				/* Prepare allocation table */
+				get_obj_num_prep();
+
+				/* Make a hard armor */
+				make_object(q_ptr, FALSE, FALSE);
+
+				/* Drop it in the dungeon */
+				(void)drop_near(q_ptr, -1, y, x);
+			}
+			break;
+
+		case '|':
+			if (m_ptr->r_idx != MON_STORMBRINGER)
+			{
+				/* Get local object */
+				q_ptr = &forge;
+
+				/* Wipe the object */
+				object_wipe(q_ptr);
+
+				/* Activate restriction */
+				get_obj_num_hook = kind_is_sword;
+
+				/* Prepare allocation table */
+				get_obj_num_prep();
+
+				/* Make a sword */
+				make_object(q_ptr, FALSE, FALSE);
+
+				/* Drop it in the dungeon */
+				(void)drop_near(q_ptr, -1, y, x);
+			}
+			break;
+		}
+		break;
+	}
+
+	/* Mega-Hack -- drop fixed artifacts */
+	if (drop_chosen_item)
+	{
+		int a_idx = 0;
+		int chance = 0;
+
+		switch (m_ptr->r_idx)
+		{
+		case MON_OBERON:
+			if (one_in_(3))
+			{
+				a_idx = ART_JUDGE;
+				chance = 33;
+			}
+			else
+			{
+				a_idx = ART_AMBER;
+				chance = 50;
+			}
+			break;
+
+		case MON_GHB:
+			a_idx = ART_GHB;
+			chance = 100;
+			break;
+
+		case MON_STORMBRINGER:
+			a_idx = ART_STORMBRINGER;
+			chance = 100;
+			break;
+
+		case MON_ECHIZEN:
+			a_idx = ART_CRIMSON;
+			chance = 50;
+			break;
+
+		case MON_GANDALF:
+			a_idx = ART_ICANUS;
+			chance = 20;
+			break;
+
+		case MON_OROCHI:
+			a_idx = ART_KUSANAGI;
+			chance = 25;
+			break;
+
+		case MON_DWORKIN:
+			a_idx = ART_JUDGE;
+			chance = 20;
+			break;
+
+		case MON_SAURON:
+			if (one_in_(10))
+			{
+				a_idx = ART_POWER;
+				chance = 100;
+			}
+			else
+			{
+				a_idx = ART_AHO;
+				chance = 100;
+			}
+			break;
+
+		case MON_BRAND:
+			if (!one_in_(3))
+			{
+				a_idx = ART_BRAND;
+				chance = 25;
+			}
+			else
+			{
+				a_idx = ART_WEREWINDLE;
+				chance = 33;
+			}
+			break;
+
+		case MON_CORWIN:
+			if (!one_in_(3))
+			{
+				a_idx = ART_GRAYSWANDIR;
+				chance = 33;
+			}
+			else
+			{
+				a_idx = ART_CORWIN;
+				chance = 33;
+			}
+			break;
+
+		case MON_SURTUR:
+			a_idx = ART_TWILIGHT;
+			chance = 66;
+			break;
+
+		case MON_SARUMAN:
+			a_idx = ART_ELENDIL;
+			chance = 33;
+			break;
+
+		case MON_FIONA:
+			a_idx = ART_FIONA;
+			chance = 50;
+			break;
+
+		case MON_JULIAN:
+			a_idx = ART_JULIAN;
+			chance = 45;
+			break;
+
+		case MON_KLING:
+			a_idx = ART_DESTINY;
+			chance = 40;
+			break;
+
+		case MON_GOEMON:
+			a_idx = ART_ZANTETSU;
+			chance = 75;
+			break;
+
+		case MON_HAGEN:
+			a_idx = ART_HAGEN;
+			chance = 66;
+			break;
+
+		case MON_CAINE:
+			a_idx = ART_CAINE;
+			chance = 50;
+			break;
+
+		case MON_BULLGATES:
+			a_idx = ART_WINBLOWS;
+			chance = 66;
+			break;
+
+		case MON_LUNGORTHIN:
+			a_idx = ART_CALRIS;
+			chance = 50;
+			break;
+
+		case MON_JACK_SHADOWS:
+			a_idx = ART_JACK;
+			chance = 15;
+			break;
+
+		case MON_DIO:
+			a_idx = ART_STONEMASK;
+			chance = 20;
+			break;
+
+		case MON_BELD:
+			a_idx = ART_SOULCRUSH;
+			chance = 10;
+			break;
+
+		case MON_PIP:
+			a_idx = ART_EXCALIBUR_J;
+			chance = 50;
+			break;
+
+		case MON_SHUTEN:
+			a_idx = ART_SHUTEN_DOJI;
+			chance = 33;
+			break;
+
+		case MON_GOTHMOG:
+			a_idx = ART_GOTHMOG;
+			chance = 33;
+			break;
+
+		case MON_FUNDIN:
+			a_idx = ART_FUNDIN;
+			chance = 5;
+			break;
+		}
+
+		if ((a_idx > 0) && ((randint0(100) < chance) || p_ptr->wizard))
+		{
+			if (a_info[a_idx].cur_num == 0)
+			{
+				/* Create the artifact */
+				create_named_art(a_idx, y, x);
+				a_info[a_idx].cur_num = 1;
+			}
+		}
+
+		if ((r_ptr->flags7 & RF7_GUARDIAN) && (d_info[dungeon_type].final_guardian == m_ptr->r_idx))
+		{
+			int k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT); /* Acquirement */;
+
+			if (d_info[dungeon_type].final_object)
+				k_idx = d_info[dungeon_type].final_object;
+
+			if (d_info[dungeon_type].final_artifact)
+			{
+				int a_idx = d_info[dungeon_type].final_artifact;
 				if (a_info[a_idx].cur_num == 0)
 				{
 					/* Create the artifact */
 					create_named_art(a_idx, y, x);
 
 					a_info[a_idx].cur_num = 1;
+					k_idx = 0;
 				}
 			}
-		}
-	}
 
-	if ((r_ptr->flags7 & RF7_GUARDIAN) && !p_ptr->inside_battle && (d_info[dungeon_type].final_guardian == m_ptr->r_idx) && !cloned)
-	{
-		int k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT); /* Acquirement */;
-
-		if (d_info[dungeon_type].final_object)
-			k_idx = d_info[dungeon_type].final_object;
-
-		if (d_info[dungeon_type].final_artifact)
-		{
-			int a_idx = d_info[dungeon_type].final_artifact;
-			if (a_info[a_idx].cur_num == 0)
+			if (k_idx)
 			{
-				/* Create the artifact */
-				create_named_art(a_idx, y, x);
+				/* Get local object */
+				q_ptr = &forge;
 
-				a_info[a_idx].cur_num = 1;
-				k_idx = 0;
+				/* Prepare to make a reward */
+				object_prep(q_ptr, k_idx);
+
+				apply_magic(q_ptr, object_level, FALSE, TRUE, FALSE, FALSE);
+
+				/* Drop it in the dungeon */
+				(void)drop_near(q_ptr, -1, y, x);
 			}
-		}
-
-		if (k_idx)
-		{
-			/* Get local object */
-			q_ptr = &forge;
-
-			/* Prepare to make a reward */
-			object_prep(q_ptr, k_idx);
-
-			apply_magic(q_ptr, object_level, FALSE, TRUE, FALSE, FALSE);
-
-			/* Drop it in the dungeon */
-			(void)drop_near(q_ptr, -1, y, x);
-		}
 #ifdef JP
-		msg_format("あなたは%sを制覇した！",d_name+d_info[dungeon_type].name);
+			msg_format("あなたは%sを制覇した！",d_name+d_info[dungeon_type].name);
 #else
-		msg_format("You have conquered %s!",d_name+d_info[dungeon_type].name);
+			msg_format("You have conquered %s!",d_name+d_info[dungeon_type].name);
 #endif
+		}
 	}
 
 	/* Determine how much we can drop */
@@ -1414,7 +1445,7 @@ msg_print("地面に落とされた。");
 	if (p_ptr->inside_battle) return;
 
 	/* Winner? */
-	if (m_ptr->r_idx == MON_SERPENT)
+	if ((m_ptr->r_idx == MON_SERPENT) && !cloned)
 	{
 		/* Total winner */
 		p_ptr->total_winner = TRUE;
@@ -1428,7 +1459,7 @@ msg_print("地面に落とされた。");
 		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "become *WINNER* of Hengband finely!");
 #endif
 
-		if (p_ptr->pclass == CLASS_CHAOS_WARRIOR)
+		if ((p_ptr->pclass == CLASS_CHAOS_WARRIOR) || (p_ptr->muta2 & MUT2_CHAOS_GIFT))
 		{
 #ifdef JP
 			msg_format("%sからの声が響いた。", chaos_patrons[p_ptr->chaos_patron]);
@@ -1441,23 +1472,22 @@ msg_print("地面に落とされた。");
 
 		/* Congratulations */
 #ifdef JP
-msg_print("*** おめでとう ***");
+		msg_print("*** おめでとう ***");
 #else
 		msg_print("*** CONGRATULATIONS ***");
 #endif
 
 #ifdef JP
-msg_print("あなたはゲームをコンプリートしました。");
+		msg_print("あなたはゲームをコンプリートしました。");
 #else
 		msg_print("You have won the game!");
 #endif
 
 #ifdef JP
-msg_print("準備が整ったら引退(自殺コマンド)しても結構です。");
+		msg_print("準備が整ったら引退(自殺コマンド)しても結構です。");
 #else
 		msg_print("You may retire (commit suicide) when you are ready.");
 #endif
-
 	}
 }
 
