@@ -809,6 +809,18 @@ bool reset_recall(void)
 	select_dungeon = choose_dungeon("reset");
 #endif
 
+	/* Ironman option */
+	if (ironman_downward)
+	{
+#ifdef JP
+		msg_print("何も起こらなかった。");
+#else
+		msg_print("Nothing happens.");
+#endif
+
+		return TRUE;
+	}
+
 	if (!select_dungeon) return FALSE;
 	/* Prompt */
 #ifdef JP
