@@ -331,7 +331,7 @@ cptr make_screen_dump(void)
 	}
 
 	/* Terminate string */
-	screen_buf->data[screen_buf->size] = '\0';
+	buf_append(screen_buf, "", 1);
 
 	ret = string_make(screen_buf->data);
 
