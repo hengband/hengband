@@ -3000,7 +3000,8 @@ msg_print("超能力パワーを吸いとられた！");
 						msg_print("Your psychic energy is drained!");
 #endif
 
-						p_ptr->csp = MAX(0, p_ptr->csp - damroll(5, dam) / 2);
+						p_ptr->csp -= damroll(5, dam) / 2;
+						if (p_ptr->csp < 0) p_ptr->csp = 0;
 						p_ptr->redraw |= PR_MANA;
 						p_ptr->window |= (PW_SPELL);
 						take_hit(DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
