@@ -2733,10 +2733,8 @@ P:0:3d4:28:22:-30
 F:DEX | CHAOTIC | CURSED | HEAVY_CURSE | TUNNEL | AGGRAVATE | BLOWS |
 F:RES_CONF | RES_CHAOS | RES_FEAR | RES_DISEN | NO_TELE
 
-#JH# 吕给司、毖下辑今に很ってました。
-#E:of Taikobo
 N:159:吕给司の
-E:of the Angler
+E:of Taikobo
 I:22:40:0
 W:10:150:30:10000
 P:0:1d1:0:0:0
