@@ -96,6 +96,7 @@ extern s32b Rand_div(u32b m);
 extern s16b randnor(int mean, int stand);
 extern s16b damroll(int num, int sides);
 extern s16b maxroll(int num, int sides);
+extern s32b div_round(s32b n, s32b d);
 
 
 #endif

@@ -18,25 +18,58 @@
 
 
 /*
- * Array of minimum room depths
+ * [from SAngband (originally from OAngband)]
+ *
+ * Table of values that control how many times each type of room will
+ * appear.  Each type of room has its own row, and each column
+ * corresponds to dungeon levels 0, 10, 20, and so on.  The final
+ * value is the minimum depth the room can appear at.  -LM-
+ *
+ * Level 101 and below use the values for level 100.
+ *
+ * Rooms with lots of monsters or loot may not be generated if the
+ * object or monster lists are already nearly full.  Rooms will not
+ * appear above their minimum depth.  Tiny levels will not have space
+ * for all the rooms you ask for.
  */
-static s16b roomdep[] =
+static room_info_type room_info_normal[ROOM_T_MAX] =
 {
-	 0, /* 0  = Nothing */
-	 1, /* 1  = Simple (33x11) */
-	 1, /* 2  = Overlapping (33x11) */
-	 3, /* 3  = Crossed (33x11) */
-	 3, /* 4  = Large (33x11) */
-	10, /* 5  = Monster nest (33x11) */
-	10, /* 6  = Monster pit (33x11) */
-	10, /* 7  = Lesser vault (33x22) */
-	20, /* 8  = Greater vault (66x44) */
-	 5, /* 9  = Fractal cave (42x24) */
-	10, /* 10 = Random vault (44x22) */
-	 3, /* 11 = Circular rooms (22x22) */
-	10, /* 12 = Crypts (22x22) */
-	20, /* 13 = Trapped monster pit */
-	20, /* 14 = Piranha/Armageddon trap room */ 
+	/* Depth */
+	/*  0  10  20  30  40  50  60  70  80  90 100  min limit */
+
+	{{999,900,800,700,600,500,400,300,200,100,  0},  0}, /*NORMAL   */
+	{{  1, 10, 20, 30, 40, 50, 60, 70, 80, 90,100},  1}, /*OVERLAP  */
+	{{  1, 10, 20, 30, 40, 50, 60, 70, 80, 90,100},  3}, /*CROSS    */
+	{{  1, 10, 20, 30, 40, 50, 60, 70, 80, 90,100},  3}, /*INNER_F  */
+	{{  0,  1,  1,  1,  2,  3,  5,  6,  8, 10, 13}, 10}, /*NEST     */
+	{{  0,  1,  1,  2,  3,  4,  6,  8, 10, 13, 16}, 10}, /*PIT      */
+	{{  0,  1,  1,  1,  2,  2,  3,  5,  6,  8, 10}, 10}, /*LESSER_V */
+	{{  0,  0,  1,  1,  1,  2,  2,  3,  4,  5,  6}, 20}, /*GREATER_V*/
+	{{  0,100,200,300,400,500,600,700,800,900,999}, 10}, /*FRACAVE  */
+	{{  0,  1,  1,  1,  1,  2,  2,  3,  4,  5,  6}, 10}, /*RANDOM_V */
+	{{  0,  4,  8, 12, 16, 20, 24, 28, 32, 36, 40},  3}, /*OVAL     */
+	{{  1,  6, 12, 18, 24, 30, 36, 42, 48, 54, 60}, 10}, /*CRYPT    */
+	{{  0,  0,  1,  1,  1,  2,  3,  4,  5,  6,  8}, 20}, /*TRAP_PIT */
+	{{  0,  0,  1,  1,  1,  2,  3,  4,  5,  6,  8}, 20}, /*TRAP     */
+};
+
+
+/* Build rooms in descending order of difficulty. */
+static byte room_build_order[ROOM_T_MAX] = {
+	ROOM_T_GREATER_VAULT,
+	ROOM_T_RANDOM_VAULT,
+	ROOM_T_LESSER_VAULT,
+	ROOM_T_TRAP_PIT,
+	ROOM_T_PIT,
+	ROOM_T_NEST,
+	ROOM_T_TRAP,
+	ROOM_T_INNER_FEAT,
+	ROOM_T_OVAL,
+	ROOM_T_CRYPT,
+	ROOM_T_OVERLAP,
+	ROOM_T_CROSS,
+	ROOM_T_FRACAVE,
+	ROOM_T_NORMAL,
 };
 
 
@@ -201,91 +234,170 @@ static void check_room_boundary(int x1, int y1, int x2, int y2)
 
 
 /*
- * This function is used to allocate the space needed by a room in the room_map
- * array.
- * x, y represent the size of the room (0...x-1) by (0...y-1).
- * crowded is used to denote a monset nest.
- * by0, bx0 are the positions in the room_map array given to the build_type'x'
- * function.
- * xx, yy are the returned center of the allocated room in coordinates for
- * cave.feat and cave.info etc.
+ * Find a good spot for the next room.  -LM-
+ *
+ * Find and allocate a free space in the dungeon large enough to hold
+ * the room calling this function.
+ *
+ * We allocate space in 11x11 blocks, but want to make sure that rooms
+ * align neatly on the standard screen.  Therefore, we make them use
+ * blocks in few 11x33 rectangles as possible.
+ *
+ * Be careful to include the edges of the room in height and width!
+ *
+ * Return TRUE and values for the center of the room if all went well.
+ * Otherwise, return FALSE.
  */
-static bool room_alloc(int x, int y, bool crowded, int by0, int bx0, int *xx, int *yy)
+static bool find_space(int *y, int *x, int height, int width)
 {
-	int temp, bx1, bx2, by1, by2, by, bx;
+	int i;
+	int by, bx, by1, bx1, by2, bx2;
+	int block_y, block_x;
 
-	/* Calculate number of room_map squares to allocate */
-
-	/* temp is total number along width */
-	temp = ((x - 1) / BLOCK_WID) + 1;
-
-	/* bx2 = ending block */
-	bx2 = temp / 2 + bx0;
-
-	/* bx1 = starting block (Note: rounding taken care of here.) */
-	bx1 = bx2 + 1 - temp;
-
-	/* temp is total number along height */
-	temp = ((y - 1) / BLOCK_HGT) + 1;
-
-	/* by2 = ending block */
-	by2 = temp / 2 + by0;
-
-	/* by1 = starting block */
-	by1 = by2 + 1 - temp;
+	bool filled;
 
 
-	/* Never run off the screen */
-	if ((by1 < 0) || (by2 >= dun->row_rooms)) return (FALSE);
-	if ((bx1 < 0) || (bx2 >= dun->col_rooms)) return (FALSE);
+	/* Find out how many blocks we need. */
+	int blocks_high = 1 + ((height - 1) / BLOCK_HGT);
+	int blocks_wide = 1 + ((width - 1) / BLOCK_WID);
 
-	/* Verify open space */
-	for (by = by1; by <= by2; by++)
+	/* There are no way to allocate such huge space */
+	if (dun->row_rooms < blocks_high) return FALSE;
+	if (dun->col_rooms < blocks_wide) return FALSE;
+
+	/* Sometimes, little rooms like to have more space. */
+	if (blocks_wide == 2)
 	{
-		for (bx = bx1; bx <= bx2; bx++)
+		if (one_in_(3)) blocks_wide = 3;
+	}
+	else if (blocks_wide == 1)
+	{
+		if (one_in_(2)) blocks_wide = rand_range(2, 3);
+	}
+
+
+	/* We'll allow twenty-five guesses. */
+	for (i = 0; i < 25; i++)
+	{
+		filled = FALSE;
+
+		/* Pick a top left block at random */
+		block_y = randint0(dun->row_rooms - blocks_high);
+		block_x = randint0(dun->col_rooms - blocks_wide);
+
+
+		/* Itty-bitty rooms can shift about within their rectangle */
+		if (blocks_wide < 3)
 		{
-			if (dun->room_map[by][bx]) return (FALSE);
+			/* Rooms that straddle a border must shift. */
+			if ((blocks_wide == 2) && ((block_x % 3) == 2))
+			{
+				if (one_in_(2)) block_x--;
+				else block_x++;
+			}
 		}
-	}
 
-	/* It is *extremely* important that the following calculation */
-	/* be *exactly* correct to prevent memory errors XXX XXX XXX */
-
-	/* Acquire the location of the room */
-	*yy = ((by1 + by2 + 1) * BLOCK_HGT) / 2;
-	*xx = ((bx1 + bx2 + 1) * BLOCK_WID) / 2;
-
-
-	/* Save the room location */
-	if (dun->cent_n < CENT_MAX)
-	{
-		dun->cent[dun->cent_n].y = *yy;
-		dun->cent[dun->cent_n].x = *xx;
-		dun->cent_n++;
-	}
-
-	/* Reserve some blocks */
-	for (by = by1; by <= by2; by++)
-	{
-		for (bx = bx1; bx <= bx2; bx++)
+		/* Rooms with width divisible by 3 get fitted to a rectangle. */
+		else if ((blocks_wide % 3) == 0)
 		{
-			dun->room_map[by][bx] = TRUE;
+			/* Align to the left edge of a 11x33 rectangle. */
+			if ((block_x % 3) == 2) block_x++;
+			if ((block_x % 3) == 1) block_x--;
 		}
+
+		/*
+		 * Big rooms that do not have a width divisible by 3 get
+		 * aligned towards the edge of the dungeon closest to them.
+		 */
+		else
+		{
+			/* Shift towards left edge of dungeon. */
+			if (block_x + (blocks_wide / 2) <= dun->col_rooms / 2)
+			{
+				if (((block_x % 3) == 2) && ((blocks_wide % 3) == 2))
+					block_x--;
+				if ((block_x % 3) == 1) block_x--;
+			}
+
+			/* Shift toward right edge of dungeon. */
+			else
+			{
+				if (((block_x % 3) == 2) && ((blocks_wide % 3) == 2))
+					block_x++;
+				if ((block_x % 3) == 1) block_x++;
+			}
+		}
+
+		/* Extract blocks */
+		by1 = block_y + 0;
+		bx1 = block_x + 0;
+		by2 = block_y + blocks_high;
+		bx2 = block_x + blocks_wide;
+
+		/* Never run off the screen */
+		if ((by1 < 0) || (by2 > dun->row_rooms)) continue;
+		if ((bx1 < 0) || (bx2 > dun->col_rooms)) continue;
+
+		/* Verify available space */
+		for (by = by1; by < by2; by++)
+		{
+			for (bx = bx1; bx < bx2; bx++)
+			{
+				if (dun->room_map[by][bx])
+				{
+					filled = TRUE;
+				}
+			}
+		}
+
+		/* If space filled, try again. */
+		if (filled) continue;
+
+
+		/* It is *extremely* important that the following calculation */
+		/* be *exactly* correct to prevent memory errors XXX XXX XXX */
+
+		/* Acquire the location of the room */
+		(*y) = ((by1 + by2) * BLOCK_HGT) / 2;
+		(*x) = ((bx1 + bx2) * BLOCK_WID) / 2;
+
+		/* Save the room location */
+		if (dun->cent_n < CENT_MAX)
+		{
+			dun->cent[dun->cent_n].y = *y;
+			dun->cent[dun->cent_n].x = *x;
+			dun->cent_n++;
+		}
+
+		/* Reserve some blocks. */
+		for (by = by1; by < by2; by++)
+		{
+			for (bx = bx1; bx < bx2; bx++)
+			{
+				dun->room_map[by][bx] = TRUE;
+			}
+		}
+
+
+		/*
+		 * Hack- See if room will cut off a cavern.
+		 *
+		 * If so, fix by tunneling outside the room in such a
+		 * way as to connect the caves.
+		 */
+		check_room_boundary(*x - width / 2 - 1, *y - height / 2 - 1, *x + (width - 1) / 2 + 1, *y + (height - 1) / 2 + 1);
+
+
+		/* Success. */
+		return (TRUE);
 	}
 
-	/* Count "crowded" rooms */
-	if (crowded) dun->crowded++;
-
-	/*
-	 * Hack- See if room will cut off a cavern.
-	 * If so, fix by tunneling outside the room in such a way as to connect the caves.
-	 */
-	check_room_boundary(*xx - x / 2 - 1, *yy - y / 2 - 1,
-			    *xx + (x - 1) / 2 + 1, *yy + (y - 1) / 2 + 1);
-
-	/* Success */
-	return (TRUE);
+	/* Failure. */
+	return (FALSE);
 }
+
+
+
 
 /*
  * Room building routines.
@@ -311,7 +423,7 @@ static bool room_alloc(int x, int y, bool crowded, int by0, int bx0, int *xx, in
 /*
  * Type 1 -- normal rectangular rooms
  */
-static void build_type1(int by0, int bx0)
+static bool build_type1(void)
 {
 	int y, x, y2, x2, yval, xval;
 	int y1, x1, xsize, ysize;
@@ -329,8 +441,8 @@ static void build_type1(int by0, int bx0)
 	xsize = x1 + x2 + 1;
 	ysize = y1 + y2 + 1;
 
-	/* Try to allocate space for room.  If fails, exit */
-	if (!room_alloc(xsize + 2, ysize + 2, FALSE, by0, bx0, &xval, &yval)) return;
+	/* Find and reserve some space in the dungeon.  Get center of room. */
+	if (!find_space(&yval, &xval, ysize + 2, xsize + 2)) return FALSE;
 
 	/* Choose lite or dark */
 	light = ((dun_level <= randint1(25)) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS));
@@ -452,13 +564,15 @@ static void build_type1(int by0, int bx0)
 
 		place_random_door(yval, xval, TRUE);
 	}
+
+	return TRUE;
 }
 
 
 /*
  * Type 2 -- Overlapping rectangular rooms
  */
-static void build_type2(int by0, int bx0)
+static bool build_type2(void)
 {
 	int			y, x, xval, yval;
 	int			y1a, x1a, y2a, x2a;
@@ -466,9 +580,8 @@ static void build_type2(int by0, int bx0)
 	bool		light;
 	cave_type   *c_ptr;
 
-
-	/* Try to allocate space for room. If fails, exit */
-	if (!room_alloc(25, 11, FALSE, by0, bx0, &xval, &yval)) return;
+	/* Find and reserve some space in the dungeon.  Get center of room. */
+	if (!find_space(&yval, &xval, 11, 25)) return FALSE;
 
 	/* Choose lite or dark */
 	light = ((dun_level <= randint1(25)) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS));
@@ -564,6 +677,8 @@ static void build_type2(int by0, int bx0)
 			place_floor_grid(c_ptr);
 		}
 	}
+
+	return TRUE;
 }
 
 
@@ -580,7 +695,7 @@ static void build_type2(int by0, int bx0)
  * the code below will work (with "bounds checking") for 5x5, or even
  * for unsymetric values like 4x3 or 5x3 or 3x4 or 3x5, or even larger.
  */
-static void build_type3(int by0, int bx0)
+static bool build_type3(void)
 {
 	int			y, x, dy, dx, wy, wx;
 	int			y1a, x1a, y2a, x2a;
@@ -590,8 +705,9 @@ static void build_type3(int by0, int bx0)
 	cave_type   *c_ptr;
 
 
-	/* Try to allocate space for room. */
-	if (!room_alloc(25, 11, FALSE, by0, bx0, &xval, &yval)) return;
+	/* Find and reserve some space in the dungeon.  Get center of room. */
+	if (!find_space(&yval, &xval, 11, 25)) return FALSE;
+
 
 	/* Choose lite or dark */
 	light = ((dun_level <= randint1(25)) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS));
@@ -817,6 +933,8 @@ static void build_type3(int by0, int bx0)
 			break;
 		}
 	}
+
+	return TRUE;
 }
 
 
@@ -830,7 +948,7 @@ static void build_type3(int by0, int bx0)
  *	4 - Inner room has a maze
  *	5 - A set of four inner rooms
  */
-static void build_type4(int by0, int bx0)
+static bool build_type4(void)
 {
 	int         y, x, y1, x1;
 	int         y2, x2, tmp, yval, xval;
@@ -838,8 +956,8 @@ static void build_type4(int by0, int bx0)
 	cave_type   *c_ptr;
 
 
-	/* Try to allocate space for room. */
-	if (!room_alloc(25, 11, FALSE, by0, bx0, &xval, &yval)) return;
+	/* Find and reserve some space in the dungeon.  Get center of room. */
+	if (!find_space(&yval, &xval, 11, 25)) return FALSE;
 
 	/* Choose lite or dark */
 	light = ((dun_level <= randint1(25)) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS));
@@ -1135,6 +1253,8 @@ static void build_type4(int by0, int bx0)
 			break;
 		}
 	}
+
+	return TRUE;
 }
 
 
@@ -1688,9 +1808,6 @@ static int pick_vault_type(vault_aux_type *l_ptr, s16b allow_flag_mask)
 	return n_ptr->name ? count : -1;
 }
 
-static void build_type6(int by0, int bx0, bool nest);
-static void build_type5(int by0, int bx0, bool nest);
-
 static vault_aux_type nest_types[] =
 {
 #ifdef JP
@@ -1921,7 +2038,7 @@ static void ang_sort_swap_nest_mon_info(vptr u, vptr v, int a, int b)
  *
  * Note that "monster nests" will never contain "unique" monsters.
  */
-static void build_type5(int by0, int bx0, bool pit)
+static bool build_type5(void)
 {
 	int y, x, y1, x1, y2, x2, xval, yval;
 	int i;
@@ -1934,18 +2051,13 @@ static void build_type5(int by0, int bx0, bool pit)
 	int cur_nest_type = pick_vault_type(nest_types, d_info[dungeon_type].nest);
 	vault_aux_type *n_ptr;
 
-	/* Try to allocate space for room. */
-	if (!room_alloc(25, 11, TRUE, by0, bx0, &xval, &yval)) return;
+	/* Find and reserve some space in the dungeon.  Get center of room. */
+	if (!find_space(&yval, &xval, 11, 25)) return FALSE;
 
 	/* No type available */
 	if (cur_nest_type < 0)
 	{
-		if (pit) return;
-		else
-		{
-			build_type6(by0, bx0, TRUE);
-			return;
-		}
+		return FALSE;
 	}
 
 	n_ptr = &nest_types[cur_nest_type];
@@ -2053,7 +2165,7 @@ static void build_type5(int by0, int bx0, bool pit)
 		}
 
 		/* Notice failure */
-		if (!r_idx || !attempts) return;
+		if (!r_idx || !attempts) return FALSE;
 
 		/* Note the alignment */
 		if (r_ptr->flags3 & RF3_EVIL) align.sub_align |= SUB_ALIGN_EVIL;
@@ -2118,6 +2230,8 @@ static void build_type5(int by0, int bx0, bool pit)
 			msg_print(r_name + r_info[nest_mon_info[i].r_idx].name);
 		}
 	}
+
+	return TRUE;
 }
 
 
@@ -2157,7 +2271,7 @@ static void build_type5(int by0, int bx0, bool pit)
  *
  * Note that "monster pits" will never contain "unique" monsters.
  */
-static void build_type6(int by0, int bx0, bool nest)
+static bool build_type6(void)
 {
 	int y, x, y1, x1, y2, x2, xval, yval;
 	int i, j;
@@ -2171,18 +2285,13 @@ static void build_type6(int by0, int bx0, bool nest)
 	int cur_pit_type = pick_vault_type(pit_types, d_info[dungeon_type].pit);
 	vault_aux_type *n_ptr;
 
-	/* Try to allocate space for room. */
-	if (!room_alloc(25, 11, TRUE, by0, bx0, &xval, &yval)) return;
+	/* Find and reserve some space in the dungeon.  Get center of room. */
+	if (!find_space(&yval, &xval, 11, 25)) return FALSE;
 
 	/* No type available */
 	if (cur_pit_type < 0)
 	{
-		if (nest) return;
-		else
-		{
-			build_type5(by0, bx0, TRUE);
-			return;
-		}
+		return FALSE;
 	}
 
 	n_ptr = &pit_types[cur_pit_type];
@@ -2287,7 +2396,7 @@ static void build_type6(int by0, int bx0, bool nest)
 		}
 
 		/* Notice failure */
-		if (!r_idx || !attempts) return;
+		if (!r_idx || !attempts) return FALSE;
 
 		/* Note the alignment */
 		if (r_ptr->flags3 & RF3_EVIL) align.sub_align |= SUB_ALIGN_EVIL;
@@ -2399,6 +2508,8 @@ static void build_type6(int by0, int bx0, bool nest)
 
 	/* Center monster */
 	place_monster_aux(0, yval, xval, what[7], PM_NO_KAGE);
+
+	return TRUE;
 }
 
 
@@ -2417,7 +2528,7 @@ static void coord_trans(int *x, int *y, int xoffset, int yoffset, int transno)
 	 * be expressed simply in terms of swapping and inverting the
 	 * x and y coordinates.
 	 */
-	for (i = 0; i <= transno % 4; i++)
+	for (i = 0; i < transno % 4; i++)
 	{
 		/* rotate by 90 degrees */
 		temp = *x;
@@ -2463,7 +2574,7 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
 			coord_trans(&i, &j, xoffset, yoffset, transno);
 
 			/* Extract the location */
-			if (transno%2)
+			if (transno % 2 == 0)
 			{
 				/* no swap of x/y */
 				x = xval - (xmax / 2) + i;
@@ -2592,7 +2703,7 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
 			coord_trans(&i, &j, xoffset, yoffset, transno);
 
 			/* Extract the location */
-			if (transno % 2)
+			if (transno % 2 == 0)
 			{
 				/* no swap of x/y */
 				x = xval - (xmax / 2) + i;
@@ -2680,7 +2791,7 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
 /*
  * Type 7 -- simple vaults (see "v_info.txt")
  */
-static void build_type7(int by0, int bx0)
+static bool build_type7(void)
 {
 	vault_type *v_ptr = NULL;
 	int dummy = 0;
@@ -2702,7 +2813,7 @@ static void build_type7(int by0, int bx0)
 	}
 
 	/* No lesser vault found */
-	if (!v_ptr) return;
+	if (!v_ptr) return FALSE;
 
 	/* pick type of transformation (0-7) */
 	transno = randint0(8);
@@ -2710,6 +2821,13 @@ static void build_type7(int by0, int bx0)
 	/* calculate offsets */
 	x = v_ptr->wid;
 	y = v_ptr->hgt;
+
+	/* Some huge vault cannot be ratated to fit in the dungeon */
+	if (x+2 > cur_hgt-2)
+	{
+		/* Forbid 90 or 270 degree ratation */
+		transno &= ~1;
+	}
 
 	coord_trans(&x, &y, 0, 0, transno);
 
@@ -2731,8 +2849,10 @@ static void build_type7(int by0, int bx0)
 		yoffset = 0;
 	}
 
-	/* Try to allocate space for room. */
-	if (!room_alloc(abs(x), abs(y), FALSE, by0, bx0, &xval, &yval)) return;
+
+	/* Find and reserve some space in the dungeon.  Get center of room. */
+	if (!find_space(&yval, &xval, abs(y), abs(x))) return FALSE;
+
 
 	if (dummy >= SAFE_MAX_ATTEMPTS)
 	{
@@ -2745,7 +2865,7 @@ msg_print("警告！小さな地下室を配置できません！");
 #endif
 
 		}
-		return;
+		return FALSE;
 	}
 
 
@@ -2769,13 +2889,15 @@ msg_print("警告！小さな地下室を配置できません！");
 	/* Hack -- Build the vault */
 	build_vault(yval, xval, v_ptr->hgt, v_ptr->wid,
 		    v_text + v_ptr->text, xoffset, yoffset, transno);
+
+	return TRUE;
 }
 
 
 /*
  * Type 8 -- greater vaults (see "v_info.txt")
  */
-static void build_type8(int by0, int bx0)
+static bool build_type8(void)
 {
 	vault_type *v_ptr = NULL;
 	int dummy = 0;
@@ -2797,7 +2919,7 @@ static void build_type8(int by0, int bx0)
 	}
 
 	/* No greater vault found */
-	if (!v_ptr) return;
+	if (!v_ptr) return FALSE;
 
 	/* pick type of transformation (0-7) */
 	transno = randint0(8);
@@ -2805,6 +2927,13 @@ static void build_type8(int by0, int bx0)
 	/* calculate offsets */
 	x = v_ptr->wid;
 	y = v_ptr->hgt;
+
+	/* Some huge vault cannot be ratated to fit in the dungeon */
+	if (x+2 > cur_hgt-2)
+	{
+		/* Forbid 90 or 270 degree ratation */
+		transno &= ~1;
+	}
 
 	coord_trans(&x, &y, 0, 0, transno);
 
@@ -2832,7 +2961,9 @@ static void build_type8(int by0, int bx0)
 	 * Hack -- Prepare a bit larger space (+2, +2) to 
 	 * prevent generation of vaults with no-entrance.
 	 */
-	if (!room_alloc(abs(x) + 2, abs(y) + 2, FALSE, by0, bx0, &xval, &yval)) return;
+	/* Find and reserve some space in the dungeon.  Get center of room. */
+	if (!find_space(&yval, &xval, abs(y) + 2, abs(x) + 2)) return FALSE;
+
 
 	if (dummy >= SAFE_MAX_ATTEMPTS)
 	{
@@ -2845,7 +2976,7 @@ msg_print("警告！巨大な地下室を配置できません！");
 #endif
 
 		}
-		return;
+		return FALSE;
 	}
 
 
@@ -2869,6 +3000,8 @@ msg_print("警告！巨大な地下室を配置できません！");
 	/* Hack -- Build the vault */
 	build_vault(yval, xval, v_ptr->hgt, v_ptr->wid,
 		    v_text + v_ptr->text, xoffset, yoffset, transno);
+
+	return TRUE;
 }
 
 /*
@@ -3519,7 +3652,7 @@ static bool generate_fracave(int y0, int x0, int xsize, int ysize, int cutoff, b
 /*
  * Driver routine to create fractal cave system
  */
-static void build_type9(int by0, int bx0)
+static bool build_type9(void)
 {
 	int grd, roug, cutoff, xsize, ysize, y0, x0;
 
@@ -3529,8 +3662,8 @@ static void build_type9(int by0, int bx0)
 	xsize = randint1(22) * 2 + 6;
 	ysize = randint1(15) * 2 + 6;
 
-	/* Try to allocate space for room.  If fails, exit */
-	if (!room_alloc(xsize + 1, ysize + 1, FALSE, by0, bx0, &x0, &y0)) return;
+	/* Find and reserve some space in the dungeon.  Get center of room. */
+	if (!find_space(&y0, &x0, ysize + 1, xsize + 1)) return FALSE;
 
 	light = done = FALSE;
 	room = TRUE;
@@ -3558,6 +3691,8 @@ static void build_type9(int by0, int bx0)
 		/* Convert to normal format + clean up */
 		done = generate_fracave(y0, x0, xsize, ysize, cutoff, light, room);
 	}
+
+	return TRUE;
 }
 
 #ifdef ALLOW_CAVERNS_AND_LAKES
@@ -3613,37 +3748,37 @@ static bool generate_lake(int y0, int x0, int xsize, int ysize, int c1, int c2, 
 	/* Get features based on type */
 	switch (type)
 	{
-	case GEN_LAKE_TYPE_LAVA: /* Lava */
+	case LAKE_T_LAVA: /* Lava */
 		feat1 = FEAT_DEEP_LAVA;
 		feat2 = FEAT_SHAL_LAVA;
 		feat3 = floor_type[randint0(100)];
 		break;
-	case GEN_LAKE_TYPE_WATER: /* Water */
+	case LAKE_T_WATER: /* Water */
 		feat1 = FEAT_DEEP_WATER;
 		feat2 = FEAT_SHAL_WATER;
 		feat3 = floor_type[randint0(100)];
 		break;
-	case GEN_LAKE_TYPE_CAVE: /* Collapsed cave */
+	case LAKE_T_CAVE: /* Collapsed cave */
 		feat1 = floor_type[randint0(100)];
 		feat2 = floor_type[randint0(100)];
 		feat3 = FEAT_RUBBLE;
 		break;
-	case GEN_LAKE_TYPE_EARTH_VAULT: /* Earth vault */
+	case LAKE_T_EARTH_VAULT: /* Earth vault */
 		feat1 = FEAT_RUBBLE;
 		feat2 = floor_type[randint0(100)];
 		feat3 = FEAT_RUBBLE;
 		break;
-	case GEN_LAKE_TYPE_AIR_VAULT: /* Air vault */
+	case LAKE_T_AIR_VAULT: /* Air vault */
 		feat1 = FEAT_GRASS;
 		feat2 = FEAT_TREES;
 		feat3 = FEAT_GRASS;
 		break;
-	case GEN_LAKE_TYPE_WATER_VAULT: /* Water vault */
+	case LAKE_T_WATER_VAULT: /* Water vault */
 		feat1 = FEAT_SHAL_WATER;
 		feat2 = FEAT_DEEP_WATER;
 		feat3 = FEAT_SHAL_WATER;
 		break;
-	case GEN_LAKE_TYPE_FIRE_VAULT: /* Fire Vault */
+	case LAKE_T_FIRE_VAULT: /* Fire Vault */
 		feat1 = FEAT_SHAL_LAVA;
 		feat2 = FEAT_DEEP_LAVA;
 		feat3 = FEAT_SHAL_LAVA;
@@ -3756,7 +3891,7 @@ void build_lake(int type)
 	int c1, c2, c3;
 
 	/* paranoia - exit if lake type out of range. */
-	if ((type < GEN_LAKE_TYPE_LAVA) || (type > GEN_LAKE_TYPE_FIRE_VAULT))
+	if ((type < LAKE_T_LAVA) || (type > LAKE_T_FIRE_VAULT))
 	{
 		msg_format("Invalid lake type (%d)", type);
 		return;
@@ -4481,7 +4616,7 @@ void build_maze_vault(int x0, int y0, int xsize, int ysize, bool is_vault)
  * a way to get in even if the vault abuts a side of the dungeon.
  */
 static void build_mini_c_vault(int x0, int y0, int xsize, int ysize)
- {
+{
 	int dy, dx;
 	int y1, x1, y2, x2, y, x, total;
 	int m, n, num_vertices;
@@ -4506,7 +4641,7 @@ static void build_mini_c_vault(int x0, int y0, int xsize, int ysize)
 
 		cave[y1-2][x].info |= (CAVE_ROOM | CAVE_ICKY);
 
-		place_extra_noperm_bold(y1-2, x);
+		place_outer_noperm_bold(y1-2, x);
 	}
 
 	for (x = x1 - 2; x <= x2 + 2; x++)
@@ -4515,7 +4650,7 @@ static void build_mini_c_vault(int x0, int y0, int xsize, int ysize)
 
 		cave[y2+2][x].info |= (CAVE_ROOM | CAVE_ICKY);
 
-		place_extra_noperm_bold(y2+2, x);
+		place_outer_noperm_bold(y2+2, x);
 	}
 
 	for (y = y1 - 2; y <= y2 + 2; y++)
@@ -4524,7 +4659,7 @@ static void build_mini_c_vault(int x0, int y0, int xsize, int ysize)
 
 		cave[y][x1-2].info |= (CAVE_ROOM | CAVE_ICKY);
 
-		place_extra_noperm_bold(y, x1-2);
+		place_outer_noperm_bold(y, x1-2);
 	}
 
 	for (y = y1 - 2; y <= y2 + 2; y++)
@@ -4533,17 +4668,21 @@ static void build_mini_c_vault(int x0, int y0, int xsize, int ysize)
 
 		cave[y][x2+2].info |= (CAVE_ROOM | CAVE_ICKY);
 
-		place_extra_noperm_bold(y, x2+2);
+		place_outer_noperm_bold(y, x2+2);
 	}
 
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
-			cave[y][x].info |= (CAVE_ROOM | CAVE_ICKY);
+			cave_type *c_ptr = &cave[y][x];
+
+			c_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
 
 			/* Permanent walls */
-			cave[y][x].feat = FEAT_PERM_INNER;
+			c_ptr->feat = FEAT_PERM_INNER;
+			c_ptr->info &= ~(CAVE_MASK);
+			c_ptr->info |= CAVE_INNER;
 		}
 	}
 
@@ -4578,15 +4717,15 @@ static void build_mini_c_vault(int x0, int y0, int xsize, int ysize)
 	{
 		/* left and right */
 		y = randint1(dy) + dy / 2;
-		place_outer_noperm_bold(y1 + y, x1 - 1);
-		place_outer_noperm_bold(y1 + y, x2 + 1);
+		place_inner_bold(y1 + y, x1 - 1);
+		place_inner_bold(y1 + y, x2 + 1);
 	}
 	else
 	{
 		/* top and bottom */
 		x = randint1(dx) + dx / 2;
-		place_outer_noperm_bold(y1 - 1, x1 + x);
-		place_outer_noperm_bold(y2 + 1, x1 + x);
+		place_inner_bold(y1 - 1, x1 + x);
+		place_inner_bold(y2 + 1, x1 + x);
 	}
 
 	/* Fill with monsters and treasure, highest difficulty */
@@ -5069,22 +5208,22 @@ static void build_elemental_vault(int x0, int y0, int xsiz, int ysiz)
 	if (dun_level < 25)
 	{
 		/* Earth vault  (Rubble) */
-		type = GEN_LAKE_TYPE_EARTH_VAULT;
+		type = LAKE_T_EARTH_VAULT;
 	}
 	else if (dun_level < 50)
 	{
 		/* Air vault (Trees) */
-		type = GEN_LAKE_TYPE_AIR_VAULT;
+		type = LAKE_T_AIR_VAULT;
 	}
 	else if (dun_level < 75)
 	{
 		/* Water vault (shallow water) */
-		type = GEN_LAKE_TYPE_WATER_VAULT;
+		type = LAKE_T_WATER_VAULT;
 	}
 	else
 	{
 		/* Fire vault (shallow lava) */
-		type = GEN_LAKE_TYPE_FIRE_VAULT;
+		type = LAKE_T_FIRE_VAULT;
 	}
 
 	while (!done)
@@ -5138,7 +5277,7 @@ static void build_elemental_vault(int x0, int y0, int xsiz, int ysiz)
 /*
  * Random vaults
  */
-static void build_type10(int by0, int bx0)
+static bool build_type10(void)
 {
 	int y0, x0, xsize, ysize, vtype;
 
@@ -5147,8 +5286,8 @@ static void build_type10(int by0, int bx0)
 	xsize = randint1(22) + 22;
 	ysize = randint1(11) + 11;
 
-	/* Allocate in room_map.  If will not fit, exit */
-	if (!room_alloc(xsize + 1, ysize + 1, FALSE, by0, bx0, &x0, &y0)) return;
+	/* Find and reserve some space in the dungeon.  Get center of room. */
+	if (!find_space(&y0, &x0, ysize + 1, xsize + 1)) return FALSE;
 
 	/* Boost the rating- higher than lesser vaults and lower than greater vaults */
 	rating += 10;
@@ -5183,8 +5322,10 @@ static void build_type10(int by0, int bx0)
 		/* I know how to add a few more... give me some time. */
 
 		/* Paranoia */
-		default: return;
+		default: return FALSE;
 	}
+
+	return TRUE;
 }
 
 
@@ -5195,7 +5336,7 @@ static void build_type10(int by0, int bx0)
  *
  * When done fill from the inside to find the walls,
  */
-static void build_type11(int by0, int bx0)
+static bool build_type11(void)
 {
 	int rad, x, y, x0, y0;
 	int light = FALSE;
@@ -5205,8 +5346,8 @@ static void build_type11(int by0, int bx0)
 
 	rad = randint0(9);
 
-	/* Allocate in room_map.  If will not fit, exit */
-	if (!room_alloc(rad * 2 + 1, rad * 2 + 1, FALSE, by0, bx0, &x0, &y0)) return;
+	/* Find and reserve some space in the dungeon.  Get center of room. */
+	if (!find_space(&y0, &x0, rad * 2 + 1, rad * 2 + 1)) return FALSE;
 
 	/* Make circular floor */
 	for (x = x0 - rad; x <= x0 + rad; x++)
@@ -5228,6 +5369,8 @@ static void build_type11(int by0, int bx0)
 
 	/* Find visible outer walls and set to be FEAT_OUTER */
 	add_outer_wall(x0, y0, light, x0 - rad, y0 - rad, x0 + rad, y0 + rad);
+
+	return TRUE;
 }
 
 
@@ -5238,8 +5381,8 @@ static void build_type11(int by0, int bx0)
  *
  * When done fill from the inside to find the walls,
  */
-static void build_type12(int by0, int bx0)
-	{
+static bool build_type12(void)
+{
 	int rad, x, y, x0, y0;
 	int light = FALSE;
 	bool emptyflag = TRUE;
@@ -5256,8 +5399,8 @@ static void build_type12(int by0, int bx0)
 
 	rad = randint1(9);
 
-	/* Allocate in room_map.  If will not fit, exit */
-	if (!room_alloc(rad * 2 + 3, rad * 2 + 3, FALSE, by0, bx0, &x0, &y0)) return;
+	/* Find and reserve some space in the dungeon.  Get center of room. */
+	if (!find_space(&y0, &x0, rad * 2 + 3, rad * 2 + 3)) return FALSE;
 
 	/* Make floor */
 	for (x = x0 - rad; x <= x0 + rad; x++)
@@ -5322,6 +5465,8 @@ static void build_type12(int by0, int bx0)
 		/* Traps naturally */
 		vault_traps(y0, x0, 4, 4, randint0(3) + 2);
 	}
+
+	return TRUE;
 }
 
 
@@ -5387,7 +5532,7 @@ static bool vault_aux_trapped_pit(int r_idx)
  *
  * Note that "monster pits" will never contain "unique" monsters.
  */
-static void build_type13(int by0, int bx0)
+static bool build_type13(void)
 {
 	static int placing[][3] = {
 		{-2, -9, 0}, {-2, -8, 0}, {-3, -7, 0}, {-3, -6, 0},
@@ -5431,13 +5576,13 @@ static void build_type13(int by0, int bx0)
 	vault_aux_type *n_ptr;
 
 	/* Only in Angband */
-	if (dungeon_type != 1) return;
+	if (dungeon_type != 1) return FALSE;
 
-	/* Try to allocate space for room. */
-	if (!room_alloc(25, 13, TRUE, by0, bx0, &xval, &yval)) return;
+	/* Find and reserve some space in the dungeon.  Get center of room. */
+	if (!find_space(&yval, &xval, 13, 25)) return FALSE;
 
 	/* No type available */
-	if (cur_pit_type < 0) return;
+	if (cur_pit_type < 0) return FALSE;
 
 	n_ptr = &pit_types[cur_pit_type];
 
@@ -5569,7 +5714,7 @@ static void build_type13(int by0, int bx0)
 		}
 
 		/* Notice failure */
-		if (!r_idx || !attempts) return;
+		if (!r_idx || !attempts) return FALSE;
 
 		/* Note the alignment */
 		if (r_ptr->flags3 & RF3_EVIL) align.sub_align |= SUB_ALIGN_EVIL;
@@ -5640,6 +5785,8 @@ static void build_type13(int by0, int bx0)
 		x = xval + placing[i][1];
 		place_monster_aux(0, y, x, what[placing[i][2]], PM_NO_KAGE);
 	}
+
+	return TRUE;
 }
 
 
@@ -5648,7 +5795,7 @@ static void build_type13(int by0, int bx0)
  *
  * A special trap is placed at center of the room
  */
-static void build_type14(int by0, int bx0)
+static bool build_type14(void)
 {
 	int y, x, y2, x2, yval, xval;
 	int y1, x1, xsize, ysize;
@@ -5667,8 +5814,8 @@ static void build_type14(int by0, int bx0)
 	xsize = x1 + x2 + 1;
 	ysize = y1 + y2 + 1;
 
-	/* Try to allocate space for room.  If fails, exit */
-	if (!room_alloc(xsize + 2, ysize + 2, FALSE, by0, bx0, &xval, &yval)) return;
+	/* Find and reserve some space in the dungeon.  Get center of room. */
+	if (!find_space(&yval, &xval, ysize + 2, xsize + 2)) return FALSE;
 
 	/* Choose lite or dark */
 	light = ((dun_level <= randint1(25)) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS));
@@ -5728,6 +5875,8 @@ static void build_type14(int by0, int bx0)
 		msg_format("Room of %s", f_name + f_info[trap].name);
 #endif
 	}
+
+	return TRUE;
 }
 
 
@@ -5737,33 +5886,26 @@ static void build_type14(int by0, int bx0)
  * Note that we restrict the number of "crowded" rooms to reduce
  * the chance of overflowing the monster list during level creation.
  */
-bool room_build(int by0, int bx0, int typ)
+bool room_build(int typ)
 {
-	/* Restrict level */
-	if ((dun_level < roomdep[typ]) && !ironman_rooms) return FALSE;
-
-	/* Restrict "crowded" rooms */
-	if ((dun->crowded >= 2) && ((typ == ROOM_BUILD_TYPE_NEST) ||
-		(typ == ROOM_BUILD_TYPE_PIT) || (typ == ROOM_BUILD_TYPE_TRAP_PIT))) return FALSE;
-
 	/* Build a room */
 	switch (typ)
 	{
 	/* Build an appropriate room */
-	case ROOM_BUILD_TYPE_NORMAL:        build_type1(by0, bx0); break;
-	case ROOM_BUILD_TYPE_OVERLAP:       build_type2(by0, bx0); break;
-	case ROOM_BUILD_TYPE_CROSS:         build_type3(by0, bx0); break;
-	case ROOM_BUILD_TYPE_INNER_FEAT:    build_type4(by0, bx0); break;
-	case ROOM_BUILD_TYPE_NEST:          build_type5(by0, bx0, FALSE); break;
-	case ROOM_BUILD_TYPE_PIT:           build_type6(by0, bx0, FALSE); break;
-	case ROOM_BUILD_TYPE_LESSER_VAULT:  build_type7(by0, bx0); break;
-	case ROOM_BUILD_TYPE_GREATER_VAULT: build_type8(by0, bx0); break;
-	case ROOM_BUILD_TYPE_FRACAVE:       build_type9(by0, bx0); break;
-	case ROOM_BUILD_TYPE_RANDOM_VAULT:  build_type10(by0, bx0); break;
-	case ROOM_BUILD_TYPE_OVAL:          build_type11(by0, bx0); break;
-	case ROOM_BUILD_TYPE_CRYPT:         build_type12(by0, bx0); break;
-	case ROOM_BUILD_TYPE_TRAP_PIT:      build_type13(by0, bx0); break;
-	case ROOM_BUILD_TYPE_TRAP:          build_type14(by0, bx0); break;
+	case ROOM_T_NORMAL:        build_type1(); break;
+	case ROOM_T_OVERLAP:       build_type2(); break;
+	case ROOM_T_CROSS:         build_type3(); break;
+	case ROOM_T_INNER_FEAT:    build_type4(); break;
+	case ROOM_T_NEST:          build_type5(); break;
+	case ROOM_T_PIT:           build_type6(); break;
+	case ROOM_T_LESSER_VAULT:  build_type7(); break;
+	case ROOM_T_GREATER_VAULT: build_type8(); break;
+	case ROOM_T_FRACAVE:       build_type9(); break;
+	case ROOM_T_RANDOM_VAULT:  build_type10(); break;
+	case ROOM_T_OVAL:          build_type11(); break;
+	case ROOM_T_CRYPT:         build_type12(); break;
+	case ROOM_T_TRAP_PIT:      build_type13(); break;
+	case ROOM_T_TRAP:          build_type14(); break;
 
 	/* Paranoia */
 	default: return FALSE;
@@ -5771,3 +5913,193 @@ bool room_build(int by0, int bx0, int typ)
 
 	return TRUE;
 }
+
+
+#define MOVE_PLIST(dst, src) (prob_list[dst] += prob_list[src], prob_list[src] = 0)
+
+/*
+ * [from SAngband (originally from OAngband)]
+ * 
+ * Generate rooms in dungeon.  Build bigger rooms at first.
+ */
+void generate_rooms(void)
+{
+	int i;
+	bool remain;
+	int crowded = 0;
+	int total_prob;
+	int prob_list[ROOM_T_MAX];
+	int rooms_built = 0;
+	int area_size = 100 * (cur_hgt*cur_wid) / (MAX_HGT*MAX_WID);
+	int level_index = MIN(10, div_round(dun_level, 10));
+
+        /* Number of each type of room on this level */
+        s16b room_num[ROOM_T_MAX];
+
+	/* Limit number of rooms */
+	int dun_rooms = rand_range(DUN_ROOMS_MIN, DUN_ROOMS_MAX * area_size / 100);
+
+	/* Assume normal cave */
+	room_info_type *room_info_ptr = room_info_normal;
+
+
+	/*
+	 * Initialize probability list.
+	 */
+	for (i = 0; i < ROOM_T_MAX; i++)
+	{
+		/* No rooms allowed above their minimum depth. */
+		if (dun_level < room_info_ptr[i].min_level)
+		{
+			prob_list[i] = 0;
+		}
+		else
+		{
+			prob_list[i] = room_info_ptr[i].prob[level_index];
+		}
+	}
+
+	/*
+	 * XXX -- Various dungeon types and options.
+	 */
+
+	/* Ironman sees only Greater Vaults */
+	if (ironman_rooms && !((d_info[dungeon_type].flags1 & (DF1_BEGINNER | DF1_CHAMELEON))))
+	{
+		for (i = 0; i < ROOM_T_MAX; i++)
+		{
+			if (i == ROOM_T_GREATER_VAULT) prob_list[i] = 1;
+			else prob_list[i] = 0;
+		}
+	}
+
+	/* Forbidden vaults */
+	else if (d_info[dungeon_type].flags1 & DF1_NO_VAULT)
+	{
+		prob_list[ROOM_T_LESSER_VAULT] = 0;
+		prob_list[ROOM_T_GREATER_VAULT] = 0;
+		prob_list[ROOM_T_RANDOM_VAULT] = 0;
+	}
+
+
+	/* NO_CAVE dungeon (Castle)*/
+	if (d_info[dungeon_type].flags1 & DF1_NO_CAVE)
+	{
+		MOVE_PLIST(ROOM_T_NORMAL, ROOM_T_FRACAVE);
+		MOVE_PLIST(ROOM_T_INNER_FEAT, ROOM_T_CRYPT);
+		MOVE_PLIST(ROOM_T_INNER_FEAT, ROOM_T_OVAL);
+	}
+
+	/* CAVE dungeon (Orc cave etc.) */
+	else if (d_info[dungeon_type].flags1 & DF1_CAVE)
+	{
+		MOVE_PLIST(ROOM_T_FRACAVE, ROOM_T_NORMAL);
+	}
+
+	/* No caves when a (random) cavern exists: they look bad */
+	else if (dun->cavern || dun->empty_level)
+	{
+		prob_list[ROOM_T_FRACAVE] = 0;
+	}
+
+
+	/*
+	 * Initialize number of rooms,
+	 * And calcurate total probability.
+	 */
+	for (total_prob = 0, i = 0; i < ROOM_T_MAX; i++)
+	{
+		room_num[i] = 0;
+		total_prob += prob_list[i];
+	}
+
+	/*
+	 * Prepare the number of rooms, of all types, we should build
+	 * on this level.
+	 */
+	for (i = 0; i < dun_rooms; i++)
+	{
+		int room_type;
+		int rand = randint0(total_prob);
+
+		/* Get room_type randomly */
+		for (room_type = 0; room_type < ROOM_T_MAX; room_type++)
+		{
+			if (rand < prob_list[room_type]) break;
+			else rand -= prob_list[room_type];
+		}
+
+		/* Paranoia */
+		if (room_type >= ROOM_T_MAX) room_type = ROOM_T_NORMAL;
+
+		/* Increase the number of rooms of that type we should build. */
+		room_num[room_type]++;
+	}
+
+
+	/*
+	 * Build each type of room one by one until we cannot build any more.
+	 * [from SAngband (originally from OAngband)]
+	 */
+	while (TRUE)
+	{
+		/* Assume no remaining rooms */
+		remain = FALSE;
+
+		for (i = 0; i < ROOM_T_MAX; i++)
+		{
+			/* What type of room are we building now? */
+			int room_type = room_build_order[i];
+
+			/* Stop building rooms when we hit the maximum. */
+			if (rooms_built >= dun_rooms)
+			{
+				remain = FALSE;
+				break;
+			}
+
+			/* Go next if none available */
+			if (!room_num[room_type]) continue;
+
+			/* Use up one unit */
+			room_num[room_type]--;
+
+			/* Build the room. */
+			if (room_build(room_type))
+			{
+				/* Increase the room built count. */
+				rooms_built++;
+
+				/* Mark as there was some remaining rooms */
+				remain = TRUE;
+
+				switch (room_type)
+				{
+				case ROOM_T_PIT:
+				case ROOM_T_NEST:
+				case ROOM_T_TRAP_PIT:
+
+					/* Avoid too many monsters */
+					if (++crowded >= 2)
+					{
+						room_num[ROOM_T_PIT] = 0;
+						room_num[ROOM_T_NEST] = 0;
+						room_num[ROOM_T_TRAP_PIT] = 0;
+					}
+				}
+			}
+
+			/* Stop building this type on failure. */
+			else
+			{
+				room_num[room_type] = 0;
+			}
+		}
+
+		/* End loop if no room remain */
+		if (!remain) break;
+	}
+
+}
+
+

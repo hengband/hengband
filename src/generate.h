@@ -13,10 +13,6 @@
 #define DARK_EMPTY  5   /* 1/chance of arena level NOT being lit (2) */
 #define DUN_CAVERN  20	/* 1/chance of having a cavern level */
 
-/* Number of rooms to attempt (was 50) */
-#define DUN_ROOMS_MIN	10
-#define DUN_ROOMS_MAX	100
-
 /*
  * Dungeon tunnel generation values
  */
@@ -139,8 +135,11 @@ struct dun_data
 	/* Array of which blocks are used */
 	bool room_map[MAX_ROOMS_ROW][MAX_ROOMS_COL];
 
-	/* Hack -- there is a pit/nest on this level */
-	int crowded;
+	/* Various type of dungeon floors */
+	bool destroyed;
+	bool empty_level;
+	bool cavern;
+	int laketype;
 };
 
 extern dun_data *dun;

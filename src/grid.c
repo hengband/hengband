@@ -446,7 +446,6 @@ void correct_dir(int *rdir, int *cdir, int y1, int x1, int y2, int x2)
 }
 
 
-
 /*
  * Pick a random direction
  */
@@ -1147,3 +1146,4 @@ bool build_tunnel2(int x1, int y1, int x2, int y2, int type, int cutoff)
 		return TRUE;
 	}
 }
+

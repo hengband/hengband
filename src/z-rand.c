@@ -313,4 +313,33 @@ s16b maxroll(int num, int sides)
 }
 
 
+/*
+ * Given a numerator and a denominator, supply a properly rounded result,
+ * using the RNG to smooth out remainders.  -LM-
+ */
+s32b div_round(s32b n, s32b d)
+{
+        s32b tmp;
+
+        /* Refuse to divide by zero */
+        if (!d) return (n);
+
+        /* Division */
+        tmp = n / d;
+
+        /* Rounding */
+        if ((ABS(n) % ABS(d)) > randint0(ABS(d)))
+        {
+                /* Increase the absolute value */
+                if (n * d > 0L) tmp += 1L;
+                else            tmp -= 1L;
+        }
+
+        /* Return */
+        return (tmp);
+}
+
+
+
+
 

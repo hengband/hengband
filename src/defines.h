@@ -2437,33 +2437,6 @@
 #define CAVE_IN_DETECT  0x4000    /* trap detected area (inner circle only) */
 
 
-/* Room types for generate_lake() */
-#define GEN_LAKE_TYPE_LAVA        1
-#define GEN_LAKE_TYPE_WATER       2
-#define GEN_LAKE_TYPE_CAVE        3
-#define GEN_LAKE_TYPE_EARTH_VAULT 4
-#define GEN_LAKE_TYPE_AIR_VAULT   5
-#define GEN_LAKE_TYPE_WATER_VAULT 6
-#define GEN_LAKE_TYPE_FIRE_VAULT  7
-
-
-/* Room types for room_build() */
-#define ROOM_BUILD_TYPE_NORMAL         1
-#define ROOM_BUILD_TYPE_OVERLAP        2
-#define ROOM_BUILD_TYPE_CROSS          3
-#define ROOM_BUILD_TYPE_INNER_FEAT     4
-#define ROOM_BUILD_TYPE_NEST           5
-#define ROOM_BUILD_TYPE_PIT            6
-#define ROOM_BUILD_TYPE_LESSER_VAULT   7
-#define ROOM_BUILD_TYPE_GREATER_VAULT  8
-#define ROOM_BUILD_TYPE_FRACAVE        9
-#define ROOM_BUILD_TYPE_RANDOM_VAULT  10
-#define ROOM_BUILD_TYPE_OVAL          11
-#define ROOM_BUILD_TYPE_CRYPT         12
-#define ROOM_BUILD_TYPE_TRAP_PIT      13
-#define ROOM_BUILD_TYPE_TRAP          14
-
-
 /*
  * Bit flags for the "project()" function
  *
