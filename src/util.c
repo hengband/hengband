@@ -703,15 +703,15 @@ int fd_make(cptr file, int mode)
 #else /* BEN_HACK */
 
 # if defined(MACINTOSH) && defined(MAC_MPW)
-
-	/* setting file type and creator -- AR */
 	{
-		errr errr_tmp;
-		errr_tmp = open(buf, O_CREAT | O_EXCL | O_WRONLY | O_BINARY, mode);
-		fsetfileinfo(file, _fcreator, _ftype);
-		return(errr_tmp);
+		int fdes;
+		/* Create the file, fail if exists, write-only, binary */
+		fdes = open(buf, O_CREAT | O_EXCL | O_WRONLY | O_BINARY, mode);
+		/* Set creator and type if the file is successfully opened */
+		if (fdes >= 0) fsetfileinfo(buf, _fcreator, _ftype);
+		/* Return the descriptor */
+		return (fdes);
 	}
-
 # else
 	/* Create the file, fail if exists, write-only, binary */
 	return (open(buf, O_CREAT | O_EXCL | O_WRONLY | O_BINARY, mode));
