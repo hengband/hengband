@@ -2284,20 +2284,8 @@ note("[ユーザー設定ファイルを初期化しています...]");
 	/* Process that file */
 	process_pref_file(buf);
 
-	/* Access the "user" pref file */
-	sprintf(buf, "user.prf");
-
-	/* Process that file */
-	process_pref_file(buf);
-
 	/* Access the "basic" system pref file */
 	sprintf(buf, "pref-%s.prf", ANGBAND_SYS);
-
-	/* Process that file */
-	process_pref_file(buf);
-
-	/* Access the "user" system pref file */
-	sprintf(buf, "user-%s.prf", ANGBAND_SYS);
 
 	/* Process that file */
 	process_pref_file(buf);

@@ -6048,6 +6048,18 @@ static void load_all_pref_files(void)
 {
 	char buf[1024];
 
+	/* Access the "user" pref file */
+	sprintf(buf, "user.prf");
+
+	/* Process that file */
+	process_pref_file(buf);
+
+	/* Access the "user" system pref file */
+	sprintf(buf, "user-%s.prf", ANGBAND_SYS);
+
+	/* Process that file */
+	process_pref_file(buf);
+
 	/* Access the "race" pref file */
 	sprintf(buf, "%s.prf", rp_ptr->title);
 
