@@ -1,4 +1,117 @@
+2002-04-25  Takeshi Mogami  <mogami@cvs>
+
+	* src/wizard2.c 1.14:
+	ウィザードコマンド ^A o でオブジェクトのcursedの値を表示。
+
+	* src/dungeon.c 1.35, src/melee2.c 1.21:
+	typo修正。aaron jorgensen さんの報告。
+
+2002-04-24  hoge  <hoge@cvs>
+
+	* src/mspells1.c 1.20, src/object2.c 1.35, src/racial.c 1.12, src/spells3.c 1.20, src/store.c 1.9, configure.in 1.13, lib/edit/e_info_j.txt 1.18, lib/edit/k_info_j.txt 1.22, lib/edit/r_info_j.txt 1.33, lib/file/news_j.txt 1.5, src/cmd1.c 1.30, src/defines.h 1.37, src/dungeon.c 1.34, src/effects.c 1.19:
+	呪い更新
+	とりあえず、人斬り→人喰い
+	人喰い&警告エッセンス
+
+2002-04-23  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.10:
+	'q'の他に'_'でも終了するようにした。
+
+2002-04-22  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.9:
+	エディタを一度終了してもカーソル位置を保存するようにした。
+
+	* src/birth.c 1.27:
+	生い立ちエディタの配列溢れ修正。
+
+	* src/defines.h 1.36, src/load.c 1.24:
+	忘れてたTURNS_PER_TICKの変更を今やった。20L→10L。
+
+2002-04-22  _nothere  <_nothere@cvs>
+
+	* lib/edit/q0thief1_j.txt 1.3, lib/edit/q0thief2_j.txt 1.3, lib/edit/q_info_j.txt 1.3:
+	モリバントの盗賊ギルドの2つのクエスト名から "盗賊クエスト" を外した.
+
+2002-04-21  Takeshi Mogami  <mogami@cvs>
+
+	* src/birth.c 1.26:
+	英語版でメッセージがはみ出していたので修正。
+
+	* src/birth.c 1.25, src/defines.h 1.35, src/externs.h 1.41, src/files.c 1.50, src/japanese.c 1.5, src/load.c 1.23, src/save.c 1.11, src/types.h 1.15, src/variable.c 1.18:
+	ToMEのクイック・スタートと生い立ちエディタ移植。
+
+	* src/z-term.c 1.13:
+	デバックメッセージの外し忘れ修正。
+
+2002-04-20  _nothere  <_nothere@cvs>
+
+	* src/main-win.c 1.13:
+	右上のxやファイル(F)メニューの終了(X)が実行された場合の動作をctrl+xを押した場合と同じ動作に変更.
+
+	* lib/edit/k_info_j.txt 1.21:
+	武器呪縛の巻物の説明を修正.
+
+	* src/object1.c 1.27:
+	*鑑定*で読める発動効果の説明にダメージと充填ターン数が書かれていない物が残っていたので追加した.
+
+2002-04-20  Takeshi Mogami  <mogami@cvs>
+
+	* lib/pref/graf-xxx.prf 1.10:
+	ToME の 8x8 tile の更新に合わせて、いくつかタイルを貰ってきた。
+
+2002-04-20  _nothere  <_nothere@cvs>
+
+	* src/main-win.c 1.12:
+	Windowsで, ファイル(F)メニューの終了(X)や右上の[x]で終了させた場合にplayrecordに残らなかったので, それも残るようにした.
+
+2002-04-19  Takeshi Mogami  <mogami@cvs>
+
+	* src/generate.c 1.16:
+	闘技場もモンスター闘技場と同様に1画面サイズに修正。
+
+	* src/z-term.c 1.12:
+	&& || の優先順が曖昧だったので修正。括弧忘れてた。
+
+2002-04-19  _nothere  <_nothere@cvs>
+
+	* src/spells1.c 1.14:
+	火炎属性と冷気属性で, 弱点と耐性を同時に持つモンスターに攻撃した場合は耐性が優先されるようにした. また, 冷気に弱いモンスターは極寒属性にも弱くした.
+
+	* lib/edit/k_info_j.txt 1.20:
+	賢者の杖の*鑑定*結果に知能が回復する記述を入れ忘れていたので追加.
+
+2002-04-19  Takeshi Mogami  <mogami@cvs>
+
+	* src/rooms.c 1.12:
+	ミミック(ミミック(箱)の像)がmimic部屋に出るのを禁止。
+	冗談キャラなのにあんまり沢山出すぎて笑えない。
+
+2002-04-18  _nothere  <_nothere@cvs>
+
+	* src/cmd5.c 1.17, src/spells3.c 1.19:
+	カオス魔法を失敗した場合, またはシャッフルの運命の輪による劣化ではpvalを減少しないように変更.
+
+2002-04-18  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/commdesc.txt 1.7, lib/help/jcommdesc.txt 1.6:
+	コマンド説明リストの設定ファイル関係が分離してるのは見難いので
+	こっちにも追加。
+
+	* lib/help/command.txt 1.7, lib/help/jcommand.txt 1.6, lib/help/jpref.txt 1.5, lib/help/pref.txt 1.8:
+	自動拾いエディタの説明追加。
+
+	* src/z-term.c 1.11:
+	revision 1.10 の修正は勘違いしていて、全然修正になってなかった。
+	今度は本当に修正した。
+
 2002-04-17  Takeshi Mogami  <mogami@cvs>
+
+	* lib/pref/graf-new.prf 1.7:
+	ビハインダーに空白の16x16タイルを割当て。
+
+	* Changelogs 1.36: 更新
 
 	* src/cave.c 1.38, src/z-term.c 1.10:
 	Bigtileのタイルモードで全角ASCIIしかないモンスター等が動いたときに、
