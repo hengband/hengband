@@ -34,11 +34,11 @@ N:8:Farmer Maggot
 #tells you to get off his land.
 は「わしの土地から出ていけ」と言っている。
 #says, "Grip! Fang! Wolf! Come on, lads!"
-「かみつき！きば！おおかみ！みんな来い！」
+「くいつき！きば！おおかみ！みんな来い！」
 #says, "They won't harm you -- not unless I tell 'em to!"
 「あいつらは噛みついたりせんよ。わしが命令せんかぎりな！」
 #says, "Here, Grip! Fang! Heel!"
-「ここだ、かみつき！きば！来い！」
+「ここだ、くいつき！きば！来い！」
 exclaims, "Well, if that isn't queerer than ever?"
 #asks, "Were you coming to visit me?"
 「わしに会いにきたのかい？」
