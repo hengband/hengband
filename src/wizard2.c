@@ -1849,7 +1849,7 @@ void do_cmd_debug(void)
 
 	/* Detect everything */
 	case 'd':
-		detect_all(DETECT_RAD_ALL*3);
+		detect_all(DETECT_RAD_ALL * 3);
 		break;
 
 	/* Dimension_door */
@@ -1914,7 +1914,7 @@ void do_cmd_debug(void)
 
 	/* Magic Mapping */
 	case 'm':
-		map_area(DETECT_RAD_ALL);
+		map_area(DETECT_RAD_ALL * 3);
 		break;
 
 	/* Mutation */
