@@ -2038,7 +2038,7 @@ msg_print("床上のアイテムが呪文を跳ね返した。");
 
 	/* Create a glyph */
 	cave[py][px].info |= CAVE_OBJECT;
-	cave[py][px].mimic = FEAT_GLYPH;
+	cave[py][px].mimic = feat_glyph;
 
 	/* Notice */
 	note_spot(py, px);
@@ -2065,7 +2065,7 @@ msg_print("床上のアイテムが呪文を跳ね返した。");
 
 	/* Create a mirror */
 	cave[py][px].info |= CAVE_OBJECT;
-	cave[py][px].mimic = FEAT_MIRROR;
+	cave[py][px].mimic = feat_mirror;
 
 	/* Turn on the light */
 	cave[py][px].info |= CAVE_GLOW;
@@ -2101,7 +2101,7 @@ msg_print("床上のアイテムが呪文を跳ね返した。");
 
 	/* Create a glyph */
 	cave[py][px].info |= CAVE_OBJECT;
-	cave[py][px].mimic = FEAT_MINOR_GLYPH;
+	cave[py][px].mimic = feat_explosive_rune;
 
 	/* Notice */
 	note_spot(py, px);

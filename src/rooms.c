@@ -81,7 +81,7 @@ static void place_locked_door(int y, int x)
 	}
 	else
 	{
-		set_cave_feat(y, x, FEAT_DOOR_HEAD+randint1(7));
+		set_cave_feat(y, x, feat_locked_door[randint0(num_locked_door)]);
 		cave[y][x].info &= ~(CAVE_FLOOR);
 		delete_monster(y, x);
 	}
@@ -2676,37 +2676,37 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
 
 				/* Black market in a dungeon */
 			case 'S':
-				set_cave_feat(y, x, FEAT_SHOP_HEAD + STORE_BLACK);
+				set_cave_feat(y, x, feat_black_market);
 				store_init(NO_TOWN, STORE_BLACK);
 				break;
-				
+
 				/* The Pattern */
 			case 'p':
-				set_cave_feat(y, x, FEAT_PATTERN_START);
+				set_cave_feat(y, x, feat_pattern_start);
 				break;
-				
+
 			case 'a':
-				set_cave_feat(y, x, FEAT_PATTERN_1);
+				set_cave_feat(y, x, feat_pattern_1);
 				break;
-				
+
 			case 'b':
-				set_cave_feat(y, x, FEAT_PATTERN_2);
+				set_cave_feat(y, x, feat_pattern_2);
 				break;
-				
+
 			case 'c':
-				set_cave_feat(y, x, FEAT_PATTERN_3);
+				set_cave_feat(y, x, feat_pattern_3);
 				break;
-				
+
 			case 'd':
-				set_cave_feat(y, x, FEAT_PATTERN_4);
+				set_cave_feat(y, x, feat_pattern_4);
 				break;
-				
+
 			case 'P':
-				set_cave_feat(y, x, FEAT_PATTERN_END);
+				set_cave_feat(y, x, feat_pattern_end);
 				break;
-				
+
 			case 'B':
-				set_cave_feat(y, x, FEAT_PATTERN_XTRA1);
+				set_cave_feat(y, x, feat_pattern_exit);
 				break;
 
 			case 'A':
@@ -3766,39 +3766,39 @@ static bool generate_lake(int y0, int x0, int xsize, int ysize, int c1, int c2, 
 	switch (type)
 	{
 	case LAKE_T_LAVA: /* Lava */
-		feat1 = FEAT_DEEP_LAVA;
-		feat2 = FEAT_SHAL_LAVA;
+		feat1 = feat_deep_lava;
+		feat2 = feat_shallow_lava;
 		feat3 = floor_type[randint0(100)];
 		break;
 	case LAKE_T_WATER: /* Water */
-		feat1 = FEAT_DEEP_WATER;
-		feat2 = FEAT_SHAL_WATER;
+		feat1 = feat_deep_water;
+		feat2 = feat_shallow_water;
 		feat3 = floor_type[randint0(100)];
 		break;
 	case LAKE_T_CAVE: /* Collapsed cave */
 		feat1 = floor_type[randint0(100)];
 		feat2 = floor_type[randint0(100)];
-		feat3 = FEAT_RUBBLE;
+		feat3 = feat_rubble;
 		break;
 	case LAKE_T_EARTH_VAULT: /* Earth vault */
-		feat1 = FEAT_RUBBLE;
+		feat1 = feat_rubble;
 		feat2 = floor_type[randint0(100)];
-		feat3 = FEAT_RUBBLE;
+		feat3 = feat_rubble;
 		break;
 	case LAKE_T_AIR_VAULT: /* Air vault */
-		feat1 = FEAT_GRASS;
-		feat2 = FEAT_TREES;
-		feat3 = FEAT_GRASS;
+		feat1 = feat_grass;
+		feat2 = feat_tree;
+		feat3 = feat_grass;
 		break;
 	case LAKE_T_WATER_VAULT: /* Water vault */
-		feat1 = FEAT_SHAL_WATER;
-		feat2 = FEAT_DEEP_WATER;
-		feat3 = FEAT_SHAL_WATER;
+		feat1 = feat_shallow_water;
+		feat2 = feat_deep_water;
+		feat3 = feat_shallow_water;
 		break;
 	case LAKE_T_FIRE_VAULT: /* Fire Vault */
-		feat1 = FEAT_SHAL_LAVA;
-		feat2 = FEAT_DEEP_LAVA;
-		feat3 = FEAT_SHAL_LAVA;
+		feat1 = feat_shallow_lava;
+		feat2 = feat_deep_lava;
+		feat3 = feat_shallow_lava;
 		break;
 
 	/* Paranoia */
@@ -5729,7 +5729,7 @@ static bool build_type13(void)
 
 	/* Place the wall open trap */
 	cave[yval][xval].mimic = cave[yval][xval].feat;
-	cave[yval][xval].feat = FEAT_TRAP_OPEN;
+	cave[yval][xval].feat = feat_trap_open;
 
 	/* Sort the entries */
 	for (i = 0; i < 16 - 1; i++)
@@ -5855,9 +5855,9 @@ static bool build_type14(void)
 	}
 
 	if (dun_level < 30 + randint1(30))
-		trap = FEAT_TRAP_PIRANHA;
+		trap = feat_trap_piranha;
 	else
-		trap = FEAT_TRAP_ARMAGEDDON;
+		trap = feat_trap_armageddon;
 
 	/* Place a special trap */
 	c_ptr = &cave[rand_spread(yval, ysize/4)][rand_spread(xval, xsize/4)];

@@ -1326,19 +1326,13 @@ void change_floor(void)
 				/* No stairs down from Quest */
 				if ((change_floor_mode & CFM_UP) && !quest_number(dun_level))
 				{
-					if (change_floor_mode & CFM_SHAFT)
-						c_ptr->feat = FEAT_MORE_MORE;
-					else
-						c_ptr->feat = FEAT_MORE;
+					c_ptr->feat = (change_floor_mode & CFM_SHAFT) ? feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair;
 				}
 
 				/* No stairs up when ironman_downward */
 				else if ((change_floor_mode & CFM_DOWN) && !ironman_downward)
 				{
-					if (change_floor_mode & CFM_SHAFT)
-						c_ptr->feat = FEAT_LESS_LESS;
-					else
-						c_ptr->feat = FEAT_LESS;
+					c_ptr->feat = (change_floor_mode & CFM_SHAFT) ? feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair;
 				}
 
 				/* Paranoia -- Clear mimic */
@@ -1536,17 +1530,15 @@ void stair_creation(void)
 	/* Create a staircase */
 	if (up)
 	{
-		if (dest_sf_ptr->last_visit && dest_sf_ptr->dun_level <= dun_level - 2)
-			cave_set_feat(py, px, FEAT_LESS_LESS);
-		else
-			cave_set_feat(py, px, FEAT_LESS);
+		cave_set_feat(py, px,
+			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= dun_level - 2)) ?
+			feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair);
 	}
 	else
 	{
-		if (dest_sf_ptr->last_visit && dest_sf_ptr->dun_level >= dun_level + 2)
-			cave_set_feat(py, px, FEAT_MORE_MORE);
-		else
-			cave_set_feat(py, px, FEAT_MORE);
+		cave_set_feat(py, px,
+			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= dun_level + 2)) ?
+			feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair);
 	}
 
 

@@ -339,11 +339,11 @@ void place_trees(int x, int y)
 				if ((distance(j, i, y, x) > 1) || (randint1(100) < 25))
 				{
 					if (randint1(100) < 75)
-						cave[j][i].feat = FEAT_TREES;
+						cave[j][i].feat = feat_tree;
 				}
 				else
 				{
-					cave[j][i].feat = FEAT_RUBBLE;
+					cave[j][i].feat = feat_rubble;
 				}
 
 				/* Clear garbage of hidden trap or door */
@@ -359,7 +359,7 @@ void place_trees(int x, int y)
 	if (!ironman_downward && one_in_(3))
 	{
 		/* up stair */
-		cave[y][x].feat = FEAT_LESS;
+		cave[y][x].feat = feat_up_stair;
 	}
 }
 

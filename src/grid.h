@@ -21,9 +21,9 @@
 /* This should not be used */
 /*#define set_cave_info(Y,X,I)    (cave[(Y)][(X)].info = (I)) */
 
-#define place_rubble(Y,X)       set_cave_feat(Y,X,FEAT_RUBBLE)
-#define place_up_stairs(Y,X)    set_cave_feat(Y,X,FEAT_LESS)
-#define place_down_stairs(Y,X)  set_cave_feat(Y,X,FEAT_MORE)
+#define place_rubble(Y,X)       set_cave_feat(Y,X,feat_rubble)
+#define place_up_stairs(Y,X)    set_cave_feat(Y,X,feat_up_stair)
+#define place_down_stairs(Y,X)  set_cave_feat(Y,X,feat_down_stair)
 
 #define is_floor_bold(Y,X) (cave[Y][X].info & CAVE_FLOOR)
 #define is_extra_bold(Y,X) (cave[Y][X].info & CAVE_EXTRA)
@@ -71,7 +71,7 @@
 
 #define place_extra_perm_bold(Y, X) \
 { \
-	set_cave_feat(Y,X,FEAT_PERM); \
+	set_cave_feat(Y,X,feat_permanent); \
 	cave[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(Y,X,CAVE_EXTRA); \
 	delete_monster(Y, X); \
@@ -79,7 +79,7 @@
 
 #define place_extra_perm_grid(C) \
 { \
-	(C)->feat = FEAT_PERM; \
+	(C)->feat = feat_permanent; \
 	(C)->info &= ~(CAVE_MASK); \
 	(C)->info |= CAVE_EXTRA; \
 	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \
@@ -114,7 +114,7 @@
 
 #define place_inner_perm_bold(Y, X) \
 { \
-	set_cave_feat(Y,X,FEAT_PERM); \
+	set_cave_feat(Y,X,feat_permanent); \
 	cave[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(Y,X,CAVE_INNER); \
 	delete_monster(Y, X); \
@@ -122,7 +122,7 @@
 
 #define place_inner_perm_grid(C) \
 { \
-	(C)->feat = FEAT_PERM; \
+	(C)->feat = feat_permanent; \
 	(C)->info &= ~(CAVE_MASK); \
 	(C)->info |= CAVE_INNER; \
 	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \
@@ -146,7 +146,7 @@
 
 #define place_outer_perm_bold(Y, X) \
 { \
-	set_cave_feat(Y,X,FEAT_PERM); \
+	set_cave_feat(Y,X,feat_permanent); \
 	cave[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(Y,X,CAVE_OUTER); \
 	delete_monster(Y, X); \
@@ -154,7 +154,7 @@
 
 #define place_outer_perm_grid(C) \
 { \
-	(C)->feat = FEAT_PERM; \
+	(C)->feat = feat_permanent; \
 	(C)->info &= ~(CAVE_MASK); \
 	(C)->info |= CAVE_OUTER; \
 	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \
@@ -198,7 +198,7 @@
 
 #define place_solid_perm_bold(Y, X) \
 { \
-	set_cave_feat(Y,X,FEAT_PERM); \
+	set_cave_feat(Y,X,feat_permanent); \
 	cave[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(Y,X,CAVE_SOLID); \
 	delete_monster(Y, X); \
@@ -206,7 +206,7 @@
 
 #define place_solid_perm_grid(C) \
 { \
-	(C)->feat = FEAT_PERM; \
+	(C)->feat = feat_permanent; \
 	(C)->info &= ~(CAVE_MASK); \
 	(C)->info |= CAVE_SOLID; \
 	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \

@@ -5254,30 +5254,37 @@ void acquirement(int y1, int x1, int num, bool great, bool known)
 }
 
 
-#define MAX_TRAPS		18
+#define MAX_NORMAL_TRAPS 18
 
-static int trap_num[MAX_TRAPS] =
+/* See init_feat_variables() in init2.c */
+static s16b normal_traps[MAX_NORMAL_TRAPS];
+
+/*
+ * Initialize arrays for normal traps
+ */
+void init_normal_traps(void)
 {
-	FEAT_TRAP_TRAPDOOR,
-	FEAT_TRAP_PIT,
-	FEAT_TRAP_SPIKED_PIT,
-	FEAT_TRAP_POISON_PIT,
-	FEAT_TRAP_TY_CURSE,
-	FEAT_TRAP_TELEPORT,
-	FEAT_TRAP_FIRE,
-	FEAT_TRAP_ACID,
-	FEAT_TRAP_SLOW,
-	FEAT_TRAP_LOSE_STR,
-	FEAT_TRAP_LOSE_DEX,
-	FEAT_TRAP_LOSE_CON,
-	FEAT_TRAP_BLIND,
-	FEAT_TRAP_CONFUSE,
-	FEAT_TRAP_POISON,
-	FEAT_TRAP_SLEEP,
-	FEAT_TRAP_TRAPS,
-	FEAT_TRAP_ALARM,
-};
+	int cur_trap = 0;
 
+	normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_TRAPDOOR");
+	normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_PIT");
+	normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_SPIKED_PIT");
+	normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_POISON_PIT");
+	normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_TY_CURSE");
+	normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_TELEPORT");
+	normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_FIRE");
+	normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_ACID");
+	normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_SLOW");
+	normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_LOSE_STR");
+	normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_LOSE_DEX");
+	normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_LOSE_CON");
+	normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_BLIND");
+	normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_CONFUSE");
+	normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_POISON");
+	normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_SLEEP");
+	normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_TRAPS");
+	normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_ALARM");
+}
 
 /*
  * Get random trap
@@ -5295,7 +5302,7 @@ s16b choose_random_trap(void)
 	while (1)
 	{
 		/* Hack -- pick a trap */
-		feat = trap_num[randint0(MAX_TRAPS)];
+		feat = normal_traps[randint0(MAX_NORMAL_TRAPS)];
 
 		/* Accept non-trapdoors */
 		if (!have_flag(f_info[feat].flags, FF_MORE)) break;

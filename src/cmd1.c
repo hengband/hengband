@@ -1074,8 +1074,8 @@ static void hit_trap(bool break_trap)
 
 	/* Get the cave grid */
 	cave_type *c_ptr = &cave[y][x];
-
-	int trap_feat = c_ptr->feat;
+	feature_type *f_ptr = &f_info[c_ptr->feat];
+	int trap_feat_type = have_flag(f_ptr->flags, FF_TRAP) ? f_ptr->subtype : NOT_TRAP;
 
 #ifdef JP
 	cptr name = "トラップ";
@@ -1089,9 +1089,9 @@ static void hit_trap(bool break_trap)
 	cave_alter_feat(y, x, FF_HIT_TRAP);
 
 	/* Analyze XXX XXX XXX */
-	switch (trap_feat)
+	switch (trap_feat_type)
 	{
-		case FEAT_TRAP_TRAPDOOR:
+		case TRAP_TRAPDOOR:
 		{
 			if (p_ptr->levitation)
 			{
@@ -1139,7 +1139,7 @@ static void hit_trap(bool break_trap)
 			break;
 		}
 
-		case FEAT_TRAP_PIT:
+		case TRAP_PIT:
 		{
 			if (p_ptr->levitation)
 			{
@@ -1170,7 +1170,7 @@ static void hit_trap(bool break_trap)
 			break;
 		}
 
-		case FEAT_TRAP_SPIKED_PIT:
+		case TRAP_SPIKED_PIT:
 		{
 			if (p_ptr->levitation)
 			{
@@ -1225,7 +1225,7 @@ static void hit_trap(bool break_trap)
 			break;
 		}
 
-		case FEAT_TRAP_POISON_PIT:
+		case TRAP_POISON_PIT:
 		{
 			if (p_ptr->levitation)
 			{
@@ -1299,7 +1299,7 @@ static void hit_trap(bool break_trap)
 			break;
 		}
 
-		case FEAT_TRAP_TY_CURSE:
+		case TRAP_TY_CURSE:
 		{
 #ifdef JP
 			msg_print("何かがピカッと光った！");
@@ -1327,7 +1327,7 @@ static void hit_trap(bool break_trap)
 			break;
 		}
 
-		case FEAT_TRAP_TELEPORT:
+		case TRAP_TELEPORT:
 		{
 #ifdef JP
 			msg_print("テレポート・トラップにひっかかった！");
@@ -1339,7 +1339,7 @@ static void hit_trap(bool break_trap)
 			break;
 		}
 
-		case FEAT_TRAP_FIRE:
+		case TRAP_FIRE:
 		{
 #ifdef JP
 			msg_print("炎に包まれた！");
@@ -1357,7 +1357,7 @@ static void hit_trap(bool break_trap)
 			break;
 		}
 
-		case FEAT_TRAP_ACID:
+		case TRAP_ACID:
 		{
 #ifdef JP
 			msg_print("酸が吹きかけられた！");
@@ -1375,7 +1375,7 @@ static void hit_trap(bool break_trap)
 			break;
 		}
 
-		case FEAT_TRAP_SLOW:
+		case TRAP_SLOW:
 		{
 			if (check_hit(125))
 			{
@@ -1401,7 +1401,7 @@ static void hit_trap(bool break_trap)
 			break;
 		}
 
-		case FEAT_TRAP_LOSE_STR:
+		case TRAP_LOSE_STR:
 		{
 			if (check_hit(125))
 			{
@@ -1432,7 +1432,7 @@ static void hit_trap(bool break_trap)
 			break;
 		}
 
-		case FEAT_TRAP_LOSE_DEX:
+		case TRAP_LOSE_DEX:
 		{
 			if (check_hit(125))
 			{
@@ -1463,7 +1463,7 @@ static void hit_trap(bool break_trap)
 			break;
 		}
 
-		case FEAT_TRAP_LOSE_CON:
+		case TRAP_LOSE_CON:
 		{
 			if (check_hit(125))
 			{
@@ -1494,7 +1494,7 @@ static void hit_trap(bool break_trap)
 			break;
 		}
 
-		case FEAT_TRAP_BLIND:
+		case TRAP_BLIND:
 		{
 #ifdef JP
 			msg_print("黒いガスに包み込まれた！");
@@ -1509,7 +1509,7 @@ static void hit_trap(bool break_trap)
 			break;
 		}
 
-		case FEAT_TRAP_CONFUSE:
+		case TRAP_CONFUSE:
 		{
 #ifdef JP
 			msg_print("きらめくガスに包み込まれた！");
@@ -1524,7 +1524,7 @@ static void hit_trap(bool break_trap)
 			break;
 		}
 
-		case FEAT_TRAP_POISON:
+		case TRAP_POISON:
 		{
 #ifdef JP
 			msg_print("刺激的な緑色のガスに包み込まれた！");
@@ -1539,7 +1539,7 @@ static void hit_trap(bool break_trap)
 			break;
 		}
 
-		case FEAT_TRAP_SLEEP:
+		case TRAP_SLEEP:
 		{
 #ifdef JP
 			msg_print("奇妙な白い霧に包まれた！");
@@ -1579,7 +1579,7 @@ msg_print("身の毛もよだつ光景が頭に浮かんだ。");
 			break;
 		}
 
-		case FEAT_TRAP_TRAPS:
+		case TRAP_TRAPS:
 		{
 #ifdef JP
 msg_print("まばゆい閃光が走った！");
@@ -1593,7 +1593,7 @@ msg_print("まばゆい閃光が走った！");
 			break;
 		}
 
-		case FEAT_TRAP_ALARM:
+		case TRAP_ALARM:
 		{
 #ifdef JP
 			msg_print("けたたましい音が鳴り響いた！");
@@ -1606,7 +1606,7 @@ msg_print("まばゆい閃光が走った！");
 			break;
 		}
 
-		case FEAT_TRAP_OPEN:
+		case TRAP_OPEN:
 		{
 #ifdef JP
 			msg_print("大音響と共にまわりの壁が崩れた！");
@@ -1621,7 +1621,7 @@ msg_print("まばゆい閃光が走った！");
 			break;
 		}
 
-		case FEAT_TRAP_ARMAGEDDON:
+		case TRAP_ARMAGEDDON:
 		{
 			static int levs[10] = {0, 0, 20, 10, 5, 3, 2, 1, 1, 1};
 			int evil_idx = 0, good_idx = 0;
@@ -1671,7 +1671,7 @@ msg_print("まばゆい閃光が走った！");
 			break;
 		}
 
-		case FEAT_TRAP_PIRANHA:
+		case TRAP_PIRANHA:
 		{
 #ifdef JP
 			msg_print("突然壁から水が溢れ出した！ピラニアがいる！");
@@ -3283,8 +3283,8 @@ bool pattern_seq(int c_y, int c_x, int n_y, int n_x)
 
 	if (!is_pattern_tile_cur && !is_pattern_tile_new) return TRUE;
 
-	pattern_type_cur = is_pattern_tile_cur ? cur_f_ptr->power : NOT_PATTERN_TILE;
-	pattern_type_new = is_pattern_tile_new ? new_f_ptr->power : NOT_PATTERN_TILE;
+	pattern_type_cur = is_pattern_tile_cur ? cur_f_ptr->subtype : NOT_PATTERN_TILE;
+	pattern_type_new = is_pattern_tile_new ? new_f_ptr->subtype : NOT_PATTERN_TILE;
 
 	if (pattern_type_new == PATTERN_TILE_START)
 	{
@@ -3689,33 +3689,37 @@ bool move_player_effect(int ny, int nx, u32b mpe_mode)
 
 bool trap_can_be_ignored(int feat)
 {
-	switch (feat)
+	feature_type *f_ptr = &f_info[feat];
+
+	if (!have_flag(f_ptr->flags, FF_TRAP)) return TRUE;
+
+	switch (f_ptr->subtype)
 	{
-	case FEAT_TRAP_TRAPDOOR:
-	case FEAT_TRAP_PIT:
-	case FEAT_TRAP_SPIKED_PIT:
-	case FEAT_TRAP_POISON_PIT:
+	case TRAP_TRAPDOOR:
+	case TRAP_PIT:
+	case TRAP_SPIKED_PIT:
+	case TRAP_POISON_PIT:
 		if (p_ptr->levitation) return TRUE;
 		break;
-	case FEAT_TRAP_TELEPORT:
+	case TRAP_TELEPORT:
 		if (p_ptr->anti_tele) return TRUE;
 		break;
-	case FEAT_TRAP_FIRE:
+	case TRAP_FIRE:
 		if (p_ptr->immune_fire) return TRUE;
 		break;
-	case FEAT_TRAP_ACID:
+	case TRAP_ACID:
 		if (p_ptr->immune_acid) return TRUE;
 		break;
-	case FEAT_TRAP_BLIND:
+	case TRAP_BLIND:
 		if (p_ptr->resist_blind) return TRUE;
 		break;
-	case FEAT_TRAP_CONFUSE:
+	case TRAP_CONFUSE:
 		if (p_ptr->resist_conf) return TRUE;
 		break;
-	case FEAT_TRAP_POISON:
+	case TRAP_POISON:
 		if (p_ptr->resist_pois) return TRUE;
 		break;
-	case FEAT_TRAP_SLEEP:
+	case TRAP_SLEEP:
 		if (p_ptr->free_act) return TRUE;
 		break;
 	}

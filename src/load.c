@@ -2285,6 +2285,12 @@ static void rd_messages(void)
 /* Old hidden trap flag */
 #define CAVE_TRAP       0x8000
 
+/*** Terrain Feature Indexes (see "lib/edit/f_info.txt") ***/
+#define OLD_FEAT_INVIS              0x02
+#define OLD_FEAT_GLYPH              0x03
+#define OLD_FEAT_MINOR_GLYPH        0x40
+#define OLD_FEAT_MIRROR             0xc3
+
 /*
  * Read the dungeon (old method)
  *
@@ -2486,16 +2492,16 @@ static errr rd_dungeon_old(void)
 			c_ptr = &cave[y][x];
 
 			/* Very old */
-			if (c_ptr->feat == FEAT_INVIS)
+			if (c_ptr->feat == OLD_FEAT_INVIS)
 			{
-				c_ptr->feat = FEAT_FLOOR;
+				c_ptr->feat = feat_floor;
 				c_ptr->info |= CAVE_TRAP;
 			}
 
 			/* Older than 1.1.1 */
-			if (c_ptr->feat == FEAT_MIRROR)
+			if (c_ptr->feat == OLD_FEAT_MIRROR)
 			{
-				c_ptr->feat = FEAT_FLOOR;
+				c_ptr->feat = feat_floor;
 				c_ptr->info |= CAVE_OBJECT;
 			}
 		}
@@ -2511,16 +2517,16 @@ static errr rd_dungeon_old(void)
 			/* Old CAVE_IN_MIRROR flag */
 			if (c_ptr->info & CAVE_OBJECT)
 			{
-				c_ptr->mimic = FEAT_MIRROR;
+				c_ptr->mimic = feat_mirror;
 			}
 
 			/* Runes will be mimics and flags */
-			else if (c_ptr->feat == FEAT_MINOR_GLYPH ||
-				 c_ptr->feat == FEAT_GLYPH)
+			else if ((c_ptr->feat == OLD_FEAT_MINOR_GLYPH) ||
+			         (c_ptr->feat == OLD_FEAT_GLYPH))
 			{
 				c_ptr->info |= CAVE_OBJECT;
 				c_ptr->mimic = c_ptr->feat;
-				c_ptr->feat = FEAT_FLOOR;
+				c_ptr->feat = feat_floor;
 			}
 
 			/* Hidden traps will be trap terrains mimicing floor */
@@ -2532,10 +2538,10 @@ static errr rd_dungeon_old(void)
 			}
 
 			/* Another hidden trap */
-			else if (c_ptr->feat == FEAT_INVIS)
+			else if (c_ptr->feat == OLD_FEAT_INVIS)
 			{
-				c_ptr->mimic = FEAT_FLOOR;
-				c_ptr->feat = FEAT_TRAP_OPEN;
+				c_ptr->mimic = feat_floor;
+				c_ptr->feat = feat_trap_open;
 			}
 		}
 	}

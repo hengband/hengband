@@ -688,7 +688,7 @@ static void pattern_teleport(void)
 static void wreck_the_pattern(void)
 {
 	int to_ruin = 0, r_y, r_x;
-	int pattern_type = f_info[cave[py][px].feat].power;
+	int pattern_type = f_info[cave[py][px].feat].subtype;
 
 	if (pattern_type == PATTERN_TILE_WRECKED)
 	{
@@ -718,13 +718,13 @@ static void wreck_the_pattern(void)
 		scatter(&r_y, &r_x, py, px, 4, 0);
 
 		if (pattern_tile(r_y, r_x) &&
-		    (f_info[cave[r_y][r_x].feat].power != PATTERN_TILE_WRECKED))
+		    (f_info[cave[r_y][r_x].feat].subtype != PATTERN_TILE_WRECKED))
 		{
-			cave_set_feat(r_y, r_x, FEAT_PATTERN_XTRA2);
+			cave_set_feat(r_y, r_x, feat_pattern_corrupted);
 		}
 	}
 
-	cave_set_feat(py, px, FEAT_PATTERN_XTRA2);
+	cave_set_feat(py, px, feat_pattern_corrupted);
 }
 
 
@@ -741,7 +741,7 @@ static bool pattern_effect(void)
 		wreck_the_pattern();
 	}
 
-	pattern_type = f_info[cave[py][px].feat].power;
+	pattern_type = f_info[cave[py][px].feat].subtype;
 
 	switch (pattern_type)
 	{
@@ -761,7 +761,7 @@ static bool pattern_effect(void)
 		(void)restore_level();
 		(void)hp_player(1000);
 
-		cave_set_feat(py, px, FEAT_PATTERN_OLD);
+		cave_set_feat(py, px, feat_pattern_old);
 
 #ifdef JP
 		msg_print("「パターン」のこの部分は他の部分より強力でないようだ。");
@@ -3953,7 +3953,7 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 					if (!have_flag(f_ptr->flags, FF_STORE)) continue;
 
 					/* Verify store type */
-					if (f_ptr->power == n)
+					if (f_ptr->subtype == n)
 					{
 						/* Message */
 #ifdef JP

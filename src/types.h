@@ -52,7 +52,7 @@
  * Feature state structure
  *
  * - Action (FF_*)
- * - Result (FEAT_*)
+ * - Result (f_info ID)
  */
 typedef struct feature_state feature_state;
 
@@ -84,6 +84,7 @@ struct feature_type
 
 	feature_state state[MAX_FEAT_STATES];
 
+	byte subtype;
 	byte power;
 
 	byte d_attr[F_LIT_MAX];   /* Default feature attribute */

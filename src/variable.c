@@ -1188,6 +1188,80 @@ bool generate_encounter;
 
 cptr screen_dump = NULL;
 
+/*** Terrain feature variables ***/
+
+/* Nothing */
+s16b feat_none;
+
+/* Floor */
+s16b feat_floor;
+
+/* Objects */
+s16b feat_glyph;
+s16b feat_explosive_rune;
+s16b feat_mirror;
+
+/* Doors */
+s16b feat_open_door;
+s16b feat_broken_door;
+s16b feat_closed_door;
+s16b feat_locked_door[MAX_LJ_DOORS];
+s16b num_locked_door = 0;
+s16b feat_jammed_door[MAX_LJ_DOORS];
+s16b num_jammed_door = 0;
+
+/* Stairs */
+s16b feat_up_stair;
+s16b feat_down_stair;
+s16b feat_entrance;
+
+/* Special traps */
+s16b feat_trap_open;
+s16b feat_trap_armageddon;
+s16b feat_trap_piranha;
+
+/* Rubble */
+s16b feat_rubble;
+
+/* Seams */
+s16b feat_magma_vein;
+s16b feat_quartz_vein;
+
+/* Walls */
+s16b feat_granite;
+s16b feat_permanent;
+
+/* Pattern */
+s16b feat_pattern_start;
+s16b feat_pattern_1;
+s16b feat_pattern_2;
+s16b feat_pattern_3;
+s16b feat_pattern_4;
+s16b feat_pattern_end;
+s16b feat_pattern_old;
+s16b feat_pattern_exit;
+s16b feat_pattern_corrupted;
+
+/* Various */
+s16b feat_black_market;
+s16b feat_town;
+
+/* Terrains */
+s16b feat_deep_water;
+s16b feat_shallow_water;
+s16b feat_deep_lava;
+s16b feat_shallow_lava;
+s16b feat_dirt;
+s16b feat_grass;
+s16b feat_flower;
+s16b feat_brake;
+s16b feat_tree;
+s16b feat_mountain;
+s16b feat_swamp;
+
+/* Unknown grid (not detected) */
+s16b feat_undetected;
+
 /*
  * Which dungeon ?
  */

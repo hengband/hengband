@@ -147,14 +147,14 @@ void place_random_door(int y, int x, bool room)
 	if (tmp < 300)
 	{
 		/* Create open door */
-		set_cave_feat(y, x, FEAT_OPEN);
+		set_cave_feat(y, x, feat_open_door);
 	}
 
 	/* Broken doors (100/1000) */
 	else if (tmp < 400)
 	{
 		/* Create broken door */
-		set_cave_feat(y, x, FEAT_BROKEN);
+		set_cave_feat(y, x, feat_broken_door);
 	}
 
 	/* Secret doors (200/1000) */
@@ -204,21 +204,21 @@ void place_closed_door(int y, int x)
 	if (tmp < 300)
 	{
 		/* Create closed door */
-		cave_set_feat(y, x, FEAT_DOOR_HEAD + 0x00);
+		cave_set_feat(y, x, feat_closed_door);
 	}
 
 	/* Locked doors (99/400) */
 	else if (tmp < 399)
 	{
 		/* Create locked door */
-		cave_set_feat(y, x, FEAT_DOOR_HEAD + randint1(7));
+		cave_set_feat(y, x, feat_locked_door[randint0(num_locked_door)]);
 	}
 
 	/* Stuck doors (1/400) */
 	else
 	{
 		/* Create jammed door */
-		cave_set_feat(y, x, FEAT_DOOR_HEAD + 0x08 + randint0(8));
+		cave_set_feat(y, x, feat_jammed_door[randint0(num_jammed_door)]);
 	}
 
 	/* Now it is not floor */

@@ -1011,144 +1011,6 @@
 #define MAX_FEAT_STATES	 8
 
 
-/*** Terrain Feature Indexes (see "lib/edit/f_info.txt") ***/
-
-/* Nothing */
-#define FEAT_NONE               0x00
-
-/* Various */
-#define FEAT_FLOOR              0x01
-#define FEAT_INVIS              0x02
-#define FEAT_GLYPH              0x03
-#define FEAT_OPEN               0x04
-#define FEAT_BROKEN             0x05
-#define FEAT_LESS               0x06
-#define FEAT_MORE               0x07
-
-/* Quest features -KMW- */
-#define FEAT_QUEST_ENTER		0x08
-#define FEAT_QUEST_EXIT			0x09
-#define FEAT_QUEST_DOWN			0x0A
-#define FEAT_QUEST_UP			0x0B
-
-#define FEAT_LESS_LESS          0x0D
-#define FEAT_MORE_MORE          0x0E
-
-/* Feature 0x0E - 0x0F unused */
-
-/* Traps */
-#define FEAT_TRAP_TRAPDOOR      0x10
-#define FEAT_TRAP_PIT           0x11
-#define FEAT_TRAP_SPIKED_PIT    0x12
-#define FEAT_TRAP_POISON_PIT    0x13
-#define FEAT_TRAP_TY_CURSE      0x14
-#define FEAT_TRAP_TELEPORT      0x15
-#define FEAT_TRAP_FIRE          0x16
-#define FEAT_TRAP_ACID          0x17
-#define FEAT_TRAP_SLOW          0x18
-#define FEAT_TRAP_LOSE_STR      0x19
-#define FEAT_TRAP_LOSE_DEX      0x1A
-#define FEAT_TRAP_LOSE_CON      0x1B
-#define FEAT_TRAP_BLIND         0x1C
-#define FEAT_TRAP_CONFUSE       0x1D
-#define FEAT_TRAP_POISON        0x1E
-#define FEAT_TRAP_SLEEP         0x1F
-
-/* Doors */
-#define FEAT_DOOR_HEAD          0x20
-#define FEAT_DOOR_TAIL          0x2F
-
-/* Extra */
-#define FEAT_SECRET             0x30
-#define FEAT_RUBBLE             0x31
-
-/* Seams */
-#define FEAT_MAGMA              0x32
-#define FEAT_QUARTZ             0x33
-#define FEAT_MAGMA_H            0x34
-#define FEAT_QUARTZ_H           0x35
-#define FEAT_MAGMA_K            0x36
-#define FEAT_QUARTZ_K           0x37
-
-/* Walls */
-#define FEAT_WALL               0x38
-#define FEAT_WALL_INNER         0x39
-#define FEAT_WALL_OUTER         0x3A
-#define FEAT_WALL_SOLID         0x3B
-#define FEAT_PERM               0x3C
-#define FEAT_PERM_INNER         0x3D
-#define FEAT_PERM_OUTER         0x3E
-#define FEAT_PERM_SOLID         0x3F
-
-/* Glyph */
-#define FEAT_MINOR_GLYPH        0x40
-
-/* Pattern */
-#define FEAT_PATTERN_START      0x41
-#define FEAT_PATTERN_1          0x42
-#define FEAT_PATTERN_2          0x43
-#define FEAT_PATTERN_3          0x44
-#define FEAT_PATTERN_4          0x45
-#define FEAT_PATTERN_END        0x46
-#define FEAT_PATTERN_OLD        0x47
-#define FEAT_PATTERN_XTRA1      0x48
-#define FEAT_PATTERN_XTRA2      0x49
-
-/* Shops */
-#define FEAT_SHOP_HEAD          0x4A
-#define FEAT_SHOP_TAIL          0x52
-
-/* Terrains */
-#define FEAT_DEEP_WATER         0x53
-#define FEAT_SHAL_WATER         0x54
-#define FEAT_DEEP_LAVA          0x55
-#define FEAT_SHAL_LAVA          0x56
-#define FEAT_DARK_PIT           0x57
-#define FEAT_DIRT               0x58
-#define FEAT_GRASS              0x59
-
-#define FEAT_TRAP_TRAPS         0x5A
-#define FEAT_TRAP_ALARM         0x5B
-#define FEAT_TRAP_OPEN          0x5C
-
-#define FEAT_FLOWER             0x5D
-#define FEAT_DEEP_GRASS         0x5E
-#define FEAT_MUSEUM             0x5F
-
-/* Terrain */
-#define FEAT_TREES              0x60
-#define FEAT_MOUNTAIN           0x61
-#define FEAT_MOUNTAIN_WALL      0x62
-
-/* Feature 0x63 - 0x7F unused */
-
-/* Buildings */
-#define FEAT_BLDG_HEAD          0x80
-#define FEAT_BLDG_TAIL          0x9F
-
-/* Hack -- Special fake terrains for f_info */
-#define FEAT_CONVERT_FLOOR      0xa0
-#define FEAT_CONVERT_WALL       0xa1
-#define FEAT_CONVERT_INNER      0xa2
-#define FEAT_CONVERT_OUTER      0xa3
-#define FEAT_CONVERT_SOLID      0xa4
-#define FEAT_CONVERT_STREAM1    0xa5
-#define FEAT_CONVERT_STREAM2    0xa6
-
-#define FEAT_TOWN               0xc0
-#define FEAT_ENTRANCE           0xc1
-#define FEAT_SWAMP              0xc2
-
-/* for mirror master */
-#define FEAT_MIRROR             0xc3
-
-/* unknown grid (not detected)  */
-#define FEAT_UNDETECTED         0xc4
-
-/* special traps */
-#define FEAT_TRAP_ARMAGEDDON    0xc5
-#define FEAT_TRAP_PIRANHA       0xc6
-
 /*
  * Wilderness terrains
  */
@@ -1321,7 +1183,39 @@
 #define TELEPORT_DEC_VALOUR 0x00000004
 
 
-/* Type of pattern tiles */
+/* Types of normal traps */
+#define NOT_TRAP        -1
+#define TRAP_TRAPDOOR    0
+#define TRAP_PIT         1
+#define TRAP_SPIKED_PIT  2
+#define TRAP_POISON_PIT  3
+#define TRAP_TY_CURSE    4
+#define TRAP_TELEPORT    5
+#define TRAP_FIRE        6
+#define TRAP_ACID        7
+#define TRAP_SLOW        8
+#define TRAP_LOSE_STR    9
+#define TRAP_LOSE_DEX   10
+#define TRAP_LOSE_CON   11
+#define TRAP_BLIND      12
+#define TRAP_CONFUSE    13
+#define TRAP_POISON     14
+#define TRAP_SLEEP      15
+#define TRAP_TRAPS      16
+#define TRAP_ALARM      17
+
+
+/* Types of special traps */
+#define TRAP_OPEN       18
+#define TRAP_ARMAGEDDON 19
+#define TRAP_PIRANHA    20
+
+
+/* Maximum locked/jammed doors */
+#define MAX_LJ_DOORS 8
+
+
+/* Types of pattern tiles */
 #define NOT_PATTERN_TILE      -1
 #define PATTERN_TILE_START    0
 #define PATTERN_TILE_1        1
@@ -1334,7 +1228,7 @@
 #define PATTERN_TILE_WRECKED  8
 
 
-/* Type of conversions */
+/* Types of conversions */
 #define CONVERT_TYPE_FLOOR   0
 #define CONVERT_TYPE_WALL    1
 #define CONVERT_TYPE_INNER   2

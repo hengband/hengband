@@ -968,7 +968,7 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 			else if (darkened_grid(c_ptr))
 			{
 				/* Unsafe cave grid -- idea borrowed from Unangband */
-				feat = (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) ? FEAT_UNDETECTED : FEAT_NONE;
+				feat = (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
 
 				/* Access darkness */
 				f_ptr = &f_info[feat];
@@ -1019,10 +1019,7 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 		else
 		{
 			/* Unsafe cave grid -- idea borrowed from Unangband */
-			if (view_unsafe_grids && (c_ptr->info & (CAVE_UNSAFE)))
-				feat = FEAT_UNDETECTED;
-			else
-				feat = FEAT_NONE;
+			feat = (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
 
 			/* Access darkness */
 			f_ptr = &f_info[feat];
@@ -1061,7 +1058,7 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 				if (have_flag(f_ptr->flags, FF_LOS) && have_flag(f_ptr->flags, FF_PROJECT))
 				{
 					/* Unsafe cave grid -- idea borrowed from Unangband */
-					feat = (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) ? FEAT_UNDETECTED : FEAT_NONE;
+					feat = (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
 
 					/* Access darkness */
 					f_ptr = &f_info[feat];
@@ -1135,10 +1132,7 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 		else
 		{
 			/* Unsafe cave grid -- idea borrowed from Unangband */
-			if (view_unsafe_grids && (c_ptr->info & (CAVE_UNSAFE)))
-				feat = FEAT_UNDETECTED;
-			else
-				feat = FEAT_NONE;
+			feat = (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
 
 			/* Access feature */
 			f_ptr = &f_info[feat];
@@ -1572,7 +1566,7 @@ void display_dungeon(void)
 				/* Clear out-of-bound tiles */
 
 				/* Access darkness */
-				feature_type *f_ptr = &f_info[FEAT_NONE];
+				feature_type *f_ptr = &f_info[feat_none];
 
 				/* Normal attr */
 				a = f_ptr->x_attr[F_LIT_STANDARD];
@@ -4654,7 +4648,7 @@ int conv_dungeon_feat(int newfeat)
 
 	if (have_flag(f_ptr->flags, FF_CONVERT))
 	{
-		switch (f_ptr->power)
+		switch (f_ptr->subtype)
 		{
 		case CONVERT_TYPE_FLOOR:
 			return floor_type[randint0(100)];

@@ -4606,7 +4606,7 @@ void do_cmd_store(void)
 	}
 
 	/* Extract the store code */
-	which = f_info[c_ptr->feat].power;
+	which = f_info[c_ptr->feat].subtype;
 
 	old_town_num = p_ptr->town_num;
 	if ((which == STORE_HOME) || (which == STORE_MUSEUM)) p_ptr->town_num = 1;

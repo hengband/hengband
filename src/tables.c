@@ -6734,22 +6734,6 @@ cptr exp_level_str[5]=
 {"[Unskilled]", "[Beginner]", "[Skilled]", "[Expert]", "[Master]"};
 #endif
 
-s16b conv_terrain2feat[MAX_WILDERNESS] =
-{
-  FEAT_PERM,
-  FEAT_TOWN,
-  FEAT_DEEP_WATER,
-  FEAT_SHAL_WATER,
-  FEAT_SWAMP,
-  FEAT_DIRT,
-  FEAT_GRASS,
-  FEAT_TREES,
-  FEAT_DIRT,
-  FEAT_SHAL_LAVA,
-  FEAT_DEEP_LAVA,
-  FEAT_MOUNTAIN
-};
-
 /* Weird melee attack types when hallucinating */
 #ifdef JP
 cptr silly_attacks[MAX_SILLY_ATTACK] =

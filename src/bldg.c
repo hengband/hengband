@@ -4914,7 +4914,7 @@ void do_cmd_bldg(void)
 		return;
 	}
 
-	which = f_info[cave[py][px].feat].power;
+	which = f_info[cave[py][px].feat].subtype;
 
 	bldg = &building[which];
 

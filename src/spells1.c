@@ -671,7 +671,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 #else
 			msg_format("A tree %s", message);
 #endif
-			cave_set_feat(y, x, (one_in_(3) ? FEAT_DEEP_GRASS : FEAT_GRASS));
+			cave_set_feat(y, x, one_in_(3) ? feat_brake : feat_grass);
 
 			/* Observe */
 			if (c_ptr->info & (CAVE_MARK)) obvious = TRUE;
@@ -893,7 +893,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 			if (player_bold(y, x)) break;
 
 			/* Create a closed door */
-			cave_set_feat(y, x, FEAT_DOOR_HEAD + 0x00);
+			cave_set_feat(y, x, feat_closed_door);
 
 			/* Observe */
 			if (c_ptr->info & (CAVE_MARK)) obvious = TRUE;
@@ -920,7 +920,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 			if (player_bold(y, x)) break;
 
 			/* Create a closed door */
-			cave_set_feat(y, x, FEAT_TREES);
+			cave_set_feat(y, x, feat_tree);
 
 			/* Observe */
 			if (c_ptr->info & (CAVE_MARK)) obvious = TRUE;
@@ -936,7 +936,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 
 			/* Create a glyph */
 			c_ptr->info |= CAVE_OBJECT;
-			c_ptr->mimic = FEAT_GLYPH;
+			c_ptr->mimic = feat_glyph;
 
 			/* Notice */
 			note_spot(y, x);
@@ -956,7 +956,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 			if (player_bold(y, x)) break;
 
 			/* Place a wall */
-			cave_set_feat(y, x, FEAT_WALL);
+			cave_set_feat(y, x, feat_granite);
 
 			break;
 		}
@@ -974,13 +974,13 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 				if (!have_flag(f_ptr->flags, FF_FLOOR)) break;
 
 				/* Place a shallow lava */
-				cave_set_feat(y, x, FEAT_SHAL_LAVA);
+				cave_set_feat(y, x, feat_shallow_lava);
 			}
 			/* Deep Lava */
 			else if (dam)
 			{
 				/* Place a deep lava */
-				cave_set_feat(y, x, FEAT_DEEP_LAVA);
+				cave_set_feat(y, x, feat_deep_lava);
 			}
 			break;
 		}
@@ -997,13 +997,13 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 				if (!have_flag(f_ptr->flags, FF_FLOOR)) break;
 
 				/* Place a shallow water */
-				cave_set_feat(y, x, FEAT_SHAL_WATER);
+				cave_set_feat(y, x, feat_shallow_water);
 			}
 			/* Deep Water */
 			else if (dam)
 			{
 				/* Place a deep water */
-				cave_set_feat(y, x, FEAT_DEEP_WATER);
+				cave_set_feat(y, x, feat_deep_water);
 			}
 			break;
 		}

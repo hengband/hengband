@@ -793,10 +793,10 @@ static bool cave_gen(void)
 		build_maze_vault(cur_wid/2-1, cur_hgt/2-1, cur_wid-4, cur_hgt-4, FALSE);
 
 		/* Place 3 or 4 down stairs near some walls */
-		if (!alloc_stairs(FEAT_MORE, rand_range(2, 3), 3)) return FALSE;
+		if (!alloc_stairs(feat_down_stair, rand_range(2, 3), 3)) return FALSE;
 
 		/* Place 1 or 2 up stairs near some walls */
-		if (!alloc_stairs(FEAT_LESS, 1, 3)) return FALSE;
+		if (!alloc_stairs(feat_up_stair, 1, 3)) return FALSE;
 	}
 
 	/* Build some rooms */
@@ -828,13 +828,13 @@ static bool cave_gen(void)
 			/* Choose water or lava */
 			if ((randint1(MAX_DEPTH * 2) - 1 > dun_level) && (d_info[dungeon_type].flags1 & DF1_WATER_RIVER))
 			{
-				feat1 = FEAT_DEEP_WATER;
-				feat2 = FEAT_SHAL_WATER;
+				feat1 = feat_deep_water;
+				feat2 = feat_shallow_water;
 			}
 			else if  (d_info[dungeon_type].flags1 & DF1_LAVA_RIVER)
 			{
-				feat1 = FEAT_DEEP_LAVA;
-				feat2 = FEAT_SHAL_LAVA;
+				feat1 = feat_deep_lava;
+				feat2 = feat_shallow_lava;
 			}
 			else feat1 = 0;
 
@@ -964,10 +964,10 @@ static bool cave_gen(void)
 		}
 
 		/* Place 3 or 4 down stairs near some walls */
-		if (!alloc_stairs(FEAT_MORE, rand_range(3, 4), 3)) return FALSE;
+		if (!alloc_stairs(feat_down_stair, rand_range(3, 4), 3)) return FALSE;
 
 		/* Place 1 or 2 up stairs near some walls */
-		if (!alloc_stairs(FEAT_LESS, rand_range(1, 2), 3)) return FALSE;
+		if (!alloc_stairs(feat_up_stair, rand_range(1, 2), 3)) return FALSE;
 	}
 
 	if (!dun->laketype)
@@ -1178,7 +1178,7 @@ static void arena_gen(void)
 		for (x = qx + 1; x < qx + SCREEN_WID - 1; x++)
 		{
 			/* Create empty floor */
-			cave[y][x].feat = FEAT_FLOOR;
+			cave[y][x].feat = feat_floor;
 		}
 	}
 
@@ -1241,7 +1241,7 @@ static void build_battle(void)
 
 	i = y_height + 4;
 	j = xval;
-	cave[i][j].feat = FEAT_BLDG_HEAD + 3;
+	cave[i][j].feat = f_tag_to_index("BUILDING_3");
 	cave[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 	player_place(i, j);
 }
@@ -1275,7 +1275,7 @@ static void battle_gen(void)
 		for (x = qx + 1; x < qx + SCREEN_WID - 1; x++)
 		{
 			/* Create empty floor */
-			cave[y][x].feat = FEAT_FLOOR;
+			cave[y][x].feat = feat_floor;
 		}
 	}
 

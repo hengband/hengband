@@ -1643,6 +1643,19 @@ errr parse_f_info(char *buf, header *head)
 				while (*t == ' ' || *t == '|') t++;
 			}
 
+			/* XXX XXX XXX Hack -- Read feature subtype */
+			if (1 == sscanf(s, "SUBTYPE_%d", &i))
+			{
+				/* Extract a "subtype" */
+				f_ptr->subtype =  i;
+
+				/* Start at next entry */
+				s = t;
+
+				/* Continue */
+				continue;
+			}
+
 			/* XXX XXX XXX Hack -- Read feature power */
 			if (1 == sscanf(s, "POWER_%d", &i))
 			{
@@ -3326,12 +3339,12 @@ static errr parse_line_feature(char *buf)
 		int index = zz[0][0];
 
 		/* Reset the info for the letter */
-		letter[index].feature = FEAT_NONE;
+		letter[index].feature = feat_none;
 		letter[index].monster = 0;
 		letter[index].object = 0;
 		letter[index].ego = 0;
 		letter[index].artifact = 0;
-		letter[index].trap = FEAT_NONE;
+		letter[index].trap = feat_none;
 		letter[index].cave_info = 0;
 		letter[index].special = 0;
 		letter[index].random = RANDOM_NONE;

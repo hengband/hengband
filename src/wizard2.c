@@ -1678,8 +1678,8 @@ static void do_cmd_wiz_zap_all(void)
  */
 static void do_cmd_wiz_create_feature(void)
 {
-	static int   prev_feat = FEAT_NONE;
-	static int   prev_mimic = FEAT_NONE;
+	static int   prev_feat = 0;
+	static int   prev_mimic = 0;
 	cave_type    *c_ptr;
 	feature_type *f_ptr;
 	char         tmp_val[160];

@@ -604,7 +604,7 @@ msg_print("魔法の階段が現れた...");
 
 
 		/* Create stairs down */
-		cave_set_feat(y, x, FEAT_MORE);
+		cave_set_feat(y, x, feat_down_stair);
 
 		/* Remember to update everything */
 		p_ptr->update |= (PU_FLOW);
@@ -3557,7 +3557,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 	if (!(c_ptr->info & CAVE_MARK) && !player_can_see_bold(y, x))
 	{
 		/* Forget feature */
-		feat = FEAT_NONE;
+		feat = feat_none;
 	}
 
 	f_ptr = &f_info[feat];
@@ -3570,7 +3570,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 		/* Hack -- special handling for building doors */
 		if (have_flag(f_ptr->flags, FF_BLDG) && !p_ptr->inside_arena)
 		{
-			name = building[f_ptr->power].name;
+			name = building[f_ptr->subtype].name;
 		}
 		else if (have_flag(f_ptr->flags, FF_ENTRANCE))
 		{
@@ -3584,7 +3584,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 		{
 			name = town[c_ptr->special].name;
 		}
-		else if (p_ptr->wild_mode && (feat == FEAT_FLOOR))
+		else if (p_ptr->wild_mode && (feat == feat_floor))
 		{
 #ifdef JP
 			name = "道";

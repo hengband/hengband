@@ -1589,6 +1589,122 @@ static errr init_quests(void)
 }
 
 
+static feat_tag_is_not_found = FALSE;
+
+
+s16b f_tag_to_index_in_init(cptr str)
+{
+	s16b feat = f_tag_to_index(str);
+
+	if (feat < 0) feat_tag_is_not_found = TRUE;
+
+	return feat;
+}
+
+
+/*
+ * Initialize feature variables
+ */
+static errr init_feat_variables(void)
+{
+	int i;
+
+	/* Nothing */
+	feat_none = f_tag_to_index_in_init("NONE");
+
+	/* Floor */
+	feat_floor = f_tag_to_index_in_init("FLOOR");
+
+	/* Objects */
+	feat_glyph = f_tag_to_index_in_init("GLYPH");
+	feat_explosive_rune = f_tag_to_index_in_init("EXPLOSIVE_RUNE");
+	feat_mirror = f_tag_to_index_in_init("MIRROR");
+
+	/* Doors */
+	feat_open_door = f_tag_to_index_in_init("OPEN_DOOR");
+	feat_broken_door = f_tag_to_index_in_init("BROKEN_DOOR");
+	feat_closed_door = f_tag_to_index_in_init("CLOSED_DOOR");
+
+	/* Locked doors */
+	for (i = 1; i < MAX_LJ_DOORS; i++)
+	{
+		s16b door = f_tag_to_index(format("LOCKED_DOOR_%d", i));
+		if (door < 0) break;
+		feat_locked_door[num_locked_door++] = door;
+	}
+	if (!num_locked_door) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
+
+	/* Jammed doors */
+	for (i = 0; i < MAX_LJ_DOORS; i++)
+	{
+		s16b door = f_tag_to_index(format("JAMMED_DOOR_%d", i));
+		if (door < 0) break;
+		feat_jammed_door[num_jammed_door++] = door;
+	}
+	if (!num_jammed_door) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
+
+	/* Stairs */
+	feat_up_stair = f_tag_to_index_in_init("UP_STAIR");
+	feat_down_stair = f_tag_to_index_in_init("DOWN_STAIR");
+	feat_entrance = f_tag_to_index_in_init("ENTRANCE");
+
+	/* Normal traps */
+	init_normal_traps();
+
+	/* Special traps */
+	feat_trap_open = f_tag_to_index_in_init("TRAP_OPEN");
+	feat_trap_armageddon = f_tag_to_index_in_init("TRAP_ARMAGEDDON");
+	feat_trap_piranha = f_tag_to_index_in_init("TRAP_PIRANHA");
+
+	/* Rubble */
+	feat_rubble = f_tag_to_index_in_init("RUBBLE");
+
+	/* Seams */
+	feat_magma_vein = f_tag_to_index_in_init("MAGMA_VEIN");
+	feat_quartz_vein = f_tag_to_index_in_init("QUARTZ_VEIN");
+
+	/* Walls */
+	feat_granite = f_tag_to_index_in_init("GRANITE");
+	feat_permanent = f_tag_to_index_in_init("PERMANENT");
+
+	/* Pattern */
+	feat_pattern_start = f_tag_to_index_in_init("PATTERN_START");
+	feat_pattern_1 = f_tag_to_index_in_init("PATTERN_1");
+	feat_pattern_2 = f_tag_to_index_in_init("PATTERN_2");
+	feat_pattern_3 = f_tag_to_index_in_init("PATTERN_3");
+	feat_pattern_4 = f_tag_to_index_in_init("PATTERN_4");
+	feat_pattern_end = f_tag_to_index_in_init("PATTERN_END");
+	feat_pattern_old = f_tag_to_index_in_init("PATTERN_OLD");
+	feat_pattern_exit = f_tag_to_index_in_init("PATTERN_EXIT");
+	feat_pattern_corrupted = f_tag_to_index_in_init("PATTERN_CORRUPTED");
+
+	/* Various */
+	feat_black_market = f_tag_to_index_in_init("BLACK_MARKET");
+	feat_town = f_tag_to_index_in_init("TOWN");
+
+	/* Terrains */
+	feat_deep_water = f_tag_to_index_in_init("DEEP_WATER");
+	feat_shallow_water = f_tag_to_index_in_init("SHALLOW_WATER");
+	feat_deep_lava = f_tag_to_index_in_init("DEEP_LAVA");
+	feat_shallow_lava = f_tag_to_index_in_init("SHALLOW_LAVA");
+	feat_dirt = f_tag_to_index_in_init("DIRT");
+	feat_grass = f_tag_to_index_in_init("GRASS");
+	feat_flower = f_tag_to_index_in_init("FLOWER");
+	feat_brake = f_tag_to_index_in_init("BRAKE");
+	feat_tree = f_tag_to_index_in_init("TREE");
+	feat_mountain = f_tag_to_index_in_init("MOUNTAIN");
+	feat_swamp = f_tag_to_index_in_init("SWAMP");
+
+	/* Unknown grid (not detected) */
+	feat_undetected = f_tag_to_index_in_init("UNDETECTED");
+
+	/* Wilderness terrains */
+	init_wilderness_terrains();
+
+	return feat_tag_is_not_found ? PARSE_ERROR_UNDEFINED_TERRAIN_TAG : 0;
+}
+
+
 /*
  * Initialize some other arrays
  */
@@ -2242,9 +2358,11 @@ if (init_misc()) quit("その他の変数を初期化できません");
 #ifdef JP
 	note("[データの初期化中... (地形)]");
 	if (init_f_info()) quit("地形初期化不能");
+	if (init_feat_variables()) quit("地形初期化不能");
 #else
 	note("[Initializing arrays... (features)]");
 	if (init_f_info()) quit("Cannot initialize features");
+	if (init_feat_variables()) quit("Cannot initialize features");
 #endif
 
 
