@@ -1925,7 +1925,16 @@ static void process_world(void)
 	    !((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) ||
 	      !(quest[quest_num].flags & QUEST_FLAG_PRESET)))) &&
 	    !p_ptr->inside_battle)
+	{
+		/* Announce feeling */
 		do_cmd_feeling();
+
+		/* Update the level indicator */
+		p_ptr->redraw |= (PR_DEPTH);
+
+		/* Disturb */
+		if (disturb_minor) disturb(0, 0);
+	}
 
 	if (p_ptr->inside_battle && !p_ptr->leaving)
 	{

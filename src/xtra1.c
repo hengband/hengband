@@ -930,6 +930,7 @@ static void prt_depth(void)
 {
 	char depths[32];
 	int wid, hgt, row_depth, col_depth;
+	int attr = TERM_WHITE;
 
 	Term_get_size(&wid, &hgt);
 	col_depth = wid + COL_DEPTH;
@@ -971,8 +972,24 @@ sprintf(depths, "%d ³¬", dun_level);
 
 	}
 
+	/* Get color of level based on feeling  -JSV- */
+	if (dun_level &&
+	    (turn - old_turn >= (150 - dun_level)*TURNS_PER_TICK || cheat_xtra))
+	{
+		if (feeling ==  1) attr = TERM_VIOLET;
+		if (feeling ==  2) attr = TERM_RED;
+		if (feeling ==  3) attr = TERM_L_RED;
+		if (feeling ==  4) attr = TERM_ORANGE;
+		if (feeling ==  5) attr = TERM_ORANGE;
+		if (feeling ==  6) attr = TERM_YELLOW;
+		if (feeling ==  7) attr = TERM_YELLOW;
+		if (feeling ==  8) attr = TERM_WHITE;
+		if (feeling ==  9) attr = TERM_WHITE;
+		if (feeling == 10) attr = TERM_L_WHITE;
+	}
+
 	/* Right-Adjust the "depth", and clear old values */
-	prt(format("%7s", depths), row_depth, col_depth);
+	c_prt(attr, format("%7s", depths), row_depth, col_depth);
 }
 
 
