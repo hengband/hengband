@@ -1663,10 +1663,10 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 	if (breath || magic)
 	{
 		/* Total casting */
-		m = r_ptr->r_cast_inate + r_ptr->r_cast_spell;
+		m = r_ptr->r_cast_spell;
 
 		/* Average frequency */
-		n = (r_ptr->freq_inate + r_ptr->freq_spell) / 2;
+		n = r_ptr->freq_spell;
 
 		/* Describe the spell frequency */
 		if (m > 100 || know_everything)

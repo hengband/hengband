@@ -256,7 +256,7 @@ static void wr_lore(int r_idx)
 	wr_byte(r_ptr->r_drop_item);
 
 	/* Count spells */
-	wr_byte(r_ptr->r_cast_inate);
+	wr_byte(0); /* unused now */
 	wr_byte(r_ptr->r_cast_spell);
 
 	/* Count blows of each type */

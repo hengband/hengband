@@ -2910,14 +2910,44 @@ msg_format("%^s%s", m_name, monmessage);
 		}
 	}
 
-	/* Attempt to cast a spell */
-	if (aware && make_attack_spell(m_idx)) return;
+	/* Try to cast spell occasionally */
+	if (r_ptr->freq_spell && randint1(100) <= r_ptr->freq_spell)
+	{
+		bool counterattack = FALSE;
 
-	/*
-	 * Attempt to cast a spell at an enemy other than the player
-	 * (may slow the game a smidgeon, but I haven't noticed.)
-	 */
-	if (monst_spell_monst(m_idx)) return;
+		/* Give priority to counter attack? */
+		if (m_ptr->target_y)
+		{
+			int t_m_idx = cave[m_ptr->target_y][m_ptr->target_x].m_idx;
+
+			/* The monster must be an enemy, and projectable */
+			if (t_m_idx &&
+			    are_enemies(m_ptr, &m_list[t_m_idx]) &&
+			    projectable(m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
+			{
+				counterattack = TRUE;
+			}
+		}
+
+		if (!counterattack)
+		{
+			/* Attempt to cast a spell */
+			if (aware && make_attack_spell(m_idx)) return;
+
+			/*
+			 * Attempt to cast a spell at an enemy other than the player
+			 * (may slow the game a smidgeon, but I haven't noticed.)
+			 */
+			if (monst_spell_monst(m_idx)) return;
+		}
+		else
+		{
+			/* Attempt to do counter attack at first */
+			if (monst_spell_monst(m_idx)) return;
+
+			if (aware && make_attack_spell(m_idx)) return;
+		}
+	}
 
 	can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || (p_ptr->pass_wall)));
 
@@ -3689,8 +3719,11 @@ msg_format("%^sが%sを破壊した。", m_name, o_name);
 	/* If we haven't done anything, try casting a spell again */
 	if (!do_turn && !do_move && !m_ptr->monfear && !(p_ptr->riding == m_idx) && aware)
 	{
-		/* Cast spell */
-		if (make_attack_spell(m_idx)) return;
+		/* Try to cast spell again */
+		if (r_ptr->freq_spell && randint1(100) <= r_ptr->freq_spell)
+		{
+			if (make_attack_spell(m_idx)) return;
+		}
 	}
 
 
@@ -3824,7 +3857,6 @@ void process_monsters(void)
 	byte    old_r_blows2 = 0;
 	byte    old_r_blows3 = 0;
 
-	byte    old_r_cast_inate = 0;
 	byte    old_r_cast_spell = 0;
 
 	int speed;
@@ -3856,7 +3888,6 @@ void process_monsters(void)
 		old_r_blows3 = r_ptr->r_blows[3];
 
 		/* Memorize castings */
-		old_r_cast_inate = r_ptr->r_cast_inate;
 		old_r_cast_spell = r_ptr->r_cast_spell;
 	}
 
@@ -4008,7 +4039,6 @@ void process_monsters(void)
 			(old_r_blows1 != r_ptr->r_blows[1]) ||
 			(old_r_blows2 != r_ptr->r_blows[2]) ||
 			(old_r_blows3 != r_ptr->r_blows[3]) ||
-			(old_r_cast_inate != r_ptr->r_cast_inate) ||
 			(old_r_cast_spell != r_ptr->r_cast_spell))
 		{
 			/* Window stuff */

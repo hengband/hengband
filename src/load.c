@@ -857,7 +857,7 @@ static void rd_lore(int r_idx)
 	rd_byte(&r_ptr->r_drop_item);
 
 	/* Count spells */
-	rd_byte(&r_ptr->r_cast_inate);
+	rd_byte(&tmp8u);
 	rd_byte(&r_ptr->r_cast_spell);
 
 	/* Count blows of each type */

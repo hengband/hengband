@@ -2688,7 +2688,6 @@ Term_addstr(-1, TERM_WHITE, " ['r'思い出, ' 'で続行, ESC]");
 				if (r_ptr->flags1 & RF1_ONLY_ITEM) r_ptr->r_drop_gold = 0;
 				
 				/* Hack -- observe many spells */
-				r_ptr->r_cast_inate = MAX_UCHAR;
 				r_ptr->r_cast_spell = MAX_UCHAR;
 				
 				/* Hack -- know all the flags */

@@ -2348,7 +2348,7 @@ errr parse_r_info(char *buf, header *head)
 			if (1 == sscanf(s, "1_IN_%d", &i))
 			{
 				/* Extract a "frequency" */
-				r_ptr->freq_spell = r_ptr->freq_inate = 100 / i;
+				r_ptr->freq_spell = 100 / i;
 
 					/* Start at next entry */
 				s = t;

@@ -279,8 +279,7 @@ struct monster_race
 
 	s16b extra;				/* Unused (for now) */
 
-	byte freq_inate;		/* Inate spell frequency */
-	byte freq_spell;		/* Other spell frequency */
+	byte freq_spell;		/* Spell frequency */
 
 	u32b flags1;			/* Flags 1 (general) */
 	u32b flags2;			/* Flags 2 (abilities) */
@@ -331,7 +330,6 @@ struct monster_race
 	byte r_drop_gold;		/* Max number of gold dropped at once */
 	byte r_drop_item;		/* Max number of item dropped at once */
 
-	byte r_cast_inate;		/* Max number of inate spells seen */
 	byte r_cast_spell;		/* Max number of other spells seen */
 
 	byte r_blows[4];		/* Number of times each blow type was seen */

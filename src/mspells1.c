@@ -1229,7 +1229,7 @@ static int choose_attack_spell(int m_idx, byte spells[], byte num)
  */
 bool make_attack_spell(int m_idx)
 {
-	int             k, chance, thrown_spell = 0, rlev, failrate;
+	int             k, thrown_spell = 0, rlev, failrate;
 	byte            spell[96], num = 0;
 	u32b            f4, f5, f6;
 	monster_type    *m_ptr = &m_list[m_idx];
@@ -1260,9 +1260,6 @@ bool make_attack_spell(int m_idx)
 	bool maneable = player_has_los_bold(m_ptr->fy, m_ptr->fx);
 	bool learnable = (seen && maneable && !world_monster);
 
-	/* Assume "normal" target */
-	bool normal = TRUE;
-
 	/* Assume "projectable" */
 	bool direct = TRUE;
 
@@ -1277,18 +1274,9 @@ bool make_attack_spell(int m_idx)
 	if (m_ptr->mflag & MFLAG_NICE) return (FALSE);
 	if (!is_hostile(m_ptr)) return (FALSE);
 
-	/* Hack -- Extract the spell probability */
-	chance = (r_ptr->freq_inate + r_ptr->freq_spell) / 2;
-
-	/* Not allowed to cast spells */
-	if (!chance) return (FALSE);
-
-
-	/* Only do spells occasionally */
-	if (randint0(100) >=  chance) return (FALSE);
 
 	/* Sometimes forbid inate attacks (breaths) */
-	if (randint0(100) >= (chance * 2)) no_inate = TRUE;
+	if (randint0(100) >= (r_ptr->freq_spell * 2)) no_inate = TRUE;
 
 	/* XXX XXX XXX Handle "track_target" option (?) */
 
@@ -1298,94 +1286,92 @@ bool make_attack_spell(int m_idx)
 	f5 = r_ptr->flags5;
 	f6 = r_ptr->flags6;
 
-	/* Hack -- require projectable player */
-	if (normal)
+	/*** require projectable player ***/
+
+	/* Check range */
+	if ((m_ptr->cdis > MAX_RANGE) && !m_ptr->target_y) return (FALSE);
+
+	/* Check path */
+	if (projectable(m_ptr->fy, m_ptr->fx, y, x))
 	{
-		/* Check range */
-		if ((m_ptr->cdis > MAX_RANGE) && !m_ptr->target_y) return (FALSE);
+		/* Breath disintegration to the glyph if possible */
+		if ((!cave_floor_bold(y,x)) && (r_ptr->flags4 & RF4_BR_DISI) && one_in_(2)) do_disi = TRUE;
+	}
 
-		/* Check path */
-		if (projectable(m_ptr->fy, m_ptr->fx, y, x))
+	/* Check path to next grid */
+	else
+	{
+		bool success = FALSE;
+
+		if ((r_ptr->flags4 & RF4_BR_DISI) &&
+		    (m_ptr->cdis < MAX_RANGE/2) &&
+		    in_disintegration_range(m_ptr->fy, m_ptr->fx, y, x) &&
+		    (one_in_(10) || (projectable(y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
 		{
-			/* Breath disintegration to the glyph */
-			if ((!cave_floor_bold(y,x)) && (r_ptr->flags4 & RF4_BR_DISI) && one_in_(2)) do_disi = TRUE;
+			do_disi = TRUE;
+			success = TRUE;
 		}
-
-		/* Check path to next grid */
 		else
 		{
-			bool success = FALSE;
+			int i;
+			int tonari;
+			int tonari_y[4][8] = {{-1,-1,-1,0,0,1,1,1},
+					      {-1,-1,-1,0,0,1,1,1},
+					      {1,1,1,0,0,-1,-1,-1},
+					      {1,1,1,0,0,-1,-1,-1}};
+			int tonari_x[4][8] = {{-1,0,1,-1,1,-1,0,1},
+					      {1,0,-1,1,-1,1,0,-1},
+					      {-1,0,1,-1,1,-1,0,1},
+					      {1,0,-1,1,-1,1,0,-1}};
 
-			if ((r_ptr->flags4 & RF4_BR_DISI) &&
-			    (m_ptr->cdis < MAX_RANGE/2) &&
-			    in_disintegration_range(m_ptr->fy, m_ptr->fx, y, x) &&
-			    (one_in_(10) || (projectable(y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
+			if (m_ptr->fy < py && m_ptr->fx < px) tonari = 0;
+			else if (m_ptr->fy < py) tonari = 1;
+			else if (m_ptr->fx < px) tonari = 2;
+			else tonari = 3;
+
+			for (i = 0; i < 8; i++)
 			{
-				do_disi = TRUE;
+				int next_x = x + tonari_x[tonari][i];
+				int next_y = y + tonari_y[tonari][i];
+				cave_type *c_ptr;
+
+				/* Access the next grid */
+				c_ptr = &cave[next_y][next_x];
+
+				/* Skip door, rubble, wall */
+				if ((c_ptr->feat >= FEAT_DOOR_HEAD) && (c_ptr->feat <= FEAT_PERM_SOLID)) continue;
+
+				/* Skip tree */
+				if (c_ptr->feat == FEAT_TREES) continue;
+
+				/* Skip mountain */
+				if (c_ptr->feat == FEAT_MOUNTAIN) continue;
+
+				if (projectable(m_ptr->fy, m_ptr->fx, next_y, next_x))
+				{
+					y = next_y;
+					x = next_x;
+					success = TRUE;
+					break;
+				}
+			}
+		}
+
+		if (!success)
+		{
+			if (m_ptr->target_y && m_ptr->target_x)
+			{
+				y = m_ptr->target_y;
+				x = m_ptr->target_x;
+				f4 &= (RF4_INDIRECT_MASK);
+				f5 &= (RF5_INDIRECT_MASK);
+				f6 &= (RF6_INDIRECT_MASK);
 				success = TRUE;
 			}
-			else
-			{
-				int i;
-				int tonari;
-				int tonari_y[4][8] = {{-1,-1,-1,0,0,1,1,1},
-						      {-1,-1,-1,0,0,1,1,1},
-						      {1,1,1,0,0,-1,-1,-1},
-						      {1,1,1,0,0,-1,-1,-1}};
-				int tonari_x[4][8] = {{-1,0,1,-1,1,-1,0,1},
-						      {1,0,-1,1,-1,1,0,-1},
-						      {-1,0,1,-1,1,-1,0,1},
-						      {1,0,-1,1,-1,1,0,-1}};
-
-				if (m_ptr->fy < py && m_ptr->fx < px) tonari = 0;
-				else if (m_ptr->fy < py) tonari = 1;
-				else if (m_ptr->fx < px) tonari = 2;
-				else tonari = 3;
-
-				for (i = 0; i < 8; i++)
-				{
-					int next_x = x + tonari_x[tonari][i];
-					int next_y = y + tonari_y[tonari][i];
-					cave_type *c_ptr;
-
-					/* Access the next grid */
-					c_ptr = &cave[next_y][next_x];
-
-					/* Skip door, rubble, wall */
-					if ((c_ptr->feat >= FEAT_DOOR_HEAD) && (c_ptr->feat <= FEAT_PERM_SOLID)) continue;
-
-					/* Skip tree */
-					if (c_ptr->feat == FEAT_TREES) continue;
-
-					/* Skip mountain */
-					if (c_ptr->feat == FEAT_MOUNTAIN) continue;
-
-					if (projectable(m_ptr->fy, m_ptr->fx, next_y, next_x))
-					{
-						y = next_y;
-						x = next_x;
-						success = TRUE;
-						break;
-					}
-				}
-			}
-
-			if (!success)
-			{
-				if (m_ptr->target_y && m_ptr->target_x)
-				{
-					y = m_ptr->target_y;
-					x = m_ptr->target_x;
-					f4 &= (RF4_INDIRECT_MASK);
-					f5 &= (RF5_INDIRECT_MASK);
-					f6 &= (RF6_INDIRECT_MASK);
-					success = TRUE;
-				}
-			}
-
-			/* No spells */
-			if (!success) return FALSE;
 		}
+
+		/* No spells */
+		if (!success) return FALSE;
 	}
 
 	reset_target(m_ptr);
@@ -4537,7 +4523,7 @@ msg_print("多くの力強いものが間近に現れた音が聞こえる。");
 		if (thrown_spell < 32 * 4)
 		{
 			r_ptr->r_flags4 |= (1L << (thrown_spell - 32 * 3));
-			if (r_ptr->r_cast_inate < MAX_UCHAR) r_ptr->r_cast_inate++;
+			if (r_ptr->r_cast_spell < MAX_UCHAR) r_ptr->r_cast_spell++;
 		}
 
 		/* Bolt or Ball */
