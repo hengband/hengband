@@ -359,8 +359,8 @@ struct _term_data
 
 	uint keys;
 
-	int rows;
-	int cols;
+	uint rows;	/* int -> uint */
+	uint cols;
 
 	uint pos_x;
 	uint pos_y;
@@ -999,9 +999,11 @@ static void term_getsize(term_data *td)
 	if (td->cols < 1) td->cols = 1;
 	if (td->rows < 1) td->rows = 1;
 
+#if 0
 	/* Paranoia */
 	if (td->cols > 80) td->cols = 80;
 	if (td->rows > 24) td->rows = 24;
+#endif
 
 	/* Window sizes */
 	wid = td->cols * td->tile_wid + td->size_ow1 + td->size_ow2;
@@ -3929,16 +3931,18 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 
 		case WM_GETMINMAXINFO:
 		{
-#if 0
+			MINMAXINFO FAR *lpmmi;
+			RECT rc;
+
 			lpmmi = (MINMAXINFO FAR *)lParam;
 
 			/* this message was sent before WM_NCCREATE */
 			if (!td) return 1;
 
-			/* Minimum window size is 8x2 */
+			/* Minimum window size is 80x24 */
 			rc.left = rc.top = 0;
-			rc.right = rc.left + 8 * td->tile_wid + td->size_ow1 + td->size_ow2;
-			rc.bottom = rc.top + 2 * td->tile_hgt + td->size_oh1 + td->size_oh2 + 1;
+			rc.right = rc.left + 80 * td->tile_wid + td->size_ow1 + td->size_ow2;
+			rc.bottom = rc.top + 24 * td->tile_hgt + td->size_oh1 + td->size_oh2 + 1;
 
 			/* Adjust */
 			AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
@@ -3947,26 +3951,6 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 			lpmmi->ptMinTrackSize.x = rc.right - rc.left;
 			lpmmi->ptMinTrackSize.y = rc.bottom - rc.top;
 
-			/* Maximum window size */
-			rc.left = rc.top = 0;
-			rc.right = rc.left + 80 * td->tile_wid + td->size_ow1 + td->size_ow2;
-			rc.bottom = rc.top + 24 * td->tile_hgt + td->size_oh1 + td->size_oh2;
-
-			/* Paranoia */
-			rc.right  += (td->tile_wid - 1);
-			rc.bottom += (td->tile_hgt - 1);
-
-			/* Adjust */
-			AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
-
-			/* Save maximum size */
-			lpmmi->ptMaxSize.x = rc.right - rc.left;
-			lpmmi->ptMaxSize.y = rc.bottom - rc.top;
-
-			/* Save maximum size */
-			lpmmi->ptMaxTrackSize.x = rc.right - rc.left;
-			lpmmi->ptMaxTrackSize.y = rc.bottom - rc.top;
-#endif
 			return 0;
 		}
 
@@ -4231,44 +4215,26 @@ LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 
 		case WM_GETMINMAXINFO:
 		{
-#if 0
-			/* this message was sent before WM_NCCREATE */
-			if (!td) return 1;
+			MINMAXINFO FAR *lpmmi;
+			RECT rc;
 
 			lpmmi = (MINMAXINFO FAR *)lParam;
 
-			/* Minimum size */
+			/* this message was sent before WM_NCCREATE */
+			if (!td) return 1;
+
+			/* Minimum window size is 80x24 */
 			rc.left = rc.top = 0;
-			rc.right = rc.left + 8 * td->tile_wid + td->size_ow1 + td->size_ow2;
-			rc.bottom = rc.top + 2 * td->tile_hgt + td->size_oh1 + td->size_oh2;
+			rc.right = rc.left + 20 * td->tile_wid + td->size_ow1 + td->size_ow2;
+			rc.bottom = rc.top + 3 * td->tile_hgt + td->size_oh1 + td->size_oh2 + 1;
 
 			/* Adjust */
 			AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
 
-			/* Save the minimum size */
+			/* Save minimum size */
 			lpmmi->ptMinTrackSize.x = rc.right - rc.left;
 			lpmmi->ptMinTrackSize.y = rc.bottom - rc.top;
 
-			/* Maximum window size */
-			rc.left = rc.top = 0;
-			rc.right = rc.left + 80 * td->tile_wid + td->size_ow1 + td->size_ow2;
-			rc.bottom = rc.top + 24 * td->tile_hgt + td->size_oh1 + td->size_oh2;
-
-			/* Paranoia */
-			rc.right += (td->tile_wid - 1);
-			rc.bottom += (td->tile_hgt - 1);
-
-			/* Adjust */
-			AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
-
-			/* Save maximum size */
-			lpmmi->ptMaxSize.x = rc.right - rc.left;
-			lpmmi->ptMaxSize.y = rc.bottom - rc.top;
-
-			/* Save the maximum size */
-			lpmmi->ptMaxTrackSize.x = rc.right - rc.left;
-			lpmmi->ptMaxTrackSize.y = rc.bottom - rc.top;
-#endif
 			return 0;
 		}
 
