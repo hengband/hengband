@@ -438,9 +438,14 @@ static bool autopick_new_entry(autopick_type *entry, cptr str, bool allow_defaul
  */
 static bool is_favorite(object_type *o_ptr)
 {
-	/* Only weapons match */
-	if (!(TV_WEAPON_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_WEAPON_END))
+	/* Only melee weapons match */
+	if (!(o_ptr->tval == TV_POLEARM ||
+	      o_ptr->tval == TV_SWORD ||
+	      o_ptr->tval == TV_DIGGING ||
+	      o_ptr->tval == TV_HAFTED))
+	{
 		return FALSE;
+	}
 
 	/* Favorite weapons are varied depend on the class */
 	switch (p_ptr->pclass)
