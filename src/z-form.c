@@ -605,7 +605,7 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 
 
 #ifdef JP
-                  for (q = 0; tmp[q]; q++) if ( iskanji(tmp[q]) ) { do_xtra=FALSE;break;} 
+		for (q = 0; tmp[q]; q++) if (iskanji(tmp[q])) { do_xtra=FALSE;break;} 
 #endif
 		/* Mega-Hack -- handle "capitilization" */
 		if (do_xtra)
@@ -617,11 +617,8 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 				if (!isspace(tmp[q]))
 				{
 					/* Capitalize if possible */
-#ifdef JP
-					if (!iskanji(tmp[q]))
-#endif
-						if (islower(tmp[q]))
-							tmp[q] = toupper(tmp[q]);
+					if (islower(tmp[q]))
+						tmp[q] = toupper(tmp[q]);
 
 					/* Done */
 					break;
