@@ -511,7 +511,7 @@ static void beam(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
  */
 static void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, bool learnable)
 {
-	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER;
+	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER | PROJECT_NO_REF;
 
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
