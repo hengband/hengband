@@ -5504,79 +5504,6 @@ static int collect_artifacts(int grp_cur, int object_idx[])
 static char hack[17] = "dwsorgbuDWvyRGBU";
 
 
-static errr photo_fgets(FILE *fff, char *buf, huge n)
-{
-	huge i = 0;
-
-	char *s;
-
-	char tmp[1024];
-
-	/* Read a line */
-	if (fgets(tmp, 1024, fff))
-	{
-		/* Convert weirdness */
-		for (s = tmp; *s; s++)
-		{
-			/* Handle newline */
-			if (*s == '\n')
-			{
-				/* Terminate */
-				buf[i] = '\0';
-
-				/* Success */
-				return (0);
-			}
-
-			/* Handle tabs */
-			else if (*s == '\t')
-			{
-				/* Hack -- require room */
-				if (i + 8 >= n) break;
-
-				/* Append a space */
-				buf[i++] = ' ';
-
-				/* Append some more spaces */
-				while (!(i % 8)) buf[i++] = ' ';
-			}
-
-#ifdef JP
-			else if (iskanji(*s))
-			{
-				if (!s[1]) break;
-				buf[i++] = *s++;
-				buf[i++] = *s;
-			}
-# ifndef EUC
-	/* 半角かなに対応 */
-			else if ((((int)*s & 0xff) > 0xa1) && (((int)*s & 0xff ) < 0xdf))
-			{
-				buf[i++] = *s;
-				if (i >= n) break;
-			}
-# endif
-#endif
-			/* Handle printables */
-			else
-			{
-				/* Copy */
-				buf[i++] = *s;
-
-				/* Check length */
-				if (i >= n) break;
-			}
-		}
-	}
-
-	/* Nothing */
-	buf[0] = '\0';
-
-	/* Failure */
-	return (1);
-}
-
-
 /*
  * Hack -- load a screen dump from a file
  */
@@ -5623,32 +5550,46 @@ void do_cmd_load_screen(void)
 
 
 	/* Load the screen */
-	for (y = 0; okay && (y < hgt); y++)
+	for (y = 0; okay; y++)
 	{
-		/* Get a line of data */
-		if (photo_fgets(fff, buf, 1024)) okay = FALSE;
+		/* Get a line of data including control code */
+		if (!fgets(buf, 1024, fff)) okay = FALSE;
+
+		/* Get the blank line */
+		if (buf[0] == '\n' || buf[0] == '\0') break;
+
+		/* Ignore too large screen image */
+		if (y >= hgt) continue;
 
 		/* Show each row */
 		for (x = 0; x < wid - 1; x++)
 		{
+			/* End of line */
+			if (buf[x] == '\n' || buf[x] == '\0') break;
+
 			/* Put the attr/char */
 			Term_draw(x, y, TERM_WHITE, buf[x]);
 		}
 	}
 
-	/* Get the blank line */
-	if (my_fgets(fff, buf, sizeof(buf))) okay = FALSE;
-
-
 	/* Dump the screen */
-	for (y = 0; okay && (y < hgt); y++)
+	for (y = 0; okay; y++)
 	{
-		/* Get a line of data */
-		if (photo_fgets(fff, buf, 1024)) okay = FALSE;
+		/* Get a line of data including control code */
+		if (!fgets(buf, 1024, fff)) okay = FALSE;
+
+		/* Get the blank line */
+		if (buf[0] == '\n' || buf[0] == '\0') break;
+
+		/* Ignore too large screen image */
+		if (y >= hgt) continue;
 
 		/* Dump each row */
 		for (x = 0; x < wid - 1; x++)
 		{
+			/* End of line */
+			if (buf[x] == '\n' || buf[x] == '\0') break;
+
 			/* Get the attr/char */
 			(void)(Term_what(x, y, &a, &c));
 
@@ -5663,10 +5604,6 @@ void do_cmd_load_screen(void)
 			Term_draw(x, y, a, c);
 		}
 	}
-
-
-	/* Get the blank line */
-	if (my_fgets(fff, buf, sizeof(buf))) okay = FALSE;
 
 
 	/* Close it */
