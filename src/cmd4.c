@@ -2305,7 +2305,7 @@ void do_cmd_options(void)
 		/* Special choices */
 		prt("(D)  基本ウェイト量", 11, 5);
 		prt("(H) 低ヒットポイント警告", 12, 5);
-		prt("(M) 低魔力色閾値", 13, 5);
+		prt("(M)   低魔力色閾値", 13, 5);
 		prt("(A)    自動セーブ         オプション", 14, 5);
 		/* Window flags */
 		prt("(W) ウインドウフラグ", 15, 5);
@@ -2529,9 +2529,9 @@ void do_cmd_options(void)
 			{
 				/* Prompt */
 #ifdef JP
-				prt("コマンド: 基本ウェイト量", 18, 0);
+				prt("コマンド: 基本ウェイト量", 19, 0);
 #else
-				prt("Command: Base Delay Factor", 18, 0);
+				prt("Command: Base Delay Factor", 19, 0);
 #endif
 
 
@@ -2577,9 +2577,9 @@ void do_cmd_options(void)
 			{
 				/* Prompt */
 #ifdef JP
-				prt("コマンド: 低ヒットポイント警告", 18, 0);
+				prt("コマンド: 低ヒットポイント警告", 19, 0);
 #else
-				prt("Command: Hitpoint Warning", 18, 0);
+				prt("Command: Hitpoint Warning", 19, 0);
 #endif
 
 
@@ -2624,9 +2624,9 @@ void do_cmd_options(void)
 			{
 				/* Prompt */
 #ifdef JP
-				prt("コマンド: 低魔力色閾値", 18, 0);
+				prt("コマンド: 低魔力色閾値", 19, 0);
 #else
-				prt("Command: Mana Color Threshold", 18, 0);
+				prt("Command: Mana Color Threshold", 19, 0);
 #endif
 
 
