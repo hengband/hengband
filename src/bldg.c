@@ -2382,7 +2382,7 @@ static bool kankin(void)
 			if ((o_ptr->tval == TV_CORPSE) && (o_ptr->pval == kubi_r_idx[j]))
 			{
 				char buf[MAX_NLEN+20];
-				int num, k;
+				int num, k, item_new;
 				object_type forge;
 
 				object_desc(o_name, o_ptr, 0);
@@ -2393,7 +2393,7 @@ static bool kankin(void)
 #endif
 				if (!get_check(buf)) continue;
 
-#if 0 /* Obsorated */
+#if 0 /* Obsoleted */
 #ifdef JP
 				msg_format("賞金 %ld＄を手に入れた。", (r_info[kubi_r_idx[j]].level + 1) * 300 * o_ptr->number);
 #else
@@ -2408,7 +2408,7 @@ static bool kankin(void)
 				kubi_r_idx[j] += 10000;
 
 				change = TRUE;
-#endif /* Obsorated */
+#endif /* Obsoleted */
 
 				/* Hand it first */
 				inven_item_increase(i, -o_ptr->number);
@@ -2443,15 +2443,21 @@ static bool kankin(void)
 				 * Since a corpse is handed at first,
 				 * there is at least one empty slot.
 				 */
-				(void)inven_carry(&forge);
+				item_new = inven_carry(&forge);
 
 				/* Describe the object */
 				object_desc(o_name, &forge, 0);
 #ifdef JP
-				msg_format("%s を貰った。",o_name);
+				msg_format("%s(%c)を貰った。", o_name, index_to_label(item_new));
 #else
-				msg_format("You get %s. ",o_name);
+				msg_format("You get %s (%c). ", o_name, index_to_label(item_new));
 #endif
+
+				/* Auto-inscription */
+				autopick_alter_item(item_new, FALSE);
+
+				/* Handle stuff */
+				handle_stuff();
 
 				change = TRUE;
 			}
