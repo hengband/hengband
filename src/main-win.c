@@ -565,6 +565,12 @@ static COLORREF win_clr[256];
 
 
 /*
+ * Flag for macro trigger with dump ASCII
+ */
+static bool Term_no_press = FALSE;
+
+
+/*
  * The "simple" color values
  *
  * See "main-ibm.c" for original table information
@@ -610,6 +616,7 @@ VK_CONVERT,VK_NONCONVERT,VK_ACCEPT,VK_MODECHANGE,
 VK_PRIOR,VK_NEXT,VK_END,VK_HOME,VK_LEFT,VK_UP,VK_RIGHT,VK_DOWN,
 VK_SELECT,VK_PRINT,VK_EXECUTE,VK_SNAPSHOT,VK_INSERT,VK_DELETE,
 VK_HELP,VK_APPS,
+VK_MULTIPLY,VK_ADD,VK_SEPARATOR,VK_SUBTRACT,VK_DIVIDE,
 VK_F1,VK_F2,VK_F3,VK_F4,VK_F5,VK_F6,VK_F7,VK_F8,VK_F9,VK_F10,
 VK_F11,VK_F12,VK_F13,VK_F14,VK_F15,VK_F16,VK_F17,VK_F18,VK_F19,VK_F20,
 VK_F21,VK_F22,VK_F23,VK_F24,VK_NUMLOCK,VK_SCROLL,
@@ -4205,12 +4212,19 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 				Term_keypress('x');
 
 				/* Extended key bit */
-				switch (i)
+				switch (wParam)
 				{
-				case VK_ENTER:
-				case '/':
+				case VK_DIVIDE:
+					Term_no_press = TRUE;
+				case VK_RETURN:
 					/* Numpad Enter and '/' are extended key */
 					numpad = ext_key;
+					break;
+				case VK_ADD:
+				case VK_MULTIPLY:
+				case VK_SUBTRACT:
+				case VK_SEPARATOR:
+					Term_no_press = TRUE;
 				default:
 					/* Other extended keys are on full keyboard */
 					numpad = !ext_key;
@@ -4234,7 +4248,8 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 
 		case WM_CHAR:
 		{
-			Term_keypress(wParam);
+			if (Term_no_press) Term_no_press = FALSE;
+			else Term_keypress(wParam);
 			return 0;
 		}
 
