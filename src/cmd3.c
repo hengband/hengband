@@ -909,27 +909,11 @@ void do_cmd_destroy(void)
 		o_ptr = &o_list[0 - item];
 	}
 
-
-	/* See how many items */
-	if (o_ptr->number > 1)
-	{
-		/* Get a quantity */
-		amt = get_quantity(NULL, o_ptr->number);
-
-		/* Allow user abort */
-		if (amt <= 0) return;
-	}
-
-
-	/* Describe the object */
-	old_number = o_ptr->number;
-	o_ptr->number = amt;
-	object_desc(o_name, o_ptr, 0);
-	o_ptr->number = old_number;
-
-	/* Verify unless quantity given */
+	/* Verify unless quantity given beforehand */
 	if (!force && (confirm_destroy || (object_value(o_ptr) > 0)))
 	{
+		object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
+
 		/* Make a verification */
 		sprintf(out_val, 
 #ifdef JP
@@ -981,8 +965,25 @@ void do_cmd_destroy(void)
 				/* The object is already destroyed. */
 				return;
 			}
-		}
+		} /* while (TRUE) */
 	}
+
+	/* See how many items */
+	if (o_ptr->number > 1)
+	{
+		/* Get a quantity */
+		amt = get_quantity(NULL, o_ptr->number);
+
+		/* Allow user abort */
+		if (amt <= 0) return;
+	}
+
+
+	/* Describe the object */
+	old_number = o_ptr->number;
+	o_ptr->number = amt;
+	object_desc(o_name, o_ptr, 0);
+	o_ptr->number = old_number;
 
 	/* Take a turn */
 	energy_use = 100;
