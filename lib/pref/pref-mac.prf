@@ -104,6 +104,32 @@ P:^_27\r
 A:9
 P:^_28\r
 
+A:+
+P:^_05\r
+
+A:-
+P:^_14\r
+
+A:*
+P:^_03\r
+
+A:/
+P:^_11\r
+
+A:=
+P:^_17\r
+
+A:\n
+P:^_12\r
+
+A:_
+P:^_30\r
+
+A:.
+P:^_01\r
+
+A:,
+P:^_31\r
 
 #
 # Shift-Keypad -- Directed running
