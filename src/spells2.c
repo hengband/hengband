@@ -6037,7 +6037,7 @@ void discharge_minion(void)
 			delete_monster_idx(i);
 			continue;
 		}
-		dam = m_ptr->hp / 2;
+		dam = m_ptr->maxhp / 2;
 		if (dam > 100) dam = (dam-100)/2 + 100;
 		if (dam > 400) dam = (dam-400)/2 + 400;
 		if (dam > 800) dam = 800;
