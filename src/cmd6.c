@@ -2635,10 +2635,15 @@ msg_print("ダンジョンが揺れた。");
 		{
 #ifdef JP
 			msg_print("何も起らなかった。");
-			msg_print("もったいない事をしたような気がする。食べ物は大切にしなくては。");
 #else
 			msg_print("Nothing happen.");
-			msg_print("What a waste.  It's your food!");
+#endif
+			if (p_ptr->prace == RACE_SKELETON || p_ptr->prace == RACE_GOLEM ||
+				p_ptr->prace == RACE_ZOMBIE || p_ptr->prace == RACE_SPECTRE)
+#ifdef JP
+				msg_print("もったいない事をしたような気がする。食べ物は大切にしなくては。");
+#else
+				msg_print("What a waste.  It's your food!");
 #endif
 			break;
 		}
@@ -3375,7 +3380,7 @@ static int rod_effect(int sval, int dir, bool *use_charge, bool magic)
 	{
 		case SV_ROD_DETECT_TRAP:
 		{
-			if (detect_traps(DETECT_RAD_DEFAULT, dir ? FALSE : TRUE)) ident = TRUE;
+			if (detect_traps(DETECT_RAD_DEFAULT, (bool)(dir ? FALSE : TRUE))) ident = TRUE;
 			break;
 		}
 
