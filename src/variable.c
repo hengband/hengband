@@ -198,6 +198,7 @@ bool show_weights;			/* Show weights in object listings */
 bool ring_bell;				/* Ring the bell (on errors, etc) */
 
 bool show_item_graph;
+bool numpad_as_cursorkey;
 
 
 /* Option Set 2 -- Disturbance */

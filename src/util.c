@@ -5308,18 +5308,35 @@ int inkey_special(void)
 	};
 
 	static const struct {
+		bool numpad;
 		cptr keyname;
 		int keycode;
 	} special_key_list[] = {
-		{"Down]", SKEY_DOWN},
-		{"Left]", SKEY_LEFT},
-		{"Right]", SKEY_RIGHT},
-		{"Up]", SKEY_UP},
-		{"Page_Up]", SKEY_PGUP},
-		{"Page_Down]", SKEY_PGDOWN},
-		{"Home]", SKEY_TOP},
-		{"End]", SKEY_BOTTOM},
-		{NULL, 0},
+		{FALSE, "Down]", SKEY_DOWN},
+		{FALSE, "Left]", SKEY_LEFT},
+		{FALSE, "Right]", SKEY_RIGHT},
+		{FALSE, "Up]", SKEY_UP},
+		{FALSE, "Page_Up]", SKEY_PGUP},
+		{FALSE, "Page_Down]", SKEY_PGDOWN},
+		{FALSE, "Home]", SKEY_TOP},
+		{FALSE, "End]", SKEY_BOTTOM},
+		{TRUE, "KP_Down]", SKEY_DOWN},
+		{TRUE, "KP_Left]", SKEY_LEFT},
+		{TRUE, "KP_Right]", SKEY_RIGHT},
+		{TRUE, "KP_Up]", SKEY_UP},
+		{TRUE, "KP_Page_Up]", SKEY_PGUP},
+		{TRUE, "KP_Page_Down]", SKEY_PGDOWN},
+		{TRUE, "KP_Home]", SKEY_TOP},
+		{TRUE, "KP_End]", SKEY_BOTTOM},
+		{TRUE, "KP_2]", SKEY_DOWN},
+		{TRUE, "KP_4]", SKEY_LEFT},
+		{TRUE, "KP_6]", SKEY_RIGHT},
+		{TRUE, "KP_8]", SKEY_UP},
+		{TRUE, "KP_9]", SKEY_PGUP},
+		{TRUE, "KP_3]", SKEY_PGDOWN},
+		{TRUE, "KP_7]", SKEY_TOP},
+		{TRUE, "KP_1]", SKEY_BOTTOM},
+		{FALSE, NULL, 0},
 	};
 	char buf[1024];
 	cptr str = buf;
@@ -5381,7 +5398,8 @@ int inkey_special(void)
 		/* Get a special key code */
 		for (i = 0; special_key_list[i].keyname; i++)
 		{
-			if (streq(str, special_key_list[i].keyname))
+			if ((!special_key_list[i].numpad || numpad_as_cursorkey) &&
+			    streq(str, special_key_list[i].keyname))
 			{
 				skey = special_key_list[i].keycode;
 				break;

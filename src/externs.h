@@ -204,6 +204,7 @@ extern char summon_kin_type;
 extern bool hack_mind;
 extern bool hack_mutation;
 extern bool show_item_graph;
+extern bool numpad_as_cursorkey;
 extern bool rogue_like_commands;
 extern bool quick_messages;
 extern bool auto_more;

@@ -6596,6 +6596,14 @@ option_type option_info[] =
 	"over_exert",                   "Allow casting spells when short of mana" },
 #endif
 
+#ifdef JP
+	{ &numpad_as_cursorkey,         TRUE, OPT_PAGE_INPUT, 2, 31,
+	"numpad_as_cursorkey",          "エディタ内でテンキーをカーソルキーとして使う。" },
+#else
+	{ &numpad_as_cursorkey,         TRUE, OPT_PAGE_INPUT, 2, 31,
+	"numpad_as_cursorkey",          "Use numpad keys as cursor key in editor mode" },
+#endif
+
 	/*** Output Options ***/
 
 #ifdef JP
