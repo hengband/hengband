@@ -3305,6 +3305,10 @@ bool get_check_strict(cptr prompt, int mode)
 	int i;
 	char buf[80];
 
+	/* "strncpy" sometimes fails to set '\0' to the end of the 
+	   given string. So "memset" is necessary! -- henkma       */
+	memset(buf, 0, 80);
+
 	if (auto_more)
 	{
 		p_ptr->window |= PW_MESSAGE;
