@@ -247,7 +247,7 @@ void build_streamer(int feat, int chance)
 			if ((feat >= FEAT_MAGMA) && (feat <= FEAT_WALL_SOLID))
 			{
 				if (!is_extra_grid(c_ptr) && !is_inner_grid(c_ptr) && !is_outer_grid(c_ptr) && !is_solid_grid(c_ptr)) continue;
-				if ((c_ptr->feat >= FEAT_DOOR_HEAD) && (c_ptr->feat <= FEAT_SECRET)) continue;
+				if (is_closed_door(c_ptr->feat)) continue;
 				if ((feat == FEAT_MAGMA) || (feat == FEAT_QUARTZ)) treasure = TRUE;
 			}
 			else
@@ -305,7 +305,6 @@ void place_trees(int x, int y)
 			c_ptr = &cave[j][i];
 
 			if (c_ptr->info & CAVE_ICKY) continue;
-			if (c_ptr->info & CAVE_TRAP) continue;
 			if (c_ptr->o_idx) continue;
 
 			/* Want square to be in the circle and accessable. */
@@ -324,6 +323,9 @@ void place_trees(int x, int y)
 				{
 					cave[j][i].feat = FEAT_RUBBLE;
 				}
+
+                                /* Clear possible garbage of hidden trap or door */
+                                c_ptr->mimic = 0;
 
 				/* Light area since is open above */
 				cave[j][i].info |= (CAVE_GLOW | CAVE_ROOM);

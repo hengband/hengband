@@ -40,14 +40,14 @@
 /* Savefile version for Hengband 1.1.1 and later */
 #define H_VER_MAJOR 1
 #define H_VER_MINOR 3
-#define H_VER_PATCH 0
-#define H_VER_EXTRA 1
+#define H_VER_PATCH 1
+#define H_VER_EXTRA 0
 
 /* Added for ZAngband */
 #define FAKE_VERSION   0
 #define FAKE_VER_MAJOR 11
 #define FAKE_VER_MINOR 3
-#define FAKE_VER_PATCH 0
+#define FAKE_VER_PATCH 1
 
 #define ANGBAND_2_8_1
 #define ZANGBAND
@@ -2348,9 +2348,9 @@
 #define CAVE_VIEW       0x0020    /* view flag */
 #define CAVE_TEMP       0x0040    /* temp flag */
 #define CAVE_XTRA       0x0080    /* misc flag */
-#define CAVE_MNLT	0x0100	/* Illuminated by monster */
+#define CAVE_MNLT	0x0100    /* Illuminated by monster */
 
-#define CAVE_TRAP       0x8000
+#define CAVE_XXX0       0x8000    /* Now unused */
 
 /* Used only while cave generation */
 #define CAVE_FLOOR      0x0200
@@ -2365,7 +2365,7 @@
 #define CAVE_XXXX1      0x0200
 #define CAVE_XXXX2      0x0400
 #define CAVE_XXXX3      0x0800
-#define CAVE_IN_MIRROR  0x1000    /* mirror */
+#define CAVE_OBJECT  0x1000    /* mirror */
 #define CAVE_UNSAFE     0x2000    /* Might have trap */
 #define CAVE_IN_DETECT  0x4000    /* trap detected area (inner circle only) */
 
@@ -3931,8 +3931,7 @@
 	  (cave[Y][X].feat == FEAT_FLOWER) || \
 	  (cave[Y][X].feat == FEAT_GRASS) || \
 	  (cave[Y][X].feat == FEAT_DIRT)) && \
-	  !(cave[Y][X].info & CAVE_TRAP) && \
-	  !(cave[Y][X].info & CAVE_IN_MIRROR) && \
+	  !(cave[Y][X].info & CAVE_OBJECT) && \
 	  (cave[Y][X].o_idx == 0))
 
 
@@ -3977,7 +3976,7 @@
 	  (cave[Y][X].feat == FEAT_DEEP_GRASS) || \
 	  (cave[Y][X].feat == FEAT_FLOWER) || \
 	  (cave[Y][X].feat == FEAT_DIRT)) && \
-	  !(cave[Y][X].info & CAVE_TRAP) && \
+	  !(cave[Y][X].info & CAVE_OBJECT) && \
 	  (cave[Y][X].o_idx == 0) && \
 	  (cave[Y][X].m_idx == 0))
 

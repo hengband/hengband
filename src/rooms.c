@@ -60,8 +60,15 @@ static void place_secret_door(int y, int x)
 	}
 	else
 	{
-		set_cave_feat(y, x, FEAT_SECRET);
-		cave[y][x].info &= ~(CAVE_FLOOR);
+                cave_type *c_ptr = &cave[y][x];
+
+		/* Create secret door */
+                place_closed_door(y, x);
+
+                /* Hide */
+                c_ptr->mimic = fill_type[randint0(100)];
+
+		c_ptr->info &= ~(CAVE_FLOOR);
 	}
 }
 
@@ -5319,7 +5326,8 @@ static void build_type13(int by0, int bx0)
 	}
 
 	/* Place the wall open trap */
-	cave[yval][xval].feat = FEAT_INVIS;
+	cave[yval][xval].mimic = cave[yval][xval].feat;
+	cave[yval][xval].feat = FEAT_TRAP_OPEN;
         add_cave_info(yval, xval, CAVE_ROOM);
 
 	/* Prepare allocation table */

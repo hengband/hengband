@@ -551,7 +551,7 @@ static bool get_moves_aux2(int m_idx, int *yp, int *xp)
 		if (!(((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || p_ptr->pass_wall)) || (r_ptr->flags2 & RF2_KILL_WALL)))
 		{
 			if (cost == 0) continue;
-			if (!can_open_door && (c_ptr->feat >= FEAT_DOOR_HEAD && c_ptr->feat <= FEAT_SECRET)) continue;
+			if (!can_open_door && is_closed_door(c_ptr->feat)) continue;
 		}
 
 		/* Hack -- for kill or pass wall monster.. */
@@ -3165,6 +3165,9 @@ msg_print("ギシギシいう音が聞こえる。");
 			/* Forget the wall */
 			c_ptr->info &= ~(CAVE_MARK);
 
+                        /* Clear garbage of hidden trap or door */
+                        c_ptr->mimic = 0;
+
 			/* Notice */
 			c_ptr->feat = floor_type[randint0(100)];
 
@@ -3173,9 +3176,7 @@ msg_print("ギシギシいう音が聞こえる。");
 		}
 
 		/* Handle doors and secret doors */
-		else if (((c_ptr->feat >= FEAT_DOOR_HEAD) &&
-		          (c_ptr->feat <= FEAT_DOOR_TAIL)) ||
-		          (c_ptr->feat == FEAT_SECRET))
+		else if (is_closed_door(c_ptr->feat))
 		{
 			bool may_bash = TRUE;
 
@@ -3186,9 +3187,8 @@ msg_print("ギシギシいう音が聞こえる。");
 			if ((r_ptr->flags2 & RF2_OPEN_DOOR) &&
 				 (!is_pet(m_ptr) || (p_ptr->pet_extra_flags & PF_OPEN_DOORS)))
 			{
-				/* Closed doors and secret doors */
-				if ((c_ptr->feat == FEAT_DOOR_HEAD) ||
-					(c_ptr->feat == FEAT_SECRET))
+				/* Closed doors */
+				if (c_ptr->feat == FEAT_DOOR_HEAD)
 				{
 					/* The door is open */
 					did_open_door = TRUE;
@@ -3273,7 +3273,7 @@ msg_print("ドアを叩き開ける音がした！");
 		}
 
 		/* Hack -- check for Glyph of Warding */
-		if (do_move && (c_ptr->feat == FEAT_GLYPH) &&
+		if (do_move && is_glyph_grid(c_ptr) &&
 		    !((r_ptr->flags1 & RF1_NEVER_BLOW) && (py == ny) && (px == nx)))
 		{
 			/* Assume no move allowed */
@@ -3297,7 +3297,8 @@ msg_print("守りのルーンが壊れた！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Break the rune */
-				c_ptr->feat = floor_type[randint0(100)];
+                                c_ptr->info &= ~(CAVE_OBJECT);
+                                c_ptr->mimic = 0;
 
 				/* Allow movement */
 				do_move = TRUE;
@@ -3306,7 +3307,7 @@ msg_print("守りのルーンが壊れた！");
 				note_spot(ny, nx);
 			}
 		}
-		else if (do_move && (c_ptr->feat == FEAT_MINOR_GLYPH) &&
+		else if (do_move && is_explosive_rune_grid(c_ptr) &&
 		         !((r_ptr->flags1 & RF1_NEVER_BLOW) && (py == ny) && (px == nx)))
 		{
 			/* Assume no move allowed */
@@ -3343,7 +3344,9 @@ msg_print("爆発のルーンは解除された。");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Break the rune */
-				c_ptr->feat = floor_type[randint0(100)];
+                                c_ptr->info &= ~(CAVE_OBJECT);
+                                c_ptr->mimic = 0;
+
 				note_spot(ny, nx);
 				lite_spot(ny, nx);
 

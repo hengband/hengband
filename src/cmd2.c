@@ -949,10 +949,6 @@ static bool is_open(int feat)
 	return (feat == FEAT_OPEN);
 }
 
-static bool is_closed(int feat)
-{
-        return ((feat >= FEAT_DOOR_HEAD) && (feat <= FEAT_DOOR_TAIL));
-}
 
 /*
  * Return the number of features around (or under) the character.
@@ -968,6 +964,9 @@ static int count_dt(int *y, int *x, bool (*test)(int feat), bool under)
 	/* Check around (and under) the character */
 	for (d = 0; d < 9; d++)
 	{
+                cave_type *c_ptr;
+                byte feat;
+
                 /* if not searching under player continue */
                 if ((d == 8) && !under) continue;
 
@@ -975,11 +974,17 @@ static int count_dt(int *y, int *x, bool (*test)(int feat), bool under)
 		yy = py + ddy_ddd[d];
 		xx = px + ddx_ddd[d];
 
-		/* Must have knowledge */
-		if (!(cave[yy][xx].info & (CAVE_MARK))) continue;
+                /* Get the cave */
+                c_ptr = &cave[yy][xx];
 
+		/* Must have knowledge */
+		if (!(c_ptr->info & (CAVE_MARK))) continue;
+
+                /* Feature code (applying "mimic" field) */
+                feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+                
 		/* Not looking for this feature */
-		if (!((*test)(cave[yy][xx].feat))) continue;
+		if (!((*test)(feat))) continue;
 
 		/* OK */
 		++count;
@@ -1205,7 +1210,7 @@ void do_cmd_open(void)
 		int num_doors, num_chests;
 
 		/* Count closed doors (locked or jammed) */
-		num_doors = count_dt(&y, &x, is_closed, FALSE);
+		num_doors = count_dt(&y, &x, is_closed_door, FALSE);
 
 		/* Count chests (locked) */
 		num_chests = count_chests(&y, &x, FALSE);
@@ -1248,9 +1253,8 @@ void do_cmd_open(void)
 		o_idx = chest_check(y, x);
 
 		/* Nothing useful */
-		if (!((c_ptr->feat >= FEAT_DOOR_HEAD) &&
-		      (c_ptr->feat <= FEAT_DOOR_TAIL)) &&
-		    !o_idx)
+		if (!(is_closed_door(c_ptr->feat) && !c_ptr->mimic) &&
+                    !o_idx)
 		{
 			/* Message */
 #ifdef JP
@@ -1533,6 +1537,7 @@ static bool twall(int y, int x, byte feat)
 static bool do_cmd_tunnel_aux(int y, int x, int dir)
 {
 	cave_type *c_ptr;
+	byte feat;
 
 	bool more = FALSE;
 
@@ -1545,12 +1550,15 @@ static bool do_cmd_tunnel_aux(int y, int x, int dir)
 	/* Get grid */
 	c_ptr = &cave[y][x];
 
+        /* Feature code (applying "mimic" field) */
+        feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+
 	/* Sound */
 	sound(SOUND_DIG);
 
 	/* Titanium */
-	if ((c_ptr->feat >= FEAT_PERM_EXTRA) &&
-	    (c_ptr->feat <= FEAT_PERM_SOLID))
+	if ((feat >= FEAT_PERM_EXTRA) &&
+	    (feat <= FEAT_PERM_SOLID))
 	{
 #ifdef JP
 		msg_print("この岩は硬すぎて掘れないようだ。");
@@ -1561,7 +1569,7 @@ static bool do_cmd_tunnel_aux(int y, int x, int dir)
 	}
 
 	/* No tunnelling through mountains */
-	else if (c_ptr->feat == FEAT_MOUNTAIN)
+	else if (feat == FEAT_MOUNTAIN)
 	{
 #ifdef JP
 		msg_print("そこは掘れない!");
@@ -1571,7 +1579,7 @@ static bool do_cmd_tunnel_aux(int y, int x, int dir)
 
 	}
 
-	else if (c_ptr->feat == FEAT_TREES) /* -KMW- */
+	else if (feat == FEAT_TREES) /* -KMW- */
 	{
 		/* Chop Down */
 		if ((p_ptr->skill_dig > 10 + randint0(400)) && twall(y, x, FEAT_GRASS))
@@ -1604,8 +1612,8 @@ static bool do_cmd_tunnel_aux(int y, int x, int dir)
 
 
 	/* Granite */
-	else if ((c_ptr->feat >= FEAT_WALL_EXTRA) &&
-	         (c_ptr->feat <= FEAT_WALL_SOLID))
+	else if ((feat >= FEAT_WALL_EXTRA) &&
+	         (feat <= FEAT_WALL_SOLID))
 	{
 		/* Tunnel */
 		if ((p_ptr->skill_dig > 40 + randint0(1600)) && twall(y, x, floor_type[randint0(100)]))
@@ -1635,18 +1643,18 @@ static bool do_cmd_tunnel_aux(int y, int x, int dir)
 
 
 	/* Quartz / Magma */
-	else if ((c_ptr->feat >= FEAT_MAGMA) &&
-	    (c_ptr->feat <= FEAT_QUARTZ_K))
+	else if ((feat >= FEAT_MAGMA) &&
+	    (feat <= FEAT_QUARTZ_K))
 	{
 		bool okay = FALSE;
 		bool gold = FALSE;
 		bool hard = FALSE;
 
 		/* Found gold */
-		if (c_ptr->feat >= FEAT_MAGMA_H) gold = TRUE;
+		if (feat >= FEAT_MAGMA_H) gold = TRUE;
 
 		/* Extract "quartz" flag XXX XXX XXX */
-		if ((c_ptr->feat - FEAT_MAGMA) & 0x01) hard = TRUE;
+		if ((feat - FEAT_MAGMA) & 0x01) hard = TRUE;
 
 		/* Quartz */
 		if (hard)
@@ -1720,7 +1728,7 @@ static bool do_cmd_tunnel_aux(int y, int x, int dir)
 	}
 
 	/* Rubble */
-	else if (c_ptr->feat == FEAT_RUBBLE)
+	else if (feat == FEAT_RUBBLE)
 	{
 		/* Remove the rubble */
 		if ((p_ptr->skill_dig > randint0(200)) && twall(y, x, floor_type[randint0(100)]))
@@ -1764,37 +1772,6 @@ static bool do_cmd_tunnel_aux(int y, int x, int dir)
 		}
 	}
 
-	/* Secret doors */
-	else if (c_ptr->feat >= FEAT_SECRET)
-	{
-		/* Tunnel */
-		if ((p_ptr->skill_dig > 30 + randint0(1200)) && twall(y, x, floor_type[randint0(100)]))
-		{
-#ifdef JP
-			msg_print("穴を掘り終えた。");
-#else
-			msg_print("You have finished the tunnel.");
-#endif
-
-		}
-
-		/* Keep trying */
-		else
-		{
-			/* We may continue tunelling */
-#ifdef JP
-			msg_print("花崗岩の壁に穴を掘っている。");
-#else
-			msg_print("You tunnel into the granite wall.");
-#endif
-
-			more = TRUE;
-
-			/* Occasional Search XXX XXX */
-			if (randint0(100) < 25) search();
-		}
-	}
-
 	/* Doors */
 	else
 	{
@@ -1823,6 +1800,12 @@ static bool do_cmd_tunnel_aux(int y, int x, int dir)
 		}
 	}
 
+        if (is_hidden_door(c_ptr))
+        {
+                /* Occasional Search XXX XXX */
+                if (randint0(100) < 25) search();
+        }
+
 	/* Notice new floor grids */
 	if (!cave_floor_bold(y, x))
 	{
@@ -1849,6 +1832,7 @@ void do_cmd_tunnel(void)
 	int			y, x, dir;
 
 	cave_type	*c_ptr;
+	byte feat;
 
 	bool		more = FALSE;
 
@@ -1881,11 +1865,14 @@ void do_cmd_tunnel(void)
 		/* Get grid */
 		c_ptr = &cave[y][x];
 
+                /* Feature code (applying "mimic" field) */
+                feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+
 		/* No tunnelling through doors */
-		if (((c_ptr->feat >= FEAT_DOOR_HEAD) && (c_ptr->feat <= FEAT_DOOR_TAIL)) ||
-		    ((c_ptr->feat >= FEAT_BLDG_HEAD) && (c_ptr->feat <= FEAT_BLDG_TAIL)) ||
-		    ((c_ptr->feat >= FEAT_SHOP_HEAD) && (c_ptr->feat <= FEAT_SHOP_TAIL)) ||
-		    (c_ptr->feat == FEAT_MUSEUM))
+		if (((feat >= FEAT_DOOR_HEAD) && (feat <= FEAT_DOOR_TAIL)) ||
+		    ((feat >= FEAT_BLDG_HEAD) && (feat <= FEAT_BLDG_TAIL)) ||
+		    ((feat >= FEAT_SHOP_HEAD) && (feat <= FEAT_SHOP_TAIL)) ||
+		    (feat == FEAT_MUSEUM))
 		{
 			/* Message */
 #ifdef JP
@@ -1897,8 +1884,8 @@ void do_cmd_tunnel(void)
 		}
 
 		/* No tunnelling through air */
-		else if (cave_floor_grid(c_ptr) || ((c_ptr->feat >= FEAT_MINOR_GLYPH) &&
-		    (c_ptr->feat <= FEAT_PATTERN_XTRA2)))
+		else if (cave_floor_grid(c_ptr) || ((feat >= FEAT_MINOR_GLYPH) &&
+		    (feat <= FEAT_PATTERN_XTRA2)))
 		{
 			/* Message */
 #ifdef JP
@@ -1910,7 +1897,7 @@ void do_cmd_tunnel(void)
 		}
 
 		/* No tunnelling through mountains */
-		else if (c_ptr->feat == FEAT_MOUNTAIN)
+		else if (feat == FEAT_MOUNTAIN)
 		{
 #ifdef JP
 			msg_print("そこは掘れない。");
@@ -2702,43 +2689,45 @@ void do_cmd_alter(void)
 		}
 
 		/* Tunnel through walls */
-		else if (((c_ptr->feat >= FEAT_SECRET) &&
+		else if (((c_ptr->feat >= FEAT_RUBBLE) &&
 		          (c_ptr->feat < FEAT_MINOR_GLYPH)) ||
 		         ((c_ptr->feat == FEAT_TREES) ||
 		          (c_ptr->feat == FEAT_MOUNTAIN)))
 		{
-			/* Tunnel */
 			more = do_cmd_tunnel_aux(y, x, dir);
 		}
 
-		/* Bash jammed doors */
-		else if ((c_ptr->feat >= FEAT_DOOR_HEAD + 0x08) &&
-		         (c_ptr->feat < FEAT_MINOR_GLYPH))
-		{
-			/* Tunnel */
-			more = do_cmd_bash_aux(y, x, dir);
-		}
+                else if (is_closed_door(c_ptr->feat))
+                {
+                        /* Tunnel hidden door */
+                        if (c_ptr->mimic)
+                        {
+                                more = do_cmd_tunnel_aux(y, x, dir);
+                        }
 
-		/* Open closed doors */
-		else if ((c_ptr->feat >= FEAT_DOOR_HEAD) &&
-		         (c_ptr->feat < FEAT_MINOR_GLYPH))
-		{
-			/* Tunnel */
-			more = do_cmd_open_aux(y, x, dir);
-		}
+                        /* Bash jammed doors */
+                        else if (c_ptr->feat >= FEAT_DOOR_HEAD + 0x08)
+                        {
+                                more = do_cmd_bash_aux(y, x, dir);
+                        }
+
+                        /* Locked doors */
+                        else
+                        {
+                                more = do_cmd_open_aux(y, x, dir);
+                        }
+                }
 
 		/* Close open doors */
 		else if ((c_ptr->feat == FEAT_OPEN) ||
 		         (c_ptr->feat == FEAT_BROKEN))
 		{
-			/* Tunnel */
 			more = do_cmd_close_aux(y, x, dir);
 		}
 
 		/* Disarm traps */
 		else if (is_trap(c_ptr->feat))
 		{
-			/* Tunnel */
 			more = do_cmd_disarm_aux(y, x, dir);
 		}
 

@@ -81,8 +81,8 @@ bool teleport_away(int m_idx, int dis, bool dec_valour)
 			if (!cave_empty_bold(ny, nx)) continue;
 
 			/* Hack -- no teleport onto glyph of warding */
-			if (cave[ny][nx].feat == FEAT_GLYPH) continue;
-			if (cave[ny][nx].feat == FEAT_MINOR_GLYPH) continue;
+			if (is_glyph_grid(&cave[ny][nx])) continue;
+			if (is_explosive_rune_grid(&cave[ny][nx])) continue;
 
 			/* ...nor onto the Pattern */
 			if ((cave[ny][nx].feat >= FEAT_PATTERN_START) &&
@@ -193,8 +193,8 @@ void teleport_to_player(int m_idx, int power)
 			if (!cave_empty_bold(ny, nx)) continue;
 
 			/* Hack -- no teleport onto glyph of warding */
-			if (cave[ny][nx].feat == FEAT_GLYPH) continue;
-			if (cave[ny][nx].feat == FEAT_MINOR_GLYPH) continue;
+			if (is_glyph_grid(&cave[ny][nx])) continue;
+			if (is_explosive_rune_grid(&cave[ny][nx])) continue;
 
 			/* ...nor onto the Pattern */
 			if ((cave[ny][nx].feat >= FEAT_PATTERN_START) &&
@@ -1665,7 +1665,14 @@ msg_print("床上のアイテムが呪文を跳ね返した。");
 	}
 
 	/* Create a glyph */
-	cave_set_feat(py, px, FEAT_GLYPH);
+	cave[py][px].info |= CAVE_OBJECT;
+        cave[py][px].mimic = FEAT_GLYPH;
+
+	/* Notice */
+	note_spot(py, px);
+	
+	/* Redraw */
+	lite_spot(py, px);
 
 	return TRUE;
 }
@@ -1685,7 +1692,8 @@ msg_print("床上のアイテムが呪文を跳ね返した。");
 	}
 
 	/* Create a mirror */
-	cave[py][px].info |= CAVE_IN_MIRROR;
+	cave[py][px].info |= CAVE_OBJECT;
+        cave[py][px].mimic = FEAT_MIRROR;
 
 	/* Turn on the light */
 	cave[py][px].info |= CAVE_GLOW;
@@ -1718,7 +1726,14 @@ msg_print("床上のアイテムが呪文を跳ね返した。");
 	}
 
 	/* Create a glyph */
-	cave_set_feat(py, px, FEAT_MINOR_GLYPH);
+	cave[py][px].info |= CAVE_OBJECT;
+        cave[py][px].mimic = FEAT_MINOR_GLYPH;
+
+	/* Notice */
+	note_spot(py, px);
+	
+	/* Redraw */
+	lite_spot(py, px);
 
 	return TRUE;
 }

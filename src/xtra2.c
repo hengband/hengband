@@ -572,7 +572,7 @@ msg_print("クエストを達成した！");
 	if (create_stairs)
 	{
 		/* Stagger around */
-		while (cave_perma_bold(y, x) || cave[y][x].o_idx || (cave[y][x].info & CAVE_IN_MIRROR) )
+		while (cave_perma_bold(y, x) || cave[y][x].o_idx || (cave[y][x].info & CAVE_OBJECT) )
 		{
 			/* Pick a location */
 			scatter(&ny, &nx, y, x, 1, 0);
@@ -591,9 +591,6 @@ msg_print("魔法の階段が現れた...");
 
 		/* Create stairs down */
 		cave_set_feat(y, x, FEAT_MORE);
-
-		/* Delete invisible trap */
-		cave[y][x].info &= ~(CAVE_TRAP);
 
 		/* Remember to update everything */
 		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS);
@@ -2814,9 +2811,7 @@ static bool target_set_accept(int y, int x)
 	if (c_ptr->info & (CAVE_MARK))
 	{
 		/* Notice glyphs */
-		if (c_ptr->feat == FEAT_GLYPH) return (TRUE);
-		if (c_ptr->feat == FEAT_MINOR_GLYPH) return (TRUE);
-		if ((c_ptr->info & CAVE_IN_MIRROR)) return (TRUE);
+		if (c_ptr->info & CAVE_OBJECT) return (TRUE);
 
 		/* Notice the Pattern */
 		if ((c_ptr->feat <= FEAT_PATTERN_XTRA2) &&
@@ -2964,7 +2959,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 
 	bool boring;
 
-	int feat;
+	byte feat;
 
 	int query;
 
@@ -3505,14 +3500,8 @@ if (o_ptr->number != 1) s1 = "それらは";
 		/* Double break */
 		if (this_o_idx) break;
 
-		if (c_ptr->mimic)
-		{
-			feat = c_ptr->mimic;
-		}
-		else
-		{
-			feat = f_info[c_ptr->feat].mimic;
-		}
+                /* Feature code (applying "mimic" field) */
+                feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
 
 		/* Require knowledge about grid, or ability to see grid */
 		if (!(c_ptr->info & CAVE_MARK) && !player_can_see_bold(y, x))
@@ -3522,7 +3511,7 @@ if (o_ptr->number != 1) s1 = "それらは";
 		}
 
 		/* Terrain feature if needed */
-		if (boring || (feat > FEAT_INVIS) || (c_ptr->info & CAVE_IN_MIRROR))
+		if (boring || (feat > FEAT_INVIS))
 		{
 			cptr name;
 
@@ -3549,14 +3538,6 @@ if (o_ptr->number != 1) s1 = "それらは";
 				name = "道";
 #else
 				name = "road";
-#endif
-			}
-			else if ( (c_ptr->info & CAVE_IN_MIRROR) )
-			{
-#ifdef JP
-				name = "鏡";
-#else
-				name = "a mirror";
 #endif
 			}
 			else
@@ -3609,7 +3590,7 @@ s2 = "の入口";
 #endif
 
 			}
-			else if ((feat == FEAT_TOWN) || (feat == FEAT_FLOOR) || (feat == FEAT_DIRT) || (feat == FEAT_FLOWER) || (c_ptr->info & CAVE_IN_MIRROR))
+			else if ((feat == FEAT_TOWN) || (feat == FEAT_FLOOR) || (feat == FEAT_DIRT) || (feat == FEAT_FLOWER))
 			{
 #ifndef JP
 				s3 ="";

@@ -18,12 +18,16 @@
 
 # N:serial number:terrain name
 # G:symbol:color
+# M:mimic
 
-# N' indicates the beginning of an entry. The serial number must
+# 'N' indicates the beginning of an entry. The serial number must
 # increase for each new item.
 
 # 'G' is for graphics - symbol and color. There are 16 colors, as
 # follows:
+
+# 'M' is for fixed mimicing terrain type.  Pretend other terrain with
+# all visual effects.  No effect on temporal mimic.
 
 # D - Black        w - White          s - Gray          o - Orange
 # r - Red          g - Green          b - Blue          u - Brown
@@ -219,7 +223,6 @@ G:^:g
 N:32:•…•¢
 E:door
 G:+:U
-M:32
 
 # 0x2x --> locked door (power 1)
 
@@ -353,15 +356,15 @@ G:%:w
 
 # 0x34 --> magma vein + treasure
 
-N:52:Õœ¥‰§Œπ€ÃÆ
-E:magma vein
+N:52:Õœ¥‰§Œπ€ÃÆ(±£§µ§Ï§ø∫‚ ı§Ú¥ﬁÕ≠)
+E:magma vein with hidden treasure
 G:%:s
 M:50
 
 # 0x35 --> quartz vein + treasure
 
-N:53:¿–±—§Œπ€ÃÆ
-E:quartz vein
+N:53:¿–±—§Œπ€ÃÆ(±£§µ§Ï§ø∫‚ ı§Ú¥ﬁÕ≠)
+E:quartz vein hidden treasure
 G:%:w
 M:51
 
@@ -720,19 +723,18 @@ E:Town
 G:*:W
 
 N:193:•¿•Û•∏•Á•Û§ÿ§Œ∆˛∏˝
-E:Entrance to dungeon
+E:entrance to dungeon
 G:>:v
 
 N:194:æ¬√œ
-E:Swamp
+E:swamp
 G:.:B
 
 N:195:∂¿
-E:Mirror
+E:mirror
 G:*:v
 
 # Used by view_unsafe_grids option
-
 N:196:Ã§√Œ§Œ√œ∑¡ (Ã§¥∂√Œ)
 E:unknown grid (not detected)
 G:x:D

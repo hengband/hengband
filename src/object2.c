@@ -4938,8 +4938,8 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 			    (c_ptr->feat != FEAT_FLOWER) &&
 			    (c_ptr->feat != FEAT_DEEP_GRASS) &&
 			    (c_ptr->feat != FEAT_SHAL_LAVA) &&
-				(c_ptr->feat != FEAT_TREES)) continue;
-			if (c_ptr->info & (CAVE_TRAP | CAVE_IN_MIRROR)) continue;
+                            (c_ptr->feat != FEAT_TREES)) continue;
+			if (c_ptr->info & (CAVE_OBJECT)) continue;
 
 			/* No objects */
 			k = 0;
@@ -5230,22 +5230,16 @@ static int trap_num[MAX_TRAPS] =
 
 
 /*
- * Hack -- instantiate a trap
+ * Get random trap
  *
  * XXX XXX XXX This routine should be redone to reflect trap "level".
  * That is, it does not make sense to have spiked pits at 50 feet.
  * Actually, it is not this routine, but the "trap instantiation"
  * code, which should also check for "trap doors" on quest levels.
  */
-void pick_trap(int y, int x)
+byte choose_random_trap(void)
 {
-	int feat;
-
-	cave_type *c_ptr = &cave[y][x];
-
-	/* Paranoia */
-	if (!(c_ptr->info & CAVE_TRAP)) return;
-	c_ptr->info &= ~(CAVE_TRAP);
+	byte feat;
 
 	/* Pick a trap */
 	while (1)
@@ -5265,8 +5259,27 @@ void pick_trap(int y, int x)
 		break;
 	}
 
-	/* Activate the trap */
-	cave_set_feat(y, x, feat);
+        return feat;
+}
+
+/*
+ * Disclose an invisible trap
+ */
+void disclose_grid(int y, int x)
+{
+	cave_type *c_ptr = &cave[y][x];
+
+	/* Paranoia */
+	if (!c_ptr->mimic) return;
+
+        /* No longer hidden */
+        c_ptr->mimic = 0;
+
+	/* Notice */
+	note_spot(y, x);
+
+	/* Redraw */
+	lite_spot(y, x);
 }
 
 
@@ -5281,6 +5294,8 @@ void pick_trap(int y, int x)
  */
 void place_trap(int y, int x)
 {
+	cave_type *c_ptr = &cave[y][x];
+
 	/* Paranoia -- verify location */
 	if (!in_bounds(y, x)) return;
 
@@ -5288,7 +5303,8 @@ void place_trap(int y, int x)
 	if (!cave_naked_bold(y, x)) return;
 
 	/* Place an invisible trap */
-	cave[y][x].info |= CAVE_TRAP;
+        c_ptr->mimic = c_ptr->feat;
+        c_ptr->feat = choose_random_trap();
 }
 
 
@@ -6476,7 +6492,7 @@ bool process_frakir(int xx, int yy)
 
 	c_ptr = &cave[yy][xx];
 	if (((!easy_disarm && (is_trap(c_ptr->feat) || c_ptr->feat == FEAT_INVIS))
-            || (c_ptr->info & CAVE_TRAP)) && !one_in_(13))
+            || (c_ptr->mimic && is_trap(c_ptr->feat))) && !one_in_(13))
 	{
 		object_type *o_ptr = choose_warning_item();
 

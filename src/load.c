@@ -1841,6 +1841,9 @@ static void rd_messages(void)
 
 
 
+/* Old hidden trap flag */
+#define CAVE_TRAP       0x8000
+
 /*
  * Read the dungeon
  *
@@ -1956,39 +1959,6 @@ static errr rd_dungeon(void)
 		}
 	}
 
-        /* Convert cave data */
-        if (z_older_than(11, 0, 99))
-        {
-                for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
-                {
-			/* Wipe old unused flags */
-			cave[y][x].info &= ~(CAVE_MASK);
-                }
-        }
-
-        if (h_older_than(1, 1, 1, 0))
-        {
-                for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
-                {
-			/* Access the cave */
-			c_ptr = &cave[y][x];
-
-                        /* Very old */
-                        if (c_ptr->feat == FEAT_INVIS)
-                        {
-                                c_ptr->feat = FEAT_FLOOR;
-                                c_ptr->info |= CAVE_TRAP;
-                        }
-                
-                        /* Older than 1.1.1 */
-                        if (c_ptr->feat == FEAT_MIRROR)
-                        {
-                                c_ptr->feat = FEAT_FLOOR;
-                                c_ptr->info |= CAVE_IN_MIRROR;
-                        }
-                }
-        }
-
 	/*** Run length decoding ***/
 
 	/* Load the dungeon data */
@@ -2048,6 +2018,85 @@ static errr rd_dungeon(void)
 			}
 		}
 	}
+
+        /* Convert cave data */
+        if (z_older_than(11, 0, 99))
+        {
+                for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
+                {
+			/* Wipe old unused flags */
+			cave[y][x].info &= ~(CAVE_MASK);
+                }
+        }
+
+        if (h_older_than(1, 1, 1, 0))
+        {
+                for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
+                {
+			/* Access the cave */
+			c_ptr = &cave[y][x];
+
+                        /* Very old */
+                        if (c_ptr->feat == FEAT_INVIS)
+                        {
+                                c_ptr->feat = FEAT_FLOOR;
+                                c_ptr->info |= CAVE_TRAP;
+                        }
+                
+                        /* Older than 1.1.1 */
+                        if (c_ptr->feat == FEAT_MIRROR)
+                        {
+                                c_ptr->feat = FEAT_FLOOR;
+                                c_ptr->info |= CAVE_OBJECT;
+                        }
+                }
+        }
+
+        if (h_older_than(1, 3, 1, 0))
+        {
+                for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
+                {
+			/* Access the cave */
+			c_ptr = &cave[y][x];
+
+                        /* Old CAVE_IN_MIRROR flag */
+                        if (c_ptr->info & CAVE_OBJECT)
+                        {
+                                c_ptr->mimic = FEAT_MIRROR;
+                        }
+
+                        /* Runes will be mimics and flags */
+                        else if (c_ptr->feat == FEAT_MINOR_GLYPH ||
+                                 c_ptr->feat == FEAT_GLYPH)
+                        {
+                                c_ptr->info |= CAVE_OBJECT;
+                                c_ptr->mimic = c_ptr->feat;
+                                c_ptr->feat = FEAT_FLOOR;
+                        }
+
+                        /* Hidden traps will be trap terrains mimicing floor */
+                        else if (c_ptr->info & CAVE_TRAP)
+                        {
+                                c_ptr->info &= ~CAVE_TRAP;
+                                c_ptr->mimic = c_ptr->feat;
+                                c_ptr->feat = choose_random_trap();
+                        }
+
+                        /* Another hidden trap */
+                        else if (c_ptr->feat == FEAT_INVIS)
+                        {
+                                c_ptr->mimic = FEAT_FLOOR;
+                                c_ptr->feat = FEAT_TRAP_OPEN;
+                        }
+
+                        /* Hidden doors will be closed doors mimicing wall */
+                        else if (c_ptr->feat == FEAT_SECRET)
+                        {
+                                place_closed_door(y, x);
+                                c_ptr->mimic = FEAT_WALL_EXTRA;
+                        }
+                }
+        }
 
 	/*** Objects ***/
 

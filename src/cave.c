@@ -91,6 +91,38 @@ bool is_trap(int feat)
 
 
 /*
+ * Return TRUE if the given grid is a known trap
+ */
+bool is_known_trap(cave_type *c_ptr)
+{
+        if (!c_ptr->mimic && is_trap(c_ptr->feat)) return TRUE;
+        else return FALSE;
+}
+
+
+/*
+ * Return TRUE if the given grid is a closed door
+ */
+bool is_closed_door(int feat)
+{
+        return (feat >= FEAT_DOOR_HEAD && feat <= FEAT_DOOR_TAIL);
+}
+
+
+/*
+ * Return TRUE if the given grid is a hidden closed door
+ */
+bool is_hidden_door(cave_type *c_ptr)
+{
+        if (c_ptr->mimic &&
+            is_closed_door(c_ptr->feat))
+                return TRUE;
+        else 
+                return FALSE;
+}
+
+
+/*
  * A simple, fast, integer-based line-of-sight algorithm.  By Joseph Hall,
  * 4116 Brewster Drive, Raleigh NC 27606.  Email to jnh@ecemwl.ncsu.edu.
  *
@@ -644,7 +676,6 @@ static bool feat_supports_lighting(byte feat)
 	case FEAT_MORE:
 	case FEAT_LESS_LESS:
 	case FEAT_MORE_MORE:
-	case FEAT_SECRET:
 	case FEAT_RUBBLE:
 	case FEAT_MAGMA:
 	case FEAT_QUARTZ:
@@ -877,9 +908,8 @@ void map_info(int y, int x, byte *ap, char *cp)
 	/* Get the cave */
 	c_ptr = &cave[y][x];
 
-	/* Feature code */
-	feat = c_ptr->mimic ? c_ptr->mimic : c_ptr->feat;
-	feat = (c_ptr->info & CAVE_IN_MIRROR) ? FEAT_MIRROR : feat;
+	/* Feature code (applying "mimic" field) */
+	feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
 
 	/* Floors (etc) */
 	if ((feat <= FEAT_INVIS) || (feat == FEAT_DIRT) || (feat == FEAT_GRASS))
@@ -1019,12 +1049,6 @@ void map_info(int y, int x, byte *ap, char *cp)
 		/* Memorized grids */
 		if ((c_ptr->info & CAVE_MARK) && (view_granite_lite || new_ascii_graphics))
 		{
-			/* Apply "mimic" field */
-			if (c_ptr->mimic)
-				feat = c_ptr->mimic;
-			else
-				feat = f_info[feat].mimic;
-
 			/* Access feature */
 			f_ptr = &f_info[feat];
 
@@ -1063,7 +1087,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 							a = lighting_colours[a][0];
 						}
 						else if (use_graphics &&
-								feat_supports_lighting(c_ptr->feat))
+								feat_supports_lighting(feat))
 						{
 							/* Use a brightly lit tile */
 							c += 2;
@@ -1103,7 +1127,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 			/* Special lighting effects */
 			else if (view_granite_lite && !p_ptr->wild_mode &&
 			   (((a == TERM_WHITE) && !use_graphics) ||
-			   (use_graphics && feat_supports_lighting(c_ptr->feat))))
+			   (use_graphics && feat_supports_lighting(feat))))
 			{
 				/* Handle "blind" */
 				if (p_ptr->blind)
@@ -1258,7 +1282,6 @@ void map_info(int y, int x, byte *ap, char *cp)
 		case FEAT_DEEP_GRASS:
 		case FEAT_SWAMP:
 		case FEAT_TREES:
-		case FEAT_SECRET:
 		case FEAT_RUBBLE:
 		case FEAT_MAGMA:
 		case FEAT_QUARTZ:
@@ -1338,7 +1361,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 	(*cp) = c;
 
 	/* Hack -- rare random hallucination, except on outer dungeon walls */
-	if (p_ptr->image && (c_ptr->feat < FEAT_PERM_SOLID) && !randint0(256))
+	if (p_ptr->image && (feat < FEAT_PERM_SOLID) && !randint0(256))
 	{
 		/* Hallucinate */
 		image_random(ap, cp);
@@ -1899,6 +1922,11 @@ void note_spot(int y, int x)
 
 	s16b this_o_idx, next_o_idx = 0;
 
+	byte feat;
+
+	/* Feature code (applying "mimic" field) */
+	feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+
 
 	/* Blind players see nothing */
 	if (p_ptr->blind) return;
@@ -1938,7 +1966,7 @@ void note_spot(int y, int x)
 			c_ptr->info |= (CAVE_MARK);
 		}
 		/* Handle floor grids first */
-		if ((c_ptr->feat <= FEAT_INVIS) || (c_ptr->feat == FEAT_DIRT) || (c_ptr->feat == FEAT_GRASS))
+		if ((feat <= FEAT_INVIS) || (feat == FEAT_DIRT) || (feat == FEAT_GRASS))
 		{
 			/* Option -- memorize all torch-lit floors */
 			if (view_torch_grids && (c_ptr->info & (CAVE_LITE | CAVE_MNLT)))
@@ -4460,13 +4488,13 @@ void update_flow(void)
 
 			c_ptr = &cave[y][x];
 				       
-			if ((c_ptr->feat >= FEAT_DOOR_HEAD) && (c_ptr->feat <= FEAT_SECRET)) m += 3;
+			if (is_closed_door(c_ptr->feat)) m += 3;
 
 			/* Ignore "pre-stamped" entries */
 			if (c_ptr->dist != 0 && c_ptr->dist <= n && c_ptr->cost <= m) continue;
 
 			/* Ignore "walls" and "rubble" */
-			if ((c_ptr->feat > FEAT_SECRET) && (c_ptr->feat != FEAT_TREES) && !cave_floor_grid(c_ptr)) continue;
+			if ((c_ptr->feat >= FEAT_RUBBLE) && (c_ptr->feat != FEAT_TREES) && !cave_floor_grid(c_ptr)) continue;
 
 			/* Save the flow cost */
 			if (c_ptr->cost == 0 || c_ptr->cost > m) c_ptr->cost = m;
@@ -4557,7 +4585,7 @@ void update_smell(void)
 			c_ptr = &cave[y][x];
 
 			/* Walls, water, and lava cannot hold scent. */
-			if ((c_ptr->feat > FEAT_SECRET) && (c_ptr->feat != FEAT_TREES) && !cave_floor_grid(c_ptr)) continue;
+			if ((c_ptr->feat >= FEAT_RUBBLE) && (c_ptr->feat != FEAT_TREES) && !cave_floor_grid(c_ptr)) continue;
 
 			/* Grid must not be blocked by walls from the character */
 			if (!player_has_los_bold(y, x)) continue;
@@ -4581,6 +4609,8 @@ void map_area(int range)
 
 	cave_type       *c_ptr;
 
+	byte feat;
+
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
 
 	/* Scan that area */
@@ -4592,15 +4622,18 @@ void map_area(int range)
 
 			c_ptr = &cave[y][x];
 
+                        /* Feature code (applying "mimic" field) */
+                        feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+
 			/* All non-walls are "checked" */
-			if ((c_ptr->feat < FEAT_SECRET) ||
-			    (c_ptr->feat == FEAT_RUBBLE) ||
-			   ((c_ptr->feat >= FEAT_MINOR_GLYPH) &&
-			    (c_ptr->feat <= FEAT_TREES)) ||
-			    (c_ptr->feat >= FEAT_TOWN))
+			if ((feat <= FEAT_DOOR_TAIL) ||
+			    (feat == FEAT_RUBBLE) ||
+			   ((feat >= FEAT_MINOR_GLYPH) &&
+			    (feat <= FEAT_TREES)) ||
+			    (feat >= FEAT_TOWN))
 			{
 				/* Memorize normal features */
-				if ((c_ptr->feat > FEAT_INVIS) && (c_ptr->feat != FEAT_DIRT) && (c_ptr->feat != FEAT_GRASS))
+				if ((feat > FEAT_INVIS) && (feat != FEAT_DIRT) && (feat != FEAT_GRASS))
 				{
 					/* Memorize the object */
 					c_ptr->info |= (CAVE_MARK);
@@ -4611,8 +4644,11 @@ void map_area(int range)
 				{
 					c_ptr = &cave[y + ddy_ddd[i]][x + ddx_ddd[i]];
 
+                                        /* Feature code (applying "mimic" field) */
+                                        feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+
 					/* Memorize walls (etc) */
-					if ((c_ptr->feat >= FEAT_SECRET) && (c_ptr->feat != FEAT_DIRT) && (c_ptr->feat != FEAT_GRASS))
+					if ((feat >= FEAT_RUBBLE) && (feat != FEAT_DIRT) && (feat != FEAT_GRASS))
 					{
 						/* Memorize the walls */
 						c_ptr->info |= (CAVE_MARK);
@@ -4650,6 +4686,8 @@ void map_area(int range)
 void wiz_lite(bool wizard, bool ninja)
 {
 	int i, y, x;
+	cave_type       *c_ptr;
+	byte feat;
 
 	/* Memorize objects */
 	for (i = 1; i < o_max; i++)
@@ -4680,8 +4718,11 @@ void wiz_lite(bool wizard, bool ninja)
 		{
 			cave_type *c_ptr = &cave[y][x];
 
+                        /* Feature code (applying "mimic" field) */
+                        feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+
 			/* Process all non-walls */
-			if (cave_floor_bold(y, x) || (c_ptr->feat == FEAT_RUBBLE) || (c_ptr->feat == FEAT_TREES) || (c_ptr->feat == FEAT_MOUNTAIN))
+			if (cave_floor_bold(y, x) || (feat == FEAT_RUBBLE) || (feat == FEAT_TREES) || (feat == FEAT_MOUNTAIN))
 			{
 				/* Scan all neighbors */
 				for (i = 0; i < 9; i++)
@@ -4692,6 +4733,9 @@ void wiz_lite(bool wizard, bool ninja)
 					/* Get the grid */
 					c_ptr = &cave[yy][xx];
 
+                                        /* Feature code (applying "mimic" field) */
+                                        feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+
 					/* Memorize normal features */
 					if (ninja)
 					{
@@ -4700,7 +4744,7 @@ void wiz_lite(bool wizard, bool ninja)
 					}
 					else
 					{
-						if ((c_ptr->feat > FEAT_INVIS))
+						if ((feat > FEAT_INVIS))
 						{
 							/* Memorize the grid */
 							c_ptr->info |= (CAVE_MARK);
@@ -4797,6 +4841,9 @@ void cave_set_feat(int y, int x, int feat)
 {
 	cave_type *c_ptr = &cave[y][x];
 
+        /* Clear mimic type */
+        c_ptr->mimic = 0;
+
 	/* Change the feature */
 	c_ptr->feat = feat;
 
@@ -4811,7 +4858,8 @@ void cave_set_feat(int y, int x, int feat)
 void remove_mirror(int y, int x)
 {
 	/* Remove the mirror */
-	cave[y][x].info &= ~(CAVE_IN_MIRROR);
+	cave[y][x].info &= ~(CAVE_OBJECT);
+        cave[y][x].mimic = 0;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS)
 	{
@@ -4824,6 +4872,43 @@ void remove_mirror(int y, int x)
 	/* Redraw */
 	lite_spot(y, x);
 }
+
+
+/*
+ *  Return TRUE if there is a mirror on the grid.
+ */
+bool is_mirror_grid(cave_type *c_ptr)
+{
+        if ((c_ptr->info & CAVE_OBJECT) && c_ptr->mimic == FEAT_MIRROR)
+                return TRUE;
+        else
+                return FALSE;
+}
+
+
+/*
+ *  Return TRUE if there is a mirror on the grid.
+ */
+bool is_glyph_grid(cave_type *c_ptr)
+{
+        if ((c_ptr->info & CAVE_OBJECT) && c_ptr->mimic == FEAT_GLYPH)
+                return TRUE;
+        else
+                return FALSE;
+}
+
+
+/*
+ *  Return TRUE if there is a mirror on the grid.
+ */
+bool is_explosive_rune_grid(cave_type *c_ptr)
+{
+        if ((c_ptr->info & CAVE_OBJECT) && c_ptr->mimic == FEAT_MINOR_GLYPH)
+                return TRUE;
+        else
+                return FALSE;
+}
+
 
 /*
  * Calculate "incremental motion". Used by project() and shoot().

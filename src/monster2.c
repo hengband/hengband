@@ -2865,12 +2865,6 @@ bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 	/* Paranoia */
 	if (!r_ptr->name) return (FALSE);
 
-#if 0
-	/* Hack -- no creation on glyph of warding */
-	if (cave[y][x].feat == FEAT_GLYPH) return (FALSE);
-	if (cave[y][x].feat == FEAT_MINOR_GLYPH) return (FALSE);
-#endif
-
 	/* Nor on the Pattern */
 	if ((cave[y][x].feat >= FEAT_PATTERN_START)
 	 && (cave[y][x].feat <= FEAT_PATTERN_XTRA2))
@@ -2939,7 +2933,7 @@ bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 	/* Access the location */
 	c_ptr = &cave[y][x];
 
-	if (c_ptr->feat == FEAT_GLYPH)
+	if (is_glyph_grid(c_ptr))
 	{
 		if (randint1(BREAK_GLYPH) < (r_ptr->level+20))
 		{
@@ -2958,7 +2952,8 @@ msg_print("守りのルーンが壊れた！");
 			c_ptr->info &= ~(CAVE_MARK);
 
 			/* Break the rune */
-			c_ptr->feat = floor_type[randint0(100)];
+                        c_ptr->info &= ~(CAVE_OBJECT);
+                        c_ptr->mimic = 0;
 
 			/* Notice */
 			note_spot(y, x);
@@ -3260,7 +3255,7 @@ msg_print("守りのルーンが壊れた！");
 		}
 	}
 
-	if (c_ptr->feat == FEAT_MINOR_GLYPH)
+	if (is_explosive_rune_grid(c_ptr))
 	{
 		/* Break the ward */
 		if (randint1(BREAK_MINOR_GLYPH) > r_ptr->level)
@@ -3290,7 +3285,9 @@ msg_print("爆発のルーンは解除された。");
 		c_ptr->info &= ~(CAVE_MARK);
 
 		/* Break the rune */
-		c_ptr->feat = floor_type[randint0(100)];
+                c_ptr->info &= ~(CAVE_OBJECT);
+                c_ptr->mimic = 0;
+
 		note_spot(y, x);
 		lite_spot(y, x);
 	}
@@ -3333,13 +3330,7 @@ static bool mon_scatter(int *yp, int *xp, int y, int x, int max_dist)
 			if (!cave_empty_bold2(ny, nx)) continue;
 			if (cave[ny][nx].m_idx) continue;
 			if ((ny == py) && (nx == px)) continue;
-			
-#if 0
-			/* Hack -- no summon on glyph of warding */
-			if (cave[ny][nx].feat == FEAT_GLYPH) continue;
-			if (cave[ny][nx].feat == FEAT_MINOR_GLYPH) continue;
-#endif
-			
+						
 			/* ... nor on the Pattern */
 			if ((cave[ny][nx].feat >= FEAT_PATTERN_START) &&
 			    (cave[ny][nx].feat <= FEAT_PATTERN_XTRA2))

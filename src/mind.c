@@ -1264,7 +1264,7 @@ static int number_of_mirrors( void )
   int val=0;
   for( x=0 ; x < cur_wid ; x++ ){
     for( y=0 ; y < cur_hgt ; y++ ){
-      if( (cave[y][x].info & CAVE_IN_MIRROR) )val++;
+      if (is_mirror_grid(&cave[y][x])) val++;
     }
   }
   return val;
@@ -1282,7 +1282,7 @@ static bool cast_mirror_spell(int spell)
 	{
 	/* mirror of seeing */
 	case 0:
-	  tmp = (cave[py][px].info & CAVE_IN_MIRROR) ? 4 : 0;
+	  tmp = is_mirror_grid(&cave[py][px]) ? 4 : 0;
 	  if( plev + tmp > 4)detect_monsters_normal(DETECT_RAD_DEFAULT);
 	  if( plev + tmp > 18 )detect_monsters_invis(DETECT_RAD_DEFAULT);
 	  if( plev + tmp > 28 )set_tim_esp(plev,FALSE);
@@ -1310,7 +1310,7 @@ msg_format("There are too many mirrors to control!");
 	  break;
 	case 2:
 	  if (!get_aim_dir(&dir)) return FALSE;
-	  if ( plev > 9 && (cave[py][px].info & CAVE_IN_MIRROR) ){
+	  if ( plev > 9 && is_mirror_grid(&cave[py][px]) ) {
 	    fire_beam(GF_LITE, dir,damroll(3+((plev-1)/5),4));
 	  }
 	  else {
@@ -1348,7 +1348,7 @@ msg_format("There are too many mirrors to control!");
 	case 9:
 	  for(x=0;x<cur_wid;x++){
 	    for(y=0;y<cur_hgt;y++){
-	      if(cave[y][x].info & CAVE_IN_MIRROR){
+	      if (is_mirror_grid(&cave[y][x])) {
 		project(0,2,y,x,plev,GF_OLD_SLEEP,(PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP|PROJECT_NO_HANGEKI),-1);
 	      }
 	    }
@@ -1377,7 +1377,7 @@ msg_format("There are too many mirrors to control!");
 	  break;
 	/* illusion light */
 	case 14:
-	  tmp = (cave[py][px].feat & CAVE_IN_MIRROR) ? 4 : 3;
+	  tmp = is_mirror_grid(&cave[py][px]) ? 4 : 3;
 	  slow_monsters();
 	  stun_monsters(plev*tmp);
 	  confuse_monsters(plev*tmp);
@@ -1387,7 +1387,7 @@ msg_format("There are too many mirrors to control!");
 	  break;
 	/* mirror shift */
 	case 15:
-	  if( !(cave[py][px].info & CAVE_IN_MIRROR) ){
+	  if( !is_mirror_grid(&cave[py][px]) ){
 #ifdef JP
 		msg_print("鏡の国の場所がわからない！");
 #else
@@ -1751,12 +1751,12 @@ msg_print("その方向にはモンスターはいません。");
 		{
 			int ny = GRID_Y(path_g[i]);
 			int nx = GRID_X(path_g[i]);
-			
+			cave_type *c_ptr = &cave[ny][nx];
+
 			if (in_bounds(ny, nx) && cave_empty_bold(ny, nx) &&
-			    cave[ny][nx].feat != FEAT_GLYPH &&
-			    cave[ny][nx].feat != FEAT_MINOR_GLYPH &&
-			    !(cave[ny][nx].feat >= FEAT_PATTERN_START &&
-			      cave[ny][nx].feat <= FEAT_PATTERN_XTRA2))
+			    !(c_ptr->info & CAVE_OBJECT) &&
+			    !(c_ptr->feat >= FEAT_PATTERN_START &&
+			      c_ptr->feat <= FEAT_PATTERN_XTRA2))
 			{
 				ty = ny;
 				tx = nx;
@@ -2142,7 +2142,7 @@ msg_format("%sの力が制御できない氾流となって解放された！", p);
 			break;
 		case MIND_MIRROR_MASTER:
 			/* Cast the spell */
-			if( (cave[py][px].info & CAVE_IN_MIRROR) )on_mirror = TRUE;
+			if( is_mirror_grid(&cave[py][px]) )on_mirror = TRUE;
 			cast = cast_mirror_spell(n);
 			break;
 		case MIND_NINJUTSU:

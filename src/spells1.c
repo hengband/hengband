@@ -49,7 +49,7 @@ static void next_mirror( int* next_y , int* next_x , int cury, int curx)
 	{
 		for( y=0 ; y < cur_hgt ; y++ )
 		{
-			if( (cave[y][x].info & CAVE_IN_MIRROR)){
+			if( is_mirror_grid(&cave[y][x])){
 				mirror_y[mirror_num]=y;
 				mirror_x[mirror_num]=x;
 				mirror_num++;
@@ -718,10 +718,10 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 		case GF_KILL_TRAP:
 		{
 			/* Reveal secret doors */
-			if (c_ptr->feat == FEAT_SECRET)
+			if (is_hidden_door(c_ptr))
 			{
 				/* Pick a door */
-				place_closed_door(y, x);
+				disclose_grid(y, x);
 
 				/* Check line of sight */
 				if (known)
@@ -731,8 +731,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 			}
 
 			/* Destroy traps */
-			if ((c_ptr->info & CAVE_TRAP) || is_trap(c_ptr->feat) ||
-                            c_ptr->feat == FEAT_INVIS)
+			if (is_trap(c_ptr->feat))
 			{
 				/* Check line of sight */
 				if (known)
@@ -750,11 +749,7 @@ msg_print("まばゆい閃光が走った！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Destroy the trap */
-				if (c_ptr->info & CAVE_TRAP) c_ptr->info &= ~(CAVE_TRAP);
-				else
-				{
-					c_ptr->feat = floor_type[randint0(100)];
-				}
+				cave_set_feat(y, x, floor_type[randint0(100)]);
 			}
 
 			/* Locked doors are unlocked */
@@ -777,9 +772,6 @@ msg_print("カチッと音がした！");
 				}
 			}
 
-			/* Notice */
-			note_spot(y, x);
-
 			break;
 		}
 
@@ -789,9 +781,7 @@ msg_print("カチッと音がした！");
 			/* Destroy all doors and traps */
 			if ((c_ptr->feat == FEAT_OPEN) ||
                             (c_ptr->feat == FEAT_BROKEN) ||
-                            (c_ptr->info & CAVE_TRAP) ||
                             is_trap(c_ptr->feat) ||
-                            (c_ptr->feat == FEAT_INVIS) ||
                             ((c_ptr->feat >= FEAT_DOOR_HEAD) &&
                              (c_ptr->feat <= FEAT_DOOR_TAIL)))
 			{
@@ -820,11 +810,7 @@ msg_print("まばゆい閃光が走った！");
 				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Destroy the feature */
-				if (c_ptr->info & CAVE_TRAP) c_ptr->info &= ~(CAVE_TRAP);
-				else
-				{
-					c_ptr->feat = floor_type[randint0(100)];
-				}
+				cave_set_feat(y, x, floor_type[randint0(100)]);
 			}
 
 			/* Notice */
@@ -1042,7 +1028,7 @@ msg_print("ドアが溶けて泥になった！");
 			     (cave[y][x].feat != FEAT_DIRT) &&
 			     (cave[y][x].o_idx == 0) &&
 			     (cave[y][x].m_idx == 0))
-			    || (cave[y][x].info & CAVE_IN_MIRROR) )
+			    || is_mirror_grid(&cave[y][x]) )
 				 break;
 			/* Place a trap */
 			place_trap(y, x);
@@ -1076,7 +1062,15 @@ msg_print("ドアが溶けて泥になった！");
 			/* Require a "naked" floor grid */
 			if (!cave_naked_bold(y, x)) break;
 
-			cave_set_feat(y, x, FEAT_GLYPH);
+                        /* Create a glyph */
+                        cave[py][px].info |= CAVE_OBJECT;
+                        cave[py][px].mimic = FEAT_GLYPH;
+
+                        /* Notice */
+                        note_spot(py, px);
+	
+                        /* Redraw */
+                        lite_spot(py, px);
 
 			break;
 		}
@@ -1184,7 +1178,7 @@ msg_print("ドアが溶けて泥になった！");
 				if (player_can_see_bold(y, x)) obvious = TRUE;
 
 				/* Turn off the light. */
-				if(!(c_ptr->info & CAVE_IN_MIRROR))c_ptr->info &= ~(CAVE_GLOW);
+				if (!is_mirror_grid(c_ptr)) c_ptr->info &= ~(CAVE_GLOW);
 
 				/* Hack -- Forget "boring" grids */
 				if ((c_ptr->feat <= FEAT_INVIS) || (c_ptr->feat == FEAT_DIRT) || (c_ptr->feat == FEAT_GRASS))
@@ -1210,7 +1204,7 @@ msg_print("ドアが溶けて泥になった！");
 		case GF_SHARDS:
 		case GF_ROCKET:
 		{
-			if( (cave[y][x].info & CAVE_IN_MIRROR))
+			if (is_mirror_grid(&cave[y][x]))
 			{
 #ifdef JP
 				msg_print("鏡が割れた！");
@@ -1224,7 +1218,7 @@ msg_print("ドアが溶けて泥になった！");
 		}
 		case GF_SOUND:
 		{
-			if( (cave[y][x].info & CAVE_IN_MIRROR) && p_ptr->lev < 40 )
+			if (is_mirror_grid(&cave[y][x]) && p_ptr->lev < 40 )
 			{
 #ifdef JP
 				msg_print("鏡が割れた！");
@@ -8296,6 +8290,9 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 	monster_target_y=py;
 	monster_target_x=px;
 
+        /* Initialize with nul string */
+        who_name[0] = '\0';
+
 	/* Hack -- Jump to target */
 	if (flg & (PROJECT_JUMP))
 	{
@@ -8467,7 +8464,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 				}
 			}
 			if(project_o(0,0,y,x,dam,GF_SEEKER))notice=TRUE;
-			if( (cave[y][x].info & CAVE_IN_MIRROR))
+			if( is_mirror_grid(&cave[y][x]))
 			{
 			  /* The target of monsterspell becomes tha mirror(broken) */
 			        monster_target_y=(s16b)y;
@@ -8607,7 +8604,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 				if( second_step )continue;
 				break;
 			}
-			if( (cave[y][x].info & CAVE_IN_MIRROR) && !second_step )
+			if( is_mirror_grid(&cave[y][x]) && !second_step )
 			{
 			  /* The target of monsterspell becomes tha mirror(broken) */
 			        monster_target_y=(s16b)y;
@@ -9221,7 +9218,7 @@ bool binding_field( int dam )
 	{
 		for( y=0 ; y < cur_hgt ; y++ )
 		{
-			if( (cave[y][x].info & CAVE_IN_MIRROR) &&
+			if( is_mirror_grid(&cave[y][x]) &&
 			    distance(py,px,y,x) <= MAX_RANGE &&
 			    distance(py,px,y,x) != 0 &&
 			    player_has_los_bold(y,x)
@@ -9354,7 +9351,7 @@ void seal_of_mirror( int dam )
 	{
 		for( y = 0 ; y < cur_hgt ; y++ )
 		{
-			if( (cave[y][x].info & CAVE_IN_MIRROR))
+			if( is_mirror_grid(&cave[y][x]))
 			{
 				if(project_m(0,0,y,x,dam,GF_GENOCIDE,
 							 (PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP)))

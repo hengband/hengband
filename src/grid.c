@@ -124,21 +124,26 @@ void place_random_door(int y, int x)
 	if (tmp < 300)
 	{
 		/* Create open door */
-		cave_set_feat(y, x, FEAT_OPEN);
+		set_cave_feat(y, x, FEAT_OPEN);
 	}
 
 	/* Broken doors (100/1000) */
 	else if (tmp < 400)
 	{
 		/* Create broken door */
-		cave_set_feat(y, x, FEAT_BROKEN);
+		set_cave_feat(y, x, FEAT_BROKEN);
 	}
 
 	/* Secret doors (200/1000) */
 	else if (tmp < 600)
 	{
+                cave_type *c_ptr = &cave[y][x];
+
 		/* Create secret door */
-		cave_set_feat(y, x, FEAT_SECRET);
+                place_closed_door(y, x);
+
+                /* Hide */
+                c_ptr->mimic = fill_type[randint0(100)];
 	}
 
 	/* Closed, locked, or stuck doors (400/1000) */

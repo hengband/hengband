@@ -178,8 +178,8 @@ static bool alloc_stairs(int feat, int num, int walls)
 				/* Require a certain number of adjacent walls */
 				if (next_to_walls(y, x) < walls) continue;
 
-                                /* No hidden trap on stairs */
-                                c_ptr->info &= ~CAVE_TRAP;
+                                /* Clear possible garbage of hidden trap */
+                                c_ptr->mimic = 0;
 
 				/* Clear previous contents, add stairs */
 				if (i < more_num) c_ptr->feat = feat+0x07;
