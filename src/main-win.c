@@ -2990,11 +2990,7 @@ static void init_windows(void)
 
 #if 1 /* #ifdef JP */
 		strncpy(td->lf.lfFaceName, td->font_want, LF_FACESIZE);
-#ifdef JP
-		td->lf.lfCharSet = SHIFTJIS_CHARSET;
-#else
-		td->lf.lfCharSet = ANSI_CHARSET;
-#endif
+		td->lf.lfCharSet = DEFAULT_CHARSET;
 		td->lf.lfPitchAndFamily = FIXED_PITCH | FF_DONTCARE;
 		/* Activate the chosen font */
 		term_force_font(td, NULL);
