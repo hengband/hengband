@@ -271,7 +271,7 @@ F:LITE | RES_LITE
 N:33:テレパシーの
 E:of Telepathy
 X:33:20
-W:0:36:0:15000
+W:0:18:0:15000
 F:TELEPATHY
 
 N:34:急速回復の
