@@ -6888,12 +6888,6 @@ quit("セーブファイルが壊れています");
 		counts_write(2,0);
 		p_ptr->count = 0;
 
-#ifdef JP
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "辺境の地に降り立った。");
-#else
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "You are standing in the Outpost.");
-#endif
-
 		load = FALSE;
 
 		determine_bounty_uniques();
@@ -6998,6 +6992,19 @@ prt("お待ち下さい...", 0, 0);
 
 	/* Hack -- Character is no longer "icky" */
 	character_icky = FALSE;
+
+
+	if (new_game)
+	{
+		char buf[80];
+
+#ifdef JP
+		sprintf(buf, "%sに降り立った。", map_name());
+#else
+		sprintf(buf, "You are standing in the %s.", map_name());
+#endif
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, buf);
+	}
 
 
 	/* Start game */
