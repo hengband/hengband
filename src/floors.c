@@ -651,7 +651,6 @@ void leave_floor(void)
 	saved_floor_type *sf_ptr;
 	int quest_r_idx = 0;
 	int i;
-	int oy = py, ox = px;
 
 	/* Preserve pets and prepare to take these to next floor */
 	preserve_pet();
@@ -913,18 +912,11 @@ void leave_floor(void)
 	/* If you can return, you need to save previous floor */
 	if (!(change_floor_mode & (CFM_NO_RETURN | CFM_CLEAR_ALL)))
 	{
-		int ty = py;
-		int tx = px;
-
 		/* Get out of the my way! */
 		get_out_monster();
 
 		/* Record the last visit turn of current floor */
 		sf_ptr->last_visit = turn;
-
-		/* Hack -- Before visual update */
-		py = oy;
-		px = ox;
 
 		/* Forget the lite */
 		forget_lite();
@@ -934,10 +926,6 @@ void leave_floor(void)
 
 		/* Forget the view */
 		clear_mon_lite();
-
-		/* Hack -- After visual update */
-		py = ty;
-		px = tx;
 
 		/* Save current floor */
 		if (!save_floor(sf_ptr, 0))

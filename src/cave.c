@@ -3075,7 +3075,7 @@ void forget_lite(void)
 		cave[y][x].info &= ~(CAVE_LITE);
 
 		/* Redraw */
-		lite_spot(y, x);
+		/* lite_spot(y, x); Perhaps don't need? */
 	}
 
 	/* None left */
@@ -3705,7 +3705,7 @@ void forget_view(void)
 		if (!panel_contains(y, x)) continue;
 
 		/* Update the screen */
-		lite_spot(y, x);
+		/* lite_spot(y, x); Perhaps don't need? */
 	}
 
 	/* None left */
