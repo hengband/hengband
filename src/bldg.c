@@ -1921,7 +1921,7 @@ static bool kakutoujou(void)
 	char out_val[160], tmp_str[80];
 	cptr p;
 
-	if ((turn - old_battle) > 5000)
+	if ((turn - old_battle) > TURNS_PER_TICK*250)
 	{
 		battle_monsters();
 		old_battle = turn;
@@ -2685,8 +2685,8 @@ msg_print("バーテンはいくらかの食べ物とビールをくれた。");
 			break;
 
 		case BACT_REST: /* Rest for the night */
-			dawnval = ((turn % (20L * TOWN_DAWN)));
-			if (dawnval > 50000)
+			dawnval = ((turn % (TURNS_PER_TICK * TOWN_DAWN)));
+			if (dawnval > (TURNS_PER_TICK * TOWN_DAWN)/4)
 			{  /* nighttime */
 				if ((p_ptr->poisoned) || (p_ptr->cut))
 				{
@@ -2712,11 +2712,11 @@ msg_print("すみません、でもうちで誰かに死なれちゃ困りますんで。");
 #else
 					do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "stay over night at the inn");
 #endif
-					turn = ((turn / 100000) + 1) * 100000;
-					if (((oldturn + 5L * TOWN_DAWN) % (20L * TOWN_DAWN)) > 50000L) do_cmd_write_nikki(NIKKI_HIGAWARI, 0, NULL);
+					turn = (turn / (TURNS_PER_TICK*TOWN_DAWN/2) + 1) * (TURNS_PER_TICK*TOWN_DAWN/2);
+					if (((oldturn + TURNS_PER_TICK * TOWN_DAWN / 4) % (TURNS_PER_TICK * TOWN_DAWN)) > TURNS_PER_TICK * TOWN_DAWN/4) do_cmd_write_nikki(NIKKI_HIGAWARI, 0, NULL);
 					p_ptr->chp = p_ptr->mhp;
 
-					dungeon_turn += MIN(turn - oldturn, 5000);
+					dungeon_turn += MIN(turn - oldturn, TURNS_PER_TICK*250);
 
 					if (ironman_nightmare)
 					{

@@ -113,15 +113,47 @@ static void prt_field(cptr info, int row, int col)
 
 
 /*
+ *  Whether daytime or not
+ */
+bool is_daytime(void)
+{
+	s32b len = TURNS_PER_TICK * TOWN_DAWN;
+	if ((turn % len) < (len / 2))
+		return TRUE;
+	else
+		return FALSE;
+}
+
+/*
+ * Extract day, hour, min
+ */
+void extract_day_hour_min(int *day, int *hour, int *min)
+{
+	s32b len = TURNS_PER_TICK * TOWN_DAWN;
+	s32b tick = turn % len + len / 4;
+
+	if ((p_ptr->prace == RACE_VAMPIRE) ||
+	    (p_ptr->prace == RACE_SKELETON) ||
+	    (p_ptr->prace == RACE_ZOMBIE) ||
+	    (p_ptr->prace == RACE_SPECTRE))
+		*day = (turn - (TURNS_PER_TICK * TOWN_DAWN *3/4)) / len + 1;
+	else
+		*day = (turn + (TURNS_PER_TICK * TOWN_DAWN /4))/ len + 1;
+	*hour = (24 * tick / len) % 24;
+	*min = (1440 * tick / len) % 60;
+}
+
+/*
  * Print time
  */
 void prt_time(void)
 {
-	s32b len = 20L * TOWN_DAWN;
-	s32b tick = turn % len + len / 4;
+	int day, hour, min;
 
 	/* Dump 13 spaces to clear */
 	c_put_str(TERM_WHITE, "             ", ROW_DAY, COL_DAY);
+
+	extract_day_hour_min(&day, &hour, &min);
 
 	/* Dump the info itself */
 	c_put_str(TERM_WHITE, format(
@@ -130,18 +162,9 @@ void prt_time(void)
 #else
 		"Day %-2d",
 #endif
-		((p_ptr->prace == RACE_VAMPIRE) ||
-		 (p_ptr->prace == RACE_SKELETON) ||
-		 (p_ptr->prace == RACE_ZOMBIE) ||
-		 (p_ptr->prace == RACE_SPECTRE))
-		? (turn - (15L * TOWN_DAWN)) / len + 1
-		: (turn + (5L * TOWN_DAWN))/ len + 1),
-		  ROW_DAY, COL_DAY);
+		day), ROW_DAY, COL_DAY);
 	
-	c_put_str(TERM_WHITE, format("%2d:%02d",
-				      (24 * tick / len) % 24,
-				      (1440 * tick / len) % 60),
-		  ROW_DAY, COL_DAY+7);
+	c_put_str(TERM_WHITE, format("%2d:%02d", hour, min), ROW_DAY, COL_DAY+7);
 }
 
 

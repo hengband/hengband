@@ -5449,7 +5449,7 @@ static bool player_birth_aux(void)
 	    (p_ptr->prace == RACE_SPECTRE))
 	{
 		/* Undead start just after midnight */
-		turn = (60L * TOWN_DAWN) / 4 + 1;
+		turn = (TURNS_PER_TICK*3 * TOWN_DAWN) / 4 + 1;
 	}
 	else
 	{

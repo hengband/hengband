@@ -1162,15 +1162,6 @@ static void arena_gen(void)
 	int y, x;
 	int qy = SCREEN_HGT;
 	int qx = SCREEN_WID;
-	bool daytime;
-
-	/* Day time */
-	if ((turn % (20L * TOWN_DAWN)) < ((20L * TOWN_DAWN) / 2))
-		daytime = TRUE;
-
-	/* Night time */
-	else
-		daytime = FALSE;
 
 	/* Start with solid walls */
 	for (y = 0; y < MAX_HGT; y++)
@@ -1440,7 +1431,7 @@ static byte extract_feeling(void)
 	if (rating > 10) return 8;
 	if (rating > 0) return 9;
 
-	if((turn - old_turn) > 100000L)
+	if((turn - old_turn) > TURNS_PER_TICK * TOWN_DAWN /2)
 		chg_virtue(V_PATIENCE, 1);
 
 	return 10;

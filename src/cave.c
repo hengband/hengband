@@ -3342,8 +3342,6 @@ void update_mon_lite(void)
 
 	s16b end_temp;
 
-	bool daytime = ((turn % (20L * TOWN_DAWN)) < ((20L * TOWN_DAWN) / 2));
-
 	/* Clear all monster lit squares */
 	for (i = 0; i < mon_lite_n; i++)
 	{
@@ -3381,7 +3379,7 @@ void update_mon_lite(void)
 
 		/* Exit if has no light */
 		if (!rad) continue;
-		if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) && (m_ptr->csleep || (!dun_level && daytime) || p_ptr->inside_battle)) continue;
+		if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) && (m_ptr->csleep || (!dun_level && is_daytime()) || p_ptr->inside_battle)) continue;
 
 		if (world_monster) continue;
 

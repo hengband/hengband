@@ -1878,8 +1878,8 @@ static void display_player_middle(void)
 
 	/* Dump Day */
 	{
-		s32b len = 20L * TOWN_DAWN;
-		s32b tick = turn % len + len / 4;
+		int day, hour, min;
+		extract_day_hour_min(&day, &hour, &min);
 
 		sprintf(buf, 
 #ifdef JP
@@ -1887,14 +1887,7 @@ static void display_player_middle(void)
 #else
 			"Day %ld %2ld:%02ld", 
 #endif
-			((p_ptr->prace == RACE_VAMPIRE) ||
-			 (p_ptr->prace == RACE_SKELETON) ||
-			 (p_ptr->prace == RACE_ZOMBIE) ||
-			 (p_ptr->prace == RACE_SPECTRE))
-			? (turn - (15L * TOWN_DAWN)) / len + 1
-			: (turn + (5L * TOWN_DAWN))/ len + 1,
-			(24 * tick / len) % 24,
-			(1440 * tick / len) % 60);
+			day, hour, min);
 	}
 	display_player_one_line(ENTRY_DAY, buf, TERM_L_GREEN);
 

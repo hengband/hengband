@@ -1085,7 +1085,8 @@ msg_print("明かりが消えてしまった！");
 	/* The light is getting dim */
 	else if (o_ptr->name2 == EGO_LITE_LONG)
 	{
-		if ((o_ptr->xtra4 < 50) && (!(o_ptr->xtra4 % 5)) && (turn % 40))
+		if ((o_ptr->xtra4 < 50) && (!(o_ptr->xtra4 % 5))
+		    && (turn % (TURNS_PER_TICK*2)))
 		{
 			if (disturb_minor) disturb(0, 0);
 #ifdef JP
@@ -1488,15 +1489,16 @@ static void process_world(void)
 	object_kind *k_ptr;
 	const int dec_count = (easy_band ? 2 : 1);
 
-	int hour, min, prev_min;
-	s32b len = 20L * TOWN_DAWN;
+	int day, hour, min, prev_min;
+
+	s32b len = TURNS_PER_TICK * TOWN_DAWN;
 	s32b tick = turn % len + len / 4;
 
-	hour = (24 * tick / len) % 24;
-	min = (1440 * tick / len) % 60;
+	extract_day_hour_min(&day, &hour, &min);
 	prev_min = (1440 * (tick - 20) / len) % 60;
 
-        if ((turn - old_turn == (3000 - dun_level*20)) && (dun_level) &&
+        if ((turn - old_turn == (150 - dun_level) * TURNS_PER_TICK)
+	    && (dun_level) &&
 	    !(quest_number(dun_level) && ((quest_number(dun_level) < MIN_RANDOM_QUEST) && !(quest_number(dun_level) == QUEST_OBERON || quest_number(dun_level) == QUEST_SERPENT || !(quest[quest_number(dun_level)].flags & QUEST_FLAG_PRESET)))) &&
 	    !(p_ptr->inside_battle))
 		do_cmd_feeling();
@@ -1569,7 +1571,7 @@ msg_print("残念でした。");
 			p_ptr->energy = 100;
 			battle_monsters();
 		}
-		else if(turn - old_turn == 3000L)
+		else if(turn - old_turn == 150*TURNS_PER_TICK)
 		{
 #ifdef JP
 msg_print("申し分けありませんが、この勝負は引き分けとさせていただきます。");
@@ -1584,11 +1586,11 @@ msg_print("申し分けありませんが、この勝負は引き分けとさせていただきます。");
 	}
 
 	/* Every 20 game turns */
-	if (turn % 20) return;
+	if (turn % TURNS_PER_TICK) return;
 
 	/*** Check the Time and Load ***/
 
-	if (!(turn % 1000))
+	if (!(turn % (50*TURNS_PER_TICK)))
 	{
 		/* Check time and load */
 		if ((0 != check_time()) || (0 != check_load()))
@@ -1636,7 +1638,7 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 	/*** Attempt timed autosave ***/
 	if (autosave_t && autosave_freq && !p_ptr->inside_battle)
 	{
-		if (!(turn % ((s32b)autosave_freq * 20)))
+		if (!(turn % ((s32b)autosave_freq * TURNS_PER_TICK)))
 			do_cmd_save_game(TRUE);
 	}
 
@@ -1655,12 +1657,12 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 	if (!dun_level && !p_ptr->inside_quest && !p_ptr->inside_battle && !p_ptr->inside_arena && !p_ptr->wild_mode)
 	{
 		/* Hack -- Daybreak/Nighfall in town */
-		if (!(turn % ((20L * TOWN_DAWN) / 2)))
+		if (!(turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2)))
 		{
 			bool dawn;
 
 			/* Check for dawn */
-			dawn = (!(turn % (20L * TOWN_DAWN)));
+			dawn = (!(turn % (TURNS_PER_TICK * TOWN_DAWN)));
 
 			/* Day breaks */
 			if (dawn)
@@ -1740,7 +1742,7 @@ msg_print("日が沈んだ。");
 	}
 
 	/* Set back the rewards once a day */
-	if (!(turn % (200L * STORE_TURNS)))
+	if (!(turn % (TURNS_PER_TICK*10 * STORE_TURNS)))
 	{
 		int n;
 
@@ -1771,8 +1773,8 @@ if (cheat_xtra) msg_print("報酬をリセット");
 	}
 
 	/* Hack -- Check for creature regeneration */
-	if (!(turn % 200) && !p_ptr->inside_battle) regen_monsters();
-	if (!(turn % 60)) regen_captured_monsters();
+	if (!(turn % (TURNS_PER_TICK*10)) && !p_ptr->inside_battle) regen_monsters();
+	if (!(turn % (TURNS_PER_TICK*3))) regen_captured_monsters();
 
 
 	/*** Damage over Time ***/
@@ -1793,8 +1795,7 @@ take_hit(DAMAGE_NOESCAPE, 1, "毒", -1);
 	/* (Vampires) Take damage from sunlight */
 	if (prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE))
 	{
-		if (!dun_level && !p_ptr->resist_lite && !p_ptr->invuln &&
-		    (!((turn / ((20L * TOWN_DAWN) / 2)) % 2)))
+		if (!dun_level && !p_ptr->resist_lite && !p_ptr->invuln && is_daytime())
 		{
 			if (cave[py][px].info & CAVE_GLOW)
 			{
@@ -2197,7 +2198,7 @@ take_hit(DAMAGE_NOESCAPE, i, "致命傷", -1);
 		if (p_ptr->food < PY_FOOD_MAX)
 		{
 			/* Every 100 game turns */
-			if (!(turn % 100))
+			if (!(turn % (TURNS_PER_TICK*5)))
 			{
 				/* Basic digestion rate based on speed */
 				i = /* extract_energy[p_ptr->pspeed] * 2;*/
@@ -2703,7 +2704,7 @@ msg_print("こんなに多くのペットを制御できない！");
 			/* Decrease life-span */
 			if (o_ptr->name2 == EGO_LITE_LONG)
 			{
-				if (turn % 40) o_ptr->xtra4--;
+				if (turn % (TURNS_PER_TICK*2)) o_ptr->xtra4--;
 			}
 			else o_ptr->xtra4--;
 
@@ -6786,7 +6787,7 @@ s32b turn_real(s32b hoge)
 	    (p_ptr->prace == RACE_SKELETON) ||
 	    (p_ptr->prace == RACE_ZOMBIE) ||
 	    (p_ptr->prace == RACE_SPECTRE))
-		return hoge-(60L * TOWN_DAWN) / 4;
+		return hoge-(TURNS_PER_TICK * TOWN_DAWN *3/ 4);
 	else
 		return hoge;
 }

@@ -224,23 +224,11 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 	cptr note_level = "";
 	bool do_level = TRUE;
 
-	s32b len = 20L * TOWN_DAWN;
-	s32b tick = turn % len + len / 4;
-
 	static bool disable_nikki = FALSE;
 
+	extract_day_hour_min(&day, &hour, &min);
+
 	if (disable_nikki) return(-1);
-
-	if ((p_ptr->prace == RACE_VAMPIRE) ||
-	    (p_ptr->prace == RACE_SKELETON) ||
-	    (p_ptr->prace == RACE_ZOMBIE) ||
-	    (p_ptr->prace == RACE_SPECTRE))
-		day = (turn - (15L * TOWN_DAWN))/ len + 1;
-	else
-		day = (turn + (5L * TOWN_DAWN))/ len + 1;
-
-	hour = (24 * tick / len) % 24;
-	min = (1440 * tick / len) % 60;
 
 	if (type == NIKKI_FIX_QUEST_C ||
 	    type == NIKKI_FIX_QUEST_F ||
@@ -4625,7 +4613,7 @@ void do_cmd_feeling(void)
 	}
 
 	/* Display the feeling */
-        if (turn - old_turn >= (3000 - dun_level*20) || cheat_xtra)
+        if (turn - old_turn >= (150 - dun_level)*TURNS_PER_TICK || cheat_xtra)
         {
                 if (p_ptr->muta3 & MUT3_GOOD_LUCK) msg_print(do_cmd_feeling_text_lucky[feeling]);
                 else {
@@ -7670,18 +7658,8 @@ void do_cmd_time(void)
 
 	FILE *fff;
 
-	s32b len = 20L * TOWN_DAWN;
-	s32b tick = turn % len + len / 4;
+	extract_day_hour_min(&day, &hour, &min);
 
-	if ((p_ptr->prace == RACE_VAMPIRE) ||
-	    (p_ptr->prace == RACE_SKELETON) ||
-	    (p_ptr->prace == RACE_ZOMBIE) ||
-	    (p_ptr->prace == RACE_SPECTRE))
-		day = (turn - (15L * TOWN_DAWN))/ len + 1;
-	else
-		day = (turn + (5L * TOWN_DAWN))/ len + 1;
-	hour = (24 * tick / len) % 24;
-	min = (1440 * tick / len) % 60;
 	full = hour * 100 + min;
 
 	start = 9999;

@@ -639,7 +639,6 @@ static border_type border;
 void wilderness_gen(void)
 {
 	int i, y, x, lim;
-	bool daytime;
 	cave_type *c_ptr;
 
    	/* Big town */
@@ -753,13 +752,6 @@ void wilderness_gen(void)
 	/* South east corner */
 	cave[MAX_HGT - 1][MAX_WID - 1].mimic = border.south_east;
 
-
-	/* Day time */
-	if ((turn % (20L * TOWN_DAWN)) < ((20L * TOWN_DAWN) / 2))
-		daytime = TRUE;
-	else
-		daytime = FALSE;
-
 	/* Light up or darken the area */
 	for (y = 0; y < cur_hgt; y++)
 	{
@@ -768,7 +760,7 @@ void wilderness_gen(void)
 			/* Get the cave grid */
 			c_ptr = &cave[y][x];
 
-			if (daytime)
+			if (is_daytime())
 			{
 				/* Assume lit */
 				c_ptr->info |= (CAVE_GLOW);

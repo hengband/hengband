@@ -2465,7 +2465,7 @@ static int increase_insults(void)
 		st_ptr->bad_buy = 0;
 
 		/* Open tomorrow */
-		st_ptr->store_open = turn + 25000 + randint1(25000);
+		st_ptr->store_open = turn + TURNS_PER_TICK*TOWN_DAWN/8 + randint1(TURNS_PER_TICK*TOWN_DAWN/8);
 
 		/* Closed */
 		return (TRUE);
@@ -4485,7 +4485,7 @@ void do_cmd_store(void)
 	}
 
 	/* Calculate the number of store maintainances since the last visit */
-	maintain_num = (turn - town[p_ptr->town_num].store[which].last_visit) / (20L * STORE_TURNS);
+	maintain_num = (turn - town[p_ptr->town_num].store[which].last_visit) / (TURNS_PER_TICK * STORE_TURNS);
 
 	/* Maintain the store max. 10 times */
 	if (maintain_num > 10) maintain_num = 10;

@@ -1185,6 +1185,8 @@ extern void build_gamma_table(int gamma);
 #endif /* SUPPORT_GAMMA */
 
 /* xtra1.c */
+extern bool is_daytime(void);
+extern void extract_day_hour_min(int *day, int *hour, int *min);
 extern void prt_time(void);
 extern cptr map_name(void);
 extern void cnv_stat(int val, char *out_val);
