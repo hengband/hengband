@@ -5262,8 +5262,8 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
 
 			if (!in_generate) /* Normal */
 			{
-				/* Lose unsafety and runes/mirrors */
-				c_ptr->info &= ~(CAVE_UNSAFE | CAVE_OBJECT);
+				/* Lose unsafety */
+				c_ptr->info &= ~(CAVE_UNSAFE);
 
 				/* Hack -- Notice player affect */
 				if (player_bold(y, x))
@@ -5870,9 +5870,6 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 			{
 				/* Delete objects */
 				delete_object(yy, xx);
-
-				/* Clear mirror, runes flag */
-				c_ptr->info &= ~CAVE_OBJECT;
 
 				/* Wall (or floor) type */
 				t = cave_have_flag_bold(yy, xx, FF_PROJECT) ? randint0(100) : 200;

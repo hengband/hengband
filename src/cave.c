@@ -4520,17 +4520,6 @@ void cave_set_feat(int y, int x, int feat)
 	cave_type *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[feat];
 
-	if (character_dungeon && is_mirror_grid(c_ptr) && (d_info[dungeon_type].flags1 & DF1_DARKNESS))
-	{
-		c_ptr->info &= ~(CAVE_GLOW);
-		if (!view_torch_grids) c_ptr->info &= ~(CAVE_MARK);
-
-		/* Remove flag for mirror/glyph */
-		c_ptr->info &= ~(CAVE_OBJECT);
-
-		update_local_illumination(y, x);
-	}
-
 	/* Clear mimic type */
 	c_ptr->mimic = 0;
 
@@ -4539,6 +4528,17 @@ void cave_set_feat(int y, int x, int feat)
 
 	if (character_dungeon)
 	{
+		if (is_mirror_grid(c_ptr) && (d_info[dungeon_type].flags1 & DF1_DARKNESS))
+		{
+			c_ptr->info &= ~(CAVE_GLOW);
+			if (!view_torch_grids) c_ptr->info &= ~(CAVE_MARK);
+
+			update_local_illumination(y, x);
+		}
+
+		/* Remove flag for mirror/glyph */
+		c_ptr->info &= ~(CAVE_OBJECT);
+
 		/* Check for change to boring grid */
 		if (!have_flag(f_ptr->flags, FF_REMEMBER)) c_ptr->info &= ~(CAVE_MARK);
 
