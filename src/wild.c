@@ -14,44 +14,39 @@
 #include "angband.h"
 
 
+static void set_floor_and_wall_aux(s16b feat_type[100], feat_prob prob[DUNGEON_FEAT_PROB_NUM])
+{
+	int lim[DUNGEON_FEAT_PROB_NUM], cur = 0, i;
+
+	lim[0] = prob[0].percent;
+	for (i = 1; i < DUNGEON_FEAT_PROB_NUM; i++) lim[i] = lim[i - 1] + prob[i].percent;
+
+	/* Paranoia */
+	if (lim[DUNGEON_FEAT_PROB_NUM - 1] < 100) lim[DUNGEON_FEAT_PROB_NUM - 1] = 100;
+
+	for (i = 0; i < 100; i++)
+	{
+		while (i == lim[cur]) cur++;
+		feat_type[i] = prob[cur].feat;
+	}
+}
+
 /*
  * Fill the arrays of floors and walls in the good proportions
  */
 void set_floor_and_wall(byte type)
 {
 	static byte cur_type = 255;
-	int i;
+	dungeon_info_type *d_ptr;
 
 	/* Already filled */
 	if (cur_type == type) return;
 
 	cur_type = type;
+	d_ptr = &d_info[type];
 
-	for (i = 0; i < 100; i++)
-	{
-		int lim1, lim2, lim3;
-
-		lim1 = d_info[type].floor_percent1;
-		lim2 = lim1 + d_info[type].floor_percent2;
-		lim3 = lim2 + d_info[type].floor_percent3;
-
-		if (i < lim1)
-			floor_type[i] = d_info[type].floor1;
-		else if (i < lim2)
-			floor_type[i] = d_info[type].floor2;
-		else if (i < lim3)
-			floor_type[i] = d_info[type].floor3;
-
-		lim1 = d_info[type].fill_percent1;
-		lim2 = lim1 + d_info[type].fill_percent2;
-		lim3 = lim2 + d_info[type].fill_percent3;
-		if (i < lim1)
-			fill_type[i] = d_info[type].fill_type1;
-		else if (i < lim2)
-			fill_type[i] = d_info[type].fill_type2;
-		else if (i < lim3)
-			fill_type[i] = d_info[type].fill_type3;
-	}
+	set_floor_and_wall_aux(floor_type, d_ptr->floor);
+	set_floor_and_wall_aux(fill_type, d_ptr->fill);
 }
 
 

@@ -1586,6 +1586,15 @@ struct high_score
 	char how[40];		/* Method of death (string) */
 };
 
+
+typedef struct
+{
+	s16b feat;    /* Feature tile */
+	byte percent; /* Chance of type */
+}
+feat_prob;
+
+
 /* A structure for the != dungeon types */
 typedef struct dungeon_info_type dungeon_info_type;
 struct dungeon_info_type {
@@ -1595,25 +1604,16 @@ struct dungeon_info_type {
 	byte dy;
 	byte dx;
 
-	s16b floor1;		/* Floor tile 1 */
-	byte floor_percent1;	/* Chance of type 1 */
-	s16b floor2;		/* Floor tile 2 */
-	byte floor_percent2;	/* Chance of type 2 */
-	s16b floor3;		/* Floor tile 3 */
-	byte floor_percent3;	/* Chance of type 3 */
-	s16b outer_wall;	/* Outer wall tile */
-	s16b inner_wall;	/* Inner wall tile */
-	s16b stream1;		/* stream tile */
-	s16b stream2;		/* stream tile */
-	s16b fill_type1;	/* Cave tile 1 */
-	byte fill_percent1;	/* Chance of type 1 */
-	s16b fill_type2;	/* Cave tile 2 */
-	byte fill_percent2;	/* Chance of type 2 */
-	s16b fill_type3;	/* Cave tile 3 */
-	byte fill_percent3;	/* Chance of type 3 */
-	s16b mindepth;		/* Minimal depth */
-	s16b maxdepth;		/* Maximal depth */
-	byte min_plev;		/* Minimal plev needed to enter -- it's an anti-cheating mesure */
+	feat_prob floor[DUNGEON_FEAT_PROB_NUM]; /* Floor probability */
+	feat_prob fill[DUNGEON_FEAT_PROB_NUM];  /* Cave wall probability */
+	s16b outer_wall;                        /* Outer wall tile */
+	s16b inner_wall;                        /* Inner wall tile */
+	s16b stream1;                           /* stream tile */
+	s16b stream2;                           /* stream tile */
+
+	s16b mindepth;         /* Minimal depth */
+	s16b maxdepth;         /* Maximal depth */
+	byte min_plev;         /* Minimal plev needed to enter -- it's an anti-cheating mesure */
 	s16b pit;
 	s16b nest;
 	byte mode;		/* Mode of combinaison of the monster flags */

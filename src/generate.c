@@ -1466,7 +1466,7 @@ void clear_cave(void)
  */
 void generate_cave(void)
 {
-	int num;
+	int num, i;
 
 	/* Fill the arrays of floors and walls in the good proportions */
 	set_floor_and_wall(dungeon_type);
@@ -1481,9 +1481,14 @@ void generate_cave(void)
 		/* Clear and empty the cave */
 		clear_cave();
 
-		if (have_flag(f_info[d_info[dungeon_type].fill_type1].flags, FF_HAS_GOLD) ||
-		    have_flag(f_info[d_info[dungeon_type].fill_type2].flags, FF_HAS_GOLD) ||
-		    have_flag(f_info[d_info[dungeon_type].fill_type3].flags, FF_HAS_GOLD)) rating += 40;
+		for (i = 0; i < DUNGEON_FEAT_PROB_NUM; i++)
+		{
+			if (have_flag(f_info[d_info[dungeon_type].fill[i].feat].flags, FF_HAS_GOLD))
+			{
+				rating += 40;
+				break;
+			}
+		}
 
 		/* Build the arena -KMW- */
 		if (p_ptr->inside_arena)

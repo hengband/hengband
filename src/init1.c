@@ -3013,16 +3013,15 @@ errr parse_d_info(char *buf, header *head)
 		char *zz[16];
 
 		/* Scan for the values */
-		if (tokenize(buf+2, 7, zz, 0) != 7) return (1);
+		if (tokenize(buf+2, DUNGEON_FEAT_PROB_NUM * 2 + 1, zz, 0) != (DUNGEON_FEAT_PROB_NUM * 2 + 1)) return (1);
 
 		/* Save the values */
-		d_ptr->floor1 = f_tag_to_index(zz[0]);
-		d_ptr->floor_percent1 = atoi(zz[1]);
-		d_ptr->floor2 = f_tag_to_index(zz[2]);
-		d_ptr->floor_percent2 = atoi(zz[3]);
-		d_ptr->floor3 = f_tag_to_index(zz[4]);
-		d_ptr->floor_percent3 = atoi(zz[5]);
-		d_ptr->tunnel_percent = atoi(zz[6]);
+		for (i = 0; i < DUNGEON_FEAT_PROB_NUM; i++)
+		{
+			d_ptr->floor[i].feat = f_tag_to_index(zz[i * 2]);
+			d_ptr->floor[i].percent = atoi(zz[i * 2 + 1]);
+		}
+		d_ptr->tunnel_percent = atoi(zz[DUNGEON_FEAT_PROB_NUM * 2]);
 	}
 
 	/* Process 'A' for "wAll type" (one line only) */
@@ -3031,19 +3030,18 @@ errr parse_d_info(char *buf, header *head)
 		char *zz[16];
 
 		/* Scan for the values */
-		if (tokenize(buf+2, 10, zz, 0) != 10) return (1);
+		if (tokenize(buf+2, DUNGEON_FEAT_PROB_NUM * 2 + 4, zz, 0) != (DUNGEON_FEAT_PROB_NUM * 2 + 4)) return (1);
 
 		/* Save the values */
-		d_ptr->fill_type1 = f_tag_to_index(zz[0]);
-		d_ptr->fill_percent1 = atoi(zz[1]);
-		d_ptr->fill_type2 = f_tag_to_index(zz[2]);
-		d_ptr->fill_percent2 = atoi(zz[3]);
-		d_ptr->fill_type3 = f_tag_to_index(zz[4]);
-		d_ptr->fill_percent3 = atoi(zz[5]);
-		d_ptr->outer_wall = f_tag_to_index(zz[6]);
-		d_ptr->inner_wall = f_tag_to_index(zz[7]);
-		d_ptr->stream1 = f_tag_to_index(zz[8]);
-		d_ptr->stream2 = f_tag_to_index(zz[9]);
+		for (i = 0; i < DUNGEON_FEAT_PROB_NUM; i++)
+		{
+			d_ptr->fill[i].feat = f_tag_to_index(zz[i * 2]);
+			d_ptr->fill[i].percent = atoi(zz[i * 2 + 1]);
+		}
+		d_ptr->outer_wall = f_tag_to_index(zz[DUNGEON_FEAT_PROB_NUM * 2]);
+		d_ptr->inner_wall = f_tag_to_index(zz[DUNGEON_FEAT_PROB_NUM * 2 + 1]);
+		d_ptr->stream1 = f_tag_to_index(zz[DUNGEON_FEAT_PROB_NUM * 2 + 2]);
+		d_ptr->stream2 = f_tag_to_index(zz[DUNGEON_FEAT_PROB_NUM * 2 + 3]);
 	}
 
 	/* Process 'F' for "Dungeon Flags" (multiple lines) */

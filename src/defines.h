@@ -5366,6 +5366,9 @@ extern int PlayerUID;
 #define DUNGEON_DARKNESS 19
 
 
+#define DUNGEON_FEAT_PROB_NUM 3
+
+
 /*
  * Flags for change floor mode
  */
