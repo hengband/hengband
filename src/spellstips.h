@@ -832,7 +832,7 @@ static char *spell_tips[VALID_REALM][32] =
 		"attacks with powerful 3 strikes.",
 
 		"attacks with vamparic strikes which absorbs HP from a monster and gives them to you. No effect to unliving monsters.",
-		"attempts to stun, confuse and sleep all waking monster.",
+		"attempts to stun, confuse and sleep all waking monsters.",
 		"performs a series of rush attacks. The series continues while killing each monster in a time and SP remains.",
 		"runs toward given location while attacking all monsters on the path.",
 		"double attacks at a time.",
