@@ -2782,7 +2782,7 @@ note_dies = "は蒸発した！";
 #ifdef JP
 				if (seen) msg_format("%sはあなたが見えないので影響されない！", m_name);
 #else
-				if (seen) msg_format("%^s  can't see you, and isn't affected!", m_name);
+				if (seen) msg_format("%^s can't see you, and isn't affected!", m_name);
 #endif
 				skipped = TRUE;
 				break;
@@ -6441,9 +6441,9 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		int max_attempts = 10;
 
 #ifdef JP
-if (blind) msg_print("何かが跳ね返った！");
-else if (p_ptr->special_defense & KATA_FUUJIN) msg_print("風の如く武器を振るって弾き返した！");
-else msg_print("攻撃が跳ね返った！");
+		if (blind) msg_print("何かが跳ね返った！");
+		else if (p_ptr->special_defense & KATA_FUUJIN) msg_print("風の如く武器を振るって弾き返した！");
+		else msg_print("攻撃が跳ね返った！");
 #else
 		if (blind) msg_print("Something bounces!");
 		else msg_print("The attack bounces!");
@@ -8997,7 +8997,8 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			}
 			else
 			{
-				monster_race *ref_ptr = &r_info[m_list[cave[y][x].m_idx].r_idx];
+				monster_type *m_ptr = &m_list[cave[y][x].m_idx];
+				monster_race *ref_ptr = &r_info[m_ptr->r_idx];
 
 				if ((ref_ptr->flags2 & RF2_REFLECTING) && (!one_in_(10) && (flg & PROJECT_REFLECTABLE) && (!who || dist_hack > 1)))
 				{
@@ -9021,14 +9022,13 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 						t_x = x_saver;
 					}
 
-					if (m_list[cave[y][x].m_idx].ml)
+					if (m_ptr->ml)
 					{
 #ifdef JP
-if ((m_list[cave[y][x].m_idx].r_idx == MON_KENSHIROU)
-	|| (m_list[cave[y][x].m_idx].r_idx == MON_RAOU))
-	msg_print("「北斗神拳奥義・二指真空把！」");
-if (m_list[cave[y][x].m_idx].r_idx == MON_DIO) msg_print("ディオ・ブランドーは指一本で攻撃を弾き返した！");
-else msg_print("攻撃は跳ね返った！");
+						if ((m_ptr->r_idx == MON_KENSHIROU) || (m_ptr->r_idx == MON_RAOU))
+							msg_print("「北斗神拳奥義・二指真空把！」");
+						else if (m_ptr->r_idx == MON_DIO) msg_print("ディオ・ブランドーは指一本で攻撃を弾き返した！");
+						else msg_print("攻撃は跳ね返った！");
 #else
 						msg_print("The attack bounces!");
 #endif
