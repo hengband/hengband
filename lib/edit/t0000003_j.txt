@@ -276,6 +276,8 @@ B:$6:N:Weaponmaster:Garad-Dural:Dwarf
 B:6:N:武器匠:ガラド=ドゥラル:ドワーフ
 B:$6:A:0:Compare weapons:200:200:c:21:0
 B:6:A:0:武器を比較する:200:200:c:21:0
+B:$6:A:1:Evaluate AC:200:200:a:46:0
+B:6:A:1:防御について調べる:200:200:a:46:0
 
 B:$7:N:Fighters Hall:Hjolgar:Barbarian
 B:7:N:戦士の集会所:ヒョルガー:野蛮人

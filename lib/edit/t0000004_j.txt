@@ -183,6 +183,8 @@ B:$6:N:Weaponmaster:Rodonwin:Human
 B:6:N:武器匠:ロドウィン:人間
 B:$6:A:0:Compare weapons:400:400:c:21:0
 B:6:A:0:武器を比較する:400:400:c:21:0
+B:$6:A:1:Evaluate AC:400:400:a:46:0
+B:6:A:1:防御について調べる:400:400:a:46:0
 
 B:$7:N:Fighters Hall:Gharz:Golem
 B:7:N:戦士の集会所:ガーツ:ゴーレム

@@ -321,9 +321,13 @@ B:$6:N:Weaponmaster:Suiyan:Human
 B:6:N:Éð´ï¾¢:¿å°Ã:¿Í´Ö
 B:$6:A:0:Compare weapons:1000:1000:c:21:0
 B:6:A:0:Éð´ï¤òÈæ³Ó¤¹¤ë:1000:1000:c:21:0
+B:$6:A:1:Evaluate AC:1000:1000:a:46:0
+B:6:A:1:ËÉ¸æ¤Ë¤Ä¤¤¤ÆÄ´¤Ù¤ë:1000:1000:a:46:0
 ?:[IOR [EQU $QUEST5 3] [EQU $QUEST5 4] ]
 B:$6:A:0:Compare weapons:150:150:c:21:0
 B:6:A:0:Éð´ï¤òÈæ³Ó¤¹¤ë:150:150:c:21:0
+B:$6:A:1:Evaluate AC:150:150:a:46:0
+B:6:A:1:ËÉ¸æ¤Ë¤Ä¤¤¤ÆÄ´¤Ù¤ë:150:150:a:46:0
 ?:1
 
 B:$7:N:Fighters Hall:Barak:Human
