@@ -1967,7 +1967,7 @@ note = "にはかなり耐性がある！";
 				dam /= 9;
 				if (seen) r_ptr->r_flags3 |= (RF3_IM_FIRE);
 			}
-			if (r_ptr->flags3 & (RF3_HURT_FIRE))
+			else if (r_ptr->flags3 & (RF3_HURT_FIRE))
 			{
 #ifdef JP
 note = "はひどい痛手をうけた。";
@@ -2007,7 +2007,7 @@ note = "にはかなり耐性がある！";
 				dam /= 9;
 				if (seen) r_ptr->r_flags3 |= (RF3_IM_COLD);
 			}
-			if (r_ptr->flags3 & (RF3_HURT_COLD))
+			else if (r_ptr->flags3 & (RF3_HURT_COLD))
 			{
 #ifdef JP
 note = "はひどい痛手をうけた。";
@@ -3274,6 +3274,17 @@ note = "にはかなり耐性がある。";
 
 				dam /= 9;
 				if (seen) r_ptr->r_flags3 |= (RF3_IM_COLD);
+			}
+			else if (r_ptr->flags3 & (RF3_HURT_COLD))
+			{
+#ifdef JP
+note = "はひどい痛手をうけた。";
+#else
+				note = " is hit hard.";
+#endif
+
+				dam *= 2;
+				if (seen) r_ptr->r_flags3 |= (RF3_HURT_COLD);
 			}
 			break;
 		}
