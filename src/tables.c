@@ -7246,4 +7246,7 @@ byte feature_action_flags[FF_FLAG_MAX] =
 	0, /* TOWN */
 	0, /* ENTRANCE */
 	0, /* MIRROR */
+	0, /* UNPERM */
+	0, /* TELEPORTABLE */
+	0, /* CONVERT */
 };
