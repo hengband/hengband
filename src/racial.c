@@ -157,7 +157,7 @@ static bool do_cmd_archer(void)
 #endif
 
 			/* Auto-inscription */
-			if (slot > 0) autopick_alter_item(slot, FALSE);
+			if (slot >= 0) autopick_alter_item(slot, FALSE);
 
 			/* Destroy the wall */
 			cave_alter_feat(y, x, FF_HURT_ROCK);
@@ -231,7 +231,7 @@ static bool do_cmd_archer(void)
 		slot = inven_carry(q_ptr);
 
 		/* Auto-inscription */
-		if (slot > 0) autopick_alter_item(slot, FALSE);
+		if (slot >= 0) autopick_alter_item(slot, FALSE);
 	}
 	/**********Create bolts*********/
 	else if (ext == 3)
@@ -299,7 +299,7 @@ static bool do_cmd_archer(void)
 		slot = inven_carry(q_ptr);
 
 		/* Auto-inscription */
-		if (slot > 0) autopick_alter_item(slot, FALSE);
+		if (slot >= 0) autopick_alter_item(slot, FALSE);
 	}
 	return TRUE;
 }
