@@ -177,8 +177,9 @@ Below, only the new features in Hengband are explained.
 
 Hengband offers two different methods of auto-pickup/destroy.
 - Powerful method
-  Hengband offers a very powerful auto-pickup/auto-destroy system 
-  which you may customize.  Please read the file "autopick_eng.txt".
+  Hengband offers a very powerful auto-pickup/auto-destroy system
+  which you may customize.  Press '_' key to enter edit mode.  Please
+  read the file "autopick_eng.txt" about the syntax.
 
 - Easy method
   Since the powerful method is slightly difficult to use 
@@ -186,6 +187,27 @@ Hengband offers two different methods of auto-pickup/destroy.
   the destroy_items option and/or the always_pickup option to use 
   this method.  These options are located in (6) Easy Auto-Destroyer 
   Options and (1) Input Options in the Set options ('=') command.
+
+------ Tile graphics, Big tile, and Big screen
+
+- Tile graphics
+  To use graphics mode, choose it from menu for Windows and Mac, or
+  use -g option for Linux.  There are 8x8 size old tile and 16x16 size
+  Adam bolt tile, and you can change from menu for Windows and Mac, or
+  use -- -a option to use 16x16 tile for Linux.  Since source archive
+  doesn't include 16x16 size tile, you need to download the
+  heng_graf.tar.gz.
+
+- Big tile (Double-width tile)
+  In the Big tile mode, graphic tile have double width, and become
+  square.  You can choose Bigtile from menu for Windows and Mac, or
+  use -- -b option for Linux.
+
+- Big screen
+  You can resize each window using mouse, which allow you to have
+  terminal windows larger than 80x24.  On linux, it's convenience to
+  use environment variables: ANGBAND_X11_COLS_0 and
+  ANGBAND_X11_ROWS_0.
 
 
 ------ Play Record

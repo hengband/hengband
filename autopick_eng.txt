@@ -8,17 +8,33 @@
 #
 #    =====   How to use auto-picker/destroyer   ========
 #    
-#      Create a file named "pickpref.prf" or "pickpref-<<name>>.prf" 
-#      (or move and rename this file) in the same directory as your 
-#      user preference files.  This will be ~/.angband/Hengband/ 
-#      for UNIX, or hengband\lib\user\ for other operating systems.
-#      
-#      The game will read the file "pickpref-<<current character 
-#      name>>.prf" first and then read the file "pickpref.prf".  The 
-#      first-read file takes priority.
+#     Press the _ in a game to enter editor mode for preference of
+#     auto-picker/destroyer.  Basic usage of the editor is almost same
+#     as vi, and also have emacs like commands.  Most commands is
+#     always displayed on the first line and the right half of the
+#     screen.
 #
-#      You may use the '$' command within the game to reread auto-
-#      picker files.
+#     Important commands 
+#      'a', 'i' or ^Q :  Enter insert mode from command mode
+#      ESC  or ^Q     :  Return to command mode from insert mode
+#      'q'            :  Quit the editor (command mode only)
+#      'hjkl2468'     :  Move cursor (command mode only)
+#      ^B ^N ^P ^F    :  Move cursor (always)
+#      ^I  : Choose an item from inventry/equipment, then insert its name
+#      ^S  : Rotates action (pick up / destroy / leave on floor)
+#      ^U  : Rotates idendify state (identified / unidentified / ...)
+#
+#      The preference will be saved in a file named
+#      "pickpref-<<name>>.prf" in your user directory; This will be
+#      ~/.angband/Hengband/ for UNIX, or hengband\lib\user\ for other
+#      operating systems.  You may edit this file using any text
+#      editor, and may use the '$' command within the game to reread
+#      this file.  When you don't use the in-game editor, you may use
+#      "pickpref.prf" as preference file.
+#
+#      When there are both files, the game will read the file
+#      "pickpref-<<current character name>>.prf" first and then read
+#      the file "pickpref.prf".  The first-read file takes priority.
 #
 #      Notes:
 #      Maximum number of active lines is 1009.
