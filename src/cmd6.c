@@ -6596,7 +6596,7 @@ static bool select_magic_eater(int mode)
 	if (repeat_pull(&sn))
 	{
 		/* Verify the spell */
-		if (sn > 71 && !(p_ptr->magic_num1[sn] > k_info[lookup_kind(TV_ROD, i)].pval * (p_ptr->magic_num2[sn] - 1) * 0x10000L))
+		if (sn > 71 && !(p_ptr->magic_num1[sn] > k_info[lookup_kind(TV_ROD, sn-72)].pval * (p_ptr->magic_num2[sn] - 1) * 0x10000L))
 			return sn;
 		else if (sn < 72 && !(p_ptr->magic_num1[sn] < 0x10000))
 			return sn;
