@@ -941,7 +941,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 	s16b this_o_idx, next_o_idx = 0;
 
 	/* Feature code (applying "mimic" field) */
-	byte feat = c_ptr->mimic ? f_info[c_ptr->mimic].mimic : f_info[c_ptr->feat].mimic;
+	byte feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 	byte a;
 	byte c;
@@ -1757,7 +1757,7 @@ void note_spot(int y, int x)
 	byte feat;
 
 	/* Feature code (applying "mimic" field) */
-	feat = c_ptr->mimic ? f_info[c_ptr->mimic].mimic : f_info[c_ptr->feat].mimic;
+	feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 
 	/* Blind players see nothing */
@@ -4687,7 +4687,7 @@ void map_area(int range)
 			c_ptr = &cave[y][x];
 
 			/* Feature code (applying "mimic" field) */
-			feat = c_ptr->mimic ? f_info[c_ptr->mimic].mimic : f_info[c_ptr->feat].mimic;
+			feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 			/* All non-walls are "checked" */
 			if ((feat <= FEAT_DOOR_TAIL) ||
@@ -4709,7 +4709,7 @@ void map_area(int range)
 					c_ptr = &cave[y + ddy_ddd[i]][x + ddx_ddd[i]];
 
 					/* Feature code (applying "mimic" field) */
-					feat = c_ptr->mimic ? f_info[c_ptr->mimic].mimic : f_info[c_ptr->feat].mimic;
+					feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 					/* Memorize walls (etc) */
 					if ((feat >= FEAT_RUBBLE) && (feat != FEAT_DIRT) && (feat != FEAT_GRASS))
@@ -4776,7 +4776,7 @@ void wiz_lite(bool ninja)
 			cave_type *c_ptr = &cave[y][x];
 
 			/* Feature code (applying "mimic" field) */
-			feat = c_ptr->mimic ? f_info[c_ptr->mimic].mimic : f_info[c_ptr->feat].mimic;
+			feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 			/* Process all non-walls */
 			if (cave_floor_bold(y, x) || (feat == FEAT_RUBBLE) || (feat == FEAT_TREES) || (feat == FEAT_MOUNTAIN))
@@ -4791,7 +4791,7 @@ void wiz_lite(bool ninja)
 					c_ptr = &cave[yy][xx];
 
 					/* Feature code (applying "mimic" field) */
-					feat = c_ptr->mimic ? f_info[c_ptr->mimic].mimic : f_info[c_ptr->feat].mimic;
+					feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 					/* Memorize normal features */
 					if (ninja)
@@ -5256,7 +5256,7 @@ void glow_deep_lava_and_bldg(void)
 			c_ptr = &cave[y][x];
 
 			/* Feature code (applying "mimic" field) */
-			feat = c_ptr->mimic ? f_info[c_ptr->mimic].mimic : f_info[c_ptr->feat].mimic;
+			feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 			if ((feat == FEAT_DEEP_LAVA) ||
 			   ((feat >= FEAT_SHOP_HEAD) &&
