@@ -4692,7 +4692,7 @@ bool genocide_aux(int m_idx, int power, bool player_cast, int dam_side, cptr spe
 		if (MON_CSLEEP(m_ptr))
 		{
 			(void)set_monster_csleep(m_idx, 0);
-			if (see_m)
+			if (m_ptr->ml)
 			{
 #ifdef JP
 				msg_format("%^sが目を覚ました。", m_name);
@@ -5995,7 +5995,7 @@ static void cave_temp_room_lite(void)
 				(void)set_monster_csleep(c_ptr->m_idx, 0);
 
 				/* Notice the "waking up" */
-				if (is_seen(m_ptr))
+				if (m_ptr->ml)
 				{
 					char m_name[80];
 

@@ -1642,7 +1642,7 @@ static bool vanish_dungeon(void)
 				(void)set_monster_csleep(c_ptr->m_idx, 0);
 
 				/* Notice the "waking up" */
-				if (is_seen(m_ptr))
+				if (m_ptr->ml)
 				{
 					/* Acquire the monster name */
 					monster_desc(m_name, m_ptr, 0);
