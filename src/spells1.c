@@ -599,6 +599,84 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 	dam = (dam + r) / (r + 1);
 
 
+	if (c_ptr->feat == FEAT_TREES)
+	{
+		cptr message;
+		switch (typ)
+		{
+		case GF_POIS:
+		case GF_NUKE:
+		case GF_DEATH_RAY:
+#ifdef JP
+			message = "枯れた";break;
+#else
+			message = "nanka.";break;
+#endif
+		case GF_TIME:
+#ifdef JP
+			message = "縮んだ";break;
+#else
+			message = "nanka.";break;
+#endif
+		case GF_ACID:
+#ifdef JP
+			message = "溶けた";break;
+#else
+			message = "melted.";break;
+#endif
+		case GF_COLD:
+		case GF_ICE:
+#ifdef JP
+			message = "凍り、砕け散った";break;
+#else
+			message = "nanka.";break;
+#endif
+		case GF_FIRE:
+		case GF_ELEC:
+		case GF_PLASMA:
+#ifdef JP
+			message = "燃えた";break;
+#else
+			message = "burns up!";break;
+#endif
+		case GF_METEOR:
+		case GF_CHAOS:
+		case GF_MANA:
+		case GF_SEEKER:
+		case GF_SUPER_RAY:
+		case GF_SHARDS:
+		case GF_ROCKET:
+		case GF_SOUND:
+		case GF_DISENCHANT:
+		case GF_FORCE:
+		case GF_GRAVITY:
+#ifdef JP
+			message = "粉砕された";break;
+#else
+			message = "was crushed.";break;
+#endif
+		default:
+			message = NULL;break;
+		}
+		if (message)
+		{
+#ifdef JP
+			msg_format("木は%s。", message);
+#else
+			msg_format("A tree %s", message);
+#endif
+			c_ptr->feat = (one_in_(3) ? FEAT_DEEP_GRASS : FEAT_GRASS);
+			c_ptr->info &= ~(CAVE_MASK);
+			c_ptr->info |= CAVE_FLOOR;
+
+			/* Observe */
+			if (c_ptr->info & (CAVE_MARK)) obvious = TRUE;
+
+			/* Update some things */
+			p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
+		}
+	}
+
 	/* Analyze the type */
 	switch (typ)
 	{
@@ -613,9 +691,6 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 		case GF_BRAIN_SMASH:
 		case GF_DRAIN_MANA:
 		case GF_PSY_SPEAR:
-		case GF_ELEC:
-		case GF_COLD:
-		case GF_ICE:
 		case GF_FORCE:
 		case GF_HOLY_FIRE:
 		case GF_HELL_FIRE:
@@ -626,11 +701,10 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 		case GF_DOMINATION:
 		case GF_IDENTIFY:
 		case GF_ATTACK:
-		{
-			break;
-		}
-
 		case GF_ACID:
+		case GF_ELEC:
+		case GF_COLD:
+		case GF_ICE:
 		case GF_FIRE:
 		case GF_PLASMA:
 		case GF_METEOR:
@@ -639,56 +713,6 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 		case GF_SEEKER:
 		case GF_SUPER_RAY:
 		{
-			cptr message;
-			if (c_ptr->feat == FEAT_TREES)
-			{
-				switch (typ)
-				{
-				case GF_ACID:
-#ifdef JP
-					message = "溶けた";break;
-#else
-					message = "melted.";break;
-#endif
-				case GF_FIRE: 
-				case GF_PLASMA:
-#ifdef JP
-					message = "燃えた";break;
-#else
-					message = "burns up!";break;
-#endif
-				case GF_METEOR:
-				case GF_CHAOS:
-				case GF_MANA: 
-				case GF_SEEKER: 
-				case GF_SUPER_RAY:
-#ifdef JP
-					message = "粉砕された";break;
-#else
-					message = "was crushed.";break;
-#endif
-				default:
-#ifdef JP
-					message = "燃えた";break;
-#else
-					message = "burns up!";break;
-#endif
-				}
-#ifdef JP
-				msg_format("木は%s。", message);
-#else
-				msg_format("A tree %s", message);
-#endif
-				c_ptr->feat = (one_in_(3) ? FEAT_DEEP_GRASS : FEAT_GRASS);
-				c_ptr->info &= ~(CAVE_MASK);
-				c_ptr->info |= CAVE_FLOOR;
-
-				/* Observe */
-				if (c_ptr->info & (CAVE_MARK)) obvious = TRUE;
-
-				/* Update some things */
-				p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
-			}
 			break;
 		}
 

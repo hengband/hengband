@@ -1199,7 +1199,7 @@ msg_print("少し頭がハッキリした。");
 		}
 		case CLASS_RED_MAGE:
 		{
-			if (racial_aux(48, 60, A_INT, 25))
+			if (racial_aux(48, 20, A_INT, 0))
 			{
 				handle_stuff();
 				do_cmd_cast();
@@ -2660,8 +2660,8 @@ strcpy(power_desc[num].name, "連続魔");
 #endif
 
 		power_desc[num].level = 48;
-		power_desc[num].cost = 60;
-		power_desc[num].fail = 100 - racial_chance(48, A_INT, 25);
+		power_desc[num].cost = 20;
+		power_desc[num].fail = 100 - racial_chance(48, A_INT, 0);
 		power_desc[num++].number = -3;
 		break;
 	}

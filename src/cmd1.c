@@ -2438,6 +2438,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 	bool            stab_fleeing = FALSE;
 	bool            fuiuchi = FALSE;
 	bool            do_quake = FALSE;
+	bool            weak = FALSE;
 	bool            drain_msg = TRUE;
 	int             drain_result = 0, drain_heal = 0;
 	bool            can_drain = FALSE;
@@ -3231,11 +3232,7 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 				}
 				m_ptr->maxhp -= (k+7)/8;
 				if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
-#ifdef JP
-				msg_format("%sは弱くなったようだ。", m_name);
-#else
-				msg_format("%^s seems weakened.", m_name);
-#endif
+				weak = TRUE;
 			}
 			can_drain = FALSE;
 			drain_result = 0;
@@ -3362,6 +3359,7 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 						r_ptr = &r_info[m_ptr->r_idx];
 
 						*fear = FALSE;
+						weak = FALSE;
 					}
 					else
 					{
@@ -3533,6 +3531,14 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 	}
 
 
+	if (weak && !(*mdeath))
+	{
+#ifdef JP
+		msg_format("%sは弱くなったようだ。", m_name);
+#else
+		msg_format("%^s seems weakened.", m_name);
+#endif
+	}
 	if (drain_left != MAX_VAMPIRIC_DRAIN)
 	{
 		if (one_in_(4))

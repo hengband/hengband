@@ -12349,15 +12349,15 @@ D:厄介なゼファーハウンド達を支配するアンデッドだ。
 N:672:<コーン>のジャガーノート
 E:Juggernaut of Khorne
 G:g:D
-I:125:90d19:12:90:10
+I:120:90d19:12:90:10
 W:43:3:0:2500:0:0
-B:BUTT:HURT:6d6
-B:CRUSH:HURT:8d6
-B:CRUSH:HURT:8d6
-B:BUTT:HURT:6d6
+B:BUTT:HURT:8d6
+B:CRUSH:HURT:10d6
+B:CRUSH:HURT:10d6
+B:BUTT:HURT:8d6
 F:BASH_DOOR | REFLECTING | KILL_ITEM |
 F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | DEMON |
-F:NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING | EVIL
+F:NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING | EVIL | RIDING
 D:$A great, vicious beast whose flesh is made of steel and whose 
 D:$blood is fire. It charges at you ignoring everything else.
 D:巨大な悪意に満ちた獣で、肉体は鉄、血は炎でできている。
