@@ -208,6 +208,9 @@ bool monst_spell_monst(int m_idx)
 
 	bool pet = is_pet(m_ptr);
 
+	bool in_no_magic_dungeon = (d_info[dungeon_type].flags1 & DF1_NO_MAGIC) && dun_level
+		&& (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest));
+
 	/* Prepare flags for summoning */
 	if (pet) p_mode |= PM_FORCE_PET;
 	if (!pet) u_mode |= PM_ALLOW_UNIQUE;
@@ -310,7 +313,7 @@ bool monst_spell_monst(int m_idx)
 	/* Extract the monster level */
 	rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
 
-	if (dun_level && (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest)) && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC))
+	if (in_no_magic_dungeon && !(r_ptr->flags2 & RF2_STUPID))
 	{
 		f4 &= (RF4_NOMAGIC_MASK);
 		f5 &= (RF5_NOMAGIC_MASK);
@@ -468,7 +471,6 @@ bool monst_spell_monst(int m_idx)
 		f4 &= (RF4_INT_MASK);
 		f5 &= (RF5_INT_MASK);
 		f6 &= (RF6_INT_MASK);
-
 	}
 
 	/* No spells left */
@@ -526,7 +528,7 @@ bool monst_spell_monst(int m_idx)
 	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(1, 0);
 
 	/* Check for spell failure (inate attacks never fail) */
-	if (!spell_is_inate(thrown_spell) && m_ptr->stunned && one_in_(2))
+	if (!spell_is_inate(thrown_spell) && (in_no_magic_dungeon || (m_ptr->stunned && one_in_(2))))
 	{
 		disturb(1, 0);
 		/* Message */

@@ -1268,6 +1268,9 @@ bool make_attack_spell(int m_idx)
 	/* Check "projectable" */
 	bool direct;
 
+	bool in_no_magic_dungeon = (d_info[dungeon_type].flags1 & DF1_NO_MAGIC) && dun_level
+		&& (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest));
+
 	/* Cannot cast spells when confused */
 	if (m_ptr->confused)
 	{
@@ -1401,7 +1404,7 @@ bool make_attack_spell(int m_idx)
 		f6 &= ~(RF6_DARKNESS);
 	}
 
-	if (dun_level && (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest)) && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC))
+	if (in_no_magic_dungeon && !(r_ptr->flags2 & RF2_STUPID))
 	{
 		f4 &= (RF4_NOMAGIC_MASK);
 		f5 &= (RF5_NOMAGIC_MASK);
@@ -1522,7 +1525,8 @@ bool make_attack_spell(int m_idx)
 	if (r_ptr->flags2 & RF2_STUPID) failrate = 0;
 
 	/* Check for spell failure (inate attacks never fail) */
-	if (!spell_is_inate(thrown_spell) && ((m_ptr->stunned && one_in_(2)) || (randint0(100) < failrate)))
+	if (!spell_is_inate(thrown_spell)
+	    && (in_no_magic_dungeon || (m_ptr->stunned && one_in_(2)) || (randint0(100) < failrate)))
 	{
 		disturb(1, 0);
 		/* Message */
