@@ -83,13 +83,11 @@ static BUF* buf_new(void)
 	return p;
 }
 
-#if 0
 static void buf_delete(BUF *b)
 {
 	free(b->data);
 	free(b);
 }
-#endif
 
 static int buf_append(BUF *buf, const char *data, size_t size)
 {
@@ -248,6 +246,98 @@ static errr make_dump(BUF* dumpbuf)
 	/* Success */
 	return (0);
 }
+
+/*
+ * Make screen dump to buffer
+ */
+cptr make_screen_dump(void)
+{
+	BUF *screen_buf;
+	int y, x, i;
+	cptr ret;
+
+	byte a = 0, old_a = 0;
+	char c = ' ';
+
+	char *html_head[] = {
+		"<html>\n<body text=\"#ffffff\" bgcolor=\"#000000\">\n",
+		"<pre>",
+		0,
+	};
+	char *html_foot[] = {
+		"</pre>\n",
+		"</body>\n</html>\n",
+		0,
+	};
+
+	/* Alloc buffer */
+	screen_buf = buf_new();
+	if (screen_buf == NULL) return (NULL);
+
+	for (i = 0; html_head[i]; i++)
+		buf_sprintf(screen_buf, html_head[i]);
+
+	/* Dump the screen */
+	for (y = 0; y < 24; y++)
+	{
+		/* Start the row */
+		if (y != 0)
+			buf_sprintf(screen_buf, "\n");
+
+		/* Dump each row */
+		for (x = 0; x < 79; x++)
+		{
+			int rv, gv, bv;
+			char *cc = NULL;
+			/* Get the attr/char */
+			(void)(Term_what(x, y, &a, &c));
+
+			switch (c)
+			{
+			case '&': cc = "&amp;"; break;
+			case '<': cc = "&lt;"; break;
+			case '>': cc = "&gt;"; break;
+#ifdef WINDOWS
+			case 0x1f: c = '.'; break;
+			case 0x7f: c = (a == 0x09) ? '%' : '#'; break;
+#endif
+			}
+
+			a = a & 0x0F;
+			if ((y == 0 && x == 0) || a != old_a) {
+				rv = angband_color_table[a][1];
+				gv = angband_color_table[a][2];
+				bv = angband_color_table[a][3];
+				buf_sprintf(screen_buf, "%s<font color=\"#%02x%02x%02x\">", 
+					    ((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
+				old_a = a;
+			}
+			if (cc)
+				buf_sprintf(screen_buf, "%s", cc);
+			else
+				buf_sprintf(screen_buf, "%c", c);
+		}
+	}
+	buf_sprintf(screen_buf, "</font>");
+
+	for (i = 0; html_foot[i]; i++)
+		buf_sprintf(screen_buf, html_foot[i]);
+
+	/* Screen dump size is too big ? */
+	if (screen_buf->size > SCREEN_BUF_SIZE)
+	{
+		buf_delete(screen_buf);
+		return (NULL);
+	}
+
+	ret = string_make(screen_buf->data);
+
+	/* Free buffer */
+	buf_delete(screen_buf);
+
+	return ret;
+}
+
 
 errr report_score(void)
 {

@@ -664,7 +664,6 @@ extern void do_cmd_knowledge(void);
 extern void plural_aux(char * Name);
 extern void do_cmd_checkquest(void);
 extern void do_cmd_time(void);
-extern cptr make_screen_dump(void);
 
 /* cmd5.c */
 extern cptr spell_categoly_name(int tval);
@@ -1465,6 +1464,7 @@ extern size_t mb_strlcpy(char *dst, const char *src, size_t size);
 
 /* report.c */
 extern errr report_score(void);
+extern cptr make_screen_dump(void);
 
 /* inet.c */
 extern int soc_write(int sd, char *buf, size_t sz);
