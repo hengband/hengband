@@ -4711,7 +4711,7 @@ void place_object(int y, int x, u32b mode)
 	if (!in_bounds(y, x)) return;
 
 	/* Require clean floor space */
-	if (!cave_clean_bold(y, x)) return;
+	if (!cave_droppable_bold(y, x)) return;
 
 
 	/* Get local object */
@@ -4828,7 +4828,7 @@ void place_gold(int y, int x)
 	if (!in_bounds(y, x)) return;
 
 	/* Require clean floor space */
-	if (!cave_clean_bold(y, x)) return;
+	if (!cave_droppable_bold(y, x)) return;
 
 
 	/* Get local object */
@@ -5089,7 +5089,7 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 		bx = tx;
 
 		/* Require floor space */
-		if (!cave_clean_bold(by, bx)) continue;
+		if (!cave_droppable_bold(by, bx)) continue;
 
 		/* Okay */
 		flag = TRUE;

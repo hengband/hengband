@@ -1946,7 +1946,7 @@ void alter_reality(void)
 bool warding_glyph(void)
 {
 	/* XXX XXX XXX */
-	if (!cave_clean_bold(py, px))
+	if (!cave_droppable_bold(py, px) || !have_flag(f_flags_bold(py, px), FF_PROJECT))
 	{
 #ifdef JP
 msg_print("床上のアイテムが呪文を跳ね返した。");
@@ -1973,7 +1973,7 @@ msg_print("床上のアイテムが呪文を跳ね返した。");
 bool warding_mirror(void)
 {
 	/* XXX XXX XXX */
-	if (!cave_clean_bold(py, px))
+	if (!cave_droppable_bold(py, px) || !have_flag(f_flags_bold(py, px), FF_PROJECT))
 	{
 #ifdef JP
 msg_print("床上のアイテムが呪文を跳ね返した。");

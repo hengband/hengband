@@ -4338,6 +4338,19 @@
 
 
 /*
+ * Determine if a "legal" grid is a "droppable" grid
+ *
+ * Line 1 -- forbid non-drops
+ * Line 2 -- forbid object terrains
+ * Line 3 -- forbid normal objects
+ */
+#define cave_droppable_bold(Y,X) \
+	(have_flag(f_flags_bold((Y), (X)), FF_DROP) && \
+	 !(cave[Y][X].info & CAVE_OBJECT) && \
+	 !(cave[Y][X].o_idx))
+
+
+/*
  * Determine if a "legal" grid is an "empty" floor grid
  *
  * Line 1 -- forbid non-placement grids

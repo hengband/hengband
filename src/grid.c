@@ -36,8 +36,10 @@ bool new_player_spot(void)
 		c_ptr = &cave[y][x];
 
 		/* Must be a "naked" floor grid */
-		if (!cave_clean_bold(y, x) || c_ptr->m_idx) continue;
-		if (!in_bounds(y,x)) continue;
+		if (c_ptr->m_idx) continue;
+		if (!have_flag(f_flags_grid(c_ptr), FF_MOVE) && !have_flag(f_flags_grid(c_ptr), FF_CAN_FLY)) continue;
+		if (!player_can_enter(c_ptr->feat, 0)) continue;
+		if (!in_bounds(y, x)) continue;
 
 		/* Refuse to start on anti-teleport grids */
 		if (c_ptr->info & (CAVE_ICKY)) continue;
