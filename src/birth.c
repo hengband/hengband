@@ -5367,7 +5367,7 @@ static bool player_birth_aux(void)
 		if (!get_player_seikaku()) return FALSE;
 
 		clear_from(10);
-		roff_to_buf(seikaku_jouhou[p_ptr->pseikaku], 78, temp);
+		roff_to_buf(seikaku_jouhou[p_ptr->pseikaku], 74, temp);
 		t = temp;
 
 		for (i = 0; i< 6; i++)
