@@ -275,11 +275,6 @@ cptr autopick_line_from_entry(autopick_type *entry)
                 }
                 buf[i] = '\0';
 	}
-	else
-	{
-		if (entry->flag[0] == 0L && entry->flag[0] == 0L)
-			return NULL;
-	}
 
 	if (entry->insc)
 	{
@@ -2520,16 +2515,12 @@ void do_cmd_edit_autopick(void)
 	/* Free old entries */
 	init_autopicker();
 
-	/* Name of the Last Destroyed Item */
+	/* Command Description of the 'Last Destroyed Item' */
         if (autopick_last_destroyed_object.k_idx)
         {
                 autopick_entry_from_object(entry, &autopick_last_destroyed_object);
                 last_destroyed = autopick_line_from_entry_kill(entry);
-        }
 
-	/* Command Description of the Last Destroyed Item */
-	if (last_destroyed)
-	{
 		strncpy(last_destroyed_command, format("^L \"%s\"", last_destroyed), WID_DESC+2);
 		last_destroyed_command[WID_DESC+2] = '\0';
 	}
@@ -3132,9 +3123,11 @@ void do_cmd_edit_autopick(void)
 		case KTRL('c'):
 			/* Insert a conditinal expression line */
 			insert_return_code(lines_list, 0, cy);
+			string_free(lines_list[cy]);
 			lines_list[cy] = string_make(classrace);
 			cy++;
 			insert_return_code(lines_list, 0, cy);
+			string_free(lines_list[cy]);
 			lines_list[cy] = string_make("?:1");
 			cx = 0;
 
@@ -3193,23 +3186,22 @@ void do_cmd_edit_autopick(void)
 				dirty_flags |= DIRTY_SCREEN;
 				break;
 			}
-			tmp = autopick_line_from_entry_kill(entry);
 
-			if (tmp)
-			{
-				insert_return_code(lines_list, 0, cy);
-				lines_list[cy] = tmp;
-				cx = 0;
+                        insert_return_code(lines_list, 0, cy);
+			string_free(lines_list[cy]);
+                        lines_list[cy] = autopick_line_from_entry_kill(entry);
+                        cx = 0;
 
-				/* Now dirty because of item/equip menu */
-				dirty_flags |= DIRTY_SCREEN;
-			}
+                        /* Now dirty because of item/equip menu */
+                        dirty_flags |= DIRTY_SCREEN;
+
 			break;
 		case KTRL('l'):
 			/* Insert a name of last destroyed item */
 			if (last_destroyed)
 			{
 				insert_return_code(lines_list, 0, cy);
+                                string_free(lines_list[cy]);
 				lines_list[cy] = string_make(last_destroyed);
 				cx = 0;
 
