@@ -2756,7 +2756,7 @@ strcpy(power_desc[num].name, "¶À³ä¤ê");
 #ifdef JP
 strcpy(power_desc[num].name, "ÀÅ¿å");
 #else
-		strcpy(power_desc[num].name, "Clear Mind");
+		strcpy(power_desc[num].name, "Mirror Concentration");
 #endif
 
 		power_desc[num].level = 30;
