@@ -847,13 +847,6 @@ Monsters exploit players weaknesses (*)    [smart_cheat]
     Allow monsters to know what spell attacks you are resistant to,
     and to use this information to choose the best attacks.
 
-***** <stupid_monsters>
-Monsters behave stupidly (*)    [stupid_monsters]
-    If you are a sissy, set this option to get the old, really stupid
-    monster AI.  Note that the smart AI is a bit processing power
-    expensive. If you have an old computer (386sx) and Hengband is
-    running too slowly, you could try turning stupid_monsters on.
-
 ***** <vanilla_town>
 Use 'vanilla' town without quests and wilderness    [vanilla_town]
     Uses the basic town known from the standard Angband. This town is
@@ -901,11 +894,6 @@ Permanently enable the autoscummer    [ironman_autoscum]
 Always create empty 'arena' levels (*)    [ironman_empty_levels]
     If this option is enabled, then every level will be empty 'arena'
     level . See the "Allow empty 'arena' levels" option above.
-
-***** <terrain_streams>
-Create terrain 'streamers' in the dungeon (*)    [terrain_streams]
-    If this option is enabled, rivers, lava flows, or forests will be
-    generated in dungeon.
 
 ***** <munchkin_death>
 (Cheating) Ask for death saves (*)    [munchkin_death]

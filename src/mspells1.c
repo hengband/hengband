@@ -1284,18 +1284,11 @@ bool make_attack_spell(int m_idx)
 	if (!chance) return (FALSE);
 
 
-	if (stupid_monsters)
-	{
-		/* Only do spells occasionally */
-		if (randint0(100) >= chance) return (FALSE);
-	}
-	else
-	{
-		if (randint0(100) >=  chance) return (FALSE);
+        /* Only do spells occasionally */
+        if (randint0(100) >=  chance) return (FALSE);
 
-		/* Sometimes forbid inate attacks (breaths) */
-		if (randint0(100) >= (chance * 2)) no_inate = TRUE;
-	}
+        /* Sometimes forbid inate attacks (breaths) */
+        if (randint0(100) >= (chance * 2)) no_inate = TRUE;
 
 	/* XXX XXX XXX Handle "track_target" option (?) */
 
@@ -1400,11 +1393,8 @@ bool make_attack_spell(int m_idx)
 	/* Extract the monster level */
 	rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
 
-	if (!stupid_monsters)
-	{
-		/* Forbid inate attacks sometimes */
-		if (no_inate) f4 &= 0x500000FF;
-	}
+        /* Forbid inate attacks sometimes */
+        if (no_inate) f4 &= 0x500000FF;
 
 	if (!p_ptr->csp)
 	{
@@ -1449,37 +1439,34 @@ bool make_attack_spell(int m_idx)
 	/* No spells left */
 	if (!f4 && !f5 && !f6) return (FALSE);
 
-	if (!stupid_monsters)
-	{
-		/* Check for a clean bolt shot */
-		if (((f4 & RF4_BOLT_MASK) ||
-		     (f5 & RF5_BOLT_MASK) ||
-		     (f6 & RF6_BOLT_MASK)) &&
-		     !(r_ptr->flags2 & RF2_STUPID) &&
-		     !clean_shot(m_ptr->fy, m_ptr->fx, py, px, FALSE))
-		{
-			/* Remove spells that will only hurt friends */
-			f4 &= ~(RF4_BOLT_MASK);
-			f5 &= ~(RF5_BOLT_MASK);
-			f6 &= ~(RF6_BOLT_MASK);
-		}
+        /* Check for a clean bolt shot */
+        if (((f4 & RF4_BOLT_MASK) ||
+             (f5 & RF5_BOLT_MASK) ||
+             (f6 & RF6_BOLT_MASK)) &&
+            !(r_ptr->flags2 & RF2_STUPID) &&
+            !clean_shot(m_ptr->fy, m_ptr->fx, py, px, FALSE))
+        {
+                /* Remove spells that will only hurt friends */
+                f4 &= ~(RF4_BOLT_MASK);
+                f5 &= ~(RF5_BOLT_MASK);
+                f6 &= ~(RF6_BOLT_MASK);
+        }
 
-		/* Check for a possible summon */
-		if (((f4 & RF4_SUMMON_MASK) ||
-		     (f5 & RF5_SUMMON_MASK) ||
-		     (f6 & RF6_SUMMON_MASK)) &&
-		     !(r_ptr->flags2 & RF2_STUPID) &&
-		     !(summon_possible(y, x)))
-		{
-			/* Remove summoning spells */
-			f4 &= ~(RF4_SUMMON_MASK);
-			f5 &= ~(RF5_SUMMON_MASK);
-			f6 &= ~(RF6_SUMMON_MASK);
-		}
+        /* Check for a possible summon */
+        if (((f4 & RF4_SUMMON_MASK) ||
+             (f5 & RF5_SUMMON_MASK) ||
+             (f6 & RF6_SUMMON_MASK)) &&
+            !(r_ptr->flags2 & RF2_STUPID) &&
+            !(summon_possible(y, x)))
+        {
+                /* Remove summoning spells */
+                f4 &= ~(RF4_SUMMON_MASK);
+                f5 &= ~(RF5_SUMMON_MASK);
+                f6 &= ~(RF6_SUMMON_MASK);
+        }
 
-		/* No spells left */
-		if (!f4 && !f5 && !f6) return (FALSE);
-	}
+        /* No spells left */
+        if (!f4 && !f5 && !f6) return (FALSE);
 
 	/* Extract the "inate" spells */
 	for (k = 0; k < 32; k++)
@@ -1517,50 +1504,43 @@ bool make_attack_spell(int m_idx)
 	/* Hack -- Get the "died from" name */
 	monster_desc(ddesc, m_ptr, 0x288);
 
-	if (stupid_monsters)
-	{
-		/* Choose a spell to cast */
-		thrown_spell = spell[randint0(num)];
-	}
-	else
-	{
-		int attempt = 10;
-		if (do_disi) thrown_spell = 96+31;
-		else
-		{
-			while(attempt--)
-			{
-				thrown_spell = choose_attack_spell(m_idx, spell, num);
-				if (thrown_spell) break;
-			}
-		}
+        if (do_disi)
+                thrown_spell = 96+31;
+        else
+        {
+                int attempt = 10;
+                while(attempt--)
+                {
+                        thrown_spell = choose_attack_spell(m_idx, spell, num);
+                        if (thrown_spell) break;
+                }
+        }
 
-		/* Abort if no spell was chosen */
-		if (!thrown_spell) return (FALSE);
+        /* Abort if no spell was chosen */
+        if (!thrown_spell) return (FALSE);
 
-		/* Calculate spell failure rate */
-		failrate = 25 - (rlev + 3) / 4;
+        /* Calculate spell failure rate */
+        failrate = 25 - (rlev + 3) / 4;
 
-		/* Hack -- Stupid monsters will never fail (for jellies and such) */
-		if (r_ptr->flags2 & RF2_STUPID) failrate = 0;
+        /* Hack -- Stupid monsters will never fail (for jellies and such) */
+        if (r_ptr->flags2 & RF2_STUPID) failrate = 0;
 
-		/* Check for spell failure (inate attacks never fail) */
-		if ((thrown_spell >= 128) && ((m_ptr->stunned && one_in_(2)) || (randint0(100) < failrate)))
-		{
-			disturb(1, 0);
-			/* Message */
-			if (thrown_spell != (160+7)) /* Not RF6_SPECIAL */
-			{
+        /* Check for spell failure (inate attacks never fail) */
+        if ((thrown_spell >= 128) && ((m_ptr->stunned && one_in_(2)) || (randint0(100) < failrate)))
+        {
+                disturb(1, 0);
+                /* Message */
+                if (thrown_spell != (160+7)) /* Not RF6_SPECIAL */
+                {
 #ifdef JP
-msg_format("%^sは呪文を唱えようとしたが失敗した。", m_name);
+                        msg_format("%^sは呪文を唱えようとしたが失敗した。", m_name);
 #else
-				msg_format("%^s tries to cast a spell, but fails.", m_name);
+                        msg_format("%^s tries to cast a spell, but fails.", m_name);
 #endif
-			}
+                }
 
-			return (TRUE);
-		}
-	}
+                return (TRUE);
+        }
 
 
 	/* Cast the spell. */

@@ -4430,9 +4430,6 @@ void update_flow(void)
 	int flow_head = 1;
 	int flow_tail = 0;
 
-	/* Hack -- disabled */
-	if (stupid_monsters) return;
-
 	/* Paranoia -- make sure the array is empty */
 	if (temp_n) return;
 

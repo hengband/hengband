@@ -229,7 +229,6 @@ bool player_symbols;		/* Use varying symbols for the player char */
 bool equippy_chars;		/* Back by popular demand... */
 bool display_mutations;		/* Skip mutations screen even if we have it */
 bool plain_descriptions;	/* Plain object descriptions */
-bool stupid_monsters;		/* Monsters use old AI */
 bool confirm_destroy;		/* Known worthless items are destroyed without confirmation */
 bool confirm_stairs;		/* Prompt before staircases... */
 bool confirm_wear;		/* Confirm before putting on known cursed items */
@@ -1093,7 +1092,6 @@ bool ironman_downward;        /* Don't allow climbing upwards/recalling */
 bool ironman_autoscum;        /* Permanently enable the autoscummer */
 bool lite_town;               /* Use "lite" town without wilderness */
 bool ironman_empty_levels;    /* Always create empty 'arena' levels */
-bool terrain_streams;         /* Create terrain 'streamers' in the dungeon */
 bool ironman_rooms;           /* Always generate very unusual rooms */
 bool ironman_nightmare;			/* Play the game in Nightmare mode */
 bool left_hander;

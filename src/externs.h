@@ -242,7 +242,6 @@ extern bool allow_debug_opts;   /* Allow use of debug/cheat options */
 
 extern bool display_mutations;     /* Skip mutations screen in 'C'haracter display */
 extern bool plain_descriptions;
-extern bool stupid_monsters;
 extern bool confirm_destroy;
 extern bool confirm_wear;
 extern bool confirm_stairs;
@@ -471,7 +470,6 @@ extern bool ironman_downward;
 extern bool ironman_autoscum;
 extern bool lite_town;
 extern bool ironman_empty_levels;
-extern bool terrain_streams;
 extern bool ironman_rooms;
 extern bool ironman_nightmare;
 extern bool left_hander;

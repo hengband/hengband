@@ -7142,16 +7142,6 @@ option_type option_info[] =
 
 
 #ifdef JP
-	{ &stupid_monsters,             FALSE, 6, 5, 2,
-	"stupid_monsters",              "モンスターが間抜けな行動をとる(*)" },
-#else
-	{ &stupid_monsters,             FALSE, 6, 5, 2,
-	"stupid_monsters",              "Monsters behave stupidly (*)" },
-#endif
-
-
-
-#ifdef JP
 	{ &vanilla_town,                FALSE, 6, 6, 0,
 	"vanilla_town",                 "元祖の街/クエストと荒野なし" },
 #else
@@ -7211,15 +7201,6 @@ option_type option_info[] =
 #else
 	{ &ironman_empty_levels,        FALSE, 6, 6, 8,
 	"ironman_empty_levels",         "Always create empty 'arena' levels (*)" },
-#endif
-
-
-#ifdef JP
-       { &terrain_streams,              TRUE,  6, 6, 9,
-       "terrain_streams",               "川や森などをダンジョンに生成(*)" },
-#else
-       { &terrain_streams,              TRUE,  6, 6, 9,
-       "terrain_streams",               "Create terrain 'streamers' in the dungeon (*)" },
 #endif
 
 

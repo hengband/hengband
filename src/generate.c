@@ -739,7 +739,7 @@ if (cheat_room) msg_print("小さな地下室を却下します。");
 	}
 
 	/* Make a hole in the dungeon roof sometimes at level 1 */
-	if ((dun_level == 1) && terrain_streams)
+	if (dun_level == 1)
 	{
 		while (one_in_(DUN_MOS_DEN))
 		{
@@ -751,7 +751,7 @@ if (cheat_room) msg_print("小さな地下室を却下します。");
 	if (destroyed) destroy_level();
 
 	/* Hack -- Add some rivers */
-	if (one_in_(3) && (randint1(dun_level) > 5) && terrain_streams)
+	if (one_in_(3) && (randint1(dun_level) > 5))
 	{
 	 	/* Choose water or lava */
 		if ((randint1(MAX_DEPTH * 2) - 1 > dun_level) && (d_info[dungeon_type].flags1 & DF1_WATER_RIVER))

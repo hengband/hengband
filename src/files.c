@@ -4553,14 +4553,6 @@ fprintf(fff, "\n 何か不正なことをしてしまってます。");
 #endif
 
 
-	if (stupid_monsters)
-#ifdef JP
-fprintf(fff, "\n 敵は愚かな行動を取ります。");
-#else
-		fprintf(fff, "\n Your opponents are behaving stupidly.");
-#endif
-
-
 	fprintf(fff,"\n");
 
 	/* Monsters slain */
@@ -6007,11 +5999,9 @@ long total_points(void)
 	u32b point, point_h, point_l;
 	int arena_win = MIN(p_ptr->arena_number, MAX_ARENA_MONS);
 
-	if (stupid_monsters) mult -= 70;
 	if (!preserve_mode) mult += 10;
 	if (!autoroller) mult += 10;
 	if (!smart_learn) mult -= 20;
-	if (!terrain_streams) mult -= 20;
 	if (smart_cheat) mult += 30;
 	if (ironman_shops) mult += 50;
 	if (ironman_small_levels) mult += 10;

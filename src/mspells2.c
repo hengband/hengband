@@ -360,33 +360,32 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		/* Remove some spells if necessary */
-		if (!stupid_monsters)
-		{
-			/* Check for a clean bolt shot */
-			if (((f4 & RF4_BOLT_MASK) ||
-			     (f5 & RF5_BOLT_MASK) ||
-			     (f6 & RF6_BOLT_MASK)) &&
-			    !(r_ptr->flags2 & RF2_STUPID) &&
-			    !clean_shot(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, pet))
-			{
-				f4 &= ~(RF4_BOLT_MASK);
-				f5 &= ~(RF5_BOLT_MASK);
-				f6 &= ~(RF6_BOLT_MASK);
-			}
 
-			/* Check for a possible summon */
-			if (((f4 & RF4_SUMMON_MASK) ||
-			     (f5 & RF5_SUMMON_MASK) ||
-			     (f6 & RF6_SUMMON_MASK)) &&
-			    !(r_ptr->flags2 & RF2_STUPID) &&
-			    !(summon_possible(t_ptr->fy, t_ptr->fx)))
-			{
-				/* Remove summoning spells */
-				f4 &= ~(RF4_SUMMON_MASK);
-				f5 &= ~(RF5_SUMMON_MASK);
-				f6 &= ~(RF6_SUMMON_MASK);
-			}
-		}
+                /* Check for a clean bolt shot */
+                if (((f4 & RF4_BOLT_MASK) ||
+                     (f5 & RF5_BOLT_MASK) ||
+                     (f6 & RF6_BOLT_MASK)) &&
+                    !(r_ptr->flags2 & RF2_STUPID) &&
+                    !clean_shot(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, pet))
+                {
+                        f4 &= ~(RF4_BOLT_MASK);
+                        f5 &= ~(RF5_BOLT_MASK);
+                        f6 &= ~(RF6_BOLT_MASK);
+                }
+
+                /* Check for a possible summon */
+                if (((f4 & RF4_SUMMON_MASK) ||
+                     (f5 & RF5_SUMMON_MASK) ||
+                     (f6 & RF6_SUMMON_MASK)) &&
+                    !(r_ptr->flags2 & RF2_STUPID) &&
+                    !(summon_possible(t_ptr->fy, t_ptr->fx)))
+                {
+                        /* Remove summoning spells */
+                        f4 &= ~(RF4_SUMMON_MASK);
+                        f5 &= ~(RF5_SUMMON_MASK);
+                        f6 &= ~(RF6_SUMMON_MASK);
+                }
+
 		/* Hack -- allow "desperate" spells */
 		if ((r_ptr->flags2 & RF2_SMART) &&
 			(m_ptr->hp < m_ptr->maxhp / 10) &&

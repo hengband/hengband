@@ -610,9 +610,6 @@ static bool get_moves_aux(int m_idx, int *yp, int *xp, bool no_flow)
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	/* Monster flowing disabled */
-	if (stupid_monsters) return (FALSE);
-
 	/* Can monster cast attack spell? */
 	if (r_ptr->flags4 & (RF4_ATTACK_MASK) ||
 	    r_ptr->flags5 & (RF5_ATTACK_MASK) ||
@@ -726,9 +723,6 @@ static bool get_fear_moves_aux(int m_idx, int *yp, int *xp)
 	int i;
 
 	monster_type *m_ptr = &m_list[m_idx];
-
-	/* Monster flowing disabled */
-	if (stupid_monsters) return (FALSE);
 
 	/* Monster location */
 	fy = m_ptr->fy;
@@ -971,7 +965,7 @@ static bool find_safety(int m_idx, int *yp, int *xp)
 			if (!cave_floor_grid(c_ptr)) continue;
 
 			/* Check for "availability" (if monsters can flow) */
-			if (!stupid_monsters && !(m_ptr->mflag2 & MFLAG_NOFLOW))
+			if (!(m_ptr->mflag2 & MFLAG_NOFLOW))
 			{
 				/* Ignore grids very far from the player */
 				if (c_ptr->dist == 0) continue;
@@ -1109,12 +1103,8 @@ static bool get_moves(int m_idx, int *mm)
 	bool         no_flow = ((m_ptr->mflag2 & MFLAG_NOFLOW) && (cave[m_ptr->fy][m_ptr->fx].cost > 2));
 	bool         can_pass_wall;
 
-	/* Flow towards the player */
-	if (!stupid_monsters)
-	{
-		/* Flow towards the player */
-		(void)get_moves_aux(m_idx, &y2, &x2, no_flow);
-	}
+        /* Flow towards the player */
+        (void)get_moves_aux(m_idx, &y2, &x2, no_flow);
 
 	can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || (p_ptr->pass_wall)));
 
@@ -1122,7 +1112,7 @@ static bool get_moves(int m_idx, int *mm)
 	y = m_ptr->fy - y2;
 	x = m_ptr->fx - x2;
 
-	if (!stupid_monsters && !will_run && is_hostile(m_ptr) &&
+	if (!will_run && is_hostile(m_ptr) &&
 	    (r_ptr->flags1 & RF1_FRIENDS) &&
 	    (los(m_ptr->fy, m_ptr->fx, py, px) ||
 	    (cave[m_ptr->fy][m_ptr->fx].dist < MAX_SIGHT / 2)))
@@ -1210,7 +1200,7 @@ static bool get_moves(int m_idx, int *mm)
 	}
 
 	/* Apply fear if possible and necessary */
-	if ((stupid_monsters || is_pet(m_ptr)) && will_run)
+	if (is_pet(m_ptr) && will_run)
 	{
 		/* XXX XXX Not very "smart" */
 		y = (-y), x = (-x);
@@ -1226,7 +1216,7 @@ static bool get_moves(int m_idx, int *mm)
 			if (find_safety(m_idx, &y, &x))
 			{
 				/* Attempt to avoid the player */
-				if (!stupid_monsters && !no_flow)
+				if (!no_flow)
 				{
 					/* Adjust movement */
 					if (get_fear_moves_aux(m_idx, &y, &x)) done = TRUE;
@@ -1243,11 +1233,8 @@ static bool get_moves(int m_idx, int *mm)
 	}
 
 
-	if (!stupid_monsters)
-	{
-		/* Check for no move */
-		if (!x && !y) return (FALSE);
-	}
+        /* Check for no move */
+        if (!x && !y) return (FALSE);
 
 
 	/* Extract the "absolute distances" */
@@ -3037,11 +3024,6 @@ msg_format("%^s%s", m_name, monmessage);
 		get_enemy_dir(m_idx, mm);
 	}
 	/* Normal movement */
-	else if (stupid_monsters)
-	{
-		/* Logical moves */
-		get_moves(m_idx, mm);
-	}
 	else
 	{
 		/* Logical moves, may do nothing */
@@ -3698,7 +3680,7 @@ msg_format("%^sが%sを破壊した。", m_name, o_name);
 		m_ptr->mflag2 &= ~MFLAG_NOFLOW;
 
 	/* If we haven't done anything, try casting a spell again */
-	if (!do_turn && !do_move && !m_ptr->monfear && !stupid_monsters && !(p_ptr->riding == m_idx) && aware)
+	if (!do_turn && !do_move && !m_ptr->monfear && !(p_ptr->riding == m_idx) && aware)
 	{
 		/* Cast spell */
 		if (make_attack_spell(m_idx)) return;
@@ -3908,7 +3890,7 @@ void process_monsters(void)
 		fy = m_ptr->fy;
 
 		/* Flow by smell is allowed */
-		if (!stupid_monsters && !p_ptr->no_flowed)
+		if (!p_ptr->no_flowed)
 		{
 			m_ptr->mflag2 &= ~MFLAG_NOFLOW;
 		}
@@ -3934,7 +3916,7 @@ void process_monsters(void)
 #if 0 /* (cave[py][px].when == cave[fy][fx].when) is always FALSE... */
 		/* Hack -- Monsters can "smell" the player from far away */
 		/* Note that most monsters have "aaf" of "20" or so */
-		else if (!stupid_monsters && !(m_ptr->mflag2 & MFLAG_NOFLOW) &&
+		else if (!(m_ptr->mflag2 & MFLAG_NOFLOW) &&
 			(cave_floor_bold(py, px) || (cave[py][px].feat == FEAT_TREES)) &&
 			(cave[py][px].when == cave[fy][fx].when) &&
 			(cave[fy][fx].dist < MONSTER_FLOW_DEPTH) &&
