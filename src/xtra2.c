@@ -1147,23 +1147,22 @@ msg_print("地面に落とされた。");
 			{
 				do
 				{
-					if (one_in_(3))
+					switch (randint0(3))
 					{
+					case 0:
 						a_idx = ART_NAMAKE_HAMMER;
-						chance = 100;
-					}
-					else if (one_in_(2))
-					{
+						break;
+					case 1:
 						a_idx = ART_NAMAKE_BOW;
-						chance = 100;
-					}
-					else
-					{
+						break;
+					case 2:
 						a_idx = ART_NAMAKE_ARMOR;
-						chance = 100;
+						break;
 					}
 				}
 				while (a_info[a_idx].cur_num);
+
+				chance = 100;
 			}
 			else if (m_ptr->r_idx == MON_GHB)
 			{
