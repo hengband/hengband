@@ -1754,7 +1754,11 @@ static cptr *read_text_lines(cptr filename, bool user)
 	return lines_list;
 }
 
-static cptr *read_pickpref_text_lines(void)
+
+#define PT_DEFAULT 0
+#define PT_WITH_PNAME 1
+
+static cptr *read_pickpref_text_lines(int *filename_mode_p)
 {
 	char buf[1024];
 	cptr *lines_list;
@@ -1773,6 +1777,7 @@ static cptr *read_pickpref_text_lines(void)
 #else
 		lines_list = read_text_lines("pickpref.prf", TRUE);
 #endif
+                *filename_mode_p = PT_DEFAULT;
 	}
 
 	if (!lines_list)
@@ -1782,6 +1787,7 @@ static cptr *read_pickpref_text_lines(void)
 #else
 		lines_list = read_text_lines("pickpref.prf", FALSE);
 #endif
+                *filename_mode_p = PT_WITH_PNAME;
 	}
 
 	if (!lines_list)
@@ -1789,6 +1795,7 @@ static cptr *read_pickpref_text_lines(void)
 		/* Allocate list of pointers */
 		C_MAKE(lines_list, MAX_LINES, cptr);
 		lines_list[0] = string_make("");
+                *filename_mode_p = PT_WITH_PNAME;
 	}
 	return lines_list;
 }
@@ -2494,6 +2501,7 @@ void do_cmd_edit_autopick(void)
 	autopick_type an_entry, *entry = &an_entry;
 	char buf[MAX_LINELEN];
 	cptr *lines_list;
+        int filename_mode = PT_WITH_PNAME;
 
 	int i, j, k, len;
 	cptr tmp;
@@ -2548,7 +2556,7 @@ void do_cmd_edit_autopick(void)
 	yank_buf[0] = '\0';
 
 	/* Read or initialize whole text */
-	lines_list = read_pickpref_text_lines();
+	lines_list = read_pickpref_text_lines(&filename_mode);
 
 	/* Reset cursor position if needed */
 	for (i = 0; i < cy; i++)
@@ -3263,7 +3271,7 @@ void do_cmd_edit_autopick(void)
 				break;
 
 			free_text_lines(lines_list);
-			lines_list = read_pickpref_text_lines();
+			lines_list = read_pickpref_text_lines(&filename_mode);
 			dirty_flags |= DIRTY_ALL | DIRTY_MODE;
 			cx = cy = 0;
 			edit_mode = FALSE;
@@ -3575,11 +3583,25 @@ void do_cmd_edit_autopick(void)
 	/* Restore the screen */
 	screen_load();
 
+        switch (filename_mode)
+        {
+        case PT_DEFAULT:
 #ifdef JP
-	sprintf(buf, "picktype-%s.prf", player_name);
+                strcpy(buf, "picktype.prf");
 #else
-	sprintf(buf, "pickpref-%s.prf", player_name);
+                strcpy(buf, "pickpref.prf");
 #endif
+                break;
+
+        case PT_WITH_PNAME:
+#ifdef JP
+                sprintf(buf, "picktype-%s.prf", player_name);
+#else
+                sprintf(buf, "pickpref-%s.prf", player_name);
+#endif
+                break;
+        }
+
 	write_text_lines(buf, lines_list);
 	free_text_lines(lines_list);
 
