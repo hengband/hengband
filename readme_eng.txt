@@ -79,6 +79,9 @@ Serpent of Chaos, whom you must kill in order to win the game.
 
 ---------  Commands  ----------- 
 
+     Please read on-line help (Press the ? key in the game) for full
+information of the game.  Here are only descriptions of basic commands.
+
      The following section lists most commands, and the less frequently used 
 ones may be accessed by pressing the return key, or (if using the original 
 keyset) the 'x' key, to bring up the command menu.  Almost any command may be 
@@ -147,13 +150,17 @@ keyset, and by pushing 'x' in the Rogue-like keyset.
   M  Full dungeon map
   ~  Display various information
 
-  [other]
+  [Other]
   p  Command pets
   =  Set options
   $  Reload auto-picker preference file
   _  Edit auto-picker preference
   n/[  Repeat previous command
   @  Interact with macros
+
+  [Help]
+  ?  View the on-line help 
+     (Press a-z to choose a section,  space key to go next page.)
 
 
 --- Inscriptions
