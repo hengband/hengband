@@ -4677,7 +4677,7 @@ static void init_menubar(void)
 
 	/* Get the "File" menu */
 #if TARGET_API_MAC_CARBON
-	m = GetMenu(MENU_FILE);
+	m = GetMenuHandle(MENU_FILE);
 	err = Gestalt( gestaltSystemVersion, &response );
 	if ( (err == noErr) && (response >= 0x00000A00) )
 	{
