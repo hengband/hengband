@@ -2068,6 +2068,7 @@ static cptr ctrl_command_desc[] =
 
 
 #define MAX_YANK 1024
+#define MAX_LINELEN 1024
 #define DIRTY_ALL 0x01
 #define DIRTY_COMMAND 0x02
 #define DIRTY_MODE 0x04
@@ -2086,7 +2087,7 @@ void do_cmd_edit_autopick(void)
 	char yank_buf[MAX_YANK];
 	char classrace[80];
 	autopick_type an_entry, *entry = &an_entry;
-	char buf[1024];
+	char buf[MAX_LINELEN];
 	cptr *lines_list;
 
 	int i, j, k, len;
@@ -2391,19 +2392,23 @@ void do_cmd_edit_autopick(void)
 				/* Mode line is now dirty */
 				dirty_flags |= DIRTY_MODE;
 			}
+
+			/* Insert a character */
 			else if (!iscntrl(key&0xff))
 			{
 				int next;
 
+				/* Save preceding string */
 				for (i = j = 0; lines_list[cy][i] && i < cx; i++)
 					buf[j++] = lines_list[cy][i];
 
+				/* Add a character */
 #ifdef JP
                                 if (iskanji(key))
 				{
                                         inkey_base = TRUE;
                                         next = inkey();
-                                        if (j+2 < 1024)
+                                        if (j+2 < MAX_LINELEN)
 					{
                                                 buf[j++] = key;
                                                 buf[j++] = next;
@@ -2415,15 +2420,21 @@ void do_cmd_edit_autopick(void)
 				else
 #endif
 				{
-                                        if (j+1 < 1024)
+                                        if (j+1 < MAX_LINELEN)
 						buf[j++] = key;
 					cx++;
 				}
-				for (; lines_list[cy][i] && j + 1 < 1024; i++)
+
+				/* Add following */
+				for (; lines_list[cy][i] && j + 1 < MAX_LINELEN; i++)
 					buf[j++] = lines_list[cy][i];
 				buf[j] = '\0';
+
+				/* Replace current line with new line */
 				string_free(lines_list[cy]);
 				lines_list[cy] = string_make(buf);
+
+				/* Move to correct collumn */
 				len = strlen(lines_list[cy]);
 				if (len < cx) cx = len;
 
@@ -2802,12 +2813,18 @@ void do_cmd_edit_autopick(void)
 			{
 				for (j = 0; yank_buf[j]; j += strlen(yank_buf + j) + 1)
 				{
+					int k = j;
+
 					/* Split current line */
 					insert_return_code(lines_list, cx, cy);
 
 					/* Paste yank buffer */
-					strcpy(buf, lines_list[cy]);
-					strncat(buf, yank_buf + j, 1024);
+					for(i = 0; lines_list[cy][i]; i++)
+						buf[i] = lines_list[cy][i];
+					while (yank_buf[k] && i < MAX_LINELEN)
+						buf[i++] = yank_buf[k++];
+					buf[i] = '\0';
+
 					string_free(lines_list[cy]);
 					lines_list[cy] = string_make(buf);
 
