@@ -2672,9 +2672,8 @@ static void tim_player_flags(u32b flgs[TR_FLAG_SIZE])
 	if (p_ptr->wraith_form)
 		add_flag(flgs, TR_REFLECT);
 	/* by henkma */
-	if (p_ptr->tim_reflect){
+	if (p_ptr->tim_reflect)
 		add_flag(flgs, TR_REFLECT);
-	}
 
 	if (p_ptr->magicdef)
 	{

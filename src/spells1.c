@@ -6435,7 +6435,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 	if (!who) return (FALSE);
 	if (who == p_ptr->riding) return (FALSE);
 
-	if ((p_ptr->reflect || p_ptr->tim_reflect || ((p_ptr->special_defense & KATA_FUUJIN) && !p_ptr->blind)) && (flg & PROJECT_REFLECTABLE) && !one_in_(10))
+	if ((p_ptr->reflect || ((p_ptr->special_defense & KATA_FUUJIN) && !p_ptr->blind)) && (flg & PROJECT_REFLECTABLE) && !one_in_(10))
 	{
 		byte t_y, t_x;
 		int max_attempts = 10;

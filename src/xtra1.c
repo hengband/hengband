@@ -4485,6 +4485,12 @@ void calc_bonuses(void)
 		p_ptr->ffall = TRUE;
 	}
 
+	/* Temporary reflection */
+	if (p_ptr->tim_reflect)
+	{
+		p_ptr->reflect = TRUE;
+	}
+
 	/* Hack -- Hero/Shero -> Res fear */
 	if (IS_HERO() || p_ptr->shero)
 	{
