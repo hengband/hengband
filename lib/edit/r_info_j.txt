@@ -18533,8 +18533,8 @@ B:CRUSH:HURT:2d6
 F:COLD_BLOOD | NO_SLEEP | NO_CONF | NO_FEAR | NONLIVING
 S:1_IN_6
 S:SCARE | BLIND | CONF | S_MONSTER
-D:$A powerful weapon from a time long past when heroes walked the earth, and
-D:$magical weapons of power unmatched were created. Blood drips from its
+D:$A powerful weapon from a time long past when heroes walked the earth, and 
+D:$magical weapons of power unmatched were created. Blood drips from its 
 D:$wicked blade.
 D:英雄達が地に存在し、比類なき力を持った魔法の武器が作られていた遠い過去の時代の
 D:強力な武器の一つだ。その刺の付いた刃からは血が滴っている。
