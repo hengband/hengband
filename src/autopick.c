@@ -3290,9 +3290,8 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 			else
 #endif
 			{
-#ifdef SJIS
-				if (pos < len &&
-				    (isprint(c) || (0xa0 <= c && c <= 0xdf)))
+#ifdef JP
+				if (pos < len && (isprint(c) || iskana(c)))
 #else
 				if (pos < len && isprint(c))
 #endif

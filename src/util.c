@@ -3327,9 +3327,8 @@ bool askfor_aux(char *buf, int len)
 			else
 #endif
 			{
-#ifdef SJIS
-				if (pos < len &&
-				    (isprint(c) || (0xa0 <= c && c <= 0xdf)))
+#ifdef JP
+				if (pos < len && (isprint(c) || iskana(c)))
 #else
 				if (pos < len && isprint(c))
 #endif
