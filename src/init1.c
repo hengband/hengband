@@ -3787,16 +3787,15 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
 		/* Function: EQU */
 		else if (streq(t, "EQU"))
 		{
-			v = "1";
+			v = "0";
 			if (*s && (f != b2))
 			{
 				t = process_dungeon_file_expr(&s, &f);
 			}
 			while (*s && (f != b2))
 			{
-				p = t;
-				t = process_dungeon_file_expr(&s, &f);
-				if (*t && !streq(p, t)) v = "0";
+				p = process_dungeon_file_expr(&s, &f);
+				if (streq(t, p)) v = "1";
 			}
 		}
 

@@ -146,7 +146,7 @@ W:D:############################################################################
 # Starting position
 W:P:48:5
 
-?:[IOR [EQU $WILDERNESS NONE] [EQU $WILDERNESS LITE] ]
+?:[EQU $WILDERNESS NONE LITE]
 
 # Edge of the world
 W:F:#:0

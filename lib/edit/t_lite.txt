@@ -71,12 +71,12 @@ F:b:129:3:0:0:0:0:0:2
 F:!:1:3:0:42
 
 # Broad Spear
-?:[AND [EQU $QUEST1 3] [IOR [EQU $CLASS BeastMaster] [EQU $CLASS Cavalry] ] ]
+?:[AND [EQU $QUEST1 3] [EQU $CLASS BeastMaster Cavalry] ]
 F:b:129:3:0:0:0:0:0:2
 F:!:1:3:0:543
 
 # Set of Gauntlets
-?:[AND [EQU $QUEST1 3] [IOR [EQU $CLASS Monk] [EQU $CLASS ForceTrainer] ] ]
+?:[AND [EQU $QUEST1 3] [EQU $CLASS Monk ForceTrainer] ]
 F:b:129:3:0:0:0:0:0:2
 F:!:1:3:0:126
 
@@ -96,7 +96,7 @@ F:b:129:3:0:0:0:0:0:2
 F:!:1:3:0:70
 
 # Ring of Warning
-?:[AND [EQU $QUEST1 3] [IOR [EQU $CLASS Mage] [EQU $CLASS High-Mage] [EQU $CLASS Blue-Mage] [EQU $CLASS Sorcerer] [EQU $CLASS Mirror-Master] ] ]
+?:[AND [EQU $QUEST1 3] [EQU $CLASS Mage High-Mage Blue-Mage Sorcerer Mirror-Master] ]
 F:b:129:3:0:0:0:0:0:2
 F:!:1:3:0:618
 
@@ -282,7 +282,7 @@ F:!:1:3:0:0:0:141
 
 # Quest 27 rewarding (Ranger, Archer gets Long Bow of Bard)
 # continue with quest 33
-?:[AND [EQU $QUEST27 3] [IOR [EQU $CLASS Ranger] [EQU $CLASS Archer] ] ]
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Ranger Archer] ]
 F:b:129:3:0:0:0:0:0:15
 F:!:1:3:0:0:0:125
 
@@ -331,21 +331,21 @@ F:@:1:3:0:0:0:215
 # Quest 27 rewarding (Mage, High-Mage)
 # get Hard Leather Cap of Ben Franklin
 # continue with quest 33
-?:[AND [EQU $QUEST27 3] [IOR [IOR [EQU $CLASS Mage] [EQU $CLASS High-Mage] ] [IOR [EQU $CLASS Sorcerer] [EQU $CLASS Blue-Mage] ] ] ]
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Mage High-Mage Sorcerer Blue-Mage] ]
 F:b:129:3:0:0:0:0:0:15
 F:!:1:3:0:0:0:33
 
 # Quest 27 rewarding (Priest, Bard, ForceTrainer)
 # get Palantir of Westernesse
 # continue with quest 33
-?:[AND [EQU $QUEST27 3] [IOR [IOR [EQU $CLASS Priest] [EQU $CLASS Bard] ] [IOR [EQU $CLASS ForceTrainer] [EQU $CLASS Mindcrafter] ] ] ]
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Priest Bard ForceTrainer Mindcrafter] ]
 F:b:129:3:0:0:0:0:0:15
 F:!:1:3:0:0:0:15
 
 # Quest 27 rewarding (Magiceater, Mirror-Master)
 # get Numenor
 # continue with quest 33
-?:[AND [EQU $QUEST27 3] [IOR [EQU $CLASS Magiceater] [EQU $CLASS Mirror-Master] ] ] ]
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Magiceater Mirror-Master] ]
 F:a:128:3
 F:@:1:3:0:0:0:132
 
@@ -531,7 +531,7 @@ B:$2:N:Library:Astinus:Human?
 B:2:N:図書館:アスティヌス:人間?
 B:$2:A:0:Research item:2000:2000:a:1:0
 B:2:A:0:アイテム調査:2000:2000:a:1:0
-?:[IOR [EQU $QUEST5 3] [EQU $QUEST5 4] ]
+?:[EQU $QUEST5 3 4]
 B:$2:A:0:Research item:1000:1000:a:1:0
 B:2:A:0:アイテム調査:1000:1000:a:1:0
 ?:1
@@ -559,7 +559,7 @@ B:$4:N:Beastmaster:Lorien:Elf
 B:4:N:モンスター仙人:ロリエン:エルフ
 B:$4:A:0:Research monster:10000:10000:r:20:0
 B:4:A:0:モンスター調査:10000:10000:r:20:0
-?:[IOR [EQU $QUEST5 3] [EQU $QUEST5 4] ]
+?:[EQU $QUEST5 3 4]
 B:$4:A:0:Research monster:1200:1200:r:20:0
 B:4:A:0:モンスター調査:1200:1200:r:20:0
 ?:1
@@ -570,7 +570,7 @@ B:$5:A:0:Compare weapons:1000:1000:c:21:0
 B:5:A:0:武器を比較する:1000:1000:c:21:0
 B:$6:A:1:Evaluate AC:1000:1000:a:46:0
 B:6:A:1:防御について調べる:1000:1000:a:46:0
-?:[IOR [EQU $QUEST5 3] [EQU $QUEST5 4] ]
+?:[EQU $QUEST5 3 4]
 B:$5:A:0:Compare weapons:150:150:c:21:0
 B:5:A:0:武器を比較する:150:150:c:21:0
 B:$6:A:1:Evaluate AC:150:150:a:46:0

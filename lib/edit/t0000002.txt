@@ -254,7 +254,7 @@ B:0:N:図書館:アスティヌス:人間?
 B:$0:A:0:Research item:2000:2000:a:1:0
 B:0:A:0:アイテム調査:2000:2000:a:1:0
 # After clearing the tower the research gets cheaper
-?:[IOR [EQU $QUEST5 3] [EQU $QUEST5 4] ]
+?:[EQU $QUEST5 3 4]
 B:$0:A:0:Research item:1000:1000:a:1:0
 B:0:A:0:アイテム調査:1000:1000:a:1:0
 ?:1
@@ -312,7 +312,7 @@ B:$5:N:Beastmaster:Lorien:Elf
 B:5:N:モンスター仙人:ロリエン:エルフ
 B:$5:A:0:Research monster:10000:10000:r:20:0
 B:5:A:0:モンスター調査:10000:10000:r:20:0
-?:[IOR [EQU $QUEST5 3] [EQU $QUEST5 4] ]
+?:[EQU $QUEST5 3 4]
 B:$5:A:0:Research monster:1200:1200:r:20:0
 B:5:A:0:モンスター調査:1200:1200:r:20:0
 ?:1
@@ -323,7 +323,7 @@ B:$6:A:0:Compare weapons:1000:1000:c:21:0
 B:6:A:0:武器を比較する:1000:1000:c:21:0
 B:$6:A:1:Evaluate AC:1000:1000:a:46:0
 B:6:A:1:防御について調べる:1000:1000:a:46:0
-?:[IOR [EQU $QUEST5 3] [EQU $QUEST5 4] ]
+?:[EQU $QUEST5 3 4]
 B:$6:A:0:Compare weapons:150:150:c:21:0
 B:6:A:0:武器を比較する:150:150:c:21:0
 B:$6:A:1:Evaluate AC:150:150:a:46:0
