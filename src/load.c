@@ -505,7 +505,7 @@ static void rd_item(object_type *o_ptr)
 	u32b flags;
 	char buf[128];
 
-	if (h_older_than(1, 3, 2, 1))
+	if (h_older_than(1, 5, 0, 0))
 	{
 		rd_item_old(o_ptr);
 		return;
@@ -754,7 +754,7 @@ static void rd_monster(monster_type *m_ptr)
 	byte tmp8u;
 	char buf[128];
 
-	if (h_older_than(1, 3, 2, 1))
+	if (h_older_than(1, 5, 0, 0))
 	{
 		rd_monster_old(m_ptr);
 		return;
@@ -1665,7 +1665,7 @@ note(format("の中", tmp16s));
 		p_ptr->recall_dungeon = (byte)tmp16s;
 	}
 
-	if (h_older_than(1, 3, 2, 1))
+	if (h_older_than(1, 5, 0, 0))
 		p_ptr->alter_reality = 0;
 	else
 		rd_s16b(&p_ptr->alter_reality);
@@ -1901,7 +1901,7 @@ note(format("の中", tmp16s));
 	}
 
 	/* Current floor_id */
-	if (h_older_than(1, 3, 2, 1))
+	if (h_older_than(1, 5, 0, 0))
 	{
 		p_ptr->floor_id = 0;
 	}
@@ -2761,7 +2761,7 @@ static errr rd_dungeon(void)
 	init_saved_floors();
 
 	/* Older method */
-	if (h_older_than(1, 3, 2, 1))
+	if (h_older_than(1, 5, 0, 0))
 	{
 		err = rd_dungeon_old();
 
@@ -3363,7 +3363,7 @@ note(format("伝説のアイテムが多すぎる(%u)！", tmp16u));
 		rd_byte(&tmp8u);
 		a_ptr->cur_num = tmp8u;
 
-		if (h_older_than(1, 3, 2, 1))
+		if (h_older_than(1, 5, 0, 0))
 		{
 			a_ptr->floor_id = 0;
 
