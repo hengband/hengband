@@ -2546,7 +2546,7 @@ strcpy(power_desc[num].name, "É´Îö·ý");
 
 		power_desc[num].level = 30;
 		power_desc[num].cost = 30;
-		power_desc[num].fail = 100 - racial_chance(20, A_STR, 20);
+		power_desc[num].fail = 100 - racial_chance(30, A_STR, 20);
 		power_desc[num++].number = -4;
 		break;
 	}
