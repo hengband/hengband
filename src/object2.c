@@ -928,7 +928,7 @@ s32b flag_cost(object_type * o_ptr, int plusses)
 	count = 0;
 	if (f1 & TR1_CHAOTIC) {total += 5000;count++;}
 	if (f1 & TR1_VAMPIRIC) {total += 6500;count++;}
-	if (f1 & TR1_FORCE_WEPON) {tmp_cost += 2500;count++;}
+	if (f1 & TR1_FORCE_WEAPON) {tmp_cost += 2500;count++;}
 	if (f1 & TR1_SLAY_ANIMAL) {tmp_cost += 1800;count++;}
 	if (f1 & TR1_SLAY_EVIL) {tmp_cost += 2300;count++;}
 	if (f1 & TR1_SLAY_UNDEAD) {tmp_cost += 1800;count++;}
@@ -6848,7 +6848,7 @@ static void drain_essence(void)
 		}
 	}
 
-	if ((old_f1 & TR1_FORCE_WEPON) && !(new_f1 & TR1_FORCE_WEPON))
+	if ((old_f1 & TR1_FORCE_WEAPON) && !(new_f1 & TR1_FORCE_WEAPON))
 	{
 		drain_value[ESSENCE_INT-1] += 5;
 		drain_value[ESSENCE_WIS-1] += 5;

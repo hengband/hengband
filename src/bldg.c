@@ -3076,11 +3076,11 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 		if ((o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE)))
 			mult = mult * (o_ptr->dd + 2) / o_ptr->dd;
 	}
-	if ((p_ptr->pclass != CLASS_SAMURAI) && (f1 & TR1_FORCE_WEPON) && (p_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) mult = mult * 7 / 2;
+	if ((p_ptr->pclass != CLASS_SAMURAI) && (f1 & TR1_FORCE_WEAPON) && (p_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) mult = mult * 7 / 2;
 
 	/* Print the relevant lines */
 #ifdef JP
-if (f1 & TR1_FORCE_WEPON)     compare_weapon_aux2(o_ptr, p_ptr->num_blow[0], r++, col, 1*mult, "理力:", f1, f2, f3, TERM_L_BLUE);
+if (f1 & TR1_FORCE_WEAPON)     compare_weapon_aux2(o_ptr, p_ptr->num_blow[0], r++, col, 1*mult, "理力:", f1, f2, f3, TERM_L_BLUE);
 if (f1 & TR1_SLAY_ANIMAL) compare_weapon_aux2(o_ptr, p_ptr->num_blow[0], r++, col, 2*mult, "動物:", f1, f2, f3, TERM_YELLOW);
 if (f1 & TR1_SLAY_EVIL)   compare_weapon_aux2(o_ptr, p_ptr->num_blow[0], r++, col, 2*mult, "邪悪:", f1, f2, f3, TERM_YELLOW);
 if (f1 & TR1_SLAY_UNDEAD) compare_weapon_aux2(o_ptr, p_ptr->num_blow[0], r++, col, 3*mult, "不死:", f1, f2, f3, TERM_YELLOW);
@@ -3096,7 +3096,7 @@ if (f1 & TR1_BRAND_FIRE)  compare_weapon_aux2(o_ptr, p_ptr->num_blow[0], r++, co
 if (f1 & TR1_BRAND_COLD)  compare_weapon_aux2(o_ptr, p_ptr->num_blow[0], r++, col, 5*mult/2, "冷属性:", f1, f2, f3, TERM_RED);
 if (f1 & TR1_BRAND_POIS)  compare_weapon_aux2(o_ptr, p_ptr->num_blow[0], r++, col, 5*mult/2, "毒属性:", f1, f2, f3, TERM_RED);
 #else
-	if (f1 & TR1_FORCE_WEPON)     compare_weapon_aux2(o_ptr, p_ptr->num_blow[0], r++, col, 1*mult, "Force  :", f1, f2, f3, TERM_L_BLUE);
+	if (f1 & TR1_FORCE_WEAPON)     compare_weapon_aux2(o_ptr, p_ptr->num_blow[0], r++, col, 1*mult, "Force  :", f1, f2, f3, TERM_L_BLUE);
 	if (f1 & TR1_SLAY_ANIMAL) compare_weapon_aux2(o_ptr, p_ptr->num_blow[0], r++, col, 2*mult, "Animals:", f1, f2, f3, TERM_YELLOW);
 	if (f1 & TR1_SLAY_EVIL)   compare_weapon_aux2(o_ptr, p_ptr->num_blow[0], r++, col, 2*mult, "Evil:", f1, f2, f3, TERM_YELLOW);
 	if (f1 & TR1_SLAY_UNDEAD) compare_weapon_aux2(o_ptr, p_ptr->num_blow[0], r++, col, 3*mult, "Undead:", f1, f2, f3, TERM_YELLOW);

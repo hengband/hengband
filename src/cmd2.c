@@ -3523,7 +3523,7 @@ s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 				}
 			}
 
-			if ((f1 & TR1_FORCE_WEPON) && (p_ptr->csp > (p_ptr->msp / 30)))
+			if ((f1 & TR1_FORCE_WEAPON) && (p_ptr->csp > (p_ptr->msp / 30)))
 			{
 				p_ptr->csp -= (1+(p_ptr->msp / 30));
 				p_ptr->redraw |= (PR_MANA);

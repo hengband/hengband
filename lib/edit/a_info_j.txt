@@ -2230,7 +2230,7 @@ E:of Gandalf
 I:21:21:4
 W:30:50:40:140000
 P:0:3d2:10:13:0
-F:INT | WIS | CHR | HIDE_TYPE | SEARCH | BRAND_FIRE | FORCE_WEPON |
+F:INT | WIS | CHR | HIDE_TYPE | SEARCH | BRAND_FIRE | FORCE_WEAPON |
 F:SLAY_EVIL | SLAY_TROLL | SLAY_ORC | LITE | DEC_MANA |
 F:HOLD_LIFE | RES_FIRE | RES_NETHER | SEE_INVIS | ACTIVATE | SHOW_MODS
 D:$The staff of the great wizard Gandalf.  
@@ -2505,7 +2505,7 @@ E:'Goln Nova'
 I:23:16:2
 W:30:50:150:100000
 P:0:2d5:15:15:0
-F:STR | DEX | HIDE_TYPE | FORCE_WEPON |
+F:STR | DEX | HIDE_TYPE | FORCE_WEAPON |
 F:SHOW_MODS | RIDING | SLAY_DEMON
 D:かつて魔導都市サイラーグを破壊つくした魔獣、ザナッファー。
 D:それを滅ぼしたといわれるのが、この伝説の武器である。
@@ -3313,7 +3313,7 @@ E:'hermit's purple'
 I:21:2:2
 W:40:40:30:40000
 P:0:1d6:10:5:0
-F:INT | WIS | FORCE_WEPON |
+F:INT | WIS | FORCE_WEAPON |
 F:SEE_INVIS | TELEPATHY
 D:半幽体化した不思議な茨の鞭だ。所有者の精神力を攻撃力に変換し、
 D:波紋の力で身を守ることができる。

@@ -1411,7 +1411,7 @@
 #define EGO_WEST                68
 #define EGO_ATTACKS             69
 #define EGO_SLAYING_WEAPON      70
-#define EGO_FORCE_WEPON             71
+#define EGO_FORCE_WEAPON        71
 #define EGO_BRAND_ACID          72
 #define EGO_BRAND_ELEC          73
 #define EGO_BRAND_FIRE          74
@@ -2889,7 +2889,7 @@
 #define TR1_CON                 0x00000010L     /* CON += "pval" */
 #define TR1_CHR                 0x00000020L     /* CHR += "pval" */
 #define TR1_MAGIC_MASTERY       0x00000040L     /* Later */
-#define TR1_FORCE_WEPON             0x00000080L     /* Later */
+#define TR1_FORCE_WEAPON        0x00000080L     /* Later */
 #define TR1_STEALTH             0x00000100L     /* Stealth += "pval" */
 #define TR1_SEARCH              0x00000200L     /* Search += "pval" */
 #define TR1_INFRA               0x00000400L     /* Infra += "pval" */

@@ -500,7 +500,7 @@ static cptr k_info_flags1[] =
 	"CON",
 	"CHR",
 	"MAGIC_MASTERY",
-	"FORCE_WEPON",
+	"FORCE_WEAPON",
 	"STEALTH",
 	"SEARCH",
 	"INFRA",

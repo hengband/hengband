@@ -1038,7 +1038,7 @@ static void random_slay(object_type *o_ptr, bool is_scroll)
 					artifact_bias = BIAS_NECROMANTIC;
 				break;
 			case 32:
-				o_ptr->art_flags1 |= TR1_FORCE_WEPON;
+				o_ptr->art_flags1 |= TR1_FORCE_WEAPON;
 				/*  if (is_scroll) msg_print("It looks consuming your MP!");*/
 				if (!artifact_bias)
 					artifact_bias = (one_in_(2) ? BIAS_MAGE : BIAS_PRIESTLY);
@@ -1678,7 +1678,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		o_ptr->to_h = 0;
 		o_ptr->to_d = 0;
 		o_ptr->art_flags1 &= ~(TR1_BLOWS);
-		o_ptr->art_flags1 &= ~(TR1_FORCE_WEPON);
+		o_ptr->art_flags1 &= ~(TR1_FORCE_WEAPON);
 		o_ptr->art_flags1 &= ~(TR1_SLAY_ANIMAL);
 		o_ptr->art_flags1 &= ~(TR1_SLAY_EVIL);
 		o_ptr->art_flags1 &= ~(TR1_SLAY_UNDEAD);

@@ -527,7 +527,7 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode)
 				if (mult == 10) mult = 40;
 				else if (mult < 60) mult = 60;
 			}
-			if ((p_ptr->pclass != CLASS_SAMURAI) && (f1 & TR1_FORCE_WEPON) && (p_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
+			if ((p_ptr->pclass != CLASS_SAMURAI) && (f1 & TR1_FORCE_WEAPON) && (p_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
 			{
 				p_ptr->csp -= (1+(o_ptr->dd * o_ptr->ds / 5));
 				p_ptr->redraw |= (PR_MANA);
@@ -3468,7 +3468,7 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 					if (!(p_ptr->resist_pois || p_ptr->oppose_pois) && (mult < 3))
 						mult = mult * 5 / 2;
 
-					if ((p_ptr->pclass != CLASS_SAMURAI) && (f1 & TR1_FORCE_WEPON) && (p_ptr->csp > (p_ptr->msp / 30)))
+					if ((p_ptr->pclass != CLASS_SAMURAI) && (f1 & TR1_FORCE_WEAPON) && (p_ptr->csp > (p_ptr->msp / 30)))
 					{
 						p_ptr->csp -= (1+(p_ptr->msp / 30));
 						p_ptr->redraw |= (PR_MANA);

@@ -2209,7 +2209,7 @@ static void display_player_various(void)
 				basedam *= 11;
 				basedam /= 9;
 			}
-			if (object_known_p(o_ptr) && (p_ptr->pclass != CLASS_SAMURAI) && (f1 & TR1_FORCE_WEPON) && (p_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
+			if (object_known_p(o_ptr) && (p_ptr->pclass != CLASS_SAMURAI) && (f1 & TR1_FORCE_WEAPON) && (p_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
 				basedam = basedam * 7 / 2;
 			if (p_ptr->riding && (o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE)))
 				basedam = basedam*(o_ptr->dd+2)/o_ptr->dd;

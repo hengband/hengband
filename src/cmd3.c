@@ -1390,7 +1390,7 @@ static flag_insc_table flag_insc_brand[] =
 	{ "µÛ", "V", TR1_VAMPIRIC, 1, 0 },
 	{ "¿Ì", "Q", TR1_IMPACT, 1, 0 },
 	{ "ÀÚ", "S", TR1_VORPAL, 1, 0 },
-	{ "Íý", "M", TR1_FORCE_WEPON, 1, 0 },
+	{ "Íý", "M", TR1_FORCE_WEAPON, 1, 0 },
 	{ NULL, NULL, 0, 0, 0 }
 };
 
@@ -1515,7 +1515,7 @@ static flag_insc_table flag_insc_brand[] =
   	{ "V", TR1_VAMPIRIC, 1, 0 },
   	{ "Q", TR1_IMPACT, 1, 0 },
   	{ "S", TR1_VORPAL, 1, 0 },
-  	{ "M", TR1_FORCE_WEPON, 1, 0 },
+  	{ "M", TR1_FORCE_WEAPON, 1, 0 },
   	{ NULL, 0, 0, 0 }
 };
 

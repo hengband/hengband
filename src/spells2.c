@@ -2780,7 +2780,7 @@ info[i++] = "あなたの武器はドラゴンに対して特に強い力を発揮する。";
 
 		}
 
-		if (f1 & (TR1_FORCE_WEPON))
+		if (f1 & (TR1_FORCE_WEAPON))
 		{
 #ifdef JP
 info[i++] = "あなたの武器はMPを使って攻撃する。";

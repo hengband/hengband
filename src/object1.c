@@ -3067,7 +3067,7 @@ info[i++] = "それは自然界の動物に対して特に恐るべき力を発揮する。";
 
 	}
 
-	if (f1 & (TR1_FORCE_WEPON))
+	if (f1 & (TR1_FORCE_WEAPON))
 	{
 #ifdef JP
 info[i++] = "それは使用者の魔力を使って攻撃する。";

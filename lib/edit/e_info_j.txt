@@ -570,7 +570,7 @@ X:24:15
 W:0:18:0:12000
 C:3:3:0:2
 F:INT | WIS |
-F:FORCE_WEPON | SEE_INVIS
+F:FORCE_WEAPON | SEE_INVIS
 
 # The "Elemental" brands (4) (6)
 
