@@ -4841,7 +4841,7 @@ s = "呪文書がない！";
 	}
 
 	/* Extract mana consumption rate */
-	shouhimana = s_ptr->smana*(3800 - experience_of_spell(spell, realm)) + 2399;
+	shouhimana = s_ptr->smana*(3800 - experience_of_spell(spell, realm-1)) + 2399;
 	if(p_ptr->dec_mana)
 		shouhimana *= 3;
 	else shouhimana *= 4;
