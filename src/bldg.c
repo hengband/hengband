@@ -2371,7 +2371,7 @@ static bool kankin(void)
 		for (i = INVEN_PACK-1; i >= 0; i--)
 		{
 			o_ptr = &inventory[i];
-			if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (o_ptr->pval == kubi_r_idx[j]))
+			if ((o_ptr->tval == TV_CORPSE) && (o_ptr->pval == kubi_r_idx[j]))
 			{
 				char buf[MAX_NLEN+20];
 				int num, k;

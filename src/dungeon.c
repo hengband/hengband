@@ -6552,7 +6552,7 @@ void determine_bounty_uniques(void)
 
 			if (!(r_ptr->flags1 & RF1_UNIQUE)) continue;
 
-			if (!(r_ptr->flags9 & RF9_DROP_CORPSE)) continue;
+			if (!(r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON))) continue;
 
 			if (r_ptr->rarity > 100) continue;
 

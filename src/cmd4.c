@@ -8436,6 +8436,8 @@ static void do_cmd_knowledge_kubi(void)
 	
 	if (fff)
 	{
+		bool listed = FALSE;
+
 #ifdef JP
 		fprintf(fff, "今日のターゲット : %s\n", (p_ptr->today_mon ? r_name + r_info[p_ptr->today_mon].name : "不明"));
 		fprintf(fff, "\n");
@@ -8445,17 +8447,25 @@ static void do_cmd_knowledge_kubi(void)
 		fprintf(fff, "\n");
 		fprintf(fff, "List of wanted monsters\n");
 #endif
+		fprintf(fff, "----------------------------------------------\n");
+
 		for (i = 0; i < MAX_KUBI; i++)
 		{
-			fprintf(fff,"%-40s ---- ",r_name + r_info[(kubi_r_idx[i] > 10000 ? kubi_r_idx[i] - 10000 : kubi_r_idx[i])].name);
-			if (kubi_r_idx[i] > 10000)
+			if (kubi_r_idx[i] <= 10000)
+			{
+				fprintf(fff,"%s\n", r_name + r_info[kubi_r_idx[i]].name);
+
+				listed = TRUE;
+			}
+		}
+
+		if (!listed)
+		{
 #ifdef JP
-				fprintf(fff, "済\n");
+			fprintf(fff,"\n%s\n", "賞金首はもう残っていません。");
 #else
-				fprintf(fff, "done\n");
+			fprintf(fff,"\n%s\n", "There is no more wanted monster.");
 #endif
-			else
-				fprintf(fff, "$%d\n", 300 * (r_info[kubi_r_idx[i]].level + 1));
 		}
 	}
 	
