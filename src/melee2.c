@@ -3871,7 +3871,7 @@ bool process_the_world(int num, int who, bool vs_player)
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	world_monster = 0;
-	if (vs_player || (los(py, px, m_ptr->fy, m_ptr->fx) && projectable(py, px, m_ptr->fy, m_ptr->fx)))
+	if (vs_player || (player_has_los_bold(m_ptr->fy, m_ptr->fx) && projectable(py, px, m_ptr->fy, m_ptr->fx)))
 	{
 #ifdef JP
 		msg_print("「時は動きだす…」");

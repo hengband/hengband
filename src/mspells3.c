@@ -729,7 +729,7 @@ msg_print("かん高い金切り声をあげた。");
 
 		if (!target_set(TARGET_KILL)) return FALSE;
 		if (!cave[target_row][target_col].m_idx) break;
-		if (!los(py, px, target_row, target_col)) break;
+		if (!player_has_los_bold(target_row, target_col)) break;
 		if (!projectable(py, px, target_row, target_col)) break;
 		m_ptr = &m_list[cave[target_row][target_col].m_idx];
 		monster_desc(m_name, m_ptr, 0);
@@ -1443,7 +1443,7 @@ msg_format("%sを引き戻した。", m_name);
 		if (!target_set(TARGET_KILL)) return FALSE;
 		target_m_idx = cave[target_row][target_col].m_idx;
 		if (!target_m_idx) break;
-		if (!los(py, px, target_row, target_col)) break;
+		if (!player_has_los_bold(target_row, target_col)) break;
 		if (!projectable(py, px, target_row, target_col)) break;
 		m_ptr = &m_list[target_m_idx];
 		r_ptr = &r_info[m_ptr->r_idx];

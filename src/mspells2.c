@@ -3120,7 +3120,7 @@ bool monst_spell_monst(int m_idx)
 		if(m_ptr->r_idx = MON_DIO) who == 1;
 		else if(m_ptr->r_idx = MON_WONG) who == 3;
 		dam = who;
-		if(!process_the_world(randint1(2)+2, who, los(py, px, m_ptr->fy, m_ptr->fx))) return (FALSE);
+		if(!process_the_world(randint1(2)+2, who, player_has_los_bold(m_ptr->fy, m_ptr->fx))) return (FALSE);
 #endif
 		return FALSE;
 

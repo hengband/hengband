@@ -1171,7 +1171,7 @@ static bool cast_force_spell(int spell)
 
 		if (!target_set(TARGET_KILL)) return FALSE;
 		if (!cave[target_row][target_col].m_idx) break;
-		if (!los(py, px, target_row, target_col)) break;
+		if (!player_has_los_bold(target_row, target_col)) break;
 		if (!projectable(py, px, target_row, target_col)) break;
 		m_ptr = &m_list[cave[target_row][target_col].m_idx];
 		monster_desc(m_name, m_ptr, 0);
