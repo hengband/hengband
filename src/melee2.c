@@ -2239,6 +2239,7 @@ static void process_monster(int m_idx)
 	bool            do_turn;
 	bool            do_move;
 	bool            do_view;
+	bool            must_alter_to_move;
 
 	bool            did_open_door;
 	bool            did_bash_door;
@@ -2829,6 +2830,7 @@ msg_format("%^s%s", m_name, monmessage);
 	do_turn = FALSE;
 	do_move = FALSE;
 	do_view = FALSE;
+	must_alter_to_move = FALSE;
 
 	/* Assume nothing */
 	did_open_door = FALSE;
@@ -2904,6 +2906,7 @@ msg_format("%^s%s", m_name, monmessage);
 		{
 			/* Eat through walls/doors/rubble */
 			do_move = TRUE;
+			must_alter_to_move = TRUE;
 
 			/* Monster destroyed a wall (later) */
 			did_kill_wall = TRUE;
@@ -2913,7 +2916,6 @@ msg_format("%^s%s", m_name, monmessage);
 		else if (is_closed_door(c_ptr->feat))
 		{
 			bool may_bash = TRUE;
-			feature_type *f_ptr = &f_info[c_ptr->feat];
 
 			/* Assume no move allowed */
 			do_move = FALSE;
@@ -2975,6 +2977,7 @@ msg_format("%^s%s", m_name, monmessage);
 
 					/* Hack -- fall into doorway */
 					do_move = TRUE;
+					must_alter_to_move = TRUE;
 				}
 			}
 
@@ -2993,6 +2996,8 @@ msg_format("%^s%s", m_name, monmessage);
 				{
 					cave_alter_feat(ny, nx, FF_OPEN);
 				}
+
+				f_ptr = &f_info[c_ptr->feat];
 
 				/* Handle viewable doors */
 				do_view = TRUE;
@@ -3184,6 +3189,36 @@ msg_format("%^s%s", m_name, monmessage);
 			}
 		}
 
+		if (did_kill_wall)
+		{
+			if (one_in_(GRINDNOISE))
+			{
+#ifdef JP
+				msg_print("ギシギシいう音が聞こえる。");
+#else
+				msg_print("There is a grinding sound.");
+#endif
+			}
+
+			cave_alter_feat(ny, nx, FF_HURT_DISI);
+			f_ptr = &f_info[c_ptr->feat];
+
+			/* Note changes to viewable region */
+			do_view = TRUE;
+
+			/* Take a turn */
+			do_turn = TRUE;
+		}
+
+		if (must_alter_to_move && (r_ptr->flags7 & RF7_AQUATIC))
+		{
+			if (!monster_can_cross_terrain(c_ptr->feat, r_ptr, is_riding_mon ? CEM_RIDING : 0))
+			{
+				/* Assume no move allowed */
+				do_move = FALSE;
+			}
+		}
+
 		/*
 		 * Check if monster can cross terrain
 		 * This is checked after the normal attacks
@@ -3219,23 +3254,7 @@ msg_format("%^s%s", m_name, monmessage);
 			/* Take a turn */
 			do_turn = TRUE;
 
-			if (did_kill_wall)
-			{
-				if (one_in_(GRINDNOISE))
-				{
-#ifdef JP
-					msg_print("ギシギシいう音が聞こえる。");
-#else
-					msg_print("There is a grinding sound.");
-#endif
-				}
-
-				cave_alter_feat(ny, nx, FF_HURT_DISI);
-
-				/* Note changes to viewable region */
-				do_view = TRUE;
-			}
-			else if (have_flag(f_ptr->flags, FF_TREE))
+			if (have_flag(f_ptr->flags, FF_TREE))
 			{
 				if (!(r_ptr->flags7 & RF7_CAN_FLY) && (!is_riding_mon || !p_ptr->levitation) && !(r_ptr->flags8 & RF8_WILD_WOOD))
 				{
