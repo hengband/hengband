@@ -2620,6 +2620,7 @@ I:39:9:2
 W:60:60:10:60000
 P:0:1d1:0:0:0
 F:INT | CHR | SPEED | ACTIVATE | FEATHER | HOLD_LIFE | INSTA_ART
+D:浮遊の力を与えてくれる青く仄光る宝石だ。
 
 N:148:『与一の弓』
 E:of Yoichi
@@ -2647,6 +2648,7 @@ I:23:20:2
 W:30:25:120:80000
 P:0:10d4:17:21:0
 F:STR | DEX | VORPAL | TUNNEL | SHOW_MODS
+D:鋼をも切り裂く、切れ味抜群の日本刀だ。
 
 N:151:八咫
 E:'Yata-no-Kagami'
@@ -2977,6 +2979,7 @@ F:SLAY_UNDEAD | SLAY_DEMON | SLAY_TROLL | SLAY_GIANT | SLAY_ORC |
 F:IM_FIRE | RES_SHARDS | RES_FEAR | TUNNEL | INFRA | SEARCH | REFLECT |
 F:LITE | TELEPATHY | REGEN | BRAND_FIRE | BRAND_COLD | BRAND_POIS |
 F:HIDE_TYPE | SHOW_MODS | RIDING | QUESTITEM | INSTA_ART
+D:なんというか適当に作られた棒だ。
 
 N:182:いいかげんな
 E:of irresponsibility
@@ -2987,6 +2990,7 @@ F:SPEED | INT | WIS | SUST_INT | SUST_WIS | XTRA_SHOTS | XTRA_MIGHT |
 F:DEC_MANA |
 F:RES_DARK | RES_LITE | RES_DISEN | RES_BLIND | IM_COLD | SLOW_DIGEST |
 F:HIDE_TYPE | SHOW_MODS | QUESTITEM | INSTA_ART
+D:すごくいいかげんな作りの弓だ。
 
 N:183:やる気のない
 E:of idler
@@ -2997,6 +3001,7 @@ F:STEALTH | CON | CHR | SUST_CON | SUST_CHR | IM_ELEC | RES_ACID |
 F:RES_CONF | RES_SOUND | RES_NETHER | RES_NEXUS | RES_CHAOS |
 F:SH_FIRE | SH_ELEC | SH_COLD | RES_POIS | HOLD_LIFE | FEATHER |
 F:HIDE_TYPE | SHOW_MODS | QUESTITEM | INSTA_ART
+D:どう見てもやる気のない感じの服だ。
 
 # The Broad Sword 'Arunruth'
 
@@ -3156,6 +3161,7 @@ I:21:16:6
 W:40:40:350:100000
 P:0:4d7:0:20:10
 F:STR | RES_FEAR
+D:大江山の鬼の首領たる酒呑童子の重い金棒だ。
 
 N:195:『ゴールデンハンマー』
 E:'Golden Hammer'
@@ -3202,6 +3208,7 @@ I:36:8:-10
 W:20:3:110:0
 P:8:1d1:-1:0:64
 F:AGGRAVATE | SUST_CHR | CHR
+D:なんとゴツゴツとした鎧だこと。
 
 N:201:『青龍の霊息』
 E:'Elemental of Ching-Rong'
@@ -3241,8 +3248,8 @@ F:INT | WIS | CHR | HIDE_TYPE | RES_LITE | RES_DARK |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD |
 F:RES_POIS | RES_CONF | RES_CHAOS | RES_NETHER |
 F:RES_NEXUS | AGGRAVATE | CURSED | HEAVY_CURSE | TY_CURSE
-D:この赤々と錆びた今にも崩れ去りそうな鎖かたびらには，
-D:かつて愚かにも守護する魔除けを奪われ朽ち果てた，
+D:この赤々と錆びた今にも崩れ去りそうな鎖かたびらには、
+D:かつて愚かにも守護する魔除けを奪われ朽ち果てた、
 D:太古の高僧の怨念がこもっている。
 
 # 綱鎧『化粧回し』
@@ -3404,6 +3411,8 @@ P:0:0d0:0:0:5
 F:STEALTH | SEARCH | HIDE_TYPE | SEE_INVIS |
 F:RES_DARK | ACTIVATE | LITE |
 F:INSTA_ART
+D:漆黒の宝玉がつけられた頸飾りだ。
+D:身に付けると自分が暗闇の中にいるのを感じる。
 
 # The Bastard Sword of Eowyn
 
@@ -3415,3 +3424,7 @@ P:0:4d4:12:16:0
 F:STR | CHR | STEALTH | SPEED | 
 F:SLAY_EVIL | SLAY_UNDEAD | SLAY_GIANT | SLAY_ANIMAL | 
 F:RES_NETHER | RES_FEAR | RES_DARK | RES_COLD
+D:「盾持つ乙女」ことローハン王国のエオウィン姫が、
+D:ベレンノールの野において魔王に振るった剣だ。
+D:「しかしわたしは生き身の人間の男ではない！お前が向き合って
+D:いるのは女だ。わたしはエオウィン、エオムンドの娘だ。」
