@@ -881,11 +881,13 @@ command("U"/"O").
     monsters.  A Blue-Mage's prime statistic is Intelligence as this
     determines his spell casting ability.
 
-    A Blue-Mage can learn and cast monster spells/techniques as their
-    own spell; this technique is called Blue magic.  Unlike Imitators,
-    Blue-Mages remember their spells permanently, but they must learn
-    spells from monsters by activating their class power 'Learning',
-    and they can learn only attack and summoning spells.
+    A Blue-Mage can learn and cast monster ranged attacks, spells, or
+    summons as their own spells; this technique is called Blue magic.
+    Unlike Imitators, Blue-Mages remember their spells permanently,
+    but they must get hit by a monster's spell while their class power
+    'Learning' is active to learn spells.  Because of this
+    requirement, they do not learn spells, like healing, that affect
+    the monster itself.
 
 
 ***** <Cavalry>
