@@ -1,3 +1,28 @@
+2002-02-16  Takeshi Mogami  <mogami@akiru>
+
+	* src/cmd4.c, src/effects.c, src/melee1.c, src/mspells1.c, src/mspells2.c:
+	闘技場で敗れたとき、彼はあなたの先祖を？人葬っているが の表記がでないように修正。
+	また、プレイ記録を追加。
+
+2002-02-16  henkma  <henkma@akiru>
+
+	* src/util.c:
+	get_check_strictのyes/noを(o)k/(c)ancelに変更してみた. 動作確認はしているが, ゲームプレイ中に試してないので操作感の感想求む. 前のよりは良いと思う. 一応前記関数のところにdefineしてあるCHECK_STRICTを1にすれば前の状態になるようにしている. その部分に関してnoがnだけで反応してしまうバグがあったのでついでに直してある.
+
+2002-02-15  Takeshi Mogami  <mogami@akiru>
+
+	* src/monster1.c: fire a missle -> fire an arrow
+
+2002-02-15  hoge  <hoge@akiru>
+
+	* lib/edit/t0000001_j.txt, src/defines.h, src/init1.c, src/mane.c, src/melee1.c, src/melee2.c, src/monster1.c, src/mspells1.c, src/mspells2.c, src/mspells3.c, src/tables.c, src/wizard1.c, lib/edit/r_info_j.txt:
+	ARROW_?を全部SHOOTに統一。
+	モンクの盗賊クエスト報酬修正。
+
+2002-02-15  Takeshi Mogami  <mogami@akiru>
+
+	* Changelogs: 更新
+
 2002-02-15  habu  <habu@akiru>
 
 	* src/mspells1.c, src/mspells2.c, src/mspells3.c, src/mutation.c, src/object2.c, src/racial.c, src/rooms.c, src/save.c, src/spells1.c, src/spells2.c, src/spells3.c, src/store.c, src/streams.c, src/wild.c, src/wizard2.c, src/xtra2.c, src/z-rand.c, src/z-rand.h, src/cave.c, src/cmd1.c, src/cmd2.c, src/cmd4.c, src/cmd5.c, src/cmd6.c, src/dungeon.c, src/effects.c, src/files.c, src/flavor.c, src/generate.c, src/grid.c, src/grid.h, src/hissatsu.c, src/init1.c, src/load.c, src/main-dos.c, src/mane.c, src/melee1.c, src/melee2.c, src/mind.c, src/monster1.c, src/monster2.c, src/artifact.c, src/avatar.c, src/birth.c, src/bldg.c:
