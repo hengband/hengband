@@ -1406,7 +1406,9 @@ static void get_inscription(char *buff, object_type *o_ptr)
                 while (*insc)
                 {
                         if (*insc == '#') break;
+#ifdef JP
                         if (iskanji(*insc)) *buff++ = *insc++;
+#endif
                         *buff++ = *insc++;
                 }
 
