@@ -7935,7 +7935,7 @@ static bool do_disintegration(int by, int bx, int y, int x)
 
 	/* Disintegration balls explosions are stopped by perma-walls */
 	if (!in_disintegration_range(by, bx, y, x)) return FALSE;
-						
+
 	/* Permanent walls and artifacts don't get effect */
 	/* But not protect monsters and other objects */
 	if (!cave_valid_bold(y, x)) return TRUE;
@@ -8011,7 +8011,6 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 
 					/* Enforce an arc */
 					if (distance(by, bx, y, x) != cdis) continue;
-
 
 					if (disint_ball)
 					{
@@ -8989,7 +8988,6 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 						t_x = x_saver - 1 + randint1(3);
 						max_attempts--;
 					}
-
 					while (max_attempts && in_bounds2u(t_y, t_x) &&
 					    !(los(y, x, t_y, t_x)));
 
@@ -9026,7 +9024,6 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 				}
 			}
 
-
 			/* Find the closest point in the blast */
 			if (breath)
 			{
@@ -9036,8 +9033,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			{
 				effective_dist = dist;
 			}
-			
-			
+
 			/* Target may be the riding player */
 			if (p_ptr->riding && (y == py) && (x == px))
 			{
@@ -9050,19 +9046,18 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 					/* Aimed on the mount */
 					/* The monster takes full damage */
 				}
-				
+
 				/* Otherwise partly affect the mount */
 				else
 				{
 					effective_dist++;
 				}
 			}
-			
+
 			/* Affect the monster in the grid */
 			if (project_m(who, effective_dist, y, x, dam, typ,flg)) notice = TRUE;
 		}
-		
-	
+
 		/* Player affected one monster (without "jumping") */
 		if (!who && (project_m_n == 1) && !jump)
 		{
@@ -9117,7 +9112,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			}
 
 			/* Target may be your horse */
-			if (p_ptr->riding && (y == py) && (x == px))
+			if (p_ptr->riding)
 			{
 				/* A beam or bolt is well aimed */
 				if ((flg & (PROJECT_BEAM | PROJECT_REFLECTABLE)) && (y == y2) && (x == x2))
@@ -9128,7 +9123,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 					/* Aimed on the player */
 					/* The player takes full damage */
 				}
-				
+
 				/* Otherwise partly affect the player */
 				else
 				{
@@ -9138,6 +9133,9 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 
 			/* Affect the player */
 			if (project_p(who, who_name, effective_dist, y, x, dam, typ, flg, monspell)) notice = TRUE;
+
+			/* Affect done */
+			break;
 		}
 	}
 
