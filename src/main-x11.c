@@ -1403,9 +1403,9 @@ static errr Infofnt_init_real(XFontStruct *info)
  *	name: The name of the requested Font
  */
 #ifdef _JP
-static errr Infofnt_init_data(cptr name, cptr kname)
+static void Infofnt_init_data(cptr name, cptr kname)
 #else
-static errr Infofnt_init_data(cptr name)
+static void Infofnt_init_data(cptr name)
 #endif
 
 {
@@ -1425,10 +1425,10 @@ static errr Infofnt_init_data(cptr name)
 	/*** Load the info Fresh, using the name ***/
 
 	/* If the name is not given, report an error */
-	if (!name) return (-1);
+	if (!name || !*name) quit("Missing font!");
 
 #ifdef _JP
-	if (!kname) return (-1);
+	if (!kname || !*kname) quit("Missing kanji font!");
 #endif
 	/* Attempt to load the font */
 #ifdef USE_FONTSET
@@ -1449,9 +1449,9 @@ static errr Infofnt_init_data(cptr name)
 
 
 	/* The load failed, try to recover */
-	if (!info) return (-1);
+	if (!info) quit_fmt("Failed to find font:\"%s\"", name);
 #ifdef _JP
-	if (!kinfo) return (-1);
+	if (!kinfo) quit_fmt("Failed to find font:\"%s\"", kname);
 #endif
 
 
@@ -1482,7 +1482,7 @@ static errr Infofnt_init_data(cptr name)
 #endif
 #endif
 		/* Fail */
-		return (-1);
+		quit_fmt("Failed to prepare font:\"%s\"", name);
 	}
 
 	/* Save a copy of the font name */
@@ -1496,9 +1496,6 @@ static errr Infofnt_init_data(cptr name)
 #ifdef _JP
 	Infokfnt->nuke = 1;
 #endif
-
-	/* Success */
-	return (0);
 }
 
 
