@@ -520,7 +520,6 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 	{
 		/* Ego objects */
 		if (object_is_ego(o_ptr))
-		    
 		{
 			if (object_is_weapon_armour_ammo(o_ptr))
 			{
@@ -541,11 +540,8 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 				/* Don't use the object description */
 				name = FALSE;
 
-				if (object_is_weapon_armour_ammo(o_ptr))
-				{
-					/* Restrict to 'common' equipments */
-					if (!object_is_rare(o_ptr)) ADD_FLG(FLG_COMMON);
-				}
+				/* Restrict to 'common' equipments */
+				if (!object_is_rare(o_ptr)) ADD_FLG(FLG_COMMON);
 			}
 
 			ADD_FLG(FLG_EGO);
