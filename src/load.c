@@ -650,16 +650,14 @@ static void rd_item(object_type *o_ptr)
 	if (flags & SAVE_ITEM_INSCRIPTION)
 	{
 		rd_string(buf, sizeof(buf));
-		if (buf[0]) o_ptr->inscription = quark_add(buf);
-	       	else o_ptr->inscription = 0;
+		o_ptr->inscription = quark_add(buf);
 	}
 	else o_ptr->inscription = 0;
 
 	if (flags & SAVE_ITEM_ART_NAME)
 	{
 		rd_string(buf, sizeof(buf));
-		if (buf[0]) o_ptr->art_name = quark_add(buf);
-		else o_ptr->art_name = 0;
+		o_ptr->art_name = quark_add(buf);
 	}
 	else o_ptr->art_name = 0;
 }
@@ -899,8 +897,7 @@ static void rd_monster(monster_type *m_ptr)
 	if (flags & SAVE_MON_NICKNAME) 
 	{
 		rd_string(buf, sizeof(buf));
-		if (buf[0]) m_ptr->nickname = quark_add(buf);
-		else m_ptr->nickname = 0;
+		m_ptr->nickname = quark_add(buf);
 	}
 	else m_ptr->nickname = 0;
 
