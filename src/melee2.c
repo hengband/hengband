@@ -1542,6 +1542,8 @@ static bool monst_attack_monst(int m_idx, int t_idx)
 			/* break; */
 		}
 
+		if (method == RBM_SHOOT) continue;
+
 		/* Extract the attack "power" */
 		switch (effect)
 		{

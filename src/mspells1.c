@@ -311,10 +311,7 @@ static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 		if (int_outof(r_ptr, 150)) f5 &= ~(RF5_BO_PLAS);
 		if (int_outof(r_ptr, 150)) f5 &= ~(RF5_BO_ICEE);
 		if (int_outof(r_ptr, 150)) f5 &= ~(RF5_MISSILE);
-		if (int_outof(r_ptr, 150)) f4 &= ~(RF4_ARROW_1);
-		if (int_outof(r_ptr, 150)) f4 &= ~(RF4_ARROW_2);
-		if (int_outof(r_ptr, 150)) f4 &= ~(RF4_ARROW_3);
-		if (int_outof(r_ptr, 150)) f4 &= ~(RF4_ARROW_4);
+		if (int_outof(r_ptr, 150)) f4 &= ~(RF4_SHOOT);
 	}
 
 	if (smart & (SM_IMM_FREE))
@@ -1661,7 +1658,7 @@ else msg_format("%^sがロケットを発射した。", m_name);
 			break;
 		}
 
-		/* RF4_ARROW_1 */
+		/* RF4_SHOOT */
 		case 96+4:
 		{
 			if (x!=px || y!=py) return (FALSE);
@@ -1678,76 +1675,30 @@ else msg_format("%^sが矢を放った。", m_name);
 			else msg_format("%^s fires an arrow.", m_name);
 #endif
 
-			dam = damroll(2, 5);
-			bolt(m_idx, GF_ARROW, dam, MS_ARROW_1, learnable);
+			dam = damroll(r_ptr->blow[0].d_dice, r_ptr->blow[0].d_side);
+			bolt(m_idx, GF_ARROW, dam, MS_SHOOT, learnable);
 			update_smart_learn(m_idx, DRS_REFLECT);
 			break;
 		}
 
-		/* RF4_ARROW_2 */
+		/* RF4_XXX2 */
 		case 96+5:
 		{
-			if (x!=px || y!=py) return (FALSE);
-			disturb(1, 0);
-#ifdef JP
-if (blind) msg_format("%^sが奇妙な音を発した。", m_name);
-#else
-			if (blind) msg_format("%^s makes a strange noise.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^sが矢を放った。", m_name);
-#else
-			else msg_format("%^s fires an arrow!", m_name);
-#endif
-
-			dam = damroll(3, 6);
-			bolt(m_idx, GF_ARROW, dam, MS_ARROW_2, learnable);
-			update_smart_learn(m_idx, DRS_REFLECT);
+			/* XXX XXX XXX */
 			break;
 		}
 
-		/* RF4_ARROW_3 */
+		/* RF4_XXX3 */
 		case 96+6:
 		{
-			if (x!=px || y!=py) return (FALSE);
-			disturb(1, 0);
-#ifdef JP
-if (blind) msg_format("%^sが奇妙な音を発した。", m_name);
-#else
-			if (blind) msg_format("%^s makes a strange noise.", m_name);
-#endif
-
-#ifdef JP
-			else msg_format("%sがボルトを撃った。", m_name);
-#else
-			else msg_format("%^s fires a bolt.", m_name);
-#endif
-			dam = damroll(5, 6);
-			bolt(m_idx, GF_ARROW, dam, MS_ARROW_3, learnable);
-			update_smart_learn(m_idx, DRS_REFLECT);
+			/* XXX XXX XXX */
 			break;
 		}
 
-		/* RF4_ARROW_4 */
+		/* RF4_XXX4 */
 		case 96+7:
 		{
-			if (x!=px || y!=py) return (FALSE);
-			disturb(1, 0);
-#ifdef JP
-if (blind) msg_format("%^sが奇妙な音を発した。", m_name);
-#else
-			if (blind) msg_format("%^s makes a strange noise.", m_name);
-#endif
-
-#ifdef JP
-			else msg_format("%sがボルトを撃った。", m_name);
-#else
-			else msg_format("%^s fires a bolt.", m_name);
-#endif
-			dam = damroll(7, 6);
-			bolt(m_idx, GF_ARROW, dam, MS_ARROW_4, learnable);
-			update_smart_learn(m_idx, DRS_REFLECT);
+			/* XXX XXX XXX */
 			break;
 		}
 

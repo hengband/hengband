@@ -2245,18 +2245,12 @@ spoil_out("が、侵入者を追跡しない");
 #ifdef JP
 if (flags4 & RF4_SHRIEK)  vp[vn++] = "悲鳴で助けを求める";
 if (flags4 & RF4_ROCKET)  vp[vn++] = "ロケットを発射する";
-if (flags4 & RF4_ARROW_2) vp[vn++] = "数回矢を撃つ";
-if (flags4 & RF4_ARROW_2) vp[vn++] = "数回矢を撃つ";
-if (flags4 & RF4_ARROW_4) vp[vn++] = "数回射撃をする";
-if (flags4 & RF4_ARROW_4) vp[vn++] = "数回射撃をする";
+if (flags4 & RF4_SHOOT) vp[vn++] = "射撃をする";
 if (flags6 & (RF6_SPECIAL)) vp[vn++] = "特別な行動をする";
 #else
 		if (flags4 & RF4_SHRIEK)  vp[vn++] = "shriek for help";
 		if (flags4 & RF4_ROCKET)  vp[vn++] = "shoot a rocket";
-		if (flags4 & RF4_ARROW_1) vp[vn++] = "fire arrows";
-		if (flags4 & RF4_ARROW_2) vp[vn++] = "fire arrows";
-		if (flags4 & RF4_ARROW_3) vp[vn++] = "fire missiles";
-		if (flags4 & RF4_ARROW_4) vp[vn++] = "fire missiles";
+		if (flags4 & RF4_SHOOT) vp[vn++] = "fire missiles";
 		if (flags6 & (RF6_SPECIAL)) vp[vn++] = "do something";
 #endif
 
@@ -2945,6 +2939,8 @@ sprintf(buf, " %d フィート先から侵入者に気付くことがある。",
 		for (k = 0, j = 0; j < 4; j++)
 		{
 			if (!r_ptr->blow[j].method) continue;
+
+			if (r_ptr->blow[j].method == RBM_SHOOT) continue;
 
 			/* No method yet */
 			p = "???";

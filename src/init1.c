@@ -85,6 +85,7 @@ static cptr r_info_blow_method[] =
 	"INSULT",
 	"MOAN",
 	"SHOW",
+	"SHOOT",
 	NULL
 };
 
@@ -258,10 +259,10 @@ static cptr r_info_flags4[] =
 	"XXX1",
 	"DISPEL",
 	"ROCKET",
-	"ARROW_1",
-	"ARROW_2",
-	"ARROW_3",
-	"ARROW_4",
+	"SHOOT",
+	"XXX2",
+	"XXX3",
+	"XXX4",
 	"BR_ACID",
 	"BR_ELEC",
 	"BR_FIRE",

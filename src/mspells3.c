@@ -37,6 +37,9 @@ void learned_info(char *p, int power)
 	{
 		case MS_SHRIEK:
 		case MS_XXX1:
+		case MS_XXX2:
+		case MS_XXX3:
+		case MS_XXX4:
 		case MS_SCARE:
 		case MS_BLIND:
 		case MS_CONF:
@@ -78,18 +81,17 @@ void learned_info(char *p, int power)
 		case MS_ROCKET:
 			sprintf(p, " %s%d", s_dam, hp/4);
 			break;
-		case MS_ARROW_1:
-			sprintf(p, " %s2d5", s_dam);
+		case MS_SHOOT:
+		{
+			object_type *o_ptr = NULL;
+			if (buki_motteruka(INVEN_RARM)) o_ptr = &inventory[INVEN_RARM];
+			else if (buki_motteruka(INVEN_LARM)) o_ptr = &inventory[INVEN_LARM];
+			else
+				sprintf(p, " %s1", s_dam);
+			if (o_ptr)
+				sprintf(p, " %s%dd%d+%d", s_dam, o_ptr->dd, o_ptr->ds, o_ptr->to_d);
 			break;
-		case MS_ARROW_2:
-			sprintf(p, " %s3d6", s_dam);
-			break;
-		case MS_ARROW_3:
-			sprintf(p, " %s5d6", s_dam);
-			break;
-		case MS_ARROW_4:
-			sprintf(p, " %s7d6", s_dam);
-			break;
+		}
 		case MS_BR_ACID:
 		case MS_BR_ELEC:
 		case MS_BR_FIRE:
@@ -811,49 +813,36 @@ msg_print("ロケットを発射した。");
 		damage = hp / 4;
 			fire_rocket(GF_ROCKET, dir, damage, 2);
 		break;
-	case MS_ARROW_1:
+	case MS_SHOOT:
+	{
+		object_type *o_ptr = NULL;
+
 		if (!get_aim_dir(&dir)) return FALSE;
 		else
+		{
 #ifdef JP
 msg_print("矢を放った。");
 #else
 			msg_print("You fire an arrow.");
 #endif
-		damage = damroll(2, 5);
-		fire_bolt(GF_ARROW, dir, damage);
+			if (buki_motteruka(INVEN_RARM)) o_ptr = &inventory[INVEN_RARM];
+			else if (buki_motteruka(INVEN_LARM)) o_ptr = &inventory[INVEN_LARM];
+			else
+			damage = 1;
+			if (o_ptr)
+			{
+				damage = damroll(o_ptr->dd, o_ptr->ds)+ o_ptr->to_d;
+				if (damage < 1) damage = 1;
+			}
+			fire_bolt(GF_ARROW, dir, damage);
+		}
 		break;
-	case MS_ARROW_2:
-		if (!get_aim_dir(&dir)) return FALSE;
-		else
-#ifdef JP
-msg_print("矢を放った。");
-#else
-			msg_print("You fires an arrow.");
-#endif
-		damage = damroll(3, 6);
-		fire_bolt(GF_ARROW, dir, damage);
+	}
+	case MS_XXX2:
 		break;
-	case MS_ARROW_3:
-		if (!get_aim_dir(&dir)) return FALSE;
-		else
-#ifdef JP
-msg_print("ボルトを撃った。");
-#else
-			msg_print("You fire a bolt.");
-#endif
-		damage = damroll(5, 6);
-		fire_bolt(GF_ARROW, dir, damage);
+	case MS_XXX3:
 		break;
-	case MS_ARROW_4:
-		if (!get_aim_dir(&dir)) return FALSE;
-		else
-#ifdef JP
-msg_print("ボルトを撃った。");
-#else
-			msg_print("You fire a bolt.");
-#endif
-		damage = damroll(7, 6);
-		fire_bolt(GF_ARROW, dir, damage);
+	case MS_XXX4:
 		break;
 	case MS_BR_ACID:
 		if (!get_aim_dir(&dir)) return FALSE;

@@ -542,7 +542,7 @@ msg_format("%^sが%sにロケットを発射した。", m_name, t_name);
 				break;
 			}
 
-			/* RF4_ARROW_1 */
+			/* RF4_SHOOT */
 			case 96+4:
 			{
 				if (known)
@@ -576,129 +576,30 @@ msg_format("%^sが%sに矢を放った。", m_name, t_name);
 					sound(SOUND_SHOOT);
 				}
 
-				dam = damroll(2, 5);
-				monst_bolt_monst(m_idx, y, x, GF_ARROW, dam, MS_ARROW_1, learnable);
+				dam = damroll(r_ptr->blow[0].d_dice, r_ptr->blow[0].d_side);
+				monst_bolt_monst(m_idx, y, x, GF_ARROW, dam, MS_SHOOT, learnable);
 
 				break;
 			}
 
-			/* RF4_ARROW_2 */
+			/* RF4_XXX2 */
 			case 96+5:
 			{
-				if (known)
-				{
-					if (see_either)
-					{
-						if (blind)
-						{
-#ifdef JP
-msg_format("%^sが奇妙な音を発した。", m_name);
-#else
-							msg_format("%^s makes a strange noise.", m_name);
-#endif
-
-						}
-						else
-						{
-#ifdef JP
-msg_format("%^sが%sに矢を放った。", m_name, t_name);
-#else
-							msg_format("%^s fires an arrow at %s.", m_name, t_name);
-#endif
-
-						}
-					}
-					else
-					{
-                                                mon_fight = TRUE;
-					}
-
-					sound(SOUND_SHOOT);
-				}
-
-				dam = damroll(3, 6);
-				monst_bolt_monst(m_idx, y, x, GF_ARROW, dam, MS_ARROW_2, learnable);
-
+				/* XXX XXX XXX */
 				break;
 			}
 
-			/* RF4_ARROW_3 */
+			/* RF4_XXX3 */
 			case 96+6:
 			{
-				if (known)
-				{
-					if (see_either)
-					{
-						if (blind)
-						{
-#ifdef JP
-msg_format("%^sが奇妙な音を発した。", m_name);
-#else
-							msg_format("%^s makes a strange noise.", m_name);
-#endif
-
-						}
-						else
-						{
-#ifdef JP
-msg_format("%sが%sにボルトを放った。", m_name, t_name);
-#else
-							msg_format("%^s fires a bolt at %s.", m_name, t_name);
-#endif
-
-						}
-					}
-					else
-					{
-                                                mon_fight = TRUE;
-					}
-
-					sound(SOUND_SHOOT);
-				}
-
-				dam = damroll(5, 6);
-				monst_bolt_monst(m_idx, y, x, GF_ARROW, dam, MS_ARROW_3, learnable);
-
+				/* XXX XXX XXX */
 				break;
 			}
 
-			/* RF4_ARROW_4 */
+			/* RF4_XXX4 */
 			case 96+7:
 			{
-				if (known)
-				{
-					if (see_either)
-					{
-						if (blind)
-						{
-#ifdef JP
-msg_format("%^sが奇妙な音を発した。", m_name);
-#else
-							msg_format("%^s makes a strange noise.", m_name);
-#endif
-
-						}
-						else
-						{
-#ifdef JP
-msg_format("%sが%sにボルトを放った。", m_name, t_name);
-#else
-							msg_format("%^s fires a bolt at %s.", m_name, t_name);
-#endif
-
-						}
-					}
-					else
-					{
-                                                mon_fight = TRUE;
-					}
-
-					sound(SOUND_SHOOT);
-				}
-
-				dam = damroll(7, 6);
-				monst_bolt_monst(m_idx, y, x, GF_ARROW, dam, MS_ARROW_4, learnable);
-
+				/* XXX XXX XXX */
 				break;
 			}
 

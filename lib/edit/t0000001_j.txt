@@ -56,9 +56,13 @@ F:b:129:3:0:0:0:0:0:1
 F:b:129:3:0:0:0:0:0:14
 F:!:1:3:0:42
 
-?:[AND [EQU $QUEST1 3] [IOR [EQU $CLASS BeastMaster] [EQU $CLASS Cavalry] [EQU $CLASS Monk] ] ]
+?:[AND [EQU $QUEST1 3] [IOR [EQU $CLASS BeastMaster] [EQU $CLASS Cavalry] ] ]
 F:b:129:3:0:0:0:0:0:14
 F:!:1:3:0:543
+
+?:[AND [EQU $QUEST1 3] [EQU $CLASS Monk] ]
+F:b:129:3:0:0:0:0:0:14
+F:!:1:3:0:126
 
 ?:[AND [EQU $QUEST1 3] [EQU $CLASS Priest] ]
 F:b:129:3:0:0:0:0:0:14

@@ -247,6 +247,8 @@ bool make_attack_normal(int m_idx)
 		/* Handle "leaving" */
 		if (p_ptr->leaving) break;
 
+		if (method == RBM_SHOOT) continue;
+
 		/* Extract visibility (before blink) */
 		if (m_ptr->ml) visible = TRUE;
 

@@ -3025,6 +3025,7 @@
 #define RBM_INSULT      22
 #define RBM_MOAN        23
 #define RBM_SHOW        24
+#define RBM_SHOOT       25
 
 
 /*
@@ -3183,10 +3184,10 @@
 #define RF4_XXX1            0x00000002  /* XXX */
 #define RF4_DISPEL          0x00000004  /* Dispel magic */
 #define RF4_ROCKET          0x00000008  /* TY: Rocket */
-#define RF4_ARROW_1         0x00000010  /* Fire an arrow (light) */
-#define RF4_ARROW_2         0x00000020  /* Fire an arrow (heavy) */
-#define RF4_ARROW_3         0x00000040  /* Fire missiles (light) */
-#define RF4_ARROW_4         0x00000080  /* Fire missiles (heavy) */
+#define RF4_SHOOT           0x00000010  /* Fire missiles */
+#define RF4_XXX2            0x00000020
+#define RF4_XXX3            0x00000040
+#define RF4_XXX4            0x00000080
 #define RF4_BR_ACID         0x00000100  /* Breathe Acid */
 #define RF4_BR_ELEC         0x00000200  /* Breathe Elec */
 #define RF4_BR_FIRE         0x00000400  /* Breathe Fire */
@@ -3389,7 +3390,7 @@
  * Hack -- "bolt" spells that may hurt fellow monsters
  */
 #define RF4_BOLT_MASK \
-  (RF4_ROCKET | RF4_ARROW_1 | RF4_ARROW_2 | RF4_ARROW_3 | RF4_ARROW_4)
+  (RF4_ROCKET | RF4_SHOOT)
 
 #define RF5_BOLT_MASK \
    (RF5_BO_ACID | RF5_BO_ELEC | RF5_BO_FIRE | RF5_BO_COLD | \
@@ -3465,8 +3466,8 @@
  * Hack -- "attack" spells
  */
 #define RF4_ATTACK_MASK \
-  (RF4_SHRIEK | RF4_DISPEL | RF4_ROCKET | RF4_ARROW_1 | RF4_ARROW_2 | \
-   RF4_ARROW_3 | RF4_ARROW_4 | RF4_BR_ACID | RF4_BR_ELEC | RF4_BR_FIRE | \
+  (RF4_SHRIEK | RF4_DISPEL | RF4_ROCKET | RF4_SHOOT | \
+   RF4_BR_ACID | RF4_BR_ELEC | RF4_BR_FIRE | \
    RF4_BR_COLD | RF4_BR_POIS | RF4_BR_NETH | RF4_BR_LITE | RF4_BR_DARK | \
    RF4_BR_CONF | RF4_BR_SOUN | RF4_BR_CHAO | RF4_BR_DISE | RF4_BR_NEXU | \
    RF4_BR_TIME | RF4_BR_INER | RF4_BR_GRAV | RF4_BR_SHAR | RF4_BR_PLAS | \
@@ -3492,7 +3493,7 @@
  * Hack -- "indirect" spells
  */
 #define RF4_INDIRECT_MASK \
-  (RF4_SHRIEK | RF4_XXX1)
+  (RF4_SHRIEK | RF4_XXX1 | RF4_XXX2 | RF4_XXX3 | RF4_XXX4)
 
 #define RF5_INDIRECT_MASK \
   0L
@@ -3510,8 +3511,8 @@
  * Hack -- "no magic" spells
  */
 #define RF4_NOMAGIC_MASK \
-	(RF4_SHRIEK | RF4_ROCKET | RF4_ARROW_1 | RF4_ARROW_2 | \
-	 RF4_ARROW_3 | RF4_ARROW_4 | RF4_BR_ACID | RF4_BR_ELEC | \
+	(RF4_SHRIEK | RF4_ROCKET | RF4_SHOOT | \
+	 RF4_BR_ACID | RF4_BR_ELEC | \
 	 RF4_BR_FIRE | RF4_BR_COLD | RF4_BR_POIS | RF4_BR_NETH | \
 	 RF4_BR_LITE | RF4_BR_DARK | RF4_BR_CONF | RF4_BR_SOUN | \
 	 RF4_BR_CHAO | RF4_BR_DISE | RF4_BR_NEXU | RF4_BR_SHAR | \
@@ -4265,10 +4266,10 @@ extern int PlayerUID;
 #define MS_XXX1           1
 #define MS_DISPEL         2
 #define MS_ROCKET         3
-#define MS_ARROW_1        4
-#define MS_ARROW_2        5
-#define MS_ARROW_3        6
-#define MS_ARROW_4        7
+#define MS_SHOOT          4
+#define MS_XXX2           5
+#define MS_XXX3           6
+#define MS_XXX4           7
 #define MS_BR_ACID        8
 #define MS_BR_ELEC        9
 #define MS_BR_FIRE        10

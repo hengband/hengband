@@ -364,8 +364,7 @@ else msg_print("ロケットを発射した。");
 		
 			fire_rocket(GF_ROCKET, dir, damage, 2);
 		break;
-	case MS_ARROW_1:
-	case MS_ARROW_2:
+	case MS_SHOOT:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
 else msg_print("矢を放った。");
@@ -375,16 +374,11 @@ else msg_print("矢を放った。");
 		
 			fire_bolt(GF_ARROW, dir, damage);
 		break;
-	case MS_ARROW_3:
-	case MS_ARROW_4:
-		if (!get_aim_dir(&dir)) return FALSE;
-#ifdef JP
-else msg_print("ボルトを撃った。");
-#else
-			else msg_print("You fires a bolt.");
-#endif
-		
-			fire_bolt(GF_ARROW, dir, damage);
+	case MS_XXX2:
+		break;
+	case MS_XXX3:
+		break;
+	case MS_XXX4:
 		break;
 	case MS_BR_ACID:
 		if (!get_aim_dir(&dir)) return FALSE;

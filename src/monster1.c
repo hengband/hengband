@@ -962,27 +962,9 @@ roff(format("%^sは矢の呪文を跳ね返す。", wd_he[msex]));
 #endif
 
 #ifdef JP
-	if (flags4 & RF4_ARROW_1) {vp[vn] = "矢を撃つ";color[vn++] = TERM_L_UMBER;}
+	if (flags4 & RF4_SHOOT) {vp[vn] = "射撃をする";color[vn++] = TERM_UMBER;}
 #else
-	if (flags4 & RF4_ARROW_1) {vp[vn] = "fire an arrow";color[vn++] = TERM_L_UMBER;}
-#endif
-
-#ifdef JP
-	if (flags4 & RF4_ARROW_2) {vp[vn] = "強力な矢を撃つ";color[vn++] = TERM_L_UMBER;}
-#else
-	if (flags4 & RF4_ARROW_2) {vp[vn] = "fire arrows";color[vn++] = TERM_L_UMBER;}
-#endif
-
-#ifdef JP
-	if (flags4 & RF4_ARROW_3) {vp[vn] = "射撃をする";color[vn++] = TERM_UMBER;}
-#else
-	if (flags4 & RF4_ARROW_3) {vp[vn] = "fire a missile";color[vn++] = TERM_UMBER;}
-#endif
-
-#ifdef JP
-	if (flags4 & RF4_ARROW_4) {vp[vn] = "強力な射撃をする";color[vn++] = TERM_UMBER;}
-#else
-	if (flags4 & RF4_ARROW_4) {vp[vn] = "fire missiles";color[vn++] = TERM_UMBER;}
+	if (flags4 & RF4_SHOOT) {vp[vn] = "fire a missile";color[vn++] = TERM_UMBER;}
 #endif
 
 #ifdef JP
@@ -2563,6 +2545,7 @@ if ((flags3 & RF3_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "テレポー
 	{
 		/* Skip non-attacks */
 		if (!r_ptr->blow[m].method) continue;
+		if (r_ptr->blow[m].method == RBM_SHOOT) continue;
 
 		/* Count known attacks */
 		if (r_ptr->r_blows[m]) n++;
@@ -2575,17 +2558,16 @@ if ((flags3 & RF3_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "テレポー
 
 		/* Skip non-attacks */
 		if (!r_ptr->blow[m].method) continue;
+		if (r_ptr->blow[m].method == RBM_SHOOT) continue;
 
 		/* Skip unknown attacks */
 		if (!r_ptr->r_blows[m]) continue;
-
 
 		/* Extract the attack info */
 		method = r_ptr->blow[m].method;
 		effect = r_ptr->blow[m].effect;
 		d1 = r_ptr->blow[m].d_dice;
 		d2 = r_ptr->blow[m].d_side;
-
 
 		/* No method yet */
 		p = NULL;

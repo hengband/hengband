@@ -1411,6 +1411,7 @@ E:Novice ranger
 G:p:g
 I:110:6d8:20:6:5
 W:4:1:0:18:500:1039
+B:SHOOT:HURT:2d7
 B:HIT:HURT:1d7
 B:HIT:HURT:1d7
 F:MALE | HAS_LITE_1 |
@@ -1418,7 +1419,7 @@ F:FORCE_SLEEP | DROP_SKELETON | DROP_CORPSE
 F:DROP_60 | EAT_LOSE_STR | EAT_LOSE_WIS | EAT_GIVE_CON |
 F:OPEN_DOOR | BASH_DOOR | WILD_WOOD |
 S:1_IN_9 | 
-S:ARROW_2 | MISSILE
+S:SHOOT | MISSILE
 D:$An agile hunter, ready and relaxed.
 D:機敏な野伏で、常に戦闘を意識している。
 
@@ -1542,12 +1543,13 @@ E:Ewok
 G:h:G
 I:110:3d5:10:10:10
 W:5:2:0:20:0:0
+B:SHOOT:HURT:2d5
 B:HIT:HURT:2d4
 B:HIT:HURT:2d4
 F:DROP_60 | OPEN_DOOR | BASH_DOOR | FRIENDS | DROP_CORPSE |
 F:WILD_WOOD | HAS_LITE_1 |
 S:1_IN_8
-S:ARROW_1
+S:SHOOT
 D:$A cute, furry little animal, full of merchandising potential. 
 D:それは小さな毛むくじゃらのかわいい熊で、商業的価値が高い。
 
@@ -1896,6 +1898,7 @@ E:Novice archer
 G:p:G
 I:120:6d8:20:10:5
 W:6:2:0:20:140:219
+B:SHOOT:HURT:2d5
 B:HIT:HURT:1d5
 B:HIT:HURT:1d5
 F:MALE | HAS_LITE_1 |
@@ -1903,7 +1906,7 @@ F:FORCE_SLEEP | WILD_ALL | DROP_SKELETON | DROP_CORPSE
 F:ONLY_GOLD | DROP_1D2 | EAT_GIVE_DEX | EAT_LOSE_INT | EAT_LOSE_WIS
 F:OPEN_DOOR | BASH_DOOR
 S:1_IN_3 | 
-S:ARROW_1
+S:SHOOT
 D:$A nasty little fellow with a bow and arrow.
 D:弓と矢を持った、背の低いやっかいな奴だ。
 
@@ -2249,8 +2252,8 @@ E:Robin Hood, the Outlaw
 G:p:G
 I:120:14d12:20:30:20
 W:8:2:0:150:0:0
-B:HIT:HURT:1d6
-B:HIT:HURT:1d6
+B:SHOOT:HURT:3d6
+B:HIT:HURT:2d6
 B:TOUCH:EAT_GOLD
 B:TOUCH:EAT_ITEM
 F:UNIQUE | MALE | FORCE_SLEEP | FORCE_MAXHP | CAN_SPEAK |
@@ -2258,7 +2261,7 @@ F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | DROP_GREAT | WILD_WOOD |
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | EVIL | DROP_SKELETON | DROP_CORPSE
 F:EAT_GIVE_DEX | EAT_LOSE_WIS
 S:1_IN_5
-S:ARROW_2 | HEAL | TRAPS
+S:SHOOT | HEAL | TRAPS
 D:$The legendary archer steals from the rich (you qualify).
 D:この伝説の射手は金持ち（あなたは合格）から金を盗む
 
@@ -2328,13 +2331,14 @@ E:Novice ranger
 G:p:g
 I:110:6d8:20:6:5
 W:8:1:0:18:500:1039
+B:SHOOT:HURT:2d7
 B:HIT:HURT:1d7
 B:HIT:HURT:1d7
 F:MALE | HAS_LITE_2 |
 F:FORCE_SLEEP | FRIENDS | DROP_60 | DROP_SKELETON | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR |
 S:1_IN_9 | 
-S:ARROW_2 | MISSILE
+S:SHOOT | MISSILE
 D:$An agile hunter, ready and relaxed.
 D:機敏な野伏で、常に戦闘を意識している。
 D:そして仲間たちが追跡の手助けをしている。
@@ -3041,12 +3045,13 @@ E:Quiver slot
 G:,:U
 I:120:1d1:4:1:0
 W:10:2:0:3:0:0
+B:SHOOT:HURT:2d5
 B:SPORE:CONFUSE:1d1
 F:NEVER_MOVE | COLD_BLOOD | MULTIPLY |
 F:STUPID | EMPTY_MIND | 
 F:NO_CONF | NO_SLEEP | NO_FEAR
 S:1_IN_5
-S:ARROW_1
+S:SHOOT
 D:$It looks weird.
 D:それは奇妙に見える。
 
@@ -3613,13 +3618,14 @@ E:Knight archer
 G:p:U
 I:110:11d10:20:40:20
 W:12:1:0:40:0:0
+B:SHOOT:HURT:4d6
 B:HIT:HURT:3d4
 B:HIT:HURT:3d4
 F:MALE | HAS_LITE_2 |
 F:DROP_1D2 | 
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 S:1_IN_8
-S:ARROW_2
+S:SHOOT
 D:$A warrior trained in melee as well as missile weapons.
 D:射撃だけでなく接近戦にも優れた戦士だ。
 
@@ -3865,6 +3871,7 @@ E:Drider
 G:S:b
 I:110:10d13:8:30:80
 W:13:2:0:55:0:0
+B:SHOOT:HURT:3d6
 B:HIT:HURT:1d12
 B:HIT:HURT:1d12
 B:BITE:POISON:1d6
@@ -3872,7 +3879,7 @@ F:FORCE_SLEEP |
 F:BASH_DOOR | DROP_SKELETON |
 F:EVIL | IM_POIS
 S:1_IN_8 | 
-S:CONF | CAUSE_1 | DARKNESS | MISSILE | ARROW_2 
+S:CONF | CAUSE_1 | DARKNESS | MISSILE | SHOOT 
 D:$A dark elven torso merged with the bloated form of a giant spider.
 D:それは上半身がエルフで、下半身には巨大蜘蛛の様な膨れた腹を持っている。
 
@@ -4030,6 +4037,7 @@ E:Black orc
 G:o:D
 I:110:12d10:20:36:20
 W:13:2:0:45:0:0
+B:SHOOT:HURT:2d7
 B:HIT:HURT:3d4
 B:HIT:HURT:3d4
 F:MALE | WILD_ALL | DROP_SKELETON | DROP_CORPSE
@@ -4037,7 +4045,7 @@ F:FRIENDS | DROP_60 | EAT_POISONOUS |
 F:OPEN_DOOR | BASH_DOOR | 
 F:EVIL | ORC | HURT_LITE
 S:1_IN_15
-S:ARROW_1
+S:SHOOT
 D:$He is a large orc with powerful arms and deep black skin.
 D:彼は強い力と漆黒の肌を持った大きなオークだ。
 
@@ -4712,6 +4720,7 @@ E:Orc captain
 G:o:g
 I:110:20d10:20:59:20
 W:16:3:0:40:0:0
+B:SHOOT:HURT:3d6
 B:HIT:HURT:3d4
 B:HIT:HURT:3d4
 B:HIT:HURT:3d4
@@ -4720,7 +4729,7 @@ F:DROP_90 |
 F:OPEN_DOOR | BASH_DOOR | ESCORT | DROP_SKELETON | DROP_CORPSE
 F:EVIL | ORC | CAN_SPEAK
 S:1_IN_15
-S:ARROW_1
+S:SHOOT
 D:$An armoured orc with an air of authority.
 D:鎧を着たオークで、威厳のある雰囲気を漂わせている。
 
@@ -5178,6 +5187,7 @@ E:Uruk
 G:o:w
 I:110:8d10:20:50:20
 W:18:1:0:68:0:0
+B:SHOOT:HURT:3d5
 B:HIT:HURT:3d5
 B:HIT:HURT:3d5
 F:MALE | 
@@ -5185,7 +5195,7 @@ F:FORCE_MAXHP | FRIENDS | DROP_60 |
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE | EAT_POISONOUS |
 F:EVIL | ORC | IM_POIS
 S:1_IN_12
-S:ARROW_1
+S:SHOOT
 D:$He is a cunning orc of power, as tall as a man, and stronger.  It fears 
 D:$little.
 D:彼はずる賢くて力のあるオークで、背丈は人間と同じぐらいだが力は人間より強い。
@@ -7539,6 +7549,7 @@ E:Cyclops
 G:P:u
 I:120:66d12:20:90:20
 W:28:2:0:350:2000:490
+B:SHOOT:HURT:7d6
 B:HIT:HURT:9d8
 B:HIT:HURT:9d8
 F:FORCE_SLEEP | 
@@ -7546,7 +7557,7 @@ F:DROP_1D2 | TAKE_ITEM | WILD_SHORE | WILD_MOUNTAIN |
 F:BASH_DOOR | OPEN_DOOR | MOVE_BODY | DROP_CORPSE | EAT_GIVE_STR |
 F:EVIL | IM_POIS | IM_ACID | GIANT
 S:1_IN_8 | 
-S:ARROW_4
+S:SHOOT
 D:$A gigantic humanoid with but one eye.
 D:一つ目の巨人だ。
 
@@ -8092,15 +8103,15 @@ E:Manticore
 G:H:o
 I:120:25d10:12:15:10
 W:30:2:0:300:0:0
-B:HIT:HURT:3d4
-B:HIT:HURT:3d4
-B:HIT:HURT:3d4
-B:HIT:HURT:3d4
+B:SHOOT:HURT:7d6
+B:HIT:HURT:4d4
+B:HIT:HURT:4d4
+B:HIT:HURT:4d4
 F:FORCE_SLEEP | FORCE_MAXHP |
 F:BASH_DOOR | CAN_FLY | WILD_WOOD | DROP_CORPSE | RIDING
 F:EVIL
 S:1_IN_5 | 
-S:ARROW_4
+S:SHOOT
 D:$It is a winged lion's body with a human torso and a tail covered in 
 D:$vicious spikes.
 D:それは羽の生えたライオンの体と、人間の上半身と、邪悪な刺に覆われた尻尾を
@@ -8451,6 +8462,7 @@ E:Biclops
 G:P:u
 I:120:60d12:20:90:20
 W:33:5:0:1200:0:0
+B:SHOOT:HURT:9d6
 B:HIT:HURT:11d8
 B:HIT:HURT:11d8
 F:FORCE_SLEEP |
@@ -8458,7 +8470,7 @@ F:DROP_1D2 | TAKE_ITEM | DROP_CORPSE |
 F:BASH_DOOR | OPEN_DOOR | MOVE_BODY |
 F:EVIL | IM_POIS | IM_ACID | GIANT | EAT_GIVE_STR |
 S:1_IN_8 |
-S:ARROW_4
+S:SHOOT
 D:$Oh, no! Aaargh! It is the most unnatural, most disgusting 
 D:$creature imaginable: a two-eyed cyclops! This perversion 
 D:$of nature must be exterminated!
@@ -9432,12 +9444,13 @@ E:Halfling slinger
 G:h:U
 I:110:30d9:20:40:30
 W:35:1:0:330:0:0
+B:SHOOT:HURT:6d6
 B:HIT:HURT:2d6
 B:HIT:HURT:2d6
 F:FORCE_MAXHP | OPEN_DOOR | FRIENDS | DROP_90 |
 F:SMART | EVIL | IM_POIS | IM_COLD | MALE | DROP_SKELETON | DROP_CORPSE
 S:1_IN_3
-S:ARROW_4
+S:SHOOT
 D:$A rebel halfling who has rejected the halfling tradition of archery.
 D:ハーフリング（ホビット）の弓術の伝統を拒否したはぐれ者だ。
 
@@ -9817,7 +9830,7 @@ F:IM_FIRE | IM_COLD | IM_ELEC |
 F:IM_POIS | NONLIVING | REFLECTING |
 F:NO_CONF | NO_SLEEP | NO_FEAR | HURT_ROCK
 S:1_IN_8
-S:ARROW_4
+S:SHOOT
 D:$An enormous construct resembling a titan made from stone.  It strides 
 D:$purposefully towards you, swinging its slow fists with earth-shattering 
 D:$power.
@@ -12862,7 +12875,7 @@ F:DRAGON | IM_FIRE | IM_COLD |
 F:IM_ELEC | IM_POIS | CAN_SWIM |
 F:NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING | RIDING
 S:1_IN_6 | 
-S:BLIND | SLOW | CONF | ARROW_3 | 
+S:BLIND | SLOW | CONF | SHOOT | 
 S:BR_POIS
 D:$A constructed dragon, the drolem has massive strength.  Powerful spells 
 D:$weaved during its creation make it a fearsome adversary.  Its eyes show 
@@ -13804,7 +13817,7 @@ F:ONLY_ITEM | DROP_1D2 | DROP_4D2 | DROP_GOOD |
 F:BASH_DOOR | DROP_CORPSE
 F:EVIL | IM_FIRE | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_6 | 
-S:SLOW | ARROW_4 | BO_MANA | BO_PLAS | BA_ELEC | 
+S:SLOW | SHOOT | BO_MANA | BO_PLAS | BA_ELEC | 
 S:BR_WALL
 D:$A fearsome bull-headed demon, Baphomet swings a mighty axe as he curses 
 D:$all that defy him.
@@ -15550,6 +15563,7 @@ E:Julian, Master of Arden Forest
 G:p:g
 I:130:55d100:100:100:20
 W:69:1:0:36000:0:0
+B:SHOOT:HURT:10d15
 B:HIT:HURT:9d15
 B:HIT:HURT:9d15
 B:HIT:LOSE_CON:1d30
@@ -15560,7 +15574,7 @@ F:DROP_CHOSEN | HAS_LITE_2 |
 F:EVIL | IM_POIS | IM_ELEC | IM_COLD | SMART | REGENERATE
 F:OPEN_DOOR | BASH_DOOR |
 S:1_IN_4 |
-S:TPORT | TELE_TO | ARROW_2 | SHRIEK | SCARE | DARKNESS |
+S:TPORT | TELE_TO | SHOOT | SHRIEK | SCARE | DARKNESS |
 S:S_ANT | S_SPIDER | S_HOUND | S_HYDRA | TRAPS | BO_WATE | BO_ELEC
 D:$Julian is at home in wild woodlands. He enjoys hunting a challenging 
 D:$prey: you. "Julian, dark hair hanging long, blue eyes containing neither 
@@ -17771,9 +17785,10 @@ E:Culverin
 G:I:U
 I:110:8d5:20:13:40
 W:8:2:0:25:0:0
+B:SHOOT:HURT:4d6
 F:NEVER_BLOW | RAND_25 | ANIMAL | WILD_WOOD |
 S:1_IN_1
-S:ARROW_3 |
+S:SHOOT |
 D:$A many legged scuttling thing, it spits pebbles with deadly force.
 D:たくさんの脚で逃げ回り、小石を恐ろしいスピードで口から発射する虫。
 D:「で、その《ビハインダー》とやらは、どんな格好をしているのかね？」
@@ -18200,11 +18215,12 @@ E:Bouncing mine
 G:.:B
 I:120:40d15:50:10:10
 W:70:6:0:2000:0:0
+B:SHOOT:HURT:15d10
 B:EXPLODE:HURT:15d5
 F:CHAR_CLEAR | ATTR_CLEAR
 F:NEVER_MOVE | IM_POIS | NONLIVING | IM_ACID | STUPID | FORCE_MAXHP
 S:1_IN_3
-S:ROCKET | ARROW_4 | BLINK | BR_POIS | BR_CHAO | BR_NEXU
+S:ROCKET | SHOOT | BLINK | BR_POIS | BR_CHAO | BR_NEXU
 D:$It was left here to be used against intruders.
 D:それは侵入者に対して使用するために置かれている。
 
@@ -18305,14 +18321,14 @@ E:Sky golem
 G:g:B
 I:110:10d80:20:116:10
 W:40:3:0:4000:0:0
-B:SPIT:COLD:10d10
+B:SHOOT:HURT:7d6
 B:SPIT:COLD:10d10
 B:SPIT:COLD:10d10
 B:GAZE:BLIND
 F:EMPTY_MIND | BASH_DOOR
 F:IM_COLD | NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING | FORCE_MAXHP
 S:1_IN_5
-S:BR_LITE | BA_COLD | BR_COLD | BO_ICEE | BO_COLD | BR_TIME | ARROW_4
+S:BR_LITE | BA_COLD | BR_COLD | BO_ICEE | BO_COLD | BR_TIME | SHOOT
 D:$Obsidian eyes stare at you as you bend before the shower of heavenly
 D:$powers and spells...
 D:Obsidian eyes stare at you as you bend before the shower of heavenly
@@ -18387,13 +18403,14 @@ E:Elf lord
 G:h:g
 I:121:15d15:15:50:10
 W:25:2:0:555:0:0
+B:SHOOT:HURT:7d6
 B:HIT:HURT:1d9
 B:HIT:HURT:1d9
 B:HIT:HURT:4d8
 F:MALE | ONLY_ITEM | DROP_1D2 | DROP_GOOD | OPEN_DOOR | BASH_DOOR |
 F:NO_SLEEP | FRIENDLY | GOOD | 
 S:1_IN_3 |
-S:HEAL | BLINK | TPORT | BA_FIRE | ARROW_2 | BA_COLD | ARROW_4
+S:HEAL | BLINK | TPORT | BA_FIRE | SHOOT | BA_COLD
 D:$A powerful elven leader who knows some magic as well.
 D:A powerful elven leader who knows some magic as well.
 
@@ -18867,7 +18884,7 @@ F:NO_STUN | NO_CONF | NO_SLEEP | CAN_SWIM | CAN_FLY | UNIQUE2 | WILD_SHORE |
 F:WILD_OCEAN | WILD_WASTE | WILD_WOOD | WILD_VOLCANO | WILD_MOUNTAIN |
 F:WILD_GRASS | WILD_ALL | SELF_LITE_1 | SELF_LITE_2 |
 S:1_IN_3 |
-S:SHRIEK | DISPEL | ROCKET | ARROW_1 | ARROW_2 | ARROW_3 | ARROW_4 | BR_ACID |
+S:SHRIEK | DISPEL | ROCKET | SHOOT | BR_ACID |
 S:BR_ELEC | BR_FIRE | BR_COLD | BR_POIS | BR_NETH | BR_LITE | BR_DARK | BR_CONF |
 S:BR_SOUN | BR_CHAO | BR_DISE | BR_NEXU | BR_TIME | BR_INER | BR_GRAV | BR_SHAR |
 S:BR_PLAS | BR_WALL | BR_MANA | BA_NUKE | BR_NUKE | BA_CHAO | BR_DISI | BA_ACID |
@@ -19258,12 +19275,13 @@ E:Hammer bors
 G:h:g
 I:120:10d25:20:30:10
 W:22:2:0:300:0:0
+B:SHOOT:HURT:4d6
 B:HIT:HURT:2d4
 B:HIT:HURT:2d4
 B:HIT:HURT:2d4
 F:FORCE_SLEEP | DROP_CORPSE | RAND_50 | ANIMAL |
 S:1_IN_2 | 
-S:ARROW_3
+S:SHOOT
 
 N:951:メット
 E:Met
@@ -19310,12 +19328,13 @@ E:Orcish Artillery
 G:o:B
 I:110:10d10:40:20:60
 W:14:3:0:40:0:0
+B:SHOOT:HURT:3d6
 B:HIT:HURT:1d5
 B:HIT:HURT:1d5
 F:FORCE_SLEEP | DROP_1D2 | SMART | DROP_CORPSE | DROP_SKELETON |
 F:ORC | HURT_LITE | EVIL |
 S:1_IN_2 |
-S:ARROW_2
+S:SHOOT
 
 N:955:やせこけた馬
 E:Scrawny horse
@@ -20140,13 +20159,14 @@ E:High-elven ranger
 G:h:G
 I:115:50d30:20:70:20
 W:40:3:0:500:0:0
+B:SHOOT:HURT:9d6
 B:HIT:HURT:10d8
 B:HIT:HURT:10d8
 F:MALE | FRIENDS | OPEN_DOOR | BASH_DOOR |
 F:GOOD | DROP_SKELETON | DROP_CORPSE | SMART |
 F:IM_ACID | IM_COLD | RES_WATE | RES_NETH |
 S:1_IN_2 |
-S:ARROW_4
+S:SHOOT
 D:$An elf cloaked in green wielding a longbow.
 D:緑のクロークをまとい、長弓を使うエルフだ。
 
@@ -20727,13 +20747,14 @@ E:Ranger
 G:p:g
 I:110:15d11:20:40:40
 W:20:1:0:55:0:0
+B:SHOOT:HURT:5d6
 B:HIT:HURT:5d4
 B:HIT:HURT:5d4
 F:MALE | 
 F:DROP_1D2 | 
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR 
 S:1_IN_4 | 
-S:ARROW_2 | ARROW_3 | MISSILE | S_MONSTER | BO_ELEC | BLINK
+S:SHOOT | MISSILE | S_MONSTER | BO_ELEC | BLINK
 D:$A warrior who is at one with nature. A master of both bow and sword, with 
 D:$minor spellcasting skills, and animals come to do his bidding.
 D:自然と共に戦う戦士だ。弓にも剣にも達者で、多少の魔法も使うことができ、
