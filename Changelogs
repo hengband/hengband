@@ -1,4 +1,81 @@
+2002-04-06  Takeshi Mogami  <mogami@cvs>
+
+	* lib/file/news.txt 1.5.10.1, lib/file/news_j.txt 1.3.10.1:
+	1.0.10 -> 1.0.11
+
+	* lib/edit/r_info_j.txt 1.32, lib/file/news.txt 1.6, lib/file/news_j.txt 1.4, src/cave.c 1.30, src/cmd1.c 1.28, src/cmd2.c 1.20, src/cmd3.c 1.16, src/defines.h 1.32, src/externs.h 1.37, src/generate.c 1.12, src/init1.c 1.31, src/load.c 1.21, src/melee2.c 1.19, src/monster2.c 1.18, src/save.c 1.9, src/spells1.c 1.13, src/spells2.c 1.18, src/types.h 1.11, src/xtra2.c 1.26, lib/edit/misc_j.txt 1.6:
+	branch-mogami-tanuki をマージ。
+
+	* lib/help/jversion.txt 1.6.10.1, lib/help/version.txt 1.6.6.1:
+	枝にもcommit
+
+	* lib/help/version.txt 1.7: 英語版履歴 1.0.11
+
+2002-04-06  hoge  <hoge@cvs>
+
+	* lib/help/jversion.txt 1.7: jversion.txt 作成
+
+2002-04-06  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/a_info_j.txt 1.20:
+	宮本武蔵の★の説明追加。
+
+	* readme.txt 1.5, readme_eng.txt 1.6:
+	タイルとBigtileの説明追加。
+
+2002-04-06  hoge  <hoge@cvs>
+
+	* src/artifact.c 1.21: ☆のwarningちょっと修正。
+
+2002-04-06  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/r_info_j.txt 1.31: HUMANフラグ修正
+
+2002-04-06  hoge  <hoge@cvs>
+
+	* src/object2.c 1.34, src/xtra1.c 1.30, lib/edit/a_info_j.txt 1.19, lib/edit/e_info_j.txt 1.17, src/artifact.c 1.20, src/dungeon.c 1.29:
+	☆や防衛者にWARNING
+	両手持ちちょっと弱く
+	鋭敏兜の最大値を6に減らす
+
+2002-04-05  Takeshi Mogami  <mogami@cvs>
+
+	* src/dungeon.c 1.28, src/init2.c 1.10:
+	ほとんど活用されてない user.prf をユーザーディレクトリに各自が置く
+	設定ファイルとしてもっと活用できるように、セーブデータのロードの後で
+	user.prfを読み込むように修正。こうすると$CLASS $RACE等で条件分岐に使える。
+
+2002-04-05  _nothere  <_nothere@cvs>
+
+	* lib/edit/k_info_j.txt 1.16, src/init1.c 1.30, src/object1.c 1.25:
+	branch-_nothere-objdescをマージ.
+
+	* lib/edit/k_info_j.txt 1.15.2.6:
+	Mogamiさんの校正結果を取り込んで英訳を修正.
+
+2002-04-05  habu  <habu@cvs>
+
+	* lib/edit/a_info_j.txt 1.18:
+	エクスカリバーに警告能力を追加。
+
+2002-04-05  _nothere  <_nothere@cvs>
+
+	* lib/edit/k_info_j.txt 1.15.2.5:
+	キノコ, 薬, 巻物, ロッド, 魔法棒, 杖の説明の英訳が完了.
+
+2002-04-04  _nothere  <_nothere@cvs>
+
+	* lib/edit/k_info_j.txt 1.15.2.4, src/object1.c 1.24.2.2:
+	巻物の説明まで一応英訳終了. *鑑定*済みアイテムの記述表示コードの整理.
+
 2002-04-04  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/charattr.hlp 1.4, lib/help/charattr.txt 1.6:
+	技能についてのヘルプ(英語版)を追加。
+
+	* src/mspells2.c 1.14: ; を忘れてた; 再修正。
+
+	* Changelogs 1.31: 更新
 
 	* src/mspells2.c 1.13:
 	mspells2.c モンスター対モンスターで実装されてない魔法を使ったとき、
