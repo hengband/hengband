@@ -710,8 +710,9 @@ bool make_attack_normal(int m_idx)
 
 				case RBE_SUPERHURT:
 				{
-					if ((randint1(rlev*2+300) > (ac+200)) || one_in_(13)) {
-						int tmp_damage = damage-(damage*((ac < 150) ? ac : 150)/250);
+					if (((randint1(rlev*2+300) > (ac+200)) || one_in_(13)) && !CHECK_MULTISHADOW())
+					{
+						int tmp_damage = damage - (damage * ((ac < 150) ? ac : 150) / 250);
 #ifdef JP
 						msg_print("痛恨の一撃！");
 #else
@@ -744,7 +745,7 @@ bool make_attack_normal(int m_idx)
 					if (explode) break;
 
 					/* Take "poison" effect */
-					if (!(p_ptr->resist_pois || IS_OPPOSE_POIS()))
+					if (!(p_ptr->resist_pois || IS_OPPOSE_POIS()) && !CHECK_MULTISHADOW())
 					{
 						if (set_poisoned(p_ptr->poisoned + randint1(rlev) + 5))
 						{
@@ -766,7 +767,7 @@ bool make_attack_normal(int m_idx)
 					if (explode) break;
 
 					/* Allow complete resist */
-					if (!p_ptr->resist_disen)
+					if (!p_ptr->resist_disen && !CHECK_MULTISHADOW())
 					{
 						/* Apply disenchantment */
 						if (apply_disenchant(0))
@@ -791,7 +792,7 @@ bool make_attack_normal(int m_idx)
 					/* Take some damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (p_ptr->is_dead) break;
+					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
 					/* Find an item */
 					for (k = 0; k < 10; k++)
@@ -861,7 +862,7 @@ bool make_attack_normal(int m_idx)
 					/* Confused monsters cannot steal successfully. -LM-*/
 					if (MON_CONFUSED(m_ptr)) break;
 
-					if (p_ptr->is_dead) break;
+					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
 					/* Obvious */
 					obvious = TRUE;
@@ -945,7 +946,7 @@ bool make_attack_normal(int m_idx)
 					/* Confused monsters cannot steal successfully. -LM-*/
 					if (MON_CONFUSED(m_ptr)) break;
 
-					if (p_ptr->is_dead) break;
+					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
 					/* Saving throw (unless paralyzed) based on dex and level */
 					if (!p_ptr->paralyzed &&
@@ -1066,7 +1067,7 @@ bool make_attack_normal(int m_idx)
 					/* Take some damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (p_ptr->is_dead) break;
+					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
 					/* Steal some food */
 					for (k = 0; k < 10; k++)
@@ -1120,7 +1121,7 @@ bool make_attack_normal(int m_idx)
 					/* Take some damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (p_ptr->is_dead) break;
+					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
 					/* Drain fuel */
 					if ((o_ptr->xtra4 > 0) && (!object_is_fixed_artifact(o_ptr)))
@@ -1251,12 +1252,12 @@ bool make_attack_normal(int m_idx)
 					if (p_ptr->is_dead) break;
 
 					/* Increase "blind" */
-					if (!p_ptr->resist_blind)
+					if (!p_ptr->resist_blind && !CHECK_MULTISHADOW())
 					{
 						if (set_blind(p_ptr->blind + 10 + randint1(rlev)))
 						{
 #ifdef JP
-							if(m_ptr->r_idx == MON_DIO) msg_print("どうだッ！この血の目潰しはッ！");
+							if (m_ptr->r_idx == MON_DIO) msg_print("どうだッ！この血の目潰しはッ！");
 #else
 							/* nanka */
 #endif
@@ -1279,7 +1280,7 @@ bool make_attack_normal(int m_idx)
 					if (p_ptr->is_dead) break;
 
 					/* Increase "confused" */
-					if (!p_ptr->resist_conf)
+					if (!p_ptr->resist_conf && !CHECK_MULTISHADOW())
 					{
 						if (set_confused(p_ptr->confused + 3 + randint1(rlev)))
 						{
@@ -1301,7 +1302,11 @@ bool make_attack_normal(int m_idx)
 					if (p_ptr->is_dead) break;
 
 					/* Increase "afraid" */
-					if (p_ptr->resist_fear)
+					if (CHECK_MULTISHADOW())
+					{
+						/* Do nothing */
+					}
+					else if (p_ptr->resist_fear)
 					{
 #ifdef JP
 						msg_print("しかし恐怖に侵されなかった！");
@@ -1343,7 +1348,11 @@ bool make_attack_normal(int m_idx)
 					if (p_ptr->is_dead) break;
 
 					/* Increase "paralyzed" */
-					if (p_ptr->free_act)
+					if (CHECK_MULTISHADOW())
+					{
+						/* Do nothing */
+					}
+					else if (p_ptr->free_act)
 					{
 #ifdef JP
 						msg_print("しかし効果がなかった！");
@@ -1385,7 +1394,7 @@ bool make_attack_normal(int m_idx)
 					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (p_ptr->is_dead) break;
+					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
 					/* Damage (stat) */
 					if (do_dec_stat(A_STR)) obvious = TRUE;
@@ -1398,7 +1407,7 @@ bool make_attack_normal(int m_idx)
 					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (p_ptr->is_dead) break;
+					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
 					/* Damage (stat) */
 					if (do_dec_stat(A_INT)) obvious = TRUE;
@@ -1411,7 +1420,7 @@ bool make_attack_normal(int m_idx)
 					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (p_ptr->is_dead) break;
+					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
 					/* Damage (stat) */
 					if (do_dec_stat(A_WIS)) obvious = TRUE;
@@ -1424,7 +1433,7 @@ bool make_attack_normal(int m_idx)
 					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (p_ptr->is_dead) break;
+					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
 					/* Damage (stat) */
 					if (do_dec_stat(A_DEX)) obvious = TRUE;
@@ -1437,7 +1446,7 @@ bool make_attack_normal(int m_idx)
 					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (p_ptr->is_dead) break;
+					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
 					/* Damage (stat) */
 					if (do_dec_stat(A_CON)) obvious = TRUE;
@@ -1450,7 +1459,7 @@ bool make_attack_normal(int m_idx)
 					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (p_ptr->is_dead) break;
+					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
 					/* Damage (stat) */
 					if (do_dec_stat(A_CHR)) obvious = TRUE;
@@ -1463,7 +1472,7 @@ bool make_attack_normal(int m_idx)
 					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (p_ptr->is_dead) break;
+					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
 					/* Damage (stats) */
 					if (do_dec_stat(A_STR)) obvious = TRUE;
@@ -1506,7 +1515,7 @@ bool make_attack_normal(int m_idx)
 					/* Take damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (p_ptr->is_dead) break;
+					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
 					(void)drain_exp(d, d / 10, 95);
 					break;
@@ -1522,7 +1531,7 @@ bool make_attack_normal(int m_idx)
 					/* Take damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (p_ptr->is_dead) break;
+					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
 					(void)drain_exp(d, d / 10, 90);
 					break;
@@ -1538,7 +1547,7 @@ bool make_attack_normal(int m_idx)
 					/* Take damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (p_ptr->is_dead) break;
+					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
 					(void)drain_exp(d, d / 10, 75);
 					break;
@@ -1554,7 +1563,7 @@ bool make_attack_normal(int m_idx)
 					/* Take damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (p_ptr->is_dead) break;
+					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
 					(void)drain_exp(d, d / 10, 50);
 					break;
@@ -1565,7 +1574,7 @@ bool make_attack_normal(int m_idx)
 					/* Take some damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (p_ptr->is_dead) break;
+					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
 					/* Take "poison" effect */
 					if (!(p_ptr->resist_pois || IS_OPPOSE_POIS()))
@@ -1598,7 +1607,7 @@ bool make_attack_normal(int m_idx)
 				case RBE_TIME:
 				{
 					if (explode) break;
-					if (!p_ptr->resist_time)
+					if (!p_ptr->resist_time && !CHECK_MULTISHADOW())
 					{
 						switch (randint1(10))
 						{
@@ -1686,7 +1695,7 @@ bool make_attack_normal(int m_idx)
 					/* Take damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (p_ptr->is_dead) break;
+					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
 					resist_drain = !drain_exp(d, d / 10, 50);
 
@@ -1745,17 +1754,28 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					/* Obvious */
 					obvious = TRUE;
 
-					do_cut = 0;
-
-					/* Take damage */
-					p_ptr->csp -= damage;
-					if (p_ptr->csp < 0)
+					if (CHECK_MULTISHADOW())
 					{
-						p_ptr->csp = 0;
-						p_ptr->csp_frac = 0;
+#ifdef JP
+						msg_print("攻撃は幻影に命中し、あなたには届かなかった。");
+#else
+						msg_print("The attack hits Shadow, you are unharmed!");
+#endif
 					}
+					else
+					{
+						do_cut = 0;
 
-					p_ptr->redraw |= (PR_MANA);
+						/* Take damage */
+						p_ptr->csp -= damage;
+						if (p_ptr->csp < 0)
+						{
+							p_ptr->csp = 0;
+							p_ptr->csp_frac = 0;
+						}
+
+						p_ptr->redraw |= (PR_MANA);
+					}
 
 					break;
 				}

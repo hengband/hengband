@@ -2803,7 +2803,7 @@ note_dies = "は蒸発した！";
 #endif
 
 					/* Saving throw */
-					if (randint0(100 + r_ptr->level/2) < p_ptr->skill_sav)
+					if ((randint0(100 + r_ptr->level / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW())
 					{
 #ifdef JP
 						msg_print("しかし効力を跳ね返した！");
@@ -2817,7 +2817,7 @@ note_dies = "は蒸発した！";
 						/* Injure +/- confusion */
 						monster_desc(killer, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 						take_hit(DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
-						if (one_in_(4))
+						if (one_in_(4) && !CHECK_MULTISHADOW())
 						{
 							switch (randint1(4))
 							{
@@ -2939,29 +2939,31 @@ note_dies = "は蒸発した！";
 #endif
 
 					/* Saving throw */
-					if (randint0(100 + r_ptr->level/2) < p_ptr->skill_sav)
+					if ((randint0(100 + r_ptr->level / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW())
 					{
 #ifdef JP
 						msg_print("あなたは効力を跳ね返した！");
 #else
 						msg_print("You resist the effects!");
 #endif
-
 					}
 					else
 					{
 						/* Injure + mana drain */
 						monster_desc(killer, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+						if (!CHECK_MULTISHADOW())
+						{
 #ifdef JP
-						msg_print("超能力パワーを吸いとられた！");
+							msg_print("超能力パワーを吸いとられた！");
 #else
-						msg_print("Your psychic energy is drained!");
+							msg_print("Your psychic energy is drained!");
 #endif
 
-						p_ptr->csp -= damroll(5, dam) / 2;
-						if (p_ptr->csp < 0) p_ptr->csp = 0;
-						p_ptr->redraw |= PR_MANA;
-						p_ptr->window |= (PW_SPELL);
+							p_ptr->csp -= damroll(5, dam) / 2;
+							if (p_ptr->csp < 0) p_ptr->csp = 0;
+							p_ptr->redraw |= PR_MANA;
+							p_ptr->window |= (PW_SPELL);
+						}
 						take_hit(DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
 					}
 					dam = 0;
@@ -6481,7 +6483,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		case GF_ACID:
 		{
 #ifdef JP
-if (fuzzy) msg_print("酸で攻撃された！");
+			if (fuzzy) msg_print("酸で攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by acid!");
 #endif
@@ -6494,7 +6496,7 @@ if (fuzzy) msg_print("酸で攻撃された！");
 		case GF_FIRE:
 		{
 #ifdef JP
-if (fuzzy) msg_print("火炎で攻撃された！");
+			if (fuzzy) msg_print("火炎で攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by fire!");
 #endif
@@ -6507,7 +6509,7 @@ if (fuzzy) msg_print("火炎で攻撃された！");
 		case GF_COLD:
 		{
 #ifdef JP
-if (fuzzy) msg_print("冷気で攻撃された！");
+			if (fuzzy) msg_print("冷気で攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by cold!");
 #endif
@@ -6520,7 +6522,7 @@ if (fuzzy) msg_print("冷気で攻撃された！");
 		case GF_ELEC:
 		{
 #ifdef JP
-if (fuzzy) msg_print("電撃で攻撃された！");
+			if (fuzzy) msg_print("電撃で攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by lightning!");
 #endif
@@ -6534,7 +6536,7 @@ if (fuzzy) msg_print("電撃で攻撃された！");
 		{
 			bool double_resist = IS_OPPOSE_POIS();
 #ifdef JP
-if (fuzzy) msg_print("毒で攻撃された！");
+			if (fuzzy) msg_print("毒で攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by poison!");
 #endif
@@ -6543,14 +6545,14 @@ if (fuzzy) msg_print("毒で攻撃された！");
 			if (double_resist) dam = (dam + 2) / 3;
 
 			if ((!(double_resist || p_ptr->resist_pois)) &&
-			     one_in_(HURT_CHANCE))
+			     one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW())
 			{
 				do_dec_stat(A_CON);
 			}
 
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 
-			if (!(double_resist || p_ptr->resist_pois))
+			if (!(double_resist || p_ptr->resist_pois) && !CHECK_MULTISHADOW())
 			{
 				set_poisoned(p_ptr->poisoned + randint0(dam) + 10);
 			}
@@ -6562,7 +6564,7 @@ if (fuzzy) msg_print("毒で攻撃された！");
 		{
 			bool double_resist = IS_OPPOSE_POIS();
 #ifdef JP
-if (fuzzy) msg_print("放射能で攻撃された！");
+			if (fuzzy) msg_print("放射能で攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by radiation!");
 #endif
@@ -6570,14 +6572,14 @@ if (fuzzy) msg_print("放射能で攻撃された！");
 			if (p_ptr->resist_pois) dam = (2 * dam + 2) / 5;
 			if (double_resist) dam = (2 * dam + 2) / 5;
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
-			if (!(double_resist || p_ptr->resist_pois))
+			if (!(double_resist || p_ptr->resist_pois) && !CHECK_MULTISHADOW())
 			{
 				set_poisoned(p_ptr->poisoned + randint0(dam) + 10);
 
 				if (one_in_(5)) /* 6 */
 				{
 #ifdef JP
-msg_print("奇形的な変身を遂げた！");
+					msg_print("奇形的な変身を遂げた！");
 #else
 					msg_print("You undergo a freakish metamorphosis!");
 #endif
@@ -6600,7 +6602,7 @@ msg_print("奇形的な変身を遂げた！");
 		case GF_MISSILE:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何かで攻撃された！");
+			if (fuzzy) msg_print("何かで攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by something!");
 #endif
@@ -6613,7 +6615,7 @@ if (fuzzy) msg_print("何かで攻撃された！");
 		case GF_HOLY_FIRE:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何かで攻撃された！");
+			if (fuzzy) msg_print("何かで攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by something!");
 #endif
@@ -6629,7 +6631,7 @@ if (fuzzy) msg_print("何かで攻撃された！");
 		case GF_HELL_FIRE:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何かで攻撃された！");
+			if (fuzzy) msg_print("何かで攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by something!");
 #endif
@@ -6644,7 +6646,7 @@ if (fuzzy) msg_print("何かで攻撃された！");
 		case GF_ARROW:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何か鋭いもので攻撃された！");
+			if (fuzzy) msg_print("何か鋭いもので攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by something sharp!");
 #endif
@@ -6673,7 +6675,7 @@ if (fuzzy) msg_print("何か鋭いもので攻撃された！");
 
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 
-			if (!p_ptr->resist_sound)
+			if (!p_ptr->resist_sound && !CHECK_MULTISHADOW())
 			{
 				int k = (randint1((dam > 40) ? 35 : (dam * 3 / 4 + 5)));
 				(void)set_stun(p_ptr->stun + k);
@@ -6693,23 +6695,22 @@ if (fuzzy) msg_print("何か鋭いもので攻撃された！");
 		case GF_NETHER:
 		{
 #ifdef JP
-if (fuzzy) msg_print("地獄の力で攻撃された！");
+			if (fuzzy) msg_print("地獄の力で攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by nether forces!");
 #endif
-
 
 			if (p_ptr->resist_neth)
 			{
 				if (!prace_is_(RACE_SPECTRE))
 					dam *= 6; dam /= (randint1(4) + 7);
 			}
-			else drain_exp(200 + (p_ptr->exp / 100), 200 + (p_ptr->exp / 1000), 75);
+			else if (!CHECK_MULTISHADOW()) drain_exp(200 + (p_ptr->exp / 100), 200 + (p_ptr->exp / 1000), 75);
 
-			if (prace_is_(RACE_SPECTRE))
+			if (prace_is_(RACE_SPECTRE) && !CHECK_MULTISHADOW())
 			{
 #ifdef JP
-msg_print("気分がよくなった。");
+				msg_print("気分がよくなった。");
 #else
 				msg_print("You feel invigorated!");
 #endif
@@ -6729,23 +6730,26 @@ msg_print("気分がよくなった。");
 		case GF_WATER:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何か湿ったもので攻撃された！");
+			if (fuzzy) msg_print("何か湿ったもので攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by something wet!");
 #endif
 
-			if (!p_ptr->resist_sound)
+			if (!CHECK_MULTISHADOW())
 			{
-				set_stun(p_ptr->stun + randint1(40));
-			}
-			if (!p_ptr->resist_conf)
-			{
-				set_confused(p_ptr->confused + randint1(5) + 5);
-			}
+				if (!p_ptr->resist_sound)
+				{
+					set_stun(p_ptr->stun + randint1(40));
+				}
+				if (!p_ptr->resist_conf)
+				{
+					set_confused(p_ptr->confused + randint1(5) + 5);
+				}
 
-			if (one_in_(5))
-			{
-				inven_damage(set_cold_destroy, 3);
+				if (one_in_(5))
+				{
+					inven_damage(set_cold_destroy, 3);
+				}
 			}
 
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
@@ -6756,7 +6760,7 @@ if (fuzzy) msg_print("何か湿ったもので攻撃された！");
 		case GF_CHAOS:
 		{
 #ifdef JP
-if (fuzzy) msg_print("無秩序の波動で攻撃された！");
+			if (fuzzy) msg_print("無秩序の波動で攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by a wave of anarchy!");
 #endif
@@ -6765,33 +6769,39 @@ if (fuzzy) msg_print("無秩序の波動で攻撃された！");
 			{
 				dam *= 6; dam /= (randint1(4) + 7);
 			}
-			if (!p_ptr->resist_conf)
+
+			if (!CHECK_MULTISHADOW())
 			{
-				(void)set_confused(p_ptr->confused + randint0(20) + 10);
-			}
-			if (!p_ptr->resist_chaos)
-			{
-				(void)set_image(p_ptr->image + randint1(10));
-				if (one_in_(3))
+				if (!p_ptr->resist_conf)
 				{
+					(void)set_confused(p_ptr->confused + randint0(20) + 10);
+				}
+				if (!p_ptr->resist_chaos)
+				{
+					(void)set_image(p_ptr->image + randint1(10));
+					if (one_in_(3))
+					{
 #ifdef JP
-msg_print("あなたの身体はカオスの力で捻じ曲げられた！");
+						msg_print("あなたの身体はカオスの力で捻じ曲げられた！");
 #else
-					msg_print("Your body is twisted by chaos!");
+						msg_print("Your body is twisted by chaos!");
 #endif
 
-					(void)gain_random_mutation(0);
+						(void)gain_random_mutation(0);
+					}
+				}
+				if (!p_ptr->resist_neth && !p_ptr->resist_chaos)
+				{
+					drain_exp(5000 + (p_ptr->exp / 100), 500 + (p_ptr->exp / 1000), 75);
+				}
+
+				if (!p_ptr->resist_chaos || one_in_(9))
+				{
+					inven_damage(set_elec_destroy, 2);
+					inven_damage(set_fire_destroy, 2);
 				}
 			}
-			if (!p_ptr->resist_neth && !p_ptr->resist_chaos)
-			{
-				drain_exp(5000 + (p_ptr->exp / 100), 500 + (p_ptr->exp / 1000), 75);
-			}
-			if (!p_ptr->resist_chaos || one_in_(9))
-			{
-				inven_damage(set_elec_destroy, 2);
-				inven_damage(set_fire_destroy, 2);
-			}
+
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
@@ -6800,7 +6810,7 @@ msg_print("あなたの身体はカオスの力で捻じ曲げられた！");
 		case GF_SHARDS:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何か鋭いもので攻撃された！");
+			if (fuzzy) msg_print("何か鋭いもので攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by something sharp!");
 #endif
@@ -6809,7 +6819,7 @@ if (fuzzy) msg_print("何か鋭いもので攻撃された！");
 			{
 				dam *= 6; dam /= (randint1(4) + 7);
 			}
-			else
+			else if (!CHECK_MULTISHADOW())
 			{
 				(void)set_cut(p_ptr->cut + dam);
 			}
@@ -6827,7 +6837,7 @@ if (fuzzy) msg_print("何か鋭いもので攻撃された！");
 		case GF_SOUND:
 		{
 #ifdef JP
-if (fuzzy) msg_print("轟音で攻撃された！");
+			if (fuzzy) msg_print("轟音で攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by a loud noise!");
 #endif
@@ -6836,7 +6846,7 @@ if (fuzzy) msg_print("轟音で攻撃された！");
 			{
 				dam *= 5; dam /= (randint1(4) + 7);
 			}
-			else
+			else if (!CHECK_MULTISHADOW())
 			{
 				int k = (randint1((dam > 90) ? 35 : (dam / 3 + 5)));
 				(void)set_stun(p_ptr->stun + k);
@@ -6855,7 +6865,7 @@ if (fuzzy) msg_print("轟音で攻撃された！");
 		case GF_CONFUSION:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何か混乱するもので攻撃された！");
+			if (fuzzy) msg_print("何か混乱するもので攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by something puzzling!");
 #endif
@@ -6864,7 +6874,7 @@ if (fuzzy) msg_print("何か混乱するもので攻撃された！");
 			{
 				dam *= 5; dam /= (randint1(4) + 7);
 			}
-			if (!p_ptr->resist_conf)
+			else if (!CHECK_MULTISHADOW())
 			{
 				(void)set_confused(p_ptr->confused + randint1(20) + 10);
 			}
@@ -6885,7 +6895,7 @@ if (fuzzy) msg_print("何か混乱するもので攻撃された！");
 			{
 				dam *= 6; dam /= (randint1(4) + 7);
 			}
-			else
+			else if (!CHECK_MULTISHADOW())
 			{
 				(void)apply_disenchant(0);
 			}
@@ -6897,7 +6907,7 @@ if (fuzzy) msg_print("何か混乱するもので攻撃された！");
 		case GF_NEXUS:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何か奇妙なもので攻撃された！");
+			if (fuzzy) msg_print("何か奇妙なもので攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by something strange!");
 #endif
@@ -6906,7 +6916,7 @@ if (fuzzy) msg_print("何か奇妙なもので攻撃された！");
 			{
 				dam *= 6; dam /= (randint1(4) + 7);
 			}
-			else
+			else if (!CHECK_MULTISHADOW())
 			{
 				apply_nexus(m_ptr);
 			}
@@ -6918,12 +6928,12 @@ if (fuzzy) msg_print("何か奇妙なもので攻撃された！");
 		case GF_FORCE:
 		{
 #ifdef JP
-if (fuzzy) msg_print("運動エネルギーで攻撃された！");
+			if (fuzzy) msg_print("運動エネルギーで攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by kinetic force!");
 #endif
 
-			if (!p_ptr->resist_sound)
+			if (!p_ptr->resist_sound && !CHECK_MULTISHADOW())
 			{
 				(void)set_stun(p_ptr->stun + randint1(20));
 			}
@@ -6936,25 +6946,26 @@ if (fuzzy) msg_print("運動エネルギーで攻撃された！");
 		case GF_ROCKET:
 		{
 #ifdef JP
-if (fuzzy) msg_print("爆発があった！");
+			if (fuzzy) msg_print("爆発があった！");
 #else
 			if (fuzzy) msg_print("There is an explosion!");
 #endif
 
-			if (!p_ptr->resist_sound)
+			if (!p_ptr->resist_sound && !CHECK_MULTISHADOW())
 			{
 				(void)set_stun(p_ptr->stun + randint1(20));
 			}
+
 			if (p_ptr->resist_shard)
 			{
 				dam /= 2;
 			}
-			else
+			else if (!CHECK_MULTISHADOW())
 			{
-				(void)set_cut(p_ptr->  cut + ( dam / 2));
+				(void)set_cut(p_ptr->cut + (dam / 2));
 			}
 
-			if ((!p_ptr->resist_shard) || one_in_(12))
+			if (!p_ptr->resist_shard || one_in_(12))
 			{
 				inven_damage(set_cold_destroy, 3);
 			}
@@ -6967,12 +6978,12 @@ if (fuzzy) msg_print("爆発があった！");
 		case GF_INERTIA:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何か遅いもので攻撃された！");
+			if (fuzzy) msg_print("何か遅いもので攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by something slow!");
 #endif
 
-			(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
+			if (!CHECK_MULTISHADOW()) (void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
@@ -6981,7 +6992,7 @@ if (fuzzy) msg_print("何か遅いもので攻撃された！");
 		case GF_LITE:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何かで攻撃された！");
+			if (fuzzy) msg_print("何かで攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by something!");
 #endif
@@ -6990,16 +7001,17 @@ if (fuzzy) msg_print("何かで攻撃された！");
 			{
 				dam *= 4; dam /= (randint1(4) + 7);
 			}
-			else if (!blind && !p_ptr->resist_blind)
+			else if (!blind && !p_ptr->resist_blind && !CHECK_MULTISHADOW())
 			{
 				(void)set_blind(p_ptr->blind + randint1(5) + 2);
 			}
+
 			if (prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE))
 			{
 #ifdef JP
-msg_print("光で肉体が焦がされた！");
+				if (!CHECK_MULTISHADOW()) msg_print("光で肉体が焦がされた！");
 #else
-				msg_print("The light scorches your flesh!");
+				if (!CHECK_MULTISHADOW()) msg_print("The light scorches your flesh!");
 #endif
 
 				dam *= 2;
@@ -7008,14 +7020,15 @@ msg_print("光で肉体が焦がされた！");
 			{
 				dam = dam * 4 / 3;
 			}
+
 			if (p_ptr->wraith_form) dam *= 2;
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 
-			if (p_ptr->wraith_form)
+			if (p_ptr->wraith_form && !CHECK_MULTISHADOW())
 			{
 				p_ptr->wraith_form = 0;
 #ifdef JP
-msg_print("閃光のため非物質的な影の存在でいられなくなった。");
+				msg_print("閃光のため非物質的な影の存在でいられなくなった。");
 #else
 				msg_print("The light forces you out of your incorporeal shadow form.");
 #endif
@@ -7038,7 +7051,7 @@ msg_print("閃光のため非物質的な影の存在でいられなくなった。");
 		case GF_DARK:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何かで攻撃された！");
+			if (fuzzy) msg_print("何かで攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by something!");
 #endif
@@ -7049,7 +7062,7 @@ if (fuzzy) msg_print("何かで攻撃された！");
 
 				if (prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE) || p_ptr->wraith_form) dam = 0;
 			}
-			else if (!blind && !p_ptr->resist_blind)
+			else if (!blind && !p_ptr->resist_blind && !CHECK_MULTISHADOW())
 			{
 				(void)set_blind(p_ptr->blind + randint1(5) + 2);
 			}
@@ -7061,7 +7074,7 @@ if (fuzzy) msg_print("何かで攻撃された！");
 		case GF_TIME:
 		{
 #ifdef JP
-if (fuzzy) msg_print("過去からの衝撃に攻撃された！");
+			if (fuzzy) msg_print("過去からの衝撃に攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by a blast from the past!");
 #endif
@@ -7071,13 +7084,12 @@ if (fuzzy) msg_print("過去からの衝撃に攻撃された！");
 				dam *= 4;
 				dam /= (randint1(4) + 7);
 #ifdef JP
-msg_print("時間が通り過ぎていく気がする。");
+				msg_print("時間が通り過ぎていく気がする。");
 #else
 				msg_print("You feel as if time is passing you by.");
 #endif
-
 			}
-			else
+			else if (!CHECK_MULTISHADOW())
 			{
 				switch (randint1(10))
 				{
@@ -7085,7 +7097,7 @@ msg_print("時間が通り過ぎていく気がする。");
 					{
 						if (p_ptr->prace == RACE_ANDROID) break;
 #ifdef JP
-msg_print("人生が逆戻りした気がする。");
+						msg_print("人生が逆戻りした気がする。");
 #else
 						msg_print("You feel life has clocked back.");
 #endif
@@ -7099,12 +7111,12 @@ msg_print("人生が逆戻りした気がする。");
 						switch (randint1(6))
 						{
 #ifdef JP
-case 1: k = A_STR; act = "強く"; break;
-case 2: k = A_INT; act = "聡明で"; break;
-case 3: k = A_WIS; act = "賢明で"; break;
-case 4: k = A_DEX; act = "器用で"; break;
-case 5: k = A_CON; act = "健康で"; break;
-case 6: k = A_CHR; act = "美しく"; break;
+							case 1: k = A_STR; act = "強く"; break;
+							case 2: k = A_INT; act = "聡明で"; break;
+							case 3: k = A_WIS; act = "賢明で"; break;
+							case 4: k = A_DEX; act = "器用で"; break;
+							case 5: k = A_CON; act = "健康で"; break;
+							case 6: k = A_CHR; act = "美しく"; break;
 #else
 							case 1: k = A_STR; act = "strong"; break;
 							case 2: k = A_INT; act = "bright"; break;
@@ -7113,15 +7125,13 @@ case 6: k = A_CHR; act = "美しく"; break;
 							case 5: k = A_CON; act = "hale"; break;
 							case 6: k = A_CHR; act = "beautiful"; break;
 #endif
-
 						}
 
 #ifdef JP
-msg_format("あなたは以前ほど%sなくなってしまった...。", act);
+						msg_format("あなたは以前ほど%sなくなってしまった...。", act);
 #else
 						msg_format("You're not as %s as you used to be...", act);
 #endif
-
 
 						p_ptr->stat_cur[k] = (p_ptr->stat_cur[k] * 3) / 4;
 						if (p_ptr->stat_cur[k] < 3) p_ptr->stat_cur[k] = 3;
@@ -7132,11 +7142,10 @@ msg_format("あなたは以前ほど%sなくなってしまった...。", act);
 					case 10:
 					{
 #ifdef JP
-msg_print("あなたは以前ほど力強くなくなってしまった...。");
+						msg_print("あなたは以前ほど力強くなくなってしまった...。");
 #else
 						msg_print("You're not as powerful as you used to be...");
 #endif
-
 
 						for (k = 0; k < 6; k++)
 						{
@@ -7164,13 +7173,16 @@ msg_print("あなたは以前ほど力強くなくなってしまった...。");
 			msg_print("Gravity warps around you.");
 #endif
 
-			teleport_player(5, TELEPORT_PASSIVE);
-			if (!p_ptr->levitation)
-				(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
-			if (!(p_ptr->resist_sound || p_ptr->levitation))
+			if (!CHECK_MULTISHADOW())
 			{
-				int k = (randint1((dam > 90) ? 35 : (dam / 3 + 5)));
-				(void)set_stun(p_ptr->stun + k);
+				teleport_player(5, TELEPORT_PASSIVE);
+				if (!p_ptr->levitation)
+					(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
+				if (!(p_ptr->resist_sound || p_ptr->levitation))
+				{
+					int k = (randint1((dam > 90) ? 35 : (dam / 3 + 5)));
+					(void)set_stun(p_ptr->stun + k);
+				}
 			}
 			if (p_ptr->levitation)
 			{
@@ -7190,7 +7202,7 @@ msg_print("あなたは以前ほど力強くなくなってしまった...。");
 		case GF_DISINTEGRATE:
 		{
 #ifdef JP
-if (fuzzy) msg_print("純粋なエネルギーで攻撃された！");
+			if (fuzzy) msg_print("純粋なエネルギーで攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by pure energy!");
 #endif
@@ -7202,7 +7214,7 @@ if (fuzzy) msg_print("純粋なエネルギーで攻撃された！");
 		case GF_OLD_HEAL:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何らかの攻撃によって気分がよくなった。");
+			if (fuzzy) msg_print("何らかの攻撃によって気分がよくなった。");
 #else
 			if (fuzzy) msg_print("You are hit by something invigorating!");
 #endif
@@ -7215,7 +7227,7 @@ if (fuzzy) msg_print("何らかの攻撃によって気分がよくなった。");
 		case GF_OLD_SPEED:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何かで攻撃された！");
+			if (fuzzy) msg_print("何かで攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by something!");
 #endif
@@ -7228,7 +7240,7 @@ if (fuzzy) msg_print("何かで攻撃された！");
 		case GF_OLD_SLOW:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何か遅いもので攻撃された！");
+			if (fuzzy) msg_print("何か遅いもので攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by something slow!");
 #endif
@@ -7241,7 +7253,7 @@ if (fuzzy) msg_print("何か遅いもので攻撃された！");
 		{
 			if (p_ptr->free_act)  break;
 #ifdef JP
-if (fuzzy) msg_print("眠ってしまった！");
+			if (fuzzy) msg_print("眠ってしまった！");
 #else
 			if (fuzzy) msg_print("You fall asleep!");
 #endif
@@ -7250,11 +7262,10 @@ if (fuzzy) msg_print("眠ってしまった！");
 			if (ironman_nightmare)
 			{
 #ifdef JP
-msg_print("恐ろしい光景が頭に浮かんできた。");
+				msg_print("恐ろしい光景が頭に浮かんできた。");
 #else
 				msg_print("A horrible vision enters your mind.");
 #endif
-
 
 				/* Pick a nightmare */
 				get_mon_num_prep(get_nightmare, NULL);
@@ -7277,7 +7288,7 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 		case GF_SUPER_RAY:
 		{
 #ifdef JP
-if (fuzzy) msg_print("魔法のオーラで攻撃された！");
+			if (fuzzy) msg_print("魔法のオーラで攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by an aura of magic!");
 #endif
@@ -7290,7 +7301,7 @@ if (fuzzy) msg_print("魔法のオーラで攻撃された！");
 		case GF_PSY_SPEAR:
 		{
 #ifdef JP
-if (fuzzy) msg_print("エネルギーの塊で攻撃された！");
+			if (fuzzy) msg_print("エネルギーの塊で攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by an energy!");
 #endif
@@ -7303,7 +7314,7 @@ if (fuzzy) msg_print("エネルギーの塊で攻撃された！");
 		case GF_METEOR:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何かが空からあなたの頭上に落ちてきた！");
+			if (fuzzy) msg_print("何かが空からあなたの頭上に落ちてきた！");
 #else
 			if (fuzzy) msg_print("Something falls from the sky on you!");
 #endif
@@ -7322,24 +7333,27 @@ if (fuzzy) msg_print("何かが空からあなたの頭上に落ちてきた！");
 		case GF_ICE:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何か鋭く冷たいもので攻撃された！");
+			if (fuzzy) msg_print("何か鋭く冷たいもので攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by something sharp and cold!");
 #endif
 
 			cold_dam(dam, killer, monspell);
-			if (!p_ptr->resist_shard)
+			if (!CHECK_MULTISHADOW())
 			{
-				(void)set_cut(p_ptr->cut + damroll(5, 8));
-			}
-			if (!p_ptr->resist_sound)
-			{
-				(void)set_stun(p_ptr->stun + randint1(15));
-			}
+				if (!p_ptr->resist_shard)
+				{
+					(void)set_cut(p_ptr->cut + damroll(5, 8));
+				}
+				if (!p_ptr->resist_sound)
+				{
+					(void)set_stun(p_ptr->stun + randint1(15));
+				}
 
-			if ((!(p_ptr->resist_cold || IS_OPPOSE_COLD())) || one_in_(12))
-			{
-				if (!p_ptr->immune_cold) inven_damage(set_cold_destroy, 3);
+				if ((!(p_ptr->resist_cold || IS_OPPOSE_COLD())) || one_in_(12))
+				{
+					if (!p_ptr->immune_cold) inven_damage(set_cold_destroy, 3);
+				}
 			}
 
 			break;
@@ -7349,7 +7363,7 @@ if (fuzzy) msg_print("何か鋭く冷たいもので攻撃された！");
 		case GF_DEATH_RAY:
 		{
 #ifdef JP
-if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
+			if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 #else
 			if (fuzzy) msg_print("You are hit by something extremely cold!");
 #endif
@@ -7391,7 +7405,15 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 		/* Drain mana */
 		case GF_DRAIN_MANA:
 		{
-			if (p_ptr->csp)
+			if (CHECK_MULTISHADOW())
+			{
+#ifdef JP
+				msg_print("攻撃は幻影に命中し、あなたには届かなかった。");
+#else
+				msg_print("The attack hits Shadow, you are unharmed!");
+#endif
+			}
+			else if (p_ptr->csp)
 			{
 				/* Basic message */
 #ifdef JP
@@ -7458,7 +7480,7 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 		/* Mind blast */
 		case GF_MIND_BLAST:
 		{
-			if (randint0(100 + rlev/2) < (MAX(5, p_ptr->skill_sav)))
+			if ((randint0(100 + rlev / 2) < MAX(5, p_ptr->skill_sav)) && !CHECK_MULTISHADOW())
 			{
 #ifdef JP
 				msg_print("しかし効力を跳ね返した！");
@@ -7469,29 +7491,32 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 			}
 			else
 			{
+				if (!CHECK_MULTISHADOW())
+				{
 #ifdef JP
-				msg_print("霊的エネルギーで精神が攻撃された。");
+					msg_print("霊的エネルギーで精神が攻撃された。");
 #else
-				msg_print("Your mind is blasted by psyonic energy.");
+					msg_print("Your mind is blasted by psyonic energy.");
 #endif
 
-				if (!p_ptr->resist_conf)
-				{
-					(void)set_confused(p_ptr->confused + randint0(4) + 4);
-				}
+					if (!p_ptr->resist_conf)
+					{
+						(void)set_confused(p_ptr->confused + randint0(4) + 4);
+					}
 
-				if (!p_ptr->resist_chaos && one_in_(3))
-				{
-					(void)set_image(p_ptr->image + randint0(250) + 150);
-				}
+					if (!p_ptr->resist_chaos && one_in_(3))
+					{
+						(void)set_image(p_ptr->image + randint0(250) + 150);
+					}
 
-				p_ptr->csp -= 50;
-				if (p_ptr->csp < 0)
-				{
-					p_ptr->csp = 0;
-					p_ptr->csp_frac = 0;
+					p_ptr->csp -= 50;
+					if (p_ptr->csp < 0)
+					{
+						p_ptr->csp = 0;
+						p_ptr->csp_frac = 0;
+					}
+					p_ptr->redraw |= PR_MANA;
 				}
-				p_ptr->redraw |= PR_MANA;
 
 				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			}
@@ -7501,7 +7526,7 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 		/* Brain smash */
 		case GF_BRAIN_SMASH:
 		{
-			if (randint0(100 + rlev/2) < (MAX(5, p_ptr->skill_sav)))
+			if ((randint0(100 + rlev / 2) < MAX(5, p_ptr->skill_sav)) && !CHECK_MULTISHADOW())
 			{
 #ifdef JP
 				msg_print("しかし効力を跳ね返した！");
@@ -7512,43 +7537,49 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 			}
 			else
 			{
+				if (!CHECK_MULTISHADOW())
+				{
 #ifdef JP
-				msg_print("霊的エネルギーで精神が攻撃された。");
+					msg_print("霊的エネルギーで精神が攻撃された。");
 #else
-				msg_print("Your mind is blasted by psionic energy.");
+					msg_print("Your mind is blasted by psionic energy.");
 #endif
 
-				p_ptr->csp -= 100;
-				if (p_ptr->csp < 0)
-				{
-					p_ptr->csp = 0;
-					p_ptr->csp_frac = 0;
+					p_ptr->csp -= 100;
+					if (p_ptr->csp < 0)
+					{
+						p_ptr->csp = 0;
+						p_ptr->csp_frac = 0;
+					}
+					p_ptr->redraw |= PR_MANA;
 				}
-				p_ptr->redraw |= PR_MANA;
 
 				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
-				if (!p_ptr->resist_blind)
+				if (!CHECK_MULTISHADOW())
 				{
-					(void)set_blind(p_ptr->blind + 8 + randint0(8));
-				}
-				if (!p_ptr->resist_conf)
-				{
-					(void)set_confused(p_ptr->confused + randint0(4) + 4);
-				}
-				if (!p_ptr->free_act)
-				{
-					(void)set_paralyzed(p_ptr->paralyzed + randint0(4) + 4);
-				}
-				(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
+					if (!p_ptr->resist_blind)
+					{
+						(void)set_blind(p_ptr->blind + 8 + randint0(8));
+					}
+					if (!p_ptr->resist_conf)
+					{
+						(void)set_confused(p_ptr->confused + randint0(4) + 4);
+					}
+					if (!p_ptr->free_act)
+					{
+						(void)set_paralyzed(p_ptr->paralyzed + randint0(4) + 4);
+					}
+					(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
 
-				while (randint0(100 + rlev/2) > (MAX(5, p_ptr->skill_sav)))
-					(void)do_dec_stat(A_INT);
-				while (randint0(100 + rlev/2) > (MAX(5, p_ptr->skill_sav)))
-					(void)do_dec_stat(A_WIS);
+					while (randint0(100 + rlev / 2) > (MAX(5, p_ptr->skill_sav)))
+						(void)do_dec_stat(A_INT);
+					while (randint0(100 + rlev / 2) > (MAX(5, p_ptr->skill_sav)))
+						(void)do_dec_stat(A_WIS);
 
-				if (!p_ptr->resist_chaos)
-				{
-					(void)set_image(p_ptr->image + randint0(250) + 150);
+					if (!p_ptr->resist_chaos)
+					{
+						(void)set_image(p_ptr->image + randint0(250) + 150);
+					}
 				}
 			}
 			break;
@@ -7557,7 +7588,7 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 		/* cause 1 */
 		case GF_CAUSE_1:
 		{
-			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
+			if ((randint0(100 + rlev / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW())
 			{
 #ifdef JP
 				msg_print("しかし効力を跳ね返した！");
@@ -7568,7 +7599,7 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 			}
 			else
 			{
-				curse_equipment(15, 0);
+				if (!CHECK_MULTISHADOW()) curse_equipment(15, 0);
 				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			}
 			break;
@@ -7577,7 +7608,7 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 		/* cause 2 */
 		case GF_CAUSE_2:
 		{
-			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
+			if ((randint0(100 + rlev / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW())
 			{
 #ifdef JP
 				msg_print("しかし効力を跳ね返した！");
@@ -7588,7 +7619,7 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 			}
 			else
 			{
-				curse_equipment(25, MIN(rlev/2-15, 5));
+				if (!CHECK_MULTISHADOW()) curse_equipment(25, MIN(rlev / 2 - 15, 5));
 				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			}
 			break;
@@ -7597,7 +7628,7 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 		/* cause 3 */
 		case GF_CAUSE_3:
 		{
-			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
+			if ((randint0(100 + rlev / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW())
 			{
 #ifdef JP
 				msg_print("しかし効力を跳ね返した！");
@@ -7608,7 +7639,7 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 			}
 			else
 			{
-				curse_equipment(33, MIN(rlev/2-15, 15));
+				if (!CHECK_MULTISHADOW()) curse_equipment(33, MIN(rlev / 2 - 15, 15));
 				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			}
 			break;
@@ -7617,7 +7648,7 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 		/* cause 4 */
 		case GF_CAUSE_4:
 		{
-			if ((randint0(100 + rlev/2) < p_ptr->skill_sav) && !(m_ptr->r_idx == MON_KENSHIROU))
+			if ((randint0(100 + rlev / 2) < p_ptr->skill_sav) && !(m_ptr->r_idx == MON_KENSHIROU) && !CHECK_MULTISHADOW())
 			{
 #ifdef JP
 				msg_print("しかし秘孔を跳ね返した！");
@@ -7629,7 +7660,7 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 			else
 			{
 				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
-				(void)set_cut(p_ptr->cut + damroll(10, 10));
+				if (!CHECK_MULTISHADOW()) (void)set_cut(p_ptr->cut + damroll(10, 10));
 			}
 			break;
 		}
@@ -7637,7 +7668,7 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 		/* Hand of Doom */
 		case GF_HAND_DOOM:
 		{
-			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
+			if ((randint0(100 + rlev/2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW())
 			{
 #ifdef JP
 				msg_format("しかし効力を跳ね返した！");
@@ -7648,16 +7679,19 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 			}
 			else
 			{
+				if (!CHECK_MULTISHADOW())
+				{
 #ifdef JP
-				msg_print("あなたは命が薄まっていくように感じた！");
+					msg_print("あなたは命が薄まっていくように感じた！");
 #else
-				msg_print("You feel your life fade away!");
+					msg_print("You feel your life fade away!");
 #endif
+					curse_equipment(40, 20);
+				}
 
 				get_damage = take_hit(DAMAGE_ATTACK, dam, m_name, monspell);
-				curse_equipment(40, 20);
 
-				if (p_ptr->chp < 1) p_ptr->chp = 1;
+				if (p_ptr->chp < 1) p_ptr->chp = 1; /* Paranoia */
 			}
 			break;
 		}

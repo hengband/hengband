@@ -5377,6 +5377,9 @@ extern int PlayerUID;
 #define IS_TIM_ESP() (p_ptr->tim_esp || music_singing(MUSIC_MIND))
 #define IS_TIM_STEALTH() (p_ptr->tim_stealth || music_singing(MUSIC_STEALTH))
 
+/* Multishadow effects is determined by turn */
+#define CHECK_MULTISHADOW() (p_ptr->multishadow && (turn & 1))
+
 /* Is "teleport level" ineffective to this target? */
 #define TELE_LEVEL_IS_INEFF(TARGET) \
 	(p_ptr->inside_arena || p_ptr->inside_battle || \

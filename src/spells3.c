@@ -4784,8 +4784,7 @@ int inven_damage(inven_func typ, int perc)
 	object_type *o_ptr;
 	char        o_name[MAX_NLEN];
 
-	/* Multishadow effects is determined by turn */
-	if( p_ptr->multishadow && (turn & 1) )return 0;
+	if (CHECK_MULTISHADOW()) return 0;
 
 	if (p_ptr->inside_arena) return 0;
 
@@ -4969,15 +4968,18 @@ int acid_dam(int dam, cptr kb_str, int monspell)
 	if (p_ptr->resist_acid) dam = (dam + 2) / 3;
 	if (double_resist) dam = (dam + 2) / 3;
 
-	if ((!(double_resist || p_ptr->resist_acid)) &&
-	    one_in_(HURT_CHANCE))
-		(void)do_dec_stat(A_CHR);
+	if (!CHECK_MULTISHADOW())
+	{
+		if ((!(double_resist || p_ptr->resist_acid)) &&
+		    one_in_(HURT_CHANCE))
+			(void)do_dec_stat(A_CHR);
 
-	/* If any armor gets hit, defend the player */
-	if (minus_ac()) dam = (dam + 1) / 2;
+		/* If any armor gets hit, defend the player */
+		if (minus_ac()) dam = (dam + 1) / 2;
+	}
 
 	/* Take damage */
-	get_damage=take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage = take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
 	if (!(double_resist && p_ptr->resist_acid))
@@ -5012,11 +5014,11 @@ int elec_dam(int dam, cptr kb_str, int monspell)
 	if (double_resist) dam = (dam + 2) / 3;
 
 	if ((!(double_resist || p_ptr->resist_elec)) &&
-	    one_in_(HURT_CHANCE))
+	    one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW())
 		(void)do_dec_stat(A_DEX);
 
 	/* Take damage */
-	get_damage=take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage = take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
 	if (!(double_resist && p_ptr->resist_elec))
@@ -5052,11 +5054,11 @@ int fire_dam(int dam, cptr kb_str, int monspell)
 	if (double_resist) dam = (dam + 2) / 3;
 
 	if ((!(double_resist || p_ptr->resist_fire)) &&
-	    one_in_(HURT_CHANCE))
+	    one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW())
 		(void)do_dec_stat(A_STR);
 
 	/* Take damage */
-	get_damage=take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage = take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
 	if (!(double_resist && p_ptr->resist_fire))
@@ -5091,11 +5093,11 @@ int cold_dam(int dam, cptr kb_str, int monspell)
 	if (double_resist) dam = (dam + 2) / 3;
 
 	if ((!(double_resist || p_ptr->resist_cold)) &&
-	    one_in_(HURT_CHANCE))
+	    one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW())
 		(void)do_dec_stat(A_STR);
 
 	/* Take damage */
-	get_damage=take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage = take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
 	if (!(double_resist && p_ptr->resist_cold))

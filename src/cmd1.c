@@ -1386,8 +1386,13 @@ static void hit_trap(bool break_trap)
 #endif
 
 				dam = damroll(1, 4);
-				take_hit(DAMAGE_ATTACK, dam, name, -1);
-				(void)set_slow(p_ptr->slow + randint0(20) + 20, FALSE);
+#ifdef JP
+				take_hit(DAMAGE_ATTACK, dam, "ダーツの罠", -1);
+#else
+				take_hit(DAMAGE_ATTACK, dam, "a dart trap", -1);
+#endif
+
+				if (!CHECK_MULTISHADOW()) (void)set_slow(p_ptr->slow + randint0(20) + 20, FALSE);
 			}
 			else
 			{
@@ -1418,7 +1423,7 @@ static void hit_trap(bool break_trap)
 				take_hit(DAMAGE_ATTACK, dam, "a dart trap", -1);
 #endif
 
-				(void)do_dec_stat(A_STR);
+				if (!CHECK_MULTISHADOW()) (void)do_dec_stat(A_STR);
 			}
 			else
 			{
@@ -1449,7 +1454,7 @@ static void hit_trap(bool break_trap)
 				take_hit(DAMAGE_ATTACK, dam, "a dart trap", -1);
 #endif
 
-				(void)do_dec_stat(A_DEX);
+				if (!CHECK_MULTISHADOW()) (void)do_dec_stat(A_DEX);
 			}
 			else
 			{
@@ -1480,7 +1485,7 @@ static void hit_trap(bool break_trap)
 				take_hit(DAMAGE_ATTACK, dam, "a dart trap", -1);
 #endif
 
-				(void)do_dec_stat(A_CON);
+				if (!CHECK_MULTISHADOW()) (void)do_dec_stat(A_CON);
 			}
 			else
 			{

@@ -5125,8 +5125,7 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 			}
 		}
 
-		/* Multishadow effects is determined by turn */
-		if (p_ptr->multishadow && (turn & 1))
+		if (CHECK_MULTISHADOW())
 		{
 			if (damage_type == DAMAGE_FORCE)
 			{
