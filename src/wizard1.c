@@ -3374,6 +3374,9 @@ void spoil_random_artifact(cptr fname)
 	char buf[1024];
 
 
+	/* Drop priv's */
+	safe_setuid_drop();
+
 	/* Build the filename */
 	path_build(buf, 1024, ANGBAND_DIR_USER, fname);
 
@@ -3434,6 +3437,9 @@ void spoil_random_artifact(cptr fname)
 		msg_print("Cannot close list file.");
 		return;
 	}
+
+	/* Grab priv's */
+	safe_setuid_grab();
 
 	/* Message */
 	msg_print("Successfully created a list file.");

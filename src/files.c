@@ -4859,10 +4859,6 @@ errr file_character(cptr name, bool full)
 	/* Open the non-existing file */
 	if (fd < 0) fff = my_fopen(buf, "w");
 
-	/* Grab priv's */
-	safe_setuid_grab();
-
-
 	/* Invalid file */
 	if (!fff)
 	{
@@ -4884,6 +4880,8 @@ msg_format("キャラクタ情報のファイルへの書き出しに失敗しました！");
 	/* Close it */
 	my_fclose(fff);
 
+	/* Grab priv's */
+	safe_setuid_grab();
 
 	/* Message */
 #ifdef JP
@@ -5305,10 +5303,11 @@ msg_format("'%s'をオープンできません。", name);
 		/* Show a general "title" */
 		if (show_version)
 		{
+			prt(format(
 #ifdef JP
-prt(format("[変愚蛮怒 %d.%d.%d, %s, %d/%d]",
+				"[変愚蛮怒 %d.%d.%d, %s, %d/%d]",
 #else
-		prt(format("[Hengband %d.%d.%d, %s, Line %d/%d]",
+				"[Hengband %d.%d.%d, %s, Line %d/%d]",
 #endif
 
 		           FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH,
@@ -5316,12 +5315,13 @@ prt(format("[変愚蛮怒 %d.%d.%d, %s, %d/%d]",
 		}
 		else
 		{
+			prt(format(
 #ifdef JP
-prt(format("[%s, %d/%d]",
+				"[%s, %d/%d]",
 #else
-			prt(format("[%s, Line %d/%d]",
+				"[%s, Line %d/%d]",
 #endif
-			           caption, line, size), 0, 0);
+				caption, line, size), 0, 0);
 		}
 
 		/* Prompt -- menu screen */
@@ -5485,32 +5485,6 @@ strcpy(tmp, "jhelp.hlp");
 			if (line < 0) line = ((size-1)/20)*20;
 		}
 
-#ifdef JP_FALSE
-		/* 日本語版で追加されたヘルプの表示 */
-		/* あまりよい処理の仕方とは思えない・・・すまん */
-
-		/* 簡易コマンド一覧 */
-		if (menu && (k == 'c' || k == 'C'))
-		{
-			char tmp[80];
-			switch (rogue_like_commands)
-			{
-				case TRUE:
-				{
-					strcpy(tmp, "j_com_r.txt");
-					if(!show_file(TRUE, tmp, NULL, 0, mode)) k = 'q';
-					break;
-				}
-				case FALSE:
-				{
-					strcpy(tmp, "j_com_o.txt");
-					if(!show_file(TRUE, tmp, NULL, 0, mode)) k = 'q';
-					break;
-				}
-			}
-		}
-
-#endif
 		/* Recurse on numbers */
 		if (menu)
 		{
@@ -5537,26 +5511,22 @@ strcpy(tmp, "jhelp.hlp");
 			strcpy (xtmp, "");
 
 #ifdef JP
-if (get_string("ファイル名: ", xtmp, 80))
+			if (!get_string("ファイル名: ", xtmp, 80))
 #else
-			if (get_string("File name: ", xtmp, 80))
+			if (!get_string("File name: ", xtmp, 80))
 #endif
-
-			{
-				if (xtmp[0] && (xtmp[0] != ' '))
-				{
-				}
-			}
-			else
 			{
 				continue;
 			}
+ 
+			/* Close it */
+			my_fclose(fff);
+
+                        /* Drop priv's */
+			safe_setuid_drop();
 
 			/* Build the filename */
 			path_build(buff, 1024, ANGBAND_DIR_USER, xtmp);
-
-			/* Close it */
-			my_fclose(fff);
 
 			/* Hack -- Re-Open the file */
 			fff = my_fopen(path, "r");
@@ -5567,7 +5537,7 @@ if (get_string("ファイル名: ", xtmp, 80))
 			if (!(fff && ffp))
 			{
 #ifdef JP
-msg_print("ファイルが見つかりません。");
+msg_print("ファイルが開けません。");
 #else
 				msg_print("Failed to open file.");
 #endif
@@ -5586,6 +5556,9 @@ msg_print("ファイルが見つかりません。");
 			/* Close it */
 			my_fclose(fff);
 			my_fclose(ffp);
+
+			/* Grab priv's */
+			safe_setuid_grab();
 
 			/* Hack -- Re-Open the file */
 			fff = my_fopen(path, "r");

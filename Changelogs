@@ -1,5 +1,23 @@
 2002-01-22  habu  <habu@akiru>
 
+	* src/cave.c, src/dungeon.c, src/externs.h, src/melee2.c:
+	モンスターの追跡ルーチン関係をOを参考に大幅に変更。かなりの処理速度アップに繋がるはず。
+
+2002-01-22  Takeshi Mogami  <mogami@akiru>
+
+	* lib/help/jobjects.hlp, lib/help/jobjects.txt:
+	ファイル追加の追加
+
+	* lib/help/readme.txt:
+	前、「間違ってreadme.txtをhelpディレクトリにaddしたままだった」と思って削除したが、
+	勘違いだったので復活。
+
+	* lib/help/jbldg.txt, lib/help/jcharattr.hlp, lib/help/jcharattr.txt, lib/help/jcommand.hlp, lib/help/jcommand.txt, lib/help/jcommand0.txt, lib/help/jcommdesc.hlp, lib/help/jcommdesc.txt, lib/help/jdefend.hlp, lib/help/jdefend.txt, lib/help/jdungeon.hlp, lib/help/jdungeon.txt, lib/help/jgambling.txt, lib/help/jgeneral.hlp, lib/help/jgeneral.txt, lib/help/jhelp.hlp, lib/help/jhelpinfo.txt, lib/help/jmagic.hlp, lib/help/jmagic.txt, lib/help/jmonster.hlp, lib/help/jmonster.txt, lib/help/joption.hlp, lib/help/joption.txt, lib/help/jplaying.txt, lib/help/jpref.hlp, lib/help/jpref.txt, lib/help/jspecial.hlp, lib/help/jtang.txt, lib/help/jtown.hlp, lib/help/jtown.txt, lib/help/jversion.txt, src/files.c, Changelogs, lib/help/Makefile.am, lib/help/j_general.txt, lib/help/j_item1.txt, lib/help/j_item2.txt, lib/help/j_name.txt, lib/help/j_trans.txt, lib/help/japanese.txt, lib/help/jattack.hlp, lib/help/jattack.txt, lib/help/jbirth.hlp, lib/help/jbirth.txt:
+	日本語版のZ240ヘルプを元に変愚蛮怒ヘルプを作成。
+	まだjmagicなど、一部未完成。
+
+2002-01-22  habu  <habu@akiru>
+
 	* src/cmd5.c, src/externs.h, src/spells2.c:
 	ペット爆破の魔法でユニークモンスターを破壊できないように修正。
 

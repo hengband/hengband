@@ -133,6 +133,9 @@ static FILE *open_auto_dump(cptr buf, cptr mark, int *line)
 
 	char header_mark_str[80];
 
+	/* Drop priv's */
+	safe_setuid_drop();
+
 	sprintf(header_mark_str, auto_dump_header, mark);
 
 	/* Remove old macro dumps */
@@ -149,6 +152,10 @@ static FILE *open_auto_dump(cptr buf, cptr mark, int *line)
 		msg_format("Failed to open %s.", buf);
 #endif
 		msg_print(NULL);
+
+		/* Grab priv's */
+		safe_setuid_grab();
+		
 		return NULL;
 	}
 
@@ -190,6 +197,9 @@ static void close_auto_dump(FILE *fff, cptr mark, int line_num)
 
 	my_fclose(fff);
 
+	/* Grab priv's */
+	safe_setuid_grab();
+		
 	return;
 }
 
@@ -252,6 +262,9 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 	sprintf(file_name,"playrec-%s.txt",savefile_base);
 #endif
 
+	/* Hack -- drop permissions */
+	safe_setuid_drop();
+
 	/* Build the filename */
 	path_build(buf, 1024, ANGBAND_DIR_USER, file_name);
 
@@ -261,7 +274,10 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 	fff = my_fopen(buf, "a");
 
 	/* Failure */
-	if (!fff) {
+	if (!fff)
+	{
+		/* Hack -- grab permissions */
+		safe_setuid_grab();
 #ifdef JP
 		msg_format("%s を開くことができませんでした。プレイ記録を一時停止します。", buf);
 #else
@@ -655,6 +671,9 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 
 	my_fclose(fff);
 
+	/* Hack -- grab permissions */
+	safe_setuid_grab();
+
 	if (do_level) write_level = FALSE;
 
 	return (0);
@@ -741,6 +760,9 @@ static void do_cmd_disp_nikki(void)
 	sprintf(file_name,"playrec-%s.txt",savefile_base);
 #endif
 
+	/* Hack -- drop permissions */
+	safe_setuid_drop();
+
 	/* Build the filename */
 	path_build(buf, 1024, ANGBAND_DIR_USER, file_name);
 
@@ -760,6 +782,9 @@ static void do_cmd_disp_nikki(void)
 
 	/* Display the file contents */
 	show_file(FALSE, buf, nikki_title, -1, 0);
+
+	/* Hack -- grab permissions */
+	safe_setuid_grab();
 }
 
 static void do_cmd_bunshou(void)
@@ -822,6 +847,9 @@ static void do_cmd_erase_nikki(void)
 	sprintf(file_name,"playrec-%s.txt",savefile_base);
 #endif
 
+	/* Hack -- drop permissions */
+	safe_setuid_drop();
+
 	/* Build the filename */
 	path_build(buf, 1024, ANGBAND_DIR_USER, file_name);
 
@@ -844,6 +872,9 @@ static void do_cmd_erase_nikki(void)
 #endif
 	}
 	msg_print(NULL);
+
+	/* Hack -- grab permissions */
+	safe_setuid_grab();
 }
 
 #if 0
@@ -2827,14 +2858,8 @@ void do_cmd_macros(void)
 			/* Ask for a file */
 			if (!askfor_aux(tmp, 80)) continue;
 
-			/* Drop priv's */
-			safe_setuid_drop();
-
 			/* Dump the macros */
 			(void)macro_dump(tmp);
-
-			/* Grab priv's */
-			safe_setuid_grab();
 
 			/* Prompt */
 #ifdef JP
@@ -3020,14 +3045,8 @@ void do_cmd_macros(void)
 			/* Ask for a file */
 			if (!askfor_aux(tmp, 80)) continue;
 
-			/* Drop priv's */
-			safe_setuid_drop();
-
 			/* Dump the macros */
 			(void)keymap_dump(tmp);
-
-			/* Grab priv's */
-			safe_setuid_grab();
 
 			/* Prompt */
 #ifdef JP
@@ -3384,15 +3403,9 @@ void do_cmd_visuals(void)
 			/* Build the filename */
 			path_build(buf, 1024, ANGBAND_DIR_USER, tmp);
 
-			/* Drop priv's */
-			safe_setuid_drop();
-
 			/* Append to the file */
 			fff = open_auto_dump(buf, mark, &line_num);
 			if (!fff) continue;
-
-			/* Grab priv's */
-			safe_setuid_grab();
 
 			/* Start dumping */
 #ifdef JP
@@ -3463,15 +3476,9 @@ void do_cmd_visuals(void)
 			/* Build the filename */
 			path_build(buf, 1024, ANGBAND_DIR_USER, tmp);
 
-			/* Drop priv's */
-			safe_setuid_drop();
-
 			/* Append to the file */
 			fff = open_auto_dump(buf, mark, &line_num);
 			if (!fff) continue;
-
-			/* Grab priv's */
-			safe_setuid_grab();
 
 			/* Start dumping */
 #ifdef JP
@@ -3542,15 +3549,9 @@ void do_cmd_visuals(void)
 			/* Build the filename */
 			path_build(buf, 1024, ANGBAND_DIR_USER, tmp);
 
-			/* Drop priv's */
-			safe_setuid_drop();
-
 			/* Append to the file */
 			fff = open_auto_dump(buf, mark, &line_num);
 			if (!fff) continue;
-
-			/* Grab priv's */
-			safe_setuid_grab();
 
 			/* Start dumping */
 #ifdef JP
@@ -4014,15 +4015,9 @@ void do_cmd_colors(void)
 			/* Build the filename */
 			path_build(buf, 1024, ANGBAND_DIR_USER, tmp);
 
-			/* Drop priv's */
-			safe_setuid_drop();
-
 			/* Append to the file */
 			fff = open_auto_dump(buf, mark, &line_num);
 			if (!fff) continue;
-
-			/* Grab priv's */
-			safe_setuid_grab();
 
 			/* Start dumping */
 #ifdef JP
@@ -4603,6 +4598,9 @@ void do_cmd_load_screen(void)
 	char buf[1024];
 
 
+	/* Hack -- drop permissions */
+	safe_setuid_drop();
+
 	/* Build the filename */
 	path_build(buf, 1024, ANGBAND_DIR_USER, "dump.txt");
 
@@ -4678,6 +4676,9 @@ void do_cmd_load_screen(void)
 	/* Close it */
 	my_fclose(fff);
 
+	/* Hack -- grab permissions */
+	safe_setuid_grab();
+		
 
 	/* Message */
 #ifdef JP
@@ -5041,14 +5042,8 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
 
-	/* Hack -- drop permissions */
-	safe_setuid_drop();
-
 	/* Append to the file */
 	fff = my_fopen(filename, "w");
-
-	/* Hack -- grab permissions */
-	safe_setuid_grab();
 
 	/* Oops */
 	if (!fff) {
@@ -5060,12 +5055,13 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 #endif
 		    msg_print(NULL);
 		}
-	    return;
+		
+		return;
 	}
 
 	/* Save the screen */
 	if (message)
-	screen_save();
+		screen_save();
 
 	/* Build the filename */
 	path_build(buf, 1024, ANGBAND_DIR_USER, "htmldump.prf");
@@ -5135,7 +5131,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	if (!tmpfff) {
 		for (i = 0; html_foot[i]; i++)
 			fprintf(fff, html_foot[i]);
-		}
+	}
 	else {
 		rewind(tmpfff);
 		yomikomu = 0;
@@ -5171,7 +5167,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 
 	/* Restore the screen */
 	if (message)
-	screen_load();
+		screen_load();
 }
 
 /*
@@ -5193,7 +5189,13 @@ void do_cmd_save_screen_html(void)
 
 	msg_print(NULL);
 
+	/* Hack -- drop permissions */
+	safe_setuid_drop();
+
 	do_cmd_save_screen_html_aux(buf, 1);
+
+	/* Hack -- grab permissions */
+	safe_setuid_grab();
 }
 
 
@@ -5236,30 +5238,30 @@ void do_cmd_save_screen(void)
 		char buf[1024];
 
 
+		/* Hack -- drop permissions */
+		safe_setuid_drop();
+
 		/* Build the filename */
 		path_build(buf, 1024, ANGBAND_DIR_USER, "dump.txt");
 
 		/* File type is "TEXT" */
 		FILE_TYPE(FILE_TYPE_TEXT);
 
-		/* Hack -- drop permissions */
-		safe_setuid_drop();
-
 		/* Append to the file */
 		fff = my_fopen(buf, "w");
 
-		/* Hack -- grab permissions */
-		safe_setuid_grab();
-
 		/* Oops */
-		if (!fff) {
+		if (!fff)
+		{
+			/* Hack -- grab permissions */
+			safe_setuid_grab();
 #ifdef JP
-		    msg_format("ファイル %s を開けませんでした。", buf);
+			msg_format("ファイル %s を開けませんでした。", buf);
 #else
-		    msg_format("Failed to open file %s.", buf);
+			msg_format("Failed to open file %s.", buf);
 #endif
-		    msg_print(NULL);
-		    return;
+			msg_print(NULL);
+			return;
 		}
 
 
@@ -5318,6 +5320,8 @@ void do_cmd_save_screen(void)
 		/* Close it */
 		my_fclose(fff);
 
+		/* Hack -- grab permissions */
+		safe_setuid_grab();
 
 		/* Message */
 #ifdef JP
