@@ -893,7 +893,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 			if (player_bold(y, x)) break;
 
 			/* Create a closed door */
-			cave_set_feat(y, x, feat_closed_door);
+			cave_set_feat(y, x, feat_door[DOOR_DOOR].closed);
 
 			/* Observe */
 			if (c_ptr->info & (CAVE_MARK)) obvious = TRUE;

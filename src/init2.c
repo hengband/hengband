@@ -1621,31 +1621,63 @@ static errr init_feat_variables(void)
 	feat_mirror = f_tag_to_index_in_init("MIRROR");
 
 	/* Doors */
-	feat_open_door = f_tag_to_index_in_init("OPEN_DOOR");
-	feat_broken_door = f_tag_to_index_in_init("BROKEN_DOOR");
-	feat_closed_door = f_tag_to_index_in_init("CLOSED_DOOR");
+	feat_door[DOOR_DOOR].open = f_tag_to_index_in_init("OPEN_DOOR");
+	feat_door[DOOR_DOOR].broken = f_tag_to_index_in_init("BROKEN_DOOR");
+	feat_door[DOOR_DOOR].closed = f_tag_to_index_in_init("CLOSED_DOOR");
 
 	/* Locked doors */
 	for (i = 1; i < MAX_LJ_DOORS; i++)
 	{
 		s16b door = f_tag_to_index(format("LOCKED_DOOR_%d", i));
 		if (door < 0) break;
-		feat_locked_door[num_locked_door++] = door;
+		feat_door[DOOR_DOOR].locked[i - 1] = door;
 	}
-	if (!num_locked_door) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
+	if (i == 1) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
+	feat_door[DOOR_DOOR].num_locked = i - 1;
 
 	/* Jammed doors */
 	for (i = 0; i < MAX_LJ_DOORS; i++)
 	{
 		s16b door = f_tag_to_index(format("JAMMED_DOOR_%d", i));
 		if (door < 0) break;
-		feat_jammed_door[num_jammed_door++] = door;
+		feat_door[DOOR_DOOR].jammed[i] = door;
 	}
-	if (!num_jammed_door) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
+	if (!i) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
+	feat_door[DOOR_DOOR].num_jammed = i;
+
+	/* Glass doors */
+	feat_door[DOOR_GLASS_DOOR].open = f_tag_to_index_in_init("OPEN_GLASS_DOOR");
+	feat_door[DOOR_GLASS_DOOR].broken = f_tag_to_index_in_init("BROKEN_GLASS_DOOR");
+	feat_door[DOOR_GLASS_DOOR].closed = f_tag_to_index_in_init("CLOSED_GLASS_DOOR");
+
+	/* Locked glass doors */
+	for (i = 1; i < MAX_LJ_DOORS; i++)
+	{
+		s16b door = f_tag_to_index(format("LOCKED_GLASS_DOOR_%d", i));
+		if (door < 0) break;
+		feat_door[DOOR_GLASS_DOOR].locked[i - 1] = door;
+	}
+	if (i == 1) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
+	feat_door[DOOR_GLASS_DOOR].num_locked = i - 1;
+
+	/* Jammed glass doors */
+	for (i = 0; i < MAX_LJ_DOORS; i++)
+	{
+		s16b door = f_tag_to_index(format("JAMMED_GLASS_DOOR_%d", i));
+		if (door < 0) break;
+		feat_door[DOOR_GLASS_DOOR].jammed[i] = door;
+	}
+	if (!i) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
+	feat_door[DOOR_GLASS_DOOR].num_jammed = i;
 
 	/* Curtains */
-	feat_open_curtain = f_tag_to_index_in_init("OPEN_CURTAIN");
-	feat_closed_curtain = f_tag_to_index_in_init("CLOSED_CURTAIN");
+	feat_door[DOOR_CURTAIN].open = f_tag_to_index_in_init("OPEN_CURTAIN");
+	feat_door[DOOR_CURTAIN].broken = feat_door[DOOR_CURTAIN].open;
+	feat_door[DOOR_CURTAIN].closed = f_tag_to_index_in_init("CLOSED_CURTAIN");
+	feat_door[DOOR_CURTAIN].locked[0] = feat_door[DOOR_CURTAIN].closed;
+	feat_door[DOOR_CURTAIN].num_locked = 1;
+	feat_door[DOOR_CURTAIN].jammed[0] = feat_door[DOOR_CURTAIN].closed;
+	feat_door[DOOR_CURTAIN].num_jammed = 1;
 
 	/* Stairs */
 	feat_up_stair = f_tag_to_index_in_init("UP_STAIR");
@@ -1670,6 +1702,10 @@ static errr init_feat_variables(void)
 	/* Walls */
 	feat_granite = f_tag_to_index_in_init("GRANITE");
 	feat_permanent = f_tag_to_index_in_init("PERMANENT");
+
+	/* Glass walls */
+	feat_glass_wall = f_tag_to_index_in_init("GLASS_WALL");
+	feat_permanent_glass_wall = f_tag_to_index_in_init("PERMANENT_GLASS_WALL");
 
 	/* Pattern */
 	feat_pattern_start = f_tag_to_index_in_init("PATTERN_START");

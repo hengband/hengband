@@ -129,11 +129,15 @@ void place_random_stairs(int y, int x)
 void place_random_door(int y, int x, bool room)
 {
 	int tmp;
+	s16b feat = feat_none;
 	cave_type *c_ptr = &cave[y][x];
+
+	int type = ((d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
+		one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN : DOOR_DOOR;
 
 	/* Initialize mimic info */
 	c_ptr->mimic = 0;
-	
+
 	if (d_info[dungeon_type].flags1 & DF1_NO_DOORS)
 	{
 		place_floor_bold(y, x);
@@ -146,27 +150,24 @@ void place_random_door(int y, int x, bool room)
 	/* Open doors (300/1000) */
 	if (tmp < 300)
 	{
-		bool curtain = (d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
-			one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256);
-
 		/* Create open door */
-		set_cave_feat(y, x, curtain ? feat_open_curtain : feat_open_door);
+		feat = feat_door[type].open;
 	}
 
 	/* Broken doors (100/1000) */
 	else if (tmp < 400)
 	{
 		/* Create broken door */
-		set_cave_feat(y, x, feat_broken_door);
+		feat = feat_door[type].broken;
 	}
 
 	/* Secret doors (200/1000) */
 	else if (tmp < 600)
 	{
 		/* Create secret door */
-		place_closed_door(y, x);
+		place_closed_door(y, x, type);
 
-		if (c_ptr->feat != feat_closed_curtain)
+		if (type != DOOR_CURTAIN)
 		{
 			/* Hide. If on the edge of room, use outer wall. */
 			c_ptr->mimic = room ? feat_wall_outer : fill_type[randint0(100)];
@@ -184,7 +185,19 @@ void place_random_door(int y, int x, bool room)
 	}
 
 	/* Closed, locked, or stuck doors (400/1000) */
-	else place_closed_door(y, x);
+	else place_closed_door(y, x, type);
+
+	if (tmp < 400)
+	{
+		if (feat != feat_none)
+		{
+			set_cave_feat(y, x, feat);
+		}
+		else
+		{
+			place_floor_bold(y, x);
+		}
+	}
 
 	delete_monster(y, x);
 }
@@ -193,9 +206,10 @@ void place_random_door(int y, int x, bool room)
 /*
  * Place a random type of normal door at the given location.
  */
-void place_closed_door(int y, int x)
+void place_closed_door(int y, int x, int type)
 {
 	int tmp;
+	s16b feat = feat_none;
 
 	if (d_info[dungeon_type].flags1 & DF1_NO_DOORS)
 	{
@@ -209,29 +223,35 @@ void place_closed_door(int y, int x)
 	/* Closed doors (300/400) */
 	if (tmp < 300)
 	{
-		bool curtain = (d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
-			one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 48 : 512);
-
 		/* Create closed door */
-		cave_set_feat(y, x, curtain ? feat_closed_curtain : feat_closed_door);
+		feat = feat_door[type].closed;
 	}
 
 	/* Locked doors (99/400) */
 	else if (tmp < 399)
 	{
 		/* Create locked door */
-		cave_set_feat(y, x, feat_locked_door[randint0(num_locked_door)]);
+		feat = feat_locked_door_random(type);
 	}
 
 	/* Stuck doors (1/400) */
 	else
 	{
 		/* Create jammed door */
-		cave_set_feat(y, x, feat_jammed_door[randint0(num_jammed_door)]);
+		feat = feat_jammed_door_random(type);
 	}
 
-	/* Now it is not floor */
-	cave[y][x].info &= ~(CAVE_MASK);
+	if (feat != feat_none)
+	{
+		cave_set_feat(y, x, feat);
+
+		/* Now it is not floor */
+		cave[y][x].info &= ~(CAVE_MASK);
+	}
+	else
+	{
+		place_floor_bold(y, x);
+	}
 }
 
 

@@ -1674,3 +1674,18 @@ typedef struct
 	byte tval;  /* tval of prize (0 means no prize) */
 	byte sval;  /* sval of prize */
 } arena_type;
+
+
+/*
+ * A structure type for doors
+ */
+typedef struct
+{
+	s16b open;
+	s16b broken;
+	s16b closed;
+	s16b locked[MAX_LJ_DOORS];
+	s16b num_locked;
+	s16b jammed[MAX_LJ_DOORS];
+	s16b num_jammed;
+} door_type;

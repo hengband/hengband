@@ -34,9 +34,13 @@
 
 #    % - outside of the vault, where corridors may be connected
 #    # - granite
+#    $ - glass wall
 #    X - impenetrable rock
+#    Y - impenetrable glass wall
 #    * - treasure or trap
 #    + - secret door
+#    - - secret glass door
+#    ' - curtain
 #    ^ - trap
 #    & - monster up to 5 levels out of depth (OOD)
 #    @ - monster up to 11 levels OOD
@@ -377,19 +381,19 @@ N:18:Lesser vault (mirror)
 X:7:5:17:19
 D:%%%%%%%%%%%%%%%%%%%
 D:%.................%
-D:%.+#############+.%
-D:%.##&,,,,#,,,,&##.%
-D:%.#&#,,,###,,,#&#.%
-D:%.#,,,,,,#,,,,,,#.%
-D:%.##,,,,,#,,,,,##.%
-D:%.###,,,^#^,,,###.%
-D:%.#######+#######.%
-D:%.###,,,^#^,,,###.%
-D:%.##,,,,,#,,,,,##.%
-D:%.#,,,,,,#,,,,,,#.%
-D:%.#&#,,,###,,,#&#.%
-D:%.##&,,,,#,,,,&##.%
-D:%.+#############+.%
+D:%.-$$$$$$$$$$$$$-.%
+D:%.$$&,,,,$,,,,&$$.%
+D:%.$&$,,,$$$,,,$&$.%
+D:%.$,,,,,,$,,,,,,$.%
+D:%.$$,,,,,$,,,,,$$.%
+D:%.$$$,,,^$^,,,$$$.%
+D:%.$$$$$$$-$$$$$$$.%
+D:%.$$$,,,^$^,,,$$$.%
+D:%.$$,,,,,$,,,,,$$.%
+D:%.$,,,,,,$,,,,,,$.%
+D:%.$&$,,,$$$,,,$&$.%
+D:%.$$&,,,,$,,,,&$$.%
+D:%.-$$$$$$$$$$$$$-.%
 D:%.................%
 D:%%%%%%%%%%%%%%%%%%%
 
@@ -1201,17 +1205,17 @@ N:55:Lesser vault (arena)
 X:7:5:15:17
 D:%%%%%%%%%%%%%%%%%
 D:%...............%
-D:%.+###########+.%
-D:%.#...........#.%
-D:%.#.####^####.#.%
-D:%.#.#,,,,,,,#.#.%
-D:%.#.#,,,,,,,#.#.%
-D:%.#.^,,,,,,,^.#.%
-D:%.#.#,,,,,,,#.#.%
-D:%.#.#,,,,,,,#.#.%
-D:%.#.####^####.#.%
-D:%.#...........#.%
-D:%.+###########+.%
+D:%.-$$$$$$$$$$$-.%
+D:%.$...........$.%
+D:%.$.$$$$^$$$$.$.%
+D:%.$.$,,,,,,,$.$.%
+D:%.$.$,,,,,,,$.$.%
+D:%.$.^,,,,,,,^.$.%
+D:%.$.$,,,,,,,$.$.%
+D:%.$.$,,,,,,,$.$.%
+D:%.$.$$$$^$$$$.$.%
+D:%.$...........$.%
+D:%.-$$$$$$$$$$$-.%
 D:%...............%
 D:%%%%%%%%%%%%%%%%%
 
@@ -2479,7 +2483,7 @@ D:%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # with the Pattern enabled. Not sure which version first had Pattern
 # vaults, probably around 2.1.1.
 
-N:110: *Greater Vault* (Absolutely Huge)
+N:110:*Greater Vault* (Absolutely Huge)
 X:8:50:41:82
 D:%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 D:%................................................................................%
@@ -2698,7 +2702,7 @@ D:%%%%%%%%%%%%%
 D:%...........%
 D:%.XXXXXXXXX.%
 D:%.XXXXXXXXX.%
-D:%.......SXX.%
+D:%.'.....SXX.%
 D:%.XXXXXXXXX.%
 D:%.XXXXXXXXX.%
 D:%...........%
@@ -2708,7 +2712,7 @@ N:117:Black market3
 X:7:5:9:13
 D:%%%%%%%%%%%%%
 D:%...........%
-D:%.XXXX.XXXX.%
+D:%.XXXX'XXXX.%
 D:%.X.......X.%
 D:%.X.......X.%
 D:%.XXXXSXXXX.%
@@ -2723,15 +2727,15 @@ X:7:25:15:23
 D:    %%  %%%%%%%  %%    
 D:   %..% %..&..% %..%   
 D:  %&..&%#&...&#%&..&%  
-D: %......#..X..#......% 
-D:  %&..X....X....X..&%  
-D:%%##...X.+XXX+.X...##%%
-D:%.&...+XXX@9@XXX+...&.%
-D:%&.XXXX**,999,**XXXX.&%
-D:%.&...+XXX@9@XXX+...&.%
-D:%%##...X.+XXX+.X...##%%
-D:  %&..X....X....X..&%  
-D: %......#..X..#......% 
+D: %......#..Y..#......% 
+D:  %&..Y....Y....Y..&%  
+D:%%##...Y.-YYY-.Y...##%%
+D:%.&...-YYY@9@YYY-...&.%
+D:%&.YYYY**,999,**YYYY.&%
+D:%.&...-YYY@9@YYY-...&.%
+D:%%##...Y.-YYY-.Y...##%%
+D:  %&..Y....Y....Y..&%  
+D: %......#..Y..#......% 
 D:  %&..&%#&...&#%&..&%  
 D:   %..% %..&..% %..%   
 D:    %%  %%%%%%%  %%    
@@ -2822,31 +2826,31 @@ D:%.......XXXXX+XXXXX.......%
 D:%...XXXXX...^^^...XXXXX...%
 D:%..XX,,,&.XXX+XXX.&,,,XX..%
 D:%...XXXXXXX.^^^.XXXXXXX...%
-D:%...XX**...@X^X@...**XX...%
-D:%....X**XXXXX^XXXXX**X....%
-D:%...XXX,X.........X,XXX...%
-D:%...X9X9X..*X+X*..X9X9X...%
-D:%...X9XXX.*XX^XX*.XXX9X...%
-D:%..XX.*X9@XX...XX@9X*.XX..%
-D:%..X..*XX@XXX^XXX@XX*..X..%
-D:%..X..**X8X9X+X9X8X**..X..%
-D:%..X..**XXX.^^^.XXX**..X..%
-D:%.XX.XXX8X8.XXX.8X8XXX.XX.%
-D:%.X..X9X8XX.^X^.XX8X9X..X.%
-D:%.X+XX9XXXXXX^XXXXXX9XX+X.%
-D:%.X.^^X^^.........^^X^^.X.%
-D:%.X+XX9XXXXXX^XXXXXX9XX+X.%
-D:%.X..X9X8XX.^X^.XX8X9X..X.%
-D:%.XX.XXX8X8.XXX.8X8XXX.XX.%
-D:%..X..**XXX.^^^.XXX**..X..%
-D:%..X..**X8X9X+X9X8X**..X..%
-D:%..X..*XX@XXX^XXX@XX*..X..%
-D:%..XX.*X9@XX&.&XX@9X*.XX..%
-D:%...X9XXX.*XX^XX*.XXX9X...%
-D:%...X9X9X..*X+X*..X9X9X...%
-D:%...XXX,X.........X,XXX...%
-D:%....X**XXXXX^XXXXX**X....%
-D:%...XX**...@X^X@...**XX...%
+D:%...YY**...@Y^Y@...**YY...%
+D:%....Y**YYYYY^YYYYY**Y....%
+D:%...YYY,Y.........Y,YYY...%
+D:%...Y9Y9Y..*Y-Y*..Y9Y9Y...%
+D:%...Y9YYY.*YY^YY*.YYY9Y...%
+D:%..YY.*Y9@YY...YY@9Y*.YY..%
+D:%..Y..*YY@YYY^YYY@YY*..Y..%
+D:%..Y..**Y8Y9Y-Y9Y8Y**..Y..%
+D:%..Y..**YYY.^^^.YYY**..Y..%
+D:%.YY.YYY8Y8.YYY.8Y8YYY.YY.%
+D:%.Y..Y9Y8YY.^Y^.YY8Y9Y..Y.%
+D:%.Y-YY9YYYYYY^YYYYYY9YY-Y.%
+D:%.Y.^^Y^^.........^^Y^^.Y.%
+D:%.Y-YY9YYYYYY^YYYYYY9YY-Y.%
+D:%.Y..Y9Y8YY.^Y^.YY8Y9Y..Y.%
+D:%.YY.YYY8Y8.YYY.8Y8YYY.YY.%
+D:%..Y..**YYY.^^^.YYY**..Y..%
+D:%..Y..**Y8Y9Y-Y9Y8Y**..Y..%
+D:%..Y..*YY@YYY^YYY@YY*..Y..%
+D:%..YY.*Y9@YY&.&YY@9Y*.YY..%
+D:%...Y9YYY.*YY^YY*.YYY9Y...%
+D:%...Y9Y9Y..*Y-Y*..Y9Y9Y...%
+D:%...YYY,Y.........Y,YYY...%
+D:%....Y**YYYYY^YYYYY**Y....%
+D:%...YY**...@Y^Y@...**YY...%
 D:%...XXXXXXX.^^^.XXXXXXX...%
 D:%..XX,,,&.XXX+XXX.&,,,XX..%
 D:%...XXXXX...^^^...XXXXX...%
@@ -2994,29 +2998,29 @@ X:8:16:27:27
 
 D:%%%%%%%%%%%%%%%%%%%%%%%%%%%
 D:%.........................%
-D:%.........#XXXXX#.........%
-D:%.......XXX,,,,,XXX.......%
-D:%......XXXX,,,,,XXXX......%
-D:%.....XXXXXX,,,XXXXXX.....%
-D:%....XXXXXXX+X+XXXXXXX....%
-D:%...X9XXXX^^^^^^^XXXX9X...%
-D:%..XXXX8X@X+XXX+X@X8XXXX..%
-D:%..X&&X9XXX^X^X^XXX9X&&X..%
-D:%..X&&XX+XXX^X^XXX+XX&&X..%
-D:%.XX.XXXX.X.X@X.X.XXXX.XX.%
-D:%.XX+XX9XX^XX,XX^XX9XX+XX.%
-D:%.+^^+^^^^^X9,9X^^^^^+^^+.%
-D:%.XX+XX9XX^XX,XX^XX9XX+XX.%
-D:%.XX.XXXX.X.X@X.X.XXXX.XX.%
-D:%..X&&XX+XXX^X^XXX+XX&&X..%
-D:%..X&&X9XXX^X^X^XXX9X&&X..%
-D:%..XXXX8X@X+XXX+X@X8XXXX..%
-D:%...X9XXXX^^^^^^^XXXX9X...%
-D:%....XXXXXXX+X+XXXXXXX....%
-D:%.....XXXXXX,,,XXXXXX.....%
-D:%......XXXX,,,,,XXXX......%
-D:%.......XXX,,,,,XXX.......%
-D:%.........#XXXXX#.........%
+D:%.........$YYYYY$.........%
+D:%.......YYY,,,,,YYY.......%
+D:%......YYYY,,,,,YYYY......%
+D:%.....YYYYYY,,,YYYYYY.....%
+D:%....YYYYYYY-Y-YYYYYYY....%
+D:%...Y9YYYY^^^^^^^YYYY9Y...%
+D:%..YYYY8Y@Y-YYY-Y@Y8YYYY..%
+D:%..Y&&Y9YYY^Y^Y^YYY9Y&&Y..%
+D:%..Y&&YY-YYY^Y^YYY-YY&&Y..%
+D:%.YY.YYYY.Y.Y@Y.Y.YYYY.YY.%
+D:%.YY-YY9YY^YY,YY^YY9YY-YY.%
+D:%.-^^-^^^^^Y9,9Y^^^^^-^^-.%
+D:%.YY-YY9YY^YY,YY^YY9YY-YY.%
+D:%.YY.YYYY.Y.Y@Y.Y.YYYY.YY.%
+D:%..Y&&YY-YYY^Y^YYY-YY&&Y..%
+D:%..Y&&Y9YYY^Y^Y^YYY9Y&&Y..%
+D:%..YYYY8Y@Y-YYY-Y@Y8YYYY..%
+D:%...Y9YYYY^^^^^^^YYYY9Y...%
+D:%....YYYYYYY-Y-YYYYYYY....%
+D:%.....YYYYYY,,,YYYYYY.....%
+D:%......YYYY,,,,,YYYY......%
+D:%.......YYY,,,,,YYY.......%
+D:%.........$YYYYY$.........%
 D:%.........................%
 D:%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

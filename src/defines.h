@@ -1183,6 +1183,23 @@
 #define TELEPORT_DEC_VALOUR 0x00000004
 
 
+/* Types of doors */
+#define DOOR_DEFAULT    -1
+#define DOOR_DOOR        0
+#define DOOR_GLASS_DOOR  1
+#define DOOR_CURTAIN     2
+
+#define MAX_DOOR_TYPES   3
+
+#define feat_locked_door_random(DOOR_TYPE) \
+	(feat_door[(DOOR_TYPE)].num_locked ? \
+	 feat_door[(DOOR_TYPE)].locked[randint0(feat_door[(DOOR_TYPE)].num_locked)] : feat_none)
+
+#define feat_jammed_door_random(DOOR_TYPE) \
+	(feat_door[(DOOR_TYPE)].num_jammed ? \
+	 feat_door[(DOOR_TYPE)].jammed[randint0(feat_door[(DOOR_TYPE)].num_jammed)] : feat_none)
+
+
 /* Types of normal traps */
 #define NOT_TRAP        -1
 #define TRAP_TRAPDOOR    0

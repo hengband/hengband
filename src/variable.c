@@ -1202,21 +1202,7 @@ s16b feat_explosive_rune;
 s16b feat_mirror;
 
 /* Doors */
-s16b feat_open_door;
-s16b feat_broken_door;
-s16b feat_closed_door;
-
-/* Locked doors */
-s16b feat_locked_door[MAX_LJ_DOORS];
-s16b num_locked_door = 0;
-
-/* Jammed doors */
-s16b feat_jammed_door[MAX_LJ_DOORS];
-s16b num_jammed_door = 0;
-
-/* Curtains */
-s16b feat_open_curtain;
-s16b feat_closed_curtain;
+door_type feat_door[MAX_DOOR_TYPES];
 
 /* Stairs */
 s16b feat_up_stair;
@@ -1238,6 +1224,10 @@ s16b feat_quartz_vein;
 /* Walls */
 s16b feat_granite;
 s16b feat_permanent;
+
+/* Glass walls */
+s16b feat_glass_wall;
+s16b feat_permanent_glass_wall;
 
 /* Pattern */
 s16b feat_pattern_start;
