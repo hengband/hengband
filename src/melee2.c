@@ -3502,6 +3502,9 @@ msg_print("爆発のルーンは解除された。");
 			/* Redraw the new grid */
 			lite_spot(ny, nx);
 
+			/* Update sub-windows */
+			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+
 			if (p_ptr->riding == m_idx)
 			{
 				verify_panel();
@@ -3511,9 +3514,6 @@ msg_print("爆発のルーンは解除された。");
 
 				/* Update the monsters */
 				p_ptr->update |= (PU_DISTANCE);
-
-				/* Window stuff */
-				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 			}
 
 			/* Possible disturb */
@@ -3699,6 +3699,9 @@ msg_format("%^sが%sを破壊した。", m_name, o_name);
 	{
 		/* Update some things */
 		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
+
+		/* Window stuff */
+		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	}
 
 	/* Notice changes in view */

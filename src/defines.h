@@ -2527,10 +2527,10 @@
 #define PR_STUN         0x00002000L     /* Display Extra (Stun) */
 #define PR_HUNGER       0x00004000L     /* Display Extra (Hunger) */
 #define PR_STATUS       0x00008000L     /* Display Status Bar */
-#define PR_DUNGEON      0x00010000L     /* Display Extra (Blind) */
+#define PR_XXX0         0x00010000L     /* (unused) */
 #define PR_UHEALTH      0x00020000L     /* Display Uma Health Bar */
-#define PR_XXX1         0x00040000L     /* Display Extra (Afraid) */
-#define PR_XXX2         0x00080000L     /* Display Extra (Poisoned) */
+#define PR_XXX1         0x00040000L     /* (unused) */
+#define PR_XXX2         0x00080000L     /* (unused) */
 #define PR_STATE        0x00100000L     /* Display Extra (State) */
 #define PR_SPEED        0x00200000L     /* Display Extra (Speed) */
 #define PR_STUDY        0x00400000L     /* Display Extra (Study) */

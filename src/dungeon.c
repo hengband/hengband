@@ -5361,6 +5361,7 @@ msg_format("%^sを恐怖から立ち直らせた。", m_name);
 			}
 		}
 
+		/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
 		handle_stuff();
 	}
 
@@ -5433,18 +5434,11 @@ msg_format("%^sを恐怖から立ち直らせた。", m_name);
 		p_ptr->counter = FALSE;
 		now_damaged = FALSE;
 
-		/* Notice stuff (if needed) */
-		if (p_ptr->notice) notice_stuff();
+		/* Handle "p_ptr->notice" */
+		notice_stuff();
 
-		/* Update stuff (if needed) */
-		if (p_ptr->update) update_stuff();
-
-		/* Redraw stuff (if needed) */
-		if (p_ptr->redraw) redraw_stuff();
-
-		/* Redraw stuff (if needed) */
-		if (p_ptr->window) window_stuff();
-
+		/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
+		handle_stuff();
 
 		/* Place the cursor on the player */
 		move_cursor_relative(py, px);
@@ -5495,17 +5489,11 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 			inven_item_describe(item);
 			inven_item_optimize(item);
 
-			/* Notice stuff (if needed) */
-			if (p_ptr->notice) notice_stuff();
+			/* Handle "p_ptr->notice" */
+			notice_stuff();
 
-			/* Update stuff (if needed) */
-			if (p_ptr->update) update_stuff();
-
-			/* Redraw stuff (if needed) */
-			if (p_ptr->redraw) redraw_stuff();
-
-			/* Redraw stuff (if needed) */
-			if (p_ptr->window) window_stuff();
+			/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
+			handle_stuff();
 		}
 
 
@@ -5758,6 +5746,7 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 				world_player = FALSE;
 				p_ptr->energy_need = ENERGY_NEED();
 
+				/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
 				handle_stuff();
 			}
 		}
@@ -5879,14 +5868,8 @@ static void dungeon(bool load_game)
 	/* Update monsters */
 	p_ptr->update |= (PU_MONSTERS | PU_DISTANCE | PU_FLOW);
 
-	/* Update stuff */
-	update_stuff();
-
-	/* Redraw stuff */
-	redraw_stuff();
-
-	/* Redraw stuff */
-	window_stuff();
+	/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
+	handle_stuff();
 
 	/* Leave "xtra" mode */
 	character_xtra = FALSE;
@@ -5897,17 +5880,11 @@ static void dungeon(bool load_game)
 	/* Combine / Reorder the pack */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-	/* Notice stuff */
+	/* Handle "p_ptr->notice" */
 	notice_stuff();
 
-	/* Update stuff */
-	update_stuff();
-
-	/* Redraw stuff */
-	redraw_stuff();
-
-	/* Window stuff */
-	window_stuff();
+	/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
+	handle_stuff();
 
 	/* Refresh */
 	Term_fresh();
@@ -5996,17 +5973,11 @@ msg_print("試合開始！");
 		/* Process the player */
 		process_player();
 
-		/* Notice stuff */
-		if (p_ptr->notice) notice_stuff();
+		/* Handle "p_ptr->notice" */
+		notice_stuff();
 
-		/* Update stuff */
-		if (p_ptr->update) update_stuff();
-
-		/* Redraw stuff */
-		if (p_ptr->redraw) redraw_stuff();
-
-		/* Redraw stuff */
-		if (p_ptr->window) window_stuff();
+		/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
+		handle_stuff();
 
 		/* Hack -- Hilite the player */
 		move_cursor_relative(py, px);
@@ -6020,17 +5991,11 @@ msg_print("試合開始！");
 		/* Process all of the monsters */
 		process_monsters();
 
-		/* Notice stuff */
-		if (p_ptr->notice) notice_stuff();
+		/* Handle "p_ptr->notice" */
+		notice_stuff();
 
-		/* Update stuff */
-		if (p_ptr->update) update_stuff();
-
-		/* Redraw stuff */
-		if (p_ptr->redraw) redraw_stuff();
-
-		/* Redraw stuff */
-		if (p_ptr->window) window_stuff();
+		/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
+		handle_stuff();
 
 		/* Hack -- Hilite the player */
 		move_cursor_relative(py, px);
@@ -6045,17 +6010,11 @@ msg_print("試合開始！");
 		/* Process the world */
 		process_world();
 
-		/* Notice stuff */
-		if (p_ptr->notice) notice_stuff();
+		/* Handle "p_ptr->notice" */
+		notice_stuff();
 
-		/* Update stuff */
-		if (p_ptr->update) update_stuff();
-
-		/* Redraw stuff */
-		if (p_ptr->redraw) redraw_stuff();
-
-		/* Window stuff */
-		if (p_ptr->window) window_stuff();
+		/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
+		handle_stuff();
 
 		/* Hack -- Hilite the player */
 		move_cursor_relative(py, px);
@@ -6637,18 +6596,11 @@ if (init_v_info()) quit("建築物初期化不能");
 		/* Process the level */
 		dungeon(load_game);
 
-		/* Notice stuff */
-		if (p_ptr->notice) notice_stuff();
+		/* Handle "p_ptr->notice" */
+		notice_stuff();
 
-		/* Update stuff */
-		if (p_ptr->update) update_stuff();
-
-		/* Redraw stuff */
-		if (p_ptr->redraw) redraw_stuff();
-
-		/* Window stuff */
-		if (p_ptr->window) window_stuff();
-
+		/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
+		handle_stuff();
 
 		/* Cancel the target */
 		target_who = 0;

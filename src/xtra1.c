@@ -5731,11 +5731,6 @@ void redraw_stuff(void)
 		prt_dungeon();
 	}
 
-	if (p_ptr->redraw & (PR_DUNGEON))
-	{
-		p_ptr->redraw &= ~(PR_DUNGEON);
-	}
-
 	if (p_ptr->redraw & (PR_EQUIPPY))
 	{
 		p_ptr->redraw &= ~(PR_EQUIPPY);
