@@ -3126,7 +3126,7 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 	 */
 	byte color = TERM_YELLOW;
 	char buf[MAX_NLEN+20];
-	const size_t len = 80;
+	const int len = 80;
 
 #ifdef JP
 	char prompt[] = "検索(^I:持ち物 ^L:破壊された物): ";
