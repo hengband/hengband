@@ -5260,9 +5260,9 @@ static bool do_cmd_histpref(void)
 	histpref_buf = histbuf;
 
 #ifdef JP
-	sprintf(buf, "histedit-%s.prf", player_name);
+	sprintf(buf, "histedit-%s.prf", player_base);
 #else
-	sprintf(buf, "histpref-%s.prf", player_name);
+	sprintf(buf, "histpref-%s.prf", player_base);
 #endif
 	err = process_histpref_file(buf);
 
@@ -6223,6 +6223,9 @@ static bool player_birth_aux(void)
 	/* Get a name, recolor it, prepare savefile */
 	get_name();
 
+	/* Process the player name (accept as savefile name) */
+	process_player_name(TRUE);
+
 	/*** Edit character background ***/
 	edit_history();
 
@@ -6256,9 +6259,6 @@ static bool player_birth_aux(void)
 	/* Save character data for quick start */
 	save_prev_data(&previous_char);
 	previous_char.quick_ok = TRUE;
-
-	/* Process the player name */
-	process_player_name(FALSE);
 
 	/* Accept */
 	return (TRUE);

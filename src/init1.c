@@ -4301,7 +4301,22 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
 			/* Player name */
 			else if (streq(b+1, "PLAYER"))
 			{
-				v = player_base;
+				static char tmp_player_name[32];
+				char *pn, *tpn;
+				for (pn = player_name, tpn = tmp_player_name; *pn; pn++, tpn++)
+				{
+#ifdef JP
+					if (iskanji(*pn))
+					{
+						*(tpn++) = *(pn++);
+						*tpn = *pn;
+						continue;
+					}
+#endif
+					*tpn = my_strchr(" []", *pn) ? '_' : *pn;
+				}
+				*tpn = '\0';
+				v = tmp_player_name;
 			}
 
 			/* Town */

@@ -1021,7 +1021,22 @@ cptr process_pref_file_expr(char **sp, char *fp)
 			/* Player */
 			else if (streq(b+1, "PLAYER"))
 			{
-				v = player_base;
+				static char tmp_player_name[32];
+				char *pn, *tpn;
+				for (pn = player_name, tpn = tmp_player_name; *pn; pn++, tpn++)
+				{
+#ifdef JP
+					if (iskanji(*pn))
+					{
+						*(tpn++) = *(pn++);
+						*tpn = *pn;
+						continue;
+					}
+#endif
+					*tpn = my_strchr(" []", *pn) ? '_' : *pn;
+				}
+				*tpn = '\0';
+				v = tmp_player_name;
 			}
 
 			/* First realm */
@@ -5979,9 +5994,11 @@ quit_fmt("'%s' という名前は不正なコントロールコードを含んでいます。", player_nam
 			player_base[k++] = '_';
 			i += strlen(PATH_SEP);
 		}
+		/* Convert some characters to underscore */
 #ifdef MSDOS
-		/* Convert space, dot, and underscore to underscore */
-		else if (my_strchr(". _", c)) player_base[k++] = '_';
+		else if (my_strchr(" \"*+,./:;<=>?[\\]|", c)) player_base[k++] = '_';
+#elif defined(WINDOWS)
+		else if (my_strchr("\"*,/:;<>?\\|", c)) player_base[k++] = '_';
 #endif
 		else if (isprint(c)) player_base[k++] = c;
 	}
