@@ -245,7 +245,7 @@ D:怒らせなければ全く無害だ。
 
 #JZ#
 #JZ#(コメント)訳は 紫月閑丸さん
-N:4:ズオアオトリ
+N:4:ズアオアトリ
 E:Chaffinch
 G:B:r
 I:110:1d1:30:1:10
@@ -254,7 +254,7 @@ B:BITE:HURT:1d3
 F:RAND_25 | CAN_FLY | WILD_ONLY | WILD_WOOD | WILD_GRASS
 F:ANIMAL | DROP_SKELETON
 D:$Utterly harmless, except when angry.
-D:怒らせなければ全く無害だ。
+D:頭青花鶏。怒らせなければ全く無害だ。
 
 #JZ#
 N:5:野うさぎ
