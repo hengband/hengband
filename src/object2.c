@@ -1001,6 +1001,7 @@ s32b flag_cost(object_type * o_ptr, int plusses)
 	if (f3 & TR3_TELEPATHY) total += 20000;
 	if (f3 & TR3_SLOW_DIGEST) total += 750;
 	if (f3 & TR3_REGEN) total += 2500;
+	if (f3 & TR3_WARNING) total += 2000;
 	if (f3 & TR3_XTRA_MIGHT) total += 2250;
 	if (f3 & TR3_XTRA_SHOTS) total += 10000;
 	if (f3 & TR3_IGNORE_ACID) total += 100;
@@ -6169,11 +6170,40 @@ void display_koff(int k_idx)
 	}
 }
 
+/* Choose one of items that have warning flag */
+object_type *choose_warning_item(void)
+{
+	int i;
+	int choices[INVEN_TOTAL-INVEN_RARM];
+	int number = 0;
+
+	/* Paranoia -- Player has no warning-item */
+	if (!p_ptr->warning) return (NULL);
+
+	/* Search Inventry */
+	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
+	{
+		u32b f1, f2, f3;
+		object_type *o_ptr = &inventory[i];
+
+		object_flags(o_ptr, &f1, &f2, &f3);
+		if (f3 & (TR3_WARNING))
+		{
+			choices[number] = i;
+			number++;
+		}
+	}
+
+	/* Choice one of them */
+	return (&inventory[choices[rand_int(number)]]);
+}
+
 /* Examine the grid (xx,yy) and warn the player if there are any danger */
 bool process_frakir(int xx, int yy)
 {
 	int mx,my;
 	cave_type *c_ptr;
+	char o_name[MAX_NLEN];
 
 #define FRAKIR_AWARE_RANGE 12
 	int dam_max = 0;
@@ -6183,28 +6213,33 @@ bool process_frakir(int xx, int yy)
 	{
 		for (my = yy-FRAKIR_AWARE_RANGE; my < yy+FRAKIR_AWARE_RANGE+1; my++)
 		{
+			int dam_max0=0;
+			monster_type *m_ptr;
+			monster_race *r_ptr;
+			u32b f4, f5, f6;
+			int rlev;
+
 			if (!in_bounds(my,mx) || (distance(my,mx,yy,xx)>FRAKIR_AWARE_RANGE)) continue;
 
 			c_ptr = &cave[my][mx];
-			if (c_ptr->m_idx > 0)
+
+			if (!c_ptr->m_idx) continue;
+
+			m_ptr = &m_list[c_ptr->m_idx];
+			r_ptr = &r_info[m_ptr->r_idx];
+
+			f4 = r_ptr->flags4;
+			f5 = r_ptr->flags5;
+			f6 = r_ptr->flags6;
+
+			rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+
+			if (m_ptr->csleep) continue;
+			if (is_pet(m_ptr)) continue;
+
+			/* Monster spells (only powerful ones)*/
+			if(projectable(my,mx,yy,xx))
 			{
-				int dam_max0=0;
-				int m_idx = c_ptr->m_idx;
-				monster_type *m_ptr = &m_list[m_idx];
-				monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-				u32b f4 = r_ptr->flags4;
-				u32b f5 = r_ptr->flags5;
-				u32b f6 = r_ptr->flags6;
-
-				int rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-
-				if (m_ptr->csleep) continue;
-				if (is_pet(m_ptr)) continue;
-
-				/* Monster spells (only powerful ones)*/
-				if(projectable(my,mx,yy,xx))
-				{
 
 #define DAMCALC(f,val,max,im,vln,res,resx,resy,op,opx,opy,dmax) \
 	   if (f){ int dam = (val)>(max)? (max):(val); \
@@ -6215,130 +6250,126 @@ bool process_frakir(int xx, int yy)
            if (dam>dmax) dmax = dam; \
            }
 
-					DAMCALC(f4 & (RF4_BR_FIRE), m_ptr->hp / 3, 1600, 
-						p_ptr->immune_fire, p_ptr->muta3 & MUT3_VULN_ELEM,
-						p_ptr->resist_fire, 1, 3,
-						p_ptr->oppose_fire, 1, 3, dam_max0);
+				DAMCALC(f4 & (RF4_BR_FIRE), m_ptr->hp / 3, 1600, 
+					p_ptr->immune_fire, p_ptr->muta3 & MUT3_VULN_ELEM,
+					p_ptr->resist_fire, 1, 3,
+					p_ptr->oppose_fire, 1, 3, dam_max0);
 
-					DAMCALC(f4 & (RF4_BR_COLD), m_ptr->hp / 3, 1600, 
-						p_ptr->immune_cold, p_ptr->muta3 & MUT3_VULN_ELEM,
-						p_ptr->resist_cold, 1, 3,
-						p_ptr->oppose_cold, 1, 3, dam_max0);
+				DAMCALC(f4 & (RF4_BR_COLD), m_ptr->hp / 3, 1600, 
+					p_ptr->immune_cold, p_ptr->muta3 & MUT3_VULN_ELEM,
+					p_ptr->resist_cold, 1, 3,
+					p_ptr->oppose_cold, 1, 3, dam_max0);
 
-					DAMCALC(f4 & (RF4_BR_ELEC), m_ptr->hp / 3, 1600, 
-						p_ptr->immune_elec, p_ptr->muta3 & MUT3_VULN_ELEM,
-						p_ptr->resist_elec, 1, 3,
-						p_ptr->oppose_elec, 1, 3, dam_max0);
+				DAMCALC(f4 & (RF4_BR_ELEC), m_ptr->hp / 3, 1600, 
+					p_ptr->immune_elec, p_ptr->muta3 & MUT3_VULN_ELEM,
+					p_ptr->resist_elec, 1, 3,
+					p_ptr->oppose_elec, 1, 3, dam_max0);
 
-					DAMCALC(f4 & (RF4_BR_ACID), m_ptr->hp / 3, 1600, 
-						p_ptr->immune_acid, p_ptr->muta3 & MUT3_VULN_ELEM,
-						p_ptr->resist_acid, 1, 3,
-						p_ptr->oppose_acid, 1, 3, dam_max0);
+				DAMCALC(f4 & (RF4_BR_ACID), m_ptr->hp / 3, 1600, 
+					p_ptr->immune_acid, p_ptr->muta3 & MUT3_VULN_ELEM,
+					p_ptr->resist_acid, 1, 3,
+					p_ptr->oppose_acid, 1, 3, dam_max0);
 
-					DAMCALC(f4 & (RF4_BR_POIS), m_ptr->hp / 3, 800,
-						FALSE , FALSE,
-						p_ptr->resist_pois, 1, 3,
-						p_ptr->oppose_pois, 1, 3, dam_max0);
-
-
-					DAMCALC(f4 & (RF4_BR_NETH), m_ptr->hp / 6, 550, FALSE , FALSE,
-						p_ptr->resist_neth, 6, 9, FALSE, 1, 1, dam_max0);
-
-					DAMCALC(f4 & (RF4_BR_LITE), m_ptr->hp / 6, 400, FALSE , FALSE,
-						p_ptr->resist_lite, 4, 9, FALSE, 1, 1, dam_max0);
-
-					DAMCALC(f4 & (RF4_BR_DARK), m_ptr->hp / 6, 400, FALSE , FALSE,
-						p_ptr->resist_dark, 4, 9, FALSE, 1, 1, dam_max0);
-
-					DAMCALC(f4 & (RF4_BR_CONF), m_ptr->hp / 6, 450, FALSE , FALSE,
-						p_ptr->resist_conf, 5, 9, FALSE, 1, 1, dam_max0);
-
-					DAMCALC(f4 & (RF4_BR_SOUN), m_ptr->hp / 6, 450, FALSE , FALSE,
-						p_ptr->resist_sound, 5, 9, FALSE, 1, 1, dam_max0);
-
-					DAMCALC(f4 & (RF4_BR_CHAO), m_ptr->hp / 6, 600, FALSE , FALSE,
-						p_ptr->resist_chaos, 6, 9, FALSE, 1, 1, dam_max0);
-
-					DAMCALC(f4 & (RF4_BR_DISE), m_ptr->hp / 6, 500, FALSE , FALSE,
-						p_ptr->resist_disen, 6, 9, FALSE, 1, 1, dam_max0);
-
-					DAMCALC(f4 & (RF4_BR_NEXU), m_ptr->hp / 3, 250, FALSE , FALSE,
-						p_ptr->resist_nexus, 6, 9, FALSE, 1, 1, dam_max0);
-
-					DAMCALC(f4 & (RF4_BR_TIME), m_ptr->hp / 3, 150, FALSE , FALSE,
-						FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-					DAMCALC(f4 & (RF4_BR_INER), m_ptr->hp / 6, 200, FALSE , FALSE,
-						FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-					DAMCALC(f4 & (RF4_BR_GRAV), m_ptr->hp / 3, 200, FALSE , FALSE,
-						FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-					DAMCALC(f4 & (RF4_BR_SHAR), m_ptr->hp / 6, 500, FALSE , FALSE,
-						p_ptr->resist_shard, 6, 9, FALSE, 1, 1, dam_max0);
-
-					DAMCALC(f4 & (RF4_BR_PLAS), m_ptr->hp / 6, 150, FALSE , FALSE,
-						FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-					DAMCALC(f4 & (RF4_BR_WALL), m_ptr->hp / 6, 200, FALSE , FALSE,
-						FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-					DAMCALC(f4 & (RF4_BR_MANA), m_ptr->hp / 3, 250, FALSE , FALSE,
-						FALSE, 1, 1, FALSE, 1, 1, dam_max0);
-
-					DAMCALC(f4 & (RF4_BR_NUKE), m_ptr->hp / 3, 800, FALSE , FALSE,
-						p_ptr->resist_pois, 2, 5, 
-						p_ptr->oppose_pois, 2, 5, dam_max0);
-
-					DAMCALC(f4 & (RF4_BR_DISI), m_ptr->hp / 3, 300, FALSE , FALSE,
-						FALSE, 1, 1, FALSE, 1, 1, dam_max0);
+				DAMCALC(f4 & (RF4_BR_POIS), m_ptr->hp / 3, 800,
+					FALSE , FALSE,
+					p_ptr->resist_pois, 1, 3,
+					p_ptr->oppose_pois, 1, 3, dam_max0);
 
 
-					DAMCALC(f4 & (RF4_ROCKET), m_ptr->hp / 4, 800, FALSE , FALSE,
-						p_ptr->resist_shard, 1, 2, FALSE, 1, 1, dam_max0);
+				DAMCALC(f4 & (RF4_BR_NETH), m_ptr->hp / 6, 550, FALSE , FALSE,
+					p_ptr->resist_neth, 6, 9, FALSE, 1, 1, dam_max0);
 
-					DAMCALC(f5 & (RF5_BA_MANA), rlev*4 + 150, 9999, FALSE , FALSE,
-						FALSE, 1, 1, FALSE, 1, 1, dam_max0);
+				DAMCALC(f4 & (RF4_BR_LITE), m_ptr->hp / 6, 400, FALSE , FALSE,
+					p_ptr->resist_lite, 4, 9, FALSE, 1, 1, dam_max0);
 
-					DAMCALC(f5 & (RF5_BA_DARK), rlev*4 + 150, 9999, FALSE , FALSE,
-						p_ptr->resist_dark, 4, 9, FALSE, 1, 1, dam_max0);
+				DAMCALC(f4 & (RF4_BR_DARK), m_ptr->hp / 6, 400, FALSE , FALSE,
+					p_ptr->resist_dark, 4, 9, FALSE, 1, 1, dam_max0);
 
-					DAMCALC(f5 & (RF5_BA_LITE), rlev*4 + 150, 9999, FALSE , FALSE,
-						p_ptr->resist_lite, 4, 9, FALSE, 1, 1, dam_max0);
+				DAMCALC(f4 & (RF4_BR_CONF), m_ptr->hp / 6, 450, FALSE , FALSE,
+					p_ptr->resist_conf, 5, 9, FALSE, 1, 1, dam_max0);
+
+				DAMCALC(f4 & (RF4_BR_SOUN), m_ptr->hp / 6, 450, FALSE , FALSE,
+					p_ptr->resist_sound, 5, 9, FALSE, 1, 1, dam_max0);
+
+				DAMCALC(f4 & (RF4_BR_CHAO), m_ptr->hp / 6, 600, FALSE , FALSE,
+					p_ptr->resist_chaos, 6, 9, FALSE, 1, 1, dam_max0);
+
+				DAMCALC(f4 & (RF4_BR_DISE), m_ptr->hp / 6, 500, FALSE , FALSE,
+					p_ptr->resist_disen, 6, 9, FALSE, 1, 1, dam_max0);
+
+				DAMCALC(f4 & (RF4_BR_NEXU), m_ptr->hp / 3, 250, FALSE , FALSE,
+					p_ptr->resist_nexus, 6, 9, FALSE, 1, 1, dam_max0);
+
+				DAMCALC(f4 & (RF4_BR_TIME), m_ptr->hp / 3, 150, FALSE , FALSE,
+					FALSE, 1, 1, FALSE, 1, 1, dam_max0);
+
+				DAMCALC(f4 & (RF4_BR_INER), m_ptr->hp / 6, 200, FALSE , FALSE,
+					FALSE, 1, 1, FALSE, 1, 1, dam_max0);
+
+				DAMCALC(f4 & (RF4_BR_GRAV), m_ptr->hp / 3, 200, FALSE , FALSE,
+					FALSE, 1, 1, FALSE, 1, 1, dam_max0);
+
+				DAMCALC(f4 & (RF4_BR_SHAR), m_ptr->hp / 6, 500, FALSE , FALSE,
+					p_ptr->resist_shard, 6, 9, FALSE, 1, 1, dam_max0);
+
+				DAMCALC(f4 & (RF4_BR_PLAS), m_ptr->hp / 6, 150, FALSE , FALSE,
+					FALSE, 1, 1, FALSE, 1, 1, dam_max0);
+
+				DAMCALC(f4 & (RF4_BR_WALL), m_ptr->hp / 6, 200, FALSE , FALSE,
+					FALSE, 1, 1, FALSE, 1, 1, dam_max0);
+
+				DAMCALC(f4 & (RF4_BR_MANA), m_ptr->hp / 3, 250, FALSE , FALSE,
+					FALSE, 1, 1, FALSE, 1, 1, dam_max0);
+
+				DAMCALC(f4 & (RF4_BR_NUKE), m_ptr->hp / 3, 800, FALSE , FALSE,
+					p_ptr->resist_pois, 2, 5, 
+					p_ptr->oppose_pois, 2, 5, dam_max0);
+
+				DAMCALC(f4 & (RF4_BR_DISI), m_ptr->hp / 3, 300, FALSE , FALSE,
+					FALSE, 1, 1, FALSE, 1, 1, dam_max0);
 
 
-					DAMCALC(f4 & (RF4_ROCKET),m_ptr->hp / 4, 800, FALSE , FALSE,
-						p_ptr->resist_shard, 1, 2, FALSE, 1, 1, dam_max0);
+				DAMCALC(f4 & (RF4_ROCKET), m_ptr->hp / 4, 800, FALSE , FALSE,
+					p_ptr->resist_shard, 1, 2, FALSE, 1, 1, dam_max0);
 
-					DAMCALC(f6 & (RF6_HAND_DOOM), p_ptr->chp*6/10, 9999, FALSE , FALSE,
-						FALSE, 1, 1, FALSE, 1, 1, dam_max0);
+				DAMCALC(f5 & (RF5_BA_MANA), rlev*4 + 150, 9999, FALSE , FALSE,
+					FALSE, 1, 1, FALSE, 1, 1, dam_max0);
 
-				}
+				DAMCALC(f5 & (RF5_BA_DARK), rlev*4 + 150, 9999, FALSE , FALSE,
+					p_ptr->resist_dark, 4, 9, FALSE, 1, 1, dam_max0);
 
-				/* Monster melee attacks */
-				if(mx <= xx+1 && mx >= xx-1 && my <=yy+1 && my >= yy-1)
-				{
-					int m;
-					int dam_melee=0;
-					for (m = 0; m < 4; m++)
-					{
-						int d1, d2;
+				DAMCALC(f5 & (RF5_BA_LITE), rlev*4 + 150, 9999, FALSE , FALSE,
+					p_ptr->resist_lite, 4, 9, FALSE, 1, 1, dam_max0);
 
-						/* Skip non-attacks */
-						if (!r_ptr->blow[m].method) continue;
 
-						/* Extract the attack info */
-						d1 = r_ptr->blow[m].d_dice;
-						d2 = r_ptr->blow[m].d_side;
+				DAMCALC(f6 & (RF6_HAND_DOOM), p_ptr->chp*6/10, 9999, FALSE , FALSE,
+					FALSE, 1, 1, FALSE, 1, 1, dam_max0);
 
-						dam_melee += d1*d2;
-					}
-					if(dam_melee>dam_max0)dam_max0=dam_melee;
-				}
-
-				/* Contribution from this monster */
-				dam_max+=dam_max0;
 			}
+
+			/* Monster melee attacks */
+			if(mx <= xx+1 && mx >= xx-1 && my <=yy+1 && my >= yy-1)
+			{
+				int m;
+				int dam_melee=0;
+				for (m = 0; m < 4; m++)
+				{
+					int d1, d2;
+
+					/* Skip non-attacks */
+					if (!r_ptr->blow[m].method) continue;
+
+					/* Extract the attack info */
+					d1 = r_ptr->blow[m].d_dice;
+					d2 = r_ptr->blow[m].d_side;
+
+					dam_melee += d1*d2;
+				}
+				if(dam_melee>dam_max0)dam_max0=dam_melee;
+			}
+
+			/* Contribution from this monster */
+			dam_max+=dam_max0;
 		}
 	}
 
@@ -6349,10 +6380,13 @@ bool process_frakir(int xx, int yy)
 
 		if (dam_max>(p_ptr->chp)/2)
 		{
+			object_type *o_ptr = choose_warning_item();
+
+			object_desc(o_name, o_ptr, FALSE, 0);
 #ifdef JP
-			msg_print("指輪が鋭く震えた！");
+			msg_format("%sが鋭く震えた！", o_name);
 #else
-			msg_print("The Ring pulsates sharply!");
+			msg_format("%s pulsates sharply!", o_name);
 #endif
 			disturb(0,0);
 #ifdef JP
@@ -6367,10 +6401,13 @@ bool process_frakir(int xx, int yy)
 	c_ptr = &cave[yy][xx];
 	if (((is_trap(c_ptr->feat) && !easy_disarm) || (c_ptr->info & CAVE_TRAP)) && randint(13)!=1)
 	{
+		object_type *o_ptr = choose_warning_item();
+
+		object_desc(o_name, o_ptr, FALSE, 0);
 #ifdef JP
-		msg_print("指輪が震えた！");
+		msg_format("%sが震えた！", o_name);
 #else
-		msg_print("The Ring pulsates!");
+		msg_format("%s pulsates!", o_name);
 #endif
 		disturb(0,0);
 #ifdef JP

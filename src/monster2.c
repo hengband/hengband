@@ -2956,9 +2956,12 @@ msg_print("守りのルーンが壊れた！");
 
 	if (p_ptr->warning && character_dungeon)
 	{
-		cptr color;
 		if (r_ptr->flags1 & RF1_UNIQUE)
 		{
+			cptr color;
+			object_type *o_ptr;
+			char o_name[MAX_NLEN];
+
 			if (r_ptr->level > p_ptr->lev + 30)
 #ifdef JP
 				color = "黒く";
@@ -2995,10 +2998,13 @@ msg_print("守りのルーンが壊れた！");
 #else
 				color = "white";
 #endif
+
+			o_ptr = choose_warning_item();
+			object_desc(o_name, o_ptr, FALSE, 0);
 #ifdef JP
-			msg_format("指輪は%s光った。",color);
+			msg_format("%sは%s光った。",o_name, color);
 #else
-			msg_format("Your ring glows %s.",color);
+			msg_format("%s glows %s.",o_name, color);
 #endif
 		}
 	}

@@ -188,7 +188,7 @@ void object_flags(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3)
 					case 0: (*f3) |= (TR3_FEATHER);     break;
 					case 1: (*f3) |= (TR3_LITE);        break;
 					case 2: (*f3) |= (TR3_SEE_INVIS);   break;
-					case 3: (*f3) |= (TR3_TELEPATHY);   break;
+					case 3: (*f3) |= (TR3_WARNING);     break;
 					case 4: (*f3) |= (TR3_SLOW_DIGEST); break;
 					case 5: (*f3) |= (TR3_REGEN);       break;
 					case 6: (*f2) |= (TR2_FREE_ACT);    break;
@@ -387,7 +387,7 @@ void object_flags_known(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3)
 						case 0: (*f3) |= (TR3_FEATHER);     break;
 						case 1: (*f3) |= (TR3_LITE);        break;
 						case 2: (*f3) |= (TR3_SEE_INVIS);   break;
-						case 3: (*f3) |= (TR3_TELEPATHY);   break;
+						case 3: (*f3) |= (TR3_WARNING);     break;
 						case 4: (*f3) |= (TR3_SLOW_DIGEST); break;
 						case 5: (*f3) |= (TR3_REGEN);       break;
 						case 6: (*f2) |= (TR2_FREE_ACT);    break;
@@ -3410,6 +3410,15 @@ info[i++] = "それはあなたの新陳代謝を遅くする。";
 info[i++] = "それは体力回復力を強化する。";
 #else
 		info[i++] = "It speeds your regenerative powers.";
+#endif
+
+	}
+	if (f3 & (TR3_WARNING))
+	{
+#ifdef JP
+info[i++] = "それは危険に対して警告を発する。";
+#else
+		info[i++] = "XXX";
 #endif
 
 	}

@@ -809,6 +809,7 @@ static const flag_desc misc_flags3_desc[] =
 	{ TR3_TELEPATHY,          "¥Æ¥ì¥Ñ¥·¡¼" },
 	{ TR3_SLOW_DIGEST,        "ÃÙ¾Ã²½" },
 	{ TR3_REGEN,              "µÞÂ®²óÉü" },
+	{ TR3_WARNING,            "·Ù¹ð" },
 /*	{ TR3_XTRA_MIGHT,         "¶¯ÎÏ¼Í·â" }, */
 	{ TR3_XTRA_SHOTS,         "ÄÉ²Ã¼Í·â" },        /* always +1? */
 	{ TR3_DRAIN_EXP,          "·Ð¸³ÃÍµÛ¼ý" },
@@ -826,6 +827,7 @@ static const flag_desc misc_flags3_desc[] =
 	{ TR3_TELEPATHY,          "ESP" },
 	{ TR3_SLOW_DIGEST,        "Slow Digestion" },
 	{ TR3_REGEN,              "Regeneration" },
+	{ TR3_WARNING,            "Warning" },
 /*	{ TR3_XTRA_MIGHT,         "Extra Might" }, */
 	{ TR3_XTRA_SHOTS,         "+1 Extra Shot" },        /* always +1? */
 	{ TR3_DRAIN_EXP,          "Drains Experience" },

@@ -578,7 +578,7 @@ static cptr k_info_flags3[] =
 	"NO_MAGIC",
 	"DEC_MANA",
 	"TY_CURSE",
-	"XXX1",
+	"WARNING",
 	"HIDE_TYPE",
 	"SHOW_MODS",
 	"INSTA_ART",
