@@ -1335,10 +1335,9 @@
 #define F_LIT_STANDARD 0 /* Standard */
 #define F_LIT_LITE     1 /* Brightly lit */
 #define F_LIT_DARK     2 /* Darkened */
-#define F_LIT_DARKDARK 3 /* Darkly darkened */
 
 #define F_LIT_NS_BEGIN 1 /* Nonstandard */
-#define F_LIT_MAX      4
+#define F_LIT_MAX      3
 
 
 /*** Artifact indexes (see "lib/edit/a_info.txt") ***/

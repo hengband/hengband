@@ -3580,12 +3580,10 @@ static cptr lighting_level_str[F_LIT_MAX] =
 	"標準色",
 	"明色",
 	"暗色",
-	"暗暗色",
 #else
 	"standard",
 	"brightly lit",
 	"darkened",
-	"darkly darkened",
 #endif
 };
 
@@ -3932,11 +3930,10 @@ void do_cmd_visuals(void)
 				auto_dump_printf("# %s\n", (f_name + f_ptr->name));
 
 				/* Dump the feature attr/char info */
-				auto_dump_printf("F:%d:0x%02X/0x%02X:0x%02X/0x%02X:0x%02X/0x%02X:0x%02X/0x%02X\n\n", i,
+				auto_dump_printf("F:%d:0x%02X/0x%02X:0x%02X/0x%02X:0x%02X/0x%02X\n\n", i,
 					(byte)(f_ptr->x_attr[F_LIT_STANDARD]), (byte)(f_ptr->x_char[F_LIT_STANDARD]),
 					(byte)(f_ptr->x_attr[F_LIT_LITE]), (byte)(f_ptr->x_char[F_LIT_LITE]),
-					(byte)(f_ptr->x_attr[F_LIT_DARK]), (byte)(f_ptr->x_char[F_LIT_DARK]),
-					(byte)(f_ptr->x_attr[F_LIT_DARKDARK]), (byte)(f_ptr->x_char[F_LIT_DARKDARK]));
+					(byte)(f_ptr->x_attr[F_LIT_DARK]), (byte)(f_ptr->x_char[F_LIT_DARK]));
 			}
 
 			/* Close */
@@ -8313,10 +8310,10 @@ static void display_feature_list(int col, int row, int per_page, int *feat_idx,
 	int feat_cur, int feat_top, bool visual_only, int lighting_level)
 {
 	int lit_col[F_LIT_MAX], i, j;
-	int f_idx_col = use_bigtile ? 59 : 62;
+	int f_idx_col = use_bigtile ? 62 : 64;
 
 	/* Correct columns 1 and 4 */
-	lit_col[F_LIT_STANDARD] = use_bigtile ? (69 - F_LIT_MAX) : 69;
+	lit_col[F_LIT_STANDARD] = use_bigtile ? (71 - F_LIT_MAX) : 71;
 	for (i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++)
 		lit_col[i] = lit_col[F_LIT_STANDARD] + 2 + (i - F_LIT_NS_BEGIN) * 2 + (use_bigtile ? i : 0);
 
@@ -8483,13 +8480,13 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, int d
 			prt("名前", 4, max + 3);
 			if (use_bigtile)
 			{
-				if (p_ptr->wizard || visual_only) prt("Idx", 4, 59);
-				prt("文字 ( l/ d/ D)", 4, 63);
+				if (p_ptr->wizard || visual_only) prt("Idx", 4, 62);
+				prt("文字 ( l/ d)", 4, 66);
 			}
 			else
 			{
-				if (p_ptr->wizard || visual_only) prt("Idx", 4, 62);
-				prt("文字 (l/d/D)", 4, 66);
+				if (p_ptr->wizard || visual_only) prt("Idx", 4, 64);
+				prt("文字 (l/d)", 4, 68);
 			}
 #else
 			prt("Visuals - features", 2, 0);
@@ -8497,13 +8494,13 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, int d
 			prt("Name", 4, max + 3);
 			if (use_bigtile)
 			{
-				if (p_ptr->wizard || visual_only) prt("Idx", 4, 59);
-				prt("Sym ( l/ d/ D)", 4, 64);
+				if (p_ptr->wizard || visual_only) prt("Idx", 4, 62);
+				prt("Sym ( l/ d)", 4, 67);
 			}
 			else
 			{
-				if (p_ptr->wizard || visual_only) prt("Idx", 4, 62);
-				prt("Sym (l/d/D)", 4, 67);
+				if (p_ptr->wizard || visual_only) prt("Idx", 4, 64);
+				prt("Sym (l/d)", 4, 69);
 			}
 #endif
 

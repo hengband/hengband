@@ -1556,15 +1556,14 @@ errr parse_f_info(char *buf, header *head)
 			/* G:c:a:LIT (default) */
 			apply_default_feat_lighting(f_ptr->d_attr, f_ptr->d_char);
 
-			/* G:c:a:lc:la:dc:da:Dc:Da */
+			/* G:c:a:lc:la:dc:da */
 			if (!streq(buf + 6, "LIT"))
 			{
 				char attr_lite_tmp[F_LIT_MAX - F_LIT_NS_BEGIN];
 
-				if ((F_LIT_MAX - F_LIT_NS_BEGIN) * 2 != sscanf(buf + 6, "%c:%c:%c:%c:%c:%c",
+				if ((F_LIT_MAX - F_LIT_NS_BEGIN) * 2 != sscanf(buf + 6, "%c:%c:%c:%c",
 					&char_tmp[F_LIT_LITE], &attr_lite_tmp[F_LIT_LITE - F_LIT_NS_BEGIN],
-					&char_tmp[F_LIT_DARK], &attr_lite_tmp[F_LIT_DARK - F_LIT_NS_BEGIN],
-					&char_tmp[F_LIT_DARKDARK], &attr_lite_tmp[F_LIT_DARKDARK - F_LIT_NS_BEGIN])) return 1;
+					&char_tmp[F_LIT_DARK], &attr_lite_tmp[F_LIT_DARK - F_LIT_NS_BEGIN])) return 1;
 				if (buf[F_LIT_MAX * 4 + 1]) return 1;
 
 				for (j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++)

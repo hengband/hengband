@@ -458,13 +458,13 @@ errr process_pref_file_command(char *buf)
 	/* Process "F:<num>:<a>/<c>" -- attr/char for terrain features */
 	/* "F:<num>:<a>/<c>" */
 	/* "F:<num>:<a>/<c>:LIT" */
-	/* "F:<num>:<a>/<c>:<la>/<lc>:<da>/<dc>:<Da>/<Dc>" */
+	/* "F:<num>:<a>/<c>:<la>/<lc>:<da>/<dc>" */
 	case 'F':
 		{
 			feature_type *f_ptr;
-			int num = tokenize(buf + 2, 9, zz, TOKENIZE_CHECKQUOTE);
+			int num = tokenize(buf + 2, F_LIT_MAX * 2 + 1, zz, TOKENIZE_CHECKQUOTE);
 
-			if ((num != 3) && (num != 4) && (num != 9)) return 1;
+			if ((num != 3) && (num != 4) && (num != F_LIT_MAX * 2 + 1)) return 1;
 			else if ((num == 4) && !streq(zz[3], "LIT")) return 1;
 
 			i = (huge)strtol(zz[0], NULL, 0);
@@ -496,7 +496,7 @@ errr process_pref_file_command(char *buf)
 				break;
 
 			/* Use desired lighting */
-			case 9:
+			case F_LIT_MAX * 2 + 1:
 				for (j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++)
 				{
 					n1 = strtol(zz[j * 2 + 1], NULL, 0);
