@@ -1643,6 +1643,10 @@ static errr init_feat_variables(void)
 	}
 	if (!num_jammed_door) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
 
+	/* Curtains */
+	feat_open_curtain = f_tag_to_index_in_init("OPEN_CURTAIN");
+	feat_closed_curtain = f_tag_to_index_in_init("CLOSED_CURTAIN");
+
 	/* Stairs */
 	feat_up_stair = f_tag_to_index_in_init("UP_STAIR");
 	feat_down_stair = f_tag_to_index_in_init("DOWN_STAIR");

@@ -100,17 +100,20 @@ static void place_secret_door(int y, int x)
 		/* Create secret door */
 		place_closed_door(y, x);
 
-		/* Hide by inner wall because this is used in rooms only */
-		c_ptr->mimic = feat_wall_inner;
-
-		/* Floor type terrain cannot hide a door */
-		if (feat_supports_los(c_ptr->mimic) && !feat_supports_los(c_ptr->feat))
+		if (c_ptr->feat != feat_closed_curtain)
 		{
-			if (have_flag(f_info[c_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[c_ptr->mimic].flags, FF_CAN_FLY))
+			/* Hide by inner wall because this is used in rooms only */
+			c_ptr->mimic = feat_wall_inner;
+
+			/* Floor type terrain cannot hide a door */
+			if (feat_supports_los(c_ptr->mimic) && !feat_supports_los(c_ptr->feat))
 			{
-				c_ptr->feat = one_in_(2) ? c_ptr->mimic : floor_type[randint0(100)];
+				if (have_flag(f_info[c_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[c_ptr->mimic].flags, FF_CAN_FLY))
+				{
+					c_ptr->feat = one_in_(2) ? c_ptr->mimic : floor_type[randint0(100)];
+				}
+				c_ptr->mimic = 0;
 			}
-			c_ptr->mimic = 0;
 		}
 
 		c_ptr->info &= ~(CAVE_FLOOR);
@@ -478,6 +481,9 @@ static bool build_type1(void)
 
 	cave_type *c_ptr;
 
+	bool curtain = (d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
+		one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 48 : 512);
+
 	/* Pick a room size */
 	y1 = randint1(4);
 	x1 = randint1(11);
@@ -543,6 +549,30 @@ static bool build_type1(void)
 	}
 
 
+	/* Hack -- Occasional curtained room */
+	if (curtain && (y2 - y1 > 2) && (x2 - x1 > 2))
+	{
+		for (y = y1; y <= y2; y++)
+		{
+			c_ptr = &cave[y][x1];
+			c_ptr->feat = feat_closed_curtain;
+			c_ptr->info &= ~(CAVE_MASK);
+			c_ptr = &cave[y][x2];
+			c_ptr->feat = feat_closed_curtain;
+			c_ptr->info &= ~(CAVE_MASK);
+		}
+		for (x = x1; x <= x2; x++)
+		{
+			c_ptr = &cave[y1][x];
+			c_ptr->feat = feat_closed_curtain;
+			c_ptr->info &= ~(CAVE_MASK);
+			c_ptr = &cave[y2][x];
+			c_ptr->feat = feat_closed_curtain;
+			c_ptr->info &= ~(CAVE_MASK);
+		}
+	}
+
+
 	/* Hack -- Occasional pillar room */
 	if (one_in_(20))
 	{
@@ -596,12 +626,16 @@ static bool build_type1(void)
 	/* Hack -- Occasional divided room */
 	else if (one_in_(50))
 	{
+		bool curtain2 = (d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
+			one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 2 : 128);
+
 		if (randint1(100) < 50)
 		{
 			/* Horizontal wall */
 			for (x = x1; x <= x2; x++)
 			{
 				place_inner_bold(yval, x);
+				if (curtain2) cave[yval][x].feat = feat_closed_curtain;
 			}
 
 			/* Prevent edge of wall from being tunneled */
@@ -614,6 +648,7 @@ static bool build_type1(void)
 			for (y = y1; y <= y2; y++)
 			{
 				place_inner_bold(y, xval);
+				if (curtain2) cave[y][xval].feat = feat_closed_curtain;
 			}
 
 			/* Prevent edge of wall from being tunneled */
@@ -622,6 +657,7 @@ static bool build_type1(void)
 		}
 
 		place_random_door(yval, xval, TRUE);
+		if (curtain2) cave[yval][xval].feat = feat_closed_curtain;
 	}
 
 	return TRUE;

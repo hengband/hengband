@@ -825,7 +825,7 @@ static cptr d_info_flags1[] =
 	"NO_DOORS",
 	"WATER_RIVER",
 	"LAVA_RIVER",
-	"XXX",
+	"CURTAIN",
 	"XXX",
 	"CAVE",
 	"CAVERN",

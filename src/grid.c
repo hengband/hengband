@@ -146,8 +146,11 @@ void place_random_door(int y, int x, bool room)
 	/* Open doors (300/1000) */
 	if (tmp < 300)
 	{
+		bool curtain = (d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
+			one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256);
+
 		/* Create open door */
-		set_cave_feat(y, x, feat_open_door);
+		set_cave_feat(y, x, curtain ? feat_open_curtain : feat_open_door);
 	}
 
 	/* Broken doors (100/1000) */
@@ -163,17 +166,20 @@ void place_random_door(int y, int x, bool room)
 		/* Create secret door */
 		place_closed_door(y, x);
 
-		/* Hide. If on the edge of room, use outer wall. */
-		c_ptr->mimic = room ? feat_wall_outer : fill_type[randint0(100)];
-
-		/* Floor type terrain cannot hide a door */
-		if (feat_supports_los(c_ptr->mimic) && !feat_supports_los(c_ptr->feat))
+		if (c_ptr->feat != feat_closed_curtain)
 		{
-			if (have_flag(f_info[c_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[c_ptr->mimic].flags, FF_CAN_FLY))
+			/* Hide. If on the edge of room, use outer wall. */
+			c_ptr->mimic = room ? feat_wall_outer : fill_type[randint0(100)];
+
+			/* Floor type terrain cannot hide a door */
+			if (feat_supports_los(c_ptr->mimic) && !feat_supports_los(c_ptr->feat))
 			{
-				c_ptr->feat = one_in_(2) ? c_ptr->mimic : floor_type[randint0(100)];
+				if (have_flag(f_info[c_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[c_ptr->mimic].flags, FF_CAN_FLY))
+				{
+					c_ptr->feat = one_in_(2) ? c_ptr->mimic : floor_type[randint0(100)];
+				}
+				c_ptr->mimic = 0;
 			}
-			c_ptr->mimic = 0;
 		}
 	}
 
@@ -203,8 +209,11 @@ void place_closed_door(int y, int x)
 	/* Closed doors (300/400) */
 	if (tmp < 300)
 	{
+		bool curtain = (d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
+			one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 48 : 512);
+
 		/* Create closed door */
-		cave_set_feat(y, x, feat_closed_door);
+		cave_set_feat(y, x, curtain ? feat_closed_curtain : feat_closed_door);
 	}
 
 	/* Locked doors (99/400) */

@@ -5197,7 +5197,7 @@ extern int PlayerUID;
 #define DF1_NO_DOORS            0x00000020L
 #define DF1_WATER_RIVER         0x00000040L
 #define DF1_LAVA_RIVER          0x00000080L
-#define DF1_XXX08               0x00000100L
+#define DF1_CURTAIN             0x00000100L
 #define DF1_XXX09               0x00000200L
 #define DF1_CAVE                0x00000400L
 #define DF1_CAVERN              0x00000800L

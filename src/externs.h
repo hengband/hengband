@@ -576,6 +576,8 @@ extern s16b feat_locked_door[MAX_LJ_DOORS];
 extern s16b num_locked_door;
 extern s16b feat_jammed_door[MAX_LJ_DOORS];
 extern s16b num_jammed_door;
+extern s16b feat_open_curtain;
+extern s16b feat_closed_curtain;
 extern s16b feat_up_stair;
 extern s16b feat_down_stair;
 extern s16b feat_entrance;
@@ -880,7 +882,6 @@ extern void change_floor(void);
 extern void stair_creation(void);
 
 /* generate.c */
-extern void place_closed_door(int y, int x);
 extern bool place_quest_monsters(void);
 extern void wipe_generate_cave_flags(void);
 extern void clear_cave(void);

@@ -1205,10 +1205,18 @@ s16b feat_mirror;
 s16b feat_open_door;
 s16b feat_broken_door;
 s16b feat_closed_door;
+
+/* Locked doors */
 s16b feat_locked_door[MAX_LJ_DOORS];
 s16b num_locked_door = 0;
+
+/* Jammed doors */
 s16b feat_jammed_door[MAX_LJ_DOORS];
 s16b num_jammed_door = 0;
+
+/* Curtains */
+s16b feat_open_curtain;
+s16b feat_closed_curtain;
 
 /* Stairs */
 s16b feat_up_stair;
