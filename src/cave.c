@@ -4686,7 +4686,6 @@ void map_area(int range)
 void wiz_lite(bool wizard, bool ninja)
 {
 	int i, y, x;
-	cave_type       *c_ptr;
 	byte feat;
 
 	/* Memorize objects */

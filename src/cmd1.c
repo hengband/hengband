@@ -4243,6 +4243,9 @@ msg_format("%sが恐怖していて制御できない。", m_name);
  */
 static int see_wall(int dir, int y, int x)
 {
+        cave_type   *c_ptr;
+        byte feat;
+
 	/* Get the new location */
 	y += ddy[dir];
 	x += ddx[dir];
@@ -4250,29 +4253,35 @@ static int see_wall(int dir, int y, int x)
 	/* Illegal grids are not known walls */
 	if (!in_bounds2(y, x)) return (FALSE);
 
+        /* Access grid */
+        c_ptr = &cave[y][x];
+
+        /* Feature code (applying "mimic" field) */
+        feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+
 	/* Non-wall grids are not known walls */
-	if (cave[y][x].feat <= FEAT_DOOR_TAIL) return (FALSE);
+	if (feat <= FEAT_DOOR_TAIL) return (FALSE);
 
-	if ((cave[y][x].feat >= FEAT_DEEP_WATER) &&
-	    (cave[y][x].feat <= FEAT_GRASS)) return (FALSE);
+	if ((feat >= FEAT_DEEP_WATER) &&
+	    (feat <= FEAT_GRASS)) return (FALSE);
 
-	if ((cave[y][x].feat >= FEAT_SHOP_HEAD) &&
-	    (cave[y][x].feat <= FEAT_SHOP_TAIL)) return (FALSE);
+	if ((feat >= FEAT_SHOP_HEAD) &&
+	    (feat <= FEAT_SHOP_TAIL)) return (FALSE);
 
-	if (cave[y][x].feat == FEAT_DEEP_GRASS) return (FALSE);
-	if (cave[y][x].feat == FEAT_FLOWER) return (FALSE);
+	if (feat == FEAT_DEEP_GRASS) return (FALSE);
+	if (feat == FEAT_FLOWER) return (FALSE);
 
-	if (cave[y][x].feat == FEAT_MUSEUM) return (FALSE);
+	if (feat == FEAT_MUSEUM) return (FALSE);
 
-	if ((cave[y][x].feat >= FEAT_BLDG_HEAD) &&
-	    (cave[y][x].feat <= FEAT_BLDG_TAIL)) return (FALSE);
+	if ((feat >= FEAT_BLDG_HEAD) &&
+	    (feat <= FEAT_BLDG_TAIL)) return (FALSE);
 
-/*	if (cave[y][x].feat == FEAT_TREES) return (FALSE); */
+/*	if (feat == FEAT_TREES) return (FALSE); */
 
 	/* Must be known to the player */
-	if (!(cave[y][x].info & (CAVE_MARK))) return (FALSE);
+	if (!(c_ptr->info & (CAVE_MARK))) return (FALSE);
 
-	if (cave[y][x].feat >= FEAT_TOWN) return (FALSE);
+	if (feat >= FEAT_TOWN) return (FALSE);
 
 	/* Default */
 	return (TRUE);
@@ -5041,9 +5050,18 @@ void run_step(int dir)
 	/* Start running */
 	if (dir)
 	{
+                cave_type   *c_ptr;
+                byte feat;
+        
+                /* Access grid */
+                c_ptr = &cave[py+ddy[dir]][px+ddx[dir]];
+
+                /* Feature code (applying "mimic" field) */
+                feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+
 		/* Hack -- do not start silly run */
 		if (see_wall(dir, py, px) &&
-		   (cave[py+ddy[dir]][px+ddx[dir]].feat != FEAT_TREES))
+		   (feat != FEAT_TREES))
 		{
 			/* Message */
 #ifdef JP
