@@ -433,6 +433,16 @@ bool monst_spell_monst(int m_idx)
 				}
 			}
 		}
+
+		/* Special moves restriction */
+		if (f6 & RF6_SPECIAL)
+		{
+			if (r_ptr->d_char == 'B')
+			{
+				if (!(p_ptr->pet_extra_flags & PF_TELEPORT)) f6 &= ~(RF6_SPECIAL);
+			}
+			else f6 &= ~(RF6_SPECIAL);
+		}
 	}
 
 	/* Remove some spells if necessary */
