@@ -4,7 +4,7 @@
 # います。このファイルを 'picktype.prf' という名前で
 # lib\user\picktype.prf か ~/.angband/Hengband/picktype.prf としてコピー
 # すれば、そのまま自動拾いファイルとして使用することができます。
-# (Unix の場合は ~/.angband/Hengband/ のみが使用可能。Window等、Unix以
+# (Unix の場合は ~/.angband/Hengband/ のみが使用可能。Windows等、Unix以
 # 外の場合は、lib\user\ のみが使用可能です。)
 #
 #    ●自動拾いの使い方
