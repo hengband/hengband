@@ -142,9 +142,9 @@ static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 
 	if (smart & SM_IMM_ACID)
 	{
-		if (int_outof(r_ptr, 200)) f4 &= ~(RF4_BR_ACID);
-		if (int_outof(r_ptr, 200)) f5 &= ~(RF5_BA_ACID);
-		if (int_outof(r_ptr, 200)) f5 &= ~(RF5_BO_ACID);
+		f4 &= ~(RF4_BR_ACID);
+		f5 &= ~(RF5_BA_ACID);
+		f5 &= ~(RF5_BO_ACID);
 	}
 	else if ((smart & (SM_OPP_ACID)) && (smart & (SM_RES_ACID)))
 	{
@@ -162,9 +162,9 @@ static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 
 	if (smart & (SM_IMM_ELEC))
 	{
-		if (int_outof(r_ptr, 200)) f4 &= ~(RF4_BR_ELEC);
-		if (int_outof(r_ptr, 200)) f5 &= ~(RF5_BA_ELEC);
-		if (int_outof(r_ptr, 200)) f5 &= ~(RF5_BO_ELEC);
+		f4 &= ~(RF4_BR_ELEC);
+		f5 &= ~(RF5_BA_ELEC);
+		f5 &= ~(RF5_BO_ELEC);
 	}
 	else if ((smart & (SM_OPP_ELEC)) && (smart & (SM_RES_ELEC)))
 	{
@@ -182,9 +182,9 @@ static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 
 	if (smart & (SM_IMM_FIRE))
 	{
-		if (int_outof(r_ptr, 200)) f4 &= ~(RF4_BR_FIRE);
-		if (int_outof(r_ptr, 200)) f5 &= ~(RF5_BA_FIRE);
-		if (int_outof(r_ptr, 200)) f5 &= ~(RF5_BO_FIRE);
+		f4 &= ~(RF4_BR_FIRE);
+		f5 &= ~(RF5_BA_FIRE);
+		f5 &= ~(RF5_BO_FIRE);
 	}
 	else if ((smart & (SM_OPP_FIRE)) && (smart & (SM_RES_FIRE)))
 	{
@@ -202,10 +202,10 @@ static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 
 	if (smart & (SM_IMM_COLD))
 	{
-		if (int_outof(r_ptr, 200)) f4 &= ~(RF4_BR_COLD);
-		if (int_outof(r_ptr, 200)) f5 &= ~(RF5_BA_COLD);
-		if (int_outof(r_ptr, 200)) f5 &= ~(RF5_BO_COLD);
-		if (int_outof(r_ptr, 200)) f5 &= ~(RF5_BO_ICEE);
+		f4 &= ~(RF4_BR_COLD);
+		f5 &= ~(RF5_BA_COLD);
+		f5 &= ~(RF5_BO_COLD);
+		f5 &= ~(RF5_BO_ICEE);
 	}
 	else if ((smart & (SM_OPP_COLD)) && (smart & (SM_RES_COLD)))
 	{
@@ -239,9 +239,18 @@ static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 
 	if (smart & (SM_RES_NETH))
 	{
-		if (int_outof(r_ptr, 20)) f4 &= ~(RF4_BR_NETH);
-		if (int_outof(r_ptr, 50)) f5 &= ~(RF5_BA_NETH);
-		if (int_outof(r_ptr, 50)) f5 &= ~(RF5_BO_NETH);
+		if (prace_is_(RACE_SPECTRE))
+		{
+			f4 &= ~(RF4_BR_NETH);
+			f5 &= ~(RF5_BA_NETH);
+			f5 &= ~(RF5_BO_NETH);
+		}
+		else
+		{
+			if (int_outof(r_ptr, 20)) f4 &= ~(RF4_BR_NETH);
+			if (int_outof(r_ptr, 50)) f5 &= ~(RF5_BA_NETH);
+			if (int_outof(r_ptr, 50)) f5 &= ~(RF5_BO_NETH);
+		}
 	}
 
 	if (smart & (SM_RES_LITE))
@@ -252,18 +261,26 @@ static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 
 	if (smart & (SM_RES_DARK))
 	{
-		if (int_outof(r_ptr, 50)) f4 &= ~(RF4_BR_DARK);
-		if (int_outof(r_ptr, 50)) f5 &= ~(RF5_BA_DARK);
+		if (prace_is_(RACE_VAMPIRE))
+		{
+			f4 &= ~(RF4_BR_DARK);
+			f5 &= ~(RF5_BA_DARK);
+		}
+		else
+		{
+			if (int_outof(r_ptr, 50)) f4 &= ~(RF4_BR_DARK);
+			if (int_outof(r_ptr, 50)) f5 &= ~(RF5_BA_DARK);
+		}
 	}
 
 	if (smart & (SM_RES_FEAR))
 	{
-		if (int_outof(r_ptr, 200)) f5 &= ~(RF5_SCARE);
+		f5 &= ~(RF5_SCARE);
 	}
 
 	if (smart & (SM_RES_CONF))
 	{
-		if (int_outof(r_ptr, 200)) f5 &= ~(RF5_CONF);
+		f5 &= ~(RF5_CONF);
 		if (int_outof(r_ptr, 50)) f4 &= ~(RF4_BR_CONF);
 	}
 
@@ -280,13 +297,13 @@ static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 
 	if (smart & (SM_RES_BLIND))
 	{
-		if (int_outof(r_ptr, 200)) f5 &= ~(RF5_BLIND);
+		f5 &= ~(RF5_BLIND);
 	}
 
 	if (smart & (SM_RES_NEXUS))
 	{
 		if (int_outof(r_ptr, 50)) f4 &= ~(RF4_BR_NEXU);
-		if (int_outof(r_ptr, 200)) f6 &= ~(RF6_TELE_LEVEL);
+		f6 &= ~(RF6_TELE_LEVEL);
 	}
 
 	if (smart & (SM_RES_SOUND))
@@ -316,13 +333,13 @@ static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 
 	if (smart & (SM_IMM_FREE))
 	{
-		if (int_outof(r_ptr, 200)) f5 &= ~(RF5_HOLD);
-		if (int_outof(r_ptr, 200)) f5 &= ~(RF5_SLOW);
+		f5 &= ~(RF5_HOLD);
+		f5 &= ~(RF5_SLOW);
 	}
 
 	if (smart & (SM_IMM_MANA))
 	{
-		if (int_outof(r_ptr, 200)) f5 &= ~(RF5_DRAIN_MANA);
+		f5 &= ~(RF5_DRAIN_MANA);
 	}
 
 	/* XXX XXX XXX No spells left? */
