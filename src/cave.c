@@ -3285,7 +3285,7 @@ static void mon_dark_hack(int y, int x)
 	c_ptr = &cave[y][x];
 
 	/* Want a unlit and undarkened square in view of the player */
-	if ((c_ptr->info & (CAVE_LITE | CAVE_MNLT)) || ((c_ptr->info & (CAVE_MNDK | CAVE_VIEW)) != CAVE_VIEW)) return;
+	if ((c_ptr->info & (CAVE_LITE | CAVE_MNLT | CAVE_MNDK | CAVE_VIEW)) != CAVE_VIEW) return;
 
 	if (!cave_floor_grid(c_ptr))
 	{
