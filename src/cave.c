@@ -4611,6 +4611,28 @@ void cave_set_feat(int y, int x, int feat)
 	/* Change the feature */
 	c_ptr->feat = feat;
 
+	/* Hack -- glow the deep lava */
+	if (feat == FEAT_DEEP_LAVA)
+	{
+		int i, yy, xx;
+
+		for (i = 0; i < 9; i++)
+		{
+			yy = y + ddy_ddd[i];
+			xx = x + ddx_ddd[i];
+			if (!in_bounds2(yy, xx)) continue;
+			cave[yy][xx].info |= CAVE_GLOW;
+			if (player_has_los_bold(yy, xx))
+			{
+				/* Notice */
+				note_spot(yy, xx);
+
+				/* Redraw */
+				lite_spot(yy, xx);
+			}
+		}
+	}
+
 	/* Notice */
 	note_spot(y, x);
 
