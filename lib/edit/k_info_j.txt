@@ -1804,7 +1804,7 @@ N:191:*解呪*
 E:*Remove Curse*
 G:?:d
 I:70:15:0
-W:50:0:5:8000
+W:50:0:5:4000
 A:50/2:75/2
 D:$It removes normal and heavy curses from equipped items when you read it.
 D:それは読むと装備しているアイテムにかかった弱い呪いと重い呪いを解く。

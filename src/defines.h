@@ -1458,7 +1458,7 @@
 #define EGO_DIGGING             100
 #define EGO_SLAY_HUMAN          101
 #define EGO_MORGUL              102
-/* xxx */
+#define EGO_KILL_HUMAN          103
 
 /* Bows */
 #define EGO_ACCURACY            104
@@ -3061,9 +3061,12 @@
 #define TRC_TELEPORT_SELF       0x00000001L
 #define TRC_CHAINSWORD          0x00000002L
 
+#define TRC_SPECIAL_MASK \
+	(TRC_TY_CURSE | TRC_AGGRAVATE)
+
 #define TRC_HEAVY_MASK   \
 	(TRC_TY_CURSE | TRC_AGGRAVATE | TRC_DRAIN_EXP | TRC_ADD_H_CURSE | \
-	 TRC_CALL_DEMON | TRC_CALL_DRAGON)
+	 TRC_CALL_DEMON | TRC_CALL_DRAGON | TRC_TELEPORT)
 
 #define TRC_P_FLAG_MASK  \
 	(TRC_TY_CURSE | TRC_DRAIN_EXP | TRC_ADD_L_CURSE | TRC_ADD_H_CURSE | \
@@ -4781,8 +4784,10 @@ extern int PlayerUID;
 #define ESSENCE_RES_DISEN     64
 #define ESSENCE__SH__FIRE     65
 #define ESSENCE__SH__ELEC     66
+#define ESSENCE_S_HUMAN       67
 #define ESSENCE__SH__COLD     68
 #define ESSENCE_NO_MAGIC      70
+#define ESSENCE_WARNING       73
 #define ESSENCE_FEATHER       77
 #define ESSENCE_LITE          78
 #define ESSENCE_SEE_INVIS     79

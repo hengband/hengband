@@ -540,6 +540,10 @@ u32b get_curse(int power, object_type *o_ptr)
 		{
 			if (!(new_curse & TRC_HEAVY_MASK)) continue;
 		}
+		else if (power == 1)
+		{
+			if (new_curse & TRC_SPECIAL_MASK) continue;
+		}
 		else if (power == 0)
 		{
 			if (new_curse & TRC_HEAVY_MASK) continue;
@@ -597,7 +601,7 @@ msg_format("%sは呪いを跳ね返した！", o_name,
 			changed = TRUE;
 		o_ptr->curse_flags |= TRC_CURSED;
 	}
-	if (heavy_chance >= 50) curse_power = 2;
+	if (heavy_chance >= 50) curse_power++;
 
 	new_curse = get_curse(curse_power, o_ptr);
 	if (!(o_ptr->curse_flags & new_curse))
@@ -2752,7 +2756,7 @@ msg_print("しかし効力を跳ね返した！");
 			}
 			else
 			{
-				curse_equipment(33, 0);
+				curse_equipment(15, 0);
 				take_hit(DAMAGE_ATTACK, dam, ddesc, MS_CAUSE_1);
 			}
 			break;
@@ -2788,7 +2792,7 @@ msg_print("しかし効力を跳ね返した！");
 			}
 			else
 			{
-				curse_equipment(50, 5);
+				curse_equipment(25, MIN(rlev/2-15, 5));
 				take_hit(DAMAGE_ATTACK, dam, ddesc, MS_CAUSE_2);
 			}
 			break;
@@ -2824,7 +2828,7 @@ msg_print("しかし効力を跳ね返した！");
 			}
 			else
 			{
-				curse_equipment(80, 15);
+				curse_equipment(33, MIN(rlev/2-15, 15));
 				take_hit(DAMAGE_ATTACK, dam, ddesc, MS_CAUSE_3);
 			}
 			break;
@@ -3411,7 +3415,7 @@ msg_print("あなたは命が薄まっていくように感じた！");
 #endif
 
 				take_hit(DAMAGE_ATTACK, dummy, m_name, MS_HAND_DOOM);
-				curse_equipment(100, 20);
+				curse_equipment(40, 20);
 
 				if (p_ptr->chp < 1) p_ptr->chp = 1;
 			}

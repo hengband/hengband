@@ -1461,6 +1461,15 @@ msg_format("あなたは%sのブレスを吐いた。",((type == GF_NETHER) ? "地獄" : "火炎"
 			}
 			break;
 		case MIMIC_VAMPIRE:
+			if (d_info[dungeon_type].flags1 & DF1_NO_MELEE)
+			{
+#ifdef JP
+				msg_print("なぜか攻撃することができない。");
+#else
+				msg_print("Something prevent you from attacking.");
+#endif
+				return FALSE;
+			}
 			if (racial_aux(2, (1 + (plev / 3)), A_CON, 9))
 			{
 				int y, x, dummy = 0;

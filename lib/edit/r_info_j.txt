@@ -7614,7 +7614,7 @@ D:$like the creation of some deranged alchemist.
 D:牛に似ているが頭は巨大で首は細くて折れそうだ。錯乱した錬金術師により
 D:作られた生物のようだ。
 
-N:448:レッサー ウォールモンスター
+N:448:レッサー・ウォールモンスター
 E:Lesser wall monster
 G:#:W
 I:110:13d8:20:75:40

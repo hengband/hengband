@@ -247,7 +247,7 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode)
 					r_ptr->r_flags3 |= RF3_ANIMAL;
 				}
 
-				if (mult < 20) mult = 20;
+				if (mult < 25) mult = 25;
 			}
 
 			/* Slay Evil */
@@ -271,7 +271,7 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode)
 					r_ptr->r_flags2 |= RF2_HUMAN;
 				}
 
-				if (mult < 20) mult = 20;
+				if (mult < 25) mult = 25;
 			}
 
 			/* Slay Undead */

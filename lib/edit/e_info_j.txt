@@ -780,7 +780,7 @@ C:0:0:0:5
 F:TUNNEL | BRAND_ACID | 
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:101:人斬りの
+N:101:人喰いの
 E:of Slay Human
 X:24:10
 W:0:23:0:2500
@@ -794,7 +794,12 @@ C:20:20:10:0
 F:SEE_INVIS | AGGRAVATE | HEAVY_CURSE | CURSED
 F:RANDOM_CURSE2
 
-# 103 (unused)
+N:103:*人喰い*の
+E:of *Slay* Human
+X:24:16
+W:0:60:0:4000
+C:0:0:0:2
+F:DEX | SLAY_HUMAN
 
 
 ### Missile Launchers ###

@@ -12,7 +12,7 @@
 
 #include "angband.h"
 
-#define TY_CURSE_CHANCE 100
+#define TY_CURSE_CHANCE 200
 #define CHAINSWORD_NOISE 100
 
 static bool load = TRUE;
@@ -3326,7 +3326,7 @@ msg_print("武器を落してしまった！");
 		 * Hack: Uncursed teleporting items (e.g. Trump Weapons)
 		 * can actually be useful!
 		 */
-		if ((p_ptr->cursed & TRC_TELEPORT_SELF) && one_in_(100))
+		if ((p_ptr->cursed & TRC_TELEPORT_SELF) && one_in_(200))
 		{
 #ifdef JP
 if (get_check_strict("テレポートしますか？", CHECK_OKAY_CANCEL))
@@ -3420,7 +3420,7 @@ msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
 			}
 		}
 		/* Call animal */
-		if ((p_ptr->cursed & TRC_CALL_ANIMAL) && one_in_(1500))
+		if ((p_ptr->cursed & TRC_CALL_ANIMAL) && one_in_(2500))
 		{
 			if (summon_specific(0, py, px, dun_level, SUMMON_ANIMAL,
 			    TRUE, FALSE, FALSE, TRUE, TRUE))
@@ -3438,7 +3438,7 @@ msg_format("%sが動物を引き寄せた！", o_name);
 			}
 		}
 		/* Call demon */
-		if ((p_ptr->cursed & TRC_CALL_DEMON) && one_in_(666))
+		if ((p_ptr->cursed & TRC_CALL_DEMON) && one_in_(1111))
 		{
 			if (summon_specific(0, py, px, dun_level, SUMMON_DEMON,
 			    TRUE, FALSE, FALSE, TRUE, TRUE))
@@ -3456,7 +3456,7 @@ msg_format("%sが悪魔を引き寄せた！", o_name);
 			}
 		}
 		/* Call dragon */
-		if ((p_ptr->cursed & TRC_CALL_DRAGON) && one_in_(400))
+		if ((p_ptr->cursed & TRC_CALL_DRAGON) && one_in_(800))
 		{
 			if (summon_specific(0, py, px, dun_level, SUMMON_DRAGON,
 			    TRUE, FALSE, FALSE, TRUE, TRUE))
@@ -3488,7 +3488,7 @@ msg_print("とても暗い... とても恐い！");
 			}
 		}
 		/* Teleport player */
-		if ((p_ptr->cursed & TRC_TELEPORT) && one_in_(100) && !p_ptr->anti_tele)
+		if ((p_ptr->cursed & TRC_TELEPORT) && one_in_(200) && !p_ptr->anti_tele)
 		{
 			disturb(0, 0);
 

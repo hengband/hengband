@@ -992,6 +992,7 @@ static void mass_produce(object_type *o_ptr)
 			if (cost <= 60L) size += damroll(3, 5);
 			if (cost <= 240L) size += damroll(1, 5);
 			if (o_ptr->sval == SV_SCROLL_STAR_IDENTIFY) size += damroll(3, 5);
+			if (o_ptr->sval == SV_SCROLL_STAR_REMOVE_CURSE) size += damroll(1, 4);
 			break;
 		}
 

@@ -1781,7 +1781,12 @@ static int remove_curse_aux(int all)
 		if (!all && (o_ptr->curse_flags & TRC_HEAVY_CURSE)) continue;
 
 		/* Perma-Cursed Items can NEVER be uncursed */
-		if (o_ptr->curse_flags & TRC_PERMA_CURSE) continue;
+		if (o_ptr->curse_flags & TRC_PERMA_CURSE)
+		{
+			/* Uncurse it */
+			o_ptr->curse_flags &= (TRC_CURSED | TRC_HEAVY_CURSE | TRC_PERMA_CURSE);
+			continue;
+		}
 
 		/* Uncurse it */
 		o_ptr->curse_flags = 0L;
