@@ -3186,6 +3186,7 @@ void update_lite(void)
 
 
 static bool mon_invis;
+static s16b mon_fy, mon_fx;
 
 /*
  * Add a square to the changes array
@@ -3193,6 +3194,7 @@ static bool mon_invis;
 static void mon_lite_hack(int y, int x)
 {
 	cave_type *c_ptr;
+	int       midpoint;
 
 	/* Out of bounds */
 	if (!in_bounds2(y, x)) return;
@@ -3202,8 +3204,37 @@ static void mon_lite_hack(int y, int x)
 	/* Want a unlit square in view of the player */
 	if ((c_ptr->info & (CAVE_MNLT | CAVE_VIEW)) != CAVE_VIEW) return;
 
-	/* Hack XXX XXX - Is it a wall and monster not in LOS? */
-	if (!cave_floor_grid(c_ptr) && mon_invis) return;
+	if (!cave_floor_grid(c_ptr))
+	{
+		/* Hack XXX XXX - Is it a wall and monster not in LOS? */
+		if (mon_invis) return;
+
+		/* Hack -- Prevent monster lite leakage in walls */
+		if (((y < py) && (y > mon_fy)) || ((y > py) && (y < mon_fy)))
+		{
+			midpoint = (px + mon_fx) >> 1;
+			if (x < midpoint)
+			{
+				if (!cave_floor_bold(y, x + 1)) return;
+			}
+			else if (x > midpoint)
+			{
+				if (!cave_floor_bold(y, x - 1)) return;
+			}
+		}
+		else if (((x < px) && (x > mon_fx)) || ((x > py) && (y < mon_fx)))
+		{
+			midpoint = (py + mon_fy) >> 1;
+			if (y < midpoint)
+			{
+				if (!cave_floor_bold(y + 1, x)) return;
+			}
+			else if (y > midpoint)
+			{
+				if (!cave_floor_bold(y - 1, x)) return;
+			}
+		}
+	}
 
 	/* We trust temp_n does not exceed TEMP_MAX */
 
@@ -3234,6 +3265,7 @@ static void mon_lite_hack(int y, int x)
 static void mon_dark_hack(int y, int x)
 {
 	cave_type *c_ptr;
+	int       midpoint;
 
 	/* Out of bounds */
 	if (!in_bounds2(y, x)) return;
@@ -3243,8 +3275,37 @@ static void mon_dark_hack(int y, int x)
 	/* Want a unlit and undarkened square in view of the player */
 	if ((c_ptr->info & (CAVE_LITE | CAVE_MNLT)) || ((c_ptr->info & (CAVE_MNDK | CAVE_VIEW)) != CAVE_VIEW)) return;
 
-	/* Hack XXX XXX - Is it a wall and monster not in LOS? */
-	if (!cave_floor_grid(c_ptr) && mon_invis) return;
+	if (!cave_floor_grid(c_ptr))
+	{
+		/* Hack XXX XXX - Is it a wall and monster not in LOS? */
+		if (mon_invis) return;
+
+		/* Hack -- Prevent monster dark lite leakage in walls */
+		if (((y < py) && (y > mon_fy)) || ((y > py) && (y < mon_fy)))
+		{
+			midpoint = (px + mon_fx) >> 1;
+			if (x < midpoint)
+			{
+				if (!cave_floor_bold(y, x + 1)) return;
+			}
+			else if (x > midpoint)
+			{
+				if (!cave_floor_bold(y, x - 1)) return;
+			}
+		}
+		else if (((x < px) && (x > mon_fx)) || ((x > py) && (y < mon_fx)))
+		{
+			midpoint = (py + mon_fy) >> 1;
+			if (y < midpoint)
+			{
+				if (!cave_floor_bold(y + 1, x)) return;
+			}
+			else if (y > midpoint)
+			{
+				if (!cave_floor_bold(y - 1, x)) return;
+			}
+		}
+	}
 
 	/* We trust temp_n does not exceed TEMP_MAX */
 
@@ -3274,6 +3335,7 @@ void update_mon_lite(void)
 	cave_type *c_ptr;
 
 	s16b fx, fy;
+	void (*add_mon_lite)(int, int);
 
 	s16b end_temp;
 
@@ -3309,6 +3371,9 @@ void update_mon_lite(void)
 		/* Is it too far away? */
 		if (m_ptr->cdis > dis_lim) continue;
 
+		/* If a monster stops time, break */
+		if (world_monster) break;
+
 		/* Get lite radius */
 		rad = 0;
 
@@ -3324,257 +3389,136 @@ void update_mon_lite(void)
 		{
 			if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) && (m_ptr->csleep || (!dun_level && is_daytime()) || p_ptr->inside_battle)) continue;
 			if (d_info[dungeon_type].flags1 & DF1_DARKNESS) rad = 1;
+			add_mon_lite = mon_lite_hack;
 		}
 		else
 		{
 			if (!(r_ptr->flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2)) && (m_ptr->csleep || (!dun_level && !is_daytime()))) continue;
+			add_mon_lite = mon_dark_hack;
+			rad = -rad; /* Use absolute value */
 		}
-
-		if (world_monster) continue;
 
 		/* Access the location */
-		fx = m_ptr->fx;
-		fy = m_ptr->fy;
+		mon_fx = m_ptr->fx;
+		mon_fy = m_ptr->fy;
 
 		/* Is the monster visible? */
-		mon_invis = !(cave[fy][fx].info & CAVE_VIEW);
+		mon_invis = !(cave[mon_fy][mon_fx].info & CAVE_VIEW);
 
-		if (rad > 0) /* Lite */
+		/* The square it is on */
+		add_mon_lite(mon_fy, mon_fx);
+
+		/* Adjacent squares */
+		add_mon_lite(mon_fy + 1, mon_fx);
+		add_mon_lite(mon_fy - 1, mon_fx);
+		add_mon_lite(mon_fy, mon_fx + 1);
+		add_mon_lite(mon_fy, mon_fx - 1);
+		add_mon_lite(mon_fy + 1, mon_fx + 1);
+		add_mon_lite(mon_fy + 1, mon_fx - 1);
+		add_mon_lite(mon_fy - 1, mon_fx + 1);
+		add_mon_lite(mon_fy - 1, mon_fx - 1);
+
+		/* Radius 2 */
+		if (rad >= 2)
 		{
-			/* The square it is on */
-			mon_lite_hack(fy, fx);
-
-			/* Adjacent squares */
-			mon_lite_hack(fy + 1, fx);
-			mon_lite_hack(fy - 1, fx);
-			mon_lite_hack(fy, fx + 1);
-			mon_lite_hack(fy, fx - 1);
-			mon_lite_hack(fy + 1, fx + 1);
-			mon_lite_hack(fy + 1, fx - 1);
-			mon_lite_hack(fy - 1, fx + 1);
-			mon_lite_hack(fy - 1, fx - 1);
-
-			/* Radius 2 */
-			if (rad >= 2)
+			/* South of the monster */
+			if (cave_floor_bold(mon_fy + 1, mon_fx))
 			{
-				/* South of the monster */
-				if (cave_floor_bold(fy + 1, fx))
+				add_mon_lite(mon_fy + 2, mon_fx + 1);
+				add_mon_lite(mon_fy + 2, mon_fx);
+				add_mon_lite(mon_fy + 2, mon_fx - 1);
+
+				c_ptr = &cave[mon_fy + 2][mon_fx];
+
+				/* Radius 3 */
+				if ((rad == 3) && cave_floor_grid(c_ptr))
 				{
-					mon_lite_hack(fy + 2, fx + 1);
-					mon_lite_hack(fy + 2, fx);
-					mon_lite_hack(fy + 2, fx - 1);
-
-					c_ptr = &cave[fy + 2][fx];
-
-					/* Radius 3 */
-					if ((rad == 3) && cave_floor_grid(c_ptr))
-					{
-						mon_lite_hack(fy + 3, fx + 1);
-						mon_lite_hack(fy + 3, fx);
-						mon_lite_hack(fy + 3, fx - 1);
-					}
-				}
-
-				/* North of the monster */
-				if (cave_floor_bold(fy - 1, fx))
-				{
-					mon_lite_hack(fy - 2, fx + 1);
-					mon_lite_hack(fy - 2, fx);
-					mon_lite_hack(fy - 2, fx - 1);
-
-					c_ptr = &cave[fy - 2][fx];
-
-					/* Radius 3 */
-					if ((rad == 3) && cave_floor_grid(c_ptr))
-					{
-						mon_lite_hack(fy - 3, fx + 1);
-						mon_lite_hack(fy - 3, fx);
-						mon_lite_hack(fy - 3, fx - 1);
-					}
-				}
-
-				/* East of the monster */
-				if (cave_floor_bold(fy, fx + 1))
-				{
-					mon_lite_hack(fy + 1, fx + 2);
-					mon_lite_hack(fy, fx + 2);
-					mon_lite_hack(fy - 1, fx + 2);
-
-					c_ptr = &cave[fy][fx + 2];
-
-					/* Radius 3 */
-					if ((rad == 3) && cave_floor_grid(c_ptr))
-					{
-						mon_lite_hack(fy + 1, fx + 3);
-						mon_lite_hack(fy, fx + 3);
-						mon_lite_hack(fy - 1, fx + 3);
-					}
-				}
-
-				/* West of the monster */
-				if (cave_floor_bold(fy, fx - 1))
-				{
-					mon_lite_hack(fy + 1, fx - 2);
-					mon_lite_hack(fy, fx - 2);
-					mon_lite_hack(fy - 1, fx - 2);
-
-					c_ptr = &cave[fy][fx - 2];
-
-					/* Radius 3 */
-					if ((rad == 3) && cave_floor_grid(c_ptr))
-					{
-						mon_lite_hack(fy + 1, fx - 3);
-						mon_lite_hack(fy, fx - 3);
-						mon_lite_hack(fy - 1, fx - 3);
-					}
+					add_mon_lite(mon_fy + 3, mon_fx + 1);
+					add_mon_lite(mon_fy + 3, mon_fx);
+					add_mon_lite(mon_fy + 3, mon_fx - 1);
 				}
 			}
 
-			/* Radius 3 */
-			if (rad == 3)
+			/* North of the monster */
+			if (cave_floor_bold(mon_fy - 1, mon_fx))
 			{
-				/* South-East of the monster */
-				if (cave_floor_bold(fy + 1, fx + 1))
-				{
-					mon_lite_hack(fy + 2, fx + 2);
-				}
+				add_mon_lite(mon_fy - 2, mon_fx + 1);
+				add_mon_lite(mon_fy - 2, mon_fx);
+				add_mon_lite(mon_fy - 2, mon_fx - 1);
 
-				/* South-West of the monster */
-				if (cave_floor_bold(fy + 1, fx - 1))
-				{
-					mon_lite_hack(fy + 2, fx - 2);
-				}
+				c_ptr = &cave[mon_fy - 2][mon_fx];
 
-				/* North-East of the monster */
-				if (cave_floor_bold(fy - 1, fx + 1))
+				/* Radius 3 */
+				if ((rad == 3) && cave_floor_grid(c_ptr))
 				{
-					mon_lite_hack(fy - 2, fx + 2);
+					add_mon_lite(mon_fy - 3, mon_fx + 1);
+					add_mon_lite(mon_fy - 3, mon_fx);
+					add_mon_lite(mon_fy - 3, mon_fx - 1);
 				}
+			}
 
-				/* North-West of the monster */
-				if (cave_floor_bold(fy - 1, fx - 1))
+			/* East of the monster */
+			if (cave_floor_bold(mon_fy, mon_fx + 1))
+			{
+				add_mon_lite(mon_fy + 1, mon_fx + 2);
+				add_mon_lite(mon_fy, mon_fx + 2);
+				add_mon_lite(mon_fy - 1, mon_fx + 2);
+
+				c_ptr = &cave[mon_fy][mon_fx + 2];
+
+				/* Radius 3 */
+				if ((rad == 3) && cave_floor_grid(c_ptr))
 				{
-					mon_lite_hack(fy - 2, fx - 2);
+					add_mon_lite(mon_fy + 1, mon_fx + 3);
+					add_mon_lite(mon_fy, mon_fx + 3);
+					add_mon_lite(mon_fy - 1, mon_fx + 3);
+				}
+			}
+
+			/* West of the monster */
+			if (cave_floor_bold(mon_fy, mon_fx - 1))
+			{
+				add_mon_lite(mon_fy + 1, mon_fx - 2);
+				add_mon_lite(mon_fy, mon_fx - 2);
+				add_mon_lite(mon_fy - 1, mon_fx - 2);
+
+				c_ptr = &cave[mon_fy][mon_fx - 2];
+
+				/* Radius 3 */
+				if ((rad == 3) && cave_floor_grid(c_ptr))
+				{
+					add_mon_lite(mon_fy + 1, mon_fx - 3);
+					add_mon_lite(mon_fy, mon_fx - 3);
+					add_mon_lite(mon_fy - 1, mon_fx - 3);
 				}
 			}
 		}
-		else /* Dark (rad < 0) */
+
+		/* Radius 3 */
+		if (rad == 3)
 		{
-			/* The square it is on */
-			mon_dark_hack(fy, fx);
-
-			/* Adjacent squares */
-			mon_dark_hack(fy + 1, fx);
-			mon_dark_hack(fy - 1, fx);
-			mon_dark_hack(fy, fx + 1);
-			mon_dark_hack(fy, fx - 1);
-			mon_dark_hack(fy + 1, fx + 1);
-			mon_dark_hack(fy + 1, fx - 1);
-			mon_dark_hack(fy - 1, fx + 1);
-			mon_dark_hack(fy - 1, fx - 1);
-
-			/* Radius -2 */
-			if (rad <= -2)
+			/* South-East of the monster */
+			if (cave_floor_bold(mon_fy + 1, mon_fx + 1))
 			{
-				/* South of the monster */
-				if (cave_floor_bold(fy + 1, fx))
-				{
-					mon_dark_hack(fy + 2, fx + 1);
-					mon_dark_hack(fy + 2, fx);
-					mon_dark_hack(fy + 2, fx - 1);
-
-					c_ptr = &cave[fy + 2][fx];
-
-					/* Radius -3 */
-					if ((rad == -3) && cave_floor_grid(c_ptr))
-					{
-						mon_dark_hack(fy + 3, fx + 1);
-						mon_dark_hack(fy + 3, fx);
-						mon_dark_hack(fy + 3, fx - 1);
-					}
-				}
-
-				/* North of the monster */
-				if (cave_floor_bold(fy - 1, fx))
-				{
-					mon_dark_hack(fy - 2, fx + 1);
-					mon_dark_hack(fy - 2, fx);
-					mon_dark_hack(fy - 2, fx - 1);
-
-					c_ptr = &cave[fy - 2][fx];
-
-					/* Radius -3 */
-					if ((rad == -3) && cave_floor_grid(c_ptr))
-					{
-						mon_dark_hack(fy - 3, fx + 1);
-						mon_dark_hack(fy - 3, fx);
-						mon_dark_hack(fy - 3, fx - 1);
-					}
-				}
-
-				/* East of the monster */
-				if (cave_floor_bold(fy, fx + 1))
-				{
-					mon_dark_hack(fy + 1, fx + 2);
-					mon_dark_hack(fy, fx + 2);
-					mon_dark_hack(fy - 1, fx + 2);
-
-					c_ptr = &cave[fy][fx + 2];
-
-					/* Radius -3 */
-					if ((rad == -3) && cave_floor_grid(c_ptr))
-					{
-						mon_dark_hack(fy + 1, fx + 3);
-						mon_dark_hack(fy, fx + 3);
-						mon_dark_hack(fy - 1, fx + 3);
-					}
-				}
-
-				/* West of the monster */
-				if (cave_floor_bold(fy, fx - 1))
-				{
-					mon_dark_hack(fy + 1, fx - 2);
-					mon_dark_hack(fy, fx - 2);
-					mon_dark_hack(fy - 1, fx - 2);
-
-					c_ptr = &cave[fy][fx - 2];
-
-					/* Radius -3 */
-					if ((rad == -3) && cave_floor_grid(c_ptr))
-					{
-						mon_dark_hack(fy + 1, fx - 3);
-						mon_dark_hack(fy, fx - 3);
-						mon_dark_hack(fy - 1, fx - 3);
-					}
-				}
+				add_mon_lite(mon_fy + 2, mon_fx + 2);
 			}
 
-			/* Radius -3 */
-			if (rad == -3)
+			/* South-West of the monster */
+			if (cave_floor_bold(mon_fy + 1, mon_fx - 1))
 			{
-				/* South-East of the monster */
-				if (cave_floor_bold(fy + 1, fx + 1))
-				{
-					mon_dark_hack(fy + 2, fx + 2);
-				}
+				add_mon_lite(mon_fy + 2, mon_fx - 2);
+			}
 
-				/* South-West of the monster */
-				if (cave_floor_bold(fy + 1, fx - 1))
-				{
-					mon_dark_hack(fy + 2, fx - 2);
-				}
+			/* North-East of the monster */
+			if (cave_floor_bold(mon_fy - 1, mon_fx + 1))
+			{
+				add_mon_lite(mon_fy - 2, mon_fx + 2);
+			}
 
-				/* North-East of the monster */
-				if (cave_floor_bold(fy - 1, fx + 1))
-				{
-					mon_dark_hack(fy - 2, fx + 2);
-				}
-
-				/* North-West of the monster */
-				if (cave_floor_bold(fy - 1, fx - 1))
-				{
-					mon_dark_hack(fy - 2, fx - 2);
-				}
+			/* North-West of the monster */
+			if (cave_floor_bold(mon_fy - 1, mon_fx - 1))
+			{
+				add_mon_lite(mon_fy - 2, mon_fx - 2);
 			}
 		}
 	}
