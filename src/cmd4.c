@@ -7299,8 +7299,8 @@ static void display_visual_list(int col, int row, int height, int width, byte at
 		/* Display columns until done */
 		for (j = 0; j < width; j++)
 		{
-			byte a, a2;
-			char c, c2;
+			byte a;
+			char c;
 			int x = col + j;
 			int y = row + i;
 			int ia, ic;

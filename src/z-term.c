@@ -593,10 +593,10 @@ void Term_queue_bigchar(int x, int y, byte a, char c, byte ta, char tc)
 	 * Use a multibyte character instead of a dirty pair of ASCII
 	 * characters.
 	 */
-	else if (' ' <= c && c <= 127)
+	else if (' ' <= c) /* isprint(c) */
 	{
-		c = ascii_to_zenkaku[2 * (c - ' ')];
 		c2 = ascii_to_zenkaku[2 * (c - ' ') + 1];
+		c = ascii_to_zenkaku[2 * (c - ' ')];
 
 		/* Mark it as a Kanji */
 		a2 = a | AF_KANJI2;
