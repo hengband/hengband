@@ -1797,7 +1797,7 @@ G:?:d
 I:70:38:0
 W:50:0:5:500
 A:50/4:90/2
-D:$It create a glyph on the floor you stand when you read it.
+D:$It creates a glyph on the floor you stand when you read it.
 D:それは読むと自分の足元の床に回避の彫像を作り出す。
 
 N:191:*解呪*
