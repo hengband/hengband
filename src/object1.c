@@ -3342,7 +3342,7 @@ info[i++] = "それは電気のバリアを張る。";
 #ifdef JP
 info[i++] = "それは冷気のバリアを張る。";
 #else
-		info[i++] = "It produces a coldly sheath.";
+		info[i++] = "It produces a sheath of coldness.";
 #endif
 
 	}
