@@ -1,4 +1,282 @@
+2003-08-31  Takeshi Mogami  <mogami@cvs>
+
+	* src/birth.c 1.78, src/bldg.c 1.45, src/externs.h 1.136, src/monster1.c 1.42, src/monster2.c 1.81, src/rooms.c 1.49:
+	hook関数 monster_* を mon_hook_* と改名。これらはstatic関数にした。
+	mon_hook_floorを追加。ペット召喚で床の上に水棲モンスターを
+	召喚しようとして失敗する事がないようにした。
+
+2003-08-31  nothere  <nothere@cvs>
+
+	* src/monster2.c 1.80:
+	増殖するモンスターがクローンだった場合は新しいモンスターもクローンと
+	なるように修正.
+
+	* lib/edit/r_info.txt 1.30:
+	ロレントの手榴弾ばら撒きで救援召喚がラーニングできるのはおかしい等の
+	理由により, 手榴弾ばら撒きを救援召喚から特殊な行動に移転. 反魔法の洞
+	窟でも使用できるようになる. ペット召喚の巻物等でペットになった場合の
+	手榴弾ばら撒きの使用条件は "攻撃魔法許可" かつ "召喚魔法許可" である
+	こととした.
+
+	* src/mspells1.c 1.64, src/mspells2.c 1.60:
+	ロレントの手榴弾ばら撒きで救援召喚がラーニングできるのはおかしい等の
+	理由により, 手榴弾ばら撒きを救援召喚から特殊な行動に移転. 反魔法の洞
+	窟でも使用できるようになる. ペット召喚の巻物等でペットになった場合の
+	手榴弾ばら撒きの使用条件は "攻撃魔法許可" かつ "召喚魔法許可" である
+	こととした. なお, 以下の変更を含む.
+	* 救援召喚のID分岐をswitch文で整理.
+	* モンスター同士の戦いでの『混沌のサーペント』, サーペント・ゾンビの
+	  ダンジョンの主召喚時に, ミドガルドの大蛇『ヨルムンガンド』生存時は
+	  対プレイヤーの時同様に1/6で水が吹き出るように変更.
+	* 王蟲が魔法として特殊な行動を選ぶコードが残っていたので削除.
+	* コメントで, "RF6_SUMMON_KIN" -> "RF6_S_KIN".
+
+2003-08-30  nothere  <nothere@cvs>
+
+	* src/cave.c 1.123:
+	忍者啓蒙時に元々明るい場所がある場合は, 通常の啓蒙と同じ条件である
+	view_perma_grids && !view_torch_gridsならば記憶されるようにした.
+
+	* src/cmd1.c 1.93:
+	武器を持たない忍者が不意打ちを使えていたバグを修正. また, 忍者や盗賊
+	が盾しか持たない場合でも不意打ち判定が動いていたバグを修正.
+
+	* src/xtra2.c 1.100:
+	* バーノール, ルパート, バーノール=ルパートを倒した場合の生存数や殺害
+	  回数に関する処理は, 仮にクローンだった場合は実行されないように変更.
+	* 徳のコードの一部の微妙な整理.
+	* monster_death()内での変数clonedの細かい修正.
+
+	* src/mspells1.c 1.63, src/mspells2.c 1.59, src/defines.h 1.139:
+	インターネット・エクスプローダーと超人ロックのクローンの召喚でIDが直
+	接使われていたので, 記号定数化.
+
+	* src/kajitips.h 1.3, src/mindtips.h 1.14, src/spellstips.h 1.30:
+	Typo fix.
+	* "エッセンス一覧" の説明の文末記号が抜けていたので付けた.
+	* 英文で '.' の後に更に文が続く場合に, 文頭が大文字になっていなかった
+	  部分を修正.
+
+	* lib/edit/r_info.txt 1.29: Typo fix.
+	* アーデンの森の主『ジュリアン』について, "同乗" -> "同情".
+	* スライムモルドの英文テキストで '.' の付け忘れ.
+
+	* src/cave.c 1.122:
+	忍者の視界の床を記憶する動作をオプション依存にした変更との兼ね合いを
+	考え, 啓蒙の動作について変更.
+	* 忍者啓蒙では床と砂地と草地は記憶されないように変更.
+	* 暗闇の洞窟で通常啓蒙を使った場合は砂地と草地が記憶されていたが, 床
+	  と完全に同じ扱いとして記憶しないようにした.
+
+2003-08-29  nothere  <nothere@cvs>
+
+	* src/xtra2.c 1.99:
+	ミスリル・ゴーレムを倒した時にミスリルだけ落とすように変更.
+
+	* lib/file/a_low_j.txt 1.12: "ミノタウルス" -> "ミノタウロス".
+
+	* lib/edit/r_info.txt 1.28: モンスターのフラグの調整.
+	* ピラニア, メカジキ, 巨大ヒル, バラクーダ, カツオノエボシ, ジャイ
+	  アント・ピラニア, ヒッポカンポス, イクシツザチトル, ニクシー, シュ
+	  モクザメ, 白鮫, イクシツザチトル・プリースト, フグ, シャチ, 大白鮫,
+	  吸血イクシツザチトル, タツノオトシゴ, 水トロル, 『ジョーズ』, 空飛
+	  ぶ鯨, ファスティトカロン, リヴァイアサン, クラーケンの子, 水棲ゴー
+	  レム, アンデッド・チョウチンアンコウ, チョウチンアンコウ, 水棲ナー
+	  ガ, 白ワニにRES_WATE追加.
+	* シルバー・ゼリーにHAS_DARK_1追加.
+	* 『柳じじい』, フオルン, エント, 木の鬚『ファンゴルン』にHURT_FIRE追
+	  加.
+	* リヴァイアサンにEVIL追加.
+	* 黄色い光にRES_LITE追加.
+	* 混沌の落し子にRES_CHAO追加.
+	* 目のドルジの説明テキスト変更.
+	* ナイトウィング, ナイトクローラーを進化しないようにした.
+	* 金色の怪人『ワッハマン』からEMPTY_MIND削除.
+	* ニーベルング族の『ミーメ』, ニーベルング族の王『アルベリヒ』, ダー
+	  クエルフの鍛冶師『エオル』にRES_DARK追加.
+	* アルベリヒの息子『ハーゲン』にRES_DARK, RES_DISE追加.
+	* プラネター, ソーラーにNO_FEAR追加.
+	* 見習超能力者 (単体, 集団両方) にMALE追加.
+	* 凍った球体にCOLD_BLOOD追加.
+	* 地のスピリット, スタンウォール, 動く岩, レッサー・ウォールモンス
+	  ター, 『究極ダンジョン=クリーナー』, 地のエレメンタル, 大地の主
+	  『クェイカー』, 長老岩, 花崗岩の壁, 溶岩の壁, 石英の壁, ダオ, 鋼鉄
+	  ドラゴンにRES_SHAR追加.
+	* "ミノタウルス" -> "ミノタウロス".
+
+2003-08-29  Takeshi Mogami  <mogami@cvs>
+
+	* lib/pref/pref-opt.prf 1.17, src/externs.h 1.135, src/flavor.c 1.39, src/tables.c 1.67, src/variable.c 1.44, lib/help/joption.txt 1.25:
+	change_numeral も削除。
+
+	* src/hissatsu.c 1.27, src/mane.c 1.23, src/mind.c 1.28, src/mspells3.c 1.31, src/object1.c 1.72, src/object2.c 1.99, src/tables.c 1.66, src/variable.c 1.43, src/xtra1.c 1.77, src/xtra2.c 1.98, lib/help/joption.txt 1.24, lib/help/option.txt 1.24, lib/pref/pref-opt.prf 1.16, src/cmd1.c 1.92, src/cmd5.c 1.75, src/effects.c 1.44, src/externs.h 1.134:
+	henkmaさんと相談して同意を得た不要なオプションを削除：
+	show_choices, player_symbols, stack_allow_items, expand_look,
+	find_examine, alert_hitpoint, view_reduce_lite .
+
+2003-08-27  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/jmonster.txt 1.6.6.1, lib/help/monster.txt 1.4.10.1:
+	維持コストの説明文修正。
+
+	* lib/pref/graf-new.prf 1.8.2.1, lib/pref/graf-xxx.prf 1.12.2.1, lib/edit/k_info.txt 1.10.2.1:
+	A Set of Gloves of Dragon  ->  A Set of Dragon Gloves
+
+2003-08-26  Takeshi Mogami  <mogami@cvs>
+
+	* src/rooms.c 1.48:
+	フロアの一番下の1ブロック分に部屋が配置されなかったバグ修正。
+
+	* src/cmd2.c 1.59:
+	剣術家のブーメランが闘技場で使えなくなっていたバグ修正。
+	ついでに o_ptr->tval != 5 と直接数値で書いてあった所を TV_SPIKE に修正。
+
+	* src/defines.h 1.138, src/generate.c 1.69, src/generate.h 1.3, src/grid.c 1.19, src/rooms.c 1.47, src/rooms.h 1.3, src/z-rand.c 1.5, src/z-rand.h 1.5:
+	ダンジョンの部屋生成コードを変更。SAngから大幅に変更しつつ移植。
+	大きい部屋から先に生成するので Greater Vault の生成失敗が少なくなる。
+	深層のフロアが特殊な部屋ばっかりになる傾向があるので、
+	各部屋の出現率 room_info_normal を今後調整する必要あり。
+	今後、ダンジョン毎に異なる room_info を用意する事で特徴を出す事もできる。
+
+	* configure.in 1.28, lib/file/news.txt 1.24, lib/file/news_j.txt 1.22, src/defines.h 1.137:
+	バージョン番号を1.7.0へ。
+
+	* lib/file/news.txt 1.23.2.1, lib/file/news_j.txt 1.21.2.1, src/defines.h 1.136.2.1, configure.in 1.27.2.1:
+	バージョン番号を1.6.0へ。
+
+	* src/mindtips.h 1.13, src/spellstips.h 1.29:
+	主語が無い不完全な文でも、どちらかというと大文字で開始した方が良い
+	という意見(@#angband)だったので、全て大文字にした。
+
+	* src/defines.h 1.136: セーブファイルバージョンについて、コメント付加。
+
+	* src/spellstips.h 1.28: typo: for few turns -> for a few turns
+
+2003-08-26  nothere  <nothere@cvs>
+
+	* src/externs.h 1.133, src/floors.c 1.22, src/racial.c 1.42, src/spells2.c 1.81:
+	ダンジョンのフロア間を移動する際に鏡は爆発なしで消えるようにした.
+
+	* src/cave.c 1.66.2.5:
+	2倍幅モード(タイルが有効かどうかは関係ない)かつ軌道表示有効時にシンボ
+	ル'*'で表示されたモンスターを軌道に入れると文字化けが起きていたバグを
+	修正. 開発版より.
+
+	* src/cave.c 1.121:
+	2倍幅モード(タイルが有効かどうかは関係ない)かつ軌道表示有効時にシンボ
+	ル'*'で表示されたモンスターを軌道に入れると文字化けが起きていたバグを
+	修正.
+
+	* src/birth.c 1.77: "クラコン" -> "クラッコン".
+
+	* src/mindtips.h 1.12, src/spellstips.h 1.27: Typo fix.
+
+	* src/mindtips.h 1.11, src/spellstips.h 1.26:
+	テレポート・モンスター魔法の説明を修正.
+
+	* src/mindtips.h 1.10: "生成する" -> "生成する。".
+
+	* src/defines.h 1.135, src/files.c 1.124, src/load.c 1.71, src/save.c 1.37, src/types.h 1.34, src/xtra2.c 1.97:
+	スコア計算では最大の最大経験値を読むようにした. これにより, アイテム
+	で経験値吸収されてもスコアが減らなくなった. なお, セーブデータバー
+	ジョンは1.5.4.1に上がった.
+
+2003-08-24  nothere  <nothere@cvs>
+
+	* src/cmd6.c 1.62, src/externs.h 1.132, src/mspells3.c 1.30, src/spells3.c 1.92:
+	フラグp_ptr->to_m_chance, p_ptr->dec_mana, p_ptr->easy_spell,
+	p_ptr->heavy_spellから導かれる魔法失敗率への影響を関数にまとめた. こ
+	れにより, 消費魔力減少のある魔道具術師の魔法道具使用失敗率が-1%になり
+	得たバグを修正.
+
+2003-08-23  nothere  <nothere@cvs>
+
+	* src/object1.c 1.71:
+	1.70では{!}という銘の場合にバグが残っていたので, get_item_allow()の最
+	初でcommand_cmd == 0ならばTRUEを返すように修正.
+
+	* src/object1.c 1.70:
+	{%!!}という銘が刻まれた場合に最後の'!'の右側が文字列終端の'\0'であり,
+	command_cmd == 0にヒットした結果, 確認が出てしまうバグを修正. {!!}の
+	銘はget_item_allow()内では無視することとした. 1.68でのcommand_cmd = 0
+	とする変更によるエンバグであった.
+
+2003-08-21  Takeshi Mogami  <mogami@cvs>
+
+	* src/xtra2.c 1.96:
+	銀のエンゼルを倒した時、4,9,14,...体目でおもちゃのカンヅメを出していたので、
+	ちゃんと5体目から出すように修正。
+
+2003-08-19  Takeshi Mogami  <mogami@cvs>
+
+	* src/defines.h 1.134: typo: parchement -> parchment
+
+	* lib/edit/d_info.txt 1.5: コメント補完。
+
+	* src/cmd4.c 1.97, src/cmd6.c 1.61, src/flavor.c 1.38, src/wizard1.c 1.33, src/wizard2.c 1.45:
+	typo: parchement -> parchment
+
+	* src/cmd6.c 1.60, src/spells1.c 1.81:
+	Typo: "Your feel your head clear." -> "You feel your head clear."
+
+2003-08-19  henkma  <henkma@cvs>
+
+	* src/cmd6.c 1.59, src/object1.c 1.69:
+	ガンダルフの杖, 帯魔力ペンダントの発動の仕様変更.
+
+	* src/cmd6.c 1.58: ソースコードの方に残っていた「首飾」→「首飾り」
+
+	* lib/edit/a_info.txt 1.10:
+	英語版, charmed pendantの表記がおかしかったので修正.
+
+2003-08-17  nothere  <nothere@cvs>
+
+	* lib/edit/r_info.txt 1.27, src/birth.c 1.76, src/bldg.c 1.44, src/defines.h 1.133, src/dungeon.c 1.130, src/floors.c 1.21, src/init1.c 1.64, src/load.c 1.70, src/melee2.c 1.75, src/monster2.c 1.79, src/object2.c 1.98, src/spells1.c 1.80, src/xtra2.c 1.95:
+	一般形のナズグルに与えられるフラグUNIQUE_7をNAZGULと置き換えた. この
+	過程で, 以下の変更を含む.
+	* 一般形のナズグルのmax_numである5を記号定数化. その記号定数が使われ
+	  るのはユニークでない場合のみとした.
+
+2003-08-17  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/r_info.txt 1.26:
+	超エリートパラディン、反逆パラディン、トラップマスター、ソードマンにHUMANフラグ付加。
+
+	* src/bldg.c 1.43:
+	日替わり賞金首の換金で、集団型の見習いメイジと孤立型の見習いメイジ等を区別しないようにした。
+
+2003-08-16  nothere  <nothere@cvs>
+
+	* src/xtra2.c 1.94:
+	自分中心で半径2以上の森の中で暁の戦士を倒すと必ず復活を阻止できるバグ
+	を修正.
+
+2003-08-14  nothere  <nothere@cvs>
+
+	* src/object1.c 1.68:
+	例えば, 鑑定の杖 {@ud} で鑑定する作業中には d) のアイテムを鑑定できな
+	くなっていた. 他にもこういった2回以上アイテムを選ぶ作業がある場合に,
+	2回目以降のアイテム選択が最初のcommand_cmdに関係する銘で影響されてい
+	たので, get_item()/get_item_floor()でアイテムを選択できてTRUEを返す場
+	合はcommand_cmd = 0とするように変更.
+
+2003-08-13  nothere  <nothere@cvs>
+
+	* src/monster2.c 1.78:
+	保存階にいるアイテムを拾ったユニークモンスターが別の階に現れてから保
+	存階に戻った場合, lite_spot()が呼ばれた際に配列外アクセスを起こして強
+	制終了する場合があるバグを修正. また, monster_drop_carried_objects()
+	内でのo_ptr->held_m_idxの扱いがおかしく, モンスターがアイテムを落とす
+	度に座標(0,0)が再描画されていたバグも修正.
+
 2003-08-12  Takeshi Mogami  <mogami@cvs>
+
+	* src/defines.h 1.132:
+	間違ってセーブファイルバージョン H_VER_PATCHの方を4にしてしまっていた
+	ので、正しくプログラムバージョンFAKE_VER_PATCHの方を4にした。
+	セーブファイルバージョンはしょうがないので戻さないで4のまま。
+
+	* Changelogs 1.72: 更新。(1.4.4/1.5.4)
 
 	* lib/help/version.txt 1.14.2.4, lib/help/jversion.txt 1.14.2.5:
 	バージョン1.4.4用。
@@ -1930,9 +2208,6 @@
 
 	* Changelogs 1.67: 更新
 
-	* CVSROOT/loginfo 1.2:
-	コミットメールをhengband-cvs@lists.sourceforge.jpへ設定。
-
 2003-05-11  nothere  <nothere@cvs>
 
 	* src/cmd4.c 1.85, src/flavor.c 1.34, src/melee1.c 1.29, src/spells1.c 1.53:
@@ -2222,11 +2497,6 @@
 	全ての現行*bandは Ben のコードベースを使っているのに ZAngが出来た時点
 	で Ben 自身がvanillaのソースのcopyrightに名前を入れてなかったという理
 	由だけで変愚でも名前が抜けているから、とそういう理由。
-
-2003-04-09  root  <root@cvs>
-
-	* CVSROOT/checkoutlist 1.1, CVSROOT/commitinfo 1.1, CVSROOT/config 1.1, CVSROOT/cvswrappers 1.1, CVSROOT/editinfo 1.1, CVSROOT/loginfo 1.1, CVSROOT/modules 1.1, CVSROOT/notify 1.1, CVSROOT/rcsinfo 1.1, CVSROOT/taginfo 1.1, CVSROOT/verifymsg 1.1:
-	initial checkin
 
 2003-04-03  iks  <iks@cvs>
 
