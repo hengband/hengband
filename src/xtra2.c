@@ -3571,8 +3571,36 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 	{
 		cptr name;
 
+		/* Hack -- special handling for quest entrances */
+		if (have_flag(f_ptr->flags, FF_QUEST_ENTER))
+		{
+			/* Set the quest number temporary */
+			int old_quest = p_ptr->inside_quest;
+			int j;
+
+			/* Clear the text */
+			for (j = 0; j < 10; j++) quest_text[j][0] = '\0';
+			quest_text_line = 0;
+
+			p_ptr->inside_quest = c_ptr->special;
+
+			/* Get the quest text */
+			init_flags = INIT_SHOW_TEXT;
+
+			process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+
+#ifdef JP
+			name = format("クエスト「%s」(%d階相当)", quest[c_ptr->special].name, quest[c_ptr->special].level);
+#else
+			name = format("the entrance to the quest '%s'(level %d)", quest[c_ptr->special].name, quest[c_ptr->special].level);
+#endif
+
+			/* Reset the old quest number */
+			p_ptr->inside_quest = old_quest;
+		}
+
 		/* Hack -- special handling for building doors */
-		if (have_flag(f_ptr->flags, FF_BLDG) && !p_ptr->inside_arena)
+		else if (have_flag(f_ptr->flags, FF_BLDG) && !p_ptr->inside_arena)
 		{
 			name = building[f_ptr->subtype].name;
 		}
@@ -3617,6 +3645,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 
 		/* Hack -- special introduction for store & building doors -KMW- */
 		if (have_flag(f_ptr->flags, FF_STORE) ||
+		    have_flag(f_ptr->flags, FF_QUEST_ENTER) ||
 		    (have_flag(f_ptr->flags, FF_BLDG) && !p_ptr->inside_arena) ||
 		    have_flag(f_ptr->flags, FF_ENTRANCE))
 		{
