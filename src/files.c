@@ -3297,7 +3297,7 @@ static void display_player_other_flag_info(void)
         display_flag_aux(row+ 3, col, "Á±ÎÉESP   :", TR_ESP_GOOD, &f, 0);
         display_flag_aux(row+ 4, col, "ÉÔ»àESP   :", TR_ESP_UNDEAD, &f, 0);
         display_flag_aux(row+ 5, col, "°­ËâESP   :", TR_ESP_DEMON, &f, 0);
-        display_flag_aux(row+ 6, col, "ÎµESP     :", TR_ESP_DRAGON, &f, 0);
+        display_flag_aux(row+ 6, col, "Î¶ESP     :", TR_ESP_DRAGON, &f, 0);
         display_flag_aux(row+ 7, col, "¿Í´ÖESP   :", TR_ESP_HUMAN, &f, 0);
         display_flag_aux(row+ 8, col, "Æ°ÊªESP   :", TR_ESP_ANIMAL, &f, 0);
         display_flag_aux(row+ 9, col, "¥ª¡¼¥¯ESP :", TR_ESP_ORC, &f, 0);
@@ -3357,10 +3357,10 @@ static void display_player_other_flag_info(void)
         display_flag_aux(row+11, col, "¾ÃÈñËâÎÏ¸º¾¯:", TR_DEC_MANA, &f, 0);
         display_flag_aux(row+12, col, "·Ù¹ð        :", TR_WARNING, &f, 0);
         display_flag_aux(row+13, col, "½ËÊ¡        :", TR_BLESSED, &f, 0);
-        display_flag_aux(row+14, col, "·Ð¸³ÃÍ¸º¾¯  :", TR_DRAIN_EXP, &f, 0);
-        display_flag_aux(row+15, col, "Íð¥Æ¥ì¥Ý¡¼¥È:", TR_TELEPORT, &f, 0);
-        display_flag_aux(row+16, col, "È¿´¶        :", TR_AGGRAVATE, &f, 0);
-        display_flag_aux(row+17, col, "ÂÀ¸Å¤Î±åÇ°  :", TR_TY_CURSE, &f, 0);
+        display_flag_aux(row+15, col, "·Ð¸³ÃÍ¸º¾¯  :", TR_DRAIN_EXP, &f, 0);
+        display_flag_aux(row+16, col, "Íð¥Æ¥ì¥Ý¡¼¥È:", TR_TELEPORT, &f, 0);
+        display_flag_aux(row+17, col, "È¿´¶        :", TR_AGGRAVATE, &f, 0);
+        display_flag_aux(row+18, col, "ÂÀ¸Å¤Î±åÇ°  :", TR_TY_CURSE, &f, 0);
 #else
         display_flag_aux(row+ 0, col, "Add Blows   :", TR_BLOWS, &f, 0);
         display_flag_aux(row+ 1, col, "Add Tunnel  :", TR_TUNNEL, &f, 0);
@@ -3376,10 +3376,10 @@ static void display_player_other_flag_info(void)
         display_flag_aux(row+11, col, "Econom. Mana:", TR_DEC_MANA, &f, 0);
         display_flag_aux(row+12, col, "Warning     :", TR_WARNING, &f, 0);
         display_flag_aux(row+13, col, "Blessed     :", TR_BLESSED, &f, 0);
-        display_flag_aux(row+14, col, "Drain Exp   :", TR_DRAIN_EXP, &f, 0);
-        display_flag_aux(row+15, col, "Rnd.Teleport:", TR_TELEPORT, &f, 0);
-        display_flag_aux(row+16, col, "Aggravate   :", TR_AGGRAVATE, &f, 0);
-        display_flag_aux(row+17, col, "TY Curse    :", TR_TY_CURSE, &f, 0);
+        display_flag_aux(row+15, col, "Drain Exp   :", TR_DRAIN_EXP, &f, 0);
+        display_flag_aux(row+16, col, "Rnd.Teleport:", TR_TELEPORT, &f, 0);
+        display_flag_aux(row+17, col, "Aggravate   :", TR_AGGRAVATE, &f, 0);
+        display_flag_aux(row+18, col, "TY Curse    :", TR_TY_CURSE, &f, 0);
 #endif
 
 }
