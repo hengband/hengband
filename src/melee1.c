@@ -30,7 +30,7 @@ static int monster_critical(int dice, int sides, int dam)
 	if ((dam < 20) && (randint0(100) >= dam)) return (0);
 
 	/* Perfect damage */
-	if (dam == total && dam >= 40) max++;
+	if ((dam >= total) && (dam >= 40)) max++;
 
 	/* Super-charge */
 	if (dam >= 20)
