@@ -4949,7 +4949,7 @@ cptr spell_names[VALID_REALM][32] =
 		"Plasma Ball",
 		"Polymorph Demon",
 		"Nather Wave",
-		"Kiss of Saccubus",
+		"Kiss of Succubus",
 		"Doom Hand",
 
 		"Raise the Morale",
