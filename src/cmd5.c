@@ -5606,6 +5606,9 @@ msg_format("%sから振り落とされそうになって、壁にぶつかった。",m_name);
 
 	p_ptr->redraw |= (PR_EXTRA);
 
+	/* Update health track of mount */
+	p_ptr->redraw |= (PR_UHEALTH);
+
 	if (p_ptr->ffall && !force)
 	{
 		monster_desc(m_name, m_ptr, 0);
@@ -5621,7 +5624,6 @@ msg_format("%sから落ちたが、空中でうまく体勢を立て直して着地した。",m_name);
 #else
 	take_hit(DAMAGE_NOESCAPE, r_ptr->level+3, "Falling from riding", -1);
 #endif
-	p_ptr->redraw |= (PR_UHEALTH);
 
 	return TRUE;
 }

@@ -2392,71 +2392,76 @@ msg_print("少しの間悲しい気分になった。");
 
 		if (m_ptr->hp < m_ptr->maxhp/3)
 		{
-			bool level_teleport = TRUE;
 			char m_name[80];
 			monster_desc(m_name, m_ptr, 0);
 
 			if (m_idx == p_ptr->riding && riding_pinch < 2)
 			{
 #ifdef JP
-msg_format("%sは傷の痛さの余りあなたの束縛から逃れようとしている。", m_name);
+				msg_format("%sは傷の痛さの余りあなたの束縛から逃れようとしている。", m_name);
 #else
-					msg_format("%^s seems to be in so much pain, and trying to escape from your restriction.", m_name);
+				msg_format("%^s seems to be in so much pain, and trying to escape from your restriction.", m_name);
 #endif
 				riding_pinch++;
-				level_teleport = FALSE;
 				disturb(1, 0);
 			}
-			else if (m_ptr->ml)
+			else 
 			{
 				if (m_idx == p_ptr->riding)
 				{
 #ifdef JP
-msg_format("%sはあなたの束縛から脱出した。", m_name);
+					msg_format("%sはあなたの束縛から脱出した。", m_name);
 #else
 					msg_format("%^s succeeded to escape from your restriction!", m_name);
 #endif
-				}
-				if ((r_ptr->flags2 & RF2_CAN_SPEAK) && (m_ptr->r_idx != MON_GRIP) && (m_ptr->r_idx != MON_WOLF) && (m_ptr->r_idx != MON_FANG))
-				{
-#ifdef JP
-msg_format("%^s「ピンチだ！退却させてもらう！」", m_name);
-#else
-					msg_format("%^s says 'It is the pinch! I will retreat'.", m_name);
-#endif
-				}
-#ifdef JP
-msg_format("%^sがテレポート・レベルの巻物を読んだ。", m_name);
-#else
-				msg_format("%^s read a scroll of teleport level.", m_name);
-#endif
-#ifdef JP
-msg_format("%^sが消え去った。", m_name);
-#else
-				msg_format("%^s disappears.", m_name);
-#endif
-			}
-
-			if (level_teleport)
-			{
-				delete_monster_idx(m_idx);
-
-				if (m_idx == p_ptr->riding)
-				{
 					if (rakuba(-1, FALSE))
 					{
 #ifdef JP
-msg_print("地面に落とされた。");
+						msg_print("地面に落とされた。");
 #else
 						msg_print("You have fallen from riding pet.");
 #endif
 					}
 				}
+
+				if (m_ptr->ml)
+				{
+					if ((r_ptr->flags2 & RF2_CAN_SPEAK) && (m_ptr->r_idx != MON_GRIP) && (m_ptr->r_idx != MON_WOLF) && (m_ptr->r_idx != MON_FANG))
+					{
+#ifdef JP
+						msg_format("%^s「ピンチだ！退却させてもらう！」", m_name);
+#else
+						msg_format("%^s says 'It is the pinch! I will retreat'.", m_name);
+#endif
+					}
+#ifdef JP
+					msg_format("%^sがテレポート・レベルの巻物を読んだ。", m_name);
+					msg_format("%^sが消え去った。", m_name);
+#else
+					msg_format("%^s read a scroll of teleport level.", m_name);
+					msg_format("%^s disappears.", m_name);
+#endif
+				}
+
+				if (m_idx == p_ptr->riding && rakuba(-1, FALSE))
+				{
+#ifdef JP
+					msg_print("地面に落とされた。");
+#else
+					msg_print("You have fallen from riding pet.");
+#endif
+				}
+
+				delete_monster_idx(m_idx);
+
 				return;
 			}
 		}
 		else
+		{
+			/* Reset the counter */
 			if (m_idx == p_ptr->riding) riding_pinch = 0;
+		}
 			
 	}
 
