@@ -5355,6 +5355,8 @@ static bool get_item_allow(int item)
 
 	object_type *o_ptr;
 
+	if (!command_cmd) return TRUE; /* command_cmd is no longer effective */
+
 	/* Inventory */
 	if (item >= 0)
 	{
@@ -5376,11 +5378,8 @@ static bool get_item_allow(int item)
 	/* Process preventions */
 	while (s)
 	{
-		/* Ignore the "!!" inscription */
-		if (s[1] == '!') s++;
-
 		/* Check the "restriction" */
-		else if ((s[1] == command_cmd) || (s[1] == '*'))
+		if ((s[1] == command_cmd) || (s[1] == '*'))
 		{
 			/* Verify the choice */
 #ifdef JP
