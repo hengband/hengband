@@ -3592,7 +3592,10 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 #endif
 		}
 #ifndef JP
-		else if (have_flag(f_ptr->flags, FF_FLOOR) || have_flag(f_ptr->flags, FF_TOWN))
+		else if (have_flag(f_ptr->flags, FF_FLOOR) ||
+			 have_flag(f_ptr->flags, FF_TOWN) ||
+y			 have_flag(f_ptr->flags, FF_SHALLOW) ||
+			 have_flag(f_ptr->flags, FF_DEEP))
 		{
 			s3 ="";
 		}

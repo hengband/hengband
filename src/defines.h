@@ -4325,11 +4325,11 @@
 
 /*
  * Determine if a "legal" grid is a "clean" floor grid
+ * Determine if terrain-change spells are allowed in a grid.
  *
- * Line 1 -- forbid non-drops
- * Line 2 -- forbid permanents
- * Line 3 -- forbid object terrains
- * Line 4 -- forbid normal objects
+ * Line 1 -- forbid non-floors
+ * Line 2 -- forbid object terrains
+ * Line 3 -- forbid normal objects
  */
 #define cave_clean_bold(Y,X) \
 	(have_flag(f_flags_bold((Y), (X)), FF_FLOOR) && \
@@ -4338,20 +4338,19 @@
 
 
 /*
- * Determine if a "legal" grid is a "droppable" grid
+ * Determine if an object can be dropped on a "legal" grid
  *
  * Line 1 -- forbid non-drops
  * Line 2 -- forbid object terrains
- * Line 3 -- forbid normal objects
  */
-#define cave_droppable_bold(Y,X) \
+#define cave_drop_bold(Y,X) \
 	(have_flag(f_flags_bold((Y), (X)), FF_DROP) && \
-	 !(cave[Y][X].info & CAVE_OBJECT) && \
-	 !(cave[Y][X].o_idx))
+	 !(cave[Y][X].info & CAVE_OBJECT))
 
 
 /*
  * Determine if a "legal" grid is an "empty" floor grid
+ * Determine if monsters are allowed to move into a grid
  *
  * Line 1 -- forbid non-placement grids
  * Line 2 -- forbid normal monsters
@@ -4365,31 +4364,22 @@
 
 /*
  * Determine if a "legal" grid is an "empty" floor grid
+ * Determine if monster generation is allowed in a grid
  *
- * Line 1 -- forbid non-placement grids
- * Line 2 -- forbid chasms
- * Line 3 -- allow trees while player is in dungeon
- * Line 4 -- forbid normal monsters
- * Line 5 -- forbid the player
+ * Line 1 -- forbid non-empty grids
+ * Line 2 -- forbid trees while dungeon generation
  */
 #define cave_empty_bold2(Y,X) \
-	(have_flag(f_flags_bold((Y), (X)), FF_PLACE) && \
-	 (character_dungeon || !have_flag(f_flags_bold((Y), (X)), FF_TREE)) && \
-	 !(cave[Y][X].m_idx) && \
-	 !player_bold(Y,X))
+	(cave_empty_bold(Y,X) && \
+	 (character_dungeon || !have_flag(f_flags_bold((Y), (X)), FF_TREE)))
 
 
 /*
  * Determine if a "legal" grid is an "naked" floor grid
  *
- * Line 1 -- forbid non-projectables
- * Line 2 -- forbid non-droppers
- * Line 3 -- forbid doors
- * Line 4 -- forbid permanent
- * Line 5 -- forbid object terrains
- * Line 6 -- forbid normal objects
- * Line 7 -- forbid monsters
- * Line 8 -- forbid the player
+ * Line 1 -- forbid non-clean gird
+ * Line 2 -- forbid monsters
+ * Line 3 -- forbid the player
  */
 #define cave_naked_bold(Y,X) \
 	(cave_clean_bold(Y,X) && \

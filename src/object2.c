@@ -4701,7 +4701,8 @@ void place_object(int y, int x, u32b mode)
 {
 	s16b o_idx;
 
-	cave_type *c_ptr;
+	/* Acquire grid */
+	cave_type *c_ptr = &cave[y][x];
 
 	object_type forge;
 	object_type *q_ptr;
@@ -4710,8 +4711,11 @@ void place_object(int y, int x, u32b mode)
 	/* Paranoia -- check bounds */
 	if (!in_bounds(y, x)) return;
 
-	/* Require clean floor space */
-	if (!cave_droppable_bold(y, x)) return;
+	/* Require floor space */
+	if (!cave_drop_bold(y, x)) return;
+
+	/* Avoid stacking on other objects */
+	if (c_ptr->o_idx) return;
 
 
 	/* Get local object */
@@ -4741,9 +4745,6 @@ void place_object(int y, int x, u32b mode)
 		/* Location */
 		o_ptr->iy = y;
 		o_ptr->ix = x;
-
-		/* Acquire grid */
-		c_ptr = &cave[y][x];
 
 		/* Build a stack */
 		o_ptr->next_o_idx = c_ptr->o_idx;
@@ -4818,7 +4819,9 @@ void place_gold(int y, int x)
 {
 	s16b o_idx;
 
-	cave_type *c_ptr;
+	/* Acquire grid */
+	cave_type *c_ptr = &cave[y][x];
+
 
 	object_type forge;
 	object_type *q_ptr;
@@ -4827,8 +4830,11 @@ void place_gold(int y, int x)
 	/* Paranoia -- check bounds */
 	if (!in_bounds(y, x)) return;
 
-	/* Require clean floor space */
-	if (!cave_droppable_bold(y, x)) return;
+	/* Require floor space */
+	if (!cave_drop_bold(y, x)) return;
+
+	/* Avoid stacking on other objects */
+	if (c_ptr->o_idx) return;
 
 
 	/* Get local object */
@@ -4858,9 +4864,6 @@ void place_gold(int y, int x)
 		/* Save location */
 		o_ptr->iy = y;
 		o_ptr->ix = x;
-
-		/* Acquire grid */
-		c_ptr = &cave[y][x];
 
 		/* Build a stack */
 		o_ptr->next_o_idx = c_ptr->o_idx;
@@ -4984,11 +4987,8 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 			/* Obtain grid */
 			c_ptr = &cave[ty][tx];
 
-			/* Require drop space */
-			if (!have_flag(f_flags_grid(c_ptr), FF_DROP)) continue;
-
 			/* Require floor space */
-			if (c_ptr->info & (CAVE_OBJECT)) continue;
+			if (!cave_drop_bold(y, x)) continue;
 
 			/* No objects */
 			k = 0;
@@ -5089,7 +5089,11 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 		bx = tx;
 
 		/* Require floor space */
-		if (!cave_droppable_bold(by, bx)) continue;
+		if (!cave_drop_bold(by, bx)) continue;
+
+		/* Avoid stacking on other objects */
+		if (cave[by][bx].o_idx) continue;
+
 
 		/* Okay */
 		flag = TRUE;

@@ -990,7 +990,7 @@ F:PERMANENT | GLOW
 
 N:83:DEEP_WATER
 J:¿¼¤¤¿å
-E:pool of deep water
+E:deep water
 G:~:b:LIT
 W:2
 F:LOS | PROJECT | MOVE | PLACE | REMEMBER | WATER | DEEP | CAN_FLY | CAN_SWIM |
@@ -998,15 +998,15 @@ F:TELEPORTABLE
 
 N:84:SHALLOW_WATER
 J:Àõ¤¤¿å¤ÎÎ®¤ì
-E:stream of shallow water
+E:shallow water
 G:~:B:LIT
 W:2
-F:LOS | PROJECT | MOVE | PLACE | DROP | REMEMBER | WATER | SHALLOW | CAN_FLY |
+F:LOS | PROJECT | MOVE | PLACE | DROP | FLOOR | REMEMBER | WATER | SHALLOW | CAN_FLY |
 F:CAN_SWIM | TELEPORTABLE
 
 N:85:DEEP_LAVA
 J:¿¼¤¤ÍÏ´äÎ¯¤ê
-E:pool of deep lava
+E:deep lava
 G:~:r:LIT
 W:2
 F:LOS | PROJECT | MOVE | PLACE | REMEMBER | GLOW | LAVA | DEEP | CAN_FLY |
@@ -1014,7 +1014,7 @@ F:TELEPORTABLE
 
 N:86:SHALLOW_LAVA
 J:Àõ¤¤ÍÏ´ä¤ÎÎ®¤ì
-E:stream of shallow lava
+E:shallow lava
 G:~:U:LIT
 W:2
 F:LOS | PROJECT | MOVE | PLACE | DROP | REMEMBER | LAVA | SHALLOW | CAN_FLY |
