@@ -2,9 +2,9 @@
 # Thieves Quest 1
 # By Shayne Steele (steele@cs.fsu.edu)
 
-# Name Thieves Quest 1
-Q:$29:N:Thieves Quest 1 (The Mimic's Treasure)
-Q:29:N:盗賊クエスト１（ミミックの財宝）
+# Name The Mimic's Treasure
+Q:$29:N:The Mimic's Treasure
+Q:29:N:ミミックの財宝
 
 # Definition 
 Q:$29:Q:6:0:0:0:25:0:0:0:6

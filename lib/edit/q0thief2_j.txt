@@ -2,9 +2,9 @@
 # Thieves Quest 2
 # By Shayne Steele (steele@cs.fsu.edu)
 
-# Name Thieves Quest 2
-Q:$30:N:Thieves Quest 2 (Tengu and Death Swords)
-Q:30:N:盗賊クエスト２（テングとデスソード）
+# Name Tengu and Death Swords
+Q:$30:N:Tengu and Death Swords
+Q:30:N:テングとデスソード
 
 # Definition 
 Q:$30:Q:6:0:0:0:25:0:0:0:6

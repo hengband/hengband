@@ -115,11 +115,11 @@
 ?:[EQU $QUEST_NUMBER 28]
 %:q0000028_j.txt
 
-# Thieves Quest 1
+# The Mimic's Treasure
 ?:[EQU $QUEST_NUMBER 29]
 %:q0thief1_j.txt
 
-# Thieves Quest 2
+# Tengu and Death Swords
 ?:[EQU $QUEST_NUMBER 30]
 %:q0thief2_j.txt
 
