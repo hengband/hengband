@@ -2867,7 +2867,7 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 #endif
 
 					teleport_away(c_ptr->m_idx, 50, FALSE);
-					num = p_ptr->num_blow[hand] + 1; /* Can't hit it anymore! */
+					num = num_blow + 1; /* Can't hit it anymore! */
 					*mdeath = TRUE;
 				}
 			}
