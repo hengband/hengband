@@ -969,7 +969,7 @@ static void rd_options(void)
 
 	rd_u16b(&c);
 
-	if (c & 0x0002) wizard = TRUE;
+	if (c & 0x0002) p_ptr->wizard = TRUE;
 
 	cheat_peek = (c & 0x0100) ? TRUE : FALSE;
 	cheat_hear = (c & 0x0200) ? TRUE : FALSE;
@@ -1160,13 +1160,13 @@ static void rd_extra(void)
 
 	rd_string(player_name, 32);
 
-	rd_string(died_from, 80);
+	rd_string(p_ptr->died_from, 80);
 
 	load_quick_start();
 
 	for (i = 0; i < 4; i++)
 	{
-		rd_string(history[i], 60);
+		rd_string(p_ptr->history[i], 60);
 	}
 
 	/* Class/Race/Seikaku/Gender/Spells */
@@ -1210,20 +1210,20 @@ static void rd_extra(void)
 
 	rd_s16b(&p_ptr->lev);
 
-	for (i = 0; i < 64; i++) rd_s16b(&spell_exp[i]);
+	for (i = 0; i < 64; i++) rd_s16b(&p_ptr->spell_exp[i]);
 	if ((p_ptr->pclass == CLASS_SORCERER) && z_older_than(10, 4, 2))
 	{
-		for (i = 0; i < 64; i++) spell_exp[i] = 1600;
+		for (i = 0; i < 64; i++) p_ptr->spell_exp[i] = 1600;
 	}
 	if (z_older_than(10, 3, 6))
-		for (i = 0; i < 5; i++) for (j = 0; j < 60; j++) rd_s16b(&weapon_exp[i][j]);
+		for (i = 0; i < 5; i++) for (j = 0; j < 60; j++) rd_s16b(&p_ptr->weapon_exp[i][j]);
 	else
-		for (i = 0; i < 5; i++) for (j = 0; j < 64; j++) rd_s16b(&weapon_exp[i][j]);
-	for (i = 0; i < 10; i++) rd_s16b(&skill_exp[i]);
+		for (i = 0; i < 5; i++) for (j = 0; j < 64; j++) rd_s16b(&p_ptr->weapon_exp[i][j]);
+	for (i = 0; i < 10; i++) rd_s16b(&p_ptr->skill_exp[i]);
 	if (z_older_than(10, 4, 1))
 	{
-		if (p_ptr->pclass != CLASS_BEASTMASTER) skill_exp[GINOU_RIDING] /= 2;
-		skill_exp[GINOU_RIDING] = MIN(skill_exp[GINOU_RIDING], s_info[p_ptr->pclass].s_max[GINOU_RIDING]);
+		if (p_ptr->pclass != CLASS_BEASTMASTER) p_ptr->skill_exp[GINOU_RIDING] /= 2;
+		p_ptr->skill_exp[GINOU_RIDING] = MIN(p_ptr->skill_exp[GINOU_RIDING], s_info[p_ptr->pclass].s_max[GINOU_RIDING]);
 	}
 	if (z_older_than(10, 3, 14))
 	{
@@ -1256,10 +1256,10 @@ static void rd_extra(void)
 	{
 		for (i = 0; i < OLD_MAX_MANE; i++)
 		{
-			mane_spell[i] = -1;
-			mane_dam[i] = 0;
+			p_ptr->mane_spell[i] = -1;
+			p_ptr->mane_dam[i] = 0;
 		}
-		mane_num = 0;
+		p_ptr->mane_num = 0;
 	}
 	else if (z_older_than(10, 2, 3))
 	{
@@ -1270,20 +1270,20 @@ static void rd_extra(void)
 		}
 		for (i = 0; i < MAX_MANE; i++)
 		{
-			mane_spell[i] = -1;
-			mane_dam[i] = 0;
+			p_ptr->mane_spell[i] = -1;
+			p_ptr->mane_dam[i] = 0;
 		}
 		rd_s16b(&tmp16s);
-		mane_num = 0;
+		p_ptr->mane_num = 0;
 	}
 	else
 	{
 		for (i = 0; i < MAX_MANE; i++)
 		{
-			rd_s16b(&mane_spell[i]);
-			rd_s16b(&mane_dam[i]);
+			rd_s16b(&p_ptr->mane_spell[i]);
+			rd_s16b(&p_ptr->mane_dam[i]);
 		}
-		rd_s16b(&mane_num);
+		rd_s16b(&p_ptr->mane_num);
 	}
 
 	if (z_older_than(10, 0, 3))
@@ -1604,7 +1604,7 @@ note(format("の中", tmp16s));
 		if (tmp8u) p_ptr->action = ACTION_LEARN;
 	}
 	rd_byte((byte *)&preserve_mode);
-	rd_byte((byte *)&wait_report_score);
+	rd_byte((byte *)&p_ptr->wait_report_score);
 
 	/* Future use */
 	for (i = 0; i < 48; i++) rd_byte(&tmp8u);
@@ -1619,14 +1619,14 @@ note(format("の中", tmp16s));
 
 
 	/* Special stuff */
-	rd_u16b(&panic_save);
-	rd_u16b(&total_winner);
-	rd_u16b(&noscore);
+	rd_u16b(&p_ptr->panic_save);
+	rd_u16b(&p_ptr->total_winner);
+	rd_u16b(&p_ptr->noscore);
 
 
 	/* Read "death" */
 	rd_byte(&tmp8u);
-	death = tmp8u;
+	p_ptr->is_dead = tmp8u;
 
 	/* Read "feeling" */
 	rd_byte(&tmp8u);
@@ -2282,7 +2282,7 @@ if (arg_fiddle) note("オプションをロードしました");
 	if (munchkin_death)
 	{
 		/* Mark savefile */
-		noscore |= 0x0001;
+		p_ptr->noscore |= 0x0001;
 	}
 
 	/* Then the "messages" */
@@ -2664,7 +2664,7 @@ note(format("ヒットポイント配列が大きすぎる(%u)！", tmp16u));
 	/* Read the player_hp array */
 	for (i = 0; i < tmp16u; i++)
 	{
-		rd_s16b(&player_hp[i]);
+		rd_s16b(&p_ptr->player_hp[i]);
 	}
 
 	/* Important -- Initialize the sex */
@@ -2675,22 +2675,22 @@ note(format("ヒットポイント配列が大きすぎる(%u)！", tmp16u));
 	cp_ptr = &class_info[p_ptr->pclass];
 	ap_ptr = &seikaku_info[p_ptr->pseikaku];
 
-	if(z_older_than(10, 2, 2) && (p_ptr->pclass == CLASS_BEASTMASTER) && !death)
+	if(z_older_than(10, 2, 2) && (p_ptr->pclass == CLASS_BEASTMASTER) && !p_ptr->is_dead)
 	{
 		p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 		do_cmd_rerate(FALSE);
 	}
-	if(z_older_than(10, 3, 2) && (p_ptr->pclass == CLASS_ARCHER) && !death)
+	if(z_older_than(10, 3, 2) && (p_ptr->pclass == CLASS_ARCHER) && !p_ptr->is_dead)
 	{
 		p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 		do_cmd_rerate(FALSE);
 	}
-	if(z_older_than(10, 2, 6) && (p_ptr->pclass == CLASS_SORCERER) && !death)
+	if(z_older_than(10, 2, 6) && (p_ptr->pclass == CLASS_SORCERER) && !p_ptr->is_dead)
 	{
 		p_ptr->hitdie = rp_ptr->r_mhp/2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
 		do_cmd_rerate(FALSE);
 	}
-	if(z_older_than(10, 4, 7) && (p_ptr->pclass == CLASS_BLUE_MAGE) && !death)
+	if(z_older_than(10, 4, 7) && (p_ptr->pclass == CLASS_BLUE_MAGE) && !p_ptr->is_dead)
 	{
 		p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 		do_cmd_rerate(FALSE);
@@ -2701,12 +2701,12 @@ note(format("ヒットポイント配列が大きすぎる(%u)！", tmp16u));
 
 
 	/* Read spell info */
-	rd_u32b(&spell_learned1);
-	rd_u32b(&spell_learned2);
-	rd_u32b(&spell_worked1);
-	rd_u32b(&spell_worked2);
-	rd_u32b(&spell_forgotten1);
-	rd_u32b(&spell_forgotten2);
+	rd_u32b(&p_ptr->spell_learned1);
+	rd_u32b(&p_ptr->spell_learned2);
+	rd_u32b(&p_ptr->spell_worked1);
+	rd_u32b(&p_ptr->spell_worked2);
+	rd_u32b(&p_ptr->spell_forgotten1);
+	rd_u32b(&p_ptr->spell_forgotten2);
 
 	if (z_older_than(10,0,5))
 	{
@@ -2715,8 +2715,8 @@ note(format("ヒットポイント配列が大きすぎる(%u)！", tmp16u));
 		{
 			/* Count known spells */
 			if ((i < 32) ?
-			    (spell_learned1 & (1L << i)) :
-			    (spell_learned2 & (1L << (i - 32))))
+			    (p_ptr->spell_learned1 & (1L << i)) :
+			    (p_ptr->spell_learned2 & (1L << (i - 32))))
 			{
 				p_ptr->learned_spells++;
 			}
@@ -2733,7 +2733,7 @@ note(format("ヒットポイント配列が大きすぎる(%u)！", tmp16u));
 
 	for (i = 0; i < 64; i++)
 	{
-		rd_byte(&spell_order[i]);
+		rd_byte(&p_ptr->spell_order[i]);
 	}
 
 
@@ -2811,7 +2811,7 @@ note("持ち物情報を読み込むことができません");
 		if (buf[0]) screen_dump = string_make(buf);
 	}
 
-	if (death)
+	if (p_ptr->is_dead)
 	{
 		for (i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++)
 		{
@@ -2821,7 +2821,7 @@ note("持ち物情報を読み込むことができません");
 
 
 	/* I'm not dead yet... */
-	if (!death)
+	if (!p_ptr->is_dead)
 	{
 		/* Dead players have no dungeon */
 #ifdef JP

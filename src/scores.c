@@ -531,7 +531,7 @@ errr top_twenty(void)
 	{
 		/* 2byte 文字を考慮しながらコピー(EUC を仮定) */
 		int cnt = 0;
-		unsigned char *d = (unsigned char*)died_from;
+		unsigned char *d = (unsigned char*)p_ptr->died_from;
 		unsigned char *h = (unsigned char*)the_score.how;
 		while(*d && cnt < 31){
 			if(iskanji(*d)){
@@ -548,16 +548,16 @@ errr top_twenty(void)
 		*h = '\0';
 	}
 #endif
-	if (strlen(died_from) >= 39)
+	if (strlen(p_ptr->died_from) >= 39)
 	{
-		mb_strlcpy(the_score.how, died_from, 37+1);
+		mb_strlcpy(the_score.how, p_ptr->died_from, 37+1);
 		strcat(the_score.how, "…");
 	}
 	else
-		strcpy(the_score.how, died_from);
+		strcpy(the_score.how, p_ptr->died_from);
 
 #else
-	sprintf(the_score.how, "%-.31s", died_from);
+	sprintf(the_score.how, "%-.31s", p_ptr->died_from);
 #endif
 
 
@@ -901,12 +901,12 @@ void kingly(void)
 	dun_level = 0;
 
 	/* Fake death */
-	if (!streq(died_from, "Seppuku"))
+	if (!streq(p_ptr->died_from, "Seppuku"))
 #ifdef JP
 	        /* 引退したときの識別文字 */
-        	(void)strcpy(died_from, "ripe");
+        	(void)strcpy(p_ptr->died_from, "ripe");
 #else
-		(void)strcpy(died_from, "Ripe Old Age");
+		(void)strcpy(p_ptr->died_from, "Ripe Old Age");
 #endif
 
 

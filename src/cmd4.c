@@ -1544,13 +1544,13 @@ static void do_cmd_options_cheat(cptr info)
 			case 'Y':
 			case '6':
 			{
-				if(!noscore)
+				if(!p_ptr->noscore)
 #ifdef JP
 					do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "詐欺オプションをONにして、スコアを残せなくなった。");
 #else
 					do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "give up sending score to use cheating options.");
 #endif
-				noscore |= (cheat_info[k].o_set * 256 + cheat_info[k].o_bit);
+				p_ptr->noscore |= (cheat_info[k].o_set * 256 + cheat_info[k].o_bit);
 				(*cheat_info[k].o_var) = TRUE;
 				k = (k + 1) % n;
 				break;
@@ -5997,17 +5997,17 @@ static void do_cmd_knowledge_weapon_exp(void)
 				{
 					if((k_ptr->tval == TV_BOW) && (k_ptr->sval == SV_CRIMSON)) continue;
 
-					if(weapon_exp[4-i][num]<4000) shougou=0;
-					else if(weapon_exp[4-i][num]<6000) shougou=1;
-					else if(weapon_exp[4-i][num]<7000) shougou=2;
-					else if(weapon_exp[4-i][num]<8000) shougou=3;
+					if(p_ptr->weapon_exp[4-i][num]<4000) shougou=0;
+					else if(p_ptr->weapon_exp[4-i][num]<6000) shougou=1;
+					else if(p_ptr->weapon_exp[4-i][num]<7000) shougou=2;
+					else if(p_ptr->weapon_exp[4-i][num]<8000) shougou=3;
 					else shougou=4;
 					strip_name(tmp, j);
 					fprintf(fff,"%-25s ",tmp);
-					if (weapon_exp[4-i][num] >= s_info[p_ptr->pclass].w_max[4-i][num]) fprintf(fff,"!");
+					if (p_ptr->weapon_exp[4-i][num] >= s_info[p_ptr->pclass].w_max[4-i][num]) fprintf(fff,"!");
 					else fprintf(fff," ");
 					fprintf(fff,"%s",shougou_moji[shougou]);
-					if (cheat_xtra) fprintf(fff," %d",weapon_exp[4-i][num]);
+					if (cheat_xtra) fprintf(fff," %d",p_ptr->weapon_exp[4-i][num]);
 					fprintf(fff,"\n");
 					break;
 				}
@@ -6073,10 +6073,10 @@ static void do_cmd_knowledge_spell_exp(void)
 				s_ptr = &mp_ptr->info[p_ptr->realm1 - 1][i];
 			}
 			if(s_ptr->slevel == 99) continue;
-			if(spell_exp[i]<900) shougou=0;
-			else if(spell_exp[i]<1200) shougou=1;
-			else if(spell_exp[i]<1400) shougou=2;
-			else if(spell_exp[i]<1600) shougou=3;
+			if(p_ptr->spell_exp[i]<900) shougou=0;
+			else if(p_ptr->spell_exp[i]<1200) shougou=1;
+			else if(p_ptr->spell_exp[i]<1400) shougou=2;
+			else if(p_ptr->spell_exp[i]<1600) shougou=3;
 			else shougou=4;
 			fprintf(fff,"%-25s ",spell_names[technic2magic(p_ptr->realm1)-1][i]);
 			if (p_ptr->realm1 == REALM_HISSATSU)
@@ -6087,7 +6087,7 @@ static void do_cmd_knowledge_spell_exp(void)
 				else fprintf(fff," ");
 				fprintf(fff,"%s",shougou_moji[shougou]);
 			}
-			if (cheat_xtra) fprintf(fff," %d",spell_exp[i]);
+			if (cheat_xtra) fprintf(fff," %d",p_ptr->spell_exp[i]);
 			fprintf(fff,"\n");
 		}
 	}
@@ -6107,15 +6107,15 @@ static void do_cmd_knowledge_spell_exp(void)
 			}
 			if(s_ptr->slevel == 99) continue;
 
-			if(spell_exp[i+32]<900) shougou=0;
-			else if(spell_exp[i+32]<1200) shougou=1;
-			else if(spell_exp[i+32]<1400) shougou=2;
+			if(p_ptr->spell_exp[i+32]<900) shougou=0;
+			else if(p_ptr->spell_exp[i+32]<1200) shougou=1;
+			else if(p_ptr->spell_exp[i+32]<1400) shougou=2;
 			else shougou=3;
 			fprintf(fff,"%-25s ",spell_names[technic2magic(p_ptr->realm2)-1][i]);
 			if (shougou == 3) fprintf(fff,"!");
 			else fprintf(fff," ");
 			fprintf(fff,"%s",shougou_moji[shougou]);
-			if (cheat_xtra) fprintf(fff," %d",spell_exp[i+32]);
+			if (cheat_xtra) fprintf(fff," %d",p_ptr->spell_exp[i+32]);
 			fprintf(fff,"\n");
 		}
 	}
@@ -6168,25 +6168,25 @@ static void do_cmd_knowledge_skill_exp(void)
 	{
 		if(i == GINOU_RIDING)
 		{
-			if(skill_exp[i]<500) shougou=0;
-			else if(skill_exp[i]<2000) shougou=1;
-			else if(skill_exp[i]<5000) shougou=2;
-			else if(skill_exp[i]<8000) shougou=3;
+			if(p_ptr->skill_exp[i]<500) shougou=0;
+			else if(p_ptr->skill_exp[i]<2000) shougou=1;
+			else if(p_ptr->skill_exp[i]<5000) shougou=2;
+			else if(p_ptr->skill_exp[i]<8000) shougou=3;
 			else shougou=4;
 		}
 		else
 		{
-			if(skill_exp[i]<4000) shougou=0;
-			else if(skill_exp[i]<6000) shougou=1;
-			else if(skill_exp[i]<7000) shougou=2;
-			else if(skill_exp[i]<8000) shougou=3;
+			if(p_ptr->skill_exp[i]<4000) shougou=0;
+			else if(p_ptr->skill_exp[i]<6000) shougou=1;
+			else if(p_ptr->skill_exp[i]<7000) shougou=2;
+			else if(p_ptr->skill_exp[i]<8000) shougou=3;
 			else shougou=4;
 		}
 		fprintf(fff,"%-20s ",skill_name[i]);
-		if (skill_exp[i] == s_info[p_ptr->pclass].s_max[i]) fprintf(fff,"!");
+		if (p_ptr->skill_exp[i] == s_info[p_ptr->pclass].s_max[i]) fprintf(fff,"!");
 		else fprintf(fff," ");
 		fprintf(fff,"%s",shougou_moji[shougou]);
-		if (cheat_xtra) fprintf(fff," %d",skill_exp[i]);
+		if (cheat_xtra) fprintf(fff," %d",p_ptr->skill_exp[i]);
 		fprintf(fff,"\n");
 	}
 
@@ -6866,7 +6866,7 @@ static void do_cmd_knowledge_stat(void)
 	
 	if (fff)
 	{
-		percent = (int)(((long)player_hp[PY_MAX_LEVEL - 1] * 200L) /
+		percent = (int)(((long)p_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) /
 			(2 * p_ptr->hitdie +
 			((PY_MAX_LEVEL - 1+3) * (p_ptr->hitdie + 1))));
 
@@ -7236,7 +7236,7 @@ sprintf(rand_tmp_str,"%s (%d 階) - %sを倒す。\n",
 	if (!total) fprintf(fff, "Nothing.\n");
 #endif
 
-	if (wizard) {
+	if (p_ptr->wizard) {
 #ifdef JP
 	fprintf(fff, "\n《残りのランダムクエスト》\n");
 #else

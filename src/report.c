@@ -428,7 +428,7 @@ errr report_score(void)
 	buf_sprintf(score, "seikaku: %s\n", seikakutmp);
 	buf_sprintf(score, "realm1: %s\n", realm_names[p_ptr->realm1]);
 	buf_sprintf(score, "realm2: %s\n", realm_names[p_ptr->realm2]);
-	buf_sprintf(score, "killer: %s\n", died_from);
+	buf_sprintf(score, "killer: %s\n", p_ptr->died_from);
 	buf_sprintf(score, "-----charcter dump-----\n");
 
 	make_dump(score);

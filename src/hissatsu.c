@@ -119,7 +119,7 @@ cptr            p = "必殺剣";
 					{
 						menu_line += 31;
 						if (menu_line > 32) menu_line -= 32;
-					} while(!(spell_learned1 & (1L << (menu_line-1))));
+					} while(!(p_ptr->spell_learned1 & (1L << (menu_line-1))));
 					break;
 				}
 
@@ -131,7 +131,7 @@ cptr            p = "必殺剣";
 					{
 						menu_line++;
 						if (menu_line > 32) menu_line -= 32;
-					} while(!(spell_learned1 & (1L << (menu_line-1))));
+					} while(!(p_ptr->spell_learned1 & (1L << (menu_line-1))));
 					break;
 				}
 
@@ -150,7 +150,7 @@ cptr            p = "必殺剣";
 						reverse = TRUE;
 					}
 					else menu_line+=16;
-					while(!(spell_learned1 & (1L << (menu_line-1))))
+					while(!(p_ptr->spell_learned1 & (1L << (menu_line-1))))
 					{
 						if (reverse)
 						{
@@ -207,11 +207,11 @@ put_str("name              Lv  SP      name              Lv  SP ", y, x + 5);
 
 					if (spell.slevel > PY_MAX_LEVEL) continue;
 					line++;
-					if (!(spell_learned1 >> i)) break;
+					if (!(p_ptr->spell_learned1 >> i)) break;
 
 					/* Access the spell */
 					if (spell.slevel > plev)   continue;
-					if (!(spell_learned1 & (1L << i))) continue;
+					if (!(p_ptr->spell_learned1 & (1L << i))) continue;
 					if (use_menu)
 					{
 						if (i == (menu_line-1))
@@ -278,7 +278,7 @@ put_str("name              Lv  SP      name              Lv  SP ", y, x + 5);
 		}
 
 		/* Totally Illegal */
-		if ((i < 0) || (i >= 32) || !(spell_learned1 & (1 << sentaku[i])))
+		if ((i < 0) || (i >= 32) || !(p_ptr->spell_learned1 & (1 << sentaku[i])))
 		{
 			bell();
 			continue;
@@ -1192,10 +1192,10 @@ prt("確認のため '@' を押して下さい。", 0, 0);
 		i = inkey();
 		prt("", 0, 0);
 		if (i != '@') return FALSE;
-		if (total_winner)
+		if (p_ptr->total_winner)
 		{
 			take_hit(DAMAGE_FORCE, 9999, "Seppuku", -1);
-			total_winner = TRUE;
+			p_ptr->total_winner = TRUE;
 		}
 		else
 		{
@@ -1255,7 +1255,7 @@ msg_print("武器を持たないと必殺技は使えない！");
 
 		return;
 	}
-	if (!spell_learned1)
+	if (!p_ptr->spell_learned1)
 	{
 #ifdef JP
 msg_print("何も技を知らない。");
@@ -1404,11 +1404,11 @@ s = "読める書がない。";
 
 	for (i = o_ptr->sval * 8; i < o_ptr->sval * 8 + 8; i++)
 	{
-		if (spell_learned1 & (1L << i)) continue;
+		if (p_ptr->spell_learned1 & (1L << i)) continue;
 		if (technic_info[TECHNIC_HISSATSU][i].slevel > p_ptr->lev) continue;
 
-		spell_learned1 |= (1L << i);
-		spell_worked1 |= (1L << i);
+		p_ptr->spell_learned1 |= (1L << i);
+		p_ptr->spell_worked1 |= (1L << i);
 #ifdef JP
 		msg_format("%sの技を覚えた。", spell_names[technic2magic(REALM_HISSATSU)-1][i]);
 #else
@@ -1417,9 +1417,9 @@ s = "読める書がない。";
 		for (j = 0; j < 64; j++)
 		{
 			/* Stop at the first empty space */
-			if (spell_order[j] == 99) break;
+			if (p_ptr->spell_order[j] == 99) break;
 		}
-		spell_order[j] = i;
+		p_ptr->spell_order[j] = i;
 		gain = TRUE;
 	}
 	if (!gain)

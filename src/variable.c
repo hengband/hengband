@@ -118,10 +118,6 @@ byte create_down_stair;	/* Auto-create "down stairs" */
 
 bool msg_flag;			/* Used in msg_print() for "buffering" */
 
-bool alive;				/* True if game is running */
-
-bool death;				/* True if player has died */
-
 s16b running;			/* Current counter for running, if any */
 s16b resting;			/* Current counter for resting, if any */
 
@@ -138,17 +134,9 @@ s32b dungeon_turn;			/* Game turn in dungeon */
 s32b old_turn;			/* Turn when level began (feelings) */
 s32b old_battle;
 
-bool wizard;			/* Is the player currently in Wizard mode? */
-
 bool use_sound;			/* The "sound" mode is enabled */
 bool use_graphics;		/* The "graphics" mode is enabled */
 bool use_bigtile = FALSE;
-
-u16b total_winner;		/* Semi-Hack -- Game has been won */
-
-u16b panic_save;		/* Track some special "conditions" */
-u16b noscore;			/* Track various "cheating" conditions */
-bool wait_report_score;         /* Waiting to report score */
 
 s16b signal_count;		/* Hack -- Count interupts */
 
@@ -386,15 +374,6 @@ char player_name[32];
  */
 char player_base[32];
 
-/*
- * What killed the player
- */
-char died_from[80];
-
-/*
- * Hack -- Textual "history" for the Player
- */
-char history[4][60];
 
 /*
  * Buffer to hold the current savefile name
@@ -734,27 +713,6 @@ player_race *rp_ptr;
 player_class *cp_ptr;
 player_seikaku *ap_ptr;
 player_magic *mp_ptr;
-
-
-/*
- * More spell info
- */
-u32b spell_learned1;	/* bit mask of spells learned */
-u32b spell_learned2;	/* bit mask of spells learned */
-u32b spell_worked1;	/* bit mask of spells tried and worked */
-u32b spell_worked2;	/* bit mask of spells tried and worked */
-u32b spell_forgotten1;	/* bit mask of spells learned but forgotten */
-u32b spell_forgotten2;	/* bit mask of spells learned but forgotten */
-byte spell_order[64];	/* order spells learned/remembered/forgotten */
-
-
-/*
- * Calculated base hp values for player at each level,
- * store them so that drain life + restore life does not
- * affect hit points.  Also prevents shameless use of backup
- * savefiles for hitpoint acquirement.
- */
-s16b player_hp[PY_MAX_LEVEL];
 
 
 /*
@@ -1150,18 +1108,8 @@ bool autochara;
 
 bool can_save = FALSE;        /* Game can be saved */
 
-s16b spell_exp[64];           /* mahou keikenchi */
-
-s16b weapon_exp[5][64];       /* weapon keikenchi */
-
-s16b skill_exp[10];           /* ginou keikenchi */
-
 bool world_monster;
 bool world_player;
-
-s16b mane_spell[MAX_MANE];
-s16b mane_dam[MAX_MANE];
-s16b mane_num;
 
 int cap_mon;
 int cap_mspeed;

@@ -241,7 +241,7 @@ bool make_attack_normal(int m_idx)
 		}
 
 		/* Stop if player is dead or gone */
-		if (!alive || death) break;
+		if (!p_ptr->playing || p_ptr->is_dead) break;
 		if (distance(py, px, m_ptr->fy, m_ptr->fx) > 1) break;
 
 		/* Handle "leaving" */
@@ -823,7 +823,7 @@ bool make_attack_normal(int m_idx)
 					/* Take some damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					/* Find an item */
 					for (k = 0; k < 10; k++)
@@ -893,7 +893,7 @@ bool make_attack_normal(int m_idx)
 					/* Confused monsters cannot steal successfully. -LM-*/
 					if (m_ptr->confused) break;
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					/* Obvious */
 					obvious = TRUE;
@@ -977,7 +977,7 @@ bool make_attack_normal(int m_idx)
 					/* Confused monsters cannot steal successfully. -LM-*/
 					if (m_ptr->confused) break;
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					/* Saving throw (unless paralyzed) based on dex and level */
 					if (!p_ptr->paralyzed &&
@@ -1099,7 +1099,7 @@ bool make_attack_normal(int m_idx)
 					/* Take some damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					/* Steal some food */
 					for (k = 0; k < 10; k++)
@@ -1153,7 +1153,7 @@ bool make_attack_normal(int m_idx)
 					/* Take some damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					/* Drain fuel */
 					if ((o_ptr->xtra4 > 0) && (!artifact_p(o_ptr)))
@@ -1278,7 +1278,7 @@ bool make_attack_normal(int m_idx)
 					/* Take damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					/* Increase "blind" */
 					if (!p_ptr->resist_blind)
@@ -1306,7 +1306,7 @@ bool make_attack_normal(int m_idx)
 					/* Take damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					/* Increase "confused" */
 					if (!p_ptr->resist_conf)
@@ -1328,7 +1328,7 @@ bool make_attack_normal(int m_idx)
 					/* Take damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					/* Increase "afraid" */
 					if (p_ptr->resist_fear)
@@ -1370,7 +1370,7 @@ bool make_attack_normal(int m_idx)
 					/* Take damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					/* Increase "paralyzed" */
 					if (p_ptr->free_act)
@@ -1415,7 +1415,7 @@ bool make_attack_normal(int m_idx)
 					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					/* Damage (stat) */
 					if (do_dec_stat(A_STR)) obvious = TRUE;
@@ -1428,7 +1428,7 @@ bool make_attack_normal(int m_idx)
 					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					/* Damage (stat) */
 					if (do_dec_stat(A_INT)) obvious = TRUE;
@@ -1441,7 +1441,7 @@ bool make_attack_normal(int m_idx)
 					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					/* Damage (stat) */
 					if (do_dec_stat(A_WIS)) obvious = TRUE;
@@ -1454,7 +1454,7 @@ bool make_attack_normal(int m_idx)
 					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					/* Damage (stat) */
 					if (do_dec_stat(A_DEX)) obvious = TRUE;
@@ -1467,7 +1467,7 @@ bool make_attack_normal(int m_idx)
 					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					/* Damage (stat) */
 					if (do_dec_stat(A_CON)) obvious = TRUE;
@@ -1480,7 +1480,7 @@ bool make_attack_normal(int m_idx)
 					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					/* Damage (stat) */
 					if (do_dec_stat(A_CHR)) obvious = TRUE;
@@ -1493,7 +1493,7 @@ bool make_attack_normal(int m_idx)
 					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					/* Damage (stats) */
 					if (do_dec_stat(A_STR)) obvious = TRUE;
@@ -1534,7 +1534,7 @@ bool make_attack_normal(int m_idx)
 					/* Take damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					if (p_ptr->prace == RACE_ANDROID)
 					{
@@ -1583,7 +1583,7 @@ bool make_attack_normal(int m_idx)
 					/* Take damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					if (p_ptr->prace == RACE_ANDROID)
 					{
@@ -1632,7 +1632,7 @@ bool make_attack_normal(int m_idx)
 					/* Take damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					if (p_ptr->prace == RACE_ANDROID)
 					{
@@ -1681,7 +1681,7 @@ bool make_attack_normal(int m_idx)
 					/* Take damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					if (p_ptr->prace == RACE_ANDROID)
 					{
@@ -1727,7 +1727,7 @@ bool make_attack_normal(int m_idx)
 					/* Take some damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					/* Take "poison" effect */
 					if (!(p_ptr->resist_pois || p_ptr->oppose_pois))
@@ -1845,7 +1845,7 @@ bool make_attack_normal(int m_idx)
 					/* Take damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (death) break;
+					if (p_ptr->is_dead) break;
 
 					if (p_ptr->prace == RACE_ANDROID)
 					{
@@ -2026,7 +2026,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 
 			if (touched)
 			{
-				if (p_ptr->sh_fire && alive && !death)
+				if (p_ptr->sh_fire && alive && !p_ptr->is_dead)
 				{
 					if (!(r_ptr->flags3 & RF3_IM_FIRE))
 					{
@@ -2058,7 +2058,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					}
 				}
 
-				if (p_ptr->sh_elec && alive && !death)
+				if (p_ptr->sh_elec && alive && !p_ptr->is_dead)
 				{
 					if (!(r_ptr->flags3 & RF3_IM_ELEC))
 					{
@@ -2090,7 +2090,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					}
 				}
 
-				if (p_ptr->sh_cold && alive && !death)
+				if (p_ptr->sh_cold && alive && !p_ptr->is_dead)
 				{
 					if (!(r_ptr->flags3 & RF3_IM_COLD))
 					{
@@ -2123,7 +2123,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 				}
 
 				/* by henkma */
-				if (p_ptr->dustrobe && alive && !death)
+				if (p_ptr->dustrobe && alive && !p_ptr->is_dead)
 				{
 					if (!(r_ptr->flags4 & RF4_BR_SHAR))
 					{
@@ -2153,7 +2153,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					}
 				}
 
-				if (p_ptr->tim_sh_holy && alive && !death)
+				if (p_ptr->tim_sh_holy && alive && !p_ptr->is_dead)
 				{
 					if (r_ptr->flags3 & RF3_EVIL)
 					{
@@ -2182,7 +2182,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					}
 				}
 
-				if (p_ptr->tim_sh_touki && alive && !death)
+				if (p_ptr->tim_sh_touki && alive && !p_ptr->is_dead)
 				{
 					int dam = damroll(2, 6);
 
@@ -2286,7 +2286,7 @@ msg_format("%^sから落ちてしまった！", m_name);
 		}
 	}
 
-	if (p_ptr->tim_eyeeye && get_damage > 0 && !death)
+	if (p_ptr->tim_eyeeye && get_damage > 0 && !p_ptr->is_dead)
 	{
 #ifdef JP
 		msg_format("攻撃が%s自身を傷つけた！", m_name);
@@ -2303,7 +2303,7 @@ msg_format("%^sから落ちてしまった！", m_name);
 	}
 
 
-	if ((p_ptr->counter || (p_ptr->special_defense & KATA_MUSOU)) && alive && !death && m_ptr->ml && (p_ptr->csp > 7))
+	if ((p_ptr->counter || (p_ptr->special_defense & KATA_MUSOU)) && alive && !p_ptr->is_dead && m_ptr->ml && (p_ptr->csp > 7))
 	{
 		char m_name[80];
 		monster_desc(m_name, m_ptr, 0);
@@ -2319,7 +2319,7 @@ msg_format("%^sから落ちてしまった！", m_name);
 	}
 
 	/* Blink away */
-	if (blinked && alive && !death)
+	if (blinked && alive && !p_ptr->is_dead)
 	{
 #ifdef JP
 		msg_print("泥棒は笑って逃げた！");
@@ -2332,12 +2332,12 @@ msg_format("%^sから落ちてしまった！", m_name);
 
 
 	/* Always notice cause of death */
-	if (death && (r_ptr->r_deaths < MAX_SHORT) && !p_ptr->inside_arena)
+	if (p_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !p_ptr->inside_arena)
 	{
 		r_ptr->r_deaths++;
 	}
 
-	if (m_ptr->ml && fear && alive && !death)
+	if (m_ptr->ml && fear && alive && !p_ptr->is_dead)
 	{
 		sound(SOUND_FLEE);
 #ifdef JP

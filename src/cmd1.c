@@ -1720,7 +1720,7 @@ static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
 		k = mon_damage_mod(m_ptr, k, FALSE);
 
 		/* Complex message */
-		if (wizard)
+		if (p_ptr->wizard)
 		{
 #ifdef JP
 				msg_format("%d/%d のダメージを与えた。", k, m_ptr->hp);
@@ -1840,16 +1840,16 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 	{
 		if ((r_ptr->level + 10) > p_ptr->lev)
 		{
-			if (skill_exp[GINOU_SUDE] < s_info[p_ptr->pclass].s_max[GINOU_SUDE])
+			if (p_ptr->skill_exp[GINOU_SUDE] < s_info[p_ptr->pclass].s_max[GINOU_SUDE])
 			{
-				if (skill_exp[GINOU_SUDE] < 4000)
-					skill_exp[GINOU_SUDE]+=40;
-				else if((skill_exp[GINOU_SUDE] < 6000))
-					skill_exp[GINOU_SUDE]+=5;
-				else if((skill_exp[GINOU_SUDE] < 7000) && (p_ptr->lev > 19))
-					skill_exp[GINOU_SUDE]+=1;
-				else if((skill_exp[GINOU_SUDE] < 8000) && (p_ptr->lev > 34))
-					if (one_in_(3)) skill_exp[GINOU_SUDE]+=1;
+				if (p_ptr->skill_exp[GINOU_SUDE] < 4000)
+					p_ptr->skill_exp[GINOU_SUDE]+=40;
+				else if((p_ptr->skill_exp[GINOU_SUDE] < 6000))
+					p_ptr->skill_exp[GINOU_SUDE]+=5;
+				else if((p_ptr->skill_exp[GINOU_SUDE] < 7000) && (p_ptr->lev > 19))
+					p_ptr->skill_exp[GINOU_SUDE]+=1;
+				else if((p_ptr->skill_exp[GINOU_SUDE] < 8000) && (p_ptr->lev > 34))
+					if (one_in_(3)) p_ptr->skill_exp[GINOU_SUDE]+=1;
 				p_ptr->update |= (PU_BONUS);
 			}
 		}
@@ -1860,7 +1860,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 		{
 			int tval = inventory[INVEN_RARM+hand].tval - TV_BOW;
 			int sval = inventory[INVEN_RARM+hand].sval;
-			int now_exp = weapon_exp[tval][sval];
+			int now_exp = p_ptr->weapon_exp[tval][sval];
 			if (now_exp < s_info[p_ptr->pclass].w_max[tval][sval])
 			{
 				int amount = 0;
@@ -1868,7 +1868,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				else if(now_exp < 6000) amount = 10;
 				else if((now_exp < 7000) && (p_ptr->lev > 19)) amount = 1;
 				else if((p_ptr->lev > 34) && one_in_(2)) amount = 1;
-				weapon_exp[tval][sval] += amount;
+				p_ptr->weapon_exp[tval][sval] += amount;
 				p_ptr->update |= (PU_BONUS);
 			}
 		}
@@ -1907,7 +1907,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 	else num_blow = p_ptr->num_blow[hand];
 
 	/* Attack once for each legal blow */
-	while ((num++ < num_blow) && !death)
+	while ((num++ < num_blow) && !p_ptr->is_dead)
 	{
 		if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) || (mode == HISSATSU_KYUSHO))
 		{
@@ -2067,7 +2067,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 					{
 						old_ptr = ma_ptr;
 
-						if (wizard && cheat_xtra)
+						if (p_ptr->wizard && cheat_xtra)
 						{
 #ifdef JP
 							msg_print("攻撃を再選択しました。");
@@ -2470,7 +2470,7 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 			}
 
 			/* Complex message */
-			if (wizard || cheat_xtra)
+			if (p_ptr->wizard || cheat_xtra)
 			{
 #ifdef JP
 				msg_format("%d/%d のダメージを与えた。", k, m_ptr->hp);
@@ -3050,16 +3050,16 @@ bool py_attack(int y, int x, int mode)
 
 	if (p_ptr->migite && p_ptr->hidarite)
 	{
-		if ((skill_exp[GINOU_NITOURYU] < s_info[p_ptr->pclass].s_max[GINOU_NITOURYU]) && ((skill_exp[GINOU_NITOURYU] - 1000) / 200 < r_info[m_ptr->r_idx].level))
+		if ((p_ptr->skill_exp[GINOU_NITOURYU] < s_info[p_ptr->pclass].s_max[GINOU_NITOURYU]) && ((p_ptr->skill_exp[GINOU_NITOURYU] - 1000) / 200 < r_info[m_ptr->r_idx].level))
 		{
-			if (skill_exp[GINOU_NITOURYU] < 4000)
-				skill_exp[GINOU_NITOURYU]+=80;
-			else if(skill_exp[GINOU_NITOURYU] < 6000)
-				skill_exp[GINOU_NITOURYU]+=4;
-			else if(skill_exp[GINOU_NITOURYU] < 7000)
-				skill_exp[GINOU_NITOURYU]+=1;
-			else if(skill_exp[GINOU_NITOURYU] < 8000)
-				if (one_in_(3)) skill_exp[GINOU_NITOURYU]+=1;
+			if (p_ptr->skill_exp[GINOU_NITOURYU] < 4000)
+				p_ptr->skill_exp[GINOU_NITOURYU]+=80;
+			else if(p_ptr->skill_exp[GINOU_NITOURYU] < 6000)
+				p_ptr->skill_exp[GINOU_NITOURYU]+=4;
+			else if(p_ptr->skill_exp[GINOU_NITOURYU] < 7000)
+				p_ptr->skill_exp[GINOU_NITOURYU]+=1;
+			else if(p_ptr->skill_exp[GINOU_NITOURYU] < 8000)
+				if (one_in_(3)) p_ptr->skill_exp[GINOU_NITOURYU]+=1;
 			p_ptr->update |= (PU_BONUS);
 		}
 	}
@@ -3067,13 +3067,13 @@ bool py_attack(int y, int x, int mode)
 	if (p_ptr->riding)
 	{
 		int ridinglevel = r_info[m_list[p_ptr->riding].r_idx].level;
-		if ((skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING]) && ((skill_exp[GINOU_RIDING] - 1000) / 200 < r_info[m_ptr->r_idx].level) && (skill_exp[GINOU_RIDING]/100 - 2000 < ridinglevel))
-			skill_exp[GINOU_RIDING]++;
-		if ((skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING]) && (skill_exp[GINOU_RIDING]/100 < ridinglevel))
+		if ((p_ptr->skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING]) && ((p_ptr->skill_exp[GINOU_RIDING] - 1000) / 200 < r_info[m_ptr->r_idx].level) && (p_ptr->skill_exp[GINOU_RIDING]/100 - 2000 < ridinglevel))
+			p_ptr->skill_exp[GINOU_RIDING]++;
+		if ((p_ptr->skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING]) && (p_ptr->skill_exp[GINOU_RIDING]/100 < ridinglevel))
 		{
-			if (ridinglevel*100 > (skill_exp[GINOU_RIDING] + 1500))
-				skill_exp[GINOU_RIDING] += (1+(ridinglevel - skill_exp[GINOU_RIDING]/100 - 15));
-			else skill_exp[GINOU_RIDING]++;
+			if (ridinglevel*100 > (p_ptr->skill_exp[GINOU_RIDING] + 1500))
+				p_ptr->skill_exp[GINOU_RIDING] += (1+(ridinglevel - p_ptr->skill_exp[GINOU_RIDING]/100 - 15));
+			else p_ptr->skill_exp[GINOU_RIDING]++;
 		}
 		p_ptr->update |= (PU_BONUS);
 	}
@@ -3232,7 +3232,7 @@ static bool pattern_seq(int c_y, int c_x, int n_y, int n_x)
 					ok_move = FEAT_PATTERN_1;
 					break;
 				default:
-					if (wizard)
+					if (p_ptr->wizard)
 #ifdef JP
 						msg_format("おかしなパターン歩行、%d。", cave[c_y][c_x]);
 #else

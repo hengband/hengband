@@ -1332,7 +1332,7 @@ msg_print("地面に落とされた。");
 				break;
 			}
 
-			if ((a_idx > 0) && ((randint0(100) < chance) || (wizard)))
+			if ((a_idx > 0) && ((randint0(100) < chance) || (p_ptr->wizard)))
 			{
 				if (a_info[a_idx].cur_num == 0)
 				{
@@ -1460,7 +1460,7 @@ msg_print("地面に落とされた。");
 	if (m_ptr->r_idx == MON_SERPENT)
 	{
 		/* Total winner */
-		total_winner = TRUE;
+		p_ptr->total_winner = TRUE;
 
 		/* Redraw the "title" */
 		p_ptr->redraw |= (PR_TITLE);
@@ -3618,7 +3618,7 @@ s2 = "の入口";
 			}
 
 			/* Display a message */
-			if (wizard)
+			if (p_ptr->wizard)
 #ifdef JP
 			sprintf(out_val, "%s%s%s%s[%s] %x %d %d %d %d (%d,%d)", s1, name, s2, s3, info, c_ptr->info, c_ptr->feat, c_ptr->dist, c_ptr->cost, c_ptr->when, x, y);
 #else

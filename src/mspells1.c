@@ -1501,7 +1501,7 @@ bool make_attack_spell(int m_idx)
 	if (!num) return (FALSE);
 
 	/* Stop if player is dead or gone */
-	if (!alive || death) return (FALSE);
+	if (!p_ptr->playing || p_ptr->is_dead) return (FALSE);
 
 	/* Stop if player is leaving */
 	if (p_ptr->leaving) return (FALSE);
@@ -4607,19 +4607,19 @@ msg_print("多くの力強いものが間近に現れた音が聞こえる。");
 	{
 		if (thrown_spell != 167)
 		{
-			if (mane_num == MAX_MANE)
+			if (p_ptr->mane_num == MAX_MANE)
 			{
 				int i;
-				mane_num--;
-				for (i = 0;i < mane_num;i++)
+				p_ptr->mane_num--;
+				for (i = 0;i < p_ptr->mane_num;i++)
 				{
-					mane_spell[i] = mane_spell[i+1];
-					mane_dam[i] = mane_dam[i+1];
+					p_ptr->mane_spell[i] = p_ptr->mane_spell[i+1];
+					p_ptr->mane_dam[i] = p_ptr->mane_dam[i+1];
 				}
 			}
-			mane_spell[mane_num] = thrown_spell - 96;
-			mane_dam[mane_num] = dam;
-			mane_num++;
+			p_ptr->mane_spell[p_ptr->mane_num] = thrown_spell - 96;
+			p_ptr->mane_dam[p_ptr->mane_num] = dam;
+			p_ptr->mane_num++;
 			new_mane = TRUE;
 
 			p_ptr->redraw |= (PR_MANE);
@@ -4653,7 +4653,7 @@ msg_print("多くの力強いものが間近に現れた音が聞こえる。");
 
 
 	/* Always take note of monsters that kill you */
-	if (death && (r_ptr->r_deaths < MAX_SHORT) && !p_ptr->inside_arena)
+	if (p_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !p_ptr->inside_arena)
 	{
 		r_ptr->r_deaths++;
 	}

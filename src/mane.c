@@ -111,7 +111,7 @@ cptr            p = "能力";
 	/* No redraw yet */
 	redraw = FALSE;
 
-	num = mane_num;
+	num = p_ptr->mane_num;
 
 	/* Build a prompt (accept all spells) */
 #ifdef JP
@@ -163,7 +163,7 @@ put_str("失率 効果", y, x + 36);
 				for (i = 0; i < num; i++)
 				{
 					/* Access the spell */
-					spell = monster_powers[mane_spell[i]];
+					spell = monster_powers[p_ptr->mane_spell[i]];
 
 					chance = spell.manefail;
 
@@ -173,7 +173,7 @@ put_str("失率 効果", y, x + 36);
 					/* Reduce failure rate by INT/WIS adjustment */
 					chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[spell.use_stat]] + adj_mag_stat[p_ptr->stat_ind[A_DEX]] - 2) / 2;
 
-					if (spell.manedam) chance = chance * mane_dam[i] / spell.manedam;
+					if (spell.manedam) chance = chance * p_ptr->mane_dam[i] / spell.manedam;
 
 					chance += p_ptr->to_m_chance;
 
@@ -191,7 +191,7 @@ put_str("失率 効果", y, x + 36);
 					if (chance > 95) chance = 95;
 
 					/* Get info */
-					mane_info(comment, mane_spell[i], (baigaesi ? mane_dam[i]*2 : mane_dam[i]));
+					mane_info(comment, p_ptr->mane_spell[i], (baigaesi ? p_ptr->mane_dam[i]*2 : p_ptr->mane_dam[i]));
 
 					/* Dump the spell --(-- */
 					sprintf(psi_desc, "  %c) %-30s %3d%%%s",
@@ -235,7 +235,7 @@ put_str("失率 効果", y, x + 36);
 		}
 
 		/* Save the spell index */
-		spell = monster_powers[mane_spell[i]];
+		spell = monster_powers[p_ptr->mane_spell[i]];
 
 		/* Verify it */
 		if (ask)
@@ -244,9 +244,9 @@ put_str("失率 効果", y, x + 36);
 
 			/* Prompt */
 #ifdef JP
-(void) strnfmt(tmp_val, 78, "%sをまねますか？", monster_powers[mane_spell[i]].name);
+(void) strnfmt(tmp_val, 78, "%sをまねますか？", monster_powers[p_ptr->mane_spell[i]].name);
 #else
-			(void)strnfmt(tmp_val, 78, "Use %s? ", monster_powers[mane_spell[i]].name);
+			(void)strnfmt(tmp_val, 78, "Use %s? ", monster_powers[p_ptr->mane_spell[i]].name);
 #endif
 
 
@@ -277,7 +277,7 @@ put_str("失率 効果", y, x + 36);
 	/* Save the choice */
 	(*sn) = i;
 
-	damage = (baigaesi ? mane_dam[i]*2 : mane_dam[i]);
+	damage = (baigaesi ? p_ptr->mane_dam[i]*2 : p_ptr->mane_dam[i]);
 
 	/* Success */
 	return (TRUE);
@@ -1315,7 +1315,7 @@ msg_print("混乱していて集中できない！");
 		return TRUE;
 	}
 
-	if (!mane_num)
+	if (!p_ptr->mane_num)
 	{
 #ifdef JP
 msg_print("まねられるものが何もない！");
@@ -1329,7 +1329,7 @@ msg_print("まねられるものが何もない！");
 	/* get power */
 	if (!get_mane_power(&n, baigaesi)) return FALSE;
 
-	spell = monster_powers[mane_spell[n]];
+	spell = monster_powers[p_ptr->mane_spell[n]];
 
 	/* Spell failure chance */
 	chance = spell.manefail;
@@ -1375,16 +1375,16 @@ msg_print("ものまねに失敗した！");
 		sound(SOUND_ZAP);
 
 		/* Cast the spell */
-		cast = use_mane(mane_spell[n]);
+		cast = use_mane(p_ptr->mane_spell[n]);
 
 		if (!cast) return FALSE;
 	}
 
-	mane_num--;
-	for (j = n; j < mane_num;j++)
+	p_ptr->mane_num--;
+	for (j = n; j < p_ptr->mane_num;j++)
 	{
-		mane_spell[j] = mane_spell[j+1];
-		mane_dam[j] = mane_dam[j+1];
+		p_ptr->mane_spell[j] = p_ptr->mane_spell[j+1];
+		p_ptr->mane_dam[j] = p_ptr->mane_dam[j+1];
 	}
 
 	/* Take a turn */

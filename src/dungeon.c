@@ -1396,7 +1396,7 @@ static void check_music(void)
 
         s_ptr = &technic_info[REALM_MUSIC - MIN_TECHNIC - 1][p_ptr->magic_num2[0]];
 
-	shouhimana = (s_ptr->smana*(3800-spell_exp[p_ptr->magic_num2[0]])+2399);
+	shouhimana = (s_ptr->smana*(3800-p_ptr->spell_exp[p_ptr->magic_num2[0]])+2399);
 	if(p_ptr->dec_mana)
 		shouhimana *= 3;
 	else shouhimana *= 4;
@@ -1441,14 +1441,14 @@ static void check_music(void)
 			p_ptr->redraw |= (PR_STATUS);
 		}
         }
-	if (spell_exp[p_ptr->magic_num2[0]] < 900)
-		spell_exp[p_ptr->magic_num2[0]]+=5;
-	else if(spell_exp[p_ptr->magic_num2[0]] < 1200)
-		{if (one_in_(2) && (dun_level > 4) && ((dun_level + 10) > p_ptr->lev)) spell_exp[p_ptr->magic_num2[0]]+=1;}
-	else if(spell_exp[p_ptr->magic_num2[0]] < 1400)
-		{if (one_in_(5) && ((dun_level + 5) > p_ptr->lev) && ((dun_level + 5) > s_ptr->slevel)) spell_exp[p_ptr->magic_num2[0]]+=1;}
-	else if(spell_exp[p_ptr->magic_num2[0]] < 1600)
-		{if (one_in_(5) && ((dun_level + 5) > p_ptr->lev) && (dun_level > s_ptr->slevel)) spell_exp[p_ptr->magic_num2[0]]+=1;}
+	if (p_ptr->spell_exp[p_ptr->magic_num2[0]] < 900)
+		p_ptr->spell_exp[p_ptr->magic_num2[0]]+=5;
+	else if(p_ptr->spell_exp[p_ptr->magic_num2[0]] < 1200)
+		{if (one_in_(2) && (dun_level > 4) && ((dun_level + 10) > p_ptr->lev)) p_ptr->spell_exp[p_ptr->magic_num2[0]]+=1;}
+	else if(p_ptr->spell_exp[p_ptr->magic_num2[0]] < 1400)
+		{if (one_in_(5) && ((dun_level + 5) > p_ptr->lev) && ((dun_level + 5) > s_ptr->slevel)) p_ptr->spell_exp[p_ptr->magic_num2[0]]+=1;}
+	else if(p_ptr->spell_exp[p_ptr->magic_num2[0]] < 1600)
+		{if (one_in_(5) && ((dun_level + 5) > p_ptr->lev) && (dun_level > s_ptr->slevel)) p_ptr->spell_exp[p_ptr->magic_num2[0]]+=1;}
 
         gere_music(p_ptr->magic_num1[0]);
 }
@@ -1633,7 +1633,7 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 
 
 				/* Stop playing */
-				alive = FALSE;
+				p_ptr->playing = FALSE;
 
 				/* Leaving */
 				p_ptr->leaving = TRUE;
@@ -2337,7 +2337,7 @@ msg_print("あまりにも空腹で気絶してしまった。");
 			regenmana(upkeep_regen/100);
 
 #ifdef TRACK_FRIENDS
-			if (wizard)
+			if (p_ptr->wizard)
 			{
 #ifdef JP
 msg_format("ＭＰ回復: %d/%d", upkeep_regen, regen_amount);
@@ -3802,7 +3802,7 @@ msg_print("下に引きずり降ろされる感じがする！");
 static bool enter_wizard_mode(void)
 {
 	/* Ask first time */
-	if (!noscore)
+	if (!p_ptr->noscore)
 	{
 		/* Mention effects */
 #ifdef JP
@@ -3827,7 +3827,7 @@ if (!get_check("本当にウィザードモードに入りたいのですか? "))
 		}
 
 		/* Mark savefile */
-		noscore |= 0x0002;
+		p_ptr->noscore |= 0x0002;
 	}
 
 	/* Success */
@@ -3843,7 +3843,7 @@ if (!get_check("本当にウィザードモードに入りたいのですか? "))
 static bool enter_debug_mode(void)
 {
 	/* Ask first time */
-	if (!noscore)
+	if (!p_ptr->noscore)
 	{
 		/* Mention effects */
 #ifdef JP
@@ -3873,7 +3873,7 @@ if (!get_check("本当にデバグ・コマンドを使いますか? "))
 		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "give up sending score to use debug commands.");
 #endif
 		/* Mark savefile */
-		noscore |= 0x0008;
+		p_ptr->noscore |= 0x0008;
 	}
 
 	/* Success */
@@ -3896,7 +3896,7 @@ extern void do_cmd_debug(void);
 static bool enter_borg_mode(void)
 {
 	/* Ask first time */
-	if (!(noscore & 0x0010))
+	if (!(p_ptr->noscore & 0x0010))
 	{
 		/* Mention effects */
 #ifdef JP
@@ -3921,7 +3921,7 @@ if (!get_check("本当にボーグ・コマンドを使いますか? "))
 		}
 
 		/* Mark savefile */
-		noscore |= 0x0010;
+		p_ptr->noscore |= 0x0010;
 	}
 
 	/* Success */
@@ -3978,9 +3978,9 @@ static void process_command(void)
 		/* Toggle Wizard Mode */
 		case KTRL('W'):
 		{
-			if (wizard)
+			if (p_ptr->wizard)
 			{
-				wizard = FALSE;
+				p_ptr->wizard = FALSE;
 #ifdef JP
 msg_print("ウィザードモード解除。");
 #else
@@ -3990,7 +3990,7 @@ msg_print("ウィザードモード解除。");
 			}
 			else if (enter_wizard_mode())
 			{
-				wizard = TRUE;
+				p_ptr->wizard = TRUE;
 #ifdef JP
 msg_print("ウィザードモード突入。");
 #else
@@ -5109,7 +5109,7 @@ msg_format("%^sを起こした。", m_name);
 			int d = 1;
 
 			/* Make a "saving throw" against stun */
-			if (randint0(r_info[m_ptr->r_idx].level) < skill_exp[GINOU_RIDING])
+			if (randint0(r_info[m_ptr->r_idx].level) < p_ptr->skill_exp[GINOU_RIDING])
 			{
 				/* Recover fully */
 				d = m_ptr->stunned;
@@ -5149,7 +5149,7 @@ msg_format("%^sを朦朧状態から立ち直らせた。", m_name);
 			int d = 1;
 
 			/* Make a "saving throw" against stun */
-			if (randint0(r_info[m_ptr->r_idx].level) < skill_exp[GINOU_RIDING])
+			if (randint0(r_info[m_ptr->r_idx].level) < p_ptr->skill_exp[GINOU_RIDING])
 			{
 				/* Recover fully */
 				d = m_ptr->confused;
@@ -5189,7 +5189,7 @@ msg_format("%^sを混乱状態から立ち直らせた。", m_name);
 			int d = 1;
 
 			/* Make a "saving throw" against stun */
-			if (randint0(r_info[m_ptr->r_idx].level) < skill_exp[GINOU_RIDING])
+			if (randint0(r_info[m_ptr->r_idx].level) < p_ptr->skill_exp[GINOU_RIDING])
 			{
 				/* Recover fully */
 				d = m_ptr->monfear;
@@ -5577,13 +5577,13 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 			}
 			if (p_ptr->pclass == CLASS_IMITATOR)
 			{
-				if (mane_num > (p_ptr->lev > 44 ? 3 : p_ptr->lev > 29 ? 2 : 1))
+				if (p_ptr->mane_num > (p_ptr->lev > 44 ? 3 : p_ptr->lev > 29 ? 2 : 1))
 				{
-					mane_num--;
-					for (i = 0; i < mane_num; i++)
+					p_ptr->mane_num--;
+					for (i = 0; i < p_ptr->mane_num; i++)
 					{
-						mane_spell[i] = mane_spell[i+1];
-						mane_dam[i] = mane_dam[i+1];
+						p_ptr->mane_spell[i] = p_ptr->mane_spell[i+1];
+						p_ptr->mane_dam[i] = p_ptr->mane_dam[i+1];
 					}
 				}
 				new_mane = FALSE;
@@ -5620,7 +5620,7 @@ msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
 		}
 
 		/* Hack -- notice death */
-		if (!alive || death)
+		if (!p_ptr->playing || p_ptr->is_dead)
 		{
 			world_player = FALSE;
 			break;
@@ -5848,7 +5848,7 @@ msg_print("試合開始！");
 		p_ptr->magic_num1[0] = MUSIC_DETECT;
 
 	/* Hack -- notice death or departure */
-	if (!alive || death) return;
+	if (!p_ptr->playing || p_ptr->is_dead) return;
 
 	/* Print quest message if appropriate */
 	if (!p_ptr->inside_quest && (dungeon_type == DUNGEON_ANGBAND))
@@ -5939,7 +5939,7 @@ msg_print("試合開始！");
 		if (fresh_after) Term_fresh();
 
 		/* Hack -- Notice death or departure */
-		if (!alive || death) break;
+		if (!p_ptr->playing || p_ptr->is_dead) break;
 
 		/* Process all of the monsters */
 		process_monsters();
@@ -5963,7 +5963,7 @@ msg_print("試合開始！");
 		if (fresh_after) Term_fresh();
 
 		/* Hack -- Notice death or departure */
-		if (!alive || death) break;
+		if (!p_ptr->playing || p_ptr->is_dead) break;
 
 
 		/* Process the world */
@@ -5988,7 +5988,7 @@ msg_print("試合開始！");
 		if (fresh_after) Term_fresh();
 
 		/* Hack -- Notice death or departure */
-		if (!alive || death) break;
+		if (!p_ptr->playing || p_ptr->is_dead) break;
 
 		/* Handle "leaving" */
 		if (p_ptr->leaving) break;
@@ -6008,7 +6008,7 @@ msg_print("試合開始！");
 	}
 
 	/* Not save-and-quit and not dead? */
-	if (alive && !death)
+	if (p_ptr->playing && !p_ptr->is_dead)
 	{
 		for(num = 0; num < 21; num++)
 		{
@@ -6229,7 +6229,7 @@ quit("セーブファイルが壊れています");
 	}
 
 	/* Report waited score */
-	if (wait_report_score)
+	if (p_ptr->wait_report_score)
 	{
 		char buf[1024];
 		bool success;
@@ -6247,7 +6247,7 @@ quit("セーブファイルが壊れています");
 		/* Update stuff */
 		update_stuff();
 
-		death = TRUE;
+		p_ptr->is_dead = TRUE;
 
 		start_time = time(NULL);
 
@@ -6281,7 +6281,7 @@ quit("セーブファイルが壊れています");
 		}
 		else
 		{
-			wait_report_score = FALSE;
+			p_ptr->wait_report_score = FALSE;
 			top_twenty();
 #ifdef JP
 			if (!save_player()) msg_print("セーブ失敗！");
@@ -6522,7 +6522,7 @@ prt("お待ち下さい...", 0, 0);
 
 
 	/* Hack -- Enter wizard mode */
-	if (arg_wizard && enter_wizard_mode()) wizard = TRUE;
+	if (arg_wizard && enter_wizard_mode()) p_ptr->wizard = TRUE;
 
 	/* Initialize the town-buildings if necessary */
 	if (!dun_level && !p_ptr->inside_quest)
@@ -6559,7 +6559,7 @@ if (init_v_info()) quit("建築物初期化不能");
 
 
 	/* Start game */
-	alive = TRUE;
+	p_ptr->playing = TRUE;
 
 	/* Reset the visual mappings */
 	reset_visuals();
@@ -6585,7 +6585,7 @@ if (init_v_info()) quit("建築物初期化不能");
 	if (arg_force_roguelike) rogue_like_commands = TRUE;
 
 	/* Hack -- Enforce "delayed death" */
-	if (p_ptr->chp < 0) death = TRUE;
+	if (p_ptr->chp < 0) p_ptr->is_dead = TRUE;
 
 	if (p_ptr->prace == RACE_ANDROID) calc_android_exp();
 
@@ -6640,11 +6640,11 @@ if (init_v_info()) quit("建築物初期化不能");
 		clear_mon_lite();
 
 		/* Handle "quit and save" */
-		if (!alive && !death) break;
+		if (!p_ptr->playing && !p_ptr->is_dead) break;
 
 		/* Erase the old cave */
 		wipe_o_list();
-		if (!death) wipe_m_list();
+		if (!p_ptr->is_dead) wipe_m_list();
 
 
 		/* XXX XXX XXX */
@@ -6653,7 +6653,7 @@ if (init_v_info()) quit("建築物初期化不能");
 		load_game = FALSE;
 
 		/* Accidental Death */
-		if (alive && death)
+		if (p_ptr->playing && p_ptr->is_dead)
 		{
 			if (p_ptr->inside_arena)
 			{
@@ -6662,7 +6662,7 @@ if (init_v_info()) quit("建築物初期化不能");
 					p_ptr->arena_number++;
 				else
 					p_ptr->arena_number = 99;
-				death = FALSE;
+				p_ptr->is_dead = FALSE;
 				p_ptr->chp = 0;
 				p_ptr->chp_frac = 0;
 				p_ptr->exit_bldg = TRUE;
@@ -6672,9 +6672,9 @@ if (init_v_info()) quit("建築物初期化不能");
 			{
 				/* Mega-Hack -- Allow player to cheat death */
 #ifdef JP
-if ((wizard || cheat_live) && !get_check("死にますか? "))
+if ((p_ptr->wizard || cheat_live) && !get_check("死にますか? "))
 #else
-				if ((wizard || cheat_live) && !get_check("Die? "))
+				if ((p_ptr->wizard || cheat_live) && !get_check("Die? "))
 #endif
 
 				{
@@ -6685,7 +6685,7 @@ if ((wizard || cheat_live) && !get_check("死にますか? "))
 					p_ptr->age++;
 
 					/* Mark savefile */
-					noscore |= 0x0001;
+					p_ptr->noscore |= 0x0001;
 
 					/* Message */
 #ifdef JP
@@ -6748,14 +6748,14 @@ msg_print("張りつめた大気が流れ去った...");
 
 					/* Note cause of death XXX XXX XXX */
 #ifdef JP
-(void)strcpy(died_from, "死の欺き");
+(void)strcpy(p_ptr->died_from, "死の欺き");
 #else
-					(void)strcpy(died_from, "Cheating death");
+					(void)strcpy(p_ptr->died_from, "Cheating death");
 #endif
 
 
 					/* Do not die */
-					death = FALSE;
+					p_ptr->is_dead = FALSE;
 
 					dun_level = 0;
 					p_ptr->inside_arena = FALSE;
@@ -6801,7 +6801,7 @@ msg_print("張りつめた大気が流れ去った...");
 		}
 
 		/* Handle "death" */
-		if (death) break;
+		if (p_ptr->is_dead) break;
 
 		/* Make a new level */
 		generate_cave();

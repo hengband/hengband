@@ -775,7 +775,7 @@ void object_aware(object_type *o_ptr)
 #endif /* SCRIPT_OBJ_KIND */
 
 	if(mihanmei && !(k_info[o_ptr->k_idx].gen_flags & TRG_INSTA_ART) && record_ident &&
-	   !death && ((o_ptr->tval >= TV_AMULET && o_ptr->tval <= TV_POTION) || (o_ptr->tval == TV_FOOD)))
+	   !p_ptr->is_dead && ((o_ptr->tval >= TV_AMULET && o_ptr->tval <= TV_POTION) || (o_ptr->tval == TV_FOOD)))
 	{
 		object_type forge;
 		object_type *q_ptr;
@@ -4791,9 +4791,9 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 
 		/* Debug */
 #ifdef JP
-		if (wizard) msg_print("(破損)");
+		if (p_ptr->wizard) msg_print("(破損)");
 #else
-		if (wizard) msg_print("(breakage)");
+		if (p_ptr->wizard) msg_print("(breakage)");
 #endif
 
 
@@ -4917,9 +4917,9 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 
 		/* Debug */
 #ifdef JP
-		if (wizard) msg_print("(床スペースがない)");
+		if (p_ptr->wizard) msg_print("(床スペースがない)");
 #else
-		if (wizard) msg_print("(no floor space)");
+		if (p_ptr->wizard) msg_print("(no floor space)");
 #endif
 
 
@@ -5012,9 +5012,9 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 
 		/* Debug */
 #ifdef JP
-		if (wizard) msg_print("(アイテムが多過ぎる)");
+		if (p_ptr->wizard) msg_print("(アイテムが多過ぎる)");
 #else
-		if (wizard) msg_print("(too many objects)");
+		if (p_ptr->wizard) msg_print("(too many objects)");
 #endif
 
 

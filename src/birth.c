@@ -2464,7 +2464,7 @@ static void save_prev_data(birther *birther_ptr)
 	/* Save the hp */
 	for (i = 0; i < PY_MAX_LEVEL; i++)
 	{
-		birther_ptr->player_hp[i] = player_hp[i];
+		birther_ptr->player_hp[i] = p_ptr->player_hp[i];
 	}
 
 	birther_ptr->chaos_patron = p_ptr->chaos_patron;
@@ -2478,7 +2478,7 @@ static void save_prev_data(birther *birther_ptr)
 	/* Save the history */
 	for (i = 0; i < 4; i++)
 	{
-		strcpy(birther_ptr->history[i], history[i]);
+		strcpy(birther_ptr->history[i], p_ptr->history[i]);
 	}
 }
 
@@ -2521,10 +2521,10 @@ static void load_prev_data(bool swap)
 	/* Load the hp */
 	for (i = 0; i < PY_MAX_LEVEL; i++)
 	{
-		player_hp[i] = previous_char.player_hp[i];
+		p_ptr->player_hp[i] = previous_char.player_hp[i];
 	}
-	p_ptr->mhp = player_hp[0];
-	p_ptr->chp = player_hp[0];
+	p_ptr->mhp = p_ptr->player_hp[0];
+	p_ptr->chp = p_ptr->player_hp[0];
 
 	p_ptr->chaos_patron = previous_char.chaos_patron;
 
@@ -2536,7 +2536,7 @@ static void load_prev_data(bool swap)
 	/* Load the history */
 	for (i = 0; i < 4; i++)
 	{
-		strcpy(history[i], previous_char.history[i]);
+		strcpy(p_ptr->history[i], previous_char.history[i]);
 	}
 
 	/*** Save the previous data ***/
@@ -2721,21 +2721,21 @@ static void get_extra(bool roll_hitdie)
 
 	for (i = 0; i < 64; i++)
 	{
-		if (p_ptr->pclass == CLASS_SORCERER) spell_exp[i] = 1600;
-		else if (p_ptr->pclass == CLASS_RED_MAGE) spell_exp[i] = 1200;
-		else spell_exp[i] = 0;
+		if (p_ptr->pclass == CLASS_SORCERER) p_ptr->spell_exp[i] = 1600;
+		else if (p_ptr->pclass == CLASS_RED_MAGE) p_ptr->spell_exp[i] = 1200;
+		else p_ptr->spell_exp[i] = 0;
 	}
 
 	for (i = 0; i < 5; i++)
 		for (j = 0; j < 64; j++)
-			weapon_exp[i][j] = s_info[p_ptr->pclass].w_start[i][j];
+			p_ptr->weapon_exp[i][j] = s_info[p_ptr->pclass].w_start[i][j];
 	if(p_ptr->pseikaku == SEIKAKU_SEXY)
 	{
-		weapon_exp[TV_HAFTED-TV_BOW][SV_WHIP] = 4000;
+		p_ptr->weapon_exp[TV_HAFTED-TV_BOW][SV_WHIP] = 4000;
 	}
 
 	for (i = 0; i < 10; i++)
-		skill_exp[i] = s_info[p_ptr->pclass].s_start[i];
+		p_ptr->skill_exp[i] = s_info[p_ptr->pclass].s_start[i];
 
 	/* Hitdice */
 	if (p_ptr->pclass == CLASS_SORCERER)
@@ -2758,26 +2758,26 @@ static void get_extra(bool roll_hitdie)
 		while (TRUE)
 		{
 			/* Pre-calculate level 1 hitdice */
-			player_hp[0] = p_ptr->hitdie;
+			p_ptr->player_hp[0] = p_ptr->hitdie;
 
 			for (i = 1; i < 4; i++)
 			{
 				j = randint1(p_ptr->hitdie);
-				player_hp[0] += j;
+				p_ptr->player_hp[0] += j;
 			}
 
 			/* Roll the hitpoint values */
 			for (i = 1; i < PY_MAX_LEVEL; i++)
 			{
 				j = randint1(p_ptr->hitdie);
-				player_hp[i] = player_hp[i - 1] + j;
+				p_ptr->player_hp[i] = p_ptr->player_hp[i - 1] + j;
 			}
 
 			/* XXX Could also require acceptable "mid-level" hitpoints */
 
 			/* Require "valid" hitpoints at highest level */
-			if (player_hp[PY_MAX_LEVEL - 1] < min_value) continue;
-			if (player_hp[PY_MAX_LEVEL - 1] > max_value) continue;
+			if (p_ptr->player_hp[PY_MAX_LEVEL - 1] < min_value) continue;
+			if (p_ptr->player_hp[PY_MAX_LEVEL - 1] > max_value) continue;
 
 			/* Acceptable */
 			break;
@@ -2785,7 +2785,7 @@ static void get_extra(bool roll_hitdie)
 	}
 
 	/* Initial hitpoints */
-	p_ptr->mhp = player_hp[0];
+	p_ptr->mhp = p_ptr->player_hp[0];
 }
 
 
@@ -2801,7 +2801,7 @@ static void get_history(void)
 	char buf[240];
 
 	/* Clear the previous history strings */
-	for (i = 0; i < 4; i++) history[i][0] = '\0';
+	for (i = 0; i < 4; i++) p_ptr->history[i][0] = '\0';
 
 	/* Clear the history text */
 	buf[0] = '\0';
@@ -3041,7 +3041,7 @@ static void get_history(void)
         t = temp;
         for(i=0 ; i<4 ; i++){
              if(t[0]==0)break; 
-             else {strcpy(history[i], t);t += strlen(t)+1;}
+             else {strcpy(p_ptr->history[i], t);t += strlen(t)+1;}
              }
        }
 }
@@ -3191,7 +3191,7 @@ static void player_wipe(void)
 	/* Wipe the history */
 	for (i = 0; i < 4; i++)
 	{
-		strcpy(history[i], "");
+		strcpy(p_ptr->history[i], "");
 	}
 
 	/* Wipe the quests */
@@ -3258,16 +3258,16 @@ static void player_wipe(void)
 	/* Wipe the spells */
 	if (p_ptr->pclass == CLASS_SORCERER)
 	{
-		spell_learned1 = spell_learned2 = 0xffffffffL;
-		spell_worked1 = spell_worked2 = 0xffffffffL;
+		p_ptr->spell_learned1 = p_ptr->spell_learned2 = 0xffffffffL;
+		p_ptr->spell_worked1 = p_ptr->spell_worked2 = 0xffffffffL;
 	}
 	else
 	{
-		spell_learned1 = spell_learned2 = 0L;
-		spell_worked1 = spell_worked2 = 0L;
+		p_ptr->spell_learned1 = p_ptr->spell_learned2 = 0L;
+		p_ptr->spell_worked1 = p_ptr->spell_worked2 = 0L;
 	}
-	spell_forgotten1 = spell_forgotten2 = 0L;
-	for (i = 0; i < 64; i++) spell_order[i] = 99;
+	p_ptr->spell_forgotten1 = p_ptr->spell_forgotten2 = 0L;
+	for (i = 0; i < 64; i++) p_ptr->spell_order[i] = 99;
 	p_ptr->learned_spells = 0;
 	p_ptr->add_spells = 0;
 	p_ptr->knowledge = 0;
@@ -3284,19 +3284,19 @@ static void player_wipe(void)
 	cheat_live = FALSE;
 
 	/* Assume no winning game */
-	total_winner = FALSE;
+	p_ptr->total_winner = FALSE;
 
 	world_player = FALSE;
 
 	/* Assume no panic save */
-	panic_save = 0;
+	p_ptr->panic_save = 0;
 
 	/* Assume no cheating */
-	noscore = 0;
-        wizard = FALSE;
+	p_ptr->noscore = 0;
+        p_ptr->wizard = FALSE;
 
 	/* Not waiting to report score */
-	wait_report_score = FALSE;
+	p_ptr->wait_report_score = FALSE;
 
 	/* Default pet command settings */
 	p_ptr->pet_follow_distance = PET_FOLLOW_DIST;
@@ -3329,10 +3329,10 @@ static void player_wipe(void)
 	p_ptr->leftbldg = FALSE;
 	for (i = 0; i < MAX_MANE; i++)
 	{
-		mane_spell[i] = -1;
-		mane_dam[i] = 0;
+		p_ptr->mane_spell[i] = -1;
+		p_ptr->mane_dam[i] = 0;
 	}
-	mane_num = 0;
+	p_ptr->mane_num = 0;
 	p_ptr->exit_bldg = TRUE; /* only used for arena now -KMW- */
 
 	/* Reset rewards */
@@ -5132,15 +5132,15 @@ static void edit_history(void)
         /* Edit character background */
         for (i = 0; i < 4; i++)
         {
-                sprintf(old_history[i], "%s", history[i]);
+                sprintf(old_history[i], "%s", p_ptr->history[i]);
         }
         /* Turn 0 to space */
 	for (i = 0; i < 4; i++)
 	{
-		for (j = 0; history[i][j]; j++) /* loop */;
+		for (j = 0; p_ptr->history[i][j]; j++) /* loop */;
 
-		for (; j < 59; j++) history[i][j] = ' ';
-		history[i][59] = '\0';
+		for (; j < 59; j++) p_ptr->history[i][j] = ' ';
+		p_ptr->history[i][59] = '\0';
 	}
         display_player(1);
 #ifdef JP
@@ -5153,14 +5153,14 @@ static void edit_history(void)
         {
                 for (i = 0; i < 4; i++)
                 {
-                        put_str(history[i], i + 12, 10);
+                        put_str(p_ptr->history[i], i + 12, 10);
                 }
 #ifdef JP
-		if (iskanji2(history[y], x))
-			c_put_str(TERM_L_BLUE, format("%c%c", history[y][x],history[y][x+1]), y + 12, x + 10);
+		if (iskanji2(p_ptr->history[y], x))
+			c_put_str(TERM_L_BLUE, format("%c%c", p_ptr->history[y][x],p_ptr->history[y][x+1]), y + 12, x + 10);
 		else
 #endif
-                c_put_str(TERM_L_BLUE, format("%c", history[y][x]), y + 12, x + 10);
+                c_put_str(TERM_L_BLUE, format("%c", p_ptr->history[y][x]), y + 12, x + 10);
 
 		/* Place cursor just after cost of current stat */
                 Term_gotoxy(x + 10, y + 12);
@@ -5172,7 +5172,7 @@ static void edit_history(void)
                         y--;
                         if (y < 0) y = 3;
 #ifdef JP
-			if ((x > 0) && (iskanji2(history[y], x-1))) x--;
+			if ((x > 0) && (iskanji2(p_ptr->history[y], x-1))) x--;
 #endif
                 }
                 else if (c == '2')
@@ -5180,13 +5180,13 @@ static void edit_history(void)
                         y++;
                         if (y > 3) y = 0;
 #ifdef JP
-			if ((x > 0) && (iskanji2(history[y], x-1))) x--;
+			if ((x > 0) && (iskanji2(p_ptr->history[y], x-1))) x--;
 #endif
                 }
                 else if (c == '6')
                 {
 #ifdef JP
-			if (iskanji2(history[y], x)) x++;
+			if (iskanji2(p_ptr->history[y], x)) x++;
 #endif
                         x++;
                         if (x > 58) x = 0;
@@ -5195,7 +5195,7 @@ static void edit_history(void)
                 {
                         x--;
 #ifdef JP
-			if ((x > 0) && (iskanji2(history[y], x-1))) x--;
+			if ((x > 0) && (iskanji2(p_ptr->history[y], x-1))) x--;
 #endif
                         if (x < 0) x = 58;
                 }
@@ -5207,20 +5207,20 @@ static void edit_history(void)
                 {
                         for (i = 0; i < 4; i++)
                         {
-                                sprintf(history[i], "%s", old_history[i]);
-                                put_str(history[i], i + 12, 10);
+                                sprintf(p_ptr->history[i], "%s", old_history[i]);
+                                put_str(p_ptr->history[i], i + 12, 10);
                         }
                         break;
                 }
 		else if (c == '\010')
 		{
 			x--;
-                        history[y][x] = ' ';
+                        p_ptr->history[y][x] = ' ';
 #ifdef JP
-			if ((x > 0) && (iskanji2(history[y], x-1)))
+			if ((x > 0) && (iskanji2(p_ptr->history[y], x-1)))
 			{
 				x--;
-				history[y][x] = ' ';
+				p_ptr->history[y][x] = ' ';
 			}
 #endif
 			if (x < 0) x = 58;
@@ -5232,9 +5232,9 @@ static void edit_history(void)
 #endif
                 {
 #ifdef JP
-			if (iskanji2(history[y], x))
+			if (iskanji2(p_ptr->history[y], x))
 			{
-				history[y][x+1] = ' ';
+				p_ptr->history[y][x+1] = ' ';
 			}
 
 			if (iskanji(c))
@@ -5246,17 +5246,17 @@ static void edit_history(void)
 					if (y > 3) y = 0;
 				}
 
-				if (iskanji2(history[y], x+1))
+				if (iskanji2(p_ptr->history[y], x+1))
 				{
-					history[y][x+2] = ' ';
+					p_ptr->history[y][x+2] = ' ';
 				}
 
-				history[y][x++] = c;
+				p_ptr->history[y][x++] = c;
 
 				c = inkey();
 			}
 #endif
-                        history[y][x++] = c;
+                        p_ptr->history[y][x++] = c;
 			if (x > 58)
 			{
 				x = 0;

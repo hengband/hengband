@@ -3986,7 +3986,7 @@ void process_monsters(void)
 			m_ptr->mflag2 |= MFLAG_NOFLOW;
 
 		/* Hack -- notice death or departure */
-		if (!alive || death) break;
+		if (!p_ptr->playing || p_ptr->is_dead) break;
 
 		/* Notice leaving */
 		if (p_ptr->leaving) break;

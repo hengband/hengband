@@ -7478,7 +7478,7 @@ if (fuzzy) msg_print("何か非常に冷たいもので攻撃された！");
 		}
 	}
 
-	if (p_ptr->tim_eyeeye && get_damage > 0 && !death)
+	if (p_ptr->tim_eyeeye && get_damage > 0 && !p_ptr->is_dead)
 	{
 #ifdef JP
 		msg_format("攻撃が%s自身を傷つけた！", m_name);

@@ -2574,7 +2574,7 @@ static void msg_flush(int x)
 	}
 	now_damaged = FALSE;
 
-	if (!alive || !nagasu)
+	if (!p_ptr->playing || !nagasu)
 	{
 		/* Pause for response */
 #ifdef JP

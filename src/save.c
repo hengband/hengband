@@ -804,7 +804,7 @@ static void wr_options(void)
 
 	c = 0;
 
-	if (wizard) c |= 0x0002;
+	if (p_ptr->wizard) c |= 0x0002;
 
 	if (cheat_peek) c |= 0x0100;
 	if (cheat_hear) c |= 0x0200;
@@ -921,7 +921,7 @@ static void save_quick_start(void)
 	wr_byte(previous_char.quests);
 
 	/* No quick start after using debug mode or cheat options */
-	if (noscore || munchkin_death) previous_char.quick_ok = FALSE;
+	if (p_ptr->noscore || munchkin_death) previous_char.quick_ok = FALSE;
 
 	wr_byte((byte)previous_char.quick_ok);
 }
@@ -936,13 +936,13 @@ static void wr_extra(void)
 
 	wr_string(player_name);
 
-	wr_string(died_from);
+	wr_string(p_ptr->died_from);
 
 	save_quick_start();
 
 	for (i = 0; i < 4; i++)
 	{
-		wr_string(history[i]);
+		wr_string(p_ptr->history[i]);
 	}
 
 	/* Race/Class/Gender/Spells */
@@ -976,9 +976,9 @@ static void wr_extra(void)
 	wr_u16b(p_ptr->exp_frac);
 	wr_s16b(p_ptr->lev);
 
-	for (i = 0; i < 64; i++) wr_s16b(spell_exp[i]);
-	for (i = 0; i < 5; i++) for (j = 0; j < 64; j++) wr_s16b(weapon_exp[i][j]);
-	for (i = 0; i < 10; i++) wr_s16b(skill_exp[i]);
+	for (i = 0; i < 64; i++) wr_s16b(p_ptr->spell_exp[i]);
+	for (i = 0; i < 5; i++) for (j = 0; j < 64; j++) wr_s16b(p_ptr->weapon_exp[i][j]);
+	for (i = 0; i < 10; i++) wr_s16b(p_ptr->skill_exp[i]);
 	for (i = 0; i < 108; i++) wr_s32b(p_ptr->magic_num1[i]);
 	for (i = 0; i < 108; i++) wr_byte(p_ptr->magic_num2[i]);
 
@@ -989,10 +989,10 @@ static void wr_extra(void)
 
 	for (i = 0; i < MAX_MANE; i++)
 	{
-		wr_s16b(mane_spell[i]);
-		wr_s16b(mane_dam[i]);
+		wr_s16b(p_ptr->mane_spell[i]);
+		wr_s16b(p_ptr->mane_dam[i]);
 	}
-	wr_s16b(mane_num);
+	wr_s16b(p_ptr->mane_num);
 
 	for (i = 0; i < MAX_KUBI; i++)
 	{
@@ -1123,7 +1123,7 @@ static void wr_extra(void)
 	wr_byte(p_ptr->action);
 	wr_byte(0);
 	wr_byte(preserve_mode);
-	wr_byte(wait_report_score);
+	wr_byte(p_ptr->wait_report_score);
 
 	/* Future use */
 	for (i = 0; i < 12; i++) wr_u32b(0L);
@@ -1140,13 +1140,13 @@ static void wr_extra(void)
 
 
 	/* Special stuff */
-	wr_u16b(panic_save);
-	wr_u16b(total_winner);
-	wr_u16b(noscore);
+	wr_u16b(p_ptr->panic_save);
+	wr_u16b(p_ptr->total_winner);
+	wr_u16b(p_ptr->noscore);
 
 
 	/* Write death */
-	wr_byte(death);
+	wr_byte(p_ptr->is_dead);
 
 	/* Write feeling */
 	wr_byte(feeling);
@@ -1588,17 +1588,17 @@ static bool wr_savefile_new(void)
 	wr_u16b(tmp16u);
 	for (i = 0; i < tmp16u; i++)
 	{
-		wr_s16b(player_hp[i]);
+		wr_s16b(p_ptr->player_hp[i]);
 	}
 
 
 	/* Write spell data */
-	wr_u32b(spell_learned1);
-	wr_u32b(spell_learned2);
-	wr_u32b(spell_worked1);
-	wr_u32b(spell_worked2);
-	wr_u32b(spell_forgotten1);
-	wr_u32b(spell_forgotten2);
+	wr_u32b(p_ptr->spell_learned1);
+	wr_u32b(p_ptr->spell_learned2);
+	wr_u32b(p_ptr->spell_worked1);
+	wr_u32b(p_ptr->spell_worked2);
+	wr_u32b(p_ptr->spell_forgotten1);
+	wr_u32b(p_ptr->spell_forgotten2);
 
 	wr_s16b(p_ptr->learned_spells);
 	wr_s16b(p_ptr->add_spells);
@@ -1606,7 +1606,7 @@ static bool wr_savefile_new(void)
 	/* Dump the ordered spells */
 	for (i = 0; i < 64; i++)
 	{
-		wr_byte(spell_order[i]);
+		wr_byte(p_ptr->spell_order[i]);
 	}
 
 
@@ -1650,7 +1650,7 @@ static bool wr_savefile_new(void)
 	wr_s16b(p_ptr->pet_extra_flags);
 
 	/* Write screen dump for sending score */
-	if (screen_dump && (wait_report_score || !death))
+	if (screen_dump && (p_ptr->wait_report_score || !p_ptr->is_dead))
 	{
 		wr_string(screen_dump);
 	}
@@ -1660,7 +1660,7 @@ static bool wr_savefile_new(void)
 	}
 
 	/* Player is not dead, write the dungeon */
-	if (!death)
+	if (!p_ptr->is_dead)
 	{
 		/* Dump the dungeon */
 		wr_dungeon();
@@ -1894,7 +1894,7 @@ bool load_player(void)
 	turn = 0;
 
 	/* Paranoia */
-	death = FALSE;
+	p_ptr->is_dead = FALSE;
 
 
 	/* Allow empty savefile name */
@@ -2147,10 +2147,10 @@ bool load_player(void)
 		}
 
 		/* Player is dead */
-		if (death)
+		if (p_ptr->is_dead)
 		{
 			/* Player is no longer "dead" */
-			death = FALSE;
+			p_ptr->is_dead = FALSE;
 
 			/* Cheat death */
 			if (arg_wizard)

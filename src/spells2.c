@@ -51,7 +51,7 @@ void self_knowledge(void)
 
 	strcpy(Dummy, "");
 
-	percent = (int)(((long)player_hp[PY_MAX_LEVEL - 1] * 200L) /
+	percent = (int)(((long)p_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) /
 		(2 * p_ptr->hitdie +
 		((PY_MAX_LEVEL - 1+3) * (p_ptr->hitdie + 1))));
 

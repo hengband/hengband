@@ -974,9 +974,9 @@ struct player_type
 
 	byte hitdie;		/* Hit dice (sides) */
 	u16b expfact;       /* Experience factor
-						 * Note: was byte, causing overflow for Amberite
-						 * characters (such as Amberite Paladins)
-						 */
+			     * Note: was byte, causing overflow for Amberite
+			     * characters (such as Amberite Paladins)
+			     */
 
 	s16b age;			/* Characters age */
 	s16b ht;			/* Height */
@@ -1018,24 +1018,27 @@ struct player_type
 	s16b stat_max_max[6];	/* Maximal "maximal" stat values */
 	s16b stat_cur[6];	/* Current "natural" stat values */
 
+	s16b learned_spells;
+	s16b add_spells;
+
 	u32b count;
 
-	s16b fast;			/* Timed -- Fast */
-	s16b slow;			/* Timed -- Slow */
-	s16b blind;			/* Timed -- Blindness */
+	s16b fast;		/* Timed -- Fast */
+	s16b slow;		/* Timed -- Slow */
+	s16b blind;		/* Timed -- Blindness */
 	s16b paralyzed;		/* Timed -- Paralysis */
 	s16b confused;		/* Timed -- Confusion */
 	s16b afraid;		/* Timed -- Fear */
-	s16b image;			/* Timed -- Hallucination */
+	s16b image;		/* Timed -- Hallucination */
 	s16b poisoned;		/* Timed -- Poisoned */
-	s16b cut;			/* Timed -- Cut */
-	s16b stun;			/* Timed -- Stun */
+	s16b cut;		/* Timed -- Cut */
+	s16b stun;		/* Timed -- Stun */
 
 	s16b protevil;		/* Timed -- Protection */
 	s16b invuln;		/* Timed -- Invulnerable */
 	s16b ult_res;		/* Timed -- Ultimate Resistance */
-	s16b hero;			/* Timed -- Heroism */
-	s16b shero;			/* Timed -- Super Heroism */
+	s16b hero;		/* Timed -- Heroism */
+	s16b shero;		/* Timed -- Super Heroism */
 	s16b shield;		/* Timed -- Shield Spell */
 	s16b blessed;		/* Timed -- Blessed */
 	s16b tim_invis;		/* Timed -- See Invisible */
@@ -1084,18 +1087,77 @@ struct player_type
 	s16b virtues[8];
 	s16b vir_types[8];
 
-	s16b word_recall;	/* Word of recall counter */
-	byte recall_dungeon;
+	s16b word_recall;	  /* Word of recall counter */
+	byte recall_dungeon;      /* Dungeon set to be recalled */
 
-	s16b energy_need;	/* Energy needed for next move */
+	s16b energy_need;	  /* Energy needed for next move */
 
-	s16b food;		/* Current nutrition */
+	s16b food;		  /* Current nutrition */
 
-	u32b total_weight;	/* Total weight being carried */
+	u32b special_attack;	  /* Special attack capacity -LM- */
+	u32b special_defense;	  /* Special block capacity -LM- */
+	byte action;		  /* Currently action */
 
-	u32b special_attack;	/* Special attack capacity -LM- */
-	u32b special_defense;	/* Special block capacity -LM- */
-	byte action;		/* Currently action */
+	u32b spell_learned1;	  /* bit mask of spells learned */
+	u32b spell_learned2;	  /* bit mask of spells learned */
+	u32b spell_worked1;	  /* bit mask of spells tried and worked */
+	u32b spell_worked2;	  /* bit mask of spells tried and worked */
+	u32b spell_forgotten1;	  /* bit mask of spells learned but forgotten */
+	u32b spell_forgotten2;	  /* bit mask of spells learned but forgotten */
+	byte spell_order[64];	  /* order spells learned/remembered/forgotten */
+
+	s16b spell_exp[64];       /* Proficiency of spells */
+	s16b weapon_exp[5][64];   /* Proficiency of weapons */
+	s16b skill_exp[10];       /* Proficiency of misc. skill */
+
+	s32b magic_num1[108];     /* Array for non-spellbook type magic */
+	byte magic_num2[108];     /* Flags for non-spellbook type magics */
+
+	s16b mane_spell[MAX_MANE];
+	s16b mane_dam[MAX_MANE];
+	s16b mane_num;
+
+	s16b player_hp[PY_MAX_LEVEL];
+	char died_from[80];   	  /* What killed the player */
+	char history[4][60];  	  /* Textual "history" for the Player */
+
+	u16b total_winner;	  /* Total winner */
+	u16b panic_save;	  /* Panic save */
+
+	u16b noscore;		  /* Cheating flags */
+
+	bool wait_report_score;   /* Waiting to report score */
+	bool is_dead;		  /* Player is dead */
+
+	bool wizard;		  /* Player is in wizard mode */
+
+	s16b riding;              /* Riding on a monster of this index */
+	byte knowledge;           /* Knowledge about yourself */
+	s32b visit;               /* Visited towns */
+
+	byte start_race;          /* Race at birth */
+	s32b old_race1;           /* Record of race changes */
+	s32b old_race2;           /* Record of race changes */
+	s16b old_realm;           /* Record of realm changes */
+
+	s16b pet_follow_distance; /* Length of the imaginary "leash" for pets */
+	s16b pet_extra_flags;     /* Various flags for controling pets */
+
+	s16b today_mon;           /* Wanted monster */
+
+	bool dtrap;               /* Whether you are on trap-safe grids */
+
+
+	/*** Temporary fields ***/
+
+	bool playing;			/* True if player is playing */
+	bool leaving;			/* True if player is leaving */
+
+	byte exit_bldg;			/* Goal obtained in arena? -KMW- */
+	byte leftbldg;			/* did we just leave a special area? -KMW- */
+
+	bool leaving_dungeon;	/* True if player is leaving the dungeon */
+	bool teleport_town;
 
 	s16b health_who;	/* Health bar trackee */
 
@@ -1104,10 +1166,9 @@ struct player_type
 	s16b object_kind_idx;	/* Object kind trackee */
 
 	s16b new_spells;	/* Number of spells available */
-
 	s16b old_spells;
-	s16b learned_spells;
-	s16b add_spells;
+
+	s16b old_food_aux;	/* Old value of food */
 
 	bool old_cumber_armor;
 	bool old_cumber_glove;
@@ -1119,10 +1180,6 @@ struct player_type
 	bool old_monlite;
 
 	s16b old_lite;		/* Old radius of lite (if any) */
-	s16b old_view;		/* Old radius of view (if any) */
-
-	s16b old_food_aux;	/* Old value of food */
-
 
 	bool cumber_armor;	/* Mana draining armor */
 	bool cumber_glove;	/* Mana draining gloves */
@@ -1143,6 +1200,18 @@ struct player_type
 
 	s16b stat_use[6];	/* Current modified stats */
 	s16b stat_top[6];	/* Maximal modified stats */
+
+	bool sutemi;
+	bool counter;
+
+	s32b align;				/* Good/evil/neutral */
+	s16b run_py;
+	s16b run_px;
+
+
+	/*** Extracted fields ***/
+
+	u32b total_weight;	/* Total weight being carried */
 
 	s16b stat_add[6];	/* Modifiers to stat values */
 	s16b stat_ind[6];	/* Indexes into stat tables */
@@ -1187,12 +1256,10 @@ struct player_type
 	bool sustain_chr;	/* Keep charisma */
 
 	u32b cursed;            /* Player is cursed */
-	bool sutemi;
-	bool counter;
 
-	bool can_swim;			/* No damage falling */
-	bool ffall;			/* No damage falling */
-	bool lite;			/* Permanent light */
+	bool can_swim;		/* No damage falling */
+	bool ffall;		/* No damage falling */
+	bool lite;		/* Permanent light */
 	bool free_act;		/* Never paralyzed */
 	bool see_inv;		/* Can see invisible */
 	bool regenerate;	/* Regenerate hit pts */
@@ -1254,38 +1321,6 @@ struct player_type
 	byte tval_ammo;		/* Correct ammo tval */
 
 	s16b pspeed;		/* Current speed */
-
-	/*** Pet commands ***/
-	s16b pet_follow_distance; /* Length of the imaginary "leash" for pets */
-	s16b pet_extra_flags; /* Length of the imaginary "leash" for pets */
-
-	/*** Temporary fields ***/
-	byte exit_bldg;			/* Goal obtained in arena? -KMW- */
-	byte leftbldg;			/* did we just leave a special area? -KMW- */
-	bool leaving;			/* True if player is leaving */
-
-	bool leaving_dungeon;	/* True if player is leaving the dungeon */
-	bool teleport_town;
-
-	s32b align;				/* Good/evil/neutral */
-	s16b today_mon;
-
-	s16b riding;
-	byte knowledge;
-	s32b visit;
-
-	s32b magic_num1[108];
-	byte magic_num2[108];
-
-	byte start_race;
-	s32b old_race1;
-	s32b old_race2;
-	s16b old_realm;
-
-	s16b run_py;
-	s16b run_px;
-
-	bool dtrap;
 };
 
 

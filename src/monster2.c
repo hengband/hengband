@@ -1934,7 +1934,7 @@ msg_format("%s%sの顔を見てしまった！",
 
 		/* Demon characters are unaffected */
 		if ((p_ptr->prace == RACE_IMP) || (p_ptr->prace == RACE_DEMON) || (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)) return;
-		if (wizard) return;
+		if (p_ptr->wizard) return;
 
 		/* Undead characters are 50% likely to be unaffected */
 		if ((p_ptr->prace == RACE_SKELETON) || (p_ptr->prace == RACE_ZOMBIE)

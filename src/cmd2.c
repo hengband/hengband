@@ -3567,9 +3567,9 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	/* Actually "fire" the object */
 	bonus = (p_ptr->to_h_b + o_ptr->to_h + j_ptr->to_h);
 	if ((j_ptr->sval == SV_LIGHT_XBOW) || (j_ptr->sval == SV_HEAVY_XBOW))
-		chance = (p_ptr->skill_thb + ((weapon_exp[0][j_ptr->sval])/400 + bonus) * BTH_PLUS_ADJ);
+		chance = (p_ptr->skill_thb + ((p_ptr->weapon_exp[0][j_ptr->sval])/400 + bonus) * BTH_PLUS_ADJ);
 	else
-		chance = (p_ptr->skill_thb + ((weapon_exp[0][j_ptr->sval]-4000)/200 + bonus) * BTH_PLUS_ADJ);
+		chance = (p_ptr->skill_thb + ((p_ptr->weapon_exp[0][j_ptr->sval]-4000)/200 + bonus) * BTH_PLUS_ADJ);
 
 	energy_use = bow_energy(j_ptr->sval);
 	tmul = bow_tmul(j_ptr->sval);
@@ -3721,7 +3721,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 
 			if ((r_ptr->level + 10) > p_ptr->lev)
 			{
-				int now_exp = weapon_exp[0][j_ptr->sval];
+				int now_exp = p_ptr->weapon_exp[0][j_ptr->sval];
 				if (now_exp < s_info[p_ptr->pclass].w_max[0][j_ptr->sval])
 				{
 					int amount = 0;
@@ -3729,16 +3729,16 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 					else if (now_exp <  6000) amount = 25;
 					else if ((now_exp < 7000) && (p_ptr->lev > 19)) amount = 10;
 					else if (p_ptr->lev > 34) amount = 2;
-					weapon_exp[0][j_ptr->sval] += amount;
+					p_ptr->weapon_exp[0][j_ptr->sval] += amount;
 					p_ptr->update |= (PU_BONUS);
 				}
 			}
 
 			if (p_ptr->riding)
 			{
-				if (skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING] && ((skill_exp[GINOU_RIDING] - 1000) / 200 < r_info[m_list[p_ptr->riding].r_idx].level) && one_in_(2))
+				if (p_ptr->skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING] && ((p_ptr->skill_exp[GINOU_RIDING] - 1000) / 200 < r_info[m_list[p_ptr->riding].r_idx].level) && one_in_(2))
 				{
-					skill_exp[GINOU_RIDING]+=1;
+					p_ptr->skill_exp[GINOU_RIDING]+=1;
 					p_ptr->update |= (PU_BONUS);
 				}
 			}
@@ -3828,7 +3828,7 @@ note_dies = "は爆発して粉々になった。";
 				tdam = mon_damage_mod(m_ptr, tdam, FALSE);
 
 				/* Complex message */
-				if (wizard || cheat_xtra)
+				if (p_ptr->wizard || cheat_xtra)
 				{
 #ifdef JP
 					msg_format("%d/%d のダメージを与えた。",
@@ -4433,7 +4433,7 @@ note_dies = "は爆発して粉々になった。";
 				tdam = mon_damage_mod(m_ptr, tdam, FALSE);
 
 				/* Complex message */
-				if (wizard)
+				if (p_ptr->wizard)
 				{
 #ifdef JP
 					msg_format("%d/%dのダメージを与えた。",

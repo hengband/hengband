@@ -236,7 +236,7 @@ bool set_mimic(int v, int p, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -312,7 +312,7 @@ bool set_blind(int v)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -406,7 +406,7 @@ bool set_confused(int v)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -498,7 +498,7 @@ bool set_poisoned(int v)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -560,7 +560,7 @@ bool set_afraid(int v)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -639,7 +639,7 @@ bool set_paralyzed(int v)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -707,7 +707,7 @@ bool set_image(int v)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 
 	/* Open */
@@ -781,7 +781,7 @@ bool set_fast(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -849,7 +849,7 @@ bool set_lightspeed(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -917,7 +917,7 @@ bool set_slow(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -983,7 +983,7 @@ bool set_shield(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -1053,7 +1053,7 @@ bool set_tsubureru(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -1123,7 +1123,7 @@ bool set_magicdef(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -1193,7 +1193,7 @@ bool set_blessed(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -1262,7 +1262,7 @@ bool set_hero(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -1334,7 +1334,7 @@ bool set_shero(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	if (p_ptr->pclass == CLASS_BERSERKER) v = 1;
 	/* Open */
@@ -1407,7 +1407,7 @@ bool set_protevil(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -1472,7 +1472,7 @@ bool set_wraith_form(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -1568,7 +1568,7 @@ bool set_invuln(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -1662,7 +1662,7 @@ bool set_tim_esp(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -1734,7 +1734,7 @@ bool set_tim_invis(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -1806,7 +1806,7 @@ bool set_tim_infra(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -1878,7 +1878,7 @@ bool set_tim_regen(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -1947,7 +1947,7 @@ bool set_tim_stealth(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -2010,7 +2010,7 @@ bool set_superstealth(bool set)
 {
 	bool notice = FALSE;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (set)
@@ -2085,7 +2085,7 @@ bool set_tim_ffall(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -2154,7 +2154,7 @@ bool set_tim_sh_touki(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -2220,7 +2220,7 @@ bool set_tim_sh_fire(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -2289,7 +2289,7 @@ bool set_tim_sh_holy(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -2359,7 +2359,7 @@ bool set_tim_eyeeye(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -2429,7 +2429,7 @@ bool set_resist_magic(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -2498,7 +2498,7 @@ bool set_tim_reflect(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -2567,7 +2567,7 @@ bool set_multishadow(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -2636,7 +2636,7 @@ bool set_dustrobe(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -2705,7 +2705,7 @@ bool set_kabenuke(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -2768,7 +2768,7 @@ bool set_tsuyoshi(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -3043,7 +3043,7 @@ bool set_oppose_acid(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -3109,7 +3109,7 @@ bool set_oppose_elec(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -3175,7 +3175,7 @@ bool set_oppose_fire(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	if ((prace_is_(RACE_DEMON) && (p_ptr->lev > 44)) || (p_ptr->mimic_form == MIMIC_DEMON)) v = 1;
 	/* Open */
@@ -3242,7 +3242,7 @@ bool set_oppose_cold(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -3309,7 +3309,7 @@ bool set_oppose_pois(int v, bool do_dec)
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if ((p_ptr->pclass == CLASS_NINJA) && (p_ptr->lev > 44)) v = 1;
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -3379,7 +3379,7 @@ bool set_stun(int v)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	if (prace_is_(RACE_GOLEM) || ((p_ptr->pclass == CLASS_BERSERKER) && (p_ptr->lev > 34))) v = 0;
 
@@ -3567,7 +3567,7 @@ bool set_cut(int v)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	if ((p_ptr->prace == RACE_GOLEM ||
 	    p_ptr->prace == RACE_SKELETON ||
@@ -4977,7 +4977,7 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 	int warning = (p_ptr->mhp * hitpoint_warn / 10);
 
 	/* Paranoia */
-	if (death) return 0;
+	if (p_ptr->is_dead) return 0;
 
 	if (p_ptr->sutemi) damage *= 2;
 	if (p_ptr->special_defense & KATA_IAI) damage += (damage + 4) / 5;
@@ -5111,7 +5111,7 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 		p_ptr->leaving = TRUE;
 
 		/* Note death */
-		death = TRUE;
+		p_ptr->is_dead = TRUE;
 
 		if (p_ptr->inside_arena)
 		{
@@ -5133,13 +5133,13 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 
 			/* Note cause of death */
 #ifdef JP
-			sprintf(died_from, "%s%s%s", !p_ptr->paralyzed ? "" : p_ptr->free_act ? "Ä¦Áü¾õÂÖ¤Ç":"Ëãáã¾õÂÖ¤Ç", p_ptr->image ? "¸¸³Ð¤ËÏÄ¤ó¤À" : "", hit_from);
+			sprintf(p_ptr->died_from, "%s%s%s", !p_ptr->paralyzed ? "" : p_ptr->free_act ? "Ä¦Áü¾õÂÖ¤Ç":"Ëãáã¾õÂÖ¤Ç", p_ptr->image ? "¸¸³Ð¤ËÏÄ¤ó¤À" : "", hit_from);
 #else
-			sprintf(died_from, "%s%s", hit_from, !p_ptr->paralyzed ? "" : " while helpless");
+			sprintf(p_ptr->died_from, "%s%s", hit_from, !p_ptr->paralyzed ? "" : " while helpless");
 #endif
 
 			/* No longer a winner */
-			total_winner = FALSE;
+			p_ptr->total_winner = FALSE;
 
 			if (p_ptr->inside_arena)
 #ifdef JP
@@ -5166,9 +5166,9 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 				sprintf(buf,"level %d", dun_level);
 #endif
 #ifdef JP
-			sprintf(tmp,"%s¤Ç%s¤Ë»¦¤µ¤ì¤¿¡£",buf, died_from);
+			sprintf(tmp,"%s¤Ç%s¤Ë»¦¤µ¤ì¤¿¡£",buf, p_ptr->died_from);
 #else
-			sprintf(tmp,"killed by %s %s.", died_from, buf);
+			sprintf(tmp,"killed by %s %s.", p_ptr->died_from, buf);
 #endif
 			do_cmd_write_nikki(NIKKI_BUNSHOU, 0, tmp);
 #ifdef JP
@@ -5205,7 +5205,7 @@ msg_format("¤¢¤Ê¤¿¤Ï%s¤Þ¤·¤¿¡£", android ? "²õ¤ì" : "»à¤Ë");
 			}
 			else
 			{
-				if (streq(died_from, "Seppuku"))
+				if (streq(p_ptr->died_from, "Seppuku"))
 				{
 #ifdef JP
 				  get_rnd_line("seppuku_j.txt", 0, death_message);
@@ -5222,7 +5222,7 @@ get_rnd_line("death_j.txt", 0, death_message);
 #endif
 				}
 #ifdef JP
-			        while (!get_string(streq(died_from, "Seppuku") ? "¼­À¤¤Î¶ç: " : "ÃÇËöËâ¤Î¶«¤Ó: ", death_message, 1024)) ;
+			        while (!get_string(streq(p_ptr->died_from, "Seppuku") ? "¼­À¤¤Î¶ç: " : "ÃÇËöËâ¤Î¶«¤Ó: ", death_message, 1024)) ;
 #else
 				while (!get_string("Last word: ", death_message, 1024)) ;
 #endif
@@ -5234,7 +5234,7 @@ get_rnd_line("death_j.txt", 0, death_message);
 					strcpy(death_message, android ? "You are broken." : "You die.");
 #endif
 				}
-				if (streq(died_from, "Seppuku"))
+				if (streq(p_ptr->died_from, "Seppuku"))
 				{
 #ifdef JP
 				  int i, len;
@@ -5346,7 +5346,7 @@ msg_print("*** ·Ù¹ð:Äã¥Ò¥Ã¥È¡¦¥Ý¥¤¥ó¥È¡ª ***");
  */
 void gain_exp(s32b amount)
 {
-	if (death) return;
+	if (p_ptr->is_dead) return;
 
 	if (p_ptr->prace == RACE_ANDROID) return;
 
@@ -5369,7 +5369,7 @@ void calc_android_exp(void)
 {
 	int i;
 	u32b total_exp = 0;
-	if (death) return;
+	if (p_ptr->is_dead) return;
 
 	if (p_ptr->prace != RACE_ANDROID) return;
 
@@ -5460,7 +5460,7 @@ bool set_ultimate_res(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -5525,7 +5525,7 @@ bool set_tim_res_nether(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
@@ -5590,7 +5590,7 @@ bool set_tim_res_time(int v, bool do_dec)
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (death) return FALSE;
+	if (p_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)

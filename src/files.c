@@ -590,7 +590,7 @@ errr process_pref_file_command(char *buf)
 			    option_info[i].o_text &&
 			    streq(option_info[i].o_text, buf + 2))
 			{
-				if (alive && 6 == option_info[i].o_page && !wizard)
+				if (p_ptr->playing && 6 == option_info[i].o_page && !p_ptr->wizard)
 				{
 #ifdef JP
 					msg_format("初期オプションは変更できません! '%s'", buf);	
@@ -630,7 +630,7 @@ errr process_pref_file_command(char *buf)
 			    option_info[i].o_text &&
 			    streq(option_info[i].o_text, buf + 2))
 			{
-				if (alive && 6 == option_info[i].o_page && !wizard)
+				if (p_ptr->playing && 6 == option_info[i].o_page && !p_ptr->wizard)
 				{
 #ifdef JP
 					msg_format("初期オプションは変更できません! '%s'", buf);	
@@ -1754,9 +1754,9 @@ static void display_player_middle(void)
 	if (object_known_p(o_ptr)) show_todam += o_ptr->to_d;
 
 	if ((o_ptr->sval == SV_LIGHT_XBOW) || (o_ptr->sval == SV_HEAVY_XBOW))
-		show_tohit += (weapon_exp[0][o_ptr->sval])/400;
+		show_tohit += (p_ptr->weapon_exp[0][o_ptr->sval])/400;
 	else
-		show_tohit += (weapon_exp[0][o_ptr->sval]-4000)/200;
+		show_tohit += (p_ptr->weapon_exp[0][o_ptr->sval]-4000)/200;
 
 	/* Range attacks */
 	display_player_one_line(ENTRY_SHOOT_HIT_DAM, format("(%+d,%+d)", show_tohit, show_todam), TERM_L_BLUE);
@@ -4083,12 +4083,12 @@ void display_player(int mode)
 
 			for (i = 0; i < 4; i++)
 			{
-				put_str(history[i], i + 12, 10);
+				put_str(p_ptr->history[i], i + 12, 10);
 			}
 
 			*statmsg = '\0';
 
-			if (death && total_winner)
+			if (p_ptr->is_dead && p_ptr->total_winner)
 			{
 #ifdef JP
 				strcpy(statmsg, "…あなたは勝利の後引退した。");
@@ -4096,7 +4096,7 @@ void display_player(int mode)
 				strcpy(statmsg, "...You retired from the adventure after the winning.");
 #endif
 			}
-			else if (death)
+			else if (p_ptr->is_dead)
 			{
 				if (dun_level)
 				{
@@ -4108,25 +4108,25 @@ void display_player(int mode)
 						process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
 
 #ifdef JP
-						sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[p_ptr->inside_quest].name, died_from);
+						sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[p_ptr->inside_quest].name, p_ptr->died_from);
 #else
-						sprintf(statmsg, "...You were killed by %s in the quest '%s'.", died_from, quest[p_ptr->inside_quest].name);
+						sprintf(statmsg, "...You were killed by %s in the quest '%s'.", p_ptr->died_from, quest[p_ptr->inside_quest].name);
 #endif
 					}
 					else
 					{					
 #ifdef JP
-						sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), dun_level, died_from);
+						sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), dun_level, p_ptr->died_from);
 #else
-						sprintf(statmsg, "...You were killed by %s on level %d of %s.", died_from, dun_level, map_name());
+						sprintf(statmsg, "...You were killed by %s on level %d of %s.", p_ptr->died_from, dun_level, map_name());
 #endif
 					}
 				}
 				else
 #ifdef JP
-					sprintf(statmsg, "…あなたは%sで%sに殺された。", map_name(), died_from);
+					sprintf(statmsg, "…あなたは%sで%sに殺された。", map_name(), p_ptr->died_from);
 #else
-					sprintf(statmsg, "...You were killed by %s in %s.", died_from, map_name());
+					sprintf(statmsg, "...You were killed by %s in %s.", p_ptr->died_from, map_name());
 #endif
 			}
 			else if (character_dungeon)
@@ -4373,7 +4373,7 @@ errr make_character_dump(FILE *fff)
 		if (pet) fprintf(fff, "\n");
 	}
 
-	if (death && !total_winner)
+	if (p_ptr->is_dead && !p_ptr->total_winner)
 	{
 #ifdef JP
 		fprintf(fff, "\n  [死ぬ直前のメッセージ]\n\n");
@@ -4591,7 +4591,7 @@ errr make_character_dump(FILE *fff)
 #endif
 	}
 
-	if (noscore)
+	if (p_ptr->noscore)
 #ifdef JP
 fprintf(fff, "\n 何か不正なことをしてしまってます。");
 #else
@@ -5933,7 +5933,7 @@ void do_cmd_suicide(void)
 	flush();
 
 	/* Verify Retirement */
-	if (total_winner)
+	if (p_ptr->total_winner)
 	{
 		/* Verify */
 #ifdef JP
@@ -5956,7 +5956,7 @@ if (!get_check("本当に自殺しますか？")) return;
 	}
 
 
-	if (!noscore)
+	if (!p_ptr->noscore)
 	{
 		/* Special Verification for suicide */
 #ifdef JP
@@ -5972,15 +5972,15 @@ prt("確認のため '@' を押して下さい。", 0, 0);
 	}
 
 	/* Stop playing */
-	alive = FALSE;
+	p_ptr->playing = FALSE;
 
 	/* Kill the player */
-	death = TRUE;
+	p_ptr->is_dead = TRUE;
 
 	/* Leaving */
 	p_ptr->leaving = TRUE;
 
-	if (!total_winner)
+	if (!p_ptr->total_winner)
 	{
 #ifdef JP
 		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "ダンジョンの探索に絶望して自殺した。");
@@ -5994,9 +5994,9 @@ prt("確認のため '@' を押して下さい。", 0, 0);
 
 	/* Cause of death */
 #ifdef JP
-(void)strcpy(died_from, "途中終了");
+(void)strcpy(p_ptr->died_from, "途中終了");
 #else
-	(void)strcpy(died_from, "Quitting");
+	(void)strcpy(p_ptr->died_from, "Quitting");
 #endif
 
 }
@@ -6043,9 +6043,9 @@ prt("ゲームをセーブしています...", 0, 0);
 
 	/* The player is not dead */
 #ifdef JP
-(void)strcpy(died_from, "(セーブ)");
+(void)strcpy(p_ptr->died_from, "(セーブ)");
 #else
-	(void)strcpy(died_from, "(saved)");
+	(void)strcpy(p_ptr->died_from, "(saved)");
 #endif
 
 
@@ -6082,9 +6082,9 @@ prt("ゲームをセーブしています... 失敗！", 0, 0);
 
 	/* Note that the player is not dead */
 #ifdef JP
-(void)strcpy(died_from, "(元気に生きている)");
+(void)strcpy(p_ptr->died_from, "(元気に生きている)");
 #else
-	(void)strcpy(died_from, "(alive and well)");
+	(void)strcpy(p_ptr->died_from, "(alive and well)");
 #endif
 
 }
@@ -6095,7 +6095,7 @@ prt("ゲームをセーブしています... 失敗！", 0, 0);
  */
 void do_cmd_save_and_exit(void)
 {
-	alive = FALSE;
+	p_ptr->playing = FALSE;
 
 	/* Leaving */
 	p_ptr->leaving = TRUE;
@@ -6162,7 +6162,7 @@ long total_points(void)
 	if ((p_ptr->pseikaku == SEIKAKU_MUNCHKIN) && point)
 	{
 		point = 1;
-		if (total_winner) point = 2;
+		if (p_ptr->total_winner) point = 2;
 	}
 	if (easy_band) point = (0 - point);
 
@@ -6206,7 +6206,7 @@ static void make_bones(void)
 
 
 	/* Ignore wizards and borgs */
-	if (!(noscore & 0x00FF))
+	if (!(p_ptr->noscore & 0x00FF))
 	{
 		/* Ignore people who die in town */
 		if (dun_level)
@@ -6320,7 +6320,7 @@ static void print_tomb(void)
 
 
 		/* King or Queen */
-		if (total_winner || (p_ptr->lev > PY_MAX_LEVEL))
+		if (p_ptr->total_winner || (p_ptr->lev > PY_MAX_LEVEL))
 		{
 #ifdef JP
                 /* 英日切り替え */
@@ -6382,34 +6382,34 @@ static void print_tomb(void)
 
 #ifdef JP
         /* 墓に刻む言葉をオリジナルより細かく表示 */
-        if (streq(died_from, "途中終了"))
+        if (streq(p_ptr->died_from, "途中終了"))
         {
                 strcpy(tmp, "<自殺>");
         }
         else
         {
-                if (streq(died_from, "ripe"))
+                if (streq(p_ptr->died_from, "ripe"))
                 {
                         strcpy(tmp, "引退後に天寿を全う");
                 }
-                else if (streq(died_from, "Seppuku"))
+                else if (streq(p_ptr->died_from, "Seppuku"))
                 {
                         strcpy(tmp, "勝利の後、切腹");
                 }
                 else
                 {
-                        strcpy(tmp, died_from);
+                        strcpy(tmp, p_ptr->died_from);
                 }
         }
         center_string(buf, tmp);
         put_str(buf, 14, 11);
 
-        if(!streq(died_from, "ripe") && !streq(died_from, "Seppuku"))
+        if(!streq(p_ptr->died_from, "ripe") && !streq(p_ptr->died_from, "Seppuku"))
         {
                 if( dun_level == 0 )
                 {
 			cptr town = (p_ptr->town_num ? "街" : "荒野");
-                        if(streq(died_from, "途中終了"))
+                        if(streq(p_ptr->died_from, "途中終了"))
                         {
                                 sprintf(tmp, "%sで死んだ", town);
                         }
@@ -6420,7 +6420,7 @@ static void print_tomb(void)
                 }
                 else
                 {
-                        if(streq(died_from, "途中終了"))
+                        if(streq(p_ptr->died_from, "途中終了"))
                         {
                                 sprintf(tmp, "地下 %d 階で死んだ", dun_level);
                         }
@@ -6438,14 +6438,14 @@ static void print_tomb(void)
 		put_str(buf, 14, 11);
 
 
-		if (strlen(died_from) > 24)
+		if (strlen(p_ptr->died_from) > 24)
 		{
-			strncpy(dummy, died_from, 24);
+			strncpy(dummy, p_ptr->died_from, 24);
 			dummy[24] = '\0';
 			(void)sprintf(tmp, "by %s.", dummy);
 		}
 		else
-			(void)sprintf(tmp, "by %s.", died_from);
+			(void)sprintf(tmp, "by %s.", p_ptr->died_from);
 
 		center_string(buf, tmp);
 		put_str(buf, 15, 11);
@@ -6679,7 +6679,7 @@ msg_print("スコア・ファイルが使用できません。");
 
 #ifndef SCORE_WIZARDS
 	/* Wizard-mode pre-empts scoring */
-	if (noscore & 0x000F)
+	if (p_ptr->noscore & 0x000F)
 	{
 #ifdef JP
 msg_print("ウィザード・モードではスコアが記録されません。");
@@ -6694,7 +6694,7 @@ msg_print("ウィザード・モードではスコアが記録されません。");
 
 #ifndef SCORE_BORGS
 	/* Borg-mode pre-empts scoring */
-	if (noscore & 0x00F0)
+	if (p_ptr->noscore & 0x00F0)
 	{
 #ifdef JP
 msg_print("ボーグ・モードではスコアが記録されません。");
@@ -6709,7 +6709,7 @@ msg_print("ボーグ・モードではスコアが記録されません。");
 
 #ifndef SCORE_CHEATERS
 	/* Cheaters are not scored */
-	if (noscore & 0xFF00)
+	if (p_ptr->noscore & 0xFF00)
 	{
 #ifdef JP
 msg_print("詐欺をやった人はスコアが記録されません。");
@@ -6724,9 +6724,9 @@ msg_print("詐欺をやった人はスコアが記録されません。");
 
 	/* Interupted */
 #ifdef JP
-if (!total_winner && streq(died_from, "強制終了"))
+if (!p_ptr->total_winner && streq(p_ptr->died_from, "強制終了"))
 #else
-	if (!total_winner && streq(died_from, "Interrupting"))
+	if (!p_ptr->total_winner && streq(p_ptr->died_from, "Interrupting"))
 #endif
 
 	{
@@ -6742,9 +6742,9 @@ msg_print("強制終了のためスコアが記録されません。");
 
 	/* Quitter */
 #ifdef JP
-if (!total_winner && streq(died_from, "途中終了"))
+if (!p_ptr->total_winner && streq(p_ptr->died_from, "途中終了"))
 #else
-	if (!total_winner && streq(died_from, "Quitting"))
+	if (!p_ptr->total_winner && streq(p_ptr->died_from, "Quitting"))
 #endif
 
 	{
@@ -6798,10 +6798,10 @@ void close_game(void)
 
 
 	/* Handle death */
-	if (death)
+	if (p_ptr->is_dead)
 	{
 		/* Handle retirement */
-		if (total_winner) kingly();
+		if (p_ptr->total_winner) kingly();
 
 		/* Save memories */
 #ifdef JP
@@ -6840,8 +6840,8 @@ if (!save_player()) msg_print("セーブ失敗！");
 				if (get_check_strict("Stand by for later score registration? ", (CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
 #endif
 				{
-					wait_report_score = TRUE;
-					death = FALSE;
+					p_ptr->wait_report_score = TRUE;
+					p_ptr->is_dead = FALSE;
 #ifdef JP
 					if (!save_player()) msg_print("セーブ失敗！");
 #else
@@ -6849,7 +6849,7 @@ if (!save_player()) msg_print("セーブ失敗！");
 #endif
 				}
 			}
-			if (!wait_report_score)
+			if (!p_ptr->wait_report_score)
 				(void)top_twenty();
 		}
 		else if (highscore_fd >= 0)
@@ -6922,19 +6922,19 @@ if (!character_generated || character_saved) quit("緊急事態");
 	disturb(1, 0);
 
 	/* Mega-Hack -- Delay death */
-	if (p_ptr->chp < 0) death = FALSE;
+	if (p_ptr->chp < 0) p_ptr->is_dead = FALSE;
 
 	/* Hardcode panic save */
-	panic_save = 1;
+	p_ptr->panic_save = 1;
 
 	/* Forbid suspend */
 	signals_ignore_tstp();
 
 	/* Indicate panic save */
 #ifdef JP
-(void)strcpy(died_from, "(緊急セーブ)");
+(void)strcpy(p_ptr->died_from, "(緊急セーブ)");
 #else
-	(void)strcpy(died_from, "(panic save)");
+	(void)strcpy(p_ptr->died_from, "(panic save)");
 #endif
 
 
@@ -7330,13 +7330,13 @@ static void handle_signal_simple(int sig)
 
 
 	/* Terminate dead characters */
-	if (death)
+	if (p_ptr->is_dead)
 	{
 		/* Mark the savefile */
 #ifdef JP
-(void)strcpy(died_from, "強制終了");
+(void)strcpy(p_ptr->died_from, "強制終了");
 #else
-		(void)strcpy(died_from, "Abortion");
+		(void)strcpy(p_ptr->died_from, "Abortion");
 #endif
 
 		forget_lite();
@@ -7360,9 +7360,9 @@ quit("強制終了");
 	{
 		/* Cause of "death" */
 #ifdef JP
-(void)strcpy(died_from, "強制終了中");
+(void)strcpy(p_ptr->died_from, "強制終了中");
 #else
-		(void)strcpy(died_from, "Interrupting");
+		(void)strcpy(p_ptr->died_from, "Interrupting");
 #endif
 
 
@@ -7371,10 +7371,10 @@ quit("強制終了");
 		clear_mon_lite();
 
 		/* Stop playing */
-		alive = FALSE;
+		p_ptr->playing = FALSE;
 
 		/* Suicide */
-		death = TRUE;
+		p_ptr->is_dead = TRUE;
 
 		/* Leaving */
 		p_ptr->leaving = TRUE;
@@ -7470,13 +7470,13 @@ Term_putstr(45, hgt - 1, -1, TERM_RED, "緊急セーブ...");
 	Term_fresh();
 
 	/* Panic Save */
-	panic_save = 1;
+	p_ptr->panic_save = 1;
 
 	/* Panic save */
 #ifdef JP
-(void)strcpy(died_from, "(緊急セーブ)");
+(void)strcpy(p_ptr->died_from, "(緊急セーブ)");
 #else
-	(void)strcpy(died_from, "(panic save)");
+	(void)strcpy(p_ptr->died_from, "(panic save)");
 #endif
 
 

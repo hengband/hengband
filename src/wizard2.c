@@ -29,27 +29,27 @@ void do_cmd_rerate(bool display)
 	/* Rerate */
 	while (1)
 	{
-		player_hp[0] = p_ptr->hitdie;
+		p_ptr->player_hp[0] = p_ptr->hitdie;
 
 		for (i = 1; i < 4; i++)
 		{
 			j = randint1(p_ptr->hitdie);
-			player_hp[0] += j;
+			p_ptr->player_hp[0] += j;
 		}
 
 		/* Collect values */
 		for (i = 1; i < PY_MAX_LEVEL; i++)
 		{
-			player_hp[i] = randint1(p_ptr->hitdie);
-			player_hp[i] += player_hp[i - 1];
+			p_ptr->player_hp[i] = randint1(p_ptr->hitdie);
+			p_ptr->player_hp[i] += p_ptr->player_hp[i - 1];
 		}
 
 		/* Legal values */
-		if ((player_hp[PY_MAX_LEVEL - 1] >= min_value) &&
-		    (player_hp[PY_MAX_LEVEL - 1] <= max_value)) break;
+		if ((p_ptr->player_hp[PY_MAX_LEVEL - 1] >= min_value) &&
+		    (p_ptr->player_hp[PY_MAX_LEVEL - 1] <= max_value)) break;
 	}
 
-	percent = (int)(((long)player_hp[PY_MAX_LEVEL - 1] * 200L) /
+	percent = (int)(((long)p_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) /
 		(2 * p_ptr->hitdie +
 		((PY_MAX_LEVEL - 1+3) * (p_ptr->hitdie + 1))));
 
@@ -400,21 +400,21 @@ static void do_cmd_wiz_change_aux(void)
 	{
 		for (i = 0;i < 64;i++)
 		{
-			weapon_exp[j][i] = tmp_s16b;
-			if (weapon_exp[j][i] > s_info[p_ptr->pclass].w_max[j][i]) weapon_exp[j][i] = s_info[p_ptr->pclass].w_max[j][i];
+			p_ptr->weapon_exp[j][i] = tmp_s16b;
+			if (p_ptr->weapon_exp[j][i] > s_info[p_ptr->pclass].w_max[j][i]) p_ptr->weapon_exp[j][i] = s_info[p_ptr->pclass].w_max[j][i];
 		}
 	}
 
 	for (j = 0; j < 10; j++)
 	{
-		skill_exp[j] = tmp_s16b;
-		if (skill_exp[j] > s_info[p_ptr->pclass].s_max[j]) skill_exp[j] = s_info[p_ptr->pclass].s_max[j];
+		p_ptr->skill_exp[j] = tmp_s16b;
+		if (p_ptr->skill_exp[j] > s_info[p_ptr->pclass].s_max[j]) p_ptr->skill_exp[j] = s_info[p_ptr->pclass].s_max[j];
 	}
 
 	for (j = 0; j < 32; j++)
-		spell_exp[j] = (tmp_s16b > 1600 ? 1600 : tmp_s16b);
+		p_ptr->spell_exp[j] = (tmp_s16b > 1600 ? 1600 : tmp_s16b);
 	for (; j < 64; j++)
-		spell_exp[j] = (tmp_s16b > 1400 ? 1400 : tmp_s16b);
+		p_ptr->spell_exp[j] = (tmp_s16b > 1400 ? 1400 : tmp_s16b);
 
 	/* Default */
 	sprintf(tmp_val, "%ld", (long)(p_ptr->au));

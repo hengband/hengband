@@ -3861,8 +3861,8 @@ strcpy(name, "(»Ω∆……‘«Ω)");
 
 			/* Forgotten */
 			else if ((j < 1) ?
-				((spell_forgotten1 & (1L << i))) :
-				((spell_forgotten2 & (1L << (i % 32)))))
+				((p_ptr->spell_forgotten1 & (1L << i))) :
+				((p_ptr->spell_forgotten2 & (1L << (i % 32)))))
 			{
 				/* Forgotten */
 				a = TERM_ORANGE;
@@ -3870,8 +3870,8 @@ strcpy(name, "(»Ω∆……‘«Ω)");
 
 			/* Unknown */
 			else if (!((j < 1) ?
-				(spell_learned1 & (1L << i)) :
-				(spell_learned2 & (1L << (i % 32)))))
+				(p_ptr->spell_learned1 & (1L << i)) :
+				(p_ptr->spell_learned2 & (1L << (i % 32)))))
 			{
 				/* Unknown */
 				a = TERM_RED;
@@ -3879,8 +3879,8 @@ strcpy(name, "(»Ω∆……‘«Ω)");
 
 			/* Untried */
 			else if (!((j < 1) ?
-				(spell_worked1 & (1L << i)) :
-				(spell_worked2 & (1L << (i % 32)))))
+				(p_ptr->spell_worked1 & (1L << i)) :
+				(p_ptr->spell_worked2 & (1L << (i % 32)))))
 			{
 				/* Untried */
 				a = TERM_YELLOW;
@@ -3910,8 +3910,8 @@ s16b experience_of_spell(int spell, int realm)
 {
 	if (p_ptr->pclass == CLASS_SORCERER) return 1600;
 	else if (p_ptr->pclass == CLASS_RED_MAGE) return 1200;
-	else if (realm+1 == p_ptr->realm1) return spell_exp[spell];
-	else if (realm+1 == p_ptr->realm2) return spell_exp[spell + 32];
+	else if (realm+1 == p_ptr->realm1) return p_ptr->spell_exp[spell];
+	else if (realm+1 == p_ptr->realm2) return p_ptr->spell_exp[spell + 32];
 	else return 0;
 }
 
@@ -3952,7 +3952,7 @@ s16b spell_chance(int spell, int realm)
 	chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
 
 	if (p_ptr->riding)
-		chance += (MAX(r_info[m_list[p_ptr->riding].r_idx].level-skill_exp[GINOU_RIDING]/100-10,0));
+		chance += (MAX(r_info[m_list[p_ptr->riding].r_idx].level-p_ptr->skill_exp[GINOU_RIDING]/100-10,0));
 
 	/* Extract mana consumption rate */
 	shouhimana = s_ptr->smana*(3800 - experience_of_spell(spell, realm)) + 2399;
@@ -4048,8 +4048,8 @@ bool spell_okay(int spell, bool learned, bool study_pray, int realm)
 
 	/* Spell is forgotten */
 	if ((realm == p_ptr->realm2 - 1) ?
-	    (spell_forgotten2 & (1L << spell)) :
-	    (spell_forgotten1 & (1L << spell)))
+	    (p_ptr->spell_forgotten2 & (1L << spell)) :
+	    (p_ptr->spell_forgotten1 & (1L << spell)))
 	{
 		/* Never okay */
 		return (FALSE);
@@ -4060,8 +4060,8 @@ bool spell_okay(int spell, bool learned, bool study_pray, int realm)
 
 	/* Spell is learned */
 	if ((realm == p_ptr->realm2 - 1) ?
-	    (spell_learned2 & (1L << spell)) :
-	    (spell_learned1 & (1L << spell)))
+	    (p_ptr->spell_learned2 & (1L << spell)) :
+	    (p_ptr->spell_learned1 & (1L << spell)))
 	{
 		/* Always true */
 		return (!study_pray);
@@ -4421,7 +4421,7 @@ void print_spells(int target_spell, byte *spells, int num, int y, int x, int rea
 	bool max = FALSE;
 
 
-	if (((realm < 0) || (realm > MAX_REALM - 1)) && wizard)
+	if (((realm < 0) || (realm > MAX_REALM - 1)) && p_ptr->wizard)
 #ifdef JP
 msg_print("∑Ÿπ°™ print_spell §¨ŒŒ∞Ë§ §∑§À∏∆§–§Ï§ø");
 #else
@@ -4576,8 +4576,8 @@ comment = " Ã§√Œ";
 			line_attr = TERM_L_BLUE;
 		}
 		else if ((realm + 1 == p_ptr->realm1) ?
-		    ((spell_forgotten1 & (1L << spell))) :
-		    ((spell_forgotten2 & (1L << spell))))
+		    ((p_ptr->spell_forgotten1 & (1L << spell))) :
+		    ((p_ptr->spell_forgotten2 & (1L << spell))))
 		{
 #ifdef JP
 comment = " À∫µ—";
@@ -4588,8 +4588,8 @@ comment = " À∫µ—";
 			line_attr = TERM_YELLOW;
 		}
 		else if (!((realm + 1 == p_ptr->realm1) ?
-		    (spell_learned1 & (1L << spell)) :
-		    (spell_learned2 & (1L << spell))))
+		    (p_ptr->spell_learned1 & (1L << spell)) :
+		    (p_ptr->spell_learned2 & (1L << spell))))
 		{
 #ifdef JP
 comment = " Ã§√Œ";
@@ -4600,8 +4600,8 @@ comment = " Ã§√Œ";
 			line_attr = TERM_L_BLUE;
 		}
 		else if (!((realm + 1 == p_ptr->realm1) ?
-		    (spell_worked1 & (1L << spell)) :
-		    (spell_worked2 & (1L << spell))))
+		    (p_ptr->spell_worked1 & (1L << spell)) :
+		    (p_ptr->spell_worked2 & (1L << spell))))
 		{
 #ifdef JP
 comment = " Ã§∑–∏≥";
