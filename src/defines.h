@@ -3328,8 +3328,8 @@
 #define RF2_BRAIN_3         0x04000000
 #define RF2_BRAIN_4         0x08000000
 #define RF2_BRAIN_5         0x10000000
-#define RF2_BRAIN_6         0x20000000
-#define RF2_HUMAN           0x40000000
+#define RF2_ATTR_SEMIRAND   0x20000000  /* Color is determined semi-randomly */
+#define RF2_HUMAN           0x40000000  /* Human */
 #define RF2_QUANTUM         0x80000000  /* Monster has quantum behavior */
 
 /*

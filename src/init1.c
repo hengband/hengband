@@ -214,7 +214,7 @@ static cptr r_info_flags2[] =
 	"BRAIN_3",
 	"BRAIN_4",
 	"BRAIN_5",
-	"BRAIN_6",
+	"ATTR_SEMIRAND",
 	"HUMAN",
 	"QUANTUM"
 };

@@ -1441,14 +1441,10 @@ void map_info(int y, int x, byte *ap, char *cp)
 					*ap = a;
 					*cp = c;
 
-					/* Mimics' colors vary */
-					if ((c == '\"') || (c == '!') || (c == '='))
+					/* Use semi-random attr (usually mimics' colors vary) */
+					if ((r_ptr->flags2 & RF2_ATTR_SEMIRAND) && !use_graphics)
 					{
-						if (!(r_ptr->flags1 & RF1_UNIQUE) && !use_graphics)
-						{
-							/* Use semi-random attr */
-							*ap = c_ptr->m_idx % 15 + 1;
-						}
+						*ap = c_ptr->m_idx % 15 + 1;
 					}
 				}
 
@@ -1489,14 +1485,10 @@ void map_info(int y, int x, byte *ap, char *cp)
 						/* Normal case */
 						*ap = a;
 
-						/* Mimics' colors vary */
-						if ((c == '\"') || (c == '!') || (c == '='))
+						/* Use semi-random attr (usually mimics' colors vary) */
+						if ((r_ptr->flags2 & RF2_ATTR_SEMIRAND) && !use_graphics)
 						{
-							if (!(r_ptr->flags1 & RF1_UNIQUE) && !use_graphics)
-							{
-								/* Use semi-random attr */
-								*ap = c_ptr->m_idx % 15 + 1;
-							}
+							*ap = c_ptr->m_idx % 15 + 1;
 						}
 					}
 
