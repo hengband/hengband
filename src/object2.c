@@ -2333,8 +2333,6 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 					if (one_in_(3))
 						o_ptr->art_flags2 |= TR2_RES_POIS;
 					break;
-				case EGO_SLAY_DRAGON:
-					break;
 				case EGO_KILL_DRAGON:
 					if (one_in_(3))
 						o_ptr->art_flags2 |= TR2_RES_POIS;
@@ -2342,8 +2340,6 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 				case EGO_WEST:
 					if (one_in_(3))
 						o_ptr->art_flags2 |= TR2_RES_FEAR;
-					break;
-				case EGO_CHAOTIC:
 					break;
 				case EGO_SLAYING_WEAPON:
 					if (one_in_(3)) /* double damage */
@@ -2394,9 +2390,6 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 						o_ptr->art_flags1 |= TR1_BLOWS;
 					else
 						o_ptr->pval = m_bonus(3, level);
-					break;
-				case EGO_BLESS_BLADE:
-					one_ability(o_ptr);
 					break;
 				}
 
@@ -4229,7 +4222,7 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 		if (e_ptr->flags3 & (TR3_CURSED)) o_ptr->ident |= (IDENT_CURSED);
 
 		if (e_ptr->gen_flags & (TRG_ONE_SUSTAIN)) one_sustain(o_ptr);
-		if (e_ptr->gen_flags & (TRG_XTRA_POWER)) one_sustain(o_ptr);
+		if (e_ptr->gen_flags & (TRG_XTRA_POWER)) one_ability(o_ptr);
 		if (e_ptr->gen_flags & (TRG_XTRA_H_RES)) one_high_resistance(o_ptr);
 		if (e_ptr->gen_flags & (TRG_XTRA_E_RES)) one_ele_resistance(o_ptr);
 		if (e_ptr->gen_flags & (TRG_XTRA_D_RES)) one_dragon_ele_resistance(o_ptr);
