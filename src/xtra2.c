@@ -2429,64 +2429,82 @@ cptr look_mon_desc(int m_idx)
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	bool         living;
 	int          perc;
-
+	cptr desc = NULL;
 
 	/* Determine if the monster is "living" */
 	living = monster_living(r_ptr);
 
+	/* Calculate a health "percentage" */
+	perc = 100L * m_ptr->hp / m_ptr->maxhp;
 
 	/* Healthy monsters */
 	if (m_ptr->hp >= m_ptr->maxhp)
 	{
 		/* No damage */
 #ifdef JP
-return (living ? "無傷" : "無ダメージ");
+		desc = living ? "無傷" : "無ダメージ";
 #else
-		return (living ? "unhurt" : "undamaged");
+		desc = living ? "unhurt" : "undamaged";
 #endif
 
 	}
 
-
-	/* Calculate a health "percentage" */
-	perc = 100L * m_ptr->hp / m_ptr->maxhp;
-
-	if (perc >= 60)
+	else if (perc >= 60)
 	{
 #ifdef JP
-return (living ? "軽傷" : "小ダメージ");
+		desc = living ? "軽傷" : "小ダメージ";
 #else
-		return (living ? "somewhat wounded" : "somewhat damaged");
+		desc = living ? "somewhat wounded" : "somewhat damaged";
 #endif
 
 	}
 
-	if (perc >= 25)
+	else if (perc >= 25)
 	{
 #ifdef JP
-return (living ? "負傷" : "中ダメージ");
+		desc = living ? "負傷" : "中ダメージ";
 #else
-		return (living ? "wounded" : "damaged");
+		desc = living ? "wounded" : "damaged";
 #endif
 
 	}
 
-	if (perc >= 10)
+	else if (perc >= 10)
 	{
 #ifdef JP
-return (living ? "重傷" : "大ダメージ");
+		desc = living ? "重傷" : "大ダメージ";
 #else
-		return (living ? "badly wounded" : "badly damaged");
+		desc = living ? "badly wounded" : "badly damaged";
 #endif
 
 	}
 
+	else 
+	{
 #ifdef JP
-return (living ? "半死半生" : "倒れかけ");
+		desc = living ? "半死半生" : "倒れかけ";
 #else
-	return (living ? "almost dead" : "almost destroyed");
+		desc = living ? "almost dead" : "almost destroyed";
 #endif
+	}
 
+	/* Display monster's level --- idea bolowed from ToME */
+	if (r_ptr->r_tkills)
+	{
+#ifdef JP
+		return format("レベル%d, %s", r_ptr->level, desc);
+#else
+		return format("Level %d, %s", r_ptr->level, desc);
+#endif
+	}
+	else 
+	{
+#ifdef JP
+		return format("レベル???, %s", desc);
+#else
+		return format("Level ???, %s", desc);
+#endif
+	}
 }
 
 
