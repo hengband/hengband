@@ -5335,7 +5335,7 @@ static bool player_birth_aux(void)
 			strcpy(inp, "10");
 
 			/* Get a response (or escape) */
-			if (!askfor_aux(inp, 2)) inp[0] = '\0';
+			if (!askfor_aux(inp, 2)) strcpy(inp, "10");
 
 			/* Quit */
 			if (inp[0] == 'Q') birth_quit();
