@@ -885,6 +885,14 @@ s32b flag_cost(object_type * o_ptr, int plusses)
 	}
 	else
 	{
+                if ((o_ptr->tval == TV_RING) || (o_ptr->tval == TV_AMULET))
+                {
+                        object_kind *k_ptr = &k_info[o_ptr->k_idx];
+
+                        for (i = 0; i < TR_FLAG_SIZE; i++)
+                                flgs[i] &= ~(k_ptr->flags[i]);
+                }
+
 		if (o_ptr->name2)
 		{
 			ego_item_type *e_ptr = &e_info[o_ptr->name2];
@@ -892,13 +900,6 @@ s32b flag_cost(object_type * o_ptr, int plusses)
 			for (i = 0; i < TR_FLAG_SIZE; i++)
 				flgs[i] &= ~(e_ptr->flags[i]);
 
-			if ((o_ptr->tval == TV_RING) || (o_ptr->tval == TV_AMULET))
-			{
-				object_kind *k_ptr = &k_info[o_ptr->k_idx];
-
-				for (i = 0; i < TR_FLAG_SIZE; i++)
-					flgs[i] &= ~(k_ptr->flags[i]);
-			}
 		}
 		else if (o_ptr->art_name)
 		{
@@ -1005,17 +1006,17 @@ s32b flag_cost(object_type * o_ptr, int plusses)
 	if (have_flag(flgs, TR_LITE)) total += 1250;
 	if (have_flag(flgs, TR_SEE_INVIS)) total += 2000;
 	if (have_flag(flgs, TR_TELEPATHY)) total += 20000;
-	if (have_flag(flgs, TR_ESP_ANIMAL)) total += 3000;
-	if (have_flag(flgs, TR_ESP_UNDEAD)) total += 3000;
-	if (have_flag(flgs, TR_ESP_DEMON)) total += 3000;
-	if (have_flag(flgs, TR_ESP_ORC)) total += 3000;
-	if (have_flag(flgs, TR_ESP_TROLL)) total += 3000;
-	if (have_flag(flgs, TR_ESP_GIANT)) total += 3000;
-	if (have_flag(flgs, TR_ESP_DRAGON)) total += 3000;
-	if (have_flag(flgs, TR_ESP_HUMAN)) total += 3000;
-	if (have_flag(flgs, TR_ESP_EVIL)) total += 10000;
-	if (have_flag(flgs, TR_ESP_GOOD)) total += 6000;
-	if (have_flag(flgs, TR_ESP_NONLIVING)) total += 6000;
+	if (have_flag(flgs, TR_ESP_ANIMAL)) total += 1000;
+	if (have_flag(flgs, TR_ESP_UNDEAD)) total += 1000;
+	if (have_flag(flgs, TR_ESP_DEMON)) total += 1000;
+	if (have_flag(flgs, TR_ESP_ORC)) total += 1000;
+	if (have_flag(flgs, TR_ESP_TROLL)) total += 1000;
+	if (have_flag(flgs, TR_ESP_GIANT)) total += 1000;
+	if (have_flag(flgs, TR_ESP_DRAGON)) total += 1000;
+	if (have_flag(flgs, TR_ESP_HUMAN)) total += 1000;
+	if (have_flag(flgs, TR_ESP_EVIL)) total += 15000;
+	if (have_flag(flgs, TR_ESP_GOOD)) total += 2000;
+	if (have_flag(flgs, TR_ESP_NONLIVING)) total += 2000;
 	if (have_flag(flgs, TR_ESP_UNIQUE)) total += 10000;
 	if (have_flag(flgs, TR_SLOW_DIGEST)) total += 750;
 	if (have_flag(flgs, TR_REGEN)) total += 2500;
@@ -1192,7 +1193,7 @@ s32b object_value_real(object_type *o_ptr)
 		value += flag_cost(o_ptr, o_ptr->pval);
 	}
 
-	else if (o_ptr->art_flags[0] || o_ptr->art_flags[1] || o_ptr->art_flags[2])
+	else if (o_ptr->art_flags[0] || o_ptr->art_flags[1] || o_ptr->art_flags[2] || o_ptr->art_flags[3])
 	{
 		value += flag_cost(o_ptr, o_ptr->pval);
 	}
@@ -3088,6 +3089,12 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					rating += 15;
 				}
 				break;
+
+                                case SV_RING_WARNING:
+                                {
+                                        if (one_in_(3)) one_low_esp(o_ptr);
+                                        break;
+                                }
 
 				/* Searching */
 				case SV_RING_SEARCHING:

@@ -124,6 +124,27 @@ void one_dragon_ele_resistance(object_type *o_ptr)
 
 
 /*
+ * Choose one lower rank esp
+ */
+void one_low_esp(object_type *o_ptr)
+{
+        switch (randint1(9))
+        {
+        case 1: add_flag(o_ptr->art_flags, TR_ESP_ANIMAL);   break;
+        case 2: add_flag(o_ptr->art_flags, TR_ESP_UNDEAD);   break;
+        case 3: add_flag(o_ptr->art_flags, TR_ESP_DEMON);   break;
+        case 4: add_flag(o_ptr->art_flags, TR_ESP_ORC);   break;
+        case 5: add_flag(o_ptr->art_flags, TR_ESP_TROLL);   break;
+        case 6: add_flag(o_ptr->art_flags, TR_ESP_GIANT);   break;
+        case 7: add_flag(o_ptr->art_flags, TR_ESP_DRAGON);   break;
+        case 8: add_flag(o_ptr->art_flags, TR_ESP_HUMAN);   break;
+        case 9: add_flag(o_ptr->art_flags, TR_ESP_GOOD);   break;
+        }
+}
+
+
+
+/*
  * Choose one random resistance
  */
 void one_resistance(object_type *o_ptr)
@@ -156,18 +177,7 @@ void one_ability(object_type *o_ptr)
 	case 7: add_flag(o_ptr->art_flags, TR_HOLD_LIFE);   break;
 	case 8:
 	case 9:
-		switch (randint1(9))
-		{
-		case 1: add_flag(o_ptr->art_flags, TR_ESP_ANIMAL);   break;
-		case 2: add_flag(o_ptr->art_flags, TR_ESP_UNDEAD);   break;
-		case 3: add_flag(o_ptr->art_flags, TR_ESP_DEMON);   break;
-		case 4: add_flag(o_ptr->art_flags, TR_ESP_ORC);   break;
-		case 5: add_flag(o_ptr->art_flags, TR_ESP_TROLL);   break;
-		case 6: add_flag(o_ptr->art_flags, TR_ESP_GIANT);   break;
-		case 7: add_flag(o_ptr->art_flags, TR_ESP_DRAGON);   break;
-		case 8: add_flag(o_ptr->art_flags, TR_ESP_HUMAN);   break;
-		case 9: add_flag(o_ptr->art_flags, TR_ESP_GOOD);   break;
-		}
+                one_low_esp(o_ptr);
 		break;
 	}
 }
