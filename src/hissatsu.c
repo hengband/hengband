@@ -892,10 +892,16 @@ static bool cast_hissatsu_spell(int spell)
 		int i;
 		if (!get_rep_dir2(&dir)) return FALSE;
 		if (dir == 5) return FALSE;
-		y = py + ddy[dir];
-		x = px + ddx[dir];
 		for (i = 0; i < 3; i++)
 		{
+                        int oy, ox;
+                        int ny, nx;
+                        int m_idx;
+                        monster_type *m_ptr;
+
+                        y = py + ddy[dir];
+                        x = px + ddx[dir];
+
 			if (cave[y][x].m_idx)
 				py_attack(y, x, HISSATSU_3DAN);
 			else
@@ -907,77 +913,84 @@ static bool cast_hissatsu_spell(int spell)
 #endif
 				return FALSE;
 			}
+
 			if (d_info[dungeon_type].flags1 & DF1_NO_MELEE)
 			{
 				return TRUE;
 			}
-			if (cave[y][x].m_idx)
-			{
-				int oy, ox;
-				int ny = y + ddy[dir];
-				int nx = x + ddx[dir];
-				int m_idx = cave[y][x].m_idx;
-				monster_type *m_ptr = &m_list[m_idx];
-				if (cave_empty_bold(ny, nx))
-				{
-					cave[y][x].m_idx = 0;
-					cave[ny][nx].m_idx = m_idx;
-					m_ptr->fy = ny;
-					m_ptr->fx = nx;
 
-					update_mon(m_idx, TRUE);
+                        /* Monster is dead? */
+			if (!cave[y][x].m_idx) break;
 
-					/* Save the old location */
-					oy = py;
-					ox = px;
+                        ny = y + ddy[dir];
+                        nx = x + ddx[dir];
+                        m_idx = cave[y][x].m_idx;
+                        m_ptr = &m_list[m_idx];
 
-					/* Move the player */
-					py = y;
-					px = x;
+                        /* Monster cannot move back? */
+                        if (!monster_can_enter(ny, nx, &r_info[m_ptr->r_idx])) continue;
 
-					if (p_ptr->riding)
-					{
-						int tmp;
-						tmp = cave[py][px].m_idx;
-						cave[py][px].m_idx = cave[oy][ox].m_idx;
-						cave[oy][ox].m_idx = tmp;
-						m_list[p_ptr->riding].fy = py;
-						m_list[p_ptr->riding].fx = px;
-						update_mon(cave[py][px].m_idx, TRUE);
-					}
+                        cave[y][x].m_idx = 0;
+                        cave[ny][nx].m_idx = m_idx;
+                        m_ptr->fy = ny;
+                        m_ptr->fx = nx;
 
-					forget_flow();
+                        update_mon(m_idx, TRUE);
 
-					/* Redraw the old spot */
-					lite_spot(oy, ox);
+                        /* Player can move forward? */
+                        if (player_can_enter(cave[y][x].feat))
+                        {
+                                /* Save the old location */
+                                oy = py;
+                                ox = px;
 
-					/* Redraw the new spot */
-					lite_spot(py, px);
+                                /* Move the player */
+                                py = y;
+                                px = x;
 
-					/* Redraw the new spot */
-					lite_spot(ny, nx);
+                                if (p_ptr->riding)
+                                {
+                                        int tmp;
+                                        tmp = cave[py][px].m_idx;
+                                        cave[py][px].m_idx = cave[oy][ox].m_idx;
+                                        cave[oy][ox].m_idx = tmp;
+                                        m_list[p_ptr->riding].fy = py;
+                                        m_list[p_ptr->riding].fx = px;
+                                        update_mon(cave[py][px].m_idx, TRUE);
+                                }
 
-					/* Check for new panel (redraw map) */
-					verify_panel();
+                                forget_flow();
 
-					/* Update stuff */
-					p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW);
+                                /* Redraw the old spot */
+                                lite_spot(oy, ox);
 
-					/* Update the monsters */
-					p_ptr->update |= (PU_DISTANCE);
+                                /* Redraw the new spot */
+                                lite_spot(py, px);
+                        }
 
-					/* Window stuff */
-					p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+                        /* Redraw the old spot */
+                        lite_spot(y, x);
 
-					/* Handle stuff XXX XXX XXX */
-					handle_stuff();
+                        /* Redraw the new spot */
+                        lite_spot(ny, nx);
 
-					if (i < 2) msg_print(NULL);
-					y += ddy[dir];
-					x += ddx[dir];
-				}
-			}
-			else break;
+                        /* Check for new panel (redraw map) */
+                        verify_panel();
+
+                        /* Update stuff */
+                        p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW);
+
+                        /* Update the monsters */
+                        p_ptr->update |= (PU_DISTANCE);
+
+                        /* Window stuff */
+                        p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+
+                        /* Handle stuff */
+                        handle_stuff();
+
+                        /* -more- */
+                        if (i < 2) msg_print(NULL);
 		}
 		break;
 	}

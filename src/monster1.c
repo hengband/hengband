@@ -3532,6 +3532,99 @@ bool monster_can_cross_terrain(byte feat, monster_race *r_ptr)
 
 
 /*
+ * Strictly check if monster can enter the grid
+ */
+bool monster_can_enter(int y, int x, monster_race *r_ptr)
+{
+        cave_type *c_ptr = &cave[y][x];
+        byte feat = c_ptr->feat;
+
+        /* Player or other monster */
+        if ((y == py) && (x == px)) return FALSE;
+        if (c_ptr->m_idx) return FALSE;
+
+        /* Permanent wall */
+        if ((c_ptr->feat >= FEAT_PERM_EXTRA) &&
+            (c_ptr->feat <= FEAT_PERM_SOLID))
+                return FALSE;
+
+        /* Can fly over the Pattern */
+        if ((c_ptr->feat >= FEAT_PATTERN_START) &&
+            (c_ptr->feat <= FEAT_PATTERN_XTRA2))
+        {
+            if (!(r_ptr->flags7 & RF7_CAN_FLY))
+                    return FALSE;
+            else
+                    return TRUE;
+        }
+
+        /* Can fly over mountain on the surface */
+        if (feat == FEAT_MOUNTAIN)
+        {
+            if (!dun_level && 
+                ((r_ptr->flags7 & RF7_CAN_FLY) ||
+                 (r_ptr->flags8 & RF8_WILD_MOUNTAIN)))
+                    return TRUE;
+            else
+                    return FALSE;
+        }
+
+        /* Cannot enter wall without pass wall ability */
+        if (!cave_floor_grid(c_ptr) && !(r_ptr->flags2 & RF2_PASS_WALL))
+                return FALSE;
+
+	/* Pit */
+	if (feat == FEAT_DARK_PIT)
+	{
+		if (r_ptr->flags7 & RF7_CAN_FLY)
+			return TRUE;
+		else
+			return FALSE;
+	}
+	/* Deep water */
+	if (feat == FEAT_DEEP_WATER)
+	{
+		if ((r_ptr->flags7 & RF7_AQUATIC) ||
+		    (r_ptr->flags7 & RF7_CAN_FLY) ||
+		    (r_ptr->flags7 & RF7_CAN_SWIM))
+			return TRUE;
+		else
+			return FALSE;
+	}
+	/* Shallow water */
+	else if (feat == FEAT_SHAL_WATER)
+	{
+		if (!(r_ptr->flags2 & RF2_AURA_FIRE) ||
+		    (r_ptr->flags7 & RF7_AQUATIC) ||
+		    (r_ptr->flags7 & RF7_CAN_FLY) ||
+		    (r_ptr->flags7 & RF7_CAN_SWIM))
+			return TRUE;
+		else
+			return FALSE;
+	}
+	/* Aquatic monster */
+	else if ((r_ptr->flags7 & RF7_AQUATIC) &&
+		    !(r_ptr->flags7 & RF7_CAN_FLY))
+	{
+		return FALSE;
+	}
+	/* Lava */
+	else if ((feat == FEAT_SHAL_LAVA) ||
+	    (feat == FEAT_DEEP_LAVA))
+	{
+		if ((r_ptr->flags3 & RF3_IM_FIRE) ||
+		    (r_ptr->flags7 & RF7_CAN_FLY))
+			return TRUE;
+		else
+			return FALSE;
+	}
+
+	return TRUE;
+}
+
+
+
+/*
  * Check if two monsters are enemies
  */
 bool are_enemies(monster_type *m_ptr, monster_type *n_ptr)
