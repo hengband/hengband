@@ -378,8 +378,7 @@ static bool check_local_illumination(int y, int x)
 	int xx = (x < px) ? (x + 1) : (x > px) ? (x - 1) : x;
 
 	/* Check for "local" illumination */
-	return (cave[yy][xx].info & (CAVE_LITE | CAVE_MNLT)) ||
-	       ((cave[yy][xx].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW);
+	return (cave[yy][xx].info & CAVE_GLOW) ? TRUE : FALSE;
 }
 
 
