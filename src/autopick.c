@@ -84,7 +84,7 @@ static object_type autopick_last_destroyed_object;
 #define KEY_BOOSTED "ダイス目の違う"
 #define KEY_MORE_THAN  "ダイス目"
 #define KEY_DICE  "以上の"
-#define KEY_MORE_BONUS  "修正値が"
+#define KEY_MORE_BONUS  "修正値"
 #define KEY_MORE_BONUS2  "以上の"
 #define KEY_WORTHLESS "無価値の"
 #define KEY_ARTIFACT "アーティファクト"
@@ -604,8 +604,7 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
         {
                 if (!object_known_p(o_ptr)) return FALSE;
 
-                if (k_info[o_ptr->k_idx].pval ||
-                    (o_ptr->name2 && e_info[o_ptr->name2].max_pval))
+                if (o_ptr->pval)
                 {
                         if (o_ptr->pval < entry->bonus) return FALSE;
                 }
