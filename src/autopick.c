@@ -4948,6 +4948,9 @@ static void insert_single_letter(text_body_type *tb, int key)
  */
 void do_cmd_edit_autopick(void)
 {
+	static int cx_save = 0;
+	static int cy_save = 0;
+
 	text_body_type text_body, *tb = &text_body;
 
 	autopick_type an_entry, *entry = &an_entry;
@@ -4960,7 +4963,9 @@ void do_cmd_edit_autopick(void)
 	byte quit = 0;
 
 	tb->changed = FALSE;
-	tb->cx = tb->cy = tb->upper = tb->left = 0;
+	tb->cx = cx_save;
+	tb->cy = cy_save;
+	tb->upper = tb->left = 0;
 	tb->mark = 0;
 	tb->mx = tb->my = 0;
 	tb->old_cy = tb->old_upper = tb->old_left = -1;
@@ -5219,6 +5224,7 @@ void do_cmd_edit_autopick(void)
 
 	if (tb->changed && quit == QUIT_AND_SAVE)
 		write_text_lines(buf, tb->lines_list);
+
 	free_text_lines(tb->lines_list);
 
 	string_free(tb->last_destroyed);
@@ -5231,4 +5237,8 @@ void do_cmd_edit_autopick(void)
 
 	/* HACK -- reset start_time so that playtime is not increase while edit */
 	start_time = time(NULL);
+
+	/* Save cursor location */
+	cx_save = tb->cx;
+	cy_save = tb->cy;
 }
