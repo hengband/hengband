@@ -335,31 +335,31 @@ F:@:1:3:0:0:0:80
 F:a:128:3
 F:@:1:3:0:405
 
-# Quest 27 rewarding (Tourist gets Platinum Yendorian Express Card)
+# Quest 27 rewarding (Tourist gets The Platinum Yendorian Express Card)
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Tourist] ]
 F:a:128:3
 F:@:1:3:0:0:0:141
 
-# Quest 27 rewarding (Ranger, Archer gets Long Bow of Bard)
+# Quest 27 rewarding (Ranger, Archer gets The Long Bow of Bard)
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [IOR [EQU $CLASS Ranger] [EQU $CLASS Archer] ] ]
 F:a:128:3
 F:@:1:3:0:0:0:125
 
-# Quest 27 rewarding (Warrior, Berserker gets Glaive of Pain)
+# Quest 27 rewarding (Warrior, Berserker gets The Glaive of Pain)
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [IOR [EQU $CLASS Warrior] [EQU $CLASS Berserker] ] ]
 F:a:128:3
 F:@:1:3:0:0:0:94
 
-# Quest 27 rewarding (BeastMaster gets Lance of Eorlingas)
+# Quest 27 rewarding (BeastMaster gets The Lance of Eorlingas)
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS BeastMaster] ]
 F:a:128:3
 F:@:1:3:0:0:0:100
 
-# Quest 27 rewarding (Kihei gets GaeBolg)
+# Quest 27 rewarding (Cavalry gets GaeBolg)
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Cavalry] ]
 F:a:128:3
@@ -371,7 +371,7 @@ F:@:1:3:0:0:0:163
 F:a:128:3
 F:@:1:3:0:0:0:77
 
-# Quest 27 rewarding (Rogue gets Sling of Buckland)
+# Quest 27 rewarding (Rogue gets The Sling of Buckland)
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Rogue] ]
 F:a:128:3
@@ -390,21 +390,21 @@ F:a:128:3
 F:@:1:3:0:0:0:215
 
 # Quest 27 rewarding (Mage, High-Mage)
-# get Hard Leather Cap of Ben Franklin
+# get The Hard Leather Cap of Indra
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [IOR [IOR [EQU $CLASS Mage] [EQU $CLASS High-Mage] ] [IOR [EQU $CLASS Sorcerer] [EQU $CLASS Blue-Mage] ] ] ]
 F:a:128:3
 F:@:1:3:0:0:0:33
 
 # Quest 27 rewarding (Priest, Bard, ForceTrainer)
-# get Palantir of Westernesse
+# get The Palantir of Westernesse
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [IOR [IOR [EQU $CLASS Priest] [EQU $CLASS Bard] ] [IOR [EQU $CLASS ForceTrainer] [EQU $CLASS Mindcrafter] ] ] ]
 F:a:128:3
 F:@:1:3:0:0:0:15
 
 # Quest 27 rewarding (Magiceater, Mirror-Master)
-# get Numenor
+# get The Jewel Encrusted Crown of Numenor
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [IOR [EQU $CLASS Magiceater] [EQU $CLASS Mirror-Master] ] ] ]
 F:a:128:3
