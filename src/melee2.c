@@ -97,7 +97,7 @@ static bool get_enemy_dir(int m_idx, int *mm)
 			/* Monster must be 'an enemy' */
 			if (!are_enemies(m_ptr, t_ptr)) continue;
 
-			can_pass_wall = (((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || (p_ptr->pass_wall))) || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != p_ptr->riding)));
+			can_pass_wall = (((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || p_ptr->pass_wall)) || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != p_ptr->riding)));
 
 			/* Monster must be projectable if we can't pass through walls */
 			if (!can_pass_wall &&
@@ -549,7 +549,7 @@ static bool get_moves_aux2(int m_idx, int *yp, int *xp)
 		cost = c_ptr->cost;
 
 		/* Monster cannot kill or pass walls */
-		if (!(((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || p_ptr->pass_wall)) || (r_ptr->flags2 & RF2_KILL_WALL)))
+		if (!(((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || p_ptr->pass_wall)) || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != p_ptr->riding))))
 		{
 			if (cost == 0) continue;
 			if (!can_open_door && is_closed_door(c_ptr->feat)) continue;
@@ -623,9 +623,8 @@ static bool get_moves_aux(int m_idx, int *yp, int *xp, bool no_flow)
 	if (no_flow) return (FALSE);
 
 	/* Monster can go through rocks */
-	if ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || (p_ptr->pass_wall))) return (FALSE);
-	if (r_ptr->flags2 & RF2_KILL_WALL) return (FALSE);
-	if (!cave_floor_bold(py, px) && (cave[py][px].feat != FEAT_TREES)) return (FALSE);
+	if ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || p_ptr->pass_wall)) return (FALSE);
+	if ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != p_ptr->riding)) return (FALSE);
 
 	/* Monster location */
 	y1 = m_ptr->fy;
@@ -1100,7 +1099,7 @@ static bool get_moves(int m_idx, int *mm)
 	bool         will_run = mon_will_run(m_idx);
 	cave_type    *c_ptr;
 	bool         no_flow = ((m_ptr->mflag2 & MFLAG2_NOFLOW) && (cave[m_ptr->fy][m_ptr->fx].cost > 2));
-	bool         can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || (p_ptr->pass_wall)));
+	bool         can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || p_ptr->pass_wall));
 
 	/* Counter attack to an enemy monster */
 	if (!will_run && m_ptr->target_y)
@@ -1144,8 +1143,7 @@ static bool get_moves(int m_idx, int *mm)
 				c_ptr = &cave[yy][xx];
 
 				/* Check grid */
-				if (((cave_floor_grid(c_ptr)) || ((c_ptr->feat & 0x60) == 0x60)) &&
-					 monster_can_cross_terrain(c_ptr->feat, r_ptr))
+				if (monster_can_cross_terrain(c_ptr->feat, r_ptr, 0))
 				{
 					/* One more room grid */
 					room++;
@@ -2267,6 +2265,7 @@ static void process_monster(int m_idx)
 	int             mm[8];
 
 	cave_type       *c_ptr;
+	feature_type    *f_ptr;
 
 	monster_type    *y_ptr;
 
@@ -2282,12 +2281,14 @@ static void process_monster(int m_idx)
 	bool            did_pass_wall;
 	bool            did_kill_wall;
 	bool            gets_angry = FALSE;
-	bool            can_pass_wall;
+	bool            can_cross;
 	bool            aware = TRUE;
 
 	bool            fear;
 
-	if ((m_idx == p_ptr->riding) && !(r_ptr->flags7 & RF7_RIDING))
+	bool            is_riding_mon = (m_idx == p_ptr->riding);
+
+	if (is_riding_mon && !(r_ptr->flags7 & RF7_RIDING))
 	{
 		if (rakuba(0, TRUE))
 		{
@@ -2409,7 +2410,7 @@ msg_print("少しの間悲しい気分になった。");
 			char m_name[80];
 			monster_desc(m_name, m_ptr, 0);
 
-			if (m_idx == p_ptr->riding && riding_pinch < 2)
+			if (is_riding_mon && riding_pinch < 2)
 			{
 #ifdef JP
 				msg_format("%sは傷の痛さの余りあなたの束縛から逃れようとしている。", m_name);
@@ -2421,7 +2422,7 @@ msg_print("少しの間悲しい気分になった。");
 			}
 			else
 			{
-				if (m_idx == p_ptr->riding)
+				if (is_riding_mon)
 				{
 #ifdef JP
 					msg_format("%sはあなたの束縛から脱出した。", m_name);
@@ -2457,7 +2458,7 @@ msg_print("少しの間悲しい気分になった。");
 #endif
 				}
 
-				if (m_idx == p_ptr->riding && rakuba(-1, FALSE))
+				if (is_riding_mon && rakuba(-1, FALSE))
 				{
 #ifdef JP
 					msg_print("地面に落とされた。");
@@ -2477,7 +2478,7 @@ msg_print("少しの間悲しい気分になった。");
 		else
 		{
 			/* Reset the counter */
-			if (m_idx == p_ptr->riding) riding_pinch = 0;
+			if (is_riding_mon) riding_pinch = 0;
 		}
 	}
 
@@ -2511,7 +2512,7 @@ msg_print("少しの間悲しい気分になった。");
 
 			/* Redraw the health bar */
 			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-			if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
+			if (is_riding_mon) p_ptr->redraw |= (PR_UHEALTH);
 
 			/* Hack -- Count the wakings */
 			if (r_ptr->r_wake < MAX_UCHAR)
@@ -2528,7 +2529,7 @@ msg_print("少しの間悲しい気分になった。");
 		if (one_in_(2)) return;
 	}
 
-	if (p_ptr->riding == m_idx)
+	if (is_riding_mon)
 	{
 		p_ptr->update |= (PU_BONUS);
 	}
@@ -2749,8 +2750,6 @@ msg_format("%^s%s", m_name, monmessage);
 		}
 	}
 
-	can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || (p_ptr->pass_wall)));
-
 	/* Hack -- Assume no movement */
 	mm[0] = mm[1] = mm[2] = mm[3] = 0;
 	mm[4] = mm[5] = mm[6] = mm[7] = 0;
@@ -2897,19 +2896,14 @@ msg_format("%^s%s", m_name, monmessage);
 
 		/* Access that cave grid */
 		c_ptr = &cave[ny][nx];
+		f_ptr = &f_info[c_ptr->feat];
+		can_cross = monster_can_cross_terrain(c_ptr->feat, r_ptr, is_riding_mon ? CEM_RIDING : 0);
 
 		/* Access that cave grid's contents */
 		y_ptr = &m_list[c_ptr->m_idx];
 
-		/* Floor is open? */
-		if (cave_floor_grid(c_ptr))
-		{
-			/* Go ahead and move */
-			do_move = TRUE;
-		}
-
 		/* Hack -- player 'in' wall */
-		else if (player_bold(ny, nx))
+		if (player_bold(ny, nx))
 		{
 			do_move = TRUE;
 		}
@@ -2920,79 +2914,54 @@ msg_format("%^s%s", m_name, monmessage);
 			do_move = TRUE;
 		}
 
-		/* Permanent wall */
-		else if ((c_ptr->feat >= FEAT_PERM_EXTRA) &&
-			(c_ptr->feat <= FEAT_PERM_SOLID))
+		/* Floor is open? */
+		else if (can_cross)
 		{
-			do_move = FALSE;
-		}
-
-		/* Hack -- semi-transparent terrains are no obstacle */
-		else if (c_ptr->feat == FEAT_TREES)
-		{
-			do_move = TRUE;
-		}
-
-		/* Hack -- semi-transparent terrains are no obstacle */
-		else if ((c_ptr->feat == FEAT_MOUNTAIN) && ((r_ptr->flags2 & RF2_KILL_WALL) || (!dun_level && ((r_ptr->flags7 & RF7_CAN_FLY) || (r_ptr->flags8 & RF8_WILD_MOUNTAIN)))))
-		{
-			do_move = TRUE;
-		}
-
-
-		/* Monster moves through walls (and doors) */
-		else if (can_pass_wall)
-		{
-			/* Pass through walls/doors/rubble */
+			/* Go ahead and move */
 			do_move = TRUE;
 
-			/* Monster went through a wall */
-			did_pass_wall = TRUE;
+			/* Monster moves through walls (and doors) */
+			if ((r_ptr->flags2 & RF2_PASS_WALL) && (!is_riding_mon || p_ptr->pass_wall) &&
+			    !have_flag(f_ptr->flags, FF_MOVE))
+			{
+				/* Monster went through a wall */
+				did_pass_wall = TRUE;
+			}
+
+			if ((r_ptr->flags2 & RF2_KILL_WALL) && have_flag(f_ptr->flags, FF_TUNNEL) &&
+			    !have_flag(f_ptr->flags, FF_LOS) && !have_flag(f_ptr->flags, FF_PERMANENT))
+			{
+				/* Monster destroyed a wall (later) */
+				did_kill_wall = TRUE;
+			}
 		}
 
 		/* Monster destroys walls (and doors) */
-		else if ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != p_ptr->riding))
+		else if ((r_ptr->flags2 & RF2_KILL_WALL) && !is_riding_mon &&
+		         have_flag(f_ptr->flags, FF_TUNNEL) && !have_flag(f_ptr->flags, FF_PERMANENT))
 		{
 			/* Eat through walls/doors/rubble */
 			do_move = TRUE;
 
-			/* Monster destroyed a wall */
+			/* Monster destroyed a wall (later) */
 			did_kill_wall = TRUE;
-
-			if (one_in_(GRINDNOISE))
-			{
-#ifdef JP
-msg_print("ギシギシいう音が聞こえる。");
-#else
-				msg_print("There is a grinding sound.");
-#endif
-
-			}
-
-			/* Forget the wall */
-			c_ptr->info &= ~(CAVE_MARK);
-
-			/* Notice */
-			cave_set_feat(ny, nx, floor_type[randint0(100)]);
-
-			/* Note changes to viewable region */
-			if (player_has_los_bold(ny, nx)) do_view = TRUE;
 		}
 
 		/* Handle doors and secret doors */
 		else if (is_closed_door(c_ptr->feat))
 		{
 			bool may_bash = TRUE;
+			feature_type *f_ptr = &f_info[c_ptr->feat];
 
 			/* Assume no move allowed */
 			do_move = FALSE;
 
 			/* Creature can open doors. */
-			if ((r_ptr->flags2 & RF2_OPEN_DOOR) &&
+			if ((r_ptr->flags2 & RF2_OPEN_DOOR) && have_flag(f_ptr->flags, FF_OPEN) &&
 				 (!is_pet(m_ptr) || (p_ptr->pet_extra_flags & PF_OPEN_DOORS)))
 			{
 				/* Closed doors */
-				if (c_ptr->feat == FEAT_DOOR_HEAD)
+				if (!f_ptr->power)
 				{
 					/* The door is open */
 					did_open_door = TRUE;
@@ -3005,18 +2974,13 @@ msg_print("ギシギシいう音が聞こえる。");
 				}
 
 				/* Locked doors (not jammed) */
-				else if (c_ptr->feat < FEAT_DOOR_HEAD + 0x08)
+				else
 				{
-					int k;
-
-					/* Door power */
-					k = ((c_ptr->feat - FEAT_DOOR_HEAD) & 0x07);
-
 					/* Try to unlock it XXX XXX XXX */
-					if (randint0(m_ptr->hp / 10) > k)
+					if (randint0(m_ptr->hp / 10) > f_ptr->power)
 					{
 						/* Unlock the door */
-						cave_set_feat(ny, nx, FEAT_DOOR_HEAD + 0x00);
+						cave_alter_feat(ny, nx, FF_OPEN);
 
 						/* Do not bash the door */
 						may_bash = FALSE;
@@ -3025,24 +2989,18 @@ msg_print("ギシギシいう音が聞こえる。");
 			}
 
 			/* Stuck doors -- attempt to bash them down if allowed */
-			if (may_bash && (r_ptr->flags2 & RF2_BASH_DOOR) &&
+			if (may_bash && (r_ptr->flags2 & RF2_BASH_DOOR) && have_flag(f_ptr->flags, FF_BASH) &&
 				(!is_pet(m_ptr) || (p_ptr->pet_extra_flags & PF_OPEN_DOORS)))
 			{
-				int k;
-
-				/* Door power */
-				k = ((c_ptr->feat - FEAT_DOOR_HEAD) & 0x07);
-
 				/* Attempt to Bash XXX XXX XXX */
-				if (randint0(m_ptr->hp / 10) > k)
+				if (randint0(m_ptr->hp / 10) > f_ptr->power)
 				{
 					/* Message */
 #ifdef JP
-msg_print("ドアを叩き開ける音がした！");
+					msg_print("ドアを叩き開ける音がした！");
 #else
 					msg_print("You hear a door burst open!");
 #endif
-
 
 					/* Disturb (sometimes) */
 					if (disturb_minor) disturb(0, 0);
@@ -3062,13 +3020,13 @@ msg_print("ドアを叩き開ける音がした！");
 				/* Break down the door */
 				if (did_bash_door && (randint0(100) < 50))
 				{
-					cave_set_feat(ny, nx, FEAT_BROKEN);
+					cave_alter_feat(ny, nx, FF_BASH);
 				}
 
 				/* Open the door */
 				else
 				{
-					cave_set_feat(ny, nx, FEAT_OPEN);
+					cave_alter_feat(ny, nx, FF_OPEN);
 				}
 
 				/* Handle viewable doors */
@@ -3090,11 +3048,10 @@ msg_print("ドアを叩き開ける音がした！");
 				if (c_ptr->info & CAVE_MARK)
 				{
 #ifdef JP
-msg_print("守りのルーンが壊れた！");
+					msg_print("守りのルーンが壊れた！");
 #else
 					msg_print("The rune of protection is broken!");
 #endif
-
 				}
 
 				/* Forget the rune */
@@ -3127,7 +3084,7 @@ msg_print("守りのルーンが壊れた！");
 					if (c_ptr->info & CAVE_MARK)
 					{
 #ifdef JP
-msg_print("ルーンが爆発した！");
+						msg_print("ルーンが爆発した！");
 #else
 						msg_print("The rune explodes!");
 #endif
@@ -3138,7 +3095,7 @@ msg_print("ルーンが爆発した！");
 				else
 				{
 #ifdef JP
-msg_print("爆発のルーンは解除された。");
+					msg_print("爆発のルーンは解除された。");
 #else
 					msg_print("An explosive rune was disarmed.");
 #endif
@@ -3201,13 +3158,6 @@ msg_print("爆発のルーンは解除された。");
 					do_turn = TRUE;
 				}
 			}
-
-			if ((c_ptr->feat >= FEAT_PATTERN_START) &&
-				(c_ptr->feat <= FEAT_PATTERN_XTRA2) &&
-				!do_turn && !(r_ptr->flags7 & RF7_CAN_FLY))
-			{
-				do_move = FALSE;
-			}
 		}
 
 		/* A monster is in the way */
@@ -3221,12 +3171,9 @@ msg_print("爆発のルーンは解除された。");
 			/* Attack 'enemies' */
 			if (((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW) &&
 				 (r_ptr->mexp * r_ptr->level > z_ptr->mexp * z_ptr->level) &&
-				 cave_floor_grid(c_ptr) &&
-				 (c_ptr->m_idx != p_ptr->riding)) ||
+				 can_cross && (c_ptr->m_idx != p_ptr->riding)) ||
 				are_enemies(m_ptr, y_ptr) || m_ptr->confused)
 			{
-				do_move = FALSE;
-
 				if (!(r_ptr->flags1 & RF1_NEVER_BLOW))
 				{
 					if (r_ptr->flags2 & RF2_KILL_BODY)
@@ -3255,9 +3202,9 @@ msg_print("爆発のルーンは解除された。");
 
 			/* Push past weaker monsters (unless leaving a wall) */
 			else if ((r_ptr->flags2 & RF2_MOVE_BODY) &&
-				(r_ptr->mexp > z_ptr->mexp) && cave_floor_grid(c_ptr) &&
-				(cave_floor_grid(&cave[m_ptr->fy][m_ptr->fx])) &&
-				 (c_ptr->m_idx != p_ptr->riding))
+				(r_ptr->mexp > z_ptr->mexp) &&
+				can_cross && (c_ptr->m_idx != p_ptr->riding) &&
+				monster_can_cross_terrain(cave[m_ptr->fy][m_ptr->fx].feat, z_ptr, 0))
 			{
 				/* Allow movement */
 				do_move = TRUE;
@@ -3275,7 +3222,7 @@ msg_print("爆発のルーンは解除された。");
 		 * to allow monsters to attack an enemy,
 		 * even if it can't enter the terrain.
 		 */
-		if (do_move && !monster_can_cross_terrain(c_ptr->feat, r_ptr))
+		if (do_move && !can_cross && !did_kill_wall)
 		{
 			/* Assume no move allowed */
 			do_move = FALSE;
@@ -3291,7 +3238,7 @@ msg_print("爆発のルーンは解除された。");
 			do_move = FALSE;
 		}
 
-		if (m_idx == p_ptr->riding)
+		if (is_riding_mon)
 		{
 			if (!p_ptr->riding_ryoute && !(m_list[p_ptr->riding].monfear)) do_move = FALSE;
 		}
@@ -3307,14 +3254,25 @@ msg_print("爆発のルーンは解除された。");
 			/* Hack -- Update the old location */
 			cave[oy][ox].m_idx = c_ptr->m_idx;
 
-			if (c_ptr->feat == FEAT_TREES)
+			if (did_kill_wall)
 			{
-				if (r_ptr->flags2 & RF2_KILL_WALL)
+				if (one_in_(GRINDNOISE))
 				{
-					cave_set_feat(ny, nx, FEAT_GRASS);
-
+#ifdef JP
+					msg_print("ギシギシいう音が聞こえる。");
+#else
+					msg_print("There is a grinding sound.");
+#endif
 				}
-				if (!(r_ptr->flags7 & RF7_CAN_FLY) && !(r_ptr->flags8 & RF8_WILD_WOOD))
+
+				cave_alter_feat(ny, nx, FF_HURT_DISI);
+
+				/* Note changes to viewable region */
+				if (player_has_los_bold(ny, nx)) do_view = TRUE;
+			}
+			else if (have_flag(f_ptr->flags, FF_TREE))
+			{
+				if (!(r_ptr->flags7 & RF7_CAN_FLY) && (!is_riding_mon || !p_ptr->ffall) && !(r_ptr->flags8 & RF8_WILD_WOOD))
 				{
 					m_ptr->energy_need += ENERGY_NEED();
 				}
@@ -3347,7 +3305,7 @@ msg_print("爆発のルーンは解除された。");
 			/* Update the monster */
 			update_mon(m_idx, TRUE);
 
-			if (p_ptr->riding == m_idx)
+			if (is_riding_mon)
 			{
 				py = ny;
 				px = nx;
@@ -3359,7 +3317,7 @@ msg_print("爆発のルーンは解除された。");
 			/* Redraw the new grid */
 			lite_spot(ny, nx);
 
-			if (p_ptr->riding == m_idx)
+			if (is_riding_mon)
 			{
 				verify_panel();
 
@@ -3462,9 +3420,9 @@ msg_print("爆発のルーンは解除された。");
 							{
 								/* Dump a message */
 #ifdef JP
-msg_format("%^sは%sを拾おうとしたが、だめだった。", m_name, o_name);
+								msg_format("%^sは%sを拾おうとしたが、だめだった。", m_name, o_name);
 #else
-msg_format("%^s tries to pick up %s, but fails.", m_name, o_name);
+								msg_format("%^s tries to pick up %s, but fails.", m_name, o_name);
 #endif
 							}
 						}
@@ -3481,11 +3439,10 @@ msg_format("%^s tries to pick up %s, but fails.", m_name, o_name);
 						{
 							/* Dump a message */
 #ifdef JP
-msg_format("%^sが%sを拾った。", m_name, o_name);
+							msg_format("%^sが%sを拾った。", m_name, o_name);
 #else
 							msg_format("%^s picks up %s.", m_name, o_name);
 #endif
-
 						}
 
 						/* Excise the object */
@@ -3518,11 +3475,10 @@ msg_format("%^sが%sを拾った。", m_name, o_name);
 						{
 							/* Dump a message */
 #ifdef JP
-msg_format("%^sが%sを破壊した。", m_name, o_name);
+							msg_format("%^sが%sを破壊した。", m_name, o_name);
 #else
 							msg_format("%^s destroys %s.", m_name, o_name);
 #endif
-
 						}
 
 						/* Delete the object */
@@ -3544,7 +3500,7 @@ msg_format("%^sが%sを破壊した。", m_name, o_name);
 		m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
 
 	/* If we haven't done anything, try casting a spell again */
-	if (!do_turn && !do_move && !m_ptr->monfear && !(p_ptr->riding == m_idx) && aware)
+	if (!do_turn && !do_move && !m_ptr->monfear && !is_riding_mon && aware)
 	{
 		/* Try to cast spell again */
 		if (r_ptr->freq_spell && randint1(100) <= r_ptr->freq_spell)
@@ -3784,7 +3740,7 @@ void process_monsters(void)
 		/* Hack -- Monsters can "smell" the player from far away */
 		/* Note that most monsters have "aaf" of "20" or so */
 		else if (!(m_ptr->mflag2 & MFLAG2_NOFLOW) &&
-			(cave_floor_bold(py, px) || (cave[py][px].feat == FEAT_TREES)) &&
+			have_flag(f_flags_bold(py, px), FF_MOVE) &&
 			(cave[py][px].when == cave[fy][fx].when) &&
 			(cave[fy][fx].dist < MONSTER_FLOW_DEPTH) &&
 			(cave[fy][fx].dist < r_ptr->aaf))

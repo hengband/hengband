@@ -392,6 +392,17 @@ static errr init_info_raw(int fd, header *head)
 		fd_read(fd, head->text_ptr, head->text_size);
 	}
 
+
+	if (head->tag_size)
+	{
+		/* Allocate the "*_tag" array */
+		C_MAKE(head->tag_ptr, head->tag_size, char);
+
+		/* Read the "*_tag" array */
+		fd_read(fd, head->tag_ptr, head->tag_size);
+	}
+
+
 	/* Success */
 	return (0);
 }
@@ -426,7 +437,7 @@ static void init_header(header *head, int num, int len)
  * even if the string happens to be empty (everyone has a unique '\0').
  */
 static errr init_info(cptr filename, header *head,
-			void **info, char **name, char **text)
+		      void **info, char **name, char **text, char **tag)
 {
 	int fd;
 
@@ -484,10 +495,12 @@ static errr init_info(cptr filename, header *head,
 		/* Hack -- make "fake" arrays */
 		if (name) C_MAKE(head->name_ptr, FAKE_NAME_SIZE, char);
 		if (text) C_MAKE(head->text_ptr, FAKE_TEXT_SIZE, char);
+		if (tag)  C_MAKE(head->tag_ptr, FAKE_TAG_SIZE, char);
 
 		if (info) (*info) = head->info_ptr;
 		if (name) (*name) = head->name_ptr;
 		if (text) (*text) = head->text_ptr;
+		if (tag)  (*tag)  = head->tag_ptr;
 
 		/*** Load the ascii template file ***/
 
@@ -546,6 +559,14 @@ static errr init_info(cptr filename, header *head,
 		}
 
 
+		/*** Make final retouch on fake tags ***/
+
+		if (head->retouch)
+		{
+			(*head->retouch)(head);
+		}
+
+
 		/*** Dump the binary image file ***/
 
 		/* File type is "DATA" */
@@ -586,6 +607,9 @@ static errr init_info(cptr filename, header *head,
 			/* Dump the "*_text" array */
 			fd_write(fd, head->text_ptr, head->text_size);
 
+			/* Dump the "*_tag" array */
+			fd_write(fd, head->tag_ptr, head->tag_size);
+
 			/* Close */
 			(void)fd_close(fd);
 		}
@@ -599,6 +623,7 @@ static errr init_info(cptr filename, header *head,
 		/* Hack -- Free the "fake" arrays */
 		if (name) C_KILL(head->name_ptr, FAKE_NAME_SIZE, char);
 		if (text) C_KILL(head->text_ptr, FAKE_TEXT_SIZE, char);
+		if (tag)  C_KILL(head->tag_ptr, FAKE_TAG_SIZE, char);
 
 #endif	/* ALLOW_TEMPLATES */
 
@@ -644,6 +669,7 @@ static errr init_info(cptr filename, header *head,
 	if (info) (*info) = head->info_ptr;
 	if (name) (*name) = head->name_ptr;
 	if (text) (*text) = head->text_ptr;
+	if (tag)  (*tag)  = head->tag_ptr;
 
 	/* Success */
 	return (0);
@@ -663,10 +689,13 @@ static errr init_f_info(void)
 	/* Save a pointer to the parsing function */
 	f_head.parse_info_txt = parse_f_info;
 
+	/* Save a pointer to the retouch fake tags */
+	f_head.retouch = retouch_f_info;
+
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("f_info", &f_head,
-			 (void*)&f_info, (void*)&f_name, NULL);
+			 (void*)&f_info, &f_name, NULL, &f_tag);
 }
 
 
@@ -686,7 +715,7 @@ static errr init_k_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("k_info", &k_head,
-			 (void*)&k_info, (void*)&k_name, (void*)&k_text);
+			 (void*)&k_info, &k_name, &k_text, NULL);
 }
 
 
@@ -707,7 +736,7 @@ static errr init_a_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("a_info", &a_head,
-			 (void*)&a_info, (void*)&a_name, (void*)&a_text);
+			 (void*)&a_info, &a_name, &a_text, NULL);
 }
 
 
@@ -728,7 +757,7 @@ static errr init_e_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("e_info", &e_head,
-			 (void*)&e_info, (void*)&e_name, (void*)&e_text);
+			 (void*)&e_info, &e_name, &e_text, NULL);
 }
 
 
@@ -749,7 +778,7 @@ static errr init_r_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("r_info", &r_head,
-			 (void*)&r_info, (void*)&r_name, (void*)&r_text);
+			 (void*)&r_info, &r_name, &r_text, NULL);
 }
 
 
@@ -770,7 +799,7 @@ static errr init_d_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("d_info", &d_head,
-			 (void*)&d_info, (void*)&d_name, (void*)&d_text);
+			 (void*)&d_info, &d_name, &d_text, NULL);
 }
 
 
@@ -793,7 +822,7 @@ errr init_v_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("v_info", &v_head,
-			 (void*)&v_info, (void*)&v_name, (void*)&v_text);
+			 (void*)&v_info, &v_name, &v_text, NULL);
 }
 
 
@@ -813,7 +842,7 @@ static errr init_s_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("s_info", &s_head,
-			 (void*)&s_info, NULL, NULL);
+			 (void*)&s_info, NULL, NULL, NULL);
 }
 
 
@@ -833,7 +862,7 @@ static errr init_m_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("m_info", &m_head,
-			 (void*)&m_info, NULL, NULL);
+			 (void*)&m_info, NULL, NULL, NULL);
 }
 
 

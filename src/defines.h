@@ -76,7 +76,7 @@
 #define H_VER_MAJOR 1
 #define H_VER_MINOR 7
 #define H_VER_PATCH 0
-#define H_VER_EXTRA 1
+#define H_VER_EXTRA 2
 
 
 #define ANGBAND_2_8_1
@@ -380,6 +380,7 @@
  */
 #define FAKE_NAME_SIZE  40 * 1024L
 #define FAKE_TEXT_SIZE 150 * 1024L
+#define FAKE_TAG_SIZE   10 * 1024L
 
 
 /*
@@ -993,6 +994,12 @@
 #define MAX_COL_STATBAR         (-26)
 
 
+/*
+ * Number of feats we change to (Excluding default). Used in f_info.txt.
+ */
+#define MAX_FEAT_STATES	 8
+
+
 /*** Terrain Feature Indexes (see "lib/edit/f_info.txt") ***/
 
 /* Nothing */
@@ -1141,6 +1148,186 @@
 
 #define MAX_WILDERNESS          12 /* Maximum wilderness index */
 
+
+/*
+ * Feature flags - should be used instead of feature indexes unless generating.
+ * Originally from UnAngband, and modified into TR-like style in Hengband
+ */
+
+
+#define FF_LOS           0
+#define FF_PROJECT       1
+#define FF_MOVE          2
+#define FF_PLACE         3
+#define FF_DROP          4
+#define FF_SECRET        5
+#define FF_NOTICE        6
+#define FF_REMEMBER      7
+#define FF_OPEN          8
+#define FF_CLOSE         9
+#define FF_BASH          10
+#define FF_SPIKE         11
+#define FF_DISARM        12
+#define FF_STORE         13
+#define FF_TUNNEL        14
+#define FF_MAY_HAVE_GOLD 15
+#define FF_HAS_GOLD      16
+#define FF_HAS_ITEM      17
+#define FF_DOOR          18
+#define FF_TRAP          19
+#define FF_STAIRS        20
+#define FF_GLYPH         21
+#define FF_LESS          22
+#define FF_MORE          23
+#define FF_AVOID_RUN     24
+#define FF_FLOOR         25
+#define FF_WALL          26
+#define FF_PERMANENT     27
+#define FF_INNER         28
+#define FF_OUTER         29
+#define FF_SOLID         30
+#define FF_HIT_TRAP      31
+
+/* #define FF_BRIDGE        32 */
+/* #define FF_RIVER         33 */
+/* #define FF_LAKE          34 */
+/* #define FF_BRIDGED       35 */
+/* #define FF_COVERED       36 */
+#define FF_GLOW          37
+#define FF_ENSECRET      38
+#define FF_WATER         39
+#define FF_LAVA          40
+#define FF_SHALLOW       41
+#define FF_DEEP          42
+/* #define FF_FILLED        43 */
+#define FF_HURT_ROCK     44
+/* #define FF_HURT_FIRE     45 */
+/* #define FF_HURT_COLD     46 */
+/* #define FF_HURT_ACID     47 */
+/* #define FF_ICE           48 */
+/* #define FF_ACID          49 */
+/* #define FF_OIL           50 */
+#define FF_MUST_FLY      51
+/* #define FF_CAN_CLIMB     52 */
+#define FF_CAN_FLY       53
+#define FF_CAN_SWIM      54
+#define FF_CAN_PASS      55
+/* #define FF_CAN_OOZE      56 */
+#define FF_CAN_DIG       57
+/* #define FF_HIDE_ITEM     58 */
+/* #define FF_HIDE_SNEAK    59 */
+/* #define FF_HIDE_SWIM     60 */
+/* #define FF_HIDE_DIG      61 */
+/* #define FF_KILL_HUGE     62 */
+/* #define FF_KILL_MOVE     63 */
+
+/* #define FF_PICK_TRAP     64 */
+/* #define FF_PICK_DOOR     65 */
+/* #define FF_ALLOC         66 */
+/* #define FF_CHEST         67 */
+/* #define FF_DROP_1D2      68 */
+/* #define FF_DROP_2D2      69 */
+/* #define FF_DROP_GOOD     70 */
+/* #define FF_DROP_GREAT    71 */
+/* #define FF_HURT_POIS     72 */
+/* #define FF_HURT_ELEC     73 */
+/* #define FF_HURT_WATER    74 */
+/* #define FF_HURT_BWATER   75 */
+/* #define FF_USE_FEAT      76 */
+/* #define FF_GET_FEAT      77 */
+/* #define FF_GROUND        78 */
+/* #define FF_OUTSIDE       79 */
+/* #define FF_EASY_HIDE     80 */
+/* #define FF_EASY_CLIMB    81 */
+/* #define FF_MUST_CLIMB    82 */
+#define FF_TREE          83
+/* #define FF_NEED_TREE     84 */
+/* #define FF_BLOOD         85 */
+/* #define FF_DUST          86 */
+/* #define FF_SLIME         87 */
+#define FF_PLANT         88
+/* #define FF_XXX2          89 */
+/* #define FF_INSTANT       90 */
+/* #define FF_EXPLODE       91 */
+/* #define FF_TIMED         92 */
+/* #define FF_ERUPT         93 */
+/* #define FF_STRIKE        94 */
+/* #define FF_SPREAD        95 */
+
+#define FF_SPECIAL       96
+#define FF_HURT_DISI     97
+#define FF_QUEST_ENTER   98
+#define FF_QUEST_EXIT    99
+#define FF_QUEST         100
+#define FF_SHAFT         101
+#define FF_MOUNTAIN      102
+#define FF_BLDG          103
+#define FF_MINOR_GLYPH   104
+#define FF_PATTERN       105
+#define FF_TOWN          106
+#define FF_ENTRANCE      107
+#define FF_MIRROR        108
+#define FF_UNPERM        109
+#define FF_TELEPORTABLE  110
+
+#define FF_FLAG_MAX      111
+#define FF_FLAG_SIZE     (1 + ((FF_FLAG_MAX - 1) / 32))
+
+/* Which features are dynamic */
+#define have_dynamic_flags(ARRAY) \
+	(!!((ARRAY)[(FF_INSTANT / 32)] & \
+	    ((1UL << (FF_INSTANT % 32)) | \
+	     (1UL << (FF_EXPLODE % 32)) | \
+	     (1UL << (FF_TIMED % 32)) | \
+	     (1UL << (FF_ERUPT % 32)) | \
+	     (1UL << (FF_STRIKE % 32)) | \
+	     (1UL << (FF_SPREAD % 32)))))
+
+
+/*
+ * Feature action flags
+ */
+#define FAF_DESTROY 0x01
+#define FAF_NO_DROP 0x02
+
+
+/*
+ * Player teleportation flags
+ */
+#define TELEPORT_ALLOW_DEEP      0x0001
+#define TELEPORT_ALLOW_OBJECT    0x0002
+#define TELEPORT_REQUIRE_PROJECT 0x0004
+
+
+/* Type of pattern tiles */
+#define NOT_PATTERN_TILE      -1
+#define PATTERN_TILE_START    0
+#define PATTERN_TILE_1        1
+#define PATTERN_TILE_2        2
+#define PATTERN_TILE_3        3
+#define PATTERN_TILE_4        4
+#define PATTERN_TILE_END      5
+#define PATTERN_TILE_OLD      6
+#define PATTERN_TILE_TELEPORT 7
+#define PATTERN_TILE_WRECKED  8
+
+
+/*
+ * Bit flags for the *_can_enter() and monster_can_cross_terrain()
+ */
+#define CEM_RIDING              0x0001
+#define CEM_P_CAN_ENTER_PATTERN 0x0002
+
+
+/* Lighting levels of features' attr and char */
+
+#define F_LIT_STANDARD 0 /* Standard */
+#define F_LIT_LITE     1 /* Brightly lit */
+#define F_LIT_DARK     2 /* Darkened */
+#define F_LIT_DARKDARK 3 /* Darkly darkened */
+
+#define F_LIT_NS_BEGIN 1 /* Nonstandard */
+#define F_LIT_MAX      4
 
 
 /*** Artifact indexes (see "lib/edit/a_info.txt") ***/
@@ -4105,11 +4292,19 @@
 	((C) == &cave[py][px])
 
 
+#define f_flags_bold(Y,X) \
+	(f_info[cave[(Y)][(X)].feat].flags)
+
+
+#define f_flags_grid(C) \
+	(f_info[(C)->feat].flags)
+
+
 /*
  * Determine if a "feature" is a "floor"
  */
-#define feat_floor(F) \
-	(!((F) & 0x20))
+#define feat_supports_los(F) \
+	(have_flag(f_info[(F)].flags, FF_LOS))
 
 
 /*
@@ -4125,182 +4320,126 @@
  * -KMW-
  */
 #define cave_floor_bold(Y,X) \
-	(feat_floor(cave[(Y)][(X)].feat))
+	(feat_supports_los(cave[(Y)][(X)].feat))
 
 
 /*
  * Determine if a "legal" grid is a "clean" floor grid
  *
- * Line 1 -- forbid non-floors
- * Line 2 -- forbid deep water -KMW-
- * Line 3 -- forbid deep lava -KMW-
+ * Line 1 -- forbid non-drops
+ * Line 2 -- forbid permanents
+ * Line 3 -- forbid object terrains
  * Line 4 -- forbid normal objects
  */
 #define cave_clean_bold(Y,X) \
-	(((cave[Y][X].feat == FEAT_FLOOR) || \
-	  (cave[Y][X].feat == FEAT_SHAL_WATER) || \
-	  (cave[Y][X].feat == FEAT_SHAL_LAVA) || \
-	  (cave[Y][X].feat == FEAT_DEEP_GRASS) || \
-	  (cave[Y][X].feat == FEAT_FLOWER) || \
-	  (cave[Y][X].feat == FEAT_GRASS) || \
-	  (cave[Y][X].feat == FEAT_DIRT)) && \
-	  !(cave[Y][X].info & CAVE_OBJECT) && \
+	(have_flag(f_flags_bold((Y), (X)), FF_DROP) && \
+	 !have_flag(f_flags_bold((Y), (X)), FF_PERMANENT) && \
+	 !(cave[Y][X].info & CAVE_OBJECT) && \
 	  (cave[Y][X].o_idx == 0))
 
 
 /*
  * Determine if a "legal" grid is an "empty" floor grid
  *
- * Line 1 -- forbid doors, rubble, seams, walls
+ * Line 1 -- forbid non-placement grids
  * Line 2 -- forbid normal monsters
  * Line 3 -- forbid the player
  */
 #define cave_empty_bold(Y,X) \
-    (cave_floor_bold(Y,X) && \
-     !(cave[Y][X].m_idx) && \
-     !player_bold(Y,X))
+	(have_flag(f_flags_bold((Y), (X)), FF_PLACE) && \
+	 !(cave[Y][X].m_idx) && \
+	 !player_bold(Y,X))
 
 
 /*
  * Determine if a "legal" grid is an "empty" floor grid
  *
- * Line 1 -- forbid doors, rubble, seams, walls
- * Line 2 -- forbid normal monsters
- * Line 3 -- forbid the player
+ * Line 1 -- forbid non-placement grids
+ * Line 2 -- forbid chasms
+ * Line 3 -- allow trees while player is in dungeon
+ * Line 4 -- forbid normal monsters
+ * Line 5 -- forbid the player
  */
 #define cave_empty_bold2(Y,X) \
-    (((cave_floor_bold(Y,X) && (cave[Y][X].feat != FEAT_DARK_PIT)) || (character_dungeon && (cave[Y][X].feat == FEAT_TREES)))&& \
-     !(cave[Y][X].m_idx) && \
-     !player_bold(Y,X))
+	(((have_flag(f_flags_bold((Y), (X)), FF_PLACE) && \
+	   !have_flag(f_flags_bold((Y), (X)), FF_MUST_FLY)) || \
+	  (character_dungeon && have_flag(f_flags_bold((Y), (X)), FF_TREE))) && \
+	 !(cave[Y][X].m_idx) && \
+	 !player_bold(Y,X))
 
 
 /*
  * Determine if a "legal" grid is an "naked" floor grid
  *
- * Line 1 -- forbid non-floors, non-shallow water & lava -KMW-
- * Line 4 -- forbid normal objects
- * Line 5 -- forbid player/monsters
+ * Line 1 -- forbid non-placers
+ * Line 2 -- forbid non-droppers
+ * Line 3 -- forbid permanent
+ * Line 4 -- forbid object terrains
+ * Line 5 -- forbid normal objects
+ * Line 6 -- forbid monsters
+ * Line 7 -- forbid the player
  */
 #define cave_naked_bold(Y,X) \
-	(((cave[Y][X].feat == FEAT_FLOOR) || \
-	  (cave[Y][X].feat == FEAT_SHAL_WATER) || \
-	  (cave[Y][X].feat == FEAT_SHAL_LAVA) || \
-	  (cave[Y][X].feat == FEAT_GRASS) || \
-	  (cave[Y][X].feat == FEAT_DEEP_GRASS) || \
-	  (cave[Y][X].feat == FEAT_FLOWER) || \
-	  (cave[Y][X].feat == FEAT_DIRT)) && \
-	  !(cave[Y][X].info & CAVE_OBJECT) && \
-	  (cave[Y][X].o_idx == 0) && \
-	  (cave[Y][X].m_idx == 0))
-
+	(have_flag(f_flags_bold((Y), (X)), FF_PLACE) && \
+	 have_flag(f_flags_bold((Y), (X)), FF_DROP) && \
+	 !have_flag(f_flags_bold((Y), (X)), FF_PERMANENT) && \
+	 !(cave[Y][X].info & CAVE_OBJECT) && \
+	 !(cave[Y][X].o_idx) && \
+	 !(cave[Y][X].m_idx) && \
+	 !player_bold(Y,X))
 
 
 /*
  * Determine if a "legal" grid is "permanent"
  *
- * Line 1   -- perma-walls
- * Line 2-3 -- stairs
- * Line 4-5 -- building doors -KMW-
- * Line 6-7 -- shop doors
+ * Line 1 -- permanent flag
  */
 #define cave_perma_bold(Y,X) \
-	(((cave[Y][X].feat >= FEAT_PERM_EXTRA) && \
-	  (cave[Y][X].feat <= FEAT_PERM_SOLID)) || \
-	 (cave[Y][X].feat == FEAT_LESS) || \
-	 (cave[Y][X].feat == FEAT_MORE) || \
-	 (cave[Y][X].feat == FEAT_ENTRANCE) || \
-	 (cave[Y][X].feat == FEAT_LESS_LESS) || \
-	 (cave[Y][X].feat == FEAT_MORE_MORE) || \
-	 (cave[Y][X].feat == FEAT_MOUNTAIN) || \
-	 ((cave[Y][X].feat >= FEAT_QUEST_ENTER) && \
-	  (cave[Y][X].feat <= FEAT_QUEST_UP)) || \
-	 ((cave[Y][X].feat >= FEAT_PATTERN_START) && \
-	  (cave[Y][X].feat <= FEAT_PATTERN_XTRA2)) || \
-	 ((cave[Y][X].feat >= FEAT_SHOP_HEAD) && \
-	  (cave[Y][X].feat <= FEAT_SHOP_TAIL)) || \
-	 (cave[Y][X].feat == FEAT_MUSEUM) || \
-	 ((cave[Y][X].feat >= FEAT_BLDG_HEAD) && \
-	  (cave[Y][X].feat <= FEAT_BLDG_TAIL)))
+	(have_flag(f_flags_bold((Y), (X)), FF_PERMANENT))
 
 
 /*
  * Grid based version of "cave_floor_bold()"
  */
 #define cave_floor_grid(C) \
-	(feat_floor((C)->feat))
+	(feat_supports_los((C)->feat))
 
-
-/*
- * Grid based version of "cave_clean_bold()"
- */
-#define cave_clean_grid(C) \
-    (((C)->feat == FEAT_FLOOR) && \
-     (!(C)->o_idx))
 
 /*
  * Grid based version of "cave_empty_bold()"
  */
 #define cave_empty_grid(C) \
-    (cave_floor_grid(C) && \
-     !((C)->m_idx) && \
-     !player_grid(C))
+	(have_flag(f_flags_grid(C), FF_PLACE) && \
+	 !((C)->m_idx) && \
+	 !player_grid(C))
+
 
 /*
  * Grid based version of "cave_empty_bold()"
  */
 #define cave_empty_grid2(C) \
-    ((cave_floor_grid(C) || ((C)->feat == FEAT_TREES)) && \
-     !((C)->m_idx) && \
-     !player_grid(C))
-
-/*
- * Grid based version of "cave_empty_bold()"
- */
-#define cave_naked_grid(C) \
-    (((C)->feat == FEAT_FLOOR) && \
-     !((C)->o_idx) && \
-     !((C)->m_idx) && \
-     !player_grid(C))
+	((have_flag(f_flags_grid(C), FF_PLACE) || \
+	  have_flag(f_flags_grid(C), FF_TREE)) && \
+	 !((C)->m_idx) && \
+	 !player_grid(C))
 
 
 /*
  * Grid based version of "cave_perma_bold()"
  */
 #define cave_perma_grid(C) \
-	((((C)->feat >= FEAT_PERM_EXTRA) && \
-	  ((C)->feat <= FEAT_PERM_SOLID)) || \
-	 ((C)->feat == FEAT_LESS) || \
-	 ((C)->feat == FEAT_MORE) || \
-	 ((C)->feat == FEAT_ENTRANCE) || \
-	 ((C)->feat == FEAT_LESS_LESS) || \
-	 ((C)->feat == FEAT_MORE_MORE) || \
-	 ((C)->feat == FEAT_MOUNTAIN) || \
-	 (((C)->feat >= FEAT_QUEST_ENTER) && \
-	  ((C)->feat <= FEAT_QUEST_UP)) || \
-	 (((C)->feat >= FEAT_PATTERN_START) && \
-	  ((C)->feat <= FEAT_PATTERN_XTRA2)) || \
-	 (((C)->feat >= FEAT_SHOP_HEAD) && \
-	  ((C)->feat <= FEAT_SHOP_TAIL)) || \
-	 ((C)->feat == FEAT_MUSEUM) || \
-	 (((C)->feat >= FEAT_BLDG_HEAD) && \
-	  ((C)->feat <= FEAT_BLDG_TAIL)))
+	(have_flag(f_flags_grid(C), FF_PERMANENT))
 
 
 #define pattern_tile(Y,X) \
-     ((cave[Y][X].feat <= FEAT_PATTERN_XTRA2) && (cave[Y][X].feat >= FEAT_PATTERN_START))
+	(have_flag(f_flags_bold((Y), (X)), FF_PATTERN))
 
 /*
  * Does the grid stop disintegration?
  */
 #define cave_stop_disintegration(Y,X) \
-	(((cave[Y][X].feat >= FEAT_PERM_EXTRA) && \
-	  (cave[Y][X].feat <= FEAT_PERM_SOLID)) || \
-	  (cave[Y][X].feat == FEAT_MOUNTAIN) || \
-	 ((cave[Y][X].feat >= FEAT_SHOP_HEAD) && \
-	  (cave[Y][X].feat <= FEAT_SHOP_TAIL)) || \
-	 ((cave[Y][X].feat >= FEAT_BLDG_HEAD) && \
-	  (cave[Y][X].feat <= FEAT_BLDG_TAIL)) || \
-	  (cave[Y][X].feat == FEAT_MUSEUM))
+	(!have_flag(f_flags_bold((Y), (X)), FF_PROJECT) && \
+	 have_flag(f_flags_bold((Y), (X)), FF_PERMANENT))
 
 
 /*
@@ -4323,12 +4462,14 @@
  * Determine if a "boundary" grid is "floor mimic"
  */
 #define boundary_floor_bold(Y,X) \
-	((cave[(Y)][(X)].feat == FEAT_PERM_SOLID) && \
-	  cave[(Y)][(X)].mimic && feat_floor(cave[(Y)][(X)].mimic))
+	(have_flag(f_flags_bold((Y), (X)), FF_WALL) && \
+	 have_flag(f_flags_bold((Y), (X)), FF_PERMANENT) && \
+	 cave[(Y)][(X)].mimic && feat_supports_los(cave[(Y)][(X)].mimic))
 
 #define boundary_floor_grid(C) \
-	(((C)->feat == FEAT_PERM_SOLID) && \
-	  (C)->mimic && feat_floor((C)->mimic))
+	(have_flag(f_flags_grid(C), FF_WALL) && \
+	 have_flag(f_flags_grid(C), FF_PERMANENT) && \
+	 (C)->mimic && feat_supports_los((C)->mimic))
 
 /*
  * Get feature mimic from f_info[] (applying "mimic" field)
@@ -4380,6 +4521,12 @@ extern int PlayerUID;
 #define TERM_L_GREEN            13  /* 'G' */   /* 0,4,0 */
 #define TERM_L_BLUE             14  /* 'B' */   /* 0,4,4 */
 #define TERM_L_UMBER            15  /* 'U' */   /* 3,2,1 */
+
+
+/*
+ * Not using graphical tiles for this feature?
+ */
+#define is_ascii_graphics(A) (!((A) & 0x80))
 
 
 /*** Sound constants ***/

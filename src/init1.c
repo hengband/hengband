@@ -128,6 +128,128 @@ static cptr r_info_blow_effect[] =
 
 
 /*
+ * Feature info flags
+ */
+static cptr f_info_flags[] =
+{
+	"LOS",
+	"PROJECT",
+	"MOVE",
+	"PLACE",
+	"DROP",
+	"SECRET",
+	"NOTICE",
+	"REMEMBER",
+	"OPEN",
+	"CLOSE",
+	"BASH",
+	"SPIKE",
+	"DISARM",
+	"STORE",
+	"TUNNEL",
+	"MAY_HAVE_GOLD",
+	"HAS_GOLD",
+	"HAS_ITEM",
+	"DOOR",
+	"TRAP",
+	"STAIRS",
+	"GLYPH",
+	"LESS",
+	"MORE",
+	"AVOID_RUN",
+	"FLOOR",
+	"WALL",
+	"PERMANENT",
+	"INNER",
+	"OUTER",
+	"SOLID",
+	"HIT_TRAP",
+
+	"BRIDGE",
+	"RIVER",
+	"LAKE",
+	"BRIDGED",
+	"COVERED",
+	"GLOW",
+	"ENSECRET",
+	"WATER",
+	"LAVA",
+	"SHALLOW",
+	"DEEP",
+	"FILLED",
+	"HURT_ROCK",
+	"HURT_FIRE",
+	"HURT_COLD",
+	"HURT_ACID",
+	"ICE",
+	"ACID",
+	"OIL",
+	"MUST_FLY",
+	"CAN_CLIMB",
+	"CAN_FLY",
+	"CAN_SWIM",
+	"CAN_PASS",
+	"CAN_OOZE",
+	"CAN_DIG",
+	"HIDE_ITEM",
+	"HIDE_SNEAK",
+	"HIDE_SWIM",
+	"HIDE_DIG",
+	"KILL_HUGE",
+	"KILL_MOVE",
+
+	"PICK_TRAP",
+	"PICK_DOOR",
+	"ALLOC",
+	"CHEST",
+	"DROP_1D2",
+	"DROP_2D2",
+	"DROP_GOOD",
+	"DROP_GREAT",
+	"HURT_POIS",
+	"HURT_ELEC",
+	"HURT_WATER",
+	"HURT_BWATER",
+	"USE_FEAT",
+	"GET_FEAT",
+	"GROUND",
+	"OUTSIDE",
+	"EASY_HIDE",
+	"EASY_CLIMB",
+	"MUST_CLIMB",
+	"TREE",
+	"NEED_TREE",
+	"BLOOD",
+	"DUST",
+	"SLIME",
+	"PLANT",
+	"XXX2",
+	"INSTANT",
+	"EXPLODE",
+	"TIMED",
+	"ERUPT",
+	"STRIKE",
+	"SPREAD",
+
+	"SPECIAL",
+	"HURT_DISI",
+	"QUEST_ENTER",
+	"QUEST_EXIT",
+	"QUEST",
+	"SHAFT",
+	"MOUNTAIN",
+	"BLDG",
+	"MINOR_GLYPH",
+	"PATTERN",
+	"TOWN",
+	"ENTRANCE",
+	"MIRROR",
+	"UNPERM",
+	"TELEPORTABLE",
+};
+
+
+/*
  * Monster race flags
  */
 static cptr r_info_flags1[] =
@@ -788,6 +910,48 @@ static bool add_name(u32b *offset, header *head, cptr buf)
 
 
 /*
+ * Add a tag to the tag-storage and return an offset to it.
+ *
+ * Returns FALSE when there isn't enough space available to store
+ * the name.
+ */
+static bool add_tag(s16b *offset, header *head, cptr buf)
+{
+	u32b i;
+
+	/* Search for an existing (fake) tag */
+	for (i = 1; i < head->tag_size; i += strlen(&head->tag_ptr[i]) + 1)
+	{
+		/* Found it */
+		if (streq(&head->tag_ptr[i], buf)) break;
+	}
+
+	/* There was no existing tag */
+	if (i >= head->tag_size)
+	{
+		/* Hack -- Verify space */
+		if (head->tag_size + strlen(buf) + 8 > FAKE_TAG_SIZE)
+			return FALSE;
+
+		/* Append chars to the tags */
+		strcpy(head->tag_ptr + head->tag_size, buf);
+
+		/* Point the new tag */
+		i = head->tag_size;
+
+		/* Advance the index */
+		head->tag_size += strlen(buf) + 1;
+	}
+
+	/* Return offset of the tag */
+	*offset = (s16b)i;
+
+	/* Success */
+	return TRUE;
+}
+
+
+/*
  * Convert a "color letter" into an "actual" color
  * The colors are: dwsorgbuDWvyRGBU, as shown below
  */
@@ -840,6 +1004,7 @@ errr init_info_txt(FILE *fp, char *buf, header *head,
 	/* Prepare the "fake" stuff */
 	head->name_size = 0;
 	head->text_size = 0;
+	head->tag_size = 1;
 
 	/* Parse */
 	while (0 == my_fgets(fp, buf, 1024))
@@ -1180,13 +1345,92 @@ errr parse_m_info(char *buf, header *head)
 
 
 /*
+ * Grab one flag from a textual string
+ */
+static errr grab_one_flag(u32b *flags, cptr names[], cptr what)
+{
+	int i;
+
+	/* Check flags */
+	for (i = 0; i < 32; i++)
+	{
+		if (streq(what, names[i]))
+		{
+			*flags |= (1L << i);
+			return 0;
+		}
+	}
+
+	return -1;
+}
+
+
+/*
+ * Grab one flag in an feature_type from a textual string
+ */
+static errr grab_one_feat_flag(feature_type *f_ptr, cptr what)
+{
+	int i;
+
+	/* Check flags */
+	for (i = 0; i < FF_FLAG_MAX; i++)
+	{
+		if (streq(what, f_info_flags[i]))
+		{
+			add_flag(f_ptr->flags, i);
+			return 0;
+		}
+	}
+
+	/* Oops */
+#ifdef JP
+	msg_format("未知の地形フラグ '%s'。", what);
+#else
+	msg_format("Unknown feature flag '%s'.", what);
+#endif
+
+	/* Error */
+	return PARSE_ERROR_GENERIC;
+}
+
+
+/*
+ * Grab an action in an feature_type from a textual string
+ */
+static errr grab_one_feat_action(feature_type *f_ptr, cptr what, int count)
+{
+	int i;
+
+	/* Check flags */
+	for (i = 0; i < FF_FLAG_MAX; i++)
+	{
+		if (streq(what, f_info_flags[i]))
+		{
+			f_ptr->state[count].action = i;
+			return 0;
+		}
+	}
+
+	/* Oops */
+#ifdef JP
+	msg_format("未知の地形アクション '%s'。", what);
+#else
+	msg_format("Unknown feature action '%s'.", what);
+#endif
+
+	/* Error */
+	return PARSE_ERROR_GENERIC;
+}
+
+
+/*
  * Initialize the "f_info" array, by parsing an ascii "template" file
  */
 errr parse_f_info(char *buf, header *head)
 {
 	int i;
 
-	char *s;
+	char *s, *t;
 
 	/* Current entry */
 	static feature_type *f_ptr = NULL;
@@ -1198,16 +1442,11 @@ errr parse_f_info(char *buf, header *head)
 		/* Find the colon before the name */
 		s = my_strchr(buf+2, ':');
 
-			/* Verify that colon */
-		if (!s) return (1);
-
-		/* Nuke the colon, advance to the name */
-		*s++ = '\0';
-
-#ifdef JP
-		/* Paranoia -- require a name */
-		if (!*s) return (1);
-#endif
+		if (s)
+		{
+			/* Nuke the colon, advance to the name */
+			*s++ = '\0';
+		}
 
 		/* Get the index */
 		i = atoi(buf+2);
@@ -1224,25 +1463,43 @@ errr parse_f_info(char *buf, header *head)
 		/* Point at the "info" */
 		f_ptr = &f_info[i];
 
-#ifdef JP
-		/* Store the name */
-		if (!add_name(&f_ptr->name, head, s)) return (7);
-#endif
+		/* Tag name is given */
+		if (s)
+		{
+			/* Store the tag */
+			if (!add_tag(&f_ptr->tag, head, s)) return (7);
+		}
+
 		/* Default "mimic" */
 		f_ptr->mimic = i;
+
+		/* Default "destroyed state" -- if not specified */
+		f_ptr->destroyed = i;
+
+		/* Default "states" */
+		for (i = 0; i < MAX_FEAT_STATES; i++) f_ptr->state[i].action = FF_FLAG_MAX;
 	}
 
 	/* There better be a current f_ptr */
 	else if (!f_ptr) return (3);
 
 #ifdef JP
-	/* 英語名を読むルーチンを追加 */
-	/* 'E' から始まる行は英語名としている */
+	else if (buf[0] == 'J')
+	{
+		/* Store the name */
+		if (!add_name(&f_ptr->name, head, buf+2)) return (7);
+	}
+
 	else if (buf[0] == 'E')
 	{
-		/* nothing to do */
+		/* Ignore english name */
 	}
 #else
+	else if (buf[0] == 'J')
+	{
+		/* Ignore Japanese name */
+	}
+
 	else if (buf[0] == 'E')
 	{
 		/* Acquire the Text */
@@ -1257,38 +1514,183 @@ errr parse_f_info(char *buf, header *head)
 	/* Process 'M' for "Mimic" (one line only) */
 	else if (buf[0] == 'M')
 	{
-		int mimic;
+		s16b offset;
 
-		/* Scan for the values */
-		if (1 != sscanf(buf+2, "%d",
-				&mimic)) return (1);
+		if (!add_tag(&offset, head, buf + 2)) return PARSE_ERROR_OUT_OF_MEMORY;
 
-		/* Save the values */
-		f_ptr->mimic = mimic;
-
+		/* Record a fake tag index */
+		f_ptr->mimic = -offset;
 	}
 
 
 	/* Process 'G' for "Graphics" (one line only) */
 	else if (buf[0] == 'G')
 	{
-		byte tmp;
+		int j;
+		byte def_attr[F_LIT_MAX];
+		char char_tmp[F_LIT_MAX];
 
 		/* Paranoia */
+		if (buf[1] != ':') return (1);
 		if (!buf[2]) return (1);
-		if (!buf[3]) return (1);
+		if (buf[3] != ':') return (1);
 		if (!buf[4]) return (1);
 
+		/* Extract the char */
+		char_tmp[F_LIT_STANDARD] = buf[2];
+
 		/* Extract the color */
-		tmp = color_char_to_attr(buf[4]);
+		def_attr[F_LIT_STANDARD] = color_char_to_attr(buf[4]);
 
 		/* Paranoia */
-		if (tmp > 127) return (1);
+		if (def_attr[F_LIT_STANDARD] > 127) return (1);
 
-		/* Save the values */
-		f_ptr->d_attr = tmp;
-		f_ptr->d_char = buf[2];
+		/* Save the default values for lighting */
+		for (j = 0; j < F_LIT_MAX; j++)
+		{
+			f_ptr->d_attr[j] = def_attr[F_LIT_STANDARD];
+			f_ptr->d_char[j] = char_tmp[F_LIT_STANDARD];
+		}
 
+		/* Is this feature supports lighting? */
+		if (buf[5] == ':')
+		{
+			def_attr[F_LIT_LITE] = lighting_colours[def_attr[F_LIT_STANDARD]][0];
+			def_attr[F_LIT_DARK] = lighting_colours[def_attr[F_LIT_STANDARD]][1];
+			def_attr[F_LIT_DARKDARK] = lighting_colours[lighting_colours[def_attr[F_LIT_STANDARD]][1]][1];
+
+			/* G:c:a:LIT (default) */
+			if (streq(buf + 6, "LIT"))
+			{
+				for (j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++)
+				{
+					f_ptr->d_attr[j] = def_attr[j];
+				}
+			}
+
+			/* G:c:a:lc:la:dc:da:Dc:Da */
+			else
+			{
+				char attr_lite_tmp[F_LIT_MAX - F_LIT_NS_BEGIN];
+
+				if ((F_LIT_MAX - F_LIT_NS_BEGIN) * 2 != sscanf(buf + 6, "%c:%c:%c:%c:%c:%c",
+					&char_tmp[F_LIT_LITE], &attr_lite_tmp[F_LIT_LITE - F_LIT_NS_BEGIN],
+					&char_tmp[F_LIT_DARK], &attr_lite_tmp[F_LIT_DARK - F_LIT_NS_BEGIN],
+					&char_tmp[F_LIT_DARKDARK], &attr_lite_tmp[F_LIT_DARKDARK - F_LIT_NS_BEGIN])) return 1;
+				if (buf[F_LIT_MAX * 4 + 1]) return 1;
+
+				for (j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++)
+				{
+					switch (attr_lite_tmp[j - F_LIT_NS_BEGIN])
+					{
+					case '*':
+						/* Use default lighting */
+						f_ptr->d_attr[j] = def_attr[j];
+						break;
+					case '-':
+						/* No lighting support */
+						f_ptr->d_attr[j] = def_attr[F_LIT_STANDARD];
+						break;
+					default:
+						/* Extract the color */
+						f_ptr->d_attr[j] = color_char_to_attr(attr_lite_tmp[j - F_LIT_NS_BEGIN]);
+						if (f_ptr->d_attr[j] > 127) return 1;
+						break;
+					}
+					f_ptr->d_char[j] = char_tmp[j];
+				}
+			}
+		}
+		else if (buf[5]) return 1;
+	}
+
+	/* Hack -- Process 'F' for flags */
+	else if (buf[0] == 'F')
+	{
+		/* Parse every entry textually */
+		for (s = buf + 2; *s; )
+		{
+			/* Find the end of this entry */
+			for (t = s; *t && (*t != ' ') && (*t != '|'); ++t) /* loop */;
+
+			/* Nuke and skip any dividers */
+			if (*t)
+			{
+				*t++ = '\0';
+				while (*t == ' ' || *t == '|') t++;
+			}
+
+			/* XXX XXX XXX Hack -- Read feature power */
+			if (1 == sscanf(s, "POWER_%d", &i))
+			{
+				/* Extract a "power" */
+				f_ptr->power =  i;
+
+				/* Start at next entry */
+				s = t;
+
+				/* Continue */
+				continue;
+			}
+
+			/* Parse this entry */
+			if (0 != grab_one_feat_flag(f_ptr, s)) return (PARSE_ERROR_INVALID_FLAG);
+
+			/* Start the next entry */
+			s = t;
+		}
+	}
+
+	/* Process 'W' for "More Info" (one line only) */
+	else if (buf[0] == 'W')
+	{
+		int priority;
+
+		/* Scan for the value */
+		if (1 != sscanf(buf+2, "%d", &priority)) return (PARSE_ERROR_GENERIC);
+
+		/* Save the value */
+		f_ptr->priority = priority;
+	}
+
+	/* Process 'K' for "States" (up to four lines + default (which cannot be last)) */
+	else if (buf[0] == 'K')
+	{
+		s16b offset;
+
+		/* Find the next empty state slot (if any) */
+		for (i = 0; i < MAX_FEAT_STATES; i++) if (f_ptr->state[i].action == FF_FLAG_MAX) break;
+
+		/* Oops, no more slots */
+		if (i == MAX_FEAT_STATES) return PARSE_ERROR_GENERIC;
+
+		/* Analyze the first field */
+		for (s = t = buf+2; *t && (*t != ':'); t++) /* loop */;
+
+		/* Terminate the field (if necessary) */
+		if (*t == ':') *t++ = '\0';
+
+		/* Is this default entry? */
+		if (streq(s, "DESTROYED"))
+		{
+			if (!add_tag(&offset, head, t)) return PARSE_ERROR_OUT_OF_MEMORY;
+
+			/* Record a fake tag index */
+			f_ptr->destroyed = -offset;
+		}
+		else
+		{
+			/* Reset */
+			f_ptr->state[i].action = 0;
+
+			/* Parse this entry */
+			if (0 != grab_one_feat_action(f_ptr, s, i)) return PARSE_ERROR_INVALID_FLAG;
+
+			if (!add_tag(&offset, head, t)) return PARSE_ERROR_OUT_OF_MEMORY;
+
+			/* Record a fake tag index */
+			f_ptr->state[i].result = -offset;
+		}
 	}
 
 	/* Oops */
@@ -1296,6 +1698,80 @@ errr parse_f_info(char *buf, header *head)
 
 	/* Success */
 	return (0);
+}
+
+
+/*
+ * Convert a fake tag to a real feat index
+ */
+s16b f_tag_to_index(cptr str)
+{
+	u16b i;
+
+	/* Search for real index corresponding to this fake tag */
+	for (i = 0; i < f_head.info_num; i++)
+	{
+		if (streq(f_tag + f_info[i].tag, str))
+		{
+			/* Return the index */
+			return (s16b)i;
+		}
+	}
+
+	/* Not found */
+	return 0;
+}
+
+
+/*
+ * Search for real index corresponding to this fake tag
+ */
+static void search_real_feat(s16b *feat)
+{
+	int i;
+
+	/* Don't convert non-fake tag */
+	if (*feat >= 0) return;
+
+	/* Search for real index corresponding to this fake tag */
+	for (i = 0; i < f_head.info_num; i++)
+	{
+		if ((-(*feat)) == f_info[i].tag)
+		{
+			/* Record real index */
+			*feat = (s16b)i;
+			return;
+		}
+	}
+
+	/* Undefined tag */
+#ifdef JP
+	msg_format("未定義のタグ '%s'。", f_tag + (-(*feat)));
+#else
+	msg_format("%s is undefined.", f_tag + (-(*feat)));
+#endif
+}
+
+
+/*
+ * Retouch fake tags of f_info
+ */
+void retouch_f_info(header *head)
+{
+	int i;
+
+	/* Convert fake tags to real feat indices */
+	for (i = 0; i < head->info_num; i++)
+	{
+		feature_type *f_ptr = &f_info[i];
+		int j;
+
+		search_real_feat(&f_ptr->mimic);
+
+		search_real_feat(&f_ptr->destroyed);
+
+		for (j = 0; j < MAX_FEAT_STATES; j++) search_real_feat(&f_ptr->state[j].result);
+	}
 }
 
 
@@ -1316,15 +1792,8 @@ static errr grab_one_kind_flag(object_kind *k_ptr, cptr what)
 		}
 	}
 
-	/* Check gen_flags */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, k_info_gen_flags[i]))
-		{
-			k_ptr->gen_flags |= (1L << i);
-			return (0);
-		}
-	}
+	if (grab_one_flag(&k_ptr->gen_flags, k_info_gen_flags, what) == 0)
+		return 0;
 
 	/* Oops */
 #ifdef JP
@@ -1437,8 +1906,9 @@ errr parse_k_info(char *buf, header *head)
 		byte tmp;
 
 		/* Paranoia */
+		if (buf[1] != ':') return (1);
 		if (!buf[2]) return (1);
-		if (!buf[3]) return (1);
+		if (buf[3] != ':') return (1);
 		if (!buf[4]) return (1);
 
 		/* Extract the char */
@@ -1584,15 +2054,8 @@ static errr grab_one_artifact_flag(artifact_type *a_ptr, cptr what)
 		}
 	}
 
-	/* Check gen_flags */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, k_info_gen_flags[i]))
-		{
-			a_ptr->gen_flags |= (1L << i);
-			return (0);
-		}
-	}
+	if (grab_one_flag(&a_ptr->gen_flags, k_info_gen_flags, what) == 0)
+		return 0;
 
 	/* Oops */
 #ifdef JP
@@ -1804,18 +2267,11 @@ static bool grab_one_ego_item_flag(ego_item_type *e_ptr, cptr what)
 			return (0);
 		}
 	}
-	
-	/* Check gen_flags */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, k_info_gen_flags[i]))
-		{
-			e_ptr->gen_flags |= (1L << i);
-			return (0);
-		}
-	}
 
-/* Oops */
+	if (grab_one_flag(&e_ptr->gen_flags, k_info_gen_flags, what) == 0)
+		return 0;
+
+	/* Oops */
 #ifdef JP
 	msg_format("未知の名のあるアイテム・フラグ '%s'。", what);
 #else
@@ -2003,77 +2459,26 @@ errr parse_e_info(char *buf, header *head)
  */
 static errr grab_one_basic_flag(monster_race *r_ptr, cptr what)
 {
-	int i;
+	if (grab_one_flag(&r_ptr->flags1, r_info_flags1, what) == 0)
+		return 0;
 
-	/* Scan flags1 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flags1[i]))
-		{
-			r_ptr->flags1 |= (1L << i);
-			return (0);
-		}
-	}
+	if (grab_one_flag(&r_ptr->flags2, r_info_flags2, what) == 0)
+		return 0;
 
-	/* Scan flags2 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flags2[i]))
-		{
-			r_ptr->flags2 |= (1L << i);
-			return (0);
-		}
-	}
+	if (grab_one_flag(&r_ptr->flags3, r_info_flags3, what) == 0)
+		return 0;
 
-	/* Scan flags3 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flags3[i]))
-		{
-			r_ptr->flags3 |= (1L << i);
-			return (0);
-		}
-	}
+	if (grab_one_flag(&r_ptr->flags7, r_info_flags7, what) == 0)
+		return 0;
 
-	/* Scan flags7 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flags7[i]))
-		{
-			r_ptr->flags7 |= (1L << i);
-			return (0);
-		}
-	}
+	if (grab_one_flag(&r_ptr->flags8, r_info_flags8, what) == 0)
+		return 0;
 
-	/* Scan flags8 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flags8[i]))
-		{
-			r_ptr->flags8 |= (1L << i);
-			return (0);
-		}
-	}
+	if (grab_one_flag(&r_ptr->flags9, r_info_flags9, what) == 0)
+		return 0;
 
-	/* Scan flags9 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flags9[i]))
-		{
-			r_ptr->flags9 |= (1L << i);
-			return (0);
-		}
-	}
-
-	/* Scan flagsr (resistance) */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flagsr[i]))
-		{
-			r_ptr->flagsr |= (1L << i);
-			return (0);
-		}
-	}
+	if (grab_one_flag(&r_ptr->flagsr, r_info_flagsr, what) == 0)
+		return 0;
 
 	/* Oops */
 #ifdef JP
@@ -2093,37 +2498,14 @@ static errr grab_one_basic_flag(monster_race *r_ptr, cptr what)
  */
 static errr grab_one_spell_flag(monster_race *r_ptr, cptr what)
 {
-	int i;
+	if (grab_one_flag(&r_ptr->flags4, r_info_flags4, what) == 0)
+		return 0;
 
-	/* Scan flags4 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flags4[i]))
-		{
-			r_ptr->flags4 |= (1L << i);
-			return (0);
-		}
-	}
+	if (grab_one_flag(&r_ptr->flags5, r_info_flags5, what) == 0)
+		return 0;
 
-	/* Scan flags5 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flags5[i]))
-		{
-			r_ptr->flags5 |= (1L << i);
-			return (0);
-		}
-	}
-
-	/* Scan flags6 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flags6[i]))
-		{
-			r_ptr->flags6 |= (1L << i);
-			return (0);
-		}
-	}
+	if (grab_one_flag(&r_ptr->flags6, r_info_flags6, what) == 0)
+		return 0;
 
 	/* Oops */
 #ifdef JP
@@ -2239,8 +2621,9 @@ errr parse_r_info(char *buf, header *head)
 		byte tmp;
 
 		/* Paranoia */
+		if (buf[1] != ':') return (1);
 		if (!buf[2]) return (1);
-		if (!buf[3]) return (1);
+		if (buf[3] != ':') return (1);
 		if (!buf[4]) return (1);
 
 		/* Extract the char */
@@ -2429,17 +2812,8 @@ errr parse_r_info(char *buf, header *head)
  */
 static errr grab_one_dungeon_flag(dungeon_info_type *d_ptr, cptr what)
 {
-	int i;
-
-	/* Scan flags1 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, d_info_flags1[i]))
-		{
-			d_ptr->flags1 |= (1L << i);
-			return (0);
-		}
-	}
+	if (grab_one_flag(&d_ptr->flags1, d_info_flags1, what) == 0)
+		return 0;
 
 	/* Oops */
 #ifdef JP
@@ -2457,77 +2831,26 @@ static errr grab_one_dungeon_flag(dungeon_info_type *d_ptr, cptr what)
  */
 static errr grab_one_basic_monster_flag(dungeon_info_type *d_ptr, cptr what)
 {
-	int i;
+	if (grab_one_flag(&d_ptr->mflags1, r_info_flags1, what) == 0)
+		return 0;
 
-	/* Scan flags1 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flags1[i]))
-		{
-			d_ptr->mflags1 |= (1L << i);
-			return (0);
-		}
-	}
+	if (grab_one_flag(&d_ptr->mflags2, r_info_flags2, what) == 0)
+		return 0;
 
-	/* Scan flags2 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flags2[i]))
-		{
-			d_ptr->mflags2 |= (1L << i);
-			return (0);
-		}
-	}
+	if (grab_one_flag(&d_ptr->mflags3, r_info_flags3, what) == 0)
+		return 0;
 
-	/* Scan flags3 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flags3[i]))
-		{
-			d_ptr->mflags3 |= (1L << i);
-			return (0);
-		}
-	}
+	if (grab_one_flag(&d_ptr->mflags7, r_info_flags7, what) == 0)
+		return 0;
 
-	/* Scan flags7 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flags7[i]))
-		{
-			d_ptr->mflags7 |= (1L << i);
-			return (0);
-		}
-	}
+	if (grab_one_flag(&d_ptr->mflags8, r_info_flags8, what) == 0)
+		return 0;
 
-	/* Scan flags8 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flags8[i]))
-		{
-			d_ptr->mflags8 |= (1L << i);
-			return (0);
-		}
-	}
+	if (grab_one_flag(&d_ptr->mflags9, r_info_flags9, what) == 0)
+		return 0;
 
-	/* Scan flags9 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flags9[i]))
-		{
-			d_ptr->mflags9 |= (1L << i);
-			return (0);
-		}
-	}
-
-	/* Scan flagsr (resistance) */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flagsr[i]))
-		{
-			d_ptr->mflagsr |= (1L << i);
-			return (0);
-		}
-	}
+	if (grab_one_flag(&d_ptr->mflagsr, r_info_flagsr, what) == 0)
+		return 0;
 
 	/* Oops */
 #ifdef JP
@@ -2545,37 +2868,14 @@ static errr grab_one_basic_monster_flag(dungeon_info_type *d_ptr, cptr what)
  */
 static errr grab_one_spell_monster_flag(dungeon_info_type *d_ptr, cptr what)
 {
-	int i;
+	if (grab_one_flag(&d_ptr->mflags4, r_info_flags4, what) == 0)
+		return 0;
 
-	/* Scan flags4 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flags4[i]))
-		{
-			d_ptr->mflags4 |= (1L << i);
-			return (0);
-		}
-	}
+	if (grab_one_flag(&d_ptr->mflags5, r_info_flags5, what) == 0)
+		return 0;
 
-	/* Scan flags5 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flags5[i]))
-		{
-			d_ptr->mflags5 |= (1L << i);
-			return (0);
-		}
-	}
-
-	/* Scan flags6 */
-	for (i = 0; i < 32; i++)
-	{
-		if (streq(what, r_info_flags6[i]))
-		{
-			d_ptr->mflags6 |= (1L << i);
-			return (0);
-		}
-	}
+	if (grab_one_flag(&d_ptr->mflags6, r_info_flags6, what) == 0)
+		return 0;
 
 	/* Oops */
 #ifdef JP
@@ -2710,45 +3010,40 @@ errr parse_d_info(char *buf, header *head)
 	/* Process 'L' for "fLoor type" (one line only) */
 	else if (buf[0] == 'L')
 	{
-		int f1, f2, f3;
-		int p1, p2, p3;
-		int tunnel;
+		char *zz[16];
 
 		/* Scan for the values */
-		if (7 != sscanf(buf+2, "%d:%d:%d:%d:%d:%d:%d",
-				&f1, &p1, &f2, &p2, &f3, &p3, &tunnel)) return (1);
+		if (tokenize(buf+2, 7, zz, 0) != 7) return (1);
 
 		/* Save the values */
-		d_ptr->floor1 = f1;
-		d_ptr->floor_percent1 = p1;
-		d_ptr->floor2 = f2;
-		d_ptr->floor_percent2 = p2;
-		d_ptr->floor3 = f3;
-		d_ptr->floor_percent3 = p3;
-		d_ptr->tunnel_percent = tunnel;
+		d_ptr->floor1 = f_tag_to_index(zz[0]);
+		d_ptr->floor_percent1 = atoi(zz[1]);
+		d_ptr->floor2 = f_tag_to_index(zz[2]);
+		d_ptr->floor_percent2 = atoi(zz[3]);
+		d_ptr->floor3 = f_tag_to_index(zz[4]);
+		d_ptr->floor_percent3 = atoi(zz[5]);
+		d_ptr->tunnel_percent = atoi(zz[6]);
 	}
 
 	/* Process 'A' for "wAll type" (one line only) */
 	else if (buf[0] == 'A')
 	{
-		int w1, w2, w3, outer, inner, stream1, stream2;
-		int p1, p2, p3;
+		char *zz[16];
 
 		/* Scan for the values */
-		if (10 != sscanf(buf+2, "%d:%d:%d:%d:%d:%d:%d:%d:%d:%d",
-				 &w1, &p1, &w2, &p2, &w3, &p3, &outer, &inner, &stream1, &stream2)) return (1);
+		if (tokenize(buf+2, 10, zz, 0) != 10) return (1);
 
 		/* Save the values */
-		d_ptr->fill_type1 = w1;
-		d_ptr->fill_percent1 = p1;
-		d_ptr->fill_type2 = w2;
-		d_ptr->fill_percent2 = p2;
-		d_ptr->fill_type3 = w3;
-		d_ptr->fill_percent3 = p3;
-		d_ptr->outer_wall = outer;
-		d_ptr->inner_wall = inner;
-		d_ptr->stream1 = stream1;
-		d_ptr->stream2 = stream2;
+		d_ptr->fill_type1 = f_tag_to_index(zz[0]);
+		d_ptr->fill_percent1 = atoi(zz[1]);
+		d_ptr->fill_type2 = f_tag_to_index(zz[2]);
+		d_ptr->fill_percent2 = atoi(zz[3]);
+		d_ptr->fill_type3 = f_tag_to_index(zz[4]);
+		d_ptr->fill_percent3 = atoi(zz[5]);
+		d_ptr->outer_wall = f_tag_to_index(zz[6]);
+		d_ptr->inner_wall = f_tag_to_index(zz[7]);
+		d_ptr->stream1 = f_tag_to_index(zz[8]);
+		d_ptr->stream2 = f_tag_to_index(zz[9]);
 	}
 
 	/* Process 'F' for "Dungeon Flags" (multiple lines) */

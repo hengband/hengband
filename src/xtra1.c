@@ -2953,6 +2953,7 @@ void calc_bonuses(void)
 #endif
 	bool            have_sw = FALSE, have_kabe = FALSE;
 	bool            easy_2weapon = FALSE;
+	bool            riding_ffall = FALSE;
 	s16b this_o_idx, next_o_idx = 0;
 	player_race *tmp_rp_ptr;
 
@@ -3594,16 +3595,10 @@ void calc_bonuses(void)
 			new_speed += (p_ptr->lev) / 10 + 5;
 	}
 
-	if (p_ptr->riding)
+	if (music_singing(MUSIC_WALL))
 	{
-		if (!(r_info[m_list[p_ptr->riding].r_idx].flags2 & RF2_PASS_WALL))
-			p_ptr->pass_wall = FALSE;
-		if (r_info[m_list[p_ptr->riding].r_idx].flags2 & RF2_KILL_WALL)
-			p_ptr->pass_wall = TRUE;
+		p_ptr->kill_wall = TRUE;
 	}
-	if (music_singing(MUSIC_WALL)) p_ptr->kill_wall = TRUE;
-
-	if (p_ptr->kill_wall) p_ptr->pass_wall = TRUE;
 
 	/* Hack -- apply racial/class stat maxes */
 	/* Apply the racial modifiers */
@@ -4307,10 +4302,16 @@ void calc_bonuses(void)
 		p_ptr->dis_to_d[1] -= 5;
 	}
 
-	/* wraith_form */
+	/* Wraith form */
 	if (p_ptr->wraith_form)
 	{
 		p_ptr->reflect = TRUE;
+		p_ptr->pass_wall = TRUE;
+	}
+
+	if (p_ptr->kabenuke)
+	{
+		p_ptr->pass_wall = TRUE;
 	}
 
 	/* Temporary blessing */
@@ -4533,8 +4534,11 @@ void calc_bonuses(void)
 
 	if (p_ptr->riding)
 	{
-		int speed = m_list[p_ptr->riding].mspeed;
-		if (m_list[p_ptr->riding].mspeed > 110)
+		monster_type *riding_m_ptr = &m_list[p_ptr->riding];
+		monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
+		int speed = riding_m_ptr->mspeed;
+
+		if (riding_m_ptr->mspeed > 110)
 		{
 			new_speed = 110 + (s16b)((speed - 110) * (p_ptr->skill_exp[GINOU_RIDING] * 3 + p_ptr->lev * 160L - 10000L) / (22000L));
 			if (new_speed < 110) new_speed = 110;
@@ -4543,16 +4547,18 @@ void calc_bonuses(void)
 		{
 			new_speed = speed;
 		}
-		new_speed 
-		+= (p_ptr->skill_exp[GINOU_RIDING] + p_ptr->lev *160L)/3200;
-		if (m_list[p_ptr->riding].fast) new_speed += 10;
-		if (m_list[p_ptr->riding].slow) new_speed -= 10;
-		if (r_info[m_list[p_ptr->riding].r_idx].flags7 & RF7_CAN_FLY) p_ptr->ffall = TRUE;
-		if (r_info[m_list[p_ptr->riding].r_idx].flags7 & (RF7_CAN_SWIM | RF7_AQUATIC)) p_ptr->can_swim = TRUE;
+		new_speed += (p_ptr->skill_exp[GINOU_RIDING] + p_ptr->lev *160L)/3200;
+		if (riding_m_ptr->fast) new_speed += 10;
+		if (riding_m_ptr->slow) new_speed -= 10;
+		riding_ffall = (riding_r_ptr->flags7 & RF7_CAN_FLY) ? TRUE : FALSE;
+		if (riding_r_ptr->flags7 & (RF7_CAN_SWIM | RF7_AQUATIC)) p_ptr->can_swim = TRUE;
+
+		if (!(riding_r_ptr->flags2 & RF2_PASS_WALL)) p_ptr->pass_wall = FALSE;
+		if (riding_r_ptr->flags2 & RF2_KILL_WALL) p_ptr->kill_wall = TRUE;
 
 		if (p_ptr->skill_exp[GINOU_RIDING] < RIDING_EXP_SKILLED) j += (p_ptr->wt * 3 * (RIDING_EXP_SKILLED - p_ptr->skill_exp[GINOU_RIDING])) / RIDING_EXP_SKILLED;
 
-		i = 3000 + r_info[m_list[p_ptr->riding].r_idx].level * 50;
+		i = 3000 + riding_r_ptr->level * 50;
 	}
 
 	/* XXX XXX XXX Apply "encumbrance" from weight */
@@ -5059,6 +5065,8 @@ void calc_bonuses(void)
 		p_ptr->num_blow[0] += 1+extra_blows[0];
 	}
 
+	if (p_ptr->riding) p_ptr->ffall = riding_ffall;
+
 	monk_armour_aux = FALSE;
 
 	if (heavy_armor())
@@ -5493,7 +5501,7 @@ msg_print("バランスがとれるようになった。");
 		if ((o_ptr->tval == TV_ENCHANT_BOOK) && (o_ptr->sval == 2)) have_kabe = TRUE;
 	}
 
-	if ((p_ptr->pass_wall && !p_ptr->kill_wall) || p_ptr->kabenuke || p_ptr->wraith_form) p_ptr->no_flowed = TRUE;
+	if (p_ptr->pass_wall && !p_ptr->kill_wall) p_ptr->no_flowed = TRUE;
 #if 0
 	if (have_dd_s && ((p_ptr->realm1 == REALM_SORCERY) || (p_ptr->realm2 == REALM_SORCERY) || (p_ptr->pclass == CLASS_SORCERER)))
 	{

@@ -89,11 +89,16 @@ struct header
 
 	u32b text_size;		/* Size of the "text" array in bytes */
 
+	u32b tag_size;		/* Size of the "tag" array in bytes */
+
 	void *info_ptr;
 	char *name_ptr;
 	char *text_ptr;
+	char *tag_ptr;
 
 	parse_info_txt_func parse_info_txt;
+
+	void (*retouch)(header *head);
 };
 
 extern errr init_info_txt(FILE *fp, char *buf, header *head,
@@ -103,6 +108,8 @@ extern errr init_info_txt(FILE *fp, char *buf, header *head,
 extern errr parse_z_info(char *buf, header *head);
 extern errr parse_v_info(char *buf, header *head);
 extern errr parse_f_info(char *buf, header *head);
+extern s16b f_tag_to_index(cptr str);
+extern void retouch_f_info(header *head);
 extern errr parse_k_info(char *buf, header *head);
 extern errr parse_a_info(char *buf, header *head);
 extern errr parse_e_info(char *buf, header *head);

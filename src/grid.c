@@ -148,7 +148,7 @@ void place_random_door(int y, int x, bool room)
 		c_ptr->mimic = room ? feat_wall_outer : fill_type[randint0(100)];
 
 		/* Floor type terrain cannot hide a door */
-		if (feat_floor(c_ptr->mimic))
+		if (feat_supports_los(c_ptr->mimic))
 		{
 			c_ptr->feat = c_ptr->mimic;
 			c_ptr->mimic = 0;
@@ -543,6 +543,7 @@ void build_tunnel(int row1, int col1, int row2, int col2)
 	bool door_flag = FALSE;
 
 	cave_type *c_ptr;
+	feature_type *f_ptr;
 
 	/* Save the starting location */
 	start_row = row1;
@@ -595,13 +596,16 @@ void build_tunnel(int row1, int col1, int row2, int col2)
 
 		/* Access the location */
 		c_ptr = &cave[tmp_row][tmp_col];
+		f_ptr = &f_info[c_ptr->feat];
 
+		if (have_flag(f_ptr->flags, FF_WALL) && have_flag(f_ptr->flags, FF_PERMANENT))
+		{
+			/* Avoid the edge of the dungeon */
+			if (have_flag(f_ptr->flags, FF_SOLID)) continue;
 
-		/* Avoid the edge of the dungeon */
-		if (c_ptr->feat == FEAT_PERM_SOLID) continue;
-
-		/* Avoid the edge of vaults */
-		if (c_ptr->feat == FEAT_PERM_OUTER) continue;
+			/* Avoid the edge of vaults */
+			if (have_flag(f_ptr->flags, FF_OUTER)) continue;
+		}
 
 		/* Avoid "solid" granite walls */
 		if (is_solid_grid(c_ptr)) continue;
@@ -609,13 +613,20 @@ void build_tunnel(int row1, int col1, int row2, int col2)
 		/* Pierce "outer" walls of rooms */
 		if (is_outer_grid(c_ptr))
 		{
+			feature_type *ff_ptr;
+
 			/* Acquire the "next" location */
 			y = tmp_row + row_dir;
 			x = tmp_col + col_dir;
 
+			ff_ptr = &f_info[cave[y][x].feat];
+
 			/* Hack -- Avoid outer/solid permanent walls */
-			if (cave[y][x].feat == FEAT_PERM_SOLID) continue;
-			if (cave[y][x].feat == FEAT_PERM_OUTER) continue;
+			if (have_flag(ff_ptr->flags, FF_WALL) && have_flag(ff_ptr->flags, FF_PERMANENT))
+			{
+				if (have_flag(ff_ptr->flags, FF_SOLID)) continue;
+				if (have_flag(ff_ptr->flags, FF_OUTER)) continue;
+			}
 
 			/* Hack -- Avoid outer/solid granite walls */
 			if (is_outer_bold(y, x)) continue;
@@ -732,19 +743,26 @@ static bool set_tunnel(int *x, int *y, bool affectwall)
 	int feat, i, j, dx, dy;
 
 	cave_type *c_ptr = &cave[*y][*x];
+	feature_type *f_ptr;
 
 	if (!in_bounds(*y, *x)) return TRUE;
 
 	feat = c_ptr->feat;
+	f_ptr = &f_info[feat];
 
-	if ((feat == FEAT_PERM_OUTER) ||
-	    (feat == FEAT_PERM_INNER) ||
-	    is_inner_grid(c_ptr))
+	if (have_flag(f_ptr->flags, FF_WALL) && have_flag(f_ptr->flags, FF_PERMANENT))
 	{
 		/*
 		 * Ignore permanent walls - sometimes cannot tunnel around them anyway
 		 * so don't try - it just complicates things unnecessarily.
 		 */
+
+		if (have_flag(f_ptr->flags, FF_OUTER)) return TRUE;
+		if (have_flag(f_ptr->flags, FF_INNER)) return TRUE;
+	}
+
+	if (is_inner_grid(c_ptr))
+	{
 		return TRUE;
 	}
 
@@ -753,9 +771,9 @@ static bool set_tunnel(int *x, int *y, bool affectwall)
 		/* Save the tunnel location */
 		if (dun->tunn_n < TUNN_MAX)
 		{
-				dun->tunn[dun->tunn_n].y = *y;
-				dun->tunn[dun->tunn_n].x = *x;
-				dun->tunn_n++;
+			dun->tunn[dun->tunn_n].y = *y;
+			dun->tunn[dun->tunn_n].x = *x;
+			dun->tunn_n++;
 		}
 
 		return TRUE;

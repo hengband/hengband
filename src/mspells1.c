@@ -370,11 +370,10 @@ bool summon_possible(int y1, int x1)
 			if (distance(y1, x1, y, x)>2) continue;
 
 			/* ...nor on the Pattern */
-			if ((cave[y][x].feat >= FEAT_PATTERN_START)
-				&& (cave[y][x].feat <= FEAT_PATTERN_XTRA2)) continue;
+			if (pattern_tile(y, x)) continue;
 
 			/* Require empty floor grid in line of sight */
-			if ((cave_empty_bold(y, x) || (cave[y][x].feat == FEAT_TREES)) && los(y1, x1, y, x) && los(y, x, y1, x1)) return (TRUE);
+			if (cave_empty_bold(y, x) && los(y1, x1, y, x) && los(y, x, y1, x1)) return (TRUE);
 		}
 	}
 
@@ -1361,14 +1360,8 @@ bool make_attack_spell(int m_idx)
 				/* Access the next grid */
 				c_ptr = &cave[next_y][next_x];
 
-				/* Skip door, rubble, wall */
-				if ((c_ptr->feat >= FEAT_DOOR_HEAD) && (c_ptr->feat <= FEAT_PERM_SOLID)) continue;
-
-				/* Skip tree */
-				if (c_ptr->feat == FEAT_TREES) continue;
-
-				/* Skip mountain */
-				if (c_ptr->feat == FEAT_MOUNTAIN) continue;
+				/* Skip door, rubble, wall, tree, mountain, etc. */
+				if (!have_flag(f_flags_grid(c_ptr), FF_PROJECT)) continue;
 
 				if (projectable(m_ptr->fy, m_ptr->fx, next_y, next_x))
 				{

@@ -33,7 +33,7 @@
  */
 void reset_visuals(void)
 {
-	int i;
+	int i, j;
 
 	/* Extract some info about terrain features */
 	for (i = 0; i < max_f_idx; i++)
@@ -41,8 +41,11 @@ void reset_visuals(void)
 		feature_type *f_ptr = &f_info[i];
 
 		/* Assume we will use the underlying values */
-		f_ptr->x_attr = f_ptr->d_attr;
-		f_ptr->x_char = f_ptr->d_char;
+		for (j = 0; j < F_LIT_MAX; j++)
+		{
+			f_ptr->x_attr[j] = f_ptr->d_attr[j];
+			f_ptr->x_char[j] = f_ptr->d_char[j];
+		}
 	}
 
 	/* Extract default attr/char code for objects */

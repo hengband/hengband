@@ -85,8 +85,7 @@ bool teleport_away(int m_idx, int dis, bool dec_valour)
 			if (is_explosive_rune_grid(&cave[ny][nx])) continue;
 
 			/* ...nor onto the Pattern */
-			if ((cave[ny][nx].feat >= FEAT_PATTERN_START) &&
-			    (cave[ny][nx].feat <= FEAT_PATTERN_XTRA2)) continue;
+			if (pattern_tile(ny, nx)) continue;
 
 			/* No teleporting into vaults and such */
 			if (!(p_ptr->inside_quest || p_ptr->inside_arena))
@@ -204,8 +203,7 @@ void teleport_monster_to(int m_idx, int ty, int tx, int power)
 			if (is_explosive_rune_grid(c_ptr)) continue;
 
 			/* ...nor onto the Pattern */
-			if ((c_ptr->feat >= FEAT_PATTERN_START) &&
-			    (c_ptr->feat <= FEAT_PATTERN_XTRA2)) continue;
+			if (pattern_tile(ny, nx)) continue;
 
 			/* No teleporting into vaults and such */
 			/* if (c_ptr->info & (CAVE_ICKY)) continue; */
@@ -250,6 +248,39 @@ void teleport_monster_to(int m_idx, int ty, int tx, int power)
 
 	if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
 		p_ptr->update |= (PU_MON_LITE);
+}
+
+
+bool cave_teleportable_bold(int y, int x, u16b mode)
+{
+	cave_type    *c_ptr = &cave[y][x];
+	feature_type *f_ptr = &f_info[c_ptr->feat];
+
+	/* Require "teleportable" space */
+	if (!have_flag(f_ptr->flags, FF_TELEPORTABLE)) return FALSE;
+
+	if (!(mode & TELEPORT_ALLOW_OBJECT) && (c_ptr->info & CAVE_OBJECT)) return FALSE;
+
+	if (c_ptr->m_idx) return FALSE;
+	if (player_bold(y, x)) return FALSE;
+
+	if (!player_can_enter(c_ptr->feat, 0)) return FALSE;
+
+	if ((mode & TELEPORT_REQUIRE_PROJECT) && !have_flag(f_ptr->flags, FF_PROJECT)) return FALSE;
+
+	if (!(mode & TELEPORT_ALLOW_DEEP))
+	{
+		if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP))
+		{
+			if (!p_ptr->ffall && !p_ptr->can_swim) return FALSE;
+		}
+		if (have_flag(f_ptr->flags, FF_LAVA) && !p_ptr->immune_fire && !IS_INVULN())
+		{
+			if (have_flag(f_ptr->flags, FF_DEEP) || !p_ptr->ffall) return FALSE;
+		}
+	}
+
+	return TRUE;
 }
 
 
@@ -320,12 +351,10 @@ msg_print("不思議な力がテレポートを防いだ！");
 			/* Ignore illegal locations */
 			if (!in_bounds(y, x)) continue;
 
-			/* Require "naked" floor space or trees */
-			if (!(cave_naked_bold(y, x) ||
-			    (cave[y][x].feat == FEAT_TREES))) continue;
-
 			/* No teleporting into vaults and such */
 			if (cave[y][x].info & CAVE_ICKY) continue;
+
+			if (!cave_teleportable_bold(y, x, 0)) continue;
 
 			/* This grid looks good */
 			look = FALSE;
@@ -434,7 +463,7 @@ void teleport_player_to(int ny, int nx, bool no_tele)
 	if (p_ptr->anti_tele && no_tele)
 	{
 #ifdef JP
-msg_print("不思議な力がテレポートを防いだ！");
+		msg_print("不思議な力がテレポートを防いだ！");
 #else
 		msg_print("A mysterious force prevents you from teleporting!");
 #endif
@@ -454,11 +483,8 @@ msg_print("不思議な力がテレポートを防いだ！");
 		}
 
 		/* Accept "naked" floor grids */
-		if (no_tele)
-		{
-			if (cave_naked_bold(y, x) || (((cave[y][x].feat == FEAT_DEEP_LAVA) || (cave[y][x].feat == FEAT_DEEP_WATER)) && !cave[y][x].m_idx)) break;
-		}
-		else if (cave_empty_bold(y, x) || player_bold(y, x)) break;
+		if (!no_tele && player_bold(y, x)) break;
+		if (cave_teleportable_bold(y, x, TELEPORT_ALLOW_DEEP | (no_tele ? 0 : TELEPORT_ALLOW_OBJECT))) break;
 
 		/* Occasionally advance the distance */
 		if (++ctr > (4 * dis * dis + 4 * dis + 1))
@@ -1507,8 +1533,8 @@ msg_print("属性付加に失敗した。");
  * Non-permanent walls, trees, mountains, or doors
  */
 #define vanishable_feat(F) \
-	((!feat_floor(F) && (((F) < FEAT_PERM_EXTRA) || ((F) > FEAT_PERM_SOLID))) || \
-	 ((F) == FEAT_OPEN) || ((F) == FEAT_BROKEN))
+	(have_flag((F)->flags, FF_HURT_DISI) || have_flag((F)->flags, FF_MOUNTAIN) || \
+	 have_flag((F)->flags, FF_PATTERN))
 
 /*
  * Vanish all walls in this floor
@@ -1517,9 +1543,9 @@ static bool vanish_dungeon(void)
 {
 	int          y, x;
 	cave_type    *c_ptr;
+	feature_type *f_ptr;
 	monster_type *m_ptr;
 	char         m_name[80];
-	byte         feat;
 
 	/* Prevent vasishing of quest levels and town */
 	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !dun_level)
@@ -1535,7 +1561,7 @@ static bool vanish_dungeon(void)
 			c_ptr = &cave[y][x];
 
 			/* Seeing true feature code (ignore mimic) */
-			feat = c_ptr->feat;
+			f_ptr = &f_info[c_ptr->feat];
 
 			/* Lose room and vault */
 			c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
@@ -1570,11 +1596,7 @@ static bool vanish_dungeon(void)
 			}
 
 			/* Process all walls, doors and patterns */
-			if (vanishable_feat(feat) || pattern_tile(y, x))
-			{
-				/* Create floor */
-				cave_set_feat(y, x, floor_type[randint0(100)]);
-			}
+			if (vanishable_feat(f_ptr)) cave_alter_feat(y, x, FF_HURT_DISI);
 		}
 	}
 
@@ -1582,40 +1604,68 @@ static bool vanish_dungeon(void)
 	for (x = 0; x < cur_wid; x++)
 	{
 		c_ptr = &cave[0][x];
+		f_ptr = &f_info[c_ptr->mimic];
 
 		/* Lose room and vault */
 		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
 		/* Set boundary mimic if needed */
-		if (c_ptr->mimic && vanishable_feat(c_ptr->mimic)) c_ptr->mimic = floor_type[randint0(100)];
+		if (c_ptr->mimic && vanishable_feat(f_ptr))
+		{
+			c_ptr->mimic = feat_state(c_ptr->mimic, FF_HURT_DISI);
+
+			/* Check for change to boring grid */
+			if (!have_flag(f_info[c_ptr->mimic].flags, FF_REMEMBER)) c_ptr->info &= ~(CAVE_MARK);
+		}
 
 		c_ptr = &cave[cur_hgt - 1][x];
+		f_ptr = &f_info[c_ptr->mimic];
 
 		/* Lose room and vault */
 		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
 		/* Set boundary mimic if needed */
-		if (c_ptr->mimic && vanishable_feat(c_ptr->mimic)) c_ptr->mimic = floor_type[randint0(100)];
+		if (c_ptr->mimic && vanishable_feat(f_ptr))
+		{
+			c_ptr->mimic = feat_state(c_ptr->mimic, FF_HURT_DISI);
+
+			/* Check for change to boring grid */
+			if (!have_flag(f_info[c_ptr->mimic].flags, FF_REMEMBER)) c_ptr->info &= ~(CAVE_MARK);
+		}
 	}
 
 	/* Special boundary walls -- Left and right */
 	for (y = 1; y < (cur_hgt - 1); y++)
 	{
 		c_ptr = &cave[y][0];
+		f_ptr = &f_info[c_ptr->mimic];
 
 		/* Lose room and vault */
 		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
 		/* Set boundary mimic if needed */
-		if (c_ptr->mimic && vanishable_feat(c_ptr->mimic)) c_ptr->mimic = floor_type[randint0(100)];
+		if (c_ptr->mimic && vanishable_feat(f_ptr))
+		{
+			c_ptr->mimic = feat_state(c_ptr->mimic, FF_HURT_DISI);
+
+			/* Check for change to boring grid */
+			if (!have_flag(f_info[c_ptr->mimic].flags, FF_REMEMBER)) c_ptr->info &= ~(CAVE_MARK);
+		}
 
 		c_ptr = &cave[y][cur_wid - 1];
+		f_ptr = &f_info[c_ptr->mimic];
 
 		/* Lose room and vault */
 		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
 		/* Set boundary mimic if needed */
-		if (c_ptr->mimic && vanishable_feat(c_ptr->mimic)) c_ptr->mimic = floor_type[randint0(100)];
+		if (c_ptr->mimic && vanishable_feat(f_ptr))
+		{
+			c_ptr->mimic = feat_state(c_ptr->mimic, FF_HURT_DISI);
+
+			/* Check for change to boring grid */
+			if (!have_flag(f_info[c_ptr->mimic].flags, FF_REMEMBER)) c_ptr->info &= ~(CAVE_MARK);
+		}
 	}
 
 	/* Mega-Hack -- Forget the view and lite */
@@ -1923,7 +1973,7 @@ msg_print("床上のアイテムが呪文を跳ね返した。");
 
 	/* Notice */
 	note_spot(py, px);
-	
+
 	/* Redraw */
 	lite_spot(py, px);
 
@@ -5838,11 +5888,13 @@ bool dimension_door(void)
 
 	p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
 
-	if (!cave_empty_bold(y, x) || (cave[y][x].info & CAVE_ICKY) ||
-		(distance(y, x, py, px) > plev / 2 + 10) ||
-		(!randint0(plev / 10 + 10)))
+	if (!cave_teleportable_bold(y, x, TELEPORT_ALLOW_DEEP | TELEPORT_ALLOW_OBJECT | TELEPORT_REQUIRE_PROJECT) ||
+	    (cave[y][x].info & CAVE_ICKY) ||
+	    (distance(y, x, py, px) > plev / 2 + 10) ||
+	    (!randint0(plev / 10 + 10)))
 	{
-		if( p_ptr->pclass != CLASS_MIRROR_MASTER ){
+		if (p_ptr->pclass != CLASS_MIRROR_MASTER)
+		{
 #ifdef JP
 			msg_print("精霊界から物質界に戻る時うまくいかなかった！");
 #else

@@ -4848,7 +4848,7 @@ void do_cmd_quest(void)
 {
 	energy_use = 100;
 
-	if (cave[py][px].feat != FEAT_QUEST_ENTER)
+	if (!have_flag(f_flags_bold(py, px), FF_QUEST_ENTER))
 	{
 #ifdef JP
 msg_print("ここにはクエストの入口はない。");
@@ -4897,11 +4897,10 @@ void do_cmd_bldg(void)
 
 	energy_use = 100;
 
-	if (!((cave[py][px].feat >= FEAT_BLDG_HEAD) &&
-		  (cave[py][px].feat <= FEAT_BLDG_TAIL)))
+	if (!have_flag(f_flags_bold(py, px), FF_BLDG))
 	{
 #ifdef JP
-msg_print("ここには建物はない。");
+		msg_print("ここには建物はない。");
 #else
 		msg_print("You see no building here.");
 #endif
@@ -4909,7 +4908,7 @@ msg_print("ここには建物はない。");
 		return;
 	}
 
-	which = (cave[py][px].feat - FEAT_BLDG_HEAD);
+	which = f_info[cave[py][px].feat].power;
 
 	bldg = &building[which];
 

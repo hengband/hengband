@@ -3459,11 +3459,14 @@ bool mutation_power_aux(u32b power)
 			{
 				int x, y, ox, oy;
 				cave_type *c_ptr;
+				feature_type *f_ptr;
 
 				if (!get_rep_dir2(&dir)) return FALSE;
 				y = py + ddy[dir];
 				x = px + ddx[dir];
 				c_ptr = &cave[y][x];
+				f_ptr = &f_info[c_ptr->feat];
+
 				if (cave_floor_bold(y, x) || boundary_floor_grid(c_ptr))
 				{
 #ifdef JP
@@ -3474,14 +3477,12 @@ bool mutation_power_aux(u32b power)
 
 					break;
 				}
-				else if (((c_ptr->feat >= FEAT_PERM_EXTRA) &&
-					(c_ptr->feat <= FEAT_PERM_SOLID)) ||
-					(c_ptr->feat == FEAT_MOUNTAIN))
+				else if (have_flag(f_ptr->flags, FF_PERMANENT))
 				{
 #ifdef JP
-					msg_format("いてっ！この%sはあなたの歯より硬い！", (c_ptr->mimic == FEAT_TREES) ? "木" : "壁");
+					msg_format("いてっ！この%sはあなたの歯より硬い！", f_name + f_info[get_feat_mimic(c_ptr)].name);
 #else
-					msg_format("Ouch!  This %s is harder than your teeth!", (c_ptr->mimic == FEAT_TREES) ? "tree" : "wall");
+					msg_format("Ouch!  This %s is harder than your teeth!", f_name + f_info[get_feat_mimic(c_ptr)].name);
 #endif
 
 					break;
@@ -3496,7 +3497,7 @@ bool mutation_power_aux(u32b power)
 
 					break;
 				}
-				else if (c_ptr->feat == FEAT_TREES)
+				else if (have_flag(f_ptr->flags, FF_TREE))
 				{
 #ifdef JP
 					msg_print("木はあまり美味しくない！");

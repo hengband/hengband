@@ -590,7 +590,7 @@ static void pattern_teleport(void)
 
 	/* Ask for level */
 #ifdef JP
-if (get_check("他の階にテレポートしますか？"))
+	if (get_check("他の階にテレポートしますか？"))
 #else
 	if (get_check("Teleport level? "))
 #endif
@@ -619,7 +619,7 @@ if (get_check("他の階にテレポートしますか？"))
 
 		/* Prompt */
 #ifdef JP
-sprintf(ppp, "テレポート先:(%d-%d)", min_level, max_level);
+		sprintf(ppp, "テレポート先:(%d-%d)", min_level, max_level);
 #else
 		sprintf(ppp, "Teleport to level (%d-%d): ", min_level, max_level);
 #endif
@@ -635,7 +635,7 @@ sprintf(ppp, "テレポート先:(%d-%d)", min_level, max_level);
 		command_arg = atoi(tmp_val);
 	}
 #ifdef JP
-else if (get_check("通常テレポート？"))
+	else if (get_check("通常テレポート？"))
 #else
 	else if (get_check("Normal teleport? "))
 #endif
@@ -657,7 +657,7 @@ else if (get_check("通常テレポート？"))
 
 	/* Accept request */
 #ifdef JP
-msg_format("%d 階にテレポートしました。", command_arg);
+	msg_format("%d 階にテレポートしました。", command_arg);
 #else
 	msg_format("You teleport to dungeon level %d.", command_arg);
 #endif
@@ -689,21 +689,21 @@ msg_format("%d 階にテレポートしました。", command_arg);
 static void wreck_the_pattern(void)
 {
 	int to_ruin = 0, r_y, r_x;
+	int pattern_type = f_info[cave[py][px].feat].power;
 
-	if (cave[py][px].feat == FEAT_PATTERN_XTRA2)
+	if (pattern_type == PATTERN_TILE_WRECKED)
 	{
 		/* Ruined already */
 		return;
 	}
 
 #ifdef JP
-msg_print("パターンを血で汚してしまった！");
-msg_print("何か恐ろしい事が起こった！");
+	msg_print("パターンを血で汚してしまった！");
+	msg_print("何か恐ろしい事が起こった！");
 #else
 	msg_print("You bleed on the Pattern!");
 	msg_print("Something terrible happens!");
 #endif
-
 
 	if (!IS_INVULN())
 #ifdef JP
@@ -712,15 +712,14 @@ msg_print("何か恐ろしい事が起こった！");
 		take_hit(DAMAGE_NOESCAPE, damroll(10, 8), "corrupting the Pattern", -1);
 #endif
 
-
 	to_ruin = randint1(45) + 35;
 
 	while (to_ruin--)
 	{
 		scatter(&r_y, &r_x, py, px, 4, 0);
 
-		if ((cave[r_y][r_x].feat >= FEAT_PATTERN_START) &&
-		    (cave[r_y][r_x].feat < FEAT_PATTERN_XTRA2))
+		if (pattern_tile(r_y, r_x) &&
+		    (f_info[cave[r_y][r_x].feat].power != PATTERN_TILE_WRECKED))
 		{
 			cave_set_feat(r_y, r_x, FEAT_PATTERN_XTRA2);
 		}
@@ -733,9 +732,9 @@ msg_print("何か恐ろしい事が起こった！");
 /* Returns TRUE if we are on the Pattern... */
 static bool pattern_effect(void)
 {
-	if ((cave[py][px].feat < FEAT_PATTERN_START) ||
-	    (cave[py][px].feat > FEAT_PATTERN_XTRA2))
-		return FALSE;
+	int pattern_type;
+
+	if (!pattern_tile(py, px)) return FALSE;
 
 	if ((prace_is_(RACE_AMBERITE)) &&
 	    (p_ptr->cut > 0) && one_in_(10))
@@ -743,8 +742,11 @@ static bool pattern_effect(void)
 		wreck_the_pattern();
 	}
 
-	if (cave[py][px].feat == FEAT_PATTERN_END)
+	pattern_type = f_info[cave[py][px].feat].power;
+
+	switch (pattern_type)
 	{
+	case PATTERN_TILE_END:
 		(void)set_poisoned(0);
 		(void)set_image(0);
 		(void)set_stun(0);
@@ -759,44 +761,42 @@ static bool pattern_effect(void)
 		(void)do_res_stat(A_CHR);
 		(void)restore_level();
 		(void)hp_player(1000);
+
 		cave_set_feat(py, px, FEAT_PATTERN_OLD);
+
 #ifdef JP
-msg_print("「パターン」のこの部分は他の部分より強力でないようだ。");
+		msg_print("「パターン」のこの部分は他の部分より強力でないようだ。");
 #else
 		msg_print("This section of the Pattern looks less powerful.");
 #endif
 
-	}
+		/*
+		 * We could make the healing effect of the
+		 * Pattern center one-time only to avoid various kinds
+		 * of abuse, like luring the win monster into fighting you
+		 * in the middle of the pattern...
+		 */
+		break;
 
-
-	/*
-	 * We could make the healing effect of the
-	 * Pattern center one-time only to avoid various kinds
-	 * of abuse, like luring the win monster into fighting you
-	 * in the middle of the pattern...
-	 */
-
-	else if (cave[py][px].feat == FEAT_PATTERN_OLD)
-	{
+	case PATTERN_TILE_OLD:
 		/* No effect */
-	}
-	else if (cave[py][px].feat == FEAT_PATTERN_XTRA1)
-	{
+		break;
+
+	case PATTERN_TILE_TELEPORT:
 		pattern_teleport();
-	}
-	else if (cave[py][px].feat == FEAT_PATTERN_XTRA2)
-	{
+		break;
+
+	case PATTERN_TILE_WRECKED:
 		if (!IS_INVULN())
 #ifdef JP
 			take_hit(DAMAGE_NOESCAPE, 200, "壊れた「パターン」を歩いたダメージ", -1);
 #else
 			take_hit(DAMAGE_NOESCAPE, 200, "walking the corrupted Pattern", -1);
 #endif
+		break;
 
-	}
-	else
-	{
-		if ((prace_is_(RACE_AMBERITE)) && !one_in_(2))
+	default:
+		if (prace_is_(RACE_AMBERITE) && !one_in_(2))
 			return TRUE;
 		else if (!IS_INVULN())
 #ifdef JP
@@ -804,7 +804,7 @@ msg_print("「パターン」のこの部分は他の部分より強力でないようだ。");
 #else
 			take_hit(DAMAGE_NOESCAPE, damroll(1, 3), "walking the Pattern", -1);
 #endif
-
+		break;
 	}
 
 	return TRUE;
@@ -1891,6 +1891,7 @@ static void process_world(void)
 	bool cave_no_regen = FALSE;
 	int upkeep_factor = 0;
 	cave_type *c_ptr;
+	feature_type *f_ptr;
 	object_type *o_ptr;
 	int temp;
 	object_kind *k_ptr;
@@ -1925,7 +1926,6 @@ static void process_world(void)
 
 	if (p_ptr->inside_battle && !p_ptr->leaving)
 	{
-
 		int i2, j2;
 		int win_m_idx = 0;
 		int number_mon = 0;
@@ -1933,16 +1933,20 @@ static void process_world(void)
 		/* Count all hostile monsters */
 		for (i2 = 0; i2 < cur_wid; ++i2)
 			for (j2 = 0; j2 < cur_hgt; j2++)
-				if ((cave[j2][i2].m_idx > 0) && (cave[j2][i2].m_idx != p_ptr->riding))
+			{
+				c_ptr = &cave[j2][i2];
+
+				if ((c_ptr->m_idx > 0) && (c_ptr->m_idx != p_ptr->riding))
 				{
 					number_mon++;
-					win_m_idx = cave[j2][i2].m_idx;
+					win_m_idx = c_ptr->m_idx;
 				}
+			}
 
 		if (number_mon == 0)
 		{
 #ifdef JP
-msg_print("相打ちに終わりました。");
+			msg_print("相打ちに終わりました。");
 #else
 			msg_print("They have kill each other at the same time.");
 #endif
@@ -1959,7 +1963,7 @@ msg_print("相打ちに終わりました。");
 
 			monster_desc(m_name, wm_ptr, 0);
 #ifdef JP
-msg_format("%sが勝利した！", m_name);
+			msg_format("%sが勝利した！", m_name);
 #else
 			msg_format("%s is winner!", m_name);
 #endif
@@ -1968,21 +1972,21 @@ msg_format("%sが勝利した！", m_name);
 			if (win_m_idx == (sel_monster+1))
 			{
 #ifdef JP
-msg_print("おめでとうございます。");
+				msg_print("おめでとうございます。");
 #else
 				msg_print("Congratulations.");
 #endif
 #ifdef JP
-msg_format("%d＄を受け取った。", battle_odds);
+				msg_format("%d＄を受け取った。", battle_odds);
 #else
 				msg_format("You received %d gold.", battle_odds);
 #endif
-			p_ptr->au += battle_odds;
+				p_ptr->au += battle_odds;
 			}
 			else
 			{
 #ifdef JP
-msg_print("残念でした。");
+				msg_print("残念でした。");
 #else
 				msg_print("You lost gold.");
 #endif
@@ -1994,7 +1998,7 @@ msg_print("残念でした。");
 		else if(turn - old_turn == 150*TURNS_PER_TICK)
 		{
 #ifdef JP
-msg_print("申し分けありませんが、この勝負は引き分けとさせていただきます。");
+			msg_print("申し分けありませんが、この勝負は引き分けとさせていただきます。");
 #else
 			msg_format("This battle have ended in a draw.");
 #endif
@@ -2117,8 +2121,6 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 			/* Night falls */
 			else
 			{
-				byte feat;
-
 				/* Message */
 #ifdef JP
 				msg_print("日が沈んだ。");
@@ -2135,14 +2137,15 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 						c_ptr = &cave[y][x];
 
 						/* Feature code (applying "mimic" field) */
-						feat = get_feat_mimic(c_ptr);
+						f_ptr = &f_info[get_feat_mimic(c_ptr)];
 
-						if (!is_mirror_grid(c_ptr) && (feat != FEAT_QUEST_ENTER) && (feat != FEAT_ENTRANCE))
+						if (!is_mirror_grid(c_ptr) && !have_flag(f_ptr->flags, FF_QUEST_ENTER) &&
+						    !have_flag(f_ptr->flags, FF_ENTRANCE))
 						{
 							/* Assume dark */
 							c_ptr->info &= ~(CAVE_GLOW);
 
-							if ((feat <= FEAT_INVIS) || (feat == FEAT_DIRT) || (feat == FEAT_GRASS))
+							if (!have_flag(f_ptr->flags, FF_REMEMBER))
 							{
 								/* Forget the normal floor grid */
 								c_ptr->info &= ~(CAVE_MARK);
@@ -2182,22 +2185,41 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 			{
 				int n;
 
-				/* Pick a random shop (except home) */
+				/* Pick a random shop (except home and museum) */
 				do
 				{
 					n = randint0(MAX_STORES);
 				}
 				while ((n == STORE_HOME) || (n == STORE_MUSEUM));
 
-				/* Message */
+				/* Check every feature */
+				for (i = 1; i < max_f_idx; i++)
+				{
+					/* Access the index */
+					f_ptr = &f_info[i];
+
+					/* Skip empty index */
+					if (!f_ptr->name) continue;
+
+					/* Skip non-store features */
+					if (!have_flag(f_ptr->flags, FF_STORE)) continue;
+
+					/* Verify store type */
+					if (f_ptr->power == n)
+					{
+						/* Message */
 #ifdef JP
-				if (cheat_xtra) msg_format("%sの店主をシャッフルします。", f_name + f_info[FEAT_SHOP_HEAD + n].name);
+						if (cheat_xtra) msg_format("%sの店主をシャッフルします。", f_name + f_ptr->name);
 #else
-				if (cheat_xtra) msg_format("Shuffle a Shopkeeper of %s.", f_name + f_info[FEAT_SHOP_HEAD + n].name);
+						if (cheat_xtra) msg_format("Shuffle a Shopkeeper of %s.", f_name + f_ptr->name);
 #endif
 
-				/* Shuffle it */
-				store_shuffle(n);
+						/* Shuffle it */
+						store_shuffle(n);
+
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -2288,86 +2310,64 @@ sprintf(ouch, "%sを装備したダメージ", o_name);
 		}
 	}
 
-	if ((cave[py][px].feat == FEAT_SHAL_LAVA) &&
-		!IS_INVULN() && !p_ptr->immune_fire && !p_ptr->ffall)
-	{
-		int damage = 3000 + randint0(2000);
+	f_ptr = &f_info[cave[py][px].feat];
 
-		if (prace_is_(RACE_ENT)) damage += damage/3;
-		if (p_ptr->resist_fire) damage = damage / 3;
-		if (IS_OPPOSE_FIRE()) damage = damage / 3;
-		damage = damage / 100 + (randint0(100) < (damage % 100));
+	if (have_flag(f_ptr->flags, FF_LAVA) && !IS_INVULN() && !p_ptr->immune_fire)
+	{
+		int damage = 0;
+
+		if (have_flag(f_ptr->flags, FF_DEEP))
+		{
+			damage = 6000 + randint0(4000);
+		}
+		else if (!p_ptr->ffall)
+		{
+			damage = 3000 + randint0(2000);
+		}
 
 		if (damage)
 		{
-			/* Take damage */
+			if (prace_is_(RACE_ENT)) damage += damage / 3;
+			if (p_ptr->resist_fire) damage = damage / 3;
+			if (IS_OPPOSE_FIRE()) damage = damage / 3;
+
+			if (p_ptr->ffall) damage = damage / 5;
+
+			damage = damage / 100 + (randint0(100) < (damage % 100));
+
+			if (p_ptr->ffall)
+			{
 #ifdef JP
-msg_print("溶岩で火傷した！");
-take_hit(DAMAGE_NOESCAPE, damage, "浅い溶岩流", -1);
+				msg_print("熱で火傷した！");
+				take_hit(DAMAGE_NOESCAPE, damage, format("%sの上に浮遊したダメージ", f_name + f_ptr->name), -1);
 #else
-			msg_print("The lava burns you!");
-			take_hit(DAMAGE_NOESCAPE, damage, "shallow lava", -1);
+				msg_print("The heat burns you!");
+				take_hit(DAMAGE_NOESCAPE, damage, format("flying over %s", f_name + f_ptr->name), -1);
 #endif
+			}
+			else
+			{
+#ifdef JP
+				msg_format("%sで火傷した！", f_name + f_ptr->name);
+#else
+				msg_format("The %s burns you!", f_name + f_ptr->name);
+#endif
+				take_hit(DAMAGE_NOESCAPE, damage, f_name + f_ptr->name, -1);
+			}
 
 			cave_no_regen = TRUE;
 		}
 	}
 
-	else if ((cave[py][px].feat == FEAT_DEEP_LAVA) &&
-		!IS_INVULN() && !p_ptr->immune_fire)
-	{
-		int damage = 6000 + randint0(4000);
-
-		cptr message;
-		cptr hit_from;
-
-		if (p_ptr->resist_fire) damage = damage / 3;
-		if (IS_OPPOSE_FIRE()) damage = damage / 3;
-
-		if (p_ptr->ffall)
-		{
-			damage = damage / 5;
-
-#ifdef JP
-message = "熱で火傷した！";
-hit_from = "深い溶岩流の上に浮遊したダメージ";
-#else
-			message = "The heat burns you!";
-			hit_from = "flying over deep lava";
-#endif
-
-		}
-		else
-		{
-#ifdef JP
-message = "溶岩で火傷した！";
-hit_from = "深い溶岩流";
-#else
-			message = "The lava burns you!";
-			hit_from = "deep lava";
-#endif
-
-		}
-
-		damage = damage / 100 + (randint0(100) < (damage % 100));
-		if (damage)
-		{
-			/* Take damage */
-			msg_print(message);
-			take_hit(DAMAGE_NOESCAPE, damage, hit_from, -1);
-
-			cave_no_regen = TRUE;
-		}
-	}
-
-	else if ((cave[py][px].feat == FEAT_DEEP_WATER) && !p_ptr->ffall && !p_ptr->can_swim)
+	if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP) &&
+	    !p_ptr->ffall && !p_ptr->can_swim)
 	{
 		if (p_ptr->total_weight > (((u32b)adj_str_wgt[p_ptr->stat_ind[A_STR]] * (p_ptr->pclass == CLASS_BERSERKER ? 150 : 100)) / 2))
 		{
 			/* Take damage */
 #ifdef JP
-msg_print("溺れている！");
-take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->lev), "溺れ", -1);
+			msg_print("溺れている！");
+			take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->lev), "溺れ", -1);
 #else
 			msg_print("You are drowning!");
 			take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->lev), "drowning", -1);
@@ -2430,10 +2430,10 @@ take_hit(DAMAGE_NOESCAPE, damage, "冷気のオーラ", -1);
 	 * reduced below 0 hp by being inside a stone wall; others
 	 * WILL BE!
 	 */
-	if (!cave_floor_bold(py, px))
+	if (!have_flag(f_ptr->flags, FF_MOVE))
 	{
 		/* Player can walk through trees */
-		if ((cave[py][px].feat == FEAT_TREES) || ((cave[py][px].feat == FEAT_MOUNTAIN) && !dun_level && p_ptr->ffall))
+		if (have_flag(f_ptr->flags, FF_MOUNTAIN) && !dun_level && p_ptr->ffall)
 		{
 			/* Do nothing */
 		}
@@ -2447,24 +2447,22 @@ take_hit(DAMAGE_NOESCAPE, damage, "冷気のオーラ", -1);
 			if (p_ptr->pass_wall)
 			{
 #ifdef JP
-msg_print("体の分子が分解した気がする！");
-dam_desc = "密度";
+				msg_print("体の分子が分解した気がする！");
+				dam_desc = "密度";
 #else
 				msg_print("Your molecules feel disrupted!");
 				dam_desc = "density";
 #endif
-
 			}
 			else
 			{
 #ifdef JP
-msg_print("崩れた岩に押し潰された！");
-dam_desc = "硬い岩";
+				msg_print("崩れた岩に押し潰された！");
+				dam_desc = "硬い岩";
 #else
 				msg_print("You are being crushed!");
 				dam_desc = "solid rock";
 #endif
-
 			}
 
 			take_hit(DAMAGE_NOESCAPE, 1 + (p_ptr->lev / 5), dam_desc, -1);
@@ -2799,8 +2797,9 @@ msg_print("こんなに多くのペットを制御できない！");
 	/* Regenerate Hit Points if needed */
 	if ((p_ptr->chp < p_ptr->mhp) && !cave_no_regen)
 	{
-		if ((cave[py][px].feat < FEAT_PATTERN_END) &&
-		    (cave[py][px].feat >= FEAT_PATTERN_START))
+		f_ptr = &f_info[cave[py][px].feat];
+
+		if (have_flag(f_ptr->flags, FF_PATTERN) && (f_ptr->power <= PATTERN_TILE_4))
 		{
 			regenhp(regen_amount / 5); /* Hmmm. this should never happen? */
 		}

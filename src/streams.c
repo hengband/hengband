@@ -105,7 +105,7 @@ static void recursive_river(int x1, int y1, int x2, int y2, int feat1, int feat2
 						if (distance(ty, tx, y, x) > rand_spread(width, 1)) continue;
 
 						/* Do not convert permanent features */
-						if (cave_perma_grid(c_ptr) && (c_ptr->feat != FEAT_MOUNTAIN)) continue;
+						if (cave_perma_grid(c_ptr) && !have_flag(f_flags_grid(c_ptr), FF_MOUNTAIN)) continue;
 
 						/*
 						 * Clear previous contents, add feature
@@ -120,7 +120,7 @@ static void recursive_river(int x1, int y1, int x2, int y2, int feat1, int feat2
 						c_ptr->mimic = 0;
 
 						/* Lava terrain glows */
-						if ((feat1 == FEAT_DEEP_LAVA) ||  (feat1 == FEAT_SHAL_LAVA))
+						if (have_flag(f_info[feat1].flags, FF_LAVA))
 						{
 							if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS)) c_ptr->info |= CAVE_GLOW;
 						}
@@ -210,9 +210,13 @@ void build_streamer(int feat, int chance)
 	int		i, tx, ty;
 	int		y, x, dir;
 	int dummy = 0;
-	bool treasure = FALSE;
 
 	cave_type *c_ptr;
+	feature_type *f_ptr;
+
+	feature_type *streamer_ptr = &f_info[feat];
+	bool streamer_is_wall = have_flag(streamer_ptr->flags, FF_WALL) && !have_flag(streamer_ptr->flags, FF_PERMANENT);
+	bool streamer_may_have_gold = have_flag(streamer_ptr->flags, FF_MAY_HAVE_GOLD);
 
 	/* Hack -- Choose starting point */
 	y = rand_spread(cur_hgt / 2, cur_hgt / 6);
@@ -242,20 +246,17 @@ void build_streamer(int feat, int chance)
 
 			/* Access the grid */
 			c_ptr = &cave[ty][tx];
+			f_ptr = &f_info[c_ptr->feat];
 
-			if ((c_ptr->feat >= FEAT_DEEP_WATER) && (c_ptr->feat <= FEAT_SHAL_LAVA)) continue;
-			if ((c_ptr->feat >= FEAT_PERM_EXTRA) && (c_ptr->feat <= FEAT_PERM_SOLID)) continue;
+			if (have_flag(f_ptr->flags, FF_MOVE) && (have_flag(f_ptr->flags, FF_WATER) || have_flag(f_ptr->flags, FF_LAVA)))
+				continue;
+			if (cave_perma_grid(c_ptr) && !have_flag(f_ptr->flags, FF_MOUNTAIN)) continue;
 
 			/* Only convert "granite" walls */
-			if ((feat >= FEAT_MAGMA) && (feat <= FEAT_WALL_SOLID))
+			if (streamer_is_wall)
 			{
 				if (!is_extra_grid(c_ptr) && !is_inner_grid(c_ptr) && !is_outer_grid(c_ptr) && !is_solid_grid(c_ptr)) continue;
 				if (is_closed_door(c_ptr->feat)) continue;
-				if ((feat == FEAT_MAGMA) || (feat == FEAT_QUARTZ)) treasure = TRUE;
-			}
-			else
-			{
-				if (cave_perma_grid(c_ptr) && (c_ptr->feat != FEAT_MOUNTAIN)) continue;
 			}
 
 			/* Clear previous contents, add proper vein type */
@@ -264,13 +265,21 @@ void build_streamer(int feat, int chance)
 			/* Paranoia: Clear mimic field */
 			c_ptr->mimic = 0;
 
-			/* Hack -- Add some known treasure */
-			if (treasure && one_in_(chance))
-				c_ptr->feat += (FEAT_MAGMA_K - FEAT_MAGMA);
+			if (streamer_may_have_gold)
+			{
+				/* Hack -- Add some known treasure */
+				if (one_in_(chance))
+				{
+					cave_alter_feat(ty, tx, FF_MAY_HAVE_GOLD);
+				}
 
-			/* Hack -- Add some hidden treasure */
-			else if (treasure && one_in_(chance/4))
-				c_ptr->feat += (FEAT_MAGMA_H - FEAT_MAGMA);
+				/* Hack -- Add some hidden treasure */
+				else if (one_in_(chance / 4))
+				{
+					cave_alter_feat(ty, tx, FF_MAY_HAVE_GOLD);
+					cave_alter_feat(ty, tx, FF_ENSECRET);
+				}
+			}
 		}
 
 		if (dummy >= SAFE_MAX_ATTEMPTS)

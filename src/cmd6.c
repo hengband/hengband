@@ -5407,10 +5407,10 @@ msg_print("あなたの槍は電気でスパークしている...");
 				y = py+ddy[dir];
 				x = px+ddx[dir];
 				tsuri_dir = dir;
-				if (!(cave[y][x].feat == FEAT_DEEP_WATER) && !(cave[y][x].feat == FEAT_SHAL_WATER))
+				if (!have_flag(f_flags_bold(y, x), FF_WATER))
 				{
 #ifdef JP
-					msg_print("そこは陸地だ。");
+					msg_print("そこは水辺ではない。");
 #else
 					msg_print("There is no fishing place.");
 #endif

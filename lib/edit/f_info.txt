@@ -42,717 +42,1398 @@ V:2.8.1
 
 # 0x00 --> nothing
 
-N:0:未知の地形
+N:0:NONE
+J:未知の地形
 E:unknown grid
 G: :w
+W:1
 
 
 # 0x01 --> open floor
 
-N:1:床
+N:1:FLOOR
+J:床
 E:open floor
-G:.:w
+G:.:w:LIT
+W:2
+F:LOS | PROJECT | MOVE | PLACE | DROP | FLOOR | CAN_FLY | TELEPORTABLE
 
-# 0x02 --> invisible trap (drawn as open floor)
+# 0x02 --> invisible trap (drawn as open floor, obsoleted)
 
-N:2:隠れたトラップ
+N:2:INVIS
+J:隠れたトラップ
 E:invisible trap
-G:.:w
-M:1
+G:.:w:LIT
+M:FLOOR
+W:2
+K:DESTROYED:FLOOR
+K:SECRET:INVIS
+F:LOS | PROJECT | MOVE | PLACE | SECRET | TRAP | HIT_TRAP | CAN_FLY | HURT_DISI
 
 # 0x03 --> glyph of warding
 
-N:3:回避の彫像
+N:3:GLYPH
+J:回避の彫像
 E:glyph of warding
-G:;:y
+G:;:y:LIT
+W:16
+K:DESTROYED:FLOOR
+F:LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | GLYPH | CAN_FLY |
+F:HURT_DISI
 
 # 0x04 --> open door
 
-N:4:開いたドア
+N:4:OPEN_DOOR
+J:開いたドア
 E:open door
 G:':U
+W:10
+K:DESTROYED:FLOOR
+K:CLOSE:CLOSED_DOOR
+F:LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | CLOSE | DOOR | CAN_FLY |
+F:HURT_DISI | TELEPORTABLE
 
 # 0x05 --> broken door
 
-N:5:壊れたドア
+N:5:BROKEN_DOOR
+J:壊れたドア
 E:broken door
 G:':u
+W:10
+K:DESTROYED:FLOOR
+K:CLOSE:BROKEN_DOOR
+F:LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | CLOSE | DOOR | CAN_FLY |
+F:HURT_DISI | TELEPORTABLE
 
 # 0x06 --> up stairs (perm)
 
-N:6:上り階段
+N:6:UP_STAIR
+J:上り階段
 E:up staircase
-G:<:w
+G:<:w:LIT
+W:35
+K:SHAFT:SHAFT_UP
+F:LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | STAIRS | LESS |
+F:PERMANENT | CAN_FLY | TELEPORTABLE
 
 # 0x07 --> down stairs (perm)
 
-N:7:下り階段
+N:7:DOWN_STAIR
+J:下り階段
 E:down staircase
-G:>:w
+G:>:w:LIT
+W:35
+K:SHAFT:SHAFT_DOWN
+F:LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | STAIRS | MORE |
+F:PERMANENT | CAN_FLY | TELEPORTABLE
 
-N:8:クエスト入口
+N:8:QUEST_ENTER
+J:クエスト入口
 E:quest entrance
 G:>:y
+W:35
+F:LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | STAIRS | MORE |
+F:PERMANENT | CAN_FLY | SPECIAL | QUEST_ENTER | TELEPORTABLE
 
-N:9:クエスト出口
+N:9:QUEST_EXIT
+J:クエスト出口
 E:quest exit
 G:<:y
+W:35
+F:LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | STAIRS | LESS |
+F:PERMANENT | CAN_FLY | SPECIAL | QUEST_EXIT | TELEPORTABLE
 
-N:10:クエスト下り階段
+N:10:QUEST_DOWN
+J:クエスト下り階段
 E:quest down level
 G:>:r
+W:35
+F:LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | STAIRS | MORE |
+F:PERMANENT | CAN_FLY | SPECIAL | QUEST | TELEPORTABLE
 
-N:11:クエスト上がり階段
+N:11:QUEST_UP
+J:クエスト上がり階段
 E:quest up level
 G:<:r
+W:35
+F:LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | STAIRS | LESS |
+F:PERMANENT | CAN_FLY | SPECIAL | QUEST | TELEPORTABLE
 
-N:12:街の出口
+N:12:TOWN_EXIT
+J:街の出口
 E:town exit
 G:>:g
+W:35
+F:LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | STAIRS | MORE |
+F:PERMANENT | CAN_FLY | TELEPORTABLE
 
 # 0x0C --> up stairs (perm)
 
-N:13:上り坑道
+N:13:SHAFT_UP
+J:上り坑道
 E:shaft up
-G:<:U
+G:<:U:LIT
+W:35
+F:LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | STAIRS | LESS |
+F:PERMANENT | CAN_FLY | SHAFT | TELEPORTABLE
 
 # 0x0D --> down stairs (perm)
 
-N:14:下り坑道
+N:14:SHAFT_DOWN
+J:下り坑道
 E:shaft down
-G:>:U
+G:>:U:LIT
+W:35
+F:LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | STAIRS | MORE |
+F:PERMANENT | CAN_FLY | SHAFT | TELEPORTABLE
 
 # 0x10 --> visible trap -- trap door
 
-N:16:トラップ・ドア
+N:16:TRAP_TRAPDOOR
+J:トラップ・ドア
 E:trap door
-G:^:w
+G:^:w:LIT
+W:2
+K:DESTROYED:FLOOR
+K:HIT_TRAP:TRAP_TRAPDOOR
+F:POWER_5 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM | TRAP |
+F:MORE | HIT_TRAP | CAN_FLY | HURT_DISI
 
 # 0x11 --> visible trap -- open pit
 
-N:17:落とし穴
+N:17:TRAP_PIT
+J:落とし穴
 E:pit
-G:^:s
+G:^:s:LIT
+W:2
+K:DESTROYED:FLOOR
+K:HIT_TRAP:TRAP_PIT
+F:POWER_5 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM | TRAP |
+F:HIT_TRAP | CAN_FLY | HURT_DISI
 
 # 0x12 --> visible trap -- spiked pit
 
-N:18:落とし穴
+N:18:TRAP_SPIKED_PIT
+J:落とし穴
 E:pit
-G:^:s
-M:17
+G:^:s:LIT
+M:TRAP_PIT
+W:2
+K:DESTROYED:FLOOR
+K:HIT_TRAP:TRAP_SPIKED_PIT
+F:POWER_5 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM | TRAP |
+F:HIT_TRAP | CAN_FLY | HURT_DISI
 
 # 0x13 --> visible trap -- poison pit
 
-N:19:落とし穴
+N:19:TRAP_POISON_PIT
+J:落とし穴
 E:pit
-G:^:s
-M:17
+G:^:s:LIT
+M:TRAP_PIT
+W:2
+K:DESTROYED:FLOOR
+K:HIT_TRAP:TRAP_POISON_PIT
+F:POWER_5 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM | TRAP |
+F:HIT_TRAP | CAN_FLY | HURT_DISI
 
 # 0x14 --> visible trap -- rune -- summon
 
-N:20:邪悪なルーン
+N:20:TRAP_TY_CURSE
+J:邪悪なルーン
 E:evil rune
-G:^:G
+G:^:G:LIT
+W:2
+K:DESTROYED:FLOOR
+K:HIT_TRAP:FLOOR
+F:POWER_5 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM | TRAP |
+F:HIT_TRAP | CAN_FLY | HURT_DISI
 
 # 0x15 --> visible trap -- rune -- teleport
 
-N:21:奇妙なルーン
+N:21:TRAP_TELEPORT
+J:奇妙なルーン
 E:strange rune
-G:^:o
+G:^:o:LIT
+W:2
+K:DESTROYED:FLOOR
+K:HIT_TRAP:TRAP_TELEPORT
+F:POWER_5 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM | TRAP |
+F:HIT_TRAP | CAN_FLY | HURT_DISI
 
 # 0x16 --> visible trap -- spot -- fire
 
-N:22:焦げた場所
+N:22:TRAP_FIRE
+J:焦げた場所
 E:discolored spot
-G:^:u
+G:^:u:LIT
+W:2
+K:DESTROYED:FLOOR
+K:HIT_TRAP:TRAP_FIRE
+F:POWER_5 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM | TRAP |
+F:HIT_TRAP | CAN_FLY | HURT_DISI
 
 # 0x17 --> visible trap -- spot -- acid
 
-N:23:焦げた場所
+N:23:TRAP_ACID
+J:焦げた場所
 E:discolored spot
-G:^:u
-M:22
+G:^:u:LIT
+M:TRAP_FIRE
+W:2
+K:DESTROYED:FLOOR
+K:HIT_TRAP:TRAP_ACID
+F:POWER_5 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM | TRAP |
+F:HIT_TRAP | CAN_FLY | HURT_DISI
 
 # 0x18 --> visible trap -- dart -- slow
 
-N:24:ダーツ・トラップ
+N:24:TRAP_SLOW
+J:ダーツ・トラップ
 E:dart trap
-G:^:r
+G:^:r:LIT
+W:2
+K:DESTROYED:FLOOR
+K:HIT_TRAP:TRAP_SLOW
+F:POWER_5 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM | TRAP |
+F:HIT_TRAP | CAN_FLY | HURT_DISI
 
 # 0x19 --> visible trap -- dart -- lose str
 
-N:25:ダーツ・トラップ
+N:25:TRAP_LOSE_STR
+J:ダーツ・トラップ
 E:dart trap
-G:^:r
-M:24
+G:^:r:LIT
+M:TRAP_SLOW
+W:2
+K:DESTROYED:FLOOR
+K:HIT_TRAP:TRAP_LOSE_STR
+F:POWER_5 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM | TRAP |
+F:HIT_TRAP | CAN_FLY | HURT_DISI
 
 # 0x1A --> visible trap -- dart -- lose dex
 
-N:26:ダーツ・トラップ
+N:26:TRAP_LOSE_DEX
+J:ダーツ・トラップ
 E:dart trap
-G:^:r
-M:24
+G:^:r:LIT
+M:TRAP_SLOW
+W:2
+K:DESTROYED:FLOOR
+K:HIT_TRAP:TRAP_LOSE_DEX
+F:POWER_5 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM | TRAP |
+F:HIT_TRAP | CAN_FLY | HURT_DISI
 
 # 0x1B --> visible trap -- dart -- lose con
 
-N:27:ダーツ・トラップ
+N:27:TRAP_LOSE_CON
+J:ダーツ・トラップ
 E:dart trap
-G:^:r
-M:24
+G:^:r:LIT
+M:TRAP_SLOW
+W:2
+K:DESTROYED:FLOOR
+K:HIT_TRAP:TRAP_LOSE_CON
+F:POWER_5 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM | TRAP |
+F:HIT_TRAP | CAN_FLY | HURT_DISI
 
 # 0x1C --> visible trap -- gas -- blind
 
-N:28:ガス・トラップ
+N:28:TRAP_BLIND
+J:ガス・トラップ
 E:gas trap
-G:^:g
+G:^:g:LIT
+W:2
+K:DESTROYED:FLOOR
+K:HIT_TRAP:TRAP_BLIND
+F:POWER_5 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM | TRAP |
+F:HIT_TRAP | CAN_FLY | HURT_DISI
 
 # 0x1D --> visible trap -- gas -- confuse
 
-N:29:ガス・トラップ
+N:29:TRAP_CONFUSE
+J:ガス・トラップ
 E:gas trap
-G:^:g
-M:28
+G:^:g:LIT
+M:TRAP_BLIND
+W:2
+K:DESTROYED:FLOOR
+K:HIT_TRAP:TRAP_CONFUSE
+F:POWER_5 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM | TRAP |
+F:HIT_TRAP | CAN_FLY | HURT_DISI
 
 # 0x1E --> visible trap -- gas -- poison
 
-N:30:ガス・トラップ
+N:30:TRAP_POISON
+J:ガス・トラップ
 E:gas trap
-G:^:g
-M:28
+G:^:g:LIT
+M:TRAP_BLIND
+W:2
+K:DESTROYED:FLOOR
+K:HIT_TRAP:TRAP_POISON
+F:POWER_5 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM | TRAP |
+F:HIT_TRAP | CAN_FLY | HURT_DISI
 
 # 0x1F --> visible trap -- gas -- sleep
 
-N:31:ガス・トラップ
+N:31:TRAP_SLEEP
+J:ガス・トラップ
 E:gas trap
-G:^:g
-M:28
+G:^:g:LIT
+M:TRAP_BLIND
+W:2
+K:DESTROYED:FLOOR
+K:HIT_TRAP:TRAP_SLEEP
+F:POWER_5 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM | TRAP |
+F:HIT_TRAP | CAN_FLY | HURT_DISI
 
 # 0x2x --> locked door (power 0)
 
-N:32:ドア
+N:32:CLOSED_DOOR
+J:ドア
 E:door
 G:+:U
+W:10
+K:DESTROYED:FLOOR
+K:OPEN:OPEN_DOOR
+K:BASH:BROKEN_DOOR
+K:SPIKE:JAMMED_DOOR_1
+F:POWER_0 | NOTICE | REMEMBER | OPEN | BASH | SPIKE | TUNNEL | DOOR |
+F:HURT_ROCK | CAN_PASS | HURT_DISI
 
 # 0x2x --> locked door (power 1)
 
-N:33:鍵のかかったドア
+N:33:LOCKED_DOOR_1
+J:鍵のかかったドア
 E:locked door
 G:+:U
-M:32
+M:CLOSED_DOOR
+W:10
+K:DESTROYED:FLOOR
+K:OPEN:OPEN_DOOR
+K:BASH:BROKEN_DOOR
+K:SPIKE:JAMMED_DOOR_2
+K:DISARM:CLOSED_DOOR
+F:POWER_1 | NOTICE | REMEMBER | OPEN | BASH | SPIKE | TUNNEL | DOOR |
+F:HURT_ROCK | CAN_PASS | HURT_DISI
 
 # 0x2x --> locked door (power 2)
 
-N:34:鍵のかかったドア
+N:34:LOCKED_DOOR_2
+J:鍵のかかったドア
 E:locked door
 G:+:U
-M:32
+M:CLOSED_DOOR
+W:10
+K:DESTROYED:FLOOR
+K:OPEN:OPEN_DOOR
+K:BASH:BROKEN_DOOR
+K:SPIKE:JAMMED_DOOR_3
+K:DISARM:CLOSED_DOOR
+F:POWER_2 | NOTICE | REMEMBER | OPEN | BASH | SPIKE | TUNNEL | DOOR |
+F:HURT_ROCK | CAN_PASS | HURT_DISI
 
 # 0x2x --> locked door (power 3)
 
-N:35:鍵のかかったドア
+N:35:LOCKED_DOOR_3
+J:鍵のかかったドア
 E:locked door
 G:+:U
-M:32
+M:CLOSED_DOOR
+W:10
+K:DESTROYED:FLOOR
+K:OPEN:OPEN_DOOR
+K:BASH:BROKEN_DOOR
+K:SPIKE:JAMMED_DOOR_4
+K:DISARM:CLOSED_DOOR
+F:POWER_3 | NOTICE | REMEMBER | OPEN | BASH | SPIKE | TUNNEL | DOOR |
+F:HURT_ROCK | CAN_PASS | HURT_DISI
 
 # 0x2x --> locked door (power 4)
 
-N:36:鍵のかかったドア
+N:36:LOCKED_DOOR_4
+J:鍵のかかったドア
 E:locked door
 G:+:U
-M:32
+M:CLOSED_DOOR
+W:10
+K:DESTROYED:FLOOR
+K:OPEN:OPEN_DOOR
+K:BASH:BROKEN_DOOR
+K:SPIKE:JAMMED_DOOR_5
+K:DISARM:CLOSED_DOOR
+F:POWER_4 | NOTICE | REMEMBER | OPEN | BASH | SPIKE | TUNNEL | DOOR |
+F:HURT_ROCK | CAN_PASS | HURT_DISI
 
 # 0x2x --> locked door (power 5)
 
-N:37:鍵のかかったドア
+N:37:LOCKED_DOOR_5
+J:鍵のかかったドア
 E:locked door
 G:+:U
-M:32
+M:CLOSED_DOOR
+W:10
+K:DESTROYED:FLOOR
+K:OPEN:OPEN_DOOR
+K:BASH:BROKEN_DOOR
+K:SPIKE:JAMMED_DOOR_6
+K:DISARM:CLOSED_DOOR
+F:POWER_5 | NOTICE | REMEMBER | OPEN | BASH | SPIKE | TUNNEL | DOOR |
+F:HURT_ROCK | CAN_PASS | HURT_DISI
 
 # 0x2x --> locked door (power 6)
 
-N:38:鍵のかかったドア
+N:38:LOCKED_DOOR_6
+J:鍵のかかったドア
 E:locked door
 G:+:U
-M:32
+M:CLOSED_DOOR
+W:10
+K:DESTROYED:FLOOR
+K:OPEN:OPEN_DOOR
+K:BASH:BROKEN_DOOR
+K:SPIKE:JAMMED_DOOR_7
+K:DISARM:CLOSED_DOOR
+F:POWER_6 | NOTICE | REMEMBER | OPEN | BASH | SPIKE | TUNNEL | DOOR |
+F:HURT_ROCK | CAN_PASS | HURT_DISI
 
 # 0x2x --> locked door (power 7)
 
-N:39:鍵のかかったドア
+N:39:LOCKED_DOOR_7
+J:鍵のかかったドア
 E:locked door
 G:+:U
-M:32
+M:CLOSED_DOOR
+W:10
+K:DESTROYED:FLOOR
+K:OPEN:OPEN_DOOR
+K:BASH:BROKEN_DOOR
+K:SPIKE:JAMMED_DOOR_7
+K:DISARM:CLOSED_DOOR
+F:POWER_7 | NOTICE | REMEMBER | OPEN | BASH | SPIKE | TUNNEL | DOOR |
+F:HURT_ROCK | CAN_PASS | HURT_DISI
 
 # 0x2x --> jammed door (power 0)
 
-N:40:くさびが打たれたドア
+N:40:JAMMED_DOOR_0
+J:くさびが打たれたドア
 E:jammed door
 G:+:U
-M:32
+M:CLOSED_DOOR
+W:10
+K:DESTROYED:FLOOR
+K:BASH:BROKEN_DOOR
+K:SPIKE:JAMMED_DOOR_1
+F:POWER_0 | NOTICE | REMEMBER | BASH | SPIKE | TUNNEL | DOOR | HURT_ROCK |
+F:CAN_PASS | HURT_DISI
 
 # 0x2x --> jammed door (power 1)
 
-N:41:くさびが打たれたドア
+N:41:JAMMED_DOOR_1
+J:くさびが打たれたドア
 E:jammed door
 G:+:U
-M:32
+M:CLOSED_DOOR
+W:10
+K:DESTROYED:FLOOR
+K:BASH:BROKEN_DOOR
+K:SPIKE:JAMMED_DOOR_2
+F:POWER_1 | NOTICE | REMEMBER | BASH | SPIKE | TUNNEL | DOOR | HURT_ROCK |
+F:CAN_PASS | HURT_DISI
 
 # 0x2x --> jammed door (power 2)
 
-N:42:くさびが打たれたドア
+N:42:JAMMED_DOOR_2
+J:くさびが打たれたドア
 E:jammed door
 G:+:U
-M:32
+M:CLOSED_DOOR
+W:10
+K:DESTROYED:FLOOR
+K:BASH:BROKEN_DOOR
+K:SPIKE:JAMMED_DOOR_3
+F:POWER_2 | NOTICE | REMEMBER | BASH | SPIKE | TUNNEL | DOOR | HURT_ROCK |
+F:CAN_PASS | HURT_DISI
 
 # 0x2x --> jammed door (power 3)
 
-N:43:くさびが打たれたドア
+N:43:JAMMED_DOOR_3
+J:くさびが打たれたドア
 E:jammed door
 G:+:U
-M:32
+M:CLOSED_DOOR
+W:10
+K:DESTROYED:FLOOR
+K:BASH:BROKEN_DOOR
+K:SPIKE:JAMMED_DOOR_4
+F:POWER_3 | NOTICE | REMEMBER | BASH | SPIKE | TUNNEL | DOOR | HURT_ROCK |
+F:CAN_PASS | HURT_DISI
 
 # 0x2x --> jammed door (power 4)
 
-N:44:くさびが打たれたドア
+N:44:JAMMED_DOOR_4
+J:くさびが打たれたドア
 E:jammed door
 G:+:U
-M:32
+M:CLOSED_DOOR
+W:10
+K:DESTROYED:FLOOR
+K:BASH:BROKEN_DOOR
+K:SPIKE:JAMMED_DOOR_5
+F:POWER_4 | NOTICE | REMEMBER | BASH | SPIKE | TUNNEL | DOOR | HURT_ROCK |
+F:CAN_PASS | HURT_DISI
 
 # 0x2x --> jammed door (power 5)
 
-N:45:くさびが打たれたドア
+N:45:JAMMED_DOOR_5
+J:くさびが打たれたドア
 E:jammed door
 G:+:U
-M:32
+M:CLOSED_DOOR
+W:10
+K:DESTROYED:FLOOR
+K:BASH:BROKEN_DOOR
+K:SPIKE:JAMMED_DOOR_6
+F:POWER_5 | NOTICE | REMEMBER | BASH | SPIKE | TUNNEL | DOOR | HURT_ROCK |
+F:CAN_PASS | HURT_DISI
 
 # 0x2x --> jammed door (power 6)
 
-N:46:くさびが打たれたドア
+N:46:JAMMED_DOOR_6
+J:くさびが打たれたドア
 E:jammed door
 G:+:U
-M:32
+M:CLOSED_DOOR
+W:10
+K:DESTROYED:FLOOR
+K:BASH:BROKEN_DOOR
+K:SPIKE:JAMMED_DOOR_7
+F:POWER_6 | NOTICE | REMEMBER | BASH | SPIKE | TUNNEL | DOOR | HURT_ROCK |
+F:CAN_PASS | HURT_DISI
 
 # 0x2x --> jammed door (power 7)
 
-N:47:くさびが打たれたドア
+N:47:JAMMED_DOOR_7
+J:くさびが打たれたドア
 E:jammed door
 G:+:U
-M:32
+M:CLOSED_DOOR
+W:10
+K:DESTROYED:FLOOR
+K:BASH:BROKEN_DOOR
+K:SPIKE:JAMMED_DOOR_7
+F:POWER_7 | NOTICE | REMEMBER | BASH | SPIKE | TUNNEL | DOOR | HURT_ROCK |
+F:CAN_PASS | HURT_DISI
 
 # 0x30 --> secret door
 
-N:48:隠しドア
+N:48:SECRET_DOOR
+J:隠しドア
 E:secret door
 G:#:w
-M:56
+M:GRANITE
+W:10
+K:DESTROYED:FLOOR
+K:SECRET:CLOSED_DOOR
+K:OPEN:OPEN_DOOR
+K:BASH:BROKEN_DOOR
+F:SECRET | NOTICE | REMEMBER | OPEN | BASH | TUNNEL | DOOR | HURT_ROCK |
+F:CAN_PASS | HURT_DISI
 
 # 0x31 --> rubble
 
-N:49:岩石
+N:49:RUBBLE
+J:岩石
 E:pile of rubble
-G:::w
+G:::w:LIT
+W:2
+K:DESTROYED:FLOOR
+F:POWER_10 | REMEMBER | TUNNEL | HAS_ITEM | HURT_ROCK | CAN_PASS | CAN_DIG |
+F:HURT_DISI
 
 # 0x32 --> magma vein
 
-N:50:溶岩の鉱脈
+N:50:MAGMA_VEIN
+J:溶岩の鉱脈
 E:magma vein
-G:%:s
+G:%:s:LIT
+W:2
+K:DESTROYED:FLOOR
+K:MAY_HAVE_GOLD:MAGMA_TREASURE
+F:POWER_10 | REMEMBER | TUNNEL | MAY_HAVE_GOLD | WALL | HURT_ROCK | CAN_PASS |
+F:HURT_DISI
 
 # 0x33 --> quartz vein
 
-N:51:石英の鉱脈
+N:51:QUARTZ_VEIN
+J:石英の鉱脈
 E:quartz vein
-G:%:w
+G:%:w:LIT
+W:2
+K:DESTROYED:FLOOR
+K:MAY_HAVE_GOLD:QUARTZ_TREASURE
+F:POWER_20 | REMEMBER | TUNNEL | MAY_HAVE_GOLD | WALL | HURT_ROCK | CAN_PASS |
+F:HURT_DISI
 
 # 0x34 --> magma vein + treasure
 
-N:52:溶岩の鉱脈(隠された財宝を含有)
+N:52:MAGMA_HIDDEN
+J:溶岩の鉱脈(隠された財宝を含有)
 E:magma vein with hidden treasure
-G:%:s
-M:50
+G:%:s:LIT
+M:MAGMA_VEIN
+W:2
+K:DESTROYED:FLOOR
+K:SECRET:MAGMA_TREASURE
+F:POWER_10 | SECRET | REMEMBER | TUNNEL | HAS_GOLD | WALL | HURT_ROCK |
+F:CAN_PASS | HURT_DISI
 
 # 0x35 --> quartz vein + treasure
 
-N:53:石英の鉱脈(隠された財宝を含有)
+N:53:QUARTZ_HIDDEN
+J:石英の鉱脈(隠された財宝を含有)
 E:quartz vein hidden treasure
-G:%:w
-M:51
+G:%:w:LIT
+M:QUARTZ_VEIN
+W:2
+K:DESTROYED:FLOOR
+K:SECRET:QUARTZ_TREASURE
+F:POWER_20 | SECRET | REMEMBER | TUNNEL | HAS_GOLD | WALL | HURT_ROCK |
+F:CAN_PASS | HURT_DISI
 
 # 0x36 --> magma vein + known treasure
 
-N:54:財宝を含有した溶岩の鉱脈
+N:54:MAGMA_TREASURE
+J:財宝を含有した溶岩の鉱脈
 E:magma vein with treasure
-G:*:o
+G:*:o:LIT
+W:2
+K:DESTROYED:FLOOR
+K:ENSECRET:MAGMA_HIDDEN
+F:POWER_20 | REMEMBER | TUNNEL | HAS_GOLD | WALL | HURT_ROCK | CAN_PASS |
+F:HURT_DISI
 
 # 0x37 --> quartz vein + known treasure
 
-N:55:財宝を含有した石英の鉱脈
+N:55:QUARTZ_TREASURE
+J:財宝を含有した石英の鉱脈
 E:quartz vein with treasure
-G:*:o
+G:*:o:LIT
+W:2
+K:DESTROYED:FLOOR
+K:ENSECRET:QUARTZ_HIDDEN
+F:POWER_20 | REMEMBER | TUNNEL | HAS_GOLD | WALL | HURT_ROCK | CAN_PASS |
+F:HURT_DISI
 
 # 0x38 --> granite wall -- basic
 
-N:56:花崗岩の壁
+N:56:GRANITE
+J:花崗岩の壁
 E:granite wall
-G:#:w
+G:#:w:LIT
+W:2
+K:DESTROYED:FLOOR
+F:POWER_40 | REMEMBER | TUNNEL | WALL | HURT_ROCK | CAN_PASS | HURT_DISI
 
 # 0x39 --> granite wall -- inner
 
-N:57:花崗岩の壁
+N:57:GRANITE_INNER
+J:花崗岩の壁
 E:granite wall
-G:#:w
-M:56
+G:#:w:LIT
+M:GRANITE
+W:2
+K:DESTROYED:FLOOR
+F:POWER_40 | REMEMBER | TUNNEL | WALL | INNER | HURT_ROCK | CAN_PASS |
+F:HURT_DISI
 
 # 0x3A --> granite wall -- outer
 
-N:58:花崗岩の壁
+N:58:GRANITE_OUTER
+J:花崗岩の壁
 E:granite wall
-G:#:w
-M:56
+G:#:w:LIT
+M:GRANITE
+W:2
+K:DESTROYED:FLOOR
+F:POWER_40 | REMEMBER | TUNNEL | WALL | OUTER | HURT_ROCK | CAN_PASS |
+F:HURT_DISI
 
 # 0x3B --> granite wall -- solid
 
-N:59:花崗岩の壁
+N:59:GRANITE_SOLID
+J:花崗岩の壁
 E:granite wall
-G:#:w
-M:56
+G:#:w:LIT
+M:GRANITE
+W:2
+K:DESTROYED:FLOOR
+F:POWER_40 | REMEMBER | TUNNEL | WALL | SOLID | HURT_ROCK | CAN_PASS |
+F:HURT_DISI
 
 # 0x3C --> permanent wall -- basic (perm)
 
-N:60:永久岩の壁
+N:60:PERMANENT
+J:永久岩の壁
 E:permanent wall
-G:#:U
+G:#:U:LIT
+W:5
+K:UNPERM:GRANITE
+F:REMEMBER | TUNNEL | WALL | PERMANENT
 
 # 0x3D --> permanent wall -- inner (perm)
 
-N:61:永久岩の壁
+N:61:PERMANENT_INNER
+J:永久岩の壁
 E:permanent wall
-G:#:U
-M:60
+G:#:U:LIT
+M:PERMANENT
+W:5
+K:UNPERM:GRANITE_INNER
+F:REMEMBER | TUNNEL | WALL | PERMANENT | INNER
 
 # 0x3E --> permanent wall -- outer (perm)
 
-N:62:永久岩の壁
+N:62:PERMANENT_OUTER
+J:永久岩の壁
 E:permanent wall
-G:#:U
-M:60
+G:#:U:LIT
+M:PERMANENT
+W:5
+K:UNPERM:GRANITE_OUTER
+F:REMEMBER | TUNNEL | WALL | PERMANENT | OUTER
 
 # 0x3F --> permanent wall -- solid (perm)
 
-N:63:永久岩の壁
+N:63:PERMANENT_SOLID
+J:永久岩の壁
 E:permanent wall
-G:#:U
-M:60
+G:#:U:LIT
+M:PERMANENT
+W:5
+K:UNPERM:GRANITE_SOLID
+F:REMEMBER | TUNNEL | WALL | PERMANENT | SOLID
 
-N:64:爆発ルーン
+N:64:EXPLOSIVE_RUNE
+J:爆発ルーン
 E:explosive rune
-G:;:R
+G:;:R:LIT
+W:16
+K:DESTROYED:FLOOR
+F:LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | CAN_FLY | MINOR_GLYPH |
+F:HURT_DISI
 
-N:65:パターン出発点
+N:65:PATTERN_START
+J:パターン出発点
 E:Pattern startpoint
 G:*:w
+W:16
+K:HURT_DISI:FLOOR
+F:POWER_0 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | PERMANENT | CAN_FLY |
+F:PATTERN
 
-N:66:パターンの一部
+N:66:PATTERN_1
+J:パターンの一部
 E:section of the Pattern
 G:*:B
+W:16
+K:HURT_DISI:FLOOR
+F:POWER_1 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | PERMANENT | CAN_FLY |
+F:PATTERN
 
-N:67:パターンの一部
+N:67:PATTERN_2
+J:パターンの一部
 E:section of the Pattern
 G:*:b
+W:16
+K:HURT_DISI:FLOOR
+F:POWER_2 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | PERMANENT | CAN_FLY |
+F:PATTERN
 
-N:68:パターンの一部
+N:68:PATTERN_3
+J:パターンの一部
 E:section of the Pattern
 G:*:B
+W:16
+K:HURT_DISI:FLOOR
+F:POWER_3 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | PERMANENT | CAN_FLY |
+F:PATTERN
 
-N:69:パターンの一部
+N:69:PATTERN_4
+J:パターンの一部
 E:section of the Pattern
 G:*:b
+W:16
+K:HURT_DISI:FLOOR
+F:POWER_4 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | PERMANENT | CAN_FLY |
+F:PATTERN
 
-N:70:パターンの一部
+N:70:PATTERN_END
+J:パターンの一部
 E:section of the Pattern
 G:*:W
+W:16
+K:HURT_DISI:FLOOR
+F:POWER_5 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | PERMANENT | CAN_FLY |
+F:PATTERN
 
-N:71:パターンの一部(discharged)
+N:71:PATTERN_OLD
+J:パターンの一部(discharged)
 E:section of the Pattern (discharged)
 G:*:W
+W:16
+K:HURT_DISI:FLOOR
+F:POWER_6 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | PERMANENT | CAN_FLY |
+F:PATTERN
 
-N:72:パターン出口
+N:72:PATTERN_EXIT
+J:パターン出口
 E:Pattern exit
 G:*:w
+W:16
+K:HURT_DISI:FLOOR
+F:POWER_7 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | PERMANENT | CAN_FLY |
+F:PATTERN
 
-N:73:壊れたパターンの一部
+N:73:PATTERN_CORRUPTED
+J:壊れたパターンの一部
 E:corrupted section of the Pattern
 G:*:D
+W:16
+K:HURT_DISI:FLOOR
+F:POWER_8 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | PERMANENT | CAN_FLY |
+F:PATTERN
 
 # 0x4A --> shop -- general store (perm)
 
-N:74:雑貨屋
+N:74:GENERAL_STORE
+J:雑貨屋
 E:General Store
 G:1:U
+W:10
+F:POWER_0 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | STORE | DOOR |
+F:PERMANENT | GLOW
 
 # 0x4B --> shop -- armoury (perm)
 
-N:75:防具屋
+N:75:ARMOURY
+J:防具屋
 E:Armoury
 G:2:s
+W:10
+F:POWER_1 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | STORE | DOOR |
+F:PERMANENT | GLOW
 
 # 0x4C --> shop -- weapon shop (perm)
 
-N:76:武器専門店
+N:76:WEAPON_SMITHS
+J:武器専門店
 E:Weapon Smiths
 G:3:w
+W:10
+F:POWER_2 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | STORE | DOOR |
+F:PERMANENT | GLOW
 
 # 0x4D --> shop -- temple (perm)
 
-N:77:寺院
+N:77:TEMPLE
+J:寺院
 E:Temple
 G:4:g
+W:10
+F:POWER_3 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | STORE | DOOR |
+F:PERMANENT | GLOW
 
 # 0x4E --> shop -- alchemist (perm)
 
-N:78:錬金術の店
+N:78:ALCHEMY_SHOP
+J:錬金術の店
 E:Alchemy Shop
 G:5:b
+W:10
+F:POWER_4 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | STORE | DOOR |
+F:PERMANENT | GLOW
 
 # 0x4F --> shop -- magic shop (perm)
 
-N:79:魔法の店
+N:79:MAGIC_SHOP
+J:魔法の店
 E:Magic Shop
 G:6:r
+W:10
+F:POWER_5 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | STORE | DOOR |
+F:PERMANENT | GLOW
 
 # 0x50 --> shop -- black market (perm)
 
-N:80:ブラック・マーケット
+N:80:BLACK_MARKET
+J:ブラック・マーケット
 E:Black Market
 G:7:D
+W:10
+F:POWER_6 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | STORE | DOOR |
+F:PERMANENT | GLOW
 
 # 0x51 --> shop -- home (perm)
 
-N:81:我が家
+N:81:HOME
+J:我が家
 E:Home
 G:8:y
+W:10
+F:POWER_7 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | STORE | DOOR |
+F:PERMANENT | GLOW
 
 # 0x52 --> shop -- bookstore (perm)
 
-N:82:書店
+N:82:BOOKSTORE
+J:書店
 E:Bookstore
 G:9:o
+W:10
+F:POWER_8 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | STORE | DOOR |
+F:PERMANENT | GLOW
 
 # 0x53 --> terrain -- deep water
 
-N:83:深い水
+N:83:DEEP_WATER
+J:深い水
 E:pool of deep water
-G:~:b
+G:~:b:LIT
+W:2
+F:LOS | PROJECT | MOVE | PLACE | REMEMBER | WATER | DEEP | CAN_FLY | CAN_SWIM |
+F:TELEPORTABLE
 
-N:84:浅い水の流れ
+N:84:SHALLOW_WATER
+J:浅い水の流れ
 E:stream of shallow water
-G:~:B
+G:~:B:LIT
+W:2
+F:LOS | PROJECT | MOVE | PLACE | DROP | REMEMBER | WATER | SHALLOW | CAN_FLY |
+F:CAN_SWIM | TELEPORTABLE
 
-N:85:深い溶岩溜り
+N:85:DEEP_LAVA
+J:深い溶岩溜り
 E:pool of deep lava
-G:~:r
+G:~:r:LIT
+W:2
+F:LOS | PROJECT | MOVE | PLACE | REMEMBER | GLOW | LAVA | DEEP | CAN_FLY |
+F:TELEPORTABLE
 
-N:86:浅い溶岩の流れ
+N:86:SHALLOW_LAVA
+J:浅い溶岩の流れ
 E:stream of shallow lava
-G:~:U
+G:~:U:LIT
+W:2
+F:LOS | PROJECT | MOVE | PLACE | DROP | REMEMBER | LAVA | SHALLOW | CAN_FLY |
+F:TELEPORTABLE
 
-N:87:暗い穴
+N:87:DARK_PIT
+J:暗い穴
 E:dark pit
-G:#:D
+G:#:D:LIT
+W:1
+F:LOS | PROJECT | MOVE | PLACE | REMEMBER | MUST_FLY | CAN_FLY | TELEPORTABLE
 
-N:88:砂地
+N:88:DIRT
+J:砂地
 E:dirt
-G:.:u
+G:.:u:LIT
+W:2
+F:LOS | PROJECT | MOVE | PLACE | DROP | FLOOR | CAN_FLY | TELEPORTABLE
 
-N:89:草地
+N:89:GRASS
+J:草地
 E:patch of grass
-G:.:g
+G:.:g:LIT
+W:2
+F:LOS | PROJECT | MOVE | PLACE | DROP | FLOOR | CAN_FLY | PLANT | TELEPORTABLE
 
-N:90:コンパクトルーン
+N:90:TRAP_TRAPS
+J:コンパクトルーン
 E:compact rune
-G:^:D
+G:^:D:LIT
+W:2
+K:DESTROYED:FLOOR
+K:HIT_TRAP:FLOOR
+F:POWER_5 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM | TRAP |
+F:HIT_TRAP | CAN_FLY | HURT_DISI
 
-N:91:警報装置
+N:91:TRAP_ALARM
+J:警報装置
 E:alarm
-G:^:R
+G:^:R:LIT
+W:2
+K:DESTROYED:FLOOR
+K:HIT_TRAP:TRAP_ALARM
+F:POWER_5 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM | TRAP |
+F:HIT_TRAP | CAN_FLY | HURT_DISI
 
-N:92:開門スイッチ
+N:92:TRAP_OPEN
+J:開門スイッチ
 E:wall opeing trap
-G:^:w
+G:^:w:LIT
+W:10
+K:DESTROYED:FLOOR
+K:HIT_TRAP:TRAP_OPEN
+F:POWER_100 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM |
+F:TRAP | HIT_TRAP | CAN_FLY | HURT_DISI
 
-N:93:花
+N:93:FLOWER
+J:花
 E:flower
-G:::G
+G:::G:LIT
+W:2
+K:DESTROYED:GRASS
+F:LOS | PROJECT | MOVE | PLACE | DROP | REMEMBER | CAN_FLY | PLANT |
+F:HURT_DISI | TELEPORTABLE
 
-N:94:草むら
+N:94:BRAKE
+J:草むら
 E:brake
-G:::g
+G:::g:LIT
+W:2
+K:DESTROYED:GRASS
+F:LOS | PROJECT | MOVE | PLACE | DROP | REMEMBER | CAN_FLY | PLANT |
+F:HURT_DISI | TELEPORTABLE
 
-N:95:博物館
+N:95:MUSEUM
+J:博物館
 E:Museum
 G:0:v
+W:10
+F:POWER_9 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | STORE | DOOR |
+F:PERMANENT | GLOW
 
-N:96:木
+N:96:TREE
+J:木
 E:tree
-G:#:G
+G:#:G:LIT
+W:2
+K:DESTROYED:GRASS
+F:POWER_10 | MOVE | PLACE | DROP | REMEMBER | TUNNEL | AVOID_RUN | CAN_FLY |
+F:TREE | PLANT | HURT_DISI | TELEPORTABLE
 
-N:97:山脈
+N:97:MOUNTAIN
+J:山脈
 E:mountain chain
-G:^:o
+G:^:o:LIT
+W:5
+K:HURT_DISI:DIRT
+F:REMEMBER | AVOID_RUN | WALL | PERMANENT | MOUNTAIN | TELEPORTABLE
 
-N:128:建物
+N:128:BUILDING_0
+J:建物
 E:Building
 G:+:U
+W:10
+F:POWER_0 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:129:建物
+N:129:BUILDING_1
+J:建物
 E:Building
 G:+:U
+W:10
+F:POWER_1 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:130:建物
+N:130:BUILDING_2
+J:建物
 E:Building
 G:+:v
+W:10
+F:POWER_2 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:131:建物
+N:131:BUILDING_3
+J:建物
 E:Building
 G:+:U
+W:10
+F:POWER_3 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:132:建物
+N:132:BUILDING_4
+J:建物
 E:Building
 G:+:U
+W:10
+F:POWER_4 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:133:建物
+N:133:BUILDING_5
+J:建物
 E:Building
 G:+:U
+W:10
+F:POWER_5 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:134:建物
+N:134:BUILDING_6
+J:建物
 E:Building
 G:+:U
+W:10
+F:POWER_6 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:135:建物
+N:135:BUILDING_7
+J:建物
 E:Building
 G:+:o
+W:10
+F:POWER_7 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:136:建物
+N:136:BUILDING_8
+J:建物
 E:Building
 G:+:R
+W:10
+F:POWER_8 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:137:建物
+N:137:BUILDING_9
+J:建物
 E:Building
 G:+:G
+W:10
+F:POWER_9 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:138:建物
+N:138:BUILDING_10
+J:建物
 E:Building
 G:+:v
+W:10
+F:POWER_10 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:139:建物
+N:139:BUILDING_11
+J:建物
 E:Building
 G:+:u
+W:10
+F:POWER_11 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:140:建物
+N:140:BUILDING_12
+J:建物
 E:Building
 G:+:w
+W:10
+F:POWER_12 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:141:建物
+N:141:BUILDING_13
+J:建物
 E:Building
 G:+:B
+W:10
+F:POWER_13 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:142:建物
+N:142:BUILDING_14
+J:建物
 E:Building
 G:+:B
+W:10
+F:POWER_14 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:143:建物
+N:143:BUILDING_15
+J:建物
 E:Building
 G:+:B
+W:10
+F:POWER_15 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:144:建物
+N:144:BUILDING_16
+J:建物
 E:Building
 G:+:B
+W:10
+F:POWER_16 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:145:建物
+N:145:BUILDING_17
+J:建物
 E:Building
 G:+:B
+W:10
+F:POWER_17 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:146:建物
+N:146:BUILDING_18
+J:建物
 E:Building
 G:+:B
+W:10
+F:POWER_18 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:147:建物
+N:147:BUILDING_19
+J:建物
 E:Building
 G:+:B
+W:10
+F:POWER_19 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:148:建物
+N:148:BUILDING_20
+J:建物
 E:Building
 G:+:B
+W:10
+F:POWER_20 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:149:建物
+N:149:BUILDING_21
+J:建物
 E:Building
 G:+:B
+W:10
+F:POWER_21 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:150:建物
+N:150:BUILDING_22
+J:建物
 E:Building
 G:+:B
+W:10
+F:POWER_22 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:151:建物
+N:151:BUILDING_23
+J:建物
 E:Building
 G:+:B
+W:10
+F:POWER_23 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:152:建物
+N:152:BUILDING_24
+J:建物
 E:Building
 G:+:B
+W:10
+F:POWER_24 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:153:建物
+N:153:BUILDING_25
+J:建物
 E:Building
 G:+:B
+W:10
+F:POWER_25 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:154:建物
+N:154:BUILDING_26
+J:建物
 E:Building
 G:+:B
+W:10
+F:POWER_26 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:155:建物
+N:155:BUILDING_27
+J:建物
 E:Building
 G:+:B
+W:10
+F:POWER_27 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:156:建物
+N:156:BUILDING_28
+J:建物
 E:Building
 G:+:B
+W:10
+F:POWER_28 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:157:建物
+N:157:BUILDING_29
+J:建物
 E:Building
 G:+:B
+W:10
+F:POWER_29 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:158:建物
+N:158:BUILDING_30
+J:建物
 E:Building
 G:+:B
+W:10
+F:POWER_30 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:159:建物
+N:159:BUILDING_31
+J:建物
 E:Building
 G:+:B
+W:10
+F:POWER_31 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | DOOR | PERMANENT |
+F:GLOW | BLDG
 
-N:192:街
+N:192:TOWN
+J:街
 E:Town
 G:*:W
+W:35
+F:LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | PERMANENT | CAN_FLY |
+F:SPECIAL | TOWN | TELEPORTABLE
 
-N:193:ダンジョンへの入口
+N:193:ENTRANCE
+J:ダンジョンへの入口
 E:entrance to dungeon
 G:>:v
+W:35
+F:LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | STAIRS | MORE |
+F:PERMANENT | CAN_FLY | SPECIAL | ENTRANCE | TELEPORTABLE
 
-N:194:沼地
+N:194:SWAMP
+J:沼地
 E:swamp
-G:.:B
+G:.:B:LIT
+W:2
+F:LOS | PROJECT | MOVE | PLACE | DROP | REMEMBER | WATER | SHALLOW | CAN_FLY |
+F:CAN_SWIM | TELEPORTABLE
 
-N:195:鏡
+N:195:MIRROR
+J:鏡
 E:mirror
-G:*:v
+G:*:v:LIT
+W:16
+F:LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | CAN_FLY | HURT_DISI |
+F:MIRROR
 
 # Used by view_unsafe_grids option
-N:196:未知の地形 (未感知)
+N:196:UNDETECTED
+J:未知の地形 (未感知)
 E:unknown grid (not detected)
 G:x:D
+W:1
 
-N:197:ハルマゲドン・トラップ
+N:197:TRAP_ARMAGEDDON
+J:ハルマゲドン・トラップ
 E:Armageddon trap
-G:^:v
+G:^:v:LIT
+W:10
+K:DESTROYED:FLOOR
+K:HIT_TRAP:FLOOR
+F:POWER_100 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM |
+F:TRAP | HIT_TRAP | CAN_FLY | HURT_DISI
 
-N:198:ピラニア・トラップ
+N:198:TRAP_PIRANHA
+J:ピラニア・トラップ
 E:Piranha trap
-G:^:b
-
+G:^:b:LIT
+W:10
+K:DESTROYED:FLOOR
+K:HIT_TRAP:FLOOR
+F:POWER_100 | LOS | PROJECT | MOVE | PLACE | NOTICE | REMEMBER | DISARM |
+F:TRAP | HIT_TRAP | CAN_FLY | HURT_DISI

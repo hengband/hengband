@@ -493,13 +493,13 @@ static bool cast_hissatsu_spell(int spell)
 
 		py_attack(y, x, 0);
 
-		if (!player_can_enter(cave[y][x].feat) || is_trap(cave[y][x].feat))
+		if (!player_can_enter(cave[y][x].feat, 0) || is_trap(cave[y][x].feat))
 			break;
 
 		y += ddy[dir];
 		x += ddx[dir];
 
-		if (player_can_enter(cave[y][x].feat) && !is_trap(cave[y][x].feat) && !cave[y][x].m_idx)
+		if (player_can_enter(cave[y][x].feat, 0) && !is_trap(cave[y][x].feat) && !cave[y][x].m_idx)
 		{
 			int oy, ox;
 
@@ -662,19 +662,10 @@ static bool cast_hissatsu_spell(int spell)
 		if (cave[y][x].m_idx)
 			py_attack(y, x, HISSATSU_HAGAN);
 
-		/* Non-walls (etc) */
-		if (cave_floor_bold(y, x)) break;
-
-		/* Permanent walls */
-		if (cave[y][x].feat >= FEAT_PERM_EXTRA) break;
-
-		if (cave[y][x].feat < FEAT_DOOR_HEAD) break;
-
-		/* Forget the wall */
-		cave[y][x].info &= ~(CAVE_MARK);
+		if (!have_flag(f_flags_bold(y, x), FF_HURT_ROCK)) break;
 
 		/* Destroy the feature */
-		cave_set_feat(y, x, floor_type[randint0(100)]);
+		cave_alter_feat(y, x, FF_HURT_ROCK);
 
 		/* Update some things */
 		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
@@ -924,7 +915,7 @@ static bool cast_hissatsu_spell(int spell)
 			m_ptr = &m_list[m_idx];
 
 			/* Monster cannot move back? */
-			if (!monster_can_enter(ny, nx, &r_info[m_ptr->r_idx])) continue;
+			if (!monster_can_enter(ny, nx, &r_info[m_ptr->r_idx], 0)) continue;
 
 			cave[y][x].m_idx = 0;
 			cave[ny][nx].m_idx = m_idx;
@@ -934,7 +925,7 @@ static bool cast_hissatsu_spell(int spell)
 			update_mon(m_idx, TRUE);
 
 			/* Player can move forward? */
-			if (player_can_enter(cave[y][x].feat))
+			if (player_can_enter(cave[y][x].feat, 0))
 			{
 				/* Save the old location */
 				oy = py;
@@ -1054,8 +1045,9 @@ static bool cast_hissatsu_spell(int spell)
 	case 27:
 	{
 		if (!tgt_pt(&x, &y)) return FALSE;
-		if (!cave_empty_bold(y, x) || (cave[y][x].info & CAVE_ICKY) ||
-			(distance(y, x, py, px) > MAX_SIGHT / 2) ||
+		if (!cave_teleportable_bold(y, x, TELEPORT_ALLOW_DEEP | TELEPORT_ALLOW_OBJECT | TELEPORT_REQUIRE_PROJECT) ||
+		    (cave[y][x].info & CAVE_ICKY) ||
+		    (distance(y, x, py, px) > MAX_SIGHT / 2) ||
 		    !projectable(py, px, y, x))
 		{
 #ifdef JP
@@ -1068,7 +1060,7 @@ static bool cast_hissatsu_spell(int spell)
 		if (p_ptr->anti_tele)
 		{
 #ifdef JP
-msg_print("不思議な力がテレポートを防いだ！");
+			msg_print("不思議な力がテレポートを防いだ！");
 #else
 			msg_print("A mysterious force prevents you from teleporting!");
 #endif

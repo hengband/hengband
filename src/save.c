@@ -955,8 +955,8 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 
 		/* Dump it */
 		wr_u16b(ct_ptr->info);
-		wr_byte(ct_ptr->feat);
-		wr_byte(ct_ptr->mimic);
+		wr_s16b(ct_ptr->feat);
+		wr_s16b(ct_ptr->mimic);
 		wr_s16b(ct_ptr->special);
 	}
 

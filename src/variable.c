@@ -224,7 +224,6 @@ bool view_yellow_lite;   /* Use special colors for torch-lit grids */
 bool view_bright_lite;   /* Use special colors for 'viewable' grids */
 bool view_granite_lite;   /* Use special colors for wall grids (slow) */
 bool view_special_lite;   /* Use special colors for floor grids (slow) */
-bool new_ascii_graphics;   /* Show a clear contrast between light and dark */
 bool display_path;   /* Display actual path before shooting */
 bool always_show_list;   /* Always show list at first when select items */
 bool abbrev_extra;   /* Describe obj's extra resistances by abbreviation */
@@ -807,6 +806,7 @@ player_magic *m_info;
  */
 feature_type *f_info;
 char *f_name;
+char *f_tag;
 
 /*
  * The object kind arrays
@@ -1212,10 +1212,10 @@ cptr screen_dump = NULL;
 byte dungeon_type;
 s16b *max_dlv;
 
-byte feat_wall_outer;
-byte feat_wall_inner;
-byte feat_wall_solid;
-byte floor_type[100], fill_type[100];
+s16b feat_wall_outer;
+s16b feat_wall_inner;
+s16b feat_wall_solid;
+s16b floor_type[100], fill_type[100];
 
 bool now_damaged;
 s16b now_message;

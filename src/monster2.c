@@ -2686,7 +2686,7 @@ static bool monster_hook_chameleon_lord(int r_idx)
 	if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
 		return FALSE;
 
-	if (!monster_can_cross_terrain(cave[m_ptr->fy][m_ptr->fx].feat, r_ptr)) return FALSE;
+	if (!monster_can_cross_terrain(cave[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
 
 	/* Not born */
 	if (!(old_r_ptr->flags7 & RF7_CHAMELEON))
@@ -2716,7 +2716,7 @@ static bool monster_hook_chameleon(int r_idx)
 	if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
 		return FALSE;
 
-	if (!monster_can_cross_terrain(cave[m_ptr->fy][m_ptr->fx].feat, r_ptr)) return FALSE;
+	if (!monster_can_cross_terrain(cave[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
 
 	/* Not born */
 	if (!(old_r_ptr->flags7 & RF7_CHAMELEON))
@@ -2927,17 +2927,10 @@ static bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 	cptr		name = (r_name + r_ptr->name);
 
 	/* DO NOT PLACE A MONSTER IN THE SMALL SCALE WILDERNESS !!! */
-	if(p_ptr->wild_mode) return FALSE;
+	if (p_ptr->wild_mode) return FALSE;
 
 	/* Verify location */
 	if (!in_bounds(y, x)) return (FALSE);
-
-	/* Require empty space (if not ghostly) */
-	if (!(!dun_level && (c_ptr->feat == FEAT_MOUNTAIN) && ((r_ptr->flags8 & RF8_WILD_MOUNTAIN) || (r_ptr->flags7 & RF7_CAN_FLY))) &&
-	    !(cave_empty_bold2(y, x) || (mode & PM_IGNORE_TERRAIN)) &&
-	    !((r_ptr->flags2 & RF2_PASS_WALL) &&
-	      !(cave_perma_bold(y, x) || c_ptr->m_idx ||
-	    player_bold(y, x)))) return (FALSE);
 
 	/* Paranoia */
 	if (!r_idx) return (FALSE);
@@ -2945,15 +2938,13 @@ static bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 	/* Paranoia */
 	if (!r_ptr->name) return (FALSE);
 
-	/* Nor on the Pattern */
-	if ((c_ptr->feat >= FEAT_PATTERN_START)
-	 && (c_ptr->feat <= FEAT_PATTERN_XTRA2))
-		return (FALSE);
-
-	if (!(mode & PM_IGNORE_TERRAIN) &&
-	    !monster_can_cross_terrain(c_ptr->feat, r_ptr))
+	if (!(mode & PM_IGNORE_TERRAIN))
 	{
-		return FALSE;
+		/* Not on the Pattern */
+		if (pattern_tile(y, x)) return FALSE;
+
+		/* Require empty space (if not ghostly) */
+		if (!monster_can_enter(y, x, r_ptr, 0)) return FALSE;
 	}
 
 	if (!p_ptr->inside_battle)
@@ -3422,9 +3413,7 @@ static bool mon_scatter(int *yp, int *xp, int y, int x, int max_dist)
 			if (!cave_empty_bold2(ny, nx)) continue;
 
 			/* ... nor on the Pattern */
-			if ((cave[ny][nx].feat >= FEAT_PATTERN_START) &&
-			    (cave[ny][nx].feat <= FEAT_PATTERN_XTRA2))
-				continue;
+			if (pattern_tile(ny, nx)) continue;
 
 			i = distance(y, x, ny, nx);
 
@@ -3794,7 +3783,7 @@ bool alloc_guardian(void)
 			ox = randint1(cur_wid - 4) + 2;
 
 			/* Is it a good spot ? */
-			if (cave_empty_bold2(oy, ox) && monster_can_cross_terrain(cave[oy][ox].feat, &r_info[guardian]))
+			if (cave_empty_bold2(oy, ox) && monster_can_cross_terrain(cave[oy][ox].feat, &r_info[guardian], 0))
 			{
 				/* Place the guardian */
 				if (place_monster_aux(0, oy, ox, guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) return TRUE;
@@ -3840,7 +3829,7 @@ bool alloc_monster(int dis, u32b mode)
 		}
 		else
 		{
-			if (!cave_empty_bold2(y, x) && (cave[y][x].feat != FEAT_MOUNTAIN)) continue;
+			if (!cave_empty_bold2(y, x) && !have_flag(f_flags_bold(y, x), FF_MOUNTAIN)) continue;
 		}
 
 		/* Accept far away grids */

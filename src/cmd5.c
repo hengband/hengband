@@ -1813,7 +1813,7 @@ msg_print("「卑しき者よ、我は汝の下僕にあらず！ お前の魂を頂くぞ！」");
 					x = px - 8 + randint0(17);
 					y = py - 8 + randint0(17);
 
-					if (!in_bounds(y,x) || (!cave_floor_bold(y,x) && (cave[y][x].feat != FEAT_TREES)) || !player_has_los_bold(y, x)) continue;
+					if (!in_bounds(y, x) || !have_flag(f_flags_bold(y, x), FF_MOVE) || !player_has_los_bold(y, x)) continue;
 
 					dx = (px > x) ? (px - x) : (x - px);
 					dy = (py > y) ? (py - y) : (y - py);
@@ -3106,7 +3106,7 @@ msg_print("召喚されたドラゴンは怒っている！");
 						x = px - 8 + randint0(17);
 						y = py - 8 + randint0(17);
 
-						if (!in_bounds(y,x) || (!cave_floor_bold(y,x) && (cave[y][x].feat != FEAT_TREES)) || !player_has_los_bold(y, x)) continue;
+						if (!in_bounds(y, x) || !have_flag(f_flags_bold(y, x), FF_MOVE) || !player_has_los_bold(y, x)) continue;
 
 						dx = (px > x) ? (px - x) : (x - px);
 						dy = (py > y) ? (py - y) : (y - py);
@@ -5585,7 +5585,7 @@ bool do_riding(bool force)
 		if (!cave_empty_bold2(y, x))
 		{
 #ifdef JP
-msg_print("そちらには降りられません。");
+			msg_print("そちらには降りられません。");
 #else
 			msg_print("You cannot go to that direction.");
 #endif
@@ -5600,29 +5600,29 @@ msg_print("そちらには降りられません。");
 		if (p_ptr->confused)
 		{
 #ifdef JP
-msg_print("混乱していて乗れない！");
+			msg_print("混乱していて乗れない！");
 #else
 			msg_print("You are too confused!");
 #endif
 			return FALSE;
 		}
-		if (!(c_ptr->m_idx))
+
+		m_ptr = &m_list[c_ptr->m_idx];
+
+		if (!c_ptr->m_idx || !m_ptr->ml)
 		{
 #ifdef JP
-msg_print("その場所にはモンスターはいません。");
+			msg_print("その場所にはモンスターはいません。");
 #else
-			msg_print("Here is no pet.");
+			msg_print("Here is no monster.");
 #endif
 
 			return FALSE;
 		}
-
-		m_ptr = &m_list[c_ptr->m_idx];
-
 		if (!is_pet(m_ptr) && !force)
 		{
 #ifdef JP
-msg_print("そのモンスターはペットではありません。");
+			msg_print("そのモンスターはペットではありません。");
 #else
 			msg_print("That monster is not a pet.");
 #endif
@@ -5632,39 +5632,31 @@ msg_print("そのモンスターはペットではありません。");
 		if (!(r_info[m_ptr->r_idx].flags7 & RF7_RIDING))
 		{
 #ifdef JP
-msg_print("そのモンスターには乗れなさそうだ。");
+			msg_print("そのモンスターには乗れなさそうだ。");
 #else
 			msg_print("This monster doesn't seem suitable for riding.");
 #endif
 
 			return FALSE;
 		}
-		if (!(p_ptr->pass_wall) && (c_ptr->feat >= FEAT_RUBBLE) && (c_ptr->feat <= FEAT_PERM_SOLID))
+		if (!pattern_seq(py, px, y, x))
 		{
-#ifdef JP
-msg_print("そのモンスターは壁の中にいる。");
-#else
-			msg_print("This monster is in the wall.");
-#endif
-
 			return FALSE;
 		}
-		if ((cave[py][px].feat >= FEAT_PATTERN_START) && (cave[py][px].feat <= FEAT_PATTERN_XTRA2) && ((cave[y][x].feat < FEAT_PATTERN_START) || (cave[y][x].feat > FEAT_PATTERN_XTRA2)))
+		if (!player_can_enter(c_ptr->feat, CEM_P_CAN_ENTER_PATTERN))
 		{
+			feature_type *f_ptr = &f_info[c_ptr->feat];
 #ifdef JP
-msg_print("パターンの上からは乗れません。");
+			msg_format("そのモンスターは%sの%sにいる。", f_name + f_ptr->name,
+			           (!have_flag(f_ptr->flags, FF_MOVE) ||
+			           (!have_flag(f_ptr->flags, FF_LOS) &&
+			            !have_flag(f_ptr->flags, FF_TREE))) ? "中" : "上");
 #else
-			msg_print("You cannot ride from on Pattern.");
-#endif
-
-			return FALSE;
-		}
-		if (!m_ptr->ml)
-		{
-#ifdef JP
-msg_print("その場所にはモンスターはいません。");
-#else
-			msg_print("Here is no monster.");
+			msg_format("This monster is %s the %s.",
+			           (!have_flag(f_ptr->flags, FF_MOVE) ||
+			           (!have_flag(f_ptr->flags, FF_LOS) &&
+			            !have_flag(f_ptr->flags, FF_TREE))) ? "in" : "on",
+			           f_name + f_ptr->name);
 #endif
 
 			return FALSE;
@@ -5672,7 +5664,7 @@ msg_print("その場所にはモンスターはいません。");
 		if (r_info[m_ptr->r_idx].level > randint1((p_ptr->skill_exp[GINOU_RIDING] / 50 + p_ptr->lev / 2 + 20)))
 		{
 #ifdef JP
-msg_print("うまく乗れなかった。");
+			msg_print("うまく乗れなかった。");
 #else
 			msg_print("You failed to ride.");
 #endif
@@ -5681,13 +5673,14 @@ msg_print("うまく乗れなかった。");
 
 			return FALSE;
 		}
+
 		if (m_ptr->csleep)
 		{
 			char m_name[80];
 			monster_desc(m_name, m_ptr, 0);
 			m_ptr->csleep = 0;
 #ifdef JP
-msg_format("%sを起こした。", m_name);
+			msg_format("%sを起こした。", m_name);
 #else
 			msg_format("You have waked %s up.", m_name);
 #endif

@@ -64,39 +64,7 @@ int distance (int y1, int x1, int y2, int x2)
  */
 bool is_trap(int feat)
 {
-	switch (feat)
-	{
-		case FEAT_TRAP_TRAPDOOR:
-		case FEAT_TRAP_PIT:
-		case FEAT_TRAP_SPIKED_PIT:
-		case FEAT_TRAP_POISON_PIT:
-		case FEAT_TRAP_TY_CURSE:
-		case FEAT_TRAP_TELEPORT:
-		case FEAT_TRAP_FIRE:
-		case FEAT_TRAP_ACID:
-		case FEAT_TRAP_SLOW:
-		case FEAT_TRAP_LOSE_STR:
-		case FEAT_TRAP_LOSE_DEX:
-		case FEAT_TRAP_LOSE_CON:
-		case FEAT_TRAP_BLIND:
-		case FEAT_TRAP_CONFUSE:
-		case FEAT_TRAP_POISON:
-		case FEAT_TRAP_SLEEP:
-		case FEAT_TRAP_TRAPS:
-		case FEAT_TRAP_ALARM:
-		case FEAT_TRAP_OPEN:
-		case FEAT_TRAP_ARMAGEDDON:
-		case FEAT_TRAP_PIRANHA:
-		{
-			/* A trap */
-			return (TRUE);
-		}
-		default:
-		{
-			/* Not a trap */
-			return (FALSE);
-		}
-	}
+	return have_flag(f_info[feat].flags, FF_TRAP);
 }
 
 
@@ -105,8 +73,10 @@ bool is_trap(int feat)
  */
 bool is_known_trap(cave_type *c_ptr)
 {
-	if (!c_ptr->mimic && is_trap(c_ptr->feat)) return TRUE;
-	else return FALSE;
+	if (!c_ptr->mimic && !have_flag(f_flags_grid(c_ptr), FF_SECRET) &&
+	    is_trap(c_ptr->feat)) return TRUE;
+	else
+		return FALSE;
 }
 
 
@@ -115,7 +85,10 @@ bool is_known_trap(cave_type *c_ptr)
  */
 bool is_closed_door(int feat)
 {
-	return (feat >= FEAT_DOOR_HEAD && feat <= FEAT_DOOR_TAIL);
+	feature_type *f_ptr = &f_info[feat];
+
+	return (have_flag(f_ptr->flags, FF_OPEN) || have_flag(f_ptr->flags, FF_BASH)) &&
+	       !have_flag(f_ptr->flags, FF_MOVE);
 }
 
 
@@ -124,10 +97,10 @@ bool is_closed_door(int feat)
  */
 bool is_hidden_door(cave_type *c_ptr)
 {
-	if (c_ptr->mimic &&
+	if ((c_ptr->mimic || have_flag(f_flags_grid(c_ptr), FF_SECRET)) &&
 	    is_closed_door(c_ptr->feat))
 		return TRUE;
-	else 
+	else
 		return FALSE;
 }
 
@@ -635,61 +608,6 @@ static void image_random(byte *ap, char *cp)
 }
 
 /*
- * Not using graphical tiles for this feature?
- */
-#define is_ascii_graphics(A) (!((A) & 0x80))
-
-/*
- * The 16x16 tile of the terrain supports lighting
- */
-static bool feat_supports_lighting(byte feat)
-{
-	if (is_trap(feat)) return streq(ANGBAND_GRAF, "new");
-
-	switch (feat)
-	{
-	case FEAT_FLOOR:
-	case FEAT_INVIS:
-	case FEAT_GLYPH:
-	case FEAT_LESS:
-	case FEAT_MORE:
-	case FEAT_LESS_LESS:
-	case FEAT_MORE_MORE:
-	case FEAT_RUBBLE:
-	case FEAT_MAGMA:
-	case FEAT_QUARTZ:
-	case FEAT_MAGMA_H:
-	case FEAT_QUARTZ_H:
-	case FEAT_MAGMA_K:
-	case FEAT_QUARTZ_K:
-	case FEAT_WALL_EXTRA:
-	case FEAT_WALL_INNER:
-	case FEAT_WALL_OUTER:
-	case FEAT_WALL_SOLID:
-	case FEAT_PERM_EXTRA:
-	case FEAT_PERM_INNER:
-	case FEAT_PERM_OUTER:
-	case FEAT_PERM_SOLID:
-	case FEAT_MINOR_GLYPH:
-	case FEAT_DEEP_WATER:
-	case FEAT_SHAL_WATER:
-	case FEAT_DEEP_LAVA:
-	case FEAT_SHAL_LAVA:
-	case FEAT_DARK_PIT:
-	case FEAT_DIRT:
-	case FEAT_GRASS:
-	case FEAT_FLOWER:
-	case FEAT_DEEP_GRASS:
-	case FEAT_TREES:
-	case FEAT_MOUNTAIN:
-	case FEAT_MIRROR:
-		return TRUE;
-	default:
-		return FALSE;
-	}
-}
-
-/*
  * This array lists the effects of "brightness" on various "base" colours.
  *
  * This is used to do dynamic lighting effects in ascii :-)
@@ -698,7 +616,7 @@ static bool feat_supports_lighting(byte feat)
  * The layout of the array is [x][0] = light and [x][1] = dark.
  */
 
-static byte lighting_colours[16][2] =
+byte lighting_colours[16][2] =
 {
 	/* TERM_DARK */
 	{TERM_L_DARK, TERM_DARK},
@@ -757,7 +675,7 @@ static byte lighting_colours[16][2] =
  */
 #define darkened_grid_hack() \
 { \
-	if (feat_floor(feat)) \
+	if (feat_supports_los(feat)) \
 	{ \
 		/* Unsafe cave grid -- idea borrowed from Unangband */ \
 		if (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) \
@@ -768,22 +686,22 @@ static byte lighting_colours[16][2] =
 			f_ptr = &f_info[feat]; \
 \
 			/* Char and attr of unsafe grid */ \
-			c = f_ptr->x_char; \
-			a = f_ptr->x_attr; \
+			c = f_ptr->x_char[F_LIT_STANDARD]; \
+			a = f_ptr->x_attr[F_LIT_STANDARD]; \
 		} \
 		else \
 		{ \
 			/* For feat_priority control */ \
 			feat = FEAT_NONE; \
 \
+			/* Access darkness */ \
+			f_ptr = &f_info[feat]; \
+\
 			if (use_graphics) \
 			{ \
-				/* Access darkness */ \
-				f_ptr = &f_info[feat]; \
-\
 				/* Char and attr of darkness */ \
-				c = f_ptr->x_char; \
-				a = f_ptr->x_attr; \
+				c = f_ptr->x_char[F_LIT_STANDARD]; \
+				a = f_ptr->x_attr[F_LIT_STANDARD]; \
 			} \
 			else \
 			{ \
@@ -792,20 +710,19 @@ static byte lighting_colours[16][2] =
 			} \
 		} \
 	} \
-	else \
+	else if (view_granite_lite && view_yellow_lite) \
 	{ \
-		if (is_ascii_graphics(a)) \
-		{ \
-			/* Use darkened colour */ \
-			a = !new_ascii_graphics ? TERM_L_DARK : lighting_colours[a][1]; \
-		} \
-		else if (feat_supports_lighting(feat)) \
-		{ \
-			/* Use a dark tile */ \
-			c++; \
-		} \
+		/* Use a darkly darkened colour/tile */ \
+		a = f_ptr->x_attr[F_LIT_DARKDARK]; \
+		c = f_ptr->x_char[F_LIT_DARKDARK]; \
 	} \
 } ;
+
+
+/* Is this grid "darkened" by monster? */
+#define darkened_grid(C) \
+	((((C)->info & (CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK)) == (CAVE_VIEW | CAVE_MNDK)) && \
+	!p_ptr->see_nocto && !p_ptr->blind)
 
 
 /*
@@ -931,22 +848,19 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 	/* Get the cave */
 	cave_type *c_ptr = &cave[y][x];
 
-	feature_type *f_ptr;
-
 	s16b this_o_idx, next_o_idx = 0;
 
 	/* Feature code (applying "mimic" field) */
-	byte feat = get_feat_mimic(c_ptr);
+	s16b feat = get_feat_mimic(c_ptr);
+
+	/* Access floor */
+	feature_type *f_ptr = &f_info[feat];
 
 	byte a;
 	byte c;
 
-	/* Is this grid "darkened" by monster? */
-	bool darkened_grid = ((c_ptr->info & (CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK)) == (CAVE_VIEW | CAVE_MNDK)) &&
-							!p_ptr->see_nocto && !p_ptr->blind;
-
-	/* Floors (etc) */
-	if ((feat <= FEAT_INVIS) || (feat == FEAT_DIRT) || (feat == FEAT_GRASS))
+	/* Boring grids (floors, etc) */
+	if (!have_flag(f_ptr->flags, FF_REMEMBER))
 	{
 		/* Memorized (or visible) floor */
 		if ((c_ptr->info & CAVE_MARK) ||
@@ -955,109 +869,70 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 		  (((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) || p_ptr->see_nocto))) &&
 		   !p_ptr->blind))
 		{
-			/* Access floor */
-			f_ptr = &f_info[feat];
-
 			/* Normal char */
-			c = f_ptr->x_char;
+			c = f_ptr->x_char[F_LIT_STANDARD];
 
 			/* Normal attr */
-			a = f_ptr->x_attr;
+			a = f_ptr->x_attr[F_LIT_STANDARD];
 
-			/* Mega-Hack -- Handle "in-sight" and "darkened" grids first */
-			if (darkened_grid)
+			if (p_ptr->wild_mode)
+			{
+				/* Special lighting effects */
+				/* Handle "blind" */
+				if (view_special_lite && p_ptr->blind)
+				{
+					/* Use a darkly darkened colour/tile */
+					a = f_ptr->x_attr[F_LIT_DARKDARK];
+					c = f_ptr->x_char[F_LIT_DARKDARK];
+				}
+			}
+
+			/* Mega-Hack -- Handle "in-sight" and "darkened" grids */
+			else if (darkened_grid(c_ptr))
 			{
 				darkened_grid_hack();
 			}
 
 			/* Special lighting effects */
-			else if (view_special_lite && (!p_ptr->wild_mode) && ((a == TERM_WHITE) || use_graphics))
+			else if (view_special_lite)
 			{
 				/* Handle "blind" */
 				if (p_ptr->blind)
 				{
-					if (is_ascii_graphics(a))
-					{
-						/* Use "dark gray" */
-						a = TERM_L_DARK;
-					}
-					else
-					{
-						/*
-						 * feat_supports_lighting(feat)
-						 * is always TRUE here
-						 */
-
-						/* Use a dark tile */
-						c++;
-					}
+					/* Use a darkly darkened colour/tile */
+					a = f_ptr->x_attr[F_LIT_DARKDARK];
+					c = f_ptr->x_char[F_LIT_DARKDARK];
 				}
 
 				/* Handle "torch-lit" grids */
 				else if (c_ptr->info & (CAVE_LITE | CAVE_MNLT))
 				{
 					/* Torch lite */
-					if (view_yellow_lite && !p_ptr->wild_mode)
+					if (view_yellow_lite)
 					{
-						if (is_ascii_graphics(a))
-						{
-							/* Use "yellow" */
-							a = TERM_YELLOW;
-						}
-						else
-						{
-							/*
-							 * feat_supports_lighting(feat)
-							 * is always TRUE here
-							 */
-
-							/* Use a brightly lit tile */
-							c += 2;
-						}
+						/* Use a brightly lit colour/tile */
+						a = f_ptr->x_attr[F_LIT_LITE];
+						c = f_ptr->x_char[F_LIT_LITE];
 					}
 				}
 
 				/* Handle "dark" grids */
 				else if ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
 				{
-					if (is_ascii_graphics(a))
-					{
-						/* Use "dark gray" */
-						a = TERM_L_DARK;
-					}
-					else
-					{
-						/*
-						 * feat_supports_lighting(feat)
-						 * is always TRUE here
-						 */
-
-						/* Use a dark tile */
-						c++;
-					}
+					/* Use a darkly darkened colour/tile */
+					a = f_ptr->x_attr[F_LIT_DARKDARK];
+					c = f_ptr->x_char[F_LIT_DARKDARK];
 				}
 
 				/* Handle "out-of-sight" grids */
 				else if (!(c_ptr->info & CAVE_VIEW))
 				{
 					/* Special flag */
-					if (view_bright_lite && !p_ptr->wild_mode)
+					if (view_bright_lite)
 					{
-						if (is_ascii_graphics(a))
-						{
-							/* Use "gray" */
-							a = TERM_SLATE;
-						}
-						else
-						{
-							/*
-							 * feat_supports_lighting(feat)
-							 * is always TRUE here
-							 */
-
-							/* Use a dark tile */
-							c++;
-						}
+						/* Use a darkened colour/tile */
+						a = f_ptr->x_attr[F_LIT_DARK];
+						c = f_ptr->x_char[F_LIT_DARK];
 					}
 				}
 			}
@@ -1076,169 +951,83 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 			f_ptr = &f_info[feat];
 
 			/* Normal attr */
-			a = f_ptr->x_attr;
+			a = f_ptr->x_attr[F_LIT_STANDARD];
 
 			/* Normal char */
-			c = f_ptr->x_char;
+			c = f_ptr->x_char[F_LIT_STANDARD];
 		}
 	}
 
-	/* Non floors */
+	/* Interesting grids (non-floors) */
 	else
 	{
 		/* Memorized grids */
-		if ((c_ptr->info & CAVE_MARK) && (view_granite_lite || new_ascii_graphics))
+		if (c_ptr->info & CAVE_MARK)
 		{
-			/* Access feature */
-			f_ptr = &f_info[feat];
-
 			/* Normal char */
-			c = f_ptr->x_char;
+			c = f_ptr->x_char[F_LIT_STANDARD];
 
 			/* Normal attr */
-			a = f_ptr->x_attr;
+			a = f_ptr->x_attr[F_LIT_STANDARD];
 
-			/* Mega-Hack -- Handle "in-sight" and "darkened" grids first */
-			if (darkened_grid)
+			if (p_ptr->wild_mode)
+			{
+				/* Special lighting effects */
+				/* Handle "blind" */
+				if (view_granite_lite && p_ptr->blind)
+				{
+					/* Use a darkened colour/tile */
+					a = f_ptr->x_attr[F_LIT_DARK];
+					c = f_ptr->x_char[F_LIT_DARK];
+				}
+			}
+
+			/* Mega-Hack -- Handle "in-sight" and "darkened" grids */
+			else if (darkened_grid(c_ptr))
 			{
 				darkened_grid_hack();
 			}
 
-			else if (new_ascii_graphics)
-			{
-				/* Handle "blind" */
-				if (p_ptr->blind)
-				{
-					if (is_ascii_graphics(a))
-					{
-						/* Use darkened colour */
-						a = lighting_colours[a][1];
-					}
-					else if (feat_supports_lighting(feat))
-					{
-						/* Use a dark tile */
-						c++;
-					}
-				}
-
-				/* Handle "torch-lit" grids */
-				else if (c_ptr->info & (CAVE_LITE | CAVE_MNLT))
-				{
-					/* Torch lite */
-					if (view_yellow_lite && !p_ptr->wild_mode && (feat_supports_lighting(feat) || is_ascii_graphics(a)))
-					{
-						if (is_ascii_graphics(a))
-						{
-							/* Use lightened colour */
-							a = lighting_colours[a][0];
-						}
-						else if (feat_supports_lighting(feat))
-						{
-							/* Use a brightly lit tile */
-							c += 2;
-						}
-					}
-				}
-
-				/* Handle "view_bright_lite" */
-				else if (view_bright_lite && !p_ptr->wild_mode && (feat_supports_lighting(feat) || is_ascii_graphics(a)))
-				{
-					/* Not viewable */
-					if (!(c_ptr->info & CAVE_VIEW))
-					{
-						if (is_ascii_graphics(a))
-						{
-							/* Use darkened colour */
-							a = lighting_colours[a][1];
-						}
-						else if (feat_supports_lighting(feat))
-						{
-							/* Use a dark tile */
-							c++;
-						}
-					}
-
-					/* Not glowing */
-					else if ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
-					{
-						if (is_ascii_graphics(a))
-						{
-							/* Use darkened colour */
-							a = lighting_colours[a][1];
-						}
-					}
-				}
-			}
-
 			/* Special lighting effects */
-			else if (view_granite_lite && !p_ptr->wild_mode &&
-			   (((a == TERM_WHITE) && !use_graphics) ||
-			   (use_graphics && feat_supports_lighting(feat))))
+			else if (view_granite_lite)
 			{
 				/* Handle "blind" */
 				if (p_ptr->blind)
 				{
-					if (is_ascii_graphics(a))
-					{
-						/* Use "dark gray" */
-						a = TERM_L_DARK;
-					}
-					else
-					{
-						/* Use a dark tile */
-						c++;
-					}
+					/* Use a darkened colour/tile */
+					a = f_ptr->x_attr[F_LIT_DARK];
+					c = f_ptr->x_char[F_LIT_DARK];
 				}
 
 				/* Handle "torch-lit" grids */
 				else if (c_ptr->info & (CAVE_LITE | CAVE_MNLT))
 				{
 					/* Torch lite */
-					if (view_yellow_lite && !p_ptr->wild_mode)
+					if (view_yellow_lite)
 					{
-						if (is_ascii_graphics(a))
-						{
-							/* Use "yellow" */
-							a = TERM_YELLOW;
-						}
-						else
-						{
-							/* Use a brightly lit tile */
-							c += 2;
-						}
+						/* Use a brightly lit colour/tile */
+						a = f_ptr->x_attr[F_LIT_LITE];
+						c = f_ptr->x_char[F_LIT_LITE];
 					}
 				}
 
 				/* Handle "view_bright_lite" */
-				else if (view_bright_lite && !p_ptr->wild_mode)
+				else if (view_bright_lite)
 				{
 					/* Not viewable */
 					if (!(c_ptr->info & CAVE_VIEW))
 					{
-						if (is_ascii_graphics(a))
-						{
-							/* Use "gray" */
-							a = TERM_SLATE;
-						}
-						else
-						{
-							/* Use a dark tile */
-							c++;
-						}
+						/* Use a darkened colour/tile */
+						a = f_ptr->x_attr[F_LIT_DARK];
+						c = f_ptr->x_char[F_LIT_DARK];
 					}
 
 					/* Not glowing */
 					else if ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
 					{
-						if (is_ascii_graphics(a))
-						{
-							/* Use "gray" */
-							a = TERM_SLATE;
-						}
-						else
-						{
-							/* Use a lit tile */
-						}
+						/* Use a darkened colour/tile */
+						a = f_ptr->x_attr[F_LIT_DARK];
+						c = f_ptr->x_char[F_LIT_DARK];
 					}
 
 					/* Not glowing correctly */
@@ -1253,155 +1042,36 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 						/* Check for "local" illumination */
 						if ((cave[yy][xx].info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
 						{
-							if (is_ascii_graphics(a))
-							{
-								/* Use "gray" */
-								a = TERM_SLATE;
-							}
-							else
-							{
-								/* Use a lit tile */
-							}
+							/* Use a darkened colour/tile */
+							a = f_ptr->x_attr[F_LIT_DARK];
+							c = f_ptr->x_char[F_LIT_DARK];
 						}
 					}
 				}
 			}
 		}
 
-		/* "Simple Lighting" */
+		/* Unknown */
 		else
 		{
-			/* Handle "blind" */
-			if (!(c_ptr->info & CAVE_MARK))
-			{
-				/* Unsafe cave grid -- idea borrowed from Unangband */
-				if (view_unsafe_grids && (c_ptr->info & (CAVE_UNSAFE)))
-					feat = FEAT_UNDETECTED;
-				else
-					feat = FEAT_NONE;
-			}
+			/* Unsafe cave grid -- idea borrowed from Unangband */
+			if (view_unsafe_grids && (c_ptr->info & (CAVE_UNSAFE)))
+				feat = FEAT_UNDETECTED;
+			else
+				feat = FEAT_NONE;
 
 			/* Access feature */
 			f_ptr = &f_info[feat];
 
 			/* Normal attr */
-			a = f_ptr->x_attr;
+			a = f_ptr->x_attr[F_LIT_STANDARD];
 
 			/* Normal char */
-			c = f_ptr->x_char;
-
-			/* Mega-Hack -- Handle "in-sight" and "darkened" grids */
-			if (darkened_grid)
-			{
-				darkened_grid_hack();
-			}
+			c = f_ptr->x_char[F_LIT_STANDARD];
 		}
 	}
 
-	if (feat_priority == -1)
-	{
-		switch (feat)
-		{
-		case FEAT_NONE:
-		case FEAT_UNDETECTED:
-		case FEAT_DARK_PIT:
-			feat_priority = 1;
-			break;
-
-		case FEAT_FLOOR:
-		case FEAT_INVIS:
-		case FEAT_TRAP_TRAPDOOR:
-		case FEAT_TRAP_PIT:
-		case FEAT_TRAP_SPIKED_PIT:
-		case FEAT_TRAP_POISON_PIT:
-		case FEAT_TRAP_TY_CURSE:
-		case FEAT_TRAP_TELEPORT:
-		case FEAT_TRAP_FIRE:
-		case FEAT_TRAP_ACID:
-		case FEAT_TRAP_SLOW:
-		case FEAT_TRAP_LOSE_STR:
-		case FEAT_TRAP_LOSE_DEX:
-		case FEAT_TRAP_LOSE_CON:
-		case FEAT_TRAP_BLIND:
-		case FEAT_TRAP_CONFUSE:
-		case FEAT_TRAP_POISON:
-		case FEAT_TRAP_SLEEP:
-		case FEAT_TRAP_TRAPS:
-		case FEAT_TRAP_ALARM:
-		case FEAT_DIRT:
-		case FEAT_GRASS:
-		case FEAT_FLOWER:
-		case FEAT_DEEP_GRASS:
-		case FEAT_SWAMP:
-		case FEAT_TREES:
-		case FEAT_RUBBLE:
-		case FEAT_MAGMA:
-		case FEAT_QUARTZ:
-		case FEAT_MAGMA_H:
-		case FEAT_QUARTZ_H:
-		case FEAT_WALL_EXTRA:
-		case FEAT_WALL_INNER:
-		case FEAT_WALL_OUTER:
-		case FEAT_WALL_SOLID:
-		case FEAT_DEEP_WATER:
-		case FEAT_SHAL_WATER:
-		case FEAT_DEEP_LAVA:
-		case FEAT_SHAL_LAVA:
-			feat_priority = 2;
-			break;
-
-		case FEAT_MAGMA_K:
-		case FEAT_QUARTZ_K:
-			/* Now a days treasere grid is too many */
-			feat_priority = 2;
-			break;
-
-		case FEAT_MOUNTAIN:
-		case FEAT_PERM_EXTRA:
-		case FEAT_PERM_INNER:
-		case FEAT_PERM_OUTER:
-		case FEAT_PERM_SOLID:
-			feat_priority = 5;
-			break;
-
-			/* default is feat_priority = 20; (doors and stores) */ 
-
-		case FEAT_GLYPH:
-		case FEAT_MINOR_GLYPH:
-		case FEAT_MIRROR:
-		case FEAT_PATTERN_START:
-		case FEAT_PATTERN_1:
-		case FEAT_PATTERN_2:
-		case FEAT_PATTERN_3:
-		case FEAT_PATTERN_4:
-		case FEAT_PATTERN_END:
-		case FEAT_PATTERN_OLD:
-		case FEAT_PATTERN_XTRA1:
-		case FEAT_PATTERN_XTRA2:
-			feat_priority = 16;
-			break;
-
-			/* objects have feat_priority = 20 */ 
-			/* monsters have feat_priority = 30 */ 
-
-		case FEAT_LESS:
-		case FEAT_MORE:
-		case FEAT_QUEST_ENTER:
-		case FEAT_QUEST_EXIT:
-		case FEAT_QUEST_DOWN:
-		case FEAT_QUEST_UP:
-		case FEAT_LESS_LESS:
-		case FEAT_MORE_MORE:
-		case FEAT_TOWN:
-		case FEAT_ENTRANCE:
-			feat_priority = 35;
-			break;
-
-		default:
-			feat_priority = 10;
-			break;
-		}
-	}
+	if (feat_priority == -1) feat_priority = f_ptr->priority;
 
 	/* Save the terrain info for the transparency effects */
 	(*tap) = a;
@@ -1412,10 +1082,17 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 	(*cp) = c;
 
 	/* Hack -- rare random hallucination, except on outer dungeon walls */
-	if (p_ptr->image && (feat < FEAT_PERM_SOLID) && one_in_(256))
+	if (p_ptr->image)
 	{
-		/* Hallucinate */
-		image_random(ap, cp);
+		/* Access real feature */
+		feature_type *rf_ptr = &f_info[c_ptr->feat];
+
+		if (!(have_flag(rf_ptr->flags, FF_SOLID) && have_flag(rf_ptr->flags, FF_PERMANENT)) &&
+			one_in_(256))
+		{
+			/* Hallucinate */
+			image_random(ap, cp);
+		}
 	}
 
 	/* Objects */
@@ -1733,11 +1410,8 @@ void note_spot(int y, int x)
 	/* Hack -- memorize grids */
 	if (!(c_ptr->info & (CAVE_MARK)))
 	{
-		/* Feature code (applying "mimic" field) */
-		byte feat = get_feat_mimic(c_ptr);
-
-		/* Handle floor grids first */
-		if ((feat <= FEAT_INVIS) || (feat == FEAT_DIRT) || (feat == FEAT_GRASS))
+		/* Memorize some "boring" grids */
+		if (!have_flag(f_info[get_feat_mimic(c_ptr)].flags, FF_REMEMBER))
 		{
 			/* Option -- memorize all torch-lit floors */
 			if (view_torch_grids &&
@@ -1834,10 +1508,10 @@ void display_dungeon(void)
 				feature_type *f_ptr = &f_info[FEAT_NONE];
 
 				/* Normal attr */
-				a = f_ptr->x_attr;
+				a = f_ptr->x_attr[F_LIT_STANDARD];
 
 				/* Normal char */
-				c = f_ptr->x_char;
+				c = f_ptr->x_char[F_LIT_STANDARD];
 
 				/* Hack -- Queue it */
 				Term_queue_char(x - px + Term->wid / 2 - 1, y - py + Term->hgt / 2 - 1, a, c, ta, tc);
@@ -4427,7 +4101,7 @@ void update_flow(void)
 			if (c_ptr->dist != 0 && c_ptr->dist <= n && c_ptr->cost <= m) continue;
 
 			/* Ignore "walls" and "rubble" */
-			if ((c_ptr->feat >= FEAT_RUBBLE) && (c_ptr->feat != FEAT_TREES) && !cave_floor_grid(c_ptr)) continue;
+			if (!have_flag(f_flags_grid(c_ptr), FF_MOVE) && !is_closed_door(c_ptr->feat)) continue;
 
 			/* Save the flow cost */
 			if (c_ptr->cost == 0 || c_ptr->cost > m) c_ptr->cost = m;
@@ -4518,7 +4192,7 @@ void update_smell(void)
 			c_ptr = &cave[y][x];
 
 			/* Walls, water, and lava cannot hold scent. */
-			if ((c_ptr->feat >= FEAT_RUBBLE) && (c_ptr->feat != FEAT_TREES) && !cave_floor_grid(c_ptr)) continue;
+			if (!have_flag(f_flags_grid(c_ptr), FF_MOVE) && !is_closed_door(c_ptr->feat)) continue;
 
 			/* Grid must not be blocked by walls from the character */
 			if (!player_has_los_bold(y, x)) continue;
@@ -4539,10 +4213,9 @@ void update_smell(void)
 void map_area(int range)
 {
 	int             i, x, y;
-
 	cave_type       *c_ptr;
-
-	byte feat;
+	s16b            feat;
+	feature_type    *f_ptr;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
 
@@ -4557,16 +4230,13 @@ void map_area(int range)
 
 			/* Feature code (applying "mimic" field) */
 			feat = get_feat_mimic(c_ptr);
+			f_ptr = &f_info[feat];
 
 			/* All non-walls are "checked" */
-			if ((feat <= FEAT_DOOR_TAIL) ||
-			    (feat == FEAT_RUBBLE) ||
-			   ((feat >= FEAT_MINOR_GLYPH) &&
-			    (feat <= FEAT_TREES)) ||
-			    (feat >= FEAT_TOWN))
+			if (!have_flag(f_ptr->flags, FF_WALL))
 			{
 				/* Memorize normal features */
-				if ((feat > FEAT_INVIS) && (feat != FEAT_DIRT) && (feat != FEAT_GRASS))
+				if (have_flag(f_ptr->flags, FF_REMEMBER))
 				{
 					/* Memorize the object */
 					c_ptr->info |= (CAVE_MARK);
@@ -4579,9 +4249,10 @@ void map_area(int range)
 
 					/* Feature code (applying "mimic" field) */
 					feat = get_feat_mimic(c_ptr);
+					f_ptr = &f_info[feat];
 
 					/* Memorize walls (etc) */
-					if ((feat >= FEAT_RUBBLE) && (feat != FEAT_DIRT) && (feat != FEAT_GRASS))
+					if (have_flag(f_ptr->flags, FF_REMEMBER))
 					{
 						/* Memorize the walls */
 						c_ptr->info |= (CAVE_MARK);
@@ -4619,7 +4290,8 @@ void map_area(int range)
 void wiz_lite(bool ninja)
 {
 	int i, y, x;
-	byte feat;
+	s16b feat;
+	feature_type *f_ptr;
 
 	/* Memorize objects */
 	for (i = 1; i < o_max; i++)
@@ -4646,9 +4318,10 @@ void wiz_lite(bool ninja)
 
 			/* Feature code (applying "mimic" field) */
 			feat = get_feat_mimic(c_ptr);
+			f_ptr = &f_info[feat];
 
 			/* Process all non-walls */
-			if (cave_floor_bold(y, x) || (feat == FEAT_RUBBLE) || (feat == FEAT_TREES) || (feat == FEAT_MOUNTAIN))
+			if (!have_flag(f_ptr->flags, FF_WALL))
 			{
 				/* Scan all neighbors */
 				for (i = 0; i < 9; i++)
@@ -4660,7 +4333,7 @@ void wiz_lite(bool ninja)
 					c_ptr = &cave[yy][xx];
 
 					/* Feature code (applying "mimic" field) */
-					feat = get_feat_mimic(c_ptr);
+					f_ptr = &f_info[get_feat_mimic(c_ptr)];
 
 					/* Perma-lite the grid */
 					if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS) && !ninja)
@@ -4669,7 +4342,7 @@ void wiz_lite(bool ninja)
 					}
 
 					/* Memorize normal features */
-					if ((feat > FEAT_INVIS) && (feat != FEAT_DIRT) && (feat != FEAT_GRASS))
+					if (have_flag(f_ptr->flags, FF_REMEMBER))
 					{
 						/* Memorize the grid */
 						c_ptr->info |= (CAVE_MARK);
@@ -4777,6 +4450,7 @@ void wiz_dark(void)
 void cave_set_feat(int y, int x, int feat)
 {
 	cave_type *c_ptr = &cave[y][x];
+	feature_type *f_ptr = &f_info[feat];
 
 	/* Clear mimic type */
 	c_ptr->mimic = 0;
@@ -4787,8 +4461,14 @@ void cave_set_feat(int y, int x, int feat)
 	/* Change the feature */
 	c_ptr->feat = feat;
 
+	/* Check for change to boring grid */
+	if (!have_flag(f_ptr->flags, FF_REMEMBER)) c_ptr->info &= ~(CAVE_MARK);
+
+	/* Check for change to out of sight grid */
+	else if (!player_can_see_bold(y, x)) c_ptr->info &= ~(CAVE_MARK);
+
 	/* Hack -- glow the deep lava */
-	if ((feat == FEAT_DEEP_LAVA) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS))
+	if (have_flag(f_ptr->flags, FF_GLOW) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS))
 	{
 		int i, yy, xx;
 
@@ -4816,6 +4496,88 @@ void cave_set_feat(int y, int x, int feat)
 	lite_spot(y, x);
 }
 
+
+/*
+ * Take a feature, determine what that feature becomes
+ * through applying the given action.
+ */
+int feat_state(int feat, int action)
+{
+	feature_type *f_ptr = &f_info[feat];
+	int newfeat, i;
+
+	/* Get the new feature */
+	for (i = 0; i < MAX_FEAT_STATES; i++)
+	{
+		if (f_ptr->state[i].action == action)
+		{
+			newfeat = f_ptr->state[i].result;
+			return (newfeat == FEAT_FLOOR) ? floor_type[randint0(100)] : newfeat;
+		}
+	}
+
+	if (have_flag(f_ptr->flags, FF_PERMANENT)) return feat;
+
+	if (feature_action_flags[action] & FAF_DESTROY)
+	{
+		newfeat = f_ptr->destroyed;
+		return (newfeat == FEAT_FLOOR) ? floor_type[randint0(100)] : newfeat;
+	}
+	else return feat;
+}
+
+/*
+ * Takes a location and action and changes the feature at that 
+ * location through applying the given action.
+ */
+void cave_alter_feat(int y, int x, int action)
+{
+	/* Set old feature */
+	int oldfeat = cave[y][x].feat;
+
+	/* Get the new feat */
+	int newfeat = feat_state(oldfeat, action);
+
+	/* No change */
+	if (newfeat == oldfeat) return;
+
+	/* Set the new feature */
+	cave_set_feat(y, x, newfeat);
+
+	if (!(feature_action_flags[action] & FAF_NO_DROP))
+	{
+		feature_type *old_f_ptr = &f_info[oldfeat];
+		feature_type *f_ptr = &f_info[newfeat];
+		bool found = FALSE;
+
+		/* Handle gold */
+		if (have_flag(old_f_ptr->flags, FF_HAS_GOLD) && !have_flag(f_ptr->flags, FF_HAS_GOLD))
+		{
+			/* Place some gold */
+			place_gold(y, x);
+			found = TRUE;
+		}
+
+		/* Handle item */
+		if (have_flag(old_f_ptr->flags, FF_HAS_ITEM) && !have_flag(f_ptr->flags, FF_HAS_ITEM) && (randint0(100) < (15 - dun_level / 2)))
+		{
+			/* Place object */
+			place_object(y, x, 0L);
+			found = TRUE;
+		}
+
+		if (found && character_dungeon && player_can_see_bold(y, x))
+		{
+#ifdef JP
+			msg_print("何かを発見した！");
+#else
+			msg_print("You have found something!");
+#endif
+		}
+	}
+}
+
+
 /* Remove a mirror */
 void remove_mirror(int y, int x)
 {
@@ -4841,7 +4603,7 @@ void remove_mirror(int y, int x)
  */
 bool is_mirror_grid(cave_type *c_ptr)
 {
-	if ((c_ptr->info & CAVE_OBJECT) && c_ptr->mimic == FEAT_MIRROR)
+	if ((c_ptr->info & CAVE_OBJECT) && have_flag(f_info[c_ptr->mimic].flags, FF_MIRROR))
 		return TRUE;
 	else
 		return FALSE;
@@ -4853,7 +4615,7 @@ bool is_mirror_grid(cave_type *c_ptr)
  */
 bool is_glyph_grid(cave_type *c_ptr)
 {
-	if ((c_ptr->info & CAVE_OBJECT) && c_ptr->mimic == FEAT_GLYPH)
+	if ((c_ptr->info & CAVE_OBJECT) && have_flag(f_info[c_ptr->mimic].flags, FF_GLYPH))
 		return TRUE;
 	else
 		return FALSE;
@@ -4865,7 +4627,7 @@ bool is_glyph_grid(cave_type *c_ptr)
  */
 bool is_explosive_rune_grid(cave_type *c_ptr)
 {
-	if ((c_ptr->info & CAVE_OBJECT) && c_ptr->mimic == FEAT_MINOR_GLYPH)
+	if ((c_ptr->info & CAVE_OBJECT) && have_flag(f_info[c_ptr->mimic].flags, FF_MINOR_GLYPH))
 		return TRUE;
 	else
 		return FALSE;
@@ -5109,7 +4871,6 @@ void glow_deep_lava_and_bldg(void)
 {
 	int y, x, i, yy, xx;
 	cave_type *c_ptr;
-	byte feat;
 
 	/* Not in the darkness dungeon */
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) return;
@@ -5121,14 +4882,8 @@ void glow_deep_lava_and_bldg(void)
 			c_ptr = &cave[y][x];
 
 			/* Feature code (applying "mimic" field) */
-			feat = get_feat_mimic(c_ptr);
 
-			if ((feat == FEAT_DEEP_LAVA) ||
-			   ((feat >= FEAT_SHOP_HEAD) &&
-			    (feat <= FEAT_SHOP_TAIL)) ||
-			    (feat == FEAT_MUSEUM) ||
-			   ((feat >= FEAT_BLDG_HEAD) &&
-			    (feat <= FEAT_BLDG_TAIL)))
+			if (have_flag(f_info[get_feat_mimic(c_ptr)].flags, FF_GLOW))
 			{
 				for (i = 0; i < 9; i++)
 				{

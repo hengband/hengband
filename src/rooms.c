@@ -103,7 +103,7 @@ static void place_secret_door(int y, int x)
 		c_ptr->mimic = feat_wall_inner;
 
 		/* Floor type terrain cannot hide a door */
-		if (feat_floor(c_ptr->mimic))
+		if (feat_supports_los(c_ptr->mimic))
 		{
 			c_ptr->feat = c_ptr->mimic;
 			c_ptr->mimic = 0;
@@ -3184,10 +3184,10 @@ static void generate_hmap(int y0, int x0, int xsiz, int ysiz, int grd, int roug,
 	fill_data.ymin = y0 - yhsize;
 	fill_data.xmax = x0 + xhsize;
 	fill_data.ymax = y0 + yhsize;
-	
+
 	/* Store cutoff in global for quick access */
 	fill_data.c1 = cutoff;
-	
+
 	/*
 	* Scale factor for middle points:
 	* About sqrt(2) * 256 - correct for a square lattice
@@ -3203,8 +3203,8 @@ static void generate_hmap(int y0, int x0, int xsiz, int ysiz, int grd, int roug,
 	{
 		for (j = 0; j <= ysize; j++)
 		{
-			/* 255 is a flag for "not done yet" */
-			cave[(int)(fill_data.ymin + j)][(int)(fill_data.xmin + i)].feat = 255;
+			/* -1 is a flag for "not done yet" */
+			cave[(int)(fill_data.ymin + j)][(int)(fill_data.xmin + i)].feat = -1;
 			/* Clear icky flag because may be redoing the cave */
 			cave[(int)(fill_data.ymin + j)][(int)(fill_data.xmin + i)].info &= ~(CAVE_ICKY);
 		}
@@ -3236,11 +3236,11 @@ static void generate_hmap(int y0, int x0, int xsiz, int ysiz, int grd, int roug,
 		xhstep /= 2;
 		ystep = yhstep;
 		yhstep /= 2;
-		
+
 		/* cache well used values */
 		xstep2 = xstep / 256;
 		ystep2 = ystep / 256;
-		
+
 		xhstep2 = xhstep / 256;
 		yhstep2 = yhstep / 256;
 
@@ -3252,10 +3252,10 @@ static void generate_hmap(int y0, int x0, int xsiz, int ysiz, int grd, int roug,
 				/* cache often used values */
 				ii = i / 256 + fill_data.xmin;
 				jj = j / 256 + fill_data.ymin;
-				
+
 				/* Test square */
-				if (cave[jj][ii].feat == 255)
-				{				
+				if (cave[jj][ii].feat == -1)
+				{
 					if (xhstep2 > grd)
 					{
 						/* If greater than 'grid' level then is random */
@@ -3282,9 +3282,9 @@ static void generate_hmap(int y0, int x0, int xsiz, int ysiz, int grd, int roug,
 				/* cache often used values */
 				ii = i / 256 + fill_data.xmin;
 				jj = j / 256 + fill_data.ymin;
-				
+
 				/* Test square */
-				if (cave[jj][ii].feat == 255)
+				if (cave[jj][ii].feat == -1)
 				{
 					if (xhstep2 > grd)
 					{
@@ -3311,10 +3311,10 @@ static void generate_hmap(int y0, int x0, int xsiz, int ysiz, int grd, int roug,
 				/* cache often used values */
 				ii = i / 256 + fill_data.xmin;
 				jj = j / 256 + fill_data.ymin;
-				
+
 				/* Test square */
-				if (cave[jj][ii].feat == 255)
-				{				
+				if (cave[jj][ii].feat == -1)
+				{
 					if (xhstep2 > grd)
 					{
 						/* If greater than 'grid' level then is random */
@@ -3326,12 +3326,12 @@ static void generate_hmap(int y0, int x0, int xsiz, int ysiz, int grd, int roug,
 						xm = fill_data.xmin + (i - xhstep) / 256;
 						xp = fill_data.xmin + (i + xhstep) / 256;
 						ym = fill_data.ymin + (j - yhstep) / 256;
-						yp = fill_data.ymin + (j + yhstep) / 256;					
-					
+						yp = fill_data.ymin + (j + yhstep) / 256;
+
 						/* 
 						 * Average over all four corners + scale by diagsize to
 						 * reduce the effect of the square grid on the shape of the fractal
-						 */				
+						 */
 						store_height(ii, jj,
 							(cave[ym][xm].feat + cave[yp][xm].feat
 							+ cave[ym][xp].feat + cave[yp][xp].feat) / 4
@@ -3504,7 +3504,6 @@ static void cave_fill(byte y, byte x)
 static bool generate_fracave(int y0, int x0, int xsize, int ysize, int cutoff, bool light, bool room)
 {
 	int x, y, i, xhsize, yhsize;
-	
 
 	/* offsets to middle from corner */
 	xhsize = xsize / 2;
@@ -3905,9 +3904,8 @@ static bool generate_lake(int y0, int x0, int xsize, int ysize, int c1, int c2, 
 			/* turn off icky flag (no longer needed.) */
 			cave[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
 
-			/* Light lava and trees */
-			if ((cave[y0 + y - yhsize][x0 + x - xhsize].feat == FEAT_DEEP_LAVA) ||
-				(cave[y0 + y - yhsize][x0 + x - xhsize].feat == FEAT_SHAL_LAVA))
+			/* Light lava */
+			if (have_flag(f_flags_bold(y0 + y - yhsize, x0 + x - xhsize), FF_LAVA))
 			{
 				if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS)) cave[y0 + y - yhsize][x0 + x - xhsize].info |= CAVE_GLOW;
 			}
@@ -4053,8 +4051,7 @@ static void fill_treasure(int x1, int x2, int y1, int y2, int difficulty)
 
 			 /* if floor, shallow water and lava */
 			if (is_floor_bold(y, x) ||
-			    (cave[y][x].feat == FEAT_SHAL_WATER) ||
-			    (cave[y][x].feat == FEAT_SHAL_LAVA))
+			    (have_flag(f_flags_bold(y, x), FF_PLACE) && have_flag(f_flags_bold(y, x), FF_DROP)))
 			{
 				/* The smaller 'value' is, the better the stuff */
 				if (value < 0)
@@ -5029,16 +5026,22 @@ static void build_castle_vault(int x0, int y0, int xsize, int ysize)
 static void add_outer_wall(int x, int y, int light,
 									int x1, int y1, int x2, int y2)
 {
+	cave_type *c_ptr;
+	feature_type *f_ptr;
 	int i, j;
 
 	if (!in_bounds(y, x)) return;
 
+	c_ptr = &cave[y][x];
+
 	/* hack- check to see if square has been visited before
 	* if so, then exit (use room flag to do this) */
-	if (cave[y][x].info & CAVE_ROOM) return;
+	if (c_ptr->info & CAVE_ROOM) return;
 
 	/* set room flag */
-	cave[y][x].info |= CAVE_ROOM;
+	c_ptr->info |= CAVE_ROOM;
+
+	f_ptr = &f_info[c_ptr->feat];
 
 	if (is_floor_bold(y, x))
 	{
@@ -5050,7 +5053,7 @@ static void add_outer_wall(int x, int y, int light,
 					 (y + j >= y1) && (y + j <= y2))
 				{
 					add_outer_wall(x + i, y + j, light, x1, y1, x2, y2);
-					if (light) cave[y][x].info |= CAVE_GLOW;
+					if (light) c_ptr->info |= CAVE_GLOW;
 				}
 			}
 		}
@@ -5059,12 +5062,12 @@ static void add_outer_wall(int x, int y, int light,
 	{
 		/* Set bounding walls */
 		place_outer_bold(y, x);
-		if (light) cave[y][x].info |= CAVE_GLOW;
+		if (light) c_ptr->info |= CAVE_GLOW;
 	}
-	else if (cave[y][x].feat == FEAT_PERM_OUTER)
+	else if (have_flag(f_ptr->flags, FF_WALL) && have_flag(f_ptr->flags, FF_PERMANENT) && have_flag(f_ptr->flags, FF_OUTER))
 	{
 		/* Set bounding walls */
-		if (light) cave[y][x].info |= CAVE_GLOW;
+		if (light) c_ptr->info |= CAVE_GLOW;
 	}
 }
 
@@ -5839,7 +5842,7 @@ static bool build_type14(void)
 	bool light;
 
 	cave_type *c_ptr;
-	byte trap;
+	s16b trap;
 
 	/* Pick a room size */
 	y1 = randint1(4);

@@ -518,10 +518,10 @@ static void generate_wilderness_area(int terrain, u32b seed, bool border, bool c
 	 * ToDo: calculate the medium height of the adjacent
 	 * terrains for every corner.
 	 */
-	cave[1][1].feat = (byte)randint0(table_size);
-	cave[MAX_HGT-2][1].feat = (byte)randint0(table_size);
-	cave[1][MAX_WID-2].feat = (byte)randint0(table_size);
-	cave[MAX_HGT-2][MAX_WID-2].feat = (byte)randint0(table_size);
+	cave[1][1].feat = randint0(table_size);
+	cave[MAX_HGT-2][1].feat = randint0(table_size);
+	cave[1][MAX_WID-2].feat = randint0(table_size);
+	cave[MAX_HGT-2][MAX_WID-2].feat = randint0(table_size);
 
 	if (!corner)
 	{
@@ -663,7 +663,7 @@ static void generate_area(int y, int x, bool border, bool corner)
 		dx = rand_range(6, cur_wid - 6);
 
 		cave[dy][dx].feat = FEAT_ENTRANCE;
-		cave[dy][dx].special = (byte)wilderness[y][x].entrance;
+		cave[dy][dx].special = wilderness[y][x].entrance;
 
 		/* Use the complex RNG */
 		Rand_quick = FALSE;
@@ -684,6 +684,7 @@ void wilderness_gen(void)
 {
 	int i, y, x, lim;
 	cave_type *c_ptr;
+	feature_type *f_ptr;
 
 	/* Big town */
 	cur_hgt = MAX_HGT;
@@ -815,24 +816,22 @@ void wilderness_gen(void)
 			else
 			{
 				/* Feature code (applying "mimic" field) */
-				byte feat = get_feat_mimic(c_ptr);
+				f_ptr = &f_info[get_feat_mimic(c_ptr)];
 
-				if (!is_mirror_grid(c_ptr) && (feat != FEAT_QUEST_ENTER) && (feat != FEAT_ENTRANCE))
+				if (!is_mirror_grid(c_ptr) && !have_flag(f_ptr->flags, FF_QUEST_ENTER) &&
+				    !have_flag(f_ptr->flags, FF_ENTRANCE))
 				{
 					/* Assume dark */
 					c_ptr->info &= ~(CAVE_GLOW);
 
 					/* Darken "boring" features */
-					if ((feat <= FEAT_INVIS) ||
-					   ((feat >= FEAT_DEEP_WATER) &&
-					    (feat <= FEAT_MOUNTAIN) &&
-					    (feat != FEAT_MUSEUM)))
+					if (!have_flag(f_ptr->flags, FF_REMEMBER))
 					{
 						/* Forget the grid */
 						c_ptr->info &= ~(CAVE_MARK);
 					}
 				}
-				else if (feat == FEAT_ENTRANCE)
+				else if (have_flag(f_ptr->flags, FF_ENTRANCE))
 				{
 					/* Assume lit */
 					c_ptr->info |= (CAVE_GLOW);
@@ -850,11 +849,20 @@ void wilderness_gen(void)
 		{
 			for (x = 0; x < cur_wid; x++)
 			{
-				if (((cave[y][x].feat - FEAT_BLDG_HEAD) == 4) || ((p_ptr->town_num == 1) && ((cave[y][x].feat - FEAT_BLDG_HEAD) == 0)))
+				/* Get the cave grid */
+				c_ptr = &cave[y][x];
+
+				/* Seeing true feature code (ignore mimic) */
+				f_ptr = &f_info[c_ptr->feat];
+
+				if (have_flag(f_ptr->flags, FF_BLDG))
 				{
-					if (cave[y][x].m_idx) delete_monster_idx(cave[y][x].m_idx);
-					p_ptr->oldpy = y;
-					p_ptr->oldpx = x;
+					if ((f_ptr->power == 4) || ((p_ptr->town_num == 1) && (f_ptr->power == 0)))
+					{
+						if (c_ptr->m_idx) delete_monster_idx(c_ptr->m_idx);
+						p_ptr->oldpy = y;
+						p_ptr->oldpx = x;
+					}
 				}
 			}
 		}
@@ -867,9 +875,12 @@ void wilderness_gen(void)
 		{
 			for (x = 0; x < cur_wid; x++)
 			{
-				if (cave[y][x].feat == FEAT_ENTRANCE)
+				/* Get the cave grid */
+				c_ptr = &cave[y][x];
+
+				if (have_flag(f_flags_grid(c_ptr), FF_ENTRANCE))
 				{
-					if (cave[y][x].m_idx) delete_monster_idx(cave[y][x].m_idx);
+					if (c_ptr->m_idx) delete_monster_idx(c_ptr->m_idx);
 					p_ptr->oldpy = y;
 					p_ptr->oldpx = x;
 				}

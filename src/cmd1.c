@@ -695,7 +695,6 @@ void search(void)
 					msg_print("You have found a trap.");
 #endif
 
-
 					/* Disturb */
 					disturb(0, 0);
 				}
@@ -743,7 +742,6 @@ void search(void)
 #else
 						msg_print("You have discovered a trap on the chest!");
 #endif
-
 
 						/* Know the trap */
 						object_known(o_ptr);
@@ -1075,24 +1073,24 @@ static void hit_trap(bool break_trap)
 	int i, num, dam;
 	int x = px, y = py;
 
-	cave_type *c_ptr;
+	/* Get the cave grid */
+	cave_type *c_ptr = &cave[y][x];
+
+	int trap_feat = c_ptr->feat;
 
 #ifdef JP
-	cptr		name = "トラップ";
+	cptr name = "トラップ";
 #else
 	cptr name = "a trap";
 #endif
 
-
-
 	/* Disturb the player */
 	disturb(0, 0);
 
-	/* Get the cave grid */
-	c_ptr = &cave[y][x];
+	cave_alter_feat(y, x, FF_HIT_TRAP);
 
 	/* Analyze XXX XXX XXX */
-	switch (c_ptr->feat)
+	switch (trap_feat)
 	{
 		case FEAT_TRAP_TRAPDOOR:
 		{
@@ -1310,8 +1308,6 @@ static void hit_trap(bool break_trap)
 			msg_print("There is a flash of shimmering light!");
 #endif
 
-			c_ptr->info &= ~(CAVE_MARK);
-			cave_set_feat(y, x, floor_type[randint0(100)]);
 			num = 2 + randint1(3);
 			for (i = 0; i < num; i++)
 			{
@@ -1592,10 +1588,6 @@ msg_print("まばゆい閃光が走った！");
 			msg_print("There is a bright flash of light!");
 #endif
 
-
-			/* Destroy this trap */
-			cave_set_feat(y, x, floor_type[randint0(100)]);
-
 			/* Make some new traps */
 			project(0, 1, y, x, 0, GF_MAKE_TRAP, PROJECT_HIDE | PROJECT_JUMP | PROJECT_GRID, -1);
 
@@ -1641,9 +1633,6 @@ msg_print("まばゆい閃光が走った！");
 #else
 			msg_print("Suddenly, you are surrounded by immotal beings!");
 #endif
-
-			/* Destroy this trap */
-			cave_set_feat(y, x, floor_type[randint0(100)]);
 
 			/* Summon Demons and Angels */
 			for (lev = dun_level; lev >= 20; lev -= 1 + lev/16)
@@ -1691,9 +1680,6 @@ msg_print("まばゆい閃光が走った！");
 			msg_print("Suddenly, the room is filled with water with piranhas!");
 #endif
 
-			/* Destroy this trap */
-			cave_set_feat(y, x, floor_type[randint0(100)]);
-
 			/* Water fills room */
 			fire_ball_hide(GF_WATER_FLOW, 0, 1, 10);
 
@@ -1706,9 +1692,10 @@ msg_print("まばゆい閃光が走った！");
 			break;
 		}
 	}
+
 	if (break_trap && is_trap(c_ptr->feat))
 	{
-		cave_set_feat(y, x, floor_type[randint0(100)]);
+		cave_alter_feat(y, x, FF_DISARM);
 #ifdef JP
 		msg_print("トラップを粉砕した。");
 #else
@@ -3278,22 +3265,28 @@ bool py_attack(int y, int x, int mode)
 }
 
 
-static bool pattern_seq(int c_y, int c_x, int n_y, int n_x)
+bool pattern_seq(int c_y, int c_x, int n_y, int n_x)
 {
-	if (!pattern_tile(c_y, c_x) && !pattern_tile(n_y, n_x))
-		return TRUE;
+	feature_type *cur_f_ptr = &f_info[cave[c_y][c_x].feat];
+	feature_type *new_f_ptr = &f_info[cave[n_y][n_x].feat];
+	bool is_pattern_tile_cur = have_flag(cur_f_ptr->flags, FF_PATTERN);
+	bool is_pattern_tile_new = have_flag(new_f_ptr->flags, FF_PATTERN);
+	int pattern_type_cur, pattern_type_new;
 
-	if (cave[n_y][n_x].feat == FEAT_PATTERN_START)
+	if (!is_pattern_tile_cur && !is_pattern_tile_new) return TRUE;
+
+	pattern_type_cur = is_pattern_tile_cur ? cur_f_ptr->power : NOT_PATTERN_TILE;
+	pattern_type_new = is_pattern_tile_new ? new_f_ptr->power : NOT_PATTERN_TILE;
+
+	if (pattern_type_new == PATTERN_TILE_START)
 	{
-		if (!pattern_tile(c_y, c_x) &&
-		    !p_ptr->confused && !p_ptr->stun && !p_ptr->image)
+		if (!is_pattern_tile_cur && !p_ptr->confused && !p_ptr->stun && !p_ptr->image)
 		{
 #ifdef JP
 			if (get_check("パターンの上を歩き始めると、全てを歩かなければなりません。いいですか？"))
 #else
 			if (get_check("If you start walking the Pattern, you must walk the whole way. Ok? "))
 #endif
-
 				return TRUE;
 			else
 				return FALSE;
@@ -3301,11 +3294,11 @@ static bool pattern_seq(int c_y, int c_x, int n_y, int n_x)
 		else
 			return TRUE;
 	}
-	else if ((cave[n_y][n_x].feat == FEAT_PATTERN_OLD) ||
-		 (cave[n_y][n_x].feat == FEAT_PATTERN_END) ||
-		 (cave[n_y][n_x].feat == FEAT_PATTERN_XTRA2))
+	else if ((pattern_type_new == PATTERN_TILE_OLD) ||
+		 (pattern_type_new == PATTERN_TILE_END) ||
+		 (pattern_type_new == PATTERN_TILE_WRECKED))
 	{
-		if (pattern_tile(c_y, c_x))
+		if (is_pattern_tile_cur)
 		{
 			return TRUE;
 		}
@@ -3320,14 +3313,14 @@ static bool pattern_seq(int c_y, int c_x, int n_y, int n_x)
 			return FALSE;
 		}
 	}
-	else if ((cave[n_y][n_x].feat == FEAT_PATTERN_XTRA1) ||
-		 (cave[c_y][c_x].feat == FEAT_PATTERN_XTRA1))
+	else if ((pattern_type_new == PATTERN_TILE_TELEPORT) ||
+		 (pattern_type_cur == PATTERN_TILE_TELEPORT))
 	{
 		return TRUE;
 	}
-	else if (cave[c_y][c_x].feat == FEAT_PATTERN_START)
+	else if (pattern_type_cur == PATTERN_TILE_START)
 	{
-		if (pattern_tile(n_y, n_x))
+		if (is_pattern_tile_new)
 			return TRUE;
 		else
 		{
@@ -3340,11 +3333,11 @@ static bool pattern_seq(int c_y, int c_x, int n_y, int n_x)
 			return FALSE;
 		}
 	}
-	else if ((cave[c_y][c_x].feat == FEAT_PATTERN_OLD) ||
-		 (cave[c_y][c_x].feat == FEAT_PATTERN_END) ||
-		 (cave[c_y][c_x].feat == FEAT_PATTERN_XTRA2))
+	else if ((pattern_type_cur == PATTERN_TILE_OLD) ||
+		 (pattern_type_cur == PATTERN_TILE_END) ||
+		 (pattern_type_cur == PATTERN_TILE_WRECKED))
 	{
-		if (!pattern_tile(n_y, n_x))
+		if (!is_pattern_tile_new)
 		{
 #ifdef JP
 			msg_print("パターンを踏み外してはいけません。");
@@ -3361,7 +3354,7 @@ static bool pattern_seq(int c_y, int c_x, int n_y, int n_x)
 	}
 	else
 	{
-		if (!pattern_tile(c_y, c_x))
+		if (!is_pattern_tile_cur)
 		{
 #ifdef JP
 			msg_print("パターンの上を歩くにはスタート地点から歩き始めなくてはなりません。");
@@ -3373,51 +3366,49 @@ static bool pattern_seq(int c_y, int c_x, int n_y, int n_x)
 		}
 		else
 		{
-			byte ok_move = FEAT_PATTERN_START;
-			switch (cave[c_y][c_x].feat)
+			byte ok_move = PATTERN_TILE_START;
+			switch (pattern_type_cur)
 			{
-				case FEAT_PATTERN_1:
-					ok_move = FEAT_PATTERN_2;
+				case PATTERN_TILE_1:
+					ok_move = PATTERN_TILE_2;
 					break;
-				case FEAT_PATTERN_2:
-					ok_move = FEAT_PATTERN_3;
+				case PATTERN_TILE_2:
+					ok_move = PATTERN_TILE_3;
 					break;
-				case FEAT_PATTERN_3:
-					ok_move = FEAT_PATTERN_4;
+				case PATTERN_TILE_3:
+					ok_move = PATTERN_TILE_4;
 					break;
-				case FEAT_PATTERN_4:
-					ok_move = FEAT_PATTERN_1;
+				case PATTERN_TILE_4:
+					ok_move = PATTERN_TILE_1;
 					break;
 				default:
 					if (p_ptr->wizard)
 #ifdef JP
-						msg_format("おかしなパターン歩行、%d。", cave[c_y][c_x].feat);
+						msg_format("おかしなパターン歩行、%d。", pattern_type_cur);
 #else
-						msg_format("Funny Pattern walking, %d.", cave[c_y][c_x].feat);
+						msg_format("Funny Pattern walking, %d.", pattern_type_cur);
 #endif
 
 					return TRUE; /* Goof-up */
 			}
 
-			if ((cave[n_y][n_x].feat == ok_move) ||
-			    (cave[n_y][n_x].feat == cave[c_y][c_x].feat))
+			if ((pattern_type_new == ok_move) ||
+			    (pattern_type_new == pattern_type_cur))
 				return TRUE;
 			else
 			{
-				if (!pattern_tile(n_y, n_x))
+				if (!is_pattern_tile_new)
 #ifdef JP
 					msg_print("パターンを踏み外してはいけません。");
 #else
 					msg_print("You may not step off from the Pattern.");
 #endif
-
 				else
 #ifdef JP
 					msg_print("パターンの上は正しい順序で歩かねばなりません。");
 #else
 					msg_print("You must walk the Pattern in correct order.");
 #endif
-
 
 				return FALSE;
 			}
@@ -3426,86 +3417,38 @@ static bool pattern_seq(int c_y, int c_x, int n_y, int n_x)
 }
 
 
-
-bool player_can_enter(byte feature)
+bool player_can_enter(s16b feature, u16b mode)
 {
-	switch (feature)
-	{
-	case FEAT_DOOR_HEAD: /* Nasty hack -- Doors */
-	case FEAT_DOOR_HEAD + 0x01:
-	case FEAT_DOOR_HEAD + 0x02:
-	case FEAT_DOOR_HEAD + 0x03:
-	case FEAT_DOOR_HEAD + 0x04:
-	case FEAT_DOOR_HEAD + 0x05:
-	case FEAT_DOOR_HEAD + 0x06:
-	case FEAT_DOOR_HEAD + 0x07:
-	case FEAT_DOOR_HEAD + 0x08:
-	case FEAT_DOOR_HEAD + 0x09:
-	case FEAT_DOOR_HEAD + 0x0a:
-	case FEAT_DOOR_HEAD + 0x0b:
-	case FEAT_DOOR_HEAD + 0x0c:
-	case FEAT_DOOR_HEAD + 0x0d:
-	case FEAT_DOOR_HEAD + 0x0e:
-	case FEAT_DOOR_TAIL: /* Equals FEAT_DOOR_HEAD + 0x0f */
-	case FEAT_SECRET:
-	case FEAT_RUBBLE:
-	case FEAT_MAGMA:
-	case FEAT_QUARTZ:
-	case FEAT_MAGMA_H:
-	case FEAT_QUARTZ_H:
-	case FEAT_MAGMA_K:
-	case FEAT_QUARTZ_K:
-	case FEAT_WALL_EXTRA:
-	case FEAT_WALL_INNER:
-	case FEAT_WALL_OUTER:
-	case FEAT_WALL_SOLID:
-		/* Player can not walk through "walls" unless in Shadow Form */
-		return p_ptr->wraith_form || p_ptr->pass_wall || p_ptr->kabenuke;
+	feature_type *f_ptr = &f_info[feature];
 
-	case FEAT_PERM_EXTRA:
-	case FEAT_PERM_INNER:
-	case FEAT_PERM_OUTER:
-	case FEAT_PERM_SOLID:
-	case FEAT_PATTERN_START:
-	case FEAT_PATTERN_1:
-	case FEAT_PATTERN_2:
-	case FEAT_PATTERN_3:
-	case FEAT_PATTERN_4:
-	case FEAT_PATTERN_END:
-	case FEAT_PATTERN_OLD:
-	case FEAT_PATTERN_XTRA1:
-	case FEAT_PATTERN_XTRA2:
+	if (p_ptr->riding) return monster_can_cross_terrain(feature, &r_info[m_list[p_ptr->riding].r_idx], mode | CEM_RIDING);
+
+	/* Pattern */
+	if (have_flag(f_ptr->flags, FF_PATTERN))
+	{
+		if (!(mode & CEM_P_CAN_ENTER_PATTERN)) return FALSE;
+	}
+
+	/* "CAN" flags */
+	if (have_flag(f_ptr->flags, FF_CAN_FLY) && p_ptr->ffall) return TRUE;
+	if (have_flag(f_ptr->flags, FF_CAN_SWIM) && p_ptr->can_swim) return TRUE;
+	if (have_flag(f_ptr->flags, FF_CAN_PASS) && p_ptr->pass_wall) return TRUE;
+
+	if (!have_flag(f_ptr->flags, FF_MOVE))
+	{
+		/* Can fly over mountain on the surface */
+		if (have_flag(f_ptr->flags, FF_MOUNTAIN) && !dun_level)
+		{
+			if (p_ptr->ffall) return TRUE;
+		}
+
+		/* Cannot enter */
 		return FALSE;
-
-	case FEAT_DARK_PIT:
-		return p_ptr->ffall;
-
-	case FEAT_MOUNTAIN:
-		return !dun_level && p_ptr->ffall;
 	}
 
-	/* Assume okay */
+	if (have_flag(f_ptr->flags, FF_MUST_FLY) && !p_ptr->ffall) return FALSE;
+
 	return TRUE;
-}
-
-
-/*
- * Get feature string which blocks your way
- */
-static cptr blocking_feat_name(byte feat)
-{
-	switch (feat)
-	{
-#ifdef JP
-	case FEAT_TREES: return "木";
-	case FEAT_MOUNTAIN: return "山";
-	default: return "壁";
-#else
-	case FEAT_TREES: return "tree";
-	case FEAT_MOUNTAIN: return "mountain";
-	default: return "wall";
-#endif
-	}
 }
 
 
@@ -3520,9 +3463,15 @@ static cptr blocking_feat_name(byte feat)
  */
 void move_player(int dir, int do_pickup, bool break_trap)
 {
-	int y, x;
+	/* Find the result of moving */
+	int y = py + ddy[dir];
+	int x = px + ddx[dir];
 
-	cave_type *c_ptr;
+	/* Examine the destination */
+	cave_type *c_ptr = &cave[y][x];
+
+	feature_type *f_ptr = &f_info[c_ptr->feat];
+
 	monster_type *m_ptr;
 
 	monster_type *riding_m_ptr = &m_list[p_ptr->riding];
@@ -3530,18 +3479,12 @@ void move_player(int dir, int do_pickup, bool break_trap)
 
 	char m_name[80];
 
-	bool p_can_pass_walls = FALSE;
+	bool p_can_enter = player_can_enter(c_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
+	bool p_can_kill_walls = FALSE;
 	bool stormbringer = FALSE;
 
 	bool oktomove = TRUE;
 	bool do_past = FALSE;
-
-	/* Find the result of moving */
-	y = py + ddy[dir];
-	x = px + ddx[dir];
-
-	/* Examine the destination */
-	c_ptr = &cave[y][x];
 
 	/* Exit the area */
 	if (!dun_level && !p_ptr->wild_mode &&
@@ -3549,7 +3492,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		 (y == 0) || (y == MAX_HGT - 1)))
 	{
 		/* Can the player enter the grid? */
-		if (c_ptr->mimic && player_can_enter(c_ptr->mimic))
+		if (c_ptr->mimic && player_can_enter(c_ptr->mimic, 0))
 		{
 			/* Hack: move to new area */
 			if ((y == 0) && (x == 0))
@@ -3628,6 +3571,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 
 		/* "Blocked" message appears later */
 		/* oktomove = FALSE; */
+		p_can_enter = FALSE;
 	}
 
 	/* Get the monster */
@@ -3639,15 +3583,11 @@ void move_player(int dir, int do_pickup, bool break_trap)
 
 	/* Player can not walk through "walls"... */
 	/* unless in Shadow Form */
-	if (p_ptr->wraith_form || p_ptr->pass_wall || p_ptr->kabenuke)
-		p_can_pass_walls = TRUE;
-	if ((c_ptr->feat >= FEAT_PERM_EXTRA) && (c_ptr->feat <= FEAT_PERM_SOLID))
-	{
-		p_can_pass_walls = FALSE;
-	}
+	p_can_kill_walls = p_ptr->kill_wall && have_flag(f_ptr->flags, FF_TUNNEL) &&
+		!cave_floor_grid(c_ptr) && cave_valid_bold(y, x);
 
 	/* Hack -- attack monsters */
-	if (c_ptr->m_idx && (m_ptr->ml || cave_floor_bold(y, x) || p_can_pass_walls))
+	if (c_ptr->m_idx && (m_ptr->ml || p_can_enter || p_can_kill_walls))
 	{
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -3655,8 +3595,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		if (!is_hostile(m_ptr) &&
 		    !(p_ptr->confused || p_ptr->image || !m_ptr->ml || p_ptr->stun ||
 		    ((p_ptr->muta2 & MUT2_BERS_RAGE) && p_ptr->shero)) &&
-		    (pattern_seq(py, px, y, x)) &&
-		    ((cave_floor_bold(y, x)) || (c_ptr->feat == FEAT_TREES) || (p_can_pass_walls)))
+		    pattern_seq(py, px, y, x) && (p_can_enter || p_can_kill_walls))
 		{
 			m_ptr->csleep = 0;
 			if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
@@ -3664,11 +3603,14 @@ void move_player(int dir, int do_pickup, bool break_trap)
 			/* Extract monster name (or "it") */
 			monster_desc(m_name, m_ptr, 0);
 
-			/* Auto-Recall if possible and visible */
-			if (m_ptr->ml) monster_race_track(m_ptr->ap_r_idx);
+			if (m_ptr->ml)
+			{
+				/* Auto-Recall if possible and visible */
+				monster_race_track(m_ptr->ap_r_idx);
 
-			/* Track a new monster */
-			if (m_ptr->ml) health_track(c_ptr->m_idx);
+				/* Track a new monster */
+				health_track(c_ptr->m_idx);
+			}
 
 			/* displace? */
 			if ((stormbringer && (randint1(1000) > 666)) || (p_ptr->pclass == CLASS_BERSERKER))
@@ -3676,9 +3618,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 				py_attack(y, x, 0);
 				oktomove = FALSE;
 			}
-			else if (monster_can_cross_terrain(cave[py][px].feat, r_ptr) &&
-				 (cave_floor_bold(py, px) || cave[py][px].feat == FEAT_TREES ||
-				  (r_ptr->flags2 & RF2_PASS_WALL)))
+			else if (monster_can_cross_terrain(cave[py][px].feat, r_ptr, 0))
 			{
 				do_past = TRUE;
 			}
@@ -3703,16 +3643,108 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		}
 	}
 
+	if (oktomove && p_ptr->riding)
+	{
+		if (riding_r_ptr->flags1 & RF1_NEVER_MOVE)
+		{
+#ifdef JP
+			msg_print("動けない！");
+#else
+			msg_print("Can't move!");
+#endif
+			energy_use = 0;
+			oktomove = FALSE;
+			disturb(0, 0);
+		}
+		else if (riding_m_ptr->monfear)
+		{
+			char m_name[80];
+
+			/* Acquire the monster name */
+			monster_desc(m_name, riding_m_ptr, 0);
+
+			/* Dump a message */
+#ifdef JP
+			msg_format("%sが恐怖していて制御できない。", m_name);
+#else
+			msg_format("%^s is too scared to control.", m_name);
+#endif
+			oktomove = FALSE;
+			disturb(0, 0);
+		}
+		else if (p_ptr->riding_ryoute)
+		{
+			oktomove = FALSE;
+			disturb(0, 0);
+		}
+		else if (have_flag(f_ptr->flags, FF_CAN_FLY) && (riding_r_ptr->flags7 & RF7_CAN_FLY))
+		{
+			/* Allow moving */
+		}
+		else if (have_flag(f_ptr->flags, FF_CAN_SWIM) && (riding_r_ptr->flags7 & RF7_CAN_SWIM))
+		{
+			/* Allow moving */
+		}
+		else if (have_flag(f_ptr->flags, FF_WATER) &&
+			!(riding_r_ptr->flags7 & RF7_AQUATIC) &&
+			(have_flag(f_ptr->flags, FF_DEEP) || (riding_r_ptr->flags2 & RF2_AURA_FIRE)))
+		{
+#ifdef JP
+			msg_format("%sの上に行けない。", f_name + f_ptr->name);
+#else
+			msg_print("Can't swim.");
+#endif
+			energy_use = 0;
+			oktomove = FALSE;
+			disturb(0, 0);
+		}
+		else if (!have_flag(f_ptr->flags, FF_WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC))
+		{
+#ifdef JP
+			msg_format("%sから上がれない。", f_name + f_info[cave[py][px].feat].name);
+#else
+			msg_print("Can't land.");
+#endif
+			energy_use = 0;
+			oktomove = FALSE;
+			disturb(0, 0);
+		}
+		else if (have_flag(f_ptr->flags, FF_LAVA) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
+		{
+#ifdef JP
+			msg_format("%sの上に行けない。", f_name + f_ptr->name);
+#else
+			msg_print("Too hot to go through.");
+#endif
+			energy_use = 0;
+			oktomove = FALSE;
+			disturb(0, 0);
+		}
+
+		if (oktomove && riding_m_ptr->stunned && one_in_(2))
+		{
+			char m_name[80];
+			monster_desc(m_name, riding_m_ptr, 0);
+#ifdef JP
+			msg_format("%sが朦朧としていてうまく動けない！",m_name);
+#else
+			msg_format("You cannot control stunned %s!",m_name);
+#endif
+			oktomove = FALSE;
+			disturb(0, 0);
+		}
+	}
+
 	if (!oktomove)
 	{
 	}
 
-	else if ((c_ptr->feat == FEAT_DARK_PIT) && !p_ptr->ffall)
+	else if (have_flag(f_ptr->flags, FF_MUST_FLY) && !p_ptr->ffall)
 	{
 #ifdef JP
-		msg_print("裂け目を横切ることはできません。");
+		msg_format("%sを横切ることはできません。", f_name + f_ptr->name);
 #else
-		msg_print("You can't cross the chasm.");
+		msg_format("You can't cross the %s.", f_name + f_ptr->name);
 #endif
 
 		energy_use = 0;
@@ -3720,42 +3752,32 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		oktomove = FALSE;
 	}
 
-	else if (c_ptr->feat == FEAT_MOUNTAIN)
+	else if (have_flag(f_ptr->flags, FF_MOUNTAIN) && (dun_level || !p_ptr->ffall))
 	{
-		if (dun_level || !p_ptr->ffall)
-		{
 #ifdef JP
-			msg_print("山には登れません！");
+		msg_print("山には登れません！");
 #else
-			msg_print("You can't climb the mountains!");
+		msg_print("You can't climb the mountains!");
 #endif
 
-			running = 0;
-			energy_use = 0;
-			oktomove = FALSE;
-		}
+		running = 0;
+		energy_use = 0;
+		oktomove = FALSE;
 	}
 	/*
 	 * Player can move through trees and
 	 * has effective -10 speed
 	 * Rangers can move without penality
 	 */
-	else if (c_ptr->feat == FEAT_TREES)
+	else if (have_flag(f_ptr->flags, FF_TREE) && !p_can_kill_walls)
 	{
-		oktomove = TRUE;
 		if ((p_ptr->pclass != CLASS_RANGER) && !p_ptr->ffall) energy_use *= 2;
-	}
-
-	else if ((c_ptr->feat >= FEAT_QUEST_ENTER) &&
-		(c_ptr->feat <= FEAT_QUEST_EXIT))
-	{
-		oktomove = TRUE;
 	}
 
 #ifdef ALLOW_EASY_DISARM /* TNB */
 
 	/* Disarm a visible trap */
-	else if ((do_pickup != easy_disarm) && is_known_trap(c_ptr))
+	else if ((do_pickup != easy_disarm) && have_flag(f_ptr->flags, FF_DISARM) && !c_ptr->mimic)
 	{
 		bool ignore = FALSE;
 		switch (c_ptr->feat)
@@ -3797,108 +3819,13 @@ void move_player(int dir, int do_pickup, bool break_trap)
 	}
 
 #endif /* ALLOW_EASY_DISARM -- TNB */
-	else if (p_ptr->riding && (riding_r_ptr->flags1 & RF1_NEVER_MOVE))
-	{
-#ifdef JP
-		msg_print("動けない！");
-#else
-		msg_print("Can't move!");
-#endif
-		energy_use = 0;
-		oktomove = FALSE;
-		disturb(0, 0);
-	}
-
-	else if (p_ptr->riding && riding_m_ptr->monfear)
-	{
-		char m_name[80];
-
-		/* Acquire the monster name */
-		monster_desc(m_name, riding_m_ptr, 0);
-
-		/* Dump a message */
-#ifdef JP
-		msg_format("%sが恐怖していて制御できない。", m_name);
-#else
-		msg_format("%^s is too scared to control.", m_name);
-#endif
-		oktomove = FALSE;
-		disturb(0, 0);
-	}
-
-	else if (p_ptr->riding && p_ptr->riding_ryoute)
-	{
-		oktomove = FALSE;
-		disturb(0, 0);
-	}
-
-	else if ((p_ptr->riding && (riding_r_ptr->flags7 & RF7_AQUATIC)) && (c_ptr->feat != FEAT_SHAL_WATER) && (c_ptr->feat != FEAT_DEEP_WATER))
-	{
-#ifdef JP
-		msg_print("陸上に上がれない。");
-#else
-		msg_print("Can't land.");
-#endif
-		energy_use = 0;
-		oktomove = FALSE;
-		disturb(0, 0);
-	}
-
-	else if ((p_ptr->riding && !(riding_r_ptr->flags7 & (RF7_AQUATIC | RF7_CAN_SWIM | RF7_CAN_FLY))) && (c_ptr->feat == FEAT_DEEP_WATER))
-	{
-#ifdef JP
-		msg_print("水上に行けない。");
-#else
-		msg_print("Can't swim.");
-#endif
-		energy_use = 0;
-		oktomove = FALSE;
-		disturb(0, 0);
-	}
-
-	else if ((p_ptr->riding && (riding_r_ptr->flags2 & RF2_AURA_FIRE) && !(riding_r_ptr->flags7 & RF7_CAN_FLY)) && (c_ptr->feat == FEAT_SHAL_WATER))
-	{
-#ifdef JP
-		msg_print("水上に行けない。");
-#else
-		msg_print("Can't swim.");
-#endif
-		energy_use = 0;
-		oktomove = FALSE;
-		disturb(0, 0);
-	}
-
-	else if ((p_ptr->riding && !(riding_r_ptr->flags7 & RF7_CAN_FLY) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) && ((c_ptr->feat == FEAT_SHAL_LAVA) || (c_ptr->feat == FEAT_DEEP_LAVA)))
-	{
-#ifdef JP
-		msg_print("溶岩の上に行けない。");
-#else
-		msg_print("Too hot to go through.");
-#endif
-		energy_use = 0;
-		oktomove = FALSE;
-		disturb(0, 0);
-	}
-
-	else if (p_ptr->riding && riding_m_ptr->stunned && one_in_(2))
-	{
-		char m_name[80];
-		monster_desc(m_name, riding_m_ptr, 0);
-#ifdef JP
-		msg_format("%sが朦朧としていてうまく動けない！",m_name);
-#else
-		msg_format("You cannot control stunned %s!",m_name);
-#endif
-		oktomove = FALSE;
-		disturb(0, 0);
-	}
 
 	/* Player can not walk through "walls" unless in wraith form...*/
-	else if ((!cave_floor_bold(y, x)) &&
-		(!p_can_pass_walls))
+	else if (!p_can_enter && !p_can_kill_walls)
 	{
 		/* Feature code (applying "mimic" field) */
-		byte feat = get_feat_mimic(c_ptr);
+		s16b feat = get_feat_mimic(c_ptr);
+		cptr name = f_name + f_info[feat].name;
 
 		oktomove = FALSE;
 
@@ -3909,34 +3836,8 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		if ((!(c_ptr->info & (CAVE_MARK))) &&
 		    (p_ptr->blind || !(c_ptr->info & (CAVE_LITE))))
 		{
-			/* Rubble */
-			if (feat == FEAT_RUBBLE)
-			{
-#ifdef JP
-				msg_print("岩石が行く手をはばんでいるようだ。");
-#else
-				msg_print("You feel some rubble blocking your way.");
-#endif
-
-				c_ptr->info |= (CAVE_MARK);
-				lite_spot(y, x);
-			}
-
-			/* Closed door */
-			else if (is_closed_door(feat))
-			{
-#ifdef JP
-				msg_print("ドアが行く手をはばんでいるようだ。");
-#else
-				msg_print("You feel a closed door blocking your way.");
-#endif
-
-				c_ptr->info |= (CAVE_MARK);
-				lite_spot(y, x);
-			}
-
 			/* Boundary floor mimic */
-			else if (boundary_floor_grid(c_ptr))
+			if (boundary_floor_grid(c_ptr))
 			{
 #ifdef JP
 				msg_print("それ以上先には進めないようだ。");
@@ -3949,9 +3850,10 @@ void move_player(int dir, int do_pickup, bool break_trap)
 			else
 			{
 #ifdef JP
-				msg_format("%sが行く手をはばんでいるようだ。", blocking_feat_name(feat));
+				msg_format("%sが行く手をはばんでいるようだ。", name);
 #else
-				msg_format("You feel a %s blocking your way.", blocking_feat_name(feat));
+				msg_format("You feel %s %s blocking your way.",
+					is_a_vowel(name[0]) ? "an" : "a", name);
 #endif
 
 				c_ptr->info |= (CAVE_MARK);
@@ -3962,45 +3864,8 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		/* Notice things */
 		else
 		{
-			/* Rubble */
-			if (feat == FEAT_RUBBLE)
-			{
-#ifdef JP
-				msg_print("岩石が行く手をはばんでいる。");
-#else
-				msg_print("There is rubble blocking your way.");
-#endif
-
-				if (!(p_ptr->confused || p_ptr->stun || p_ptr->image))
-					energy_use = 0;
-
-				/*
-				 * Well, it makes sense that you lose time bumping into
-				 * a wall _if_ you are confused, stunned or blind; but
-				 * typing mistakes should not cost you a turn...
-				 */
-			}
-			/* Closed doors */
-			else if (is_closed_door(feat))
-			{
-#ifdef ALLOW_EASY_OPEN
-
-				if (easy_open && easy_open_door(y, x)) return;
-
-#endif /* ALLOW_EASY_OPEN */
-
-#ifdef JP
-				msg_print("ドアが行く手をはばんでいる。");
-#else
-				msg_print("There is a closed door blocking your way.");
-#endif
-
-				if (!(p_ptr->confused || p_ptr->stun || p_ptr->image))
-					energy_use = 0;
-			}
-
 			/* Boundary floor mimic */
-			else if (boundary_floor_grid(c_ptr))
+			if (boundary_floor_grid(c_ptr))
 			{
 #ifdef JP
 				msg_print("それ以上先には進めない。");
@@ -4015,12 +3880,23 @@ void move_player(int dir, int do_pickup, bool break_trap)
 			/* Wall (or secret door) */
 			else
 			{
+#ifdef ALLOW_EASY_OPEN
+				/* Closed doors */
+				if (easy_open && is_closed_door(feat) && easy_open_door(y, x)) return;
+#endif /* ALLOW_EASY_OPEN */
+
 #ifdef JP
-				msg_format("%sが行く手をはばんでいる。", blocking_feat_name(feat));
+				msg_format("%sが行く手をはばんでいる。", name);
 #else
-				msg_format("There is a %s blocking your way.", blocking_feat_name(feat));
+				msg_format("There is %s %s blocking your way.",
+					is_a_vowel(name[0]) ? "an" : "a", name);
 #endif
 
+				/*
+				 * Well, it makes sense that you lose time bumping into
+				 * a wall _if_ you are confused, stunned or blind; but
+				 * typing mistakes should not cost you a turn...
+				 */
 				if (!(p_ptr->confused || p_ptr->stun || p_ptr->image))
 					energy_use = 0;
 			}
@@ -4031,7 +3907,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 	}
 
 	/* Normal movement */
-	if (!pattern_seq(py, px, y, x))
+	if (oktomove && !pattern_seq(py, px, y, x))
 	{
 		if (!(p_ptr->confused || p_ptr->stun || p_ptr->image))
 		{
@@ -4099,22 +3975,9 @@ void move_player(int dir, int do_pickup, bool break_trap)
 			project(0, 0, py, px,
 				(60 + p_ptr->lev), GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM, -1);
 		}
-		else if (p_ptr->kill_wall || (p_ptr->riding && (riding_r_ptr->flags2 & RF2_KILL_WALL)))
+		else if (p_can_kill_walls)
 		{
-			if (!cave_floor_bold(py, px) && cave_valid_bold(py, px) &&
-				(cave[py][px].feat < FEAT_PATTERN_START ||
-				 cave[py][px].feat > FEAT_PATTERN_XTRA2) &&
-				(cave[py][px].feat < FEAT_DEEP_WATER ||
-				 cave[py][px].feat > FEAT_GRASS))
-			{
-				/* Forget the wall */
-				cave[py][px].info &= ~(CAVE_MARK);
-
-				if (cave[py][px].feat == FEAT_TREES)
-					cave_set_feat(py, px, FEAT_GRASS);
-				else
-					cave_set_feat(py, px, floor_type[randint0(100)]);
-			}
+			cave_alter_feat(py, px, FF_HURT_DISI);
 
 			/* Update some things -- similar to GF_KILL_WALL */
 			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
@@ -4199,9 +4062,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 #endif /* ALLOW_EASY_DISARM -- TNB */
 
 		/* Handle "store doors" */
-		if (((c_ptr->feat >= FEAT_SHOP_HEAD) &&
-		    (c_ptr->feat <= FEAT_SHOP_TAIL)) ||
-		    (c_ptr->feat == FEAT_MUSEUM))
+		if (have_flag(f_ptr->flags, FF_STORE))
 		{
 			/* Disturb */
 			disturb(0, 0);
@@ -4212,8 +4073,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		}
 
 		/* Handle "building doors" -KMW- */
-		else if ((c_ptr->feat >= FEAT_BLDG_HEAD) &&
-		    (c_ptr->feat <= FEAT_BLDG_TAIL))
+		else if (have_flag(f_ptr->flags, FF_BLDG))
 		{
 			/* Disturb */
 			disturb(0, 0);
@@ -4224,7 +4084,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		}
 
 		/* Handle quest areas -KMW- */
-		else if (c_ptr->feat == FEAT_QUEST_ENTER)
+		else if (have_flag(f_ptr->flags, FF_QUEST_ENTER))
 		{
 			/* Disturb */
 			disturb(0, 0);
@@ -4234,7 +4094,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 			command_new = SPECIAL_KEY_QUEST;
 		}
 
-		else if (c_ptr->feat == FEAT_QUEST_EXIT)
+		else if (have_flag(f_ptr->flags, FF_QUEST_EXIT))
 		{
 			if (quest[p_ptr->inside_quest].type == QUEST_TYPE_FIND_EXIT)
 			{
@@ -4261,7 +4121,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		}
 
 		/* Set off a trap */
-		else if (is_trap(c_ptr->feat))
+		else if (have_flag(f_ptr->flags, FF_HIT_TRAP))
 		{
 			/* Disturb */
 			disturb(0, 0);
@@ -4313,6 +4173,8 @@ void move_player(int dir, int do_pickup, bool break_trap)
 }
 
 
+static bool use_avoid_run;
+
 /*
  * Hack -- Check for a "known wall" (see below)
  */
@@ -4334,16 +4196,17 @@ static int see_wall(int dir, int y, int x)
 	if (c_ptr->info & (CAVE_MARK))
 	{
 		/* Feature code (applying "mimic" field) */
-		byte feat = get_feat_mimic(c_ptr);
+		s16b         feat = get_feat_mimic(c_ptr);
+		feature_type *f_ptr;
 
-		/* Rubble, Magma, Quartz, Wall, Perm wall */
-		if (feat >= FEAT_RUBBLE && feat <= FEAT_PERM_SOLID) return TRUE;
+		/* Wall grids are known walls */
+		if (!player_can_enter(feat, 0)) return TRUE;
 
-		/* Tree */
-		if (feat == FEAT_TREES) return TRUE;
+		f_ptr = &f_info[feat];
 
-		/* Mountain */
-		if (feat == FEAT_MOUNTAIN) return TRUE;
+		if (use_avoid_run && have_flag(f_ptr->flags, FF_AVOID_RUN)) return TRUE;
+
+		else if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_AVOID_RUN)) return TRUE;
 	}
 
 	return FALSE;
@@ -4364,9 +4227,6 @@ static int see_nothing(int dir, int y, int x)
 
 	/* Memorized grids are always known */
 	if (cave[y][x].info & (CAVE_MARK)) return (FALSE);
-
-	/* Non-floor grids are unknown */
-	if (!cave_floor_bold(y, x)) return (TRUE);
 
 	/* Viewable door/wall grids are known */
 	if (player_can_see_bold(y, x)) return (FALSE);
@@ -4589,6 +4449,8 @@ static void run_init(int dir)
 	row = py + ddy[dir];
 	col = px + ddx[dir];
 
+	use_avoid_run = !have_flag(f_flags_bold(row, col), FF_AVOID_RUN);
+
 	/* Extract cycle index */
 	i = chome[dir];
 
@@ -4663,7 +4525,8 @@ static bool run_test(void)
 	int         i, max, inv;
 	int         option = 0, option2 = 0;
 	cave_type   *c_ptr;
-	byte feat;
+	s16b        feat;
+	feature_type *f_ptr;
 
 	/* Where we came from */
 	prev_dir = find_prevdir;
@@ -4704,7 +4567,6 @@ static bool run_test(void)
 	{
 		s16b this_o_idx, next_o_idx = 0;
 
-
 		/* New direction */
 		new_dir = cycle[chome[prev_dir] + i];
 
@@ -4717,6 +4579,7 @@ static bool run_test(void)
 
 		/* Feature code (applying "mimic" field) */
 		feat = get_feat_mimic(c_ptr);
+		f_ptr = &f_info[feat];
 
 		/* Visible monsters abort running */
 		if (c_ptr->m_idx)
@@ -4742,116 +4605,44 @@ static bool run_test(void)
 			if (o_ptr->marked) return (TRUE);
 		}
 
-
 		/* Assume unknown */
 		inv = TRUE;
 
 		/* Check memorized grids */
 		if (c_ptr->info & (CAVE_MARK))
 		{
-			bool notice = TRUE;
+			bool notice = have_flag(f_ptr->flags, FF_NOTICE);
 
-			/* Examine the terrain */
-			switch (feat)
+			if (notice && have_flag(f_ptr->flags, FF_MOVE))
 			{
-				/* Floors */
-				case FEAT_FLOOR:
-
-				/* Invis traps */
-				case FEAT_INVIS:
-
-				/* Normal veins */
-				case FEAT_MAGMA:
-				case FEAT_QUARTZ:
-
-				/* Hidden treasure */
-				case FEAT_MAGMA_H:
-				case FEAT_QUARTZ_H:
-
-				/* Known treasure (almost uninteresting) */
-				case FEAT_MAGMA_K:
-				case FEAT_QUARTZ_K:
-
-				/* Walls */
-				case FEAT_RUBBLE:
-				case FEAT_WALL_EXTRA:
-				case FEAT_WALL_INNER:
-				case FEAT_WALL_OUTER:
-				case FEAT_WALL_SOLID:
-				case FEAT_PERM_EXTRA:
-				case FEAT_PERM_INNER:
-				case FEAT_PERM_OUTER:
-				case FEAT_PERM_SOLID:
-				/* dirt, grass, trees, ... */
-				case FEAT_SHAL_WATER:
-				case FEAT_DIRT:
-				case FEAT_GRASS:
-				case FEAT_DEEP_GRASS:
-				case FEAT_FLOWER:
-				case FEAT_DARK_PIT:
-				case FEAT_TREES:
-				case FEAT_MOUNTAIN:
-				{
-					/* Ignore */
-					notice = FALSE;
-
-					/* Done */
-					break;
-				}
-
-				/* quest features */
-				case FEAT_QUEST_ENTER:
-				case FEAT_QUEST_EXIT:
-				{
-					/* Notice */
-					notice = TRUE;
-
-					/* Done */
-					break;
-				}
-
-				case FEAT_DEEP_LAVA:
-				case FEAT_SHAL_LAVA:
-				{
-					/* Ignore */
-					if (IS_INVULN() || p_ptr->immune_fire) notice = FALSE;
-
-					/* Done */
-					break;
-				}
-
-				case FEAT_DEEP_WATER:
-				{
-					/* Ignore */
-					if (p_ptr->ffall || p_ptr->total_weight<= (((u32b)adj_str_wgt[p_ptr->stat_ind[A_STR]]*(p_ptr->pclass == CLASS_BERSERKER ? 150 : 100))/2)) notice = FALSE;
-
-					/* Done */
-					break;
-				}
-
 				/* Open doors */
-				case FEAT_OPEN:
-				case FEAT_BROKEN:
+				if (find_ignore_doors && have_flag(f_ptr->flags, FF_DOOR) && have_flag(f_ptr->flags, FF_CLOSE))
 				{
 					/* Option -- ignore */
-					if (find_ignore_doors) notice = FALSE;
-
-					/* Done */
-					break;
+					notice = FALSE;
 				}
 
 				/* Stairs */
-				case FEAT_LESS:
-				case FEAT_MORE:
-				case FEAT_LESS_LESS:
-				case FEAT_MORE_MORE:
-				case FEAT_ENTRANCE:
+				else if (find_ignore_stairs && have_flag(f_ptr->flags, FF_STAIRS))
 				{
 					/* Option -- ignore */
-					if (find_ignore_stairs) notice = FALSE;
+					notice = FALSE;
+				}
 
-					/* Done */
-					break;
+				/* Lava */
+				else if (have_flag(f_ptr->flags, FF_LAVA) && (p_ptr->immune_fire || IS_INVULN()))
+				{
+					/* Ignore */
+					notice = FALSE;
+				}
+
+				/* Deep water */
+				else if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP) &&
+				         (p_ptr->ffall || p_ptr->can_swim ||
+				          p_ptr->total_weight <= (((u32b)adj_str_wgt[p_ptr->stat_ind[A_STR]]*(p_ptr->pclass == CLASS_BERSERKER ? 150 : 100)) / 2)))
+				{
+					/* Ignore */
+					notice = FALSE;
 				}
 			}
 
@@ -4863,7 +4654,7 @@ static bool run_test(void)
 		}
 
 		/* Analyze unknown grids and floors considering mimic */
-		if (inv || feat_floor(feat))
+		if (inv || !see_wall(0, row, col))
 		{
 			/* Looking for open area */
 			if (find_openarea)
@@ -4925,32 +4716,14 @@ static bool run_test(void)
 		}
 	}
 
-
 	/* Looking for open area */
 	if (find_openarea)
 	{
 		/* Hack -- look again */
 		for (i = -max; i < 0; i++)
 		{
-			new_dir = cycle[chome[prev_dir] + i];
-
-			row = py + ddy[new_dir];
-			col = px + ddx[new_dir];
-
-			/* Access grid */
-			c_ptr = &cave[row][col];
-
-			/* Feature code (applying "mimic" field) */
-			feat = get_feat_mimic(c_ptr);
-
 			/* Unknown grid or non-wall XXX XXX XXX cave_floor_grid(c_ptr)) */
-			if (!(c_ptr->info & (CAVE_MARK)) ||
-			    ((feat <= FEAT_DOOR_TAIL) ||
-			     (feat == FEAT_FLOWER) ||
-			     (feat == FEAT_DEEP_GRASS) ||
-			     ((feat >= FEAT_DEEP_WATER) &&
-			      (feat <= FEAT_GRASS))))
-
+			if (!see_wall(cycle[chome[prev_dir] + i], py, px))
 			{
 				/* Looking to break right */
 				if (find_breakright)
@@ -4973,25 +4746,8 @@ static bool run_test(void)
 		/* Hack -- look again */
 		for (i = max; i > 0; i--)
 		{
-			new_dir = cycle[chome[prev_dir] + i];
-
-			row = py + ddy[new_dir];
-			col = px + ddx[new_dir];
-
-			/* Access grid */
-			c_ptr = &cave[row][col];
-
-			/* Feature code (applying "mimic" field) */
-			feat = get_feat_mimic(c_ptr);
-
 			/* Unknown grid or non-wall XXX XXX XXX cave_floor_grid(c_ptr)) */
-			if (!(c_ptr->info & (CAVE_MARK)) ||
-			    ((feat <= FEAT_DOOR_TAIL) ||
-			     (feat == FEAT_FLOWER) ||
-			     (feat == FEAT_DEEP_GRASS) ||
-			     ((feat >= FEAT_DEEP_WATER) &&
-			      (feat <= FEAT_GRASS))))
-
+			if (!see_wall(cycle[chome[prev_dir] + i], py, px))
 			{
 				/* Looking to break left */
 				if (find_breakleft)
@@ -5011,7 +4767,6 @@ static bool run_test(void)
 			}
 		}
 	}
-
 
 	/* Not looking for open area */
 	else
@@ -5087,13 +4842,11 @@ static bool run_test(void)
 		}
 	}
 
-
 	/* About to hit a known wall, stop */
 	if (see_wall(find_current, py, px))
 	{
 		return (TRUE);
 	}
-
 
 	/* Failure */
 	return (FALSE);
@@ -5109,23 +4862,17 @@ void run_step(int dir)
 	/* Start running */
 	if (dir)
 	{
-		/* Access grid */
-		cave_type *c_ptr = &cave[py+ddy[dir]][px+ddx[dir]];
-
-		/* Feature code (applying "mimic" field) */
-		byte feat = get_feat_mimic(c_ptr);
+		use_avoid_run = FALSE;
 
 		/* Hack -- do not start silly run */
-		if (see_wall(dir, py, px) &&
-		   (feat != FEAT_TREES))
+		if (see_wall(dir, py, px))
 		{
 			/* Message */
 #ifdef JP
-			msg_print("その方向には行けません。");
+			msg_print("その方向には走れません。");
 #else
 			msg_print("You cannot run in that direction.");
 #endif
-
 
 			/* Disturb */
 			disturb(0, 0);

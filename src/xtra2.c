@@ -2919,62 +2919,11 @@ static bool target_set_accept(int y, int x)
 	/* Interesting memorized features */
 	if (c_ptr->info & (CAVE_MARK))
 	{
-		/* Feature code (applying "mimic" field) */
-		byte feat = get_feat_mimic(c_ptr);
-
-		/* Notice glyphs */
+		/* Notice object features */
 		if (c_ptr->info & CAVE_OBJECT) return (TRUE);
 
-		/* Notice the Pattern */
-		if ((feat <= FEAT_PATTERN_XTRA2) &&
-		    (feat >= FEAT_PATTERN_START))
-			return (TRUE);
-
-		/* Notice doors */
-		if (feat == FEAT_OPEN) return (TRUE);
-		if (feat == FEAT_BROKEN) return (TRUE);
-
-		/* Notice stairs */
-		if (feat == FEAT_LESS) return (TRUE);
-		if (feat == FEAT_MORE) return (TRUE);
-		if (feat == FEAT_LESS_LESS) return (TRUE);
-		if (feat == FEAT_MORE_MORE) return (TRUE);
-
-		/* Notice shops */
-		if ((feat >= FEAT_SHOP_HEAD) &&
-		    (feat <= FEAT_SHOP_TAIL)) return (TRUE);
-
-		if (feat == FEAT_MUSEUM) return (TRUE);
-
-		/* Notice buildings -KMW- */
-		if ((feat >= FEAT_BLDG_HEAD) &&
-		    (feat <= FEAT_BLDG_TAIL)) return (TRUE);
-
-		/* Notice traps */
-		if (is_trap(feat)) return (TRUE);
-
-		/* Notice doors */
-		if ((feat >= FEAT_DOOR_HEAD) &&
-		    (feat <= FEAT_DOOR_TAIL)) return (TRUE);
-
-#if 0
-		/* Notice rubble */
-		/* I think FEAT_RUBBLEs should not be "interesting" */
-		if (feat == FEAT_RUBBLE) return (TRUE);
-
-		/* Notice veins with treasure */
-		/* Now veins with treasure are too many */
-		if (feat == FEAT_MAGMA_K) return (TRUE);
-		if (feat == FEAT_QUARTZ_K) return (TRUE);
-#endif
-
-		/* Notice quest features */
-		if (feat == FEAT_QUEST_ENTER) return (TRUE);
-		if (feat == FEAT_QUEST_EXIT) return (TRUE);
-		if (feat == FEAT_QUEST_DOWN) return (TRUE);
-		if (feat == FEAT_QUEST_UP) return (TRUE);
-		if (feat == FEAT_TOWN) return (TRUE);
-		if (feat == FEAT_ENTRANCE) return (TRUE);
+		/* Feature code (applying "mimic" field) */
+		if (have_flag(f_info[get_feat_mimic(c_ptr)].flags, FF_NOTICE)) return TRUE;
 	}
 
 	/* Nope */
@@ -3127,7 +3076,8 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 	s16b this_o_idx, next_o_idx = 0;
 	cptr s1 = "", s2 = "", s3 = "", x_info = "";
 	bool boring = TRUE;
-	byte feat;
+	s16b feat;
+	feature_type *f_ptr;
 	int query = '\001';
 	char out_val[MAX_NLEN+80];
 
@@ -3578,17 +3528,19 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 		feat = FEAT_NONE;
 	}
 
+	f_ptr = &f_info[feat];
+
 	/* Terrain feature if needed */
 	if (boring || (feat > FEAT_INVIS))
 	{
 		cptr name;
 
 		/* Hack -- special handling for building doors */
-		if ((feat >= FEAT_BLDG_HEAD) && (feat <= FEAT_BLDG_TAIL))
+		if (have_flag(f_ptr->flags, FF_BLDG))
 		{
-			name = building[feat - FEAT_BLDG_HEAD].name;
+			name = building[f_ptr->power].name;
 		}
-		else if (feat == FEAT_ENTRANCE)
+		else if (have_flag(f_ptr->flags, FF_ENTRANCE))
 		{
 #ifdef JP
 			name = format("%s(%d階相当)", d_text + d_info[c_ptr->special].text, d_info[c_ptr->special].mindepth);
@@ -3596,7 +3548,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 			name = format("%s(level %d)", d_text + d_info[c_ptr->special].text, d_info[c_ptr->special].mindepth);
 #endif
 		}
-		else if (feat == FEAT_TOWN)
+		else if (have_flag(f_ptr->flags, FF_TOWN))
 		{
 			name = town[c_ptr->special].name;
 		}
@@ -3610,80 +3562,59 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 		}
 		else
 		{
-			name = f_name + f_info[feat].name;
+			name = f_name + f_ptr->name;
 		}
 
 
 		/* Pick a prefix */
-		if (*s2 && ((feat >= FEAT_MINOR_GLYPH) &&
-			    (feat <= FEAT_PATTERN_XTRA2)))
-		{
-#ifdef JP
-			s2 = "の上";
-#else
-			s2 = "on ";
-#endif
-
-		}
-		else if (*s2 && ((feat >= FEAT_DOOR_HEAD) &&
-				 (feat <= FEAT_PERM_SOLID)))
+		if (*s2 &&
+		    (!have_flag(f_ptr->flags, FF_MOVE) ||
+		    (!have_flag(f_ptr->flags, FF_LOS) &&
+		     !have_flag(f_ptr->flags, FF_TREE)) ||
+		     have_flag(f_ptr->flags, FF_TOWN)))
 		{
 #ifdef JP
 			s2 = "の中";
 #else
 			s2 = "in ";
 #endif
-
-		}
-		else if (*s2 && (feat == FEAT_TOWN))
-		{
-#ifdef JP
-			s2 = "の中";
-#else
-			s2 = "in ";
-#endif
-
 		}
 
 		/* Hack -- special introduction for store & building doors -KMW- */
-		if (((feat >= FEAT_SHOP_HEAD) && (feat <= FEAT_SHOP_TAIL)) ||
-		    ((feat >= FEAT_BLDG_HEAD) && (feat <= FEAT_BLDG_TAIL)) ||
-		    (feat == FEAT_MUSEUM) ||
-		    (feat == FEAT_ENTRANCE))
+		if (have_flag(f_ptr->flags, FF_STORE) ||
+		    have_flag(f_ptr->flags, FF_BLDG) ||
+		    have_flag(f_ptr->flags, FF_ENTRANCE))
 		{
 #ifdef JP
 			s2 = "の入口";
 #else
 			s3 = "";
 #endif
-
 		}
-		else if ((feat == FEAT_TOWN) || (feat == FEAT_FLOOR) || (feat == FEAT_DIRT) || (feat == FEAT_FLOWER))
-		{
 #ifndef JP
+		else if (have_flag(f_ptr->flags, FF_FLOOR) || have_flag(f_ptr->flags, FF_TOWN))
+		{
 			s3 ="";
-#endif
 		}
 		else
 		{
 			/* Pick proper indefinite article */
-#ifndef JP
 			s3 = (is_a_vowel(name[0])) ? "an " : "a ";
-#endif
 		}
+#endif
 
 		/* Display a message */
 		if (p_ptr->wizard)
 #ifdef JP
 			sprintf(out_val, "%s%s%s%s[%s] %x %d %d %d %d (%d,%d)", s1, name, s2, s3, info, c_ptr->info, c_ptr->feat, c_ptr->dist, c_ptr->cost, c_ptr->when, x, y);
 #else
-		sprintf(out_val, "%s%s%s%s [%s] %x %d %d %d %d (%d,%d)", s1, s2, s3, name, info, c_ptr->info, c_ptr->feat, c_ptr->dist, c_ptr->cost, c_ptr->when, x, y);
+			sprintf(out_val, "%s%s%s%s [%s] %x %d %d %d %d (%d,%d)", s1, s2, s3, name, info, c_ptr->info, c_ptr->feat, c_ptr->dist, c_ptr->cost, c_ptr->when, x, y);
 #endif
 		else
 #ifdef JP
 			sprintf(out_val, "%s%s%s%s[%s]", s1, name, s2, s3, info);
 #else
-		sprintf(out_val, "%s%s%s%s [%s]", s1, s2, s3, name, info);
+			sprintf(out_val, "%s%s%s%s [%s]", s1, s2, s3, name, info);
 #endif
 
 		prt(out_val, 0, 0);

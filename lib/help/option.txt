@@ -245,12 +245,6 @@ Use special colors for floor grids (slow)    [view_special_lite]
     speed of the game.  This option may not work well if the attr/char
     codes for walls/veins have been changed
 
-***** <new_ascii_graphics>
-Show a clear contrast between light and dark    [new_ascii_graphics]
-    This option activates a special color scheme for all grids other
-    than normal white color, when used with view_bright_lite and/or
-    view_granite_lite.
-
 ***** <display_path>
 Display actual path before shooting    [display_path]
     When this option is set, the targeting mode will show path from

@@ -108,7 +108,7 @@ extern cptr game_inscriptions[];
 extern kamae kamae_shurui[MAX_KAMAE];
 extern kamae kata_shurui[MAX_KATA];
 extern cptr exp_level_str[5];
-extern byte conv_terrain2feat[MAX_WILDERNESS];
+extern s16b conv_terrain2feat[MAX_WILDERNESS];
 extern cptr silly_attacks[MAX_SILLY_ATTACK];
 #ifdef JP
 extern cptr silly_attacks2[MAX_SILLY_ATTACK];
@@ -117,6 +117,7 @@ extern monster_power monster_powers[MAX_MONSPELLS];
 extern cptr monster_powers_short[MAX_MONSPELLS];
 extern cptr ident_info[];
 extern mbe_info_type mbe_info[];
+extern byte feature_action_flags[FF_FLAG_MAX];
 
 /* variable.c */
 extern cptr copyright[5];
@@ -254,7 +255,6 @@ extern bool view_yellow_lite;   /* Use special colors for torch-lit grids */
 extern bool view_bright_lite;   /* Use special colors for 'viewable' grids */
 extern bool view_granite_lite;   /* Use special colors for wall grids (slow) */
 extern bool view_special_lite;   /* Use special colors for floor grids (slow) */
-extern bool new_ascii_graphics;   /* Show a clear contrast between light and dark */
 extern bool display_path;   /* Display actual path before shooting */
 extern bool always_show_list;   /* Always show list at first when select items */
 extern bool abbrev_extra;   /* Describe obj's extra resistances by abbreviation */
@@ -467,6 +467,7 @@ extern skill_table *s_info;
 extern player_magic *m_info;
 extern feature_type *f_info;
 extern char *f_name;
+extern char *f_tag;
 extern object_kind *k_info;
 extern char *k_name;
 extern char *k_text;
@@ -573,10 +574,10 @@ extern bool generate_encounter;
 extern cptr screen_dump;
 extern byte dungeon_type;
 extern s16b *max_dlv;
-extern byte feat_wall_outer;
-extern byte feat_wall_inner;
-extern byte feat_wall_solid;
-extern byte floor_type[100], fill_type[100];
+extern s16b feat_wall_outer;
+extern s16b feat_wall_inner;
+extern s16b feat_wall_solid;
+extern s16b floor_type[100], fill_type[100];
 extern bool now_damaged;
 extern s16b now_message;
 extern bool use_menu;
@@ -612,6 +613,7 @@ extern bool player_can_see_bold(int y, int x);
 extern bool cave_valid_bold(int y, int x);
 extern bool cave_valid_grid(cave_type *c_ptr);
 extern bool no_lite(void);
+extern byte lighting_colours[16][2];
 extern void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp);
 extern void move_cursor_relative(int row, int col);
 extern void print_rel(char c, byte a, int y, int x);
@@ -636,6 +638,8 @@ extern void map_area(int range);
 extern void wiz_lite(bool ninja);
 extern void wiz_dark(void);
 extern void cave_set_feat(int y, int x, int feat);
+extern int feat_state(int feat, int action);
+extern void cave_alter_feat(int y, int x, int action);
 extern void remove_mirror(int y, int x);
 extern bool is_mirror_grid(cave_type *c_ptr);
 extern bool is_glyph_grid(cave_type *c_ptr);
@@ -659,7 +663,8 @@ extern void search(void);
 extern void py_pickup_aux(int o_idx);
 extern void carry(int pickup);
 extern bool py_attack(int y, int x, int mode);
-extern bool player_can_enter(byte feature);
+extern bool pattern_seq(int c_y, int c_x, int n_y, int n_x);
+extern bool player_can_enter(s16b feature, u16b mode);
 extern void move_player(int dir, int do_pickup, bool break_trap);
 extern void run_step(int dir);
 
@@ -875,8 +880,8 @@ extern void set_friendly(monster_type *m_ptr);
 extern void set_pet(monster_type *m_ptr);
 extern void set_hostile(monster_type *m_ptr);
 extern void anger_monster(monster_type *m_ptr);
-extern bool monster_can_cross_terrain(byte feat, monster_race *r_ptr);
-extern bool monster_can_enter(int y, int x, monster_race *r_ptr);
+extern bool monster_can_cross_terrain(s16b feat, monster_race *r_ptr, u16b mode);
+extern bool monster_can_enter(int y, int x, monster_race *r_ptr, u16b mode);
 extern bool are_enemies(monster_type *m_ptr1, monster_type *m_ptr2);
 extern bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr);
 extern bool monster_living(monster_race *r_ptr);
@@ -970,7 +975,7 @@ extern bool make_gold(object_type *j_ptr);
 extern void place_gold(int y, int x);
 extern s16b drop_near(object_type *o_ptr, int chance, int y, int x);
 extern void acquirement(int y1, int x1, int num, bool great, bool known);
-extern byte choose_random_trap(void);
+extern s16b choose_random_trap(void);
 extern void disclose_grid(int y, int x);
 extern void place_trap(int y, int x);
 extern void inven_item_charges(int item);
@@ -1126,6 +1131,7 @@ extern void remove_all_mirrors(bool explode);
 /* spells3.c */
 extern bool teleport_away(int m_idx, int dis, bool dec_valour);
 extern void teleport_monster_to(int m_idx, int ty, int tx, int power);
+extern bool cave_teleportable_bold(int y, int x, u16b mode);
 extern void teleport_player(int dis);
 extern void teleport_player_to(int ny, int nx, bool no_tele);
 extern void teleport_level(int m_idx);

@@ -2307,7 +2307,7 @@ static errr rd_dungeon_old(void)
 			c_ptr = &cave[y][x];
 
 			/* Extract "feat" */
-			c_ptr->feat = tmp8u;
+			c_ptr->feat = (s16b)tmp8u;
 
 			/* Advance/Wrap */
 			if (++x >= xmax)
@@ -2336,8 +2336,8 @@ static errr rd_dungeon_old(void)
 			/* Access the cave */
 			c_ptr = &cave[y][x];
 
-			/* Extract "feat" */
-			c_ptr->mimic = tmp8u;
+			/* Extract "mimic" */
+			c_ptr->mimic = (s16b)tmp8u;
 
 			/* Advance/Wrap */
 			if (++x >= xmax)
@@ -2404,7 +2404,7 @@ static errr rd_dungeon_old(void)
 				c_ptr->feat = FEAT_FLOOR;
 				c_ptr->info |= CAVE_TRAP;
 			}
-		
+
 			/* Older than 1.1.1 */
 			if (c_ptr->feat == FEAT_MIRROR)
 			{
@@ -2704,8 +2704,18 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 		/* Read it */
 		rd_u16b(&ct_ptr->info);
-		rd_byte(&ct_ptr->feat);
-		rd_byte(&ct_ptr->mimic);
+		if (h_older_than(1, 7, 0, 2))
+		{
+			rd_byte(&tmp8u);
+			ct_ptr->feat = (s16b)tmp8u;
+			rd_byte(&tmp8u);
+			ct_ptr->mimic = (s16b)tmp8u;
+		}
+		else
+		{
+			rd_s16b(&ct_ptr->feat);
+			rd_s16b(&ct_ptr->mimic);
+		}
 		rd_s16b(&ct_ptr->special);
 	}
 
@@ -2936,7 +2946,7 @@ static errr rd_dungeon(void)
 		{
 			saved_floor_type *sf_ptr = &saved_floors[i];
 			byte tmp8u;
-		
+
 			/* Unused element */
 			if (!sf_ptr->floor_id) continue;
 
@@ -2946,7 +2956,7 @@ static errr rd_dungeon(void)
 
 			/* Read from the save file */
 			err = rd_saved_floor(sf_ptr);
-			
+
 			/* Error? */
 			if (err) break;
 

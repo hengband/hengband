@@ -524,7 +524,7 @@ static void place_pet(void)
 				for (j = 1000; j > 0; j--)
 				{
 					scatter(&cy, &cx, py, px, d, 0);
-					if ((cave_floor_bold(cy, cx) || (cave[cy][cx].feat == FEAT_TREES)) && !cave[cy][cx].m_idx && !player_bold(cy, cx)) break;
+					if (have_flag(f_flags_bold(cy, cx), FF_MOVE) && !cave[cy][cx].m_idx && !player_bold(cy, cx)) break;
 				}
 				if (j) break;
 			}
@@ -701,8 +701,7 @@ static void get_out_monster(void)
 		if (is_explosive_rune_grid(&cave[ny][nx])) continue;
 
 		/* ...nor onto the Pattern */
-		if ((cave[ny][nx].feat >= FEAT_PATTERN_START) &&
-		    (cave[ny][nx].feat <= FEAT_PATTERN_XTRA2)) continue;
+		if (pattern_tile(ny, nx)) continue;
 
 		/*** It's a good place ***/
 
@@ -729,21 +728,7 @@ static void get_out_monster(void)
 /*
  * Is this feature has special meaning (except floor_id) with c_ptr->special?
  */
-static bool feat_uses_special(byte feat)
-{
-	switch (feat)
-	{
-	case FEAT_QUEST_ENTER:
-	case FEAT_QUEST_EXIT:
-	case FEAT_QUEST_DOWN:
-	case FEAT_QUEST_UP:
-	case FEAT_TOWN:
-	case FEAT_ENTRANCE:
-		return TRUE;
-	}
-
-	return FALSE;
-}
+#define feat_uses_special(F) (have_flag(f_info[(F)].flags, FF_SPECIAL))
 
 
 /*
@@ -768,12 +753,13 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 		for (x = 0; x < cur_wid; x++)
 		{
 			cave_type *c_ptr = &cave[y][x];
+			feature_type *f_ptr = &f_info[c_ptr->feat];
 			bool ok = FALSE;
 
 			if (change_floor_mode & CFM_UP)
 			{
-				if (c_ptr->feat == FEAT_LESS ||
-				    c_ptr->feat == FEAT_LESS_LESS)
+				if (have_flag(f_ptr->flags, FF_LESS) && have_flag(f_ptr->flags, FF_STAIRS) &&
+				    !have_flag(f_ptr->flags, FF_SPECIAL))
 				{
 					ok = TRUE;
 
@@ -789,8 +775,8 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 
 			else if (change_floor_mode & CFM_DOWN)
 			{
-				if (c_ptr->feat == FEAT_MORE ||
-				    c_ptr->feat == FEAT_MORE_MORE)
+				if (have_flag(f_ptr->flags, FF_MORE) && have_flag(f_ptr->flags, FF_STAIRS) &&
+				    !have_flag(f_ptr->flags, FF_SPECIAL))
 				{
 					ok = TRUE;
 
@@ -806,14 +792,13 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 
 			else
 			{
-				if (FEAT_BLDG_HEAD <= c_ptr->feat &&
-				    c_ptr->feat <= FEAT_BLDG_TAIL)
+				if (have_flag(f_ptr->flags, FF_BLDG))
 				{
 					ok = TRUE;
 				}
 			}
 
-			if (ok && num < 20)
+			if (ok && (num < 20))
 			{
 				x_table[num] = x;
 				y_table[num] = y;
@@ -854,6 +839,7 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 void leave_floor(void)
 {
 	cave_type *c_ptr = NULL;
+	feature_type *f_ptr;
 	saved_floor_type *sf_ptr;
 	int quest_r_idx = 0;
 	int i;
@@ -946,6 +932,7 @@ void leave_floor(void)
 	{
 		/* Extract stair position */
 		c_ptr = &cave[py][px];
+		f_ptr = &f_info[c_ptr->feat];
 
 		/* Get back to old saved floor? */
 		if (c_ptr->special && !feat_uses_special(c_ptr->feat) && get_sf_ptr(c_ptr->special))
@@ -955,8 +942,7 @@ void leave_floor(void)
 		}
 
 		/* Mark shaft up/down */
-		if (c_ptr->feat == FEAT_LESS_LESS ||
-		    c_ptr->feat == FEAT_MORE_MORE)
+		if (have_flag(f_ptr->flags, FF_STAIRS) && have_flag(f_ptr->flags, FF_SHAFT))
 		{
 			prepare_change_floor_mode(CFM_SHAFT);
 		}

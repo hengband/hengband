@@ -3500,15 +3500,11 @@ prt("[何かキーを押すとゲームに戻ります]", k, 13);
 }
 
 
-/*
- * Detect all traps on current panel
- */
-bool detect_traps(int range, bool known)
+static bool detect_feat_flag(int range, int flag, bool known)
 {
-	int             x, y;
-	bool            detect = FALSE;
-	cave_type       *c_ptr;
-
+	int       x, y;
+	bool      detect = FALSE;
+	cave_type *c_ptr;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
 
@@ -3523,40 +3519,50 @@ bool detect_traps(int range, bool known)
 			/* Access the grid */
 			c_ptr = &cave[y][x];
 
-			/* Mark as detected */
-			if (dist <= range && known)
+			/* Hack -- Safe */
+			if (flag == FF_TRAP)
 			{
-				if (dist <= range - 1)
-					c_ptr->info |= (CAVE_IN_DETECT);
-
-				c_ptr->info &= ~(CAVE_UNSAFE);
-
-				/* Redraw */
-				lite_spot(y, x);
-			}
-
-			/* Detect traps */
-			if (is_trap(c_ptr->feat))
-			{
-				/* Hack -- Memorize */
-				c_ptr->info |= (CAVE_MARK);
-
-				if (c_ptr->mimic)
+				/* Mark as detected */
+				if (dist <= range && known)
 				{
-					/* Disclose a hidden trap */
-					disclose_grid(y, x);
-				}
-				else
-				{
+					if (dist <= range - 1) c_ptr->info |= (CAVE_IN_DETECT);
+
+					c_ptr->info &= ~(CAVE_UNSAFE);
+
 					/* Redraw */
 					lite_spot(y, x);
 				}
+			}
+
+			/* Detect flags */
+			if (have_flag(f_flags_grid(c_ptr), flag))
+			{
+				/* Detect secrets */
+				disclose_grid(y, x);
+
+				/* Hack -- Memorize */
+				c_ptr->info |= (CAVE_MARK);
+
+				/* Redraw */
+				lite_spot(y, x);
 
 				/* Obvious */
 				detect = TRUE;
 			}
 		}
 	}
+
+	/* Result */
+	return detect;
+}
+
+
+/*
+ * Detect all traps on current panel
+ */
+bool detect_traps(int range, bool known)
+{
+	bool detect = detect_feat_flag(range, FF_TRAP, known);
 
 	if (known) p_ptr->dtrap = TRUE;
 
@@ -3566,17 +3572,15 @@ bool detect_traps(int range, bool known)
 	if (detect)
 	{
 #ifdef JP
-msg_print("トラップの存在を感じとった！");
+		msg_print("トラップの存在を感じとった！");
 #else
 		msg_print("You sense the presence of traps!");
 #endif
-
 	}
 
 	/* Result */
-	return (detect);
+	return detect;
 }
-
 
 
 /*
@@ -3584,47 +3588,7 @@ msg_print("トラップの存在を感じとった！");
  */
 bool detect_doors(int range)
 {
-	int y, x;
-
-	bool detect = FALSE;
-
-	cave_type *c_ptr;
-
-	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
-
-	/* Scan the panel */
-	for (y = 1; y < cur_hgt - 1; y++)
-	{
-		for (x = 1; x < cur_wid - 1; x++)
-		{
-			if (distance(py, px, y, x) > range) continue;
-
-			c_ptr = &cave[y][x];
-
-			/* Detect secret doors */
-			if (is_hidden_door(c_ptr))
-			{
-				/* Pick a door */
-				disclose_grid(y, x);
-			}
-
-			/* Detect doors */
-			if (((c_ptr->feat >= FEAT_DOOR_HEAD) &&
-			     (c_ptr->feat <= FEAT_DOOR_TAIL)) ||
-			    ((c_ptr->feat == FEAT_OPEN) ||
-			     (c_ptr->feat == FEAT_BROKEN)))
-			{
-				/* Hack -- Memorize */
-				c_ptr->info |= (CAVE_MARK);
-
-				/* Redraw */
-				lite_spot(y, x);
-
-				/* Obvious */
-				detect = TRUE;
-			}
-		}
-	}
+	bool detect = detect_feat_flag(range, FF_DOOR, TRUE);
 
 	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] > MUSIC_DETECT)) detect = FALSE;
 
@@ -3632,15 +3596,14 @@ bool detect_doors(int range)
 	if (detect)
 	{
 #ifdef JP
-msg_print("ドアの存在を感じとった！");
+		msg_print("ドアの存在を感じとった！");
 #else
 		msg_print("You sense the presence of doors!");
 #endif
-
 	}
 
 	/* Result */
-	return (detect);
+	return detect;
 }
 
 
@@ -3649,41 +3612,7 @@ msg_print("ドアの存在を感じとった！");
  */
 bool detect_stairs(int range)
 {
-	int y, x;
-
-	bool detect = FALSE;
-
-	cave_type *c_ptr;
-
-	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
-
-	/* Scan the panel */
-	for (y = 1; y < cur_hgt - 1; y++)
-	{
-		for (x = 1; x < cur_wid - 1; x++)
-		{
-			if (distance(py, px, y, x) > range) continue;
-
-			c_ptr = &cave[y][x];
-
-			/* Detect stairs */
-			if ((c_ptr->feat == FEAT_LESS) ||
-			    (c_ptr->feat == FEAT_LESS_LESS) ||
-			    (c_ptr->feat == FEAT_MORE) ||
-			    (c_ptr->feat == FEAT_MORE_MORE) ||
-			    (c_ptr->feat == FEAT_ENTRANCE))
-			{
-				/* Hack -- Memorize */
-				c_ptr->info |= (CAVE_MARK);
-
-				/* Redraw */
-				lite_spot(y, x);
-
-				/* Obvious */
-				detect = TRUE;
-			}
-		}
-	}
+	bool detect = detect_feat_flag(range, FF_STAIRS, TRUE);
 
 	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] > MUSIC_DETECT)) detect = FALSE;
 
@@ -3691,15 +3620,14 @@ bool detect_stairs(int range)
 	if (detect)
 	{
 #ifdef JP
-msg_print("階段の存在を感じとった！");
+		msg_print("階段の存在を感じとった！");
 #else
 		msg_print("You sense the presence of stairs!");
 #endif
-
 	}
 
 	/* Result */
-	return (detect);
+	return detect;
 }
 
 
@@ -3708,46 +3636,7 @@ msg_print("階段の存在を感じとった！");
  */
 bool detect_treasure(int range)
 {
-	int y, x;
-
-	bool detect = FALSE;
-
-	cave_type *c_ptr;
-
-	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
-
-	/* Scan the current panel */
-	for (y = 1; y < cur_hgt; y++)
-	{
-		for (x = 1; x < cur_wid; x++)
-		{
-			if (distance(py, px, y, x) > range) continue;
-
-			c_ptr = &cave[y][x];
-
-			/* Notice embedded gold */
-			if ((c_ptr->feat == FEAT_MAGMA_H) ||
-			    (c_ptr->feat == FEAT_QUARTZ_H))
-			{
-				/* Expose the gold */
-				c_ptr->feat += 0x02;
-			}
-
-			/* Magma/Quartz + Known Gold */
-			if ((c_ptr->feat == FEAT_MAGMA_K) ||
-			    (c_ptr->feat == FEAT_QUARTZ_K))
-			{
-				/* Hack -- Memorize */
-				c_ptr->info |= (CAVE_MARK);
-
-				/* Redraw */
-				lite_spot(y, x);
-
-				/* Detect */
-				detect = TRUE;
-			}
-		}
-	}
+	bool detect = detect_feat_flag(range, FF_HAS_GOLD, TRUE);
 
 	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] > MUSIC_DETECT+6)) detect = FALSE;
 
@@ -3755,18 +3644,15 @@ bool detect_treasure(int range)
 	if (detect)
 	{
 #ifdef JP
-msg_print("埋蔵された財宝の存在を感じとった！");
+		msg_print("埋蔵された財宝の存在を感じとった！");
 #else
 		msg_print("You sense the presence of buried treasure!");
 #endif
-
 	}
 
-
 	/* Result */
-	return (detect);
+	return detect;
 }
-
 
 
 /*
@@ -5656,7 +5542,7 @@ bool earthquake(int cy, int cx, int r)
 	}
 
 	/* First, affect the player (if necessary) */
-	if (hurt && !prace_is_(RACE_SPECTRE) && !p_ptr->wraith_form && !p_ptr->kabenuke)
+	if (hurt && !p_ptr->pass_wall && !p_ptr->kill_wall)
 	{
 		/* Check around the player */
 		for (i = 0; i < 8; i++)
@@ -5873,9 +5759,7 @@ if (damage) take_hit(DAMAGE_ATTACK, damage, "地震", -1);
 							if (is_explosive_rune_grid(&cave[y][x])) continue;
 
 							/* ... nor on the Pattern */
-							if ((cave[y][x].feat <= FEAT_PATTERN_XTRA2) &&
-							    (cave[y][x].feat >= FEAT_PATTERN_START))
-								continue;
+							if (pattern_tile(y, x)) continue;
 
 							/* Important -- Skip "quake" grids */
 							if (map[16+y-cy][16+x-cx]) continue;
@@ -6237,27 +6121,30 @@ static void cave_temp_room_unlite(void)
 		c_ptr->info &= ~(CAVE_TEMP);
 
 		/* Darken the grid */
-		if (!is_mirror_grid(c_ptr)) c_ptr->info &= ~(CAVE_GLOW);
-
-		/* Hack -- Forget "boring" grids */
-		if ((c_ptr->feat <= FEAT_INVIS) || (c_ptr->feat == FEAT_DIRT) || (c_ptr->feat == FEAT_GRASS))
+		if (!is_mirror_grid(c_ptr))
 		{
-			/* Forget the grid */
-			if (!view_torch_grids) c_ptr->info &= ~(CAVE_MARK);
+			c_ptr->info &= ~(CAVE_GLOW);
 
-			/* Notice */
-			note_spot(y, x);
+			/* Hack -- Forget "boring" grids */
+			if (!have_flag(f_info[get_feat_mimic(c_ptr)].flags, FF_REMEMBER))
+			{
+				/* Forget the grid */
+				if (!view_torch_grids) c_ptr->info &= ~(CAVE_MARK);
+
+				/* Notice */
+				note_spot(y, x);
+			}
+
+			/* Process affected monsters */
+			if (c_ptr->m_idx)
+			{
+				/* Update the monster */
+				update_mon(c_ptr->m_idx, FALSE);
+			}
+
+			/* Redraw */
+			lite_spot(y, x);
 		}
-
-		/* Process affected monsters */
-		if (c_ptr->m_idx)
-		{
-			/* Update the monster */
-			update_mon(c_ptr->m_idx, FALSE);
-		}
-
-		/* Redraw */
-		lite_spot(y, x);
 	}
 
 	/* None left */
@@ -7692,7 +7579,7 @@ bool rush_attack(bool *mdeath)
 		ny = GRID_Y(path_g[i]);
 		nx = GRID_X(path_g[i]);
 
-		if (!cave_empty_bold(ny, nx) || !player_can_enter(cave[ny][nx].feat))
+		if (!cave_empty_bold(ny, nx) || !player_can_enter(cave[ny][nx].feat, 0))
 		{
 			if (cave[ny][nx].m_idx)
 			{

@@ -49,6 +49,21 @@
 
 
 /*
+ * Feature state structure
+ *
+ * - Action (FF_*)
+ * - Result (FEAT_*)
+ */
+typedef struct feature_state feature_state;
+
+struct feature_state
+{
+	byte action;
+	s16b result;
+};
+
+
+/*
  * Information about terrain "features"
  */
 
@@ -56,21 +71,26 @@ typedef struct feature_type feature_type;
 
 struct feature_type
 {
-	u32b name;			/* Name (offset) */
-	u32b text;			/* Text (offset) */
+	u32b name;                /* Name (offset) */
+	u32b text;                /* Text (offset) */
+	s16b tag;                 /* Tag (offset) */
 
-	byte mimic;			/* Feature to mimic */
+	s16b mimic;               /* Feature to mimic */
 
-	byte extra;			/* Extra byte (unused) */
+	u32b flags[FF_FLAG_SIZE]; /* Flags */
 
-	s16b unused;		/* Extra bytes (unused) */
+	u16b priority;            /* Map priority */
+	s16b destroyed;           /* Default destroyed state */
 
-	byte d_attr;		/* Default feature attribute */
-	byte d_char;		/* Default feature character */
+	feature_state state[MAX_FEAT_STATES];
 
+	byte power;
 
-	byte x_attr;		/* Desired feature attribute */
-	byte x_char;		/* Desired feature character */
+	byte d_attr[F_LIT_MAX];   /* Default feature attribute */
+	byte d_char[F_LIT_MAX];   /* Default feature character */
+
+	byte x_attr[F_LIT_MAX];   /* Desired feature attribute */
+	byte x_char[F_LIT_MAX];   /* Desired feature character */
 };
 
 
@@ -422,7 +442,7 @@ struct cave_type
 {
 	u16b info;		/* Hack -- cave flags */
 
-	byte feat;		/* Hack -- feature type */
+	s16b feat;		/* Hack -- feature type */
 
 	s16b o_idx;		/* Object in this grid */
 
@@ -430,7 +450,7 @@ struct cave_type
 
 	s16b special;	/* Special cave info */
 
-	byte mimic;		/* Feature to mimic */
+	s16b mimic;		/* Feature to mimic */
 
 	byte cost;		/* Hack -- cost of flowing */
 	byte dist;		/* Hack -- distance from player */
@@ -1454,14 +1474,14 @@ struct building_type
 typedef struct border_type border_type;
 struct border_type
 {
-	byte 	north[MAX_WID];
-	byte 	south[MAX_WID];
-	byte 	east[MAX_HGT];
-	byte 	west[MAX_HGT];
-	byte	north_west;
-	byte	north_east;
-	byte	south_west;
-	byte	south_east;
+	s16b north[MAX_WID];
+	s16b south[MAX_WID];
+	s16b east[MAX_HGT];
+	s16b west[MAX_HGT];
+	s16b north_west;
+	s16b north_east;
+	s16b south_west;
+	s16b south_east;
 };
 
 
@@ -1575,21 +1595,21 @@ struct dungeon_info_type {
 	byte dy;
 	byte dx;
 
-	byte floor1;		/* Floor tile 1 */
+	s16b floor1;		/* Floor tile 1 */
 	byte floor_percent1;	/* Chance of type 1 */
-	byte floor2;		/* Floor tile 2 */
+	s16b floor2;		/* Floor tile 2 */
 	byte floor_percent2;	/* Chance of type 2 */
-	byte floor3;		/* Floor tile 3 */
+	s16b floor3;		/* Floor tile 3 */
 	byte floor_percent3;	/* Chance of type 3 */
-	byte outer_wall;	/* Outer wall tile */
-	byte inner_wall;	/* Inner wall tile */
+	s16b outer_wall;	/* Outer wall tile */
+	s16b inner_wall;	/* Inner wall tile */
 	s16b stream1;		/* stream tile */
 	s16b stream2;		/* stream tile */
-	byte fill_type1;	/* Cave tile 1 */
+	s16b fill_type1;	/* Cave tile 1 */
 	byte fill_percent1;	/* Chance of type 1 */
-	byte fill_type2;	/* Cave tile 2 */
+	s16b fill_type2;	/* Cave tile 2 */
 	byte fill_percent2;	/* Chance of type 2 */
-	byte fill_type3;	/* Cave tile 3 */
+	s16b fill_type3;	/* Cave tile 3 */
 	byte fill_percent3;	/* Chance of type 3 */
 	s16b mindepth;		/* Minimal depth */
 	s16b maxdepth;		/* Maximal depth */
@@ -1660,8 +1680,8 @@ typedef struct
 typedef struct
 {
 	u16b info;
-	byte feat;
-	byte mimic;
+	s16b feat;
+	s16b mimic;
 	s16b special;
 	u16b occurrence;
 } cave_template_type;

@@ -1485,13 +1485,13 @@ static bool cast_berserk_spell(int spell)
 
 		py_attack(y, x, 0);
 
-		if (!player_can_enter(cave[y][x].feat) || is_trap(cave[y][x].feat))
+		if (!player_can_enter(cave[y][x].feat, 0) || is_trap(cave[y][x].feat))
 			break;
 
 		y += ddy[dir];
 		x += ddx[dir];
 
-		if (player_can_enter(cave[y][x].feat) && !is_trap(cave[y][x].feat) && !cave[y][x].m_idx)
+		if (player_can_enter(cave[y][x].feat, 0) && !is_trap(cave[y][x].feat) && !cave[y][x].m_idx)
 		{
 			int oy, ox;
 
@@ -1751,8 +1751,7 @@ msg_print("その方向にはモンスターはいません。");
 
 			if (in_bounds(ny, nx) && cave_empty_bold(ny, nx) &&
 			    !(c_ptr->info & CAVE_OBJECT) &&
-			    !(c_ptr->feat >= FEAT_PATTERN_START &&
-			      c_ptr->feat <= FEAT_PATTERN_XTRA2))
+				!pattern_tile(ny, nx))
 			{
 				ty = ny;
 				tx = nx;

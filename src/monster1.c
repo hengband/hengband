@@ -3331,19 +3331,33 @@ monster_hook_type get_monster_hook(void)
 
 monster_hook_type get_monster_hook2(int y, int x)
 {
+	feature_type *f_ptr = &f_info[cave[y][x].feat];
+
 	/* Set the monster list */
-	switch (cave[y][x].feat)
+
+	/* Water */
+	if (have_flag(f_ptr->flags, FF_WATER))
 	{
-	case FEAT_SHAL_WATER:
-		return (monster_hook_type)mon_hook_shallow_water;
-	case FEAT_DEEP_WATER:
-		return (monster_hook_type)mon_hook_deep_water;
-	case FEAT_DEEP_LAVA:
-	case FEAT_SHAL_LAVA:
-		return (monster_hook_type)mon_hook_lava;
-	default:
-		return (monster_hook_type)mon_hook_floor;
+		/* Deep water */
+		if (have_flag(f_ptr->flags, FF_DEEP))
+		{
+			return (monster_hook_type)mon_hook_deep_water;
+		}
+
+		/* Shallow water */
+		else
+		{
+			return (monster_hook_type)mon_hook_shallow_water;
+		}
 	}
+
+	/* Lava */
+	else if (have_flag(f_ptr->flags, FF_LAVA))
+	{
+		return (monster_hook_type)mon_hook_lava;
+	}
+
+	else return (monster_hook_type)mon_hook_floor;
 }
 
 
@@ -3403,52 +3417,66 @@ msg_format("%^sは怒った！", m_name);
 /*
  * Check if monster can cross terrain
  */
-bool monster_can_cross_terrain(byte feat, monster_race *r_ptr)
+bool monster_can_cross_terrain(s16b feat, monster_race *r_ptr, u16b mode)
 {
-	/* Pit */
-	if (feat == FEAT_DARK_PIT)
+	feature_type *f_ptr = &f_info[feat];
+
+	/* Pattern */
+	if (have_flag(f_ptr->flags, FF_PATTERN))
 	{
-		if (r_ptr->flags7 & RF7_CAN_FLY)
-			return TRUE;
+		if (!(mode & CEM_RIDING))
+		{
+			if (!(r_ptr->flags7 & RF7_CAN_FLY)) return FALSE;
+		}
 		else
-			return FALSE;
+		{
+			if (!(mode & CEM_P_CAN_ENTER_PATTERN)) return FALSE;
+		}
 	}
-	/* Deep water */
-	if (feat == FEAT_DEEP_WATER)
+
+	/* "CAN" flags */
+	if (have_flag(f_ptr->flags, FF_CAN_FLY) && (r_ptr->flags7 & RF7_CAN_FLY)) return TRUE;
+	if (have_flag(f_ptr->flags, FF_CAN_SWIM) && (r_ptr->flags7 & RF7_CAN_SWIM)) return TRUE;
+	if (have_flag(f_ptr->flags, FF_CAN_PASS))
 	{
-		if ((r_ptr->flags7 & RF7_AQUATIC) ||
-		    (r_ptr->flags7 & RF7_CAN_FLY) ||
-		    (r_ptr->flags7 & RF7_CAN_SWIM))
-			return TRUE;
-		else
-			return FALSE;
+		if ((r_ptr->flags2 & RF2_PASS_WALL) && (!(mode & CEM_RIDING) || p_ptr->pass_wall)) return TRUE;
 	}
-	/* Shallow water */
-	else if (feat == FEAT_SHAL_WATER)
+
+	if (!have_flag(f_ptr->flags, FF_MOVE))
 	{
-		if (!(r_ptr->flags2 & RF2_AURA_FIRE) ||
-		    (r_ptr->flags7 & RF7_AQUATIC) ||
-		    (r_ptr->flags7 & RF7_CAN_FLY) ||
-		    (r_ptr->flags7 & RF7_CAN_SWIM))
-			return TRUE;
-		else
-			return FALSE;
-	}
-	/* Aquatic monster */
-	else if ((r_ptr->flags7 & RF7_AQUATIC) &&
-		    !(r_ptr->flags7 & RF7_CAN_FLY))
-	{
+		/* Can fly over mountain on the surface */
+		if (have_flag(f_ptr->flags, FF_MOUNTAIN) && !dun_level)
+		{
+			if ((r_ptr->flags7 & RF7_CAN_FLY) || (r_ptr->flags8 & RF8_WILD_MOUNTAIN))
+				return TRUE;
+		}
+
+		/* Cannot enter */
 		return FALSE;
 	}
-	/* Lava */
-	else if ((feat == FEAT_SHAL_LAVA) ||
-	    (feat == FEAT_DEEP_LAVA))
+
+	if (have_flag(f_ptr->flags, FF_MUST_FLY) && !(r_ptr->flags7 & RF7_CAN_FLY)) return FALSE;
+
+	/* Water */
+	if (have_flag(f_ptr->flags, FF_WATER))
 	{
-		if ((r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) ||
-		    (r_ptr->flags7 & RF7_CAN_FLY))
-			return TRUE;
-		else
-			return FALSE;
+		if (!(r_ptr->flags7 & RF7_AQUATIC))
+		{
+			/* Deep water */
+			if (have_flag(f_ptr->flags, FF_DEEP)) return FALSE;
+
+			/* Shallow water */
+			else if (r_ptr->flags2 & RF2_AURA_FIRE) return FALSE;
+		}
+	}
+
+	/* Aquatic monster into non-water? */
+	else if (r_ptr->flags7 & RF7_AQUATIC) return FALSE;
+
+	/* Lava */
+	if (have_flag(f_ptr->flags, FF_LAVA))
+	{
+		if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) return FALSE;
 	}
 
 	return TRUE;
@@ -3458,92 +3486,15 @@ bool monster_can_cross_terrain(byte feat, monster_race *r_ptr)
 /*
  * Strictly check if monster can enter the grid
  */
-bool monster_can_enter(int y, int x, monster_race *r_ptr)
+bool monster_can_enter(int y, int x, monster_race *r_ptr, u16b mode)
 {
 	cave_type *c_ptr = &cave[y][x];
-	byte feat = c_ptr->feat;
 
 	/* Player or other monster */
 	if (player_bold(y, x)) return FALSE;
 	if (c_ptr->m_idx) return FALSE;
 
-	/* Permanent wall */
-	if ((c_ptr->feat >= FEAT_PERM_EXTRA) &&
-	    (c_ptr->feat <= FEAT_PERM_SOLID))
-		return FALSE;
-
-	/* Can fly over the Pattern */
-	if ((c_ptr->feat >= FEAT_PATTERN_START) &&
-	    (c_ptr->feat <= FEAT_PATTERN_XTRA2))
-	{
-	    if (!(r_ptr->flags7 & RF7_CAN_FLY))
-		    return FALSE;
-	    else
-		    return TRUE;
-	}
-
-	/* Can fly over mountain on the surface */
-	if (feat == FEAT_MOUNTAIN)
-	{
-	    if (!dun_level && 
-		((r_ptr->flags7 & RF7_CAN_FLY) ||
-		 (r_ptr->flags8 & RF8_WILD_MOUNTAIN)))
-		    return TRUE;
-	    else
-		    return FALSE;
-	}
-
-	/* Cannot enter wall without pass wall ability */
-	if (!cave_floor_grid(c_ptr) && !(r_ptr->flags2 & RF2_PASS_WALL))
-		return FALSE;
-
-	/* Pit */
-	if (feat == FEAT_DARK_PIT)
-	{
-		if (r_ptr->flags7 & RF7_CAN_FLY)
-			return TRUE;
-		else
-			return FALSE;
-	}
-	/* Deep water */
-	if (feat == FEAT_DEEP_WATER)
-	{
-		if ((r_ptr->flags7 & RF7_AQUATIC) ||
-		    (r_ptr->flags7 & RF7_CAN_FLY) ||
-		    (r_ptr->flags7 & RF7_CAN_SWIM))
-			return TRUE;
-		else
-			return FALSE;
-	}
-	/* Shallow water */
-	else if (feat == FEAT_SHAL_WATER)
-	{
-		if (!(r_ptr->flags2 & RF2_AURA_FIRE) ||
-		    (r_ptr->flags7 & RF7_AQUATIC) ||
-		    (r_ptr->flags7 & RF7_CAN_FLY) ||
-		    (r_ptr->flags7 & RF7_CAN_SWIM))
-			return TRUE;
-		else
-			return FALSE;
-	}
-	/* Aquatic monster */
-	else if ((r_ptr->flags7 & RF7_AQUATIC) &&
-		    !(r_ptr->flags7 & RF7_CAN_FLY))
-	{
-		return FALSE;
-	}
-	/* Lava */
-	else if ((feat == FEAT_SHAL_LAVA) ||
-	    (feat == FEAT_DEEP_LAVA))
-	{
-		if ((r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) ||
-		    (r_ptr->flags7 & RF7_CAN_FLY))
-			return TRUE;
-		else
-			return FALSE;
-	}
-
-	return TRUE;
+	return monster_can_cross_terrain(c_ptr->feat, r_ptr, mode);
 }
 
 

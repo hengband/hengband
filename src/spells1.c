@@ -17,19 +17,6 @@
 #define HURT_CHANCE 16
 
 
-/*
- * Does the grid stop disintegration?
- */
-#define cave_stop_disintegration(Y,X) \
-	(((cave[Y][X].feat >= FEAT_PERM_EXTRA) && \
-	  (cave[Y][X].feat <= FEAT_PERM_SOLID)) || \
-	  (cave[Y][X].feat == FEAT_MOUNTAIN) || \
-	 ((cave[Y][X].feat >= FEAT_SHOP_HEAD) && \
-	  (cave[Y][X].feat <= FEAT_SHOP_TAIL)) || \
-	 ((cave[Y][X].feat >= FEAT_BLDG_HEAD) && \
-	  (cave[Y][X].feat <= FEAT_BLDG_TAIL)) || \
-	  (cave[Y][X].feat == FEAT_MUSEUM))
-
 static int rakubadam_m;
 static int rakubadam_p;
 
@@ -384,7 +371,7 @@ sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 			else if (!(flg & (PROJECT_PATH)))
 			{
 				/* Always stop at non-initial wall grids */
-				if ((n > 0) && !cave_floor_bold(y, x)) break;
+				if ((n > 0) && !have_flag(f_flags_bold(y, x), FF_PROJECT)) break;
 			}
 
 			/* Sometimes stop at non-initial monsters/players */
@@ -469,7 +456,7 @@ sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 			else if (!(flg & (PROJECT_PATH)))
 			{
 				/* Always stop at non-initial wall grids */
-				if ((n > 0) && !cave_floor_bold(y, x)) break;
+				if ((n > 0) && !have_flag(f_flags_bold(y, x), FF_PROJECT)) break;
 			}
 
 			/* Sometimes stop at non-initial monsters/players */
@@ -536,7 +523,7 @@ sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 			else if (!(flg & (PROJECT_PATH)))
 			{
 				/* Always stop at non-initial wall grids */
-				if ((n > 0) && !cave_floor_bold(y, x)) break;
+				if ((n > 0) && !have_flag(f_flags_bold(y, x), FF_PROJECT)) break;
 			}
 
 			/* Sometimes stop at non-initial monsters/players */
@@ -593,6 +580,7 @@ static s16b monster_target_y;
 static bool project_f(int who, int r, int y, int x, int dam, int typ)
 {
 	cave_type       *c_ptr = &cave[y][x];
+	feature_type    *f_ptr = &f_info[c_ptr->feat];
 
 	bool obvious = FALSE;
 	bool known = player_has_los_bold(y, x);
@@ -605,7 +593,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 	dam = (dam + r) / (r + 1);
 
 
-	if (c_ptr->feat == FEAT_TREES)
+	if (have_flag(f_ptr->flags, FF_TREE))
 	{
 		cptr message;
 		switch (typ)
@@ -743,7 +731,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 				if (known)
 				{
 #ifdef JP
-msg_print("まばゆい閃光が走った！");
+					msg_print("まばゆい閃光が走った！");
 #else
 					msg_print("There is a bright flash of light!");
 #endif
@@ -751,25 +739,23 @@ msg_print("まばゆい閃光が走った！");
 					obvious = TRUE;
 				}
 
-				/* Forget the trap */
-				c_ptr->info &= ~(CAVE_MARK);
-
 				/* Destroy the trap */
-				cave_set_feat(y, x, floor_type[randint0(100)]);
+				cave_alter_feat(y, x, FF_DISARM);
 			}
 
 			/* Locked doors are unlocked */
-			else if ((c_ptr->feat >= FEAT_DOOR_HEAD + 0x01) &&
-						 (c_ptr->feat <= FEAT_DOOR_HEAD + 0x07))
+			if (is_closed_door(c_ptr->feat) && f_ptr->power && have_flag(f_ptr->flags, FF_OPEN))
 			{
+				s16b old_feat = c_ptr->feat;
+
 				/* Unlock the door */
-				cave_set_feat(y, x, FEAT_DOOR_HEAD + 0x00);
+				cave_alter_feat(y, x, FF_DISARM);
 
 				/* Check line of sound */
-				if (known)
+				if (known && (old_feat != c_ptr->feat))
 				{
 #ifdef JP
-msg_print("カチッと音がした！");
+					msg_print("カチッと音がした！");
 #else
 					msg_print("Click!");
 #endif
@@ -796,18 +782,14 @@ msg_print("カチッと音がした！");
 		case GF_KILL_DOOR:
 		{
 			/* Destroy all doors and traps */
-			if ((c_ptr->feat == FEAT_OPEN) ||
-			    (c_ptr->feat == FEAT_BROKEN) ||
-			    is_trap(c_ptr->feat) ||
-			    ((c_ptr->feat >= FEAT_DOOR_HEAD) &&
-			     (c_ptr->feat <= FEAT_DOOR_TAIL)))
+			if (is_trap(c_ptr->feat) || have_flag(f_ptr->flags, FF_DOOR))
 			{
 				/* Check line of sight */
 				if (known)
 				{
 					/* Message */
 #ifdef JP
-msg_print("まばゆい閃光が走った！");
+					msg_print("まばゆい閃光が走った！");
 #else
 					msg_print("There is a bright flash of light!");
 #endif
@@ -816,22 +798,15 @@ msg_print("まばゆい閃光が走った！");
 				}
 
 				/* Visibility change */
-				if ((c_ptr->feat >= FEAT_DOOR_HEAD) &&
-					 (c_ptr->feat <= FEAT_DOOR_TAIL))
+				if (have_flag(f_ptr->flags, FF_DOOR))
 				{
 					/* Update some things */
 					p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
 				}
 
-				/* Forget the door */
-				c_ptr->info &= ~(CAVE_MARK);
-
 				/* Destroy the feature */
-				cave_set_feat(y, x, floor_type[randint0(100)]);
+				cave_alter_feat(y, x, FF_TUNNEL);
 			}
-
-			/* Notice */
-			note_spot(y, x);
 
 			/* Remove "unsafe" flag if player is not blind */
 			if (!p_ptr->blind && player_has_los_bold(y, x))
@@ -849,23 +824,28 @@ msg_print("まばゆい閃光が走った！");
 
 		case GF_JAM_DOOR: /* Jams a door (as if with a spike) */
 		{
-			if ((c_ptr->feat >= FEAT_DOOR_HEAD) &&
-				 (c_ptr->feat <= FEAT_DOOR_TAIL))
+			if (have_flag(f_ptr->flags, FF_SPIKE))
 			{
-				/* Convert "locked" to "stuck" XXX XXX XXX */
-				if (c_ptr->feat < FEAT_DOOR_HEAD + 0x08) c_ptr->feat += 0x08;
+				s16b old_mimic = c_ptr->mimic;
 
-				/* Add one spike to the door */
-				if (c_ptr->feat < FEAT_DOOR_TAIL) c_ptr->feat++;
+				cave_alter_feat(y, x, FF_SPIKE);
+
+				c_ptr->mimic = old_mimic;
+
+				/* Notice */
+				note_spot(y, x);
+
+				/* Redraw */
+				lite_spot(y, x);
 
 				/* Check line of sight */
-				if (known)
+				if (known && !c_ptr->mimic)
 				{
 					/* Message */
 #ifdef JP
-msg_print("何かがつっかえてドアが開かない。");
+					msg_format("%sに何かがつっかえて開かなくなった。", f_name + f_ptr->name);
 #else
-					msg_print("The door seems stuck.");
+					msg_format("The %s seems stuck.", f_name + f_ptr->name);
 #endif
 
 					obvious = TRUE;
@@ -877,151 +857,28 @@ msg_print("何かがつっかえてドアが開かない。");
 		/* Destroy walls (and doors) */
 		case GF_KILL_WALL:
 		{
-			/* Non-walls (etc) */
-			if (cave_floor_bold(y, x)) break;
-
-			/* Permanent walls */
-			if (c_ptr->feat >= FEAT_PERM_EXTRA) break;
-
-			/* Granite */
-			if (c_ptr->feat >= FEAT_WALL_EXTRA)
+			if (have_flag(f_ptr->flags, FF_HURT_ROCK))
 			{
+				cptr name = f_name + f_ptr->name;
+
 				/* Message */
 				if (known && (c_ptr->info & (CAVE_MARK)))
 				{
 #ifdef JP
-msg_print("壁が溶けて泥になった！");
+					msg_format("%sが溶けて泥になった！", name);
 #else
-					msg_print("The wall turns into mud!");
+					msg_format("The %s turns into mud!", name);
 #endif
 
 					obvious = TRUE;
 				}
-
-				/* Forget the wall */
-				c_ptr->info &= ~(CAVE_MARK);
 
 				/* Destroy the wall */
-				cave_set_feat(y, x, floor_type[randint0(100)]);
+				cave_alter_feat(y, x, FF_HURT_ROCK);
+
+				/* Update some things */
+				p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
 			}
-
-			/* Quartz / Magma with treasure */
-			else if (c_ptr->feat >= FEAT_MAGMA_H)
-			{
-				/* Message */
-				if (known && (c_ptr->info & (CAVE_MARK)))
-				{
-#ifdef JP
-msg_print("鉱脈が溶けて泥になった！");
-msg_print("何かを発見した！");
-#else
-					msg_print("The vein turns into mud!");
-					msg_print("You have found something!");
-#endif
-
-					obvious = TRUE;
-				}
-
-				/* Forget the wall */
-				c_ptr->info &= ~(CAVE_MARK);
-
-				/* Destroy the wall */
-				cave_set_feat(y, x, floor_type[randint0(100)]);
-
-				/* Place some gold */
-				place_gold(y, x);
-			}
-
-			/* Quartz / Magma */
-			else if (c_ptr->feat >= FEAT_MAGMA)
-			{
-				/* Message */
-				if (known && (c_ptr->info & (CAVE_MARK)))
-				{
-#ifdef JP
-msg_print("鉱脈が溶けて泥になった！");
-#else
-					msg_print("The vein turns into mud!");
-#endif
-
-					obvious = TRUE;
-				}
-
-				/* Forget the wall */
-				c_ptr->info &= ~(CAVE_MARK);
-
-				/* Destroy the wall */
-				cave_set_feat(y, x, floor_type[randint0(100)]);
-			}
-
-			/* Rubble */
-			else if (c_ptr->feat == FEAT_RUBBLE)
-			{
-				/* Message */
-				if (known && (c_ptr->info & (CAVE_MARK)))
-				{
-#ifdef JP
-msg_print("岩石が溶けて泥になった！");
-#else
-					msg_print("The rubble turns into mud!");
-#endif
-
-					obvious = TRUE;
-				}
-
-				/* Forget the wall */
-				c_ptr->info &= ~(CAVE_MARK);
-
-				/* Destroy the rubble */
-				cave_set_feat(y, x, floor_type[randint0(100)]);
-
-				/* Hack -- place an object */
-				if (randint0(100) < 10)
-				{
-					/* Found something */
-					if (player_can_see_bold(y, x))
-					{
-#ifdef JP
-msg_print("岩石の下に何か隠されていた！");
-#else
-						msg_print("There was something buried in the rubble!");
-#endif
-
-						obvious = TRUE;
-					}
-
-					/* Place object */
-					place_object(y, x, 0L);
-				}
-			}
-
-			/* Destroy doors (and secret doors) */
-			else /* if (c_ptr->feat >= FEAT_DOOR_HEAD) */
-			{
-				/* Hack -- special message */
-				if (known && (c_ptr->info & (CAVE_MARK)))
-				{
-#ifdef JP
-msg_print("ドアが溶けて泥になった！");
-#else
-					msg_print("The door turns into mud!");
-#endif
-
-					obvious = TRUE;
-				}
-
-				/* Forget the wall */
-				c_ptr->info &= ~(CAVE_MARK);
-
-				/* Destroy the feature */
-				cave_set_feat(y, x, floor_type[randint0(100)]);
-			}
-
-			/* Notice */
-			note_spot(y, x);
-
-			/* Update some things */
-			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
 
 			break;
 		}
@@ -1051,13 +908,9 @@ msg_print("ドアが溶けて泥になった！");
 		case GF_MAKE_TRAP:
 		{
 			/* Require a "naked" floor grid */
-			if (((cave[y][x].feat != FEAT_FLOOR) &&
-			     (cave[y][x].feat != FEAT_GRASS) &&
-			     (cave[y][x].feat != FEAT_DIRT) &&
-			     (cave[y][x].o_idx == 0) &&
-			     (cave[y][x].m_idx == 0))
-			    || is_mirror_grid(&cave[y][x]) )
-				 break;
+			if (!have_flag(f_ptr->flags, FF_FLOOR) || is_mirror_grid(c_ptr))
+				break;
+
 			/* Place a trap */
 			place_trap(y, x);
 
@@ -1091,12 +944,12 @@ msg_print("ドアが溶けて泥になった！");
 			if (!cave_naked_bold(y, x)) break;
 
 			/* Create a glyph */
-			cave[y][x].info |= CAVE_OBJECT;
-			cave[y][x].mimic = FEAT_GLYPH;
+			c_ptr->info |= CAVE_OBJECT;
+			c_ptr->mimic = FEAT_GLYPH;
 
 			/* Notice */
 			note_spot(y, x);
-	
+
 			/* Redraw */
 			lite_spot(y, x);
 
@@ -1206,16 +1059,19 @@ msg_print("ドアが溶けて泥になった！");
 				if (player_can_see_bold(y, x)) obvious = TRUE;
 
 				/* Turn off the light. */
-				if (!is_mirror_grid(c_ptr)) c_ptr->info &= ~(CAVE_GLOW);
-
-				/* Hack -- Forget "boring" grids */
-				if ((c_ptr->feat <= FEAT_INVIS) || (c_ptr->feat == FEAT_DIRT) || (c_ptr->feat == FEAT_GRASS))
+				if (!is_mirror_grid(c_ptr))
 				{
-					/* Forget */
-					c_ptr->info &= ~(CAVE_MARK);
+					c_ptr->info &= ~(CAVE_GLOW);
 
-					/* Notice */
-					note_spot(y, x);
+					/* Hack -- Forget "boring" grids */
+					if (!have_flag(f_ptr->flags, FF_REMEMBER))
+					{
+						/* Forget */
+						c_ptr->info &= ~(CAVE_MARK);
+
+						/* Notice */
+						note_spot(y, x);
+					}
 				}
 
 				/* Redraw */
@@ -1232,28 +1088,29 @@ msg_print("ドアが溶けて泥になった！");
 		case GF_SHARDS:
 		case GF_ROCKET:
 		{
-			if (is_mirror_grid(&cave[y][x]))
+			if (is_mirror_grid(c_ptr))
 			{
 #ifdef JP
 				msg_print("鏡が割れた！");
 #else
-				msg_print("The mirror was chashed!");
-#endif				
-				remove_mirror(y,x);
-			    project(0,2,y,x, p_ptr->lev /2 +5 ,GF_SHARDS,(PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP|PROJECT_NO_HANGEKI),-1);
+				msg_print("The mirror was crashed!");
+#endif
+				remove_mirror(y, x);
+				project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 			}
 			break;
 		}
 		case GF_SOUND:
 		{
-			if (is_mirror_grid(&cave[y][x]) && p_ptr->lev < 40 )
+			if (is_mirror_grid(c_ptr) && p_ptr->lev < 40)
 			{
 #ifdef JP
 				msg_print("鏡が割れた！");
 #else
-				msg_print("The mirror was chashed!");
-#endif				
-				cave_set_feat(y,x, FEAT_FLOOR);
+				msg_print("The mirror was crashed!");
+#endif
+				remove_mirror(y, x);
+				project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 			}
 			break;
 		}
@@ -8113,31 +7970,27 @@ bool in_disintegration_range(int y1, int x1, int y2, int x2)
  */
 static bool do_disintegration(int by, int bx, int y, int x)
 {
-	byte feat;
+	feature_type *f_ptr;
 
 	/* Disintegration balls explosions are stopped by perma-walls */
 	if (!in_disintegration_range(by, bx, y, x)) return FALSE;
-						
+
 	/* Permanent walls and artifacts don't get effect */
 	/* But not protect monsters and other objects */
 	if (!cave_valid_bold(y, x)) return TRUE;
 
 	/* Destroy mirror/glyph */
-	remove_mirror(y,x);
+	remove_mirror(y, x);
 
-	feat = cave[y][x].feat;
+	f_ptr = &f_info[cave[y][x].feat];
 
-	if ((feat < FEAT_PATTERN_START || feat > FEAT_PATTERN_XTRA2) &&
-	    (feat < FEAT_DEEP_WATER || feat > FEAT_GRASS))
+	if (have_flag(f_ptr->flags, FF_HURT_DISI))
 	{
-		if (feat == FEAT_TREES || feat == FEAT_FLOWER || feat == FEAT_DEEP_GRASS)
-			cave_set_feat(y, x, FEAT_GRASS);
-		else
-			cave_set_feat(y, x, floor_type[randint0(100)]);
-	}
+		cave_alter_feat(y, x, FF_HURT_DISI);
 
-	/* Update some things -- similar to GF_KILL_WALL */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
+		/* Update some things -- similar to GF_KILL_WALL */
+		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
+	}
 
 	return TRUE;
 }
@@ -8746,11 +8599,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 				}
 			}
 			if(project_o(0,0,y,x,dam,GF_SUPER_RAY) )notice=TRUE;
-			if( cave[y][x].feat == FEAT_RUBBLE ||
-			    cave[y][x].feat == FEAT_DOOR_HEAD ||
-			    cave[y][x].feat == FEAT_DOOR_TAIL ||
-			    (cave[y][x].feat >= FEAT_WALL_EXTRA &&
-			     cave[y][x].feat <= FEAT_PERM_SOLID ))
+			if (!have_flag(f_flags_bold(y, x), FF_PROJECT))
 			{
 				if( second_step )continue;
 				break;
@@ -8819,7 +8668,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 		else
 		{
 			/* Hack -- Balls explode before reaching walls */
-			if (!cave_floor_bold(ny, nx) && (rad > 0)) break;
+			if (!have_flag(f_flags_bold(ny, nx), FF_PROJECT) && (rad > 0)) break;
 		}
 
 		/* Advance */

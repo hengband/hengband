@@ -641,6 +641,11 @@ static store_type *st_ptr = NULL;
 static owner_type *ot_ptr = NULL;
 #endif
 
+/*
+ * We store the current "store feat" here so everyone can access it
+ */
+static int cur_store_feat;
+
 
 
 
@@ -2329,7 +2334,7 @@ static void display_store(void)
 	/* Normal stores */
 	else
 	{
-		cptr store_name = (f_name + f_info[FEAT_SHOP_HEAD + cur_store_num].name);
+		cptr store_name = (f_name + f_info[cur_store_feat].name);
 		cptr owner_name = (ot_ptr->owner_name);
 		cptr race_name = race_info[ot_ptr->owner_race].title;
 
@@ -3486,7 +3491,7 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 							ot_ptr->owner_name, race_info[ot_ptr->owner_race].title);
 						put_str(buf, 3, 10);
 						sprintf(buf, "%s (%ld)",
-							(f_name + f_info[FEAT_SHOP_HEAD + cur_store_num].name), (long)(ot_ptr->max_cost));
+							(f_name + f_info[cur_store_feat].name), (long)(ot_ptr->max_cost));
 						prt(buf, 3, 50);
 					}
 
@@ -4499,9 +4504,7 @@ void do_cmd_store(void)
 	c_ptr = &cave[py][px];
 
 	/* Verify a store */
-	if (!((c_ptr->feat >= FEAT_SHOP_HEAD) &&
-		  (c_ptr->feat <= FEAT_SHOP_TAIL)) &&
-	    (c_ptr->feat != FEAT_MUSEUM))
+	if (!have_flag(f_flags_grid(c_ptr), FF_STORE))
 	{
 #ifdef JP
 		msg_print("ここには店がありません。");
@@ -4513,8 +4516,7 @@ void do_cmd_store(void)
 	}
 
 	/* Extract the store code */
-	if (c_ptr->feat == FEAT_MUSEUM) which = STORE_MUSEUM;
-	else which = (c_ptr->feat - FEAT_SHOP_HEAD);
+	which = f_info[c_ptr->feat].power;
 
 	old_town_num = p_ptr->town_num;
 	if ((which == STORE_HOME) || (which == STORE_MUSEUM)) p_ptr->town_num = 1;
@@ -4574,6 +4576,9 @@ void do_cmd_store(void)
 
 	/* Save the store number */
 	cur_store_num = which;
+
+	/* Hack -- save the store feature */
+	cur_store_feat = c_ptr->feat;
 
 	/* Save the store and owner pointers */
 	st_ptr = &town[p_ptr->town_num].store[cur_store_num];

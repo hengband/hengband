@@ -4984,15 +4984,10 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 			/* Obtain grid */
 			c_ptr = &cave[ty][tx];
 
+			/* Require drop space */
+			if (!have_flag(f_flags_grid(c_ptr), FF_DROP)) continue;
+
 			/* Require floor space */
-			if ((c_ptr->feat != FEAT_FLOOR) &&
-			    (c_ptr->feat != FEAT_SHAL_WATER) &&
-			    (c_ptr->feat != FEAT_GRASS) &&
-			    (c_ptr->feat != FEAT_DIRT) &&
-			    (c_ptr->feat != FEAT_FLOWER) &&
-			    (c_ptr->feat != FEAT_DEEP_GRASS) &&
-			    (c_ptr->feat != FEAT_SHAL_LAVA) &&
-			    (c_ptr->feat != FEAT_TREES)) continue;
 			if (c_ptr->info & (CAVE_OBJECT)) continue;
 
 			/* No objects */
@@ -5088,16 +5083,6 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 			ty = randint0(cur_hgt);
 			tx = randint0(cur_wid);
 		}
-
-		/* Grid */
-		c_ptr = &cave[ty][tx];
-
-		/* Require floor space (or shallow terrain) -KMW- */
-		if ((c_ptr->feat != FEAT_FLOOR) &&
-		    (c_ptr->feat != FEAT_SHAL_WATER) &&
-		    (c_ptr->feat != FEAT_GRASS) &&
-		    (c_ptr->feat != FEAT_DIRT) &&
-		    (c_ptr->feat != FEAT_SHAL_LAVA)) continue;
 
 		/* Bounce to that location */
 		by = ty;
@@ -5292,9 +5277,9 @@ static int trap_num[MAX_TRAPS] =
  * Actually, it is not this routine, but the "trap instantiation"
  * code, which should also check for "trap doors" on quest levels.
  */
-byte choose_random_trap(void)
+s16b choose_random_trap(void)
 {
-	byte feat;
+	s16b feat;
 
 	/* Pick a trap */
 	while (1)
@@ -5303,7 +5288,7 @@ byte choose_random_trap(void)
 		feat = trap_num[randint0(MAX_TRAPS)];
 
 		/* Accept non-trapdoors */
-		if (feat != FEAT_TRAP_TRAPDOOR) break;
+		if (!have_flag(f_info[feat].flags, FF_MORE)) break;
 
 		/* Hack -- no trap doors on special levels */
 		if (p_ptr->inside_arena || quest_number(dun_level)) continue;
@@ -5324,17 +5309,22 @@ void disclose_grid(int y, int x)
 {
 	cave_type *c_ptr = &cave[y][x];
 
-	/* Paranoia */
-	if (!c_ptr->mimic) return;
+	if (have_flag(f_flags_grid(c_ptr), FF_SECRET))
+	{
+		/* No longer hidden */
+		cave_alter_feat(y, x, FF_SECRET);
+	}
+	else if (c_ptr->mimic)
+	{
+		/* No longer hidden */
+		c_ptr->mimic = 0;
 
-	/* No longer hidden */
-	c_ptr->mimic = 0;
+		/* Notice */
+		note_spot(y, x);
 
-	/* Notice */
-	note_spot(y, x);
-
-	/* Redraw */
-	lite_spot(y, x);
+		/* Redraw */
+		lite_spot(y, x);
+	}
 }
 
 
@@ -5355,7 +5345,7 @@ void place_trap(int y, int x)
 	if (!in_bounds(y, x)) return;
 
 	/* Require empty, clean, floor grid */
-	if (!cave_naked_bold(y, x)) return;
+	if (!cave_clean_bold(y, x)) return;
 
 	/* Place an invisible trap */
 	c_ptr->mimic = c_ptr->feat;
@@ -6827,7 +6817,7 @@ bool process_warning(int xx, int yy)
 	else old_damage = old_damage / 2;
 
 	c_ptr = &cave[yy][xx];
-	if (((!easy_disarm && (is_trap(c_ptr->feat) || c_ptr->feat == FEAT_INVIS))
+	if (((!easy_disarm && is_trap(c_ptr->feat))
 	    || (c_ptr->mimic && is_trap(c_ptr->feat))) && !one_in_(13))
 	{
 		object_type *o_ptr = choose_warning_item();

@@ -108,7 +108,7 @@ static bool wiz_dimension_door(void)
 
 	if (!tgt_pt(&x, &y)) return FALSE;
 
-	if (!cave_empty_bold(y, x))
+	if (!cave_teleportable_bold(y, x, TELEPORT_ALLOW_DEEP | TELEPORT_ALLOW_OBJECT))
 	{
 #ifdef JP
 msg_print("精霊界から物質界に戻る時うまくいかなかった！");

@@ -10,20 +10,20 @@
 
 
 # pool of deep water
-F:83:6:37
+F:83:6:37:LIT
 
 # stream of shallow water
-F:84:14:37
+F:84:14:37:LIT
 
 # pool of deep lava
-F:85:4:37
+F:85:4:37:LIT
 
 # stream of shallow lava
-F:86:12:37
+F:86:12:37:LIT
 
 # dark pit
-F:87:8:37
+F:87:8:37:LIT
 
 # tree
-F:96:5:37
+F:96:5:37:LIT
 

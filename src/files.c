@@ -433,7 +433,7 @@ errr process_pref_file_command(char *buf)
 			n2 = strtol(zz[2], NULL, 0);
 			if (i >= max_r_idx) return 1;
 			r_ptr = &r_info[i];
-			if (n1) r_ptr->x_attr = n1;
+			if (n1 || (!(n2 & 0x80) && n2)) r_ptr->x_attr = n1; /* Allow ATTR_DARK text */
 			if (n2) r_ptr->x_char = n2;
 			return 0;
 		}
@@ -449,27 +449,75 @@ errr process_pref_file_command(char *buf)
 			n2 = strtol(zz[2], NULL, 0);
 			if (i >= max_k_idx) return 1;
 			k_ptr = &k_info[i];
-			if (n1) k_ptr->x_attr = n1;
+			if (n1 || (!(n2 & 0x80) && n2)) k_ptr->x_attr = n1; /* Allow ATTR_DARK text */
 			if (n2) k_ptr->x_char = n2;
 			return 0;
 		}
 		break;
 
 	/* Process "F:<num>:<a>/<c>" -- attr/char for terrain features */
+	/* "F:<num>:<a>/<c>" */
+	/* "F:<num>:<a>/<c>:LIT" */
+	/* "F:<num>:<a>/<c>:<la>/<lc>:<da>/<dc>:<Da>/<Dc>" */
 	case 'F':
-		if (tokenize(buf+2, 3, zz, TOKENIZE_CHECKQUOTE) == 3)
 		{
 			feature_type *f_ptr;
+			int num = tokenize(buf + 2, 9, zz, TOKENIZE_CHECKQUOTE);
+
+			if ((num != 3) && (num != 4) && (num != 9)) return 1;
+			else if ((num == 4) && !streq(zz[3], "LIT")) return 1;
+
 			i = (huge)strtol(zz[0], NULL, 0);
-			n1 = strtol(zz[1], NULL, 0);
-			n2 = strtol(zz[2], NULL, 0);
 			if (i >= max_f_idx) return 1;
 			f_ptr = &f_info[i];
-			if (n1) f_ptr->x_attr = n1;
-			if (n2) f_ptr->x_char = n2;
-			return 0;
+
+			n1 = strtol(zz[1], NULL, 0);
+			n2 = strtol(zz[2], NULL, 0);
+			if (n1 || (!(n2 & 0x80) && n2)) /* Allow ATTR_DARK text */
+			{
+				for (j = 0; j < F_LIT_MAX; j++) f_ptr->x_attr[j] = n1;
+			}
+			if (n2)
+			{
+				for (j = 0; j < F_LIT_MAX; j++) f_ptr->x_char[j] = n2;
+			}
+
+			/* Mega-hack -- feat supports lighting */
+			switch (num)
+			{
+			/* No lighting support */
+			case 3:
+				break;
+
+			/* Use default lighting */
+			case 4:
+				if (is_ascii_graphics(f_ptr->x_attr[F_LIT_STANDARD]))
+				{
+					f_ptr->x_attr[F_LIT_LITE] = lighting_colours[f_ptr->x_attr[F_LIT_STANDARD]][0];
+					f_ptr->x_attr[F_LIT_DARK] = lighting_colours[f_ptr->x_attr[F_LIT_STANDARD]][1];
+					f_ptr->x_attr[F_LIT_DARKDARK] = lighting_colours[lighting_colours[f_ptr->x_attr[F_LIT_STANDARD]][1]][1];
+				}
+				else
+				{
+					f_ptr->x_char[F_LIT_LITE] += 2;
+					f_ptr->x_char[F_LIT_DARK]++;
+					f_ptr->x_char[F_LIT_DARKDARK]++;
+				}
+				break;
+
+			/* Use desired lighting */
+			case 9:
+				for (j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++)
+				{
+					n1 = strtol(zz[j * 2 + 1], NULL, 0);
+					n2 = strtol(zz[j * 2 + 2], NULL, 0);
+					if (n1 || (!(n2 & 0x80) && n2)) f_ptr->x_attr[j] = n1; /* Allow ATTR_DARK text */
+					if (n2) f_ptr->x_char[j] = n2;
+				}
+				break;
+			}
 		}
-		break;
+		return 0;
 
 	/* Process "S:<num>:<a>/<c>" -- attr/char for special things */
 	case 'S':

@@ -122,11 +122,13 @@ dun_data *dun;
  */
 static bool alloc_stairs(int feat, int num, int walls)
 {
-	int         y, x, i, j, flag;
-	int         more_num = 0;
-	cave_type   *c_ptr;
+	int          y, x, i, j, flag;
+	int          more_num = 0;
+	cave_type    *c_ptr;
 
-	if (feat == FEAT_LESS)
+	feature_type *f_ptr = &f_info[feat];
+
+	if (have_flag(f_ptr->flags, FF_LESS))
 	{
 		/* No up stairs in town or in ironman mode */
 		if (ironman_downward || !dun_level) return TRUE;
@@ -134,7 +136,7 @@ static bool alloc_stairs(int feat, int num, int walls)
 		if (dun_level > d_info[dungeon_type].mindepth)
 			more_num = (randint1(num+1))/2;
 	}
-	else if (feat == FEAT_MORE)
+	else if (have_flag(f_ptr->flags, FF_MORE))
 	{
 		int q_idx = quest_number(dun_level);
 
@@ -154,6 +156,9 @@ static bool alloc_stairs(int feat, int num, int walls)
 		if ((dun_level < d_info[dungeon_type].maxdepth-1) && !quest_number(dun_level+1))
 			more_num = (randint1(num)+1)/2;
 	}
+
+	/* Paranoia */
+	else return FALSE;
 
 	/* Place "num" stairs */
 	for (i = 0; i < num; i++)
@@ -181,8 +186,7 @@ static bool alloc_stairs(int feat, int num, int walls)
 				c_ptr->mimic = 0;
 
 				/* Clear previous contents, add stairs */
-				if (i < more_num) c_ptr->feat = feat+0x07;
-				else c_ptr->feat = feat;
+				c_ptr->feat = (i < more_num) ? feat_state(feat, FF_SHAFT) : feat;
 
 				/* All done */
 				flag = TRUE;
@@ -348,15 +352,15 @@ static bool possible_doorway(int y, int x)
 	if (next_to_corr(y, x) >= 2)
 	{
 		/* Check Vertical */
-		if ((cave[y-1][x].feat >= FEAT_MAGMA) &&
-		    (cave[y+1][x].feat >= FEAT_MAGMA))
+		if (have_flag(f_flags_bold(y - 1, x), FF_WALL) &&
+		    have_flag(f_flags_bold(y + 1, x), FF_WALL))
 		{
 			return (TRUE);
 		}
 
 		/* Check Horizontal */
-		if ((cave[y][x-1].feat >= FEAT_MAGMA) &&
-		    (cave[y][x+1].feat >= FEAT_MAGMA))
+		if (have_flag(f_flags_bold(y, x - 1), FF_WALL) &&
+		    have_flag(f_flags_bold(y, x + 1), FF_WALL))
 		{
 			return (TRUE);
 		}
@@ -479,9 +483,12 @@ static void set_bound_perm_wall(cave_type *c_ptr)
 	}
 	else
 	{
+		feature_type *f_ptr = &f_info[c_ptr->feat];
+
 		/* Hack -- Decline boundary walls with known treasure  */
-		if ((c_ptr->feat == FEAT_MAGMA_K) || (c_ptr->feat == FEAT_QUARTZ_K))
-			c_ptr->feat -= (FEAT_MAGMA_K - FEAT_MAGMA);
+		if ((have_flag(f_ptr->flags, FF_HAS_GOLD) || have_flag(f_ptr->flags, FF_HAS_ITEM)) &&
+		    !have_flag(f_ptr->flags, FF_SECRET))
+			c_ptr->feat = feat_state(c_ptr->feat, FF_ENSECRET);
 
 		/* Set boundary mimic */
 		c_ptr->mimic = c_ptr->feat;
@@ -752,13 +759,17 @@ static bool cave_gen(void)
 			}
 			else feat1 = 0;
 
-
-			/* Only add river if matches lake type or if have no lake at all */
-			if ((((dun->laketype == LAKE_T_LAVA) && (feat1 == FEAT_DEEP_LAVA)) ||
-			     ((dun->laketype == LAKE_T_WATER) && (feat1 == FEAT_DEEP_WATER)) ||
-			      !dun->laketype) && feat1)
+			if (feat1)
 			{
-				add_river(feat1, feat2);
+				feature_type *f_ptr = &f_info[feat1];
+
+				/* Only add river if matches lake type or if have no lake at all */
+				if (((dun->laketype == LAKE_T_LAVA) && have_flag(f_ptr->flags, FF_LAVA)) ||
+				    ((dun->laketype == LAKE_T_WATER) && have_flag(f_ptr->flags, FF_WATER)) ||
+				     !dun->laketype)
+				{
+					add_river(feat1, feat2);
+				}
 			}
 		}
 
@@ -808,6 +819,7 @@ static bool cave_gen(void)
 			for (j = 0; j < dun->tunn_n; j++)
 			{
 				cave_type *c_ptr;
+				feature_type *f_ptr;
 
 				/* Access the grid */
 				y = dun->tunn[j].y;
@@ -815,10 +827,10 @@ static bool cave_gen(void)
 
 				/* Access the grid */
 				c_ptr = &cave[y][x];
+				f_ptr = &f_info[c_ptr->feat];
 
 				/* Clear previous contents (if not a lake), add a floor */
-				if ((c_ptr->feat < FEAT_DEEP_WATER) ||
-				    (c_ptr->feat > FEAT_SHAL_LAVA))
+				if (!have_flag(f_ptr->flags, FF_MOVE) || (!have_flag(f_ptr->flags, FF_WATER) && !have_flag(f_ptr->flags, FF_LAVA)))
 				{
 					/* Clear mimic type */
 					c_ptr->mimic = 0;
@@ -1472,7 +1484,9 @@ void generate_cave(void)
 		/* Clear and empty the cave */
 		clear_cave();
 
-		if ((d_info[dungeon_type].fill_type1 == FEAT_MAGMA_K) || (d_info[dungeon_type].fill_type2 == FEAT_MAGMA_K) || (d_info[dungeon_type].fill_type3 == FEAT_MAGMA_K)) rating += 40;
+		if (have_flag(f_info[d_info[dungeon_type].fill_type1].flags, FF_HAS_GOLD) ||
+		    have_flag(f_info[d_info[dungeon_type].fill_type2].flags, FF_HAS_GOLD) ||
+		    have_flag(f_info[d_info[dungeon_type].fill_type3].flags, FF_HAS_GOLD)) rating += 40;
 
 		/* Build the arena -KMW- */
 		if (p_ptr->inside_arena)

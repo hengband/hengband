@@ -3553,6 +3553,22 @@ void do_cmd_macros(void)
 }
 
 
+static cptr lighting_level_str[F_LIT_MAX] =
+{
+#ifdef JP
+	"標準色",
+	"明色",
+	"暗色",
+	"暗暗色",
+#else
+	"standard",
+	"brightly lit",
+	"darkened",
+	"darkly darkened",
+#endif
+};
+
+
 static void cmd_visuals_aux(int i, int *num, int max)
 {
 	if (iscntrl(i))
@@ -3654,7 +3670,7 @@ void do_cmd_visuals(void)
 
 		/* Prompt */
 #ifdef JP
-		prt("コマンド:", 18, 0);
+		prt("コマンド:", 15, 0);
 #else
 		prt("Command: ", 15, 0);
 #endif
@@ -3679,7 +3695,7 @@ void do_cmd_visuals(void)
 
 			/* Prompt */
 #ifdef JP
-			prt("ファイル: ", 18, 0);
+			prt("ファイル: ", 17, 0);
 #else
 			prt("File: ", 17, 0);
 #endif
@@ -3895,8 +3911,11 @@ void do_cmd_visuals(void)
 				auto_dump_printf("# %s\n", (f_name + f_ptr->name));
 
 				/* Dump the feature attr/char info */
-				auto_dump_printf("F:%d:0x%02X/0x%02X\n\n", i,
-					(byte)(f_ptr->x_attr), (byte)(f_ptr->x_char));
+				auto_dump_printf("F:%d:0x%02X/0x%02X:0x%02X/0x%02X:0x%02X/0x%02X:0x%02X/0x%02X\n\n", i,
+					(byte)(f_ptr->x_attr[F_LIT_STANDARD]), (byte)(f_ptr->x_char[F_LIT_STANDARD]),
+					(byte)(f_ptr->x_attr[F_LIT_LITE]), (byte)(f_ptr->x_char[F_LIT_LITE]),
+					(byte)(f_ptr->x_attr[F_LIT_DARK]), (byte)(f_ptr->x_char[F_LIT_DARK]),
+					(byte)(f_ptr->x_attr[F_LIT_DARKDARK]), (byte)(f_ptr->x_char[F_LIT_DARKDARK]));
 			}
 
 			/* Close */
@@ -4113,6 +4132,7 @@ void do_cmd_visuals(void)
 		else if (i == '8')
 		{
 			static int f = 0;
+			static int lighting_level = F_LIT_STANDARD;
 
 			/* Prompt */
 #ifdef JP
@@ -4129,20 +4149,21 @@ void do_cmd_visuals(void)
 				char c;
 				int t;
 
-				byte da = (byte)f_ptr->d_attr;
-				byte dc = (byte)f_ptr->d_char;
-				byte ca = (byte)f_ptr->x_attr;
-				byte cc = (byte)f_ptr->x_char;
+				byte da = (byte)f_ptr->d_attr[lighting_level];
+				byte dc = (byte)f_ptr->d_char[lighting_level];
+				byte ca = (byte)f_ptr->x_attr[lighting_level];
+				byte cc = (byte)f_ptr->x_char[lighting_level];
 
 				/* Label the object */
+				prt("", 17, 5);
 #ifdef JP
 				Term_putstr(5, 17, -1, TERM_WHITE,
-					    format("地形 = %d, 名前 = %-40.40s",
-						   f, (f_name + f_ptr->name)));
+					    format("地形 = %d, 名前 = %s, 明度 = %s",
+						   f, (f_name + f_ptr->name), lighting_level_str[lighting_level]));
 #else
 				Term_putstr(5, 17, -1, TERM_WHITE,
-					    format("Terrain = %d, Name = %-40.40s",
-						   f, (f_name + f_ptr->name)));
+					    format("Terrain = %d, Name = %s, Lighting = %s",
+						   f, (f_name + f_ptr->name), lighting_level_str[lighting_level]));
 #endif
 
 
@@ -4175,10 +4196,10 @@ void do_cmd_visuals(void)
 				/* Prompt */
 #ifdef JP
 				Term_putstr(0, 22, -1, TERM_WHITE,
-					    "コマンド (n/N/^N/a/A/^A/c/C/^C): ");
+					    "コマンド (n/N/^N/a/A/^A/c/C/^C/l/L/^L): ");
 #else
 				Term_putstr(0, 22, -1, TERM_WHITE,
-					    "Command (n/N/^N/a/A/^A/c/C/^C): ");
+					    "Command (n/N/^N/a/A/^A/c/C/^C/l/L/^L): ");
 #endif
 
 				/* Get a command */
@@ -4197,14 +4218,17 @@ void do_cmd_visuals(void)
 					cmd_visuals_aux(i, &f, max_f_idx);
 					break;
 				case 'a':
-					t = (int)f_info[f].x_attr;
+					t = (int)f_info[f].x_attr[lighting_level];
 					cmd_visuals_aux(i, &t, 256);
-					f_info[f].x_attr = (byte)t;
+					f_info[f].x_attr[lighting_level] = (byte)t;
 					break;
 				case 'c':
-					t = (int)f_info[f].x_char;
+					t = (int)f_info[f].x_char[lighting_level];
 					cmd_visuals_aux(i, &t, 256);
-					f_info[f].x_char = (byte)t;
+					f_info[f].x_char[lighting_level] = (byte)t;
+					break;
+				case 'l':
+					cmd_visuals_aux(i, &lighting_level, F_LIT_MAX);
 					break;
 				}
 			}
@@ -7309,13 +7333,17 @@ static void place_visual_list_cursor(int col, int row, byte a, byte c, byte attr
 static byte attr_idx = 0;
 static byte char_idx = 0;
 
+/* Hack -- for feature lighting */
+static byte attr_idx_feat[F_LIT_MAX] = {0, 0, 0, 0};
+static byte char_idx_feat[F_LIT_MAX] = {0, 0, 0, 0};
+
 /*
  *  Do visual mode command -- Change symbols
  */
 static bool visual_mode_command(char ch, bool *visual_list_ptr, 
-				int height, int width, 
-				byte *attr_top_ptr, byte *char_left_ptr, 
-				byte *cur_attr_ptr, byte *cur_char_ptr)
+				int height, int width,
+				byte *attr_top_ptr, byte *char_left_ptr,
+				byte *cur_attr_ptr, byte *cur_char_ptr, bool *need_redraw)
 {
 	static byte attr_old = 0, char_old = 0;
 
@@ -7340,6 +7368,7 @@ static bool visual_mode_command(char ch, bool *visual_list_ptr,
 		{
 			/* Accept change */
 			*visual_list_ptr = FALSE;
+			*need_redraw = TRUE;
 
 			return TRUE;
 		}
@@ -7363,19 +7392,30 @@ static bool visual_mode_command(char ch, bool *visual_list_ptr,
 
 	case 'C':
 	case 'c':
-		/* Set the visual */
-		attr_idx = *cur_attr_ptr;
-		char_idx = *cur_char_ptr;
+		{
+			int i;
 
+			/* Set the visual */
+			attr_idx = *cur_attr_ptr;
+			char_idx = *cur_char_ptr;
+
+			/* Hack -- for feature lighting */
+			for (i = 0; i < F_LIT_MAX; i++)
+			{
+				attr_idx_feat[i] = 0;
+				char_idx_feat[i] = 0;
+			}
+		}
 		return TRUE;
 
 	case 'P':
 	case 'p':
-		if (attr_idx)
+		if (attr_idx || (!(char_idx & 0x80) && char_idx)) /* Allow ATTR_DARK text */
 		{
 			/* Set the char */
 			*cur_attr_ptr = attr_idx;
 			*attr_top_ptr = MAX(0, (*cur_attr_ptr & 0x7f) - 5);
+			if (!*visual_list_ptr) *need_redraw = TRUE;
 		}
 
 		if (char_idx)
@@ -7383,6 +7423,7 @@ static bool visual_mode_command(char ch, bool *visual_list_ptr,
 			/* Set the char */
 			*cur_char_ptr = char_idx;
 			*char_left_ptr = MAX(0, *cur_char_ptr - 10);
+			if (!*visual_list_ptr) *need_redraw = TRUE;
 		}
 
 		return TRUE;
@@ -7397,7 +7438,7 @@ static bool visual_mode_command(char ch, bool *visual_list_ptr,
 
 			if (use_bigtile) eff_width = width / 2;
 			else eff_width = width;
-					
+
 			/* Restrict direction */
 			if ((a == 0) && (ddy[d] < 0)) d = 0;
 			if ((c == 0) && (ddx[d] < 0)) d = 0;
@@ -7492,7 +7533,7 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 /*
  * Display known monsters.
  */
-static void do_cmd_knowledge_monsters(void)
+static void do_cmd_knowledge_monsters(bool *need_redraw)
 {
 	int i, len, max;
 	int grp_cur, grp_top, old_grp_cur;
@@ -7500,7 +7541,7 @@ static void do_cmd_knowledge_monsters(void)
 	int grp_cnt, grp_idx[100];
 	int mon_cnt;
 	s16b *mon_idx;
-	
+
 	int column = 0;
 	bool flag;
 	bool redraw;
@@ -7651,11 +7692,11 @@ static void do_cmd_knowledge_monsters(void)
 		{
 			Term_gotoxy(max + 3, 6 + (mon_cur - mon_top));
 		}
-	
+
 		ch = inkey();
 
 		/* Do visual mode command if needed */
-		if (visual_mode_command(ch, &visual_list, browser_rows-1, wid - (max + 3), &attr_top, &char_left, &r_ptr->x_attr, &r_ptr->x_char)) continue;
+		if (visual_mode_command(ch, &visual_list, browser_rows-1, wid - (max + 3), &attr_top, &char_left, &r_ptr->x_attr, &r_ptr->x_char, need_redraw)) continue;
 
 		switch (ch)
 		{
@@ -7803,7 +7844,7 @@ static void desc_obj_fake(int k_idx)
 /*
  * Display known objects
  */
-static void do_cmd_knowledge_objects(void)
+static void do_cmd_knowledge_objects(bool *need_redraw)
 {
 	int i, len, max;
 	int grp_cur, grp_top, old_grp_cur;
@@ -7943,7 +7984,7 @@ static void do_cmd_knowledge_objects(void)
 
 		/* Prompt */
 #ifdef JP
-		prt(format("<方向>, 'r'で思い出を見る%s%s, ESC", k_ptr->flavor ? "" : visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更", (attr_idx||char_idx) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"), hgt - 1, 0);
+		prt(format("<方向>, 'r'で詳細を見る%s%s, ESC", k_ptr->flavor ? "" : visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更", (attr_idx||char_idx) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"), hgt - 1, 0);
 #else
 		prt(format("<dir>, 'r' to recall%s%s, ESC", k_ptr->flavor ? "" : visual_list ? ", ENTER to accept" : ", 'v' for visuals", (attr_idx||char_idx) ? ", 'c', 'p' to paste" : ", 'c' to copy"), hgt - 1, 0);
 #endif
@@ -7970,12 +8011,12 @@ static void do_cmd_knowledge_objects(void)
 		{
 			Term_gotoxy(max + 3, 6 + (object_cur - object_top));
 		}
-	
+
 		ch = inkey();
 
 		/* Do visual mode command if needed */
 		/* Symbol of objects with flavor cannot be changed */
-		if (!k_ptr->flavor && visual_mode_command(ch, &visual_list, browser_rows-1, wid - (max + 3), &attr_top, &char_left, &k_ptr->x_attr, &k_ptr->x_char)) continue;
+		if (!k_ptr->flavor && visual_mode_command(ch, &visual_list, browser_rows-1, wid - (max + 3), &attr_top, &char_left, &k_ptr->x_attr, &k_ptr->x_char, need_redraw)) continue;
 
 		switch (ch)
 		{
@@ -8010,14 +8051,22 @@ static void do_cmd_knowledge_objects(void)
 }
 
 
-
 /*
  * Display the features in a group.
  */
 static void display_feature_list(int col, int row, int per_page, int *feat_idx,
-	int feat_cur, int feat_top)
+	int feat_cur, int feat_top, int lighting_level)
 {
 	int i;
+	int col2 = 67;
+	int col3 = 69;
+	int col4 = 71;
+
+	/* Correct columns 1 and 4 */
+	if (use_bigtile)
+	{
+		col2++; col3 += 2; col4 += 3;
+	}
 
 	/* Display lines until done */
 	for (i = 0; i < per_page && feat_idx[feat_top + i]; i++)
@@ -8039,11 +8088,30 @@ static void display_feature_list(int col, int row, int per_page, int *feat_idx,
 		/* Hack -- visual_list mode */
 		if (per_page == 1)
 		{
-			c_prt(attr, format("%02x/%02x", f_ptr->x_attr, f_ptr->x_char), row + i, 60);
+			/* Display lighting level */
+			c_prt(attr, format("(%s)", lighting_level_str[lighting_level]), row + i, col + 1 + strlen(f_name + f_ptr->name));
+
+			c_prt(attr, format("%02x/%02x", f_ptr->x_attr[lighting_level], f_ptr->x_char[lighting_level]), row + i, 56);
 		}
 
 		/* Display symbol */
-		Term_queue_bigchar(68, row + i, f_ptr->x_attr, f_ptr->x_char, 0, 0);
+		Term_queue_bigchar(65, row + i, f_ptr->x_attr[F_LIT_STANDARD], f_ptr->x_char[F_LIT_STANDARD], 0, 0);
+
+		Term_putch(col2, row + i, TERM_SLATE, '(');
+		Term_putch(col3, row + i, TERM_SLATE, '/');
+		Term_putch(col4, row + i, TERM_SLATE, '/');
+		Term_putch(col4 + (use_bigtile ? 3 : 2), row + i, TERM_SLATE, ')');
+
+		/* Mega-hack */
+
+		/* Use lightened colour */
+		Term_queue_bigchar(col2 + 1, row + i, f_ptr->x_attr[F_LIT_LITE], f_ptr->x_char[F_LIT_LITE], 0, 0);
+
+		/* Use darkened colour */
+		Term_queue_bigchar(col3 + 1, row + i, f_ptr->x_attr[F_LIT_DARK], f_ptr->x_char[F_LIT_DARK], 0, 0);
+
+		/* Use darkly darkened colour */
+		Term_queue_bigchar(col4 + 1, row + i, f_ptr->x_attr[F_LIT_DARKDARK], f_ptr->x_char[F_LIT_DARKDARK], 0, 0);
 	}
 
 	/* Clear remaining lines */
@@ -8057,7 +8125,7 @@ static void display_feature_list(int col, int row, int per_page, int *feat_idx,
 /*
  * Interact with feature visuals.
  */
-static void do_cmd_knowledge_features(void)
+static void do_cmd_knowledge_features(bool *need_redraw)
 {
 	int i, len, max;
 	int grp_cur, grp_top, old_grp_cur;
@@ -8065,7 +8133,7 @@ static void do_cmd_knowledge_features(void)
 	int grp_cnt, grp_idx[100];
 	int feat_cnt;
 	int *feat_idx;
-	
+
 	int column = 0;
 	bool flag;
 	bool redraw;
@@ -8075,6 +8143,11 @@ static void do_cmd_knowledge_features(void)
 
 	int browser_rows;
 	int wid, hgt;
+
+	byte attr_old[F_LIT_MAX] = {0, 0, 0, 0};
+	byte char_old[F_LIT_MAX] = {0, 0, 0, 0};
+	byte *cur_attr_ptr, *cur_char_ptr;
+	int lighting_level = F_LIT_STANDARD;
 
 	/* Get size */
 	Term_get_size(&wid, &hgt);
@@ -8123,11 +8196,20 @@ static void do_cmd_knowledge_features(void)
 		if (redraw)
 		{
 			clear_from(0);
-		
+
+#ifdef JP
+			prt("表示 - 地形", 2, 0);
+			prt("グループ", 4, 0);
+			prt("名前", 4, max + 3);
+			if (use_bigtile) prt("文字 ( l/ d/ D)", 4, 63);
+			else prt("文字 (l/d/D)", 4, 62);
+#else
 			prt("Visuals - features", 2, 0);
 			prt("Group", 4, 0);
 			prt("Name", 4, max + 3);
-			prt("Sym", 4, 67);
+			if (use_bigtile) prt("Sym ( l/ d/ D)", 4, 64);
+			else prt("Sym (l/d/D)", 4, 63);
+#endif
 
 			for (i = 0; i < 78; i++)
 			{
@@ -8166,14 +8248,14 @@ static void do_cmd_knowledge_features(void)
 		if (!visual_list)
 		{
 			/* Display a list of features in the current group */
-			display_feature_list(max + 3, 6, browser_rows, feat_idx, feat_cur, feat_top);
+			display_feature_list(max + 3, 6, browser_rows, feat_idx, feat_cur, feat_top, F_LIT_STANDARD);
 		}
 		else
 		{
 			feat_top = feat_cur;
 
 			/* Display a list of features in the current group */
-			display_feature_list(max + 3, 6, 1, feat_idx, feat_cur, feat_top);
+			display_feature_list(max + 3, 6, 1, feat_idx, feat_cur, feat_top, lighting_level);
 
 			/* Display visual list below first object */
 			display_visual_list(max + 3, 7, browser_rows-1, wid - (max + 3), attr_top, char_left);
@@ -8181,17 +8263,19 @@ static void do_cmd_knowledge_features(void)
 
 		/* Prompt */
 #ifdef JP
-		prt(format("<方向>%s%s, ESC", visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更", (attr_idx||char_idx) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"), hgt - 1, 0);
+		prt(format("<方向>%s%s, ESC", visual_list ? ", ENTERで決定, 'a'で対象明度変更" : ", 'v'でシンボル変更", (attr_idx||char_idx) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"), hgt - 1, 0);
 #else
-		prt(format("<dir>%s%s, ESC", visual_list ? ", ENTER to accept" : ", 'v' for visuals", (attr_idx||char_idx) ? ", 'c', 'p' to paste" : ", 'c' to copy"), hgt - 1, 0);
+		prt(format("<dir>%s%s, ESC", visual_list ? ", ENTER to accept, 'a' for lighting level" : ", 'v' for visuals", (attr_idx||char_idx) ? ", 'c', 'p' to paste" : ", 'c' to copy"), hgt - 1, 0);
 #endif
 
 		/* Get the current feature */
 		f_ptr = &f_info[feat_idx[feat_cur]];
+		cur_attr_ptr = &f_ptr->x_attr[lighting_level];
+		cur_char_ptr = &f_ptr->x_char[lighting_level];
 
 		if (visual_list)
 		{
-			place_visual_list_cursor(max + 3, 7, f_ptr->x_attr, f_ptr->x_char, attr_top, char_left);
+			place_visual_list_cursor(max + 3, 7, *cur_attr_ptr, *cur_char_ptr, attr_top, char_left);
 		}
 		else if (!column)
 		{
@@ -8201,11 +8285,85 @@ static void do_cmd_knowledge_features(void)
 		{
 			Term_gotoxy(max + 3, 6 + (feat_cur - feat_top));
 		}
-	
+
 		ch = inkey();
 
+		if ((ch == 'A') && visual_list)
+		{
+			if (lighting_level <= F_LIT_STANDARD) lighting_level = F_LIT_DARKDARK;
+			else lighting_level--;
+			attr_top = MAX(0, (f_ptr->x_attr[lighting_level] & 0x7f) - 5);
+			char_left = MAX(0, f_ptr->x_char[lighting_level] - 10);
+			continue;
+		}
+
+		else if ((ch == 'a') && visual_list)
+		{
+			if (lighting_level >= F_LIT_DARKDARK) lighting_level = F_LIT_STANDARD;
+			else lighting_level++;
+			attr_top = MAX(0, (f_ptr->x_attr[lighting_level] & 0x7f) - 5);
+			char_left = MAX(0, f_ptr->x_char[lighting_level] - 10);
+			continue;
+		}
+
 		/* Do visual mode command if needed */
-		if (visual_mode_command(ch, &visual_list, browser_rows-1, wid - (max + 3), &attr_top, &char_left, &f_ptr->x_attr, &f_ptr->x_char)) continue;
+		else if (visual_mode_command(ch, &visual_list, browser_rows-1, wid - (max + 3), &attr_top, &char_left, cur_attr_ptr, cur_char_ptr, need_redraw))
+		{
+			switch (ch)
+			{
+			/* Restore previous visual settings */
+			case ESCAPE:
+				for (i = 0; i < F_LIT_MAX; i++)
+				{
+					f_ptr->x_attr[i] = attr_old[i];
+					f_ptr->x_char[i] = char_old[i];
+				}
+
+				/* Fall through */
+
+			case '\n':
+			case '\r':
+				lighting_level = F_LIT_STANDARD;
+				break;
+
+			/* Preserve current visual settings */
+			case 'V':
+			case 'v':
+				for (i = 0; i < F_LIT_MAX; i++)
+				{
+					attr_old[i] = f_ptr->x_attr[i];
+					char_old[i] = f_ptr->x_char[i];
+				}
+				lighting_level = F_LIT_STANDARD;
+				break;
+
+			case 'C':
+			case 'c':
+				if (!visual_list)
+				{
+					for (i = 0; i < F_LIT_MAX; i++)
+					{
+						attr_idx_feat[i] = f_ptr->x_attr[i];
+						char_idx_feat[i] = f_ptr->x_char[i];
+					}
+				}
+				break;
+
+			case 'P':
+			case 'p':
+				if (!visual_list)
+				{
+					/* Allow ATTR_DARK text */
+					for (i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++)
+					{
+						if (attr_idx_feat[i] || (!(char_idx_feat[i] & 0x80) && char_idx_feat[i])) f_ptr->x_attr[i] = attr_idx_feat[i];
+						if (char_idx_feat[i]) f_ptr->x_char[i] = char_idx_feat[i];
+					}
+				}
+				break;
+			}
+			continue;
+		}
 
 		switch (ch)
 		{
@@ -9169,16 +9327,21 @@ static void do_cmd_knowledge_autopick(void)
  */
 void do_cmd_knowledge(void)
 {
-	int i,p=0;
+	int i, p = 0;
+	bool need_redraw = FALSE;
+
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
+
 	/* Save the screen */
 	screen_save();
+
 	/* Interact until done */
 	while (1)
 	{
 		/* Clear screen */
 		Term_clear();
+
 		/* Ask for a choice */
 #ifdef JP
 		prt(format("%d/2 ページ", (p+1)), 2, 65);
@@ -9190,7 +9353,8 @@ void do_cmd_knowledge(void)
 
 		/* Give some choices */
 #ifdef JP
-		if (p == 0) {
+		if (p == 0)
+		{
 			prt("(1) 既知の伝説のアイテム                 の一覧", 6, 5);
 			prt("(2) 既知のアイテム                       の一覧", 7, 5);
 			prt("(3) 既知の生きているユニーク・モンスター の一覧", 8, 5);
@@ -9201,7 +9365,9 @@ void do_cmd_knowledge(void)
 			prt("(8) 我が家のアイテム                     の一覧", 13, 5);
 			prt("(9) *鑑定*済み装備の耐性                 の一覧", 14, 5);
 			prt("(0) 地形の表示文字/タイル                の一覧", 15, 5);
-		} else {
+		}
+		else
+		{
 			prt("(a) 自分に関する情報                     の一覧", 6, 5);
 			prt("(b) 突然変異                             の一覧", 7, 5);
 			prt("(c) 武器の経験値                         の一覧", 8, 5);
@@ -9213,7 +9379,8 @@ void do_cmd_knowledge(void)
 			prt("(i) 現在の自動拾い/破壊設定              の一覧", 14, 5);
 		}
 #else
-		if (p == 0) {
+		if (p == 0)
+		{
 			prt("(1) Display known artifacts", 6, 5);
 			prt("(2) Display known objects", 7, 5);
 			prt("(3) Display remaining uniques", 8, 5);
@@ -9224,7 +9391,9 @@ void do_cmd_knowledge(void)
 			prt("(8) Display home inventory", 13, 5);
 			prt("(9) Display *identified* equip.", 14, 5);
 			prt("(0) Display terrain symbols.", 15, 5);
-		} else {
+		}
+		else
+		{
 			prt("(a) Display about yourself", 6, 5);
 			prt("(b) Display mutations", 7, 5);
 			prt("(c) Display weapon proficiency", 8, 5);
@@ -9253,6 +9422,7 @@ void do_cmd_knowledge(void)
 
 		/* Prompt */
 		i = inkey();
+
 		/* Done */
 		if (i == ESCAPE) break;
 		switch (i)
@@ -9265,13 +9435,13 @@ void do_cmd_knowledge(void)
 			do_cmd_knowledge_artifacts();
 			break;
 		case '2': /* Objects */
-			do_cmd_knowledge_objects();
+			do_cmd_knowledge_objects(&need_redraw);
 			break;
 		case '3': /* Uniques */
 			do_cmd_knowledge_uniques();
 			break;
 		case '4': /* Monsters */
-			do_cmd_knowledge_monsters();
+			do_cmd_knowledge_monsters(&need_redraw);
 			break;
 		case '5': /* Kill count  */
 			do_cmd_knowledge_kill_count();
@@ -9289,7 +9459,7 @@ void do_cmd_knowledge(void)
 			do_cmd_knowledge_inven();
 			break;
 		case '0': /* Feature list */
-			do_cmd_knowledge_features();
+			do_cmd_knowledge_features(&need_redraw);
 			break;
 		/* Next page */
 		case 'a': /* Max stat */
@@ -9322,11 +9492,15 @@ void do_cmd_knowledge(void)
 		default: /* Unknown option */
 			bell();
 		}
+
 		/* Flush messages */
 		msg_print(NULL);
 	}
+
 	/* Restore the screen */
 	screen_load();
+
+	if (need_redraw) do_cmd_redraw();
 }
 
 
