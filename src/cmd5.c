@@ -4163,13 +4163,13 @@ msg_print("神の御力が邪悪を打ち払った！");
 			if (dir != 5) {
 				while(1)
 				{
+					if (cave_stop_disintegration(ty + ddy[dir], tx + ddx[dir])) break;
 					tx += ddx[dir];
 					ty += ddy[dir];
 					if (!cave_floor_bold(ty,tx) || !player_has_los_bold(ty, tx) || cave[ty][tx].m_idx) break;
 				}
 			}
-			else if (target_okay() &&
-				 in_disintegration_range(py, px, target_row, target_col))
+			else if (target_okay() && !cave_stop_disintegration(target_row, target_col) && in_disintegration_range(py, px, target_row, target_col))
 			{
 				tx = target_col;
 				ty = target_row;
