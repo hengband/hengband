@@ -4845,9 +4845,9 @@ void wiz_dark(void)
 
 
 	/* Forget every grid */
-	for (y = 0; y < cur_hgt; y++)
+	for (y = 1; y < cur_hgt - 1; y++)
 	{
-		for (x = 0; x < cur_wid; x++)
+		for (x = 1; x < cur_wid - 1; x++)
 		{
 			cave_type *c_ptr = &cave[y][x];
 
@@ -4855,6 +4855,20 @@ void wiz_dark(void)
 			c_ptr->info &= ~(CAVE_MARK | CAVE_IN_DETECT);
 			c_ptr->info |= (CAVE_UNSAFE);
 		}
+	}
+
+	/* Forget every grid on horizontal edge */
+	for (x = 0; x < cur_wid; x++)
+	{
+		cave[0][x].info &= ~(CAVE_MARK);
+		cave[cur_hgt - 1][x].info &= ~(CAVE_MARK);
+	}
+
+	/* Forget every grid on vertical edge */
+	for (y = 1; y < (cur_hgt - 1); y++)
+	{
+		cave[y][0].info &= ~(CAVE_MARK);
+		cave[y][cur_wid - 1].info &= ~(CAVE_MARK);
 	}
 
 	/* Forget all objects */
