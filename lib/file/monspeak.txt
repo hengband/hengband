@@ -677,6 +677,7 @@ says, 'Count 3, then you die.'
 says, 'I came back to kill you.'
 says, 'Fist of the north star is invincible!!'
 shouts, 'AAATATATATATATATATATATATATATATATA!!!!'
+says, 'You're already dead.'
 
 N:1003:The ghost 'Q'
 says, 'Refill'
