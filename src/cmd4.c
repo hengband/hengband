@@ -4424,10 +4424,6 @@ void do_cmd_feeling(void)
 	/* Verify the feeling */
 	if (feeling > 10) feeling = 10;
 
-#ifdef USE_SCRIPT
-	if (cmd_feeling_callback(feeling)) return;
-#endif /* USE_SCRIPT */
-
 	/* No useful feeling in quests */
 	if (p_ptr->inside_quest && !random_quest_number(dun_level))
 	{

@@ -1008,12 +1008,6 @@ void do_cmd_destroy(void)
 		}
 	}
 
-#ifdef USE_SCRIPT
-
-	if (destroy_object_callback(o_ptr, amt)) return;
-
-#endif /* USE_SCRIPT */
-
 	/* Take a turn */
 	energy_use = 100;
 

@@ -1352,10 +1352,6 @@ static void wiz_create_item(void)
 		apply_magic(q_ptr, dun_level, FALSE, FALSE, FALSE, FALSE);
 	}
 
-#ifdef USE_SCRIPT
-	q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 	/* Drop the object from heaven */
 	(void)drop_near(q_ptr, -1, py, px);
 
@@ -1636,43 +1632,6 @@ static void do_cmd_wiz_zap_all(void)
 }
 
 
-#ifdef USE_SCRIPT
-
-/*
- * Hack -- Execute a script function
- */
-static void do_cmd_wiz_script(void)
-{
-	int err;
-	char name[80];
-
-	/* Get name of script to execute */
-	name[0] = '\0';
-
-	if (!get_string("Function name: ", name, 80)) return;
-
-	/* No name, no execute */
-	if (name[0] == '\0')
-	{
-		msg_print("Cancelled.");
-		return;
-	}
-
-	/* Execute script */
-	err = script_execute(name);
-
-	/* Error */
-	if (err)
-	{
-		msg_print("Failed.");
-		return;
-	}
-}
-
-#endif /* USE_SCRIPT */
-
-
-
 #ifdef ALLOW_SPOILERS
 
 /*
@@ -1934,13 +1893,6 @@ void do_cmd_debug(void)
 		case '_':
 		do_cmd_wiz_hack_ben();
 		break;
-
-#ifdef USE_SCRIPT
-		/* Hack -- activate a script */
-		case '@':
-		do_cmd_wiz_script();
-		break;
-#endif /* USE_SCRIPT */
 
 		/* Not a Wizard Command */
 		default:

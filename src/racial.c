@@ -1555,10 +1555,6 @@ msg_print("周囲を調べた。");
 				/* Create the food ration */
 				object_prep(q_ptr, 21);
 
-#ifdef USE_SCRIPT
-				q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 				/* Drop the object from heaven */
 				(void)drop_near(q_ptr, -1, py, px);
 #ifdef JP

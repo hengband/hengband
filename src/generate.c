@@ -1668,6 +1668,7 @@ msg_format("%sとはぐれてしまった。", m_name);
 void generate_cave(void)
 {
 	int y, x, num;
+	int i;
 
 	/* The dungeon is not ready */
 	character_dungeon = FALSE;
@@ -1739,70 +1740,64 @@ void generate_cave(void)
 
 		ambush_flag = FALSE;
 
-#ifdef USE_SCRIPT
-		if (!generate_level_callback(dun_level))
-#endif /* USE_SCRIPT */
+		/* Fill the arrays of floors and walls in the good proportions */
+		for (i = 0; i < 100; i++)
 		{
-			int i;
-			/* Fill the arrays of floors and walls in the good proportions */
-			for (i = 0; i < 100; i++)
-			{
-				int lim1, lim2, lim3;
+			int lim1, lim2, lim3;
 
-				lim1 = d_info[0].floor_percent1;
-				lim2 = lim1 + d_info[0].floor_percent2;
-				lim3 = lim2 + d_info[0].floor_percent3;
+			lim1 = d_info[0].floor_percent1;
+			lim2 = lim1 + d_info[0].floor_percent2;
+			lim3 = lim2 + d_info[0].floor_percent3;
 
-				if (i < lim1)
-					floor_type[i] = d_info[0].floor1;
-				else if (i < lim2)
-					floor_type[i] = d_info[0].floor2;
-				else if (i < lim3)
-					floor_type[i] = d_info[0].floor3;
+			if (i < lim1)
+				floor_type[i] = d_info[0].floor1;
+			else if (i < lim2)
+				floor_type[i] = d_info[0].floor2;
+			else if (i < lim3)
+				floor_type[i] = d_info[0].floor3;
 
-				lim1 = d_info[0].fill_percent1;
-				lim2 = lim1 + d_info[0].fill_percent2;
-				lim3 = lim2 + d_info[0].fill_percent3;
-				if (i < lim1)
-					fill_type[i] = d_info[0].fill_type1;
-				else if (i < lim2)
-					fill_type[i] = d_info[0].fill_type2;
-				else if (i < lim3)
-					fill_type[i] = d_info[0].fill_type3;
-			}
+			lim1 = d_info[0].fill_percent1;
+			lim2 = lim1 + d_info[0].fill_percent2;
+			lim3 = lim2 + d_info[0].fill_percent3;
+			if (i < lim1)
+				fill_type[i] = d_info[0].fill_type1;
+			else if (i < lim2)
+				fill_type[i] = d_info[0].fill_type2;
+			else if (i < lim3)
+				fill_type[i] = d_info[0].fill_type3;
+		}
 
-			/* Build the arena -KMW- */
-			if (p_ptr->inside_arena)
-			{
+		/* Build the arena -KMW- */
+		if (p_ptr->inside_arena)
+		{
 				/* Small arena */
-				arena_gen();
-			}
+			arena_gen();
+		}
 
-			/* Build the battle -KMW- */
-			else if (p_ptr->inside_battle)
-			{
+		/* Build the battle -KMW- */
+		else if (p_ptr->inside_battle)
+		{
 				/* Small arena */
-				battle_gen();
-			}
+			battle_gen();
+		}
 
-			else if (p_ptr->inside_quest)
-			{
-				quest_gen();
-			}
+		else if (p_ptr->inside_quest)
+		{
+			quest_gen();
+		}
 
-			/* Build the town */
-			else if (!dun_level)
-			{
+		/* Build the town */
+		else if (!dun_level)
+		{
 				/* Make the wilderness */
-				if (p_ptr->wild_mode) wilderness_gen_small();
-				else wilderness_gen();
-			}
+			if (p_ptr->wild_mode) wilderness_gen_small();
+			else wilderness_gen();
+		}
 
-			/* Build a real level */
-			else
-			{
-				okay = level_gen(&why);
-			}
+		/* Build a real level */
+		else
+		{
+			okay = level_gen(&why);
 		}
 
 		/* Extract the feeling */

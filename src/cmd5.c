@@ -463,10 +463,6 @@ s = "読める本がない。";
 		o_ptr = &o_list[0 - item];
 	}
 
-#ifdef USE_SCRIPT
-	if (object_browse_callback(o_ptr)) return;
-#endif /* USE_SCRIPT */
-
 	/* Access the item's sval */
 	sval = o_ptr->sval;
 
@@ -4374,9 +4370,6 @@ static bool cast_music_spell(int spell)
  */
 void do_cmd_cast(void)
 {
-#ifdef USE_SCRIPT
-	use_skill_callback();
-#else /* USE_SCRIPT */
 	int	item, sval, spell, realm;
 	int	chance;
 	int	increment = 0;
@@ -4475,10 +4468,6 @@ s = "呪文書がない！";
 	{
 		o_ptr = &o_list[0 - item];
 	}
-
-#ifdef USE_SCRIPT
-	if (object_cast_callback(o_ptr)) return;
-#endif /* USE_SCRIPT */
 
 	/* Access the item's sval */
 	sval = o_ptr->sval;
@@ -4862,7 +4851,6 @@ msg_print("体を悪くしてしまった！");
 	/* Window stuff */
 	p_ptr->window |= (PW_PLAYER);
 	p_ptr->window |= (PW_SPELL);
-#endif /* USE_SCRIPT */
 }
 
 

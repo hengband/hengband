@@ -488,17 +488,7 @@ static void rd_item(object_type *o_ptr)
 		s32b tmp32s;
 
 		rd_s32b(&tmp32s);
-#ifdef USE_SCRIPT
-		if (tmp32s)
-		{
-			char *python_object = (char*) malloc(tmp32s + 1);
-			rd_string(python_object, tmp32s + 1);
-			o_ptr->python = object_load_callback(python_object);
-			free(python_object);
-		}
-#else /* USE_SCRIPT */
 		strip_bytes(tmp32s);
-#endif /* USE_SCRIPT */
 	}
 
 	/* Mega-Hack -- handle "dungeon objects" later */
@@ -2887,17 +2877,7 @@ note("ダンジョンデータ読み込み失敗");
 			s32b tmp32s;
 
 			rd_s32b(&tmp32s);
-#ifdef USE_SCRIPT
-			if (tmp32s)
-			{
-				char *callbacks = (char*) malloc(tmp32s + 1);
-				rd_string(callbacks, tmp32s + 1);
-				callbacks_load_callback(callbacks);
-				free(callbacks);
-			}
-#else /* USE_SCRIPT */
 			strip_bytes(tmp32s);
-#endif /* USE_SCRIPT */
 		}
 	}
 

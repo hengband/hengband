@@ -3162,22 +3162,8 @@ static errr parse_line_building(char *buf)
 
 		case 'Z':
 		{
-#ifdef USE_SCRIPT
-			if (tokenize(s+2, 2, zz, 0) == 2)
-			{
-				/* Index of the action */
-				int action_index = atoi(zz[0]);
-
-				/* Name of the action */
-				strcpy(building[index].act_script[action_index], zz[1]);
-
-				break;
-			}
-			return (1);
-#else /* USE_SCRIPT */
 			/* Ignore scripts */
 			break;
-#endif /* USE_SCRIPT */
 		}
 
 		default:
@@ -3348,10 +3334,6 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				/* Apply magic (no messages, no artifacts) */
 				apply_magic(o_ptr, base_level, FALSE, TRUE, FALSE, FALSE);
 
-#ifdef USE_SCRIPT
-				o_ptr->python = object_create_callback(o_ptr);
-#endif /* USE_SCRIPT */
-
 				(void)drop_near(o_ptr, -1, *y, *x);
 			}
 
@@ -3365,9 +3347,6 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 					object_type *q_ptr = &forge;
 
 					object_prep(q_ptr, k_idx);
-#ifdef USE_SCRIPT
-					q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
 
 					/* Drop it in the dungeon */
 					(void)drop_near(q_ptr, -1, *y, *x);

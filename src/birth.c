@@ -2255,17 +2255,6 @@ static bool get_player_realms(void)
 {
         int i, count;
 
-#ifdef USE_SCRIPT
-	int result = get_player_realms_callback();
-
-	if (result == -1)
-		/* Restart */
-		return FALSE;
-	else if (result == 1)
-		/* Success */
-		return TRUE;
-#endif /* USE_SCRIPT */
-
 	/* Clean up infomation of modifications */
 	put_str("                                   ", 3, 40);
 	put_str("                                   ", 4, 40);
@@ -3525,10 +3514,6 @@ void player_outfit(void)
 	object_type	*q_ptr;
 
 
-#ifdef USE_SCRIPT
-	if (player_outfit_callback()) return;
-#endif /* USE_SCRIPT */
-
 	/* Get local object */
 	q_ptr = &forge;
 
@@ -3551,10 +3536,6 @@ void player_outfit(void)
 			object_aware(q_ptr);
 			object_known(q_ptr);
 
-#ifdef USE_SCRIPT
-			q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 			(void)inven_carry(q_ptr);
 
 			break;
@@ -3566,10 +3547,6 @@ void player_outfit(void)
 			q_ptr->number = (byte)rand_range(3, 7);
 			object_aware(q_ptr);
 			object_known(q_ptr);
-
-#ifdef USE_SCRIPT
-			q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
 
 			(void)inven_carry(q_ptr);
 		}
@@ -3588,10 +3565,6 @@ void player_outfit(void)
 		object_aware(q_ptr);
 		object_known(q_ptr);
 
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 		(void)inven_carry(q_ptr);
 	}
 	else if (p_ptr->pclass != CLASS_NINJA)
@@ -3602,10 +3575,6 @@ void player_outfit(void)
 		q_ptr->xtra4 = rand_range(3, 7) * 500;
 		object_aware(q_ptr);
 		object_known(q_ptr);
-
-#ifdef USE_SCRIPT
-	q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
 
 		(void)inven_carry(q_ptr);
 	}
@@ -3622,10 +3591,6 @@ void player_outfit(void)
 		object_aware(q_ptr);
 		object_known(q_ptr);
 
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 		(void)inven_carry(q_ptr);
 	}
 	if (p_ptr->pclass == CLASS_RANGER)
@@ -3635,10 +3600,6 @@ void player_outfit(void)
 
 		object_aware(q_ptr);
 		object_known(q_ptr);
-
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
 
 		(void)inven_carry(q_ptr);
 	}
@@ -3650,10 +3611,6 @@ void player_outfit(void)
 
 		object_aware(q_ptr);
 		object_known(q_ptr);
-
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
 
 		(void)inven_carry(q_ptr);
 	}
@@ -3667,10 +3624,6 @@ void player_outfit(void)
 		object_aware(q_ptr);
 		object_known(q_ptr);
 
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 		(void)inven_carry(q_ptr);
 	}
 	else if (p_ptr->pclass == CLASS_SORCERER)
@@ -3683,10 +3636,6 @@ void player_outfit(void)
 
 			object_aware(q_ptr);
 			object_known(q_ptr);
-
-#ifdef USE_SCRIPT
-			q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
 
 			(void)inven_carry(q_ptr);
 		}
@@ -3702,10 +3651,6 @@ void player_outfit(void)
 			object_aware(q_ptr);
 			object_known(q_ptr);
 
-#ifdef USE_SCRIPT
-			q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 			(void)inven_carry(q_ptr);
 		}
 
@@ -3715,10 +3660,6 @@ void player_outfit(void)
 		object_aware(q_ptr);
 		object_known(q_ptr);
 
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 		(void)inven_carry(q_ptr);
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_WAYBREAD));
@@ -3726,10 +3667,6 @@ void player_outfit(void)
 
 		object_aware(q_ptr);
 		object_known(q_ptr);
-
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
 
 		(void)inven_carry(q_ptr);
 
@@ -3739,10 +3676,6 @@ void player_outfit(void)
 		object_aware(q_ptr);
 		object_known(q_ptr);
 
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 		(void)inven_carry(q_ptr);
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_PINT_OF_ALE));
@@ -3751,10 +3684,6 @@ void player_outfit(void)
 		object_aware(q_ptr);
 		object_known(q_ptr);
 
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 		(void)inven_carry(q_ptr);
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_PINT_OF_WINE));
@@ -3762,10 +3691,6 @@ void player_outfit(void)
 
 		object_aware(q_ptr);
 		object_known(q_ptr);
-
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
 
 		(void)inven_carry(q_ptr);
 	}
@@ -3777,10 +3702,6 @@ void player_outfit(void)
 
 		object_aware(q_ptr);
 		object_known(q_ptr);
-
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
 
 		(void)inven_carry(q_ptr);
 	}
@@ -3831,10 +3752,6 @@ void player_outfit(void)
 		object_aware(q_ptr);
 		object_known(q_ptr);
 
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 		(void)inven_carry(q_ptr);
 	}
 }
@@ -3852,17 +3769,6 @@ static bool get_player_race(void)
 	char    p2 = ')';
 	char    buf[80], cur[80];
 
-
-#ifdef USE_SCRIPT
-	int result = get_player_race_callback();
-
-	if (result == -1)
-		/* Restart */
-		return FALSE;
-	else if (result == 1)
-		/* Success */
-		return TRUE;
-#endif /* USE_SCRIPT */
 
 	/* Extra info */
 	clear_from(10);
@@ -4051,17 +3957,6 @@ static bool get_player_class(void)
 	char    buf[80], cur[80];
 	cptr    str;
 
-
-#ifdef USE_SCRIPT
-	int result = get_player_class_callback();
-
-	if (result == -1)
-		/* Restart */
-		return FALSE;
-	else if (result == 1)
-		/* Success */
-		return TRUE;
-#endif /* USE_SCRIPT */
 
 	/* Extra info */
 	clear_from(10);
@@ -4276,17 +4171,6 @@ static bool get_player_seikaku(void)
 	char    tmp[64];
 	cptr    str;
 
-
-#ifdef USE_SCRIPT
-	int result = get_player_seikaku_callback();
-
-	if (result == -1)
-		/* Restart */
-		return FALSE;
-	else if (result == 1)
-		/* Success */
-		return TRUE;
-#endif /* USE_SCRIPT */
 
 	/* Extra info */
 	clear_from(10);
@@ -5093,10 +4977,6 @@ static bool player_birth_aux(void)
 	char buf[80], cur[80];
 	char inp[80];
 
-#ifdef USE_SCRIPT
-	int result;
-#endif /* USE_SCRIPT */
-
 
 	/*** Intro ***/
 
@@ -5142,20 +5022,6 @@ static bool player_birth_aux(void)
 	put_str("Make your charactor. ('S' Restart, 'Q' Quit, '?' Help)", 8, 10);
 #endif
 
-
-#ifdef USE_SCRIPT
-	/*
-	 * Ask for the world
-	 */
-	result = get_world_callback();
-
-	if (result == -1)
-		/* Restart */
-		return FALSE;
-
-	/* Clean up */
-	clear_from(10);
-#endif /* USE_SCRIPT */
 
 	/*** Player sex ***/
 

@@ -1763,10 +1763,6 @@ static void store_item_optimize(int item)
 	/* Must have no items */
 	if (o_ptr->number) return;
 
-#ifdef USE_SCRIPT
-	object_delete_callback(o_ptr);
-#endif /* USE_SCRIPT */
-
 	/* One less item */
 	st_ptr->stock_num--;
 
@@ -1953,10 +1949,6 @@ static void store_create(void)
 
 		/* Mass produce and/or Apply discount */
 		mass_produce(q_ptr);
-
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
 
 		/* Attempt to carry the (known) item */
 		(void)store_carry(q_ptr);
@@ -4039,12 +4031,6 @@ msg_print("特に変わったところはないようだ。");
 #endif
 
 
-#ifdef USE_SCRIPT
-
-	store_examine_callback(o_ptr);
-
-#endif /* USE_SCRIPT */
-
 	return;
 }
 
@@ -5001,10 +4987,6 @@ void store_init(int town_num, int store_num)
 	/* Clear any old items */
 	for (k = 0; k < st_ptr->stock_size; k++)
 	{
-#ifdef USE_SCRIPT
-		object_delete_callback(&st_ptr->stock[k]);
-#endif /* USE_SCRIPT */
-
 		object_wipe(&st_ptr->stock[k]);
 	}
 }
@@ -5020,10 +5002,6 @@ void move_to_black_market(object_type *o_ptr)
 	o_ptr->ident |= IDENT_STOREB;
 
 	(void)store_carry(o_ptr);
-
-#ifdef USE_SCRIPT
-	object_delete_callback(o_ptr);
-#endif /* USE_SCRIPT */
 
 	object_wipe(o_ptr); /* Don't leave a bogus object behind... */
 }

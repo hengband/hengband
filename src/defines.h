@@ -48,17 +48,10 @@
 #define SAVEFILE_VERSION 3
 
 /* Added for ZAngband */
-#ifdef USE_SCRIPT
-#define FAKE_VERSION   0
-#define FAKE_VER_MAJOR 3
-#define FAKE_VER_MINOR 0
-#define FAKE_VER_PATCH 0
-#else /* USE_SCRIPT */
 #define FAKE_VERSION   0
 #define FAKE_VER_MAJOR 11
 #define FAKE_VER_MINOR 0
 #define FAKE_VER_PATCH 8
-#endif /* USE_SCRIPT */
 
 #define ANGBAND_2_8_1
 #define ZANGBAND

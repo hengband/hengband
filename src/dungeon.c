@@ -220,197 +220,180 @@ static void sense_inventory1(void)
 	bool        heavy = FALSE;
 	object_type *o_ptr;
 
-#ifdef USE_SCRIPT
-	int         result;
-#endif /* USE_SCRIPT */
-
 
 	/*** Check for "sensing" ***/
 
 	/* No sensing when confused */
 	if (p_ptr->confused) return;
 
-#ifdef USE_SCRIPT
-
-	result = sense_inventory_callback();
-
-	if (result == -1)
-		heavy = TRUE;
-
-	if (!result)
-
-#endif /* USE_SCRIPT */
-
+	/* Analyze the class */
+	switch (p_ptr->pclass)
 	{
-		/* Analyze the class */
-		switch (p_ptr->pclass)
+		case CLASS_WARRIOR:
+		case CLASS_ARCHER:
+		case CLASS_SAMURAI:
+		case CLASS_CAVALRY:
 		{
-			case CLASS_WARRIOR:
-			case CLASS_ARCHER:
-			case CLASS_SAMURAI:
-			case CLASS_CAVALRY:
-			{
-				/* Good sensing */
-				if (0 != rand_int(9000L / (plev * plev + 40))) return;
+			/* Good sensing */
+			if (0 != rand_int(9000L / (plev * plev + 40))) return;
 
-				/* Heavy sensing */
-				heavy = TRUE;
+			/* Heavy sensing */
+			heavy = TRUE;
 
-				/* Done */
-				break;
-			}
+			/* Done */
+			break;
+		}
 
-			case CLASS_SMITH:
-			{
-				/* Good sensing */
-				if (0 != rand_int(6000L / (plev * plev + 50))) return;
+		case CLASS_SMITH:
+		{
+			/* Good sensing */
+			if (0 != rand_int(6000L / (plev * plev + 50))) return;
 
-				/* Heavy sensing */
-				heavy = TRUE;
+			/* Heavy sensing */
+			heavy = TRUE;
 
-				/* Done */
-				break;
-			}
+			/* Done */
+			break;
+		}
 
-			case CLASS_MAGE:
-			case CLASS_HIGH_MAGE:
-			case CLASS_SORCERER:
-			case CLASS_MAGIC_EATER:
-			{
-				/* Very bad (light) sensing */
-				if (0 != rand_int(240000L / (plev + 5))) return;
+		case CLASS_MAGE:
+		case CLASS_HIGH_MAGE:
+		case CLASS_SORCERER:
+		case CLASS_MAGIC_EATER:
+		{
+			/* Very bad (light) sensing */
+			if (0 != rand_int(240000L / (plev + 5))) return;
 
-				/* Done */
-				break;
-			}
+			/* Done */
+			break;
+		}
 
-			case CLASS_PRIEST:
-			case CLASS_BARD:
-			{
-				/* Good (light) sensing */
-				if (0 != rand_int(10000L / (plev * plev + 40))) return;
+		case CLASS_PRIEST:
+		case CLASS_BARD:
+		{
+			/* Good (light) sensing */
+			if (0 != rand_int(10000L / (plev * plev + 40))) return;
 
-				/* Done */
-				break;
-			}
+			/* Done */
+			break;
+		}
 
-			case CLASS_ROGUE:
-			case CLASS_NINJA:
-			{
-				/* Okay sensing */
-				if (0 != rand_int(20000L / (plev * plev + 40))) return;
+		case CLASS_ROGUE:
+		case CLASS_NINJA:
+		{
+			/* Okay sensing */
+			if (0 != rand_int(20000L / (plev * plev + 40))) return;
 
-				/* Heavy sensing */
-				heavy = TRUE;
+			/* Heavy sensing */
+			heavy = TRUE;
 
-				/* Done */
-				break;
-			}
+			/* Done */
+			break;
+		}
 
-			case CLASS_RANGER:
-			{
-				/* Bad sensing */
-				if (0 != rand_int(95000L / (plev * plev + 40))) return;
+		case CLASS_RANGER:
+		{
+			/* Bad sensing */
+			if (0 != rand_int(95000L / (plev * plev + 40))) return;
 
-				/* Changed! */
-				heavy = TRUE;
+			/* Changed! */
+			heavy = TRUE;
 
-				/* Done */
-				break;
-			}
+			/* Done */
+			break;
+		}
 
-			case CLASS_PALADIN:
-			{
-				/* Bad sensing */
-				if (0 != rand_int(77777L / (plev * plev + 40))) return;
+		case CLASS_PALADIN:
+		{
+			/* Bad sensing */
+			if (0 != rand_int(77777L / (plev * plev + 40))) return;
 
-				/* Heavy sensing */
-				heavy = TRUE;
+			/* Heavy sensing */
+			heavy = TRUE;
 
-				/* Done */
-				break;
-			}
+			/* Done */
+			break;
+		}
 
-			case CLASS_WARRIOR_MAGE:
-			case CLASS_RED_MAGE:
-			{
-				/* Bad sensing */
-				if (0 != rand_int(75000L / (plev * plev + 40))) return;
+		case CLASS_WARRIOR_MAGE:
+		case CLASS_RED_MAGE:
+		{
+			/* Bad sensing */
+			if (0 != rand_int(75000L / (plev * plev + 40))) return;
 
-				/* Done */
-				break;
-			}
+			/* Done */
+			break;
+		}
 
-			case CLASS_MINDCRAFTER:
-			case CLASS_MIRROR_MASTER:
-			{
-				/* Bad sensing */
-				if (0 != rand_int(55000L / (plev * plev + 40))) return;
+		case CLASS_MINDCRAFTER:
+		case CLASS_MIRROR_MASTER:
+		{
+			/* Bad sensing */
+			if (0 != rand_int(55000L / (plev * plev + 40))) return;
 
-				/* Done */
-				break;
-			}
+			/* Done */
+			break;
+		}
 
-			case CLASS_CHAOS_WARRIOR:
-			{
-				/* Bad sensing */
-				if (0 != rand_int(80000L / (plev * plev + 40))) return;
+		case CLASS_CHAOS_WARRIOR:
+		{
+			/* Bad sensing */
+			if (0 != rand_int(80000L / (plev * plev + 40))) return;
 
-				/* Changed! */
-				heavy = TRUE;
+			/* Changed! */
+			heavy = TRUE;
 
-				/* Done */
-				break;
-			}
+			/* Done */
+			break;
+		}
 
-			case CLASS_MONK:
-			case CLASS_FORCETRAINER:
-			{
-				/* Okay sensing */
-				if (0 != rand_int(20000L / (plev * plev + 40))) return;
+		case CLASS_MONK:
+		case CLASS_FORCETRAINER:
+		{
+			/* Okay sensing */
+			if (0 != rand_int(20000L / (plev * plev + 40))) return;
 
-				/* Done */
-				break;
-			}
+			/* Done */
+			break;
+		}
 
-			case CLASS_TOURIST:
-			{
-				/* Good sensing */
-				if (0 != rand_int(20000L / ((plev+50)*(plev+50)))) return;
+		case CLASS_TOURIST:
+		{
+			/* Good sensing */
+			if (0 != rand_int(20000L / ((plev+50)*(plev+50)))) return;
 
-				/* Heavy sensing */
-				heavy = TRUE;
+			/* Heavy sensing */
+			heavy = TRUE;
 
-				/* Done */
-				break;
-			}
+			/* Done */
+			break;
+		}
 
-			case CLASS_IMITATOR:
-			case CLASS_BLUE_MAGE:
-			{
-				/* Bad sensing */
-				if (0 != rand_int(55000L / (plev * plev + 40))) return;
+		case CLASS_IMITATOR:
+		case CLASS_BLUE_MAGE:
+		{
+			/* Bad sensing */
+			if (0 != rand_int(55000L / (plev * plev + 40))) return;
 
-				/* Done */
-				break;
-			}
+			/* Done */
+			break;
+		}
 
-			case CLASS_BEASTMASTER:
-			{
-				/* Bad sensing */
-				if (0 != rand_int(65000L / (plev * plev + 40))) return;
+		case CLASS_BEASTMASTER:
+		{
+			/* Bad sensing */
+			if (0 != rand_int(65000L / (plev * plev + 40))) return;
 
-				/* Done */
-				break;
-			}
-			case CLASS_BERSERKER:
-			{
-				/* Heavy sensing */
-				heavy = TRUE;
+			/* Done */
+			break;
+		}
+		case CLASS_BERSERKER:
+		{
+			/* Heavy sensing */
+			heavy = TRUE;
 
-				/* Done */
-				break;
-			}
+			/* Done */
+			break;
 		}
 	}
 
@@ -477,98 +460,84 @@ static void sense_inventory2(void)
 	int         plev = p_ptr->lev;
 	object_type *o_ptr;
 
-#ifdef USE_SCRIPT
-	int         result;
-#endif /* USE_SCRIPT */
-
 
 	/*** Check for "sensing" ***/
 
 	/* No sensing when confused */
 	if (p_ptr->confused) return;
 
-#ifdef USE_SCRIPT
-
-	result = sense_inventory_callback();
-
-	if (!result)
-
-#endif /* USE_SCRIPT */
-
+	/* Analyze the class */
+	switch (p_ptr->pclass)
 	{
-		/* Analyze the class */
-		switch (p_ptr->pclass)
+		case CLASS_WARRIOR:
+		case CLASS_ARCHER:
+		case CLASS_SAMURAI:
+		case CLASS_CAVALRY:
+		case CLASS_BERSERKER:
 		{
-			case CLASS_WARRIOR:
-			case CLASS_ARCHER:
-			case CLASS_SAMURAI:
-			case CLASS_CAVALRY:
-			case CLASS_BERSERKER:
-			{
-				return;
-			}
+			return;
+		}
 
-			case CLASS_SMITH:
-			case CLASS_PALADIN:
-			case CLASS_CHAOS_WARRIOR:
-			case CLASS_IMITATOR:
-			case CLASS_BEASTMASTER:
-			case CLASS_NINJA:
-			{
-				/* Very bad (light) sensing */
-				if (0 != rand_int(240000L / (plev + 5))) return;
+		case CLASS_SMITH:
+		case CLASS_PALADIN:
+		case CLASS_CHAOS_WARRIOR:
+		case CLASS_IMITATOR:
+		case CLASS_BEASTMASTER:
+		case CLASS_NINJA:
+		{
+			/* Very bad (light) sensing */
+			if (0 != rand_int(240000L / (plev + 5))) return;
 
-				/* Done */
-				break;
-			}
+			/* Done */
+			break;
+		}
 
-			case CLASS_RANGER:
-			case CLASS_WARRIOR_MAGE:
-			case CLASS_RED_MAGE:
-			case CLASS_MONK:
-			{
-				/* Bad sensing */
-				if (0 != rand_int(95000L / (plev * plev + 40))) return;
+		case CLASS_RANGER:
+		case CLASS_WARRIOR_MAGE:
+		case CLASS_RED_MAGE:
+		case CLASS_MONK:
+		{
+			/* Bad sensing */
+			if (0 != rand_int(95000L / (plev * plev + 40))) return;
 
-				/* Done */
-				break;
-			}
+			/* Done */
+			break;
+		}
 
-			case CLASS_PRIEST:
-			case CLASS_BARD:
-			case CLASS_ROGUE:
-			case CLASS_FORCETRAINER:
-			case CLASS_MINDCRAFTER:
-			{
-				/* Good sensing */
-				if (0 != rand_int(20000L / (plev * plev + 40))) return;
+		case CLASS_PRIEST:
+		case CLASS_BARD:
+		case CLASS_ROGUE:
+		case CLASS_FORCETRAINER:
+		case CLASS_MINDCRAFTER:
+		{
+			/* Good sensing */
+			if (0 != rand_int(20000L / (plev * plev + 40))) return;
 
-				/* Done */
-				break;
-			}
+			/* Done */
+			break;
+		}
 
-			case CLASS_MAGE:
-			case CLASS_HIGH_MAGE:
-			case CLASS_SORCERER:
-			case CLASS_MAGIC_EATER:
-			case CLASS_MIRROR_MASTER:
-			case CLASS_BLUE_MAGE:
-			{
-				/* Good sensing */
-				if (0 != rand_int(9000L / (plev * plev + 40))) return;
+		case CLASS_MAGE:
+		case CLASS_HIGH_MAGE:
+		case CLASS_SORCERER:
+		case CLASS_MAGIC_EATER:
+		case CLASS_MIRROR_MASTER:
+		case CLASS_BLUE_MAGE:
+		{
+			/* Good sensing */
+			if (0 != rand_int(9000L / (plev * plev + 40))) return;
 
-				/* Done */
-				break;
-			}
+			/* Done */
+			break;
+		}
 
-			case CLASS_TOURIST:
-			{
-				/* Good sensing */
-				if (0 != rand_int(20000L / ((plev+50)*(plev+50)))) return;
+		case CLASS_TOURIST:
+		{
+			/* Good sensing */
+			if (0 != rand_int(20000L / ((plev+50)*(plev+50)))) return;
 
-				/* Done */
-				break;
-			}
+			/* Done */
+			break;
 		}
 	}
 
@@ -6393,18 +6362,6 @@ if (init_v_info()) quit("建築物初期化不能");
 	/* Process */
 	while (TRUE)
 	{
-#ifdef USE_SCRIPT
-		/* Save the current coordinates */
-		s32b wild_y = p_ptr->wilderness_y;
-		s32b wild_x = p_ptr->wilderness_x;
-		s16b level = dun_level;
-
-		if (level == 0)
-			enter_wilderness_callback(wild_y, wild_x);
-		else
-			enter_level_callback(level);
-#endif /* USE_SCRIPT */
-
 		/* Process the level */
 		dungeon(load_game);
 
@@ -6449,13 +6406,6 @@ if (init_v_info()) quit("建築物初期化不能");
 		msg_print(NULL);
 
 		load_game = FALSE;
-
-#ifdef USE_SCRIPT
-		if (level == 0)
-			leave_wilderness_callback(wild_y, wild_x);
-		else
-			leave_level_callback(level);
-#endif /* USE_SCRIPT */
 
 		/* Accidental Death */
 		if (alive && death)

@@ -601,27 +601,8 @@ static void wr_item(object_type *o_ptr)
 		wr_string("");
 	}
 
-#ifdef USE_SCRIPT
-	{
-		cptr python_object = object_save_callback(o_ptr);
-		if (python_object && *python_object)
-		{
-			wr_s32b(strlen(python_object));
-			wr_string(python_object);
-			string_free(python_object);
-		}
-		else
-		{
-			/* No Python object */
-			wr_s32b(0);
-		}
-	}
-#else /* USE_SCRIPT */
-
 	/* No Python object */
 	wr_s32b(0);
-
-#endif /* USE_SCRIPT */
 }
 
 
@@ -1630,28 +1611,8 @@ static bool wr_savefile_new(void)
 		/* Dump the ghost */
 		wr_ghost();
 
-#ifdef USE_SCRIPT
-		{
-			cptr callbacks = callbacks_save_callback();
-			if (callbacks && *callbacks)
-			{
-				wr_s32b(strlen(callbacks));
-				wr_string(callbacks);
-				string_free(callbacks);
-			}
-			else
-			{
-				/* No scripts */
-				wr_s32b(0);
-			}
-		}
-#else /* USE_SCRIPT */
-
 		/* No scripts */
 		wr_s32b(0);
-
-#endif /* USE_SCRIPT */
-
 	}
 
 

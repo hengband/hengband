@@ -4073,299 +4073,286 @@ msg_print("お金が足りません！");
 
 	if (!bcost) set_reward = TRUE;
 
-#ifdef USE_SCRIPT
-
-	if (building_command_callback(cave[py][px].feat - FEAT_BLDG_HEAD, i))
+	switch (bact)
 	{
-		/* Script paid the price */
-		paid = TRUE;
-	}
-	else
-
-#endif /* USE_SCRIPT */
-
-	{
-		switch (bact)
-		{
-			case BACT_NOTHING:
+	case BACT_NOTHING:
 				/* Do nothing */
-				break;
-			case BACT_RESEARCH_ITEM:
-				paid = identify_fully(FALSE);
-				break;
-			case BACT_TOWN_HISTORY:
-				town_history();
-				break;
-			case BACT_RACE_LEGENDS:
-				race_legends();
-				break;
-			case BACT_QUEST:
-				castle_quest();
-				break;
-			case BACT_KING_LEGENDS:
-			case BACT_ARENA_LEGENDS:
-			case BACT_LEGENDS:
-				show_highclass(building_loc);
-				break;
-			case BACT_POSTER:
-			case BACT_ARENA_RULES:
-			case BACT_ARENA:
-				arena_comm(bact);
-				break;
-			case BACT_IN_BETWEEN:
-			case BACT_CRAPS:
-			case BACT_SPIN_WHEEL:
-			case BACT_DICE_SLOTS:
-			case BACT_GAMBLE_RULES:
-			case BACT_POKER:
-				gamble_comm(bact);
-				break;
-			case BACT_REST:
-			case BACT_RUMORS:
-			case BACT_FOOD:
-				paid = inn_comm(bact);
-				break;
-			case BACT_RESEARCH_MONSTER:
-				paid = research_mon();
-				break;
-			case BACT_COMPARE_WEAPONS:
-				paid = compare_weapons();
-				break;
-			case BACT_ENCHANT_WEAPON:
-				item_tester_hook = item_tester_hook_melee_weapon;
-				enchant_item(bcost, 1, 1, 0);
-				break;
-			case BACT_ENCHANT_ARMOR:
-				item_tester_hook = item_tester_hook_armour;
-				enchant_item(bcost, 0, 0, 1);
-				break;
-			case BACT_RECHARGE:
-				building_recharge();
-				break;
-			case BACT_RECHARGE_ALL:
-				building_recharge_all();
-				break;
-			case BACT_IDENTS: /* needs work */
+		break;
+	case BACT_RESEARCH_ITEM:
+		paid = identify_fully(FALSE);
+		break;
+	case BACT_TOWN_HISTORY:
+		town_history();
+		break;
+	case BACT_RACE_LEGENDS:
+		race_legends();
+		break;
+	case BACT_QUEST:
+		castle_quest();
+		break;
+	case BACT_KING_LEGENDS:
+	case BACT_ARENA_LEGENDS:
+	case BACT_LEGENDS:
+		show_highclass(building_loc);
+		break;
+	case BACT_POSTER:
+	case BACT_ARENA_RULES:
+	case BACT_ARENA:
+		arena_comm(bact);
+		break;
+	case BACT_IN_BETWEEN:
+	case BACT_CRAPS:
+	case BACT_SPIN_WHEEL:
+	case BACT_DICE_SLOTS:
+	case BACT_GAMBLE_RULES:
+	case BACT_POKER:
+		gamble_comm(bact);
+		break;
+	case BACT_REST:
+	case BACT_RUMORS:
+	case BACT_FOOD:
+		paid = inn_comm(bact);
+		break;
+	case BACT_RESEARCH_MONSTER:
+		paid = research_mon();
+		break;
+	case BACT_COMPARE_WEAPONS:
+		paid = compare_weapons();
+		break;
+	case BACT_ENCHANT_WEAPON:
+		item_tester_hook = item_tester_hook_melee_weapon;
+		enchant_item(bcost, 1, 1, 0);
+		break;
+	case BACT_ENCHANT_ARMOR:
+		item_tester_hook = item_tester_hook_armour;
+		enchant_item(bcost, 0, 0, 1);
+		break;
+	case BACT_RECHARGE:
+		building_recharge();
+		break;
+	case BACT_RECHARGE_ALL:
+		building_recharge_all();
+		break;
+	case BACT_IDENTS: /* needs work */
 #ifdef JP
-				if (!get_check("持ち物を全て鑑定してよろしいですか？")) break;
-				identify_pack();
-				msg_print(" 持ち物全てが鑑定されました。");
+		if (!get_check("持ち物を全て鑑定してよろしいですか？")) break;
+		identify_pack();
+		msg_print(" 持ち物全てが鑑定されました。");
 #else
-				if (!get_check("Do you pay for identify all your possession? ")) break;
-				identify_pack();
-				msg_print("Your possessions have been identified.");
+		if (!get_check("Do you pay for identify all your possession? ")) break;
+		identify_pack();
+		msg_print("Your possessions have been identified.");
 #endif
 
-				paid = TRUE;
-				break;
-			case BACT_IDENT_ONE: /* needs work */
-				paid = ident_spell(FALSE);
-				break;
-			case BACT_LEARN:
-				do_cmd_study();
-				break;
-			case BACT_HEALING: /* needs work */
-				hp_player(200);
-				set_poisoned(0);
-				set_blind(0);
-				set_confused(0);
-				set_cut(0);
-				set_stun(0);
-				paid = TRUE;
-				break;
-			case BACT_RESTORE: /* needs work */
-				if (do_res_stat(A_STR)) paid = TRUE;
-				if (do_res_stat(A_INT)) paid = TRUE;
-				if (do_res_stat(A_WIS)) paid = TRUE;
-				if (do_res_stat(A_DEX)) paid = TRUE;
-				if (do_res_stat(A_CON)) paid = TRUE;
-				if (do_res_stat(A_CHR)) paid = TRUE;
-				break;
-			case BACT_GOLD: /* set timed reward flag */
-				if (!p_ptr->rewards[BACT_GOLD])
-				{
-					share_gold();
-					p_ptr->rewards[BACT_GOLD] = TRUE;
-				}
-				else
-				{
+		paid = TRUE;
+		break;
+	case BACT_IDENT_ONE: /* needs work */
+		paid = ident_spell(FALSE);
+		break;
+	case BACT_LEARN:
+		do_cmd_study();
+		break;
+	case BACT_HEALING: /* needs work */
+		hp_player(200);
+		set_poisoned(0);
+		set_blind(0);
+		set_confused(0);
+		set_cut(0);
+		set_stun(0);
+		paid = TRUE;
+		break;
+	case BACT_RESTORE: /* needs work */
+		if (do_res_stat(A_STR)) paid = TRUE;
+		if (do_res_stat(A_INT)) paid = TRUE;
+		if (do_res_stat(A_WIS)) paid = TRUE;
+		if (do_res_stat(A_DEX)) paid = TRUE;
+		if (do_res_stat(A_CON)) paid = TRUE;
+		if (do_res_stat(A_CHR)) paid = TRUE;
+		break;
+	case BACT_GOLD: /* set timed reward flag */
+		if (!p_ptr->rewards[BACT_GOLD])
+		{
+			share_gold();
+			p_ptr->rewards[BACT_GOLD] = TRUE;
+		}
+		else
+		{
 #ifdef JP
-msg_print("今日の分け前はすでに支払ったぞ！");
+			msg_print("今日の分け前はすでに支払ったぞ！");
 #else
-					msg_print("You just had your daily allowance!");
+			msg_print("You just had your daily allowance!");
 #endif
-				}
-				break;
-			case BACT_ENCHANT_ARROWS:
-				item_tester_hook = item_tester_hook_ammo;
-				enchant_item(bcost, 1, 1, 0);
-				break;
-			case BACT_ENCHANT_BOW:
-				item_tester_tval = TV_BOW;
-				enchant_item(bcost, 1, 1, 0);
-				break;
-			case BACT_RECALL:
-				if (recall_player(1)) paid = TRUE;
-				break;
-			case BACT_TELEPORT_LEVEL:
+		}
+		break;
+	case BACT_ENCHANT_ARROWS:
+		item_tester_hook = item_tester_hook_ammo;
+		enchant_item(bcost, 1, 1, 0);
+		break;
+	case BACT_ENCHANT_BOW:
+		item_tester_tval = TV_BOW;
+		enchant_item(bcost, 1, 1, 0);
+		break;
+	case BACT_RECALL:
+		if (recall_player(1)) paid = TRUE;
+		break;
+	case BACT_TELEPORT_LEVEL:
+	{
+		int select_dungeon;
+		int i, num = 0;
+		s16b *dun;
+		int max_depth;
+
+		/* Allocate the "dun" array */
+		C_MAKE(dun, max_d_idx, s16b);
+
+		screen_save();
+		clear_bldg(4, 20);
+
+		for(i = 1; i < max_d_idx; i++)
+		{
+			char buf[80];
+			bool seiha = FALSE;
+
+			if (!d_info[i].maxdepth) continue;
+			if (!max_dlv[i]) continue;
+			if (d_info[i].final_guardian)
 			{
-				int select_dungeon;
-				int i, num = 0;
-				s16b *dun;
-				int max_depth;
-
-				/* Allocate the "dun" array */
-				C_MAKE(dun, max_d_idx, s16b);
-
-				screen_save();
-				clear_bldg(4, 20);
-
-				for(i = 1; i < max_d_idx; i++)
-				{
-					char buf[80];
-					bool seiha = FALSE;
-
-					if (!d_info[i].maxdepth) continue;
-					if (!max_dlv[i]) continue;
-					if (d_info[i].final_guardian)
-					{
-						if (!r_info[d_info[i].final_guardian].max_num) seiha = TRUE;
-					}
-					else if (max_dlv[i] == d_info[i].maxdepth) seiha = TRUE;
+				if (!r_info[d_info[i].final_guardian].max_num) seiha = TRUE;
+			}
+			else if (max_dlv[i] == d_info[i].maxdepth) seiha = TRUE;
 
 #ifdef JP
-					sprintf(buf,"%c) %c%-12s : 最大 %d 階", 'a'+num, seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
+			sprintf(buf,"%c) %c%-12s : 最大 %d 階", 'a'+num, seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
 #else
-					sprintf(buf,"%c) %c%-12s : Max level %d", 'a'+num, seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
+			sprintf(buf,"%c) %c%-12s : Max level %d", 'a'+num, seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
 #endif
-					put_str(buf, 4+num, 5);
-					dun[num] = i;
-					num++;
-				}
+			put_str(buf, 4+num, 5);
+			dun[num] = i;
+			num++;
+		}
 #ifdef JP
-				prt("どのダンジョンにテレポートしますか:", 0, 0);
+		prt("どのダンジョンにテレポートしますか:", 0, 0);
 #else
-				prt("Which dungeon do you teleport?: ", 0, 0);
+		prt("Which dungeon do you teleport?: ", 0, 0);
 #endif
-				while(1)
-				{
-					i = inkey();
+		while(1)
+		{
+			i = inkey();
 
-					if (i == ESCAPE)
-					{
-						/* Free the "dun" array */
-						C_KILL(dun, max_d_idx, s16b);
-
-						screen_load();
-						return;
-					}
-					if (i >= 'a' && i <('a'+num))
-					{
-						select_dungeon = dun[i-'a'];
-						break;
-					}
-					else bell();
-				}
-				screen_load();
-
+			if (i == ESCAPE)
+			{
 				/* Free the "dun" array */
 				C_KILL(dun, max_d_idx, s16b);
 
-				max_depth = d_info[select_dungeon].maxdepth;
-
-				/* Limit depth in Angband */
-				if (select_dungeon == DUNGEON_ANGBAND)
-				{
-					if (quest[QUEST_OBERON].status != QUEST_STATUS_FINISHED) max_depth = 98;
-					else if(quest[QUEST_SERPENT].status != QUEST_STATUS_FINISHED) max_depth = 99;
-				}
-
-#ifdef JP
-amt = get_quantity(format("%sの何階にテレポートしますか？", d_name + d_info[select_dungeon].name), max_depth);
-#else
-amt = get_quantity(format("Teleport to which level of %s? ", d_name + d_info[select_dungeon].name), max_depth);
-#endif
-
-				if (amt > 0)
-				{
-					p_ptr->word_recall = 1;
-					p_ptr->recall_dungeon = select_dungeon;
-					max_dlv[p_ptr->recall_dungeon] = ((amt > d_info[select_dungeon].maxdepth) ? d_info[select_dungeon].maxdepth : ((amt < d_info[select_dungeon].mindepth) ? d_info[select_dungeon].mindepth : amt));
-					if (record_maxdeapth)
-#ifdef JP
-						do_cmd_write_nikki(NIKKI_TRUMP, select_dungeon, "トランプタワーで");
-#else
-						do_cmd_write_nikki(NIKKI_TRUMP, select_dungeon, "at Trump Tower");
-#endif
-#ifdef JP
-msg_print("回りの大気が張りつめてきた...");
-#else
-					msg_print("The air about you becomes charged...");
-#endif
-
-					paid = TRUE;
-					p_ptr->redraw |= (PR_STATUS);
-				}
+				screen_load();
+				return;
+			}
+			if (i >= 'a' && i <('a'+num))
+			{
+				select_dungeon = dun[i-'a'];
 				break;
 			}
-			case BACT_LOSE_MUTATION:
-				paid = lose_mutation(0);
-				/* ToDo: Better message text. */
-				if (!paid)
-#ifdef JP
-msg_print("奇妙なくらい普通になった気がする。");
-#else
-					msg_print("You feel oddly normal.");
-#endif
-
-
-				break;
-			case BACT_BATTLE:
-				kakutoujou();
-				break;
-			case BACT_TSUCHINOKO:
-				tsuchinoko();
-				break;
-			case BACT_KUBI:
-				shoukinkubi();
-				break;
-			case BACT_TARGET:
-				today_target();
-				break;
-			case BACT_KANKIN:
-				kankin();
-				break;
-			case BACT_HEIKOUKA:
-#ifdef JP
-msg_print("平衡化の儀式を行なった。");
-#else
- msg_print("You received an equalization ritual.");
-#endif
-				set_virtue(V_COMPASSION, 0);
-				set_virtue(V_HONOUR, 0);
-				set_virtue(V_JUSTICE, 0);
-				set_virtue(V_SACRIFICE, 0);
-				set_virtue(V_KNOWLEDGE, 0);
-				set_virtue(V_FAITH, 0);
-				set_virtue(V_ENLIGHTEN, 0);
-				set_virtue(V_ENCHANT, 0);
-				set_virtue(V_CHANCE, 0);
-				set_virtue(V_NATURE, 0);
-				set_virtue(V_HARMONY, 0);
-				set_virtue(V_VITALITY, 0);
-				set_virtue(V_UNLIFE, 0);
-				set_virtue(V_PATIENCE, 0);
-				set_virtue(V_TEMPERANCE, 0);
-				set_virtue(V_DILIGENCE, 0);
-				set_virtue(V_VALOUR, 0);
-				set_virtue(V_INDIVIDUALISM, 0);
-				get_virtues();
-				paid = TRUE;
-				break;
-			case BACT_TELE_TOWN:
-				paid = tele_town();
-				break;
+			else bell();
 		}
+		screen_load();
+
+		/* Free the "dun" array */
+		C_KILL(dun, max_d_idx, s16b);
+
+		max_depth = d_info[select_dungeon].maxdepth;
+
+		/* Limit depth in Angband */
+		if (select_dungeon == DUNGEON_ANGBAND)
+		{
+			if (quest[QUEST_OBERON].status != QUEST_STATUS_FINISHED) max_depth = 98;
+			else if(quest[QUEST_SERPENT].status != QUEST_STATUS_FINISHED) max_depth = 99;
+		}
+
+#ifdef JP
+		amt = get_quantity(format("%sの何階にテレポートしますか？", d_name + d_info[select_dungeon].name), max_depth);
+#else
+		amt = get_quantity(format("Teleport to which level of %s? ", d_name + d_info[select_dungeon].name), max_depth);
+#endif
+
+		if (amt > 0)
+		{
+			p_ptr->word_recall = 1;
+			p_ptr->recall_dungeon = select_dungeon;
+			max_dlv[p_ptr->recall_dungeon] = ((amt > d_info[select_dungeon].maxdepth) ? d_info[select_dungeon].maxdepth : ((amt < d_info[select_dungeon].mindepth) ? d_info[select_dungeon].mindepth : amt));
+			if (record_maxdeapth)
+#ifdef JP
+				do_cmd_write_nikki(NIKKI_TRUMP, select_dungeon, "トランプタワーで");
+#else
+			do_cmd_write_nikki(NIKKI_TRUMP, select_dungeon, "at Trump Tower");
+#endif
+#ifdef JP
+			msg_print("回りの大気が張りつめてきた...");
+#else
+			msg_print("The air about you becomes charged...");
+#endif
+
+			paid = TRUE;
+			p_ptr->redraw |= (PR_STATUS);
+		}
+		break;
+	}
+	case BACT_LOSE_MUTATION:
+		paid = lose_mutation(0);
+		/* ToDo: Better message text. */
+		if (!paid)
+#ifdef JP
+			msg_print("奇妙なくらい普通になった気がする。");
+#else
+		msg_print("You feel oddly normal.");
+#endif
+
+
+		break;
+	case BACT_BATTLE:
+		kakutoujou();
+		break;
+	case BACT_TSUCHINOKO:
+		tsuchinoko();
+		break;
+	case BACT_KUBI:
+		shoukinkubi();
+		break;
+	case BACT_TARGET:
+		today_target();
+		break;
+	case BACT_KANKIN:
+		kankin();
+		break;
+	case BACT_HEIKOUKA:
+#ifdef JP
+		msg_print("平衡化の儀式を行なった。");
+#else
+		msg_print("You received an equalization ritual.");
+#endif
+		set_virtue(V_COMPASSION, 0);
+		set_virtue(V_HONOUR, 0);
+		set_virtue(V_JUSTICE, 0);
+		set_virtue(V_SACRIFICE, 0);
+		set_virtue(V_KNOWLEDGE, 0);
+		set_virtue(V_FAITH, 0);
+		set_virtue(V_ENLIGHTEN, 0);
+		set_virtue(V_ENCHANT, 0);
+		set_virtue(V_CHANCE, 0);
+		set_virtue(V_NATURE, 0);
+		set_virtue(V_HARMONY, 0);
+		set_virtue(V_VITALITY, 0);
+		set_virtue(V_UNLIFE, 0);
+		set_virtue(V_PATIENCE, 0);
+		set_virtue(V_TEMPERANCE, 0);
+		set_virtue(V_DILIGENCE, 0);
+		set_virtue(V_VALOUR, 0);
+		set_virtue(V_INDIVIDUALISM, 0);
+		get_virtues();
+		paid = TRUE;
+		break;
+	case BACT_TELE_TOWN:
+		paid = tele_town();
+		break;
 	}
 
 	if (paid)

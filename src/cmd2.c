@@ -64,10 +64,6 @@ void do_cmd_go_up(void)
 				do_cmd_write_nikki(NIKKI_FIX_QUEST_F, leaving_quest, NULL);
 		}
 
-#ifdef USE_SCRIPT
-		if (cmd_go_up_callback()) return;
-#endif /* USE_SCRIPT */
-
 		/* Activate the quest */
 		if (!quest[p_ptr->inside_quest].status)
 		{
@@ -119,10 +115,6 @@ if (get_check("本当にこの階を去りますか？"))
 			energy_use = 100;
 
 			if (autosave_l) do_cmd_save_game(TRUE);
-
-#ifdef USE_SCRIPT
-			if (cmd_go_up_callback()) return;
-#endif /* USE_SCRIPT */
 
 			if (p_ptr->inside_quest)
 			{
@@ -470,16 +462,6 @@ void do_cmd_search(void)
 	/* Take a turn */
 	energy_use = 100;
 
-#ifdef USE_SCRIPT
-	if (cmd_search_callback(py, px))
-	{
-		/* Disturb */
-		disturb(0, 0);
-
-		return;
-	}
-#endif /* USE_SCRIPT */
-
 	/* Search */
 	search();
 }
@@ -589,10 +571,6 @@ static void chest_death(bool scatter, int y, int x, s16b o_idx)
 			/* Make a good object */
 			if (!make_object(q_ptr, TRUE, great)) continue;
 		}
-
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
 
 		/* If chest scatters its contents, pick any floor square. */
 		if (scatter)
@@ -1295,15 +1273,6 @@ void do_cmd_open(void)
 		/* Get requested location */
 		y = py + ddy[dir];
 		x = px + ddx[dir];
-
-#ifdef USE_SCRIPT
-		if (cmd_open_callback(y, x))
-		{
-			/* Don't repeat the action */
-			disturb(0, 0);
-			return;
-		}
-#endif /* USE_SCRIPT */
 
 		/* Get requested grid */
 		c_ptr = &cave[y][x];

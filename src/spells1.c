@@ -6176,10 +6176,6 @@ msg_print("生命力が体から吸い取られた気がする！");
 		/* Mark the item as fully known */
 		q_ptr->ident |= (IDENT_MENTAL);
 
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 		/* Drop it in the dungeon */
 		(void)drop_near(q_ptr, -1, py, px);
 	}

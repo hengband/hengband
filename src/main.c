@@ -19,12 +19,6 @@
 
 #if !defined(MACINTOSH) && !defined(WINDOWS) && !defined(ACORN)
 
-#ifdef USE_SCRIPT
-
-#include "Python.h"
-
-#endif /* USE_SCRIPT */
-
 
 /*
  * A hook for "quit()".

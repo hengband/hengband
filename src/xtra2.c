@@ -614,10 +614,6 @@ msg_print("魔法の階段が現れた...");
 			/* Make a great object */
 			make_object(q_ptr, TRUE, TRUE);
 
-#ifdef USE_SCRIPT
-			q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 			/* Drop it in the dungeon */
 			(void)drop_near(q_ptr, -1, y, x);
 		}
@@ -793,10 +789,6 @@ msg_print("勝利！チャンピオンへの道を進んでいる。");
 
 			apply_magic(q_ptr, object_level, FALSE, FALSE, FALSE, FALSE);
 
-#ifdef USE_SCRIPT
-			q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 			/* Drop it in the dungeon */
 			(void)drop_near(q_ptr, -1, y, x);
 		}
@@ -859,10 +851,6 @@ msg_print("地面に落とされた。");
 		apply_magic(q_ptr, object_level, FALSE, FALSE, FALSE, FALSE);
 
 		q_ptr->pval = m_ptr->r_idx;
-
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
 
 		/* Drop it in the dungeon */
 		(void)drop_near(q_ptr, -1, y, x);
@@ -954,10 +942,6 @@ msg_print("地面に落とされた。");
 
 		apply_magic(q_ptr, object_level, FALSE, FALSE, FALSE, FALSE);
 
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 		/* Drop it in the dungeon */
 		(void)drop_near(q_ptr, -1, y, x);
 	}
@@ -984,10 +968,6 @@ msg_print("地面に落とされた。");
 		/* Make a great object */
 		make_object(q_ptr, FALSE, FALSE);
 
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 		/* Drop it in the dungeon */
 		(void)drop_near(q_ptr, -1, y, x);
 	}
@@ -1000,10 +980,6 @@ msg_print("地面に落とされた。");
 
 		/* Prepare to make a Blade of Chaos */
 		object_prep(q_ptr, lookup_kind(TV_SWORD, randint(2)));
-
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
 
 		/* Drop it in the dungeon */
 		(void)drop_near(q_ptr, -1, y, x);
@@ -1027,10 +1003,6 @@ msg_print("地面に落とされた。");
 		/* Make a great object */
 		make_object(q_ptr, FALSE, FALSE);
 
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 		/* Drop it in the dungeon */
 		(void)drop_near(q_ptr, -1, y, x);
 	}
@@ -1052,10 +1024,6 @@ msg_print("地面に落とされた。");
 
 		/* Make a great object */
 		make_object(q_ptr, FALSE, FALSE);
-
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
 
 		/* Drop it in the dungeon */
 		(void)drop_near(q_ptr, -1, y, x);
@@ -1079,10 +1047,6 @@ msg_print("地面に落とされた。");
 		/* Make a great object */
 		make_object(q_ptr, FALSE, FALSE);
 
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 		/* Drop it in the dungeon */
 		(void)drop_near(q_ptr, -1, y, x);
 	}
@@ -1105,10 +1069,6 @@ msg_print("地面に落とされた。");
 		/* Make a great object */
 		make_object(q_ptr, FALSE, FALSE);
 
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 		/* Drop it in the dungeon */
 		(void)drop_near(q_ptr, -1, y, x);
 	}
@@ -1122,10 +1082,6 @@ msg_print("地面に落とされた。");
 		object_prep(q_ptr, lookup_kind(TV_CHEST, 50));
 
 		apply_magic(q_ptr, object_level, FALSE, FALSE, FALSE, FALSE);
-
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
 
 		/* Drop it in the dungeon */
 		(void)drop_near(q_ptr, -1, y, x);
@@ -1148,10 +1104,6 @@ msg_print("地面に落とされた。");
 			/* Mega-Hack -- Actually create "Grond" */
 			apply_magic(q_ptr, -1, TRUE, TRUE, TRUE, FALSE);
 
-#ifdef USE_SCRIPT
-			q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 			/* Drop it in the dungeon */
 			(void)drop_near(q_ptr, -1, y, x);
 
@@ -1166,10 +1118,6 @@ msg_print("地面に落とされた。");
 
 			/* Mega-Hack -- Actually create "Morgoth" */
 			apply_magic(q_ptr, -1, TRUE, TRUE, TRUE, FALSE);
-
-#ifdef USE_SCRIPT
-			q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
 
 			/* Drop it in the dungeon */
 			(void)drop_near(q_ptr, -1, y, x);
@@ -1416,10 +1364,6 @@ msg_print("地面に落とされた。");
 
 			apply_magic(q_ptr, object_level, FALSE, TRUE, FALSE, FALSE);
 
-#ifdef USE_SCRIPT
-			q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 			/* Drop it in the dungeon */
 			(void)drop_near(q_ptr, -1, y, x);
 		}
@@ -1477,10 +1421,6 @@ msg_print("地面に落とされた。");
 			dump_item++;
 		}
 
-#ifdef USE_SCRIPT
-		q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 		/* Drop it in the dungeon */
 		(void)drop_near(q_ptr, -1, y, x);
 	}
@@ -1498,10 +1438,6 @@ msg_print("地面に落とされた。");
 		/* Take notes on treasure */
 		lore_treasure(m_idx, dump_item, dump_gold);
 	}
-
-#ifdef USE_SCRIPT
-	kill_monster_callback(m_idx);
-#endif /* USE_SCRIPT */
 
 	/* Only process "Quest Monsters" */
 	if (!(r_ptr->flags1 & RF1_QUESTOR)) return;
@@ -4764,10 +4700,6 @@ msg_print("「汝の行いは貴き剣に値せり。」");
 			q_ptr->to_d = 3 + randint(dun_level) % 10;
 			random_resistance(q_ptr, FALSE, randint(34) + 4);
 			q_ptr->name2 = EGO_CHAOTIC;
-
-#ifdef USE_SCRIPT
-			q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
 
 			/* Drop it in the dungeon */
 			(void)drop_near(q_ptr, -1, py, px);

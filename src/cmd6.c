@@ -83,15 +83,8 @@ static void do_cmd_eat_food_aux(int item)
 	/* Object level */
 	lev = get_object_level(o_ptr);
 
-#ifdef USE_SCRIPT
-	eat_callback(o_ptr->sval);
-
-	if (!object_eat_callback(o_ptr))
-#endif /* USE_SCRIPT */
-
+	if (o_ptr->tval == TV_FOOD)
 	{
-		if (o_ptr->tval == TV_FOOD)
-		{
 		/* Analyze the food */
 		switch (o_ptr->sval)
 		{
@@ -170,7 +163,7 @@ static void do_cmd_eat_food_aux(int item)
 			case SV_FOOD_WEAKNESS:
 			{
 #ifdef JP
-			take_hit(DAMAGE_NOESCAPE, damroll(6, 6), "毒入り食料", -1);
+				take_hit(DAMAGE_NOESCAPE, damroll(6, 6), "毒入り食料", -1);
 #else
 				take_hit(DAMAGE_NOESCAPE, damroll(6, 6), "poisonous food", -1);
 #endif
@@ -183,7 +176,7 @@ static void do_cmd_eat_food_aux(int item)
 			case SV_FOOD_SICKNESS:
 			{
 #ifdef JP
-			take_hit(DAMAGE_NOESCAPE, damroll(6, 6), "毒入り食料", -1);
+				take_hit(DAMAGE_NOESCAPE, damroll(6, 6), "毒入り食料", -1);
 #else
 				take_hit(DAMAGE_NOESCAPE, damroll(6, 6), "poisonous food", -1);
 #endif
@@ -196,7 +189,7 @@ static void do_cmd_eat_food_aux(int item)
 			case SV_FOOD_STUPIDITY:
 			{
 #ifdef JP
-			take_hit(DAMAGE_NOESCAPE, damroll(8, 8), "毒入り食料", -1);
+				take_hit(DAMAGE_NOESCAPE, damroll(8, 8), "毒入り食料", -1);
 #else
 				take_hit(DAMAGE_NOESCAPE, damroll(8, 8), "poisonous food", -1);
 #endif
@@ -209,7 +202,7 @@ static void do_cmd_eat_food_aux(int item)
 			case SV_FOOD_NAIVETY:
 			{
 #ifdef JP
-			take_hit(DAMAGE_NOESCAPE, damroll(8, 8), "毒入り食料", -1);
+				take_hit(DAMAGE_NOESCAPE, damroll(8, 8), "毒入り食料", -1);
 #else
 				take_hit(DAMAGE_NOESCAPE, damroll(8, 8), "poisonous food", -1);
 #endif
@@ -222,7 +215,7 @@ static void do_cmd_eat_food_aux(int item)
 			case SV_FOOD_UNHEALTH:
 			{
 #ifdef JP
-			take_hit(DAMAGE_NOESCAPE, damroll(10, 10), "毒入り食料", -1);
+				take_hit(DAMAGE_NOESCAPE, damroll(10, 10), "毒入り食料", -1);
 #else
 				take_hit(DAMAGE_NOESCAPE, damroll(10, 10), "poisonous food", -1);
 #endif
@@ -235,7 +228,7 @@ static void do_cmd_eat_food_aux(int item)
 			case SV_FOOD_DISEASE:
 			{
 #ifdef JP
-			take_hit(DAMAGE_NOESCAPE, damroll(10, 10), "毒入り食料", -1);
+				take_hit(DAMAGE_NOESCAPE, damroll(10, 10), "毒入り食料", -1);
 #else
 				take_hit(DAMAGE_NOESCAPE, damroll(10, 10), "poisonous food", -1);
 #endif
@@ -300,34 +293,34 @@ static void do_cmd_eat_food_aux(int item)
 
 
 #ifdef JP
-		/* それぞれの食べ物の感想をオリジナルより細かく表現 */
-		case SV_FOOD_BISCUIT:
-		{
-			msg_print("甘くてサクサクしてとてもおいしい。");
-			ident = TRUE;
-			break;
-		}
+			/* それぞれの食べ物の感想をオリジナルより細かく表現 */
+			case SV_FOOD_BISCUIT:
+			{
+				msg_print("甘くてサクサクしてとてもおいしい。");
+				ident = TRUE;
+				break;
+			}
 
-		case SV_FOOD_JERKY:
-		{
-			msg_print("歯ごたえがあっておいしい。");
-			ident = TRUE;
-			break;
-		}
+			case SV_FOOD_JERKY:
+			{
+				msg_print("歯ごたえがあっておいしい。");
+				ident = TRUE;
+				break;
+			}
 
-		case SV_FOOD_SLIME_MOLD:
-		{
-			msg_print("これはなんとも形容しがたい味だ。");
-			ident = TRUE;
-			break;
-		}
+			case SV_FOOD_SLIME_MOLD:
+			{
+				msg_print("これはなんとも形容しがたい味だ。");
+				ident = TRUE;
+				break;
+			}
 
-		case SV_FOOD_RATION:
-		{
-			msg_print("これはおいしい。");
-			ident = TRUE;
-			break;
-		}
+			case SV_FOOD_RATION:
+			{
+				msg_print("これはおいしい。");
+				ident = TRUE;
+				break;
+			}
 #else
 			case SV_FOOD_RATION:
 			case SV_FOOD_BISCUIT:
@@ -344,7 +337,7 @@ static void do_cmd_eat_food_aux(int item)
 			case SV_FOOD_WAYBREAD:
 			{
 #ifdef JP
-			msg_print("これはひじょうに美味だ。");
+				msg_print("これはひじょうに美味だ。");
 #else
 				msg_print("That tastes good.");
 #endif
@@ -357,11 +350,11 @@ static void do_cmd_eat_food_aux(int item)
 
 #ifdef JP
 			case SV_FOOD_PINT_OF_ALE:
-		{
-			msg_print("のどごし爽やかだ。");
-			ident = TRUE;
-			break;
-		}
+			{
+				msg_print("のどごし爽やかだ。");
+				ident = TRUE;
+				break;
+			}
 
 			case SV_FOOD_PINT_OF_WINE:
 			{
@@ -379,10 +372,6 @@ static void do_cmd_eat_food_aux(int item)
 			}
 #endif
 
-		}
-		}
-		else
-		{
 		}
 	}
 
@@ -446,10 +435,6 @@ msg_print("食べ物がアゴを素通りして落ちた！");
 
 			/* Create the item */
 			object_prep(q_ptr, lookup_kind(o_ptr->tval, o_ptr->sval));
-
-#ifdef USE_SCRIPT
-			q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
 
 			/* Drop the object from heaven */
 			(void)drop_near(q_ptr, -1, py, px);

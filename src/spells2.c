@@ -6999,10 +6999,6 @@ void kawarimi(bool success)
 
 	object_prep(q_ptr, lookup_kind(TV_STATUE, SV_WOODEN_STATUE));
 
-#ifdef USE_SCRIPT
-	q_ptr->python = object_create_callback(q_ptr);
-#endif /* USE_SCRIPT */
-
 	q_ptr->pval = MON_NINJA;
 
 	/* Drop it in the dungeon */

@@ -169,10 +169,6 @@ void delete_object_idx(int o_idx)
 		lite_spot(y, x);
 	}
 
-#ifdef USE_SCRIPT
-	object_delete_callback(j_ptr);
-#endif /* USE_SCRIPT */
-
 	/* Wipe the object */
 	object_wipe(j_ptr);
 
@@ -208,10 +204,6 @@ void delete_object(int y, int x)
 
 		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
-
-#ifdef USE_SCRIPT
-		object_delete_callback(o_ptr);
-#endif /* USE_SCRIPT */
 
 		/* Wipe the object */
 		object_wipe(o_ptr);
@@ -305,10 +297,6 @@ static void compact_objects_aux(int i1, int i2)
 
 	/* Structure copy */
 	o_list[i2] = o_list[i1];
-
-#ifdef USE_SCRIPT
-	object_delete_callback(o_ptr);
-#endif /* USE_SCRIPT */
 
 	/* Wipe the hole */
 	object_wipe(o_ptr);
@@ -497,10 +485,6 @@ void wipe_o_list(void)
 			/* Hack -- see above */
 			c_ptr->o_idx = 0;
 		}
-
-#ifdef USE_SCRIPT
-		object_delete_callback(o_ptr);
-#endif /* USE_SCRIPT */
 
 		/* Wipe the object */
 		object_wipe(o_ptr);
@@ -1837,10 +1821,6 @@ void object_copy(object_type *o_ptr, object_type *j_ptr)
 {
 	/* Copy the structure */
 	COPY(o_ptr, j_ptr, object_type);
-
-#ifdef USE_SCRIPT
-	j_ptr->python = object_copy_callback(o_ptr, j_ptr);
-#endif /* USE_SCRIPT */
 }
 
 
@@ -4654,10 +4634,6 @@ void place_object(int y, int x, bool good, bool great)
 		/* Place the object */
 		c_ptr->o_idx = o_idx;
 
-#ifdef USE_SCRIPT
-		o_ptr->python = object_create_callback(o_ptr);
-#endif /* USE_SCRIPT */
-
 		/* Notice */
 		note_spot(y, x);
 
@@ -4774,10 +4750,6 @@ void place_gold(int y, int x)
 
 		/* Place the object */
 		c_ptr->o_idx = o_idx;
-
-#ifdef USE_SCRIPT
-		o_ptr->python = object_create_callback(o_ptr);
-#endif /* USE_SCRIPT */
 
 		/* Notice */
 		note_spot(y, x);
@@ -5165,10 +5137,6 @@ void acquirement(int y1, int x1, int num, bool great, bool known)
 			object_known(i_ptr);
 		}
 
-#ifdef USE_SCRIPT
-		i_ptr->python = object_create_callback(i_ptr);
-#endif /* USE_SCRIPT */
-
 		/* Drop the object */
 		(void)drop_near(i_ptr, -1, y1, x1);
 	}
@@ -5396,10 +5364,6 @@ void inven_item_optimize(int item)
 		/* One less item */
 		inven_cnt--;
 
-#ifdef USE_SCRIPT
-		object_delete_callback(&inventory[item]);
-#endif /* USE_SCRIPT */
-
 		/* Slide everything down */
 		for (i = item; i < INVEN_PACK; i++)
 		{
@@ -5419,10 +5383,6 @@ void inven_item_optimize(int item)
 	{
 		/* One less item */
 		equip_cnt--;
-
-#ifdef USE_SCRIPT
-		object_delete_callback(&inventory[item]);
-#endif /* USE_SCRIPT */
 
 		/* Erase the empty slot */
 		object_wipe(&inventory[item]);
@@ -5724,11 +5684,6 @@ s16b inven_carry(object_type *o_ptr)
 			object_copy(&inventory[k+1], &inventory[k]);
 		}
 
-#ifdef USE_SCRIPT
-		/* Not a real deletion */
-		/* object_delete_callback(&inventory[i]); */
-#endif /* USE_SCRIPT */
-
 		/* Wipe the empty slot */
 		object_wipe(&inventory[i]);
 	}
@@ -5999,10 +5954,6 @@ void combine_pack(void)
 					/* Structure copy */
 					inventory[k] = inventory[k+1];
 				}
-
-#ifdef USE_SCRIPT
-				object_delete_callback(&inventory[k]);
-#endif /* USE_SCRIPT */
 
 				/* Erase the "final" slot */
 				object_wipe(&inventory[k]);

@@ -2853,13 +2853,6 @@ msg_format("%^s%s", m_name, monmessage);
 	mm[0] = mm[1] = mm[2] = mm[3] = 0;
 	mm[4] = mm[5] = mm[6] = mm[7] = 0;
 
-#ifdef USE_SCRIPT
-	if (monster_move_callback(mm, m_idx))
-	{
-	}
-	else
-#endif /* USE_SCRIPT */
-
 
 	/* Confused -- 100% random */
 	if (m_ptr->confused || !aware)

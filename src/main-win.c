@@ -4667,9 +4667,6 @@ static void init_stuff(void)
 		validate_dir(ANGBAND_DIR_DATA, FALSE);
 	}
 
-#ifdef USE_SCRIPT
-	validate_dir(ANGBAND_DIR_SCRIPT, TRUE);
-#endif /* USE_SCRIPT */
 	validate_dir(ANGBAND_DIR_FILE, TRUE);
 	validate_dir(ANGBAND_DIR_HELP, FALSE);
 	validate_dir(ANGBAND_DIR_INFO, FALSE);

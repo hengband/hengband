@@ -1400,12 +1400,6 @@ extern bool do_cmd_disarm_aux(int y, int x, int dir);
 #endif /* ALLOW_EASY_DISARM -- TNB */
 
 
-#ifdef USE_SCRIPT
-extern errr script_execute(char *name);
-extern errr init_script(void);
-#endif /* USE_SCRIPT */
-
-
 #ifdef ALLOW_EASY_FLOOR /* TNB */
 
 /* object1.c */

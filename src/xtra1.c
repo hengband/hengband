@@ -3310,119 +3310,110 @@ void calc_bonuses(void)
 		}
 	}
 
-#ifdef USE_SCRIPT
-
-	if (!get_player_flags_callback())
-
-#endif /* USE_SCRIPT */
-
+	switch (p_ptr->pclass)
 	{
-		switch (p_ptr->pclass)
-		{
-			case CLASS_WARRIOR:
-				if (p_ptr->lev > 29) p_ptr->resist_fear = TRUE;
-				if (p_ptr->lev > 44) p_ptr->regenerate = TRUE;
-				break;
-			case CLASS_PALADIN:
-				if (p_ptr->lev > 39) p_ptr->resist_fear = TRUE;
-				break;
-			case CLASS_CHAOS_WARRIOR:
-				if (p_ptr->lev > 29) p_ptr->resist_chaos = TRUE;
-				if (p_ptr->lev > 39) p_ptr->resist_fear = TRUE;
-				break;
-			case CLASS_MINDCRAFTER:
-				if (p_ptr->lev >  9) p_ptr->resist_fear = TRUE;
-				if (p_ptr->lev > 19) p_ptr->sustain_wis = TRUE;
-				if (p_ptr->lev > 29) p_ptr->resist_conf = TRUE;
-				if (p_ptr->lev > 39) p_ptr->telepathy = TRUE;
-				break;
-			case CLASS_MONK:
-			case CLASS_FORCETRAINER:
-				/* Unencumbered Monks become faster every 10 levels */
-				if (!(heavy_armor()))
-				{
-					if (!((p_ptr->prace == RACE_KLACKON) ||
-						(p_ptr->prace == RACE_SPRITE) ||
-						(p_ptr->pseikaku == SEIKAKU_MUNCHKIN)))
-						p_ptr->pspeed += (p_ptr->lev) / 10;
+		case CLASS_WARRIOR:
+			if (p_ptr->lev > 29) p_ptr->resist_fear = TRUE;
+			if (p_ptr->lev > 44) p_ptr->regenerate = TRUE;
+			break;
+		case CLASS_PALADIN:
+			if (p_ptr->lev > 39) p_ptr->resist_fear = TRUE;
+			break;
+		case CLASS_CHAOS_WARRIOR:
+			if (p_ptr->lev > 29) p_ptr->resist_chaos = TRUE;
+			if (p_ptr->lev > 39) p_ptr->resist_fear = TRUE;
+			break;
+		case CLASS_MINDCRAFTER:
+			if (p_ptr->lev >  9) p_ptr->resist_fear = TRUE;
+			if (p_ptr->lev > 19) p_ptr->sustain_wis = TRUE;
+			if (p_ptr->lev > 29) p_ptr->resist_conf = TRUE;
+			if (p_ptr->lev > 39) p_ptr->telepathy = TRUE;
+			break;
+		case CLASS_MONK:
+		case CLASS_FORCETRAINER:
+			/* Unencumbered Monks become faster every 10 levels */
+			if (!(heavy_armor()))
+			{
+				if (!((p_ptr->prace == RACE_KLACKON) ||
+					(p_ptr->prace == RACE_SPRITE) ||
+					(p_ptr->pseikaku == SEIKAKU_MUNCHKIN)))
+					p_ptr->pspeed += (p_ptr->lev) / 10;
 
-					/* Free action if unencumbered at level 25 */
-					if  (p_ptr->lev > 24)
-						p_ptr->free_act = TRUE;
-				}
-				break;
-			case CLASS_SORCERER:
-				p_ptr->to_a -= 50;
-				p_ptr->dis_to_a -= 50;
-				break;
-			case CLASS_BARD:
-				p_ptr->resist_sound = TRUE;
-				break;
-			case CLASS_SAMURAI:
-				if (p_ptr->lev > 29) p_ptr->resist_fear = TRUE;
-				break;
-			case CLASS_BERSERKER:
-				p_ptr->shero = 1;
-				p_ptr->sustain_str = TRUE;
-				p_ptr->sustain_dex = TRUE;
-				p_ptr->sustain_con = TRUE;
-				p_ptr->regenerate = TRUE;
-				p_ptr->free_act = TRUE;
-				p_ptr->pspeed += 2;
-				if (p_ptr->lev > 29) p_ptr->pspeed++;
-				if (p_ptr->lev > 39) p_ptr->pspeed++;
-				if (p_ptr->lev > 44) p_ptr->pspeed++;
-				if (p_ptr->lev > 49) p_ptr->pspeed++;
-				p_ptr->to_a += 10+p_ptr->lev/2;
-				p_ptr->dis_to_a += 10+p_ptr->lev/2;
-				p_ptr->skill_dig += (100+p_ptr->lev*8);
-				if (p_ptr->lev > 39) p_ptr->reflect = TRUE;
-				p_ptr->redraw |= PR_STATUS;
-				break;
-			case CLASS_MIRROR_MASTER:
-				if (p_ptr->lev > 39) p_ptr->reflect = TRUE;
-				break;
-			case CLASS_NINJA:
-				/* Unencumbered Monks become faster every 10 levels */
-				if (heavy_armor())
-				{
-					p_ptr->pspeed -= (p_ptr->lev) / 10;
-					p_ptr->skill_stl -= (p_ptr->lev)/10;
-				}
-				else
-				{
-					if (!inventory[INVEN_LARM].tval || p_ptr->hidarite)
-					{
-						p_ptr->pspeed += 3;
-					if (!((p_ptr->prace == RACE_KLACKON) ||
-						(p_ptr->prace == RACE_SPRITE) ||
-						(p_ptr->pseikaku == SEIKAKU_MUNCHKIN)))
-						p_ptr->pspeed += (p_ptr->lev) / 10;
-
-					p_ptr->skill_stl += (p_ptr->lev)/10;
-					
-					/* Free action if unencumbered at level 25 */
-					if  (p_ptr->lev > 24)
-						p_ptr->free_act = TRUE;
-					}
-				}
+				/* Free action if unencumbered at level 25 */
+				if  (p_ptr->lev > 24)
+					p_ptr->free_act = TRUE;
+			}
+			break;
+		case CLASS_SORCERER:
+			p_ptr->to_a -= 50;
+			p_ptr->dis_to_a -= 50;
+			break;
+		case CLASS_BARD:
+			p_ptr->resist_sound = TRUE;
+			break;
+		case CLASS_SAMURAI:
+			if (p_ptr->lev > 29) p_ptr->resist_fear = TRUE;
+			break;
+		case CLASS_BERSERKER:
+			p_ptr->shero = 1;
+			p_ptr->sustain_str = TRUE;
+			p_ptr->sustain_dex = TRUE;
+			p_ptr->sustain_con = TRUE;
+			p_ptr->regenerate = TRUE;
+			p_ptr->free_act = TRUE;
+			p_ptr->pspeed += 2;
+			if (p_ptr->lev > 29) p_ptr->pspeed++;
+			if (p_ptr->lev > 39) p_ptr->pspeed++;
+			if (p_ptr->lev > 44) p_ptr->pspeed++;
+			if (p_ptr->lev > 49) p_ptr->pspeed++;
+			p_ptr->to_a += 10+p_ptr->lev/2;
+			p_ptr->dis_to_a += 10+p_ptr->lev/2;
+			p_ptr->skill_dig += (100+p_ptr->lev*8);
+			if (p_ptr->lev > 39) p_ptr->reflect = TRUE;
+			p_ptr->redraw |= PR_STATUS;
+			break;
+		case CLASS_MIRROR_MASTER:
+			if (p_ptr->lev > 39) p_ptr->reflect = TRUE;
+			break;
+		case CLASS_NINJA:
+			/* Unencumbered Monks become faster every 10 levels */
+			if (heavy_armor())
+			{
+				p_ptr->pspeed -= (p_ptr->lev) / 10;
+				p_ptr->skill_stl -= (p_ptr->lev)/10;
+			}
+			else
+			{
 				if (!inventory[INVEN_LARM].tval || p_ptr->hidarite)
 				{
-					p_ptr->to_a += p_ptr->lev/2+5;
-					p_ptr->dis_to_a += p_ptr->lev/2+5;
+					p_ptr->pspeed += 3;
+				if (!((p_ptr->prace == RACE_KLACKON) ||
+					(p_ptr->prace == RACE_SPRITE) ||
+					(p_ptr->pseikaku == SEIKAKU_MUNCHKIN)))
+					p_ptr->pspeed += (p_ptr->lev) / 10;
+					p_ptr->skill_stl += (p_ptr->lev)/10;
+
+				/* Free action if unencumbered at level 25 */
+				if  (p_ptr->lev > 24)
+					p_ptr->free_act = TRUE;
 				}
-				p_ptr->slow_digest = TRUE;
-				p_ptr->resist_fear = TRUE;
-				if (p_ptr->lev > 19) p_ptr->resist_pois = TRUE;
-				if (p_ptr->lev > 24) p_ptr->sustain_dex = TRUE;
-				if (p_ptr->lev > 29) p_ptr->see_inv = TRUE;
-				if (p_ptr->lev > 44)
-				{
-					p_ptr->oppose_pois = 1;
-					p_ptr->redraw |= PR_STATUS;
-				}
-				break;
-		}
+			}
+			if (!inventory[INVEN_LARM].tval || p_ptr->hidarite)
+			{
+				p_ptr->to_a += p_ptr->lev/2+5;
+				p_ptr->dis_to_a += p_ptr->lev/2+5;
+			}
+			p_ptr->slow_digest = TRUE;
+			p_ptr->resist_fear = TRUE;
+			if (p_ptr->lev > 19) p_ptr->resist_pois = TRUE;
+			if (p_ptr->lev > 24) p_ptr->sustain_dex = TRUE;
+			if (p_ptr->lev > 29) p_ptr->see_inv = TRUE;
+			if (p_ptr->lev > 44)
+			{
+				p_ptr->oppose_pois = 1;
+				p_ptr->redraw |= PR_STATUS;
+			}
+			break;
 	}
 
 	/***** Races ****/

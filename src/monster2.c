@@ -219,10 +219,6 @@ void delete_monster_idx(int i)
 	/* Count monsters */
 	m_cnt--;
 
-#ifdef USE_SCRIPT
-	delete_monster_callback(i);
-#endif /* USE_SCRIPT */
-
 	/* Visual update */
 	lite_spot(y, x);
 }
@@ -310,10 +306,6 @@ static void compact_monsters_aux(int i1, int i2)
 
 	/* Wipe the hole */
 	(void)WIPE(&m_list[i1], monster_type);
-
-#ifdef USE_SCRIPT
-	copy_monster_callback(i1, i2);
-#endif /* USE_SCRIPT */
 
 }
 
@@ -440,9 +432,6 @@ void wipe_m_list(void)
 		/* Wipe the Monster */
 		(void)WIPE(m_ptr, monster_type);
 
-#ifdef USE_SCRIPT
-		delete_monster_callback(i);
-#endif /* USE_SCRIPT */
 	}
 
 	/* Reset "m_max" */
@@ -2908,10 +2897,6 @@ msg_print("守りのルーンが壊れた！");
 
 	/* Hack -- Notice new multi-hued monsters */
 	if (r_ptr->flags1 & RF1_ATTR_MULTI) shimmer_monsters = TRUE;
-
-#ifdef USE_SCRIPT
-	create_monster_callback(c_ptr->m_idx);
-#endif /* USE_SCRIPT */
 
 	if (p_ptr->warning && character_dungeon)
 	{

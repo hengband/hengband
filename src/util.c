@@ -1918,10 +1918,6 @@ char inkey(void)
 	bool done = FALSE;
 	term *old = Term;
 
-#ifdef USE_SCRIPT
-	char result;
-#endif /* USE_SCRIPT */
-
 	/* Hack -- Use the "inkey_next" pointer */
 	if (inkey_next && *inkey_next && !inkey_xtra)
 	{
@@ -1952,18 +1948,6 @@ char inkey(void)
 	}
 
 #endif /* ALLOW_BORG */
-
-#ifdef USE_SCRIPT
-
-	if ((result = inkey_borg_callback(inkey_base, inkey_xtra, inkey_flag, inkey_scan)))
-	{
-		/* Cancel the various "global parameters" */
-		inkey_base = inkey_xtra = inkey_flag = inkey_scan = FALSE;
-
-		return (result);
-	}
-
-#endif /* USE_SCRIPT */
 
 
 	/* Hack -- handle delayed "flush()" */
@@ -2143,12 +2127,6 @@ char inkey(void)
 
 	/* Cancel the various "global parameters" */
 	inkey_base = inkey_xtra = inkey_flag = inkey_scan = FALSE;
-
-#ifdef USE_SCRIPT
-
-	if ((result = inkey_callback(ch))) return result;
-
-#endif /* USE_SCRIPT */
 
 	/* Return the keypress */
 	return (ch);

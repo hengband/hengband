@@ -2099,21 +2099,6 @@ if (init_misc()) quit("その他の変数を初期化できません");
 #endif
 
 
-#ifdef USE_SCRIPT
-#ifdef JP
-note("[スクリプトを初期化しています... ]");
-#else
-	note("[Initializing scripts... ]");
-#endif
-
-#ifdef JP
-if (init_script()) quit("スクリプトを初期化できません");
-#else
-	if (init_script()) quit("Cannot initialize scripts");
-#endif
-
-#endif /* USE_SCRIPT */
-
 	/* Initialize feature info */
 #ifdef JP
 	note("[データの初期化中... (地形)]");

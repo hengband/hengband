@@ -573,16 +573,6 @@ void search(void)
 				/* Access the grid */
 				c_ptr = &cave[y][x];
 
-#ifdef USE_SCRIPT
-				if (player_search_grid_callback(y, x))
-				{
-					/* Disturb */
-					disturb(0, 0);
-
-					return;
-				}
-#endif /* USE_SCRIPT */
-
 				/* Invisible trap */
 				if (c_ptr->info & CAVE_TRAP)
 				{
@@ -4487,13 +4477,6 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 	if (oktomove)
 	{
 		int oy, ox;
-
-#ifdef USE_SCRIPT
-		if (player_enter_grid_callback(y, x)) return;
-
-		/* Player movement callback */
-		if (player_move_callback(y, x)) return;
-#endif /* USE_SCRIPT */
 
 #ifdef USE_FRAKIR
                 if (p_ptr->warning)

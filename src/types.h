@@ -15,12 +15,6 @@
  * This file should ONLY be included by "angband.h"
  */
 
-#ifdef USE_SCRIPT
-
-#include "Python.h"
-
-#endif /* USE_SCRIPT */
-
 /*
  * Note that "char" may or may not be signed, and that "signed char"
  * may or may not work on all machines.  So always use "s16b" or "s32b"
@@ -530,10 +524,6 @@ struct object_type
 
 	s16b held_m_idx;	/* Monster holding us (if any) */
 
-#ifdef USE_SCRIPT
-	PyObject *python;
-#endif /* USE_SCRIPT */
-
 #ifdef SCRIPT_OBJ_KIND
 	char *name;
 
@@ -642,10 +632,6 @@ typedef struct alloc_entry alloc_entry;
 
 struct alloc_entry
 {
-#ifdef USE_SCRIPT
-	PyObject *python;
-#endif /* USE_SCRIPT */
-
 	s16b index;		/* The actual index */
 
 	byte level;		/* Base dungeon level */
@@ -1362,10 +1348,6 @@ struct building_type
 	char letters[8];                /* action letters */
 	s16b actions[8];                /* action codes */
 	s16b action_restr[8];           /* action restrictions */
-
-#ifdef USE_SCRIPT
-	char act_script[8][128];        /* Scripts for the building */
-#endif /* USE_SCRIPT */
 
 	s16b member_class[MAX_CLASS];   /* which classes are part of guild */
 	s16b member_race[MAX_RACES];    /* which classes are part of guild */
