@@ -2626,8 +2626,13 @@ static void build_type8(int by0, int bx0)
 		yoffset = 0;
 	}
 
-	/* Try to allocate space for room.  If fails, exit */
-	if (!room_alloc(abs(x), abs(y), FALSE, by0, bx0, &xval, &yval)) return;
+	/*
+	 * Try to allocate space for room.  If fails, exit
+	 *
+	 * Hack -- Prepare a bit larger space (+2, +2) to 
+	 * prevent generation of vaults with no-entrance.
+	 */
+	if (!room_alloc(abs(x) + 2, abs(y) + 2, FALSE, by0, bx0, &xval, &yval)) return;
 
 	if (dummy >= SAFE_MAX_ATTEMPTS)
 	{
