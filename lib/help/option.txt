@@ -408,7 +408,7 @@ Reduce view-radius in town    [view_reduce_view]
     player to ignore monsters in town which are more than ten grids
     away, which is usually safe, since none have distance attacks.
 
-Check for user abort while continuous command    [avoid_abort]
+Check for user abort while continuous command    [check_abort]
     Avoid checking to see if the user has pressed a key during resting
     or running or repeated commands.  This not only makes the game much
     more efficient (on many systems), but also allows the use of

@@ -5040,7 +5040,7 @@ msg_print("何か変わった気がする！");
 	}
 
 	/* Handle "abort" */
-	if (avoid_abort)
+	if (check_abort)
 	{
 		/* Check for "player abort" (semi-efficiently for resting) */
 		if (running || command_rep || (p_ptr->action == ACTION_REST) || (p_ptr->action == ACTION_FISH))

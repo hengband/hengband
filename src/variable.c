@@ -250,7 +250,7 @@ bool plain_descriptions;	/* Plain object descriptions */
 bool stupid_monsters;		/* Monsters use old AI */
 bool confirm_destroy;		/* Known worthless items are destroyed without confirmation */
 bool confirm_stairs;		/* Prompt before staircases... */
-bool wear_confirm;		/* Confirm before putting on known cursed items */
+bool confirm_wear;		/* Confirm before putting on known cursed items */
 bool disturb_pets;		/* Pets moving nearby disturb us */
 
 
@@ -284,7 +284,7 @@ bool smart_cheat;			/* Monsters exploit player weaknesses */
 bool view_reduce_lite;		/* Reduce lite-radius when running */
 bool view_reduce_view;		/* Reduce view-radius in town */
 
-bool avoid_abort;			/* Avoid checking for user abort */
+bool check_abort;			/* Avoid checking for user abort */
 
 bool flush_failure;			/* Flush input on any failure */
 bool flush_disturb;			/* Flush input on disturbance */
@@ -309,7 +309,7 @@ bool plain_pickup;
 
 bool always_show_list;
 bool powerup_home;
-bool old_way_of_kaz;
+bool change_numeral;
 bool send_score;
 
 /* Cheating options */

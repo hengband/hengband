@@ -385,7 +385,7 @@ s = "おっと。";
 		return;
 	}
 
-	if (cursed_p(o_ptr) && wear_confirm &&
+	if (cursed_p(o_ptr) && confirm_wear &&
 	    (object_known_p(o_ptr) || (o_ptr->ident & IDENT_SENSE)))
 	{
 		char dummy[MAX_NLEN+80];

@@ -21,9 +21,9 @@ X:other_query_flag
 X:use_old_target
 Y:always_repeat
 X:confirm_destroy
-Y:wear_confirm
+Y:confirm_wear
 X:confirm_stairs
-Y:target_pet
+X:target_pet
 Y:easy_open
 Y:easy_disarm
 X:easy_floor
@@ -51,7 +51,7 @@ Y:view_special_lite
 X:new_ascii_graphics
 X:display_path
 Y:always_show_list
-Y:old_way_of_kaz
+Y:change_numeral
 
 ##### Game-Play #####
 
@@ -91,7 +91,7 @@ X:disturb_trap_detect
 
 X:view_reduce_lite
 X:view_reduce_view
-Y:avoid_abort
+Y:check_abort
 Y:flush_failure
 X:flush_disturb
 Y:fresh_before

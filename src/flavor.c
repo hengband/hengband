@@ -1639,7 +1639,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 	}
 	else if (o_ptr->number > 1)
 	{
-		if ( old_way_of_kaz == FALSE ){
+		if ( change_numeral == FALSE ){
 			t = object_desc_num(t, o_ptr->number);
 			if (o_ptr->number > 9)
 				t = object_desc_str(t, "¸Ä¤Î ");

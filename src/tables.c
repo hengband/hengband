@@ -6384,10 +6384,10 @@ option_type option_info[] =
 
 
 #ifdef JP
-	{ &wear_confirm,                TRUE, 1, 5, 4,
+	{ &confirm_wear,                TRUE, 1, 5, 4,
 	"confirm_wear",                 "呪われた物を装備する時確認する" },
 #else
-	{ &wear_confirm,                TRUE, 1, 5, 4,
+	{ &confirm_wear,                TRUE, 1, 5, 4,
 	"confirm_wear",                 "Confirm to wear/wield known cursed items" },
 #endif
 
@@ -6402,10 +6402,10 @@ option_type option_info[] =
 
 
 #ifdef JP
-	{ &target_pet,                  TRUE,  1, 2, 5,
+	{ &target_pet,                  FALSE,  1, 2, 5,
         "target_pet",                   "ペットをターゲットにする" },
 #else
-	{ &target_pet,                  TRUE,  1, 2, 5,
+	{ &target_pet,                  FALSE,  1, 2, 5,
 	"target_pet",                   "Allow targetting pets" },
 #endif
 
@@ -6633,11 +6633,11 @@ option_type option_info[] =
 
 
 #ifdef JP
-	{ &old_way_of_kaz,              TRUE,  2, 4, 5,
-        "old_way_of_kaz",               "アイテムの種類によって数え方を変える" },
+	{ &change_numeral,              TRUE,  2, 4, 5,
+        "change_numeral",               "アイテムの種類によって数え方を変える" },
 #else
-	{ &old_way_of_kaz,              TRUE,  99, 4, 5,
-        "old_way_of_kaz",               "Change a way to counting (japanese only)" },
+	{ &change_numeral,              TRUE,  99, 4, 5,
+        "change_numeral",               "Change a way to counting (japanese only)" },
 #endif
 
 
@@ -6920,11 +6920,11 @@ option_type option_info[] =
 
 
 #ifdef JP
-	{ &avoid_abort,                 TRUE,  5, 1, 18,
-        "avoid_abort",                  "連続コマンドはキー入力で中断する" },
+	{ &check_abort,                 TRUE,  5, 1, 18,
+        "check_abort",                  "連続コマンドはキー入力で中断する" },
 #else
-	{ &avoid_abort,                 TRUE,  5, 1, 18,
-	"avoid_abort",                  "Check for user abort while continuous command" },
+	{ &check_abort,                 TRUE,  5, 1, 18,
+	"check_abort",                  "Check for user abort while continuous command" },
 #endif
 
 

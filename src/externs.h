@@ -225,7 +225,7 @@ extern bool disturb_move;
 extern bool disturb_panel;
 extern bool disturb_state;
 extern bool disturb_minor;
-extern bool avoid_abort;
+extern bool check_abort;
 extern bool avoid_other;
 extern bool flush_disturb;
 extern bool flush_failure;
@@ -245,14 +245,14 @@ extern bool plain_pickup;
 
 extern bool always_show_list;
 extern bool powerup_home;
-extern bool old_way_of_kaz;
+extern bool change_numeral;
 extern bool send_score;
 
 extern bool skip_mutations;     /* Skip mutations screen in 'C'haracter display */
 extern bool plain_descriptions;
 extern bool stupid_monsters;
 extern bool confirm_destroy;
-extern bool wear_confirm;
+extern bool confirm_wear;
 extern bool confirm_stairs;
 extern bool disturb_pets;
 extern bool view_perma_grids;
