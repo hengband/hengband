@@ -29,24 +29,6 @@ JP_OPT= -DJP -DSJIS
 # Basic definitions
 #
 
-# Objects
-#OBJS = \
-#	main.o main-dos.o main-ibm.o \
-#	artifact.o avatar.o birth.o bldg.o \
-#	cave.o cmd1.o cmd2.o cmd3.o \
-#	cmd4.o cmd5.o cmd6.o dungeon.o \
-#	effects.o files.o flavor.o generate.o \
-#	grid.o init1.o init2.o load.o \
-#	melee1.o melee2.o mind.o monster1.o \
-#	monster2.o mspells1.o mspells2.o mutation.o \
-#	notes.o \
-#	obj_kind.o object1.o object2.o racial.o \
-#	rooms.o save.o scores.o script.o \
-#	spells1.o spells2.o spells3.o store.o \
-#	streams.o tables.o util.o variable.o \
-#	wild.o wizard1.o wizard2.o xtra1.o \
-#	xtra2.o z-form.o z-rand.o z-term.o \
-#	z-util.o z-virt.o \
 OBJS = \
 	z-util.o z-virt.o z-form.o z-rand.o z-term.o \
 	variable.o tables.o util.o cave.o \
@@ -162,7 +144,6 @@ obj_kind.o: obj_kind.c $(INCS)
 racial.o: racial.c $(INCS)
 save.o: save.c $(INCS)
 scores.o: scores.c $(INCS)
-script.o: script.c $(INCS)
 spells1.o: spells1.c $(INCS)
 spells2.o: spells2.c $(INCS)
 spells3.o: spells3.c $(INCS)
