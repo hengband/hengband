@@ -4109,8 +4109,6 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 				else
 				{
 					cave[py][px].feat = floor_type[randint0(100)];
-					cave[py][px].info &= ~(CAVE_MASK);
-					cave[py][px].info |= CAVE_FLOOR;
 				}
 			}
 				/* Update some things -- similar to GF_KILL_WALL */

@@ -3169,8 +3169,6 @@ msg_print("ギシギシいう音が聞こえる。");
 
 			/* Notice */
 			c_ptr->feat = floor_type[randint0(100)];
-			c_ptr->info &= ~(CAVE_MASK);
-			c_ptr->info |= CAVE_FLOOR;
 
 			/* Note changes to viewable region */
 			if (player_has_los_bold(ny, nx)) do_view = TRUE;
@@ -3302,8 +3300,6 @@ msg_print("守りのルーンが壊れた！");
 
 				/* Break the rune */
 				c_ptr->feat = floor_type[randint0(100)];
-				c_ptr->info &= ~(CAVE_MASK);
-				c_ptr->info |= CAVE_FLOOR;
 
 				/* Allow movement */
 				do_move = TRUE;
@@ -3350,8 +3346,6 @@ msg_print("爆発のルーンは解除された。");
 
 				/* Break the rune */
 				c_ptr->feat = floor_type[randint0(100)];
-				c_ptr->info &= ~(CAVE_MASK);
-				c_ptr->info |= CAVE_FLOOR;
 				note_spot(ny, nx);
 				lite_spot(ny, nx);
 
@@ -3487,8 +3481,6 @@ msg_print("爆発のルーンは解除された。");
 				if (r_ptr->flags2 & RF2_KILL_WALL)
 				{
 					c_ptr->feat = FEAT_GRASS;
-					c_ptr->info &= ~(CAVE_MASK);
-					c_ptr->info |= CAVE_FLOOR;
 				}
 				if (!(r_ptr->flags7 & RF7_CAN_FLY) && !(r_ptr->flags8 & RF8_WILD_WOOD))
 				{

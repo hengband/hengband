@@ -2356,7 +2356,7 @@
 #define CAVE_VAULT      0x4000
 #define CAVE_TRAP       0x8000
 
-#define CAVE_MASK (CAVE_FLOOR | CAVE_EXTRA | CAVE_INNER | CAVE_OUTER | CAVE_SOLID)
+#define CAVE_MASK (CAVE_FLOOR | CAVE_EXTRA | CAVE_INNER | CAVE_OUTER | CAVE_SOLID | CAVE_VAULT)
 
 /*
  * Bit flags for the "project()" function

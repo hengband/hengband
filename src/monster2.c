@@ -2775,8 +2775,6 @@ msg_print("守りのルーンが壊れた！");
 
 			/* Break the rune */
 			c_ptr->feat = floor_type[randint0(100)];
-			c_ptr->info &= ~(CAVE_MASK);
-			c_ptr->info |= CAVE_FLOOR;
 
 			/* Notice */
 			note_spot(y, x);
@@ -3100,8 +3098,6 @@ msg_print("爆発のルーンは解除された。");
 
 		/* Break the rune */
 		c_ptr->feat = floor_type[randint0(100)];
-		c_ptr->info &= ~(CAVE_MASK);
-		c_ptr->info |= CAVE_FLOOR;
 		note_spot(y, x);
 		lite_spot(y, x);
 	}

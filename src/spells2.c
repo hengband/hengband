@@ -5222,8 +5222,6 @@ bool destroy_area(int y1, int x1, int r, int full)
 				{
 					/* Create floor */
 					c_ptr->feat = floor_type[randint0(100)];
-					c_ptr->info &= ~(CAVE_MASK);
-					c_ptr->info |= CAVE_FLOOR;
 				}
 			}
 		}
@@ -5729,8 +5727,6 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 				{
 					/* Create floor */
 					c_ptr->feat = floor_type[randint0(100)];
-					c_ptr->info &= ~(CAVE_MASK);
-					c_ptr->info |= CAVE_FLOOR;
 				}
 			}
 		}

@@ -1502,8 +1502,6 @@ static bool twall(int y, int x, byte feat)
 
 	/* Forget the wall */
 	c_ptr->info &= ~(CAVE_MARK);
-	c_ptr->info &= ~(CAVE_MASK);
-	c_ptr->info |= (CAVE_FLOOR);
 
 	/* Remove the feature */
 	cave_set_feat(y, x, feat);
@@ -2251,8 +2249,6 @@ static bool do_cmd_disarm_aux(int y, int x, int dir)
 
 		/* Remove the trap */
 		c_ptr->feat = floor_type[randint0(100)];
-		c_ptr->info &= ~(CAVE_MASK);
-		c_ptr->info |= CAVE_FLOOR;
 		note_spot(y, x);
 		lite_spot(y, x);
 

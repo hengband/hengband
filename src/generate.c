@@ -1559,6 +1559,24 @@ static void place_pet(void)
 }
 
 /*
+ * Wipe all unnecessary flags after cave generation
+ */
+void wipe_generate_cave_flags(void)
+{
+	int x, y;
+
+	for (y = 0; y < MAX_HGT; y++)
+	{
+		for (x = 0; x < MAX_WID; x++)
+		{
+			/* Wipe unused flags */
+			cave[y][x].info &= ~(CAVE_MASK);
+		}
+	}
+
+}
+
+/*
  * Generates a random dungeon level			-RAK-
  *
  * Hack -- regenerate any "overflow" levels
@@ -1798,6 +1816,8 @@ if (why) msg_format("生成やり直し(%s)", why);
 			}
 		}
 	}
+
+	wipe_generate_cave_flags();
 
 	place_pet();
 

@@ -666,8 +666,6 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 			msg_format("A tree %s", message);
 #endif
 			c_ptr->feat = (one_in_(3) ? FEAT_DEEP_GRASS : FEAT_GRASS);
-			c_ptr->info &= ~(CAVE_MASK);
-			c_ptr->info |= CAVE_FLOOR;
 
 			/* Observe */
 			if (c_ptr->info & (CAVE_MARK)) obvious = TRUE;
@@ -755,8 +753,6 @@ msg_print("まばゆい閃光が走った！");
 				else
 				{
 					c_ptr->feat = floor_type[randint0(100)];
-					c_ptr->info &= ~(CAVE_MASK);
-					c_ptr->info |= CAVE_FLOOR;
 				}
 			}
 
@@ -826,8 +822,6 @@ msg_print("まばゆい閃光が走った！");
 				else
 				{
 					c_ptr->feat = floor_type[randint0(100)];
-					c_ptr->info &= ~(CAVE_MASK);
-					c_ptr->info |= CAVE_FLOOR;
 				}
 			}
 
@@ -893,8 +887,6 @@ msg_print("壁が溶けて泥になった！");
 
 				/* Destroy the wall */
 				c_ptr->feat = floor_type[randint0(100)];
-				c_ptr->info &= ~(CAVE_MASK);
-				c_ptr->info |= CAVE_FLOOR;
 			}
 
 			/* Quartz / Magma with treasure */
@@ -919,8 +911,6 @@ msg_print("何かを発見した！");
 
 				/* Destroy the wall */
 				c_ptr->feat = floor_type[randint0(100)];
-				c_ptr->info &= ~(CAVE_MASK);
-				c_ptr->info |= CAVE_FLOOR;
 
 				/* Place some gold */
 				place_gold(y, x);
@@ -946,8 +936,6 @@ msg_print("鉱脈が溶けて泥になった！");
 
 				/* Destroy the wall */
 				c_ptr->feat = floor_type[randint0(100)];
-				c_ptr->info &= ~(CAVE_MASK);
-				c_ptr->info |= CAVE_FLOOR;
 			}
 
 			/* Rubble */
@@ -970,8 +958,6 @@ msg_print("岩石が溶けて泥になった！");
 
 				/* Destroy the rubble */
 				c_ptr->feat = floor_type[randint0(100)];
-				c_ptr->info &= ~(CAVE_MASK);
-				c_ptr->info |= CAVE_FLOOR;
 
 				/* Hack -- place an object */
 				if (randint0(100) < 10)
@@ -1013,8 +999,6 @@ msg_print("ドアが溶けて泥になった！");
 
 				/* Destroy the feature */
 				c_ptr->feat = floor_type[randint0(100)];
-				c_ptr->info &= ~(CAVE_MASK);
-				c_ptr->info |= CAVE_FLOOR;
 			}
 
 			/* Notice */
@@ -7681,8 +7665,6 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 							else
 							{
 								cave[y][x].feat = floor_type[randint0(100)];
-								cave[y][x].info &= ~(CAVE_MASK);
-								cave[y][x].info |= CAVE_FLOOR;
 							}
 						}
 						/* Update some things -- similar to GF_KILL_WALL */
@@ -8462,8 +8444,6 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 								else
 								{
 									cave[y][x].feat = floor_type[randint0(100)];
-									cave[y][x].info &= ~(CAVE_MASK);
-									cave[y][x].info |= CAVE_FLOOR;
 								}
 							}
 
