@@ -2214,6 +2214,8 @@ void update_mon(int m_idx, bool full)
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
+        bool do_disturb = disturb_move;
+
 	int d;
 
 	/* Current location */
@@ -2226,6 +2228,14 @@ void update_mon(int m_idx, bool full)
 	/* Seen by vision */
 	bool easy = FALSE;
 
+        /* Do disturb? */
+        if (disturb_high)
+        {
+                monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
+
+                if (ap_r_ptr->r_tkills && ap_r_ptr->level >= p_ptr->lev)
+                        do_disturb = TRUE;
+        }
 
 	/* Compute distance */
 	if (full)
@@ -2527,7 +2537,7 @@ void update_mon(int m_idx, bool full)
 			if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 
 			/* Disturb on disappearance */
-			if (disturb_move)
+			if (do_disturb)
 			{
 				if (disturb_pets || is_hostile(m_ptr))
 					disturb(1, 0);
@@ -2546,7 +2556,7 @@ void update_mon(int m_idx, bool full)
 			m_ptr->mflag |= (MFLAG_VIEW);
 
 			/* Disturb on appearance */
-			if (disturb_move)
+			if (do_disturb)
 			{
 				if (disturb_pets || is_hostile(m_ptr))
 					disturb(1, 0);
@@ -2564,7 +2574,7 @@ void update_mon(int m_idx, bool full)
 			m_ptr->mflag &= ~(MFLAG_VIEW);
 
 			/* Disturb on disappearance */
-			if (disturb_move)
+			if (do_disturb)
 			{
 				if (disturb_pets || is_hostile(m_ptr))
 					disturb(1, 0);

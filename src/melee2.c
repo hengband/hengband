@@ -2271,6 +2271,7 @@ static void process_monster(int m_idx)
 {
 	monster_type    *m_ptr = &m_list[m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+	monster_race    *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
 
 	int             i, d, oy, ox, ny, nx;
 
@@ -2841,7 +2842,7 @@ msg_print("重厚な足音が聞こえた。");
 		}
 
 		/* Some monsters can speak */
-		if ((r_info[m_ptr->ap_r_idx].flags2 & RF2_CAN_SPEAK) && aware &&
+		if ((ap_r_ptr->flags2 & RF2_CAN_SPEAK) && aware &&
 			one_in_(SPEAK_CHANCE) &&
 			player_has_los_bold(oy, ox))
 		{
@@ -3511,9 +3512,10 @@ msg_print("爆発のルーンは解除された。");
 			}
 
 			/* Possible disturb */
-			if (m_ptr->ml && (disturb_move ||
-				((m_ptr->mflag & MFLAG_VIEW) &&
-				disturb_near)))
+			if (m_ptr->ml &&
+                            (disturb_move ||
+                             (disturb_near && (m_ptr->mflag & MFLAG_VIEW)) ||
+                             (disturb_high && ap_r_ptr->r_tkills && ap_r_ptr->level >= p_ptr->lev)))
 			{
 				/* Disturb */
 				if (is_hostile(m_ptr))

@@ -213,6 +213,7 @@ bool find_examine;			/* Run into potential corners */
 
 bool disturb_move;			/* Disturb whenever any monster moves */
 bool disturb_near;			/* Disturb whenever viewable monster moves */
+bool disturb_high;                      /* Disturb whenever high-level monster moves */
 bool disturb_panel;			/* Disturb whenever map panel changes */
 bool disturb_state;			/* Disturn whenever player state changes */
 bool disturb_minor;			/* Disturb whenever boring things happen */

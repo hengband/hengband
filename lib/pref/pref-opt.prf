@@ -80,6 +80,7 @@ Y:find_ignore_doors
 X:find_cut
 Y:find_examine
 X:disturb_move
+X:disturb_high
 Y:disturb_near
 X:disturb_pets
 Y:disturb_panel

@@ -415,6 +415,12 @@ Disturb whenever any monster moves    [disturb_move]
     you should probably turn this option off if you want to "rest" near
     such monsters.
 
+***** <disturb_high>
+Disturb whenever high-level monster moves    [disturb_high]
+    Disturb the player when any monster whose level is higher than the
+    player moves, appears, or disappears.  This includes monsters
+    which are only visible due to telepathy.
+
 ***** <disturb_near>
 Disturb whenever viewable monster moves    [disturb_near]
     Disturb the player when any viewable monster moves, whenever any

@@ -211,6 +211,7 @@ extern bool find_ignore_doors;
 extern bool find_cut;
 extern bool find_examine;
 extern bool disturb_near;
+extern bool disturb_high;
 extern bool disturb_move;
 extern bool disturb_panel;
 extern bool disturb_state;

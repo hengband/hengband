@@ -6932,6 +6932,15 @@ option_type option_info[] =
 
 
 #ifdef JP
+	{ &disturb_high,                FALSE,  4, 1, 3,
+        "disturb_high",                 "レベルの高いモンスターが動いたら行動を中止する"},
+#else
+	{ &disturb_high,                FALSE,  4, 1, 3,
+	"disturb_high",                 "Disturb whenever high-level monster moves" },
+#endif
+
+
+#ifdef JP
 	{ &disturb_near,                TRUE,  4, 0, 21,
         "disturb_near",                 "視界内のモンスターが動いたら行動を中止する" },
 #else
