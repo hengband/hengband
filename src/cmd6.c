@@ -823,12 +823,12 @@ static void do_cmd_quaff_potion_aux(int item)
 			msg_print("The potion makes you vomit!");
 #endif
 
-			if (prace_is_(RACE_GOLEM) ||
-			    prace_is_(RACE_ZOMBIE) ||
-			    prace_is_(RACE_DEMON) ||
-			    prace_is_(RACE_ANDROID) ||
-			    prace_is_(RACE_SPECTRE) ||
-			    (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING))
+			if (!(prace_is_(RACE_GOLEM) ||
+			      prace_is_(RACE_ZOMBIE) ||
+			      prace_is_(RACE_DEMON) ||
+			      prace_is_(RACE_ANDROID) ||
+			      prace_is_(RACE_SPECTRE) ||
+			      (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING)))
 			{
 				/* Only living creatures get thirsty */
 				(void)set_food(PY_FOOD_STARVE - 1);
