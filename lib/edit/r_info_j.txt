@@ -21302,3 +21302,30 @@ D:$Tanuki (raccoon dog) is thought to bewitch people in Japanese.
 D:$Tanuki can disguise as human beings by putting a magic leaf on his/her head.
 D:日本の伝説では、たぬきは人を化かすと伝えられている。
 D:魔法の木の葉を頭に載せて人に化けるのだ。
+
+N:1068:混沌のサマ師『ディオニソス』
+E:Dionysus, The Munchkin of Chaos
+G:G:g
+I:154:10d100:100:162:40
+W:55:7:0:10000:0:0
+B:SHOOT:HURT:16d6
+B:SLASH:EXP_VAMP:6d8
+B:SLASH:EXP_VAMP:6d8
+B:TOUCH:EAT_ITEM
+F:UNIQUE | MALE | CAN_FLY | RAND_25 | RAND_50
+F:FORCE_MAXHP | CAN_SPEAK | SMART | REGENERATE |
+F:NO_CONF | NO_STUN | RES_DISE | RES_NEXU 
+F:IM_ACID | IM_ELEC | IM_FIRE | IM_POIS | IM_COLD | RES_NETH 
+F:ONLY_ITEM | DROP_90 | DROP_GOOD | DROP_GREAT |
+F:TAKE_ITEM | DROP_CORPSE |
+F:INVISIBLE | PASS_WALL | 
+F:UNDEAD | EVIL
+S:1_IN_2 |
+S:SHOOT | TELE_AWAY | TPORT | HASTE | BLINK | HEAL
+D:$He is one of the greatest trickster. Even greatest warrior cannot
+D:$defeat him, and his storm of holy might arrows from the dark have
+D:$defeated numerous victims.
+D:彼はこの世界で最も偉大ないかさま師だ。いかなる剣の達人も彼に深い傷を
+D:負わせる事は不可能であり、死角を付いて嵐のように射ち出される彼の聖な
+D:る矢は幾多の犠牲者を葬ってきた。
+
