@@ -4103,6 +4103,7 @@ static void dump_aux_pet(FILE *fff)
 {
 	int i;
 	bool pet = FALSE;
+	bool pet_settings = FALSE;
 	char pet_name[80];
 
 	for (i = m_max - 1; i >= 1; i--)
@@ -4111,6 +4112,7 @@ static void dump_aux_pet(FILE *fff)
 
 		if (!m_ptr->r_idx) continue;
 		if (!is_pet(m_ptr)) continue;
+		pet_settings = TRUE;
 		if (!m_ptr->nickname && (p_ptr->riding != i)) continue;
 		if (!pet)
 		{
@@ -4126,6 +4128,53 @@ static void dump_aux_pet(FILE *fff)
 	}
 
 	if (pet) fprintf(fff, "\n");
+
+	if (pet_settings)
+	{
+#ifdef JP
+		fprintf(fff, "\n  [ペットへの命令]\n");
+#else
+		fprintf(fff, "\n  [Command for Pets]\n");
+#endif
+
+#ifdef JP
+		fprintf(fff, "\n ドアを開ける:                       %s", (p_ptr->pet_extra_flags & PF_OPEN_DOORS) ? "ON" : "OFF");
+#else
+		fprintf(fff, "\n Pets open doors:                    %s", (p_ptr->pet_extra_flags & PF_OPEN_DOORS) ? "ON" : "OFF");
+#endif
+
+#ifdef JP
+		fprintf(fff, "\n アイテムを拾う:                     %s", (p_ptr->pet_extra_flags & PF_PICKUP_ITEMS) ? "ON" : "OFF");
+#else
+		fprintf(fff, "\n Pets pick up items:                 %s", (p_ptr->pet_extra_flags & PF_PICKUP_ITEMS) ? "ON" : "OFF");
+#endif
+
+#ifdef JP
+		fprintf(fff, "\n テレポート系魔法を使う:             %s", (p_ptr->pet_extra_flags & PF_TELEPORT) ? "ON" : "OFF");
+#else
+		fprintf(fff, "\n Allow teleport:                     %s", (p_ptr->pet_extra_flags & PF_TELEPORT) ? "ON" : "OFF");
+#endif
+
+#ifdef JP
+		fprintf(fff, "\n 攻撃魔法を使う:                     %s", (p_ptr->pet_extra_flags & PF_ATTACK_SPELL) ? "ON" : "OFF");
+#else
+		fprintf(fff, "\n Allow cast attack spell:            %s", (p_ptr->pet_extra_flags & PF_ATTACK_SPELL) ? "ON" : "OFF");
+#endif
+
+#ifdef JP
+		fprintf(fff, "\n 召喚魔法を使う:                     %s", (p_ptr->pet_extra_flags & PF_SUMMON_SPELL) ? "ON" : "OFF");
+#else
+		fprintf(fff, "\n Allow cast summon spell:            %s", (p_ptr->pet_extra_flags & PF_SUMMON_SPELL) ? "ON" : "OFF");
+#endif
+
+#ifdef JP
+		fprintf(fff, "\n プレイヤーを巻き込む範囲魔法を使う: %s", (p_ptr->pet_extra_flags & PF_BALL_SPELL) ? "ON" : "OFF");
+#else
+		fprintf(fff, "\n Allow involve player in area spell: %s", (p_ptr->pet_extra_flags & PF_BALL_SPELL) ? "ON" : "OFF");
+#endif
+
+		fputs("\n\n", fff);
+	}
 }
 
 
