@@ -148,7 +148,7 @@ void place_random_door(int y, int x, bool room)
 		c_ptr->mimic = room ? feat_wall_outer : fill_type[randint0(100)];
 
 		/* Floor type terrain cannot hide a door */
-		if (!(c_ptr->mimic & 0x20))
+		if (feat_floor(c_ptr->mimic))
 		{
 			c_ptr->feat = c_ptr->mimic;
 			c_ptr->mimic = 0;

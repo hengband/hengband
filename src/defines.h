@@ -4037,6 +4037,13 @@
 
 
 /*
+ * Determine if a "feature" is a "floor"
+ */
+#define feat_floor(F) \
+	(!((F) & 0x20))
+
+
+/*
  * Determine if a "legal" grid is a "floor" grid
  *
  * Line 1 -- forbid doors, rubble, seams, walls
@@ -4049,7 +4056,7 @@
  * -KMW-
  */
 #define cave_floor_bold(Y,X) \
-	(!(cave[Y][X].feat & 0x20))
+	(feat_floor(cave[(Y)][(X)].feat))
 
 
 /*
@@ -4151,7 +4158,7 @@
  * Grid based version of "cave_floor_bold()"
  */
 #define cave_floor_grid(C) \
-    (!((C)->feat & 0x20))
+	(feat_floor((C)->feat))
 
 
 /*
@@ -4247,14 +4254,12 @@
  * Determine if a "boundary" grid is "floor mimic"
  */
 #define boundary_floor_bold(Y,X) \
-    ((cave[(Y)][(X)].feat == FEAT_PERM_SOLID) && \
-      cave[(Y)][(X)].mimic && \
-    !(cave[(Y)][(X)].mimic & 0x20))
+	((cave[(Y)][(X)].feat == FEAT_PERM_SOLID) && \
+	  cave[(Y)][(X)].mimic && feat_floor(cave[(Y)][(X)].mimic))
 
 #define boundary_floor_grid(C) \
-    (((C)->feat == FEAT_PERM_SOLID) && \
-      (C)->mimic && \
-    !((C)->mimic & 0x20))
+	(((C)->feat == FEAT_PERM_SOLID) && \
+	  (C)->mimic && feat_floor((C)->mimic))
 
 #define update_playtime() \
 {\

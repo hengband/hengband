@@ -4896,7 +4896,7 @@ static bool run_test(void)
 		}
 
 		/* Analyze unknown grids and floors considering mimic */
-		if (inv || (!(feat & 0x20)))
+		if (inv || feat_floor(feat))
 		{
 			/* Looking for open area */
 			if (find_openarea)
