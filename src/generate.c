@@ -1239,7 +1239,13 @@ static void build_battle(void)
 	place_extra_perm_bold(y_depth-4, x_right-18);
 	cave[y_depth-4][x_right-18].info |= (CAVE_GLOW | CAVE_MARK);
 
-	i = y_height + 4;
+	for (i = y_height + 1; i <= y_height + 5; i++)
+		for (j = x_left + 20 + 2 * (y_height + 5 - i); j <= x_right - 20 - 2 * (y_height + 5 - i); j++)
+		{
+			cave[i][j].feat = feat_permanent_glass_wall;
+		}
+
+	i = y_height + 1;
 	j = xval;
 	cave[i][j].feat = f_tag_to_index("BUILDING_3");
 	cave[i][j].info |= (CAVE_GLOW | CAVE_MARK);
@@ -1283,9 +1289,9 @@ static void battle_gen(void)
 
 	for(i=0;i<4;i++)
 	{
-		place_monster_aux(0, py + 5 + (i/2)*4, px - 2 + (i%2)*4, battle_mon[i],
+		place_monster_aux(0, py + 8 + (i/2)*4, px - 2 + (i%2)*4, battle_mon[i],
 				  (PM_NO_KAGE | PM_NO_PET));
-		set_friendly(&m_list[cave[py+5+(i/2)*4][px-2+(i%2)*4].m_idx]);
+		set_friendly(&m_list[cave[py+8+(i/2)*4][px-2+(i%2)*4].m_idx]);
 	}
 	for(i = 1; i < m_max; i++)
 	{
