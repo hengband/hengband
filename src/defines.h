@@ -4361,9 +4361,9 @@
  * Line 5 -- forbid the player
  */
 #define cave_empty_bold2(Y,X) \
-	(((have_flag(f_flags_bold((Y), (X)), FF_PLACE) && \
-	   !have_flag(f_flags_bold((Y), (X)), FF_MUST_FLY)) || \
-	  (character_dungeon && have_flag(f_flags_bold((Y), (X)), FF_TREE))) && \
+	(have_flag(f_flags_bold((Y), (X)), FF_PLACE) && \
+	 !have_flag(f_flags_bold((Y), (X)), FF_MUST_FLY) && \
+	 (character_dungeon || !have_flag(f_flags_bold((Y), (X)), FF_TREE)) && \
 	 !(cave[Y][X].m_idx) && \
 	 !player_bold(Y,X))
 
