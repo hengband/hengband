@@ -529,8 +529,12 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 				ADD_FLG(FLG_WORTHLESS);
 				break;
 
+			case FEEL_EXCELLENT:
+				ADD_FLG(FLG_EGO);
+				break;
+
 			default:
-				/* It's not know as useless so... */
+				/* It's not known to be useless so... */
 				ADD_FLG(FLG_UNIDENTIFIED);
 				break;
 			}
@@ -540,12 +544,23 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 	/* Identified */
 	else
 	{
-		/* Ego object */
+		/* Ego objects */
 		if (o_ptr->name2)
+		    
 		{
 			ego_item_type *e_ptr = &e_info[o_ptr->name2];
 			entry->name = string_make(e_name + e_ptr->name);
-			name = FALSE;
+
+			if (TV_WEAPON_BEGIN <= o_ptr->tval &&
+			    o_ptr->tval <= TV_ARMOR_END)
+			{
+				/*
+				 * Base name of ego weapons and armors
+				 * are almost meaningless.  Ignore it.
+				 */
+				name = FALSE;
+			}
+
 			ADD_FLG(FLG_EGO);
 		}
 
@@ -1001,7 +1016,12 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 	/*** Ego object ***/
 	if (IS_FLG(FLG_EGO))
 	{
-		if (!object_known_p(o_ptr) || !o_ptr->name2)
+		/* Need to be an ego item */
+		if (!o_ptr->name2) return FALSE;
+
+		/* Need to be known to be an ego */
+		if (!object_known_p(o_ptr) &&
+		    !((o_ptr->ident & IDENT_SENSE) && o_ptr->feeling == FEEL_EXCELLENT))
 			return FALSE;
 	}
 
@@ -5675,7 +5695,7 @@ void do_cmd_edit_autopick(void)
 		}
 
 		/* Insert a character */
-		else if (!iscntrl(key & 0xff))
+		else if (!iscntrl((unsigned char)key))
 		{
 			/* Ignore selection */
 			if (tb->mark)
