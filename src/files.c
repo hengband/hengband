@@ -4281,18 +4281,32 @@ errr make_character_dump(FILE *fff)
 	/* Free Memory */
 	C_KILL(quest_num, max_quests, int);
 
-	if (p_ptr->is_dead && !p_ptr->total_winner)
+	if (p_ptr->is_dead)
 	{
-#ifdef JP
-		fprintf(fff, "\n  [死ぬ直前のメッセージ]\n\n");
-#else
-		fprintf(fff, "\n  [Last messages]\n\n");
-#endif
-		for (i = MIN(message_num(), 30); i >= 0; i--)
+		if (!p_ptr->total_winner)
 		{
-			fprintf(fff,"> %s\n",message_str((s16b)i));
+#ifdef JP
+			fprintf(fff, "\n  [死ぬ直前のメッセージ]\n\n");
+#else
+			fprintf(fff, "\n  [Last messages]\n\n");
+#endif
+			for (i = MIN(message_num(), 30); i >= 0; i--)
+			{
+				fprintf(fff,"> %s\n",message_str((s16b)i));
+			}
+			fprintf(fff, "\n");
 		}
-		fprintf(fff, "\n");
+
+		/* Hack -- *Winning* message */
+		else if (p_ptr->last_message)
+		{
+#ifdef JP
+			fprintf(fff, "\n  [*勝利*メッセージ]\n\n");
+#else
+			fprintf(fff, "\n  [*Winning* message]\n\n");
+#endif
+			fprintf(fff,"  %s\n", p_ptr->last_message);
+		}
 	}
 
 #ifdef JP
@@ -5813,6 +5827,28 @@ prt("確認のため '@' を押して下さい。", 0, 0);
 		i = inkey();
 		prt("", 0, 0);
 		if (i != '@') return;
+	}
+
+	/* Initialize "last message" buffer */
+	if (p_ptr->last_message) string_free(p_ptr->last_message);
+	p_ptr->last_message = NULL;
+
+	/* Hack -- Note *winning* message */
+	if (p_ptr->total_winner && last_words)
+	{
+		char buf[1024] = "";
+
+#ifdef JP
+		while (!get_string("*勝利*メッセージ: ", buf, sizeof buf)) ;
+#else
+		while (!get_string("*Winning* message: ", buf, sizeof buf)) ;
+#endif
+
+		if (buf[0])
+		{
+			p_ptr->last_message = string_make(buf);
+			msg_print(p_ptr->last_message);
+		}
 	}
 
 	/* Stop playing */

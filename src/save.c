@@ -536,6 +536,8 @@ static void wr_extra(void)
 
 	wr_string(p_ptr->died_from);
 
+	wr_string(p_ptr->last_message ? p_ptr->last_message : "");
+
 	save_quick_start();
 
 	for (i = 0; i < 4; i++)

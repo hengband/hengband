@@ -5220,6 +5220,10 @@ if (get_check_strict("画面を保存しますか？", CHECK_NO_HISTORY))
 
 			flush();
 
+			/* Initialize "last message" buffer */
+			if (p_ptr->last_message) string_free(p_ptr->last_message);
+			p_ptr->last_message = NULL;
+
 			/* Hack -- Note death */
 			if (!last_words)
 			{
@@ -5262,6 +5266,8 @@ get_rnd_line("death_j.txt", 0, death_message);
 					strcpy(death_message, android ? "You are broken." : "You die.");
 #endif
 				}
+				else p_ptr->last_message = string_make(death_message);
+
 				if (streq(p_ptr->died_from, "Seppuku"))
 				{
 #ifdef JP

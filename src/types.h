@@ -1111,6 +1111,7 @@ struct player_type
 
 	s16b player_hp[PY_MAX_LEVEL];
 	char died_from[80];   	  /* What killed the player */
+	cptr last_message;        /* Last message on death or retirement */
 	char history[4][60];  	  /* Textual "history" for the Player */
 
 	u16b total_winner;	  /* Total winner */

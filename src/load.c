@@ -1500,6 +1500,15 @@ static void rd_extra(void)
 
 	rd_string(p_ptr->died_from, sizeof(p_ptr->died_from));
 
+	if (!h_older_than(1, 7, 0, 1))
+	{
+		char buf[1024];
+
+		/* Read the message */
+		rd_string(buf, sizeof buf);
+		if (buf[0]) p_ptr->last_message = string_make(buf);
+	}
+
 	load_quick_start();
 
 	for (i = 0; i < 4; i++)
