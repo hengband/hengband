@@ -3098,6 +3098,12 @@ static byte get_destroyed_object_for_search(object_type **o_handle, cptr *search
 static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 {
 	int pos = 0;
+
+	/*
+	 * Text color
+	 * TERM_YELLOW : Overwrite mode
+	 * TERM_WHITE : Insert mode
+	 */
 	byte color = TERM_YELLOW;
 	char buf[MAX_NLEN+20];
 	const size_t len = 80;
@@ -3140,7 +3146,10 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 		{
 			int i = 0;
 
-			/* No effect at biggining of line */
+			/* Now on insert mode */
+			color = TERM_WHITE;
+
+			/* No move at biggining of line */
 			if (0 == pos) break;
 
 			while (TRUE)
@@ -3161,15 +3170,15 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 			/* Get previous position */
 			pos = i;
 
-			/* Now on insert mode */
-			color = TERM_WHITE;
-
 			break;
 		}
 
 		case SKEY_RIGHT:
 		case KTRL('f'):
-			/* No effect at end of line */
+			/* Now on insert mode */
+			color = TERM_WHITE;
+
+			/* No move at end of line */
 			if ('\0' == buf[pos]) break;
 
 #ifdef JP
@@ -3179,9 +3188,6 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 #else
 			pos++;
 #endif
-
-			/* Now on insert mode */
-			color = TERM_WHITE;
 
 			break;
 
@@ -3214,7 +3220,10 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 		case '\010':
 			/* Backspace */
 
-			/* No effect at biggining of line */
+			/* Now on insert mode */
+			color = TERM_WHITE;
+
+			/* No move at biggining of line */
 			if (!pos) break;
 
 			/* Go left 1 unit */
@@ -3226,16 +3235,20 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 		case KTRL('d'):
 			/* Delete key */
 		{
+			int dst, src;
 
-			int dst = pos;
+			/* Now on insert mode */
+			color = TERM_WHITE;
 
 			/* Position of next character */
-			int src = pos + 1;
+			src = pos + 1;
 
 #ifdef JP
 			/* Next character is one more byte away */
 			if (iskanji(src)) src++;
 #endif
+
+			dst = pos;
 
 			/* Move characters at src to dst */
 			while ('\0' != (buf[dst++] = buf[src++]))

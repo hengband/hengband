@@ -3138,13 +3138,19 @@ void clear_from(int row)
 
 
 /*
- * Get some input at the cursor location.
+ * Get some string input at the cursor location.
  * Assume the buffer is initialized to a default string.
- * Note that this string is often "empty" (see below).
- * The default buffer is displayed in yellow until cleared.
- * Pressing RETURN right away accepts the default entry.
- * Normal chars clear the default and append the char.
- * Backspace clears the default or deletes the final char.
+ *
+ * The default buffer is in Overwrite mode and displayed in yellow at
+ * first.  Normal chars clear the yellow text and append the char in
+ * white text.
+ *
+ * LEFT (^B) and RIGHT (^F) movement keys move the cursor position.
+ * If the text is still displayed in yellow (Overwite mode), it will
+ * turns into white (Insert mode) when cursor moves.
+ *
+ * DELETE (^D) deletes a char at the cursor position.
+ * BACKSPACE (^H) deletes a char at the left of cursor position.
  * ESCAPE clears the buffer and the window and returns FALSE.
  * RETURN accepts the current buffer contents and returns TRUE.
  */
@@ -3152,6 +3158,12 @@ bool askfor_aux(char *buf, int len)
 {
 	int y, x;
 	int pos = 0;
+
+	/*
+	 * Text color
+	 * TERM_YELLOW : Overwrite mode
+	 * TERM_WHITE : Insert mode
+	 */
 	byte color = TERM_YELLOW;
 
 	/* Locate the cursor position */
@@ -3193,7 +3205,10 @@ bool askfor_aux(char *buf, int len)
 		{
 			int i = 0;
 
-			/* No effect at biggining of line */
+			/* Now on insert mode */
+			color = TERM_WHITE;
+
+			/* No move at biggining of line */
 			if (0 == pos) break;
 
 			while (TRUE)
@@ -3214,15 +3229,15 @@ bool askfor_aux(char *buf, int len)
 			/* Get previous position */
 			pos = i;
 
-			/* Now on insert mode */
-			color = TERM_WHITE;
-
 			break;
 		}
 
 		case SKEY_RIGHT:
 		case KTRL('f'):
-			/* No effect at end of line */
+			/* Now on insert mode */
+			color = TERM_WHITE;
+
+			/* No move at end of line */
 			if ('\0' == buf[pos]) break;
 
 #ifdef JP
@@ -3232,9 +3247,6 @@ bool askfor_aux(char *buf, int len)
 #else
 			pos++;
 #endif
-
-			/* Now on insert mode */
-			color = TERM_WHITE;
 
 			break;
 
@@ -3251,7 +3263,10 @@ bool askfor_aux(char *buf, int len)
 		case '\010':
 			/* Backspace */
 
-			/* No effect at biggining of line */
+			/* Now on insert mode */
+			color = TERM_WHITE;
+
+			/* No move at biggining of line */
 			if (!pos) break;
 
 			/* Go left 1 unit */
@@ -3263,16 +3278,20 @@ bool askfor_aux(char *buf, int len)
 		case KTRL('d'):
 			/* Delete key */
 		{
+			int dst, src;
 
-			int dst = pos;
+			/* Now on insert mode */
+			color = TERM_WHITE;
 
 			/* Position of next character */
-			int src = pos + 1;
+			src = pos + 1;
 
 #ifdef JP
 			/* Next character is one more byte away */
 			if (iskanji(src)) src++;
 #endif
+
+			dst = pos;
 
 			/* Move characters at src to dst */
 			while ('\0' != (buf[dst++] = buf[src++]))
