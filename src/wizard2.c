@@ -1336,12 +1336,6 @@ static void wiz_create_item(void)
 	/* Return if failed */
 	if (!k_idx) return;
 
-	/* Get local object */
-	q_ptr = &forge;
-
-	/* Create the item */
-	object_prep(q_ptr, k_idx);
-
 	if (k_info[k_idx].gen_flags & TRG_INSTA_ART)
 	{
 		int i;
@@ -1350,24 +1344,29 @@ static void wiz_create_item(void)
 		for (i = 1; i < max_a_idx; i++)
 		{
 			/* Ignore incorrect tval */
-			if (a_info[i].tval != q_ptr->tval) continue;
+			if (a_info[i].tval != k_info[k_idx].tval) continue;
 
 			/* Ignore incorrect sval */
-			if (a_info[i].sval != q_ptr->sval) continue;
+			if (a_info[i].sval != k_info[k_idx].sval) continue;
 
-			/* Choose this artifact */
-			q_ptr->name1 = i;
-			break;
+			/* Create this artifact */
+                        create_named_art(i, py, px);
+
+                        /* All done */
+                        msg_print("Allocated(INSTA_ART).");
+
+                        return;
 		}
+	}
 
-		/* Apply magic */
-		apply_magic(q_ptr, -1, TRUE, TRUE, TRUE, FALSE);
-	}
-	else
-	{
-		/* Apply magic */
-		apply_magic(q_ptr, dun_level, FALSE, FALSE, FALSE, FALSE);
-	}
+	/* Get local object */
+	q_ptr = &forge;
+
+	/* Create the item */
+	object_prep(q_ptr, k_idx);
+
+        /* Apply magic */
+        apply_magic(q_ptr, dun_level, FALSE, FALSE, FALSE, FALSE);
 
 	/* Drop the object from heaven */
 	(void)drop_near(q_ptr, -1, py, px);
