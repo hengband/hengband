@@ -9301,17 +9301,18 @@ D:――侵入者を殺す事！――を果たす為にあなたに向って大股で歩み寄ってくる。
 D:このモンスターに対してはあまりの魔法の無力さに呆然とするであろう。
 
 #JZ#
-N:531:『Little Boy』
-E:Little Boy
+N:531:人々を爆死させてきた左手『シアーハートアタック』
+E:Sheer Heart Attack, the Bomb Hand
 G:{:D
-I:120:12d12:10:80:12
+I:120:12d12:10:150:12
 W:35:2:0:200:0:0
 B:EXPLODE:SHATTER:100d2
 F:FORCE_SLEEP | FORCE_MAXHP | UNIQUE | REFLECTING |
 F:EMPTY_MIND | COLD_BLOOD | BASH_DOOR | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS
 F:NO_FEAR | NO_CONF | NO_SLEEP | NONLIVING | RES_TELE
-D:$A shining machine of death and destruction.
-D:輝く死と破壊の機械だ。
+D:吉良吉影のスタンド『キラークイーン』の左手だ。冒険者の体温を頼りに
+D:どこまでも追いかける。「『キラークイーン』の『シアーハートアタック』
+D:は狙った獲物は絶対に仕留める……」
 
 #J0#
 N:532:ダガシ
