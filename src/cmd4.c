@@ -3291,6 +3291,31 @@ void do_cmd_macros(void)
 }
 
 
+static void cmd_visuals_aux(char i, int *num, int max)
+{
+	if (iscntrl(i))
+	{
+		char str[10] = "";
+		int tmp;
+
+		sprintf(str, "%d", *num);
+
+		if (!get_string(format("Input new number(0-%d): ", max-1), str, 4))
+			return;
+
+		tmp = strtol(str, NULL, 0);
+		if (tmp >= 0 && tmp < max)
+			*num = tmp;
+		return;
+	}
+	else if (isupper(i))
+		*num = (*num + max - 1) % max;
+	else
+		*num = (*num + 1) % max;
+
+	return;
+}
+
 /*
  * Interact with "visuals"
  */
@@ -3644,6 +3669,8 @@ void do_cmd_visuals(void)
 			while (1)
 			{
 				monster_race *r_ptr = &r_info[r];
+				char c;
+				int t;
 
 				byte da = (r_ptr->d_attr);
 				byte dc = (r_ptr->d_char);
@@ -3689,12 +3716,11 @@ void do_cmd_visuals(void)
 				/* Prompt */
 #ifdef JP
 				Term_putstr(0, 22, -1, TERM_WHITE,
-				            "コマンド (n/N/a/A/c/C): ");
+				            "コマンド (n/N/^N/a/A/^A/c/C/^C): ");
 #else
 				Term_putstr(0, 22, -1, TERM_WHITE,
-				            "Command (n/N/a/A/c/C): ");
+				            "Command (n/N/^N/a/A/^A/c/C/^C): ");
 #endif
-
 
 				/* Get a command */
 				i = inkey();
@@ -3702,13 +3728,26 @@ void do_cmd_visuals(void)
 				/* All done */
 				if (i == ESCAPE) break;
 
-				/* Analyze */
-				if (i == 'n') r = (r + max_r_idx + 1) % max_r_idx;
-				if (i == 'N') r = (r + max_r_idx - 1) % max_r_idx;
-				if (i == 'a') r_ptr->x_attr = (byte)(ca + 1);
-				if (i == 'A') r_ptr->x_attr = (byte)(ca - 1);
-				if (i == 'c') r_ptr->x_char = (byte)(cc + 1);
-				if (i == 'C') r_ptr->x_char = (byte)(cc - 1);
+				if (iscntrl(i)) c = 'a' + i - KTRL('A');
+				else if (isupper(i)) c = 'a' + i - 'A';
+				else c = i;
+
+				switch (c)
+				{
+				case 'n':
+					cmd_visuals_aux(i, &r, max_r_idx);
+					break;
+				case 'a':
+					t = (int)r_ptr->x_attr;
+					cmd_visuals_aux(i, &t, 256);
+					r_ptr->x_attr = (byte)t;
+					break;
+				case 'c':
+					t = (int)r_ptr->x_char;
+					cmd_visuals_aux(i, &t, 256);
+					r_ptr->x_char = (byte)t;
+					break;
+				}
 			}
 		}
 
@@ -3729,6 +3768,8 @@ void do_cmd_visuals(void)
 			while (1)
 			{
 				object_kind *k_ptr = &k_info[k];
+				char c;
+				int t;
 
 				byte da = (byte)k_ptr->d_attr;
 				byte dc = (byte)k_ptr->d_char;
@@ -3774,12 +3815,11 @@ void do_cmd_visuals(void)
 				/* Prompt */
 #ifdef JP
 				Term_putstr(0, 22, -1, TERM_WHITE,
-				            "コマンド (n/N/a/A/c/C): ");
+				            "コマンド (n/N/^N/a/A/^A/c/C/^C): ");
 #else
 				Term_putstr(0, 22, -1, TERM_WHITE,
-				            "Command (n/N/a/A/c/C): ");
+				            "Command (n/N/^N/a/A/^A/c/C/^C): ");
 #endif
-
 
 				/* Get a command */
 				i = inkey();
@@ -3787,13 +3827,26 @@ void do_cmd_visuals(void)
 				/* All done */
 				if (i == ESCAPE) break;
 
-				/* Analyze */
-				if (i == 'n') k = (k + max_k_idx + 1) % max_k_idx;
-				if (i == 'N') k = (k + max_k_idx - 1) % max_k_idx;
-				if (i == 'a') k_info[k].x_attr = (byte)(ca + 1);
-				if (i == 'A') k_info[k].x_attr = (byte)(ca - 1);
-				if (i == 'c') k_info[k].x_char = (byte)(cc + 1);
-				if (i == 'C') k_info[k].x_char = (byte)(cc - 1);
+				if (iscntrl(i)) c = 'a' + i - KTRL('A');
+				else if (isupper(i)) c = 'a' + i - 'A';
+				else c = i;
+
+				switch (c)
+				{
+				case 'n':
+					cmd_visuals_aux(i, &k, max_k_idx);
+					break;
+				case 'a':
+					t = (int)k_info[k].x_attr;
+					cmd_visuals_aux(i, &t, 256);
+					k_info[k].x_attr = (byte)t;
+					break;
+				case 'c':
+					t = (int)k_info[k].x_char;
+					cmd_visuals_aux(i, &t, 256);
+					k_info[k].x_char = (byte)t;
+					break;
+				}
 			}
 		}
 
@@ -3814,6 +3867,8 @@ void do_cmd_visuals(void)
 			while (1)
 			{
 				feature_type *f_ptr = &f_info[f];
+				char c;
+				int t;
 
 				byte da = (byte)f_ptr->d_attr;
 				byte dc = (byte)f_ptr->d_char;
@@ -3859,12 +3914,11 @@ void do_cmd_visuals(void)
 				/* Prompt */
 #ifdef JP
 				Term_putstr(0, 22, -1, TERM_WHITE,
-				            "コマンド (n/N/a/A/c/C): ");
+				            "コマンド (n/N/^N/a/A/^A/c/C/^C): ");
 #else
 				Term_putstr(0, 22, -1, TERM_WHITE,
-				            "Command (n/N/a/A/c/C): ");
+				            "Command (n/N/^N/a/A/^A/c/C/^C): ");
 #endif
-
 
 				/* Get a command */
 				i = inkey();
@@ -3872,13 +3926,26 @@ void do_cmd_visuals(void)
 				/* All done */
 				if (i == ESCAPE) break;
 
-				/* Analyze */
-				if (i == 'n') f = (f + max_f_idx + 1) % max_f_idx;
-				if (i == 'N') f = (f + max_f_idx - 1) % max_f_idx;
-				if (i == 'a') f_info[f].x_attr = (byte)(ca + 1);
-				if (i == 'A') f_info[f].x_attr = (byte)(ca - 1);
-				if (i == 'c') f_info[f].x_char = (byte)(cc + 1);
-				if (i == 'C') f_info[f].x_char = (byte)(cc - 1);
+				if (iscntrl(i)) c = 'a' + i - KTRL('A');
+				else if (isupper(i)) c = 'a' + i - 'A';
+				else c = i;
+
+				switch (c)
+				{
+				case 'n':
+					cmd_visuals_aux(i, &f, max_f_idx);
+					break;
+				case 'a':
+					t = (int)f_info[f].x_attr;
+					cmd_visuals_aux(i, &t, 256);
+					f_info[f].x_attr = (byte)t;
+					break;
+				case 'c':
+					t = (int)f_info[f].x_char;
+					cmd_visuals_aux(i, &t, 256);
+					f_info[f].x_char = (byte)t;
+					break;
+				}
 			}
 		}
 
