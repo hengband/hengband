@@ -20672,7 +20672,7 @@ F:OPEN_DOOR | DEMON | CAN_SPEAK | NONLIVING |
 F:EVIL | RAND_25 | IM_COLD | IM_FIRE | IM_POIS | CAN_SWIM |
 S:1_IN_6 |
 S:BR_COLD
-D:A demon small in stature whose face you can't help but love.
+D:$A demon small in stature whose face you can't help but love.
 D:憎めない顔をした小柄な悪魔だ。
 
 #
