@@ -196,6 +196,7 @@
  *   Term->user_hook = Perform user actions
  *   Term->xtra_hook = Perform extra actions
  *   Term->curs_hook = Draw (or Move) the cursor
+ *   Term->bigcurs_hook = Draw (or Move) the big cursor (bigtile mode)
  *   Term->wipe_hook = Draw some blank spaces
  *   Term->text_hook = Draw some text in the window
  *   Term->pict_hook = Draw some attr/chars in the window
@@ -1617,6 +1618,7 @@ errr Term_fresh(void)
 
 	/* Paranoia -- use "fake" hooks to prevent core dumps */
 	if (!Term->curs_hook) Term->curs_hook = Term_curs_hack;
+	if (!Term->bigcurs_hook) Term->bigcurs_hook = Term->curs_hook;
 	if (!Term->wipe_hook) Term->wipe_hook = Term_wipe_hack;
 	if (!Term->text_hook) Term->text_hook = Term_text_hack;
 	if (!Term->pict_hook) Term->pict_hook = Term_pict_hack;
@@ -1831,10 +1833,26 @@ errr Term_fresh(void)
 		if (!scr->cu && scr->cv)
 		{
 #ifdef CHUUKEI
-		  send_curs_to_chuukei_server(scr->cx, scr->cy);
+                        send_curs_to_chuukei_server(scr->cx, scr->cy);
 #endif
-			/* Call the cursor display routine */
-			(void)((*Term->curs_hook)(scr->cx, scr->cy));
+
+#ifdef JP
+			if ((scr->cx + 1 < w) &&
+                            ((old->a[scr->cy][scr->cx + 1] == 255) ||
+                             (!(old->a[scr->cy][scr->cx] & 0x80) &&
+                              iskanji(old->c[scr->cy][scr->cx]))))
+#else
+			if ((scr->cx + 1 < w) && (old->a[scr->cy][scr->cx + 1] == 255))
+#endif
+			{
+				/* Double width cursor for the Bigtile mode */
+                                (void)((*Term->bigcurs_hook)(scr->cx, scr->cy));
+                        }
+                        else
+                        {
+                                /* Call the cursor display routine */
+                                (void)((*Term->curs_hook)(scr->cx, scr->cy));
+                        }
 		}
 	}
 

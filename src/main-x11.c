@@ -2432,17 +2432,24 @@ static errr Term_curs_x11(int x, int y)
 	/* Draw the cursor */
 	Infoclr_set(xor);
 
-#ifdef JP
-	if (x + 1 < Term->wid &&
-	    ((use_bigtile && Term->old->a[y][x+1] == 255) ||
-	     (iskanji(Term->old->c[y][x]) && !(Term->old->a[y][x] & 0x80))))
-#else
-	if (use_bigtile && x + 1 < Term->wid && Term->old->a[y][x+1] == 255)
-#endif
-		Infofnt_text_non(x, y, "  ", 2);
-	else
 	/* Hilite the cursor character */
 	Infofnt_text_non(x, y, " ", 1);
+
+	/* Success */
+	return (0);
+}
+
+
+/*
+ * Draw the double width cursor
+ */
+static errr Term_bigcurs_x11(int x, int y)
+{
+	/* Draw the cursor */
+	Infoclr_set(xor);
+
+	/* Hilite the cursor character */
+        Infofnt_text_non(x, y, "  ", 2);
 
 	/* Success */
 	return (0);
@@ -3008,6 +3015,7 @@ static errr term_data_init(term_data *td, int i)
 	/* Hooks */
 	t->xtra_hook = Term_xtra_x11;
 	t->curs_hook = Term_curs_x11;
+	t->bigcurs_hook = Term_bigcurs_x11;
 	t->wipe_hook = Term_wipe_x11;
 	t->text_hook = Term_text_x11;
 
