@@ -1072,7 +1072,10 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 			{
 				for (j = 0; j < 9; j++)
 				{
-					if (have_flag(f_flags_bold(y + ddy_ddd[j], x + ddx_ddd[j]), FF_GLOW))
+					int by = y + ddy_ddd[j];
+					int bx = x + ddx_ddd[j];
+
+					if (in_bounds2(by, bx) && have_flag(f_flags_bold(by, bx), FF_GLOW))
 					{
 						do_dark = FALSE;
 						break;
