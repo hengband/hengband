@@ -4020,8 +4020,13 @@ void display_player(int mode)
 static bool ang_sort_comp_quest_num(vptr u, vptr v, int a, int b)
 {
 	int *q_num = (int *)u;
+        quest_type *qa = &quest[q_num[a]];
+        quest_type *qb = &quest[q_num[b]];
 
-	return (quest[q_num[b]].complev >= quest[q_num[a]].complev);
+	if (qa->complev < qb->complev) return TRUE;
+	if (qa->complev > qb->complev) return FALSE;
+	if (qa->level <= qb->level) return TRUE;
+        return FALSE;
 }
 
 static void ang_sort_swap_quest_num(vptr u, vptr v, int a, int b)
