@@ -1659,10 +1659,14 @@ s16b inscribe_flags(object_type *o_ptr, cptr out_val)
 
 				if (o_ptr->name2)
 				{
+                                        bool teleport = have_flag(flgs, TR_TELEPORT);
 					ego_item_type *e_ptr = &e_info[o_ptr->name2];
 					
 					for (j = 0; j < TR_FLAG_SIZE; j++)
 						flgs[j] &= ~e_ptr->flags[j];
+
+                                        /* Always inscribe {.} for random teleport */
+                                        if (teleport) add_flag(flgs, TR_TELEPORT);
 				}
 			}
 
