@@ -495,6 +495,61 @@ static bool object_flavor(int k_idx)
 
 
 /*
+ * Create a name from random parts.
+ */
+void get_table_name_aux(char *out_string)
+{
+#ifdef JP
+	char Syllable[80];
+	get_rnd_line("aname_j.txt", 1, Syllable);
+	strcpy(out_string, Syllable);
+	get_rnd_line("aname_j.txt", 2, Syllable);
+	strcat(out_string, Syllable);
+#else
+	int testcounter = randint1(3) + 1;
+
+	strcpy(out_string, "");
+
+	if (randint1(3) == 2)
+	{
+		while (testcounter--)
+			strcat(out_string, syllables[randint0(MAX_SYLLABLES)]);
+	}
+	else
+	{
+		char Syllable[80];
+		testcounter = randint1(2) + 1;
+		while (testcounter--)
+		{
+			(void)get_rnd_line("elvish.txt", 0, Syllable);
+			strcat(out_string, Syllable);
+		}
+	}
+
+	out_string[0] = toupper(out_string[1]);
+
+	out_string[16] = '\0';
+#endif
+}
+
+
+/*
+ * Create a name from random parts without quotes.
+ */
+void get_table_name(char *out_string)
+{
+	char buff[80];
+	get_table_name_aux(buff);
+
+#ifdef JP
+	sprintf(out_string, "¡Ø%s¡Ù", buff);
+#else
+	sprintf(out_string, "'%s'", buff);
+#endif
+}
+
+
+/*
  * Prepare the "variable" part of the "k_info" array.
  *
  * The "color"/"metal"/"type" of an item is its "flavor".
