@@ -2702,8 +2702,10 @@ static bool target_set_accept(int y, int x)
 		    (c_ptr->feat <= FEAT_DOOR_TAIL)) return (TRUE);
 
 		/* Notice rubble */
+		/* I think FEAT_RUBBLEs should not be "interesting" */
+#if 0
 		if (c_ptr->feat == FEAT_RUBBLE) return (TRUE);
-
+#endif
 		/* Notice veins with treasure */
 		if (c_ptr->feat == FEAT_MAGMA_K) return (TRUE);
 		if (c_ptr->feat == FEAT_QUARTZ_K) return (TRUE);
