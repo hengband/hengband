@@ -646,6 +646,7 @@ char angband_sound_name[SOUND_MAX][16] =
 	"show",
 	"unused",
 	"explode",
+	"glass",
 };
 
 

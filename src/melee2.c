@@ -2846,10 +2846,24 @@ msg_format("%^s%s", m_name, monmessage);
 			do_move = TRUE;
 		}
 
+		/* Possibly a monster to attack */
 		else if (c_ptr->m_idx)
 		{
-			/* Possibly a monster to attack */
 			do_move = TRUE;
+		}
+
+		/* Monster destroys walls (and doors) */
+		else if ((r_ptr->flags2 & RF2_KILL_WALL) &&
+		         (can_cross ? !have_flag(f_ptr->flags, FF_LOS) : !is_riding_mon) &&
+		         have_flag(f_ptr->flags, FF_HURT_DISI) && !have_flag(f_ptr->flags, FF_PERMANENT) &&
+		         (!have_flag(f_ptr->flags, FF_GLASS) || (r_ptr->flags2 & RF2_STUPID) || (m_ptr->hp >= MAX(m_ptr->maxhp / 3, 200))))
+		{
+			/* Eat through walls/doors/rubble */
+			do_move = TRUE;
+			if (!can_cross) must_alter_to_move = TRUE;
+
+			/* Monster destroyed a wall (later) */
+			did_kill_wall = TRUE;
 		}
 
 		/* Floor is open? */
@@ -2865,25 +2879,6 @@ msg_format("%^s%s", m_name, monmessage);
 				/* Monster went through a wall */
 				did_pass_wall = TRUE;
 			}
-
-			if ((r_ptr->flags2 & RF2_KILL_WALL) && have_flag(f_ptr->flags, FF_TUNNEL) &&
-			    !have_flag(f_ptr->flags, FF_LOS) && !have_flag(f_ptr->flags, FF_PERMANENT))
-			{
-				/* Monster destroyed a wall (later) */
-				did_kill_wall = TRUE;
-			}
-		}
-
-		/* Monster destroys walls (and doors) */
-		else if ((r_ptr->flags2 & RF2_KILL_WALL) && !is_riding_mon &&
-		         have_flag(f_ptr->flags, FF_TUNNEL) && !have_flag(f_ptr->flags, FF_PERMANENT))
-		{
-			/* Eat through walls/doors/rubble */
-			do_move = TRUE;
-			must_alter_to_move = TRUE;
-
-			/* Monster destroyed a wall (later) */
-			did_kill_wall = TRUE;
 		}
 
 		/* Handle doors and secret doors */
@@ -2937,10 +2932,17 @@ msg_format("%^s%s", m_name, monmessage);
 				if (randint0(m_ptr->hp / 10) > f_ptr->power)
 				{
 					/* Message */
+					if (have_flag(f_ptr->flags, FF_GLASS))
 #ifdef JP
-					msg_print("ドアを叩き開ける音がした！");
+						msg_print("ガラスが砕ける音がした！");
 #else
-					msg_print("You hear a door burst open!");
+						msg_print("You hear a glass was crashed!");
+#endif
+					else
+#ifdef JP
+						msg_print("ドアを叩き開ける音がした！");
+#else
+						msg_print("You hear a door burst open!");
 #endif
 
 					/* Disturb (sometimes) */
@@ -2960,9 +2962,19 @@ msg_format("%^s%s", m_name, monmessage);
 			if (did_open_door || did_bash_door)
 			{
 				/* Break down the door */
-				if (did_bash_door && ((randint0(100) < 50) || (feat_state(c_ptr->feat, FF_OPEN) == c_ptr->feat)))
+				if (did_bash_door && ((randint0(100) < 50) || (feat_state(c_ptr->feat, FF_OPEN) == c_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS)))
 				{
 					cave_alter_feat(ny, nx, FF_BASH);
+
+					if (!m_ptr->r_idx) /* Killed by shards of glass, etc. */
+					{
+						/* Update some things */
+						p_ptr->update |= (PU_FLOW);
+						p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_BASH_DOOR);
+
+						return;
+					}
 				}
 
 				/* Open the door */
@@ -3172,14 +3184,32 @@ msg_format("%^s%s", m_name, monmessage);
 		{
 			if (one_in_(GRINDNOISE))
 			{
+				if (have_flag(f_ptr->flags, FF_GLASS))
 #ifdef JP
-				msg_print("ギシギシいう音が聞こえる。");
+					msg_print("何かの砕ける音が聞こえる。");
 #else
-				msg_print("There is a grinding sound.");
+					msg_print("There is a crashing sound.");
+#endif
+				else
+#ifdef JP
+					msg_print("ギシギシいう音が聞こえる。");
+#else
+					msg_print("There is a grinding sound.");
 #endif
 			}
 
 			cave_alter_feat(ny, nx, FF_HURT_DISI);
+
+			if (!m_ptr->r_idx) /* Killed by shards of glass, etc. */
+			{
+				/* Update some things */
+				p_ptr->update |= (PU_FLOW);
+				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_KILL_WALL);
+
+				return;
+			}
+
 			f_ptr = &f_info[c_ptr->feat];
 
 			/* Note changes to viewable region */

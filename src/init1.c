@@ -247,6 +247,7 @@ static cptr f_info_flags[] =
 	"UNPERM",
 	"TELEPORTABLE",
 	"CONVERT",
+	"GLASS",
 };
 
 

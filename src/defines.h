@@ -1289,8 +1289,9 @@
 #define FF_UNPERM        109
 #define FF_TELEPORTABLE  110
 #define FF_CONVERT       111
+#define FF_GLASS         112
 
-#define FF_FLAG_MAX      112
+#define FF_FLAG_MAX      113
 #define FF_FLAG_SIZE     (1 + ((FF_FLAG_MAX - 1) / 32))
 
 /* Which features are dynamic */
@@ -1307,8 +1308,9 @@
 /*
  * Feature action flags
  */
-#define FAF_DESTROY 0x01
-#define FAF_NO_DROP 0x02
+#define FAF_DESTROY     0x01
+#define FAF_NO_DROP     0x02
+#define FAF_CRASH_GLASS 0x04
 
 
 /*
@@ -2707,6 +2709,7 @@
  * Special caster ID for project()
  */
 #define PROJECT_WHO_UNCTRL_POWER -1
+#define PROJECT_WHO_GLASS_SHARDS -2
 
 
 /*
@@ -4571,11 +4574,12 @@ extern int PlayerUID;
 #define SOUND_SHOW      62 /* A monster makes a "show" attack */
 #define SOUND_UNUSED    63 /* (no sound for gaze attacks) */
 #define SOUND_EXPLODE   64 /* Something (or somebody) explodes */
+#define SOUND_GLASS     65 /* A glass feature was crashed */
 
 /*
  * Mega-Hack -- maximum known sounds
  */
-#define SOUND_MAX 65
+#define SOUND_MAX 66
 
 #define MAX_VIRTUE 18
 

@@ -3864,7 +3864,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 
 	/* Player can not walk through "walls"... */
 	/* unless in Shadow Form */
-	p_can_kill_walls = p_ptr->kill_wall && have_flag(f_ptr->flags, FF_TUNNEL) &&
+	p_can_kill_walls = p_ptr->kill_wall && have_flag(f_ptr->flags, FF_HURT_DISI) &&
 		(!p_can_enter || !have_flag(f_ptr->flags, FF_LOS)) &&
 		!have_flag(f_ptr->flags, FF_PERMANENT);
 

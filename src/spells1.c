@@ -1112,11 +1112,33 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 #else
 				msg_print("The mirror was crashed!");
 #endif
+				sound(SOUND_GLASS);
 				remove_mirror(y, x);
 				project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 			}
+
+			if (have_flag(f_ptr->flags, FF_GLASS) && !have_flag(f_ptr->flags, FF_PERMANENT) && (dam >= 50))
+			{
+				/* Message */
+				if (known && (c_ptr->info & CAVE_MARK))
+				{
+#ifdef JP
+					msg_format("%sが割れた！", f_name + f_info[get_feat_mimic(c_ptr)].name);
+#else
+					msg_format("The %s was crashed!", f_name + f_info[get_feat_mimic(c_ptr)].name);
+#endif
+					sound(SOUND_GLASS);
+				}
+
+				/* Destroy the wall */
+				cave_alter_feat(y, x, FF_HURT_ROCK);
+
+				/* Update some things */
+				p_ptr->update |= (PU_FLOW);
+			}
 			break;
 		}
+
 		case GF_SOUND:
 		{
 			if (is_mirror_grid(c_ptr) && p_ptr->lev < 40)
@@ -1126,8 +1148,29 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 #else
 				msg_print("The mirror was crashed!");
 #endif
+				sound(SOUND_GLASS);
 				remove_mirror(y, x);
 				project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
+			}
+
+			if (have_flag(f_ptr->flags, FF_GLASS) && !have_flag(f_ptr->flags, FF_PERMANENT) && (dam >= 200))
+			{
+				/* Message */
+				if (known && (c_ptr->info & CAVE_MARK))
+				{
+#ifdef JP
+					msg_format("%sが割れた！", f_name + f_info[get_feat_mimic(c_ptr)].name);
+#else
+					msg_format("The %s was crashed!", f_name + f_info[get_feat_mimic(c_ptr)].name);
+#endif
+					sound(SOUND_GLASS);
+				}
+
+				/* Destroy the wall */
+				cave_alter_feat(y, x, FF_HURT_ROCK);
+
+				/* Update some things */
+				p_ptr->update |= (PU_FLOW);
 			}
 			break;
 		}
@@ -1639,7 +1682,7 @@ msg_format("%sは%s", o_name, note_kill);
  * We attempt to return "TRUE" if the player saw anything "useful" happen.
  */
 /* "flg" was added. */
-static bool project_m(int who, int r, int y, int x, int dam, int typ , int flg)
+static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see_s_msg)
 {
 	int tmp;
 
@@ -1663,9 +1706,6 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ , int flg)
 
 	/* Can the player know about this effect? */
 	bool known = ((m_ptr->cdis <= MAX_SIGHT) || p_ptr->inside_battle);
-
-	/* Can the player see the source of this effect? */
-	bool see_s_msg = ((who <= 0) || is_seen(caster_ptr));
 
 	/* Were the effects "irrelevant"? */
 	bool skipped = FALSE;
@@ -6206,14 +6246,14 @@ msg_print("生命力が体から吸い取られた気がする！");
 	/* XXX XXX XXX Verify this code */
 
 	/* Update the monster */
-	update_mon(c_ptr->m_idx, FALSE);
+	if (m_ptr->r_idx) update_mon(c_ptr->m_idx, FALSE);
 
 	/* Redraw the monster grid */
 	lite_spot(y, x);
 
 
 	/* Update monster recall window */
-	if (p_ptr->monster_race_idx == m_ptr->r_idx)
+	if ((p_ptr->monster_race_idx == m_ptr->r_idx) && (seen || !m_ptr->r_idx))
 	{
 		/* Window stuff */
 		p_ptr->window |= (PW_MONSTER);
@@ -6410,6 +6450,14 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 			strcpy(killer, "制御できない力の氾流");
 #else
 			strcpy(killer, "uncontrollable power storm");
+#endif
+			break;
+
+		case PROJECT_WHO_GLASS_SHARDS:
+#ifdef JP
+			strcpy(killer, "ガラスの破片");
+#else
+			strcpy(killer, "shards of glass");
 #endif
 			break;
 
@@ -8203,6 +8251,9 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 	/* Attacker's name (prepared before polymorph)*/
 	char who_name[80];
 
+	/* Can the player see the source of this effect? */
+	bool see_s_msg = TRUE;
+
 	/* Initialize by null string */
 	who_name[0] = '\0';
 
@@ -8405,7 +8456,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 				{
 					y = GRID_Y(path_g[j]);
 					x = GRID_X(path_g[j]);
-					if(project_m(0,0,y,x,dam,GF_SEEKER,flg))notice=TRUE;
+					if(project_m(0,0,y,x,dam,GF_SEEKER,flg,TRUE))notice=TRUE;
 					if(!who && (project_m_n==1) && !jump ){
 					  if(cave[project_m_y][project_m_x].m_idx >0 ){
 					    monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
@@ -8427,7 +8478,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			int x,y;
 			y = GRID_Y(path_g[i]);
 			x = GRID_X(path_g[i]);
-			if(project_m(0,0,y,x,dam,GF_SEEKER,flg))
+			if(project_m(0,0,y,x,dam,GF_SEEKER,flg,TRUE))
 			  notice=TRUE;
 			if(!who && (project_m_n==1) && !jump ){
 			  if(cave[project_m_y][project_m_x].m_idx >0 ){
@@ -8557,7 +8608,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			int x,y;
 			y = GRID_Y(path_g[i]);
 			x = GRID_X(path_g[i]);
-			(void)project_m(0,0,y,x,dam,GF_SUPER_RAY,flg);
+			(void)project_m(0,0,y,x,dam,GF_SUPER_RAY,flg,TRUE);
 			if(!who && (project_m_n==1) && !jump ){
 			  if(cave[project_m_y][project_m_x].m_idx >0 ){
 			    monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
@@ -8841,6 +8892,13 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 	if (p_ptr->update) update_stuff();
 
 
+	if (flg & PROJECT_KILL)
+	{
+		see_s_msg = (who > 0) ? is_seen(&m_list[who]) :
+			(!who ? TRUE : player_can_see_bold(y1, x1));
+	}
+
+
 	/* Check features */
 	if (flg & (PROJECT_GRID))
 	{
@@ -9067,7 +9125,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			}
 
 			/* Affect the monster in the grid */
-			if (project_m(who, effective_dist, y, x, dam, typ,flg)) notice = TRUE;
+			if (project_m(who, effective_dist, y, x, dam, typ, flg, see_s_msg)) notice = TRUE;
 		}
 
 
@@ -9333,7 +9391,7 @@ bool binding_field( int dam )
 			{
 				if (player_has_los_bold(y, x) && projectable(py, px, y, x)) {
 					(void)project_m(0,0,y,x,dam,GF_MANA,
-					  (PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP));
+					  (PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP),TRUE);
 				}
 			}
 		}
@@ -9361,7 +9419,7 @@ void seal_of_mirror( int dam )
 			if( is_mirror_grid(&cave[y][x]))
 			{
 				if(project_m(0,0,y,x,dam,GF_GENOCIDE,
-							 (PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP)))
+							 (PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP),TRUE))
 				{
 					if( !cave[y][x].m_idx )
 					{

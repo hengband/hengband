@@ -3465,17 +3465,18 @@ bool mutation_power_aux(u32b power)
 			{
 				int x, y;
 				cave_type *c_ptr;
-				feature_type *f_ptr;
+				feature_type *f_ptr, *mimic_f_ptr;
 
 				if (!get_rep_dir2(&dir)) return FALSE;
 				y = py + ddy[dir];
 				x = px + ddx[dir];
 				c_ptr = &cave[y][x];
 				f_ptr = &f_info[c_ptr->feat];
+				mimic_f_ptr = &f_info[get_feat_mimic(c_ptr)];
 
 				if (music_singing_any()) stop_singing();
 
-				if (!have_flag(f_info[get_feat_mimic(c_ptr)].flags, FF_HURT_ROCK))
+				if (!have_flag(mimic_f_ptr->flags, FF_HURT_ROCK))
 				{
 #ifdef JP
 					msg_print("この地形は食べられない。");
@@ -3487,9 +3488,9 @@ bool mutation_power_aux(u32b power)
 				else if (have_flag(f_ptr->flags, FF_PERMANENT))
 				{
 #ifdef JP
-					msg_format("いてっ！この%sはあなたの歯より硬い！", f_name + f_info[get_feat_mimic(c_ptr)].name);
+					msg_format("いてっ！この%sはあなたの歯より硬い！", f_name + mimic_f_ptr->name);
 #else
-					msg_format("Ouch!  This %s is harder than your teeth!", f_name + f_info[get_feat_mimic(c_ptr)].name);
+					msg_format("Ouch!  This %s is harder than your teeth!", f_name + mimic_f_ptr->name);
 #endif
 					break;
 				}
@@ -3514,6 +3515,15 @@ bool mutation_power_aux(u32b power)
 #endif
 					break;
 				}
+				else if (have_flag(f_ptr->flags, FF_GLASS))
+				{
+#ifdef JP
+					msg_print("ガラスの味は好きじゃない！");
+#else
+					msg_print("You don't like the glassy taste!");
+#endif
+					break;
+				}
 				else if (have_flag(f_ptr->flags, FF_DOOR) || have_flag(f_ptr->flags, FF_CAN_DIG))
 				{
 					(void)set_food(p_ptr->food + 3000);
@@ -3525,9 +3535,9 @@ bool mutation_power_aux(u32b power)
 				else
 				{
 #ifdef JP
-					msg_format("この%sはとてもおいしい！", f_name + f_info[get_feat_mimic(c_ptr)].name);
+					msg_format("この%sはとてもおいしい！", f_name + mimic_f_ptr->name);
 #else
-					msg_format("This %s is very filling!", f_name + f_info[get_feat_mimic(c_ptr)].name);
+					msg_format("This %s is very filling!", f_name + mimic_f_ptr->name);
 #endif
 					(void)set_food(p_ptr->food + 10000);
 				}

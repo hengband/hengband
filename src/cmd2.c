@@ -1608,6 +1608,9 @@ static bool do_cmd_tunnel_aux(int y, int x)
 			}
 #endif
 
+			/* Sound */
+			if (have_flag(f_ptr->flags, FF_GLASS)) sound(SOUND_GLASS);
+
 			/* Remove the feature */
 			cave_alter_feat(y, x, FF_TUNNEL);
 
@@ -2235,12 +2238,15 @@ static bool do_cmd_bash_aux(int y, int x, int dir)
 	/* Get grid */
 	cave_type	*c_ptr = &cave[y][x];
 
+	/* Get feature */
+	feature_type *f_ptr = &f_info[c_ptr->feat];
+
 	/* Hack -- Bash power based on strength */
 	/* (Ranges from 3 to 20 to 100 to 200) */
 	int bash = adj_str_blow[p_ptr->stat_ind[A_STR]];
 
 	/* Extract door power */
-	int temp = f_info[c_ptr->feat].power;
+	int temp = f_ptr->power;
 
 	bool		more = FALSE;
 
@@ -2274,9 +2280,11 @@ static bool do_cmd_bash_aux(int y, int x, int dir)
 		msg_format("The %s crashes open!", name);
 #endif
 
+		/* Sound */
+		sound(have_flag(f_ptr->flags, FF_GLASS) ? SOUND_GLASS : SOUND_OPENDOOR);
 
 		/* Break down the door */
-		if ((randint0(100) < 50) || (feat_state(c_ptr->feat, FF_OPEN) == c_ptr->feat))
+		if ((randint0(100) < 50) || (feat_state(c_ptr->feat, FF_OPEN) == c_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS))
 		{
 			cave_alter_feat(y, x, FF_BASH);
 		}
@@ -2286,9 +2294,6 @@ static bool do_cmd_bash_aux(int y, int x, int dir)
 		{
 			cave_alter_feat(y, x, FF_OPEN);
 		}
-
-		/* Sound */
-		sound(SOUND_OPENDOOR);
 
 		/* Hack -- Fall through the door */
 		move_player(dir, FALSE, FALSE);

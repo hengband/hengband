@@ -7144,11 +7144,11 @@ byte feature_action_flags[FF_FLAG_MAX] =
 	0, /* REMEMBER */
 	0, /* OPEN */
 	0, /* CLOSE */
-	0, /* BASH */
+	FAF_CRASH_GLASS, /* BASH */
 	0, /* SPIKE */
 	FAF_DESTROY, /* DISARM */
 	0, /* STORE */
-	FAF_DESTROY, /* TUNNEL */
+	FAF_DESTROY | FAF_CRASH_GLASS, /* TUNNEL */
 	0, /* MAY_HAVE_GOLD */
 	0, /* HAS_GOLD */
 	0, /* HAS_ITEM */
@@ -7179,7 +7179,7 @@ byte feature_action_flags[FF_FLAG_MAX] =
 	0, /* SHALLOW */
 	0, /* DEEP */
 	0, /* FILLED */
-	FAF_DESTROY, /* HURT_ROCK */
+	FAF_DESTROY | FAF_CRASH_GLASS, /* HURT_ROCK */
 	0, /* HURT_FIRE */
 	0, /* HURT_COLD */
 	0, /* HURT_ACID */
@@ -7234,7 +7234,7 @@ byte feature_action_flags[FF_FLAG_MAX] =
 	0, /* SPREAD */
 
 	0, /* SPECIAL */
-	FAF_DESTROY | FAF_NO_DROP, /* HURT_DISI */
+	FAF_DESTROY | FAF_NO_DROP | FAF_CRASH_GLASS, /* HURT_DISI */
 	0, /* QUEST_ENTER */
 	0, /* QUEST_EXIT */
 	0, /* QUEST */
@@ -7249,4 +7249,5 @@ byte feature_action_flags[FF_FLAG_MAX] =
 	0, /* UNPERM */
 	0, /* TELEPORTABLE */
 	0, /* CONVERT */
+	0, /* GLASS */
 };
