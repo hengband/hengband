@@ -9,7 +9,7 @@ angband_files = \
 	timenorm_j.txt w_cursed_j.txt w_high_j.txt w_low_j.txt \
 	w_med_j.txt \
 	a_cursed.txt a_high.txt a_low.txt a_med.txt \
-	chainswd.txt crime.txt dead.txt \
+	chainswd.txt dead.txt \
 	death.txt elvish.txt error.txt mondeath.txt \
 	monfear.txt monfrien.txt monspeak.txt news.txt \
 	rumors.txt seppuku.txt silly.txt timefun.txt \
