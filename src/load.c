@@ -427,7 +427,7 @@ static void rd_item_old(object_type *o_ptr)
 		{
 			switch (o_ptr->xtra2 % 8)
 			{
-			case 0: add_flag(o_ptr->art_flags, TR_FEATHER);     break;
+			case 0: add_flag(o_ptr->art_flags, TR_LEVITATION);     break;
 			case 1: add_flag(o_ptr->art_flags, TR_LITE);        break;
 			case 2: add_flag(o_ptr->art_flags, TR_SEE_INVIS);   break;
 			case 3: add_flag(o_ptr->art_flags, TR_WARNING);     break;
@@ -1850,7 +1850,7 @@ static void rd_extra(void)
 		p_ptr->tim_regen = 0;
 		p_ptr->kabenuke = 0;
 		p_ptr->tim_stealth = 0;
-		p_ptr->tim_ffall = 0;
+		p_ptr->tim_levitation = 0;
 		p_ptr->tim_sh_touki = 0;
 		p_ptr->lightspeed = 0;
 		p_ptr->tsubureru = 0;
@@ -1879,7 +1879,7 @@ static void rd_extra(void)
 		rd_s16b(&p_ptr->tim_regen);
 		rd_s16b(&p_ptr->kabenuke);
 		rd_s16b(&p_ptr->tim_stealth);
-		rd_s16b(&p_ptr->tim_ffall);
+		rd_s16b(&p_ptr->tim_levitation);
 		rd_s16b(&p_ptr->tim_sh_touki);
 		rd_s16b(&p_ptr->lightspeed);
 		rd_s16b(&p_ptr->tsubureru);

@@ -1049,7 +1049,7 @@ struct player_type
 	s16b tim_regen;
 	s16b kabenuke;
 	s16b tim_stealth;
-	s16b tim_ffall;
+	s16b tim_levitation;
 	s16b tim_sh_touki;
 	s16b lightspeed;
 	s16b tsubureru;
@@ -1251,7 +1251,7 @@ struct player_type
 	u32b cursed;            /* Player is cursed */
 
 	bool can_swim;		/* No damage falling */
-	bool ffall;		/* No damage falling */
+	bool levitation;		/* No damage falling */
 	bool lite;		/* Permanent light */
 	bool free_act;		/* Never paralyzed */
 	bool see_inv;		/* Can see invisible */

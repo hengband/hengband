@@ -2053,7 +2053,7 @@ sprintf(ouch, "%sを装備したダメージ", o_name);
 		{
 			damage = 6000 + randint0(4000);
 		}
-		else if (!p_ptr->ffall)
+		else if (!p_ptr->levitation)
 		{
 			damage = 3000 + randint0(2000);
 		}
@@ -2064,11 +2064,11 @@ sprintf(ouch, "%sを装備したダメージ", o_name);
 			if (p_ptr->resist_fire) damage = damage / 3;
 			if (IS_OPPOSE_FIRE()) damage = damage / 3;
 
-			if (p_ptr->ffall) damage = damage / 5;
+			if (p_ptr->levitation) damage = damage / 5;
 
 			damage = damage / 100 + (randint0(100) < (damage % 100));
 
-			if (p_ptr->ffall)
+			if (p_ptr->levitation)
 			{
 #ifdef JP
 				msg_print("熱で火傷した！");
@@ -2094,7 +2094,7 @@ sprintf(ouch, "%sを装備したダメージ", o_name);
 	}
 
 	if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP) &&
-	    !p_ptr->ffall && !p_ptr->can_swim)
+	    !p_ptr->levitation && !p_ptr->can_swim)
 	{
 		if (p_ptr->total_weight > (((u32b)adj_str_wgt[p_ptr->stat_ind[A_STR]] * (p_ptr->pclass == CLASS_BERSERKER ? 150 : 100)) / 2))
 		{
@@ -2384,9 +2384,9 @@ static void process_world_aux_timeout(void)
 	}
 
 	/* Timed levitation */
-	if (p_ptr->tim_ffall)
+	if (p_ptr->tim_levitation)
 	{
-		(void)set_tim_ffall(p_ptr->tim_ffall - 1, TRUE);
+		(void)set_tim_levitation(p_ptr->tim_levitation - 1, TRUE);
 	}
 
 	/* Timed sh_touki */

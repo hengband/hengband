@@ -3272,7 +3272,7 @@ msg_format("%^s%s", m_name, monmessage);
 			}
 			else if (have_flag(f_ptr->flags, FF_TREE))
 			{
-				if (!(r_ptr->flags7 & RF7_CAN_FLY) && (!is_riding_mon || !p_ptr->ffall) && !(r_ptr->flags8 & RF8_WILD_WOOD))
+				if (!(r_ptr->flags7 & RF7_CAN_FLY) && (!is_riding_mon || !p_ptr->levitation) && !(r_ptr->flags8 & RF8_WILD_WOOD))
 				{
 					m_ptr->energy_need += ENERGY_NEED();
 				}

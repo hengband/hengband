@@ -1056,7 +1056,7 @@ static bool cast_force_spell(int spell)
 		(void)lite_area(damroll(2, (plev / 2)), (plev / 10) + 1);
 		break;
 	case 2:
-		set_tim_ffall(randint1(30) + 30 + boost / 5, FALSE);
+		set_tim_levitation(randint1(30) + 30 + boost / 5, FALSE);
 		break;
 	case 3:
 		project_length = plev / 8 + 3;
@@ -1653,7 +1653,7 @@ msg_print("その方向にはモンスターはいません。");
 	case 7:
 		return ident_spell(FALSE);
 	case 8:
-		set_tim_ffall(randint1(20) + 20, FALSE);
+		set_tim_levitation(randint1(20) + 20, FALSE);
 		break;
 	case 9:
 		fire_ball(GF_FIRE, 0, 50+plev, plev/10+2);

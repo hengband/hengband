@@ -1329,7 +1329,7 @@ extern bool set_tim_infra(int v, bool do_dec);
 extern bool set_tim_regen(int v, bool do_dec);
 extern bool set_tim_stealth(int v, bool do_dec);
 extern bool set_lightspeed(int v, bool do_dec);
-extern bool set_tim_ffall(int v, bool do_dec);
+extern bool set_tim_levitation(int v, bool do_dec);
 extern bool set_tim_sh_touki(int v, bool do_dec);
 extern bool set_tim_sh_fire(int v, bool do_dec);
 extern bool set_tim_sh_holy(int v, bool do_dec);

@@ -270,7 +270,7 @@ bool cave_teleportable_bold(int y, int x, bool passive)
 
 		if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP))
 		{
-			if (!p_ptr->ffall && !p_ptr->can_swim) return FALSE;
+			if (!p_ptr->levitation && !p_ptr->can_swim) return FALSE;
 		}
 
 		if (have_flag(f_ptr->flags, FF_LAVA) && !p_ptr->immune_fire && !IS_INVULN())
@@ -279,7 +279,7 @@ bool cave_teleportable_bold(int y, int x, bool passive)
 			if (have_flag(f_ptr->flags, FF_DEEP)) return FALSE;
 
 			/* Forbid shallow lava when the player don't have levitation */
-			if (!p_ptr->ffall) return FALSE;
+			if (!p_ptr->levitation) return FALSE;
 		}
 
 		if (have_flag(f_ptr->flags, FF_HIT_TRAP))

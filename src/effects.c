@@ -177,7 +177,7 @@ void reset_tim_flags(void)
 	p_ptr->tim_stealth = 0;     /* Timed -- Stealth */
 	p_ptr->tim_esp = 0;
 	p_ptr->wraith_form = 0;     /* Timed -- Wraith Form */
-	p_ptr->tim_ffall = 0;
+	p_ptr->tim_levitation = 0;
 	p_ptr->tim_sh_touki = 0;
 	p_ptr->tim_sh_fire = 0;
 	p_ptr->tim_sh_holy = 0;
@@ -2092,9 +2092,9 @@ bool set_superstealth(bool set)
 
 
 /*
- * Set "p_ptr->tim_ffall", notice observable changes
+ * Set "p_ptr->tim_levitation", notice observable changes
  */
-bool set_tim_ffall(int v, bool do_dec)
+bool set_tim_levitation(int v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -2106,11 +2106,11 @@ bool set_tim_ffall(int v, bool do_dec)
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->tim_ffall && !do_dec)
+		if (p_ptr->tim_levitation && !do_dec)
 		{
-			if (p_ptr->tim_ffall > v) return FALSE;
+			if (p_ptr->tim_levitation > v) return FALSE;
 		}
-		else if (!p_ptr->tim_ffall)
+		else if (!p_ptr->tim_levitation)
 		{
 #ifdef JP
 msg_print("体が宙に浮き始めた。");
@@ -2125,7 +2125,7 @@ msg_print("体が宙に浮き始めた。");
 	/* Shut */
 	else
 	{
-		if (p_ptr->tim_ffall)
+		if (p_ptr->tim_levitation)
 		{
 #ifdef JP
 msg_print("もう宙に浮かべなくなった。");
@@ -2138,7 +2138,7 @@ msg_print("もう宙に浮かべなくなった。");
 	}
 
 	/* Use the value */
-	p_ptr->tim_ffall = v;
+	p_ptr->tim_levitation = v;
 
 	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);

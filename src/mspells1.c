@@ -1688,7 +1688,7 @@ msg_format("%^sがかん高い金切り声をあげた。", m_name);
 			set_tim_esp(0, TRUE);
 			set_tim_regen(0, TRUE);
 			set_tim_stealth(0, TRUE);
-			set_tim_ffall(0, TRUE);
+			set_tim_levitation(0, TRUE);
 			set_tim_sh_touki(0, TRUE);
 			set_tim_sh_fire(0, TRUE);
 			set_tim_sh_holy(0, TRUE);
@@ -3609,7 +3609,7 @@ msg_format("%^sがテレポートした。", m_name);
 
 						sound(SOUND_FALL);
 
-						if (p_ptr->ffall)
+						if (p_ptr->levitation)
 						{
 #ifdef JP
 							msg_print("あなたは静かに着地した。");

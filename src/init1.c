@@ -728,7 +728,7 @@ static cptr k_info_flags[] =
 	"HIDE_TYPE",
 	"SHOW_MODS",
 	"XXX1",
-	"FEATHER",
+	"LEVITATION",
 	"LITE",
 	"SEE_INVIS",
 	"TELEPATHY",

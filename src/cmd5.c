@@ -5594,7 +5594,7 @@ msg_format("%sから振り落とされそうになって、壁にぶつかった。",m_name);
 	/* Update health track of mount */
 	p_ptr->redraw |= (PR_UHEALTH);
 
-	if (p_ptr->ffall && !force)
+	if (p_ptr->levitation && !force)
 	{
 		monster_desc(m_name, m_ptr, 0);
 #ifdef JP

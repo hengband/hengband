@@ -3305,7 +3305,7 @@ info[i++] = "それは劣化への耐性を授ける。";
 
 	}
 
-	if (have_flag(flgs, TR_FEATHER))
+	if (have_flag(flgs, TR_LEVITATION))
 	{
 #ifdef JP
 info[i++] = "それは宙に浮くことを可能にする。";

@@ -5824,7 +5824,7 @@ static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr, int *j, by
 			print_flag(TR_TELEPATHY);
 			print_flag(TR_SLOW_DIGEST);
 			print_flag(TR_REGEN);
-			print_flag(TR_FEATHER);
+			print_flag(TR_LEVITATION);
 
 			fputc('\n', fff);
 		}

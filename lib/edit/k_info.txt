@@ -1649,7 +1649,7 @@ G:=:d
 I:45:7:0
 W:5:0:2:200
 A:5/1
-F:FEATHER
+F:LEVITATION
 
 N:143:ยัฦว
 E:Poison Resistance

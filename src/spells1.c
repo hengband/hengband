@@ -7212,19 +7212,19 @@ msg_print("周辺の重力がゆがんだ。");
 #endif
 
 			teleport_player(5, TRUE);
-			if (!p_ptr->ffall)
+			if (!p_ptr->levitation)
 				(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
-			if (!(p_ptr->resist_sound || p_ptr->ffall))
+			if (!(p_ptr->resist_sound || p_ptr->levitation))
 			{
 				int k = (randint1((dam > 90) ? 35 : (dam / 3 + 5)));
 				(void)set_stun(p_ptr->stun + k);
 			}
-			if (p_ptr->ffall)
+			if (p_ptr->levitation)
 			{
 				dam = (dam * 2) / 3;
 			}
 
-			if (!p_ptr->ffall || one_in_(13))
+			if (!p_ptr->levitation || one_in_(13))
 			{
 				inven_damage(set_cold_destroy, 2);
 			}

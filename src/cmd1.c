@@ -1093,7 +1093,7 @@ static void hit_trap(bool break_trap)
 	{
 		case FEAT_TRAP_TRAPDOOR:
 		{
-			if (p_ptr->ffall)
+			if (p_ptr->levitation)
 			{
 #ifdef JP
 				msg_print("落し戸を飛び越えた。");
@@ -1141,7 +1141,7 @@ static void hit_trap(bool break_trap)
 
 		case FEAT_TRAP_PIT:
 		{
-			if (p_ptr->ffall)
+			if (p_ptr->levitation)
 			{
 #ifdef JP
 				msg_print("落し穴を飛び越えた。");
@@ -1172,7 +1172,7 @@ static void hit_trap(bool break_trap)
 
 		case FEAT_TRAP_SPIKED_PIT:
 		{
-			if (p_ptr->ffall)
+			if (p_ptr->levitation)
 			{
 #ifdef JP
 				msg_print("トゲのある落し穴を飛び越えた。");
@@ -1227,7 +1227,7 @@ static void hit_trap(bool break_trap)
 
 		case FEAT_TRAP_POISON_PIT:
 		{
-			if (p_ptr->ffall)
+			if (p_ptr->levitation)
 			{
 #ifdef JP
 				msg_print("トゲのある落し穴を飛び越えた。");
@@ -3428,7 +3428,7 @@ bool player_can_enter(s16b feature, u16b mode)
 	}
 
 	/* "CAN" flags */
-	if (have_flag(f_ptr->flags, FF_CAN_FLY) && p_ptr->ffall) return TRUE;
+	if (have_flag(f_ptr->flags, FF_CAN_FLY) && p_ptr->levitation) return TRUE;
 	if (have_flag(f_ptr->flags, FF_CAN_SWIM) && p_ptr->can_swim) return TRUE;
 	if (have_flag(f_ptr->flags, FF_CAN_PASS) && p_ptr->pass_wall) return TRUE;
 
@@ -3677,7 +3677,7 @@ bool trap_can_be_ignored(int feat)
 	case FEAT_TRAP_PIT:
 	case FEAT_TRAP_SPIKED_PIT:
 	case FEAT_TRAP_POISON_PIT:
-		if (p_ptr->ffall) return TRUE;
+		if (p_ptr->levitation) return TRUE;
 		break;
 	case FEAT_TRAP_TELEPORT:
 		if (p_ptr->anti_tele) return TRUE;
@@ -4003,7 +4003,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 	{
 	}
 
-	else if (!have_flag(f_ptr->flags, FF_MOVE) && have_flag(f_ptr->flags, FF_CAN_FLY) && !p_ptr->ffall)
+	else if (!have_flag(f_ptr->flags, FF_MOVE) && have_flag(f_ptr->flags, FF_CAN_FLY) && !p_ptr->levitation)
 	{
 #ifdef JP
 		msg_format("空を飛ばないと%sの上には行けない。", f_name + f_info[get_feat_mimic(c_ptr)].name);
@@ -4023,7 +4023,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 	 */
 	else if (have_flag(f_ptr->flags, FF_TREE) && !p_can_kill_walls)
 	{
-		if ((p_ptr->pclass != CLASS_RANGER) && !p_ptr->ffall) energy_use *= 2;
+		if ((p_ptr->pclass != CLASS_RANGER) && !p_ptr->levitation) energy_use *= 2;
 	}
 
 #ifdef ALLOW_EASY_DISARM /* TNB */
@@ -4670,7 +4670,7 @@ static bool run_test(void)
 
 				/* Deep water */
 				else if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP) &&
-				         (p_ptr->ffall || p_ptr->can_swim ||
+				         (p_ptr->levitation || p_ptr->can_swim ||
 				          p_ptr->total_weight <= (((u32b)adj_str_wgt[p_ptr->stat_ind[A_STR]]*(p_ptr->pclass == CLASS_BERSERKER ? 150 : 100)) / 2)))
 				{
 					/* Ignore */

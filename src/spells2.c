@@ -2093,7 +2093,7 @@ info[i++] = "あなたは透明なモンスターを見ることができる。";
 #endif
 
 	}
-	if (p_ptr->ffall)
+	if (p_ptr->levitation)
 	{
 #ifdef JP
 info[i++] = "あなたは飛ぶことができる。";

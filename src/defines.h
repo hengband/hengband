@@ -2267,7 +2267,7 @@
 #define SV_RING_STUPIDITY                3
 #define SV_RING_TELEPORTATION            4
 #define SV_RING_SLOW_DIGESTION           6
-#define SV_RING_FEATHER_FALL             7
+#define SV_RING_LEVITATION_FALL             7
 #define SV_RING_RESIST_FIRE              8
 #define SV_RING_RESIST_COLD              9
 #define SV_RING_SUSTAIN_STR             10
@@ -3352,7 +3352,7 @@
 #define TR_HIDE_TYPE           73     /* Hide "pval" description */
 #define TR_SHOW_MODS           74     /* Always show Tohit/Todam */
 #define TR_XXX1                75     /* XXX1 */
-#define TR_FEATHER             76     /* Feather Falling */
+#define TR_LEVITATION             76     /* Feather Falling */
 #define TR_LITE                77     /* Permanent Light */
 #define TR_SEE_INVIS           78     /* See Invisible */
 #define TR_TELEPATHY           79     /* Telepathy */

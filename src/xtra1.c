@@ -572,7 +572,7 @@ static void prt_status(void)
 	if (p_ptr->ult_res) ADD_FLG(BAR_ULTIMATE);
 
 	/* tim levitation */
-	if (p_ptr->tim_ffall) ADD_FLG(BAR_LEVITATE);
+	if (p_ptr->tim_levitation) ADD_FLG(BAR_LEVITATE);
 
 	if (p_ptr->tim_res_nether) ADD_FLG(BAR_RESNETH);
 
@@ -2953,7 +2953,7 @@ void calc_bonuses(void)
 #endif
 	bool            have_sw = FALSE, have_kabe = FALSE;
 	bool            easy_2weapon = FALSE;
-	bool            riding_ffall = FALSE;
+	bool            riding_levitation = FALSE;
 	s16b this_o_idx, next_o_idx = 0;
 	player_race *tmp_rp_ptr;
 
@@ -3037,7 +3037,7 @@ void calc_bonuses(void)
 	p_ptr->slow_digest = FALSE;
 	p_ptr->regenerate = FALSE;
 	p_ptr->can_swim = FALSE;
-	p_ptr->ffall = FALSE;
+	p_ptr->levitation = FALSE;
 	p_ptr->hold_life = FALSE;
 	p_ptr->telepathy = FALSE;
 	p_ptr->esp_animal = FALSE;
@@ -3286,7 +3286,7 @@ void calc_bonuses(void)
 			p_ptr->sh_fire = TRUE;
 			p_ptr->see_inv = TRUE;
 			p_ptr->telepathy = TRUE;
-			p_ptr->ffall = TRUE;
+			p_ptr->levitation = TRUE;
 			p_ptr->kill_wall = TRUE;
 			new_speed += 5;
 			p_ptr->to_a += 20;
@@ -3393,7 +3393,7 @@ void calc_bonuses(void)
 			if (p_ptr->lev > 19) p_ptr->see_inv = TRUE;
 			break;
 		case RACE_DRACONIAN:
-			p_ptr->ffall = TRUE;
+			p_ptr->levitation = TRUE;
 			if (p_ptr->lev >  4) p_ptr->resist_fire = TRUE;
 			if (p_ptr->lev >  9) p_ptr->resist_cold = TRUE;
 			if (p_ptr->lev > 14) p_ptr->resist_acid = TRUE;
@@ -3441,7 +3441,7 @@ void calc_bonuses(void)
 			if (p_ptr->pclass != CLASS_NINJA) p_ptr->lite = TRUE;
 			break;
 		case RACE_SPECTRE:
-			p_ptr->ffall = TRUE;
+			p_ptr->levitation = TRUE;
 			p_ptr->free_act = TRUE;
 			p_ptr->resist_neth = TRUE;
 			p_ptr->hold_life = TRUE;
@@ -3453,7 +3453,7 @@ void calc_bonuses(void)
 			if (p_ptr->lev > 34) p_ptr->telepathy = TRUE;
 			break;
 		case RACE_SPRITE:
-			p_ptr->ffall = TRUE;
+			p_ptr->levitation = TRUE;
 			p_ptr->resist_lite = TRUE;
 
 			/* Sprites become faster */
@@ -3481,7 +3481,7 @@ void calc_bonuses(void)
 			if (p_ptr->lev > 45) p_ptr->stat_add[A_CON]++;
 			break;
 		case RACE_ANGEL:
-			p_ptr->ffall = TRUE;
+			p_ptr->levitation = TRUE;
 			p_ptr->see_inv = TRUE;
 			p_ptr->align += 200;
 			break;
@@ -3501,7 +3501,7 @@ void calc_bonuses(void)
 			p_ptr->sustain_con = TRUE;
 			break;
 		case RACE_S_FAIRY:
-			p_ptr->ffall = TRUE;
+			p_ptr->levitation = TRUE;
 			break;
 		case RACE_KUTA:
 			p_ptr->resist_conf = TRUE;
@@ -3524,7 +3524,7 @@ void calc_bonuses(void)
 		p_ptr->free_act = TRUE;
 		p_ptr->slow_digest = TRUE;
 		p_ptr->regenerate = TRUE;
-		p_ptr->ffall = TRUE;
+		p_ptr->levitation = TRUE;
 		p_ptr->hold_life = TRUE;
 		p_ptr->telepathy = TRUE;
 		p_ptr->lite = TRUE;
@@ -3740,7 +3740,7 @@ void calc_bonuses(void)
 
 		if (p_ptr->muta3 & MUT3_WINGS)
 		{
-			p_ptr->ffall = TRUE;
+			p_ptr->levitation = TRUE;
 		}
 
 		if (p_ptr->muta3 & MUT3_FEARLESS)
@@ -3867,7 +3867,7 @@ void calc_bonuses(void)
 		if (have_flag(flgs, TR_ESP_UNIQUE))  p_ptr->esp_unique = TRUE;
 
 		if (have_flag(flgs, TR_SEE_INVIS))   p_ptr->see_inv = TRUE;
-		if (have_flag(flgs, TR_FEATHER))     p_ptr->ffall = TRUE;
+		if (have_flag(flgs, TR_LEVITATION))     p_ptr->levitation = TRUE;
 		if (have_flag(flgs, TR_FREE_ACT))    p_ptr->free_act = TRUE;
 		if (have_flag(flgs, TR_HOLD_LIFE))   p_ptr->hold_life = TRUE;
 		if (have_flag(flgs, TR_WARNING)){
@@ -4337,7 +4337,7 @@ void calc_bonuses(void)
 		p_ptr->resist_conf = TRUE;
 		p_ptr->reflect = TRUE;
 		p_ptr->free_act = TRUE;
-		p_ptr->ffall = TRUE;
+		p_ptr->levitation = TRUE;
 	}
 
 	/* Temporary "Hero" */
@@ -4427,9 +4427,9 @@ void calc_bonuses(void)
 	}
 
 	/* Temporary levitation */
-	if (p_ptr->tim_ffall)
+	if (p_ptr->tim_levitation)
 	{
-		p_ptr->ffall = TRUE;
+		p_ptr->levitation = TRUE;
 	}
 
 	/* Temporary reflection */
@@ -4553,7 +4553,7 @@ void calc_bonuses(void)
 		new_speed += (p_ptr->skill_exp[GINOU_RIDING] + p_ptr->lev *160L)/3200;
 		if (riding_m_ptr->fast) new_speed += 10;
 		if (riding_m_ptr->slow) new_speed -= 10;
-		riding_ffall = (riding_r_ptr->flags7 & RF7_CAN_FLY) ? TRUE : FALSE;
+		riding_levitation = (riding_r_ptr->flags7 & RF7_CAN_FLY) ? TRUE : FALSE;
 		if (riding_r_ptr->flags7 & (RF7_CAN_SWIM | RF7_AQUATIC)) p_ptr->can_swim = TRUE;
 
 		if (!(riding_r_ptr->flags2 & RF2_PASS_WALL)) p_ptr->pass_wall = FALSE;
@@ -5043,7 +5043,7 @@ void calc_bonuses(void)
 			p_ptr->sh_fire = TRUE;
 			p_ptr->sh_elec = TRUE;
 			p_ptr->sh_cold = TRUE;
-			p_ptr->ffall = TRUE;
+			p_ptr->levitation = TRUE;
 		}
 		else if (p_ptr->special_defense & KAMAE_GENBU)
 		{
@@ -5062,13 +5062,13 @@ void calc_bonuses(void)
 			p_ptr->dis_to_h[0] -= (p_ptr->lev / 3);
 			p_ptr->dis_to_d[0] -= (p_ptr->lev / 6);
 			p_ptr->num_blow[0] /= 2;
-			p_ptr->ffall = TRUE;
+			p_ptr->levitation = TRUE;
 		}
 
 		p_ptr->num_blow[0] += 1+extra_blows[0];
 	}
 
-	if (p_ptr->riding) p_ptr->ffall = riding_ffall;
+	if (p_ptr->riding) p_ptr->levitation = riding_levitation;
 
 	monk_armour_aux = FALSE;
 

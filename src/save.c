@@ -686,7 +686,7 @@ static void wr_extra(void)
 	wr_s16b(p_ptr->tim_regen);
 	wr_s16b(p_ptr->kabenuke);
 	wr_s16b(p_ptr->tim_stealth);
-	wr_s16b(p_ptr->tim_ffall);
+	wr_s16b(p_ptr->tim_levitation);
 	wr_s16b(p_ptr->tim_sh_touki);
 	wr_s16b(p_ptr->lightspeed);
 	wr_s16b(p_ptr->tsubureru);
