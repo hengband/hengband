@@ -66,7 +66,6 @@ extern void build_lake(int type);
 extern void build_cavern(void);
 #endif /* ALLOW_CAVERNS_AND_LAKES */
 
-extern bool room_build(int typ);
 extern bool generate_rooms(void);
 extern void build_maze_vault(int x0, int y0, int xsize, int ysize, bool is_vault);
 

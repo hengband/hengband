@@ -342,18 +342,6 @@ static bool find_space(int *y, int *x, int height, int width)
 	if (dun->row_rooms < blocks_high) return FALSE;
 	if (dun->col_rooms < blocks_wide) return FALSE;
 
-#if 0
-	/* Sometimes, little rooms like to have more space. */
-	if (blocks_wide == 2)
-	{
-		if (one_in_(3)) blocks_wide = 3;
-	}
-	else if (blocks_wide == 1)
-	{
-		if (one_in_(2)) blocks_wide = rand_range(2, 3);
-	}
-#endif
-
 	/* Initiallize */
 	candidates = 0;
 
@@ -498,7 +486,20 @@ static bool build_type1(void)
 	ysize = y1 + y2 + 1;
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(&yval, &xval, ysize + 2, xsize + 2)) return FALSE;
+	if (!find_space(&yval, &xval, ysize + 2, xsize + 2))
+	{
+		/* Limit to the minimum room size, and retry */
+		y1 = 1;
+		x1 = 1;
+		y2 = 1;
+		x2 = 1;
+
+		xsize = x1 + x2 + 1;
+		ysize = y1 + y2 + 1;
+
+		/* Find and reserve some space in the dungeon.  Get center of room. */
+		if (!find_space(&yval, &xval, ysize + 2, xsize + 2)) return FALSE;
+	}
 
 	/* Choose lite or dark */
 	light = ((dun_level <= randint1(25)) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS));
@@ -3700,7 +3701,22 @@ static bool build_type9(void)
 	ysize = randint1(15) * 2 + 6;
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(&y0, &x0, ysize + 1, xsize + 1)) return FALSE;
+	if (!find_space(&y0, &x0, ysize + 1, xsize + 1))
+	{
+		/* Limit to the minimum room size, and retry */
+		xsize = 8;
+		ysize = 8;
+
+		/* Find and reserve some space in the dungeon.  Get center of room. */
+		if (!find_space(&y0, &x0, ysize + 1, xsize + 1))
+		{
+			/*
+			 * Still no space?!
+			 * Try normal room
+			 */
+			return build_type1();
+		}
+	}
 
 	light = done = FALSE;
 	room = TRUE;
@@ -5923,7 +5939,7 @@ static bool build_type14(void)
  * Note that we restrict the number of "crowded" rooms to reduce
  * the chance of overflowing the monster list during level creation.
  */
-bool room_build(int typ)
+static bool room_build(int typ)
 {
 	/* Build a room */
 	switch (typ)
@@ -5974,13 +5990,8 @@ bool generate_rooms(void)
 	/* Limit number of rooms */
 	int dun_rooms = DUN_ROOMS_MAX * area_size / 100;
 
-	/* Limit minimum number of rooms */
-	int min_rooms = 8 - ((MAX_HGT/ cur_hgt) + (MAX_WID / cur_wid));
-
 	/* Assume normal cave */
 	room_info_type *room_info_ptr = room_info_normal;
-
-	bool greater_vault_only = FALSE;
 
 	/*
 	 * Initialize probability list.
@@ -6010,8 +6021,6 @@ bool generate_rooms(void)
 			if (i == ROOM_T_GREATER_VAULT) prob_list[i] = 1;
 			else prob_list[i] = 0;
 		}
-
-		greater_vault_only = TRUE;
 	}
 
 	/* Forbidden vaults */
@@ -6096,13 +6105,6 @@ bool generate_rooms(void)
 		}
 	}
 
-	if (greater_vault_only)
-	{
-		/* Increase the room built count. */
-		if (room_build(ROOM_T_NORMAL)) rooms_built++;
-		else return FALSE;
-	}
-
 	/*
 	 * Build each type of room one by one until we cannot build any more.
 	 * [from SAngband (originally from OAngband)]
@@ -6147,19 +6149,13 @@ bool generate_rooms(void)
 					}
 				}
 			}
-
-			/* Stop building this type on failure. */
-			else
-			{
-				room_num[room_type] = 0;
-			}
 		}
 
 		/* End loop if no room remain */
 		if (!remain) break;
 	}
 
-	if (rooms_built < min_rooms) return FALSE;
+	if (rooms_built < 1) return FALSE;
 
 	if (cheat_room)
 	{

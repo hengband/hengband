@@ -126,43 +126,35 @@ dun_data *dun;
  */
 static int next_to_walls(int y, int x)
 {
-	int	k = 0;
+	int k = 0;
 
-	if (cave_have_flag_bold(y + 1, x, FF_WALL)) k++;
-	if (cave_have_flag_bold(y - 1, x, FF_WALL)) k++;
-	if (cave_have_flag_bold(y, x + 1, FF_WALL)) k++;
-	if (cave_have_flag_bold(y, x - 1, FF_WALL)) k++;
+	if (is_extra_bold(y + 1, x)) k++;
+	if (is_extra_bold(y - 1, x)) k++;
+	if (is_extra_bold(y, x + 1)) k++;
+	if (is_extra_bold(y, x - 1)) k++;
 
 	return (k);
 }
 
 
-static bool cannot_place_stairs(int walls)
+/*
+ *  Helper function for alloc_stairs().
+ *
+ *  Is this a good location for stairs?
+ */
+static bool alloc_stairs_aux(int y, int x, int walls)
 {
-	int       y, x;
-	int       count = 0;
-	cave_type *c_ptr;
+	/* Access the grid */
+	cave_type *c_ptr = &cave[y][x];
 
-	for (y = 1; y < (cur_hgt - 1); y++)
-	{
-		for (x = 1; x < (cur_wid - 1); x++)
-		{
-			/* Access the grid */
-			c_ptr = &cave[y][x];
+	/* Require "naked" floor grid */
+	if (!is_floor_grid(c_ptr)) return FALSE;
+	if (pattern_tile(y, x)) return FALSE;
+	if (c_ptr->o_idx || c_ptr->m_idx) return FALSE;
 
-			/* Require "naked" floor grid */
-			if (!is_floor_grid(c_ptr) || pattern_tile(y, x) || c_ptr->o_idx || c_ptr->m_idx) continue;
+	/* Require a certain number of adjacent walls */
+	if (next_to_walls(y, x) < walls) return FALSE;
 
-			/* Require a certain number of adjacent walls */
-			if (next_to_walls(y, x) >= walls)
-			{
-				/* Enough grids? */
-				if (++count >= 20) return FALSE;
-			}
-		}
-	}
-
-	/* No naked grid */
 	return TRUE;
 }
 
@@ -172,10 +164,8 @@ static bool cannot_place_stairs(int walls)
  */
 static bool alloc_stairs(int feat, int num, int walls)
 {
-	int          y, x, i, j;
-	int          shaft_num = 0;
-	bool         flag, checked;
-	cave_type    *c_ptr;
+	int i;
+	int shaft_num = 0;
 
 	feature_type *f_ptr = &f_info[feat];
 
@@ -212,59 +202,70 @@ static bool alloc_stairs(int feat, int num, int walls)
 	else return FALSE;
 
 
-	/* There very few walls in an arena level */
-	if (dun->empty_level) walls = 1;
-
 	/* Place "num" stairs */
 	for (i = 0; i < num; i++)
 	{
-		/* Try several times */
-		for (flag = checked = FALSE; !flag; )
+		while (TRUE)
 		{
-			/* Try several times, then decrease "walls" */
-			for (j = 0; j <= 3000; j++)
+			int y = 0, x = 0;
+			cave_type *c_ptr;
+
+			int candidates = 0;
+			int pick;
+
+			for (y = 1; y < cur_hgt - 1; y++)
 			{
-				/* Pick a random grid */
-				y = randint1(cur_hgt-2);
-				x = randint1(cur_wid-2);
-
-				/* Access the grid */
-				c_ptr = &cave[y][x];
-
-				/* Require "naked" floor grid */
-				if (!is_floor_grid(c_ptr) || pattern_tile(y, x) || c_ptr->o_idx || c_ptr->m_idx) continue;
-
-				/* Require a certain number of adjacent walls */
-				if (next_to_walls(y, x) < walls) continue;
-
-				/* Clear possible garbage of hidden trap */
-				c_ptr->mimic = 0;
-
-				/* Clear previous contents, add stairs */
-				c_ptr->feat = (i < shaft_num) ? feat_state(feat, FF_SHAFT) : feat;
-
-				/* All done */
-				flag = TRUE;
-				break;
-			}
-
-			/* Require fewer walls */
-			if (!flag)
-			{
-				if (!checked)
+				for (x = 1; x < cur_wid - 1; x++)
 				{
-					if (cannot_place_stairs(walls))
+					if (alloc_stairs_aux(y, x, walls))
 					{
-						if (walls)
-						{
-							walls--;
-							checked = FALSE;
-						}
-						else return FALSE;
+						/* A valid space found */
+						candidates++;
 					}
-					else checked = TRUE;
 				}
 			}
+
+			/* No valid place! */
+			if (!candidates)
+			{
+				/* There are exactly no place! */
+				if (walls <= 0) return FALSE;
+
+				/* Decrease walls limit, and try again */
+				walls--;
+				continue;
+			}
+
+			/* Choose a random one */
+			pick = randint1(candidates);
+
+			for (y = 1; y < cur_hgt - 1; y++)
+			{
+				for (x = 1; x < cur_wid - 1; x++)
+				{
+					if (alloc_stairs_aux(y, x, walls))
+					{
+						pick--;
+
+						/* Is this a picked one? */
+						if (!pick) break;
+					}
+				}
+
+				if (!pick) break;
+			}
+
+			/* Access the grid */
+			c_ptr = &cave[y][x];
+
+			/* Clear possible garbage of hidden trap */
+			c_ptr->mimic = 0;
+
+			/* Clear previous contents, add stairs */
+			c_ptr->feat = (i < shaft_num) ? feat_state(feat, FF_SHAFT) : feat;
+
+			/* Success */
+			break;
 		}
 	}
 	return TRUE;
