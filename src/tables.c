@@ -4636,44 +4636,44 @@ cptr spell_names[VALID_REALM][32] =
 
 cptr spell_names[VALID_REALM][32] =
 {
-	/*** Life Spells ***/ /* nanka */
+	/*** Life Spells ***/
 	{
 		/* Common Life Spellbooks */
-		"Detect Evil",
 		"Cure Light Wounds",
 		"Bless",
-		"Remove Fear",
+		"Light Wounds",
 		"Call Light",
 		"Detect Doors & Traps",
 		"Cure Medium Wounds",
+		"Cure Poison",   
 		"Satisfy Hunger",
 
 		"Remove Curse",
-		"Cure Poison",   
+		"Medium Wounds",
 		"Cure Critical Wounds",
-		"Sense Unseen",
-		"Holy Orb",
-		"Protection from Evil",
+		"Resist Heat and Cold",
+		"Sense Surroundings",
+		"Turn Undead",
 		"Healing",
 		"Glyph of Warding",
 
 		/* Rare Life Spellbooks */
-		"Exorcism",
 		"Dispel Curse",
-		"Dispel Undead & Demons",
+		"Perception",
+		"Dispel Undead",
 		"Day of the Dove",
-		"Dispel Evil",
-		"Banishment",
-		"Holy Word",
+		"Critical Wounds",
+		"Word of Recall",
+		"Alter Reality",
 		"Warding True",
 
-		"Heroism",
-		"Prayer",
-		"Turn Undead",
+		"Mass Impotence",
+		"Detection",
+		"Annihilate Undead",
+		"Clairvoyance",
 		"Restoration",
 		"Healing True",
 		"Holy Vision",
-		"Divine Intervention",
 		"Ultimate Resistance",
 	},
 
@@ -5035,7 +5035,7 @@ cptr spell_names[VALID_REALM][32] =
 
 		/* Rare Crusade Spellbooks */
 		"Unbarring Ways",
-		"nanka",
+		"Arrest",
 		"Holy Aura",
 		"Dispel Undead & Demons",
 		"Dispel Evil",
