@@ -5139,7 +5139,7 @@ bool destroy_area(int y1, int x1, int r, int full)
 			r_ptr = &r_info[m_ptr->r_idx];
 
 			/* Lose room and vault */
-			c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY | CAVE_TRAP | CAVE_UNSAFE);
+			c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY | CAVE_TRAP | CAVE_UNSAFE | CAVE_IN_MIRROR);
 
 			/* Lose light and knowledge */
 			c_ptr->info &= ~(CAVE_MARK | CAVE_GLOW);
@@ -5354,7 +5354,7 @@ bool earthquake(int cy, int cx, int r)
 			c_ptr = &cave[yy][xx];
 
 			/* Lose room and vault */
-			c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY | CAVE_TRAP | CAVE_UNSAFE);
+			c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY | CAVE_TRAP | CAVE_UNSAFE | CAVE_IN_MIRROR );
 
 			/* Lose light and knowledge */
 			c_ptr->info &= ~(CAVE_GLOW | CAVE_MARK);
