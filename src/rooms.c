@@ -2826,18 +2826,16 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
  */
 static bool build_type7(void)
 {
-	vault_type *v_ptr = NULL;
-	int dummy = 0;
+	vault_type *v_ptr;
+	int dummy;
 	int x, y;
 	int xval, yval;
 	int xoffset, yoffset;
 	int transno;
 
 	/* Pick a lesser vault */
-	while (dummy < SAFE_MAX_ATTEMPTS)
+	for (dummy = 0; dummy < SAFE_MAX_ATTEMPTS; dummy++)
 	{
-		dummy++;
-
 		/* Access a random vault record */
 		v_ptr = &v_info[randint0(max_v_idx)];
 
@@ -2846,7 +2844,18 @@ static bool build_type7(void)
 	}
 
 	/* No lesser vault found */
-	if (!v_ptr) return FALSE;
+	if (dummy >= SAFE_MAX_ATTEMPTS)
+	{
+		if (cheat_room)
+		{
+#ifdef JP
+			msg_print("警告！小さな地下室を配置できません！");
+#else
+			msg_print("Warning! Could not place lesser vault!");
+#endif
+		}
+		return FALSE;
+	}
 
 	/* pick type of transformation (0-7) */
 	transno = randint0(8);
@@ -2882,32 +2891,19 @@ static bool build_type7(void)
 		yoffset = 0;
 	}
 
-
 	/* Find and reserve some space in the dungeon.  Get center of room. */
 	if (!find_space(&yval, &xval, abs(y), abs(x))) return FALSE;
-
-
-	if (dummy >= SAFE_MAX_ATTEMPTS)
-	{
-		if (cheat_room)
-		{
-#ifdef JP
-msg_print("警告！小さな地下室を配置できません！");
-#else
-			msg_print("Warning! Could not place lesser vault!");
-#endif
-
-		}
-		return FALSE;
-	}
-
 
 #ifdef FORCE_V_IDX
 	v_ptr = &v_info[2];
 #endif
 
 	/* Message */
-	if (cheat_room) msg_format("%s", v_name + v_ptr->name);
+#ifdef JP
+	if (cheat_room) msg_format("小さな地下室(%s)", v_name + v_ptr->name);
+#else
+	if (cheat_room) msg_format("Lesser vault (%s)", v_name + v_ptr->name);
+#endif
 
 	/* Boost the rating */
 	rating += v_ptr->rat;
@@ -2932,18 +2928,16 @@ msg_print("警告！小さな地下室を配置できません！");
  */
 static bool build_type8(void)
 {
-	vault_type *v_ptr = NULL;
-	int dummy = 0;
+	vault_type *v_ptr;
+	int dummy;
 	int xval, yval;
 	int x, y;
 	int transno;
 	int xoffset, yoffset;
 
 	/* Pick a greater vault */
-	while (dummy < SAFE_MAX_ATTEMPTS)
+	for (dummy = 0; dummy < SAFE_MAX_ATTEMPTS; dummy++)
 	{
-		dummy++;
-
 		/* Access a random vault record */
 		v_ptr = &v_info[randint0(max_v_idx)];
 
@@ -2952,7 +2946,18 @@ static bool build_type8(void)
 	}
 
 	/* No greater vault found */
-	if (!v_ptr) return FALSE;
+	if (dummy >= SAFE_MAX_ATTEMPTS)
+	{
+		if (cheat_room)
+		{
+#ifdef JP
+			msg_print("警告！巨大な地下室を配置できません！");
+#else
+			msg_print("Warning! Could not place greater vault!");
+#endif
+		}
+		return FALSE;
+	}
 
 	/* pick type of transformation (0-7) */
 	transno = randint0(8);
@@ -2997,28 +3002,16 @@ static bool build_type8(void)
 	/* Find and reserve some space in the dungeon.  Get center of room. */
 	if (!find_space(&yval, &xval, abs(y) + 2, abs(x) + 2)) return FALSE;
 
-
-	if (dummy >= SAFE_MAX_ATTEMPTS)
-	{
-		if (cheat_room)
-		{
-#ifdef JP
-msg_print("警告！巨大な地下室を配置できません！");
-#else
-			msg_print("Warning! Could not place greater vault!");
-#endif
-
-		}
-		return FALSE;
-	}
-
-
 #ifdef FORCE_V_IDX
 	v_ptr = &v_info[76 + randint1(3)];
 #endif
 
 	/* Message */
-	if (cheat_room) msg_format("%s", v_name + v_ptr->name);
+#ifdef JP
+	if (cheat_room) msg_format("巨大な地下室(%s)", v_name + v_ptr->name);
+#else
+	if (cheat_room) msg_format("Greater vault (%s)", v_name + v_ptr->name);
+#endif
 
 	/* Boost the rating */
 	rating += v_ptr->rat;
