@@ -2791,7 +2791,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					if (one_in_(4)) add_flag(o_ptr->art_flags, TR_RES_POIS);
 					break;
 				case EGO_REFLECTION:
-					if (o_ptr->sval == SV_SHIELD_OF_DEFLECTION)
+					if (o_ptr->sval == SV_MIRROR_SHIELD)
 						o_ptr->name2 = 0;
 					break;
 				}

@@ -3609,7 +3609,7 @@ msg_format("%sはあなたの魔力を吸収した！", o_name);
 	if (one_in_(999) && !p_ptr->anti_magic)
 	{
 		if ((inventory[INVEN_LITE].tval) &&
-		    (inventory[INVEN_LITE].sval == SV_LITE_THRAIN))
+		    (inventory[INVEN_LITE].sval == SV_LITE_JUDGE))
 		{
 #ifdef JP
 msg_print("『審判の宝石』はあなたの体力を吸収した！");

@@ -1675,8 +1675,8 @@
 #define TV_CHEST         7      /* Chests ('&') */
 #define TV_FIGURINE      8      /* Magical figurines */
 #define TV_STATUE        9      /* Statue, what a silly object... */
-#define TV_CORPSE	10      /* Corpses and Skeletons, specific */
-#define TV_CAPTURE	11      /* Monster ball */
+#define TV_CORPSE       10      /* Corpses and Skeletons, specific */
+#define TV_CAPTURE      11      /* Monster ball */
 #define TV_NO_AMMO      15      /* Ammo for crimson */
 #define TV_SHOT         16      /* Ammo for slings */
 #define TV_ARROW        17      /* Ammo for bows */
@@ -1757,8 +1757,8 @@
 #define SV_LONG_BOW                     13	/* (x3) */
 #define SV_LIGHT_XBOW                   23	/* (x3) */
 #define SV_HEAVY_XBOW                   24	/* (x4) */
-#define SV_CRIMSON                      50
-#define SV_NAMAKE_BOW                   63
+#define SV_CRIMSON                      50	/* (x0) */
+#define SV_NAMAKE_BOW                   63	/* (x3) */
 
 /* The "sval" codes for TV_DIGGING */
 #define SV_SHOVEL                        1
@@ -1787,9 +1787,9 @@
 #define SV_TWO_HANDED_FLAIL             18	/* 3d6  */
 #define SV_GREAT_HAMMER                 19	/* 4d6  */
 #define SV_MACE_OF_DISRUPTION           20	/* 5d8  */
-#define SV_WIZSTAFF                     21      /* 1d4  */
-#define SV_GROND                        50	/* 3d4  */
-#define SV_NAMAKE_HAMMER                63
+#define SV_WIZSTAFF                     21	/* 1d2  */
+#define SV_GROND                        50	/* 3d9  */
+#define SV_NAMAKE_HAMMER                63	/* 1d77 */
 
 /* The "sval" values for TV_POLEARM */
 #define SV_HATCHET                       1	/* 1d5 */
@@ -1851,7 +1851,7 @@
 #define SV_BLADE_OF_CHAOS               30  /* 6d5 */
 #define SV_DIAMOND_EDGE                 31  /* 7d5 */
 #define SV_DOKUBARI                     32  /* 1d1 */
-#define SV_HAYABUSA                     33  /* 1d4 */
+#define SV_HAYABUSA                     33  /* 1d6 */
 
 /* The "sval" codes for TV_SHIELD */
 #define SV_SMALL_LEATHER_SHIELD          2
@@ -1860,7 +1860,7 @@
 #define SV_LARGE_METAL_SHIELD            5
 #define SV_DRAGON_SHIELD                 6
 #define SV_KNIGHT_SHIELD                 7
-#define SV_SHIELD_OF_DEFLECTION         10
+#define SV_MIRROR_SHIELD                10
 #define SV_YATA_MIRROR                  50
 
 /* The "sval" codes for TV_HELM */
@@ -1871,10 +1871,12 @@
 #define SV_STEEL_HELM                    6
 #define SV_DRAGON_HELM                   7
 #define SV_KABUTO                        8  /* 7 */
+
+/* The "sval" codes for TV_CROWN */
 #define SV_IRON_CROWN                   10
 #define SV_GOLDEN_CROWN                 11
 #define SV_JEWELED_CROWN                12
-#define SV_MORGOTH                      50
+#define SV_CHAOS                        50
 
 /* The "sval" codes for TV_BOOTS */
 #define SV_PAIR_OF_SOFT_LEATHER_BOOTS    2
@@ -1886,7 +1888,7 @@
 #define SV_CLOAK                         1
 #define SV_ELVEN_CLOAK                   2
 #define SV_FUR_CLOAK                     3
-#define SV_ETHEREAL_CLOAK		 5
+#define SV_ETHEREAL_CLOAK                5
 #define SV_SHADOW_CLOAK                  6
 
 /* The "sval" codes for TV_GLOVES */
@@ -1959,7 +1961,7 @@
 #define SV_LITE_EDISON                   3
 #define SV_LITE_GALADRIEL                4
 #define SV_LITE_ELENDIL                  5
-#define SV_LITE_THRAIN                   6
+#define SV_LITE_JUDGE                    6
 #define SV_LITE_LORE                     7
 #define SV_LITE_PALANTIR                 8
 #define SV_LITE_FLY_STONE                9
@@ -2023,7 +2025,7 @@
 #define SV_RING_DAMAGE                  29
 #define SV_RING_SLAYING                 30
 #define SV_RING_SPEED                   31
-#define SV_RING_BARAHIR                 32
+#define SV_RING_FRAKIR                  32
 #define SV_RING_TULKAS                  33
 #define SV_RING_NARYA                   34
 #define SV_RING_NENYA                   35

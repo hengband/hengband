@@ -1113,13 +1113,13 @@ msg_print("地面に落とされた。");
 			/* Get local object */
 			q_ptr = &forge;
 
-			/* Mega-Hack -- Prepare to make "Morgoth" */
-			object_prep(q_ptr, lookup_kind(TV_CROWN, SV_MORGOTH));
+			/* Mega-Hack -- Prepare to make "Chaos" */
+			object_prep(q_ptr, lookup_kind(TV_CROWN, SV_CHAOS));
 
-			/* Mega-Hack -- Mark this item as "Morgoth" */
+			/* Mega-Hack -- Mark this item as "Chaos" */
 			q_ptr->name1 = ART_CHAOS;
 
-			/* Mega-Hack -- Actually create "Morgoth" */
+			/* Mega-Hack -- Actually create "Chaos" */
 			apply_magic(q_ptr, -1, TRUE, TRUE, TRUE, FALSE);
 
 			/* Drop it in the dungeon */

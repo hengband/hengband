@@ -3460,7 +3460,7 @@ s = "磨く盾がありません。";
 	object_flags(o_ptr, flgs);
 
 	if (o_ptr->k_idx && !artifact_p(o_ptr) && !ego_item_p(o_ptr) &&
-	    !o_ptr->art_name && !cursed_p(o_ptr) && (o_ptr->sval != SV_SHIELD_OF_DEFLECTION))
+	    !o_ptr->art_name && !cursed_p(o_ptr) && (o_ptr->sval != SV_MIRROR_SHIELD))
 	{
 #ifdef JP
 msg_format("%sは輝いた！", o_name);
