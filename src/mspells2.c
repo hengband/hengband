@@ -112,7 +112,7 @@ static bool direct_beam(int y1, int x1, int y2, int x2, monster_type *m_ptr)
 	return TRUE;
 }
 
-static bool breath_direct(int y1, int x1, int y2, int x2, int rad, bool disint_ball, bool friend)
+static bool breath_direct(int y1, int x1, int y2, int x2, int rad, int typ, bool friend)
 {
 	/* Must be the same as projectable() */
 
@@ -129,9 +129,25 @@ static bool breath_direct(int y1, int x1, int y2, int x2, int rad, bool disint_b
 	bool hit2 = FALSE;
 	bool hityou = FALSE;
 
+	int flg;
+
+	switch (typ)
+	{
+	case GF_LITE:
+	case GF_LITE_WEAK:
+		flg = PROJECT_LOS;
+		break;
+	case GF_DISINTEGRATE:
+		flg = PROJECT_DISI;
+		break;
+	default:
+		flg = 0;
+		break;
+	}
+
 	/* Check the projection path */
-	grid_n = project_path(grid_g, MAX_RANGE, y1, x1, y2, x2, disint_ball ? PROJECT_DISI : 0);
-	breath_shape(grid_g, grid_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y2, x2, disint_ball);
+	grid_n = project_path(grid_g, MAX_RANGE, y1, x1, y2, x2, flg);
+	breath_shape(grid_g, grid_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y2, x2, typ);
 
 	for (i = 0; i < grids; i++)
 	{
@@ -451,14 +467,19 @@ bool monst_spell_monst(int m_idx)
 				/* Expected breath radius */
 				int rad = (r_ptr->flags2 & RF2_POWERFUL) ? 3 : 2;
 
-				if (!breath_direct(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, FALSE, TRUE))
+				if (!breath_direct(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, 0, TRUE))
 				{
 					f4 &= ~(RF4_BREATH_MASK);
 					f5 &= ~(RF5_BREATH_MASK);
 					f6 &= ~(RF6_BREATH_MASK);
 				}
+				else if ((f4 & RF4_BR_LITE) &&
+					 !breath_direct(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, GF_LITE, TRUE))
+				{
+					f4 &= ~(RF4_BR_LITE);
+				}
 				else if ((f4 & RF4_BR_DISI) &&
-					 !breath_direct(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, TRUE, TRUE))
+					 !breath_direct(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, GF_DISINTEGRATE, TRUE))
 				{
 					f4 &= ~(RF4_BR_DISI);
 				}

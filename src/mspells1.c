@@ -1258,7 +1258,8 @@ bool make_attack_spell(int m_idx)
 	char            m_poss[80];
 #endif
 	bool            no_inate = FALSE;
-	bool            do_disi = FALSE;
+	bool            do_br_lite = FALSE;
+	bool            do_br_disi = FALSE;
 	int             dam = 0;
 	u32b mode = 0L;
 	int s_num_6 = (easy_band ? 2 : 6);
@@ -1317,8 +1318,14 @@ bool make_attack_spell(int m_idx)
 	/* Check path */
 	if (projectable(m_ptr->fy, m_ptr->fx, y, x))
 	{
-		/* Breath disintegration to the glyph if possible */
-		if (!have_flag(f_flags_bold(y, x), FF_PROJECT) && (f4 & RF4_BR_DISI) && one_in_(2)) do_disi = TRUE;
+		if (!have_flag(f_flags_bold(y, x), FF_PROJECT))
+		{
+			/* Breath lite to the transparent wall if possible */
+			if ((f4 & RF4_BR_LITE) && cave_los_bold(y, x) && one_in_(2)) do_br_lite = TRUE;
+
+			/* Breath disintegration to the wall if possible */
+			if ((f4 & RF4_BR_DISI) && have_flag(f_flags_bold(y, x), FF_HURT_DISI) && one_in_(2)) do_br_disi = TRUE;
+		}
 	}
 
 	/* Check path to next grid */
@@ -1331,7 +1338,15 @@ bool make_attack_spell(int m_idx)
 		    in_disintegration_range(m_ptr->fy, m_ptr->fx, y, x) &&
 		    (one_in_(10) || (projectable(y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
 		{
-			do_disi = TRUE;
+			do_br_disi = TRUE;
+			success = TRUE;
+		}
+		else if ((f4 & RF4_BR_LITE) &&
+		    (m_ptr->cdis < MAX_RANGE/2) &&
+		    los(m_ptr->fy, m_ptr->fx, y, x) &&
+		    (one_in_(10) || (projectable(y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
+		{
+			do_br_lite = TRUE;
 			success = TRUE;
 		}
 		else
@@ -1541,8 +1556,19 @@ bool make_attack_spell(int m_idx)
 	monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 #endif
 
-	if (do_disi)
-		thrown_spell = 96+31;
+	if (do_br_lite && do_br_disi)
+	{
+		if (one_in_(2)) thrown_spell = 96+14; /* RF4_BR_LITE */
+		else thrown_spell = 96+31; /* RF4_BR_DISI */
+	}
+	else if (do_br_lite)
+	{
+		thrown_spell = 96+14; /* RF4_BR_LITE */
+	}
+	else if (do_br_disi)
+	{
+		thrown_spell = 96+31; /* RF4_BR_DISI */
+	}
 	else
 	{
 		int attempt = 10;

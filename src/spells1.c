@@ -368,6 +368,10 @@ sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 			{
 				if ((n > 0) && cave_stop_disintegration(y, x)) break;
 			}
+			else if (flg & (PROJECT_LOS))
+			{
+				if ((n > 0) && !cave_los_bold(y, x)) break;
+			}
 			else if (!(flg & (PROJECT_PATH)))
 			{
 				/* Always stop at non-initial wall grids */
@@ -453,6 +457,10 @@ sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 			{
 				if ((n > 0) && cave_stop_disintegration(y, x)) break;
 			}
+			else if (flg & (PROJECT_LOS))
+			{
+				if ((n > 0) && !cave_los_bold(y, x)) break;
+			}
 			else if (!(flg & (PROJECT_PATH)))
 			{
 				/* Always stop at non-initial wall grids */
@@ -519,6 +527,10 @@ sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 			if (flg & (PROJECT_DISI))
 			{
 				if ((n > 0) && cave_stop_disintegration(y, x)) break;
+			}
+			else if (flg & (PROJECT_LOS))
+			{
+				if ((n > 0) && !cave_los_bold(y, x)) break;
 			}
 			else if (!(flg & (PROJECT_PATH)))
 			{
@@ -7977,7 +7989,7 @@ bool in_disintegration_range(int y1, int x1, int y2, int x2)
 /*
  * breath shape
  */
-void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte *gm, int *pgm_rad, int rad, int y1, int x1, int y2, int x2, bool disint_ball)
+void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte *gm, int *pgm_rad, int rad, int y1, int x1, int y2, int x2, int typ)
 {
 	int by = y1;
 	int bx = x1;
@@ -8025,16 +8037,21 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 					/* Enforce an arc */
 					if (distance(by, bx, y, x) != cdis) continue;
 
-
-					if (disint_ball)
+					switch (typ)
 					{
+					case GF_LITE:
+					case GF_LITE_WEAK:
+						/* Lights are stopped by opaque terrains */
+						if (!los(by, bx, y, x)) continue;
+						break;
+					case GF_DISINTEGRATE:
 						/* Disintegration are stopped only by perma-walls */
 						if (!in_disintegration_range(by, bx, y, x)) continue;
-					}
-					else
-					{
-						/* The blast is stopped by walls */
+						break;
+					default:
+						/* Ball explosions are stopped by walls */
 						if (!projectable(by, bx, y, x)) continue;
+						break;
 					}
 
 					/* Save this grid */
@@ -8344,10 +8361,16 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 		grids++;
 	}
 
-	if (typ == GF_DISINTEGRATE)
+	switch (typ)
 	{
+	case GF_LITE:
+	case GF_LITE_WEAK:
+		if (breath || (flg & PROJECT_BEAM)) flg |= (PROJECT_LOS);
+		break;
+	case GF_DISINTEGRATE:
 		flg |= (PROJECT_GRID);
 		if (breath || (flg & PROJECT_BEAM)) flg |= (PROJECT_DISI);
+		break;
 	}
 
 	/* Calculate the projection path */
@@ -8635,6 +8658,11 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			/* Hack -- Balls explode before reaching walls */
 			if (cave_stop_disintegration(ny, nx) && (rad > 0)) break;
 		}
+		else if (flg & PROJECT_LOS)
+		{
+			/* Hack -- Balls explode before reaching walls */
+			if (!cave_los_bold(ny, nx) && (rad > 0)) break;
+		}
 		else
 		{
 			/* Hack -- Balls explode before reaching walls */
@@ -8751,7 +8779,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 		{
 			flg &= ~(PROJECT_HIDE);
 
-			breath_shape(path_g, dist, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, (bool)(typ == GF_DISINTEGRATE));
+			breath_shape(path_g, dist, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, typ);
 		}
 		else
 		{
@@ -8769,15 +8797,21 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 						/* Enforce a "circular" explosion */
 						if (distance(by, bx, y, x) != dist) continue;
 
-						if (typ == GF_DISINTEGRATE)
+						switch (typ)
 						{
+						case GF_LITE:
+						case GF_LITE_WEAK:
+							/* Lights are stopped by opaque terrains */
+							if (!los(by, bx, y, x)) continue;
+							break;
+						case GF_DISINTEGRATE:
 							/* Disintegration are stopped only by perma-walls */
 							if (!in_disintegration_range(by, bx, y, x)) continue;
-						}
-						else
-						{
+							break;
+						default:
 							/* Ball explosions are stopped by walls */
 							if (!projectable(by, bx, y, x)) continue;
+							break;
 						}
 
 						/* Save this grid */
