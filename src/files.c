@@ -5044,6 +5044,81 @@ msg_print("キャラクタ情報のファイルへの書き出しに成功しました。");
 
 
 /*
+ * Display single line of on-line help file
+ */
+static void show_file_aux_line(cptr str, int cy, byte color)
+{
+	int cx = 0;
+
+	/* Initial cursor position */
+	Term_gotoxy(cx, cy);
+
+
+	while (*str)
+	{
+		cptr leftb = my_strchr(str, '[');
+		int len;
+
+		/* Get length of white text */
+		if (NULL == leftb)
+		{
+			len = strlen(str);
+		}
+		else
+		{
+			len = (int)(leftb - str);
+		}
+
+		/* Print a white (actually default colored) text */
+		Term_addstr(len, color, str);
+		cx += len;
+		str += len;
+
+		/* Colored segment? */
+		if (prefix(str, "[[[[["))
+		{
+			cptr rightb;
+			byte attr;
+
+			str += 5;
+
+			/* Illigal end of line */
+			if (!isalpha((int)((unsigned char)*str))) break;
+
+			/* Get color attr */
+			attr = color_char_to_attr(*str);
+
+			str++;
+
+			rightb = my_strchr(str, ']');
+
+			/* No close-bracket? */
+			if (NULL == rightb) break;
+
+			len = (int)(rightb - str);
+
+			/* Ok print a colored text */
+			Term_addstr(len, attr, str);
+			cx += len;
+			str = rightb + 1;
+		}
+
+		/* This '[' was not a part of color tag */
+		else if (*str == '[')
+		{
+			/* Print the '[' */
+			Term_addstr(1, color, str);
+			cx++;
+			str++;
+		}
+	}
+
+	/* Clear rest of line */
+	Term_erase(cx, cy, 255);
+}
+
+
+/*
  * Recursive file perusal.
  *
  * Return FALSE on 'Q', otherwise TRUE.
@@ -5338,7 +5413,6 @@ msg_format("'%s'をオープンできません。", name);
 		/* Dump the next 20, or rows, lines of the file */
 		for (i = 0; i < rows; )
 		{
-			int print_x, x;
 			cptr str = buf;
 
 			/* Hack -- track the "first" line */
@@ -5388,42 +5462,7 @@ msg_format("'%s'をオープンできません。", name);
 			find = NULL;
 
 			/* Dump the line */
-			x = 0;
-			print_x = 0;
-			while (str[x])
-			{
-				/* Color ? */
-				if (prefix(str + x, "[[[[["))
-				{
-					byte c;
-					x += 5;
-
-					/* Illigal end of line */
-					if (!str[x]) break;
-
-					/* Get color attr */
-					c = color_char_to_attr(str[x++]);
-
-					/* Ok print a colored text */
-					while (str[x] && str[x] != ']')
-					{
-						Term_putch(print_x, i + 2, c, str[x]);
-						x++;
-						print_x++;
-					}
-
-					if (str[x] == ']') x++;
-				}
-				else
-				{
-					Term_putch(print_x, i + 2, color, str[x]);
-					x++;
-					print_x++;
-				}
-			}
-
-			/* Clear rest of line */
-			Term_erase(print_x, i + 2, 255);
+			show_file_aux_line(str, i + 2, color);
 
 			/* Hilite "shower" */
 			if (shower[0])
