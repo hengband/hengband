@@ -77,6 +77,9 @@ F:c:1:8:44
 # Bandit
 F:d:1:8:150
 
+# Door
+F:+:32:8
+
 # Master rogue
 F:e:1:8:376
 
