@@ -1,4 +1,34 @@
+2002-02-02  Takeshi Mogami  <mogami@akiru>
+
+	* src/main-mac.c:
+	16x16タイルグラフィック用だったmain-mac.cを8x8タイル用に修正。
+
+	* src/files.c:
+	英語版では 「STR :」 「INT !」のようにスペースがひとつ余るので、
+	せっかくだから有効に使って、 「INT!:」のようにするよう修正。
+
+	* src/tables.c, src/files.c:
+	- 英語版で能力値MAXの ! の位置がずれていたので修正。
+	- 日本語版で"現在"のラベルがずれていたので修正。
+	- 'C'の3ページ目で日本語版はダメージを受けた能力値に'x'が付かないのを修正。
+	- 英語版でもダメージを受けてても受けてなくてもStr等のまま変化しないのを修正。
+
+	* src/main-mac.c, src/util.c:
+	MPW用に、util.c の方の 13 も '\r' に書き直し。
+
+	* src/main-mac.c:
+	MPWではデフォルトで '\r' が line feed(つまり10)、
+	'\n' が caridge return (つまり13)を発生させるというとんでもない仕様である
+	ことが判明したので、13というキーコードを使わないように修正。
+	(-noMapCRというオプションで'\r'と'\n'を入れ換えられるが、
+	どっちのオプションでも動くようにした。)
+
+	* src/cave.c, src/util.c, src/z-config.h:
+	再び MPW向けの変更各種。
+
 2002-02-01  Takeshi Mogami  <mogami@akiru>
+
+	* Changelogs: 更新
 
 	* src/birth.c:
 	英語版のアンドロイドの生い立ちで同じ種類の行が2つ重なるバグ修正。
