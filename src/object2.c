@@ -5892,8 +5892,8 @@ s16b inven_carry(object_type *o_ptr)
 	/* Forget location */
 	j_ptr->iy = j_ptr->ix = 0;
 
-	/* No longer marked */
-	j_ptr->marked = 0;
+	/* Player touches it, and no longer marked */
+	j_ptr->marked = OM_TOUCHED;
 
 	/* Increase the weight */
 	p_ptr->total_weight += (j_ptr->number * j_ptr->weight);

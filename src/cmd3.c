@@ -530,6 +530,9 @@ msg_print("クエストを達成した！");
 	/* Wear the new stuff */
 	object_copy(o_ptr, q_ptr);
 
+	/* Player touches it */
+	o_ptr->marked |= OM_TOUCHED;
+
 	/* Increase the weight */
 	p_ptr->total_weight += q_ptr->weight;
 

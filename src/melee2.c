@@ -3440,7 +3440,7 @@ msg_format("%^s%s", m_name, monmessage);
 						excise_object_idx(this_o_idx);
 
 						/* Forget mark */
-						o_ptr->marked = 0;
+						o_ptr->marked &= OM_TOUCHED;
 
 						/* Forget location */
 						o_ptr->iy = o_ptr->ix = 0;

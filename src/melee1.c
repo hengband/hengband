@@ -1032,7 +1032,7 @@ bool make_attack_normal(int m_idx)
 							}
 
 							/* Forget mark */
-							j_ptr->marked = 0;
+							j_ptr->marked = OM_TOUCHED;
 
 							/* Memorize monster */
 							j_ptr->held_m_idx = m_idx;

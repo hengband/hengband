@@ -1277,6 +1277,9 @@ msg_format("%sは%sという感じがする...",
 	/* "Inscribe" it */
 	o_ptr->feeling = feel;
 
+	/* Player touches it */
+	o_ptr->marked |= OM_TOUCHED;
+
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
@@ -3524,7 +3527,11 @@ static byte get_dungeon_feeling(void)
 		if (!o_ptr->k_idx) continue;
 
 		/* Skip known objects */
-		if (object_is_known(o_ptr)) continue;
+		if (object_is_known(o_ptr))
+		{
+			/* Touched? */
+			if (o_ptr->marked & OM_TOUCHED) continue;
+		}
 
 		/* Skip pseudo-known objects */
 		if (o_ptr->ident & IDENT_SENSE) continue;

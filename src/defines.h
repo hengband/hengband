@@ -3163,6 +3163,7 @@
 #define OM_NOMSG        0x02    /* temporary flag to suppress messages */
 #define OM_NO_QUERY     0x04    /* Query for auto-pick was already answered as 'No' */
 #define OM_AUTODESTROY  0x08    /* Destroy later to avoid illegal inventry shift */
+#define OM_TOUCHED      0x10    /* Object was touched by player */
 
 
 /*

@@ -2181,6 +2181,9 @@ static errr rd_inventory(void)
 		/* Wield equipment */
 		if (n >= INVEN_RARM)
 		{
+			/* Player touches it */
+			q_ptr->marked |= OM_TOUCHED;
+
 			/* Copy object */
 			object_copy(&inventory[n], q_ptr);
 
@@ -2211,6 +2214,9 @@ note("持ち物の中のアイテムが多すぎる！");
 		{
 			/* Get a slot */
 			n = slot++;
+
+			/* Player touches it */
+			q_ptr->marked |= OM_TOUCHED;
 
 			/* Copy object */
 			object_copy(&inventory[n], q_ptr);

@@ -2782,6 +2782,9 @@ bool identify_item(object_type *o_ptr)
 	object_aware(o_ptr);
 	object_known(o_ptr);
 
+	/* Player touches it */
+	o_ptr->marked |= OM_TOUCHED;
+
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 

@@ -3746,7 +3746,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 		object_copy(o_ptr, q_ptr);
 
 		/* Forget mark */
-		o_ptr->marked = 0;
+		o_ptr->marked &= OM_TOUCHED;
 
 		/* Forget location */
 		o_ptr->iy = o_ptr->ix = 0;
