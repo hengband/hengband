@@ -683,7 +683,7 @@ extern void do_cmd_activate(void);
 extern void do_cmd_rerate(bool display);
 extern void ring_of_power(int dir);
 extern void do_cmd_use(void);
-extern void do_cmd_magic_eater(void);
+extern void do_cmd_magic_eater(bool only_browse);
 
 /* dungeon.c */
 extern void leave_quest_check(void);

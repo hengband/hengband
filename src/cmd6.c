@@ -6592,11 +6592,11 @@ msg_print("混乱していて読めない！");
 	}
 }
 
-static bool select_magic_eater(int mode)
+static bool select_magic_eater(bool only_browse)
 {
 	int ext=0;
 	char choice;
-	bool flag, redraw;
+	bool flag, redraw, request_list;
 	int tval = 0;
 	int             ask = TRUE, i = 0;
 	char            out_val[160];
@@ -6740,15 +6740,123 @@ static bool select_magic_eater(int mode)
 #else
 	(void)strnfmt(out_val, 78, "(*=List, ESC=exit) Use which power? ");
 #endif
-	if (use_menu) screen_save();
+	
+	/* Save the screen */
+	screen_save();
+
+        request_list = always_show_list;
 
 	/* Get a spell from the user */
-
-        choice = (always_show_list || use_menu) ? ESCAPE:1;
         while (!flag)
         {
-		if( choice==ESCAPE ) choice = ' '; 
-		else if( !get_com(out_val, &choice, FALSE) )break; 
+		/* Show the list */
+		if (request_list || use_menu)
+		{
+			byte y, x = 0;
+			int ctr, chance;
+			int k_idx;
+			char dummy[80];
+			int x1, y1, level;
+			byte col;
+
+			strcpy(dummy, "");
+
+			for (y = 1; y < 20; y++)
+				prt("", y, x);
+
+			y = 1;
+
+			/* Print header(s) */
+#ifdef JP
+			prt(format("                           %s 失率                           %s 失率", (tval == TV_ROD ? "  状態  " : "使用回数"), (tval == TV_ROD ? "  状態  " : "使用回数")), y++, x);
+#else
+			prt(format("                           %s Fail                           %s Fail", (tval == TV_ROD ? "  Stat  " : " Charges"), (tval == TV_ROD ? "  Stat  " : " Charges")), y++, x);
+#endif
+
+			/* Print list */
+			for (ctr = 0; ctr < EATER_EXT; ctr++)
+			{
+				if (!p_ptr->magic_num2[ctr+ext]) continue;
+
+				k_idx = lookup_kind(tval, ctr);
+
+				if (use_menu)
+				{
+					if (ctr == (menu_line-1))
+#ifdef JP
+						strcpy(dummy, "》");
+#else
+					strcpy(dummy, "> ");
+#endif
+					else strcpy(dummy, "  ");
+						
+				}
+				/* letter/number for power selection */
+				else
+				{
+					char letter;
+					if (ctr < 26)
+						letter = I2A(ctr);
+					else
+						letter = '0' + ctr - 26;
+					sprintf(dummy, "%c)",letter);
+				}
+				x1 = ((ctr < EATER_EXT/2) ? x : x + 40);
+				y1 = ((ctr < EATER_EXT/2) ? y + ctr : y + ctr - EATER_EXT/2);
+				level = (tval == TV_ROD ? k_info[k_idx].level * 5 / 6 - 5 : k_info[k_idx].level);
+				chance = level * 4 / 5 + 20;
+				chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
+				level /= 2;
+				if (p_ptr->lev > level)
+				{
+					chance -= 3 * (p_ptr->lev - level);
+				}
+				chance += p_ptr->to_m_chance;
+				if (p_ptr->heavy_spell) chance += 20;
+				if(p_ptr->dec_mana && p_ptr->easy_spell) chance-=4;
+				else if (p_ptr->easy_spell) chance-=3;
+				else if (p_ptr->dec_mana) chance-=2;
+				chance = MAX(chance, adj_mag_fail[p_ptr->stat_ind[mp_ptr->spell_stat]]);
+				/* Stunning makes spells harder */
+				if (p_ptr->stun > 50) chance += 25;
+				else if (p_ptr->stun) chance += 15;
+
+				if (chance > 95) chance = 95;
+
+				if(p_ptr->dec_mana) chance--;
+				if (p_ptr->heavy_spell) chance += 5;
+
+				col = TERM_WHITE;
+
+				if (k_idx)
+				{
+					if (tval == TV_ROD)
+					{
+						strcat(dummy, format(
+#ifdef JP
+							       " %-22.22s 充填:%2d/%2d%3d%%",
+#else
+							       " %-22.22s   (%2d/%2d) %3d%%",
+#endif
+							       k_name + k_info[k_idx].name, 
+							       p_ptr->magic_num1[ctr+ext] ? 
+							       (p_ptr->magic_num1[ctr+ext] - 1) / (EATER_ROD_CHARGE * k_info[k_idx].pval) +1 : 0, 
+							       p_ptr->magic_num2[ctr+ext], chance));
+						if (p_ptr->magic_num1[ctr+ext] > k_info[k_idx].pval * (p_ptr->magic_num2[ctr+ext]-1) * EATER_ROD_CHARGE) col = TERM_RED;
+					}
+					else
+					{
+						strcat(dummy, format(" %-22.22s    %2d/%2d %3d%%", k_name + k_info[k_idx].name, (s16b)(p_ptr->magic_num1[ctr+ext]/EATER_CHARGE), p_ptr->magic_num2[ctr+ext], chance));
+						if (p_ptr->magic_num1[ctr+ext] < EATER_CHARGE) col = TERM_RED;
+					}
+				}
+				else
+					strcpy(dummy, "");
+				c_prt(col, dummy, y1, x1);
+			}
+		}
+
+		if(!get_com(out_val, &choice, FALSE)) break; 
 
 		if (use_menu && choice != ' ')
 		{
@@ -6826,131 +6934,25 @@ static bool select_magic_eater(int mode)
 				}
 			}
 		}
+
 		/* Request redraw */
-		if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && ask))
+		if (use_menu && ask) continue;
+
+		/* Request redraw */
+		if (!use_menu && ((choice == ' ') || (choice == '*') || (choice == '?')))
 		{
-			/* Show the list */
-			if (!redraw || use_menu)
-			{
-				byte y, x = 0;
-				int ctr, chance;
-				int k_idx;
-				char dummy[80];
-				int x1, y1, level;
-				byte col;
-
-				strcpy(dummy, "");
-
-				/* Show list */
-				redraw = TRUE;
-
-				/* Save the screen */
-				if (!use_menu) screen_save();
-
-				for (y = 1; y < 20; y++)
-					prt("", y, x);
-
-				y = 1;
-
-				/* Print header(s) */
-#ifdef JP
-				prt(format("                           %s 失率                           %s 失率", (tval == TV_ROD ? "  状態  " : "使用回数"), (tval == TV_ROD ? "  状態  " : "使用回数")), y++, x);
-#else
-				prt(format("                           %s Fail                           %s Fail", (tval == TV_ROD ? "  Stat  " : " Charges"), (tval == TV_ROD ? "  Stat  " : " Charges")), y++, x);
-#endif
-
-				/* Print list */
-				for (ctr = 0; ctr < EATER_EXT; ctr++)
-				{
-					if (!p_ptr->magic_num2[ctr+ext]) continue;
-
-					k_idx = lookup_kind(tval, ctr);
-
-					if (use_menu)
-					{
-						if (ctr == (menu_line-1))
-#ifdef JP
-							strcpy(dummy, "》");
-#else
-							strcpy(dummy, "> ");
-#endif
-						else strcpy(dummy, "  ");
-						
-					}
-					/* letter/number for power selection */
-					else
-					{
-						char letter;
-						if (ctr < 26)
-							letter = I2A(ctr);
-						else
-							letter = '0' + ctr - 26;
-						sprintf(dummy, "%c)",letter);
-					}
-					x1 = ((ctr < EATER_EXT/2) ? x : x + 40);
-					y1 = ((ctr < EATER_EXT/2) ? y + ctr : y + ctr - EATER_EXT/2);
-					level = (tval == TV_ROD ? k_info[k_idx].level * 5 / 6 - 5 : k_info[k_idx].level);
-					chance = level * 4 / 5 + 20;
-					chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
-					level /= 2;
-					if (p_ptr->lev > level)
-					{
-						chance -= 3 * (p_ptr->lev - level);
-					}
-					chance += p_ptr->to_m_chance;
-					if (p_ptr->heavy_spell) chance += 20;
-					if(p_ptr->dec_mana && p_ptr->easy_spell) chance-=4;
-					else if (p_ptr->easy_spell) chance-=3;
-					else if (p_ptr->dec_mana) chance-=2;
-					chance = MAX(chance, adj_mag_fail[p_ptr->stat_ind[mp_ptr->spell_stat]]);
-					/* Stunning makes spells harder */
-					if (p_ptr->stun > 50) chance += 25;
-					else if (p_ptr->stun) chance += 15;
-
-					if (chance > 95) chance = 95;
-
-					if(p_ptr->dec_mana) chance--;
-					if (p_ptr->heavy_spell) chance += 5;
-
-					col = TERM_WHITE;
-
-					if (k_idx)
-					{
-						if (tval == TV_ROD)
-						{
-strcat(dummy, format(
-#ifdef JP
-	" %-22.22s 充填:%2d/%2d%3d%%",
-#else
-	" %-22.22s   (%2d/%2d) %3d%%",
-#endif
-	k_name + k_info[k_idx].name, 
-	p_ptr->magic_num1[ctr+ext] ? 
-	(p_ptr->magic_num1[ctr+ext] - 1) / (EATER_ROD_CHARGE * k_info[k_idx].pval) +1 : 0, 
-	p_ptr->magic_num2[ctr+ext], chance));
-							if (p_ptr->magic_num1[ctr+ext] > k_info[k_idx].pval * (p_ptr->magic_num2[ctr+ext]-1) * EATER_ROD_CHARGE) col = TERM_RED;
-						}
-						else
-						{
-							strcat(dummy, format(" %-22.22s    %2d/%2d %3d%%", k_name + k_info[k_idx].name, (s16b)(p_ptr->magic_num1[ctr+ext]/EATER_CHARGE), p_ptr->magic_num2[ctr+ext], chance));
-							if (p_ptr->magic_num1[ctr+ext] < EATER_CHARGE) col = TERM_RED;
-						}
-					}
-					else
-						strcpy(dummy, "");
-					c_prt(col, dummy, y1, x1);
-				}
-			}
-
 			/* Hide the list */
-			else
+			if (request_list)
 			{
 				/* Hide list */
-				redraw = FALSE;
-
+				request_list = FALSE;
+				
 				/* Restore the screen */
 				screen_load();
+				screen_save();
 			}
+			else
+				request_list = TRUE;
 
 			/* Redo asking */
 			continue;
@@ -6984,7 +6986,7 @@ strcat(dummy, format(
 			continue;
 		}
 
-		if (mode == 0)
+		if (!only_browse)
 		{
 			/* Verify it */
 			if (ask)
@@ -7031,12 +7033,40 @@ strcat(dummy, format(
 			}
 		}
 
+		/* Browse */
+		else
+		{
+			int line, j;
+			char temp[70 * 20];
+
+			/* Clear lines, position cursor  (really should use strlen here) */
+			Term_erase(7, 23, 255);
+			Term_erase(7, 22, 255);
+			Term_erase(7, 21, 255);
+			Term_erase(7, 20, 255);
+
+			roff_to_buf(k_text + k_info[lookup_kind(tval, i)].text, 62, temp);
+			for (j = 0, line = 21; temp[j]; j += 1 + strlen(&temp[j]))
+			{
+				prt(&temp[j], line, 10);
+				line++;
+			}
+	
+#ifdef JP
+			prt("何かキーを押して下さい。",0,0);
+#else
+			prt("Hit any key.",0,0);
+#endif
+			(void)inkey();
+			continue;
+		}
+
 		/* Stop the loop */
 		flag = TRUE;
 	}
 
 	/* Restore the screen */
-	if (redraw) screen_load();
+	screen_load();
 
 	if (!flag) return -1;
 
@@ -7046,13 +7076,17 @@ strcat(dummy, format(
 	return ext+i;
 }
 
-void do_cmd_magic_eater(void)
+
+/*
+ *  Use eaten rod, wand or staff
+ */
+void do_cmd_magic_eater(bool only_browse)
 {
 	int item, dir, chance, level, k_idx, tval, sval;
 	bool use_charge = TRUE;
 
 	/* Not when confused */
-	if (p_ptr->confused)
+	if (!only_browse && p_ptr->confused)
 	{
 #ifdef JP
 msg_print("混乱していて唱えられない！");
@@ -7063,7 +7097,7 @@ msg_print("混乱していて唱えられない！");
 		return;
 	}
 
-	item = select_magic_eater(0);
+	item = select_magic_eater(only_browse);
 	if (item == -1)
 	{
 		energy_use = 0;
