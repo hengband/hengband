@@ -4021,7 +4021,7 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 			do_cmd_save_game(TRUE);
 	}
 
-	if (mon_fight)
+	if (mon_fight && !ignore_unview)
 	{
 #ifdef JP
 		msg_print("何かが聞こえた。");

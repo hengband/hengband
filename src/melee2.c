@@ -2548,13 +2548,16 @@ static void process_monster(int m_idx)
 
 	if (gets_angry)
 	{
-		char m_name[80];
-		monster_desc(m_name, m_ptr, 0);
+		if (is_pet(m_ptr) || see_m)
+		{
+			char m_name[80];
+			monster_desc(m_name, m_ptr, is_pet(m_ptr) ? MD_ASSUME_VISIBLE : 0);
 #ifdef JP
-msg_format("%^sは突然敵にまわった！", m_name);
+			msg_format("%^sは突然敵にまわった！", m_name);
 #else
-		msg_format("%^s suddenly becomes hostile!", m_name);
+			msg_format("%^s suddenly becomes hostile!", m_name);
 #endif
+		}
 
 		set_hostile(m_ptr);
 	}
