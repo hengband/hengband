@@ -123,6 +123,7 @@
 #if 0
 char *XSetIMValues(XIM, ...); /* Hack for XFree86 4.0 */
 #endif
+#include <X11/Xatom.h>
 #endif /* __MAKEDEPEND__ */
 
 
@@ -1790,6 +1791,38 @@ struct term_data
 static term_data data[MAX_TERM_DATA];
 
 
+/* Use short names for the most commonly used elements of various structures. */
+#define DPY (Metadpy->dpy)
+#define WIN (Infowin->win)
+
+
+/* Describe a set of co-ordinates. */
+typedef struct co_ord co_ord;
+struct co_ord
+{
+	int x;
+	int y;
+};
+
+
+/*
+ * A special structure to store information about the text currently
+ * selected.
+ */
+typedef struct x11_selection_type x11_selection_type;
+struct x11_selection_type
+{
+	bool select; /* The selection is currently in use. */
+	bool drawn; /* The selection is currently displayed. */
+	term *t; /* The window where the selection is found. */
+	co_ord init; /* The starting co-ordinates. */
+	co_ord cur; /* The end co-ordinates (the current ones if still copying). */
+	co_ord old; /* The previous end co-ordinates. */
+	Time time; /* The time at which the selection was finalised. */
+};
+
+static x11_selection_type s_ptr[1];
+
 
 /*
  * Process a keypress event
@@ -1935,6 +1968,405 @@ static void react_keypress(XKeyEvent *xev)
 }
 
 
+/*
+ * Find the square a particular pixel is part of.
+ */
+static void pixel_to_square(int * const x, int * const y,
+	const int ox, const int oy)
+{
+	(*x) = (ox - Infowin->ox) / Infofnt->wid;
+	(*y) = (oy - Infowin->oy) / Infofnt->hgt;
+}
+
+/*
+ * Find the pixel at the top-left corner of a square.
+ */
+static void square_to_pixel(int * const x, int * const y,
+	const int ox, const int oy)
+{
+	(*x) = ox * Infofnt->wid + Infowin->ox;
+	(*y) = oy * Infofnt->hgt + Infowin->oy;
+}
+
+/*
+ * Convert co-ordinates from starting corner/opposite corner to minimum/maximum.
+ */
+static void sort_co_ord(co_ord *min, co_ord *max,
+	const co_ord *b, const co_ord *a)
+{
+	min->x = MIN(a->x, b->x);
+	min->y = MIN(a->y, b->y);
+	max->x = MAX(a->x, b->x);
+	max->y = MAX(a->y, b->y);
+}
+
+/*
+ * Remove the selection by redrawing it.
+ */
+static void mark_selection_clear(int x1, int y1, int x2, int y2)
+{
+	Term_redraw_section(x1,y1,x2,y2);
+}
+
+/*
+ * Select an area by drawing a grey box around it.
+ * NB. These two functions can cause flicker as the selection is modified,
+ * as the game redraws the entire marked section.
+ */
+static void mark_selection_mark(int x1, int y1, int x2, int y2)
+{
+	square_to_pixel(&x1, &y1, x1, y1);
+	square_to_pixel(&x2, &y2, x2, y2);
+	XDrawRectangle(Metadpy->dpy, Infowin->win, clr[2]->gc, x1, y1,
+		x2-x1+Infofnt->wid - 1, y2-y1+Infofnt->hgt - 1);
+}
+
+/*
+ * Mark a selection by drawing boxes around it (for now).
+ */
+static void mark_selection(void)
+{
+	co_ord min, max;
+	term *old = Term;
+	bool draw = s_ptr->select;
+	bool clear = s_ptr->drawn;
+
+	/* Open the correct term if necessary. */
+	if (s_ptr->t != old) Term_activate(s_ptr->t);
+
+	if (clear)
+	{
+		sort_co_ord(&min, &max, &s_ptr->init, &s_ptr->old);
+		mark_selection_clear(min.x, min.y, max.x, max.y);
+	}
+	if (draw)
+	{
+		sort_co_ord(&min, &max, &s_ptr->init, &s_ptr->cur);
+		mark_selection_mark(min.x, min.y, max.x, max.y);
+	}
+
+	/* Finish on the current term. */
+	if (s_ptr->t != old) Term_activate(old);
+
+	s_ptr->old.x = s_ptr->cur.x;
+	s_ptr->old.y = s_ptr->cur.y;
+	s_ptr->drawn = s_ptr->select;
+}
+
+/*
+ * Forget a selection for one reason or another.
+ */
+static void copy_x11_release(void)
+{
+	/* Deselect the current selection. */
+	s_ptr->select = FALSE;
+
+	/* Remove its graphical represesntation. */
+	mark_selection();
+}
+
+/*
+ * Start to select some text on the screen.
+ */
+static void copy_x11_start(int x, int y)
+{
+	if (s_ptr->select) copy_x11_release();
+
+	/* Remember where the selection started. */
+	s_ptr->t = Term;
+	s_ptr->init.x = s_ptr->cur.x = s_ptr->old.x = x;
+	s_ptr->init.y = s_ptr->cur.y = s_ptr->old.y = y;
+}
+
+/*
+ * Respond to movement of the mouse when selecting text.
+ */
+static void copy_x11_cont(int x, int y, unsigned int buttons)
+{
+	/* Use the nearest square within bounds if the mouse is outside. */
+	x = MIN(MAX(x, 0), Term->wid-1);
+	y = MIN(MAX(y, 0), Term->hgt-1);
+
+	/* The left mouse button isn't pressed. */
+	if (~buttons & Button1Mask) return;
+
+	/* Not a selection in this window. */
+	if (s_ptr->t != Term) return;
+
+	/* Not enough movement. */
+	if (x == s_ptr->old.x && y == s_ptr->old.y && s_ptr->select) return;
+
+	/* Something is being selected. */
+	s_ptr->select = TRUE;
+
+	/* Track the selection. */
+	s_ptr->cur.x = x;
+	s_ptr->cur.y = y;
+
+	/* Hack - display it inefficiently. */
+	mark_selection();
+}
+
+/*
+ * Respond to release of the left mouse button by putting the selected text in
+ * the primary buffer.
+ */
+static void copy_x11_end(const Time time)
+{
+	/* No selection. */
+	if (!s_ptr->select) return;
+
+	/* Not a selection in this window. */
+	if (s_ptr->t != Term) return;
+
+	/* Remember when the selection was finalised. */
+	s_ptr->time = time;
+
+	/* Acquire the primary selection. */
+	XSetSelectionOwner(Metadpy->dpy, XA_PRIMARY, Infowin->win, time);
+	if (XGetSelectionOwner(Metadpy->dpy, XA_PRIMARY) != Infowin->win)
+	{
+		/* Failed to acquire the selection, so forget it. */
+		/* bell("Failed to acquire primary buffer."); */
+		s_ptr->select = FALSE;
+		mark_selection();
+	}
+}
+
+/*
+ * Send a message to request that the PRIMARY buffer be sent here.
+ */
+static void paste_x11_request(const Time time)
+{
+	/* Check the owner. */
+	if (XGetSelectionOwner(Metadpy->dpy, XA_PRIMARY) == None)
+	{
+		/* No selection. */
+		/* bell("No selection found."); */
+		return;
+	}
+
+	/* Request the event as a STRING. */
+	XConvertSelection(DPY, XA_PRIMARY, XA_STRING, XA_STRING, WIN, time);
+}
+
+/*
+ * Add a character to a string in preparation for sending it to another
+ * client as a STRING.
+ * This doesn't change anything, as clients tend not to have difficulty in
+ * receiving this format (although the standard specifies a restricted set).
+ * Strings do not have a colour.
+ */
+static int add_char_string(char *buf, byte a, char c)
+{
+	(void)a;
+
+	*buf = c;
+	return 1;
+}
+
+static bool paste_x11_send_text(XSelectionRequestEvent *rq, int (*add)(char *, byte, char))
+{
+	char buf[1024];
+	co_ord max, min;
+	int x,y,l;
+	byte a;
+	char c;
+
+	/* Too old, or incorrect call. */
+	if (rq->time < s_ptr->time || !add) return FALSE;
+
+	/* Work out which way around to paste. */
+	sort_co_ord(&min, &max, &s_ptr->init, &s_ptr->cur);
+
+	/* Paranoia. */
+	if (XGetSelectionOwner(DPY, XA_PRIMARY) != WIN)
+	{
+		/* bell("Someone stole my selection!"); */
+		return FALSE;
+	}
+
+	/* Delete the old value of the property. */
+	XDeleteProperty(DPY, rq->requestor, rq->property);
+
+	for (y = 0; y < Term->hgt; y++)
+	{
+		if (y < min.y) continue;
+		if (y > max.y) break;
+
+		for (x = l = 0; x < Term->wid; x++)
+		{
+			if (x < min.x) continue;
+			if (x > max.x) break;
+
+			/* Find the character. */
+			Term_what(x, y, &a, &c);
+
+			/* Add it. */
+			l += (*add)(buf+l, a, c);
+		}
+
+#if 0
+		/* Terminate all but the last line in an appropriate way. */
+		if (y != max.y) l += (*add)(buf+l, TERM_WHITE, '\n');
+#else
+		/* Terminate all line unless single line message. */
+		if (min.y != max.y) l += (*add)(buf+l, TERM_WHITE, '\n');
+#endif
+
+		/* Send the (non-empty) string. */
+		XChangeProperty(DPY, rq->requestor, rq->property, rq->target, 8,
+			PropModeAppend, (byte*)buf, l);
+	}
+	return TRUE;
+}
+
+static Atom xa_targets, xa_timestamp;
+
+/*
+ * Set the required variable atoms at start-up to avoid errors later.
+ */
+static void set_atoms(void)
+{
+	xa_targets = XInternAtom(DPY, "TARGETS", False);
+	xa_timestamp = XInternAtom(DPY, "TIMESTAMP", False);
+}
+
+/*
+ * Send some text requested by another X client.
+ */
+static void paste_x11_send(XSelectionRequestEvent *rq)
+{
+	XEvent event;
+	XSelectionEvent *ptr = &(event.xselection);
+
+	/* Set the event parameters. */
+	ptr->type = SelectionNotify;
+	ptr->property = rq->property;
+	ptr->display = rq->display;
+	ptr->requestor = rq->requestor;
+	ptr->selection = rq->selection;
+	ptr->target = rq->target;
+	ptr->time = rq->time;
+
+	/* Paste the appropriate information for each target type.
+	 * Note that this currently rejects MULTIPLE targets.
+	 */
+
+	if (rq->target == XA_STRING)
+	{
+		if (!paste_x11_send_text(rq, add_char_string))
+			ptr->property = None;
+	}
+	else if (rq->target == xa_targets)
+	{
+		Atom target_list[2];
+		target_list[0] = XA_STRING;
+		target_list[1] = xa_targets;
+		XChangeProperty(DPY, rq->requestor, rq->property, rq->target,
+			(8 * sizeof(target_list[0])), PropModeReplace,
+			(unsigned char *)target_list,
+			(sizeof(target_list) / sizeof(target_list[0])));
+	}
+	else if (rq->target == xa_timestamp)
+	{
+		XChangeProperty(DPY, rq->requestor, rq->property, rq->target,
+			(8 * sizeof(Time)), PropModeReplace,
+			(unsigned char *)s_ptr->time, 1);
+	}
+	else
+	{
+		ptr->property = None;
+	}
+
+	/* Send whatever event we're left with. */
+	XSendEvent(DPY, rq->requestor, FALSE, NoEventMask, &event);
+}
+
+/*
+ * Add the contents of the PRIMARY buffer to the input queue.
+ *
+ * Hack - This doesn't use the "time" of the event, and so accepts anything a
+ * client tries to send it.
+ */
+static void paste_x11_accept(const XSelectionEvent *ptr)
+{
+	unsigned long offset, left;
+
+	/* Failure. */
+	if (ptr->property == None)
+	{
+		/* bell("Paste failure (remote client could not send)."); */
+		return;
+	}
+
+	if (ptr->selection != XA_PRIMARY)
+	{
+		/* bell("Paste failure (remote client did not send primary selection)."); */
+		return;
+	}
+
+	if (ptr->target != XA_STRING)
+	{
+		/* bell("Paste failure (selection in unknown format)."); */
+		return;
+	}
+
+	for (offset = 0; ; offset += left)
+	{
+		errr err;
+
+		/* A pointer for the pasted information. */
+		unsigned char *data;
+
+		Atom type;
+		int fmt;
+		unsigned long nitems;
+
+		/* Set data to the string, and catch errors. */
+		if (XGetWindowProperty(Metadpy->dpy, Infowin->win, XA_STRING, offset,
+			32767, TRUE, XA_STRING, &type, &fmt, &nitems, &left, &data)
+			!= Success) break;
+
+		/* Paste the text. */
+		err = type_string((char*)data, nitems);
+
+		/* Free the data pasted. */
+		XFree(data);
+
+		/* No room. */
+		if (err == PARSE_ERROR_OUT_OF_MEMORY)
+		{
+			/* bell("Paste failure (too much text selected)."); */
+			break;
+		}
+		/* Paranoia? - strange errors. */
+		else if (err)
+		{
+			break;
+		}
+
+		/* Pasted everything. */
+		if (!left) return;
+	}
+
+	/* An error has occurred, so free the last bit of data before returning. */
+	XFree(data);
+}
+
+/*
+ * Handle various events conditional on presses of a mouse button.
+ */
+static void handle_button(Time time, int x, int y, int button,
+	bool press)
+{
+	/* The co-ordinates are only used in Angband format. */
+	pixel_to_square(&x, &y, x, y);
+
+	if (press && button == 1) copy_x11_start(x, y);
+	if (!press && button == 1) copy_x11_end(time);
+	if (!press && button == 2) paste_x11_request(time);
+}
 
 
 /*
@@ -1949,7 +2381,7 @@ static errr CheckEvent(bool wait)
 	term_data *td = NULL;
 	infowin *iwin = NULL;
 
-	int i, x, y;
+	int i;
 
 #ifdef USE_XIM
  redo_checkevent:
@@ -1957,6 +2389,13 @@ static errr CheckEvent(bool wait)
 
 	/* Do not wait unless requested */
 	if (!wait && !XPending(Metadpy->dpy)) return (1);
+
+	/*
+	 * Hack - redraw the selection, if needed.
+	 * This doesn't actually check that one of its squares was drawn to,
+	 * only that this may have happened.
+	 */
+	if (s_ptr->select && !s_ptr->drawn) mark_selection();
 
 	/* Load the Event */
 	XNextEvent(Metadpy->dpy, xev);
@@ -2041,13 +2480,16 @@ static errr CheckEvent(bool wait)
 	/* Switch on the Type */
 	switch (xev->type)
 	{
-
-#if 0
-
 		case ButtonPress:
 		case ButtonRelease:
 		{
-			int z = 0;
+			bool press = (xev->type == ButtonPress);
+
+			/* Where is the mouse */
+			int x = xev->xbutton.x;
+			int y = xev->xbutton.y;
+
+			int z;
 
 			/* Which button is involved */
 			if (xev->xbutton.button == Button1) z = 1;
@@ -2055,12 +2497,10 @@ static errr CheckEvent(bool wait)
 			else if (xev->xbutton.button == Button3) z = 3;
 			else if (xev->xbutton.button == Button4) z = 4;
 			else if (xev->xbutton.button == Button5) z = 5;
-
-			/* Where is the mouse */
-			x = xev->xbutton.x;
-			y = xev->xbutton.y;
+			else z = 0;
 
 			/* XXX Handle */
+			handle_button(xev->xbutton.time, x, y, z, press);
 
 			break;
 		}
@@ -2068,10 +2508,6 @@ static errr CheckEvent(bool wait)
 		case EnterNotify:
 		case LeaveNotify:
 		{
-			/* Where is the mouse */
-			x = xev->xcrossing.x;
-			y = xev->xcrossing.y;
-
 			/* XXX Handle */
 
 			break;
@@ -2080,11 +2516,40 @@ static errr CheckEvent(bool wait)
 		case MotionNotify:
 		{
 			/* Where is the mouse */
-			x = xev->xmotion.x;
-			y = xev->xmotion.y;
+			int x = xev->xmotion.x;
+			int y = xev->xmotion.y;
+			unsigned int z = xev->xmotion.state;
+
+			/* Convert to co-ordinates Angband understands. */
+			pixel_to_square(&x, &y, x, y);
+
+			/* Highlight the current square, if appropriate. */
+			/* highlight_square(window, y, x); */
+
+			/* Alter the selection if appropriate. */
+			copy_x11_cont(x, y, z);
 
 			/* XXX Handle */
 
+			break;
+		}
+
+		case SelectionNotify:
+		{
+			paste_x11_accept(&(xev->xselection));
+			break;
+		}
+
+		case SelectionRequest:
+		{
+			paste_x11_send(&(xev->xselectionrequest));
+			break;
+		}
+
+		case SelectionClear:
+		{
+			s_ptr->select = FALSE;
+			mark_selection();
 			break;
 		}
 
@@ -2094,14 +2559,8 @@ static errr CheckEvent(bool wait)
 			break;
 		}
 
-#endif
-
 		case KeyPress:
 		{
-			/* Save the mouse location */
-			x = xev->xkey.x;
-			y = xev->xkey.y;
-
 			/* Hack -- use "old" term */
 			Term_activate(&old_td->t);
 
@@ -2405,7 +2864,7 @@ static errr Term_xtra_x11(int n, int v)
 		case TERM_XTRA_LEVEL: return (Term_xtra_x11_level(v));
 
 		/* Clear the screen */
-		case TERM_XTRA_CLEAR: Infowin_wipe(); return (0);
+		case TERM_XTRA_CLEAR: Infowin_wipe(); s_ptr->drawn = FALSE; return (0);
 
 		/* Delay for some milliseconds */
 		case TERM_XTRA_DELAY: usleep(1000 * v); return (0);
@@ -2491,6 +2950,9 @@ static errr Term_wipe_x11(int x, int y, int n)
 	/* Mega-Hack -- Erase some space */
 	Infofnt_text_non(x, y, "", n);
 
+	/* Redraw the selection if any, as it may have been obscured. (later) */
+	s_ptr->drawn = FALSE;
+
 	/* Success */
 	return (0);
 }
@@ -2506,6 +2968,9 @@ static errr Term_text_x11(int x, int y, int n, byte a, cptr s)
 
 	/* Draw the text */
 	Infofnt_text_std(x, y, s, n);
+
+	/* Redraw the selection if any, as it may have been obscured. (later) */
+	s_ptr->drawn = FALSE;
 
 	/* Success */
 	return (0);
@@ -2636,6 +3101,9 @@ static errr Term_pict_x11(int x, int y, int n, const byte *ap, const char *cp)
 
 #endif /* USE_TRANSPARENCY */
 	}
+
+	/* Redraw the selection if any, as it may have been obscured. (later) */
+	s_ptr->drawn = FALSE;
 
 	/* Success */
 	return (0);
@@ -2966,9 +3434,9 @@ static errr term_data_init(term_data *td, int i)
 
 	/* Ask for certain events */
 #if defined(USE_XIM)
-	Infowin_set_mask(ExposureMask | StructureNotifyMask | KeyPressMask | FocusChangeMask);
+	Infowin_set_mask(ExposureMask | StructureNotifyMask | KeyPressMask | PointerMotionMask | ButtonPressMask | ButtonReleaseMask | FocusChangeMask);
 #else
-	Infowin_set_mask(ExposureMask | StructureNotifyMask | KeyPressMask);
+	Infowin_set_mask(ExposureMask | StructureNotifyMask | KeyPressMask | PointerMotionMask | ButtonPressMask | ButtonReleaseMask);
 #endif
 
 	/* Set the window name */
@@ -3219,6 +3687,10 @@ errr init_x11(int argc, char *argv[])
 		/* Initialize the color */
 		Infoclr_init_ppn(pixel, Metadpy->bg, "cpy", 0);
 	}
+
+
+	/* Prepare required atoms. */
+	set_atoms();
 
 
 	/* Initialize the windows */
