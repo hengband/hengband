@@ -1837,6 +1837,71 @@ static cptr pit_subtype_string(int type, bool nest)
 }
 
 
+/* A struct for nest monster information with cheat_hear */
+typedef struct
+{
+	s16b r_idx;
+	bool used;
+}
+nest_mon_info_type;
+
+
+/*
+ * Comp function for sorting nest monster information
+ */
+static bool ang_sort_comp_nest_mon_info(vptr u, vptr v, int a, int b)
+{
+	nest_mon_info_type *nest_mon_info = (nest_mon_info_type *)u;
+	int w1 = nest_mon_info[a].r_idx;
+	int w2 = nest_mon_info[b].r_idx;
+	monster_race *r1_ptr = &r_info[w1];
+	monster_race *r2_ptr = &r_info[w2];
+	int z1, z2;
+
+	/* Unused */
+	(void)v;
+
+	/* Extract used info */
+	z1 = nest_mon_info[a].used;
+	z2 = nest_mon_info[b].used;
+
+	/* Compare used status */
+	if (z1 < z2) return FALSE;
+	if (z1 > z2) return TRUE;
+
+	/* Compare levels */
+	if (r1_ptr->level < r2_ptr->level) return TRUE;
+	if (r1_ptr->level > r2_ptr->level) return FALSE;
+
+	/* Compare experience */
+	if (r1_ptr->mexp < r2_ptr->mexp) return TRUE;
+	if (r1_ptr->mexp > r2_ptr->mexp) return FALSE;
+
+	/* Compare indexes */
+	return w1 <= w2;
+}
+
+
+/*
+ * Swap function for sorting nest monster information
+ */
+static void ang_sort_swap_nest_mon_info(vptr u, vptr v, int a, int b)
+{
+	nest_mon_info_type *nest_mon_info = (nest_mon_info_type *)u;
+	nest_mon_info_type holder;
+
+	/* Unused */
+	(void)v;
+
+	/* Swap */
+	holder = nest_mon_info[a];
+	nest_mon_info[a] = nest_mon_info[b];
+	nest_mon_info[b] = holder;
+}
+
+
+#define NUM_NEST_MON_TYPE 64
+
 /*
  * Type 5 -- Monster nests
  *
@@ -1860,7 +1925,7 @@ static void build_type5(int by0, int bx0, bool pit)
 {
 	int y, x, y1, x1, y2, x2, xval, yval;
 	int i;
-	int what[64];
+	nest_mon_info_type nest_mon_info[NUM_NEST_MON_TYPE];
 
 	int align = 0;
 
@@ -1967,7 +2032,7 @@ static void build_type5(int by0, int bx0, bool pit)
 	get_mon_num_prep(n_ptr->hook_func, NULL);
 
 	/* Pick some monster types */
-	for (i = 0; i < 64; i++)
+	for (i = 0; i < NUM_NEST_MON_TYPE; i++)
 	{
 		int r_idx = 0, attempts = 100;
 
@@ -1994,7 +2059,8 @@ static void build_type5(int by0, int bx0, bool pit)
 		if (r_info[r_idx].flags3 & RF3_GOOD) align++;
 		else if (r_info[r_idx].flags3 & RF3_EVIL) align--;
 
-		what[i] = r_idx;
+		nest_mon_info[i].r_idx = r_idx;
+		nest_mon_info[i].used = FALSE;
 	}
 
 	/* Describe */
@@ -2022,10 +2088,34 @@ static void build_type5(int by0, int bx0, bool pit)
 	{
 		for (x = xval - 9; x <= xval + 9; x++)
 		{
-			int r_idx = what[randint0(64)];
+			int r_idx;
+
+			i = randint0(NUM_NEST_MON_TYPE);
+			r_idx = nest_mon_info[i].r_idx;
 
 			/* Place that "random" monster (no groups) */
 			(void)place_monster_aux(0, y, x, r_idx, 0L);
+
+			nest_mon_info[i].used = TRUE;
+		}
+	}
+
+	if (cheat_room && cheat_hear)
+	{
+		ang_sort_comp = ang_sort_comp_nest_mon_info;
+		ang_sort_swap = ang_sort_swap_nest_mon_info;
+		ang_sort(nest_mon_info, NULL, NUM_NEST_MON_TYPE);
+
+		/* Dump the entries (prevent multi-printing) */
+		for (i = 0; i < NUM_NEST_MON_TYPE; i++)
+		{
+			if (!nest_mon_info[i].used) break;
+			for (; i < NUM_NEST_MON_TYPE - 1; i++)
+			{
+				if (nest_mon_info[i].r_idx != nest_mon_info[i + 1].r_idx) break;
+				if (!nest_mon_info[i + 1].used) break;
+			}
+			msg_print(r_name + r_info[nest_mon_info[i].r_idx].name);
 		}
 	}
 }
