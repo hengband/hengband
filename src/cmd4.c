@@ -2730,9 +2730,6 @@ void do_cmd_pref(void)
 
 void do_cmd_reload_autopick(void)
 {
-	char buf[80];
-	errr err;
-
 #ifdef JP
 	if (!get_check("自動拾い設定ファイルをロードしますか? ")) return;
 #else
