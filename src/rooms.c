@@ -2367,7 +2367,7 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
 				case '9':
 				{
 					monster_level = base_level + 9;
-					place_monster(y, x, TRUE, TRUE);
+					place_monster(y, x, TRUE, FALSE);
 					monster_level = base_level;
 					object_level = base_level + 7;
 					place_object(y, x, TRUE, FALSE);
@@ -2379,7 +2379,7 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
 				case '8':
 				{
 					monster_level = base_level + 40;
-					place_monster(y, x, TRUE, TRUE);
+					place_monster(y, x, TRUE, FALSE);
 					monster_level = base_level;
 					object_level = base_level + 20;
 					place_object(y, x, TRUE, TRUE);
