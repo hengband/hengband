@@ -726,7 +726,7 @@ Command your pets (p)
      you disallow them to pick up anything.
 
 Output list of random artifacts (^V)
-     This command write file named "randifact.txt" to your user
+     This command writes file named "randifact.txt" to your user
      directory with list of all random artifact you have.
 
 -- 

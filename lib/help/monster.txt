@@ -73,7 +73,7 @@ will probably get cleaned up.
 === Monster Memories ===
 
 Because there are so many monsters and because often different monsters
-share similar colors and symbols, it is very difficult to keep track of
+share similar colors and symbols; it is very difficult to keep track of
 the capabilities of various creatures. Luckily, Hengband automatically
 keeps track of your experiences with a particular creature.
  
@@ -86,14 +86,14 @@ that fact is noted.
 
 If you have killed enough of a particular creature, or suffered enough
 attacks, recalling the monster memory may also provide you with
-information not otherwise available, such as a armor class or hit dice.
+information not otherwise available, such as an armor class or hit dice.
 These are not explained, but may be useful to give the relative danger
 of each creature.
  
 Your monster memory may be accessed by pressing '/' and then entering
 the symbol you wish to research. Each monster with that symbol of which
 you have some knowledge will displayed in turn beginning with the
-deepest. Alternatively, you may enter targetting mode by pressing '*'
+deepest. Alternatively, you may enter targeting mode by pressing '*'
 and, with the cursor over the creature in question, press 'r' to
 recall details.
 
@@ -106,7 +106,7 @@ character.
 ***** <Uniques>
 === Unique Monsters ===
 
-The monsters in Hengband are unique in that each variety of monster
+The monsters in Hengband are unique in that each variety of monsters
 has its own set of physical and, where applicable, magical abilities.
 However, some monsters in Hengband are truly unique and this group
 of monsters are often referred to as "Uniques".

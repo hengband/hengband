@@ -27,7 +27,7 @@ cptr spell_category_name(int tval)
 		return "¼öÊ¸";
 #else
 	case TV_HISSATSU_BOOK:
-		return "arts";
+		return "art";
 	case TV_LIFE_BOOK:
 		return "prayer";
 	case TV_MUSIC_BOOK:

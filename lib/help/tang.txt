@@ -441,7 +441,7 @@ An arrow (1d5) (+0, +0) (26/26)
 
 The first number is the average damage per shot, and the second is
 average damage per round.  The two numbers can differ because the
-shooting weapons have differing energy requirements per shot (unlike
+shooting weapons have different energy requirements per shot (unlike
 melee weapons.)
 
 === On Slays ===
@@ -550,10 +550,10 @@ watchful for opportunities to get a double move on monsters, and be
 aware that they can do the same to you!  This rule change has a lot of 
 consequences; playing the game will teach them to you...
 
-Apart from this, things are pretty familar.  The amount of energy you 
+Apart from this, things are pretty familiar.  The amount of energy you 
 can gain each game turn is 10 for an average-speed player or monster, 
 can be almost 50 for very fast ones, and most actions you take cost 100 
-energy to perform.  The biggest exception are weapons of Extra Shots; 
+energy to perform.  The biggest exception is weapons of Extra Shots; 
 firing one of these takes less energy, making monsters appear to move 
 in slow motion.  
 

@@ -6849,7 +6849,7 @@ static int select_magic_eater(bool only_browse)
 			prt(format(" %s staff", (menu_line == 1) ? "> " : "  "), 2, 14);
 			prt(format(" %s wand", (menu_line == 2) ? "> " : "  "), 3, 14);
 			prt(format(" %s rod", (menu_line == 3) ? "> " : "  "), 4, 14);
-			prt("Which type of magic do you usu?", 0, 0);
+			prt("Which type of magic do you use?", 0, 0);
 #endif
 			choice = inkey();
 			switch(choice)

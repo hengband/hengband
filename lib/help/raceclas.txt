@@ -915,8 +915,8 @@ command("U"/"O").
     their special combat techniques when surrounded by an anti-magic
     barrier.  Berserkers, however, cannot use any magical devices or
     read any scrolls, and are hopeless at all non-combat skills.
-    Since Berserker Amberite or Spectres are quite easy to *win* with,
-    their scores are lowered.
+    Since Berserker Spectres are quite easy to *win* with, their 
+    scores are lowered.
 
     Berserkers use a unique system of techniques called 'Rage'.  They
     gain more techniques as they gain levels.  They use no magic:

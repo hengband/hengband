@@ -76,7 +76,7 @@ The world of Hengband includes five towns separated by a wilderness
 and many dungeons. Fixed quests (see below [d]) could be begun by
 entering certain buildings in the towns.
 
-While most people welcome these large world, they are not for everyone
+While most people welcome this large world, they are not for everyone
 and consequently, there are three possible town options in Hengband -
 the 'Standard' town(s), the 'Lite' town and the 'Vanilla' town. The
 default is the standard town and the lite town and the vanilla town
@@ -135,7 +135,7 @@ for computer efficiency reasons.
 --- The 'Vanilla' Town ---
 
 The vanilla town consists of the nine standard shops only and an
-impenetrable wall which surrounds the town. There are no other
+impenetrable wall which surrounds the town. There is no other
 embellishments. The special buildings and the fixed quests are
 unavailable if you select this option as is the wilderness.
 
@@ -149,7 +149,7 @@ to come out of the woodwork when excited. Blubbering idiots are a
 constant annoyance, but not harmful. Public drunks wander about the
 town singing, and are of no threat to anyone. Sneaky rogues who work
 for the black market are always greedily eyeing your backpack for
-potential new 'purchases'. . . And finally, what town would be complete
+potential new 'purchases'... And finally, what town would be complete
 without a swarm of half drunk warriors, who take offense or become
 annoyed just for the fun of it.
 
