@@ -122,6 +122,9 @@ bool teleport_away(int m_idx, int dis, bool dec_valour)
 	m_ptr->fy = ny;
 	m_ptr->fx = nx;
 
+	/* Forget the counter target */
+	reset_target(m_ptr);
+
 	/* Update the monster (new location) */
 	update_mon(m_idx, TRUE);
 
