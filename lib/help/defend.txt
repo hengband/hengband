@@ -1,6 +1,6 @@
 === Defending Yourself ===
  
-In Zangband, monsters may damage and otherwise harm you in a number of
+In Hengband, monsters may damage and otherwise harm you in a number of
 ways: in direct melee combat, by exploding next to you, by breathing
 on you and by casting spells. Some monsters referred to as "summoners"
 may not directly harm you but may summon other monsters to do their
@@ -59,7 +59,7 @@ no damage is the same as a miss. Two, good armor will absorb some of
 the damage that your character would have taken from normal attacks.
 Three, acid damage is reduced by wearing body armor (but the armor will
 be damaged instead). It is obvious that a high armor class is a must
-for surviving the deeper levels of Zangband. Note, however, that armor
+for surviving the deeper levels of Hengband. Note, however, that armor
 class by itself will not protect you from the side effects of monster
 melee attacks mentioned above.
 
@@ -91,7 +91,7 @@ not apply. Also, there is no saving throw against monster breaths. For
 these types of attacks, your only recourse it to find items or other
 means which grant you 'resistance' to that type of attack.
 
-In Zangband there are many forms of resistance which may be obtained
+In Hengband there are many forms of resistance which may be obtained
 either as bonuses from your equipment, as the result of casting a
 magical spell, activating certain artifacts or as the result of a
 mutation. Unfortunately, not all attacks available to monsters can be
@@ -146,11 +146,6 @@ and may grant resistance to certain forms of attack. Each Ego type may
 only be found on certain types of armor - for example, you can find a
 Shield of Elvenkind but not Boots of Elvenkind.
 
-Note: Zangband has extended the original Angband's concept of adding
-random abilities to the various Ego types considerably. These can be
-either guaranteed or have only a varying chance of being granted. (See
-'Randabil.spo' for details of the random powers of Ego Armor).
-
 
 --- Armor/Shields ---
 
@@ -189,6 +184,9 @@ of Reflection (Shields Only)
      These shields reflect missiles and bolt spells preventing damage
      to the player character and often damaging the originating
      monster. The reflection is not 100% effective but nearly so. 
+
+of Night and Day (Shields Only)
+     These shields provide resistance to light and darkness.
 
 --- Caps/Helms/Crowns ---
 
@@ -256,6 +254,12 @@ of Electricity
      These cloaks cannot be harmed by acid or electricity attacks. They
      also grant resistance to electricity and give out an electric
      aura.
+
+of the Bat
+     These very powerful cloaks grant speed, stealth, infravision,
+     levitation, ability to see invisible and resistance to
+     darkness. But in return for these ability, you will have large
+     penalty to to-hit and to-damage bonus.
 
 --- Gloves/Gauntlets/Sets of Cesti ---
 
@@ -412,7 +416,7 @@ Shards
     have sound resistance and not by shard resistance.
 
 Nexus
-    Nexus attacks are one of the most annoying attacks in Zangband but
+    Nexus attacks are one of the most annoying attacks in Hengband but
     will rarely kill you directly. A Nexus attack will damage the player
     and may teleport the player, teleport-level the player or swap two
     of your primary statistics around. Nexus resistance will reduce the
@@ -422,7 +426,7 @@ Nexus
 
 Chaos
     Chaos attacks are one of the most dangerous attack types in
-    Zangband. They have a relatively high maximum damage, and may also
+    Hengband. They have a relatively high maximum damage, and may also
     confuse the player, cause hallucination, reduce your character's
     experience and cause you to mutate. Chaos resistance will the
     damage taken from such attacks and negate all side-effects.
@@ -449,20 +453,21 @@ Gravity
 
 Disenchantment
     Disenchantment attacks damage the player and may result in the
-    to-hit, to-dam and to-AC bonuses on your wielded equipment being
-    reduced. Disenchantment resistance will reduce the damage you take
-    and will prevent the disenchantment of your equipment.
+    to-hit, to-dam, to-AC, pval bonuses on your wielded equipment
+    being reduced. Disenchantment resistance will reduce the damage
+    you take and will prevent the disenchantment of your equipment.
+
+Toxic Waste
+    Resist poison will resist the damage and side effects from Toxic
+    Waste attacks. Otherwise, you will suffer fearful side effects
+    include reducing stats and changing your race.
+
 
 ***** <Unresistable>
 --- Unresistable Attacks ---
 
 There is no resistance to the following types of attacks although some
 of their side-effects may be resisted.
-
-Toxic Waste
-    Resist poison will resist the damage from Toxic Waste attacks but
-    you may still suffer some side effects unless you also have chaos
-    resistance.
 
 Time
     Time attacks damage the player, drain experience and may reduce one
@@ -517,7 +522,7 @@ Hold-life
 ***** <Recovering>
 === Recovering from Attacks ===
 
-You cannot combat with the creatures in Zangband and expect to come out
+You cannot combat with the creatures in Hengband and expect to come out
 unscathed every time. When a monster inflicts damage on you, you will
 need to take steps to recover from the damage as soon as possible.
 
@@ -535,13 +540,29 @@ Cure Light/Serious/Critical Wounds
      cuts. The amount of hitpoints healed and the number of other bad
      effects cured increases from Light to Serious to Critical.
 
+Cure Light Wounds
+     restores 2d8 hitpoints and removes cuts, blindness and berserk.
+
+Cure Serious Wounds
+     restores 4d8 hitpoints and removes cuts, blindness, confusion and
+     berserk.
+
+Cure Critical Wounds
+     restores 4d8 hitpoints and removes cuts, blindness, confusion,
+     stun, poison and berserk.
+
+Curing
+     restores 50 hitpoints and removes cuts, blindness, confusion,
+     stun, poison and hallucination.
+
 Healing
-     restores 300 hitpoints and removes all temporary bad effects with
-     the exception of fear and cures all wounds.
+     restores 300 hitpoints and removes cuts, blindness, confusion,
+     stun, poison and berserk.
 
 *Healing*
-     restores 1000 hitpoints and removes all temporary bad effects and
-     cures all wounds
+     restores 1200 hitpoints and removes cuts, blindness, confusion,
+     stun, poison and berserk.
+
 
 Potions of Life
      restores 5000 hitpoints (about 5 times more than you'll ever
@@ -575,4 +596,4 @@ exhaustive list is not provided in this document.
 Original   : (??), Leon Marrick and Chris Weisiger
 Updated    : (??)
 Updated    : Zangband DevTeam
-Last update: January 13, 2000
+Updated    : some people

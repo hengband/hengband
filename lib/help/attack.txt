@@ -1,6 +1,6 @@
 === Attacking Monsters ===
  
-Attacking is simple in Zangband. If you move into a creature, you
+Attacking is simple in Hengband. If you move into a creature, you
 attack it. If you are wielding a weapon (including digging implements
 which are considered to be weapons) when you do so, the damage for the
 weapon is used when you hit a creature. Otherwise, you will attack with
@@ -48,29 +48,17 @@ option.txt#UserInterface [2]).
 --- Attacking Monsters in Walls ---
 
 You should note that some creatures, for example ghosts, can pass
-through the dungeon walls. When such a creature is in a wall, it can
-not be damaged by attacks which are normally stopped by walls (this
-includes most types of magical attacks). You can, however, attack a
-creature in a wall with your weapon by trying to move into the wall
-space which contains the creature. If the creature is invisible and
-you do not have the ability to see invisible creatures, you must tunnel
-into the wall space containing the creature.
+through the dungeon walls. You can attack a creature in a wall with
+your weapon by trying to move into the wall space which contains the
+creature. If the creature is invisible and you do not have the ability
+to see invisible creatures, you must tunnel into the wall space
+containing the creature.
 
-***** <Bashing>
---- Body and Shield Bashes ---
-
-If a creature is positioned next to you, you may bash it. Weight is the
-primary factor in being able to bash something, but strength plays a
-role too. If a shield is currently being worn, the bash is a shield
-bash and will do more damage. A successful bashing will damage your
-opponent and may throw an opponent off balance for a number of rounds,
-allowing a player to get in a free hit or more. Unfortunately, the
-converse is also true. Having a high dexterity reduces the chance of
-you being thrown off balance. This is a risky attack.
-
-Note: You will automatically do shield bashes during melee combat.
-These bashes have a chance to stun or confuse your opponent. 
-
+Bolt spells does full damage to such creaure in a wall, but ball
+spells will be stopped and blow up just in front of a wall and does
+only half damages. Inversely, when you have ghost like form, and are
+in a wall, you will take only half damage from ball spells and
+breathes of monsters, which is very important privilege.
 
 ***** <MeleeWeapons>
 === Melee Weapons ===
@@ -80,31 +68,25 @@ weapon before it can be used in a fight. A secondary weapon can be kept
 by keeping it in the backpack, and switching it with the primary weapon
 when needed.
 
-Zangband assumes that your youth in the rough environment near the
+Weapons have two main magical characteristics, their enchanted ability
+to hit and their enchanted ability to do damage, expressed as
+`(+#,+#)'. A normal weapon would be `(+0,+0)'. Many weapons in Hengband
+have bonuses to hit and/or do damage. Some weapons are cursed, and have
+penalties that hurt the player. Cursed weapons cannot be unwielded
+until the curse is lifted. Identifying a weapon will inform you of the
+magical bonuses and penalties and whether or not it is cursed.
+
+Hengband assumes that your youth in the rough environment near the
 dungeons has taught you the relative merits of different weapons, and
 displays as part of their description the damage dice which define
-their capabilities. The dice used for a given weapon is displayed as
+their capabilities. Any damage enchantment is added to the dice roll
+for that weapon. The dice used for a given weapon is displayed as
 "#d#". The first number indicates how many dice to roll, and the second
 indicates how many sides they have. A "2d6" weapon will give damage
-from 2 to 12, before considering any other bonuses. The weight of a
-weapon is also a consideration.
-
-In addition to their base damage, each weapon has two main magical
-characteristics, their bonus to your skill and their bonus to your
-deadliness, expressed as "(+#,+#)". A normal weapon would be "(+0,+0)"
-but many weapons in Zangband have bonuses to your skill and/or
-deadliness. These bonuses may be increased, subject to certain upper
-limits, by magical means through a process referred to as 'enchanting'.
-Some weapons are cursed, and will have penalties that hurt the player.
-Cursed weapons cannot be unwielded until the curse is lifted. Note that
-identifying a weapon will inform you of the magical bonuses and
-penalties and whether or not it is cursed.
-
-Although you receive any magical bonuses an unidentified weapon may
-possess when you wield it, those bonuses will not be added in to the
-displayed values of skill and deadliness on your character sheet. You
-must identify the weapon before the displayed values reflect the real
-values used.
+from 2 to 12, plus any damage bonus. The weight of a weapon is also a
+consideration. Heavy weapons may hit harder, but they are also harder
+to use. Depending on your strength, dexterity, character class, and
+weapon weight, you may get several attacks per turn.
 
 
 ***** <MissileLaunch>
@@ -133,14 +115,12 @@ will also reduce the damage from a strike that actually occurs.
 The varying types of missile launchers each have their own strengths
 and weaknesses. Which can be summarized as follows:
 
-                 energy to fire   multiplier   remarks
-Sling:                  50             2
-Short Bow:             100             2
-Long Bow:              100             2       strength  <  16
-                       100             3       strength  >= 16
-Light Crossbow:        120             4
-Heavy Crossbow:        150             5       dexterity >= 16
-                       200             5       dexterity <  16
+                 Shots per turn    Multiplier
+Sling:                1.25             2
+Short Bow:            1.00             2
+Long Bow:             1.00             3
+Light Crossbow:       0.83             3
+Heavy Crossbow:       0.75             4
 
 Bows tend to be good at dealing constant streams of damage.  A sling is
 good for killing many small monsters - it even does more damage per
@@ -149,11 +129,9 @@ deal enormous amounts of damage in one shot.  However, the reload time
 is such that a longbow will deal more damage over time.
 
 Certain classes automatically receive additional shots as they become
-more experienced. Rangers receive an additional shot with a bow at
-level 20 and at level 40 and an additional shot with a crossbow at
-level 30. Rogues receive an extra shot with a sling at level 20 and at
-level 40. Warriors receive an additional shot with any missile launcher
-at level 40.
+more experienced. Rangers and Cavalry receive some additional shots
+with a bow. Rogues receive some extra shots with a sling. Archers and
+Warriors receive some additional shots with any missile launcher.
 
 
 ***** <EgoArtifact>
@@ -174,7 +152,7 @@ has two attributes that make it deadly to your opponent (for example
 you are fighting a demon and your weapon slays both evil and demons
 (demons are evil)), only the most effective slay will apply.
 
-Zangband has extended the original Angband's concept of adding random
+Hengband has extended the original Angband's concept of adding random
 abilities to the various Ego types considerably. These can be either
 guaranteed or have only a varying chance of being granted. (See
 'Randabil.spo' for details of the random powers of Ego Weapons).
@@ -263,109 +241,124 @@ Implement of Digging
     master and healing them in the process.
 
 Weapon of Melting
-    A magical weapon of acid that will inflict three times the normal
-    damage when used against a creature that is not resistant to acid.
-    It also provides resistance against acid attacks.
+    A magical weapon of acid that will inflict damage with 2.5 times
+    the normal dice when used against a creature that is not resistant
+    to acid.  It also provides resistance against acid attacks.
 
 Weapon of Shocking
-    A magical weapon of lightning that will inflict three times the
-    normal damage when used against a creature that is not resistant to
-    electricity. It also provides resistance against lightning attacks.
+    A magical weapon of lightning that will inflict damage with 2.5
+    times the normal dice when used against a creature that is not
+    resistant to electricity. It also provides resistance against
+    lightning attacks.
 
 Weapon of Freezing
-    A magical weapon of ice that will inflict three times the normal
-    damage when used against a creature that is not resistant to cold.
-    It also provides resistance against cold attacks.
+    A magical weapon of ice that will inflict damage with 2.5 the
+    normal dice when used against a creature that is not resistant to
+    cold.  It also provides resistance against cold attacks.
 
 Weapon of Burning
-    A magical weapon of fire that will inflict three times the normal
-    damage when used against a creature that is not resistant to fire.
-    It also provides resistance against fire attacks.
+    A magical weapon of fire that will inflict damage with 2.5 the
+    normal dice when used against a creature that is not resistant to
+    fire.  It also provides resistance against fire attacks.
 
 Weapon of Poisoning
-    A magical weapon, coated with poison, that will inflict three times
-    the normal damage to creatures not resistant to poison. It also
-    provides resistance against toxic and poisonous attacks.
+    A magical weapon, coated with poison, that will inflict damage
+    with 2.5 times the normal dice to creatures not resistant to
+    poison. It also provides resistance against toxic and poisonous
+    attacks.
+
+Weapon of Force
+    This weapon will attack monsters with your mana power and will
+    inflict damage with six times the normal dice.
 
 --- Weapons of Slay {Monster-Type} ---
 
 Weapon of Slay Animal
     This weapon is especially effective against natural creatures and
-    will do three times the normal damage against such creatures.
+    will inflict damage with two times the normal dice against such
+    creatures.
 
 Weapon of Slay Evil
-    This weapon is especially effective against evil creatures and will
-    do two times the normal damage against such creatures.
+    This weapon is especially effective against evil creatures and
+    will inflict damage with two times the normal dice against such
+    creatures.
 
 Weapon of Slay Undead
     This weapon is especially effective against undead creatures and
-    will do three times the normal damage against such creatures. It 
-    will also provide resistance to life draining attacks.
+    will inflict three times the normal dice against such
+    creatures. It will also provide resistance to life draining
+    attacks.
 
 Weapon of Slay Demon
     This weapon is especially effective against demonic creatures and
-    will do three times the normal damage against such creatures.
+    will inflict damage with three times the normal dice against such
+    creatures.
 
 Weapon of Slay Orc
-    This weapon is especially effective against orcs and will do
-    three times the normal damage against such creatures.
+    This weapon is especially effective against orcs and will inflict
+    damage with three times the normal dice against such creatures.
 
 Weapon of Slay Troll
-    This weapon is especially effective against trolls and will do
-    three times the normal damage against such creatures.
+    This weapon is especially effective against trolls and will
+    inflict damage with three times the normal dice against such
+    creatures.
 
 Weapon of Slay Giant
     This weapon is especially effective against giant humanoids and
-    will do three times the normal damage against such creatures.
+    will inflict damage with three times the normal dice against such
+    creatures.
 
 Weapon of Slay Dragon
-    This weapon is especially effective against dragons and will do
-    three times the normal damage against such creatures.
+    This weapon is especially effective against dragons and will
+    inflict damage with three times the normal dice against such
+    creatures.
 
 --- Weapons of *Slay* {Monster-Type} ---
 
 Weapon of *Slay* Animal
     This weapon is especially effective against natural creatures and
-    will do three times the normal damage against such creatures. It
-    will also increase your intelligence and allow you to regenerate
-    hit-points and mana faster.
+    will inflict damage with two times the normal dice against such
+    creatures. It will also increase your intelligence and allow you
+    to regenerate hit-points and mana faster.
 
 Weapon of *Slay* Evil
-    This weapon is especially effective against evil creatures and will
-    do two times the normal damage against such creatures. It will
-    increase your wisdom and will also be a blessed blade.
+    This weapon is especially effective against evil creatures and
+    will inflict damage with two times the normal dice against such
+    creatures. It will increase your wisdom and will also be a blessed
+    blade.
 
 Weapon of *Slay* Undead
     This weapon is especially effective against undead creatures and
-    will do three times the normal damage against such creatures. It 
-    will increase your wisdom and will also provide resistance to both
-    nether and life-draining attacks. Finally, it will allow you to see
-    invisible creatures.
+    will inflict damage with three times the normal dice against such
+    creatures. It will increase your wisdom and will also provide
+    resistance to both nether and life-draining attacks. Finally, it
+    will allow you to see invisible creatures.
 
 Weapon of *Slay* Demon
     This weapon is especially effective against demonic creatures and
-    will do three times the normal damage against such creatures. It
-    will also increase your intelligence.
+    will inflict damage with three times the normal dice against such
+    creatures. It will also increase your intelligence.
 
 Weapon of *Slay* Orc
-    This weapon is especially effective against orcs and will do three
-    times the normal damage against such creatures. It will also
-    increase your dexterity.
+    This weapon is especially effective against orcs and will inflict
+    damage with three times the normal dice against such creatures. It
+    will also increase your dexterity.
 
 Weapon of *Slay* Troll
-    This weapon is especially effective against trolls and will do
-    three times the normal damage against such creatures. It will also
-    increase your strength.
+    This weapon is especially effective against trolls and will
+    inflict damage with three times the normal dice against such
+    creatures. It will also increase your strength.
 
 Weapon of *Slay* Giant
     This weapon is especially effective against giant humanoids and
-    will do three times the normal damage against such creatures. It
-    will also increase your strength.
+    will inflict damage with three times the normal dice against such
+    creatures. It will also increase your strength.
 
 Weapon of *Slay* Dragon
-    This weapon is especially effective against dragons and will do
-    five times the normal damage against such creatures. It will also
-    increase your constitution.
+    This weapon is especially effective against dragons and will
+    inflict damage with five times the normal dice against such
+    creatures. It will also increase your constitution.
+
 
 --- Missile Launchers ---
 
@@ -385,26 +378,26 @@ Launcher of Extra Shots
 
 Ammunition of Hurt Animal
     This ammunition is especially effective against natural creatures
-    and will do three times the normal damage against such creatures.
+    and will do 1.7 times the normal damage against such creatures.
 
 Ammunition of Hurt Evil
     This ammunition is especially effective against evil creatures and
-    will do two times the normal damage against such creatures.
+    will do 1.5 times the normal damage against such creatures.
 
 Ammunition of Hurt Dragon
     This ammunition is especially effective against dragons and will do
-    three times the normal damage against such creatures.
+    three two the normal damage against such creatures.
 
 Ammunition of Shocking
-    This ammunition will inflict three times the normal damage when
+    This ammunition will inflict 1.7 times the normal damage when
     used against a creature that is not resistant to electricity.
 
 Ammunition of Flame
-    This ammunition will inflict three times the normal damage when
+    This ammunition will inflict 1.7 times the normal damage when
     used against a creature that is not resistant to fire.
 
 Ammunition of Frost
-    This ammunition will inflict three times the normal damage when
+    This ammunition will inflict 1.7 times the normal damage when
     used against a creature that is not resistant to cold.
 
 Ammunition of Slaying
@@ -437,168 +430,15 @@ these grant small cumulative bonuses to your combat skill. Some magic
 realms contain equivalent spells.
 
 
-***** <DamageCalc>
-=== Calculating Damage ===
-
-Unlike standard Angband, however you attack a monster, whether in melee
-or by firing or throwing missiles, the weapon or object's base number
-of damage dice are cumulatively multiplied by any and all applicable
-modifiers. Actual damage is determined by rolling the final number of
-dice. The biggest conceptual difference is how Skill and Deadliness
-(formerly known as to-hit and to-damage respectively) work:
-
-Combat Skill: (formerly called the plus to hit)
-     Your combat skill affects your ability to hit a monster, and also
-     determines how often you get critical hits. The more skilled you
-     are, the better those critical hits. You know you have scored a
-     critical hit when you get any combat message other than "you hit"
-     (or punch) "the <monster_name>".
-
-Deadliness: (formerly called the plus to damage)
-     Deadliness acts as a percentage bonus to damage (you may inspect
-     your current bonus on the character screen). It is not unusual
-     for high-level characters to have bonuses in excess of 200%, and
-     therefore triple the number of dice they roll on every blow with
-     the Deadliness multiplier alone.
-
-
-***** <MeleeCalc>
---- Melee ---
-
-The formula for calculating the damage done by a weapon whose base
-damage dice are XdY is as follows:
-
-    Z = X * (bonus from any applicable slays/brands) * (the critical
-        multiplier (if any)) * (bonus from your deadliness percentage)
-
-    Then roll a Y-sided dice Z times adding each result to give the
-    total damage.
-
-    Example 1
-    ---------
-    You hit a Troll with a dagger (1d4)
-
-    there is one damage die                      :  1x damage
-    it's a weapon of Slay Troll                  :  2x damage
-    you get a critical hit for 2x damage         :  2x damage
-    you have a total bonus to Deadliness of 200% :  2x damage
-
-    Thus,
-
-    Z = 1 * 2 * 2 * 2 = 8
-
-    Rolling a four-sided dice 8 times yields an average damage of 20
-    per blow.
-
-
-***** <BareHandCalc>
---- Bare Handed Combat ---
-
-The calculation for bare handed combat is identical to that of melee
-combat. With the exception of the monk class, it is assumed that your
-hands will do a base damage of 1d1. Thus you will get two 1d1 attacks
-per round. Monk bare handed combat is addressed separately below.
-
-
-***** <FireCalc>
---- Missile Launchers ---
-
-The formula for calculating the damage done by a missile launcher
-firing ammunition whose base damage dice are XdY is as follows:
-
-    Z = X * (missile launcher damage multiplier) * (bonus from any
-        applicable slays/brands) * (the critical multiplier (if any))
-        * (bonus from your deadliness percentage)
-
-    Then roll a Y-sided dice Z times adding each result to give the
-    total damage.
-
-    Example 1
-    ---------
-    You use a long bow to hit a Dragon with an arrow (3d4)
-
-    there are three damage dice                  :  3x damage
-    its a long bow, and you have high strength   :  3x damage
-    it's an arrow of Hurt Dragon                 :  2x damage
-    you don't get a critical hit                 :  1x damage
-    you have a total bonus to Deadliness of 200% :  2x damage
-
-    Thus,
-
-    Z = 3 * 3 * 2 * 1 * 2 = 36
-
-    Rolling a four-sided dice 36 times yields an average damage of 90
-    per blow.
-
-
-***** <ThrowCalc>
---- Throwing ---
-
-Throwing and firing are broadly similar, with five main differences:
-firstly, only throwing weapons have a damage multiplier, which
-increases as you gain experience levels (it ranges from 4 to 12).
-Secondly, no thrown object other than the special throwing weapons
-may take advantage of bonuses to Skill or Deadliness granted by your
-equipment. Thirdly, only throwing weapons can get critical hits when
-thrown. Fourthly, thrown objects may break, but throwing weapons only
-do so rarely. Finally, you may never throw more than one object per
-round. Note that throwing weapons are very rare...
-
-The formula for calculating the damage done by a thrown object whose
-base damage dice are XdY is as follows:
-
-    Z = X * (throwing damage multiplier (if any)) * (bonus from any
-        applicable slays/brands) * (the critical multiplier (if any))
-        * (bonus from your deadliness percentage)
-
-    Then roll a Y-sided dice Z times adding each result to give the
-    total damage.
-
-    Example 1
-    ---------
-    You throw a spear (1d6) to hit an Orc and at your level throwing
-    weapons receive a 6x multiplier.
-
-    there is one damage die                      :  1x damage
-    its a throwing weapon                        :  6x damage
-    no applicable slay or brand                  :  1x damage
-    you get a critical hit for 3x damage         :  3x damage
-    you have a total bonus to Deadliness of 200% :  2x damage
-
-    Thus,
-
-    Z = 1 * 6 * 1 * 3 * 2 = 36
-
-    Rolling a six sided dice 36 times yields an average damage of 126
-    per blow.
-
-
-    Example 2
-    ---------
-    You throw a flail (2d6) to hit an Orc and at your level throwing
-    weapons receive a 2x multiplier.
-
-    there are two damage dice                        :  2x damage
-    its not a throwing weapon                        :  1x damage
-    no applicable slay or brand                      :  1x damage
-    no critical hit (its not a throwing weapon)      :  1x damage
-    no Deadliness bonus  (its not a throwing weapon) :  1x damage
-
-    Thus,
-
-    Z = 2 * 1 * 1 * 1 * 1 = 2
-
-    Rolling a six-sided dice 2 times yields an average damage of 7.
-
-
 ***** <MonkAttacks>
 === Monk Attacks ===
 
-The Monk character is designed to be a barehanded fighter rather than
-using a weapon like the other Zangband classes. As a Monk's level
-increases the number of attacks they get per round increases and new,
-increasingly powerful attacks become available. Higher level attacks
-have a chance to stun the Monk's opponent.
+The Monk and ForceTrainer is designed to be a barehanded fighter
+rather than using a weapon like the other Hengband classes. As a
+Monk's level increases the number of attacks they get per round
+increases and new, increasingly powerful attacks become
+available. Higher level attacks have a chance to stun the Monk's
+opponent.
 
 While the type of attack that a Monk uses for each blow is chosen at
 random from the list of available attacks, at higher levels there is a
@@ -612,23 +452,23 @@ highest attack type chosen.
 
 Attack Name   Min.lvl   Damage   Stun    Notes
 -----------------------------------------------------------------------
-Punch            1       1d4       -
-Kick             2       1d5       -
-Strike           3       1d6       -
-Knee             5       2d3       *     Likely to stun male opponents
-Elbow            7       1d7       -
-Butt             9       2d4       -
-Ankle Kick      11       2d5       -     May slow down the opponent
-Uppercut        13       3d5       6
-Double-kick     16       6d3       8
-Cat's Claw      20       4d6       -
-Jump Kick       25       4d7      10
-Eagle's Claw    29       5d6       -
-Circle Kick     33       5d8      10
-Iron Fist       37       6d8      10
-Flying Kick     41       7d8      12
-Dragon Fist     45       7d10     16
-Crushing Blow   48       7d12     18
+Punch            1       1d5       -
+Kick             2       1d7       -
+Strike           3       1d9       -
+Knee             5       2d4       *     Likely to stun male opponents
+Elbow            7       1d12      -
+Butt             9       2d6       -
+Ankle Kick      11       3d6       -     May slow down the opponent
+Uppercut        13       5d5       6
+Double-kick     16       5d6       8
+Cat's Claw      20       5d8       -
+Jump Kick       24       6d8      10
+Eagle's Claw    28       7d9       -
+Circle Kick     32       8d10     10
+Iron Fist       35       8d11     10
+Flying Kick     39       8d12     12
+Dragon Fist     43       9d12     16
+Crushing Blow   48      10d13     18
 
 
 ***** <MeleeTactics>
@@ -637,16 +477,18 @@ Crushing Blow   48       7d12     18
 
 Pillardancing
 -------------
-Requires that you be at least twice as fast as the monster you are
-fighting. Find a single block of wall, freestanding, and lure your
-enemy to it. When both you and your enemy are standing next to the
-pillar, hit him, and then move so that you are opposite the pillar from
-him. He will use his turn to move so that he's standing next to you.
-Hit him again, and then move again. Repeat until he's dead.
 
-Note: Some monsters move erratically, and cannot be relied upon to move
-in the method expected. Also, some monsters (mostly Ghosts) can move
-through walls, and a small number of monsters can chew through walls.
+A Classical tactics of Angband like that; When you are at least twice
+as fast as the monster you are fighting. Find a single block of wall,
+freestanding, and lure your enemy to it. When both you and your enemy
+are standing next to the pillar, hit him, and then move so that you
+are opposite the pillar from him. He will use his turn to move so that
+he's standing next to you.  Hit him again, and then move again. Repeat
+until he's dead.
+
+But in Hengband, this method is not helpful at all. Monsters in
+Hengband essentially move at an irregular speed; they might suddenly
+move some steps at one turn after some turn of pause.
 
 
 Shoot'n Scoot
@@ -657,16 +499,6 @@ missile weapon at him until he gets close, and then Phase Door. Fire
 again, until he gets close, and repeat. By the time you run out of
 ammunition, he should be dead or weak enough for you to finish him HTH
 (Hand to Hand).
-
-
-Hack'n Back
------------
-Requires that you be at least twice as fast as your opponent. Stand
-next to your enemy, hit him, and back up. He should use his turn to
-move towards you instead of using a missile weapon or a spell. Hit him
-again, back up again, repeat. This is a little more dangerous than
-Pillardancing, because the monster gets a chance to breathe or cast a
-spell, but it's easier to set up.
 
 
 Wail'n Bail
@@ -693,7 +525,7 @@ monsters.
 Original   : (??) and Leon Marrick
 Updated    : (??)
 Updated    : Zangband DevTeam
-Last update: January 13, 2000
+Updated    : someone
 
 ***** Begin Hyperlinks
 ***** [1] commdesc.txt#ThrowFire
