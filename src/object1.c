@@ -5109,7 +5109,7 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 
 #ifdef ALLOW_EASY_FLOOR /* TNB */
 
-	if (easy_floor) return get_item_floor(cp, pmt, str, mode);
+	if (easy_floor || use_menu) return get_item_floor(cp, pmt, str, mode);
 
 #endif /* ALLOW_EASY_FLOOR -- TNB */
 
@@ -5235,7 +5235,6 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 			if (item_tester_okay(o_ptr)) allow_floor = TRUE;
 		}
 	}
-
 
 	/* Require at least one legal choice */
 	if (!allow_floor && (i1 > i2) && (e1 > e2))
@@ -5543,22 +5542,31 @@ if (allow_floor) strcat(out_val, " '-'¾²¾å,");
 			case '\r':
 			case '\n':
 			{
-				/* Validate the item */
-				if (!get_item_okay(get_item_label))
+				if (command_wrk == USE_FLOOR)
 				{
-					bell();
-					break;
+					/* Special index */
+					(*cp) = -get_item_label;
+				}
+				else
+				{
+					/* Validate the item */
+					if (!get_item_okay(get_item_label))
+					{
+						bell();
+						break;
+					}
+
+					/* Allow player to "refuse" certain actions */
+					if (!get_item_allow(get_item_label))
+					{
+						done = TRUE;
+						break;
+					}
+
+					/* Accept that choice */
+					(*cp) = get_item_label;
 				}
 
-				/* Allow player to "refuse" certain actions */
-				if (!get_item_allow(get_item_label))
-				{
-					done = TRUE;
-					break;
-				}
-
-				/* Accept that choice */
-				(*cp) = get_item_label;
 				item = TRUE;
 				done = TRUE;
 				break;
@@ -6425,51 +6433,50 @@ if (!command_see && !use_menu) strcat(out_val, " '*'°ìÍ÷,");
 
 			/* Append */
 #ifdef JP
-if (allow_equip)
-{
-	if (use_menu)
-	{
-		if (allow_floor)
-			strcat(out_val, " '6' ÁõÈ÷ÉÊ,");
-		else
-			strcat(out_val, " '4'or'6' ÁõÈ÷ÉÊ,");
-	}
-	else strcat(out_val, " '/' ÁõÈ÷ÉÊ,");
-}
-else if (select_the_force)
-	strcat(out_val, " 'w'Îýµ¤½Ñ,");
+			if (allow_equip)
+			{
+				if (!use_menu)
+					strcat(out_val, " '/' ÁõÈ÷ÉÊ,");
+				else if (allow_floor)
+					strcat(out_val, " '6' ÁõÈ÷ÉÊ,");
+				else
+					strcat(out_val, " '4'or'6' ÁõÈ÷ÉÊ,");
+			}
+			else if (select_the_force)
+				strcat(out_val, " 'w'Îýµ¤½Ñ,");
 #else
-if (allow_equip)
-{
-	if (use_menu)
-	{
-		if (allow_floor)
-			strcat(out_val, " 6 for Equip,");
-		else
-			strcat(out_val, " 4 or 6 for Equip,");
-	}
-	else strcat(out_val, " / for Equip,");
-}
-else if (select_the_force)
-	strcat(out_val, " w for the Force,");
+			if (allow_equip)
+			{
+				if (!use_menu)
+					strcat(out_val, " / for Equip,");
+				else if (allow_floor)
+					strcat(out_val, " 6 for Equip,");
+				else
+					strcat(out_val, " 4 or 6 for Equip,");
+			}
+			else if (select_the_force)
+				strcat(out_val, " w for the Force,");
 #endif
 
 			/* Append */
+			if (allow_floor)
+			{
 #ifdef JP
-if (allow_floor)
-{
-	if (use_menu)
-	{
-		if (allow_equip)
-			strcat(out_val, " '4' ¾²¾å,");
-		else
-			strcat(out_val, " '4'or'6' ¾²¾å,");
-	}
-	else strcat(out_val, " '-'¾²¾å,");
-}
+				if (!use_menu)
+					strcat(out_val, " '-'¾²¾å,");
+				if (allow_equip)
+					strcat(out_val, " '4' ¾²¾å,");
+				else
+					strcat(out_val, " '4'or'6' ¾²¾å,");
 #else
-			if (allow_floor) strcat(out_val, " - for floor,");
+				if (!use_menu)
+					strcat(out_val, " - for floor,");
+				if (allow_equip)
+					strcat(out_val, " 4 for floor,");
+				else
+					strcat(out_val, " 4 or 6 for floor,");
 #endif
+			}
 
 		}
 
@@ -6508,40 +6515,45 @@ if (!command_see && !use_menu) strcat(out_val, " '*'°ìÍ÷,");
 
 
 			/* Append */
+			if (allow_inven)
+			{
 #ifdef JP
-if (allow_inven)
-{
-	if (use_menu)
-	{
-		if (allow_floor)
-			strcat(out_val, " '4' »ý¤ÁÊª,");
-		else
-			strcat(out_val, " '4'or'6' »ý¤ÁÊª,");
-	}
-	else strcat(out_val, " '/' »ý¤ÁÊª,");
-}
+				if (!use_menu)
+					strcat(out_val, " '/' »ý¤ÁÊª,");
+				else if (allow_floor)
+					strcat(out_val, " '4' »ý¤ÁÊª,");
+				else
+					strcat(out_val, " '4'or'6' »ý¤ÁÊª,");
 #else
-			if (allow_inven) strcat(out_val, " / for Inven,");
-#endif
 
+				if (!use_menu)
+					strcat(out_val, " / for Inven,");
+				else if (allow_floor)
+					strcat(out_val, " 4 for Inven,");
+				else
+					strcat(out_val, " 4 or 6 for Inven,");
+#endif
+			}
 
 			/* Append */
+			if (allow_floor)
+			{
 #ifdef JP
-if (allow_floor)
-{
-	if (use_menu)
-	{
-		if (allow_floor)
-			strcat(out_val, " '6' ¾²¾å,");
-		else
-			strcat(out_val, " '4'or'6' ¾²¾å,");
-	}
-	else strcat(out_val, " '-'¾²¾å,");
-}
+				if (!use_menu)
+					strcat(out_val, " '-'¾²¾å,");
+				else if (allow_inven)
+					strcat(out_val, " '6' ¾²¾å,");
+				else
+					strcat(out_val, " '4'or'6' ¾²¾å,");
 #else
-			if (allow_floor) strcat(out_val, " - for floor,");
+				if (!use_menu)
+					strcat(out_val, " - for floor,");
+				else if (allow_inven)
+					strcat(out_val, " 6 for floor,");
+				else
+					strcat(out_val, " 4 or 6 for floor,");
 #endif
-
+			}
 		}
 
 		/* Viewing floor */
@@ -6582,27 +6594,27 @@ if (!command_see && !use_menu) strcat(out_val, " '*'°ìÍ÷,");
 				if (allow_inven && allow_equip)
 				{
 #ifdef JP
-strcat(out_val, " '4' ÁõÈ÷ÉÊ,  '6' »ý¤ÁÊª,");
+					strcat(out_val, " '4' ÁõÈ÷ÉÊ, '6' »ý¤ÁÊª,");
 #else
-					strcat(out_val, " / for Inven,");
+					strcat(out_val, " 4 for Equip, 6 for Inven,");
 #endif
 
 				}
 				else if (allow_inven)
 				{
 #ifdef JP
-strcat(out_val, " '4'or'6' »ý¤ÁÊª,");
+					strcat(out_val, " '4'or'6' »ý¤ÁÊª,");
 #else
-					strcat(out_val, " / for Inven,");
+					strcat(out_val, " 4 or 6 for Inven,");
 #endif
 
 				}
 				else if (allow_equip)
 				{
 #ifdef JP
-strcat(out_val, " '4'or'6' ÁõÈ÷ÉÊ,");
+					strcat(out_val, " '4'or'6' ÁõÈ÷ÉÊ,");
 #else
-					strcat(out_val, " / for Equip,");
+					strcat(out_val, " 4 or 6 for Equip,");
 #endif
 
 				}
@@ -6611,7 +6623,7 @@ strcat(out_val, " '4'or'6' ÁõÈ÷ÉÊ,");
 			else if (allow_inven)
 			{
 #ifdef JP
-strcat(out_val, " '/' »ý¤ÁÊª,");
+				strcat(out_val, " '/' »ý¤ÁÊª,");
 #else
 				strcat(out_val, " / for Inven,");
 #endif
@@ -6620,7 +6632,7 @@ strcat(out_val, " '/' »ý¤ÁÊª,");
 			else if (allow_equip)
 			{
 #ifdef JP
-strcat(out_val, " '/'ÁõÈ÷ÉÊ,");
+				strcat(out_val, " '/'ÁõÈ÷ÉÊ,");
 #else
 				strcat(out_val, " / for Equip,");
 #endif
@@ -6810,22 +6822,31 @@ strcat(out_val, " '/'ÁõÈ÷ÉÊ,");
 			case '\r':
 			case '\n':
 			{
-				/* Validate the item */
-				if (!get_item_okay(get_item_label))
+				if (command_wrk == USE_FLOOR)
 				{
-					bell();
-					break;
+					/* Special index */
+					(*cp) = -get_item_label;
+				}
+				else
+				{
+					/* Validate the item */
+					if (!get_item_okay(get_item_label))
+					{
+						bell();
+						break;
+					}
+
+					/* Allow player to "refuse" certain actions */
+					if (!get_item_allow(get_item_label))
+					{
+						done = TRUE;
+						break;
+					}
+
+					/* Accept that choice */
+					(*cp) = get_item_label;
 				}
 
-				/* Allow player to "refuse" certain actions */
-				if (!get_item_allow(get_item_label))
-				{
-					done = TRUE;
-					break;
-				}
-
-				/* Accept that choice */
-				(*cp) = get_item_label;
 				item = TRUE;
 				done = TRUE;
 				break;
