@@ -1901,7 +1901,8 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 
 	if (a_scroll)
 	{
-		char dummy_name[80];
+		char dummy_name[80] = "";
+
 		/* Identify it fully */
 		object_aware(o_ptr);
 		object_known(o_ptr);
@@ -1909,38 +1910,33 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		/* Mark the item as fully known */
 		o_ptr->ident |= (IDENT_MENTAL);
 
-		strcpy(dummy_name, "");
 		(void)screen_object(o_ptr, TRUE);
 
 #ifdef JP
-		if (!(get_string("このアーティファクトを何と名付けますか？", dummy_name, 80)))
+		if (get_string("このアーティファクトを何と名付けますか？", dummy_name, sizeof dummy_name) && dummy_name[0])
 #else
-		if (!(get_string("What do you want to call the artifact? ", dummy_name, 80)))
+		if (get_string("What do you want to call the artifact? ", dummy_name, sizeof dummy_name) && dummy_name[0])
 #endif
-
-		{
-			get_random_name(new_name, object_is_armour(o_ptr), power_level);
-		}
-		else
 		{
 #ifdef JP
 			strcpy(new_name, "《");
 #else
 			strcpy(new_name, "'");
 #endif
-
 			strcat(new_name, dummy_name);
 #ifdef JP
 			strcat(new_name, "》という名の");
 #else
 			strcat(new_name, "'");
 #endif
-
+		}
+		else
+		{
+			get_random_name(new_name, object_is_armour(o_ptr), power_level);
 		}
 
 		chg_virtue(V_INDIVIDUALISM, 2);
 		chg_virtue(V_ENCHANT, 5);
-
 	}
 	else
 	{
@@ -1949,20 +1945,13 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 
 	if (cheat_xtra)
 	{
-		if (artifact_bias)
 #ifdef JP
-msg_format("運の偏ったアーティファクト: %d。", artifact_bias);
+		if (artifact_bias) msg_format("運の偏ったアーティファクト: %d。", artifact_bias);
+		else msg_print("アーティファクトに運の偏りなし。");
 #else
-			msg_format("Biased artifact: %d.", artifact_bias);
+		if (artifact_bias) msg_format("Biased artifact: %d.", artifact_bias);
+		else msg_print("No bias in artifact.");
 #endif
-
-		else
-#ifdef JP
-msg_print("アーティファクトに運の偏りなし。");
-#else
-			msg_print("No bias in artifact.");
-#endif
-
 	}
 
 	/* Save the inscription */
