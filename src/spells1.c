@@ -731,7 +731,8 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 			}
 
 			/* Destroy traps */
-			if ((c_ptr->info & CAVE_TRAP) || is_trap(c_ptr->feat))
+			if ((c_ptr->info & CAVE_TRAP) || is_trap(c_ptr->feat) ||
+                            c_ptr->feat == FEAT_INVIS)
 			{
 				/* Check line of sight */
 				if (known)
@@ -787,11 +788,12 @@ msg_print("カチッと音がした！");
 		{
 			/* Destroy all doors and traps */
 			if ((c_ptr->feat == FEAT_OPEN) ||
-				 (c_ptr->feat == FEAT_BROKEN) ||
-				 (c_ptr->info & CAVE_TRAP) ||
-				(is_trap(c_ptr->feat)) ||
-				((c_ptr->feat >= FEAT_DOOR_HEAD) &&
-				 (c_ptr->feat <= FEAT_DOOR_TAIL)))
+                            (c_ptr->feat == FEAT_BROKEN) ||
+                            (c_ptr->info & CAVE_TRAP) ||
+                            is_trap(c_ptr->feat) ||
+                            (c_ptr->feat == FEAT_INVIS) ||
+                            ((c_ptr->feat >= FEAT_DOOR_HEAD) &&
+                             (c_ptr->feat <= FEAT_DOOR_TAIL)))
 			{
 				/* Check line of sight */
 				if (known)

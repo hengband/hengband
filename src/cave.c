@@ -58,7 +58,6 @@ bool is_trap(int feat)
 {
 	switch (feat)
 	{
-		case FEAT_INVIS:
 		case FEAT_TRAP_TRAPDOOR:
 		case FEAT_TRAP_PIT:
 		case FEAT_TRAP_SPIKED_PIT:

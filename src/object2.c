@@ -6471,7 +6471,8 @@ bool process_frakir(int xx, int yy)
 	else old_damage = old_damage/2;
 
 	c_ptr = &cave[yy][xx];
-	if (((is_trap(c_ptr->feat) && !easy_disarm) || (c_ptr->info & CAVE_TRAP)) && !one_in_(13))
+	if (((!easy_disarm && (is_trap(c_ptr->feat) || c_ptr->feat == FEAT_INVIS))
+            || (c_ptr->info & CAVE_TRAP)) && !one_in_(13))
 	{
 		object_type *o_ptr = choose_warning_item();
 

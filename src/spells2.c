@@ -3530,12 +3530,13 @@ bool detect_traps(int range, bool known)
 				pick_trap(y, x);
 			}
 
+                        /* Detect invisible open traps */
+                        if (c_ptr->feat == FEAT_INVIS)
+                                c_ptr->feat = FEAT_TRAP_OPEN;
+
 			/* Detect traps */
 			if (is_trap(c_ptr->feat))
 			{
-                                if (c_ptr->feat == FEAT_INVIS)
-                                        c_ptr->feat = FEAT_TRAP_OPEN;
-
 				/* Hack -- Memorize */
 				c_ptr->info |= (CAVE_MARK);
 
