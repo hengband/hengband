@@ -4070,16 +4070,21 @@
 #define cave_perma_bold(Y,X) \
 	(((cave[Y][X].feat >= FEAT_PERM_EXTRA) && \
 	  (cave[Y][X].feat <= FEAT_PERM_SOLID)) || \
-	 ((cave[Y][X].feat == FEAT_LESS) || \
-	  (cave[Y][X].feat == FEAT_MORE) || \
-	  (cave[Y][X].feat == FEAT_ENTRANCE)) || \
-	 ((cave[Y][X].feat == FEAT_LESS_LESS) || \
-	  (cave[Y][X].feat == FEAT_MORE_MORE)) || \
-	 ((cave[Y][X].feat >= FEAT_BLDG_HEAD) && \
-	  (cave[Y][X].feat <= FEAT_BLDG_TAIL)) || \
+	 (cave[Y][X].feat == FEAT_LESS) || \
+	 (cave[Y][X].feat == FEAT_MORE) || \
+	 (cave[Y][X].feat == FEAT_ENTRANCE) || \
+	 (cave[Y][X].feat == FEAT_LESS_LESS) || \
+	 (cave[Y][X].feat == FEAT_MORE_MORE) || \
+	 (cave[Y][X].feat == FEAT_MOUNTAIN) || \
+	 ((cave[Y][X].feat >= FEAT_QUEST_ENTER) && \
+	  (cave[Y][X].feat <= FEAT_QUEST_UP)) || \
+	 ((cave[Y][X].feat >= FEAT_PATTERN_START) && \
+	  (cave[Y][X].feat <= FEAT_PATTERN_XTRA2)) || \
 	 ((cave[Y][X].feat >= FEAT_SHOP_HEAD) && \
 	  (cave[Y][X].feat <= FEAT_SHOP_TAIL)) || \
-	  (cave[Y][X].feat == FEAT_MUSEUM))
+	 (cave[Y][X].feat == FEAT_MUSEUM) || \
+	 ((cave[Y][X].feat >= FEAT_BLDG_HEAD) && \
+	  (cave[Y][X].feat <= FEAT_BLDG_TAIL)))
 
 
 /*
@@ -4128,19 +4133,19 @@
 #define cave_perma_grid(C) \
 	((((C)->feat >= FEAT_PERM_EXTRA) && \
 	  ((C)->feat <= FEAT_PERM_SOLID)) || \
-	  ((C)->feat == FEAT_LESS) || \
-	  ((C)->feat == FEAT_MORE) || \
-	  ((C)->feat == FEAT_ENTRANCE) || \
-	  ((C)->feat == FEAT_LESS_LESS) || \
-	  ((C)->feat == FEAT_MORE_MORE) || \
-	  ((C)->feat == FEAT_MOUNTAIN) || \
+	 ((C)->feat == FEAT_LESS) || \
+	 ((C)->feat == FEAT_MORE) || \
+	 ((C)->feat == FEAT_ENTRANCE) || \
+	 ((C)->feat == FEAT_LESS_LESS) || \
+	 ((C)->feat == FEAT_MORE_MORE) || \
+	 ((C)->feat == FEAT_MOUNTAIN) || \
 	 (((C)->feat >= FEAT_QUEST_ENTER) && \
 	  ((C)->feat <= FEAT_QUEST_UP)) || \
 	 (((C)->feat >= FEAT_PATTERN_START) && \
 	  ((C)->feat <= FEAT_PATTERN_XTRA2)) || \
 	 (((C)->feat >= FEAT_SHOP_HEAD) && \
 	  ((C)->feat <= FEAT_SHOP_TAIL)) || \
-	  ((C)->feat == FEAT_MUSEUM) || \
+	 ((C)->feat == FEAT_MUSEUM) || \
 	 (((C)->feat >= FEAT_BLDG_HEAD) && \
 	  ((C)->feat <= FEAT_BLDG_TAIL)))
 
