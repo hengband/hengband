@@ -3579,6 +3579,9 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					o_ptr->pval = randint1(5) + m_bonus(5, level);
 					o_ptr->to_a = randint1(5) + m_bonus(5, level);
 
+					/* gain one low ESP */
+					add_esp_weak(o_ptr);
+
 					/* Boost the rating */
 					rating += 15;
 
