@@ -4325,7 +4325,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 #else /* ZANGBAND */
 				/* do_cmd_save_game(); */
 #endif /* ZANGBAND */
-				Term_key_push(252);
+				Term_key_push(SPECIAL_KEY_QUIT);
 				return 0;
 			}
 			quit(NULL);
