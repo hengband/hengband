@@ -1737,6 +1737,14 @@ void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 	if (object_value(o_ptr) <= 0)
 		ADD_FLG(FLG_WORTHLESS);
 
+	if (object_known_p(o_ptr))
+	{
+		if (o_ptr->name2)
+			ADD_FLG(FLG_EGO);
+		else if (o_ptr->name1 || o_ptr->art_name)
+			ADD_FLG(FLG_ARTIFACT);
+	}
+
 	switch(o_ptr->tval)
 	{
 		object_kind *k_ptr; 
@@ -1832,7 +1840,7 @@ void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 /*
  * Choose an item and get auto-picker entry from it.
  */
-static bool entry_from_object(autopick_type *entry)
+static bool entry_from_choosed_object(autopick_type *entry)
 {
 	int item;
 	object_type *o_ptr;
@@ -2464,7 +2472,7 @@ void do_cmd_edit_autopick(void)
 			break;
 		case KTRL('i'):
 			/* Insert choosen item name */
-			if (!entry_from_object(entry))
+			if (!entry_from_choosed_object(entry))
 			{
 				/* Now dirty because of item/equip menu */
 				dirty_flags |= DIRTY_SCREEN;
