@@ -3826,7 +3826,7 @@ void do_cmd_visuals(void)
 #endif
 
 			/* Dump monsters */
-			for (i = 1; i < max_r_idx; i++)
+			for (i = 0; i < max_r_idx; i++)
 			{
 				monster_race *r_ptr = &r_info[i];
 
@@ -3893,7 +3893,7 @@ void do_cmd_visuals(void)
 #endif
 
 			/* Dump objects */
-			for (i = 1; i < max_k_idx; i++)
+			for (i = 0; i < max_k_idx; i++)
 			{
 				char o_name[80];
 				object_kind *k_ptr = &k_info[i];
@@ -3977,7 +3977,7 @@ void do_cmd_visuals(void)
 #endif
 
 			/* Dump features */
-			for (i = 1; i < max_f_idx; i++)
+			for (i = 0; i < max_f_idx; i++)
 			{
 				feature_type *f_ptr = &f_info[i];
 
