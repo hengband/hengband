@@ -271,176 +271,176 @@ static void prt_stat(int stat)
 #define BAR_PARALYZE 3
 #define BAR_CONFUSE 4
 #define BAR_POISONED 5
-#define BAR_SENSEUNSEEN 6
-#define BAR_TELEPATHY 7
-#define BAR_REGENERATION 8
-#define BAR_INFRAVISION 9
-#define BAR_PROTEVIL 10
-#define BAR_INVULN 11
-#define BAR_WRAITH 12
-#define BAR_PASSWALL 13
-#define BAR_REFLECTION 14
-#define BAR_HEROISM 15
-#define BAR_BERSERK 16
-#define BAR_BLESSED 17
-#define BAR_MAGICDEFENSE 18
-#define BAR_EXPAND 19
-#define BAR_STONESKIN 20
-#define BAR_KAWARIMI 21
-#define BAR_IMMACID 22
-#define BAR_RESACID 23
-#define BAR_IMMELEC 24
-#define BAR_RESELEC 25
-#define BAR_IMMFIRE 26
-#define BAR_RESFIRE 27
-#define BAR_IMMCOLD 28
-#define BAR_RESCOLD 29
-#define BAR_RESPOIS 30
-#define BAR_RECALL 31
-#define BAR_AFRAID 32
-#define BAR_RESTIME 33
-#define BAR_MULTISHADOW 34
-#define BAR_ATTKCONF 35
-#define BAR_REGMAGIC 36
-#define BAR_ULTIMATE 37
-#define BAR_LEVITATE 38
-#define BAR_RESNETH 39
-#define BAR_DUSTROBE 40
-#define BAR_ATTKFIRE 41
-#define BAR_ATTKCOLD 42
-#define BAR_ATTKELEC 43
-#define BAR_ATTKACID 44
-#define BAR_ATTKPOIS 45
-#define BAR_SUPERSTEALTH 46
-#define BAR_SHFIRE 47
-#define BAR_STEALTH 48
-#define BAR_TOUKI 49
-#define BAR_SHHOLY 50
-#define BAR_EYEEYE 51
-
-#define BAR_MAXNUM 52
+#define BAR_AFRAID 6
+#define BAR_LEVITATE 7
+#define BAR_REFLECTION 8
+#define BAR_PASSWALL 9
+#define BAR_WRAITH 10
+#define BAR_PROTEVIL 11
+#define BAR_KAWARIMI 12
+#define BAR_MAGICDEFENSE 13
+#define BAR_EXPAND 14
+#define BAR_STONESKIN 15
+#define BAR_MULTISHADOW 16
+#define BAR_REGMAGIC 17
+#define BAR_ULTIMATE 18
+#define BAR_INVULN 19
+#define BAR_IMMACID 20
+#define BAR_RESACID 21
+#define BAR_IMMELEC 22
+#define BAR_RESELEC 23
+#define BAR_IMMFIRE 24
+#define BAR_RESFIRE 25
+#define BAR_IMMCOLD 26
+#define BAR_RESCOLD 27
+#define BAR_RESPOIS 28
+#define BAR_RESNETH 29
+#define BAR_RESTIME 30
+#define BAR_DUSTROBE 31
+#define BAR_SHFIRE 32
+#define BAR_TOUKI 33
+#define BAR_SHHOLY 34
+#define BAR_EYEEYE 35
+#define BAR_BLESSED 36
+#define BAR_HEROISM 37
+#define BAR_BERSERK 38
+#define BAR_ATTKFIRE 39
+#define BAR_ATTKCOLD 40
+#define BAR_ATTKELEC 41
+#define BAR_ATTKACID 42
+#define BAR_ATTKPOIS 43
+#define BAR_ATTKCONF 44
+#define BAR_SENSEUNSEEN 45
+#define BAR_TELEPATHY 46
+#define BAR_REGENERATION 47
+#define BAR_INFRAVISION 48
+#define BAR_STEALTH 49
+#define BAR_SUPERSTEALTH 50
+#define BAR_RECALL 51
 
 
 static struct {
 	int attr;
-	cptr str;
+	cptr sstr;
+	cptr lstr;
 } bar[]
 #ifdef JP
 = {
-	{TERM_YELLOW, "§ƒ"},
-	{TERM_VIOLET, "∏∏"},
-	{TERM_L_DARK, "Ã’"},
-	{TERM_RED, "·„"},
-	{TERM_VIOLET, "Õ"},
-	{TERM_GREEN, "∆«"},
-	{TERM_L_BLUE, "ªÎ"},
-	{TERM_ORANGE, "•∆"},
-	{TERM_L_BLUE, "≤Û"},
-	{TERM_L_RED, "¿÷"},
-	{TERM_SLATE, "ºŸ"},
-	{TERM_YELLOW, "Ãµ"},
-	{TERM_L_DARK, "Õ©"},
-	{TERM_SLATE, " …"},
-	{TERM_SLATE, "»ø"},
-	{TERM_WHITE, "Õ¶"},
-	{TERM_RED, "∂∏"},
-	{TERM_WHITE, "ΩÀ"},
-	{TERM_YELLOW, "À‚"},
-	{TERM_L_UMBER, "ø≠"},
-	{TERM_WHITE, "¿–"},
-	{TERM_VIOLET, " —"},
-	{TERM_L_GREEN, "ª¿"},
-	{TERM_GREEN, "ª¿"},
-	{TERM_L_BLUE, "≈≈"},
-	{TERM_BLUE, "≈≈"},
-	{TERM_L_RED, "≤–"},
-	{TERM_RED, "≤–"},
-	{TERM_WHITE, "Œ‰"},
-	{TERM_SLATE, "Œ‰"},
-	{TERM_GREEN, "∆«"},
-	{TERM_WHITE, "µ¢"},
-	{TERM_BLUE, "∂≤"},
-	{TERM_L_BLUE, "ª˛"},
-	{TERM_L_BLUE, " ¨"},
-	{TERM_RED, "Õ"},
-	{TERM_SLATE, "À…"},
-	{TERM_YELLOW, "µÊ"},
-	{TERM_L_BLUE, "…‚"},
-	{TERM_L_DARK, "πˆ"},
-	{TERM_L_DARK, "∂¿"},
-	{TERM_L_RED, "≤–"},
-	{TERM_WHITE, "Œ‰"},
-	{TERM_L_BLUE, "≈≈"},
-	{TERM_SLATE, "ª¿"},
-	{TERM_L_GREEN, "∆«"},
-	{TERM_YELLOW, "ƒ∂±£"},
-	{TERM_L_RED, "•™"},
-	{TERM_UMBER, "±£"},
-	{TERM_WHITE, "∆Æ"},
-	{TERM_WHITE, "¿ª"},
-	{TERM_VIOLET, "Ã‹"}
+	{TERM_YELLOW, "§ƒ", "§ƒ§Ë§∑"},
+	{TERM_VIOLET, "∏∏", "∏∏≥–"},
+	{TERM_L_DARK, "Ã’", "Ã’Ã‹"},
+	{TERM_RED, "·„", "À„·„"},
+	{TERM_VIOLET, "Õ", "∫ÆÕ"},
+	{TERM_GREEN, "∆«", "∆«"},
+	{TERM_BLUE, "∂≤", "∂≤…›"},
+	{TERM_L_BLUE, "…‚", "…‚Õ∑"},
+	{TERM_SLATE, "»ø", "»øºÕ"},
+	{TERM_SLATE, " …", " …»¥§±"},
+	{TERM_L_DARK, "Õ©", "Õ©¬Œ"},
+	{TERM_SLATE, "ºŸ", "À…ºŸ"},
+	{TERM_VIOLET, " —", " —§Ô§Íø»"},
+	{TERM_YELLOW, "À‚", "À‚À°≥ª"},
+	{TERM_L_UMBER, "ø≠", "ø≠§”"},
+	{TERM_WHITE, "¿–", "¿–»©"},
+	{TERM_L_BLUE, " ¨", " ¨ø»"},
+	{TERM_SLATE, "À…", "À‚À°À…∏Ê"},
+	{TERM_YELLOW, "µÊ", "µÊ∂À"},
+	{TERM_YELLOW, "Ãµ", "Ãµ≈®"},
+	{TERM_L_GREEN, "ª¿", "ª¿Ã»±÷"},
+	{TERM_GREEN, "ª¿", "¬—ª¿"},
+	{TERM_L_BLUE, "≈≈", "≈≈Ã»±÷"},
+	{TERM_BLUE, "≈≈", "¬—≈≈"},
+	{TERM_L_RED, "≤–", "≤–Ã»±÷"},
+	{TERM_RED, "≤–", "¬—≤–"},
+	{TERM_WHITE, "Œ‰", "Œ‰Ã»±÷"},
+	{TERM_SLATE, "Œ‰", "¬—Œ‰"},
+	{TERM_GREEN, "∆«", "¬—∆«"},
+	{TERM_L_DARK, "πˆ", "¬—√œπˆ"},
+	{TERM_L_BLUE, "ª˛", "¬—ª˛¥÷"},
+	{TERM_L_DARK, "∂¿", "∂¿•™°º•È"},
+	{TERM_L_RED, "•™", "≤–•™°º•È"},
+	{TERM_WHITE, "∆Æ", "∆Æµ§"},
+	{TERM_WHITE, "¿ª", "¿ª•™°º•È"},
+	{TERM_VIOLET, "Ã‹", "Ã‹§À§œÃ‹"},
+	{TERM_WHITE, "ΩÀ", "ΩÀ °"},
+	{TERM_WHITE, "Õ¶", "Õ¶"},
+	{TERM_RED, "∂∏", "∂∏Õ"},
+	{TERM_L_RED, "≤–", "À‚∑ı≤–"},
+	{TERM_WHITE, "Œ‰", "À‚∑ıŒ‰"},
+	{TERM_L_BLUE, "≈≈", "À‚∑ı≈≈"},
+	{TERM_SLATE, "ª¿", "À‚∑ıª¿"},
+	{TERM_L_GREEN, "∆«", "À‚∑ı∆«"},
+	{TERM_RED, "Õ", "∫ÆÕ¬«∑‚"},
+	{TERM_L_BLUE, "ªÎ", "∆©Ã¿ªÎ"},
+	{TERM_ORANGE, "•∆", "•∆•Ï•—•∑"},
+	{TERM_L_BLUE, "≤Û", "≤Û…¸"},
+	{TERM_L_RED, "¿÷", "¿÷≥∞"},
+	{TERM_UMBER, "±£", "±£Ã©"},
+	{TERM_YELLOW, "ƒ∂±£", "ƒ∂±£Ã©"},
+	{TERM_WHITE, "µ¢", "µ¢¥‘"},
+	{0, NULL, NULL}
 };
 #else
 = {
-	{TERM_YELLOW, "Ts"},
-	{TERM_VIOLET, "Hu"},
-	{TERM_L_DARK, "Bl"},
-	{TERM_RED, "Pa"},
-	{TERM_VIOLET, "Cf"},
-	{TERM_GREEN, "Po"},
-	{TERM_L_BLUE, "Se"},
-	{TERM_ORANGE, "Te"},
-	{TERM_L_BLUE, "Rg"},
-	{TERM_L_RED, "If"},
-	{TERM_SLATE, "Ev"},
-	{TERM_YELLOW, "Iv"},
-	{TERM_L_DARK, "Gh"},
-	{TERM_SLATE, "Wp"},
-	{TERM_SLATE, "Rf"},
-	{TERM_WHITE, "He"},
-	{TERM_RED, "Br"},
-	{TERM_WHITE, "Bs"},
-	{TERM_YELLOW, "Md"},
-	{TERM_L_UMBER, "Eh"},
-	{TERM_WHITE, "Ss"},
-	{TERM_VIOLET, "Qa"},
-	{TERM_L_GREEN, "Ac"},
-	{TERM_GREEN, "Ac"},
-	{TERM_L_BLUE, "El"},
-	{TERM_BLUE, "El"},
-	{TERM_L_RED, "Fi"},
-	{TERM_RED, "Fi"},
-	{TERM_WHITE, "Co"},
-	{TERM_SLATE, "Co"},
-	{TERM_GREEN, "Po"},
-	{TERM_WHITE, "Wr"},
-	{TERM_BLUE, "Fe"},
-	{TERM_L_BLUE, "Ti"},
-	{TERM_L_BLUE, "Ms"},
-	{TERM_RED, "Cf"},
-	{TERM_SLATE, "Rm"},
-	{TERM_YELLOW, "Ul"},
-	{TERM_L_BLUE, "Lv"},
-	{TERM_L_DARK, "Nt"},
-	{TERM_L_DARK, "Am"},
-	{TERM_L_RED, "Fi"},
-	{TERM_WHITE, "Co"},
-	{TERM_L_BLUE, "El"},
-	{TERM_SLATE, "Ac"},
-	{TERM_L_GREEN, "Po"},
-	{TERM_YELLOW, "Stlt"},
-	{TERM_L_RED, "Sf"},
-	{TERM_UMBER, "Sl"},
-	{TERM_WHITE, "Ae"},
-	{TERM_WHITE, "Ha"},
-	{TERM_VIOLET, "Ee"}
+	{TERM_YELLOW, "Ts", "Tsuyoshi"},
+	{TERM_VIOLET, "Hu", "Hullc"},
+	{TERM_L_DARK, "Bl", "Blind"},
+	{TERM_RED, "Pa", "Paralyze"},
+	{TERM_VIOLET, "Cf", "Confuse"},
+	{TERM_GREEN, "Po", "Poisoned"},
+	{TERM_BLUE, "Fe", "Fear"},
+	{TERM_L_BLUE, "Lv", "Levit"},
+	{TERM_SLATE, "Rf", "Reflect"},
+	{TERM_SLATE, "Pw", "PassWall"},
+	{TERM_L_DARK, "Wr", "Wraith"},
+	{TERM_SLATE, "Ev", "ProtEvil"},
+	{TERM_VIOLET, "Kw", "Kawarimi"},
+	{TERM_YELLOW, "Md", "MagicArmor"},
+	{TERM_L_UMBER, "Eh", "Expand"},
+	{TERM_WHITE, "Ss", "StoneSkin"},
+	{TERM_L_BLUE, "Ms", "MultiShadow"},
+	{TERM_SLATE, "Rm", "RegistMag"},
+	{TERM_YELLOW, "Ul", "Ultimate"},
+	{TERM_YELLOW, "Iv", "Invuln"},
+	{TERM_L_GREEN, "IAc", "ImmAcid"},
+	{TERM_GREEN, "Ac", "RAcid"},
+	{TERM_L_BLUE, "IEl", "ImmElec"},
+	{TERM_BLUE, "El", "RElec"},
+	{TERM_L_RED, "IFi", "ImmFire"},
+	{TERM_RED, "Fi", "RFire"},
+	{TERM_WHITE, "ICo", "ImmCold"},
+	{TERM_SLATE, "Co", "RCold"},
+	{TERM_GREEN, "Po", "RPois"},
+	{TERM_L_DARK, "Nt", "RNether"},
+	{TERM_L_BLUE, "Ti", "RTime"},
+	{TERM_L_DARK, "Am", "SMirror"},
+	{TERM_L_RED, "SFi", "SFire"},
+	{TERM_WHITE, "STo", "SToukie"},
+	{TERM_WHITE, "SHo", "SHoly"},
+	{TERM_VIOLET, "Ee", "EyeEye"},
+	{TERM_WHITE, "Bs", "Bless"},
+	{TERM_WHITE, "He", "Hero"},
+	{TERM_RED, "Br", "Berserk"},
+	{TERM_L_RED, "AFi", "AFire"},
+	{TERM_WHITE, "ACo", "ACold"},
+	{TERM_L_BLUE, "AEl", "AElec"},
+	{TERM_SLATE, "AAc", "AAcid"},
+	{TERM_L_GREEN, "APo", "APois"},
+	{TERM_RED, "ACf", "AConf"},
+	{TERM_L_BLUE, "Se", "SeeInv"},
+	{TERM_ORANGE, "Te", "Telepathy"},
+	{TERM_L_BLUE, "Rg", "Regen"},
+	{TERM_L_RED, "If", "Infra"},
+	{TERM_UMBER, "Sl", "Stealth"},
+	{TERM_YELLOW, "Stlt", "SStealth"},
+	{TERM_WHITE, "Rc", "Recall"},
+	{0, NULL, NULL}
 };
 #endif
 
 #define ADD_FLG(FLG) (bar_flags[FLG / 32] |= (1L << (FLG % 32)))
 #define IS_FLG(FLG) (bar_flags[FLG / 32] & (1L << (FLG % 32)))
 
-#define MAX_BAR_COL 57
 
 /*
  *  Show status bar
@@ -448,14 +448,15 @@ static struct {
 static void prt_status(void)
 {
 	u32b bar_flags[2];
-	int wid, hgt, row_statbar;
+	int wid, hgt, row_statbar, max_col_statbar;
 	int i, col = 0, num = 0;
-	bool space = FALSE;
+	int space = 2;
 
 	Term_get_size(&wid, &hgt);
-	row_statbar = hgt - 1;
+	row_statbar = hgt + ROW_STATBAR;
+	max_col_statbar = wid + MAX_COL_STATBAR;
 
-	Term_erase(0, row_statbar, MAX_BAR_COL);
+	Term_erase(0, row_statbar, max_col_statbar);
 
 	bar_flags[0] = bar_flags[1] = 0L;
 
@@ -588,34 +589,54 @@ static void prt_status(void)
 	if (p_ptr->tim_eyeeye) ADD_FLG(BAR_EYEEYE);
 
 	/* Calcurate length */
-	for (i = 0; i < BAR_MAXNUM; i++)
+	for (i = 0; bar[i].sstr; i++)
 	{
 		if (IS_FLG(i))
 		{
-			col += strlen(bar[i].str);
+			col += strlen(bar[i].lstr) + 1;
 			num++;
 		}
 	}
 
-	/* If there are excess spaces, use it */
-	if (col - 1 <= MAX_BAR_COL - (num-1))
+	/* If there are not excess spaces for long strings, use short one */
+	if (col - 1 > max_col_statbar)
 	{
-		space = TRUE;
-		col += num - 1;
+		space = 0;
+		col = 0;
+
+		for (i = 0; bar[i].sstr; i++)
+		{
+			if (IS_FLG(i))
+			{
+				col += strlen(bar[i].sstr);
+			}
+		}
+
+		/* If there are excess spaces for short string, use more */
+		if (col - 1 <= max_col_statbar - (num-1))
+		{
+			space = 1;
+			col += num - 1;
+		}
 	}
 
+
 	/* Centering display column */
-	col = (MAX_BAR_COL - col) / 2;
+	col = (max_col_statbar - col) / 2;
 
 	/* Display status bar */
-	for (i = 0; i < BAR_MAXNUM; i++)
+	for (i = 0; bar[i].sstr; i++)
 	{
 		if (IS_FLG(i))
 		{
-			c_put_str(bar[i].attr, bar[i].str, row_statbar, col);
-			col += strlen(bar[i].str);
-			if (space) col++;
-			if (col > MAX_BAR_COL) break;
+			cptr str;
+			if (space == 2) str = bar[i].lstr;
+			else str = bar[i].sstr;
+
+			c_put_str(bar[i].attr, str, row_statbar, col);
+			col += strlen(str);
+			if (space > 0) col++;
+			if (col > max_col_statbar) break;
 		}
 	}
 }
@@ -905,10 +926,11 @@ static void prt_sp(void)
 static void prt_depth(void)
 {
 	char depths[32];
-	int wid, hgt, row_depth;
+	int wid, hgt, row_depth, col_depth;
 
 	Term_get_size(&wid, &hgt);
-	row_depth = hgt - 1;
+	col_depth = wid + COL_DEPTH;
+	row_depth = hgt + ROW_DEPTH;
 
 	if (!dun_level)
 	{
@@ -947,7 +969,7 @@ sprintf(depths, "%d ≥¨", dun_level);
 	}
 
 	/* Right-Adjust the "depth", and clear old values */
-	prt(format("%7s", depths), row_depth, COL_DEPTH);
+	prt(format("%7s", depths), row_depth, col_depth);
 }
 
 
@@ -1212,10 +1234,11 @@ static void prt_speed(void)
 
 	byte attr = TERM_WHITE;
 	char buf[32] = "";
-	int wid, hgt, row_speed;
+	int wid, hgt, row_speed, col_speed;
 
 	Term_get_size(&wid, &hgt);
-	row_speed = hgt - 1;
+	col_speed = wid + COL_SPEED;
+	row_speed = hgt + ROW_SPEED;
 
 	/* Hack -- Visually "undo" the Search Mode Slowdown */
 	if (p_ptr->action == ACTION_SEARCH) i += 10;
@@ -1269,39 +1292,41 @@ static void prt_speed(void)
 	}
 
 	/* Display the speed */
-	c_put_str(attr, format("%-9s", buf), row_speed, COL_SPEED);
+	c_put_str(attr, format("%-9s", buf), row_speed, col_speed);
 }
 
 
 static void prt_study(void)
 {
-	int wid, hgt, row_study;
+	int wid, hgt, row_study, col_study;
 
 	Term_get_size(&wid, &hgt);
-	row_study = hgt - 1;
+	col_study = wid + COL_STUDY;
+	row_study = hgt + ROW_STUDY;
 
 	if (p_ptr->new_spells)
 	{
 #ifdef JP
-		put_str("≥ÿΩ¨", row_study, COL_STUDY);
+		put_str("≥ÿΩ¨", row_study, col_study);
 #else
-		put_str("Stud", row_study, COL_STUDY);
+		put_str("Stud", row_study, col_study);
 #endif
 
 	}
 	else
 	{
-		put_str("    ", row_study, COL_STUDY);
+		put_str("    ", row_study, col_study);
 	}
 }
 
 
 static void prt_mane(void)
 {
-	int wid, hgt, row_study;
+	int wid, hgt, row_study, col_study;
 
 	Term_get_size(&wid, &hgt);
-	row_study = hgt - 1;
+	col_study = wid + COL_STUDY;
+	row_study = hgt + ROW_STUDY;
 
 	if (p_ptr->pclass == CLASS_IMITATOR)
 	{
@@ -1311,14 +1336,14 @@ static void prt_mane(void)
 			if (new_mane) attr = TERM_L_RED;
 			else attr = TERM_WHITE;
 #ifdef JP
-			c_put_str(attr, "§ﬁ§Õ", row_study, COL_STUDY);
+			c_put_str(attr, "§ﬁ§Õ", row_study, col_study);
 #else
-			c_put_str(attr, "Mane", row_study, COL_STUDY);
+			c_put_str(attr, "Mane", row_study, col_study);
 #endif
 		}
 		else
 		{
-			put_str("    ", row_study, COL_STUDY);
+			put_str("    ", row_study, col_study);
 		}
 	}
 }
