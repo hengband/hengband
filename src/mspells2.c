@@ -444,7 +444,8 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (r_ptr->d_char == 'B')
 			{
-				if (!(p_ptr->pet_extra_flags & PF_TELEPORT)) f6 &= ~(RF6_SPECIAL);
+				if ((p_ptr->pet_extra_flags & (PF_ATTACK_SPELL | PF_TELEPORT)) != (PF_ATTACK_SPELL | PF_TELEPORT))
+					f6 &= ~(RF6_SPECIAL);
 			}
 			else f6 &= ~(RF6_SPECIAL);
 		}
