@@ -712,7 +712,7 @@ static char *spell_tips[VALID_REALM][32] =
 		"gives resistance to fire, cold, electricity, acid and poison for a while. These resistances can be added to which from equipment for more powerful resistances.",
 		"hastes you for a while.",
 		"gives ability to pass walls for a while.",
-		"makes a shild a shild of reflection.",
+		"makes a shield a shield of reflection.",
 		"creates a golem.",
 		"gives resistance to magic, bonus to AC, resistance to confusion, blindness, reflection, free action and levitation for a while.",
 
