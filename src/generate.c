@@ -1502,10 +1502,13 @@ static void place_pet(void)
 		if (m_idx)
 		{
 			monster_type *m_ptr = &m_list[m_idx];
-			monster_race *r_ptr = &r_info[m_ptr->r_idx];
+			monster_race *r_ptr;
 			
 			cave[cy][cx].m_idx = m_idx;
+
 			m_ptr->r_idx = party_mon[i].r_idx;
+                        r_ptr = &r_info[m_ptr->r_idx];
+
 			m_ptr->ap_r_idx = party_mon[i].ap_r_idx;
 			m_ptr->sub_align = party_mon[i].sub_align;
 			m_ptr->fy = cy;
