@@ -3062,6 +3062,10 @@ void calc_bonuses(void)
 
 	p_ptr->to_m_chance = 0;
 
+	/* Clear the Extra Dice Bonuses */
+	p_ptr->to_dd[0] = p_ptr->to_ds[0] = 0;
+	p_ptr->to_dd[1] = p_ptr->to_ds[1] = 0;
+
 	/* Start with "normal" speed */
 	new_speed = 110;
 
@@ -4980,6 +4984,7 @@ void calc_bonuses(void)
 			{
 				p_ptr->to_h[i] +=15;
 				p_ptr->dis_to_h[i] +=15;
+				p_ptr->to_dd[i] += 2;
 			}
 			else if (!(have_flag(flgs, TR_RIDING)))
 			{

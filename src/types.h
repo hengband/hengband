@@ -1295,6 +1295,9 @@ struct player_type
 	bool warning;
 	bool mighty_throw;
 
+	s16b to_dd[2]; /* Extra dice/sides */
+	s16b to_ds[2];
+
 	s16b dis_to_h[2];	/* Known bonus to hit (wield) */
 	s16b dis_to_h_b;	/* Known bonus to hit (bow) */
 	s16b dis_to_d[2];	/* Known bonus to dam (wield) */

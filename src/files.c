@@ -2081,9 +2081,9 @@ static void display_player_various(void)
 		shot_frac = 0;
 	}
 
-	for(i = 0; i< 2; i++)
+	for(i = 0; i < 2; i++)
 	{
-		damage[i] = p_ptr->dis_to_d[i]*100;
+		damage[i] = p_ptr->dis_to_d[i] * 100;
 		if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER)) && (empty_hands(TRUE) > 1))
 		{
 			int level = p_ptr->lev;
@@ -2102,27 +2102,30 @@ static void display_player_various(void)
 		}
 		else
 		{
+			o_ptr = &inventory[INVEN_RARM + i];
+
 			/* Average damage per round */
-			o_ptr = &inventory[INVEN_RARM+i];
-			if (object_known_p(o_ptr)) damage[i] += o_ptr->to_d*100;
-			basedam = (o_ptr->dd * (o_ptr->ds + 1))*50;
-			object_flags(o_ptr, flgs);
-			if ((o_ptr->ident & IDENT_MENTAL) && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)))
+			if (o_ptr->k_idx)
 			{
-				/* vorpal blade */
-				basedam *= 5;
-				basedam /= 3;
+				if (object_known_p(o_ptr)) damage[i] += o_ptr->to_d * 100;
+				basedam = ((o_ptr->dd + p_ptr->to_dd[i]) * (o_ptr->ds + p_ptr->to_ds[i] + 1)) * 50;
+				object_flags_known(o_ptr, flgs);
+				if ((o_ptr->ident & IDENT_MENTAL) && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)))
+				{
+					/* vorpal blade */
+					basedam *= 5;
+					basedam /= 3;
+				}
+				else if (have_flag(flgs, TR_VORPAL))
+				{
+					/* vorpal flag only */
+					basedam *= 11;
+					basedam /= 9;
+				}
+				if ((p_ptr->pclass != CLASS_SAMURAI) && have_flag(flgs, TR_FORCE_WEAPON) && (p_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
+					basedam = basedam * 7 / 2;
 			}
-			else if (object_known_p(o_ptr) && (have_flag(flgs, TR_VORPAL)))
-			{
-				/* vorpal flag only */
-				basedam *= 11;
-				basedam /= 9;
-			}
-			if (object_known_p(o_ptr) && (p_ptr->pclass != CLASS_SAMURAI) && (have_flag(flgs, TR_FORCE_WEAPON)) && (p_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
-				basedam = basedam * 7 / 2;
-			if (p_ptr->riding && (o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE)))
-				basedam = basedam*(o_ptr->dd+2)/o_ptr->dd;
+			else basedam = 0;
 		}
 		damage[i] += basedam;
 		if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) damage[i] = 1;
