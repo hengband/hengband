@@ -83,12 +83,13 @@ cptr            p = "必殺剣";
 	}
 
 	/* Build a prompt (accept all spells) */
+	(void) strnfmt(out_val, 78, 
 #ifdef JP
-(void) strnfmt(out_val, 78, "(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？",
+		       "(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？",
 #else
-	(void)strnfmt(out_val, 78, "(%^ss %c-%c, *=List, ESC=exit) Use which %s? ",
+		       "(%^ss %c-%c, *=List, ESC=exit) Use which %s? ",
 #endif
-	p, I2A(0), "abcdefghijklmnopqrstuvwxyz012345"[num-1], p);
+		       p, I2A(0), "abcdefghijklmnopqrstuvwxyz012345"[num-1], p);
 
 	if (use_menu) screen_save();
 
@@ -292,7 +293,7 @@ put_str("name              Lv  SP      name              Lv  SP ", y, x + 5);
 
 			/* Prompt */
 #ifdef JP
-(void) strnfmt(tmp_val, 78, "%sを使いますか？", spell_names[technic2magic(REALM_HISSATSU)-1][j]);
+			(void) strnfmt(tmp_val, 78, "%sを使いますか？", spell_names[technic2magic(REALM_HISSATSU)-1][j]);
 #else
 			(void)strnfmt(tmp_val, 78, "Use %s? ", spell_names[technic2magic(REALM_HISSATSU)-1][j]);
 #endif
@@ -310,14 +311,11 @@ put_str("name              Lv  SP      name              Lv  SP ", y, x + 5);
 	if (redraw) screen_load();
 
 	/* Show choices */
-	if (show_choices)
-	{
-		/* Update */
-		p_ptr->window |= (PW_SPELL);
+	p_ptr->window |= (PW_SPELL);
 
-		/* Window stuff */
-		window_stuff();
-	}
+	/* Window stuff */
+	window_stuff();
+
 
 	/* Abort if needed */
 	if (!flag) return (FALSE);

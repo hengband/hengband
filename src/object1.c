@@ -5719,41 +5719,39 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 		int get_item_label = 0;
 
 		/* Show choices */
-		if (show_choices)
+		int ni = 0;
+		int ne = 0;
+
+		/* Scan windows */
+		for (j = 0; j < 8; j++)
 		{
-			int ni = 0;
-			int ne = 0;
+			/* Unused */
+			if (!angband_term[j]) continue;
 
-			/* Scan windows */
-			for (j = 0; j < 8; j++)
-			{
-				/* Unused */
-				if (!angband_term[j]) continue;
+			/* Count windows displaying inven */
+			if (window_flag[j] & (PW_INVEN)) ni++;
 
-				/* Count windows displaying inven */
-				if (window_flag[j] & (PW_INVEN)) ni++;
-
-				/* Count windows displaying equip */
-				if (window_flag[j] & (PW_EQUIP)) ne++;
-			}
-
-			/* Toggle if needed */
-			if ((command_wrk && ni && !ne) ||
-			    (!command_wrk && !ni && ne))
-			{
-				/* Toggle */
-				toggle_inven_equip();
-
-				/* Track toggles */
-				toggle = !toggle;
-			}
-
-			/* Update */
-			p_ptr->window |= (PW_INVEN | PW_EQUIP);
-
-			/* Redraw windows */
-			window_stuff();
+			/* Count windows displaying equip */
+			if (window_flag[j] & (PW_EQUIP)) ne++;
 		}
+
+		/* Toggle if needed */
+		if ((command_wrk && ni && !ne) ||
+		    (!command_wrk && !ni && ne))
+		{
+			/* Toggle */
+			toggle_inven_equip();
+
+			/* Track toggles */
+			toggle = !toggle;
+		}
+
+		/* Update */
+		p_ptr->window |= (PW_INVEN | PW_EQUIP);
+
+		/* Redraw windows */
+		window_stuff();
+
 
 		/* Inventory screen */
 		if (!command_wrk)
@@ -6302,18 +6300,15 @@ if (ver && !verify("本当に", k))
 	item_tester_hook = NULL;
 
 
-	/* Clean up */
-	if (show_choices)
-	{
-		/* Toggle again if needed */
-		if (toggle) toggle_inven_equip();
+	/* Clean up  'show choices' */
+	/* Toggle again if needed */
+	if (toggle) toggle_inven_equip();
 
-		/* Update */
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
+	/* Update */
+	p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
-		/* Window stuff */
-		window_stuff();
-	}
+	/* Window stuff */
+	window_stuff();
 
 
 	/* Clear the prompt line */
@@ -6749,41 +6744,38 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 		int get_item_label = 0;
 
 		/* Show choices */
-		if (show_choices)
+		int ni = 0;
+		int ne = 0;
+
+		/* Scan windows */
+		for (j = 0; j < 8; j++)
 		{
-			int ni = 0;
-			int ne = 0;
+			/* Unused */
+			if (!angband_term[j]) continue;
 
-			/* Scan windows */
-			for (j = 0; j < 8; j++)
-			{
-				/* Unused */
-				if (!angband_term[j]) continue;
+			/* Count windows displaying inven */
+			if (window_flag[j] & (PW_INVEN)) ni++;
 
-				/* Count windows displaying inven */
-				if (window_flag[j] & (PW_INVEN)) ni++;
-
-				/* Count windows displaying equip */
-				if (window_flag[j] & (PW_EQUIP)) ne++;
-			}
-
-			/* Toggle if needed */
-			if ((command_wrk == (USE_EQUIP) && ni && !ne) ||
-				(command_wrk == (USE_INVEN) && !ni && ne))
-			{
-				/* Toggle */
-				toggle_inven_equip();
-
-				/* Track toggles */
-				toggle = !toggle;
-			}
-
-			/* Update */
-			p_ptr->window |= (PW_INVEN | PW_EQUIP);
-
-			/* Redraw windows */
-			window_stuff();
+			/* Count windows displaying equip */
+			if (window_flag[j] & (PW_EQUIP)) ne++;
 		}
+
+		/* Toggle if needed */
+		if ((command_wrk == (USE_EQUIP) && ni && !ne) ||
+		    (command_wrk == (USE_INVEN) && !ni && ne))
+		{
+			/* Toggle */
+			toggle_inven_equip();
+
+			/* Track toggles */
+			toggle = !toggle;
+		}
+
+		/* Update */
+		p_ptr->window |= (PW_INVEN | PW_EQUIP);
+
+		/* Redraw windows */
+		window_stuff();
 
 		/* Inventory screen */
 		if (command_wrk == (USE_INVEN))
@@ -7740,18 +7732,15 @@ if (ver && !verify("本当に", k))
 	item_tester_hook = NULL;
 
 
-	/* Clean up */
-	if (show_choices)
-	{
-		/* Toggle again if needed */
-		if (toggle) toggle_inven_equip();
+	/* Clean up  'show choices' */
+	/* Toggle again if needed */
+	if (toggle) toggle_inven_equip();
 
-		/* Update */
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
+	/* Update */
+	p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
-		/* Window stuff */
-		window_stuff();
-	}
+	/* Window stuff */
+	window_stuff();
 
 
 	/* Clear the prompt line */

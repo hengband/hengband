@@ -4538,7 +4538,7 @@ static int see_nothing(int dir, int y, int x)
  * two spaces straight ahead, and the space marked with 's' are both
  * unknown space, then it is a potential corner and enter if
  * find_examine is set, otherwise must stop because it is not a
- * corner.
+ * corner. (find_examine option is removed and always is TRUE.)
  */
 
 
@@ -5066,7 +5066,7 @@ static bool run_test(void)
 		}
 
 		/* Two options, examining corners */
-		else if (find_examine && !find_cut)
+		else if (!find_cut)
 		{
 			/* Primary option */
 			find_current = option;
@@ -5089,8 +5089,7 @@ static bool run_test(void)
 			{
 				/* Can not see anything ahead and in the direction we */
 				/* are turning, assume that it is a potential corner. */
-				if (find_examine &&
-				    see_nothing(option, row, col) &&
+				if (see_nothing(option, row, col) &&
 				    see_nothing(option2, row, col))
 				{
 					find_current = option;
@@ -5170,9 +5169,6 @@ void run_step(int dir)
 			/* Done */
 			return;
 		}
-
-		/* Calculate torch radius */
-		p_ptr->update |= (PU_TORCH);
 
 		/* Initialize */
 		run_init(dir);

@@ -194,7 +194,6 @@ bool stack_force_costs;		/* Merge discounts when stacking */
 
 bool show_labels;			/* Show labels in object listings */
 bool show_weights;			/* Show weights in object listings */
-bool show_choices;			/* Show choices in certain sub-windows */
 
 bool ring_bell;				/* Ring the bell (on errors, etc) */
 
@@ -206,7 +205,6 @@ bool show_item_graph;
 bool find_ignore_stairs;	/* Run past stairs */
 bool find_ignore_doors;		/* Run through open doors */
 bool find_cut;				/* Run past known corners */
-bool find_examine;			/* Run into potential corners */
 
 bool disturb_move;			/* Disturb whenever any monster moves */
 bool disturb_near;			/* Disturb whenever viewable monster moves */
@@ -215,7 +213,6 @@ bool disturb_panel;			/* Disturb whenever map panel changes */
 bool disturb_state;			/* Disturn whenever player state changes */
 bool disturb_minor;			/* Disturb whenever boring things happen */
 
-bool alert_hitpoint;		/* Alert user to critical hitpoints */
 bool disturb_trap_detect;       /* Disturb when leaving trap detected area */
 bool alert_trap_detect;         /* Alert when leaving trap detected area */
 bool last_words;		/* Get last words upon dying */
@@ -224,7 +221,6 @@ bool small_levels;		/* Allow unusually small dungeon levels */
 bool always_small_levels;		/* Use always unusually small dungeon levels */
 bool empty_levels;		/* Allow empty 'arena' levels */
 bool bound_walls_perm;		/* Boundary walls are created by permanent wall */
-bool player_symbols;		/* Use varying symbols for the player char */
 bool equippy_chars;		/* Back by popular demand... */
 bool display_mutations;		/* Skip mutations screen even if we have it */
 bool plain_descriptions;	/* Plain object descriptions */
@@ -241,9 +237,6 @@ bool manual_haggle;			/* Auto-haggle in stores */
 
 bool auto_scum;				/* Auto-scum for good levels */
 
-bool stack_allow_items;		/* Allow weapons and armor to stack */
-
-bool expand_look;			/* Expand the power of the look command */
 bool expand_list;			/* Expand the power of the list commands */
 
 bool view_perma_grids;		/* Map remembers all perma-lit grids */
@@ -261,7 +254,6 @@ bool smart_cheat;			/* Monsters exploit player weaknesses */
 
 /* Option Set 4 -- Efficiency */
 
-bool view_reduce_lite;		/* Reduce lite-radius when running */
 bool view_reduce_view;		/* Reduce view-radius in town */
 
 bool check_abort;			/* Avoid checking for user abort */

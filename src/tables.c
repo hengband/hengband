@@ -6653,29 +6653,11 @@ option_type option_info[] =
 
 
 #ifdef JP
-	{ &show_choices,                TRUE,  2, 0, 12,
-	"show_choices",                 "持ち物/装備ウィンドウに選択アイテム表示" },
-#else
-	{ &show_choices,                TRUE,  2, 0, 12,
-	"show_choices",                 "Show choices in certain sub-windows" },
-#endif
-
-
-#ifdef JP
 	{ &plain_pickup,                FALSE, 2, 6, 6,
 	"plain_pickup",                 "「拾った」メッセージを簡略化する" },
 #else
 	{ &plain_pickup,                FALSE,99, 6, 6,
 	"plain_pickup",                 "Plain pickup messages(japanese only)" },
-#endif
-
-
-#ifdef JP
-	{ &player_symbols,              FALSE, 2, 1, 13,
-	"player_symbols",               "プレイヤーを特別な記号で表示する"},
-#else
-	{ &player_symbols,              FALSE, 2, 1, 13,
-	"player_symbols",               "Use special symbols for the player char"},
 #endif
 
 
@@ -6824,24 +6806,6 @@ option_type option_info[] =
 
 
 #ifdef JP
-	{ &stack_allow_items,           TRUE,  3, 1, 2,
-	"stack_allow_items",            "同種の武器や防具をまとめる" },
-#else
-	{ &stack_allow_items,           TRUE,  3, 1, 2,
-	"stack_allow_items",            "Allow weapons and armor to stack" },
-#endif
-
-
-#ifdef JP
-	{ &expand_look,                 TRUE,  3, 1, 4,
-	"expand_look",                  "「回りを調べる」コマンドを拡張する" },
-#else
-	{ &expand_look,                 TRUE,  3, 1, 4,
-	"expand_look",                  "Expand the power of the look command" },
-#endif
-
-
-#ifdef JP
 	{ &expand_list,                 TRUE,  3, 1, 5,
 	"expand_list",                  "「一覧」コマンドを拡張する" },
 #else
@@ -6974,15 +6938,6 @@ option_type option_info[] =
 
 
 #ifdef JP
-	{ &find_examine,                TRUE,  4, 0, 19,
-	"find_examine",                 "通路が暗い時になるべく曲り角と仮定して通過する" },
-#else
-	{ &find_examine,                TRUE,  4, 0, 19,
-	"find_examine",                 "Run into potential corners" },
-#endif
-
-
-#ifdef JP
 	{ &disturb_move,                FALSE,  4, 0, 20,
 	"disturb_move",                 "どこのモンスターが動いても行動を中止する" },
 #else
@@ -7055,15 +7010,6 @@ option_type option_info[] =
 
 
 #ifdef JP
-	{ &alert_hitpoint,              TRUE, 4, 0, 26,
-	"alert_hitpoint",               "低ヒットポイントの警告時にビープを鳴らす" },
-#else
-	{ &alert_hitpoint,              TRUE, 4, 0, 26,
-	"alert_hitpoint",               "Alert user to critical hitpoints" },
-#endif
-
-
-#ifdef JP
 	{ &disturb_trap_detect,         TRUE, 4, 0, 27,
 	"disturb_trap_detect",          "トラップ感知範囲外に出る直前に行動を中止する" },
 #else
@@ -7081,15 +7027,6 @@ option_type option_info[] =
 
 
 	/*** Efficiency ***/
-
-#ifdef JP
-	{ &view_reduce_lite,            FALSE, 5, 1, 16,
-     "view_reduce_lite",  "走っているときは明かりの半径を減少する" },
-#else
-	{ &view_reduce_lite,            FALSE, 5, 1, 16,
-	"view_reduce_lite",             "Reduce lite-radius when running" },
-#endif
-
 
 #ifdef JP
 	{ &view_reduce_view,            FALSE, 5, 1, 17,

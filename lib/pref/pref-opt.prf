@@ -36,9 +36,7 @@ X:depth_in_feet
 Y:show_labels
 Y:show_weights
 Y:show_item_graph
-Y:show_choices
 X:plain_pickup
-X:player_symbols
 Y:equippy_chars
 X:display_mutations
 Y:plain_descriptions
@@ -59,8 +57,6 @@ X:manual_haggle
 X:auto_scum
 Y:stack_force_notes
 X:stack_force_costs
-Y:stack_allow_items
-Y:expand_look
 Y:expand_list
 Y:view_perma_grids
 X:view_torch_grids
@@ -78,7 +74,6 @@ X:allow_debug_opts
 X:find_ignore_stairs
 Y:find_ignore_doors
 X:find_cut
-Y:find_examine
 X:disturb_move
 X:disturb_high
 Y:disturb_near
@@ -87,13 +82,11 @@ Y:disturb_panel
 Y:disturb_state
 Y:disturb_minor
 X:ring_bell
-Y:alert_hitpoint
 Y:disturb_trap_detect
 X:alert_trap_detect
 
 ##### Efficiency #####
 
-X:view_reduce_lite
 X:view_reduce_view
 Y:check_abort
 Y:flush_failure

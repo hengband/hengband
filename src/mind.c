@@ -809,14 +809,10 @@ put_str(format("Lv   %s   Fail Info", ((use_mind == MIND_BERSERKER) || (use_mind
 	if (redraw && !only_browse) screen_load();
 
 	/* Show choices */
-	if (show_choices)
-	{
-		/* Update */
-		p_ptr->window |= (PW_SPELL);
+	p_ptr->window |= (PW_SPELL);
 
-		/* Window stuff */
-		window_stuff();
-	}
+	/* Window stuff */
+	window_stuff();
 
 	/* Abort if needed */
 	if (!flag) return (FALSE);

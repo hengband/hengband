@@ -418,13 +418,13 @@ cptr            p = "魔法";
 	}
 
 	/* Build a prompt (accept all spells) */
+	(void)strnfmt(out_val, 78, 
 #ifdef JP
-(void) strnfmt(out_val, 78, "(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？",
+		      "(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？",
 #else
-	(void)strnfmt(out_val, 78, "(%c-%c, *=List, ESC=exit) Use which %s? ",
+		      "(%c-%c, *=List, ESC=exit) Use which %s? ",
 #endif
-
-		I2A(0), I2A(num - 1), p);
+		      I2A(0), I2A(num - 1), p);
 
 	if (use_menu) screen_save();
 
@@ -640,7 +640,7 @@ put_str("MP 失率 効果", y, x + 33);
 
 			/* Prompt */
 #ifdef JP
-(void) strnfmt(tmp_val, 78, "%sの魔法を唱えますか？", monster_powers[spellnum[i]].name);
+			(void) strnfmt(tmp_val, 78, "%sの魔法を唱えますか？", monster_powers[spellnum[i]].name);
 #else
 			(void)strnfmt(tmp_val, 78, "Use %s? ", monster_powers[spellnum[i]].name);
 #endif
@@ -658,14 +658,10 @@ put_str("MP 失率 効果", y, x + 33);
 	if (redraw) screen_load();
 
 	/* Show choices */
-	if (show_choices)
-	{
-		/* Update */
-		p_ptr->window |= (PW_SPELL);
+	p_ptr->window |= (PW_SPELL);
 
-		/* Window stuff */
-		window_stuff();
-	}
+	/* Window stuff */
+	window_stuff();
 
 	/* Abort if needed */
 	if (!flag) return (FALSE);

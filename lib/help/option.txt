@@ -159,16 +159,6 @@ Show items graphics    [show_item_graph]
     Displays small icons of the items in your "inventory" list,
     "equipment" list and "stores".
 
-***** <show_choices>
-Show choices in certain sub-windows    [show_choices]
-    Indicate legal choices in "special" windows which display lists.
-    
-***** <player_symbols>
-Use special symbols for the player char    [player_symbols]
-    This option is needed only when the system platform is "ibm".
-    This option allows you to display your character using race /
-    class / sex dependent colours and graphical symbols.
-
 ***** <equippy_chars>
 Display 'equippy' chars    [equippy_chars]
     This option will show you a graphical representation of your worn
@@ -289,20 +279,6 @@ Merge discounts when stacking    [stack_force_costs]
     discount. This option may cause you to lose "value", but will give
     you optimal pack usage.
 
-***** <stack_allow_items>
-Allow weapons and armor to stack    [stack_allow_items]
-    Allow identical weapons and armor to be combined into a stack. This
-    also allows unidentified, but identical, ammo to be combined, which
-    may result in the auto-identification of some of the ammo, but
-    which makes it a lot easier to actually use unidentified ammo.
-    
-***** <expand_look>
-Expand the power of the look command    [expand_look]
-    Expand the "look" command to allow the user to "look" at grids
-    which are not actually in view of the player, allowing the
-    examination of objects/monsters which have only been detected by
-    spells, or sensed via telepathy.
-
 ***** <expand_list>
 Expand the power of the list commands    [expand_list]
     Expand the "listing" commands so that they "wrap" at the "edges" of
@@ -414,10 +390,6 @@ Run past known corners    [find_cut]
     in "faster" running, but may cause you to run into a "lurking"
     monster.
 
-***** <find_examine>
-Run into potential corners    [find_examine]
-    Fully explore "potential corners" in hallways.
-    
 ***** <disturb_move>
 Disturb whenever any monster moves    [disturb_move]
     Disturb the player when any monster moves, appears, or disappears.
@@ -468,12 +440,6 @@ Disturb whenever boring things happen    [disturb_minor]
 Audible bell (on errors, etc)    [ring_bell]
     Attempt to make a "bell" noise when various "errors" occur.
     
-***** <alert_hitpoint>
-Alert user to critical hitpoints    [alert_hitpoint]
-    Produce a "bell" noise, and flush all pending input, when your
-    hitpoints reach the "critical point" chosen elsewhere, preventing
-    stupid deaths.
-
 ***** <disturb_trap_detect>
 Disturb when leaving trap detected area    [disturb_trap_detect]
     This option causes you to be disturbed when the player is running
@@ -488,13 +454,6 @@ Alert when leaving trap detected area    [alert_trap_detect]
 ***** <Efficiency>
 === Option set 5 -- Efficiency ===
 
-***** <view_reduce_lite>
-Reduce lite-radius when running    [view_reduce_lite]
-    Reduce the "radius" of the player's "lite" to that of a "torch"
-    when the player is "running", which makes running more "efficient",
-    but is extremely annoying.  Certain older versions of Angband used
-    this behavior always, so "purists" should turn it on.
-    
 ***** <view_reduce_view>
 Reduce view-radius in town    [view_reduce_view]
     Reduce the "radius" of the player's "view" by half when the player

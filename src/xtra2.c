@@ -2986,9 +2986,6 @@ static void target_set_prepare(int mode)
 		{
 			cave_type *c_ptr;
 
-			/* Require line of sight, unless "look" is "expanded" */
-			if (!expand_look && !player_has_los_bold(y, x)) continue;
-
 			/* Require "interesting" contents */
 			if (!target_set_accept(y, x)) continue;
 

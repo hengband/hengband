@@ -5331,7 +5331,7 @@ get_rnd_line("death_j.txt", 0, death_message);
 	if (p_ptr->chp < warning)
 	{
 		/* Hack -- bell on first notice */
-		if (alert_hitpoint && (old_chp > warning)) bell();
+		if (old_chp > warning) bell();
 
 		sound(SOUND_WARN);
 
