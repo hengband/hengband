@@ -3077,45 +3077,7 @@ bool monst_spell_monst(int m_idx)
 #endif
 		}
 
-		teleport_away(m_idx, MAX_SIGHT * 2 + 5, FALSE, FALSE);
-
-		if (los(py, px, m_ptr->fy, m_ptr->fx) && !world_monster && m_ptr->ml)
-		{
-			for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
-			{
-				u32b flgs[TR_FLAG_SIZE];
-				object_type *o_ptr = &inventory[i];
-
-				if (object_is_cursed(o_ptr)) continue;
-
-				object_flags(o_ptr, flgs);
-
-				if ((have_flag(flgs, TR_TELEPORT)) || (p_ptr->muta1 & MUT1_VTELEPORT) || (p_ptr->pclass == CLASS_IMITATOR))
-				{
-#ifdef JP
-					cptr msg = "ついていきますか？";
-#else
-					cptr msg = "Do you follow it? ";
-#endif
-
-					if (get_check_strict(msg, CHECK_OKAY_CANCEL))
-					{
-						if (one_in_(3))
-						{
-							teleport_player(200, TRUE);
-#ifdef JP
-							msg_print("失敗！");
-#else
-							msg_print("Failed!");
-#endif
-						}
-						else teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE, FALSE);
-						p_ptr->energy_need = ENERGY_NEED();
-					}
-					break;
-				}
-			}
-		}
+		teleport_away_followable(m_idx);
 		break;
 
 	/* RF6_WORLD */

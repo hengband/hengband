@@ -3408,56 +3408,14 @@ msg_format("%^sが瞬時に消えた。", m_name);
 		/* RF6_TPORT */
 		case 160+5:
 		{
-			int i, oldfy, oldfx;
-			u32b flgs[TR_FLAG_SIZE];
-			object_type *o_ptr;
-
-			oldfy = m_ptr->fy;
-			oldfx = m_ptr->fx;
-
 			disturb(1, 0);
 #ifdef JP
-msg_format("%^sがテレポートした。", m_name);
+			msg_format("%^sがテレポートした。", m_name);
 #else
 			msg_format("%^s teleports away.", m_name);
 #endif
 
-			teleport_away(m_idx, MAX_SIGHT * 2 + 5, FALSE, FALSE);
-
-			if (los(py, px, oldfy, oldfx) && !world_monster)
-			{
-				for (i=INVEN_RARM;i<INVEN_TOTAL;i++)
-				{
-					o_ptr = &inventory[i];
-					if (!object_is_cursed(o_ptr))
-					{
-						object_flags(o_ptr, flgs);
-
-						if ((have_flag(flgs, TR_TELEPORT)) || (p_ptr->muta1 & MUT1_VTELEPORT) || (p_ptr->pclass == CLASS_IMITATOR))
-						{
-#ifdef JP
-							if (get_check_strict("ついていきますか？", CHECK_OKAY_CANCEL))
-#else
-							if (get_check_strict("Do you follow it? ", CHECK_OKAY_CANCEL))
-#endif
-							{
-								if (one_in_(3))
-								{
-									teleport_player(200, TRUE);
-#ifdef JP
-									msg_print("失敗！");
-#else
-									msg_print("Failed!");
-#endif
-								}
-								else teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE, FALSE);
-								p_ptr->energy_need += ENERGY_NEED();
-							}
-							break;
-						}
-					}
-				}
-			}
+			teleport_away_followable(m_idx);
 			break;
 		}
 

@@ -1145,6 +1145,7 @@ extern void teleport_monster_to(int m_idx, int ty, int tx, int power, bool passi
 extern bool cave_player_teleportable_bold(int y, int x, bool passive, bool nonmagical);
 extern void teleport_player(int dis, bool passive);
 extern void teleport_player_to(int ny, int nx, bool no_tele, bool passive);
+extern void teleport_away_followable(int m_idx);
 extern void teleport_level(int m_idx);
 extern int choose_dungeon(cptr note, int y, int x);
 extern bool recall_player(int turns);

@@ -498,6 +498,66 @@ void teleport_player_to(int ny, int nx, bool no_tele, bool passive)
 }
 
 
+void teleport_away_followable(int m_idx)
+{
+	monster_type *m_ptr = &m_list[m_idx];
+	int          oldfy = m_ptr->fy;
+	int          oldfx = m_ptr->fx;
+	bool         old_ml = m_ptr->ml;
+	int          old_cdis = m_ptr->cdis;
+
+	teleport_away(m_idx, MAX_SIGHT * 2 + 5, FALSE, FALSE);
+
+	if (old_ml && (old_cdis <= MAX_SIGHT) && !world_monster && los(py, px, oldfy, oldfx))
+	{
+		bool follow = FALSE;
+
+		if ((p_ptr->muta1 & MUT1_VTELEPORT) || (p_ptr->pclass == CLASS_IMITATOR)) follow = TRUE;
+		else
+		{
+			u32b flgs[TR_FLAG_SIZE];
+			object_type *o_ptr;
+			int i;
+
+			for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
+			{
+				o_ptr = &inventory[i];
+				if (o_ptr->k_idx && !object_is_cursed(o_ptr))
+				{
+					object_flags(o_ptr, flgs);
+					if (have_flag(flgs, TR_TELEPORT))
+					{
+						follow = TRUE;
+						break;
+					}
+				}
+			}
+		}
+
+		if (follow)
+		{
+#ifdef JP
+			if (get_check_strict("ついていきますか？", CHECK_OKAY_CANCEL))
+#else
+			if (get_check_strict("Do you follow it? ", CHECK_OKAY_CANCEL))
+#endif
+			{
+				if (one_in_(3))
+				{
+					teleport_player(200, TRUE);
+#ifdef JP
+					msg_print("失敗！");
+#else
+					msg_print("Failed!");
+#endif
+				}
+				else teleport_player_to(m_ptr->fy, m_ptr->fx, TRUE, FALSE);
+				p_ptr->energy_need += ENERGY_NEED();
+			}
+		}
+	}
+}
+
 
 /*
  * Teleport the player one level up or down (random when legal)
