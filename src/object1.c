@@ -5401,9 +5401,9 @@ sprintf(out_val, "持ち物:");
 			{
 				/* Build the prompt */
 #ifdef JP
-sprintf(tmp_val, "%c-%c,",
+sprintf(tmp_val, "%c-%c,'(',')',",
 #else
-				sprintf(tmp_val, " %c-%c,",
+				sprintf(tmp_val, " %c-%c,'(',')',",
 #endif
 
 				        index_to_label(i1), index_to_label(i2));
@@ -5449,9 +5449,9 @@ sprintf(out_val, "装備品:");
 			{
 				/* Build the prompt */
 #ifdef JP
-sprintf(tmp_val, "%c-%c,",
+sprintf(tmp_val, "%c-%c,'(',')',",
 #else
-				sprintf(tmp_val, " %c-%c,",
+				sprintf(tmp_val, " %c-%c,'(',')',",
 #endif
 
 				        index_to_label(e1), index_to_label(e2));
@@ -5810,7 +5810,6 @@ if (other_query_flag && !verify("本当に", k)) continue;
 			default:
 			{
 				int ver;
-
 				if(select_spellbook){
                                     bool not_found = FALSE;
                                     /* Look up the tag */
@@ -5847,13 +5846,17 @@ if (other_query_flag && !verify("本当に", k)) continue;
 				/* Convert letter to inventory index */
 				if (!command_wrk)
 				{
-					k = label_to_inven(which);
+                                        if (which == '(') k = i1;
+                                        else if (which == ')') k = i2;
+                                        else k = label_to_inven(which);
 				}
 
 				/* Convert letter to equipment index */
 				else
 				{
-					k = label_to_equip(which);
+                                        if (which == '(') k = e1;
+                                        else if (which == ')') k = e2;
+					else k = label_to_equip(which);
 				}
 
 				/* Validate the item */
@@ -6436,9 +6439,9 @@ sprintf(out_val, "持ち物:");
 			{
 				/* Build the prompt */
 #ifdef JP
-sprintf(tmp_val, "%c-%c,",
+sprintf(tmp_val, "%c-%c,'(',')',",
 #else
-				sprintf(tmp_val, " %c-%c,",
+				sprintf(tmp_val, " %c-%c,'(',')',",
 #endif
 
 				        index_to_label(i1), index_to_label(i2));
@@ -6519,9 +6522,9 @@ sprintf(out_val, "装備品:");
 			{
 				/* Build the prompt */
 #ifdef JP
-sprintf(tmp_val, "%c-%c,",
+sprintf(tmp_val, "%c-%c,'(',')',",
 #else
-				sprintf(tmp_val, " %c-%c,",
+				sprintf(tmp_val, " %c-%c,'(',')',",
 #endif
 
 				        index_to_label(e1), index_to_label(e2));
@@ -6595,9 +6598,9 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 			{
 				/* Build the prompt */
 #ifdef JP
-sprintf(tmp_val, "%c-%c,", n1, n2);
+sprintf(tmp_val, "%c-%c,'(',')',", n1, n2);
 #else
-				sprintf(tmp_val, " %c-%c,", n1, n2);
+				sprintf(tmp_val, " %c-%c,'(',')',", n1, n2);
 #endif
 
 
@@ -7221,19 +7224,25 @@ if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
 				/* Convert letter to inventory index */
 				if (command_wrk == (USE_INVEN))
 				{
-					k = label_to_inven(which);
+                                        if (which == '(') k = i1;
+                                        else if (which == ')') k = i2;
+					else k = label_to_inven(which);
 				}
 
 				/* Convert letter to equipment index */
 				else if (command_wrk == (USE_EQUIP))
 				{
-					k = label_to_equip(which);
+                                        if (which == '(') k = e1;
+                                        else if (which == ')') k = e2;
+					else k = label_to_equip(which);
 				}
 
 				/* Convert letter to floor index */
 				else if (command_wrk == USE_FLOOR)
 				{
-					k = islower(which) ? A2I(which) : -1;
+                                        if (which == '(') k = 0;
+                                        else if (which == ')') k = floor_num - 1;
+					else k = islower(which) ? A2I(which) : -1;
 					if (k < 0 || k >= floor_num || k >= 23)
 					{
 						bell();
