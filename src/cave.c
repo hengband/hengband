@@ -1404,18 +1404,22 @@ void map_info(int y, int x, byte *ap, char *cp)
 		/* Visible monster */
 		if (m_ptr->ml)
 		{
+			monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
+
 			feat_priority = 30;
 
 			/* Hack -- hallucination */
 			if (p_ptr->image)
 			{
-				/* Hallucinatory monster */
-				image_monster(ap, cp);
+				/* Prevent clear char and attr monster */
+				if (~r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR))
+				{
+					/* Hallucinatory monster */
+					image_monster(ap, cp);
+				}
 			}
 			else
 			{
-				monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
-
 				/* Monster attr/char */
 				a = r_ptr->x_attr;
 				c = r_ptr->x_char;
