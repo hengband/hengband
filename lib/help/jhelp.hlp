@@ -1,40 +1,36 @@
-        [ 変愚蛮怒・オンライン・ヘルプ・システムへようこそ ]
+[ 変愚蛮怒・オンライン・ヘルプ・システムへようこそ ]
   参照したいオンライン・ヘルプの番号を押して下さい:
 
-    (0) 変愚蛮怒固有の情報    (readme.txt)
-    (9) 自動拾い/破壊の使い方 (autopick.txt)
+  (0) 全体的な情報          (jgeneral.hlp)  (j) 追加情報  (jspecail.hlp)
+  (1) キャラクター作成      (jbirth  .hlp)
+  (2) 種族、職業、性格      (jcharattr.hlp)
+  (3) 街と荒野              (jtown   .hlp)
+  (4) ダンジョンの探険      (jdungeon.hlp)
+  (5) アイテム              (jobjects.hlp)
+  (6) モンスター            (jmonster.hlp)
+  (7) 攻撃                  (jattack .hlp)
+  (8) 防御                  (jdefend .hlp)
+  (9) 魔法のシステム        (jmagic  .hlp)
+  (a) コマンドの解説        (jcommand.hlp)
+  (b) オプションの一覧      (joption .hlp)
+  (c) ユーザー設定ファイル  (jpref   .hlp)
+  (d) 変愚蛮怒初心者ガイド  (jtang   .txt)
+  (e) 英語版ヘルプ          (help    .hlp)
 
-  (以下の日本語ヘルプは JAngband のものです。
-   参考程度にしかならないので注意してください。)
-
-    (1) 全体的な情報          (jgeneral.txt)
-    (2) キャラクター作成      (jbirth  .txt)
-    (3) ダンジョンの探険      (jdungeon.txt)
-    (4) モンスターへの攻撃    (jattack .txt)
-    (5) ゲームをプレイする    (jplaying.txt)
-    (6) コマンドの詳細        (jcommand.hlp)
-    (7) オプションの一覧      (joption .hlp)
-    (8) バージョン履歴        (jversion.txt)
-  <日本語版追加>
-    (a) 日本語版の情報        (jang_gen.txt)
-    (b) アイテムの解説        (j_name  .txt)
-    (c) 日本語訳について      (japanese.txt)
-    (e) 英語版ヘルプ          (help.hlp)
-
-    (?) ヘルプシステムの使用法      (jhelpinfo.txt)
-***** [0] ..\readme.txt
-***** [9] ..\autopick.txt
-***** [1] jgeneral.txt
-***** [2] jbirth.txt
-***** [3] jdungeon.txt
-***** [4] jattack.txt
-***** [5] jplaying.txt
-***** [6] jcommand.hlp
-***** [7] joption.hlp
-***** [8] jversion.txt
-***** [a] jang_gen.txt
-***** [b] j_name.txt
-***** [c] japanese.txt
+  (?) ヘルプシステムの使用法      (jhelpinfo.txt)
+***** [0] jgeneral.hlp
+***** [1] jbirth.hlp
+***** [2] jcharattr.hlp
+***** [3] jtown.hlp
+***** [4] jdungeon.hlp
+***** [5] jobjects.hlp
+***** [6] jmonster.hlp
+***** [7] jattack.hlp
+***** [8] jdefend.hlp
+***** [9] jmagic.hlp
+***** [a] jcommand.hlp
+***** [b] joption.hlp
+***** [c] jpref.hlp
+***** [d] jtang.txt
+***** [j] jspecial.hlp
 ***** [e] help.hlp
-
-
