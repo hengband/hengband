@@ -1941,9 +1941,9 @@ G:?:d
 I:70:52:0
 W:90:0:5:200000
 A:90/16
-D:$It creates an artifact from normal weapon or armour when you read it. In 
+D:$It creates an artifact from nameless weapon or armour when you read it. In 
 D:$this process, extra stack of the equipment will be destroyed.
-D:それは読むと並の武器・防具からアーティファクトを作り出す。装備品が
+D:それは読むと無銘の武器・防具からアーティファクトを作り出す。装備品が
 D:積み重なっていた場合は1個を残して壊れる。
 
 N:206:魔力充填
