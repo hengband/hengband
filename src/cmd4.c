@@ -3008,7 +3008,7 @@ void do_cmd_macros(void)
 
 		/* Describe that action */
 #ifdef JP
-		prt("(1) ユーザー設定ファイルのロード", 4, 5);
+		prt("マクロ行動が(もしあれば)下に表示されます:", 20, 0);
 #else
 		prt("Current action (if any) shown below:", 20, 0);
 #endif
