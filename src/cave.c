@@ -4519,6 +4519,7 @@ void cave_set_feat(int y, int x, int feat)
 {
 	cave_type *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[feat];
+	bool old_los = cave_have_flag_bold(y, x, FF_LOS);
 
 	/* Clear mimic type */
 	c_ptr->mimic = 0;
@@ -4550,6 +4551,13 @@ void cave_set_feat(int y, int x, int feat)
 
 		/* Redraw */
 		lite_spot(y, x);
+
+		/* Check if los has changed */
+		if (old_los ^ have_flag(f_ptr->flags, FF_LOS))
+		{
+			/* Update the visuals */
+			p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE | PU_MONSTERS);
+		}
 	}
 
 	/* Hack -- glow the deep lava */

@@ -1738,7 +1738,7 @@ static void do_cmd_wiz_create_feature(void)
 	lite_spot(y, x);
 
 	/* Update some things */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
+	p_ptr->update |= (PU_FLOW);
 
 	prev_feat = tmp_feat;
 	prev_mimic = tmp_mimic;

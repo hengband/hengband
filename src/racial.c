@@ -157,8 +157,7 @@ static bool do_cmd_archer(void)
 			/* Destroy the wall */
 			cave_alter_feat(y, x, FF_HURT_ROCK);
 
-			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
-			p_ptr->window |= (PW_OVERHEAD);
+			p_ptr->update |= (PU_FLOW);
 		}
 	}
 	/**********Create arrows*********/

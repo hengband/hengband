@@ -5483,10 +5483,7 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
 		p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
 
 		/* Update stuff */
-		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
-
-		/* Update the monsters */
-		p_ptr->update |= (PU_MONSTERS);
+		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
 
 		/* Redraw map */
 		p_ptr->redraw |= (PR_MAP);
@@ -5984,10 +5981,7 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
 
 	/* Update stuff */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
-
-	/* Update the monsters */
-	p_ptr->update |= (PU_DISTANCE);
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
 
 	/* Update the health bar */
 	p_ptr->redraw |= (PR_HEALTH | PR_UHEALTH);
@@ -7022,16 +7016,10 @@ bool wall_stone(void)
 	bool dummy = (project(0, 1, py, px, 0, GF_STONE_WALL, flg, -1));
 
 	/* Update stuff */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
-
-	/* Update the monsters */
-	p_ptr->update |= (PU_MONSTERS);
+	p_ptr->update |= (PU_FLOW);
 
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
-
-	/* Window stuff */
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	return dummy;
 }

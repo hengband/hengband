@@ -2878,12 +2878,9 @@ static void calc_torch(void)
 	/* Notice changes in the "lite radius" */
 	if (p_ptr->old_lite != p_ptr->cur_lite)
 	{
-		/* Update the lite */
+		/* Update stuff */
 		/* Hack -- PU_MON_LITE for monsters' darkness */
-		p_ptr->update |= (PU_LITE | PU_MON_LITE);
-
-		/* Update the monsters */
-		p_ptr->update |= (PU_MONSTERS);
+		p_ptr->update |= (PU_LITE | PU_MON_LITE | PU_MONSTERS);
 
 		/* Remember the old lite */
 		p_ptr->old_lite = p_ptr->cur_lite;

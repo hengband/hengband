@@ -3498,10 +3498,7 @@ bool move_player_effect(int ny, int nx, u32b mpe_mode)
 		verify_panel();
 
 		/* Update stuff */
-		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
-
-		/* Update the monsters */
-		p_ptr->update |= (PU_DISTANCE);
+		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_DISTANCE);
 
 		/* Window stuff */
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -4183,7 +4180,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 			cave_alter_feat(y, x, FF_HURT_DISI);
 
 			/* Update some things -- similar to GF_KILL_WALL */
-			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
+			p_ptr->update |= (PU_FLOW);
 		}
 
 		/* Sound */

@@ -607,7 +607,7 @@ msg_print("魔法の階段が現れた...");
 		cave_set_feat(y, x, FEAT_MORE);
 
 		/* Remember to update everything */
-		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
+		p_ptr->update |= (PU_FLOW);
 	}
 
 	/*

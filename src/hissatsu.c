@@ -638,7 +638,7 @@ static bool cast_hissatsu_spell(int spell)
 		cave_alter_feat(y, x, FF_HURT_ROCK);
 
 		/* Update some things */
-		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
+		p_ptr->update |= (PU_FLOW);
 
 		break;
 	}

@@ -675,9 +675,6 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 
 			/* Observe */
 			if (c_ptr->info & (CAVE_MARK)) obvious = TRUE;
-
-			/* Update some things */
-			p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
 		}
 	}
 
@@ -808,13 +805,6 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 					obvious = TRUE;
 				}
 
-				/* Visibility change */
-				if (have_flag(f_ptr->flags, FF_DOOR))
-				{
-					/* Update some things */
-					p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
-				}
-
 				/* Destroy the feature */
 				cave_alter_feat(y, x, FF_TUNNEL);
 			}
@@ -887,7 +877,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 				cave_alter_feat(y, x, FF_HURT_ROCK);
 
 				/* Update some things */
-				p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
+				p_ptr->update |= (PU_FLOW);
 			}
 
 			break;
@@ -907,9 +897,6 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 
 			/* Observe */
 			if (c_ptr->info & (CAVE_MARK)) obvious = TRUE;
-
-			/* Update some things */
-			p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
 
 			break;
 		}
@@ -938,8 +925,6 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 			/* Observe */
 			if (c_ptr->info & (CAVE_MARK)) obvious = TRUE;
 
-			/* Update some things */
-			p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
 
 			break;
 		}
@@ -972,9 +957,6 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 
 			/* Place a wall */
 			cave_set_feat(y, x, FEAT_WALL);
-
-			/* Update some things */
-			p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
 
 			break;
 		}
@@ -1159,7 +1141,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 				cave_alter_feat(y, x, FF_HURT_DISI);
 
 				/* Update some things -- similar to GF_KILL_WALL */
-				p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
+				p_ptr->update |= (PU_FLOW);
 			}
 			break;
 		}

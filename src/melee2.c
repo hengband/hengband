@@ -3019,7 +3019,7 @@ msg_format("%^s%s", m_name, monmessage);
 				}
 
 				/* Handle viewable doors */
-				if (player_has_los_bold(ny, nx)) do_view = TRUE;
+				do_view = TRUE;
 			}
 		}
 
@@ -3260,7 +3260,7 @@ msg_format("%^s%s", m_name, monmessage);
 				cave_alter_feat(ny, nx, FF_HURT_DISI);
 
 				/* Note changes to viewable region */
-				if (player_has_los_bold(ny, nx)) do_view = TRUE;
+				do_view = TRUE;
 			}
 			else if (have_flag(f_ptr->flags, FF_TREE))
 			{
@@ -3493,7 +3493,7 @@ msg_format("%^s%s", m_name, monmessage);
 	if (do_view)
 	{
 		/* Update some things */
-		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
+		p_ptr->update |= (PU_FLOW);
 
 		/* Window stuff */
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);

@@ -5425,8 +5425,6 @@ void do_cmd_pet_dismiss(void)
 #else
 		msg_print("'U'nnamed means all your pets except named pets and your mount.");
 #endif
-
-	p_ptr->update |= (PU_MON_LITE);
 }
 
 static bool player_can_ride_aux(cave_type *c_ptr, bool now_riding)
@@ -5581,10 +5579,7 @@ msg_format("%sから振り落とされそうになって、壁にぶつかった。",m_name);
 	p_ptr->update |= (PU_BONUS);
 
 	/* Update stuff */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
-
-	/* Update the monsters */
-	p_ptr->update |= (PU_DISTANCE);
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
 
 	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);

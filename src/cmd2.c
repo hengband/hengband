@@ -1124,9 +1124,6 @@ static bool do_cmd_open_aux(int y, int x)
 			/* Open the door */
 			cave_alter_feat(y, x, FF_OPEN);
 
-			/* Update some things */
-			p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
-
 			/* Sound */
 			sound(SOUND_OPENDOOR);
 
@@ -1158,9 +1155,6 @@ static bool do_cmd_open_aux(int y, int x)
 	{
 		/* Open the door */
 		cave_alter_feat(y, x, FF_OPEN);
-
-		/* Update some things */
-		p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
 
 		/* Sound */
 		sound(SOUND_OPENDOOR);
@@ -1351,9 +1345,6 @@ static bool do_cmd_close_aux(int y, int x)
 			}
 			else
 			{
-				/* Update some things */
-				p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
-
 				/* Sound */
 				sound(SOUND_SHUTDOOR);
 			}
@@ -1579,7 +1570,7 @@ static bool do_cmd_tunnel_aux(int y, int x)
 			cave_alter_feat(y, x, FF_TUNNEL);
 
 			/* Update some things */
-			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
+			p_ptr->update |= (PU_FLOW);
 		}
 		else
 		{
@@ -1603,17 +1594,22 @@ static bool do_cmd_tunnel_aux(int y, int x)
 		{
 #ifdef JP
 			if (tree) msg_format("%sを切り払った。", name);
-			else msg_print("穴を掘り終えた。");
+			else
+			{
+				msg_print("穴を掘り終えた。");
+				p_ptr->update |= (PU_FLOW);
+			}
 #else
 			if (tree) msg_format("You have cleared away the %s.", name);
-			else msg_print("You have finished the tunnel.");
+			else
+			{
+				msg_print("You have finished the tunnel.");
+				p_ptr->update |= (PU_FLOW);
+			}
 #endif
 
 			/* Remove the feature */
 			cave_alter_feat(y, x, FF_TUNNEL);
-
-			/* Update some things */
-			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
 
 			chg_virtue(V_DILIGENCE, 1);
 			chg_virtue(V_NATURE, -1);
@@ -1826,12 +1822,8 @@ bool easy_open_door(int y, int x)
 			msg_print("You have picked the lock.");
 #endif
 
-
 			/* Open the door */
 			cave_alter_feat(y, x, FF_OPEN);
-
-			/* Update some things */
-			p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
 
 			/* Sound */
 			sound(SOUND_OPENDOOR);
@@ -1861,9 +1853,6 @@ bool easy_open_door(int y, int x)
 	{
 		/* Open the door */
 		cave_alter_feat(y, x, FF_OPEN);
-
-		/* Update some things */
-		p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
 
 		/* Sound */
 		sound(SOUND_OPENDOOR);
@@ -2303,10 +2292,6 @@ static bool do_cmd_bash_aux(int y, int x, int dir)
 
 		/* Hack -- Fall through the door */
 		move_player(dir, FALSE, FALSE);
-
-		/* Update some things */
-		p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
-		p_ptr->update |= (PU_DISTANCE);
 	}
 
 	/* Saving throw against stun */
