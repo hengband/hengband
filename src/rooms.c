@@ -46,7 +46,7 @@ static room_info_type room_info_normal[ROOM_T_MAX] =
 	{{  0,  1,  1,  1,  2,  2,  3,  5,  6,  8, 10}, 10}, /*LESSER_V */
 	{{  0,  0,  1,  1,  1,  2,  2,  3,  4,  5,  6}, 20}, /*GREATER_V*/
 	{{  0,100,200,300,400,500,600,700,800,900,999}, 10}, /*FRACAVE  */
-	{{  0,  1,  1,  1,  1,  2,  2,  3,  4,  5,  6}, 10}, /*RANDOM_V */
+	{{  0,  1,  1,  1,  1,  1,  1,  2,  2,  3,  3}, 10}, /*RANDOM_V */
 	{{  0,  4,  8, 12, 16, 20, 24, 28, 32, 36, 40},  3}, /*OVAL     */
 	{{  1,  6, 12, 18, 24, 30, 36, 42, 48, 54, 60}, 10}, /*CRYPT    */
 	{{  0,  0,  1,  1,  1,  2,  3,  4,  5,  6,  8}, 20}, /*TRAP_PIT */
@@ -234,6 +234,82 @@ static void check_room_boundary(int x1, int y1, int x2, int y2)
 
 
 /*
+ *  Helper function for find_space().
+ *
+ *  Is this a good location?
+ */
+static bool find_space_aux(int blocks_high, int blocks_wide, int block_y, int block_x)
+{
+	int by1, bx1, by2, bx2, by, bx;
+
+	/* Itty-bitty rooms must shift about within their rectangle */
+	if (blocks_wide < 3)
+	{
+		if ((blocks_wide == 2) && (block_x % 3) == 2)
+			return FALSE;
+	}
+
+	/* Rooms with width divisible by 3 must be fitted to a rectangle. */
+	else if ((blocks_wide % 3) == 0)
+	{
+		/* Must be aligned to the left edge of a 11x33 rectangle. */
+		if ((block_x % 3) != 0)
+			return FALSE;
+	}
+
+	/*
+	 * Big rooms that do not have a width divisible by 3 must be
+	 * aligned towards the edge of the dungeon closest to them.
+	 */
+	else
+	{
+		/* Shift towards left edge of dungeon. */
+		if (block_x + (blocks_wide / 2) <= dun->col_rooms / 2)
+		{
+			if (((block_x % 3) == 2) && ((blocks_wide % 3) == 2))
+				return FALSE;
+			if ((block_x % 3) == 1)
+				return FALSE;
+		}
+
+		/* Shift toward right edge of dungeon. */
+		else
+		{
+			if (((block_x % 3) == 2) && ((blocks_wide % 3) == 2))
+				return FALSE;
+			if ((block_x % 3) == 1)
+				return FALSE;
+		}
+	}
+
+	/* Extract blocks */
+	by1 = block_y + 0;
+	bx1 = block_x + 0;
+	by2 = block_y + blocks_high;
+	bx2 = block_x + blocks_wide;
+
+	/* Never run off the screen */
+	if ((by1 < 0) || (by2 > dun->row_rooms)) return FALSE;
+	if ((bx1 < 0) || (bx2 > dun->col_rooms)) return FALSE;
+	
+	/* Verify available space */
+	for (by = by1; by < by2; by++)
+	{
+		for (bx = bx1; bx < bx2; bx++)
+		{
+			if (dun->room_map[by][bx])
+			{
+				return FALSE;
+			}
+		}
+	}
+
+	/* This location is okay */
+	return TRUE;
+}
+
+
+/*
  * Find a good spot for the next room.  -LM-
  *
  * Find and allocate a free space in the dungeon large enough to hold
@@ -250,11 +326,9 @@ static void check_room_boundary(int x1, int y1, int x2, int y2)
  */
 static bool find_space(int *y, int *x, int height, int width)
 {
-	int i;
+	int candidates, pick;
 	int by, bx, by1, bx1, by2, bx2;
-	int block_y, block_x;
-
-	bool filled;
+	int block_y = 0, block_x = 0;
 
 
 	/* Find out how many blocks we need. */
@@ -265,6 +339,7 @@ static bool find_space(int *y, int *x, int height, int width)
 	if (dun->row_rooms < blocks_high) return FALSE;
 	if (dun->col_rooms < blocks_wide) return FALSE;
 
+#if 0
 	/* Sometimes, little rooms like to have more space. */
 	if (blocks_wide == 2)
 	{
@@ -274,127 +349,95 @@ static bool find_space(int *y, int *x, int height, int width)
 	{
 		if (one_in_(2)) blocks_wide = rand_range(2, 3);
 	}
+#endif
 
+	/* Initiallize */
+	candidates = 0;
 
-	/* We'll allow twenty-five guesses. */
-	for (i = 0; i < 25; i++)
+	/* Count the number of varid places */
+	for (block_y = dun->row_rooms - blocks_high; block_y >= 0; block_y--)
 	{
-		filled = FALSE;
-
-		/* Pick a top left block at random */
-		block_y = randint0(dun->row_rooms - blocks_high + 1);
-		block_x = randint0(dun->col_rooms - blocks_wide + 1);
-
-		/* Itty-bitty rooms can shift about within their rectangle */
-		if (blocks_wide < 3)
+		for (block_x = dun->col_rooms - blocks_wide; block_x >= 0; block_x--)
 		{
-			/* Rooms that straddle a border must shift. */
-			if ((blocks_wide == 2) && ((block_x % 3) == 2))
+			if (find_space_aux(blocks_high, blocks_wide, block_y, block_x))
 			{
-				if (one_in_(2)) block_x--;
-				else block_x++;
+				/* Find a varid place */
+				candidates++;
 			}
 		}
-
-		/* Rooms with width divisible by 3 get fitted to a rectangle. */
-		else if ((blocks_wide % 3) == 0)
-		{
-			/* Align to the left edge of a 11x33 rectangle. */
-			if ((block_x % 3) == 2) block_x++;
-			if ((block_x % 3) == 1) block_x--;
-		}
-
-		/*
-		 * Big rooms that do not have a width divisible by 3 get
-		 * aligned towards the edge of the dungeon closest to them.
-		 */
-		else
-		{
-			/* Shift towards left edge of dungeon. */
-			if (block_x + (blocks_wide / 2) <= dun->col_rooms / 2)
-			{
-				if (((block_x % 3) == 2) && ((blocks_wide % 3) == 2))
-					block_x--;
-				if ((block_x % 3) == 1) block_x--;
-			}
-
-			/* Shift toward right edge of dungeon. */
-			else
-			{
-				if (((block_x % 3) == 2) && ((blocks_wide % 3) == 2))
-					block_x++;
-				if ((block_x % 3) == 1) block_x++;
-			}
-		}
-
-		/* Extract blocks */
-		by1 = block_y + 0;
-		bx1 = block_x + 0;
-		by2 = block_y + blocks_high;
-		bx2 = block_x + blocks_wide;
-
-		/* Never run off the screen */
-		if ((by1 < 0) || (by2 > dun->row_rooms)) continue;
-		if ((bx1 < 0) || (bx2 > dun->col_rooms)) continue;
-
-		/* Verify available space */
-		for (by = by1; by < by2; by++)
-		{
-			for (bx = bx1; bx < bx2; bx++)
-			{
-				if (dun->room_map[by][bx])
-				{
-					filled = TRUE;
-				}
-			}
-		}
-
-		/* If space filled, try again. */
-		if (filled) continue;
-
-
-		/* It is *extremely* important that the following calculation */
-		/* be *exactly* correct to prevent memory errors XXX XXX XXX */
-
-		/* Acquire the location of the room */
-		(*y) = ((by1 + by2) * BLOCK_HGT) / 2;
-		(*x) = ((bx1 + bx2) * BLOCK_WID) / 2;
-
-		/* Save the room location */
-		if (dun->cent_n < CENT_MAX)
-		{
-			dun->cent[dun->cent_n].y = *y;
-			dun->cent[dun->cent_n].x = *x;
-			dun->cent_n++;
-		}
-
-		/* Reserve some blocks. */
-		for (by = by1; by < by2; by++)
-		{
-			for (bx = bx1; bx < bx2; bx++)
-			{
-				dun->room_map[by][bx] = TRUE;
-			}
-		}
-
-
-		/*
-		 * Hack- See if room will cut off a cavern.
-		 *
-		 * If so, fix by tunneling outside the room in such a
-		 * way as to connect the caves.
-		 */
-		check_room_boundary(*x - width / 2 - 1, *y - height / 2 - 1, *x + (width - 1) / 2 + 1, *y + (height - 1) / 2 + 1);
-
-
-		/* Success. */
-		return (TRUE);
 	}
 
-	/* Failure. */
-	return (FALSE);
-}
+	/* No place! */
+	if (!candidates)
+	{
+		return FALSE;
+	}
 
+	/* Choose a random one */
+	pick = randint1(candidates);
+
+	/* Pick up the choosen location */
+	for (block_y = dun->row_rooms - blocks_high; block_y >= 0; block_y--)
+	{
+		for (block_x = dun->col_rooms - blocks_wide; block_x >= 0; block_x--)
+		{
+			if (find_space_aux(blocks_high, blocks_wide, block_y, block_x))
+			{
+				pick--;
+
+				/* This one is picked? */
+				if (!pick) break;
+			}
+		}
+
+		if (!pick) break;
+	}
+
+	/* Extract blocks */
+	by1 = block_y + 0;
+	bx1 = block_x + 0;
+	by2 = block_y + blocks_high;
+	bx2 = block_x + blocks_wide;
+
+	/*
+	 * It is *extremely* important that the following calculation
+	 * be *exactly* correct to prevent memory errors
+	 */
+
+	/* Acquire the location of the room */
+	(*y) = ((by1 + by2) * BLOCK_HGT) / 2;
+	(*x) = ((bx1 + bx2) * BLOCK_WID) / 2;
+
+	/* Save the room location */
+	if (dun->cent_n < CENT_MAX)
+	{
+		dun->cent[dun->cent_n].y = *y;
+		dun->cent[dun->cent_n].x = *x;
+		dun->cent_n++;
+	}
+
+	/* Reserve some blocks. */
+	for (by = by1; by < by2; by++)
+	{
+		for (bx = bx1; bx < bx2; bx++)
+		{
+			dun->room_map[by][bx] = TRUE;
+		}
+	}
+
+
+	/*
+	 * Hack- See if room will cut off a cavern.
+	 *
+	 * If so, fix by tunneling outside the room in such a
+	 * way as to connect the caves.
+	 */
+	check_room_boundary(*x - width / 2 - 1, *y - height / 2 - 1, *x + (width - 1) / 2 + 1, *y + (height - 1) / 2 + 1);
+
+
+	/* Success. */
+	return TRUE;
+}
 
 
 
@@ -6016,7 +6059,7 @@ void generate_rooms(void)
 	 * Prepare the number of rooms, of all types, we should build
 	 * on this level.
 	 */
-	for (i = 0; i < dun_rooms; i++)
+	for (i = dun_rooms; i > 0; i--)
 	{
 		int room_type;
 		int rand = randint0(total_prob);
@@ -6033,8 +6076,26 @@ void generate_rooms(void)
 
 		/* Increase the number of rooms of that type we should build. */
 		room_num[room_type]++;
-	}
 
+		switch (room_type)
+		{
+		case ROOM_T_NEST:
+		case ROOM_T_PIT:
+		case ROOM_T_LESSER_VAULT:
+		case ROOM_T_TRAP_PIT:
+
+			/* Large room */
+			i -= 2;
+			break;
+
+		case ROOM_T_GREATER_VAULT:
+		case ROOM_T_RANDOM_VAULT:
+
+			/* Largest room */
+			i -= 3;
+			break;
+		}
+	}
 
 	/*
 	 * Build each type of room one by one until we cannot build any more.
@@ -6049,13 +6110,6 @@ void generate_rooms(void)
 		{
 			/* What type of room are we building now? */
 			int room_type = room_build_order[i];
-
-			/* Stop building rooms when we hit the maximum. */
-			if (rooms_built >= dun_rooms)
-			{
-				remain = FALSE;
-				break;
-			}
 
 			/* Go next if none available */
 			if (!room_num[room_type]) continue;
