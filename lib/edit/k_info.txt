@@ -573,7 +573,7 @@ W:5:0:75:48
 A:5/1
 P:0:1d6:0:0:0
 F:SHOW_MODS
-D:A smaller version of the longsword, perfectly sized for Hobbits.
+D:$A smaller version of the longsword, perfectly sized for Hobbits.
 D:ロングソードを少し短かくしたような剣。ホビットにぴったりのサイズだ。
 
 N:47:折れた剣
