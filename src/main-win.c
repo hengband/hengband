@@ -616,7 +616,9 @@ VK_CONVERT,VK_NONCONVERT,VK_ACCEPT,VK_MODECHANGE,
 VK_PRIOR,VK_NEXT,VK_END,VK_HOME,VK_LEFT,VK_UP,VK_RIGHT,VK_DOWN,
 VK_SELECT,VK_PRINT,VK_EXECUTE,VK_SNAPSHOT,VK_INSERT,VK_DELETE,
 VK_HELP,VK_APPS,
-VK_MULTIPLY,VK_ADD,VK_SEPARATOR,VK_SUBTRACT,VK_DIVIDE,
+VK_NUMPAD0,VK_NUMPAD1,VK_NUMPAD2,VK_NUMPAD3,VK_NUMPAD4,
+VK_NUMPAD5,VK_NUMPAD6,VK_NUMPAD7,VK_NUMPAD8,VK_NUMPAD9,
+VK_MULTIPLY,VK_ADD,VK_SEPARATOR,VK_SUBTRACT,VK_DECIMAL,VK_DIVIDE,
 VK_F1,VK_F2,VK_F3,VK_F4,VK_F5,VK_F6,VK_F7,VK_F8,VK_F9,VK_F10,
 VK_F11,VK_F12,VK_F13,VK_F14,VK_F15,VK_F16,VK_F17,VK_F18,VK_F19,VK_F20,
 VK_F21,VK_F22,VK_F23,VK_F24,VK_NUMLOCK,VK_SCROLL,
@@ -4214,19 +4216,39 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 				/* Extended key bit */
 				switch (wParam)
 				{
+				/* Numpad Enter and '/' are extended key */
 				case VK_DIVIDE:
 					Term_no_press = TRUE;
-				case VK_RETURN:
-					/* Numpad Enter and '/' are extended key */
+				case VK_RETURN:	/* Enter */
 					numpad = ext_key;
 					break;
+				/* Other extended keys are on full keyboard */
+				case VK_NUMPAD0:
+				case VK_NUMPAD1:
+				case VK_NUMPAD2:
+				case VK_NUMPAD3:
+				case VK_NUMPAD4:
+				case VK_NUMPAD5:
+				case VK_NUMPAD6:
+				case VK_NUMPAD7:
+				case VK_NUMPAD8:
+				case VK_NUMPAD9:
 				case VK_ADD:
 				case VK_MULTIPLY:
 				case VK_SUBTRACT:
 				case VK_SEPARATOR:
+				case VK_DECIMAL:
 					Term_no_press = TRUE;
-				default:
-					/* Other extended keys are on full keyboard */
+				case VK_HOME:
+				case VK_END:
+				case VK_PRIOR:	/* Page Up */
+				case VK_NEXT:	/* Page Down */
+				case VK_INSERT:
+				case VK_DELETE:
+				case VK_UP:
+				case VK_DOWN:
+				case VK_LEFT:
+				case VK_RIGHT:
 					numpad = !ext_key;
 				}
 
