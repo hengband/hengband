@@ -2734,35 +2734,22 @@ static void free_text_lines(cptr *lines_list)
  */
 static void toggle_keyword(text_body_type *tb, int flg)
 {
-	int by1, by2, bx1, bx2, y;
+	int by1, by2, y;
 	bool add = TRUE;
 	bool fixed = FALSE;
 
-	/* Select this line */
-	if (!tb->mark)
+	/* Some lines are selected */
+	if (tb->mark)
 	{
-		tb->my = tb->cy;
-		tb->mx = 0;
+		by1 = MIN(tb->my, tb->cy);
+		by2 = MAX(tb->my, tb->cy);
 	}
 
-	if (tb->my < tb->cy)
+	/* No mark -- Select current line */
+	else /* if (!tb->mark) */
 	{
-		by1 = tb->my;
-		by2 = tb->cy;
-		bx1 = tb->mx;
-		bx2 = tb->cx;
+		by1 = by2 = tb->cy;
 	}
-	else
-	{
-		by2 = tb->my;
-		by1 = tb->cy;
-		bx2 = tb->mx;
-		bx1 = tb->cx;
-	}
-
-	/* String on these lines are not really selected */  
-	if (tb->lines_list[by1][bx1] == '\0' && by1 < tb->cy) by1++;
-	if (bx2 == 0 && by1 < by2) by2--;
 
 
 	/* Set/Reset flag of each line */
@@ -2828,35 +2815,23 @@ static void toggle_keyword(text_body_type *tb, int flg)
 static void toggle_command_letter(text_body_type *tb, byte flg)
 {
 	autopick_type an_entry, *entry = &an_entry;
-	int by1, by2, bx1, bx2, y;
+	int by1, by2, y;
 	bool add = TRUE;
 	bool fixed = FALSE;
 
-	/* Select this line */
-	if (!tb->mark)
+	/* Some lines are selected */
+	if (tb->mark)
 	{
-		tb->my = tb->cy;
-		tb->mx = 0;
+		by1 = MIN(tb->my, tb->cy);
+		by2 = MAX(tb->my, tb->cy);
 	}
 
-	if (tb->my < tb->cy)
+	/* No mark -- Select current line */
+	else /* if (!tb->mark) */
 	{
-		by1 = tb->my;
-		by2 = tb->cy;
-		bx1 = tb->mx;
-		bx2 = tb->cx;
-	}
-	else
-	{
-		by2 = tb->my;
-		by1 = tb->cy;
-		bx2 = tb->mx;
-		bx1 = tb->cx;
+		by1 = by2 = tb->cy;
 	}
 
-	/* String on these lines are not really selected */  
-	if (tb->lines_list[by1][bx1] == '\0' && by1 < tb->cy) by1++;
-	if (bx2 == 0 && by1 < by2) by2--;
 
 	/* Set/Reset flag of each line */
 	for (y = by1; y <= by2; y++)
@@ -2923,33 +2898,21 @@ static void toggle_command_letter(text_body_type *tb, byte flg)
  */
 static void add_keyword(text_body_type *tb, int flg)
 {
-	int by1, by2, bx1, bx2, y;
+	int by1, by2, y;
 
-	/* Select this line */
-	if (!tb->mark)
+	/* Some lines are selected */
+	if (tb->mark)
 	{
-		tb->my = tb->cy;
-		tb->mx = 0;
+		by1 = MIN(tb->my, tb->cy);
+		by2 = MAX(tb->my, tb->cy);
 	}
 
-	if (tb->my < tb->cy)
+	/* No mark -- Select current line */
+	else /* if (!tb->mark) */
 	{
-		by1 = tb->my;
-		by2 = tb->cy;
-		bx1 = tb->mx;
-		bx2 = tb->cx;
-	}
-	else
-	{
-		by2 = tb->my;
-		by1 = tb->cy;
-		bx2 = tb->mx;
-		bx1 = tb->cx;
+		by1 = by2 = tb->cy;
 	}
 
-	/* String on these lines are not really selected */  
-	if (tb->lines_list[by1][bx1] == '\0' && by1 < tb->cy) by1++;
-	if (bx2 == 0 && by1 < by2) by2--;
 
 	/* Set/Reset flag of each line */
 	for (y = by1; y <= by2; y++)
@@ -4153,7 +4116,7 @@ static void add_str_to_yank(text_body_type *tb, cptr str)
 static void draw_text_editor(text_body_type *tb)
 {
 	int i;
-	int by1 = -1, bx1 = -1, by2 = -1, bx2 = -1;
+	int by1 = 0, by2 = 0;
 
 	/* Get size */
 	Term_get_size(&tb->wid, &tb->hgt);
@@ -4265,21 +4228,8 @@ static void draw_text_editor(text_body_type *tb)
 
 		tb->dirty_flags |= DIRTY_ALL;
 
-		if (tb->my < tb->cy ||
-		    (tb->my == tb->cy && tb->mx < tmp_cx))
-		{
-			by1 = tb->my;
-			bx1 = tb->mx;
-			by2 = tb->cy;
-			bx2 = tmp_cx;
-		}
-		else
-		{
-			by2 = tb->my;
-			bx2 = tb->mx;
-			by1 = tb->cy;
-			bx1 = tmp_cx;
-		}
+		by1 = MIN(tb->my, tb->cy);
+		by2 = MAX(tb->my, tb->cy);
 	}
 
 	/* Dump up to tb->hgt lines of messages */
@@ -4331,27 +4281,35 @@ static void draw_text_editor(text_body_type *tb)
 			else color = TERM_WHITE;
 		}
 
-		if (!tb->mark)
+		/* No mark or Out of mark */
+		if (!tb->mark || (y < by1 || by2 < y))
 		{
 			/* Dump the messages, bottom to top */
 			Term_putstr(leftcol, i + 1, tb->wid - 1, color, msg);
 		}
 
+		/* Multiple lines selected */
+		else if (by1 != by2)
+		{
+			/* Dump the messages, bottom to top */
+			Term_putstr(leftcol, i + 1, tb->wid - 1, TERM_YELLOW, msg);
+		}
+
+		/* Single line selected */
 		else
 		{
 			int x0 = leftcol + tb->left;
+			int len = strlen(tb->lines_list[tb->cy]);
+			int bx1 = MIN(tb->mx, tb->cx);
+			int bx2 = MAX(tb->mx, tb->cx);
 
-			int sx0 = 0;
-			int sx1 = 0;
-
-			if (by1 <= y && y < by2) sx1 = strlen(msg);
-			if (y == by1) sx0 = bx1;
-			if (y == by2) sx1 = bx2;
+			/* Correct cursor location */
+			if (bx2 > len) bx2 = len;
 
 			Term_gotoxy(leftcol, i + 1);
-			if (x0 < sx0) Term_addstr(sx0 - x0, color, msg);
-			if (x0 < sx1) Term_addstr(sx1 - sx0, TERM_YELLOW, msg + (sx0 - x0));
-			Term_addstr(-1, color, msg + (sx1 - x0));
+			if (x0 < bx1) Term_addstr(bx1 - x0, color, msg);
+			if (x0 < bx2) Term_addstr(bx2 - bx1, TERM_YELLOW, msg + (bx1 - x0));
+			Term_addstr(-1, color, msg + (bx2 - x0));
 		}
 	}
 
@@ -4555,9 +4513,6 @@ static void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool wh
 	char *d = buf;
 	int x;
 
-	/* No segment? */
-	if (x0 == x1) return;
-
 	/* Kill whole line? */
 	if (whole && x0 == 0 && s[x1] == '\0' && tb->lines_list[y+1])
 	{
@@ -4575,6 +4530,9 @@ static void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool wh
 
 		return;
 	}
+
+	/* No segment? */
+	if (x0 == x1) return;
 
 	/* Before the segment */
 	for (x = 0; x < x0; x++)
@@ -4887,43 +4845,46 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 	case EC_CUT:
 	{	
-		int by1, bx1, by2, bx2;
-		int y;
-
 		/* Copy the text first */
 		do_editor_command(tb, EC_COPY);
 
-		if (tb->my < tb->cy ||
-		    (tb->my == tb->cy && tb->mx < tb->cx))
+		/* Single line case */
+		if (tb->my == tb->cy)
 		{
-			by1 = tb->my;
-			bx1 = tb->mx;
-			by2 = tb->cy;
-			bx2 = tb->cx;
-		}
-		else
-		{
-			by2 = tb->my;
-			bx2 = tb->mx;
-			by1 = tb->cy;
-			bx1 = tb->cx;
-		}
+			int bx1 = MIN(tb->mx, tb->cx);
+			int bx2 = MAX(tb->mx, tb->cx);
+			int len = strlen(tb->lines_list[tb->cy]);
 
-		/* Kill lines in reverse order */
-		for (y = by2; y >= by1; y--)
-		{
-			int x0 = 0;
-			int x1 = strlen(tb->lines_list[y]);
+			/* Correct fake cursor position */
+			if (bx2 > len) bx2 = len;
 
-			if (y == by1) x0 = bx1;
-			if (y == by2) x1 = bx2;
+			kill_line_segment(tb, tb->cy, bx1, bx2, TRUE);
 
-			kill_line_segment(tb, y, x0, x1, TRUE);
+			/* New cursor position */
+			tb->cx = bx1;
 		}
 
-		/* Correct cursor position */
-		tb->cy = by1;
-		tb->cx = bx1;
+		/* Multiple lines case */
+		else /* if (tb->my != tb->cy) */
+		{
+			int y;
+
+			int by1 = MIN(tb->my, tb->cy);
+			int by2 = MAX(tb->my, tb->cy);
+
+			/* Kill lines in reverse order */
+			for (y = by2; y >= by1; y--)
+			{
+				int len = strlen(tb->lines_list[y]);
+				
+				kill_line_segment(tb, y, 0, len, TRUE);
+			}
+
+			/* New cursor position */
+			tb->cy = by1;
+			tb->cx = 0;
+		}
+
 
 		/* Disable selection */
 		tb->mark = 0;
@@ -4936,8 +4897,6 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 	case EC_COPY:
 	{	
-		int by1, bx1, by2, bx2;
-		int y;
 		int len = strlen(tb->lines_list[tb->cy]);
 
 		/* Correct cursor location */
@@ -4946,59 +4905,68 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		/* Use single line? */
 		if (!tb->mark)
 		{
+			/* Select a single line */
+			tb->cx = 0;
 			tb->my = tb->cy;
-			tb->mx = 0;
-			if (tb->lines_list[tb->cy + 1])
-			{
-				/* Select a single line */
-				tb->cx = 0;
-				tb->cy++;
-			}
-			else
-			{
-				/* Select bottom line */
-				tb->cx = len;
-			}
-		}
-
-		if (tb->my < tb->cy ||
-		    (tb->my == tb->cy && tb->mx < tb->cx))
-		{
-			by1 = tb->my;
-			bx1 = tb->mx;
-			by2 = tb->cy;
-			bx2 = tb->cx;
-		}
-		else
-		{
-			by2 = tb->my;
-			bx2 = tb->mx;
-			by1 = tb->cy;
-			bx1 = tb->cx;
+			tb->mx = len;
 		}
 
 		/* Kill old yank buffer */
 		kill_yank_chain(tb);
 
-		/* Copy string to yank buffer */
-		for (y = by1; y <= by2; y++)
+
+		/* Single line case */
+		if (tb->my == tb->cy)
 		{
 			int i;
 			char buf[MAX_LINELEN];
+			int bx1 = MIN(tb->mx, tb->cx);
+			int bx2 = MAX(tb->mx, tb->cx);
 
-			int x0 = 0;
-			int x1 = strlen(tb->lines_list[y]);
+			/* Correct fake cursor position */
+			if (bx2 > len) bx2 = len;
 
-			if (y == by1) x0 = bx1;
-			if (y == by2) x1 = bx2;
-
-			for (i = 0; i < x1 - x0; i++)
+			/* Whole part of this line is selected */
+			if (bx1 == 0 && bx2 == len)
 			{
-				buf[i] = tb->lines_list[y][x0 + i];
-			}
-			buf[i] = '\0';
+				/* Copy this line */
+				add_str_to_yank(tb, tb->lines_list[tb->cy]);
 
-			add_str_to_yank(tb, buf);
+				/* Add end of line to the buffer */
+				add_str_to_yank(tb, "");
+			}
+
+			/* Segment of this line is selected */
+			else
+			{
+				for (i = 0; i < bx2 - bx1; i++)
+				{
+					buf[i] = tb->lines_list[tb->cy][bx1 + i];
+				}
+				buf[i] = '\0';
+
+				/* Copy this segment of line */
+				add_str_to_yank(tb, buf);
+			}
+		}
+
+		/* Multiple lines case */
+		else /* if (tb->my != tb->cy) */
+		{
+			int y;
+
+			int by1 = MIN(tb->my, tb->cy);
+			int by2 = MAX(tb->my, tb->cy);
+
+			/* Copy lines */
+			for (y = by1; y <= by2; y++)
+			{
+				/* Copy this line */
+				add_str_to_yank(tb, tb->lines_list[y]);
+			}
+
+			/* Add final end of line to the buffer */
+			add_str_to_yank(tb, "");
 		}
 
 		/* Disable selection */
