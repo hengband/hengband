@@ -4350,35 +4350,12 @@ void update_view(void)
 
 
 
-
-
-
-/*
- * Hack -- provide some "speed" for the "flow" code
- * This entry is the "current index" for the "when" field
- * Note that a "when" value of "zero" means "not used".
- *
- * Note that the "cost" indexes from 1 to 127 are for
- * "old" data, and from 128 to 255 are for "new" data.
- *
- * This means that as long as the player does not "teleport",
- * then any monster up to 128 + MONSTER_FLOW_DEPTH will be
- * able to track down the player, and in general, will be
- * able to track down either the player or a position recently
- * occupied by the player.
- */
-static int flow_n = 0;
-
-
 /*
  * Hack -- forget the "flow" information
  */
 void forget_flow(void)
 {
 	int x, y;
-
-	/* Nothing to forget */
-	if (!flow_n) return;
 
 	/* Check the entire dungeon */
 	for (y = 0; y < cur_hgt; y++)
@@ -4391,9 +4368,6 @@ void forget_flow(void)
 			cave[y][x].when = 0;
 		}
 	}
-
-	/* Start over */
-	flow_n = 0;
 }
 
 
