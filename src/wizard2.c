@@ -194,7 +194,7 @@ static void prt_alloc(byte tval, byte sval, int row, int col)
 {
 	int i, j;
 	int home = 0;
-	u32b maxd = 1, maxr = 1, maxt = 1;
+	u32b maxd = 1, maxr0 = 1, maxr = 1, maxt = 1;
 	u32b rarity[K_MAX_DEPTH];
 	u32b total[K_MAX_DEPTH];
 	u32b display[22];
@@ -245,10 +245,11 @@ static void prt_alloc(byte tval, byte sval, int row, int col)
 	/* Find maxima */
 	for (i = 0; i < K_MAX_DEPTH; i++)
 	{
-		if (rarity[i] / GREAT_OBJ / K_MAX_DEPTH > maxr)
-			maxr = rarity[i] / GREAT_OBJ / K_MAX_DEPTH;
+		if (rarity[i] > maxr0) maxr0 = rarity[i];
 		if (total[i] > maxt) maxt = total[i];
 	}
+	maxr = maxr0 / GREAT_OBJ / K_MAX_DEPTH;
+	if (maxr == 0) maxr = 1;
 
 	/* Simulate a log graph */
 	if (maxt / maxr > 32)
@@ -273,7 +274,9 @@ static void prt_alloc(byte tval, byte sval, int row, int col)
 		/* Shift the values into view */
 		for (j = i * K_MAX_DEPTH / 22; j < (i + 1) * K_MAX_DEPTH / 22; j++)
 		{
-			display[i] += rarity[j] * 10 * maxt / total[j];
+			if (maxr0 < 10)
+				rarity[j] *= 10;
+			display[i] += rarity[j] * maxt / total[j];
 		}
 
 		/* Track maximum */
