@@ -1126,6 +1126,9 @@ void do_cmd_change_name(void)
 		if (c == 'c')
 		{
 			get_name();
+
+                        /* Process the player name */
+                        process_player_name(FALSE);
 		}
 
 		/* File dump */
@@ -5758,7 +5761,7 @@ static void do_cmd_knowledge_artifacts(void)
 	}
 
 	/* Allocate the "who" array */
-	C_MAKE(who, max_r_idx, s16b);
+	C_MAKE(who, max_a_idx, s16b);
 
 	/* Allocate the "okay" array */
 	C_MAKE(okay, max_a_idx, bool);
@@ -5888,7 +5891,7 @@ strcpy(base_name, "未知の伝説のアイテム");
 	}
 
 	/* Free the "who" array */
-	C_KILL(who, max_r_idx, s16b);
+	C_KILL(who, max_a_idx, s16b);
 
 	/* Free the "okay" array */
 	C_KILL(okay, max_a_idx, bool);
