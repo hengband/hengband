@@ -7811,6 +7811,8 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 						/* Disintegration balls explosions are stopped by perma-walls */
 						if (!in_disintegration_range(by, bx, y, x)) continue;
 						
+						/* Disintegration destroys mirrors. */
+						remove_mirror(y,x);
 						if (real_breath && cave_valid_bold(y, x) &&
 						    (cave[y][x].feat < FEAT_PATTERN_START ||
 						     cave[y][x].feat > FEAT_PATTERN_XTRA2) &&
