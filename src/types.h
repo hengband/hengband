@@ -613,6 +613,8 @@ struct monster_type
 	u32b exp;
 
 	u32b smart;			/* Field for "smart_learn" */
+
+	s16b parent_m_idx;
 };
 
 

@@ -15,8 +15,6 @@
 #define HORDE_NOGOOD 0x01
 #define HORDE_NOEVIL 0x02
 
-bool is_kage = FALSE;
-
 cptr horror_desc[MAX_SAN_HORROR] =
 {
 #ifdef JP
@@ -292,7 +290,7 @@ void delete_monster(int y, int x)
  */
 static void compact_monsters_aux(int i1, int i2)
 {
-	int y, x;
+	int y, x, i;
 
 	cave_type *c_ptr;
 
@@ -345,6 +343,18 @@ static void compact_monsters_aux(int i1, int i2)
 
 	/* Hack -- Update the health bar */
 	if (p_ptr->health_who == i1) health_track(i2);
+
+	/* Hack -- Update parent index */
+	if (is_pet(m_ptr))
+	{
+		for (i = 1; i < m_max; i++)
+		{
+			monster_type *m2_ptr = &m_list[i];
+
+			if (m2_ptr->parent_m_idx == i1)
+				m2_ptr->parent_m_idx = i2;
+		}
+	}
 
 	/* Structure copy */
 	COPY(&m_list[i2], &m_list[i1], monster_type);
@@ -589,11 +599,6 @@ static int summon_specific_type = 0;
  */
 static int summon_specific_who = -1;
 
-
-/*
- * Hack -- the hostility of the summoned monster
- */
-static bool summon_specific_hostile = TRUE;
 
 static bool summon_unique_okay = FALSE;
 
@@ -2919,7 +2924,7 @@ byte get_mspeed(monster_race *r_ptr)
  * This is the only function which may place a monster in the dungeon,
  * except for the savefile loading code.
  */
-bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
+static bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 {
 	cave_type		*c_ptr;
 
@@ -3090,7 +3095,7 @@ msg_print("守りのルーンが壊れた！");
 
 	}
 
-	if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL) || (r_ptr->level < 10)) is_kage = FALSE;
+	if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL) || (r_ptr->level < 10)) mode &= ~PM_KAGE;
 
 	/* Make a new monster */
 	c_ptr->m_idx = m_pop();
@@ -3140,6 +3145,18 @@ msg_print("守りのルーンが壊れた！");
 	m_ptr->mflag = 0;
 	m_ptr->mflag2 = 0;
 
+
+	/* Your pet summons its pet. */
+	if (who > 0 && is_pet(&m_list[who]))
+	{
+		mode |= PM_FORCE_PET;
+		m_ptr->parent_m_idx = who;
+	}
+	else
+	{
+		m_ptr->parent_m_idx = 0;
+	}
+
 	if (r_ptr->flags7 & RF7_CHAMELEON)
 	{
 		choose_new_monster(c_ptr->m_idx, TRUE, 0);
@@ -3151,7 +3168,7 @@ msg_print("守りのルーンが壊れた！");
 		if ((r_ptr->flags1 & RF1_UNIQUE) && (who <= 0))
 			m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
 	}
-	else if (is_kage)
+	else if ((mode & PM_KAGE) && !(mode & PM_FORCE_PET))
 	{
 		m_ptr->ap_r_idx = MON_KAGE;
 		m_ptr->mflag2 |= MFLAG2_KAGE;
@@ -3617,10 +3634,8 @@ bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
 	int             i;
 	monster_race    *r_ptr = &r_info[r_idx];
 
-	if (one_in_(333) && !(mode & PM_NO_KAGE) && !(mode & PM_FORCE_PET))
-		is_kage = TRUE;
-	else
-		is_kage = FALSE;
+	if (!(mode & PM_NO_KAGE) && one_in_(333))
+		mode |= PM_KAGE;
 
 	/* Place one monster, or fail */
 	if (!place_monster_one(who, y, x, r_idx, mode)) return (FALSE);
@@ -3912,9 +3927,6 @@ static bool summon_specific_okay(int r_idx)
 
 		/* Friendly vs. opposite aligned normal or pet */
 		if (monster_has_hostile_align(m_ptr, 0, 0, r_ptr)) return FALSE;
-
-		/* Hostile vs. non-hostile */
-		if (is_hostile(m_ptr) != summon_specific_hostile) return FALSE;
 	}
 	/* Use the player's alignment */
 	else if (summon_specific_who < 0)
@@ -3981,9 +3993,6 @@ bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
 	summon_specific_type = type;
 
 	summon_unique_okay = (mode & PM_ALLOW_UNIQUE) ? TRUE : FALSE;
-
-	/* Save the hostility */
-	summon_specific_hostile = (!(mode & PM_FORCE_FRIENDLY) && !(is_friendly_idx(who)) && !(mode & PM_FORCE_PET));
 
 	/* Prepare allocation table */
 	get_mon_num_prep(summon_specific_okay, get_monster_hook2(y, x));

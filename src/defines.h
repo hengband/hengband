@@ -2652,6 +2652,7 @@
 #define PM_ALLOW_UNIQUE   0x00000040
 #define PM_IGNORE_TERRAIN 0x00000080
 #define PM_HASTE          0x00000100
+#define PM_KAGE           0x00000200
 
 
 /* Bit flags for monster_desc() */
@@ -5256,6 +5257,7 @@ extern int PlayerUID;
 #define SAVE_MON_EXP          0x00001000
 #define SAVE_MON_MFLAG2       0x00002000
 #define SAVE_MON_NICKNAME     0x00004000
+#define SAVE_MON_PARENT       0x00008000
 
 
 /*

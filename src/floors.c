@@ -349,10 +349,23 @@ static void preserve_pet(void)
 
 	if (p_ptr->riding)
 	{
-		COPY(&party_mon[0], &m_list[p_ptr->riding], monster_type);
+		monster_type *m_ptr = &m_list[p_ptr->riding];
 
-		/* Delete from this floor */
-		delete_monster_idx(p_ptr->riding);
+		/* Pet of other pet don't follow. */
+		if (m_ptr->parent_m_idx)
+		{
+			p_ptr->riding = 0;
+			p_ptr->pet_extra_flags &= ~(PF_RYOUTE);
+			p_ptr->riding_ryoute = p_ptr->old_riding_ryoute = FALSE;
+		}
+		else
+		{
+			/* Preserve the mount */
+			COPY(&party_mon[0], m_ptr, monster_type);
+
+			/* Delete from this floor */
+			delete_monster_idx(p_ptr->riding);
+		}
 	}
 
 	/*
@@ -377,6 +390,12 @@ static void preserve_pet(void)
 			{
 				int dis = distance(py, px, m_ptr->fy, m_ptr->fx);
 
+				/* Confused (etc.) monsters don't follow. */
+				if (m_ptr->confused || m_ptr->stunned || m_ptr->csleep) continue;
+
+				/* Pet of other pet don't follow. */
+				if (m_ptr->parent_m_idx) continue;
+
 				/*
 				 * Pets with nickname will follow even from 3 blocks away
 				 * when you or the pet can see the other.
@@ -391,7 +410,6 @@ static void preserve_pet(void)
 				{
 					if (dis > 1) continue;
 				}
-				if (m_ptr->confused || m_ptr->stunned || m_ptr->csleep) continue;
 			}
 
 			COPY(&party_mon[num], &m_list[i], monster_type);
@@ -417,6 +435,36 @@ static void preserve_pet(void)
 
 			monster_desc(m_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 			do_cmd_write_nikki(NIKKI_NAMED_PET, 4, m_name);
+		}
+	}
+
+
+	/* Pet of other pet may disappear. */
+	for (i = m_max - 1; i >=1; i--)
+	{
+		monster_type *m_ptr = &m_list[i];
+
+		/* Are there its parent? */
+		if (m_ptr->parent_m_idx && !m_list[m_ptr->parent_m_idx].r_idx)
+		{
+			/* Its parent have gone, it also goes away. */
+
+			if (m_ptr->ml)
+			{
+				char m_name[80];
+			
+				/* Acquire the monster name */
+				monster_desc(m_name, m_ptr, 0);
+
+#ifdef JP
+				msg_format("%sは消え去った！", m_name);
+#else
+				msg_format("%^s disappears!", m_name);
+#endif
+			}
+
+			/* Delete the monster */
+			delete_monster_idx(i);
 		}
 	}
 }

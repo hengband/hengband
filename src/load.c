@@ -833,6 +833,9 @@ static void rd_monster(monster_type *m_ptr)
 		else m_ptr->nickname = 0;
 	}
 	else m_ptr->nickname = 0;
+
+	if (flags & SAVE_MON_PARENT) rd_s16b(&m_ptr->parent_m_idx);
+	else m_ptr->parent_m_idx = 0;
 }
 
 

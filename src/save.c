@@ -202,6 +202,7 @@ static void wr_monster(monster_type *m_ptr)
 	if (m_ptr->exp) flags |= SAVE_MON_EXP;
 	if (m_ptr->mflag2) flags |= SAVE_MON_MFLAG2;
 	if (m_ptr->nickname) flags |= SAVE_MON_NICKNAME;
+	if (m_ptr->parent_m_idx) flags |= SAVE_MON_PARENT;
 
 	/*** Monster save flags ***/
 	wr_u32b(flags);
@@ -235,6 +236,7 @@ static void wr_monster(monster_type *m_ptr)
 	if (flags & SAVE_MON_EXP) wr_u32b(m_ptr->exp);
 	if (flags & SAVE_MON_MFLAG2) wr_byte(m_ptr->mflag2);
 	if (flags & SAVE_MON_NICKNAME) wr_string(quark_str(m_ptr->nickname));
+	if (flags & SAVE_MON_PARENT) wr_s16b(m_ptr->parent_m_idx);
 }
 
 

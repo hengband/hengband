@@ -5190,6 +5190,9 @@ static bool ang_sort_comp_pet_dismiss(vptr u, vptr v, int a, int b)
 	if (m_ptr1->nickname && !m_ptr2->nickname) return TRUE;
 	if (m_ptr2->nickname && !m_ptr1->nickname) return FALSE;
 
+	if (!m_ptr1->parent_m_idx && m_ptr2->parent_m_idx) return TRUE;
+	if (!m_ptr2->parent_m_idx && m_ptr1->parent_m_idx) return FALSE;
+
 	if ((r_ptr1->flags1 & RF1_UNIQUE) && !(r_ptr2->flags1 & RF1_UNIQUE)) return TRUE;
 	if ((r_ptr2->flags1 & RF1_UNIQUE) && !(r_ptr1->flags1 & RF1_UNIQUE)) return FALSE;
 

@@ -2318,6 +2318,31 @@ static void process_monster(int m_idx)
 		if (randint0(tmp) > (r_ptr->level+20)) aware = FALSE;
 	}
 
+	/* Are there its parent? */
+	if (m_ptr->parent_m_idx && !m_list[m_ptr->parent_m_idx].r_idx)
+	{
+		/* Its parent have gone, it also goes away. */
+
+		if (m_ptr->ml)
+		{
+			char m_name[80];
+			
+			/* Acquire the monster name */
+			monster_desc(m_name, m_ptr, 0);
+
+#ifdef JP
+			msg_format("%sは消え去った！", m_name);
+#else
+			msg_format("%^s disappears!", m_name);
+#endif
+		}
+
+		/* Delete the monster */
+		delete_monster_idx(m_idx);
+
+		return;
+	}
+
 	/* Quantum monsters are odd */
 	if (r_ptr->flags2 & (RF2_QUANTUM))
 	{
@@ -4005,6 +4030,9 @@ void monster_gain_exp(int m_idx, int s_idx)
 			msg_format("%^s evolved into %s.", m_name, r_name + r_ptr->name);
 #endif
 			r_info[old_r_idx].r_xtra1 |= MR1_SINKA;
+
+			/* Now you feel very close to this pet. */
+			m_ptr->parent_m_idx = 0;
 		}
 		update_mon(m_idx, FALSE);
 		lite_spot(m_ptr->fy, m_ptr->fx);
