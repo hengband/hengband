@@ -4315,6 +4315,12 @@
 	(((C)->feat == FEAT_PERM_SOLID) && \
 	  (C)->mimic && feat_floor((C)->mimic))
 
+/*
+ * Get feature mimic from f_info[] (applying "mimic" field)
+ */
+#define get_feat_mimic(C) \
+	(f_info[(C)->mimic ? (C)->mimic : (C)->feat].mimic)
+
 #define update_playtime() \
 {\
 	u32b tmp;\

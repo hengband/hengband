@@ -2895,10 +2895,8 @@ static bool target_set_accept(int y, int x)
 	/* Interesting memorized features */
 	if (c_ptr->info & (CAVE_MARK))
 	{
-		byte feat;
-
 		/* Feature code (applying "mimic" field) */
-		feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
+		byte feat = get_feat_mimic(c_ptr);
 
 		/* Notice glyphs */
 		if (c_ptr->info & CAVE_OBJECT) return (TRUE);
@@ -3547,7 +3545,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 
 
 	/* Feature code (applying "mimic" field) */
-	feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
+	feat = get_feat_mimic(c_ptr);
 
 	/* Require knowledge about grid, or ability to see grid */
 	if (!(c_ptr->info & CAVE_MARK) && !player_can_see_bold(y, x))

@@ -3903,12 +3903,10 @@ void move_player(int dir, int do_pickup, bool break_trap)
 	else if ((!cave_floor_bold(y, x)) &&
 		(!p_can_pass_walls))
 	{
-		byte feat;
+		/* Feature code (applying "mimic" field) */
+		byte feat = get_feat_mimic(c_ptr);
 
 		oktomove = FALSE;
-
-		/* Feature code (applying "mimic" field) */
-		feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
 
 		/* Disturb the player */
 		disturb(0, 0);
@@ -4327,7 +4325,6 @@ void move_player(int dir, int do_pickup, bool break_trap)
 static int see_wall(int dir, int y, int x)
 {
 	cave_type   *c_ptr;
-	byte feat;
 
 	/* Get the new location */
 	y += ddy[dir];
@@ -4339,12 +4336,12 @@ static int see_wall(int dir, int y, int x)
 	/* Access grid */
 	c_ptr = &cave[y][x];
 
-	/* Feature code (applying "mimic" field) */
-	feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
-
 	/* Must be known to the player */
 	if (c_ptr->info & (CAVE_MARK))
 	{
+		/* Feature code (applying "mimic" field) */
+		byte feat = get_feat_mimic(c_ptr);
+
 		/* Rubble, Magma, Quartz, Wall, Perm wall */
 		if (feat >= FEAT_RUBBLE && feat <= FEAT_PERM_SOLID) return TRUE;
 
@@ -4725,7 +4722,7 @@ static bool run_test(void)
 		c_ptr = &cave[row][col];
 
 		/* Feature code (applying "mimic" field) */
-		feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
+		feat = get_feat_mimic(c_ptr);
 
 		/* Visible monsters abort running */
 		if (c_ptr->m_idx)
@@ -4950,7 +4947,7 @@ static bool run_test(void)
 			c_ptr = &cave[row][col];
 
 			/* Feature code (applying "mimic" field) */
-			feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
+			feat = get_feat_mimic(c_ptr);
 
 			/* Unknown grid or non-wall XXX XXX XXX cave_floor_grid(c_ptr)) */
 			if (!(c_ptr->info & (CAVE_MARK)) ||
@@ -4991,7 +4988,7 @@ static bool run_test(void)
 			c_ptr = &cave[row][col];
 
 			/* Feature code (applying "mimic" field) */
-			feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
+			feat = get_feat_mimic(c_ptr);
 
 			/* Unknown grid or non-wall XXX XXX XXX cave_floor_grid(c_ptr)) */
 			if (!(c_ptr->info & (CAVE_MARK)) ||
@@ -5118,14 +5115,11 @@ void run_step(int dir)
 	/* Start running */
 	if (dir)
 	{
-		cave_type   *c_ptr;
-		byte feat;
-
 		/* Access grid */
-		c_ptr = &cave[py+ddy[dir]][px+ddx[dir]];
+		cave_type *c_ptr = &cave[py+ddy[dir]][px+ddx[dir]];
 
 		/* Feature code (applying "mimic" field) */
-		feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
+		byte feat = get_feat_mimic(c_ptr);
 
 		/* Hack -- do not start silly run */
 		if (see_wall(dir, py, px) &&

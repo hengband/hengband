@@ -940,7 +940,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 	s16b this_o_idx, next_o_idx = 0;
 
 	/* Feature code (applying "mimic" field) */
-	byte feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
+	byte feat = get_feat_mimic(c_ptr);
 
 	byte a;
 	byte c;
@@ -1354,13 +1354,13 @@ void map_info(int y, int x, byte *ap, char *cp)
 		case FEAT_SHAL_LAVA:
 			feat_priority = 2;
 			break;
-			
+
 		case FEAT_MAGMA_K:
 		case FEAT_QUARTZ_K:
 			/* Now a days treasere grid is too many */
 			feat_priority = 2;
 			break;
-			
+
 		case FEAT_MOUNTAIN:
 		case FEAT_PERM_EXTRA:
 		case FEAT_PERM_INNER:
@@ -1368,9 +1368,9 @@ void map_info(int y, int x, byte *ap, char *cp)
 		case FEAT_PERM_SOLID:
 			feat_priority = 5;
 			break;
-			
+
 			/* default is feat_priority = 20; (doors and stores) */ 
-			
+
 		case FEAT_GLYPH:
 		case FEAT_MINOR_GLYPH:
 		case FEAT_MIRROR:
@@ -1385,10 +1385,10 @@ void map_info(int y, int x, byte *ap, char *cp)
 		case FEAT_PATTERN_XTRA2:
 			feat_priority = 16;
 			break;
-			
+
 			/* objects have feat_priority = 20 */ 
 			/* monsters have feat_priority = 30 */ 
-			
+
 		case FEAT_LESS:
 		case FEAT_MORE:
 		case FEAT_QUEST_ENTER:
@@ -1401,7 +1401,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 		case FEAT_ENTRANCE:
 			feat_priority = 35;
 			break;
-			
+
 		default:
 			feat_priority = 10;
 			break;
@@ -1753,11 +1753,6 @@ void note_spot(int y, int x)
 
 	s16b this_o_idx, next_o_idx = 0;
 
-	byte feat;
-
-	/* Feature code (applying "mimic" field) */
-	feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
-
 
 	/* Blind players see nothing */
 	if (p_ptr->blind) return;
@@ -1793,6 +1788,9 @@ void note_spot(int y, int x)
 	/* Hack -- memorize grids */
 	if (!(c_ptr->info & (CAVE_MARK)))
 	{
+		/* Feature code (applying "mimic" field) */
+		byte feat = get_feat_mimic(c_ptr);
+
 		/* Handle floor grids first */
 		if ((feat <= FEAT_INVIS) || (feat == FEAT_DIRT) || (feat == FEAT_GRASS))
 		{
@@ -4689,7 +4687,7 @@ void map_area(int range)
 			c_ptr = &cave[y][x];
 
 			/* Feature code (applying "mimic" field) */
-			feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
+			feat = get_feat_mimic(c_ptr);
 
 			/* All non-walls are "checked" */
 			if ((feat <= FEAT_DOOR_TAIL) ||
@@ -4711,7 +4709,7 @@ void map_area(int range)
 					c_ptr = &cave[y + ddy_ddd[i]][x + ddx_ddd[i]];
 
 					/* Feature code (applying "mimic" field) */
-					feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
+					feat = get_feat_mimic(c_ptr);
 
 					/* Memorize walls (etc) */
 					if ((feat >= FEAT_RUBBLE) && (feat != FEAT_DIRT) && (feat != FEAT_GRASS))
@@ -4778,7 +4776,7 @@ void wiz_lite(bool ninja)
 			cave_type *c_ptr = &cave[y][x];
 
 			/* Feature code (applying "mimic" field) */
-			feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
+			feat = get_feat_mimic(c_ptr);
 
 			/* Process all non-walls */
 			if (cave_floor_bold(y, x) || (feat == FEAT_RUBBLE) || (feat == FEAT_TREES) || (feat == FEAT_MOUNTAIN))
@@ -4793,7 +4791,7 @@ void wiz_lite(bool ninja)
 					c_ptr = &cave[yy][xx];
 
 					/* Feature code (applying "mimic" field) */
-					feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
+					feat = get_feat_mimic(c_ptr);
 
 					/* Perma-lite the grid */
 					if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS) && !ninja)
@@ -5254,7 +5252,7 @@ void glow_deep_lava_and_bldg(void)
 			c_ptr = &cave[y][x];
 
 			/* Feature code (applying "mimic" field) */
-			feat = f_info[c_ptr->mimic ? c_ptr->mimic : c_ptr->feat].mimic;
+			feat = get_feat_mimic(c_ptr);
 
 			if ((feat == FEAT_DEEP_LAVA) ||
 			   ((feat >= FEAT_SHOP_HEAD) &&
