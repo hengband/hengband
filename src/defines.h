@@ -2785,7 +2785,7 @@
 #define GF_STASIS_EVIL 115
 #define GF_WOUNDS      116
 
-#define MAX_GF				116
+#define MAX_GF				117
 
 /*
  * Some things which induce learning
