@@ -1057,7 +1057,7 @@ msg_format("モンスター数基本値を %d から %d に減らします", small_tester, i);
 	/* Put some monsters in the dungeon */
 	for (i = i + k; i > 0; i--)
 	{
-		(void)alloc_monster(0, TRUE);
+		(void)alloc_monster(0, PM_ALLOW_SLEEP);
 	}
 
 	/* Place some traps in the dungeon */

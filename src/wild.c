@@ -836,8 +836,13 @@ void wilderness_gen(void)
 	/* Make some residents */
 	for (i = 0; i < lim; i++)
 	{
+		u32b mode = 0;
+
+		if (!(generate_encounter || (one_in_(2) && (!p_ptr->town_num))))
+			mode |= PM_ALLOW_SLEEP;
+
 		/* Make a resident */
-		(void)alloc_monster(generate_encounter ? 0 : 3, (bool)!(generate_encounter || (one_in_(2) && (!p_ptr->town_num))));
+		(void)alloc_monster(generate_encounter ? 0 : 3, mode);
 	}
 
 	if(generate_encounter) ambush_flag = TRUE;
