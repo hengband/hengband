@@ -3247,7 +3247,7 @@ bool monst_spell_monst(int m_idx)
 						dam += damroll(6, 8);
 					}
 
-					if (p_ptr->riding)
+					if (p_ptr->riding == t_idx)
 					{
 						int get_damage = 0;
 
