@@ -613,7 +613,7 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 			if ((TV_EQUIP_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_EQUIP_END))
 				ADD_FLG(FLG_NAMELESS);
 
-				bol_mark = TRUE;
+			bol_mark = TRUE;
 		}
 
 	}
