@@ -24,7 +24,6 @@
 #define place_rubble(Y,X)       set_cave_feat(Y,X,FEAT_RUBBLE)
 #define place_up_stairs(Y,X)    set_cave_feat(Y,X,FEAT_LESS)
 #define place_down_stairs(Y,X)  set_cave_feat(Y,X,FEAT_MORE)
-#define place_invis_wall(Y,X)   set_cave_feat(Y,X,FEAT_WALL_INVIS)
 
 #define is_floor_bold(Y,X) (cave[Y][X].info & CAVE_FLOOR)
 #define is_extra_bold(Y,X) (cave[Y][X].info & CAVE_EXTRA)
