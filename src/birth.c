@@ -3749,7 +3749,7 @@ void player_outfit(void)
 		object_prep(q_ptr, lookup_kind(TV_FLASK, SV_ANY));
 
 		/* Fuel with oil (move pval to xtra4) */
-		apply_magic(q_ptr, 1, FALSE, FALSE, FALSE, FALSE);
+		apply_magic(q_ptr, 1, 0L);
 
 		q_ptr->number = (byte)rand_range(7, 12);
 		object_aware(q_ptr);

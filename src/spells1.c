@@ -969,7 +969,7 @@ msg_print("岩石の下に何か隠されていた！");
 					}
 
 					/* Place gold */
-					place_object(y, x, FALSE, FALSE);
+					place_object(y, x, AM_OKAY);
 				}
 			}
 

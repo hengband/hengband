@@ -917,44 +917,45 @@ static void wiz_reroll_item(object_type *o_ptr)
 			case 'w': case 'W':
 			{
 				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, dun_level, FALSE, TRUE, TRUE, TRUE);
+				apply_magic(q_ptr, dun_level, AM_GOOD | AM_GREAT | AM_CURSED);
 				break;
 			}
 			/* Apply bad magic, but first clear object */
 			case 'c': case 'C':
 			{
 				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, dun_level, FALSE, TRUE, FALSE, TRUE);
+				apply_magic(q_ptr, dun_level, AM_GOOD | AM_CURSED);
 				break;
 			}
 			/* Apply normal magic, but first clear object */
 			case 'n': case 'N':
 			{
 				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, dun_level, FALSE, FALSE, FALSE, FALSE);
+				apply_magic(q_ptr, dun_level, 0L);
 				break;
 			}
 			/* Apply good magic, but first clear object */
 			case 'g': case 'G':
 			{
 				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, dun_level, FALSE, TRUE, FALSE, FALSE);
+				apply_magic(q_ptr, dun_level, AM_GOOD);
 				break;
 			}
 			/* Apply great magic, but first clear object */
 			case 'e': case 'E':
 			{
 				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, dun_level, FALSE, TRUE, TRUE, FALSE);
+				apply_magic(q_ptr, dun_level, AM_GOOD | AM_GREAT);
 				break;
 			}
+			/* Apply special magic, but first clear object */
 			case 's': case 'S':
 			{
 				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, dun_level, TRUE, TRUE, TRUE, FALSE);
+				apply_magic(q_ptr, dun_level, AM_OKAY | AM_GOOD | AM_GREAT | AM_SPECIAL);
 
-				/* Failed to create normal artifact; make a random one */
-				if (!artifact_p(q_ptr)) create_artifact(q_ptr, FALSE);
+				/* Failed to create artifact; make a random one */
+				if (!artifact_p(q_ptr) && !q_ptr->art_name) create_artifact(q_ptr, FALSE);
 				break;
 			}
 		}
@@ -1002,7 +1003,7 @@ static void wiz_statistics(object_type *o_ptr)
 	char ch;
 	cptr quality;
 
-	bool good, great;
+	u32b mode;
 
 	object_type forge;
 	object_type	*q_ptr;
@@ -1030,26 +1031,21 @@ static void wiz_statistics(object_type *o_ptr)
 
 		if (ch == 'n' || ch == 'N')
 		{
-			good = FALSE;
-			great = FALSE;
+			mode = AM_OKAY;
 			quality = "normal";
 		}
 		else if (ch == 'g' || ch == 'G')
 		{
-			good = TRUE;
-			great = FALSE;
+			mode = AM_OKAY | AM_GOOD;
 			quality = "good";
 		}
 		else if (ch == 'e' || ch == 'E')
 		{
-			good = TRUE;
-			great = TRUE;
+			mode = AM_OKAY | AM_GOOD | AM_GREAT;
 			quality = "excellent";
 		}
 		else
 		{
-			good = FALSE;
-			great = FALSE;
 			break;
 		}
 
@@ -1097,7 +1093,7 @@ static void wiz_statistics(object_type *o_ptr)
 			object_wipe(q_ptr);
 
 			/* Create an object */
-			make_object(q_ptr, good, great);
+			make_object(q_ptr, mode);
 
 
 			/* XXX XXX XXX Mega-Hack -- allow multiple artifacts */
@@ -1420,7 +1416,7 @@ static void wiz_create_item(void)
 	object_prep(q_ptr, k_idx);
 
 	/* Apply magic */
-	apply_magic(q_ptr, dun_level, FALSE, FALSE, FALSE, FALSE);
+	apply_magic(q_ptr, dun_level, 0L);
 
 	/* Drop the object from heaven */
 	(void)drop_near(q_ptr, -1, py, px);

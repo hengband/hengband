@@ -124,7 +124,7 @@ static bool do_cmd_archer(void)
 			q_ptr->number = (byte)rand_range(15,30);
 			object_aware(q_ptr);
 			object_known(q_ptr);
-			apply_magic(q_ptr, p_ptr->lev, FALSE, FALSE, FALSE, FALSE);
+			apply_magic(q_ptr, p_ptr->lev, 0L);
 			q_ptr->discount = 99;
 
 			(void)inven_carry(q_ptr);
@@ -188,7 +188,7 @@ static bool do_cmd_archer(void)
 		q_ptr->number = (byte)rand_range(5,10);
 		object_aware(q_ptr);
 		object_known(q_ptr);
-		apply_magic(q_ptr, p_ptr->lev, FALSE, FALSE, FALSE, FALSE);
+		apply_magic(q_ptr, p_ptr->lev, 0L);
 
 		q_ptr->discount = 99;
 
@@ -252,7 +252,7 @@ static bool do_cmd_archer(void)
 		q_ptr->number = (byte)rand_range(4,8);
 		object_aware(q_ptr);
 		object_known(q_ptr);
-		apply_magic(q_ptr, p_ptr->lev, FALSE, FALSE, FALSE, FALSE);
+		apply_magic(q_ptr, p_ptr->lev, 0L);
 
 		q_ptr->discount = 99;
 

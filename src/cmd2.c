@@ -440,7 +440,7 @@ static void chest_death(bool scatter, int y, int x, s16b o_idx)
 	int number;
 
 	bool small;
-	bool great = FALSE;
+	u32b mode = AM_OKAY | AM_GOOD;
 
 	object_type forge;
 	object_type *q_ptr;
@@ -458,7 +458,7 @@ static void chest_death(bool scatter, int y, int x, s16b o_idx)
 	{
 		number = 5;
 		small = FALSE;
-		great = TRUE;
+		mode |= AM_GREAT;
 		object_level = o_ptr->xtra3;
 	}
 	else
@@ -493,7 +493,7 @@ static void chest_death(bool scatter, int y, int x, s16b o_idx)
 		else
 		{
 			/* Make a good object */
-			if (!make_object(q_ptr, TRUE, great)) continue;
+			if (!make_object(q_ptr, mode)) continue;
 		}
 
 		/* If chest scatters its contents, pick any floor square. */
@@ -1724,7 +1724,7 @@ static bool do_cmd_tunnel_aux(int y, int x)
 			if (randint0(100) < (15 - dun_level/2))
 			{
 				/* Create a simple object */
-				place_object(y, x, FALSE, FALSE);
+				place_object(y, x, AM_OKAY);
 
 				/* Observe new object */
 				if (player_can_see_bold(y, x))

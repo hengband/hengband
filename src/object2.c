@@ -2352,7 +2352,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 			/* Very good */
 			if (power > 1)
 			{
-				if (one_in_(30))
+				if (one_in_(30) || (power > 2)) /* power > 2 is debug only */
 					create_artifact(o_ptr, FALSE);
 				else
 					/* Special Ego-item */
@@ -2384,7 +2384,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 			/* Very Good */
 			if (power > 1)
 			{
-				if (one_in_(40))
+				if (one_in_(40) || (power > 2)) /* power > 2 is debug only */
 				{
 					create_artifact(o_ptr, FALSE);
 					break;
@@ -2510,7 +2510,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 			/* Very good */
 			if (power > 1)
 			{
-				if (one_in_(20))
+				if (one_in_(20) || (power > 2)) /* power > 2 is debug only */
 				{
 					create_artifact(o_ptr, FALSE);
 					break;
@@ -2529,6 +2529,12 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 			/* Very good */
 			if (power > 1)
 			{
+				if (power > 2) /* power > 2 is debug only */
+				{
+					create_artifact(o_ptr, FALSE);
+					break;
+				}
+
 				o_ptr->name2 = get_random_ego(INVEN_AMMO, TRUE);
 
 				switch (o_ptr->name2)
@@ -2680,7 +2686,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 		{
 			/* Rating boost */
 			rating += 30;
-			if(one_in_(50))
+			if (one_in_(50) || (power > 2)) /* power > 2 is debug only */
 				create_artifact(o_ptr, FALSE);
 
 			/* Mention the item */
@@ -2715,7 +2721,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					break;
 				}
 
-				if (one_in_(20))
+				if (one_in_(20) || (power > 2)) /* power > 2 is debug only */
 				{
 					create_artifact(o_ptr, FALSE);
 					break;
@@ -2776,7 +2782,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 			/* Very good */
 			if (power > 1)
 			{
-				if (one_in_(20))
+				if (one_in_(20) || (power > 2)) /* power > 2 is debug only */
 				{
 					create_artifact(o_ptr, FALSE);
 					break;
@@ -2812,7 +2818,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 			}
 			if (power > 1)
 			{
-				if (one_in_(20))
+				if (one_in_(20) || (power > 2)) /* power > 2 is debug only */
 				{
 					create_artifact(o_ptr, FALSE);
 					break;
@@ -2844,7 +2850,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 			/* Very good */
 			if (power > 1)
 			{
-				if (one_in_(20))
+				if (one_in_(20) || (power > 2)) /* power > 2 is debug only */
 				{
 					create_artifact(o_ptr, FALSE);
 					break;
@@ -2875,7 +2881,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 			/* Very good */
 			if (power > 1)
 			{
-				if (one_in_(20))
+				if (one_in_(20) || (power > 2)) /* power > 2 is debug only */
 				{
 					create_artifact(o_ptr, FALSE);
 					break;
@@ -2937,7 +2943,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 			/* Very good */
 			if (power > 1)
 			{
-				if (one_in_(20))
+				if (one_in_(20) || (power > 2)) /* power > 2 is debug only */
 				{
 					create_artifact(o_ptr, FALSE);
 					break;
@@ -2983,7 +2989,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 			/* Very good */
 			if (power > 1)
 			{
-				if (one_in_(20))
+				if (one_in_(20) || (power > 2)) /* power > 2 is debug only */
 				{
 					create_artifact(o_ptr, FALSE);
 					break;
@@ -3324,9 +3330,10 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					break;
 				}
 			}
-			if (one_in_(400) && (power > 0) && !cursed_p(o_ptr) && (level > 79))
+			if ((one_in_(400) && (power > 0) && !cursed_p(o_ptr) && (level > 79))
+			    || (power > 2)) /* power > 2 is debug only */
 			{
-				o_ptr->pval = MIN(o_ptr->pval,4);
+				o_ptr->pval = MIN(o_ptr->pval, 4);
 				/* Randart amulet */
 				create_artifact(o_ptr, FALSE);
 			}
@@ -3662,9 +3669,10 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					break;
 				}
 			}
-			if (one_in_(150) && (power > 0) && !cursed_p(o_ptr) && (level > 79))
+			if ((one_in_(150) && (power > 0) && !cursed_p(o_ptr) && (level > 79))
+			    || (power > 2)) /* power > 2 is debug only */
 			{
-				o_ptr->pval = MIN(o_ptr->pval,4);
+				o_ptr->pval = MIN(o_ptr->pval, 4);
 				/* Randart amulet */
 				create_artifact(o_ptr, FALSE);
 			}
@@ -3883,7 +3891,11 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 				o_ptr->pval = 0;
 			}
 
-			if ((power == 2) || ((power == 1) && one_in_(3)))
+			if (power > 2) /* power > 2 is debug only */
+			{
+				create_artifact(o_ptr, FALSE);
+			}
+			else if ((power == 2) || ((power == 1) && one_in_(3)))
 			{
 				while (!o_ptr->name2)
 				{
@@ -4141,9 +4153,8 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
  * "good" and "great" arguments are false.  As a total hack, if "great" is
  * true, then the item gets 3 extra "attempts" to become an artifact.
  */
-void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, bool curse)
+void apply_magic(object_type *o_ptr, int lev, u32b mode)
 {
-
 	int i, rolls, f1, f2, power;
 
 	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN) lev += randint0(p_ptr->lev/2+10);
@@ -4179,13 +4190,19 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 	power = 0;
 
 	/* Roll for "good" */
-	if (good || magik(f1))
+	if ((mode & AM_GOOD) || magik(f1))
 	{
 		/* Assume "good" */
 		power = 1;
 
 		/* Roll for "great" */
-		if (great || magik(f2)) power = 2;
+		if ((mode & AM_GREAT) || magik(f2))
+		{
+			power = 2;
+
+			/* Roll for "special" */
+			if (mode & AM_SPECIAL) power = 3;
+		}
 	}
 
 	/* Roll for "cursed" */
@@ -4199,7 +4216,7 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 	}
 
 	/* Apply curse */
-	if (curse)
+	if (mode & AM_CURSED)
 	{
 		/* Assume 'cursed' */
 		if (power > 0)
@@ -4219,11 +4236,11 @@ void apply_magic(object_type *o_ptr, int lev, bool okay, bool good, bool great, 
 	/* Get one roll if excellent */
 	if (power >= 2) rolls = 1;
 
-	/* Hack -- Get four rolls if forced great */
-	if (great) rolls = 4;
+	/* Hack -- Get four rolls if forced great or special */
+	if (mode & (AM_GREAT | AM_SPECIAL)) rolls = 4;
 
 	/* Hack -- Get no rolls if not allowed */
-	if (!okay || o_ptr->name1) rolls = 0;
+	if (!(mode & AM_OKAY) || o_ptr->name1) rolls = 0;
 
 	/* Roll for artifacts if allowed */
 	for (i = 0; i < rolls; i++)
@@ -4587,17 +4604,17 @@ static bool kind_is_good(int k_idx)
  *
  * We assume that the given object has been "wiped".
  */
-bool make_object(object_type *j_ptr, bool good, bool great)
+bool make_object(object_type *j_ptr, u32b mode)
 {
 	int prob, base;
 	byte obj_level;
 
 
 	/* Chance of "special object" */
-	prob = (good ? 10 : 1000);
+	prob = ((mode & AM_GOOD) ? 10 : 1000);
 
 	/* Base level for the object */
-	base = (good ? (object_level + 10) : object_level);
+	base = ((mode & AM_GOOD) ? (object_level + 10) : object_level);
 
 
 	/* Generate a special object, or a normal object */
@@ -4606,7 +4623,7 @@ bool make_object(object_type *j_ptr, bool good, bool great)
 		int k_idx;
 
 		/* Good objects */
-		if (good)
+		if (mode & AM_GOOD)
 		{
 			/* Activate restriction */
 			get_obj_num_hook = kind_is_good;
@@ -4636,7 +4653,7 @@ bool make_object(object_type *j_ptr, bool good, bool great)
 	}
 
 	/* Apply magic (allow artifacts) */
-	apply_magic(j_ptr, object_level, TRUE, good, great, FALSE);
+	apply_magic(j_ptr, object_level, mode);
 
 	/* Hack -- generate multiple spikes/missiles */
 	switch (j_ptr->tval)
@@ -4679,7 +4696,7 @@ bool make_object(object_type *j_ptr, bool good, bool great)
  *
  * This routine requires a clean floor grid destination.
  */
-void place_object(int y, int x, bool good, bool great)
+void place_object(int y, int x, u32b mode)
 {
 	s16b o_idx;
 
@@ -4703,7 +4720,7 @@ void place_object(int y, int x, bool good, bool great)
 	object_wipe(q_ptr);
 
 	/* Make an object (if possible) */
-	if (!make_object(q_ptr, good, great)) return;
+	if (!make_object(q_ptr, mode)) return;
 
 
 	/* Make an object */
@@ -5215,6 +5232,7 @@ void acquirement(int y1, int x1, int num, bool great, bool known)
 {
 	object_type *i_ptr;
 	object_type object_type_body;
+	u32b mode = AM_OKAY | AM_GOOD | (great ? AM_GREAT : 0L);
 
 	/* Acquirement */
 	while (num--)
@@ -5226,7 +5244,7 @@ void acquirement(int y1, int x1, int num, bool great, bool known)
 		object_wipe(i_ptr);
 
 		/* Make a good (or great) object (if possible) */
-		if (!make_object(i_ptr, TRUE, great)) continue;
+		if (!make_object(i_ptr, mode)) continue;
 
 		if (known)
 		{

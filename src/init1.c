@@ -3339,7 +3339,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				 */
 				if (randint0(100) < 75)
 				{
-					place_object(*y, *x, FALSE, FALSE);
+					place_object(*y, *x, AM_OKAY);
 				}
 				else
 				{
@@ -3354,11 +3354,11 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 
 				/* Create an out of deep object */
 				if (randint0(100) < 75)
-					place_object(*y, *x, FALSE, FALSE);
+					place_object(*y, *x, AM_OKAY);
 				else if (randint0(100) < 80)
-					place_object(*y, *x, TRUE, FALSE);
+					place_object(*y, *x, AM_OKAY | AM_GOOD);
 				else
-					place_object(*y, *x, TRUE, TRUE);
+					place_object(*y, *x, AM_OKAY | AM_GOOD | AM_GREAT);
 
 				object_level = base_level;
 			}
@@ -3389,7 +3389,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				}
 
 				/* Apply magic (no messages, no artifacts) */
-				apply_magic(o_ptr, base_level, FALSE, TRUE, FALSE, FALSE);
+				apply_magic(o_ptr, base_level, AM_GOOD);
 
 				(void)drop_near(o_ptr, -1, *y, *x);
 			}
