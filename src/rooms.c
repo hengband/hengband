@@ -1225,6 +1225,14 @@ static bool vault_aux_undead(int r_idx)
  */
 static bool vault_aux_chapel_g(int r_idx)
 {
+	static int chapel_list[] = {
+		MON_NOV_PRIEST, MON_NOV_PALADIN, MON_NOV_PRIEST_G, MON_NOV_PALADIN_G, 
+		MON_PRIEST, MON_JADE_MONK, MON_IVORY_MONK, MON_ULTRA_PALADIN, 
+		MON_EBONY_MONK, MON_KNI_TEMPLAR, MON_PALADIN, MON_TOPAZ_MONK,
+		0};
+
+	int i;
+
 	monster_race *r_ptr = &r_info[r_idx];
 
 	/* Validate the monster */
@@ -1234,34 +1242,13 @@ static bool vault_aux_chapel_g(int r_idx)
 	if ((r_idx == MON_A_GOLD) || (r_idx == MON_A_SILVER)) return (FALSE);
 
 	/* Require "priest" or Angel */
-	if (!((r_ptr->d_char == 'A') ||
-#ifdef JP
-strstr((r_name + r_ptr->E_name),"emplar") ||
-#else
-		strstr((r_name + r_ptr->name),"emplar") ||
-#endif
-#ifdef JP
-strstr((r_name + r_ptr->E_name),"aladin") ||
-#else
-		strstr((r_name + r_ptr->name),"aladin") ||
-#endif
-#ifdef JP
-strstr((r_name + r_ptr->E_name)," monk") ||
-#else
-		strstr((r_name + r_ptr->name)," monk") ||
-#endif
-#ifdef JP
-strstr((r_name + r_ptr->E_name),"riest")))
-#else
-		strstr((r_name + r_ptr->name),"riest")))
-#endif
 
-	{
-		return (FALSE);
-	}
+	if (r_ptr->d_char == 'A') return TRUE;
 
-	/* Okay */
-	return (TRUE);
+	for (i = 0; chapel_list[i]; i++)
+		if (r_idx == chapel_list[i]) return TRUE;
+
+	return FALSE;
 }
 
 

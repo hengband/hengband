@@ -4391,6 +4391,7 @@ extern int PlayerUID;
 #define MON_ARCH_VILE     357
 #define MON_COLD_VOR      358
 #define MON_ENERGY_VOR    359
+#define MON_JADE_MONK     370
 #define MON_HAGEN         383
 #define MON_PHANTOM_B     385
 #define MON_ANGEL         417
@@ -4399,6 +4400,7 @@ extern int PlayerUID;
 #define MON_ARCHANGEL     456
 #define MON_GHOST         477
 #define MON_NINJA         485
+#define MON_IVORY_MONK    492
 #define MON_LOG_MASTER    498
 #define MON_GOEMON        505
 #define MON_CHERUB        511
@@ -4492,6 +4494,7 @@ extern int PlayerUID;
 #define MON_ONE_RING      864
 #define MON_CAAWS         866
 #define MON_CULVERIN      867
+#define MON_EBONY_MONK    870
 #define MON_HAGURE        871
 #define MON_OROCHI        872
 #define MON_ECHIZEN       873
@@ -4541,9 +4544,11 @@ extern int PlayerUID;
 #define MON_SHURYUUDAN    1023
 #define MON_WAHHA         1031
 #define MON_DEBBY         1032
+#define MON_KNI_TEMPLAR   1037
 #define MON_PALADIN       1038
 #define MON_CHAMELEON     1040
 #define MON_CHAMELEON_K   1041
+#define MON_TOPAZ_MONK    1047
 #define MON_LOUSY         1063
 #define MON_JIZOTAKO      1065
 
