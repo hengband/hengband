@@ -4988,6 +4988,27 @@ sprintf(caption, "スポイラー・ファイル'%s'", name);
 		fff = my_fopen(path, "r");
 	}
 
+	/* Look in "info" */
+	if (!fff)
+	{
+		/* Build the filename */
+		path_build(path, 1024, ANGBAND_DIR, name);
+
+		for (i = 0; path[i]; i++)
+			if ('\\' == path[i])
+				path[i] = PATH_SEP[0];
+
+		/* Caption */
+#ifdef JP
+sprintf(caption, "スポイラー・ファイル'%s'", name);
+#else
+		sprintf(caption, "Info file '%s'", name);
+#endif
+
+		/* Open the file */
+		fff = my_fopen(path, "r");
+	}
+
 	/* Oops */
 	if (!fff)
 	{

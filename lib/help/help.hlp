@@ -1,4 +1,13 @@
-Welcome to the Zangband Online Help System.
+Welcome to the Hengband Online Help System.
+
+Full help document of Hengband is not yet available.
+There is a few document which explains special feature of Hengband.
+Please choose one of the following online help files:
+
+    (a) General Information for Hengband (readme.txt)
+    (b) How to use auto-picker/destroyer (autopick.txt)
+
+Documents below are Zangband 2.2.8 Online Help for reference.
 
 Please choose one of the following online help files:
 
@@ -15,6 +24,8 @@ Please choose one of the following online help files:
     (?) Help System Commands           (helpinfo.txt)
 
 
+***** [a] ..\readme.txt
+***** [b] ..\autopick.txt
 ***** [0] general.hlp
 ***** [1] birth.hlp
 ***** [2] dungeon.hlp
