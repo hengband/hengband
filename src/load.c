@@ -1926,19 +1926,6 @@ static errr rd_dungeon(void)
 			/* Extract "feat" */
 			c_ptr->feat = tmp8u;
 
-			if (c_ptr->feat == FEAT_INVIS)
-			{
-				c_ptr->feat = FEAT_FLOOR;
-				c_ptr->info |= CAVE_TRAP;
-			}
-
-                        /* Older than 1.1.1 */
-			if (c_ptr->feat == FEAT_MIRROR)
-			{
-				c_ptr->feat = FEAT_FLOOR;
-				c_ptr->info |= CAVE_IN_MIRROR;
-			}
-
 			/* Advance/Wrap */
 			if (++x >= xmax)
 			{
@@ -1950,6 +1937,36 @@ static errr rd_dungeon(void)
 			}
 		}
 	}
+
+        /* Convert cave data */
+        if (z_older_than(11, 0, 99))
+        {
+                for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
+                {
+			/* Wipe old unused flags */
+			cave[y][x].info &= ~(CAVE_MASK);
+                }
+        }
+
+        if (h_older_than(1, 1, 1, 0))
+        {
+                for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
+                {
+                        /* Very old */
+                        if (c_ptr->feat == FEAT_INVIS)
+                        {
+                                c_ptr->feat = FEAT_FLOOR;
+                                c_ptr->info |= CAVE_TRAP;
+                        }
+                
+                        /* Older than 1.1.1 */
+                        if (c_ptr->feat == FEAT_MIRROR)
+                        {
+                                c_ptr->feat = FEAT_FLOOR;
+                                c_ptr->info |= CAVE_IN_MIRROR;
+                        }
+                }
+        }
 
 	/*** Run length decoding ***/
 
