@@ -14446,7 +14446,7 @@ S:S_HYDRA
 D:$A massive legendary hydra.  It has twelve powerful heads.  Its many eyes 
 D:$stare at you as clouds of smoke and poisonous vapour rise from its 
 D:$seething form.
-D:巨大な伝説的ヒドラだ。それは力に満ちあふれた二十もの首を持っている。
+D:巨大な伝説的ヒドラだ。それは力に満ちあふれた十二もの首を持っている。
 D:たくさんの目が冒険者を睨み付け、燃え立つような全身からは煙の雲と毒の蒸気
 D:を立ちのぼらせている。
 
