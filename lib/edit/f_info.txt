@@ -829,7 +829,6 @@ J:パターン出発点
 E:Pattern startpoint
 G:*:w
 W:16
-K:HURT_DISI:FLOOR
 F:POWER_0 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | PERMANENT | CAN_FLY |
 F:PATTERN
 
@@ -838,7 +837,6 @@ J:パターンの一部
 E:section of the Pattern
 G:*:B
 W:16
-K:HURT_DISI:FLOOR
 F:POWER_1 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | PERMANENT | CAN_FLY |
 F:PATTERN
 
@@ -847,7 +845,6 @@ J:パターンの一部
 E:section of the Pattern
 G:*:b
 W:16
-K:HURT_DISI:FLOOR
 F:POWER_2 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | PERMANENT | CAN_FLY |
 F:PATTERN
 
@@ -856,7 +853,6 @@ J:パターンの一部
 E:section of the Pattern
 G:*:B
 W:16
-K:HURT_DISI:FLOOR
 F:POWER_3 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | PERMANENT | CAN_FLY |
 F:PATTERN
 
@@ -865,7 +861,6 @@ J:パターンの一部
 E:section of the Pattern
 G:*:b
 W:16
-K:HURT_DISI:FLOOR
 F:POWER_4 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | PERMANENT | CAN_FLY |
 F:PATTERN
 
@@ -874,7 +869,6 @@ J:パターンの一部
 E:section of the Pattern
 G:*:W
 W:16
-K:HURT_DISI:FLOOR
 F:POWER_5 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | PERMANENT | CAN_FLY |
 F:PATTERN
 
@@ -883,7 +877,6 @@ J:パターンの一部(discharged)
 E:section of the Pattern (discharged)
 G:*:W
 W:16
-K:HURT_DISI:FLOOR
 F:POWER_6 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | PERMANENT | CAN_FLY |
 F:PATTERN
 
@@ -892,7 +885,6 @@ J:パターン出口
 E:Pattern exit
 G:*:w
 W:16
-K:HURT_DISI:FLOOR
 F:POWER_7 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | PERMANENT | CAN_FLY |
 F:PATTERN
 
@@ -901,7 +893,6 @@ J:壊れたパターンの一部
 E:corrupted section of the Pattern
 G:*:D
 W:16
-K:HURT_DISI:FLOOR
 F:POWER_8 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | PERMANENT | CAN_FLY |
 F:PATTERN
 

@@ -1529,14 +1529,6 @@ msg_print("属性付加に失敗した。");
 
 
 /*
- * Determine if a "feature" is a "vanishable"
- * Non-permanent walls, trees, mountains, or doors
- */
-#define vanishable_feat(F) \
-	(have_flag((F)->flags, FF_HURT_DISI) || \
-	 have_flag((F)->flags, FF_PATTERN))
-
-/*
  * Vanish all walls in this floor
  */
 static bool vanish_dungeon(void)
@@ -1594,7 +1586,7 @@ static bool vanish_dungeon(void)
 			}
 
 			/* Process all walls, doors and patterns */
-			if (vanishable_feat(f_ptr)) cave_alter_feat(y, x, FF_HURT_DISI);
+			if (have_flag(f_ptr->flags, FF_HURT_DISI)) cave_alter_feat(y, x, FF_HURT_DISI);
 		}
 	}
 
@@ -1608,7 +1600,7 @@ static bool vanish_dungeon(void)
 		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
 		/* Set boundary mimic if needed */
-		if (c_ptr->mimic && vanishable_feat(f_ptr))
+		if (c_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
 		{
 			c_ptr->mimic = feat_state(c_ptr->mimic, FF_HURT_DISI);
 
@@ -1623,7 +1615,7 @@ static bool vanish_dungeon(void)
 		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
 		/* Set boundary mimic if needed */
-		if (c_ptr->mimic && vanishable_feat(f_ptr))
+		if (c_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
 		{
 			c_ptr->mimic = feat_state(c_ptr->mimic, FF_HURT_DISI);
 
@@ -1642,7 +1634,7 @@ static bool vanish_dungeon(void)
 		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
 		/* Set boundary mimic if needed */
-		if (c_ptr->mimic && vanishable_feat(f_ptr))
+		if (c_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
 		{
 			c_ptr->mimic = feat_state(c_ptr->mimic, FF_HURT_DISI);
 
@@ -1657,7 +1649,7 @@ static bool vanish_dungeon(void)
 		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
 		/* Set boundary mimic if needed */
-		if (c_ptr->mimic && vanishable_feat(f_ptr))
+		if (c_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
 		{
 			c_ptr->mimic = feat_state(c_ptr->mimic, FF_HURT_DISI);
 
