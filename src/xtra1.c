@@ -3150,7 +3150,7 @@ void calc_bonuses(void)
 	bool            yoiyami = FALSE;
 	bool            down_saving = FALSE;
 	bool            have_dd_s, have_dd_t, have_sw, have_kabe;
-	bool            easy_2hand = FALSE;
+	bool            easy_2weapon = FALSE;
 	s16b this_o_idx, next_o_idx = 0;
 	player_race *tmp_rp_ptr;
 
@@ -4060,7 +4060,7 @@ void calc_bonuses(void)
 		if (f2 & (TR2_SUST_CHR)) p_ptr->sustain_chr = TRUE;
 
 		if (o_ptr->name2 == EGO_YOIYAMI) yoiyami = TRUE;
-		if (o_ptr->name2 == EGO_2HAND) easy_2hand = TRUE;
+		if (o_ptr->name2 == EGO_2WEAPON) easy_2weapon = TRUE;
 		if (o_ptr->name2 == EGO_RING_RES_TIME) p_ptr->resist_time = TRUE;
 		if (o_ptr->name2 == EGO_RING_THROW) p_ptr->mighty_throw = TRUE;
 		if (o_ptr->name2 == EGO_RING_WIZARD) p_ptr->easy_spell = TRUE;
@@ -4531,7 +4531,7 @@ void calc_bonuses(void)
 			p_ptr->to_a += 10;
 			p_ptr->dis_to_a += 10;
 		}
-		if (easy_2hand)
+		if (easy_2weapon)
 		{
 			if (penalty1 > 0) penalty1 /= 2;
 			if (penalty2 > 0) penalty2 /= 2;

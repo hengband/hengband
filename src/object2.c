@@ -6905,7 +6905,7 @@ static void drain_essence(void)
 	{
 		drain_value[ESSENCE_DEX-1] += 10;
 	}
-	if (old_name2 == EGO_2HAND)
+	if (old_name2 == EGO_2WEAPON)
 	{
 		drain_value[ESSENCE_DEX] += 20;
 	}

@@ -1388,7 +1388,7 @@
 #define EGO_SLAYING             49
 #define EGO_AGILITY             50
 #define EGO_POWER               51
-#define EGO_2HAND               52
+#define EGO_2WEAPON             52
 #define EGO_MAGIC_MASTERY       53
 #define EGO_WEAKNESS            54
 #define EGO_CLUMSINESS          55
