@@ -2572,7 +2572,7 @@ void update_mon(int m_idx, bool full)
 			if (d <= p_ptr->see_infra)
 			{
 				/* Handle "cold blooded" monsters */
-				if (r_ptr->flags2 & (RF2_COLD_BLOOD))
+				if ((r_ptr->flags2 & (RF2_COLD_BLOOD | RF2_AURA_FIRE)) == RF2_COLD_BLOOD)
 				{
 					/* Take note */
 					do_cold_blood = TRUE;
