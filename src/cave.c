@@ -1225,6 +1225,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 		switch (feat)
 		{
 		case FEAT_NONE:
+		case FEAT_UNDETECTD:
 		case FEAT_DARK_PIT:
 			feat_priority = 1;
 			break;
