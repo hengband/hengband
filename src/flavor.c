@@ -1167,7 +1167,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 	bool            show_weapon = FALSE;
 	bool            show_armour = FALSE;
 
-	cptr            s;
+	cptr            s, s0;
 	char            *t;
 
 	char            p1 = '(', p2 = ')';
@@ -1334,7 +1334,6 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			break;
 		}
 
-
 		/* Armour */
 		case TV_BOOTS:
 		case TV_GLOVES:
@@ -1349,7 +1348,6 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			show_armour = TRUE;
 			break;
 		}
-
 
 		/* Lites (including a few "Specials") */
 		case TV_LITE:
@@ -1371,13 +1369,13 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			modstr = k_name + flavor_k_ptr->flavor_name;
 
 #ifdef JP
-                        if (!flavor)    basenm = "%のアミュレット";
-                        else if (aware) basenm = "%の#アミュレット";
-                        else            basenm = "#アミュレット";
+			if (!flavor)    basenm = "%のアミュレット";
+			else if (aware) basenm = "%の#アミュレット";
+			else            basenm = "#アミュレット";
 #else
-                        if (!flavor)    basenm = "& Amulet~ of %";
-                        else if (aware) basenm = "& # Amulet~ of %";
-                        else            basenm = "& # Amulet~";
+			if (!flavor)    basenm = "& Amulet~ of %";
+			else if (aware) basenm = "& # Amulet~ of %";
+			else            basenm = "& # Amulet~";
 #endif
 
 			break;
@@ -1397,13 +1395,13 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			modstr = k_name + flavor_k_ptr->flavor_name;
 
 #ifdef JP
-                        if (!flavor)    basenm = "%の指輪";
-                        else if (aware) basenm = "%の#指輪";
-                        else            basenm = "#指輪";
+			if (!flavor)    basenm = "%の指輪";
+			else if (aware) basenm = "%の#指輪";
+			else            basenm = "#指輪";
 #else
-                        if (!flavor)    basenm = "& Ring~ of %";
-                        else if (aware) basenm = "& # Ring~ of %";
-                        else            basenm = "& # Ring~";
+			if (!flavor)    basenm = "& Ring~ of %";
+			else if (aware) basenm = "& # Ring~ of %";
+			else            basenm = "& # Ring~";
 #endif
 
 			if (!k_ptr->to_h && !k_ptr->to_d && (o_ptr->to_h || o_ptr->to_d)) show_weapon = TRUE;
@@ -1422,13 +1420,13 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			modstr = k_name + flavor_k_ptr->flavor_name;
 
 #ifdef JP
-                        if (!flavor)    basenm = "%の杖";
-                        else if (aware) basenm = "%の#杖";
-                        else            basenm = "#杖";
+			if (!flavor)    basenm = "%の杖";
+			else if (aware) basenm = "%の#杖";
+			else            basenm = "#杖";
 #else
-                        if (!flavor)    basenm = "& Staff~ of %";
-                        else if (aware) basenm = "& # Staff~ of %";
-                        else            basenm = "& # Staff~";
+			if (!flavor)    basenm = "& Staff~ of %";
+			else if (aware) basenm = "& # Staff~ of %";
+			else            basenm = "& # Staff~";
 #endif
 
 			break;
@@ -1440,9 +1438,9 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			modstr = k_name + flavor_k_ptr->flavor_name;
 
 #ifdef JP
-                        if (!flavor)    basenm = "%の魔法棒";
-                        else if (aware) basenm = "%の#魔法棒";
-                        else            basenm = "#魔法棒";
+			if (!flavor)    basenm = "%の魔法棒";
+			else if (aware) basenm = "%の#魔法棒";
+			else            basenm = "#魔法棒";
 #else
 			if (!flavor)    basenm = "& Wand~ of %";
 			else if (aware) basenm = "& # Wand~ of %";
@@ -1460,11 +1458,11 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 #ifdef JP
 			if (!flavor)    basenm = "%のロッド";
 			else if (aware) basenm = "%の#ロッド";
-                        else            basenm = "#ロッド";
+			else            basenm = "#ロッド";
 #else
-                        if (!flavor)    basenm = "& Rod~ of %";
-                        else if (aware) basenm = "& # Rod~ of %";
-                        else            basenm = "& # Rod~";
+			if (!flavor)    basenm = "& Rod~ of %";
+			else if (aware) basenm = "& # Rod~ of %";
+			else            basenm = "& # Rod~";
 #endif
 
 			break;
@@ -1476,13 +1474,13 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			modstr = k_name + flavor_k_ptr->flavor_name;
 
 #ifdef JP
-                        if (!flavor)    basenm = "%の巻物";
-                        else if (aware) basenm = "「#」と書かれた%の巻物";
-                        else            basenm = "「#」と書かれた巻物";
+			if (!flavor)    basenm = "%の巻物";
+			else if (aware) basenm = "「#」と書かれた%の巻物";
+			else            basenm = "「#」と書かれた巻物";
 #else
-                        if (!flavor)    basenm = "& Scroll~ of %";
-                        else if (aware) basenm = "& Scroll~ titled \"#\" of %";
-                        else            basenm = "& Scroll~ titled \"#\"";
+			if (!flavor)    basenm = "& Scroll~ of %";
+			else if (aware) basenm = "& Scroll~ titled \"#\" of %";
+			else            basenm = "& Scroll~ titled \"#\"";
 #endif
 
 			break;
@@ -1494,13 +1492,13 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			modstr = k_name + flavor_k_ptr->flavor_name;
 
 #ifdef JP
-                        if (!flavor)    basenm = "%の薬";
-                        else if (aware) basenm = "%の#薬";
-                        else            basenm = "#薬";
+			if (!flavor)    basenm = "%の薬";
+			else if (aware) basenm = "%の#薬";
+			else            basenm = "#薬";
 #else
-                        if (!flavor)    basenm = "& Potion~ of %";
-                        else if (aware) basenm = "& # Potion~ of %";
-                        else            basenm = "& # Potion~";
+			if (!flavor)    basenm = "& Potion~ of %";
+			else if (aware) basenm = "& # Potion~ of %";
+			else            basenm = "& # Potion~";
 #endif
 
 			break;
@@ -1515,13 +1513,13 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			modstr = k_name + flavor_k_ptr->flavor_name;
 
 #ifdef JP
-                        if (!flavor)    basenm = "%のキノコ";
-                        else if (aware) basenm = "%の#キノコ";
-                        else            basenm = "#キノコ";
+			if (!flavor)    basenm = "%のキノコ";
+			else if (aware) basenm = "%の#キノコ";
+			else            basenm = "#キノコ";
 #else
-                        if (!flavor)    basenm = "& Mushroom~ of %";
-                        else if (aware) basenm = "& # Mushroom~ of %";
-                        else            basenm = "& # Mushroom~";
+			if (!flavor)    basenm = "& Mushroom~ of %";
+			else if (aware) basenm = "& # Mushroom~ of %";
+			else            basenm = "& # Mushroom~";
 #endif
 
 			break;
@@ -1784,20 +1782,11 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		}
 
 		/* Hack -- The only one of its kind */
-		else if (known && object_is_artifact(o_ptr))
+		else if ((known && object_is_artifact(o_ptr)) ||
+		         ((o_ptr->tval == TV_CORPSE) &&
+		          (r_info[o_ptr->pval].flags1 & RF1_UNIQUE)))
 		{
 			t = object_desc_str(t, "The ");
-		}
-
-		/* Unique corpses are unique */
-		else if (o_ptr->tval == TV_CORPSE)
-		{
-			monster_race *r_ptr = &r_info[o_ptr->pval];
-
-			if (r_ptr->flags1 & RF1_UNIQUE)
-			{
-				t = object_desc_str(t, "The ");
-			}
 		}
 
 		/* A single one */
@@ -1913,23 +1902,32 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 #endif
 
 	/* Copy the string */
-	for (; *s; s++)
+	for (s0 = NULL; *s || s0; )
 	{
-		/* Insert the modifier (flavor) */
-		if (*s == '#')
+		/* The end of the flavour/kind string. */
+		if (!*s)
 		{
-			t = object_desc_str(t, modstr);
+			s = s0 + 1;
+			s0 = NULL;
+		}
 
-			/* Paranoia -- Never append multiple modstr's */
+		/* Begin to append the modifier (flavor) */
+		else if ((*s == '#') && !s0)
+		{
+			s0 = s;
+			s = modstr;
+
+			/* Paranoia -- Never append multiple modstrs */
 			modstr = "";
 		}
 
-		/* Append kind name */
-		else if (*s == '%')
+		/* Begin to append the kind name */
+		else if ((*s == '%') && !s0)
 		{
-			t = object_desc_str(t, kindname);
+			s0 = s;
+			s = kindname;
 
-			/* Paranoia -- Never append multiple kindname's */
+			/* Paranoia -- Never append multiple kindnames */
 			kindname = "";
 		}
 
@@ -1950,6 +1948,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 				/* Add an 's' */
 				*t++ = 's';
 			}
+			s++;
 		}
 #endif
 
@@ -1957,7 +1956,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		else
 		{
 			/* Copy */
-			*t++ = *s;
+			*t++ = *s++;
 		}
 	}
 

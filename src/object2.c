@@ -5858,7 +5858,8 @@ s16b inven_takeoff(int item, int amt)
 	object_desc(o_name, q_ptr, 0);
 
 	/* Took off weapon */
-	if (item == INVEN_RARM)
+	if (((item == INVEN_RARM) || (item == INVEN_LARM)) &&
+	    object_is_melee_weapon(o_ptr))
 	{
 #ifdef JP
 		act = "を装備からはずした";

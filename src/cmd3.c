@@ -536,37 +536,31 @@ msg_print("クエストを達成した！");
 	/* Increment the equip counter by hand */
 	equip_cnt++;
 
+#ifdef JP
+#define STR_WIELD_RARM "%s(%c)を右手に装備した。"
+#define STR_WIELD_LARM "%s(%c)を左手に装備した。"
+#define STR_WIELD_ARMS "%s(%c)を両手で構えた。"
+#else
+#define STR_WIELD_RARM "You are wielding %s (%c) in your right hand."
+#define STR_WIELD_LARM "You are wielding %s (%c) in your left hand."
+#define STR_WIELD_ARMS "You are wielding %s (%c) with both hands."
+#endif
+
 	/* Where is the item now */
 	switch (slot)
 	{
 	case INVEN_RARM:
 		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(FALSE) == EMPTY_HAND_LARM) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
-#ifdef JP
-			act = "%s(%c)を両手で構えた。";
-#else
-			act = "You are wielding %s (%c) with both hands.";
-#endif
+			act = STR_WIELD_ARMS;
 		else
-#ifdef JP
-			act = (left_hander ? "%s(%c)を左手に装備した。" : "%s(%c)を右手に装備した。");
-#else
-			act = (left_hander ? "You are wielding %s (%c) on left hand." : "You are wielding %s (%c) on right hand.");
-#endif
+			act = (left_hander ? STR_WIELD_LARM : STR_WIELD_RARM);
 		break;
 
 	case INVEN_LARM:
 		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(FALSE) == EMPTY_HAND_RARM) && (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE)))
-#ifdef JP
-			act = "%s(%c)を両手で構えた。";
-#else
-			act = "You are wielding %s (%c) with both hands.";
-#endif
+			act = STR_WIELD_ARMS;
 		else
-#ifdef JP
-			act = (left_hander ? "%s(%c)を右手に装備した。" : "%s(%c)を左手に装備した。");
-#else
-			act = (left_hander ? "You are wielding %s (%c) on right hand." : "You are wielding %s (%c) on left hand.");
-#endif
+			act = (left_hander ? STR_WIELD_RARM : STR_WIELD_LARM);
 		break;
 
 	case INVEN_BOW:
@@ -672,7 +666,7 @@ void kamaenaoshi(int item)
 #ifdef JP
 					msg_format("%sを%sで構えた。", o_name, (left_hander ? "左手" : "右手"));
 #else
-					msg_format("You are wielding %s on %s hand.", o_name, (left_hander ? "left":"right"));
+					msg_format("You are wielding %s in your %s hand.", o_name, (left_hander ? "left":"right"));
 #endif
 			}
 			else

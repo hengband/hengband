@@ -1994,9 +1994,9 @@ msg_format("%sを殺した。", m_name);
 			/* Special note at death */
 			if (explode)
 #ifdef JP
-msg_format("%sは爆発して粉々になった。", m_name);
+				msg_format("%sは爆発して粉々になった。", m_name);
 #else
-				msg_format("%s explodes into tiny shreds.", m_name);
++				msg_format("%^s explodes into tiny shreds.", m_name);
 #endif
 			else
 			{
