@@ -305,7 +305,7 @@ static bool use_mane(int spell)
 #ifdef JP
 msg_print("かん高い金切り声をあげた。");
 #else
-		msg_print("You makes a high pitched shriek.");
+		msg_print("You make a high pitched shriek.");
 #endif
 
 		aggravate_monsters(0);
@@ -359,7 +359,7 @@ msg_format("%sはもう減速されていない。", m_name);
 #ifdef JP
 else msg_print("ロケットを発射した。");
 #else
-			else msg_print("You fires a rocket.");
+			else msg_print("You fire a rocket.");
 #endif
 		
 			fire_rocket(GF_ROCKET, dir, damage, 2);
@@ -369,7 +369,7 @@ else msg_print("ロケットを発射した。");
 #ifdef JP
 else msg_print("矢を放った。");
 #else
-			else msg_print("You fires an arrow.");
+			else msg_print("You fire an arrow.");
 #endif
 		
 			fire_bolt(GF_ARROW, dir, damage);
@@ -385,7 +385,7 @@ else msg_print("矢を放った。");
 #ifdef JP
 else msg_print("酸のブレスを吐いた。");
 #else
-			else msg_print("You breathes acid.");
+			else msg_print("You breathe acid.");
 #endif
 		
 			fire_ball(GF_ACID, dir, damage, (plev > 35 ? -3 : -2));
@@ -395,7 +395,7 @@ else msg_print("酸のブレスを吐いた。");
 #ifdef JP
 else msg_print("稲妻のブレスを吐いた。");
 #else
-			else msg_print("You breathes lightning.");
+			else msg_print("You breathe lightning.");
 #endif
 		
 			fire_ball(GF_ELEC, dir, damage, (plev > 35 ? -3 : -2));
@@ -405,7 +405,7 @@ else msg_print("稲妻のブレスを吐いた。");
 #ifdef JP
 else msg_print("火炎のブレスを吐いた。");
 #else
-			else msg_print("You breathes fire.");
+			else msg_print("You breathe fire.");
 #endif
 		
 			fire_ball(GF_FIRE, dir, damage, (plev > 35 ? -3 : -2));
@@ -415,7 +415,7 @@ else msg_print("火炎のブレスを吐いた。");
 #ifdef JP
 else msg_print("冷気のブレスを吐いた。");
 #else
-			else msg_print("You breathes frost.");
+			else msg_print("You breathe frost.");
 #endif
 		
 			fire_ball(GF_COLD, dir, damage, (plev > 35 ? -3 : -2));
@@ -425,7 +425,7 @@ else msg_print("冷気のブレスを吐いた。");
 #ifdef JP
 else msg_print("ガスのブレスを吐いた。");
 #else
-			else msg_print("You breathes gas.");
+			else msg_print("You breathe gas.");
 #endif
 		
 			fire_ball(GF_POIS, dir, damage, (plev > 35 ? -3 : -2));
@@ -435,7 +435,7 @@ else msg_print("ガスのブレスを吐いた。");
 #ifdef JP
 else msg_print("地獄のブレスを吐いた。");
 #else
-			else msg_print("You breathes nether.");
+			else msg_print("You breathe nether.");
 #endif
 		
 			fire_ball(GF_NETHER, dir, damage, (plev > 35 ? -3 : -2));
@@ -445,7 +445,7 @@ else msg_print("地獄のブレスを吐いた。");
 #ifdef JP
 else msg_print("閃光のブレスを吐いた。");
 #else
-			else msg_print("You breathes light.");
+			else msg_print("You breathe light.");
 #endif
 		
 			fire_ball(GF_LITE, dir, damage, (plev > 35 ? -3 : -2));
@@ -455,7 +455,7 @@ else msg_print("閃光のブレスを吐いた。");
 #ifdef JP
 else msg_print("暗黒のブレスを吐いた。");
 #else
-			else msg_print("You breathes darkness.");
+			else msg_print("You breathe darkness.");
 #endif
 		
 			fire_ball(GF_DARK, dir, damage, (plev > 35 ? -3 : -2));
@@ -465,7 +465,7 @@ else msg_print("暗黒のブレスを吐いた。");
 #ifdef JP
 else msg_print("混乱のブレスを吐いた。");
 #else
-			else msg_print("You breathes confusion.");
+			else msg_print("You breathe confusion.");
 #endif
 		
 			fire_ball(GF_CONFUSION, dir, damage, (plev > 35 ? -3 : -2));
@@ -475,7 +475,7 @@ else msg_print("混乱のブレスを吐いた。");
 #ifdef JP
 else msg_print("轟音のブレスを吐いた。");
 #else
-			else msg_print("You breathes sound.");
+			else msg_print("You breathe sound.");
 #endif
 		
 			fire_ball(GF_SOUND, dir, damage, (plev > 35 ? -3 : -2));
@@ -485,7 +485,7 @@ else msg_print("轟音のブレスを吐いた。");
 #ifdef JP
 else msg_print("カオスのブレスを吐いた。");
 #else
-			else msg_print("You breathes chaos.");
+			else msg_print("You breathe chaos.");
 #endif
 		
 			fire_ball(GF_CHAOS, dir, damage, (plev > 35 ? -3 : -2));
@@ -495,7 +495,7 @@ else msg_print("カオスのブレスを吐いた。");
 #ifdef JP
 else msg_print("劣化のブレスを吐いた。");
 #else
-			else msg_print("You breathes disenchantment.");
+			else msg_print("You breathe disenchantment.");
 #endif
 		
 			fire_ball(GF_DISENCHANT, dir, damage, (plev > 35 ? -3 : -2));
@@ -505,7 +505,7 @@ else msg_print("劣化のブレスを吐いた。");
 #ifdef JP
 else msg_print("因果混乱のブレスを吐いた。");
 #else
-			else msg_print("You breathes nexus.");
+			else msg_print("You breathe nexus.");
 #endif
 		
 			fire_ball(GF_NEXUS, dir, damage, (plev > 35 ? -3 : -2));
@@ -515,7 +515,7 @@ else msg_print("因果混乱のブレスを吐いた。");
 #ifdef JP
 else msg_print("時間逆転のブレスを吐いた。");
 #else
-			else msg_print("You breathes time.");
+			else msg_print("You breathe time.");
 #endif
 		
 			fire_ball(GF_TIME, dir, damage, (plev > 35 ? -3 : -2));
@@ -525,7 +525,7 @@ else msg_print("時間逆転のブレスを吐いた。");
 #ifdef JP
 else msg_print("遅鈍のブレスを吐いた。");
 #else
-			else msg_print("You breathes inertia.");
+			else msg_print("You breathe inertia.");
 #endif
 		
 			fire_ball(GF_INERTIA, dir, damage, (plev > 35 ? -3 : -2));
@@ -535,7 +535,7 @@ else msg_print("遅鈍のブレスを吐いた。");
 #ifdef JP
 else msg_print("重力のブレスを吐いた。");
 #else
-			else msg_print("You breathes gravity.");
+			else msg_print("You breathe gravity.");
 #endif
 		
 			fire_ball(GF_GRAVITY, dir, damage, (plev > 35 ? -3 : -2));
@@ -545,7 +545,7 @@ else msg_print("重力のブレスを吐いた。");
 #ifdef JP
 else msg_print("破片のブレスを吐いた。");
 #else
-			else msg_print("You breathes shards.");
+			else msg_print("You breathe shards.");
 #endif
 		
 			fire_ball(GF_SHARDS, dir, damage, (plev > 35 ? -3 : -2));
@@ -555,7 +555,7 @@ else msg_print("破片のブレスを吐いた。");
 #ifdef JP
 else msg_print("プラズマのブレスを吐いた。");
 #else
-			else msg_print("You breathes plasma.");
+			else msg_print("You breathe plasma.");
 #endif
 		
 			fire_ball(GF_PLASMA, dir, damage, (plev > 35 ? -3 : -2));
@@ -565,7 +565,7 @@ else msg_print("プラズマのブレスを吐いた。");
 #ifdef JP
 else msg_print("フォースのブレスを吐いた。");
 #else
-			else msg_print("You breathes force.");
+			else msg_print("You breathe force.");
 #endif
 		
 			fire_ball(GF_FORCE, dir, damage, (plev > 35 ? -3 : -2));
@@ -575,7 +575,7 @@ else msg_print("フォースのブレスを吐いた。");
 #ifdef JP
 else msg_print("魔力のブレスを吐いた。");
 #else
-			else msg_print("You breathes mana.");
+			else msg_print("You breathe mana.");
 #endif
 		
 			fire_ball(GF_MANA, dir, damage, (plev > 35 ? -3 : -2));
@@ -585,7 +585,7 @@ else msg_print("魔力のブレスを吐いた。");
 #ifdef JP
 else msg_print("放射能球を放った。");
 #else
-			else msg_print("You casts a ball of radiation.");
+			else msg_print("You cast a ball of radiation.");
 #endif
 		
 			fire_ball(GF_NUKE, dir, damage, 2);
@@ -595,7 +595,7 @@ else msg_print("放射能球を放った。");
 #ifdef JP
 else msg_print("放射性廃棄物のブレスを吐いた。");
 #else
-			else msg_print("You breathes toxic waste.");
+			else msg_print("You breathe toxic waste.");
 #endif
 		
 			fire_ball(GF_NUKE, dir, damage, (plev > 35 ? -3 : -2));
@@ -605,7 +605,7 @@ else msg_print("放射性廃棄物のブレスを吐いた。");
 #ifdef JP
 else msg_print("純ログルスを放った。");
 #else
-			else msg_print("You invokes a raw Logrus.");
+			else msg_print("You invoke a raw Logrus.");
 #endif
 		
 			fire_ball(GF_CHAOS, dir, damage, 4);
@@ -615,7 +615,7 @@ else msg_print("純ログルスを放った。");
 #ifdef JP
 else msg_print("分解のブレスを吐いた。");
 #else
-			else msg_print("You breathes disintegration.");
+			else msg_print("You breathe disintegration.");
 #endif
 		
 			fire_ball(GF_DISINTEGRATE, dir, damage, (plev > 35 ? -3 : -2));
@@ -625,7 +625,7 @@ else msg_print("分解のブレスを吐いた。");
 #ifdef JP
 else msg_print("アシッド・ボールの呪文を唱えた。");
 #else
-			else msg_print("You casts an acid ball.");
+			else msg_print("You cast an acid ball.");
 #endif
 		
 			fire_ball(GF_ACID, dir, damage, 2);
@@ -635,7 +635,7 @@ else msg_print("アシッド・ボールの呪文を唱えた。");
 #ifdef JP
 else msg_print("サンダー・ボールの呪文を唱えた。");
 #else
-			else msg_print("You casts a lightning ball.");
+			else msg_print("You cast a lightning ball.");
 #endif
 		
 			fire_ball(GF_ELEC, dir, damage, 2);
@@ -645,7 +645,7 @@ else msg_print("サンダー・ボールの呪文を唱えた。");
 #ifdef JP
 else msg_print("ファイア・ボールの呪文を唱えた。");
 #else
-			else msg_print("You casts a fire ball.");
+			else msg_print("You cast a fire ball.");
 #endif
 		
 			fire_ball(GF_FIRE, dir, damage, 2);
@@ -655,7 +655,7 @@ else msg_print("ファイア・ボールの呪文を唱えた。");
 #ifdef JP
 else msg_print("アイス・ボールの呪文を唱えた。");
 #else
-			else msg_print("You casts a frost ball.");
+			else msg_print("You cast a frost ball.");
 #endif
 		
 			fire_ball(GF_COLD, dir, damage, 2);
@@ -665,7 +665,7 @@ else msg_print("アイス・ボールの呪文を唱えた。");
 #ifdef JP
 else msg_print("悪臭雲の呪文を唱えた。");
 #else
-			else msg_print("You casts a stinking cloud.");
+			else msg_print("You cast a stinking cloud.");
 #endif
 		
 			fire_ball(GF_POIS, dir, damage, 2);
@@ -675,7 +675,7 @@ else msg_print("悪臭雲の呪文を唱えた。");
 #ifdef JP
 else msg_print("地獄球の呪文を唱えた。");
 #else
-			else msg_print("You casts a nether ball.");
+			else msg_print("You cast a nether ball.");
 #endif
 		
 			fire_ball(GF_NETHER, dir, damage, 2);
@@ -685,7 +685,7 @@ else msg_print("地獄球の呪文を唱えた。");
 #ifdef JP
 else msg_print("流れるような身振りをした。");
 #else
-			else msg_print("You gestures fluidly.");
+			else msg_print("You gesture fluidly.");
 #endif
 		
 			fire_ball(GF_WATER, dir, damage, 4);
@@ -695,7 +695,7 @@ else msg_print("流れるような身振りをした。");
 #ifdef JP
 else msg_print("魔力の嵐の呪文を念じた。");
 #else
-			else msg_print("You invokes a mana storm.");
+			else msg_print("You invoke a mana storm.");
 #endif
 		
 			fire_ball(GF_MANA, dir, damage, 4);
@@ -705,7 +705,7 @@ else msg_print("魔力の嵐の呪文を念じた。");
 #ifdef JP
 else msg_print("暗黒の嵐の呪文を念じた。");
 #else
-			else msg_print("You invokes a darkness storm.");
+			else msg_print("You invoke a darkness storm.");
 #endif
 		
 			fire_ball(GF_DARK, dir, damage, 4);
@@ -743,7 +743,7 @@ else msg_print("暗黒の嵐の呪文を念じた。");
 #ifdef JP
 else msg_print("アシッド・ボルトの呪文を唱えた。");
 #else
-			else msg_print("You casts an acid bolt.");
+			else msg_print("You cast an acid bolt.");
 #endif
 		
 			fire_bolt(GF_ACID, dir, damage);
@@ -753,7 +753,7 @@ else msg_print("アシッド・ボルトの呪文を唱えた。");
 #ifdef JP
 else msg_print("サンダー・ボルトの呪文を唱えた。");
 #else
-			else msg_print("You casts a lightning bolt.");
+			else msg_print("You cast a lightning bolt.");
 #endif
 		
 			fire_bolt(GF_ELEC, dir, damage);
@@ -763,7 +763,7 @@ else msg_print("サンダー・ボルトの呪文を唱えた。");
 #ifdef JP
 else msg_print("ファイア・ボルトの呪文を唱えた。");
 #else
-			else msg_print("You casts a fire bolt.");
+			else msg_print("You cast a fire bolt.");
 #endif
 		
 			fire_bolt(GF_FIRE, dir, damage);
@@ -773,7 +773,7 @@ else msg_print("ファイア・ボルトの呪文を唱えた。");
 #ifdef JP
 else msg_print("アイス・ボルトの呪文を唱えた。");
 #else
-			else msg_print("You casts a frost bolt.");
+			else msg_print("You cast a frost bolt.");
 #endif
 		
 			fire_bolt(GF_COLD, dir, damage);
@@ -783,7 +783,7 @@ else msg_print("アイス・ボルトの呪文を唱えた。");
 #ifdef JP
 else msg_print("スターバーストの呪文を念じた。");
 #else
-			else msg_print("You invokes a starburst.");
+			else msg_print("You invoke a starburst.");
 #endif
 		
 			fire_ball(GF_LITE, dir, damage, 4);
@@ -793,7 +793,7 @@ else msg_print("スターバーストの呪文を念じた。");
 #ifdef JP
 else msg_print("地獄の矢の呪文を唱えた。");
 #else
-			else msg_print("You casts a nether bolt.");
+			else msg_print("You cast a nether bolt.");
 #endif
 		
 			fire_bolt(GF_NETHER, dir, damage);
@@ -803,7 +803,7 @@ else msg_print("地獄の矢の呪文を唱えた。");
 #ifdef JP
 else msg_print("ウォーター・ボルトの呪文を唱えた。");
 #else
-			else msg_print("You casts a water bolt.");
+			else msg_print("You cast a water bolt.");
 #endif
 		
 			fire_bolt(GF_WATER, dir, damage);
@@ -813,7 +813,7 @@ else msg_print("ウォーター・ボルトの呪文を唱えた。");
 #ifdef JP
 else msg_print("魔力の矢の呪文を唱えた。");
 #else
-			else msg_print("You casts a mana bolt.");
+			else msg_print("You cast a mana bolt.");
 #endif
 		
 			fire_bolt(GF_MANA, dir, damage);
@@ -823,7 +823,7 @@ else msg_print("魔力の矢の呪文を唱えた。");
 #ifdef JP
 else msg_print("プラズマ・ボルトの呪文を唱えた。");
 #else
-			else msg_print("You casts a plasma bolt.");
+			else msg_print("You cast a plasma bolt.");
 #endif
 		
 			fire_bolt(GF_PLASMA, dir, damage);
@@ -833,7 +833,7 @@ else msg_print("プラズマ・ボルトの呪文を唱えた。");
 #ifdef JP
 else msg_print("極寒の矢の呪文を唱えた。");
 #else
-			else msg_print("You casts a ice bolt.");
+			else msg_print("You cast a ice bolt.");
 #endif
 		
 			fire_bolt(GF_ICE, dir, damage);
@@ -843,7 +843,7 @@ else msg_print("極寒の矢の呪文を唱えた。");
 #ifdef JP
 else msg_print("マジック・ミサイルの呪文を唱えた。");
 #else
-			else msg_print("You casts a magic missile.");
+			else msg_print("You cast a magic missile.");
 #endif
 		
 			fire_bolt(GF_MISSILE, dir, damage);
@@ -853,7 +853,7 @@ else msg_print("マジック・ミサイルの呪文を唱えた。");
 #ifdef JP
 else msg_print("恐ろしげな幻覚を作り出した。");
 #else
-			else msg_print("You casts a fearful illusion.");
+			else msg_print("You cast a fearful illusion.");
 #endif
 		
 			fear_monster(dir, plev+10);
@@ -867,7 +867,7 @@ else msg_print("恐ろしげな幻覚を作り出した。");
 #ifdef JP
 else msg_print("誘惑的な幻覚をつくり出した。");
 #else
-			else msg_print("You casts a mesmerizing illusion.");
+			else msg_print("You cast a mesmerizing illusion.");
 #endif
 		
 			confuse_monster(dir, plev * 2);
@@ -889,7 +889,7 @@ else msg_print("誘惑的な幻覚をつくり出した。");
 #ifdef JP
 else msg_print("<破滅の手>を放った！");
 #else
-		else msg_print("You invokes the Hand of Doom!");
+		else msg_print("You invoke the Hand of Doom!");
 #endif
 
 		fire_ball_hide(GF_HAND_DOOM, dir, 200, 0);
@@ -899,7 +899,7 @@ else msg_print("<破滅の手>を放った！");
 #ifdef JP
 msg_print("自分の傷に念を集中した。");
 #else
-			msg_print("You concentrates on your wounds!");
+			msg_print("You concentrate on your wounds!");
 #endif
 		(void)hp_player(plev*6);
 		(void)set_stun(0);
@@ -909,7 +909,7 @@ msg_print("自分の傷に念を集中した。");
 #ifdef JP
 msg_print("無傷の球の呪文を唱えた。");
 #else
-			msg_print("You casts a Globe of Invulnerability.");
+			msg_print("You cast a Globe of Invulnerability.");
 #endif
 		(void)set_invuln(randint1(7) + 7, FALSE);
 		break;
@@ -966,7 +966,7 @@ msg_print("無傷の球の呪文を唱えた。");
 #ifdef JP
 msg_format("%sを引き戻した。", m_name);
 #else
-			msg_format("You commands %s to return.", m_name);
+			msg_format("You command %s to return.", m_name);
 #endif
 
 		teleport_to_player(cave[target_row][target_col].m_idx, 100);
@@ -992,7 +992,7 @@ msg_format("%sを引き戻した。", m_name);
 #ifdef JP
 msg_format("%sの足を指さした。", m_name);
 #else
-			msg_format("You gestures at %s's feet.", m_name);
+			msg_format("You gesture at %s's feet.", m_name);
 #endif
 
 		if ((r_ptr->flags3 & RF3_RES_TELE) || (r_ptr->flags1 & RF1_QUESTOR) || (r_ptr->level + randint1(50) > plev + randint1(60)))
@@ -1030,7 +1030,7 @@ msg_format("%sは天井を突き破って宙へ浮いていった。",m_name);
 #ifdef JP
 else msg_print("光の剣を放った。");
 #else
-			else msg_print("You throws a psycho-spear.");
+			else msg_print("You throw a psycho-spear.");
 #endif
 		(void)fire_beam(GF_PSY_SPEAR, dir, damage);
 		break;
@@ -1038,7 +1038,7 @@ else msg_print("光の剣を放った。");
 #ifdef JP
 msg_print("暗闇の中で手を振った。");
 #else
-			msg_print("You gestures in shadow.");
+			msg_print("You gesture in shadow.");
 #endif
 		(void)unlite_area(10, 3);
 		break;
@@ -1047,7 +1047,7 @@ msg_print("暗闇の中で手を振った。");
 #ifdef JP
 msg_print("呪文を唱えて邪悪に微笑んだ。");
 #else
-			msg_print("You casts a spell and cackles evilly.");
+			msg_print("You cast a spell and cackles evilly.");
 #endif
 		trap_creation(target_row, target_col);
 		break;
@@ -1062,7 +1062,7 @@ msg_print("しかし何も起きなかった。");
 #ifdef JP
 msg_print("死者復活の呪文を唱えた。");
 #else
-		msg_print("You casts a animate dead.");
+		msg_print("You cast a animate dead.");
 #endif
 		(void)animate_dead(0, py, px);
 		break;
@@ -1074,7 +1074,7 @@ msg_print("死者復活の呪文を唱えた。");
 #ifdef JP
 msg_print("援軍を召喚した。");
 #else
-			msg_print("You summons minions.");
+			msg_print("You summon minions.");
 #endif
 		for (k = 0;k < 4; k++)
 		{
@@ -1090,7 +1090,7 @@ msg_print("援軍を召喚した。");
 #ifdef JP
 msg_print("サイバーデーモンを召喚した！");
 #else
-			msg_print("You summons Cyberdemons!");
+			msg_print("You summon Cyberdemons!");
 #endif
 		if (max_cyber > 4) max_cyber = 4;
 		for (k = 0;k < max_cyber; k++)
@@ -1104,7 +1104,7 @@ msg_print("サイバーデーモンを召喚した！");
 #ifdef JP
 msg_print("仲間を召喚した。");
 #else
-			msg_print("You summons help.");
+			msg_print("You summon help.");
 #endif
 		for (k = 0;k < 1; k++)
 			summon_specific(-1, target_row, target_col, plev, 0, (mode | u_mode));
@@ -1117,7 +1117,7 @@ msg_print("仲間を召喚した。");
 #ifdef JP
 msg_print("モンスターを召喚した！");
 #else
-			msg_print("You summons monsters!");
+			msg_print("You summon monsters!");
 #endif
 		for (k = 0;k < 6; k++)
 			summon_specific(-1, target_row, target_col, plev, 0, (mode | u_mode));
@@ -1130,7 +1130,7 @@ msg_print("モンスターを召喚した！");
 #ifdef JP
 msg_print("アリを召喚した。");
 #else
-			msg_print("You summons ants.");
+			msg_print("You summon ants.");
 #endif
 		for (k = 0;k < 6; k++)
 			summon_specific(-1, target_row, target_col, plev, SUMMON_ANT, mode);
@@ -1143,7 +1143,7 @@ msg_print("アリを召喚した。");
 #ifdef JP
 msg_print("蜘蛛を召喚した。");
 #else
-			msg_print("You summons spiders.");
+			msg_print("You summon spiders.");
 #endif
 		for (k = 0;k < 6; k++)
 			summon_specific(-1, target_row, target_col, plev, SUMMON_SPIDER, mode);
@@ -1156,7 +1156,7 @@ msg_print("蜘蛛を召喚した。");
 #ifdef JP
 msg_print("ハウンドを召喚した。");
 #else
-			msg_print("You summons hounds.");
+			msg_print("You summon hounds.");
 #endif
 		for (k = 0;k < 4; k++)
 			summon_specific(-1, target_row, target_col, plev, SUMMON_HOUND, mode);
@@ -1169,7 +1169,7 @@ msg_print("ハウンドを召喚した。");
 #ifdef JP
 msg_print("ヒドラを召喚した。");
 #else
-			msg_print("You summons hydras.");
+			msg_print("You summon hydras.");
 #endif
 		for (k = 0;k < 4; k++)
 			summon_specific(-1, target_row, target_col, plev, SUMMON_HYDRA, mode);
@@ -1182,7 +1182,7 @@ msg_print("ヒドラを召喚した。");
 #ifdef JP
 msg_print("天使を召喚した！");
 #else
-			msg_print("You summons angel!");
+			msg_print("You summon angel!");
 #endif
 		for (k = 0;k < 1; k++)
 			summon_specific(-1, target_row, target_col, plev, SUMMON_ANGEL, mode);
@@ -1195,7 +1195,7 @@ msg_print("天使を召喚した！");
 #ifdef JP
 msg_print("混沌の宮廷から悪魔を召喚した！");
 #else
-			msg_print("You summons a demon from the Courts of Chaos!");
+			msg_print("You summon a demon from the Courts of Chaos!");
 #endif
 		for (k = 0;k < 1; k++)
 			summon_specific(-1, target_row, target_col, plev, SUMMON_DEMON, (mode | u_mode));
@@ -1208,7 +1208,7 @@ msg_print("混沌の宮廷から悪魔を召喚した！");
 #ifdef JP
 msg_print("アンデッドの強敵を召喚した！");
 #else
-			msg_print("You summons an undead adversary!");
+			msg_print("You summon an undead adversary!");
 #endif
 		for (k = 0;k < 1; k++)
 			summon_specific(-1, target_row, target_col, plev, SUMMON_UNDEAD, (mode | u_mode));
@@ -1221,7 +1221,7 @@ msg_print("アンデッドの強敵を召喚した！");
 #ifdef JP
 msg_print("ドラゴンを召喚した！");
 #else
-			msg_print("You summons dragon!");
+			msg_print("You summon dragon!");
 #endif
 		for (k = 0;k < 1; k++)
 			summon_specific(-1, target_row, target_col, plev, SUMMON_DRAGON, (mode | u_mode));
@@ -1234,7 +1234,7 @@ msg_print("ドラゴンを召喚した！");
 #ifdef JP
 msg_print("強力なアンデッドを召喚した！");
 #else
-			msg_print("You summons greater undead!");
+			msg_print("You summon greater undead!");
 #endif
 		for (k = 0;k < 6; k++)
 			summon_specific(-1, target_row, target_col, plev, SUMMON_HI_UNDEAD, (mode | u_mode));
@@ -1247,7 +1247,7 @@ msg_print("強力なアンデッドを召喚した！");
 #ifdef JP
 msg_print("古代ドラゴンを召喚した！");
 #else
-			msg_print("You summons ancient dragons!");
+			msg_print("You summon ancient dragons!");
 #endif
 		for (k = 0;k < 4; k++)
 			summon_specific(-1, target_row, target_col, plev, SUMMON_HI_DRAGON, (mode | u_mode));
@@ -1260,7 +1260,7 @@ msg_print("古代ドラゴンを召喚した！");
 #ifdef JP
 msg_print("アンバーの王族を召喚した！");
 #else
-			msg_print("You summons Lords of Amber!");
+			msg_print("You summon Lords of Amber!");
 #endif
 		for (k = 0;k < 4; k++)
 			summon_specific(-1, target_row, target_col, plev, SUMMON_AMBERITES, (mode | PM_ALLOW_UNIQUE));
@@ -1273,7 +1273,7 @@ msg_print("アンバーの王族を召喚した！");
 #ifdef JP
 msg_print("特別な強敵を召喚した！");
 #else
-			msg_print("You summons special opponents!");
+			msg_print("You summon special opponents!");
 #endif
 		for (k = 0;k < 4; k++)
 			if (summon_specific(-1, target_row, target_col, plev, SUMMON_UNIQUE, (mode | PM_ALLOW_UNIQUE))) count++;

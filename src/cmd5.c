@@ -3816,7 +3816,7 @@ msg_print("悪魔は現れなかった。");
 #ifdef JP
 else msg_print("<破滅の手>を放った！");
 #else
-		else msg_print("You invokes the Hand of Doom!");
+		else msg_print("You invoke the Hand of Doom!");
 #endif
 
 		fire_ball_hide(GF_HAND_DOOM, dir, plev * 2, 0);
