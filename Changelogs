@@ -1,4 +1,35 @@
+2002-03-06  Takeshi Mogami  <mogami@akiru>
+
+	* src/spells1.c: 木が凍って砕けた等、英訳。
+
+2002-03-06  habu  <habu@akiru>
+
+	* src/load.c, src/types.h:
+	EGO_XTRA_* から art_flags への変換をz_older_than()で囲んだ。また、object_type.xtra1は現在全く使われてないのでその旨をコメントに書いた。
+
+2002-03-06  hoge  <hoge@akiru>
+
+	* src/tables.c, configure.in, lib/edit/r_info_j.txt, lib/file/news.txt, lib/file/news_j.txt, lib/help/jversion.txt, src/cmd1.c, src/defines.h, src/racial.c, src/spells1.c:
+	バージョン番号を1.0.10に上げる
+	コーンのジャガーノートの強さ変更
+	木は多くの属性の攻撃で壊れる
+	連続魔の変更
+
+2002-03-06  Takeshi Mogami  <mogami@akiru>
+
+	* lib/pref/graf-new.prf:
+	Pern由来の16x16タイルの設定を間違えていて、白い豆腐があらわれていたのを修正。
+
+	* src/generate.c, src/save.c:
+	乗馬のバグ、本当に修正。原因はセーブ時にp_ptr->ridingをセーブした後で変更したせい。
+	さっきのgenerate.cの修正は、勘違いだったので取り消し。
+
+	* src/generate.c:
+	乗馬中にセーブロードしたとき、乗馬中のペットがおかしくなるバグ修正。
+
 2002-03-05  Takeshi Mogami  <mogami@akiru>
+
+	* Changelogs: 更新
 
 	* src/cmd1.c, src/effects.c, src/melee1.c, src/melee2.c, src/monster2.c, src/mspells1.c, src/spells1.c:
 	幻覚状態の時に死因が ランダムな名前+(?) になってしまっていたのを、
