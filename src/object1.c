@@ -4375,7 +4375,7 @@ int show_inven(int target_item)
 	char            out_desc[23][MAX_NLEN];
 	int             target_item_label = 0;
 	int             wid, hgt;
-	char inven_spellbook_label[24];
+	char inven_spellbook_label[52+1];
 
 	/* See cmd5.c */
 	extern bool select_spellbook;
@@ -4418,13 +4418,17 @@ int show_inven(int target_item)
 	{
 		int index;
 
-		strcpy(inven_spellbook_label, "abcdefghijklmnopqrstuvw");
-		for (i = 0; i < INVEN_PACK; i++)
+		strcpy(inven_spellbook_label, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+		for (i = 0; i < 52; i++)
 		{
-			if (get_tag(&index, (char)('a' + i)))
+                        char c;
+                        if (i < 26) c = (char)('a' + i);
+                        else c = (char)('A' + i - 26);
+
+			if (get_tag(&index, c))
 			{
 				inven_spellbook_label[i] = ' ';
-				inven_spellbook_label[index] = (char)('a' + i);
+				inven_spellbook_label[index] = c;
 			}
 		}
 	}
