@@ -6152,11 +6152,6 @@ static void cave_temp_room_unlite(void)
 }
 
 
-#define cave_pass_lite_bold(Y,X) \
-	(cave_los_bold((Y), (X)) && \
-	 have_flag(f_flags_bold((Y), (X)), FF_PROJECT))
-
-
 /*
  * Determine how much contiguous open space this grid is next to
  */
@@ -6175,7 +6170,7 @@ static int next_to_open(int cy, int cx)
 		x = cx + ddx_cdd[i % 8];
 
 		/* Found a wall, break the length */
-		if (!cave_pass_lite_bold(y, x))
+		if (!cave_los_bold(y, x))
 		{
 			/* Track best length */
 			if (len > blen)
@@ -6208,7 +6203,7 @@ static int next_to_walls_adj(int cy, int cx)
 		y = cy + ddy_ddd[i];
 		x = cx + ddx_ddd[i];
 
-		if (!cave_pass_lite_bold(y, x)) c++;
+		if (!cave_los_bold(y, x)) c++;
 	}
 
 	return c;
@@ -6248,7 +6243,7 @@ static void cave_temp_room_aux(int y, int x, bool only_room)
 		 * properly.
 		 * This leaves only a check for 6 bounding walls!
 		 */
-		if (in_bounds(y, x) && cave_pass_lite_bold(y, x) &&
+		if (in_bounds(y, x) && cave_los_bold(y, x) &&
 		    (next_to_walls_adj(y, x) == 6) && (next_to_open(y, x) <= 1)) return;
 	}
 
@@ -6299,7 +6294,7 @@ void lite_room(int y1, int x1)
 		x = temp_x[i], y = temp_y[i];
 
 		/* Walls get lit, but stop light */
-		if (!cave_pass_lite_bold(y, x)) continue;
+		if (!cave_los_bold(y, x)) continue;
 
 		/* Spread adjacent */
 		cave_temp_lite_room_aux(y + 1, x);
@@ -6335,7 +6330,7 @@ void unlite_room(int y1, int x1)
 		x = temp_x[i], y = temp_y[i];
 
 		/* Walls get dark, but stop darkness */
-		if (!cave_pass_lite_bold(y, x)) continue;
+		if (!cave_los_bold(y, x)) continue;
 
 		/* Spread adjacent */
 		cave_temp_unlite_room_aux(y + 1, x);
