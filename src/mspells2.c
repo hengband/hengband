@@ -317,12 +317,6 @@ bool monst_spell_monst(int m_idx)
 	/* Extract the monster level */
 	rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
 
-	if (pet)
-	{
-		f4 &= ~(RF4_SHRIEK);
-		f6 &= ~(RF6_DARKNESS | RF6_TRAPS);
-	}
-
 	if (dun_level && (!p_ptr->inside_quest || (p_ptr->inside_quest < MIN_RANDOM_QUEST)) && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC))
 	{
 		f4 &= (RF4_NOMAGIC_MASK);
@@ -341,11 +335,6 @@ bool monst_spell_monst(int m_idx)
 		f6 &= ~(RF6_HEAL);
 	}
 
-	if (!(p_ptr->pet_extra_flags & PF_TELEPORT) && pet)
-	{
-		f6 &= ~((RF6_BLINK | RF6_TPORT | RF6_TELE_AWAY));
-	}
-
 	if (m_idx == p_ptr->riding)
 	{
 		f4 &= ~(RF4_RIDING_MASK);
@@ -353,72 +342,90 @@ bool monst_spell_monst(int m_idx)
 		f6 &= ~(RF6_RIDING_MASK);
 	}
 
-	if (!(p_ptr->pet_extra_flags & PF_ATTACK_SPELL) && pet)
+	if (pet)
 	{
-		f4 &= ~(RF4_ATTACK_MASK);
-		f5 &= ~(RF5_ATTACK_MASK);
-		f6 &= ~(RF6_ATTACK_MASK);
-	}
+		f4 &= ~(RF4_SHRIEK);
+		f6 &= ~(RF6_DARKNESS | RF6_TRAPS);
 
-	if (!(p_ptr->pet_extra_flags & PF_SUMMON_SPELL) && pet)
-	{
-		f4 &= ~(RF4_SUMMON_MASK);
-		f5 &= ~(RF5_SUMMON_MASK);
-		f6 &= ~(RF6_SUMMON_MASK);
-	}
-
-	/* Prevent collateral damage */
-	if (!(p_ptr->pet_extra_flags & PF_BALL_SPELL) && pet && (m_idx != p_ptr->riding))
-	{
-		int real_y = y;
-		int real_x = x;
-		int dist;
-
-		/* Expected breath radius */
-		int rad = (r_ptr->flags2 & RF2_POWERFUL) ? 3 : 2;
-
-		get_project_point(m_ptr->fy, m_ptr->fx, &real_y, &real_x);
-		dist = distance(real_y, real_x, py, px);
-
-		if (los(real_y, real_x, py, px))
+		if (!(p_ptr->pet_extra_flags & PF_TELEPORT))
 		{
-			if (dist <= 2)
+			f6 &= ~(RF6_BLINK | RF6_TPORT | RF6_TELE_AWAY);
+		}
+
+		if (!(p_ptr->pet_extra_flags & PF_ATTACK_SPELL))
+		{
+			f4 &= ~(RF4_ATTACK_MASK);
+			f5 &= ~(RF5_ATTACK_MASK);
+			f6 &= ~(RF6_ATTACK_MASK);
+		}
+
+		if (!(p_ptr->pet_extra_flags & PF_SUMMON_SPELL))
+		{
+			f4 &= ~(RF4_SUMMON_MASK);
+			f5 &= ~(RF5_SUMMON_MASK);
+			f6 &= ~(RF6_SUMMON_MASK);
+		}
+
+		/* Prevent collateral damage */
+		if (!(p_ptr->pet_extra_flags & PF_BALL_SPELL) && (m_idx != p_ptr->riding))
+		{
+			if ((f4 & RF4_BALL_MASK) ||
+			    (f5 & RF5_BALL_MASK) ||
+			    (f6 & RF6_BALL_MASK))
 			{
-				f4 &= ~(RF4_BALL_MASK);
-				f5 &= ~(RF5_BALL_MASK);
-				f6 &= ~(RF6_BALL_MASK);
+				int real_y = y;
+				int real_x = x;
+				int dist;
+
+				get_project_point(m_ptr->fy, m_ptr->fx, &real_y, &real_x);
+				dist = distance(real_y, real_x, py, px);
+
+				if (los(real_y, real_x, py, px))
+				{
+					if (dist <= 2)
+					{
+						f4 &= ~(RF4_BALL_MASK);
+						f5 &= ~(RF5_BALL_MASK);
+						f6 &= ~(RF6_BALL_MASK);
+					}
+					else if (dist <= 4)
+					{
+						f4 &= ~(RF4_BIG_BALL_MASK);
+						f5 &= ~(RF5_BIG_BALL_MASK);
+						f6 &= ~(RF6_BIG_BALL_MASK);
+					}
+				}
 			}
-			else if (dist <= 4)
+
+			if (((f4 & RF4_BEAM_MASK) ||
+			     (f5 & RF5_BEAM_MASK) ||
+			     (f6 & RF6_BEAM_MASK)) &&
+			    !direct_beam(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, m_ptr))
 			{
-				f4 &= ~(RF4_BIG_BALL_MASK);
-				f5 &= ~(RF5_BIG_BALL_MASK);
-				f6 &= ~(RF6_BIG_BALL_MASK);
+				f4 &= ~(RF4_BEAM_MASK);
+				f5 &= ~(RF5_BEAM_MASK);
+				f6 &= ~(RF6_BEAM_MASK);
 			}
-		}
 
-		if (((f4 & RF4_BEAM_MASK) ||
-		     (f5 & RF5_BEAM_MASK) ||
-		     (f6 & RF6_BEAM_MASK)) &&
-		    !direct_beam(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, m_ptr))
-		{
-			f4 &= ~(RF4_BEAM_MASK);
-			f5 &= ~(RF5_BEAM_MASK);
-			f6 &= ~(RF6_BEAM_MASK);
-		}
+			if ((f4 & RF4_BREATH_MASK) ||
+			    (f5 & RF5_BREATH_MASK) ||
+			    (f6 & RF6_BREATH_MASK))
+			{
+				/* Expected breath radius */
+				int rad = (r_ptr->flags2 & RF2_POWERFUL) ? 3 : 2;
 
-		if (((f4 & RF4_BREATH_MASK) ||
-		     (f5 & RF5_BREATH_MASK) ||
-		     (f6 & RF6_BREATH_MASK)) &&
-		    !breath_direct(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, FALSE, TRUE))
-		{
-			f4 &= ~(RF4_BREATH_MASK);
-			f5 &= ~(RF5_BREATH_MASK);
-			f6 &= ~(RF6_BREATH_MASK);
-		}
-		else if ((f4 & RF4_BR_DISI) &&
-			 !breath_direct(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, TRUE, TRUE))
-		{
-			f4 &= ~(RF4_BR_DISI);
+				if (!breath_direct(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, FALSE, TRUE))
+				{
+					f4 &= ~(RF4_BREATH_MASK);
+					f5 &= ~(RF5_BREATH_MASK);
+					f6 &= ~(RF6_BREATH_MASK);
+				}
+				else if ((f4 & RF4_BR_DISI) &&
+					 !breath_direct(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, TRUE, TRUE))
+				{
+					f4 &= ~(RF4_BR_DISI);
+				}
+			}
 		}
 	}
 
