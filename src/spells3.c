@@ -1941,9 +1941,11 @@ msg_print("床上のアイテムが呪文を跳ね返した。");
 
 	/* Notice */
 	note_spot(py, px);
-	
+
 	/* Redraw */
 	lite_spot(py, px);
+
+	update_local_illumination(py, px);
 
 	return TRUE;
 }

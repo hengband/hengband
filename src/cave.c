@@ -383,6 +383,83 @@ static bool check_local_illumination(int y, int x)
 
 
 /*
+ * Update "local" illumination
+ */
+void update_local_illumination(int y, int x)
+{
+	int i, yy, xx;
+
+	if (!in_bounds(y, x)) return;
+
+	if ((y != py) && (x != px))
+	{
+		yy = (y < py) ? (y - 1) : (y + 1);
+		xx = (x < px) ? (x - 1) : (x + 1);
+
+		if (player_has_los_bold(yy, xx))
+		{
+			/* Update the monster */
+			if (cave[yy][xx].m_idx) update_mon(cave[yy][xx].m_idx, FALSE);
+
+			/* Notice and redraw */
+			note_spot(yy, xx);
+			lite_spot(yy, xx);
+		}
+	}
+	else if (x != px) /* y == py */
+	{
+		xx = (x < px) ? (x - 1) : (x + 1);
+
+		for (i = -1; i <= 1; i++)
+		{
+			yy = y + i;
+			if (!player_has_los_bold(yy, xx)) continue;
+
+			/* Update the monster */
+			if (cave[yy][xx].m_idx) update_mon(cave[yy][xx].m_idx, FALSE);
+
+			/* Notice and redraw */
+			note_spot(yy, xx);
+			lite_spot(yy, xx);
+		}
+	}
+	else if (y != py) /* x == px */
+	{
+		yy = (y < py) ? (y - 1) : (y + 1);
+
+		for (i = -1; i <= 1; i++)
+		{
+			xx = x + i;
+			if (!player_has_los_bold(yy, xx)) continue;
+
+			/* Update the monster */
+			if (cave[yy][xx].m_idx) update_mon(cave[yy][xx].m_idx, FALSE);
+
+			/* Notice and redraw */
+			note_spot(yy, xx);
+			lite_spot(yy, xx);
+		}
+	}
+	else /* Player's grid */
+	{
+		for (i = 0; i < 9; i++)
+		{
+			yy = y + ddy_ddd[i];
+			xx = x + ddx_ddd[i];
+			if (!player_has_los_bold(yy, xx)) continue;
+
+			/* Update the monster */
+			if (cave[yy][xx].m_idx) update_mon(cave[yy][xx].m_idx, FALSE);
+
+			/* Notice and redraw */
+			note_spot(yy, xx);
+			lite_spot(yy, xx);
+		}
+	}
+}
+
+
+/*
  * Can the player "see" the given grid in detail?
  *
  * He must have vision, illumination, and line of sight.
@@ -4425,6 +4502,8 @@ void cave_set_feat(int y, int x, int feat)
 
 		/* Remove flag for mirror/glyph */
 		c_ptr->info &= ~(CAVE_OBJECT);
+
+		update_local_illumination(y, x);
 	}
 
 	/* Clear mimic type */
@@ -4441,6 +4520,9 @@ void cave_set_feat(int y, int x, int feat)
 		/* Check for change to out of sight grid */
 		else if (!player_can_see_bold(y, x)) c_ptr->info &= ~(CAVE_MARK);
 
+		/* Update the monster */
+		if (c_ptr->m_idx) update_mon(c_ptr->m_idx, FALSE);
+
 		/* Notice */
 		note_spot(y, x);
 
@@ -4452,20 +4534,30 @@ void cave_set_feat(int y, int x, int feat)
 	if (have_flag(f_ptr->flags, FF_GLOW) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS))
 	{
 		int i, yy, xx;
+		cave_type *cc_ptr;
 
 		for (i = 0; i < 9; i++)
 		{
 			yy = y + ddy_ddd[i];
 			xx = x + ddx_ddd[i];
 			if (!in_bounds2(yy, xx)) continue;
-			cave[yy][xx].info |= CAVE_GLOW;
-			if (character_dungeon && player_has_los_bold(yy, xx))
+			cc_ptr = &cave[yy][xx];
+			cc_ptr->info |= CAVE_GLOW;
+			if (character_dungeon)
 			{
-				/* Notice */
-				note_spot(yy, xx);
+				if (player_has_los_grid(cc_ptr))
+				{
+					/* Update the monster */
+					if (cc_ptr->m_idx) update_mon(cc_ptr->m_idx, FALSE);
 
-				/* Redraw */
-				lite_spot(yy, xx);
+					/* Notice */
+					note_spot(yy, xx);
+
+					/* Redraw */
+					lite_spot(yy, xx);
+				}
+
+				update_local_illumination(yy, xx);
 			}
 		}
 	}
@@ -4577,15 +4669,23 @@ void cave_alter_feat(int y, int x, int action)
 /* Remove a mirror */
 void remove_mirror(int y, int x)
 {
+	cave_type *c_ptr = &cave[y][x];
+
 	/* Remove the mirror */
-	cave[y][x].info &= ~(CAVE_OBJECT);
-	cave[y][x].mimic = 0;
+	c_ptr->info &= ~(CAVE_OBJECT);
+	c_ptr->mimic = 0;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS)
 	{
-		cave[y][x].info &= ~(CAVE_GLOW);
-		if( !view_torch_grids )cave[y][x].info &= ~(CAVE_MARK);
+		c_ptr->info &= ~(CAVE_GLOW);
+		if (!view_torch_grids) c_ptr->info &= ~(CAVE_MARK);
+
+		/* Update the monster */
+		if (c_ptr->m_idx) update_mon(c_ptr->m_idx, FALSE);
+
+		update_local_illumination(y, x);
 	}
+
 	/* Notice */
 	note_spot(y, x);
 

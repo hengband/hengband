@@ -1037,20 +1037,25 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 		case GF_LITE:
 		{
 			/* Turn on the light */
-			if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS)) c_ptr->info |= (CAVE_GLOW);
+			if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS))
+			{
+				c_ptr->info |= (CAVE_GLOW);
 
-			/* Notice */
-			note_spot(y, x);
+				/* Notice */
+				note_spot(y, x);
 
-			/* Redraw */
-			lite_spot(y, x);
+				/* Redraw */
+				lite_spot(y, x);
 
-			/* Observe */
-			if (player_can_see_bold(y, x)) obvious = TRUE;
+				update_local_illumination(y, x);
 
-			/* Mega-Hack -- Update the monster in the affected grid */
-			/* This allows "spear of light" (etc) to work "correctly" */
-			if (c_ptr->m_idx) update_mon(c_ptr->m_idx, FALSE);
+				/* Observe */
+				if (player_can_see_bold(y, x)) obvious = TRUE;
+
+				/* Mega-Hack -- Update the monster in the affected grid */
+				/* This allows "spear of light" (etc) to work "correctly" */
+				if (c_ptr->m_idx) update_mon(c_ptr->m_idx, FALSE);
+			}
 
 			break;
 		}
@@ -1061,9 +1066,6 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 		{
 			if (!p_ptr->inside_battle)
 			{
-				/* Notice */
-				if (player_can_see_bold(y, x)) obvious = TRUE;
-
 				/* Turn off the light. */
 				if (!is_mirror_grid(c_ptr))
 				{
@@ -1078,14 +1080,19 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 						/* Notice */
 						note_spot(y, x);
 					}
+
+					/* Redraw */
+					lite_spot(y, x);
+
+					update_local_illumination(y, x);
+
+					/* Notice */
+					if (player_can_see_bold(y, x)) obvious = TRUE;
+
+					/* Mega-Hack -- Update the monster in the affected grid */
+					/* This allows "spear of light" (etc) to work "correctly" */
+					if (c_ptr->m_idx) update_mon(c_ptr->m_idx, FALSE);
 				}
-
-				/* Redraw */
-				lite_spot(y, x);
-
-				/* Mega-Hack -- Update the monster in the affected grid */
-				/* This allows "spear of light" (etc) to work "correctly" */
-				if (c_ptr->m_idx) update_mon(c_ptr->m_idx, FALSE);
 			}
 
 			/* All done */

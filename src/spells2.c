@@ -6061,6 +6061,8 @@ msg_format("%^sが目を覚ました。", m_name);
 
 		/* Redraw */
 		lite_spot(y, x);
+
+		update_local_illumination(y, x);
 	}
 
 	/* None left */
@@ -6119,6 +6121,8 @@ static void cave_temp_room_unlite(void)
 
 			/* Redraw */
 			lite_spot(y, x);
+
+			update_local_illumination(y, x);
 		}
 	}
 

@@ -601,6 +601,7 @@ extern bool is_known_trap(cave_type *c_ptr);
 extern bool is_closed_door(int feat);
 extern bool is_hidden_door(cave_type *c_ptr);
 extern bool los(int y1, int x1, int y2, int x2);
+extern void update_local_illumination(int y, int x);
 extern bool player_can_see_bold(int y, int x);
 extern bool cave_valid_bold(int y, int x);
 extern bool cave_valid_grid(cave_type *c_ptr);
