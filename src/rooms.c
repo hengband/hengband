@@ -4188,7 +4188,7 @@ void build_maze_vault(int x0, int y0, int xsize, int ysize, bool is_vault)
 {
 	int y, x, dy, dx;
 	int y1, x1, y2, x2;
-	int i, m, n, num_vertices, *visited;
+	int m, n, num_vertices, *visited;
 	bool light;
 	cave_type *c_ptr;
 
@@ -4237,10 +4237,7 @@ void build_maze_vault(int x0, int y0, int xsize, int ysize, bool is_vault)
 	num_vertices = m * n;
 
 	/* initialize array of visited vertices */
-	/* use ralloc here ? */
-	visited = (int *)malloc(num_vertices * sizeof(int));
-	for (i = 0; i < num_vertices; i++)
-		visited[i] = 0;
+	C_MAKE(visited, num_vertices, int);
 
 	/* traverse the graph to create a spaning tree, pick a random root */
 	r_visit(y1, x1, y2, x2, randint0(num_vertices), 0, visited);
@@ -4248,7 +4245,7 @@ void build_maze_vault(int x0, int y0, int xsize, int ysize, bool is_vault)
 	/* Fill with monsters and treasure, low difficulty */
 	if (is_vault) fill_treasure(x1, x2, y1, y2, randint1(5));
 
-	free(visited);
+	C_KILL(visited, num_vertices, int);
 }
 
 
@@ -4263,7 +4260,7 @@ static void build_mini_c_vault(int x0, int y0, int xsize, int ysize)
  {
  	int dy, dx;
  	int y1, x1, y2, x2, y, x, total;
-	int i, m, n, num_vertices;
+	int m, n, num_vertices;
 	int *visited;
 
  	if (cheat_room) msg_print("Mini Checker Board Vault");
@@ -4333,10 +4330,7 @@ static void build_mini_c_vault(int x0, int y0, int xsize, int ysize)
 	num_vertices = m * n;
 
 	/* initialize array of visited vertices */
-	/* use ralloc here ? */
-	visited = (int *) malloc(num_vertices * sizeof(int));
-	for (i = 0; i < num_vertices; i++)
-		visited[i] = 0;
+	C_MAKE(visited, num_vertices, int);
 
 	/* traverse the graph to create a spannng tree, pick a random root */
 	r_visit(y1, x1, y2, x2, randint0(num_vertices), 0, visited);
@@ -4374,8 +4368,7 @@ static void build_mini_c_vault(int x0, int y0, int xsize, int ysize)
 	/* Fill with monsters and treasure, highest difficulty */
 	fill_treasure(x1, x2, y1, y2, 10);
 
-	/* rnfree(visited, num_vertices * sizeof(int)); */
-	free(visited);
+	C_KILL(visited, num_vertices, int);
 }
 
 
