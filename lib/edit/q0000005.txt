@@ -21,8 +21,9 @@ Q:5:T:どうかモンスターどもを一掃して塔を取り戻してください！
 # Description for quest reward
 ?:[EQU $QUEST5 3]
 Q:$5:T:Thank you for cleaning the tower of all these strange creatures.
-Q:$5:T:I've talked with Astinus, the local librarian. He will offer you
-Q:$5:T:a special discount price when identifying magical objects.
+Q:$5:T:I've talked with Astinus, the local librarian, Suiyan, the local
+Q:$5:T:weaponmaster, and Lorien, the local beastmaster. They will offer you
+Q:$5:T:a special discount price when they serve you.
 Q:5:T:塔の怪物を一掃して下さって有難うございます。この街の司書のアスティヌス、
 Q:5:T:武器匠の水庵、モンスター仙人のロリエンに話を付けておいたので、
 Q:5:T:今後これらの店では格安でサービスを受けられるでしょう。
