@@ -6251,7 +6251,7 @@ quit("セーブファイルが壊れています");
 	world_monster = FALSE;
 	now_damaged = FALSE;
 	now_message = 0;
-	start_time = time(NULL);
+	start_time = time(NULL) - 1;
 	record_o_name[0] = '\0';
 
 	/* Sexy gal gets bonus to maximum weapon skill of whip */

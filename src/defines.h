@@ -3935,7 +3935,6 @@
 {\
 	u32b tmp;\
 	tmp = time(NULL);\
-	if (tmp == start_time) tmp++; \
 	playtime += (tmp - start_time);\
 	start_time = tmp;\
 }
