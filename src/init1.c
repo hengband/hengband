@@ -250,22 +250,6 @@ static cptr f_info_flags[] =
 
 
 /*
- * Special feature info tags
- */
-static cptr f_info_special_tags[] =
-{
-	"*FLOOR*",
-	"*WALL*",
-	"*INNER*",
-	"*OUTER*",
-	"*SOLID*",
-	"*STREAM1*",
-	"*STREAM2*",
-	NULL,
-};
-
-
-/*
  * Monster race flags
  */
 static cptr r_info_flags1[] =
@@ -1734,16 +1718,6 @@ s16b f_tag_to_index(cptr str)
 		}
 	}
 
-	/* Search for special index corresponding to this fake tag */
-	for (i = 0; f_info_special_tags[i]; i++)
-	{
-		if (streq(f_info_special_tags[i], str))
-		{
-			/* Return the special index */
-			return (s16b)(FEAT_DUNGEON_FLOOR - i);
-		}
-	}
-
 	/* Not found */
 	return 0;
 }
@@ -1766,17 +1740,6 @@ static void search_real_feat(s16b *feat)
 		{
 			/* Record real index */
 			*feat = (s16b)i;
-			return;
-		}
-	}
-
-	/* Search for special index corresponding to this fake tag */
-	for (i = 0; f_info_special_tags[i]; i++)
-	{
-		if (streq(f_info_special_tags[i], f_tag + (-(*feat))))
-		{
-			/* Record special index */
-			*feat = (s16b)(FEAT_DUNGEON_FLOOR - i);
 			return;
 		}
 	}

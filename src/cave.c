@@ -4468,19 +4468,19 @@ int conv_dungeon_feat(int newfeat)
 {
 	switch (newfeat)
 	{
-	case FEAT_DUNGEON_FLOOR:
+	case FEAT_CONVERT_FLOOR:
 		return floor_type[randint0(100)];
-	case FEAT_DUNGEON_WALL:
+	case FEAT_CONVERT_WALL:
 		return fill_type[randint0(100)];
-	case FEAT_DUNGEON_INNER:
+	case FEAT_CONVERT_INNER:
 		return feat_wall_inner;
-	case FEAT_DUNGEON_OUTER:
+	case FEAT_CONVERT_OUTER:
 		return feat_wall_outer;
-	case FEAT_DUNGEON_SOLID:
+	case FEAT_CONVERT_SOLID:
 		return feat_wall_solid;
-	case FEAT_DUNGEON_STREAM1:
+	case FEAT_CONVERT_STREAM1:
 		return d_info[dungeon_type].stream1;
-	case FEAT_DUNGEON_STREAM2:
+	case FEAT_CONVERT_STREAM2:
 		return d_info[dungeon_type].stream2;
 	default:
 		return newfeat;

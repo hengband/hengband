@@ -1115,6 +1115,15 @@
 #define FEAT_BLDG_HEAD          0x80
 #define FEAT_BLDG_TAIL          0x9F
 
+/* Hack -- Special fake terrains for f_info */
+#define FEAT_CONVERT_FLOOR      0xa0
+#define FEAT_CONVERT_WALL       0xa1
+#define FEAT_CONVERT_INNER      0xa2
+#define FEAT_CONVERT_OUTER      0xa3
+#define FEAT_CONVERT_SOLID      0xa4
+#define FEAT_CONVERT_STREAM1    0xa5
+#define FEAT_CONVERT_STREAM2    0xa6
+
 #define FEAT_TOWN               0xc0
 #define FEAT_ENTRANCE           0xc1
 #define FEAT_SWAMP              0xc2
@@ -1128,15 +1137,6 @@
 /* special traps */
 #define FEAT_TRAP_ARMAGEDDON    0xc5
 #define FEAT_TRAP_PIRANHA       0xc6
-
-/* Hack -- Special fake terrain for f_info */
-#define FEAT_DUNGEON_FLOOR      -1
-#define FEAT_DUNGEON_WALL       -2
-#define FEAT_DUNGEON_INNER      -3
-#define FEAT_DUNGEON_OUTER      -4
-#define FEAT_DUNGEON_SOLID      -5
-#define FEAT_DUNGEON_STREAM1    -6
-#define FEAT_DUNGEON_STREAM2    -7
 
 /*
  * Wilderness terrains
