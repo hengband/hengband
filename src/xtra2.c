@@ -777,13 +777,13 @@ msg_print("勝利！チャンピオンへの道を進んでいる。");
 #endif
 		}
 
-		if (arena_shouhin[p_ptr->arena_number])
+		if (arena_info[p_ptr->arena_number].tval)
 		{
 			/* Get local object */
 			q_ptr = &forge;
 
 			/* Prepare to make a prize */
-			object_prep(q_ptr, lookup_kind(k_info[arena_shouhin[p_ptr->arena_number]].tval, k_info[arena_shouhin[p_ptr->arena_number]].sval));
+			object_prep(q_ptr, lookup_kind(arena_info[p_ptr->arena_number].tval, arena_info[p_ptr->arena_number].sval));
 
 			apply_magic(q_ptr, object_level, FALSE, FALSE, FALSE, FALSE);
 
@@ -1275,7 +1275,7 @@ msg_print("地面に落とされた。");
 				chance = 66;
 				break;
 
-			case MON_CAIN:
+			case MON_CAINE:
 				a_idx = ART_CAINE;
 				chance = 50;
 				break;

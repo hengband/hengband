@@ -350,7 +350,7 @@ msg_print("あなたはすべての敵に勝利した。");
 			}
 			else
 			{
-				r_ptr = &r_info[arena_monsters[p_ptr->arena_number]];
+				r_ptr = &r_info[arena_info[p_ptr->arena_number].r_idx];
 				name = (r_name + r_ptr->name);
 #ifdef JP
 msg_format("%s に挑戦するものはいないか？", name);
@@ -1806,7 +1806,7 @@ void battle_monsters(void)
 				case MON_SHADOWLORD:
 				case MON_ARCHLICH:
 				case MON_BLEYS:
-				case MON_CAIN:
+				case MON_CAINE:
 				case MON_JULIAN:
 				case MON_VENOM_WYRM:
 				case MON_MASTER_MYS:
@@ -1834,7 +1834,7 @@ void battle_monsters(void)
 				case MON_BAZOOKER:
 				case MON_GCWADL:
 				case MON_KIRIN:
-				case MON_HOUOU:
+				case MON_FENGHUANG:
 					power[i] = power[i] * 4 / 3;
 					break;
 				case MON_UMBER_HULK:
@@ -1842,7 +1842,7 @@ void battle_monsters(void)
 				case MON_WATER_VOR:
 				case MON_COLD_VOR:
 				case MON_ENERGY_VOR:
-				case MON_BARNEY:
+				case MON_GACHAPIN:
 				case MON_REVENANT:
 				case MON_NEXUS_VOR:
 				case MON_PLASMA_VOR:

@@ -1664,3 +1664,13 @@ typedef struct
 	u16b occurrence;
 } cave_template_type;
 
+
+/*
+ * A structure type for arena entry
+ */
+typedef struct
+{
+	s16b r_idx; /* Monster (0 means victory prizing) */
+	byte tval;  /* tval of prize (0 means no prize) */
+	byte sval;  /* sval of prize */
+} arena_type;

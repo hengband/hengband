@@ -5135,7 +5135,7 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 
 		if (p_ptr->inside_arena)
 		{
-			cptr m_name = r_name+r_info[arena_monsters[p_ptr->arena_number]].name;
+			cptr m_name = r_name+r_info[arena_info[p_ptr->arena_number].r_idx].name;
 #ifdef JP
 			msg_format("あなたは%sの前に敗れ去った。", m_name);
 #else

@@ -1163,28 +1163,50 @@ byte blows_table[12][12] =
 
 };
 
-s16b arena_monsters[MAX_ARENA_MONS+2] =
+
+arena_type arena_info[MAX_ARENA_MONS + 2] =
 {
-	1059,  1060,	230,	241,	255,	270,	285,
-	293,	321,	348,	367,	395,	396,	403,
-	417,	436,	453,	464,	471,	479,	490,
-	504,	539,	569,	593,	621,	623,	1061,
-	1062,	657,	666,	702,	720,	768,	786,
-	798,	988,	847,	  0,	871
+	{ MON_NOBORTA,       0,         0                             },
+	{ MON_MORI_TROLL,    0,         0                             },
+	{ MON_TIGER,         0,         0                             },
+	{ MON_DRUID,         0,         0                             },
+	{ MON_HILL_GIANT,    TV_POTION, SV_POTION_SPEED               },
+	{ MON_WERERAT,       0,         0                             },
+	{ MON_ORC_CAPTAIN,   0,         0                             },
+	{ MON_BERSERKER,     0,         0                             },
+	{ MON_STONE_GIANT,   0,         0                             },
+	{ MON_D_ELF_LORD,    TV_POTION, SV_POTION_HEALING             },
+	{ MON_IRON_GOLEM,    0,         0                             },
+	{ MON_C_CRAWLER,     0,         0                             },
+	{ MON_XICLOTLAN,     0,         0                             },
+	{ MON_TROLL_PRIEST,  0,         0                             },
+	{ MON_ANGEL,         TV_ROD,    SV_ROD_STONE_TO_MUD           },
+	{ MON_SPIRIT_NAGA,   0,         0                             },
+	{ MON_BASILISK,      0,         0                             },
+	{ MON_MITHRIL_GOLEM, 0,         0                             },
+	{ MON_SHADOW_DRAKE,  0,         0                             },
+	{ MON_OGRE_SHAMAN,   TV_SCROLL, SV_SCROLL_ACQUIREMENT         },
+	{ MON_BICLOPS,       0,         0                             },
+	{ MON_ETHER_DRAKE,   TV_SCROLL, SV_SCROLL_RUNE_OF_PROTECTION  },
+	{ MON_HALFLING_S,    0,         0                             },
+	{ MON_ELDER_THING,   TV_ROD,    SV_ROD_DRAIN_LIFE             },
+	{ MON_M_MH_DRAGON,   0,         0                             },
+	{ MON_ETTIN,         TV_SCROLL, SV_SCROLL_STAR_ENCHANT_WEAPON },
+	{ MON_VAMPIRE_LORD,  0,         0                             },
+	{ MON_BARNEY,        TV_SCROLL, SV_SCROLL_GENOCIDE            },
+	{ MON_GROO,          0,         0                             },
+	{ MON_D_ELF_SORC,    TV_WAND,   SV_WAND_STRIKING              },
+	{ MON_IRON_LICH,     0,         0                             },
+	{ MON_G_TITAN,       TV_POTION, SV_POTION_STAR_ENLIGHTENMENT  },
+	{ MON_G_BALROG,      0,         0                             },
+	{ MON_NIGHTWALKER,   TV_ROD,    SV_ROD_IDENTIFY               },
+	{ MON_SHAMBLER,      TV_STAFF,  SV_STAFF_HOLINESS             },
+	{ MON_BLACK_REAVER,  TV_SCROLL, SV_SCROLL_STAR_ACQUIREMENT    },
+	{ MON_FENGHUANG,     TV_STAFF,  SV_STAFF_THE_MAGI             },
+	{ MON_WYRM_POWER,    TV_ROD,    SV_ROD_HEALING                },
+	{ 0,                 0,         0                             }, /* Victory prizing */
+	{ MON_HAGURE,        TV_SCROLL, SV_SCROLL_ARTIFACT            },
 };
-
-
-
-s16b arena_shouhin[MAX_ARENA_MONS+2] =
-{
-	  0,	  0,	  0,	  0,	249,	  0,	  0,
-	  0,	  0,	242,	  0,	  0,	  0,	  0,
-	583,	  0,	  0,	  0,	  0,	198,	  0,
-	190,	  0,	363,	  0,	212,	  0,	207,
-	  0,	628,	  0,	422,	  0,	372,	327,
-	199,	325,	374,	  0,	205
-};
-
 
 
 /*
