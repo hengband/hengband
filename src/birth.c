@@ -3949,8 +3949,6 @@ static bool get_player_race(void)
 	put_str("Note: Your 'race' determines various intrinsic factors and bonuses.", 23 ,5);
 #endif
 
-	hack_mutation = FALSE;
-
 	/* Dump races */
 	for (n = 0; n < MAX_RACES; n++)
 	{
@@ -4100,10 +4098,6 @@ static bool get_player_race(void)
 
 	/* Set race */
 	p_ptr->prace = k;
-
-	/* Give beastman a mutation at character birth */
-	if (p_ptr->prace == RACE_BEASTMAN)
-		hack_mutation = TRUE;
 
 	rp_ptr = &race_info[p_ptr->prace];
 	str = rp_ptr->title;
@@ -6228,6 +6222,10 @@ void player_birth(void)
 
 	/* Generate the random seeds for the wilderness */
 	seed_wilderness();
+
+	/* Give beastman a mutation at character birth */
+	if (p_ptr->prace == RACE_BEASTMAN) hack_mutation = TRUE;
+	else hack_mutation = FALSE;
 
 	/* Set the message window flag as default */
 	if (!window_flag[1])
