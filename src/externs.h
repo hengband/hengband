@@ -1352,6 +1352,7 @@ extern int spell_exp_level(int spell_exp);
 /* mspells1.c */
 extern bool clean_shot(int y1, int x1, int y2, int x2, bool friend);
 extern bool summon_possible(int y1, int x1);
+extern bool spell_is_inate(u16b spell);
 
 /* mspells2.c */
 extern bool monst_spell_monst(int m_idx);

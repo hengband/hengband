@@ -1156,6 +1156,29 @@ static int choose_attack_spell(int m_idx, byte spells[], byte num)
 
 
 /*
+ * Return TRUE if a spell is inate spell.
+ */
+bool spell_is_inate(u16b spell)
+{
+	if (spell < 32 * 4) /* Set RF4 */
+	{
+		if ((1L << (spell - 32 * 3)) & RF4_NOMAGIC_MASK) return TRUE;
+	}
+	else if (spell < 32 * 5) /* Set RF5 */
+	{
+		if ((1L << (spell - 32 * 4)) & RF5_NOMAGIC_MASK) return TRUE;
+	}
+	else if (spell < 32 * 6) /* Set RF6 */
+	{
+		if ((1L << (spell - 32 * 5)) & RF6_NOMAGIC_MASK) return TRUE;
+	}
+
+	/* This spell is not "inate" */
+	return FALSE;
+}
+
+
+/*
  * Creatures can cast spells, shoot missiles, and breathe.
  *
  * Returns "TRUE" if a spell (or whatever) was (successfully) cast.
@@ -1499,18 +1522,15 @@ bool make_attack_spell(int m_idx)
 	if (r_ptr->flags2 & RF2_STUPID) failrate = 0;
 
 	/* Check for spell failure (inate attacks never fail) */
-	if ((thrown_spell >= 128) && ((m_ptr->stunned && one_in_(2)) || (randint0(100) < failrate)))
+	if (!spell_is_inate(thrown_spell) && ((m_ptr->stunned && one_in_(2)) || (randint0(100) < failrate)))
 	{
 		disturb(1, 0);
 		/* Message */
-		if (thrown_spell != (160+7)) /* Not RF6_SPECIAL */
-		{
 #ifdef JP
-			msg_format("%^sは呪文を唱えようとしたが失敗した。", m_name);
+		msg_format("%^sは呪文を唱えようとしたが失敗した。", m_name);
 #else
-			msg_format("%^s tries to cast a spell, but fails.", m_name);
+		msg_format("%^s tries to cast a spell, but fails.", m_name);
 #endif
-		}
 
 		return (TRUE);
 	}
@@ -4468,7 +4488,7 @@ msg_print("多くの力強いものが間近に現れた音が聞こえる。");
 
 	if (seen && maneable && !world_monster && (p_ptr->pclass == CLASS_IMITATOR))
 	{
-		if (thrown_spell != 167)
+		if (thrown_spell != 167) /* Not RF6_SPECIAL */
 		{
 			if (p_ptr->mane_num == MAX_MANE)
 			{

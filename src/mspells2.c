@@ -526,18 +526,15 @@ bool monst_spell_monst(int m_idx)
 	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(1, 0);
 
 	/* Check for spell failure (inate attacks never fail) */
-	if ((thrown_spell >= 128) && m_ptr->stunned && one_in_(2))
+	if (!spell_is_inate(thrown_spell) && m_ptr->stunned && one_in_(2))
 	{
 		disturb(1, 0);
 		/* Message */
-		if (thrown_spell != (160+7)) /* Not RF6_SPECIAL */
-		{
 #ifdef JP
-			msg_format("%^sは呪文を唱えようとしたが失敗した。", m_name);
+		msg_format("%^sは呪文を唱えようとしたが失敗した。", m_name);
 #else
-			msg_format("%^s tries to cast a spell, but fails.", m_name);
+		msg_format("%^s tries to cast a spell, but fails.", m_name);
 #endif
-		}
 
 		return (TRUE);
 	}
@@ -4096,7 +4093,7 @@ bool monst_spell_monst(int m_idx)
 
 	if (see_m && maneable && !world_monster && !p_ptr->blind && (p_ptr->pclass == CLASS_IMITATOR))
 	{
-		if (thrown_spell != 167)
+		if (thrown_spell != 167) /* Not RF6_SPECIAL */
 		{
 			if (p_ptr->mane_num == MAX_MANE)
 			{
