@@ -2186,8 +2186,8 @@ errr Term_erase(int x, int y, int n)
          * 全角文字の右半分から文字を表示する場合、
          * 重なった文字の左部分を消去。
          */
-        if (n > 0 && ((scr_aa[x] & KANJI2) && !(scr_aa[x] & 0x80))
-	    || ((byte)scr_cc[x] == 255 && scr_aa[x] == 255))
+        if (n > 0 && (((scr_aa[x] & KANJI2) && !(scr_aa[x] & 0x80))
+		      || ((byte)scr_cc[x] == 255 && scr_aa[x] == 255)))
 #else
         if (n > 0 && (byte)scr_cc[x] == 255 && scr_aa[x] == 255)
 #endif
