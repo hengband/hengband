@@ -473,36 +473,26 @@ errr process_pref_file_command(char *buf)
 
 			n1 = strtol(zz[1], NULL, 0);
 			n2 = strtol(zz[2], NULL, 0);
-			if (n1 || (!(n2 & 0x80) && n2)) /* Allow ATTR_DARK text */
-			{
-				for (j = 0; j < F_LIT_MAX; j++) f_ptr->x_attr[j] = n1;
-			}
-			if (n2)
-			{
-				for (j = 0; j < F_LIT_MAX; j++) f_ptr->x_char[j] = n2;
-			}
+			if (n1 || (!(n2 & 0x80) && n2)) f_ptr->x_attr[F_LIT_STANDARD] = n1; /* Allow ATTR_DARK text */
+			if (n2) f_ptr->x_char[F_LIT_STANDARD] = n2;
 
 			/* Mega-hack -- feat supports lighting */
 			switch (num)
 			{
 			/* No lighting support */
 			case 3:
+				n1 = f_ptr->x_attr[F_LIT_STANDARD];
+				n2 = f_ptr->x_char[F_LIT_STANDARD];
+				for (j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++)
+				{
+					f_ptr->x_attr[j] = n1;
+					f_ptr->x_char[j] = n2;
+				}
 				break;
 
 			/* Use default lighting */
 			case 4:
-				if (is_ascii_graphics(f_ptr->x_attr[F_LIT_STANDARD]))
-				{
-					f_ptr->x_attr[F_LIT_LITE] = lighting_colours[f_ptr->x_attr[F_LIT_STANDARD]][0];
-					f_ptr->x_attr[F_LIT_DARK] = lighting_colours[f_ptr->x_attr[F_LIT_STANDARD]][1];
-					f_ptr->x_attr[F_LIT_DARKDARK] = lighting_colours[lighting_colours[f_ptr->x_attr[F_LIT_STANDARD]][1]][1];
-				}
-				else
-				{
-					f_ptr->x_char[F_LIT_LITE] += 2;
-					f_ptr->x_char[F_LIT_DARK]++;
-					f_ptr->x_char[F_LIT_DARKDARK]++;
-				}
+				apply_default_feat_lighting(f_ptr->x_attr, f_ptr->x_char);
 				break;
 
 			/* Use desired lighting */

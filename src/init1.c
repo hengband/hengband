@@ -1528,7 +1528,7 @@ errr parse_f_info(char *buf, header *head)
 	else if (buf[0] == 'G')
 	{
 		int j;
-		byte def_attr[F_LIT_MAX];
+		byte s_attr;
 		char char_tmp[F_LIT_MAX];
 
 		/* Paranoia */
@@ -1541,36 +1541,23 @@ errr parse_f_info(char *buf, header *head)
 		char_tmp[F_LIT_STANDARD] = buf[2];
 
 		/* Extract the color */
-		def_attr[F_LIT_STANDARD] = color_char_to_attr(buf[4]);
+		s_attr = color_char_to_attr(buf[4]);
 
 		/* Paranoia */
-		if (def_attr[F_LIT_STANDARD] > 127) return (1);
+		if (s_attr > 127) return (1);
 
-		/* Save the default values for lighting */
-		for (j = 0; j < F_LIT_MAX; j++)
-		{
-			f_ptr->d_attr[j] = def_attr[F_LIT_STANDARD];
-			f_ptr->d_char[j] = char_tmp[F_LIT_STANDARD];
-		}
+		/* Save the standard values */
+		f_ptr->d_attr[F_LIT_STANDARD] = s_attr;
+		f_ptr->d_char[F_LIT_STANDARD] = char_tmp[F_LIT_STANDARD];
 
 		/* Is this feature supports lighting? */
 		if (buf[5] == ':')
 		{
-			def_attr[F_LIT_LITE] = lighting_colours[def_attr[F_LIT_STANDARD]][0];
-			def_attr[F_LIT_DARK] = lighting_colours[def_attr[F_LIT_STANDARD]][1];
-			def_attr[F_LIT_DARKDARK] = lighting_colours[lighting_colours[def_attr[F_LIT_STANDARD]][1]][1];
-
 			/* G:c:a:LIT (default) */
-			if (streq(buf + 6, "LIT"))
-			{
-				for (j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++)
-				{
-					f_ptr->d_attr[j] = def_attr[j];
-				}
-			}
+			apply_default_feat_lighting(f_ptr->d_attr, f_ptr->d_char);
 
 			/* G:c:a:lc:la:dc:da:Dc:Da */
-			else
+			if (!streq(buf + 6, "LIT"))
 			{
 				char attr_lite_tmp[F_LIT_MAX - F_LIT_NS_BEGIN];
 
@@ -1586,11 +1573,10 @@ errr parse_f_info(char *buf, header *head)
 					{
 					case '*':
 						/* Use default lighting */
-						f_ptr->d_attr[j] = def_attr[j];
 						break;
 					case '-':
 						/* No lighting support */
-						f_ptr->d_attr[j] = def_attr[F_LIT_STANDARD];
+						f_ptr->d_attr[j] = f_ptr->d_attr[F_LIT_STANDARD];
 						break;
 					default:
 						/* Extract the color */
@@ -1602,7 +1588,15 @@ errr parse_f_info(char *buf, header *head)
 				}
 			}
 		}
-		else if (buf[5]) return 1;
+		else if (!buf[5])
+		{
+			for (j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++)
+			{
+				f_ptr->d_attr[j] = s_attr;
+				f_ptr->d_char[j] = char_tmp[F_LIT_STANDARD];
+			}
+		}
+		else return 1;
 	}
 
 	/* Hack -- Process 'F' for flags */

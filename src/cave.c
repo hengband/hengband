@@ -748,6 +748,32 @@ byte lighting_colours[16][2] =
 
 
 /*
+ * Apply "default" feature lighting effects
+ */
+void apply_default_feat_lighting(byte f_attr[F_LIT_MAX], byte f_char[F_LIT_MAX])
+{
+	byte s_attr = f_attr[F_LIT_STANDARD];
+	byte s_char = f_char[F_LIT_STANDARD];
+	int i;
+
+	if (is_ascii_graphics(s_attr)) /* For ASCII */
+	{
+		f_attr[F_LIT_LITE] = lighting_colours[s_attr][0];
+		f_attr[F_LIT_DARK] = lighting_colours[s_attr][1];
+		f_attr[F_LIT_DARKDARK] = lighting_colours[f_attr[F_LIT_DARK]][1];
+		for (i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) f_char[i] = s_char;
+	}
+	else /* For tile graphics */
+	{
+		for (i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) f_attr[i] = s_attr;
+		f_char[F_LIT_LITE] = s_char + 2;
+		f_char[F_LIT_DARK] = s_char + 1;
+		f_char[F_LIT_DARKDARK]  = s_char + 1;
+	}
+}
+
+
+/*
  * Mega-Hack -- Partial code of map_info() for darkened grids
  * Note: Each variable is declared in map_info().
  *       This macro modifies "feat", "f_ptr", "c" and "a".

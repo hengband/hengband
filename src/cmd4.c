@@ -3971,10 +3971,10 @@ void do_cmd_visuals(void)
 				char c;
 				int t;
 
-				byte da = (r_ptr->d_attr);
-				byte dc = (r_ptr->d_char);
-				byte ca = (r_ptr->x_attr);
-				byte cc = (r_ptr->x_char);
+				byte da = r_ptr->d_attr;
+				byte dc = r_ptr->d_char;
+				byte ca = r_ptr->x_attr;
+				byte cc = r_ptr->x_char;
 
 				/* Label the object */
 #ifdef JP
@@ -4070,10 +4070,10 @@ void do_cmd_visuals(void)
 				char c;
 				int t;
 
-				byte da = (byte)k_ptr->d_attr;
-				byte dc = (byte)k_ptr->d_char;
-				byte ca = (byte)k_ptr->x_attr;
-				byte cc = (byte)k_ptr->x_char;
+				byte da = k_ptr->d_attr;
+				byte dc = k_ptr->d_char;
+				byte ca = k_ptr->x_attr;
+				byte cc = k_ptr->x_char;
 
 				/* Label the object */
 #ifdef JP
@@ -4136,14 +4136,14 @@ void do_cmd_visuals(void)
 					cmd_visuals_aux(i, &k, max_k_idx);
 					break;
 				case 'a':
-					t = (int)k_info[k].x_attr;
+					t = (int)k_ptr->x_attr;
 					cmd_visuals_aux(i, &t, 256);
-					k_info[k].x_attr = (byte)t;
+					k_ptr->x_attr = (byte)t;
 					break;
 				case 'c':
-					t = (int)k_info[k].x_char;
+					t = (int)k_ptr->x_char;
 					cmd_visuals_aux(i, &t, 256);
-					k_info[k].x_char = (byte)t;
+					k_ptr->x_char = (byte)t;
 					break;
 				}
 			}
@@ -4170,10 +4170,10 @@ void do_cmd_visuals(void)
 				char c;
 				int t;
 
-				byte da = (byte)f_ptr->d_attr[lighting_level];
-				byte dc = (byte)f_ptr->d_char[lighting_level];
-				byte ca = (byte)f_ptr->x_attr[lighting_level];
-				byte cc = (byte)f_ptr->x_char[lighting_level];
+				byte da = f_ptr->d_attr[lighting_level];
+				byte dc = f_ptr->d_char[lighting_level];
+				byte ca = f_ptr->x_attr[lighting_level];
+				byte cc = f_ptr->x_char[lighting_level];
 
 				/* Label the object */
 				prt("", 17, 5);
@@ -4217,10 +4217,10 @@ void do_cmd_visuals(void)
 				/* Prompt */
 #ifdef JP
 				Term_putstr(0, 22, -1, TERM_WHITE,
-					    "コマンド (n/N/^N/a/A/^A/c/C/^C/l/L/^L): ");
+					    "コマンド (n/N/^N/a/A/^A/c/C/^C/l/L/^L/d/D/^D): ");
 #else
 				Term_putstr(0, 22, -1, TERM_WHITE,
-					    "Command (n/N/^N/a/A/^A/c/C/^C/l/L/^L): ");
+					    "Command (n/N/^N/a/A/^A/c/C/^C/l/L/^L/d/D/^D): ");
 #endif
 
 				/* Get a command */
@@ -4239,17 +4239,20 @@ void do_cmd_visuals(void)
 					cmd_visuals_aux(i, &f, max_f_idx);
 					break;
 				case 'a':
-					t = (int)f_info[f].x_attr[lighting_level];
+					t = (int)f_ptr->x_attr[lighting_level];
 					cmd_visuals_aux(i, &t, 256);
-					f_info[f].x_attr[lighting_level] = (byte)t;
+					f_ptr->x_attr[lighting_level] = (byte)t;
 					break;
 				case 'c':
-					t = (int)f_info[f].x_char[lighting_level];
+					t = (int)f_ptr->x_char[lighting_level];
 					cmd_visuals_aux(i, &t, 256);
-					f_info[f].x_char[lighting_level] = (byte)t;
+					f_ptr->x_char[lighting_level] = (byte)t;
 					break;
 				case 'l':
 					cmd_visuals_aux(i, &lighting_level, F_LIT_MAX);
+					break;
+				case 'd':
+					apply_default_feat_lighting(f_ptr->x_attr, f_ptr->x_char);
 					break;
 				}
 			}
@@ -7355,13 +7358,13 @@ static byte attr_idx = 0;
 static byte char_idx = 0;
 
 /* Hack -- for feature lighting */
-static byte attr_idx_feat[F_LIT_MAX] = {0, 0, 0, 0};
-static byte char_idx_feat[F_LIT_MAX] = {0, 0, 0, 0};
+static byte attr_idx_feat[F_LIT_MAX];
+static byte char_idx_feat[F_LIT_MAX];
 
 /*
  *  Do visual mode command -- Change symbols
  */
-static bool visual_mode_command(char ch, bool *visual_list_ptr, 
+static bool visual_mode_command(char ch, bool *visual_list_ptr,
 				int height, int width,
 				byte *attr_top_ptr, byte *char_left_ptr,
 				byte *cur_attr_ptr, byte *cur_char_ptr, bool *need_redraw)
@@ -7380,7 +7383,6 @@ static bool visual_mode_command(char ch, bool *visual_list_ptr,
 
 			return TRUE;
 		}
-
 		break;
 
 	case '\n':
@@ -7484,7 +7486,6 @@ static bool visual_mode_command(char ch, bool *visual_list_ptr,
 			if ((ddy[d] > 0) && *attr_top_ptr + height < MIN(0x7f, (a & 0x7f) + 4)) (*attr_top_ptr)++;
 			return TRUE;
 		}
-				
 		break;
 	}
 
@@ -8075,22 +8076,20 @@ static void do_cmd_knowledge_objects(bool *need_redraw)
 }
 
 
+#define NS_LIT_NUM       (F_LIT_MAX - F_LIT_NS_BEGIN)
+#define ROW_LIT_STANDARD 65
+
 /*
  * Display the features in a group.
  */
 static void display_feature_list(int col, int row, int per_page, int *feat_idx,
 	int feat_cur, int feat_top, int lighting_level)
 {
-	int i;
-	int col2 = 67;
-	int col3 = 69;
-	int col4 = 71;
+	int ns_lit_col[NS_LIT_NUM], i, j;
 
 	/* Correct columns 1 and 4 */
-	if (use_bigtile)
-	{
-		col2++; col3 += 2; col4 += 3;
-	}
+	for (i = 0; i < NS_LIT_NUM; i++)
+		ns_lit_col[i] = ROW_LIT_STANDARD + 2 + i * 2 + (use_bigtile ? (1 + i) : 0);
 
 	/* Display lines until done */
 	for (i = 0; i < per_page && feat_idx[feat_top + i]; i++)
@@ -8103,39 +8102,38 @@ static void display_feature_list(int col, int row, int per_page, int *feat_idx,
 		/* Access the index */
 		feature_type *f_ptr = &f_info[f_idx];
 
+		int row_i = row + i;
+
 		/* Choose a color */
 		attr = ((i + feat_top == feat_cur) ? TERM_L_BLUE : TERM_WHITE);
 
 		/* Display the name */
-		c_prt(attr, f_name + f_ptr->name, row + i, col);
+		c_prt(attr, f_name + f_ptr->name, row_i, col);
 
 		/* Hack -- visual_list mode */
 		if (per_page == 1)
 		{
 			/* Display lighting level */
-			c_prt(attr, format("(%s)", lighting_level_str[lighting_level]), row + i, col + 1 + strlen(f_name + f_ptr->name));
+			c_prt(attr, format("(%s)", lighting_level_str[lighting_level]), row_i, col + 1 + strlen(f_name + f_ptr->name));
 
-			c_prt(attr, format("%02x/%02x", f_ptr->x_attr[lighting_level], f_ptr->x_char[lighting_level]), row + i, 56);
+			c_prt(attr, format("%02x/%02x", f_ptr->x_attr[lighting_level], f_ptr->x_char[lighting_level]), row_i, ROW_LIT_STANDARD - 9);
 		}
 
 		/* Display symbol */
-		Term_queue_bigchar(65, row + i, f_ptr->x_attr[F_LIT_STANDARD], f_ptr->x_char[F_LIT_STANDARD], 0, 0);
+		Term_queue_bigchar(ROW_LIT_STANDARD, row_i, f_ptr->x_attr[F_LIT_STANDARD], f_ptr->x_char[F_LIT_STANDARD], 0, 0);
 
-		Term_putch(col2, row + i, TERM_SLATE, '(');
-		Term_putch(col3, row + i, TERM_SLATE, '/');
-		Term_putch(col4, row + i, TERM_SLATE, '/');
-		Term_putch(col4 + (use_bigtile ? 3 : 2), row + i, TERM_SLATE, ')');
+		Term_putch(ns_lit_col[0], row_i, TERM_SLATE, '(');
+		for (j = 1; j < NS_LIT_NUM; j++)
+		{
+			Term_putch(ns_lit_col[j], row_i, TERM_SLATE, '/');
+		}
+		Term_putch(ns_lit_col[NS_LIT_NUM - 1] + (use_bigtile ? 3 : 2), row_i, TERM_SLATE, ')');
 
-		/* Mega-hack */
-
-		/* Use lightened colour */
-		Term_queue_bigchar(col2 + 1, row + i, f_ptr->x_attr[F_LIT_LITE], f_ptr->x_char[F_LIT_LITE], 0, 0);
-
-		/* Use darkened colour */
-		Term_queue_bigchar(col3 + 1, row + i, f_ptr->x_attr[F_LIT_DARK], f_ptr->x_char[F_LIT_DARK], 0, 0);
-
-		/* Use darkly darkened colour */
-		Term_queue_bigchar(col4 + 1, row + i, f_ptr->x_attr[F_LIT_DARKDARK], f_ptr->x_char[F_LIT_DARKDARK], 0, 0);
+		/* Mega-hack -- Use non-standard colour */
+		for (j = 0; j < NS_LIT_NUM; j++)
+		{
+			Term_queue_bigchar(ns_lit_col[j] + 1, row_i, f_ptr->x_attr[F_LIT_NS_BEGIN + j], f_ptr->x_char[F_LIT_NS_BEGIN + j], 0, 0);
+		}
 	}
 
 	/* Clear remaining lines */
@@ -8168,10 +8166,13 @@ static void do_cmd_knowledge_features(bool *need_redraw)
 	int browser_rows;
 	int wid, hgt;
 
-	byte attr_old[F_LIT_MAX] = {0, 0, 0, 0};
-	byte char_old[F_LIT_MAX] = {0, 0, 0, 0};
+	byte attr_old[F_LIT_MAX];
+	byte char_old[F_LIT_MAX];
 	byte *cur_attr_ptr, *cur_char_ptr;
 	int lighting_level = F_LIT_STANDARD;
+
+	C_WIPE(attr_old, F_LIT_MAX, byte);
+	C_WIPE(char_old, F_LIT_MAX, byte);
 
 	/* Get size */
 	Term_get_size(&wid, &hgt);
@@ -8287,9 +8288,9 @@ static void do_cmd_knowledge_features(bool *need_redraw)
 
 		/* Prompt */
 #ifdef JP
-		prt(format("<方向>%s%s, ESC", visual_list ? ", ENTERで決定, 'a'で対象明度変更" : ", 'v'でシンボル変更", (attr_idx||char_idx) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"), hgt - 1, 0);
+		prt(format("<方向>%s, 'd'で標準光源効果%s, ESC", visual_list ? ", ENTERで決定, 'a'で対象明度変更" : ", 'v'でシンボル変更", (attr_idx||char_idx) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"), hgt - 1, 0);
 #else
-		prt(format("<dir>%s%s, ESC", visual_list ? ", ENTER to accept, 'a' for lighting level" : ", 'v' for visuals", (attr_idx||char_idx) ? ", 'c', 'p' to paste" : ", 'c' to copy"), hgt - 1, 0);
+		prt(format("<dir>%s, 'd' for default lighting%s, ESC", visual_list ? ", ENTER to accept, 'a' for lighting level" : ", 'v' for visuals", (attr_idx||char_idx) ? ", 'c', 'p' to paste" : ", 'c' to copy"), hgt - 1, 0);
 #endif
 
 		/* Get the current feature */
@@ -8312,21 +8313,47 @@ static void do_cmd_knowledge_features(bool *need_redraw)
 
 		ch = inkey();
 
-		if ((ch == 'A') && visual_list)
+		if (visual_list && ((ch == 'A') || (ch == 'a')))
 		{
-			if (lighting_level <= F_LIT_STANDARD) lighting_level = F_LIT_DARKDARK;
-			else lighting_level--;
-			attr_top = MAX(0, (f_ptr->x_attr[lighting_level] & 0x7f) - 5);
-			char_left = MAX(0, f_ptr->x_char[lighting_level] - 10);
+			int prev_lighting_level = lighting_level;
+
+			if (ch == 'A')
+			{
+				if (lighting_level <= 0) lighting_level = F_LIT_MAX - 1;
+				else lighting_level--;
+			}
+			else
+			{
+				if (lighting_level >= F_LIT_MAX - 1) lighting_level = 0;
+				else lighting_level++;
+			}
+
+			if (f_ptr->x_attr[prev_lighting_level] != f_ptr->x_attr[lighting_level])
+				attr_top = MAX(0, (f_ptr->x_attr[lighting_level] & 0x7f) - 5);
+
+			if (f_ptr->x_char[prev_lighting_level] != f_ptr->x_char[lighting_level])
+				char_left = MAX(0, f_ptr->x_char[lighting_level] - 10);
+
 			continue;
 		}
 
-		else if ((ch == 'a') && visual_list)
+		else if ((ch == 'D') || (ch == 'd'))
 		{
-			if (lighting_level >= F_LIT_DARKDARK) lighting_level = F_LIT_STANDARD;
-			else lighting_level++;
-			attr_top = MAX(0, (f_ptr->x_attr[lighting_level] & 0x7f) - 5);
-			char_left = MAX(0, f_ptr->x_char[lighting_level] - 10);
+			byte prev_x_attr = f_ptr->x_attr[lighting_level];
+			byte prev_x_char = f_ptr->x_char[lighting_level];
+
+			apply_default_feat_lighting(f_ptr->x_attr, f_ptr->x_char);
+
+			if (visual_list)
+			{
+				if (prev_x_attr != f_ptr->x_attr[lighting_level])
+					 attr_top = MAX(0, (f_ptr->x_attr[lighting_level] & 0x7f) - 5);
+
+				if (prev_x_char != f_ptr->x_char[lighting_level])
+					char_left = MAX(0, f_ptr->x_char[lighting_level] - 10);
+			}
+			else *need_redraw = TRUE;
+
 			continue;
 		}
 
