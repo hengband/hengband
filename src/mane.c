@@ -1337,13 +1337,12 @@ msg_print("まねられるものが何もない！");
 	/* Reduce failure rate by "effective" level adjustment */
 	if (plev > spell.level) chance -= 3 * (plev - spell.level);
 
-	if (p_ptr->pseikaku == SEIKAKU_NAMAKE) chance += 10;
-	if (p_ptr->pseikaku == SEIKAKU_KIREMONO) chance -= 3;
-
-	/* Reduce failure rate by INT/WIS adjustment */
-	chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[spell.use_stat]] - 1);
+	/* Reduce failure rate by 1 stat and DEX adjustment */
+	chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[spell.use_stat]] + adj_mag_stat[p_ptr->stat_ind[A_DEX]] - 2) / 2;
 
 	if (spell.manedam) chance = chance * damage / spell.manedam;
+
+	chance += p_ptr->to_m_chance;
 
 	/* Extract the minimum failure rate */
 	minfail = adj_mag_fail[p_ptr->stat_ind[spell.use_stat]];
