@@ -10778,7 +10778,7 @@ S:1_IN_2 |
 S:BLIND | SLOW | CONF | SCARE | DRAIN_MANA | MIND_BLAST | FORGET | 
 S:DARKNESS | BO_ACID | BO_FIRE | BO_COLD
 D:$A disembodied eye, surrounded by twelve smaller eyes on stalks.
-D:触手の先に付いた 20 の小さな目玉に囲まれている、体を持たない目玉だ。
+D:触手の先に付いた１２個の小さな目玉に囲まれている、体を持たない目玉だ。
 
 #J0#
 N:604:エンペラー・ワイト
