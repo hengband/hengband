@@ -490,7 +490,7 @@ static cptr spell_tips[VALID_REALM][32] =
 
 		"prevents any breeders on current level from breeding.",
 		"detects all monsters, traps, doors, stairs, treasures and items in your vicinity.",
-		"vanishes all undead monsters in your vicinity from the current dungeon level unless resisted.",
+		"eliminates all nearby undead monsters, exhausting you.  Powerful or unique monsters may be able to resist.",
 		"maps and lights whole dungeon level. knows all objects location. and gives telepathy for a while.",
 		"restores all stats and experience.",
 		"The greatest healing magic. heals all HP, cut and stun.",
@@ -629,7 +629,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"makes current weapon poison branded.",
 		"absorbs some HP from a monster and gives them to you. You will also gain nutritional sustenance from this.",
 		"resurrects nearby corpse and skeltons. and makes these your pets.",
-		"removes all monsters with given symbol from the current dungeon level unless resisted.",
+		"eliminates an entire class of monster, exhausting you.  Powerful or unique monsters may resist.",
 
 		"gives bonus to hit and HP, immunity to fear for a while. but decreases AC.",
 		"causes random effects.",
@@ -645,7 +645,7 @@ static cptr spell_tips[VALID_REALM][32] =
 		"identifies an item. or *identifies* an item at higher level.",
 		"mimic a vampire for a while. loses abilities of original race and gets abilitis as a vampire.",
 		"restore lost experience.",
-		"removes all monsters in your vicinity from the current dungeon level unless resisted.",
+		"eliminates all nearby monsters, exhausting you.  Powerful or unique monsters may be able to resist.",
 		"fires a powerful ball of evil power. hurts good monsters greatly.",
 		"becomes wraith form which gives ability to pass walls and makes all damages half.",
 	},

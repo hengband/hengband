@@ -1894,8 +1894,8 @@ G:?:d
 I:70:45:0
 W:50:0:5:1000
 A:50/4:100/4
-D:$It removes all monsters nearby you from current dungeon level unless 
-D:$resisted when you read it.
+D:$It eliminates all nearby monsters, exhausting you.  
+D:$Powerful or unique monsters may be able to resist.
 D:それは読むと自分の周囲のモンスターを現在の階から消し去る。抵抗されると無効。
 
 N:201:透明物体感知
@@ -1962,8 +1962,8 @@ G:?:d
 I:70:44:0
 W:40:0:5:750
 A:40/4:80/4
-D:$It removes all monsters of the specified symbol from current dungeon level 
-D:$unless resisted when you read it.
+D:$It eliminates an entire class of monster, exhausting you.  
+D:$Powerful or unique monsters may resist.
 D:それは読むと指定した文字のモンスターを現在の階から消し去る。抵抗されると
 D:無効。
 
@@ -3170,8 +3170,8 @@ I:55:27:4
 W:80:0:50:30000
 A:75/5
 P:0:1d2:0:0:0
-D:$It removes all monsters of the specified symbol from current dungeon level 
-D:$unless resisted when you use it.
+D:$It eliminates an entire class of monster, exhausting you.  
+D:$Powerful or unique monsters may resist.
 D:それは使うと指定した文字のモンスターを現在の階から消し去る。抵抗されると
 D:無効。
 
@@ -3433,7 +3433,7 @@ I:66:28:250
 W:100:0:15:150000
 A:50/32:100/8
 P:0:1d1:0:0:0
-D:$It fires randomly with random attribute when you zap it.
+D:$It is capable of firing almost anything, at random.
 D:それは振るとランダムな1属性でランダムな攻撃をする。
 
 N:351:ドア/階段感知

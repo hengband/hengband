@@ -278,7 +278,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 			}
 			else
 			{
-				s_ptr = &mp_ptr->info[use_realm - 1][spell % 32];
+				s_ptr = &mp_ptr->info[use_realm - 1][spell];
 			}
 
 			if (use_realm == REALM_HISSATSU)
@@ -301,11 +301,11 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 			jverb1( prompt, jverb_buf );
                         /* 英日切り替え機能に対応 */
                         (void) strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ",
-                                spell_names[technic2magic(use_realm)-1][spell % 32], shouhimana,
+                                spell_names[technic2magic(use_realm)-1][spell], shouhimana,
 				       spell_chance(spell, use_realm),jverb_buf);
 #else
 			(void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ",
-				prompt, spell_names[technic2magic(use_realm)-1][spell % 32], shouhimana,
+				prompt, spell_names[technic2magic(use_realm)-1][spell], shouhimana,
 				spell_chance(spell, use_realm));
 #endif
 

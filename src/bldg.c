@@ -4445,7 +4445,7 @@ msg_print("ここには建物はない。");
 #ifdef JP
 msg_print("「敗者に用はない。」");
 #else
-		msg_print("'There is no place for LOSER.'");
+		msg_print("'There's no place here for a LOSER like you!'");
 #endif
 		return;
 	}
