@@ -3967,7 +3967,7 @@ static bool cast_crusade_spell(int spell)
 		(void)sleep_monsters_touch();
 		break;
 	case 5:
-		teleport_player(plev*3);
+		teleport_player(25+plev/2);
 		break;
 	case 6:
 		if (!get_aim_dir(&dir)) return FALSE;

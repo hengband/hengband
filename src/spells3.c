@@ -4345,7 +4345,7 @@ static void spell_info(char *p, int spell, int realm)
 		switch (spell)
 		{
 		case  0: sprintf(p, " %s%dd4", s_dam, 3 + ((plev - 1) / 5)); break;
-		case  5: sprintf(p, " %s%d", s_range, plev*3); break;
+		case  5: sprintf(p, " %s%d", s_range, 25+plev/2); break;
 #ifdef JP
 		case  6: sprintf(p, " %s³Æ%dd2", s_dam, 3+((plev-1)/9)); break;
 #else

@@ -50,8 +50,8 @@
 /* Added for ZAngband */
 #define FAKE_VERSION   0
 #define FAKE_VER_MAJOR 11
-#define FAKE_VER_MINOR 0
-#define FAKE_VER_PATCH 99
+#define FAKE_VER_MINOR 1
+#define FAKE_VER_PATCH 0
 
 #define ANGBAND_2_8_1
 #define ZANGBAND
