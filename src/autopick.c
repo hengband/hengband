@@ -3136,7 +3136,7 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 		Term_gotoxy(col + pos, 0);
 
 		/* Get a special key code */
-		skey = inkey_special();
+		skey = inkey_special(FALSE);
 
 		/* Analyze the key */
 		switch (skey)
@@ -5656,7 +5656,7 @@ void do_cmd_edit_autopick(void)
 		tb->old_hgt = tb->hgt;
 
 		/* Get a command */
-		key = inkey_special();
+		key = inkey_special(TRUE);
 
 		/* Special keys */
 		if (key & SKEY_MASK)

@@ -5396,7 +5396,7 @@ static void edit_history(void)
 		Term_gotoxy(x + 10, y + 12);
 
 		/* Get special key code */
-		skey = inkey_special();
+		skey = inkey_special(TRUE);
 
 		/* Get a character code */
 		if (!(skey & SKEY_MASK)) c = (char)skey;

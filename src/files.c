@@ -5315,7 +5315,7 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 		}
 
 		/* Get a special key code */
-		skey = inkey_special();
+		skey = inkey_special(TRUE);
 
 		/* Show the help for the help */
 		if (skey == '?')
