@@ -3266,8 +3266,6 @@ msg_format("%^s%s", m_name, monmessage);
 		/* Creature has been allowed move */
 		if (do_move)
 		{
-			s16b this_o_idx, next_o_idx;
-
 			/* Take a turn */
 			do_turn = TRUE;
 
@@ -3331,39 +3329,38 @@ msg_format("%^s%s", m_name, monmessage);
 					disturb(0, 0);
 			}
 
-			/* Scan all objects in the grid */
-			for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+			/* Take or Kill objects on the floor */
+			if (c_ptr->o_idx && (r_ptr->flags2 & (RF2_TAKE_ITEM | RF2_KILL_ITEM)) &&
+			    (!is_pet(m_ptr) || ((p_ptr->pet_extra_flags & PF_PICKUP_ITEMS) && (r_ptr->flags2 & RF2_TAKE_ITEM))))
 			{
-				object_type *o_ptr;
+				s16b this_o_idx, next_o_idx;
+				bool do_take = (r_ptr->flags2 & RF2_TAKE_ITEM) ? TRUE : FALSE;
 
-				/* Acquire object */
-				o_ptr = &o_list[this_o_idx];
-
-				/* Acquire next object */
-				next_o_idx = o_ptr->next_o_idx;
-
-				/* Skip gold */
-				if (o_ptr->tval == TV_GOLD) continue;
-
-				/*
-				 * Skip "real" corpses and statues, to avoid extreme
-				 * silliness like a novice rogue pockets full of statues
-				 * and corpses.
-				 */
-				if ((o_ptr->tval == TV_CORPSE) ||
-				    (o_ptr->tval == TV_STATUE)) continue;
-
-				/* Take or Kill objects on the floor */
-				if ((r_ptr->flags2 & (RF2_TAKE_ITEM | RF2_KILL_ITEM)) &&
-					 (!is_pet(m_ptr) || (p_ptr->pet_extra_flags & PF_PICKUP_ITEMS)))
+				/* Scan all objects in the grid */
+				for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 				{
-					u32b flgs[TR_FLAG_SIZE];
+					u32b flgs[TR_FLAG_SIZE], flg2 = 0L, flg3 = 0L, flgr = 0L;
+					char m_name[80], o_name[MAX_NLEN];
 
-					u32b flg2 = 0L;
-					u32b flg3 = 0L;
+					/* Acquire object */
+					object_type *o_ptr = &o_list[this_o_idx];
 
-					char m_name[80];
-					char o_name[MAX_NLEN];
+					/* Acquire next object */
+					next_o_idx = o_ptr->next_o_idx;
+
+					if (do_take)
+					{
+						/* Skip gold */
+						if (o_ptr->tval == TV_GOLD) continue;
+
+						/*
+						 * Skip "real" corpses and statues, to avoid extreme
+						 * silliness like a novice rogue pockets full of statues
+						 * and corpses.
+						 */
+						if ((o_ptr->tval == TV_CORPSE) ||
+						    (o_ptr->tval == TV_STATUE)) continue;
+					}
 
 					/* Extract some flags */
 					object_flags(o_ptr, flgs);
@@ -3375,12 +3372,12 @@ msg_format("%^s%s", m_name, monmessage);
 					monster_desc(m_name, m_ptr, MD_INDEF_HIDDEN);
 
 					/* React to objects that hurt the monster */
-					if (have_flag(flgs, TR_KILL_DRAGON)) flg3 |= (RF3_DRAGON);
 					if (have_flag(flgs, TR_SLAY_DRAGON)) flg3 |= (RF3_DRAGON);
+					if (have_flag(flgs, TR_KILL_DRAGON)) flg3 |= (RF3_DRAGON);
 					if (have_flag(flgs, TR_SLAY_TROLL))  flg3 |= (RF3_TROLL);
 					if (have_flag(flgs, TR_KILL_TROLL))  flg3 |= (RF3_TROLL);
-					if (have_flag(flgs, TR_KILL_GIANT))  flg3 |= (RF3_GIANT);
 					if (have_flag(flgs, TR_SLAY_GIANT))  flg3 |= (RF3_GIANT);
+					if (have_flag(flgs, TR_KILL_GIANT))  flg3 |= (RF3_GIANT);
 					if (have_flag(flgs, TR_SLAY_ORC))    flg3 |= (RF3_ORC);
 					if (have_flag(flgs, TR_KILL_ORC))    flg3 |= (RF3_ORC);
 					if (have_flag(flgs, TR_SLAY_DEMON))  flg3 |= (RF3_DEMON);
@@ -3393,12 +3390,18 @@ msg_format("%^s%s", m_name, monmessage);
 					if (have_flag(flgs, TR_KILL_EVIL))   flg3 |= (RF3_EVIL);
 					if (have_flag(flgs, TR_SLAY_HUMAN))  flg2 |= (RF2_HUMAN);
 					if (have_flag(flgs, TR_KILL_HUMAN))  flg2 |= (RF2_HUMAN);
+					if (have_flag(flgs, TR_BRAND_ACID))  flgr |= (RFR_IM_ACID);
+					if (have_flag(flgs, TR_BRAND_ELEC))  flgr |= (RFR_IM_ELEC);
+					if (have_flag(flgs, TR_BRAND_FIRE))  flgr |= (RFR_IM_FIRE);
+					if (have_flag(flgs, TR_BRAND_COLD))  flgr |= (RFR_IM_COLD);
+					if (have_flag(flgs, TR_BRAND_POIS))  flgr |= (RFR_IM_POIS);
 
 					/* The object cannot be picked up by the monster */
-					if (object_is_artifact(o_ptr) || (r_ptr->flags3 & flg3) || (r_ptr->flags2 & flg2))
+					if (object_is_artifact(o_ptr) || (r_ptr->flags3 & flg3) || (r_ptr->flags2 & flg2) ||
+					    ((~(r_ptr->flagsr) & flgr) && !(r_ptr->flagsr & RFR_RES_ALL)))
 					{
 						/* Only give a message for "take_item" */
-						if ((r_ptr->flags2 & (RF2_TAKE_ITEM)) && (r_ptr->flags2 & (RF2_STUPID)))
+						if (do_take && (r_ptr->flags2 & RF2_STUPID))
 						{
 							/* Take note */
 							did_take_item = TRUE;
@@ -3417,7 +3420,7 @@ msg_format("%^s%s", m_name, monmessage);
 					}
 
 					/* Pick up the item */
-					else if (r_ptr->flags2 & RF2_TAKE_ITEM)
+					else if (do_take)
 					{
 						/* Take note */
 						did_take_item = TRUE;
