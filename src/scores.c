@@ -895,6 +895,9 @@ msg_print("何かキーを押すとゲームに戻ります");
  */
 void kingly(void)
 {
+	int wid, hgt;
+	int cx, cy;
+
 	/* Hack -- retire in town */
 	dun_level = 0;
 
@@ -914,6 +917,10 @@ void kingly(void)
 	/* Restore the level */
 	p_ptr->lev = p_ptr->max_plv;
 
+	Term_get_size(&wid, &hgt);
+	cy = hgt / 2;
+	cx = wid / 2;
+
 	/* Hack -- Instant Gold */
 	p_ptr->au += 10000000L;
 
@@ -921,28 +928,28 @@ void kingly(void)
 	Term_clear();
 
 	/* Display a crown */
-	put_str("#", 1, 34);
-	put_str("#####", 2, 32);
-	put_str("#", 3, 34);
-	put_str(",,,  $$$  ,,,", 4, 28);
-	put_str(",,=$   \"$$$$$\"   $=,,", 5, 24);
-	put_str(",$$        $$$        $$,", 6, 22);
-	put_str("*>         <*>         <*", 7, 22);
-	put_str("$$         $$$         $$", 8, 22);
-	put_str("\"$$        $$$        $$\"", 9, 22);
-	put_str("\"$$       $$$       $$\"", 10, 23);
-	put_str("*#########*#########*", 11, 24);
-	put_str("*#########*#########*", 12, 24);
+	put_str("#", cy - 11, cx - 1);
+	put_str("#####", cy - 10, cx - 3);
+	put_str("#", cy - 9, cx - 1);
+	put_str(",,,  $$$  ,,,", cy - 8, cx - 7);
+	put_str(",,=$   \"$$$$$\"   $=,,", cy - 7, cx - 11);
+	put_str(",$$        $$$        $$,", cy - 6, cx - 13);
+	put_str("*>         <*>         <*", cy - 5, cx - 13);
+	put_str("$$         $$$         $$", cy - 4, cx - 13);
+	put_str("\"$$        $$$        $$\"", cy - 3, cx - 13);
+	put_str("\"$$       $$$       $$\"", cy - 2, cx - 12);
+	put_str("*#########*#########*", cy - 1, cx - 11);
+	put_str("*#########*#########*", cy, cx - 11);
 
 	/* Display a message */
 #ifdef JP
-put_str("Veni, Vidi, Vici!", 15, 26);
-put_str("来た、見た、勝った！", 16, 25);
-put_str(format("偉大なる%s万歳！", sp_ptr->winner), 17, 22);
+	put_str("Veni, Vidi, Vici!", cy + 3, cx - 9);
+	put_str("来た、見た、勝った！", cy + 4, cx - 10);
+	put_str(format("偉大なる%s万歳！", sp_ptr->winner), cy + 5, cx - 11);
 #else
-	put_str("Veni, Vidi, Vici!", 15, 26);
-	put_str("I came, I saw, I conquered!", 16, 21);
-	put_str(format("All Hail the Mighty %s!", sp_ptr->winner), 17, 22);
+	put_str("Veni, Vidi, Vici!", cy + 3, cx - 9);
+	put_str("I came, I saw, I conquered!", cy + 4, cx - 14);
+	put_str(format("All Hail the Mighty %s!", sp_ptr->winner), cy + 5, cx - 13);
 #endif
 
 #ifdef JP
@@ -958,5 +965,5 @@ put_str(format("偉大なる%s万歳！", sp_ptr->winner), 17, 22);
 	flush();
 
 	/* Wait for response */
-	pause_line(23);
+	pause_line(hgt - 1);
 }
