@@ -887,10 +887,18 @@ static void regenmana(int percent)
 	/* Regerating mana (unless the player has excess mana) */
 	else if (percent > 0)
 	{
-		u32b new_mana_frac = (p_ptr->msp * percent / 100 + PY_REGEN_MNBASE) << 16;
+		/*
+		 * (percent/100) is from constants PY_REGEN_* , 
+		 * which is Regen factor*2^16 . 
+		 */
+		s32b new_mana = 0;
+		u32b new_mana_frac = (p_ptr->msp * percent / 100 + PY_REGEN_MNBASE);
+
+		/* Convert the unit x2^16 -> x2^32 */
+		s64b_mul(&new_mana, &new_mana_frac, 0, 0x1L<<16);
 
 		/* Regenerate */
-		s64b_add(&(p_ptr->csp), &(p_ptr->csp_frac), 0, new_mana_frac);
+		s64b_add(&(p_ptr->csp), &(p_ptr->csp_frac), new_mana, new_mana_frac);
 
 		/* Must set frac to zero even if equal */
 		if (p_ptr->csp >= p_ptr->msp)
