@@ -1357,6 +1357,10 @@ static flag_insc_table flag_insc_sust[] =
  */
 static char *inscribe_flags_aux(flag_insc_table *fi_ptr, u32b flgs[TR_FLAG_SIZE], bool kanji, char *ptr)
 {
+#ifndef JP
+	(void)kanji;
+#endif
+
 	while (fi_ptr->english)
 	{
 		if (have_flag(flgs, fi_ptr->flag) &&

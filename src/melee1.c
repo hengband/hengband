@@ -165,8 +165,10 @@ bool make_attack_normal(int m_idx)
 	bool touched = FALSE, fear = FALSE, alive = TRUE;
 	bool explode = FALSE;
 	bool do_silly_attack = (one_in_(2) && p_ptr->image);
-	int syouryaku = 0;
 	int get_damage = 0;
+#ifdef JP
+	int abbreviate = 0;
+#endif
 
 	/* Not allowed to attack */
 	if (r_ptr->flags1 & (RF1_NEVER_BLOW)) return (FALSE);
@@ -273,11 +275,11 @@ bool make_attack_normal(int m_idx)
 
 				/* Message */
 #ifdef JP
-				if (syouryaku)
+				if (abbreviate)
 				    msg_format("撃退した。");
 				else
 				    msg_format("%^sは撃退された。", m_name);
-				syouryaku = 1;/*２回目以降は省略 */
+				abbreviate = 1;/*２回目以降は省略 */
 #else
 				msg_format("%^s is repelled.", m_name);
 #endif
@@ -448,7 +450,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_CHARGE:
 				{
 #ifdef JP
-					syouryaku = -1;
+					abbreviate = -1;
 					act = "は請求書をよこした。";
 #else
 					act = "charges you.";
@@ -462,7 +464,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_CRAWL:
 				{
 #ifdef JP
-					syouryaku = -1;
+					abbreviate = -1;
 					act = "が体の上を這い回った。";
 #else
 					act = "crawls on you.";
@@ -499,8 +501,8 @@ bool make_attack_normal(int m_idx)
 
 				case RBM_EXPLODE:
 				{
-					syouryaku = -1;
 #ifdef JP
+					abbreviate = -1;
 					act = "は爆発した。";
 #else
 					act = "explodes.";
@@ -547,8 +549,8 @@ bool make_attack_normal(int m_idx)
 
 				case RBM_XXX4:
 				{
-					syouryaku = -1;
 #ifdef JP
+					abbreviate = -1;
 					act = "が XXX4 を発射した。";
 #else
 					act = "projects XXX4's at you.";
@@ -571,7 +573,9 @@ bool make_attack_normal(int m_idx)
 
 				case RBM_INSULT:
 				{
-					syouryaku = -1;
+#ifdef JP
+					abbreviate = -1;
+#endif
 					act = desc_insult[randint0(m_ptr->r_idx == MON_DEBBY ? 10 : 8)];
 					sound(SOUND_MOAN);
 					break;
@@ -579,7 +583,9 @@ bool make_attack_normal(int m_idx)
 
 				case RBM_MOAN:
 				{
-					syouryaku = -1;
+#ifdef JP
+					abbreviate = -1;
+#endif
 					act = desc_moan[randint0(4)];
 					sound(SOUND_MOAN);
 					break;
@@ -587,7 +593,9 @@ bool make_attack_normal(int m_idx)
 
 				case RBM_SHOW:
 				{
-					syouryaku = -1;
+#ifdef JP
+					abbreviate = -1;
+#endif
 					if (m_ptr->r_idx == MON_JAIAN)
 					{
 #ifdef JP
@@ -663,17 +671,19 @@ bool make_attack_normal(int m_idx)
 			{
 				if (do_silly_attack)
 				{
-					syouryaku = -1;
+#ifdef JP
+					abbreviate = -1;
+#endif
 					act = silly_attacks[randint0(MAX_SILLY_ATTACK)];
 				}
 #ifdef JP
-				if(syouryaku==0)
+				if (abbreviate == 0)
 				    msg_format("%^sに%s", m_name, act);
-				else if(syouryaku==1)
+				else if (abbreviate == 1)
 				    msg_format("%s", act);
-				else /*if(syouryaku==-1)*/
+				else /* if (abbreviate == -1) */
 				    msg_format("%^s%s", m_name, act);
-				syouryaku = 1;/*２回目以降は省略 */
+				abbreviate = 1;/*２回目以降は省略 */
 #else
 				msg_format("%^s %s", m_name, act);
 #endif
@@ -2046,11 +2056,11 @@ msg_format("%sは体力を回復したようだ。", m_name);
 
 					/* Message */
 #ifdef JP
-					if (syouryaku)
+					if (abbreviate)
 					    msg_format("%sかわした。", (p_ptr->special_attack & ATTACK_SUIKEN) ? "奇妙な動きで" : "");
 					else
 					    msg_format("%s%^sの攻撃をかわした。", (p_ptr->special_attack & ATTACK_SUIKEN) ? "奇妙な動きで" : "", m_name);
-					syouryaku = 1;/*２回目以降は省略 */
+					abbreviate = 1;/*２回目以降は省略 */
 #else
 					msg_format("%^s misses you.", m_name);
 #endif

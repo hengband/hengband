@@ -1287,7 +1287,8 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 	/* Scan all objects in the grid */
 	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
-		object_type *o_ptr;
+		/* Acquire object */
+		object_type *o_ptr = &o_list[this_o_idx];
 
 		bool is_art = FALSE;
 		bool ignore = FALSE;
@@ -1299,9 +1300,6 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 		/* Get the "plural"-ness */
 		bool plural = (o_ptr->number > 1);
 #endif
-
-		/* Acquire object */
-		o_ptr = &o_list[this_o_idx];
 
 		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;

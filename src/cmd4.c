@@ -9015,8 +9015,8 @@ static void do_cmd_knowledge_quests(void)
 static void do_cmd_knowledge_home(void)
 {
 	FILE *fff;
-	
-	int i, x;
+
+	int i;
 	char file_name[1024];
 	store_type  *st_ptr;
 	char o_name[MAX_NLEN];
@@ -9028,14 +9028,14 @@ static void do_cmd_knowledge_home(void)
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff) {
 #ifdef JP
-	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
+		msg_format("一時ファイル %s を作成できませんでした。", file_name);
 #else
-	    msg_format("Failed to create temporary file %s.", file_name);
+		msg_format("Failed to create temporary file %s.", file_name);
 #endif
-	    msg_print(NULL);
-	    return;
+		msg_print(NULL);
+		return;
 	}
-	
+
 	if (fff)
 	{
 		/* Print all homes in the different towns */
@@ -9044,13 +9044,15 @@ static void do_cmd_knowledge_home(void)
 		/* Home -- if anything there */
 		if (st_ptr->stock_num)
 		{
+#ifdef JP
+			int x = 1;
+#endif
 			/* Header with name of the town */
 #ifdef JP
 			fprintf(fff, "  [ 我が家のアイテム ]\n");
 #else
 			fprintf(fff, "  [Home Inventory]\n");
 #endif
-				x = 1;
 
 			/* Dump all available items */
 			for (i = 0; i < st_ptr->stock_num; i++)
@@ -9084,10 +9086,10 @@ static void do_cmd_knowledge_home(void)
 			fprintf(fff, "\n\n");
 		}
 	}
-	
+
 	/* Close the file */
 	my_fclose(fff);
-	
+
 	/* Display the file contents */
 #ifdef JP
 	show_file(TRUE, file_name, "我が家のアイテム", 0, 0);
@@ -9095,7 +9097,7 @@ static void do_cmd_knowledge_home(void)
 	show_file(TRUE, file_name, "Home Inventory", 0, 0);
 #endif
 
-	
+
 	/* Remove the file */
 	fd_kill(file_name);
 }
