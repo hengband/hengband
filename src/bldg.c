@@ -1280,7 +1280,7 @@ sprintf(tmp_str,"賭け金 (1-%ld)？", maxbet);
 		 * Use get_string() because we may need more than
 		 * the s16b value returned by get_quantity().
 		 */
-		if (get_string(tmp_str, out_val, 32))
+		if (get_string(tmp_str, out_val, 32, TRUE))
 		{
 			/* Strip spaces */
 			for (p = out_val; *p == ' '; p++);
@@ -1453,9 +1453,9 @@ c_put_str(TERM_GREEN, "ルーレット", 5, 2);
 					prt("--------------------------------", 8, 3);
 					strcpy(out_val, "");
 #ifdef JP
-get_string("何番？ (0-9): ", out_val, 32);
+					get_string("何番？ (0-9): ", out_val, 32, TRUE);
 #else
-					get_string("Pick a number (0-9): ", out_val, 32);
+					get_string("Pick a number (0-9): ", out_val, 32, TRUE);
 #endif
 
 					for (p = out_val; isspace(*p); p++);
@@ -2012,7 +2012,7 @@ sprintf(tmp_str,"賭け金 (1-%ld)？", maxbet);
 		 * Use get_string() because we may need more than
 		 * the s16b value returned by get_quantity().
 		 */
-		if (get_string(tmp_str, out_val, 32))
+		if (get_string(tmp_str, out_val, 32, TRUE))
 		{
 			/* Strip spaces */
 			for (p = out_val; *p == ' '; p++);
@@ -3967,11 +3967,10 @@ if (get_check(format("そのロッドを＄%d で再充填しますか？",
 
 		/* Get the quantity for staves and wands */
 #ifdef JP
-charges = get_quantity(format("一回分＄%d で何回分充填しますか？",
+		charges = get_quantity(format("一回分＄%d で何回分充填しますか？",
 #else
 		charges = get_quantity(format("Add how many charges for %d gold? ",
 #endif
-
 			      price), MIN(p_ptr->au / price, max_charges));
 
 		/* Do nothing */
@@ -4353,12 +4352,12 @@ if (!get_com("モンスターの文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前):
 	{
 		all = TRUE;
 #ifdef JP
-		if (!get_string("名前(英語の場合小文字で可)",temp, 70))
+		if (!get_string("名前(英語の場合小文字で可)", temp, 70, TRUE))
 #else
-		if (!get_string("Enter name:",temp, 70))
+		if (!get_string("Enter name:",temp, 70, TRUE))
 #endif
 		{
-			temp[0]=0;
+			temp[0] = 0;
 
 			/* Restore */
 			screen_load();

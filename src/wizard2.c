@@ -366,7 +366,7 @@ static void do_cmd_wiz_change_aux(void)
 		sprintf(tmp_val, "%d", p_ptr->stat_max[i]);
 
 		/* Query */
-		if (!get_string(ppp, tmp_val, 3)) return;
+		if (!get_string(ppp, tmp_val, 3, TRUE)) return;
 
 		/* Extract */
 		tmp_int = atoi(tmp_val);
@@ -385,9 +385,9 @@ static void do_cmd_wiz_change_aux(void)
 
 	/* Query */
 #ifdef JP
-	if (!get_string("熟練度: ", tmp_val, 9)) return;
+	if (!get_string("熟練度: ", tmp_val, 9, TRUE)) return;
 #else
-	if (!get_string("Proficiency: ", tmp_val, 9)) return;
+	if (!get_string("Proficiency: ", tmp_val, 9, TRUE)) return;
 #endif
 
 	/* Extract */
@@ -421,7 +421,7 @@ static void do_cmd_wiz_change_aux(void)
 	sprintf(tmp_val, "%ld", (long)(p_ptr->au));
 
 	/* Query */
-	if (!get_string("Gold: ", tmp_val, 9)) return;
+	if (!get_string("Gold: ", tmp_val, 9, TRUE)) return;
 
 	/* Extract */
 	tmp_long = atol(tmp_val);
@@ -437,7 +437,7 @@ static void do_cmd_wiz_change_aux(void)
 	sprintf(tmp_val, "%ld", (long)(p_ptr->max_exp));
 
 	/* Query */
-	if (!get_string("Experience: ", tmp_val, 9)) return;
+	if (!get_string("Experience: ", tmp_val, 9, TRUE)) return;
 
 	/* Extract */
 	tmp_long = atol(tmp_val);
@@ -819,25 +819,25 @@ static void wiz_tweak_item(object_type *o_ptr)
 
 	p = "Enter new 'pval' setting: ";
 	sprintf(tmp_val, "%d", o_ptr->pval);
-	if (!get_string(p, tmp_val, 5)) return;
+	if (!get_string(p, tmp_val, 5, TRUE)) return;
 	o_ptr->pval = atoi(tmp_val);
 	wiz_display_item(o_ptr);
 
 	p = "Enter new 'to_a' setting: ";
 	sprintf(tmp_val, "%d", o_ptr->to_a);
-	if (!get_string(p, tmp_val, 5)) return;
+	if (!get_string(p, tmp_val, 5, TRUE)) return;
 	o_ptr->to_a = atoi(tmp_val);
 	wiz_display_item(o_ptr);
 
 	p = "Enter new 'to_h' setting: ";
 	sprintf(tmp_val, "%d", o_ptr->to_h);
-	if (!get_string(p, tmp_val, 5)) return;
+	if (!get_string(p, tmp_val, 5, TRUE)) return;
 	o_ptr->to_h = atoi(tmp_val);
 	wiz_display_item(o_ptr);
 
 	p = "Enter new 'to_d' setting: ";
 	sprintf(tmp_val, "%d", o_ptr->to_d);
-	if (!get_string(p, tmp_val, 5)) return;
+	if (!get_string(p, tmp_val, 5, TRUE)) return;
 	o_ptr->to_d = atoi(tmp_val);
 	wiz_display_item(o_ptr);
 }
@@ -1040,7 +1040,7 @@ static void wiz_statistics(object_type *o_ptr)
 		}
 
 		sprintf(tmp_val, "%ld", test_roll);
-		if (get_string(p, tmp_val, 10)) test_roll = atol(tmp_val);
+		if (get_string(p, tmp_val, 10, TRUE)) test_roll = atol(tmp_val);
 		test_roll = MAX(1, test_roll);
 
 		/* Let us know what we are doing */
@@ -1163,7 +1163,7 @@ static void wiz_quantity_item(object_type *o_ptr)
 	sprintf(tmp_val, "%d", o_ptr->number);
 
 	/* Query */
-	if (get_string("Quantity: ", tmp_val, 2))
+	if (get_string("Quantity: ", tmp_val, 2, TRUE))
 	{
 		/* Extract */
 		tmp_int = atoi(tmp_val);
@@ -1492,7 +1492,7 @@ static void do_cmd_wiz_jump(void)
 		sprintf(tmp_val, "%d", dungeon_type);
 
 		/* Ask for a level */
-		if (!get_string(ppp, tmp_val, 2)) return;
+		if (!get_string(ppp, tmp_val, 2, TRUE)) return;
 
 		tmp_dungeon_type = atoi(tmp_val);
 		if (!d_info[tmp_dungeon_type].maxdepth || (tmp_dungeon_type > max_d_idx)) tmp_dungeon_type = DUNGEON_ANGBAND;
@@ -1504,7 +1504,7 @@ static void do_cmd_wiz_jump(void)
 		sprintf(tmp_val, "%d", dun_level);
 
 		/* Ask for a level */
-		if (!get_string(ppp, tmp_val, 10)) return;
+		if (!get_string(ppp, tmp_val, 10, TRUE)) return;
 
 		/* Extract request */
 		command_arg = atoi(tmp_val);
@@ -1695,9 +1695,9 @@ static void do_cmd_wiz_create_feature(void)
 
 	/* Query */
 #ifdef JP
-	if (!get_string("地形: ", tmp_val, 3)) return;
+	if (!get_string("地形: ", tmp_val, 3, TRUE)) return;
 #else
-	if (!get_string("Feature: ", tmp_val, 3)) return;
+	if (!get_string("Feature: ", tmp_val, 3, TRUE)) return;
 #endif
 
 	/* Extract */
@@ -1710,9 +1710,9 @@ static void do_cmd_wiz_create_feature(void)
 
 	/* Query */
 #ifdef JP
-	if (!get_string("地形 (mimic): ", tmp_val, 3)) return;
+	if (!get_string("地形 (mimic): ", tmp_val, 3, TRUE)) return;
 #else
-	if (!get_string("Feature (mimic): ", tmp_val, 3)) return;
+	if (!get_string("Feature (mimic): ", tmp_val, 3, TRUE)) return;
 #endif
 
 	/* Extract */

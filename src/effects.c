@@ -5246,9 +5246,9 @@ get_rnd_line("death_j.txt", 0, death_message);
 #endif
 				}
 #ifdef JP
-				while (!get_string(streq(p_ptr->died_from, "Seppuku") ? "¼­À¤¤Î¶ç: " : "ÃÇËöËâ¤Î¶«¤Ó: ", death_message, 1024)) ;
+				while (!get_string(streq(p_ptr->died_from, "Seppuku") ? "¼­À¤¤Î¶ç: " : "ÃÇËöËâ¤Î¶«¤Ó: ", death_message, 1024, FALSE)) ;
 #else
-				while (!get_string("Last word: ", death_message, 1024)) ;
+				while (!get_string("Last word: ", death_message, 1024, FALSE)) ;
 #endif
 				if (death_message[0] == '\0')
 				{

@@ -5553,7 +5553,7 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 		}
 
 		/* Get a special key code */
-		skey = inkey_special(TRUE);
+		skey = inkey_special(TRUE, FALSE);
 
 		/* Show the help for the help */
 		if (skey == '?')
@@ -5729,17 +5729,17 @@ strcpy(tmp, "jhelp.hlp");
 			char buff[1024];
 			char xtmp[82];
 
-			strcpy (xtmp, "");
+			strcpy(xtmp, "");
 
 #ifdef JP
-			if (!get_string("ファイル名: ", xtmp, 80))
+			if (!get_string("ファイル名: ", xtmp, 80, FALSE))
 #else
-			if (!get_string("File name: ", xtmp, 80))
+			if (!get_string("File name: ", xtmp, 80, FALSE))
 #endif
 			{
 				continue;
 			}
- 
+
 			/* Close it */
 			my_fclose(fff);
 
@@ -6022,9 +6022,9 @@ void get_name(void)
 
 	/* Prompt for a new name */
 #ifdef JP
-	if (get_string("キャラクターの名前を入力して下さい: ", tmp, 15))
+	if (get_string("キャラクターの名前を入力して下さい: ", tmp, 15, FALSE))
 #else
-	if (get_string("Enter a name for your character: ", tmp, 15))
+	if (get_string("Enter a name for your character: ", tmp, 15, FALSE))
 #endif
 	{
 		/* Use the name */
@@ -6114,9 +6114,9 @@ prt("確認のため '@' を押して下さい。", 0, 0);
 		char buf[1024] = "";
 
 #ifdef JP
-		while (!get_string("*勝利*メッセージ: ", buf, sizeof buf)) ;
+		while (!get_string("*勝利*メッセージ: ", buf, sizeof buf, FALSE)) ;
 #else
-		while (!get_string("*Winning* message: ", buf, sizeof buf)) ;
+		while (!get_string("*Winning* message: ", buf, sizeof buf, FALSE)) ;
 #endif
 
 		if (buf[0])

@@ -2247,11 +2247,10 @@ static void do_name_pet(void)
 
 		/* Get a new inscription (possibly empty) */
 #ifdef JP
-		if (get_string("名前: ", out_val, 15))
+		if (get_string("名前: ", out_val, 15, FALSE))
 #else
-		if (get_string("Name: ", out_val, 15))
+		if (get_string("Name: ", out_val, 15, FALSE))
 #endif
-
 		{
 			if (out_val[0])
 			{

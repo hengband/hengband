@@ -1917,7 +1917,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 
 		(void)screen_object(o_ptr, TRUE);
 
-		if (!get_string(ask_msg, dummy_name, sizeof dummy_name)
+		if (!get_string(ask_msg, dummy_name, sizeof dummy_name, FALSE)
 		    || !dummy_name[0])
 		{
 			/* Cancelled */
