@@ -18098,6 +18098,10 @@ S:TPORT | BLIND | BLINK | HEAL | HASTE |
 S:CONF | BO_MANA | BRAIN_SMASH | PSY_SPEAR |
 S:BA_NETH | BA_DARK | BA_CHAO |
 S:S_MONSTERS | S_DEMON | S_KIN
+D:彼女はただ超人として超人との戦いを望むが故に、皇帝に扮し地球を
+D:滅ぼそうとした。「とにかくある朝起きてみるとディナールは皇帝
+D:レイザークの神聖なる領地となっていたのだ」
+D:（聖悠紀、超人ロック「コズミックゲーム」）
 
 N:883:サーペント・ゾンビ
 E:Zombified Serpent of Chaos
@@ -18751,6 +18755,8 @@ S:1_IN_3 |
 S:BLIND | CONF | SCARE | 
 S:BA_DARK | BO_NETH | BR_NETH | BR_DARK | BR_NUKE | BR_POIS | HAND_DOOM |
 S:S_DEMON | S_KIN | DISPEL
+D:その名を口にするだけで破滅をもたらすほどの恐るべきデーモンであり、
+D:地獄の軍勢の指揮官であると言われている。
 
 N:921:インターネット・エクスプローダー
 E:Internet Exploder
@@ -18779,6 +18785,7 @@ F:DROP_CORPSE | ONLY_GOLD | DROP_1D2 | IM_ELEC | ANIMAL | AURA_ELEC |
 F:SELF_LITE_1 |
 S:1_IN_5 | 
 S:BR_ELEC | BO_ELEC
+D:かわいらしい外見をしているが、油断すると思わぬ衝撃を受けるだろう。
 
 N:923:雪女
 E:Yukionnna
@@ -18843,6 +18850,7 @@ F:OPEN_DOOR | GOOD | CAN_SWIM | CAN_FLY |
 F:NO_CONF | NO_SLEEP | FRIENDLY | TAKE_ITEM |
 S:1_IN_4 |
 S:BA_FIRE | HASTE | HOLD | CONF | BLIND
+D:赤い帽子と口髭がよく似合う、ダンディな配管工だ。
 
 N:928:『クッパ大王』
 E:Kuppa
@@ -18859,6 +18867,8 @@ F:DROP_1D2 | DROP_2D2 | ONLY_ITEM | DROP_GOOD |
 F:BASH_DOOR | EVIL | CAN_SWIM | CAN_FLY | KILL_ITEM |
 S:1_IN_3 |
 S:BR_FIRE | SCARE
+D:亀のような外見をしているが、火を吐き、凶暴な性格をしている。
+D:彼は常にキノコ王国を征服しようとたくらんでいる。
 
 N:929:巨大サイバーワイアーム天使悪魔リッチ
 E:Greater cyber wyrm angel daemon lich
@@ -19039,6 +19049,8 @@ F:DROP_2D2 | DROP_1D2 | DROP_GOOD | ONLY_ITEM | CAN_SWIM |
 F:GOOD | IM_COLD | IM_POIS | IM_ACID | IM_ELEC | IM_FIRE | REGENERATE |
 S:1_IN_3 |
 S:CAUSE_4 | TELE_TO
+D:一子相伝とされる北斗神拳の伝承者だ。力が全てを支配すると思われた
+D:時代にあって愛に生き、愛のために戦っている。
 
 N:937:サイバー『レムス』
 E:Lems the cyborg
@@ -19281,6 +19293,8 @@ B:HIT:HURT:2d4
 F:FORCE_SLEEP | DROP_CORPSE | RAND_50 | ANIMAL |
 S:1_IN_2 | 
 S:SHOOT
+D:この二本足で歩行する亀のような生き物は、
+D:投擲を非常に得意としている。
 
 N:951:メット
 E:Met
@@ -19308,6 +19322,7 @@ F:FORCE_SLEEP |
 F:FRIENDS |
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE |
 F:ANIMAL | NO_CONF | NO_SLEEP
+D:今にも爆発しそうな犬だ。
 
 N:953:折れたデスソード
 E:Broken death sword
@@ -19321,6 +19336,7 @@ B:HIT:POISON:1d1
 F:NONLIVING | NO_FEAR |
 F:STUPID | COLD_BLOOD | NO_CONF | NO_SLEEP |
 F:EVIL | IM_COLD | IM_FIRE | IM_ELEC | IM_POIS
+D:獲物の血を求めて動き回る折れた剣だ。
 
 N:954:オークの弩弓隊
 E:Orcish Artillery
@@ -19344,6 +19360,7 @@ B:BITE:HURT:1d2
 B:KICK:HURT:1d3
 F:WILD_ONLY | WILD_TOWN | RAND_25 |
 F:ANIMAL | DROP_SKELETON | DROP_CORPSE | RIDING
+D:満足に飼葉も与えられていないがりがりでふらふらの哀れな馬だ。
 
 N:956:馬
 E:Horse
@@ -19354,6 +19371,8 @@ B:BITE:HURT:1d8
 B:KICK:HURT:2d4
 F:WILD_WASTE | BASH_DOOR |
 F:ANIMAL | DROP_SKELETON | DROP_CORPSE | RIDING
+D:馬は速く駆けることのできる四本足の獣で、
+D:古くから人間の乗り物として利用されてきた。
 
 N:957:あばれ馬
 E:Unruly horse
@@ -19365,6 +19384,8 @@ B:KICK:HURT:2d4
 B:KICK:HURT:2d4
 F:WILD_WASTE | BASH_DOOR | RAND_25 |
 F:ANIMAL | DROP_SKELETON | DROP_CORPSE | RIDING
+D:馬は普段は従順で大人しい生き物であるが、
+D:一旦暴走しだすと手がつけられなくなる。
 
 N:958:赤ぷよ
 E:Red puyo
@@ -19453,6 +19474,7 @@ G:N:D
 I:110:1d1:0:0:0
 W:1:255:0:0:0:0
 F:KAGE
+D:$Nobody knows its true character.
 D:その正体は誰も知らない。
 
 N:965:ミミック(ミミック(箱)の像)
@@ -19739,6 +19761,8 @@ F:UNIQUE | MALE | CAN_SPEAK | FORCE_MAXHP | ESCORT |
 F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | DROP_GOOD | DROP_CORPSE |
 F:OPEN_DOOR | BASH_DOOR | CAN_SWIM | AURA_ELEC | DROP_CHOSEN |
 F:EVIL | GIANT | IM_POIS | IM_FIRE | IM_ELEC
+D:丹波の国の大江山をねぐらとし、京の都を襲っては財宝と娘を
+D:奪う凶悪な鬼どもの首領だ。
 
 N:980:コアトル
 E:Coatl
@@ -19783,6 +19807,7 @@ F:COLD_BLOOD | OPEN_DOOR | CAN_FLY |
 F:EVIL | UNDEAD | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP |
 S:1_IN_5
 S:BLIND | HOLD | SCARE | CAUSE_4 | BO_NETH | S_UNDEAD
+D:この不吉なモンスターは自分の首を脇に抱え、死を告げにやってくる。
 
 N:983:ヒバゴン
 E:Hibagon
@@ -19822,6 +19847,7 @@ B:BITE:LOSE_ALL:3d8
 F:REFLECTING | DROP_1D2 | DROP_2D2 | RES_DISE | ANIMAL |
 F:REGENERATE | IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
 F:NO_CONF | NO_SLEEP | RES_TELE | CAN_SWIM | RIDING
+D:額に一本の角を持った白馬で、乙女にのみ心を許すと言われる。
 
 N:986:猫又
 E:Nekomata
@@ -19834,6 +19860,7 @@ F:MALE | EVIL | FORCE_SLEEP | DROP_1D2 | ANIMAL |
 F:SMART | OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 S:1_IN_3 |
 S:SCARE | CAUSE_2 | S_MONSTER
+D:猫が年老いると次第に高い知能と分かれた尻尾を持ち、猫又になるという。
 
 N:987:九尾の狐
 E:Nine-tailed fox
@@ -19850,6 +19877,7 @@ F:NO_CONF | NO_SLEEP | RES_TELE | RIDING |
 S:1_IN_2
 S:S_MONSTERS | CAUSE_3 | CAUSE_4 | CONF | BRAIN_SMASH | DRAIN_MANA | SCARE |
 S:HASTE | HOLD |
+D:尾が九つに分かれた狐で、強い妖力を秘めている。
 
 N:988:鳳凰
 E:Fenghuang
@@ -19869,6 +19897,8 @@ F:NO_STUN | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_3 |
 S:SCARE | BRAIN_SMASH | DRAIN_MANA |
 S:BR_FIRE | BR_LITE | BR_SOUN | HEAL | S_ANGEL
+D:この聖なる鳥は、前は鴻、後は麟、顎は燕、嘴は鶏、頸は蛇、尾は魚、
+D:額は鸛、顋は鴛、背は亀甲、羽は五采を備え、龍の紋様を持つと言う。
 
 N:989:麒麟
 E:Kirin
@@ -19887,6 +19917,8 @@ F:RES_DISE | RES_NETH | RES_PLAS |
 F:NO_STUN | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_6 |
 S:BLIND | SHRIEK | DISPEL | INVULNER | S_ANGEL
+D:龍の鱗に牛の尾、馬の蹄を持ち、角の生えた四本足の聖なる獣で、
+D:王者が仁のある政治を行った時に姿を現わすと言われている。
 
 N:990:ペガサス
 E:Pegasus
@@ -19898,6 +19930,7 @@ B:BITE:HURT:3d8
 B:KICK:HURT:4d10
 B:KICK:HURT:4d10
 F:DROP_2D2 | ANIMAL | NO_SLEEP | CAN_FLY | RIDING
+D:翼の生えた天駆ける白馬だ。
 
 N:991:オーディンの乗馬『スレイプニル』
 E:Sleipnir, the Odin's Steed
@@ -19911,6 +19944,8 @@ B:BITE:HURT:10d10
 F:FORCE_MAXHP | UNIQUE | ANIMAL | CAN_FLY |
 F:REGENERATE | BASH_DOOR | IM_FIRE | IM_COLD | IM_ELEC |
 F:IM_POIS | NO_CONF | NO_SLEEP | NO_FEAR | DROP_CORPSE | RIDING
+D:オーディンの乗馬たるスレイプニルは、8本の足を持つ名馬である。
+D:巨人ロキの子供であると言われている。
 
 N:992:ヴァリノールの猟犬『フアン』
 E:Huan, the Hound of Valinor
@@ -19926,8 +19961,8 @@ F:FORCE_SLEEP | FORCE_MAXHP | RAND_25 | GOOD | FRIENDLY |
 F:SMART | OPEN_DOOR | BASH_DOOR | MOVE_BODY | RIDING |
 F:ANIMAL | IM_FIRE | IM_POIS | NO_CONF | NO_SLEEP
 D:ヴァリノールの猟犬たるフアンは特別な力を持ち、人語を理解し、そして
-D:話すことができる。しかれども、フェアノールの子息達の前で話すことは
-D:無い。なぜならば彼は死ぬまでに3度しか話をすることを許されておらず、
+D:話すことができる。しかし、フェアノールの子息達の前で話すことは無い。
+D:なぜならば彼は死ぬまでに3度しか話をすることを許されておらず、
 D:その大いなる使命の時を待っているからである。
 
 N:993:ダオ
@@ -20256,7 +20291,6 @@ D:$Collect 5 marks of Silver Angel or 1 mark of Gold Angel!
 D:$And you will win The Can of Toys!
 D:金なら1匹、銀なら5匹でもれなくおもちゃのカンヅメが当たります。
 
-
 N:1012:自縛霊
 E:Jibaku ghost
 G:G:W
@@ -20267,6 +20301,7 @@ B:TOUCH:LOSE_WIS
 F:NEVER_MOVE | 
 F:INVISIBLE | COLD_BLOOD | PASS_WALL | CAN_FLY |
 F:EVIL | UNDEAD | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP
+D:この世に未練がある冒険者の魂のなれの果てだ。
 
 #
 # ファイナルファイトから。残像が付く速い動きで手榴弾ばら撒く軍人風の人。
@@ -20309,8 +20344,6 @@ F:OPEN_DOOR | EVIL | BASH_DOOR | SMART | CAN_FLY
 S:1_IN_8
 S:BO_MANA | BLINK
 
-
-
 #
 # ミサイル
 #
@@ -20326,7 +20359,6 @@ F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS |
 F:NO_FEAR | NO_CONF | NO_SLEEP | NONLIVING | RES_TELE
 D:$A shining machine of death and destruction.
 D:輝く死と破壊の機械だ。
-
 
 #
 # 蜘蛛召喚する敵が召喚しちゃうと変だけど。訳は「蜘蛛型爆弾」の方がよいかも。
@@ -20344,7 +20376,6 @@ D:$It is a small bomb of a form like a spider.
 D:$It walks toward you!
 D:蜘蛛のような形の小さな爆弾で、あなたに向って歩き、爆発する。
 
-
 #
 # HUNTER X HUNTER より。
 #
@@ -20356,7 +20387,6 @@ W:1:3:0:3:0:0
 B:EXPLODE:HURT:1d2
 F:RAND_50 | CAN_FLY |
 F:WEIRD_MIND | ANIMAL
-
 
 #
 # ケンシロウのコピーだけど、少しだけ違う。Raoh?
@@ -20377,6 +20407,8 @@ F:DROP_2D2 | DROP_1D2 | DROP_GOOD | ONLY_ITEM | CAN_SWIM |
 F:GOOD | IM_COLD | IM_POIS | IM_ACID | IM_ELEC | IM_FIRE | REGENERATE |
 S:1_IN_3 |
 S:CAUSE_3 | TELE_TO
+D:ラオウは北斗神拳伝承者ケンシロウの義兄であり北斗神拳の使い手である。
+D:激動の闇の時代に、己の信念で新たな時代を築こうとした。
 
 #
 # ジュリアンのやつのコピー。名前？
@@ -20392,8 +20424,7 @@ B:BITE:HURT:6d6
 F:FORCE_MAXHP | UNIQUE | ANIMAL |
 F:REGENERATE | BASH_DOOR | IM_FIRE | IM_COLD | IM_ELEC |
 F:IM_POIS | NO_CONF | NO_SLEEP | NO_FEAR | DROP_CORPSE | RIDING
-
-
+D:黒く大きな体をしたこの荒ぶる馬は、まさにラオウの乗馬にふさわしい。
 
 #
 # I hate them。
@@ -20410,7 +20441,6 @@ F:WILD_WOOD
 D:$It is a biped living thing like the bear. 
 D:$It pounces on you expressionlessly.
 D:無表情で襲いかかる、二足歩行の熊のような生き物だ。
-
 
 #
 # OnePiecebandのプレビュー。こうしてみるとなんかサブイ……。
@@ -20429,7 +20459,6 @@ F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | DROP_GREAT | WILD_GRASS |
 F:TAKE_ITEM | OPEN_DOOR | CAN_SWIM | DROP_SKELETON | DROP_CORPSE
 S:1_IN_3
 S:HEAL | TRAPS
-
 
 #
 # 強すぎる？
@@ -20576,6 +20605,7 @@ F:OPEN_DOOR | DEMON | CAN_SPEAK | NONLIVING |
 F:EVIL | RAND_25 | IM_COLD | IM_FIRE | IM_POIS | CAN_SWIM |
 S:1_IN_6 |
 S:BR_COLD
+D:憎めない顔をした小柄な悪魔だ。
 
 #
 #ブロッダのコピー
@@ -20686,6 +20716,8 @@ B:CRUSH:HURT:4d8
 F:NEVER_MOVE | NONLIVING | NO_FEAR |
 F:STUPID | COLD_BLOOD | CHAR_MULTI | NO_CONF | NO_SLEEP |
 F:EVIL | IM_COLD | IM_FIRE | FORCE_MAXHP | IM_ELEC | IM_POIS
+D:$It resembles a normal armor until some poor fool ventures too close! 
+D:哀れで愚かな冒険者が近づいて来るまでは普通の鎧に似ている。
 
 N:1036:トラップマスター
 E:Trap master
@@ -20697,6 +20729,7 @@ F:MALE | DROP_SKELETON | DROP_CORPSE |
 F:DROP_1D2 | EAT_GIVE_DEX | EAT_LOSE_WIS | OPEN_DOOR | BASH_DOOR | EVIL |
 S:1_IN_2 |
 S:TRAPS | BLINK
+D:気をつけろ！姿を見たときはすでに罠に囲まれているぞ。
 
 N:1037:聖堂騎士
 E:Knight templar
@@ -20767,6 +20800,7 @@ F:CHAMELEON | WILD_WOOD | DROP_1D2 | DROP_CORPSE | DROP_SKELETON | ANIMAL |
 F:CAN_FLY | IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS |
 S:1_IN_1
 S:SPECIAL
+D:周囲の環境に合わせてその姿を変えると言われる生物だ。
 
 N:1041:カメレオンの王
 E:Chameleon Lord
@@ -20778,6 +20812,8 @@ F:CHAMELEON | DROP_3D2 | DROP_CORPSE | DROP_SKELETON | ANIMAL |
 F:CAN_FLY | IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS
 S:1_IN_1
 S:SPECIAL
+D:カメレオンは周囲の環境に合わせてその姿を変えると言われるが、
+D:それは王とて例外ではない。
 
 N:1042:幻の鯨『イッカク』
 E:Narwhal
@@ -20824,7 +20860,6 @@ D:$For it, a dog may be a favorite food.
 D:ディオが隠れ棲む館の門番であるこの鳥は犬が
 D:大好物なのかもしれない。
 
-
 N:1044:白ワニ
 E:White crocodile
 G:R:w
@@ -20844,7 +20879,6 @@ D:$For him, an adventurer is only game.
 D:このワニは下水道の中で巨大に成長した。
 D:彼にとっては冒険者など獲物にすぎない。
 
-
 #J0#
 N:1045:分解ボルテックス
 E:Disintegrate vortex
@@ -20857,7 +20891,7 @@ F:EMPTY_MIND | BASH_DOOR | POWERFUL | KILL_WALL |
 F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN | NONLIVING
 S:1_IN_6 | 
 S:BR_DISI
-
+D:周囲のものが渦巻き状に分解されていくのが見える。
 
 N:1046:黒色王『ウルファング』
 E:Ulfang the Black
@@ -20876,7 +20910,6 @@ F:EVIL
 D:$A short and swarthy Easterling dressed in Black.
 D:背が低くて浅黒い肌をした東夷で、黒い服に身を包んでいる。
 
-
 N:1047:黄衣の修行僧
 E:Topaz monk
 G:p:y
@@ -20893,7 +20926,6 @@ S:1_IN_9 |
 S:HASTE
 D:$A yellow-garbed monk, trained in martial arts.
 D:黄色の法衣を身に纏った、拳法に熟練した修行僧だ。
-
 
 N:1048:石ドラゴン
 E:Stone dragon
@@ -20928,7 +20960,6 @@ F:IM_FIRE | IM_ELEC | IM_POIS |
 F:EVIL | DRAGON | NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
 D:$A huge dragon all made of steel. It looks very solid...
 D:全身が鋼鉄でできた巨大なドラゴンだ。非常に硬そうに見える...
-
 
 N:1050:タイタンの『アトラス』
 E:Atlas, the Titan
@@ -21124,8 +21155,8 @@ F:FORCE_MAXHP | DROP_CORPSE | WILD_TOWN | WILD_ONLY
 #F:ONLY_ITEM | DROP_90 | DROP_GOOD | FRIENDLY |
 F:OPEN_DOOR | BASH_DOOR | HAS_LITE_1 |
 F:NO_CONF | NO_SLEEP
-D:面の皮は普通のトロルよりも厚い。
 D:$Brazen faced this creature is more impudent than normal troll.
+D:面の皮は普通のトロルよりも厚い。
 
 N:1061:『恐竜バーニーちゃん』
 E:Barney the Dinosaur
@@ -21163,7 +21194,6 @@ D:$He who laughs at Groo's brains will find there is nothing to laugh
 D:$about... erm, nobody laughs at Groo and lives.
 D:グルーの頭を笑う者は、そのうち笑えないことに気づくだろう...
 D:ていうかグルーを笑って生きのびた者はいない。
-
 
 N:1063:巨大白シラミの王『lousy』
 E:Lousy, the King of Louses
@@ -21204,6 +21234,9 @@ S:TPORT | BLINK | TELE_AWAY | TELE_LEVEL | HASTE |
 S:SLOW | HOLD |
 S:BR_TIME | BR_NEXU | BR_GRAV | BR_INER | 
 S:S_DRAGON
+D:このような存在にはかつて出会ったことがない。
+D:その周囲の空間も時も歪んで見えるためよく分からないが、
+D:なんとなく巨大なドラゴンがいるように見える。
 
 N:1065:地蔵尊の蛸
 E:Octopus of Kshitigarbha
