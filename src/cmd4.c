@@ -6672,7 +6672,7 @@ static void do_cmd_knowledge_uniques(void)
 
 	if (n_alive_total)
 	{
-		fprintf(fff, "---------  -----------\n", n_alive_total);
+		fprintf(fff, "---------  -----------\n");
 #ifdef JP
 		fprintf(fff, "     合計  生存: %3d体\n", n_alive_total);
 #else
