@@ -96,6 +96,7 @@ static void sense_inventory_aux(int slot, bool heavy)
 	byte        feel;
 	object_type *o_ptr = &inventory[slot];
 	char        o_name[MAX_NLEN];
+	int idx;
 
 	/* We know about it already, do not tell us again */
 	if (o_ptr->ident & (IDENT_SENSE))return;
@@ -193,6 +194,11 @@ o_name, index_to_label(slot),game_inscriptions[feel]);
 
 	/* Set the "inscription" */
 	o_ptr->feeling = feel;
+
+	/* Auto-inscription/destroy */
+	idx = is_autopick(o_ptr);
+	auto_inscribe_item(o_ptr, idx);
+	auto_destroy_item(slot, idx);
 
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
