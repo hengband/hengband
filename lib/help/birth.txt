@@ -18,8 +18,8 @@ between the two most recent characters, until you are presented with a
 character that you feel comfortable with.
 
 You may start the entire process over at any time by pressing 'S' at
-any prompt (with the exception of the autoroller (see below [1]) prompt
-and the prompt for the number of random quests (see below [2])).
+any prompt (with the exception of the autoroller (see below [b]) prompt
+and the prompt for the number of random quests (see below [c])).
 
 
 ***** <StartUp>
@@ -28,14 +28,14 @@ and the prompt for the number of random quests (see below [2])).
 During character generation you may press '=' at any time to access
 the start-up options. A more detailed description of the various
 start-up options can be found in the section on the Options Page (see
-option.txt#StartUp [3]). Some options have "(*)" mark that means these
+option.txt#StartUp [d]). Some options have "(*)" mark that means these
 options effect to the difficulty of the game and effect to estimation
 of your score.
 
 Perhaps one of the most important features of the start-up options is
 the ability to decide what type of town level you want. The various
 town options are discussed on the Town page (see dungeon.txt#TownLevel
-[4]).
+[e]).
 
 
 ***** <CharAttributes>
@@ -50,8 +50,8 @@ Your character's sex has a minimal effect on game play - females start
 with slightly more gold, males are generally heavier and so can bash
 more effectively. Race, class, personality and magic realms have a far
 more significant effect and are discussed at some length in the Race
-(see charattr.txt#TheRaces [5]), Class (see charattr.txt#TheClasses
-[6]) and Magic Realms (see magic.txt#MagicRealms [7]) sections.
+(see charattr.txt#TheRaces [f]), Class (see charattr.txt#TheClasses
+[g]) and Magic Realms (see magic.txt#MagicRealms [h]) sections.
 
 --- Secondary Attributes ---
 
@@ -96,7 +96,7 @@ offers utility and defensive spells, Nature offers both defensive and
 offensive spells, Trump specializes in teleportation and summoning
 spells and Chaos and Death are offensive. A more complete description
 of the magic realms and spellcasting in general can be found in the
-section on the Magic Realms (see magic.txt#MagicRealms [7]).
+section on the Magic Realms (see magic.txt#MagicRealms [h]).
 
 Where possible, it is generally a good idea to pick one defensive realm
 and one offensive realm.
@@ -151,7 +151,7 @@ Once you have chosen your race, class and (if applicable) your magic
 realm(s), you will be asked how many random quests you wish to be
 assigned. You may choose any number between 0 and 10. A more detailed
 discussion of random quests can be found in the Dungeon section (see
-dungeon.txt#RandomQuests [8]).
+dungeon.txt#RandomQuests [i]).
 
 
 ***** <AutoRoller>
@@ -160,9 +160,9 @@ dungeon.txt#RandomQuests [8]).
 The auto-roller is a quick means of generating start-up characters
 based on a set of user-selected criteria. If you choose to use the
 auto-roller, you will be presented with a column giving the maximum
-possible statistics (see charattr.txt#PrimaryStats [9]) for your
+possible statistics (see charattr.txt#PrimaryStats [j]) for your
 choice of race, class and maximize mode (see option.txt#StartUp
-[3]). Then you can specify your desired statistics using keypad or
+[d]). Then you can specify your desired statistics using keypad or
 cursor keys.
 
 Once you have specified your desired statistics, the computer will
@@ -171,12 +171,12 @@ your specified criteria. Each stat is rolled as a number from 8 to 17,
 with a normal distribution, and is then immediately modified based
 upon the race and class which you have chosen. The exact quantum of
 this modification can be found in the Character Attributes section
-(see charattr.txt#StatBonusTable [a]).
+(see charattr.txt#StatBonusTable [k]).
 
 Once a character that matches or exceeds your expectations has been
 rolled, Hengband stops to ask you whether you accept or not. If you
 accept the rolled character (by pressing Enter), you will be asked for
-its name (see below [c]). If not, you may press 'r' to resume rolling
+its name (see below [m]). If not, you may press 'r' to resume rolling
 and searching for the next match or, if this is not your first match,
 'p' to return to the previous character which met your criteria.
 
@@ -244,15 +244,15 @@ Updated    : Zangband DevTeam
 Updated    : Hengband 1.0.11
 
 ***** Begin Hyperlinks
-***** [1] birth.txt#AutoRoller
-***** [2] birth.txt#RandomQuests
-***** [3] option.txt#StartUp
-***** [4] dungeon.txt#TownLevel
-***** [5] charattr.txt#TheRaces
-***** [6] charattr.txt#TheClasses
-***** [7] magic.txt#MagicRealms
-***** [8] dungeon.txt#RandomQuests
-***** [9] charattr.txt#PrimaryStats
-***** [a] charattr.txt#StatBonusTable
-***** [b] birth.txt#LifeRating
-***** [c] birth.txt#CharName
+***** [b] birth.txt#AutoRoller
+***** [c] birth.txt#RandomQuests
+***** [d] option.txt#StartUp
+***** [e] dungeon.txt#TownLevel
+***** [f] charattr.txt#TheRaces
+***** [g] charattr.txt#TheClasses
+***** [h] magic.txt#MagicRealms
+***** [i] dungeon.txt#RandomQuests
+***** [j] charattr.txt#PrimaryStats
+***** [k] charattr.txt#StatBonusTable
+***** [l] birth.txt#LifeRating
+***** [m] birth.txt#CharName

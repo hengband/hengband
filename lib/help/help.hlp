@@ -2,37 +2,37 @@ Welcome to the Hengband Online Help System.
 
 Please choose one of the following online help files:
 
-    (0) General Information            (general.hlp)
-    (1) Creating a Character           (birth.hlp)
-    (2) Character Attributes           (charattr.hlp)
-    (3) The Town and Wilderness        (town.hlp)
-    (4) The Dungeon                    (dungeon.hlp)
-    (5) Hengband Objects               (objects.hlp)
-    (6) Monsters and Pets              (monster.hlp)
-    (7) Attacking and Weapons          (attack.hlp)
-    (8) Defending and Armor            (defend.hlp)
-    (9) Hengband Magic System          (magic.hlp)
-    (a) Hengband Commands              (command.hlp)
-    (b) Hengband Options               (option.hlp)
-    (c) User Preference Files          (pref.hlp)
-    (d) The Hengband Newbie Guide      (tang.txt)
-    (e) Version history                (version.txt)
+    (a) General Information            (general.hlp)
+    (b) Creating a Character           (birth.hlp)
+    (c) Character Attributes           (charattr.hlp)
+    (d) The Town and Wilderness        (town.hlp)
+    (e) The Dungeon                    (dungeon.hlp)
+    (f) Hengband Objects               (objects.hlp)
+    (g) Monsters and Pets              (monster.hlp)
+    (h) Attacking and Weapons          (attack.hlp)
+    (i) Defending and Armor            (defend.hlp)
+    (j) Hengband Magic System          (magic.hlp)
+    (k) Hengband Commands              (command.hlp)
+    (l) Hengband Options               (option.hlp)
+    (m) User Preference Files          (pref.hlp)
+    (n) The Hengband Newbie Guide      (tang.txt)
+    (o) Version history                (version.txt)
 
     (?) Help System Commands           (helpinfo.txt)
 
 
-***** [0] general.hlp
-***** [1] birth.hlp
-***** [2] charattr.hlp
-***** [3] town.hlp
-***** [4] dungeon.hlp
-***** [5] objects.hlp
-***** [6] monster.hlp
-***** [7] attack.hlp
-***** [8] defend.hlp
-***** [9] magic.hlp
-***** [a] command.hlp
-***** [b] option.hlp
-***** [c] pref.hlp
-***** [d] tang.txt
-***** [e] version.txt
+***** [a] general.hlp
+***** [b] birth.hlp
+***** [c] charattr.hlp
+***** [d] town.hlp
+***** [e] dungeon.hlp
+***** [f] objects.hlp
+***** [g] monster.hlp
+***** [h] attack.hlp
+***** [i] defend.hlp
+***** [j] magic.hlp
+***** [k] command.hlp
+***** [l] option.hlp
+***** [m] pref.hlp
+***** [n] tang.txt
+***** [o] version.txt

@@ -6,7 +6,7 @@ adventure in the town called Outpost. Symbols appearing on your screen
 will represent the walls, floor, objects, features, and creatures
 lurking about. In order to direct your character through his
 adventure, you will enter single character commands (see command.txt
-[1]).
+[b]).
 
 We recommend that you go to the Yeek cave next to your starting
 position in the town of Outpost.  Although the King of Yeeks at the
@@ -41,7 +41,7 @@ mostly harmful to your character's well being. Symbols specific to the
 town and wilderness are shown below. Note that many creatures and
 objects from the dungeon may also appear in town and you should also
 review the comprehensive listing of all the various symbols which can
-be found in the dungeon section (see dungeon.txt#MapSymbols [2]).
+be found in the dungeon section (see dungeon.txt#MapSymbols [c]).
 
   Terrain                             Shops     
   -------                             -----
@@ -73,7 +73,7 @@ Fortunately, the various shops and the other special buildings are open
 on a 24-hour basis.
 
 The world of Hengband includes five towns separated by a wilderness
-and many dungeons. Fixed quests (see below [3]) could be begun by
+and many dungeons. Fixed quests (see below [d]) could be begun by
 entering certain buildings in the towns.
 
 While most people welcome these large world, they are not for everyone
@@ -81,7 +81,7 @@ and consequently, there are three possible town options in Hengband -
 the 'Standard' town(s), the 'Lite' town and the 'Vanilla' town. The
 default is the standard town and the lite town and the vanilla town
 options can be selected by pressing '=' during character
-generation. (see option.txt#StartUp [4])
+generation. (see option.txt#StartUp [e])
 
 Your choice of town is fixed for the duration of your character's
 life and will be the new default for future characters created with
@@ -179,7 +179,7 @@ the name of the store, the maximum amount of cash that the store owner
 will pay for any one item, and the store inventory, listed along with
 tentative prices, which will become "fixed" (at the "final offer")
 should you ever manage to haggle a store owner down to his final offer
-(see below [5]).
+(see below [f]).
 
 You will also see an (incomplete) list of available commands. Note that
 many of the commands which work in the dungeon work in the stores as
@@ -365,8 +365,8 @@ Updated    : Hengband 1.0.11
 
 
 ***** Begin Hyperlinks
-***** [1] command.txt
-***** [2] dungeon.txt#MapSymbols
-***** [3] town.txt#FixedQuests
-***** [4] option.txt#StartUp
-***** [5] town.txt#Bartering
+***** [b] command.txt
+***** [c] dungeon.txt#MapSymbols
+***** [d] town.txt#FixedQuests
+***** [e] option.txt#StartUp
+***** [f] town.txt#Bartering

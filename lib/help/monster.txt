@@ -11,7 +11,7 @@ defeat.
 
 Many monsters have the same letter symbol and sometimes color on the
 screen. The exact species or type of creature can be discovered by
-'l'ooking at it (see commdesc.txt#Looking [1]). 
+'l'ooking at it (see commdesc.txt#Looking [b]). 
  
   a   Giant Ant                       A   Angelic being
   b   Giant Bat                       B   Bird
@@ -347,4 +347,4 @@ Updated    : Zangband DevTeam
 Updated    : Hengband 1.0.11
 
 ***** Begin Hyperlinks
-***** [1] commdesc.txt#Looking
+***** [b] commdesc.txt#Looking

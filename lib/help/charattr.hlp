@@ -2,25 +2,25 @@ Character Attributes
 
 Please choose one of the following online help files:
 
-    (0) Creating a Character          (charattr.txt)
-    (1) The Races                     (charattr.txt#TheRaces)
-    (2) The Classes                   (charattr.txt#TheClasses)
-    (2) The Personality               (charattr.txt#ThePersonality)
-    (4) Primary Statistics            (charattr.txt#PrimaryStats)
-    (5) Primary Skills                (charattr.txt#PrimarySkills)
-    (6) Proficiency Levels of Skills  (charattr.txt#Proficiency)
-    (7) Stat Bonus Tables             (charattr.txt#StatBonusTable)
-    (8) Ability Tables                (charattr.txt#SkillBonusTable)
+    (a) Creating a Character          (charattr.txt)
+    (b) The Races                     (charattr.txt#TheRaces)
+    (c) The Classes                   (charattr.txt#TheClasses)
+    (c) The Personality               (charattr.txt#ThePersonality)
+    (e) Primary Statistics            (charattr.txt#PrimaryStats)
+    (f) Primary Skills                (charattr.txt#PrimarySkills)
+    (g) Proficiency Levels of Skills  (charattr.txt#Proficiency)
+    (h) Stat Bonus Tables             (charattr.txt#StatBonusTable)
+    (i) Ability Tables                (charattr.txt#SkillBonusTable)
 
     (?) Help System Commands          (helpinfo.txt)
 
 
-***** [0] charattr.txt
-***** [1] charattr.txt#TheRaces
-***** [2] charattr.txt#TheClasses
-***** [3] charattr.txt#ThePersonality
-***** [4] charattr.txt#PrimaryStats
-***** [5] charattr.txt#PrimarySkills
-***** [6] charattr.txt#Proficiency
-***** [7] charattr.txt#StatBonusTable
-***** [8] charattr.txt#SkillBonusTable
+***** [a] charattr.txt
+***** [b] charattr.txt#TheRaces
+***** [c] charattr.txt#TheClasses
+***** [d] charattr.txt#ThePersonality
+***** [e] charattr.txt#PrimaryStats
+***** [f] charattr.txt#PrimarySkills
+***** [g] charattr.txt#Proficiency
+***** [h] charattr.txt#StatBonusTable
+***** [i] charattr.txt#SkillBonusTable

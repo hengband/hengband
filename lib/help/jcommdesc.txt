@@ -345,7 +345,7 @@
      アイテムの表示の後ろの "{}" 内に表示されます。銘は指定したアイテム
      (の束)それ自身に刻まれるものであって、自動的に全ての同種のアイテ
      ムに銘が記載されるわけではありません。特定の銘はゲーム中で意味を
-     持ちます(jobjects.txt#Inscriptions [1]を参照)。
+     持ちます(jobjects.txt#Inscriptions [b]を参照)。
 
 アイテムの銘を消す: Uninscribe an object (})
      このコマンドはアイテムに刻まれた銘を消去します。ゲームが自動的に
@@ -677,4 +677,4 @@ Updated    : Hengband 1.0.11
 
 
 ***** Begin Hyperlinks
-***** [1] jobjects.txt#Inscriptions
+***** [b] jobjects.txt#Inscriptions

@@ -2,21 +2,21 @@ Hengband Commands.
 
 Please choose one of the following online help files:
 
-    (0) Hengband Commands           (command.txt)
-    (1) Original Keyset             (command.txt#OriginalKeyset)
-    (2) Roguelike Keyset            (command.txt#RogueKeyset)
-    (3) Special Keys                (command.txt#SpecialKeys)
-    (4) Command Counts              (command.txt#CommandCounts)
-    (5) Selection of Objects        (command.txt#ObjectSelection)
-    (6) Command Descriptions        (commdesc.hlp)
+    (a) Hengband Commands           (command.txt)
+    (b) Original Keyset             (command.txt#OriginalKeyset)
+    (c) Roguelike Keyset            (command.txt#RogueKeyset)
+    (d) Special Keys                (command.txt#SpecialKeys)
+    (e) Command Counts              (command.txt#CommandCounts)
+    (f) Selection of Objects        (command.txt#ObjectSelection)
+    (g) Command Descriptions        (commdesc.hlp)
 
     (?) Help System Commands        (helpinfo.txt)
 
 
-***** [0] command.txt
-***** [1] command.txt#OriginalKeyset
-***** [2] command.txt#RogueKeyset
-***** [3] command.txt#SpecialKeys
-***** [4] command.txt#CommandCounts
-***** [5] command.txt#ObjectSelection
-***** [6] commdesc.hlp
+***** [a] command.txt
+***** [b] command.txt#OriginalKeyset
+***** [c] command.txt#RogueKeyset
+***** [d] command.txt#SpecialKeys
+***** [e] command.txt#CommandCounts
+***** [f] command.txt#ObjectSelection
+***** [g] commdesc.hlp

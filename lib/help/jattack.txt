@@ -31,12 +31,12 @@
 なります。８つの方向どれかを選んでも、また「*」キーまたはスペースキー
 を押してターゲットモードに入ることも出来ます。
 ターゲットモードに関する詳しい解説はコマンド詳説のセクション
-(jcommdesc.txt#ThrowFire [1]を参照)にあります。
+(jcommdesc.txt#ThrowFire [b]を参照)にあります。
 
 オプションの一つである use_old_target を使えば常に直前に選んだダーゲッ
 トを自動的に選択でき、毎回同じモンスターを指定する手間を省けます。詳し
 い解説はユーザーインターフェースオプションのセクション
-(joption.txt#UserInterface [2]を参照)にあります。
+(joption.txt#UserInterface [c]を参照)にあります。
 
 ***** <AttackWalls>
 --- 壁の中のモンスターへの攻撃 ---
@@ -489,6 +489,6 @@ Updated    : Hengband 1.0.11
 
 
 ***** Begin Hyperlinks
-***** [1] jcommdesc.txt#ThrowFire
-***** [2] joption.txt#UserInterface
+***** [b] jcommdesc.txt#ThrowFire
+***** [c] joption.txt#UserInterface
 

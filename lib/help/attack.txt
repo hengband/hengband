@@ -36,13 +36,13 @@ attacking magical device (unless the spell or device has an area
 effect), you will be prompted for a direction. You may choose any of
 the eight movement directions or press '*' to enter targeting mode. A
 detailed explanation of targeting mode can be found in the section on
-Command Descriptions (see commdesc.txt#ThrowFire [1]).
+Command Descriptions (see commdesc.txt#ThrowFire [b]).
 
 You may also wish to make use of the use_old_target option which
 automatically selects the last target. This prevents you from having to
 target the same monster every time you attack it. An explanation of
 this option is found the section on User Interface Options (see
-option.txt#UserInterface [2]).
+option.txt#UserInterface [c]).
 
 ***** <AttackWalls>
 --- Attacking Monsters in Walls ---
@@ -511,5 +511,5 @@ Updated    : Zangband DevTeam
 Updated    : Hengband 1.0.11
 
 ***** Begin Hyperlinks
-***** [1] commdesc.txt#ThrowFire
-***** [2] option.txt#UserInterface
+***** [b] commdesc.txt#ThrowFire
+***** [c] option.txt#UserInterface

@@ -2,13 +2,13 @@
 
 This document gives a brief introduction to Hengband. You will probably
 want to browse through all the "help files", especially the sections on
-available commands (see command.txt [1] and commdesc.txt [2]), before
+available commands (see command.txt [b] and commdesc.txt [c]), before
 beginning any serious adventuring...
 
 
 The game of Hengband is a single player dungeon simulation. A player
 may choose from a number of races, classes and magic realms when
-creating a character (see charattr.txt [3]), and then "run" that
+creating a character (see charattr.txt [d]), and then "run" that
 character over a period of days, weeks, even months. Deep down inside,
 the real objective of the game is to increase your experience, and
 certain other characteristics, and also to collect useful items, to
@@ -43,7 +43,7 @@ Many towns and dungeons await you; good ones to explore early on
 include the orc caves and the Labyrinth.  To the northeast of the town
 of Morivant, near the center of the map, is the dread dungeon of
 Angband.  It is home to the Serpent of Chaos, whom you must kill in
-order to win the game. (see town.txt [5])
+order to win the game. (see town.txt [f])
 
 ***** <Winning>
 --- Winning The Game ---
@@ -92,7 +92,7 @@ send to the World Score Board.
 
 Whether your character is killed or you retire victorious, it will
 leave behind a reduced save file, which contains only the monster
-memory (see attack.txt#MonsterMemory [4]) and your option choices. It
+memory (see attack.txt#MonsterMemory [e]) and your option choices. It
 may be restored, in which case the new character is generated exactly
 as if the file was not there, but the new player will find his monster
 memory containing all the experience of past incarnations.
@@ -148,9 +148,9 @@ Updated    : Hengband 1.0.11
 
 
 ***** Begin Hyperlinks
-***** [1] command.txt
-***** [2] commdesc.txt
-***** [3] charattr.txt
-***** [4] attack.txt#MonsterMemory
-***** [5] town.txt
+***** [b] command.txt
+***** [c] commdesc.txt
+***** [d] charattr.txt
+***** [e] attack.txt#MonsterMemory
+***** [f] town.txt
 

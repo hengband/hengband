@@ -1,35 +1,35 @@
 [ 変愚蛮怒・オンライン・ヘルプ・システムへようこそ ]
   参照したいヘルプの番号を押して下さい:
 
- (0)全体的な情報        (jgeneral.hlp) (j)追加情報    (jspecail.hlp)
- (1)キャラクター作成    (jbirth  .hlp) (e)英語版ヘルプ(help    .hlp)
- (2)種族、職業、性格    (jcharattr.hlp)
- (3)街と荒野            (jtown   .hlp)
- (4)ダンジョンの探険    (jdungeon.hlp)
- (5)アイテム            (jobjects.hlp)
- (6)モンスター          (jmonster.hlp)
- (7)攻撃と武器          (jattack .hlp)
- (8)防御と防具          (jdefend .hlp)
- (9)魔法のシステム      (jmagic  .hlp)
- (a)コマンドの解説      (jcommand.hlp)
- (b)オプションの一覧    (joption .hlp)
- (c)ユーザー設定ファイル(jpref   .hlp)
- (d)変愚蛮怒初心者ガイド(jtang   .txt)   
+ (a)全体的な情報        (jgeneral.hlp) (u)追加情報    (jspecail.hlp)
+ (b)キャラクター作成    (jbirth  .hlp) (o)英語版ヘルプ(help    .hlp)
+ (c)種族、職業、性格    (jcharattr.hlp)
+ (d)街と荒野            (jtown   .hlp)
+ (e)ダンジョンの探険    (jdungeon.hlp)
+ (f)アイテム            (jobjects.hlp)
+ (g)モンスター          (jmonster.hlp)
+ (h)攻撃と武器          (jattack .hlp)
+ (i)防御と防具          (jdefend .hlp)
+ (j)魔法のシステム      (jmagic  .hlp)
+ (k)コマンドの解説      (jcommand.hlp)
+ (l)オプションの一覧    (joption .hlp)
+ (m)ユーザー設定ファイル(jpref   .hlp)
+ (n)変愚蛮怒初心者ガイド(jtang   .txt)   
 
  (?)ヘルプシステムの使用法      (jhelpinfo.txt)
-***** [0] jgeneral.hlp
-***** [1] jbirth.hlp
-***** [2] jcharattr.hlp
-***** [3] jtown.hlp
-***** [4] jdungeon.hlp
-***** [5] jobjects.hlp
-***** [6] jmonster.hlp
-***** [7] jattack.hlp
-***** [8] jdefend.hlp
-***** [9] jmagic.hlp
-***** [a] jcommand.hlp
-***** [b] joption.hlp
-***** [c] jpref.hlp
-***** [d] jtang.txt
-***** [j] jspecial.hlp
-***** [e] help.hlp
+***** [a] jgeneral.hlp
+***** [b] jbirth.hlp
+***** [c] jcharattr.hlp
+***** [d] jtown.hlp
+***** [e] jdungeon.hlp
+***** [f] jobjects.hlp
+***** [g] jmonster.hlp
+***** [h] jattack.hlp
+***** [i] jdefend.hlp
+***** [j] jmagic.hlp
+***** [k] jcommand.hlp
+***** [l] joption.hlp
+***** [m] jpref.hlp
+***** [n] jtang.txt
+***** [u] jspecial.hlp
+***** [o] help.hlp

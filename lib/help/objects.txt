@@ -4,7 +4,7 @@ The Hengband dungeons are full of objects and many monsters you meet
 will be carrying one or more items about their person which you may
 retrieve from their corpse should you be skillful enough to defeat
 them. You may pick up objects by moving on top of them. By setting
-various options (see option.txt#UserInterface [1]) you may choose to
+various options (see option.txt#UserInterface [b]) you may choose to
 pick up items automatically or to be prompted before picking up
 objects.
 
@@ -119,7 +119,7 @@ extent possible the compacting is performed on objects some distance
 away from the players current position. During compaction, items are
 removed in order of increasing quality with the least useful items
 removed first. Ego items are rarely removed from the level during the
-compaction process while artifacts (see below [3]) are never removed.
+compaction process while artifacts (see below [d]) are never removed.
 
 
 ***** <CursedObjects>
@@ -246,9 +246,9 @@ Table 1 - Pseudo-Id ability of the Classes
     Monk               Weak       Fast
 
 
-When you pseudo-id an item, it will be inscribed (see below [4]) with
+When you pseudo-id an item, it will be inscribed (see below [e]) with
 the quality level you have determined it to be of. This inscription
-will remain until you identify it (see below [5]) at which time it will
+will remain until you identify it (see below [f]) at which time it will
 be removed. The various inscriptions and their meanings are as follows:
 
 
@@ -311,11 +311,11 @@ you purchase in the town.
 
 In addition to the ordinary weapons and armor your character may find
 in the dungeon, some of them may be endowed with additional powers.
-These objects fall into three types: (1) artifacts which are dealt with
-below and can be identified by their name; (2) Ego Weapons which are
+These objects fall into three types: (b) artifacts which are dealt with
+below and can be identified by their name; (c) Ego Weapons which are
 described more fully in Attacking Monsters (see attack.txt#EgoArtifact
-[6]); and (3) Ego Armors which are discussed more fully in Defending
-Yourself (see defend.txt#EgoArtifact [7]).
+[g]); and (d) Ego Armors which are discussed more fully in Defending
+Yourself (see defend.txt#EgoArtifact [h]).
 
 Unlike artifacts which are unique and may only be found once in each
 game, it is not unusual to find several Ego Weapons or Ego Armor of the
@@ -392,7 +392,7 @@ not yet found and as a result is often best used on the town level.
 In addition to the ordinary weapons, armor and other equipment your
 character may find in the dungeon, some such items may be endowed with
 additional powers such as sustains, resistances and abilities. Such
-items fall into three categories: (1) artifacts; (2) ego items; and (3)
+items fall into three categories: (b) artifacts; (c) ego items; and (d)
 ordinary items which grant additional powers. In addition to their
 fixed powers, some of these objects may also be granted an additional
 power (or powers) in a random fashion.
@@ -446,7 +446,7 @@ You may "inscribe" any object with a textual inscription of your
 choice. These inscriptions are not limited in length, though you may
 not be able to see the whole inscription on the item. The game applies
 special meaning to inscriptions containing any text of the form "@#" or
-"@x#" or "!x" or "!*" (see command.txt#ObjectSelection [8]) .
+"@x#" or "!x" or "!*" (see command.txt#ObjectSelection [i]) .
 
 The game provides some "fake" inscriptions to help you keep track of
 your possessions. Wands and staves which are known to be empty will be
@@ -796,10 +796,10 @@ Updated    : Zangband DevTeam
 Updated    : Hengband 1.0.11
 
 ***** Begin Hyperlinks
-***** [1] option.txt#UserInterface
-***** [3] objects.txt#Artifacts
-***** [4] objects.txt#Inscriptions
-***** [5] objects.txt#Identifying
-***** [6] attack.txt#EgoArtifact
-***** [7] defend.txt#EgoArtifact
-***** [8] command.txt#ObjectSelection
+***** [b] option.txt#UserInterface
+***** [d] objects.txt#Artifacts
+***** [e] objects.txt#Inscriptions
+***** [f] objects.txt#Identifying
+***** [g] attack.txt#EgoArtifact
+***** [h] defend.txt#EgoArtifact
+***** [i] command.txt#ObjectSelection

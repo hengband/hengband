@@ -2,26 +2,26 @@
 
 参照したいオンライン・ヘルプの番号を押して下さい:
 
-    (0) ユーザー設定ファイル             (jpref.txt)
-    (1) ユーザー設定ファイルのコマンド   (jpref.txt#Commands)
-    (2) マクロ                           (jpref.txt#Macros)
-    (3) キー配置                         (jpref.txt#Keymaps)
-    (4) 画面表示                         (jpref.txt#Visuals)
-    (5) カラー                           (jpref.txt#Colors)
-    (6) オプション                       (jpref.txt#Options)
-    (7) 自動拾い/破壊設定ファイル        (jpref.txt#Autopick)
-    (8) 条件分岐付きの設定               (jpref.txt#Condition)
+    (a) ユーザー設定ファイル             (jpref.txt)
+    (b) ユーザー設定ファイルのコマンド   (jpref.txt#Commands)
+    (c) マクロ                           (jpref.txt#Macros)
+    (d) キー配置                         (jpref.txt#Keymaps)
+    (e) 画面表示                         (jpref.txt#Visuals)
+    (f) カラー                           (jpref.txt#Colors)
+    (g) オプション                       (jpref.txt#Options)
+    (h) 自動拾い/破壊設定ファイル        (jpref.txt#Autopick)
+    (i) 条件分岐付きの設定               (jpref.txt#Condition)
 
 
     (?) ヘルプシステムの使用法           (jhelpinfo.txt)
 
 
-***** [0] jpref.txt
-***** [1] jpref.txt#Commands
-***** [2] jpref.txt#Macros
-***** [3] jpref.txt#Keymaps
-***** [4] jpref.txt#Visuals
-***** [5] jpref.txt#Colors
-***** [6] jpref.txt#Options
-***** [7] jpref.txt#Autopick
-***** [8] jpref.txt#Condition
+***** [a] jpref.txt
+***** [b] jpref.txt#Commands
+***** [c] jpref.txt#Macros
+***** [d] jpref.txt#Keymaps
+***** [e] jpref.txt#Visuals
+***** [f] jpref.txt#Colors
+***** [g] jpref.txt#Options
+***** [h] jpref.txt#Autopick
+***** [i] jpref.txt#Condition

@@ -2,19 +2,19 @@ An Introduction to Hengband and general information.
 
 Please choose one of the following online help files:
 
-    (0) General Information        (general.txt)
-    (1) First Place to Go          (general.txt#First)
-    (2) Winning the Game           (general.txt#Winning)
-    (3) Upon Death and Dying       (general.txt#UponDeath)
-    (4) Hengband on the Web        (general.txt#Web)
-    (5) Version History            (version.txt)
+    (a) General Information        (general.txt)
+    (b) First Place to Go          (general.txt#First)
+    (c) Winning the Game           (general.txt#Winning)
+    (d) Upon Death and Dying       (general.txt#UponDeath)
+    (e) Hengband on the Web        (general.txt#Web)
+    (f) Version History            (version.txt)
 
     (?) Help System Commands       (helpinfo.txt)
 
 
-***** [0] general.txt
-***** [1] general.txt#Overview
-***** [2] general.txt#Winning
-***** [3] general.txt#UponDeath
-***** [4] general.txt#Web
-***** [5] version.txt
+***** [a] general.txt
+***** [b] general.txt#Overview
+***** [c] general.txt#Winning
+***** [d] general.txt#UponDeath
+***** [e] general.txt#Web
+***** [f] version.txt

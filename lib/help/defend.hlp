@@ -2,25 +2,25 @@ Defending and Armor.
 
 Please choose one of the following online help files:
 
-    (0) Defending and Armor               (defend.txt)
-    (1) Armor Class                       (defend.txt#Armor)
-    (2) Resisting Magical Attacks         (defend.txt#ResistingMagic)
-    (3) Ego Armor and Artifacts           (defend.txt#EgoArtifact)
-    (4) The Resistances                   (defend.txt#Resistances)
-    (5) Unresistable Attacks              (defend.txt#Unresistable)
-    (6) Immunities                        (defend.txt#Immunities)
-    (7) Miscellaneous Resists             (defend.txt#Miscellaneous)
-    (8) Recovering from Attacks           (defend.txt#Recovering)
+    (a) Defending and Armor               (defend.txt)
+    (b) Armor Class                       (defend.txt#Armor)
+    (c) Resisting Magical Attacks         (defend.txt#ResistingMagic)
+    (d) Ego Armor and Artifacts           (defend.txt#EgoArtifact)
+    (e) The Resistances                   (defend.txt#Resistances)
+    (f) Unresistable Attacks              (defend.txt#Unresistable)
+    (g) Immunities                        (defend.txt#Immunities)
+    (h) Miscellaneous Resists             (defend.txt#Miscellaneous)
+    (i) Recovering from Attacks           (defend.txt#Recovering)
 
     (?) Help System Commands              (helpinfo.txt)
  
 
-***** [0] defend.txt
-***** [1] defend.txt#Armor
-***** [2] defend.txt#ResistingMagic
-***** [3] defend.txt#EgoArtifact
-***** [4] defend.txt#Resistances
-***** [5] defend.txt#Unresistable
-***** [6] defend.txt#Immunities
-***** [7] defend.txt#Miscellaneous
-***** [8] defend.txt#Recovering
+***** [a] defend.txt
+***** [b] defend.txt#Armor
+***** [c] defend.txt#ResistingMagic
+***** [d] defend.txt#EgoArtifact
+***** [e] defend.txt#Resistances
+***** [f] defend.txt#Unresistable
+***** [g] defend.txt#Immunities
+***** [h] defend.txt#Miscellaneous
+***** [i] defend.txt#Recovering

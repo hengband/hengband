@@ -9,7 +9,7 @@ Zangband では色々と武器や防具が追加されています。ここではそれらのアイ
 
 いずれも魔法の込められた棒状のアイテムです。設定を借りたと思われる
 ＡＤ＆Ｄでの定義をフェリアナスさんの解説から加筆して引用します。ゲーム
-中での性質の違いは jobjects.txt#ObjectTypes [1]を参照してください。　
+中での性質の違いは jobjects.txt#ObjectTypes [b]を参照してください。　
 
     ワンド(wand)は魔法少女のバトンのような小さな杖です。「魔法の杖」以
     外の意味がほとんどなく、だいたいは装飾や先端にワンポイント等のつい
@@ -226,4 +226,4 @@ http://208.167.74.218:2700/tiktok/Docs/DeathlordManual.txt から取ったと
 --
 執筆：板倉
 ***** Begin Hyperlinks
-***** [1] jobjects.txt#ObjectTypes
+***** [b] jobjects.txt#ObjectTypes

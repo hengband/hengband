@@ -2,23 +2,23 @@
 
 参照したいオンライン・ヘルプの番号を押して下さい:
 
-    (0) 変愚蛮怒のモンスター        (jmonster.txt)
-    (1) モンスターの記号            (jmonster.txt#MonsterSymbols)
-    (2) モンスターの色              (jmonster.txt#MonsterColors)
-    (3) モンスターの思い出          (jmonster.txt#MonsterMemory)
-    (4) ユニークモンスター          (jmonster.txt#Uniques)
-    (5) 正気度チェック              (jmonster.txt#EldritchHorror)
-    (6) ペット                      (jmonster.txt#Pets)
-    (7) 友好的なモンスター          (jmonster.txt#Friendly)
+    (a) 変愚蛮怒のモンスター        (jmonster.txt)
+    (b) モンスターの記号            (jmonster.txt#MonsterSymbols)
+    (c) モンスターの色              (jmonster.txt#MonsterColors)
+    (d) モンスターの思い出          (jmonster.txt#MonsterMemory)
+    (e) ユニークモンスター          (jmonster.txt#Uniques)
+    (f) 正気度チェック              (jmonster.txt#EldritchHorror)
+    (g) ペット                      (jmonster.txt#Pets)
+    (h) 友好的なモンスター          (jmonster.txt#Friendly)
 
     (?) ヘルプシステムの使用法      (jhelpinfo.txt)
 
 
-***** [0] jmonster.txt
-***** [1] jmonster.txt#MonsterSymbols
-***** [2] jmonster.txt#MonsterColors
-***** [3] jmonster.txt#MonsterMemory
-***** [4] jmonster.txt#Uniques
-***** [5] jmonster.txt#EldritchHorror
-***** [6] jmonster.txt#Pets
-***** [7] jmonster.txt#Friendly
+***** [a] jmonster.txt
+***** [b] jmonster.txt#MonsterSymbols
+***** [c] jmonster.txt#MonsterColors
+***** [d] jmonster.txt#MonsterMemory
+***** [e] jmonster.txt#Uniques
+***** [f] jmonster.txt#EldritchHorror
+***** [g] jmonster.txt#Pets
+***** [h] jmonster.txt#Friendly

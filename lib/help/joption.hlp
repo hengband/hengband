@@ -2,35 +2,35 @@
 
  参照したいオンライン・ヘルプを選んで下さい:
 
-    (0) 変愚蛮怒 オプション一覧             (joption.txt)
-    (1) オプション1 -- キー入力             (joption.txt#Input)
-    (2) オプション2 -- 画面出力             (joption.txt#Output)
-    (3) オプション3 -- ゲームプレイ         (joption.txt#GamePlay)
-    (4) オプション4 -- 行動中止             (joption.txt#Disturbance)
-    (5) オプション5 -- 効率化               (joption.txt#Efficiency)
-    (6) オプション6 -- 簡易アイテム自動破壊 (joption.txt#AutoDestroyer)
-    (7) オプションR -- プレイ記録           (joption.txt#PlayRecord)
-    (8) オプションD -- 基本ウェイト量       (joption.txt#BaseDelay)
-    (9) オプションH -- 低ヒットポイント警告 (joption.txt#Hitpoint)
-    (a) オプションA -- 自動セーブオプション (joption.txt#Autosave)
-    (b) オプションW -- ウィンドウ フラグ    (joption.txt#Window)
-    (c) オプションC -- 詐欺オプション       (joption.txt#Cheating)
-    (d) 初期オプション                      (joption.txt#StartUp)
+    (a) 変愚蛮怒 オプション一覧             (joption.txt)
+    (b) オプション1 -- キー入力             (joption.txt#Input)
+    (c) オプション2 -- 画面出力             (joption.txt#Output)
+    (d) オプション3 -- ゲームプレイ         (joption.txt#GamePlay)
+    (e) オプション4 -- 行動中止             (joption.txt#Disturbance)
+    (f) オプション5 -- 効率化               (joption.txt#Efficiency)
+    (g) オプション6 -- 簡易アイテム自動破壊 (joption.txt#AutoDestroyer)
+    (h) オプションR -- プレイ記録           (joption.txt#PlayRecord)
+    (i) オプションD -- 基本ウェイト量       (joption.txt#BaseDelay)
+    (j) オプションH -- 低ヒットポイント警告 (joption.txt#Hitpoint)
+    (k) オプションA -- 自動セーブオプション (joption.txt#Autosave)
+    (l) オプションW -- ウィンドウ フラグ    (joption.txt#Window)
+    (m) オプションC -- 詐欺オプション       (joption.txt#Cheating)
+    (n) 初期オプション                      (joption.txt#StartUp)
 
     (?) ヘルプシステムの使用法      (jhelpinfo.txt)
 
 
-***** [0] joption.txt
-***** [1] joption.txt#Input
-***** [2] joption.txt#Output
-***** [3] joption.txt#GamePlay
-***** [4] joption.txt#Disturbance
-***** [5] joption.txt#Efficiency
-***** [6] joption.txt#AutoDestroyer
-***** [7] joption.txt#PlayRecord
-***** [8] joption.txt#BaseDelay
-***** [9] joption.txt#Hitpoint
-***** [a] joption.txt#Autosave
-***** [b] joption.txt#Window
-***** [c] joption.txt#Cheating
-***** [d] joption.txt#StartUp
+***** [a] joption.txt
+***** [b] joption.txt#Input
+***** [c] joption.txt#Output
+***** [d] joption.txt#GamePlay
+***** [e] joption.txt#Disturbance
+***** [f] joption.txt#Efficiency
+***** [g] joption.txt#AutoDestroyer
+***** [h] joption.txt#PlayRecord
+***** [i] joption.txt#BaseDelay
+***** [j] joption.txt#Hitpoint
+***** [k] joption.txt#Autosave
+***** [l] joption.txt#Window
+***** [m] joption.txt#Cheating
+***** [n] joption.txt#StartUp

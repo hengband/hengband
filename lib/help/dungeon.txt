@@ -6,7 +6,7 @@ towns and a large wilderness area, the bulk of your adventuring will
 take place in the dungeon. Symbols appearing on your screen will
 represent the dungeon's walls, floor, objects, features, and creatures
 lurking about. In order to direct your character through his adventure,
-you will enter single character commands (see command.txt [1]).
+you will enter single character commands (see command.txt [b]).
 
 
 ***** <MapSymbols>
@@ -120,7 +120,7 @@ level and 'reset' the recall depth to that level (instead of the
 deepest level).
 
 A more complete description of Hengband objects is found elsewhere in
-the documentation (see object.txt [2]).
+the documentation (see object.txt [c]).
 
 
 ***** <Mining>
@@ -299,5 +299,5 @@ Updated    : Zangband DevTeam
 Updated    : Hengband 1.0.11
 
 ***** Begin Hyperlinks
-***** [1] command.txt
-***** [2] object.txt
+***** [b] command.txt
+***** [c] object.txt

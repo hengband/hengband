@@ -1,6 +1,6 @@
 === Character Attributes ===
 
-During the process of Character Generation (see birth.txt [1]), you
+During the process of Character Generation (see birth.txt [b]), you
 will select your character's four primary attributes - its sex, race,
 class and personality. If you select a spellcasting class, you will
 also make a choice of magic realms at that time. Your character will
@@ -28,7 +28,7 @@ which modify the abilities of the character in a variety of ways. For
 example, strength affects your carrying capacity, the amount of damage
 you to a monster when you hit it and the number of blows per round you
 get with a weapon. A more complete discussion of the primary
-statistics is contained later in this document (see below [2]).
+statistics is contained later in this document (see below [c]).
 
 --- Experience ---
 
@@ -74,7 +74,7 @@ items, which may be kept, or sold to a shop-keeper for more gold.
 Each character has an armor class, representing how well the character
 can avoid damage. Your armor class is affected by your dexterity and
 your equipment. A more detailed discussion of Armor Class can be found
-in the Combat section (see attack.txt#Armor [3]).
+in the Combat section (see attack.txt#Armor [d]).
 
 --- Hit Points ---
 
@@ -101,7 +101,7 @@ experience level, stats and their current equipment. These skills have
 fairly obvious effects, but will be described more completely below.
 The starting abilities of a character are based upon race and class.
 Abilities may be adjusted by high or low stats, and may increase with
-the level of the character (see below for details [4]).
+the level of the character (see below for details [e]).
 
 Each character may have one or more racially intrinsic skills and
 racial abilities, which may also include special resistances and
@@ -945,7 +945,7 @@ combat.
 For the proficiency level of the Riding, you need to attack in melee
 or shoot with missile weapon when riding.  And your speed increases up
 to the mount's speed when the proficiency level increases.  (see
-monster.txt#Pets [5])
+monster.txt#Pets [f])
 
 
 ***** <StatBonusTable>
@@ -1168,8 +1168,8 @@ Updated    : Zangband DevTeam
 Updated    : Hengband 1.0.11
 
 ***** Begin Hyperlinks
-***** [1] birth.txt
-***** [2] charattr.txt#PrimaryStats
-***** [3] defend.txt#Armor
-***** [4] charattr.txt#PrimarySkills
-***** [5] monster.txt#Pets
+***** [b] birth.txt
+***** [c] charattr.txt#PrimaryStats
+***** [d] defend.txt#Armor
+***** [e] charattr.txt#PrimarySkills
+***** [f] monster.txt#Pets

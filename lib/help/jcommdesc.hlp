@@ -2,41 +2,41 @@ Hengband コマンド詳説
 
 参照したいオンライン・ヘルプを選んで下さい:
 
-    (0) コマンド詳説                    (jcommdesc.txt)
-    (1) 一覧関係のコマンド              (jcommdesc.txt#Inventory)
-    (2) 移動のコマンド                  (jcommdesc.txt#Movement)
-    (3) 休憩のコマンド                  (jcommdesc.txt#Resting)
-    (4) 探索のコマンド                  (jcommdesc.txt#Searching)
-    (5) 変化を及ぼすコマンド            (jcommdesc.txt#Alter)
-    (6) 呪文と祈りのコマンド            (jcommdesc.txt#SpellPrayer)
-    (7) アイテムを操作するコマンド      (jcommdesc.txt#ObjectManip)
-    (8) 魔法のアイテムのコマンド        (jcommdesc.txt#MagicalObject)
-    (9) 武器を投げる、撃つコマンド      (jcommdesc.txt#ThrowFire)
-    (a) 見るコマンド                    (jcommdesc.txt#Looking)
-    (b) メッセージ関係のコマンド        (jcommdesc.txt#Message)
-    (c) 状態を知るコマンド              (jcommdesc.txt#GameStatus)
-    (d) セーブとゲームをやめるコマンド  (jcommdesc.txt#SaveExit)
-    (e) ユーザー設定ファイルのコマンド  (jcommdesc.txt#UserPref)
-    (f) ヘルプ                          (jcommdesc.txt#Help)
-    (g) 特別コマンド                    (jcommdesc.txt#Extra)
+    (a) コマンド詳説                    (jcommdesc.txt)
+    (b) 一覧関係のコマンド              (jcommdesc.txt#Inventory)
+    (c) 移動のコマンド                  (jcommdesc.txt#Movement)
+    (d) 休憩のコマンド                  (jcommdesc.txt#Resting)
+    (e) 探索のコマンド                  (jcommdesc.txt#Searching)
+    (f) 変化を及ぼすコマンド            (jcommdesc.txt#Alter)
+    (g) 呪文と祈りのコマンド            (jcommdesc.txt#SpellPrayer)
+    (h) アイテムを操作するコマンド      (jcommdesc.txt#ObjectManip)
+    (i) 魔法のアイテムのコマンド        (jcommdesc.txt#MagicalObject)
+    (j) 武器を投げる、撃つコマンド      (jcommdesc.txt#ThrowFire)
+    (k) 見るコマンド                    (jcommdesc.txt#Looking)
+    (l) メッセージ関係のコマンド        (jcommdesc.txt#Message)
+    (m) 状態を知るコマンド              (jcommdesc.txt#GameStatus)
+    (n) セーブとゲームをやめるコマンド  (jcommdesc.txt#SaveExit)
+    (o) ユーザー設定ファイルのコマンド  (jcommdesc.txt#UserPref)
+    (p) ヘルプ                          (jcommdesc.txt#Help)
+    (r) 特別コマンド                    (jcommdesc.txt#Extra)
 
     (?) ヘルプシステムの使用法          (jhelpinfo.txt)
 
 
-***** [0] jcommdesc.txt
-***** [1] jcommdesc.txt#Inventory
-***** [2] jcommdesc.txt#Movement
-***** [3] jcommdesc.txt#Resting
-***** [4] jcommdesc.txt#Searching
-***** [5] jcommdesc.txt#Alter
-***** [6] jcommdesc.txt#SpellPrayer
-***** [7] jcommdesc.txt#ObjectManip
-***** [8] jcommdesc.txt#MagicalObject
-***** [9] jcommdesc.txt#ThrowFire
-***** [a] jcommdesc.txt#Looking
-***** [b] jcommdesc.txt#Message
-***** [c] jcommdesc.txt#GameStatus
-***** [d] jcommdesc.txt#SaveExit
-***** [e] jcommdesc.txt#UserPref
-***** [f] jcommdesc.txt#Help
-***** [g] jcommdesc.txt#Extra
+***** [a] jcommdesc.txt
+***** [b] jcommdesc.txt#Inventory
+***** [c] jcommdesc.txt#Movement
+***** [d] jcommdesc.txt#Resting
+***** [e] jcommdesc.txt#Searching
+***** [f] jcommdesc.txt#Alter
+***** [g] jcommdesc.txt#SpellPrayer
+***** [h] jcommdesc.txt#ObjectManip
+***** [i] jcommdesc.txt#MagicalObject
+***** [j] jcommdesc.txt#ThrowFire
+***** [k] jcommdesc.txt#Looking
+***** [l] jcommdesc.txt#Message
+***** [m] jcommdesc.txt#GameStatus
+***** [n] jcommdesc.txt#SaveExit
+***** [o] jcommdesc.txt#UserPref
+***** [p] jcommdesc.txt#Help
+***** [r] jcommdesc.txt#Extra

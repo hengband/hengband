@@ -2,33 +2,33 @@
 
 参照したいオンライン・ヘルプの番号を押して下さい:
 
-    (0) 街と荒野                           (jtown.txt)
-    (1) 街と荒野に現れる文字               (jtown.txt#MapSymbols)
-    (2) 街のマップ                         (jtown.txt#TownLevel)
-    (3) 標準の街                           (jtown.txt#StandardTown)
-    (4) 小規模な街                         (jtown.txt#LiteTown)
-    (5) 元祖の町                           (jtown.txt#VanillaTown)
-    (6) 街の住民                           (jtown.txt#Townspeople)
-    (7) 街での買い物                       (jtown.txt#Shopping)
-    (8) 売買交渉                           (jtown.txt#Bartering)
-    (9) アイテムの価格                     (jtown.txt#ObjectPricing)
-    (a) 店の一覧                           (jtown.txt#TheShops)
-    (b) 特別な建物                         (jtown.txt#Buildings)
-    (c) 固定クエスト                       (jtown.txt#FixedQuests)
+    (a) 街と荒野                           (jtown.txt)
+    (b) 街と荒野に現れる文字               (jtown.txt#MapSymbols)
+    (c) 街のマップ                         (jtown.txt#TownLevel)
+    (d) 標準の街                           (jtown.txt#StandardTown)
+    (e) 小規模な街                         (jtown.txt#LiteTown)
+    (f) 元祖の町                           (jtown.txt#VanillaTown)
+    (g) 街の住民                           (jtown.txt#Townspeople)
+    (h) 街での買い物                       (jtown.txt#Shopping)
+    (i) 売買交渉                           (jtown.txt#Bartering)
+    (j) アイテムの価格                     (jtown.txt#ObjectPricing)
+    (k) 店の一覧                           (jtown.txt#TheShops)
+    (l) 特別な建物                         (jtown.txt#Buildings)
+    (m) 固定クエスト                       (jtown.txt#FixedQuests)
 
     (?) ヘルプシステムの使用法             (jhelpinfo.txt)
 
 
-***** [0] jtown.txt
-***** [1] jtown.txt#MapSymbols
-***** [2] jtown.txt#TownLevel
-***** [3] jtown.txt#StandardTown
-***** [4] jtown.txt#LiteTown
-***** [5] jtown.txt#VanillaTown
-***** [6] jtown.txt#Townspeople
-***** [7] jtown.txt#Shopping
-***** [8] jtown.txt#Bartering
-***** [9] jtown.txt#ObjectPricing
-***** [a] jtown.txt#TheShops
-***** [b] jtown.txt#Buildings
-***** [c] jtown.txt#FixedQuests
+***** [a] jtown.txt
+***** [b] jtown.txt#MapSymbols
+***** [c] jtown.txt#TownLevel
+***** [d] jtown.txt#StandardTown
+***** [e] jtown.txt#LiteTown
+***** [f] jtown.txt#VanillaTown
+***** [g] jtown.txt#Townspeople
+***** [h] jtown.txt#Shopping
+***** [i] jtown.txt#Bartering
+***** [j] jtown.txt#ObjectPricing
+***** [k] jtown.txt#TheShops
+***** [l] jtown.txt#Buildings
+***** [m] jtown.txt#FixedQuests

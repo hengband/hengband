@@ -2,23 +2,23 @@
 
 参照したいオンライン・ヘルプの番号を押して下さい:
 
-    (0) 街とダンジョン                        (jdungeon.txt)
-    (1) 画面上の文字                          (jdungeon.txt#MapSymbols)
-    (2) ダンジョンの内部                      (jdungeon.txt#WithinDungeon)
-    (3) ダンジョンで見つかるアイテム          (jdungeon.txt#Objects)
-    (4) 採掘                                  (jdungeon.txt#Mining)
-    (5) 階段、隠しドア、通路、部屋            (jdungeon.txt#StairsDoorsEtc)
-    (6) 階の雰囲気                            (jdungeon.txt#Feelings)
-    (7) ランダムクエスト                      (jdungeon.txt#RandomQuests)
+    (a) 街とダンジョン                        (jdungeon.txt)
+    (b) 画面上の文字                          (jdungeon.txt#MapSymbols)
+    (c) ダンジョンの内部                      (jdungeon.txt#WithinDungeon)
+    (d) ダンジョンで見つかるアイテム          (jdungeon.txt#Objects)
+    (e) 採掘                                  (jdungeon.txt#Mining)
+    (f) 階段、隠しドア、通路、部屋            (jdungeon.txt#StairsDoorsEtc)
+    (g) 階の雰囲気                            (jdungeon.txt#Feelings)
+    (h) ランダムクエスト                      (jdungeon.txt#RandomQuests)
 
     (?) Help System Commands                  (helpinfo.txt)
 
 
-***** [0] jdungeon.txt
-***** [1] jdungeon.txt#MapSymbols
-***** [2] jdungeon.txt#WithinDungeon
-***** [3] jdungeon.txt#Objects
-***** [4] jdungeon.txt#Mining
-***** [5] jdungeon.txt#StairsDoorsEtc
-***** [6] jdungeon.txt#Feelings
-***** [7] jdungeon.txt#RandomQuests
+***** [a] jdungeon.txt
+***** [b] jdungeon.txt#MapSymbols
+***** [c] jdungeon.txt#WithinDungeon
+***** [d] jdungeon.txt#Objects
+***** [e] jdungeon.txt#Mining
+***** [f] jdungeon.txt#StairsDoorsEtc
+***** [g] jdungeon.txt#Feelings
+***** [h] jdungeon.txt#RandomQuests

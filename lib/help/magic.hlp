@@ -2,19 +2,19 @@ Hengband Magic System.
 
 Please choose one of the following online help files:
 
-    (0) Hengband Magic System             (magic.txt)
-    (1) Class Spell Ability               (magic.txt#ClassSpellAbil)
-    (2) The Magic Realms                  (magic.txt#MagicRealms)
-    (3) On Casting Spells ...             (magic.txt#CastingSpells)
-    (4) Spell Types                       (magic.txt#SpellTypes)
-    (5) Hints and Tips                    (magic.txt#Hints)
+    (a) Hengband Magic System             (magic.txt)
+    (b) Class Spell Ability               (magic.txt#ClassSpellAbil)
+    (c) The Magic Realms                  (magic.txt#MagicRealms)
+    (d) On Casting Spells ...             (magic.txt#CastingSpells)
+    (e) Spell Types                       (magic.txt#SpellTypes)
+    (f) Hints and Tips                    (magic.txt#Hints)
 
     (?) Help System Commands              (helpinfo.txt)
 
 
-***** [0] magic.txt
-***** [1] magic.txt#ClassSpellAbil
-***** [2] magic.txt#MagicRealms
-***** [3] magic.txt#CastingSpells
-***** [4] magic.txt#SpellTypes
-***** [5] magic.txt#Hints
+***** [a] magic.txt
+***** [b] magic.txt#ClassSpellAbil
+***** [c] magic.txt#MagicRealms
+***** [d] magic.txt#CastingSpells
+***** [e] magic.txt#SpellTypes
+***** [f] magic.txt#Hints

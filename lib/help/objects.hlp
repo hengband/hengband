@@ -2,37 +2,37 @@ Hengband Objects.
 
 Please choose one of the following online help files:
 
-    (0) Hengband Objects               (objects.txt)
-    (1) Object Symbols                 (objects.txt#ObjectSymbols)
-    (2) Equipment and Inventory        (objects.txt#EquipInvent)
-    (3) Objects Generation             (objects.txt#Generation)
-    (4) Object Compaction              (objects.txt#Compaction)
-    (5) Cursed Objects                 (objects.txt#CursedObjects)
-    (6) The Ancient and Foul Curse     (objects.txt#AncientCurse)
-    (7) Object Flavors                 (objects.txt#ObjectFlavors)
-    (8) Pseudo-ID                      (objects.txt#PseudoID)
-    (9) Identifying Objects            (objects.txt#Identifying)
-    (a) Ego Objects                    (objects.txt#EgoObjects)
-    (b) Artifacts                      (objects.txt#Artifacts)
-    (c) Random Abilities of Objects    (objects.txt#RandomAbilities)
-    (d) Object Inscriptions            (objects.txt#Inscriptions)
-    (e) Object Types                   (objects.txt#ObjectTypes)
+    (a) Hengband Objects               (objects.txt)
+    (b) Object Symbols                 (objects.txt#ObjectSymbols)
+    (c) Equipment and Inventory        (objects.txt#EquipInvent)
+    (d) Objects Generation             (objects.txt#Generation)
+    (e) Object Compaction              (objects.txt#Compaction)
+    (f) Cursed Objects                 (objects.txt#CursedObjects)
+    (g) The Ancient and Foul Curse     (objects.txt#AncientCurse)
+    (h) Object Flavors                 (objects.txt#ObjectFlavors)
+    (i) Pseudo-ID                      (objects.txt#PseudoID)
+    (j) Identifying Objects            (objects.txt#Identifying)
+    (k) Ego Objects                    (objects.txt#EgoObjects)
+    (l) Artifacts                      (objects.txt#Artifacts)
+    (m) Random Abilities of Objects    (objects.txt#RandomAbilities)
+    (n) Object Inscriptions            (objects.txt#Inscriptions)
+    (o) Object Types                   (objects.txt#ObjectTypes)
 
     (?) Help System Commands           (helpinfo.txt)
 
 
-***** [0] objects.txt
-***** [1] objects.txt#ObjectSymbols
-***** [2] objects.txt#EquipInvent
-***** [3] objects.txt#Generation
-***** [4] objects.txt#Compaction
-***** [5] objects.txt#CursedObjects
-***** [6] objects.txt#AncientCurse
-***** [7] objects.txt#ObjectFlavors
-***** [8] objects.txt#PseudoID
-***** [9] objects.txt#Identifying
-***** [a] objects.txt#EgoObjects
-***** [b] objects.txt#Artifacts
-***** [c] objects.txt#RandomAbilities
-***** [d] objects.txt#Inscriptions
-***** [e] objects.txt#ObjectTypes
+***** [a] objects.txt
+***** [b] objects.txt#ObjectSymbols
+***** [c] objects.txt#EquipInvent
+***** [d] objects.txt#Generation
+***** [e] objects.txt#Compaction
+***** [f] objects.txt#CursedObjects
+***** [g] objects.txt#AncientCurse
+***** [h] objects.txt#ObjectFlavors
+***** [i] objects.txt#PseudoID
+***** [j] objects.txt#Identifying
+***** [k] objects.txt#EgoObjects
+***** [l] objects.txt#Artifacts
+***** [m] objects.txt#RandomAbilities
+***** [n] objects.txt#Inscriptions
+***** [o] objects.txt#ObjectTypes

@@ -2,19 +2,19 @@
 
 参照したいオンライン・ヘルプの番号を押して下さい:
 
-    (0) 変愚蛮怒の魔法システム            (jmagic.txt)
-    (1) 職業別魔法使用能力                (jmagic.txt#ClassSpellAbil)
-    (2) 魔法の領域                        (jmagic.txt#MagicRealms)
-    (3) 呪文の使用                        (jmagic.txt#CastingSpells)
-    (4) 呪文の種類                        (jmagic.txt#SpellTypes)
-    (5) ヒントと豆知識                    (jmagic.txt#Hints)
+    (a) 変愚蛮怒の魔法システム            (jmagic.txt)
+    (b) 職業別魔法使用能力                (jmagic.txt#ClassSpellAbil)
+    (c) 魔法の領域                        (jmagic.txt#MagicRealms)
+    (d) 呪文の使用                        (jmagic.txt#CastingSpells)
+    (e) 呪文の種類                        (jmagic.txt#SpellTypes)
+    (f) ヒントと豆知識                    (jmagic.txt#Hints)
 
     (?) ヘルプシステムの使用法            (jhelpinfo.txt)
 
 
-***** [0] jmagic.txt
-***** [1] jmagic.txt#ClassSpellAbil
-***** [2] jmagic.txt#MagicRealms
-***** [3] jmagic.txt#CastingSpells
-***** [4] jmagic.txt#SpellTypes
-***** [5] jmagic.txt#Hints
+***** [a] jmagic.txt
+***** [b] jmagic.txt#ClassSpellAbil
+***** [c] jmagic.txt#MagicRealms
+***** [d] jmagic.txt#CastingSpells
+***** [e] jmagic.txt#SpellTypes
+***** [f] jmagic.txt#Hints

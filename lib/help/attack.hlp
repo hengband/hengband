@@ -2,25 +2,25 @@ Attacking and Weapons
 
 Please choose one of the following online help files:
 
-    (0) Attacking and Weapons            (attack.txt)
-    (1) Attacking from a Distance        (attack.txt#DistanceAttack)
-    (2) Attacking Monsters in Walls      (attack.txt#AttackWalls)
-    (3) Melee Weapons                    (attack.txt#MeleeWeapons)
-    (4) Missile Launchers                (attack.txt#MissileLaunch)
-    (5) Ego Weapons and Artifacts        (attack.txt#EgoArtifact)
-    (6) Magical Aids to Physical Combat  (attack.txt#MagicalAids)
-    (7) Monk Attacks                     (attack.txt#MonkAttacks)
-    (8) Basic Tactics                    (attack.txt#MeleeTactics)
+    (a) Attacking and Weapons            (attack.txt)
+    (b) Attacking from a Distance        (attack.txt#DistanceAttack)
+    (c) Attacking Monsters in Walls      (attack.txt#AttackWalls)
+    (d) Melee Weapons                    (attack.txt#MeleeWeapons)
+    (e) Missile Launchers                (attack.txt#MissileLaunch)
+    (f) Ego Weapons and Artifacts        (attack.txt#EgoArtifact)
+    (g) Magical Aids to Physical Combat  (attack.txt#MagicalAids)
+    (h) Monk Attacks                     (attack.txt#MonkAttacks)
+    (i) Basic Tactics                    (attack.txt#MeleeTactics)
 
     (?) Help System Commands             (helpinfo.txt)
  
 
-***** [0] attack.txt
-***** [1] attack.txt#DistanceAttack
-***** [2] attack.txt#AttackWalls
-***** [3] attack.txt#MeleeWeapons
-***** [4] attack.txt#MissileLaunch
-***** [5] attack.txt#EgoArtifact
-***** [6] attack.txt#MagicalAids
-***** [7] attack.txt#MonkAttacks
-***** [8] attack.txt#MeleeTactics
+***** [a] attack.txt
+***** [b] attack.txt#DistanceAttack
+***** [c] attack.txt#AttackWalls
+***** [d] attack.txt#MeleeWeapons
+***** [e] attack.txt#MissileLaunch
+***** [f] attack.txt#EgoArtifact
+***** [g] attack.txt#MagicalAids
+***** [h] attack.txt#MonkAttacks
+***** [i] attack.txt#MeleeTactics

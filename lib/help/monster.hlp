@@ -2,23 +2,23 @@ Hengband Monsters.
 
 Please choose one of the following online help files:
 
-    (0) Hengband Monsters            (monster.txt)
-    (1) Monster Symbols              (monster.txt#MonsterSymbols)
-    (2) Monster Color                (monster.txt#MonsterColors)
-    (3) Monster Memory               (monster.txt#MonsterMemory)
-    (4) Unique Monsters              (monster.txt#Uniques)
-    (5) Eldritch Horrors             (monster.txt#EldritchHorror)
-    (6) Pets and Riding              (monster.txt#Pets)
-    (7) Friendly Monsters            (monster.txt#Friendly)
+    (a) Hengband Monsters            (monster.txt)
+    (b) Monster Symbols              (monster.txt#MonsterSymbols)
+    (c) Monster Color                (monster.txt#MonsterColors)
+    (d) Monster Memory               (monster.txt#MonsterMemory)
+    (e) Unique Monsters              (monster.txt#Uniques)
+    (f) Eldritch Horrors             (monster.txt#EldritchHorror)
+    (g) Pets and Riding              (monster.txt#Pets)
+    (h) Friendly Monsters            (monster.txt#Friendly)
 
     (?) Help System Commands         (helpinfo.txt)
 
 
-***** [0] monster.txt
-***** [1] monster.txt#MonsterSymbols
-***** [2] monster.txt#MonsterColors
-***** [3] monster.txt#MonsterMemory
-***** [4] monster.txt#Uniques
-***** [5] monster.txt#EldritchHorror
-***** [6] monster.txt#Pets
-***** [7] monster.txt#Friendly
+***** [a] monster.txt
+***** [b] monster.txt#MonsterSymbols
+***** [c] monster.txt#MonsterColors
+***** [d] monster.txt#MonsterMemory
+***** [e] monster.txt#Uniques
+***** [f] monster.txt#EldritchHorror
+***** [g] monster.txt#Pets
+***** [h] monster.txt#Friendly

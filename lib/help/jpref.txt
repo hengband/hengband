@@ -226,9 +226,9 @@ pref file)」と呼ばれるファイルに保存します。そのファイルはコメントと、
 A:"X:avoid_abort\rR\rmbc"Y:avoid_abort\r
 P:\[F1]
 
-avoid_abort オプションについては、効率化オプション [1] を参照してくだ
+avoid_abort オプションについては、効率化オプション [b] を参照してくだ
 さい。
-***** [1] joption.txt#Efficiency
+***** [b] joption.txt#Efficiency
 
 ***** <Autopick>
 ==== アイテム自動拾い/破壊設定ファイル ====
@@ -255,10 +255,10 @@ avoid_abort オプションについては、効率化オプション [1] を参照してくだ
 致命傷の治癒の薬
 ---------
 
-もっと実用的な設定例は (autopick.txt [2]) を参照してください。条件分岐を持ち
+もっと実用的な設定例は (autopick.txt [c]) を参照してください。条件分岐を持ち
 いてどの職業でも快適に自動拾い/破壊を使えます。
 
-***** [2] ../autopick.txt
+***** [c] ../autopick.txt
 
 --- 自動拾い/破壊の基本書式 ---
 
@@ -275,10 +275,10 @@ picktype.prf の先頭から順番に優先的に評価するので、不要なものの破壊の
 
 自動拾いや破壊や放置として設定されたアイテムはダンジョンの全体図'M'コ
 マンドの中でその位置と名前を表示する事ができます。設定コマンドの説明
-(jcommdesc.txt#Looking [3])のダンジョンの全体図を表示を参照してくださ
+(jcommdesc.txt#Looking [d])のダンジョンの全体図を表示を参照してくださ
 い。
 
-***** [3] jcommdesc.txt#Looking
+***** [d] jcommdesc.txt#Looking
 
 --- 特別なキーワード ---
 

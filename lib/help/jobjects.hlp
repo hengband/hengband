@@ -2,35 +2,35 @@
 
 参照したいオンライン・ヘルプの番号を押して下さい:
 
-    (0) 変愚蛮怒のアイテム             (jobjects.txt)
-    (1) アイテムの記号                 (jobjects.txt#ObjectSymbols)
-    (2) 装備と持ち物                   (jobjects.txt#EquipInvent)
-    (3) アイテムの生成                 (jobjects.txt#Generation)
-    (4) アイテム圧縮                   (jobjects.txt#Compaction)
-    (5) 呪われたアイテム               (jobjects.txt#CursedObjects)
-    (6) 太古の忌まわしい怨念           (jobjects.txt#AncientCurse)
-    (7) アイテムの見かけ               (jobjects.txt#ObjectFlavors)
-    (8) 疑似鑑定                       (jobjects.txt#PseudoID)
-    (9) アイテムの鑑定                 (jobjects.txt#Identifying)
-    (a) エゴアイテムとアーティファクト (jobjects.txt#EgoObjects)
-    (b) アイテムのランダムな属性       (jobjects.txt#RandomAbilities)
-    (c) アイテムの銘                   (jobjects.txt#Inscriptions)
-    (d) アイテムの種類                 (jobjects.txt#ObjectTypes)
+    (a) 変愚蛮怒のアイテム             (jobjects.txt)
+    (b) アイテムの記号                 (jobjects.txt#ObjectSymbols)
+    (c) 装備と持ち物                   (jobjects.txt#EquipInvent)
+    (d) アイテムの生成                 (jobjects.txt#Generation)
+    (e) アイテム圧縮                   (jobjects.txt#Compaction)
+    (f) 呪われたアイテム               (jobjects.txt#CursedObjects)
+    (g) 太古の忌まわしい怨念           (jobjects.txt#AncientCurse)
+    (h) アイテムの見かけ               (jobjects.txt#ObjectFlavors)
+    (i) 疑似鑑定                       (jobjects.txt#PseudoID)
+    (j) アイテムの鑑定                 (jobjects.txt#Identifying)
+    (k) エゴアイテムとアーティファクト (jobjects.txt#EgoObjects)
+    (l) アイテムのランダムな属性       (jobjects.txt#RandomAbilities)
+    (m) アイテムの銘                   (jobjects.txt#Inscriptions)
+    (n) アイテムの種類                 (jobjects.txt#ObjectTypes)
 
     (?) ヘルプシステムの使用法         (jhelpinfo.txt)
 
 
-***** [0] jobjects.txt
-***** [1] jobjects.txt#ObjectSymbols
-***** [2] jobjects.txt#EquipInvent
-***** [3] jobjects.txt#Generation
-***** [4] jobjects.txt#Compaction
-***** [5] jobjects.txt#CursedObjects
-***** [6] jobjects.txt#AncientCurse
-***** [7] jobjects.txt#ObjectFlavors
-***** [8] jobjects.txt#PseudoID
-***** [9] jobjects.txt#Identifying
-***** [a] jobjects.txt#EgoObjects
-***** [b] jobjects.txt#RandomAbilities
-***** [c] jobjects.txt#Inscriptions
-***** [d] jobjects.txt#ObjectTypes
+***** [a] jobjects.txt
+***** [b] jobjects.txt#ObjectSymbols
+***** [c] jobjects.txt#EquipInvent
+***** [d] jobjects.txt#Generation
+***** [e] jobjects.txt#Compaction
+***** [f] jobjects.txt#CursedObjects
+***** [g] jobjects.txt#AncientCurse
+***** [h] jobjects.txt#ObjectFlavors
+***** [i] jobjects.txt#PseudoID
+***** [j] jobjects.txt#Identifying
+***** [k] jobjects.txt#EgoObjects
+***** [l] jobjects.txt#RandomAbilities
+***** [m] jobjects.txt#Inscriptions
+***** [n] jobjects.txt#ObjectTypes

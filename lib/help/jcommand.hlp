@@ -2,21 +2,21 @@ Hengband コマンド解説
 
  参照したいオンライン・ヘルプを選んで下さい:
 
-    (0) Hengband コマンド概説       (jcommand.txt)
-    (1) オリジナルキー配置          (jcommand.txt#OriginalKeyset)
-    (2) ローグ風キー配置            (jcommand.txt#RogueKeyset)
-    (3) 特殊なキー                  (jcommand.txt#SpecialKeys)
-    (4) 回数指定                    (jcommand.txt#CommandCounts)
-    (5) アイテムの選択              (jcommand.txt#ObjectSelection)
-    (6) コマンド詳説                (jcommdesc.hlp)
+    (a) Hengband コマンド概説       (jcommand.txt)
+    (b) オリジナルキー配置          (jcommand.txt#OriginalKeyset)
+    (c) ローグ風キー配置            (jcommand.txt#RogueKeyset)
+    (d) 特殊なキー                  (jcommand.txt#SpecialKeys)
+    (e) 回数指定                    (jcommand.txt#CommandCounts)
+    (f) アイテムの選択              (jcommand.txt#ObjectSelection)
+    (g) コマンド詳説                (jcommdesc.hlp)
 
     (?) ヘルプシステムの使用法      (jhelpinfo.txt)
 
 
-***** [0] jcommand.txt
-***** [1] jcommand.txt#OriginalKeyset
-***** [2] jcommand.txt#RogueKeyset
-***** [3] jcommand.txt#SpecialKeys
-***** [4] jcommand.txt#CommandCounts
-***** [5] jcommand.txt#ObjectSelection
-***** [6] jcommdesc.hlp
+***** [a] jcommand.txt
+***** [b] jcommand.txt#OriginalKeyset
+***** [c] jcommand.txt#RogueKeyset
+***** [d] jcommand.txt#SpecialKeys
+***** [e] jcommand.txt#CommandCounts
+***** [f] jcommand.txt#ObjectSelection
+***** [g] jcommdesc.hlp

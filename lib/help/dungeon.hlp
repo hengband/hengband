@@ -2,23 +2,23 @@ The Town and Dungeon.
 
 Please choose one of the following online help files:
 
-    (0) Town and Dungeon                      (dungeon.txt)
-    (1) Symbols on Your Map                   (dungeon.txt#MapSymbols)
-    (2) Within the Dungeon                    (dungeon.txt#WithinDungeon)
-    (3) Objects in the Dungeon                (dungeon.txt#Objects)
-    (4) Mining                                (dungeon.txt#Mining)
-    (5) Staircases, Doors, Passages & Rooms   (dungeon.txt#StairsDoorsEtc)
-    (6) Level Feelings                        (dungeon.txt#Feelings)
-    (7) Random Quests                         (dungeon.txt#RandomQuests)
+    (a) Town and Dungeon                      (dungeon.txt)
+    (b) Symbols on Your Map                   (dungeon.txt#MapSymbols)
+    (c) Within the Dungeon                    (dungeon.txt#WithinDungeon)
+    (d) Objects in the Dungeon                (dungeon.txt#Objects)
+    (e) Mining                                (dungeon.txt#Mining)
+    (f) Staircases, Doors, Passages & Rooms   (dungeon.txt#StairsDoorsEtc)
+    (g) Level Feelings                        (dungeon.txt#Feelings)
+    (h) Random Quests                         (dungeon.txt#RandomQuests)
 
     (?) Help System Commands                  (helpinfo.txt)
 
 
-***** [0] dungeon.txt
-***** [1] dungeon.txt#MapSymbols
-***** [2] dungeon.txt#WithinDungeon
-***** [3] dungeon.txt#Objects
-***** [4] dungeon.txt#Mining
-***** [5] dungeon.txt#StairsDoorsEtc
-***** [6] dungeon.txt#Feelings
-***** [7] dungeon.txt#RandomQuests
+***** [a] dungeon.txt
+***** [b] dungeon.txt#MapSymbols
+***** [c] dungeon.txt#WithinDungeon
+***** [d] dungeon.txt#Objects
+***** [e] dungeon.txt#Mining
+***** [f] dungeon.txt#StairsDoorsEtc
+***** [g] dungeon.txt#Feelings
+***** [h] dungeon.txt#RandomQuests

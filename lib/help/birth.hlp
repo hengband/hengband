@@ -2,29 +2,29 @@ Creating a Character.
 
 Please choose one of the following online help files:
 
-    (0) Creating a Character              (birth.txt)
-    (1) Start-Up Options                  (birth.txt#StartUp)
-    (2) Character Attributes              (birth.txt#CharAttributes)
-    (3) Race Class Combinations           (birth.txt#RaceClassComb)
-    (4) Choosing Your Magic Realm         (birth.txt#ChoosingMagic)
-    (5) Class/Realm Restrictions          (birth.txt#Restrictions)
-    (6) Random Quests                     (birth.txt#RandomQuests)
-    (7) The Auto-Roller                   (birth.txt#AutoRoller)
-    (8) Life Ratings                      (birth.txt#LifeRating)
-    (9) Naming Your Character             (birth.txt#CharName)
-    (a) Starting Inventory                (birth.txt#StartInventory)
+    (a) Creating a Character              (birth.txt)
+    (b) Start-Up Options                  (birth.txt#StartUp)
+    (c) Character Attributes              (birth.txt#CharAttributes)
+    (d) Race Class Combinations           (birth.txt#RaceClassComb)
+    (e) Choosing Your Magic Realm         (birth.txt#ChoosingMagic)
+    (f) Class/Realm Restrictions          (birth.txt#Restrictions)
+    (g) Random Quests                     (birth.txt#RandomQuests)
+    (h) The Auto-Roller                   (birth.txt#AutoRoller)
+    (i) Life Ratings                      (birth.txt#LifeRating)
+    (j) Naming Your Character             (birth.txt#CharName)
+    (k) Starting Inventory                (birth.txt#StartInventory)
 
     (?) Help System Commands              (helpinfo.txt)
 
 
-***** [0] birth.txt
-***** [1] birth.txt#StartUp
-***** [2] birth.txt#CharAttributes
-***** [3] birth.txt#RaceClassComb
-***** [4] birth.txt#ChoosingMagic
-***** [5] birth.txt#Restrictions
-***** [6] birth.txt#RandomQuests
-***** [7] birth.txt#AutoRoller
-***** [8] birth.txt#LifeRating
-***** [9] birth.txt#CharName
-***** [a] birth.txt#StartInventory
+***** [a] birth.txt
+***** [b] birth.txt#StartUp
+***** [c] birth.txt#CharAttributes
+***** [d] birth.txt#RaceClassComb
+***** [e] birth.txt#ChoosingMagic
+***** [f] birth.txt#Restrictions
+***** [g] birth.txt#RandomQuests
+***** [h] birth.txt#AutoRoller
+***** [i] birth.txt#LifeRating
+***** [j] birth.txt#CharName
+***** [k] birth.txt#StartInventory
