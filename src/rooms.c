@@ -2289,7 +2289,7 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
 			c_ptr->mimic = 0;
 
 			/* Part of a vault */
-			c_ptr->info |= (CAVE_ICKY);
+			c_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
 
 			/* Analyze the grid */
 			switch (*t)
