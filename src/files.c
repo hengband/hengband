@@ -1485,6 +1485,7 @@ errr check_load_init(void)
 #define ENTRY_ALIGN 42
 
 #define ENTRY_EXP_ANDR 43
+#define ENTRY_EXP_TO_ADV_ANDR 44
 
 
 static struct
@@ -1540,6 +1541,7 @@ static struct
 	{29,  6, 21, "社会的地位"},
 	{29,  7, 21, "属性"},
 	{29, 14, 21, "強化度"},
+	{29, 16, 21, "次レベル"},
 };
 #else
 = {
@@ -1587,6 +1589,7 @@ static struct
 	{29,  6, 21, "Social Class"},
 	{29,  7, 21, "Align"},
 	{29, 14, 21, "Construction"},
+	{29, 16, 21, "Const to Adv"},
 };
 #endif
 
@@ -1831,12 +1834,15 @@ static void display_player_middle(void)
 		display_player_one_line(ENTRY_MAX_EXP, format("%ld", p_ptr->max_exp), TERM_L_GREEN);
 
 	/* Dump exp to advance */
+	if (p_ptr->prace == RACE_ANDROID) e = ENTRY_EXP_TO_ADV_ANDR;
+	else e = ENTRY_EXP_TO_ADV;
+
 	if (p_ptr->lev >= PY_MAX_LEVEL)
-		display_player_one_line(ENTRY_EXP_TO_ADV, "*****", TERM_L_GREEN);
+		display_player_one_line(e, "*****", TERM_L_GREEN);
 	else if (p_ptr->prace == RACE_ANDROID)
-		display_player_one_line(ENTRY_EXP_TO_ADV, format("%ld", (s32b)(player_exp_a[p_ptr->lev - 1] * p_ptr->expfact / 100L)), TERM_L_GREEN);
+		display_player_one_line(e, format("%ld", (s32b)(player_exp_a[p_ptr->lev - 1] * p_ptr->expfact / 100L)), TERM_L_GREEN);
 	else
-		display_player_one_line(ENTRY_EXP_TO_ADV, format("%ld", (s32b)(player_exp[p_ptr->lev - 1] * p_ptr->expfact / 100L)), TERM_L_GREEN);
+		display_player_one_line(e, format("%ld", (s32b)(player_exp[p_ptr->lev - 1] * p_ptr->expfact / 100L)), TERM_L_GREEN);
 
 	/* Dump gold */
 	display_player_one_line(ENTRY_GOLD, format("%ld", p_ptr->au), TERM_L_GREEN);
