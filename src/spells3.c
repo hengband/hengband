@@ -2540,8 +2540,7 @@ void identify_item(object_type *o_ptr)
 	/* Description */
 	object_desc(o_name, o_ptr, TRUE, 3);
 
-	if ((artifact_p(o_ptr) || o_ptr->art_name) &&
-	    !object_known_p(o_ptr) && !(o_ptr->ident&IDENT_SENSE))
+	if ((artifact_p(o_ptr) || o_ptr->art_name) && !(o_ptr->ident & IDENT_KNOWN))
 		motoart = FALSE;
 
 	if (!(o_ptr->ident & (IDENT_MENTAL)))
