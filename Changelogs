@@ -1,4 +1,105 @@
+2002-05-19  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/f_info_j.txt 1.7:
+	FEAT_UNDETECTED の定義追加。
+
+	* src/cave.c 1.45, src/defines.h 1.47, src/xtra2.c 1.35:
+	view_granite_lite offでview_unsafe_grids on のとき壁を全部xにしてしまっ
+	ていたバグ修正。さらに FEAT_UNDETECTED を導入して、未感知の地形表示の
+	文字やタイルを変更できるようにした。
+
+	* src/xtra2.c 1.34:
+	パトロンの報酬でレベルが上ると、再帰的にcheck_experience()が呼ばれて、
+	能力値上昇の処理がバグるので、パトロンの処理はループの最後に移動。
+
+2002-05-19  _nothere  <_nothere@cvs>
+
+	* src/cave.c 1.44:
+	view_granite_liteもnew_ascii_graphicsもOFFの時に地上の端が壁に見える現象の修正.
+
+2002-05-18  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.23, src/cmd4.c 1.36, src/dungeon.c 1.44, src/externs.h 1.56:
+	{=g}の処理の仕方を変えて、ハードコードでいちいち判定しないで、
+	自動拾いの登録リストの一番最初に「(:=g」を強制的に入れるようにした。
+
+	* lib/help/raceclas.txt 1.2:
+	英語版の性格説明が一部壊れてた(キーボードマクロで自動で処理してたのが失敗)ので修正。
+
+	* lib/help/joption.txt 1.11, lib/help/option.txt 1.12:
+	トラップ感知範囲から出るときの警告オプションの説明修正。
+
+	* lib/help/joption.txt 1.10, lib/help/option.txt 1.11, lib/pref/pref-opt.prf 1.9, src/externs.h 1.55, src/generate.c 1.23, src/spells2.c 1.28, src/tables.c 1.34, src/variable.c 1.23, src/xtra2.c 1.33, src/cave.c 1.43, src/cmd1.c 1.38, src/defines.h 1.46:
+	Unangband より、view_unsafe_gridsオプション実装。
+	未知の地形でトラップ感知済みで無い場所は灰色の'x'を表示する。
+	啓蒙や魔法の地図を使うと見えなくなるが、それまでは便利。
+
+2002-05-17  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd2.c 1.25, src/dungeon.c 1.43:
+	アリーナで、くさび だけを投げられるようにした。
+
+	* src/xtra2.c 1.32:
+	lookコマンドで名前の次に(レベル???, 無傷)等と表示。
+
+	* src/spells3.c 1.27, src/wizard2.c 1.17, src/xtra2.c 1.31, src/cmd1.c 1.37, src/cmd2.c 1.24, src/cmd5.c 1.20, src/cmd6.c 1.21, src/defines.h 1.45, src/dungeon.c 1.42, src/externs.h 1.54, src/generate.c 1.22, src/grid.c 1.4, src/init1.c 1.34, src/mane.c 1.8, src/melee2.c 1.23, src/mind.c 1.9, src/monster2.c 1.26, src/mspells1.c 1.23, src/mspells2.c 1.17, src/mspells3.c 1.12, src/mutation.c 1.5, src/rooms.c 1.15, src/spells1.c 1.19, src/spells2.c 1.27, src/artifact.c 1.22:
+	summon_specific() や、place_monster()等の仕様変更。
+	u32b mode という変数一つで全部のフラグを表現するようにした。
+
+	* lib/edit/a_info_j.txt 1.22:
+	The Angler は個人名としては誤訳。
+
+	* src/cmd5.c 1.19, src/defines.h 1.44, src/spells1.c 1.18, src/spells2.c 1.26:
+	PROJECT_FASTの実装。スターダストはちゃんとスターダストっぽくなった。
+	ランダムな散乱の幅がdev=1になっていたが、もっと散乱した方が「らしい」のでdev=3にした。
+
+2002-05-16  _nothere  <_nothere@cvs>
+
+	* src/monster2.c 1.25:
+	カメレオンは最初に決まった属性のモンスターにしか化けないので, 生成時にsub_alignも一致させるようにした. また, ダンジョンの主召喚ではなく自然生成されたカメレオンの王のsub_alignを外見によらず中立とした.
+
+2002-05-16  iks  <iks@cvs>
+
+	* lib/edit/a_info_j.txt 1.21:
+	ToMEでの発音に従った名称変更に変愚でも追随。
+
+2002-05-15  _nothere  <_nothere@cvs>
+
+	* src/monster2.c 1.24:
+	モンスター生成時のsub_align付けの場所変更.
+
+	* src/spells2.c 1.25:
+	英語版での属性表記の修正忘れの修正.
+
+2002-05-15  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.22: 未使用のローカル変数削除
+
+2002-05-14  hoge  <hoge@cvs>
+
+	* src/dungeon.c 1.41, src/effects.c 1.20, src/externs.h 1.53, src/files.c 1.53, src/flavor.c 1.14, src/init2.c 1.11, src/monster2.c 1.23, src/mspells1.c 1.22, src/object2.c 1.37, src/rooms.c 1.14, src/spells1.c 1.17, src/spells2.c 1.24, src/spells3.c 1.26, src/spellstips.h 1.17, src/store.c 1.10, src/tables.c 1.33, src/types.h 1.19, src/wizard1.c 1.19, src/wizard2.c 1.16, src/xtra2.c 1.30, lib/edit/k_info_j.txt 1.24, lib/edit/m_info_j.txt 1.5, lib/edit/misc_j.txt 1.9, lib/edit/t0000002_j.txt 1.4, lib/edit/t0000003_j.txt 1.4, lib/edit/t0000004_j.txt 1.4, lib/edit/t0000005_j.txt 1.2, lib/edit/t_lite_j.txt 1.7, lib/pref/font-xxx.prf 1.3, src/avatar.c 1.3, src/birth.c 1.30, src/cmd3.c 1.20, src/cmd5.c 1.18, src/defines.h 1.43:
+	破邪。まだ作ってる途中。
+	とりあえずできてるところまでcommit。
+	効果の表示/レベル/失敗率等はまだ。
+
+2002-05-14  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.21:
+	- またも符号を間違えて床の上のアイテムに対して自動刻みが正常動作しなかったので修正。
+	- {=g}と刻んだアイテムは自動破壊の対象からはずすはずだったのに、
+	  持ち物の中にあって鑑定したときは破壊してしまっていたので修正。
+
+2002-05-13  _nothere  <_nothere@cvs>
+
+	* src/spells2.c 1.23:
+	調査アイテムを使った時のモンスター属性表示の英語表記を短くした.
+
+	* src/dungeon.c 1.40:
+	slotが渡されるべきところにo_ptrが渡されていてコンパイルできなかったので修正.
+
 2002-05-13  Takeshi Mogami  <mogami@cvs>
+
+	* Changelogs 1.42: 更新
 
 	* src/autopick.c 1.20, src/externs.h 1.52, src/spells3.c 1.25:
 	- 持ち物の中のアイテムを鑑定して自動刻みや自動破壊にマッチさせようとした
