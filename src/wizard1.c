@@ -2907,10 +2907,6 @@ sprintf(buf, " %d フィート先から侵入者に気付くことがある。",
 			{
 				spoil_out(" good object");
 			}
-			else if (flags1 & (RF1_DROP_USEFUL))
-			{
-				spoil_out(" useful object");
-			}
 			else if (flags1 & (RF1_ONLY_ITEM))
 			{
 				spoil_out(" object");
@@ -2926,11 +2922,6 @@ sprintf(buf, " %d フィート先から侵入者に気付くことがある。",
 				spoil_out(" or treasure");
 			}
 			if (i > 1) spoil_out("s");
-
-			if (flags1 & (RF1_DROP_CHOSEN))
-			{
-				spoil_out(", in addition to chosen objects");
-			}
 
 			spoil_out(".  ");
 		}

@@ -985,7 +985,7 @@ msg_print("地面に落とされた。");
 		(void)drop_near(q_ptr, -1, y, x);
 	}
 
-	else if ((r_ptr->d_char == '|') && !(r_ptr->flags1 & RF1_DROP_CHOSEN) &&
+	else if ((r_ptr->d_char == '|') && !(m_ptr->r_idx == MON_STORMBRINGER) &&
 	    !(p_ptr->inside_arena || p_ptr->inside_battle))
 	{
 		/* Get local object */
@@ -1087,7 +1087,7 @@ msg_print("地面に落とされた。");
 		(void)drop_near(q_ptr, -1, y, x);
 	}
 	/* Mega-Hack -- drop "winner" treasures */
-	else if (r_ptr->flags1 & RF1_DROP_CHOSEN)
+	else
 	{
 		if (m_ptr->r_idx == MON_SERPENT)
 
