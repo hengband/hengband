@@ -6611,12 +6611,12 @@ prt("お待ち下さい...", 0, 0);
 	{
 		/* Init the wilderness */
 
-process_dungeon_file("w_info_j.txt", 0, 0, max_wild_y, max_wild_x);
+		process_dungeon_file("w_info.txt", 0, 0, max_wild_y, max_wild_x);
 
 		/* Init the town */
 		init_flags = INIT_ONLY_BUILDINGS;
 
-process_dungeon_file("t_info_j.txt", 0, 0, MAX_HGT, MAX_WID);
+		process_dungeon_file("t_info.txt", 0, 0, MAX_HGT, MAX_WID);
 
 	}
 

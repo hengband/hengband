@@ -244,7 +244,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		/* Get the quest text */
 		init_flags = INIT_ASSIGN;
 
-		process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+		process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 		/* Reset the old quest number */
 		p_ptr->inside_quest = old_quest;
@@ -7113,7 +7113,7 @@ static void do_cmd_knowledge_quests(void)
 			/* Get the quest text */
 			init_flags = INIT_SHOW_TEXT;
 
-			process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+			process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 			/* Reset the old quest number */
 			p_ptr->inside_quest = old_quest;
@@ -7285,7 +7285,7 @@ sprintf(rand_tmp_str,"%s (%d ³¬) - %s¤òÅÝ¤¹¡£\n",
 				/* Get the quest */
 				init_flags = INIT_ASSIGN;
 
-				process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+				process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 				/* Reset the old quest number */
 				p_ptr->inside_quest = old_quest;
@@ -7366,7 +7366,7 @@ sprintf(rand_tmp_str,"%s (%d ³¬) - %s¤òÅÝ¤¹¡£\n",
 				/* Get the quest text */
 				init_flags = INIT_ASSIGN;
 
-				process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+				process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 				/* Reset the old quest number */
 				p_ptr->inside_quest = old_quest;
@@ -7473,7 +7473,7 @@ static void do_cmd_knowledge_home(void)
 	char o_name[MAX_NLEN];
 	cptr		paren = ")";
 
-	process_dungeon_file("w_info_j.txt", 0, 0, max_wild_y, max_wild_x);
+	process_dungeon_file("w_info.txt", 0, 0, max_wild_y, max_wild_x);
 
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);

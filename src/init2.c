@@ -452,7 +452,7 @@ static errr init_info(cptr filename, header *head,
 	{
 #ifdef CHECK_MODIFICATION_TIME
 
-		err = check_modification_date(fd, format("%s_j.txt", filename));
+		err = check_modification_date(fd, format("%s.txt", filename));
 
 #endif /* CHECK_MODIFICATION_TIME */
 
@@ -485,14 +485,14 @@ static errr init_info(cptr filename, header *head,
 
 		/* Build the filename */
 
-		path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, format("%s_j.txt", filename));
+		path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, format("%s.txt", filename));
 
 		/* Open the file */
 		fp = my_fopen(buf, "r");
 
 		/* Parse it */
 #ifdef JP
-		if (!fp) quit(format("'%s_j.txt'ファイルをオープンできません。", filename));
+		if (!fp) quit(format("'%s.txt'ファイルをオープンできません。", filename));
 #else
 		if (!fp) quit(format("Cannot open '%s.txt' file.", filename));
 #endif
@@ -514,13 +514,13 @@ static errr init_info(cptr filename, header *head,
 			oops = ((err > 0) ? err_str[err] : "未知の");
 
 			/* Oops */
-			msg_format("'%s_j.txt'ファイルの %d 行目にエラー。", filename, error_line);
+			msg_format("'%s.txt'ファイルの %d 行目にエラー。", filename, error_line);
 			msg_format("レコード %d は '%s' エラーがあります。", error_idx, oops);
 			msg_format("構文 '%s'。", buf);
 			msg_print(NULL);
 
 			/* Quit */
-			quit(format("'%s_j.txt'ファイルにエラー", filename));
+			quit(format("'%s.txt'ファイルにエラー", filename));
 #else
 			/* Error string */
 			oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
@@ -1385,7 +1385,7 @@ static byte store_table[MAX_STORES][STORE_CHOICES][2] =
 static errr init_misc(void)
 {
 	/* Initialize the values */
-	process_dungeon_file("misc_j.txt", 0, 0, 0, 0);
+	process_dungeon_file("misc.txt", 0, 0, 0, 0);
 
 	return 0;
 }

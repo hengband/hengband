@@ -2600,7 +2600,7 @@ note(format("クエストが多すぎる(%u)！", max_quests_load));
 							init_flags = INIT_ASSIGN;
 							p_ptr->inside_quest = i;
 
-							process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+							process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 							p_ptr->inside_quest = old_inside_quest;
 						}
 					}

@@ -1355,7 +1355,7 @@ static void quest_gen(void)
 
 	init_flags = INIT_CREATE_DUNGEON | INIT_ASSIGN;
 
-process_dungeon_file("q_info_j.txt", 0, 0, MAX_HGT, MAX_WID);
+	process_dungeon_file("q_info.txt", 0, 0, MAX_HGT, MAX_WID);
 }
 
 /* Make a real level */

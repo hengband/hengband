@@ -3846,7 +3846,7 @@ void display_player(int mode)
 					/* Bewere that INIT_ASSIGN resets the cur_num. */
 					init_flags = INIT_ASSIGN;
 
-					process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+					process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 #ifdef JP
 					sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[p_ptr->inside_quest].name, p_ptr->died_from);
@@ -3886,7 +3886,7 @@ void display_player(int mode)
 					/* Get the quest text */
 					init_flags = INIT_SHOW_TEXT;
 
-					process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+					process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 #ifdef JP
 					sprintf(statmsg, "…あなたは現在、 クエスト「%s」を遂行中だ。", quest[p_ptr->inside_quest].name);
@@ -4200,7 +4200,7 @@ errr make_character_dump(FILE *fff)
 				/* Get the quest */
 				init_flags = INIT_ASSIGN;
 
-				process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+				process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 				/* Reset the old quest number */
 				p_ptr->inside_quest = old_quest;
@@ -4281,7 +4281,7 @@ errr make_character_dump(FILE *fff)
 				/* Get the quest text */
 				init_flags = INIT_ASSIGN;
 
-				process_dungeon_file("q_info_j.txt", 0, 0, 0, 0);
+				process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 				/* Reset the old quest number */
 				p_ptr->inside_quest = old_quest;
@@ -4719,7 +4719,7 @@ fprintf(fff, "  [ キャラクタの持ち物 ]\n\n");
 	/* Add an empty line */
 	fprintf(fff, "\n\n");
 
-	process_dungeon_file("w_info_j.txt", 0, 0, max_wild_y, max_wild_x);
+	process_dungeon_file("w_info.txt", 0, 0, max_wild_y, max_wild_x);
 
 	/* Print all homes in the different towns */
 	st_ptr = &town[1].store[STORE_HOME];
