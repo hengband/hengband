@@ -3903,6 +3903,18 @@ strcpy(name, "(х╫фиитг╫)");
 }
 
 
+/*
+ * Returns experience of a spell
+ */
+s16b experience_of_spell(int spell, int realm)
+{
+	if (p_ptr->pclass == CLASS_SORCERER) return 1600;
+	else if (p_ptr->pclass == CLASS_RED_MAGE) return 1200;
+	else if (realm+1 == p_ptr->realm1) return spell_exp[spell];
+	else if (realm+1 == p_ptr->realm2) return spell_exp[spell + 32];
+	else return 0;
+}
+
 
 /*
  * Returns spell chance of failure for spell -RAK-
@@ -3942,16 +3954,12 @@ s16b spell_chance(int spell, int realm)
 	if (p_ptr->riding)
 		chance += (MAX(r_info[m_list[p_ptr->riding].r_idx].level-skill_exp[GINOU_RIDING]/100-10,0));
 
-	if (p_ptr->pclass == CLASS_SORCERER)
-		shouhimana = s_ptr->smana*2200 + 2399;
-	else if (p_ptr->pclass == CLASS_RED_MAGE)
-		shouhimana = s_ptr->smana*2600 + 2399;
-	else if ((realm+1 == p_ptr->realm1) || (realm+1 == p_ptr->realm2))
-		shouhimana = (s_ptr->smana*(3800-spell_exp[((p_ptr->realm1 == realm+1) ? spell: spell+32)])+2399);
-	else shouhimana = s_ptr->smana*3800;
-	if(p_ptr->dec_mana)
-		shouhimana *= 3;
+	/* Extract mana consumption rate */
+	shouhimana = s_ptr->smana*(3800 - experience_of_spell(spell, realm)) + 2399;
+
+	if(p_ptr->dec_mana) shouhimana *= 3;
 	else shouhimana *= 4;
+
 	shouhimana /= 9600;
 	if(shouhimana < 1) shouhimana = 1;
 
@@ -4001,8 +4009,9 @@ s16b spell_chance(int spell, int realm)
 
 	if ((realm+1 == p_ptr->realm1) || (realm+1 == p_ptr->realm2))
 	{
-		if(spell_exp[((p_ptr->realm1 == realm+1) ? spell: spell+32)]>1399) chance--;
-		if(spell_exp[((p_ptr->realm1 == realm+1) ? spell: spell+32)]>1599) chance--;
+		s16b exp = experience_of_spell(spell, realm);
+		if(exp > 1399) chance--;
+		if(exp > 1599) chance--;
 	}
 	if(p_ptr->dec_mana) chance--;
 	if (p_ptr->heavy_spell) chance += 5;
@@ -4467,36 +4476,34 @@ put_str(buf, y, x + 29);
 			shouhimana = s_ptr->smana;
 		else
 		{
-			if (p_ptr->pclass == CLASS_SORCERER)
-				shouhimana = s_ptr->smana*2200 + 2399;
-			else if (p_ptr->pclass == CLASS_RED_MAGE)
-				shouhimana = s_ptr->smana*2600 + 2399;
-			else if ((realm+1 == p_ptr->realm1) || (realm+1 == p_ptr->realm2))
-				shouhimana = (s_ptr->smana*(3800-spell_exp[(spell+increment)])+2399);
-			else
-				shouhimana = s_ptr->smana*3800+2399;
-			if(p_ptr->dec_mana)
-				shouhimana *= 3;
+			s16b exp = experience_of_spell(spell, realm);
+
+			/* Extract mana consumption rate */
+			shouhimana = s_ptr->smana*(3800 - exp) + 2399;
+
+			if(p_ptr->dec_mana) shouhimana *= 3;
 			else shouhimana *= 4;
+
 			shouhimana /= 9600;
 			if(shouhimana < 1) shouhimana = 1;
+
+			if ((increment == 64) || (s_ptr->slevel >= 99)) shougou = 0;
+			else if (exp < 900) shougou = 0;
+			else if (exp < 1200) shougou = 1;
+			else if (exp < 1400) shougou = 2;
+			else if (exp < 1600) shougou = 3;
+			else shougou = 4;
+
+			max = FALSE;
+			if (!increment && (shougou == 4)) max = TRUE;
+			else if ((increment == 32) && (shougou == 3)) max = TRUE;
+			else if (s_ptr->slevel >= 99) max = TRUE;
+			else if (p_ptr->pclass == CLASS_RED_MAGE) max = TRUE;
+
+			strncpy(ryakuji,shougou_moji[shougou],4);
+			ryakuji[3] = ']';
+			ryakuji[4] = '\0';
 		}
-
-		if ((increment == 64) || (s_ptr->slevel >= 99)) shougou = 0;
-		else if (spell_exp[spell+increment]<900) shougou = 0;
-		else if (spell_exp[spell+increment]<1200) shougou = 1;
-		else if (spell_exp[spell+increment]<1400) shougou = 2;
-		else if (spell_exp[spell+increment]<1600) shougou = 3;
-		else shougou = 4;
-		max = FALSE;
-		if (!increment && (shougou == 4)) max = TRUE;
-		else if ((increment == 32) && (shougou == 3)) max = TRUE;
-		else if (s_ptr->slevel >= 99) max = TRUE;
-		else if (p_ptr->pclass == CLASS_RED_MAGE) max = TRUE;
-
-		strncpy(ryakuji,shougou_moji[shougou],4);
-		ryakuji[3] = ']';
-		ryakuji[4] = '\0';
 
 		if (use_menu && target_spell)
 		{
