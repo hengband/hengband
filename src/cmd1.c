@@ -2489,16 +2489,17 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 	{
 		if ((r_ptr->level + 10) > p_ptr->lev)
 		{
-			if (weapon_exp[inventory[INVEN_RARM+hand].tval-TV_BOW][inventory[INVEN_RARM+hand].sval] < s_info[p_ptr->pclass].w_max[inventory[INVEN_RARM+hand].tval-TV_BOW][inventory[INVEN_RARM+hand].sval])
+			int tval = inventory[INVEN_RARM+hand].tval - TV_BOW;
+			int sval = inventory[INVEN_RARM+hand].sval;
+			int now_exp = weapon_exp[tval][sval];
+			if (now_exp < s_info[p_ptr->pclass].w_max[tval][sval])
 			{
-				if (weapon_exp[inventory[INVEN_RARM+hand].tval-TV_BOW][inventory[INVEN_RARM+hand].sval] < 4000)
-					weapon_exp[inventory[INVEN_RARM+hand].tval-TV_BOW][inventory[INVEN_RARM+hand].sval]+=80;
-				else if((weapon_exp[inventory[INVEN_RARM+hand].tval-TV_BOW][inventory[INVEN_RARM+hand].sval] < 6000))
-					weapon_exp[inventory[INVEN_RARM+hand].tval-TV_BOW][inventory[INVEN_RARM+hand].sval]+=10;
-				else if((weapon_exp[inventory[INVEN_RARM+hand].tval-TV_BOW][inventory[INVEN_RARM+hand].sval] < 7000) && (p_ptr->lev > 19))
-					weapon_exp[inventory[INVEN_RARM+hand].tval-TV_BOW][inventory[INVEN_RARM+hand].sval]+=1;
-				else if((weapon_exp[inventory[INVEN_RARM+hand].tval-TV_BOW][inventory[INVEN_RARM+hand].sval] < 8000) && (p_ptr->lev > 34))
-					if (one_in_(2)) weapon_exp[inventory[INVEN_RARM+hand].tval-TV_BOW][inventory[INVEN_RARM+hand].sval]+=1;
+				int ammount = 0;
+				if (now_exp < 4000) ammount = 80;
+				else if(now_exp < 6000) ammount = 10;
+				else if((now_exp < 7000) && (p_ptr->lev > 19)) ammount = 1;
+				else if((p_ptr->lev > 34) && one_in_(2)) ammount = 1;
+				weapon_exp[tval][sval] += ammount;
 				p_ptr->update |= (PU_BONUS);
 			}
 		}

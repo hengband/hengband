@@ -5079,15 +5079,18 @@ void calc_bonuses(void)
 	{
 		if(buki_motteruka(INVEN_RARM+i))
 		{
-			p_ptr->to_h[i] += (weapon_exp[inventory[INVEN_RARM+i].tval-TV_BOW][inventory[INVEN_RARM+i].sval]-4000)/200;
-			p_ptr->dis_to_h[i] += (weapon_exp[inventory[INVEN_RARM+i].tval-TV_BOW][inventory[INVEN_RARM+i].sval]-4000)/200;
-			if ((p_ptr->pclass == CLASS_MONK) && !(s_info[CLASS_MONK].w_max[inventory[INVEN_RARM+i].tval-TV_BOW][inventory[INVEN_RARM+i].sval]))
+			int tval = inventory[INVEN_RARM+i].tval - TV_BOW;
+			int sval = inventory[INVEN_RARM+i].sval;
+
+			p_ptr->to_h[i] += (weapon_exp[tval][sval]-4000)/200;
+			p_ptr->dis_to_h[i] += (weapon_exp[tval][sval]-4000)/200;
+			if ((p_ptr->pclass == CLASS_MONK) && !(s_info[CLASS_MONK].w_max[tval][sval]))
 			{
 				p_ptr->to_h[i] -= 40;
 				p_ptr->dis_to_h[i] -= 40;
 				p_ptr->icky_wield[i] = TRUE;
 			}
-			else if ((p_ptr->pclass == CLASS_FORCETRAINER) && !(s_info[CLASS_FORCETRAINER].w_max[inventory[INVEN_RARM+i].tval-TV_BOW][inventory[INVEN_RARM+i].sval]))
+			else if ((p_ptr->pclass == CLASS_FORCETRAINER) && !(s_info[CLASS_FORCETRAINER].w_max[tval][sval]))
 			{
 				p_ptr->to_h[i] -= 40;
 				p_ptr->dis_to_h[i] -= 40;
@@ -5095,7 +5098,7 @@ void calc_bonuses(void)
 			}
 			else if (p_ptr->pclass == CLASS_NINJA)
 			{
-				if ((s_info[CLASS_NINJA].w_max[inventory[INVEN_RARM+i].tval-TV_BOW][inventory[INVEN_RARM+i].sval] <= 4000) || (inventory[INVEN_LARM-i].tval == TV_SHIELD))
+				if ((s_info[CLASS_NINJA].w_max[tval][sval] <= 4000) || (inventory[INVEN_LARM-i].tval == TV_SHIELD))
 				{
 					p_ptr->to_h[i] -= 40;
 					p_ptr->dis_to_h[i] -= 40;

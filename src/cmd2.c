@@ -3765,16 +3765,16 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 
 			if ((r_ptr->level + 10) > p_ptr->lev)
 			{
-				if (weapon_exp[0][j_ptr->sval] < s_info[p_ptr->pclass].w_max[0][j_ptr->sval])
+				int now_exp = weapon_exp[0][j_ptr->sval];
+				if (now_exp < s_info[p_ptr->pclass].w_max[0][j_ptr->sval])
 				{
-					if (weapon_exp[0][j_ptr->sval] < 4000)
-						weapon_exp[0][j_ptr->sval]+=80;
-					else if ((weapon_exp[0][j_ptr->sval] < 6000))
-						weapon_exp[0][j_ptr->sval]+=25;
-					else if ((weapon_exp[0][j_ptr->sval] < 7000) && (p_ptr->lev > 19))
-						weapon_exp[0][j_ptr->sval]+=10;
-					else if ((weapon_exp[0][j_ptr->sval] < 8000) && (p_ptr->lev > 34))
-						weapon_exp[0][j_ptr->sval]+=2;
+					int ammount = 0;
+					if (now_exp < 4000) ammount = 80;
+					else if (now_exp <  6000) ammount = 25;
+					else if ((now_exp < 7000) && (p_ptr->lev > 19)) ammount = 10;
+					else if (p_ptr->lev > 34) ammount = 2;
+					weapon_exp[0][j_ptr->sval] += ammount;
+					p_ptr->update |= (PU_BONUS);
 				}
 			}
 
