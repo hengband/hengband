@@ -629,7 +629,7 @@ void build_tunnel(int row1, int col1, int row2, int col2)
 		if (permanent_wall(&f_info[c_ptr->feat]))
 		{
 			/* Avoid the edge of vaults */
-			if (is_inner_grid(c_ptr)) continue;
+			if (is_outer_grid(c_ptr)) continue;
 		}
 
 		/* Avoid "solid" walls */
