@@ -2213,10 +2213,11 @@ static void display_inventory(void)
 
 
 		/* Indicate the "current page" */
+		/* Trailing spaces are to display (Page xx) and (Page x) */
 #ifdef JP
-		put_str(format("(%dページ)", store_top/12 + 1), 5, 20);
+		put_str(format("(%dページ)  ", store_top/12 + 1), 5, 20);
 #else
-		put_str(format("(Page %d)", store_top/12 + 1), 5, 20);
+		put_str(format("(Page %d)  ", store_top/12 + 1), 5, 20);
 #endif
 
 	}
