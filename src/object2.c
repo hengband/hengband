@@ -1676,6 +1676,7 @@ static int object_similar_part(object_type *o_ptr, object_type *j_ptr)
 		case TV_RING:
 		case TV_AMULET:
 		case TV_LITE:
+		case TV_WHISTLE:
 		{
 			/* Require full knowledge of both items */
 			if (!object_known_p(o_ptr) || !object_known_p(j_ptr)) return 0;
