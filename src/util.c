@@ -1154,6 +1154,9 @@ void text_to_ascii(char *buf, cptr str)
 			/* Skip the backslash */
 			str++;
 
+			/* Paranoia */
+			if (!(*str)) break;
+
 			/* Macro Trigger */
 			if (*str == '[')
 			{
