@@ -1314,7 +1314,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	else if (IS_FLG(FLG_HELMS))
 		body_str = "ヘルメットや冠";
 	else if (IS_FLG(FLG_GLOVES))
-		body_str = "小手";
+		body_str = "籠手";
 	else if (IS_FLG(FLG_BOOTS))
 		body_str = "ブーツ";
 
@@ -1343,7 +1343,20 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	}
 
 	if (insc)
-		strncat(buff, format("に「%s」と刻んで", insc), 80);
+        {
+		strncat(buff, format("に「%s」", insc), 80);
+
+                if (strstr(insc, "%%all"))
+                        strcat(buff, "(%%allは全能力を表す英字の記号で置換)");
+                else if (strstr(insc, "%all"))
+                        strcat(buff, "(%allは全能力を表す記号で置換)");
+                else if (strstr(insc, "%%"))
+                        strcat(buff, "(%%は追加能力を表す英字の記号で置換)");
+                else if (strstr(insc, "%"))
+                        strcat(buff, "(%は追加能力を表す記号で置換)");
+
+		strcat(buff, "と刻んで");
+        }
 	else
 		strcat(buff, "を");
 
@@ -1586,7 +1599,16 @@ static void describe_autopick(char *buff, autopick_type *entry)
 
 	/* Auto-insctiption */
 	if (insc)
-		strncat(buff, format("and inscribe \"%s\" on ", insc), 80);
+        {
+		strncat(buff, format("and inscribe \"%s\"", insc), 80);
+
+                if (strstr(insc, "%all"))
+                        strcat(buff, ", replacing %all with code string representing all abilities,");
+                else if (strstr(insc, "%"))
+                        strcat(buff, ", replacing % with code string representing extra random abilities,");
+
+		strcat(buff, " on ");
+        }
 
 	/* Adjective */
 	if (!before_n) 
@@ -1652,11 +1674,11 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	if (act & DO_DISPLAY)
 	{
 		if (act & DONT_AUTOPICK)
-			strcat(buff, "  Display these items when you press 'N' in the full map('M').");
+			strcat(buff, "  Display these items when you press the N key in the full 'M'ap.");
 		else if (act & DO_AUTODESTROY)
-			strcat(buff, "  Display these items when you press 'K' in the full map('M').");
+			strcat(buff, "  Display these items when you press the K key in the full 'M'ap.");
 		else
-			strcat(buff, "  Display these items when you press 'M' in the full map('M').");
+			strcat(buff, "  Display these items when you press the M key in the full 'M'ap.");
 	}
 	else
 		strcat(buff, " Not displayed in the full map.");
@@ -2449,7 +2471,7 @@ void do_cmd_edit_autopick(void)
 
         object_type *search_o_ptr = NULL;
         cptr search_str = NULL;
-        cptr last_destroyed;
+        cptr last_destroyed = NULL;
 	char last_destroyed_command[WID_DESC+3];
 	char yank_buf[MAX_YANK];
 	char classrace[80];
@@ -2475,14 +2497,16 @@ void do_cmd_edit_autopick(void)
 	init_autopicker();
 
 	/* Name of the Last Destroyed Item */
-	autopick_entry_from_object(entry, &autopick_last_destroyed_object);
-	last_destroyed = autopick_line_from_entry(entry);
+        if (autopick_last_destroyed_object.k_idx)
+        {
+                autopick_entry_from_object(entry, &autopick_last_destroyed_object);
+                last_destroyed = autopick_line_from_entry(entry);
+        }
 
 	/* Command Description of the Last Destroyed Item */
 	if (last_destroyed)
 	{
-		strcpy(last_destroyed_command, "^L \"");
-		strncpy(last_destroyed_command + 4, last_destroyed, WID_DESC-4);
+		strncpy(last_destroyed_command, format("^L \"%s\"", last_destroyed), WID_DESC+2);
 		last_destroyed_command[WID_DESC+2] = '\0';
 	}
 	else
