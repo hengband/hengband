@@ -2297,7 +2297,7 @@ static byte choose_realm(s32b choices, int *count)
 		else k = -1;
 		if (c == '?')
 		{
-#ifdef JP                 
+#ifdef JP
 			show_help("jmagic.txt#MagicRealms");
 #else
 			show_help("magic.txt#MagicRealms");
@@ -2307,9 +2307,9 @@ static byte choose_realm(s32b choices, int *count)
 		{
 			screen_save();
 #ifdef JP
-			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
+			do_cmd_options_aux(OPT_PAGE_BIRTH, "初期オプション((*)はスコアに影響)");
 #else
-			do_cmd_options_aux(6, "Birth option((*)s effect score)");
+			do_cmd_options_aux(OPT_PAGE_BIRTH, "Birth option((*)s effect score)");
 #endif
 
 			screen_load();
@@ -4171,7 +4171,7 @@ static bool get_player_race(void)
 		else k = -1;
 		if (c == '?')
 		{
-#ifdef JP                 
+#ifdef JP
 			show_help("jraceclas.txt#TheRaces");
 #else
 			show_help("raceclas.txt#TheRaces");
@@ -4181,9 +4181,9 @@ static bool get_player_race(void)
 		{
 			screen_save();
 #ifdef JP
-			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
+			do_cmd_options_aux(OPT_PAGE_BIRTH, "初期オプション((*)はスコアに影響)");
 #else
-			do_cmd_options_aux(6, "Birth Option((*)s effect score)");
+			do_cmd_options_aux(OPT_PAGE_BIRTH, "Birth Option((*)s effect score)");
 #endif
 			screen_load();
 		}
@@ -4386,7 +4386,7 @@ static bool get_player_class(void)
 		else k = -1;
 		if (c == '?')
 		{
-#ifdef JP                 
+#ifdef JP
 			show_help("jraceclas.txt#TheClasses");
 #else
 			show_help("raceclas.txt#TheClasses");
@@ -4396,9 +4396,9 @@ static bool get_player_class(void)
 		{
 			screen_save();
 #ifdef JP
-			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
+			do_cmd_options_aux(OPT_PAGE_BIRTH, "初期オプション((*)はスコアに影響)");
 #else
-			do_cmd_options_aux(6, "Birth Option((*)s effect score)");
+			do_cmd_options_aux(OPT_PAGE_BIRTH, "Birth Option((*)s effect score)");
 #endif
 
 			screen_load();
@@ -4628,7 +4628,7 @@ static bool get_player_seikaku(void)
 		else k = -1;
 		if (c == '?')
 		{
-#ifdef JP                 
+#ifdef JP
 			show_help("jraceclas.txt#ThePersonalities");
 #else
 			show_help("raceclas.txt#ThePersonalities");
@@ -4638,9 +4638,9 @@ static bool get_player_seikaku(void)
 		{
 			screen_save();
 #ifdef JP
-			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
+			do_cmd_options_aux(OPT_PAGE_BIRTH, "初期オプション((*)はスコアに影響)");
 #else
-			do_cmd_options_aux(6, "Birth Option((*)s effect score)");
+			do_cmd_options_aux(OPT_PAGE_BIRTH, "Birth Option((*)s effect score)");
 #endif
 
 			screen_load();
@@ -4900,20 +4900,18 @@ static bool get_stat_limits(void)
 			}
 			break;
 		case '?':
-		{
-#ifdef JP                 
+#ifdef JP
 			show_help("jbirth.txt#AutoRoller");
 #else
 			show_help("birth.txt#AutoRoller");
 #endif
-		}
 			break;
 		case '=':
 			screen_save();
 #ifdef JP
-			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
+			do_cmd_options_aux(OPT_PAGE_BIRTH, "初期オプション((*)はスコアに影響)");
 #else
-			do_cmd_options_aux(6, "Birth Option((*)s effect score)");
+			do_cmd_options_aux(OPT_PAGE_BIRTH, "Birth Option((*)s effect score)");
 #endif
 
 			screen_load();
@@ -5195,7 +5193,7 @@ static bool get_chara_limits(void)
 			}
 			break;
 		case '?':
-#ifdef JP                 
+#ifdef JP
 			show_help("jbirth.txt#AutoRoller");
 #else
 			show_help("birth.txt#AutoRoller");
@@ -5204,9 +5202,9 @@ static bool get_chara_limits(void)
 		case '=':
 			screen_save();
 #ifdef JP
-			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
+			do_cmd_options_aux(OPT_PAGE_BIRTH, "初期オプション((*)はスコアに影響)");
 #else
-			do_cmd_options_aux(6, "Birth Option((*)s effect score)");
+			do_cmd_options_aux(OPT_PAGE_BIRTH, "Birth Option((*)s effect score)");
 #endif
 
 			screen_load();
@@ -5738,9 +5736,9 @@ static bool player_birth_aux(void)
 		{
 			screen_save();
 #ifdef JP
-			do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
+			do_cmd_options_aux(OPT_PAGE_BIRTH, "初期オプション((*)はスコアに影響)");
 #else
-			do_cmd_options_aux(6, "Birth Option((*)s effect score)");
+			do_cmd_options_aux(OPT_PAGE_BIRTH, "Birth Option((*)s effect score)");
 #endif
 
 			screen_load();
@@ -5871,9 +5869,9 @@ static bool player_birth_aux(void)
 
 	screen_save();
 #ifdef JP
-	do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
+	do_cmd_options_aux(OPT_PAGE_BIRTH, "初期オプション((*)はスコアに影響)");
 #else
-	do_cmd_options_aux(6, "Birth Option((*)s effect score)");
+	do_cmd_options_aux(OPT_PAGE_BIRTH, "Birth Option((*)s effect score)");
 #endif
 
 	screen_load();
@@ -5957,7 +5955,7 @@ static bool player_birth_aux(void)
 			}
 			else if (inp[0] == '?')
 			{
-#ifdef JP                 
+#ifdef JP
 				show_help("jbirth.txt#RandomQuests");
 #else
 				show_help("birth.txt#RandomQuests");
@@ -6274,7 +6272,7 @@ static bool player_birth_aux(void)
 			/* Help */
 			if (c == '?')
 			{
-#ifdef JP                 
+#ifdef JP
 				show_help("jbirth.txt#AutoRoller");
 #else
 				show_help("birth.txt#AutoRoller");
@@ -6285,9 +6283,9 @@ static bool player_birth_aux(void)
 			{
 				screen_save();
 #ifdef JP
-				do_cmd_options_aux(6, "初期オプション((*)はスコアに影響)");
+				do_cmd_options_aux(OPT_PAGE_BIRTH, "初期オプション((*)はスコアに影響)");
 #else
-				do_cmd_options_aux(6, "Birth Option((*)s effect score)");
+				do_cmd_options_aux(OPT_PAGE_BIRTH, "Birth Option((*)s effect score)");
 #endif
 
 				screen_load();
@@ -6397,7 +6395,7 @@ static bool ask_quick_start(void)
 		else if (c == 'S') return (FALSE);
 		else if (c == '?')
 		{
-#ifdef JP                 
+#ifdef JP
 			show_help("jbirth.txt#QuickStart");
 #else
 			show_help("birth.txt#QuickStart");

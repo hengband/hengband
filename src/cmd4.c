@@ -1902,9 +1902,6 @@ static void do_cmd_options_autosave(cptr info)
 }
 
 
-#define PAGE_BIRTH       6
-#define PAGE_AUTODESTROY 7
-
 /*
  * Interact with some options
  */
@@ -1914,7 +1911,7 @@ void do_cmd_options_aux(int page, cptr info)
 	int     i, k = 0, n = 0, l;
 	int     opt[24];
 	char    buf[80];
-	bool    browse_only = (page == PAGE_BIRTH) && character_generated &&
+	bool    browse_only = (page == OPT_PAGE_BIRTH) && character_generated &&
 	                      (!p_ptr->wizard || !allow_debug_opts);
 
 
@@ -1949,9 +1946,9 @@ void do_cmd_options_aux(int page, cptr info)
 
 		/* HACK -- description for easy-auto-destroy options */
 #ifdef JP
-		if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "以下のオプションは、簡易自動破壊を使用するときのみ有効", 6, 6);
+		if (page == OPT_PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "以下のオプションは、簡易自動破壊を使用するときのみ有効", 6, 6);
 #else
-		if (page == PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "Following options will protect items from easy auto-destroyer.", 6, 3);
+		if (page == OPT_PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "Following options will protect items from easy auto-destroyer.", 6, 3);
 #endif
 
 		/* Display the options */
@@ -1972,11 +1969,11 @@ void do_cmd_options_aux(int page, cptr info)
 #endif
 
 				option_info[opt[i]].o_text);
-			if ((page == PAGE_AUTODESTROY) && i > 2) c_prt(a, buf, i + 5, 0);
+			if ((page == OPT_PAGE_AUTODESTROY) && i > 2) c_prt(a, buf, i + 5, 0);
 			else c_prt(a, buf, i + 2, 0);
 		}
 
-		if ((page == PAGE_AUTODESTROY) && (k > 2)) l = 3;
+		if ((page == OPT_PAGE_AUTODESTROY) && (k > 2)) l = 3;
 		else l = 0;
 
 		/* Hilite current option */
@@ -2382,9 +2379,9 @@ void do_cmd_options(void)
 			{
 				/* Process the general options */
 #ifdef JP
-				do_cmd_options_aux(1, "キー入力オプション");
+				do_cmd_options_aux(OPT_PAGE_INPUT, "キー入力オプション");
 #else
-				do_cmd_options_aux(1, "Input Options");
+				do_cmd_options_aux(OPT_PAGE_INPUT, "Input Options");
 #endif
 
 				break;
@@ -2395,9 +2392,9 @@ void do_cmd_options(void)
 			{
 				/* Process the general options */
 #ifdef JP
-				do_cmd_options_aux(2, "画面出力オプション");
+				do_cmd_options_aux(OPT_PAGE_OUTPUT, "画面出力オプション");
 #else
-				do_cmd_options_aux(2, "Output Options");
+				do_cmd_options_aux(OPT_PAGE_OUTPUT, "Output Options");
 #endif
 
 				break;
@@ -2408,9 +2405,9 @@ void do_cmd_options(void)
 			{
 				/* Spawn */
 #ifdef JP
-				do_cmd_options_aux(3, "ゲームプレイ・オプション");
+				do_cmd_options_aux(OPT_PAGE_GAMEPLAY, "ゲームプレイ・オプション");
 #else
-				do_cmd_options_aux(3, "Game-Play Options");
+				do_cmd_options_aux(OPT_PAGE_GAMEPLAY, "Game-Play Options");
 #endif
 
 				break;
@@ -2421,9 +2418,9 @@ void do_cmd_options(void)
 			{
 				/* Spawn */
 #ifdef JP
-				do_cmd_options_aux(4, "行動中止関係のオプション");
+				do_cmd_options_aux(OPT_PAGE_DISTURBANCE, "行動中止関係のオプション");
 #else
-				do_cmd_options_aux(4, "Disturbance Options");
+				do_cmd_options_aux(OPT_PAGE_DISTURBANCE, "Disturbance Options");
 #endif
 
 				break;
@@ -2434,9 +2431,9 @@ void do_cmd_options(void)
 			{
 				/* Spawn */
 #ifdef JP
-				do_cmd_options_aux(5, "効率化オプション");
+				do_cmd_options_aux(OPT_PAGE_EFFICIENCY, "効率化オプション");
 #else
-				do_cmd_options_aux(5, "Efficiency Options");
+				do_cmd_options_aux(OPT_PAGE_EFFICIENCY, "Efficiency Options");
 #endif
 
 				break;
@@ -2447,9 +2444,9 @@ void do_cmd_options(void)
 			{
 				/* Spawn */
 #ifdef JP
-				do_cmd_options_aux(7, "簡易アイテム自動破壊オプション");
+				do_cmd_options_aux(OPT_PAGE_AUTODESTROY, "簡易アイテム自動破壊オプション");
 #else
-				do_cmd_options_aux(7, "Easy Auto-Destroyer Options");
+				do_cmd_options_aux(OPT_PAGE_AUTODESTROY, "Easy Auto-Destroyer Options");
 #endif
 				break;
 			}
@@ -2460,9 +2457,9 @@ void do_cmd_options(void)
 			{
 				/* Spawn */
 #ifdef JP
-				do_cmd_options_aux(10, "プレイ記録オプション");
+				do_cmd_options_aux(OPT_PAGE_PLAYRECORD, "プレイ記録オプション");
 #else
-				do_cmd_options_aux(10, "Play-record Options");
+				do_cmd_options_aux(OPT_PAGE_PLAYRECORD, "Play-record Options");
 #endif
 				break;
 			}
@@ -2473,9 +2470,9 @@ void do_cmd_options(void)
 			{
 				/* Spawn */
 #ifdef JP
-				do_cmd_options_aux(6, (!p_ptr->wizard || !allow_debug_opts) ? "初期オプション(参照のみ)" : "初期オプション((*)はスコアに影響)");
+				do_cmd_options_aux(OPT_PAGE_BIRTH, (!p_ptr->wizard || !allow_debug_opts) ? "初期オプション(参照のみ)" : "初期オプション((*)はスコアに影響)");
 #else
-				do_cmd_options_aux(6, (!p_ptr->wizard || !allow_debug_opts) ? "Birth Options(browse only)" : "Birth Options((*)s effect score)");
+				do_cmd_options_aux(OPT_PAGE_BIRTH, (!p_ptr->wizard || !allow_debug_opts) ? "Birth Options(browse only)" : "Birth Options((*)s effect score)");
 #endif
 
 				break;

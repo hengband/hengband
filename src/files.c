@@ -583,7 +583,8 @@ errr process_pref_file_command(char *buf)
 				int os = option_info[i].o_set;
 				int ob = option_info[i].o_bit;
 
-				if ((p_ptr->playing || character_xtra) && 6 == option_info[i].o_page && !p_ptr->wizard)
+				if ((p_ptr->playing || character_xtra) &&
+					(OPT_PAGE_BIRTH == option_info[i].o_page) && !p_ptr->wizard)
 				{
 #ifdef JP
 					msg_format("初期オプションは変更できません! '%s'", buf);
