@@ -2529,13 +2529,6 @@ static errr rd_dungeon_old(void)
 				c_ptr->mimic = FEAT_FLOOR;
 				c_ptr->feat = FEAT_TRAP_OPEN;
 			}
-
-			/* Hidden doors will be closed doors mimicing wall */
-			else if (c_ptr->feat == FEAT_SECRET)
-			{
-				place_closed_door(y, x);
-				c_ptr->mimic = FEAT_WALL;
-			}
 		}
 	}
 

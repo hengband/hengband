@@ -83,6 +83,7 @@ static void place_locked_door(int y, int x)
 	{
 		set_cave_feat(y, x, FEAT_DOOR_HEAD+randint1(7));
 		cave[y][x].info &= ~(CAVE_FLOOR);
+		delete_monster(y, x);
 	}
 }
 
@@ -113,6 +114,7 @@ static void place_secret_door(int y, int x)
 		}
 
 		c_ptr->info &= ~(CAVE_FLOOR);
+		delete_monster(y, x);
 	}
 }
 

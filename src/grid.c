@@ -179,6 +179,8 @@ void place_random_door(int y, int x, bool room)
 
 	/* Closed, locked, or stuck doors (400/1000) */
 	else place_closed_door(y, x);
+
+	delete_monster(y, x);
 }
 
 
