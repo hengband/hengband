@@ -702,6 +702,23 @@ void search(void)
 					disturb(0, 0);
 				}
 
+				/* Invisible wall opening trap */
+				if (c_ptr->feat == FEAT_INVIS)
+				{
+                                        /* Activate the trap */
+                                        cave_set_feat(y, x, FEAT_TRAP_OPEN);
+
+					/* Message */
+#ifdef JP
+					msg_print("トラップを発見した。");
+#else
+					msg_print("You have found a trap.");
+#endif
+
+					/* Disturb */
+					disturb(0, 0);
+				}
+
 				/* Secret door */
 				if (c_ptr->feat == FEAT_SECRET)
 				{
@@ -1602,6 +1619,21 @@ msg_print("まばゆい閃光が走った！");
 
 			break;
 		}
+
+                case FEAT_TRAP_OPEN:
+                {
+#ifdef JP
+                        msg_print("大音響と共にまわりの壁が崩れた！");
+#else
+                        msg_print("Suddenly, surrounding walls are opened!");
+#endif
+                        (void)project(0, 3, y, x, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE, -1);
+                        (void)project(0, 3, y, x - 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE, -1);
+                        (void)project(0, 3, y, x + 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE, -1);
+                        aggravate_monsters(0);
+
+                        break;
+                }
 	}
 	if (break_trap && is_trap(c_ptr->feat))
 	{
@@ -4174,6 +4206,25 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 			/* Hit the trap */
 			hit_trap(break_trap);
 		}
+
+		/* Discover invisible wall opening trap */
+                else if (c_ptr->feat == FEAT_INVIS)
+                {
+                        c_ptr->feat = FEAT_TRAP_OPEN;
+
+			/* Disturb */
+			disturb(0, 0);
+
+			/* Message */
+#ifdef JP
+			msg_print("トラップだ！");
+#else
+			msg_print("You found a trap!");
+#endif
+
+			/* Hit the trap */
+			hit_trap(break_trap);
+                }
 
 		/* Set off an visible trap */
 		else if (is_trap(c_ptr->feat))

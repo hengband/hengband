@@ -1037,6 +1037,7 @@
 
 #define FEAT_TRAP_TRAPS         0x5A
 #define FEAT_TRAP_ALARM         0x5B
+#define FEAT_TRAP_OPEN          0x5C
 
 #define FEAT_FLOWER             0x5D
 #define FEAT_DEEP_GRASS         0x5E

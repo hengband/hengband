@@ -563,6 +563,10 @@ N:91:警報装置
 E:alarm
 G:^:R
 
+N:92:開門スイッチ
+E:wall opeing trap
+G:^:w
+
 N:93:花
 E:flower
 G:::G

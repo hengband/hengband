@@ -58,6 +58,7 @@ bool is_trap(int feat)
 {
 	switch (feat)
 	{
+		case FEAT_INVIS:
 		case FEAT_TRAP_TRAPDOOR:
 		case FEAT_TRAP_PIT:
 		case FEAT_TRAP_SPIKED_PIT:
@@ -76,6 +77,7 @@ bool is_trap(int feat)
 		case FEAT_TRAP_SLEEP:
 		case FEAT_TRAP_TRAPS:
 		case FEAT_TRAP_ALARM:
+                case FEAT_TRAP_OPEN:
 		{
 			/* A trap */
 			return (TRUE);

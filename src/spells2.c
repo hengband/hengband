@@ -3524,6 +3524,9 @@ bool detect_traps(int range)
 			/* Detect traps */
 			if (is_trap(c_ptr->feat))
 			{
+                                if (c_ptr->feat == FEAT_INVIS)
+                                        c_ptr->feat = FEAT_TRAP_OPEN;
+
 				/* Hack -- Memorize */
 				c_ptr->info |= (CAVE_MARK);
 
