@@ -956,8 +956,8 @@ msg_format("モンスター数基本値を %d から %d に減らします", small_tester, i);
 	/* Place some traps in the dungeon */
 	alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_TRAP, randint1(k));
 
-	/* Put some rubble in corridors */
-	alloc_object(ALLOC_SET_CORR, ALLOC_TYP_RUBBLE, randint1(k));
+	/* Put some rubble in corridors (except NO_CAVE dungeon (Castle)) */
+	if (!(d_info[dungeon_type].flags1 & DF1_NO_CAVE)) alloc_object(ALLOC_SET_CORR, ALLOC_TYP_RUBBLE, randint1(k));
 
 	/* Mega Hack -- No object at first level of deeper dungeon */
 	if (p_ptr->enter_dungeon && dun_level > 1)
