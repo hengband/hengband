@@ -359,14 +359,14 @@ static bool find_space(int *y, int *x, int height, int width)
 	/* Initiallize */
 	candidates = 0;
 
-	/* Count the number of varid places */
+	/* Count the number of valid places */
 	for (block_y = dun->row_rooms - blocks_high; block_y >= 0; block_y--)
 	{
 		for (block_x = dun->col_rooms - blocks_wide; block_x >= 0; block_x--)
 		{
 			if (find_space_aux(blocks_high, blocks_wide, block_y, block_x))
 			{
-				/* Find a varid place */
+				/* Find a valid place */
 				candidates++;
 			}
 		}
