@@ -5536,10 +5536,7 @@ bool earthquake(int cy, int cx, int r)
 			c_ptr = &cave[yy][xx];
 
 			/* Lose room and vault */
-			c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY | CAVE_UNSAFE | CAVE_OBJECT );
-
-                        /* Clear mimic type */
-                        c_ptr->mimic = 0;
+			c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY | CAVE_UNSAFE);
 
 			/* Lose light and knowledge */
 			c_ptr->info &= ~(CAVE_GLOW | CAVE_MARK);
@@ -5902,6 +5899,12 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 
 				/* Delete objects */
 				delete_object(yy, xx);
+
+                                /* Clear mimic type */
+                                c_ptr->mimic = 0;
+
+                                /* Clear mirror, runes flag */
+                                c_ptr->info &= ~CAVE_OBJECT;
 
 				/* Wall (or floor) type */
 				t = (floor ? randint0(100) : 200);
