@@ -5252,7 +5252,7 @@ static bool player_birth_aux(void)
 #ifdef JP
 	put_str("クイック・スタートを使うと以前と全く同じキャラクターで始められます。", 11, 5);
 #else
-	put_str("Do you want to use the quick start function(same character as your last one).", 11, 5);
+	put_str("Do you want to use the quick start function(same character as your last one).", 11, 2);
 #endif
 
 		/* Choose */
