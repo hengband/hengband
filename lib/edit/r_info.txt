@@ -4629,6 +4629,7 @@ E:Griffon
 G:H:u
 I:115:30d10:20:50:70
 W:15:1:0:50:0:0
+B:SHOOT:HURT:4d5
 B:CLAW:HURT:2d3
 B:CLAW:HURT:2d3
 B:BITE:HURT:2d3
@@ -4636,7 +4637,7 @@ F:FORCE_MAXHP | DROP_CORPSE | CAN_FLY | RIDING |
 F:BASH_DOOR | 
 F:ANIMAL | IM_COLD | IM_ELEC | IM_ACID
 S:1_IN_10 |
-S:MISSILE
+S:SHOOT
 D:$It is half lion, half eagle.  It flies menacingly towards you.
 D:その体は半分がライオンで、半分がワシだ。それは冒険者の方へ威嚇的に
 D:飛んでくる。
