@@ -1,3 +1,116 @@
+2002-09-24  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/jbldg.txt 1.3, src/birth.c 1.50, src/cmd1.c 1.56, src/cmd3.c 1.29, src/cmd4.c 1.56, src/files.c 1.81, src/load.c 1.41, src/monster2.c 1.42, src/mspells2.c 1.25, src/rooms.c 1.18, src/spells1.c 1.41, src/store.c 1.18, src/wizard1.c 1.26, src/wizard2.c 1.29, src/xtra1.c 1.52:
+	「TOband dev-team からバグ報告」のバグいろいろ修正。全部ではない。
+	d_infoの'M:'フラグ等は取り入れなかった。
+
+	* src/cmd6.c 1.34:
+	トラップ感知のロッドを振ったときに方向指定 dir が0以外かどうかで未判明かどうか
+	調べていたが、魔法具術で使ったときはdirが未定義だった為に判定を間違っていたバグ修正。
+
+	* src/autopick.c 1.68:
+	床上のアイテムの自動破壊で一番上のアイテムを破壊した所でループが終って
+	しまってその下のアイテムを破壊してくれなかったバグ修正。
+
+2002-09-20  Takeshi Mogami  <mogami@cvs>
+
+	* src/generate.c 1.25.2.2:
+	Loading /usr/share/emacs/site-lisp/lang/lang-ja.el (source)...
+	階の移動時にペットを置く処理で、m_ptr->r_idx に正しい値を代入する前に
+	r_info[m_ptr->r_idx] を参照していたバグ修正。
+
+	* src/generate.c 1.31:
+	階の移動時にペットを置く処理で、m_ptr->r_idx に正しい値を代入する前に
+	r_info[m_ptr->r_idx] を参照していたバグ修正。
+
+2002-09-19  iks  <iks@cvs>
+
+	* src/spells2.c 1.57:
+	cave_set_feat関数導入で発生したearthquake関数のエンコードバグ(震源と全く違う位置での地形書き換え現象)を修正。
+
+2002-09-14  Takeshi Mogami  <mogami@cvs>
+
+	* src/spells2.c 1.56, src/streams.c 1.5, src/cmd1.c 1.55, src/cmd2.c 1.34, src/hissatsu.c 1.16, src/melee2.c 1.33, src/spells1.c 1.40:
+	c_ptr->mimic のコードさらにバグ取り。地形を操作する各コマンド disarm,
+	open, close, bash, tunnel等、全部c_ptr->featを直接見てしまっていた。
+	また魔法効果 stone to mud等でc_ptr->mimicをちゃんと更新していなかった
+	のを修正。直接 c_ptr->feat を設定するコードをほとんど全て
+	cave_set_feat()で置き変えて自動的に mimic = 0 になるようにした。
+
+	* lib/help/j_general.txt 1.2, lib/help/j_trans.txt 1.2, lib/help/jgeneral.hlp 1.6, lib/help/jlicense.txt 1.2, lib/help/jspecial.hlp 1.4:
+	著作権表記 1.2.1からマージ。
+
+	* src/cave.c 1.60, src/cmd1.c 1.54:
+	隠しトラップに隣接して走るコマンドを入力すると「その方向にはいけません」
+	と言われる事があったバグ修正。
+
+2002-09-12  Takeshi Mogami  <mogami@cvs>
+
+	* src/artifact.c 1.27, src/autopick.c 1.67, src/bldg.c 1.21, src/cmd5.c 1.44, src/cmd6.c 1.33, src/defines.h 1.76, src/dungeon.c 1.71, src/externs.h 1.78, src/hissatsu.c 1.15, src/mind.c 1.15, src/racial.c 1.24, src/spells3.c 1.51, src/wizard2.c 1.28, src/xtra1.c 1.51:
+	鑑定のロッドの使用後に自動破棄があったときのバグ修正。
+	さらにp_ptr->noticeの新しいフラグPN_AUTODESTROYを導入して
+	いちいちoptimizeを遅らせるHackをしないで済むように書き変えた。
+
+	* src/cmd6.c 1.23.2.3:
+	鑑定のロッドの使用後に自動破壊が起きた時の処理でoptimizeを遅らせているのに、
+	遅らせていたoptimizeを後でするのを忘れていたバグ修正。
+
+2002-09-11  Takeshi Mogami  <mogami@cvs>
+
+	* src/xtra2.c 1.48:
+	'l'ookコマンドでスペースキーで興味のある地形を巡っているとき、
+	隠し扉や隠しトラップの位置にもカーソルが来てしまっていたバグ修正。
+
+2002-09-10  Takeshi Mogami  <mogami@cvs>
+
+	* src/load.c 1.40:
+	1.2.x以前のセーブデータをロードしたときにテレパシーの冠のテレパシーが
+	失われないように修正。
+
+	* lib/edit/q0000027_j.txt 1.5, src/init1.c 1.46:
+	方法変更。さっきの方法よりスマート。
+	F:+:58:8:0:0:0:0:32
+	と書くと地形'+'は見掛けが花崗岩の壁(58)で、探索するとドア(32)が見付かる。
+
+	* lib/edit/q0000027_j.txt 1.4, src/init1.c 1.45:
+	クエスト内で隠し扉が置かれる処理の変更を忘れていたので追加。
+
+2002-09-08  xdd  <xdd@cvs>
+
+	* src/main-mac-carbon.c 1.8, src/main-mac.c 1.20:
+	初期設定ファイルが作成されていない状態でタイル表示をONにすると表示されなかった問題の修正。
+
+	* src/main-mac-carbon.c 1.7, src/main-mac.c 1.19:
+	コメント行のF9とF10のキーコードが入れ変っていたので修正。
+
+	* lib/pref/pref-mac.prf 1.5:
+	F9とF10キーのコードが入れ変わっている問題の修正。
+
+	* src/main-mac-carbon.c 1.2.2.3, src/main-mac.c 1.17.4.1:
+	コメント行のF9とF10のキーコードが入れ変わっていたので修正。
+
+	* lib/pref/pref-mac.prf 1.4.20.1:
+	F9とF10キーのコードが入れ変わっている問題の修正。
+
+2002-09-08  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/version.txt 1.11.2.2: jversion.txt英訳
+
+2002-09-08  habu  <habu@cvs>
+
+	* lib/help/jversion.txt 1.11.2.2:
+	バージョン1.2.1のバージョン履歴を追加。
+
+	* configure.in 1.18.2.2, lib/file/news.txt 1.12.2.2, lib/file/news_j.txt 1.11.2.2, src/defines.h 1.65.2.4:
+	バージョン1.2.1リリースに向けてバージョン名を更新。
+
+2002-09-08  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/s_info_j.txt 1.3, lib/edit/t0000001_j.txt 1.9, lib/edit/t_lite_j.txt 1.8:
+	狂戦士の弓の熟練度を0に。鏡使いの報酬を警告の指輪に。
+
+	* Changelogs 1.56: 更新
+
 2002-09-07  Takeshi Mogami  <mogami@cvs>
 
 	* src/spells2.c 1.55:
