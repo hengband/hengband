@@ -7701,7 +7701,7 @@ static void add_essence(int mode)
 
 	if (es_ptr->add == ESSENCE_SLAY_GLOVE)
 		item_tester_tval = TV_GLOVES;
-	else if (mode == 1)
+	else if (mode == 1 || mode == 5)
 		item_tester_hook = item_tester_hook_melee_ammo;
 	else if (es_ptr->add == ESSENCE_ATTACK)
 		item_tester_hook = item_tester_hook_weapon;
