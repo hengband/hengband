@@ -3045,7 +3045,7 @@ static void display_flag_aux(int row, int col, cptr header,
 	}
 
         /* Assume that player flag is already written */
-        if (mode & (DP_IMM | DP_WP)) return;
+        if (mode & DP_IMM) return;
 
 	/* Default */
 	c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
@@ -3219,7 +3219,7 @@ static void display_player_other_flag_info(void)
 
 	display_player_equippy(row-2, col+12, DP_WP);
 
-	c_put_str(TERM_WHITE, "ab", row-1, col+12);
+	c_put_str(TERM_WHITE, "ab@", row-1, col+12);
 
 #ifdef JP
         display_flag_aux(row+ 0, col, "¼Ù°­ ÇÜÂÇ :", TR_SLAY_EVIL, &f, DP_WP);
