@@ -3971,7 +3971,7 @@ void request_command(int shopping)
 			/* Get a command */
 			sub_cmd = inkey();
 
-			if (!shopping && command_menu && ((sub_cmd == '\r') || (sub_cmd == 'x') || (sub_cmd == 'X'))
+			if (!shopping && command_menu && ((sub_cmd == '\r') || (sub_cmd == '\n') || (sub_cmd == 'x') || (sub_cmd == 'X'))
 			    && !keymap_act[mode][(byte)(sub_cmd)])
 			{
 				int basey, basex;

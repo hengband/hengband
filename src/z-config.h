@@ -686,7 +686,9 @@
  * Check the modification time of *_info.raw files
  * (by Keldon Jones)
  */
+#ifndef MAC_MPW
 #define CHECK_MODIFICATION_TIME
+#endif
 
 /*
  * Use the new sorting routines for creation

@@ -2351,9 +2351,9 @@ void display_map(int *cy, int *cx)
 
 	byte tp;
 
-	byte bigma[cur_hgt+2][cur_wid+2];
-	char bigmc[cur_hgt+2][cur_wid+2];
-	byte bigmp[cur_hgt+2][cur_wid+2];
+	byte bigma[MAX_HGT+2][MAX_WID+2];
+	char bigmc[MAX_HGT+2][MAX_WID+2];
+	byte bigmp[MAX_HGT+2][MAX_WID+2];
 
 	byte ma[SCREEN_HGT + 2][SCREEN_WID + 2];
 	char mc[SCREEN_HGT + 2][SCREEN_WID + 2];
