@@ -2568,7 +2568,7 @@ prt("お待ち下さい...", 0, 0);
 			byte flag;
 
 #ifdef JP
-			put_str("何かキーを押してください('M':拾う 'N':放置 'D':M+D 'K':壊すアイテムを表示)", 23, 1);
+			put_str("何かキーを押してください('M':拾う 'N':放置 'D':M+N 'K':壊すアイテムを表示)", 23, 1);
 #else
 			put_str(" Hit M, N(for ~), K(for !), or D(same as M+N) to display auto-picker items.", 23, 1);
 #endif
