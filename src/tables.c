@@ -6767,15 +6767,6 @@ option_type option_info[] =
 #endif
 
 
-#ifdef JP
-	{ &change_numeral,              TRUE,  2, 4, 5,
-	"change_numeral",               "アイテムの種類によって数え方を変える" },
-#else
-	{ &change_numeral,              TRUE,  99, 4, 5,
-	"change_numeral",               "Change a way to counting (japanese only)" },
-#endif
-
-
 	/*** Game-Play ***/
 
 #ifdef JP

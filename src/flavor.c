@@ -2268,16 +2268,8 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 	}
 	else if (o_ptr->number > 1)
 	{
-		if (change_numeral == FALSE)
-		{
-			t = object_desc_num(t, o_ptr->number);
-			t = object_desc_str(t, (o_ptr->number > 9) ? "個の " : "つの ");
-		}
-		else
-		{
-			t = object_desc_kosuu(t, o_ptr);
-			t = object_desc_str(t, "の ");
-		}
+		t = object_desc_kosuu(t, o_ptr);
+		t = object_desc_str(t, "の ");
 	}
 
 	/* 英語の場合アーティファクトは The が付くので分かるが

@@ -281,7 +281,6 @@ bool plain_pickup;
 
 bool always_show_list;
 bool powerup_home;
-bool change_numeral;
 bool send_score;
 bool allow_debug_opts;   /* Allow use of debug/cheat options */
 
