@@ -2871,7 +2871,7 @@ static bool target_set_accept(int y, int x)
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Memorized object */
-		if (o_ptr->marked) return (TRUE);
+		if (o_ptr->marked & OM_FOUND) return (TRUE);
 	}
 
 	/* Interesting memorized features */
@@ -3415,7 +3415,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Describe it */
-		if (o_ptr->marked)
+		if (o_ptr->marked & OM_FOUND)
 		{
 			char o_name[MAX_NLEN];
 

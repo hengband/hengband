@@ -4640,7 +4640,7 @@ static bool run_test(void)
 			next_o_idx = o_ptr->next_o_idx;
 
 			/* Visible object */
-			if (o_ptr->marked) return (TRUE);
+			if (o_ptr->marked & OM_FOUND) return (TRUE);
 		}
 
 		/* Assume unknown */

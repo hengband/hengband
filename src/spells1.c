@@ -1452,7 +1452,7 @@ note_kill = "壊れてしまった！";
 						object_known(o_ptr);
 
 						/* Notice */
-						if (known && o_ptr->marked)
+						if (known && (o_ptr->marked & OM_FOUND))
 						{
 #ifdef JP
 msg_print("カチッと音がした！");
@@ -1521,7 +1521,7 @@ note_kill = "灰になった。";
 		if (do_kill)
 		{
 			/* Effect "observed" */
-			if (known && o_ptr->marked)
+			if (known && (o_ptr->marked & OM_FOUND))
 			{
 				obvious = TRUE;
 				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -1531,7 +1531,7 @@ note_kill = "灰になった。";
 			if (is_art || ignore)
 			{
 				/* Observe the resist */
-				if (known && o_ptr->marked)
+				if (known && (o_ptr->marked & OM_FOUND))
 				{
 #ifdef JP
 msg_format("%sは影響を受けない！",
@@ -1548,7 +1548,7 @@ msg_format("%sは影響を受けない！",
 			else
 			{
 				/* Describe if needed */
-				if (known && o_ptr->marked && note_kill)
+				if (known && (o_ptr->marked & OM_FOUND) && note_kill)
 				{
 #ifdef JP
 msg_format("%sは%s", o_name, note_kill);

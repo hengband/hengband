@@ -1216,7 +1216,7 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Memorized objects */
-		if (o_ptr->marked)
+		if (o_ptr->marked & OM_FOUND)
 		{
 			if (display_autopick)
 			{

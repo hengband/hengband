@@ -6275,7 +6275,7 @@ int scan_floor(int *items, int y, int x, int mode)
 		if ((mode & 0x01) && !item_tester_okay(o_ptr)) continue;
 
 		/* Marked */
-		if ((mode & 0x02) && !o_ptr->marked) continue;
+		if ((mode & 0x02) && !(o_ptr->marked & OM_FOUND)) continue;
 
 		/* Accept this item */
 		/* XXX Hack -- Enforce limit */

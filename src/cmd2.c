@@ -434,7 +434,7 @@ static s16b chest_check(int y, int x)
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Skip unknown chests XXX XXX */
-		/* if (!o_ptr->marked) continue; */
+		/* if (!(o_ptr->marked & OM_FOUND)) continue; */
 
 		/* Check for chest */
 		if (o_ptr->tval == TV_CHEST) return (this_o_idx);

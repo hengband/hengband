@@ -1628,7 +1628,7 @@ static void autopick_delayed_alter_aux(int item)
 	/* Get the item (on the floor) */
 	else o_ptr = &o_list[0 - item];
 
-	if (o_ptr->k_idx && o_ptr->marked & OM_AUTODESTROY)
+	if (o_ptr->k_idx && (o_ptr->marked & OM_AUTODESTROY))
 	{
 		char o_name[MAX_NLEN];
 
