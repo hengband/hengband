@@ -101,7 +101,7 @@ typedef struct
 static grouper group_item[] =
 {
 #ifdef JP
-{ TV_SHOT,          "射撃物" },
+	{ TV_SHOT,          "射撃物" },
 #else
 	{ TV_SHOT,          "Ammo" },
 #endif
@@ -110,24 +110,23 @@ static grouper group_item[] =
 	{ TV_BOLT,          NULL },
 
 #ifdef JP
-{ TV_BOW,           "弓" },
+	{ TV_BOW,           "弓" },
 #else
 	{ TV_BOW,           "Bows" },
 #endif
 
-
 #ifdef JP
-{ TV_SWORD,         "武器" },
+	{ TV_DIGGING,       "武器" },
 #else
-	{ TV_SWORD,         "Weapons" },
+	{ TV_DIGGING,       "Weapons" },
 #endif
 
 	{ TV_POLEARM,       NULL },
 	{ TV_HAFTED,        NULL },
-	{ TV_DIGGING,       NULL },
+	{ TV_SWORD,         NULL },
 
 #ifdef JP
-{ TV_SOFT_ARMOR,    "防具（体）" },
+	{ TV_SOFT_ARMOR,    "防具 (体)" },
 #else
 	{ TV_SOFT_ARMOR,    "Armour (Body)" },
 #endif
@@ -136,61 +135,60 @@ static grouper group_item[] =
 	{ TV_DRAG_ARMOR,    NULL },
 
 #ifdef JP
-{ TV_CLOAK,         "防具（その他）" },
+	{ TV_BOOTS,         "防具 (その他)" },
 #else
-	{ TV_CLOAK,         "Armour (Misc)" },
+	{ TV_BOOTS,         "Armour (Misc)" },
 #endif
 
-	{ TV_SHIELD,        NULL },
+	{ TV_GLOVES,        NULL },
 	{ TV_HELM,          NULL },
 	{ TV_CROWN,         NULL },
-	{ TV_GLOVES,        NULL },
-	{ TV_BOOTS,         NULL },
+	{ TV_SHIELD,        NULL },
+	{ TV_CLOAK,         NULL },
 
 #ifdef JP
-{ TV_AMULET,        "アミュレット" },
-{ TV_RING,          "指輪" },
+	{ TV_LITE,          "光源" },
+	{ TV_AMULET,        "アミュレット" },
+	{ TV_RING,          "指輪" },
 #else
+	{ TV_LITE,          "Light Sources" },
 	{ TV_AMULET,        "Amulets" },
 	{ TV_RING,          "Rings" },
 #endif
 
+#ifdef JP
+	{ TV_STAFF,         "杖" },
+	{ TV_WAND,          "魔法棒" },
+	{ TV_ROD,           "ロッド" },
+#else
+	{ TV_STAFF,         "Staffs" },
+	{ TV_WAND,          "Wands" },
+	{ TV_ROD,           "Rods" },
+#endif
 
 #ifdef JP
-{ TV_SCROLL,        "巻物" },
-{ TV_POTION,        "薬" },
-{ TV_FOOD,          "食料" },
+	{ TV_SCROLL,        "巻物" },
+	{ TV_POTION,        "薬" },
+	{ TV_FOOD,          "食料" },
 #else
 	{ TV_SCROLL,        "Scrolls" },
 	{ TV_POTION,        "Potions" },
 	{ TV_FOOD,          "Food" },
 #endif
 
-
 #ifdef JP
-{ TV_ROD,           "ロッド" },
-{ TV_WAND,          "魔法棒" },
-{ TV_STAFF,         "杖" },
-#else
-	{ TV_ROD,           "Rods" },
-	{ TV_WAND,          "Wands" },
-	{ TV_STAFF,         "Staffs" },
-#endif
-
-
-#ifdef JP
-{ TV_LIFE_BOOK,     "魔法書（生命）" },
-{ TV_SORCERY_BOOK,  "魔法書（仙術）" },
-{ TV_NATURE_BOOK,   "魔法書（自然）" },
-{ TV_CHAOS_BOOK,    "魔法書（カオス）" },
-{ TV_DEATH_BOOK,    "魔法書（暗黒）" },
-{ TV_TRUMP_BOOK,    "魔法書（トランプ）" },
-{ TV_ARCANE_BOOK,   "魔法書（秘術）" },
-{ TV_CRAFT_BOOK,  "魔法書（匠）" },
-{ TV_DAEMON_BOOK,   "魔法書（悪魔）" },
-{ TV_CRUSADE_BOOK,     "魔法書（破邪）" },
-{ TV_MUSIC_BOOK,    "歌集" },
-{ TV_HISSATSU_BOOK, "武芸の書" },
+	{ TV_LIFE_BOOK,     "魔法書 (生命)" },
+	{ TV_SORCERY_BOOK,  "魔法書 (仙術)" },
+	{ TV_NATURE_BOOK,   "魔法書 (自然)" },
+	{ TV_CHAOS_BOOK,    "魔法書 (カオス)" },
+	{ TV_DEATH_BOOK,    "魔法書 (暗黒)" },
+	{ TV_TRUMP_BOOK,    "魔法書 (トランプ)" },
+	{ TV_ARCANE_BOOK,   "魔法書 (秘術)" },
+	{ TV_CRAFT_BOOK,    "魔法書 (匠)" },
+	{ TV_DAEMON_BOOK,   "魔法書 (悪魔)" },
+	{ TV_CRUSADE_BOOK,  "魔法書 (破邪)" },
+	{ TV_MUSIC_BOOK,    "歌集" },
+	{ TV_HISSATSU_BOOK, "武芸の書" },
 #else
 	{ TV_LIFE_BOOK,     "Books (Life)" },
 	{ TV_SORCERY_BOOK,  "Books (Sorcery)" },
@@ -199,58 +197,50 @@ static grouper group_item[] =
 	{ TV_DEATH_BOOK,    "Books (Death)" },
 	{ TV_TRUMP_BOOK,    "Books (Trump)" },
 	{ TV_ARCANE_BOOK,   "Books (Arcane)" },
-	{ TV_CRAFT_BOOK,  "Books (Craft)" },
+	{ TV_CRAFT_BOOK,    "Books (Craft)" },
 	{ TV_DAEMON_BOOK,   "Books (Daemon)" },
-	{ TV_CRUSADE_BOOK,     "Books (Crusade)" },
+	{ TV_CRUSADE_BOOK,  "Books (Crusade)" },
 	{ TV_MUSIC_BOOK,    "Song Books" },
 	{ TV_HISSATSU_BOOK, "Books (Kendo)" },
 #endif
 
 #ifdef JP
-{ TV_PARCHMENT,    "羊皮紙" },
+	{ TV_WHISTLE,       "笛" },
+	{ TV_CAPTURE,       "キャプチャー・ボール" },
+	{ TV_CARD,          "エクスプレスカード" },
 #else
-{ TV_PARCHMENT,    "Parchment" },
+	{ TV_WHISTLE,       "Whistle" },
+	{ TV_CAPTURE,       "Capture Ball" },
+	{ TV_CARD,          "Express Card" },
 #endif
 
 #ifdef JP
-{ TV_CHEST,         "箱" },
+	{ TV_CHEST,         "箱" },
 #else
 	{ TV_CHEST,         "Chests" },
 #endif
 
 #ifdef JP
-{ TV_CAPTURE,         "キャプチャー・ボール" },
+	{ TV_FIGURINE,      "人形" },
+	{ TV_STATUE,        "像" },
+	{ TV_CORPSE,        "死体" },
 #else
-	{ TV_CAPTURE,         "Capture Ball" },
-#endif
-
-#ifdef JP
-{ TV_CARD,         "エクスプレスカード" },
-#else
-	{ TV_CARD,         "Express Card" },
-#endif
-
 	{ TV_FIGURINE,      "Magical Figurines" },
 	{ TV_STATUE,        "Statues" },
 	{ TV_CORPSE,        "Corpses" },
-
-#ifdef JP
-{ TV_WHISTLE,         "笛" },
-#else
-	{ TV_WHISTLE,         "Whistle" },
 #endif
 
 #ifdef JP
-{ TV_SPIKE,         "くさび" },
+	{ TV_SKELETON,      "その他" },
 #else
-	{ TV_SPIKE,         "Spike" },
+	{ TV_SKELETON,      "Misc" },
 #endif
 
-	{ TV_LITE,          NULL },
-	{ TV_FLASK,         NULL },
-	{ TV_JUNK,          NULL },
 	{ TV_BOTTLE,        NULL },
-	{ TV_SKELETON,      NULL },
+	{ TV_JUNK,          NULL },
+	{ TV_SPIKE,         NULL },
+	{ TV_FLASK,         NULL },
+	{ TV_PARCHMENT,     NULL },
 
 	{ 0, "" }
 };
@@ -354,7 +344,7 @@ static void kind_info(char *buf, char *dam, char *wgt, int *lev, s32b *val, int 
  */
 static void spoil_obj_desc(cptr fname)
 {
-	int i, k, s, t, n = 0;
+	int i, k, s, t, n = 0, group_start = 0;
 
 	u16b who[200];
 
@@ -398,54 +388,59 @@ static void spoil_obj_desc(cptr fname)
 		/* Write out the group title */
 		if (group_item[i].name)
 		{
-			/* Hack -- bubble-sort by cost and then level */
-			for (s = 0; s < n - 1; s++)
+			if (n)
 			{
-				for (t = 0; t < n - 1; t++)
+				/* Hack -- bubble-sort by cost and then level */
+				for (s = 0; s < n - 1; s++)
 				{
-					int i1 = t;
-					int i2 = t + 1;
-
-					int e1;
-					int e2;
-
-					s32b t1;
-					s32b t2;
-
-					kind_info(NULL, NULL, NULL, &e1, &t1, who[i1]);
-					kind_info(NULL, NULL, NULL, &e2, &t2, who[i2]);
-
-					if ((t1 > t2) || ((t1 == t2) && (e1 > e2)))
+					for (t = 0; t < n - 1; t++)
 					{
-						int tmp = who[i1];
-						who[i1] = who[i2];
-						who[i2] = tmp;
+						int i1 = t;
+						int i2 = t + 1;
+
+						int e1;
+						int e2;
+
+						s32b t1;
+						s32b t2;
+
+						kind_info(NULL, NULL, NULL, &e1, &t1, who[i1]);
+						kind_info(NULL, NULL, NULL, &e2, &t2, who[i2]);
+
+						if ((t1 > t2) || ((t1 == t2) && (e1 > e2)))
+						{
+							int tmp = who[i1];
+							who[i1] = who[i2];
+							who[i2] = tmp;
+						}
 					}
 				}
+
+				fprintf(fff, "\n\n%s\n\n", group_item[group_start].name);
+
+				/* Spoil each item */
+				for (s = 0; s < n; s++)
+				{
+					int e;
+					s32b v;
+
+					/* Describe the kind */
+					kind_info(buf, dam, wgt, &e, &v, who[s]);
+
+					/* Dump it */
+					fprintf(fff, "     %-45s%8s%7s%5d%9ld\n",
+						buf, dam, wgt, e, (long)(v));
+				}
+
+				/* Start a new set */
+				n = 0;
 			}
-
-			/* Spoil each item */
-			for (s = 0; s < n; s++)
-			{
-				int e;
-				s32b v;
-
-				/* Describe the kind */
-				kind_info(buf, dam, wgt, &e, &v, who[s]);
-
-				/* Dump it */
-				fprintf(fff, "     %-45s%8s%7s%5d%9ld\n",
-					buf, dam, wgt, e, (long)(v));
-			}
-
-			/* Start a new set */
-			n = 0;
 
 			/* Notice the end */
 			if (!group_item[i].tval) break;
 
 			/* Start a new set */
-			fprintf(fff, "\n\n%s\n\n", group_item[i].name);
+			group_start = i;
 		}
 
 		/* Acquire legal item types */
