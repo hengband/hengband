@@ -3345,12 +3345,23 @@ msg_print("守りのルーンが壊れた！");
 #endif
 
 			o_ptr = choose_warning_item();
-			object_desc(o_name, o_ptr, FALSE, 0);
+			if (o_ptr)
+			{
+				object_desc(o_name, o_ptr, FALSE, 0);
 #ifdef JP
-			msg_format("%sは%s光った。",o_name, color);
+				msg_format("%sは%s光った。", o_name, color);
 #else
-			msg_format("%s glows %s.",o_name, color);
+				msg_format("%s glows %s.", o_name, color);
 #endif
+			}
+			else
+			{
+#ifdef JP
+				msg_format("s%光る物が頭に浮かんだ。", color);
+#else
+				msg_format("An %s image forms in your mind.");
+#endif
+			}
 		}
 	}
 
