@@ -3809,9 +3809,9 @@ info[i++] = "それはあなたの魔力を吸い取る。";
 				break;
 			case SV_AMULET_THE_MAGI:
 #ifdef JP
-				info[i++] = "それは３つの低級なESPを授ける。";
+				info[i++] = "それは最大で３つまでの低級なESPを授ける。";
 #else
-				info[i++] = "It provides three low rank ESPs.";
+				info[i++] = "It provides up to three low rank ESPs.";
 #endif
 				break;
 			}
