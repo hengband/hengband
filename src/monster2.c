@@ -1676,14 +1676,23 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 				(void)sprintf(desc, "%s?", name);
 #endif
 			}
-			else if ((cave[m_ptr->fy][m_ptr->fx].m_idx == p_ptr->riding) || !p_ptr->inside_battle)
-				(void)strcpy(desc, name);
-			else
+
+			/* Inside monster arena, and it is not your mount */
+			else if (p_ptr->inside_battle &&
+				 !(p_ptr->riding && (&m_list[p_ptr->riding] == m_ptr)))
+			{
+				/* It is a fake unique monster */
 #ifdef JP
 				(void)sprintf(desc, "%sもどき", name);
 #else
 				(void)sprintf(desc, "fake %s", name);
 #endif
+			}
+
+			else
+			{
+				(void)strcpy(desc, name);
+			}
 		}
 
 		/* It could be an indefinite monster */
@@ -1732,7 +1741,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 			strcat(desc,buf);
 		}
 
-		if (cave[m_ptr->fy][m_ptr->fx].m_idx == p_ptr->riding)
+		if (p_ptr->riding && (&m_list[p_ptr->riding] == m_ptr))
 		{
 #ifdef JP
 			strcat(desc,"(乗馬中)");
