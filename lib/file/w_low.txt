@@ -1,45 +1,60 @@
 N: 1:BIAS_ELEC
-8
+11
 'Stungun'
 'Grid Bug'
 'Spark'
 'Electric Eel'
 'Electronics'
 'Shockbringer'
-of Shockness
 'Thunder Mountain'
+'Lightning Conductor'
+'Static Eletricity'
+'Blue Blink'
+of Shockness
 
 N: 2:BIAS_POIS
-6
+8
 'Dioxin'
 'Poisonous Maggot'
 'Insect's Poison'
 'Wormwood'
+'Tsuchinoko'
+'Snake Master'
 of mold
 of Depleted Uranium
 
 N: 3:BIAS_FIRE
-10
-'Eat One'
+9
+'Salamander'
 'Cracker'
-of the Down
 'Red Hot Chili Pepper'
 'Tabasco'
-'Molotov cocktail'
+'Molotov Cocktail'
 'Fire Ant'
-'Fireman'
-'Hot Brood'
+'Hot Blood'
 'Fervent Soul'
+of the Damn
 
 N: 4:BIAS_COLD
-4
+9
+'Freezing'
+'Polar Bear'
+'Snow Avalanche'
 'Freeze!'
 'Freezing Blade'
 'Icy Clow'
+'Nimloth'
+'Bigfoot'
 of Liquid Helium
 
 N: 5:BIAS_ACID
-5
+11
+'Adenine'
+'Guanine'
+'Thymine'
+'Cytosine'
+'Uracil'
+'Leucine'
 'Melt Down'
 'Acidic detergent'
 'Termite'
@@ -47,43 +62,62 @@ N: 5:BIAS_ACID
 'Acid Rain'
 
 N:12:BIAS_CHAOS
-3
+12
+'Koch'
+'Julia'
+'Cotortion Blade'
+'Protean Edge'
+'cHaOs rEgIoN'
 'Schrodinger'
 'Mandelbrot'
+'Kaleidoscope'
+'Randamizer'
+'Shapechanger'
 of Change
+of Logrus
 
 N:14:BIAS_NECROMANTIC
-7
+11
 'Blood'
+'Tombstone'
+'Evil Soldlier'
 'Satan's Claw'
 'Rotten Child'
-that strangled people
+'Necrophiliac'
+'Dread of Night'
+'Dungeon Shade'
+'Elfrist'
 of Misery
 of Boodoo
-'Necrophiliac'
 
 N:15:BIAS_LAW
 N:13:BIAS_PRIESTLY
 N: 8:BIAS_WIS
-6
+13
 'Indulgence'
 'Angel's Love Song'
 'Monastery'
 'Pure Mischief'
-of bless
+'Self-Enlightenment'
+'Angelic Blessing'
+'Path of Peace'
+'Starlit Angel'
+'Angelic Page'
+'Disciple of Law'
+'Worship'
+of blessing
 of Holy Smoke
 
 N: 9:BIAS_DEX
-3
+N:16:BIAS_ROGUE
+11
 'Whirlwind'
 'Cat's Clow'
 'Sands of Time'
-
-N:16:BIAS_ROGUE
-7
 'Raid'
 'Elusiveness'
-'The Seven Tools'
+'Seven Tools'
+'Chameleon's Tongue'
 of Trickery
 of Jack
 of Tachyon
@@ -91,9 +125,12 @@ of Cowardice
 
 N:17:BIAS_MAGE
 N: 7:BIAS_INT
-4
+8
 'Instant Mage Maker'
-'Power of Hand'
+'Force of Hand'
+'Kumon'
+'Math Magic'
+'Cheating'
 of Novice Mage
 of Jongnamk, Son of Jongil
 of Tips
@@ -101,45 +138,52 @@ of Tips
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
 N:10:BIAS_CON
-6
+14
 'Basher'
-'The Body Power'
+'Body Power'
 'Muscle'
 'Abslicer'
 'Peace Maker'
+'Protein'
+'Grizzly Bear'
+'Warrior's Charge'
+'Valorous Charge'
+'Warrior's Stand'
+'Spoils of Victory'
+'Ogresmacher'
+'Weekend Warrior'
 of Slay Munchkin
 
 N:19:BIAS_RANGER
-6
-of Centaurs
+10
 'Animalbane'
 'Sniper'
 'Naturebane'
 'Catapult'
+'Mumakbane'
+'Mosquito'
+'Laserscope'
+of Centaurs
 of *Slay Bear*
-
+of *Slay Cat*
 
 N:11:BIAS_CHR
-5
-(friendly)
+8
+'Lolita'
 'Laughcaller'
-of Sadists
 'S&M'
+'friendly'
+'Oneiric Girl'
+of Sadists
 of Cuties
+of Alice
 
 N:*:Default
-31
-'I killed many many monsters and all I got was this trival artifact!'
-'Ogresmacher'
-'Elfrist'
+26
 'Grayswandie'
 'Plutonium'
 'X-Winblow'
-of Severe Pain
-of Horror
-of Agony
 'Wormbiter'
-'Mumakbane'
 'Shrieker'
 'Rotten Egg'
 'Phaser'
@@ -152,7 +196,6 @@ of Agony
 'Kryptonite'
 'Virus'
 'Patriot'
-'Weekend Warrior'
 'Bungee'
 'Pig's Eye'
 'Peashooter'
@@ -160,3 +203,6 @@ of Agony
 'Gilettar'
 'Angrist'
 'Belangil'
+of Severe Pain
+of Horror
+of Agony

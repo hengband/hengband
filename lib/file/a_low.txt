@@ -21,9 +21,10 @@ of Tarantula
 of Talos
 
 N: 3:BIAS_FIRE
-11
+12
 'Sunglasses'
 'Fan'
+'Fireman'
 'Fire Extinguisher'
 'Burning Student'
 'Keeper of Flame'
