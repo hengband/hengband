@@ -1,4 +1,123 @@
+2002-06-22  Takeshi Mogami  <mogami@cvs>
+
+	* src/monster1.c 1.20, src/monster2.c 1.35, src/spells3.c 1.44:
+	クローン地獄での謎のモンスターのバグ修正。このバグは3つのバグの複合だった。
+	・暗い穴の上は召喚不可能だが、モンスターの変身後の配置も不可能になっていた(バグ1)
+	→ 暗い穴に全てのモンスターが歩いて入れる(バグ2)
+	→ 変身で配置失敗(1.0.11以前はその後で大抵クラッシュ(バグ3a))
+	→ (1.1.0RC以降)配置失敗にも関わらず強引にm_list[hack_m_idx_ii]を元のモンスターのデータで上書きしようとする。(バグ3b)
+	→ hack_m_idx_iiは未定義なので全然関係無い位置のm_listを破壊してしまう。
+	→ 破壊されたモンスターが元居た位置のcave[y][x].m_idxが残る
+	   (= 死んでも死なない謎の見えないモンスター(たまたまml==TRUEのとき)、
+	    または「プレイヤー」(たまたまml==FALSEのとき))。
+
+2002-06-21  Takeshi Mogami  <mogami@cvs>
+
+	* src/object1.c 1.38:
+	アイテム選択時に'('と')'で1つ目と最後のアイテムを選択するようにした。
+
+	* src/autopick.c 1.49:
+	「パターンが見付かりません」のメッセージが、'n'と'N'では表示されていたけれど、
+	'/'では表示されなくなっていたのを修正。
+
+	* src/autopick.c 1.48:
+	次を検索'n'、1つ前を検索'N'を追加。見付からなかったときは
+	説明文領域に「パターンが見付かりません: 」と表示。
+
+	* lib/help/pref.txt 1.14, autopick.txt 1.13, autopick_eng.txt 1.15, lib/help/jpref.txt 1.11:
+	キーワードの順番が自由になったのに対応して更新。
+
+	* src/autopick.c 1.47, src/externs.h 1.67, src/variable.c 1.26:
+	- ^U ^S などのコマンドを最大長さの1024文字近くの行に使うと落ちるバグ修正。
+	- ^U ^S などのコマンドが使ったメモリを解放しないでどんどん浪費するバグ修正。
+	- 自動拾い設定のキーワードの順番を自由にした。
+	- 検索コマンド'/'実装。/^Iで持ち物のアイテムに一致する行検索。/^Lで最後に自動破壊したアイテムに一致する行検索。
+
+2002-06-20  Takeshi Mogami  <mogami@cvs>
+
+	* src/load.c 1.31:
+	バージョンアップ後のロードで鏡地形の変更を適用。
+
+2002-06-20  henkma  <henkma@cvs>
+
+	* src/xtra2.c 1.39:
+	lookコマンドで, mirrorにaが付くか付かないかの判定が元の地形を使ってなされてい
+	たので直した.
+
+	* src/cave.c 1.52:
+	間違って地形のmimicコードをいじるような変更にしてしまっていたので修正.
+
+	* src/spells1.c 1.26:
+	シーカーレイのコード修正. 最後の鏡にあたった後のランダムな方向の選び方が
+	変だったので直した.
+
+	* src/cave.c 1.51, src/defines.h 1.62, src/externs.h 1.66, src/melee1.c 1.17, src/mind.c 1.11, src/object2.c 1.43, src/racial.c 1.20, src/spells1.c 1.25, src/spells3.c 1.43, src/xtra2.c 1.38:
+	鏡の仕様変更. 前の地形をちゃんと保存し, 壊れたら強制的に床になるのではなく
+	前の地形になるようにした. 同じ方法で紋章についてもできるはずだけどそれにつ
+	いては今回は保留. 変更前のもので鏡のプレイをしていると問題あるが, セーブフ
+	ァイルコンバートのコードは次のバージョンナンバーアップの時にする予定.
+	ジョンup時
+
+2002-06-20  Takeshi Mogami  <mogami@cvs>
+
+	* src/generate.c 1.25:
+	階を移動するときペットの属性を保存していなかった為に問答無用で中立扱いになっていたバグ修正。
+
+	* lib/help/jraceclas.txt 1.4, lib/help/raceclas.txt 1.4, src/birth.c 1.47:
+	- ヘルプの性格の説明に、ヒットポイントと呪文の失敗率への影響についての
+	  説明を追加。英語版はキャラ作成時の説明文にも追加。日本語版は文章があ
+	  まりよくないのでキャラ作成時については見送り。
+	- 英語版の説明文で読みやすいように文の間をスペース文字を2つにした。
+	- 英語版のヘルプで見出しがDunedain(複数形)だったところをDunadan(単数)に修正。
+	- 日本語版でデュナダンの説明がアンバライトと同じだったのをjangbandのものに修正。
+
+	* lib/help/jdefend.txt 1.5, lib/help/jmonster.txt 1.6, lib/help/jobjects.txt 1.7, lib/help/jraceclas.txt 1.3, lib/help/jtown.txt 1.6, lib/help/version.txt 1.11:
+	タブコードが入っていたのをスペースに変換。
+	また、typo修正 「酷いどき」→「酷いとき」
+
+2002-06-19  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/joption.txt 1.12, lib/help/option.txt 1.13, src/tables.c 1.44, src/store.c 1.14:
+	値段が店の上限価格以上のアイテムを売るとき交渉が不要で上限金額にいきなり
+	決定するが、それに対応いて値切りオプションがオフのときも消費税が掛から
+	なくなっていた。それを廃止して常に消費税が掛かるようにした。
+	同時に値切りオプションを初期オプションにしてゲーム中に変更できなくした。
+
+2002-06-19  henkma  <henkma@cvs>
+
+	* lib/edit/q0000027_j.txt 1.3:
+	古い城の上級魔法書部屋に退魔払邪を置いた, ついでにいくつかコメントを修正.
+
+2002-06-18  Takeshi Mogami  <mogami@cvs>
+
+	* src/cmd6.c 1.23, src/dungeon.c 1.55, src/externs.h 1.65:
+	魔道具術師で、Browseコマンドが使えるようにした。
+
+	* src/birth.c 1.46:
+	生い立ちエディタで、バックスペースキーが漢字コードと'\0'を壊すバグ修正。
+
+2002-06-17  Takeshi Mogami  <mogami@cvs>
+
+	* configure.in 1.18:
+	commit忘れてた。ほとんど実害はないが。
+
+	* src/spells2.c 1.38:
+	lite_area()と同時に、暗闇生成の範囲も広くなっていたので、
+	1.1.0RC2までの範囲に戻した。
+
+	* lib/edit/k_info_j.txt 1.29, src/bldg.c 1.17, src/cmd5.c 1.39, src/spellstips.h 1.23:
+	再び John Q. Smith さんによる英文訂正。
+
+	* src/object1.c 1.37:
+	このあいだの消費マナ関連の修正の、残りカスのゴミ削除。
+	実質的に無意味、無害な式。
+
 2002-06-16  Takeshi Mogami  <mogami@cvs>
+
+	* lib/file/news.txt 1.12, lib/file/news_j.txt 1.11:
+	news.txt 更新。
+
+	* Changelogs 1.49: 更新
 
 	* src/spells3.c 1.42:
 	サブウィンドウの呪文リストを表示すると青魔道師と鏡使いで
