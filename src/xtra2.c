@@ -1067,7 +1067,7 @@ msg_print("地面に落とされた。");
 	case MON_A_GOLD:
 	case MON_A_SILVER:
 		if (drop_chosen_item && ((m_ptr->r_idx == MON_A_GOLD) ||
-		     ((m_ptr->r_idx == MON_A_SILVER) && !((r_ptr->r_pkills + 1) % 5))))
+		     ((m_ptr->r_idx == MON_A_SILVER) && (r_ptr->r_pkills % 5 == 0))))
 		{
 			/* Get local object */
 			q_ptr = &forge;
