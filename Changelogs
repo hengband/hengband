@@ -1,4 +1,94 @@
+2002-02-28  Takeshi Mogami  <mogami@akiru>
+
+	* src/object1.c: '\n'の追加し忘れていたのを追加。
+
+	* src/report.c:
+	MPWで、-noMapCR オプションは弊害が非常に大きく使用不可なので、ローカルで使う
+	改行コード CR から、スコア送信用の LF に変換するコードを追加。
+
+2002-02-28  habu  <habu@akiru>
+
+	* src/melee2.c:
+	壁抜け状態などでモンスターが追跡しない場合でも、魔法を撃てる位置には優先的に動けるようにした。
+
+2002-02-27  Takeshi Mogami  <mogami@akiru>
+
+	* src/spells3.c:
+	魔力食い失敗のメッセージ、以前修正したはずだったのに、修正場所を間違えて
+	充填のメッセージの方を変えていたので、再修正。
+
+	* src/cmd2.c:
+	エクスカリパーを投げたときに大ダメージになるように、投擲するアイテムの
+	ダメージ修正は絶対値を取るようにした。命中修正は変わらないので当てるのは
+	難しい。
+
+	* src/files.c:
+	pval < -10 のとき'C'での表示がバグるのを修正。
+
+	* src/files.c:
+	キャラクターの作成中に生い立ち表示で現在地を表示しようとするバグを修正。
+
+2002-02-26  habu  <habu@akiru>
+
+	* src/mane.c, src/monster1.c, src/mspells1.c, src/mspells2.c, src/mspells3.c, src/tables.c, src/wizard1.c:
+	アンバーの王 -> アンバーの王族 に統一
+
+2002-02-26  Takeshi Mogami  <mogami@akiru>
+
+	* src/monster2.c:
+	ダンジョンの主召喚で出たカメレオンの王の護衛がカメレオンになるように修正。
+
+2002-02-26  habu  <habu@akiru>
+
+	* src/cmd1.c:
+	なまけものは打撃攻撃にペナルティを受けてなかったので射撃と同様外れやすくした。また、なまけものはトラップにかかり*にくく*なっていたので、かかりやすくした。
+	恐らく、check_hitが打撃の命中判定だと思ってコードを書いたためにこのような事になっていたのだろう。
+
+	* src/xtra2.c:
+	lookコマンドで、床や砂地や花の上にいる時に「にいる」が表示されていなかったので修正。
+
+2002-02-26  Takeshi Mogami  <mogami@akiru>
+
+	* src/mspells1.c:
+	ダンジョンの主召喚がサーペントゾンビに対応していなかったのを修正。
+
+2002-02-26  habu  <habu@akiru>
+
+	* src/artifact.c, src/externs.h, src/variable.c:
+	artifact_biasは大域変数ではなく、artifact.c内のstatic変数にした。また、random_*の引数is_scrollは必要ないので削除。さらにif〜else ifの羅列をswitchで書きなおした。
+
+2002-02-26  Takeshi Mogami  <mogami@akiru>
+
+	* src/defines.h: MAX_HISCORESを999にした。
+
+2002-02-26  habu  <habu@akiru>
+
+	* src/mspells1.c:
+	remove_bad_spell()で、幽霊の場合は100%地獄属性を削除、吸血鬼の場合は100%暗黒属性を削除するようにした。(四属性の免疫の扱いと同じ)
+	int_outof(r_ptr, 200) は必ず真になるので判定しないようにした。
+
+	* src/artifact.c, src/cmd6.c, src/externs.h, src/load.c, src/object1.c, src/object2.c, src/xtra2.c:
+	object_type.xtra1の使用を廃止してart_flagsを使うようにした。これにより、object_type.xtra1は今のところ完全に使われていないメンバ変数になった。
+	one_sustain()、one_resistance()、one_ability()などの関数を用意し、これまでマジックナンバーだった、random_resistance(...,randint(22)+16)のような指定をすべてこれらで置き変えた。
+	セーブファイル互換性のためにload.cでxtra1とxtra2を見てart_flagsに耐性等をコンバートするコードも追加した。
+
+2002-02-26  Takeshi Mogami  <mogami@akiru>
+
+	* src/cmd5.c, src/hissatsu.c, src/mind.c, src/object1.c, src/object2.c, src/util.c:
+	コマンドメニューがリターンキーを識別するコードを '\r' だけでなく
+	'\n' も加えた。MPW用。
+
+2002-02-26  habu  <habu@akiru>
+
+	* src/object2.c:
+	ドワーフの鎧の重量を2/3にするコードと基本ACを+5するコードを、a_m_aux_2()内に移動。
+
+	* src/artifact.c:
+	必要ないので、コメントアウトされている、if (is_scroll) msg_print(...);をすべて削除。
+
 2002-02-24  Takeshi Mogami  <mogami@akiru>
+
+	* Changelogs: 更新。
 
 	* src/main-mac.c:
 	バージョンが変わったときに古い初期設定ファイルを無視するようにした。
