@@ -1552,12 +1552,6 @@ static bool cmd_racial_power_aux(s32b command)
 
 		case RACE_HALF_GIANT:
 			if (!get_aim_dir(&dir)) return FALSE;
-#ifdef JP
-			msg_print("石の壁を叩きつけた。");
-#else
-			msg_print("You bash at a stone wall.");
-#endif
-
 			(void)wall_to_mud(dir);
 			break;
 
