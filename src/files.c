@@ -5433,9 +5433,9 @@ msg_format("'%s'をオープンできません。", name);
 			/* Get a color */
 			if (prefix(str, "#####"))
 			{
-				str += 5;
-				if (*str)
+				if (str[5] && isalpha(str[5]))
 				{
+					str += 5;
 					color = color_char_to_attr(*str);
 					str++;
 				}
