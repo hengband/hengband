@@ -26,7 +26,7 @@ static void monst_breath_monst(int m_idx, int y, int x, int typ, int dam_hp, int
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Determine the radius of the blast */
-	if (rad < 1) rad = (r_ptr->flags2 & RF2_POWERFUL) ? 3 : 2;
+	if (rad < 1 && breath) rad = (r_ptr->flags2 & RF2_POWERFUL) ? 3 : 2;
 
 	/* Handle breath attacks */
 	if (breath) rad = 0 - rad;
