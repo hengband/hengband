@@ -2575,7 +2575,7 @@ I:75:35:100
 W:3:0:4:40
 A:3/1
 P:0:1d1:0:0:0
-D:$It heals you 6d8, cures blindness, confusion and berserk and reduces cuts 
+D:$It heals you 4d8, cures blindness, confusion and berserk and reduces cuts 
 D:$when you quaff it.
 D:それは飲むと体力が4d8回復し、盲目・混乱・狂戦士化を癒し、切り傷を和らげる。
 
