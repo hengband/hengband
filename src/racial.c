@@ -1379,8 +1379,8 @@ msg_print("武器を持たないといけません。");
 			    int x,y;
 			      for( x=0 ; x < cur_wid ;x++){
 				for( y=0 ; y < cur_hgt ;y++){
-				  if( cave[y][x].feat == FEAT_MIRROR){
-				    cave_set_feat( y , x , FEAT_FLOOR );
+				  if( (cave[y][x].info & CAVE_IN_MIRROR)){
+				    remove_mirror(y,x);
 				    project(0,2,y,x, p_ptr->lev /2 +5 ,GF_SHARDS,(PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP|PROJECT_NO_REF|PROJECT_NO_HANGEKI),-1);
 				  }
 				}
@@ -1399,7 +1399,7 @@ msg_print("今はペットを操ることに集中していないと。");
 				  return FALSE;
 			  }
 			  if (racial_aux(30, 0, A_INT, 20)){
-			        if( cave[py][px].feat == FEAT_MIRROR)
+			        if( (cave[py][px].info & CAVE_IN_MIRROR))
 				{
 #ifdef JP
 msg_print("少し頭がハッキリした。");

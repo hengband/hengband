@@ -571,6 +571,7 @@ extern void map_area(int range);
 extern void wiz_lite(bool wizard, bool ninja);
 extern void wiz_dark(void);
 extern void cave_set_feat(int y, int x, int feat);
+extern void remove_mirror(int y, int x);
 extern void mmove2(int *y, int *x, int y1, int x1, int y2, int x2);
 extern bool projectable(int y1, int x1, int y2, int x2);
 extern void scatter(int *yp, int *xp, int y, int x, int d, int mode);

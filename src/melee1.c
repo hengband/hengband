@@ -2148,7 +2148,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 							alive = FALSE;
 						}
 					}
-					if( cave[py][px].feat == FEAT_MIRROR ){
+					if( (cave[py][px].info & CAVE_IN_MIRROR)){
 						teleport_player(10);
 					}
 				}

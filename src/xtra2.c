@@ -2818,7 +2818,7 @@ static bool target_set_accept(int y, int x)
 		/* Notice glyphs */
 		if (c_ptr->feat == FEAT_GLYPH) return (TRUE);
 		if (c_ptr->feat == FEAT_MINOR_GLYPH) return (TRUE);
-		if (c_ptr->feat == FEAT_MIRROR) return (TRUE);
+		if ((c_ptr->info & CAVE_IN_MIRROR)) return (TRUE);
 
 		/* Notice the Pattern */
 		if ((c_ptr->feat <= FEAT_PATTERN_XTRA2) &&
@@ -3551,6 +3551,14 @@ if (o_ptr->number != 1) s1 = "それらは";
 				name = "道";
 #else
 				name = "road";
+#endif
+			}
+			else if ( (c_ptr->info & CAVE_IN_MIRROR) )
+			{
+#ifdef JP
+				name = "鏡";
+#else
+				name = "mirror";
 #endif
 			}
 			else

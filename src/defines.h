@@ -2375,6 +2375,10 @@
 #define CAVE_MASK (CAVE_FLOOR | CAVE_EXTRA | CAVE_INNER | CAVE_OUTER | CAVE_SOLID | CAVE_VAULT)
 
 /* Used only after cave generation */
+#define CAVE_XXXX1      0x0200
+#define CAVE_XXXX2      0x0400
+#define CAVE_XXXX3      0x0800
+#define CAVE_IN_MIRROR  0x1000    /* mirror */
 #define CAVE_UNSAFE     0x2000    /* Might have trap */
 #define CAVE_IN_DETECT  0x4000    /* trap detected area (inner circle only) */
 
@@ -3892,6 +3896,7 @@
 	  (cave[Y][X].feat == FEAT_GRASS) || \
 	  (cave[Y][X].feat == FEAT_DIRT)) && \
 	  !(cave[Y][X].info & CAVE_TRAP) && \
+	  !(cave[Y][X].info & CAVE_IN_MIRROR) && \
 	  (cave[Y][X].o_idx == 0))
 
 

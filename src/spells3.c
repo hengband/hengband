@@ -1684,8 +1684,8 @@ msg_print("床上のアイテムが呪文を跳ね返した。");
 		return FALSE;
 	}
 
-	/* Create a glyph */
-	cave_set_feat(py, px, FEAT_MIRROR);
+	/* Create a mirror */
+	cave[py][px].info |= CAVE_IN_MIRROR;
 	note_spot(py, px);
 	lite_spot(py, px);
 

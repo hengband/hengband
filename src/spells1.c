@@ -49,7 +49,7 @@ static void next_mirror( int* next_y , int* next_x )
 	{
 		for( y=0 ; y < cur_hgt ; y++ )
 		{
-			if( cave[y][x].feat == FEAT_MIRROR ){
+			if( (cave[y][x].info & CAVE_IN_MIRROR)){
 				mirror_y[mirror_num]=y;
 				mirror_x[mirror_num]=x;
 				mirror_num++;
@@ -1208,21 +1208,21 @@ msg_print("ドアが溶けて泥になった！");
 		case GF_SHARDS:
 		case GF_ROCKET:
 		{
-			if(	cave[y][x].feat == FEAT_MIRROR )
+			if( (cave[y][x].info & CAVE_IN_MIRROR))
 			{
 #ifdef JP
 				msg_print("鏡が割れた！");
 #else
 				msg_print("The mirror was chashed!");
 #endif				
-				cave_set_feat(y,x, FEAT_FLOOR);
+				remove_mirror(y,x);
 			    project(0,2,y,x, p_ptr->lev /2 +5 ,GF_SHARDS,(PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP|PROJECT_NO_REF|PROJECT_NO_HANGEKI),-1);
 			}
 			break;
 		}
 		case GF_SOUND:
 		{
-			if(	cave[y][x].feat == FEAT_MIRROR && p_ptr->lev < 40 )
+			if( (cave[y][x].info & CAVE_IN_MIRROR) && p_ptr->lev < 40 )
 			{
 #ifdef JP
 				msg_print("鏡が割れた！");
@@ -8245,13 +8245,13 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 				}
 			}
 			if(project_o(0,0,y,x,dam,GF_SEEKER))notice=TRUE;
-			if( cave[y][x].feat == FEAT_MIRROR )
+			if( (cave[y][x].info & CAVE_IN_MIRROR))
 			{
 			  /* The target of monsterspell becomes tha mirror(broken) */
 			        monster_target_y=(s16b)y;
 				monster_target_x=(s16b)x;
 
-				cave_set_feat( y, x , FEAT_FLOOR );
+				remove_mirror(y,x);
 				next_mirror( &oy,&ox );
 
 				path_n = i+project_path(&(path_g[i+1]), (project_length ? project_length : MAX_RANGE), y, x, oy, ox, flg);
@@ -8385,13 +8385,13 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 				if( second_step )continue;
 				break;
 			}
-			if( cave[y][x].feat == FEAT_MIRROR && !second_step )
+			if( (cave[y][x].info & CAVE_IN_MIRROR) && !second_step )
 			{
 			  /* The target of monsterspell becomes tha mirror(broken) */
 			        monster_target_y=(s16b)y;
 				monster_target_x=(s16b)x;
 
-				cave_set_feat( y, x , FEAT_FLOOR );
+				remove_mirror(y,x);
 				for( j = 0; j <=i ; j++ )
 				{
 					y = GRID_Y(path_g[j]);
@@ -8999,7 +8999,7 @@ bool binding_field( int dam )
 	{
 		for( y=0 ; y < cur_hgt ; y++ )
 		{
-			if( cave[y][x].feat == FEAT_MIRROR &&
+			if( (cave[y][x].info & CAVE_IN_MIRROR) &&
 			    distance(py,px,y,x) <= MAX_RANGE &&
 			    distance(py,px,y,x) != 0 &&
 			    player_has_los_bold(y,x)
@@ -9118,7 +9118,7 @@ bool binding_field( int dam )
 #else
 		msg_print("The field broke a mirror");
 #endif	
-		cave_set_feat( point_y[0] , point_x[0] , FEAT_FLOOR );
+		remove_mirror(point_y[0],point_x[0]);
 	}
 
 	return TRUE;
@@ -9132,14 +9132,14 @@ void seal_of_mirror( int dam )
 	{
 		for( y = 0 ; y < cur_hgt ; y++ )
 		{
-			if( cave[y][x].feat == FEAT_MIRROR )
+			if( (cave[y][x].info & CAVE_IN_MIRROR))
 			{
 				if(project_m(0,0,y,x,dam,GF_GENOCIDE,
 							 (PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP|PROJECT_NO_REF)))
 				{
 					if( !cave[y][x].m_idx )
 					{
-						cave_set_feat( y,x, FEAT_FLOOR );
+						remove_mirror(y,x);
 					}
 				}
 			}

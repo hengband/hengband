@@ -4848,8 +4848,7 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 			    (c_ptr->feat != FEAT_DEEP_GRASS) &&
 			    (c_ptr->feat != FEAT_SHAL_LAVA) &&
 				(c_ptr->feat != FEAT_TREES)) continue;
-
-			if (c_ptr->info & CAVE_TRAP) continue;
+			if (c_ptr->info & (CAVE_TRAP | CAVE_IN_MIRROR)) continue;
 
 			/* No objects */
 			k = 0;
