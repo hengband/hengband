@@ -4171,6 +4171,7 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
 		case VK_SEPARATOR:
 		case VK_DECIMAL:
 			Term_no_press = TRUE;
+		case VK_CLEAR:
 		case VK_HOME:
 		case VK_END:
 		case VK_PRIOR:	/* Page Up */
