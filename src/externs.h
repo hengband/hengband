@@ -834,6 +834,7 @@ extern void stair_creation(void);
 /* generate.c */
 extern void place_closed_door(int y, int x);
 extern bool place_quest_monsters(void);
+extern void wipe_generate_cave_flags(void);
 extern void clear_cave(void);
 extern void generate_cave(void);
 

@@ -1413,7 +1413,7 @@ static bool level_gen(cptr *why)
 /*
  * Wipe all unnecessary flags after cave generation
  */
-static void wipe_generate_cave_flags(void)
+void wipe_generate_cave_flags(void)
 {
 	int x, y;
 

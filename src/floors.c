@@ -334,6 +334,8 @@ static void build_dead_end(void)
 
 	/* Give one square */
 	place_floor_bold(py, px);
+
+	wipe_generate_cave_flags();
 }
 
 
