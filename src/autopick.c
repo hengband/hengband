@@ -2030,14 +2030,13 @@ static bool get_string_for_search(object_type **o_handle, cptr *search_strp)
 
 #ifdef JP
         int k_flag[MAX_NLEN+20];
-        char prompt[] = "検索(^I:持ち物 ^L:破壊された物):";
+        char prompt[] = "検索(^I:持ち物 ^L:破壊された物): ";
 #else
-        char prompt[] = "Search key(^I:inven ^L:destroyed):";
+        char prompt[] = "Search key(^I:inven ^L:destroyed): ";
 #endif
         int col = sizeof(prompt) - 1;
 
-        if (*o_handle) object_desc(buf, *o_handle, FALSE, 3);
-        else if (*search_strp) strcpy(buf, *search_strp);
+        if (*search_strp) strcpy(buf, *search_strp);
         else buf[0] = '\0';
 
 	/* Display prompt */
@@ -2090,15 +2089,19 @@ static bool get_string_for_search(object_type **o_handle, cptr *search_strp)
                         if (!o_ptr) return FALSE;
 
                         *o_handle = o_ptr;
+
                         string_free(*search_strp);
-                        *search_strp = NULL;
+                        object_desc(buf, *o_handle, FALSE, 3);
+                        *search_strp = string_make(format("<%s>", buf));
                         return TRUE;
 
                 case KTRL('l'):
                         if (!autopick_last_destroyed_object.k_idx) break;
                         *o_handle = &autopick_last_destroyed_object;
+
                         string_free(*search_strp);
-                        *search_strp = NULL;
+                        object_desc(buf, *o_handle, FALSE, 3);
+                        *search_strp = string_make(format("<%s>", buf));
                         return TRUE;
 
 		case 0x7F:
@@ -2158,7 +2161,7 @@ static bool get_string_for_search(object_type **o_handle, cptr *search_strp)
 /*
  * Search next line matches for o_ptr
  */
-static bool search_for_object(cptr *lines_list, object_type *o_ptr, int *cyp)
+static bool search_for_object(cptr *lines_list, object_type *o_ptr, int *cxp, int *cyp, bool forward)
 {
         int i;
 	autopick_type an_entry, *entry = &an_entry;
@@ -2178,12 +2181,24 @@ static bool search_for_object(cptr *lines_list, object_type *o_ptr, int *cyp)
 			o_name[i] = tolower(o_name[i]);
 	}
 	
-        for (i = *cyp + 1; lines_list[i]; i++)
+        i = *cyp;
+
+        while (1)
         {
+                if (forward)
+                {
+                        if (!lines_list[++i]) break;
+                }
+                else
+                {
+                        if (--i < 0) break;
+                }
+
                 if (!autopick_new_entry(entry, lines_list[i])) continue;
 
                 if (is_autopick_aux(o_ptr, entry, o_name))
                 {
+                        *cxp = 0;
                         *cyp = i;
                         return TRUE;
                 }
@@ -2196,13 +2211,22 @@ static bool search_for_object(cptr *lines_list, object_type *o_ptr, int *cyp)
 /*
  * Search next line matches to the string
  */
-static bool search_for_string(cptr *lines_list, cptr search_str, int *cxp, int *cyp)
+static bool search_for_string(cptr *lines_list, cptr search_str, int *cxp, int *cyp, bool forward)
 {
-        int i;
+        int i = *cyp;
 
-        for (i = *cyp + 1; lines_list[i]; i++)
+        while (1)
         {
                 cptr pos;
+
+                if (forward)
+                {
+                        if (!lines_list[++i]) break;
+                }
+                else
+                {
+                        if (--i < 0) break;
+                }
 #ifdef JP
                 pos = strstr_j(lines_list[i], search_str);
 #else
@@ -2412,7 +2436,8 @@ static cptr ctrl_command_desc[] =
 #define DIRTY_ALL 0x01
 #define DIRTY_COMMAND 0x02
 #define DIRTY_MODE 0x04
-#define DIRTY_SCREEN 0x04
+#define DIRTY_SCREEN 0x08
+#define DIRTY_NOT_FOUND 0x10
 
 /*
  * In-game editor of Object Auto-picker/Destoryer
@@ -2631,14 +2656,22 @@ void do_cmd_edit_autopick(void)
 		prt (format("(%d,%d)", cx, cy), 0, 70);
 
 		/* Display information when updated */
-		if (old_cy != cy || (dirty_flags & DIRTY_ALL) || dirty_line == cy)
+		if (old_cy != cy || (dirty_flags & (DIRTY_ALL | DIRTY_NOT_FOUND)) || dirty_line == cy)
 		{
 			/* Clear information line */
 			Term_erase(0, hgt - 3 + 1, wid);
 			Term_erase(0, hgt - 3 + 2, wid);
 
 			/* Display information */
-			if (lines_list[cy][0] == '#')
+                        if (dirty_flags & DIRTY_NOT_FOUND)
+                        {
+#ifdef JP
+				prt(format("パターンが見つかりません: %s", search_str), hgt - 3 + 1, 0);
+#else
+				prt(format("Pattern not found: %s", search_str), hgt - 3 + 1, 0);
+#endif
+                        }
+			else if (lines_list[cy][0] == '#')
 			{
 #ifdef JP
 				prt("この行はコメントです。", hgt - 3 + 1, 0);
@@ -2933,13 +2966,26 @@ void do_cmd_edit_autopick(void)
 
                                 if (!get_string_for_search(&search_o_ptr, &search_str))
                                         break;
+
+                                /* fall through */
+                        case 'n':
                                 if (search_o_ptr)
                                 {
-                                        if (search_for_object(lines_list, search_o_ptr, &cy)) cx = 0;
+                                        if (!search_for_object(lines_list, search_o_ptr, &cx, &cy, TRUE)) dirty_flags |= DIRTY_NOT_FOUND;
                                 }
                                 else if (search_str)
                                 {
-                                        search_for_string(lines_list, search_str, &cx, &cy);
+                                        if (!search_for_string(lines_list, search_str, &cx, &cy, TRUE)) dirty_flags |= DIRTY_NOT_FOUND;
+                                }
+                                break;
+                        case 'N':
+                                if (search_o_ptr)
+                                {
+                                        if (!search_for_object(lines_list, search_o_ptr, &cx, &cy, FALSE)) dirty_flags |= DIRTY_NOT_FOUND;
+                                }
+                                else if (search_str)
+                                {
+                                        if (!search_for_string(lines_list, search_str, &cx, &cy, FALSE)) dirty_flags |= DIRTY_NOT_FOUND;
                                 }
                                 break;
 			}
