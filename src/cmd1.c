@@ -2495,12 +2495,12 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 			int now_exp = weapon_exp[tval][sval];
 			if (now_exp < s_info[p_ptr->pclass].w_max[tval][sval])
 			{
-				int ammount = 0;
-				if (now_exp < 4000) ammount = 80;
-				else if(now_exp < 6000) ammount = 10;
-				else if((now_exp < 7000) && (p_ptr->lev > 19)) ammount = 1;
-				else if((p_ptr->lev > 34) && one_in_(2)) ammount = 1;
-				weapon_exp[tval][sval] += ammount;
+				int amount = 0;
+				if (now_exp < 4000) amount = 80;
+				else if(now_exp < 6000) amount = 10;
+				else if((now_exp < 7000) && (p_ptr->lev > 19)) amount = 1;
+				else if((p_ptr->lev > 34) && one_in_(2)) amount = 1;
+				weapon_exp[tval][sval] += amount;
 				p_ptr->update |= (PU_BONUS);
 			}
 		}
