@@ -347,7 +347,7 @@ bool monst_spell_monst(int m_idx)
 
 		if (!(p_ptr->pet_extra_flags & PF_TELEPORT))
 		{
-			f6 &= ~(RF6_BLINK | RF6_TPORT | RF6_TELE_AWAY);
+			f6 &= ~(RF6_BLINK | RF6_TPORT | RF6_TELE_TO | RF6_TELE_AWAY | RF6_TELE_LEVEL);
 		}
 
 		if (!(p_ptr->pet_extra_flags & PF_ATTACK_SPELL))
@@ -3338,6 +3338,8 @@ bool monst_spell_monst(int m_idx)
 				if (t_idx == p_ptr->riding) teleport_player(MAX_SIGHT * 2 + 5);
 				else teleport_away(t_idx, MAX_SIGHT * 2 + 5, FALSE);
 			}
+
+			wake_up = TRUE;
 		}
 		break;
 
