@@ -1686,7 +1686,14 @@ msg_print("床上のアイテムが呪文を跳ね返した。");
 
 	/* Create a mirror */
 	cave[py][px].info |= CAVE_IN_MIRROR;
+
+	/* Turn on the light */
+	cave[py][px].info |= CAVE_GLOW;
+
+	/* Notice */
 	note_spot(py, px);
+	
+	/* Redraw */
 	lite_spot(py, px);
 
 	return TRUE;

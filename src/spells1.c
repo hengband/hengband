@@ -1182,7 +1182,7 @@ msg_print("ドアが溶けて泥になった！");
 				if (player_can_see_bold(y, x)) obvious = TRUE;
 
 				/* Turn off the light. */
-				c_ptr->info &= ~(CAVE_GLOW);
+				if(!(c_ptr->info & CAVE_IN_MIRROR))c_ptr->info &= ~(CAVE_GLOW);
 
 				/* Hack -- Forget "boring" grids */
 				if ((c_ptr->feat <= FEAT_INVIS) || (c_ptr->feat == FEAT_DIRT) || (c_ptr->feat == FEAT_GRASS))

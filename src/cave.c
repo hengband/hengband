@@ -4838,6 +4838,11 @@ void remove_mirror(int y, int x)
 	/* Remove the mirror */
 	cave[y][x].info &= ~(CAVE_IN_MIRROR);
 
+	if (d_info[dungeon_type].flags1 & DF1_DARKNESS)
+	{
+		cave[y][x].info &= ~(CAVE_GLOW);
+		if( !view_torch_grids )cave[y][x].info &= ~(CAVE_MARK);
+	}
 	/* Notice */
 	note_spot(y, x);
 

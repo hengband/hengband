@@ -1733,7 +1733,7 @@ msg_print("日が沈んだ。");
 						    (y == 0) || (y == cur_hgt-1))
 						{
 							/* Forget the grid */
-							c_ptr->info &= ~(CAVE_GLOW | CAVE_MARK);
+							if (!(c_ptr->info & CAVE_IN_MIRROR)) c_ptr->info &= ~(CAVE_GLOW | CAVE_MARK);
 
 							/* Hack -- Notice spot */
 							note_spot(y, x);
