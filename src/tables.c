@@ -3978,7 +3978,7 @@ u32b fake_spell_flags[4]=
 };
 
 
-s32b realm_choices1[] =
+s32b realm_choices1[MAX_CLASS] =
 {
 	(CH_NONE),				/* Warrior */
 	(CH_LIFE | CH_SORCERY | CH_NATURE |
@@ -4016,10 +4016,11 @@ s32b realm_choices1[] =
 	(CH_NONE),				/* Berserker */
 	(CH_NONE),				/* Kaji */
 	(CH_NONE),				/* Mirror-master */
+	(CH_NONE),				/* Ninja */
 };
 
 
-s32b realm_choices2[] =
+s32b realm_choices2[MAX_CLASS] =
 {
 	(CH_NONE),                              /* Warrior */
 	(CH_LIFE | CH_SORCERY | CH_NATURE |
@@ -4057,6 +4058,7 @@ s32b realm_choices2[] =
 	(CH_NONE),				/* Berserker */
 	(CH_NONE),				/* Kaji */
 	(CH_NONE),				/* Mirror-master */
+	(CH_NONE),				/* Ninja */
 };
 
 
