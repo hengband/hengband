@@ -514,11 +514,19 @@ void place_quest_monsters(void)
 				/* Find an empty grid */
 				for (l = SAFE_MAX_ATTEMPTS; l > 0; l--)
 				{
+					cave_type    *c_ptr;
+					feature_type *f_ptr;
+
 					y = randint0(cur_hgt);
 					x = randint0(cur_wid);
 
+					c_ptr = &cave[y][x];
+					f_ptr = &f_info[c_ptr->feat];
+
+					if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) continue;
 					if (!monster_can_enter(y, x, r_ptr, 0)) continue;
 					if (distance(y, x, py, px) < 10) continue;
+					if (c_ptr->info & CAVE_ICKY) continue;
 					else break;
 				}
 
