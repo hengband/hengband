@@ -1344,8 +1344,10 @@ void do_cmd_messages(int num_now)
 {
 	int i, n;
 
-	char shower[80];
-	char finder[80];
+	char shower_str[81];
+	char finder_str[81];
+	char back_str[81];
+	cptr shower = NULL;
 	int wid, hgt;
 	int num_lines;
 
@@ -1356,11 +1358,10 @@ void do_cmd_messages(int num_now)
 	num_lines = hgt - 4;
 
 	/* Wipe finder */
-	strcpy(finder, "");
+	strcpy(finder_str, "");
 
 	/* Wipe shower */
-	strcpy(shower, "");
-
+	strcpy(shower_str, "");
 
 	/* Total messages */
 	n = message_num();
@@ -1386,10 +1387,10 @@ void do_cmd_messages(int num_now)
 			cptr msg = message_str(i+j);
 
 			/* Dump the messages, bottom to top */
-			c_prt((i+j < num_now ? TERM_WHITE : TERM_SLATE), msg, num_lines + 1 - j, 0);
+			c_prt((i + j < num_now ? TERM_WHITE : TERM_SLATE), msg, num_lines + 1 - j, 0);
 
 			/* Hilite "shower" */
-			if (shower[0])
+			if (shower && shower[0])
 			{
 				cptr str = msg;
 
@@ -1417,12 +1418,11 @@ void do_cmd_messages(int num_now)
 #ifdef JP
 		/* translation */
 		prt(format("以前のメッセージ %d-%d 全部で(%d)",
-			   i, i+j-1, n), 0, 0);
+			   i, i + j - 1, n), 0, 0);
 #else
 		prt(format("Message Recall (%d-%d of %d)",
-			   i, i+j-1, n), 0, 0);
+			   i, i + j - 1, n), 0, 0);
 #endif
-
 
 		/* Display prompt (not very informative) */
 #ifdef JP
@@ -1430,7 +1430,6 @@ void do_cmd_messages(int num_now)
 #else
 		prt("[Press 'p' for older, 'n' for newer, ..., or ESCAPE]", hgt - 1, 0);
 #endif
-
 
 		/* Get a command */
 		skey = inkey_special(TRUE);
@@ -1441,9 +1440,10 @@ void do_cmd_messages(int num_now)
 		/* Hack -- Save the old index */
 		j = i;
 
-		/* Hack -- handle show */
-		if (skey == '=')
+		switch (skey)
 		{
+		/* Hack -- handle show */
+		case '=':
 			/* Prompt */
 #ifdef JP
 			prt("強調: ", hgt - 1, 0);
@@ -1451,104 +1451,121 @@ void do_cmd_messages(int num_now)
 			prt("Show: ", hgt - 1, 0);
 #endif
 
-
 			/* Get a "shower" string, or continue */
-			if (!askfor(shower, 80)) continue;
+			strcpy(back_str, shower_str);
+			if (askfor(shower_str, 80))
+			{
+				/* Show it */
+				shower = shower_str[0] ? shower_str : NULL;
+			}
+			else strcpy(shower_str, back_str);
 
 			/* Okay */
 			continue;
-		}
 
 		/* Hack -- handle find */
-		if (skey == '/' || skey == KTRL('s'))
-		{
-			int z;
+		case '/':
+		case KTRL('s'):
+			{
+				int z;
 
-			/* Prompt */
+				/* Prompt */
 #ifdef JP
-			prt("検索: ", hgt - 1, 0);
+				prt("検索: ", hgt - 1, 0);
 #else
-			prt("Find: ", hgt - 1, 0);
+				prt("Find: ", hgt - 1, 0);
 #endif
 
-
-			/* Get a "finder" string, or continue */
-			if (!askfor(finder, 80)) continue;
-
-			/* Show it */
-			strcpy(shower, finder);
-
-			/* Scan messages */
-			for (z = i + 1; z < n; z++)
-			{
-				cptr msg = message_str(z);
-
-				/* Search for it */
-				if (my_strstr(msg, finder))
+				/* Get a "finder" string, or continue */
+				strcpy(back_str, finder_str);
+				if (!askfor(finder_str, 80))
 				{
-					/* New location */
-					i = z;
+					strcpy(finder_str, back_str);
+					continue;
+				}
+				else if (!finder_str[0])
+				{
+					shower = NULL; /* Stop showing */
+					continue;
+				}
 
-					/* Done */
-					break;
+				/* Show it */
+				shower = finder_str;
+
+				/* Scan messages */
+				for (z = i + 1; z < n; z++)
+				{
+					cptr msg = message_str(z);
+
+					/* Search for it */
+					if (my_strstr(msg, finder_str))
+					{
+						/* New location */
+						i = z;
+
+						/* Done */
+						break;
+					}
 				}
 			}
-		}
+			break;
 
 		/* Recall 1 older message */
-		if (skey == SKEY_TOP)
-		{
+		case SKEY_TOP:
 			/* Go to the oldest line */
 			i = n - num_lines;
-		}
+			break;
 
 		/* Recall 1 newer message */
-		if (skey == SKEY_BOTTOM)
-		{
+		case SKEY_BOTTOM:
 			/* Go to the newest line */
 			i = 0;
-		}
+			break;
 
 		/* Recall 1 older message */
-		if (skey == '8' || skey == SKEY_UP || skey == '\n' || skey == '\r')
-		{
+		case '8':
+		case SKEY_UP:
+		case '\n':
+		case '\r':
 			/* Go older if legal */
 			i = MIN(i + 1, n - num_lines);
-		}
+			break;
 
 		/* Recall 10 older messages */
-		if (skey == '+')
-		{
+		case '+':
 			/* Go older if legal */
 			i = MIN(i + 10, n - num_lines);
-		}
+			break;
 
 		/* Recall 20 older messages */
-		if (skey == 'p' || skey == KTRL('P') || skey == ' ' || skey == SKEY_PGUP)
-		{
+		case 'p':
+		case KTRL('P'):
+		case ' ':
+		case SKEY_PGUP:
 			/* Go older if legal */
 			i = MIN(i + num_lines, n - num_lines);
-		}
+			break;
 
 		/* Recall 20 newer messages */
-		if (skey == 'n' || skey == KTRL('N') || skey == SKEY_PGDOWN)
-		{
+		case 'n':
+		case KTRL('N'):
+		case SKEY_PGDOWN:
 			/* Go newer (if able) */
 			i = MAX(0, i - num_lines);
-		}
+			break;
 
 		/* Recall 10 newer messages */
-		if (skey == '-')
-		{
+		case '-':
 			/* Go newer (if able) */
 			i = MAX(0, i - 10);
-		}
+			break;
 
 		/* Recall 1 newer messages */
-		if (skey == '2' || skey == SKEY_DOWN)
-		{
+		case '2':
+		case SKEY_DOWN:
 			/* Go newer (if able) */
 			i = MAX(0, i - 1);
+			break;
 		}
 
 		/* Hack -- Error of some kind */
