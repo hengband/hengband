@@ -1750,6 +1750,12 @@ msg_format("%^sは恐ろしい血の呪いをあなたにかけた！", m_name);
 #endif
 
 				msg_format("%^s %s", m_name, line_got);
+
+			if (m_ptr->r_idx == MON_SERPENT)
+			{
+				/* Make screen dump */
+				screen_dump = make_screen_dump();
+			}
 		}
 
 		if (!(d_info[dungeon_type].flags1 & DF1_BEGINNER))

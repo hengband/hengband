@@ -872,7 +872,7 @@ static void wr_ghost(void)
 
 	/* Name */
 #ifdef JP
-wr_string("不正なゴースト");
+	wr_string("不正なゴースト");
 #else
 	wr_string("Broken Ghost");
 #endif
@@ -1602,6 +1602,16 @@ static bool wr_savefile_new(void)
 	wr_s16b(p_ptr->pet_follow_distance);
 	wr_s16b(p_ptr->pet_extra_flags);
 
+	/* Write screen dump for sending score */
+	if (screen_dump && (wait_report_score || !death))
+	{
+		wr_string(screen_dump);
+	}
+	else
+	{
+		wr_string("");
+	}
+
 	/* Player is not dead, write the dungeon */
 	if (!death)
 	{
@@ -1853,7 +1863,7 @@ bool load_player(void)
 	{
 		/* Give a message */
 #ifdef JP
-msg_print("セーブファイルがありません。");
+		msg_print("セーブファイルがありません。");
 #else
 		msg_print("Savefile does not exist.");
 #endif
@@ -1891,7 +1901,7 @@ msg_print("セーブファイルがありません。");
 
 			/* Message */
 #ifdef JP
-msg_print("セーブファイルは現在使用中です。");
+			msg_print("セーブファイルは現在使用中です。");
 #else
 			msg_print("Savefile is currently in use.");
 #endif
@@ -1926,7 +1936,7 @@ msg_print("セーブファイルは現在使用中です。");
 
 		/* Message (below) */
 #ifdef JP
-if (err) what = "セーブファイルを開けません。";
+		if (err) what = "セーブファイルを開けません。";
 #else
 		if (err) what = "Cannot open savefile";
 #endif
@@ -1947,7 +1957,7 @@ if (err) what = "セーブファイルを開けません。";
 
 		/* What */
 #ifdef JP
-if (err) what = "セーブファイルを読めません。";
+		if (err) what = "セーブファイルを読めません。";
 #else
 		if (err) what = "Cannot read savefile";
 #endif
@@ -2013,7 +2023,7 @@ if (err) what = "セーブファイルを読めません。";
 
 		/* Message (below) */
 #ifdef JP
-if (err) what = "セーブファイルを解析出来ません。";
+		if (err) what = "セーブファイルを解析出来ません。";
 #else
 		if (err) what = "Cannot parse savefile";
 #endif
@@ -2028,7 +2038,7 @@ if (err) what = "セーブファイルを解析出来ません。";
 
 		/* Message (below) */
 #ifdef JP
-if (err) what = "セーブファイルが壊れています";
+		if (err) what = "セーブファイルが壊れています";
 #else
 		if (err) what = "Broken savefile";
 #endif
@@ -2045,7 +2055,7 @@ if (err) what = "セーブファイルが壊れています";
 		{
 			/* Message */
 #ifdef JP
-what = "無効なタイム・スタンプです";
+			what = "無効なタイム・スタンプです";
 #else
 			what = "Invalid timestamp";
 #endif
@@ -2069,7 +2079,7 @@ what = "無効なタイム・スタンプです";
 			if (z_major == 2 && z_minor == 0 && z_patch == 6)
 			{
 #ifdef JP
-msg_print("バージョン 2.0.* 用のセーブファイルを変換しました。");
+				msg_print("バージョン 2.0.* 用のセーブファイルを変換しました。");
 #else
 				msg_print("Converted a 2.0.* savefile.");
 #endif
@@ -2079,7 +2089,7 @@ msg_print("バージョン 2.0.* 用のセーブファイルを変換しました。");
 			{
 				/* Message */
 #ifdef JP
-msg_format("バージョン %d.%d.%d 用のセーブ・ファイルを変換しました。",
+				msg_format("バージョン %d.%d.%d 用のセーブ・ファイルを変換しました。",
 #else
 				msg_format("Converted a %d.%d.%d savefile.",
 #endif
@@ -2152,7 +2162,7 @@ msg_format("バージョン %d.%d.%d 用のセーブ・ファイルを変換しました。",
 
 	/* Message */
 #ifdef JP
-msg_format("エラー(%s)がバージョン%d.%d.%d 用セーブファイル読み込中に発生。",
+	msg_format("エラー(%s)がバージョン%d.%d.%d 用セーブファイル読み込中に発生。",
 #else
 	msg_format("Error (%s) reading %d.%d.%d savefile.",
 #endif

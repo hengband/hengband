@@ -5027,7 +5027,6 @@ static void do_cmd_knowledge_inven(void)
 /*
  * Make screen dump to buffer
  */
-#define SCREEN_BUF_SIZE 65536
 cptr make_screen_dump(void)
 {
 	int y, x, i;

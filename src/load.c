@@ -2939,6 +2939,13 @@ note("持ち物情報を読み込むことができません");
 		rd_s16b(&p_ptr->pet_extra_flags);
 	}
 
+	if (!z_older_than(11, 0, 9))
+	{
+		char buf[SCREEN_BUF_SIZE];
+		rd_string(buf, SCREEN_BUF_SIZE);
+		if (buf[0]) screen_dump = string_make(buf);
+	}
+
 	if (death)
 	{
 		for (i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++)

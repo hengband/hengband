@@ -51,7 +51,7 @@
 #define FAKE_VERSION   0
 #define FAKE_VER_MAJOR 11
 #define FAKE_VER_MINOR 0
-#define FAKE_VER_PATCH 8
+#define FAKE_VER_PATCH 9
 
 #define ANGBAND_2_8_1
 #define ZANGBAND
@@ -4808,3 +4808,5 @@ extern int PlayerUID;
 
 #define MAX_MACRO_MOD 12
 #define MAX_MACRO_TRIG 200
+
+#define SCREEN_BUF_SIZE 65536           /* max screen dump buffer size */
