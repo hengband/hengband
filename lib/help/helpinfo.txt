@@ -1,21 +1,21 @@
-[[[[[G=== Online Help Commands ===
+[[[[G|=== Online Help Commands ===
 
-You can move cursor using [[[[[ythe arrow keys].        [[[[[BMovement commands]
-Press the indicated letter [a-z] to        [[[[[y   'q'    ](Leave the help system)
-activate a link.                           [[[[[y   ESC    ](Return to the prev file)
+You can move cursor using [[[[y|the arrow keys|.        [[[[B|Movement commands|
+Press the indicated letter [a-z] to        [[[[y|   'q'    |(Leave the help system)
+activate a link.                           [[[[y|   ESC    |(Return to the prev file)
 
-For example, press [[[[[ythe j key] when you see  [[[[[y   Home   ](Go to the top)
-"(see monster.txt#Pets [j])" etc.          [[[[[y  PageUp  ](Go up 1 page)
-Pressing [[[[[ythe ESC key] takes you back to     [[[[[y Up Arrow ](Go up 1 line)
-the previous location.                     [[[[[yDown Arrow](Go down 1 line)
-                                           [[[[[y PageDown ](Go down 1 page)
-                                           [[[[[y   End    ](Go to the bottom)
+For example, press [[[[y|the j key| when you see  [[[[y|   Home   |(Go to the top)
+"(see monster.txt#Pets [j])" etc.          [[[[y|  PageUp  |(Go up 1 page)
+Pressing [[[[y|the ESC key| takes you back to     [[[[y| Up Arrow |(Go up 1 line)
+the previous location.                     [[[[y|Down Arrow|(Go down 1 line)
+                                           [[[[y| PageDown |(Go down 1 page)
+                                           [[[[y|   End    |(Go to the bottom)
 
-                                           [[[[[y   '#'    ](Jump to a specific line)
-      [[[[[BOther commands]                       [[[[[y   '%'    ](Jump to a specific file)
-[[[[[y'/'] or [[[[[y'^S'] (Search for a string)                
-    [[[[[y'=']     (Highlight lines containing a string)
-    [[[[[y'|']     (Save current document to a file)
+                                           [[[[y|   '#'    |(Jump to a specific line)
+      [[[[B|Other commands|                       [[[[y|   '%'    |(Jump to a specific file)
+[[[[y|'/'| or [[[[y|'^S'| (Search for a string)                
+    [[[[y|'='|     (Highlight lines containing a string)
+    [[[[y]'|']     (Save current document to a file)
 
 --
 Updated    : Hengband 1.7.0

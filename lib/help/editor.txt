@@ -1,4 +1,4 @@
-[[[[[G=== Auto-Picker/Destroyer Editor ===
+[[[[G|=== Auto-Picker/Destroyer Editor ===
 
 Please choose one of the following online help files:
 
@@ -28,7 +28,7 @@ Please choose one of the following online help files:
 ***** [k] ../pref/pickpref.prf
 
 ***** <Editor>
-[[[[[G--- The Basics of Auto-picker Editor ---
+[[[[G|--- The Basics of Auto-picker Editor ---
 
 The "auto-picker editor" is a special text editor to write preferences
 for auto-picker/destroyer.
@@ -63,7 +63,7 @@ Press a-l to choose a command or open a sub-menu.  Also you can press
 
 
 ***** <CutAndPaste>
-[[[[[G--- Cur and Paste
+[[[[G|--- Cur and Paste
 
 Cut and Paste are useful when you want to write many similer lines, or
 want to swap lines.
@@ -91,25 +91,25 @@ move cursor to select text.
 
 
 ***** <RegisterName>
-[[[[[G--- Register to Auto-picker ---
+[[[[G|--- Register to Auto-picker ---
 
 ***** <InsertObjectName>
-[[[[[G--- Insert Name from your Inventory ---
+[[[[G|--- Insert Name from your Inventory ---
 
 ***** <InsertKeyword>
-[[[[[G--- Insert Fixed Keyword ---
+[[[[G|--- Insert Fixed Keyword ---
 
 ***** <MultiLines>
-[[[[[G--- Change Multiple Lines at Once ---
+[[[[G|--- Change Multiple Lines at Once ---
 
 ***** <Conditionals>
-[[[[[G--- Conditionals ---
+[[[[G|--- Conditionals ---
 
 ***** <AutoRegister>
-[[[[[G--- Auto Register an Item without Editor ---
+[[[[G|--- Auto Register an Item without Editor ---
 
 ***** <AutopickFormat>
-[[[[[G--- Format of Auto-picker/destroyer ---
+[[[[G|--- Format of Auto-picker/destroyer ---
 
 Hengband can automatically pick up or destroy specified objects when
 you write objects name in the file "pickpref.prf" or
@@ -269,7 +269,7 @@ Special Notes:
 
 
 ***** <ConditionFormat>
-[[[[[G--- Format of Conditionals ---
+[[[[G|--- Format of Conditionals ---
 
   The lines of pickpref.prf can be disabled/enabled using 
   conditional expressions. 
