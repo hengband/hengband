@@ -4117,9 +4117,9 @@ static void dump_aux_pet(FILE *fff)
 		if (!pet)
 		{
 #ifdef JP
-			fprintf(fff, "\n  [主なペット]\n\n");
+			fprintf(fff, "\n\n  [主なペット]\n\n");
 #else
-			fprintf(fff, "\n  [Leading Pets]\n\n");
+			fprintf(fff, "\n\n  [Leading Pets]\n\n");
 #endif
 			pet = TRUE;
 		}
@@ -4127,14 +4127,12 @@ static void dump_aux_pet(FILE *fff)
 		fprintf(fff, "%s\n", pet_name);
 	}
 
-	if (pet) fprintf(fff, "\n");
-
 	if (pet_settings)
 	{
 #ifdef JP
-		fprintf(fff, "\n  [ペットへの命令]\n");
+		fprintf(fff, "\n\n  [ペットへの命令]\n");
 #else
-		fprintf(fff, "\n  [Command for Pets]\n");
+		fprintf(fff, "\n\n  [Command for Pets]\n");
 #endif
 
 #ifdef JP
@@ -4173,7 +4171,7 @@ static void dump_aux_pet(FILE *fff)
 		fprintf(fff, "\n Allow involve player in area spell: %s", (p_ptr->pet_extra_flags & PF_BALL_SPELL) ? "ON" : "OFF");
 #endif
 
-		fputs("\n\n", fff);
+		fputc('\n', fff);
 	}
 }
 
@@ -4199,9 +4197,9 @@ static void dump_aux_class_special(FILE *fff)
 		for (i=0;i<60;i++) { p[i][0] = '\0'; }
 
 #ifdef JP
-		strcat(p[col], "\n  [学習済みの青魔法]\n");
+		strcat(p[col], "\n\n  [学習済みの青魔法]\n");
 #else
-		strcat(p[col], "\n  [Learned Blue Magic]\n");
+		strcat(p[col], "\n\n  [Learned Blue Magic]\n");
 #endif
 
 
@@ -4349,6 +4347,7 @@ static void dump_aux_quest(FILE *fff)
 	do_cmd_knowledge_quests_completed(fff, quest_num);
 	fputc('\n', fff);
 	do_cmd_knowledge_quests_failed(fff, quest_num);
+	fputc('\n', fff);
 
 	/* Free Memory */
 	C_KILL(quest_num, max_quests, int);
@@ -4375,7 +4374,7 @@ static void dump_aux_last_message(FILE *fff)
 			{
 				fprintf(fff,"> %s\n",message_str((s16b)i));
 			}
-			fprintf(fff, "\n");
+			fputc('\n', fff);
 		}
 
 		/* Hack -- *Winning* message */
@@ -4387,6 +4386,7 @@ static void dump_aux_last_message(FILE *fff)
 			fprintf(fff, "\n  [*Winning* Message]\n\n");
 #endif
 			fprintf(fff,"  %s\n", p_ptr->last_message);
+			fputc('\n', fff);
 		}
 	}
 }
@@ -4400,9 +4400,9 @@ static void dump_aux_recall(FILE *fff)
 	int y;
 
 #ifdef JP
-	fprintf(fff, "\n\n  [帰還場所]\n\n");
+	fprintf(fff, "\n  [帰還場所]\n\n");
 #else
-	fprintf(fff, "\n\n  [Recall Depth]\n\n");
+	fprintf(fff, "\n  [Recall Depth]\n\n");
 #endif
 
 	for (y = 1; y < max_d_idx; y++)
@@ -4551,16 +4551,16 @@ static void dump_aux_options(FILE *fff)
 #endif
 
 
-	fprintf(fff,"\n");
+	fputc('\n', fff);
 
 	if (p_ptr->noscore)
 #ifdef JP
-		fprintf(fff, "\n 何か不正なことをしてしまっています。");
+		fprintf(fff, "\n 何か不正なことをしてしまっています。\n");
 #else
-		fprintf(fff, "\n You have done something illegal.");
+		fprintf(fff, "\n You have done something illegal.\n");
 #endif
 
-	fprintf(fff,"\n");
+	fputc('\n', fff);
 }
 
 
@@ -4771,6 +4771,8 @@ static void dump_aux_race_history(FILE *fff)
 			fprintf(fff, "\n You were a %s before.", race_info[i].title);
 #endif
 		}
+
+		fputc('\n', fff);
 	}
 }
 
@@ -4784,6 +4786,7 @@ static void dump_aux_realm_history(FILE *fff)
 	{
 		int i;
 
+		fputc('\n', fff);
 		for (i = 0; i < MAX_MAGIC; i++)
 		{
 			if (!(p_ptr->old_realm & 1L << i)) continue;
@@ -4793,6 +4796,7 @@ static void dump_aux_realm_history(FILE *fff)
 			fprintf(fff, "\n You were able to use %s magic before.", realm_names[i+1]);
 #endif
 		}
+		fputc('\n', fff);
 	}
 }
 
@@ -4834,9 +4838,6 @@ static void dump_aux_mutations(FILE *fff)
 
 		dump_mutations(fff);
 	}
-
-	/* Skip some lines */
-	fprintf(fff, "\n\n");
 }
 
 
@@ -5003,6 +5004,7 @@ errr make_character_dump(FILE *fff)
 	dump_aux_class_special(fff);
 	dump_aux_mutations(fff);
 	dump_aux_pet(fff);
+	fputs("\n\n", fff);
 	dump_aux_equipment_inventory(fff);
 	dump_aux_home_museum(fff);
 
