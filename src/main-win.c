@@ -4292,6 +4292,20 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 			return 0;
 		}
 
+		case WM_QUERYENDSESSION:
+		{
+			if (game_in_progress && character_generated)
+			{
+				/* Hack -- Forget messages */
+				msg_flag = FALSE;
+
+				/* Save the game */
+				exit_game_panic(FALSE);
+			}
+			quit(NULL);
+			return 0;
+		}
+
 		case WM_QUIT:
 		{
 			quit(NULL);

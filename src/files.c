@@ -7087,15 +7087,14 @@ prt("リターンキーか ESC キーを押して下さい。", 0, 40);
  * XXX XXX Hack -- clear the death flag when creating a HANGUP
  * save file so that player can see tombstone when restart.
  */
-void exit_game_panic(void)
+void exit_game_panic(bool use_message)
 {
 	/* If nothing important has happened, just quit */
 #ifdef JP
-if (!character_generated || character_saved) quit("緊急事態");
+	if (!character_generated || character_saved) quit(use_message ? "緊急事態" : NULL);
 #else
-	if (!character_generated || character_saved) quit("panic");
+	if (!character_generated || character_saved) quit(use_message ? "panic" : NULL);
 #endif
-
 
 	/* Mega-Hack -- see "msg_print()" */
 	msg_flag = FALSE;
@@ -7117,7 +7116,7 @@ if (!character_generated || character_saved) quit("緊急事態");
 
 	/* Indicate panic save */
 #ifdef JP
-(void)strcpy(p_ptr->died_from, "(緊急セーブ)");
+	(void)strcpy(p_ptr->died_from, "(緊急セーブ)");
 #else
 	(void)strcpy(p_ptr->died_from, "(panic save)");
 #endif
@@ -7125,19 +7124,18 @@ if (!character_generated || character_saved) quit("緊急事態");
 
 	/* Panic save, or get worried */
 #ifdef JP
-if (!save_player()) quit("緊急セーブ失敗！");
+	if (!save_player()) quit(use_message ? "緊急セーブ失敗！" : NULL);
 #else
-	if (!save_player()) quit("panic save failed!");
+	if (!save_player()) quit(use_message ? "panic save failed!" : NULL);
 #endif
 
 
 	/* Successful panic save */
 #ifdef JP
-quit("緊急セーブ成功！");
+	quit(use_message ? "緊急セーブ成功！" : NULL);
 #else
-	quit("panic save succeeded!");
+	quit(use_message ? "panic save succeeded!" : NULL);
 #endif
-
 }
 
 

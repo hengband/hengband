@@ -796,7 +796,7 @@ extern void do_cmd_save_game(int is_autosave);
 extern void do_cmd_save_and_exit(void);
 extern long total_points(void);
 extern void close_game(void);
-extern void exit_game_panic(void);
+extern void exit_game_panic(bool use_message);
 extern void signals_ignore_tstp(void);
 extern void signals_handle_tstp(void);
 extern void signals_init(void);
