@@ -2240,7 +2240,7 @@ spoil_out("が、侵入者を追跡しない");
 			else spoil_out("an escort.  ");
 		}
 
-		if ((flags1 & RF1_FRIEND) || (flags1 & RF1_FRIENDS))
+		if (flags1 & RF1_FRIENDS)
 		{
 			sprintf(buf, "%s usually appears in groups.  ", wd_che[msex]);
 			spoil_out(buf);

@@ -229,7 +229,6 @@ static void roff_aux(int r_idx, int remem)
 	if (r_ptr->flags1 & RF1_FEMALE)  flags1 |= (RF1_FEMALE);
 
 	/* Assume some "creation" flags */
-	if (r_ptr->flags1 & RF1_FRIEND)  flags1 |= (RF1_FRIEND);
 	if (r_ptr->flags1 & RF1_FRIENDS) flags1 |= (RF1_FRIENDS);
 	if (r_ptr->flags1 & RF1_ESCORT)  flags1 |= (RF1_ESCORT);
 	if (r_ptr->flags1 & RF1_ESCORTS) flags1 |= (RF1_ESCORTS);
@@ -935,7 +934,7 @@ roff(format("%^sは矢の呪文を跳ね返す。", wd_he[msex]));
 	}
 
 	/* Describe friends */
-	else if ((flags1 & RF1_FRIEND) || (flags1 & RF1_FRIENDS))
+	else if (flags1 & RF1_FRIENDS)
 	{
 #ifdef JP
 		roff(format("%^sは通常集団で現れる。",

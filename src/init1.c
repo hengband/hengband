@@ -150,7 +150,7 @@ static cptr r_info_flags1[] =
 	"FORCE_MAXHP",
 	"FORCE_SLEEP",
 	"FORCE_EXTRA",
-	"FRIEND",
+	"XXX1",
 	"FRIENDS",
 	"ESCORT",
 	"ESCORTS",
@@ -168,8 +168,8 @@ static cptr r_info_flags1[] =
 	"DROP_4D2",
 	"DROP_GOOD",
 	"DROP_GREAT",
-	"XXX1",
-	"XXX2"
+	"XXX2",
+	"XXX3"
 };
 
 /*

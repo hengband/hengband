@@ -3105,7 +3105,7 @@
 #define RF1_FORCE_MAXHP         0x00000200  /* Start with max hitpoints */
 #define RF1_FORCE_SLEEP         0x00000400  /* Start out sleeping */
 #define RF1_FORCE_EXTRA         0x00000800  /* Start out something */
-#define RF1_FRIEND              0x00001000  /* Arrive with a friend */
+#define RF1_XXX1                0x00001000  /* XXX */
 #define RF1_FRIENDS             0x00002000  /* Arrive with some friends */
 #define RF1_ESCORT              0x00004000  /* Arrive with an escort */
 #define RF1_ESCORTS             0x00008000  /* Arrive with some escorts */
@@ -3123,8 +3123,8 @@
 #define RF1_DROP_4D2            0x08000000  /* Drop 4d2 items/gold */
 #define RF1_DROP_GOOD           0x10000000  /* Drop good items */
 #define RF1_DROP_GREAT          0x20000000  /* Drop great items */
-#define RF1_XXX1                0x40000000  /* XXX */
-#define RF1_XXX2                0x80000000  /* XXX */
+#define RF1_XXX2                0x40000000  /* XXX */
+#define RF1_XXX3                0x80000000  /* XXX */
 
 /*
  * New monster race bit flags
