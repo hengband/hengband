@@ -3305,10 +3305,6 @@ bool get_check_strict(cptr prompt, int mode)
 	int i;
 	char buf[80];
 
-	/* "strncpy" sometimes fails to set '\0' to the end of the 
-	   given string. So "memset" is necessary! -- henkma       */
-	memset(buf, 0, 80);
-
 	if (auto_more)
 	{
 		p_ptr->window |= PW_MESSAGE;
@@ -3322,22 +3318,30 @@ bool get_check_strict(cptr prompt, int mode)
 	if (!rogue_like_commands)
 		mode &= ~1;
 
+
 	/* Hack -- Build a "useful" prompt */
 	if (mode & 1)
 	{
 #ifdef JP
-		mb_strlcpy(buf, prompt, 78-8);
+		/* (79-8)バイトの指定, promptが長かった場合, 
+		   (79-9)文字の後終端文字が書き込まれる.     
+		   英語の方のstrncpyとは違うので注意.
+		   elseの方の分岐も同様. --henkma
+		*/
+		mb_strlcpy(buf, prompt, 80-8);
 #else
-		strncpy(buf, prompt, 78-8);
+		strncpy(buf, prompt, 79-8);
+		buf[79-8]='\0';
 #endif
 		strcat(buf, "[yes/no]");
 	}
 	else
 	{
 #ifdef JP
-		mb_strlcpy(buf, prompt, 78-5);
+		mb_strlcpy(buf, prompt, 80-5);
 #else
-		strncpy(buf, prompt, 78-5);
+		strncpy(buf, prompt, 79-5);
+		buf[79-5]='\0';
 #endif
 		strcat(buf, "[y/n]");
 	}
