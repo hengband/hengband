@@ -517,6 +517,11 @@ static void rd_monster(monster_type *m_ptr)
 	/* Read the monster race */
 	rd_s16b(&m_ptr->r_idx);
 
+	if (z_older_than(11, 0, 12))
+		m_ptr->ap_r_idx = m_ptr->r_idx;
+	else
+		rd_s16b(&m_ptr->ap_r_idx);
+
 	/* Read the other information */
 	rd_byte(&m_ptr->fy);
 	rd_byte(&m_ptr->fx);
@@ -595,6 +600,12 @@ static void rd_monster(monster_type *m_ptr)
 	else
 	{
 		rd_byte(&m_ptr->mflag2);
+	}
+
+	if (z_older_than(11, 0, 12))
+	{
+		if (m_ptr->mflag2 & MFLAG_KAGE)
+			m_ptr->ap_r_idx = MON_KAGE;
 	}
 
 	if (z_older_than(10, 1, 3))

@@ -614,6 +614,7 @@ static void wr_item(object_type *o_ptr)
 static void wr_monster(monster_type *m_ptr)
 {
 	wr_s16b(m_ptr->r_idx);
+	wr_s16b(m_ptr->ap_r_idx);
 	wr_byte(m_ptr->fy);
 	wr_byte(m_ptr->fx);
 	wr_s16b(m_ptr->hp);

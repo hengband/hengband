@@ -1449,7 +1449,7 @@ s16b get_mon_num(int level)
  *   0x40 --> Assume the monster is hidden
  *   0x80 --> Assume the monster is visible
  *  0x100 --> Chameleon's true name
- *  0x200 --> Ignore hallucination
+ *  0x200 --> Ignore hallucination, and penetrate shape change
  *
  * Useful Modes:
  *   0x00 --> Full nominative name ("the kobold") or "it"
@@ -1470,8 +1470,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 	bool            seen, pron;
 	bool            named = FALSE;
 
-	if (m_ptr->mflag2 & MFLAG_KAGE) r_ptr = &r_info[MON_KAGE];
-	else r_ptr = &r_info[m_ptr->r_idx];
+	r_ptr = &r_info[m_ptr->ap_r_idx];
 
 	if ((mode & 0x100) && (m_ptr->mflag2 & MFLAG_CHAMELEON))
 	{
@@ -1635,6 +1634,27 @@ if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
 	/* Handle all other visible monster requests */
 	else
 	{
+		/* Tanuki? */
+		if (is_pet(m_ptr) && m_ptr->ap_r_idx != m_ptr->r_idx)
+		{
+#ifdef JP
+				char *t;
+				strcpy(buf, name);
+				t = buf;
+				while(strncmp(t, "』", 2) && *t) t++;
+				if (*t)
+				{
+					*t = '\0';
+					(void)sprintf(desc, "%s？』", buf);
+				}
+				else
+					(void)sprintf(desc, "%s？", name);
+#else
+				(void)sprintf(desc, "%s?", name);
+#endif
+		}
+		else
+
 		/* It could be a Unique */
 		if ((r_ptr->flags1 & RF1_UNIQUE) && !(p_ptr->image && !(mode & 0x200)))
 		{
@@ -1680,16 +1700,6 @@ if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
 #endif
 
 			(void)strcat(desc, name);
-
-			if (m_ptr->nickname)
-			{
-#ifdef JP
-				sprintf(buf,"「%s」",quark_str(m_ptr->nickname));
-#else
-				sprintf(buf," called %s",quark_str(m_ptr->nickname));
-#endif
-				strcat(desc,buf);
-			}
 		}
 
 		/* It could be a normal, definite, monster */
@@ -1711,45 +1721,57 @@ if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
 #endif
 
 			(void)strcat(desc, name);
+		}
 
-			if (m_ptr->nickname)
+		if (m_ptr->nickname)
+		{
+#ifdef JP
+			sprintf(buf,"「%s」",quark_str(m_ptr->nickname));
+#else
+			sprintf(buf," called %s",quark_str(m_ptr->nickname));
+#endif
+			strcat(desc,buf);
+		}
+
+		if ((m_ptr->fy == py) && (m_ptr->fx == px))
+		{
+#ifdef JP
+			strcat(desc,"(乗馬中)");
+#else
+			strcat(desc,"(riding)");
+#endif
+		}
+
+		if ((mode & 0x200) && (m_ptr->mflag2 & MFLAG_CHAMELEON))
+		{
+			if (r_ptr->flags1 & RF1_UNIQUE)
 			{
 #ifdef JP
-				sprintf(buf,"「%s」",quark_str(m_ptr->nickname));
+				strcat(desc,"(カメレオンの王)");
 #else
-				sprintf(buf," called %s",quark_str(m_ptr->nickname));
+				strcat(desc,"(Chameleon Lord)");
 #endif
-				strcat(desc,buf);
 			}
-
-			if ((m_ptr->fy == py) && (m_ptr->fx == px))
-#ifdef JP
-				strcat(desc,"(乗馬中)");
-#else
-				strcat(desc,"(riding)");
-#endif
-			if ((mode & 0x200) && (m_ptr->mflag2 & MFLAG_CHAMELEON))
+			else
 			{
-				if (r_ptr->flags1 & RF1_UNIQUE)
 #ifdef JP
-					strcat(desc,"(カメレオンの王)");
+				strcat(desc,"(カメレオン)");
 #else
-					strcat(desc,"(Chameleon Lord)");
-#endif
-				else
-#ifdef JP
-					strcat(desc,"(カメレオン)");
-#else
-					strcat(desc,"(Chameleon)");
+				strcat(desc,"(Chameleon)");
 #endif
 			}
+		}
+
+		if ((mode & 0x200) && m_ptr->ap_r_idx != m_ptr->r_idx)
+		{
+			strcat(desc, format("(%s)", r_name + r_info[m_ptr->r_idx].name));
 		}
 
 		/* Handle the Possessive as a special afterthought */
 		if (mode & 0x02)
 		{
 			/* XXX Check for trailing "s" */
-
+			
 			/* Simply append "apostrophe" and "s" */
 #ifdef JP
 			(void)strcat(desc, "の");
@@ -2347,9 +2369,10 @@ void update_mon(int m_idx, bool full)
 			if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 
 			/* Hack -- Count "fresh" sightings */
-			if ((m_ptr->mflag2 & MFLAG_KAGE) && (r_info[MON_KAGE].r_sights < MAX_SHORT))
+			if ((m_ptr->ap_r_idx == MON_KAGE) && (r_info[MON_KAGE].r_sights < MAX_SHORT))
 				r_info[MON_KAGE].r_sights++;
-			else if (r_ptr->r_sights < MAX_SHORT) r_ptr->r_sights++;
+			else if (m_ptr->ap_r_idx == m_ptr->r_idx && 
+				 r_ptr->r_sights < MAX_SHORT) r_ptr->r_sights++;
 
 			/* Eldritch Horror */
 			if (r_ptr->flags2 & RF2_ELDRITCH_HORROR)
@@ -2535,6 +2558,7 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 	}
 
 	m_ptr->r_idx = r_idx;
+	m_ptr->ap_r_idx = r_idx;
 	update_mon(m_idx, FALSE);
 	lite_spot(m_ptr->fy, m_ptr->fx);
 	if (born) return;
@@ -2581,6 +2605,28 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 	}
 	m_ptr->maxhp = (long)(m_ptr->maxhp * m_ptr->max_maxhp) / oldmaxhp;
 	m_ptr->hp = (long)(m_ptr->hp * m_ptr->max_maxhp) / oldmaxhp;
+}
+
+/*
+ *  Set initial racial appearance of a monster
+ */
+static int initial_r_appearance(int r_idx)
+{
+	int ap_r_idx;
+	int min = MIN(base_level-5, 50);
+
+	if (!(r_info[r_idx].flags7 & RF7_TANUKI))
+		return r_idx;
+
+	get_mon_num_prep(monster_hook_chameleon, NULL);
+
+	while (1)
+	{
+		ap_r_idx = get_mon_num(base_level + 10);
+		if (r_info[ap_r_idx].flags7 & RF7_AQUATIC) continue;
+		if (r_info[ap_r_idx].level >= min) break;
+	}
+	return ap_r_idx;
 }
 
 
@@ -2800,6 +2846,7 @@ msg_print("守りのルーンが壊れた！");
 
 	/* Save the race */
 	m_ptr->r_idx = r_idx;
+	m_ptr->ap_r_idx = initial_r_appearance(r_idx);
 
 	/* Place the monster at the location */
 	m_ptr->fy = y;
@@ -2831,7 +2878,12 @@ msg_print("守りのルーンが壊れた！");
 		m_ptr->mflag2 |= MFLAG_CHAMELEON;
 		rating++;
 	}
-	else if (is_kage) m_ptr->mflag2 |= MFLAG_KAGE;
+	else if (is_kage)
+	{
+		m_ptr->ap_r_idx = MON_KAGE;
+		m_ptr->mflag2 |= MFLAG_KAGE;
+	}
+
 	if (no_pet) m_ptr->mflag2 |= MFLAG_NOPET;
 
 	/* Not visible */

@@ -2851,7 +2851,7 @@ msg_format("%^sは勇気を取り戻した。", m_name);
 	if (!p_ptr->inside_battle)
 	{
 		/* Hack! "Cyber" monster makes noise... */
-		if (m_ptr->r_idx == MON_CYBER &&
+		if (m_ptr->ap_r_idx == MON_CYBER &&
 		    one_in_(CYBERNOISE) &&
 		    !m_ptr->ml && (m_ptr->cdis <= MAX_SIGHT))
 		{
@@ -2865,7 +2865,7 @@ msg_print("重厚な足音が聞こえた。");
 		}
 
 		/* Some monsters can speak */
-		if ((r_ptr->flags2 & RF2_CAN_SPEAK) && aware &&
+		if ((r_info[m_ptr->ap_r_idx].flags2 & RF2_CAN_SPEAK) && aware &&
 			one_in_(SPEAK_CHANCE) &&
 			player_has_los_bold(oy, ox))
 		{
@@ -2915,7 +2915,7 @@ filename = "monfrien_j.txt";
 
 
 			/* Get the monster line */
-			if (get_rnd_line(filename, m_ptr->r_idx, monmessage) == 0)
+			if (get_rnd_line(filename, m_ptr->ap_r_idx, monmessage) == 0)
 			{
 				/* Say something */
 #ifdef JP
@@ -4146,6 +4146,7 @@ void monster_gain_exp(int m_idx, int s_idx)
 
 		monster_desc(m_name, m_ptr, 0);
 		m_ptr->r_idx = r_ptr->next_r_idx;
+		m_ptr->ap_r_idx = m_ptr->r_idx;
 		r_ptr = &r_info[m_ptr->r_idx];
 		if (r_ptr->flags1 & RF1_FORCE_MAXHP)
 		{

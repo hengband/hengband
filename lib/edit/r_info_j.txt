@@ -21288,3 +21288,17 @@ D:$the very stones of the dungeon - what could it do to you?
 D:巨大でとても強力なドラゴンだ。激しく蒸気を吹きだす酸を地面に滴らせ、
 D:滴った酸はダンジョンの岩石をあっという間に溶解し穴を空けている…
 D:これがあなたに当たったらどうなることか！
+
+N:1067:たぬき
+E:Tanuki
+G:q:U
+I:120:30d20:18:5:40
+W:24:10:0:200:0:0
+B:HIT:HURT:1d5
+B:CRUSH:HURT:1d6
+F:TAKE_ITEM | OPEN_DOOR | DROP_CORPSE | RAND_25
+F:ANIMAL | TANUKI
+D:$Tanuki (raccoon dog) is thought to bewitch people in Japanese. 
+D:$Tanuki can disguise as human beings by putting a magic leaf on his/her head.
+D:日本の伝説では、たぬきは人を化かすと伝えられている。
+D:魔法の木の葉を頭に載せて人に化けるのだ。

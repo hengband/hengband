@@ -8115,7 +8115,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 					    monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
 
 					    /* Hack -- auto-recall */
-					    if (m_ptr->ml) monster_race_track((bool)(m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
+					    if (m_ptr->ml) monster_race_track(m_ptr->ap_r_idx);
 
 					    /* Hack - auto-track */
 					    if (m_ptr->ml) health_track(cave[project_m_y][project_m_x].m_idx);
@@ -8138,7 +8138,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			    monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
 			    
 			    /* Hack -- auto-recall */
-			    if (m_ptr->ml) monster_race_track((bool)(m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
+			    if (m_ptr->ml) monster_race_track(m_ptr->ap_r_idx);
 			    
 			    /* Hack - auto-track */
 			    if (m_ptr->ml) health_track(cave[project_m_y][project_m_x].m_idx);
@@ -8271,7 +8271,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			    monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
 			    
 			    /* Hack -- auto-recall */
-			    if (m_ptr->ml) monster_race_track((bool)(m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
+			    if (m_ptr->ml) monster_race_track(m_ptr->ap_r_idx);
 			    
 			    /* Hack - auto-track */
 			    if (m_ptr->ml) health_track(cave[project_m_y][project_m_x].m_idx);
@@ -8743,7 +8743,7 @@ else msg_print("¹¶·â¤ÏÄ·¤ÍÊÖ¤Ã¤¿¡ª");
 				monster_type *m_ptr = &m_list[cave[y][x].m_idx];
 
 				/* Hack -- auto-recall */
-				if (m_ptr->ml) monster_race_track((bool)(m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
+				if (m_ptr->ml) monster_race_track(m_ptr->ap_r_idx);
 
 				/* Hack - auto-track */
 				if (m_ptr->ml) health_track(cave[y][x].m_idx);

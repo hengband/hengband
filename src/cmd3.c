@@ -2840,7 +2840,7 @@ void do_cmd_query_symbol(void)
 		r_idx = who[i];
 
 		/* Hack -- Auto-recall */
-		monster_race_track(FALSE, r_idx);
+		monster_race_track(r_idx);
 
 		/* Hack -- Handle stuff */
 		handle_stuff();

@@ -51,7 +51,7 @@
 #define FAKE_VERSION   0
 #define FAKE_VER_MAJOR 11
 #define FAKE_VER_MINOR 0
-#define FAKE_VER_PATCH 11
+#define FAKE_VER_PATCH 12
 
 #define ANGBAND_2_8_1
 #define ZANGBAND
@@ -3363,16 +3363,17 @@
 #define RF7_CAN_FLY             0x00000004  /* Monster can fly */
 #define RF7_FRIENDLY            0x00000008  /* Monster is friendly */
 #define RF7_UNIQUE_7            0x00000010  /* Is a "Nazgul" unique */
-#define RF7_UNIQUE2             0x00000020  /* uso unique */
-#define RF7_RIDING               0x00000040  /* Can riding */
+#define RF7_UNIQUE2             0x00000020  /* Fake unique */
+#define RF7_RIDING              0x00000040  /* Good for riding */
 #define RF7_KAGE                0x00000080  /* Is kage */
 #define RF7_HAS_LITE_1          0x00000100  /* Monster carries light */
 #define RF7_SELF_LITE_1         0x00000200  /* Monster lights itself */
 #define RF7_HAS_LITE_2          0x00000400  /* Monster carries light */
 #define RF7_SELF_LITE_2         0x00000800  /* Monster lights itself */
-#define RF7_GUARDIAN            0x00001000
-#define RF7_CHAMELEON           0x00002000
-#define RF7_KILL_EXP            0x00004000
+#define RF7_GUARDIAN            0x00001000  /* Guardian of a dungeon */
+#define RF7_CHAMELEON           0x00002000  /* Chameleon can change */
+#define RF7_KILL_EXP            0x00004000  /* No exp until you kill it */
+#define RF7_TANUKI              0x00008000  /* Tanuki disguise */
 
 /*
  * Monster race flags
@@ -4630,6 +4631,7 @@ extern int PlayerUID;
 #define MON_TOPAZ_MONK    1047
 #define MON_LOUSY         1063
 #define MON_JIZOTAKO      1065
+#define MON_TANUKI        1067
 
 #define MAX_AUTOPICK 1009
 #define DO_AUTOPICK    0x01

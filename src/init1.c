@@ -388,7 +388,7 @@ static cptr r_info_flags7[] =
 	"GUARDIAN",
 	"CHAMELEON",
 	"KILL_EXP",
-	"XXX7X15",
+	"TANUKI",
 	"XXX7X16",
 	"XXX7X17",
 	"XXX7X18",

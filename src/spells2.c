@@ -4963,9 +4963,12 @@ bool probing(void)
 			if (!probe) {msg_print("Probing...");msg_print(NULL);}
 #endif
 
-			if (m_ptr->mflag2 & MFLAG_KAGE)
+			if (m_ptr->ap_r_idx != m_ptr->r_idx)
 			{
-				m_ptr->mflag2 &= ~(MFLAG_KAGE);
+				if (m_ptr->mflag2 & MFLAG_KAGE)
+					m_ptr->mflag2 &= ~(MFLAG_KAGE);
+
+				m_ptr->ap_r_idx = m_ptr->r_idx;
 				lite_spot(m_ptr->fy, m_ptr->fx);
 			}
 			/* Get "the monster" or "something" */

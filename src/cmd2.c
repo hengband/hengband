@@ -3815,7 +3815,7 @@ note_dies = "は爆発して粉々になった。";
 
 
 					/* Hack -- Track this monster race */
-					if (m_ptr->ml) monster_race_track((bool)(m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
+					if (m_ptr->ml) monster_race_track(m_ptr->ap_r_idx);
 
 					/* Hack -- Track this monster */
 					if (m_ptr->ml) health_track(c_ptr->m_idx);
@@ -4381,7 +4381,7 @@ note_dies = "は爆発して粉々になった。";
 
 
 					/* Hack -- Track this monster race */
-					if (m_ptr->ml) monster_race_track((bool)(m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
+					if (m_ptr->ml) monster_race_track(m_ptr->ap_r_idx);
 
 					/* Hack -- Track this monster */
 					if (m_ptr->ml) health_track(c_ptr->m_idx);

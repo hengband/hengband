@@ -570,6 +570,7 @@ typedef struct monster_type monster_type;
 struct monster_type
 {
 	s16b r_idx;			/* Monster race index */
+	s16b ap_r_idx;			/* Monster race appearance index */
 
 	byte fy;			/* Y location on map */
 	byte fx;			/* X location on map */

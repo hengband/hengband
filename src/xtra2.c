@@ -1717,6 +1717,13 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 	{
 		char m_name[80];
 
+		if (r_info[m_ptr->r_idx].flags7 & RF7_TANUKI)
+		{
+			r_ptr = &r_info[m_ptr->r_idx];
+			m_ptr->ap_r_idx = m_ptr->r_idx;
+			if (r_ptr->r_sights < MAX_SHORT) r_ptr->r_sights++;
+		}
+
 		/* Extract monster name */
 		monster_desc(m_name, m_ptr, 0x100);
 
@@ -1997,7 +2004,7 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 			else if (r_ptr->r_tkills < MAX_SHORT) r_ptr->r_tkills++;
 
 			/* Hack -- Auto-recall */
-			monster_race_track((bool)(m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
+			monster_race_track(m_ptr->ap_r_idx);
 		}
 
 		if ((m_ptr->r_idx == MON_BANOR) || (m_ptr->r_idx == MON_LUPART))
@@ -3025,7 +3032,7 @@ cptr name = "何か奇妙な物";
 				monster_desc(m_name, m_ptr, 0x08);
 
 				/* Hack -- track this monster race */
-				monster_race_track((bool)(m_ptr->mflag2 & MFLAG_KAGE), m_ptr->r_idx);
+				monster_race_track(m_ptr->ap_r_idx);
 
 				/* Hack -- health bar for this monster */
 				health_track(c_ptr->m_idx);
@@ -3043,8 +3050,7 @@ cptr name = "何か奇妙な物";
 						screen_save();
 
 						/* Recall on screen */
-						if (m_ptr->mflag2 & MFLAG_KAGE) screen_roff(MON_KAGE,0);
-						else screen_roff(m_ptr->r_idx, 0);
+						screen_roff(m_ptr->ap_r_idx, 0);
 
 						/* Hack -- Complete the prompt (again) */
 #ifdef JP
@@ -4341,7 +4347,7 @@ if (!get_com("方向 (ESCで中断)? ", &ch, TRUE)) break;
 	else if (p_ptr->riding)
 	{
 		monster_type *m_ptr = &m_list[p_ptr->riding];
-		monster_race *r_ptr = &r_info[m_ptr->r_idx];
+		monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
 
 		if (m_ptr->confused)
 		{

@@ -1393,8 +1393,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 		if (m_ptr->ml)
 		{
 			monster_race *r_ptr;
-			if (m_ptr->mflag2 & MFLAG_KAGE) r_ptr = &r_info[MON_KAGE];
-			else r_ptr = &r_info[m_ptr->r_idx];
+			r_ptr = &r_info[m_ptr->ap_r_idx];
 
 			/* Desired attr */
 			a = r_ptr->x_attr;
@@ -4975,10 +4974,8 @@ void health_track(int m_idx)
 /*
  * Hack -- track the given monster race
  */
-void monster_race_track(bool kage, int r_idx)
+void monster_race_track(int r_idx)
 {
-	if (kage) r_idx = MON_KAGE;
-
 	/* Save this monster ID */
 	p_ptr->monster_race_idx = r_idx;
 

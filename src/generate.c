@@ -1499,6 +1499,7 @@ static void place_pet(void)
 			
 			cave[cy][cx].m_idx = m_idx;
 			m_ptr->r_idx = party_mon[i].r_idx;
+			m_ptr->ap_r_idx = party_mon[i].ap_r_idx;
 			m_ptr->fy = cy;
 			m_ptr->fx = cx;
 			m_ptr->cdis = party_mon[i].cdis;
