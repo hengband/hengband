@@ -7620,7 +7620,7 @@ static void do_cmd_knowledge_autopick(void)
 			tmp = "Pickup";
 #endif
 		}
-		else if (act & DO_QUERY_AUTOPICK)
+		else /* if (act & DO_QUERY_AUTOPICK) */ /* Obvious */
 		{
 #ifdef JP
 			tmp = "ณฮวง";

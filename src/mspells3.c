@@ -744,6 +744,7 @@ static bool cast_learned_spell(int spell, bool success)
 	if (pet)
 	{
 		p_mode = PM_FORCE_PET;
+		g_mode = 0;
 	}
 	else
 	{
