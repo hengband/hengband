@@ -560,6 +560,9 @@ static void change_realm2(int next_realm)
 	p_ptr->notice |= (PN_REORDER);
 	p_ptr->update |= (PU_SPELLS);
 	handle_stuff();
+
+	/* Load the "pref" files */
+	if (autoload_pref_files) load_all_pref_files();
 }
 
 

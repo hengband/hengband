@@ -359,7 +359,6 @@ MPが足りなくても魔法に挑戦する  [over_exert]
     験値ではなく、次のレベルに必要な経験値を表示します。
 
 
-
 ***** <GamePlay>
 === オプション4 -- ゲームプレイ ===
 
@@ -470,6 +469,14 @@ MPが足りなくても魔法に挑戦する  [over_exert]
     プション画面の'C'の項目)は一度でも使用するとスコアの登録が出来なく
     なる為、操作を間違って使用してしまわないように使用制限が付けられて
     います。allow_debug_optsを有効にするとこの使用制限を解除します。
+
+***** <autoload_pref_files>
+設定ファイルを自動で読み込む  [autoload_pref_files]
+    通常は自動拾いなどの各種設定ファイルはゲーム開始時に読み込まれるだ
+    けであり、ゲーム中で条件が変わっても設定ファイルの内容は反映され
+    ません。このオプションを有効にすると、設定ファイル内の条件分岐に影
+    響する可能性のあるゲーム内の変化があった際に自動で各種設定ファイル
+    を読み込みます。
 
 
 ***** <Disturbance>
@@ -920,6 +927,6 @@ Original   : Ben Harrison
 Updated    : Zangband 2.1.* by Topi Ylinen
 Updated    : Zangband 2.2.0 through 2.2.6c by Robert Ruehlmann
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.5.2
+Updated    : Hengband 1.7.0
 
 ***** [a] jpref.txt#Options

@@ -4729,6 +4729,7 @@ take_hit(DAMAGE_LOSELIFE, change / 2, "変化した傷", -1);
 void change_race(int new_race, cptr effect_msg)
 {
 	cptr title = race_info[new_race].title;
+	int  old_race = p_ptr->prace;
 
 #ifdef JP
 	msg_format("あなたは%s%sに変化した！", effect_msg, title);
@@ -4778,6 +4779,9 @@ void change_race(int new_race, cptr effect_msg)
 	p_ptr->update |= (PU_BONUS);
 
 	handle_stuff();
+
+	/* Load the "pref" files */
+	if (autoload_pref_files && (old_race != p_ptr->prace)) load_all_pref_files();
 
 	/* Player's graphic tile may change */
 	lite_spot(py, px);

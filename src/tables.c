@@ -6803,10 +6803,10 @@ option_type option_info[] =
 
 #ifdef JP
 	{ &exp_need,                    FALSE, OPT_PAGE_TEXT, 2, 12,
-	"exp_need",                "次のレベルに必要な経験値を表示する" },
+	"exp_need",                     "次のレベルに必要な経験値を表示する" },
 #else
 	{ &exp_need,                    FALSE, OPT_PAGE_TEXT, 2, 12,
-	"exp_need",                "Show the experience needed for next level" },
+	"exp_need",                     "Show the experience needed for next level" },
 #endif
 
 
@@ -6916,6 +6916,14 @@ option_type option_info[] =
 #else
 	{ &allow_debug_opts,            FALSE, OPT_PAGE_GAMEPLAY, 6, 11,
 	"allow_debug_opts",             "Allow use of debug/cheat options" },
+#endif
+
+#ifdef JP
+	{ &autoload_pref_files,         FALSE, OPT_PAGE_GAMEPLAY, 2, 2,
+	"autoload_pref_files",          "設定ファイルを自動で読み込む" },
+#else
+	{ &autoload_pref_files,         FALSE, OPT_PAGE_GAMEPLAY, 2, 2,
+	"autoload_pref_files",          "Load user pref files automatically" },
 #endif
 
 	/*** Disturbance ***/

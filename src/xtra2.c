@@ -24,7 +24,7 @@ void check_experience(void)
 	bool level_mutation = FALSE;
 	bool level_inc_stat = FALSE;
 	bool android = (p_ptr->prace == RACE_ANDROID ? TRUE : FALSE);
-
+	int  old_lev = p_ptr->lev;
 
 	/* Hack -- lower limit */
 	if (p_ptr->exp < 0) p_ptr->exp = 0;
@@ -221,6 +221,9 @@ msg_print("あなたは変わった気がする...");
 		/* Handle stuff */
 		handle_stuff();
 	}
+
+	/* Load the "pref" files */
+	if (autoload_pref_files && (old_lev != p_ptr->lev)) load_all_pref_files();
 }
 
 

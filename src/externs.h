@@ -295,6 +295,7 @@ extern bool send_score;	/* Send score dump to the world score server */
 #endif
 
 extern bool allow_debug_opts;	/* Allow use of debug/cheat options */
+extern bool autoload_pref_files;
 
 
 /*** Disturbance Options ***/
@@ -762,6 +763,7 @@ extern void do_cmd_magic_eater(bool only_browse);
 
 /* dungeon.c */
 extern void leave_quest_check(void);
+extern void load_all_pref_files(void);
 extern void extract_option_vars(void);
 extern void determine_bounty_uniques(void);
 extern void determine_today_mon(bool conv_old);
