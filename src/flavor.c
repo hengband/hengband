@@ -1393,6 +1393,150 @@ static bool have_flag_of(flag_insc_table *fi_ptr, u32b flgs[TR_FLAG_SIZE])
 	return (FALSE);
 }
 
+static char *get_ability_abbreviation(char *ptr, object_type *o_ptr, bool kanji, bool all)
+{
+	char *prev_ptr = ptr;
+	u32b flgs[TR_FLAG_SIZE];
+
+	/* Extract the flags */
+	object_flags(o_ptr, flgs);
+
+
+	/* Remove obvious flags */
+	if (!all)
+	{
+		object_kind *k_ptr = &k_info[o_ptr->k_idx];
+		int j;
+				
+		/* Base object */
+		for (j = 0; j < TR_FLAG_SIZE; j++)
+			flgs[j] &= ~k_ptr->flags[j];
+
+		if (o_ptr->name1)
+		{
+			artifact_type *a_ptr = &a_info[o_ptr->name1];
+					
+			for (j = 0; j < TR_FLAG_SIZE; j++)
+				flgs[j] &= ~a_ptr->flags[j];
+		}
+
+		if (o_ptr->name2)
+		{
+			bool teleport = have_flag(flgs, TR_TELEPORT);
+			ego_item_type *e_ptr = &e_info[o_ptr->name2];
+					
+			for (j = 0; j < TR_FLAG_SIZE; j++)
+				flgs[j] &= ~e_ptr->flags[j];
+
+			/* Always inscribe {.} for random teleport */
+			if (teleport) add_flag(flgs, TR_TELEPORT);
+		}
+	}
+
+
+	/* Plusses */
+	if (have_flag_of(flag_insc_plus, flgs))
+	{
+		if (kanji)
+			ADD_INSC("+");
+	}
+	ptr = inscribe_flags_aux(flag_insc_plus, flgs, kanji, ptr);
+
+	/* Immunity */
+	if (have_flag_of(flag_insc_immune, flgs))
+	{
+		if (!kanji && ptr != prev_ptr)
+		{
+			ADD_INSC(";");
+			prev_ptr = ptr;
+		}
+		ADD_INSC("*");
+	}
+	ptr = inscribe_flags_aux(flag_insc_immune, flgs, kanji, ptr);
+
+	/* Resistance */
+	if (have_flag_of(flag_insc_resistance, flgs))
+	{
+		if (kanji)
+			ADD_INSC("r");
+		else if (ptr != prev_ptr)
+		{
+			ADD_INSC(";");
+			prev_ptr = ptr;
+		}
+	}
+	ptr = inscribe_flags_aux(flag_insc_resistance, flgs, kanji, ptr);
+
+	/* Misc Ability */
+	if (have_flag_of(flag_insc_misc, flgs))
+	{
+		if (ptr != prev_ptr)
+		{
+			ADD_INSC(";");
+			prev_ptr = ptr;
+		}
+	}
+	ptr = inscribe_flags_aux(flag_insc_misc, flgs, kanji, ptr);
+
+	/* Aura */
+	if (have_flag_of(flag_insc_aura, flgs))
+	{
+		ADD_INSC("[");
+	}
+	ptr = inscribe_flags_aux(flag_insc_aura, flgs, kanji, ptr);
+
+	/* Brand Weapon */
+	if (have_flag_of(flag_insc_brand, flgs))
+		ADD_INSC("|");
+	ptr = inscribe_flags_aux(flag_insc_brand, flgs, kanji, ptr);
+
+	/* Kill Weapon */
+	if (have_flag_of(flag_insc_kill, flgs))
+		ADD_INSC("/X");
+	ptr = inscribe_flags_aux(flag_insc_kill, flgs, kanji, ptr);
+
+	/* Slay Weapon */
+	if (have_flag_of(flag_insc_slay, flgs))
+		ADD_INSC("/");
+	ptr = inscribe_flags_aux(flag_insc_slay, flgs, kanji, ptr);
+
+	/* Esp */
+	if (kanji)
+	{
+		if (have_flag_of(flag_insc_esp1, flgs) ||
+		    have_flag_of(flag_insc_esp2, flgs))
+			ADD_INSC("~");
+		ptr = inscribe_flags_aux(flag_insc_esp1, flgs, kanji, ptr);
+		ptr = inscribe_flags_aux(flag_insc_esp2, flgs, kanji, ptr);
+	}
+	else
+	{
+		if (have_flag_of(flag_insc_esp1, flgs))
+			ADD_INSC("~");
+		ptr = inscribe_flags_aux(flag_insc_esp1, flgs, kanji, ptr);
+		if (have_flag_of(flag_insc_esp2, flgs))
+			ADD_INSC("~");
+		ptr = inscribe_flags_aux(flag_insc_esp2, flgs, kanji, ptr);
+	}
+
+	/* Random Teleport */
+	if (have_flag(flgs, TR_TELEPORT))
+	{
+		ADD_INSC(".");
+	}
+
+	/* sustain */
+	if (have_flag_of(flag_insc_sust, flgs))
+	{
+		ADD_INSC("(");
+	}
+	ptr = inscribe_flags_aux(flag_insc_sust, flgs, kanji, ptr);
+
+	*ptr = '\0';
+
+	return ptr;
+}
+
 
 /*
  *  Get object inscription with auto inscription of object flags.
@@ -1401,9 +1545,6 @@ static void get_inscription(char *buff, object_type *o_ptr)
 {
 	cptr insc = quark_str(o_ptr->inscription);
 	char *ptr = buff;
-	char *prev_ptr = buff;
-
-	u32b flgs[TR_FLAG_SIZE];
 
 	/* Not fully identified */
 	if (!(o_ptr->ident & IDENT_MENTAL))
@@ -1422,23 +1563,22 @@ static void get_inscription(char *buff, object_type *o_ptr)
 		return;
 	}
 
-	/* Extract the flags */
-	object_flags(o_ptr, flgs);
-
-
 	*buff = '\0';
 	for (; *insc; insc++)
 	{
-		bool kanji = FALSE;
-		bool all;
-
 		/* Ignore fake artifact inscription */
 		if (*insc == '#') break;
 
 		/* {%} will be automatically converted */
 		else if ('%' == *insc)
 		{
-			cptr start_percent = ptr;
+			bool kanji = FALSE;
+			bool all;
+			cptr start = ptr;
+
+			/* check for too long inscription */
+			if (ptr >= buff + MAX_NLEN) continue;
+
 #ifdef JP
 			if ('%' == insc[1])
 			{
@@ -1460,140 +1600,9 @@ static void get_inscription(char *buff, object_type *o_ptr)
 				all = FALSE;
 			}
 
-			/* check for too long inscription */
-			if (ptr >= buff + MAX_NLEN) continue;
+			ptr = get_ability_abbreviation(ptr, o_ptr, kanji, all);
 
-			/* Remove obvious flags */
-			if (!all)
-			{
-				object_kind *k_ptr = &k_info[o_ptr->k_idx];
-				int j;
-				
-				/* Base object */
-				for (j = 0; j < TR_FLAG_SIZE; j++)
-					flgs[j] &= ~k_ptr->flags[j];
-
-				if (o_ptr->name1)
-				{
-					artifact_type *a_ptr = &a_info[o_ptr->name1];
-					
-					for (j = 0; j < TR_FLAG_SIZE; j++)
-						flgs[j] &= ~a_ptr->flags[j];
-				}
-
-				if (o_ptr->name2)
-				{
-					bool teleport = have_flag(flgs, TR_TELEPORT);
-					ego_item_type *e_ptr = &e_info[o_ptr->name2];
-					
-					for (j = 0; j < TR_FLAG_SIZE; j++)
-						flgs[j] &= ~e_ptr->flags[j];
-
-					/* Always inscribe {.} for random teleport */
-					if (teleport) add_flag(flgs, TR_TELEPORT);
-				}
-			}
-
-
-			/* Plusses */
-			if (have_flag_of(flag_insc_plus, flgs))
-			{
-				if (kanji)
-					ADD_INSC("+");
-			}
-			ptr = inscribe_flags_aux(flag_insc_plus, flgs, kanji, ptr);
-
-			/* Immunity */
-			if (have_flag_of(flag_insc_immune, flgs))
-			{
-				if (!kanji && ptr != prev_ptr)
-				{
-					ADD_INSC(";");
-					prev_ptr = ptr;
-				}
-				ADD_INSC("*");
-			}
-			ptr = inscribe_flags_aux(flag_insc_immune, flgs, kanji, ptr);
-
-			/* Resistance */
-			if (have_flag_of(flag_insc_resistance, flgs))
-			{
-				if (kanji)
-					ADD_INSC("r");
-				else if (ptr != prev_ptr)
-				{
-					ADD_INSC(";");
-					prev_ptr = ptr;
-				}
-			}
-			ptr = inscribe_flags_aux(flag_insc_resistance, flgs, kanji, ptr);
-
-			/* Misc Ability */
-			if (have_flag_of(flag_insc_misc, flgs))
-			{
-				if (ptr != prev_ptr)
-				{
-					ADD_INSC(";");
-					prev_ptr = ptr;
-				}
-			}
-			ptr = inscribe_flags_aux(flag_insc_misc, flgs, kanji, ptr);
-
-			/* Aura */
-			if (have_flag_of(flag_insc_aura, flgs))
-			{
-				ADD_INSC("[");
-			}
-			ptr = inscribe_flags_aux(flag_insc_aura, flgs, kanji, ptr);
-
-			/* Brand Weapon */
-			if (have_flag_of(flag_insc_brand, flgs))
-				ADD_INSC("|");
-			ptr = inscribe_flags_aux(flag_insc_brand, flgs, kanji, ptr);
-
-			/* Kill Weapon */
-			if (have_flag_of(flag_insc_kill, flgs))
-				ADD_INSC("/X");
-			ptr = inscribe_flags_aux(flag_insc_kill, flgs, kanji, ptr);
-
-			/* Slay Weapon */
-			if (have_flag_of(flag_insc_slay, flgs))
-				ADD_INSC("/");
-			ptr = inscribe_flags_aux(flag_insc_slay, flgs, kanji, ptr);
-
-			/* Esp */
-			if (kanji)
-			{
-				if (have_flag_of(flag_insc_esp1, flgs) ||
-				    have_flag_of(flag_insc_esp2, flgs))
-					ADD_INSC("~");
-				ptr = inscribe_flags_aux(flag_insc_esp1, flgs, kanji, ptr);
-				ptr = inscribe_flags_aux(flag_insc_esp2, flgs, kanji, ptr);
-			}
-			else
-			{
-				if (have_flag_of(flag_insc_esp1, flgs))
-					ADD_INSC("~");
-				ptr = inscribe_flags_aux(flag_insc_esp1, flgs, kanji, ptr);
-				if (have_flag_of(flag_insc_esp2, flgs))
-					ADD_INSC("~");
-				ptr = inscribe_flags_aux(flag_insc_esp2, flgs, kanji, ptr);
-			}
-
-			/* Random Teleport */
-			if (have_flag(flgs, TR_TELEPORT))
-			{
-				ADD_INSC(".");
-			}
-
-			/* sustain */
-			if (have_flag_of(flag_insc_sust, flgs))
-			{
-				ADD_INSC("(");
-			}
-			ptr = inscribe_flags_aux(flag_insc_sust, flgs, kanji, ptr);
-
-			if (ptr == start_percent)
+			if (ptr == start)
 				ADD_INSC(" ");
 		}
 		else
@@ -3179,6 +3188,31 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
 #else
 		strcpy(tmp_val2, "tried");
 #endif
+	}
+
+	if ((abbrev_extra || abbrev_all) && (o_ptr->ident & IDENT_MENTAL))
+	{
+		if (!o_ptr->inscription || !strchr(quark_str(o_ptr->inscription), '%'))
+		{
+			bool kanji, all;
+			char buf[1024];
+
+#ifdef JP
+			kanji = TRUE;
+#else
+			kanji = FALSE;
+#endif
+			all = abbrev_all;
+
+			get_ability_abbreviation(buf, o_ptr, kanji, all);
+
+			if (buf[0])
+			{
+				if (tmp_val2[0]) strcat(tmp_val2, ", ");
+
+				strcat(tmp_val2, buf);
+			}
+		}
 	}
 
 	/* Use the standard inscription if available */

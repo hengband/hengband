@@ -277,10 +277,12 @@ bool view_granite_lite;		/* Use special colors for wall grids (slow) */
 bool view_special_lite;		/* Use special colors for floor grids (slow) */
 bool new_ascii_graphics;
 bool display_path;
+bool always_show_list;
+bool abbrev_extra;
+bool abbrev_all;
 bool target_pet;
 bool plain_pickup;
 
-bool always_show_list;
 bool powerup_home;
 bool send_score;
 bool allow_debug_opts;   /* Allow use of debug/cheat options */

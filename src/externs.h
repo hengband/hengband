@@ -243,9 +243,11 @@ extern bool view_special_lite;
 extern bool new_ascii_graphics;
 extern bool target_pet;
 extern bool display_path;
+extern bool always_show_list;
+extern bool abbrev_extra;
+extern bool abbrev_all;
 extern bool plain_pickup;
 
-extern bool always_show_list;
 extern bool powerup_home;
 extern bool send_score;
 extern bool allow_debug_opts;   /* Allow use of debug/cheat options */
