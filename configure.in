@@ -3,7 +3,7 @@ AC_INIT(src/main.c)
 
 AM_CONFIG_HEADER(src/autoconf.h)
 
-AM_INIT_AUTOMAKE(hengband, 1.1.0)
+AM_INIT_AUTOMAKE(hengband, 1.1.0b)
 
 AC_ARG_WITH(setgid,
 [  --with-setgid=NAME      install hengband as group NAME],
