@@ -230,8 +230,9 @@ cptr autopick_line_from_entry(autopick_type *entry)
 	if (IS_FLG(FLG_HUMAN)) ADD_KEY(KEY_HUMAN);
 	if (IS_FLG(FLG_WORTHLESS)) ADD_KEY(KEY_WORTHLESS);
 	if (IS_FLG(FLG_NAMELESS)) ADD_KEY(KEY_NAMELESS);
-	if (IS_FLG(FLG_ARTIFACT)) ADD_KEY(KEY_ARTIFACT);
 	if (IS_FLG(FLG_EGO)) ADD_KEY(KEY_EGO);
+
+	if (IS_FLG(FLG_ARTIFACT)) ADD_KEY(KEY_ARTIFACT);
 
 	if (IS_FLG(FLG_ITEMS)) ADD_KEY2(KEY_ITEMS);
 	else if (IS_FLG(FLG_WEAPONS)) ADD_KEY2(KEY_WEAPONS);
@@ -251,7 +252,10 @@ cptr autopick_line_from_entry(autopick_type *entry)
 	else if (IS_FLG(FLG_HELMS)) ADD_KEY2(KEY_HELMS);
 	else if (IS_FLG(FLG_GLOVES)) ADD_KEY2(KEY_GLOVES);
 	else if (IS_FLG(FLG_BOOTS)) ADD_KEY2(KEY_BOOTS);
-	else
+
+        /* You don't need sepalator after adjective */
+        /* 'artifact' is not true adjective */
+	else if (!IS_FLG(FLG_ARTIFACT))
 		sepa_flag = FALSE;
 
 	if (entry->name && entry->name[0])
