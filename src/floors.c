@@ -191,6 +191,9 @@ static void kill_saved_floor(saved_floor_type *sf_ptr)
 {
 	char floor_savefile[1024];
 
+	/* Paranoia */
+	if (!sf_ptr) return;
+
 	/* Already empty */
 	if (!sf_ptr->floor_id) return;
 
@@ -275,7 +278,8 @@ s16b get_new_floor_id(void)
 	sf_ptr->lower_floor_id = 0;
 	sf_ptr->visit_mark = latest_visit_mark++;
 
-	/* sf_ptr->dun_level is not yet decided */
+	/* sf_ptr->dun_level may be changed later */
+	sf_ptr->dun_level = dun_level;
 
 
 	/* Increment number of floor_id */
@@ -877,9 +881,6 @@ void leave_floor(void)
 	{
 	    /* Get temporal floor_id */
 	    p_ptr->floor_id = get_new_floor_id();
-	    
-	    /* Record the dungeon level */
-	    get_sf_ptr(p_ptr->floor_id)->dun_level = dun_level;
 	}
 
 
@@ -1046,9 +1047,6 @@ void leave_floor(void)
 		{
 			c_ptr->special = new_floor_id;
 		}
-
-		/* Record new dungeon level */
-		get_sf_ptr(new_floor_id)->dun_level = dun_level;
 	}
 
 	/* Fix connection -- level teleportation or trap door */
@@ -1502,6 +1500,14 @@ void stair_creation(void)
 
 	/* Extract current floor data */
 	sf_ptr = get_sf_ptr(p_ptr->floor_id);
+
+	/* Paranoia */
+	if (!sf_ptr)
+	{
+		/* No floor id? -- Create now! */
+		p_ptr->floor_id = get_new_floor_id();
+		sf_ptr = get_sf_ptr(p_ptr->floor_id);
+	} 
 
 	/* Choose randomly */
 	if (up && down)
