@@ -6334,9 +6334,10 @@ long total_points(void)
 }
 
 
+#define GRAVE_LINE_WIDTH 31
 
 /*
- * Centers a string within a 31 character string		-JWT-
+ * Centers a string within a GRAVE_LINE_WIDTH character string		-JWT-
  */
 static void center_string(char *buf, cptr str)
 {
@@ -6346,10 +6347,10 @@ static void center_string(char *buf, cptr str)
 	i = strlen(str);
 
 	/* Necessary border */
-	j = 15 - i / 2;
+	j = GRAVE_LINE_WIDTH / 2 - i / 2;
 
 	/* Mega-Hack */
-	(void)sprintf(buf, "%*s%s%*s", j, "", str, 31 - i - j, "");
+	(void)sprintf(buf, "%*s%s%*s", j, "", str, GRAVE_LINE_WIDTH - i - j, "");
 }
 
 
@@ -6555,7 +6556,7 @@ static void print_tomb(void)
 		}
 		else
 		{
-			roff_to_buf(p_ptr->died_from, 32, tmp, sizeof tmp);
+			roff_to_buf(p_ptr->died_from, GRAVE_LINE_WIDTH + 1, tmp, sizeof tmp);
 			t = tmp + strlen(tmp) + 1;
 			if (*t)
 			{
@@ -6564,6 +6565,28 @@ static void print_tomb(void)
 				{
 					for (t = dummy + strlen(dummy) - 2; iskanji(*(t - 1)); t--) /* Loop */;
 					strcpy(t, "…");
+				}
+				else if (my_strstr(tmp, "『") && suffix(dummy, "』"))
+				{
+					char dummy2[80];
+					char *name_head = my_strstr(tmp, "『");
+					sprintf(dummy2, "%s%s", name_head, dummy);
+					if (strlen(dummy2) <= GRAVE_LINE_WIDTH)
+					{
+						strcpy(dummy, dummy2);
+						*name_head = '\0';
+					}
+				}
+				else if (my_strstr(tmp, "「") && suffix(dummy, "」"))
+				{
+					char dummy2[80];
+					char *name_head = my_strstr(tmp, "「");
+					sprintf(dummy2, "%s%s", name_head, dummy);
+					if (strlen(dummy2) <= GRAVE_LINE_WIDTH)
+					{
+						strcpy(dummy, dummy2);
+						*name_head = '\0';
+					}
 				}
 				center_string(buf, dummy);
 				put_str(buf, 15, 11);
@@ -6606,7 +6629,7 @@ static void print_tomb(void)
 		center_string(buf, tmp);
 		put_str(buf, 14, 11);
 
-		roff_to_buf(format("by %s.", p_ptr->died_from), 32, tmp, sizeof tmp);
+		roff_to_buf(format("by %s.", p_ptr->died_from), GRAVE_LINE_WIDTH + 1, tmp, sizeof tmp);
 		center_string(buf, tmp);
 		put_str(buf, 15, 11);
 		t = tmp + strlen(tmp) + 1;
@@ -6616,7 +6639,7 @@ static void print_tomb(void)
 			if (*(t + strlen(t) + 1)) /* Does 3rd line exist? */
 			{
 				int dummy_len = strlen(dummy);
-				strcpy(dummy + MIN(dummy_len, 28), "...");
+				strcpy(dummy + MIN(dummy_len, GRAVE_LINE_WIDTH - 3), "...");
 			}
 			center_string(buf, dummy);
 			put_str(buf, 16, 11);
