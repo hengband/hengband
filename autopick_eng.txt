@@ -80,7 +80,11 @@
 #      worthless         : Items which you cannot sell match.
 #      artifacts         : Artifact items match.
 #      ego               : Ego items match.
+#      good              : {good} items match.
 #      nameless          : Non ego/non artifact items match.
+#      average           : {average} items match.
+#      rare              : Rare equipment such as Dragon armors etc. match.
+#      common            : Any equipments except 'rare' equipment match.
 #      wanted            : Wanted monster's corpses or skeletons match.
 #      unique monster's  : Unique monster's corpses, skeletons or statues match.
 #      human             : Human corpses or skeletons match.
@@ -100,6 +104,7 @@
 #      magical devices   : Wands, staffs, rods and scrolls match.
 #      lights            : Light sources match.
 #      junks             : Junk items like Shard of Pottery or etc. match.
+#      corpses or skeletons : Corpses or skeletons of monsters match.
 #      spellbooks        : All books match.
 #      favorite weapons  : Weapons suitable for your class (for Priest, Monk,
 #                          BeastMaster, ForceTrainer, Cavalry, and Ninja)
@@ -176,13 +181,15 @@
 #      [! ~ ; (]
 #      [[all] [collecting]
 #       [unaware] [unidentified] [identified] [*identified*] 
+#       [artifact] [ego] [good] [nameless] [average]
+#       [worthless] [rare] [common]
 #       [dice boosted] [more than N dice] [more bonus than N] 
-#       [worthless] [artifact] [ego] [nameless] 
 #       [wanted] [unique monster's] [human] [unreadable] 
 #       [first realm's] [second realm's] [first] [second] [third] [fourth] 
-#       [items | weapons | armors | missiles | magical devices | 
-#        lights | junks | spellbooks | hafted weapons | shields | bows | 
-#        rings | amulets | suits | cloaks | helms | gloves | boots] :]
+#       [items | weapons | favorite weapons | armors | missiles |
+#        magical devices | lights | junks | corpses or skeletons | spellbooks |
+#        hafted weapons | shields | bows | rings | amulets | suits | cloaks |
+#        helms | gloves | boots] :]
 #      [[^]part-of-item-name] [#auto-inscription-string]
 #    
 #    
