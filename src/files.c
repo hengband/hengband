@@ -6035,7 +6035,7 @@ long total_points(void)
 	if (ironman_downward) point *= 2;
 	if (p_ptr->pclass == CLASS_BERSERKER)
 	{
-		if ((p_ptr->prace == RACE_SPECTRE) || (p_ptr->prace == RACE_AMBERITE))
+		if ( p_ptr->prace == RACE_SPECTRE )
 			point = point / 5;
 	}
 
