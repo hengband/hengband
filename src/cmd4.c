@@ -249,7 +249,7 @@ static void auto_dump_printf(cptr fmt, ...)
 	}
 
 	/* Dump it */
-	fprintf(auto_dump_stream, buf);
+	fprintf(auto_dump_stream, "%s", buf);
 }
 
 
