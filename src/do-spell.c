@@ -4,837 +4,6 @@
 
 #include "angband.h"
 
-#define LIFE_SPEL_CURE_LIGHT_WOUNDS         0  
-#define LIFE_SPEL_BLESS			    1  
-#define LIFE_SPEL_CAUSE_LIGHT_WOUNDS	    2  
-#define LIFE_SPEL_CALL_LIGHT		    3  
-#define LIFE_SPEL_DETECT_DOORS_AND_TRAPS    4  
-#define LIFE_SPEL_CURE_MEDIUM_WOUNDS	    5  
-#define LIFE_SPEL_CURE_POISON		    6  
-#define LIFE_SPEL_SATISFY_HUNGER	    7  
-#define LIFE_SPEL_REMOVE_CURSE		    8  
-#define LIFE_SPEL_CAUSE_MEDIUM_WOUNDS	    9  
-#define LIFE_SPEL_CURE_CRITICAL_WOUNDS	    10 
-#define LIFE_SPEL_RESIST_HEAT_AND_COLD	    11 
-#define LIFE_SPEL_SENSE_SURROUNDINGS	    12 
-#define LIFE_SPEL_TURN_UNDEAD		    13 
-#define LIFE_SPEL_HEALING		    14 
-#define LIFE_SPEL_GLYPH_OF_WARDING	    15 
-#define LIFE_SPEL_DISPEL_CURSE		    16 
-#define LIFE_SPEL_PERCEPTION		    17 
-#define LIFE_SPEL_DISPEL_UNDEAD		    18 
-#define LIFE_SPEL_DAY_OF_THE_DOVE	    19 
-#define LIFE_SPEL_CAUSE_CRITICAL_WOUNDS	    20 
-#define LIFE_SPEL_WORD_OF_RECALL	    21 
-#define LIFE_SPEL_ALTER_REALITY		    22 
-#define LIFE_SPEL_WARDING_TRUE		    23 
-#define LIFE_SPEL_STERILIZATION		    24 
-#define LIFE_SPEL_DETECTION		    25 
-#define LIFE_SPEL_ANNIHILATE_UNDEAD	    26 
-#define LIFE_SPEL_CLAIRVOYANCE		    27 
-#define LIFE_SPEL_RESTORATION		    28 
-#define LIFE_SPEL_HEALING_TRUE		    29 
-#define LIFE_SPEL_HOLY_VISION		    30 
-#define LIFE_SPEL_ULTIMATE_RESISTANCE	    31 
-#define SORC_SPEL_DETECT_MONSTERS	    32 
-#define SORC_SPEL_PHASE_DOOR		    33 
-#define SORC_SPEL_DETECT_DOORS_AND_TRAPS    34 
-#define SORC_SPEL_LIGHT_AREA		    35 
-#define SORC_SPEL_CONFUSE_MONSTER	    36 
-#define SORC_SPEL_TELEPORT		    37 
-#define SORC_SPEL_SLEEP_MONSTER		    38 
-#define SORC_SPEL_RECHARGING		    39 
-#define SORC_SPEL_MAGIC_MAPPING		    40 
-#define SORC_SPEL_IDENTIFY		    41 
-#define SORC_SPEL_SLOW_MONSTER		    42 
-#define SORC_SPEL_MASS_SLEEP		    43 
-#define SORC_SPEL_TELEPORT_AWAY		    44 
-#define SORC_SPEL_HASTE_SELF		    45 
-#define SORC_SPEL_DETECTION_TRUE	    46 
-#define SORC_SPEL_IDENTIFY_TRUE		    47 
-#define SORC_SPEL_DETECT_ITEMS_AND_TREASURE 48 
-#define SORC_SPEL_CHARM_MONSTER		    49 
-#define SORC_SPEL_SENSE_MINDS		    50 
-#define SORC_SPEL_TELEPORT_TO_TOWN	    51 
-#define SORC_SPEL_SELF_KNOWLEDGE	    52 
-#define SORC_SPEL_TELEPORT_LEVEL	    53 
-#define SORC_SPEL_WORD_OF_RECALL	    54 
-#define SORC_SPEL_DIMENSION_DOOR	    55 
-#define SORC_SPEL_PROBING		    56 
-#define SORC_SPEL_EXPLOSIVE_RUNE	    57 
-#define SORC_SPEL_TELEKINESIS		    58 
-#define SORC_SPEL_CLAIRVOYANCE		    59 
-#define SORC_SPEL_CHARM_MONSTERS	    60 
-#define SORC_SPEL_ALCHEMY		    61 
-#define SORC_SPEL_BANISHMENT		    62 
-#define SORC_SPEL_GLOBE_OF_INVULNERABILITY  63 
-#define NATU_SPEL_DETECT_CREATURES	    64 
-#define NATU_SPEL_LIGHTNING		    65 
-#define NATU_SPEL_DETECT_DOORS_AND_TRAPS    66 
-#define NATU_SPEL_PRODUCE_FOOD		    67 
-#define NATU_SPEL_DAYLIGHT		    68 
-#define NATU_SPEL_ANIMAL_TAMING		    69 
-#define NATU_SPEL_RESIST_ENVIRONMENT	    70 
-#define NATU_SPEL_CURE_WOUNDS_AND_POISON    71 
-#define NATU_SPEL_STONE_TO_MUD		    72 
-#define NATU_SPEL_FROST_BOLT		    73 
-#define NATU_SPEL_NATURE_AWARENESS	    74 
-#define NATU_SPEL_FIRE_BOLT		    75 
-#define NATU_SPEL_RAY_OF_SUNLIGHT	    76 
-#define NATU_SPEL_ENTANGLE		    77 
-#define NATU_SPEL_SUMMON_ANIMAL		    78 
-#define NATU_SPEL_HERBAL_HEALING	    79 
-#define NATU_SPEL_STAIR_BUILDING	    80 
-#define NATU_SPEL_STONE_SKIN		    81 
-#define NATU_SPEL_RESISTANCE_TRUE	    82 
-#define NATU_SPEL_FOREST_CREATION	    83 
-#define NATU_SPEL_ANIMAL_FRIENDSHIP	    84 
-#define NATU_SPEL_STONE_TELL		    85 
-#define NATU_SPEL_WALL_OF_STONE		    86 
-#define NATU_SPEL_PROTECT_FROM_CORROSION    87 
-#define NATU_SPEL_EARTHQUAKE		    88 
-#define NATU_SPEL_CYCLONE		    89 
-#define NATU_SPEL_BLIZZARD		    90 
-#define NATU_SPEL_LIGHTNING_STORM	    91 
-#define NATU_SPEL_WHIRLPOOL		    92 
-#define NATU_SPEL_CALL_SUNLIGHT		    93 
-#define NATU_SPEL_ELEMENTAL_BRANDING	    94 
-#define NATU_SPEL_NATURES_WRATH		    95 
-#define CHAO_SPEL_MAGIC_MISSILE		    96 
-#define CHAO_SPEL_TRAP_DOOR_DESTRUCTION     97 
-#define CHAO_SPEL_FLASH_OF_LIGHT	    98 
-#define CHAO_SPEL_TOUCH_OF_CONFUSION	    99 
-#define CHAO_SPEL_MANA_BURST		    100
-#define CHAO_SPEL_FIRE_BOLT		    101
-#define CHAO_SPEL_FIST_OF_FORCE		    102
-#define CHAO_SPEL_TELEPORT_SELF		    103
-#define CHAO_SPEL_WONDER		    104
-#define CHAO_SPEL_CHAOS_BOLT		    105
-#define CHAO_SPEL_SONIC_BOOM		    106
-#define CHAO_SPEL_DOOM_BOLT		    107
-#define CHAO_SPEL_FIRE_BALL		    108
-#define CHAO_SPEL_TELEPORT_OTHER	    109
-#define CHAO_SPEL_WORD_OF_DESTRUCTION	    110
-#define CHAO_SPEL_INVOKE_LOGRUS		    111
-#define CHAO_SPEL_POLYMORPH_OTHER	    112
-#define CHAO_SPEL_CHAIN_LIGHTNING	    113
-#define CHAO_SPEL_ARCANE_BINDING	    114
-#define CHAO_SPEL_DISINTEGRATE		    115
-#define CHAO_SPEL_ALTER_REALITY		    116
-#define CHAO_SPEL_MAGIC_ROCKET		    117
-#define CHAO_SPEL_CHAOS_BRANDING	    118
-#define CHAO_SPEL_SUMMON_DEMON		    119
-#define CHAO_SPEL_BEAM_OF_GRAVITY	    120
-#define CHAO_SPEL_METEOR_SWARM		    121
-#define CHAO_SPEL_FLAME_STRIKE		    122
-#define CHAO_SPEL_CALL_CHAOS		    123
-#define CHAO_SPEL_POLYMORPH_SELF	    124
-#define CHAO_SPEL_MANA_STORM		    125
-#define CHAO_SPEL_BREATHE_LOGRUS	    126
-#define CHAO_SPEL_CALL_THE_VOID		    127
-#define DEAT_SPEL_DETECT_UNLIFE		    128
-#define DEAT_SPEL_MALEDICTION		    129
-#define DEAT_SPEL_DETECT_EVIL		    130
-#define DEAT_SPEL_STINKING_CLOUD	    131
-#define DEAT_SPEL_BLACK_SLEEP		    132
-#define DEAT_SPEL_RESIST_POISON		    133
-#define DEAT_SPEL_HORRIFY		    134
-#define DEAT_SPEL_ENSLAVE_UNDEAD	    135
-#define DEAT_SPEL_ORB_OF_ENTROPY	    136
-#define DEAT_SPEL_NETHER_BOLT		    137
-#define DEAT_SPEL_CLOUD_KILL		    138
-#define DEAT_SPEL_GENOCIDE_ONE		    139
-#define DEAT_SPEL_POISON_BRANDING	    140
-#define DEAT_SPEL_VAMPIRIC_DRAIN	    141
-#define DEAT_SPEL_ANIMATE_DEAD		    142
-#define DEAT_SPEL_GENOCIDE		    143
-#define DEAT_SPEL_BERSERK		    144
-#define DEAT_SPEL_INVOKE_SPIRITS	    145
-#define DEAT_SPEL_DARK_BOLT		    146
-#define DEAT_SPEL_BATTLE_FRENZY		    147
-#define DEAT_SPEL_VAMPIRIC_BRANDING	    148
-#define DEAT_SPEL_VAMPIRISM_TRUE	    149
-#define DEAT_SPEL_NETHER_WAVE		    150
-#define DEAT_SPEL_DARKNESS_STORM	    151
-#define DEAT_SPEL_DEATH_RAY		    152
-#define DEAT_SPEL_RAISE_THE_DEAD	    153
-#define DEAT_SPEL_ESOTERIA		    154
-#define DEAT_SPEL_POLYMORPH_VAMPIRE	    155
-#define DEAT_SPEL_RESTORE_LIFE		    156
-#define DEAT_SPEL_MASS_GENOCIDE		    157
-#define DEAT_SPEL_HELLFIRE		    158
-#define DEAT_SPEL_WRAITHFORM		    159
-#define TRUM_SPEL_PHASE_DOOR		    160
-#define TRUM_SPEL_TRUMP_SPIDERS		    161
-#define TRUM_SPEL_SHUFFLE		    162
-#define TRUM_SPEL_RESET_RECALL		    163
-#define TRUM_SPEL_TELEPORT		    164
-#define TRUM_SPEL_TRUMP_SPYING		    165
-#define TRUM_SPEL_TELEPORT_AWAY		    166
-#define TRUM_SPEL_TRUMP_ANIMALS		    167
-#define TRUM_SPEL_TRUMP_REACH		    168
-#define TRUM_SPEL_TRUMP_KAMIKAZE	    169
-#define TRUM_SPEL_PHANTASMAL_SERVANT	    170
-#define TRUM_SPEL_HASTE_MONSTER		    171
-#define TRUM_SPEL_TELEPORT_LEVEL	    172
-#define TRUM_SPEL_DIMENSION_DOOR	    173
-#define TRUM_SPEL_WORD_OF_RECALL	    174
-#define TRUM_SPEL_BANISH		    175
-#define TRUM_SPEL_SWAP_POSITION		    176
-#define TRUM_SPEL_TRUMP_UNDEAD		    177
-#define TRUM_SPEL_TRUMP_REPTILES	    178
-#define TRUM_SPEL_TRUMP_MONSTERS	    179
-#define TRUM_SPEL_TRUMP_HOUNDS		    180
-#define TRUM_SPEL_TRUMP_BRANDING	    181
-#define TRUM_SPEL_LIVING_TRUMP		    182
-#define TRUM_SPEL_TRUMP_CYBERDEMON	    183
-#define TRUM_SPEL_TRUMP_DIVINATION	    184
-#define TRUM_SPEL_TRUMP_LORE		    185
-#define TRUM_SPEL_HEAL_MONSTER		    186
-#define TRUM_SPEL_TRUMP_DRAGON		    187
-#define TRUM_SPEL_TRUMP_METEOR		    188
-#define TRUM_SPEL_TRUMP_DEMON		    189
-#define TRUM_SPEL_TRUMP_GREATER_UNDEAD	    190
-#define TRUM_SPEL_TRUMP_ANCIENT_DRAGON	    191
-#define ARCA_SPEL_ZAP			    192
-#define ARCA_SPEL_WIZARD_LOCK		    193
-#define ARCA_SPEL_DETECT_INVISIBILITY	    194
-#define ARCA_SPEL_DETECT_MONSTERS	    195
-#define ARCA_SPEL_BLINK			    196
-#define ARCA_SPEL_LIGHT_AREA		    197
-#define ARCA_SPEL_TRAP_AND_DOOR_DESTRUCTION 198
-#define ARCA_SPEL_CURE_LIGHT_WOUNDS	    199
-#define ARCA_SPEL_DETECT_DOORS_AND_TRAPS    200
-#define ARCA_SPEL_PHLOGISTON		    201
-#define ARCA_SPEL_DETECT_TREASURE	    202
-#define ARCA_SPEL_DETECT_ENCHANTMENT	    203
-#define ARCA_SPEL_DETECT_OBJECTS	    204
-#define ARCA_SPEL_CURE_POISON		    205
-#define ARCA_SPEL_RESIST_COLD		    206
-#define ARCA_SPEL_RESIST_FIRE		    207
-#define ARCA_SPEL_RESIST_LIGHTNING	    208
-#define ARCA_SPEL_RESIST_ACID		    209
-#define ARCA_SPEL_CURE_MEDIUM_WOUNDS	    210
-#define ARCA_SPEL_TELEPORT		    211
-#define ARCA_SPEL_IDENTIFY		    212
-#define ARCA_SPEL_STONE_TO_MUD		    213
-#define ARCA_SPEL_RAY_OF_LIGHT		    214
-#define ARCA_SPEL_SATISFY_HUNGER	    215
-#define ARCA_SPEL_SEE_INVISIBLE		    216
-#define ARCA_SPEL_CONJURE_ELEMENTAL	    217
-#define ARCA_SPEL_TELEPORT_LEVEL	    218
-#define ARCA_SPEL_TELEPORT_AWAY		    219
-#define ARCA_SPEL_ELEMENTAL_BALL	    220
-#define ARCA_SPEL_DETECTION		    221
-#define ARCA_SPEL_WORD_OF_RECALL	    222
-#define ARCA_SPEL_CLAIRVOYANCE		    223
-#define CRAF_SPEL_INFRAVISION		    224
-#define CRAF_SPEL_REGENERATION		    225
-#define CRAF_SPEL_SATISFY_HUNGER	    226
-#define CRAF_SPEL_RESIST_COLD		    227
-#define CRAF_SPEL_RESIST_FIRE		    228
-#define CRAF_SPEL_HEROISM		    229
-#define CRAF_SPEL_RESIST_LIGHTNING	    230
-#define CRAF_SPEL_RESIST_ACID		    231
-#define CRAF_SPEL_SEE_INVISIBILITY	    232
-#define CRAF_SPEL_REMOVE_CURSE		    233
-#define CRAF_SPEL_RESIST_POISON		    234
-#define CRAF_SPEL_BERSERK		    235
-#define CRAF_SPEL_SELF_KNOWLEDGE	    236
-#define CRAF_SPEL_PROTECTION_FROM_EVIL	    237
-#define CRAF_SPEL_CURE			    238
-#define CRAF_SPEL_MANA_BRANDING		    239
-#define CRAF_SPEL_TELEPATHY		    240
-#define CRAF_SPEL_STONE_SKIN		    241
-#define CRAF_SPEL_RESISTANCE		    242
-#define CRAF_SPEL_HASTE_SELF		    243
-#define CRAF_SPEL_WALK_THROUGH_WALL	    244
-#define CRAF_SPEL_POLISH_SHIELD		    245
-#define CRAF_SPEL_CREATE_GOLEM		    246
-#define CRAF_SPEL_MAGICAL_ARMOR		    247
-#define CRAF_SPEL_REMOVE_ENCHANTMENT	    248
-#define CRAF_SPEL_REMOVE_ALL_CURSE	    249
-#define CRAF_SPEL_KNOWLEDGE_TRUE	    250
-#define CRAF_SPEL_ENCHANT_WEAPON	    251
-#define CRAF_SPEL_ENCHANT_ARMOR		    252
-#define CRAF_SPEL_BRAND_WEAPON		    253
-#define CRAF_SPEL_LIVING_TRUMP		    254
-#define CRAF_SPEL_IMMUNITY		    255
-#define DAEM_SPEL_MAGIC_MISSILE		    256
-#define DAEM_SPEL_DETECT_UNLIFE		    257
-#define DAEM_SPEL_EVIL_BLESS		    258
-#define DAEM_SPEL_RESIST_FIRE		    259
-#define DAEM_SPEL_HORRIFY		    260
-#define DAEM_SPEL_NETHER_BOLT		    261
-#define DAEM_SPEL_SUMMON_MANES		    262
-#define DAEM_SPEL_HELLISH_FLAME		    263
-#define DAEM_SPEL_DOMINATE_DEMON	    264
-#define DAEM_SPEL_VISION		    265
-#define DAEM_SPEL_RESIST_NETHER		    266
-#define DAEM_SPEL_PLASMA_BOLT		    267
-#define DAEM_SPEL_FIRE_BALL		    268
-#define DAEM_SPEL_FIRE_BRANDING		    269
-#define DAEM_SPEL_NETHER_BALL		    270
-#define DAEM_SPEL_SUMMON_DEMON		    271
-#define DAEM_SPEL_DEVILISH_EYE		    272
-#define DAEM_SPEL_DEVIL_CLOAK		    273
-#define DAEM_SPEL_THE_FLOW_OF_LAVA	    274
-#define DAEM_SPEL_PLASMA_BALL		    275
-#define DAEM_SPEL_POLYMORPH_DEMON	    276
-#define DAEM_SPEL_NATHER_WAVE		    277
-#define DAEM_SPEL_KISS_OF_SUCCUBUS	    278
-#define DAEM_SPEL_DOOM_HAND		    279
-#define DAEM_SPEL_RAISE_THE_MORALE	    280
-#define DAEM_SPEL_IMMORTAL_BODY		    281
-#define DAEM_SPEL_INSANITY_CIRCLE	    282
-#define DAEM_SPEL_EXPLODE_PETS		    283
-#define DAEM_SPEL_SUMMON_GREATER_DEMON	    284
-#define DAEM_SPEL_NETHER_STORM		    285
-#define DAEM_SPEL_BLOODY_CURSE		    286
-#define DAEM_SPEL_POLYMORPH_DEMONLORD	    287
-#define CRUS_SPEL_PUNISHMENT		    288
-#define CRUS_SPEL_DETECT_EVIL		    289
-#define CRUS_SPEL_REMOVE_FEAR		    290
-#define CRUS_SPEL_SCARE_MONSTER		    291
-#define CRUS_SPEL_SANCTUARY		    292
-#define CRUS_SPEL_PORTAL		    293
-#define CRUS_SPEL_STAR_DUST		    294
-#define CRUS_SPEL_PURIFY		    295
-#define CRUS_SPEL_SCATTER_EVIL		    296
-#define CRUS_SPEL_HOLY_ORB		    297
-#define CRUS_SPEL_EXORCISM		    298
-#define CRUS_SPEL_REMOVE_CURSE		    299
-#define CRUS_SPEL_SENSE_UNSEEN		    300
-#define CRUS_SPEL_PROTECTION_FROM_EVIL	    301
-#define CRUS_SPEL_JUDGMENT_THUNDER	    302
-#define CRUS_SPEL_HOLY_WORD		    303
-#define CRUS_SPEL_UNBARRING_WAYS	    304
-#define CRUS_SPEL_ARREST		    305
-#define CRUS_SPEL_HOLY_AURA		    306
-#define CRUS_SPEL_DISPEL_UNDEAD_AND_DEMONS  307
-#define CRUS_SPEL_DISPEL_EVIL		    308
-#define CRUS_SPEL_HOLY_BLADE		    309
-#define CRUS_SPEL_STAR_BURST		    310
-#define CRUS_SPEL_SUMMON_ANGEL		    311
-#define CRUS_SPEL_HEROISM		    312
-#define CRUS_SPEL_DISPEL_CURSE		    313
-#define CRUS_SPEL_BANISH_EVIL		    314
-#define CRUS_SPEL_ARMAGEDDON		    315
-#define CRUS_SPEL_AN_EYE_FOR_AN_EYE	    316
-#define CRUS_SPEL_WRATH_OF_THE_GOD	    317
-#define CRUS_SPEL_DIVINE_INTERVENTION	    318
-#define CRUS_SPEL_CRUSADE		    319
-#define MUSI_SPEL_SONG_OF_HOLDING	    320
-#define MUSI_SPEL_SONG_OF_BLESSING	    321
-#define MUSI_SPEL_WRECKING_NOTE		    322
-#define MUSI_SPEL_STUN_PATTERN		    323
-#define MUSI_SPEL_FLOW_OF_LIFE		    324
-#define MUSI_SPEL_SONG_OF_THE_SUN	    325
-#define MUSI_SPEL_SONG_OF_FEAR		    326
-#define MUSI_SPEL_HEROIC_BALLAD		    327
-#define MUSI_SPEL_CLAIRAUDIENCE		    328
-#define MUSI_SPEL_SOUL_SHRIEK		    329
-#define MUSI_SPEL_SONG_OF_LORE		    330
-#define MUSI_SPEL_HIDING_TUNE		    331
-#define MUSI_SPEL_ILLUSION_PATTERN	    332
-#define MUSI_SPEL_DOOMCALL		    333
-#define MUSI_SPEL_FIRIELS_SONG		    334
-#define MUSI_SPEL_FELLOWSHIP_CHANT	    335
-#define MUSI_SPEL_SOUND_OF_DISINTEGRATION   336
-#define MUSI_SPEL_FINRODS_RESISTANCE	    337
-#define MUSI_SPEL_HOBBIT_MELODIES	    338
-#define MUSI_SPEL_WORLD_CONTORTION	    339
-#define MUSI_SPEL_DISPELLING_CHANT	    340
-#define MUSI_SPEL_THE_VOICE_OF_SARUMAN	    341
-#define MUSI_SPEL_SONG_OF_THE_TEMPEST	    342
-#define MUSI_SPEL_AMBARKANTA		    343
-#define MUSI_SPEL_WRECKING_PATTERN	    344
-#define MUSI_SPEL_STATIONARY_SHRIEK	    345
-#define MUSI_SPEL_ENDURANCE		    346
-#define MUSI_SPEL_THE_HEROS_POEM	    347
-#define MUSI_SPEL_RELIEF_OF_YAVANNA	    348
-#define MUSI_SPEL_GODDESS_REBIRTH	    349
-#define MUSI_SPEL_WIZARDRY_OF_SAURON	    350
-#define MUSI_SPEL_FINGOLFINS_CHALLENGE	    351
-#define TECH_SPEL_TOBI_IZUNA		    352
-#define TECH_SPEL_3_WAY_ATTACK		    353
-#define TECH_SPEL_BOOMERANG		    354
-#define TECH_SPEL_BURNING_STRIKE	    355
-#define TECH_SPEL_DETECT_FEROCITY	    356
-#define TECH_SPEL_STRIKE_TO_STUN	    357
-#define TECH_SPEL_COUNTER		    358
-#define TECH_SPEL_HARAINUKE		    359
-#define TECH_SPEL_SERPENTS_TONGUE	    360
-#define TECH_SPEL_ZAMMAKEN		    361
-#define TECH_SPEL_WIND_BLAST		    362
-#define TECH_SPEL_JUDGE			    363
-#define TECH_SPEL_ROCK_SMASH		    364
-#define TECH_SPEL_MIDARE_SETSUGEKKA	    365
-#define TECH_SPEL_SPOT_AIMING		    366
-#define TECH_SPEL_MAJINGIRI		    367
-#define TECH_SPEL_DESPERATE_ATTACK	    368
-#define TECH_SPEL_LIGHTNING_EAGLE	    369
-#define TECH_SPEL_RUSH_ATTACK		    370
-#define TECH_SPEL_BLOODY_MAELSTROM	    371
-#define TECH_SPEL_EARTHQUAKE_BLOW	    372
-#define TECH_SPEL_CRACK			    373
-#define TECH_SPEL_WAR_CRY		    374
-#define TECH_SPEL_MUSOU_SANDAN		    375
-#define TECH_SPEL_VAMPIRES_FANG		    376
-#define TECH_SPEL_MOON_DAZZLING		    377
-#define TECH_SPEL_HUNDRED_SLAUGHTER	    378
-#define TECH_SPEL_DRAGONIC_FLASH	    379
-#define TECH_SPEL_TWIN_SLASH		    380
-#define TECH_SPEL_KOFUKU_ZETTOUSEI	    381
-#define TECH_SPEL_KEIUN_KININKEN	    382
-#define TECH_SPEL_HARAKIRI		    383
-
-
-/*
- * List of spell ID's for each realm
- */
-static s16b spell_id_list[][32] =
-{
-	{
-		LIFE_SPEL_CURE_LIGHT_WOUNDS,
-		LIFE_SPEL_BLESS,
-		LIFE_SPEL_CAUSE_LIGHT_WOUNDS,
-		LIFE_SPEL_CALL_LIGHT,
-		LIFE_SPEL_DETECT_DOORS_AND_TRAPS,
-		LIFE_SPEL_CURE_MEDIUM_WOUNDS,
-		LIFE_SPEL_CURE_POISON,
-		LIFE_SPEL_SATISFY_HUNGER,
-		LIFE_SPEL_REMOVE_CURSE,
-		LIFE_SPEL_CAUSE_MEDIUM_WOUNDS,
-		LIFE_SPEL_CURE_CRITICAL_WOUNDS,
-		LIFE_SPEL_RESIST_HEAT_AND_COLD,
-		LIFE_SPEL_SENSE_SURROUNDINGS,
-		LIFE_SPEL_TURN_UNDEAD,
-		LIFE_SPEL_HEALING,
-		LIFE_SPEL_GLYPH_OF_WARDING,
-		LIFE_SPEL_DISPEL_CURSE,
-		LIFE_SPEL_PERCEPTION,
-		LIFE_SPEL_DISPEL_UNDEAD,
-		LIFE_SPEL_DAY_OF_THE_DOVE,
-		LIFE_SPEL_CAUSE_CRITICAL_WOUNDS,
-		LIFE_SPEL_WORD_OF_RECALL,
-		LIFE_SPEL_ALTER_REALITY,
-		LIFE_SPEL_WARDING_TRUE,
-		LIFE_SPEL_STERILIZATION,
-		LIFE_SPEL_DETECTION,
-		LIFE_SPEL_ANNIHILATE_UNDEAD,
-		LIFE_SPEL_CLAIRVOYANCE,
-		LIFE_SPEL_RESTORATION,
-		LIFE_SPEL_HEALING_TRUE,
-		LIFE_SPEL_HOLY_VISION,
-		LIFE_SPEL_ULTIMATE_RESISTANCE,
-	},
-
-	{
-		SORC_SPEL_DETECT_MONSTERS,
-		SORC_SPEL_PHASE_DOOR,
-		SORC_SPEL_DETECT_DOORS_AND_TRAPS,
-		SORC_SPEL_LIGHT_AREA,
-		SORC_SPEL_CONFUSE_MONSTER,
-		SORC_SPEL_TELEPORT,
-		SORC_SPEL_SLEEP_MONSTER,
-		SORC_SPEL_RECHARGING,
-		SORC_SPEL_MAGIC_MAPPING,
-		SORC_SPEL_IDENTIFY,
-		SORC_SPEL_SLOW_MONSTER,
-		SORC_SPEL_MASS_SLEEP,
-		SORC_SPEL_TELEPORT_AWAY,
-		SORC_SPEL_HASTE_SELF,
-		SORC_SPEL_DETECTION_TRUE,
-		SORC_SPEL_IDENTIFY_TRUE,
-		SORC_SPEL_DETECT_ITEMS_AND_TREASURE,
-		SORC_SPEL_CHARM_MONSTER,
-		SORC_SPEL_SENSE_MINDS,
-		SORC_SPEL_TELEPORT_TO_TOWN,
-		SORC_SPEL_SELF_KNOWLEDGE,
-		SORC_SPEL_TELEPORT_LEVEL,
-		SORC_SPEL_WORD_OF_RECALL,
-		SORC_SPEL_DIMENSION_DOOR,
-		SORC_SPEL_PROBING,
-		SORC_SPEL_EXPLOSIVE_RUNE,
-		SORC_SPEL_TELEKINESIS,
-		SORC_SPEL_CLAIRVOYANCE,
-		SORC_SPEL_CHARM_MONSTERS,
-		SORC_SPEL_ALCHEMY,
-		SORC_SPEL_BANISHMENT,
-		SORC_SPEL_GLOBE_OF_INVULNERABILITY,
-	},
-
-	{
-		NATU_SPEL_DETECT_CREATURES,
-		NATU_SPEL_LIGHTNING,
-		NATU_SPEL_DETECT_DOORS_AND_TRAPS,
-		NATU_SPEL_PRODUCE_FOOD,
-		NATU_SPEL_DAYLIGHT,
-		NATU_SPEL_ANIMAL_TAMING,
-		NATU_SPEL_RESIST_ENVIRONMENT,
-		NATU_SPEL_CURE_WOUNDS_AND_POISON,
-		NATU_SPEL_STONE_TO_MUD,
-		NATU_SPEL_FROST_BOLT,
-		NATU_SPEL_NATURE_AWARENESS,
-		NATU_SPEL_FIRE_BOLT,
-		NATU_SPEL_RAY_OF_SUNLIGHT,
-		NATU_SPEL_ENTANGLE,
-		NATU_SPEL_SUMMON_ANIMAL,
-		NATU_SPEL_HERBAL_HEALING,
-		NATU_SPEL_STAIR_BUILDING,
-		NATU_SPEL_STONE_SKIN,
-		NATU_SPEL_RESISTANCE_TRUE,
-		NATU_SPEL_FOREST_CREATION,
-		NATU_SPEL_ANIMAL_FRIENDSHIP,
-		NATU_SPEL_STONE_TELL,
-		NATU_SPEL_WALL_OF_STONE,
-		NATU_SPEL_PROTECT_FROM_CORROSION,
-		NATU_SPEL_EARTHQUAKE,
-		NATU_SPEL_CYCLONE,
-		NATU_SPEL_BLIZZARD,
-		NATU_SPEL_LIGHTNING_STORM,
-		NATU_SPEL_WHIRLPOOL,
-		NATU_SPEL_CALL_SUNLIGHT,
-		NATU_SPEL_ELEMENTAL_BRANDING,
-		NATU_SPEL_NATURES_WRATH,
-	},
-
-	{
-		CHAO_SPEL_MAGIC_MISSILE,
-		CHAO_SPEL_TRAP_DOOR_DESTRUCTION,
-		CHAO_SPEL_FLASH_OF_LIGHT,
-		CHAO_SPEL_TOUCH_OF_CONFUSION,
-		CHAO_SPEL_MANA_BURST,
-		CHAO_SPEL_FIRE_BOLT,
-		CHAO_SPEL_FIST_OF_FORCE,
-		CHAO_SPEL_TELEPORT_SELF,
-		CHAO_SPEL_WONDER,
-		CHAO_SPEL_CHAOS_BOLT,
-		CHAO_SPEL_SONIC_BOOM,
-		CHAO_SPEL_DOOM_BOLT,
-		CHAO_SPEL_FIRE_BALL,
-		CHAO_SPEL_TELEPORT_OTHER,
-		CHAO_SPEL_WORD_OF_DESTRUCTION,
-		CHAO_SPEL_INVOKE_LOGRUS,
-		CHAO_SPEL_POLYMORPH_OTHER,
-		CHAO_SPEL_CHAIN_LIGHTNING,
-		CHAO_SPEL_ARCANE_BINDING,
-		CHAO_SPEL_DISINTEGRATE,
-		CHAO_SPEL_ALTER_REALITY,
-		CHAO_SPEL_MAGIC_ROCKET,
-		CHAO_SPEL_CHAOS_BRANDING,
-		CHAO_SPEL_SUMMON_DEMON,
-		CHAO_SPEL_BEAM_OF_GRAVITY,
-		CHAO_SPEL_METEOR_SWARM,
-		CHAO_SPEL_FLAME_STRIKE,
-		CHAO_SPEL_CALL_CHAOS,
-		CHAO_SPEL_POLYMORPH_SELF,
-		CHAO_SPEL_MANA_STORM,
-		CHAO_SPEL_BREATHE_LOGRUS,
-		CHAO_SPEL_CALL_THE_VOID,
-	},
-
-	{
-		DEAT_SPEL_DETECT_UNLIFE,
-		DEAT_SPEL_MALEDICTION,
-		DEAT_SPEL_DETECT_EVIL,
-		DEAT_SPEL_STINKING_CLOUD,
-		DEAT_SPEL_BLACK_SLEEP,
-		DEAT_SPEL_RESIST_POISON,
-		DEAT_SPEL_HORRIFY,
-		DEAT_SPEL_ENSLAVE_UNDEAD,
-		DEAT_SPEL_ORB_OF_ENTROPY,
-		DEAT_SPEL_NETHER_BOLT,
-		DEAT_SPEL_CLOUD_KILL,
-		DEAT_SPEL_GENOCIDE_ONE,
-		DEAT_SPEL_POISON_BRANDING,
-		DEAT_SPEL_VAMPIRIC_DRAIN,
-		DEAT_SPEL_ANIMATE_DEAD,
-		DEAT_SPEL_GENOCIDE,
-		DEAT_SPEL_BERSERK,
-		DEAT_SPEL_INVOKE_SPIRITS,
-		DEAT_SPEL_DARK_BOLT,
-		DEAT_SPEL_BATTLE_FRENZY,
-		DEAT_SPEL_VAMPIRIC_BRANDING,
-		DEAT_SPEL_VAMPIRISM_TRUE,
-		DEAT_SPEL_NETHER_WAVE,
-		DEAT_SPEL_DARKNESS_STORM,
-		DEAT_SPEL_DEATH_RAY,
-		DEAT_SPEL_RAISE_THE_DEAD,
-		DEAT_SPEL_ESOTERIA,
-		DEAT_SPEL_POLYMORPH_VAMPIRE,
-		DEAT_SPEL_RESTORE_LIFE,
-		DEAT_SPEL_MASS_GENOCIDE,
-		DEAT_SPEL_HELLFIRE,
-		DEAT_SPEL_WRAITHFORM,
-	},
-
-	{
-		TRUM_SPEL_PHASE_DOOR,
-		TRUM_SPEL_TRUMP_SPIDERS,
-		TRUM_SPEL_SHUFFLE,
-		TRUM_SPEL_RESET_RECALL,
-		TRUM_SPEL_TELEPORT,
-		TRUM_SPEL_TRUMP_SPYING,
-		TRUM_SPEL_TELEPORT_AWAY,
-		TRUM_SPEL_TRUMP_ANIMALS,
-		TRUM_SPEL_TRUMP_REACH,
-		TRUM_SPEL_TRUMP_KAMIKAZE,
-		TRUM_SPEL_PHANTASMAL_SERVANT,
-		TRUM_SPEL_HASTE_MONSTER,
-		TRUM_SPEL_TELEPORT_LEVEL,
-		TRUM_SPEL_DIMENSION_DOOR,
-		TRUM_SPEL_WORD_OF_RECALL,
-		TRUM_SPEL_BANISH,
-		TRUM_SPEL_SWAP_POSITION,
-		TRUM_SPEL_TRUMP_UNDEAD,
-		TRUM_SPEL_TRUMP_REPTILES,
-		TRUM_SPEL_TRUMP_MONSTERS,
-		TRUM_SPEL_TRUMP_HOUNDS,
-		TRUM_SPEL_TRUMP_BRANDING,
-		TRUM_SPEL_LIVING_TRUMP,
-		TRUM_SPEL_TRUMP_CYBERDEMON,
-		TRUM_SPEL_TRUMP_DIVINATION,
-		TRUM_SPEL_TRUMP_LORE,
-		TRUM_SPEL_HEAL_MONSTER,
-		TRUM_SPEL_TRUMP_DRAGON,
-		TRUM_SPEL_TRUMP_METEOR,
-		TRUM_SPEL_TRUMP_DEMON,
-		TRUM_SPEL_TRUMP_GREATER_UNDEAD,
-		TRUM_SPEL_TRUMP_ANCIENT_DRAGON,
-	},
-
-	{
-		ARCA_SPEL_ZAP,
-		ARCA_SPEL_WIZARD_LOCK,
-		ARCA_SPEL_DETECT_INVISIBILITY,
-		ARCA_SPEL_DETECT_MONSTERS,
-		ARCA_SPEL_BLINK,
-		ARCA_SPEL_LIGHT_AREA,
-		ARCA_SPEL_TRAP_AND_DOOR_DESTRUCTION,
-		ARCA_SPEL_CURE_LIGHT_WOUNDS,
-		ARCA_SPEL_DETECT_DOORS_AND_TRAPS,
-		ARCA_SPEL_PHLOGISTON,
-		ARCA_SPEL_DETECT_TREASURE,
-		ARCA_SPEL_DETECT_ENCHANTMENT,
-		ARCA_SPEL_DETECT_OBJECTS,
-		ARCA_SPEL_CURE_POISON,
-		ARCA_SPEL_RESIST_COLD,
-		ARCA_SPEL_RESIST_FIRE,
-		ARCA_SPEL_RESIST_LIGHTNING,
-		ARCA_SPEL_RESIST_ACID,
-		ARCA_SPEL_CURE_MEDIUM_WOUNDS,
-		ARCA_SPEL_TELEPORT,
-		ARCA_SPEL_IDENTIFY,
-		ARCA_SPEL_STONE_TO_MUD,
-		ARCA_SPEL_RAY_OF_LIGHT,
-		ARCA_SPEL_SATISFY_HUNGER,
-		ARCA_SPEL_SEE_INVISIBLE,
-		ARCA_SPEL_CONJURE_ELEMENTAL,
-		ARCA_SPEL_TELEPORT_LEVEL,
-		ARCA_SPEL_TELEPORT_AWAY,
-		ARCA_SPEL_ELEMENTAL_BALL,
-		ARCA_SPEL_DETECTION,
-		ARCA_SPEL_WORD_OF_RECALL,
-		ARCA_SPEL_CLAIRVOYANCE,
-	},
-
-	{
-		CRAF_SPEL_INFRAVISION,
-		CRAF_SPEL_REGENERATION,
-		CRAF_SPEL_SATISFY_HUNGER,
-		CRAF_SPEL_RESIST_COLD,
-		CRAF_SPEL_RESIST_FIRE,
-		CRAF_SPEL_HEROISM,
-		CRAF_SPEL_RESIST_LIGHTNING,
-		CRAF_SPEL_RESIST_ACID,
-		CRAF_SPEL_SEE_INVISIBILITY,
-		CRAF_SPEL_REMOVE_CURSE,
-		CRAF_SPEL_RESIST_POISON,
-		CRAF_SPEL_BERSERK,
-		CRAF_SPEL_SELF_KNOWLEDGE,
-		CRAF_SPEL_PROTECTION_FROM_EVIL,
-		CRAF_SPEL_CURE,
-		CRAF_SPEL_MANA_BRANDING,
-		CRAF_SPEL_TELEPATHY,
-		CRAF_SPEL_STONE_SKIN,
-		CRAF_SPEL_RESISTANCE,
-		CRAF_SPEL_HASTE_SELF,
-		CRAF_SPEL_WALK_THROUGH_WALL,
-		CRAF_SPEL_POLISH_SHIELD,
-		CRAF_SPEL_CREATE_GOLEM,
-		CRAF_SPEL_MAGICAL_ARMOR,
-		CRAF_SPEL_REMOVE_ENCHANTMENT,
-		CRAF_SPEL_REMOVE_ALL_CURSE,
-		CRAF_SPEL_KNOWLEDGE_TRUE,
-		CRAF_SPEL_ENCHANT_WEAPON,
-		CRAF_SPEL_ENCHANT_ARMOR,
-		CRAF_SPEL_BRAND_WEAPON,
-		CRAF_SPEL_LIVING_TRUMP,
-		CRAF_SPEL_IMMUNITY,
-	},
-
-	{
-		DAEM_SPEL_MAGIC_MISSILE,
-		DAEM_SPEL_DETECT_UNLIFE,
-		DAEM_SPEL_EVIL_BLESS,
-		DAEM_SPEL_RESIST_FIRE,
-		DAEM_SPEL_HORRIFY,
-		DAEM_SPEL_NETHER_BOLT,
-		DAEM_SPEL_SUMMON_MANES,
-		DAEM_SPEL_HELLISH_FLAME,
-		DAEM_SPEL_DOMINATE_DEMON,
-		DAEM_SPEL_VISION,
-		DAEM_SPEL_RESIST_NETHER,
-		DAEM_SPEL_PLASMA_BOLT,
-		DAEM_SPEL_FIRE_BALL,
-		DAEM_SPEL_FIRE_BRANDING,
-		DAEM_SPEL_NETHER_BALL,
-		DAEM_SPEL_SUMMON_DEMON,
-		DAEM_SPEL_DEVILISH_EYE,
-		DAEM_SPEL_DEVIL_CLOAK,
-		DAEM_SPEL_THE_FLOW_OF_LAVA,
-		DAEM_SPEL_PLASMA_BALL,
-		DAEM_SPEL_POLYMORPH_DEMON,
-		DAEM_SPEL_NATHER_WAVE,
-		DAEM_SPEL_KISS_OF_SUCCUBUS,
-		DAEM_SPEL_DOOM_HAND,
-		DAEM_SPEL_RAISE_THE_MORALE,
-		DAEM_SPEL_IMMORTAL_BODY,
-		DAEM_SPEL_INSANITY_CIRCLE,
-		DAEM_SPEL_EXPLODE_PETS,
-		DAEM_SPEL_SUMMON_GREATER_DEMON,
-		DAEM_SPEL_NETHER_STORM,
-		DAEM_SPEL_BLOODY_CURSE,
-		DAEM_SPEL_POLYMORPH_DEMONLORD,
-	},
-
-	{
-		CRUS_SPEL_PUNISHMENT,
-		CRUS_SPEL_DETECT_EVIL,
-		CRUS_SPEL_REMOVE_FEAR,
-		CRUS_SPEL_SCARE_MONSTER,
-		CRUS_SPEL_SANCTUARY,
-		CRUS_SPEL_PORTAL,
-		CRUS_SPEL_STAR_DUST,
-		CRUS_SPEL_PURIFY,
-		CRUS_SPEL_SCATTER_EVIL,
-		CRUS_SPEL_HOLY_ORB,
-		CRUS_SPEL_EXORCISM,
-		CRUS_SPEL_REMOVE_CURSE,
-		CRUS_SPEL_SENSE_UNSEEN,
-		CRUS_SPEL_PROTECTION_FROM_EVIL,
-		CRUS_SPEL_JUDGMENT_THUNDER,
-		CRUS_SPEL_HOLY_WORD,
-		CRUS_SPEL_UNBARRING_WAYS,
-		CRUS_SPEL_ARREST,
-		CRUS_SPEL_HOLY_AURA,
-		CRUS_SPEL_DISPEL_UNDEAD_AND_DEMONS,
-		CRUS_SPEL_DISPEL_EVIL,
-		CRUS_SPEL_HOLY_BLADE,
-		CRUS_SPEL_STAR_BURST,
-		CRUS_SPEL_SUMMON_ANGEL,
-		CRUS_SPEL_HEROISM,
-		CRUS_SPEL_DISPEL_CURSE,
-		CRUS_SPEL_BANISH_EVIL,
-		CRUS_SPEL_ARMAGEDDON,
-		CRUS_SPEL_AN_EYE_FOR_AN_EYE,
-		CRUS_SPEL_WRATH_OF_THE_GOD,
-		CRUS_SPEL_DIVINE_INTERVENTION,
-		CRUS_SPEL_CRUSADE,
-	},
-};
-
-
-/*
- * List of spell ID's for each special realm
- */
-static s16b technique_id_list[][32] =
-{
-	{
-		MUSI_SPEL_SONG_OF_HOLDING,
-		MUSI_SPEL_SONG_OF_BLESSING,
-		MUSI_SPEL_WRECKING_NOTE,
-		MUSI_SPEL_STUN_PATTERN,
-		MUSI_SPEL_FLOW_OF_LIFE,
-		MUSI_SPEL_SONG_OF_THE_SUN,
-		MUSI_SPEL_SONG_OF_FEAR,
-		MUSI_SPEL_HEROIC_BALLAD,
-		MUSI_SPEL_CLAIRAUDIENCE,
-		MUSI_SPEL_SOUL_SHRIEK,
-		MUSI_SPEL_SONG_OF_LORE,
-		MUSI_SPEL_HIDING_TUNE,
-		MUSI_SPEL_ILLUSION_PATTERN,
-		MUSI_SPEL_DOOMCALL,
-		MUSI_SPEL_FIRIELS_SONG,
-		MUSI_SPEL_FELLOWSHIP_CHANT,
-		MUSI_SPEL_SOUND_OF_DISINTEGRATION,
-		MUSI_SPEL_FINRODS_RESISTANCE,
-		MUSI_SPEL_HOBBIT_MELODIES,
-		MUSI_SPEL_WORLD_CONTORTION,
-		MUSI_SPEL_DISPELLING_CHANT,
-		MUSI_SPEL_THE_VOICE_OF_SARUMAN,
-		MUSI_SPEL_SONG_OF_THE_TEMPEST,
-		MUSI_SPEL_AMBARKANTA,
-		MUSI_SPEL_WRECKING_PATTERN,
-		MUSI_SPEL_STATIONARY_SHRIEK,
-		MUSI_SPEL_ENDURANCE,
-		MUSI_SPEL_THE_HEROS_POEM,
-		MUSI_SPEL_RELIEF_OF_YAVANNA,
-		MUSI_SPEL_GODDESS_REBIRTH,
-		MUSI_SPEL_WIZARDRY_OF_SAURON,
-		MUSI_SPEL_FINGOLFINS_CHALLENGE,
-	},
-
-	{
-		TECH_SPEL_TOBI_IZUNA,
-		TECH_SPEL_3_WAY_ATTACK,
-		TECH_SPEL_BOOMERANG,
-		TECH_SPEL_BURNING_STRIKE,
-		TECH_SPEL_DETECT_FEROCITY,
-		TECH_SPEL_STRIKE_TO_STUN,
-		TECH_SPEL_COUNTER,
-		TECH_SPEL_HARAINUKE,
-		TECH_SPEL_SERPENTS_TONGUE,
-		TECH_SPEL_ZAMMAKEN,
-		TECH_SPEL_WIND_BLAST,
-		TECH_SPEL_JUDGE,
-		TECH_SPEL_ROCK_SMASH,
-		TECH_SPEL_MIDARE_SETSUGEKKA,
-		TECH_SPEL_SPOT_AIMING,
-		TECH_SPEL_MAJINGIRI,
-		TECH_SPEL_DESPERATE_ATTACK,
-		TECH_SPEL_LIGHTNING_EAGLE,
-		TECH_SPEL_RUSH_ATTACK,
-		TECH_SPEL_BLOODY_MAELSTROM,
-		TECH_SPEL_EARTHQUAKE_BLOW,
-		TECH_SPEL_CRACK,
-		TECH_SPEL_WAR_CRY,
-		TECH_SPEL_MUSOU_SANDAN,
-		TECH_SPEL_VAMPIRES_FANG,
-		TECH_SPEL_MOON_DAZZLING,
-		TECH_SPEL_HUNDRED_SLAUGHTER,
-		TECH_SPEL_DRAGONIC_FLASH,
-		TECH_SPEL_TWIN_SLASH,
-		TECH_SPEL_KOFUKU_ZETTOUSEI,
-		TECH_SPEL_KEIUN_KININKEN,
-		TECH_SPEL_HARAKIRI,
-	},
-};
-
-
-/*
- * Get unique spell id from realm and spell number (0-31) in the realm
- */
-static int spell_id_from(int realm, int spell)
-{
-	if (is_magic(realm))
-		return (int)spell_id_list[realm - 1][spell];
-	else
-		return (int)technique_id_list[realm - MIN_TECHNIC][spell];
-}
-
 
 /*
  * Generate dice info string such as "foo 2d10"
@@ -2016,37 +1185,19 @@ void stop_singing(void)
 }
 
 
-/*
- * Do everything for each spell
- */
-cptr do_spell(int realm, int spell, int mode)
+static cptr do_life_spell(int spell, int mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
 	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
-	bool fail = (mode == SPELL_FAIL) ? TRUE : FALSE;
-	bool cont = (mode == SPELL_CONT) ? TRUE : FALSE;
-	bool stop = (mode == SPELL_STOP) ? TRUE : FALSE;
-
-#ifdef JP
-	static const char s_dam[] = "損傷:";
-	static const char s_random[] = "ランダム";
-	static const char s_rng[] = "射程";
-#else
-	static const char s_dam[] = "dam ";
-	static const char s_random[] = "random";
-	static const char s_rng[] = "rng ";
-#endif
 
 	int dir;
 	int plev = p_ptr->lev;
 
-	int spellid = spell_id_from(realm, spell);
-
-	switch (spellid)
+	switch (spell)
 	{
-	case LIFE_SPEL_CURE_LIGHT_WOUNDS:  
+	case 0:
 #ifdef JP
 		if (name) return "軽傷の治癒";
 		if (desc) return "怪我と体力を少し回復させる。";
@@ -2069,7 +1220,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_BLESS:  
+	case 1:
 #ifdef JP
 		if (name) return "祝福";
 		if (desc) return "一定時間、命中率とACにボーナスを得る。";
@@ -2090,7 +1241,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_CAUSE_LIGHT_WOUNDS:  
+	case 2:
 #ifdef JP
 		if (name) return "軽傷";
 		if (desc) return "1体のモンスターに小ダメージを与える。抵抗されると無効。";
@@ -2113,7 +1264,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_CALL_LIGHT:  
+	case 3:
 #ifdef JP
 		if (name) return "光の召喚";
 		if (desc) return "光源が照らしている範囲か部屋全体を永久に明るくする。";
@@ -2136,7 +1287,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_DETECT_DOORS_AND_TRAPS:  
+	case 4:
 #ifdef JP
 		if (name) return "罠 & 隠し扉感知";
 		if (desc) return "近くの全ての罠と扉と階段を感知する。";
@@ -2159,7 +1310,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_CURE_MEDIUM_WOUNDS:  
+	case 5:
 #ifdef JP
 		if (name) return "重傷の治癒";
 		if (desc) return "怪我と体力を中程度回復させる。";
@@ -2182,7 +1333,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_CURE_POISON:  
+	case 6:
 #ifdef JP
 		if (name) return "解毒";
 		if (desc) return "体内の毒を取り除く。";
@@ -2199,7 +1350,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_SATISFY_HUNGER:  
+	case 7:
 #ifdef JP
 		if (name) return "空腹充足";
 		if (desc) return "満腹にする。";
@@ -2216,7 +1367,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_REMOVE_CURSE:  
+	case 8:
 #ifdef JP
 		if (name) return "解呪";
 		if (desc) return "アイテムにかかった弱い呪いを解除する。";
@@ -2240,7 +1391,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_CAUSE_MEDIUM_WOUNDS:  
+	case 9:
 #ifdef JP
 		if (name) return "重傷";
 		if (desc) return "1体のモンスターに中ダメージを与える。抵抗されると無効。";
@@ -2263,7 +1414,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_CURE_CRITICAL_WOUNDS: 
+	case 10:
 #ifdef JP
 		if (name) return "致命傷の治癒";
 		if (desc) return "体力を大幅に回復させ、負傷と朦朧状態も全快する。";
@@ -2287,7 +1438,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_RESIST_HEAT_AND_COLD: 
+	case 11:
 #ifdef JP
 		if (name) return "耐熱耐寒";
 		if (desc) return "一定時間、火炎と冷気に対する耐性を得る。装備による耐性に累積する。";
@@ -2309,7 +1460,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_SENSE_SURROUNDINGS: 
+	case 12:
 #ifdef JP
 		if (name) return "周辺感知";
 		if (desc) return "周辺の地形を感知する。";
@@ -2330,7 +1481,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_TURN_UNDEAD: 
+	case 13:
 #ifdef JP
 		if (name) return "パニック・アンデッド";
 		if (desc) return "視界内のアンデッドを恐怖させる。抵抗されると無効。";
@@ -2347,7 +1498,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_HEALING: 
+	case 14:
 #ifdef JP
 		if (name) return "体力回復";
 		if (desc) return "極めて強力な回復呪文で、負傷と朦朧状態も全快する。";
@@ -2370,7 +1521,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_GLYPH_OF_WARDING: 
+	case 15:
 #ifdef JP
 		if (name) return "結界の紋章";
 		if (desc) return "自分のいる床の上に、モンスターが通り抜けたり召喚されたりすることができなくなるルーンを描く。";
@@ -2387,7 +1538,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_DISPEL_CURSE: 
+	case 16:
 #ifdef JP
 		if (name) return "*解呪*";
 		if (desc) return "アイテムにかかった強力な呪いを解除する。";
@@ -2411,7 +1562,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_PERCEPTION: 
+	case 17:
 #ifdef JP
 		if (name) return "鑑識";
 		if (desc) return "アイテムを識別する。";
@@ -2428,7 +1579,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_DISPEL_UNDEAD: 
+	case 18:
 #ifdef JP
 		if (name) return "アンデッド退散";
 		if (desc) return "視界内の全てのアンデッドにダメージを与える。";
@@ -2450,7 +1601,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_DAY_OF_THE_DOVE: 
+	case 19:
 #ifdef JP
 		if (name) return "凪の刻";
 		if (desc) return "視界内の全てのモンスターを魅了する。抵抗されると無効。";
@@ -2471,7 +1622,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_CAUSE_CRITICAL_WOUNDS: 
+	case 20:
 #ifdef JP
 		if (name) return "致命傷";
 		if (desc) return "1体のモンスターに大ダメージを与える。抵抗されると無効。";
@@ -2494,7 +1645,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_WORD_OF_RECALL: 
+	case 21:
 #ifdef JP
 		if (name) return "帰還の詔";
 		if (desc) return "地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。";
@@ -2516,7 +1667,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_ALTER_REALITY: 
+	case 22:
 #ifdef JP
 		if (name) return "真実の祭壇";
 		if (desc) return "現在の階を再構成する。";
@@ -2538,7 +1689,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_WARDING_TRUE: 
+	case 23:
 #ifdef JP
 		if (name) return "真・結界";
 		if (desc) return "自分のいる床と周囲8マスの床の上に、モンスターが通り抜けたり召喚されたりすることができなくなるルーンを描く。";
@@ -2560,7 +1711,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_STERILIZATION: 
+	case 24:
 #ifdef JP
 		if (name) return "不毛化";
 		if (desc) return "この階の増殖するモンスターが増殖できなくなる。";
@@ -2577,7 +1728,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_DETECTION: 
+	case 25:
 #ifdef JP
 		if (name) return "全感知";
 		if (desc) return "近くの全てのモンスター、罠、扉、階段、財宝、そしてアイテムを感知する。";
@@ -2598,7 +1749,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_ANNIHILATE_UNDEAD: 
+	case 26:
 #ifdef JP
 		if (name) return "アンデッド消滅";
 		if (desc) return "自分の周囲にいるアンデッドを現在の階から消し去る。抵抗されると無効。";
@@ -2619,7 +1770,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_CLAIRVOYANCE: 
+	case 27:
 #ifdef JP
 		if (name) return "千里眼";
 		if (desc) return "その階全体を永久に照らし、ダンジョン内すべてのアイテムを感知する。";
@@ -2636,7 +1787,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_RESTORATION: 
+	case 28:
 #ifdef JP
 		if (name) return "全復活";
 		if (desc) return "すべてのステータスと経験値を回復する。";
@@ -2659,7 +1810,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_HEALING_TRUE: 
+	case 29:
 #ifdef JP
 		if (name) return "*体力回復*";
 		if (desc) return "最強の治癒の魔法で、負傷と朦朧状態も全快する。";
@@ -2682,7 +1833,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_HOLY_VISION: 
+	case 30:
 #ifdef JP
 		if (name) return "聖なるビジョン";
 		if (desc) return "アイテムの持つ能力を完全に知る。";
@@ -2699,7 +1850,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case LIFE_SPEL_ULTIMATE_RESISTANCE: 
+	case 31:
 #ifdef JP
 		if (name) return "究極の耐性";
 		if (desc) return "一定時間、あらゆる耐性を付け、ACと魔法防御能力を上昇させる。";
@@ -2726,8 +1877,25 @@ cptr do_spell(int realm, int spell, int mode)
 			}
 		}
 		break;
+	}
 
-	case SORC_SPEL_DETECT_MONSTERS: 
+	return "";
+}
+
+
+static cptr do_sorcery_spell(int spell, int mode)
+{
+	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
+	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
+	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
+	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
+
+	int dir;
+	int plev = p_ptr->lev;
+
+	switch (spell)
+	{
+	case 0:
 #ifdef JP
 		if (name) return "モンスター感知";
 		if (desc) return "近くの全ての見えるモンスターを感知する。";
@@ -2748,7 +1916,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_PHASE_DOOR: 
+	case 1:
 #ifdef JP
 		if (name) return "ショート・テレポート";
 		if (desc) return "近距離のテレポートをする。";
@@ -2769,7 +1937,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_DETECT_DOORS_AND_TRAPS: 
+	case 2:
 #ifdef JP
 		if (name) return "罠と扉感知";
 		if (desc) return "近くの全ての扉と罠を感知する。";
@@ -2792,7 +1960,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_LIGHT_AREA: 
+	case 3:
 #ifdef JP
 		if (name) return "ライト・エリア";
 		if (desc) return "光源が照らしている範囲か部屋全体を永久に明るくする。";
@@ -2815,7 +1983,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_CONFUSE_MONSTER: 
+	case 4:
 #ifdef JP
 		if (name) return "パニック・モンスター";
 		if (desc) return "モンスター1体を混乱させる。抵抗されると無効。";
@@ -2838,7 +2006,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_TELEPORT: 
+	case 5:
 #ifdef JP
 		if (name) return "テレポート";
 		if (desc) return "遠距離のテレポートをする。";
@@ -2859,7 +2027,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_SLEEP_MONSTER: 
+	case 6:
 #ifdef JP
 		if (name) return "スリープ・モンスター";
 		if (desc) return "モンスター1体を眠らせる。抵抗されると無効。";
@@ -2882,7 +2050,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_RECHARGING: 
+	case 7:
 #ifdef JP
 		if (name) return "魔力充填";
 		if (desc) return "杖/魔法棒の充填回数を増やすか、充填中のロッドの充填時間を減らす。";
@@ -2903,7 +2071,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_MAGIC_MAPPING: 
+	case 8:
 #ifdef JP
 		if (name) return "魔法の地図";
 		if (desc) return "周辺の地形を感知する。";
@@ -2924,7 +2092,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_IDENTIFY: 
+	case 9:
 #ifdef JP
 		if (name) return "鑑定";
 		if (desc) return "アイテムを識別する。";
@@ -2941,7 +2109,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_SLOW_MONSTER: 
+	case 10:
 #ifdef JP
 		if (name) return "スロウ・モンスター";
 		if (desc) return "モンスター1体を減速さる。抵抗されると無効。";
@@ -2964,7 +2132,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_MASS_SLEEP: 
+	case 11:
 #ifdef JP
 		if (name) return "周辺スリープ";
 		if (desc) return "視界内の全てのモンスターを眠らせる。抵抗されると無効。";
@@ -2985,7 +2153,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_TELEPORT_AWAY: 
+	case 12:
 #ifdef JP
 		if (name) return "テレポート・モンスター";
 		if (desc) return "モンスターをテレポートさせるビームを放つ。抵抗されると無効。";
@@ -3008,7 +2176,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_HASTE_SELF: 
+	case 13:
 #ifdef JP
 		if (name) return "スピード";
 		if (desc) return "一定時間、加速する。";
@@ -3030,7 +2198,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_DETECTION_TRUE: 
+	case 14:
 #ifdef JP
 		if (name) return "真・感知";
 		if (desc) return "近くの全てのモンスター、罠、扉、階段、財宝、そしてアイテムを感知する。";
@@ -3051,7 +2219,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_IDENTIFY_TRUE: 
+	case 15:
 #ifdef JP
 		if (name) return "真・鑑定";
 		if (desc) return "アイテムの持つ能力を完全に知る。";
@@ -3068,7 +2236,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_DETECT_ITEMS_AND_TREASURE: 
+	case 16:
 #ifdef JP
 		if (name) return "物体と財宝感知";
 		if (desc) return "近くの全てのアイテムと財宝を感知する。";
@@ -3091,7 +2259,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_CHARM_MONSTER: 
+	case 17:
 #ifdef JP
 		if (name) return "チャーム・モンスター";
 		if (desc) return "モンスター1体を魅了する。抵抗されると無効。";
@@ -3114,7 +2282,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_SENSE_MINDS: 
+	case 18:
 #ifdef JP
 		if (name) return "精神感知";
 		if (desc) return "一定時間、テレパシー能力を得る。";
@@ -3136,7 +2304,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_TELEPORT_TO_TOWN: 
+	case 19:
 #ifdef JP
 		if (name) return "街移動";
 		if (desc) return "街へ移動する。地上にいるときしか使えない。";
@@ -3153,7 +2321,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_SELF_KNOWLEDGE: 
+	case 20:
 #ifdef JP
 		if (name) return "自己分析";
 		if (desc) return "現在の自分の状態を完全に知る。";
@@ -3170,7 +2338,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_TELEPORT_LEVEL: 
+	case 21:
 #ifdef JP
 		if (name) return "テレポート・レベル";
 		if (desc) return "瞬時に上か下の階にテレポートする。";
@@ -3192,7 +2360,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_WORD_OF_RECALL: 
+	case 22:
 #ifdef JP
 		if (name) return "帰還の呪文";
 		if (desc) return "地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。";
@@ -3214,7 +2382,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_DIMENSION_DOOR: 
+	case 23:
 #ifdef JP
 		if (name) return "次元の扉";
 		if (desc) return "短距離内の指定した場所にテレポートする。";
@@ -3241,7 +2409,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_PROBING: 
+	case 24:
 #ifdef JP
 		if (name) return "調査";
 		if (desc) return "モンスターの属性、残り体力、最大体力、スピード、正体を知る。";
@@ -3258,7 +2426,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_EXPLOSIVE_RUNE: 
+	case 25:
 #ifdef JP
 		if (name) return "爆発のルーン";
 		if (desc) return "自分のいる床の上に、モンスターが通ると爆発してダメージを与えるルーンを描く。";
@@ -3281,7 +2449,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_TELEKINESIS: 
+	case 26:
 #ifdef JP
 		if (name) return "念動力";
 		if (desc) return "アイテムを自分の足元へ移動させる。";
@@ -3304,7 +2472,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_CLAIRVOYANCE: 
+	case 27:
 #ifdef JP
 		if (name) return "千里眼";
 		if (desc) return "その階全体を永久に照らし、ダンジョン内すべてのアイテムを感知する。さらに、一定時間テレパシー能力を得る。";
@@ -3334,7 +2502,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_CHARM_MONSTERS: 
+	case 28:
 #ifdef JP
 		if (name) return "魅了の視線";
 		if (desc) return "視界内の全てのモンスターを魅了する。抵抗されると無効。";
@@ -3355,7 +2523,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_ALCHEMY: 
+	case 29:
 #ifdef JP
 		if (name) return "錬金術";
 		if (desc) return "アイテム1つをお金に変える。";
@@ -3372,7 +2540,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_BANISHMENT: 
+	case 30:
 #ifdef JP
 		if (name) return "怪物追放";
 		if (desc) return "視界内の全てのモンスターをテレポートさせる。抵抗されると無効。";
@@ -3393,7 +2561,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case SORC_SPEL_GLOBE_OF_INVULNERABILITY: 
+	case 31:
 #ifdef JP
 		if (name) return "無傷の球";
 		if (desc) return "一定時間、ダメージを受けなくなるバリアを張る。切れた瞬間に少しターンを消費するので注意。";
@@ -3413,8 +2581,33 @@ cptr do_spell(int realm, int spell, int mode)
 			}
 		}
 		break;
+	}
 
-	case NATU_SPEL_DETECT_CREATURES: 
+	return "";
+}
+
+
+static cptr do_nature_spell(int spell, int mode)
+{
+	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
+	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
+	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
+	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
+
+#ifdef JP
+	static const char s_dam[] = "損傷:";
+	static const char s_rng[] = "射程";
+#else
+	static const char s_dam[] = "dam ";
+	static const char s_rng[] = "rng ";
+#endif
+
+	int dir;
+	int plev = p_ptr->lev;
+
+	switch (spell)
+	{
+	case 0:
 #ifdef JP
 		if (name) return "モンスター感知";
 		if (desc) return "近くの全ての見えるモンスターを感知する。";
@@ -3435,7 +2628,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_LIGHTNING: 
+	case 1:
 #ifdef JP
 		if (name) return "稲妻";
 		if (desc) return "電撃の短いビームを放つ。";
@@ -3462,7 +2655,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_DETECT_DOORS_AND_TRAPS: 
+	case 2:
 #ifdef JP
 		if (name) return "罠と扉感知";
 		if (desc) return "近くの全ての罠と扉を感知する。";
@@ -3485,7 +2678,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_PRODUCE_FOOD: 
+	case 3:
 #ifdef JP
 		if (name) return "食糧生成";
 		if (desc) return "満腹になる。";
@@ -3514,7 +2707,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_DAYLIGHT: 
+	case 4:
 #ifdef JP
 		if (name) return "日の光";
 		if (desc) return "光源が照らしている範囲か部屋全体を永久に明るくする。";
@@ -3552,7 +2745,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_ANIMAL_TAMING: 
+	case 5:
 #ifdef JP
 		if (name) return "動物習し";
 		if (desc) return "動物1体を魅了する。抵抗されると無効。";
@@ -3575,7 +2768,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_RESIST_ENVIRONMENT: 
+	case 6:
 #ifdef JP
 		if (name) return "環境への耐性";
 		if (desc) return "一定時間、冷気、炎、電撃に対する耐性を得る。装備による耐性に累積する。";
@@ -3598,7 +2791,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_CURE_WOUNDS_AND_POISON: 
+	case 7:
 #ifdef JP
 		if (name) return "傷と毒治療";
 		if (desc) return "怪我を全快させ、毒を体から完全に取り除き、体力を少し回復させる。";
@@ -3622,7 +2815,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_STONE_TO_MUD: 
+	case 8:
 #ifdef JP
 		if (name) return "岩石溶解";
 		if (desc) return "壁を溶かして床にする。";
@@ -3647,7 +2840,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_FROST_BOLT: 
+	case 9:
 #ifdef JP
 		if (name) return "アイス・ボルト";
 		if (desc) return "冷気のボルトもしくはビームを放つ。";
@@ -3670,7 +2863,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_NATURE_AWARENESS: 
+	case 10:
 #ifdef JP
 		if (name) return "自然の覚醒";
 		if (desc) return "周辺の地形を感知し、近くの罠、扉、階段、全てのモンスターを感知する。";
@@ -3696,7 +2889,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_FIRE_BOLT: 
+	case 11:
 #ifdef JP
 		if (name) return "ファイア・ボルト";
 		if (desc) return "火炎のボルトもしくはビームを放つ。";
@@ -3719,7 +2912,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_RAY_OF_SUNLIGHT: 
+	case 12:
 #ifdef JP
 		if (name) return "太陽光線";
 		if (desc) return "光線を放つ。光りを嫌うモンスターに効果がある。";
@@ -3748,7 +2941,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_ENTANGLE: 
+	case 13:
 #ifdef JP
 		if (name) return "足かせ";
 		if (desc) return "視界内の全てのモンスターを減速させる。抵抗されると無効。";
@@ -3769,7 +2962,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_SUMMON_ANIMAL: 
+	case 14:
 #ifdef JP
 		if (name) return "動物召喚";
 		if (desc) return "動物を1体召喚する。";
@@ -3794,7 +2987,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_HERBAL_HEALING: 
+	case 15:
 #ifdef JP
 		if (name) return "薬草治療";
 		if (desc) return "体力を大幅に回復させ、負傷、朦朧状態、毒から全快する。";
@@ -3818,7 +3011,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_STAIR_BUILDING: 
+	case 16:
 #ifdef JP
 		if (name) return "階段生成";
 		if (desc) return "自分のいる位置に階段を作る。";
@@ -3835,7 +3028,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_STONE_SKIN: 
+	case 17:
 #ifdef JP
 		if (name) return "肌石化";
 		if (desc) return "一定時間、ACを上昇させる。";
@@ -3857,7 +3050,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_RESISTANCE_TRUE: 
+	case 18:
 #ifdef JP
 		if (name) return "真・耐性";
 		if (desc) return "一定時間、酸、電撃、炎、冷気、毒に対する耐性を得る。装備による耐性に累積する。";
@@ -3882,7 +3075,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_FOREST_CREATION: 
+	case 19:
 #ifdef JP
 		if (name) return "森林創造";
 		if (desc) return "周囲に木を作り出す。";
@@ -3899,7 +3092,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_ANIMAL_FRIENDSHIP: 
+	case 20:
 #ifdef JP
 		if (name) return "動物友和";
 		if (desc) return "視界内の全ての動物を魅了する。抵抗されると無効。";
@@ -3920,7 +3113,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_STONE_TELL: 
+	case 21:
 #ifdef JP
 		if (name) return "試金石";
 		if (desc) return "アイテムの持つ能力を完全に知る。";
@@ -3937,7 +3130,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_WALL_OF_STONE: 
+	case 22:
 #ifdef JP
 		if (name) return "石の壁";
 		if (desc) return "自分の周囲に花崗岩の壁を作る。";
@@ -3954,7 +3147,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_PROTECT_FROM_CORROSION: 
+	case 23:
 #ifdef JP
 		if (name) return "腐食防止";
 		if (desc) return "アイテムを酸で傷つかないよう加工する。";
@@ -3971,7 +3164,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_EARTHQUAKE: 
+	case 24:
 #ifdef JP
 		if (name) return "地震";
 		if (desc) return "周囲のダンジョンを揺らし、壁と床をランダムに入れ変える。";
@@ -3992,7 +3185,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_CYCLONE: 
+	case 25:
 #ifdef JP
 		if (name) return "カマイタチ";
 		if (desc) return "全方向に向かって攻撃する。";
@@ -4025,7 +3218,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_BLIZZARD: 
+	case 26:
 #ifdef JP
 		if (name) return "ブリザード";
 		if (desc) return "巨大な冷気の球を放つ。";
@@ -4049,7 +3242,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_LIGHTNING_STORM: 
+	case 27:
 #ifdef JP
 		if (name) return "稲妻嵐";
 		if (desc) return "巨大な電撃の球を放つ。";
@@ -4073,7 +3266,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_WHIRLPOOL: 
+	case 28:
 #ifdef JP
 		if (name) return "渦潮";
 		if (desc) return "巨大な水の球を放つ。";
@@ -4096,7 +3289,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_CALL_SUNLIGHT: 
+	case 29:
 #ifdef JP
 		if (name) return "陽光召喚";
 		if (desc) return "自分を中心とした光の球を発生させる。さらに、その階全体を永久に照らし、ダンジョン内すべてのアイテムを感知する。";
@@ -4136,7 +3329,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_ELEMENTAL_BRANDING: 
+	case 30:
 #ifdef JP
 		if (name) return "精霊の刃";
 		if (desc) return "武器に炎か冷気の属性をつける。";
@@ -4153,7 +3346,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case NATU_SPEL_NATURES_WRATH: 
+	case 31:
 #ifdef JP
 		if (name) return "自然の脅威";
 		if (desc) return "近くの全てのモンスターにダメージを与え、地震を起こし、自分を中心とした分解の球を発生させる。";
@@ -4178,8 +3371,33 @@ cptr do_spell(int realm, int spell, int mode)
 			}
 		}
 		break;
+	}
 
-	case CHAO_SPEL_MAGIC_MISSILE: 
+	return "";
+}
+
+
+static cptr do_chaos_spell(int spell, int mode)
+{
+	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
+	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
+	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
+	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
+
+#ifdef JP
+	static const char s_dam[] = "損傷:";
+	static const char s_random[] = "ランダム";
+#else
+	static const char s_dam[] = "dam ";
+	static const char s_random[] = "random";
+#endif
+
+	int dir;
+	int plev = p_ptr->lev;
+
+	switch (spell)
+	{
+	case 0:
 #ifdef JP
 		if (name) return "マジック・ミサイル";
 		if (desc) return "弱い魔法の矢を放つ。";
@@ -4203,7 +3421,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_TRAP_DOOR_DESTRUCTION: 
+	case 1:
 #ifdef JP
 		if (name) return "トラップ/ドア破壊";
 		if (desc) return "隣接する罠と扉を破壊する。";
@@ -4224,7 +3442,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_FLASH_OF_LIGHT: 
+	case 2:
 #ifdef JP
 		if (name) return "閃光";
 		if (desc) return "光源が照らしている範囲か部屋全体を永久に明るくする。";
@@ -4247,7 +3465,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_TOUCH_OF_CONFUSION: 
+	case 3:
 #ifdef JP
 		if (name) return "混乱の手";
 		if (desc) return "相手を混乱させる攻撃をできるようにする。";
@@ -4274,7 +3492,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_MANA_BURST:
+	case 4:
 #ifdef JP
 		if (name) return "魔力炸裂";
 		if (desc) return "魔法の球を放つ。";
@@ -4314,7 +3532,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_FIRE_BOLT:
+	case 5:
 #ifdef JP
 		if (name) return "ファイア・ボルト";
 		if (desc) return "炎のボルトもしくはビームを放つ。";
@@ -4338,7 +3556,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_FIST_OF_FORCE:
+	case 6:
 #ifdef JP
 		if (name) return "力の拳";
 		if (desc) return "ごく小さな分解の球を放つ。";
@@ -4363,7 +3581,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_TELEPORT_SELF:
+	case 7:
 #ifdef JP
 		if (name) return "テレポート";
 		if (desc) return "遠距離のテレポートをする。";
@@ -4384,7 +3602,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_WONDER:
+	case 8:
 #ifdef JP
 		if (name) return "ワンダー";
 		if (desc) return "モンスターにランダムな効果を与える。";
@@ -4406,7 +3624,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_CHAOS_BOLT:
+	case 9:
 #ifdef JP
 		if (name) return "カオス・ボルト";
 		if (desc) return "カオスのボルトもしくはビームを放つ。";
@@ -4430,7 +3648,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_SONIC_BOOM:
+	case 10:
 #ifdef JP
 		if (name) return "ソニック・ブーム";
 		if (desc) return "自分を中心とした轟音の球を発生させる。";
@@ -4458,7 +3676,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_DOOM_BOLT:
+	case 11:
 #ifdef JP
 		if (name) return "破滅の矢";
 		if (desc) return "純粋な魔力のビームを放つ。";
@@ -4482,7 +3700,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_FIRE_BALL:
+	case 12:
 #ifdef JP
 		if (name) return "ファイア・ボール";
 		if (desc) return "炎の球を放つ。";
@@ -4506,7 +3724,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_TELEPORT_OTHER:
+	case 13:
 #ifdef JP
 		if (name) return "テレポート・アウェイ";
 		if (desc) return "モンスターをテレポートさせるビームを放つ。抵抗されると無効。";
@@ -4529,7 +3747,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_WORD_OF_DESTRUCTION:
+	case 14:
 #ifdef JP
 		if (name) return "破壊の言葉";
 		if (desc) return "周辺のアイテム、モンスター、地形を破壊する。";
@@ -4549,7 +3767,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_INVOKE_LOGRUS:
+	case 15:
 #ifdef JP
 		if (name) return "ログルス発動";
 		if (desc) return "巨大なカオスの球を放つ。";
@@ -4573,7 +3791,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_POLYMORPH_OTHER:
+	case 16:
 #ifdef JP
 		if (name) return "他者変容";
 		if (desc) return "モンスター1体を変身させる。抵抗されると無効。";
@@ -4596,7 +3814,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_CHAIN_LIGHTNING:
+	case 17:
 #ifdef JP
 		if (name) return "連鎖稲妻";
 		if (desc) return "全方向に対して電撃のビームを放つ。";
@@ -4619,7 +3837,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_ARCANE_BINDING:
+	case 18:
 #ifdef JP
 		if (name) return "魔力封入";
 		if (desc) return "杖/魔法棒の充填回数を増やすか、充填中のロッドの充填時間を減らす。";
@@ -4640,7 +3858,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_DISINTEGRATE:
+	case 19:
 #ifdef JP
 		if (name) return "原子分解";
 		if (desc) return "巨大な分解の球を放つ。";
@@ -4664,7 +3882,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_ALTER_REALITY:
+	case 20:
 #ifdef JP
 		if (name) return "現実変容";
 		if (desc) return "現在の階を再構成する。";
@@ -4686,7 +3904,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_MAGIC_ROCKET:
+	case 21:
 #ifdef JP
 		if (name) return "マジック・ロケット";
 		if (desc) return "ロケットを発射する。";
@@ -4716,7 +3934,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_CHAOS_BRANDING:
+	case 22:
 #ifdef JP
 		if (name) return "混沌の刃";
 		if (desc) return "武器にカオスの属性をつける。";
@@ -4733,7 +3951,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_SUMMON_DEMON:
+	case 23:
 #ifdef JP
 		if (name) return "悪魔召喚";
 		if (desc) return "悪魔を1体召喚する。";
@@ -4781,7 +3999,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_BEAM_OF_GRAVITY:
+	case 24:
 #ifdef JP
 		if (name) return "重力光線";
 		if (desc) return "重力のビームを放つ。";
@@ -4805,7 +4023,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_METEOR_SWARM:
+	case 25:
 #ifdef JP
 		if (name) return "流星群";
 		if (desc) return "自分の周辺に隕石を落とす。";
@@ -4827,7 +4045,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_FLAME_STRIKE:
+	case 26:
 #ifdef JP
 		if (name) return "焔の一撃";
 		if (desc) return "自分を中心とした超巨大な炎の球を発生させる。";
@@ -4849,7 +4067,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_CALL_CHAOS:
+	case 27:
 #ifdef JP
 		if (name) return "混沌召来";
 		if (desc) return "ランダムな属性の球やビームを発生させる。";
@@ -4868,7 +4086,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_POLYMORPH_SELF:
+	case 28:
 #ifdef JP
 		if (name) return "自己変容";
 		if (desc) return "自分を変身させようとする。";
@@ -4890,7 +4108,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_MANA_STORM:
+	case 29:
 #ifdef JP
 		if (name) return "魔力の嵐";
 		if (desc) return "非常に強力で巨大な純粋な魔力の球を放つ。";
@@ -4914,7 +4132,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_BREATHE_LOGRUS:
+	case 30:
 #ifdef JP
 		if (name) return "ログルスのブレス";
 		if (desc) return "非常に強力なカオスの球を放つ。";
@@ -4938,7 +4156,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CHAO_SPEL_CALL_THE_VOID:
+	case 31:
 #ifdef JP
 		if (name) return "虚無召来";
 		if (desc) return "自分に周囲に向かって、ロケット、純粋な魔力の球、放射性廃棄物の球を放つ。ただし、壁に隣接して使用すると広範囲を破壊する。";
@@ -4956,8 +4174,33 @@ cptr do_spell(int realm, int spell, int mode)
 			}
 		}
 		break;
+	}
 
-	case DEAT_SPEL_DETECT_UNLIFE:
+	return "";
+}
+
+
+static cptr do_death_spell(int spell, int mode)
+{
+	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
+	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
+	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
+	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
+
+#ifdef JP
+	static const char s_dam[] = "損傷:";
+	static const char s_random[] = "ランダム";
+#else
+	static const char s_dam[] = "dam ";
+	static const char s_random[] = "random";
+#endif
+
+	int dir;
+	int plev = p_ptr->lev;
+
+	switch (spell)
+	{
+	case 0:
 #ifdef JP
 		if (name) return "無生命感知";
 		if (desc) return "近くの生命のないモンスターを感知する。";
@@ -4978,7 +4221,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_MALEDICTION:
+	case 1:
 #ifdef JP
 		if (name) return "呪殺弾";
 		if (desc) return "ごく小さな邪悪な力を持つボールを放つ。善良なモンスターには大きなダメージを与える。";
@@ -5026,7 +4269,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_DETECT_EVIL:
+	case 2:
 #ifdef JP
 		if (name) return "邪悪感知";
 		if (desc) return "近くの邪悪なモンスターを感知する。";
@@ -5047,7 +4290,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_STINKING_CLOUD:
+	case 3:
 #ifdef JP
 		if (name) return "悪臭雲";
 		if (desc) return "毒の球を放つ。";
@@ -5071,7 +4314,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_BLACK_SLEEP:
+	case 4:
 #ifdef JP
 		if (name) return "黒い眠り";
 		if (desc) return "1体のモンスターを眠らせる。抵抗されると無効。";
@@ -5094,7 +4337,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_RESIST_POISON:
+	case 5:
 #ifdef JP
 		if (name) return "耐毒";
 		if (desc) return "一定時間、毒への耐性を得る。装備による耐性に累積する。";
@@ -5115,7 +4358,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_HORRIFY:
+	case 6:
 #ifdef JP
 		if (name) return "恐慌";
 		if (desc) return "モンスター1体を恐怖させ、朦朧させる。抵抗されると無効。";
@@ -5139,7 +4382,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_ENSLAVE_UNDEAD:
+	case 7:
 #ifdef JP
 		if (name) return "アンデッド従属";
 		if (desc) return "アンデッド1体を魅了する。抵抗されると無効。";
@@ -5162,7 +4405,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_ORB_OF_ENTROPY:
+	case 8:
 #ifdef JP
 		if (name) return "エントロピーの球";
 		if (desc) return "生命のある者に効果のある球を放つ。";
@@ -5196,7 +4439,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_NETHER_BOLT:
+	case 9:
 #ifdef JP
 		if (name) return "地獄の矢";
 		if (desc) return "地獄のボルトもしくはビームを放つ。";
@@ -5220,7 +4463,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_CLOUD_KILL:
+	case 10:
 #ifdef JP
 		if (name) return "殺戮雲";
 		if (desc) return "自分を中心とした毒の球を発生させる。";
@@ -5242,7 +4485,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_GENOCIDE_ONE:
+	case 11:
 #ifdef JP
 		if (name) return "モンスター消滅";
 		if (desc) return "モンスター1体を消し去る。経験値やアイテムは手に入らない。抵抗されると無効。";
@@ -5265,7 +4508,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_POISON_BRANDING:
+	case 12:
 #ifdef JP
 		if (name) return "毒の刃";
 		if (desc) return "武器に毒の属性をつける。";
@@ -5282,7 +4525,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_VAMPIRIC_DRAIN:
+	case 13:
 #ifdef JP
 		if (name) return "吸血ドレイン";
 		if (desc) return "モンスター1体から生命力を吸いとる。吸いとった生命力によって満腹度が上がる。";
@@ -5332,7 +4575,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_ANIMATE_DEAD:
+	case 14:
 #ifdef JP
 		if (name) return "反魂の術";
 		if (desc) return "周囲の死体や骨を生き返す。";
@@ -5349,7 +4592,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_GENOCIDE:
+	case 15:
 #ifdef JP
 		if (name) return "抹殺";
 		if (desc) return "指定した文字のモンスターを現在の階から消し去る。抵抗されると無効。";
@@ -5370,7 +4613,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_BERSERK:
+	case 16:
 #ifdef JP
 		if (name) return "狂戦士化";
 		if (desc) return "狂戦士化し、恐怖を除去する。";
@@ -5393,7 +4636,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_INVOKE_SPIRITS:
+	case 17:
 #ifdef JP
 		if (name) return "悪霊召喚";
 		if (desc) return "ランダムで様々な効果が起こる。";
@@ -5414,7 +4657,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_DARK_BOLT:
+	case 18:
 #ifdef JP
 		if (name) return "暗黒の矢";
 		if (desc) return "暗黒のボルトもしくはビームを放つ。";
@@ -5438,7 +4681,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_BATTLE_FRENZY:
+	case 19:
 #ifdef JP
 		if (name) return "狂乱戦士";
 		if (desc) return "狂戦士化し、恐怖を除去し、加速する。";
@@ -5464,7 +4707,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_VAMPIRIC_BRANDING:
+	case 20:
 #ifdef JP
 		if (name) return "吸血の刃";
 		if (desc) return "武器に吸血の属性をつける。";
@@ -5481,7 +4724,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_VAMPIRISM_TRUE:
+	case 21:
 #ifdef JP
 		if (name) return "真・吸血";
 		if (desc) return "モンスター1体から生命力を吸いとる。吸いとった生命力によって体力が回復する。";
@@ -5513,7 +4756,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_NETHER_WAVE:
+	case 22:
 #ifdef JP
 		if (name) return "死の言魂";
 		if (desc) return "視界内の生命のあるモンスターにダメージを与える。";
@@ -5534,7 +4777,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_DARKNESS_STORM:
+	case 23:
 #ifdef JP
 		if (name) return "暗黒の嵐";
 		if (desc) return "巨大な暗黒の球を放つ。";
@@ -5558,7 +4801,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_DEATH_RAY:
+	case 24:
 #ifdef JP
 		if (name) return "死の光線";
 		if (desc) return "死の光線を放つ。";
@@ -5577,7 +4820,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_RAISE_THE_DEAD:
+	case 25:
 #ifdef JP
 		if (name) return "死者召喚";
 		if (desc) return "1体のアンデッドを召喚する。";
@@ -5633,7 +4876,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_ESOTERIA:
+	case 26:
 #ifdef JP
 		if (name) return "死者の秘伝";
 		if (desc) return "アイテムを1つ識別する。レベルが高いとアイテムの能力を完全に知ることができる。";
@@ -5657,7 +4900,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_POLYMORPH_VAMPIRE:
+	case 27:
 #ifdef JP
 		if (name) return "吸血鬼変化";
 		if (desc) return "一定時間、吸血鬼に変化する。変化している間は本来の種族の能力を失い、代わりに吸血鬼としての能力を得る。";
@@ -5678,7 +4921,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_RESTORE_LIFE:
+	case 28:
 #ifdef JP
 		if (name) return "生命力復活";
 		if (desc) return "失った経験値を回復する。";
@@ -5695,7 +4938,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_MASS_GENOCIDE:
+	case 29:
 #ifdef JP
 		if (name) return "周辺抹殺";
 		if (desc) return "自分の周囲にいるモンスターを現在の階から消し去る。抵抗されると無効。";
@@ -5716,7 +4959,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_HELLFIRE:
+	case 30:
 #ifdef JP
 		if (name) return "地獄の劫火";
 		if (desc) return "邪悪な力を持つ宝珠を放つ。善良なモンスターには大きなダメージを与える。";
@@ -5745,7 +4988,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DEAT_SPEL_WRAITHFORM:
+	case 31:
 #ifdef JP
 		if (name) return "幽体化";
 		if (desc) return "一定時間、壁を通り抜けることができ受けるダメージが軽減される幽体の状態に変身する。";
@@ -5765,8 +5008,32 @@ cptr do_spell(int realm, int spell, int mode)
 			}
 		}
 		break;
+	}
 
-	case TRUM_SPEL_PHASE_DOOR:
+	return "";
+}
+
+
+static cptr do_trump_spell(int spell, int mode)
+{
+	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
+	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
+	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
+	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
+	bool fail = (mode == SPELL_FAIL) ? TRUE : FALSE;
+
+#ifdef JP
+	static const char s_random[] = "ランダム";
+#else
+	static const char s_random[] = "random";
+#endif
+
+	int dir;
+	int plev = p_ptr->lev;
+
+	switch (spell)
+	{
+	case 0:
 #ifdef JP
 		if (name) return "ショート・テレポート";
 		if (desc) return "近距離のテレポートをする。";
@@ -5787,7 +5054,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TRUMP_SPIDERS:
+	case 1:
 #ifdef JP
 		if (name) return "蜘蛛のカード";
 		if (desc) return "蜘蛛を召喚する。";
@@ -5820,7 +5087,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_SHUFFLE:
+	case 2:
 #ifdef JP
 		if (name) return "シャッフル";
 		if (desc) return "カードの占いをする。";
@@ -5839,7 +5106,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_RESET_RECALL:
+	case 3:
 #ifdef JP
 		if (name) return "フロア・リセット";
 		if (desc) return "最深階を変更する。";
@@ -5856,7 +5123,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TELEPORT:
+	case 4:
 #ifdef JP
 		if (name) return "テレポート";
 		if (desc) return "遠距離のテレポートをする。";
@@ -5877,7 +5144,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TRUMP_SPYING:
+	case 5:
 #ifdef JP
 		if (name) return "感知のカード";
 		if (desc) return "一定時間、テレパシー能力を得る。";
@@ -5899,7 +5166,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TELEPORT_AWAY:
+	case 6:
 #ifdef JP
 		if (name) return "テレポート・モンスター";
 		if (desc) return "モンスターをテレポートさせるビームを放つ。抵抗されると無効。";
@@ -5922,7 +5189,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TRUMP_ANIMALS:
+	case 7:
 #ifdef JP
 		if (name) return "動物のカード";
 		if (desc) return "1体の動物を召喚する。";
@@ -5957,7 +5224,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TRUMP_REACH:
+	case 8:
 #ifdef JP
 		if (name) return "移動のカード";
 		if (desc) return "アイテムを自分の足元へ移動させる。";
@@ -5980,7 +5247,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TRUMP_KAMIKAZE:
+	case 9:
 #ifdef JP
 		if (name) return "カミカゼのカード";
 		if (desc) return "複数の爆発するモンスターを召喚する。";
@@ -6034,7 +5301,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_PHANTASMAL_SERVANT:
+	case 10:
 #ifdef JP
 		if (name) return "幻霊召喚";
 		if (desc) return "1体の幽霊を召喚する。";
@@ -6061,7 +5328,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_HASTE_MONSTER:
+	case 11:
 #ifdef JP
 		if (name) return "スピード・モンスター";
 		if (desc) return "モンスター1体を加速させる。";
@@ -6091,7 +5358,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TELEPORT_LEVEL:
+	case 12:
 #ifdef JP
 		if (name) return "テレポート・レベル";
 		if (desc) return "瞬時に上か下の階にテレポートする。";
@@ -6113,7 +5380,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_DIMENSION_DOOR:
+	case 13:
 #ifdef JP
 		if (name) return "次元の扉";
 		if (desc) return "短距離内の指定した場所にテレポートする。";
@@ -6140,7 +5407,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_WORD_OF_RECALL:
+	case 14:
 #ifdef JP
 		if (name) return "帰還の呪文";
 		if (desc) return "地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。";
@@ -6162,7 +5429,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_BANISH:
+	case 15:
 #ifdef JP
 		if (name) return "怪物追放";
 		if (desc) return "視界内の全てのモンスターをテレポートさせる。抵抗されると無効。";
@@ -6183,7 +5450,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_SWAP_POSITION:
+	case 16:
 #ifdef JP
 		if (name) return "位置交換のカード";
 		if (desc) return "1体のモンスターと位置を交換する。";
@@ -6212,7 +5479,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TRUMP_UNDEAD:
+	case 17:
 #ifdef JP
 		if (name) return "アンデッドのカード";
 		if (desc) return "1体のアンデッドを召喚する。";
@@ -6245,7 +5512,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TRUMP_REPTILES:
+	case 18:
 #ifdef JP
 		if (name) return "爬虫類のカード";
 		if (desc) return "1体のヒドラを召喚する。";
@@ -6278,7 +5545,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TRUMP_MONSTERS:
+	case 19:
 #ifdef JP
 		if (name) return "モンスターのカード";
 		if (desc) return "複数のモンスターを召喚する。";
@@ -6319,7 +5586,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TRUMP_HOUNDS:
+	case 20:
 #ifdef JP
 		if (name) return "ハウンドのカード";
 		if (desc) return "1グループのハウンドを召喚する。";
@@ -6352,7 +5619,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TRUMP_BRANDING:
+	case 21:
 #ifdef JP
 		if (name) return "トランプの刃";
 		if (desc) return "武器にトランプの属性をつける。";
@@ -6369,7 +5636,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_LIVING_TRUMP:
+	case 22:
 #ifdef JP
 		if (name) return "人間トランプ";
 		if (desc) return "ランダムにテレポートする突然変異か、自分の意思でテレポートする突然変異が身につく。";
@@ -6403,7 +5670,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TRUMP_CYBERDEMON:
+	case 23:
 #ifdef JP
 		if (name) return "サイバーデーモンのカード";
 		if (desc) return "1体のサイバーデーモンを召喚する。";
@@ -6436,7 +5703,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TRUMP_DIVINATION:
+	case 24:
 #ifdef JP
 		if (name) return "予見のカード";
 		if (desc) return "近くの全てのモンスター、罠、扉、階段、財宝、そしてアイテムを感知する。";
@@ -6457,7 +5724,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TRUMP_LORE:
+	case 25:
 #ifdef JP
 		if (name) return "知識のカード";
 		if (desc) return "アイテムの持つ能力を完全に知る。";
@@ -6474,7 +5741,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_HEAL_MONSTER:
+	case 26:
 #ifdef JP
 		if (name) return "回復モンスター";
 		if (desc) return "モンスター1体の体力を回復させる。";
@@ -6508,7 +5775,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TRUMP_DRAGON:
+	case 27:
 #ifdef JP
 		if (name) return "ドラゴンのカード";
 		if (desc) return "1体のドラゴンを召喚する。";
@@ -6541,7 +5808,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TRUMP_METEOR:
+	case 28:
 #ifdef JP
 		if (name) return "隕石のカード";
 		if (desc) return "自分の周辺に隕石を落とす。";
@@ -6563,7 +5830,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TRUMP_DEMON:
+	case 29:
 #ifdef JP
 		if (name) return "デーモンのカード";
 		if (desc) return "1体の悪魔を召喚する。";
@@ -6596,7 +5863,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TRUMP_GREATER_UNDEAD:
+	case 30:
 #ifdef JP
 		if (name) return "地獄のカード";
 		if (desc) return "1体の上級アンデッドを召喚する。";
@@ -6629,7 +5896,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TRUM_SPEL_TRUMP_ANCIENT_DRAGON:
+	case 31:
 #ifdef JP
 		if (name) return "古代ドラゴンのカード";
 		if (desc) return "1体の古代ドラゴンを召喚する。";
@@ -6669,8 +5936,25 @@ cptr do_spell(int realm, int spell, int mode)
 			}
 		}
 		break;
+	}
 
-	case ARCA_SPEL_ZAP:
+	return "";
+}
+
+
+static cptr do_arcane_spell(int spell, int mode)
+{
+	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
+	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
+	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
+	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
+
+	int dir;
+	int plev = p_ptr->lev;
+
+	switch (spell)
+	{
+	case 0:
 #ifdef JP
 		if (name) return "電撃";
 		if (desc) return "電撃のボルトもしくはビームを放つ。";
@@ -6694,7 +5978,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_WIZARD_LOCK:
+	case 1:
 #ifdef JP
 		if (name) return "魔法の施錠";
 		if (desc) return "扉に鍵をかける。";
@@ -6713,7 +5997,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_DETECT_INVISIBILITY:
+	case 2:
 #ifdef JP
 		if (name) return "透明体感知";
 		if (desc) return "近くの透明なモンスターを感知する。";
@@ -6734,7 +6018,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_DETECT_MONSTERS:
+	case 3:
 #ifdef JP
 		if (name) return "モンスター感知";
 		if (desc) return "近くの全ての見えるモンスターを感知する。";
@@ -6755,7 +6039,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_BLINK:
+	case 4:
 #ifdef JP
 		if (name) return "ショート・テレポート";
 		if (desc) return "近距離のテレポートをする。";
@@ -6776,7 +6060,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_LIGHT_AREA:
+	case 5:
 #ifdef JP
 		if (name) return "ライト・エリア";
 		if (desc) return "光源が照らしている範囲か部屋全体を永久に明るくする。";
@@ -6799,7 +6083,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_TRAP_AND_DOOR_DESTRUCTION:
+	case 6:
 #ifdef JP
 		if (name) return "罠と扉 破壊";
 		if (desc) return "一直線上の全ての罠と扉を破壊する。";
@@ -6818,7 +6102,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_CURE_LIGHT_WOUNDS:
+	case 7:
 #ifdef JP
 		if (name) return "軽傷の治癒";
 		if (desc) return "怪我と体力を少し回復させる。";
@@ -6841,7 +6125,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_DETECT_DOORS_AND_TRAPS:
+	case 8:
 #ifdef JP
 		if (name) return "罠と扉 感知";
 		if (desc) return "近くの全ての罠と扉と階段を感知する。";
@@ -6864,7 +6148,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_PHLOGISTON:
+	case 9:
 #ifdef JP
 		if (name) return "燃素";
 		if (desc) return "光源に燃料を補給する。";
@@ -6881,7 +6165,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_DETECT_TREASURE:
+	case 10:
 #ifdef JP
 		if (name) return "財宝感知";
 		if (desc) return "近くの財宝を感知する。";
@@ -6903,7 +6187,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_DETECT_ENCHANTMENT:
+	case 11:
 #ifdef JP
 		if (name) return "魔法 感知";
 		if (desc) return "近くの魔法がかかったアイテムを感知する。";
@@ -6924,7 +6208,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_DETECT_OBJECTS:
+	case 12:
 #ifdef JP
 		if (name) return "アイテム感知";
 		if (desc) return "近くの全てのアイテムを感知する。";
@@ -6945,7 +6229,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_CURE_POISON:
+	case 13:
 #ifdef JP
 		if (name) return "解毒";
 		if (desc) return "毒を体内から完全に取り除く。";
@@ -6962,7 +6246,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_RESIST_COLD:
+	case 14:
 #ifdef JP
 		if (name) return "耐冷";
 		if (desc) return "一定時間、冷気への耐性を得る。装備による耐性に累積する。";
@@ -6983,7 +6267,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_RESIST_FIRE:
+	case 15:
 #ifdef JP
 		if (name) return "耐火";
 		if (desc) return "一定時間、炎への耐性を得る。装備による耐性に累積する。";
@@ -7004,7 +6288,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_RESIST_LIGHTNING:
+	case 16:
 #ifdef JP
 		if (name) return "耐電";
 		if (desc) return "一定時間、電撃への耐性を得る。装備による耐性に累積する。";
@@ -7025,7 +6309,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_RESIST_ACID:
+	case 17:
 #ifdef JP
 		if (name) return "耐酸";
 		if (desc) return "一定時間、酸への耐性を得る。装備による耐性に累積する。";
@@ -7046,7 +6330,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_CURE_MEDIUM_WOUNDS:
+	case 18:
 #ifdef JP
 		if (name) return "重傷の治癒";
 		if (desc) return "怪我と体力を中程度回復させる。";
@@ -7069,7 +6353,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_TELEPORT:
+	case 19:
 #ifdef JP
 		if (name) return "テレポート";
 		if (desc) return "遠距離のテレポートをする。";
@@ -7090,7 +6374,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_IDENTIFY:
+	case 20:
 #ifdef JP
 		if (name) return "鑑定";
 		if (desc) return "アイテムを識別する。";
@@ -7107,7 +6391,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_STONE_TO_MUD:
+	case 21:
 #ifdef JP
 		if (name) return "岩石溶解";
 		if (desc) return "壁を溶かして床にする。";
@@ -7132,7 +6416,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_RAY_OF_LIGHT:
+	case 22:
 #ifdef JP
 		if (name) return "閃光";
 		if (desc) return "光線を放つ。光りを嫌うモンスターに効果がある。";
@@ -7162,7 +6446,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_SATISFY_HUNGER:
+	case 23:
 #ifdef JP
 		if (name) return "空腹充足";
 		if (desc) return "満腹にする。";
@@ -7179,7 +6463,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_SEE_INVISIBLE:
+	case 24:
 #ifdef JP
 		if (name) return "透明視認";
 		if (desc) return "一定時間、透明なものが見えるようになる。";
@@ -7200,7 +6484,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_CONJURE_ELEMENTAL:
+	case 25:
 #ifdef JP
 		if (name) return "エレメンタル召喚";
 		if (desc) return "1体のエレメンタルを召喚する。";
@@ -7224,7 +6508,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_TELEPORT_LEVEL:
+	case 26:
 #ifdef JP
 		if (name) return "テレポート・レベル";
 		if (desc) return "瞬時に上か下の階にテレポートする。";
@@ -7246,7 +6530,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_TELEPORT_AWAY:
+	case 27:
 #ifdef JP
 		if (name) return "テレポート・モンスター";
 		if (desc) return "モンスターをテレポートさせるビームを放つ。抵抗されると無効。";
@@ -7269,7 +6553,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_ELEMENTAL_BALL:
+	case 28:
 #ifdef JP
 		if (name) return "元素の球";
 		if (desc) return "炎、電撃、冷気、酸のどれかの球を放つ。";
@@ -7303,7 +6587,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_DETECTION:
+	case 29:
 #ifdef JP
 		if (name) return "全感知";
 		if (desc) return "近くの全てのモンスター、罠、扉、階段、財宝、そしてアイテムを感知する。";
@@ -7324,7 +6608,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_WORD_OF_RECALL:
+	case 30:
 #ifdef JP
 		if (name) return "帰還の呪文";
 		if (desc) return "地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。";
@@ -7346,7 +6630,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case ARCA_SPEL_CLAIRVOYANCE:
+	case 31:
 #ifdef JP
 		if (name) return "千里眼";
 		if (desc) return "その階全体を永久に照らし、ダンジョン内すべてのアイテムを感知する。さらに、一定時間テレパシー能力を得る。";
@@ -7375,8 +6659,41 @@ cptr do_spell(int realm, int spell, int mode)
 			}
 		}
 		break;
+	}
 
-	case CRAF_SPEL_INFRAVISION:
+	return "";
+}
+
+
+static cptr do_enchant_spell(int spell, int mode)
+{
+	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
+	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
+	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
+	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
+
+	int plev = p_ptr->lev;
+
+	switch (spell)
+	{
+	case 0:
+#ifdef JP
+		if (name) return "装備無力化";
+		if (desc) return "武器・防具にかけられたあらゆる魔力を完全に解除する。";
+#else
+		if (name) return "Remove Enchantment";
+		if (desc) return "Removes all magics completely from any weapon or armor.";
+#endif
+    
+		{
+			if (cast)
+			{
+				if (!mundane_spell(TRUE)) return NULL;
+			}
+		}
+		break;
+
+	case 1:
 #ifdef JP
 		if (name) return "赤外線視力";
 		if (desc) return "一定時間、赤外線視力が増強される。";
@@ -7397,7 +6714,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_REGENERATION:
+	case 2:
 #ifdef JP
 		if (name) return "回復力強化";
 		if (desc) return "一定時間、回復力が増強される。";
@@ -7418,7 +6735,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_SATISFY_HUNGER:
+	case 3:
 #ifdef JP
 		if (name) return "空腹充足";
 		if (desc) return "満腹になる。";
@@ -7435,7 +6752,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_RESIST_COLD:
+	case 4:
 #ifdef JP
 		if (name) return "耐冷気";
 		if (desc) return "一定時間、冷気への耐性を得る。装備による耐性に累積する。";
@@ -7456,7 +6773,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_RESIST_FIRE:
+	case 5:
 #ifdef JP
 		if (name) return "耐火炎";
 		if (desc) return "一定時間、炎への耐性を得る。装備による耐性に累積する。";
@@ -7477,7 +6794,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_HEROISM:
+	case 6:
 #ifdef JP
 		if (name) return "士気高揚";
 		if (desc) return "一定時間、ヒーロー気分になる。";
@@ -7500,7 +6817,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_RESIST_LIGHTNING:
+	case 7:
 #ifdef JP
 		if (name) return "耐電撃";
 		if (desc) return "一定時間、電撃への耐性を得る。装備による耐性に累積する。";
@@ -7521,7 +6838,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_RESIST_ACID:
+	case 8:
 #ifdef JP
 		if (name) return "耐酸";
 		if (desc) return "一定時間、酸への耐性を得る。装備による耐性に累積する。";
@@ -7542,7 +6859,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_SEE_INVISIBILITY:
+	case 9:
 #ifdef JP
 		if (name) return "透明視認";
 		if (desc) return "一定時間、透明なものが見えるようになる。";
@@ -7563,7 +6880,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_REMOVE_CURSE:
+	case 10:
 #ifdef JP
 		if (name) return "解呪";
 		if (desc) return "アイテムにかかった弱い呪いを解除する。";
@@ -7587,7 +6904,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_RESIST_POISON:
+	case 11:
 #ifdef JP
 		if (name) return "耐毒";
 		if (desc) return "一定時間、毒への耐性を得る。装備による耐性に累積する。";
@@ -7608,7 +6925,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_BERSERK:
+	case 12:
 #ifdef JP
 		if (name) return "狂戦士化";
 		if (desc) return "狂戦士化し、恐怖を除去する。";
@@ -7631,7 +6948,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_SELF_KNOWLEDGE:
+	case 13:
 #ifdef JP
 		if (name) return "自己分析";
 		if (desc) return "現在の自分の状態を完全に知る。";
@@ -7648,7 +6965,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_PROTECTION_FROM_EVIL:
+	case 14:
 #ifdef JP
 		if (name) return "対邪悪結界";
 		if (desc) return "邪悪なモンスターの攻撃を防ぐバリアを張る。";
@@ -7670,7 +6987,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_CURE:
+	case 15:
 #ifdef JP
 		if (name) return "癒し";
 		if (desc) return "毒、朦朧状態、負傷を全快させ、幻覚を直す。";
@@ -7690,7 +7007,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_MANA_BRANDING:
+	case 16:
 #ifdef JP
 		if (name) return "魔法剣";
 		if (desc) return "一定時間、武器に冷気、炎、電撃、酸、毒のいずれかの属性をつける。武器を持たないと使えない。";
@@ -7711,7 +7028,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_TELEPATHY:
+	case 17:
 #ifdef JP
 		if (name) return "テレパシー";
 		if (desc) return "一定時間、テレパシー能力を得る。";
@@ -7733,7 +7050,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_STONE_SKIN:
+	case 18:
 #ifdef JP
 		if (name) return "肌石化";
 		if (desc) return "一定時間、ACを上昇させる。";
@@ -7755,7 +7072,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_RESISTANCE:
+	case 19:
 #ifdef JP
 		if (name) return "全耐性";
 		if (desc) return "一定時間、酸、電撃、炎、冷気、毒に対する耐性を得る。装備による耐性に累積する。";
@@ -7780,7 +7097,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_HASTE_SELF:
+	case 20:
 #ifdef JP
 		if (name) return "スピード";
 		if (desc) return "一定時間、加速する。";
@@ -7802,7 +7119,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_WALK_THROUGH_WALL:
+	case 21:
 #ifdef JP
 		if (name) return "壁抜け";
 		if (desc) return "一定時間、半物質化し壁を通り抜けられるようになる。";
@@ -7823,7 +7140,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_POLISH_SHIELD:
+	case 22:
 #ifdef JP
 		if (name) return "盾磨き";
 		if (desc) return "盾に反射の属性をつける。";
@@ -7840,7 +7157,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_CREATE_GOLEM:
+	case 23:
 #ifdef JP
 		if (name) return "ゴーレム製造";
 		if (desc) return "1体のゴーレムを製造する。";
@@ -7872,7 +7189,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_MAGICAL_ARMOR:
+	case 24:
 #ifdef JP
 		if (name) return "魔法の鎧";
 		if (desc) return "一定時間、魔法防御力とACが上がり、混乱と盲目の耐性、反射能力、麻痺知らず、浮遊を得る。";
@@ -7892,25 +7209,7 @@ cptr do_spell(int realm, int spell, int mode)
 			}
 		}
 		break;
-
-	case CRAF_SPEL_REMOVE_ENCHANTMENT:
-#ifdef JP
-		if (name) return "装備無力化";
-		if (desc) return "武器・防具にかけられたあらゆる魔力を完全に解除する。";
-#else
-		if (name) return "Remove Enchantment";
-		if (desc) return "Removes all magics completely from any weapon or armor.";
-#endif
-    
-		{
-			if (cast)
-			{
-				if (!mundane_spell(TRUE)) return NULL;
-			}
-		}
-		break;
-
-	case CRAF_SPEL_REMOVE_ALL_CURSE:
+	case 25:
 #ifdef JP
 		if (name) return "呪い粉砕";
 		if (desc) return "アイテムにかかった強力な呪いを解除する。";
@@ -7934,7 +7233,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_KNOWLEDGE_TRUE:
+	case 26:
 #ifdef JP
 		if (name) return "完全なる知識";
 		if (desc) return "アイテムの持つ能力を完全に知る。";
@@ -7951,7 +7250,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_ENCHANT_WEAPON:
+	case 27:
 #ifdef JP
 		if (name) return "武器強化";
 		if (desc) return "武器の命中率修正とダメージ修正を強化する。";
@@ -7968,7 +7267,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_ENCHANT_ARMOR:
+	case 28:
 #ifdef JP
 		if (name) return "防具強化";
 		if (desc) return "鎧の防御修正を強化する。";
@@ -7985,7 +7284,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_BRAND_WEAPON:
+	case 29:
 #ifdef JP
 		if (name) return "武器属性付与";
 		if (desc) return "武器にランダムに属性をつける。";
@@ -8002,7 +7301,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_LIVING_TRUMP:
+	case 30:
 #ifdef JP
 		if (name) return "人間トランプ";
 		if (desc) return "ランダムにテレポートする突然変異か、自分の意思でテレポートする突然変異が身につく。";
@@ -8036,7 +7335,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRAF_SPEL_IMMUNITY:
+	case 31:
 #ifdef JP
 		if (name) return "属性への免疫";
 		if (desc) return "一定時間、冷気、炎、電撃、酸のいずれかに対する免疫を得る。";
@@ -8056,8 +7355,31 @@ cptr do_spell(int realm, int spell, int mode)
 			}
 		}
 		break;
+	}
 
-	case DAEM_SPEL_MAGIC_MISSILE:
+	return "";
+}
+
+
+static cptr do_daemon_spell(int spell, int mode)
+{
+	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
+	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
+	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
+	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
+
+#ifdef JP
+	static const char s_dam[] = "損傷:";
+#else
+	static const char s_dam[] = "dam ";
+#endif
+
+	int dir;
+	int plev = p_ptr->lev;
+
+	switch (spell)
+	{
+	case 0:
 #ifdef JP
 		if (name) return "マジック・ミサイル";
 		if (desc) return "弱い魔法の矢を放つ。";
@@ -8081,7 +7403,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_DETECT_UNLIFE:
+	case 1:
 #ifdef JP
 		if (name) return "無生命感知";
 		if (desc) return "近くの生命のないモンスターを感知する。";
@@ -8102,7 +7424,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_EVIL_BLESS:
+	case 2:
 #ifdef JP
 		if (name) return "邪なる祝福";
 		if (desc) return "一定時間、命中率とACにボーナスを得る。";
@@ -8123,7 +7445,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_RESIST_FIRE:
+	case 3:
 #ifdef JP
 		if (name) return "耐火炎";
 		if (desc) return "一定時間、炎への耐性を得る。装備による耐性に累積する。";
@@ -8144,7 +7466,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_HORRIFY:
+	case 4:
 #ifdef JP
 		if (name) return "恐慌";
 		if (desc) return "モンスター1体を恐怖させ、朦朧させる。抵抗されると無効。";
@@ -8168,7 +7490,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_NETHER_BOLT:
+	case 5:
 #ifdef JP
 		if (name) return "地獄の矢";
 		if (desc) return "地獄のボルトもしくはビームを放つ。";
@@ -8192,7 +7514,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_SUMMON_MANES:
+	case 6:
 #ifdef JP
 		if (name) return "古代の死霊召喚";
 		if (desc) return "古代の死霊を召喚する。";
@@ -8216,7 +7538,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_HELLISH_FLAME:
+	case 7:
 #ifdef JP
 		if (name) return "地獄の焔";
 		if (desc) return "邪悪な力を持つボールを放つ。善良なモンスターには大きなダメージを与える。";
@@ -8250,7 +7572,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_DOMINATE_DEMON:
+	case 8:
 #ifdef JP
 		if (name) return "デーモン支配";
 		if (desc) return "悪魔1体を魅了する。抵抗されると無効";
@@ -8273,7 +7595,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_VISION:
+	case 9:
 #ifdef JP
 		if (name) return "ビジョン";
 		if (desc) return "周辺の地形を感知する。";
@@ -8294,7 +7616,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_RESIST_NETHER:
+	case 10:
 #ifdef JP
 		if (name) return "耐地獄";
 		if (desc) return "一定時間、地獄への耐性を得る。";
@@ -8315,7 +7637,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_PLASMA_BOLT:
+	case 11:
 #ifdef JP
 		if (name) return "プラズマ・ボルト";
 		if (desc) return "プラズマのボルトもしくはビームを放つ。";
@@ -8339,7 +7661,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_FIRE_BALL:
+	case 12:
 #ifdef JP
 		if (name) return "ファイア・ボール";
 		if (desc) return "炎の球を放つ。";
@@ -8363,7 +7685,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_FIRE_BRANDING:
+	case 13:
 #ifdef JP
 		if (name) return "炎の刃";
 		if (desc) return "武器に炎の属性をつける。";
@@ -8380,7 +7702,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_NETHER_BALL:
+	case 14:
 #ifdef JP
 		if (name) return "地獄球";
 		if (desc) return "大きな地獄の球を放つ。";
@@ -8404,7 +7726,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_SUMMON_DEMON:
+	case 15:
 #ifdef JP
 		if (name) return "デーモン召喚";
 		if (desc) return "悪魔1体を召喚する。";
@@ -8462,7 +7784,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_DEVILISH_EYE:
+	case 16:
 #ifdef JP
 		if (name) return "悪魔の目";
 		if (desc) return "一定時間、テレパシー能力を得る。";
@@ -8484,7 +7806,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_DEVIL_CLOAK:
+	case 17:
 #ifdef JP
 		if (name) return "悪魔のクローク";
 		if (desc) return "恐怖を取り除き、一定時間、炎と冷気の耐性、炎のオーラを得る。耐性は装備による耐性に累積する。";
@@ -8511,7 +7833,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_THE_FLOW_OF_LAVA:
+	case 18:
 #ifdef JP
 		if (name) return "溶岩流";
 		if (desc) return "自分を中心とした炎の球を作り出し、床を溶岩に変える。";
@@ -8534,7 +7856,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_PLASMA_BALL:
+	case 19:
 #ifdef JP
 		if (name) return "プラズマ球";
 		if (desc) return "プラズマの球を放つ。";
@@ -8558,7 +7880,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_POLYMORPH_DEMON:
+	case 20:
 #ifdef JP
 		if (name) return "悪魔変化";
 		if (desc) return "一定時間、悪魔に変化する。変化している間は本来の種族の能力を失い、代わりに悪魔としての能力を得る。";
@@ -8579,7 +7901,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_NATHER_WAVE:
+	case 21:
 #ifdef JP
 		if (name) return "地獄の波動";
 		if (desc) return "視界内の全てのモンスターにダメージを与える。善良なモンスターに特に大きなダメージを与える。";
@@ -8602,7 +7924,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_KISS_OF_SUCCUBUS:
+	case 22:
 #ifdef JP
 		if (name) return "サキュバスの接吻";
 		if (desc) return "因果混乱の球を放つ。";
@@ -8625,7 +7947,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_DOOM_HAND:
+	case 23:
 #ifdef JP
 		if (name) return "破滅の手";
 		if (desc) return "破滅の手を放つ。食らったモンスターはそのときのHPの半分前後のダメージを受ける。";
@@ -8649,7 +7971,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_RAISE_THE_MORALE:
+	case 24:
 #ifdef JP
 		if (name) return "士気高揚";
 		if (desc) return "一定時間、ヒーロー気分になる。";
@@ -8672,7 +7994,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_IMMORTAL_BODY:
+	case 25:
 #ifdef JP
 		if (name) return "不滅の肉体";
 		if (desc) return "一定時間、時間逆転への耐性を得る。";
@@ -8693,7 +8015,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_INSANITY_CIRCLE:
+	case 26:
 #ifdef JP
 		if (name) return "狂気の円環";
 		if (desc) return "自分を中心としたカオスの球、混乱の球を発生させ、近くのモンスターを魅了する。";
@@ -8718,7 +8040,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_EXPLODE_PETS:
+	case 27:
 #ifdef JP
 		if (name) return "ペット爆破";
 		if (desc) return "全てのペットを強制的に爆破させる。";
@@ -8735,7 +8057,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_SUMMON_GREATER_DEMON:
+	case 28:
 #ifdef JP
 		if (name) return "グレーターデーモン召喚";
 		if (desc) return "上級デーモンを召喚する。召喚するには人間('p','h','t'で表されるモンスター)の死体を捧げなければならない。";
@@ -8752,7 +8074,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_NETHER_STORM:
+	case 29:
 #ifdef JP
 		if (name) return "地獄嵐";
 		if (desc) return "超巨大な地獄の球を放つ。";
@@ -8776,7 +8098,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_BLOODY_CURSE:
+	case 30:
 #ifdef JP
 		if (name) return "血の呪い";
 		if (desc) return "自分がダメージを受けることによって対象に呪いをかけ、ダメージを与え様々な効果を引き起こす。";
@@ -8805,7 +8127,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case DAEM_SPEL_POLYMORPH_DEMONLORD:
+	case 31:
 #ifdef JP
 		if (name) return "魔王変化";
 		if (desc) return "悪魔の王に変化する。変化している間は本来の種族の能力を失い、代わりに悪魔の王としての能力を得、壁を破壊しながら歩く。";
@@ -8825,8 +8147,25 @@ cptr do_spell(int realm, int spell, int mode)
 			}
 		}
 		break;
+	}
 
-	case CRUS_SPEL_PUNISHMENT:
+	return "";
+}
+
+
+static cptr do_crusade_spell(int spell, int mode)
+{
+	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
+	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
+	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
+	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
+
+	int dir;
+	int plev = p_ptr->lev;
+
+	switch (spell)
+	{
+	case 0:
 #ifdef JP
 		if (name) return "懲罰";
 		if (desc) return "電撃のボルトもしくはビームを放つ。";
@@ -8850,7 +8189,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_DETECT_EVIL:
+	case 1:
 #ifdef JP
 		if (name) return "邪悪存在感知";
 		if (desc) return "近くの邪悪なモンスターを感知する。";
@@ -8871,7 +8210,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_REMOVE_FEAR:
+	case 2:
 #ifdef JP
 		if (name) return "恐怖除去";
 		if (desc) return "恐怖を取り除く。";
@@ -8888,7 +8227,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_SCARE_MONSTER:
+	case 3:
 #ifdef JP
 		if (name) return "威圧";
 		if (desc) return "モンスター1体を恐怖させる。抵抗されると無効。";
@@ -8911,7 +8250,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_SANCTUARY:
+	case 4:
 #ifdef JP
 		if (name) return "聖域";
 		if (desc) return "隣接した全てのモンスターを眠らせる。抵抗されると無効。";
@@ -8932,7 +8271,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_PORTAL:
+	case 5:
 #ifdef JP
 		if (name) return "入口";
 		if (desc) return "中距離のテレポートをする。";
@@ -8953,7 +8292,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_STAR_DUST:
+	case 6:
 #ifdef JP
 		if (name) return "スターダスト";
 		if (desc) return "ターゲット付近に閃光のボルトを連射する。";
@@ -8976,7 +8315,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_PURIFY:
+	case 7:
 #ifdef JP
 		if (name) return "身体浄化";
 		if (desc) return "傷、毒、朦朧から全快する。";
@@ -8995,7 +8334,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_SCATTER_EVIL:
+	case 8:
 #ifdef JP
 		if (name) return "邪悪飛ばし";
 		if (desc) return "邪悪なモンスター1体をテレポートさせる。抵抗されると無効。";
@@ -9017,7 +8356,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_HOLY_ORB:
+	case 9:
 #ifdef JP
 		if (name) return "聖なる光球";
 		if (desc) return "聖なる力をもつ宝珠を放つ。邪悪なモンスターに対して大きなダメージを与えるが、善良なモンスターには効果がない。";
@@ -9051,7 +8390,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_EXORCISM:
+	case 10:
 #ifdef JP
 		if (name) return "悪魔払い";
 		if (desc) return "視界内の全てのアンデッド及び悪魔にダメージを与え、邪悪なモンスターを恐怖させる。";
@@ -9075,7 +8414,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_REMOVE_CURSE:
+	case 11:
 #ifdef JP
 		if (name) return "解呪";
 		if (desc) return "アイテムにかかった弱い呪いを解除する。";
@@ -9099,7 +8438,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_SENSE_UNSEEN:
+	case 12:
 #ifdef JP
 		if (name) return "透明視認";
 		if (desc) return "一定時間、透明なものが見えるようになる。";
@@ -9120,7 +8459,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_PROTECTION_FROM_EVIL:
+	case 13:
 #ifdef JP
 		if (name) return "対邪悪結界";
 		if (desc) return "邪悪なモンスターの攻撃を防ぐバリアを張る。";
@@ -9142,7 +8481,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_JUDGMENT_THUNDER:
+	case 14:
 #ifdef JP
 		if (name) return "裁きの雷";
 		if (desc) return "強力な電撃のボルトを放つ。";
@@ -9164,7 +8503,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_HOLY_WORD:
+	case 15:
 #ifdef JP
 		if (name) return "聖なる御言葉";
 		if (desc) return "視界内の邪悪な存在に大きなダメージを与え、体力を回復し、毒、恐怖、朦朧状態、負傷から全快する。";
@@ -9195,7 +8534,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_UNBARRING_WAYS:
+	case 16:
 #ifdef JP
 		if (name) return "開かれた道";
 		if (desc) return "一直線上の全ての罠と扉を破壊する。";
@@ -9214,7 +8553,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_ARREST:
+	case 17:
 #ifdef JP
 		if (name) return "封魔";
 		if (desc) return "邪悪なモンスターの動きを止める。";
@@ -9236,7 +8575,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_HOLY_AURA:
+	case 18:
 #ifdef JP
 		if (name) return "聖なるオーラ";
 		if (desc) return "一定時間、邪悪なモンスターを傷つける聖なるオーラを得る。";
@@ -9257,7 +8596,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_DISPEL_UNDEAD_AND_DEMONS:
+	case 19:
 #ifdef JP
 		if (name) return "アンデッド&悪魔退散";
 		if (desc) return "視界内の全てのアンデッド及び悪魔にダメージを与える。";
@@ -9279,7 +8618,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_DISPEL_EVIL:
+	case 20:
 #ifdef JP
 		if (name) return "邪悪退散";
 		if (desc) return "視界内の全ての邪悪なモンスターにダメージを与える。";
@@ -9300,7 +8639,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_HOLY_BLADE:
+	case 21:
 #ifdef JP
 		if (name) return "聖なる刃";
 		if (desc) return "通常の武器に滅邪の属性をつける。";
@@ -9317,7 +8656,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_STAR_BURST:
+	case 22:
 #ifdef JP
 		if (name) return "スターバースト";
 		if (desc) return "巨大な閃光の球を放つ。";
@@ -9341,7 +8680,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_SUMMON_ANGEL:
+	case 23:
 #ifdef JP
 		if (name) return "天使召喚";
 		if (desc) return "天使を1体召喚する。";
@@ -9383,7 +8722,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_HEROISM:
+	case 24:
 #ifdef JP
 		if (name) return "士気高揚";
 		if (desc) return "一定時間、ヒーロー気分になる。";
@@ -9406,7 +8745,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_DISPEL_CURSE:
+	case 25:
 #ifdef JP
 		if (name) return "呪い退散";
 		if (desc) return "アイテムにかかった強力な呪いを解除する。";
@@ -9430,7 +8769,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_BANISH_EVIL:
+	case 26:
 #ifdef JP
 		if (name) return "邪悪追放";
 		if (desc) return "視界内の全ての邪悪なモンスターをテレポートさせる。抵抗されると無効。";
@@ -9459,7 +8798,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_ARMAGEDDON:
+	case 27:
 #ifdef JP
 		if (name) return "ハルマゲドン";
 		if (desc) return "周辺のアイテム、モンスター、地形を破壊する。";
@@ -9479,7 +8818,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_AN_EYE_FOR_AN_EYE:
+	case 28:
 #ifdef JP
 		if (name) return "目には目を";
 		if (desc) return "一定時間、自分がダメージを受けたときに攻撃を行ったモンスターに対して同等のダメージを与える。";
@@ -9500,7 +8839,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_WRATH_OF_THE_GOD:
+	case 29:
 #ifdef JP
 		if (name) return "神の怒り";
 		if (desc) return "ターゲットの周囲に分解の球を多数落とす。";
@@ -9522,7 +8861,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_DIVINE_INTERVENTION:
+	case 30:
 #ifdef JP
 		if (name) return "神威";
 		if (desc) return "隣接するモンスターに聖なるダメージを与え、視界内のモンスターにダメージ、減速、朦朧、混乱、恐怖、眠りを与える。さらに体力を回復する。";
@@ -9557,7 +8896,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case CRUS_SPEL_CRUSADE:
+	case 31:
 #ifdef JP
 		if (name) return "聖戦";
 		if (desc) return "視界内の善良なモンスターをペットにしようとし、ならなかった場合及び善良でないモンスターを恐怖させる。さらに多数の加速された騎士を召喚し、ヒーロー、祝福、加速、対邪悪結界を得る。";
@@ -9598,8 +8937,34 @@ cptr do_spell(int realm, int spell, int mode)
 			}
 		}
 		break;
+	}
 
-	case MUSI_SPEL_SONG_OF_HOLDING:
+	return "";
+}
+
+
+static cptr do_music_spell(int spell, int mode)
+{
+	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
+	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
+	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
+	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
+	bool fail = (mode == SPELL_FAIL) ? TRUE : FALSE;
+	bool cont = (mode == SPELL_CONT) ? TRUE : FALSE;
+	bool stop = (mode == SPELL_STOP) ? TRUE : FALSE;
+
+#ifdef JP
+	static const char s_dam[] = "損傷:";
+#else
+	static const char s_dam[] = "dam ";
+#endif
+
+	int dir;
+	int plev = p_ptr->lev;
+
+	switch (spell)
+	{
+	case 0:
 #ifdef JP
 		if (name) return "遅鈍の歌";
 		if (desc) return "視界内の全てのモンスターを減速させる。抵抗されると無効。";
@@ -9633,7 +8998,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case MUSI_SPEL_SONG_OF_BLESSING:
+	case 1:
 #ifdef JP
 		if (name) return "祝福の歌";
 		if (desc) return "命中率とACのボーナスを得る。";
@@ -9669,7 +9034,7 @@ cptr do_spell(int realm, int spell, int mode)
 
 		break;
 
-	case MUSI_SPEL_WRECKING_NOTE:
+	case 2:
 #ifdef JP
 		if (name) return "崩壊の音色";
 		if (desc) return "轟音のボルトを放つ。";
@@ -9696,7 +9061,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case MUSI_SPEL_STUN_PATTERN:
+	case 3:
 #ifdef JP
 		if (name) return "朦朧の旋律";
 		if (desc) return "視界内の全てのモンスターを朦朧させる。抵抗されると無効。";
@@ -9732,7 +9097,7 @@ cptr do_spell(int realm, int spell, int mode)
 
 		break;
 
-	case MUSI_SPEL_FLOW_OF_LIFE:
+	case 4:
 #ifdef JP
 		if (name) return "生命の流れ";
 		if (desc) return "体力を少し回復させる。";
@@ -9768,7 +9133,7 @@ cptr do_spell(int realm, int spell, int mode)
 
 		break;
 
-	case MUSI_SPEL_SONG_OF_THE_SUN:
+	case 5:
 #ifdef JP
 		if (name) return "太陽の歌";
 		if (desc) return "光源が照らしている範囲か部屋全体を永久に明るくする。";
@@ -9800,7 +9165,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case MUSI_SPEL_SONG_OF_FEAR:
+	case 6:
 #ifdef JP
 		if (name) return "恐怖の歌";
 		if (desc) return "視界内の全てのモンスターを恐怖させる。抵抗されると無効。";
@@ -9835,7 +9200,7 @@ cptr do_spell(int realm, int spell, int mode)
 
 		break;
 
-	case MUSI_SPEL_HEROIC_BALLAD:
+	case 7:
 #ifdef JP
 		if (name) return "戦いの歌";
 		if (desc) return "ヒーロー気分になる。";
@@ -9880,7 +9245,7 @@ cptr do_spell(int realm, int spell, int mode)
 
 		break;
 
-	case MUSI_SPEL_CLAIRAUDIENCE:
+	case 8:
 #ifdef JP
 		if (name) return "霊的知覚";
 		if (desc) return "近くの罠/扉/階段を感知する。レベル15で全てのモンスター、20で財宝とアイテムを感知できるようになる。レベル25で周辺の地形を感知し、40でその階全体を永久に照らし、ダンジョン内のすべてのアイテムを感知する。この効果は歌い続けることで順に起こる。";
@@ -9951,7 +9316,7 @@ cptr do_spell(int realm, int spell, int mode)
 
 		break;
 
-	case MUSI_SPEL_SOUL_SHRIEK:
+	case 9:
 #ifdef JP
 		if (name) return "魂の歌";
 		if (desc) return "視界内の全てのモンスターに対して精神攻撃を行う。";
@@ -9987,7 +9352,7 @@ cptr do_spell(int realm, int spell, int mode)
 
 		break;
 
-	case MUSI_SPEL_SONG_OF_LORE:
+	case 10:
 #ifdef JP
 		if (name) return "知識の歌";
 		if (desc) return "自分のいるマスと隣りのマスに落ちているアイテムを鑑定する。";
@@ -10026,7 +9391,7 @@ cptr do_spell(int realm, int spell, int mode)
 
 		break;
 
-	case MUSI_SPEL_HIDING_TUNE:
+	case 11:
 #ifdef JP
 		if (name) return "隠遁の歌";
 		if (desc) return "隠密行動能力を上昇させる。";
@@ -10062,7 +9427,7 @@ cptr do_spell(int realm, int spell, int mode)
 
 		break;
 
-	case MUSI_SPEL_ILLUSION_PATTERN:
+	case 12:
 #ifdef JP
 		if (name) return "幻影の旋律";
 		if (desc) return "視界内の全てのモンスターを混乱させる。抵抗されると無効。";
@@ -10097,7 +9462,7 @@ cptr do_spell(int realm, int spell, int mode)
 
 		break;
 
-	case MUSI_SPEL_DOOMCALL:
+	case 13:
 #ifdef JP
 		if (name) return "破滅の叫び";
 		if (desc) return "視界内の全てのモンスターに対して轟音攻撃を行う。";
@@ -10133,7 +9498,7 @@ cptr do_spell(int realm, int spell, int mode)
 
 		break;
 
-	case MUSI_SPEL_FIRIELS_SONG:
+	case 14:
 #ifdef JP
 		if (name) return "フィリエルの歌";
 		if (desc) return "周囲の死体や骨を生き返す。";
@@ -10159,7 +9524,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case MUSI_SPEL_FELLOWSHIP_CHANT:
+	case 15:
 #ifdef JP
 		if (name) return "旅の仲間";
 		if (desc) return "視界内の全てのモンスターを魅了する。抵抗されると無効。";
@@ -10195,7 +9560,7 @@ cptr do_spell(int realm, int spell, int mode)
 
 		break;
 
-	case MUSI_SPEL_SOUND_OF_DISINTEGRATION:
+	case 16:
 #ifdef JP
 		if (name) return "分解音波";
 		if (desc) return "壁を掘り進む。自分の足元のアイテムは蒸発する。";
@@ -10230,7 +9595,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case MUSI_SPEL_FINRODS_RESISTANCE:
+	case 17:
 #ifdef JP
 		if (name) return "元素耐性";
 		if (desc) return "酸、電撃、炎、冷気、毒に対する耐性を得る。装備による耐性に累積する。";
@@ -10302,7 +9667,7 @@ cptr do_spell(int realm, int spell, int mode)
 
 		break;
 
-	case MUSI_SPEL_HOBBIT_MELODIES:
+	case 18:
 #ifdef JP
 		if (name) return "ホビットのメロディ";
 		if (desc) return "加速する。";
@@ -10338,7 +9703,7 @@ cptr do_spell(int realm, int spell, int mode)
 
 		break;
 
-	case MUSI_SPEL_WORLD_CONTORTION:
+	case 19:
 #ifdef JP
 		if (name) return "歪んだ世界";
 		if (desc) return "近くのモンスターをテレポートさせる。抵抗されると無効。";
@@ -10369,7 +9734,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case MUSI_SPEL_DISPELLING_CHANT:
+	case 20:
 #ifdef JP
 		if (name) return "退散の歌";
 		if (desc) return "視界内の全てのモンスターにダメージを与える。邪悪なモンスターに特に大きなダメージを与える。";
@@ -10405,7 +9770,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case MUSI_SPEL_THE_VOICE_OF_SARUMAN:
+	case 21:
 #ifdef JP
 		if (name) return "サルマンの甘言";
 		if (desc) return "視界内の全てのモンスターを減速させ、眠らせようとする。抵抗されると無効。";
@@ -10441,7 +9806,7 @@ cptr do_spell(int realm, int spell, int mode)
 
 		break;
 
-	case MUSI_SPEL_SONG_OF_THE_TEMPEST:
+	case 22:
 #ifdef JP
 		if (name) return "嵐の音色";
 		if (desc) return "轟音のビームを放つ。";
@@ -10468,7 +9833,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case MUSI_SPEL_AMBARKANTA:
+	case 23:
 #ifdef JP
 		if (name) return "もう一つの世界";
 		if (desc) return "現在の階を再構成する。";
@@ -10499,7 +9864,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case MUSI_SPEL_WRECKING_PATTERN:
+	case 24:
 #ifdef JP
 		if (name) return "破壊の旋律";
 		if (desc) return "周囲のダンジョンを揺らし、壁と床をランダムに入れ変える。";
@@ -10535,7 +9900,7 @@ cptr do_spell(int realm, int spell, int mode)
 		break;
 
 
-	case MUSI_SPEL_STATIONARY_SHRIEK:
+	case 25:
 #ifdef JP
 		if (name) return "停滞の歌";
 		if (desc) return "視界内の全てのモンスターを麻痺させようとする。抵抗されると無効。";
@@ -10570,7 +9935,7 @@ cptr do_spell(int realm, int spell, int mode)
 
 		break;
 
-	case MUSI_SPEL_ENDURANCE:
+	case 26:
 #ifdef JP
 		if (name) return "守りの歌";
 		if (desc) return "自分のいる床の上に、モンスターが通り抜けたり召喚されたりすることができなくなるルーンを描く。";
@@ -10596,7 +9961,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case MUSI_SPEL_THE_HEROS_POEM:
+	case 27:
 #ifdef JP
 		if (name) return "英雄の詩";
 		if (desc) return "加速し、ヒーロー気分になり、視界内の全てのモンスターにダメージを与える。";
@@ -10660,7 +10025,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case MUSI_SPEL_RELIEF_OF_YAVANNA:
+	case 28:
 #ifdef JP
 		if (name) return "ヤヴァンナの助け";
 		if (desc) return "強力な回復の歌で、負傷と朦朧状態も全快する。";
@@ -10698,7 +10063,7 @@ cptr do_spell(int realm, int spell, int mode)
 
 		break;
 
-	case MUSI_SPEL_GODDESS_REBIRTH:
+	case 29:
 #ifdef JP
 		if (name) return "再生の歌";
 		if (desc) return "すべてのステータスと経験値を回復する。";
@@ -10729,7 +10094,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case MUSI_SPEL_WIZARDRY_OF_SAURON:
+	case 30:
 #ifdef JP
 		if (name) return "サウロンの魔術";
 		if (desc) return "非常に強力でごく小さい轟音の球を放つ。";
@@ -10757,7 +10122,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case MUSI_SPEL_FINGOLFINS_CHALLENGE:
+	case 31:
 #ifdef JP
 		if (name) return "フィンゴルフィンの挑戦";
 		if (desc) return "ダメージを受けなくなるバリアを張る。";
@@ -10810,8 +10175,24 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 
 		break;
+	}
 
-	case TECH_SPEL_TOBI_IZUNA:
+	return "";
+}
+
+
+static cptr do_hissatsu_spell(int spell, int mode)
+{
+	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
+	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
+	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
+
+	int dir;
+	int plev = p_ptr->lev;
+
+	switch (spell)
+	{
+	case 0:
 #ifdef JP
 		if (name) return "飛飯綱";
 		if (desc) return "2マス離れたところにいるモンスターを攻撃する。";
@@ -10829,7 +10210,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_3_WAY_ATTACK:
+	case 1:
 #ifdef JP
 		if (name) return "五月雨斬り";
 		if (desc) return "3方向に対して攻撃する。";
@@ -10886,7 +10267,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_BOOMERANG:
+	case 2:
 #ifdef JP
 		if (name) return "ブーメラン";
 		if (desc) return "武器を手元に戻ってくるように投げる。戻ってこないこともある。";
@@ -10901,7 +10282,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_BURNING_STRIKE:
+	case 3:
 #ifdef JP
 		if (name) return "焔霊";
 		if (desc) return "火炎耐性のないモンスターに大ダメージを与える。";
@@ -10934,7 +10315,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_DETECT_FEROCITY:
+	case 4:
 #ifdef JP
 		if (name) return "殺気感知";
 		if (desc) return "近くの思考することができるモンスターを感知する。";
@@ -10949,7 +10330,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_STRIKE_TO_STUN:
+	case 5:
 #ifdef JP
 		if (name) return "みね打ち";
 		if (desc) return "相手にダメージを与えないが、朦朧とさせる。";
@@ -10982,7 +10363,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_COUNTER:
+	case 6:
 #ifdef JP
 		if (name) return "カウンター";
 		if (desc) return "相手に攻撃されたときに反撃する。反撃するたびにMPを消費。";
@@ -11011,7 +10392,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_HARAINUKE:
+	case 7:
 #ifdef JP
 		if (name) return "払い抜け";
 		if (desc) return "攻撃した後、反対側に抜ける。";
@@ -11068,7 +10449,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_SERPENTS_TONGUE:
+	case 8:
 #ifdef JP
 		if (name) return "サーペンツタン";
 		if (desc) return "毒耐性のないモンスターに大ダメージを与える。";
@@ -11101,7 +10482,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_ZAMMAKEN:
+	case 9:
 #ifdef JP
 		if (name) return "斬魔剣弐の太刀";
 		if (desc) return "生命のない邪悪なモンスターに大ダメージを与えるが、他のモンスターには全く効果がない。";
@@ -11134,7 +10515,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_WIND_BLAST:
+	case 10:
 #ifdef JP
 		if (name) return "裂風剣";
 		if (desc) return "攻撃した相手を後方へ吹き飛ばす。";
@@ -11213,7 +10594,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_JUDGE:
+	case 11:
 #ifdef JP
 		if (name) return "刀匠の目利き";
 		if (desc) return "武器・防具を1つ識別する。レベル45以上で武器・防具の能力を完全に知ることができる。";
@@ -11224,7 +10605,7 @@ cptr do_spell(int realm, int spell, int mode)
     
 		if (cast)
 		{
-			if (p_ptr->lev > 44)
+			if (plev > 44)
 			{
 				if (!identify_fully(TRUE)) return NULL;
 			}
@@ -11235,7 +10616,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_ROCK_SMASH:
+	case 12:
 #ifdef JP
 		if (name) return "破岩斬";
 		if (desc) return "岩を壊し、岩石系のモンスターに大ダメージを与える。";
@@ -11267,7 +10648,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_MIDARE_SETSUGEKKA:
+	case 13:
 #ifdef JP
 		if (name) return "乱れ雪月花";
 		if (desc) return "攻撃回数が増え、冷気耐性のないモンスターに大ダメージを与える。";
@@ -11300,7 +10681,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_SPOT_AIMING:
+	case 14:
 #ifdef JP
 		if (name) return "急所突き";
 		if (desc) return "モンスターを一撃で倒す攻撃を繰り出す。失敗すると1点しかダメージを与えられない。";
@@ -11333,7 +10714,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_MAJINGIRI:
+	case 15:
 #ifdef JP
 		if (name) return "魔神斬り";
 		if (desc) return "会心の一撃で攻撃する。攻撃がかわされやすい。";
@@ -11366,7 +10747,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_DESPERATE_ATTACK:
+	case 16:
 #ifdef JP
 		if (name) return "捨て身";
 		if (desc) return "強力な攻撃を繰り出す。次のターンまでの間、食らうダメージが増える。";
@@ -11400,7 +10781,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_LIGHTNING_EAGLE:
+	case 17:
 #ifdef JP
 		if (name) return "雷撃鷲爪斬";
 		if (desc) return "電撃耐性のないモンスターに非常に大きいダメージを与える。";
@@ -11433,7 +10814,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_RUSH_ATTACK:
+	case 18:
 #ifdef JP
 		if (name) return "入身";
 		if (desc) return "素早く相手に近寄り攻撃する。";
@@ -11448,7 +10829,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_BLOODY_MAELSTROM:
+	case 19:
 #ifdef JP
 		if (name) return "赤流渦";
 		if (desc) return "自分自身も傷を作りつつ、その傷が深いほど大きい威力で全方向の敵を攻撃できる。生きていないモンスターには効果がない。";
@@ -11498,7 +10879,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_EARTHQUAKE_BLOW:
+	case 20:
 #ifdef JP
 		if (name) return "激震撃";
 		if (desc) return "地震を起こす。";
@@ -11524,7 +10905,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_CRACK:
+	case 21:
 #ifdef JP
 		if (name) return "地走り";
 		if (desc) return "衝撃波のビームを放つ。";
@@ -11574,7 +10955,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_WAR_CRY:
+	case 22:
 #ifdef JP
 		if (name) return "気迫の雄叫び";
 		if (desc) return "視界内の全モンスターに対して轟音の攻撃を行う。さらに、近くにいるモンスターを怒らせる。";
@@ -11590,12 +10971,12 @@ cptr do_spell(int realm, int spell, int mode)
 #else
 			msg_print("You roar out!");
 #endif
-			project_hack(GF_SOUND, randint1(p_ptr->lev * 3));
+			project_hack(GF_SOUND, randint1(plev * 3));
 			aggravate_monsters(0);
 		}
 		break;
 
-	case TECH_SPEL_MUSOU_SANDAN:
+	case 23:
 #ifdef JP
 		if (name) return "無双三段";
 		if (desc) return "強力な3段攻撃を繰り出す。";
@@ -11682,7 +11063,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_VAMPIRES_FANG:
+	case 24:
 #ifdef JP
 		if (name) return "吸血鬼の牙";
 		if (desc) return "攻撃した相手の体力を吸いとり、自分の体力を回復させる。生命を持たないモンスターには通じない。";
@@ -11715,7 +11096,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_MOON_DAZZLING:
+	case 25:
 #ifdef JP
 		if (name) return "幻惑";
 		if (desc) return "視界内の起きている全モンスターに朦朧、混乱、眠りを与えようとする。";
@@ -11731,13 +11112,13 @@ cptr do_spell(int realm, int spell, int mode)
 #else
 			msg_print("You irregularly wave your weapon...");
 #endif
-			project_hack(GF_ENGETSU, p_ptr->lev * 4);
-			project_hack(GF_ENGETSU, p_ptr->lev * 4);
-			project_hack(GF_ENGETSU, p_ptr->lev * 4);
+			project_hack(GF_ENGETSU, plev * 4);
+			project_hack(GF_ENGETSU, plev * 4);
+			project_hack(GF_ENGETSU, plev * 4);
 		}
 		break;
 
-	case TECH_SPEL_HUNDRED_SLAUGHTER:
+	case 26:
 #ifdef JP
 		if (name) return "百人斬り";
 		if (desc) return "連続して入身でモンスターを攻撃する。攻撃するたびにMPを消費。MPがなくなるか、モンスターを倒せなかったら百人斬りは終了する。";
@@ -11779,7 +11160,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_DRAGONIC_FLASH:
+	case 27:
 #ifdef JP
 		if (name) return "天翔龍閃";
 		if (desc) return "視界内の場所を指定して、その場所と自分の間にいる全モンスターを攻撃し、その場所に移動する。";
@@ -11820,7 +11201,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_TWIN_SLASH:
+	case 28:
 #ifdef JP
 		if (name) return "二重の剣撃";
 		if (desc) return "1ターンで2度攻撃を行う。";
@@ -11859,7 +11240,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_KOFUKU_ZETTOUSEI:
+	case 29:
 #ifdef JP
 		if (name) return "虎伏絶刀勢";
 		if (desc) return "強力な攻撃を行い、近くの場所にも効果が及ぶ。";
@@ -11924,7 +11305,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_KEIUN_KININKEN:
+	case 30:
 #ifdef JP
 		if (name) return "慶雲鬼忍剣";
 		if (desc) return "自分もダメージをくらうが、相手に非常に大きなダメージを与える。アンデッドには特に効果がある。";
@@ -11962,7 +11343,7 @@ cptr do_spell(int realm, int spell, int mode)
 		}
 		break;
 
-	case TECH_SPEL_HARAKIRI:
+	case 31:
 #ifdef JP
 		if (name) return "切腹";
 		if (desc) return "「武士道とは、死ぬことと見つけたり。」";
@@ -12010,4 +11391,29 @@ cptr do_spell(int realm, int spell, int mode)
 	}
 
 	return "";
+}
+
+
+/*
+ * Do everything for each spell
+ */
+cptr do_spell(int realm, int spell, int mode)
+{
+	switch (realm)
+	{
+	case REALM_LIFE:     return do_life_spell(spell, mode);
+	case REALM_SORCERY:  return do_sorcery_spell(spell, mode);
+	case REALM_NATURE:   return do_nature_spell(spell, mode);
+	case REALM_CHAOS:    return do_chaos_spell(spell, mode);
+	case REALM_DEATH:    return do_death_spell(spell, mode);
+	case REALM_TRUMP:    return do_trump_spell(spell, mode);
+	case REALM_ARCANE:   return do_arcane_spell(spell, mode);
+	case REALM_ENCHANT:  return do_enchant_spell(spell, mode);
+	case REALM_DAEMON:   return do_daemon_spell(spell, mode);
+	case REALM_CRUSADE:  return do_crusade_spell(spell, mode);
+	case REALM_MUSIC:    return do_music_spell(spell, mode);
+	case REALM_HISSATSU: return do_hissatsu_spell(spell, mode);
+	}
+
+	return NULL;
 }
