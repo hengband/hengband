@@ -4572,7 +4572,7 @@ void wiz_dark(void)
 void cave_set_feat(int y, int x, int feat)
 {
 	cave_type *c_ptr = &cave[y][x];
-	feature_type *f_ptr;
+	feature_type *f_ptr = &f_info[feat];
 	bool old_los, old_mirror;
 
 	if (!character_dungeon)
@@ -4582,6 +4582,20 @@ void cave_set_feat(int y, int x, int feat)
 
 		/* Change the feature */
 		c_ptr->feat = feat;
+
+		/* Hack -- glow the GLOW terrain */
+		if (have_flag(f_ptr->flags, FF_GLOW) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS))
+		{
+			int i, yy, xx;
+
+			for (i = 0; i < 9; i++)
+			{
+				yy = y + ddy_ddd[i];
+				xx = x + ddx_ddd[i];
+				if (!in_bounds2(yy, xx)) continue;
+				cave[yy][xx].info |= CAVE_GLOW;
+			}
+		}
 
 		return;
 	}
@@ -4605,8 +4619,6 @@ void cave_set_feat(int y, int x, int feat)
 
 		update_local_illumination(y, x);
 	}
-
-	f_ptr = &f_info[feat];
 
 	/* Check for change to boring grid */
 	if (!have_flag(f_ptr->flags, FF_REMEMBER)) c_ptr->info &= ~(CAVE_MARK);
@@ -4634,7 +4646,7 @@ void cave_set_feat(int y, int x, int feat)
 		p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE | PU_MONSTERS);
 	}
 
-	/* Hack -- glow the deep lava */
+	/* Hack -- glow the GLOW terrain */
 	if (have_flag(f_ptr->flags, FF_GLOW) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS))
 	{
 		int i, yy, xx;
