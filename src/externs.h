@@ -179,7 +179,6 @@ extern bool inkey_base;
 extern bool inkey_xtra;
 extern bool inkey_scan;
 extern bool inkey_flag;
-extern char inkey_macro_trigger_string[1024];
 extern s16b coin_type;
 extern bool opening_chest;
 extern bool shimmer_monsters;
@@ -1228,6 +1227,7 @@ extern void build_gamma_table(int gamma);
 
 extern size_t my_strcpy(char *buf, const char *src, size_t bufsize);
 extern size_t my_strcat(char *buf, const char *src, size_t bufsize);
+extern int inkey_special(void);
 
 
 /* xtra1.c */

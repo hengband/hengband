@@ -13,9 +13,10 @@
 #include "angband.h"
 
 
-
-
 static int num_more = 0;
+
+/* Save macro trigger string for use in inkey_special() */
+static char inkey_macro_trigger_string[1024];
 
 #if 0
 #ifndef HAS_STRICMP
@@ -3150,20 +3151,11 @@ void clear_from(int row)
 bool askfor_aux(char *buf, int len)
 {
 	int y, x;
+	int pos = 0;
+	byte color = TERM_YELLOW;
 
-	int i = 0;
-
-	int k = 0;
-
-	bool done = FALSE;
-
-
-#ifdef JP
-    int	k_flag[128];
-#endif
-	/* Locate the cursor */
+	/* Locate the cursor position */
 	Term_locate(&x, &y);
-
 
 	/* Paranoia -- check len */
 	if (len < 1) len = 1;
@@ -3174,107 +3166,194 @@ bool askfor_aux(char *buf, int len)
 	/* Restrict the length */
 	if (x + len > 80) len = 80 - x;
 
-
 	/* Paranoia -- Clip the default entry */
 	buf[len] = '\0';
 
 
-	/* Display the default answer */
-	Term_erase(x, y, len);
-	Term_putstr(x, y, -1, TERM_YELLOW, buf);
-
-
 	/* Process input */
-	while (!done)
+	while (TRUE)
 	{
-		/* Place cursor */
-		Term_gotoxy(x + k, y);
+		int skey;
 
-		/* Get a key */
-		i = inkey();
+		/* Display the string */
+		Term_erase(x, y, len);
+		Term_putstr(x, y, -1, color, buf);
+
+		/* Place cursor */
+		Term_gotoxy(x + pos, y);
+
+		/* Get a special key code */
+		skey = inkey_special();
 
 		/* Analyze the key */
-		switch (i)
+		switch (skey)
 		{
-		case ESCAPE:
-			k = 0;
-			done = TRUE;
-			break;
+		case SKEY_LEFT:
+		case KTRL('b'):
+		{
+			int i = 0;
 
-		case '\n':
-		case '\r':
-			k = strlen(buf);
-			done = TRUE;
-			break;
+			/* No effect at biggining of line */
+			if (0 == pos) break;
 
-		case 0x7F:
-		case '\010':
-#ifdef JP
-				if (k > 0)
-				{
-					k--;
-					if (k_flag[k] != 0)
-						k--;
-				}
-#else
-			if (k > 0) k--;
-#endif
-
-			break;
-
-		default:
-#ifdef JP
-       {			/* 片山さん作成 */
-		int next;
-
-				if (iskanji (i)) {
-					inkey_base = TRUE;
-					next = inkey ();
-					if (k+1 < len) {
-						buf[k++] = i;
-						buf[k] = next;
-						k_flag[k++] = 1;
-					} else
-						bell();
-				} else {
-#ifdef SJIS
-		    if(k<len && (isprint(i) || (0xa0<=i && i<=0xdf))){
-#else
-		    if(k<len && isprint(i)){
-#endif
-						buf[k] = i;
-						k_flag[k++] = 0;
-					} else
-						bell();
-			       }
-		 }
-#else
-			if ((k < len) && (isprint(i)))
+			while (TRUE)
 			{
-				buf[k++] = i;
-			}
-			else
-			{
-				bell();
-			}
+				int next_pos = i + 1;
+
+#ifdef JP
+				if (iskanji(buf[next_pos])) next_pos++;
 #endif
+
+				/* Is there the cursor at next position? */ 
+				if (next_pos >= pos) break;
+
+				/* Move to next */
+				i = next_pos;
+			}
+
+			/* Get previous position */
+			pos = i;
+
+			/* Now on insert mode */
+			color = TERM_WHITE;
 
 			break;
 		}
 
-		/* Terminate */
-		buf[k] = '\0';
+		case SKEY_RIGHT:
+		case KTRL('f'):
+			/* No effect at end of line */
+			if ('\0' == buf[pos]) break;
 
-		/* Update the entry */
-		Term_erase(x, y, len);
-		Term_putstr(x, y, -1, TERM_WHITE, buf);
-	}
+#ifdef JP
+			/* Move right */
+			if (iskanji(buf[pos])) pos += 2;
+			else pos++;
+#else
+			pos++;
+#endif
 
-	/* Aborted */
-	if (i == ESCAPE) return (FALSE);
+			/* Now on insert mode */
+			color = TERM_WHITE;
 
-	/* Success */
-	return (TRUE);
+			break;
+
+		case ESCAPE:
+			/* Cancel input */
+			buf[0] = '\0';
+			return FALSE;
+
+		case '\n':
+		case '\r':
+			/* Success */
+			return TRUE;
+
+		case '\010':
+			/* Backspace */
+
+			/* No effect at biggining of line */
+			if (!pos) break;
+
+			/* Go left 1 unit */
+			pos--;
+
+			/* Fall through to 'Delete key' */
+
+		case 0x7F:
+		case KTRL('d'):
+			/* Delete key */
+		{
+
+			int dst = pos;
+
+			/* Position of next character */
+			int src = pos + 1;
+
+#ifdef JP
+			/* Next character is one more byte away */
+			if (iskanji(src)) src++;
+#endif
+
+			/* Move characters at src to dst */
+			while ('\0' != (buf[dst++] = buf[src++]))
+				/* loop */;
+
+			break;
+		}
+
+		default:
+		{
+			/* Insert a character */
+
+			char tmp[100];
+			char c;
+
+			/* Ignore special keys */
+			if (skey & SKEY_MASK) break;
+
+			/* Get a character code */
+			c = (char)skey;
+
+			if (color == TERM_YELLOW)
+			{
+				/* Overwrite default string */
+				buf[0] = '\0';
+
+				/* Go to insert mode */
+				color = TERM_WHITE;
+			}
+
+			/* Save right part of string */
+			strcpy(tmp, buf + pos);
+#ifdef JP
+			if (iskanji(c))
+			{
+				char next;
+
+				/* Bypass macro processing */
+				inkey_base = TRUE;
+				next = inkey();
+
+				if (pos + 1 < len)
+				{
+					buf[pos++] = c;
+					buf[pos++] = next;
+				}
+				else
+				{
+					bell();
+				}
+			}
+			else
+#endif
+			{
+#ifdef SJIS
+				if (pos < len &&
+				    (isprint(c) || (0xa0 <= c && c <= 0xdf)))
+#else
+				if (pos < len && isprint(c))
+#endif
+				{
+					buf[pos++] = c;
+				}
+				else
+				{
+					bell();
+				}
+			}
+
+			/* Terminate */
+			buf[pos] = '\0';
+
+			/* Write back the left part of string */
+			my_strcat(buf, tmp, len + 1);
+
+			break;
+		} /* default: */
+
+		}
+
+	} /* while (TRUE) */
 }
 
 
@@ -5099,4 +5178,147 @@ size_t my_strcat(char *buf, const char *src, size_t bufsize)
 		/* Return without appending */
 		return (dlen + strlen(src));
 	}
+}
+
+
+/*
+ * Get a keypress from the user.
+ * And interpret special keys as internal code.
+ *
+ * This function is a Mega-Hack and depend on pref-xxx.prf's.
+ * Currently works on Linux(UNIX), Windows, and Macintosh only.
+ */
+int inkey_special(void)
+{
+	static const struct {
+		cptr keyname;
+		int keyflag;
+	} modifier_key_list[] = {
+		{"shift-", SKEY_MOD_SHIFT},
+		{"control-", SKEY_MOD_CONTROL},
+		{NULL, 0},
+	};
+
+	static const struct {
+		cptr keyname;
+		int keycode;
+	} special_key_list[] = {
+		{"Down]", SKEY_DOWN},
+		{"Left]", SKEY_LEFT},
+		{"Right]", SKEY_RIGHT},
+		{"Up]", SKEY_UP},
+		{"Page_Up]", SKEY_PGUP},
+		{"Page_Down]", SKEY_PGDOWN},
+		{"Home]", SKEY_TOP},
+		{"End]", SKEY_BOTTOM},
+		{"KP_Down]", SKEY_DOWN},
+		{"KP_Left]", SKEY_LEFT},
+		{"KP_Right]", SKEY_RIGHT},
+		{"KP_Up]", SKEY_UP},
+		{"KP_Page_Up]", SKEY_PGUP},
+		{"KP_Page_Down]", SKEY_PGDOWN},
+		{"KP_Home]", SKEY_TOP},
+		{"KP_End]", SKEY_BOTTOM},
+		{"KP_2]", SKEY_DOWN},
+		{"KP_4]", SKEY_LEFT},
+		{"KP_6]", SKEY_RIGHT},
+		{"KP_8]", SKEY_UP},
+		{"KP_9]", SKEY_PGUP},
+		{"KP_3]", SKEY_PGDOWN},
+		{"KP_7]", SKEY_TOP},
+		{"KP_1]", SKEY_BOTTOM},
+		{NULL, 0},
+	};
+	char buf[1024];
+	cptr str = buf;
+	char key;
+	int skey = 0;
+	int modifier = 0;
+	int i;
+	size_t trig_len;
+
+	/* Get a keypress */
+	key = inkey();
+
+	/* Examine trigger string */
+	trig_len = strlen(inkey_macro_trigger_string);
+
+	/* No special key */
+	if (!trig_len) return (int)key;
+
+	/*
+	 * Mega Hack -- ignore macro defined on ASCII keys
+	 *
+	 * When this function is used, all ASCII keys are used as
+	 * themselfs instead of macro triggers for command macro's.
+	 */
+#ifdef JP
+	if (trig_len == 1 && !iskanji(inkey_macro_trigger_string[0]))
+#else
+	if (trig_len == 1)
+#endif
+	{
+		/* Get original key */
+		key = inkey_macro_trigger_string[0];
+		
+		/* Kill further macro expansion */
+		flush();
+
+		/* Return the originaly pressed key */
+		return (int)key;
+	}
+
+	/* Convert the trigger */
+	ascii_to_text(buf, inkey_macro_trigger_string);
+
+	/* Check the prefix "\[" */
+	if (!prefix(str, "\\[")) return 0;
+
+	/* Skip "\[" */
+	str += 2;
+
+	/* Examine modifier keys */
+	while (TRUE)
+	{
+		for (i = 0; modifier_key_list[i].keyname; i++)
+		{
+			if (prefix(str, modifier_key_list[i].keyname))
+			{
+				/* Get modifier key flag */
+				str += strlen(modifier_key_list[i].keyname);
+				modifier |= modifier_key_list[i].keyflag;
+			}
+		}
+
+		/* No more modifier key found */
+		if (!modifier_key_list[i].keyname) break;
+	}
+
+	/* Get a special key code */
+	for (i = 0; special_key_list[i].keyname; i++)
+	{
+		if (streq(str, special_key_list[i].keyname))
+		{
+			skey = special_key_list[i].keycode;
+			break;
+		}
+	}
+
+	/* No special key found? */
+	if (!skey)
+	{
+		/* Don't bother with this trigger no more */
+		inkey_macro_trigger_string[0] = '\0';
+
+		/* Return normal keycode */
+		return (int)key;
+	}
+
+	/* A special key found */
+
+	/* Kill further macro expansion */
+	flush();
+
+	/* Return special key code and modifier flags */
+	return (skey | modifier);
 }

@@ -3098,10 +3098,11 @@ static byte get_destroyed_object_for_search(object_type **o_handle, cptr *search
 static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 {
 	int pos = 0;
+	byte color = TERM_YELLOW;
 	char buf[MAX_NLEN+20];
+	const size_t len = 80;
 
 #ifdef JP
-	int k_flag[MAX_NLEN+20];
 	char prompt[] = "検索(^I:持ち物 ^L:破壊された物): ";
 #else
 	char prompt[] = "Search key(^I:inven ^L:destroyed): ";
@@ -3114,47 +3115,76 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 	/* Display prompt */
 	prt(prompt, 0, 0);
 
-	/* Display the default answer */
-	Term_erase(col, 0, 255);
-	Term_putstr(col, 0, -1, TERM_YELLOW, buf);
 
 	/* Process input */
-	while (1)
+	while (TRUE)
 	{
 		bool back = FALSE;
-		int key;
-		size_t trig_len;
+		int skey;
+
+		/* Display the string */
+		Term_erase(col, 0, 255);
+		Term_putstr(col, 0, -1, color, buf);
 
 		/* Place cursor */
 		Term_gotoxy(col + pos, 0);
 
-		/* Get a key */
-		key = inkey();
-
-		/* Count length of macro trigger which induced this key */
-		trig_len = strlen(inkey_macro_trigger_string);
-
-		/* HACK -- ignore macro defined on ASCII keys */
-#ifdef JP
-		if (trig_len == 1 && !iskanji(inkey_macro_trigger_string[0]))
-#else
-		if (trig_len == 1)
-#endif
-		{
-			/* Get original key */
-			key = inkey_macro_trigger_string[0];
-
-			/* Kill further macro expansion */
-			flush();
-		}
-
-		/* Delete key */
-		if (key == 0x7F) key = KTRL('d');
-
+		/* Get a special key code */
+		skey = inkey_special();
 
 		/* Analyze the key */
-		switch (key)
+		switch (skey)
 		{
+		case SKEY_LEFT:
+		case KTRL('b'):
+		{
+			int i = 0;
+
+			/* No effect at biggining of line */
+			if (0 == pos) break;
+
+			while (TRUE)
+			{
+				int next_pos = i + 1;
+
+#ifdef JP
+				if (iskanji(buf[next_pos])) next_pos++;
+#endif
+
+				/* Is there the cursor at next position? */ 
+				if (next_pos >= pos) break;
+
+				/* Move to next */
+				i = next_pos;
+			}
+
+			/* Get previous position */
+			pos = i;
+
+			/* Now on insert mode */
+			color = TERM_WHITE;
+
+			break;
+		}
+
+		case SKEY_RIGHT:
+		case KTRL('f'):
+			/* No effect at end of line */
+			if ('\0' == buf[pos]) break;
+
+#ifdef JP
+			/* Move right */
+			if (iskanji(buf[pos])) pos += 2;
+			else pos++;
+#else
+			pos++;
+#endif
+
+			/* Now on insert mode */
+			color = TERM_WHITE;
+
+			break;
+
 		case ESCAPE:
 			return 0;
 
@@ -3181,57 +3211,112 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 				return 1;
 			break;
 
-		case 0x7F:
 		case '\010':
-#ifdef JP
-			if (pos > 0)
-			{
-				pos--;
-				if (k_flag[pos]) pos--;
-			}
-#else
-			if (pos > 0) pos--;
-#endif
-			break;
+			/* Backspace */
 
-		default:
-#ifdef JP
-			if (iskanji(key))
-			{
-				int next;
+			/* No effect at biggining of line */
+			if (!pos) break;
 
-				inkey_base = TRUE;
-				next = inkey ();
-				if (pos + 1 < MAX_NLEN)
-				{
-					buf[pos++] = key;
-					buf[pos] = next;
-					k_flag[pos++] = 1;
-				}
-				else bell();
-			}
-			else if (pos < MAX_NLEN && isprint(key))
-			{
-				buf[pos] = key;
-				k_flag[pos++] = 0;
-			}
-			else bell();
-#else
-			if (pos < MAX_NLEN && isprint(key)) buf[pos++] = key;
-			else bell();
+			/* Go left 1 unit */
+			pos--;
+
+			/* Fall through to 'Delete key' */
+
+		case 0x7F:
+		case KTRL('d'):
+			/* Delete key */
+		{
+
+			int dst = pos;
+
+			/* Position of next character */
+			int src = pos + 1;
+
+#ifdef JP
+			/* Next character is one more byte away */
+			if (iskanji(src)) src++;
 #endif
+
+			/* Move characters at src to dst */
+			while ('\0' != (buf[dst++] = buf[src++]))
+				/* loop */;
+
 			break;
 		}
 
-		/* Terminate */
-		buf[pos] = '\0';
+		default:
+		{
+			/* Insert a character */
 
-		/* Update the entry */
-		Term_erase(col, 0, 255);
-		Term_putstr(col, 0, -1, TERM_WHITE, buf);
-	}
+			char tmp[100];
+			char c;
 
-	/* Never reached */
+			/* Ignore special keys */
+			if (skey & SKEY_MASK) break;
+
+			/* Get a character code */
+			c = (char)skey;
+
+			if (color == TERM_YELLOW)
+			{
+				/* Overwrite default string */
+				buf[0] = '\0';
+
+				/* Go to insert mode */
+				color = TERM_WHITE;
+			}
+
+			/* Save right part of string */
+			strcpy(tmp, buf + pos);
+#ifdef JP
+			if (iskanji(c))
+			{
+				char next;
+
+				/* Bypass macro processing */
+				inkey_base = TRUE;
+				next = inkey();
+
+				if (pos + 1 < len)
+				{
+					buf[pos++] = c;
+					buf[pos++] = next;
+				}
+				else
+				{
+					bell();
+				}
+			}
+			else
+#endif
+			{
+#ifdef SJIS
+				if (pos < len &&
+				    (isprint(c) || (0xa0 <= c && c <= 0xdf)))
+#else
+				if (pos < len && isprint(c))
+#endif
+				{
+					buf[pos++] = c;
+				}
+				else
+				{
+					bell();
+				}
+			}
+
+			/* Terminate */
+			buf[pos] = '\0';
+
+			/* Write back the left part of string */
+			my_strcat(buf, tmp, len + 1);
+
+			break;
+		} /* default: */
+
+		}
+
+	} /* while (TRUE) */
 }
 
 
@@ -3664,6 +3749,8 @@ command_menu_type menu_data[] =
 	{MN_CL_LEAVE, 1, -1, EC_CL_LEAVE},
 	{MN_CL_QUERY, 1, -1, EC_CL_QUERY},
 	{MN_CL_NO_DISP, 1, -1, EC_CL_NO_DISP},
+
+	{MN_DELETE_CHAR, -1, 0x7F, EC_DELETE_CHAR},
 
 	{NULL, -1, -1, 0}
 };
@@ -5371,76 +5458,34 @@ static void insert_single_letter(text_body_type *tb, int key)
 
 
 /*
- * Mega-Hack:
- * Get macro trigger string directly and translate it to the command id.
+ * Check special key code and get a movement command id
  */
-static int analyze_move_key(text_body_type *tb)
+static int analyze_move_key(text_body_type *tb, int skey)
 {
-	static const struct {
-		cptr keyname;
-		int com_id;
-	} move_key_list[] = {
-		{"Down]", EC_DOWN},
-		{"Left]", EC_LEFT},
-		{"Right]", EC_RIGHT},
-		{"Up]", EC_UP},
-		{"Page_Up]", EC_PGUP},
-		{"Page_Down]", EC_PGDOWN},
-		{"Home]", EC_TOP},
-		{"End]", EC_BOTTOM},
-		{"KP_Down]", EC_DOWN},
-		{"KP_Left]", EC_LEFT},
-		{"KP_Right]", EC_RIGHT},
-		{"KP_Up]", EC_UP},
-		{"KP_Page_Up]", EC_PGUP},
-		{"KP_Page_Down]", EC_PGDOWN},
-		{"KP_Home]", EC_TOP},
-		{"KP_End]", EC_BOTTOM},
-		{"KP_2]", EC_DOWN},
-		{"KP_4]", EC_LEFT},
-		{"KP_6]", EC_RIGHT},
-		{"KP_8]", EC_UP},
-		{"KP_9]", EC_PGUP},
-		{"KP_3]", EC_PGDOWN},
-		{"KP_7]", EC_TOP},
-		{"KP_1]", EC_BOTTOM},
-		{NULL, 0},
-	};
+	int com_id;
 
-	static const char shiftstr[] = "shift-";
-	bool shifted = FALSE;
-	char buf[1024];
-	cptr str = buf;
-	int com_id = 0;
-	int i;
+	/* Not a special key */
+	if (!(skey & SKEY_MASK)) return 0;
 
-	/* Get ascii form */
-	ascii_to_text(buf, inkey_macro_trigger_string);
-
-	/* Skip "\[" */
-	str += 2;
-
-	if (prefix(str, shiftstr))
+	/* Convert from a special key code to an editor command */
+	switch(skey & ~SKEY_MOD_MASK)
 	{
-		str += sizeof(shiftstr) - 1;
-		shifted = TRUE;
+	case SKEY_DOWN:   com_id = EC_DOWN;   break;
+	case SKEY_LEFT:   com_id = EC_LEFT;   break;
+	case SKEY_RIGHT:  com_id = EC_RIGHT;  break;
+	case SKEY_UP:     com_id = EC_UP;     break;
+	case SKEY_PGUP:   com_id = EC_PGUP;   break;
+	case SKEY_PGDOWN: com_id = EC_PGDOWN; break;
+	case SKEY_TOP:    com_id = EC_TOP;    break;
+	case SKEY_BOTTOM: com_id = EC_BOTTOM; break;
+
+	default:
+		/* Not a special movement key */
+		return 0;
 	}
 
-	for (i = 0; move_key_list[i].keyname; i++)
-	{
-		if (streq(str, move_key_list[i].keyname))
-		{
-			com_id = move_key_list[i].com_id;
-			break;
-		}
-	}
-
-	if (!com_id) return 0;
-
-	/* Kill further macro expansion */
-	flush();
-
-	if (!shifted)
+	/* Without shift modifier */
+	if (!(skey & SKEY_MOD_SHIFT))
 	{
 		/*
 		 * Un-shifted cursor keys cancells
@@ -5454,6 +5499,8 @@ static int analyze_move_key(text_body_type *tb)
 			tb->dirty_flags |= DIRTY_ALL;
 		}
 	}
+
+	/* With shift modifier */
 	else
 	{
 		/* Start selection by shift + cursor keys */
@@ -5561,7 +5608,6 @@ void do_cmd_edit_autopick(void)
 	while (!quit)
 	{
 		int com_id = 0;
-		size_t trig_len;
 
 		/* Draw_everythig */
 		draw_text_editor(tb);
@@ -5598,35 +5644,13 @@ void do_cmd_edit_autopick(void)
 		tb->old_hgt = tb->hgt;
 
 		/* Get a command */
-		key = inkey();
+		key = inkey_special();
 
-		/* Count length of macro trigger which induced this key */
-		trig_len = strlen(inkey_macro_trigger_string);
-
-		/* HACK -- ignore macro defined on ASCII keys */
-#ifdef JP
-		if (trig_len == 1 && !iskanji(inkey_macro_trigger_string[0]))
-#else
-		if (trig_len == 1)
-#endif
+		/* Special keys */
+		if (key & SKEY_MASK)
 		{
-			/* Get original key */
-			key = inkey_macro_trigger_string[0];
-
-			/* Kill further macro expansion */
-			flush();
-		}
-
-		/* Delete key */
-		if (key == 0x7F) key = KTRL('d');
-
-
-		/* Movement special keys */
-		if (trig_len > 1) com_id = analyze_move_key(tb);
-
-		if (com_id)
-		{
-			/* Already done */
+			/* Get a movement command */
+			com_id = analyze_move_key(tb, key);
 		}
 
 		/* Open the menu */

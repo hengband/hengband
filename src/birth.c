@@ -5351,7 +5351,6 @@ static bool do_cmd_histpref(void)
 static void edit_history(void)
 {
 	char old_history[4][60];
-	char c;
 	int y = 0, x = 0;
 	int i, j;
 
@@ -5379,6 +5378,9 @@ static void edit_history(void)
 
 	while (TRUE)
 	{
+		int skey;
+		char c;
+
 		for (i = 0; i < 4; i++)
 		{
 			put_str(p_ptr->history[i], i + 12, 10);
@@ -5393,18 +5395,14 @@ static void edit_history(void)
 		/* Place cursor just after cost of current stat */
 		Term_gotoxy(x + 10, y + 12);
 
-		c = inkey();
+		/* Get special key code */
+		skey = inkey_special();
 
-		/* Cursor key macroes to direction command */
-		if (strlen(inkey_macro_trigger_string) > 1)
-		{
-			if (c == '8') c = KTRL('P');
-			else if (c == '2') c = KTRL('N');
-			else if (c == '6') c = KTRL('F');
-			else if (c == '4') c = KTRL('B');
-		}
+		/* Get a character code */
+		if (!(skey & SKEY_MASK)) c = (char)skey;
+		else c = 0;
 
-		if (c == KTRL('P'))
+		if (skey == SKEY_UP)
 		{
 			y--;
 			if (y < 0) y = 3;
@@ -5412,7 +5410,7 @@ static void edit_history(void)
 			if ((x > 0) && (iskanji2(p_ptr->history[y], x-1))) x--;
 #endif
 		}
-		else if (c == KTRL('N'))
+		else if (skey == SKEY_DOWN)
 		{
 			y++;
 			if (y > 3) y = 0;
@@ -5420,7 +5418,7 @@ static void edit_history(void)
 			if ((x > 0) && (iskanji2(p_ptr->history[y], x-1))) x--;
 #endif
 		}
-		else if (c == KTRL('F'))
+		else if (skey == SKEY_RIGHT)
 		{
 #ifdef JP
 			if (iskanji2(p_ptr->history[y], x)) x++;
@@ -5432,7 +5430,7 @@ static void edit_history(void)
 				if (y < 3) y++;
 			}
 		}
-		else if (c == KTRL('B'))
+		else if (skey == SKEY_LEFT)
 		{
 			x--;
 			if (x < 0)
