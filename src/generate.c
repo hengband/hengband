@@ -1480,8 +1480,6 @@ void clear_cave(void)
  * Generates a random dungeon level			-RAK-
  *
  * Hack -- regenerate any "overflow" levels
- *
- * Hack -- allow auto-scumming via a gameplay option.
  */
 void generate_cave(void)
 {

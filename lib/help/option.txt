@@ -341,14 +341,6 @@ Show the experience needed for the next level    [exp_need]
 ***** <GamePlay>
 === Option set 4 -- Game playing ===
 
-***** <auto_scum>
-Auto-scum for good levels    [auto_scum]
-    This is a hack but allows you to force the generation of "good"
-    levels in the dungeon. This option may be extremely slow on some
-    machines, especially deep in the dungeon. The minimum "goodness" of
-    the level is based on the dungeon level, so the deeper you go, the
-    better the level will be.
-    
 ***** <stack_force_notes>
 Merge inscriptions when stacking    [stack_force_notes]
     Force otherwise identical objects to merge, even if one has an
@@ -903,14 +895,6 @@ Disable recall and use of up stairs (*)    [ironman_downward]
     You are not allowed to climb upwards, or recall to town. All stairs
     are downstairs and every time you teleport level, you'll teleport
     to a deeper level.
-
-***** <ironman_autoscum>
-Permanently enable the autoscummer    [ironman_autoscum]
-    This option switches the "autoscummer" permanently on, so that only
-    "good" levels are created.  This can mean, that there are good
-    items on this level, or that the level is protected by especially
-    powerful monsters. In Hengband it often is the later, so use this
-    option with care.
 
 ***** <ironman_empty_levels>
 Always create empty 'arena' levels (*)    [ironman_empty_levels]
