@@ -4817,43 +4817,63 @@ void roff_to_buf(cptr str, int maxlen, char *tbuf)
 	int write_pt = 0;
 	int line_len = 0;
 	int word_punct = 0;
-	unsigned char ch[3];
+	char ch[3];
 	ch[2] = '\0';
 
 	while (str[read_pt])
 	{
 #ifdef JP
+		bool kinsoku = FALSE;
 		bool kanji;
 #endif
+		int ch_len = 1;
+
+		/* Prepare one character */
 		ch[0] = str[read_pt];
 		ch[1] = '\0';
 #ifdef JP
 		kanji  = iskanji(ch[0]);
+
 		if (kanji)
+		{
 			ch[1] = str[read_pt+1];
-		if (!kanji && !isprint(ch[0]))
+			ch_len = 2;
+
+			if (strcmp(ch, "。") == 0 ||
+			    strcmp(ch, "、") == 0 ||
+			    strcmp(ch, "ィ") == 0 ||
+			    strcmp(ch, "ー") == 0)
+				kinsoku = TRUE;
+		}
+		else if (!isprint(ch[0]))
 			ch[0] = ' ';
 #else
 		if (!isprint(ch[0]))
 			ch[0] = ' ';
 #endif
 
-		if (line_len >= maxlen - 1 || str[read_pt] == '\n')
+		if (line_len + ch_len > maxlen - 1 || str[read_pt] == '\n')
 		{
 			int word_len;
 
 			/* return to better wrapping point. */
 			/* Space character at the end of the line need not to be printed. */
 			word_len = read_pt - word_punct;
-			if (ch[0] != ' ' && word_len < line_len/2)
+#ifdef JP
+			if (kanji && !kinsoku)
+				/* nothing */ ;
+			else
+#endif
+			if (ch[0] == ' ' || word_len >= line_len/2)
+				read_pt++;
+			else
 			{
 				read_pt = word_punct;
 				if (str[word_punct] == ' ')
 					read_pt++;
 				write_pt -= word_len;
 			}
-			else
-				read_pt++;
+
 			tbuf[write_pt++] = '\0';
 			line_len = 0;
 			word_punct = read_pt;
@@ -4862,10 +4882,7 @@ void roff_to_buf(cptr str, int maxlen, char *tbuf)
 		if (ch[0] == ' ')
 			word_punct = read_pt;
 #ifdef JP
-		if (kanji &&
-		    strcmp((char *)ch, "。") != 0 && strcmp((char *)ch, "、") != 0 &&
-		    strcmp((char *)ch, "ィ") != 0 && strcmp((char *)ch, "ー") != 0)
-			word_punct = read_pt;
+		if (!kinsoku) word_punct = read_pt;
 #endif
 		tbuf[write_pt++] = ch[0];
 		line_len++;
