@@ -98,7 +98,7 @@ Y:fresh_before
 X:fresh_after
 X:fresh_message
 X:compress_savefile
-Y:hilite_player
+X:hilite_player
 
 ##### Birth Options #####
 
