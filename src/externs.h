@@ -857,7 +857,6 @@ extern bool load_floor(saved_floor_type *sf_ptr, u32b mode);
 /* melee1.c */
 /* melee2.c */
 extern bool make_attack_normal(int m_idx);
-extern bool make_attack_spell(int m_idx);
 extern void process_monsters(void);
 extern int get_mproc_idx(int m_idx, int mproc_type);
 extern void mproc_init(void);
@@ -1326,6 +1325,7 @@ extern bool heavy_armor(void);
 /* effects.c */
 extern void set_action(int typ);
 extern void reset_tim_flags(void);
+extern void dispel_player(void);
 extern bool set_mimic(int v, int p, bool do_dec);
 extern bool set_blind(int v);
 extern bool set_confused(int v);
@@ -1432,7 +1432,9 @@ extern int spell_exp_level(int spell_exp);
 extern bool clean_shot(int y1, int x1, int y2, int x2, bool friend);
 extern bool summon_possible(int y1, int x1);
 extern bool raise_possible(monster_type *m_ptr);
+extern bool dispel_check(int m_idx);
 extern bool spell_is_inate(u16b spell);
+extern bool make_attack_spell(int m_idx);
 
 /* mspells2.c */
 extern void get_project_point(int sy, int sx, int *ty, int *tx, int flg);

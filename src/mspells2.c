@@ -248,6 +248,32 @@ void get_project_point(int sy, int sx, int *ty, int *tx, int flg)
 }
 
 /*
+ * Check should monster cast dispel spell at other monster.
+ */
+static bool dispel_check_monster(int m_idx, int t_idx)
+{
+	monster_type *t_ptr = &m_list[t_idx];
+
+	/* Invulnabilty */
+	if (MON_INVULNER(t_ptr)) return TRUE;
+
+	/* Speed */
+	if (t_ptr->mspeed < 135)
+	{
+		if (MON_FAST(t_ptr)) return TRUE;
+	}
+
+	/* Riding monster */
+	if (t_idx == p_ptr->riding)
+	{
+		if (dispel_check(m_idx)) return TRUE;
+	}
+
+	/* No need to cast dispel spell */
+	return FALSE;
+}
+
+/*
  * Monster tries to 'cast a spell' (or breath, etc)
  * at another monster.
  *
@@ -408,7 +434,6 @@ bool monst_spell_monst(int m_idx)
 	rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
 
 	/* Remove unimplemented spells */
-	f4 &= ~(RF4_DISPEL);
 	f6 &= ~(RF6_WORLD | RF6_TRAPS | RF6_FORGET);
 
 	/* Remove unimplemented special moves */
@@ -612,6 +637,13 @@ bool monst_spell_monst(int m_idx)
 			f6 &= ~(RF6_SUMMON_MASK);
 		}
 
+		/* Dispel magic */
+		if ((f4 & RF4_DISPEL) && !dispel_check_monster(m_idx, t_idx))
+		{
+			/* Remove dispel spell */
+			f4 &= ~(RF4_DISPEL);
+		}
+
 		/* Check for a possible raise dead */
 		if ((f6 & RF6_RAISE_DEAD) && !raise_possible(m_ptr))
 		{
@@ -748,7 +780,26 @@ bool monst_spell_monst(int m_idx)
 
 	/* RF4_DISPEL */
 	case 96+2:
-		return FALSE;
+		if (known)
+		{
+			if (see_m)
+			{
+#ifdef JP
+				msg_format("%^sが%sに対して魔力消去の呪文を念じた。", m_name, t_name);
+#else
+				msg_format("%^s invokes a dispel magic at %s.", m_name, t_name);
+#endif
+			}
+			else
+			{
+				mon_fight = TRUE;
+			}
+		}
+
+		if (t_idx == p_ptr->riding) dispel_player();
+		dispel_monster_status(t_idx);
+
+		break;
 
 	/* RF4_ROCKET */
 	case 96+3:

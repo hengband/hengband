@@ -232,6 +232,88 @@ void reset_tim_flags(void)
 }
 
 
+void dispel_player(void)
+{
+	(void)set_fast(0, TRUE);
+	(void)set_lightspeed(0, TRUE);
+	(void)set_slow(0, TRUE);
+	(void)set_shield(0, TRUE);
+	(void)set_blessed(0, TRUE);
+	(void)set_tsuyoshi(0, TRUE);
+	(void)set_hero(0, TRUE);
+	(void)set_shero(0, TRUE);
+	(void)set_protevil(0, TRUE);
+	(void)set_invuln(0, TRUE);
+	(void)set_wraith_form(0, TRUE);
+	(void)set_kabenuke(0, TRUE);
+	(void)set_tim_res_nether(0, TRUE);
+	(void)set_tim_res_time(0, TRUE);
+	/* by henkma */
+	(void)set_tim_reflect(0,TRUE);
+	(void)set_multishadow(0,TRUE);
+	(void)set_dustrobe(0,TRUE);
+
+	(void)set_tim_invis(0, TRUE);
+	(void)set_tim_infra(0, TRUE);
+	(void)set_tim_esp(0, TRUE);
+	(void)set_tim_regen(0, TRUE);
+	(void)set_tim_stealth(0, TRUE);
+	(void)set_tim_levitation(0, TRUE);
+	(void)set_tim_sh_touki(0, TRUE);
+	(void)set_tim_sh_fire(0, TRUE);
+	(void)set_tim_sh_holy(0, TRUE);
+	(void)set_tim_eyeeye(0, TRUE);
+	(void)set_magicdef(0, TRUE);
+	(void)set_resist_magic(0, TRUE);
+	(void)set_oppose_acid(0, TRUE);
+	(void)set_oppose_elec(0, TRUE);
+	(void)set_oppose_fire(0, TRUE);
+	(void)set_oppose_cold(0, TRUE);
+	(void)set_oppose_pois(0, TRUE);
+	(void)set_ultimate_res(0, TRUE);
+	(void)set_mimic(0, 0, TRUE);
+	(void)set_ele_attack(0, 0);
+	(void)set_ele_immune(0, 0);
+
+	/* Cancel glowing hands */
+	if (p_ptr->special_attack & ATTACK_CONFUSE)
+	{
+		p_ptr->special_attack &= ~(ATTACK_CONFUSE);
+#ifdef JP
+		msg_print("手の輝きがなくなった。");
+#else
+		msg_print("Your hands stop glowing.");
+#endif
+	}
+
+	if (music_singing_any())
+	{
+		p_ptr->magic_num1[1] = p_ptr->magic_num1[0];
+		p_ptr->magic_num1[0] = 0;
+#ifdef JP
+		msg_print("歌が途切れた。");
+#else
+		msg_print("Your singing is interrupted.");
+#endif
+		p_ptr->action = ACTION_NONE;
+
+		/* Recalculate bonuses */
+		p_ptr->update |= (PU_BONUS | PU_HP);
+
+		/* Redraw map */
+		p_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
+
+		/* Update monsters */
+		p_ptr->update |= (PU_MONSTERS);
+
+		/* Window stuff */
+		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+
+		p_ptr->energy_need += ENERGY_NEED();
+	}
+}
+
+
 /*
  * Set "p_ptr->tim_mimic", and "p_ptr->mimic_form",
  * notice observable changes
