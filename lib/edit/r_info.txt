@@ -3552,7 +3552,7 @@ N:215:丘オークの隊長『ゴルフィンブール』
 E:Golfimbul, the Hill Orc Chief
 G:o:u
 I:110:24d10:20:60:20
-W:12:3:0:230:0:0
+W:12:255:0:230:0:0
 B:HIT:HURT:1d12
 B:HIT:HURT:1d12
 B:HIT:HURT:1d10
@@ -21486,3 +21486,20 @@ S:HEAL
 D:$When angered or frightened,
 D:$it protects itself with a burst of blinding light.
 D:怒ったり驚いたりしたとき、発光カヴーは眩しい光の爆発で身を守る。
+
+N:1072:オークの隊長『マウフル』
+E:Mauhur, the Orc Captain
+G:o:u
+I:110:24d10:20:60:20
+W:12:255:0:160:0:0
+B:HIT:HURT:1d12
+B:HIT:HURT:1d12
+B:HIT:HURT:1d10
+B:HIT:HURT:1d10
+F:UNIQUE | MALE | 
+F:FORCE_MAXHP | WILD_ALL |
+F:ESCORT | DROP_SKELETON | DROP_CORPSE
+F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | EAT_POISONOUS
+F:OPEN_DOOR | BASH_DOOR | CAN_SPEAK |
+F:EVIL | ORC | IM_POIS | RES_DARK
+
