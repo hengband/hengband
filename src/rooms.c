@@ -242,43 +242,47 @@ static bool find_space_aux(int blocks_high, int blocks_wide, int block_y, int bl
 {
 	int by1, bx1, by2, bx2, by, bx;
 
-	/* Itty-bitty rooms must shift about within their rectangle */
-	if (blocks_wide < 3)
+	/* Align dungeon rooms (only in NO_CAVE dungeon (Castle)) */
+	if (d_info[dungeon_type].flags1 & DF1_NO_CAVE)
 	{
-		if ((blocks_wide == 2) && (block_x % 3) == 2)
-			return FALSE;
-	}
-
-	/* Rooms with width divisible by 3 must be fitted to a rectangle. */
-	else if ((blocks_wide % 3) == 0)
-	{
-		/* Must be aligned to the left edge of a 11x33 rectangle. */
-		if ((block_x % 3) != 0)
-			return FALSE;
-	}
-
-	/*
-	 * Big rooms that do not have a width divisible by 3 must be
-	 * aligned towards the edge of the dungeon closest to them.
-	 */
-	else
-	{
-		/* Shift towards left edge of dungeon. */
-		if (block_x + (blocks_wide / 2) <= dun->col_rooms / 2)
+		/* Itty-bitty rooms must shift about within their rectangle */
+		if (blocks_wide < 3)
 		{
-			if (((block_x % 3) == 2) && ((blocks_wide % 3) == 2))
-				return FALSE;
-			if ((block_x % 3) == 1)
+			if ((blocks_wide == 2) && (block_x % 3) == 2)
 				return FALSE;
 		}
 
-		/* Shift toward right edge of dungeon. */
+		/* Rooms with width divisible by 3 must be fitted to a rectangle. */
+		else if ((blocks_wide % 3) == 0)
+		{
+			/* Must be aligned to the left edge of a 11x33 rectangle. */
+			if ((block_x % 3) != 0)
+				return FALSE;
+		}
+
+		/*
+		 * Big rooms that do not have a width divisible by 3 must be
+		 * aligned towards the edge of the dungeon closest to them.
+		 */
 		else
 		{
-			if (((block_x % 3) == 2) && ((blocks_wide % 3) == 2))
-				return FALSE;
-			if ((block_x % 3) == 1)
-				return FALSE;
+			/* Shift towards left edge of dungeon. */
+			if (block_x + (blocks_wide / 2) <= dun->col_rooms / 2)
+			{
+				if (((block_x % 3) == 2) && ((blocks_wide % 3) == 2))
+					return FALSE;
+				if ((block_x % 3) == 1)
+					return FALSE;
+			}
+
+			/* Shift toward right edge of dungeon. */
+			else
+			{
+				if (((block_x % 3) == 2) && ((blocks_wide % 3) == 2))
+					return FALSE;
+				if ((block_x % 3) == 1)
+					return FALSE;
+			}
 		}
 	}
 
