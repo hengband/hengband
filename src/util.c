@@ -371,10 +371,13 @@ FILE *my_fopen(cptr file, cptr mode)
 	if (path_parse(buf, 1024, file)) return (NULL);
 
 #if defined(MACINTOSH) && defined(MAC_MPW)
-	/* setting file type/creator -- AR */
-	tempfff = fopen(buf, mode);
-	fsetfileinfo(file, _fcreator, _ftype);
-	fclose(tempfff);
+	if (strchr(mode, 'w'))
+	{
+		/* setting file type/creator */
+		tempfff = fopen(buf, mode);
+		fsetfileinfo(file, _fcreator, _ftype);
+		fclose(tempfff);
+	}
 #endif
 
 	/* Attempt to fopen the file anyway */
