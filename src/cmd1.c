@@ -1739,7 +1739,7 @@ static void touch_zap_player(monster_type *m_ptr)
 			if (p_ptr->resist_fire) aura_damage = (aura_damage + 2) / 3;
 
 			take_hit(DAMAGE_NOESCAPE, aura_damage, aura_dam, -1);
-			r_ptr->r_flags2 |= RF2_AURA_FIRE;
+			if (m_ptr->ml) r_ptr->r_flags2 |= RF2_AURA_FIRE;
 			handle_stuff();
 		}
 	}
@@ -1766,7 +1766,7 @@ static void touch_zap_player(monster_type *m_ptr)
 			if (p_ptr->resist_cold) aura_damage = (aura_damage + 2) / 3;
 
 			take_hit(DAMAGE_NOESCAPE, aura_damage, aura_dam, -1);
-			r_ptr->r_flags3 |= RF3_AURA_COLD;
+			if (m_ptr->ml) r_ptr->r_flags3 |= RF3_AURA_COLD;
 			handle_stuff();
 		}
 	}
@@ -1793,7 +1793,7 @@ static void touch_zap_player(monster_type *m_ptr)
 #endif
 
 			take_hit(DAMAGE_NOESCAPE, aura_damage, aura_dam, -1);
-			r_ptr->r_flags2 |= RF2_AURA_ELEC;
+			if (m_ptr->ml) r_ptr->r_flags2 |= RF2_AURA_ELEC;
 			handle_stuff();
 		}
 	}
