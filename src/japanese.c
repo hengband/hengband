@@ -220,7 +220,7 @@ void codeconv(char *str)
 				tmp[i] = c1;
 		}
 		tmp[i] = '\0';
-		strcpy(str, tmp);
+		strcpy(str, (char *)tmp);
 
 		C_KILL(tmp, len, byte);
 	}

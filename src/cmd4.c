@@ -3701,7 +3701,7 @@ void do_cmd_visuals(void)
 				if (use_bigtile)
 				{
 					if (da & 0x80)
-						Term_putch(44, 19, 255, 255);
+						Term_putch(44, 19, 255, -1);
 					else
 						Term_putch(44, 19, 0, ' ');
 				}
@@ -3720,7 +3720,7 @@ void do_cmd_visuals(void)
 				if (use_bigtile)
 				{
 					if (ca & 0x80)
-						Term_putch(44, 20, 255, 255);
+						Term_putch(44, 20, 255, -1);
 					else
 						Term_putch(44, 20, 0, ' ');
 				}
@@ -3814,7 +3814,7 @@ void do_cmd_visuals(void)
 				if (use_bigtile)
 				{
 					if (da & 0x80)
-						Term_putch(44, 19, 255, 255);
+						Term_putch(44, 19, 255, -1);
 					else
 						Term_putch(44, 19, 0, ' ');
 				}
@@ -3833,7 +3833,7 @@ void do_cmd_visuals(void)
 				if (use_bigtile)
 				{
 					if (ca & 0x80)
-						Term_putch(44, 20, 255, 255);
+						Term_putch(44, 20, 255, -1);
 					else
 						Term_putch(44, 20, 0, ' ');
 				}
@@ -3927,7 +3927,7 @@ void do_cmd_visuals(void)
 				if (use_bigtile)
 				{
 					if (da & 0x80)
-						Term_putch(44, 19, 255, 255);
+						Term_putch(44, 19, 255, -1);
 					else
 						Term_putch(44, 19, 0, ' ');
 				}
@@ -3946,7 +3946,7 @@ void do_cmd_visuals(void)
 				if (use_bigtile)
 				{
 					if (ca & 0x80)
-						Term_putch(44, 20, 255, 255);
+						Term_putch(44, 20, 255, -1);
 					else
 						Term_putch(44, 20, 0, ' ');
 				}

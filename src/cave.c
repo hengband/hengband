@@ -1774,7 +1774,7 @@ static void bigtile_attr(char *cp, byte *ap, char *cp2, byte *ap2)
 	if (*ap & 0x80)
 	{
 		*ap2 = 255;
-		*cp2 = 255;
+		*cp2 = -1;
 		return;
 	}
 
@@ -2102,12 +2102,12 @@ void lite_spot(int y, int x)
 		/* Hack -- Queue it */
 		Term_queue_char(panel_col_of(x), y-panel_row_prt, a, c, ta, tc);
 		if (use_bigtile)
-			Term_queue_char(panel_col_of(x)+1, y-panel_row_prt, 255, 255, 0, 0);
+			Term_queue_char(panel_col_of(x)+1, y-panel_row_prt, 255, -1, 0, 0);
 #else /* USE_TRANSPARENCY */
 		/* Hack -- Queue it */
 		Term_queue_char(panel_col_of(x), y-panel_row_prt, a, c);
 		if (use_bigtile)
-			Term_queue_char(panel_col_of(x)+1, y-panel_row_prt, 255, 255);
+			Term_queue_char(panel_col_of(x)+1, y-panel_row_prt, 255, -1);
 #endif /* USE_TRANSPARENCY */
 	}
 }

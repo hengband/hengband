@@ -2065,7 +2065,7 @@ static void display_entry(int pos)
 		{
 			cur_col++;
 			if (a & 0x80)
-				Term_draw(cur_col, i + 6, 255, 255);
+				Term_draw(cur_col, i + 6, 255, -1);
 		}
 		cur_col += 2;
 	}

@@ -5931,7 +5931,6 @@ msg_format("乱暴な魔法のために%sが壊れた！", o_name);
 }
 
 
-//bool summon_kin_player(bool pet, int level, int y, int x, bool group)
 bool summon_kin_player(int level, int y, int x, u32b mode)
 {
 	bool pet = (bool)(mode & PM_FORCE_PET);

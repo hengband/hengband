@@ -1382,9 +1382,6 @@ static void wiz_create_item(void)
  */
 static void do_cmd_wiz_cure_all(void)
 {
-	/* Remove curses */
-//	(void)remove_all_curse();
-
 	/* Restore stats */
 	(void)res_stat(A_STR);
 	(void)res_stat(A_INT);

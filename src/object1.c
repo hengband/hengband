@@ -4509,7 +4509,7 @@ int show_inven(int target_item)
 			{
 				cur_col++;
 				if (a & 0x80)
-					Term_draw(cur_col, j + 1, 255, 255);
+					Term_draw(cur_col, j + 1, 255, -1);
 			}
 			cur_col += 2;
 		}
@@ -4711,7 +4711,7 @@ int show_equip(int target_item)
 			{
 				cur_col++;
 				if (a & 0x80)
-					Term_draw(cur_col, j + 1, 255, 255);
+					Term_draw(cur_col, j + 1, 255, -1);
 			}
 			cur_col += 2;
 		}

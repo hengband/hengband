@@ -2690,7 +2690,6 @@ static int initial_r_appearance(int r_idx)
  * This is the only function which may place a monster in the dungeon,
  * except for the savefile loading code.
  */
-//bool place_monster_one(int who, int y, int x, int r_idx, bool slp, bool friendly, bool pet, bool no_pet)
 bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 {
 	int			i;
@@ -3246,7 +3245,6 @@ static bool mon_scatter(int *yp, int *xp, int y, int x, int max_dist)
 /*
  * Attempt to place a "group" of monsters around the given location
  */
-//static bool place_monster_group(int who, int y, int x, int r_idx, bool slp, bool friendly, bool pet, bool no_pet)
 static bool place_monster_group(int who, int y, int x, int r_idx, u32b mode)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -3404,7 +3402,6 @@ static bool place_monster_okay(int r_idx)
  * Note the use of the new "monster allocation table" code to restrict
  * the "get_mon_num()" function to "legal" escort types.
  */
-//bool place_monster_aux(int who, int y, int x, int r_idx, bool slp, bool grp, bool friendly, bool pet, bool no_kage, bool no_pet)
 bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
 {
 	int             i;
@@ -3481,7 +3478,6 @@ bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
  *
  * Attempt to find a monster appropriate to the "monster_level"
  */
-//bool place_monster(int y, int x, bool slp, bool grp)
 bool place_monster(int y, int x, u32b mode)
 {
 	int r_idx;
@@ -3579,7 +3575,6 @@ bool alloc_horde(int y, int x)
  *
  * Use "monster_level" for the monster level
  */
-//bool alloc_monster(int dis, bool slp)
 bool alloc_monster(int dis, u32b mode)
 {
 	int			y = 0, x = 0;
@@ -3771,7 +3766,6 @@ static bool summon_specific_okay(int r_idx)
  *
  * Note that this function may not succeed, though this is very rare.
  */
-//bool summon_specific(int who, int y1, int x1, int lev, int type, bool group, bool friendly, bool pet, bool unique_okay, bool no_pet)
 bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
 {
 	int x, y, r_idx;
@@ -3819,7 +3813,6 @@ bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
 }
 
 /* A "dangerous" function, creates a pet of the specified type */
-//bool summon_named_creature (int who, int oy, int ox, int r_idx, bool slp, bool group_ok, bool friendly, bool pet)
 bool summon_named_creature (int who, int oy, int ox, int r_idx, u32b mode)
 {
 	int x, y;
@@ -3844,7 +3837,6 @@ bool summon_named_creature (int who, int oy, int ox, int r_idx, u32b mode)
  *
  * Note that "reproduction" REQUIRES empty space.
  */
-//bool multiply_monster(int m_idx, bool clone, bool friendly, bool pet)
 bool multiply_monster(int m_idx, bool clone, u32b mode)
 {
 	monster_type	*m_ptr = &m_list[m_idx];

@@ -686,11 +686,11 @@ void Term_queue_chars(int x, int y, int n, byte a, cptr s)
 
 	byte *scr_aa = Term->scr->a[y];
 #ifdef JP
-        unsigned char *scr_cc = (unsigned char *)Term->scr->c[y];
+        char *scr_cc = Term->scr->c[y];
 
 #ifdef USE_TRANSPARENCY
 	byte *scr_taa = Term->scr->ta[y];
-	unsigned char *scr_tcc = Term->scr->tc[y];
+	char *scr_tcc = Term->scr->tc[y];
 #endif /* USE_TRANSPARENCY */
 
 #else
@@ -727,13 +727,13 @@ void Term_queue_chars(int x, int y, int n, byte a, cptr s)
 		/* 特殊文字としてMSBが立っている可能性がある */
 		/* その場合attrのMSBも立っているのでこれで識別する */
 /* check */
-		if (iskanji(*s) && !(a & 0x80))
+		if (!(a & 0x80) && iskanji(*s))
 		{
-			int nc1 = *s++;
-			int nc2 = *s;
+			char nc1 = *s++;
+			char nc2 = *s;
 
-			int na1 = (a | KANJI1);
-			int na2 = (a | KANJI2);
+			byte na1 = (a | KANJI1);
+			byte na2 = (a | KANJI2);
 
 			if((--n == 0) || !nc2) break;
 #ifdef USE_TRANSPARENCY
@@ -757,13 +757,13 @@ void Term_queue_chars(int x, int y, int n, byte a, cptr s)
 		else
 		{
 #endif
-		int oa = scr_aa[x];
-		int oc = scr_cc[x];
+		byte oa = scr_aa[x];
+		char oc = scr_cc[x];
 
 #ifdef USE_TRANSPARENCY
 
-		int ota = scr_taa[x];
-		int otc = scr_tcc[x];
+		byte ota = scr_taa[x];
+		char otc = scr_tcc[x];
 
 		/* Hack -- Ignore non-changes */
 		if ((oa == a) && (oc == *s) && (ota == 0) && (otc == 0)) continue;
