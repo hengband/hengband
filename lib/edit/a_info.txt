@@ -2238,6 +2238,7 @@ P:0:3d2:10:13:0
 F:INT | WIS | CHR | HIDE_TYPE | SEARCH | BRAND_FIRE | FORCE_WEAPON |
 F:SLAY_EVIL | SLAY_TROLL | SLAY_ORC | LITE | DEC_MANA | XTRA_POWER |
 F:HOLD_LIFE | RES_FIRE | RES_NETHER | SEE_INVIS | ACTIVATE | SHOW_MODS
+F:REGEN | SLOW_DIGEST | RES_CONF | RES_BLIND
 D:$The staff of the great wizard Gandalf.  
 D:$It is tall and sturdy, with rough-hewn runes that invoke the element of 
 D:$Earth, and which strikes down all creatures who live in the shadow of 
