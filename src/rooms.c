@@ -103,9 +103,9 @@ static void place_secret_door(int y, int x)
 		c_ptr->mimic = feat_wall_inner;
 
 		/* Floor type terrain cannot hide a door */
-		if (feat_supports_los(c_ptr->mimic))
+		if (feat_supports_los(c_ptr->mimic) && !feat_supports_los(c_ptr->feat))
 		{
-			c_ptr->feat = c_ptr->mimic;
+			if (have_flag(f_info[c_ptr->mimic].flags, FF_MOVE)) c_ptr->feat = c_ptr->mimic;
 			c_ptr->mimic = 0;
 		}
 
