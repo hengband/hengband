@@ -218,7 +218,7 @@ static bool autopick_new_entry(autopick_type *entry, cptr str, bool allow_defaul
 	entry->dice = 0;
 
 	act = DO_AUTOPICK | DO_DISPLAY;
-	while (1)
+	while (TRUE)
 	{
 		if ((act & DO_AUTOPICK) && *str == '!')
 		{
@@ -1273,6 +1273,26 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 
 
 /*
+ * Convert string to lower case
+ */
+static void str_tolower(char *str)
+{
+	/* Force to be lower case string */
+	for (; *str; str++)
+	{
+#ifdef JP
+		if (iskanji(*str))
+		{
+			str++;
+			continue;
+		}
+#endif
+		*str = tolower(*str);
+	}
+}
+
+
+/*
  * A function for Auto-picker/destroyer
  * Examine whether the object matches to the list of keywords or not.
  */
@@ -1282,21 +1302,14 @@ int is_autopick(object_type *o_ptr)
 	char o_name[MAX_NLEN];
 
 	if (o_ptr->tval == TV_GOLD) return -1;
-	
+
+	/* Prepare object name string first */
 	object_desc(o_name, o_ptr, FALSE, 3);
 
-	/* Force to be lower case string */
-	for (i = 0; o_name[i]; i++)
-	{
-#ifdef JP
-		if (iskanji(o_name[i]))
-			i++;
-		else
-#endif
-		if (isupper(o_name[i]))
-			o_name[i] = tolower(o_name[i]);
-	}
-	
+	/* Convert the string to lower case */
+	str_tolower(o_name);
+
+	/* Look for a matching entry in the list */	
 	for (i=0; i < max_autopick; i++)
 	{
 		autopick_type *entry = &autopick_list[i];
@@ -1994,7 +2007,7 @@ typedef struct {
 	cptr *lines_list;
 	byte states[MAX_LINES];
 
-	byte dirty_flags;
+	u16b dirty_flags;
 	int dirty_line;
 	int filename_mode;
 	int old_com_id;
@@ -2006,13 +2019,14 @@ typedef struct {
 /*
  * Dirty flag for text editor
  */
-#define DIRTY_ALL        0x01
-#define DIRTY_MODE       0x04
-#define DIRTY_SCREEN     0x08
-#define DIRTY_NOT_FOUND  0x10
-#define DIRTY_NO_SEARCH  0x20
-#define DIRTY_EXPRESSION 0x40
-
+#define DIRTY_ALL           0x0001
+#define DIRTY_MODE          0x0004
+#define DIRTY_SCREEN        0x0008
+#define DIRTY_NOT_FOUND     0x0010
+#define DIRTY_NO_SEARCH     0x0020
+#define DIRTY_EXPRESSION    0x0040
+#define DIRTY_SKIP_INACTIVE 0x0080
+#define DIRTY_INACTIVE      0x0100
 
 /*
  * Describe which kind of object is Auto-picked/destroyed
@@ -3389,30 +3403,24 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 /*
  * Search next line matches for o_ptr
  */
-static bool search_for_object(text_body_type *tb, object_type *o_ptr, bool forward)
+static void search_for_object(text_body_type *tb, object_type *o_ptr, bool forward)
 {
-	int i;
 	autopick_type an_entry, *entry = &an_entry;
 	char o_name[MAX_NLEN];
+	int bypassed_cy = -1;
 
+	/* Start searching from current cursor position */
+	int i = tb->cy;
+
+	/* Prepare object name string first */
 	object_desc(o_name, o_ptr, FALSE, 3);
 
-	/* Force to be lower case string */
-	for (i = 0; o_name[i]; i++)
-	{
-#ifdef JP
-		if (iskanji(o_name[i]))
-			i++;
-		else
-#endif
-		if (isupper(o_name[i]))
-			o_name[i] = tolower(o_name[i]);
-	}
-	
-	i = tb->cy;
+	/* Convert the string to lower case */
+	str_tolower(o_name);
 
-	while (1)
+	while (TRUE)
 	{
+		/* End of list? */
 		if (forward)
 		{
 			if (!tb->lines_list[++i]) break;
@@ -3422,34 +3430,74 @@ static bool search_for_object(text_body_type *tb, object_type *o_ptr, bool forwa
 			if (--i < 0) break;
 		}
 
-		/* Ignore bypassed lines */
-		if (tb->states[i] & LSTAT_BYPASS) continue;
-
+		/* Is this line is a correct entry? */
 		if (!autopick_new_entry(entry, tb->lines_list[i], FALSE)) continue;
 
-		if (is_autopick_aux(o_ptr, entry, o_name))
+		/* Does this line match to the object? */
+		if (!is_autopick_aux(o_ptr, entry, o_name)) continue;
+
+
+		/* Found a line but it's inactive */
+		if (tb->states[i] & LSTAT_BYPASS)
 		{
+			/* If it is first found, remember it */
+			if (bypassed_cy == -1) bypassed_cy = i;
+		}
+
+		/* Found an active line! */
+		else
+		{
+			/* Move to this line */
 			tb->cx = 0;
 			tb->cy = i;
-			return TRUE;
+
+			if (bypassed_cy != -1)
+			{
+				/* Mark as some lines are skipped */
+				tb->dirty_flags |= DIRTY_SKIP_INACTIVE;
+			}
+
+			/* Found it! */
+			return;
 		}
 	}
 
-	return FALSE;
+	if (bypassed_cy != -1)
+	{
+		/* Move to the remembered line */
+		tb->cx = 0;
+		tb->cy = bypassed_cy;
+
+		/* Mark as this line is inactive */
+		tb->dirty_flags |= DIRTY_INACTIVE;
+	}
+
+	else
+	{
+		/* Mark as NOT FOUND */
+		tb->dirty_flags |= DIRTY_NOT_FOUND;
+	}
+
+	return;
 }
 
 
 /*
  * Search next line matches to the string
  */
-static bool search_for_string(text_body_type *tb, cptr search_str, bool forward)
+static void search_for_string(text_body_type *tb, cptr search_str, bool forward)
 {
+	int bypassed_cy = -1;
+	int bypassed_cx = 0;
+
+	/* Start searching from current cursor position */
 	int i = tb->cy;
 
-	while (1)
+	while (TRUE)
 	{
 		cptr pos;
 
+		/* End of list? */
 		if (forward)
 		{
 			if (!tb->lines_list[++i]) break;
@@ -3459,23 +3507,62 @@ static bool search_for_string(text_body_type *tb, cptr search_str, bool forward)
 			if (--i < 0) break;
 		}
 
-		/* Ignore bypassed lines */
-		if (tb->states[i] & LSTAT_BYPASS) continue;
-
+		/* Look for the string pattern */
 #ifdef JP
 		pos = strstr_j(tb->lines_list[i], search_str);
 #else
 		pos = strstr(tb->lines_list[i], search_str);
 #endif
-		if (pos)
+
+		/* Not found! */
+		if (!pos) continue;
+
+		/* Found a line but it's inactive */
+		if (tb->states[i] & LSTAT_BYPASS)
 		{
+			/* If it is first found, remember it */
+			if (bypassed_cy == -1)
+			{
+				bypassed_cy = i;
+				bypassed_cx = (int)(pos - tb->lines_list[i]);
+			}
+		}
+
+		/* Found an active line! */
+		else
+		{
+			/* Move to this location */
 			tb->cx = (int)(pos - tb->lines_list[i]);
 			tb->cy = i;
-			return TRUE;
+
+			if (bypassed_cy != -1)
+			{
+				/* Mark as some lines are skipped */
+				tb->dirty_flags |= DIRTY_SKIP_INACTIVE;
+			}
+
+			/* Found it! */
+			return;
 		}
 	}
 
-	return FALSE;
+	if (bypassed_cy != -1)
+	{
+		/* Move to the remembered line */
+		tb->cx = bypassed_cx;
+		tb->cy = bypassed_cy;
+
+		/* Mark as this line is inactive */
+		tb->dirty_flags |= DIRTY_INACTIVE;
+	}
+
+	else
+	{
+		/* Mark as NOT FOUND */
+		tb->dirty_flags |= DIRTY_NOT_FOUND;
+	}
+
+	return;
 }
 
 
@@ -3890,7 +3977,7 @@ static int do_command_menu(int level, int start)
 	}
 	strcat(linestr, "+");
 
-	while (1)
+	while (TRUE)
 	{
 		int com_id;
 		char key;
@@ -4033,7 +4120,7 @@ static void add_str_to_yank(text_body_type *tb, cptr str)
 
 	chain = tb->yank;
 
-	while (1)
+	while (TRUE)
 	{
 		if (!chain->next)
 		{
@@ -4267,6 +4354,8 @@ static void draw_text_editor(text_body_type *tb)
 	if (tb->old_cy != tb->cy || (tb->dirty_flags & (DIRTY_ALL | DIRTY_NOT_FOUND | DIRTY_NO_SEARCH)) || tb->dirty_line == tb->cy)
 	{
 		autopick_type an_entry, *entry = &an_entry;
+		cptr str1 = NULL, str2 = NULL;
+
 
 		/* Clear information line */
 		for (i = 0; i < DESCRIPT_HGT; i++)
@@ -4279,68 +4368,77 @@ static void draw_text_editor(text_body_type *tb)
 		if (tb->dirty_flags & DIRTY_NOT_FOUND)
 		{
 #ifdef JP
-			prt(format("パターンが見つかりません: %s", tb->search_str), tb->hgt + 1 + 1, 0);
+			str1 = format("パターンが見つかりません: %s", tb->search_str);
 #else
-			prt(format("Pattern not found: %s", tb->search_str), tb->hgt + 1 + 1, 0);
+			str1 = format("Pattern not found: %s", tb->search_str);
+#endif
+		}
+		else if (tb->dirty_flags & DIRTY_SKIP_INACTIVE)
+		{
+#ifdef JP
+			str1 = format("無効状態の行をスキップしました。(%sを検索中)", tb->search_str);
+#else
+			str1 = format("Some inactive lines are skipped. (Searching %s)", tb->search_str);
+#endif
+		}
+		else if (tb->dirty_flags & DIRTY_INACTIVE)
+		{
+#ifdef JP
+			str1 = format("無効状態の行だけが見付かりました。(%sを検索中)", tb->search_str);
+#else
+			str1 = format("Found only an inactive line. (Searching %s)", tb->search_str);
 #endif
 		}
 		else if (tb->dirty_flags & DIRTY_NO_SEARCH)
 		{
 #ifdef JP
-			prt("検索中のパターンがありません('/'で検索)。", tb->hgt + 1 + 1, 0);
+			str1 = "検索中のパターンがありません('/'で検索)。";
 #else
-			prt("No pattern to search. (Press '/' to search.)", tb->hgt +1 + 1, 0);
+			str1 = "No pattern to search. (Press '/' to search.)";
 #endif
 		}
 		else if (tb->lines_list[tb->cy][0] == '#')
 		{
 #ifdef JP
-			prt("この行はコメントです。", tb->hgt +1 + 1, 0);
+			str1 = "この行はコメントです。";
 #else
-			prt("This line is a comment.", tb->hgt +1 + 1, 0);
+			str1 = "This line is a comment.";
 #endif
 		}
 		else if (tb->lines_list[tb->cy][1] == ':')
 		{
-			cptr str = NULL;
-
 			switch(tb->lines_list[tb->cy][0])
 			{
 			case '?':
 #ifdef JP
-				str = "この行は条件分岐式です。";
+				str1 = "この行は条件分岐式です。";
 #else
-				str = "This line is a Conditional Expression.";
+				str1 = "This line is a Conditional Expression.";
 #endif
 
 				break;
 			case 'A':
 #ifdef JP
-				str = "この行はマクロの実行内容を定義します。";
+				str1 = "この行はマクロの実行内容を定義します。";
 #else
-				str = "This line defines a Macro action.";
+				str1 = "This line defines a Macro action.";
 #endif
 				break;
 			case 'P':
 #ifdef JP
-				str = "この行はマクロのトリガー・キーを定義します。";
+				str1 = "この行はマクロのトリガー・キーを定義します。";
 #else
-				str = "This line defines a Macro trigger key.";
+				str1 = "This line defines a Macro trigger key.";
 #endif
 				break;
 			case 'C':
 #ifdef JP
-				str = "この行はキー配置を定義します。";
+				str1 = "この行はキー配置を定義します。";
 #else
-				str = "This line defines a Keymap.";
+				str1 = "This line defines a Keymap.";
 #endif
 				break;
 			}
-
-			/* Draw the first line */
-			if (str) prt(str, tb->hgt +1 + 1, 0);
-
-			str = NULL;
 
 			switch(tb->lines_list[tb->cy][0])
 			{
@@ -4348,17 +4446,17 @@ static void draw_text_editor(text_body_type *tb)
 				if (tb->states[tb->cy] & LSTAT_BYPASS)
 				{
 #ifdef JP
-					str = "現在の式の値は「偽(=0)」です。";
+					str2 = "現在の式の値は「偽(=0)」です。";
 #else
-					str = "The expression is 'False'(=0) currently.";
+					str2 = "The expression is 'False'(=0) currently.";
 #endif
 				}
 				else
 				{
 #ifdef JP
-					str = "現在の式の値は「真(=1)」です。";
+					str2 = "現在の式の値は「真(=1)」です。";
 #else
-					str = "The expression is 'True'(=1) currently.";
+					str2 = "The expression is 'True'(=1) currently.";
 #endif
 				}
 				break;
@@ -4367,25 +4465,22 @@ static void draw_text_editor(text_body_type *tb)
 				if (tb->states[tb->cy] & LSTAT_AUTOREGISTER)
 				{
 #ifdef JP
-					str = "この行は後で削除されます。";
+					str2 = "この行は後で削除されます。";
 #else
-					str = "This line will be delete later.";
+					str2 = "This line will be delete later.";
 #endif
 				}
 
 				else if (tb->states[tb->cy] & LSTAT_BYPASS)
 				{
 #ifdef JP
-					str = "この行は現在は無効な状態です。";
+					str2 = "この行は現在は無効な状態です。";
 #else
-					str = "This line is bypassed currently.";
+					str2 = "This line is bypassed currently.";
 #endif
 				}
 				break;
 			}
-
-			/* Draw the second line */
-			if (str) prt(str, tb->hgt +1 + 2, 0);
 		}
 
 		/* Get description of an autopicker preference line */
@@ -4429,6 +4524,12 @@ static void draw_text_editor(text_body_type *tb)
 			}
 			autopick_free_entry(entry);
 		}
+
+		/* Draw the first line */
+		if (str1) prt(str1, tb->hgt +1 + 1, 0);
+
+		/* Draw the second line */
+		if (str2) prt(str2, tb->hgt +1 + 2, 0);
 	}
 }
 
@@ -5218,11 +5319,11 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	case EC_SEARCH_FORW:
 		if (tb->search_o_ptr)
 		{
-			if (!search_for_object(tb, tb->search_o_ptr, TRUE)) tb->dirty_flags |= DIRTY_NOT_FOUND;
+			search_for_object(tb, tb->search_o_ptr, TRUE);
 		}
 		else if (tb->search_str)
 		{
-			if (!search_for_string(tb, tb->search_str, TRUE)) tb->dirty_flags |= DIRTY_NOT_FOUND;
+			search_for_string(tb, tb->search_str, TRUE);
 		}
 		else
 		{
@@ -5233,11 +5334,11 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	case EC_SEARCH_BACK:
 		if (tb->search_o_ptr)
 		{
-			if (!search_for_object(tb, tb->search_o_ptr, FALSE)) tb->dirty_flags |= DIRTY_NOT_FOUND;
+			search_for_object(tb, tb->search_o_ptr, FALSE);
 		}
 		else if (tb->search_str)
 		{
-			if (!search_for_string(tb, tb->search_str, FALSE)) tb->dirty_flags |= DIRTY_NOT_FOUND;
+			search_for_string(tb, tb->search_str, FALSE);
 		}
 		else
 		{
@@ -5304,21 +5405,22 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	case EC_INSERT_BLOCK:
 	{
 		/* Insert a conditinal expression line */
-		char classrace[80];
+		char expression[80];
 
 		/* Conditional Expression for Class and Race */
-		sprintf(classrace, "?:[AND [EQU $RACE %s] [EQU $CLASS %s]]", 
+		sprintf(expression, "?:[AND [EQU $RACE %s] [EQU $CLASS %s] [GEQ $LEVEL %02d]]", 
 #ifdef JP
-			rp_ptr->E_title, cp_ptr->E_title
+			rp_ptr->E_title, cp_ptr->E_title,
 #else
-			rp_ptr->title, cp_ptr->title
+			rp_ptr->title, cp_ptr->title,
 #endif
+			p_ptr->lev
 			);
 
 		tb->cx = 0;
 		insert_return_code(tb);
 		string_free(tb->lines_list[tb->cy]);
-		tb->lines_list[tb->cy] = string_make(classrace);
+		tb->lines_list[tb->cy] = string_make(expression);
 		tb->cy++;
 		insert_return_code(tb);
 		string_free(tb->lines_list[tb->cy]);
@@ -5753,7 +5855,7 @@ void do_cmd_edit_autopick(void)
 		}
 
 		if (com_id) quit = do_editor_command(tb, com_id);
-	} /* while (1) */
+	} /* while (TRUE) */
 
 	/* Restore the screen */
 	screen_load();
