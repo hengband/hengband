@@ -37,7 +37,11 @@ bool new_player_spot(void)
 
 		/* Must be a "naked" floor grid */
 		if (c_ptr->m_idx) continue;
-		if (!have_flag(f_flags_grid(c_ptr), FF_MOVE)) continue;
+		if (dun_level)
+		{
+			if (!have_flag(f_flags_grid(c_ptr), FF_MOVE)) continue;
+			if (!have_flag(f_flags_grid(c_ptr), FF_TELEPORTABLE)) continue;
+		}
 		if (!player_can_enter(c_ptr->feat, 0)) continue;
 		if (!in_bounds(y, x)) continue;
 
