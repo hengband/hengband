@@ -1535,6 +1535,8 @@ bool make_attack_normal(int m_idx)
 
 				case RBE_EXP_10:
 				{
+					s32b d = damroll(10, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
+
 					/* Obvious */
 					obvious = TRUE;
 
@@ -1543,47 +1545,14 @@ bool make_attack_normal(int m_idx)
 
 					if (p_ptr->is_dead) break;
 
-					if (p_ptr->prace == RACE_ANDROID)
-					{
-					}
-					else if (p_ptr->hold_life && (randint0(100) < 95))
-					{
-#ifdef JP
-						msg_print("しかし自己の生命力を守りきった！");
-#else
-						msg_print("You keep hold of your life force!");
-#endif
-
-					}
-					else
-					{
-						s32b d = damroll(10, 6) + (p_ptr->exp/100) * MON_DRAIN_LIFE;
-						if (p_ptr->hold_life)
-						{
-#ifdef JP
-							msg_print("生命力を少し吸い取られた気がする！");
-#else
-							msg_print("You feel your life slipping away!");
-#endif
-
-							lose_exp(d/10);
-						}
-						else
-						{
-#ifdef JP
-							msg_print("生命力が体から吸い取られた気がする！");
-#else
-							msg_print("You feel your life draining away!");
-#endif
-
-							lose_exp(d);
-						}
-					}
+					(void)drain_exp(d, d / 10, 95);
 					break;
 				}
 
 				case RBE_EXP_20:
 				{
+					s32b d = damroll(20, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
+
 					/* Obvious */
 					obvious = TRUE;
 
@@ -1592,47 +1561,14 @@ bool make_attack_normal(int m_idx)
 
 					if (p_ptr->is_dead) break;
 
-					if (p_ptr->prace == RACE_ANDROID)
-					{
-					}
-					else if (p_ptr->hold_life && (randint0(100) < 90))
-					{
-#ifdef JP
-						msg_print("しかし自己の生命力を守りきった！");
-#else
-						msg_print("You keep hold of your life force!");
-#endif
-
-					}
-					else
-					{
-						s32b d = damroll(20, 6) + (p_ptr->exp/100) * MON_DRAIN_LIFE;
-						if (p_ptr->hold_life)
-						{
-#ifdef JP
-							msg_print("生命力を少し吸い取られた気がする！");
-#else
-							msg_print("You feel your life slipping away!");
-#endif
-
-							lose_exp(d/10);
-						}
-						else
-						{
-#ifdef JP
-							msg_print("生命力が体から吸い取られた気がする！");
-#else
-							msg_print("You feel your life draining away!");
-#endif
-
-							lose_exp(d);
-						}
-					}
+					(void)drain_exp(d, d / 10, 90);
 					break;
 				}
 
 				case RBE_EXP_40:
 				{
+					s32b d = damroll(40, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
+
 					/* Obvious */
 					obvious = TRUE;
 
@@ -1641,47 +1577,14 @@ bool make_attack_normal(int m_idx)
 
 					if (p_ptr->is_dead) break;
 
-					if (p_ptr->prace == RACE_ANDROID)
-					{
-					}
-					else if (p_ptr->hold_life && (randint0(100) < 75))
-					{
-#ifdef JP
-						msg_print("しかし自己の生命力を守りきった！");
-#else
-						msg_print("You keep hold of your life force!");
-#endif
-
-					}
-					else
-					{
-						s32b d = damroll(40, 6) + (p_ptr->exp/100) * MON_DRAIN_LIFE;
-						if (p_ptr->hold_life)
-						{
-#ifdef JP
-							msg_print("生命力を少し吸い取られた気がする！");
-#else
-							msg_print("You feel your life slipping away!");
-#endif
-
-							lose_exp(d/10);
-						}
-						else
-						{
-#ifdef JP
-							msg_print("生命力が体から吸い取られた気がする！");
-#else
-							msg_print("You feel your life draining away!");
-#endif
-
-							lose_exp(d);
-						}
-					}
+					(void)drain_exp(d, d / 10, 75);
 					break;
 				}
 
 				case RBE_EXP_80:
 				{
+					s32b d = damroll(80, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
+
 					/* Obvious */
 					obvious = TRUE;
 
@@ -1690,42 +1593,7 @@ bool make_attack_normal(int m_idx)
 
 					if (p_ptr->is_dead) break;
 
-					if (p_ptr->prace == RACE_ANDROID)
-					{
-					}
-					else if (p_ptr->hold_life && (randint0(100) < 50))
-					{
-#ifdef JP
-						msg_print("しかし自己の生命力を守りきった！");
-#else
-						msg_print("You keep hold of your life force!");
-#endif
-
-					}
-					else
-					{
-						s32b d = damroll(80, 6) + (p_ptr->exp/100) * MON_DRAIN_LIFE;
-						if (p_ptr->hold_life)
-						{
-#ifdef JP
-							msg_print("生命力を少し吸い取られた気がする！");
-#else
-							msg_print("You feel your life slipping away!");
-#endif
-
-							lose_exp(d/10);
-						}
-						else
-						{
-#ifdef JP
-							msg_print("生命力が体から吸い取られた気がする！");
-#else
-							msg_print("You feel your life draining away!");
-#endif
-
-							lose_exp(d);
-						}
-					}
+					(void)drain_exp(d, d / 10, 50);
 					break;
 				}
 
@@ -1846,6 +1714,8 @@ bool make_attack_normal(int m_idx)
 				}
 				case RBE_EXP_VAMP:
 				{
+					s32b d = damroll(60, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
+
 					/* Obvious */
 					obvious = TRUE;
 
@@ -1854,43 +1724,7 @@ bool make_attack_normal(int m_idx)
 
 					if (p_ptr->is_dead) break;
 
-					if (p_ptr->prace == RACE_ANDROID)
-					{
-					}
-					else if (p_ptr->hold_life && (randint0(100) < 50))
-					{
-#ifdef JP
-msg_print("しかし自己の生命力を守りきった！");
-#else
-						msg_print("You keep hold of your life force!");
-#endif
-
-						resist_drain = TRUE;
-					}
-					else
-					{
-						s32b d = damroll(60, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
-						if (p_ptr->hold_life)
-						{
-#ifdef JP
-msg_print("生命力が少し体から抜け落ちた気がする！");
-#else
-							msg_print("You feel your life slipping away!");
-#endif
-
-							lose_exp(d / 10);
-						}
-						else
-						{
-#ifdef JP
-msg_print("生命力が体から吸い取られた気がする！");
-#else
-							msg_print("You feel your life draining away!");
-#endif
-
-							lose_exp(d);
-						}
-					}
+					resist_drain = !drain_exp(d, d / 10, 50);
 
 					/* Heal the attacker? */
 					if (p_ptr->mimic_form)

@@ -5483,6 +5483,51 @@ void lose_exp(s32b amount)
 	check_experience();
 }
 
+
+/*
+ * Drain experience
+ * If resisted to draining, return FALSE
+ */
+bool drain_exp(s32b drain, s32b slip, int hold_life_prob)
+{
+	/* Androids and their mimics are never drained */
+	if (p_ptr->prace == RACE_ANDROID) return FALSE;
+
+	if (p_ptr->hold_life && (randint0(100) < hold_life_prob))
+	{
+		/* Hold experience */
+#ifdef JP
+		msg_print("しかし自己の生命力を守りきった！");
+#else
+		msg_print("You keep hold of your life force!");
+#endif
+		return FALSE;
+	}
+
+	/* Hold experience failed */
+	if (p_ptr->hold_life)
+	{
+#ifdef JP
+		msg_print("生命力を少し吸い取られた気がする！");
+#else
+		msg_print("You feel your life slipping away!");
+#endif
+		lose_exp(slip);
+	}
+	else
+	{
+#ifdef JP
+		msg_print("生命力が体から吸い取られた気がする！");
+#else
+		msg_print("You feel your life draining away!");
+#endif
+		lose_exp(drain);
+	}
+
+	return TRUE;
+}
+
+
 bool set_ultimate_res(int v, bool do_dec)
 {
 	bool notice = FALSE;

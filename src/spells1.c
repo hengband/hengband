@@ -6737,38 +6737,7 @@ if (fuzzy) msg_print("地獄の力で攻撃された！");
 				if (!prace_is_(RACE_SPECTRE))
 					dam *= 6; dam /= (randint1(4) + 7);
 			}
-			else if (p_ptr->prace != RACE_ANDROID)
-			{
-				if (p_ptr->hold_life && (randint0(100) < 75))
-				{
-#ifdef JP
-msg_print("しかし自己の生命力を守りきった！");
-#else
-					msg_print("You keep hold of your life force!");
-#endif
-
-				}
-				else if (p_ptr->hold_life)
-				{
-#ifdef JP
-msg_print("生命力が少し体から抜け落ちた気がする！");
-#else
-					msg_print("You feel your life slipping away!");
-#endif
-
-					lose_exp(200 + (p_ptr->exp / 1000) * MON_DRAIN_LIFE);
-				}
-				else
-				{
-#ifdef JP
-msg_print("生命力が体から吸い取られた気がする！");
-#else
-					msg_print("You feel your life draining away!");
-#endif
-
-					lose_exp(200 + (p_ptr->exp / 100) * MON_DRAIN_LIFE);
-				}
-			}
+			else drain_exp(200 + (p_ptr->exp / 100), 200 + (p_ptr->exp / 1000), 75);
 
 			if (prace_is_(RACE_SPECTRE))
 			{
@@ -6849,38 +6818,7 @@ msg_print("あなたの身体はカオスの力で捻じ曲げられた！");
 			}
 			if (!p_ptr->resist_neth && !p_ptr->resist_chaos)
 			{
-				if (p_ptr->prace == RACE_ANDROID)
-				{
-				}
-				else if (p_ptr->hold_life && (randint0(100) < 75))
-				{
-#ifdef JP
-msg_print("しかし自己の生命力を守りきった！");
-#else
-					msg_print("You keep hold of your life force!");
-#endif
-
-				}
-				else if (p_ptr->hold_life)
-				{
-#ifdef JP
-msg_print("生命力が少し体から抜け落ちた気がする！");
-#else
-					msg_print("You feel your life slipping away!");
-#endif
-
-					lose_exp(500 + (p_ptr->exp / 1000) * MON_DRAIN_LIFE);
-				}
-				else
-				{
-#ifdef JP
-msg_print("生命力が体から吸い取られた気がする！");
-#else
-					msg_print("You feel your life draining away!");
-#endif
-
-					lose_exp(5000 + (p_ptr->exp / 100) * MON_DRAIN_LIFE);
-				}
+				drain_exp(5000 + (p_ptr->exp / 100), 500 + (p_ptr->exp / 1000), 75);
 			}
 			if (!p_ptr->resist_chaos || one_in_(9))
 			{
