@@ -907,10 +907,6 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 		/* Make traps */
 		case GF_MAKE_TRAP:
 		{
-			/* Require a "naked" floor grid */
-			if (!have_flag(f_ptr->flags, FF_FLOOR) || is_mirror_grid(c_ptr))
-				break;
-
 			/* Place a trap */
 			place_trap(y, x);
 
