@@ -403,14 +403,10 @@ extern header *v_head;
 extern vault_type *v_info;
 extern char *v_name;
 extern char *v_text;
-extern header *we_head;
-extern weapon_exp_table *we_info;
-extern char *we_name;
-extern char *we_text;
-extern header *se_head;
-extern skill_exp_table *se_info;
-extern char *se_name;
-extern char *se_text;
+extern header *s_head;
+extern skill_table *s_info;
+extern char *s_name;
+extern char *s_text;
 extern header *m_head;
 extern player_magic *m_info;
 extern char *m_name;
@@ -766,8 +762,7 @@ extern void generate_cave(void);
 
 /* init1.c */
 extern errr init_v_info_txt(FILE *fp, char *buf, bool start);
-extern errr init_we_info_txt(FILE *fp, char *buf);
-extern errr init_se_info_txt(FILE *fp, char *buf);
+extern errr init_s_info_txt(FILE *fp, char *buf);
 extern errr init_m_info_txt(FILE *fp, char *buf);
 extern errr init_f_info_txt(FILE *fp, char *buf);
 extern errr init_k_info_txt(FILE *fp, char *buf);

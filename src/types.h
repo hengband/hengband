@@ -439,30 +439,18 @@ struct vault_type
 
 
 /*
- * Information about "weapon_exp"
+ * Information about "skill"
  */
 
-typedef struct weapon_exp_table weapon_exp_table;
+typedef struct skill_table skill_table;
 
-struct weapon_exp_table
+struct skill_table
 {
-	s16b start[5][64];	/* start weapon skill */
-	s16b max[5][64];        /* max weapon skill */
+	s16b w_start[5][64];	  /* start weapon exp */
+	s16b w_max[5][64];        /* max weapon exp */
+	s16b s_start[10];	  /* start skill */
+	s16b s_max[10];           /* max skill */
 };
-
-
-/*
- * Information about "skill_exp"
- */
-
-typedef struct skill_exp_table skill_exp_table;
-
-struct skill_exp_table
-{
-	s16b start[10];	    /* start skill */
-	s16b max[10];        /* max skill */
-};
-
 
 
 /*

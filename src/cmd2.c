@@ -3796,7 +3796,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 
 			if ((r_ptr->level + 10) > p_ptr->lev)
 			{
-				if (weapon_exp[0][j_ptr->sval] < we_info[p_ptr->pclass].max[0][j_ptr->sval])
+				if (weapon_exp[0][j_ptr->sval] < s_info[p_ptr->pclass].w_max[0][j_ptr->sval])
 				{
 					if (weapon_exp[0][j_ptr->sval] < 4000)
 						weapon_exp[0][j_ptr->sval]+=80;
@@ -3811,7 +3811,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 
 			if (p_ptr->riding)
 			{
-				if (skill_exp[GINOU_RIDING] < se_info[p_ptr->pclass].max[GINOU_RIDING] && ((skill_exp[GINOU_RIDING] - 1000) / 200 < r_info[m_list[p_ptr->riding].r_idx].level) && one_in_(2))
+				if (skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING] && ((skill_exp[GINOU_RIDING] - 1000) / 200 < r_info[m_list[p_ptr->riding].r_idx].level) && one_in_(2))
 				{
 					skill_exp[GINOU_RIDING]+=1;
 					p_ptr->update |= (PU_BONUS);

@@ -2729,14 +2729,14 @@ static void get_extra(void)
 
 	for (i = 0; i < 5; i++)
 		for (j = 0; j < 64; j++)
-			weapon_exp[i][j] = we_info[p_ptr->pclass].start[i][j];
+			weapon_exp[i][j] = s_info[p_ptr->pclass].w_start[i][j];
 	if(p_ptr->pseikaku == SEIKAKU_SEXY)
 	{
 		weapon_exp[TV_HAFTED-TV_BOW][SV_WHIP] = 4000;
 	}
 
 	for (i = 0; i < 10; i++)
-		skill_exp[i] = se_info[p_ptr->pclass].start[i];
+		skill_exp[i] = s_info[p_ptr->pclass].s_start[i];
 
 	/* Reset rewards */
 	for (i = 0; i < MAX_BACT; i++)

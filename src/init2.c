@@ -2584,22 +2584,22 @@ errr init_v_info(void)
 
 
 /*
- * Initialize the "we_info" array, by parsing a binary "image" file
+ * Initialize the "s_info" array, by parsing a binary "image" file
  */
-static errr init_we_info_raw(int fd)
+static errr init_s_info_raw(int fd)
 {
 	header test;
 
 	/* Read and Verify the header */
 	if (fd_read(fd, (char*)(&test), sizeof(header)) ||
-	    (test.v_major != we_head->v_major) ||
-	    (test.v_minor != we_head->v_minor) ||
-	    (test.v_patch != we_head->v_patch) ||
-	    (test.v_extra != we_head->v_extra) ||
-	    (test.info_num != we_head->info_num) ||
-	    (test.info_len != we_head->info_len) ||
-	    (test.head_size != we_head->head_size) ||
-	    (test.info_size != we_head->info_size))
+	    (test.v_major != s_head->v_major) ||
+	    (test.v_minor != s_head->v_minor) ||
+	    (test.v_patch != s_head->v_patch) ||
+	    (test.v_extra != s_head->v_extra) ||
+	    (test.info_num != s_head->info_num) ||
+	    (test.info_len != s_head->info_len) ||
+	    (test.head_size != s_head->head_size) ||
+	    (test.info_size != s_head->info_size))
 	{
 		/* Error */
 		return (-1);
@@ -2607,28 +2607,28 @@ static errr init_we_info_raw(int fd)
 
 
 	/* Accept the header */
-	(*we_head) = test;
+	(*s_head) = test;
 
 
-	/* Allocate the "we_info" array */
-	C_MAKE(we_info, we_head->info_num, weapon_exp_table);
+	/* Allocate the "s_info" array */
+	C_MAKE(s_info, s_head->info_num, skill_table);
 
-	/* Read the "we_info" array */
-	fd_read(fd, (char*)(we_info), we_head->info_size);
-
-
-	/* Allocate the "we_name" array */
-	C_MAKE(we_name, we_head->name_size, char);
-
-	/* Read the "we_name" array */
-	fd_read(fd, (char*)(we_name), we_head->name_size);
+	/* Read the "s_info" array */
+	fd_read(fd, (char*)(s_info), s_head->info_size);
 
 
-	/* Allocate the "we_text" array */
-	C_MAKE(we_text, we_head->text_size, char);
+	/* Allocate the "s_name" array */
+	C_MAKE(s_name, s_head->name_size, char);
 
-	/* Read the "we_text" array */
-	fd_read(fd, (char*)(we_text), we_head->text_size);
+	/* Read the "s_name" array */
+	fd_read(fd, (char*)(s_name), s_head->name_size);
+
+
+	/* Allocate the "s_text" array */
+	C_MAKE(s_text, s_head->text_size, char);
+
+	/* Read the "s_text" array */
+	fd_read(fd, (char*)(s_text), s_head->text_size);
 
 	/* Success */
 	return (0);
@@ -2636,12 +2636,12 @@ static errr init_we_info_raw(int fd)
 
 
 /*
- * Initialize the "we_info" array
+ * Initialize the "s_info" array
  *
  * Note that we let each entry have a unique "name" and "text" string,
  * even if the string happens to be empty (everyone has a unique '\0').
  */
-static errr init_we_info(void)
+static errr init_s_info(void)
 {
 	int fd;
 
@@ -2658,21 +2658,21 @@ static errr init_we_info(void)
 	/*** Make the header ***/
 
 	/* Allocate the "header" */
-	MAKE(we_head, header);
+	MAKE(s_head, header);
 
 	/* Save the "version" */
-	we_head->v_major = FAKE_VER_MAJOR;
-	we_head->v_minor = FAKE_VER_MINOR;
-	we_head->v_patch = FAKE_VER_PATCH;
-	we_head->v_extra = 0;
+	s_head->v_major = FAKE_VER_MAJOR;
+	s_head->v_minor = FAKE_VER_MINOR;
+	s_head->v_patch = FAKE_VER_PATCH;
+	s_head->v_extra = 0;
 
 	/* Save the "record" information */
-	we_head->info_num = MAX_CLASS;
-	we_head->info_len = sizeof(weapon_exp_table);
+	s_head->info_num = MAX_CLASS;
+	s_head->info_len = sizeof(skill_table);
 
-	/* Save the size of "we_head" and "we_info" */
-	we_head->head_size = sizeof(header);
-	we_head->info_size = we_head->info_num * we_head->info_len;
+	/* Save the size of "s_head" and "s_info" */
+	s_head->head_size = sizeof(header);
+	s_head->info_size = s_head->info_num * s_head->info_len;
 
 
 #ifdef ALLOW_TEMPLATES
@@ -2681,9 +2681,9 @@ static errr init_we_info(void)
 
 	/* Build the filename */
 #ifdef JP
-	path_build(buf, 1024, ANGBAND_DIR_DATA, "we_info_j.raw");
+	path_build(buf, 1024, ANGBAND_DIR_DATA, "s_info_j.raw");
 #else
-	path_build(buf, 1024, ANGBAND_DIR_DATA, "we_info.raw");
+	path_build(buf, 1024, ANGBAND_DIR_DATA, "s_info.raw");
 #endif
 
 
@@ -2695,13 +2695,13 @@ static errr init_we_info(void)
 	{
 #ifdef CHECK_MODIFICATION_TIME
 
-                err = check_modification_date(fd, "we_info_j.txt");
+                err = check_modification_date(fd, "s_info_j.txt");
 
 #endif /* CHECK_MODIFICATION_TIME */
 
 		/* Attempt to parse the "raw" file */
 		if (!err)
-			err = init_we_info_raw(fd);
+			err = init_s_info_raw(fd);
 
 		/* Close it */
 		(void)fd_close(fd);
@@ -2713,37 +2713,37 @@ static errr init_we_info(void)
 
 	/*** Make the fake arrays ***/
 
-	/* Fake the size of "we_name" and "we_text" */
+	/* Fake the size of "s_name" and "s_text" */
 	fake_name_size = FAKE_NAME_SIZE;
 	fake_text_size = FAKE_TEXT_SIZE;
 
-	/* Allocate the "we_info" array */
-	C_MAKE(we_info, we_head->info_num, weapon_exp_table);
+	/* Allocate the "s_info" array */
+	C_MAKE(s_info, s_head->info_num, skill_table);
 
 	/* Hack -- make "fake" arrays */
-	C_MAKE(we_name, fake_name_size, char);
-	C_MAKE(we_text, fake_text_size, char);
+	C_MAKE(s_name, fake_name_size, char);
+	C_MAKE(s_text, fake_text_size, char);
 
 
 	/*** Load the ascii template file ***/
 
 	/* Build the filename */
 
-	path_build(buf, 1024, ANGBAND_DIR_EDIT, "we_info_j.txt");
+	path_build(buf, 1024, ANGBAND_DIR_EDIT, "s_info_j.txt");
 
 	/* Open the file */
 	fp = my_fopen(buf, "r");
 
 	/* Parse it */
 #ifdef JP
-	if (!fp) quit("'we_info_j.txt'ファイルをオープンできません。");
+	if (!fp) quit("'s_info_j.txt'ファイルをオープンできません。");
 #else
-	if (!fp) quit("Cannot open 'we_info.txt' file.");
+	if (!fp) quit("Cannot open 's_info.txt' file.");
 #endif
 
 
 	/* Parse the file */
-	err = init_we_info_txt(fp, buf);
+	err = init_s_info_txt(fp, buf);
 
 	/* Close it */
 	my_fclose(fp);
@@ -2758,25 +2758,25 @@ static errr init_we_info(void)
               oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "未知の");
 
               /* Oops */
-              msg_format("'we_info_j.txt'ファイルの %d 行目にエラー。", error_line);
+              msg_format("'s_info_j.txt'ファイルの %d 行目にエラー。", error_line);
               msg_format("レコード %d は '%s' エラーがあります。", error_idx, oops);
               msg_format("構文 '%s'。", buf);
               msg_print(NULL);
 
               /* Quit */
-              quit("'we_info_j.txt'ファイルにエラー");
+              quit("'s_info_j.txt'ファイルにエラー");
 #else
 		/* Error string */
 		oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
 
 		/* Oops */
-		msg_format("Error %d at line %d of 'we_info.txt'.", err, error_line);
+		msg_format("Error %d at line %d of 's_info.txt'.", err, error_line);
 		msg_format("Record %d contains a '%s' error.", error_idx, oops);
 		msg_format("Parsing '%s'.", buf);
 		msg_print(NULL);
 
 		/* Quit */
-		quit("Error in 'we_info.txt' file.");
+		quit("Error in 's_info.txt' file.");
 #endif
 
 	}
@@ -2789,9 +2789,9 @@ static errr init_we_info(void)
 
 	/* Build the filename */
 #ifdef JP
-	path_build(buf, 1024, ANGBAND_DIR_DATA, "we_info_j.raw");
+	path_build(buf, 1024, ANGBAND_DIR_DATA, "s_info_j.raw");
 #else
-	path_build(buf, 1024, ANGBAND_DIR_DATA, "we_info.raw");
+	path_build(buf, 1024, ANGBAND_DIR_DATA, "s_info.raw");
 #endif
 
 
@@ -2805,16 +2805,16 @@ static errr init_we_info(void)
 	if (fd >= 0)
 	{
 		/* Dump it */
-		fd_write(fd, (char*)(we_head), we_head->head_size);
+		fd_write(fd, (char*)(s_head), s_head->head_size);
 
-		/* Dump the "we_info" array */
-		fd_write(fd, (char*)(we_info), we_head->info_size);
+		/* Dump the "s_info" array */
+		fd_write(fd, (char*)(s_info), s_head->info_size);
 
-		/* Dump the "we_name" array */
-		fd_write(fd, (char*)(we_name), we_head->name_size);
+		/* Dump the "s_name" array */
+		fd_write(fd, (char*)(s_name), s_head->name_size);
 
-		/* Dump the "we_text" array */
-		fd_write(fd, (char*)(we_text), we_head->text_size);
+		/* Dump the "s_text" array */
+		fd_write(fd, (char*)(s_text), s_head->text_size);
 
 		/* Close */
 		(void)fd_close(fd);
@@ -2823,12 +2823,12 @@ static errr init_we_info(void)
 
 	/*** Kill the fake arrays ***/
 
-	/* Free the "we_info" array */
-	C_KILL(we_info, we_head->info_num, weapon_exp_table);
+	/* Free the "s_info" array */
+	C_KILL(s_info, s_head->info_num, skill_table);
 
 	/* Hack -- Free the "fake" arrays */
-	C_KILL(we_name, fake_name_size, char);
-	C_KILL(we_text, fake_text_size, char);
+	C_KILL(s_name, fake_name_size, char);
+	C_KILL(s_text, fake_text_size, char);
 
 	/* Forget the array sizes */
 	fake_name_size = 0;
@@ -2841,9 +2841,9 @@ static errr init_we_info(void)
 
 	/* Build the filename */
 #ifdef JP
-	path_build(buf, 1024, ANGBAND_DIR_DATA, "we_info_j.raw");
+	path_build(buf, 1024, ANGBAND_DIR_DATA, "s_info_j.raw");
 #else
-	path_build(buf, 1024, ANGBAND_DIR_DATA, "we_info.raw");
+	path_build(buf, 1024, ANGBAND_DIR_DATA, "s_info.raw");
 #endif
 
 	/* Attempt to open the "raw" file */
@@ -2851,316 +2851,23 @@ static errr init_we_info(void)
 
 	/* Process existing "raw" file */
 #ifdef JP
-	if (fd < 0) quit("'we_info_j.raw'ファイルをロードできません。");
+	if (fd < 0) quit("'s_info_j.raw'ファイルをロードできません。");
 #else
-	if (fd < 0) quit("Cannot load 'we_info.raw' file.");
+	if (fd < 0) quit("Cannot load 's_info.raw' file.");
 #endif
 
 
 	/* Attempt to parse the "raw" file */
-	err = init_we_info_raw(fd);
+	err = init_s_info_raw(fd);
 
 	/* Close it */
 	(void)fd_close(fd);
 
 	/* Error */
 #ifdef JP
-	if (err) quit("'we_info_j.raw'ファイルを解析できません。");
+	if (err) quit("'s_info_j.raw'ファイルを解析できません。");
 #else
-	if (err) quit("Cannot parse 'we_info.raw' file.");
-#endif
-
-
-	/* Success */
-	return (0);
-}
-
-
-/*
- * Initialize the "se_info" array, by parsing a binary "image" file
- */
-static errr init_se_info_raw(int fd)
-{
-	header test;
-
-	/* Read and Verify the header */
-	if (fd_read(fd, (char*)(&test), sizeof(header)) ||
-	    (test.v_major != se_head->v_major) ||
-	    (test.v_minor != se_head->v_minor) ||
-	    (test.v_patch != se_head->v_patch) ||
-	    (test.v_extra != se_head->v_extra) ||
-	    (test.info_num != se_head->info_num) ||
-	    (test.info_len != se_head->info_len) ||
-	    (test.head_size != se_head->head_size) ||
-	    (test.info_size != se_head->info_size))
-	{
-		/* Error */
-		return (-1);
-	}
-
-
-	/* Accept the header */
-	(*se_head) = test;
-
-
-	/* Allocate the "se_info" array */
-	C_MAKE(se_info, se_head->info_num, skill_exp_table);
-
-	/* Read the "se_info" array */
-	fd_read(fd, (char*)(se_info), se_head->info_size);
-
-
-	/* Allocate the "se_name" array */
-	C_MAKE(se_name, se_head->name_size, char);
-
-	/* Read the "se_name" array */
-	fd_read(fd, (char*)(se_name), se_head->name_size);
-
-
-	/* Allocate the "se_text" array */
-	C_MAKE(se_text, se_head->text_size, char);
-
-	/* Read the "se_text" array */
-	fd_read(fd, (char*)(se_text), se_head->text_size);
-
-	/* Success */
-	return (0);
-}
-
-
-/*
- * Initialize the "se_info" array
- *
- * Note that we let each entry have a unique "name" and "text" string,
- * even if the string happens to be empty (everyone has a unique '\0').
- */
-static errr init_se_info(void)
-{
-	int fd;
-
-	int mode = 0644;
-
-	errr err;
-
-	FILE *fp;
-
-	/* General buffer */
-	char buf[1024];
-
-
-	/*** Make the header ***/
-
-	/* Allocate the "header" */
-	MAKE(se_head, header);
-
-	/* Save the "version" */
-	se_head->v_major = FAKE_VER_MAJOR;
-	se_head->v_minor = FAKE_VER_MINOR;
-	se_head->v_patch = FAKE_VER_PATCH;
-	se_head->v_extra = 0;
-
-	/* Save the "record" information */
-	se_head->info_num = MAX_CLASS;
-	se_head->info_len = sizeof(skill_exp_table);
-
-	/* Save the size of "se_head" and "se_info" */
-	se_head->head_size = sizeof(header);
-	se_head->info_size = se_head->info_num * se_head->info_len;
-
-
-#ifdef ALLOW_TEMPLATES
-
-	/*** Load the binary image file ***/
-
-	/* Build the filename */
-#ifdef JP
-	path_build(buf, 1024, ANGBAND_DIR_DATA, "se_info_j.raw");
-#else
-	path_build(buf, 1024, ANGBAND_DIR_DATA, "se_info.raw");
-#endif
-
-
-	/* Attempt to open the "raw" file */
-	fd = fd_open(buf, O_RDONLY);
-
-	/* Process existing "raw" file */
-	if (fd >= 0)
-	{
-#ifdef CHECK_MODIFICATION_TIME
-
-                err = check_modification_date(fd, "se_info_j.txt");
-
-#endif /* CHECK_MODIFICATION_TIME */
-
-		/* Attempt to parse the "raw" file */
-		if (!err)
-			err = init_se_info_raw(fd);
-
-		/* Close it */
-		(void)fd_close(fd);
-
-		/* Success */
-		if (!err) return (0);
-	}
-
-
-	/*** Make the fake arrays ***/
-
-	/* Fake the size of "se_name" and "se_text" */
-	fake_name_size = FAKE_NAME_SIZE;
-	fake_text_size = FAKE_TEXT_SIZE;
-
-	/* Allocate the "se_info" array */
-	C_MAKE(se_info, se_head->info_num, skill_exp_table);
-
-	/* Hack -- make "fake" arrays */
-	C_MAKE(se_name, fake_name_size, char);
-	C_MAKE(se_text, fake_text_size, char);
-
-
-	/*** Load the ascii template file ***/
-
-	/* Build the filename */
-
-	path_build(buf, 1024, ANGBAND_DIR_EDIT, "se_info_j.txt");
-
-	/* Open the file */
-	fp = my_fopen(buf, "r");
-
-	/* Parse it */
-#ifdef JP
-	if (!fp) quit("'se_info_j.txt'ファイルをオープンできません。");
-#else
-	if (!fp) quit("Cannot open 'se_info.txt' file.");
-#endif
-
-
-	/* Parse the file */
-	err = init_se_info_txt(fp, buf);
-
-	/* Close it */
-	my_fclose(fp);
-
-	/* Errors */
-	if (err)
-	{
-		cptr oops;
-
-#ifdef JP
-              /* Error string */
-              oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "未知の");
-
-              /* Oops */
-              msg_format("'se_info_j.txt'ファイルの %d 行目にエラー。", error_line);
-              msg_format("レコード %d は '%s' エラーがあります。", error_idx, oops);
-              msg_format("構文 '%s'。", buf);
-              msg_print(NULL);
-
-              /* Quit */
-              quit("'se_info_j.txt'ファイルにエラー");
-#else
-		/* Error string */
-		oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
-
-		/* Oops */
-		msg_format("Error %d at line %d of 'se_info.txt'.", err, error_line);
-		msg_format("Record %d contains a '%s' error.", error_idx, oops);
-		msg_format("Parsing '%s'.", buf);
-		msg_print(NULL);
-
-		/* Quit */
-		quit("Error in 'se_info.txt' file.");
-#endif
-
-	}
-
-
-	/*** Dump the binary image file ***/
-
-	/* File type is "DATA" */
-	FILE_TYPE(FILE_TYPE_DATA);
-
-	/* Build the filename */
-#ifdef JP
-	path_build(buf, 1024, ANGBAND_DIR_DATA, "se_info_j.raw");
-#else
-	path_build(buf, 1024, ANGBAND_DIR_DATA, "se_info.raw");
-#endif
-
-
-	/* Kill the old file */
-	(void)fd_kill(buf);
-
-	/* Attempt to create the raw file */
-	fd = fd_make(buf, mode);
-
-	/* Dump to the file */
-	if (fd >= 0)
-	{
-		/* Dump it */
-		fd_write(fd, (char*)(se_head), se_head->head_size);
-
-		/* Dump the "se_info" array */
-		fd_write(fd, (char*)(se_info), se_head->info_size);
-
-		/* Dump the "se_name" array */
-		fd_write(fd, (char*)(se_name), se_head->name_size);
-
-		/* Dump the "se_text" array */
-		fd_write(fd, (char*)(se_text), se_head->text_size);
-
-		/* Close */
-		(void)fd_close(fd);
-	}
-
-
-	/*** Kill the fake arrays ***/
-
-	/* Free the "se_info" array */
-	C_KILL(se_info, se_head->info_num, skill_exp_table);
-
-	/* Hack -- Free the "fake" arrays */
-	C_KILL(se_name, fake_name_size, char);
-	C_KILL(se_text, fake_text_size, char);
-
-	/* Forget the array sizes */
-	fake_name_size = 0;
-	fake_text_size = 0;
-
-#endif /* ALLOW_TEMPLATES */
-
-
-	/*** Load the binary image file ***/
-
-	/* Build the filename */
-#ifdef JP
-	path_build(buf, 1024, ANGBAND_DIR_DATA, "se_info_j.raw");
-#else
-	path_build(buf, 1024, ANGBAND_DIR_DATA, "se_info.raw");
-#endif
-
-	/* Attempt to open the "raw" file */
-	fd = fd_open(buf, O_RDONLY);
-
-	/* Process existing "raw" file */
-#ifdef JP
-	if (fd < 0) quit("'se_info_j.raw'ファイルをロードできません。");
-#else
-	if (fd < 0) quit("Cannot load 'se_info.raw' file.");
-#endif
-
-
-	/* Attempt to parse the "raw" file */
-	err = init_se_info_raw(fd);
-
-	/* Close it */
-	(void)fd_close(fd);
-
-	/* Error */
-#ifdef JP
-	if (err) quit("'se_info_j.raw'ファイルを解析できません。");
-#else
-	if (err) quit("Cannot parse 'se_info.raw' file.");
+	if (err) quit("Cannot parse 's_info.raw' file.");
 #endif
 
 
@@ -4828,20 +4535,11 @@ if (init_script()) quit("スクリプトを初期化できません");
 
 	/* Initialize weapon_exp info */
 #ifdef JP
-	note("[データの初期化中... (武器熟練度)]");
-	if (init_we_info()) quit("武器熟練度初期化不能");
+	note("[データの初期化中... (熟練度)]");
+	if (init_s_info()) quit("熟練度初期化不能");
 #else
-	note("[Initializing arrays... (weapon exp)]");
-	if (init_we_info()) quit("Cannot initialize weapon exp");
-#endif
-
-	/* Initialize weapon_exp info */
-#ifdef JP
-	note("[データの初期化中... (技能熟練度)]");
-	if (init_se_info()) quit("技能熟練度初期化不能");
-#else
-	note("[Initializing arrays... (skill exp)]");
-	if (init_se_info()) quit("Cannot initialize skill exp");
+	note("[Initializing arrays... (skill)]");
+	if (init_s_info()) quit("Cannot initialize skill");
 #endif
 
 	/* Initialize wilderness array */

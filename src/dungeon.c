@@ -6256,7 +6256,7 @@ quit("セーブファイルが壊れています");
 
 	/* Sexy gal gets bonus to maximum weapon skill of whip */
 	if(p_ptr->pseikaku == SEIKAKU_SEXY)
-		we_info[p_ptr->pclass].max[TV_HAFTED-TV_BOW][SV_WHIP] = 8000;
+		s_info[p_ptr->pclass].w_max[TV_HAFTED-TV_BOW][SV_WHIP] = 8000;
 
         /* Fill the arrays of floors and walls in the good proportions */
         for (i = 0; i < 100; i++)

@@ -16,4 +16,4 @@ EXTRA_DIST = \
 	t0000002_j.txt t0000003_j.txt t0000004_j.txt t0000005_j.txt \
 	t0000006_j.txt t_basic_j.txt t_info_j.txt t_lite_j.txt \
 	t_pref_j.txt v_info_j.txt w_info_j.txt \
-	m_info_j.txt we_info_j.txt se_info_j.txt
+	m_info_j.txt s_info_j.txt

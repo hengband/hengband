@@ -761,20 +761,12 @@ char *v_name;
 char *v_text;
 
 /*
- * The weapon_exp_table
+ * The skill table
  */
-header *we_head;
-weapon_exp_table *we_info;
-char *we_name;
-char *we_text;
-
-/*
- * The skill_exp_table
- */
-header *se_head;
-skill_exp_table *se_info;
-char *se_name;
-char *se_text;
+header *s_head;
+skill_table *s_info;
+char *s_name;
+char *s_text;
 
 /*
  * The magic info

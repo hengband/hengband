@@ -2481,7 +2481,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 	{
 		if ((r_ptr->level + 10) > p_ptr->lev)
 		{
-			if (skill_exp[GINOU_SUDE] < se_info[p_ptr->pclass].max[GINOU_SUDE])
+			if (skill_exp[GINOU_SUDE] < s_info[p_ptr->pclass].s_max[GINOU_SUDE])
 			{
 				if (skill_exp[GINOU_SUDE] < 4000)
 					skill_exp[GINOU_SUDE]+=40;
@@ -2499,7 +2499,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 	{
 		if ((r_ptr->level + 10) > p_ptr->lev)
 		{
-			if (weapon_exp[inventory[INVEN_RARM+hand].tval-TV_BOW][inventory[INVEN_RARM+hand].sval] < we_info[p_ptr->pclass].max[inventory[INVEN_RARM+hand].tval-TV_BOW][inventory[INVEN_RARM+hand].sval])
+			if (weapon_exp[inventory[INVEN_RARM+hand].tval-TV_BOW][inventory[INVEN_RARM+hand].sval] < s_info[p_ptr->pclass].w_max[inventory[INVEN_RARM+hand].tval-TV_BOW][inventory[INVEN_RARM+hand].sval])
 			{
 				if (weapon_exp[inventory[INVEN_RARM+hand].tval-TV_BOW][inventory[INVEN_RARM+hand].sval] < 4000)
 					weapon_exp[inventory[INVEN_RARM+hand].tval-TV_BOW][inventory[INVEN_RARM+hand].sval]+=80;
@@ -3678,7 +3678,7 @@ bool py_attack(int y, int x, int mode)
 
 	if (p_ptr->migite && p_ptr->hidarite)
 	{
-		if ((skill_exp[GINOU_NITOURYU] < se_info[p_ptr->pclass].max[GINOU_NITOURYU]) && ((skill_exp[GINOU_NITOURYU] - 1000) / 200 < r_info[m_ptr->r_idx].level))
+		if ((skill_exp[GINOU_NITOURYU] < s_info[p_ptr->pclass].s_max[GINOU_NITOURYU]) && ((skill_exp[GINOU_NITOURYU] - 1000) / 200 < r_info[m_ptr->r_idx].level))
 		{
 			if (skill_exp[GINOU_NITOURYU] < 4000)
 				skill_exp[GINOU_NITOURYU]+=80;
@@ -3695,9 +3695,9 @@ bool py_attack(int y, int x, int mode)
 	if (p_ptr->riding)
 	{
 		int ridinglevel = r_info[m_list[p_ptr->riding].r_idx].level;
-		if ((skill_exp[GINOU_RIDING] < se_info[p_ptr->pclass].max[GINOU_RIDING]) && ((skill_exp[GINOU_RIDING] - 1000) / 200 < r_info[m_ptr->r_idx].level) && (skill_exp[GINOU_RIDING]/100 - 2000 < ridinglevel))
+		if ((skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING]) && ((skill_exp[GINOU_RIDING] - 1000) / 200 < r_info[m_ptr->r_idx].level) && (skill_exp[GINOU_RIDING]/100 - 2000 < ridinglevel))
 			skill_exp[GINOU_RIDING]++;
-		if ((skill_exp[GINOU_RIDING] < se_info[p_ptr->pclass].max[GINOU_RIDING]) && (skill_exp[GINOU_RIDING]/100 < ridinglevel))
+		if ((skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING]) && (skill_exp[GINOU_RIDING]/100 < ridinglevel))
 		{
 			if (ridinglevel*100 > (skill_exp[GINOU_RIDING] + 1500))
 				skill_exp[GINOU_RIDING] += (1+(ridinglevel - skill_exp[GINOU_RIDING]/100 - 15));

@@ -842,15 +842,14 @@ errr init_v_info_txt(FILE *fp, char *buf, bool start)
 
 
 /*
- * Initialize the "we_info" array, by parsing an ascii "template" file
+ * Initialize the "s_info" array, by parsing an ascii "template" file
  */
-errr init_we_info_txt(FILE *fp, char *buf)
+errr init_s_info_txt(FILE *fp, char *buf)
 {
 	int i;
-	int tval = 5, sval = 0;
 
 	/* Current entry */
-	weapon_exp_table *we_ptr = NULL;
+	skill_table *s_ptr = NULL;
 
 	/* Just before the first record */
 	error_idx = -1;
@@ -859,8 +858,8 @@ errr init_we_info_txt(FILE *fp, char *buf)
 	error_line = -1;
 
 	/* Prepare the "fake" stuff */
-	we_head->name_size = 0;
-	we_head->text_size = 0;
+	s_head->name_size = 0;
+	s_head->text_size = 0;
 
 	/* Parse */
 	while (0 == my_fgets(fp, buf, 1024))
@@ -893,134 +892,43 @@ errr init_we_info_txt(FILE *fp, char *buf)
 			if (i <= error_idx) return (4);
 
 			/* Verify information */
-			if (tval != 5 || sval != 0) return (4);
-
-			/* Verify information */
-			if (i >= we_head->info_num) return (2);
+			if (i >= s_head->info_num) return (2);
 
 			/* Save the index */
 			error_idx = i;
 
 			/* Point at the "info" */
-			we_ptr = &we_info[i];
-
-			tval = sval = 0;
+			s_ptr = &s_info[i];
 
 			/* Next... */
 			continue;
 		}
 
-		/* There better be a current we_ptr */
-		if (!we_ptr) return (3);
+		/* There better be a current s_ptr */
+		if (!s_ptr) return (3);
 
-		/* Process 'I' for "Infomation" */
-		if (buf[0] == 'I')
+		/* Process 'W' for "Weapon exp" */
+		if (buf[0] == 'W')
 		{
-			int start, max;
+			int tval, sval, start, max;
 			const s16b exp_conv_table[] = { 0, 4000, 6000, 7000, 8000 };
 
 			/* Scan for the values */
-			if (2 != sscanf(buf+2, "%d:%d",
-				&start, &max)) return (1);
+			if (4 != sscanf(buf+2, "%d:%d:%d:%d",
+				&tval, &sval, &start, &max)) return (1);
 
 			if (start < 0 || start > 4 || max < 0 || max > 4) return (8);
 
 			/* Save the values */
-			we_ptr->start[tval][sval] = exp_conv_table[start];
-			we_ptr->max[tval][sval] = exp_conv_table[max];
-
-			if (++sval == 64)
-			{
-				tval ++;
-				sval = 0;
-			}
+			s_ptr->w_start[tval][sval] = exp_conv_table[start];
+			s_ptr->w_max[tval][sval] = exp_conv_table[max];
 
 			/* Next... */
 			continue;
 		}
 
-
-		/* Oops */
-		return (6);
-	}
-
-	/* Complete the "name" and "text" sizes */
-	++we_head->name_size;
-	++we_head->text_size;
-
-	/* Success */
-	return (0);
-}
-
-
-/*
- * Initialize the "se_info" array, by parsing an ascii "template" file
- */
-errr init_se_info_txt(FILE *fp, char *buf)
-{
-	int i;
-
-	/* Current entry */
-	skill_exp_table *se_ptr = NULL;
-
-	/* Just before the first record */
-	error_idx = -1;
-
-	/* Just before the first line */
-	error_line = -1;
-
-	/* Prepare the "fake" stuff */
-	se_head->name_size = 0;
-	se_head->text_size = 0;
-
-	/* Parse */
-	while (0 == my_fgets(fp, buf, 1024))
-	{
-		/* Advance the line number */
-		error_line++;
-
-		/* Skip comments and blank lines */
-		if (!buf[0] || (buf[0] == '#')) continue;
-
-		/* Verify correct "colon" format */
-		if (buf[1] != ':') return (1);
-
-
-		/* Hack -- Process 'V' for "Version" */
-		if (buf[0] == 'V')
-		{
-			/* ignore */
-			continue;
-		}
-
-
-		/* Process 'N' for "New/Number/Name" */
-		if (buf[0] == 'N')
-		{
-			/* Get the index */
-			i = atoi(buf+2);
-
-			/* Verify information */
-			if (i <= error_idx) return (4);
-
-			/* Verify information */
-			if (i >= se_head->info_num) return (2);
-
-			/* Save the index */
-			error_idx = i;
-
-			/* Point at the "info" */
-			se_ptr = &se_info[i];
-
-			/* Next... */
-			continue;
-		}
-
-		/* There better be a current se_ptr */
-		if (!se_ptr) return (3);
-
-		/* Process 'I' for "Infomation" */
-		if (buf[0] == 'I')
+		/* Process 'S' for "Skill exp" */
+		if (buf[0] == 'S')
 		{
 			int num, start, max;
 
@@ -1031,8 +939,8 @@ errr init_se_info_txt(FILE *fp, char *buf)
 			if (start < 0 || start > 8000 || max < 0 || max > 8000) return (8);
 
 			/* Save the values */
-			se_ptr->start[num] = start;
-			se_ptr->max[num] = max;
+			s_ptr->s_start[num] = start;
+			s_ptr->s_max[num] = max;
 
 			/* Next... */
 			continue;
@@ -1044,13 +952,12 @@ errr init_se_info_txt(FILE *fp, char *buf)
 	}
 
 	/* Complete the "name" and "text" sizes */
-	++se_head->name_size;
-	++se_head->text_size;
+	++s_head->name_size;
+	++s_head->text_size;
 
 	/* Success */
 	return (0);
 }
-
 
 
 /*

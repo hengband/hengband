@@ -1292,7 +1292,7 @@ static void rd_extra(void)
 	if (z_older_than(10, 4, 1))
 	{
 		if (p_ptr->pclass != CLASS_BEASTMASTER) skill_exp[GINOU_RIDING] /= 2;
-		skill_exp[GINOU_RIDING] = MIN(skill_exp[GINOU_RIDING], se_info[p_ptr->pclass].max[GINOU_RIDING]);
+		skill_exp[GINOU_RIDING] = MIN(skill_exp[GINOU_RIDING], s_info[p_ptr->pclass].s_max[GINOU_RIDING]);
 	}
 	if (z_older_than(10, 3, 14))
 	{

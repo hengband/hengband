@@ -5825,7 +5825,7 @@ static void do_cmd_knowledge_weapon_exp(void)
 					else shougou=4;
 					strip_name(tmp, j);
 					fprintf(fff,"%-25s ",tmp);
-					if (weapon_exp[4-i][num] >= we_info[p_ptr->pclass].max[4-i][num]) fprintf(fff,"!");
+					if (weapon_exp[4-i][num] >= s_info[p_ptr->pclass].w_max[4-i][num]) fprintf(fff,"!");
 					else fprintf(fff," ");
 					fprintf(fff,"%s",shougou_moji[shougou]);
 					if (cheat_xtra) fprintf(fff," %d",weapon_exp[4-i][num]);
@@ -6004,7 +6004,7 @@ static void do_cmd_knowledge_skill_exp(void)
 			else shougou=4;
 		}
 		fprintf(fff,"%-20s ",skill_name[i]);
-		if (skill_exp[i] == se_info[p_ptr->pclass].max[i]) fprintf(fff,"!");
+		if (skill_exp[i] == s_info[p_ptr->pclass].s_max[i]) fprintf(fff,"!");
 		else fprintf(fff," ");
 		fprintf(fff,"%s",shougou_moji[shougou]);
 		if (cheat_xtra) fprintf(fff," %d",skill_exp[i]);
