@@ -3400,7 +3400,7 @@ c_put_str(TERM_L_GREEN, "能力修正", row - 1, col);
 					a = TERM_RED;
 
 					/* Label boost */
-					if (o_ptr->pval < 10) c = '0' - o_ptr->pval;
+					if (o_ptr->pval > -10) c = '0' - o_ptr->pval;
 				}
 			}
 
@@ -3493,7 +3493,7 @@ c_put_str(TERM_L_GREEN, "能力修正", row - 1, col);
 					a = TERM_RED;
 
 					/* Label boost */
-					if (dummy < 10) c = '0' - dummy;
+					if (dummy > -10) c = '0' - dummy;
 				}
 			}
 		}
