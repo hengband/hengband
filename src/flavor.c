@@ -2255,7 +2255,33 @@ t = object_desc_str(t, "(マルチ・トラップ)");
 
 		t = object_desc_chr(t, p2);
 	}
+	else if ((p_ptr->pclass == CLASS_NINJA) && (o_ptr->tval == TV_SPIKE))
+	{
+		int avgdam;
+		s16b energy_fire;
 
+		if (p_ptr->mighty_throw)
+			avgdam =  1 + 3;
+		else
+			avgdam =  1;
+		avgdam += ((p_ptr->lev+30)*(p_ptr->lev+30)-900)/55;
+
+		energy_fire = 100 - p_ptr->lev;
+
+		/* display (shot damage/ avg damage) */
+		t = object_desc_chr(t, ' ');
+		t = object_desc_chr(t, p1);
+		t = object_desc_num(t, avgdam);
+		t = object_desc_chr(t, '/');
+
+		/* calc effects of energy */
+		avgdam = 100 * avgdam / energy_fire;
+
+		t = object_desc_num(t, avgdam);
+
+		t = object_desc_chr(t, p2);
+	}
+	       
 
 	/* Add the armor bonuses */
 	if (known)
