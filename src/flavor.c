@@ -1031,7 +1031,7 @@ typedef struct flag_insc_table
 #endif
 	cptr english;
 	int flag;
-	u32b except_flag;
+	int except_flag;
 } flag_insc_table;
 
 #ifdef JP
