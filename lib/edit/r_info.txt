@@ -19440,6 +19440,12 @@ F:FORCE_SLEEP | DROP_1D2 | SMART | DROP_CORPSE | DROP_SKELETON |
 F:ORC | HURT_LITE | EVIL | RES_DARK
 S:1_IN_2 |
 S:SHOOT
+D:$In a rare display of ingenuity, the Orcs invented an incredibly
+D:$destructive weapon. Most Orcish artillerists are those who dared
+D:$criticize its effectiveness.
+D:めったに見せない発明の才によって、オークは信じられないほど破壊的な
+D:兵器を発明した。このオーク弩弓隊の兵士の大半は、その有効性に疑問を
+D:投げかけた者たちが務めている。
 
 # Description in English by Nick Keulmann
 N:955:やせこけた馬
