@@ -1565,9 +1565,6 @@ msg_print("不透明になった感じがする。");
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 
-
-
-
 	/* Handle stuff */
 	handle_stuff();
 
@@ -2771,6 +2768,9 @@ msg_print("体が物質化した。");
 
 	/* Disturb */
 	if (disturb_state) disturb(0, 0);
+
+	/* Recalculate bonuses */
+	p_ptr->update |= (PU_BONUS);
 
 	/* Handle stuff */
 	handle_stuff();
