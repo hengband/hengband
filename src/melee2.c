@@ -2457,8 +2457,45 @@ msg_print("少しの間悲しい気分になった。");
 		}
 	}
 
-	/* Handle "sleep" - Still sleeping */
-	if (m_ptr->csleep) return;
+	/* Handle "sleep" */
+	if (m_ptr->csleep)
+	{
+		/* Handle non-aggravation - Still sleeping */
+		if (!(p_ptr->cursed & TRC_AGGRAVATE)) return;
+
+		/* Handle aggravation */
+
+		/* Reset sleep counter */
+		m_ptr->csleep = 0;
+
+		if (r_ptr->flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+
+		/* Notice the "waking up" */
+		if (m_ptr->ml)
+		{
+			char m_name[80];
+
+			/* Acquire the monster name */
+			monster_desc(m_name, m_ptr, 0);
+
+			/* Dump a message */
+#ifdef JP
+			msg_format("%^sが目を覚ました。", m_name);
+#else
+			msg_format("%^s wakes up.", m_name);
+#endif
+
+			/* Redraw the health bar */
+			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
+			if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
+
+			/* Hack -- Count the wakings */
+			if (r_ptr->r_wake < MAX_UCHAR)
+			{
+				r_ptr->r_wake++;
+			}
+		}
+	}
 
 	/* Handle "stun" */
 	if (m_ptr->stunned)

@@ -1206,8 +1206,7 @@ static void process_monsters_counters(void)
 				}
 
 				/* Handle "sight" and "aggravation" */
-				else if ((m_ptr->cdis <= MAX_SIGHT) &&
-					(player_has_los_bold(m_ptr->fy, m_ptr->fx) || (p_ptr->cursed & TRC_AGGRAVATE)))
+				else if ((m_ptr->cdis <= MAX_SIGHT) && (player_has_los_bold(m_ptr->fy, m_ptr->fx)))
 				{
 					/* We may wake up */
 					test = TRUE;
@@ -1216,10 +1215,7 @@ static void process_monsters_counters(void)
 
 			if (test)
 			{
-				u32b notice = 0;
-
-				/* Hack -- handle non-aggravation */
-				if (!(p_ptr->cursed & TRC_AGGRAVATE)) notice = randint0(1024);
+				u32b notice = randint0(1024);
 
 				/* Nightmare monsters are more alert */
 				if (ironman_nightmare) notice /= 2;
@@ -1228,22 +1224,12 @@ static void process_monsters_counters(void)
 				if ((notice * notice * notice) <= noise)
 				{
 					/* Hack -- amount of "waking" */
-					int d = 1;
+					/* Wake up faster near the player */
+					int d = (m_ptr->cdis < AAF_LIMIT / 2) ? (AAF_LIMIT / m_ptr->cdis) : 1;
 
-					/* Hack -- handle aggravation */
-					if (p_ptr->cursed & TRC_AGGRAVATE)
-					{
-						d = m_ptr->csleep;
-					}
-					else
-					{
-						/* Wake up faster near the player */
-						if (m_ptr->cdis < AAF_LIMIT / 2) d = (AAF_LIMIT / m_ptr->cdis);
-
-						/* Hack -- amount of "waking" is affected by speed of player */
-						d = (d * SPEED_TO_ENERGY(p_ptr->pspeed)) / 10;
-						if (d < 0) d = 1;
-					}
+					/* Hack -- amount of "waking" is affected by speed of player */
+					d = (d * SPEED_TO_ENERGY(p_ptr->pspeed)) / 10;
+					if (d < 0) d = 1;
 
 					/* Still asleep */
 					if (m_ptr->csleep > d)
