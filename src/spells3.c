@@ -1334,6 +1334,9 @@ act = "は鋭さを増した！";
 
 				o_ptr->name2 = EGO_SHARPNESS;
 				o_ptr->pval = m_bonus(5, dun_level) + 1;
+
+				if ((o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2))
+					o_ptr->pval = 2;
 			}
 			else
 			{
