@@ -4458,11 +4458,11 @@ static pascal OSErr AEH_Open(AppleEvent *theAppleEvent,
  * F7: 98
  * F3:99
  * F8:100
- * F10:101
+ * F10:109
  * F11:103
  * F13:105
  * F14:107
- * F9:109
+ * F9:101
  * F12:111
  * F15:113
  * Help:114
