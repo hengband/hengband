@@ -5531,6 +5531,7 @@ void do_cmd_pet(void)
 	byte y = 1, x = 0;
 	int ctr = 0;
 	char buf[160];
+	char target_buf[160];
 
 	num = 0;
 
@@ -5553,13 +5554,13 @@ void do_cmd_pet(void)
 	powers[num++] = PET_DISMISS;
 
 #ifdef JP
-	sprintf(buf,"ペットのターゲットを指定 (現在：%s)",
+	sprintf(target_buf,"ペットのターゲットを指定 (現在：%s)",
 		(pet_t_m_idx ? r_name + r_info[m_list[pet_t_m_idx].r_idx].name : "指定なし"));
 #else
-	sprintf(buf,"specify a targert of pet (now:%s)",
+	sprintf(target_buf,"specify a targert of pet (now:%s)",
 		(pet_t_m_idx ? r_name + r_info[m_list[pet_t_m_idx].r_idx].name : "nothing"));
 #endif
-	power_desc[num] = buf;
+	power_desc[num] = target_buf;
 
 	powers[num++] = PET_TARGET;
 
