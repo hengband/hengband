@@ -412,80 +412,72 @@ errr process_pref_file_command(char *buf)
 
 
 	/* Require "?:*" format */
-	if (buf[1] != ':') return (1);
+	if (buf[1] != ':') return 1;
 
 
-	/* Process "%:<fname>" */
-	if (buf[0] == '%')
+	switch (buf[0])
 	{
+	/* Process "%:<fname>" */
+	case '%':
 		/* Attempt to Process the given file */
-		return (process_pref_file(buf + 2));
-	}
-
+		return process_pref_file(buf + 2);
 
 	/* Mega-Hack -- read external player's history file */
 	/* Process "H:<history>" */
-	if (buf[0] == 'H')
-	{
+	case 'H':
 		add_history_from_pref_line(buf + 2);
-		return (0);
-	}
-
+		return 0;
 
 	/* Process "R:<num>:<a>/<c>" -- attr/char for monster races */
-	else if (buf[0] == 'R')
-	{
+	case 'R':
 		if (tokenize(buf+2, 3, zz, TOKENIZE_CHECKQUOTE) == 3)
 		{
 			monster_race *r_ptr;
 			i = (huge)strtol(zz[0], NULL, 0);
 			n1 = strtol(zz[1], NULL, 0);
 			n2 = strtol(zz[2], NULL, 0);
-			if (i >= max_r_idx) return (1);
+			if (i >= max_r_idx) return 1;
 			r_ptr = &r_info[i];
 			if (n1) r_ptr->x_attr = n1;
 			if (n2) r_ptr->x_char = n2;
-			return (0);
+			return 0;
 		}
-	}
+		break;
 
 	/* Process "K:<num>:<a>/<c>"  -- attr/char for object kinds */
-	else if (buf[0] == 'K')
-	{
+	case 'K':
 		if (tokenize(buf+2, 3, zz, TOKENIZE_CHECKQUOTE) == 3)
 		{
 			object_kind *k_ptr;
 			i = (huge)strtol(zz[0], NULL, 0);
 			n1 = strtol(zz[1], NULL, 0);
 			n2 = strtol(zz[2], NULL, 0);
-			if (i >= max_k_idx) return (1);
+			if (i >= max_k_idx) return 1;
 			k_ptr = &k_info[i];
 			if (n1) k_ptr->x_attr = n1;
 			if (n2) k_ptr->x_char = n2;
-			return (0);
+			return 0;
 		}
-	}
+		break;
 
 	/* Process "F:<num>:<a>/<c>" -- attr/char for terrain features */
-	else if (buf[0] == 'F')
-	{
+	case 'F':
 		if (tokenize(buf+2, 3, zz, TOKENIZE_CHECKQUOTE) == 3)
 		{
 			feature_type *f_ptr;
 			i = (huge)strtol(zz[0], NULL, 0);
 			n1 = strtol(zz[1], NULL, 0);
 			n2 = strtol(zz[2], NULL, 0);
-			if (i >= max_f_idx) return (1);
+			if (i >= max_f_idx) return 1;
 			f_ptr = &f_info[i];
 			if (n1) f_ptr->x_attr = n1;
 			if (n2) f_ptr->x_char = n2;
-			return (0);
+			return 0;
 		}
-	}
+		break;
 
 	/* Process "S:<num>:<a>/<c>" -- attr/char for special things */
-	else if (buf[0] == 'S')
-	{
+	case 'S':
 		if (tokenize(buf+2, 3, zz, TOKENIZE_CHECKQUOTE) == 3)
 		{
 			j = (byte)strtol(zz[0], NULL, 0);
@@ -493,13 +485,12 @@ errr process_pref_file_command(char *buf)
 			n2 = strtol(zz[2], NULL, 0);
 			misc_to_attr[j] = n1;
 			misc_to_char[j] = n2;
-			return (0);
+			return 0;
 		}
-	}
+		break;
 
 	/* Process "U:<tv>:<a>/<c>" -- attr/char for unaware items */
-	else if (buf[0] == 'U')
-	{
+	case 'U':
 		if (tokenize(buf+2, 3, zz, TOKENIZE_CHECKQUOTE) == 3)
 		{
 			j = (huge)strtol(zz[0], NULL, 0);
@@ -514,67 +505,60 @@ errr process_pref_file_command(char *buf)
 					if (n2) k_ptr->d_char = n2;
 				}
 			}
-			return (0);
+			return 0;
 		}
-	}
+		break;
 
 	/* Process "E:<tv>:<a>" -- attribute for inventory objects */
-	else if (buf[0] == 'E')
-	{
+	case 'E':
 		if (tokenize(buf+2, 2, zz, TOKENIZE_CHECKQUOTE) == 2)
 		{
 			j = (byte)strtol(zz[0], NULL, 0) % 128;
 			n1 = strtol(zz[1], NULL, 0);
 			if (n1) tval_to_attr[j] = n1;
-			return (0);
+			return 0;
 		}
-	}
-
+		break;
 
 	/* Process "A:<str>" -- save an "action" for later */
-	else if (buf[0] == 'A')
-	{
+	case 'A':
 		text_to_ascii(macro__buf, buf+2);
-		return (0);
-	}
+		return 0;
 
 	/* Process "P:<str>" -- normal macro */
-	else if (buf[0] == 'P')
+	case 'P':
 	{
 		char tmp[1024];
+
 		text_to_ascii(tmp, buf+2);
 		macro_add(tmp, macro__buf);
-		return (0);
+		return 0;
 	}
 
-
 	/* Process "C:<str>" -- create keymap */
-	else if (buf[0] == 'C')
+	case 'C':
 	{
 		int mode;
-
 		char tmp[1024];
 
-		if (tokenize(buf+2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) return (1);
+		if (tokenize(buf+2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) return 1;
 
 		mode = strtol(zz[0], NULL, 0);
-		if ((mode < 0) || (mode >= KEYMAP_MODES)) return (1);
+		if ((mode < 0) || (mode >= KEYMAP_MODES)) return 1;
 
 		text_to_ascii(tmp, zz[1]);
-		if (!tmp[0] || tmp[1]) return (1);
+		if (!tmp[0] || tmp[1]) return 1;
 		i = (byte)(tmp[0]);
 
 		string_free(keymap_act[mode][i]);
 
 		keymap_act[mode][i] = string_make(macro__buf);
 
-		return (0);
+		return 0;
 	}
 
-
 	/* Process "V:<num>:<kv>:<rv>:<gv>:<bv>" -- visual info */
-	else if (buf[0] == 'V')
-	{
+	case 'V':
 		if (tokenize(buf+2, 5, zz, TOKENIZE_CHECKQUOTE) == 5)
 		{
 			i = (byte)strtol(zz[0], NULL, 0);
@@ -582,78 +566,47 @@ errr process_pref_file_command(char *buf)
 			angband_color_table[i][1] = (byte)strtol(zz[2], NULL, 0);
 			angband_color_table[i][2] = (byte)strtol(zz[3], NULL, 0);
 			angband_color_table[i][3] = (byte)strtol(zz[4], NULL, 0);
-			return (0);
+			return 0;
 		}
-	}
-
+		break;
 
 	/* Process "X:<str>" -- turn option off */
-	else if (buf[0] == 'X')
-	{
-		for (i = 0; option_info[i].o_desc; i++)
-		{
-			int os = option_info[i].o_set;
-			int ob = option_info[i].o_bit;
-
-			if (option_info[i].o_var &&
-			    option_info[i].o_text &&
-			    streq(option_info[i].o_text, buf + 2))
-			{
-				if (p_ptr->playing && 6 == option_info[i].o_page && !p_ptr->wizard)
-				{
-#ifdef JP
-					msg_format("初期オプションは変更できません! '%s'", buf);	
-#else
-					msg_format("Startup options can not changed! '%s'", buf);	
-#endif
-					msg_print(NULL);
-					return 0;
-				}
-
-				/* Clear */
-				option_flag[os] &= ~(1L << ob);
-				(*option_info[i].o_var) = FALSE;
-				return (0);
-			}
-		}
-
-		/* don't know that option. ignore it.*/
-#ifdef JP
-		msg_format("オプションの名前が正しくありません： %s", buf);
-#else
-		msg_format("Ignored invalid option: %s", buf);
-#endif
-		msg_print(NULL);
-		return 0;
-	}
-
 	/* Process "Y:<str>" -- turn option on */
-	else if (buf[0] == 'Y')
-	{
+	case 'X':
+	case 'Y':
 		for (i = 0; option_info[i].o_desc; i++)
 		{
-			int os = option_info[i].o_set;
-			int ob = option_info[i].o_bit;
-
 			if (option_info[i].o_var &&
 			    option_info[i].o_text &&
 			    streq(option_info[i].o_text, buf + 2))
 			{
+				int os = option_info[i].o_set;
+				int ob = option_info[i].o_bit;
+
 				if (p_ptr->playing && 6 == option_info[i].o_page && !p_ptr->wizard)
 				{
 #ifdef JP
-					msg_format("初期オプションは変更できません! '%s'", buf);	
+					msg_format("初期オプションは変更できません! '%s'", buf);
 #else
-					msg_format("Startup options can not changed! '%s'", buf);	
+					msg_format("Startup options can not changed! '%s'", buf);
 #endif
 					msg_print(NULL);
 					return 0;
 				}
 
-				/* Set */
-				option_flag[os] |= (1L << ob);
-				(*option_info[i].o_var) = TRUE;
-				return (0);
+				if (buf[0] == 'X')
+				{
+					/* Clear */
+					option_flag[os] &= ~(1L << ob);
+					(*option_info[i].o_var) = FALSE;
+				}
+				else
+				{
+					/* Set */
+					option_flag[os] |= (1L << ob);
+					(*option_info[i].o_var) = TRUE;
+				}
+				return 0;
 			}
 		}
 
@@ -665,16 +618,15 @@ errr process_pref_file_command(char *buf)
 #endif
 		msg_print(NULL);
 		return 0;
-	}
 
 	/* Process "Z:<type>:<str>" -- set spell color */
-	else if (buf[0] == 'Z')
+	case 'Z':
 	{
 		/* Find the colon */
 		char *t = strchr(buf + 2, ':');
 
 		/* Oops */
-		if (!t) return (1);
+		if (!t) return 1;
 
 		/* Nuke the colon */
 		*(t++) = '\0';
@@ -688,17 +640,19 @@ errr process_pref_file_command(char *buf)
 				gf_color[gf_desc[i].num] = quark_add(t);
 
 				/* Success */
-				return (0);
+				return 0;
 			}
 		}
+
+		break;
 	}
+
 	/* Initialize macro trigger names and a template */
 	/* Process "T:<trigger>:<keycode>:<shift-keycode>" */
 	/* Process "T:<template>:<modifier chr>:<modifier name>:..." */
-	else if (buf[0] == 'T')
+	case 'T':
 	{
-		int tok;
-		tok = tokenize(buf+2, 2+MAX_MACRO_MOD, zz, 0);
+		int tok = tokenize(buf+2, 2+MAX_MACRO_MOD, zz, 0);
 
 		/* Process "T:<template>:<modifier chr>:<modifier name>:..." */
 		if (tok >= 4)
@@ -733,7 +687,7 @@ errr process_pref_file_command(char *buf)
 
 				max_macrotrigger = 0;
 			}
-			
+
 			if (*zz[0] == '\0') return 0; /* clear template */
 
 			/* Number of modifier flags */
@@ -806,9 +760,10 @@ errr process_pref_file_command(char *buf)
 		/* No error */
 		return 0;
 	}
+	}
 
 	/* Failure */
-	return (1);
+	return 1;
 }
 
 
