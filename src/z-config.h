@@ -657,9 +657,6 @@
  #define DRS_SMART_OPTIONS
 #endif
 
-/* Do we want different characters for different races? */
-# define VARIABLE_PLAYER_GRAPH
-
 /* Allow hordes of 'similar' monsters */
 # define MONSTER_HORDES
 
