@@ -918,14 +918,12 @@ bool auto_destroy_item(int item, int autopick_idx)
 	/* Easy-Auto-Destroyer */
 	if (is_opt_confirm_destroy(o_ptr)) destroy = TRUE;
 
-	if (always_pickup)
-	{
-		/* Protected by auto-picker */
-		if (autopick_idx >= 0 &&
-		    !(autopick_list[autopick_idx].action & DO_AUTODESTROY))
-			destroy = FALSE;
-	}
-	else
+	/* Protected by auto-picker */
+	if (autopick_idx >= 0 &&
+	    !(autopick_list[autopick_idx].action & DO_AUTODESTROY))
+		destroy = FALSE;
+
+	if (!always_pickup)
 	{
 		/* Auto-picker/destroyer */
 		if (autopick_idx >= 0 &&
