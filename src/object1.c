@@ -4404,7 +4404,10 @@ void display_inven(void)
 	byte            attr = TERM_WHITE;
 	char            tmp_val[80];
 	char            o_name[MAX_NLEN];
+	int             wid, hgt;
 
+	/* Get size */
+	Term_get_size(&wid, &hgt);
 
 	/* Find the "final" slot */
 	for (i = 0; i < INVEN_PACK; i++)
@@ -4471,12 +4474,12 @@ void display_inven(void)
 			sprintf(tmp_val, "%3d.%1d lb", wgt / 10, wgt % 10);
 #endif
 
-			Term_putstr(71, i, -1, TERM_WHITE, tmp_val);
+			prt(tmp_val, i, wid - 9);
 		}
 	}
 
 	/* Erase the rest of the window */
-	for (i = z; i < Term->hgt; i++)
+	for (i = z; i < hgt; i++)
 	{
 		/* Erase the line */
 		Term_erase(0, i, 255);
@@ -4495,7 +4498,10 @@ void display_equip(void)
 	byte            attr = TERM_WHITE;
 	char            tmp_val[80];
 	char            o_name[MAX_NLEN];
+	int             wid, hgt;
 
+	/* Get size */
+	Term_get_size(&wid, &hgt);
 
 	/* Display the equipment */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
@@ -4550,30 +4556,29 @@ void display_equip(void)
 		/* Erase the rest of the line */
 		Term_erase(3+n, i - INVEN_RARM, 255);
 
-		/* Display the slot description (if needed) */
-		if (show_labels)
-		{
-			Term_putstr(61, i - INVEN_RARM, -1, TERM_WHITE, "<--");
-			Term_putstr(65, i - INVEN_RARM, -1, TERM_WHITE, mention_use(i));
-		}
-
 		/* Display the weight (if needed) */
 		if (show_weights && o_ptr->weight)
 		{
 			int wgt = o_ptr->weight * o_ptr->number;
-			int col = (show_labels ? 52 : 71);
 #ifdef JP
 			sprintf(tmp_val, "%3d.%1d kg", lbtokg1(wgt) , lbtokg2(wgt));
 #else
 			sprintf(tmp_val, "%3d.%1d lb", wgt / 10, wgt % 10);
 #endif
 
-			Term_putstr(col, i - INVEN_RARM, -1, TERM_WHITE, tmp_val);
+			prt(tmp_val, i - INVEN_RARM, wid - (show_labels ? 28 : 9));
+		}
+
+		/* Display the slot description (if needed) */
+		if (show_labels)
+		{
+			Term_putstr(wid - 20, i - INVEN_RARM, -1, TERM_WHITE, " <-- ");
+			prt(mention_use(i), i - INVEN_RARM, wid - 15);
 		}
 	}
 
 	/* Erase the rest of the window */
-	for (i = INVEN_TOTAL - INVEN_RARM; i < Term->hgt; i++)
+	for (i = INVEN_TOTAL - INVEN_RARM; i < hgt; i++)
 	{
 		/* Clear that line */
 		Term_erase(0, i, 255);
@@ -4873,7 +4878,7 @@ int show_inven(int target_item)
 			(void)sprintf(tmp_val, "%3d.%1d lb", wgt / 10, wgt % 10);
 #endif
 
-			put_str(tmp_val, j + 1, wid - 9);
+			prt(tmp_val, j + 1, wid - 9);
 		}
 	}
 
@@ -5075,7 +5080,7 @@ int show_equip(int target_item)
 			(void)sprintf(tmp_val, "%3d.%d lb", wgt / 10, wgt % 10);
 #endif
 
-			put_str(tmp_val, j+1, wid - 9);
+			prt(tmp_val, j + 1, wid - 9);
 		}
 	}
 
@@ -6314,7 +6319,7 @@ int show_floor(int target_item, int y, int x, int *min_width)
 			sprintf(tmp_val, "%3d.%1d lb", wgt / 10, wgt % 10);
 #endif
 
-			put_str(tmp_val, j + 1, wid - 9);
+			prt(tmp_val, j + 1, wid - 9);
 		}
 	}
 
