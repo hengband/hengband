@@ -2497,7 +2497,7 @@ B:BITE:EAT_FOOD:1d4
 F:MULTIPLY | IM_POIS | RES_DARK | HURT_LITE | EVIL | DEMON | OPEN_DOOR | 
 F:TAKE_ITEM | CAN_SWIM 
 D:$Don't splash water on them, and don't feed them after midnight!
-D:真夜中を過ぎたら水を掛けたり、餌をやってはいけない！
+D:水を掛けたり、真夜中を過ぎてから餌をやってはいけない！
 
 #J0#
 N:154:イエティ
